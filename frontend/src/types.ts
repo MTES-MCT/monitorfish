@@ -10,7 +10,11 @@ export type CollectionItem = {
   id: number | string
 }
 
-export type DateRange = [Date, Date]
+export type DeepPartial<T> = T extends object
+  ? {
+      [P in keyof T]?: DeepPartial<T[P]>
+    }
+  : T
 
 export type Native = boolean | null | number | string | undefined
 

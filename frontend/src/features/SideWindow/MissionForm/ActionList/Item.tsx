@@ -22,25 +22,37 @@ export type ItemProps = (
   onDelete: () => Promisable<void>
 }
 export function Item({ action, isNew = false, onDelete }: ItemProps) {
-  const actionLabel = useMemo(() => {
+  const [actionLabel, ActionIcon] = useMemo(() => {
     switch (isNew) {
       case true:
         switch (action.type) {
           case MissionType.AIR:
-            return 'Contrôle aérien à renseigner'
+            return ['Contrôle aérien à renseigner', Icon.Plane]
 
           case MissionType.GROUND:
-            return 'Contrôle à la débarque à renseigner'
+            return ['Contrôle à la débarque à renseigner', Icon.Plane]
 
           case MissionType.SEA:
-            return 'Contrôle en mer à renseigner'
+            return ['Contrôle en mer à renseigner', Icon.FleetSegment]
 
           default:
-            return 'Note libre à renseigner'
+            return [action.note || 'Note libre à renseigner', Icon.Note]
         }
 
       default:
-        return 'TBD'
+        switch (action.type) {
+          case MissionType.AIR:
+            return ['', Icon.Plane]
+
+          case MissionType.GROUND:
+            return ['', Icon.Plane]
+
+          case MissionType.SEA:
+            return ['', Icon.Plane]
+
+          default:
+            return [action.note, Icon.Note]
+        }
     }
   }, [action, isNew])
   const startDateAsDayjs = useMemo(() => getLocalizedDayjs(action.startDate), [action])
@@ -52,7 +64,8 @@ export function Item({ action, isNew = false, onDelete }: ItemProps) {
       </DateLabel>
       <InnerWrapper>
         <ActionLabel>
-          <Icon.FleetSegment color={THEME.color.charcoal} size={1} /> {actionLabel}
+          <ActionIcon color={THEME.color.charcoal} size={20} />
+          {actionLabel}
         </ActionLabel>
         <IconButton accent={Accent.TERTIARY} color={THEME.color.slateGray} Icon={Icon.Duplicate} size={Size.NORMAL} />
         <IconButton
@@ -96,6 +109,6 @@ const ActionLabel = styled.div`
 
   /* The SVG icon is wrapper in a div */
   > div {
-    margin-right: 0.25rem;
+    margin-right: 8px;
   }
 `

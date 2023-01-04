@@ -8,15 +8,23 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.CacheManager
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
-
     @Autowired
     private lateinit var jpaFleetSegmentRepository: JpaFleetSegmentRepository
 
     @Autowired
     lateinit var cacheManager: CacheManager
+
+    private val currentYear: Int
+
+    init {
+        val formatter = DateTimeFormatter.ofPattern("yyyy")
+        currentYear = LocalDate.now().format(formatter).toInt()
+    }
 
     @BeforeEach
     fun setup() {
@@ -146,7 +154,7 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
                 targetSpecies = listOf(),
                 bycatchSpecies = listOf(),
                 impactRiskFactor = 2.3,
-                year = 2023
+                year = currentYear + 1
             )
         )
 
@@ -161,7 +169,7 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllByYear Should find all fleet segments of the given year`() {
         // When
-        val fleetSegments = jpaFleetSegmentRepository.findAllByYear(2021)
+        val fleetSegments = jpaFleetSegmentRepository.findAllByYear(currentYear - 1)
 
         // Then
         assertThat(fleetSegments).hasSize(23)
@@ -171,14 +179,14 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `delete Should delete a fleet segment`() {
         // Given
-        val fleetSegments = jpaFleetSegmentRepository.findAllByYear(2021)
+        val fleetSegments = jpaFleetSegmentRepository.findAllByYear(currentYear - 1)
         val segmentToDelete = fleetSegments.first()
 
         // When
-        jpaFleetSegmentRepository.delete(segmentToDelete.segment, 2021)
+        jpaFleetSegmentRepository.delete(segmentToDelete.segment, currentYear - 1)
 
         // Then
-        val expectedFleetSegment = jpaFleetSegmentRepository.findAllByYear(2021)
+        val expectedFleetSegment = jpaFleetSegmentRepository.findAllByYear(currentYear - 1)
         assertThat(expectedFleetSegment).hasSize(22)
         assertThat(expectedFleetSegment).doesNotContain(segmentToDelete)
     }
@@ -205,22 +213,22 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(yearEntries).hasSize(2)
         assertThat(yearEntries.first()).isEqualTo(currentYear)
-        assertThat(yearEntries.last()).isEqualTo(2021)
+        assertThat(yearEntries.last()).isEqualTo(currentYear - 1)
     }
 
     @Test
     @Transactional
     fun `addYear Should add a new year copied from the specified year`() {
         // Given
-        assertThat(jpaFleetSegmentRepository.findAllByYear(2021)).hasSize(23)
-        assertThat(jpaFleetSegmentRepository.findAllByYear(2023)).hasSize(0)
+        assertThat(jpaFleetSegmentRepository.findAllByYear(currentYear - 1)).hasSize(23)
+        assertThat(jpaFleetSegmentRepository.findAllByYear(currentYear + 1)).hasSize(0)
 
         // When
-        jpaFleetSegmentRepository.addYear(2021, 2023)
+        jpaFleetSegmentRepository.addYear(currentYear - 1, currentYear + 1)
 
         // Then
-        assertThat(jpaFleetSegmentRepository.findAllByYear(2021)).hasSize(23)
-        val updatedFleetSegments = jpaFleetSegmentRepository.findAllByYear(2023).sortedBy { it.segment }
+        assertThat(jpaFleetSegmentRepository.findAllByYear(currentYear - 1)).hasSize(23)
+        val updatedFleetSegments = jpaFleetSegmentRepository.findAllByYear(currentYear + 1).sortedBy { it.segment }
         assertThat(updatedFleetSegments).hasSize(23)
     }
 }

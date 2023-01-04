@@ -81,7 +81,7 @@ context('Control objectives', () => {
     // When
     cy.intercept('PUT', '/bff/v1/control_objectives/78').as('updateObjective')
     cy.wait(50)
-    cy.get('[data-cy="row-78-controlPriorityLevel-1"]').click()
+    cy.get('[data-cy="row-78-controlPriorityLevel-1"]').parent().click()
     cy.get('.rs-picker-select-menu-item').eq(2).click()
     cy.wait('@updateObjective')
 
@@ -153,15 +153,18 @@ context('Control objectives', () => {
 
   it('Should permit to add a control objective year When the current year is not yet added', () => {
     // Given
-    const now = new Date(2023, 3, 14).getTime()
+    const currentYear = new Date().getFullYear()
+    const nextYear = currentYear + 1
+    const now = new Date(nextYear, 3, 14).getTime()
+
     cy.clock(now)
     cy.get('.rs-table-row').should('have.length', 57)
-    cy.get('*[data-cy^="control-objectives-year"]').contains('2022')
+    cy.get('*[data-cy^="control-objectives-year"]').contains(currentYear)
     cy.get('*[data-cy^="control-objectives-year"]').click()
     cy.get('.rs-picker-select-menu-item').should('have.length', 2)
 
     // Then
-    cy.get('*[data-cy="control-objectives-add-year"]').contains('2023')
+    cy.get('*[data-cy="control-objectives-add-year"]').contains(nextYear)
   })
 
   it('Should add the next control objective year', () => {

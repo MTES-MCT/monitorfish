@@ -64,7 +64,7 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
             placeholder="Période"
           />
           <FormikMultiSelect
-            fixedWidth={10}
+            fixedWidth={160}
             isLabelHidden
             label="Status"
             name={MissionFilterType.STATUS}
@@ -72,7 +72,7 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
             placeholder="Status"
           />
           <FormikMultiSelect
-            fixedWidth={10}
+            fixedWidth={160}
             isLabelHidden
             label="Unité"
             name={MissionFilterType.UNIT}
@@ -80,7 +80,7 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
             placeholder="Unité"
           />
           <FormikMultiSelect
-            fixedWidth={10}
+            fixedWidth={160}
             isLabelHidden
             label="Type de mission"
             name={MissionFilterType.MISSION_TYPE}
@@ -88,7 +88,7 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
             placeholder="Type de mission"
           />
           <FormikMultiSelect
-            fixedWidth={10}
+            fixedWidth={160}
             isLabelHidden
             label="Type de contrôle"
             name={MissionFilterType.INSPECTION_TYPE}
@@ -96,7 +96,7 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
             placeholder="Type de contrôle"
           />
           <FormikMultiSelect
-            fixedWidth={10}
+            fixedWidth={160}
             isLabelHidden
             label="Alerte"
             name={MissionFilterType.ALERT_TYPE}

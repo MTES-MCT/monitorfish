@@ -4,6 +4,8 @@ import { useRef } from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
+import { CustomProvider as RsuiteCustomProvider } from 'rsuite'
+import rsuiteFrFr from 'rsuite/locales/fr_FR'
 import styled, { createGlobalStyle } from 'styled-components'
 
 import APIWorker from './api/APIWorker'
@@ -51,38 +53,40 @@ export function App() {
       <GlobalStyle />
       <CustomGlobalStyle />
 
-      <Router>
-        <Switch>
-          <Route path="/backoffice">
-            <Provider store={backofficeStore}>
-              {/* eslint-disable-next-line no-null/no-null */}
-              <PersistGate loading={null} persistor={backofficePersistor}>
-                <NamespaceContext.Provider value="backoffice">
-                  <BackofficePage />
+      <RsuiteCustomProvider locale={rsuiteFrFr}>
+        <Router>
+          <Switch>
+            <Route path="/backoffice">
+              <Provider store={backofficeStore}>
+                {/* eslint-disable-next-line no-null/no-null */}
+                <PersistGate loading={null} persistor={backofficePersistor}>
+                  <NamespaceContext.Provider value="backoffice">
+                    <BackofficePage />
+                  </NamespaceContext.Provider>
+                </PersistGate>
+              </Provider>
+            </Route>
+
+            <Route exact path="/ext">
+              <Provider store={homeStore}>
+                <NamespaceContext.Provider value="homepage">
+                  <TritonFish />
                 </NamespaceContext.Provider>
-              </PersistGate>
-            </Provider>
-          </Route>
+              </Provider>
+            </Route>
 
-          <Route exact path="/ext">
-            <Provider store={homeStore}>
-              <NamespaceContext.Provider value="homepage">
-                <TritonFish />
-              </NamespaceContext.Provider>
-            </Provider>
-          </Route>
+            <Route component={TestPage} exact path="/test" />
 
-          <Route component={TestPage} exact path="/test" />
-
-          <Route path="/">
-            <Provider store={homeStore}>
-              <NamespaceContext.Provider value="homepage">
-                <HomePage />
-              </NamespaceContext.Provider>
-            </Provider>
-          </Route>
-        </Switch>
-      </Router>
+            <Route path="/">
+              <Provider store={homeStore}>
+                <NamespaceContext.Provider value="homepage">
+                  <HomePage />
+                </NamespaceContext.Provider>
+              </Provider>
+            </Route>
+          </Switch>
+        </Router>
+      </RsuiteCustomProvider>
     </ThemeProvider>
   )
 }

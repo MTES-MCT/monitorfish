@@ -30,7 +30,7 @@ import {
   setZoneSelected
 } from './RegulatoryLayerSearch.slice'
 
-import type { IconButtonProps } from '@mtes-mct/monitor-ui/elements/IconButton'
+import type { IconButtonProps } from '@mtes-mct/monitor-ui'
 
 export function RegulatoryLayerSearchInput() {
   const dispatch = useAppDispatch()
@@ -162,33 +162,33 @@ export function RegulatoryLayerSearchInput() {
 
 const InlineTagWrapper = styled.div`
   display: inline-block;
-  vertical-align: top;
   margin-left: 5px;
   margin-top: 2px;
+  vertical-align: top;
 `
 
 const SearchByGeometry = styled.div`
   color: ${COLORS.slateGray};
-  margin: 2px 0 10px 0;
-  font-weight: 300;
   font-size: 11px;
+  font-weight: 300;
+  margin: 2px 0 10px;
 `
 
 const boxFilterProperties = css`
-  width: 30px;
-  height: 30px;
   cursor: pointer;
+  height: 30px;
   margin-top: 2px;
   vertical-align: text-bottom;
+  width: 30px;
 `
 
 const polygonFilterProperties = css`
-  width: 30px;
-  height: 30px;
   cursor: pointer;
+  height: 30px;
   margin-left: 5px;
   margin-top: 2px;
   vertical-align: text-bottom;
+  width: 30px;
 `
 
 const BoxFilter = styled(BoxFilterSVG)`
@@ -211,13 +211,13 @@ const AdvancedSearchBox = styled.div<{
   advancedSearchIsOpen: boolean
 }>`
   background-color: white;
-  height: ${p => (p.advancedSearchIsOpen ? 50 : 0)}px;
-  width: 320px;
-  transition: 0.5s all;
-  padding: ${p => (p.advancedSearchIsOpen ? 10 : 0)}px 15px;
-  overflow: hidden;
-  text-align: left;
   border-bottom: ${p => (p.advancedSearchIsOpen ? 1 : 0)}px ${COLORS.lightGray} solid;
+  height: ${p => (p.advancedSearchIsOpen ? 50 : 0)}px;
+  overflow: hidden;
+  padding: ${p => (p.advancedSearchIsOpen ? 10 : 0)}px 15px;
+  text-align: left;
+  transition: 0.5s all;
+  width: 320px;
 `
 
 const PrincipalSearchInput = styled.div`
@@ -226,17 +226,17 @@ const PrincipalSearchInput = styled.div`
 `
 
 const SearchBoxInput = styled.input`
-  margin: 0;
   background-color: white;
   border: none;
+  border-bottom: 1px ${COLORS.lightGray} solid;
   border-radius: 0;
   color: ${COLORS.gunMetal};
   font-size: 13px;
   height: 40px;
-  width: 270px;
+  margin: 0;
   padding: 0 5px 0 10px;
   vertical-align: bottom;
-  border-bottom: 1px ${COLORS.lightGray} solid;
+  width: 270px;
 
   :hover,
   :focus {
@@ -245,23 +245,23 @@ const SearchBoxInput = styled.input`
 `
 
 const SearchIcon = styled(SearchIconSVG)`
-  width: 30px;
-  padding-left: 10px;
-  height: 29px;
-  padding-top: 10px;
   background: ${p => p.theme.color.white};
-  vertical-align: top;
   border-bottom: 1px ${COLORS.lightGray} solid;
+  height: 29px;
+  padding-left: 10px;
+  padding-top: 10px;
+  vertical-align: top;
+  width: 30px;
 `
 
 const CloseIcon = styled(CloseIconSVG)`
-  width: 20px;
-  padding: 13px 11px 9px 9px;
-  height: 17px;
   background: ${p => p.theme.color.white};
-  vertical-align: top;
   border-bottom: 1px ${COLORS.lightGray} solid;
   cursor: pointer;
+  height: 17px;
+  padding: 13px 11px 9px 9px;
+  vertical-align: top;
+  width: 20px;
 `
 
 const AdvancedSearch = styled(IconButton)<
@@ -269,14 +269,15 @@ const AdvancedSearch = styled(IconButton)<
     advancedSearchIsOpen?: boolean
   }
 >`
+  background: ${p => (p.advancedSearchIsOpen ? p.theme.color.blueYonder['100'] : p.theme.color.charcoal)};
+  border: unset;
   display: inline-block;
   height: 40px;
   width: 40px;
-  background: ${p => (p.advancedSearchIsOpen ? p.theme.color.blueYonder['100'] : p.theme.color.charcoal)};
-  border: unset;
+
   div {
-    margin-top: -1px;
     margin-left: -1px;
+    margin-top: -1px;
   }
 
   :hover,

@@ -43,7 +43,9 @@ context('Update Regulation', () => {
 
   it('Select another law type should reset selected layer name', () => {
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
-    cy.get('[data-key="R(CE) 494/2002"]').eq(0).scrollIntoView().click()
+    // Since this input is virtualized, we need to scroll and wait for it to render new items
+    cy.get('.rs-picker-select-menu-items > div > div').eq(0).scrollTo(0, 500).wait(500)
+    cy.get('[data-key="R(CE) 494/2002"]').eq(0).click()
     cy.get('[data-cy="tag-Ouest Cotentin Bivalves"]').should('not.exist')
   })
 

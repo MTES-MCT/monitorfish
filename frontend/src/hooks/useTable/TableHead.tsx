@@ -29,7 +29,7 @@ export function TableHead({
     <CardTableHeader noPadding>
       <FlexboxGrid>
         {isCheckable && (
-          <CellWrapper $fixedWidth={2.25} style={{ padding: 0 }}>
+          <CellWrapper $fixedWidth={36} style={{ padding: 0 }}>
             <StyledCheckbox checked={isAllChecked} onChange={onAllCheckChange} />
           </CellWrapper>
         )}
@@ -60,7 +60,7 @@ const CellWrapper = styled(FlexboxGrid.Item)<{
   height: 36px;
   padding: 0 10px;
   user-select: 'none';
-  width: ${p => p.$fixedWidth}rem;
+  width: ${p => p.$fixedWidth}px;
 `
 
 export const StyledCheckbox = styled(Checkbox)`

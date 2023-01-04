@@ -11,7 +11,8 @@ context('Edit Regulation', () => {
     cy.get('.rs-picker-toggle-placeholder').eq(0).should('have.text', 'Choisir un ensemble')
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
     cy.get('.rs-picker-select-menu-items').should('exist').should('have.length', 1)
-    cy.get('.rs-picker-select-menu-item').should('exist').should('have.length', 18)
+    // This input is virtualized, 7 out of the 18 items are not yet rendered
+    cy.get('.rs-picker-select-menu-item').should('exist').should('have.length', 11)
   })
 
   it('Select, change and remove law type Reg. MEMN', () => {
@@ -50,7 +51,9 @@ context('Edit Regulation', () => {
   it('select UE law_type should display an empty list', () => {
     // Select R(CE) 494/2002 in the dropdown menu
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
-    cy.get('[data-key="R(CE) 494/2002"]').eq(0).scrollIntoView().click()
+    // Since this input is virtualized, we need to scroll and wait for it to render new items
+    cy.get('.rs-picker-select-menu-items > div > div').eq(0).scrollTo(0, 500).wait(500)
+    cy.get('[data-key="R(CE) 494/2002"]').eq(0).click()
 
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(1).click({ force: true })
     cy.get('.rs-picker-none').contains('aucune thématique à afficher')
@@ -72,13 +75,16 @@ context('Edit Regulation', () => {
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(2).click()
     // Region list length should be equal to 18
     cy.get('.rs-picker-select-menu-items').should('exist').should('have.length', 1)
-    cy.get('.rs-picker-select-menu-item').should('exist').should('have.length', 18)
+    // This input is virtualized, 7 out of the 18 items are not yet rendered
+    cy.get('.rs-picker-select-menu-item').should('exist').should('have.length', 11)
   })
 
   it('If a EU law type has been selected, region list should be disabled', () => {
     // Select a EU law type
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
-    cy.get('[data-key="R(UE) 2019/1241"]').eq(0).scrollIntoView().click()
+    // Since this input is virtualized, we need to scroll and wait for it to render new items
+    cy.get('.rs-picker-select-menu-items > div > div').eq(0).scrollTo(0, 500).wait(500)
+    cy.get('[data-key="R(UE) 2019/1241"]').eq(0).click()
     // Region select picker should be disabled
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(2).should('have.attr', 'aria-disabled', 'true')
   })

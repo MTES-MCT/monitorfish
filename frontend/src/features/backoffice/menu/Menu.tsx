@@ -14,9 +14,7 @@ const Menu = () => {
 
   return (
     <Wrapper>
-      <Title>
-        Backoffice
-      </Title>
+      <Title>Backoffice</Title>
       <MenuLink
         style={{
           background: onRegulationPage ? theme.color.blueGray[100] : 'none'
@@ -24,9 +22,10 @@ const Menu = () => {
         to={'/backoffice/regulation'}
         title={'Zones réglementaires'}
       >
-        <Layers/>
+        <Layers />
         <LinkText>
-          Zones <br/>réglementaires
+          Zones <br />
+          réglementaires
         </LinkText>
       </MenuLink>
       <MenuLink
@@ -36,9 +35,10 @@ const Menu = () => {
         to={'/backoffice/control_objectives'}
         title={'Objectifs de contrôle'}
       >
-        <ControlObjectives/>
+        <ControlObjectives />
         <LinkText>
-          Objectifs <br/>de contrôle
+          Objectifs <br />
+          de contrôle
         </LinkText>
       </MenuLink>
       <MenuLink
@@ -48,12 +48,13 @@ const Menu = () => {
         to={'/backoffice/fleet_segments'}
         title={'Segments de flotte'}
       >
-        <Fleet/>
+        <Fleet />
         <LinkText>
-          Segments <br/>de flotte
+          Segments <br />
+          de flotte
         </LinkText>
       </MenuLink>
-  </Wrapper>
+    </Wrapper>
   )
 }
 

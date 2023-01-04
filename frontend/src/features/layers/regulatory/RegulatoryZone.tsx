@@ -26,14 +26,19 @@ import {
 import { getAdministrativeAndRegulatoryLayersStyle } from '../../map/layers/styles/administrativeAndRegulatoryLayers.style'
 import { theme } from '../../../ui/theme'
 
-export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
-  if (regulatoryZoneMetadata && regulatoryZone &&
-    (regulatoryZone.topic !== regulatoryZoneMetadata.topic ||
-      regulatoryZone.zone !== regulatoryZoneMetadata.zone)) {
+export function showOrHideMetadataIcon(regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
+  if (
+    regulatoryZoneMetadata &&
+    regulatoryZone &&
+    (regulatoryZone.topic !== regulatoryZoneMetadata.topic || regulatoryZone.zone !== regulatoryZoneMetadata.zone)
+  ) {
     setMetadataIsShown(false)
-  } else if (regulatoryZoneMetadata && regulatoryZone &&
-    (regulatoryZone.topic === regulatoryZoneMetadata.topic &&
-      regulatoryZone.zone === regulatoryZoneMetadata.zone)) {
+  } else if (
+    regulatoryZoneMetadata &&
+    regulatoryZone &&
+    regulatoryZone.topic === regulatoryZoneMetadata.topic &&
+    regulatoryZone.zone === regulatoryZoneMetadata.zone
+  ) {
     setMetadataIsShown(true)
   } else if (!regulatoryZoneMetadata && regulatoryZone) {
     setMetadataIsShown(false)
@@ -54,12 +59,8 @@ const RegulatoryZone = props => {
     regulatoryTopic
   } = props
 
-  const {
-    isReadyToShowRegulatoryLayers,
-    regulatoryZoneMetadata
-  } = useSelector(state => state.regulatory)
-  const zoneIsShown = useSelector(state =>
-    state.layer.showedLayers.some(layer => layer.id === regulatoryZone?.id))
+  const { isReadyToShowRegulatoryLayers, regulatoryZoneMetadata } = useSelector(state => state.regulatory)
+  const zoneIsShown = useSelector(state => state.layer.showedLayers.some(layer => layer.id === regulatoryZone?.id))
 
   const [metadataIsShown, setMetadataIsShown] = useState(false)
   const [isOver, setIsOver] = useState(false)
@@ -81,17 +82,21 @@ const RegulatoryZone = props => {
 
   const triggerShowRegulatoryZone = () => {
     if (!zoneIsShown && isReadyToShowRegulatoryLayers) {
-      dispatch(showRegulatoryZone({
-        type: Layer.REGULATORY.code,
-        ...regulatoryZone,
-        namespace
-      }))
+      dispatch(
+        showRegulatoryZone({
+          type: Layer.REGULATORY.code,
+          ...regulatoryZone,
+          namespace
+        })
+      )
     } else {
-      dispatch(hideLayer({
-        type: Layer.REGULATORY.code,
-        ...regulatoryZone,
-        namespace
-      }))
+      dispatch(
+        hideLayer({
+          type: Layer.REGULATORY.code,
+          ...regulatoryZone,
+          namespace
+        })
+      )
     }
   }
 
@@ -107,67 +112,59 @@ const RegulatoryZone = props => {
   const onMouseLeave = () => isOver && setIsOver(false)
 
   return (
-    <Zone
-      data-cy="regulatory-layer-zone"
-      isLast={isLast}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    >
-      <Rectangle onClick={() => dispatch(zoomInLayer({ topicAndZone: regulatoryZone }))} vectorLayerStyle={vectorLayerStyle}/>
+    <Zone data-cy="regulatory-layer-zone" isLast={isLast} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+      <Rectangle
+        onClick={() => dispatch(zoomInLayer({ topicAndZone: regulatoryZone }))}
+        vectorLayerStyle={vectorLayerStyle}
+      />
       <ZoneText
         data-cy={'regulatory-layers-my-zones-zone'}
-        title={regulatoryZone.zone
-          ? regulatoryZone.zone
-          : 'AUCUN NOM'}
+        title={regulatoryZone.zone ? regulatoryZone.zone : 'AUCUN NOM'}
         onClick={triggerShowRegulatoryZone}
       >
-        {
-          regulatoryZone.zone
-            ? regulatoryZone.zone
-            : 'AUCUN NOM'
-        }
+        {regulatoryZone.zone ? regulatoryZone.zone : 'AUCUN NOM'}
       </ZoneText>
       <Icons>
-        { isEditable &&
+        {isEditable && (
           <EditIcon
             data-cy="regulatory-layer-zone-edit"
             $isOver={isOver}
             title="Editer la réglementation"
             onClick={onEditRegulationClick}
           />
-        }
-        {
-          metadataIsShown
-            ? <PaperDarkIcon
-              title="Fermer la réglementation"
-              onClick={() => callShowRegulatoryZoneMetadata(regulatoryZone)}
-            />
-            : <PaperIcon
-              data-cy={'regulatory-layers-show-metadata'}
-              title="Afficher la réglementation"
-              onClick={() => callShowRegulatoryZoneMetadata(regulatoryZone)}
-            />
-        }
-        {
-          zoneIsShown
-            ? <ShowIcon
-              data-cy={'regulatory-layers-my-zones-zone-hide'}
-              title="Cacher la zone"
-              onClick={triggerShowRegulatoryZone}
-            />
-            : <HideIcon
-              data-cy={'regulatory-layers-my-zones-zone-show'}
-              title="Afficher la zone"
-              onClick={triggerShowRegulatoryZone}
-            />
-        }
-        {
-          allowRemoveZone
-            ? <CloseIcon title="Supprimer la zone de ma sélection"
-                         data-cy={'regulatory-layers-my-zones-zone-delete'}
-                         onClick={() => callRemoveRegulatoryZoneFromMySelection(regulatoryZone, 1, namespace)}/>
-            : null
-        }
+        )}
+        {metadataIsShown ? (
+          <PaperDarkIcon
+            title="Fermer la réglementation"
+            onClick={() => callShowRegulatoryZoneMetadata(regulatoryZone)}
+          />
+        ) : (
+          <PaperIcon
+            data-cy={'regulatory-layers-show-metadata'}
+            title="Afficher la réglementation"
+            onClick={() => callShowRegulatoryZoneMetadata(regulatoryZone)}
+          />
+        )}
+        {zoneIsShown ? (
+          <ShowIcon
+            data-cy={'regulatory-layers-my-zones-zone-hide'}
+            title="Cacher la zone"
+            onClick={triggerShowRegulatoryZone}
+          />
+        ) : (
+          <HideIcon
+            data-cy={'regulatory-layers-my-zones-zone-show'}
+            title="Afficher la zone"
+            onClick={triggerShowRegulatoryZone}
+          />
+        )}
+        {allowRemoveZone ? (
+          <CloseIcon
+            title="Supprimer la zone de ma sélection"
+            data-cy={'regulatory-layers-my-zones-zone-delete'}
+            onClick={() => callRemoveRegulatoryZoneFromMySelection(regulatoryZone, 1, namespace)}
+          />
+        ) : null}
       </Icons>
     </Zone>
   )
@@ -176,8 +173,15 @@ const RegulatoryZone = props => {
 const Rectangle = styled.div`
   width: 14px;
   height: 14px;
-  background: ${props => props.vectorLayerStyle && props.vectorLayerStyle.getFill() ? props.vectorLayerStyle.getFill().getColor() : props.theme.color.lightGray};
-  border: 1px solid ${props => props.vectorLayerStyle && props.vectorLayerStyle.getStroke() ? props.vectorLayerStyle.getStroke().getColor() : props.theme.color.slateGray};
+  background: ${props =>
+    props.vectorLayerStyle && props.vectorLayerStyle.getFill()
+      ? props.vectorLayerStyle.getFill().getColor()
+      : props.theme.color.lightGray};
+  border: 1px solid
+    ${props =>
+      props.vectorLayerStyle && props.vectorLayerStyle.getStroke()
+        ? props.vectorLayerStyle.getStroke().getColor()
+        : props.theme.color.slateGray};
   display: inline-block;
   margin-right: 10px;
   margin-left: 2px;
@@ -202,12 +206,10 @@ const Zone = styled.span`
   user-select: none;
   font-size: 13px;
   font-weight: 300;
-  ${props => props.isLast
-  ? `border-bottom: 1px solid ${COLORS.lightGray}; height: 27px;`
-  : 'height: 28px;'}
+  ${props => (props.isLast ? `border-bottom: 1px solid ${COLORS.lightGray}; height: 27px;` : 'height: 28px;')}
 
   :hover {
-    background: ${theme.color.blueGray["25"]};
+    background: ${theme.color.blueGray['25']};
   }
 `
 

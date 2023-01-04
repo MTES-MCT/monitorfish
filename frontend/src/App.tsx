@@ -2,7 +2,7 @@ import { GlobalStyle, THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
 import { useRef } from 'react'
 import { Provider } from 'react-redux'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
 import { CustomProvider as RsuiteCustomProvider } from 'rsuite'
 import rsuiteFrFr from 'rsuite/locales/fr_FR'
@@ -54,8 +54,8 @@ export function App() {
       <CustomGlobalStyle />
 
       <RsuiteCustomProvider locale={rsuiteFrFr}>
-        <Router>
-          <Switch>
+        <BrowserRouter>
+          <Routes>
             <Route path="/backoffice">
               <Provider store={backofficeStore}>
                 {/* eslint-disable-next-line no-null/no-null */}
@@ -67,7 +67,7 @@ export function App() {
               </Provider>
             </Route>
 
-            <Route exact path="/ext">
+            <Route path="/ext">
               <Provider store={homeStore}>
                 <NamespaceContext.Provider value="homepage">
                   <TritonFish />
@@ -75,7 +75,9 @@ export function App() {
               </Provider>
             </Route>
 
-            <Route component={TestPage} exact path="/test" />
+            <Route path="/test">
+              <TestPage />
+            </Route>
 
             <Route path="/">
               <Provider store={homeStore}>
@@ -84,8 +86,8 @@ export function App() {
                 </NamespaceContext.Provider>
               </Provider>
             </Route>
-          </Switch>
-        </Router>
+          </Routes>
+        </BrowserRouter>
       </RsuiteCustomProvider>
     </ThemeProvider>
   )
@@ -109,11 +111,11 @@ function HomePage() {
   return (
     <>
       <BackofficeMode isAdmin />
-      <Switch>
-        <Route exact path="/side_window">
+      <Routes>
+        <Route path="/side_window">
           <SideWindow ref={ref} isFromURL />
         </Route>
-        <Route exact path="/">
+        <Route path="/">
           <Healthcheck />
           <PreviewFilteredVessels />
           <Wrapper>
@@ -138,7 +140,7 @@ function HomePage() {
             {isDrawLayerModalDisplayed && <DrawLayerModal />}
           </Wrapper>
         </Route>
-      </Switch>
+      </Routes>
     </>
   )
 }

@@ -20,7 +20,7 @@ import { RegulatoryLayers } from '../map/layers/RegulatoryLayers'
 import { RegulatoryPreviewLayer } from '../map/layers/RegulatoryPreviewLayer'
 import { ShowRegulatoryMetadata } from '../map/ShowRegulatoryMetadata'
 import LawType from './list_regulation/LawType'
-import SearchRegulations from './list_regulation/SearchRegulations'
+import { SearchRegulations } from './list_regulation/SearchRegulations'
 import { setProcessingRegulationSaved } from './Regulation.slice'
 
 export function Backoffice() {

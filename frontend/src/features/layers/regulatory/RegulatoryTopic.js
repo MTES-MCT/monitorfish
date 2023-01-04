@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import RegulatoryLayerZone from './RegulatoryZone'
+import { RegulatoryZone } from './RegulatoryZone'
 import { Layer } from '../../../domain/entities/layers/constants'
 import { COLORS } from '../../../constants/constants'
 import NamespaceContext from '../../../domain/context/NamespaceContext'
@@ -193,7 +193,7 @@ const RegulatoryTopic = props => {
               regulatoryZones && showedLayers
                 ? regulatoryZones.map((regulatoryZone, index) => {
                   return (
-                    <RegulatoryLayerZone
+                    <RegulatoryZone
                       isLast={regulatoryZones.length === index + 1}
                       regulatoryZone={regulatoryZone}
                       key={`${regulatoryZone.topic}:${regulatoryZone.zone}`}

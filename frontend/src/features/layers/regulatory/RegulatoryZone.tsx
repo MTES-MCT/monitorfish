@@ -1,30 +1,28 @@
-import React, { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import { useHistory, useRouteMatch } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
 
-import { COLORS } from '../../../constants/constants'
 import { Layer } from '../../../domain/entities/layers/constants'
-
-import showRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
-import { closeRegulatoryZoneMetadata } from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
-import zoomInLayer from '../../../domain/use_cases/layer/zoomInLayer'
-import hideLayer from '../../../domain/use_cases/layer/hideLayer'
-import showRegulatoryZone from '../../../domain/use_cases/layer/regulation/showRegulatoryZone'
-import showRegulationToEdit from '../../../domain/use_cases/layer/regulation/showRegulationToEdit'
-
-import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
-import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
-import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
-import { PaperDarkIcon, PaperIcon } from '../../commonStyles/icons/REGPaperIcon.style'
-import { EditIcon } from '../../commonStyles/icons/EditIcon.style'
 import {
   addRegulatoryTopicOpened,
   closeRegulatoryZoneMetadataPanel,
   removeRegulatoryTopicOpened
 } from '../../../domain/shared_slices/Regulatory'
-import { getAdministrativeAndRegulatoryLayersStyle } from '../../map/layers/styles/administrativeAndRegulatoryLayers.style'
+import hideLayer from '../../../domain/use_cases/layer/hideLayer'
+import { closeRegulatoryZoneMetadata } from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
+import showRegulationToEdit from '../../../domain/use_cases/layer/regulation/showRegulationToEdit'
+import showRegulatoryZone from '../../../domain/use_cases/layer/regulation/showRegulatoryZone'
+import showRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
+import zoomInLayer from '../../../domain/use_cases/layer/zoomInLayer'
+import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { useAppSelector } from '../../../hooks/useAppSelector'
 import { theme } from '../../../ui/theme'
+import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
+import { EditIcon } from '../../commonStyles/icons/EditIcon.style'
+import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
+import { PaperDarkIcon, PaperIcon } from '../../commonStyles/icons/REGPaperIcon.style'
+import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
+import { getAdministrativeAndRegulatoryLayersStyle } from '../../map/layers/styles/administrativeAndRegulatoryLayers.style'
 
 export function showOrHideMetadataIcon(regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
   if (
@@ -45,22 +43,22 @@ export function showOrHideMetadataIcon(regulatoryZoneMetadata, regulatoryZone, s
   }
 }
 
-const RegulatoryZone = props => {
-  const dispatch = useDispatch()
-  const match = useRouteMatch()
-  const history = useHistory()
+function UnmemoizedRegulatoryZone(props) {
+  const dispatch = useAppDispatch()
+  const location = useLocation()
+  const navigate = useNavigate()
   const {
-    callRemoveRegulatoryZoneFromMySelection,
-    regulatoryZone,
     allowRemoveZone,
-    namespace,
-    isLast,
+    callRemoveRegulatoryZoneFromMySelection,
     isEditable,
-    regulatoryTopic
+    isLast,
+    namespace,
+    regulatoryTopic,
+    regulatoryZone
   } = props
 
-  const { isReadyToShowRegulatoryLayers, regulatoryZoneMetadata } = useSelector(state => state.regulatory)
-  const zoneIsShown = useSelector(state => state.layer.showedLayers.some(layer => layer.id === regulatoryZone?.id))
+  const { isReadyToShowRegulatoryLayers, regulatoryZoneMetadata } = useAppSelector(state => state.regulatory)
+  const zoneIsShown = useAppSelector(state => state.layer.showedLayers.some(layer => layer.id === regulatoryZone?.id))
 
   const [metadataIsShown, setMetadataIsShown] = useState(false)
   const [isOver, setIsOver] = useState(false)
@@ -68,10 +66,10 @@ const RegulatoryZone = props => {
 
   const callShowRegulatoryZoneMetadata = zone => {
     if (!metadataIsShown) {
-      dispatch(showRegulatoryZoneMetadata(zone))
+      dispatch(showRegulatoryZoneMetadata(zone) as any)
       setMetadataIsShown(true)
     } else {
-      dispatch(closeRegulatoryZoneMetadata())
+      dispatch(closeRegulatoryZoneMetadata() as any)
       setMetadataIsShown(false)
     }
   }
@@ -87,7 +85,7 @@ const RegulatoryZone = props => {
           type: Layer.REGULATORY.code,
           ...regulatoryZone,
           namespace
-        })
+        }) as any
       )
     } else {
       dispatch(
@@ -95,17 +93,18 @@ const RegulatoryZone = props => {
           type: Layer.REGULATORY.code,
           ...regulatoryZone,
           namespace
-        })
+        }) as any
       )
     }
   }
 
   const onEditRegulationClick = () => {
-    dispatch(showRegulationToEdit(regulatoryZone))
-    history.push(`${match.path}/edit`)
+    dispatch(showRegulationToEdit(regulatoryZone) as any)
     dispatch(removeRegulatoryTopicOpened(regulatoryTopic))
     dispatch(addRegulatoryTopicOpened(regulatoryTopic))
     dispatch(closeRegulatoryZoneMetadataPanel())
+
+    navigate(`${location.pathname}/edit`)
   }
 
   const onMouseEnter = () => !isOver && setIsOver(true)
@@ -118,51 +117,51 @@ const RegulatoryZone = props => {
         vectorLayerStyle={vectorLayerStyle}
       />
       <ZoneText
-        data-cy={'regulatory-layers-my-zones-zone'}
-        title={regulatoryZone.zone ? regulatoryZone.zone : 'AUCUN NOM'}
+        data-cy="regulatory-layers-my-zones-zone"
         onClick={triggerShowRegulatoryZone}
+        title={regulatoryZone.zone ? regulatoryZone.zone : 'AUCUN NOM'}
       >
         {regulatoryZone.zone ? regulatoryZone.zone : 'AUCUN NOM'}
       </ZoneText>
       <Icons>
         {isEditable && (
           <EditIcon
-            data-cy="regulatory-layer-zone-edit"
             $isOver={isOver}
-            title="Editer la réglementation"
+            data-cy="regulatory-layer-zone-edit"
             onClick={onEditRegulationClick}
+            title="Editer la réglementation"
           />
         )}
         {metadataIsShown ? (
           <PaperDarkIcon
-            title="Fermer la réglementation"
             onClick={() => callShowRegulatoryZoneMetadata(regulatoryZone)}
+            title="Fermer la réglementation"
           />
         ) : (
           <PaperIcon
-            data-cy={'regulatory-layers-show-metadata'}
-            title="Afficher la réglementation"
+            data-cy="regulatory-layers-show-metadata"
             onClick={() => callShowRegulatoryZoneMetadata(regulatoryZone)}
+            title="Afficher la réglementation"
           />
         )}
         {zoneIsShown ? (
           <ShowIcon
-            data-cy={'regulatory-layers-my-zones-zone-hide'}
-            title="Cacher la zone"
+            data-cy="regulatory-layers-my-zones-zone-hide"
             onClick={triggerShowRegulatoryZone}
+            title="Cacher la zone"
           />
         ) : (
           <HideIcon
-            data-cy={'regulatory-layers-my-zones-zone-show'}
-            title="Afficher la zone"
+            data-cy="regulatory-layers-my-zones-zone-show"
             onClick={triggerShowRegulatoryZone}
+            title="Afficher la zone"
           />
         )}
         {allowRemoveZone ? (
           <CloseIcon
-            title="Supprimer la zone de ma sélection"
-            data-cy={'regulatory-layers-my-zones-zone-delete'}
+            data-cy="regulatory-layers-my-zones-zone-delete"
             onClick={() => callRemoveRegulatoryZoneFromMySelection(regulatoryZone, 1, namespace)}
+            title="Supprimer la zone de ma sélection"
           />
         ) : null}
       </Icons>
@@ -170,18 +169,21 @@ const RegulatoryZone = props => {
   )
 }
 
-const Rectangle = styled.div`
+const Rectangle = styled.div<{
+  // TODO Investgate while `vectorLayerStyle: Style` doesn't work here.
+  vectorLayerStyle: any
+}>`
   width: 14px;
   height: 14px;
-  background: ${props =>
-    props.vectorLayerStyle && props.vectorLayerStyle.getFill()
-      ? props.vectorLayerStyle.getFill().getColor()
-      : props.theme.color.lightGray};
+  background: ${p =>
+    p.vectorLayerStyle && p.vectorLayerStyle.getFill()
+      ? p.vectorLayerStyle.getFill().getColor()
+      : p.theme.color.lightGray};
   border: 1px solid
-    ${props =>
-      props.vectorLayerStyle && props.vectorLayerStyle.getStroke()
-        ? props.vectorLayerStyle.getStroke().getColor()
-        : props.theme.color.slateGray};
+    ${p =>
+      p.vectorLayerStyle && p.vectorLayerStyle.getStroke()
+        ? p.vectorLayerStyle.getStroke().getColor()
+        : p.theme.color.slateGray};
   display: inline-block;
   margin-right: 10px;
   margin-left: 2px;
@@ -196,7 +198,9 @@ const Icons = styled.span`
   flex: 1;
 `
 
-const Zone = styled.span`
+const Zone = styled.span<{
+  isLast: boolean
+}>`
   display: flex;
   justify-content: flex-start;
   line-height: 1.9em;
@@ -206,7 +210,7 @@ const Zone = styled.span`
   user-select: none;
   font-size: 13px;
   font-weight: 300;
-  ${props => (props.isLast ? `border-bottom: 1px solid ${COLORS.lightGray}; height: 27px;` : 'height: 28px;')}
+  ${p => (p.isLast ? `border-bottom: 1px solid ${p.theme.color.lightGray}; height: 27px;` : 'height: 28px;')}
 
   :hover {
     background: ${theme.color.blueGray['25']};
@@ -224,4 +228,5 @@ const ZoneText = styled.span`
   margin-top: 5px;
 `
 
-export default React.memo(RegulatoryZone)
+export const RegulatoryZone = memo(UnmemoizedRegulatoryZone)
+RegulatoryZone.displayName = 'RegulatoryZone'

@@ -11,28 +11,27 @@ import { BACKOFFICE_SEARCH_PROPERTIES } from '../../../domain/entities/backoffic
 
 const SearchRegulations = props => {
   const dispatch = useDispatch()
-  const {
-    setFoundRegulatoryZonesByRegTerritory,
-    regulatoryZoneListByRegTerritory
-  } = props
+  const { setFoundRegulatoryZonesByRegTerritory, regulatoryZoneListByRegTerritory } = props
 
   const searchInput = useRef(null)
   const [searchText, setSearchText] = useState('')
 
-  const {
-    regulatoryZoneMetadata
-  } = useSelector(state => state.regulatory)
+  const { regulatoryZoneMetadata } = useSelector(state => state.regulatory)
 
   useEffect(() => {
     searchRegulatoryZone()
 
-    function searchRegulatoryZone () {
+    function searchRegulatoryZone() {
       const searchResult = {}
       if (searchText === '') {
         setFoundRegulatoryZonesByRegTerritory(regulatoryZoneListByRegTerritory)
       } else {
         Object.keys(regulatoryZoneListByRegTerritory).forEach(territory => {
-          const searchResultByLawType = searchByLawType(regulatoryZoneListByRegTerritory[territory], BACKOFFICE_SEARCH_PROPERTIES, searchText)
+          const searchResultByLawType = searchByLawType(
+            regulatoryZoneListByRegTerritory[territory],
+            BACKOFFICE_SEARCH_PROPERTIES,
+            searchText
+          )
           if (searchResultByLawType && Object.keys(searchResultByLawType).length !== 0) {
             searchResult[territory] = searchResultByLawType
           }
@@ -45,7 +44,13 @@ const SearchRegulations = props => {
         setFoundRegulatoryZonesByRegTerritory(searchResult)
       }
     }
-  }, [searchText, setFoundRegulatoryZonesByRegTerritory, regulatoryZoneListByRegTerritory, regulatoryZoneMetadata, dispatch])
+  }, [
+    searchText,
+    setFoundRegulatoryZonesByRegTerritory,
+    regulatoryZoneListByRegTerritory,
+    regulatoryZoneMetadata,
+    dispatch
+  ])
 
   useEffect(() => {
     if (searchInput) {
@@ -67,15 +72,16 @@ const SearchRegulations = props => {
           type="text"
           value={searchText}
           placeholder={'Rechercher une zone par son nom ou sa référence réglementaire'}
-          onChange={e => setSearchText(e.target.value)} />
-        <SearchIcon />
-        </SearchBox>
-        <AddRegulationButton
-          onClick={onAddRegulationClick}
-          disabled={false}
-          isLast={false}
-          title={'Saisir une nouvelle réglementation'}
+          onChange={e => setSearchText(e.target.value)}
         />
+        <SearchIcon />
+      </SearchBox>
+      <AddRegulationButton
+        onClick={onAddRegulationClick}
+        disabled={false}
+        isLast={false}
+        title={'Saisir une nouvelle réglementation'}
+      />
     </SearchContainer>
   )
 }

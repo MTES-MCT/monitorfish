@@ -4,8 +4,7 @@ import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
-import getAllRegulatoryLayersByRegTerritory
-  from '../../../domain/use_cases/layer/regulation/getAllRegulatoryLayersByRegTerritory'
+import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/layer/regulation/getAllRegulatoryLayersByRegTerritory'
 import { Layer } from '../../../domain/entities/layers/constants'
 import showRegulatoryZone from '../../../domain/use_cases/layer/regulation/showRegulatoryZone'
 
@@ -32,8 +31,7 @@ import {
   setRegulatoryTopics,
   setRegulatoryZoneMetadata
 } from '../../../domain/shared_slices/Regulatory'
-import getGeometryWithoutRegulationReference
-  from '../../../domain/use_cases/layer/regulation/getGeometryWithoutRegulationReference'
+import getGeometryWithoutRegulationReference from '../../../domain/use_cases/layer/regulation/getGeometryWithoutRegulationReference'
 import createOrUpdateRegulation from '../../../domain/use_cases/layer/regulation/createOrUpdateRegulation'
 
 import { formatDataForSelectPicker } from '../../../utils'
@@ -82,7 +80,10 @@ const EditRegulation = ({ title, isEdition }) => {
   const [geometryIsMissing, setGeometryIsMissing] = useState(false)
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   /** @type {Number[]} geometryIdList */
-  const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [], [geometryObjectList])
+  const geometryIdList = useMemo(
+    () => (geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : []),
+    [geometryObjectList]
+  )
   /** @type {boolean} saveIsForbidden */
   const [saveIsForbidden, setSaveIsForbidden] = useState(false)
 
@@ -99,15 +100,7 @@ const EditRegulation = ({ title, isEdition }) => {
     selectedRegulatoryZoneId
   } = useSelector(state => state.regulation)
 
-  const {
-    lawType,
-    topic,
-    zone,
-    region,
-    id,
-    regulatoryReferences,
-    otherInfo
-  } = processingRegulation
+  const { lawType, topic, zone, region, id, regulatoryReferences, otherInfo } = processingRegulation
 
   useEffect(() => {
     getGeometryObjectList()
@@ -130,11 +123,13 @@ const EditRegulation = ({ title, isEdition }) => {
   useEffect(() => {
     return () => {
       if (isEdition && processingRegulation?.geometry) {
-        dispatch(showRegulatoryZone({
-          type: Layer.REGULATORY.code,
-          ...processingRegulation,
-          namespace: 'backoffice'
-        }))
+        dispatch(
+          showRegulatoryZone({
+            type: Layer.REGULATORY.code,
+            ...processingRegulation,
+            namespace: 'backoffice'
+          })
+        )
       }
     }
   }, [isEdition, processingRegulation, dispatch])
@@ -184,9 +179,8 @@ const EditRegulation = ({ title, isEdition }) => {
     _atLeastOneValueIsMissing = _atLeastOneValueIsMissing || valueIsMissing
     setNameZoneIsMissing(valueIsMissing)
 
-    valueIsMissing = lawType && lawType !== '' &&
-      LAWTYPES_TO_TERRITORY[lawType] === FRANCE &&
-      !(region && region.length !== 0)
+    valueIsMissing =
+      lawType && lawType !== '' && LAWTYPES_TO_TERRITORY[lawType] === FRANCE && !(region && region.length !== 0)
     _atLeastOneValueIsMissing = _atLeastOneValueIsMissing || valueIsMissing
     setRegionIsMissing(valueIsMissing)
 
@@ -205,7 +199,8 @@ const EditRegulation = ({ title, isEdition }) => {
   useEffect(() => {
     if (regulatoryTextCheckedMap && saveOrUpdateRegulation) {
       const regulatoryTextCheckList = Object.values(regulatoryTextCheckedMap)
-      const allTextsHaveBeenChecked = regulatoryTextCheckList?.length > 0 && regulatoryTextCheckList.length === regulatoryReferences.length
+      const allTextsHaveBeenChecked =
+        regulatoryTextCheckList?.length > 0 && regulatoryTextCheckList.length === regulatoryReferences.length
 
       if (allTextsHaveBeenChecked) {
         const allRequiredValuesHaveBeenFilled = !regulatoryTextCheckList.includes(false) && !atLeastOneValueIsMissing
@@ -223,7 +218,14 @@ const EditRegulation = ({ title, isEdition }) => {
         }
       }
     }
-  }, [atLeastOneValueIsMissing, saveOrUpdateRegulation, regulatoryTextCheckedMap, setSaveIsForbidden, id, selectedRegulatoryZoneId])
+  }, [
+    atLeastOneValueIsMissing,
+    saveOrUpdateRegulation,
+    regulatoryTextCheckedMap,
+    setSaveIsForbidden,
+    id,
+    selectedRegulatoryZoneId
+  ])
 
   useEffect(() => {
     if (showRegulatoryPreview) {
@@ -232,57 +234,59 @@ const EditRegulation = ({ title, isEdition }) => {
       } else if (isEdition && processingRegulation?.geometry) {
         dispatch(setRegulatoryGeometriesToPreview([processingRegulation?.geometry]))
       } else {
-        dispatch(setError(new Error('Aucune géométrie n\'a été trouvée pour cette identifiant.')))
+        dispatch(setError(new Error("Aucune géométrie n'a été trouvée pour cette identifiant.")))
       }
     }
-  }, [isEdition, processingRegulation, id, geometryObjectList, showRegulatoryPreview, selectedRegulatoryZoneId, dispatch])
+  }, [
+    isEdition,
+    processingRegulation,
+    id,
+    geometryObjectList,
+    showRegulatoryPreview,
+    selectedRegulatoryZoneId,
+    dispatch
+  ])
 
   const getGeometryObjectList = () => {
-    dispatch(getGeometryWithoutRegulationReference())
-      .then(geometryListAsObject => {
-        if (geometryListAsObject !== undefined) {
-          setGeometryObjectList(geometryListAsObject)
-        }
-      })
+    dispatch(getGeometryWithoutRegulationReference()).then(geometryListAsObject => {
+      if (geometryListAsObject !== undefined) {
+        setGeometryObjectList(geometryListAsObject)
+      }
+    })
   }
 
   const setOtherInfo = value => {
-    dispatch(updateProcessingRegulationByKey({
-      key: REGULATORY_REFERENCE_KEYS.OTHER_INFO,
-      value
-    }))
+    dispatch(
+      updateProcessingRegulationByKey({
+        key: REGULATORY_REFERENCE_KEYS.OTHER_INFO,
+        value
+      })
+    )
   }
 
   return (
     <>
-    <Wrapper>
-      <CreateRegulationWrapper>
-        <Body>
-          <Header>
-            <LinkSpan><ChevronIcon/>
-              <BackLink
-                data-cy='go-back-link'
-                onClick={onGoBack}
-              >
-                Revenir à la liste complète des zones
-              </BackLink>
-            </LinkSpan>
-            <HeaderTitle>{title}</HeaderTitle>
-            <Span />
-          </Header>
-          <ContentWrapper>
-            <Section show>
-                <Title>
-                  identification de la zone réglementaire
-                </Title>
+      <Wrapper>
+        <CreateRegulationWrapper>
+          <Body>
+            <Header>
+              <LinkSpan>
+                <ChevronIcon />
+                <BackLink data-cy="go-back-link" onClick={onGoBack}>
+                  Revenir à la liste complète des zones
+                </BackLink>
+              </LinkSpan>
+              <HeaderTitle>{title}</HeaderTitle>
+              <Span />
+            </Header>
+            <ContentWrapper>
+              <Section show>
+                <Title>identification de la zone réglementaire</Title>
                 <RegulationLawTypeLine
                   selectData={formatDataForSelectPicker(Object.keys(LAWTYPES_TO_TERRITORY))}
                   lawTypeIsMissing={lawTypeIsMissing}
                 />
-                <RegulationTopicLine
-                  disabled={!lawType}
-                  regulationTopicIsMissing={regulationTopicIsMissing}
-                />
+                <RegulationTopicLine disabled={!lawType} regulationTopicIsMissing={regulationTopicIsMissing} />
                 <RegulationLayerZoneLine nameZoneIsMissing={nameZoneIsMissing} />
                 <RegulationRegionLine
                   disabled={!lawType || LAWTYPES_TO_TERRITORY[lawType] !== FRANCE}
@@ -294,69 +298,63 @@ const EditRegulation = ({ title, isEdition }) => {
                   showRegulatoryPreview={showRegulatoryPreview}
                   geometryIsMissing={geometryIsMissing}
                 />
-            </Section>
-            <RegulatoryTextSection
-              regulatoryTextList={regulatoryReferences}
-              saveForm={saveOrUpdateRegulation}
-            />
-            <FishingPeriodSection />
-            <SpeciesRegulation />
-            <GearRegulation />
-            <OtherRemark show>
-              <Label>Remarques générales</Label>
-              <CustomInput
-                data-cy={'regulatory-general-other-info'}
-                as="textarea"
-                rows={2}
-                placeholder=''
-                value={otherInfo || ''}
-                onChange={event => setOtherInfo(event.target.value)}
-                width={'500px'}
-                $isGray={otherInfo && otherInfo !== ''}
-              />
-            </OtherRemark>
-          </ContentWrapper>
-        </Body>
-        <Footer>
-          <FooterButton>
-            <Validate>
-              {saveIsForbidden && <ErrorMessage data-cy='save-forbidden-btn'>
-                Veuillez vérifier les champs surlignés en rouge dans le formulaire
-              </ErrorMessage>}
-              <ValidateButton
-                data-cy="validate-button"
-                disabled={false}
-                isLast={false}
-                onClick={() => {
-                  checkRequiredValues()
-                  dispatch(setSaveOrUpdateRegulation(true))
-                }}
-              >
-              { isEdition
-                ? 'Enregister les modifications'
-                : 'Créer la réglementation'
-              }
-              </ValidateButton>
-            </Validate>
-            {isEdition &&
-              <CancelButton
-                disabled={false}
-                isLast={false}
-                onClick={() => dispatch(setIsRemoveModalOpen(true))}
-              >
-                Supprimer la réglementation
-              </CancelButton>}
-          </FooterButton>
-        </Footer>
-      </CreateRegulationWrapper>
-      { showRegulatoryPreview &&
-        <BaseMap >
-          <BaseLayer />
-          <RegulatoryPreviewLayer />
-        </BaseMap>}
-    </Wrapper>
-    {isRemoveModalOpen && <RemoveRegulationModal />}
-    {isConfirmModalOpen && <ConfirmRegulationModal goBackofficeHome={goBackofficeHome} />}
+              </Section>
+              <RegulatoryTextSection regulatoryTextList={regulatoryReferences} saveForm={saveOrUpdateRegulation} />
+              <FishingPeriodSection />
+              <SpeciesRegulation />
+              <GearRegulation />
+              <OtherRemark show>
+                <Label>Remarques générales</Label>
+                <CustomInput
+                  data-cy={'regulatory-general-other-info'}
+                  as="textarea"
+                  rows={2}
+                  placeholder=""
+                  value={otherInfo || ''}
+                  onChange={event => setOtherInfo(event.target.value)}
+                  width={'500px'}
+                  $isGray={otherInfo && otherInfo !== ''}
+                />
+              </OtherRemark>
+            </ContentWrapper>
+          </Body>
+          <Footer>
+            <FooterButton>
+              <Validate>
+                {saveIsForbidden && (
+                  <ErrorMessage data-cy="save-forbidden-btn">
+                    Veuillez vérifier les champs surlignés en rouge dans le formulaire
+                  </ErrorMessage>
+                )}
+                <ValidateButton
+                  data-cy="validate-button"
+                  disabled={false}
+                  isLast={false}
+                  onClick={() => {
+                    checkRequiredValues()
+                    dispatch(setSaveOrUpdateRegulation(true))
+                  }}
+                >
+                  {isEdition ? 'Enregister les modifications' : 'Créer la réglementation'}
+                </ValidateButton>
+              </Validate>
+              {isEdition && (
+                <CancelButton disabled={false} isLast={false} onClick={() => dispatch(setIsRemoveModalOpen(true))}>
+                  Supprimer la réglementation
+                </CancelButton>
+              )}
+            </FooterButton>
+          </Footer>
+        </CreateRegulationWrapper>
+        {showRegulatoryPreview && (
+          <BaseMap>
+            <BaseLayer />
+            <RegulatoryPreviewLayer />
+          </BaseMap>
+        )}
+      </Wrapper>
+      {isRemoveModalOpen && <RemoveRegulationModal />}
+      {isConfirmModalOpen && <ConfirmRegulationModal goBackofficeHome={goBackofficeHome} />}
     </>
   )
 }

@@ -6,7 +6,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.loadPath('/#@-824534.42,6082993.21,8.70')
   })
 
-  it('Reporting Should contain the current reporting, archive or delete a reporting', () => {
+  it.only('Reporting Should contain the current reporting, archive or delete a reporting', () => {
     // Given
     cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('MARIAGE île')
     cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()

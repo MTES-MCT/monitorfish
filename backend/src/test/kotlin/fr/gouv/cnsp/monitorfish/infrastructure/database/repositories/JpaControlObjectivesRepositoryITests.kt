@@ -13,17 +13,21 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
     private lateinit var jpaControlObjectivesRepository: JpaControlObjectivesRepository
 
     private val currentYear: Int
+    private val lastYear: Int
+    private val nextYear: Int
 
     init {
         val formatter = DateTimeFormatter.ofPattern("yyyy")
         currentYear = LocalDate.now().format(formatter).toInt()
+        lastYear = currentYear - 1
+        nextYear = currentYear + 1
     }
 
     @Test
     @Transactional
     fun `findAllByYear Should find all control objectives of the given year`() {
         // When
-        val controlObjectives = jpaControlObjectivesRepository.findAllByYear(currentYear - 1)
+        val controlObjectives = jpaControlObjectivesRepository.findAllByYear(lastYear)
 
         // Then
         assertThat(controlObjectives).hasSize(53)
@@ -33,7 +37,7 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllByYear Should return no control objectives When there is no objectives for a given year`() {
         // When
-        val controlObjectives = jpaControlObjectivesRepository.findAllByYear(2020)
+        val controlObjectives = jpaControlObjectivesRepository.findAllByYear(currentYear - 2)
 
         // Then
         assertThat(controlObjectives).hasSize(0)
@@ -47,15 +51,15 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(yearEntries).hasSize(2)
-        assertThat(yearEntries.first()).isEqualTo(2022)
-        assertThat(yearEntries.last()).isEqualTo(2021)
+        assertThat(yearEntries.first()).isEqualTo(currentYear)
+        assertThat(yearEntries.last()).isEqualTo(lastYear)
     }
 
     @Test
     @Transactional
     fun `update Should update targetNumberOfControlsAtPort When not null`() {
         // Given
-        val controlObjectives = jpaControlObjectivesRepository.findAllByYear(2021)
+        val controlObjectives = jpaControlObjectivesRepository.findAllByYear(lastYear)
 
         // When
         assertThat(controlObjectives.find { it.id == 9 }?.targetNumberOfControlsAtPort).isEqualTo(50)
@@ -67,7 +71,7 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
         )
 
         // Then
-        val updatedControlObjective = jpaControlObjectivesRepository.findAllByYear(2021).find { it.id == 9 }
+        val updatedControlObjective = jpaControlObjectivesRepository.findAllByYear(lastYear).find { it.id == 9 }
         assertThat(updatedControlObjective?.targetNumberOfControlsAtPort).isEqualTo(153)
     }
 
@@ -75,7 +79,7 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `update Should update targetNumberOfControlsAtSea When not null`() {
         // Given
-        val controlObjectives = jpaControlObjectivesRepository.findAllByYear(2021)
+        val controlObjectives = jpaControlObjectivesRepository.findAllByYear(lastYear)
 
         // When
         assertThat(controlObjectives.find { it.id == 9 }?.targetNumberOfControlsAtSea).isEqualTo(20)
@@ -87,7 +91,7 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
         )
 
         // Then
-        val updatedControlObjective = jpaControlObjectivesRepository.findAllByYear(2021).find { it.id == 9 }
+        val updatedControlObjective = jpaControlObjectivesRepository.findAllByYear(lastYear).find { it.id == 9 }
         assertThat(updatedControlObjective?.targetNumberOfControlsAtSea).isEqualTo(10)
     }
 
@@ -95,7 +99,7 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `update Should update controlPriorityLevel When not null`() {
         // Given
-        val controlObjectives = jpaControlObjectivesRepository.findAllByYear(2021)
+        val controlObjectives = jpaControlObjectivesRepository.findAllByYear(lastYear)
 
         // When
         assertThat(controlObjectives.find { it.id == 9 }?.controlPriorityLevel).isEqualTo(1.0)
@@ -107,7 +111,7 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
         )
 
         // Then
-        val updatedControlObjective = jpaControlObjectivesRepository.findAllByYear(2021).find { it.id == 9 }
+        val updatedControlObjective = jpaControlObjectivesRepository.findAllByYear(lastYear).find { it.id == 9 }
         assertThat(updatedControlObjective?.controlPriorityLevel).isEqualTo(2.0)
     }
 
@@ -115,7 +119,7 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `add Should add a new control objective to a facade`() {
         // Given
-        val controlObjectives = jpaControlObjectivesRepository.findAllByYear(2021)
+        val controlObjectives = jpaControlObjectivesRepository.findAllByYear(lastYear)
         assertThat(controlObjectives).hasSize(53)
 
         // When
@@ -123,7 +127,7 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
             ControlObjective(
                 segment = "SEGMENT",
                 facade = "FACADE",
-                year = 2021,
+                year = lastYear,
                 targetNumberOfControlsAtSea = 25,
                 targetNumberOfControlsAtPort = 64,
                 controlPriorityLevel = 2.0
@@ -131,7 +135,7 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
         )
 
         // Then
-        val updatedControlObjectives = jpaControlObjectivesRepository.findAllByYear(2021)
+        val updatedControlObjectives = jpaControlObjectivesRepository.findAllByYear(lastYear)
         assertThat(updatedControlObjectives).hasSize(54)
         assertThat(updatedControlObjectives.find { it.segment == "SEGMENT" }?.targetNumberOfControlsAtSea).isEqualTo(25)
     }
@@ -140,17 +144,17 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `addYear Should add a new year copied from the specified year`() {
         // Given
-        assertThat(jpaControlObjectivesRepository.findAllByYear(currentYear - 1)).hasSize(53)
-        assertThat(jpaControlObjectivesRepository.findAllByYear(currentYear + 1)).hasSize(0)
+        assertThat(jpaControlObjectivesRepository.findAllByYear(lastYear)).hasSize(53)
+        assertThat(jpaControlObjectivesRepository.findAllByYear(nextYear)).hasSize(0)
 
         // When
-        jpaControlObjectivesRepository.addYear(currentYear - 1, currentYear + 1)
+        jpaControlObjectivesRepository.addYear(lastYear, nextYear)
 
         // Then
-        assertThat(jpaControlObjectivesRepository.findAllByYear(currentYear - 1)).hasSize(53)
-        val updatedControlObjectives = jpaControlObjectivesRepository.findAllByYear(currentYear + 1)
+        assertThat(jpaControlObjectivesRepository.findAllByYear(lastYear)).hasSize(53)
+        val updatedControlObjectives = jpaControlObjectivesRepository.findAllByYear(nextYear)
         assertThat(updatedControlObjectives).hasSize(53)
         assertThat(updatedControlObjectives.first().id).isEqualTo(107)
-        assertThat(updatedControlObjectives.first().year).isEqualTo(currentYear + 1)
+        assertThat(updatedControlObjectives.first().year).isEqualTo(nextYear)
     }
 }

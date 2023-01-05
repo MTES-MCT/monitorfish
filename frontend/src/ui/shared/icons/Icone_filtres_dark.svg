@@ -1,14 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="23.76" height="22"
-     viewBox="0 0 23.76 22">
+<svg xmlns="http://www.w3.org/2000/svg" width="23.76" height="22" viewBox="0 0 23.76 22">
     <defs>
         <clipPath id="clip-path">
-            <rect width="23.76" height="22" fill="none"/>
+            <rect width="23.76" height="22" fill="none" />
         </clipPath>
     </defs>
     <g id="Grille_de_répétition_1" data-name="Grille de répétition 1" clip-path="url(#clip-path)">
         <g transform="translate(-8.126 -9)">
             <path id="Tracé_102" data-name="Tracé 102" d="M-1168.98-7544h20l-7.665,11.3v8.7h-4.764v-8.7Z"
-                  transform="translate(1178.98 7554)" fill="current" stroke="#707785" stroke-width="2"/>
+                transform="translate(1178.98 7554)" fill="current" stroke="currentColor" stroke-width="2" />
         </g>
     </g>
 </svg>

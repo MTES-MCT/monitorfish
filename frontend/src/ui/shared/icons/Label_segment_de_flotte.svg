@@ -1,15 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="15.834" height="15.4" viewBox="0 0 15.834 15.4">
-    <g id="Label_segment_de_flotte" data-name="Label_segment de flotte" transform="translate(0.917 0.7)">
-        <path id="Tracé_138" data-name="Tracé 138" d="M357.927,227.617l7,1.144-2.3,7.09h-9.4l-2.3-7.09Z"
-              transform="translate(-350.927 -221.851)" fill="none" stroke="#707785" stroke-miterlimit="10"
-              stroke-width="1.4"/>
-        <path id="Tracé_139" data-name="Tracé 139" d="M362.879,228.433v-4.327h-9.9v4.327"
-              transform="translate(-350.927 -221.851)" fill="none" stroke="#707785" stroke-miterlimit="10"
-              stroke-width="1.4"/>
-        <rect id="Rectangle_1085" data-name="Rectangle 1085" width="4.401" height="2.255" transform="translate(4.864)"
-              fill="none" stroke="#707785" stroke-miterlimit="10" stroke-width="1.4"/>
-        <path id="Tracé_140" data-name="Tracé 140" d="M351.606,231.052l6.321-1.144,6.353,1.038"
-              transform="translate(-350.927 -221.851)" fill="none" stroke="#707785" stroke-miterlimit="10"
-              stroke-width="1.4"/>
-    </g>
+      <g id="Label_segment_de_flotte" data-name="Label_segment de flotte" transform="translate(0.917 0.7)">
+            <path id="Tracé_138" data-name="Tracé 138" d="M357.927,227.617l7,1.144-2.3,7.09h-9.4l-2.3-7.09Z"
+                  transform="translate(-350.927 -221.851)" fill="none" stroke="currentColor" stroke-miterlimit="10"
+                  stroke-width="1.4" />
+            <path id="Tracé_139" data-name="Tracé 139" d="M362.879,228.433v-4.327h-9.9v4.327"
+                  transform="translate(-350.927 -221.851)" fill="none" stroke="currentColor" stroke-miterlimit="10"
+                  stroke-width="1.4" />
+            <rect id="Rectangle_1085" data-name="Rectangle 1085" width="4.401" height="2.255"
+                  transform="translate(4.864)" fill="none" stroke="currentColor" stroke-miterlimit="10"
+                  stroke-width="1.4" />
+            <path id="Tracé_140" data-name="Tracé 140" d="M351.606,231.052l6.321-1.144,6.353,1.038"
+                  transform="translate(-350.927 -221.851)" fill="none" stroke="currentColor" stroke-miterlimit="10"
+                  stroke-width="1.4" />
+      </g>
 </svg>

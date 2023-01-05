@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="15.768" height="15.768" viewBox="0 0 15.768 15.768">
     <g id="Flèche_navigation_marées" transform="translate(14 14.884) rotate(180)">
         <path id="Flèche_droite_gris_clair" data-name="Flèche droite_gris clair" d="M0,0,7,7,0,14"
-              transform="translate(7 14) rotate(180)" fill="none" stroke="#707785" stroke-width="2.5"/>
-        <line id="Ligne_1769" data-name="Ligne 1769" x1="14" transform="translate(0 7.002)" fill="none" stroke="#707785"
-              stroke-width="2.5"/>
+            transform="translate(7 14) rotate(180)" fill="none" stroke="currentColor" stroke-width="2.5" />
+        <line id="Ligne_1769" data-name="Ligne 1769" x1="14" transform="translate(0 7.002)" fill="none"
+            stroke="currentColor" stroke-width="2.5" />
     </g>
 </svg>

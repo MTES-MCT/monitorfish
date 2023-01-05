@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Select_rectangle" transform="translate(160 -41)">
+    <g>
+      <g transform="translate(-152 44) rotate(-90)" fill="none" stroke="currentColor" stroke-miterlimit="10"
+        stroke-width="2">
+        <rect width="2" height="4" stroke="none" />
+        <rect x="1" y="1" height="2" fill="none" />
+      </g>
+      <g transform="translate(-152 60) rotate(-90)" fill="none" stroke="currentColor" stroke-miterlimit="10"
+        stroke-width="2">
+        <rect width="2" height="4" stroke="none" />
+        <rect x="1" y="1" height="2" fill="none" />
+      </g>
+      <g transform="translate(-159 49)" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2">
+        <rect width="2" height="4" stroke="none" />
+        <rect x="1" y="1" height="2" fill="none" />
+      </g>
+      <g transform="translate(-143 49)" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2">
+        <rect width="2" height="4" stroke="none" />
+        <rect x="1" y="1" height="2" fill="none" />
+      </g>
+      <g>
+        <g fill="none" stroke-miterlimit="10">
+          <path d="M-159,42v5h2V44h3V42Z" stroke="none" />
+          <path d="M -159 42 L -154 42 L -154 44 L -157 44 L -157 47 L -159 47 L -159 42 Z" stroke="none"
+            fill="currentColor" />
+        </g>
+        <g fill="none" stroke-miterlimit="10">
+          <path d="M-146,42v2h3v3h2V42Z" stroke="none" />
+          <path d="M -146 42 L -141 42 L -141 47 L -143 47 L -143 44 L -146 44 L -146 42 Z" stroke="none"
+            fill="currentColor" />
+        </g>
+      </g>
+      <g>
+        <g fill="none" stroke-miterlimit="10">
+          <path d="M-157,55h-2v5h5V58h-3Z" stroke="none" />
+          <path d="M -159 55 L -157 55 L -157 58 L -154 58 L -154 60 L -159 60 L -159 55 Z" stroke="none"
+            fill="currentColor" />
+        </g>
+        <g fill="none" stroke-miterlimit="10">
+          <path d="M-143,55v3h-3v2h5V55Z" stroke="none" />
+          <path d="M -143 55 L -141 55 L -141 60 L -146 60 L -146 58 L -143 58 L -143 55 Z" stroke="none"
+            fill="currentColor" />
+        </g>
+      </g>
+    </g>
+    <rect width="20" height="20" transform="translate(-160 41)" fill="none" />
+  </g>
+</svg>

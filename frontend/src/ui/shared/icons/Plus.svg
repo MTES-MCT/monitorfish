@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Plus" transform="translate(120 -82)">
+    <path d="M-102,91h-7V84h-2v7h-7v2h7v7h2V93h7Z" fill="currentColor" />
+    <rect width="20" height="20" transform="translate(-120 82)" fill="none" />
+  </g>
+</svg>

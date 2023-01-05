@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Activity_feed" transform="translate(40 -41)">
+    <g id="Groupe_4181" data-name="Groupe 4181">
+      <g id="Rectangle_6156" data-name="Rectangle 6156" transform="translate(-22 44) rotate(90)" fill="none"
+        stroke="currentColor" stroke-miterlimit="10" stroke-width="2">
+        <rect width="2" height="11" stroke="none" />
+        <rect x="1" y="1" height="9" fill="none" />
+      </g>
+      <g id="Rectangle_6157" data-name="Rectangle 6157" transform="translate(-25 50) rotate(90)" fill="none"
+        stroke="currentColor" stroke-miterlimit="10" stroke-width="2">
+        <rect width="2" height="8" stroke="none" />
+        <rect x="1" y="1" height="6" fill="none" />
+      </g>
+      <g id="Rectangle_6158" data-name="Rectangle 6158" transform="translate(-23 56) rotate(90)" fill="none"
+        stroke="currentColor" stroke-miterlimit="10" stroke-width="2">
+        <rect width="2" height="10" stroke="none" />
+        <rect x="1" y="1" height="8" fill="none" />
+      </g>
+      <g id="Tracé_1406" data-name="Tracé 1406" fill="none" stroke-miterlimit="10">
+        <path
+          d="M-34,51a1.994,1.994,0,0,0-1-1.723V46.723A1.994,1.994,0,0,0-34,45a2,2,0,0,0-2-2,2,2,0,0,0-2,2,1.994,1.994,0,0,0,1,1.723v2.554A1.994,1.994,0,0,0-38,51a1.994,1.994,0,0,0,1,1.723v2.554A1.994,1.994,0,0,0-38,57a2,2,0,0,0,2,2,2,2,0,0,0,2-2,1.994,1.994,0,0,0-1-1.723V52.723A1.994,1.994,0,0,0-34,51Z"
+          stroke="none" />
+        <path
+          d="M -36 43 C -34.89500045776367 43 -34 43.89500045776367 -34 45 C -34 45.73799896240234 -34.40499877929688 46.37599945068359 -35 46.72299957275391 L -35 49.27700042724609 C -34.40499877929688 49.62400054931641 -34 50.26200103759766 -34 51 C -34 51.73799896240234 -34.40499877929688 52.37599945068359 -35 52.72299957275391 L -35 55.27700042724609 C -34.40499877929688 55.62400054931641 -34 56.26200103759766 -34 57 C -34 58.10499954223633 -34.89500045776367 59 -36 59 C -37.10499954223633 59 -38 58.10499954223633 -38 57 C -38 56.26200103759766 -37.59500122070313 55.62400054931641 -37 55.27700042724609 L -37 52.72299957275391 C -37.59500122070313 52.37599945068359 -38 51.73799896240234 -38 51 C -38 50.26200103759766 -37.59500122070313 49.62400054931641 -37 49.27700042724609 L -37 46.72299957275391 C -37.59500122070313 46.37599945068359 -38 45.73799896240234 -38 45 C -38 43.89500045776367 -37.10499954223633 43 -36 43 Z"
+          stroke="none" fill="currentColor" />
+      </g>
+    </g>
+    <rect id="Rectangle_6159" data-name="Rectangle 6159" width="20" height="20" transform="translate(-40 41)"
+      fill="none" />
+  </g>
+</svg>

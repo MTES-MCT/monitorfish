@@ -1,0 +1,6 @@
+<svg id="View_on_map" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <path
+    d="M18.5,1.523l-6,2.4-5-2-6,2.4V18.477l6-2.4,5,2,6-2.4ZM3.5,5.677l3-1.2v9.846l-3,1.2Zm5,8.646V4.477l3,1.2v9.846Zm8,0-3,1.2V5.677l3-1.2Z"
+    fill="currentColor" />
+  <rect width="20" height="20" transform="translate(0)" fill="none" />
+</svg>

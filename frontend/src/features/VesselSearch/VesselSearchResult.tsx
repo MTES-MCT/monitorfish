@@ -6,14 +6,14 @@ import { getVesselCompositeIdentifier } from '../../domain/entities/vessel/vesse
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { VesselSearchResultItem } from './VesselSearchResultItem'
 
-export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, showLastSearchedVessels, width }) {
+export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, showLastSearchedVessels }) {
   const { lastSearchedVessels } = useAppSelector(state => state.global)
   const baseUrl = useMemo(() => window.location.origin, [])
 
   return (
     <>
       {!!foundVessels?.length && (
-        <Results width={width}>
+        <Results>
           <List>
             {foundVessels.map(featureOrIdentity => {
               const vesselCompositeIdentifier =
@@ -33,7 +33,7 @@ export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, sh
         </Results>
       )}
       {!foundVessels?.length && showLastSearchedVessels && (
-        <Results width={width}>
+        <Results>
           <List>
             {lastSearchedVessels.map(vessel => {
               const vesselCompositeIdentifier = getVesselCompositeIdentifier(vessel)
@@ -55,16 +55,14 @@ export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, sh
   )
 }
 
-const Results = styled.div<{
-  width: number
-}>`
+const Results = styled.div`
   background: white;
   color: ${COLORS.gunMetal};
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
   position: absolute;
   z-index: 9;
-  width: ${p => p.width}px;
+  width: 100%;
 `
 
 const List = styled.ul`

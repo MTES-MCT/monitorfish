@@ -25,7 +25,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.wait(100)
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('ALERTE / 3 milles - Chaluts')
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('NATINF 7059')
-    cy.get('*[data-cy="archive-reporting-card"]').eq(0).click()
+    cy.get('*[data-cy="archive-reporting getVesselRiskFactor = (internalReferenceNumber:-card"]').eq(0).click()
 
     // Then
     cy.get('*[data-cy="vessel-menu-reporting"]').contains(1)

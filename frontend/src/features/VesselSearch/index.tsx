@@ -127,7 +127,7 @@ export function VesselSearch({
   }, [dispatch, searchQuery, hasVesselIdInResults, fuse])
 
   return (
-    <RefWrapper ref={wrapperRef}>
+    <Wrapper ref={wrapperRef} extendedWidth={extendedWidth} isExtended={isExtended}>
       <Input
         ref={input => (selectedVesselIdentity ? input && input.focus() : null)}
         baseUrl={baseUrl}
@@ -146,13 +146,18 @@ export function VesselSearch({
         searchQuery={searchQuery}
         selectVessel={selectVessel}
         showLastSearchedVessels={showLastSearchedVessels}
-        width={extendedWidth}
       />
-    </RefWrapper>
+    </Wrapper>
   )
 }
 
-const RefWrapper = styled.div``
+const Wrapper = styled.div<{
+  extendedWidth: number
+  isExtended: boolean
+}>`
+  width: ${p => (p.isExtended ? p.extendedWidth : 320)}px;
+  transition: all 0.7s;
+`
 
 const Input = styled.input<{
   baseUrl: string
@@ -168,7 +173,7 @@ const Input = styled.input<{
   font-size: 13px;
   font-weight: 500;
   height: 40px;
-  width: ${p => (p.isExtended ? p.extendedWidth : 320)}px;
+  width: 100%;
   padding: 0 5px 0 10px;
   flex: 3;
   transition: all 0.7s;

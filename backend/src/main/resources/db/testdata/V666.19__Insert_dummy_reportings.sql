@@ -9,7 +9,7 @@ VALUES ('ALERT', 'MARIAGE ÎLE HASARD', 'ABC000180832', 'VP374069', 'CG1312', 'I
                                                            '"natinfCode": "7059"' ||
                                                            '}')::jsonb, 41.569, 37.28, null),
        ('ALERT', 'MARIAGE ÎLE HASARD', 'ABC000180832', 'VP374069', 'CG1312', 'INTERNAL_REFERENCE_NUMBER',
-        NOW() - ('56 DAY')::interval, NOW() - ('26 DAY')::interval, true, false, ('{' ||
+        NOW() - ('3 DAY')::interval, NOW() - ('4 DAY')::interval, true, false, ('{' ||
                                                                                   '"seaFront": "NAMO",' ||
                                                                                   '"flagState": "FR",' ||
                                                                                   '"riskFactor": 3.3647,' ||
@@ -17,7 +17,7 @@ VALUES ('ALERT', 'MARIAGE ÎLE HASARD', 'ABC000180832', 'VP374069', 'CG1312', 'I
                                                                                   '"natinfCode": "7059"' ||
                                                                                   '}')::jsonb, null, null, null),
        ('ALERT', 'MARIAGE ÎLE HASARD', 'ABC000180832', 'VP374069', 'CG1312', 'INTERNAL_REFERENCE_NUMBER',
-        NOW() - ('120 DAY')::interval, NOW() - ('29 DAY')::interval, true, true, ('{' ||
+        NOW() - ('4 DAY')::interval, NOW() - ('5 DAY')::interval, true, true, ('{' ||
                                                                                   '"seaFront": "NAMO",' ||
                                                                                   '"flagState": "FR",' ||
                                                                                   '"riskFactor": 3.6947,' ||

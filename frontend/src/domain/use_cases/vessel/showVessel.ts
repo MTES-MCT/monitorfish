@@ -1,5 +1,5 @@
 import { getVesselFromAPI } from '../../../api/vessel'
-import { addVesselIdentifierToVesselIdentity } from '../../../features/vessel_search/utils'
+import { addVesselIdentifierToVesselIdentity } from '../../../features/VesselSearch/utils'
 import { Vessel, VesselSidebarTab } from '../../entities/vessel/vessel'
 import { getCustomOrDefaultTrackRequest, throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
 import { removeFishingActivitiesFromMap } from '../../shared_slices/FishingActivities'

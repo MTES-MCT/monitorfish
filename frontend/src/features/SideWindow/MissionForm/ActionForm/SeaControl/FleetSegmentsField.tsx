@@ -1,15 +1,27 @@
 import { FormikMultiRadio, FormikMultiSelect, Select } from '@mtes-mct/monitor-ui'
-import { useField } from 'formik'
+import { useField, useFormikContext } from 'formik'
 import { append } from 'ramda'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 
+import { getFaoZonesFromSpeciesOnboard } from '../../../../../domain/entities/vessel/riskFactor'
+import { getVesselRiskFactor } from '../../../../../domain/use_cases/vessel/getVesselRiskFactor'
+import { useAppDispatch } from '../../../../../hooks/useAppDispatch'
+import { useAppSelector } from '../../../../../hooks/useAppSelector'
 import { FieldsetGroup } from '../../FieldsetGroup'
 
 import type { PartialSeaControl } from '../../types'
 
 export function FleetSegmentsField() {
+  const dispatch = useAppDispatch()
+  const fleetSegments = useAppSelector(state => state.fleetSegment.fleetSegments)
+  const {
+    values: {
+      vessel: { internalReferenceNumber }
+    }
+  } = useFormikContext<PartialSeaControl>()
+
   const [tideFishingZonesInput, , tideFishingZonesHelper] =
-    useField<PartialSeaControl['tideFleetSegments']>('tideFishingZones')
+    useField<PartialSeaControl['tideFishingZones']>('tideFishingZones')
   const [tideFleetSegmentsInput, , tideFleetSegmentsHelper] =
     useField<PartialSeaControl['tideFleetSegments']>('tideFleetSegments')
 
@@ -18,20 +30,48 @@ export function FleetSegmentsField() {
     [tideFishingZonesInput.value, tideFleetSegmentsInput.value]
   )
 
+  useEffect(() => {
+    const getRiskFactor = async () => {
+      try {
+        const riskFactor = await dispatch(getVesselRiskFactor(internalReferenceNumber))
+
+        tideFleetSegmentsHelper.setValue(riskFactor.segments)
+        const faoZones = getFaoZonesFromSpeciesOnboard(riskFactor.speciesOnboard)
+        tideFishingZonesHelper.setValue(faoZones)
+      } catch (e) {
+        tideFleetSegmentsHelper.setValue([])
+        tideFishingZonesHelper.setValue([])
+      }
+    }
+
+    getRiskFactor()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, internalReferenceNumber])
+
   const addFleetSegment = useCallback(
-    (_nextValue: string | undefined) => {
-      if (!_nextValue) {
+    (_nextSegment: string | undefined) => {
+      if (!_nextSegment) {
         return
       }
 
-      const nextTideFishingZonesValue = append('37.1' as any)(tideFishingZonesInput.value)
-      const nextTideFleetSegmentsValue = append(_nextValue as any)(tideFleetSegmentsInput.value)
+      const faoZones = fleetSegments.find(fleetSegment => fleetSegment.segment === _nextSegment)?.faoAreas || []
+      const nextTideFishingZonesValue = tideFishingZonesInput.value.concat(faoZones)
+      const nextTideFleetSegmentsValue = append(_nextSegment as any)(tideFleetSegmentsInput.value)
 
       tideFishingZonesHelper.setValue(nextTideFishingZonesValue)
       tideFleetSegmentsHelper.setValue(nextTideFleetSegmentsValue)
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [tideFishingZonesInput.value, tideFleetSegmentsInput.value]
+  )
+
+  const labelledFleetSegments = useMemo(
+    () =>
+      fleetSegments.map(fleetSegment => ({
+        label: `${fleetSegment.segmentName} (${fleetSegment.segment})`,
+        value: fleetSegment.segment
+      })),
+    [fleetSegments]
   )
 
   return (
@@ -96,10 +136,7 @@ export function FleetSegmentsField() {
       {!isEmpty && <hr />}
       {isEmpty && (
         <p>
-          <em>
-            Renseignez un point de contrôle, les engins utilisés et les espèce pêchées pour qu’un segment de flotte soit
-            attribué au navire.
-          </em>
+          <em>Le segment de flotte sera attribué automatiquement lors de l’ajout d’un navire.</em>
         </p>
       )}
 
@@ -108,11 +145,7 @@ export function FleetSegmentsField() {
         label="Ajouter un segment"
         name="newFleetSegment.name"
         onChange={addFleetSegment}
-        options={[
-          { label: 'Segment de flotte 1', value: 'Segment de flotte 1' },
-          { label: 'Segment de flotte 2', value: 'Segment de flotte 2' },
-          { label: 'Segment de flotte 3', value: 'Segment de flotte 3' }
-        ]}
+        options={labelledFleetSegments}
       />
     </FieldsetGroup>
   )

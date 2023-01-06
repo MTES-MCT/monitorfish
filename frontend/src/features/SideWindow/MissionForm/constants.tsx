@@ -27,7 +27,16 @@ export const NEW_SEA_CONTROL_ACTION = (): PartialSeaControl => ({
   startDate: new Date(),
   tideFishingZones: [],
   tideFleetSegments: [],
-  type: MissionType.SEA
+  type: MissionType.SEA,
+  vessel: {
+    externalReferenceNumber: undefined,
+    flagState: undefined,
+    internalReferenceNumber: undefined,
+    ircs: undefined,
+    mmsi: undefined,
+    vesselId: undefined,
+    vesselName: undefined
+  }
 })
 
 export const NEW_FREE_NOTE_ACTION = (): PartialFreeNote => ({

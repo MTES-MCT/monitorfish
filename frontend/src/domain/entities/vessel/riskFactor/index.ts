@@ -1,3 +1,5 @@
+import type { Species } from '../types'
+
 export const getRiskFactorColor = (riskFactor: number) => {
   if (riskFactor >= 1 && riskFactor < 1.75) {
     return '#8E9A9F'
@@ -109,4 +111,10 @@ export const getControlRateRiskFactorText = (controlRate: number) => {
   }
 
   return undefined
+}
+
+export function getFaoZonesFromSpeciesOnboard(speciesOnboard: Array<Species>) {
+  const faoZones = speciesOnboard.map(species => species.faoZone)
+
+  return [...new Set(faoZones)]
 }

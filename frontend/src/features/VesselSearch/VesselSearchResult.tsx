@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
@@ -7,6 +8,7 @@ import { VesselSearchResultItem } from './VesselSearchResultItem'
 
 export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, showLastSearchedVessels }) {
   const { lastSearchedVessels } = useAppSelector(state => state.global)
+  const baseUrl = useMemo(() => window.location.origin, [])
 
   return (
     <>
@@ -20,6 +22,7 @@ export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, sh
               return (
                 <VesselSearchResultItem
                   key={vesselCompositeIdentifier}
+                  baseUrl={baseUrl}
                   searchQuery={searchQuery}
                   selectVessel={selectVessel}
                   vessel={featureOrIdentity}
@@ -38,6 +41,7 @@ export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, sh
               return (
                 <VesselSearchResultItem
                   key={vesselCompositeIdentifier}
+                  baseUrl={baseUrl}
                   searchQuery={searchQuery}
                   selectVessel={() => selectVessel(vessel)}
                   vessel={vessel}
@@ -56,6 +60,9 @@ const Results = styled.div`
   color: ${COLORS.gunMetal};
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
+  position: absolute;
+  z-index: 9;
+  width: 100%;
 `
 
 const List = styled.ul`

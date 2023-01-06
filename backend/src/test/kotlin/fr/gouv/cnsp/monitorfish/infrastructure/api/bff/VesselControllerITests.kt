@@ -44,6 +44,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.lang.IllegalArgumentException
 import java.time.LocalDate.EPOCH
 import java.time.LocalTime
 import java.time.ZoneId
@@ -77,6 +78,9 @@ class VesselControllerITests {
 
     @MockBean
     private lateinit var getVesselReportings: GetVesselReportings
+
+    @MockBean
+    private lateinit var getVesselRiskFactor: GetVesselRiskFactor
 
     @MockBean
     private lateinit var getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions
@@ -626,5 +630,33 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.archived[0].type", equalTo("ALERT")))
             .andExpect(jsonPath("$.archived[0].isArchived", equalTo(true)))
             .andExpect(jsonPath("$.archived[0].isDeleted", equalTo(false)))
+    }
+
+    @Test
+    fun `Should get the risk factor of a vessel`() {
+        // Given
+        given(this.getVesselRiskFactor.execute(any())).willReturn(
+            VesselRiskFactor(segments = listOf("SWW10"))
+        )
+
+        // When
+        mockMvc.perform(get("/bff/v1/vessels/risk_factor?internalReferenceNumber=FR224226850"))
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.impactRiskFactor", equalTo(1.0)))
+            .andExpect(jsonPath("$.segments", equalTo(listOf("SWW10"))))
+
+        Mockito.verify(getVesselRiskFactor).execute("FR224226850")
+    }
+
+    @Test
+    fun `Should get a 404 When the risk factor is not found`() {
+        // Given
+        given(this.getVesselRiskFactor.execute(any())).willThrow(IllegalArgumentException("Not found"))
+
+        // When
+        mockMvc.perform(get("/bff/v1/vessels/risk_factor?internalReferenceNumber=FR224226850"))
+            // Then
+            .andExpect(status().isBadRequest)
     }
 }

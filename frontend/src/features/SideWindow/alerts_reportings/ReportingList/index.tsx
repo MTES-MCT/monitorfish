@@ -1,4 +1,4 @@
-import { Icon, IconButton } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
 import dayjs from 'dayjs'
 import countries from 'i18n-iso-countries'
 import { useCallback, useMemo, useRef } from 'react'
@@ -23,11 +23,7 @@ import { CardTableFilters } from '../../../../ui/card-table/CardTableFilters'
 import { CardTableRow } from '../../../../ui/card-table/CardTableRow'
 import { EmptyCardTable } from '../../../../ui/card-table/EmptyCardTable'
 import { FilterTableInput } from '../../../../ui/card-table/FilterTableInput'
-import { RowVerticalSeparator } from '../../../../ui/card-table/RowVerticalSeparator'
 import { downloadAsCsv } from '../../../../utils/downloadAsCsv'
-import { ReactComponent as ArchiveIcon } from '../../../icons/Bouton_archiver.svg'
-import { ReactComponent as DeleteIcon } from '../../../icons/Bouton_supprimer.svg'
-// import { ReactComponent as DownloadIcon } from '../../../icons/standardized/Download.svg'
 import { Flag } from '../../../vessel_list/tableCells'
 import { EditReporting } from '../EditReporting'
 import { REPORTING_LIST_TABLE_OPTIONS } from './constants'
@@ -156,15 +152,17 @@ MMSI: ${reporting.mmsi || ''}`
             onClick={download}
             title={`Télécharger ${tableCheckedIds.length} signalement${tableCheckedIds.length > 1 ? 's' : ''}`}
           />
-          <ArchiveButton
-            $isShowed={tableCheckedIds.length > 0}
+          <IconButton
             data-cy="archive-reporting-cards"
+            disabled={!tableCheckedIds.length}
+            Icon={Icon.Archive}
             onClick={archive}
             title={`Archiver ${tableCheckedIds.length} signalement${tableCheckedIds.length > 1 ? 's' : ''}`}
           />
-          <DeleteButton
-            $isShowed={tableCheckedIds.length > 0}
+          <IconButton
             data-cy="delete-reporting-cards"
+            disabled={!tableCheckedIds.length}
+            Icon={Icon.Delete}
             onClick={remove}
             title={`Supprimer ${tableCheckedIds.length} signalement${tableCheckedIds.length > 1 ? 's' : ''}`}
           />
@@ -184,7 +182,7 @@ MMSI: ${reporting.mmsi || ''}`
             const editingIsDisabled = reporting.item.type === ReportingType.ALERT
 
             return (
-              <CardTableRow key={reporting.id} data-cy="side-window-current-reportings" index={index + 1}>
+              <CardTableRow key={reporting.id} data-cy="side-window-current-reportings" index={index + 1} style={{}}>
                 <FlexboxGrid>
                   <FlexboxGrid.Item style={columnStyles[0]}>
                     <StyledCheckbox
@@ -215,24 +213,24 @@ MMSI: ${reporting.mmsi || ''}`
                   <FlexboxGrid.Item style={columnStyles[7]}>
                     {reporting.item.underCharter && <UnderCharter>Navire sous charte</UnderCharter>}
                   </FlexboxGrid.Item>
-                  <RowVerticalSeparator />
+                  <Separator />
                   <FlexboxGrid.Item style={columnStyles[8]}>
-                    <LEGACY_Icon
-                      alt="Voir sur la carte"
+                    <IconButton
+                      accent={Accent.TERTIARY}
                       data-cy="side-window-silenced-alerts-show-vessel"
+                      Icon={Icon.ViewOnMap}
                       onClick={() => focusOnMap(reporting.item)}
-                      src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
                       style={showIconStyle}
                       title="Voir sur la carte"
                     />
                   </FlexboxGrid.Item>
                   <FlexboxGrid.Item style={columnStyles[9]}>
-                    <LEGACY_Icon
-                      alt="Editer le signalement"
+                    <IconButton
+                      accent={Accent.TERTIARY}
                       data-cy="side-window-edit-reporting"
+                      disabled={editingIsDisabled}
+                      Icon={Icon.Edit}
                       onClick={() => edit(editingIsDisabled, reporting.item)}
-                      src={`${baseUrl}/Bouton_edition.png`}
-                      style={editIconStyle(editingIsDisabled)}
                       title="Editer le signalement"
                     />
                   </FlexboxGrid.Item>
@@ -255,40 +253,29 @@ const UnderCharter = styled.div`
   color: ${p => p.theme.color.gunMetal};
 `
 const RightAligned = styled.div`
-  margin-left: auto;
-  align-self: flex-end;
+  align-items: flex-end;
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
 
   > button:not(:last-child) {
     margin-right: 10px;
   }
 `
 
-// TODO Move that into the UI using `<IconButton />`.
-const ArchiveButton = styled(ArchiveIcon)<{
-  $isShowed?: boolean
-}>`
-  border: 1px solid ${p => p.theme.color.lightGray};
-  padding: 6.5px 6px;
-  cursor: ${p => (p.$isShowed ? 'pointer' : 'not-allowed')};
-  vertical-align: bottom;
-  margin-right: 10px;
-`
-
-// TODO Move that into the UI using `<IconButton />`.
-const DeleteButton = styled(DeleteIcon)<{
-  $isShowed?: boolean
-}>`
-  border: 1px solid ${p => p.theme.color.lightGray};
-  padding: 7px;
-  cursor: ${p => (p.$isShowed ? 'pointer' : 'not-allowed')};
-  vertical-align: bottom;
-`
-
 const styleCenter = {
   alignItems: 'center',
   display: 'flex',
-  height: 15
+  height: 15,
+  paddingLeft: 10,
+  paddingRight: 10
 }
+
+const Separator = styled.div`
+  border-left: 1px solid ${THEME.color.lightGray};
+  height: 41px;
+  margin-top: -13px;
+`
 
 // TODO Most of these styles are either repetitions or generalizable styles (i.e. ellipsis).
 // It's  better to create common pre-styled components covering 70-80% of the cases and custom-wrapped ones
@@ -298,34 +285,20 @@ const styleCenter = {
 const columnStyles: CSSProperties[] = [
   {
     ...styleCenter,
-    paddingRight: 10,
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    paddingLeft: 0,
+    paddingRight: 0,
     width: 36
   },
   {
     ...styleCenter,
-    paddingRight: 10,
-    width: '9rem'
+    width: 144
   },
   {
     ...styleCenter,
-    paddingRight: 10,
-    width: '11rem'
-  },
-  {
-    ...styleCenter,
-    display: 'inline-block',
-    height: 20,
-    marginTop: -3,
-    overflow: 'hidden',
-    paddingRight: 10,
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    width: '18rem'
-  },
-  {
-    ...styleCenter,
-    paddingRight: 10,
-    width: '9rem'
+    width: 176
   },
   {
     ...styleCenter,
@@ -333,32 +306,42 @@ const columnStyles: CSSProperties[] = [
     height: 20,
     marginTop: -3,
     overflow: 'hidden',
-    paddingRight: 10,
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
-    width: '14rem'
+    width: 288
   },
   {
     ...styleCenter,
-    paddingRight: 10,
-    width: '11rem'
+    width: 64
   },
   {
     ...styleCenter,
-    paddingRight: 10,
-    width: 145
+    display: 'inline-block',
+    height: 20,
+    marginTop: -3,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    width: 224
   },
   {
     ...styleCenter,
-    marginLeft: 10,
-    paddingRight: 10,
-    width: '2rem'
+    width: 176
   },
   {
     ...styleCenter,
-    marginLeft: 10,
-    paddingRight: 10,
-    width: '2rem'
+    width: 144
+  },
+  {
+    ...styleCenter,
+    height: '100%',
+    justifyContent: 'center',
+    width: 32
+  },
+  {
+    ...styleCenter,
+    justifyContent: 'center',
+    width: 32
   }
 ]
 
@@ -383,15 +366,3 @@ const showIconStyle: CSSProperties = {
   paddingRight: 7,
   width: 20
 }
-
-// We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
-// goes back to the main window
-// eslint-disable-next-line @typescript-eslint/naming-convention
-const LEGACY_Icon = styled.img``
-const editIconStyle: (disabled: boolean) => CSSProperties = (disabled: boolean) => ({
-  cursor: disabled ? 'not-allowed' : 'pointer',
-  flexShrink: 0,
-  float: 'right',
-  marginLeft: 'auto',
-  paddingRight: 10
-})

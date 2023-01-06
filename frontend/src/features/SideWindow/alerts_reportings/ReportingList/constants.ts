@@ -6,49 +6,55 @@ import type { TableOptions } from '../../../../hooks/useTable/types'
 export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<InfractionSuspicionReporting | PendingAlertReporting> = {
   columns: [
     {
-      fixedWidth: 9,
+      fixedWidth: 144,
       isSortable: true,
       key: 'validationDate',
       label: 'Ouvert il y a...'
     },
     {
-      fixedWidth: 11,
+      fixedWidth: 176,
       isSortable: true,
       key: 'value.source',
       label: 'Origine',
       transform: getReportingOrigin
     },
     {
-      fixedWidth: 18,
+      fixedWidth: 288,
       isSortable: true,
       key: 'value.type',
       label: 'Titre',
       transform: getReportingTitle
     },
     {
-      fixedWidth: 9,
+      fixedWidth: 64,
       isSortable: true,
       key: 'value.natinfCode',
       label: 'NATINF'
     },
     {
-      fixedWidth: 14,
+      fixedWidth: 224,
       isSortable: true,
       key: 'vesselName',
       label: 'Navire'
     },
     {
-      fixedWidth: 11,
+      fixedWidth: 176,
       isSortable: true,
       key: 'value.dml',
       label: 'DML concernées'
     },
     {
-      fixedWidth: 2,
+      fixedWidth: 144,
+      isSortable: false,
+      key: 'underCharter',
+      label: ''
+    },
+    {
+      fixedWidth: 33,
       key: '_focusOnMap'
     },
     {
-      fixedWidth: 2,
+      fixedWidth: 32,
       key: '_edit'
     }
   ],

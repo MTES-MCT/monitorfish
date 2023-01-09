@@ -395,7 +395,7 @@ def load_processed_anchorages(anchorages: pd.DataFrame):
     e = create_engine("monitorfish_remote")
 
     anchorages.to_sql(
-        name="anchorages_2022_09",
+        name="anchorages_2023_01",
         con=e,
         schema="processed",
         if_exists="replace",

@@ -18,6 +18,15 @@ export type FilterBarProps = {
   onChange: (filters: Array<MissionFilter>) => Promisable<void>
 }
 export function FilterBar({ missions, onChange }: FilterBarProps) {
+  /* eslint-disable no-null/no-null */
+  const alertTypeFilterBoxRef = useRef<HTMLDivElement | null>(null)
+  // const customDateRangeFilterBoxRef = useRef<HTMLDivElement | null>(null)
+  const dateRangeFilterBoxRef = useRef<HTMLDivElement | null>(null)
+  const inspectionTypeFilterBoxRef = useRef<HTMLDivElement | null>(null)
+  const missionTypeFilterBoxRef = useRef<HTMLDivElement | null>(null)
+  const statusFilterBoxRef = useRef<HTMLDivElement | null>(null)
+  const unitFilterBoxRef = useRef<HTMLDivElement | null>(null)
+  /* eslint-enable no-null/no-null */
   const customFiltersRef = useRef<MissionFilter[]>([])
   const [isCustomDateRangeOpen, setIsCustomDateRangeOpen] = useState(false)
 
@@ -56,53 +65,83 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
         <FormikEffect onChange={handleFilterChange} />
 
         <FiltersBox>
-          <FormikSelect
-            isLabelHidden
-            label="Période"
-            name={MissionFilterType.DATE_RANGE}
-            options={MISSION_FILTER_OPTIONS[MissionFilterType.DATE_RANGE]}
-            placeholder="Période"
-          />
-          <FormikMultiSelect
-            fixedWidth={160}
-            isLabelHidden
-            label="Status"
-            name={MissionFilterType.STATUS}
-            options={MISSION_FILTER_OPTIONS[MissionFilterType.STATUS]}
-            placeholder="Status"
-          />
-          <FormikMultiSelect
-            fixedWidth={160}
-            isLabelHidden
-            label="Unité"
-            name={MissionFilterType.UNIT}
-            options={unitsAsOptions}
-            placeholder="Unité"
-          />
-          <FormikMultiSelect
-            fixedWidth={160}
-            isLabelHidden
-            label="Type de mission"
-            name={MissionFilterType.MISSION_TYPE}
-            options={MISSION_FILTER_OPTIONS[MissionFilterType.MISSION_TYPE]}
-            placeholder="Type de mission"
-          />
-          <FormikMultiSelect
-            fixedWidth={160}
-            isLabelHidden
-            label="Type de contrôle"
-            name={MissionFilterType.INSPECTION_TYPE}
-            options={MISSION_FILTER_OPTIONS[MissionFilterType.INSPECTION_TYPE]}
-            placeholder="Type de contrôle"
-          />
-          <FormikMultiSelect
-            fixedWidth={160}
-            isLabelHidden
-            label="Alerte"
-            name={MissionFilterType.ALERT_TYPE}
-            options={MISSION_FILTER_OPTIONS[MissionFilterType.ALERT_TYPE]}
-            placeholder="Alerte"
-          />
+          <FilterBox ref={dateRangeFilterBoxRef}>
+            {dateRangeFilterBoxRef.current && (
+              <FormikSelect
+                container={dateRangeFilterBoxRef.current}
+                isLabelHidden
+                label="Période"
+                name={MissionFilterType.DATE_RANGE}
+                options={MISSION_FILTER_OPTIONS[MissionFilterType.DATE_RANGE]}
+                placeholder="Période"
+              />
+            )}
+          </FilterBox>
+          <FilterBox ref={statusFilterBoxRef}>
+            {statusFilterBoxRef.current && (
+              <FormikMultiSelect
+                container={statusFilterBoxRef.current}
+                fixedWidth={160}
+                isLabelHidden
+                label="Status"
+                name={MissionFilterType.STATUS}
+                options={MISSION_FILTER_OPTIONS[MissionFilterType.STATUS]}
+                placeholder="Status"
+              />
+            )}
+          </FilterBox>
+          <FilterBox ref={unitFilterBoxRef}>
+            {unitFilterBoxRef.current && (
+              <FormikMultiSelect
+                container={unitFilterBoxRef.current}
+                fixedWidth={160}
+                isLabelHidden
+                label="Unité"
+                name={MissionFilterType.UNIT}
+                options={unitsAsOptions}
+                placeholder="Unité"
+              />
+            )}
+          </FilterBox>
+          <FilterBox ref={missionTypeFilterBoxRef}>
+            {missionTypeFilterBoxRef.current && (
+              <FormikMultiSelect
+                container={missionTypeFilterBoxRef.current}
+                fixedWidth={160}
+                isLabelHidden
+                label="Type de mission"
+                name={MissionFilterType.MISSION_TYPE}
+                options={MISSION_FILTER_OPTIONS[MissionFilterType.MISSION_TYPE]}
+                placeholder="Type de mission"
+              />
+            )}
+          </FilterBox>
+          <FilterBox ref={inspectionTypeFilterBoxRef}>
+            {inspectionTypeFilterBoxRef.current && (
+              <FormikMultiSelect
+                container={inspectionTypeFilterBoxRef.current}
+                fixedWidth={160}
+                isLabelHidden
+                label="Type de contrôle"
+                name={MissionFilterType.INSPECTION_TYPE}
+                options={MISSION_FILTER_OPTIONS[MissionFilterType.INSPECTION_TYPE]}
+                placeholder="Type de contrôle"
+              />
+            )}
+          </FilterBox>
+          <FilterBox ref={alertTypeFilterBoxRef}>
+            {alertTypeFilterBoxRef.current && (
+              <FormikMultiSelect
+                container={alertTypeFilterBoxRef.current}
+                fixedWidth={160}
+                isLabelHidden
+                label="Alerte"
+                name={MissionFilterType.ALERT_TYPE}
+                options={MISSION_FILTER_OPTIONS[MissionFilterType.ALERT_TYPE]}
+                placeholder="Alerte"
+              />
+            )}
+          </FilterBox>
         </FiltersBox>
 
         {isCustomDateRangeOpen && (
@@ -136,4 +175,8 @@ const FiltersBox = styled.div`
   > div:not(:first-child) {
     margin-left: 1rem;
   }
+`
+
+const FilterBox = styled.div`
+  position: relative;
 `

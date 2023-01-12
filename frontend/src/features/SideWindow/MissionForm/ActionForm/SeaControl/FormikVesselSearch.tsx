@@ -1,16 +1,16 @@
 import { useField } from 'formik'
-import { RefObject, useCallback } from 'react'
+import { useCallback } from 'react'
 
+import { useNewWindow } from '../../../../../ui/NewWindow'
 import { VesselSearch } from '../../../../VesselSearch'
 
 import type { VesselIdentity } from '../../../../../domain/entities/vessel/types'
 import type { PartialSeaControl } from '../../types'
 
-export type FormikVesselSearchProps = {
-  baseRef: RefObject<HTMLDivElement>
-}
-export function FormikVesselSearch({ baseRef }: FormikVesselSearchProps) {
+export function FormikVesselSearch() {
   const [field, , helper] = useField<PartialSeaControl['vessel']>('vessel')
+
+  const { newWindowContainerRef } = useNewWindow()
 
   const onSelectVessel = useCallback(
     (nextValue: VesselIdentity) => {
@@ -49,7 +49,7 @@ export function FormikVesselSearch({ baseRef }: FormikVesselSearchProps) {
 
   return (
     <VesselSearch
-      baseRef={baseRef}
+      baseRef={newWindowContainerRef}
       defaultValue={field.value}
       extendedWidth={400}
       hasVesselIdInResults

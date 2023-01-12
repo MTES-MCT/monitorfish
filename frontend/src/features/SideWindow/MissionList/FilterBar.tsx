@@ -5,6 +5,7 @@ import { concat, flatten, map, pipe, uniq } from 'ramda'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
+import { useNewWindow } from '../../../ui/NewWindow'
 import { getOptionsFromStrings } from '../../../utils/getOptionsFromStrings'
 import { MissionDateRangeFilter, MissionFilterType, MISSION_FILTER_OPTIONS } from './constants'
 import { mapFilterFormRecordsToFilters } from './utils'
@@ -20,6 +21,8 @@ export type FilterBarProps = {
 export function FilterBar({ missions, onChange }: FilterBarProps) {
   const customFiltersRef = useRef<MissionFilter[]>([])
   const [isCustomDateRangeOpen, setIsCustomDateRangeOpen] = useState(false)
+
+  const { newWindowContainerRef } = useNewWindow()
 
   const unitsAsOptions = useMemo(
     () =>
@@ -57,6 +60,7 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
 
         <FiltersBox>
           <FormikSelect
+            baseContainer={newWindowContainerRef.current}
             isLabelHidden
             label="Période"
             name={MissionFilterType.DATE_RANGE}
@@ -64,6 +68,7 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
             placeholder="Période"
           />
           <FormikMultiSelect
+            baseContainer={newWindowContainerRef.current}
             fixedWidth={160}
             isLabelHidden
             label="Status"
@@ -72,6 +77,7 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
             placeholder="Status"
           />
           <FormikMultiSelect
+            baseContainer={newWindowContainerRef.current}
             fixedWidth={160}
             isLabelHidden
             label="Unité"
@@ -80,6 +86,7 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
             placeholder="Unité"
           />
           <FormikMultiSelect
+            baseContainer={newWindowContainerRef.current}
             fixedWidth={160}
             isLabelHidden
             label="Type de mission"
@@ -88,6 +95,7 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
             placeholder="Type de mission"
           />
           <FormikMultiSelect
+            baseContainer={newWindowContainerRef.current}
             fixedWidth={160}
             isLabelHidden
             label="Type de contrôle"
@@ -96,6 +104,7 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
             placeholder="Type de contrôle"
           />
           <FormikMultiSelect
+            baseContainer={newWindowContainerRef.current}
             fixedWidth={160}
             isLabelHidden
             label="Alerte"

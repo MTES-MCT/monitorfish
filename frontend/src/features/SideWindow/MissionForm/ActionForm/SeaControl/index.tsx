@@ -10,8 +10,9 @@ import {
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash'
-import { RefObject, useMemo } from 'react'
+import { useMemo } from 'react'
 
+import { useNewWindow } from '../../../../../ui/NewWindow'
 import { getLocalizedDayjs } from '../../../../../utils/getLocalizedDayjs'
 import { FieldGroup } from '../../FieldGroup'
 import { FieldsetGroup } from '../../FieldsetGroup'
@@ -28,11 +29,12 @@ import type { Promisable } from 'type-fest'
 
 export type SeaControlProps = {
   action: PartialSeaControl
-  baseRef: RefObject<HTMLDivElement>
   onChange: (nextNewAction: PartialSeaControl) => Promisable<void>
 }
-export function SeaControl({ action, baseRef, onChange }: SeaControlProps) {
+export function SeaControl({ action, onChange }: SeaControlProps) {
   const startDateAsDayjs = useMemo(() => getLocalizedDayjs(action.startDate), [action])
+
+  const { newWindowContainerRef } = useNewWindow()
 
   return (
     <Formik initialValues={action} onSubmit={noop}>
@@ -48,11 +50,17 @@ export function SeaControl({ action, baseRef, onChange }: SeaControlProps) {
 
         <FormBody>
           <FieldGroup isInline>
-            <FormikVesselSearch baseRef={baseRef} />
+            <FormikVesselSearch />
             <FormikCheckbox label="Navire inconnu" name="isVesselUnknown" />
           </FieldGroup>
 
-          <FormikDatePicker isLight label="Date et heure du contrôle" name="date" withTime />
+          <FormikDatePicker
+            baseContainer={newWindowContainerRef.current}
+            isLight
+            label="Date et heure du contrôle"
+            name="date"
+            withTime
+          />
 
           <MultiZoneEditor
             addButtonLabel="Ajouter un point de contrôle"

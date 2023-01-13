@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-export class NewWindow extends React.PureComponent {
+export class LegacyNewWindow extends React.PureComponent {
    /**
     * NewWindow default props.
     */

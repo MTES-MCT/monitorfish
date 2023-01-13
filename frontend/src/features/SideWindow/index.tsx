@@ -25,6 +25,7 @@ import { getAllCurrentReportings } from '../../domain/use_cases/reporting/getAll
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { usePrevious } from '../../hooks/usePrevious'
+import { NewWindowContext } from '../../ui/NewWindow'
 import { AlertsAndReportings } from './alerts_reportings/AlertsAndReportings'
 import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
 import { BeaconMalfunctionsBoard } from './beacon_malfunctions/BeaconMalfunctionsBoard'
@@ -36,27 +37,34 @@ import { SideWindowSubMenu } from './SideWindowSubMenu'
 import { getSelectedSubMenu } from './utils'
 
 import type { MenuItem } from '../../types'
-import type { CSSProperties, ForwardedRef } from 'react'
+import type { NewWindowContextValue } from '../../ui/NewWindow'
+import type { CSSProperties, ForwardedRef, HTMLAttributes } from 'react'
 
-export type SideWindowProps = {
+export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
   isFromURL: boolean
 }
-function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTMLDivElement>) {
+function SideWindowWithRef(this: any, { isFromURL }: SideWindowProps, ref: ForwardedRef<HTMLDivElement | null>) {
+  // eslint-disable-next-line no-null/no-null
+  const wrapperRef = useRef<HTMLDivElement | null>(null)
+
   const { openedSideWindowTab } = useAppSelector(state => state.global)
-  const openedBeaconMalfunctionInKanban = useAppSelector(
-    state => state.beaconMalfunction.openedBeaconMalfunctionInKanban
-  )
-  const { editedReportingInSideWindow } = useAppSelector(state => state.reporting)
-  const { focusedPendingAlertId, pendingAlerts } = useAppSelector(state => state.alert)
-  const dispatch = useAppDispatch()
+
+  const [isFirstRender, setIsFirstRender] = useState(true)
   const [isPreloading, setIsPreloading] = useState(true)
-  const previousOpenedSideWindowTab = usePrevious(openedSideWindowTab)
   const [selectedSubMenu, setSelectedSubMenu] = useState<MenuItem<SeaFront | string>>(
     getSelectedSubMenu(openedSideWindowTab)
   )
   const [selectedTab, setSelectedTab] = useState(AlertAndReportingTab.ALERT)
   const [isOverlayed, setIsOverlayed] = useState(false)
   const [isSubmenuFixed, setIsSubmenuFixed] = useState(false)
+
+  const openedBeaconMalfunctionInKanban = useAppSelector(
+    state => state.beaconMalfunction.openedBeaconMalfunctionInKanban
+  )
+  const { editedReportingInSideWindow } = useAppSelector(state => state.reporting)
+  const { focusedPendingAlertId, pendingAlerts } = useAppSelector(state => state.alert)
+  const dispatch = useAppDispatch()
+  const previousOpenedSideWindowTab = usePrevious(openedSideWindowTab)
 
   const hasSubmenu = useMemo(
     () =>
@@ -65,13 +73,24 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
     [openedSideWindowTab]
   )
 
+  const newWindowContextProviderValue: NewWindowContextValue = useMemo(
+    () => ({
+      newWindowContainerRef: wrapperRef.current
+        ? (wrapperRef as MutableRefObject<HTMLDivElement>)
+        : {
+            current: window.document.createElement('div')
+          }
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [isFirstRender]
+  )
+
   const closeRightSidebar = useCallback(() => {
     dispatch(closeBeaconMalfunctionInKanban())
     dispatch(setEditedReportingInSideWindow())
   }, [dispatch])
 
-  const baseRef = useRef() as MutableRefObject<HTMLDivElement>
-  useImperativeHandle(ref, () => baseRef.current)
+  useImperativeHandle<HTMLDivElement | null, HTMLDivElement | null>(ref, () => wrapperRef.current)
 
   useEffect(() => {
     setTimeout(() => {
@@ -158,51 +177,62 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
     [isOverlayed]
   )
 
+  useEffect(() => {
+    setIsFirstRender(false)
+  }, [])
+
   return (
-    <Wrapper ref={baseRef}>
-      <SideWindowMenu selectedMenu={openedSideWindowTab} />
-      {hasSubmenu && (
-        <SideWindowSubMenu
-          isFixed={isSubmenuFixed}
-          selectedMenu={openedSideWindowTab}
-          selectedSubMenu={selectedSubMenu}
-          selectedTab={selectedTab}
-          setIsFixed={setIsSubmenuFixed}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      )}
-      <BeaconMalfunctionsBoardGrayOverlay onClick={closeRightSidebar} style={beaconMalfunctionBoardGrayOverlayStyle} />
-      {isPreloading && (
-        <Loading>
-          <FulfillingBouncingCircleSpinner className="update-vessels" color={THEME.color.lightGray} size={100} />
-          <Text data-cy="first-loader">Chargement...</Text>
-        </Loading>
-      )}
-      {!isPreloading && (
-        <Content
-          height={window.innerHeight + 50}
-          noMargin={
-            openedSideWindowTab &&
-            [SideWindowMenuKey.MISSION_FORM, SideWindowMenuKey.MISSION_LIST].includes(openedSideWindowTab)
-          }
-        >
-          {openedSideWindowTab === SideWindowMenuKey.ALERTS && (
-            <AlertsAndReportings
-              baseRef={baseRef}
-              selectedSubMenu={
-                Object.values<string>(SeaFront).includes(selectedSubMenu.code)
-                  ? (selectedSubMenu as MenuItem<SeaFront>)
-                  : ALERTS_SUBMENU.MEMN
-              }
+    <Wrapper ref={wrapperRef}>
+      {!isFirstRender && (
+        <NewWindowContext.Provider value={newWindowContextProviderValue}>
+          <SideWindowMenu selectedMenu={openedSideWindowTab} />
+          {hasSubmenu && (
+            <SideWindowSubMenu
+              isFixed={isSubmenuFixed}
+              selectedMenu={openedSideWindowTab}
+              selectedSubMenu={selectedSubMenu}
               selectedTab={selectedTab}
-              setSelectedSeaFront={setSelectedSubMenu as any}
-              setSelectedTab={setSelectedTab}
+              setIsFixed={setIsSubmenuFixed}
+              setSelectedSubMenu={setSelectedSubMenu}
             />
           )}
-          {openedSideWindowTab === SideWindowMenuKey.BEACON_MALFUNCTIONS && <BeaconMalfunctionsBoard />}
-          {openedSideWindowTab === SideWindowMenuKey.MISSION_LIST && <MissionList />}
-          {openedSideWindowTab === SideWindowMenuKey.MISSION_FORM && <MissionForm baseRef={baseRef} />}
-        </Content>
+          <BeaconMalfunctionsBoardGrayOverlay
+            onClick={closeRightSidebar}
+            style={beaconMalfunctionBoardGrayOverlayStyle}
+          />
+          {isPreloading && (
+            <Loading>
+              <FulfillingBouncingCircleSpinner className="update-vessels" color={THEME.color.lightGray} size={100} />
+              <Text data-cy="first-loader">Chargement...</Text>
+            </Loading>
+          )}
+          {!isPreloading && (
+            <Content
+              height={window.innerHeight + 50}
+              noMargin={
+                openedSideWindowTab &&
+                [SideWindowMenuKey.MISSION_FORM, SideWindowMenuKey.MISSION_LIST].includes(openedSideWindowTab)
+              }
+            >
+              {openedSideWindowTab === SideWindowMenuKey.ALERTS && (
+                <AlertsAndReportings
+                  baseRef={wrapperRef as MutableRefObject<HTMLDivElement>}
+                  selectedSubMenu={
+                    Object.values<string>(SeaFront).includes(selectedSubMenu.code)
+                      ? (selectedSubMenu as MenuItem<SeaFront>)
+                      : ALERTS_SUBMENU.MEMN
+                  }
+                  selectedTab={selectedTab}
+                  setSelectedSeaFront={setSelectedSubMenu as any}
+                  setSelectedTab={setSelectedTab}
+                />
+              )}
+              {openedSideWindowTab === SideWindowMenuKey.BEACON_MALFUNCTIONS && <BeaconMalfunctionsBoard />}
+              {openedSideWindowTab === SideWindowMenuKey.MISSION_LIST && <MissionList />}
+              {openedSideWindowTab === SideWindowMenuKey.MISSION_FORM && <MissionForm />}
+            </Content>
+          )}
+        </NewWindowContext.Provider>
       )}
     </Wrapper>
   )

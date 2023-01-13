@@ -17,6 +17,7 @@ import { Fragment, useCallback, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
+import { useNewWindow } from '../../../../../ui/NewWindow'
 import { FieldsetGroup } from '../../FieldsetGroup'
 
 import type { PartialSeaControl } from '../../types'
@@ -24,6 +25,9 @@ import type { PartialSeaControl } from '../../types'
 export function ComplianceField() {
   const [isEditedIndexNew, setIsEditedIndexNew] = useState(false)
   const [editedIndex, setEditedIndex] = useState<number | undefined>(undefined)
+
+  const { newWindowContainerRef } = useNewWindow()
+
   const [input, , helper] = useField<PartialSeaControl['compliance']>('compliance')
 
   const addCustomInfraction = useCallback(
@@ -168,6 +172,7 @@ export function ComplianceField() {
                     ]}
                   />
                   <FormikMultiSelect
+                    baseContainer={newWindowContainerRef.current}
                     fixedWidth={460}
                     label="NATINF"
                     name={`compliance.customInfractions[${index}].natinfs`}

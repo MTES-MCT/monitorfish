@@ -1,5 +1,5 @@
 import Fuse from 'fuse.js'
-import { RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
@@ -14,9 +14,10 @@ import { addVesselIdentifierToVesselIdentity, removeDuplicatedFoundVessels } fro
 import { VesselSearchResult } from './VesselSearchResult'
 
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
+import type { MutableRefObject } from 'react'
 
 type VesselSearchProps = {
-  baseRef?: RefObject<HTMLDivElement>
+  baseRef?: MutableRefObject<HTMLDivElement>
   defaultValue?: {
     flagState?: string | null
     vesselName?: string
@@ -46,6 +47,7 @@ export function VesselSearch({
   const baseUrl = useMemo(() => window.location.origin, [])
   const { selectedVesselIdentity, vessels } = useAppSelector(state => state.vessel)
 
+  // eslint-disable-next-line no-null/no-null
   const wrapperRef = useRef(null)
   const hasSelectedVessel = useRef(false)
   const [searchQuery, setSearchQuery] = useState('')

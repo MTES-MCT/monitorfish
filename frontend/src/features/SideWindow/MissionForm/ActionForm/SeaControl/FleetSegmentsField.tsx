@@ -7,11 +7,14 @@ import { getFaoZonesFromSpeciesOnboard } from '../../../../../domain/entities/ve
 import { getVesselRiskFactor } from '../../../../../domain/use_cases/vessel/getVesselRiskFactor'
 import { useAppDispatch } from '../../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../../hooks/useAppSelector'
+import { useNewWindow } from '../../../../../ui/NewWindow'
 import { FieldsetGroup } from '../../FieldsetGroup'
 
 import type { PartialSeaControl } from '../../types'
 
 export function FleetSegmentsField() {
+  const { newWindowContainerRef } = useNewWindow()
+
   const dispatch = useAppDispatch()
   const fleetSegments = useAppSelector(state => state.fleetSegment.fleetSegments)
   const {
@@ -117,6 +120,7 @@ export function FleetSegmentsField() {
 
       {tideFishingZonesInput.value.length > 0 && (
         <FormikMultiSelect
+          baseContainer={newWindowContainerRef.current}
           fixedWidth={460}
           label="Zones de pêche de la marée (issues des FAR)"
           name="tideFishingZones"
@@ -126,6 +130,7 @@ export function FleetSegmentsField() {
 
       {tideFleetSegmentsInput.value.length > 0 && (
         <FormikMultiSelect
+          baseContainer={newWindowContainerRef.current}
           fixedWidth={460}
           label="Segment de flotte de la marée"
           name="tideFleetSegments"
@@ -142,6 +147,7 @@ export function FleetSegmentsField() {
 
       <Select
         key={`newFleetSegment.name-${tideFleetSegmentsInput.value.length}`}
+        baseContainer={newWindowContainerRef.current}
         label="Ajouter un segment"
         name="newFleetSegment.name"
         onChange={addFleetSegment}

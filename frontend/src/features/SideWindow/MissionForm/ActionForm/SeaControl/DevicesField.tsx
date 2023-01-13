@@ -4,6 +4,7 @@ import { append, remove } from 'ramda'
 import { Fragment, useCallback } from 'react'
 import styled from 'styled-components'
 
+import { useNewWindow } from '../../../../../ui/NewWindow'
 import { FieldGroup } from '../../FieldGroup'
 import { FieldsetGroup } from '../../FieldsetGroup'
 
@@ -11,6 +12,8 @@ import type { PartialSeaControl } from '../../types'
 
 export function DevicesField() {
   const [input, , helper] = useField<PartialSeaControl['deviceInfractions']>('deviceInfractions')
+
+  const { newWindowContainerRef } = useNewWindow()
 
   const addSpecyInfraction = useCallback(
     (_nextValue: string | undefined) => {
@@ -49,6 +52,7 @@ export function DevicesField() {
 
               <DeviceInfractionFormWrapper>
                 <Select
+                  baseContainer={newWindowContainerRef.current}
                   defaultValue={deviceInfraction.deviceName}
                   label="Engin"
                   name={`editedDevice[${index}].deviceName`}
@@ -87,6 +91,7 @@ export function DevicesField() {
       <FieldGroup isInline>
         <Select
           key={`newDevice.deviceName-${input.value.length}`}
+          baseContainer={newWindowContainerRef.current}
           label="Ajouter un engin"
           name="newDevice.deviceName"
           onChange={addSpecyInfraction}

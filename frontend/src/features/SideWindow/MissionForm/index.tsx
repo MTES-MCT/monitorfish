@@ -1,6 +1,6 @@
 import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
 import { noop } from 'lodash'
-import { RefObject, useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { MissionType } from '../../../domain/types/mission'
@@ -13,9 +13,9 @@ import type { MutableRefObject } from 'react'
 
 export type MissionFormProps = {
   // mission?: Mission
-  baseRef: RefObject<HTMLDivElement>
+  baseRef: MutableRefObject<HTMLDivElement>
 }
-export function MissionForm({ baseRef }) {
+export function MissionForm() {
   const headerRef = useRef() as MutableRefObject<HTMLDivElement>
   /** Header height in pixels */
   const [selectedType, setSelectedType] = useState<MissionType>(MissionType.SEA)
@@ -65,7 +65,7 @@ export function MissionForm({ baseRef }) {
           onDeleteNewAction={unsetNewAction}
           selectedType={selectedType}
         />
-        <ActionForm action={newAction} baseRef={baseRef} onChange={setNewAction} />
+        <ActionForm action={newAction} onChange={setNewAction} />
       </Body>
     </Wrapper>
   )

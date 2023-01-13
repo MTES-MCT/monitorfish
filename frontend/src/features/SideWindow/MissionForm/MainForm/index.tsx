@@ -16,6 +16,7 @@ import { useCallback, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { MissionGoal, MissionType } from '../../../../domain/types/mission'
+import { useNewWindow } from '../../../../ui/NewWindow'
 import { getOptionsFromLabelledEnum } from '../../../../utils/getOptionsFromLabelledEnum'
 import { FormBody } from '../FormBody'
 import { FormHead } from '../FormHead'
@@ -32,6 +33,8 @@ export type MainFormProps = {
 export function MainForm({ onTypeChange }: MainFormProps) {
   const currentValues = useRef<FormValues>(INITIAL_VALUES)
   const [hasMissionUnderJdpType, setHasMissionUnderJdpType] = useState(false)
+
+  const { newWindowContainerRef } = useNewWindow()
 
   const updateCurrentValues = useCallback(
     (nextValues: FormValues) => {
@@ -76,7 +79,11 @@ export function MainForm({ onTypeChange }: MainFormProps) {
         </FormHead>
 
         <CustomFormBody>
-          <FormikDateRangePicker label="Début et fin de mission" name="dateRange" />
+          <FormikDateRangePicker
+            baseContainer={newWindowContainerRef.current}
+            label="Début et fin de mission"
+            name="dateRange"
+          />
           <FormikMultiRadio
             isInline
             label="Type de mission"

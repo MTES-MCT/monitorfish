@@ -1,10 +1,10 @@
-import { Accent, Button, Icon, IconButton, Select } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Icon, IconButton, MultiSelect, Select } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
 import { assoc, remove, update } from 'ramda'
 import { useCallback, useMemo } from 'react'
-import { TagPicker } from 'rsuite'
 import styled from 'styled-components'
 
+import { useNewWindow } from '../../../../ui/NewWindow'
 import { EMPTY_UNIT } from './constants'
 
 import type { MissionUnit } from '../../../../domain/types/mission'
@@ -14,6 +14,8 @@ export type MultiUnitPickerProps = {
 }
 export function MultiUnitPicker({ name }: MultiUnitPickerProps) {
   const [input, , helpers] = useField<Partial<MissionUnit>[] | undefined>(name)
+
+  const { newWindowContainerRef } = useNewWindow()
 
   const currentUnits = useMemo(() => input.value || [], [input.value])
 
@@ -35,7 +37,7 @@ export function MultiUnitPicker({ name }: MultiUnitPickerProps) {
   )
 
   const handleChange = useCallback(
-    (index: number, property: keyof MissionUnit, nextValue: string | undefined) => {
+    (index: number, property: keyof MissionUnit, nextValue: string | string[] | undefined) => {
       const nextUnits = update(index, assoc(property, nextValue) as any, currentUnits)
 
       setValue(nextUnits)
@@ -51,6 +53,7 @@ export function MultiUnitPicker({ name }: MultiUnitPickerProps) {
           <Row key={`unit${index}`}>
             <UnitWrapper>
               <Select
+                baseContainer={newWindowContainerRef.current}
                 defaultValue={currentUnit.administration}
                 label={`Administration ${index + 1}`}
                 name={`administration_${index}`}
@@ -58,6 +61,7 @@ export function MultiUnitPicker({ name }: MultiUnitPickerProps) {
                 options={[]}
               />
               <Select
+                baseContainer={newWindowContainerRef.current}
                 defaultValue={currentUnit.unit}
                 disabled={!currentUnit.administration}
                 label={`Unité ${index + 1}`}
@@ -65,14 +69,17 @@ export function MultiUnitPicker({ name }: MultiUnitPickerProps) {
                 onChange={nextValue => handleChange(index, 'unit', nextValue)}
                 options={[]}
               />
-              <TagPicker
-                data={[]}
+              <MultiSelect
+                baseContainer={newWindowContainerRef.current}
                 defaultValue={currentUnit.resources}
                 disabled={!currentUnit.unit}
+                label={`Ressource ${index + 1}`}
                 name={`meanId_${index}`}
                 onChange={nextValue => handleChange(index, 'resources', nextValue)}
+                options={[]}
               />
               <Select
+                baseContainer={newWindowContainerRef.current}
                 defaultValue={currentUnit.contact}
                 disabled={!currentUnit.unit}
                 label={`Contact de l’unité ${index + 1}`}

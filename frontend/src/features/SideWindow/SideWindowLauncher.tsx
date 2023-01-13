@@ -7,7 +7,7 @@ import { resetFocusOnPendingAlert } from '../../domain/shared_slices/Alert'
 import { closeSideWindow } from '../../domain/shared_slices/Global'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useForceUpdate } from '../../hooks/useForceUpdate'
-import { NewWindow } from './NewWindow'
+import { LegacyNewWindow } from '../../ui/NewWindow/LegacyNewWindow'
 
 export function SideWindowLauncher() {
   const dispatch = useAppDispatch()
@@ -17,7 +17,7 @@ export function SideWindowLauncher() {
 
   return (
     <StyleSheetManager target={newWindowRef.current}>
-      <NewWindow
+      <LegacyNewWindow
         closeOnUnmount
         copyStyles
         features={{ height: '1200px', scrollbars: true, width: window.innerWidth }}
@@ -31,7 +31,7 @@ export function SideWindowLauncher() {
         title="MonitorFish"
       >
         <SideWindow ref={newWindowRef} isFromURL={false} />
-      </NewWindow>
+      </LegacyNewWindow>
     </StyleSheetManager>
   )
 }

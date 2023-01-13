@@ -4,6 +4,7 @@ import { append, remove } from 'ramda'
 import { Fragment, useCallback } from 'react'
 import styled from 'styled-components'
 
+import { useNewWindow } from '../../../../../ui/NewWindow'
 import { FieldGroup } from '../../FieldGroup'
 import { FieldsetGroup } from '../../FieldsetGroup'
 
@@ -12,6 +13,8 @@ import type { PartialSeaControl } from '../../types'
 export function SpeciesField() {
   const [input, , helper] = useField<PartialSeaControl['specyInfractions']>('specyInfractions')
   const { values } = useFormikContext<PartialSeaControl>()
+
+  const { newWindowContainerRef } = useNewWindow()
 
   const addSpecyInfraction = useCallback(
     (_nextValue: string | undefined) => {
@@ -86,6 +89,7 @@ export function SpeciesField() {
 
                 <SpecyInfractionFormWrapper>
                   <Select
+                    baseContainer={newWindowContainerRef.current}
                     defaultValue={specyInfraction.specyName}
                     label="Espèce"
                     name={`editedSpecy[${index}].specyName`}
@@ -110,6 +114,7 @@ export function SpeciesField() {
       <FieldGroup isInline>
         <Select
           key={`newSpecy.specyName-${input.value.length}`}
+          baseContainer={newWindowContainerRef.current}
           disabled={values.hasNoOnboardSpecy}
           label="Ajouter une espèce"
           name="newSpecy.specyName"

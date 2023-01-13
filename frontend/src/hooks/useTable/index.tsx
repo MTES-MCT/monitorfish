@@ -1,7 +1,7 @@
 import diacritics from 'diacritics'
 import Fuse from 'fuse.js'
-import { ascend, assocPath, descend, path, pipe, prop, propEq, sort } from 'ramda'
-import { useCallback, useMemo, useState } from 'react'
+import { ascend, assocPath, descend, equals, path, pipe, prop, propEq, sort } from 'ramda'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { TableHead } from './TableHead'
 import { getArrayPathFromStringPath, normalizeSearchQuery } from './utils'
@@ -22,7 +22,6 @@ export function useTable<T extends CollectionItem = CollectionItem>(
   searchQuery?: string
 ) {
   const [checkedIds, setCheckedIds] = useState<(number | string)[]>([])
-  const [isAllChecked, setIsAllChecked] = useState(false)
   const [isSortingDesc, setIsSortingDesc] = useState(Boolean(isDefaultSortingDesc))
   const [sortingKey, setSortingKey] = useState<string | undefined>(defaultSortedKey)
 
@@ -136,6 +135,17 @@ export function useTable<T extends CollectionItem = CollectionItem>(
       : augmentedData
   }, [augmentedData, fuse, searchQuery])
 
+  const filteredCheckedIds = useMemo(() => {
+    const filteredDataIds = filteredAugmentedData.map(filteredAugmentedDataItem => filteredAugmentedDataItem.id)
+
+    return checkedIds.filter(checkedId => filteredDataIds.includes(checkedId))
+  }, [checkedIds, filteredAugmentedData])
+
+  const isAllChecked = useMemo(
+    () => filteredCheckedIds.length > 0 && filteredCheckedIds.length === filteredAugmentedData.length,
+    [filteredAugmentedData, filteredCheckedIds]
+  )
+
   const filteredAndSortedAugmentedData = useMemo(() => {
     if (!sortingKey) {
       return filteredAugmentedData
@@ -158,8 +168,7 @@ export function useTable<T extends CollectionItem = CollectionItem>(
   )
 
   const toggleCheckAll = useCallback(() => {
-    setCheckedIds(isAllChecked ? [] : filteredAndSortedAugmentedData.map(prop('id')))
-    setIsAllChecked(!isAllChecked)
+    setCheckedIds(isAllChecked ? [] : filteredAndSortedAugmentedData.map(prop('id')).sort())
   }, [filteredAndSortedAugmentedData, isAllChecked])
 
   const sortColumn = useCallback((key: string, isDesc: boolean) => {
@@ -184,27 +193,31 @@ export function useTable<T extends CollectionItem = CollectionItem>(
 
   const toggleTableCheckForId = useCallback(
     (id: number | string) => {
-      if (checkedIds.indexOf(id) !== -1) {
-        setIsAllChecked(false)
-
-        setCheckedIds(checkedIds.filter(checkedId => checkedId !== id))
+      if (checkedIds.includes(id)) {
+        setCheckedIds(checkedIds.filter(checkedId => checkedId !== id).sort())
 
         return
       }
 
-      // If we checked the last item left to be checked, the 'check all' checkbox should be checked
-      setIsAllChecked(checkedIds.length === filteredAndSortedAugmentedData.length - 1)
-
-      setCheckedIds(checkedIds.concat(id))
+      setCheckedIds(checkedIds.concat(id).sort())
     },
-    [checkedIds, filteredAndSortedAugmentedData.length]
+    [checkedIds]
   )
+
+  // TODO Check if there is not a better pattern to avoid this `useEffect()`.
+  useEffect(() => {
+    if (equals(checkedIds, filteredCheckedIds)) {
+      return
+    }
+
+    setCheckedIds(filteredCheckedIds)
+  }, [checkedIds, filteredCheckedIds])
 
   return {
     getTableCheckedData: getCheckedData,
     renderTableHead,
     tableAugmentedData: filteredAndSortedAugmentedData,
-    tableCheckedIds: checkedIds,
+    tableCheckedIds: filteredCheckedIds,
     tableData: filteredAndSortedData,
     toggleTableAllCheck: toggleCheckAll,
     toggleTableCheckForId

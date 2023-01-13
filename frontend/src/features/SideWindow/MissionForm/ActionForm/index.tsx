@@ -7,15 +7,13 @@ import { GroundControl } from './GroundControl'
 import { SeaControl } from './SeaControl'
 
 import type { PartialAction } from '../types'
-import type { RefObject } from 'react'
 import type { Promisable } from 'type-fest'
 
 export type ActionFormProps = {
   action?: PartialAction
-  baseRef: RefObject<HTMLDivElement>
   onChange: (nextNewAction: PartialAction) => Promisable<void>
 }
-export function ActionForm({ action, baseRef, onChange }: ActionFormProps) {
+export function ActionForm({ action, onChange }: ActionFormProps) {
   if (!action) {
     return <Wrapper />
   }
@@ -24,7 +22,7 @@ export function ActionForm({ action, baseRef, onChange }: ActionFormProps) {
     <Wrapper>
       {action.type === MissionType.AIR && <AirControl action={action} />}
       {action.type === MissionType.GROUND && <GroundControl action={action} />}
-      {action.type === MissionType.SEA && <SeaControl action={action} baseRef={baseRef} onChange={onChange} />}
+      {action.type === MissionType.SEA && <SeaControl action={action} onChange={onChange} />}
       {!action.type && <FreeNote action={action} onChange={onChange} />}
     </Wrapper>
   )

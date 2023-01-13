@@ -1,4 +1,4 @@
-import { GlobalStyle, THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
+import { OnlyFontGlobalStyle, THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
 import { useRef } from 'react'
 import { Provider } from 'react-redux'
@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
 import { CustomProvider as RsuiteCustomProvider } from 'rsuite'
 import rsuiteFrFr from 'rsuite/locales/fr_FR'
-import styled, { createGlobalStyle } from 'styled-components'
+import styled from 'styled-components'
 
 import APIWorker from './api/APIWorker'
 import { BackofficeMode } from './api/BackofficeMode'
@@ -50,8 +50,7 @@ export function App() {
 
   return (
     <ThemeProvider theme={THEME}>
-      <GlobalStyle />
-      <CustomGlobalStyle />
+      <OnlyFontGlobalStyle />
 
       <RsuiteCustomProvider locale={rsuiteFrFr}>
         <Router>
@@ -171,12 +170,6 @@ function TritonFish() {
     </>
   )
 }
-
-const CustomGlobalStyle = createGlobalStyle`
-  html, body {
-    font-size: 13px;
-  }
-`
 
 const Wrapper = styled.div`
   font-size: 13px;

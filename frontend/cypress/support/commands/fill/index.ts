@@ -1,3 +1,4 @@
+import { waitFor } from 'cypress/support/utils/waitFor'
 import { isEmpty } from 'ramda'
 
 import { findElementBytext } from '../../utils/findElementBytext'
@@ -19,7 +20,9 @@ export function fill(label: string, value: boolean | string | string[] | undefin
   if (legendElement) {
     // eslint-disable-next-line cypress/no-assigning-return-values
     const cypressLegendElement = cy.get('legend').contains(label)
-    cypressLegendElement.then(() => {
+    cypressLegendElement.then(async () => {
+      await waitFor(500)
+
       const fieldsetElement = legendElement.parentElement
       if (!fieldsetElement || fieldsetElement.tagName !== 'FIELDSET') {
         throw new Error(`Could not find parent fieldset of legend element with text "${label}".`)
@@ -55,10 +58,12 @@ export function fill(label: string, value: boolean | string | string[] | undefin
 
   // eslint-disable-next-line cypress/no-assigning-return-values
   const cypressLabelElement = cy.get('label').contains(label)
-  cypressLabelElement.then(() => {
+  cypressLabelElement.then(async () => {
     if (!labelElement) {
       throw new Error('This should never happen.')
     }
+
+    await waitFor(500)
 
     // -------------------------------------------------------------------------
     // If the label has a `for` attribute

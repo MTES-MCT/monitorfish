@@ -4,7 +4,7 @@ import { SideWindowMenuKey } from 'src/features/SideWindow/constants'
 
 context('Mission Form', () => {
   beforeEach(() => {
-    cy.visit('/side_window')
+    cy.visit('/side_window').wait(500)
     if (document.querySelector('[data-cy="first-loader"]')) {
       cy.getDataCy('first-loader').should('not.be.visible')
     }

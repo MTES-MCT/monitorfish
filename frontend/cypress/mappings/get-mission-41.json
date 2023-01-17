@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v1/missions/41"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": {
+      "id": 41,
+      "missionType": "SEA",
+      "missionNature": ["FISH", "OTHER"],
+      "controlUnits": [
+        {
+          "id": 10003,
+          "administration": "DDTM",
+          "name": "DML 2A",
+          "resources": [],
+          "contact": null
+        }
+      ],
+      "openBy": "Brian Gibbs",
+      "closedBy": "Mary Rogers",
+      "observationsCacem": "Magazine more morning we career born. Language notice site next history.",
+      "observationsCnsp": null,
+      "facade": "MEMN",
+      "geom": null,
+      "inputStartDateTimeUtc": "2023-02-15T13:11:59.923703Z",
+      "inputEndDateTimeUtc": "2023-03-09T04:28:10.923703Z",
+      "envActions": [],
+      "missionSource": "CACEM",
+      "isClosed": false
+    }
+  }
+}

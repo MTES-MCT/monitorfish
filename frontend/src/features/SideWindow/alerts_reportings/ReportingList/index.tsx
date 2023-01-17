@@ -62,7 +62,7 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
       return
     }
 
-    await dispatch(archiveReportings(tableCheckedIds.map(Number)) as any)
+    await dispatch(archiveReportings(tableCheckedIds.map(Number)))
   }, [dispatch, tableCheckedIds])
 
   const download = useCallback(() => {
@@ -112,8 +112,8 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
         flagState: reporting.value.flagState
       }
 
-      dispatch(showVessel(vesselIdentity, false, false) as any)
-      dispatch(getVesselVoyage(vesselIdentity, undefined, false) as any)
+      dispatch(showVessel(vesselIdentity, false, false))
+      dispatch(getVesselVoyage(vesselIdentity, undefined, false))
     },
     [dispatch]
   )
@@ -123,7 +123,7 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
       return
     }
 
-    await dispatch(deleteReportings(tableCheckedIds.map(Number)) as any)
+    await dispatch(deleteReportings(tableCheckedIds.map(Number)))
   }, [dispatch, tableCheckedIds])
 
   function getVesselNameTitle(reporting) {

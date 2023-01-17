@@ -96,7 +96,7 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
     (silencedAlertPeriodRequest: SilencedAlertPeriodRequest, id: string) => {
       setShowSilencedAlertForIndex(undefined)
       setSilencedAlertId(undefined)
-      dispatch(silenceAlert(silencedAlertPeriodRequest, id) as any)
+      dispatch(silenceAlert(silencedAlertPeriodRequest, id))
     },
     [dispatch]
   )

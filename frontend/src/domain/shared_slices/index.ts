@@ -31,7 +31,7 @@ const commonReducerList = {
   species: speciesReducer
 }
 
-const homeReducers = {
+export const rootReducer = {
   ...commonReducerList,
   alert: alertReducer,
   beaconMalfunction: beaconMalfunctionReducer,
@@ -54,11 +54,9 @@ const homeReducers = {
   vesselList: vesselListReducer
 }
 
-const backofficeReducers = {
+export const persistedRootReducer = {
   ...commonReducerList,
   fleetSegment: fleetSegmentReducer,
   layer: layer.backoffice.reducer,
   regulation
 }
-
-export { homeReducers, backofficeReducers }

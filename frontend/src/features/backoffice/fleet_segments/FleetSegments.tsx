@@ -26,13 +26,13 @@ export function FleetSegments() {
   const currentYear = dayjs().year()
   const dispatch = useAppDispatch()
   const [fleetSegments, setFleetSegments] = useState<FleetSegment[]>([])
-  const [faoAreas, setFAOAreas] = useState([])
+  const [faoAreas, setFAOAreas] = useState<string[]>([])
   const [year, setYear] = useState<number | undefined>(currentYear)
   const [yearEntries, setYearEntries] = useState([getLabeledYear(currentYear)])
   const [isNewFleetSegmentModalOpen, setIsNewFleetSegmentModalOpen] = useState(false)
 
   useEffect(() => {
-    dispatch(getFAOAreas() as any).then(_faoAreas => setFAOAreas(_faoAreas))
+    dispatch(getFAOAreas()).then(_faoAreas => setFAOAreas(_faoAreas || []))
   }, [dispatch])
 
   const yearsToAdd = useMemo(
@@ -45,7 +45,7 @@ export function FleetSegments() {
 
   const fetchFleetSegments = useCallback(
     _year => {
-      dispatch(getAllFleetSegmentsForBackoffice(_year) as any).then(nextFleetSegments => {
+      dispatch(getAllFleetSegmentsForBackoffice(_year)).then(nextFleetSegments => {
         setYear(_year || currentYear)
         setFleetSegments(nextFleetSegments || [])
       })
@@ -55,7 +55,7 @@ export function FleetSegments() {
 
   const addYearEntry = useCallback(
     addedYear => {
-      dispatch(addFleetSegmentYear(addedYear) as any).then(years => {
+      dispatch(addFleetSegmentYear(addedYear)).then(years => {
         const yearsWithLabel = years.map(_year => getLabeledYear(_year))
         setYearEntries(yearsWithLabel)
 
@@ -66,8 +66,8 @@ export function FleetSegments() {
   )
 
   useEffect(() => {
-    dispatch(getFleetSegmentsYearEntries() as any).then(years => {
-      const yearsWithLabel = years.map(_year => getLabeledYear(_year))
+    dispatch(getFleetSegmentsYearEntries()).then(years => {
+      const yearsWithLabel = years ? years.map(_year => getLabeledYear(_year)) : []
       setYearEntries(yearsWithLabel)
     })
 
@@ -84,7 +84,7 @@ export function FleetSegments() {
 
   const triggerCreateFleetSegment = useCallback(
     newFleetSegmentData => {
-      dispatch(createFleetSegment(newFleetSegmentData, fleetSegments) as any).then(nextFleetSegments => {
+      dispatch(createFleetSegment(newFleetSegmentData, fleetSegments)).then(nextFleetSegments => {
         if (nextFleetSegments) {
           setFleetSegments(nextFleetSegments || [])
         }

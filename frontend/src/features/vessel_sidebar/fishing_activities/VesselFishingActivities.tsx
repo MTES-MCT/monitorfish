@@ -42,13 +42,13 @@ export function VesselFishingActivities() {
   useEffect(() => {
     if (!fishingActivities) {
       dispatch(resetNextFishingActivities())
-      dispatch(getVesselVoyage(selectedVesselIdentity, undefined, false) as any)
+      dispatch(getVesselVoyage(selectedVesselIdentity, undefined, false))
 
       return
     }
 
     if (previousSelectedVessel && !vesselsAreEquals(previousSelectedVessel, selectedVesselIdentity)) {
-      dispatch(getVesselVoyage(selectedVesselIdentity, undefined, false) as any)
+      dispatch(getVesselVoyage(selectedVesselIdentity, undefined, false))
     }
   }, [dispatch, fishingActivities, selectedVesselIdentity, previousSelectedVessel])
 
@@ -65,15 +65,15 @@ export function VesselFishingActivities() {
   )
 
   const goToPreviousTrip = useCallback(() => {
-    dispatch(getVesselVoyage(selectedVesselIdentity, NavigateTo.PREVIOUS, false) as any)
+    dispatch(getVesselVoyage(selectedVesselIdentity, NavigateTo.PREVIOUS, false))
   }, [dispatch, selectedVesselIdentity])
 
   const goToNextTrip = useCallback(() => {
-    dispatch(getVesselVoyage(selectedVesselIdentity, NavigateTo.NEXT, false) as any)
+    dispatch(getVesselVoyage(selectedVesselIdentity, NavigateTo.NEXT, false))
   }, [dispatch, selectedVesselIdentity])
 
   const goToLastTrip = useCallback(() => {
-    dispatch(getVesselVoyage(selectedVesselIdentity, NavigateTo.LAST, false) as any)
+    dispatch(getVesselVoyage(selectedVesselIdentity, NavigateTo.LAST, false))
   }, [dispatch, selectedVesselIdentity])
 
   return (

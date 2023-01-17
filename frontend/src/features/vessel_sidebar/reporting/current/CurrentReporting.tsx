@@ -19,7 +19,7 @@ export const operationalAlertTypes = Object.keys(COMMON_ALERT_TYPE_OPTION)
 export function CurrentReporting() {
   const dispatch = useAppDispatch()
   const { currentAndArchivedReportingsOfSelectedVessel, editedReporting } = useAppSelector(state => state.reporting)
-  const [deletionModalIsOpenForId, setDeletionModalIsOpenForId] = useState<string | undefined>(undefined)
+  const [deletionModalIsOpenForId, setDeletionModalIsOpenForId] = useState<number | undefined>(undefined)
 
   return (
     <Wrapper>
@@ -60,7 +60,7 @@ export function CurrentReporting() {
       <ConfirmDeletionModal
         closeModal={() => setDeletionModalIsOpenForId(undefined)}
         isOpened={deletionModalIsOpenForId}
-        validateCallback={() => deletionModalIsOpenForId && dispatch(deleteReporting(deletionModalIsOpenForId) as any)}
+        validateCallback={() => deletionModalIsOpenForId && dispatch(deleteReporting(deletionModalIsOpenForId))}
       />
     </Wrapper>
   )

@@ -55,10 +55,8 @@ const reportingSlice = createSlice({
 
     /**
      * Remove a given current reporting
-     * @param state
-     * @param {PayloadAction<number>} action - Reporting id
      */
-    removeCurrentReporting(state, action: PayloadAction<string>) {
+    removeCurrentReporting(state, action: PayloadAction<number>) {
       state.currentReportings = state.currentReportings.filter(reporting => reporting.id !== action.payload)
     },
 

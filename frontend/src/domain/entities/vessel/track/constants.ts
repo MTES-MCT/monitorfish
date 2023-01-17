@@ -7,19 +7,19 @@ export const TRACK_TYPE_RECORD: Record<TrackType, TrackTypeRecordItem> = {
     arrow: 'arrow_gray.png',
     code: 'ELLIPSIS',
     color: THEME.color.charcoalShadow,
-    description: '🕐 entre deux positions > 4h'
+    description: '🕐 > 4h'
   },
   FISHING: {
     arrow: 'arrow_blue.png',
     code: 'FISHING',
     color: THEME.color.darkCornflowerBlue,
-    description: 'En pêche (vitesse <= 4.5 Nds)'
+    description: 'En pêche'
   },
   TRANSIT: {
     arrow: 'arrow_green.png',
     code: 'TRANSIT',
     color: THEME.color.jungleGreen,
-    description: 'En transit (vitesse > 4.5 Nds)'
+    description: 'En transit'
   }
 }
 

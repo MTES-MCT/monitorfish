@@ -60,7 +60,7 @@ export function TrackTypeCardOverlay({ feature, map, pointerMoveEventPixel }) {
 
   return (
     <TrackTypeCardOverlayComponent ref={overlayCallback}>
-      {trackTypeToShowOnCard ? <TrackTypeCard trackType={trackTypeToShowOnCard} /> : null}
+      {trackTypeToShowOnCard && <TrackTypeCard trackType={trackTypeToShowOnCard} />}
     </TrackTypeCardOverlayComponent>
   )
 }

@@ -9,49 +9,53 @@ import {
 } from '../../shared_slices/Reporting'
 import { removeVesselReporting } from '../../shared_slices/Vessel'
 
-import type { AppDispatch, AppGetState } from '../../../store'
+import type { AppThunk } from '../../../store'
 
-export const deleteReporting = id => (dispatch: AppDispatch, getState: AppGetState) => {
-  const { selectedVesselIdentity } = getState().vessel
-  const { currentAndArchivedReportingsOfSelectedVessel } = getState().reporting
+export const deleteReporting =
+  (id: number): AppThunk =>
+  (dispatch, getState) => {
+    const { selectedVesselIdentity } = getState().vessel
+    const { currentAndArchivedReportingsOfSelectedVessel } = getState().reporting
 
-  const deletedReporting = currentAndArchivedReportingsOfSelectedVessel?.current.find(reporting => reporting.id === id)
-  const nextCurrentAndArchivedReporting = getUpdatedCurrentAndArchivedReportingOfSelectedVessel(
-    currentAndArchivedReportingsOfSelectedVessel,
-    deletedReporting
-  )
-  dispatch(
-    setCurrentAndArchivedReportingsOfSelectedVessel({
-      currentAndArchivedReportingsOfSelectedVessel: nextCurrentAndArchivedReporting,
-      vesselIdentity: selectedVesselIdentity
-    })
-  )
-
-  deleteReportingFromAPI(id)
-    .then(() => {
-      dispatch(removeReportingsIdsFromCurrentReportings([id]))
-      if (deletedReporting) {
-        dispatch(
-          removeVesselReporting({
-            reportingType: deletedReporting.type,
-            vesselFeatureId: Vessel.getVesselFeatureId(selectedVesselIdentity)
-          })
-        )
-      }
-      dispatch(removeError())
-    })
-    .catch(error => {
-      batch(() => {
-        dispatch(
-          setCurrentAndArchivedReportingsOfSelectedVessel({
-            currentAndArchivedReportingsOfSelectedVessel,
-            vesselIdentity: selectedVesselIdentity
-          })
-        )
-        dispatch(setError(error))
+    const deletedReporting = currentAndArchivedReportingsOfSelectedVessel?.current.find(
+      reporting => reporting.id === id
+    )
+    const nextCurrentAndArchivedReporting = getUpdatedCurrentAndArchivedReportingOfSelectedVessel(
+      currentAndArchivedReportingsOfSelectedVessel,
+      deletedReporting
+    )
+    dispatch(
+      setCurrentAndArchivedReportingsOfSelectedVessel({
+        currentAndArchivedReportingsOfSelectedVessel: nextCurrentAndArchivedReporting,
+        vesselIdentity: selectedVesselIdentity
       })
-    })
-}
+    )
+
+    deleteReportingFromAPI(id)
+      .then(() => {
+        dispatch(removeReportingsIdsFromCurrentReportings([id]))
+        if (deletedReporting) {
+          dispatch(
+            removeVesselReporting({
+              reportingType: deletedReporting.type,
+              vesselFeatureId: Vessel.getVesselFeatureId(selectedVesselIdentity)
+            })
+          )
+        }
+        dispatch(removeError())
+      })
+      .catch(error => {
+        batch(() => {
+          dispatch(
+            setCurrentAndArchivedReportingsOfSelectedVessel({
+              currentAndArchivedReportingsOfSelectedVessel,
+              vesselIdentity: selectedVesselIdentity
+            })
+          )
+          dispatch(setError(error))
+        })
+      })
+  }
 
 function getUpdatedCurrentAndArchivedReportingOfSelectedVessel(
   currentAndArchivedReportingsOfSelectedVessel,

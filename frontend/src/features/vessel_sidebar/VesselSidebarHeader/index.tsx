@@ -29,8 +29,8 @@ export function VesselSidebarHeader() {
   const onSelectVessel = useCallback(
     vesselIdentity => {
       if (!vesselsAreEquals(vesselIdentity, selectedVesselIdentity)) {
-        dispatch(showVessel(vesselIdentity, true, false) as any)
-        dispatch(getVesselVoyage(vesselIdentity, undefined, false) as any)
+        dispatch(showVessel(vesselIdentity, true, false))
+        dispatch(getVesselVoyage(vesselIdentity, undefined, false))
       }
       dispatch(setIsFocusedOnVesselSearch(false))
     },

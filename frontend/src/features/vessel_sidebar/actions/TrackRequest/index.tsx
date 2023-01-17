@@ -50,7 +50,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
       }
 
       // TODO Find why dispatch doesn't type actions correctly.
-      dispatch(updateSelectedVesselTrackRequest(selectedVesselIdentity, trackRequest) as any)
+      dispatch(updateSelectedVesselTrackRequest(selectedVesselIdentity, trackRequest))
     },
     [dispatch, selectedVesselIdentity]
   )
@@ -69,7 +69,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
       }
 
       // TODO Find why dispatch doesn't type actions correctly.
-      dispatch(updateSelectedVesselTrackRequest(selectedVesselIdentity, trackRequest) as any)
+      dispatch(updateSelectedVesselTrackRequest(selectedVesselIdentity, trackRequest))
     },
     [dispatch, selectedVesselIdentity]
   )

@@ -36,7 +36,7 @@ import { useAppSelector } from './hooks/useAppSelector'
 import { BackofficePage } from './pages/BackofficePage'
 import { TestPage } from './pages/TestPage'
 import { UnsupportedBrowserPage } from './pages/UnsupportedBrowserPage'
-import { backofficeStore, homeStore, backofficePersistor } from './store'
+import { persistedStore, persistedStorePersistor, store } from './store'
 import { isBrowserSupported } from './utils/isBrowserSupported'
 
 import type { MutableRefObject } from 'react'
@@ -56,9 +56,9 @@ export function App() {
         <Router>
           <Switch>
             <Route path="/backoffice">
-              <Provider store={backofficeStore}>
+              <Provider store={persistedStore}>
                 {/* eslint-disable-next-line no-null/no-null */}
-                <PersistGate loading={null} persistor={backofficePersistor}>
+                <PersistGate loading={null} persistor={persistedStorePersistor}>
                   <NamespaceContext.Provider value="backoffice">
                     <BackofficePage />
                   </NamespaceContext.Provider>
@@ -67,7 +67,7 @@ export function App() {
             </Route>
 
             <Route exact path="/ext">
-              <Provider store={homeStore}>
+              <Provider store={store}>
                 <NamespaceContext.Provider value="homepage">
                   <TritonFish />
                 </NamespaceContext.Provider>
@@ -77,7 +77,7 @@ export function App() {
             <Route component={TestPage} exact path="/test" />
 
             <Route path="/">
-              <Provider store={homeStore}>
+              <Provider store={store}>
                 <NamespaceContext.Provider value="homepage">
                   <HomePage />
                 </NamespaceContext.Provider>

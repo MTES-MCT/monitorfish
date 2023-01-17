@@ -10,15 +10,19 @@ import {
   updatingVesselTrackDepth
 } from '../../shared_slices/Vessel'
 
-import type { AppDispatch, AppGetState } from '../../../store'
+import type { AppDispatch, AppThunk } from '../../../store'
 import type { TrackRequest, VesselIdentity } from '../../entities/vessel/types'
 
 /**
  * Modify the vessel track depth on map
  */
 export const updateSelectedVesselTrackRequest =
-  (vesselIdentity: VesselIdentity, trackRequest: TrackRequest, withoutFishingMessagesRerendering: boolean = false) =>
-  async (dispatch: AppDispatch, getState: AppGetState): Promise<void> => {
+  (
+    vesselIdentity: VesselIdentity,
+    trackRequest: TrackRequest,
+    withoutFishingMessagesRerendering: boolean = false
+  ): AppThunk =>
+  async (dispatch, getState): Promise<void> => {
     try {
       const { areFishingActivitiesShowedOnMap } = getState().fishingActivities
 

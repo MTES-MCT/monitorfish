@@ -96,8 +96,8 @@ export function PendingAlertRow({
               data-cy="side-window-alerts-show-vessel"
               onClick={() => {
                 const vesselIdentity = { ...alert, flagState: alert.value.flagState }
-                dispatch(showVessel(vesselIdentity, false, false) as any)
-                dispatch(getVesselVoyage(vesselIdentity, undefined, false) as any)
+                dispatch(showVessel(vesselIdentity, false, false))
+                dispatch(getVesselVoyage(vesselIdentity, undefined, false))
               }}
               src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
               style={showIconStyle}
@@ -108,7 +108,7 @@ export function PendingAlertRow({
             <Icon
               alt="Valider"
               data-cy="side-window-alerts-validate-alert"
-              onClick={() => dispatch(validateAlert(alert.id) as any)}
+              onClick={() => dispatch(validateAlert(alert.id))}
               onMouseOut={e => {
                 e.currentTarget.src = `${baseUrl}/Icone_valider_alerte.png`
               }}

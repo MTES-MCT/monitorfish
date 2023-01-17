@@ -9,7 +9,7 @@ import {
 import { addVesselReporting, removeVesselReporting } from '../../shared_slices/Vessel'
 import { ReportingType } from '../../types/reporting'
 
-import type { AppDispatch, AppGetState } from '../../../store'
+import type { AppThunk } from '../../../store'
 import type { VesselIdentity } from '../../entities/vessel/types'
 import type { InfractionSuspicionReporting, ReportingUpdate } from '../../types/reporting'
 
@@ -19,8 +19,8 @@ export const updateReporting =
     id: number,
     nextReporting: ReportingUpdate,
     previousReportingType: ReportingType
-  ) =>
-  async (dispatch: AppDispatch, getState: AppGetState): Promise<void> => {
+  ): AppThunk<Promise<void>> =>
+  async (dispatch, getState) => {
     const { currentAndArchivedReportingsOfSelectedVessel, vesselIdentity } = getState().reporting
 
     return updateReportingFromAPI(id, nextReporting)

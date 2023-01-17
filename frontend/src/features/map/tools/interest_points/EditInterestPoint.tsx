@@ -122,7 +122,7 @@ export function EditInterestPoint({ close, healthcheckTextWarning, isOpen }: Edi
 
   const saveInterestPoint = () => {
     if (coordinates?.length) {
-      dispatch(saveInterestPointFeature() as any)
+      dispatch(saveInterestPointFeature())
       dispatch(addInterestPoint())
       close()
     }

@@ -20,15 +20,13 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
   const { blockUpdate, isUpdateBlocked, setInputDataCySelector } = useBlockUpdateAndFocusOnDataRefresh(fleetSegments)
 
   useEffect(() => {
-    dispatch(getAllGearCodes() as any)
-    dispatch(getAllSpecies() as any)
+    dispatch(getAllGearCodes())
+    dispatch(getAllSpecies())
   }, [dispatch])
 
   const deleteFleetSegment = useCallback(
     (segment, _year) => {
-      dispatch(deleteFleetSegmentAction(segment, _year) as any).then(nextFleetSegments =>
-        setFleetSegments(nextFleetSegments)
-      )
+      dispatch(deleteFleetSegmentAction(segment, _year)).then(nextFleetSegments => setFleetSegments(nextFleetSegments))
     },
     [dispatch, setFleetSegments]
   )
@@ -51,7 +49,7 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
       }
       updatedFields[key] = value
 
-      dispatch(updateFleetSegmentAction(segment, _year, updatedFields, _fleetSegments) as any).then(nextFleetSegments =>
+      dispatch(updateFleetSegmentAction(segment, _year, updatedFields, _fleetSegments)).then(nextFleetSegments =>
         setFleetSegments(nextFleetSegments)
       )
     },

@@ -23,7 +23,7 @@ import type { Promisable } from 'type-fest'
 export type ReportingCardProps = {
   isArchive?: boolean
   numberOfAlerts?: number
-  openConfirmDeletionModalForId: (reportingId: string) => Promisable<void>
+  openConfirmDeletionModalForId: (reportingId: number) => Promisable<void>
   // TODO Doesn't respect Reporting type from domain. Can it be undefined (wouldn't make sense)?
   reporting: Reporting
 }
@@ -88,7 +88,7 @@ export function ReportingCard({
           <ArchiveButton
             data-cy="archive-reporting-card"
             isAlert={!!numberOfAlerts}
-            onClick={() => dispatch(archiveReporting(reporting.id) as any)}
+            onClick={() => dispatch(archiveReporting(reporting.id))}
             title="Archiver"
           />
           <DeleteButton

@@ -24,7 +24,7 @@ export function ShowRegulatoryMetadata({ mapClickEvent }: ShowRegulatoryMetadata
           topic: feature.getProperties().topic,
           zone: feature.getProperties().zone
         }
-        dispatch(showRegulatoryZoneMetadata(zone) as any)
+        dispatch(showRegulatoryZoneMetadata(zone))
       }
     }
 

@@ -42,9 +42,9 @@ export function Backoffice() {
 
   const initBackoffice = useCallback(() => {
     batch(async () => {
-      await dispatch(getAllSpecies() as any)
-      dispatch(getAllRegulatoryLayersByRegTerritory() as any)
-      dispatch(getAllGearCodes() as any)
+      await dispatch(getAllSpecies())
+      dispatch(getAllRegulatoryLayersByRegTerritory())
+      dispatch(getAllGearCodes())
       dispatch(setProcessingRegulationSaved(false))
       dispatch(setRegulatoryZoneMetadata(null))
     })

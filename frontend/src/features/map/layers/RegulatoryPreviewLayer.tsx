@@ -69,7 +69,7 @@ function UnmemoizedRegulatoryPreviewLayer({ map }: RegulatoryPreviewLayerProps) 
 
       if (features?.length) {
         getVectorSource().addFeatures(features)
-        dispatch(zoomInLayer({ feature: features[0] }) as any)
+        dispatch(zoomInLayer({ feature: features[0] }))
       }
     }
   }, [dispatch, map, regulatoryGeometriesToPreview])

@@ -52,7 +52,7 @@ export function SilencedAlertsList({ silencedAlerts }: SilencedAlertsListProps) 
 
   const reactivateSilencedAlertCallback = useCallback(
     (id: string) => {
-      dispatch(reactivateSilencedAlert(id) as any)
+      dispatch(reactivateSilencedAlert(id))
     },
     [dispatch]
   )
@@ -132,8 +132,8 @@ export function SilencedAlertsList({ silencedAlerts }: SilencedAlertsListProps) 
                       data-cy="side-window-silenced-alerts-show-vessel"
                       onClick={() => {
                         const vesselIdentity = { ...alert, flagState: alert.value.flagState }
-                        dispatch(showVessel(vesselIdentity, false, false) as any)
-                        dispatch(getVesselVoyage(vesselIdentity, undefined, false) as any)
+                        dispatch(showVessel(vesselIdentity, false, false))
+                        dispatch(getVesselVoyage(vesselIdentity, undefined, false))
                       }}
                       src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
                       style={showIconStyle}

@@ -1,0 +1,268 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v1/control_units"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": [
+      {
+        "id": 10000,
+        "administration": "DDTM",
+        "name": "Cultures marines – DDTM 30",
+        "resources": []
+      },
+      {
+        "id": 10001,
+        "administration": "DDTM",
+        "name": "Cultures marines – DDTM 40",
+        "resources": [
+          {
+            "id": 1,
+            "name": "Semi-rigide 1"
+          },
+          {
+            "id": 2,
+            "name": "Semi-rigide 2"
+          }
+        ]
+      },
+      {
+        "id": 10002,
+        "administration": "DDTM",
+        "name": "DML – DDTM 59",
+        "resources": []
+      },
+      {
+        "id": 10003,
+        "administration": "DDTM",
+        "name": "DML 2A",
+        "resources": [
+          {
+            "id": 3,
+            "name": "Semi-rigide 1"
+          },
+          {
+            "id": 4,
+            "name": "Semi-rigide 2"
+          },
+          {
+            "id": 5,
+            "name": "Voiture"
+          }
+        ]
+      },
+      {
+        "id": 10004,
+        "administration": "DDTM",
+        "name": "DPM – DDTM 14",
+        "resources": [
+          {
+            "id": 6,
+            "name": "AR VECHEN"
+          },
+          {
+            "id": 7,
+            "name": "Semi-rigide"
+          }
+        ]
+      },
+      {
+        "id": 10005,
+        "administration": "DDTM",
+        "name": "DPM – DDTM 35",
+        "resources": []
+      },
+      {
+        "id": 10006,
+        "administration": "DDTM",
+        "name": "DPM – DDTM 44",
+        "resources": []
+      },
+      {
+        "id": 10007,
+        "administration": "DDTM",
+        "name": "SML 33",
+        "resources": []
+      },
+      {
+        "id": 10008,
+        "administration": "DDTM",
+        "name": "SML 50",
+        "resources": []
+      },
+      {
+        "id": 10009,
+        "administration": "DDTM",
+        "name": "Police de l'eau – DDTM 11",
+        "resources": []
+      },
+      {
+        "id": 10010,
+        "administration": "DIRM DM",
+        "name": "PAM Jeanne Barret",
+        "resources": []
+      },
+      {
+        "id": 10011,
+        "administration": "DIRM DM",
+        "name": "PAM Themis",
+        "resources": [
+          {
+            "id": 8,
+            "name": "PAM Jeanne Barret"
+          }
+        ]
+      },
+      {
+        "id": 10012,
+        "administration": "DIRM DM",
+        "name": "Cross Etel",
+        "resources": [
+          {
+            "id": 9,
+            "name": "PAM Themis"
+          }
+        ]
+      },
+      {
+        "id": 10013,
+        "administration": "DIRM DM",
+        "name": "Cross Gris Nez",
+        "resources": []
+      },
+      {
+        "id": 10014,
+        "administration": "Douane",
+        "name": "BGC Ajaccio",
+        "resources": []
+      },
+      {
+        "id": 10015,
+        "administration": "Douane",
+        "name": "BGC Bastia",
+        "resources": []
+      },
+      {
+        "id": 10016,
+        "administration": "Douane",
+        "name": "BSN Ste Maxime",
+        "resources": []
+      },
+      {
+        "id": 10017,
+        "administration": "Douane",
+        "name": "DF 25 Libecciu",
+        "resources": []
+      },
+      {
+        "id": 10018,
+        "administration": "Douane",
+        "name": "DF 61 Port-de-Bouc",
+        "resources": []
+      },
+      {
+        "id": 10019,
+        "administration": "DREAL",
+        "name": "DREAL Pays-de-La-Loire",
+        "resources": [
+          {
+            "id": 10,
+            "name": "ALTAIR"
+          },
+          {
+            "id": 11,
+            "name": "PHEROUSA"
+          },
+          {
+            "id": 12,
+            "name": "ARIOLA"
+          }
+        ]
+      },
+      {
+        "id": 10020,
+        "administration": "Gendarmerie Maritime",
+        "name": "P602 Verdon",
+        "resources": []
+      },
+      {
+        "id": 10021,
+        "administration": "Gendarmerie Nationale",
+        "name": "BN Toulon",
+        "resources": []
+      },
+      {
+        "id": 10022,
+        "administration": "Gendarmerie Nationale",
+        "name": "Brigade fluviale de Rouen",
+        "resources": []
+      },
+      {
+        "id": 10023,
+        "administration": "Gestionnaire AMP",
+        "name": "Natura 2000 Côte Bleue Marine",
+        "resources": []
+      },
+      {
+        "id": 10024,
+        "administration": "Marine Nationale",
+        "name": "A636 Maïto",
+        "resources": []
+      },
+      {
+        "id": 10025,
+        "administration": "Office Français de la Biodiversité",
+        "name": "OFB Sd 85",
+        "resources": []
+      },
+      {
+        "id": 10026,
+        "administration": "Office Français de la Biodiversité",
+        "name": "OFB SD974 Brigade Nature – SOI",
+        "resources": []
+      },
+      {
+        "id": 10027,
+        "administration": "Parcs Naturels Régionaux",
+        "name": "Parc Naturel Régional Martinique",
+        "resources": []
+      },
+      {
+        "id": 10028,
+        "administration": "Parcs Nationaux",
+        "name": "Parc National de Guadeloupe",
+        "resources": []
+      },
+      {
+        "id": 10029,
+        "administration": "Parcs Naturels Marins",
+        "name": "PNM Martinique",
+        "resources": []
+      },
+      {
+        "id": 10030,
+        "administration": "Police Municipale",
+        "name": "Police Municipale Le Marin 972",
+        "resources": []
+      },
+      {
+        "id": 10031,
+        "administration": "Réserves Naturelles",
+        "name": "Réserve Naturelle  de L'Ilot M'Bouzi",
+        "resources": []
+      },
+      {
+        "id": 10032,
+        "administration": "Réserves Naturelles",
+        "name": "Réserve Naturelle 7 Iles",
+        "resources": []
+      }
+    ]
+  }
+}

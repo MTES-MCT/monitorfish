@@ -43,7 +43,7 @@ export function VesselName({ focusOnVesselSearchInput }) {
     e => {
       e.stopPropagation()
 
-      dispatch(unselectVessel() as any)
+      dispatch(unselectVessel())
     },
     [dispatch]
   )

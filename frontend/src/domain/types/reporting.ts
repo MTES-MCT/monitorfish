@@ -13,7 +13,7 @@ export enum ReportingType {
 export type BaseReporting = {
   creationDate: string
   externalReferenceNumber: string
-  id: string
+  id: number
   infraction: Infraction | null
   internalReferenceNumber: string
   ircs: string

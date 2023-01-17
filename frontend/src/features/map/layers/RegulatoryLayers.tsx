@@ -41,7 +41,7 @@ export function RegulatoryLayers({ map, mapMovingAndZoomEvent }: RegulatoryLayer
     }
 
     const olLayers = map.getLayers()
-    const vectorLayersToAdd = dispatch(getRegulatoryLayersToAdd(olLayers.getArray(), showedLayers) as any)
+    const vectorLayersToAdd = dispatch(getRegulatoryLayersToAdd(olLayers.getArray(), showedLayers))
     vectorLayersToAdd.forEach(vectorLayer => {
       olLayers.push(vectorLayer)
     })

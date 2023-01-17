@@ -161,14 +161,13 @@ export function ReportingForm({
   const editReporting = useCallback(
     (editedReportingId: number, nextReportingValue: ReportingUpdate) => {
       if (editedReporting) {
-        // TODO Fix the use-case dispatch type
         dispatch(
           updateReporting(
             getOnlyVesselIdentityProperties(editedReporting),
             editedReportingId,
             nextReportingValue,
             previousReportingType.current
-          ) as any
+          )
         ).then(() => {
           closeForm()
           deleteLocalStorageReportingEntry()
@@ -197,7 +196,7 @@ export function ReportingForm({
         vesselName: selectedVesselIdentity?.vesselName
       }
 
-      dispatch(addReporting(nextReportingWithMissingProperties) as any).then(() => {
+      dispatch(addReporting(nextReportingWithMissingProperties)).then(() => {
         closeForm()
         deleteLocalStorageReportingEntry()
       })
@@ -218,7 +217,7 @@ export function ReportingForm({
       }
 
       if (editedReporting) {
-        editReporting(parseInt(editedReporting.id, 10), nextReporting.value)
+        editReporting(editedReporting.id, nextReporting.value)
 
         return
       }

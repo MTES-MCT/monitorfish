@@ -110,11 +110,11 @@ function SideWindowWithRef(this: any, { isFromURL }: SideWindowProps, ref: Forwa
 
   useEffect(() => {
     if (isFromURL) {
-      dispatch(getOperationalAlerts() as any)
-      dispatch(getAllBeaconMalfunctions() as any)
-      dispatch(getSilencedAlerts() as any)
-      dispatch(getAllCurrentReportings() as any)
-      dispatch(getFishingInfractions() as any)
+      dispatch(getOperationalAlerts())
+      dispatch(getAllBeaconMalfunctions())
+      dispatch(getSilencedAlerts())
+      dispatch(getAllCurrentReportings())
+      dispatch(getFishingInfractions())
 
       dispatch(openSideWindowTab(SideWindowMenuKey.ALERTS))
       // dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))

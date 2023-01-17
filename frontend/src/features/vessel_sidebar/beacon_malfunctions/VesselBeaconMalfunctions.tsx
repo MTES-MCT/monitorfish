@@ -19,7 +19,7 @@ export function VesselBeaconMalfunctions() {
   const [isCurrentBeaconMalfunctionDetails, setIsCurrentBeaconMalfunctionDetails] = useState<boolean>(false)
 
   useEffect(() => {
-    dispatch(getVesselBeaconMalfunctions(true) as any)
+    dispatch(getVesselBeaconMalfunctions(true))
   }, [dispatch, selectedVessel, vesselBeaconMalfunctionsFromDate])
 
   return (

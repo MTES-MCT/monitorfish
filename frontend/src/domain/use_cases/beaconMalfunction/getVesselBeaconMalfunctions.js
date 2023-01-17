@@ -1,7 +1,7 @@
 import { removeError, setError } from '../../shared_slices/Global'
 import { batch } from 'react-redux'
 import {
-  loadVesselBeaconMalfunctions,
+  loadVesselBeaconMalfunctions, resetVesselBeaconMalfunctionsResumeAndHistory,
   setVesselBeaconMalfunctionsResumeAndHistory
 } from '../../shared_slices/BeaconMalfunction'
 import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../../entities/vessel/vessel'
@@ -13,10 +13,12 @@ const getVesselBeaconMalfunctions = fromCron => (dispatch, getState) => {
     selectedVessel
   } = getState().vessel
   if (!selectedVessel) {
+    dispatch(resetVesselBeaconMalfunctionsResumeAndHistory())
     return
   }
   const vesselIdentity = getOnlyVesselIdentityProperties(selectedVessel)
   if (!vesselIdentity.vesselId) {
+    dispatch(resetVesselBeaconMalfunctionsResumeAndHistory())
     return
   }
 

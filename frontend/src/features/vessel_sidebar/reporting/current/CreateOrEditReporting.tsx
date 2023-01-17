@@ -1,10 +1,12 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
+import { vesselsAreEquals } from '../../../../domain/entities/vessel/vessel'
 import { setEditedReporting } from '../../../../domain/shared_slices/Reporting'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
+import { usePrevious } from '../../../../hooks/usePrevious'
 import { PrimaryButton } from '../../../commonStyles/Buttons.style'
 import { ReactComponent as CloseIconSVG } from '../../../icons/Croix_grise.svg'
 import { ReportingForm } from './ReportingForm'
@@ -14,11 +16,18 @@ export function CreateOrEditReporting() {
   const { selectedVesselIdentity } = useAppSelector(state => state.vessel)
   const editedReporting = useAppSelector(state => state.reporting.editedReporting)
   const [newReportingFormIsOpen, setNewReportingFormIsOpen] = useState(false)
+  const previousSelectedVesselIdentity = usePrevious(selectedVesselIdentity)
 
   const close = useCallback(() => {
     setNewReportingFormIsOpen(false)
     dispatch(setEditedReporting(null))
   }, [dispatch])
+
+  useEffect(() => {
+    if (!vesselsAreEquals(previousSelectedVesselIdentity, selectedVesselIdentity)) {
+      close()
+    }
+  }, [selectedVesselIdentity, previousSelectedVesselIdentity, close])
 
   return newReportingFormIsOpen || editedReporting ? (
     <FormWrapper>

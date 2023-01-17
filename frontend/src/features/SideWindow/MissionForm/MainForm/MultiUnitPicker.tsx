@@ -7,13 +7,13 @@ import styled from 'styled-components'
 import { useNewWindow } from '../../../../ui/NewWindow'
 import { EMPTY_UNIT } from './constants'
 
-import type { MissionUnit } from '../../../../domain/types/mission'
+import type { ControlUnit } from '../../../../domain/types/mission'
 
 export type MultiUnitPickerProps = {
   name: string
 }
 export function MultiUnitPicker({ name }: MultiUnitPickerProps) {
-  const [input, , helpers] = useField<Partial<MissionUnit>[] | undefined>(name)
+  const [input, , helpers] = useField<Partial<ControlUnit>[] | undefined>(name)
 
   const { newWindowContainerRef } = useNewWindow()
 
@@ -37,7 +37,7 @@ export function MultiUnitPicker({ name }: MultiUnitPickerProps) {
   )
 
   const handleChange = useCallback(
-    (index: number, property: keyof MissionUnit, nextValue: string | string[] | undefined) => {
+    (index: number, property: keyof ControlUnit, nextValue: string | string[] | undefined) => {
       const nextUnits = update(index, assoc(property, nextValue) as any, currentUnits)
 
       setValue(nextUnits)
@@ -62,17 +62,17 @@ export function MultiUnitPicker({ name }: MultiUnitPickerProps) {
               />
               <Select
                 baseContainer={newWindowContainerRef.current}
-                defaultValue={currentUnit.unit}
+                defaultValue={currentUnit.name}
                 disabled={!currentUnit.administration}
                 label={`Unité ${index + 1}`}
-                name={`unit_${index}`}
-                onChange={nextValue => handleChange(index, 'unit', nextValue)}
+                name={`name_${index}`}
+                onChange={nextValue => handleChange(index, 'name', nextValue)}
                 options={[]}
               />
               <MultiSelect
                 baseContainer={newWindowContainerRef.current}
-                defaultValue={currentUnit.resources}
-                disabled={!currentUnit.unit}
+                defaultValue={currentUnit.resources?.map(resource => resource.id.toString())}
+                disabled={!currentUnit.name}
                 label={`Ressource ${index + 1}`}
                 name={`meanId_${index}`}
                 onChange={nextValue => handleChange(index, 'resources', nextValue)}
@@ -81,7 +81,7 @@ export function MultiUnitPicker({ name }: MultiUnitPickerProps) {
               <Select
                 baseContainer={newWindowContainerRef.current}
                 defaultValue={currentUnit.contact}
-                disabled={!currentUnit.unit}
+                disabled={!currentUnit.name}
                 label={`Contact de l’unité ${index + 1}`}
                 name={`contact_${index}`}
                 onChange={nextValue => handleChange(index, 'contact', nextValue)}

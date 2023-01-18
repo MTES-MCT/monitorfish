@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
+import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
 import { COLORS } from '../../../../constants/constants'
 import { getNumberOfSeaAndLandBeaconMalfunctions } from '../../../../domain/entities/beaconMalfunction'
 import {
@@ -9,7 +10,6 @@ import {
   YearListTitle,
   YearListTitleText
 } from '../../common_styles/YearList.style'
-import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
 
 import type { BeaconMalfunctionResumeAndDetails } from '../../../../domain/entities/beaconMalfunction/types'
 

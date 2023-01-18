@@ -1,5 +1,6 @@
 import { batch } from 'react-redux'
 
+import { updateSelectedVesselTrackRequest } from './updateSelectedVesselTrackRequest'
 import { getVesselVoyageFromAPI } from '../../../api/vessel'
 import NoLogbookMessagesFoundError from '../../../errors/NoLogbookMessagesFoundError'
 import { dayjs } from '../../../utils/dayjs'
@@ -15,7 +16,6 @@ import {
   showFishingActivitiesOnMap
 } from '../../shared_slices/FishingActivities'
 import { removeError, setError } from '../../shared_slices/Global'
-import { updateSelectedVesselTrackRequest } from './updateSelectedVesselTrackRequest'
 
 import type { VesselIdentity } from '../../entities/vessel/types'
 

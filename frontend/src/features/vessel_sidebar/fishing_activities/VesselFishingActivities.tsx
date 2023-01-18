@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
+import FishingActivitiesSummary from './FishingActivitiesSummary'
+import LogbookMessages from './logbook_messages/LogbookMessages'
 import { COLORS } from '../../../constants/constants'
 import { FishingActivitiesTab, vesselsAreEquals } from '../../../domain/entities/vessel/vessel'
 import {
@@ -13,8 +15,6 @@ import { getVesselVoyage, NavigateTo } from '../../../domain/use_cases/vessel/ge
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { usePrevious } from '../../../hooks/usePrevious'
-import FishingActivitiesSummary from './FishingActivitiesSummary'
-import LogbookMessages from './logbook_messages/LogbookMessages'
 
 export function VesselFishingActivities() {
   const dispatch = useAppDispatch()

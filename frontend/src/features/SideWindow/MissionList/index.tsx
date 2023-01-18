@@ -3,6 +3,8 @@ import { pipe } from 'ramda'
 import { useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
+import { MISSION_LIST_TABLE_OPTIONS } from './constants'
+import { FilterBar } from './FilterBar'
 import { missionApi } from '../../../api/mission'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
@@ -10,11 +12,9 @@ import { useTable } from '../../../hooks/useTable'
 import { EmptyCardTable } from '../../../ui/card-table/EmptyCardTable'
 import { dayjs } from '../../../utils/dayjs'
 import { SideWindowMenuKey } from '../constants'
-import { MISSION_LIST_TABLE_OPTIONS } from './constants'
-import { FilterBar } from './FilterBar'
 
-import type { Mission } from '../../../domain/types/mission'
 import type { MissionFilter } from './types'
+import type { Mission } from '../../../domain/types/mission'
 import type { MutableRefObject } from 'react'
 
 export function MissionList() {

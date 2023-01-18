@@ -2,8 +2,8 @@ import { THEME } from '@mtes-mct/monitor-ui'
 import { useEffect } from 'react'
 import { SelectPicker } from 'rsuite'
 
-import { VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
+import { VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
 
 import type { BeaconMalfunction } from '../../../domain/entities/beaconMalfunction/types'
 

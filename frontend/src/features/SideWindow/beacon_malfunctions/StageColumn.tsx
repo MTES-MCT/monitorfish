@@ -1,11 +1,11 @@
 import { CSSProperties, MutableRefObject, useRef } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../constants/constants'
-import { useAppSelector } from '../../../hooks/useAppSelector'
 import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
 import { Draggable } from './Draggable'
 import { StageColumnHeader } from './StageColumnHeader'
+import { COLORS } from '../../../constants/constants'
+import { useAppSelector } from '../../../hooks/useAppSelector'
 
 import type {
   BeaconMalfunction,

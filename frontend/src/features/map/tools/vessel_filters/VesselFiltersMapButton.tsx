@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
+import Filters from './Filters'
 import { COLORS } from '../../../../constants/constants'
 import { MapToolType } from '../../../../domain/entities/map/constants'
 import { setMapToolOpened } from '../../../../domain/shared_slices/Global'
@@ -10,7 +11,6 @@ import { useClickOutsideWhenOpenedAndExecute } from '../../../../hooks/useClickO
 import { usePrevious } from '../../../../hooks/usePrevious'
 import { ReactComponent as FilterSVG } from '../../../icons/standardized/Filter.svg'
 import { MapToolButton } from '../MapToolButton'
-import Filters from './Filters'
 
 export function VesselFiltersMapButton() {
   const dispatch = useAppDispatch()

@@ -4,6 +4,8 @@ import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import SelectPicker from 'rsuite/SelectPicker'
 import styled from 'styled-components'
 
+import { FleetSegmentsTable } from './FleetSegmentsTable'
+import { NewFleetSegmentModal } from './NewFleetSegmentModal'
 import { COLORS } from '../../../constants/constants'
 import getFAOAreas from '../../../domain/use_cases/faoAreas/getFAOAreas'
 import { addFleetSegmentYear } from '../../../domain/use_cases/fleetSegment/addFleetSegmentYear'
@@ -13,8 +15,6 @@ import { getFleetSegmentsYearEntries } from '../../../domain/use_cases/fleetSegm
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { theme } from '../../../ui/theme'
 import { dayjs } from '../../../utils/dayjs'
-import { FleetSegmentsTable } from './FleetSegmentsTable'
-import { NewFleetSegmentModal } from './NewFleetSegmentModal'
 
 import type { FleetSegment } from '../../../domain/types/fleetSegment'
 

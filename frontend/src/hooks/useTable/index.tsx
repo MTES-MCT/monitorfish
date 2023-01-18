@@ -6,8 +6,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { TableHead } from './TableHead'
 import { getArrayPathFromStringPath, normalizeSearchQuery } from './utils'
 
-import type { CollectionItem } from '../../types'
 import type { AugmentedDataItem, AugmentedDataItemBase, TableOptions } from './types'
+import type { CollectionItem } from '../../types'
 
 export function useTable<T extends CollectionItem = CollectionItem>(
   maybeRawData: T[] | undefined,

@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 
+import { ConfirmDeletionModal } from './ConfirmDeletionModal'
+import { CreateOrEditReporting } from './CreateOrEditReporting'
 import { COLORS } from '../../../../constants/constants'
 import { COMMON_ALERT_TYPE_OPTION } from '../../../../domain/entities/alerts/constants'
 import { ReportingType } from '../../../../domain/types/reporting'
@@ -8,8 +10,6 @@ import { deleteReporting } from '../../../../domain/use_cases/reporting/deleteRe
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { ReportingCard } from '../ReportingCard'
-import { ConfirmDeletionModal } from './ConfirmDeletionModal'
-import { CreateOrEditReporting } from './CreateOrEditReporting'
 
 // TODO Move that into a constants file.
 export const operationalAlertTypes = Object.keys(COMMON_ALERT_TYPE_OPTION)

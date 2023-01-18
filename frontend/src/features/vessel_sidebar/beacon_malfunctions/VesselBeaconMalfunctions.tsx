@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
+import { BeaconMalfunctionDetails } from './details/BeaconMalfunctionDetails'
+import BeaconMalfunctionsResumeAndHistory from './resume/BeaconMalfunctionsResumeAndHistory'
 import { COLORS } from '../../../constants/constants'
 import { BeaconMalfunctionsTab } from '../../../domain/entities/beaconMalfunction/constants'
 import getVesselBeaconMalfunctions from '../../../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
-import { BeaconMalfunctionDetails } from './details/BeaconMalfunctionDetails'
-import BeaconMalfunctionsResumeAndHistory from './resume/BeaconMalfunctionsResumeAndHistory'
 
 export function VesselBeaconMalfunctions() {
   const dispatch = useAppDispatch()

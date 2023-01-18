@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
+import { LastPositionsSlider } from './LastPositionsSlider'
+import TrackDepthRadio from './TrackDepthRadio'
 import { COLORS } from '../../../../constants/constants'
 import { MapToolType } from '../../../../domain/entities/map/constants'
 import {
@@ -17,8 +19,6 @@ import { ReactComponent as ShowingOtherTracksSVG } from '../../../icons/Bouton_m
 import { ReactComponent as HideVesselsAtPortSVG } from '../../../icons/Masquer_navires_au_port.svg'
 import { ReactComponent as EstimatedPositionSVG } from '../../../icons/Positions_estimees.svg'
 import { MapToolBox } from '../MapToolBox'
-import { LastPositionsSlider } from './LastPositionsSlider'
-import TrackDepthRadio from './TrackDepthRadio'
 
 export function EditVesselVisibility() {
   const dispatch = useAppDispatch()

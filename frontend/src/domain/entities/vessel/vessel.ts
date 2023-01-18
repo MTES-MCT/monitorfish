@@ -1,9 +1,8 @@
 import countries from 'i18n-iso-countries'
 
-import { BaseLayers, Layer } from '../layers/constants'
 import { vesselLabel as vesselLabelEnum } from './label/types'
+import { BaseLayers, Layer } from '../layers/constants'
 
-import type { Reporting } from '../../types/reporting'
 import type {
   SelectedVessel,
   ShowedVesselTrack,
@@ -12,6 +11,7 @@ import type {
   VesselIdentity,
   VesselCompositeIdentifier
 } from './types'
+import type { Reporting } from '../../types/reporting'
 
 export const VESSEL_ALERT_STYLE = 1
 export const VESSEL_INFRACTION_SUSPICION_STYLE = 1

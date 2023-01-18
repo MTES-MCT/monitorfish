@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
+import Control from './Control'
 import { COLORS } from '../../../constants/constants'
 import { getNumberOfInfractions } from '../../../domain/entities/controls'
 import { YearListChevronIcon, YearListContent, YearListTitle, YearListTitleText } from '../common_styles/YearList.style'
-import Control from './Control'
 
 import type { VesselControl } from '../../../domain/types/control'
 

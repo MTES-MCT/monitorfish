@@ -2,15 +2,15 @@ import { useCallback, useEffect, useMemo } from 'react'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
+import ControlsResumeZone from './ControlsResumeZone'
+import LastControlZone from './LastControlZone'
+import { YearsToControlList } from './YearsToControlList'
 import { COLORS } from '../../../constants/constants'
 import { getYearsToControl, lastControlByType } from '../../../domain/entities/controls'
 import { resetNextControlSummary, setControlFromDate, setControlSummary } from '../../../domain/shared_slices/Control'
 import { getVesselControls } from '../../../domain/use_cases/vessel/getVesselControls'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
-import ControlsResumeZone from './ControlsResumeZone'
-import LastControlZone from './LastControlZone'
-import { YearsToControlList } from './YearsToControlList'
 
 export function VesselControls() {
   const dispatch = useAppDispatch()

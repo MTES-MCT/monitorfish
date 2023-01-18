@@ -2,8 +2,8 @@ import { expect } from '@jest/globals'
 import Feature from 'ol/Feature'
 import { Geometry, Polygon } from 'ol/geom'
 
-import { addGeometryToMultiPolygonGeoJSON, keepOnlyInitialGeometriesOfMultiPolygon } from '../index'
 import { dummyMultiPolygonGeoJSON } from './mocks'
+import { addGeometryToMultiPolygonGeoJSON, keepOnlyInitialGeometriesOfMultiPolygon } from '../index'
 
 describe('layers/index', () => {
   it('.addGeometryToMultiPolygonGeoJSON() Should add a geometry with OpenLayers projection to an existing MultiPolygon GeoJSON', () => {

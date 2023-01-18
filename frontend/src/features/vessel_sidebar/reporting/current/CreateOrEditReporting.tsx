@@ -1,13 +1,13 @@
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
+import { ReportingForm } from './ReportingForm'
 import { COLORS } from '../../../../constants/constants'
 import { setEditedReporting } from '../../../../domain/shared_slices/Reporting'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { PrimaryButton } from '../../../commonStyles/Buttons.style'
 import { ReactComponent as CloseIconSVG } from '../../../icons/Croix_grise.svg'
-import { ReportingForm } from './ReportingForm'
 
 export function CreateOrEditReporting() {
   const dispatch = useAppDispatch()

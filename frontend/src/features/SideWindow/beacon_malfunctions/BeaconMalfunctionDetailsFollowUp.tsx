@@ -2,6 +2,9 @@ import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
 import { Toggle } from 'rsuite'
 import styled from 'styled-components'
 
+import { BeaconMalfunctionDetailsFollowUpItem } from './BeaconMalfunctionDetailsFollowUpItem'
+import { BeaconMalfunctionDetailsFollowUpRow } from './BeaconMalfunctionDetailsFollowUpRow'
+import { BeaconMalfunctionDetailsType, getContent } from './beaconMalfunctions'
 import { COLORS } from '../../../constants/constants'
 import { UserType, VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
 import { setUserType } from '../../../domain/shared_slices/Global'
@@ -12,9 +15,6 @@ import { getDate, mergeObjects } from '../../../utils'
 import { dayjs } from '../../../utils/dayjs'
 import { pushToObjectAtIndex } from '../../../utils/pushToObjectAtIndex'
 import { ReactComponent as CommentsSVG } from '../../icons/Commentaires.svg'
-import { BeaconMalfunctionDetailsFollowUpItem } from './BeaconMalfunctionDetailsFollowUpItem'
-import { BeaconMalfunctionDetailsFollowUpRow } from './BeaconMalfunctionDetailsFollowUpRow'
-import { BeaconMalfunctionDetailsType, getContent } from './beaconMalfunctions'
 
 import type {
   BeaconMalfunctionFollowUpItem,

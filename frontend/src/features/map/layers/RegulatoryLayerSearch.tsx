@@ -3,10 +3,10 @@ import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import { MutableRefObject, useCallback, useEffect, useRef } from 'react'
 
+import { dottedLayerStyle } from './styles/dottedLayer.style'
 import { Layer } from '../../../domain/entities/layers/constants'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
 import { useAppSelector } from '../../../hooks/useAppSelector'
-import { dottedLayerStyle } from './styles/dottedLayer.style'
 
 import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { Feature } from 'ol'

@@ -12,6 +12,12 @@ import { createSelector } from '@reduxjs/toolkit'
 import { CSSProperties, MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
+import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
+import { BeaconMalfunctionDetails } from './BeaconMalfunctionDetails'
+import { getBeaconMalfunctionsByStage, searchInBeaconMalfunctions } from './beaconMalfunctions'
+import { Droppable } from './Droppable'
+import { StageColumn } from './StageColumn'
+import { VesselStatusSelect } from './VesselStatusSelect'
 import { COLORS } from '../../../constants/constants'
 import { STAGE_RECORD, VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
 import { setError } from '../../../domain/shared_slices/Global'
@@ -20,12 +26,6 @@ import updateBeaconMalfunctionFromKanban from '../../../domain/use_cases/beaconM
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
-import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
-import { BeaconMalfunctionDetails } from './BeaconMalfunctionDetails'
-import { getBeaconMalfunctionsByStage, searchInBeaconMalfunctions } from './beaconMalfunctions'
-import { Droppable } from './Droppable'
-import { StageColumn } from './StageColumn'
-import { VesselStatusSelect } from './VesselStatusSelect'
 
 import type {
   BeaconMalfunction,

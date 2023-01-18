@@ -1,8 +1,8 @@
 // TODO This should be moved to `entities/vessel/types.ts`
 
+import type { RiskFactor } from './riskFactor/types'
 import type { ReportingType } from '../../types/reporting'
 import type { VesselTrackDepth } from '../vesselTrackDepth'
-import type { RiskFactor } from './riskFactor/types'
 import type Feature from 'ol/Feature'
 import type LineString from 'ol/geom/LineString'
 import type Point from 'ol/geom/Point'

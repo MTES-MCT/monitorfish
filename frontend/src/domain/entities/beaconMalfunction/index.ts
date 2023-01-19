@@ -1,13 +1,13 @@
 import _ from 'lodash'
 
-import { getReducedTimeAgo } from '../../../features/SideWindow/beacon_malfunctions/beaconMalfunctions'
-import { getDate } from '../../../utils'
 import {
   BeaconMalfunctionPropertyName,
   BeaconMalfunctionVesselStatus,
   END_OF_MALFUNCTION_REASON_RECORD,
   STAGE_RECORD
 } from './constants'
+import { getReducedTimeAgo } from '../../../features/SideWindow/beacon_malfunctions/beaconMalfunctions'
+import { getDate } from '../../../utils'
 
 import type { BeaconMalfunction, BeaconMalfunctionResumeAndDetails } from './types'
 

@@ -1,8 +1,8 @@
+import { loadVesselsFromAPIAndApplyFilter } from './applyFilterAndSetVessels'
 import { getVesselsLastPositionsFromAPI } from '../../../api/vessel'
 import { resetIsUpdatingVessels, setError } from '../../shared_slices/Global'
 import { setVesselsSpeciesAndDistricts } from '../../shared_slices/Vessel'
 import getUniqueSpeciesAndDistricts from '../species/getUniqueSpeciesAndDistricts'
-import { loadVesselsFromAPIAndApplyFilter } from './applyFilterAndSetVessels'
 
 export const showVesselsLastPosition = () => async (dispatch, getState) => {
   if (getState().global.blockVesselsUpdate) {

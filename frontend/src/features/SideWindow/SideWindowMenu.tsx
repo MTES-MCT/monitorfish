@@ -1,10 +1,10 @@
 import { Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
+import { SideWindowMenuKey } from './constants'
 import { getEnvironmentVariable } from '../../api/api'
 import { openSideWindowTab } from '../../domain/shared_slices/Global'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
-import { SideWindowMenuKey } from './constants'
 
 const IS_DEV_ENV = getEnvironmentVariable('REACT_APP_IS_DEV_ENV')
 

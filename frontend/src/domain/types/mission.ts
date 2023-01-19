@@ -5,6 +5,7 @@ export type Mission = {
   cacemNote: string
   closedBy: string
   cnspNote: string
+  controlUnits: ControlUnit[]
   endDate: Date
   goals: MissionGoal[]
   hasOrder: boolean
@@ -12,7 +13,6 @@ export type Mission = {
   inspectionsCount: number
   isUnderJdp: boolean
   openedBy: string
-  resourceUnits: MissionUnit[]
   seaFront: SeaFront
   startDate: Date
   status: MissionStatus
@@ -45,9 +45,15 @@ export enum MissionType {
 }
 /* eslint-enable typescript-sort-keys/string-enum */
 
-export type MissionUnit = {
+export type ControlUnit = {
   administration: string
   contact: string
-  resources: Array<string>
-  unit: string
+  id: number
+  name: string
+  resources: ControlResource[]
+}
+
+export type ControlResource = {
+  id: number
+  name: string
 }

@@ -6,21 +6,29 @@ import { BeaconMalfunctionDetails } from './details/BeaconMalfunctionDetails'
 import BeaconMalfunctionsResumeAndHistory from './resume/BeaconMalfunctionsResumeAndHistory'
 import { COLORS } from '../../../constants/constants'
 import { BeaconMalfunctionsTab } from '../../../domain/entities/beaconMalfunction/constants'
+import { vesselsAreEquals } from '../../../domain/entities/vessel/vessel'
+import { setBeaconMalfunctionsTab } from '../../../domain/shared_slices/BeaconMalfunction'
 import getVesselBeaconMalfunctions from '../../../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
+import { usePrevious } from '../../../hooks/usePrevious'
 
 export function VesselBeaconMalfunctions() {
   const dispatch = useAppDispatch()
   const { beaconMalfunctionsTab, loadingVesselBeaconMalfunctions, vesselBeaconMalfunctionsFromDate } = useAppSelector(
     state => state.beaconMalfunction
   )
-  const { selectedVessel } = useAppSelector(state => state.vessel)
+  const { selectedVesselIdentity } = useAppSelector(state => state.vessel)
+  const previousSelectedVesselIdentity = usePrevious(selectedVesselIdentity)
   const [isCurrentBeaconMalfunctionDetails, setIsCurrentBeaconMalfunctionDetails] = useState<boolean>(false)
 
   useEffect(() => {
     dispatch(getVesselBeaconMalfunctions(true) as any)
-  }, [dispatch, selectedVessel, vesselBeaconMalfunctionsFromDate])
+
+    if (!vesselsAreEquals(previousSelectedVesselIdentity, selectedVesselIdentity)) {
+      dispatch(setBeaconMalfunctionsTab(BeaconMalfunctionsTab.RESUME))
+    }
+  }, [dispatch, selectedVesselIdentity, vesselBeaconMalfunctionsFromDate, previousSelectedVesselIdentity])
 
   return (
     <>

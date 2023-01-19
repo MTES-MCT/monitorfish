@@ -1,15 +1,15 @@
 // TODO Replace all options values with value-based enums.
 
-import { MissionType, MissionUnit } from '../../../../domain/types/mission'
+import { MissionType, ControlUnit } from '../../../../domain/types/mission'
 
 import type { FormValues } from './types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
-export const EMPTY_UNIT: Partial<MissionUnit> = {
+export const EMPTY_UNIT: Partial<ControlUnit> = {
   administration: undefined,
   contact: undefined,
-  resources: [],
-  unit: undefined
+  name: undefined,
+  resources: []
 }
 
 export const INITIAL_VALUES: FormValues = {

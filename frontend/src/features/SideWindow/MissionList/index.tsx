@@ -68,8 +68,8 @@ export function MissionList() {
                     </TableBodyCell>
                     <TableBodyCell $fixedWidth={112}>{dayjs(mission.endDate).format('D MMM YY, HH:MM')}</TableBodyCell>
                     <TableBodyCell $fixedWidth={160}>
-                      {mission.resourceUnits?.map(
-                        resourceUnit => `${resourceUnit.unit} (${resourceUnit.administration || '-'})`
+                      {mission.controlUnits?.map(
+                        resourceUnit => `${resourceUnit.name} (${resourceUnit.administration || '-'})`
                       )}
                     </TableBodyCell>
                     <TableBodyCell $fixedWidth={80}>{mission.type}</TableBodyCell>

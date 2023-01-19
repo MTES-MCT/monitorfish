@@ -9,13 +9,11 @@ import { addReporting } from '../../../../domain/use_cases/reporting/addReportin
 import { updateReporting } from '../../../../domain/use_cases/reporting/updateReporting'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
-import { useSaveReportingInLocalStorage } from '../../../../hooks/useSaveInLocalStorage'
-import { getLocalStorageState } from '../../../../utils'
 import { PrimaryButton, SecondaryButton } from '../../../commonStyles/Buttons.style'
 import { sortArrayByColumn } from '../../../vessel_list/tableSort'
 
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
-import type { Reporting, ReportingUpdate, ReportingType } from '../../../../domain/types/reporting'
+import type { Reporting, ReportingType, ReportingUpdate } from '../../../../domain/types/reporting'
 
 type ReportingFormProps = {
   closeForm: () => void
@@ -31,8 +29,6 @@ export function ReportingForm({
   hasWhiteBackground,
   selectedVesselIdentity
 }: ReportingFormProps) {
-  const reportingLocalStorageKey = fromSideWindow ? 'side-window-reporting-in-edit' : 'reporting-in-edit'
-
   const dispatch = useAppDispatch()
   const unitSelectRef = useRef() as MutableRefObject<HTMLDivElement>
   const natinfSelectRef = useRef() as MutableRefObject<HTMLDivElement>
@@ -42,21 +38,13 @@ export function ReportingForm({
   const [reportingType, setReportingType] = useState<ReportingType>(
     ReportingTypeCharacteristics.INFRACTION_SUSPICION.code
   )
-  useSaveReportingInLocalStorage(reportingLocalStorageKey, 'type', reportingType, false)
   const [unit, setUnit] = useState<string | null>('')
-  useSaveReportingInLocalStorage(reportingLocalStorageKey, 'unit', unit, true)
   const [authorTrigram, setAuthorTrigram] = useState('')
-  useSaveReportingInLocalStorage(reportingLocalStorageKey, 'authorTrigram', authorTrigram, true)
   const [authorContact, setAuthorContact] = useState('')
-  useSaveReportingInLocalStorage(reportingLocalStorageKey, 'authorContact', authorContact, true)
   const [reportingActor, setReportingActor] = useState(ReportingOriginActor.OPS.code)
-  useSaveReportingInLocalStorage(reportingLocalStorageKey, 'reportingActor', reportingActor, true)
   const [title, setTitle] = useState('')
-  useSaveReportingInLocalStorage(reportingLocalStorageKey, 'title', title, true)
   const [natinfCode, setNatinfCode] = useState<string | null>('')
-  useSaveReportingInLocalStorage(reportingLocalStorageKey, 'natinfCode', natinfCode, true)
   const [description, setDescription] = useState('')
-  useSaveReportingInLocalStorage(reportingLocalStorageKey, 'description', description, true)
   const [errorFields, setErrorFields] = useState<string[]>([])
   const previousReportingType = useRef() as MutableRefObject<ReportingType>
 
@@ -72,11 +60,6 @@ export function ReportingForm({
     setDescription(editedOrSavedReporting.value.description || '')
   }
 
-  const deleteLocalStorageReportingEntry = useCallback(
-    () => window.localStorage.removeItem(reportingLocalStorageKey),
-    [reportingLocalStorageKey]
-  )
-
   useEffect(() => {
     if (editedReporting) {
       fillForm(editedReporting)
@@ -85,11 +68,12 @@ export function ReportingForm({
       return
     }
 
-    const savedReporting = getLocalStorageState(null, reportingLocalStorageKey)
-    if (savedReporting) {
-      fillForm(savedReporting)
-    }
-  }, [editedReporting, reportingLocalStorageKey])
+    // TODO use initialValues from Formik
+    fillForm({
+      type: undefined,
+      value: {}
+    })
+  }, [editedReporting])
 
   useEffect(() => {
     if (reportingType === ReportingTypeCharacteristics.OBSERVATION.code) {
@@ -171,11 +155,10 @@ export function ReportingForm({
           ) as any
         ).then(() => {
           closeForm()
-          deleteLocalStorageReportingEntry()
         })
       }
     },
-    [dispatch, closeForm, deleteLocalStorageReportingEntry, editedReporting]
+    [dispatch, closeForm, editedReporting]
   )
 
   const createReporting = useCallback(
@@ -199,10 +182,9 @@ export function ReportingForm({
 
       dispatch(addReporting(nextReportingWithMissingProperties) as any).then(() => {
         closeForm()
-        deleteLocalStorageReportingEntry()
       })
     },
-    [dispatch, selectedVesselIdentity, closeForm, deleteLocalStorageReportingEntry]
+    [dispatch, selectedVesselIdentity, closeForm]
   )
 
   const createOrEditReporting = useCallback(
@@ -441,7 +423,6 @@ export function ReportingForm({
       <CancelButton
         onClick={() => {
           closeForm()
-          deleteLocalStorageReportingEntry()
         }}
       >
         Annuler

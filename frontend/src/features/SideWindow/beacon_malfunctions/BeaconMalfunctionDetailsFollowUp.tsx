@@ -11,6 +11,7 @@ import { setUserType } from '../../../domain/shared_slices/Global'
 import saveBeaconMalfunctionCommentFromKanban from '../../../domain/use_cases/beaconMalfunction/saveBeaconMalfunctionCommentFromKanban'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useListenForScroll } from '../../../hooks/useListenForScroll'
 import { getDate, mergeObjects } from '../../../utils'
 import { dayjs } from '../../../utils/dayjs'
 import { pushToObjectAtIndex } from '../../../utils/pushToObjectAtIndex'
@@ -29,9 +30,14 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
   const [today, setToday] = useState('')
   const [yesterday, setYesterday] = useState('')
   const scrollToRef = useRef<HTMLDivElement>(null)
+  const commentsAndActionsRef = useRef<HTMLDivElement>(null)
+  const isScrollBlocked = useRef(false)
   const [comment, setComment] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const [textareaHeight, setTextareaHeight] = useState(50)
+  useListenForScroll(() => {
+    isScrollBlocked.current = true
+  }, commentsAndActionsRef.current)
 
   useEffect(() => {
     setToday(getDate(new Date().toISOString()))
@@ -40,7 +46,7 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
     yesterdayDate.setDate(yesterdayDate.getDate() - 1)
     setYesterday(getDate(yesterdayDate.toISOString()))
 
-    if (comments?.length) {
+    if (comments?.length && !isScrollBlocked.current) {
       setTimeout(() => {
         scrollToRef.current?.scrollIntoView({ block: 'nearest' })
       }, 500)
@@ -160,7 +166,11 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
           {comments?.length} commentaire{comments?.length > 1 ? 's' : ''}
         </NumberCommentsText>
       </NumberComments>
-      <CommentsAndActions className="smooth-scroll" style={commentsAndActionsStyle(smallSize, textareaHeight || 0)}>
+      <CommentsAndActions
+        ref={commentsAndActionsRef}
+        className="smooth-scroll"
+        style={commentsAndActionsStyle(smallSize, textareaHeight || 0)}
+      >
         {sortedDates.map((date, dateIndex) => {
           const isLastDate = Object.keys(itemsByDate).length === dateIndex + 1
           const hoveredDate = getDate(date)

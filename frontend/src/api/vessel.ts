@@ -11,8 +11,8 @@ import type {
   VesselLastPosition,
   VesselPosition
 } from '../domain/entities/vessel/types'
-import type { ControlSummary } from '../domain/types/control'
 import type { VesselVoyage } from '../domain/types/fishingActivities'
+import type { ControlSummary } from '../domain/types/missionAction'
 import type { CurrentAndArchivedReportingsOfSelectedVessel } from '../domain/types/reporting'
 import type { NavigateTo } from '../domain/use_cases/vessel/getVesselVoyage'
 
@@ -147,10 +147,10 @@ async function getVesselVoyageFromAPI(
  *
  * @throws {@link ApiError}
  */
-async function getVesselControlsFromAPI(vesselId: number, fromDate: Date) {
+async function getVesselMissionActionsFromAPI(vesselId: number, fromDate: Date) {
   try {
     return await ky
-      .get(`/bff/v1/vessels/${vesselId}/controls?afterDateTime=${fromDate.toISOString()}`)
+      .get(`/bff/v1/vessels/${vesselId}/mission_actions?afterDateTime=${fromDate.toISOString()}`)
       .json<ControlSummary>()
   } catch (err) {
     throw new ApiError(CONTROLS_ERROR_MESSAGE, err)
@@ -197,7 +197,7 @@ export {
   getVesselPositionsFromAPI,
   getVesselFromAPI,
   getVesselsLastPositionsFromAPI,
-  getVesselControlsFromAPI,
+  getVesselMissionActionsFromAPI,
   getVesselVoyageFromAPI,
   getVesselReportingsFromAPI,
   getVesselRiskFactorFromAPI

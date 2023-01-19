@@ -5,46 +5,36 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
-import io.micrometer.core.instrument.MeterRegistry
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiParam
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.tags.Tag
 import kotlinx.coroutines.runBlocking
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.ZonedDateTime
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicInteger
 import javax.websocket.server.PathParam
 
 @RestController
 @RequestMapping("/bff/v1/vessels")
-@Api(description = "APIs for Vessels")
+@Tag(name = "APIs for Vessels")
 class VesselController(
     private val getLastPositions: GetLastPositions,
     private val getVessel: GetVessel,
     private val getVesselPositions: GetVesselPositions,
     private val getVesselVoyage: GetVesselVoyage,
     private val searchVessels: SearchVessels,
-    private val getVesselControls: GetVesselControls,
+    private val getVesselMissionActions: GetVesselMissionActions,
     private val getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions,
     private val getVesselReportings: GetVesselReportings,
-    private val getVesselRiskFactor: GetVesselRiskFactor,
-    meterRegistry: MeterRegistry
+    private val getVesselRiskFactor: GetVesselRiskFactor
 ) {
 
-    // TODO Move this the it's own infrastructure Metric class
-    val vesselsTimer = meterRegistry.timer("ws_vessel_requests_latency_seconds_summary")
-    val logbookTimer = meterRegistry.timer("ws_logbook_requests_latency_seconds_summary")
-    val vesselsGauge = meterRegistry.gauge("ws_vessels_stored_in_last_positions", AtomicInteger(0))
-
     @GetMapping("")
-    @ApiOperation("Get all vessels' last position")
+    @Operation(summary = "Get all vessels' last position")
     fun getVessels(): List<LastPositionDataOutput> {
         val positions = getLastPositions.execute()
-        vesselsGauge?.set(positions.size)
 
         return positions.map { position ->
             position.let {
@@ -54,38 +44,36 @@ class VesselController(
     }
 
     @GetMapping("/find")
-    @ApiOperation("Get vessel information and positions")
+    @Operation(summary = "Get vessel information and positions")
     fun getVessel(
-        @ApiParam("Vessel internal id")
+        @Parameter(description = "Vessel internal id")
         @RequestParam(name = "vesselId")
         vesselId: Int?,
-        @ApiParam("Vessel internal reference number (CFR)")
+        @Parameter(description = "Vessel internal reference number (CFR)")
         @RequestParam(name = "internalReferenceNumber")
         internalReferenceNumber: String,
-        @ApiParam("Vessel external reference number")
+        @Parameter(description = "Vessel external reference number")
         @RequestParam(name = "externalReferenceNumber")
         externalReferenceNumber: String,
-        @ApiParam("Vessel IRCS")
+        @Parameter(description = "Vessel IRCS")
         @RequestParam(name = "IRCS")
         IRCS: String,
-        @ApiParam("Vessel track depth")
+        @Parameter(description = "Vessel track depth")
         @RequestParam(name = "trackDepth")
         trackDepth: VesselTrackDepth,
-        @ApiParam("Vessel positions identifier")
+        @Parameter(description = "Vessel positions identifier")
         @RequestParam(name = "vesselIdentifier")
         vesselIdentifier: VesselIdentifier?,
-        @ApiParam("from date")
+        @Parameter(description = "from date")
         @RequestParam(name = "afterDateTime", required = false)
         @DateTimeFormat(pattern = zoneDateTimePattern)
         afterDateTime: ZonedDateTime?,
-        @ApiParam("to date")
+        @Parameter(description = "to date")
         @RequestParam(name = "beforeDateTime", required = false)
         @DateTimeFormat(pattern = zoneDateTimePattern)
         beforeDateTime: ZonedDateTime?
     ): ResponseEntity<VesselAndPositionsDataOutput> {
         return runBlocking {
-            val start = System.currentTimeMillis()
-
             val (vesselTrackHasBeenModified, vesselWithData) = getVessel.execute(
                 vesselId,
                 internalReferenceNumber,
@@ -99,19 +87,17 @@ class VesselController(
 
             val returnCode = if (vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
 
-            vesselsTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS)
-
             ResponseEntity.status(returnCode).body(VesselAndPositionsDataOutput.fromVesselWithData(vesselWithData))
         }
     }
 
     @GetMapping("/beacon_malfunctions")
-    @ApiOperation("Get vessel's beacon malfunctions history")
+    @Operation(summary = "Get vessel's beacon malfunctions history")
     fun getVesselBeaconMalfunctions(
-        @ApiParam("Vessel id")
+        @Parameter(description = "Vessel id")
         @RequestParam(name = "vesselId")
         vesselId: Int,
-        @ApiParam("beacon malfunctions after date time")
+        @Parameter(description = "beacon malfunctions after date time")
         @RequestParam(name = "afterDateTime")
         @DateTimeFormat(pattern = zoneDateTimePattern)
         afterDateTime: ZonedDateTime
@@ -127,35 +113,33 @@ class VesselController(
     }
 
     @GetMapping("/positions")
-    @ApiOperation("Get vessel's positions")
+    @Operation(summary = "Get vessel's positions")
     fun getVesselPositions(
-        @ApiParam("Vessel internal reference number (CFR)")
+        @Parameter(description = "Vessel internal reference number (CFR)")
         @RequestParam(name = "internalReferenceNumber")
         internalReferenceNumber: String,
-        @ApiParam("Vessel external reference number")
+        @Parameter(description = "Vessel external reference number")
         @RequestParam(name = "externalReferenceNumber")
         externalReferenceNumber: String,
-        @ApiParam("Vessel IRCS")
+        @Parameter(description = "Vessel IRCS")
         @RequestParam(name = "IRCS")
         IRCS: String,
-        @ApiParam("Vessel track depth")
+        @Parameter(description = "Vessel track depth")
         @RequestParam(name = "trackDepth")
         trackDepth: VesselTrackDepth,
-        @ApiParam("Vessel positions identifier")
+        @Parameter(description = "Vessel positions identifier")
         @RequestParam(name = "vesselIdentifier")
         vesselIdentifier: VesselIdentifier?,
-        @ApiParam("from date")
+        @Parameter(description = "from date")
         @RequestParam(name = "afterDateTime", required = false)
         @DateTimeFormat(pattern = zoneDateTimePattern)
         afterDateTime: ZonedDateTime?,
-        @ApiParam("to date")
+        @Parameter(description = "to date")
         @RequestParam(name = "beforeDateTime", required = false)
         @DateTimeFormat(pattern = zoneDateTimePattern)
         beforeDateTime: ZonedDateTime?
     ): ResponseEntity<List<PositionDataOutput>> {
         return runBlocking {
-            val start = System.currentTimeMillis()
-
             val (vesselTrackHasBeenModified, positions) = getVesselPositions.execute(
                 internalReferenceNumber,
                 externalReferenceNumber,
@@ -168,8 +152,6 @@ class VesselController(
 
             val returnCode = if (vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
 
-            vesselsTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS)
-
             val positionsDataOutput = positions.await().map {
                 PositionDataOutput.fromPosition(it)
             }
@@ -181,38 +163,40 @@ class VesselController(
         const val zoneDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.000X"
     }
 
-    @GetMapping("/{vesselId}/controls")
-    @ApiOperation("Get vessel's controls")
+    @GetMapping("/{vesselId}/mission_actions")
+    @Operation(summary = "Get vessel's mission actions")
     fun getVesselControls(
         @PathParam("Vessel id")
         @PathVariable(name = "vesselId")
         vesselId: String,
-        @ApiParam("Control after date time")
+        @Parameter(description = "actions after date time")
         @RequestParam(name = "afterDateTime")
         @DateTimeFormat(pattern = zoneDateTimePattern)
         afterDateTime: ZonedDateTime
     ): ControlSummaryDataOutput {
-        val controlResumeAndControls = getVesselControls.execute(vesselId.toInt(), afterDateTime)
+        return runBlocking {
+            val controlResumeAndControls = getVesselMissionActions.execute(vesselId.toInt(), afterDateTime)
 
-        return ControlSummaryDataOutput.fromControlSummary(controlResumeAndControls)
+            ControlSummaryDataOutput.fromControlSummary(controlResumeAndControls)
+        }
     }
 
     @GetMapping("/reporting")
-    @ApiOperation("Get vessel's reporting")
+    @Operation(summary = "Get vessel's reporting")
     fun getVesselReporting(
-        @ApiParam("Vessel internal reference number (CFR)")
+        @Parameter(description = "Vessel internal reference number (CFR)")
         @RequestParam(name = "internalReferenceNumber")
         internalReferenceNumber: String,
-        @ApiParam("Vessel external reference number")
+        @Parameter(description = "Vessel external reference number")
         @RequestParam(name = "externalReferenceNumber")
         externalReferenceNumber: String,
-        @ApiParam("Vessel IRCS")
+        @Parameter(description = "Vessel IRCS")
         @RequestParam(name = "IRCS")
         IRCS: String,
-        @ApiParam("Vessel positions identifier")
+        @Parameter(description = "Vessel positions identifier")
         @RequestParam(name = "vesselIdentifier")
         vesselIdentifier: VesselIdentifier?,
-        @ApiParam("Reporting from date time")
+        @Parameter(description = "Reporting from date time")
         @RequestParam(name = "fromDate")
         @DateTimeFormat(pattern = zoneDateTimePattern)
         fromDate: ZonedDateTime
@@ -229,9 +213,10 @@ class VesselController(
     }
 
     @GetMapping("/search")
-    @ApiOperation("Search vessels")
+    @Operation(summary = "Search vessels")
     fun searchVessel(
-        @ApiParam(
+        @Parameter(
+            description =
             "Vessel internal reference number (CFR), external marker, IRCS, MMSI, name or beacon number",
             required = true
         )
@@ -244,33 +229,30 @@ class VesselController(
     }
 
     @GetMapping("/logbook/find")
-    @ApiOperation("Get vessel's Logbook messages")
+    @Operation(summary = "Get vessel's Logbook messages")
     fun getVesselLogbookMessages(
-        @ApiParam("Vessel internal reference number (CFR)", required = true)
+        @Parameter(description = "Vessel internal reference number (CFR)", required = true)
         @RequestParam(name = "internalReferenceNumber")
         internalReferenceNumber: String,
-        @ApiParam(
+        @Parameter(
+            description =
             "Voyage request (LAST, PREVIOUS or NEXT) with respect to date",
             required = true
         )
         @RequestParam(name = "voyageRequest")
         voyageRequest: VoyageRequest,
-        @ApiParam("Trip number")
+        @Parameter(description = "Trip number")
         @RequestParam(name = "tripNumber", required = false)
         tripNumber: String?
     ): VoyageDataOutput {
-        val start = System.currentTimeMillis()
-
         val voyage = getVesselVoyage.execute(internalReferenceNumber, voyageRequest, tripNumber)
-
-        logbookTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS)
         return VoyageDataOutput.fromVoyage(voyage)
     }
 
     @GetMapping("/risk_factor")
-    @ApiOperation("Get vessel risk factor")
+    @Operation(summary = "Get vessel risk factor")
     fun getVesselRiskFactor(
-        @ApiParam("Vessel internal reference number (CFR)")
+        @Parameter(description = "Vessel internal reference number (CFR)")
         @RequestParam(name = "internalReferenceNumber")
         internalReferenceNumber: String
     ): RiskFactorDataOutput {

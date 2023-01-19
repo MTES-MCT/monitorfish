@@ -3,16 +3,16 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateOrUpdateFleetSegmentDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.FleetSegmentDataOutput
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiParam
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import javax.websocket.server.PathParam
 
 @RestController
 @RequestMapping("/bff/v1/fleet_segments")
-@Api(description = "APIs for Fleet segments")
+@Tag(name = "APIs for Fleet segments")
 class FleetSegmentController(
     private val getAllFleetSegmentsByYearByYear: GetAllFleetSegmentsByYear,
     private val updateFleetSegment: UpdateFleetSegment,
@@ -23,7 +23,7 @@ class FleetSegmentController(
 ) {
 
     @GetMapping("/{year}")
-    @ApiOperation("Get fleet segments")
+    @Operation(summary = "Get fleet segments")
     fun getFleetSegments(
         @PathParam("Year")
         @PathVariable(name = "year")
@@ -35,12 +35,12 @@ class FleetSegmentController(
     }
 
     @PutMapping(value = [""], consumes = ["application/json"])
-    @ApiOperation("Update a fleet segment")
+    @Operation(summary = "Update a fleet segment")
     fun updateFleetSegment(
-        @ApiParam("Year")
+        @Parameter(description = "Year")
         @RequestParam(name = "year")
         year: Int,
-        @ApiParam("Segment")
+        @Parameter(description = "Segment")
         @RequestParam(name = "segment")
         segment: String,
         @RequestBody
@@ -56,12 +56,12 @@ class FleetSegmentController(
     }
 
     @DeleteMapping(value = [""])
-    @ApiOperation("Delete a fleet segment")
+    @Operation(summary = "Delete a fleet segment")
     fun deleteFleetSegment(
-        @ApiParam("Year")
+        @Parameter(description = "Year")
         @RequestParam(name = "year")
         year: Int,
-        @ApiParam("Segment")
+        @Parameter(description = "Segment")
         @RequestParam(name = "segment")
         segment: String
     ): List<FleetSegmentDataOutput> {
@@ -72,7 +72,7 @@ class FleetSegmentController(
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = [""])
-    @ApiOperation("Create a fleet segment")
+    @Operation(summary = "Create a fleet segment")
     fun createFleetSegment(
         @RequestBody
         newFleetSegmentData: CreateOrUpdateFleetSegmentDataInput
@@ -83,14 +83,14 @@ class FleetSegmentController(
     }
 
     @GetMapping("/years")
-    @ApiOperation("Get fleet segment year entries")
+    @Operation(summary = "Get fleet segment year entries")
     fun getFleetSegmentYearEntries(): List<Int> {
         return getFleetSegmentYearEntries.execute()
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{year}")
-    @ApiOperation("Add a fleet segment year")
+    @Operation(summary = "Add a fleet segment year")
     fun addFleetSegmentYear(
         @PathParam("Year")
         @PathVariable(name = "year")

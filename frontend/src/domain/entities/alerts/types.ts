@@ -1,4 +1,4 @@
-import type { Infraction } from '../../types/control'
+import type { Infraction } from '../../types/missionAction'
 import type { VesselIdentifier, VesselIdentity } from '../vessel/types'
 
 export enum PendingAlertValueType {

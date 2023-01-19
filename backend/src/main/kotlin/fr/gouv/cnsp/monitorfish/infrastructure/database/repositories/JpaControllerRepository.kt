@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.entities.controls.Controller
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Controller
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControllerRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBControllerRepository
 import org.springframework.stereotype.Repository

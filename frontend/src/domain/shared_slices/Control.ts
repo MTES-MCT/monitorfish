@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import type { Controller, ControlSummary } from '../types/control'
+import type { Controller, ControlSummary } from '../types/missionAction'
 
 export type ControlState = {
   controllers: Controller[]
   controlsFromDate: Date
   // TODO Understand & check that.
-  currentControlSummary: Partial<ControlSummary>
+  currentControlSummary: ControlSummary | null
   loadingControls: boolean
   nextControlSummary: ControlSummary | null
 }
@@ -15,7 +15,7 @@ const INITIAL_STATE: ControlState = {
 
   controlsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
   // TODO Understand & check that.
-  currentControlSummary: {},
+  currentControlSummary: null,
   loadingControls: false,
   nextControlSummary: null
 }
@@ -27,7 +27,6 @@ const controlSlice = createSlice({
     /**
      * Set the loading of controls to true, and shows a loader in the controls tab
      * @function loadControls
-     * @memberOf ControlReducer
      * @param {Object=} state
      */
     loadControls(state) {
@@ -41,7 +40,6 @@ const controlSlice = createSlice({
     /**
      * Set the date since controls are fetched
      * @function setControlFromDate
-     * @memberOf ControlReducer
      * @param {Object=} state
      * @param {{payload: Date}} action - The "from" date
      */
@@ -52,7 +50,6 @@ const controlSlice = createSlice({
     /**
      * Set controllers
      * @function setControllers
-     * @memberOf ControlReducer
      * @param {Object=} state
      * @param {{payload: Controller[]}} action - the controllers
      */
@@ -63,7 +60,6 @@ const controlSlice = createSlice({
     /**
      * Set selected vessel control resume and control
      * @function setControlSummary
-     * @memberOf ControlReducer
      * @param {Object=} state
      * @param {{payload: ControlSummary}} action - the control resume
      */

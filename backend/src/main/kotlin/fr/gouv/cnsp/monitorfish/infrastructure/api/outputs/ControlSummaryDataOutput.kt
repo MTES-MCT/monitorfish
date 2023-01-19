@@ -1,31 +1,31 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.controls.ControlSummary
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionsSummary
 
 data class ControlSummaryDataOutput(
     val vesselId: Int,
     val numberOfSeaControls: Int,
     val numberOfLandControls: Int,
-    val numberOfAerialControls: Int,
-    val numberOfSeizures: Int,
+    val numberOfAirControls: Int,
+    val numberOfAirSurveillance: Int,
     val numberOfDiversions: Int,
     val numberOfEscortsToQuay: Int,
     val numberOfFishingInfractions: Int,
     val numberOfSecurityInfractions: Int,
-    val controls: List<ControlDataOutput>
+    val missionActions: List<MissionActionDataOutput>
 ) {
     companion object {
-        fun fromControlSummary(controlSummary: ControlSummary) = ControlSummaryDataOutput(
-            vesselId = controlSummary.vesselId,
-            numberOfSeaControls = controlSummary.numberOfSeaControls,
-            numberOfLandControls = controlSummary.numberOfLandControls,
-            numberOfAerialControls = controlSummary.numberOfAerialControls,
-            numberOfDiversions = controlSummary.numberOfDiversions,
-            numberOfSeizures = controlSummary.numberOfSeizures,
-            numberOfEscortsToQuay = controlSummary.numberOfEscortsToQuay,
-            numberOfFishingInfractions = controlSummary.numberOfFishingInfractions,
-            numberOfSecurityInfractions = controlSummary.numberOfSecurityInfractions,
-            controls = controlSummary.controls.map { ControlDataOutput.fromControl(it) }
+        fun fromControlSummary(missionActionsSummary: MissionActionsSummary) = ControlSummaryDataOutput(
+            vesselId = missionActionsSummary.vesselId,
+            numberOfSeaControls = missionActionsSummary.numberOfSeaControls,
+            numberOfLandControls = missionActionsSummary.numberOfLandControls,
+            numberOfAirControls = missionActionsSummary.numberOfAirControls,
+            numberOfAirSurveillance = missionActionsSummary.numberOfAirSurveillance,
+            numberOfDiversions = missionActionsSummary.numberOfDiversions,
+            numberOfEscortsToQuay = missionActionsSummary.numberOfEscortsToQuay,
+            numberOfFishingInfractions = missionActionsSummary.numberOfFishingInfractions,
+            numberOfSecurityInfractions = missionActionsSummary.numberOfSecurityInfractions,
+            missionActions = missionActionsSummary.missionActions.map { MissionActionDataOutput.fromMissionAction(it) }
         )
     }
 }

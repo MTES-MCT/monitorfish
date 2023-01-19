@@ -5,13 +5,12 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
-import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
-import fr.gouv.cnsp.monitorfish.domain.entities.controls.*
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagesAndAlerts
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.CurrentAndArchivedReportings
@@ -26,7 +25,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
-import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.equalTo
@@ -38,19 +36,16 @@ import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.context.annotation.Import
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import java.lang.IllegalArgumentException
 import java.time.LocalDate.EPOCH
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-@Import(MeterRegistryConfiguration::class)
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(value = [(VesselController::class)])
 class VesselControllerITests {
@@ -74,7 +69,7 @@ class VesselControllerITests {
     private lateinit var searchVessels: SearchVessels
 
     @MockBean
-    private lateinit var getVesselControls: GetVesselControls
+    private lateinit var getVesselMissionActions: GetVesselMissionActions
 
     @MockBean
     private lateinit var getVesselReportings: GetVesselReportings
@@ -84,9 +79,6 @@ class VesselControllerITests {
 
     @MockBean
     private lateinit var getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions
-
-    @Autowired
-    private lateinit var meterRegistry: MeterRegistry
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -416,10 +408,10 @@ class VesselControllerITests {
     }
 
     @Test
-    fun `Should get all controls for a vessel`() {
+    fun `Should get all mission actions for a vessel`() {
         // Given
-        given(this.getVesselControls.execute(any(), any())).willReturn(
-            ControlSummary(
+        givenSuspended { this.getVesselMissionActions.execute(any(), any()) }.willReturn(
+            MissionActionsSummary(
                 1,
                 1,
                 3,
@@ -429,19 +421,21 @@ class VesselControllerITests {
                 3,
                 4,
                 5,
-                listOf(Control(1, 1, Controller(1, "Controlleur")))
+                listOf(MissionAction(1, 1, 1, MissionActionType.SEA_CONTROL, ZonedDateTime.now()))
             )
         )
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/123/controls?afterDateTime=2020-05-04T03:04:05.000Z"))
+        mockMvc.perform(get("/bff/v1/vessels/123/mission_actions?afterDateTime=2020-05-04T03:04:05.000Z"))
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.numberOfSeizures", equalTo(1)))
+            .andExpect(jsonPath("$.numberOfDiversions", equalTo(2)))
             .andExpect(jsonPath("$.numberOfSeaControls", equalTo(1)))
-            .andExpect(jsonPath("$.controls.length()", equalTo(1)))
+            .andExpect(jsonPath("$.missionActions.length()", equalTo(1)))
 
-        Mockito.verify(getVesselControls).execute(123, ZonedDateTime.parse("2020-05-04T03:04:05Z"))
+        runBlocking {
+            Mockito.verify(getVesselMissionActions).execute(123, ZonedDateTime.parse("2020-05-04T03:04:05Z"))
+        }
     }
 
     @Test
@@ -570,7 +564,7 @@ class VesselControllerITests {
                             infraction = Infraction(
                                 1,
                                 natinfCode = "7059",
-                                infractionCategory = InfractionCategory.FISHING.value
+                                infractionCategory = InfractionCategory.FISHING
                             )
                         ),
                         Reporting(

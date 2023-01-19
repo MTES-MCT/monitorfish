@@ -1,0 +1,111 @@
+package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
+
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.ControlCheck
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionType
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.transaction.annotation.Transactional
+import java.time.ZonedDateTime
+
+class JpaMissionActionRepositoryITests : AbstractDBTests() {
+
+    @Autowired
+    private lateinit var jpaMissionActionsRepository: JpaMissionActionsRepository
+
+    @Test
+    @Transactional
+    fun `findVesselMissionActionsAfterDateTime Should return all vessel's controls after a date time`() {
+        // Given
+        val dateTime = ZonedDateTime.now()
+            .minusYears(1)
+            .minusMonths(1)
+
+        // When
+        val controls = jpaMissionActionsRepository.findVesselMissionActionsAfterDateTime(1, dateTime)
+
+        // Then
+        assertThat(controls).hasSize(3)
+        val firstControl = controls.first()
+
+        assertThat(firstControl.emitsVms).isEqualTo(ControlCheck.YES)
+        assertThat(firstControl.emitsAis).isEqualTo(ControlCheck.NOT_APPLICABLE)
+        assertThat(firstControl.logbookMatchesActivity).isEqualTo(ControlCheck.NO)
+        assertThat(firstControl.speciesWeightControlled).isTrue
+        assertThat(firstControl.speciesSizeControlled).isTrue
+        assertThat(firstControl.separateStowageOfPreservedSpecies).isTrue
+        assertThat(firstControl.logbookInfractions).hasSize(1)
+        assertThat(firstControl.logbookInfractions.first().infractionType).isEqualTo(InfractionType.WITH_RECORD)
+        assertThat(firstControl.logbookInfractions.first().natinf).isEqualTo(27689)
+        assertThat(firstControl.logbookInfractions.first().comments).contains(
+            "Poids à bord MNZ supérieur de 50% au poids déclaré"
+        )
+        assertThat(firstControl.licencesAndLogbookObservations).isEqualTo(
+            "C'est pas très très bien réglo toute cette poissecalle non déclarée"
+        )
+        assertThat(firstControl.gearInfractions).hasSize(2)
+        assertThat(firstControl.gearInfractions.first().infractionType).isEqualTo(InfractionType.WITH_RECORD)
+        assertThat(firstControl.gearInfractions.first().gearSeized).isNull()
+        assertThat(firstControl.gearInfractions.first().natinf).isEqualTo(23581)
+        assertThat(firstControl.gearInfractions.first().comments).isEqualTo("Maille trop petite")
+        assertThat(firstControl.speciesInfractions).hasSize(1)
+        assertThat(firstControl.speciesInfractions.first().infractionType).isEqualTo(InfractionType.WITHOUT_RECORD)
+        assertThat(firstControl.speciesInfractions.first().speciesSeized).isEqualTo(true)
+        assertThat(firstControl.speciesInfractions.first().natinf).isEqualTo(28346)
+        assertThat(firstControl.speciesInfractions.first().comments).isEqualTo("Sous taille de 8cm")
+        assertThat(firstControl.speciesObservations).isEqualTo("Saisie de l'ensemble des captures à bord")
+        assertThat(firstControl.seizureAndDiversion).isTrue
+        assertThat(firstControl.otherInfractions).hasSize(2)
+        assertThat(firstControl.otherInfractions.first().infractionType).isNull()
+        assertThat(firstControl.otherInfractions.first().natinf).isEqualTo(23588)
+        assertThat(firstControl.otherInfractions.first().comments).isEqualTo(
+            "Chalutage répété dans les 3 milles sur Piste VMS - confirmé de visu"
+        )
+        assertThat(firstControl.numberOfVesselsFlownOver).isNull()
+        assertThat(firstControl.unitWithoutOmegaGauge).isFalse
+        assertThat(firstControl.controlQualityComments).isEqualTo("Ciblage CNSP non respecté")
+        assertThat(firstControl.feedbackSheetRequired).isTrue
+        assertThat(firstControl.userTrigram).isEqualTo("DEF")
+        // TODO Finish the segments part
+        assertThat(firstControl.segments).isEqualTo(
+            "[{\"segment\": \"SWW04\", \"segmentName\": \"Midwater trawls\"}, {\"segment\": \"PEL03\", \"segmentName\": \"Polyvalent - Bottom trawl\"}]"
+        )
+        assertThat(firstControl.facade).isEqualTo("Manche ouest - Atlantique")
+        assertThat(firstControl.longitude).isEqualTo(-6.56)
+        assertThat(firstControl.latitude).isEqualTo(45.12)
+        assertThat(firstControl.portLocode).isNull()
+        assertThat(firstControl.vesselTargeted).isFalse
+        assertThat(firstControl.diversion).isNull()
+        assertThat(firstControl.seizureAndDiversionComments).isEqualTo("Saisie de la pêche")
+        assertThat(firstControl.otherComments).isEqualTo("Commentaires post contrôle")
+        assertThat(firstControl.gearOnboard).hasSize(2)
+        assertThat(firstControl.gearOnboard.first().gearCode).isEqualTo("OTB")
+        assertThat(firstControl.gearOnboard.first().declaredMesh).isEqualTo(60.0)
+        assertThat(firstControl.gearOnboard.first().controlledMesh).isNull()
+        assertThat(firstControl.gearOnboard.first().gearWasControlled).isFalse
+        assertThat(firstControl.speciesOnboard).hasSize(2)
+        assertThat(firstControl.speciesOnboard.first().speciesCode).isEqualTo("MNZ")
+        assertThat(firstControl.speciesOnboard.first().declaredWeight).isEqualTo(302.5)
+        assertThat(firstControl.speciesOnboard.first().controlledWeight).isEqualTo(450.0)
+        assertThat(firstControl.speciesOnboard.first().nbFish).isNull()
+        assertThat(firstControl.speciesOnboard.first().underSized).isTrue
+        assertThat(firstControl.controlUnits).hasSize(0)
+        assertThat(firstControl.actionType).isEqualTo(MissionActionType.SEA_CONTROL)
+    }
+
+    @Test
+    @Transactional
+    fun `findVesselMissionActionsAfterDateTime Should return no vessel controls before a date time`() {
+        // Given
+        val dateTime = ZonedDateTime.now().plusYears(2)
+
+        // When
+        val controls = jpaMissionActionsRepository.findVesselMissionActionsAfterDateTime(1, dateTime)
+
+        // Then
+        assertThat(controls).hasSize(0)
+    }
+}
+
+//  '[{"infraction_type": null, "natinf": 23588, "comments": "Chalutage répété dans les 3 milles sur Piste VMS - confirmé de visu"}, {"infraction_type": "PENDING", "natinf": 23584, "comments": "Absence d''équipement AIS à bord"}]', '{27.7.d,27.7.e}',

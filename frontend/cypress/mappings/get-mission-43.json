@@ -1,0 +1,53 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v1/missions/43"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": {
+      "id": 43,
+      "missionType": "SEA",
+      "missionNature": ["FISH", "OTHER"],
+      "controlUnits": [
+        {
+          "id": 10019,
+          "administration": "DREAL",
+          "name": "DREAL Pays-de-La-Loire",
+          "resources": [],
+          "contact": null
+        }
+      ],
+      "openBy": "Darren Clark",
+      "closedBy": "Heidi Silva",
+      "observationsCacem": "Anything box film quality. Lot series agent out rule end young pressure.",
+      "observationsCnsp": null,
+      "facade": "MED",
+      "geom": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [-4.14598393, 49.02650252],
+              [-3.85722498, 48.52088004],
+              [-3.54255983, 48.92233858],
+              [-3.86251979, 49.15131242],
+              [-4.09368042, 49.18079556],
+              [-4.14598393, 49.02650252]
+            ]
+          ]
+        ]
+      },
+      "inputStartDateTimeUtc": "2023-03-05T23:08:54.923703Z",
+      "inputEndDateTimeUtc": "2023-03-13T09:49:40.350661Z",
+      "envActions": [],
+      "missionSource": "CACEM",
+      "isClosed": false
+    }
+  }
+}

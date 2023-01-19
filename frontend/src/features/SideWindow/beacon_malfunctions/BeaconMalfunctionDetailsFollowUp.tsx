@@ -30,14 +30,14 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
   const [today, setToday] = useState('')
   const [yesterday, setYesterday] = useState('')
   const scrollToRef = useRef<HTMLDivElement>(null)
-  const scrollEventRef = useRef<HTMLDivElement>(null)
+  const commentsAndActionsRef = useRef<HTMLDivElement>(null)
   const isScrollBlocked = useRef(false)
   const [comment, setComment] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const [textareaHeight, setTextareaHeight] = useState(50)
   useListenForScroll(() => {
     isScrollBlocked.current = true
-  }, scrollEventRef.current)
+  }, commentsAndActionsRef.current)
 
   useEffect(() => {
     setToday(getDate(new Date().toISOString()))
@@ -167,7 +167,7 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
         </NumberCommentsText>
       </NumberComments>
       <CommentsAndActions
-        ref={scrollEventRef}
+        ref={commentsAndActionsRef}
         className="smooth-scroll"
         style={commentsAndActionsStyle(smallSize, textareaHeight || 0)}
       >

@@ -2,14 +2,14 @@ import countries from 'i18n-iso-countries'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
+import { CSV_ORDER } from './constants'
+import { exportToCsv } from './utils'
 import { getCoordinates } from '../../../../coordinates'
 import { WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { formatToCSVColumnsForExport, getDate } from '../../../../utils'
 import { PrimaryButton } from '../../../commonStyles/Buttons.style'
 import { ReactComponent as ExportSVG } from '../../../icons/Bouton_exporter_piste_navire.svg'
-import { CSV_ORDER } from './constants'
-import { exportToCsv } from './utils'
 
 export function ExportTrack() {
   const { coordinatesFormat } = useAppSelector(state => state.map)

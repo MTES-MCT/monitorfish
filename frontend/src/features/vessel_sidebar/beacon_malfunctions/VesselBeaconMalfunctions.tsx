@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
+import { BeaconMalfunctionDetails } from './details/BeaconMalfunctionDetails'
+import BeaconMalfunctionsResumeAndHistory from './resume/BeaconMalfunctionsResumeAndHistory'
 import { COLORS } from '../../../constants/constants'
 import { BeaconMalfunctionsTab } from '../../../domain/entities/beaconMalfunction/constants'
 import { vesselsAreEquals } from '../../../domain/entities/vessel/vessel'
@@ -10,8 +12,6 @@ import getVesselBeaconMalfunctions from '../../../domain/use_cases/beaconMalfunc
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { usePrevious } from '../../../hooks/usePrevious'
-import { BeaconMalfunctionDetails } from './details/BeaconMalfunctionDetails'
-import BeaconMalfunctionsResumeAndHistory from './resume/BeaconMalfunctionsResumeAndHistory'
 
 export function VesselBeaconMalfunctions() {
   const dispatch = useAppDispatch()

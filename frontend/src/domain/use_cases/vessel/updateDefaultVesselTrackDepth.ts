@@ -1,5 +1,5 @@
-import { setDefaultVesselTrackDepth } from '../../shared_slices/Map'
 import { updateVesselTracks } from './updateVesselTracks'
+import { setDefaultVesselTrackDepth } from '../../shared_slices/Map'
 
 import type { VesselTrackDepth } from '../../entities/vesselTrackDepth'
 

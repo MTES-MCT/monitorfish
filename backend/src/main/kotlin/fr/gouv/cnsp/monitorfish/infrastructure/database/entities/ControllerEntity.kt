@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
-import fr.gouv.cnsp.monitorfish.domain.entities.controls.Controller
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Controller
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id

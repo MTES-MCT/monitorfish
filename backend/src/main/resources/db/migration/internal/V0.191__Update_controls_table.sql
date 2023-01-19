@@ -56,4 +56,4 @@ ALTER TABLE public.controls
     DROP COLUMN segments,
     ADD COLUMN segments JSONB;
 
-ALTER TABLE public.controls RENAME to actions;
+ALTER TABLE public.controls RENAME to mission_actions;

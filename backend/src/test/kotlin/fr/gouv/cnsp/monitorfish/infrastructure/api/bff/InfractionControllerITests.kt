@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import fr.gouv.cnsp.monitorfish.domain.entities.controls.Infraction
-import fr.gouv.cnsp.monitorfish.domain.entities.controls.InfractionCategory
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.use_cases.infraction.GetFishingInfractions
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -31,8 +31,8 @@ class InfractionControllerITests {
         // Given
         given(this.getFishingInfractions.execute()).willReturn(
             listOf(
-                Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING.value),
-                Infraction(1, natinfCode = "7065", infractionCategory = InfractionCategory.FISHING.value)
+                Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING),
+                Infraction(1, natinfCode = "7065", infractionCategory = InfractionCategory.FISHING)
             )
         )
 

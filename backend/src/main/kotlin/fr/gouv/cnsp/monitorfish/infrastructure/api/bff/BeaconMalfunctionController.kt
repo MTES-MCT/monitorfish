@@ -6,15 +6,15 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconMalfunctionCo
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.BeaconMalfunctionDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.BeaconMalfunctionResumeAndDetailsDataOutput
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import javax.websocket.server.PathParam
 
 @RestController
 @RequestMapping("/bff/v1/beacon_malfunctions")
-@Api(description = "APIs for beacon malfunctions")
+@Tag(name = "APIs for beacon malfunctions")
 class BeaconMalfunctionController(
     private val getAllBeaconMalfunctions: GetAllBeaconMalfunctions,
     private val updateBeaconMalfunction: UpdateBeaconMalfunction,
@@ -25,7 +25,7 @@ class BeaconMalfunctionController(
 ) {
 
     @GetMapping(value = [""])
-    @ApiOperation("Get all beacon malfunctions")
+    @Operation(summary = "Get all beacon malfunctions")
     fun getAllBeaconMalfunctions(): List<BeaconMalfunctionDataOutput> {
         return getAllBeaconMalfunctions.execute().map {
             BeaconMalfunctionDataOutput.fromBeaconMalfunction(it)
@@ -33,7 +33,7 @@ class BeaconMalfunctionController(
     }
 
     @PutMapping(value = ["/{beaconMalfunctionId}"], consumes = ["application/json"])
-    @ApiOperation("Update a beacon malfunction")
+    @Operation(summary = "Update a beacon malfunction")
     fun updateBeaconMalfunction(
         @PathParam("Beacon malfunction id")
         @PathVariable(name = "beaconMalfunctionId")
@@ -52,7 +52,7 @@ class BeaconMalfunctionController(
     }
 
     @PutMapping(value = ["/archive"], consumes = ["application/json"])
-    @ApiOperation("Archive multiple beacon malfunctions")
+    @Operation(summary = "Archive multiple beacon malfunctions")
     fun archiveBeaconMalfunctions(
         @RequestBody ids: List<Int>
     ): List<BeaconMalfunctionResumeAndDetailsDataOutput> {
@@ -63,7 +63,7 @@ class BeaconMalfunctionController(
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = ["/{beaconMalfunctionId}/comments"], consumes = ["application/json"])
-    @ApiOperation("Save a beacon malfunction comment and return the updated beacon malfunction")
+    @Operation(summary = "Save a beacon malfunction comment and return the updated beacon malfunction")
     fun saveBeaconMalfunctionComment(
         @PathParam("Beacon malfunction id")
         @PathVariable(name = "beaconMalfunctionId")
@@ -81,7 +81,7 @@ class BeaconMalfunctionController(
     }
 
     @GetMapping(value = ["/{beaconMalfunctionId}"])
-    @ApiOperation("Get a beacon malfunction with the comments and history")
+    @Operation(summary = "Get a beacon malfunction with the comments and history")
     fun getBeaconMalfunction(
         @PathParam("Beacon malfunction id")
         @PathVariable(name = "beaconMalfunctionId")
@@ -93,7 +93,7 @@ class BeaconMalfunctionController(
     }
 
     @PutMapping(value = ["/{beaconMalfunctionId}/{notificationRequested}"])
-    @ApiOperation("Request a notification")
+    @Operation(summary = "Request a notification")
     fun requestNotification(
         @PathParam("Beacon malfunction id")
         @PathVariable(name = "beaconMalfunctionId")

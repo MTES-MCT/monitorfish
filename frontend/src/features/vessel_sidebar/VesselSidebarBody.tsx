@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 import { VesselBeaconMalfunctions } from './beacon_malfunctions/VesselBeaconMalfunctions'
-import { VesselControls } from './controls/VesselControls'
+import { Controls } from './Controls'
 import { VesselFishingActivities } from './fishing_activities/VesselFishingActivities'
 import VesselIdentity from './identity/VesselIdentity'
 import VesselReportings from './reporting/VesselReportings'
@@ -24,7 +24,7 @@ export function VesselSidebarBody() {
       {vesselSidebarTab === VesselSidebarTab.SUMMARY && <VesselSummary />}
       {vesselSidebarTab === VesselSidebarTab.IDENTITY && <VesselIdentity />}
       {vesselSidebarTab === VesselSidebarTab.VOYAGES && <VesselFishingActivities />}
-      {vesselSidebarTab === VesselSidebarTab.CONTROLS && <VesselControls />}
+      {vesselSidebarTab === VesselSidebarTab.CONTROLS && <Controls />}
       {vesselSidebarTab === VesselSidebarTab.REPORTING && <VesselReportings />}
       {vesselSidebarTab === VesselSidebarTab.ERSVMS && <VesselBeaconMalfunctions />}
     </Body>

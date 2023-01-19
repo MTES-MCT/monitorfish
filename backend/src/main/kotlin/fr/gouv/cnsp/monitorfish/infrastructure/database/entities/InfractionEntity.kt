@@ -1,10 +1,8 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
-import fr.gouv.cnsp.monitorfish.domain.entities.controls.Infraction
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionCategory
+import javax.persistence.*
 
 @Entity
 @Table(name = "infractions")
@@ -26,7 +24,7 @@ data class InfractionEntity(
         id = id,
         natinfCode = natinfCode,
         regulation = regulation,
-        infractionCategory = infractionCategory,
+        infractionCategory = infractionCategory?.let { category -> InfractionCategory.values().firstOrNull { it.value == category } },
         infraction = infraction
     )
 }

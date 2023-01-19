@@ -68,6 +68,7 @@ export function ReportingForm({
       return
     }
 
+    // TODO use initialValues from Formik
     fillForm({
       type: undefined,
       value: {}

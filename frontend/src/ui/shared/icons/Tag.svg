@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Tag" transform="translate(-160)">
+    <path d="M173.063,6l3.334,4-3.334,4H164V6h9.063M174,4H162V16h12l5-6-5-6Z" fill="currentColor" />
+    <g transform="translate(170.5 8.5)" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2">
+      <circle cx="1.5" cy="1.5" r="1.5" stroke="none" />
+      <circle cx="1.5" cy="1.5" r="0.5" fill="none" />
+    </g>
+    <rect width="20" height="20" transform="translate(160)" fill="none" />
+  </g>
+</svg>

@@ -2,11 +2,12 @@
     <g id="Label_engin_de_pêche" data-name="Label_engin de pêche" transform="translate(0.7 0.7)">
         <g id="Groupe_129" data-name="Groupe 129" transform="translate(0 0)">
             <ellipse id="Ellipse_49" data-name="Ellipse 49" cx="1.451" cy="1.451" rx="1.451" ry="1.451"
-                     transform="translate(0 0)" fill="none" stroke="#707785" stroke-miterlimit="10" stroke-width="1.4"/>
+                transform="translate(0 0)" fill="none" stroke="currentColor" stroke-miterlimit="10"
+                stroke-width="1.4" />
             <path id="Tracé_141" data-name="Tracé 141"
-                  d="M272.426,243.878v6.832a4.274,4.274,0,0,0,8.548,0v-2.525l-2.545,2.542"
-                  transform="translate(-270.975 -240.977)" fill="none" stroke="#707785" stroke-miterlimit="10"
-                  stroke-width="1.4"/>
+                d="M272.426,243.878v6.832a4.274,4.274,0,0,0,8.548,0v-2.525l-2.545,2.542"
+                transform="translate(-270.975 -240.977)" fill="none" stroke="currentColor" stroke-miterlimit="10"
+                stroke-width="1.4" />
         </g>
     </g>
 </svg>

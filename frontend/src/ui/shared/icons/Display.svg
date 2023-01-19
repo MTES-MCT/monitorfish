@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Display" transform="translate(0 -40)">
+    <g>
+      <path
+        d="M10,44a9.674,9.674,0,0,0-9,6,9.674,9.674,0,0,0,9,6,9.674,9.674,0,0,0,9-6A9.674,9.674,0,0,0,10,44Zm0,10a4,4,0,1,1,4-4A4,4,0,0,1,10,54Z"
+        fill="currentColor" />
+      <circle cx="2.25" cy="2.25" r="2.25" transform="translate(7.75 47.75)" fill="currentColor" />
+    </g>
+    <rect width="20" height="20" transform="translate(0 40)" fill="none" />
+  </g>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Download" transform="translate(-80)">
+    <g>
+      <rect width="12" height="2" transform="translate(84 16)" fill="currentColor" />
+      <path d="M93,9V2H87V9H84l6,6,6-6Z" fill="currentColor" />
+    </g>
+    <rect width="20" height="20" transform="translate(80)" fill="none" />
+  </g>
+</svg>

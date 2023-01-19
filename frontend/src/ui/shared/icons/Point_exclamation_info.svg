@@ -1,8 +1,8 @@
 <svg id="Pastille_info_gris_foncé" data-name="Pastille info_gris foncé" xmlns="http://www.w3.org/2000/svg" width="14"
-     height="14" viewBox="0 0 14 14">
-    <circle id="Ellipse_15" data-name="Ellipse 15" cx="7" cy="7" r="7" fill="#707785"/>
-    <text id="_" data-name="!" transform="translate(7.2 1.8)" fill="#fff" font-size="10"
-          font-family="Arial-BoldMT, Arial" font-weight="700">
-        <tspan style="font-size: 10px;" x="-1.665" y="9">!</tspan>
-    </text>
+  height="14" viewBox="0 0 14 14">
+  <circle id="Ellipse_15" data-name="Ellipse 15" cx="7" cy="7" r="7" fill="currentColor" />
+  <text id="_" data-name="!" transform="translate(7.2 1.8)" fill="currentColor" font-size="10"
+    font-family="Arial-BoldMT, Arial" font-weight="700">
+    <tspan style="font-size: 10px;" x="-1.665" y="9">!</tspan>
+  </text>
 </svg>

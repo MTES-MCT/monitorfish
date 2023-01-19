@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Delete" transform="translate(-23.798 -14.096)">
+    <g>
+      <rect width="1.5" height="6" transform="translate(31.548 22.096)" fill="currentColor" />
+      <rect width="1.5" height="6" transform="translate(34.548 22.096)" fill="currentColor" />
+      <path d="M41.8,17.6h-4V16.1h-8v1.5h-4v2h1.5V31.1a1,1,0,0,0,1,1h11a1,1,0,0,0,1-1V19.6h1.5ZM38.3,30.1h-9V19.6h9Z"
+        fill="currentColor" />
+    </g>
+    <rect width="20" height="20" transform="translate(23.798 14.096)" fill="none" />
+  </g>
+</svg>

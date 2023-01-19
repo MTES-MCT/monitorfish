@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="More" transform="translate(240 -41)">
+    <g>
+      <circle cx="2" cy="2" r="2" transform="translate(-232 49)" fill="currentColor" />
+      <circle cx="2" cy="2" r="2" transform="translate(-239 49)" fill="currentColor" />
+      <circle cx="2" cy="2" r="2" transform="translate(-225 49)" fill="currentColor" />
+    </g>
+    <rect width="20" height="20" transform="translate(-240 41)" fill="none" />
+  </g>
+</svg>

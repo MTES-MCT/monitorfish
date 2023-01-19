@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Archive" transform="translate(-120)">
+    <path id="Tracé_1343" data-name="Tracé 1343" d="M138,2H122V8h1V18h14V8h1ZM124,4h12V6H124Zm11,12H125V8h10Z"
+      fill="currentColor" />
+    <g id="Rectangle_6082" data-name="Rectangle 6082" transform="translate(128 10)" fill="none" stroke="currentColor"
+      stroke-miterlimit="10" stroke-width="2">
+      <rect width="4" height="2" stroke="none" />
+      <rect x="1" y="1" width="2" fill="none" />
+    </g>
+    <rect id="Rectangle_6083" data-name="Rectangle 6083" width="20" height="20" transform="translate(120)"
+      fill="none" />
+  </g>
+</svg>

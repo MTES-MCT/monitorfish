@@ -10,10 +10,8 @@ import {
   updatingVesselTrackDepth
 } from '../../shared_slices/Vessel'
 
-import type { AppDispatch, RootState } from '../../../store'
+import type { AppDispatch, AppThunk } from '../../../store'
 import type { TrackRequest, VesselIdentity } from '../../entities/vessel/types'
-import type { AnyAction } from '@reduxjs/toolkit'
-import type { ThunkAction } from 'redux-thunk'
 
 /**
  * Modify the vessel track depth on map
@@ -23,7 +21,7 @@ export const updateSelectedVesselTrackRequest =
     vesselIdentity: VesselIdentity,
     trackRequest: TrackRequest,
     withoutFishingMessagesRerendering: boolean = false
-  ): ThunkAction<Promise<void>, RootState, undefined, AnyAction> =>
+  ): AppThunk =>
   async (dispatch, getState) => {
     try {
       const { areFishingActivitiesShowedOnMap } = getState().fishingActivities

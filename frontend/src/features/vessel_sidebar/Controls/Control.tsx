@@ -6,7 +6,7 @@ import { getCoordinates } from '../../../coordinates'
 import { getNumberOfInfractions } from '../../../domain/entities/controls'
 import { WSG84_PROJECTION } from '../../../domain/entities/map/constants'
 import { MissionAction, MissionActionType } from '../../../domain/types/missionAction'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { getDate } from '../../../utils'
 import { ReactComponent as GyroRedSVG } from '../../icons/Gyrophare_controles_rouge.svg'
 import { ReactComponent as GyroGreenSVG } from '../../icons/Gyrophare_controles_vert.svg'
@@ -16,7 +16,7 @@ type ControlProps = {
   isLastItem: boolean
 }
 export function Control({ control, isLastItem }: ControlProps) {
-  const { coordinatesFormat } = useAppSelector(state => state.map)
+  const { coordinatesFormat } = useMainAppSelector(state => state.map)
 
   const [seeMoreIsOpen, setSeeMoreIsOpen] = useState(false)
 

@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
+import { YearControls } from './YearControls'
 import { COLORS } from '../../../constants/constants'
 import { Title, Zone } from '../common_styles/common.style'
-import { YearControls } from './YearControls'
 
 import type { MissionAction } from '../../../domain/types/missionAction'
 

@@ -2,6 +2,10 @@ import { CSSProperties, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
+import { BeaconMalfunctionDetailsFollowUp } from './BeaconMalfunctionDetailsFollowUp'
+import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
+import SendNotification from './SendNotification'
+import { VesselStatusSelect } from './VesselStatusSelect'
 import { COLORS } from '../../../constants/constants'
 import { getFirstVesselStatus, getMalfunctionStartDateText } from '../../../domain/entities/beaconMalfunction'
 import { VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
@@ -12,10 +16,6 @@ import { getDateTime } from '../../../utils'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes_gris.svg'
 import { ReactComponent as TimeAgoSVG } from '../../icons/Label_horaire_VMS.svg'
-import { BeaconMalfunctionDetailsFollowUp } from './BeaconMalfunctionDetailsFollowUp'
-import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
-import SendNotification from './SendNotification'
-import { VesselStatusSelect } from './VesselStatusSelect'
 
 import type {
   BeaconMalfunction,

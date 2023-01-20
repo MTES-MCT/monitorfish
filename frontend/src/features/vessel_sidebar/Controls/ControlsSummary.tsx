@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 
+import { InfractionsSummary } from './InfractionsSummary'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as WarningSVG } from '../../icons/Attention_controles.svg'
 import { ReactComponent as GyroSVG } from '../../icons/Gyrophare_controles_gris.svg'
 import { NoValue, StrongText, Title, Zone } from '../common_styles/common.style'
-import { InfractionsSummary } from './InfractionsSummary'
 
 import type { ControlSummary } from '../../../domain/types/missionAction'
 

@@ -10,24 +10,16 @@ import type { LastControls, MissionAction } from '../types/missionAction'
 export const getLastControls = (yearsToControls: { [s: string]: MissionAction[] }): LastControls => {
   const lastControls = INITIAL_LAST_CONTROLS
 
-  const sortedLastYearControlList = Object.values(yearsToControls)
+  const controlsInDatetimeDescendingOrder = Object.values(yearsToControls)
     .flat()
     .sort((a, b) => (a.actionDatetimeUtc < b.actionDatetimeUtc ? 1 : -1))
 
-  let i = 0
-  while (i < sortedLastYearControlList.length && Object.keys(lastControls).length < 2) {
-    if (sortedLastYearControlList[i]?.actionType === MissionActionType.SEA_CONTROL && !lastControls.SEA.control) {
-      lastControls.SEA = { ...lastControls.SEA, control: sortedLastYearControlList[i] }
-    } else if (
-      sortedLastYearControlList[i]?.actionType === MissionActionType.LAND_CONTROL &&
-      !lastControls.LAND.control
-    ) {
-      lastControls.LAND = { ...lastControls.LAND, control: sortedLastYearControlList[i] }
-    }
-
-    // eslint-disable-next-line no-plusplus
-    i++
-  }
+  lastControls.SEA.control = controlsInDatetimeDescendingOrder.find(
+    control => control.actionType === MissionActionType.SEA_CONTROL
+  )
+  lastControls.LAND.control = controlsInDatetimeDescendingOrder.find(
+    control => control.actionType === MissionActionType.LAND_CONTROL
+  )
 
   return lastControls
 }

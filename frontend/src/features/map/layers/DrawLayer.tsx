@@ -6,6 +6,8 @@ import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react'
 
+import { dottedLayerStyle } from './styles/dottedLayer.style'
+import { drawStyle, editStyle } from './styles/draw.style'
 import { Layer } from '../../../domain/entities/layers/constants'
 import {
   InteractionType,
@@ -15,8 +17,6 @@ import {
 } from '../../../domain/entities/map/constants'
 import { addFeatureToDrawedFeature } from '../../../domain/use_cases/draw/addFeatureToDrawedFeature'
 import { setGeometry } from '../../../domain/use_cases/draw/setGeometry'
-import { dottedLayerStyle } from './styles/dottedLayer.style'
-import { drawStyle, editStyle } from './styles/draw.style'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 

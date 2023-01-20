@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
+import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
+import { AlertAndReportingTab, SideWindowMenuKey } from './constants'
+import { SideWindowSubMenuLink } from './SideWindowSubMenuLink'
 import { COLORS } from '../../constants/constants'
 import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, ALERTS_SUBMENU, SeaFront } from '../../domain/entities/alerts/constants'
 import { STAGE_RECORD } from '../../domain/entities/beaconMalfunction/constants'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
-import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
-import { AlertAndReportingTab, SideWindowMenuKey } from './constants'
-import { SideWindowSubMenuLink } from './SideWindowSubMenuLink'
 
 import type { MenuItem } from '../../types'
 import type { CSSProperties } from 'react'

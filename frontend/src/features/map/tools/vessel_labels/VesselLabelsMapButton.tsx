@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
+import EditVesselLabels from './EditVesselLabels'
 import { MapToolType } from '../../../../domain/entities/map/constants'
 import { setMapToolOpened } from '../../../../domain/shared_slices/Global'
 import { useClickOutsideWhenOpenedAndExecute } from '../../../../hooks/useClickOutsideWhenOpenedAndExecute'
@@ -8,7 +9,6 @@ import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ReactComponent as LabelSVG } from '../../../icons/standardized/Tag.svg'
 import { MapToolButton } from '../MapToolButton'
-import EditVesselLabels from './EditVesselLabels'
 
 export function VesselLabelsMapButton() {
   const dispatch = useMainAppDispatch()

@@ -2,6 +2,9 @@ import { propEq } from 'ramda'
 import { RefObject, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
+import { PendingAlertsList } from './PendingAlertsList'
+import { ReportingList } from './ReportingList'
+import { SilencedAlertsList } from './SilencedAlertsList'
 import { COLORS } from '../../../constants/constants'
 import {
   ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS,
@@ -10,9 +13,6 @@ import {
 } from '../../../domain/entities/alerts/constants'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { AlertAndReportingTab } from '../constants'
-import { PendingAlertsList } from './PendingAlertsList'
-import { ReportingList } from './ReportingList'
-import { SilencedAlertsList } from './SilencedAlertsList'
 
 import type { MenuItem } from '../../../types'
 import type { Promisable } from 'type-fest'

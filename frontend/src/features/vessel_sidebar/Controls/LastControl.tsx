@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
+import { Green, Red } from './Controls.style'
 import { COLORS } from '../../../constants/constants'
 import { getNumberOfInfractions } from '../../../domain/entities/controls'
 import { getDate } from '../../../utils'
 import { NoValue, StrongText } from '../common_styles/common.style'
-import { Green, Red } from './Controls.style'
 
 import type { ControlAndText, MissionActionType } from '../../../domain/types/missionAction'
 

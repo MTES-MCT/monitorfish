@@ -1,7 +1,3 @@
-import { missionApi } from '../../api/mission'
-import regulation from '../../features/backoffice/Regulation.slice'
-import { regulatoryLayerSearchReducer } from '../../features/layers/regulatory/search/RegulatoryLayerSearch.slice'
-import { vesselListReducer } from '../../features/vessel_list/VesselList.slice'
 import { alertReducer } from './Alert'
 import { beaconMalfunctionReducer } from './BeaconMalfunction'
 import { controlReducer } from './Control'
@@ -22,6 +18,10 @@ import { regulatoryReducer } from './Regulatory'
 import { reportingReducer } from './Reporting'
 import { speciesReducer } from './Species'
 import { vesselSliceReducer } from './Vessel'
+import { missionApi } from '../../api/mission'
+import regulation from '../../features/backoffice/Regulation.slice'
+import { regulatoryLayerSearchReducer } from '../../features/layers/regulatory/search/RegulatoryLayerSearch.slice'
+import { vesselListReducer } from '../../features/vessel_list/VesselList.slice'
 
 const commonReducerList = {
   gear: gearReducer,

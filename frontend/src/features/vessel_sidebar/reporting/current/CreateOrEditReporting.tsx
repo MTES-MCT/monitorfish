@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
+import { ReportingForm } from './ReportingForm'
 import { COLORS } from '../../../../constants/constants'
 import { vesselsAreEquals } from '../../../../domain/entities/vessel/vessel'
 import { setEditedReporting } from '../../../../domain/shared_slices/Reporting'
@@ -9,7 +10,6 @@ import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { usePrevious } from '../../../../hooks/usePrevious'
 import { PrimaryButton } from '../../../commonStyles/Buttons.style'
 import { ReactComponent as CloseIconSVG } from '../../../icons/Croix_grise.svg'
-import { ReportingForm } from './ReportingForm'
 
 export function CreateOrEditReporting() {
   const dispatch = useMainAppDispatch()

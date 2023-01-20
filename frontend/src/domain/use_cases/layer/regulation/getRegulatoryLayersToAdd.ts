@@ -1,6 +1,6 @@
-import { getVectorOLLayer } from './showRegulatoryZone'
 import { getLayerNameNormalized } from '../../../entities/layers'
 import { Layer } from '../../../entities/layers/constants'
+import { getVectorOLLayer } from './showRegulatoryZone'
 
 export const getRegulatoryLayersToAdd = (olLayers, showedLayers) => (dispatch, getState) => {
   if (!showedLayers.length) {

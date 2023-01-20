@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { YearBeaconMalfunctions } from './YearBeaconMalfunctions'
 import { COLORS } from '../../../../constants/constants'
+import { YearBeaconMalfunctions } from './YearBeaconMalfunctions'
 
 import type { BeaconMalfunctionResumeAndDetails } from '../../../../domain/entities/beaconMalfunction/types'
 

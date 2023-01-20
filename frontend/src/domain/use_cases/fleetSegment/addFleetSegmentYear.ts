@@ -1,6 +1,6 @@
-import { getFleetSegmentsYearEntries } from './getFleetSegmentsYearEntries'
 import { addFleetSegmentYearFromAPI } from '../../../api/fleetSegment'
 import { setError } from '../../shared_slices/Global'
+import { getFleetSegmentsYearEntries } from './getFleetSegmentsYearEntries'
 
 /**
  * Add a new fleet segment year

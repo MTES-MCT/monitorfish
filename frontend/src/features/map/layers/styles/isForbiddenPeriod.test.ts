@@ -1,9 +1,9 @@
 import { describe, expect, it } from '@jest/globals'
 import Feature from 'ol/Feature'
 
-import { isForbiddenPeriod } from './isForbiddenPeriod'
 import { WEEKDAYS } from '../../../../domain/entities/regulation'
 import { getUtcDayjs } from '../../../../utils/getUtcDayjs'
+import { isForbiddenPeriod } from './isForbiddenPeriod'
 
 describe('isForbiddenPeriod', () => {
   it('isForbiddenPeriod Should return false When the regulation date range is out of a not authorized range', async () => {

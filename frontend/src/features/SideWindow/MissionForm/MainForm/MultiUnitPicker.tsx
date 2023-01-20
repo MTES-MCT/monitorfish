@@ -4,8 +4,8 @@ import { assoc, remove, update } from 'ramda'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { EMPTY_UNIT } from './constants'
 import { useNewWindow } from '../../../../ui/NewWindow'
+import { EMPTY_UNIT } from './constants'
 
 import type { ControlUnit } from '../../../../domain/types/mission'
 

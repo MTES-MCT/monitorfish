@@ -2,13 +2,6 @@ import { Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
-import {
-  resetRegulatoryZonesChecked,
-  resetZoneSelected,
-  setAdvancedSearchIsOpen,
-  setRegulatoryLayersSearchResult,
-  setZoneSelected
-} from './RegulatoryLayerSearch.slice'
 import { COLORS } from '../../../../constants/constants'
 import { LayerType as LayersType } from '../../../../domain/entities/layers/constants'
 import { InteractionListener, InteractionType } from '../../../../domain/entities/map/constants'
@@ -29,6 +22,13 @@ import { ReactComponent as BoxFilterSVG } from '../../../icons/Filtre_zone_recta
 import { ReactComponent as BoxFilterSelectedSVG } from '../../../icons/Filtre_zone_rectangle_selected.svg'
 import { ReactComponent as SearchIconSVG } from '../../../icons/Loupe_dark.svg'
 import FilterTag from '../../../map/tools/vessel_filters/FilterTag'
+import {
+  resetRegulatoryZonesChecked,
+  resetZoneSelected,
+  setAdvancedSearchIsOpen,
+  setRegulatoryLayersSearchResult,
+  setZoneSelected
+} from './RegulatoryLayerSearch.slice'
 
 import type { IconButtonProps } from '@mtes-mct/monitor-ui'
 

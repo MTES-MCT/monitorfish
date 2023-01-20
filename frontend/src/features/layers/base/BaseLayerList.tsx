@@ -2,7 +2,6 @@ import { useCallback, useMemo } from 'react'
 import { RadioGroup } from 'rsuite'
 import styled from 'styled-components'
 
-import { BaseLayerRow } from './BaseLayerRow'
 import { COLORS } from '../../../constants/constants'
 import { BaseLayers, LayerType } from '../../../domain/entities/layers/constants'
 import LayerSlice from '../../../domain/shared_slices/Layer'
@@ -11,6 +10,7 @@ import { closeRegulatoryZoneMetadata } from '../../../domain/use_cases/layer/reg
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
+import { BaseLayerRow } from './BaseLayerRow'
 
 export function BaseLayerList({ namespace }) {
   const dispatch = useMainAppDispatch()

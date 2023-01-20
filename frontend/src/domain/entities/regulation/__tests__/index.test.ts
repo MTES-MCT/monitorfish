@@ -1,7 +1,7 @@
 import { expect } from '@jest/globals'
 
-import { dummyLawTypesToTopics } from './mocks'
 import { getRegulatoryLawTypesFromZones } from '../index'
+import { dummyLawTypesToTopics } from './mocks'
 
 import type { RegulatoryZone } from '../../../types/regulation'
 

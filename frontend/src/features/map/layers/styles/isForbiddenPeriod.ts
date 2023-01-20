@@ -1,5 +1,5 @@
-import { getStartAndEndDatesSetWithCurrentYear } from './utils'
 import { WEEKDAYS } from '../../../../domain/entities/regulation'
+import { getStartAndEndDatesSetWithCurrentYear } from './utils'
 
 import type { DateInterval, FishingPeriod } from '../../../../domain/types/regulation'
 import type { Dayjs } from 'dayjs'

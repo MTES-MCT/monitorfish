@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
-import { EditInterestPoint } from './EditInterestPoint'
 import { MapToolType } from '../../../../domain/entities/map/constants'
 import { setMapToolOpened } from '../../../../domain/shared_slices/Global'
 import {
@@ -14,6 +13,7 @@ import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ReactComponent as InterestPointSVG } from '../../../icons/standardized/Landmark.svg'
 import { MapToolButton } from '../MapToolButton'
+import { EditInterestPoint } from './EditInterestPoint'
 
 export function InterestPointMapButton() {
   const dispatch = useMainAppDispatch()

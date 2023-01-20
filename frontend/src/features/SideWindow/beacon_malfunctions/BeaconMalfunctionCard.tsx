@@ -1,13 +1,13 @@
 import { CSSProperties, MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
-import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
-import { VesselStatusSelect } from './VesselStatusSelect'
 import { COLORS } from '../../../constants/constants'
 import { getMalfunctionStartDateText } from '../../../domain/entities/beaconMalfunction'
 import { END_OF_MALFUNCTION_REASON_RECORD, VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
 import { openBeaconMalfunctionInKanban } from '../../../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
 import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/vessel/showVesselFromBeaconMalfunctionsKanban'
+import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
+import { VesselStatusSelect } from './VesselStatusSelect'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 
 import type { BeaconMalfunction } from '../../../domain/entities/beaconMalfunction/types'

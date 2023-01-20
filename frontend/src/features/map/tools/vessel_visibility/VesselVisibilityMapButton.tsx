@@ -1,7 +1,6 @@
 import { useCallback, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
-import { EditVesselVisibility } from './EditVesselVisibility'
 import { MapToolType } from '../../../../domain/entities/map/constants'
 import { setMapToolOpened } from '../../../../domain/shared_slices/Global'
 import { useClickOutsideWhenOpenedAndExecute } from '../../../../hooks/useClickOutsideWhenOpenedAndExecute'
@@ -9,6 +8,7 @@ import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ReactComponent as VesselSVG } from '../../../icons/standardized/Vessel.svg'
 import { MapToolButton as VesselVisibilityButton } from '../MapToolButton'
+import { EditVesselVisibility } from './EditVesselVisibility'
 
 export function VesselVisibilityMapButton() {
   const dispatch = useMainAppDispatch()

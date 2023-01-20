@@ -5,13 +5,13 @@ import { concat, flatten, map, pipe, uniq } from 'ramda'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { MissionDateRangeFilter, MissionFilterType, MISSION_FILTER_OPTIONS } from './constants'
-import { mapFilterFormRecordsToFilters } from './utils'
 import { useNewWindow } from '../../../ui/NewWindow'
 import { getOptionsFromStrings } from '../../../utils/getOptionsFromStrings'
+import { MissionDateRangeFilter, MissionFilterType, MISSION_FILTER_OPTIONS } from './constants'
+import { mapFilterFormRecordsToFilters } from './utils'
 
-import type { MissionFilter } from './types'
 import type { Mission } from '../../../domain/types/mission'
+import type { MissionFilter } from './types'
 import type { Promisable } from 'type-fest'
 
 export type FilterBarProps = {

@@ -1,6 +1,7 @@
 import { waitFor } from 'cypress/support/utils/waitFor'
 import { isEmpty } from 'ramda'
 
+import { findElementBytext } from '../../utils/findElementBytext'
 import { checkCheckbox } from './checkCheckbox'
 import { checkMultiCheckboxOptions } from './checkMultiCheckboxOptions'
 import { checkMultiRadioOption } from './checkMultiRadioOption'
@@ -8,7 +9,6 @@ import { fillTextarea } from './fillTextarea'
 import { fillTextInput } from './fillTextInput'
 import { pickMultiSelectOptions } from './pickMultiSelectOptions'
 import { pickSelectOption } from './pickSelectOption'
-import { findElementBytext } from '../../utils/findElementBytext'
 
 export function fill(label: string, value: boolean | string | string[] | undefined): void {
   const labelElement = findElementBytext('label', label) as HTMLLabelElement | undefined

@@ -2,11 +2,11 @@ import { Dropdown, Icon } from '@mtes-mct/monitor-ui'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { Item } from './Item'
 import { MissionType } from '../../../../domain/types/mission'
 import { NEW_ACTION_BY_TYPE } from '../constants'
 import { FormBody } from '../FormBody'
 import { FormHead } from '../FormHead'
+import { Item } from './Item'
 
 import type { Action, PartialAction } from '../types'
 import type { Promisable } from 'type-fest'

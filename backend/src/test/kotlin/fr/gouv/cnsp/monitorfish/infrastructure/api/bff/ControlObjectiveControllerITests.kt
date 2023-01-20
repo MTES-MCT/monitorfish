@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(value = [(ControlObjectiveController::class)])
-class MissionActionObjectiveControllerITests {
+class ControlObjectiveControllerITests {
 
     @Autowired
     private lateinit var mockMvc: MockMvc

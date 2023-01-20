@@ -128,7 +128,7 @@ export type ControlResource = {
   name: string
 }
 
-export type ControlSummary = {
+export type MissionActionsSummary = {
   missionActions: MissionAction[]
   numberOfAerialControls: number
   numberOfDiversions: number

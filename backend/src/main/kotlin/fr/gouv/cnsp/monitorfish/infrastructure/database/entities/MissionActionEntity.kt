@@ -19,10 +19,13 @@ import javax.persistence.*
     )
 )
 @Table(name = "mission_actions")
-data class MissionActionEntity(
+class MissionActionEntity(
     @Id
-    @Column(name = "id")
-    var id: Int,
+    @SequenceGenerator(name = "mission_actions_id_seq", sequenceName = "mission_actions_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mission_actions_id_seq")
+    @Basic(optional = false)
+    @Column(name = "id", unique = true, nullable = false)
+    var id: Int? = null,
     @Column(name = "vessel_id")
     var vesselId: Int,
     @Column(name = "mission_id")
@@ -54,7 +57,7 @@ data class MissionActionEntity(
     @Column(name = "logbook_infractions", columnDefinition = "jsonb")
     var logbookInfractions: String? = null,
     @Column(name = "licences_and_logbook_observations")
-    var licencesAndLogbookObservations: String,
+    var licencesAndLogbookObservations: String? = null,
     @Type(type = "jsonb")
     @Column(name = "gear_infractions", columnDefinition = "jsonb")
     var gearInfractions: String? = null,
@@ -106,6 +109,45 @@ data class MissionActionEntity(
     @Column(name = "species_onboard", columnDefinition = "jsonb")
     var speciesOnboard: String? = null
 ) {
+    companion object {
+        fun fromMissionAction(mapper: ObjectMapper, missionAction: MissionAction) = MissionActionEntity(
+            vesselId = missionAction.vesselId,
+            missionId = missionAction.missionId,
+            actionType = missionAction.actionType,
+            actionDatetimeUtc = missionAction.actionDatetimeUtc.toInstant(),
+            emitsVms = missionAction.emitsVms,
+            emitsAis = missionAction.emitsAis,
+            logbookMatchesActivity = missionAction.logbookMatchesActivity,
+            licencesMatchActivity = missionAction.licencesMatchActivity,
+            speciesWeightControlled = missionAction.speciesWeightControlled,
+            speciesSizeControlled = missionAction.speciesSizeControlled,
+            separateStowageOfPreservedSpecies = missionAction.separateStowageOfPreservedSpecies,
+            logbookInfractions = mapper.writeValueAsString(missionAction.logbookInfractions),
+            licencesAndLogbookObservations = missionAction.licencesAndLogbookObservations,
+            gearInfractions = mapper.writeValueAsString(missionAction.gearInfractions),
+            speciesInfractions = mapper.writeValueAsString(missionAction.speciesInfractions),
+            speciesObservations = missionAction.speciesObservations,
+            seizureAndDiversion = missionAction.seizureAndDiversion,
+            otherInfractions = mapper.writeValueAsString(missionAction.otherInfractions),
+            numberOfVesselsFlownOver = missionAction.numberOfVesselsFlownOver,
+            unitWithoutOmegaGauge = missionAction.unitWithoutOmegaGauge,
+            controlQualityComments = missionAction.controlQualityComments,
+            feedbackSheetRequired = missionAction.feedbackSheetRequired,
+            userTrigram = missionAction.userTrigram,
+            segments = missionAction.segments,
+            facade = missionAction.facade,
+            longitude = missionAction.longitude,
+            latitude = missionAction.latitude,
+            portLocode = missionAction.portLocode,
+            vesselTargeted = missionAction.vesselTargeted,
+            diversion = missionAction.diversion,
+            seizureAndDiversionComments = missionAction.seizureAndDiversionComments,
+            otherComments = missionAction.otherComments,
+            gearOnboard = mapper.writeValueAsString(missionAction.gearOnboard),
+            speciesOnboard = mapper.writeValueAsString(missionAction.speciesOnboard),
+            isFromPoseidon = false
+        )
+    }
 
     fun toMissionAction(mapper: ObjectMapper) = MissionAction(
         id = id,
@@ -120,13 +162,13 @@ data class MissionActionEntity(
         speciesWeightControlled = speciesWeightControlled,
         speciesSizeControlled = speciesSizeControlled,
         separateStowageOfPreservedSpecies = separateStowageOfPreservedSpecies,
-        logbookInfractions = deserializeJSON(mapper, logbookInfractions, LogbookInfraction::class.java),
+        logbookInfractions = deserializeJSONList(mapper, logbookInfractions, LogbookInfraction::class.java),
         licencesAndLogbookObservations = licencesAndLogbookObservations,
-        gearInfractions = deserializeJSON(mapper, gearInfractions, GearInfraction::class.java),
-        speciesInfractions = deserializeJSON(mapper, speciesInfractions, SpeciesInfraction::class.java),
+        gearInfractions = deserializeJSONList(mapper, gearInfractions, GearInfraction::class.java),
+        speciesInfractions = deserializeJSONList(mapper, speciesInfractions, SpeciesInfraction::class.java),
         speciesObservations = speciesObservations,
         seizureAndDiversion = seizureAndDiversion,
-        otherInfractions = deserializeJSON(mapper, otherInfractions, OtherInfraction::class.java),
+        otherInfractions = deserializeJSONList(mapper, otherInfractions, OtherInfraction::class.java),
         numberOfVesselsFlownOver = numberOfVesselsFlownOver,
         unitWithoutOmegaGauge = unitWithoutOmegaGauge,
         controlQualityComments = controlQualityComments,
@@ -141,15 +183,35 @@ data class MissionActionEntity(
         diversion = diversion,
         seizureAndDiversionComments = seizureAndDiversionComments,
         otherComments = otherComments,
-        gearOnboard = deserializeJSON(mapper, gearOnboard, GearControl::class.java),
-        speciesOnboard = deserializeJSON(mapper, speciesOnboard, SpeciesControl::class.java)
+        gearOnboard = deserializeJSONList(mapper, gearOnboard, GearControl::class.java),
+        speciesOnboard = deserializeJSONList(mapper, speciesOnboard, SpeciesControl::class.java)
     )
 
-    private fun <T> deserializeJSON(mapper: ObjectMapper, json: String?, clazz: Class<T>): List<T> = json?.let {
+    private fun <T> deserializeJSONList(mapper: ObjectMapper, json: String?, clazz: Class<T>): List<T> = json?.let {
         mapper.readValue(
             json,
             mapper.typeFactory
                 .constructCollectionType(MutableList::class.java, clazz)
         )
     } ?: listOf()
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as MissionActionEntity
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id ?: 0
+        result = 31 * result + vesselId
+        result = 31 * result + missionId
+        result = 31 * result + actionType.hashCode()
+        result = 31 * result + actionDatetimeUtc.hashCode()
+        return result
+    }
 }

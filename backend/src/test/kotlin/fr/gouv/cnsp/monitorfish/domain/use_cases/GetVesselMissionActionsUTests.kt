@@ -11,7 +11,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselMissionActions
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.GetVesselMissionActions
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

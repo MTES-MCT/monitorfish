@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.ZonedDateTime
-import javax.websocket.server.PathParam
 
 @RestController
 @RequestMapping("/bff/v1/vessels")
@@ -25,7 +24,6 @@ class VesselController(
     private val getVesselPositions: GetVesselPositions,
     private val getVesselVoyage: GetVesselVoyage,
     private val searchVessels: SearchVessels,
-    private val getVesselMissionActions: GetVesselMissionActions,
     private val getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions,
     private val getVesselReportings: GetVesselReportings,
     private val getVesselRiskFactor: GetVesselRiskFactor
@@ -161,24 +159,6 @@ class VesselController(
 
     companion object {
         const val zoneDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.000X"
-    }
-
-    @GetMapping("/{vesselId}/mission_actions")
-    @Operation(summary = "Get vessel's mission actions")
-    fun getVesselControls(
-        @PathParam("Vessel id")
-        @PathVariable(name = "vesselId")
-        vesselId: String,
-        @Parameter(description = "actions after date time")
-        @RequestParam(name = "afterDateTime")
-        @DateTimeFormat(pattern = zoneDateTimePattern)
-        afterDateTime: ZonedDateTime
-    ): ControlSummaryDataOutput {
-        return runBlocking {
-            val controlResumeAndControls = getVesselMissionActions.execute(vesselId.toInt(), afterDateTime)
-
-            ControlSummaryDataOutput.fromControlSummary(controlResumeAndControls)
-        }
     }
 
     @GetMapping("/reporting")

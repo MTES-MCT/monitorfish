@@ -7,7 +7,7 @@ import { setIsUpdatingVessels } from '../domain/shared_slices/Global'
 import { getAllFleetSegments } from '../domain/use_cases/fleetSegment/getAllFleetSegments'
 import getHealthcheck from '../domain/use_cases/healthcheck/getHealthcheck'
 import { getVesselVoyage } from '../domain/use_cases/vessel/getVesselVoyage'
-import { getVesselActions } from '../domain/use_cases/vessel/getVesselActions'
+import { getVesselMissionActions } from '../domain/use_cases/missions/getVesselMissionActions'
 import { VesselSidebarTab } from '../domain/entities/vessel/vessel'
 import getAllRegulatoryLayers from '../domain/use_cases/layer/regulation/getAllRegulatoryLayers'
 import { getOperationalAlerts } from '../domain/use_cases/alert/getOperationalAlerts'
@@ -135,7 +135,7 @@ const APIWorker = () => {
       if (vesselSidebarTab === VesselSidebarTab.VOYAGES && selectedVesselIdentity) {
         dispatch(getVesselVoyage(selectedVesselIdentity, null, true))
       } else if (vesselSidebarTab === VesselSidebarTab.CONTROLS) {
-        dispatch(getVesselActions())
+        dispatch(getVesselMissionActions())
       } else if (vesselSidebarTab === VesselSidebarTab.REPORTING) {
         dispatch(getVesselReportings())
       } else if (isAdmin && vesselSidebarTab === VesselSidebarTab.ERSVMS) {

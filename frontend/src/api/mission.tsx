@@ -1,8 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import ky from 'ky'
 
 import { getEnvironmentVariable } from './api'
+import { ApiError } from '../libs/ApiError'
 
 import type { Mission } from '../domain/types/mission'
+import type { MissionActionsSummary } from '../domain/types/missionAction'
+
+const MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récuperer les contrôles de ce navire"
 
 const MONITORENV_URL = getEnvironmentVariable('REACT_APP_MONITORENV_URL')
 
@@ -17,3 +22,18 @@ export const missionApi = createApi({
   }),
   reducerPath: 'missionApi'
 })
+
+/**
+ * Get vessel mission actions
+ *
+ * @throws {@link ApiError}
+ */
+export async function getVesselMissionActionsFromAPI(vesselId: number, fromDate: Date) {
+  try {
+    return await ky
+      .get(`/bff/v1/mission_actions?vesselId=${vesselId}&afterDateTime=${fromDate.toISOString()}`)
+      .json<MissionActionsSummary>()
+  } catch (err) {
+    throw new ApiError(MISSION_ACTIONS_ERROR_MESSAGE, err)
+  }
+}

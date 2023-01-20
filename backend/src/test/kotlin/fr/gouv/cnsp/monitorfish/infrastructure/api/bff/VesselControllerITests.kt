@@ -69,9 +69,6 @@ class VesselControllerITests {
     private lateinit var searchVessels: SearchVessels
 
     @MockBean
-    private lateinit var getVesselMissionActions: GetVesselMissionActions
-
-    @MockBean
     private lateinit var getVesselReportings: GetVesselReportings
 
     @MockBean
@@ -116,7 +113,6 @@ class VesselControllerITests {
     }
 
     private fun <T> givenSuspended(block: suspend () -> T) = given(runBlocking { block() })!!
-
     private infix fun <T> BDDMockito.BDDMyOngoingStubbing<T>.willReturn(block: () -> T) = willReturn(block())
 
     @Test
@@ -405,37 +401,6 @@ class VesselControllerITests {
             VoyageRequest.PREVIOUS,
             "12345"
         )
-    }
-
-    @Test
-    fun `Should get all mission actions for a vessel`() {
-        // Given
-        givenSuspended { this.getVesselMissionActions.execute(any(), any()) }.willReturn(
-            MissionActionsSummary(
-                1,
-                1,
-                3,
-                0,
-                1,
-                2,
-                3,
-                4,
-                5,
-                listOf(MissionAction(1, 1, 1, MissionActionType.SEA_CONTROL, ZonedDateTime.now()))
-            )
-        )
-
-        // When
-        mockMvc.perform(get("/bff/v1/vessels/123/mission_actions?afterDateTime=2020-05-04T03:04:05.000Z"))
-            // Then
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.numberOfDiversions", equalTo(2)))
-            .andExpect(jsonPath("$.numberOfSeaControls", equalTo(1)))
-            .andExpect(jsonPath("$.missionActions.length()", equalTo(1)))
-
-        runBlocking {
-            Mockito.verify(getVesselMissionActions).execute(123, ZonedDateTime.parse("2020-05-04T03:04:05Z"))
-        }
     }
 
     @Test

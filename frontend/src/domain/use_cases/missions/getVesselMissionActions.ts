@@ -1,11 +1,11 @@
 import { batch } from 'react-redux'
 
-import { getVesselMissionActionsFromAPI } from '../../../api/vessel'
+import { getVesselMissionActionsFromAPI } from '../../../api/mission'
 import NoControlsFoundError from '../../../errors/NoControlsFoundError'
 import { loadControls, setControlSummary, setNextControlSummary } from '../../shared_slices/Control'
 import { removeError, setError } from '../../shared_slices/Global'
 
-export const getVesselActions = userRequest => (dispatch, getState) => {
+export const getVesselMissionActions = userRequest => (dispatch, getState) => {
   const { selectedVessel } = getState().vessel
   const { controlsFromDate, currentControlSummary } = getState().controls
 

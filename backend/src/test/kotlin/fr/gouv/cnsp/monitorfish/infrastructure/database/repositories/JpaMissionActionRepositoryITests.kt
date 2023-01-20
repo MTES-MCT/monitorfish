@@ -1,8 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.ControlCheck
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionType
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
+import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDummyMissionAction
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -106,6 +105,19 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(controls).hasSize(0)
     }
-}
 
-//  '[{"infraction_type": null, "natinf": 23588, "comments": "Chalutage répété dans les 3 milles sur Piste VMS - confirmé de visu"}, {"infraction_type": "PENDING", "natinf": 23584, "comments": "Absence d''équipement AIS à bord"}]', '{27.7.d,27.7.e}',
+    @Test
+    @Transactional
+    fun `saveMissionActions Should save a new mission action`() {
+        // Given
+        val dateTime = ZonedDateTime.now()
+        val newMission = getDummyMissionAction(dateTime)
+
+        // When
+        val missionAction = jpaMissionActionsRepository.save(newMission)
+
+        // Then
+        assertThat(missionAction.id).isEqualTo(8)
+        assertThat(missionAction.actionDatetimeUtc).isEqualTo(dateTime)
+    }
+}

@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionsSummary
 
-data class ControlSummaryDataOutput(
+data class MissionActionsSummaryDataOutput(
     val vesselId: Int,
     val numberOfSeaControls: Int,
     val numberOfLandControls: Int,
@@ -15,7 +15,7 @@ data class ControlSummaryDataOutput(
     val missionActions: List<MissionActionDataOutput>
 ) {
     companion object {
-        fun fromControlSummary(missionActionsSummary: MissionActionsSummary) = ControlSummaryDataOutput(
+        fun fromMissionActionsSummary(missionActionsSummary: MissionActionsSummary) = MissionActionsSummaryDataOutput(
             vesselId = missionActionsSummary.vesselId,
             numberOfSeaControls = missionActionsSummary.numberOfSeaControls,
             numberOfLandControls = missionActionsSummary.numberOfLandControls,

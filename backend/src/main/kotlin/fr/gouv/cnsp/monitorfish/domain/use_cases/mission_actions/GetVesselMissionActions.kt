@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
+package fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionType

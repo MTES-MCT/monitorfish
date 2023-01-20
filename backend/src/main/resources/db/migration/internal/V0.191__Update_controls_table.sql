@@ -56,4 +56,7 @@ ALTER TABLE public.controls
     DROP COLUMN segments,
     ADD COLUMN segments JSONB;
 
+CREATE SEQUENCE mission_actions_id_seq AS integer START 1 OWNED BY controls.id;
+ALTER TABLE controls ALTER COLUMN id SET DEFAULT nextval('mission_actions_id_seq');
+
 ALTER TABLE public.controls RENAME to mission_actions;

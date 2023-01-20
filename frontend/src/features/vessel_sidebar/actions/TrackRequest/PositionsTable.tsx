@@ -7,9 +7,9 @@ import { getCoordinates } from '../../../../coordinates'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
 import { animateToCoordinates } from '../../../../domain/shared_slices/Map'
 import { highlightVesselTrackPosition } from '../../../../domain/shared_slices/Vessel'
-import { useAppDispatch } from '../../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { useClickOutsideWhenOpened } from '../../../../hooks/useClickOutsideWhenOpened'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { isNumeric } from '../../../../utils/isNumeric'
 import { ReactComponent as ManualPositionSVG } from '../../../icons/Pastille_position_manuelle.svg'
 import { CSVOptions } from '../../../vessel_list/dataFormatting'
@@ -20,9 +20,9 @@ import type { CellProps } from 'rsuite'
 const { Cell, Column, HeaderCell } = Table
 
 export function PositionsTable({ openBox }) {
-  const dispatch = useAppDispatch()
-  const { coordinatesFormat } = useAppSelector(state => state.map)
-  const { highlightedVesselTrackPosition, selectedVesselPositions } = useAppSelector(state => state.vessel)
+  const dispatch = useMainAppDispatch()
+  const { coordinatesFormat } = useMainAppSelector(state => state.map)
+  const { highlightedVesselTrackPosition, selectedVesselPositions } = useMainAppSelector(state => state.vessel)
 
   const [sortColumn, setSortColumn] = useState(CSVOptions.dateTime.code)
   const [sortType, setSortType] = useState(SortType.DESC)
@@ -86,7 +86,7 @@ type SpeedCellProps = CellProps & {
   }
 }
 export function SpeedCell({ coordinatesFormat, dataKey, rowData, ...nativeProps }: SpeedCellProps) {
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
 
   const coordinates = rowData
     ? getCoordinates([rowData.longitude, rowData.latitude], WSG84_PROJECTION, coordinatesFormat)
@@ -118,7 +118,7 @@ type CourseCellProps = CellProps & {
   }
 }
 export function CourseCell({ coordinatesFormat, dataKey, rowData, ...nativeProps }: CourseCellProps) {
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
 
   const coordinates = rowData
     ? getCoordinates([rowData.longitude, rowData.latitude], WSG84_PROJECTION, coordinatesFormat)
@@ -150,7 +150,7 @@ type DateTimeCellProps = CellProps & {
   }
 }
 export function DateTimeCell({ coordinatesFormat, dataKey, rowData, ...nativeProps }: DateTimeCellProps) {
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
 
   const coordinates = rowData
     ? getCoordinates([rowData.longitude, rowData.latitude], WSG84_PROJECTION, coordinatesFormat)

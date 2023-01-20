@@ -7,7 +7,7 @@ import { MISSION_LIST_TABLE_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
 import { missionApi } from '../../../api/mission'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useTable } from '../../../hooks/useTable'
 import { EmptyCardTable } from '../../../ui/card-table/EmptyCardTable'
 import { dayjs } from '../../../utils/dayjs'
@@ -21,7 +21,7 @@ export function MissionList() {
   const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
   const [filters, setFilters] = useState<MissionFilter[]>([])
   const { data: maybeMissions, error: apiError, isLoading } = missionApi.useGetAllQuery(undefined)
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
 
   const baseUrl = useMemo(() => window.location.origin, [])
 

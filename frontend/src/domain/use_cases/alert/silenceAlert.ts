@@ -10,15 +10,15 @@ import {
 import { setError } from '../../shared_slices/Global'
 import { removeVesselAlertAndUpdateReporting } from '../../shared_slices/Vessel'
 
-import type { AppGetState } from '../../../store'
+import type { MainAppThunk } from '../../../store'
 import type { SilencedAlertPeriodRequest } from '../../entities/alerts/types'
 
 /**
  * Silence an alert
  */
 export const silenceAlert =
-  (silencedAlertPeriodRequest: SilencedAlertPeriodRequest, pendingAlertId: string) =>
-  (dispatch, getState: AppGetState) => {
+  (silencedAlertPeriodRequest: SilencedAlertPeriodRequest, pendingAlertId: string): MainAppThunk =>
+  (dispatch, getState) => {
     const previousPendingAlerts = getState().alert.pendingAlerts
     const previousSilencedAlerts = getState().alert.silencedAlerts
 

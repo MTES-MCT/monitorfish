@@ -7,7 +7,7 @@ import styled from 'styled-components'
 
 import { getCoordinates } from '../../../coordinates'
 import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map/constants'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { useMoveOverlayWhenDragging } from '../../../hooks/useMoveOverlayWhenDragging'
 import { useMoveOverlayWhenZooming } from '../../../hooks/useMoveOverlayWhenZooming'
 import { usePrevious } from '../../../hooks/usePrevious'
@@ -66,7 +66,7 @@ export function InterestPointOverlay({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [coordinates]
   )
-  const { coordinatesFormat } = useAppSelector(state => state.map)
+  const { coordinatesFormat } = useMainAppSelector(state => state.map)
 
   const moveInterestPointWithThrottle = useCallback(
     (target, delay) => {

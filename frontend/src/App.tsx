@@ -32,11 +32,11 @@ import { VesselList } from './features/vessel_list/VesselList'
 import UpdatingVesselLoader from './features/vessel_sidebar/UpdatingVesselLoader'
 import { VesselSidebar } from './features/vessel_sidebar/VesselSidebar'
 import { VesselSidebarHeader } from './features/vessel_sidebar/VesselSidebarHeader'
-import { useAppSelector } from './hooks/useAppSelector'
+import { useMainAppSelector } from './hooks/useMainAppSelector'
 import { BackofficePage } from './pages/BackofficePage'
 import { TestPage } from './pages/TestPage'
 import { UnsupportedBrowserPage } from './pages/UnsupportedBrowserPage'
-import { backofficeStore, homeStore, backofficePersistor } from './store'
+import { backofficeStore, backofficeStorePersistor, mainStore } from './store'
 import { isBrowserSupported } from './utils/isBrowserSupported'
 
 import type { MutableRefObject } from 'react'
@@ -58,7 +58,7 @@ export function App() {
             <Route path="/backoffice">
               <Provider store={backofficeStore}>
                 {/* eslint-disable-next-line no-null/no-null */}
-                <PersistGate loading={null} persistor={backofficePersistor}>
+                <PersistGate loading={null} persistor={backofficeStorePersistor}>
                   <NamespaceContext.Provider value="backoffice">
                     <BackofficePage />
                   </NamespaceContext.Provider>
@@ -67,7 +67,7 @@ export function App() {
             </Route>
 
             <Route exact path="/ext">
-              <Provider store={homeStore}>
+              <Provider store={mainStore}>
                 <NamespaceContext.Provider value="homepage">
                   <TritonFish />
                 </NamespaceContext.Provider>
@@ -77,7 +77,7 @@ export function App() {
             <Route component={TestPage} exact path="/test" />
 
             <Route path="/">
-              <Provider store={homeStore}>
+              <Provider store={mainStore}>
                 <NamespaceContext.Provider value="homepage">
                   <HomePage />
                 </NamespaceContext.Provider>
@@ -100,9 +100,9 @@ function HomePage() {
     isVesselListDisplayed,
     isVesselSearchDisplayed,
     isVesselVisibilityMapButtonDisplayed
-  } = useAppSelector(state => state.displayedComponent)
-  const isVesselSidebarOpen = useAppSelector(state => state.vessel.vesselSidebarIsOpen)
-  const openedSideWindowTab = useAppSelector(state => state.global.openedSideWindowTab)
+  } = useMainAppSelector(state => state.displayedComponent)
+  const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
+  const openedSideWindowTab = useMainAppSelector(state => state.global.openedSideWindowTab)
   const ref = useRef() as MutableRefObject<HTMLDivElement>
 
   return (
@@ -143,7 +143,7 @@ function HomePage() {
 }
 
 function TritonFish() {
-  const isVesselSidebarOpen = useAppSelector(state => state.vessel.vesselSidebarIsOpen)
+  const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
 
   return (
     <>

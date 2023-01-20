@@ -2,14 +2,14 @@ import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 import { contractRightMenu, expandRightMenu } from '../../../domain/shared_slices/Global'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
 import { useClickOutsideWhenOpened } from '../../../hooks/useClickOutsideWhenOpened'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
 export function RightMenuOnHoverArea() {
-  const dispatch = useAppDispatch()
-  const selectedVessel = useAppSelector(state => state.vessel.selectedVessel)
-  const mapToolOpened = useAppSelector(state => state.global.mapToolOpened)
+  const dispatch = useMainAppDispatch()
+  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
+  const mapToolOpened = useMainAppSelector(state => state.global.mapToolOpened)
 
   const areaRef = useRef(null)
   const clickedOutsideComponent = useClickOutsideWhenOpened(areaRef, !!selectedVessel)

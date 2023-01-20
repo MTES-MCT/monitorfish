@@ -5,10 +5,10 @@ import { CustomCircleRange } from './CustomCircleRange'
 import { MapToolType, MeasurementType } from '../../../../domain/entities/map/constants'
 import { setMapToolOpened } from '../../../../domain/shared_slices/Global'
 import { setMeasurementTypeToAdd } from '../../../../domain/shared_slices/Measurement'
-import { useAppDispatch } from '../../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { useClickOutsideWhenOpenedAndExecute } from '../../../../hooks/useClickOutsideWhenOpenedAndExecute'
 import { useEscapeFromKeyboardAndExecute } from '../../../../hooks/useEscapeFromKeyboardAndExecute'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
 import { ReactComponent as MultiLineSVG } from '../../../icons/standardized/Measure_broken_line.svg'
 import { ReactComponent as CircleRangeSVG } from '../../../icons/standardized/Measure_circle.svg'
@@ -16,9 +16,9 @@ import { ReactComponent as MeasurementSVG } from '../../../icons/standardized/Me
 import { MapToolButton } from '../MapToolButton'
 
 export function MeasurementMapButton() {
-  const dispatch = useAppDispatch()
-  const measurementTypeToAdd = useAppSelector(state => state.measurement.measurementTypeToAdd)
-  const { healthcheckTextWarning, mapToolOpened, rightMenuIsOpen } = useAppSelector(state => state.global)
+  const dispatch = useMainAppDispatch()
+  const measurementTypeToAdd = useMainAppSelector(state => state.measurement.measurementTypeToAdd)
+  const { healthcheckTextWarning, mapToolOpened, rightMenuIsOpen } = useMainAppSelector(state => state.global)
 
   const isRightMenuShrinked = !rightMenuIsOpen
   const isOpen = useMemo(() => mapToolOpened === MapToolType.MEASUREMENT_MENU, [mapToolOpened])

@@ -9,7 +9,7 @@ import {
 import { setEditedReporting } from '../../../domain/shared_slices/Reporting'
 import { ReportingType, Reporting } from '../../../domain/types/reporting'
 import archiveReporting from '../../../domain/use_cases/reporting/archiveReporting'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { getDateTime } from '../../../utils'
 import { ReactComponent as ArchiveIconSVG } from '../../icons/Bouton_archiver.svg'
 import { ReactComponent as EditIconSVG } from '../../icons/Bouton_editer.svg'
@@ -23,7 +23,7 @@ import type { Promisable } from 'type-fest'
 export type ReportingCardProps = {
   isArchive?: boolean
   numberOfAlerts?: number
-  openConfirmDeletionModalForId: (reportingId: string) => Promisable<void>
+  openConfirmDeletionModalForId: (reportingId: number) => Promisable<void>
   // TODO Doesn't respect Reporting type from domain. Can it be undefined (wouldn't make sense)?
   reporting: Reporting
 }
@@ -33,7 +33,7 @@ export function ReportingCard({
   openConfirmDeletionModalForId,
   reporting
 }: ReportingCardProps) {
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
   const isAnInfractionSuspicion = reportingIsAnInfractionSuspicion(reporting.type)
   const reportingName = Object.values(ReportingTypeCharacteristics).find(
     reportingType => reportingType.code === reporting.type
@@ -88,7 +88,7 @@ export function ReportingCard({
           <ArchiveButton
             data-cy="archive-reporting-card"
             isAlert={!!numberOfAlerts}
-            onClick={() => dispatch(archiveReporting(reporting.id) as any)}
+            onClick={() => dispatch(archiveReporting(reporting.id))}
             title="Archiver"
           />
           <DeleteButton

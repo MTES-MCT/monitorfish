@@ -8,7 +8,7 @@ import {
   VESSEL_STATUS
 } from '../../../../domain/entities/beaconMalfunction/constants'
 import { setOpenedBeaconMalfunction } from '../../../../domain/shared_slices/BeaconMalfunction'
-import { useAppDispatch } from '../../../../hooks/useAppDispatch'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { getDateTime } from '../../../../utils'
 import { ReactComponent as AtSeaSVG } from '../../../icons/Icone_avarie_mer.svg'
 import { ReactComponent as AtPortSVG } from '../../../icons/Icone_avarie_quai.svg'
@@ -28,7 +28,7 @@ export function BeaconMalfunctionCard({
   isLastItem,
   setIsCurrentBeaconMalfunctionDetails
 }: YearBeaconMalfunctionsProps) {
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
 
   const lastPositionPlace = useMemo(
     () =>

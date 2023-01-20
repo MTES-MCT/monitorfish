@@ -5,12 +5,12 @@ import { StyleSheetManager } from 'styled-components'
 import { SideWindow } from '.'
 import { resetFocusOnPendingAlert } from '../../domain/shared_slices/Alert'
 import { closeSideWindow } from '../../domain/shared_slices/Global'
-import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useForceUpdate } from '../../hooks/useForceUpdate'
+import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { LegacyNewWindow } from '../../ui/NewWindow/LegacyNewWindow'
 
 export function SideWindowLauncher() {
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
   const newWindowRef = useRef() as MutableRefObject<HTMLDivElement>
   const { forceUpdate } = useForceUpdate()
   useEffect(() => forceUpdate(), [forceUpdate])

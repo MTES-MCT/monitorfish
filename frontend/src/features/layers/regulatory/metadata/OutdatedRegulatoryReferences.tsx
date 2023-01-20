@@ -1,12 +1,12 @@
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { INFINITE } from '../../../backoffice/constants'
 import { ReactComponent as AlertSVG } from '../../../icons/Picto_alerte.svg'
 
 export function OutdatedRegulatoryReferences() {
-  const { hasAtLeastOneOutdatedReference, hasOneRegulatoryReference } = useAppSelector(state => {
+  const { hasAtLeastOneOutdatedReference, hasOneRegulatoryReference } = useMainAppSelector(state => {
     const today = new Date()
     let nextHasAtLeastOneOutdatedReference = false
 

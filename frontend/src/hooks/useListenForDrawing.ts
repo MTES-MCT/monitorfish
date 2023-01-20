@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { useAppSelector } from './useAppSelector'
+import { useMainAppSelector } from './useMainAppSelector'
 
 import type { InteractionListener, InteractionType } from '../domain/entities/map/constants'
 import type { GeoJSON } from '../domain/types/GeoJSON'
@@ -11,7 +11,7 @@ type GeometryAndInteractionType = {
 }
 
 export function useListenForDrawedGeometry(componentListener: InteractionListener) {
-  const { geometry, interactionType, listener } = useAppSelector(state => state.draw)
+  const { geometry, interactionType, listener } = useMainAppSelector(state => state.draw)
 
   const [drawForListener, setDrawForListener] = useState<GeometryAndInteractionType>({
     geometry: undefined,

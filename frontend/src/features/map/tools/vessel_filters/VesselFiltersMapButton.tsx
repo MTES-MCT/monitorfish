@@ -5,19 +5,19 @@ import Filters from './Filters'
 import { COLORS } from '../../../../constants/constants'
 import { MapToolType } from '../../../../domain/entities/map/constants'
 import { setMapToolOpened } from '../../../../domain/shared_slices/Global'
-import { useAppDispatch } from '../../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { useClickOutsideWhenOpenedAndExecute } from '../../../../hooks/useClickOutsideWhenOpenedAndExecute'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { usePrevious } from '../../../../hooks/usePrevious'
 import { ReactComponent as FilterSVG } from '../../../icons/standardized/Filter.svg'
 import { MapToolButton } from '../MapToolButton'
 
 export function VesselFiltersMapButton() {
-  const dispatch = useAppDispatch()
-  const { filters } = useAppSelector(state => state.filter)
-  const { mapToolOpened } = useAppSelector(state => state.global)
+  const dispatch = useMainAppDispatch()
+  const { filters } = useMainAppSelector(state => state.filter)
+  const { mapToolOpened } = useMainAppSelector(state => state.global)
   const previousFilters = usePrevious(filters)
-  const rightMenuIsOpen = useAppSelector(state => state.global.rightMenuIsOpen)
+  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
 
   const isRightMenuShrinked = !rightMenuIsOpen
   const isOpen = useMemo(() => mapToolOpened === MapToolType.FILTERS, [mapToolOpened])

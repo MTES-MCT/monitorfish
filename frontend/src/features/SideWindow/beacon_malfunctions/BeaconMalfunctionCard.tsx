@@ -8,7 +8,7 @@ import { getMalfunctionStartDateText } from '../../../domain/entities/beaconMalf
 import { END_OF_MALFUNCTION_REASON_RECORD, VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
 import { openBeaconMalfunctionInKanban } from '../../../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
 import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/vessel/showVesselFromBeaconMalfunctionsKanban'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 
 import type { BeaconMalfunction } from '../../../domain/entities/beaconMalfunction/types'
 
@@ -33,7 +33,7 @@ export function BeaconMalfunctionCard({
   updateVesselStatus,
   verticalScrollRef
 }: BeaconMalfunctionCardProps) {
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
   const vesselStatus = VESSEL_STATUS.find(_vesselStatus => _vesselStatus.value === beaconMalfunction?.vesselStatus)
   const bodyRef = useRef<HTMLDivElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)

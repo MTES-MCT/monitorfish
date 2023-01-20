@@ -9,8 +9,8 @@ import { interestPointType } from '../../../../domain/entities/interestPoints'
 import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
 import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../../../domain/shared_slices/InterestPoint'
 import saveInterestPointFeature from '../../../../domain/use_cases/interestPoint/saveInterestPointFeature'
-import { useAppDispatch } from '../../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { SetCoordinates } from '../../../coordinates/SetCoordinates'
 import { ReactComponent as ControlSVG } from '../../../icons/Label_controle.svg'
 import { ReactComponent as GearSVG } from '../../../icons/Label_engin_de_peche.svg'
@@ -27,9 +27,9 @@ type EditInterestPointProps = {
   isOpen: boolean
 }
 export function EditInterestPoint({ close, healthcheckTextWarning, isOpen }: EditInterestPointProps) {
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
 
-  const { interestPointBeingDrawed, isEditing } = useAppSelector(state => state.interestPoint)
+  const { interestPointBeingDrawed, isEditing } = useMainAppSelector(state => state.interestPoint)
 
   /** Coordinates formatted in DD [latitude, longitude] */
   const coordinates: number[] = useMemo(() => {
@@ -122,7 +122,7 @@ export function EditInterestPoint({ close, healthcheckTextWarning, isOpen }: Edi
 
   const saveInterestPoint = () => {
     if (coordinates?.length) {
-      dispatch(saveInterestPointFeature() as any)
+      dispatch(saveInterestPointFeature())
       dispatch(addInterestPoint())
       close()
     }

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { STAGE_RECORD } from '../../../domain/entities/beaconMalfunction/constants'
 import { archiveBeaconMalfunctions } from '../../../domain/use_cases/beaconMalfunction/archiveBeaconMalfunctions'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 
 import type { CSSProperties } from 'react'
 
@@ -17,7 +17,7 @@ type StageColumnHeaderType = {
   stage: string
 }
 export function StageColumnHeader({ description, ids, numberOfItems, stage }: StageColumnHeaderType) {
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
   const showArchiveAll = useMemo(() => stage === STAGE_RECORD.END_OF_MALFUNCTION.title && ids.length > 0, [stage, ids])
 
   const archiveAll = useCallback(() => {

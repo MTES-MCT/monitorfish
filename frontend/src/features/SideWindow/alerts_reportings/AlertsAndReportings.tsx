@@ -11,7 +11,7 @@ import {
   ALERTS_SUBMENU,
   SeaFront
 } from '../../../domain/entities/alerts/constants'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { AlertAndReportingTab } from '../constants'
 
 import type { MenuItem } from '../../../types'
@@ -32,7 +32,7 @@ export function AlertsAndReportings({
   setSelectedSeaFront,
   setSelectedTab
 }: AlertsAndReportingsProps) {
-  const { focusedPendingAlertId, pendingAlerts, silencedAlerts } = useAppSelector(state => state.alert)
+  const { focusedPendingAlertId, pendingAlerts, silencedAlerts } = useMainAppSelector(state => state.alert)
 
   const filteredSilencedAlerts = useMemo(
     () =>

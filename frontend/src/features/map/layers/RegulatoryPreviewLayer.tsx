@@ -7,8 +7,8 @@ import { regulatoryPreviewStyle } from './styles/regulatoryPreview.style'
 import { Layer } from '../../../domain/entities/layers/constants'
 import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map/constants'
 import zoomInLayer from '../../../domain/use_cases/layer/zoomInLayer'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
 import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { Feature } from 'ol'
@@ -18,8 +18,8 @@ export type RegulatoryPreviewLayerProps = {
   map?: any
 }
 function UnmemoizedRegulatoryPreviewLayer({ map }: RegulatoryPreviewLayerProps) {
-  const dispatch = useAppDispatch()
-  const { regulatoryGeometriesToPreview } = useAppSelector(state => state.regulatory)
+  const dispatch = useMainAppDispatch()
+  const { regulatoryGeometriesToPreview } = useMainAppSelector(state => state.regulatory)
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
   const layerRef = useRef() as MutableRefObject<VectorLayerWithName>
 
@@ -69,7 +69,7 @@ function UnmemoizedRegulatoryPreviewLayer({ map }: RegulatoryPreviewLayerProps) 
 
       if (features?.length) {
         getVectorSource().addFeatures(features)
-        dispatch(zoomInLayer({ feature: features[0] }) as any)
+        dispatch(zoomInLayer({ feature: features[0] }))
       }
     }
   }, [dispatch, map, regulatoryGeometriesToPreview])

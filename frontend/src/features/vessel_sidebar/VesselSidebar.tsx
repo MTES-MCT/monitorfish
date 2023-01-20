@@ -7,12 +7,12 @@ import { ShowFishingActivitiesOnMap } from './actions/show_fishing_activities'
 import { TrackRequest } from './actions/TrackRequest'
 import { VesselSidebarBody } from './VesselSidebarBody'
 import VesselSidebarTabs from './VesselSidebarTabs'
-import { useAppSelector } from '../../hooks/useAppSelector'
+import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 
 export function VesselSidebar() {
-  const { healthcheckTextWarning, rightMenuIsOpen } = useAppSelector(state => state.global)
-  const isFocusedOnVesselSearch = useAppSelector(state => state.vessel.isFocusedOnVesselSearch)
+  const { healthcheckTextWarning, rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const isFocusedOnVesselSearch = useMainAppSelector(state => state.vessel.isFocusedOnVesselSearch)
 
   const [isFirstLoad, setIsFirstLoad] = useState(false)
 

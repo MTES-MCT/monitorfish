@@ -11,7 +11,7 @@ import { getFirstVesselStatus, getMalfunctionStartDateText } from '../../../doma
 import { VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
 import { closeBeaconMalfunctionInKanban } from '../../../domain/shared_slices/BeaconMalfunction'
 import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/vessel/showVesselFromBeaconMalfunctionsKanban'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { getDateTime } from '../../../utils'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes_gris.svg'
@@ -32,7 +32,7 @@ export function BeaconMalfunctionDetails({
 }: BeaconMalfunctionDetailsProps) {
   const { beaconMalfunction, resume } = beaconMalfunctionWithDetails
 
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
   const vesselStatus = VESSEL_STATUS.find(_vesselStatus => _vesselStatus.value === beaconMalfunction?.vesselStatus)
   const baseUrl = window.location.origin
   const vesselStatusRef = useRef<HTMLDivElement>(null)

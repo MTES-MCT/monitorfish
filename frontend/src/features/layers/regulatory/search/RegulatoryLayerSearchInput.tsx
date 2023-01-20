@@ -18,9 +18,9 @@ import {
   MINIMUM_SEARCH_CHARACTERS_NUMBER,
   searchRegulatoryLayers
 } from '../../../../domain/use_cases/layer/regulation/searchRegulatoryLayers'
-import { useAppDispatch } from '../../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { useListenForDrawedGeometry } from '../../../../hooks/useListenForDrawing'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { theme } from '../../../../ui/theme'
 import { ReactComponent as CloseIconSVG } from '../../../icons/Croix_grise.svg'
 import { ReactComponent as PolygonFilterSVG } from '../../../icons/Filtre_zone_polygone.svg'
@@ -33,8 +33,8 @@ import FilterTag from '../../../map/tools/vessel_filters/FilterTag'
 import type { IconButtonProps } from '@mtes-mct/monitor-ui'
 
 export function RegulatoryLayerSearchInput() {
-  const dispatch = useAppDispatch()
-  const { advancedSearchIsOpen, zoneSelected } = useAppSelector(state => state.regulatoryLayerSearch)
+  const dispatch = useMainAppDispatch()
+  const { advancedSearchIsOpen, zoneSelected } = useMainAppSelector(state => state.regulatoryLayerSearch)
 
   const { geometry, interactionType } = useListenForDrawedGeometry(InteractionListener.REGULATION)
   const [searchQuery, setSearchQuery] = useState('')

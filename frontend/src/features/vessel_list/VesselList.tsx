@@ -23,9 +23,9 @@ import { getZonesAndSubZonesPromises } from '../../domain/use_cases/layer/admini
 import { addVesselListFilterZone } from '../../domain/use_cases/vessel/addVesselListFilterZone'
 import { getFilteredVessels } from '../../domain/use_cases/vessel/getFilteredVessels'
 import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
-import { useAppDispatch } from '../../hooks/useAppDispatch'
-import { useAppSelector } from '../../hooks/useAppSelector'
 import { useListenForDrawedGeometry } from '../../hooks/useListenForDrawing'
+import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { theme } from '../../ui/theme'
 import { getExtentFromGeoJSON } from '../../utils'
 import { isNumeric } from '../../utils/isNumeric'
@@ -62,17 +62,17 @@ type ZoneGroupAndChildren = {
 }
 
 export function VesselList({ namespace }) {
-  const dispatch = useAppDispatch()
-  const { previewFilteredVesselsMode, rightMenuIsOpen } = useAppSelector(state => state.global)
-  const { isVesselListModalDisplayed } = useAppSelector(state => state.displayedComponent)
+  const dispatch = useMainAppDispatch()
+  const { previewFilteredVesselsMode, rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const { isVesselListModalDisplayed } = useMainAppSelector(state => state.displayedComponent)
   const { geometry } = useListenForDrawedGeometry(InteractionListener.VESSELS_LIST)
   const {
     uniqueVesselsDistricts: districts,
     uniqueVesselsSpecies: species,
     vessels
-  } = useAppSelector(state => state.vessel)
-  const fleetSegments = useAppSelector(state => state.fleetSegment.fleetSegments)
-  const gears = useAppSelector(state => state.gear.gears)
+  } = useMainAppSelector(state => state.vessel)
+  const fleetSegments = useMainAppSelector(state => state.fleetSegment.fleetSegments)
+  const gears = useMainAppSelector(state => state.gear.gears)
 
   const firstUpdate = useRef(true)
   const [downloadVesselListModalIsOpen, setDownloadVesselListModalIsOpen] = useState(false)
@@ -87,7 +87,7 @@ export function VesselList({ namespace }) {
   const [zoneGroups, setZoneGroups] = useState<string[]>([])
 
   // Filters
-  const zonesSelected = useAppSelector(state => state.vesselList.zonesSelected)
+  const zonesSelected = useMainAppSelector(state => state.vesselList.zonesSelected)
   const administrativeZonesFiltered = useMemo(
     () =>
       zonesSelected

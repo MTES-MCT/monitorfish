@@ -17,15 +17,15 @@ import {
 } from '../../../domain/entities/map/constants'
 import { addFeatureToDrawedFeature } from '../../../domain/use_cases/draw/addFeatureToDrawedFeature'
 import { setGeometry } from '../../../domain/use_cases/draw/setGeometry'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
 import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type Geometry from 'ol/geom/Geometry'
 
 function UnmemoizedDrawLayer({ map }) {
-  const dispatch = useAppDispatch()
-  const { geometry, interactionType, listener } = useAppSelector(state => state.draw)
+  const dispatch = useMainAppDispatch()
+  const { geometry, interactionType, listener } = useMainAppSelector(state => state.draw)
 
   const feature = useMemo(() => {
     if (!geometry) {

@@ -9,9 +9,9 @@ import { COLORS } from '../../../constants/constants'
 import { UserType, VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
 import { setUserType } from '../../../domain/shared_slices/Global'
 import saveBeaconMalfunctionCommentFromKanban from '../../../domain/use_cases/beaconMalfunction/saveBeaconMalfunctionCommentFromKanban'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
 import { useListenForScroll } from '../../../hooks/useListenForScroll'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { getDate, mergeObjects } from '../../../utils'
 import { dayjs } from '../../../utils/dayjs'
 import { pushToObjectAtIndex } from '../../../utils/pushToObjectAtIndex'
@@ -24,8 +24,8 @@ import type {
 
 export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails, firstStatus, smallSize }) {
   const { actions, beaconMalfunction, comments, notifications } = beaconMalfunctionWithDetails
-  const dispatch = useAppDispatch()
-  const { userType } = useAppSelector(state => state.global)
+  const dispatch = useMainAppDispatch()
+  const { userType } = useMainAppSelector(state => state.global)
   const firstVesselStatus = VESSEL_STATUS.find(status => status.value === firstStatus) as BeaconMalfunctionStatusValue
   const [today, setToday] = useState('')
   const [yesterday, setYesterday] = useState('')

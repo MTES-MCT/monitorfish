@@ -6,16 +6,16 @@ import {
   hideFishingActivitiesOnMap,
   showFishingActivitiesOnMap
 } from '../../../../domain/shared_slices/FishingActivities'
-import { useAppDispatch } from '../../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ReactComponent as ShowFishingActivitiesSVG } from '../../../icons/Bouton_afficher_messages_JPE_sur_piste.svg'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
-  const dispatch = useAppDispatch()
-  const { healthcheckTextWarning, rightMenuIsOpen } = useAppSelector(state => state.global)
+  const dispatch = useMainAppDispatch()
+  const { healthcheckTextWarning, rightMenuIsOpen } = useMainAppSelector(state => state.global)
   const { areFishingActivitiesShowedOnMap: _areFishingActivitiesShowedOnMap, fishingActivitiesShowedOnMap } =
-    useAppSelector(state => state.fishingActivities)
+    useMainAppSelector(state => state.fishingActivities)
   const areFishingActivitiesShowedOnMap = useMemo(
     () => _areFishingActivitiesShowedOnMap || fishingActivitiesShowedOnMap?.length,
     [_areFishingActivitiesShowedOnMap, fishingActivitiesShowedOnMap]

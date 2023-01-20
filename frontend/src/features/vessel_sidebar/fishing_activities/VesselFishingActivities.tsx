@@ -12,16 +12,15 @@ import {
   setVoyage
 } from '../../../domain/shared_slices/FishingActivities'
 import { getVesselVoyage, NavigateTo } from '../../../domain/use_cases/vessel/getVesselVoyage'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { usePrevious } from '../../../hooks/usePrevious'
 
 export function VesselFishingActivities() {
-  const dispatch = useAppDispatch()
-  const { selectedVessel, selectedVesselIdentity } = useAppSelector(state => state.vessel)
-  const { fishingActivities, fishingActivitiesTab, loadingFishingActivities, nextFishingActivities } = useAppSelector(
-    state => state.fishingActivities
-  )
+  const dispatch = useMainAppDispatch()
+  const { selectedVessel, selectedVesselIdentity } = useMainAppSelector(state => state.vessel)
+  const { fishingActivities, fishingActivitiesTab, loadingFishingActivities, nextFishingActivities } =
+    useMainAppSelector(state => state.fishingActivities)
 
   const previousSelectedVessel = usePrevious(selectedVessel)
   const [messageTypeFilter, setMessageTypeFilter] = useState(null)
@@ -42,13 +41,13 @@ export function VesselFishingActivities() {
   useEffect(() => {
     if (!fishingActivities) {
       dispatch(resetNextFishingActivities())
-      dispatch(getVesselVoyage(selectedVesselIdentity, undefined, false) as any)
+      dispatch(getVesselVoyage(selectedVesselIdentity, undefined, false))
 
       return
     }
 
     if (previousSelectedVessel && !vesselsAreEquals(previousSelectedVessel, selectedVesselIdentity)) {
-      dispatch(getVesselVoyage(selectedVesselIdentity, undefined, false) as any)
+      dispatch(getVesselVoyage(selectedVesselIdentity, undefined, false))
     }
   }, [dispatch, fishingActivities, selectedVesselIdentity, previousSelectedVessel])
 
@@ -65,15 +64,15 @@ export function VesselFishingActivities() {
   )
 
   const goToPreviousTrip = useCallback(() => {
-    dispatch(getVesselVoyage(selectedVesselIdentity, NavigateTo.PREVIOUS, false) as any)
+    dispatch(getVesselVoyage(selectedVesselIdentity, NavigateTo.PREVIOUS, false))
   }, [dispatch, selectedVesselIdentity])
 
   const goToNextTrip = useCallback(() => {
-    dispatch(getVesselVoyage(selectedVesselIdentity, NavigateTo.NEXT, false) as any)
+    dispatch(getVesselVoyage(selectedVesselIdentity, NavigateTo.NEXT, false))
   }, [dispatch, selectedVesselIdentity])
 
   const goToLastTrip = useCallback(() => {
-    dispatch(getVesselVoyage(selectedVesselIdentity, NavigateTo.LAST, false) as any)
+    dispatch(getVesselVoyage(selectedVesselIdentity, NavigateTo.LAST, false))
   }, [dispatch, selectedVesselIdentity])
 
   return (

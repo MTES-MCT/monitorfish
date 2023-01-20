@@ -7,21 +7,23 @@ import { expandRightMenu } from '../../../domain/shared_slices/Global'
 import { setIsFocusedOnVesselSearch } from '../../../domain/shared_slices/Vessel'
 import { getVesselVoyage } from '../../../domain/use_cases/vessel/getVesselVoyage'
 import { showVessel } from '../../../domain/use_cases/vessel/showVessel'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { MapButtonStyle } from '../../commonStyles/MapButton.style'
 import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
 import { ReactComponent as SearchIconSVG } from '../../icons/Loupe.svg'
 import { VesselSearch } from '../../VesselSearch'
 
 export function VesselSidebarHeader() {
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
 
-  const { isFocusedOnVesselSearch, selectedVessel, selectedVesselIdentity, vesselSidebarIsOpen } = useAppSelector(
+  const { isFocusedOnVesselSearch, selectedVessel, selectedVesselIdentity, vesselSidebarIsOpen } = useMainAppSelector(
     state => state.vessel
   )
 
-  const { healthcheckTextWarning, previewFilteredVesselsMode, rightMenuIsOpen } = useAppSelector(state => state.global)
+  const { healthcheckTextWarning, previewFilteredVesselsMode, rightMenuIsOpen } = useMainAppSelector(
+    state => state.global
+  )
 
   const isVesselNameShown = !isFocusedOnVesselSearch && selectedVesselIdentity
   const isRightMenuShrinked = vesselSidebarIsOpen && !rightMenuIsOpen
@@ -29,8 +31,8 @@ export function VesselSidebarHeader() {
   const onSelectVessel = useCallback(
     vesselIdentity => {
       if (!vesselsAreEquals(vesselIdentity, selectedVesselIdentity)) {
-        dispatch(showVessel(vesselIdentity, true, false) as any)
-        dispatch(getVesselVoyage(vesselIdentity, undefined, false) as any)
+        dispatch(showVessel(vesselIdentity, true, false))
+        dispatch(getVesselVoyage(vesselIdentity, undefined, false))
       }
       dispatch(setIsFocusedOnVesselSearch(false))
     },

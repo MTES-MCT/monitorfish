@@ -1,10 +1,10 @@
 import { Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { SideWindowMenuKey } from './constants'
 import { getEnvironmentVariable } from '../../api/api'
 import { openSideWindowTab } from '../../domain/shared_slices/Global'
-import { useAppDispatch } from '../../hooks/useAppDispatch'
+import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
+import { SideWindowMenuKey } from './constants'
 
 const IS_DEV_ENV = getEnvironmentVariable('REACT_APP_IS_DEV_ENV')
 
@@ -12,7 +12,7 @@ export type SideWindowMenuProps = {
   selectedMenu?: string
 }
 export function SideWindowMenu({ selectedMenu }: SideWindowMenuProps) {
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
 
   return (
     <Menu role="menu">

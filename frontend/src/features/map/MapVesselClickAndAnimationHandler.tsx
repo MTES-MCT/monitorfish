@@ -6,8 +6,8 @@ import { updateVesselTrackAsZoomed } from '../../domain/shared_slices/Vessel'
 import { getVesselVoyage } from '../../domain/use_cases/vessel/getVesselVoyage'
 import { showVessel } from '../../domain/use_cases/vessel/showVessel'
 import { showVesselTrack } from '../../domain/use_cases/vessel/showVesselTrack'
-import { useAppDispatch } from '../../hooks/useAppDispatch'
-import { useAppSelector } from '../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 /**
  * Handle map animations - Note that the map  and mapClickEvent parameters are given from
@@ -17,10 +17,12 @@ import { useAppSelector } from '../../hooks/useAppSelector'
  * @param {boolean} hasClickEvent
  */
 export function MapVesselClickAndAnimationHandler({ map, mapClickEvent }) {
-  const dispatch = useAppDispatch()
-  const { animateToCoordinates, animateToExtent, fitToExtent } = useAppSelector(state => state.map)
-  const { vessels, vesselSidebarIsOpen, vesselsTracksShowed, vesselTrackExtent } = useAppSelector(state => state.vessel)
-  const { previewFilteredVesselsMode } = useAppSelector(state => state.global)
+  const dispatch = useMainAppDispatch()
+  const { animateToCoordinates, animateToExtent, fitToExtent } = useMainAppSelector(state => state.map)
+  const { vessels, vesselSidebarIsOpen, vesselsTracksShowed, vesselTrackExtent } = useMainAppSelector(
+    state => state.vessel
+  )
+  const { previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
 
   useEffect(() => {
     function createAnimateObject(_animateToCoordinates, resolution, duration, zoom) {

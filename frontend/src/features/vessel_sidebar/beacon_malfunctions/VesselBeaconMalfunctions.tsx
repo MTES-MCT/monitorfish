@@ -7,18 +7,17 @@ import { BeaconMalfunctionsTab } from '../../../domain/entities/beaconMalfunctio
 import { vesselsAreEquals } from '../../../domain/entities/vessel/vessel'
 import { setBeaconMalfunctionsTab } from '../../../domain/shared_slices/BeaconMalfunction'
 import getVesselBeaconMalfunctions from '../../../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { usePrevious } from '../../../hooks/usePrevious'
 import { BeaconMalfunctionDetails } from './details/BeaconMalfunctionDetails'
 import BeaconMalfunctionsResumeAndHistory from './resume/BeaconMalfunctionsResumeAndHistory'
 
 export function VesselBeaconMalfunctions() {
-  const dispatch = useAppDispatch()
-  const { beaconMalfunctionsTab, loadingVesselBeaconMalfunctions, vesselBeaconMalfunctionsFromDate } = useAppSelector(
-    state => state.beaconMalfunction
-  )
-  const { selectedVesselIdentity } = useAppSelector(state => state.vessel)
+  const dispatch = useMainAppDispatch()
+  const { beaconMalfunctionsTab, loadingVesselBeaconMalfunctions, vesselBeaconMalfunctionsFromDate } =
+    useMainAppSelector(state => state.beaconMalfunction)
+  const { selectedVesselIdentity } = useMainAppSelector(state => state.vessel)
   const previousSelectedVesselIdentity = usePrevious(selectedVesselIdentity)
   const [isCurrentBeaconMalfunctionDetails, setIsCurrentBeaconMalfunctionDetails] = useState<boolean>(false)
 

@@ -1,14 +1,14 @@
 import styled from 'styled-components'
 
 import { animateToExtent } from '../../../../domain/shared_slices/Map'
-import { useAppDispatch } from '../../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ReactComponent as ShowTrackSVG } from '../../../icons/Bouton_afficher_toute_la_piste.svg'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 export function AnimateToTrack({ isSidebarOpen }) {
-  const { healthcheckTextWarning, rightMenuIsOpen } = useAppSelector(state => state.global)
-  const dispatch = useAppDispatch()
+  const { healthcheckTextWarning, rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const dispatch = useMainAppDispatch()
 
   return (
     <VesselSidebarActionButton

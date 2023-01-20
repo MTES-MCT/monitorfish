@@ -12,8 +12,8 @@ import { setRegulatoryZoneMetadata } from '../../domain/shared_slices/Regulatory
 import getAllGearCodes from '../../domain/use_cases/gearCode/getAllGearCodes'
 import getAllRegulatoryLayersByRegTerritory from '../../domain/use_cases/layer/regulation/getAllRegulatoryLayers'
 import getAllSpecies from '../../domain/use_cases/species/getAllSpecies'
-import { useAppDispatch } from '../../hooks/useAppDispatch'
-import { useAppSelector } from '../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { EmptyResult } from '../commonStyles/Text.style'
 import RegulatoryZoneMetadata from '../layers/regulatory/RegulatoryZoneMetadata'
 import BaseMap from '../map/BaseMap'
@@ -25,7 +25,7 @@ import { ShowRegulatoryMetadata } from '../map/ShowRegulatoryMetadata'
 
 export function Backoffice() {
   const [foundRegulatoryZonesByRegTerritory, setFoundRegulatoryZonesByRegTerritory] = useState({})
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
   const [mapMovingAndZoomEvent, setMapMovingAndZoomEvent] = useState<{
     dummyUpdate: boolean
   } | null>(null)
@@ -35,10 +35,12 @@ export function Backoffice() {
     setMapMovingAndZoomEvent({ dummyUpdate: true })
   }
 
-  const { layersTopicsByRegTerritory, regulatoryZoneMetadataPanelIsOpen } = useAppSelector(state => state.regulatory)
+  const { layersTopicsByRegTerritory, regulatoryZoneMetadataPanelIsOpen } = useMainAppSelector(
+    state => state.regulatory
+  )
 
   // TODO Scritly type this once the store is perfectly typed.
-  const { regulationSaved } = useAppSelector(state => (state as any).regulation)
+  const { regulationSaved } = useMainAppSelector(state => (state as any).regulation)
 
   const initBackoffice = useCallback(() => {
     batch(async () => {

@@ -8,14 +8,14 @@ import {
 } from '../../../domain/entities/administrative'
 import { Layer, LayerType } from '../../../domain/entities/layers/constants'
 import { getVectorOLLayer } from '../../../domain/use_cases/layer/administrative/showAdministrativeLayer'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
 export type AdministrativeLayersProps = {
   map?: any
 }
 function UnmemoizedAdministrativeLayers({ map }: AdministrativeLayersProps) {
-  const { showedLayers } = useAppSelector(state => state.layer)
-  const isBackoffice = useAppSelector(state => state.global.isBackoffice)
+  const { showedLayers } = useMainAppSelector(state => state.layer)
+  const isBackoffice = useMainAppSelector(state => state.global.isBackoffice)
 
   const administrativeLayers = Object.keys(Layer)
     .map(topic => Layer[topic])

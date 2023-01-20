@@ -8,8 +8,8 @@ import { setInteractionType } from '../../../domain/shared_slices/Draw'
 import { eraseDrawedGeometries } from '../../../domain/use_cases/draw/eraseDrawedGeometries'
 import { closeAddMissionZone } from '../../../domain/use_cases/missions/closeAddMissionZone'
 import { validateMissionZone } from '../../../domain/use_cases/missions/validateMissionZone'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { theme } from '../../../ui/theme'
 
 import type { MultiPolygon } from 'ol/geom'
@@ -26,9 +26,9 @@ const validateButtonPlaceholder = {
 }
 
 export function DrawLayerModal() {
-  const dispatch = useAppDispatch()
-  const { geometry, interactionType, listener } = useAppSelector(state => state.draw)
-  const openedSideWindowTab = useAppSelector(state => state.global.openedSideWindowTab)
+  const dispatch = useMainAppDispatch()
+  const { geometry, interactionType, listener } = useMainAppSelector(state => state.draw)
+  const openedSideWindowTab = useMainAppSelector(state => state.global.openedSideWindowTab)
   const initialFeatureNumberRef = useRef<number | undefined>(undefined)
 
   const feature = useMemo(() => {

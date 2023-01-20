@@ -5,9 +5,6 @@
  * @see https://redux-toolkit.js.org/tutorials/rtk-query#add-the-service-to-your-store
  */
 
-// TODO We shouldn't have 2 stores, it's better to persist each root slice reducer. This is a bad pattern:
-// https://redux.js.org/faq/store-setup#can-or-should-i-create-multiple-stores-can-i-import-my-store-directly-and-use-it-in-components-myself
-
 import { combineReducers, configureStore, isPlain } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { createTransform, FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
@@ -25,7 +22,23 @@ import type { PersistConfig } from 'redux-persist'
 import type { ThunkAction } from 'redux-thunk'
 
 // =============================================================================
-// Common Store
+// Main Store
+
+export const mainStore = configureStore({
+  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(missionApi.middleware),
+  reducer: rootReducer
+})
+setupListeners(mainStore.dispatch)
+
+// https://react-redux.js.org/using-react-redux/usage-with-typescript#define-root-state-and-dispatch-types
+// Infer the `MainRootState` and `AppDispatch` types from the store itself
+export type MainAppDispatch = typeof mainStore.dispatch
+export type MainAppThunk<ReturnType = void> = ThunkAction<ReturnType, MainRootState, undefined, AnyAction>
+export type MainRootState = ReturnType<typeof mainStore.getState>
+
+// =============================================================================
+// Backoffice Store
+// https://redux-toolkit.js.org/usage/usage-guide#use-with-redux-persist
 
 // TODO Properly type this generic. No any.
 const SetTransform = createTransform(
@@ -40,22 +53,6 @@ const SetTransform = createTransform(
   { whitelist: ['regulation'] }
 )
 
-export const store = configureStore({
-  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(missionApi.middleware),
-  reducer: rootReducer
-})
-setupListeners(store.dispatch)
-
-// https://react-redux.js.org/using-react-redux/usage-with-typescript#define-root-state-and-dispatch-types
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type AppDispatch = typeof store.dispatch
-export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, undefined, AnyAction>
-export type RootState = ReturnType<typeof store.getState>
-
-// =============================================================================
-// Persisted Store
-// https://redux-toolkit.js.org/usage/usage-guide#use-with-redux-persist
-
 const persistedReducerConfig: PersistConfig<typeof persistedRootReducer> = {
   key: 'backofficePersistor',
   stateReconciler: autoMergeLevel2,
@@ -66,7 +63,7 @@ const persistedReducerConfig: PersistConfig<typeof persistedRootReducer> = {
 
 const persistedReducer = persistReducer(persistedReducerConfig, combineReducers(persistedRootReducer))
 
-export const persistedStore = configureStore({
+export const backofficeStore = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
@@ -77,9 +74,9 @@ export const persistedStore = configureStore({
   reducer: persistedReducer
 })
 
-export const persistedStorePersistor = persistStore(persistedStore)
+export const backofficeStorePersistor = persistStore(backofficeStore)
 
 // https://react-redux.js.org/using-react-redux/usage-with-typescript#define-root-state-and-dispatch-types
-export type PersistedAppDispatch = typeof persistedStore.dispatch
-export type PersistedAppThunk<ReturnType = void> = ThunkAction<ReturnType, PersistedRootState, unknown, AnyAction>
-export type PersistedRootState = ReturnType<typeof persistedStore.getState>
+export type BackofficeAppDispatch = typeof backofficeStore.dispatch
+export type BackofficeAppThunk<ReturnType = void> = ThunkAction<ReturnType, BackofficeRootState, unknown, AnyAction>
+export type BackofficeRootState = ReturnType<typeof backofficeStore.getState>

@@ -13,8 +13,8 @@ import {
 } from '../../../domain/entities/map/constants'
 import { fitToExtent } from '../../../domain/shared_slices/Map'
 import { addMissionZone } from '../../../domain/use_cases/missions/addMissionZone'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useListenForDrawedGeometry } from '../../../hooks/useListenForDrawing'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 
 import type { GeoJSON } from '../../../domain/types/GeoJSON'
 import type { Coordinate } from 'ol/coordinate'
@@ -23,7 +23,7 @@ export type MultiZonePickerProps = {
   addButtonLabel: string
 }
 export function MultiZonePicker({ addButtonLabel }: MultiZonePickerProps) {
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
   const { geometry } = useListenForDrawedGeometry(InteractionListener.MISSION_ZONE)
   const [value, setValue] = useState<GeoJSON.MultiPolygon | undefined>()
 

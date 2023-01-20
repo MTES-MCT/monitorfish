@@ -7,7 +7,7 @@ import { SideWindowSubMenuLink } from './SideWindowSubMenuLink'
 import { COLORS } from '../../constants/constants'
 import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, ALERTS_SUBMENU, SeaFront } from '../../domain/entities/alerts/constants'
 import { STAGE_RECORD } from '../../domain/entities/beaconMalfunction/constants'
-import { useAppSelector } from '../../hooks/useAppSelector'
+import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 
 import type { MenuItem } from '../../types'
@@ -36,9 +36,9 @@ export function SideWindowSubMenu({
   setSelectedSubMenu
 }: SideWindowSubMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const pendingAlerts = useAppSelector(state => state.alert.pendingAlerts)
-  const currentReportings = useAppSelector(state => state.reporting.currentReportings)
-  const beaconMalfunctions = useAppSelector(state => state.beaconMalfunction.beaconMalfunctions)
+  const pendingAlerts = useMainAppSelector(state => state.alert.pendingAlerts)
+  const currentReportings = useMainAppSelector(state => state.reporting.currentReportings)
+  const beaconMalfunctions = useMainAppSelector(state => state.beaconMalfunction.beaconMalfunctions)
 
   const numberOfBeaconMalfunctions = useMemo(
     () =>

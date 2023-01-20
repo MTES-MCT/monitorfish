@@ -23,8 +23,8 @@ import { STAGE_RECORD, VESSEL_STATUS } from '../../../domain/entities/beaconMalf
 import { setError } from '../../../domain/shared_slices/Global'
 import getAllBeaconMalfunctions from '../../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
 import updateBeaconMalfunctionFromKanban from '../../../domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 
 import type {
@@ -41,9 +41,9 @@ const getMemoizedBeaconMalfunctionsByStage = createSelector(
 const baseUrl = window.location.origin
 
 export function BeaconMalfunctionsBoard() {
-  const dispatch = useAppDispatch()
-  const { openedBeaconMalfunctionInKanban } = useAppSelector(state => state.beaconMalfunction)
-  const beaconMalfunctions = useAppSelector(state => getMemoizedBeaconMalfunctionsByStage(state))
+  const dispatch = useMainAppDispatch()
+  const { openedBeaconMalfunctionInKanban } = useMainAppSelector(state => state.beaconMalfunction)
+  const beaconMalfunctions = useMainAppSelector(state => getMemoizedBeaconMalfunctionsByStage(state))
   const [filteredBeaconMalfunctions, setFilteredBeaconMalfunctions] = useState({})
   const [isDroppedId, setIsDroppedId] = useState<number | undefined>(undefined)
   const [searchedVessel, setSearchedVessel] = useState<string>('')

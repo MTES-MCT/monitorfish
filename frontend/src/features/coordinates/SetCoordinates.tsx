@@ -1,18 +1,18 @@
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
+import { CoordinatesFormat } from '../../domain/entities/map/constants'
+import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { DDCoordinatesInput } from './DDCoordinatesInput'
 import { DMDCoordinatesInput } from './DMDCoordinatesInput'
 import { DMSCoordinatesInput } from './DMSCoordinatesInput'
-import { CoordinatesFormat } from '../../domain/entities/map/constants'
-import { useAppSelector } from '../../hooks/useAppSelector'
 
 type SetCoordinatesProps = {
   coordinates: number[]
   updateCoordinates: (nextCoordinates: number[], coordinates: number[]) => void
 }
 export function SetCoordinates({ coordinates, updateCoordinates }: SetCoordinatesProps) {
-  const { coordinatesFormat } = useAppSelector(state => state.map)
+  const { coordinatesFormat } = useMainAppSelector(state => state.map)
 
   const getCoordinatesInput = useCallback(() => {
     switch (coordinatesFormat) {

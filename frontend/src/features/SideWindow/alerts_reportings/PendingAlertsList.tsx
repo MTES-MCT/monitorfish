@@ -11,8 +11,8 @@ import { COLORS } from '../../../constants/constants'
 import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, SeaFront } from '../../../domain/entities/alerts/constants'
 import { resetFocusOnPendingAlert } from '../../../domain/shared_slices/Alert'
 import { silenceAlert } from '../../../domain/use_cases/alert/silenceAlert'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 
@@ -28,8 +28,8 @@ export type PendingAlertsListProps = {
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
  */
 export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSeaFront }: PendingAlertsListProps) {
-  const dispatch = useAppDispatch()
-  const { focusedPendingAlertId, pendingAlerts } = useAppSelector(state => state.alert)
+  const dispatch = useMainAppDispatch()
+  const { focusedPendingAlertId, pendingAlerts } = useMainAppSelector(state => state.alert)
   const baseUrl = window.location.origin
   const [sortColumn] = useState('creationDate')
   const [sortType] = useState(SortType.DESC)

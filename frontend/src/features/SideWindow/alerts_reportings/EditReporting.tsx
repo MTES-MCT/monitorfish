@@ -5,16 +5,16 @@ import { COLORS } from '../../../constants/constants'
 import { getOnlyVesselIdentityProperties } from '../../../domain/entities/vessel/vessel'
 import { setEditedReportingInSideWindow } from '../../../domain/shared_slices/Reporting'
 import { ReportingType } from '../../../domain/types/reporting'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes_gris.svg'
 import { ReportingForm } from '../../vessel_sidebar/reporting/current/ReportingForm'
 
 export function EditReporting() {
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
   const baseUrl = window.location.origin
-  const { editedReportingInSideWindow } = useAppSelector(state => state.reporting)
+  const { editedReportingInSideWindow } = useMainAppSelector(state => state.reporting)
 
   const editReportingWrapperStyle: CSSProperties = useMemo(
     () => ({

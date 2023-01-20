@@ -15,9 +15,9 @@ import archiveReportings from '../../../../domain/use_cases/reporting/archiveRep
 import deleteReportings from '../../../../domain/use_cases/reporting/deleteReportings'
 import { getVesselVoyage } from '../../../../domain/use_cases/vessel/getVesselVoyage'
 import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
-import { useAppDispatch } from '../../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { useForceUpdate } from '../../../../hooks/useForceUpdate'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { useTable } from '../../../../hooks/useTable'
 import { CardTable } from '../../../../ui/card-table/CardTable'
 import { CardTableBody } from '../../../../ui/card-table/CardTableBody'
@@ -37,8 +37,8 @@ type ReportingListProps = {
 }
 export function ReportingList({ selectedSeaFront }: ReportingListProps) {
   const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
-  const dispatch = useAppDispatch()
-  const { currentReportings } = useAppSelector(state => state.reporting)
+  const dispatch = useMainAppDispatch()
+  const { currentReportings } = useMainAppSelector(state => state.reporting)
   const { forceDebouncedUpdate } = useForceUpdate()
 
   const baseUrl = useMemo(() => window.location.origin, [])

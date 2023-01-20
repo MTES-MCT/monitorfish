@@ -4,8 +4,8 @@ import { COLORS } from '../../../../constants/constants'
 import { getFirstVesselStatus } from '../../../../domain/entities/beaconMalfunction'
 import { BeaconMalfunctionsTab } from '../../../../domain/entities/beaconMalfunction/constants'
 import { setBeaconMalfunctionsTab } from '../../../../domain/shared_slices/BeaconMalfunction'
-import { useAppDispatch } from '../../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { getDateTime } from '../../../../utils'
 import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
 import { BeaconMalfunctionDetailsFollowUp } from '../../../SideWindow/beacon_malfunctions/BeaconMalfunctionDetailsFollowUp'
@@ -16,8 +16,8 @@ type BeaconMalfunctionDetailsProps = {
   isCurrentBeaconMalfunctionDetails: boolean
 }
 export function BeaconMalfunctionDetails({ isCurrentBeaconMalfunctionDetails }: BeaconMalfunctionDetailsProps) {
-  const { openedBeaconMalfunction } = useAppSelector(state => state.beaconMalfunction)
-  const dispatch = useAppDispatch()
+  const { openedBeaconMalfunction } = useMainAppSelector(state => state.beaconMalfunction)
+  const dispatch = useMainAppDispatch()
 
   const navigateToResume = () => dispatch(setBeaconMalfunctionsTab(BeaconMalfunctionsTab.RESUME))
 

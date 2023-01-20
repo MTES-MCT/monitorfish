@@ -2,11 +2,13 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.AddMissionAction
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.GetVesselMissionActions
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.UpdateMissionAction
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
 import kotlinx.coroutines.runBlocking
@@ -38,6 +40,9 @@ class MissionActionsControllerITests {
 
     @MockBean
     private lateinit var addMissionAction: AddMissionAction
+
+    @MockBean
+    private lateinit var updateMissionAction: UpdateMissionAction
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -115,5 +120,51 @@ class MissionActionsControllerITests {
                     equalTo("Poids à bord MNZ supérieur de 50% au poids déclaré")
                 )
             )
+    }
+
+    @Test
+    fun `Should update a mission action`() {
+        // Given
+        val dateTime = ZonedDateTime.now()
+        val newMission = TestUtils.getDummyMissionAction(dateTime)
+        given(updateMissionAction.execute(any(), any())).willReturn(newMission)
+
+        // When
+        mockMvc.perform(
+            put("/bff/v1/mission_actions/123")
+                .content(
+                    objectMapper.writeValueAsString(
+                        AddMissionActionDataInput(
+                            actionDatetimeUtc = ZonedDateTime.now(),
+                            missionId = 2,
+                            vesselId = 2,
+                            actionType = MissionActionType.SEA_CONTROL,
+                            logbookInfractions = """
+                                [{"natinf": 27689, "comments": "Poids à bord MNZ supérieur de 50% au poids déclaré", "infractionType": "WITH_RECORD"}]
+                            """.trimIndent(),
+                            gearOnboard = """
+                                [{"gearCode": "OTB", "declaredMesh": 60.0, "gearWasControlled": false}, {"gearCode": "OTM", "declaredMesh": 60.0, "controlledMesh": 52.8, "gearWasControlled": true}]
+                            """.trimIndent()
+                        )
+                    )
+                )
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            // Then
+            .andExpect(status().isCreated)
+            .andExpect(jsonPath("$.missionId", equalTo(2)))
+            .andExpect(jsonPath("$.vesselId", equalTo(2)))
+            .andExpect(jsonPath("$.logbookInfractions[0].infractionType", equalTo("WITH_RECORD")))
+            .andExpect(jsonPath("$.logbookInfractions[0].natinf", equalTo(27689)))
+            .andExpect(
+                jsonPath(
+                    "$.logbookInfractions[0].comments",
+                    equalTo("Poids à bord MNZ supérieur de 50% au poids déclaré")
+                )
+            )
+
+        runBlocking {
+            Mockito.verify(updateMissionAction).execute(eq(123), any())
+        }
     }
 }

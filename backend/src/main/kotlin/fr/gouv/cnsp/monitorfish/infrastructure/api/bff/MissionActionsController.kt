@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.AddMissionAction
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.GetVesselMissionActions
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.UpdateMissionAction
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissionActionDataOutput
@@ -15,6 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.time.ZonedDateTime
+import javax.websocket.server.PathParam
 
 @RestController
 @RequestMapping("/bff/v1/mission_actions")
@@ -22,6 +24,7 @@ import java.time.ZonedDateTime
 class MissionActionsController(
     private val getVesselMissionActions: GetVesselMissionActions,
     private val addMissionAction: AddMissionAction,
+    private val updateMissionAction: UpdateMissionAction,
     private val mapper: ObjectMapper
 ) {
 
@@ -51,5 +54,19 @@ class MissionActionsController(
         actionInput: AddMissionActionDataInput
     ): MissionActionDataOutput {
         return MissionActionDataOutput.fromMissionAction(addMissionAction.execute(actionInput.toMissionAction(mapper)))
+    }
+
+    @PutMapping(value = ["/{actionId}"], consumes = ["application/json"])
+    @Operation(summary = "Update a mission action")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun updateMissionAction(
+        @PathParam("Action id")
+        @PathVariable(name = "actionId")
+        actionId: Int,
+        @RequestBody
+        actionInput: AddMissionActionDataInput
+    ): MissionActionDataOutput {
+        val updatedMissionAction = updateMissionAction.execute(actionId, actionInput.toMissionAction(mapper))
+        return MissionActionDataOutput.fromMissionAction(updatedMissionAction)
     }
 }

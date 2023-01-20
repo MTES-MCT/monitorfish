@@ -1,13 +1,13 @@
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { VesselSearchResultItem } from './VesselSearchResultItem'
 import { COLORS } from '../../constants/constants'
 import { getVesselCompositeIdentifier } from '../../domain/entities/vessel/vessel'
-import { useAppSelector } from '../../hooks/useAppSelector'
+import { useMainAppSelector } from '../../hooks/useMainAppSelector'
+import { VesselSearchResultItem } from './VesselSearchResultItem'
 
 export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, showLastSearchedVessels }) {
-  const { lastSearchedVessels } = useAppSelector(state => state.global)
+  const { lastSearchedVessels } = useMainAppSelector(state => state.global)
   const baseUrl = useMemo(() => window.location.origin, [])
 
   return (

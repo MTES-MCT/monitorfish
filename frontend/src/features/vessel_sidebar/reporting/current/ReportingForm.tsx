@@ -7,8 +7,8 @@ import { ReportingOriginActor, ReportingTypeCharacteristics } from '../../../../
 import { getOnlyVesselIdentityProperties } from '../../../../domain/entities/vessel/vessel'
 import { addReporting } from '../../../../domain/use_cases/reporting/addReporting'
 import { updateReporting } from '../../../../domain/use_cases/reporting/updateReporting'
-import { useAppDispatch } from '../../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { PrimaryButton, SecondaryButton } from '../../../commonStyles/Buttons.style'
 import { sortArrayByColumn } from '../../../vessel_list/tableSort'
 
@@ -29,11 +29,11 @@ export function ReportingForm({
   hasWhiteBackground,
   selectedVesselIdentity
 }: ReportingFormProps) {
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
   const unitSelectRef = useRef() as MutableRefObject<HTMLDivElement>
   const natinfSelectRef = useRef() as MutableRefObject<HTMLDivElement>
-  const infractions = useAppSelector(state => state.infraction.infractions)
-  const controllers = useAppSelector(state => state.controls.controllers)
+  const infractions = useMainAppSelector(state => state.infraction.infractions)
+  const controllers = useMainAppSelector(state => state.controls.controllers)
 
   const [reportingType, setReportingType] = useState<ReportingType>(
     ReportingTypeCharacteristics.INFRACTION_SUSPICION.code

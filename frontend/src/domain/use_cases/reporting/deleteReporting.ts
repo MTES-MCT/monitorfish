@@ -9,10 +9,10 @@ import {
 } from '../../shared_slices/Reporting'
 import { removeVesselReporting } from '../../shared_slices/Vessel'
 
-import type { AppThunk } from '../../../store'
+import type { MainAppThunk } from '../../../store'
 
 export const deleteReporting =
-  (id: number): AppThunk =>
+  (id: number): MainAppThunk =>
   (dispatch, getState) => {
     const { selectedVesselIdentity } = getState().vessel
     const { currentAndArchivedReportingsOfSelectedVessel } = getState().reporting

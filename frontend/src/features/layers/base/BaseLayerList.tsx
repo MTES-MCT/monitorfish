@@ -8,14 +8,14 @@ import { BaseLayers, LayerType } from '../../../domain/entities/layers/constants
 import LayerSlice from '../../../domain/shared_slices/Layer'
 import { selectBaseLayer } from '../../../domain/shared_slices/Map'
 import { closeRegulatoryZoneMetadata } from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
 
 export function BaseLayerList({ namespace }) {
-  const dispatch = useAppDispatch()
-  const selectedBaseLayer = useAppSelector(state => state.map.selectedBaseLayer)
-  const layersSidebarOpenedLayerType = useAppSelector(state => state.layer.layersSidebarOpenedLayerType)
+  const dispatch = useMainAppDispatch()
+  const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
+  const layersSidebarOpenedLayerType = useMainAppSelector(state => state.layer.layersSidebarOpenedLayerType)
   const { setLayersSideBarOpenedLayerType } = LayerSlice[namespace].actions
 
   const baseLayers = useMemo(() => Object.keys(BaseLayers), [])

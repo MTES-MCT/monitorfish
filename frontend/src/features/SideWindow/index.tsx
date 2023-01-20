@@ -31,8 +31,8 @@ import { getSilencedAlerts } from '../../domain/use_cases/alert/getSilencedAlert
 import getAllBeaconMalfunctions from '../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
 import getFishingInfractions from '../../domain/use_cases/infraction/getFishingInfractions'
 import { getAllCurrentReportings } from '../../domain/use_cases/reporting/getAllCurrentReportings'
-import { useAppDispatch } from '../../hooks/useAppDispatch'
-import { useAppSelector } from '../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { usePrevious } from '../../hooks/usePrevious'
 import { NewWindowContext } from '../../ui/NewWindow'
 
@@ -47,7 +47,7 @@ function SideWindowWithRef(this: any, { isFromURL }: SideWindowProps, ref: Forwa
   // eslint-disable-next-line no-null/no-null
   const wrapperRef = useRef<HTMLDivElement | null>(null)
 
-  const { openedSideWindowTab } = useAppSelector(state => state.global)
+  const { openedSideWindowTab } = useMainAppSelector(state => state.global)
 
   const [isFirstRender, setIsFirstRender] = useState(true)
   const [isPreloading, setIsPreloading] = useState(true)
@@ -58,12 +58,12 @@ function SideWindowWithRef(this: any, { isFromURL }: SideWindowProps, ref: Forwa
   const [isOverlayed, setIsOverlayed] = useState(false)
   const [isSubmenuFixed, setIsSubmenuFixed] = useState(false)
 
-  const openedBeaconMalfunctionInKanban = useAppSelector(
+  const openedBeaconMalfunctionInKanban = useMainAppSelector(
     state => state.beaconMalfunction.openedBeaconMalfunctionInKanban
   )
-  const { editedReportingInSideWindow } = useAppSelector(state => state.reporting)
-  const { focusedPendingAlertId, pendingAlerts } = useAppSelector(state => state.alert)
-  const dispatch = useAppDispatch()
+  const { editedReportingInSideWindow } = useMainAppSelector(state => state.reporting)
+  const { focusedPendingAlertId, pendingAlerts } = useMainAppSelector(state => state.alert)
+  const dispatch = useMainAppDispatch()
   const previousOpenedSideWindowTab = usePrevious(openedSideWindowTab)
 
   const hasSubmenu = useMemo(

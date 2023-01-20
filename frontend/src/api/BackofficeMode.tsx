@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 import { setIsAdmin, setIsBackoffice } from '../domain/shared_slices/Global'
-import { useAppDispatch } from '../hooks/useAppDispatch'
+import { useMainAppDispatch } from '../hooks/useMainAppDispatch'
 
 export type BackofficeModeProps = {
   isAdmin?: boolean
@@ -9,7 +9,7 @@ export type BackofficeModeProps = {
 }
 // TODO Find a better way than a component to initialize these state props (a HOC may be more fit for that?).
 export function BackofficeMode({ isAdmin = false, isBackoffice = false }: BackofficeModeProps) {
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
 
   useEffect(() => {
     dispatch(setIsBackoffice(isBackoffice))

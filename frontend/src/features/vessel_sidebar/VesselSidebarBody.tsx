@@ -1,5 +1,8 @@
 import styled from 'styled-components'
 
+import { COLORS } from '../../constants/constants'
+import { VesselSidebarTab } from '../../domain/entities/vessel/vessel'
+import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { VesselBeaconMalfunctions } from './beacon_malfunctions/VesselBeaconMalfunctions'
 import { VesselControls } from './controls/VesselControls'
 import { VesselFishingActivities } from './fishing_activities/VesselFishingActivities'
@@ -8,14 +11,11 @@ import VesselReportings from './reporting/VesselReportings'
 import VesselSummary from './VesselSummary'
 import { AlertWarning } from './warnings/AlertWarning'
 import BeaconMalfunctionWarning from './warnings/BeaconMalfunctionWarning'
-import { COLORS } from '../../constants/constants'
-import { VesselSidebarTab } from '../../domain/entities/vessel/vessel'
-import { useAppSelector } from '../../hooks/useAppSelector'
 
 export function VesselSidebarBody() {
-  const { healthcheckTextWarning } = useAppSelector(state => state.global)
-  const { selectedVessel, vesselSidebarTab } = useAppSelector(state => state.vessel)
-  const isAdmin = useAppSelector(state => state.global.isAdmin)
+  const { healthcheckTextWarning } = useMainAppSelector(state => state.global)
+  const { selectedVessel, vesselSidebarTab } = useMainAppSelector(state => state.vessel)
+  const isAdmin = useMainAppSelector(state => state.global.isAdmin)
 
   return (
     <Body healthcheckTextWarning={healthcheckTextWarning}>

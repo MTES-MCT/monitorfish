@@ -1,15 +1,15 @@
 import styled from 'styled-components'
 
 import { closeSideWindow, openSideWindowTab } from '../../../domain/shared_slices/Global'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { MapButtonStyle } from '../../commonStyles/MapButton.style'
 import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes.svg'
 import { SideWindowMenuKey } from '../constants'
 
 export function AlertsMapButton() {
-  const dispatch = useAppDispatch()
-  const { healthcheckTextWarning, openedSideWindowTab, previewFilteredVesselsMode } = useAppSelector(
+  const dispatch = useMainAppDispatch()
+  const { healthcheckTextWarning, openedSideWindowTab, previewFilteredVesselsMode } = useMainAppSelector(
     state => state.global
   )
 

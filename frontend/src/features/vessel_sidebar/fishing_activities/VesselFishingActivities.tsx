@@ -12,16 +12,15 @@ import {
   setVoyage
 } from '../../../domain/shared_slices/FishingActivities'
 import { getVesselVoyage, NavigateTo } from '../../../domain/use_cases/vessel/getVesselVoyage'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { usePrevious } from '../../../hooks/usePrevious'
 
 export function VesselFishingActivities() {
-  const dispatch = useAppDispatch()
-  const { selectedVessel, selectedVesselIdentity } = useAppSelector(state => state.vessel)
-  const { fishingActivities, fishingActivitiesTab, loadingFishingActivities, nextFishingActivities } = useAppSelector(
-    state => state.fishingActivities
-  )
+  const dispatch = useMainAppDispatch()
+  const { selectedVessel, selectedVesselIdentity } = useMainAppSelector(state => state.vessel)
+  const { fishingActivities, fishingActivitiesTab, loadingFishingActivities, nextFishingActivities } =
+    useMainAppSelector(state => state.fishingActivities)
 
   const previousSelectedVessel = usePrevious(selectedVessel)
   const [messageTypeFilter, setMessageTypeFilter] = useState(null)

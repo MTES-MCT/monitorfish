@@ -11,8 +11,8 @@ import { getSilencedAlertPeriodText } from '../../../domain/entities/alerts'
 import { validateAlert } from '../../../domain/use_cases/alert/validateAlert'
 import { getVesselVoyage } from '../../../domain/use_cases/vessel/getVesselVoyage'
 import { showVessel } from '../../../domain/use_cases/vessel/showVessel'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { Flag } from '../../vessel_list/tableCells'
 
 import type { LEGACY_PendingAlert } from '../../../domain/entities/alerts/types'
@@ -37,9 +37,9 @@ export function PendingAlertRow({
   setSilencedAlertId,
   showSilencedAlertForIndex
 }: PendingAlertRowProps) {
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
   const ref = useRef() as MutableRefObject<HTMLDivElement>
-  const { focusedPendingAlertId, silencedAlertsQueue } = useAppSelector(state => state.alert)
+  const { focusedPendingAlertId, silencedAlertsQueue } = useMainAppSelector(state => state.alert)
   const baseUrl = window.location.origin
 
   const silencedAlertsQueueMatch = useMemo(

@@ -10,7 +10,7 @@ import {
   updatingVesselTrackDepth
 } from '../../shared_slices/Vessel'
 
-import type { AppDispatch, AppThunk } from '../../../store'
+import type { MainAppDispatch, MainAppThunk } from '../../../store'
 import type { TrackRequest, VesselIdentity } from '../../entities/vessel/types'
 
 /**
@@ -21,7 +21,7 @@ export const updateSelectedVesselTrackRequest =
     vesselIdentity: VesselIdentity,
     trackRequest: TrackRequest,
     withoutFishingMessagesRerendering: boolean = false
-  ): AppThunk =>
+  ): MainAppThunk =>
   async (dispatch, getState) => {
     try {
       const { areFishingActivitiesShowedOnMap } = getState().fishingActivities
@@ -44,7 +44,7 @@ export const updateSelectedVesselTrackRequest =
     }
   }
 
-function dispatchUpdatingVessel(dispatch: AppDispatch, doNotAnimateBoolean: boolean) {
+function dispatchUpdatingVessel(dispatch: MainAppDispatch, doNotAnimateBoolean: boolean) {
   dispatch(doNotAnimate(doNotAnimateBoolean))
   dispatch(removeError())
   dispatch(updatingVesselTrackDepth())

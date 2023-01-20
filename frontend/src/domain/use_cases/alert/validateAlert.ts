@@ -7,11 +7,11 @@ import { setError } from '../../shared_slices/Global'
 import { removeVesselAlertAndUpdateReporting } from '../../shared_slices/Vessel'
 import getVesselReportings from '../vessel/getVesselReportings'
 
-import type { AppThunk } from '../../../store'
+import type { MainAppThunk } from '../../../store'
 import type { LEGACY_PendingAlert } from '../../entities/alerts/types'
 
 export const validateAlert =
-  (id: string): AppThunk =>
+  (id: string): MainAppThunk =>
   (dispatch, getState) => {
     const previousAlerts = getState().alert.pendingAlerts
     const previousAlertsWithValidatedFlag = setAlertAsValidated(previousAlerts, id)

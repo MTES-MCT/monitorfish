@@ -11,8 +11,8 @@ import {
   showVesselsEstimatedPositions
 } from '../../../../domain/shared_slices/Map'
 import { setHideNonSelectedVessels } from '../../../../domain/shared_slices/Vessel'
-import { useAppDispatch } from '../../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { MapPropertyTrigger } from '../../../commonComponents/MapPropertyTrigger'
 import { ReactComponent as HidingOtherTracksSVG } from '../../../icons/Bouton_masquer_pistes_actif.svg'
 import { ReactComponent as ShowingOtherTracksSVG } from '../../../icons/Bouton_masquer_pistes_inactif.svg'
@@ -21,10 +21,10 @@ import { ReactComponent as EstimatedPositionSVG } from '../../../icons/Positions
 import { MapToolBox } from '../MapToolBox'
 
 export function EditVesselVisibility() {
-  const dispatch = useAppDispatch()
-  const { hideNonSelectedVessels } = useAppSelector(state => state.vessel)
-  const { healthcheckTextWarning, mapToolOpened } = useAppSelector(state => state.global)
-  const { hideVesselsAtPort, showingVesselsEstimatedPositions, vesselsLastPositionVisibility } = useAppSelector(
+  const dispatch = useMainAppDispatch()
+  const { hideNonSelectedVessels } = useMainAppSelector(state => state.vessel)
+  const { healthcheckTextWarning, mapToolOpened } = useMainAppSelector(state => state.global)
+  const { hideVesselsAtPort, showingVesselsEstimatedPositions, vesselsLastPositionVisibility } = useMainAppSelector(
     state => state.map
   )
 

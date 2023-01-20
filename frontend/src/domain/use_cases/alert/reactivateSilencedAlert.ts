@@ -4,11 +4,11 @@ import { updateListItemsProp } from '../../../utils/updateListItemsProp'
 import { setSilencedAlerts } from '../../shared_slices/Alert'
 import { setError } from '../../shared_slices/Global'
 
-import type { AppThunk } from '../../../store'
+import type { MainAppThunk } from '../../../store'
 import type { LEGACY_SilencedAlert } from '../../entities/alerts/types'
 
 export const reactivateSilencedAlert =
-  (id: string): AppThunk =>
+  (id: string): MainAppThunk =>
   (dispatch, getState) => {
     const previousSilencedAlerts = getState().alert.silencedAlerts
     const previousSilencedAlertsWithReactivatedFlag = setAlertAsReactivated(previousSilencedAlerts, id)

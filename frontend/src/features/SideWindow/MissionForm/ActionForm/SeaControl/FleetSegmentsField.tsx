@@ -5,8 +5,8 @@ import { useCallback, useEffect, useMemo } from 'react'
 
 import { getFaoZonesFromSpeciesOnboard } from '../../../../../domain/entities/vessel/riskFactor'
 import { getVesselRiskFactor } from '../../../../../domain/use_cases/vessel/getVesselRiskFactor'
-import { useAppDispatch } from '../../../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { useNewWindow } from '../../../../../ui/NewWindow'
 import { FieldsetGroup } from '../../FieldsetGroup'
 
@@ -15,8 +15,8 @@ import type { PartialSeaControl } from '../../types'
 export function FleetSegmentsField() {
   const { newWindowContainerRef } = useNewWindow()
 
-  const dispatch = useAppDispatch()
-  const fleetSegments = useAppSelector(state => state.fleetSegment.fleetSegments)
+  const dispatch = useMainAppDispatch()
+  const fleetSegments = useMainAppSelector(state => state.fleetSegment.fleetSegments)
   const {
     values: {
       vessel: { internalReferenceNumber }

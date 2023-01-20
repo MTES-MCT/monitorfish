@@ -12,7 +12,7 @@ import { addFleetSegmentYear } from '../../../domain/use_cases/fleetSegment/addF
 import { createFleetSegment } from '../../../domain/use_cases/fleetSegment/createFleetSegment'
 import { getAllFleetSegmentsForBackoffice } from '../../../domain/use_cases/fleetSegment/getAllFleetSegmentsForBackoffice'
 import { getFleetSegmentsYearEntries } from '../../../domain/use_cases/fleetSegment/getFleetSegmentsYearEntries'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { theme } from '../../../ui/theme'
 import { dayjs } from '../../../utils/dayjs'
 
@@ -24,7 +24,7 @@ function getLabeledYear(_year) {
 
 export function FleetSegments() {
   const currentYear = dayjs().year()
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
   const [fleetSegments, setFleetSegments] = useState<FleetSegment[]>([])
   const [faoAreas, setFAOAreas] = useState<string[]>([])
   const [year, setYear] = useState<number | undefined>(currentYear)

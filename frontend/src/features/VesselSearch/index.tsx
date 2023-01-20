@@ -8,10 +8,10 @@ import { VesselSearchResult } from './VesselSearchResult'
 import { COLORS } from '../../constants/constants'
 import { getOnlyVesselIdentityProperties } from '../../domain/entities/vessel/vessel'
 import { searchVessels as searchVesselsAction } from '../../domain/use_cases/vessel/searchVessels'
-import { useAppDispatch } from '../../hooks/useAppDispatch'
-import { useAppSelector } from '../../hooks/useAppSelector'
 import { useClickOutsideWhenOpenedWithinRef } from '../../hooks/useClickOutsideWhenOpenedWithinRef'
 import { useEscapeFromKeyboard } from '../../hooks/useEscapeFromKeyboard'
+import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
 import type { MutableRefObject } from 'react'
@@ -43,9 +43,9 @@ export function VesselSearch({
   onSelectVessel,
   onUnselectVessel
 }: VesselSearchProps) {
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
   const baseUrl = useMemo(() => window.location.origin, [])
-  const { selectedVesselIdentity, vessels } = useAppSelector(state => state.vessel)
+  const { selectedVesselIdentity, vessels } = useMainAppSelector(state => state.vessel)
 
   // eslint-disable-next-line no-null/no-null
   const wrapperRef = useRef(null)

@@ -2,16 +2,16 @@ import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { setHideNonSelectedVessels } from '../../../../domain/shared_slices/Vessel'
-import { useAppDispatch } from '../../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ReactComponent as HidingOtherTracksSVG } from '../../../icons/Bouton_masquer_pistes_actif.svg'
 import { ReactComponent as ShowingOtherTracksSVG } from '../../../icons/Bouton_masquer_pistes_inactif.svg'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 export function HideNonSelectedVessels({ isSidebarOpen }) {
-  const dispatch = useAppDispatch()
-  const { healthcheckTextWarning, rightMenuIsOpen } = useAppSelector(state => state.global)
-  const { hideNonSelectedVessels } = useAppSelector(state => state.vessel)
+  const dispatch = useMainAppDispatch()
+  const { healthcheckTextWarning, rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const { hideNonSelectedVessels } = useMainAppSelector(state => state.vessel)
 
   return (
     <VesselSidebarActionButton

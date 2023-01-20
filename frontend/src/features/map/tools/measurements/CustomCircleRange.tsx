@@ -17,15 +17,15 @@ import {
   setCircleMeasurementToAdd,
   setMeasurementTypeToAdd
 } from '../../../../domain/shared_slices/Measurement'
-import { useAppDispatch } from '../../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { SetCoordinates } from '../../../coordinates/SetCoordinates'
 import { MapToolBox } from '../MapToolBox'
 
 export function CustomCircleRange() {
-  const dispatch = useAppDispatch()
-  const { circleMeasurementInDrawing, measurementTypeToAdd } = useAppSelector(state => state.measurement)
-  const { healthcheckTextWarning } = useAppSelector(state => state.global)
+  const dispatch = useMainAppDispatch()
+  const { circleMeasurementInDrawing, measurementTypeToAdd } = useMainAppSelector(state => state.measurement)
+  const { healthcheckTextWarning } = useMainAppSelector(state => state.global)
 
   const circleCoordinates = useMemo(() => {
     if (measurementTypeToAdd !== MeasurementType.CIRCLE_RANGE || !circleMeasurementInDrawing?.coordinates?.length) {

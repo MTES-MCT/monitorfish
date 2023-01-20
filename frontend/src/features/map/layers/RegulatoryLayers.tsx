@@ -5,8 +5,8 @@ import { getLayerNameNormalized } from '../../../domain/entities/layers'
 import { Layer } from '../../../domain/entities/layers/constants'
 import { showSimplifiedGeometries, showWholeGeometries } from '../../../domain/shared_slices/Regulatory'
 import { getRegulatoryLayersToAdd } from '../../../domain/use_cases/layer/regulation/getRegulatoryLayersToAdd'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
 export const METADATA_IS_SHOWED = 'metadataIsShowed'
 const SIMPLIFIED_FEATURE_ZOOM_LEVEL = 9.5
@@ -17,12 +17,12 @@ export type RegulatoryLayersProps = {
 }
 export function RegulatoryLayers({ map, mapMovingAndZoomEvent }: RegulatoryLayersProps) {
   const throttleDuration = 500 // ms
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
   const { getState } = useStore()
 
-  const { lastShowedFeatures, layersToFeatures, showedLayers } = useAppSelector(state => state.layer)
+  const { lastShowedFeatures, layersToFeatures, showedLayers } = useMainAppSelector(state => state.layer)
 
-  const { regulatoryZoneMetadata, simplifiedGeometries } = useAppSelector(state => state.regulatory)
+  const { regulatoryZoneMetadata, simplifiedGeometries } = useMainAppSelector(state => state.regulatory)
 
   const previousMapZoom = useRef('')
   const isThrottled = useRef(false)
@@ -41,7 +41,7 @@ export function RegulatoryLayers({ map, mapMovingAndZoomEvent }: RegulatoryLayer
     }
 
     const olLayers = map.getLayers()
-    const vectorLayersToAdd = dispatch(getRegulatoryLayersToAdd(olLayers.getArray(), showedLayers) as any)
+    const vectorLayersToAdd = dispatch(getRegulatoryLayersToAdd(olLayers.getArray(), showedLayers))
     vectorLayersToAdd.forEach(vectorLayer => {
       olLayers.push(vectorLayer)
     })

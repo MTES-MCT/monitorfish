@@ -11,8 +11,8 @@ import { COLORS } from '../../../constants/constants'
 import { reactivateSilencedAlert } from '../../../domain/use_cases/alert/reactivateSilencedAlert'
 import { getVesselVoyage } from '../../../domain/use_cases/vessel/getVesselVoyage'
 import { showVessel } from '../../../domain/use_cases/vessel/showVessel'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { getDateTime } from '../../../utils'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { Flag } from '../../vessel_list/tableCells'
@@ -28,8 +28,8 @@ export type SilencedAlertsListProps = {
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
  */
 export function SilencedAlertsList({ silencedAlerts }: SilencedAlertsListProps) {
-  const dispatch = useAppDispatch()
-  const { focusedPendingAlertId } = useAppSelector(state => state.alert)
+  const dispatch = useMainAppDispatch()
+  const { focusedPendingAlertId } = useMainAppSelector(state => state.alert)
   const baseUrl = window.location.origin
   const [sortColumn] = useState('silencedBeforeDate')
   const [sortType] = useState(SortType.ASC)
@@ -52,7 +52,7 @@ export function SilencedAlertsList({ silencedAlerts }: SilencedAlertsListProps) 
 
   const reactivateSilencedAlertCallback = useCallback(
     (id: string) => {
-      dispatch(reactivateSilencedAlert(id) as any)
+      dispatch(reactivateSilencedAlert(id))
     },
     [dispatch]
   )
@@ -132,8 +132,8 @@ export function SilencedAlertsList({ silencedAlerts }: SilencedAlertsListProps) 
                       data-cy="side-window-silenced-alerts-show-vessel"
                       onClick={() => {
                         const vesselIdentity = { ...alert, flagState: alert.value.flagState }
-                        dispatch(showVessel(vesselIdentity, false, false) as any)
-                        dispatch(getVesselVoyage(vesselIdentity, undefined, false) as any)
+                        dispatch(showVessel(vesselIdentity, false, false))
+                        dispatch(getVesselVoyage(vesselIdentity, undefined, false))
                       }}
                       src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
                       style={showIconStyle}

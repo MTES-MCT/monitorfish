@@ -7,8 +7,8 @@ import { ExportTrack } from './ExportTrack'
 import { PositionsTable } from './PositionsTable'
 import { VesselTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
 import { updateSelectedVesselTrackRequest } from '../../../../domain/use_cases/vessel/updateSelectedVesselTrackRequest'
-import { useAppDispatch } from '../../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
 import { ReactComponent as VesselSVG } from '../../../icons/Icone_navire.svg'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
@@ -20,12 +20,12 @@ type TrackRequestProps = {
   isSidebarOpen: boolean
 }
 export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
-  const dispatch = useAppDispatch()
-  const { healthcheckTextWarning } = useAppSelector(state => state.global)
-  const { rightMenuIsOpen } = useAppSelector(state => state.global)
-  const { defaultVesselTrackDepth } = useAppSelector(state => state.map)
-  const { selectedVesselTrackRequest } = useAppSelector(state => state.vessel)
-  const { selectedVesselIdentity } = useAppSelector(state => state.vessel)
+  const dispatch = useMainAppDispatch()
+  const { healthcheckTextWarning } = useMainAppSelector(state => state.global)
+  const { rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const { defaultVesselTrackDepth } = useMainAppSelector(state => state.map)
+  const { selectedVesselTrackRequest } = useMainAppSelector(state => state.vessel)
+  const { selectedVesselIdentity } = useMainAppSelector(state => state.vessel)
   const [isOpenedFromClick, setIsOpenedFromClick] = useState(false)
 
   const dateRangePickerDefaultValue = useMemo(
@@ -50,7 +50,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
       }
 
       // TODO Find why dispatch doesn't type actions correctly.
-      dispatch(updateSelectedVesselTrackRequest(selectedVesselIdentity, trackRequest) as any)
+      dispatch(updateSelectedVesselTrackRequest(selectedVesselIdentity, trackRequest))
     },
     [dispatch, selectedVesselIdentity]
   )
@@ -69,7 +69,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
       }
 
       // TODO Find why dispatch doesn't type actions correctly.
-      dispatch(updateSelectedVesselTrackRequest(selectedVesselIdentity, trackRequest) as any)
+      dispatch(updateSelectedVesselTrackRequest(selectedVesselIdentity, trackRequest))
     },
     [dispatch, selectedVesselIdentity]
   )

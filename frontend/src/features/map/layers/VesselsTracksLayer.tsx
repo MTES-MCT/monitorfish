@@ -24,8 +24,8 @@ import {
   updateVesselTrackAsHidden,
   updateVesselTrackAsShowedWithExtend
 } from '../../../domain/shared_slices/Vessel'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { usePrevious } from '../../../hooks/usePrevious'
 import CloseVesselTrackOverlay from '../overlays/CloseVesselTrackOverlay'
 import FishingActivityOverlay from '../overlays/FishingActivityOverlay'
@@ -39,13 +39,13 @@ type VesselsTracksLayerProps = {
   map?: any
 }
 function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
   const { highlightedVesselTrackPosition, selectedVessel, selectedVesselPositions, vesselsTracksShowed } =
-    useAppSelector(state => state.vessel)
-  const { fishingActivitiesShowedOnMap, redrawFishingActivitiesOnMap } = useAppSelector(
+    useMainAppSelector(state => state.vessel)
+  const { fishingActivitiesShowedOnMap, redrawFishingActivitiesOnMap } = useMainAppSelector(
     state => state.fishingActivities
   )
-  const { doNotAnimate } = useAppSelector(state => state.map)
+  const { doNotAnimate } = useMainAppSelector(state => state.map)
 
   const previousHighlightedVesselTrackPosition = usePrevious(highlightedVesselTrackPosition)
   const previousFishingActivitiesShowedOnMap: FishingActivityShowedOnMap[] | undefined =

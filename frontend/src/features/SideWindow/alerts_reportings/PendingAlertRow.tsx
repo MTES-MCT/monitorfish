@@ -11,8 +11,8 @@ import { getSilencedAlertPeriodText } from '../../../domain/entities/alerts'
 import { validateAlert } from '../../../domain/use_cases/alert/validateAlert'
 import { getVesselVoyage } from '../../../domain/use_cases/vessel/getVesselVoyage'
 import { showVessel } from '../../../domain/use_cases/vessel/showVessel'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { Flag } from '../../vessel_list/tableCells'
 
 import type { LEGACY_PendingAlert } from '../../../domain/entities/alerts/types'
@@ -37,9 +37,9 @@ export function PendingAlertRow({
   setSilencedAlertId,
   showSilencedAlertForIndex
 }: PendingAlertRowProps) {
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
   const ref = useRef() as MutableRefObject<HTMLDivElement>
-  const { focusedPendingAlertId, silencedAlertsQueue } = useAppSelector(state => state.alert)
+  const { focusedPendingAlertId, silencedAlertsQueue } = useMainAppSelector(state => state.alert)
   const baseUrl = window.location.origin
 
   const silencedAlertsQueueMatch = useMemo(
@@ -96,8 +96,8 @@ export function PendingAlertRow({
               data-cy="side-window-alerts-show-vessel"
               onClick={() => {
                 const vesselIdentity = { ...alert, flagState: alert.value.flagState }
-                dispatch(showVessel(vesselIdentity, false, false) as any)
-                dispatch(getVesselVoyage(vesselIdentity, undefined, false) as any)
+                dispatch(showVessel(vesselIdentity, false, false))
+                dispatch(getVesselVoyage(vesselIdentity, undefined, false))
               }}
               src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
               style={showIconStyle}
@@ -108,7 +108,7 @@ export function PendingAlertRow({
             <Icon
               alt="Valider"
               data-cy="side-window-alerts-validate-alert"
-              onClick={() => dispatch(validateAlert(alert.id) as any)}
+              onClick={() => dispatch(validateAlert(alert.id))}
               onMouseOut={e => {
                 e.currentTarget.src = `${baseUrl}/Icone_valider_alerte.png`
               }}

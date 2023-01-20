@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { toast, ToastContainer } from 'react-toastify'
 
 import { ErrorType } from '../../domain/entities/errors'
-import { useAppSelector } from '../../hooks/useAppSelector'
+import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 import type { ToastOptions } from 'react-toastify'
 
@@ -14,7 +14,7 @@ export function ErrorToastNotification() {
     | (Error & {
         type: ErrorType
       })
-    | null = useAppSelector(state => state.global.error)
+    | null = useMainAppSelector(state => state.global.error)
 
   useEffect(() => {
     if (!error || (error.type && error.type === ErrorType.INFO_AND_HIDDEN)) {

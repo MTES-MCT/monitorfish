@@ -9,15 +9,15 @@ import {
   drawInterestPoint,
   endInterestPointDraw
 } from '../../../../domain/shared_slices/InterestPoint'
-import { useAppDispatch } from '../../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { useEscapeFromKeyboardAndExecute } from '../../../../hooks/useEscapeFromKeyboardAndExecute'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ReactComponent as InterestPointSVG } from '../../../icons/standardized/Landmark.svg'
 import { MapToolButton } from '../MapToolButton'
 
 export function InterestPointMapButton() {
-  const dispatch = useAppDispatch()
-  const { healthcheckTextWarning, mapToolOpened, rightMenuIsOpen } = useAppSelector(state => state.global)
+  const dispatch = useMainAppDispatch()
+  const { healthcheckTextWarning, mapToolOpened, rightMenuIsOpen } = useMainAppSelector(state => state.global)
   const isRightMenuShrinked = !rightMenuIsOpen
   const isOpen = useMemo(() => mapToolOpened === MapToolType.INTEREST_POINT, [mapToolOpened])
   const wrapperRef = useRef(null)

@@ -5,30 +5,28 @@ import { deleteFleetSegment as deleteFleetSegmentAction } from '../../../domain/
 import { updateFleetSegment as updateFleetSegmentAction } from '../../../domain/use_cases/fleetSegment/updateFleetSegment'
 import getAllGearCodes from '../../../domain/use_cases/gearCode/getAllGearCodes'
 import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { useWindowResize } from '../../../hooks/useWindowResize'
 import { DeleteCell, ImpactCell, INPUT_TYPE, ModifiableCell, TagPickerCell } from '../tableCells'
 
 const { Column, HeaderCell } = Table
 
 export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, year }) {
-  const dispatch = useAppDispatch()
-  const gears = useAppSelector(state => state.gear.gears)
-  const species = useAppSelector(state => state.species.species)
+  const dispatch = useMainAppDispatch()
+  const gears = useMainAppSelector(state => state.gear.gears)
+  const species = useMainAppSelector(state => state.species.species)
   const { height, width } = useWindowResize()
   const { blockUpdate, isUpdateBlocked, setInputDataCySelector } = useBlockUpdateAndFocusOnDataRefresh(fleetSegments)
 
   useEffect(() => {
-    dispatch(getAllGearCodes() as any)
-    dispatch(getAllSpecies() as any)
+    dispatch(getAllGearCodes())
+    dispatch(getAllSpecies())
   }, [dispatch])
 
   const deleteFleetSegment = useCallback(
     (segment, _year) => {
-      dispatch(deleteFleetSegmentAction(segment, _year) as any).then(nextFleetSegments =>
-        setFleetSegments(nextFleetSegments)
-      )
+      dispatch(deleteFleetSegmentAction(segment, _year)).then(nextFleetSegments => setFleetSegments(nextFleetSegments))
     },
     [dispatch, setFleetSegments]
   )
@@ -51,7 +49,7 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
       }
       updatedFields[key] = value
 
-      dispatch(updateFleetSegmentAction(segment, _year, updatedFields, _fleetSegments) as any).then(nextFleetSegments =>
+      dispatch(updateFleetSegmentAction(segment, _year, updatedFields, _fleetSegments)).then(nextFleetSegments =>
         setFleetSegments(nextFleetSegments)
       )
     },

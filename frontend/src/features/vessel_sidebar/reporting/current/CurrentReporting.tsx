@@ -7,8 +7,8 @@ import { COLORS } from '../../../../constants/constants'
 import { COMMON_ALERT_TYPE_OPTION } from '../../../../domain/entities/alerts/constants'
 import { ReportingType } from '../../../../domain/types/reporting'
 import { deleteReporting } from '../../../../domain/use_cases/reporting/deleteReporting'
-import { useAppDispatch } from '../../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ReportingCard } from '../ReportingCard'
 
 // TODO Move that into a constants file.
@@ -17,9 +17,9 @@ export const operationalAlertTypes = Object.keys(COMMON_ALERT_TYPE_OPTION)
   .filter(alertType => alertType.isOperationalAlert)
 
 export function CurrentReporting() {
-  const dispatch = useAppDispatch()
-  const { currentAndArchivedReportingsOfSelectedVessel, editedReporting } = useAppSelector(state => state.reporting)
-  const [deletionModalIsOpenForId, setDeletionModalIsOpenForId] = useState<string | undefined>(undefined)
+  const dispatch = useMainAppDispatch()
+  const { currentAndArchivedReportingsOfSelectedVessel, editedReporting } = useMainAppSelector(state => state.reporting)
+  const [deletionModalIsOpenForId, setDeletionModalIsOpenForId] = useState<number | undefined>(undefined)
 
   return (
     <Wrapper>
@@ -60,7 +60,7 @@ export function CurrentReporting() {
       <ConfirmDeletionModal
         closeModal={() => setDeletionModalIsOpenForId(undefined)}
         isOpened={deletionModalIsOpenForId}
-        validateCallback={() => deletionModalIsOpenForId && dispatch(deleteReporting(deletionModalIsOpenForId) as any)}
+        validateCallback={() => deletionModalIsOpenForId && dispatch(deleteReporting(deletionModalIsOpenForId))}
       />
     </Wrapper>
   )

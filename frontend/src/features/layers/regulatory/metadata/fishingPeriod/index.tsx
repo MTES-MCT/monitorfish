@@ -1,12 +1,12 @@
 import ReactMarkdown from 'react-markdown'
 
 import { fishingPeriodToString } from '../../../../../domain/entities/regulation'
-import { useAppSelector } from '../../../../../hooks/useAppSelector'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { GreenCircle, RedCircle } from '../../../../commonStyles/Circle.style'
 import { Section, SectionTitle } from '../RegulatoryMetadata.style'
 
 export function FishingPeriodDisplayed() {
-  const { fishingPeriod, fishingPeriodText } = useAppSelector(state => ({
+  const { fishingPeriod, fishingPeriodText } = useMainAppSelector(state => ({
     fishingPeriod: state.regulatory.regulatoryZoneMetadata?.fishingPeriod,
     fishingPeriodText: fishingPeriodToString(state.regulatory.regulatoryZoneMetadata?.fishingPeriod)
   }))

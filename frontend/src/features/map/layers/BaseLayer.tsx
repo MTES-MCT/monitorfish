@@ -6,13 +6,13 @@ import XYZ from 'ol/source/XYZ'
 import React, { useEffect, useState } from 'react'
 
 import { BaseLayers, Layer } from '../../../domain/entities/layers/constants'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
 export type BaseLayerProps = {
   map?: any
 }
 function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
-  const selectedBaseLayer = useAppSelector(state => state.map.selectedBaseLayer)
+  const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
 
   const [baseLayersObjects] = useState({
     LIGHT: () =>

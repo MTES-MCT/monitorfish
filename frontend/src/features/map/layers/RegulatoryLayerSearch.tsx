@@ -6,14 +6,14 @@ import { MutableRefObject, useCallback, useEffect, useRef } from 'react'
 import { dottedLayerStyle } from './styles/dottedLayer.style'
 import { Layer } from '../../../domain/entities/layers/constants'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
 import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { Feature } from 'ol'
 import type Geometry from 'ol/geom/Geometry'
 
 export function RegulatoryLayerSearch({ map }) {
-  const { zoneSelected } = useAppSelector(state => state.regulatoryLayerSearch)
+  const { zoneSelected } = useMainAppSelector(state => state.regulatoryLayerSearch)
 
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource<Geometry>>
   const getVectorSource = useCallback(() => {

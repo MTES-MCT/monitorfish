@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import { Layer } from '../../domain/entities/layers/constants'
 import showRegulatoryZoneMetadata from '../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
-import { useAppDispatch } from '../../hooks/useAppDispatch'
+import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 
 export type ShowRegulatoryMetadataProps = {
   // hasClickEvent is only used for `BaseMap` to inject `mapClickEvent` props
@@ -11,7 +11,7 @@ export type ShowRegulatoryMetadataProps = {
   mapClickEvent?: any
 }
 export function ShowRegulatoryMetadata({ mapClickEvent }: ShowRegulatoryMetadataProps) {
-  const dispatch = useAppDispatch()
+  const dispatch = useMainAppDispatch()
 
   useEffect(() => {
     if (!mapClickEvent?.feature) {
@@ -24,7 +24,7 @@ export function ShowRegulatoryMetadata({ mapClickEvent }: ShowRegulatoryMetadata
           topic: feature.getProperties().topic,
           zone: feature.getProperties().zone
         }
-        dispatch(showRegulatoryZoneMetadata(zone) as any)
+        dispatch(showRegulatoryZoneMetadata(zone))
       }
     }
 

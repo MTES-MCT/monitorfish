@@ -6,16 +6,16 @@ import { COLORS } from '../../../constants/constants'
 import { getVesselCompositeIdentifier } from '../../../domain/entities/vessel/vessel'
 import { addVesselToFavorites, removeVesselFromFavorites } from '../../../domain/shared_slices/FavoriteVessel'
 import unselectVessel from '../../../domain/use_cases/vessel/unselectVessel'
-import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 import { ReactComponent as FavoriteSVG } from '../../icons/Etoile_navire_suivi.svg'
 
 export function VesselName({ focusOnVesselSearchInput }) {
-  const dispatch = useAppDispatch()
-  const vesselSidebarIsOpen = useAppSelector(state => state.vessel.vesselSidebarIsOpen)
-  const selectedVesselIdentity = useAppSelector(state => state.vessel.selectedVesselIdentity)
-  const favorites = useAppSelector(state => state.favoriteVessel.favorites)
+  const dispatch = useMainAppDispatch()
+  const vesselSidebarIsOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
+  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
+  const favorites = useMainAppSelector(state => state.favoriteVessel.favorites)
   const isFavorite = useMemo(
     () =>
       selectedVesselIdentity &&
@@ -43,7 +43,7 @@ export function VesselName({ focusOnVesselSearchInput }) {
     e => {
       e.stopPropagation()
 
-      dispatch(unselectVessel() as any)
+      dispatch(unselectVessel())
     },
     [dispatch]
   )

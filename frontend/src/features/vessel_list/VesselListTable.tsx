@@ -15,7 +15,7 @@ import { sortVesselsByProperty } from './tableSort'
 import { COLORS } from '../../constants/constants'
 import { getCoordinates } from '../../coordinates'
 import { OPENLAYERS_PROJECTION } from '../../domain/entities/map/constants'
-import { useAppSelector } from '../../hooks/useAppSelector'
+import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { ReactComponent as FlagSVG } from '../icons/flag.svg'
 
 const { Cell, Column, HeaderCell } = Table
@@ -30,8 +30,8 @@ function UnmemoizedVesselListTable({
   vesselsCountShowed,
   vesselsCountTotal
 }) {
-  const isAdmin = useAppSelector(state => state.global.isAdmin)
-  const { coordinatesFormat } = useAppSelector(state => state.map)
+  const isAdmin = useMainAppSelector(state => state.global.isAdmin)
+  const { coordinatesFormat } = useMainAppSelector(state => state.map)
   const [sortColumn, setSortColumn] = React.useState()
   const [sortType, setSortType] = React.useState()
 

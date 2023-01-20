@@ -4,15 +4,15 @@ import styled from 'styled-components'
 import { EditVesselVisibility } from './EditVesselVisibility'
 import { MapToolType } from '../../../../domain/entities/map/constants'
 import { setMapToolOpened } from '../../../../domain/shared_slices/Global'
-import { useAppDispatch } from '../../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { useClickOutsideWhenOpenedAndExecute } from '../../../../hooks/useClickOutsideWhenOpenedAndExecute'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ReactComponent as VesselSVG } from '../../../icons/standardized/Vessel.svg'
 import { MapToolButton as VesselVisibilityButton } from '../MapToolButton'
 
 export function VesselVisibilityMapButton() {
-  const dispatch = useAppDispatch()
-  const { mapToolOpened, rightMenuIsOpen } = useAppSelector(state => state.global)
+  const dispatch = useMainAppDispatch()
+  const { mapToolOpened, rightMenuIsOpen } = useMainAppSelector(state => state.global)
 
   const isRightMenuShrinked = !rightMenuIsOpen
   const isOpen = useMemo(() => mapToolOpened === MapToolType.VESSEL_VISIBILITY, [mapToolOpened])

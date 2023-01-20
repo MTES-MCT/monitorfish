@@ -5,14 +5,14 @@ import { DDCoordinatesInput } from './DDCoordinatesInput'
 import { DMDCoordinatesInput } from './DMDCoordinatesInput'
 import { DMSCoordinatesInput } from './DMSCoordinatesInput'
 import { CoordinatesFormat } from '../../domain/entities/map/constants'
-import { useAppSelector } from '../../hooks/useAppSelector'
+import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 type SetCoordinatesProps = {
   coordinates: number[]
   updateCoordinates: (nextCoordinates: number[], coordinates: number[]) => void
 }
 export function SetCoordinates({ coordinates, updateCoordinates }: SetCoordinatesProps) {
-  const { coordinatesFormat } = useAppSelector(state => state.map)
+  const { coordinatesFormat } = useMainAppSelector(state => state.map)
 
   const getCoordinatesInput = useCallback(() => {
     switch (coordinatesFormat) {

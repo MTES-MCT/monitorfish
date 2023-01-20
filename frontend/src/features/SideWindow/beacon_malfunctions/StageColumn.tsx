@@ -5,7 +5,7 @@ import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
 import { Draggable } from './Draggable'
 import { StageColumnHeader } from './StageColumnHeader'
 import { COLORS } from '../../../constants/constants'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
 import type {
   BeaconMalfunction,
@@ -29,7 +29,7 @@ export function StageColumn({
   updateVesselStatus
 }: StageColumnType) {
   const verticalScrollRef = useRef<HTMLDivElement>(null) as MutableRefObject<HTMLDivElement>
-  const { openedBeaconMalfunctionInKanban } = useAppSelector(state => state.beaconMalfunction)
+  const { openedBeaconMalfunctionInKanban } = useMainAppSelector(state => state.beaconMalfunction)
 
   return (
     <Wrapper data-cy={`side-window-beacon-malfunctions-columns-${stage.code}`} style={wrapperStyle}>

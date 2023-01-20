@@ -3,7 +3,7 @@ import { Footer, Modal, TagPicker } from 'rsuite'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { cleanInputString } from '../../../utils/cleanInputString'
 import StyledModalHeader from '../../commonComponents/StyledModalHeader'
 import { PrimaryButton } from '../../commonStyles/Buttons.style'
@@ -11,8 +11,8 @@ import { FleetSegmentInput, INPUT_TYPE, renderTagPickerValue } from '../tableCel
 
 // TODO Use Formik + Yup to handle and validate form
 export function NewFleetSegmentModal({ faoAreasList, onCancel, onSubmit, year }) {
-  const gearsFAOList = useAppSelector(state => state.gear.gears)
-  const speciesFAOList = useAppSelector(state => state.species.species)
+  const gearsFAOList = useMainAppSelector(state => state.gear.gears)
+  const speciesFAOList = useMainAppSelector(state => state.species.species)
 
   const [segment, setSegment] = useState('')
   const [segmentName, setSegmentName] = useState('')

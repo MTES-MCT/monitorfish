@@ -2,6 +2,9 @@ import { useCallback, useEffect, useMemo } from 'react'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
+import { ControlsSummary } from './ControlsSummary'
+import { LastControlsZone } from './LastControlsZone'
+import { YearsToControlList } from './YearsToControlList'
 import { COLORS } from '../../../constants/constants'
 import { getLastControls, getYearsToActions } from '../../../domain/entities/controls'
 import { resetNextControlSummary, setControlFromDate, setControlSummary } from '../../../domain/shared_slices/Control'
@@ -9,9 +12,6 @@ import { INITIAL_LAST_CONTROLS } from '../../../domain/types/missionAction'
 import { getVesselActions } from '../../../domain/use_cases/vessel/getVesselActions'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { ControlsSummary } from './ControlsSummary'
-import { LastControlsZone } from './LastControlsZone'
-import { YearsToControlList } from './YearsToControlList'
 
 export function Controls() {
   const dispatch = useMainAppDispatch()

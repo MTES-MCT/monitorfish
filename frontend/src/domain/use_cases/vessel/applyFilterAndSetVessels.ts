@@ -1,7 +1,7 @@
+import { getFilteredVessels } from './getFilteredVessels'
 import NoVesselsInFilterError from '../../../errors/NoVesselsInFilterError'
 import { setError } from '../../shared_slices/Global'
 import { setAllVesselsAsUnfiltered, setFilteredVesselsFeatures, setVesselsFromAPI } from '../../shared_slices/Vessel'
-import { getFilteredVessels } from './getFilteredVessels'
 
 import type { VesselLastPosition } from '../../entities/vessel/types'
 

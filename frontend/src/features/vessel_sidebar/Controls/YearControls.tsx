@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
+import { Control } from './Control'
 import { COLORS } from '../../../constants/constants'
 import { getNumberOfInfractions } from '../../../domain/entities/controls'
 import { YearListChevronIcon, YearListContent, YearListTitle, YearListTitleText } from '../common_styles/YearList.style'
-import { Control } from './Control'
 
 import type { MissionAction } from '../../../domain/types/missionAction'
 
@@ -56,7 +56,7 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
         </YearListTitle>
         <YearListContent isOpen={isOpen} name={year.toString()}>
           {sortedControls.map((control, index) => (
-            <Control key={control.actionDatetimeUtc} control={control} isLastItem={yearControls.length === index + 1} />
+            <Control key={control.id} control={control} isLastItem={yearControls.length === index + 1} />
           ))}
         </YearListContent>
       </Row>

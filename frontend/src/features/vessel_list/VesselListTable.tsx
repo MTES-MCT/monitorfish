@@ -2,11 +2,6 @@ import React, { useCallback, useMemo } from 'react'
 import { Table } from 'rsuite'
 import styled from 'styled-components'
 
-import { COLORS } from '../../constants/constants'
-import { getCoordinates } from '../../coordinates'
-import { OPENLAYERS_PROJECTION } from '../../domain/entities/map/constants'
-import { useMainAppSelector } from '../../hooks/useMainAppSelector'
-import { ReactComponent as FlagSVG } from '../icons/flag.svg'
 import {
   CellUsingVesselProperty,
   CellWithTitle,
@@ -17,6 +12,11 @@ import {
   TimeAgoCell
 } from './tableCells'
 import { sortVesselsByProperty } from './tableSort'
+import { COLORS } from '../../constants/constants'
+import { getCoordinates } from '../../coordinates'
+import { OPENLAYERS_PROJECTION } from '../../domain/entities/map/constants'
+import { useMainAppSelector } from '../../hooks/useMainAppSelector'
+import { ReactComponent as FlagSVG } from '../icons/flag.svg'
 
 const { Cell, Column, HeaderCell } = Table
 

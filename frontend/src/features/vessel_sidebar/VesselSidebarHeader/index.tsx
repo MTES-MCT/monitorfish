@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
+import { VesselName } from './VesselName'
 import { vesselsAreEquals } from '../../../domain/entities/vessel/vessel'
 import { expandRightMenu } from '../../../domain/shared_slices/Global'
 import { setIsFocusedOnVesselSearch } from '../../../domain/shared_slices/Vessel'
@@ -12,7 +13,6 @@ import { MapButtonStyle } from '../../commonStyles/MapButton.style'
 import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
 import { ReactComponent as SearchIconSVG } from '../../icons/Loupe.svg'
 import { VesselSearch } from '../../VesselSearch'
-import { VesselName } from './VesselName'
 
 export function VesselSidebarHeader() {
   const dispatch = useMainAppDispatch()

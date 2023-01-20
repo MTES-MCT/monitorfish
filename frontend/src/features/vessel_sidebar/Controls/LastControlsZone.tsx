@@ -1,6 +1,6 @@
+import { LastControl } from './LastControl'
 import { MissionActionType } from '../../../domain/types/missionAction'
 import { NoValue, Title, Zone } from '../common_styles/common.style'
-import { LastControl } from './LastControl'
 
 import type { LastControls } from '../../../domain/types/missionAction'
 

@@ -2,9 +2,9 @@ import { Accent, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
+import { formatDateLabel } from './utils'
 import { MissionType } from '../../../../domain/types/mission'
 import { getLocalizedDayjs } from '../../../../utils/getLocalizedDayjs'
-import { formatDateLabel } from './utils'
 
 import type { Action, PartialAction } from '../types'
 import type { Promisable } from 'type-fest'

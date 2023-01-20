@@ -3,10 +3,6 @@ import { batch } from 'react-redux'
 import { Modal } from 'rsuite'
 import styled from 'styled-components'
 
-import DownloadVesselListModal from './DownloadVesselListModal'
-import { addZoneSelected, removeZoneSelected, resetZonesSelected, setZonesSelected } from './VesselList.slice'
-import { VesselListFilters } from './VesselListFilters'
-import { VesselListTable } from './VesselListTable'
 import { COLORS } from '../../constants/constants'
 import { LayerType as LayersType, LayerType } from '../../domain/entities/layers/constants'
 import { InteractionListener, InteractionType } from '../../domain/entities/map/constants'
@@ -36,6 +32,10 @@ import { ReactComponent as VesselListSVG } from '../icons/Icone_liste_navires.sv
 import { ReactComponent as PreviewSVG } from '../icons/Oeil_apercu_carte.svg'
 import { MapToolButton } from '../map/tools/MapToolButton'
 import SaveVesselFiltersModal from '../map/tools/vessel_filters/SaveVesselFiltersModal'
+import DownloadVesselListModal from './DownloadVesselListModal'
+import { addZoneSelected, removeZoneSelected, resetZonesSelected, setZonesSelected } from './VesselList.slice'
+import { VesselListFilters } from './VesselListFilters'
+import { VesselListTable } from './VesselListTable'
 
 import type { VesselEnhancedLastPositionWebGLObject } from '../../domain/entities/vessel/types'
 

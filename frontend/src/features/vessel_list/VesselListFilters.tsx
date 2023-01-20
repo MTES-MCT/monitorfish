@@ -3,13 +3,13 @@ import React, { useCallback, useMemo } from 'react'
 import { Checkbox, CheckboxGroup, MultiCascader, SelectPicker, Tag, TagPicker } from 'rsuite'
 import styled from 'styled-components'
 
-import { lastControlAfterLabels, lastPositionTimeAgoLabels } from './dataFormatting'
 import { COLORS } from '../../constants/constants'
 import { LayerType as LayersType } from '../../domain/entities/layers/constants'
 import { VesselLocation, vesselSize } from '../../domain/entities/vessel/vessel'
 import { ReactComponent as PolygonFilterSVG } from '../icons/Filtre_zone_polygone.svg'
 import { ReactComponent as BoxFilterSVG } from '../icons/Filtre_zone_rectangle.svg'
 import FilterTag from '../map/tools/vessel_filters/FilterTag'
+import { lastControlAfterLabels, lastPositionTimeAgoLabels } from './dataFormatting'
 
 Countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 

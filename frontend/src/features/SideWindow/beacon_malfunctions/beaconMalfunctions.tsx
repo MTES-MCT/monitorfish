@@ -1,6 +1,5 @@
 import * as timeago from 'timeago.js'
 
-import { BeaconMalfunctionsDetailsFollowUpNotification } from './BeaconMalfunctionsDetailsFollowUpNotification'
 import {
   BeaconMalfunctionPropertyName,
   BeaconMalfunctionsStage,
@@ -11,6 +10,7 @@ import {
   VESSEL_STATUS
 } from '../../../domain/entities/beaconMalfunction/constants'
 import { getDate, getTextForSearch, getTime } from '../../../utils'
+import { BeaconMalfunctionsDetailsFollowUpNotification } from './BeaconMalfunctionsDetailsFollowUpNotification'
 
 import type {
   BeaconMalfunction,

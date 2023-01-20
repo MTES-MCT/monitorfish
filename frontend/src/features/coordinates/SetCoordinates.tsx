@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
+import { CoordinatesFormat } from '../../domain/entities/map/constants'
+import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { DDCoordinatesInput } from './DDCoordinatesInput'
 import { DMDCoordinatesInput } from './DMDCoordinatesInput'
 import { DMSCoordinatesInput } from './DMSCoordinatesInput'
-import { CoordinatesFormat } from '../../domain/entities/map/constants'
-import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 type SetCoordinatesProps = {
   coordinates: number[]

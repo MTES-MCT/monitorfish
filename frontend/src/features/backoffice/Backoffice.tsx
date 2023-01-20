@@ -3,9 +3,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { batch } from 'react-redux'
 import styled from 'styled-components'
 
-import LawType from './list_regulation/LawType'
-import SearchRegulations from './list_regulation/SearchRegulations'
-import { setProcessingRegulationSaved } from './Regulation.slice'
 import { FRANCE, ORGP, UE, UK } from '../../domain/entities/regulation'
 import layer from '../../domain/shared_slices/Layer'
 import { setRegulatoryZoneMetadata } from '../../domain/shared_slices/Regulatory'
@@ -22,6 +19,9 @@ import { BaseLayer } from '../map/layers/BaseLayer'
 import { RegulatoryLayers } from '../map/layers/RegulatoryLayers'
 import { RegulatoryPreviewLayer } from '../map/layers/RegulatoryPreviewLayer'
 import { ShowRegulatoryMetadata } from '../map/ShowRegulatoryMetadata'
+import LawType from './list_regulation/LawType'
+import SearchRegulations from './list_regulation/SearchRegulations'
+import { setProcessingRegulationSaved } from './Regulation.slice'
 
 export function Backoffice() {
   const [foundRegulatoryZonesByRegTerritory, setFoundRegulatoryZonesByRegTerritory] = useState({})

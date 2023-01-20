@@ -3,10 +3,10 @@ import { noop } from 'lodash'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
+import { MissionType } from '../../../domain/types/mission'
 import { ActionForm } from './ActionForm'
 import { ActionList } from './ActionList'
 import { MainForm } from './MainForm'
-import { MissionType } from '../../../domain/types/mission'
 
 import type { PartialAction } from './types'
 import type { MutableRefObject } from 'react'

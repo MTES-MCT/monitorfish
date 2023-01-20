@@ -65,6 +65,7 @@ module.exports = {
       }
     ],
 
+    'no-null/no-null': 'off',
     '@typescript/no-use-before-define': 'off',
     '@typescript-eslint/no-restricted-imports': [
       'error',

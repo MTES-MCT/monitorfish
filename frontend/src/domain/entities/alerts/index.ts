@@ -1,5 +1,5 @@
-import { SilencedAlertPeriod } from './constants'
 import { getDate } from '../../../utils'
+import { SilencedAlertPeriod } from './constants'
 
 import type { SilencedAlertPeriodRequest } from './types'
 

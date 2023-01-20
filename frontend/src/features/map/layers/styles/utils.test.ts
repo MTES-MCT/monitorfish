@@ -3,9 +3,9 @@
 import { describe, expect, it } from '@jest/globals'
 import dayjs from 'dayjs'
 
-import { getColorWithAlpha, getStartAndEndDatesSetWithCurrentYear } from './utils'
 import { theme } from '../../../../ui/theme'
 import { getUtcDayjs } from '../../../../utils/getUtcDayjs'
+import { getColorWithAlpha, getStartAndEndDatesSetWithCurrentYear } from './utils'
 
 describe('utils', () => {
   it('getColorWithAlpha Should add the alpha field on a color', async () => {

@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 
+import { MissionType } from '../../../../domain/types/mission'
 import { AirControl } from './AirControl'
 import { FreeNote } from './FreeNote'
 import { GroundControl } from './GroundControl'
 import { SeaControl } from './SeaControl'
-import { MissionType } from '../../../../domain/types/mission'
 
 import type { PartialAction } from '../types'
 import type { Promisable } from 'type-fest'

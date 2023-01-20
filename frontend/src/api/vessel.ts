@@ -1,7 +1,7 @@
 import ky, { HTTPError } from 'ky'
 
-import { ACCEPTED, NOT_FOUND } from './api'
 import { ApiError } from '../libs/ApiError'
+import { ACCEPTED, NOT_FOUND } from './api'
 
 import type { RiskFactor } from '../domain/entities/vessel/riskFactor/types'
 import type {

@@ -1,7 +1,7 @@
 import { expect } from '@jest/globals'
 
-import { anotherDummyVessels, dummyVessels } from './mocks'
 import { removeDuplicatedFoundVessels } from '../utils'
+import { anotherDummyVessels, dummyVessels } from './mocks'
 
 describe('vessel_search/utils.removeDuplicatedFoundVessels()', () => {
   it('Should return vessels from API concatenated with vessels from Map When no vessels in common', () => {

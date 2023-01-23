@@ -29,8 +29,8 @@ from src.pipeline.shared_tasks.control_flow import (
 )
 from src.pipeline.shared_tasks.dates import get_utcnow, make_timedelta
 from src.pipeline.shared_tasks.healthcheck import (
-    assert_last_positions_health,
-    get_monitorfish_healthcheck,
+  assert_last_positions_flow_health,
+  get_monitorfish_healthcheck,
 )
 
 
@@ -464,7 +464,7 @@ with Flow("Beacons malfunctions", executor=LocalDaskExecutor()) as flow:
         # Healthcheck
         healthcheck = get_monitorfish_healthcheck()
         now = get_utcnow()
-        last_positions_healthcheck = assert_last_positions_health(
+        last_positions_healthcheck = assert_last_positions_flow_health(
             healthcheck=healthcheck, utcnow=now
         )
 

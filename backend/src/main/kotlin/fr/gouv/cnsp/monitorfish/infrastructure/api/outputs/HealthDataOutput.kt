@@ -4,15 +4,15 @@ import fr.gouv.cnsp.monitorfish.domain.entities.health.Health
 import java.time.ZonedDateTime
 
 data class HealthDataOutput(
-    val datePositionReceived: ZonedDateTime,
-    val dateLastPosition: ZonedDateTime,
+    val dateLastPositionReceivedByAPI: ZonedDateTime,
+    val dateLastPositionUpdatedByPrefect: ZonedDateTime,
     val dateLogbookMessageReceived: ZonedDateTime
 ) {
     companion object {
         fun fromHealth(health: Health) = HealthDataOutput(
-            health.datePositionReceived,
-            health.dateLastPosition,
-            health.dateLogbookMessageReceived
+            dateLastPositionUpdatedByPrefect = health.dateLastPositionUpdatedByPrefect,
+            dateLastPositionReceivedByAPI = health.dateLastPositionReceivedByAPI,
+            dateLogbookMessageReceived = health.dateLogbookMessageReceived
         )
     }
 }

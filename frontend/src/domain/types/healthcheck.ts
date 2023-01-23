@@ -1,5 +1,5 @@
 export type Healthcheck = {
-  dateLastPosition: string
+  dateLastPositionReceivedByAPI: string
+  dateLastPositionUpdatedByPrefect: string
   dateLogbookMessageReceived: string
-  datePositionReceived: string
 }

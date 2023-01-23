@@ -28,13 +28,13 @@ def get_monitorfish_healthcheck() -> MonitorfishHealthcheck:
 
 
 @task(checkpoint=False)
-def assert_positions_health(
+def assert_positions_received_by_api_health(
     healthcheck: MonitorfishHealthcheck,
     utcnow: datetime = None,
     max_minutes_without_data: int = 10,
 ):
     """
-    Checks if the `date_last_position` of the input `MonitorfishHealthcheck` is within
+    Checks if the `date_last_position_received_by_api` of the input `MonitorfishHealthcheck` is within
     `max_minutes_without_data` minutes of `utcnow`.
 
     Args:
@@ -52,7 +52,7 @@ def assert_positions_health(
     if not utcnow:
         utcnow = datetime.utcnow()
 
-    time_without_data = utcnow - healthcheck.date_last_position
+    time_without_data = utcnow - healthcheck.date_last_position_received_by_api
     minutes_without_data = time_without_data.total_seconds() / 60
 
     try:
@@ -68,13 +68,13 @@ def assert_positions_health(
 
 
 @task(checkpoint=False)
-def assert_last_positions_health(
+def assert_last_positions_flow_health(
     healthcheck: MonitorfishHealthcheck,
     utcnow: datetime = None,
     max_minutes_without_data: int = 10,
 ):
     """
-    Checks if the date_time of most recent `last_position` is in the last
+    Checks if the date_time of most recent `date_last_position_updated_by_prefect` is in the last
     `max_minutes_without_data` minutes in the input `MonitorfishHealthcheck`.
 
     Args:
@@ -92,7 +92,7 @@ def assert_last_positions_health(
     if not utcnow:
         utcnow = datetime.utcnow()
 
-    time_without_data = utcnow - healthcheck.date_position_received
+    time_without_data = utcnow - healthcheck.date_last_position_updated_by_prefect
     minutes_without_data = time_without_data.total_seconds() / 60
 
     try:

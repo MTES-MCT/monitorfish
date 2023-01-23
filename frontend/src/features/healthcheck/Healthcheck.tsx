@@ -1,33 +1,30 @@
-import React from 'react'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux'
+
+import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { ReactComponent as WarningSVG } from '../icons/Picto_alerte.svg'
 
-const Healthcheck = () => {
-  const {
-    healthcheckTextWarning,
-    previewFilteredVesselsMode
-  } = useSelector(state => state.global)
+export function Healthcheck() {
+  const { healthcheckTextWarning, previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
 
-  return (<>
-    {
-      healthcheckTextWarning && !previewFilteredVesselsMode
-        ? <HealthcheckWarnings>
+  return (
+    <>
+      {healthcheckTextWarning && !previewFilteredVesselsMode ? (
+        <HealthcheckWarnings>
           <Warning>
-            <WarningIcon/>
+            <WarningIcon />
             {healthcheckTextWarning}
           </Warning>
         </HealthcheckWarnings>
-        : null
-    }
-  </>)
+      ) : null}
+    </>
+  )
 }
 
 const WarningIcon = styled(WarningSVG)`
   width: 20px;
   vertical-align: sub;
   margin-right: 8px;
-  height: 18px
+  height: 18px;
 `
 
 const Warning = styled.div`
@@ -35,12 +32,10 @@ const Warning = styled.div`
 `
 
 const HealthcheckWarnings = styled.div`
-  background: #F6D012 0% 0% no-repeat padding-box;
+  background: #f6d012 0% 0% no-repeat padding-box;
   width: calc(100vw - 26px);
   height: 22px;
   text-align: center;
   padding: 13px;
-  border-bottom: 2px solid #E3BE05;
+  border-bottom: 2px solid #e3be05;
 `
-
-export default Healthcheck

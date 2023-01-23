@@ -137,7 +137,7 @@
         <dependency>
             <groupId>org.http4k</groupId>
             <artifactId>http4k-client-apache</artifactId>
-            <version>3.274.0</version>
+            <version>4.37.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>

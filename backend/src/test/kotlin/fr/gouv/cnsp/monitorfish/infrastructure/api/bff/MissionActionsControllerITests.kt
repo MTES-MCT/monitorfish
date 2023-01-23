@@ -7,7 +7,7 @@ import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.AddMissionAction
-import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.GetVesselMissionActions
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.GetVesselControls
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.UpdateMissionAction
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
@@ -36,7 +36,7 @@ class MissionActionsControllerITests {
     private lateinit var mockMvc: MockMvc
 
     @MockBean
-    private lateinit var getVesselMissionActions: GetVesselMissionActions
+    private lateinit var getVesselControls: GetVesselControls
 
     @MockBean
     private lateinit var addMissionAction: AddMissionAction
@@ -50,10 +50,10 @@ class MissionActionsControllerITests {
     private fun <T> givenSuspended(block: suspend () -> T) = BDDMockito.given(runBlocking { block() })!!
 
     @Test
-    fun `Should get all mission actions for a vessel`() {
+    fun `Should get all controls for a vessel`() {
         // Given
-        givenSuspended { this.getVesselMissionActions.execute(any(), any()) }.willReturn(
-            MissionActionsSummary(
+        givenSuspended { this.getVesselControls.execute(any(), any()) }.willReturn(
+            ControlsSummary(
                 1,
                 1,
                 3,
@@ -73,10 +73,10 @@ class MissionActionsControllerITests {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.numberOfDiversions", equalTo(2)))
             .andExpect(jsonPath("$.numberOfSeaControls", equalTo(1)))
-            .andExpect(jsonPath("$.missionActions.length()", equalTo(1)))
+            .andExpect(jsonPath("$.controls.length()", equalTo(1)))
 
         runBlocking {
-            Mockito.verify(getVesselMissionActions).execute(123, ZonedDateTime.parse("2020-05-04T03:04:05Z"))
+            Mockito.verify(getVesselControls).execute(123, ZonedDateTime.parse("2020-05-04T03:04:05Z"))
         }
     }
 

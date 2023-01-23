@@ -34,7 +34,7 @@ export const getVesselMissionActions = userRequest => (dispatch, getState) => {
   getVesselMissionActionsFromAPI(selectedVessel.vesselId, controlsFromDate)
     .then(controlSummary => {
       if (isSameVesselAsCurrentlyShowed && !userRequest) {
-        if (controlSummary.missionActions?.length > currentControlSummary.missionActions?.length) {
+        if (controlSummary.controls?.length > currentControlSummary.missionActions?.length) {
           dispatch(setNextControlSummary(controlSummary))
         }
       } else {

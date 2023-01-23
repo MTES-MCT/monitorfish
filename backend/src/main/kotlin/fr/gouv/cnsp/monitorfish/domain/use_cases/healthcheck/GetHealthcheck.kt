@@ -18,8 +18,8 @@ class GetHealthcheck(
         val logbookMessageDateTime = logbookReportRepository.findLastMessageDate()
 
         return Health(
-            dateLastPositionUpdatedByPrefect = dateLastPositionReceivedByAPI,
-            dateLastPositionReceivedByAPI = dateLastPositionUpdatedByPrefect,
+            dateLastPositionUpdatedByPrefect = dateLastPositionUpdatedByPrefect,
+            dateLastPositionReceivedByAPI = dateLastPositionReceivedByAPI,
             dateLogbookMessageReceived = logbookMessageDateTime
         )
     }

@@ -5,7 +5,7 @@ import { getEnvironmentVariable } from './api'
 import { ApiError } from '../libs/ApiError'
 
 import type { Mission } from '../domain/types/mission'
-import type { MissionActionsSummary } from '../domain/types/missionAction'
+import type { MissionControlsSummary } from '../domain/types/missionAction'
 
 const MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récuperer les contrôles de ce navire"
 
@@ -32,7 +32,7 @@ export async function getVesselMissionActionsFromAPI(vesselId: number, fromDate:
   try {
     return await ky
       .get(`/bff/v1/mission_actions?vesselId=${vesselId}&afterDateTime=${fromDate.toISOString()}`)
-      .json<MissionActionsSummary>()
+      .json<MissionControlsSummary>()
   } catch (err) {
     throw new ApiError(MISSION_ACTIONS_ERROR_MESSAGE, err)
   }

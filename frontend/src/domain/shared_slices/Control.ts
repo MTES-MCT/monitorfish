@@ -1,14 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import type { Controller, MissionActionsSummary } from '../types/missionAction'
+import type { Controller, MissionControlsSummary } from '../types/missionAction'
 
 export type ControlState = {
   controllers: Controller[]
   controlsFromDate: Date
   // TODO Understand & check that.
-  currentControlSummary: MissionActionsSummary | null
+  currentControlSummary: MissionControlsSummary | null
   loadingControls: boolean
-  nextControlSummary: MissionActionsSummary | null
+  nextControlSummary: MissionControlsSummary | null
 }
 const INITIAL_STATE: ControlState = {
   controllers: [],
@@ -61,7 +61,7 @@ const controlSlice = createSlice({
      * Set selected vessel control resume and control
      * @function setControlSummary
      * @param {Object=} state
-     * @param {{payload: MissionActionsSummary}} action - the control resume
+     * @param {{payload: MissionControlsSummary}} action - the control resume
      */
     setControlSummary(state, action) {
       state.currentControlSummary = action.payload

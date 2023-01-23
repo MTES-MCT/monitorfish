@@ -6,11 +6,11 @@ import { ReactComponent as WarningSVG } from '../../icons/Attention_controles.sv
 import { ReactComponent as GyroSVG } from '../../icons/Gyrophare_controles_gris.svg'
 import { NoValue, StrongText, Title, Zone } from '../common_styles/common.style'
 
-import type { MissionActionsSummary } from '../../../domain/types/missionAction'
+import type { MissionControlsSummary } from '../../../domain/types/missionAction'
 
 type ControlsResumeZoneProps = {
   controlsFromDate: Date
-  summary: MissionActionsSummary
+  summary: MissionControlsSummary
 }
 export function ControlsSummary({ controlsFromDate, summary }: ControlsResumeZoneProps) {
   const {

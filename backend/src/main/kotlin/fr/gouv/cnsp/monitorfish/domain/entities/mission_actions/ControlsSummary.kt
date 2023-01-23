@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.mission_actions
 
-data class MissionActionsSummary(
+data class ControlsSummary(
     val vesselId: Int,
     val numberOfSeaControls: Int,
     val numberOfLandControls: Int,
@@ -10,5 +10,5 @@ data class MissionActionsSummary(
     val numberOfEscortsToQuay: Int,
     val numberOfFishingInfractions: Int,
     val numberOfSecurityInfractions: Int,
-    val missionActions: List<MissionAction>
+    val controls: List<MissionAction>
 )

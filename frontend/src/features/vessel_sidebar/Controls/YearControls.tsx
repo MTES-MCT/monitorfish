@@ -55,9 +55,10 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
           </YearListTitleText>
         </YearListTitle>
         <YearListContent isOpen={isOpen} name={year.toString()}>
-          {sortedControls.map((control, index) => (
-            <Control key={control.id} control={control} isLastItem={yearControls.length === index + 1} />
-          ))}
+          {sortedControls.map(
+            (control, index) =>
+              control && <Control key={control.id} control={control} isLastItem={yearControls.length === index + 1} />
+          )}
         </YearListContent>
       </Row>
     )

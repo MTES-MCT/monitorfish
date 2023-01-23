@@ -25,11 +25,21 @@ export type Controller = {
   controllerType: string
 }
 
-enum InfractionType {
+export enum InfractionType {
   PENDING = 'PENDING',
   WITHOUT_RECORD = 'WITHOUT_RECORD',
   WITH_RECORD = 'WITH_RECORD'
 }
+
+export enum InfractionDomain {
+  GEAR = 'GEAR',
+  LOGBOOK = 'LOGBOOK',
+  OTHER = 'OTHER',
+  SPECIES = 'SPECIES'
+}
+
+export const isGearInfraction = (p: any): p is GearInfraction => p.gearSeized !== undefined
+export const isSpeciesInfraction = (p: any): p is SpeciesInfraction => p.speciesSeized !== undefined
 
 export type GearInfraction = {
   comments: string
@@ -128,8 +138,8 @@ export type ControlResource = {
   name: string
 }
 
-export type MissionActionsSummary = {
-  missionActions: MissionAction[]
+export type MissionControlsSummary = {
+  controls: MissionAction[]
   numberOfAerialControls: number
   numberOfDiversions: number
   numberOfEscortsToQuay: number

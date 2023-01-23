@@ -11,7 +11,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.GetVesselMissionActions
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.GetVesselControls
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -22,7 +22,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
-class GetVesselMissionActionsUTests {
+class GetVesselControlsUTests {
 
     @MockBean
     private lateinit var missionActionsRepository: MissionActionsRepository
@@ -87,7 +87,7 @@ class GetVesselMissionActionsUTests {
         given(gearRepository.find(eq("OTB"))).willReturn(Gear("OTB", "Chalut de fond"))
 
         // When
-        val controlResumeAndControls = GetVesselMissionActions(
+        val controlResumeAndControls = GetVesselControls(
             missionActionsRepository,
             portRepository,
             gearRepository,
@@ -106,8 +106,8 @@ class GetVesselMissionActionsUTests {
         assertThat(controlResumeAndControls.numberOfFishingInfractions).isEqualTo(0)
         assertThat(controlResumeAndControls.numberOfSecurityInfractions).isEqualTo(0)
 
-        assertThat(controlResumeAndControls.missionActions.first().portName).isEqualTo("Al Jazeera Port")
-        assertThat(controlResumeAndControls.missionActions.first().gearOnboard.first().gearName).isEqualTo(
+        assertThat(controlResumeAndControls.controls.first().portName).isEqualTo("Al Jazeera Port")
+        assertThat(controlResumeAndControls.controls.first().gearOnboard.first().gearName).isEqualTo(
             "Chalut de fond"
         )
     }

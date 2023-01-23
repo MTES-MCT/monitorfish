@@ -23,20 +23,20 @@ export function Controls() {
   )
 
   const yearsToActions = useMemo(() => {
-    if (!currentControlSummary?.missionActions) {
+    if (!currentControlSummary?.controls) {
       return {}
     }
 
-    return getYearsToActions(controlsFromDate, currentControlSummary.missionActions)
+    return getYearsToActions(controlsFromDate, currentControlSummary.controls)
   }, [currentControlSummary, controlsFromDate])
 
   const lastControls = useMemo(() => {
-    if (!currentControlSummary?.missionActions) {
+    if (!currentControlSummary?.controls) {
       return INITIAL_LAST_CONTROLS
     }
 
     return getLastControls(yearsToActions)
-  }, [yearsToActions, currentControlSummary?.missionActions])
+  }, [yearsToActions, currentControlSummary?.controls])
 
   useEffect(() => {
     if (!controlsFromDate) {

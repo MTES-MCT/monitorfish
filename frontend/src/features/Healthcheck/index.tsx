@@ -8,14 +8,14 @@ export function Healthcheck() {
 
   return (
     <>
-      {healthcheckTextWarning && !previewFilteredVesselsMode ? (
+      {healthcheckTextWarning && !previewFilteredVesselsMode && (
         <HealthcheckWarnings>
           <Warning>
             <WarningIcon />
             {healthcheckTextWarning}
           </Warning>
         </HealthcheckWarnings>
-      ) : null}
+      )}
     </>
   )
 }
@@ -32,7 +32,7 @@ const Warning = styled.div`
 `
 
 const HealthcheckWarnings = styled.div`
-  background: #f6d012 0% 0% no-repeat padding-box;
+  background: ${p => p.theme.color.goldenPoppy} 0% 0% no-repeat padding-box;
   width: calc(100vw - 26px);
   height: 22px;
   text-align: center;

@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>11</java.version>
-        <spring.version>2.3.3.RELEASE</spring.version>
+        <spring.version>3.0.2</spring.version>
         <kotlin.version>1.4.10</kotlin.version>
         <testcontainers.version>1.15.1</testcontainers.version>
         <commit.hash>COMMIT_TO_CHANGE</commit.hash>

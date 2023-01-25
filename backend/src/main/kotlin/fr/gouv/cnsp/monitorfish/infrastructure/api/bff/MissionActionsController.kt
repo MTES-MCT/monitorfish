@@ -6,8 +6,8 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.GetVesselContro
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.UpdateMissionAction
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissionActionDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ControlsSummaryDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissionActionDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag

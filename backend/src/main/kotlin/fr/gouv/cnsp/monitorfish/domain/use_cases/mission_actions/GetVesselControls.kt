@@ -24,7 +24,13 @@ class GetVesselControls(
     suspend fun execute(vesselId: Int, afterDateTime: ZonedDateTime): ControlsSummary = coroutineScope {
         logger.debug("Searching controls for vessel $vesselId after $afterDateTime")
         val controls = missionActionsRepository.findVesselMissionActionsAfterDateTime(vesselId, afterDateTime)
-            .filter { it.actionType in setOf(MissionActionType.SEA_CONTROL, MissionActionType.AIR_CONTROL, MissionActionType.LAND_CONTROL) }
+            .filter {
+                it.actionType in setOf(
+                    MissionActionType.SEA_CONTROL,
+                    MissionActionType.AIR_CONTROL,
+                    MissionActionType.LAND_CONTROL
+                )
+            }
         logger.debug("Found ${controls.size} controls for vessel $vesselId")
 
         val controlsWithCodeValues = controls.map { action ->
@@ -60,13 +66,19 @@ class GetVesselControls(
             .size
 
         val numberOfGearSeized = controlsWithCodeValues
-            .filter { it.gearInfractions.any {
-                    gearInfraction -> gearInfraction.gearSeized == true
-            }}.size
+            .filter {
+                it.gearInfractions.any {
+                        gearInfraction ->
+                    gearInfraction.gearSeized == true
+                } 
+            }.size
         val numberOfSpeciesSeized = controlsWithCodeValues
-            .filter { it.speciesInfractions.any {
-                    speciesInfraction -> speciesInfraction.speciesSeized == true
-            }}.size
+            .filter {
+                it.speciesInfractions.any {
+                        speciesInfraction ->
+                    speciesInfraction.speciesSeized == true
+                } 
+            }.size
 
         ControlsSummary(
             vesselId = vesselId,

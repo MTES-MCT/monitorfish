@@ -28,7 +28,7 @@ data class MissionActionDataOutput(
     val unitWithoutOmegaGauge: Boolean? = null,
     val controlQualityComments: String? = null,
     val feedbackSheetRequired: Boolean? = null,
-    val segments: String? = null,
+    val segments: List<FleetSegment> = listOf(),
     val facade: String? = null,
     val longitude: Double? = null,
     val latitude: Double? = null,

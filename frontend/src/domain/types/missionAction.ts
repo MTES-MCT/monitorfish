@@ -84,6 +84,11 @@ export type SpeciesControl = {
   underSized: boolean | null
 }
 
+export type FleetSegment = {
+  segment: string | null
+  segmentName: string | null
+}
+
 export type MissionAction = {
   actionDatetimeUtc: string
   actionType: MissionActionType
@@ -110,7 +115,7 @@ export type MissionAction = {
   otherInfractions: OtherInfraction[]
   portLocode: String | null
   portName: String | null
-  segments: String | null
+  segments: FleetSegment[]
   seizureAndDiversion: Boolean | null
   seizureAndDiversionComments: String | null
   separateStowageOfPreservedSpecies: Boolean | null

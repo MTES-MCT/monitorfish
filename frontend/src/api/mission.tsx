@@ -24,11 +24,11 @@ export const missionApi = createApi({
 })
 
 /**
- * Get vessel mission actions
+ * Get vessel controls
  *
  * @throws {@link ApiError}
  */
-export async function getVesselMissionActionsFromAPI(vesselId: number, fromDate: Date) {
+export async function getVesselControlsFromAPI(vesselId: number, fromDate: Date) {
   try {
     return await ky
       .get(`/bff/v1/mission_actions?vesselId=${vesselId}&afterDateTime=${fromDate.toISOString()}`)

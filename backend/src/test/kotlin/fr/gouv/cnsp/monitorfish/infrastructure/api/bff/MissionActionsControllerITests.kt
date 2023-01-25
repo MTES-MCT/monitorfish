@@ -55,11 +55,6 @@ class MissionActionsControllerITests {
         givenSuspended { this.getVesselControls.execute(any(), any()) }.willReturn(
             ControlsSummary(
                 1,
-                1,
-                3,
-                0,
-                1,
-                2,
                 3,
                 4,
                 5,
@@ -71,8 +66,9 @@ class MissionActionsControllerITests {
         mockMvc.perform(get("/bff/v1/mission_actions?vesselId=123&afterDateTime=2020-05-04T03:04:05.000Z"))
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.numberOfDiversions", equalTo(2)))
-            .andExpect(jsonPath("$.numberOfSeaControls", equalTo(1)))
+            .andExpect(jsonPath("$.numberOfDiversions", equalTo(3)))
+            .andExpect(jsonPath("$.numberOfGearSeized", equalTo(4)))
+            .andExpect(jsonPath("$.numberOfSpeciesSeized", equalTo(5)))
             .andExpect(jsonPath("$.controls.length()", equalTo(1)))
 
         runBlocking {

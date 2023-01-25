@@ -9,7 +9,7 @@ export const YearListTitle = styled.span<{
   isEmpty: boolean
   isOpen: boolean
 }>`
-  padding: 7px 5px 5px 20px;
+  padding: 7px 5px 5px 16px;
   width: 100%;
   display: flex;
   user-select: none;

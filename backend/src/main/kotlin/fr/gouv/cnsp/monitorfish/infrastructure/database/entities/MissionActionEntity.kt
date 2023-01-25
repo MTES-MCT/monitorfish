@@ -96,8 +96,6 @@ class MissionActionEntity(
     var portLocode: String? = null,
     @Column(name = "vessel_targeted")
     var vesselTargeted: Boolean? = null,
-    @Column(name = "diversion")
-    var diversion: Boolean? = null,
     @Column(name = "seizure_and_diversion_comments")
     var seizureAndDiversionComments: String? = null,
     @Column(name = "other_comments")
@@ -140,7 +138,6 @@ class MissionActionEntity(
             latitude = missionAction.latitude,
             portLocode = missionAction.portLocode,
             vesselTargeted = missionAction.vesselTargeted,
-            diversion = missionAction.diversion,
             seizureAndDiversionComments = missionAction.seizureAndDiversionComments,
             otherComments = missionAction.otherComments,
             gearOnboard = mapper.writeValueAsString(missionAction.gearOnboard),
@@ -180,7 +177,6 @@ class MissionActionEntity(
         latitude = latitude,
         portLocode = portLocode,
         vesselTargeted = vesselTargeted,
-        diversion = diversion,
         seizureAndDiversionComments = seizureAndDiversionComments,
         otherComments = otherComments,
         gearOnboard = deserializeJSONList(mapper, gearOnboard, GearControl::class.java),

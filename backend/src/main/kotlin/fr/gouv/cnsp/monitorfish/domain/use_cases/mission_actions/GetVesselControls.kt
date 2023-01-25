@@ -1,8 +1,8 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.ControlsSummary
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
@@ -55,36 +55,24 @@ class GetVesselControls(
             control
         }
 
-        val numberOfSeaControls = controlsWithCodeValues
-            .filter { it.actionType == MissionActionType.SEA_CONTROL }
-            .size
-        val numberOfLandControls = controlsWithCodeValues
-            .filter { it.actionType == MissionActionType.LAND_CONTROL }
-            .size
-        val numberOfAirControls = controlsWithCodeValues
-            .filter { it.actionType == MissionActionType.AIR_CONTROL }
-            .size
-        val numberOfAirSurveillance = controlsWithCodeValues
-            .filter { it.actionType == MissionActionType.AIR_SURVEILLANCE }
-            .size
-
         val numberOfDiversions = controlsWithCodeValues
-            .filter { it.diversion == true }
-            .size
-        val numberOfEscortsToQuay = controlsWithCodeValues
             .filter { it.seizureAndDiversion == true }
             .size
 
+        val numberOfGearSeized = controlsWithCodeValues
+            .filter { it.gearInfractions.any {
+                    gearInfraction -> gearInfraction.gearSeized == true
+            }}.size
+        val numberOfSpeciesSeized = controlsWithCodeValues
+            .filter { it.speciesInfractions.any {
+                    speciesInfraction -> speciesInfraction.speciesSeized == true
+            }}.size
+
         ControlsSummary(
             vesselId = vesselId,
-            numberOfSeaControls = numberOfSeaControls,
-            numberOfLandControls = numberOfLandControls,
-            numberOfAirControls = numberOfAirControls,
-            numberOfAirSurveillance = numberOfAirSurveillance,
             numberOfDiversions = numberOfDiversions,
-            numberOfEscortsToQuay = numberOfEscortsToQuay,
-            numberOfFishingInfractions = 0,
-            numberOfSecurityInfractions = 0,
+            numberOfGearSeized = numberOfGearSeized,
+            numberOfSpeciesSeized = numberOfSpeciesSeized,
             controls = controlsWithCodeValues
         )
     }

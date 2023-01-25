@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getYearsToReportingList } from '../../../../domain/entities/reporting'
-import { Title, Zone } from '../../common_styles/common.style'
+import { Header, Zone } from '../../common_styles/common.style'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import YearReporting from './YearReporting'
@@ -32,7 +32,7 @@ const ArchivedReportings = () => {
   }
 
   return <Zone data-cy={'vessel-sidebar-reporting-tab-history'}>
-    <Title>Historique des signalements</Title>
+    <Header>Historique des signalements</Header>
     {
       yearsToReportings && Object.keys(yearsToReportings)?.length
         ? <List>

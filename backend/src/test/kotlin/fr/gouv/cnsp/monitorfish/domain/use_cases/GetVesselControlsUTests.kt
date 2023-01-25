@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.GearControl
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.SpeciesInfraction
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
@@ -49,6 +50,10 @@ class GetVesselControlsUTests {
         gearControl.controlledMesh = 58.6
         val gearControls = listOf(gearControl)
 
+        val speciesInfraction = SpeciesInfraction()
+        speciesInfraction.natinf = 12345
+        speciesInfraction.speciesSeized = true
+
         val expectedControls = listOf(
             MissionAction(
                 id = 1,
@@ -58,8 +63,7 @@ class GetVesselControlsUTests {
                 portLocode = "AEFAT",
                 actionType = MissionActionType.LAND_CONTROL,
                 gearOnboard = gearControls,
-                seizureAndDiversion = true,
-                diversion = false
+                seizureAndDiversion = true
             ),
             MissionAction(
                 id = 2,
@@ -68,7 +72,7 @@ class GetVesselControlsUTests {
                 actionDatetimeUtc = ZonedDateTime.now(),
                 actionType = MissionActionType.SEA_CONTROL,
                 seizureAndDiversion = false,
-                diversion = true
+                speciesInfractions = listOf(speciesInfraction)
             ),
             MissionAction(
                 id = 3,
@@ -77,7 +81,7 @@ class GetVesselControlsUTests {
                 actionDatetimeUtc = ZonedDateTime.now(),
                 actionType = MissionActionType.SEA_CONTROL,
                 seizureAndDiversion = false,
-                diversion = true
+                speciesInfractions = listOf(speciesInfraction)
             )
         )
         given(missionActionsRepository.findVesselMissionActionsAfterDateTime(any(), any())).willReturn(
@@ -95,16 +99,9 @@ class GetVesselControlsUTests {
         ).execute(vesselId, now)
 
         // Then
-        assertThat(controlResumeAndControls.numberOfSeaControls).isEqualTo(2)
-        assertThat(controlResumeAndControls.numberOfLandControls).isEqualTo(1)
-        assertThat(controlResumeAndControls.numberOfAirControls).isEqualTo(0)
-        assertThat(controlResumeAndControls.numberOfAirSurveillance).isEqualTo(0)
-
-        assertThat(controlResumeAndControls.numberOfDiversions).isEqualTo(2)
-        assertThat(controlResumeAndControls.numberOfEscortsToQuay).isEqualTo(1)
-        // TODO add the infractions
-        assertThat(controlResumeAndControls.numberOfFishingInfractions).isEqualTo(0)
-        assertThat(controlResumeAndControls.numberOfSecurityInfractions).isEqualTo(0)
+        assertThat(controlResumeAndControls.numberOfDiversions).isEqualTo(1)
+        assertThat(controlResumeAndControls.numberOfSpeciesSeized).isEqualTo(2)
+        assertThat(controlResumeAndControls.numberOfGearSeized).isEqualTo(0)
 
         assertThat(controlResumeAndControls.controls.first().portName).isEqualTo("Al Jazeera Port")
         assertThat(controlResumeAndControls.controls.first().gearOnboard.first().gearName).isEqualTo(

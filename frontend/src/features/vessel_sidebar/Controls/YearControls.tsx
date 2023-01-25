@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { Control } from './Control'
-import { COLORS } from '../../../constants/constants'
 import { getNumberOfInfractions } from '../../../domain/entities/controls'
 import { YearListChevronIcon, YearListContent, YearListTitle, YearListTitleText } from '../common_styles/YearList.style'
 
@@ -69,7 +68,7 @@ const Red = styled.span`
   height: 8px;
   width: 8px;
   margin-left: 5px;
-  background-color: #e1000f;
+  background-color: ${p => p.theme.color.maximumRed};
   border-radius: 50%;
   display: inline-block;
 `
@@ -78,34 +77,29 @@ const Green = styled.span`
   height: 8px;
   width: 8px;
   margin-left: 5px;
-  background-color: ${COLORS.mediumSeaGreen};
+  background-color: ${p => p.theme.color.mediumSeaGreen};
   border-radius: 50%;
   display: inline-block;
 `
 
 const Year = styled.span`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-size: 16px;
 `
 
 const YearResume = styled.span`
-  color: ${COLORS.gunMetal};
-  font-size: 13px;
+  color: ${p => p.theme.color.gunMetal};
   margin-left: 15px;
-  vertical-align: text-bottom;
 `
 
 const Row = styled.div`
   margin: 0;
   text-align: left;
-  list-style-type: none;
   width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden !important;
-  margin: 0;
-  background: ${COLORS.white};
-  color: ${COLORS.gunMetal};
+  background: ${p => p.theme.color.white};
+  color: ${p => p.theme.color.gunMetal};
   border-bottom: 1px solid ${p => p.theme.color.lightGray};
-  line-height: 1.9em;
 `

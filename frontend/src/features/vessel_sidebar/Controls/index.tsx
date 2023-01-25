@@ -3,7 +3,6 @@ import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
 import { ControlsSummary } from './ControlsSummary'
-import { LastControlsZone } from './LastControlsZone'
 import { YearsToControlList } from './YearsToControlList'
 import { COLORS } from '../../../constants/constants'
 import { getLastControls, getYearsToActions } from '../../../domain/entities/controls'
@@ -73,9 +72,12 @@ export function Controls() {
       {!loadingControls ? (
         <Body data-cy="vessel-controls">
           {currentControlSummary && (
-            <ControlsSummary controlsFromDate={controlsFromDate} summary={currentControlSummary} />
+            <ControlsSummary
+              controlsFromDate={controlsFromDate}
+              lastControls={lastControls}
+              summary={currentControlSummary}
+            />
           )}
-          <LastControlsZone controlsFromDate={controlsFromDate} lastControls={lastControls} />
           <YearsToControlList controlsFromDate={controlsFromDate} yearsToControls={yearsToActions} />
           <SeeMoreBackground>
             <SeeMore onClick={seeMore}>Afficher plus de contrôles</SeeMore>

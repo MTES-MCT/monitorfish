@@ -140,14 +140,9 @@ export type ControlResource = {
 
 export type MissionControlsSummary = {
   controls: MissionAction[]
-  numberOfAerialControls: number
   numberOfDiversions: number
-  numberOfEscortsToQuay: number
-  numberOfFishingInfractions: number
-  numberOfLandControls: number
-  numberOfSeaControls: number
-  numberOfSecurityInfractions: number
-  numberOfSeizures: number
+  numberOfGearSeized: number
+  numberOfSpeciesSeized: number
   vesselId: number
 }
 
@@ -164,7 +159,7 @@ export type ControlAndText = {
 export const INITIAL_LAST_CONTROLS: LastControls = {
   LAND: {
     control: undefined,
-    text: 'Dernier contrôle à la débarque'
+    text: 'Dernier contrôle à quai'
   },
   SEA: {
     control: undefined,

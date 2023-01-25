@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { YearControls } from './YearControls'
 import { COLORS } from '../../../constants/constants'
-import { Title, Zone } from '../common_styles/common.style'
+import { Header, Zone } from '../common_styles/common.style'
 
 import type { MissionAction } from '../../../domain/types/missionAction'
 
@@ -22,7 +22,7 @@ export function YearsToControlList({ controlsFromDate, yearsToControls }: YearsT
 
   return (
     <Zone>
-      <Title>Historique des contrôles</Title>
+      <Header>Historique des contrôles</Header>
       {yearsToControls && Object.keys(yearsToControls) && Object.keys(yearsToControls).length ? (
         <List>
           {sortedYears.map(year => (

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { Title, Zone } from '../../common_styles/common.style'
+import { Header, Zone } from '../../common_styles/common.style'
 import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
 import { setOpenedBeaconMalfunction } from '../../../../domain/shared_slices/BeaconMalfunction'
 import CurrentBeaconMalfunctionBody from './CurrentBeaconMalfunctionBody'
@@ -16,7 +16,7 @@ const CurrentBeaconMalfunction = props => {
 
   return currentBeaconMalfunctionWithDetails
     ? <Zone>
-      <Title>
+      <Header>
         Avarie en cours
         <ShowBeaconMalfunction
           data-cy={'beacon-malfunction-current-see-details'}
@@ -31,7 +31,7 @@ const CurrentBeaconMalfunction = props => {
           voir les détails de l&apos;avarie
           <Arrow/>
         </ShowBeaconMalfunction>
-      </Title>
+      </Header>
       <CurrentBeaconMalfunctionBody
         currentBeaconMalfunctionWithDetails={currentBeaconMalfunctionWithDetails}
       />

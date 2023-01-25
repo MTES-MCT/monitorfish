@@ -61,7 +61,7 @@ data class AddMissionActionDataInput(
         unitWithoutOmegaGauge = unitWithoutOmegaGauge,
         controlQualityComments = controlQualityComments,
         feedbackSheetRequired = feedbackSheetRequired,
-        segments = segments,
+        segments = deserializeJSONList(mapper, segments, FleetSegment::class.java),
         facade = facade,
         longitude = longitude,
         latitude = latitude,

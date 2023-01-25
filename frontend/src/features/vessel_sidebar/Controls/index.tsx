@@ -8,7 +8,7 @@ import { COLORS } from '../../../constants/constants'
 import { getLastControls, getYearsToActions } from '../../../domain/entities/controls'
 import { resetNextControlSummary, setControlFromDate, setControlSummary } from '../../../domain/shared_slices/Control'
 import { INITIAL_LAST_CONTROLS } from '../../../domain/types/missionAction'
-import { getVesselMissionActions } from '../../../domain/use_cases/missions/getVesselMissionActions'
+import { getVesselControls } from '../../../domain/use_cases/missions/getVesselControls'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
@@ -42,7 +42,7 @@ export function Controls() {
       return
     }
 
-    dispatch(getVesselMissionActions(true) as any)
+    dispatch(getVesselControls(true) as any)
   }, [dispatch, selectedVessel, controlsFromDate])
 
   const updateControlSummary = nextControlSummary_ => {

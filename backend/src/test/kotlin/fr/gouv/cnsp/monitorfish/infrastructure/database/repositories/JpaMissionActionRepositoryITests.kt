@@ -1,6 +1,8 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.ControlCheck
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDummyMissionAction
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -66,10 +68,9 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.controlQualityComments).isEqualTo("Ciblage CNSP non respecté")
         assertThat(firstControl.feedbackSheetRequired).isTrue
         assertThat(firstControl.userTrigram).isEqualTo("DEF")
-        // TODO Finish the segments part
-        assertThat(firstControl.segments).isEqualTo(
-            "[{\"segment\": \"SWW04\", \"segmentName\": \"Midwater trawls\"}, {\"segment\": \"PEL03\", \"segmentName\": \"Polyvalent - Bottom trawl\"}]"
-        )
+        assertThat(firstControl.segments).hasSize(2)
+        assertThat(firstControl.segments.first().segment).isEqualTo("SWW04")
+        assertThat(firstControl.segments.first().segmentName).isEqualTo("Midwater trawls")
         assertThat(firstControl.facade).isEqualTo("Manche ouest - Atlantique")
         assertThat(firstControl.longitude).isEqualTo(-6.56)
         assertThat(firstControl.latitude).isEqualTo(45.12)

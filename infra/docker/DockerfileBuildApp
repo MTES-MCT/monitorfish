@@ -91,11 +91,11 @@ COPY --from=buildFront /tmp/infra/docker/env.sh /home/monitorfish/
 # Add logs folder to be mounted as volume
 RUN mkdir /home/monitorfish/logs
 
-# Set up environement variable that define the root folder use for serving static files
+# Set up environment variable that define the root folder use for serving static files
 # It must point to the front (React) files
 ENV STATIC_FILES_PATH="/home/monitorfish/public"
 
-# Default profile is for local. Can be overiden at start : docker run -e "SPRING_PROFILES_ACTIVE=prod"
+# Default profile is for local. Can be overriden at start : docker run -e "SPRING_PROFILES_ACTIVE=prod"
 ENV SPRING_PROFILES_ACTIVE=$ENV_PROFILE
 
 RUN echo ${ENV_PROFILE}

@@ -10,7 +10,7 @@ export const Zone = styled.div`
   background: ${COLORS.white};
 `
 
-export const Title = styled.div`
+export const Header = styled.div`
   color: ${COLORS.slateGray};
   background: ${COLORS.lightGray};
   padding: 8.5px 10px 8px 20px;

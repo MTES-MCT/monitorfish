@@ -3,40 +3,49 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { NoValue } from '../common_styles/common.style'
 
-export function InfractionsSummary({ numberOfDiversions, numberOfEscortsToQuay, numberOfSeizures }) {
+type InfractionsSummaryProps = {
+  numberOfDiversions: number
+  numberOfGearSeized: number
+  numberOfSpeciesSeized: number
+}
+export function InfractionsSummary({
+  numberOfDiversions,
+  numberOfGearSeized,
+  numberOfSpeciesSeized
+}: InfractionsSummaryProps) {
   const getText = value => (!Number.isNaN(value) ? value : <NoValue>-</NoValue>)
 
   return (
-    <ResumesBoxes>
-      <ResumeBox>
-        <ResumeBoxStrongText isRed={numberOfDiversions}>{getText(numberOfDiversions)}</ResumeBoxStrongText>
-        <ResumeBoxText>Déroutement</ResumeBoxText>
-      </ResumeBox>
-      <ResumeBox>
-        <ResumeBoxStrongText isRed={numberOfEscortsToQuay}>{getText(numberOfEscortsToQuay)}</ResumeBoxStrongText>
-        <ResumeBoxText>Reconduite à quai</ResumeBoxText>
-      </ResumeBox>
-      <ResumeBox>
-        <ResumeBoxStrongText isRed={numberOfSeizures}>{getText(numberOfSeizures)}</ResumeBoxStrongText>
-        <ResumeBoxText>Appréhension</ResumeBoxText>
-      </ResumeBox>
-    </ResumesBoxes>
+    <Wrapper>
+      <Tag>
+        <InfractionNumber isRed={!!numberOfGearSeized}>{getText(numberOfGearSeized)}</InfractionNumber>
+        <Text>Appréhension engin</Text>
+      </Tag>
+      <Tag>
+        <InfractionNumber isRed={!!numberOfSpeciesSeized}>{getText(numberOfSpeciesSeized)}</InfractionNumber>
+        <Text>Appréhension espèce</Text>
+      </Tag>
+      <Tag>
+        <InfractionNumber isRed={!!numberOfDiversions}>{getText(numberOfDiversions)}</InfractionNumber>
+        <Text>Déroutement</Text>
+      </Tag>
+    </Wrapper>
   )
 }
 
-const ResumesBoxes = styled.div`
+const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-right: 15px;
+  margin-right: 12px;
 `
 
-const ResumeBoxText = styled.span`
+const Text = styled.span`
   color: ${COLORS.charcoal};
-  margin: 0 10px 0 5px;
+  margin: 0 10px 0 4px;
   font-weight: 500;
 `
 
-const ResumeBoxStrongText = styled.span<{
+const InfractionNumber = styled.span<{
   isRed: boolean
 }>`
   background: ${props => (props.isRed ? COLORS.maximumRed : COLORS.charcoal)};
@@ -48,15 +57,15 @@ const ResumeBoxStrongText = styled.span<{
   width: 16px;
   text-align: center;
   font-weight: bolder;
-  margin: 3px 0 0 4px;
+  margin: 3px 0 0 3px;
   font-weight: 500;
 `
 
-const ResumeBox = styled.span`
+const Tag = styled.span`
   background: ${COLORS.gainsboro};
   border-radius: 11px;
   font-size: 13px;
   height: 22px;
   display: inline-block;
-  margin: 8px 5px 10px 0;
+  margin: 8px 0px 10px 0;
 `

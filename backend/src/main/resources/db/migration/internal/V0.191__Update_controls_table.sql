@@ -21,6 +21,9 @@ ALTER TABLE public.controls
     RENAME COLUMN catch_controls TO species_onboard;
 
 ALTER TABLE public.controls
+    RENAME COLUMN diversion TO seizure_and_diversion;
+
+ALTER TABLE public.controls
     ADD COLUMN mission_id INTEGER,
     ADD COLUMN emits_vms VARCHAR,
     ADD COLUMN emits_ais VARCHAR,
@@ -34,7 +37,6 @@ ALTER TABLE public.controls
     ADD COLUMN gear_infractions JSONB,
     ADD COLUMN species_infractions JSONB,
     ADD COLUMN species_observations VARCHAR,
-    ADD COLUMN seizure_and_diversion BOOLEAN,
     ADD COLUMN other_infractions JSONB,
     ADD COLUMN number_of_vessels_flown_over INTEGER,
     ADD COLUMN unit_without_omega_gauge BOOLEAN,

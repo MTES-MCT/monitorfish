@@ -75,7 +75,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.latitude).isEqualTo(45.12)
         assertThat(firstControl.portLocode).isNull()
         assertThat(firstControl.vesselTargeted).isFalse
-        assertThat(firstControl.diversion).isNull()
+        assertThat(firstControl.seizureAndDiversion).isTrue
         assertThat(firstControl.seizureAndDiversionComments).isEqualTo("Saisie de la pêche")
         assertThat(firstControl.otherComments).isEqualTo("Commentaires post contrôle")
         assertThat(firstControl.gearOnboard).hasSize(2)

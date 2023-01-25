@@ -1,7 +1,7 @@
 import { getDateTime } from '../../../../utils'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { NoValue, Title, Zone } from '../../common_styles/common.style'
+import { NoValue, Header, Zone } from '../../common_styles/common.style'
 import { VESSEL_STATUS } from '../../../../domain/entities/beaconMalfunction/constants'
 
 const BeaconMalfunctionsResume = props => {
@@ -12,9 +12,9 @@ const BeaconMalfunctionsResume = props => {
 
   return vesselBeaconMalfunctionsResume
     ? <Zone>
-      <Title>
+      <Header>
         Résumé des avaries VMS (sur 1 an)
-      </Title>
+      </Header>
       <Table>
         <Fields>
           <TableBody>

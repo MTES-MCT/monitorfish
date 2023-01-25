@@ -76,6 +76,8 @@ const Wrapper = styled.div<{
   isFirstInfraction: boolean
 }>`
   margin-top: ${p => (p.isFirstInfraction ? 5 : 16)}px;
+  width: 390px;
+  white-space: initial;
 `
 
 const InfractionTagText = styled.span`

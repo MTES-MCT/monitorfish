@@ -35,7 +35,6 @@ data class MissionAction(
     val portLocode: String? = null,
     var portName: String? = null,
     val vesselTargeted: Boolean? = null,
-    val diversion: Boolean? = null,
     val seizureAndDiversionComments: String? = null,
     val otherComments: String? = null,
     val gearOnboard: List<GearControl> = listOf(),

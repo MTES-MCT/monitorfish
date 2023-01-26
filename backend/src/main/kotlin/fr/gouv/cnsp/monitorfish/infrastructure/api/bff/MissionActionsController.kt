@@ -1,0 +1,72 @@
+package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
+
+import com.fasterxml.jackson.databind.ObjectMapper
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.AddMissionAction
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.GetVesselControls
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.UpdateMissionAction
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.*
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ControlsSummaryDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissionActionDataOutput
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.tags.Tag
+import kotlinx.coroutines.runBlocking
+import org.springframework.format.annotation.DateTimeFormat
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.*
+import java.time.ZonedDateTime
+import javax.websocket.server.PathParam
+
+@RestController
+@RequestMapping("/bff/v1/mission_actions")
+@Tag(name = "APIs for mission actions")
+class MissionActionsController(
+    private val getVesselControls: GetVesselControls,
+    private val addMissionAction: AddMissionAction,
+    private val updateMissionAction: UpdateMissionAction,
+    private val mapper: ObjectMapper
+) {
+
+    @GetMapping("")
+    @Operation(summary = "Get vessel's controls")
+    fun getVesselControls(
+        @Parameter(description = "Vessel id")
+        @RequestParam(name = "vesselId")
+        vesselId: Int,
+        @Parameter(description = "actions after date time")
+        @RequestParam(name = "afterDateTime")
+        @DateTimeFormat(pattern = VesselController.zoneDateTimePattern)
+        afterDateTime: ZonedDateTime
+    ): ControlsSummaryDataOutput {
+        return runBlocking {
+            val actionsSummary = getVesselControls.execute(vesselId, afterDateTime)
+
+            ControlsSummaryDataOutput.fromControlsSummary(actionsSummary)
+        }
+    }
+
+    @PostMapping(value = [""], consumes = ["application/json"])
+    @Operation(summary = "Create a mission action")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun createMissionAction(
+        @RequestBody
+        actionInput: AddMissionActionDataInput
+    ): MissionActionDataOutput {
+        return MissionActionDataOutput.fromMissionAction(addMissionAction.execute(actionInput.toMissionAction(mapper)))
+    }
+
+    @PutMapping(value = ["/{actionId}"], consumes = ["application/json"])
+    @Operation(summary = "Update a mission action")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun updateMissionAction(
+        @PathParam("Action id")
+        @PathVariable(name = "actionId")
+        actionId: Int,
+        @RequestBody
+        actionInput: AddMissionActionDataInput
+    ): MissionActionDataOutput {
+        val updatedMissionAction = updateMissionAction.execute(actionId, actionInput.toMissionAction(mapper))
+        return MissionActionDataOutput.fromMissionAction(updatedMissionAction)
+    }
+}

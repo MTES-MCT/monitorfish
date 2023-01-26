@@ -1,9 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
-import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NAFMessageParsingException
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.ParseAndSavePosition
-import io.micrometer.core.instrument.MeterRegistry
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -12,13 +10,11 @@ import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.context.annotation.Import
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@Import(MeterRegistryConfiguration::class)
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(value = [(ApiController::class)])
 class ApiControllerITests {
@@ -28,9 +24,6 @@ class ApiControllerITests {
 
     @MockBean
     private lateinit var parseAndSavePosition: ParseAndSavePosition
-
-    @Autowired
-    private lateinit var meterRegistry: MeterRegistry
 
     @Test
     fun `A bad NAF param Should return 200 for the sender not to be worried`() {

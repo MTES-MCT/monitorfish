@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import type { Infraction } from '../types/control'
+import type { Infraction } from '../types/missionAction'
 
 export type InfractionState = {
   infractions: Infraction[]

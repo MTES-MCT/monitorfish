@@ -3,8 +3,8 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ControlObjectiveDataOutput
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import javax.websocket.server.PathParam
@@ -12,7 +12,7 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddControlObjectiveData
 
 @RestController
 @RequestMapping("/bff/v1/control_objectives")
-@Api(description = "APIs for Control objectives")
+@Tag(name = "APIs for Control objectives")
 class ControlObjectiveController(
     private val getControlObjectivesOfYear: GetControlObjectivesOfYear,
     private val getControlObjectiveYearEntries: GetControlObjectiveYearEntries,
@@ -23,7 +23,7 @@ class ControlObjectiveController(
 ) {
 
     @GetMapping("/{year}")
-    @ApiOperation("Get control objectives of a given year")
+    @Operation(summary = "Get control objectives of a given year")
     fun getControlObjectivesOfYear(
         @PathParam("Year")
         @PathVariable(name = "year")
@@ -35,20 +35,20 @@ class ControlObjectiveController(
     }
 
     @GetMapping("/years")
-    @ApiOperation("Get control objective year entries")
+    @Operation(summary = "Get control objective year entries")
     fun getControlObjectiveYearEntries(): List<Int> {
         return getControlObjectiveYearEntries.execute()
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/years")
-    @ApiOperation("Add a control objective year")
+    @Operation(summary = "Add a control objective year")
     fun addControlObjectiveYear() {
         return addControlObjectiveYear.execute()
     }
 
     @PutMapping(value = ["/{controlObjectiveId}"], consumes = ["application/json"])
-    @ApiOperation("Update a control objective")
+    @Operation(summary = "Update a control objective")
     fun updateControlObjective(
         @PathParam("Control objective id")
         @PathVariable(name = "controlObjectiveId")
@@ -65,7 +65,7 @@ class ControlObjectiveController(
     }
 
     @DeleteMapping(value = ["/{controlObjectiveId}"])
-    @ApiOperation("Delete a control objective")
+    @Operation(summary = "Delete a control objective")
     fun deleteControlObjective(
         @PathParam("Control objective id")
         @PathVariable(name = "controlObjectiveId")
@@ -75,7 +75,7 @@ class ControlObjectiveController(
     }
 
     @PostMapping(value = [""], consumes = ["application/json"])
-    @ApiOperation("Add a control objective")
+    @Operation(summary = "Add a control objective")
     fun addControlObjective(
         @RequestBody
         addControlObjectiveData: AddControlObjectiveDataInput1

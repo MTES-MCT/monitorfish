@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.controls.Controller
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Controller
 
 data class ControllerDataOutput(
     var controller: String? = null,

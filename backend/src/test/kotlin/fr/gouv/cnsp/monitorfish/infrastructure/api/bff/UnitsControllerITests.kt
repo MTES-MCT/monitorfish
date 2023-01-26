@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import fr.gouv.cnsp.monitorfish.domain.entities.controls.Controller
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Controller
 import fr.gouv.cnsp.monitorfish.domain.use_cases.controller.GetAllControllers
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test

@@ -11,7 +11,6 @@ import type {
   VesselLastPosition,
   VesselPosition
 } from '../domain/entities/vessel/types'
-import type { ControlSummary } from '../domain/types/control'
 import type { VesselVoyage } from '../domain/types/fishingActivities'
 import type { CurrentAndArchivedReportingsOfSelectedVessel } from '../domain/types/reporting'
 import type { NavigateTo } from '../domain/use_cases/vessel/getVesselVoyage'
@@ -20,7 +19,6 @@ const LAST_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les derni�
 const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"
 const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu chercher les navires dans notre base"
 const LOGBOOK_ERROR_MESSAGE = "Nous n'avons pas pu chercher les messages JPE de ce navire"
-const CONTROLS_ERROR_MESSAGE = "Nous n'avons pas pu récuperer les contrôles de ce navire"
 const REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu récuperer les signalements de ce navire"
 const RISK_FACTOR_ERROR_MESSAGE = "Nous n'avons pas pu récuperer le facteur de risque du navire"
 
@@ -143,21 +141,6 @@ async function getVesselVoyageFromAPI(
 }
 
 /**
- * Get vessel controls
- *
- * @throws {@link ApiError}
- */
-async function getVesselControlsFromAPI(vesselId: number, fromDate: Date) {
-  try {
-    return await ky
-      .get(`/bff/v1/vessels/${vesselId}/controls?afterDateTime=${fromDate.toISOString()}`)
-      .json<ControlSummary>()
-  } catch (err) {
-    throw new ApiError(CONTROLS_ERROR_MESSAGE, err)
-  }
-}
-
-/**
  * Get vessel reporting
  *
  * @throws {@link ApiError}
@@ -197,7 +180,6 @@ export {
   getVesselPositionsFromAPI,
   getVesselFromAPI,
   getVesselsLastPositionsFromAPI,
-  getVesselControlsFromAPI,
   getVesselVoyageFromAPI,
   getVesselReportingsFromAPI,
   getVesselRiskFactorFromAPI

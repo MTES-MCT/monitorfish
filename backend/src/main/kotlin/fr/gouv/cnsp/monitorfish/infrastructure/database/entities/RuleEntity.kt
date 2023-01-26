@@ -4,17 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.Rule
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.type.RuleType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import org.hibernate.annotations.Type
-import org.hibernate.annotations.TypeDef
 import java.time.ZonedDateTime
 import java.util.*
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
 
 @Entity
-@TypeDef(name = "jsonb", typeClass = JsonBinaryType::class)
 @Table(name = "rules")
 data class RuleEntity(
     @Id
@@ -32,7 +30,7 @@ data class RuleEntity(
     val lastRunDate: ZonedDateTime? = null,
     @Column(name = "last_run_success")
     val lastRunSuccess: Boolean? = null,
-    @Type(type = "jsonb")
+    @Type(JsonBinaryType::class)
     @Column(name = "value", nullable = false, columnDefinition = "jsonb")
     val value: String
 ) {

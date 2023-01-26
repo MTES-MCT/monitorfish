@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfun
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionCommentUserType
 import java.time.Instant
 import java.time.ZoneOffset
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "beacon_malfunction_comments")

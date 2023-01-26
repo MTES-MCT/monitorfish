@@ -2,23 +2,16 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilencedAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import jakarta.persistence.*
 import org.hibernate.annotations.Type
-import org.hibernate.annotations.TypeDef
-import org.hibernate.annotations.TypeDefs
 import java.time.ZonedDateTime
-import javax.persistence.*
 
 @Entity
-@TypeDefs(
-    TypeDef(
-        name = "pgsql_enum",
-        typeClass = PostgreSQLEnumType::class
-    )
-)
 @Table(name = "silenced_alerts")
 data class SilencedAlertEntity(
     @Id
@@ -34,13 +27,13 @@ data class SilencedAlertEntity(
     val externalReferenceNumber: String? = null,
     @Column(name = "ircs")
     val ircs: String? = null,
-    @Column(name = "vessel_identifier")
     @Enumerated(EnumType.STRING)
-    @Type(type = "pgsql_enum")
+    @Type(PostgreSQLEnumType::class)
+    @Column(name = "vessel_identifier", columnDefinition = "vessel_identifier")
     val vesselIdentifier: VesselIdentifier,
     @Column(name = "silenced_before_date", nullable = false)
     val silencedBeforeDate: ZonedDateTime,
-    @Type(type = "jsonb")
+    @Type(JsonBinaryType::class)
     @Column(name = "value", nullable = false, columnDefinition = "jsonb")
     val value: String,
     @Column(name = "was_validated")

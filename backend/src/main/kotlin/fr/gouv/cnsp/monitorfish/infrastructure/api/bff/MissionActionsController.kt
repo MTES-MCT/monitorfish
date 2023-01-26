@@ -16,7 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.time.ZonedDateTime
-import javax.websocket.server.PathParam
+import jakarta.websocket.server.PathParam
 
 @RestController
 @RequestMapping("/bff/v1/mission_actions")

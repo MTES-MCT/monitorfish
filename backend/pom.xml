@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.7</version>
+        <version>3.0.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>fr.gouv.cnsp</groupId>
@@ -15,8 +15,8 @@
     <description>MonitorFish</description>
 
     <properties>
-        <java.version>11</java.version>
-        <spring.version>2.7.7</spring.version>
+        <java.version>17</java.version>
+        <spring.version>3.0.1</spring.version>
         <kotlin.version>1.7.21</kotlin.version>
         <testcontainers.version>1.17.6</testcontainers.version>
         <ktor.version>2.2.2</ktor.version>
@@ -62,6 +62,12 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
             <version>${spring.version}</version>
@@ -94,7 +100,7 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>6.4.4</version>
+            <version>9.10.1</version>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -176,12 +182,12 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
-            <version>5.3.4.RELEASE</version>
+            <version>6.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.restdocs</groupId>
             <artifactId>spring-restdocs-mockmvc</artifactId>
-            <version>2.0.4.RELEASE</version>
+            <version>3.0.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -191,7 +197,7 @@
         </dependency>
         <dependency>
             <groupId>com.vladmihalcea</groupId>
-            <artifactId>hibernate-types-52</artifactId>
+            <artifactId>hibernate-types-60</artifactId>
             <version>2.21.1</version>
         </dependency>
         <dependency>
@@ -266,7 +272,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.7.7</version>
+                <version>3.0.1</version>
                 <executions>
                     <execution>
                         <id>build-info</id>
@@ -346,7 +352,7 @@
                     <args>
                         <arg>-Xjsr305=strict</arg>
                     </args>
-                    <jvmTarget>11</jvmTarget>
+                    <jvmTarget>17</jvmTarget>
                     <compilerPlugins>
                         <plugin>spring</plugin>
                         <plugin>jpa</plugin>

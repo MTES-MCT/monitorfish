@@ -2,6 +2,7 @@ import { Accent, Icon, IconButton, MultiSelect, Option, Select, TextInput, useFo
 import { pick } from 'ramda'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
 
 import {
   findControlUnitByAdministrationAndName,
@@ -135,19 +136,18 @@ export function ControlUnitSelect({
     [forceUpdate, index, onChange, selectedControlUnit]
   )
 
-  const handleContactChange = useCallback(
-    (nextValue: string | undefined) => {
-      const nextControlUnit: MissionFormValues['controlUnits'][0] = {
-        ...controlledValueRef.current,
-        contact: nextValue
-      }
+  // Let's be careful here, this should normally depend on `[index, onChange]` dependencies
+  // but since there is no reason these 2 values would change, this seems like an acceptable trade-off
+  const handleContactChange = useDebouncedCallback((nextValue: string | undefined) => {
+    const nextControlUnit: MissionFormValues['controlUnits'][0] = {
+      ...controlledValueRef.current,
+      contact: nextValue
+    }
 
-      controlledValueRef.current = nextControlUnit
+    controlledValueRef.current = nextControlUnit
 
-      onChange(index, nextControlUnit)
-    },
-    [index, onChange]
-  )
+    onChange(index, nextControlUnit)
+  }, 500)
 
   const handleDelete = useCallback(() => {
     onDelete(index)

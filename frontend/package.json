@@ -79,6 +79,7 @@
     "simplify-geojson": "1.0.5",
     "styled-components": "5.3.6",
     "timeago.js": "4.0.2",
+    "use-debounce": "9.0.3",
     "worker-loader": "3.0.8",
     "yup": "0.32.11"
   },

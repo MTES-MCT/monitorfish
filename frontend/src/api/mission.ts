@@ -1,15 +1,10 @@
 import ky from 'ky'
 
 import { monitorenvApi } from '.'
-
-// import { getEnvironmentVariable } from './utils'
-
 import { ApiError } from '../libs/ApiError'
 
 import type { Mission, MissionData } from '../domain/types/mission'
 import type { MissionControlsSummary } from '../domain/types/missionAction'
-
-// const MONITORENV_URL = getEnvironmentVariable('REACT_APP_MONITORENV_URL')
 
 export const missionApi = monitorenvApi.injectEndpoints({
   endpoints: builder => ({

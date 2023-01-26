@@ -11,7 +11,7 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
-import javax.transaction.Transactional
+import jakarta.transaction.Transactional
 
 @Repository
 class JpaLastPositionRepository(

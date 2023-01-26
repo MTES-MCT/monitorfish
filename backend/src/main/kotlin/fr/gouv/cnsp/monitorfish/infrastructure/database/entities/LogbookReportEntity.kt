@@ -7,24 +7,12 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
 import fr.gouv.cnsp.monitorfish.domain.mappers.ERSMapper.getERSMessageValueFromJSON
+import jakarta.persistence.*
 import org.hibernate.annotations.Type
-import org.hibernate.annotations.TypeDef
-import org.hibernate.annotations.TypeDefs
 import java.time.Instant
 import java.time.ZoneOffset.UTC
-import javax.persistence.*
 
 @Entity
-@TypeDefs(
-    TypeDef(
-        name = "jsonb",
-        typeClass = JsonBinaryType::class
-    ),
-    TypeDef(
-        name = "string-array",
-        typeClass = ListArrayType::class
-    )
-)
 @Table(name = "logbook_reports")
 data class LogbookReportEntity(
     @Id
@@ -64,10 +52,10 @@ data class LogbookReportEntity(
     val imo: String? = null,
     @Column(name = "log_type")
     val messageType: String? = null,
-    @Type(type = "string-array")
+    @Type(ListArrayType::class)
     @Column(name = "analyzed_by_rules", columnDefinition = "varchar(100)[]")
     val analyzedByRules: List<String>? = listOf(),
-    @Type(type = "jsonb")
+    @Type(JsonBinaryType::class)
     @Column(name = "value", nullable = true, columnDefinition = "jsonb")
     val message: String? = null,
     @Column(name = "integration_datetime_utc")

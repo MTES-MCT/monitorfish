@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionCategory
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "infractions")

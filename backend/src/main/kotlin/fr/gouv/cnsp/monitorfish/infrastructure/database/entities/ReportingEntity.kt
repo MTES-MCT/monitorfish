@@ -8,20 +8,11 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.mappers.ReportingMapper
+import jakarta.persistence.*
 import org.hibernate.annotations.Type
-import org.hibernate.annotations.TypeDef
-import org.hibernate.annotations.TypeDefs
 import java.time.ZonedDateTime
-import javax.persistence.*
 
 @Entity
-@TypeDefs(
-    TypeDef(name = "jsonb", typeClass = JsonBinaryType::class),
-    TypeDef(
-        name = "pgsql_enum",
-        typeClass = PostgreSQLEnumType::class
-    )
-)
 @Table(name = "reportings")
 data class ReportingEntity(
     @Id
@@ -31,9 +22,9 @@ data class ReportingEntity(
     val id: Int? = null,
     @Column(name = "vessel_id")
     val vesselId: Int? = null,
-    @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
-    @Type(type = "pgsql_enum")
+    @Type(PostgreSQLEnumType::class)
+    @Column(name = "type", nullable = false, columnDefinition = "reporting_type")
     val type: ReportingType,
     @Column(name = "vessel_name")
     val vesselName: String? = null,
@@ -43,15 +34,15 @@ data class ReportingEntity(
     val externalReferenceNumber: String? = null,
     @Column(name = "ircs")
     val ircs: String? = null,
-    @Column(name = "vessel_identifier")
     @Enumerated(EnumType.STRING)
-    @Type(type = "pgsql_enum")
+    @Type(PostgreSQLEnumType::class)
+    @Column(name = "vessel_identifier", columnDefinition = "vessel_identifier")
     val vesselIdentifier: VesselIdentifier? = null,
     @Column(name = "creation_date", nullable = false)
     val creationDate: ZonedDateTime,
     @Column(name = "validation_date", nullable = true)
     val validationDate: ZonedDateTime? = null,
-    @Type(type = "jsonb")
+    @Type(JsonBinaryType::class)
     @Column(name = "value", nullable = false, columnDefinition = "jsonb")
     val value: String,
     @Column(name = "archived", nullable = false)

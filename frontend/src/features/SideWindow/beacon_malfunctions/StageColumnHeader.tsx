@@ -11,7 +11,7 @@ import type { CSSProperties } from 'react'
 const MAX_ARCHIVED_ITEMS = 60
 
 type StageColumnHeaderType = {
-  description?: string
+  description?: string | undefined
   ids: number[]
   numberOfItems: number
   stage: string

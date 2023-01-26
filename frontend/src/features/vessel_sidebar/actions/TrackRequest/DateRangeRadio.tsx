@@ -17,7 +17,7 @@ export function DateRangeRadio({ defaultValue, onChange }: DateRangeRadioProps) 
   )
 
   return (
-    <RadioGroup key={defaultValue} defaultValue={normalizedDefaultValue} inline onChange={onChange as any}>
+    <RadioGroup key={defaultValue} defaultValue={normalizedDefaultValue as any} inline onChange={onChange as any}>
       <ColumnsBox>
         <Column>
           <StyledRadio value={VesselTrackDepth.LAST_DEPARTURE}>le dernier DEP</StyledRadio>

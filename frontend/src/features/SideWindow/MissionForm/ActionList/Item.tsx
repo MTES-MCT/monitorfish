@@ -29,7 +29,7 @@ export function Item({ action, isNew = false, onDelete }: ItemProps) {
           case MissionType.AIR:
             return ['Contrôle aérien à renseigner', Icon.Plane]
 
-          case MissionType.GROUND:
+          case MissionType.LAND:
             return ['Contrôle à la débarque à renseigner', Icon.Plane]
 
           case MissionType.SEA:
@@ -44,7 +44,7 @@ export function Item({ action, isNew = false, onDelete }: ItemProps) {
           case MissionType.AIR:
             return ['', Icon.Plane]
 
-          case MissionType.GROUND:
+          case MissionType.LAND:
             return ['', Icon.Plane]
 
           case MissionType.SEA:

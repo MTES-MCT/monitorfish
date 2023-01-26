@@ -1,5 +1,5 @@
 import type { MissionType } from '../../../domain/types/mission'
-import type { DeepPartial } from '../../../types'
+import type { DeepPartial, Undefine } from '../../../types'
 
 export type Action = AirControl | GroundControl | SeaControl | FreeNote
 export type PartialAction = PartialAirControl | PartialGroundControl | PartialSeaControl | PartialFreeNote
@@ -16,11 +16,11 @@ export type PartialAirControl = Partial<AirControl> & {
 
 type GroundControl = {
   startDate: Date
-  type: MissionType.GROUND
+  type: MissionType.LAND
 }
 export type PartialGroundControl = Partial<GroundControl> & {
   startDate: Date
-  type: MissionType.GROUND
+  type: MissionType.LAND
 }
 
 type SeaControl = {
@@ -83,7 +83,7 @@ export type PartialSeaControl = Omit<
   tideFishingZones: string[]
   tideFleetSegments: string[]
   type: MissionType.SEA
-  vessel: Partial<SeaControl['vessel']>
+  vessel: Undefine<SeaControl['vessel']>
 }
 
 type FreeNote = {

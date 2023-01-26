@@ -1,33 +1,91 @@
 import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
 import { noop } from 'lodash'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { omit } from 'ramda'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { ActionForm } from './ActionForm'
 import { ActionList } from './ActionList'
 import { MainForm } from './MainForm'
+import { getMissionFormInitialValues } from './MainForm/utils'
+import { getMissionDataFromMissionFormValues, isCompleteMissionFormValues } from './utils'
+import { missionApi } from '../../../api/mission'
+import { missionActions } from '../../../domain/actions'
+import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { MissionType } from '../../../domain/types/mission'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { SideWindowMenuKey } from '../constants'
 
+import type { MissionFormValues } from './MainForm/types'
 import type { PartialAction } from './types'
 import type { MutableRefObject } from 'react'
 
-export type MissionFormProps = {
-  // mission?: Mission
-  baseRef: MutableRefObject<HTMLDivElement>
-}
 export function MissionForm() {
-  const headerRef = useRef() as MutableRefObject<HTMLDivElement>
-  /** Header height in pixels */
+  const headerDivRef = useRef() as MutableRefObject<HTMLDivElement>
+
   const [selectedType, setSelectedType] = useState<MissionType>(MissionType.SEA)
+  /** Header height in pixels */
   const [headerHeight, setHeaderHeight] = useState<number>(0)
   const [newAction, setNewAction] = useState<PartialAction | undefined>(undefined)
+  const [createMission] = missionApi.useCreateMutation()
+
+  const dispatch = useMainAppDispatch()
+  const editedMission = useMainAppSelector(store => store.mission.editedMission)
+  const missionDraftFormValues = useMainAppSelector(store => store.mission.draftFormValues)
+
+  const mainFormInitialValues: MissionFormValues | undefined = useMemo(() => {
+    if (!editedMission) {
+      return undefined
+    }
+
+    const commonValues = omit(['inputDateTimeRangeUtc'], editedMission)
+    const defaultInitialValues = getMissionFormInitialValues()
+
+    return {
+      ...defaultInitialValues,
+      ...commonValues
+    }
+  }, [editedMission])
+
+  const isMissionFormValid = useMemo(
+    () => isCompleteMissionFormValues(missionDraftFormValues),
+    [missionDraftFormValues]
+  )
+
+  const createOrUpdateMission = useCallback(async () => {
+    if (!missionDraftFormValues) {
+      return
+    }
+
+    const newMission = getMissionDataFromMissionFormValues(missionDraftFormValues)
+
+    await createMission(newMission)
+  }, [createMission, missionDraftFormValues])
+
+  const goToMissionList = useCallback(async () => {
+    dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_LIST))
+  }, [dispatch])
+
+  const createOrUpdateMissionAndClose = useCallback(async () => {
+    await createOrUpdateMission()
+
+    goToMissionList()
+  }, [createOrUpdateMission, goToMissionList])
+
+  const handleMainFormChange = useCallback(
+    (nextMissionFormValues: MissionFormValues) => {
+      dispatch(missionActions.setDraftFormValues(nextMissionFormValues))
+    },
+    [dispatch]
+  )
 
   const unsetNewAction = useCallback(() => {
     setNewAction(undefined)
   }, [])
 
   const handleResize = useCallback(() => {
-    setHeaderHeight(headerRef.current.offsetHeight)
+    setHeaderHeight(headerDivRef.current.offsetHeight)
   }, [])
 
   useEffect(() => {
@@ -42,21 +100,37 @@ export function MissionForm() {
 
   return (
     <Wrapper heightOffset={headerHeight}>
-      <Header ref={headerRef}>
+      <Header ref={headerDivRef}>
         <HeaderTitle>Ajout d’une nouvelle mission</HeaderTitle>
         <HeaderButtonGroup>
-          <Button accent={Accent.TERTIARY}>Annuler</Button>
-          <Button accent={Accent.SECONDARY} Icon={Icon.Save}>
+          <Button accent={Accent.TERTIARY} onClick={goToMissionList}>
+            Annuler
+          </Button>
+          <Button
+            accent={Accent.SECONDARY}
+            disabled={!isMissionFormValid}
+            Icon={Icon.Save}
+            onClick={createOrUpdateMission}
+          >
             Enregistrer
           </Button>
-          <Button accent={Accent.SECONDARY} Icon={Icon.Confirm}>
+          <Button
+            accent={Accent.SECONDARY}
+            disabled={!isMissionFormValid}
+            Icon={Icon.Confirm}
+            onClick={createOrUpdateMissionAndClose}
+          >
             Enregistrer et clôturer
           </Button>
         </HeaderButtonGroup>
       </Header>
 
       <Body>
-        <MainForm onTypeChange={setSelectedType} />
+        <MainForm
+          initialValues={mainFormInitialValues}
+          onChange={handleMainFormChange}
+          onTypeChange={setSelectedType}
+        />
         <ActionList
           actions={[]}
           newAction={newAction}

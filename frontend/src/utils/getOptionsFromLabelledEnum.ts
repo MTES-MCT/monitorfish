@@ -1,13 +1,13 @@
-import { map, pipe, values } from 'ramda'
+import { map, pipe, toPairs } from 'ramda'
 
 import type { Option } from '../types'
 
 export const getOptionsFromLabelledEnum: (labelledEnum: Record<string, string>) => Option[] = pipe(
-  values,
+  toPairs as any,
   map(
-    (value: string): Option => ({
+    ([key, value]: [string, string]): Option => ({
       label: value,
-      value
+      value: key
     })
   )
 )

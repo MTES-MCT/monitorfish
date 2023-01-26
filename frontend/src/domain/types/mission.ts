@@ -1,59 +1,67 @@
+import type { ControlUnit } from './controlUnit'
+import type { GeoJSON } from './GeoJSON'
 import type { SeaFront } from '../entities/alerts/constants'
+import type { Except } from 'type-fest'
 
-export type Mission = {
-  alertType: MissionAlertType
-  cacemNote: string
-  closedBy: string
-  cnspNote: string
+export interface Mission {
+  closedBy?: string
   controlUnits: ControlUnit[]
-  endDate: Date
-  goals: MissionGoal[]
-  hasOrder: boolean
-  id: string
-  inspectionsCount: number
-  isUnderJdp: boolean
-  openedBy: string
-  seaFront: SeaFront
-  startDate: Date
-  status: MissionStatus
-  themes: string[]
-  type: MissionType
-  zones: Record<string, any>[]
+  // We type it as `undefined` because we don't need that prop in Fish
+  envActions: undefined
+  facade?: SeaFront
+  geom?: GeoJSON.MultiPolygon
+  id: number
+  inputEndDateTimeUtc?: string
+  inputStartDateTimeUtc: string
+  isClosed: boolean
+  isDeleted: boolean
+  missionNature?: MissionNature
+  missionSource: MissionSource
+  missionType: MissionType
+  observationsCacem?: string
+  observationsCnsp?: string
+  openBy?: string
 }
+
+export type MissionData = Except<Mission, 'id'>
 
 export enum MissionAlertType {
   WAITING_FOR_CLOSURE = 'Mission à clôturer'
 }
 
-/* eslint-disable typescript-sort-keys/string-enum */
 export enum MissionStatus {
-  IN_PROGRESS = 'En cours',
   CLOSED = 'Clôturée',
-  DONE = 'Terminée'
+  DONE = 'Terminée',
+  IN_PROGRESS = 'En cours'
 }
 
-export enum MissionGoal {
-  ENVIRONMENT = 'Env',
-  FISHING = 'Pêche',
+/* eslint-disable typescript-sort-keys/string-enum */
+export enum MissionNature {
+  ENV = 'ENV',
+  FISH = 'FISH',
+  OTHER = 'OTHER'
+}
+export enum MissionNatureLabel {
+  ENV = 'Env',
+  FISH = 'Pêche',
   OTHER = 'Autre'
 }
 
+export enum MissionSource {
+  MONITORENV = 'MONITORENV',
+  MONITORFISH = 'MONITORFISH',
+  POSEIDON_CACEM = 'POSEIDON_CACEM',
+  POSEIDON_CNSP = 'POSEIDON_CNSP'
+}
+
 export enum MissionType {
+  SEA = 'SEA',
+  LAND = 'LAND',
+  AIR = 'AIR'
+}
+export enum MissionTypeLabel {
   SEA = 'Mer',
-  GROUND = 'Terre',
+  LAND = 'Terre',
   AIR = 'Air'
 }
 /* eslint-enable typescript-sort-keys/string-enum */
-
-export type ControlUnit = {
-  administration: string
-  contact: string
-  id: number
-  name: string
-  resources: ControlResource[]
-}
-
-export type ControlResource = {
-  id: number
-  name: string
-}

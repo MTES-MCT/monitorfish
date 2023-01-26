@@ -18,6 +18,8 @@ import { OPENLAYERS_PROJECTION } from '../../domain/entities/map/constants'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { ReactComponent as FlagSVG } from '../icons/flag.svg'
 
+import type { SortType } from 'rsuite-table'
+
 const { Cell, Column, HeaderCell } = Table
 
 function UnmemoizedVesselListTable({
@@ -32,10 +34,10 @@ function UnmemoizedVesselListTable({
 }) {
   const isAdmin = useMainAppSelector(state => state.global.isAdmin)
   const { coordinatesFormat } = useMainAppSelector(state => state.map)
-  const [sortColumn, setSortColumn] = React.useState()
-  const [sortType, setSortType] = React.useState()
+  const [sortColumn, setSortColumn] = React.useState<string | undefined>(undefined)
+  const [sortType, setSortType] = React.useState<SortType | undefined>(undefined)
 
-  const handleSortColumn = (nextSortColumn, nextSortType) => {
+  const handleSortColumn = (nextSortColumn?: string, nextSortType?: SortType) => {
     setSortColumn(nextSortColumn)
     setSortType(nextSortType)
   }
@@ -67,8 +69,8 @@ function UnmemoizedVesselListTable({
         }}
         onSortColumn={handleSortColumn}
         rowHeight={36}
-        sortColumn={sortColumn}
-        sortType={sortType}
+        sortColumn={sortColumn as string | never}
+        sortType={sortType as SortType | never}
         virtualized
       >
         <Column fixed resizable width={35}>

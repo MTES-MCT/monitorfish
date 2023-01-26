@@ -1,4 +1,4 @@
-import { OK } from './api'
+import { HttpStatusCode } from './constants'
 
 export const FAO_AREAS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les zones FAO'
 
@@ -11,7 +11,7 @@ export const FAO_AREAS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les zon
 function getFAOAreasFromAPI () {
   return fetch('/bff/v1/fao_areas')
     .then(response => {
-      if (response.status === OK) {
+      if (response.status === HttpStatusCode.OK) {
         return response.json()
       } else {
         response.text().then(text => {

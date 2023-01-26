@@ -1,30 +1,8 @@
-import { SeaFront } from '../../../domain/entities/alerts/constants'
-import { Mission, MissionAlertType, MissionGoal, MissionStatus, MissionType } from '../../../domain/types/mission'
+import { Mission, MissionAlertType, MissionStatus, MissionType } from '../../../domain/types/mission'
 import { getOptionsFromLabelledEnum } from '../../../utils/getOptionsFromLabelledEnum'
 
 import type { TableOptions } from '../../../hooks/useTable/types'
 import type { Option } from '../../../types'
-
-export const DUMMY_MISSIONS: Mission[] = new Array(20).fill(undefined).map((_, index) => ({
-  alertType: MissionAlertType.WAITING_FOR_CLOSURE,
-  cacemNote: 'Une note du CACEM.',
-  closedBy: 'Bob A',
-  cnspNote: 'Une note du CNSP.',
-  controlUnits: [],
-  endDate: new Date(),
-  goals: [MissionGoal.FISHING],
-  hasOrder: false,
-  id: String(index + 1),
-  inspectionsCount: 0,
-  isUnderJdp: false,
-  openedBy: 'Bob B',
-  seaFront: SeaFront.MED,
-  startDate: new Date(),
-  status: MissionStatus.CLOSED,
-  themes: [],
-  type: MissionType.SEA,
-  zones: []
-}))
 
 /* eslint-disable typescript-sort-keys/string-enum */
 export enum MissionDateRangeFilter {
@@ -64,65 +42,65 @@ export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option[]> = {
 export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission> = {
   columns: [
     {
-      fixedWidth: 8,
+      fixedWidth: 112,
       isSortable: true,
       key: 'startDate',
       label: 'Date de début'
     },
     {
-      fixedWidth: 8,
+      fixedWidth: 112,
       isSortable: true,
       key: 'endDate',
       label: 'Date de fin'
     },
     {
-      fixedWidth: 14,
+      fixedWidth: 160,
       isSortable: true,
       key: 'unit',
       label: 'Unité (Administration)'
     },
     {
-      fixedWidth: 5,
+      fixedWidth: 80,
       isSortable: true,
       key: 'type',
       label: 'Type'
     },
     {
-      fixedWidth: 5,
+      fixedWidth: 80,
       isSortable: true,
       key: 'seaFront',
       label: 'Façade'
     },
     {
-      fixedWidth: 10,
+      fixedWidth: 160,
       key: 'themes',
       label: 'Thématiques'
     },
     {
-      fixedWidth: 2,
+      fixedWidth: 48,
       isSortable: true,
       key: 'inspectionsCount',
       label: 'Nombre de contrôles'
     },
     {
-      fixedWidth: 8,
+      fixedWidth: 128,
       isSortable: true,
       key: 'status',
       label: 'Statut'
     },
     {
-      fixedWidth: 10,
+      fixedWidth: 160,
       isSortable: true,
       key: 'alertType',
       label: 'Alerte'
     },
     {
-      fixedWidth: 3,
+      fixedWidth: 48,
       key: 'mapAction',
       label: ''
     },
     {
-      fixedWidth: 3,
+      fixedWidth: 48,
       key: 'editionAction',
       label: ''
     }

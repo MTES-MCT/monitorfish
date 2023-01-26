@@ -6,10 +6,10 @@ import type { HTMLAttributes } from 'react'
 
 type CardTableColumnTitleProps = HTMLAttributes<HTMLDivElement> & {
   children: string
-  dataCy?: string
-  isAscending?: boolean
-  isSortColumn?: boolean
-  isSortable?: boolean
+  dataCy?: string | undefined
+  isAscending?: boolean | undefined
+  isSortColumn?: boolean | undefined
+  isSortable?: boolean | undefined
 }
 export function CardTableColumnTitle({
   children,

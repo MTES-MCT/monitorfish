@@ -9,12 +9,12 @@ import type { Promisable } from 'type-fest'
 
 export type TableHeadProps = {
   columns: TableColumn[]
-  isAllChecked?: boolean
-  isCheckable?: boolean
+  isAllChecked?: boolean | undefined
+  isCheckable?: boolean | undefined
   isSortingDesc: boolean
   onAllCheckChange: () => Promisable<void>
   onSort: (key: string, isDesc: boolean) => Promisable<void>
-  sortingKey?: string
+  sortingKey?: string | undefined
 }
 export function TableHead({
   columns,

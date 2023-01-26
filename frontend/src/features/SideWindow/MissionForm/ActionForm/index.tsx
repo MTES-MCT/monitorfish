@@ -10,7 +10,7 @@ import type { PartialAction } from '../types'
 import type { Promisable } from 'type-fest'
 
 export type ActionFormProps = {
-  action?: PartialAction
+  action: PartialAction | undefined
   onChange: (nextNewAction: PartialAction) => Promisable<void>
 }
 export function ActionForm({ action, onChange }: ActionFormProps) {
@@ -21,7 +21,7 @@ export function ActionForm({ action, onChange }: ActionFormProps) {
   return (
     <Wrapper>
       {action.type === MissionType.AIR && <AirControl action={action} />}
-      {action.type === MissionType.GROUND && <GroundControl action={action} />}
+      {action.type === MissionType.LAND && <GroundControl action={action} />}
       {action.type === MissionType.SEA && <SeaControl action={action} onChange={onChange} />}
       {!action.type && <FreeNote action={action} onChange={onChange} />}
     </Wrapper>

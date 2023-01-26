@@ -1,8 +1,9 @@
 import { Accent, Button, Field, Icon, IconButton, Label } from '@mtes-mct/monitor-ui'
+import { useField } from 'formik'
 import { boundingExtent } from 'ol/extent'
 import { transformExtent } from 'ol/proj'
 import { remove } from 'ramda'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -10,36 +11,43 @@ import {
   OLGeometryType,
   OPENLAYERS_PROJECTION,
   WSG84_PROJECTION
-} from '../../../domain/entities/map/constants'
-import { fitToExtent } from '../../../domain/shared_slices/Map'
-import { addMissionZone } from '../../../domain/use_cases/missions/addMissionZone'
-import { useListenForDrawedGeometry } from '../../../hooks/useListenForDrawing'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+} from '../../../../domain/entities/map/constants'
+import { fitToExtent } from '../../../../domain/shared_slices/Map'
+import { addMissionZone } from '../../../../domain/use_cases/missions/addMissionZone'
+import { useListenForDrawedGeometry } from '../../../../hooks/useListenForDrawing'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 
-import type { GeoJSON } from '../../../domain/types/GeoJSON'
+import type { MissionFormValues } from './types'
 import type { Coordinate } from 'ol/coordinate'
 
-export type MultiZonePickerProps = {
-  addButtonLabel: string
+export type FormikMultiZonePickerProps = {
+  name: string
 }
-export function MultiZonePicker({ addButtonLabel }: MultiZonePickerProps) {
+export function FormikMultiZonePicker({ name }: FormikMultiZonePickerProps) {
+  // TODO Type that.
+  const [input, , helpers] = useField<MissionFormValues['geom']>(name)
+
   const dispatch = useMainAppDispatch()
   const { geometry } = useListenForDrawedGeometry(InteractionListener.MISSION_ZONE)
-  const [value, setValue] = useState<GeoJSON.MultiPolygon | undefined>()
 
   const polygons = useMemo(() => {
-    if (!value) {
+    if (!input.value) {
       return []
     }
 
-    return value.coordinates || []
-  }, [value])
+    return input.value.coordinates || []
+  }, [input.value])
 
-  useEffect(() => {
-    if (geometry?.type === OLGeometryType.MULTIPOLYGON) {
-      setValue(geometry)
-    }
-  }, [geometry, setValue])
+  useEffect(
+    () => {
+      if (geometry?.type === OLGeometryType.MULTIPOLYGON) {
+        helpers.setValue(geometry)
+      }
+    },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [geometry]
+  )
 
   const handleCenterOnMap = (coordinates: Coordinate[][]) => {
     const firstRing = coordinates[0]
@@ -51,27 +59,35 @@ export function MultiZonePicker({ addButtonLabel }: MultiZonePickerProps) {
     dispatch(fitToExtent(extent))
   }
 
-  const addZone = useCallback(() => {
-    dispatch(addMissionZone(value))
-  }, [dispatch, value])
+  const addZone = useCallback(
+    async () => {
+      dispatch(addMissionZone(input.value))
+    },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [dispatch, input.value]
+  )
 
   const deleteZone = useCallback(
     (index: number) => {
-      if (!value) {
+      if (!input.value) {
         return
       }
 
-      const nextCoordinates = remove(index, 1, value.coordinates)
-      setValue({ ...value, coordinates: nextCoordinates })
+      const nextCoordinates = remove(index, 1, input.value.coordinates)
+
+      helpers.setValue({ ...input.value, coordinates: nextCoordinates })
     },
-    [value, setValue]
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [input.value]
   )
 
   return (
     <Field>
       <Label>Localisations</Label>
       <Button accent={Accent.SECONDARY} Icon={Icon.Plus} onClick={addZone}>
-        {addButtonLabel}
+        Ajouter une zone de mission
       </Button>
 
       <>

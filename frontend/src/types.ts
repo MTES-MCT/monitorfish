@@ -23,9 +23,29 @@ export type MenuItem<T = string> = {
   name: string
 }
 
+export type PickStringKeys<T extends Record<any, any>> = Exact<
+  {
+    [Key in string]: T[Key]
+  },
+  T
+>
+
 export type PickStringKeysWithNativeValues<T extends Record<any, any>> = Exact<
   {
     [Key in string & ConditionalKeys<T, Native>]: T[Key]
   },
   T
 >
+
+/**
+ * Make a type or an interface props as undefined.
+ *
+ * @description
+ * Since `exactOptionalPropertyTypes` is enabled in tsconfig.json,
+ * this is useful to create "partial" objects while keeping their props mandatory.
+ */
+export type Undefine<T> = {
+  [K in keyof T]: T[K] | undefined
+}
+
+export type StringKeyRecord<T> = PickStringKeys<Record<string, T>>

@@ -1,4 +1,4 @@
-import { OK } from './api'
+import { HttpStatusCode } from './constants'
 
 export const SPECIES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les espèces'
 
@@ -11,7 +11,7 @@ export const SPECIES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les espè
 function getAllSpeciesFromAPI () {
   return fetch('/bff/v1/species')
     .then(response => {
-      if (response.status === OK) {
+      if (response.status === HttpStatusCode.OK) {
         return response.json()
       } else {
         response.text().then(text => {

@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.controls.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Infraction
 
 data class InfractionDataOutput(
     var natinfCode: String? = null,
@@ -12,7 +12,7 @@ data class InfractionDataOutput(
         fun fromInfraction(infraction: Infraction) = InfractionDataOutput(
             natinfCode = infraction.natinfCode,
             regulation = infraction.regulation,
-            infractionCategory = infraction.infractionCategory,
+            infractionCategory = infraction.infractionCategory.toString(),
             infraction = infraction.infraction
         )
     }

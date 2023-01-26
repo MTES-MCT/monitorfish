@@ -1,0 +1,83 @@
+package fr.gouv.cnsp.monitorfish.infrastructure.api.input
+
+import com.fasterxml.jackson.databind.ObjectMapper
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
+import java.time.ZonedDateTime
+
+data class AddMissionActionDataInput(
+    var vesselId: Int,
+    var missionId: Int,
+    var actionType: MissionActionType,
+    var actionDatetimeUtc: ZonedDateTime,
+    var emitsVms: ControlCheck? = null,
+    var emitsAis: ControlCheck? = null,
+    var logbookMatchesActivity: ControlCheck? = null,
+    var licencesMatchActivity: ControlCheck? = null,
+    var speciesWeightControlled: Boolean? = null,
+    var speciesSizeControlled: Boolean? = null,
+    var separateStowageOfPreservedSpecies: Boolean? = null,
+    var logbookInfractions: String? = null,
+    var licencesAndLogbookObservations: String? = null,
+    var gearInfractions: String? = null,
+    var speciesInfractions: String? = null,
+    var speciesObservations: String? = null,
+    var seizureAndDiversion: Boolean? = null,
+    var otherInfractions: String? = null,
+    var numberOfVesselsFlownOver: Int? = null,
+    var unitWithoutOmegaGauge: Boolean? = null,
+    var controlQualityComments: String? = null,
+    var feedbackSheetRequired: Boolean? = null,
+    var segments: String? = null,
+    var facade: String? = null,
+    var longitude: Double? = null,
+    var latitude: Double? = null,
+    var portLocode: String? = null,
+    var seizureAndDiversionComments: String? = null,
+    var otherComments: String? = null,
+    var gearOnboard: String? = null,
+    var userTrigram: String? = null,
+    var speciesOnboard: String? = null
+) {
+    fun toMissionAction(mapper: ObjectMapper) = MissionAction(
+        vesselId = vesselId,
+        missionId = missionId,
+        actionType = actionType,
+        actionDatetimeUtc = actionDatetimeUtc,
+        emitsVms = emitsVms,
+        emitsAis = emitsAis,
+        logbookMatchesActivity = logbookMatchesActivity,
+        licencesMatchActivity = licencesMatchActivity,
+        speciesWeightControlled = speciesWeightControlled,
+        speciesSizeControlled = speciesSizeControlled,
+        separateStowageOfPreservedSpecies = separateStowageOfPreservedSpecies,
+        logbookInfractions = deserializeJSONList(mapper, logbookInfractions, LogbookInfraction::class.java),
+        licencesAndLogbookObservations = licencesAndLogbookObservations,
+        gearInfractions = deserializeJSONList(mapper, gearInfractions, GearInfraction::class.java),
+        speciesInfractions = deserializeJSONList(mapper, speciesInfractions, SpeciesInfraction::class.java),
+        speciesObservations = speciesObservations,
+        seizureAndDiversion = seizureAndDiversion,
+        otherInfractions = deserializeJSONList(mapper, otherInfractions, OtherInfraction::class.java),
+        numberOfVesselsFlownOver = numberOfVesselsFlownOver,
+        unitWithoutOmegaGauge = unitWithoutOmegaGauge,
+        controlQualityComments = controlQualityComments,
+        feedbackSheetRequired = feedbackSheetRequired,
+        segments = deserializeJSONList(mapper, segments, FleetSegment::class.java),
+        facade = facade,
+        longitude = longitude,
+        latitude = latitude,
+        portLocode = portLocode,
+        seizureAndDiversionComments = seizureAndDiversionComments,
+        otherComments = otherComments,
+        gearOnboard = deserializeJSONList(mapper, gearOnboard, GearControl::class.java),
+        speciesOnboard = deserializeJSONList(mapper, speciesOnboard, SpeciesControl::class.java),
+        userTrigram = userTrigram
+    )
+
+    private fun <T> deserializeJSONList(mapper: ObjectMapper, json: String?, clazz: Class<T>): List<T> = json?.let {
+        mapper.readValue(
+            json,
+            mapper.typeFactory
+                .constructCollectionType(MutableList::class.java, clazz)
+        )
+    } ?: listOf()
+}

@@ -3,8 +3,8 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.controls.Infraction
-import fr.gouv.cnsp.monitorfish.domain.entities.controls.InfractionCategory
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValue
@@ -33,7 +33,7 @@ class GetVesselReportingsUTests {
     fun `execute Should return the reporting of a specified vessel`() {
         // Given
         given(infractionRepository.findInfractionByNatinfCode(eq("7059"))).willReturn(
-            Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING.value)
+            Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING)
         )
         given(reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(any(), any(), any())).willReturn(
             listOf(

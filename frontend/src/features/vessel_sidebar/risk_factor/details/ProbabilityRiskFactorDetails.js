@@ -1,7 +1,6 @@
-import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import InfractionsResume from '../../controls/InfractionsResume'
+import { InfractionsSummary } from '../../Controls/InfractionsSummary'
 import { useSelector } from 'react-redux'
 
 const ProbabilityRiskFactorDetails = ({ isOpen }) => {
@@ -18,7 +17,7 @@ const ProbabilityRiskFactorDetails = ({ isOpen }) => {
     <SubRiskDetails isOpen={isOpen}>
       <Line/>
       <InfractionsResumeZone>
-        <InfractionsResume
+        <InfractionsSummary
           numberOfDiversions={riskFactor?.numberDiversionsLastFiveYears}
           numberOfEscortsToQuay={riskFactor?.numberEscortsToQuayLastFiveYears}
           numberOfSeizures={riskFactor?.numberSeizuresLastFiveYears}

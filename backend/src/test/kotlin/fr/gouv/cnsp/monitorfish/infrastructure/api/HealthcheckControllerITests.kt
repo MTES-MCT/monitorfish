@@ -41,8 +41,8 @@ class HealthcheckControllerITests {
         mockMvc.perform(get("/bff/v1/healthcheck"))
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.datePositionReceived", equalTo("2020-12-21T15:01:00Z")))
-            .andExpect(jsonPath("$.dateLastPosition", equalTo("2020-12-21T16:01:00Z")))
+            .andExpect(jsonPath("$.dateLastPositionUpdatedByPrefect", equalTo("2020-12-21T15:01:00Z")))
+            .andExpect(jsonPath("$.dateLastPositionReceivedByAPI", equalTo("2020-12-21T16:01:00Z")))
             .andExpect(jsonPath("$.dateLogbookMessageReceived", equalTo("2020-12-21T17:01:00Z")))
     }
 }

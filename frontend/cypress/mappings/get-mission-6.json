@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v1/missions/6"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": {
+      "id": 6,
+      "missionType": "AIR",
+      "missionNature": ["FISH", "OTHER"],
+      "controlUnits": [
+        {
+          "id": 10003,
+          "administration": "DDTM",
+          "name": "DML 2A",
+          "resources": [
+            {
+              "id": 3,
+              "name": "Semi-rigide 1"
+            }
+          ],
+          "contact": null
+        }
+      ],
+      "openBy": "Kevin Torres",
+      "closedBy": "Cynthia Phillips",
+      "observationsCacem": "Toward agency blue now hand. Meet answer someone stand.",
+      "observationsCnsp": null,
+      "facade": "MED",
+      "geom": null,
+      "inputStartDateTimeUtc": "2022-01-20T08:29:11.923703Z",
+      "inputEndDateTimeUtc": "2023-02-14T17:45:28.923703Z",
+      "envActions": [],
+      "missionSource": "CNSP",
+      "isClosed": true
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import type { Infraction } from './control'
+import type { Infraction } from './missionAction'
 import type { SeaFront } from '../entities/alerts/constants'
 import type { PendingAlertValue } from '../entities/alerts/types'
 import type { VesselIdentifier } from '../entities/vessel/types'

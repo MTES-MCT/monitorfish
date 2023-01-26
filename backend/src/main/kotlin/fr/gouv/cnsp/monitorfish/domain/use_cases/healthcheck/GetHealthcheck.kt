@@ -13,10 +13,14 @@ class GetHealthcheck(
     private val logbookReportRepository: LogbookReportRepository
 ) {
     fun execute(): Health {
-        val positionDateTime = lastPositionRepository.findLastPositionDate()
-        val lastPositionDateTime = positionRepository.findLastPositionDate()
+        val dateLastPositionUpdatedByPrefect = lastPositionRepository.findLastPositionDate()
+        val dateLastPositionReceivedByAPI = positionRepository.findLastPositionDate()
         val logbookMessageDateTime = logbookReportRepository.findLastMessageDate()
 
-        return Health(positionDateTime, lastPositionDateTime, logbookMessageDateTime)
+        return Health(
+            dateLastPositionUpdatedByPrefect = dateLastPositionUpdatedByPrefect,
+            dateLastPositionReceivedByAPI = dateLastPositionReceivedByAPI,
+            dateLogbookMessageReceived = logbookMessageDateTime
+        )
     }
 }

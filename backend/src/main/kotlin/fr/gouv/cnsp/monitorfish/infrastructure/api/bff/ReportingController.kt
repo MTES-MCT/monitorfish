@@ -4,15 +4,15 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateReportingDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateReportingDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ReportingDataOutput
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import javax.websocket.server.PathParam
 
 @RestController
 @RequestMapping("/bff/v1/reportings")
-@Api(description = "APIs for reporting")
+@Tag(name = "APIs for reporting")
 class ReportingController(
     private val archiveReporting: ArchiveReporting,
     private val archiveReportings: ArchiveReportings,
@@ -24,7 +24,7 @@ class ReportingController(
 ) {
 
     @PostMapping(value = [""], consumes = ["application/json"])
-    @ApiOperation("Create a reporting")
+    @Operation(summary = "Create a reporting")
     @ResponseStatus(HttpStatus.CREATED)
     fun createReporting(
         @RequestBody
@@ -34,13 +34,13 @@ class ReportingController(
     }
 
     @GetMapping(value = [""])
-    @ApiOperation("Get all current reportings")
+    @Operation(summary = "Get all current reportings")
     fun getAllReportings(): List<ReportingDataOutput> {
         return getAllCurrentReportings.execute().map { ReportingDataOutput.fromReporting(it) }
     }
 
     @PutMapping(value = ["/{reportingId}/archive"])
-    @ApiOperation("Archive a reporting")
+    @Operation(summary = "Archive a reporting")
     fun archiveReporting(
         @PathParam("Reporting id")
         @PathVariable(name = "reportingId")
@@ -50,7 +50,7 @@ class ReportingController(
     }
 
     @PutMapping(value = ["/{reportingId}/update"], consumes = ["application/json"])
-    @ApiOperation("Update a reporting")
+    @Operation(summary = "Update a reporting")
     fun updateReporting(
         @PathParam("Reporting id")
         @PathVariable(name = "reportingId")
@@ -64,13 +64,13 @@ class ReportingController(
     }
 
     @PutMapping(value = ["/archive"])
-    @ApiOperation("Archive multiple reportings")
+    @Operation(summary = "Archive multiple reportings")
     fun archiveReportings(@RequestBody ids: List<Int>) {
         archiveReportings.execute(ids)
     }
 
     @PutMapping(value = ["/{reportingId}/delete"])
-    @ApiOperation("Delete a reporting")
+    @Operation(summary = "Delete a reporting")
     fun deleteReporting(
         @PathParam("Reporting id")
         @PathVariable(name = "reportingId")
@@ -80,7 +80,7 @@ class ReportingController(
     }
 
     @PutMapping(value = ["/delete"])
-    @ApiOperation("Delete multiple reportings")
+    @Operation(summary = "Delete multiple reportings")
     fun deleteReporting(@RequestBody ids: List<Int>) {
         deleteReportings.execute(ids)
     }

@@ -23,7 +23,7 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
   const { forceUpdate } = useForceUpdate()
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const defaultValues = useMemo(() => input.value || [], [])
+  const defaultValues = useMemo(() => input.value || [], [input.value.length])
 
   const administrationsAsOptions = useMemo((): Option[] => {
     if (!controlUnitsQuery.data) {

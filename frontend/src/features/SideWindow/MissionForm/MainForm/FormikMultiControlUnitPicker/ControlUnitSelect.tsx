@@ -9,6 +9,7 @@ import {
   mapControlUnitToResourcesAsOptions
 } from './utils'
 import { useNewWindow } from '../../../../../ui/NewWindow'
+import { mapToProp } from '../../../../../utils/mapToProp'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../constants'
 
 import type { ControlUnit } from '../../../../../domain/types/controlUnit'
@@ -45,6 +46,13 @@ export function ControlUnitSelect({
 
     return mapControlUnitToResourcesAsOptions(selectedControlUnit)
   }, [selectedControlUnit])
+
+  const controlledValueResourceIds = useMemo(
+    () => (controlledValueRef.current.resources ? mapToProp(controlledValueRef.current.resources, 'id') : []),
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [controlledValueRef.current]
+  )
 
   const unitsAsOptions = useMemo(
     (): Option[] => {
@@ -169,7 +177,8 @@ export function ControlUnitSelect({
         />
         <MultiSelect
           baseContainer={newWindowContainerRef.current}
-          defaultValue={undefined}
+          // TODO Allow for different Option value type than string in monitor-ui.
+          defaultValue={controlledValueResourceIds as any}
           disabled={!controlUnits || !controlledValueRef.current.administration}
           fixedWidth={320}
           label={`Ressource ${index + 1}`}

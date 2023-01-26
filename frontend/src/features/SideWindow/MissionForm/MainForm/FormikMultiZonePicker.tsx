@@ -25,18 +25,18 @@ export type FormikMultiZonePickerProps = {
 }
 export function FormikMultiZonePicker({ name }: FormikMultiZonePickerProps) {
   // TODO Type that.
-  const [input, , helpers] = useField<MissionFormValues['geom']>(name)
+  const [{ value }, , helpers] = useField<MissionFormValues['geom']>(name)
 
   const dispatch = useMainAppDispatch()
   const { geometry } = useListenForDrawedGeometry(InteractionListener.MISSION_ZONE)
 
   const polygons = useMemo(() => {
-    if (!input.value) {
+    if (!value) {
       return []
     }
 
-    return input.value.coordinates || []
-  }, [input.value])
+    return value.coordinates || []
+  }, [value])
 
   useEffect(
     () => {
@@ -59,28 +59,23 @@ export function FormikMultiZonePicker({ name }: FormikMultiZonePickerProps) {
     dispatch(fitToExtent(extent))
   }
 
-  const addZone = useCallback(
-    async () => {
-      dispatch(addMissionZone(input.value))
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch, input.value]
-  )
+  const addZone = useCallback(async () => {
+    dispatch(addMissionZone(value))
+  }, [dispatch, value])
 
   const deleteZone = useCallback(
     (index: number) => {
-      if (!input.value) {
+      if (!value) {
         return
       }
 
-      const nextCoordinates = remove(index, 1, input.value.coordinates)
+      const nextCoordinates = remove(index, 1, value.coordinates)
 
-      helpers.setValue({ ...input.value, coordinates: nextCoordinates })
+      helpers.setValue({ ...value, coordinates: nextCoordinates })
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [input.value]
+    [value]
   )
 
   return (

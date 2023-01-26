@@ -145,4 +145,10 @@ def attribute_segments_to_catches(
             {"segment": unassigned_catches_segment_label}
         )
 
+    segmented_catches = (
+        segmented_catches.sort_values("catch_id")
+        .drop(columns=["catch_id"])
+        .reset_index(drop=True)
+    )
+
     return segmented_catches

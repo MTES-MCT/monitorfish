@@ -8,7 +8,7 @@ import type { MissionControlsSummary } from '../domain/types/missionAction'
 
 export const missionApi = monitorenvApi.injectEndpoints({
   endpoints: builder => ({
-    create: builder.mutation<void, MissionData>({
+    createMission: builder.mutation<void, MissionData>({
       invalidatesTags: () => [{ type: 'Missions' }],
       query: mission => ({
         body: mission,
@@ -17,7 +17,7 @@ export const missionApi = monitorenvApi.injectEndpoints({
       })
     }),
 
-    delete: builder.mutation<void, string>({
+    deleteMission: builder.mutation<void, string>({
       invalidatesTags: () => [{ type: 'Missions' }],
       query: id => ({
         method: 'DELETE',
@@ -25,12 +25,12 @@ export const missionApi = monitorenvApi.injectEndpoints({
       })
     }),
 
-    getMany: builder.query<Mission[], void>({
+    getMissions: builder.query<Mission[], void>({
       providesTags: () => [{ type: 'Missions' }],
       query: () => `missions?startedAfterDateTime=&startedBeforeDateTime=`
     }),
 
-    update: builder.mutation<void, Mission>({
+    updateMission: builder.mutation<void, Mission>({
       invalidatesTags: () => [{ type: 'Missions' }],
       query: mission => ({
         body: mission,
@@ -40,6 +40,9 @@ export const missionApi = monitorenvApi.injectEndpoints({
     })
   })
 })
+
+export const { useCreateMissionMutation, useDeleteMissionMutation, useGetMissionsQuery, useUpdateMissionMutation } =
+  missionApi
 
 // TODO Let's move that part somewhere else.
 

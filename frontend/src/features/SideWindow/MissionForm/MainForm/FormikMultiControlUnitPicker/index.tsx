@@ -5,7 +5,7 @@ import { useCallback, useMemo, useRef } from 'react'
 
 import { ControlUnitSelect } from './ControlUnitSelect'
 import { mapControlUnitsToUniqueSortedAdmistrationsAsOptions } from './utils'
-import { controlUnitApi } from '../../../../../api/controlUnit'
+import { useGetControlUnitsQuery } from '../../../../../api/controlUnit'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../constants'
 
 import type { MissionFormValues } from '../types'
@@ -19,7 +19,7 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
 
   const controlledValueRef = useRef<MissionFormValues['controlUnits']>(input.value)
 
-  const controlUnitsQuery = controlUnitApi.useGetManyQuery(undefined)
+  const controlUnitsQuery = useGetControlUnitsQuery(undefined)
   const { forceUpdate } = useForceUpdate()
 
   // eslint-disable-next-line react-hooks/exhaustive-deps

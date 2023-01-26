@@ -6,7 +6,7 @@ import styled from 'styled-components'
 
 import { MISSION_LIST_TABLE_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
-import { missionApi } from '../../../api/mission'
+import { useGetMissionsQuery } from '../../../api/mission'
 import { missionActions } from '../../../domain/actions'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
@@ -22,7 +22,7 @@ import type { MutableRefObject } from 'react'
 export function MissionList() {
   const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
   const [filters, setFilters] = useState<MissionFilter[]>([])
-  const missionApiQuery = missionApi.useGetManyQuery(undefined)
+  const missionApiQuery = useGetMissionsQuery(undefined)
   const dispatch = useMainAppDispatch()
 
   const { renderTableHead, tableData } = useTable<Mission>(

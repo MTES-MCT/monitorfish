@@ -8,8 +8,12 @@ import { ActionForm } from './ActionForm'
 import { ActionList } from './ActionList'
 import { MainForm } from './MainForm'
 import { getMissionFormInitialValues } from './MainForm/utils'
-import { getMissionDataFromMissionFormValues, isCompleteMissionFormValues } from './utils'
-import { missionApi } from '../../../api/mission'
+import {
+  getMissionDataFromMissionFormValues,
+  getUpdatedMissionFromMissionFormValues,
+  isCompleteMissionFormValues
+} from './utils'
+import { useCreateMissionMutation } from '../../../api/mission'
 import { missionActions } from '../../../domain/actions'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { MissionType } from '../../../domain/types/mission'
@@ -28,7 +32,8 @@ export function MissionForm() {
   /** Header height in pixels */
   const [headerHeight, setHeaderHeight] = useState<number>(0)
   const [newAction, setNewAction] = useState<PartialAction | undefined>(undefined)
-  const [createMission] = missionApi.useCreateMutation()
+  const [createMission] = useCreateMissionMutation()
+  const [updateMission] = useCreateMissionMutation()
 
   const dispatch = useMainAppDispatch()
   const editedMission = useMainAppSelector(store => store.mission.editedMission)
@@ -53,23 +58,28 @@ export function MissionForm() {
     [missionDraftFormValues]
   )
 
-  const createOrUpdateMission = useCallback(async () => {
+  const createOrUpdateMission = useCallback(() => {
     if (!missionDraftFormValues) {
       return
     }
 
-    const newMission = getMissionDataFromMissionFormValues(missionDraftFormValues)
+    if (!editedMission) {
+      const newMission = getMissionDataFromMissionFormValues(missionDraftFormValues)
 
-    await createMission(newMission)
-  }, [createMission, missionDraftFormValues])
+      createMission(newMission)
+    } else {
+      const updatedMission = getUpdatedMissionFromMissionFormValues(editedMission.id, missionDraftFormValues)
+
+      updateMission(updatedMission)
+    }
+  }, [createMission, editedMission, missionDraftFormValues, updateMission])
 
   const goToMissionList = useCallback(async () => {
     dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_LIST))
   }, [dispatch])
 
   const createOrUpdateMissionAndClose = useCallback(async () => {
-    await createOrUpdateMission()
-
+    createOrUpdateMission()
     goToMissionList()
   }, [createOrUpdateMission, goToMissionList])
 

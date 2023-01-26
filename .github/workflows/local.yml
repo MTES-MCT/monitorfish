@@ -1,0 +1,97 @@
+# In order to locally try out new workflow setups (i.e. for upgrades and improvements),
+# you can use this experimental workflow via act (https://github.com/nektos/act).
+# Add or replace `-P ubuntu-22.04=ghcr.io/catthehacker/ubuntu:act-latest` in ~/.actrc.
+
+# Act containers are not perfectly ISO with Github Actions ones, but it's close enough.
+# Notable differences are:
+# - Some APT packages are required here when they may not be required in Github Actions.
+# - There is no need for sudo here whereas it's required in Github Actions Ubuntu image.
+
+name: Local
+
+on: workflow_dispatch
+
+jobs:
+  # Run `act -j experimental_e2e_test && sudo fuser -k 5000/tcp -k 5001/tcp -k 5433/tcp -k 8000/tcp` to run this job
+  # the fuser command is a hack to kill hanging N/docker-prox processes after stopping act:
+  experimental_e2e_test:
+    name: Test
+    runs-on: ubuntu-22.04
+    # strategy:
+    #   # when one test fails, DO NOT cancel the other
+    #   # containers, because this will kill Cypress processes
+    #   # leaving the Dashboard hanging ...
+    #   # https://github.com/cypress-io/github-action/issues/48
+    #   fail-fast: false
+    #   matrix:
+    #     # run 4 copies of the current job in parallel
+    #     containers: [1, 2, 3, 4]
+    env:
+      # ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+      DB_PUBLIC_PORT: 5433
+      CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
+      CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+      # ENV_PROFILE: ${{needs.version.outputs.ENV_PROFILE}}
+      # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      MONITORFISH_VERSION: v1.16.5_snapshot
+      PORT: 8880
+      # REACT_APP_CYPRESS_PORT: 8880
+      VERSION: v1.16.5_snapshot
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # This step is is not required in GA
+      - name: Prepare Cypress
+        run: |
+          apt-get update -qq
+          apt-get install -qq \
+            libgtk2.0-0 \
+            libgtk-3-0 \
+            libgbm-dev \
+            libnotify-dev \
+            libgconf-2-4 \
+            libnss3 \
+            libxss1 \
+            libasound2 \
+            libxtst6 \
+            xauth \
+            xvfb
+
+      - name: Setup Firefox
+        uses: browser-actions/setup-firefox@latest
+        with:
+          firefox-version: latest
+
+      - name: Check Versions
+        run: |
+          cat /etc/lsb-release
+          node -v
+          npm -v
+          docker -v
+          docker compose version
+          make -v
+          firefox -v
+          which firefox
+
+      - name: Serve Application
+        run: make docker-compose-up
+
+      - name: Run Cypress
+        uses: cypress-io/github-action@v4
+        with:
+          browser: firefox
+          env: PORT=8880
+          install: true
+          install-command: npm ci
+          parallel: true
+          record: true
+          start: npm start
+          wait-on: "http://localhost:8880"
+          wait-on-timeout: 120
+          working-directory: ./frontend

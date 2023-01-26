@@ -191,7 +191,9 @@ function buildLineStringFeatures(
       feature.secondPositionDate = secondPositionDate
       feature.isTimeEllipsis = isTimeEllipsis
       feature.trackType = getTrackType([firstPosition, secondPosition], isTimeEllipsis)
-      feature.course = rotation ? -rotation : undefined
+      if (rotation) {
+        feature.course = -rotation
+      }
       feature.speed = firstPosition.speed
 
       feature.setId(`${Layer.VESSEL_TRACK.code}:${vesselCompositeIdentifier}:line:${index}`)

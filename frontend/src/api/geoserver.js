@@ -3,7 +3,7 @@ import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map/
 import WFS from 'ol/format/WFS'
 import GML from 'ol/format/GML'
 import { REGULATION_ACTION_TYPE } from '../domain/entities/regulation'
-import { OK } from './api'
+import { HttpStatusCode } from './constants'
 
 export const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la couche réglementaire'
 const REGULATORY_ZONES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les zones réglementaires'
@@ -32,7 +32,7 @@ function getAllRegulatoryLayersFromAPI (fromBackoffice) {
   return fetch(`${geoserverURL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
     `${Layer.REGULATORY.code}&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`)
     .then(response => {
-      if (response.status === OK) {
+      if (response.status === HttpStatusCode.OK) {
         return response.json()
       } else {
         response.text().then(text => {
@@ -68,7 +68,7 @@ function getAllGeometryWithoutProperty (fromBackoffice) {
     `${Layer.REGULATORY.code}&outputFormat=application/json&propertyName=geometry,id&CQL_FILTER=` + filter.replace(/'/g, '%27').replace(/ /g, '%20')
   return fetch(REQUEST)
     .then(response => {
-      if (response.status === OK) {
+      if (response.status === HttpStatusCode.OK) {
         return response.json()
       } else {
         response.text().then(text => {
@@ -98,7 +98,7 @@ function getAdministrativeZoneFromAPI (administrativeZone, extent, subZone, from
 
   return fetch(getAdministrativeZoneURL(administrativeZone, extent, subZone, geoserverURL))
     .then(response => {
-      if (response.status === OK) {
+      if (response.status === HttpStatusCode.OK) {
         return response.json().then(response => {
           return response
         }).catch(e => {
@@ -151,7 +151,7 @@ function getRegulatoryZoneFromAPI (type, regulatoryZone, fromBackoffice) {
 
     return fetch(getRegulatoryZoneURL(type, regulatoryZone, geoserverURL))
       .then(response => {
-        if (response.status === OK) {
+        if (response.status === HttpStatusCode.OK) {
           return response.json().then(response => {
             return getFirstFeature(response)
           }).catch(e => {
@@ -207,7 +207,7 @@ export function getRegulatoryZonesInExtentFromAPI (extent, fromBackoffice) {
         .replace(/\)/g, '%29')
         .replace(/ /g, '%20'))
       .then(response => {
-        if (response.status === OK) {
+        if (response.status === HttpStatusCode.OK) {
           return response.json().then(response => {
             return response
           }).catch(error => {
@@ -253,7 +253,7 @@ function getRegulatoryFeatureMetadataFromAPI (regulatorySubZone, fromBackoffice)
 
   return fetch(url)
     .then(response => {
-      if (response.status === OK) {
+      if (response.status === HttpStatusCode.OK) {
         return response.json().then(response => {
           return getFirstFeature(response)
         })
@@ -288,7 +288,7 @@ function getAdministrativeSubZonesFromAPI (type, fromBackoffice) {
 
   return fetch(query)
     .then(response => {
-      if (response.status === OK) {
+      if (response.status === HttpStatusCode.OK) {
         return response.json().then(response => {
           return response
         }).catch(e => {

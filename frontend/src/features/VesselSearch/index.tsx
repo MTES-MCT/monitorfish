@@ -17,11 +17,13 @@ import type { VesselIdentity } from '../../domain/entities/vessel/types'
 import type { MutableRefObject } from 'react'
 
 type VesselSearchProps = {
-  baseRef?: MutableRefObject<HTMLDivElement>
-  defaultValue?: {
-    flagState?: string | null
-    vesselName?: string
-  }
+  baseRef?: MutableRefObject<HTMLDivElement> | undefined
+  defaultValue?:
+    | {
+        flagState?: string | null | undefined
+        vesselName?: string | undefined
+      }
+    | undefined
   extendedWidth: number
   hasVesselIdInResults: boolean
   isExtended: boolean

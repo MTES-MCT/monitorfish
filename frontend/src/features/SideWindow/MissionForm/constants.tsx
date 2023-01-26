@@ -15,7 +15,7 @@ export const NEW_AIR_CONTROL_ACTION = (): PartialAirControl => ({
 
 export const NEW_GROUND_CONTROL_ACTION = (): PartialGroundControl => ({
   startDate: new Date(),
-  type: MissionType.GROUND
+  type: MissionType.LAND
 })
 
 export const NEW_SEA_CONTROL_ACTION = (): PartialSeaControl => ({
@@ -46,7 +46,7 @@ export const NEW_FREE_NOTE_ACTION = (): PartialFreeNote => ({
 
 export const NEW_ACTION_BY_TYPE: Record<MissionType | 'default', () => PartialAction> = {
   [MissionType.AIR]: NEW_AIR_CONTROL_ACTION,
-  [MissionType.GROUND]: NEW_GROUND_CONTROL_ACTION,
+  [MissionType.LAND]: NEW_GROUND_CONTROL_ACTION,
   [MissionType.SEA]: NEW_SEA_CONTROL_ACTION,
   default: NEW_FREE_NOTE_ACTION
 }

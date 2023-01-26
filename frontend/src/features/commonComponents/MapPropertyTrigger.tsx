@@ -7,7 +7,7 @@ import { COLORS } from '../../constants/constants'
 import type { FunctionComponent, SVGProps } from 'react'
 
 type MapPropertyTriggerProps = {
-  Icon: FunctionComponent<SVGProps<SVGSVGElement> & { title?: string | undefined }>
+  Icon: FunctionComponent<SVGProps<SVGSVGElement> & { title?: string }>
   booleanProperty: boolean
   disabled?: boolean
   inverse?: boolean
@@ -55,7 +55,7 @@ export function MapPropertyTrigger({
 }
 
 const Wrapper = styled.div<{
-  disabled?: boolean
+  disabled: boolean | undefined
 }>`
   background: ${COLORS.gainsboro};
   border-bottom-left-radius: 2px;

@@ -115,7 +115,7 @@ export function SpeciesField() {
         <Select
           key={`newSpecy.specyName-${input.value.length}`}
           baseContainer={newWindowContainerRef.current}
-          disabled={values.hasNoOnboardSpecy}
+          disabled={Boolean(values.hasNoOnboardSpecy)}
           label="Ajouter une espèce"
           name="newSpecy.specyName"
           onChange={addSpecyInfraction}

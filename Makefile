@@ -10,6 +10,14 @@ run-front:
 run-back: run-stubbed-apis
 	docker compose up -d --quiet-pull db
 	cd backend && ./mvnw spring-boot:run -Dspring-boot.run.arguments="--spring.config.additional-location=$(INFRA_FOLDER)" -Dspring-boot.run.profiles="local"
+run-back-full:
+	docker compose down -v
+	docker compose -f ./frontend/cypress/docker-compose.yml down -v
+	docker compose -f ./infra/dev/docker-compose.yml down -v
+	docker compose up --quiet-pull flyway
+	docker compose up -d --quiet-pull --wait geoserver
+	docker compose -f ./frontend/cypress/docker-compose.yml up --quiet-pull geoserver-monitorenv-stubs
+	cd backend && ./mvnw spring-boot:run -Dspring-boot.run.arguments="--spring.config.additional-location=$(INFRA_FOLDER)" -Dspring-boot.run.profiles="local"
 run-stubbed-apis:
 	docker stop cypress-geoserver-monitorenv-stubs-1 || true
 	docker compose -f ./frontend/cypress/docker-compose.yml up -d --quiet-pull geoserver-monitorenv-stubs
@@ -24,24 +32,31 @@ test: test-back
 	cd frontend && CI=true npm run test:unit -- --coverage
 test-back: check-clean-archi
 	cd backend && ./mvnw clean && ./mvnw test
+
 dev: dev-back
 	sh -c 'make run-front'
-dev-back:
+# TODO For some reason containers don't wait for healthchecks.
+dev-back: dev-prune
 	docker compose -f ./infra/dev/docker-compose.yml down -v
 	docker network inspect monitorfish_network >/dev/null 2>&1 || docker network create monitorfish_network
 	docker compose -f ./infra/dev/docker-compose.yml up -d db
+	sleep 10
 	docker compose -f ./infra/dev/docker-compose.yml up flyway
-	docker compose -f ./infra/dev/docker-compose.yml up -d app
-	make dev-wait-for-app
+	# docker compose -f ./infra/dev/docker-compose.yml up -d geoserver
+	# sleep 30
+	docker compose -f ./infra/dev/docker-compose.yml up geoserver-monitorenv-stubs
+	# cd backend && ./mvnw spring-boot:run -Dspring-boot.run.arguments="--spring.config.additional-location=$(INFRA_FOLDER)" -Dspring-boot.run.profiles="local"
 dev-down:
 	docker compose -f ./infra/dev/docker-compose.yml down
 dev-prune:
+	docker compose down -v
+	docker compose -f ./frontend/cypress/docker-compose.yml down -v
 	docker compose -f ./infra/dev/docker-compose.yml down -v
 dev-reset:
 	rm -f ./frontend/cypress/downloads/*
 	docker compose -f ./infra/dev/docker-compose.yml stop app geoserver
 	docker compose -f ./infra/dev/docker-compose.yml exec db \
-		psql -U postgres -d postgres -c "DROP DATABASE IF EXISTS  monitorfishdb;"
+		psql -U postgres -d postgres -c "DROP DATABASE IF EXISTS monitorfishdb;"
 	docker compose -f ./infra/dev/docker-compose.yml exec db \
 		psql -U postgres -d postgres -c "CREATE DATABASE monitorfishdb;"
 	docker compose -f ./infra/dev/docker-compose.yml up flyway

@@ -27,7 +27,7 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
   const unitsAsOptions = useMemo(
     () =>
       pipe(
-        map<Mission, string[]>(({ controlUnits }) => controlUnits.map(unit => unit.name)),
+        map<Mission, string[]>(({ controlUnits }) => (controlUnits || []).map(({ name }) => name)),
         flatten,
         uniq,
         getOptionsFromStrings

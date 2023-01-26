@@ -1,4 +1,3 @@
-version: '3'
 services:
   db:
     image: timescale/timescaledb-postgis:1.7.4-pg11

@@ -1,8 +1,17 @@
-import type { MissionType, Mission, ControlUnit } from '../../../../domain/types/mission'
-import type { DateRange } from '@mtes-mct/monitor-ui'
+import type { ControlUnit } from '../../../../domain/types/controlUnit'
+import type { MissionType, MissionData } from '../../../../domain/types/mission'
+import type { Undefine } from '../../../../types'
+import type { DateAsStringRange } from '@mtes-mct/monitor-ui'
 
-export type FormValues = Partial<Omit<Mission, 'endDate' | 'startDate' | 'units'>> & {
-  dateRange?: DateRange
-  type: MissionType
-  units: Partial<ControlUnit>[]
+export type MissionFormValues = Partial<
+  Omit<
+    MissionData,
+    'controlUnits' | 'inputStartDateTimeUtc' | 'inputEndDateTimeUtc' | 'missionSource' | 'missionType' | 'controlUnits'
+  >
+> & {
+  controlUnits: Undefine<ControlUnit>[]
+  hasOrder?: boolean | undefined
+  inputDateTimeRangeUtc: DateAsStringRange | undefined
+  missionType: MissionType
+  zones: string[]
 }

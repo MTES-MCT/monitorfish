@@ -267,7 +267,7 @@ export function ReportingForm({
         <>
           <Label>Nom de l&apos;unité</Label>
           <SelectPicker
-            container={fromSideWindow ? () => unitSelectRef.current : undefined}
+            container={(fromSideWindow ? () => unitSelectRef.current : undefined) as any}
             data={controllers
               ?.map(controller => ({
                 label: `${controller.controller} (${controller.administration})`,
@@ -275,7 +275,7 @@ export function ReportingForm({
               }))
               .sort((a, b) => sortArrayByColumn(a, b, 'label', 'asc'))}
             data-cy="new-reporting-select-unit"
-            menuStyle={fromSideWindow ? { marginLeft: 40, marginTop: 270, position: 'absolute' } : undefined}
+            menuStyle={fromSideWindow ? { marginLeft: 40, marginTop: 270, position: 'absolute' } : {}}
             onChange={_unit => setUnit(_unit)}
             placeholder="Choisir l'unité"
             searchable

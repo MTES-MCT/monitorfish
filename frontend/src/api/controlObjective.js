@@ -1,4 +1,4 @@
-import { CREATED, OK } from './api'
+import { HttpStatusCode } from './constants'
 
 export const CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les objectifs de contrôle'
 export const CONTROL_OBJECTIVE_YEARS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les années des objectifs de contrôle'
@@ -17,7 +17,7 @@ export const ADD_CONTROL_OBJECTIVES_YEAR_ERROR_MESSAGE = 'Nous n\'avons pas pu a
 function getControlObjectivesFromAPI (year) {
   return fetch(`/bff/v1/control_objectives/${year}`)
     .then(response => {
-      if (response.status === OK) {
+      if (response.status === HttpStatusCode.OK) {
         return response.json()
       } else {
         response.text().then(text => {
@@ -40,7 +40,7 @@ function getControlObjectivesFromAPI (year) {
 function getControlObjectiveYearEntriesFromAPI () {
   return fetch('/bff/v1/control_objectives/years')
     .then(response => {
-      if (response.status === OK) {
+      if (response.status === HttpStatusCode.OK) {
         return response.json()
       } else {
         response.text().then(text => {
@@ -70,7 +70,7 @@ function updateControlObjectiveFromAPI (id, updatedFields) {
     },
     body: JSON.stringify(updatedFields)
   }).then(response => {
-    if (response.status !== OK) {
+    if (response.status !== HttpStatusCode.OK) {
       response.text().then(text => {
         console.error(text)
       })
@@ -92,7 +92,7 @@ function deleteControlObjectiveFromAPI (id) {
   return fetch(`/bff/v1/control_objectives/${id}`, {
     method: 'DELETE'
   }).then(response => {
-    if (response.status !== OK) {
+    if (response.status !== HttpStatusCode.OK) {
       throw Error(DELETE_CONTROL_OBJECTIVES_ERROR_MESSAGE)
     }
   }).catch(error => {
@@ -125,7 +125,7 @@ function addControlObjectiveFromAPI (segment, facade, year) {
     },
     body: JSON.stringify(createFields)
   }).then(response => {
-    if (response.status === OK) {
+    if (response.status === HttpStatusCode.OK) {
       return response.json()
     } else {
       response.text().then(text => {
@@ -148,7 +148,7 @@ function addControlObjectiveYearFromAPI () {
   return fetch('/bff/v1/control_objectives/years', {
     method: 'POST'
   }).then(response => {
-    if (response.status !== CREATED) {
+    if (response.status !== HttpStatusCode.CREATED) {
       throw Error(ADD_CONTROL_OBJECTIVES_YEAR_ERROR_MESSAGE)
     }
   }).catch(error => {

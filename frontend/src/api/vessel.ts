@@ -1,6 +1,6 @@
 import ky, { HTTPError } from 'ky'
 
-import { ACCEPTED, NOT_FOUND } from './api'
+import { HttpStatusCode } from './constants'
 import { ApiError } from '../libs/ApiError'
 
 import type { RiskFactor } from '../domain/entities/vessel/riskFactor/types'
@@ -64,7 +64,7 @@ async function getVesselFromAPI(identity: VesselIdentity, trackRequest: TrackReq
       )
       .then(response =>
         response.json<VesselAndPositions>().then(vesselAndPositions => ({
-          isTrackDepthModified: response.status === ACCEPTED,
+          isTrackDepthModified: response.status === HttpStatusCode.ACCEPTED,
           vesselAndPositions
         }))
       )
@@ -92,7 +92,7 @@ async function getVesselPositionsFromAPI(identity: VesselIdentity, trackRequest:
       )
       .then(response =>
         response.json<VesselPosition[]>().then(positions => ({
-          isTrackDepthModified: response.status === ACCEPTED,
+          isTrackDepthModified: response.status === HttpStatusCode.ACCEPTED,
           positions
         }))
       )
@@ -132,7 +132,7 @@ async function getVesselVoyageFromAPI(
       )
       .json<VesselVoyage>()
   } catch (err) {
-    if (err instanceof HTTPError && err.response.status === NOT_FOUND) {
+    if (err instanceof HTTPError && err.response.status === HttpStatusCode.NOT_FOUND) {
       return undefined
     }
 

@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconStatus
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "beacons")

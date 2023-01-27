@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import fr.gouv.cnsp.monitorfish.domain.entities.control_objective.ControlObjective
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "control_objectives")

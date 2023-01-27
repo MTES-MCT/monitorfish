@@ -1,16 +1,18 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.vladmihalcea.hibernate.type.array.ListArrayType
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import org.hibernate.annotations.Type
 import java.io.Serializable
 import java.time.ZonedDateTime
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
 
 @Entity
 @Table(name = "risk_factors")
@@ -26,13 +28,13 @@ data class RiskFactorsEntity(
     val detectabilityRiskFactor: Double,
     @Column(name = "risk_factor")
     val riskFactor: Double,
-    @Type(type = "jsonb")
+    @Type(JsonBinaryType::class)
     @Column(name = "gear_onboard", columnDefinition = "jsonb")
     val gearOnboard: String?,
-    @Type(type = "jsonb")
+    @Type(JsonBinaryType::class)
     @Column(name = "species_onboard", columnDefinition = "jsonb")
     val speciesOnboard: String?,
-    @Type(type = "string-array")
+    @Type(ListArrayType::class)
     @Column(name = "segments", columnDefinition = "varchar(50)[]")
     val segments: List<String>,
     @Column(name = "segment_highest_impact")

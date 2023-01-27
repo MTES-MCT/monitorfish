@@ -84,8 +84,8 @@ interface DBLogbookReportRepository : CrudRepository<LogbookReportEntity, Long>,
            SELECT *
            FROM logbook_reports
            WHERE
-               operation_datetime_utc >= ?2 AND
-               operation_datetime_utc <= ?3 AND
+               operation_datetime_utc >= cast(?2 AS timestamp) AND
+               operation_datetime_utc <= cast(?3 AS timestamp) AND
                cfr = ?1 AND
                trip_number = ?4 AND
                operation_type IN ('DAT', 'COR')
@@ -96,8 +96,8 @@ interface DBLogbookReportRepository : CrudRepository<LogbookReportEntity, Long>,
            FROM logbook_reports
            WHERE
                referenced_report_id IN (select report_id FROM dat_cor) AND
-               operation_datetime_utc + INTERVAL '1 day' >= ?2 AND
-               operation_datetime_utc - INTERVAL '1 day' < ?3 AND
+               operation_datetime_utc + INTERVAL '1 day' >= cast(?2 AS timestamp) AND
+               operation_datetime_utc - INTERVAL '1 day' < cast(?3 AS timestamp) AND
                operation_type = 'RET'
            ORDER BY operation_datetime_utc DESC
         ),
@@ -106,8 +106,8 @@ interface DBLogbookReportRepository : CrudRepository<LogbookReportEntity, Long>,
            FROM logbook_reports
            WHERE
                referenced_report_id IN (select report_id FROM dat_cor) AND
-               operation_datetime_utc >= ?2 AND
-               operation_datetime_utc - INTERVAL '1 week' < ?3 AND
+               operation_datetime_utc >= cast(?2 AS timestamp) AND
+               operation_datetime_utc - INTERVAL '1 week' < cast(?3 AS timestamp) AND
                operation_type = 'DEL'
            ORDER BY operation_datetime_utc desc
         )
@@ -119,8 +119,8 @@ interface DBLogbookReportRepository : CrudRepository<LogbookReportEntity, Long>,
     )
     fun findAllMessagesByTripNumberBetweenDates(
         internalReferenceNumber: String,
-        afterDateTime: Instant,
-        beforeDateTime: Instant,
+        afterDateTime: String,
+        beforeDateTime: String,
         tripNumber: String
     ): List<LogbookReportEntity>
 

@@ -10,7 +10,7 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
-import javax.transaction.Transactional
+import jakarta.transaction.Transactional
 
 @Repository
 class JpaPositionRepository(private val dbPositionRepository: DBPositionRepository) : PositionRepository {

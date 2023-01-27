@@ -3,34 +3,19 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.neovisionaries.i18n.CountryCode
 import com.vladmihalcea.hibernate.type.array.ListArrayType
-import com.vladmihalcea.hibernate.type.interval.PostgreSQLIntervalType
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import jakarta.persistence.*
 import org.hibernate.annotations.Type
-import org.hibernate.annotations.TypeDef
-import org.hibernate.annotations.TypeDefs
 import java.io.Serializable
 import java.time.Duration
 import java.time.ZonedDateTime
-import javax.persistence.*
 
 @Entity
-@TypeDefs(
-    TypeDef(
-        name = "duration",
-        typeClass = PostgreSQLIntervalType::class,
-        defaultForType = Duration::class
-    ),
-    TypeDef(name = "jsonb", typeClass = JsonBinaryType::class),
-    TypeDef(
-        name = "string-array",
-        typeClass = ListArrayType::class
-    )
-)
 @Table(name = "last_positions")
 data class LastPositionEntity(
     @Id
@@ -85,13 +70,13 @@ data class LastPositionEntity(
     val district: String? = null,
     @Column(name = "district_code")
     val districtCode: String? = null,
-    @Type(type = "jsonb")
+    @Type(JsonBinaryType::class)
     @Column(name = "gear_onboard", columnDefinition = "jsonb")
     val gearOnboard: String? = null,
-    @Type(type = "string-array")
+    @Type(ListArrayType::class)
     @Column(name = "segments", columnDefinition = "varchar(50)[]")
     val segments: List<String>? = listOf(),
-    @Type(type = "jsonb")
+    @Type(JsonBinaryType::class)
     @Column(name = "species_onboard", columnDefinition = "jsonb")
     val speciesOnboard: String? = null,
     @Column(name = "total_weight_onboard")
@@ -117,12 +102,12 @@ data class LastPositionEntity(
     val underCharter: Boolean? = null,
     @Column(name = "is_at_port")
     val isAtPort: Boolean? = null,
-    @Type(type = "string-array")
+    @Type(ListArrayType::class)
     @Column(name = "alerts", columnDefinition = "varchar(200)[]")
     val alerts: List<String>? = listOf(),
     @Column(name = "beacon_malfunction_id")
     val beaconMalfunctionId: Int?,
-    @Type(type = "string-array")
+    @Type(ListArrayType::class)
     @Column(name = "reportings", columnDefinition = "varchar(200)[]")
     val reportings: List<String>? = listOf()
 ) : Serializable {

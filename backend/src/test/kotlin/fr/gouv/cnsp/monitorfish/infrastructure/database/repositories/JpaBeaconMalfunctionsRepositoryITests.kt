@@ -5,10 +5,12 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.EndOfBeaconM
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.within
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
 import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 
 class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
 
@@ -71,7 +73,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         // Then
         val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 1 }
         assertThat(updatedBeaconMalfunction?.vesselStatus).isEqualTo(VesselStatus.AT_SEA)
-        assertThat(updatedBeaconMalfunction?.vesselStatusLastModificationDateTime).isEqualTo(updateDateTime)
+        assertThat(updatedBeaconMalfunction?.vesselStatusLastModificationDateTime).isCloseTo(updateDateTime, within(100, ChronoUnit.MILLIS))
     }
 
     @Test
@@ -94,11 +96,11 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         // Then
         val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 1 }
         assertThat(updatedBeaconMalfunction?.stage).isEqualTo(Stage.END_OF_MALFUNCTION)
-        assertThat(updatedBeaconMalfunction?.vesselStatusLastModificationDateTime).isEqualTo(updateDateTime)
+        assertThat(updatedBeaconMalfunction?.vesselStatusLastModificationDateTime).isCloseTo(updateDateTime, within(100, ChronoUnit.MILLIS))
         assertThat(updatedBeaconMalfunction?.endOfBeaconMalfunctionReason).isEqualTo(
             EndOfBeaconMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED
         )
-        assertThat(updatedBeaconMalfunction?.malfunctionEndDateTime).isEqualTo(updateDateTime)
+        assertThat(updatedBeaconMalfunction?.malfunctionEndDateTime).isCloseTo(updateDateTime, within(100, ChronoUnit.MILLIS))
     }
 
     @Test

@@ -8,12 +8,29 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 class JpaMissionActionRepositoryITests : AbstractDBTests() {
 
     @Autowired
     private lateinit var jpaMissionActionsRepository: JpaMissionActionsRepository
+
+    // 2019-01-18T07:19:28.384921Z
+
+    @Test
+    @Transactional
+    fun `findVesselMissionActionsAfterDateTime Should filter vessel's controls around the date time`() {
+        // Given
+        // This test is written to prevent time zone error
+        val dateTime = ZonedDateTime.of(2019, 1, 18, 7, 19, 45, 45, ZoneOffset.UTC)
+
+        // When
+        val controls = jpaMissionActionsRepository.findVesselMissionActionsAfterDateTime(1, dateTime)
+
+        // Then
+        assertThat(controls).hasSize(5)
+    }
 
     @Test
     @Transactional

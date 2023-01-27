@@ -12,7 +12,7 @@ import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBReportingRepository
 import org.springframework.stereotype.Repository
 import java.time.ZonedDateTime
-import javax.transaction.Transactional
+import jakarta.transaction.Transactional
 
 @Repository
 class JpaReportingRepository(

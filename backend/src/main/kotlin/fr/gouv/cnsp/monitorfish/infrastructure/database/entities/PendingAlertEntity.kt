@@ -6,20 +6,11 @@ import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import jakarta.persistence.*
 import org.hibernate.annotations.Type
-import org.hibernate.annotations.TypeDef
-import org.hibernate.annotations.TypeDefs
 import java.time.ZonedDateTime
-import javax.persistence.*
 
 @Entity
-@TypeDefs(
-    TypeDef(name = "jsonb", typeClass = JsonBinaryType::class),
-    TypeDef(
-        name = "pgsql_enum",
-        typeClass = PostgreSQLEnumType::class
-    )
-)
 @Table(name = "pending_alerts")
 data class PendingAlertEntity(
     @Id
@@ -37,15 +28,15 @@ data class PendingAlertEntity(
     val ircs: String? = null,
     @Column(name = "vessel_id")
     val vesselId: Int? = null,
-    @Column(name = "vessel_identifier")
+    @Column(name = "vessel_identifier", columnDefinition = "vessel_identifier")
     @Enumerated(EnumType.STRING)
-    @Type(type = "pgsql_enum")
+    @Type(PostgreSQLEnumType::class)
     val vesselIdentifier: VesselIdentifier,
     @Column(name = "creation_date", nullable = false)
     val creationDate: ZonedDateTime,
     @Column(name = "trip_number")
     val tripNumber: String? = null,
-    @Type(type = "jsonb")
+    @Type(JsonBinaryType::class)
     @Column(name = "value", nullable = false, columnDefinition = "jsonb")
     val value: String,
     @Column(name = "latitude")

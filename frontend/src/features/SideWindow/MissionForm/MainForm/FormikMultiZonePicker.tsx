@@ -1,4 +1,4 @@
-import { Accent, Button, Field, Icon, IconButton, Label } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Fieldset, Icon, IconButton, Label } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
 import { boundingExtent } from 'ol/extent'
 import { transformExtent } from 'ol/proj'
@@ -79,9 +79,9 @@ export function FormikMultiZonePicker({ name }: FormikMultiZonePickerProps) {
   )
 
   return (
-    <Field>
+    <Fieldset>
       <Label>Localisations</Label>
-      <Button accent={Accent.SECONDARY} Icon={Icon.Plus} onClick={addZone}>
+      <Button accent={Accent.SECONDARY} Icon={Icon.Plus} isFullWidth onClick={addZone}>
         Ajouter une zone de mission
       </Button>
 
@@ -95,9 +95,10 @@ export function FormikMultiZonePicker({ name }: FormikMultiZonePickerProps) {
               {/* eslint-disable jsx-a11y/anchor-is-valid */}
               {/* eslint-disable jsx-a11y/click-events-have-key-events */}
               {/* eslint-disable jsx-a11y/no-static-element-interactions */}
-              <Center onClick={() => handleCenterOnMap(polygonCoordinates as Coordinate[][])}>
-                <Icon.SelectRectangle /> Centrer sur la carte
-              </Center>
+              <Link onClick={() => handleCenterOnMap(polygonCoordinates as Coordinate[][])}>
+                <Icon.SelectRectangle />
+                <span>Centrer sur la carte</span>
+              </Link>
             </ZoneWrapper>
 
             <IconButton accent={Accent.SECONDARY} Icon={Icon.Edit} onClick={addZone} />
@@ -110,21 +111,17 @@ export function FormikMultiZonePicker({ name }: FormikMultiZonePickerProps) {
           </Row>
         ))}
       </>
-    </Field>
+    </Fieldset>
   )
 }
-
-const Center = styled.a`
-  cursor: pointer;
-`
 
 const Row = styled.div`
   align-items: center;
   display: flex;
-  margin: 0.5rem 0 0;
+  margin: 8px 0 0;
 
   > button {
-    margin: 0 0 0 0.5rem;
+    margin: 0 0 0 8px;
   }
 `
 
@@ -133,6 +130,18 @@ const ZoneWrapper = styled.div`
   display: flex;
   flex-grow: 1;
   font-size: 13px;
+  line-height: 1.3077; // = 17px
   justify-content: space-between;
-  padding: 5px 0.75rem 4px;
+  padding: 6px 12px 6px;
+`
+
+const Link = styled.a`
+  align-items: center;
+  cursor: pointer;
+  display: inline-flex;
+
+  > span {
+    line-height: 1;
+    margin: -2px 0 0 8px;
+  }
 `

@@ -152,3 +152,41 @@ def attribute_segments_to_catches(
     )
 
     return segmented_catches
+
+
+def attribute_segments_to_catches_by_year(
+    catches: pd.DataFrame,
+    segments: pd.DataFrame,
+    *,
+    append_unassigned_catches: bool = False,
+    unassigned_catches_segment_label: str = "Aucun"
+) -> pd.DataFrame:
+    """
+    Same as `attribute_segments_to_catches`, but with an additionnal condition on the
+    year. Both DataFrames must have a `year` column, in addition to the other
+    requirements of `attribute_segments_to_catches`.
+    """
+
+    segmented_catches = []
+
+    for year in catches.year.unique():
+        year_catches = (
+            catches[catches.year == year].copy(deep=True).reset_index(drop=True)
+        )
+
+        year_segments = (
+            segments[segments.year == year]
+            .drop(columns=["year"])
+            .copy(deep=True)
+            .reset_index(drop=True)
+        )
+
+        segmented_catches.append(
+            attribute_segments_to_catches(
+                catches=year_catches,
+                segments=year_segments,
+                append_unassigned_catches=append_unassigned_catches,
+                unassigned_catches_segment_label=unassigned_catches_segment_label,
+            )
+        )
+    return pd.concat(segmented_catches).reset_index(drop=True)

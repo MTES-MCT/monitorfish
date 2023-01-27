@@ -180,7 +180,6 @@ export function ControlUnitSelect({
           // TODO Allow for different Option value type than string in monitor-ui.
           defaultValue={controlledValueResourceIds as any}
           disabled={!controlUnits || !controlledValueRef.current.administration}
-          fixedWidth={320}
           label={`Ressource ${index + 1}`}
           name={`resouces_${index}`}
           // TODO Allow for different Option value type than string in monitor-ui.
@@ -218,7 +217,7 @@ const Wrapper = styled.div`
   display: flex;
 
   > button {
-    margin: 27px 0 0 0.5rem;
+    margin: 22px 0 0 0.5rem;
   }
 `
 

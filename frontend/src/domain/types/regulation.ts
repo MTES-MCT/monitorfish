@@ -56,14 +56,14 @@ export type FishingPeriod = {
   always?: boolean
   annualRecurrence: boolean
   authorized: boolean
-  dateRanges: [DateInterval]
+  dateRanges: DateInterval[]
   // ISO-8601 date
-  dates: [string]
+  dates: string[]
   daytime: boolean
   holidays: boolean
   otherInfo: string
-  timeIntervals: TimeInterval
-  weekdays: [string]
+  timeIntervals: TimeInterval[]
+  weekdays: string[]
 }
 
 export type RegulatedSpecies = {

@@ -72,7 +72,7 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
         )
         val fourthPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
-            now.minusHours(
+            now.minusMinutes(
                 1
             )
         )

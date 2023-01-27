@@ -1,21 +1,21 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
+import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NAFMessageParsingException
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.ParseAndSavePosition
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.context.annotation.Import
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@ExtendWith(SpringExtension::class)
+@Import(WebSecurityConfig::class)
 @WebMvcTest(value = [(ApiController::class)])
 class ApiControllerITests {
 

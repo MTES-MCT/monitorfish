@@ -4,7 +4,7 @@ import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import java.time.ZonedDateTime
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "positions")

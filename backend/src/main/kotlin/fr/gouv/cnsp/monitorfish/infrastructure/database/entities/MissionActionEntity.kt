@@ -3,21 +3,13 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
+import jakarta.persistence.*
 import org.hibernate.annotations.Type
-import org.hibernate.annotations.TypeDef
-import org.hibernate.annotations.TypeDefs
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
-import javax.persistence.*
 
 @Entity
-@TypeDefs(
-    TypeDef(
-        name = "jsonb",
-        typeClass = JsonBinaryType::class
-    )
-)
 @Table(name = "mission_actions")
 class MissionActionEntity(
     @Id
@@ -53,22 +45,22 @@ class MissionActionEntity(
     var speciesSizeControlled: Boolean? = null,
     @Column(name = "separate_stowage_of_preserved_species")
     var separateStowageOfPreservedSpecies: Boolean? = null,
-    @Type(type = "jsonb")
+    @Type(JsonBinaryType::class)
     @Column(name = "logbook_infractions", columnDefinition = "jsonb")
     var logbookInfractions: String? = null,
     @Column(name = "licences_and_logbook_observations")
     var licencesAndLogbookObservations: String? = null,
-    @Type(type = "jsonb")
+    @Type(JsonBinaryType::class)
     @Column(name = "gear_infractions", columnDefinition = "jsonb")
     var gearInfractions: String? = null,
-    @Type(type = "jsonb")
+    @Type(JsonBinaryType::class)
     @Column(name = "species_infractions", columnDefinition = "jsonb")
     var speciesInfractions: String? = null,
     @Column(name = "species_observations")
     var speciesObservations: String? = null,
     @Column(name = "seizure_and_diversion")
     var seizureAndDiversion: Boolean? = null,
-    @Type(type = "jsonb")
+    @Type(JsonBinaryType::class)
     @Column(name = "other_infractions", columnDefinition = "jsonb")
     var otherInfractions: String? = null,
     @Column(name = "number_of_vessels_flown_over")
@@ -83,7 +75,7 @@ class MissionActionEntity(
     var isFromPoseidon: Boolean,
     @Column(name = "user_trigram")
     var userTrigram: String? = null,
-    @Type(type = "jsonb")
+    @Type(JsonBinaryType::class)
     @Column(name = "segments", columnDefinition = "jsonb")
     var segments: String? = null,
     @Column(name = "facade")
@@ -100,10 +92,10 @@ class MissionActionEntity(
     var seizureAndDiversionComments: String? = null,
     @Column(name = "other_comments")
     var otherComments: String? = null,
-    @Type(type = "jsonb")
+    @Type(JsonBinaryType::class)
     @Column(name = "gear_onboard", columnDefinition = "jsonb")
     var gearOnboard: String? = null,
-    @Type(type = "jsonb")
+    @Type(JsonBinaryType::class)
     @Column(name = "species_onboard", columnDefinition = "jsonb")
     var speciesOnboard: String? = null
 ) {

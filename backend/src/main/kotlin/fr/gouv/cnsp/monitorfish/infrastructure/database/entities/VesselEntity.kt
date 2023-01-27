@@ -3,12 +3,11 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 import com.neovisionaries.i18n.CountryCode
 import com.vladmihalcea.hibernate.type.array.ListArrayType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import jakarta.persistence.*
 import org.hibernate.annotations.Type
-import org.hibernate.annotations.TypeDef
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.*
-import javax.persistence.*
 
 @Entity
 @Table(
@@ -19,10 +18,6 @@ import javax.persistence.*
         Index(columnList = "external_immatriculation", unique = false),
         Index(columnList = "ircs", unique = false)
     ]
-)
-@TypeDef(
-    name = "list-array",
-    typeClass = ListArrayType::class
 )
 data class VesselEntity(
     @Id
@@ -63,7 +58,7 @@ data class VesselEntity(
     @Column(name = "sailing_type")
     val sailingType: String? = null,
     @Column(name = "declared_fishing_gears", columnDefinition = "varchar(100)[]")
-    @Type(type = "list-array")
+    @Type(ListArrayType::class)
     val declaredFishingGears: List<String>? = null,
     @Column(name = "nav_licence_expiration_date", columnDefinition = "date")
     val navigationLicenceExpirationDate: Date? = null,
@@ -71,23 +66,23 @@ data class VesselEntity(
     @Column(name = "operator_name")
     val operatorName: String? = null,
     @Column(name = "operator_phones", columnDefinition = "varchar(100)[]")
-    @Type(type = "list-array")
+    @Type(ListArrayType::class)
     val operatorPhones: List<String>? = null,
     @Column(name = "operator_email")
     val operatorEmail: String? = null,
     @Column(name = "proprietor_name")
     val proprietorName: String? = null,
     @Column(name = "proprietor_phones", columnDefinition = "varchar(100)[]")
-    @Type(type = "list-array")
+    @Type(ListArrayType::class)
     val proprietorPhones: List<String>? = null,
     @Column(name = "proprietor_emails", columnDefinition = "varchar(100)[]")
-    @Type(type = "list-array")
+    @Type(ListArrayType::class)
     val proprietorEmails: List<String>? = null,
     @Column(name = "vessel_phones", columnDefinition = "varchar(100)[]")
-    @Type(type = "list-array")
+    @Type(ListArrayType::class)
     val vesselPhones: List<String>? = null,
     @Column(name = "vessel_emails", columnDefinition = "varchar(100)[]")
-    @Type(type = "list-array")
+    @Type(ListArrayType::class)
     val vesselEmails: List<String>? = null,
     @Column(name = "under_charter")
     val underCharter: Boolean? = null

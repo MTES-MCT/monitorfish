@@ -192,7 +192,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllMessagesByTripNumberBetweenDates Should retrieve all messages When the CFR is given`() {
         // Given
-        val lastDepartureDate = ZonedDateTime.of(2019, 10, 11, 2, 6, 0, 0, UTC)
+        val lastDepartureDate = ZonedDateTime.of(2019, 10, 11, 0, 4, 0, 0, UTC)
         val now = ZonedDateTime.now()
 
         // When
@@ -290,14 +290,17 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(messages[8].message).isInstanceOf(CRO::class.java)
 
         // COE
+        assertThat(messages[9].reportDateTime.toString()).isEqualTo("2019-10-17T01:32Z")
         assertThat(messages[9].messageType).isEqualTo("COE")
         assertThat(messages[9].message).isInstanceOf(COE::class.java)
 
         // COX
+        assertThat(messages[10].reportDateTime.toString()).isEqualTo("2019-10-15T11:23Z")
         assertThat(messages[10].messageType).isEqualTo("COX")
         assertThat(messages[10].message).isInstanceOf(COX::class.java)
 
         // DEP
+        assertThat(messages[11].reportDateTime.toString()).isEqualTo("2019-10-11T02:06Z")
         assertThat(messages[11].message).isInstanceOf(DEP::class.java)
         val depMessage = messages[11].message as DEP
         assertThat(depMessage.gearOnboard).hasSize(2)
@@ -308,12 +311,14 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(depMessage.departureDateTime.toString()).isEqualTo("2019-10-11T01:40Z[UTC]")
 
         // RET
+        assertThat(messages[12].reportDateTime.toString()).isEqualTo("2021-01-18T07:19:29.384921Z")
         assertThat(messages[12].message).isInstanceOf(Acknowledge::class.java)
         assertThat(messages[12].operationType).isEqualTo(LogbookOperationType.RET)
         val ackMessage1 = messages[12].message as Acknowledge
         assertThat(ackMessage1.returnStatus).isEqualTo("000")
 
         // RET
+        assertThat(messages[13].reportDateTime.toString()).isEqualTo("2019-08-30T11:12Z")
         assertThat(messages[13].message).isInstanceOf(Acknowledge::class.java)
         assertThat(messages[13].operationType).isEqualTo(LogbookOperationType.RET)
         val ackMessage2 = messages[13].message as Acknowledge
@@ -337,15 +342,43 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val ackMessage5 = messages[16].message as Acknowledge
         assertThat(ackMessage5.returnStatus).isEqualTo("000")
 
-        // RET
-        assertThat(messages[17].message).isInstanceOf(Acknowledge::class.java)
+        // DEL
+        assertThat(messages[17].reportDateTime.toString()).isEqualTo("2019-10-30T11:32Z")
         assertThat(messages[17].operationType).isEqualTo(LogbookOperationType.RET)
+        assertThat(messages[17].message).isInstanceOf(Acknowledge::class.java)
         val ackMessage6 = messages[17].message as Acknowledge
         assertThat(ackMessage6.returnStatus).isEqualTo("000")
 
-        // DEL
+        // RET
+        assertThat(messages[18].reportDateTime.toString()).isEqualTo("2019-10-30T11:32Z")
         assertThat(messages[18].operationType).isEqualTo(LogbookOperationType.DEL)
         assertThat(messages[18].referencedReportId).isEqualTo("OOF20190627059908")
+    }
+
+    @Test
+    @Transactional
+    fun `findAllMessagesByTripNumberBetweenDates Should retrieve messages around the date time`() {
+        // Given
+        val afterDate = ZonedDateTime.of(2019, 10, 11, 1, 4, 0, 0, UTC)
+        val beforeDate = ZonedDateTime.of(2019, 10, 11, 9, 4, 0, 0, UTC)
+
+        // When
+        val messages = jpaLogbookReportRepository
+            .findAllMessagesByTripNumberBetweenDates("FAK000999999", afterDate, beforeDate, "9463715")
+
+        // Then
+        assertThat(messages).hasSize(1)
+
+        // DEP
+        assertThat(messages[0].reportDateTime.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(messages[0].message).isInstanceOf(DEP::class.java)
+        val depMessage = messages[0].message as DEP
+        assertThat(depMessage.gearOnboard).hasSize(2)
+        assertThat(depMessage.gearOnboard.first().gear).isEqualTo("GTN")
+        assertThat(depMessage.gearOnboard.first().mesh).isEqualTo(100.0)
+        assertThat(depMessage.departurePort).isEqualTo("AEJAZ")
+        assertThat(depMessage.anticipatedActivity).isEqualTo("FSH")
+        assertThat(depMessage.departureDateTime.toString()).isEqualTo("2019-10-11T01:40Z[UTC]")
     }
 
     @Test

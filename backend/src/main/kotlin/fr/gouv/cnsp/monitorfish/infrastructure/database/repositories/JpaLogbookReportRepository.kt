@@ -17,7 +17,7 @@ import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
-import javax.transaction.Transactional
+import jakarta.transaction.Transactional
 
 @Repository
 class JpaLogbookReportRepository(
@@ -127,8 +127,8 @@ class JpaLogbookReportRepository(
             if (internalReferenceNumber.isNotEmpty()) {
                 return dbERSRepository.findAllMessagesByTripNumberBetweenDates(
                     internalReferenceNumber,
-                    afterDate.toInstant(),
-                    beforeDate.toInstant(),
+                    afterDate.toInstant().toString(),
+                    beforeDate.toInstant().toString(),
                     tripNumber
                 ).map {
                     it.toLogbookMessage(mapper)

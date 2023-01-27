@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.Instant
 import java.time.ZoneOffset
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "beacon_malfunctions")
@@ -37,8 +37,8 @@ data class BeaconMalfunctionEntity(
     val malfunctionEndDateTime: Instant?,
     @Column(name = "vessel_status_last_modification_date_utc")
     val vesselStatusLastModificationDateTime: Instant,
-    @Column(name = "end_of_malfunction_reason")
     @Enumerated(EnumType.STRING)
+    @Column(name = "end_of_malfunction_reason", columnDefinition = "beacon_malfunctions_end_of_malfunction_reason")
     val endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason,
     @Column(name = "vessel_id", nullable = false)
     val vesselId: Int,
@@ -47,8 +47,8 @@ data class BeaconMalfunctionEntity(
     val notificationRequested: BeaconMalfunctionNotificationType?,
     @Column(name = "beacon_number")
     val beaconNumber: String,
-    @Column(name = "beacon_status_at_malfunction_creation")
     @Enumerated(EnumType.STRING)
+    @Column(name = "beacon_status_at_malfunction_creation")
     val beaconStatusAtMalfunctionCreation: BeaconStatus
 ) {
     fun toBeaconMalfunction() = BeaconMalfunction(

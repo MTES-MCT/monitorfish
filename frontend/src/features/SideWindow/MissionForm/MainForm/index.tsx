@@ -212,6 +212,6 @@ const MissionNatureWrapper = styled.div`
   display: flex;
 
   > div {
-    margin-left: 12px;
+    margin-left: 10px;
   }
 `

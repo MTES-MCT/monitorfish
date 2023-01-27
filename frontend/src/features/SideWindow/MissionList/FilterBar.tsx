@@ -69,7 +69,6 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
           />
           <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}
-            fixedWidth={160}
             isLabelHidden
             label="Status"
             name={MissionFilterType.STATUS}
@@ -78,7 +77,6 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
           />
           <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}
-            fixedWidth={160}
             isLabelHidden
             label="Unité"
             name={MissionFilterType.UNIT}
@@ -87,7 +85,6 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
           />
           <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}
-            fixedWidth={160}
             isLabelHidden
             label="Type de mission"
             name={MissionFilterType.MISSION_TYPE}
@@ -96,7 +93,6 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
           />
           <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}
-            fixedWidth={160}
             isLabelHidden
             label="Type de contrôle"
             name={MissionFilterType.INSPECTION_TYPE}
@@ -105,7 +101,6 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
           />
           <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}
-            fixedWidth={160}
             isLabelHidden
             label="Alerte"
             name={MissionFilterType.ALERT_TYPE}
@@ -144,5 +139,6 @@ const FiltersBox = styled.div`
 
   > div:not(:first-child) {
     margin-left: 1rem;
+    width: 160px;
   }
 `

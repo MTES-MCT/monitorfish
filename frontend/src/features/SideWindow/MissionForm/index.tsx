@@ -19,6 +19,7 @@ import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { MissionType } from '../../../domain/types/mission'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
 import { SideWindowMenuKey } from '../constants'
 
 import type { MissionFormValues } from './MainForm/types'
@@ -155,22 +156,16 @@ export function MissionForm() {
   )
 }
 
-// TODO Check why there is a `box-sizing: revert` in index.css.
-const Wrapper = styled.div<{
+const Wrapper = styled(NoRsuiteOverrideWrapper)<{
   // Height offset in pixels
   heightOffset: number
 }>`
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   /* TODO Switch to flex sizing once SideWindow is full-flex (and remove the dirty calc). */
   /* flex-grow: 1; */
   height: calc(100% - ${p => p.heightOffset}px + 1rem);
   /* max-height: calc(100% - 47px); */
-
-  * {
-    box-sizing: border-box;
-  }
 `
 
 const Header = styled.div`

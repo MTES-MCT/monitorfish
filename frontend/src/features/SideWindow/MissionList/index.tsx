@@ -12,6 +12,7 @@ import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useTable } from '../../../hooks/useTable'
 import { EmptyCardTable } from '../../../ui/card-table/EmptyCardTable'
+import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
 import { dayjs } from '../../../utils/dayjs'
 import { SideWindowMenuKey } from '../constants'
 
@@ -126,20 +127,11 @@ export function MissionList() {
   )
 }
 
-// TODO Check why there is a `box-sizing: revert` in index.css.
-// TODO `line-height` should be 1.4 by default in html, body.
-const Wrapper = styled.div`
-  box-sizing: border-box;
+const Wrapper = styled(NoRsuiteOverrideWrapper)`
   display: flex;
   flex-direction: column;
-  line-height: 1.4;
   margin-bottom: 20px;
   width: 100%;
-
-  * {
-    box-sizing: border-box;
-    line-height: 1.4;
-  }
 `
 
 const Header = styled.div`

@@ -1,14 +1,20 @@
 from pathlib import Path
+from typing import Tuple
 
 import geopandas as gpd
 import pandas as pd
 import prefect
 from prefect import Flow, Parameter, case, task
 from prefect.executors import LocalDaskExecutor
+from sqlalchemy import DDL
 
+from config import POSEIDON_CONTROL_ID_TO_MONITORENV_MISSION_ID_SHIFT
+from src.db_config import create_engine
+from src.pipeline.entities.missions import MissionActionType, MissionOrigin, MissionType
 from src.pipeline.generic_tasks import extract, load
+from src.pipeline.helpers.controls import make_infractions
 from src.pipeline.helpers.fao_areas import remove_redundant_fao_area_codes
-from src.pipeline.helpers.segments import attribute_segments_to_catches
+from src.pipeline.helpers.segments import attribute_segments_to_catches_by_year
 from src.pipeline.processing import (
     df_to_dict_series,
     try_get_factory,
@@ -16,43 +22,37 @@ from src.pipeline.processing import (
 )
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.facades import extract_facade_areas
-from src.pipeline.shared_tasks.segments import (
-    extract_segments_of_current_year,
-    unnest_segments,
-)
+from src.pipeline.shared_tasks.segments import extract_all_segments, unnest_segments
 
 
 # ********************************** Tasks and flow ***********************************
 @task(checkpoint=False)
 def extract_controls(number_of_months: int) -> pd.DataFrame:
     """
-    Extracts controls data from FMC database.
+    Extracts controls data from FMC database for the specified number of months, going
+    back at most to January 1st 2013.
 
     Args:
         number_of_months (int): number of months of controls data to extract, going
-            backwards from the present.
+            backwards from the present. If the computed start date of the extraction is
+            before January 1st 2013, the data will be extracted from January 1st 2013 to
+            the present.
 
     Returns:
         pd.DataFrame: DataFrame with controls data.
     """
 
     parse_dates = [
-        "control_datetime_utc",
-        "input_start_datetime_utc",
-        "input_end_datetime_utc",
+        "action_datetime_utc",
     ]
 
     dtypes = {
-        "controller_id": "category",
+        "control_unit_id": "category",
         "control_type": "category",
         "port_locode": "category",
         "mission_order": "category",
         "vessel_targeted": "category",
-        "cnsp_called_unit": "category",
-        "infraction": "category",
-        "cooperative": "category",
         "diversion": "category",
-        "escort_to_quay": "category",
         "seizure": "category",
         "gear_1_code": "category",
         "gear_2_code": "category",
@@ -60,6 +60,8 @@ def extract_controls(number_of_months: int) -> pd.DataFrame:
         "gear_1_was_controlled": "category",
         "gear_2_was_controlled": "category",
         "gear_3_was_controlled": "category",
+        "open_by": "category",
+        "closed_by": "category",
     }
 
     try:
@@ -135,20 +137,21 @@ def transform_catch_controls(catch_controls: pd.DataFrame) -> pd.DataFrame:
     }
 
     catch_controls = catch_controls.rename(columns=catch_controls_columns)
-    catch_controls["catch_controls"] = df_to_dict_series(
+    catch_controls["species_onboard"] = df_to_dict_series(
         catch_controls[catch_controls_columns.values()], remove_nulls=True
     )
 
     catch_controls = (
-        catch_controls.groupby("id")["catch_controls"].apply(list).reset_index()
+        catch_controls.groupby("id")["species_onboard"].apply(list).reset_index()
     )
 
     return catch_controls
 
 
 @task(checkpoint=False)
-def transform_controls(controls):
+def transform_controls(controls: pd.DataFrame):
 
+    controls = controls.copy(deep=True)
     logger = prefect.context.get("logger")
 
     # ---------------------------------------------------------------------------------
@@ -157,11 +160,7 @@ def transform_controls(controls):
     bool_cols = [
         "mission_order",
         "vessel_targeted",
-        "cnsp_called_unit",
-        "infraction",
-        "cooperative",
         "diversion",
-        "escort_to_quay",
         "seizure",
         "gear_1_was_controlled",
         "gear_2_was_controlled",
@@ -220,7 +219,7 @@ def transform_controls(controls):
 
     # 2. Then group the 3 dictionnaries containing the data of the 3 gear controls into
     # a numpy array of dictionnaries
-    controls["gear_controls"] = controls[["gear_1", "gear_2", "gear_3"]].apply(
+    controls["gear_onboard"] = controls[["gear_1", "gear_2", "gear_3"]].apply(
         lambda row: list(row.dropna()), axis=1
     )
 
@@ -229,10 +228,74 @@ def transform_controls(controls):
 
     # ---------------------------------------------------------------------------------
     # Transform the list of infraction ids from string to list
-    logger.info("Transforming infraction ids from string to list")
-    controls["infraction_ids"] = controls.infraction_ids.fillna("").map(
-        lambda s: s.split(", ")
+
+    logbook_natinfs = {
+        27689,
+        27885,
+        20235,
+        20234,
+        10409,
+        20236,
+        27886,
+        10405,
+        20246,
+        20213,
+    }
+    gear_natinfs = {
+        7059,
+        27724,
+        2593,
+        7057,
+        27725,
+        7060,
+        20242,
+        12918,
+        27723,
+        20243,
+        20220,
+    }
+    species_natinfs = {12900, 7062, 7983, 7061, 7063, 27730, 7984, 12902, 28346}
+
+    logger.info("Transforming infraction natinfs from string to list")
+
+    controls["infraction_natinfs"] = controls.infraction_natinfs.map(
+        lambda s: set(map(int, s.split(", "))), na_action="ignore"
     )
+
+    logger.info("Creating gear_infractions")
+    controls["gear_infractions"] = controls.infraction_natinfs.apply(
+        make_infractions, only_natinfs=gear_natinfs
+    )
+
+    logger.info("Creating species_infractions")
+    controls["species_infractions"] = controls.infraction_natinfs.apply(
+        make_infractions, only_natinfs=species_natinfs
+    )
+
+    logger.info("Creating logbook_infractions")
+    controls["logbook_infractions"] = controls.infraction_natinfs.apply(
+        make_infractions, only_natinfs=logbook_natinfs
+    )
+
+    logger.info("Creating other_infractions")
+    controls["other_infractions"] = controls.infraction_natinfs.apply(
+        make_infractions,
+        exclude_natinfs=set.union(logbook_natinfs, gear_natinfs, species_natinfs),
+    )
+
+    controls = controls.drop(columns=["infraction_natinfs"])
+
+    controls["action_type"] = controls.control_type.map(
+        MissionActionType.from_poseidon_control_type
+    )
+    controls = controls.drop(columns=["control_type"])
+
+    controls["mission_type"] = controls.action_type.map(
+        MissionType.from_mission_action_type
+    )
+
+    controls["seizure_and_diversion"] = controls[["seizure", "diversion"]].any(axis=1)
+    controls = controls.drop(columns=["seizure", "diversion"])
 
     return controls
 
@@ -263,7 +326,7 @@ def compute_controls_fao_areas(
         pd.DataFrame: controls with FAO areas added
     """
 
-    # For controls with a latitude and longitude (air and sea controls), assign the
+    # For controls with a latitudide and longitude (air and sea controls), assign the
     # corresponding FAO area
 
     localized_controls = controls.loc[
@@ -336,7 +399,7 @@ def compute_controls_facade(
         ports (pd.DataFrame): ports with `locode` and `facade` columns
 
     Returns:
-        pd.DataFrame: controls with facade added
+        pd.DataFrame: DataFrame with columns `id` and `facade`
     """
     # For controls with a latitude and longitude (air and sea controls), assign the
     # corresponding facade
@@ -393,28 +456,44 @@ def compute_controls_segments(
         on="id",
     )
 
+    # For controls anterior to the first year with segment definitions, we use the
+    first_year_with_segment_defs = segments.year.min()
+    controls["year"] = controls.action_datetime_utc.map(lambda dt: dt.year)
+    controls["first_year_with_segment_defs"] = first_year_with_segment_defs
+    controls["year"] = controls[["year", "first_year_with_segment_defs"]].max(axis=1)
+    controls = controls.drop(columns=["first_year_with_segment_defs"])
+
     controls_catches = (
-        controls[["id", "gear_controls", "catch_controls", "fao_areas"]]
+        controls[["id", "year", "gear_onboard", "species_onboard", "fao_areas"]]
         .explode("fao_areas")
         .rename(columns={"fao_areas": "fao_area"})
-        .explode("gear_controls")
-        .explode("catch_controls")
-        .assign(gear=lambda x: x.gear_controls.map(try_get_factory("gearCode")))
-        .assign(species=lambda x: x.catch_controls.map(try_get_factory("speciesCode")))
-        .reset_index()[["id", "fao_area", "species", "gear"]]
+        .explode("gear_onboard")
+        .explode("species_onboard")
+        .assign(gear=lambda x: x.gear_onboard.map(try_get_factory("gearCode")))
+        .assign(species=lambda x: x.species_onboard.map(try_get_factory("speciesCode")))
+        .reset_index()[["id", "year", "fao_area", "species", "gear"]]
     )
 
     controls_catches = controls_catches.where(controls_catches.notnull(), None)
+    controls_segments = (
+        attribute_segments_to_catches_by_year(
+            controls_catches,
+            segments[
+                ["segment", "segment_name", "year", "fao_area", "gear", "species"]
+            ],
+        )[["id", "segment", "segment_name"]]
+        .drop_duplicates()
+        .rename(columns={"segment_name": "segmentName"})
+    )
+    controls_segments["segment"] = df_to_dict_series(
+        controls_segments[["segment", "segmentName"]]
+    )
 
     controls_segments = (
-        attribute_segments_to_catches(
-            controls_catches,
-            segments[["segment", "fao_area", "gear", "species"]],
-        )
-        .groupby("id")["segment"]
-        .unique()
+        controls_segments.groupby("id")[["segment", "segmentName"]]
+        .agg(list)
         .reset_index()
-        .rename(columns={"segment": "segments"})
+        .rename(columns={"segment": "segments"})[["id", "segments"]]
     )
 
     controls = pd.merge(
@@ -423,26 +502,200 @@ def compute_controls_segments(
         how="left",
         on="id",
     )
+    controls = controls.drop(columns=["year"])
+
+    # Fill null values in jsonb array volumns with []
+    controls["species_onboard"] = controls.species_onboard.map(
+        lambda l: l if isinstance(l, list) else []
+    )
+
+    controls["fao_areas"] = controls.fao_areas.map(
+        lambda l: l if isinstance(l, list) else []
+    )
+
+    controls["segments"] = controls.segments.map(
+        lambda l: l if isinstance(l, list) else []
+    )
 
     return controls
 
 
 @task(checkpoint=False)
-def load_controls(controls: pd.DataFrame, how: str):
+def make_missions_actions_and_missions_control_units(
+    controls: pd.DataFrame,
+) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    # Posedion control ids are shifted to avoid any overlap the the ids of missions
+    # created in Monitorenv.
+    # The resulting shifted index is used both as the mission_action id in Monitorfish
+    # and as mission id in Monitorenv.
+    controls["id"] = controls["id"] + POSEIDON_CONTROL_ID_TO_MONITORENV_MISSION_ID_SHIFT
 
-    assert how in ("replace", "upsert")
+    # Create missions
+    missions_columns = [
+        "id",
+        "action_datetime_utc",
+        "open_by",
+        "facade",
+        "mission_order",
+        "mission_type",
+        "closed_by",
+    ]
+
+    missions = controls[missions_columns].copy(deep=True)
+    missions["mission_nature"] = [["FISH"]] * len(missions)
+    missions["deleted"] = False
+    missions["mission_source"] = MissionOrigin.POSEIDON_CNSP
+    missions["closed"] = missions.closed_by.notnull()
+    missions["start_datetime_utc"] = missions["action_datetime_utc"]
+    missions["end_datetime_utc"] = missions["action_datetime_utc"]
+    missions = missions.drop(columns=["action_datetime_utc"])
+
+    # Create mission_actions
+    mission_actions_columns = [
+        "id",
+        "action_type",
+        "action_datetime_utc",
+        "vessel_id",
+        "cfr",
+        "ircs",
+        "external_immatriculation",
+        "vessel_name",
+        "latitude",
+        "longitude",
+        "port_locode",
+        "flag_state",
+        "facade",
+        "district_code",
+        "fao_areas",
+        "segments",
+        "gear_onboard",
+        "gear_infractions",
+        "species_onboard",
+        "species_infractions",
+        "logbook_infractions",
+        "other_infractions",
+        "seizure_and_diversion",
+        "seizure_and_diversion_comments",
+        "other_comments",
+        "vessel_targeted",
+        "open_by",
+    ]
+
+    mission_actions = controls[mission_actions_columns].copy(deep=True)
+    mission_actions["mission_id"] = mission_actions["id"]
+    mission_actions["is_from_poseidon"] = True
+    mission_actions = mission_actions.rename(columns={"open_by": "user_trigram"})
+    mission_actions["feedback_sheet_required"] = False
+
+    # Create missions_control_units
+    missions_control_units_columns = ["id", "control_unit_id"]
+    missions_control_units = (
+        controls[missions_control_units_columns]
+        .rename(columns={"id": "mission_id"})
+        .copy(deep=True)
+    )
+
+    return missions, mission_actions, missions_control_units
+
+
+@task(checkpoint=False)
+def load_missions_and_missions_control_units(
+    missions: pd.DataFrame, missions_control_units: pd.DataFrame, loading_mode: str
+):
+
+    # In "replace" loading mode, we want to replace all `missions` whose
+    # `mission_souce` is `POSEIDON_CNSP`. So we use `mission_source` as the identifier.
+
+    # In "upsert" loading mode, we want to replace only the missions whose `id` is
+    # present in the DataFrame. So we use `id` as the identifier.
+
+    assert loading_mode in ("replace", "upsert")
+    id_column = "mission_source" if loading_mode == "replace" else "id"
+
+    e = create_engine("monitorenv_remote")
+    with e.begin() as connection:
+        breakpoint()
+
+        load(
+            missions,
+            table_name="missions",
+            schema="public",
+            connection=connection,
+            logger=prefect.context.get("logger"),
+            pg_array_columns=["mission_nature"],
+            how="upsert",
+            table_id_column=id_column,
+            df_id_column=id_column,
+            enum_columns=["mission_type", "mission_source"],
+            init_ddls=[
+                DDL(
+                    "ALTER TABLE public.missions_control_units "
+                    "DROP CONSTRAINT missions_control_units_mission_id_fkey;"
+                ),
+                DDL(
+                    "ALTER TABLE public.missions_control_units "
+                    "ADD CONSTRAINT missions_control_units_mission_id_cascade_fkey "
+                    "FOREIGN KEY (mission_id) "
+                    "REFERENCES public.missions (id) "
+                    "ON DELETE CASCADE;"
+                ),
+            ],
+            end_ddls=[
+                DDL(
+                    "ALTER TABLE public.missions_control_units "
+                    "DROP CONSTRAINT missions_control_units_mission_id_cascade_fkey;"
+                ),
+                DDL(
+                    "ALTER TABLE public.missions_control_units "
+                    "ADD CONSTRAINT missions_control_units_mission_id_fkey "
+                    "FOREIGN KEY (mission_id) "
+                    "REFERENCES public.missions (id);"
+                ),
+            ],
+        )
+
+        load(
+            missions_control_units,
+            table_name="missions_control_units",
+            schema="public",
+            connection=connection,
+            logger=prefect.context.get("logger"),
+            how="append",
+        )
+
+
+@task(checkpoint=False)
+def load_mission_actions(mission_actions: pd.DataFrame, loading_mode: str):
+
+    # In "replace" loading mode, we want to replace all `mission_actions` for which
+    # `is_from_poseidon` is True. So we use `is_from_poseidon` as the identifier.
+
+    # In "upsert" loading mode, we want to replace only the `mission_actions` whose id
+    # is present in the DataFrame. So we use `id` as the identifier.
+
+    assert loading_mode in ("replace", "upsert")
+    id_column = "is_from_poseidon" if loading_mode == "replace" else "id"
 
     load(
-        controls,
-        table_name="controls",
+        mission_actions,
+        table_name="mission_actions",
         schema="public",
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
-        pg_array_columns=["infraction_ids", "segments", "fao_areas"],
-        jsonb_columns=["gear_controls", "catch_controls"],
-        how=how,
-        table_id_column="id",
-        df_id_column="id",
+        pg_array_columns=["fao_areas"],
+        jsonb_columns=[
+            "segments",
+            "gear_onboard",
+            "species_onboard",
+            "gear_infractions",
+            "species_infractions",
+            "logbook_infractions",
+            "other_infractions",
+        ],
+        how="upsert",
+        table_id_column=id_column,
+        df_id_column=id_column,
+        enum_columns=["action_type"],
     )
 
 
@@ -460,7 +713,7 @@ with Flow("Controls", executor=LocalDaskExecutor()) as flow:
         fao_areas = extract_fao_areas()
         facade_areas = extract_facade_areas()
         ports = extract_ports()
-        segments = extract_segments_of_current_year()
+        segments = extract_all_segments()
         catch_controls = extract_catch_controls()
 
         # Transform
@@ -472,8 +725,24 @@ with Flow("Controls", executor=LocalDaskExecutor()) as flow:
         controls = compute_controls_segments(
             controls, catch_controls, controls_fao_areas, controls_facade, segments
         )
+        (
+            missions,
+            mission_actions,
+            missions_control_units,
+        ) = make_missions_actions_and_missions_control_units(controls)
 
         # Load
-        load_controls(controls, how=loading_mode)
+        loaded_missions_and_missions_control_unitsloaded_missions = (
+            load_missions_and_missions_control_units(
+                missions, missions_control_units, loading_mode=loading_mode
+            )
+        )
+
+        load_mission_actions(
+            mission_actions,
+            loading_mode=loading_mode,
+            upstream_tasks=[loaded_missions_and_missions_control_unitsloaded_missions],
+        )
+
 
 flow.file_name = Path(__file__).name

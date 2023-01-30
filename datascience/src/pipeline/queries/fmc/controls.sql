@@ -1,9 +1,11 @@
 WITH infractions AS (
     SELECT
-        id_fmc_bc_resultat_controle,
-        LISTAGG(idc_fmc_natinf, ', ') WITHIN GROUP (ORDER BY idc_fmc_natinf) infraction_ids
-    FROM FMC2.FMC_BC_RESULTAT_CONT_INFR
-    GROUP BY id_fmc_bc_resultat_controle
+        i.id_fmc_bc_resultat_controle,
+        LISTAGG(n.code, ', ') WITHIN GROUP (ORDER BY n.code) infraction_natinfs
+    FROM FMC2.FMC_BC_RESULTAT_CONT_INFR i
+    JOIN FMC2.FMC_CODE_NATINF n
+    ON i.idc_fmc_natinf = n.idc_fmc_natinf
+    GROUP BY i.id_fmc_bc_resultat_controle
 )
 
 SELECT 
@@ -15,26 +17,19 @@ SELECT
     c.nom_navire AS vessel_name,
     cp.code_pays_iso2 AS flag_state,
     cq.code AS district_code,
-    ctrl.idc_fmc_moyen_controle as controller_id,
+    c.idc_fmc_moyen_controle as control_unit_id,
     ctype.libelle as control_type,
-    c.date_controle as control_datetime_utc,
-    c.date_saisie as input_start_datetime_utc,
-    c.date_cloture as input_end_datetime_utc,
+    c.date_controle as action_datetime_utc,
     c.longitude as longitude,
     c.latitude as latitude,
     port.locode as port_locode,
     c.ordre_mission as mission_order,
     c.navire_cible as vessel_targeted,
-    c.appel_cnsp_unite as cnsp_called_unit,
-    rc.cooperatif as cooperative,
-    c.observations as pre_control_comments,
-    rc.infraction,
-    infractions.infraction_ids,
+    infractions.infraction_natinfs,
     rc.deroutement as diversion,
-    rc.reconduite_a_quai as escort_to_quay,
     rc.apprehension as seizure,
-    rc.precision_apprehension as seizure_comments,
-    rc.observations as post_control_comments,
+    rc.precision_apprehension as seizure_and_diversion_comments,
+    rc.observations as other_comments,
     gears1.code as gear_1_code,
     gears2.code as gear_2_code,
     gears3.code as gear_3_code,
@@ -46,7 +41,9 @@ SELECT
     rc.maillage3 as declared_mesh_3,
     rc.maillage_controle1 as controlled_mesh_1,
     rc.maillage_controle2 as controlled_mesh_2,
-    rc.maillage_controle3 as controlled_mesh_3
+    rc.maillage_controle3 as controlled_mesh_3,
+    c.trigramme_utilisateur AS open_by,
+    rc.trigramme_utilisateur AS closed_by
 FROM FMC2.FMC_BC_CONTROLE c
 LEFT JOIN NAVPROFMC.NAV_FLOTTEUR f
 ON c.id_nav_flotteur = f.id_nav_flotteur
@@ -58,8 +55,6 @@ LEFT JOIN FMC2.FMC_CODE_TYPE_CONTROLE ctype
 ON c.idc_fmc_type_controle = ctype.idc_fmc_type_controle
 LEFT JOIN FMC2.FMC_BC_RESULTAT_CONTROLE rc
 ON c.id_fmc_bc_resultat_controle = rc.id_fmc_bc_resultat_controle
-LEFT JOIN FMC2.FMC_CODE_MOYEN_CONTROLE ctrl
-ON ctrl.idc_fmc_moyen_controle = c.idc_fmc_moyen_controle
 LEFT JOIN COMMUNFMC.C_CODE_PORT port
 ON port.idc_port = c.idc_port
 LEFT JOIN infractions
@@ -72,5 +67,6 @@ LEFT JOIN COMMUNFMC.C_PCH_CODE_ENGIN_CE gears3
 ON gears3.idc_pch_engin_ce = rc.idc_pch_engin_ce3
 WHERE 
     c.date_controle > ADD_MONTHS(SYS_EXTRACT_UTC(SYSTIMESTAMP), -:number_of_months) AND
+    c.date_controle >= DATE '2013-01-01' AND
     -- Remove controls in the future!
     c.date_controle < ADD_MONTHS(SYS_EXTRACT_UTC(SYSTIMESTAMP), 1) 

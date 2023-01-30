@@ -9,8 +9,22 @@ from src.pipeline.generic_tasks import extract
 def extract_segments_of_current_year():
     segments = extract(
         db_name="monitorfish_remote",
-        query_filepath="monitorfish/fleet_segments.sql",
+        query_filepath="monitorfish/fleet_segments_of_year.sql",
         params={"year": datetime.utcnow().year},
+    )
+
+    # Remove duplicate species that arise from the concatenation of target species and
+    # bycatch species
+    segments["species"] = segments.species.map(lambda l: sorted(set(l)))
+
+    return segments
+
+
+@task(checkpoint=False)
+def extract_all_segments():
+    segments = extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/fleet_segments.sql",
     )
 
     # Remove duplicate species that arise from the concatenation of target species and

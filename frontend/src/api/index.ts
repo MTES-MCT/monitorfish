@@ -13,7 +13,7 @@ const MONITORENV_API_URL = getEnvironmentVariable('REACT_APP_MONITORENV_URL')
 
 // We'll need that later on if we use any kind of authentication.
 const monitorenvBaseQuery = fetchBaseQuery({
-  baseUrl: `${MONITORENV_API_URL}/bff/v1`
+  baseUrl: `${MONITORENV_API_URL}/api/v1`
 })
 export const monitorenvApi = createApi({
   baseQuery: monitorenvBaseQuery,

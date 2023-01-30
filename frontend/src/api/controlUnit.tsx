@@ -6,7 +6,7 @@ export const controlUnitApi = monitorenvApi.injectEndpoints({
   endpoints: builder => ({
     getControlUnits: builder.query<ControlUnit[], void>({
       providesTags: () => [{ type: 'ControlUnits' }],
-      query: () => `control_units`
+      query: () => `/control_units`
     })
   })
 })

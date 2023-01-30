@@ -12,6 +12,6 @@ export type MissionFormValues = Partial<
   controlUnits: Undefine<ControlUnit>[]
   dateTimeRangeUtc: DateAsStringRange | undefined
   hasOrder?: boolean | undefined
+  isUnderJdp?: boolean | undefined
   missionType: MissionType
-  zones: string[]
 }

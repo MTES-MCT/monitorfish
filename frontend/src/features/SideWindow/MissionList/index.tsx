@@ -65,10 +65,10 @@ export function MissionList() {
                 {filteredMissions.map(mission => (
                   <TableBodyRow key={mission.id} data-cy="side-window-current-reportings">
                     <TableBodyCell $fixedWidth={112}>
-                      {dayjs(mission.inputStartDateTimeUtc).format('D MMM YY, HH:MM')}
+                      {dayjs(mission.startDateTimeUtc).format('D MMM YY, HH:MM')}
                     </TableBodyCell>
                     <TableBodyCell $fixedWidth={112}>
-                      {dayjs(mission.inputEndDateTimeUtc).format('D MMM YY, HH:MM')}
+                      {mission.endDateTimeUtc ? dayjs(mission.endDateTimeUtc).format('D MMM YY, HH:MM') : '-'}
                     </TableBodyCell>
                     <TableBodyCell $fixedWidth={160}>
                       {mission.controlUnits

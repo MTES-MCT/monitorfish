@@ -30,28 +30,28 @@ export function isValidControlUnit(
 }
 
 export function getMissionDataFromMissionFormValues(missionFormValues: MissionFormValues): MissionData {
-  if (!missionFormValues.inputDateTimeRangeUtc) {
-    throw new FormError(missionFormValues, 'inputDateTimeRangeUtc')
+  if (!missionFormValues.dateTimeRangeUtc) {
+    throw new FormError(missionFormValues, 'dateTimeRangeUtc')
   }
 
-  const missionBaseValues = omit(['controlUnits', 'inputDateTimeRangeUtc'], missionFormValues)
+  const missionBaseValues = omit(['controlUnits', 'dateTimeRangeUtc'], missionFormValues)
 
   const validControlUnits = missionFormValues.controlUnits.filter(isValidControlUnit)
   if (validControlUnits.length !== missionFormValues.controlUnits.length) {
     throw new FormError(missionFormValues, 'controlUnits')
   }
-  const [inputStartDateTimeUtc, inputEndDateTimeUtc] = missionFormValues.inputDateTimeRangeUtc
+  const [startDateTimeUtc, endDateTimeUtc] = missionFormValues.dateTimeRangeUtc
   const missionSource = MissionSource.MONITORFISH
 
   return {
     ...missionBaseValues,
     controlUnits: validControlUnits,
+    endDateTimeUtc,
     envActions: undefined,
-    inputEndDateTimeUtc,
-    inputStartDateTimeUtc,
     isClosed: false,
     isDeleted: false,
-    missionSource
+    missionSource,
+    startDateTimeUtc
   }
 }
 

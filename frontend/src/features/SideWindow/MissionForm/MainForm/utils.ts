@@ -10,7 +10,7 @@ export function getMissionFormInitialValues(): MissionFormValues {
 
   return {
     controlUnits: [INITIAL_MISSION_CONTROL_UNIT],
-    inputDateTimeRangeUtc: [utcizedLocalDate.toISOString(), utcizedLocalDatePlusOneHour.toISOString()],
+    dateTimeRangeUtc: [utcizedLocalDate.toISOString(), utcizedLocalDatePlusOneHour.toISOString()],
     missionType: MissionType.SEA,
     zones: []
   }

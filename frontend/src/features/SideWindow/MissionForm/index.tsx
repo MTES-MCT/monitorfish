@@ -45,7 +45,7 @@ export function MissionForm() {
       return undefined
     }
 
-    const commonValues = omit(['inputDateTimeRangeUtc'], editedMission)
+    const commonValues = omit(['dateTimeRangeUtc'], editedMission)
     const defaultInitialValues = getMissionFormInitialValues()
 
     return {

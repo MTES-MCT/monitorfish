@@ -4,11 +4,11 @@ import type { MissionFormValues } from '../../features/SideWindow/MissionForm/Ma
 import type { Mission } from '../types/mission'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-export interface BeaconMalfunctionState {
+export interface MissionState {
   draftFormValues: MissionFormValues | undefined
   editedMission: Mission | undefined
 }
-const INITIAL_STATE: BeaconMalfunctionState = {
+const INITIAL_STATE: MissionState = {
   draftFormValues: undefined,
   editedMission: undefined
 }

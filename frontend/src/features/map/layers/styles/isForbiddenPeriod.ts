@@ -1,3 +1,5 @@
+import { isObject } from 'lodash'
+
 import { getStartAndEndDatesSetWithCurrentYear } from './utils'
 import { WEEKDAYS } from '../../../../domain/entities/regulation'
 
@@ -8,12 +10,15 @@ import type Feature from 'ol/Feature'
 export function isForbiddenPeriod(feature: Feature | undefined, currentDate: Dayjs) {
   const currentWeekDayDigit = currentDate.day()
 
-  const fishingPeriodString = feature?.get('fishing_period')
-  if (!fishingPeriodString) {
+  const fishingPeriodValue = feature?.get('fishing_period') || feature?.get('fishingPeriod')
+  if (!fishingPeriodValue) {
     return false
   }
 
-  const fishingPeriod = JSON.parse(fishingPeriodString) as FishingPeriod
+  const fishingPeriod = isObject(fishingPeriodValue)
+    ? (fishingPeriodValue as FishingPeriod)
+    : (JSON.parse(fishingPeriodValue) as FishingPeriod)
+
   switch (fishingPeriod.authorized) {
     /**
      * If the dates, weekdays and dateRanges are not set, the period won't be forbidden by default.

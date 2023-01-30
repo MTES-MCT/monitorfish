@@ -2,18 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled, { css } from 'styled-components'
 import { Checkbox, CheckboxGroup } from 'rsuite'
-
-import { Layer } from '../../../../domain/entities/layers/constants'
-import showRegulatoryZoneMetadata from '../../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
+import { showRegulatoryZoneMetadata } from '../../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
 import { closeRegulatoryZoneMetadata } from '../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './RegulatoryLayerSearch.slice'
 import { showOrHideMetadataIcon } from '../RegulatoryZone'
-
-import { getAdministrativeAndRegulatoryLayersStyle } from '../../../map/layers/styles/administrativeAndRegulatoryLayers.style'
 import { PaperDarkIcon, PaperIcon } from '../../../commonStyles/icons/REGPaperIcon.style'
 import { COLORS } from '../../../../constants/constants'
 import { theme } from '../../../../ui/theme'
+import { getRegulatoryLayerStyle } from '../../../map/layers/styles/regulatoryLayer.style'
 
 const RegulatoryLayerSearchResultZone = props => {
   const {
@@ -30,7 +27,7 @@ const RegulatoryLayerSearchResultZone = props => {
   const zoneIsAlreadySelected = useSelector(state => state.regulatory
     .selectedRegulatoryLayers[regulatoryZone.topic]?.find(zone => zone.id === regulatoryZone.id))
 
-  const zoneStyle = getAdministrativeAndRegulatoryLayersStyle(Layer.REGULATORY.code)(undefined, regulatoryZone)
+  const zoneStyle = getRegulatoryLayerStyle(undefined, regulatoryZone)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
 
   const showOrHideRegulatoryZoneMetadata = _regulatoryZone => {

@@ -13,7 +13,7 @@ export const missionApi = monitorenvApi.injectEndpoints({
       query: mission => ({
         body: mission,
         method: 'PUT',
-        url: `missions`
+        url: `/missions`
       })
     }),
 
@@ -21,7 +21,7 @@ export const missionApi = monitorenvApi.injectEndpoints({
       invalidatesTags: () => [{ type: 'Missions' }],
       query: id => ({
         method: 'DELETE',
-        url: `missions/${id}`
+        url: `/missions/${id}`
       })
     }),
 
@@ -35,7 +35,7 @@ export const missionApi = monitorenvApi.injectEndpoints({
       query: mission => ({
         body: mission,
         method: 'POST',
-        url: `missions`
+        url: `/missions`
       })
     })
   })

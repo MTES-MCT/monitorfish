@@ -12,31 +12,25 @@ export const mapFilterFormRecordsToFilters = ([key, valueOrValues]: [MissionFilt
   switch (key) {
     case MissionFilterType.CUSTOM_DATE_RANGE:
       return filter<Mission>(
-        ({ inputEndDateTimeUtc, inputStartDateTimeUtc }) =>
-          dayjs(inputEndDateTimeUtc).isSameOrAfter((valueOrValues as DateRange)[0]) &&
-          dayjs(inputStartDateTimeUtc).isSameOrBefore((valueOrValues as DateRange)[1])
+        ({ endDateTimeUtc, startDateTimeUtc }) =>
+          dayjs(endDateTimeUtc).isSameOrAfter((valueOrValues as DateRange)[0]) &&
+          dayjs(startDateTimeUtc).isSameOrBefore((valueOrValues as DateRange)[1])
       )
 
     case MissionFilterType.DATE_RANGE:
       switch (valueOrValues as MissionDateRangeFilter) {
         case MissionDateRangeFilter.CURRENT_DAY:
-          return filter<Mission>(({ inputEndDateTimeUtc }) =>
-            dayjs(inputEndDateTimeUtc).isSameOrAfter(dayjs().startOf('day'))
-          )
+          return filter<Mission>(({ endDateTimeUtc }) => dayjs(endDateTimeUtc).isSameOrAfter(dayjs().startOf('day')))
 
         case MissionDateRangeFilter.CURRENT_WEEK:
-          return filter<Mission>(({ inputEndDateTimeUtc }) =>
-            dayjs(inputEndDateTimeUtc).isSameOrAfter(dayjs().startOf('week'))
-          )
+          return filter<Mission>(({ endDateTimeUtc }) => dayjs(endDateTimeUtc).isSameOrAfter(dayjs().startOf('week')))
 
         case MissionDateRangeFilter.CURRENT_MONTH:
-          return filter<Mission>(({ inputEndDateTimeUtc }) =>
-            dayjs(inputEndDateTimeUtc).isSameOrAfter(dayjs().startOf('month'))
-          )
+          return filter<Mission>(({ endDateTimeUtc }) => dayjs(endDateTimeUtc).isSameOrAfter(dayjs().startOf('month')))
 
         case MissionDateRangeFilter.CURRENT_QUARTER:
-          return filter<Mission>(({ inputEndDateTimeUtc }) =>
-            dayjs(inputEndDateTimeUtc).isSameOrAfter(dayjs().startOf('quarter'))
+          return filter<Mission>(({ endDateTimeUtc }) =>
+            dayjs(endDateTimeUtc).isSameOrAfter(dayjs().startOf('quarter'))
           )
 
         // `case MissionDateRangeFilter.CUSTOM:`

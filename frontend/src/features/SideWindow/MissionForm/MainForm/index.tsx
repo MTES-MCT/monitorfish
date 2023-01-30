@@ -97,8 +97,8 @@ export function MainForm({ initialValues, onChange, onTypeChange }: MainFormProp
             isCompact
             isStringDate
             label="Début et fin de mission"
-            // `inputStartDateTimeUtc` & `inputEndDateTimeUtc` in API
-            name="inputDateTimeRangeUtc"
+            // `startDateTimeUtc` & `endDateTimeUtc` in API
+            name="dateTimeRangeUtc"
             withTime
           />
           <FormikMultiRadio isInline label="Type de mission" name="missionType" options={MISSION_TYPES_AS_OPTIONS} />

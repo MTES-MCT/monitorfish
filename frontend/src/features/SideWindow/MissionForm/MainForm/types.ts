@@ -6,12 +6,12 @@ import type { DateAsStringRange } from '@mtes-mct/monitor-ui'
 export type MissionFormValues = Partial<
   Omit<
     MissionData,
-    'controlUnits' | 'inputStartDateTimeUtc' | 'inputEndDateTimeUtc' | 'missionSource' | 'missionType' | 'controlUnits'
+    'controlUnits' | 'endDateTimeUtc' | 'startDateTimeUtc' | 'missionSource' | 'missionType' | 'controlUnits'
   >
 > & {
   controlUnits: Undefine<ControlUnit>[]
+  dateTimeRangeUtc: DateAsStringRange | undefined
   hasOrder?: boolean | undefined
-  inputDateTimeRangeUtc: DateAsStringRange | undefined
   missionType: MissionType
   zones: string[]
 }

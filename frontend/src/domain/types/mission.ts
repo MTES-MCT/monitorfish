@@ -6,13 +6,12 @@ import type { Except } from 'type-fest'
 export interface Mission {
   closedBy?: string
   controlUnits: ControlUnit[]
+  endDateTimeUtc?: string
   // We type it as `undefined` because we don't need that prop in Fish
   envActions: undefined
   facade?: SeaFront
   geom?: GeoJSON.MultiPolygon
   id: number
-  inputEndDateTimeUtc?: string
-  inputStartDateTimeUtc: string
   isClosed: boolean
   isDeleted: boolean
   missionNature?: MissionNature
@@ -21,6 +20,7 @@ export interface Mission {
   observationsCacem?: string
   observationsCnsp?: string
   openBy?: string
+  startDateTimeUtc: string
 }
 
 export type MissionData = Except<Mission, 'id'>

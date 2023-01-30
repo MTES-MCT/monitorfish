@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import { Layer } from '../../../domain/entities/layers/constants'
-import { getAdministrativeAndRegulatoryLayersStyle } from '../layers/styles/administrativeAndRegulatoryLayers.style'
+import { getRegulatoryLayerStyle } from '../layers/styles/regulatoryLayer.style'
 
 import type { BaseRegulatoryZone } from '../../../domain/types/regulation'
 import type Feature from 'ol/Feature'
@@ -22,11 +22,7 @@ export function LayerDetailsBox({ feature }: LayerDetailsBoxProps) {
   }, [feature])
 
   const vectorLayerStyle = useMemo(
-    () =>
-      getAdministrativeAndRegulatoryLayersStyle(Layer.REGULATORY.code)(
-        undefined,
-        regulatoryFeatureProperties as BaseRegulatoryZone
-      ),
+    () => getRegulatoryLayerStyle(undefined, regulatoryFeatureProperties as BaseRegulatoryZone),
     [regulatoryFeatureProperties]
   )
 

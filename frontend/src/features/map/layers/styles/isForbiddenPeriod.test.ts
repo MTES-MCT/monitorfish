@@ -570,6 +570,25 @@ describe('isForbiddenPeriod', () => {
     const currentDate = getUtcDayjs()
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
+
+  it('isForbiddenPeriod Should parse a property in camel case', async () => {
+    // Given
+    const feature = new Feature({
+      fishingPeriod: {
+        annualRecurrence: true,
+        authorized: true,
+        dateRanges: [],
+        dates: [],
+        otherInfo: 'Max 15h/jour. Dérogation possible',
+        timeIntervals: [],
+        weekdays: ['mardi', 'mercredi', 'jeudi', 'vendredi']
+      }
+    })
+
+    // When
+    const currentDate = getUtcDayjs().day(1) // Monday
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
+  })
 })
 
 function getDateInTheFuture() {

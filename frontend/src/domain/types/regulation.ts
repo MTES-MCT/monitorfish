@@ -15,7 +15,7 @@ export type RegulatoryZone = BaseRegulatoryZone & {
   nextId: string
   otherInfo: string
   region: string
-  regulatoryReference: RegulatoryText[]
+  regulatoryReferences: RegulatoryText[] | undefined
   showed: boolean
   speciesRegulation: SpeciesRegulation
 }
@@ -54,21 +54,21 @@ export type TimeInterval = {
 
 export type FishingPeriod = {
   always?: boolean
-  annualRecurrence: boolean
-  authorized: boolean
+  annualRecurrence: boolean | undefined
+  authorized: boolean | undefined
   dateRanges: DateInterval[]
   // ISO-8601 date
   dates: string[]
-  daytime: boolean
-  holidays: boolean
-  otherInfo: string
+  daytime: boolean | undefined
+  holidays: boolean | undefined
+  otherInfo: string | undefined
   timeIntervals: TimeInterval[]
   weekdays: string[]
 }
 
 export type RegulatedSpecies = {
-  allSpecies: boolean
-  otherInfo: string
+  allSpecies: boolean | undefined
+  otherInfo: string | undefined
   species: RegulatedSpeciesDetail[]
   /** group name */
   speciesGroups: string[]
@@ -76,7 +76,7 @@ export type RegulatedSpecies = {
 
 export type SpeciesRegulation = {
   authorized: RegulatedSpecies
-  otherInfo: string
+  otherInfo: string | undefined
   unauthorized: RegulatedSpecies
 }
 
@@ -98,15 +98,15 @@ export type GearCategory = {
 
 export type GearRegulation = {
   authorized: RegulatedGears
-  otherInfo: string
+  otherInfo: string | undefined
   unauthorized: RegulatedGears
 }
 
 export type RegulatedGears = {
-  allGears: boolean
-  allPassiveGears: boolean
-  allTowedGears: boolean
-  derogation: boolean
+  allGears: boolean | undefined
+  allPassiveGears: boolean | undefined
+  allTowedGears: boolean | undefined
+  derogation: boolean | undefined
   regulatedGearCategories: Record<string, GearCategory>
   regulatedGears: Gear[]
   /**  a list of categories name and gears code */

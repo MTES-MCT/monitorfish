@@ -1,10 +1,20 @@
 import { formatDataForSelectPicker, getTextForSearch } from '../../../utils'
 import { Layer } from '../layers/constants'
 
-import type { Gear, RegulatoryLawTypes, RegulatoryZone } from '../../types/regulation'
+import type {
+  FishingPeriod,
+  Gear,
+  GearRegulation,
+  RegulatedGears,
+  RegulatedSpecies,
+  RegulatoryLawTypes,
+  RegulatoryZone,
+  SpeciesRegulation,
+  RegulatoryText
+} from '../../types/regulation'
 import type { Specy } from '../../types/specy'
 
-export const mapToRegulatoryZone = ({ geometry, id, properties }, speciesByCode) => ({
+export const mapToRegulatoryZone = ({ geometry, id, properties }, speciesByCode): Partial<RegulatoryZone> => ({
   fishingPeriod: parseFishingPeriod(properties.fishing_period),
   gearRegulation: parseGearRegulation(properties.gears),
   geometry,
@@ -63,7 +73,7 @@ function getTopicsToZones(uniqueLawTypeTopics: string[], regulatoryZones: Regula
   }, {})
 }
 
-function parseGearRegulation(gears) {
+function parseGearRegulation(gears): GearRegulation {
   return gears ? parseJSON(gears) : DEFAULT_GEAR_REGULATION
 }
 
@@ -71,9 +81,8 @@ function parseGearRegulation(gears) {
  * Parse the JSON and adds the species name to the list of species
  * @param speciesRegulation
  * @param {Object<string, {name: string, code: string}>} speciesByCode
- * @return {{otherInfo?: string, species: *, allSpecies?: boolean, speciesGroups?: string[]}}
  */
-function parseSpeciesRegulation(speciesRegulation, speciesByCode) {
+function parseSpeciesRegulation(speciesRegulation, speciesByCode): SpeciesRegulation {
   const nextSpeciesRegulation = speciesRegulation ? parseJSON(speciesRegulation) : DEFAULT_SPECIES_REGULATION
 
   if (nextSpeciesRegulation?.authorized?.species?.length) {
@@ -100,7 +109,7 @@ function addMissingSpeciesName(species: Specy[], speciesByCode: Record<string, S
   }))
 }
 
-const parseRegulatoryReferences = regulatoryTextsString => {
+const parseRegulatoryReferences = (regulatoryTextsString): RegulatoryText[] | undefined => {
   if (!regulatoryTextsString) {
     return undefined
   }
@@ -127,7 +136,7 @@ export const parseFishingPeriod = fishingPeriod => {
   return DEFAULT_FISHING_PERIOD_VALUES
 }
 
-const mapToFishingPeriod = fishingPeriod => {
+const mapToFishingPeriod = (fishingPeriod): FishingPeriod => {
   if (fishingPeriod) {
     const { dateRanges, dates, timeIntervals } = fishingPeriod
     const newDateRanges = dateRanges?.map(({ endDate, startDate }) => ({
@@ -290,8 +299,7 @@ export const DEFAULT_DATE_RANGE = {
   startDate: undefined
 }
 
-/** @type {FishingPeriod} */
-const DEFAULT_FISHING_PERIOD_VALUES = {
+const DEFAULT_FISHING_PERIOD_VALUES: FishingPeriod = {
   always: undefined,
   annualRecurrence: undefined,
   authorized: undefined,
@@ -299,55 +307,52 @@ const DEFAULT_FISHING_PERIOD_VALUES = {
   dates: [],
   daytime: undefined,
   holidays: undefined,
+  otherInfo: undefined,
   timeIntervals: [],
   weekdays: []
 }
 
-/** @type {RegulatedSpecies} */
-export const DEFAULT_AUTHORIZED_REGULATED_SPECIES = {
-  otherInfo: undefined,
-  species: [],
-  speciesGroups: []
-}
-
-/** @type {RegulatedSpecies} */
-export const DEFAULT_UNAUTHORIZED_REGULATED_SPECIES = {
+export const DEFAULT_AUTHORIZED_REGULATED_SPECIES: RegulatedSpecies = {
   allSpecies: undefined,
   otherInfo: undefined,
   species: [],
   speciesGroups: []
 }
 
-/** @type {SpeciesRegulation} */
-export const DEFAULT_SPECIES_REGULATION = {
+export const DEFAULT_UNAUTHORIZED_REGULATED_SPECIES: RegulatedSpecies = {
+  allSpecies: undefined,
+  otherInfo: undefined,
+  species: [],
+  speciesGroups: []
+}
+
+export const DEFAULT_SPECIES_REGULATION: SpeciesRegulation = {
   authorized: DEFAULT_AUTHORIZED_REGULATED_SPECIES,
   otherInfo: undefined,
   unauthorized: DEFAULT_UNAUTHORIZED_REGULATED_SPECIES
 }
 
-/** @type {RegulatedGears} */
-export const DEFAULT_AUTHORIZED_REGULATED_GEARS = {
-  allPassiveGears: null,
-  allTowedGears: null,
-  derogation: null,
+export const DEFAULT_AUTHORIZED_REGULATED_GEARS: RegulatedGears = {
+  allGears: undefined,
+  allPassiveGears: undefined,
+  allTowedGears: undefined,
+  derogation: undefined,
   regulatedGearCategories: {},
-  regulatedGears: {},
+  regulatedGears: [],
   selectedCategoriesAndGears: []
 }
 
-/** @type {RegulatedGears} */
-export const DEFAULT_UNAUTHORIZED_REGULATED_GEARS = {
-  allGears: null,
-  allPassiveGears: null,
-  allTowedGears: null,
-  derogation: null,
+export const DEFAULT_UNAUTHORIZED_REGULATED_GEARS: RegulatedGears = {
+  allGears: undefined,
+  allPassiveGears: undefined,
+  allTowedGears: undefined,
+  derogation: undefined,
   regulatedGearCategories: {},
-  regulatedGears: {},
+  regulatedGears: [],
   selectedCategoriesAndGears: []
 }
 
-/** @type {GearRegulation} */
-export const DEFAULT_GEAR_REGULATION = {
+export const DEFAULT_GEAR_REGULATION: GearRegulation = {
   authorized: DEFAULT_AUTHORIZED_REGULATED_GEARS,
   otherInfo: undefined,
   unauthorized: DEFAULT_UNAUTHORIZED_REGULATED_GEARS

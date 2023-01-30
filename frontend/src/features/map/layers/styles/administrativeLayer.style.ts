@@ -16,7 +16,7 @@ import { getHashDigitsFromRegulation } from '../utils'
 import type { BaseRegulatoryZone } from '../../../../domain/types/regulation'
 import type Feature from 'ol/Feature'
 
-export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
+export function getAdministrativeLayerStyle(type: string) {
   switch (type) {
     case Layer.EEZ.code:
       return (feature: Feature | undefined) =>

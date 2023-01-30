@@ -5,7 +5,7 @@ import VectorImageLayer from 'ol/layer/VectorImage'
 import { all, bbox as bboxStrategy } from 'ol/loadingstrategy'
 
 import layer from '../../../shared_slices/Layer'
-import { getAdministrativeAndRegulatoryLayersStyle } from '../../../../features/map/layers/styles/administrativeAndRegulatoryLayers.style'
+import { getAdministrativeLayerStyle } from '../../../../features/map/layers/styles/administrativeLayer.style'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../entities/map/constants'
 import { getAdministrativeZoneFromAPI } from '../../../../api/geoserver'
 
@@ -50,7 +50,7 @@ export const getVectorOLLayer = (type, zone, isBackoffice) => {
     updateWhileAnimating: true,
     updateWhileInteracting: true,
     style: feature => {
-      return [getAdministrativeAndRegulatoryLayersStyle(type)(feature)]
+      return [getAdministrativeLayerStyle(type)(feature)]
     },
     declutter: true
   })

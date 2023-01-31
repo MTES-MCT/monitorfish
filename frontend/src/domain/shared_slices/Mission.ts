@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import type { MissionFormValues } from '../../features/SideWindow/MissionForm/MainForm/types'
+import type { MissionFormValues } from '../../features/SideWindow/MissionForm/types'
 import type { Mission } from '../types/mission'
 import type { PayloadAction } from '@reduxjs/toolkit'
 

@@ -1,14 +1,13 @@
 import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
 import { noop } from 'lodash'
-import { omit } from 'ramda'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { ActionForm } from './ActionForm'
 import { ActionList } from './ActionList'
 import { MainForm } from './MainForm'
-import { getMissionFormInitialValues } from './MainForm/utils'
 import {
+  getMissionFormInitialValues,
   getMissionDataFromMissionFormValues,
   getUpdatedMissionFromMissionFormValues,
   isCompleteMissionFormValues
@@ -22,8 +21,7 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
 import { SideWindowMenuKey } from '../constants'
 
-import type { MissionFormValues } from './MainForm/types'
-import type { PartialAction } from './types'
+import type { MissionFormValues, PartialAction } from './types'
 import type { MutableRefObject } from 'react'
 
 export function MissionForm() {
@@ -40,19 +38,10 @@ export function MissionForm() {
   const editedMission = useMainAppSelector(store => store.mission.editedMission)
   const missionDraftFormValues = useMainAppSelector(store => store.mission.draftFormValues)
 
-  const mainFormInitialValues: MissionFormValues | undefined = useMemo(() => {
-    if (!editedMission) {
-      return undefined
-    }
-
-    const commonValues = omit(['dateTimeRangeUtc'], editedMission)
-    const defaultInitialValues = getMissionFormInitialValues()
-
-    return {
-      ...defaultInitialValues,
-      ...commonValues
-    }
-  }, [editedMission])
+  const mainFormInitialValues: MissionFormValues | undefined = useMemo(
+    () => getMissionFormInitialValues(editedMission),
+    [editedMission]
+  )
 
   const isMissionFormValid = useMemo(
     () => isCompleteMissionFormValues(missionDraftFormValues),

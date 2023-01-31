@@ -4,17 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PNOAndLANAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import org.hibernate.annotations.Type
 import java.time.ZonedDateTime
 import java.util.*
 
 @Entity
 @Table(name = "pno_lan_alerts")
-data class AlertEntity(
+data class PnoAndLanAlertEntity(
     @Id
     @Column(name = "alert_id")
     val id: UUID,
@@ -46,7 +43,7 @@ data class AlertEntity(
     }
 
     companion object {
-        fun fromAlert(alert: PNOAndLANAlert, mapper: ObjectMapper) = AlertEntity(
+        fun fromAlert(alert: PNOAndLANAlert, mapper: ObjectMapper) = PnoAndLanAlertEntity(
             id = alert.id,
             internalReferenceNumber = alert.internalReferenceNumber,
             externalReferenceNumber = alert.externalReferenceNumber,

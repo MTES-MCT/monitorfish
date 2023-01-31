@@ -209,25 +209,35 @@ object TestUtils {
         val catchOne = Catch()
         catchOne.species = "TTV"
         catchOne.weight = 123.0
+        catchOne.conversionFactor = 1.0
+
         val catchTwo = Catch()
         catchTwo.species = "SMV"
         catchTwo.weight = 961.5
+        catchTwo.conversionFactor = 1.22
+
         val catchThree = Catch()
         catchThree.species = "PNB"
         catchThree.weight = 69.7
+        catchThree.conversionFactor = 1.35
+
         val catchFour = Catch()
         catchFour.species = "CQL"
         catchFour.weight = 98.2
+        catchFour.conversionFactor = 1.0
 
         val catchFive = Catch()
         catchFive.species = "FGV"
         catchFive.weight = 25.5
+
         val catchSix = Catch()
         catchSix.species = "THB"
         catchSix.weight = 35.0
+
         val catchSeven = Catch()
         catchSeven.species = "VGY"
         catchSeven.weight = 66666.0
+
         val catchEight = Catch()
         catchEight.species = "MQP"
         catchEight.weight = 11.1
@@ -241,7 +251,10 @@ object TestUtils {
         catchTen.weight = 2225.0
 
         val firstLan = LAN()
-        firstLan.catchLanded = listOf(catchOne, catchTwo, catchThree, catchFour, catchNine)
+        // The weight is reduced because of the conversion factor
+        // catchTwo: 788.11 = 961.5 / 1.22
+        // catchTwo: 51.62 = 69.7 / 1.35
+        firstLan.catchLanded = listOf(catchOne, catchTwo.copy(weight = 788.11), catchThree.copy(weight = 51.62), catchFour, catchNine)
 
         val firstPno = PNO()
         firstPno.catchOnboard = listOf(

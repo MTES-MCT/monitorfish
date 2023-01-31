@@ -3,16 +3,7 @@
 import { MissionNatureLabel, MissionTypeLabel } from '../../../../domain/types/mission'
 import { getOptionsFromLabelledEnum } from '../../../../utils/getOptionsFromLabelledEnum'
 
-import type { MissionFormValues } from './types'
 import type { Option } from '@mtes-mct/monitor-ui'
-
-export const INITIAL_MISSION_CONTROL_UNIT: MissionFormValues['controlUnits'][0] = {
-  administration: undefined,
-  contact: undefined,
-  id: undefined,
-  name: undefined,
-  resources: undefined
-}
 
 export const FLIGHT_GOALS_AS_OPTIONS: Option[] = [
   { label: 'Vérifications VMS/AIS', value: 'Vérifications VMS/AIS' },

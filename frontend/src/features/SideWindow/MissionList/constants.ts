@@ -42,13 +42,13 @@ export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option[]> = {
 export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission> = {
   columns: [
     {
-      fixedWidth: 112,
+      fixedWidth: 144,
       isSortable: true,
       key: 'startDate',
       label: 'Date de début'
     },
     {
-      fixedWidth: 112,
+      fixedWidth: 144,
       isSortable: true,
       key: 'endDate',
       label: 'Date de fin'

@@ -11,10 +11,10 @@ import {
 } from './utils'
 import { useNewWindow } from '../../../../../ui/NewWindow'
 import { mapToProp } from '../../../../../utils/mapToProp'
-import { INITIAL_MISSION_CONTROL_UNIT } from '../constants'
+import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 
 import type { ControlUnit } from '../../../../../domain/types/controlUnit'
-import type { MissionFormValues } from '../types'
+import type { MissionFormValues } from '../../types'
 import type { Promisable } from 'type-fest'
 
 export type ControlUnitSelectProps = {

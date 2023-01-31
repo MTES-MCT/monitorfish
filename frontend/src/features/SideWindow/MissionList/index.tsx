@@ -1,4 +1,4 @@
-import { Button, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
+import { Button, getLocalizedDayjs, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
 import { noop } from 'lodash'
 import { pipe } from 'ramda'
 import { useMemo, useRef, useState } from 'react'
@@ -13,7 +13,6 @@ import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useTable } from '../../../hooks/useTable'
 import { EmptyCardTable } from '../../../ui/card-table/EmptyCardTable'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
-import { dayjs } from '../../../utils/dayjs'
 import { SideWindowMenuKey } from '../constants'
 
 import type { MissionFilter } from './types'
@@ -64,11 +63,13 @@ export function MissionList() {
               <TableBody>
                 {filteredMissions.map(mission => (
                   <TableBodyRow key={mission.id} data-cy="side-window-current-reportings">
-                    <TableBodyCell $fixedWidth={112}>
-                      {dayjs(mission.startDateTimeUtc).format('D MMM YY, HH:MM')}
+                    <TableBodyCell $fixedWidth={144}>
+                      {getLocalizedDayjs(mission.startDateTimeUtc).format('D MMM YY, HH:MM')}
                     </TableBodyCell>
-                    <TableBodyCell $fixedWidth={112}>
-                      {mission.endDateTimeUtc ? dayjs(mission.endDateTimeUtc).format('D MMM YY, HH:MM') : '-'}
+                    <TableBodyCell $fixedWidth={144}>
+                      {mission.endDateTimeUtc
+                        ? getLocalizedDayjs(mission.endDateTimeUtc).format('D MMM YY, HH:MM')
+                        : '-'}
                     </TableBodyCell>
                     <TableBodyCell $fixedWidth={160}>
                       {mission.controlUnits

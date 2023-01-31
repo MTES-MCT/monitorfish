@@ -17,7 +17,7 @@ import { addMissionZone } from '../../../../domain/use_cases/missions/addMission
 import { useListenForDrawedGeometry } from '../../../../hooks/useListenForDrawing'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 
-import type { MissionFormValues } from './types'
+import type { MissionFormValues } from '../types'
 import type { Coordinate } from 'ol/coordinate'
 
 export type FormikMultiZonePickerProps = {

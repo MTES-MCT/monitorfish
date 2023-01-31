@@ -23,26 +23,24 @@ import {
 } from './constants'
 import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'
 import { FormikMultiZonePicker } from './FormikMultiZonePicker'
-import { getMissionFormInitialValues } from './utils'
 import { MissionNature, MissionType } from '../../../../domain/types/mission'
 import { useNewWindow } from '../../../../ui/NewWindow'
 import { FormBody } from '../FormBody'
 import { FormHead } from '../FormHead'
 
-import type { MissionFormValues } from './types'
+import type { MissionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
 export type MainFormProps = {
-  initialValues: MissionFormValues | undefined
+  initialValues: MissionFormValues
   onChange: (nextPartialMission: MissionFormValues) => Promisable<void>
   onTypeChange: (nextType: MissionType) => Promisable<void>
 }
 export function MainForm({ initialValues, onChange, onTypeChange }: MainFormProps) {
-  const currentValuesRef = useRef<MissionFormValues>(initialValues || getMissionFormInitialValues())
+  const currentValuesRef = useRef<MissionFormValues>(initialValues)
+  const { newWindowContainerRef } = useNewWindow()
 
   const [hasMissionUnderJdpType, setHasMissionUnderJdpType] = useState(false)
-
-  const { newWindowContainerRef } = useNewWindow()
 
   const updateCurrentValues = useCallback(
     (nextValues: MissionFormValues) => {
@@ -83,7 +81,7 @@ export function MainForm({ initialValues, onChange, onTypeChange }: MainFormProp
   )
 
   return (
-    <Formik initialValues={currentValuesRef.current} onSubmit={noop}>
+    <Formik initialValues={initialValues || {}} onSubmit={noop}>
       <Wrapper>
         <FormikEffect onChange={updateCurrentValues as any} />
 

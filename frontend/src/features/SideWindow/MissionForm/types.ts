@@ -1,8 +1,23 @@
-import type { MissionType } from '../../../domain/types/mission'
+import type { ControlUnit } from '../../../domain/types/controlUnit'
+import type { MissionType, MissionData } from '../../../domain/types/mission'
 import type { DeepPartial, Undefine } from '../../../types'
+import type { DateAsStringRange } from '@mtes-mct/monitor-ui'
 
 export type Action = AirControl | GroundControl | SeaControl | FreeNote
 export type PartialAction = PartialAirControl | PartialGroundControl | PartialSeaControl | PartialFreeNote
+
+export type MissionFormValues = Partial<
+  Omit<
+    MissionData,
+    'controlUnits' | 'endDateTimeUtc' | 'startDateTimeUtc' | 'missionSource' | 'missionType' | 'controlUnits'
+  >
+> & {
+  controlUnits: Undefine<ControlUnit>[]
+  dateTimeRangeUtc: DateAsStringRange | undefined
+  hasOrder?: boolean | undefined
+  isUnderJdp?: boolean | undefined
+  missionType: MissionType
+}
 
 type AirControl = {
   endDate: Date

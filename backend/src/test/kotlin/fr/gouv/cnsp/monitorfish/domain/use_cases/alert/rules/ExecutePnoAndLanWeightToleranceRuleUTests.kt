@@ -97,7 +97,7 @@ class ExecutePnoAndLanWeightToleranceRuleUTests {
             val firstCatchAlerts = (allValues.first().value as PNOAndLANWeightToleranceAlert).catchesOverTolerance
             assertThat(firstCatchAlerts?.first()?.lan?.weight).isEqualTo(123.0)
             assertThat(firstCatchAlerts?.first()?.pno?.weight).isEqualTo(1123.0)
-            assertThat(firstCatchAlerts?.last()?.lan?.weight).isEqualTo(69.7)
+            assertThat(firstCatchAlerts?.last()?.lan?.weight).isEqualTo(69.687)
             assertThat(firstCatchAlerts?.last()?.pno?.weight).isEqualTo(1069.7)
 
             assertThat(allValues.last().value.type).isEqualTo(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT)
@@ -180,4 +180,5 @@ class ExecutePnoAndLanWeightToleranceRuleUTests {
                 .updateLogbookMessagesAsProcessedByRule(listOf(1, 2, 3, 4), "PNO_LAN_WEIGHT_TOLERANCE")
         }
     }
+
 }

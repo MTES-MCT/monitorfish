@@ -13,11 +13,11 @@ import fr.gouv.cnsp.monitorfish.domain.entities.rules.type.PNOAndLANWeightTolera
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.type.RuleTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PNOAndLANAlertRepository
+import jakarta.transaction.Transactional
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 import java.util.*
-import jakarta.transaction.Transactional
 
 @UseCase
 class ExecutePnoAndLanWeightToleranceRule(
@@ -55,6 +55,7 @@ class ExecutePnoAndLanWeightToleranceRule(
                     )
                     val alert = buildAlert(lan, pno, rule.value, catchesOverTolerance)
 
+                    logger.info("Saving alert: ${alert.id}...}")
                     PNOAndLANAlertRepository.save(alert)
                     logger.info("PNO_LAN_WEIGHT_TOLERANCE: Alert saved")
                 }
@@ -107,7 +108,8 @@ class ExecutePnoAndLanWeightToleranceRule(
             .keys
             .mapNotNull { lanSpeciesKey ->
                 val lanWeight = catchesLandedBySpecies[lanSpeciesKey]
-                    ?.mapNotNull { it.weight }
+                    ?.map { it.weight?.let { weight -> weight * (it.conversionFactor ?: 1.0) } }
+                    ?.mapNotNull { it }
                     ?.sum()
                 val speciesName = catchesLandedBySpecies[lanSpeciesKey]?.first()?.speciesName
                 val lanCatch = Catch(species = lanSpeciesKey, speciesName = speciesName, weight = lanWeight)

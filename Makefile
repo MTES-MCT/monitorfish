@@ -16,7 +16,7 @@ run-stubbed-apis:
 stop-stubbed-apis:
 	docker stop cypress-geoserver-1
 erase-db:
-	docker compose down
+	docker compose down -v
 	docker compose -f ./frontend/cypress/docker-compose.yml down -v
 check-clean-archi:
 	cd backend/tools && ./check-clean-architecture.sh

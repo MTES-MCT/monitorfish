@@ -26,7 +26,7 @@ export function isCompleteMissionFormValues(missionFormValues: MissionFormValues
 export function isValidControlUnit(
   formResourceUnit: MissionFormValues['controlUnits'][0]
 ): formResourceUnit is Mission['controlUnits'][0] {
-  return !hasMissingOrUndefinedValues(['administration', 'contact', 'id', 'name', 'resources'], formResourceUnit)
+  return !hasMissingOrUndefinedValues(['administration', 'id', 'name', 'resources'], formResourceUnit)
 }
 
 export function getMissionDataFromMissionFormValues(missionFormValues: MissionFormValues): MissionData {

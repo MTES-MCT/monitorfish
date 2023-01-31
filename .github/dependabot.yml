@@ -13,6 +13,8 @@ updates:
       - "VincentAntoine"
     schedule:
       interval: "weekly"
+    # Disable all dependencies update (hopefully)
+    allow: []
 
   - package-ecosystem: "npm"
     directory: "/frontend"

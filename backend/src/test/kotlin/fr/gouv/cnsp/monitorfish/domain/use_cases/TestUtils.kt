@@ -254,7 +254,13 @@ object TestUtils {
         // The weight is reduced because of the conversion factor
         // catchTwo: 788.11 = 961.5 / 1.22
         // catchTwo: 51.62 = 69.7 / 1.35
-        firstLan.catchLanded = listOf(catchOne, catchTwo.copy(weight = 788.11), catchThree.copy(weight = 51.62), catchFour, catchNine)
+        firstLan.catchLanded = listOf(
+            catchOne,
+            catchTwo.copy(weight = 788.11),
+            catchThree.copy(weight = 51.62),
+            catchFour,
+            catchNine
+        )
 
         val firstPno = PNO()
         firstPno.catchOnboard = listOf(

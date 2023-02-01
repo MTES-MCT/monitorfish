@@ -4,13 +4,13 @@ import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.PositionEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBPositionRepository
+import jakarta.transaction.Transactional
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
-import jakarta.transaction.Transactional
 
 @Repository
 class JpaPositionRepository(private val dbPositionRepository: DBPositionRepository) : PositionRepository {

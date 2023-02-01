@@ -183,5 +183,4 @@ class ExecutePnoAndLanWeightToleranceRuleUTests {
                 .updateLogbookMessagesAsProcessedByRule(listOf(1, 2, 3, 4), "PNO_LAN_WEIGHT_TOLERANCE")
         }
     }
-
 }

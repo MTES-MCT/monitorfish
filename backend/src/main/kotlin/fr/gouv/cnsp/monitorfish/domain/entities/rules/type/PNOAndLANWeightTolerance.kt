@@ -19,7 +19,9 @@ class PNOAndLANWeightTolerance(
     }
 
     fun isAboveMinimumWeightThreshold(lanWeight: Double): Boolean {
-        return lanWeight > (minimumWeightThreshold
-            ?: throw IllegalArgumentException("Minimum weight threshold is not given, rule could not be evaluated."))
+        return lanWeight > (
+            minimumWeightThreshold
+                ?: throw IllegalArgumentException("Minimum weight threshold is not given, rule could not be evaluated.")
+            )
     }
 }

@@ -16,7 +16,7 @@ class WebSecurityConfig {
         http
             .cors().and()
             .csrf().disable()
-            .authorizeHttpRequests {authorize -> authorize.requestMatchers(AntPathRequestMatcher("/**")).permitAll()}
+            .authorizeHttpRequests { authorize -> authorize.requestMatchers(AntPathRequestMatcher("/**")).permitAll() }
 
         return http.build()
     }

@@ -7,8 +7,8 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.FleetSegmentRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.CreateOrUpdateFleetSegmentFields
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.FleetSegmentEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBFleetSegmentRepository
-import org.springframework.stereotype.Repository
 import jakarta.transaction.Transactional
+import org.springframework.stereotype.Repository
 
 @Repository
 class JpaFleetSegmentRepository(private val dbFleetSegmentRepository: DBFleetSegmentRepository) : FleetSegmentRepository {

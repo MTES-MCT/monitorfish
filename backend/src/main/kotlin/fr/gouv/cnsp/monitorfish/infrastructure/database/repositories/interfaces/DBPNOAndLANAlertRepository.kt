@@ -18,7 +18,8 @@ interface DBPNOAndLANAlertRepository : CrudRepository<PnoAndLanAlertEntity, UUID
     fun findAlertsOfRules(types: List<String>, internalReferenceNumber: String, tripNumber: String?): List<PnoAndLanAlertEntity>
 
     @Modifying
-    @Query("""
+    @Query(
+        """
         insert into
             pno_lan_alerts
         values (
@@ -30,7 +31,9 @@ interface DBPNOAndLANAlertRepository : CrudRepository<PnoAndLanAlertEntity, UUID
             :tripNumber,
             cast(:value as jsonb)
         )
-    """, nativeQuery = true)
+    """,
+        nativeQuery = true
+    )
     fun save(
         id: UUID,
         internalReferenceNumber: String? = null,

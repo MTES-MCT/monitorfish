@@ -6,9 +6,9 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.FleetSegmentDataOutpu
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.websocket.server.PathParam
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
-import jakarta.websocket.server.PathParam
 
 @RestController
 @RequestMapping("/bff/v1/fleet_segments")

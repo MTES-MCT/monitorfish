@@ -68,8 +68,8 @@ class APIMissionRepositoryITest {
                           ]
                         ]
                       },
-                      "inputStartDateTimeUtc": "2023-03-02T09:30:55.923703Z",
-                      "inputEndDateTimeUtc": null,
+                      "startDateTimeUtc": "2023-03-02T09:30:55.923703Z",
+                      "endDateTimeUtc": null,
                       "envActions": [
                         {
                           "actionType": "SURVEILLANCE",

@@ -16,7 +16,7 @@ import type { Promisable } from 'type-fest'
 
 export type SideWindowSubMenuProps = {
   isFixed: boolean
-  selectedMenu?: string
+  selectedMenu: string | undefined
   selectedSubMenu: MenuItem<SeaFront | string>
   selectedTab: AlertAndReportingTab
   // TODO Rename that.

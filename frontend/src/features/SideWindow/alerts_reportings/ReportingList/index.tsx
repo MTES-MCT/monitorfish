@@ -184,23 +184,31 @@ MMSI: ${reporting.mmsi || ''}`
             return (
               <CardTableRow key={reporting.id} data-cy="side-window-current-reportings" index={index + 1} style={{}}>
                 <FlexboxGrid>
-                  <FlexboxGrid.Item style={columnStyles[0]}>
+                  <FlexboxGrid.Item style={columnStyles[0] as CSSProperties}>
                     <StyledCheckbox
                       checked={reporting.isChecked}
                       onChange={() => toggleTableCheckForId(reporting.id)}
                     />
                   </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[1]} title={reporting.item.validationDate}>
+                  <FlexboxGrid.Item style={columnStyles[1] as CSSProperties} title={reporting.item.validationDate}>
                     {timeago.format(reporting.item.validationDate, 'fr')}
                   </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[2]} title={getReportingOrigin(reporting.item, true)}>
+                  <FlexboxGrid.Item
+                    style={columnStyles[2] as CSSProperties}
+                    title={getReportingOrigin(reporting.item, true)}
+                  >
                     {getReportingOrigin(reporting.item)}
                   </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[3]} title={getReportingTitle(reporting.item, true)}>
+                  <FlexboxGrid.Item
+                    style={columnStyles[3] as CSSProperties}
+                    title={getReportingTitle(reporting.item, true)}
+                  >
                     {getReportingTitle(reporting.item)}
                   </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[4]}>{reporting.item.value.natinfCode}</FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[5]} title={getVesselNameTitle(reporting)}>
+                  <FlexboxGrid.Item style={columnStyles[4] as CSSProperties}>
+                    {reporting.item.value.natinfCode}
+                  </FlexboxGrid.Item>
+                  <FlexboxGrid.Item style={columnStyles[5] as CSSProperties} title={getVesselNameTitle(reporting)}>
                     <Flag
                       rel="preload"
                       src={`${baseUrl ? `${baseUrl}/` : ''}flags/${reporting.item.value.flagState?.toLowerCase()}.svg`}
@@ -209,12 +217,14 @@ MMSI: ${reporting.mmsi || ''}`
                     />
                     {reporting.item.vesselName}
                   </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[6]}>{reporting.item.value.dml}</FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[7]}>
+                  <FlexboxGrid.Item style={columnStyles[6] as CSSProperties}>
+                    {reporting.item.value.dml}
+                  </FlexboxGrid.Item>
+                  <FlexboxGrid.Item style={columnStyles[7] as CSSProperties}>
                     {reporting.item.underCharter && <UnderCharter>Navire sous charte</UnderCharter>}
                   </FlexboxGrid.Item>
                   <Separator />
-                  <FlexboxGrid.Item style={columnStyles[8]}>
+                  <FlexboxGrid.Item style={columnStyles[8] as CSSProperties}>
                     <IconButton
                       accent={Accent.TERTIARY}
                       data-cy="side-window-silenced-alerts-show-vessel"
@@ -224,7 +234,7 @@ MMSI: ${reporting.mmsi || ''}`
                       title="Voir sur la carte"
                     />
                   </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[9]}>
+                  <FlexboxGrid.Item style={columnStyles[9] as CSSProperties}>
                     <IconButton
                       accent={Accent.TERTIARY}
                       data-cy="side-window-edit-reporting"

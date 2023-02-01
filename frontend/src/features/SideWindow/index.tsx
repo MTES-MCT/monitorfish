@@ -240,7 +240,7 @@ function SideWindowWithRef(this: any, { isFromURL }: SideWindowProps, ref: Forwa
 
 const Content = styled.div<{
   height: number
-  noMargin?: boolean
+  noMargin: boolean | undefined
 }>`
   height: ${p => p.height}px;
   margin-left: ${p => (p.noMargin ? 0 : '30px')};

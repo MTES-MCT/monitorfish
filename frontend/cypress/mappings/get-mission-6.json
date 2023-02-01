@@ -34,8 +34,8 @@
       "observationsCnsp": null,
       "facade": "MED",
       "geom": null,
-      "inputStartDateTimeUtc": "2022-01-20T08:29:11.923703Z",
-      "inputEndDateTimeUtc": "2023-02-14T17:45:28.923703Z",
+      "startDateTimeUtc": "2022-01-20T08:29:11.923703Z",
+      "endDateTimeUtc": "2023-02-14T17:45:28.923703Z",
       "envActions": [],
       "missionSource": "CNSP",
       "isClosed": true

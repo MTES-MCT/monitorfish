@@ -1,33 +1,91 @@
 import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
 import { noop } from 'lodash'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { ActionForm } from './ActionForm'
 import { ActionList } from './ActionList'
 import { MainForm } from './MainForm'
+import {
+  getMissionFormInitialValues,
+  getMissionDataFromMissionFormValues,
+  getUpdatedMissionFromMissionFormValues,
+  isCompleteMissionFormValues
+} from './utils'
+import { useCreateMissionMutation } from '../../../api/mission'
+import { missionActions } from '../../../domain/actions'
+import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { MissionType } from '../../../domain/types/mission'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
+import { SideWindowMenuKey } from '../constants'
 
-import type { PartialAction } from './types'
+import type { MissionFormValues, PartialAction } from './types'
 import type { MutableRefObject } from 'react'
 
-export type MissionFormProps = {
-  // mission?: Mission
-  baseRef: MutableRefObject<HTMLDivElement>
-}
 export function MissionForm() {
-  const headerRef = useRef() as MutableRefObject<HTMLDivElement>
-  /** Header height in pixels */
+  const headerDivRef = useRef() as MutableRefObject<HTMLDivElement>
+
   const [selectedType, setSelectedType] = useState<MissionType>(MissionType.SEA)
+  /** Header height in pixels */
   const [headerHeight, setHeaderHeight] = useState<number>(0)
   const [newAction, setNewAction] = useState<PartialAction | undefined>(undefined)
+  const [createMission] = useCreateMissionMutation()
+  const [updateMission] = useCreateMissionMutation()
+
+  const dispatch = useMainAppDispatch()
+  const editedMission = useMainAppSelector(store => store.mission.editedMission)
+  const missionDraftFormValues = useMainAppSelector(store => store.mission.draftFormValues)
+
+  const mainFormInitialValues: MissionFormValues | undefined = useMemo(
+    () => getMissionFormInitialValues(editedMission),
+    [editedMission]
+  )
+
+  const isMissionFormValid = useMemo(
+    () => isCompleteMissionFormValues(missionDraftFormValues),
+    [missionDraftFormValues]
+  )
+
+  const createOrUpdateMission = useCallback(() => {
+    if (!missionDraftFormValues) {
+      return
+    }
+
+    if (!editedMission) {
+      const newMission = getMissionDataFromMissionFormValues(missionDraftFormValues)
+
+      createMission(newMission)
+    } else {
+      const updatedMission = getUpdatedMissionFromMissionFormValues(editedMission.id, missionDraftFormValues)
+
+      updateMission(updatedMission)
+    }
+  }, [createMission, editedMission, missionDraftFormValues, updateMission])
+
+  const goToMissionList = useCallback(async () => {
+    dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_LIST))
+  }, [dispatch])
+
+  const createOrUpdateMissionAndClose = useCallback(async () => {
+    createOrUpdateMission()
+    goToMissionList()
+  }, [createOrUpdateMission, goToMissionList])
+
+  const handleMainFormChange = useCallback(
+    (nextMissionFormValues: MissionFormValues) => {
+      dispatch(missionActions.setDraftFormValues(nextMissionFormValues))
+    },
+    [dispatch]
+  )
 
   const unsetNewAction = useCallback(() => {
     setNewAction(undefined)
   }, [])
 
   const handleResize = useCallback(() => {
-    setHeaderHeight(headerRef.current.offsetHeight)
+    setHeaderHeight(headerDivRef.current.offsetHeight)
   }, [])
 
   useEffect(() => {
@@ -42,21 +100,37 @@ export function MissionForm() {
 
   return (
     <Wrapper heightOffset={headerHeight}>
-      <Header ref={headerRef}>
+      <Header ref={headerDivRef}>
         <HeaderTitle>Ajout d’une nouvelle mission</HeaderTitle>
         <HeaderButtonGroup>
-          <Button accent={Accent.TERTIARY}>Annuler</Button>
-          <Button accent={Accent.SECONDARY} Icon={Icon.Save}>
+          <Button accent={Accent.TERTIARY} onClick={goToMissionList}>
+            Annuler
+          </Button>
+          <Button
+            accent={Accent.SECONDARY}
+            disabled={!isMissionFormValid}
+            Icon={Icon.Save}
+            onClick={createOrUpdateMission}
+          >
             Enregistrer
           </Button>
-          <Button accent={Accent.SECONDARY} Icon={Icon.Confirm}>
+          <Button
+            accent={Accent.SECONDARY}
+            disabled={!isMissionFormValid}
+            Icon={Icon.Confirm}
+            onClick={createOrUpdateMissionAndClose}
+          >
             Enregistrer et clôturer
           </Button>
         </HeaderButtonGroup>
       </Header>
 
       <Body>
-        <MainForm onTypeChange={setSelectedType} />
+        <MainForm
+          initialValues={mainFormInitialValues}
+          onChange={handleMainFormChange}
+          onTypeChange={setSelectedType}
+        />
         <ActionList
           actions={[]}
           newAction={newAction}
@@ -71,22 +145,16 @@ export function MissionForm() {
   )
 }
 
-// TODO Check why there is a `box-sizing: revert` in index.css.
-const Wrapper = styled.div<{
+const Wrapper = styled(NoRsuiteOverrideWrapper)<{
   // Height offset in pixels
   heightOffset: number
 }>`
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   /* TODO Switch to flex sizing once SideWindow is full-flex (and remove the dirty calc). */
   /* flex-grow: 1; */
   height: calc(100% - ${p => p.heightOffset}px + 1rem);
   /* max-height: calc(100% - 47px); */
-
-  * {
-    box-sizing: border-box;
-  }
 `
 
 const Header = styled.div`

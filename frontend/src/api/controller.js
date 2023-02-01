@@ -1,4 +1,4 @@
-import { OK } from './api'
+import { HttpStatusCode } from './constants'
 
 export const CONTROLLERS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les unités'
 
@@ -11,7 +11,7 @@ export const CONTROLLERS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les u
 function getControllersFromAPI () {
   return fetch('/bff/v1/controllers')
     .then(response => {
-      if (response.status === OK) {
+      if (response.status === HttpStatusCode.OK) {
         return response.json()
       } else {
         response.text().then(text => {

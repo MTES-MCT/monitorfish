@@ -12,8 +12,8 @@ import type { Action, PartialAction } from '../types'
 import type { Promisable } from 'type-fest'
 
 export type ActionListProps = {
-  actions?: Action[]
-  newAction?: PartialAction
+  actions: Action[] | undefined
+  newAction: PartialAction | undefined
   onAddAction: (newAction: PartialAction) => Promisable<void>
   onDeleteAction: (index: number) => Promisable<void>
   onDeleteNewAction: () => Promisable<void>
@@ -44,7 +44,7 @@ export function ActionList({
         <Dropdown Icon={Icon.Plus} title="Ajouter">
           <Dropdown.Item Icon={Icon.FleetSegment} onClick={() => addAction(selectedType)}>
             {selectedType === MissionType.AIR && 'Ajouter un contrôle aérien'}
-            {selectedType === MissionType.GROUND && 'Ajouter un contrôle à la débarque'}
+            {selectedType === MissionType.LAND && 'Ajouter un contrôle à la débarque'}
             {selectedType === MissionType.SEA && 'Ajouter un contrôle en mer'}
           </Dropdown.Item>
           <Dropdown.Item Icon={Icon.Observation} onClick={() => addAction(undefined)}>

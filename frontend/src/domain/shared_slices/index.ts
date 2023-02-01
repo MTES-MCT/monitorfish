@@ -14,12 +14,13 @@ import { interestPointReducer } from './InterestPoint'
 import layer from './Layer'
 import { mapReducer } from './Map'
 import { measurementReducer } from './Measurement'
+import { missionReducer } from './Mission'
 import { regulatoryReducer } from './Regulatory'
 import { reportingReducer } from './Reporting'
 import { speciesReducer } from './Species'
 import { vesselSliceReducer } from './Vessel'
-import { missionApi } from '../../api/mission'
-import regulation from '../../features/backoffice/Regulation.slice'
+import { monitorenvApi, monitorfishApi } from '../../api'
+import { regulationReducer } from '../../features/backoffice/Regulation.slice'
 import { regulatoryLayerSearchReducer } from '../../features/layers/regulatory/search/RegulatoryLayerSearch.slice'
 import { vesselListReducer } from '../../features/vessel_list/VesselList.slice'
 
@@ -31,7 +32,10 @@ const commonReducerList = {
   species: speciesReducer
 }
 
-export const rootReducer = {
+export const mainReducer = {
+  [monitorenvApi.reducerPath]: monitorenvApi.reducer,
+  [monitorfishApi.reducerPath]: monitorfishApi.reducer,
+
   ...commonReducerList,
   alert: alertReducer,
   beaconMalfunction: beaconMalfunctionReducer,
@@ -47,16 +51,16 @@ export const rootReducer = {
   interestPoint: interestPointReducer,
   layer: layer.homepage.reducer,
   measurement: measurementReducer,
-  missionApi: missionApi.reducer,
+  mission: missionReducer,
   regulatoryLayerSearch: regulatoryLayerSearchReducer,
   reporting: reportingReducer,
   vessel: vesselSliceReducer,
   vesselList: vesselListReducer
 }
 
-export const persistedRootReducer = {
+export const backofficeReducer = {
   ...commonReducerList,
   fleetSegment: fleetSegmentReducer,
   layer: layer.backoffice.reducer,
-  regulation
+  regulation: regulationReducer
 }

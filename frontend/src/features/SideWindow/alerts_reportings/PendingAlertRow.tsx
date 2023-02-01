@@ -25,7 +25,7 @@ export type PendingAlertRowProps = {
   index: number
   setShowSilencedAlertForIndex: (index: number) => Promisable<void>
   setSilencedAlertId: (id: string) => Promisable<void>
-  showSilencedAlertForIndex?: number
+  showSilencedAlertForIndex?: number | undefined
 }
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way

@@ -31,7 +31,7 @@ export type LogbookMessage = {
   ircs: string
   isCorrected: boolean
   isSentByFailoverSoftware: boolean
-  message: Object
+  message: any
   messageType: string
   operationDateTime: string
   operationNumber: string
@@ -62,6 +62,29 @@ export type PNOAndLANWeightToleranceAlertValue = {
   percentOfTolerance: number
   pnoOperationNumber: string
   type: 'PNO_LAN_WEIGHT_TOLERANCE_ALERT'
+}
+
+export type LogbookCatchesBySpecy = {
+  properties: LogbookCatch[]
+  species: string
+  speciesName: string | null
+  weight: number
+}
+
+export type LogbookCatch = {
+  conversionFactor: number | null
+  economicZone: string | null
+  effortZone: string | null
+  faoZone: string | null
+  freshness: string | null
+  numberFish: number | null
+  packaging: string | null
+  presentation: string | null
+  preservationState: string | null
+  species: string | null
+  speciesName: string | null
+  statisticalRectangle: string | null
+  weight: number | null
 }
 
 export type PNOAndLANWeightToleranceAlertValueCatches = {

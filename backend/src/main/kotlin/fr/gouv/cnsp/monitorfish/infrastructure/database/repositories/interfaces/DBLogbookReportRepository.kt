@@ -1,62 +1,74 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces
 
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookReportEntity
+import java.time.Instant
 import org.hibernate.annotations.DynamicUpdate
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
-import java.time.Instant
 
 @DynamicUpdate
-interface DBLogbookReportRepository : CrudRepository<LogbookReportEntity, Long>, JpaSpecificationExecutor<LogbookReportEntity> {
-    @Query(
-        """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDate(e.tripNumber, MIN(e.operationDateTime))
+interface DBLogbookReportRepository :
+    CrudRepository<LogbookReportEntity, Long>, JpaSpecificationExecutor<LogbookReportEntity> {
+  @Query(
+      """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDate(e.tripNumber, MIN(e.operationDateTime))
         FROM LogbookReportEntity e
         WHERE e.internalReferenceNumber = ?1
         AND e.tripNumber IS NOT NULL
         AND e.operationType IN ('DAT', 'COR')
         AND e.operationDateTime < (SELECT MIN(er.operationDateTime) FROM LogbookReportEntity er WHERE er.internalReferenceNumber = ?1 AND er.tripNumber = ?2)
         GROUP BY e.tripNumber
-        ORDER BY 2 DESC"""
-    )
-    fun findPreviousTripNumber(internalReferenceNumber: String, tripNumber: String, pageable: Pageable): List<VoyageTripNumberAndDate>
+        ORDER BY 2 DESC""")
+  fun findPreviousTripNumber(
+      internalReferenceNumber: String,
+      tripNumber: String,
+      pageable: Pageable
+  ): List<VoyageTripNumberAndDate>
 
-    @Query(
-        """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDate(e.tripNumber, MAX(e.operationDateTime))
+  @Query(
+      """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDate(e.tripNumber, MAX(e.operationDateTime))
         FROM LogbookReportEntity e
         WHERE e.internalReferenceNumber = ?1
         AND e.tripNumber IS NOT NULL
         AND e.operationType IN ('DAT', 'COR')
         AND e.operationDateTime > (SELECT MAX(er.operationDateTime) FROM LogbookReportEntity er WHERE er.internalReferenceNumber = ?1 AND er.tripNumber = ?2)
         GROUP BY e.tripNumber
-        ORDER BY 2 ASC"""
-    )
-    fun findNextTripNumber(internalReferenceNumber: String, tripNumber: String, pageable: Pageable): List<VoyageTripNumberAndDate>
+        ORDER BY 2 ASC""")
+  fun findNextTripNumber(
+      internalReferenceNumber: String,
+      tripNumber: String,
+      pageable: Pageable
+  ): List<VoyageTripNumberAndDate>
 
-    @Query(
-        """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageDates(MIN(e.operationDateTime), MAX(e.operationDateTime))
+  @Query(
+      """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageDates(MIN(e.operationDateTime), MAX(e.operationDateTime))
         FROM LogbookReportEntity e
         WHERE e.internalReferenceNumber = ?1
-        AND e.tripNumber = ?2"""
-    )
-    fun findFirstAndLastOperationsDatesOfTrip(internalReferenceNumber: String, tripNumber: String): VoyageDates
+        AND e.tripNumber = ?2""")
+  fun findFirstAndLastOperationsDatesOfTrip(
+      internalReferenceNumber: String,
+      tripNumber: String
+  ): VoyageDates
 
-    @Query(
-        """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDates(e.tripNumber, MIN(e.operationDateTime), MAX(e.operationDateTime))
+  @Query(
+      """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDates(e.tripNumber, MIN(e.operationDateTime), MAX(e.operationDateTime))
         FROM LogbookReportEntity e
         WHERE e.internalReferenceNumber = ?1
         AND e.tripNumber IS NOT NULL
         AND e.operationType IN ('DAT', 'COR')
         AND e.operationDateTime <= ?2
         GROUP BY e.tripNumber
-        ORDER BY 2 DESC """
-    )
-    fun findTripsBeforeDatetime(internalReferenceNumber: String, beforeDateTime: Instant, pageable: Pageable): List<VoyageTripNumberAndDates>
+        ORDER BY 2 DESC """)
+  fun findTripsBeforeDatetime(
+      internalReferenceNumber: String,
+      beforeDateTime: Instant,
+      pageable: Pageable
+  ): List<VoyageTripNumberAndDates>
 
-    @Query(
-        """WITH dat_cor AS (
+  @Query(
+      """WITH dat_cor AS (
             SELECT *
             FROM logbook_reports e
             WHERE e.cfr = ?1
@@ -75,12 +87,11 @@ interface DBLogbookReportRepository : CrudRepository<LogbookReportEntity, Long>,
             WHERE
                 r.value->>'returnStatus' = '000' OR
                 dc.transmission_format = 'FLUX'""",
-        nativeQuery = true
-    )
-    fun findFirstAcknowledgedDateOfTrip(internalReferenceNumber: String, tripNumber: String): Instant
+      nativeQuery = true)
+  fun findFirstAcknowledgedDateOfTrip(internalReferenceNumber: String, tripNumber: String): Instant
 
-    @Query(
-        """WITH dat_cor AS (
+  @Query(
+      """WITH dat_cor AS (
            SELECT *
            FROM logbook_reports
            WHERE
@@ -115,34 +126,32 @@ interface DBLogbookReportRepository : CrudRepository<LogbookReportEntity, Long>,
         FROM dat_cor
         UNION ALL SELECT * from ret
         UNION ALL SELECT * from del""",
-        nativeQuery = true
-    )
-    fun findAllMessagesByTripNumberBetweenDates(
-        internalReferenceNumber: String,
-        afterDateTime: String,
-        beforeDateTime: String,
-        tripNumber: String
-    ): List<LogbookReportEntity>
+      nativeQuery = true)
+  fun findAllMessagesByTripNumberBetweenDates(
+      internalReferenceNumber: String,
+      afterDateTime: String,
+      beforeDateTime: String,
+      tripNumber: String
+  ): List<LogbookReportEntity>
 
-    @Query(
-        "select operation_datetime_utc from logbook_reports where operation_datetime_utc < now() order by operation_datetime_utc desc limit 1",
-        nativeQuery = true
-    )
-    fun findLastOperationDateTime(): Instant
+  @Query(
+      "select operation_datetime_utc from logbook_reports where operation_datetime_utc < now() order by operation_datetime_utc desc limit 1",
+      nativeQuery = true)
+  fun findLastOperationDateTime(): Instant
 
-    @Query(
-        """select * from logbook_reports where report_id in
-        (select distinct referenced_report_id from logbook_reports where operation_type = 'RET' and value->>'returnStatus' = '000')
-        and (log_type = 'LAN' or log_type = 'PNO')
-        and (:ruleType <> ANY(analyzed_by_rules) or analyzed_by_rules is null)""",
-        nativeQuery = true
-    )
-    fun findAllLANAndPNONotProcessedByRule(ruleType: String): List<LogbookReportEntity>
+  @Query(
+      """select *
+            from logbook_reports
+            where report_id in
+                (select distinct referenced_report_id from logbook_reports where operation_type = 'RET' and value->>'returnStatus' = '000')
+                and (log_type = 'LAN' or log_type = 'PNO')
+                and (:ruleType <> ANY(analyzed_by_rules) or analyzed_by_rules is null)""",
+      nativeQuery = true)
+  fun findAllLANAndPNONotProcessedByRule(ruleType: String): List<LogbookReportEntity>
 
-    @Modifying(clearAutomatically = true)
-    @Query(
-        "update logbook_reports set analyzed_by_rules = array_append(analyzed_by_rules, :ruleType) where id in (:ids)",
-        nativeQuery = true
-    )
-    fun updateERSMessagesAsProcessedByRule(ids: List<Long>, ruleType: String)
+  @Modifying(clearAutomatically = true)
+  @Query(
+      "update logbook_reports set analyzed_by_rules = array_append(analyzed_by_rules, :ruleType) where id in (:ids)",
+      nativeQuery = true)
+  fun updateERSMessagesAsProcessedByRule(ids: List<Long>, ruleType: String)
 }

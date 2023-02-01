@@ -14,7 +14,7 @@
     "build:prod": "REACT_APP_ENV=prod npm run build",
     "build:local": "REACT_APP_ENV=local npm run build",
     "cypress:open": "cypress open --browser firefox --e2e",
-    "cypress:open:electron": "cypress open --browser electron --e2e",
+    "cypress:run": "cypress run --browser firefox --e2e",
     "dev": "BROWSER=none DISABLE_ESLINT_PLUGIN=true sh -ac '. ../infra/configurations/frontend/.env.local; react-scripts start'",
     "eject": "react-scripts eject",
     "prepare": "cd .. && husky install ./frontend/config/husky",

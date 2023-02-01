@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 
-import dayjs from 'dayjs'
+import { getLocalizedDayjs } from 'src/utils/getLocalizedDayjs'
+import { getUtcizedDayjs } from 'src/utils/getUtcizedDayjs'
 
 context('Vessels Track', () => {
   beforeEach(() => {
@@ -156,10 +157,10 @@ context('Vessels Track', () => {
     cy.get('.rs-picker-daterange > .rs-btn').eq(0).click(460, 480, { force: true, timeout: 10000 })
 
     cy.get('.rs-calendar-table-cell:not(.rs-calendar-table-cell-un-same-month) .rs-calendar-table-cell-day')
-      .contains(new RegExp(`^${dayjs().subtract(1, 'day').format('D')}$`))
+      .contains(new RegExp(`^${getLocalizedDayjs(getUtcizedDayjs().toDate()).format('D')}$`))
       .click({ force: true, timeout: 10000 })
     cy.get('.rs-calendar-table-cell:not(.rs-calendar-table-cell-un-same-month) .rs-calendar-table-cell-day')
-      .contains(new RegExp(`^${dayjs().format('D')}$`))
+      .contains(new RegExp(`^${getLocalizedDayjs(getUtcizedDayjs().toDate()).format('D')}$`))
       .click({ force: true, timeout: 10000 })
     cy.get('.rs-picker-toolbar-right > .rs-btn').click({ force: true, timeout: 10000 })
     cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 2)

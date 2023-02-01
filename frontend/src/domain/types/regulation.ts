@@ -53,7 +53,7 @@ export type TimeInterval = {
 }
 
 export type FishingPeriod = {
-  always?: boolean
+  always: boolean | undefined
   annualRecurrence: boolean | undefined
   authorized: boolean | undefined
   dateRanges: DateInterval[]

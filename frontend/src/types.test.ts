@@ -1,3 +1,5 @@
+import { describe, it } from '@jest/globals'
+
 import type { Undefine } from './types'
 
 interface TestInterface {
@@ -17,3 +19,14 @@ export const undefinableTestInterface: UndefinableTestInterface = {
 export const undefinableTestInterfaceWithMissingProp: UndefinableTestInterface = {
   firstProp: undefined
 }
+
+describe('types', () => {
+  /**
+   * This test is required by jest to pass the error : "Your test suite must contain at least one test."
+   *
+   * The actual tests are running when checkin TS types (by `npm run test:type:partial`):
+   * - undefinableTestInterface
+   * - undefinableTestInterfaceWithMissingProp
+   */
+  it('dummy test ', async () => {})
+})

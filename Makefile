@@ -25,9 +25,11 @@ test: test-back
 test-back: check-clean-archi
 	cd backend && ./mvnw clean && ./mvnw test
 
-dev:
+clean:
 	make erase-db
 	rm -Rf ./backend/target
+
+dev: clean
 	make run-back
 
 # CI commands - app

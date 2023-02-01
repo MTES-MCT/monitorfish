@@ -4,9 +4,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.CommunicationMeans
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotificationRecipientFunction
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotificationType
+import jakarta.persistence.*
 import java.time.Instant
 import java.time.ZoneOffset
-import jakarta.persistence.*
 
 @Entity
 @Table(name = "beacon_malfunction_notifications")

@@ -73,7 +73,10 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         // Then
         val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 1 }
         assertThat(updatedBeaconMalfunction?.vesselStatus).isEqualTo(VesselStatus.AT_SEA)
-        assertThat(updatedBeaconMalfunction?.vesselStatusLastModificationDateTime).isCloseTo(updateDateTime, within(100, ChronoUnit.MILLIS))
+        assertThat(updatedBeaconMalfunction?.vesselStatusLastModificationDateTime).isCloseTo(
+            updateDateTime,
+            within(100, ChronoUnit.MILLIS)
+        )
     }
 
     @Test
@@ -96,11 +99,17 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         // Then
         val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 1 }
         assertThat(updatedBeaconMalfunction?.stage).isEqualTo(Stage.END_OF_MALFUNCTION)
-        assertThat(updatedBeaconMalfunction?.vesselStatusLastModificationDateTime).isCloseTo(updateDateTime, within(100, ChronoUnit.MILLIS))
+        assertThat(updatedBeaconMalfunction?.vesselStatusLastModificationDateTime).isCloseTo(
+            updateDateTime,
+            within(100, ChronoUnit.MILLIS)
+        )
         assertThat(updatedBeaconMalfunction?.endOfBeaconMalfunctionReason).isEqualTo(
             EndOfBeaconMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED
         )
-        assertThat(updatedBeaconMalfunction?.malfunctionEndDateTime).isCloseTo(updateDateTime, within(100, ChronoUnit.MILLIS))
+        assertThat(updatedBeaconMalfunction?.malfunctionEndDateTime).isCloseTo(
+            updateDateTime,
+            within(100, ChronoUnit.MILLIS)
+        )
     }
 
     @Test

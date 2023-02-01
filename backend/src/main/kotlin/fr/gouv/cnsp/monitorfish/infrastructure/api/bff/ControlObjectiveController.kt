@@ -5,9 +5,9 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveD
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ControlObjectiveDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.websocket.server.PathParam
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
-import jakarta.websocket.server.PathParam
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddControlObjectiveDataInput as AddControlObjectiveDataInput1
 
 @RestController

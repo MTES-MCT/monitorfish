@@ -6,8 +6,8 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PendingAlertDataOutpu
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.SilencedAlertDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.springframework.web.bind.annotation.*
 import jakarta.websocket.server.PathParam
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/bff/v1/operational_alerts")

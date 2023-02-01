@@ -15,7 +15,6 @@
     <description>MonitorFish</description>
 
     <properties>
-        <env.MAVEN_OPTS>--add-opens java.base/java.lang=ALL-UNNAMED</env.MAVEN_OPTS>
         <java.version>17</java.version>
         <spring.version>3.0.1</spring.version>
         <kotlin.version>1.7.21</kotlin.version>
@@ -395,6 +394,7 @@
                             <target name="ktlint">
                                 <java taskname="ktlint" dir="${basedir}" fork="true" failonerror="true"
                                       classpathref="maven.plugin.classpath" classname="com.pinterest.ktlint.Main">
+                                    <jvmarg line="--add-opens java.base/java.lang=ALL-UNNAMED"/>
                                     <arg value="src/**/*.kt"/>
                                     <!-- see https://pinterest.github.io/ktlint/install/cli/#command-line-usage for more information -->
                                 </java>
@@ -410,6 +410,7 @@
                             <target name="ktlint">
                                 <java taskname="ktlint" dir="${basedir}" fork="true" failonerror="false"
                                       classpathref="maven.plugin.classpath" classname="com.pinterest.ktlint.Main">
+                                    <jvmarg line="--add-opens java.base/java.lang=ALL-UNNAMED"/>
                                     <arg value="-F"/>
                                     <arg value="src/**/*.kt"/>
                                     <!-- see https://pinterest.github.io/ktlint/install/cli/#command-line-usage for more information -->

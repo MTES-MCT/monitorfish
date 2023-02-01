@@ -125,7 +125,6 @@ class ExecutePnoAndLanWeightToleranceRule(
                         Catch(species = lanSpeciesKey, speciesName = speciesName, weight = pnoWeight)
                     } ?: return@mapNotNull PNOAndLANCatches(null, lanCatch)
 
-
                     run {
                         val percentOfPnoWeightOverLan = value.getPercentBetweenLANAndPNO(lanWeight, pnoWeight)
 

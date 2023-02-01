@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { getDateTime } from '../../../../utils'
-import LogbookMessageSpecies from './LogbookMessageSpecies'
+import { LogbookMessageSpecy, WeightType } from './LogbookMessageSpecy'
 import { buildCatchArray, LogbookMessageSender } from '../../../../domain/entities/logbook'
 
 const LANMessage = props => {
@@ -48,12 +48,13 @@ const LANMessage = props => {
         </Zone>
         <SpeciesList>
           {
-            catches.map((speciesCatch, index) => {
-              return <LogbookMessageSpecies
-                index={index + 1}
+            catches
+              .map((speciesCatch, index) => {
+              return <LogbookMessageSpecy
                 isLast={catches.length === index + 1}
-                species={speciesCatch}
+                specyCatches={speciesCatch}
                 key={'LAN' + speciesCatch.species}
+                weightType={WeightType.NET}
               />
             })
           }

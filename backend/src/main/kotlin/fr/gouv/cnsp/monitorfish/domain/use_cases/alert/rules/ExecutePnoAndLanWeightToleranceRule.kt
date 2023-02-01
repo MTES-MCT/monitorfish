@@ -111,33 +111,30 @@ class ExecutePnoAndLanWeightToleranceRule(
                     ?.map { it.weight?.let { weight -> weight * (it.conversionFactor ?: 1.0) } }
                     ?.mapNotNull { it }
                     ?.sum()
+
                 val speciesName = catchesLandedBySpecies[lanSpeciesKey]?.first()?.speciesName
                 val lanCatch = Catch(species = lanSpeciesKey, speciesName = speciesName, weight = lanWeight)
 
+                if (lanWeight == null || !value.isAboveMinimumWeightThreshold(lanWeight)) {
+                    return@mapNotNull null
+                }
+
                 try {
-                    if (lanWeight != null && value.isAboveMinimumWeightThreshold(lanWeight)) {
-                        val pnoWeight = getPNOWeight(catchesOnboardBySpecies, lanSpeciesKey)
-                        val pnoCatch = pnoWeight?.let {
-                            Catch(species = lanSpeciesKey, speciesName = speciesName, weight = pnoWeight)
+                    val pnoWeight = getPNOWeight(catchesOnboardBySpecies, lanSpeciesKey)
+                    val pnoCatch = pnoWeight?.let {
+                        Catch(species = lanSpeciesKey, speciesName = speciesName, weight = pnoWeight)
+                    } ?: return@mapNotNull PNOAndLANCatches(null, lanCatch)
+
+
+                    run {
+                        val percentOfPnoWeightOverLan = value.getPercentBetweenLANAndPNO(lanWeight, pnoWeight)
+
+                        val weightIsOverTolerance = value.evaluate(percentOfPnoWeightOverLan)
+                        if (!weightIsOverTolerance) {
+                            return@run null
                         }
 
-                        if (pnoCatch == null) {
-                            PNOAndLANCatches(null, lanCatch)
-                        } else {
-                            run {
-                                val percentOfPnoWeightOverLan = value.getPercentBetweenLANAndPNO(lanWeight, pnoWeight)
-
-                                val weightIsOverTolerance = value.evaluate(percentOfPnoWeightOverLan)
-
-                                if (weightIsOverTolerance) {
-                                    PNOAndLANCatches(pnoCatch, lanCatch)
-                                } else {
-                                    null
-                                }
-                            }
-                        }
-                    } else {
-                        null
+                        PNOAndLANCatches(pnoCatch, lanCatch)
                     }
                 } catch (e: Exception) {
                     logger.error("PNO_LAN_WEIGHT_TOLERANCE: Error while executing rule", e)

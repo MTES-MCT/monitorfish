@@ -146,9 +146,12 @@ class ExecutePnoAndLanWeightToleranceRuleUTests {
             assertThat(firstCatchAlerts?.first()?.lan?.weight).isEqualTo(123.0)
             assertThat(firstCatchAlerts?.first()?.pno?.weight).isEqualTo(1123.0)
 
-            // The species SMV is found twice
-            assertThat(firstCatchAlerts?.get(1)?.lan?.weight).isEqualTo(2884.5)
-            assertThat(firstCatchAlerts?.get(1)?.pno?.weight).isEqualTo(1923.5)
+            val secondAlert = firstCatchAlerts?.get(1)
+            assertThat(secondAlert?.lan?.species).isEqualTo("SMV")
+            // The species SMV is found 3 times
+            assertThat(secondAlert?.lan?.weight).isEqualTo(961.5 * 3)
+            // The species SMV is found 2 times
+            assertThat(secondAlert?.pno?.weight).isEqualTo(961.5 * 2 + 0.5)
 
             assertThat(firstCatchAlerts?.last()?.lan?.weight).isEqualTo(69.7)
             assertThat(firstCatchAlerts?.last()?.pno?.weight).isEqualTo(1069.7)

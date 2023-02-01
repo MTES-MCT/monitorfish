@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { getDate, getDateTime } from '../../../../utils'
-import LogbookMessageSpecies from './LogbookMessageSpecies'
+import { LogbookMessageSpecy, WeightType } from './LogbookMessageSpecy'
 import {
   buildCatchArray,
   getTotalPNOWeightFromMessage,
@@ -73,12 +73,13 @@ const PNOMessage = props => {
         </Zone>
         <SpeciesList>
           {
-            catches.map((speciesCatch, index) => {
-              return <LogbookMessageSpecies
-                index={index + 1}
+            catches
+              .map((speciesCatch, index) => {
+              return <LogbookMessageSpecy
                 isLast={catches.length === index + 1}
-                species={speciesCatch}
+                specyCatches={speciesCatch}
                 key={'PNO' + speciesCatch.species}
+                weightType={WeightType.LIVE}
               />
             })
           }

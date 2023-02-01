@@ -55,12 +55,12 @@ data class RiskFactorsEntity(
     val numberControlsLastThreeYears: Short,
     @Column(name = "number_infractions_last_5_years")
     val numberInfractionsLastFiveYears: Short,
-    @Column(name = "number_diversions_last_5_years")
-    val numberDiversionsLastFiveYears: Short,
-    @Column(name = "number_seizures_last_5_years")
-    val numberSeizuresLastFiveYears: Short,
-    @Column(name = "number_escorts_to_quay_last_5_years")
-    val numberEscortsToQuayLastFiveYears: Short,
+    @Column(name = "number_gear_seizures_last_5_years")
+    val numberGearSeizuresLastFiveYears: Short,
+    @Column(name = "number_species_seizures_last_5_years")
+    val numberSpeciesSeizuresLastFiveYears: Short,
+    @Column(name = "number_vessel_seizures_last_5_years")
+    val numberVesselSeizuresLastFiveYears: Short
 ) : Serializable {
 
     fun toVesselRiskFactor(mapper: ObjectMapper) = VesselRiskFactor(
@@ -88,8 +88,8 @@ data class RiskFactorsEntity(
         numberControlsLastFiveYears = numberControlsLastFiveYears,
         numberControlsLastThreeYears = numberControlsLastThreeYears,
         numberInfractionsLastFiveYears = numberInfractionsLastFiveYears,
-        numberDiversionsLastFiveYears = numberDiversionsLastFiveYears,
-        numberSeizuresLastFiveYears = numberSeizuresLastFiveYears,
-        numberEscortsToQuayLastFiveYears = numberEscortsToQuayLastFiveYears,
+        numberGearSeizuresLastFiveYears = numberGearSeizuresLastFiveYears,
+        numberSpeciesSeizuresLastFiveYears = numberSpeciesSeizuresLastFiveYears,
+        numberVesselSeizuresLastFiveYears = numberVesselSeizuresLastFiveYears
     )
 }

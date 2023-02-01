@@ -18,11 +18,11 @@ export function clickButton(
   const textButtonElement = findElementBytext(`${preSelector}button`, label, { index }) as HTMLButtonElement | null
 
   if (iconButtonElement) {
-    return cy.wrap(iconButtonElement).click()
+    return cy.wrap(iconButtonElement).scrollIntoView().click()
   }
 
   if (textButtonElement) {
-    return cy.wrap(textButtonElement).click()
+    return cy.wrap(textButtonElement).scrollIntoView().click()
   }
 
   throw new Error(`Unable to find button with label "${label}".`)

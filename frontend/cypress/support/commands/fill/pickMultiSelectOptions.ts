@@ -34,7 +34,27 @@ export function pickMultiSelectOptions(
             cy.get('.rs-checkbox-checker').contains(value).scrollIntoView().click({ force: true })
           })
 
-          cy.clickOutside(rsuiteMultiSelectElement.offsetTop)
+          const offsetLeft = rsuiteMultiSelectElement.offsetLeft
+            ? rsuiteMultiSelectElement.offsetLeft
+            : (() => {
+                if (!rsuiteMultiSelectElement.offsetParent) {
+                  throw new Error('`rsuiteMultiSelectElement.offsetParent` is undefined.')
+                }
+
+                return (rsuiteMultiSelectElement.offsetParent as HTMLBodyElement).offsetLeft
+              })()
+          const offsetTop =
+            rsuiteMultiSelectElement.offsetTop !== 0
+              ? rsuiteMultiSelectElement.offsetTop
+              : (() => {
+                  if (!rsuiteMultiSelectElement.offsetParent) {
+                    throw new Error('`rsuiteMultiSelectElement.offsetParent` is undefined.')
+                  }
+
+                  return (rsuiteMultiSelectElement.offsetParent as HTMLBodyElement).offsetTop
+                })()
+
+          cy.clickOutside(offsetLeft, offsetTop - 1)
         })
       }
     })

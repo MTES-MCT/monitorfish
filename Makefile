@@ -8,48 +8,29 @@ install:
 run-front:
 	cd ./frontend && npm start
 run-back: run-stubbed-apis
-	docker compose up -d --quiet-pull db
+	docker compose up -d --quiet-pull --wait db
 	cd backend && ./mvnw spring-boot:run -Dspring-boot.run.arguments="--spring.config.additional-location=$(INFRA_FOLDER)" -Dspring-boot.run.profiles="local"
 run-stubbed-apis:
-	docker stop cypress-geoserver-monitorenv-stubs-1 || true
-	docker compose -f ./frontend/cypress/docker-compose.yml up -d --quiet-pull geoserver-monitorenv-stubs
+	docker compose stop geoserver-monitorenv-stubs
+	docker compose up -d --quiet-pull --wait geoserver-monitorenv-stubs
 stop-stubbed-apis:
 	docker stop cypress-geoserver-1
 erase-db:
-	docker compose down
-	docker volume rm monitorfish_db-data
+	docker compose down -v
+	docker compose -f ./frontend/cypress/docker-compose.yml down -v
 check-clean-archi:
 	cd backend/tools && ./check-clean-architecture.sh
 test: test-back
 	cd frontend && CI=true npm run test:unit -- --coverage
 test-back: check-clean-archi
 	cd backend && ./mvnw clean && ./mvnw test
-dev: dev-back
-	sh -c 'make run-front'
-dev-back:
-	docker compose -f ./infra/dev/docker-compose.yml down -v
-	docker network inspect monitorfish_network >/dev/null 2>&1 || docker network create monitorfish_network
-	docker compose -f ./infra/dev/docker-compose.yml up -d db
-	docker compose -f ./infra/dev/docker-compose.yml up flyway
-	docker compose -f ./infra/dev/docker-compose.yml up -d app
-	make dev-wait-for-app
-dev-down:
-	docker compose -f ./infra/dev/docker-compose.yml down
-dev-prune:
-	docker compose -f ./infra/dev/docker-compose.yml down -v
-dev-reset:
-	rm -f ./frontend/cypress/downloads/*
-	docker compose -f ./infra/dev/docker-compose.yml stop app geoserver
-	docker compose -f ./infra/dev/docker-compose.yml exec db \
-		psql -U postgres -d postgres -c "DROP DATABASE IF EXISTS  monitorfishdb;"
-	docker compose -f ./infra/dev/docker-compose.yml exec db \
-		psql -U postgres -d postgres -c "CREATE DATABASE monitorfishdb;"
-	docker compose -f ./infra/dev/docker-compose.yml up flyway
-	docker compose -f ./infra/dev/docker-compose.yml start app
-	make dev-wait-for-app
-dev-wait-for-app:
-	@printf 'Waiting for backend app to be ready'
-	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
+
+clean:
+	make erase-db
+	rm -Rf ./backend/target
+
+dev: clean
+	make run-back
 
 # CI commands - app
 docker-build:

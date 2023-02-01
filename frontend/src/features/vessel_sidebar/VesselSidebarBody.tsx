@@ -32,7 +32,7 @@ export function VesselSidebarBody() {
 }
 
 const Body = styled.div<{
-  healthcheckTextWarning?: string
+  healthcheckTextWarning: string | undefined
 }>`
   padding: 0;
   background: ${COLORS.gainsboro};

@@ -14,7 +14,7 @@
     "build:prod": "REACT_APP_ENV=prod npm run build",
     "build:local": "REACT_APP_ENV=local npm run build",
     "cypress:open": "cypress open --browser firefox --e2e",
-    "cypress:open:electron": "cypress open --browser electron --e2e",
+    "cypress:run": "cypress run --browser firefox --e2e",
     "dev": "BROWSER=none DISABLE_ESLINT_PLUGIN=true sh -ac '. ../infra/configurations/frontend/.env.local; react-scripts start'",
     "eject": "react-scripts eject",
     "prepare": "cd .. && husky install ./frontend/config/husky",
@@ -32,7 +32,7 @@
   "dependencies": {
     "@dnd-kit/core": "4.0.3",
     "@dnd-kit/modifiers": "4.0.0",
-    "@mtes-mct/monitor-ui": "2.8.0",
+    "@mtes-mct/monitor-ui": "2.10.0",
     "@reduxjs/toolkit": "1.9.1",
     "@sentry/react": "7.29.0",
     "@sentry/tracing": "7.29.0",
@@ -79,6 +79,7 @@
     "simplify-geojson": "1.0.5",
     "styled-components": "5.3.6",
     "timeago.js": "4.0.2",
+    "use-debounce": "9.0.3",
     "worker-loader": "3.0.8",
     "yup": "0.32.11"
   },

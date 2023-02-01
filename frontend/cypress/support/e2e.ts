@@ -18,7 +18,7 @@ declare global {
         }>
       ): Chainable<JQuery<HTMLButtonElement>>
       clickLink(linkText: string): Chainable<JQuery<HTMLAnchorElement>>
-      clickOutside(yPosition?: number): Chainable<JQuery<HTMLBodyElement>>
+      clickOutside(xPosition?: number, yPosition?: number): Chainable<JQuery<HTMLBodyElement>>
       dragTo(
         selector: string,
         options?: Partial<{

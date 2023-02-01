@@ -15,62 +15,73 @@ import { dissoc, equals, pipe } from 'ramda'
 import { useCallback, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { FLIGHT_GOALS_AS_OPTIONS, INITIAL_VALUES, TARGETTED_SEGMENTS_AS_OPTIONS } from './constants'
-import { MultiUnitPicker } from './MultiUnitPicker'
-import { MissionGoal, MissionType } from '../../../../domain/types/mission'
+import {
+  FLIGHT_GOALS_AS_OPTIONS,
+  MISSION_NATURES_AS_OPTIONS,
+  MISSION_TYPES_AS_OPTIONS,
+  TARGETTED_SEGMENTS_AS_OPTIONS
+} from './constants'
+import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'
+import { FormikMultiZonePicker } from './FormikMultiZonePicker'
+import { MissionNature, MissionType } from '../../../../domain/types/mission'
 import { useNewWindow } from '../../../../ui/NewWindow'
-import { getOptionsFromLabelledEnum } from '../../../../utils/getOptionsFromLabelledEnum'
 import { FormBody } from '../FormBody'
 import { FormHead } from '../FormHead'
-import { MultiZonePicker } from '../MultiZonePicker'
 
-import type { FormValues } from './types'
+import type { MissionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
 export type MainFormProps = {
+  initialValues: MissionFormValues
+  onChange: (nextPartialMission: MissionFormValues) => Promisable<void>
   onTypeChange: (nextType: MissionType) => Promisable<void>
 }
-export function MainForm({ onTypeChange }: MainFormProps) {
-  const currentValues = useRef<FormValues>(INITIAL_VALUES)
-  const [hasMissionUnderJdpType, setHasMissionUnderJdpType] = useState(false)
-
+export function MainForm({ initialValues, onChange, onTypeChange }: MainFormProps) {
+  const currentValuesRef = useRef<MissionFormValues>(initialValues)
   const { newWindowContainerRef } = useNewWindow()
 
-  const updateCurrentValues = useCallback(
-    (nextValues: FormValues) => {
-      const previousValues = { ...currentValues.current }
-      currentValues.current = nextValues
+  const [hasMissionUnderJdpType, setHasMissionUnderJdpType] = useState(false)
 
-      if (currentValues.current.type !== previousValues.type) {
-        if (currentValues.current.type !== MissionType.AIR) {
+  const updateCurrentValues = useCallback(
+    (nextValues: MissionFormValues) => {
+      const previousValues = { ...currentValuesRef.current }
+      currentValuesRef.current = nextValues
+
+      if (currentValuesRef.current.missionType !== previousValues.missionType) {
+        if (currentValuesRef.current.missionType !== MissionType.AIR) {
           const nextValueWithoutExtraProps = pipe(dissoc('flightGoal'), dissoc('flightGoal'))(nextValues)
 
-          currentValues.current = nextValueWithoutExtraProps
+          currentValuesRef.current = nextValueWithoutExtraProps
         }
 
-        onTypeChange(currentValues.current.type)
+        onTypeChange(currentValuesRef.current.missionType)
       }
 
-      if (!equals(nextValues.goals, previousValues.goals) || nextValues.hasOrder !== previousValues.hasOrder) {
+      if (
+        !equals(nextValues.missionNature, previousValues.missionNature) ||
+        nextValues.hasOrder !== previousValues.hasOrder
+      ) {
         // eslint-disable-next-line no-underscore-dangle, @typescript-eslint/naming-convention
         const _hasMissionUnderJdpType =
-          (nextValues.goals !== undefined && nextValues.goals.includes(MissionGoal.FISHING)) ||
+          (nextValues.missionNature !== undefined && nextValues.missionNature.includes(MissionNature.FISH)) ||
           Boolean(nextValues.hasOrder)
 
         if (!_hasMissionUnderJdpType) {
           const nextValueWithoutExtraProps = pipe(dissoc('isUnderJdp'))(nextValues)
 
-          currentValues.current = nextValueWithoutExtraProps
+          currentValuesRef.current = nextValueWithoutExtraProps
         }
 
         setHasMissionUnderJdpType(_hasMissionUnderJdpType)
       }
+
+      onChange(currentValuesRef.current)
     },
-    [onTypeChange]
+    [onChange, onTypeChange]
   )
 
   return (
-    <Formik initialValues={currentValues.current} onSubmit={noop}>
+    <Formik initialValues={initialValues || {}} onSubmit={noop}>
       <Wrapper>
         <FormikEffect onChange={updateCurrentValues as any} />
 
@@ -81,29 +92,31 @@ export function MainForm({ onTypeChange }: MainFormProps) {
         <CustomFormBody>
           <FormikDateRangePicker
             baseContainer={newWindowContainerRef.current}
+            isCompact
+            isStringDate
             label="Début et fin de mission"
-            name="dateRange"
+            // `startDateTimeUtc` & `endDateTimeUtc` in API
+            name="dateTimeRangeUtc"
+            withTime
           />
-          <FormikMultiRadio
-            isInline
-            label="Type de mission"
-            name="type"
-            options={getOptionsFromLabelledEnum(MissionType)}
-          />
-          <FormikMultiCheckbox
-            isInline
-            label="Intentions principales de mission"
-            name="goals"
-            options={getOptionsFromLabelledEnum(MissionGoal)}
-          />
-          <UnderJdpBox>
+          <FormikMultiRadio isInline label="Type de mission" name="missionType" options={MISSION_TYPES_AS_OPTIONS} />
+          <MissionNatureWrapper>
+            <FormikMultiCheckbox
+              isInline
+              label="Intentions principales de mission"
+              name="missionNature"
+              options={MISSION_NATURES_AS_OPTIONS}
+            />
+
+            {/* TODO What to do with this prop? */}
             <FormikCheckbox disabled={!hasMissionUnderJdpType} label="Mission sous JDP" name="isUnderJdp" />
-          </UnderJdpBox>
+          </MissionNatureWrapper>
 
-          <MultiUnitPicker name="units" />
+          <FormikMultiControlUnitPicker name="controlUnits" />
 
-          <MultiZonePicker addButtonLabel="Ajouter une zone de mission" />
+          <FormikMultiZonePicker name="geom" />
 
+          {/* TODO What to do with this prop? */}
           <FormikMultiRadio
             isInline
             label="Ordre de mission"
@@ -115,7 +128,8 @@ export function MainForm({ onTypeChange }: MainFormProps) {
             ]}
           />
 
-          {currentValues.current.type === MissionType.AIR && (
+          {/* TODO What to do with this prop? */}
+          {currentValuesRef.current.missionType === MissionType.AIR && (
             <InlineFieldGroupWrapper>
               <FormikMultiSelect
                 fixedWidth={218}
@@ -132,8 +146,8 @@ export function MainForm({ onTypeChange }: MainFormProps) {
           )}
 
           <RelatedFieldGroupWrapper>
-            <FormikTextarea label="CACEM : orientations, observations" name="cacemNote" />
-            <FormikTextarea label="CNSP : orientations, observations" name="cnspNote" />
+            <FormikTextarea label="CACEM : orientations, observations" name="observationsCacem" />
+            <FormikTextarea label="CNSP : orientations, observations" name="observationsCnsp" />
           </RelatedFieldGroupWrapper>
 
           <InlineFieldGroupWrapper>
@@ -191,12 +205,11 @@ const InlineFieldGroupWrapper = styled.div`
   }
 `
 
-const UnderJdpBox = styled.div`
-  position: relative;
+const MissionNatureWrapper = styled.div`
+  align-items: flex-end;
+  display: flex;
 
   > div {
-    left: 213px;
-    position: absolute;
-    top: -51px;
+    margin-left: 10px;
   }
 `

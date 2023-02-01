@@ -1,16 +1,18 @@
-import { Button, Icon } from '@mtes-mct/monitor-ui'
+import { Button, getLocalizedDayjs, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
+import { noop } from 'lodash'
 import { pipe } from 'ramda'
 import { useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_LIST_TABLE_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
-import { missionApi } from '../../../api/mission'
+import { useGetMissionsQuery } from '../../../api/mission'
+import { missionActions } from '../../../domain/actions'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useTable } from '../../../hooks/useTable'
 import { EmptyCardTable } from '../../../ui/card-table/EmptyCardTable'
-import { dayjs } from '../../../utils/dayjs'
+import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
 import { SideWindowMenuKey } from '../constants'
 
 import type { MissionFilter } from './types'
@@ -20,13 +22,11 @@ import type { MutableRefObject } from 'react'
 export function MissionList() {
   const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
   const [filters, setFilters] = useState<MissionFilter[]>([])
-  const { data: maybeMissions, error: apiError, isLoading } = missionApi.useGetAllQuery(undefined)
+  const missionApiQuery = useGetMissionsQuery(undefined)
   const dispatch = useMainAppDispatch()
 
-  const baseUrl = useMemo(() => window.location.origin, [])
-
   const { renderTableHead, tableData } = useTable<Mission>(
-    maybeMissions,
+    missionApiQuery.data,
     MISSION_LIST_TABLE_OPTIONS,
     searchInputRef.current?.value
   )
@@ -50,9 +50,9 @@ export function MissionList() {
       <Body>
         <FilterBar missions={tableData} onChange={setFilters} />
 
-        {isLoading && <p>Chargement en cours...</p>}
-        {apiError && <pre>{JSON.stringify(apiError)}</pre>}
-        {!isLoading && !apiError && (
+        {missionApiQuery.isLoading && <p>Chargement en cours...</p>}
+        {missionApiQuery.error && <pre>{JSON.stringify(missionApiQuery.error)}</pre>}
+        {!missionApiQuery.isLoading && !missionApiQuery.error && (
           <>
             <div>{`${filteredMissions.length ? filteredMissions.length : 'Aucune'} mission${
               filteredMissions.length > 1 ? 's' : ''
@@ -63,46 +63,57 @@ export function MissionList() {
               <TableBody>
                 {filteredMissions.map(mission => (
                   <TableBodyRow key={mission.id} data-cy="side-window-current-reportings">
-                    <TableBodyCell $fixedWidth={112}>
-                      {dayjs(mission.startDate).format('D MMM YY, HH:MM')}
+                    <TableBodyCell $fixedWidth={144}>
+                      {getLocalizedDayjs(mission.startDateTimeUtc).format('D MMM YY, HH:MM')}
                     </TableBodyCell>
-                    <TableBodyCell $fixedWidth={112}>{dayjs(mission.endDate).format('D MMM YY, HH:MM')}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={144}>
+                      {mission.endDateTimeUtc
+                        ? getLocalizedDayjs(mission.endDateTimeUtc).format('D MMM YY, HH:MM')
+                        : '-'}
+                    </TableBodyCell>
                     <TableBodyCell $fixedWidth={160}>
-                      {mission.controlUnits?.map(
-                        resourceUnit => `${resourceUnit.name} (${resourceUnit.administration || '-'})`
-                      )}
+                      {mission.controlUnits
+                        ?.map(controlUnit => `${controlUnit.name} (${controlUnit.administration || '-'})`)
+                        .join(', ')}
                     </TableBodyCell>
-                    <TableBodyCell $fixedWidth={80}>{mission.type}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={80}>{mission.seaFront}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={160}>{mission.themes?.join(', ')}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={32}>{mission.inspectionsCount}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={80}>{mission.status}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={32}>{mission.alertType}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={80}>{mission.missionType}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={80}>{mission.facade}</TableBodyCell>
+                    {/* TODO Inspect that. */}
+                    {/* <TableBodyCell $fixedWidth={160}>{mission.themes?.join(', ')}</TableBodyCell> */}
+                    <TableBodyCell $fixedWidth={160}>THEMES</TableBodyCell>
+                    {/* TODO Inspect that. */}
+                    {/* <TableBodyCell $fixedWidth={48}>{mission.inspectionsCount}</TableBodyCell> */}
+                    <TableBodyCell $fixedWidth={48}>0</TableBodyCell>
+                    {/* TODO Inspect that. */}
+                    {/* <TableBodyCell $fixedWidth={128}>{mission.status}</TableBodyCell> */}
+                    <TableBodyCell $fixedWidth={128}>STATUS</TableBodyCell>
+                    <TableBodyCell $fixedWidth={160}>ALERTE</TableBodyCell>
                     <TableBodyCell
-                      $fixedWidth={32}
+                      $fixedWidth={48}
                       style={{
                         padding: '8px 12px',
                         textAlign: 'center'
                       }}
                     >
-                      <button onClick={() => undefined} type="button">
-                        <img
-                          alt="Voir sur la carte"
-                          src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
-                          title="Voir sur la carte"
-                        />
-                      </button>
+                      <IconButton Icon={Icon.ViewOnMap} onClick={noop} size={Size.SMALL} title="Voir sur la carte" />
                     </TableBodyCell>
                     <TableBodyCell
-                      $fixedWidth={32}
+                      $fixedWidth={48}
                       style={{
                         padding: '8px 12px',
                         textAlign: 'center'
                       }}
                     >
-                      <button onClick={() => undefined} type="button">
-                        <img alt="Editer la mission" src={`${baseUrl}/Bouton_edition.png`} title="Editer la mission" />
-                      </button>
+                      <IconButton
+                        Icon={Icon.Edit}
+                        // TODO Move that into a useCallback.
+                        onClick={() => {
+                          dispatch(missionActions.setEditedMission(mission))
+                          dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))
+                        }}
+                        size={Size.SMALL}
+                        title="Éditer la mission"
+                      />
                     </TableBodyCell>
                   </TableBodyRow>
                 ))}
@@ -117,20 +128,11 @@ export function MissionList() {
   )
 }
 
-// TODO Check why there is a `box-sizing: revert` in index.css.
-// TODO `line-height` should be 1.4 by default in html, body.
-const Wrapper = styled.div`
-  box-sizing: border-box;
+const Wrapper = styled(NoRsuiteOverrideWrapper)`
   display: flex;
   flex-direction: column;
-  line-height: 1.4;
   margin-bottom: 20px;
   width: 100%;
-
-  * {
-    box-sizing: border-box;
-    line-height: 1.4;
-  }
 `
 
 const Header = styled.div`
@@ -165,6 +167,7 @@ const Body = styled.div`
 // https://xd.adobe.com/view/973ae2b4-ecd1-419f-b092-8545e0d8ce57-c269/screen/a2a88bd8-4965-4ac3-ad20-2da95408c36a/
 
 const Table = styled.div`
+  box-sizing: border-box;
   flex-grow: 1;
   font-size: 13px;
   margin-top: 10px;
@@ -174,6 +177,7 @@ const Table = styled.div`
   }
 
   * {
+    box-sizing: border-box;
     font-size: inherit;
   }
 `
@@ -205,8 +209,8 @@ const TableBodyCell = styled.div<{
   border-bottom: solid 1px ${p => p.theme.color.lightGray};
   border-right: solid 1px ${p => p.theme.color.lightGray};
   overflow: hidden;
-  padding: 9px 12px;
+  padding: 9px 10px;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: ${p => p.$fixedWidth}rem;
+  width: ${p => p.$fixedWidth}px;
 `

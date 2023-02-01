@@ -14,11 +14,11 @@ describe('utils/getOptionsFromLabelledEnum()', () => {
     expect(result).toStrictEqual([
       {
         label: 'one',
-        value: 'one'
+        value: 'ONE'
       },
       {
         label: 'two',
-        value: 'two'
+        value: 'TWO'
       }
     ])
   })

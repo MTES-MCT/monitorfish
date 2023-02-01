@@ -18,9 +18,9 @@ const ProbabilityRiskFactorDetails = ({ isOpen }) => {
       <Line/>
       <InfractionsResumeZone>
         <InfractionsSummary
-          numberOfDiversions={riskFactor?.numberDiversionsLastFiveYears}
-          numberOfEscortsToQuay={riskFactor?.numberEscortsToQuayLastFiveYears}
-          numberOfSeizures={riskFactor?.numberSeizuresLastFiveYears}
+          numberOfGearSeized={riskFactor?.numberGearSeizuresLastFiveYears}
+          numberOfSpeciesSeized={riskFactor?.numberSpeciesSeizuresLastFiveYears}
+          numberOfDiversions={riskFactor?.numberVesselSeizuresLastFiveYears}
         />
       </InfractionsResumeZone>
       <Zone>

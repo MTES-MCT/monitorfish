@@ -4,7 +4,7 @@ import { AirControl } from './AirControl'
 import { FreeNote } from './FreeNote'
 import { GroundControl } from './GroundControl'
 import { SeaControl } from './SeaControl'
-import { MissionType } from '../../../../domain/types/mission'
+import { Mission } from '../../../../domain/types/mission'
 
 import type { PartialAction } from '../types'
 import type { Promisable } from 'type-fest'
@@ -20,9 +20,9 @@ export function ActionForm({ action, onChange }: ActionFormProps) {
 
   return (
     <Wrapper>
-      {action.type === MissionType.AIR && <AirControl action={action} />}
-      {action.type === MissionType.LAND && <GroundControl action={action} />}
-      {action.type === MissionType.SEA && <SeaControl action={action} onChange={onChange} />}
+      {action.type === Mission.MissionType.AIR && <AirControl action={action} />}
+      {action.type === Mission.MissionType.LAND && <GroundControl action={action} />}
+      {action.type === Mission.MissionType.SEA && <SeaControl action={action} onChange={onChange} />}
       {!action.type && <FreeNote action={action} onChange={onChange} />}
     </Wrapper>
   )

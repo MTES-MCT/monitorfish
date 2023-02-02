@@ -1,17 +1,16 @@
 import { omit } from 'ramda'
 
 import { INITIAL_MISSION_CONTROL_UNIT } from './constants'
-import { MissionSource, MissionType } from '../../../domain/types/mission'
+import { Mission } from '../../../domain/types/mission'
 import { FormError } from '../../../libs/FormError'
 import { dayjs } from '../../../utils/dayjs'
 import { getUtcizedDayjs } from '../../../utils/getUtcizedDayjs'
 import { hasMissingOrUndefinedValues } from '../../../utils/hasMissingOrUndefinedValues'
 
 import type { MissionFormValues } from './types'
-import type { Mission, MissionData } from '../../../domain/types/mission'
 import type { DateAsStringRange } from '@mtes-mct/monitor-ui'
 
-export function getMissionDataFromMissionFormValues(missionFormValues: MissionFormValues): MissionData {
+export function getMissionDataFromMissionFormValues(missionFormValues: MissionFormValues): Mission.MissionData {
   if (!missionFormValues.dateTimeRangeUtc) {
     throw new FormError(missionFormValues, 'dateTimeRangeUtc')
   }
@@ -23,7 +22,7 @@ export function getMissionDataFromMissionFormValues(missionFormValues: MissionFo
     throw new FormError(missionFormValues, 'controlUnits')
   }
   const [startDateTimeUtc, endDateTimeUtc] = missionFormValues.dateTimeRangeUtc
-  const missionSource = MissionSource.MONITORFISH
+  const missionSource = Mission.MissionSource.MONITORFISH
 
   return {
     ...missionBaseValues,
@@ -37,7 +36,7 @@ export function getMissionDataFromMissionFormValues(missionFormValues: MissionFo
   }
 }
 
-export function getMissionFormInitialValues(mission: Mission | undefined): MissionFormValues {
+export function getMissionFormInitialValues(mission: Mission.Mission | undefined): MissionFormValues {
   if (!mission) {
     const utcizedLocalDateAsDayjs = getUtcizedDayjs()
     const utcizedLocalDateAsString = utcizedLocalDateAsDayjs.toISOString()
@@ -46,7 +45,7 @@ export function getMissionFormInitialValues(mission: Mission | undefined): Missi
     return {
       controlUnits: [INITIAL_MISSION_CONTROL_UNIT],
       dateTimeRangeUtc: [utcizedLocalDateAsString, utcizedLocalDateAsStringPlusOneHour],
-      missionType: MissionType.SEA
+      missionType: Mission.MissionType.SEA
     }
   }
 
@@ -63,9 +62,9 @@ export function getMissionFormInitialValues(mission: Mission | undefined): Missi
 }
 
 export function getUpdatedMissionFromMissionFormValues(
-  missionId: Mission['id'],
+  missionId: Mission.Mission['id'],
   missionFormValues: MissionFormValues
-): Mission {
+): Mission.Mission {
   const missionData = getMissionDataFromMissionFormValues(missionFormValues)
 
   return {
@@ -93,6 +92,6 @@ export function isCompleteMissionFormValues(missionFormValues: MissionFormValues
 
 export function isValidControlUnit(
   formResourceUnit: MissionFormValues['controlUnits'][0]
-): formResourceUnit is Mission['controlUnits'][0] {
+): formResourceUnit is Mission.Mission['controlUnits'][0] {
   return !hasMissingOrUndefinedValues(['administration', 'id', 'name', 'resources'], formResourceUnit)
 }

@@ -11,7 +11,7 @@ import type { DateRange } from '@mtes-mct/monitor-ui'
 export const mapFilterFormRecordsToFilters = ([key, valueOrValues]: [MissionFilterType, any]): MissionFilter => {
   switch (key) {
     case MissionFilterType.CUSTOM_DATE_RANGE:
-      return filter<Mission>(
+      return filter<Mission.Mission>(
         ({ endDateTimeUtc, startDateTimeUtc }) =>
           dayjs(endDateTimeUtc).isSameOrAfter((valueOrValues as DateRange)[0]) &&
           dayjs(startDateTimeUtc).isSameOrBefore((valueOrValues as DateRange)[1])
@@ -20,16 +20,22 @@ export const mapFilterFormRecordsToFilters = ([key, valueOrValues]: [MissionFilt
     case MissionFilterType.DATE_RANGE:
       switch (valueOrValues as MissionDateRangeFilter) {
         case MissionDateRangeFilter.CURRENT_DAY:
-          return filter<Mission>(({ endDateTimeUtc }) => dayjs(endDateTimeUtc).isSameOrAfter(dayjs().startOf('day')))
+          return filter<Mission.Mission>(({ endDateTimeUtc }) =>
+            dayjs(endDateTimeUtc).isSameOrAfter(dayjs().startOf('day'))
+          )
 
         case MissionDateRangeFilter.CURRENT_WEEK:
-          return filter<Mission>(({ endDateTimeUtc }) => dayjs(endDateTimeUtc).isSameOrAfter(dayjs().startOf('week')))
+          return filter<Mission.Mission>(({ endDateTimeUtc }) =>
+            dayjs(endDateTimeUtc).isSameOrAfter(dayjs().startOf('week'))
+          )
 
         case MissionDateRangeFilter.CURRENT_MONTH:
-          return filter<Mission>(({ endDateTimeUtc }) => dayjs(endDateTimeUtc).isSameOrAfter(dayjs().startOf('month')))
+          return filter<Mission.Mission>(({ endDateTimeUtc }) =>
+            dayjs(endDateTimeUtc).isSameOrAfter(dayjs().startOf('month'))
+          )
 
         case MissionDateRangeFilter.CURRENT_QUARTER:
-          return filter<Mission>(({ endDateTimeUtc }) =>
+          return filter<Mission.Mission>(({ endDateTimeUtc }) =>
             dayjs(endDateTimeUtc).isSameOrAfter(dayjs().startOf('quarter'))
           )
 
@@ -40,7 +46,7 @@ export const mapFilterFormRecordsToFilters = ([key, valueOrValues]: [MissionFilt
 
     default:
       return typeof (valueOrValues as string | string[]) === 'string'
-        ? filter<Mission>(mission => mission[key] === valueOrValues)
-        : filter<Mission>(mission => valueOrValues.includes(mission[key]))
+        ? filter<Mission.Mission>(mission => mission[key] === valueOrValues)
+        : filter<Mission.Mission>(mission => valueOrValues.includes(mission[key]))
   }
 }

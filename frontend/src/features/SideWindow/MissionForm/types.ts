@@ -1,5 +1,5 @@
 import type { ControlUnit } from '../../../domain/types/controlUnit'
-import type { MissionType, MissionData } from '../../../domain/types/mission'
+import type { Mission } from '../../../domain/types/mission'
 import type { DeepPartial, Undefine } from '../../../types'
 import type { DateAsStringRange } from '@mtes-mct/monitor-ui'
 
@@ -8,7 +8,7 @@ export type PartialAction = PartialAirControl | PartialGroundControl | PartialSe
 
 export type MissionFormValues = Partial<
   Omit<
-    MissionData,
+    Mission.MissionData,
     'controlUnits' | 'endDateTimeUtc' | 'startDateTimeUtc' | 'missionSource' | 'missionType' | 'controlUnits'
   >
 > & {
@@ -16,26 +16,26 @@ export type MissionFormValues = Partial<
   dateTimeRangeUtc: DateAsStringRange | undefined
   hasOrder?: boolean | undefined
   isUnderJdp?: boolean | undefined
-  missionType: MissionType
+  missionType: Mission.MissionType
 }
 
 type AirControl = {
   endDate: Date
   startDate: Date
-  type: MissionType.AIR
+  type: Mission.MissionType.AIR
 }
 export type PartialAirControl = Partial<AirControl> & {
   startDate: Date
-  type: MissionType.AIR
+  type: Mission.MissionType.AIR
 }
 
 type GroundControl = {
   startDate: Date
-  type: MissionType.LAND
+  type: Mission.MissionType.LAND
 }
 export type PartialGroundControl = Partial<GroundControl> & {
   startDate: Date
-  type: MissionType.LAND
+  type: Mission.MissionType.LAND
 }
 
 type SeaControl = {
@@ -67,7 +67,7 @@ type SeaControl = {
   startDate: Date
   tideFishingZones: string[]
   tideFleetSegments: string[]
-  type: MissionType.SEA
+  type: Mission.MissionType.SEA
   vessel: {
     externalReferenceNumber?: string | null
     flagState: string | null
@@ -97,7 +97,7 @@ export type PartialSeaControl = Omit<
   startDate: Date
   tideFishingZones: string[]
   tideFleetSegments: string[]
-  type: MissionType.SEA
+  type: Mission.MissionType.SEA
   vessel: Undefine<SeaControl['vessel']>
 }
 

@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { formatDateLabel } from './utils'
-import { MissionType } from '../../../../domain/types/mission'
+import { Mission } from '../../../../domain/types/mission'
 import { getLocalizedDayjs } from '../../../../utils/getLocalizedDayjs'
 
 import type { Action, PartialAction } from '../types'
@@ -26,13 +26,13 @@ export function Item({ action, isNew = false, onDelete }: ItemProps) {
     switch (isNew) {
       case true:
         switch (action.type) {
-          case MissionType.AIR:
+          case Mission.MissionType.AIR:
             return ['Contrôle aérien à renseigner', Icon.Plane]
 
-          case MissionType.LAND:
+          case Mission.MissionType.LAND:
             return ['Contrôle à la débarque à renseigner', Icon.Plane]
 
-          case MissionType.SEA:
+          case Mission.MissionType.SEA:
             return ['Contrôle en mer à renseigner', Icon.FleetSegment]
 
           default:
@@ -41,13 +41,13 @@ export function Item({ action, isNew = false, onDelete }: ItemProps) {
 
       default:
         switch (action.type) {
-          case MissionType.AIR:
+          case Mission.MissionType.AIR:
             return ['', Icon.Plane]
 
-          case MissionType.LAND:
+          case Mission.MissionType.LAND:
             return ['', Icon.Plane]
 
-          case MissionType.SEA:
+          case Mission.MissionType.SEA:
             return ['', Icon.Plane]
 
           default:

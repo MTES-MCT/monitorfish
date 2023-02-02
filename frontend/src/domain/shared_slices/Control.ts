@@ -1,17 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import type { MissionControlsSummary } from '../types/missionAction'
+import type { MissionAction } from '../types/missionAction'
 
 export type ControlState = {
   controlsFromDate: Date
-  // TODO Understand & check that.
-  currentControlSummary: MissionControlsSummary | null
+  currentControlSummary: MissionAction.MissionControlsSummary | null
   loadingControls: boolean
-  nextControlSummary: MissionControlsSummary | null
+  nextControlSummary: MissionAction.MissionControlsSummary | null
 }
 const INITIAL_STATE: ControlState = {
   controlsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
-  // TODO Understand & check that.
   currentControlSummary: null,
   loadingControls: false,
   nextControlSummary: null
@@ -23,8 +21,6 @@ const controlSlice = createSlice({
   reducers: {
     /**
      * Set the loading of controls to true, and shows a loader in the controls tab
-     * @function loadControls
-     * @param {Object=} state
      */
     loadControls(state) {
       state.loadingControls = true
@@ -36,26 +32,20 @@ const controlSlice = createSlice({
 
     /**
      * Set the date since controls are fetched
-     * @function setControlFromDate
-     * @param {Object=} state
-     * @param {{payload: Date}} action - The "from" date
      */
-    setControlFromDate(state, action) {
+    setControlFromDate(state, action: PayloadAction<Date>) {
       state.controlsFromDate = action.payload
     },
 
     /**
      * Set selected vessel control resume and control
-     * @function setControlSummary
-     * @param {Object=} state
-     * @param {{payload: MissionControlsSummary}} action - the control resume
      */
-    setControlSummary(state, action) {
+    setControlSummary(state, action: PayloadAction<MissionAction.MissionControlsSummary>) {
       state.currentControlSummary = action.payload
       state.loadingControls = false
     },
 
-    setNextControlSummary(state, action) {
+    setNextControlSummary(state, action: PayloadAction<MissionAction.MissionControlsSummary>) {
       state.nextControlSummary = action.payload
     }
   }

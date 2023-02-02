@@ -1,4 +1,4 @@
-import type { Infraction } from '../../types/missionAction'
+import type { MissionAction } from '../../types/missionAction'
 import type { VesselIdentifier, VesselIdentity } from '../vessel/types'
 
 export enum PendingAlertValueType {
@@ -13,7 +13,7 @@ export type PendingAlert = {
   externalReferenceNumber: string
   flagState: string
   id: string
-  infraction: Infraction | null
+  infraction: MissionAction.Infraction | null
   internalReferenceNumber: string
   ircs: string
   tripNumber: string

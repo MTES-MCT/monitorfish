@@ -1,4 +1,4 @@
-import { Mission, MissionAlertType, MissionStatus, MissionType } from '../../../domain/types/mission'
+import { Mission } from '../../../domain/types/mission'
 import { getOptionsFromLabelledEnum } from '../../../utils/getOptionsFromLabelledEnum'
 
 import type { TableOptions } from '../../../hooks/useTable/types'
@@ -25,7 +25,7 @@ export enum MissionFilterType {
 }
 
 export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option[]> = {
-  [MissionFilterType.ALERT_TYPE]: getOptionsFromLabelledEnum(MissionAlertType),
+  [MissionFilterType.ALERT_TYPE]: getOptionsFromLabelledEnum(Mission.MissionAlertType),
   [MissionFilterType.CUSTOM_DATE_RANGE]: [],
   [MissionFilterType.DATE_RANGE]: getOptionsFromLabelledEnum(MissionDateRangeFilter),
   [MissionFilterType.INSPECTION_TYPE]: [
@@ -34,12 +34,12 @@ export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option[]> = {
       value: 'UNKNOWN'
     }
   ],
-  [MissionFilterType.MISSION_TYPE]: getOptionsFromLabelledEnum(MissionType),
-  [MissionFilterType.STATUS]: getOptionsFromLabelledEnum(MissionStatus),
+  [MissionFilterType.MISSION_TYPE]: getOptionsFromLabelledEnum(Mission.MissionType),
+  [MissionFilterType.STATUS]: getOptionsFromLabelledEnum(Mission.MissionStatus),
   [MissionFilterType.UNIT]: []
 }
 
-export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission> = {
+export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission.Mission> = {
   columns: [
     {
       fixedWidth: 144,

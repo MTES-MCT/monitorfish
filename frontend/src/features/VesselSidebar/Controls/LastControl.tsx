@@ -5,10 +5,10 @@ import { Green, Red } from './Controls.style'
 import { getNumberOfInfractions } from '../../../domain/entities/controls'
 import { getDate } from '../../../utils'
 
-import type { ControlAndText } from '../../../domain/types/missionAction'
+import type { MissionAction } from '../../../domain/types/missionAction'
 
 type LastControlProps = {
-  field: ControlAndText
+  field: MissionAction.ControlAndText
 }
 export function LastControl({ field }: LastControlProps) {
   const { control, text } = field

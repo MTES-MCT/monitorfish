@@ -15,7 +15,7 @@ import {
 import { useCreateMissionMutation } from '../../../api/mission'
 import { missionActions } from '../../../domain/actions'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
-import { MissionType } from '../../../domain/types/mission'
+import { Mission } from '../../../domain/types/mission'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
@@ -27,7 +27,7 @@ import type { MutableRefObject } from 'react'
 export function MissionForm() {
   const headerDivRef = useRef() as MutableRefObject<HTMLDivElement>
 
-  const [selectedType, setSelectedType] = useState<MissionType>(MissionType.SEA)
+  const [selectedType, setSelectedType] = useState<Mission.MissionType>(Mission.MissionType.SEA)
   /** Header height in pixels */
   const [headerHeight, setHeaderHeight] = useState<number>(0)
   const [newAction, setNewAction] = useState<PartialAction | undefined>(undefined)

@@ -3,12 +3,12 @@ import ky from 'ky'
 import { monitorenvApi } from '.'
 import { ApiError } from '../libs/ApiError'
 
-import type { Mission, MissionData } from '../domain/types/mission'
-import type { MissionControlsSummary } from '../domain/types/missionAction'
+import type { Mission } from '../domain/types/mission'
+import type { MissionAction } from '../domain/types/missionAction'
 
 export const missionApi = monitorenvApi.injectEndpoints({
   endpoints: builder => ({
-    createMission: builder.mutation<void, MissionData>({
+    createMission: builder.mutation<void, Mission.MissionData>({
       invalidatesTags: () => [{ type: 'Missions' }],
       query: mission => ({
         body: mission,
@@ -25,12 +25,12 @@ export const missionApi = monitorenvApi.injectEndpoints({
       })
     }),
 
-    getMissions: builder.query<Mission[], void>({
+    getMissions: builder.query<Mission.Mission[], void>({
       providesTags: () => [{ type: 'Missions' }],
       query: () => `missions?startedAfterDateTime=&startedBeforeDateTime=`
     }),
 
-    updateMission: builder.mutation<void, Mission>({
+    updateMission: builder.mutation<void, Mission.Mission>({
       invalidatesTags: () => [{ type: 'Missions' }],
       query: mission => ({
         body: mission,
@@ -58,7 +58,7 @@ export async function getVesselControlsFromAPI(vesselId: number, fromDate: Date)
   try {
     return await ky
       .get(`/bff/v1/mission_actions?vesselId=${vesselId}&afterDateTime=${fromDate.toISOString()}`)
-      .json<MissionControlsSummary>()
+      .json<MissionAction.MissionControlsSummary>()
   } catch (err) {
     throw new ApiError(MISSION_ACTIONS_ERROR_MESSAGE, err)
   }

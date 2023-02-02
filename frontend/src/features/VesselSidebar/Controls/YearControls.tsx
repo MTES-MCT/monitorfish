@@ -9,7 +9,7 @@ import type { MissionAction } from '../../../domain/types/missionAction'
 
 type YearControlsProps = {
   year: number
-  yearControls: MissionAction[]
+  yearControls: MissionAction.MissionAction[]
 }
 export function YearControls({ year, yearControls }: YearControlsProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)

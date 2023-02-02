@@ -5,13 +5,13 @@ import { GearOnboard } from './GearOnboard'
 import { Infraction } from './Infraction'
 import { COLORS } from '../../../constants/constants'
 import { getNumberOfInfractions } from '../../../domain/entities/controls'
-import { InfractionDomain, MissionAction, MissionActionType } from '../../../domain/types/missionAction'
+import { MissionAction } from '../../../domain/types/missionAction'
 import { getDate } from '../../../utils'
 import { ReactComponent as GyroRedSVG } from '../../icons/Gyrophare_controles_rouge.svg'
 import { ReactComponent as GyroGreenSVG } from '../../icons/Gyrophare_controles_vert.svg'
 
 type ControlProps = {
-  control: MissionAction
+  control: MissionAction.MissionAction
   isLastItem: boolean
 }
 
@@ -28,11 +28,11 @@ export function Control({ control, isLastItem }: ControlProps) {
 
   const controlType = useMemo(() => {
     switch (control.actionType) {
-      case MissionActionType.AIR_CONTROL:
+      case MissionAction.MissionActionType.AIR_CONTROL:
         return 'EN MER'
-      case MissionActionType.LAND_CONTROL:
+      case MissionAction.MissionActionType.LAND_CONTROL:
         return `À QUAI (${control.portName?.toUpperCase()})`
-      case MissionActionType.SEA_CONTROL:
+      case MissionAction.MissionActionType.SEA_CONTROL:
         return 'AÉRIEN'
       default:
         return ''
@@ -61,7 +61,7 @@ export function Control({ control, isLastItem }: ControlProps) {
             key={infraction.infractionType + infraction.natinf}
             index={index + 1}
             infraction={infraction}
-            infractionDomain={InfractionDomain.GEAR}
+            infractionDomain={MissionAction.InfractionDomain.GEAR}
           />
         ))}
         {control.speciesInfractions.map((infraction, index) => (
@@ -69,7 +69,7 @@ export function Control({ control, isLastItem }: ControlProps) {
             key={infraction.infractionType + infraction.natinf}
             index={control.gearInfractions.length + index + 1}
             infraction={infraction}
-            infractionDomain={InfractionDomain.SPECIES}
+            infractionDomain={MissionAction.InfractionDomain.SPECIES}
           />
         ))}
         {control.logbookInfractions.map((infraction, index) => (
@@ -77,7 +77,7 @@ export function Control({ control, isLastItem }: ControlProps) {
             key={infraction.infractionType + infraction.natinf}
             index={gearAndSpeciesInfractionsLength + index + 1}
             infraction={infraction}
-            infractionDomain={InfractionDomain.LOGBOOK}
+            infractionDomain={MissionAction.InfractionDomain.LOGBOOK}
           />
         ))}
         {control.otherInfractions.map((infraction, index) => (
@@ -85,7 +85,7 @@ export function Control({ control, isLastItem }: ControlProps) {
             key={infraction.infractionType + infraction.natinf}
             index={gearSpeciesAndLogbookInfractionsLength + index + 1}
             infraction={infraction}
-            infractionDomain={InfractionDomain.OTHER}
+            infractionDomain={MissionAction.InfractionDomain.OTHER}
           />
         ))}
         {control.gearOnboard.map(gear => (

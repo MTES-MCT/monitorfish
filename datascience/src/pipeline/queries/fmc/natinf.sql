@@ -1,6 +1,5 @@
 WITH t1 AS (
     SELECT
-        inf.idc_fmc_natinf as id,
         inf.code as natinf_code,
         inf.texte_reglementaire as regulation,
         typinf.libelle as infraction_category,
@@ -12,7 +11,6 @@ WITH t1 AS (
 )
 
 SELECT
-    id,
     natinf_code,
     regulation,
     infraction_category,

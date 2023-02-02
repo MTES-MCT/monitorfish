@@ -31,9 +31,9 @@ class InfractionControllerITests {
         // Given
         given(this.getFishingInfractions.execute()).willReturn(
             listOf(
-                Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING),
-                Infraction(1, natinfCode = "7065", infractionCategory = InfractionCategory.FISHING),
-            ),
+                Infraction(natinfCode = "7059", infractionCategory = InfractionCategory.FISHING),
+                Infraction(natinfCode = "7065", infractionCategory = InfractionCategory.FISHING)
+            )
         )
 
         // When

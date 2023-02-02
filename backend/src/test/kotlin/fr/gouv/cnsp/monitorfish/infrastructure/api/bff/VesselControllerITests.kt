@@ -531,7 +531,6 @@ class VesselControllerITests {
                             isArchived = false,
                             isDeleted = false,
                             infraction = Infraction(
-                                1,
                                 natinfCode = "7059",
                                 infractionCategory = InfractionCategory.FISHING,
                             ),

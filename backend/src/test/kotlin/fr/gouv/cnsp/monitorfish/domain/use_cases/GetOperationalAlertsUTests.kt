@@ -40,10 +40,10 @@ class GetOperationalAlertsUTests {
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             tripNumber = "123456",
             creationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert(),
+            value = ThreeMilesTrawlingAlert()
         )
         given(infractionRepository.findInfractionByNatinfCode(eq("7059"))).willReturn(
-            Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING),
+            Infraction(natinfCode = "7059", infractionCategory = InfractionCategory.FISHING)
         )
         given(pendingAlertRepository.findAlertsOfTypes(any())).willReturn(listOf(pendingAlert))
 
@@ -60,8 +60,8 @@ class GetOperationalAlertsUTests {
                 AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
                 AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT,
                 AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
-                AlertTypeMapping.MISSING_FAR_ALERT,
-            ),
+                AlertTypeMapping.MISSING_FAR_ALERT
+            )
         )
         Mockito.verify(infractionRepository, Mockito.times(1)).findInfractionByNatinfCode(eq("7059"))
     }

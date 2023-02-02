@@ -137,7 +137,8 @@ export class Vessel {
    * Check if vessel icon is in light or dark mode, based on the base layer
    * @return {boolean} isLight - returns true if vessel icon is light
    */
-  static iconIsLight = selectedBaseLayer => selectedBaseLayer === BaseLayers.SATELLITE.code
+  static iconIsLight = selectedBaseLayer =>
+    selectedBaseLayer === BaseLayers.SATELLITE.code || selectedBaseLayer === BaseLayers.DARK.code
 }
 
 export const getOnlyVesselIdentityProperties = (

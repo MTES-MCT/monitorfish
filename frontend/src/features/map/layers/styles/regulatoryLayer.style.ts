@@ -1,10 +1,9 @@
 import { THEME } from '@mtes-mct/monitor-ui'
 
 import { isForbiddenPeriod } from './isForbiddenPeriod'
-import { getColorWithAlpha, getStyle } from './utils'
+import { getColorWithAlpha, getHashDigitsFromRegulation, getStyle } from './utils'
 import { theme } from '../../../../ui/theme'
 import { getUtcDayjs } from '../../../../utils/getUtcDayjs'
-import { getHashDigitsFromRegulation } from '../utils'
 
 import type { BaseRegulatoryZone } from '../../../../domain/types/regulation'
 import type Feature from 'ol/Feature'

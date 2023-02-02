@@ -1,12 +1,10 @@
-import GeoJSON from 'ol/format/GeoJSON'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
-import { omit } from 'ramda'
 import React, { MutableRefObject, useCallback, useEffect, useRef } from 'react'
 
 import { getRegulatoryLayerStyle } from './styles/regulatoryLayer.style'
+import { getFeaturesFromRegulatoryZones } from './utils'
 import { Layer } from '../../../domain/entities/layers/constants'
-import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map/constants'
 import zoomInLayer from '../../../domain/use_cases/layer/zoomInLayer'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
@@ -14,7 +12,6 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { BaseRegulatoryZone } from '../../../domain/types/regulation'
 import type { Feature } from 'ol'
-import type { Geometry } from 'ol/geom'
 
 export type RegulatoryPreviewLayerProps = {
   map?: any
@@ -56,24 +53,7 @@ function UnmemoizedRegulatoryPreviewLayer({ map }: RegulatoryPreviewLayerProps) 
 
     getVectorSource().clear()
 
-    if (!regulatoryZonesToPreview?.length) {
-      return
-    }
-
-    const features = regulatoryZonesToPreview
-      .filter(regulatoryZone => regulatoryZone)
-      .map(regulatoryZone => {
-        const properties = omit(['geometry'], regulatoryZone)
-
-        const feature = new GeoJSON({
-          featureProjection: OPENLAYERS_PROJECTION
-        }).readFeature(regulatoryZone.geometry)
-        feature.setProperties(properties)
-
-        return feature
-      })
-      .filter((feature): feature is Feature<Geometry> => Boolean(feature))
-
+    const features = getFeaturesFromRegulatoryZones(regulatoryZonesToPreview)
     if (!features?.length) {
       return
     }

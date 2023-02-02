@@ -12,6 +12,9 @@ export type DeepPartial<T> = T extends object
   : T
 
 export type Native = boolean | null | number | string | undefined
+export type NativeAny = boolean | NativeArray | NativeObject | null | number | string | undefined
+export type NativeArray = Array<NativeAny>
+export type NativeObject = { [x: string]: NativeAny } | {}
 
 export type Option<V = string> = {
   label: string
@@ -37,8 +40,10 @@ export type PickStringKeysWithNativeValues<T extends Record<any, any>> = Exact<
   T
 >
 
+export type StringKeyRecord<T> = PickStringKeys<Record<string, T>>
+
 /**
- * Make a type or an interface props as undefined.
+ * Mark all the props type of an interface or a type as `| undefined`
  *
  * @description
  * Since `exactOptionalPropertyTypes` is enabled in tsconfig.json,
@@ -47,5 +52,3 @@ export type PickStringKeysWithNativeValues<T extends Record<any, any>> = Exact<
 export type Undefine<T> = {
   [K in keyof T]: T[K] | undefined
 }
-
-export type StringKeyRecord<T> = PickStringKeys<Record<string, T>>

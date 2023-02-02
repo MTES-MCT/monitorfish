@@ -5,6 +5,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 import { getEnvironmentVariable } from './utils'
+import { normalizeRtkBaseQuery } from '../utils/normalizeRtkBaseQuery'
 
 const MONITORENV_API_URL = getEnvironmentVariable('REACT_APP_MONITORENV_URL')
 
@@ -16,7 +17,7 @@ const monitorenvBaseQuery = fetchBaseQuery({
   baseUrl: `${MONITORENV_API_URL}/api/v1`
 })
 export const monitorenvApi = createApi({
-  baseQuery: monitorenvBaseQuery,
+  baseQuery: normalizeRtkBaseQuery(monitorenvBaseQuery),
   // TODO Is this prop initialization necessary?
   endpoints: () => ({}),
   reducerPath: 'monitorenvApi',
@@ -31,7 +32,7 @@ const monitorfishBaseQuery = fetchBaseQuery({
   baseUrl: `/bff/v1`
 })
 export const monitorfishApi = createApi({
-  baseQuery: monitorfishBaseQuery,
+  baseQuery: normalizeRtkBaseQuery(monitorfishBaseQuery),
   // TODO Is this prop initialization necessary?
   endpoints: () => ({}),
   reducerPath: 'monitorfishApi',

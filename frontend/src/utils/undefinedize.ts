@@ -1,12 +1,12 @@
 /* eslint-disable no-null/no-null */
 
-import { fromPairs, pipe, toPairs } from 'ramda'
+import { fromPairs, map, pipe, toPairs } from 'ramda'
 
+import { isArray } from './isArray'
+import { isObject } from './isObject'
 import { FrontendError } from '../libs/FrontendError'
 
-import type { Native } from '../types'
-
-type NativeAny = Native | Native[] | Record<string, Native>
+import type { NativeAny, NativeArray, NativeObject } from '../types'
 
 type Undefinedized<T> = T extends null
   ? undefined
@@ -20,37 +20,38 @@ type Undefinedized<T> = T extends null
     }
   : T
 
-const undefinedizeArrayValues = <T extends Array<NativeAny>>(list: T): Undefinedized<T> => list.map(undefinedize) as any
+const undefinedizeArrayValues = <T extends NativeArray>(list: T): Undefinedized<T> =>
+  list.map(undefinedize as any) as any
 
-const undefinedizeObjectProps = <T extends Record<string, Native>>(record: T): Undefinedized<T> =>
-  pipe(toPairs as any, undefinedizeObjectPropPair, fromPairs as any)(record) as any
-const undefinedizeObjectPropPair = ([key, value]: [string, NativeAny]) => [key, undefinedize(value)]
-
-const isPoja = (record: NativeAny): record is Native[] =>
-  typeof record === 'object' && record !== null && Array.isArray(record)
-const isPojo = (record: NativeAny): record is Record<string, Native> =>
-  typeof record === 'object' && record !== null && !Array.isArray(record) && record.constructor.name === 'Object'
+const undefinedizeObjectProps = <T extends NativeObject>(record: T): Undefinedized<T> =>
+  pipe(toPairs as any, map(undefinedizeObjectPropPair), fromPairs as any)(record) as any
+const undefinedizeObjectPropPair = ([key, value]: [string, NativeAny]) => [key, undefinedize(value as any)]
 
 /**
  * Transform all `null` values into `undefined` ones in any type of value
+ *
+ * @description
+ * The value must be of native type and only contains native types.
  */
 export function undefinedize<T extends NativeAny>(value: T): Undefinedized<T> | undefined {
-  if (value === null) {
+  // console.debug(value)
+
+  if (value === null || value === undefined) {
     return undefined
   }
 
   if (typeof value === 'object') {
-    if (isPoja(value)) {
-      return undefinedizeArrayValues(value)
+    if (isArray<NativeArray>(value)) {
+      return undefinedizeArrayValues(value) as any
     }
 
-    if (isPojo(value)) {
-      return undefinedizeObjectProps(value)
+    if (isObject<NativeObject>(value)) {
+      return undefinedizeObjectProps(value) as any
     }
 
     throw new FrontendError(
       `Can't handle type \`${(value as Object).constructor.name}\`.`,
-      'utils/coerceNullToUndefined.ts > coerceNullToUndefined()'
+      'utils/undefinedize.ts > undefinedize()'
     )
   }
 

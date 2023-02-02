@@ -10,6 +10,7 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookReportEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLogbookReportRepository
+import jakarta.transaction.Transactional
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.data.domain.PageRequest
@@ -17,7 +18,6 @@ import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
-import jakarta.transaction.Transactional
 
 @Repository
 class JpaLogbookReportRepository(

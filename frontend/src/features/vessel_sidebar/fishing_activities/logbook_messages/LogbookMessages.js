@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import LogbookMessage from './LogbookMessage'
+import { LogbookMessage } from './LogbookMessage'
 import { ReactComponent as SortSVG } from '../../../icons/ascendant-descendant.svg'
 import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
 import { ReactComponent as ArrowTripSVG } from '../../../icons/Fleche_navigation_marees.svg'

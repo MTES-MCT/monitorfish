@@ -10,7 +10,6 @@ import {
 import { getRegulatoryLayersWithoutTerritory } from '../entities/regulation'
 
 import type { RegulatoryLawTypes, RegulatoryZone } from '../types/regulation'
-import type { Geometry } from 'ol/geom'
 
 // TODO Move that somewhere else.
 const pushRegulatoryZoneInTopicList = (selectedRegulatoryLayers, regulatoryZone) => {
@@ -67,7 +66,6 @@ export type RegulatoryState = {
   loadingRegulatoryZoneMetadata: boolean
   // TODO Type this prop.
   regulationSearchedZoneExtent: Record<string, any>[]
-  regulatoryGeometriesToPreview: Geometry[] | null
   regulatoryLayerLawTypes: RegulatoryLawTypes | undefined
   // TODO Type this prop.
   regulatoryTopics: Record<string, any>[]
@@ -77,6 +75,7 @@ export type RegulatoryState = {
   regulatoryZoneMetadata: Record<string, any> | null
   regulatoryZoneMetadataPanelIsOpen: boolean
   regulatoryZones: RegulatoryZone[]
+  regulatoryZonesToPreview: Partial<RegulatoryZone>[]
   // TODO Type this prop.
   selectedRegulatoryLayers: Record<string, RegulatoryZone[]> | null
   simplifiedGeometries: boolean
@@ -87,13 +86,13 @@ const INITIAL_STATE: RegulatoryState = {
   layersTopicsByRegTerritory: {},
   loadingRegulatoryZoneMetadata: false,
   regulationSearchedZoneExtent: [],
-  regulatoryGeometriesToPreview: null,
   regulatoryLayerLawTypes: undefined,
   regulatoryTopics: [],
   regulatoryTopicsOpened: [],
   regulatoryZoneMetadata: null,
   regulatoryZoneMetadataPanelIsOpen: false,
   regulatoryZones: [],
+  regulatoryZonesToPreview: [],
   selectedRegulatoryLayers: null,
   simplifiedGeometries: true
 }
@@ -187,7 +186,7 @@ const regulatorySlice = createSlice({
       state.loadingRegulatoryZoneMetadata = false
     },
     resetRegulatoryGeometriesToPreview(state) {
-      state.regulatoryGeometriesToPreview = null
+      state.regulatoryZonesToPreview = []
     },
     setIsReadyToShowRegulatoryZones(state) {
       state.isReadyToShowRegulatoryLayers = true
@@ -216,8 +215,8 @@ const regulatorySlice = createSlice({
       state.regulationSearchedZoneExtent = action.payload
     },
 
-    setRegulatoryGeometriesToPreview(state, action) {
-      state.regulatoryGeometriesToPreview = action.payload
+    setRegulatoryGeometriesToPreview(state, action: PayloadAction<Partial<RegulatoryZone>[]>) {
+      state.regulatoryZonesToPreview = action.payload
     },
 
     /**

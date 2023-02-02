@@ -6,17 +6,12 @@ import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 import Text from 'ol/style/Text'
 
-import { isForbiddenPeriod } from './isForbiddenPeriod'
-import { getColorWithAlpha, getStyle } from './utils'
+import { getColorWithAlpha } from './utils'
 import { Layer } from '../../../../domain/entities/layers/constants'
-import { theme } from '../../../../ui/theme'
-import { getUtcDayjs } from '../../../../utils/getUtcDayjs'
-import { getHashDigitsFromRegulation } from '../utils'
 
-import type { BaseRegulatoryZone } from '../../../../domain/types/regulation'
 import type Feature from 'ol/Feature'
 
-export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
+export function getAdministrativeLayerStyle(type: string) {
   switch (type) {
     case Layer.EEZ.code:
       return (feature: Feature | undefined) =>
@@ -211,19 +206,6 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             text: `${feature?.get(Layer.transversal_sea_limit.subZoneFieldKey) || ''}`
           })
         })
-    case Layer.REGULATORY.code:
-      return (feature: Feature | undefined, regulation: BaseRegulatoryZone | null) => {
-        const randomDigits = getHashDigitsFromRegulation(regulation)
-        const currentDate = getUtcDayjs()
-        const isForbidden = isForbiddenPeriod(feature, currentDate)
-        const metadataIsShowed = feature?.get('metadataIsShowed')
-
-        if (isForbidden) {
-          return getStyle(getColorWithAlpha(THEME.color.lightCoral, 0.75), metadataIsShowed)
-        }
-
-        return getLayerColor(randomDigits, metadataIsShowed)
-      }
     default:
       return () =>
         new Style({
@@ -236,28 +218,4 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
           })
         })
   }
-}
-
-const DIGIT_TO_LAYER_COLOR_MAP = new Map<number, string>([
-  [0, THEME.color.yaleBlue],
-  [1, theme.color.queenBlue],
-  [2, THEME.color.glaucous],
-  [3, THEME.color.blueNcs],
-  [4, THEME.color.iceberg],
-  [5, THEME.color.lightSteelBlue],
-  [6, THEME.color.lightPeriwinkle],
-  [7, theme.color.aliceBlue],
-  [8, theme.color.lightBlue],
-  [9, theme.color.skyBlue],
-  [10, theme.color.frenchBlue],
-  [11, theme.color.prussianBlue]
-])
-
-const getLayerColor = (randomDigits, metadataIsShowed) => {
-  const color = DIGIT_TO_LAYER_COLOR_MAP.get(randomDigits)
-  if (!color) {
-    return getStyle(getColorWithAlpha(THEME.color.yaleBlue, 0.75), metadataIsShowed)
-  }
-
-  return getStyle(getColorWithAlpha(color, 0.75), metadataIsShowed)
 }

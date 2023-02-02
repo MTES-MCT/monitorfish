@@ -1,16 +1,3 @@
-import {
-  COEMessage,
-  COXMessage,
-  CROMessage,
-  DEPMessage,
-  DISMessage,
-  EOFMessage,
-  FARMessage,
-  LANMessage,
-  PNOMessage,
-  RTPMessage,
-  NotImplementedMessage
-} from '../../features/vessel_sidebar/fishing_activities/logbook_messages/index.js'
 import { Feature } from 'ol'
 import Point from 'ol/geom/Point'
 import { getFishingActivityCircleStyle } from '../../features/map/layers/styles/vesselTrack.style'
@@ -20,92 +7,79 @@ export const LogbookMessageType = {
   DEP: {
     code: 'DEP',
     displayCode: 'DEP',
-    name: 'Départ',
-    component: DEPMessage
+    name: 'Départ'
   },
   FAR: {
     code: 'FAR',
     displayCode: 'FAR',
     name: 'Captures',
-    fullName: 'Déclaration de capture',
-    component: FARMessage
+    fullName: 'Déclaration de capture'
   },
   PNO: {
     code: 'PNO',
     displayCode: 'PNO',
     name: 'Préavis',
-    fullName: 'Préavis (notification de retour au port)',
-    component: PNOMessage
+    fullName: 'Préavis (notification de retour au port)'
   },
   LAN: {
     code: 'LAN',
     displayCode: 'LAN',
     name: 'Débarquement',
-    fullName: 'Débarquement',
-    component: LANMessage
+    fullName: 'Débarquement'
   },
   RTP: {
     code: 'RTP',
     displayCode: 'RTP',
     name: 'Retour au port',
-    fullName: 'Retour au port',
-    component: RTPMessage
+    fullName: 'Retour au port'
   },
   EOF: {
     code: 'EOF',
     displayCode: 'EOF',
     name: 'Fin de la marée',
-    fullName: 'Fin de pêche',
-    component: EOFMessage
+    fullName: 'Fin de pêche'
   },
   COE: {
     code: 'COE',
     displayCode: 'COE',
     fullName: 'Entrée dans une zone d\'effort',
-    name: 'Entrée dans une zone d\'effort',
-    component: COEMessage
+    name: 'Entrée dans une zone d\'effort'
   },
   NOT_COE: {
     code: 'NOT_COE',
     displayCode: 'COE',
     fullName: 'Notification d\'entrée dans une zone d\'effort',
-    name: 'Notification d\'entrée dans une zone d\'effort',
-    component: COEMessage
+    name: 'Notification d\'entrée dans une zone d\'effort'
   },
   COX: {
     code: 'COX',
     displayCode: 'COX',
     name: 'Sortie d\'une zone d\'effort',
-    fullName: 'Sortie d\'une zone d\'effort',
-    component: COXMessage
+    fullName: 'Sortie d\'une zone d\'effort'
   },
   NOT_COX: {
     code: 'NOT_COX',
     displayCode: 'COX',
     fullName: 'Notification de sortie d\'une zone d\'effort',
-    name: 'Notification de sortie d\'une zone d\'effort',
-    component: COXMessage
+    name: 'Notification de sortie d\'une zone d\'effort'
   },
   JFO: {
     code: 'JFO',
     displayCode: 'JFO',
     fullName: 'Opération de pêche conjointe',
-    name: 'Opération de pêche conjointe',
-    component: NotImplementedMessage
+    name: 'Opération de pêche conjointe'
   },
   CRO: {
     code: 'CRO',
     displayCode: 'CRO',
     name: 'Traversée d\'une zone d\'effort',
-    fullName: 'Traversée d\'une zone d\'effort',
-    component: CROMessage
+    fullName: 'Traversée d\'une zone d\'effort'
   },
   DIS: {
     code: 'DIS',
     displayCode: 'DIS',
     name: 'Rejets',
-    fullName: 'Déclaration de rejets',
-    component: DISMessage
+    fullName: 'Déclaration de rejets'
   },
   DIM: {
     code: 'DIM',
@@ -116,50 +90,43 @@ export const LogbookMessageType = {
     code: 'RLC',
     displayCode: 'RLC',
     fullName: 'Déclaration de transfert',
-    name: 'Transfert',
-    component: NotImplementedMessage
+    name: 'Transfert'
   },
   TRA: {
     code: 'TRA',
     displayCode: 'TRA',
     fullName: 'Déclaration de transbordement',
-    name: 'Transbordement',
-    component: NotImplementedMessage
+    name: 'Transbordement'
   },
   NOT_TRA: {
     code: 'NOT_TRA',
     displayCode: 'TRA',
     fullName: 'Notification de transbordement',
-    name: 'Notification de transbordement',
-    component: NotImplementedMessage
+    name: 'Notification de transbordement'
   },
   GEAR_SHOT: {
     code: 'GEAR_SHOT',
     displayCode: 'SHT',
     fullName: 'Mise à l\'eau d\'engin',
-    name: 'Mise à l\'eau d\'engin',
-    component: NotImplementedMessage
+    name: 'Mise à l\'eau d\'engin'
   },
   GEAR_RETRIEVAL: {
     code: 'GEAR_RETRIEVAL',
     displayCode: 'RTV',
     fullName: 'Sortie de l\'eau d`engin',
-    name: 'Sortie de l\'eau d`engin',
-    component: NotImplementedMessage
+    name: 'Sortie de l\'eau d`engin'
   },
   START_ACTIVITY: {
     code: 'START_ACTIVITY',
     displayCode: 'STA',
     fullName: 'Début d\'activité de pêche',
-    name: 'Début d\'activité de pêche',
-    component: NotImplementedMessage
+    name: 'Début d\'activité de pêche'
   },
   START_FISHING: {
     code: 'START_FISHING',
     displayCode: 'STF',
     fullName: 'Début de pêche',
-    name: 'Début de pêche',
-    component: NotImplementedMessage
+    name: 'Début de pêche'
   },
   TRZ: {
     code: 'TRZ',
@@ -348,35 +315,56 @@ export const getTotalFARWeightFromMessages = logbookMessages => {
       return accumulator + sumOfCatches
     }, 0).toFixed(1))
 }
+
 export const getTotalDEPWeightFromMessage = logbookMessage => {
-  return parseFloat(logbookMessage.message.speciesOnboard.reduce((subAccumulator, speciesCatch) => {
-    return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
-  }, 0).toFixed(1))
-}
-export const getTotalLANWeightFromMessage = logbookMessage => {
-  return parseFloat(logbookMessage.message.catchLanded.reduce((subAccumulator, speciesCatch) => {
-    return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
-  }, 0).toFixed(1))
-}
-export const getTotalPNOWeightFromMessage = logbookMessage => {
-  return parseFloat(logbookMessage.message.catchOnboard.reduce((subAccumulator, speciesCatch) => {
-    return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
-  }, 0).toFixed(1))
+  return getSumOfCatchWeights(logbookMessage.message.speciesOnboard, false)
 }
 
-function setSpeciesToWeightObject (speciesToWeightObject, speciesCatch, totalWeight) {
+export const getTotalLANWeightFromMessage = logbookMessage => {
+  return getSumOfCatchWeights(logbookMessage.message.catchLanded, true)
+}
+
+export const getTotalPNOWeightFromMessage = logbookMessage => {
+  return getSumOfCatchWeights(logbookMessage.message.catchOnboard, false)
+}
+
+function getSumOfCatchWeights (arrayOfCatches, hasConversionFactorApplied = false) {
+  const sum = arrayOfCatches.reduce((subAccumulator, speciesCatch) => {
+    const conversionFactor = hasConversionFactorApplied && speciesCatch.conversionFactor
+      ? speciesCatch.conversionFactor
+      : 1
+
+    return subAccumulator + ((speciesCatch.weight * conversionFactor) || 0)
+  }, 0)
+
+  return parseFloat(sum.toFixed(1))
+}
+
+function setSpeciesToWeightObject (speciesToWeightObject, speciesCatch, totalWeight, hasConversionFactorApplied) {
+  const conversionFactor = hasConversionFactorApplied && speciesCatch.conversionFactor ? speciesCatch.conversionFactor : 1
+
   if (speciesToWeightObject[speciesCatch.species]) {
     speciesToWeightObject[speciesCatch.species].weight = parseFloat((
       speciesToWeightObject[speciesCatch.species].weight +
-      (speciesCatch.weight ? parseFloat(speciesCatch.weight) : 0)).toFixed(1))
+      multiplyByConversionFactorIfNeeded(speciesCatch.weight, conversionFactor)).toFixed(1))
   } else {
     speciesToWeightObject[speciesCatch.species] = {
       species: speciesCatch.species,
-      weight: speciesCatch.weight ? parseFloat(speciesCatch.weight.toFixed(1)) : 0,
+      weight:  multiplyByConversionFactorIfNeeded(speciesCatch.weight, conversionFactor),
       speciesName: speciesCatch.speciesName,
       totalWeight: totalWeight
     }
   }
+}
+
+function multiplyByConversionFactorIfNeeded (weight, conversionFactor = 1) {
+  if (!weight) {
+    return 0
+  }
+
+  const weightWithConversionFactor = weight * conversionFactor
+
+  return parseFloat(weightWithConversionFactor.toFixed(1))
 }
 
 function getSpeciesObject (speciesCatch) {
@@ -477,8 +465,7 @@ export const getSpeciesToWeightLANObject = lanMessage => {
   const speciesToWeightLANObject = {}
 
   lanMessage.message.catchLanded.forEach(speciesCatch => {
-    // TODO Regarder le calcul de la somme du LAN pour chaue espèce, ça semble trop élevé en env de DEV
-    setSpeciesToWeightObject(speciesToWeightLANObject, speciesCatch, null)
+    setSpeciesToWeightObject(speciesToWeightLANObject, speciesCatch, null, true)
   })
 
   return speciesToWeightLANObject

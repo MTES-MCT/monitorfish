@@ -123,6 +123,9 @@ const LANMessageResume = props => {
                 </Field>
               </TableBody>
             </Fields>
+            <WeightInfo>
+              Tous les poids sont vifs.
+            </WeightInfo>
             {props.lanMessage.catchLanded?.length ? (
               props.lanMessage.catchLanded.reduce(filterSameSpecies(), []).map((speciesCatch, index) => {
                 return (
@@ -205,6 +208,11 @@ const LANMessageResume = props => {
     </Wrapper>
   )
 }
+
+const WeightInfo = styled.span`
+  margin: 10px 0 0 5px;
+  width: 100%;
+`
 
 const OverWeightToleranceText = styled.span`
   vertical-align: text-top;
@@ -344,7 +352,7 @@ const LogbookMessageContent = styled.div`
   overflow: hidden;
   padding: 0 0 0 20px;
   border-bottom: 1px solid ${p => p.theme.color.lightGray};
-  height: ${props => (props.isOpen ? props.chartHeight + 105 : 0)}px;
+  height: ${props => (props.isOpen ? props.chartHeight + 105 + 30 : 0)}px;
   transition: 0.2s all;
 `
 

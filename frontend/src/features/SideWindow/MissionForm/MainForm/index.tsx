@@ -23,7 +23,7 @@ import {
 } from './constants'
 import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'
 import { FormikMultiZonePicker } from './FormikMultiZonePicker'
-import { MissionNature, MissionType } from '../../../../domain/types/mission'
+import { Mission } from '../../../../domain/types/mission'
 import { useNewWindow } from '../../../../ui/NewWindow'
 import { FormBody } from '../FormBody'
 import { FormHead } from '../FormHead'
@@ -34,7 +34,7 @@ import type { Promisable } from 'type-fest'
 export type MainFormProps = {
   initialValues: MissionFormValues
   onChange: (nextPartialMission: MissionFormValues) => Promisable<void>
-  onTypeChange: (nextType: MissionType) => Promisable<void>
+  onTypeChange: (nextType: Mission.MissionType) => Promisable<void>
 }
 export function MainForm({ initialValues, onChange, onTypeChange }: MainFormProps) {
   const currentValuesRef = useRef<MissionFormValues>(initialValues)
@@ -48,7 +48,7 @@ export function MainForm({ initialValues, onChange, onTypeChange }: MainFormProp
       currentValuesRef.current = nextValues
 
       if (currentValuesRef.current.missionType !== previousValues.missionType) {
-        if (currentValuesRef.current.missionType !== MissionType.AIR) {
+        if (currentValuesRef.current.missionType !== Mission.MissionType.AIR) {
           const nextValueWithoutExtraProps = pipe(dissoc('flightGoal'), dissoc('flightGoal'))(nextValues)
 
           currentValuesRef.current = nextValueWithoutExtraProps
@@ -63,7 +63,7 @@ export function MainForm({ initialValues, onChange, onTypeChange }: MainFormProp
       ) {
         // eslint-disable-next-line no-underscore-dangle, @typescript-eslint/naming-convention
         const _hasMissionUnderJdpType =
-          (nextValues.missionNature !== undefined && nextValues.missionNature.includes(MissionNature.FISH)) ||
+          (nextValues.missionNature !== undefined && nextValues.missionNature.includes(Mission.MissionNature.FISH)) ||
           Boolean(nextValues.hasOrder)
 
         if (!_hasMissionUnderJdpType) {
@@ -129,7 +129,7 @@ export function MainForm({ initialValues, onChange, onTypeChange }: MainFormProp
           />
 
           {/* TODO What to do with this prop? */}
-          {currentValuesRef.current.missionType === MissionType.AIR && (
+          {currentValuesRef.current.missionType === Mission.MissionType.AIR && (
             <InlineFieldGroupWrapper>
               <FormikMultiSelect
                 fixedWidth={218}

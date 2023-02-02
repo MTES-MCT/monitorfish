@@ -25,7 +25,7 @@ export function MissionList() {
   const missionApiQuery = useGetMissionsQuery(undefined)
   const dispatch = useMainAppDispatch()
 
-  const { renderTableHead, tableData } = useTable<Mission>(
+  const { renderTableHead, tableData } = useTable<Mission.Mission>(
     missionApiQuery.data,
     MISSION_LIST_TABLE_OPTIONS,
     searchInputRef.current?.value

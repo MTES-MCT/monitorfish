@@ -15,7 +15,7 @@ import type { Mission } from '../../../domain/types/mission'
 import type { Promisable } from 'type-fest'
 
 export type FilterBarProps = {
-  missions: Mission[]
+  missions: Mission.Mission[]
   onChange: (filters: Array<MissionFilter>) => Promisable<void>
 }
 export function FilterBar({ missions, onChange }: FilterBarProps) {
@@ -27,7 +27,7 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
   const unitsAsOptions = useMemo(
     () =>
       pipe(
-        map<Mission, string[]>(({ controlUnits }) => (controlUnits || []).map(({ name }) => name)),
+        map<Mission.Mission, string[]>(({ controlUnits }) => (controlUnits || []).map(({ name }) => name)),
         flatten,
         uniq,
         getOptionsFromStrings

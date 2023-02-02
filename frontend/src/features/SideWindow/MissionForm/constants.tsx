@@ -1,4 +1,4 @@
-import { MissionType } from '../../../domain/types/mission'
+import { Mission } from '../../../domain/types/mission'
 
 import type {
   MissionFormValues,
@@ -19,12 +19,12 @@ export const INITIAL_MISSION_CONTROL_UNIT: MissionFormValues['controlUnits'][0] 
 
 export const NEW_AIR_CONTROL_ACTION = (): PartialAirControl => ({
   startDate: new Date(),
-  type: MissionType.AIR
+  type: Mission.MissionType.AIR
 })
 
 export const NEW_GROUND_CONTROL_ACTION = (): PartialGroundControl => ({
   startDate: new Date(),
-  type: MissionType.LAND
+  type: Mission.MissionType.LAND
 })
 
 export const NEW_SEA_CONTROL_ACTION = (): PartialSeaControl => ({
@@ -36,7 +36,7 @@ export const NEW_SEA_CONTROL_ACTION = (): PartialSeaControl => ({
   startDate: new Date(),
   tideFishingZones: [],
   tideFleetSegments: [],
-  type: MissionType.SEA,
+  type: Mission.MissionType.SEA,
   vessel: {
     externalReferenceNumber: undefined,
     flagState: undefined,
@@ -53,9 +53,9 @@ export const NEW_FREE_NOTE_ACTION = (): PartialFreeNote => ({
   type: undefined
 })
 
-export const NEW_ACTION_BY_TYPE: Record<MissionType | 'default', () => PartialAction> = {
-  [MissionType.AIR]: NEW_AIR_CONTROL_ACTION,
-  [MissionType.LAND]: NEW_GROUND_CONTROL_ACTION,
-  [MissionType.SEA]: NEW_SEA_CONTROL_ACTION,
+export const NEW_ACTION_BY_TYPE: Record<Mission.MissionType | 'default', () => PartialAction> = {
+  [Mission.MissionType.AIR]: NEW_AIR_CONTROL_ACTION,
+  [Mission.MissionType.LAND]: NEW_GROUND_CONTROL_ACTION,
+  [Mission.MissionType.SEA]: NEW_SEA_CONTROL_ACTION,
   default: NEW_FREE_NOTE_ACTION
 }

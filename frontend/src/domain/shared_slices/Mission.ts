@@ -6,7 +6,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface MissionState {
   draftFormValues: MissionFormValues | undefined
-  editedMission: Mission | undefined
+  editedMission: Mission.Mission | undefined
 }
 const INITIAL_STATE: MissionState = {
   draftFormValues: undefined,
@@ -30,7 +30,7 @@ const missionSlice = createSlice({
     /**
      * Set the edited mission
      */
-    setEditedMission(state, action: PayloadAction<Mission>) {
+    setEditedMission(state, action: PayloadAction<Mission.Mission>) {
       state.editedMission = action.payload
     },
 

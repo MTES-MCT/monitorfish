@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { Item } from './Item'
-import { MissionType } from '../../../../domain/types/mission'
+import { Mission } from '../../../../domain/types/mission'
 import { NEW_ACTION_BY_TYPE } from '../constants'
 import { FormBody } from '../FormBody'
 import { FormHead } from '../FormHead'
@@ -17,7 +17,7 @@ export type ActionListProps = {
   onAddAction: (newAction: PartialAction) => Promisable<void>
   onDeleteAction: (index: number) => Promisable<void>
   onDeleteNewAction: () => Promisable<void>
-  selectedType: MissionType
+  selectedType: Mission.MissionType
 }
 export function ActionList({
   actions = [],
@@ -43,9 +43,9 @@ export function ActionList({
 
         <Dropdown Icon={Icon.Plus} title="Ajouter">
           <Dropdown.Item Icon={Icon.FleetSegment} onClick={() => addAction(selectedType)}>
-            {selectedType === MissionType.AIR && 'Ajouter un contrôle aérien'}
-            {selectedType === MissionType.LAND && 'Ajouter un contrôle à la débarque'}
-            {selectedType === MissionType.SEA && 'Ajouter un contrôle en mer'}
+            {selectedType === Mission.MissionType.AIR && 'Ajouter un contrôle aérien'}
+            {selectedType === Mission.MissionType.LAND && 'Ajouter un contrôle à la débarque'}
+            {selectedType === Mission.MissionType.SEA && 'Ajouter un contrôle en mer'}
           </Dropdown.Item>
           <Dropdown.Item Icon={Icon.Observation} onClick={() => addAction(undefined)}>
             Ajouter une note libre

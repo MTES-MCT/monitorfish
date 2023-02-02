@@ -70,14 +70,14 @@ class GetVesselControls(
                 it.gearInfractions.any {
                         gearInfraction ->
                     gearInfraction.gearSeized == true
-                } 
+                }
             }.size
         val numberOfSpeciesSeized = controlsWithCodeValues
             .filter {
                 it.speciesInfractions.any {
                         speciesInfraction ->
                     speciesInfraction.speciesSeized == true
-                } 
+                }
             }.size
 
         ControlsSummary(

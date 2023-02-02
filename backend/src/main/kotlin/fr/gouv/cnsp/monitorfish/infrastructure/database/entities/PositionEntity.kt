@@ -3,8 +3,8 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
-import java.time.ZonedDateTime
 import jakarta.persistence.*
+import java.time.ZonedDateTime
 
 @Entity
 @Table(name = "positions")

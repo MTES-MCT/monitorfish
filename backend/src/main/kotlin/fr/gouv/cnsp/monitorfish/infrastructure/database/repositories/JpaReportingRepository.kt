@@ -10,9 +10,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBReportingRepository
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Repository
 import java.time.ZonedDateTime
-import jakarta.transaction.Transactional
 
 @Repository
 class JpaReportingRepository(

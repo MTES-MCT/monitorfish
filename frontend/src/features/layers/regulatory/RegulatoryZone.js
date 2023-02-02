@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../../constants/constants'
 import { Layer } from '../../../domain/entities/layers/constants'
 
-import showRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
+import { showRegulatoryZoneMetadata } from '../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
 import { closeRegulatoryZoneMetadata } from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 import zoomInLayer from '../../../domain/use_cases/layer/zoomInLayer'
 import hideLayer from '../../../domain/use_cases/layer/hideLayer'
@@ -23,8 +23,9 @@ import {
   closeRegulatoryZoneMetadataPanel,
   removeRegulatoryTopicOpened
 } from '../../../domain/shared_slices/Regulatory'
-import { getAdministrativeAndRegulatoryLayersStyle } from '../../map/layers/styles/administrativeAndRegulatoryLayers.style'
+import { getAdministrativeLayerStyle } from '../../map/layers/styles/administrativeLayer.style'
 import { theme } from '../../../ui/theme'
+import { getRegulatoryLayerStyle } from '../../map/layers/styles/regulatoryLayer.style'
 
 export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
   if (regulatoryZoneMetadata && regulatoryZone &&
@@ -63,7 +64,7 @@ const RegulatoryZone = props => {
 
   const [metadataIsShown, setMetadataIsShown] = useState(false)
   const [isOver, setIsOver] = useState(false)
-  const vectorLayerStyle = getAdministrativeAndRegulatoryLayersStyle(Layer.REGULATORY.code)(undefined, regulatoryZone)
+  const vectorLayerStyle = getRegulatoryLayerStyle(undefined, regulatoryZone)
 
   const callShowRegulatoryZoneMetadata = zone => {
     if (!metadataIsShown) {

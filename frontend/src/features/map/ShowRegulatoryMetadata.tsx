@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 import { Layer } from '../../domain/entities/layers/constants'
-import showRegulatoryZoneMetadata from '../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
+import { showRegulatoryZoneMetadata } from '../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 
 export type ShowRegulatoryMetadataProps = {
@@ -24,7 +24,7 @@ export function ShowRegulatoryMetadata({ mapClickEvent }: ShowRegulatoryMetadata
           topic: feature.getProperties().topic,
           zone: feature.getProperties().zone
         }
-        dispatch(showRegulatoryZoneMetadata(zone))
+        dispatch(showRegulatoryZoneMetadata(zone, false))
       }
     }
 

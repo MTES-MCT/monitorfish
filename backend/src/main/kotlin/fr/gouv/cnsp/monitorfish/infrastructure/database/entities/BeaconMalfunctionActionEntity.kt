@@ -4,9 +4,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfun
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionActionPropertyName
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
+import jakarta.persistence.*
 import java.time.Instant
 import java.time.ZoneOffset
-import jakarta.persistence.*
 
 @Entity
 @Table(name = "beacon_malfunction_actions")

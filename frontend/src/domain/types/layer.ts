@@ -1,5 +1,12 @@
+import type { RegulatoryZone } from './regulation'
 import type VectorLayer from 'ol/layer/Vector'
 import type VectorSource from 'ol/source/Vector'
+
+export type TopicContainingMultipleZones = {
+  namespace: string
+  regulatoryZones: RegulatoryZone[]
+  type: string
+}
 
 export type AdministrativeOrRegulatoryLayerIdentity = {
   id: string

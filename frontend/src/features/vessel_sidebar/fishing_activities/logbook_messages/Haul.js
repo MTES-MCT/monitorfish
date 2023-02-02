@@ -4,7 +4,7 @@ import { COLORS } from '../../../../constants/constants'
 import { getCoordinates } from '../../../../coordinates'
 import { getDateTime } from '../../../../utils'
 import { WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
-import LogbookMessageSpecies from './LogbookMessageSpecies'
+import { LogbookMessageSpecy,  WeightType } from './LogbookMessageSpecy'
 import { buildCatchArray } from '../../../../domain/entities/logbook'
 import { useSelector } from 'react-redux'
 
@@ -81,12 +81,11 @@ const Haul = ({ haul, haulNumber, hasManyHauls }) => {
           {
             catches
               .map((speciesCatch, index) => {
-                return <LogbookMessageSpecies
-                  index={index + 1}
-                  hasManyProperties={speciesCatch.properties.length > 1}
+                return <LogbookMessageSpecy
                   isLast={catches.length === index + 1}
-                  species={speciesCatch}
+                  specyCatches={speciesCatch}
                   key={'FAR' + speciesCatch.species}
+                  weightType={WeightType.LIVE}
                 />
               })
           }

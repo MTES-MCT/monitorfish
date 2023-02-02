@@ -12,10 +12,8 @@ export const getRegulatoryLayersToAdd = (olLayers, showedLayers) => (dispatch, g
     .filter(layer => layersOfTypeRegulatoryLayer(layer))
 
   return layersToInsert
+    .filter(layerToInsert => layerToInsert)
     .map(layerToInsert => {
-      if (!layerToInsert) {
-        return undefined
-      }
       const getVectorLayerClosure = getVectorOLLayer(dispatch, getState)
 
       return getVectorLayerClosure(layerToInsert)

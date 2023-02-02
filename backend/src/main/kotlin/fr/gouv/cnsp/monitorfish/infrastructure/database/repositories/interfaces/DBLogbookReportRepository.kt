@@ -10,7 +10,8 @@ import org.springframework.data.repository.CrudRepository
 import java.time.Instant
 
 @DynamicUpdate
-interface DBLogbookReportRepository : CrudRepository<LogbookReportEntity, Long>, JpaSpecificationExecutor<LogbookReportEntity> {
+interface DBLogbookReportRepository :
+    CrudRepository<LogbookReportEntity, Long>, JpaSpecificationExecutor<LogbookReportEntity> {
     @Query(
         """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDate(e.tripNumber, MIN(e.operationDateTime))
         FROM LogbookReportEntity e
@@ -21,7 +22,11 @@ interface DBLogbookReportRepository : CrudRepository<LogbookReportEntity, Long>,
         GROUP BY e.tripNumber
         ORDER BY 2 DESC"""
     )
-    fun findPreviousTripNumber(internalReferenceNumber: String, tripNumber: String, pageable: Pageable): List<VoyageTripNumberAndDate>
+    fun findPreviousTripNumber(
+        internalReferenceNumber: String,
+        tripNumber: String,
+        pageable: Pageable
+    ): List<VoyageTripNumberAndDate>
 
     @Query(
         """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDate(e.tripNumber, MAX(e.operationDateTime))
@@ -33,7 +38,11 @@ interface DBLogbookReportRepository : CrudRepository<LogbookReportEntity, Long>,
         GROUP BY e.tripNumber
         ORDER BY 2 ASC"""
     )
-    fun findNextTripNumber(internalReferenceNumber: String, tripNumber: String, pageable: Pageable): List<VoyageTripNumberAndDate>
+    fun findNextTripNumber(
+        internalReferenceNumber: String,
+        tripNumber: String,
+        pageable: Pageable
+    ): List<VoyageTripNumberAndDate>
 
     @Query(
         """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageDates(MIN(e.operationDateTime), MAX(e.operationDateTime))
@@ -41,7 +50,10 @@ interface DBLogbookReportRepository : CrudRepository<LogbookReportEntity, Long>,
         WHERE e.internalReferenceNumber = ?1
         AND e.tripNumber = ?2"""
     )
-    fun findFirstAndLastOperationsDatesOfTrip(internalReferenceNumber: String, tripNumber: String): VoyageDates
+    fun findFirstAndLastOperationsDatesOfTrip(
+        internalReferenceNumber: String,
+        tripNumber: String
+    ): VoyageDates
 
     @Query(
         """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDates(e.tripNumber, MIN(e.operationDateTime), MAX(e.operationDateTime))
@@ -53,7 +65,11 @@ interface DBLogbookReportRepository : CrudRepository<LogbookReportEntity, Long>,
         GROUP BY e.tripNumber
         ORDER BY 2 DESC """
     )
-    fun findTripsBeforeDatetime(internalReferenceNumber: String, beforeDateTime: Instant, pageable: Pageable): List<VoyageTripNumberAndDates>
+    fun findTripsBeforeDatetime(
+        internalReferenceNumber: String,
+        beforeDateTime: Instant,
+        pageable: Pageable
+    ): List<VoyageTripNumberAndDates>
 
     @Query(
         """WITH dat_cor AS (
@@ -131,10 +147,12 @@ interface DBLogbookReportRepository : CrudRepository<LogbookReportEntity, Long>,
     fun findLastOperationDateTime(): Instant
 
     @Query(
-        """select * from logbook_reports where report_id in
-        (select distinct referenced_report_id from logbook_reports where operation_type = 'RET' and value->>'returnStatus' = '000')
-        and (log_type = 'LAN' or log_type = 'PNO')
-        and (:ruleType <> ANY(analyzed_by_rules) or analyzed_by_rules is null)""",
+        """select *
+            from logbook_reports
+            where report_id in
+                (select distinct referenced_report_id from logbook_reports where operation_type = 'RET' and value->>'returnStatus' = '000')
+                and (log_type = 'LAN' or log_type = 'PNO')
+                and (:ruleType <> ANY(analyzed_by_rules) or analyzed_by_rules is null)""",
         nativeQuery = true
     )
     fun findAllLANAndPNONotProcessedByRule(ruleType: String): List<LogbookReportEntity>

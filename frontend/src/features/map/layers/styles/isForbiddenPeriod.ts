@@ -1,3 +1,5 @@
+import { isObject } from 'lodash'
+
 import { getStartAndEndDatesSetWithCurrentYear } from './utils'
 import { WEEKDAYS } from '../../../../domain/entities/regulation'
 
@@ -8,22 +10,33 @@ import type Feature from 'ol/Feature'
 export function isForbiddenPeriod(feature: Feature | undefined, currentDate: Dayjs) {
   const currentWeekDayDigit = currentDate.day()
 
-  const fishingPeriodString = feature?.get('fishing_period')
-  if (!fishingPeriodString) {
+  const fishingPeriodValue = feature?.get('fishing_period') || feature?.get('fishingPeriod')
+  if (!fishingPeriodValue) {
     return false
   }
 
-  const fishingPeriod = JSON.parse(fishingPeriodString) as FishingPeriod
+  const fishingPeriod = isObject(fishingPeriodValue)
+    ? (fishingPeriodValue as FishingPeriod)
+    : (JSON.parse(fishingPeriodValue) as FishingPeriod)
+
   switch (fishingPeriod.authorized) {
     /**
-     * It is forbidden when
-     *  - isAlwaysAuthorized is false AND
+     * If the dates, weekdays and dateRanges are not set, the period won't be forbidden by default.
+     *
+     * If they are set, the period will be forbidden when
      *  - hasAllowedRange is false AND
      *  - hasAllowedDate is false AND
      *  - hasAllowedWeekDay is false
      */
     case true: {
-      const isAlwaysAuthorized = fishingPeriod.always
+      const isAlwaysAuthorized =
+        removeNullValues(fishingPeriod.dates).length === 0 &&
+        removeNullValues(fishingPeriod.weekdays).length === 0 &&
+        removeNullValues(fishingPeriod.dateRanges).length === 0
+
+      if (isAlwaysAuthorized) {
+        return false
+      }
 
       const hasAllowedRange = !!fishingPeriod.dateRanges?.find(dateRange => {
         if (fishingPeriod.annualRecurrence) {
@@ -42,7 +55,7 @@ export function isForbiddenPeriod(feature: Feature | undefined, currentDate: Day
         day => Object.keys(WEEKDAYS).indexOf(day) === currentWeekDayDigit
       )
 
-      return !isAlwaysAuthorized && !hasAllowedRange && !hasAllowedDate && !hasAllowedWeekDay
+      return !hasAllowedRange && !hasAllowedDate && !hasAllowedWeekDay
     }
     /**
      * It is forbidden when
@@ -100,4 +113,12 @@ function isWithinDateRangeWithAnnualRecurrence(dateRange: DateInterval, currentD
             ________endDate]                          [startDate__________
    */
   return currentDate.isAfter(startDateWithOffsetApplied) || currentDate.isBefore(endDateWithOffsetApplied)
+}
+
+function removeNullValues(array: any[]) {
+  if (!array || !array.length) {
+    return []
+  }
+
+  return array.filter(item => item)
 }

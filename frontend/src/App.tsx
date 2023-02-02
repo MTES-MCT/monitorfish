@@ -8,7 +8,7 @@ import { CustomProvider as RsuiteCustomProvider } from 'rsuite'
 import rsuiteFrFr from 'rsuite/locales/fr_FR'
 import styled from 'styled-components'
 
-import APIWorker from './api/APIWorker'
+import { APIWorker } from './api/APIWorker'
 import { BackofficeMode } from './api/BackofficeMode'
 import NamespaceContext from './domain/context/NamespaceContext'
 import { ErrorToastNotification } from './features/commonComponents/ErrorToastNotification'

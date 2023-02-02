@@ -17,7 +17,7 @@ export type GlobalState = {
   error: any
   // TODO Rename this prop.
   healthcheckTextWarning: string | undefined
-  isAdmin: boolean
+  isAdmin: boolean | undefined
   isBackoffice: boolean
   isUpdatingVessels: boolean
   lastSearchedVessels: any[]
@@ -35,7 +35,7 @@ const INITIAL_STATE: GlobalState = {
   blockVesselsUpdate: false,
   error: null,
   healthcheckTextWarning: undefined,
-  isAdmin: false,
+  isAdmin: undefined,
   isBackoffice: false,
   isUpdatingVessels: false,
   lastSearchedVessels: getLocalStorageState([], lastSearchedVesselsLocalStorageKey),

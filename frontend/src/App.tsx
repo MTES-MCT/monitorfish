@@ -37,6 +37,7 @@ import { BackofficePage } from './pages/BackofficePage'
 import { TestPage } from './pages/TestPage'
 import { UnsupportedBrowserPage } from './pages/UnsupportedBrowserPage'
 import { backofficeStore, backofficeStorePersistor, mainStore } from './store'
+import { FrontendErrorBoundary } from './ui/FrontendErrorBoundary'
 import { isBrowserSupported } from './utils/isBrowserSupported'
 
 import type { MutableRefObject } from 'react'
@@ -52,40 +53,42 @@ export function App() {
     <ThemeProvider theme={THEME}>
       <OnlyFontGlobalStyle />
 
-      <RsuiteCustomProvider locale={rsuiteFrFr}>
-        <Router>
-          <Switch>
-            <Route path="/backoffice">
-              <Provider store={backofficeStore}>
-                {/* eslint-disable-next-line no-null/no-null */}
-                <PersistGate loading={null} persistor={backofficeStorePersistor}>
-                  <NamespaceContext.Provider value="backoffice">
-                    <BackofficePage />
+      <FrontendErrorBoundary>
+        <RsuiteCustomProvider locale={rsuiteFrFr}>
+          <Router>
+            <Switch>
+              <Route path="/backoffice">
+                <Provider store={backofficeStore}>
+                  {/* eslint-disable-next-line no-null/no-null */}
+                  <PersistGate loading={null} persistor={backofficeStorePersistor}>
+                    <NamespaceContext.Provider value="backoffice">
+                      <BackofficePage />
+                    </NamespaceContext.Provider>
+                  </PersistGate>
+                </Provider>
+              </Route>
+
+              <Route exact path="/ext">
+                <Provider store={mainStore}>
+                  <NamespaceContext.Provider value="homepage">
+                    <TritonFish />
                   </NamespaceContext.Provider>
-                </PersistGate>
-              </Provider>
-            </Route>
+                </Provider>
+              </Route>
 
-            <Route exact path="/ext">
-              <Provider store={mainStore}>
-                <NamespaceContext.Provider value="homepage">
-                  <TritonFish />
-                </NamespaceContext.Provider>
-              </Provider>
-            </Route>
+              <Route component={TestPage} exact path="/test" />
 
-            <Route component={TestPage} exact path="/test" />
-
-            <Route path="/">
-              <Provider store={mainStore}>
-                <NamespaceContext.Provider value="homepage">
-                  <HomePage />
-                </NamespaceContext.Provider>
-              </Provider>
-            </Route>
-          </Switch>
-        </Router>
-      </RsuiteCustomProvider>
+              <Route path="/">
+                <Provider store={mainStore}>
+                  <NamespaceContext.Provider value="homepage">
+                    <HomePage />
+                  </NamespaceContext.Provider>
+                </Provider>
+              </Route>
+            </Switch>
+          </Router>
+        </RsuiteCustomProvider>
+      </FrontendErrorBoundary>
     </ThemeProvider>
   )
 }

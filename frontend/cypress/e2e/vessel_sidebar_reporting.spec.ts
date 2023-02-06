@@ -101,6 +101,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="new-reporting-description"]').type(
       "Ce navire ne devrait pas être en mer, il n'a plus de points sur son permis"
     )
+    cy.get('*[data-cy="new-reporting-author-trigram"]').type('LTH')
     cy.get('*[data-cy="new-reporting-select-natinf"]').click()
     cy.get('[data-key="2608"] > .rs-picker-select-menu-item').click()
     cy.get('*[data-cy="new-reporting-create-button"]').scrollIntoView().click()
@@ -145,6 +146,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="edit-reporting-card-8"]').click({ timeout: 10000 })
     cy.get('*[data-cy="new-reporting-select-infraction-reporting-type"]').click({ timeout: 10000 })
     cy.get('*[data-cy="new-reporting-select-natinf"]').click()
+    cy.get('*[data-cy="new-reporting-author-trigram"]').type('LTH')
     cy.get('[data-key="7059"] > .rs-picker-select-menu-item').click({ force: true })
     cy.get('*[data-cy="new-reporting-create-button"]').scrollIntoView().click()
     cy.wait('@updateReporting')

@@ -340,7 +340,7 @@ export function ReportingForm({
         <Label>Saisi par</Label>
         <StyledInput
           $hasWhiteBackground={hasWhiteBackground}
-          data-cy=""
+          data-cy="new-reporting-author-trigram"
           onChange={value => setAuthorTrigram(value)}
           placeholder="Ex: LTH"
           type="text"

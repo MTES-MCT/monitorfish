@@ -4,7 +4,7 @@ import { VesselBeaconMalfunctions } from './beacon_malfunctions/VesselBeaconMalf
 import { Controls } from './Controls'
 import { VesselFishingActivities } from './fishing_activities/VesselFishingActivities'
 import VesselIdentity from './identity/VesselIdentity'
-import VesselReportings from './reporting/VesselReportings'
+import { Reportings } from './Reportings'
 import { VesselSummary } from './Summary'
 import { AlertWarning } from './warnings/AlertWarning'
 import BeaconMalfunctionWarning from './warnings/BeaconMalfunctionWarning'
@@ -25,7 +25,7 @@ export function Body() {
       {vesselSidebarTab === VesselSidebarTab.IDENTITY && <VesselIdentity />}
       {vesselSidebarTab === VesselSidebarTab.VOYAGES && <VesselFishingActivities />}
       {vesselSidebarTab === VesselSidebarTab.CONTROLS && <Controls />}
-      {vesselSidebarTab === VesselSidebarTab.REPORTING && <VesselReportings />}
+      {vesselSidebarTab === VesselSidebarTab.REPORTING && <Reportings />}
       {vesselSidebarTab === VesselSidebarTab.ERSVMS && <VesselBeaconMalfunctions />}
     </Wrapper>
   )

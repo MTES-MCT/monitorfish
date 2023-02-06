@@ -59,7 +59,7 @@ export const ReportingOriginActor = {
 
 // TODO This should be named differently to avoid confusion with `ReportingType.INFRACTION_SUSPICION` type.
 export const infractionSuspicionReportingTypes = Object.values(ReportingTypeCharacteristics)
-  .filter(type => type.isInfractionSuspicion === true)
+  .filter(type => type.isInfractionSuspicion)
   .map(type => type.code)
 
 // TODO This should be named differently to avoid confusion with `ReportingType.INFRACTION_SUSPICION` type.

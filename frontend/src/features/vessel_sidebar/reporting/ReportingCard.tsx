@@ -58,8 +58,11 @@ export function ReportingCard({
           )}
         </Date>
         {reporting.type !== ReportingType.ALERT && <Description>{reporting.value.description}</Description>}
-        {reporting.type !== ReportingType.ALERT && reporting.value.authorContact && (
-          <Author>Émetteur: {reporting.value.authorContact}</Author>
+        {reporting.type !== ReportingType.ALERT && (reporting.value.authorContact || reporting.value.authorTrigram) && (
+          <Author>
+            Émetteur: {reporting.value.authorContact || reporting.value.authorTrigram}
+            {reporting.value.authorContact && reporting.value.authorTrigram && `(par ${reporting.value.authorTrigram})`}
+          </Author>
         )}
         {reporting.type !== ReportingType.OBSERVATION && reporting.value.natinfCode && (
           <Natinf

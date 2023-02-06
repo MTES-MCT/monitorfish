@@ -41,9 +41,7 @@ export function APIWorker() {
 
   useEffect(() => {
     if (isAdmin === undefined) {
-      return () => {
-        clearInterval(interval)
-      }
+      return () => {}
     }
 
     dispatch(setIsUpdatingVessels())

@@ -47,7 +47,6 @@ export function getReportingValueErrors(reportingValue: ReportingUpdate) {
       break
     }
     default:
-      throw Error('Should not happen')
   }
 
   return nextErrorsFields

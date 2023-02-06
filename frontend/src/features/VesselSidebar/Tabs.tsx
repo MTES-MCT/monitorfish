@@ -42,20 +42,20 @@ export function Tabs() {
       >
         <FisheriesIcon /> <br /> Pêche
       </Tab>
-      {isAdmin ? (
+      {isAdmin && (
         <Tab
           data-cy="vessel-menu-reporting"
           isActive={vesselSidebarTab === VesselSidebarTab.REPORTING}
           onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.REPORTING))}
         >
           <ReportingIcon /> <br /> Signalements
-          {selectedVessel?.reportings?.length && (
+          {!!selectedVessel?.reportings?.length && (
             <ReportingNumber hasInfractionSuspicion={selectedVessel?.hasInfractionSuspicion}>
               {selectedVessel?.reportings?.length}
             </ReportingNumber>
           )}
         </Tab>
-      ) : null}
+      )}
       <Tab
         data-cy="vessel-menu-controls"
         isActive={vesselSidebarTab === VesselSidebarTab.CONTROLS}

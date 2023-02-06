@@ -9,7 +9,7 @@ import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes_gris.svg'
-import { ReportingForm } from '../../VesselSidebar/Reportings/current/ReportingForm'
+import { ReportingForm } from '../../VesselSidebar/Reportings/Current/ReportingForm'
 
 export function EditReporting() {
   const dispatch = useMainAppDispatch()

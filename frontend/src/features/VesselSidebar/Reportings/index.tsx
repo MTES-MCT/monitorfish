@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
-import ArchivedReportings from './archived/ArchivedReportings'
-import { CurrentReporting } from './current/CurrentReporting'
+import { Archived } from './Archived'
+import { Current } from './Current'
 import { COLORS } from '../../../constants/constants'
 import { vesselsAreEquals } from '../../../domain/entities/vessel/vessel'
 import getVesselReportings from '../../../domain/use_cases/vessel/getVesselReportings'
@@ -56,8 +56,8 @@ export function Reportings() {
               Historique des signalements
             </CurrentOrHistoryButton>
           </Menu>
-          {reportingTab === ReportingTab.CURRENT_REPORTING && <CurrentReporting />}
-          {reportingTab === ReportingTab.REPORTING_HISTORY && <ArchivedReportings />}
+          {reportingTab === ReportingTab.CURRENT_REPORTING && <Current />}
+          {reportingTab === ReportingTab.REPORTING_HISTORY && <Archived />}
         </Body>
       ) : (
         <FingerprintSpinner className="radar" color={COLORS.charcoal} size={100} />

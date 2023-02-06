@@ -406,7 +406,7 @@ const DescriptionTextarea = styled(Input)<{
   border: unset;
   margin: 5px 0px 0px 0px;
   max-height: 150px;
-  width: 100%;
+  width: 390px;
   background: ${p => (p.hasWhiteBackground ? COLORS.gainsboro : COLORS.white)};
 `
 

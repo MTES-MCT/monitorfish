@@ -16,7 +16,7 @@ export const operationalAlertTypes = Object.keys(COMMON_ALERT_TYPE_OPTION)
   .map(alertTypeName => COMMON_ALERT_TYPE_OPTION[alertTypeName])
   .filter(alertType => alertType.isOperationalAlert)
 
-export function CurrentReporting() {
+export function Current() {
   const dispatch = useMainAppDispatch()
   const { currentAndArchivedReportingsOfSelectedVessel, editedReporting } = useMainAppSelector(state => state.reporting)
   const [deletionModalIsOpenForId, setDeletionModalIsOpenForId] = useState<number | undefined>(undefined)

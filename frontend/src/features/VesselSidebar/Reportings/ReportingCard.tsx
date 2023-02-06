@@ -117,8 +117,7 @@ const getReportingActor = (reportingActor, unit) => {
 const Wrapper = styled.div<{
   isInfractionSuspicion?: boolean
 }>`
-  background: ${p => (p.isInfractionSuspicion ? '#E1000F1A' : COLORS.cultured)} 0% 0% no-repeat padding-box;
-  border: 1px solid ${p => (p.isInfractionSuspicion ? '#E1000F59' : COLORS.lightGray)};
+  background: ${p => (p.isInfractionSuspicion ? '#E1000F1A' : COLORS.gainsboro)} 0% 0% no-repeat padding-box;
   display: flex;
   margin-bottom: 16px;
 `
@@ -140,10 +139,12 @@ const Actions = styled.div<{
   isAlert: boolean
   isInfractionSuspicion?: boolean
 }>`
-  border-left: 1px solid ${p => (p.isInfractionSuspicion ? '#E1000F59' : COLORS.lightGray)};
+  border-left: 2px solid ${p => p.theme.color.white};
   padding-top: ${p => (p.isAlert ? 8 : 3)}px;
+  padding-left: 1px;
   text-align: center;
-  width: 30px;
+  width: 29px;
+  margin-left: auto;
 `
 
 const NumberOfAlerts = styled.span`

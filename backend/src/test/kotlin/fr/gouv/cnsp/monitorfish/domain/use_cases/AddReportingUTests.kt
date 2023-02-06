@@ -70,7 +70,7 @@ class AddReportingUTests {
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             creationDate = ZonedDateTime.now(),
             validationDate = ZonedDateTime.now(),
-            value = Observation(reportingActor = reportingActor, title = "A title"),
+            value = Observation(reportingActor = reportingActor, authorTrigram = "LTH", title = "A title"),
             isArchived = false,
             isDeleted = false
         )
@@ -82,8 +82,8 @@ class AddReportingUTests {
 
         // Then
         when (reportingActor) {
-            ReportingActor.OPS -> assertThat(throwable.message).contains("An author trigram must be set")
-            ReportingActor.SIP -> assertThat(throwable.message).contains("An author trigram must be set")
+            ReportingActor.OPS -> assertThat(throwable).isNull()
+            ReportingActor.SIP -> assertThat(throwable).isNull()
             ReportingActor.UNIT -> assertThat(throwable.message).contains("An unit must be set")
             ReportingActor.DML -> assertThat(throwable.message).contains("An author contact must be set")
             ReportingActor.DIRM -> assertThat(throwable.message).contains("An author contact must be set")

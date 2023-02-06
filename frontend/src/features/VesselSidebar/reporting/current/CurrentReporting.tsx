@@ -77,7 +77,7 @@ function sortByValidationDate(a, b) {
 const Wrapper = styled.div`
   background: ${COLORS.white};
   margin: 10px 5px 5px 5px;
-  padding: 15px 20px 10px 20px;
+  padding: 16px 16px 1px 16px;
   text-align: left;
   color: ${COLORS.slateGray};
 `

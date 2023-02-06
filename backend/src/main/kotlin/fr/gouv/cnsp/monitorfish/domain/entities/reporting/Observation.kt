@@ -5,7 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedInfractionSusp
 class Observation(
     override val reportingActor: ReportingActor,
     override val unit: String? = null,
-    override val authorTrigram: String? = null,
+    override val authorTrigram: String,
     override val authorContact: String? = null,
     override val title: String,
     override val description: String? = null,
@@ -15,6 +15,7 @@ class Observation(
     natinfCode = null,
     title = title,
     type = ReportingTypeMapping.OBSERVATION,
+    authorTrigram = authorTrigram,
     flagState = flagState
 ) {
     companion object {

@@ -8,7 +8,7 @@ class UpdateReportingDataInput(
     val reportingActor: ReportingActor,
     val reportingType: ReportingType,
     val unit: String? = null,
-    val authorTrigram: String? = null,
+    val authorTrigram: String,
     val authorContact: String? = null,
     val title: String,
     val description: String? = null,

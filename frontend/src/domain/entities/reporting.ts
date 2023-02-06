@@ -30,22 +30,14 @@ export const ReportingTypeCharacteristics: Record<ReportingType, ReportingTypeCh
   }
 }
 
+/**
+ * We keep this order as it define the form option inputs order
+ */
+/* eslint-disable sort-keys-fix/sort-keys-fix */
 export const ReportingOriginActor = {
-  DIRM: {
-    code: 'DIRM',
-    name: 'DIRM'
-  },
-  DML: {
-    code: 'DML',
-    name: 'DML'
-  },
   OPS: {
     code: 'OPS',
     name: 'OPS'
-  },
-  OTHER: {
-    code: 'OTHER',
-    name: 'Autre'
   },
   SIP: {
     code: 'SIP',
@@ -54,6 +46,18 @@ export const ReportingOriginActor = {
   UNIT: {
     code: 'UNIT',
     name: 'Unité'
+  },
+  DML: {
+    code: 'DML',
+    name: 'DML'
+  },
+  DIRM: {
+    code: 'DIRM',
+    name: 'DIRM'
+  },
+  OTHER: {
+    code: 'OTHER',
+    name: 'Autre'
   }
 }
 

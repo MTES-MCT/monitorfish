@@ -16,8 +16,8 @@ class GetInfractionSuspicionWithDMLAndSeaFront(
     private val logger: Logger = LoggerFactory.getLogger(GetInfractionSuspicionWithDMLAndSeaFront::class.java)
 
     fun execute(infractionSuspicion: InfractionSuspicion, vesselId: Int?): InfractionSuspicion {
-        vesselId?.let { _vesselId ->
-            val districtCode = vesselRepository.findVessel(_vesselId)?.districtCode
+        vesselId?.let { vesselIdNotNull ->
+            val districtCode = vesselRepository.findVessel(vesselIdNotNull)?.districtCode
 
             districtCode?.let {
                 try {

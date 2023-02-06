@@ -55,6 +55,7 @@ class UpdateReportingUTests {
                     UpdatedInfractionSuspicionOrObservation(
                         reportingActor = ReportingActor.UNIT,
                         reportingType = ReportingType.OBSERVATION,
+                        authorTrigram = "LTH",
                         title = "A reporting"
                     )
                 )
@@ -78,7 +79,7 @@ class UpdateReportingUTests {
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "Test", natinfCode = "1234") as ReportingValue,
+                value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, authorTrigram = "LTH", title = "Test", natinfCode = "1234") as ReportingValue,
                 isArchived = false,
                 isDeleted = false
             )
@@ -92,6 +93,7 @@ class UpdateReportingUTests {
                     UpdatedInfractionSuspicionOrObservation(
                         reportingActor = ReportingActor.UNIT,
                         reportingType = ReportingType.ALERT,
+                        authorTrigram = "LTH",
                         title = "A reporting"
                     )
                 )
@@ -120,13 +122,13 @@ class UpdateReportingUTests {
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "Test", natinfCode = "1234") as ReportingValue,
+                value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, authorTrigram = "LTH", title = "Test", natinfCode = "1234") as ReportingValue,
                 isArchived = false,
                 isDeleted = false
             )
         )
         given(getInfractionSuspicionWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
-            InfractionSuspicion(reportingActor = reportingActor, title = "Test", natinfCode = "1234")
+            InfractionSuspicion(reportingActor = reportingActor, title = "Test", authorTrigram = "LTH", natinfCode = "1234")
         )
 
         // When
@@ -137,6 +139,7 @@ class UpdateReportingUTests {
                     UpdatedInfractionSuspicionOrObservation(
                         reportingActor = reportingActor,
                         reportingType = ReportingType.INFRACTION_SUSPICION,
+                        authorTrigram = "LTH",
                         title = "A reporting",
                         natinfCode = "123456"
                     )
@@ -145,8 +148,8 @@ class UpdateReportingUTests {
 
         // Then
         when (reportingActor) {
-            ReportingActor.OPS -> assertThat(throwable.message).contains("An author trigram must be set")
-            ReportingActor.SIP -> assertThat(throwable.message).contains("An author trigram must be set")
+            ReportingActor.OPS -> assertThat(throwable).isNull()
+            ReportingActor.SIP -> assertThat(throwable).isNull()
             ReportingActor.UNIT -> assertThat(throwable.message).contains("An unit must be set")
             ReportingActor.DML -> assertThat(throwable.message).contains("An author contact must be set")
             ReportingActor.DIRM -> assertThat(throwable.message).contains("An author contact must be set")
@@ -168,7 +171,7 @@ class UpdateReportingUTests {
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "Test", natinfCode = "1234") as ReportingValue,
+                value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, authorTrigram = "LTH", title = "Test", natinfCode = "1234") as ReportingValue,
                 isArchived = false,
                 isDeleted = false
             )
@@ -181,6 +184,7 @@ class UpdateReportingUTests {
                 UpdatedInfractionSuspicionOrObservation(
                     reportingActor = ReportingActor.UNIT,
                     reportingType = ReportingType.INFRACTION_SUSPICION,
+                    authorTrigram = "LTH",
                     title = "A reporting"
                 )
             )
@@ -208,6 +212,7 @@ class UpdateReportingUTests {
                     reportingActor = ReportingActor.UNIT,
                     unit = "OPS",
                     title = "A title",
+                    authorTrigram = "LTH",
                     description = "Before update"
                 ) as ReportingValue,
                 isArchived = false,
@@ -222,6 +227,7 @@ class UpdateReportingUTests {
                 reportingActor = ReportingActor.UNIT,
                 reportingType = ReportingType.OBSERVATION,
                 unit = "AN UNIT",
+                authorTrigram = "LTH",
                 title = "A reporting",
                 description = "Test 2",
                 natinfCode = "1234"
@@ -250,7 +256,7 @@ class UpdateReportingUTests {
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "Test", natinfCode = "1234") as ReportingValue,
+                value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, authorTrigram = "LTH", title = "Test", natinfCode = "1234") as ReportingValue,
                 isArchived = false,
                 isDeleted = false
             )
@@ -263,6 +269,7 @@ class UpdateReportingUTests {
                 reportingActor = ReportingActor.UNIT,
                 reportingType = ReportingType.OBSERVATION,
                 unit = "AN UNIT",
+                authorTrigram = "LTH",
                 title = "A reporting",
                 description = "Test 2",
                 natinfCode = "1234"
@@ -297,6 +304,7 @@ class UpdateReportingUTests {
                     reportingActor = ReportingActor.UNIT,
                     title = "Test",
                     natinfCode = "1234",
+                    authorTrigram = "LTH",
                     flagState = "FR"
                 ) as ReportingValue,
                 isArchived = false,
@@ -311,6 +319,7 @@ class UpdateReportingUTests {
                 natinfCode = "1234",
                 flagState = "FR",
                 dml = "DML 56",
+                authorTrigram = "LTH",
                 seaFront = "NAMO"
             )
         )
@@ -322,6 +331,7 @@ class UpdateReportingUTests {
                 reportingActor = ReportingActor.UNIT,
                 reportingType = ReportingType.INFRACTION_SUSPICION,
                 unit = "AN UNIT",
+                authorTrigram = "LTH",
                 title = "A reporting",
                 natinfCode = "1234"
             )
@@ -351,7 +361,7 @@ class UpdateReportingUTests {
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value = Observation(reportingActor = ReportingActor.UNIT, title = "Test", flagState = "FR") as ReportingValue,
+                value = Observation(reportingActor = ReportingActor.UNIT, title = "Test", authorTrigram = "LTH", flagState = "FR") as ReportingValue,
                 isArchived = false,
                 isDeleted = false
             )
@@ -364,6 +374,7 @@ class UpdateReportingUTests {
                 reportingActor = ReportingActor.UNIT,
                 reportingType = ReportingType.OBSERVATION,
                 unit = "AN UNIT",
+                authorTrigram = "LTH",
                 title = "A reporting",
                 natinfCode = "1234"
             )
@@ -391,7 +402,7 @@ class UpdateReportingUTests {
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value = Observation(reportingActor = ReportingActor.UNIT, title = "Test", flagState = "FR") as ReportingValue,
+                value = Observation(reportingActor = ReportingActor.UNIT, title = "Test", authorTrigram = "LTH", flagState = "FR") as ReportingValue,
                 isArchived = false,
                 isDeleted = false
             )
@@ -414,6 +425,7 @@ class UpdateReportingUTests {
                 reportingActor = ReportingActor.UNIT,
                 reportingType = ReportingType.INFRACTION_SUSPICION,
                 unit = "AN UNIT",
+                authorTrigram = "LTH",
                 title = "A reporting",
                 natinfCode = "1234"
             )

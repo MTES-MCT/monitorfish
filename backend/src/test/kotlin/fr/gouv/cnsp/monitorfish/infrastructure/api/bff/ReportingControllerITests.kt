@@ -117,7 +117,7 @@ class ReportingControllerITests {
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 creationDate = ZonedDateTime.now(),
-                value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+                value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", authorTrigram = "LTH", title = "A title"),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false
@@ -135,7 +135,7 @@ class ReportingControllerITests {
                             ircs = "6554fEE",
                             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                             creationDate = ZonedDateTime.now(),
-                            value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+                            value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", authorTrigram = "LTH", title = "A title"),
                             type = ReportingType.INFRACTION_SUSPICION
                         )
                     )
@@ -146,6 +146,7 @@ class ReportingControllerITests {
             .andExpect(status().isCreated)
             .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", equalTo("FRFGRGR")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingActor", equalTo("OPS")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.authorTrigram", equalTo("LTH")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo("123456")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))
     }
@@ -161,7 +162,7 @@ class ReportingControllerITests {
                     ircs = "6554fEE",
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     creationDate = ZonedDateTime.now(),
-                    value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+                    value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", authorTrigram = "LTH", title = "A title"),
                     type = ReportingType.INFRACTION_SUSPICION,
                     isDeleted = false,
                     isArchived = false,
@@ -191,7 +192,7 @@ class ReportingControllerITests {
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 creationDate = ZonedDateTime.now(),
-                value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+                value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", authorTrigram = "LTH", title = "A title"),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
@@ -208,7 +209,7 @@ class ReportingControllerITests {
                             reportingActor = ReportingActor.OPS,
                             reportingType = ReportingType.INFRACTION_SUSPICION,
                             natinfCode = "123456",
-                            title = "A title"
+                            authorTrigram = "LTH", title = "A title"
                         )
                     )
                 )
@@ -229,7 +230,7 @@ class ReportingControllerITests {
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
                 creationDate = ZonedDateTime.now(),
-                value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+                value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", authorTrigram = "LTH", title = "A title"),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false
@@ -246,7 +247,7 @@ class ReportingControllerITests {
                             externalReferenceNumber = "RGD",
                             ircs = "6554fEE",
                             creationDate = ZonedDateTime.now(),
-                            value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+                            value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", authorTrigram = "LTH", title = "A title"),
                             type = ReportingType.INFRACTION_SUSPICION
                         )
                     )

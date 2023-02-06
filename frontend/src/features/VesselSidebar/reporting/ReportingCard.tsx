@@ -7,7 +7,7 @@ import {
   ReportingTypeCharacteristics
 } from '../../../domain/entities/reporting'
 import { setEditedReporting } from '../../../domain/shared_slices/Reporting'
-import { ReportingType, Reporting } from '../../../domain/types/reporting'
+import { Reporting, ReportingType } from '../../../domain/types/reporting'
 import archiveReporting from '../../../domain/use_cases/reporting/archiveReporting'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { getDateTime } from '../../../utils'
@@ -58,11 +58,11 @@ export function ReportingCard({
           )}
         </Date>
         {reporting.type !== ReportingType.ALERT && <Description>{reporting.value.description}</Description>}
-        {reporting.type !== ReportingType.ALERT && (reporting.value.authorContact || reporting.value.authorTrigram) && (
-          <Author>
-            Émetteur: {reporting.value.authorContact || reporting.value.authorTrigram}
-            {reporting.value.authorContact && reporting.value.authorTrigram && `(par ${reporting.value.authorTrigram})`}
-          </Author>
+        {reporting.type !== ReportingType.ALERT && reporting.value.authorContact && (
+          <Author>Émetteur: {reporting.value.authorContact}</Author>
+        )}
+        {reporting.type !== ReportingType.ALERT && reporting.value.authorTrigram && (
+          <Author>Saisi par: {reporting.value.authorTrigram}</Author>
         )}
         {reporting.type !== ReportingType.OBSERVATION && reporting.value.natinfCode && (
           <Natinf
@@ -120,7 +120,7 @@ const Wrapper = styled.div<{
   background: ${p => (p.isInfractionSuspicion ? '#E1000F1A' : COLORS.cultured)} 0% 0% no-repeat padding-box;
   border: 1px solid ${p => (p.isInfractionSuspicion ? '#E1000F59' : COLORS.lightGray)};
   display: flex;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
 `
 
 const Icon = styled.div`

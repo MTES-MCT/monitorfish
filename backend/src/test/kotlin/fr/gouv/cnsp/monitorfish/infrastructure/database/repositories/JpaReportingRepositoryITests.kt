@@ -63,7 +63,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             vesselId = 126,
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             creationDate = creationDate,
-            value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+            value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", authorTrigram = "LTH", title = "A title"),
             type = ReportingType.INFRACTION_SUSPICION,
             isDeleted = false,
             isArchived = false
@@ -98,7 +98,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             ircs = "6554fEE",
             vesselId = 523,
             creationDate = creationDate,
-            value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+            value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", authorTrigram = "LTH", title = "A title"),
             type = ReportingType.INFRACTION_SUSPICION,
             isDeleted = false,
             isArchived = false

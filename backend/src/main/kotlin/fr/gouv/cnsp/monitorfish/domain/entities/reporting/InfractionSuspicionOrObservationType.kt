@@ -7,7 +7,7 @@ abstract class InfractionSuspicionOrObservationType(
     val type: ReportingTypeMapping,
     open val reportingActor: ReportingActor,
     open val unit: String? = null,
-    open val authorTrigram: String? = null,
+    open val authorTrigram: String,
     open val authorContact: String? = null,
     open val title: String,
     open val description: String? = null,
@@ -15,12 +15,6 @@ abstract class InfractionSuspicionOrObservationType(
     override val natinfCode: String? = null
 ) : ReportingValue(natinfCode) {
     fun checkReportingActorAndFieldsRequirements() = when (reportingActor) {
-        ReportingActor.OPS -> require(!authorTrigram.isNullOrEmpty()) {
-            "An author trigram must be set"
-        }
-        ReportingActor.SIP -> require(!authorTrigram.isNullOrEmpty()) {
-            "An author trigram must be set"
-        }
         ReportingActor.UNIT -> require(!unit.isNullOrEmpty()) {
             "An unit must be set"
         }
@@ -33,5 +27,6 @@ abstract class InfractionSuspicionOrObservationType(
         ReportingActor.OTHER -> require(!authorContact.isNullOrEmpty()) {
             "An author contact must be set"
         }
+        else -> {}
     }
 }

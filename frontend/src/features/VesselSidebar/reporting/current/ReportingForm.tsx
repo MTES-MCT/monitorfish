@@ -2,6 +2,7 @@ import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'reac
 import { Input, Radio, RadioGroup, SelectPicker } from 'rsuite'
 import styled from 'styled-components'
 
+import { getReportingValueErrors } from './utils'
 import { COLORS } from '../../../../constants/constants'
 import { ReportingOriginActor, ReportingTypeCharacteristics } from '../../../../domain/entities/reporting'
 import { getOnlyVesselIdentityProperties } from '../../../../domain/entities/vessel/vessel'
@@ -82,64 +83,11 @@ export function ReportingForm({
   }, [reportingType])
 
   function checkErrors(reportingValue) {
-    const {
-      authorContact: authorContactField,
-      authorTrigram: authorTrigramField,
-      reportingActor: reportingActorField,
-      title: titleField,
-      unit: unitField
-    } = reportingValue
+    const errors = getReportingValueErrors(reportingValue)
 
-    let nextErrorsFields: string[] = []
+    setErrorFields(errors)
 
-    if (!titleField) {
-      nextErrorsFields = nextErrorsFields.concat('title')
-    }
-
-    switch (reportingActorField) {
-      case ReportingOriginActor.OPS.code: {
-        if (!authorTrigramField) {
-          nextErrorsFields = nextErrorsFields.concat('authorTrigram')
-        }
-        break
-      }
-      case ReportingOriginActor.SIP.code: {
-        if (!authorTrigramField) {
-          nextErrorsFields = nextErrorsFields.concat('authorTrigram')
-        }
-        break
-      }
-      case ReportingOriginActor.UNIT.code: {
-        if (!unitField) {
-          nextErrorsFields = nextErrorsFields.concat('unit')
-        }
-        break
-      }
-      case ReportingOriginActor.DML.code: {
-        if (!authorContactField) {
-          nextErrorsFields = nextErrorsFields.concat('authorContact')
-        }
-        break
-      }
-      case ReportingOriginActor.DIRM.code: {
-        if (!authorContactField) {
-          nextErrorsFields = nextErrorsFields.concat('authorContact')
-        }
-        break
-      }
-      case ReportingOriginActor.OTHER.code: {
-        if (!authorContactField) {
-          nextErrorsFields = nextErrorsFields.concat('authorContact')
-        }
-        break
-      }
-      default:
-        throw Error('Should not happen')
-    }
-
-    setErrorFields(nextErrorsFields)
-
-    return !!nextErrorsFields.length
+    return !!errors.length
   }
 
   const editReporting = useCallback(
@@ -249,6 +197,29 @@ export function ReportingForm({
 
   return (
     <Form hasWhiteBackground={hasWhiteBackground}>
+      <Label>Type</Label>
+      <RadioGroup
+        appearance="picker"
+        defaultValue={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
+        inline
+        onChange={value => setReportingType(value as ReportingType)}
+        value={reportingType}
+      >
+        <Radio
+          key={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
+          data-cy="new-reporting-select-infraction-reporting-type"
+          value={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
+        >
+          {ReportingTypeCharacteristics.INFRACTION_SUSPICION.inputName}
+        </Radio>
+        <Radio
+          key={ReportingTypeCharacteristics.OBSERVATION.code}
+          data-cy="new-reporting-select-observation-reporting-type"
+          value={ReportingTypeCharacteristics.OBSERVATION.code}
+        >
+          {ReportingTypeCharacteristics.OBSERVATION.inputName}
+        </Radio>
+      </RadioGroup>
       <Label>Origine</Label>
       <RadioGroup
         appearance="picker"
@@ -279,24 +250,10 @@ export function ReportingForm({
             onChange={_unit => setUnit(_unit)}
             placeholder="Choisir l'unité"
             searchable
-            style={{ margin: '0px 10px 10px 0px', width: unit ? 250 : 80 }}
+            style={{ margin: '5px 10px 0px 0px', width: unit ? 250 : 80 }}
             value={unit}
           />
           <div ref={unitSelectRef} />
-        </>
-      )}
-      {(reportingActor === ReportingOriginActor.OPS.code || reportingActor === ReportingOriginActor.SIP.code) && (
-        <>
-          <Label>Identité de l&apos;émetteur (trigramme)</Label>
-          <StyledInput
-            $hasWhiteBackground={hasWhiteBackground}
-            data-cy=""
-            onChange={value => setAuthorTrigram(value)}
-            placeholder="Ex: LTH"
-            type="text"
-            value={authorTrigram}
-            width={100}
-          />
         </>
       )}
       {(reportingActor === ReportingOriginActor.UNIT.code ||
@@ -316,29 +273,6 @@ export function ReportingForm({
           />
         </>
       )}
-      <Label>Type</Label>
-      <RadioGroup
-        appearance="picker"
-        defaultValue={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
-        inline
-        onChange={value => setReportingType(value as ReportingType)}
-        value={reportingType}
-      >
-        <Radio
-          key={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
-          data-cy="new-reporting-select-infraction-reporting-type"
-          value={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
-        >
-          {ReportingTypeCharacteristics.INFRACTION_SUSPICION.inputName}
-        </Radio>
-        <Radio
-          key={ReportingTypeCharacteristics.OBSERVATION.code}
-          data-cy="new-reporting-select-observation-reporting-type"
-          value={ReportingTypeCharacteristics.OBSERVATION.code}
-        >
-          {ReportingTypeCharacteristics.OBSERVATION.inputName}
-        </Radio>
-      </RadioGroup>
       <Label>Titre</Label>
       <StyledInput
         $hasError={errorFields.includes('title')}
@@ -393,7 +327,7 @@ export function ReportingForm({
             placeholder="Natinf"
             placement={!fromSideWindow ? 'topStart' : undefined}
             searchable
-            style={{ margin: '10px 0px 0px 0px', width: natinfCode ? 335 : 70 }}
+            style={{ margin: '5px 0px 0px 0px', width: natinfCode ? 335 : 70 }}
             // @ts-ignore
             title={infractions?.find(infraction => infraction.natinfCode === natinfCode)?.infraction || ''}
             value={natinfCode}
@@ -402,6 +336,18 @@ export function ReportingForm({
           <div ref={natinfSelectRef} />
         </>
       )}
+      <>
+        <Label>Saisi par</Label>
+        <StyledInput
+          $hasWhiteBackground={hasWhiteBackground}
+          data-cy=""
+          onChange={value => setAuthorTrigram(value)}
+          placeholder="Ex: LTH"
+          type="text"
+          value={authorTrigram}
+          width={100}
+        />
+      </>
       <ValidateButton
         data-cy="new-reporting-create-button"
         onClick={() =>
@@ -457,23 +403,25 @@ export function ReportingForm({
 const DescriptionTextarea = styled(Input)<{
   hasWhiteBackground: boolean
 }>`
-  margin: 5px 0px 10px 0px;
+  border: unset;
+  margin: 5px 0px 0px 0px;
   max-height: 150px;
   width: 100%;
   background: ${p => (p.hasWhiteBackground ? COLORS.gainsboro : COLORS.white)};
 `
 
 const ValidateButton = styled(PrimaryButton)`
-  margin: 20px 10px 0px 0px;
+  margin: 10px 10px 0px 0px;
 `
 
 const CancelButton = styled(SecondaryButton)`
-  margin: 20px 0px 0px 0px;
+  margin: 10px 0px 0px 0px;
   padding-top: 4px;
 `
 
 const Label = styled.div`
   margin-top: 10px;
+  font-size: 12px;
 `
 
 const StyledInput = styled(Input)<{
@@ -481,14 +429,14 @@ const StyledInput = styled(Input)<{
 }>`
   margin: 5px 0px 10px 0px;
   width: ${props => props.width}px;
-  border: 1px solid ${props => (props.$hasError ? COLORS.maximumRed : 'unset')};
+  border: ${props => (props.$hasError ? `1px solid ${COLORS.maximumRed}` : 'unset')};
   background: ${p => (p.$hasWhiteBackground ? COLORS.gainsboro : COLORS.white)};
 `
 
 const Form = styled.div<{
   hasWhiteBackground: boolean
 }>`
-  margin: 15px;
+  margin: 16px;
   flex-direction: column;
   .rs-picker-toggle {
     background: ${p => (p.hasWhiteBackground ? COLORS.gainsboro : COLORS.white)} !important;

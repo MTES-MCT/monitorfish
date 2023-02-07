@@ -1,12 +1,14 @@
-import { MapboxVector } from 'ol/layer'
 import TileLayer from 'ol/layer/Tile'
 import { OSM } from 'ol/source'
 import TileWMS from 'ol/source/TileWMS'
 import XYZ from 'ol/source/XYZ'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 
-import { BaseLayers, Layer } from '../../../domain/entities/layers/constants'
+import { Layer } from '../../../domain/entities/layers/constants'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+
+import type { ImageTile } from 'ol'
+import type Tile from 'ol/Tile'
 
 export type BaseLayerProps = {
   map?: any
@@ -14,62 +16,88 @@ export type BaseLayerProps = {
 function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
 
-  const [baseLayersObjects] = useState({
-    LIGHT: () =>
-      new MapboxVector({
-        accessToken: process.env.REACT_APP_MAPBOX_KEY,
-        className: Layer.BASE_LAYER.code,
-        styleUrl: 'mapbox://styles/monitorfish/ckrbusml50wgv17nrzy3q374b',
-        zIndex: 0
-      }),
-    OSM: () =>
-      new TileLayer({
-        className: Layer.BASE_LAYER.code,
-        source: new OSM({
-          attributions:
-            '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
-        }),
-        zIndex: 0
-      }),
-    SATELLITE: () =>
-      new TileLayer({
-        className: Layer.BASE_LAYER.code,
-        source: new XYZ({
-          maxZoom: 19,
-          url: `https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg90?access_token=${process.env.REACT_APP_MAPBOX_KEY}`
-        }),
-        zIndex: 0
-      }),
-    SHOM: () =>
-      new TileLayer({
-        className: Layer.BASE_LAYER.code,
-        source: new TileWMS({
-          params: { LAYERS: 'RASTER_MARINE_3857_WMSR', TILED: true },
-          serverType: 'geoserver',
-          // Countries have transparency, so do not fade tiles:
-          transition: 0,
+  const tileCacheMapRef = useRef(new Map<string, string>())
 
-          url: `https://services.data.shom.fr/${process.env.REACT_APP_SHOM_KEY}/wms/r`
-        }),
-        zIndex: 0
-      })
-  })
+  const loadTileFromCacheOrFetch = useCallback((imageTile: Tile, src: string) => {
+    const imgElement = (imageTile as ImageTile).getImage()
 
-  useEffect(() => {
-    if (!map) {
+    if (tileCacheMapRef.current.has(src)) {
+      // @ts-ignore
+      imgElement.src = tileCacheMapRef.current.get(src)
+
       return
     }
 
-    function addLayerToMap() {
-      const nextSelectedBaseLayer = selectedBaseLayer || BaseLayers.OSM.code
-
-      if (baseLayersObjects[nextSelectedBaseLayer]) {
-        map.getLayers().push(baseLayersObjects[nextSelectedBaseLayer]())
+    fetch(src).then(response => {
+      if (!response.ok) {
+        return
       }
-    }
 
-    addLayerToMap()
-  }, [map, baseLayersObjects, selectedBaseLayer])
+      response.blob().then(blob => {
+        const objUrl = URL.createObjectURL(blob)
+        tileCacheMapRef.current.set(src, objUrl)
+        // @ts-ignore
+        imgElement.src = objUrl
+      })
+    })
+  }, [])
+
+  const baseLayersObjects = useMemo(
+    () => ({
+      DARK: () =>
+        new TileLayer({
+          className: Layer.BASE_LAYER.code,
+          source: new XYZ({
+            maxZoom: 19,
+            tileLoadFunction: loadTileFromCacheOrFetch,
+            url: `https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png`
+          }),
+          zIndex: 0
+        }),
+      LIGHT: () =>
+        new TileLayer({
+          className: Layer.BASE_LAYER.code,
+          source: new XYZ({
+            maxZoom: 19,
+            tileLoadFunction: loadTileFromCacheOrFetch,
+            url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}.png'
+          }),
+          zIndex: 0
+        }),
+      OSM: () =>
+        new TileLayer({
+          className: Layer.BASE_LAYER.code,
+          source: new OSM({
+            attributions:
+              '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+          }),
+          zIndex: 0
+        }),
+      SATELLITE: () =>
+        new TileLayer({
+          className: Layer.BASE_LAYER.code,
+          source: new XYZ({
+            maxZoom: 19,
+            url: `https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg90?access_token=${process.env.REACT_APP_MAPBOX_KEY}`
+          }),
+          zIndex: 0
+        }),
+      SHOM: () =>
+        new TileLayer({
+          className: Layer.BASE_LAYER.code,
+          source: new TileWMS({
+            params: { LAYERS: 'RASTER_MARINE_3857_WMSR', TILED: true },
+            serverType: 'geoserver',
+            // Countries have transparency, so do not fade tiles:
+            transition: 0,
+
+            url: `https://services.data.shom.fr/${process.env.REACT_APP_SHOM_KEY}/wms/r`
+          }),
+          zIndex: 0
+        })
+    }),
+    [loadTileFromCacheOrFetch]
+  )
 
   useEffect(() => {
     if (!map || !selectedBaseLayer || !baseLayersObjects[selectedBaseLayer]) {
@@ -81,11 +109,12 @@ function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
       // eslint-disable-next-line no-underscore-dangle
       const layerToRemove = olLayers.getArray().find(layer => layer.className_ === Layer.BASE_LAYER.code)
 
+      olLayers.insertAt(0, baseLayersObjects[selectedBaseLayer]())
+
       if (!layerToRemove) {
         return
       }
 
-      olLayers.insertAt(0, baseLayersObjects[selectedBaseLayer]())
       setTimeout(() => {
         olLayers.remove(layerToRemove)
       }, 300)

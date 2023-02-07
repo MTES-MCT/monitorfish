@@ -9,19 +9,19 @@ interface LogbookReportRepository {
     @Throws(NoLogbookFishingTripFound::class)
     fun findLastTripBeforeDateTime(
         internalReferenceNumber: String,
-        beforeDateTime: ZonedDateTime
+        beforeDateTime: ZonedDateTime,
     ): VoyageDatesAndTripNumber
 
     @Throws(NoLogbookFishingTripFound::class)
     fun findFirstAcknowledgedDateOfTripBeforeDateTime(
         internalReferenceNumber: String,
-        beforeDateTime: ZonedDateTime
+        beforeDateTime: ZonedDateTime,
     ): ZonedDateTime
 
     @Throws(NoLogbookFishingTripFound::class)
     fun findTripBeforeTripNumber(
         internalReferenceNumber: String,
-        tripNumber: String
+        tripNumber: String,
     ): VoyageDatesAndTripNumber
 
     @Throws(NoLogbookFishingTripFound::class)
@@ -30,7 +30,7 @@ interface LogbookReportRepository {
         internalReferenceNumber: String,
         afterDate: ZonedDateTime,
         beforeDate: ZonedDateTime,
-        tripNumber: String
+        tripNumber: String,
     ): List<LogbookMessage>
 
     fun findLANAndPNOMessagesNotAnalyzedBy(ruleType: String): List<Pair<LogbookMessage, LogbookMessage?>>

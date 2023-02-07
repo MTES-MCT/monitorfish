@@ -33,8 +33,8 @@ class GetVesselBeaconMalfunctionsUTests {
         given(
             beaconMalfunctionsRepository.findAllByVesselId(
                 1,
-                now.minusYears(1)
-            )
+                now.minusYears(1),
+            ),
         )
             .willReturn(
                 listOf(
@@ -42,15 +42,15 @@ class GetVesselBeaconMalfunctionsUTests {
                         1, "FR224226850", "1236514", "IRCS",
                         null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
                         ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 1
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 1,
                     ),
                     BeaconMalfunction(
                         2, "FR224226850", "1236514", "IRCS",
                         null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                         ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 1
-                    )
-                )
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 1,
+                    ),
+                ),
             )
         given(beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(1)).willReturn(
             listOf(
@@ -58,9 +58,9 @@ class GetVesselBeaconMalfunctionsUTests {
                     beaconMalfunctionId = 1,
                     comment = "A comment",
                     userType = BeaconMalfunctionCommentUserType.SIP,
-                    dateTime = now
-                )
-            )
+                    dateTime = now,
+                ),
+            ),
         )
         given(beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(1)).willReturn(
             listOf(
@@ -69,16 +69,16 @@ class GetVesselBeaconMalfunctionsUTests {
                     propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
                     nextValue = VesselStatus.ACTIVITY_DETECTED.toString(),
                     previousValue = VesselStatus.AT_PORT.toString(),
-                    dateTime = now
-                )
-            )
+                    dateTime = now,
+                ),
+            ),
         )
 
         // When
         val enrichedBeaconMalfunctions = GetVesselBeaconMalfunctions(
             beaconMalfunctionsRepository,
             beaconMalfunctionCommentsRepository,
-            beaconMalfunctionActionsRepository
+            beaconMalfunctionActionsRepository,
         )
             .execute(1, now.minusYears(1))
 

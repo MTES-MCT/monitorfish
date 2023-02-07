@@ -15,7 +15,7 @@ import java.time.ZonedDateTime
 class GetVesselVoyage(
     private val logbookReportRepository: LogbookReportRepository,
     private val PNOAndLANAlertRepository: PNOAndLANAlertRepository,
-    private val getLogbookMessages: GetLogbookMessages
+    private val getLogbookMessages: GetLogbookMessages,
 ) {
     private val logger = LoggerFactory.getLogger(GetVesselVoyage::class.java)
 
@@ -24,7 +24,7 @@ class GetVesselVoyage(
             when (voyageRequest) {
                 VoyageRequest.LAST -> logbookReportRepository.findLastTripBeforeDateTime(
                     internalReferenceNumber,
-                    ZonedDateTime.now()
+                    ZonedDateTime.now(),
                 )
                 VoyageRequest.PREVIOUS -> {
                     require(currentTripNumber != null) {
@@ -51,14 +51,14 @@ class GetVesselVoyage(
         val alerts = PNOAndLANAlertRepository.findAlertsOfTypes(
             listOf(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
             internalReferenceNumber,
-            trip.tripNumber
+            trip.tripNumber,
         )
 
         val logbookMessages = getLogbookMessages.execute(
             internalReferenceNumber,
             trip.startDate,
             trip.endDate,
-            trip.tripNumber
+            trip.tripNumber,
         )
 
         return Voyage(
@@ -67,7 +67,7 @@ class GetVesselVoyage(
             trip.startDate,
             trip.endDate,
             trip.tripNumber,
-            LogbookMessagesAndAlerts(logbookMessages, alerts)
+            LogbookMessagesAndAlerts(logbookMessages, alerts),
         )
     }
 
@@ -75,7 +75,7 @@ class GetVesselVoyage(
         currentTripNumber: String?,
         voyageRequest: VoyageRequest,
         internalReferenceNumber: String,
-        tripNumber: String
+        tripNumber: String,
     ): Boolean {
         if (currentTripNumber == null) {
             return true
@@ -96,7 +96,7 @@ class GetVesselVoyage(
 
     private fun getIsFirstVoyage(
         internalReferenceNumber: String,
-        tripNumber: String
+        tripNumber: String,
     ): Boolean {
         return try {
             logbookReportRepository.findTripBeforeTripNumber(internalReferenceNumber, tripNumber)

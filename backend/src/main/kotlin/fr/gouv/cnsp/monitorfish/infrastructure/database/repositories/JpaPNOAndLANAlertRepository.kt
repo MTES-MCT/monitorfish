@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository
 @Repository
 class JpaPNOAndLANAlertRepository(
     private val dbPNOAndLANAlertRepository: DBPNOAndLANAlertRepository,
-    private val mapper: ObjectMapper
+    private val mapper: ObjectMapper,
 ) : PNOAndLANAlertRepository {
 
     override fun save(alert: PNOAndLANAlert) {
@@ -24,7 +24,7 @@ class JpaPNOAndLANAlertRepository(
             alertEntity.ircs,
             alertEntity.creationDate,
             alertEntity.tripNumber,
-            alertEntity.value
+            alertEntity.value,
         )
     }
 

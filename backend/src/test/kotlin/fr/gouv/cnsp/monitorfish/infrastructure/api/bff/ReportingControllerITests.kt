@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
@@ -75,7 +76,7 @@ class ReportingControllerITests {
         mockMvc.perform(
             put("/bff/v1/reportings/archive")
                 .content(objectMapper.writeValueAsString(listOf(1, 2, 3)))
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON),
         )
             // Then
             .andExpect(status().isOk)
@@ -99,7 +100,7 @@ class ReportingControllerITests {
         mockMvc.perform(
             put("/bff/v1/reportings/delete")
                 .content(objectMapper.writeValueAsString(listOf(1, 2, 3)))
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON),
         )
             // Then
             .andExpect(status().isOk)
@@ -117,11 +118,17 @@ class ReportingControllerITests {
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 creationDate = ZonedDateTime.now(),
-                value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", authorTrigram = "LTH", title = "A title"),
+                value = InfractionSuspicion(
+                    ReportingActor.OPS,
+                    natinfCode = "123456",
+                    authorTrigram = "LTH",
+                    flagState = CountryCode.FR.toString(),
+                    title = "A title"
+                ),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
-                isArchived = false
-            )
+                isArchived = false,
+            ),
         )
 
         // When
@@ -135,12 +142,18 @@ class ReportingControllerITests {
                             ircs = "6554fEE",
                             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                             creationDate = ZonedDateTime.now(),
-                            value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", authorTrigram = "LTH", title = "A title"),
-                            type = ReportingType.INFRACTION_SUSPICION
-                        )
-                    )
+                            value = InfractionSuspicion(
+                                ReportingActor.OPS,
+                                natinfCode = "123456",
+                                authorTrigram = "LTH",
+                                flagState = CountryCode.FR.toString(),
+                                title = "A title"
+                            ),
+                            type = ReportingType.INFRACTION_SUSPICION,
+                        ),
+                    ),
                 )
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON),
         )
             // Then
             .andExpect(status().isCreated)
@@ -162,13 +175,19 @@ class ReportingControllerITests {
                     ircs = "6554fEE",
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     creationDate = ZonedDateTime.now(),
-                    value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", authorTrigram = "LTH", title = "A title"),
+                    value = InfractionSuspicion(
+                        ReportingActor.OPS,
+                        natinfCode = "123456",
+                        authorTrigram = "LTH",
+                        flagState = CountryCode.FR.toString(),
+                        title = "A title"
+                    ),
                     type = ReportingType.INFRACTION_SUSPICION,
                     isDeleted = false,
                     isArchived = false,
-                    underCharter = true
-                )
-            )
+                    underCharter = true,
+                ),
+            ),
         )
 
         // When
@@ -192,12 +211,18 @@ class ReportingControllerITests {
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 creationDate = ZonedDateTime.now(),
-                value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", authorTrigram = "LTH", title = "A title"),
+                value = InfractionSuspicion(
+                    ReportingActor.OPS,
+                    natinfCode = "123456",
+                    authorTrigram = "LTH",
+                    flagState = CountryCode.FR.toString(),
+                    title = "A title"
+                ),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
-                underCharter = true
-            )
+                underCharter = true,
+            ),
         )
 
         // When
@@ -207,13 +232,14 @@ class ReportingControllerITests {
                     objectMapper.writeValueAsString(
                         UpdateReportingDataInput(
                             reportingActor = ReportingActor.OPS,
-                            reportingType = ReportingType.INFRACTION_SUSPICION,
+                            type = ReportingType.INFRACTION_SUSPICION,
                             natinfCode = "123456",
-                            authorTrigram = "LTH", title = "A title"
-                        )
-                    )
+                            authorTrigram = "LTH",
+                            title = "A title",
+                        ),
+                    ),
                 )
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON),
         )
             // Then
             .andExpect(status().isOk)
@@ -230,11 +256,17 @@ class ReportingControllerITests {
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
                 creationDate = ZonedDateTime.now(),
-                value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", authorTrigram = "LTH", title = "A title"),
+                value = InfractionSuspicion(
+                    ReportingActor.OPS,
+                    natinfCode = "123456",
+                    authorTrigram = "LTH",
+                    flagState = CountryCode.FR.toString(),
+                    title = "A title"
+                ),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
-                isArchived = false
-            )
+                isArchived = false,
+            ),
         )
 
         // When
@@ -247,12 +279,18 @@ class ReportingControllerITests {
                             externalReferenceNumber = "RGD",
                             ircs = "6554fEE",
                             creationDate = ZonedDateTime.now(),
-                            value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", authorTrigram = "LTH", title = "A title"),
-                            type = ReportingType.INFRACTION_SUSPICION
-                        )
-                    )
+                            value = InfractionSuspicion(
+                                ReportingActor.OPS,
+                                natinfCode = "123456",
+                                authorTrigram = "LTH",
+                                flagState = CountryCode.FR.toString(),
+                                title = "A title"
+                            ),
+                            type = ReportingType.INFRACTION_SUSPICION,
+                        ),
+                    ),
                 )
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON),
         )
             // Then
             .andExpect(status().isCreated)

@@ -41,7 +41,7 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         assertThat(fleetSegments.first().segment).isEqualTo("ATL01")
         assertThat(fleetSegments.first().dirm).isEqualTo(listOf("MED", "SA", "NAMO", "MEMN"))
         assertThat(fleetSegments.first().gears).isEqualTo(
-            listOf("OTM", "PTM")
+            listOf("OTM", "PTM"),
         )
     }
 
@@ -59,7 +59,7 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         val updatedFleetSegment = jpaFleetSegmentRepository.update(
             "ATL01",
             CreateOrUpdateFleetSegmentFields("NEXT_ATL01"),
-            currentYear
+            currentYear,
         )
 
         // Then
@@ -80,7 +80,7 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         val updatedFleetSegment = jpaFleetSegmentRepository.update(
             "ATL01",
             CreateOrUpdateFleetSegmentFields(segmentName = "All Trawls 666"),
-            currentYear
+            currentYear,
         )
 
         // Then
@@ -97,14 +97,14 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         assertThat(fleetSegments).hasSize(66)
         assertThat(fleetSegments.first().segment).isEqualTo("ATL01")
         assertThat(fleetSegments.first().gears).isEqualTo(
-            listOf("OTM", "PTM")
+            listOf("OTM", "PTM"),
         )
 
         // When
         val updatedFleetSegment = jpaFleetSegmentRepository.update(
             "ATL01",
             CreateOrUpdateFleetSegmentFields(gears = listOf("OTB", "DOF")),
-            currentYear
+            currentYear,
         )
 
         // Then
@@ -127,7 +127,7 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         val updatedFleetSegment = jpaFleetSegmentRepository.update(
             "ATL01",
             CreateOrUpdateFleetSegmentFields(faoAreas = listOf("66.6.6", "66.6.7")),
-            currentYear
+            currentYear,
         )
 
         // Then
@@ -154,8 +154,8 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
                 targetSpecies = listOf(),
                 bycatchSpecies = listOf(),
                 impactRiskFactor = 2.3,
-                year = currentYear + 1
-            )
+                year = currentYear + 1,
+            ),
         )
 
         // Then

@@ -23,8 +23,8 @@ class GetFAOAreasUTests {
             listOf(
                 FAOArea("123", "27.1", "27.1.0"),
                 FAOArea("124", "28.1", "28.1.0"),
-                FAOArea("125", "28.1", "28.1.1")
-            )
+                FAOArea("125", "28.1", "28.1.1"),
+            ),
         )
 
         // When

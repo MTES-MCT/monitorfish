@@ -19,7 +19,7 @@ class FleetSegmentController(
     private val deleteFleetSegment: DeleteFleetSegment,
     private val createFleetSegment: CreateFleetSegment,
     private val getFleetSegmentYearEntries: GetFleetSegmentYearEntries,
-    private val addFleetSegmentYear: AddFleetSegmentYear
+    private val addFleetSegmentYear: AddFleetSegmentYear,
 ) {
 
     @GetMapping("/{year}")
@@ -27,7 +27,7 @@ class FleetSegmentController(
     fun getFleetSegments(
         @PathParam("Year")
         @PathVariable(name = "year")
-        year: Int
+        year: Int,
     ): List<FleetSegmentDataOutput> {
         return getAllFleetSegmentsByYearByYear.execute(year).map { fleetSegment ->
             FleetSegmentDataOutput.fromFleetSegment(fleetSegment)
@@ -44,12 +44,12 @@ class FleetSegmentController(
         @RequestParam(name = "segment")
         segment: String,
         @RequestBody
-        createOrUpdateFleetSegmentData: CreateOrUpdateFleetSegmentDataInput
+        createOrUpdateFleetSegmentData: CreateOrUpdateFleetSegmentDataInput,
     ): FleetSegmentDataOutput {
         val updatedFleetSegment = updateFleetSegment.execute(
             segment = segment,
             fields = createOrUpdateFleetSegmentData.toCreateOrUpdateFleetSegmentFields(),
-            year = year
+            year = year,
         )
 
         return FleetSegmentDataOutput.fromFleetSegment(updatedFleetSegment)
@@ -63,7 +63,7 @@ class FleetSegmentController(
         year: Int,
         @Parameter(description = "Segment")
         @RequestParam(name = "segment")
-        segment: String
+        segment: String,
     ): List<FleetSegmentDataOutput> {
         return deleteFleetSegment.execute(segment, year).map {
             FleetSegmentDataOutput.fromFleetSegment(it)
@@ -75,7 +75,7 @@ class FleetSegmentController(
     @Operation(summary = "Create a fleet segment")
     fun createFleetSegment(
         @RequestBody
-        newFleetSegmentData: CreateOrUpdateFleetSegmentDataInput
+        newFleetSegmentData: CreateOrUpdateFleetSegmentDataInput,
     ): FleetSegmentDataOutput {
         val createdFleetSegment = createFleetSegment.execute(newFleetSegmentData.toCreateOrUpdateFleetSegmentFields())
 
@@ -94,7 +94,7 @@ class FleetSegmentController(
     fun addFleetSegmentYear(
         @PathParam("Year")
         @PathVariable(name = "year")
-        year: Int
+        year: Int,
     ) {
         return addFleetSegmentYear.execute(year)
     }

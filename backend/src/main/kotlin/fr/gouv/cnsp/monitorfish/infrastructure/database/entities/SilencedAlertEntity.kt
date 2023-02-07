@@ -37,7 +37,7 @@ data class SilencedAlertEntity(
     @Column(name = "value", nullable = false, columnDefinition = "jsonb")
     val value: String,
     @Column(name = "was_validated")
-    val wasValidated: Boolean? = null
+    val wasValidated: Boolean? = null,
 ) {
 
     fun toSilencedAlert(mapper: ObjectMapper): SilencedAlert {
@@ -50,7 +50,7 @@ data class SilencedAlertEntity(
             vesselIdentifier = vesselIdentifier,
             silencedBeforeDate = silencedBeforeDate,
             value = mapper.readValue(value, AlertType::class.java),
-            wasValidated = wasValidated
+            wasValidated = wasValidated,
         )
     }
 
@@ -59,7 +59,7 @@ data class SilencedAlertEntity(
             mapper: ObjectMapper,
             alert: PendingAlert,
             silencedBeforeDate: ZonedDateTime,
-            isValidated: Boolean
+            isValidated: Boolean,
         ) = SilencedAlertEntity(
             vesselName = alert.vesselName,
             internalReferenceNumber = alert.internalReferenceNumber,
@@ -68,7 +68,7 @@ data class SilencedAlertEntity(
             vesselIdentifier = alert.vesselIdentifier,
             silencedBeforeDate = silencedBeforeDate,
             value = mapper.writeValueAsString(alert.value),
-            wasValidated = isValidated
+            wasValidated = isValidated,
         )
     }
 }

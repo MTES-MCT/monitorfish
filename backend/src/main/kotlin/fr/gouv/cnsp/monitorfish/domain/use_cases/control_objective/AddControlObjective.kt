@@ -14,8 +14,8 @@ class AddControlObjective(private val controlObjectivesRepository: ControlObject
                 year = year,
                 targetNumberOfControlsAtPort = 0,
                 targetNumberOfControlsAtSea = 0,
-                controlPriorityLevel = 1.0
-            )
+                controlPriorityLevel = 1.0,
+            ),
         )
     }
 }

@@ -6,14 +6,14 @@ data class InfractionDataOutput(
     var natinfCode: String? = null,
     var regulation: String? = null,
     var infractionCategory: String? = null,
-    var infraction: String? = null
+    var infraction: String? = null,
 ) {
     companion object {
         fun fromInfraction(infraction: Infraction) = InfractionDataOutput(
             natinfCode = infraction.natinfCode,
             regulation = infraction.regulation,
             infractionCategory = infraction.infractionCategory.toString(),
-            infraction = infraction.infraction
+            infraction = infraction.infraction,
         )
     }
 }

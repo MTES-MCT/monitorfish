@@ -34,7 +34,7 @@ interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
             "and p.date_time >= :from " +
             "and p.date_time <= :to " +
             "order by p.date_time DESC ",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun findLastByInternalReferenceNumber(internalReferenceNumber: String, from: ZonedDateTime, to: ZonedDateTime): List<PositionEntity>
 
@@ -63,7 +63,7 @@ interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
             "and p.date_time >= :from " +
             "and p.date_time <= :to " +
             "order by p.date_time DESC ",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun findLastByExternalReferenceNumber(externalReferenceNumber: String, from: ZonedDateTime, to: ZonedDateTime): List<PositionEntity>
 
@@ -92,13 +92,13 @@ interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
             "and p.date_time >= :from " +
             "and p.date_time <= :to " +
             "order by p.date_time DESC",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun findLastByIrcs(ircs: String, from: ZonedDateTime, to: ZonedDateTime): List<PositionEntity>
 
     @Query(
         "select date_time from positions where date_time < now() order by date_time desc limit 1",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun findLastPositionDateTime(): Instant
 }

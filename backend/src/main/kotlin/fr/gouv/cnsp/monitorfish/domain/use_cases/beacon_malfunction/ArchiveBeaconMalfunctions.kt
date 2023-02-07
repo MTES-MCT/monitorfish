@@ -7,7 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconMalfunctio
 
 @UseCase
 class ArchiveBeaconMalfunctions(
-    private val updateBeaconMalfunction: UpdateBeaconMalfunction
+    private val updateBeaconMalfunction: UpdateBeaconMalfunction,
 ) {
     @Throws(CouldNotUpdateBeaconMalfunctionException::class, IllegalArgumentException::class)
     fun execute(ids: List<Int>): List<BeaconMalfunctionResumeAndDetails> {

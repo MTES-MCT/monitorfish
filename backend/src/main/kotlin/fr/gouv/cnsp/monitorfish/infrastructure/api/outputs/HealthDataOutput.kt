@@ -6,13 +6,13 @@ import java.time.ZonedDateTime
 data class HealthDataOutput(
     val dateLastPositionReceivedByAPI: ZonedDateTime,
     val dateLastPositionUpdatedByPrefect: ZonedDateTime,
-    val dateLogbookMessageReceived: ZonedDateTime
+    val dateLogbookMessageReceived: ZonedDateTime,
 ) {
     companion object {
         fun fromHealth(health: Health) = HealthDataOutput(
             dateLastPositionUpdatedByPrefect = health.dateLastPositionUpdatedByPrefect,
             dateLastPositionReceivedByAPI = health.dateLastPositionReceivedByAPI,
-            dateLogbookMessageReceived = health.dateLogbookMessageReceived
+            dateLogbookMessageReceived = health.dateLogbookMessageReceived,
         )
     }
 }

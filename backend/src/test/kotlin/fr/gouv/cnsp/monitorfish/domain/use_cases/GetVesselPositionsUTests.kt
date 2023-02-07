@@ -37,32 +37,32 @@ class GetVesselPositionsUTests {
         val firstPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                4
-            )
+                4,
+            ),
         )
         val secondPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                3
-            )
+                3,
+            ),
         )
         val thirdPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                2
-            )
+                2,
+            ),
         )
         val fourthPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                1
-            )
+                1,
+            ),
         )
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
-            listOf(firstPosition, fourthPosition, secondPosition, thirdPosition)
+            listOf(firstPosition, fourthPosition, secondPosition, thirdPosition),
         )
         given(logbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(any(), any())).willThrow(
-            NoLogbookFishingTripFound("ERROR")
+            NoLogbookFishingTripFound("ERROR"),
         )
 
         // When
@@ -75,7 +75,7 @@ class GetVesselPositionsUTests {
                     VesselTrackDepth.LAST_DEPARTURE,
                     VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     null,
-                    null
+                    null,
                 )
         }
 
@@ -91,7 +91,7 @@ class GetVesselPositionsUTests {
     fun `execute Should not throw an exception When a vessel's position is not found`() {
         // Given
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
-            listOf()
+            listOf(),
         )
 
         // When
@@ -105,7 +105,7 @@ class GetVesselPositionsUTests {
                         VesselTrackDepth.TWELVE_HOURS,
                         VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                         null,
-                        null
+                        null,
                     )
             }
         }
@@ -118,7 +118,7 @@ class GetVesselPositionsUTests {
     fun `execute Should not throw an exception When a vessel's last DEP is not found`() {
         // Given
         given(logbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(any(), any())).willThrow(
-            NoLogbookFishingTripFound("ERROR")
+            NoLogbookFishingTripFound("ERROR"),
         )
 
         // When
@@ -132,7 +132,7 @@ class GetVesselPositionsUTests {
                         VesselTrackDepth.LAST_DEPARTURE,
                         VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                         null,
-                        null
+                        null,
                     )
             }
         }
@@ -145,7 +145,7 @@ class GetVesselPositionsUTests {
     fun `execute Should throw an exception When vessel from date is not given as a parameter and track depth is CUSTOM`() {
         // Given
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
-            listOf()
+            listOf(),
         )
 
         // When
@@ -159,7 +159,7 @@ class GetVesselPositionsUTests {
                         VesselTrackDepth.CUSTOM,
                         VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                         null,
-                        ZonedDateTime.now()
+                        ZonedDateTime.now(),
                     )
             }
         }
@@ -173,7 +173,7 @@ class GetVesselPositionsUTests {
     fun `execute Should pass the from and to parameters to the repository When it is a CUSTOM track depth`() {
         // Given
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
-            listOf()
+            listOf(),
         )
 
         // When
@@ -188,7 +188,7 @@ class GetVesselPositionsUTests {
                     VesselTrackDepth.CUSTOM,
                     VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     fromDateTime,
-                    toDateTime
+                    toDateTime,
                 )
         }
 
@@ -196,7 +196,7 @@ class GetVesselPositionsUTests {
         Mockito.verify(positionRepository).findVesselLastPositionsByInternalReferenceNumber(
             any(),
             eq(fromDateTime),
-            eq(toDateTime)
+            eq(toDateTime),
         )
     }
 
@@ -207,29 +207,29 @@ class GetVesselPositionsUTests {
         val firstPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                4
-            )
+                4,
+            ),
         )
         val secondPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                3
-            )
+                3,
+            ),
         )
         val thirdPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                2
-            )
+                2,
+            ),
         )
         val fourthPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                1
-            )
+                1,
+            ),
         )
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
-            listOf(firstPosition, fourthPosition, secondPosition, thirdPosition)
+            listOf(firstPosition, fourthPosition, secondPosition, thirdPosition),
         )
 
         // When
@@ -242,7 +242,7 @@ class GetVesselPositionsUTests {
                     VesselTrackDepth.TWELVE_HOURS,
                     VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     null,
-                    null
+                    null,
                 )
         }
 
@@ -250,7 +250,7 @@ class GetVesselPositionsUTests {
         Mockito.verify(positionRepository).findVesselLastPositionsByInternalReferenceNumber(
             eq("FR224226850"),
             any(),
-            any()
+            any(),
         )
     }
 
@@ -261,29 +261,29 @@ class GetVesselPositionsUTests {
         val firstPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                4
-            )
+                4,
+            ),
         )
         val secondPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                3
-            )
+                3,
+            ),
         )
         val thirdPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                2
-            )
+                2,
+            ),
         )
         val fourthPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                1
-            )
+                1,
+            ),
         )
         given(positionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(any(), any(), any(), any(), any())).willReturn(
-            listOf(firstPosition, fourthPosition, secondPosition, thirdPosition)
+            listOf(firstPosition, fourthPosition, secondPosition, thirdPosition),
         )
 
         // When
@@ -296,7 +296,7 @@ class GetVesselPositionsUTests {
                     VesselTrackDepth.TWELVE_HOURS,
                     null,
                     null,
-                    null
+                    null,
                 )
         }
 

@@ -42,7 +42,7 @@ data class PendingAlertEntity(
     @Column(name = "latitude")
     val latitude: Double? = null,
     @Column(name = "longitude")
-    val longitude: Double? = null
+    val longitude: Double? = null,
 ) {
 
     fun toPendingAlert(mapper: ObjectMapper): PendingAlert {
@@ -58,7 +58,7 @@ data class PendingAlertEntity(
             tripNumber = tripNumber,
             value = mapper.readValue(value, AlertType::class.java),
             latitude = latitude,
-            longitude = longitude
+            longitude = longitude,
         )
     }
 
@@ -72,7 +72,7 @@ data class PendingAlertEntity(
             vesselIdentifier = alert.vesselIdentifier,
             creationDate = alert.creationDate,
             tripNumber = alert.tripNumber,
-            value = mapper.writeValueAsString(alert.value)
+            value = mapper.writeValueAsString(alert.value),
         )
     }
 }

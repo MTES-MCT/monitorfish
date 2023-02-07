@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository
 @Repository
 class JpaRuleRepository(
     private val dbRuleRepository: DBRuleRepository,
-    private val mapper: ObjectMapper
+    private val mapper: ObjectMapper,
 ) : RuleRepository {
 
     override fun findAll(): List<Rule> {

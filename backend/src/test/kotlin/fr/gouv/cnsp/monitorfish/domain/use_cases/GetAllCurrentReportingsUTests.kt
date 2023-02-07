@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
@@ -36,17 +37,23 @@ class GetAllCurrentReportingsUTests {
             ircs = "6554fEE",
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             creationDate = ZonedDateTime.now(),
-            value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", authorTrigram = "LTH", title = "A title"),
+            value = InfractionSuspicion(
+                ReportingActor.OPS,
+                natinfCode = "123456",
+                authorTrigram = "LTH",
+                flagState = CountryCode.FR.toString(),
+                title = "A title"
+            ),
             type = ReportingType.INFRACTION_SUSPICION,
             isDeleted = false,
-            isArchived = false
+            isArchived = false,
         )
         given(reportingRepository.findAllCurrent()).willReturn(listOf(currentReporting))
         given(
             lastPositionRepository.findUnderCharterForVessel(
                 eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER),
-                eq("FRFGRGR")
-            )
+                eq("FRFGRGR"),
+            ),
         )
             .willReturn(true)
 
@@ -68,15 +75,23 @@ class GetAllCurrentReportingsUTests {
             ircs = "6554fEE",
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             creationDate = ZonedDateTime.now(),
-            value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", authorTrigram = "LTH", title = "A title"),
+            value = InfractionSuspicion(
+                ReportingActor.OPS,
+                natinfCode = "123456",
+                authorTrigram = "LTH",
+                flagState = CountryCode.FR.toString(),
+                title = "A title"
+            ),
             type = ReportingType.INFRACTION_SUSPICION,
             isDeleted = false,
-            isArchived = false
+            isArchived = false,
         )
         given(reportingRepository.findAllCurrent()).willReturn(listOf(currentReporting))
 
         // When
-        val throwable = catchThrowable { GetAllCurrentReportings(reportingRepository, lastPositionRepository).execute() }
+        val throwable = catchThrowable {
+            GetAllCurrentReportings(reportingRepository, lastPositionRepository).execute()
+        }
 
         // Then
         assertThat(throwable).isNull()

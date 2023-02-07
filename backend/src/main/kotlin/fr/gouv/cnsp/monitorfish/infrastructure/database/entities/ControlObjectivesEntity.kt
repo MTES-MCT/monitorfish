@@ -22,7 +22,7 @@ data class ControlObjectivesEntity(
     @Column(name = "target_number_of_controls_at_port")
     val targetNumberOfControlsAtPort: Int,
     @Column(name = "control_priority_level")
-    val controlPriorityLevel: Double
+    val controlPriorityLevel: Double,
 ) {
 
     fun toControlObjective() = ControlObjective(
@@ -32,7 +32,7 @@ data class ControlObjectivesEntity(
         year = year,
         targetNumberOfControlsAtSea = targetNumberOfControlsAtSea,
         targetNumberOfControlsAtPort = targetNumberOfControlsAtPort,
-        controlPriorityLevel = controlPriorityLevel
+        controlPriorityLevel = controlPriorityLevel,
     )
 
     companion object {
@@ -43,7 +43,7 @@ data class ControlObjectivesEntity(
                 year = controlObjective.year,
                 targetNumberOfControlsAtSea = controlObjective.targetNumberOfControlsAtSea,
                 targetNumberOfControlsAtPort = controlObjective.targetNumberOfControlsAtPort,
-                controlPriorityLevel = controlObjective.controlPriorityLevel
+                controlPriorityLevel = controlObjective.controlPriorityLevel,
             )
         }
     }

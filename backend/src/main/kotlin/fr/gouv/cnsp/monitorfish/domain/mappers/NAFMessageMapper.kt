@@ -152,7 +152,7 @@ class NAFMessageMapper(private val naf: String) {
             from = from,
             tripNumber = tripNumber,
             positionType = PositionType.VMS,
-            isManual = isManual
+            isManual = isManual,
         )
     }
 }

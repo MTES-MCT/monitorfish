@@ -26,7 +26,7 @@ data class BeaconMalfunctionActionEntity(
     @Column(name = "next_value")
     val nextValue: String,
     @Column(name = "date_time_utc")
-    val dateTime: Instant
+    val dateTime: Instant,
 ) {
 
     fun toBeaconMalfunctionAction() = BeaconMalfunctionAction(
@@ -35,7 +35,7 @@ data class BeaconMalfunctionActionEntity(
         propertyName = propertyName,
         previousValue = previousValue,
         nextValue = nextValue,
-        dateTime = dateTime.atZone(ZoneOffset.UTC)
+        dateTime = dateTime.atZone(ZoneOffset.UTC),
     )
 
     companion object {
@@ -48,7 +48,7 @@ data class BeaconMalfunctionActionEntity(
                     throw IllegalArgumentException(
                         "One of the previous or next values are incorrect for the property " +
                             "${BeaconMalfunctionActionPropertyName.VESSEL_STATUS}. Previous value is " +
-                            "'${beaconMalfunctionAction.previousValue}' and next value is '${beaconMalfunctionAction.nextValue}'."
+                            "'${beaconMalfunctionAction.previousValue}' and next value is '${beaconMalfunctionAction.nextValue}'.",
                     )
                 }
             }
@@ -61,7 +61,7 @@ data class BeaconMalfunctionActionEntity(
                     throw IllegalArgumentException(
                         "One of the previous or next values are incorrect for the property " +
                             "${BeaconMalfunctionActionPropertyName.STAGE}. Previous value is " +
-                            "'${beaconMalfunctionAction.previousValue}' and next value is '${beaconMalfunctionAction.nextValue}'."
+                            "'${beaconMalfunctionAction.previousValue}' and next value is '${beaconMalfunctionAction.nextValue}'.",
                     )
                 }
             }
@@ -72,7 +72,7 @@ data class BeaconMalfunctionActionEntity(
                 propertyName = beaconMalfunctionAction.propertyName,
                 previousValue = beaconMalfunctionAction.previousValue,
                 nextValue = beaconMalfunctionAction.nextValue,
-                dateTime = beaconMalfunctionAction.dateTime.toInstant()
+                dateTime = beaconMalfunctionAction.dateTime.toInstant(),
             )
         }
     }

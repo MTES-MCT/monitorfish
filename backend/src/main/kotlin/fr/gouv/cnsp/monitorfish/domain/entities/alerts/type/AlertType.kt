@@ -8,5 +8,5 @@ abstract class AlertType(
     val type: AlertTypeMapping,
     open val seaFront: String? = null,
     open val dml: String? = null,
-    override val natinfCode: String? = null
+    override val natinfCode: String? = null,
 ) : ReportingValue(natinfCode)

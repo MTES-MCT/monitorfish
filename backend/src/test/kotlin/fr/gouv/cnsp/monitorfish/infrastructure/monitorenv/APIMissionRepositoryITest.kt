@@ -117,10 +117,10 @@ class APIMissionRepositoryITest {
                       ],
                       "missionSource": "CACEM",
                       "isClosed": false
-                    }"""
+                    }""",
                     ),
                     status = HttpStatusCode.OK,
-                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
                 )
             }
             val apiClient = ApiClient(mockEngine)
@@ -148,7 +148,7 @@ class APIMissionRepositoryITest {
             val mockEngine = MockEngine { _ ->
                 respond(
                     content = "NOT FOUND",
-                    status = HttpStatusCode.NotFound
+                    status = HttpStatusCode.NotFound,
                 )
             }
             val apiClient = ApiClient(mockEngine)

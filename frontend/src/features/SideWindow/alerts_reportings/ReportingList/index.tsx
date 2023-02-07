@@ -190,8 +190,11 @@ MMSI: ${reporting.mmsi || ''}`
                       onChange={() => toggleTableCheckForId(reporting.id)}
                     />
                   </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[1] as CSSProperties} title={reporting.item.validationDate}>
-                    {timeago.format(reporting.item.validationDate, 'fr')}
+                  <FlexboxGrid.Item
+                    style={columnStyles[1] as CSSProperties}
+                    title={reporting.item.validationDate || reporting.item.creationDate}
+                  >
+                    {timeago.format(reporting.item.validationDate || reporting.item.creationDate, 'fr')}
                   </FlexboxGrid.Item>
                   <FlexboxGrid.Item
                     style={columnStyles[2] as CSSProperties}
@@ -211,9 +214,9 @@ MMSI: ${reporting.mmsi || ''}`
                   <FlexboxGrid.Item style={columnStyles[5] as CSSProperties} title={getVesselNameTitle(reporting)}>
                     <Flag
                       rel="preload"
-                      src={`${baseUrl ? `${baseUrl}/` : ''}flags/${reporting.item.value.flagState?.toLowerCase()}.svg`}
+                      src={`${baseUrl ? `${baseUrl}/` : ''}flags/${reporting.item.value.flagState.toLowerCase()}.svg`}
                       style={{ marginLeft: 0, marginRight: 5, marginTop: -2, width: 18 }}
-                      title={countries.getName(reporting.item.value.flagState?.toLowerCase(), 'fr')}
+                      title={countries.getName(reporting.item.value.flagState.toLowerCase(), 'fr')}
                     />
                     {reporting.item.vesselName}
                   </FlexboxGrid.Item>

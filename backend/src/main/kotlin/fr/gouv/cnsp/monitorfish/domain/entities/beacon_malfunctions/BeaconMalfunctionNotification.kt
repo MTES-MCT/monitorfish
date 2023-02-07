@@ -13,12 +13,12 @@ data class BeaconMalfunctionNotification(
     val recipientName: String? = null,
     val recipientAddressOrNumber: String,
     val success: Boolean? = null,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
 ) {
     data class NotificationGroupByKeys(
         val beaconMalfunctionId: Int,
         val dateTimeUtc: ZonedDateTime,
-        val notificationType: BeaconMalfunctionNotificationType
+        val notificationType: BeaconMalfunctionNotificationType,
     )
 
     fun toGroupByKeys() = NotificationGroupByKeys(beaconMalfunctionId, dateTimeUtc.withNano(0), notificationType)

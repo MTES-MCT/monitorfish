@@ -17,7 +17,7 @@ class ApiClient(engine: HttpClientEngine = Java.create()) {
                     prettyPrint = true
                     isLenient = true
                     ignoreUnknownKeys = true
-                }
+                },
             )
         }
     }

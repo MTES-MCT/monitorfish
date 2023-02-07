@@ -27,7 +27,7 @@ class JpaPositionRepository(private val dbPositionRepository: DBPositionReposito
         externalReferenceNumber: String,
         ircs: String,
         from: ZonedDateTime,
-        to: ZonedDateTime
+        to: ZonedDateTime,
     ): List<Position> {
         if (internalReferenceNumber.isNotEmpty()) {
             return findVesselLastPositionsByInternalReferenceNumber(internalReferenceNumber, from, to)
@@ -48,7 +48,7 @@ class JpaPositionRepository(private val dbPositionRepository: DBPositionReposito
     override fun findVesselLastPositionsByInternalReferenceNumber(
         internalReferenceNumber: String,
         from: ZonedDateTime,
-        to: ZonedDateTime
+        to: ZonedDateTime,
     ): List<Position> {
         return dbPositionRepository.findLastByInternalReferenceNumber(internalReferenceNumber, from, to)
             .map(PositionEntity::toPosition)
@@ -58,7 +58,7 @@ class JpaPositionRepository(private val dbPositionRepository: DBPositionReposito
     override fun findVesselLastPositionsByIrcs(
         ircs: String,
         from: ZonedDateTime,
-        to: ZonedDateTime
+        to: ZonedDateTime,
     ): List<Position> {
         return dbPositionRepository.findLastByIrcs(ircs, from, to)
             .map(PositionEntity::toPosition)
@@ -68,7 +68,7 @@ class JpaPositionRepository(private val dbPositionRepository: DBPositionReposito
     override fun findVesselLastPositionsByExternalReferenceNumber(
         externalReferenceNumber: String,
         from: ZonedDateTime,
-        to: ZonedDateTime
+        to: ZonedDateTime,
     ): List<Position> {
         return dbPositionRepository.findLastByExternalReferenceNumber(externalReferenceNumber, from, to)
             .map(PositionEntity::toPosition)

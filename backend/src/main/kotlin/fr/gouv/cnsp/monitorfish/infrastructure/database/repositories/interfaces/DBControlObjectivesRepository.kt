@@ -9,21 +9,21 @@ interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity
     @Modifying(clearAutomatically = true)
     @Query(
         value = "UPDATE control_objectives SET target_number_of_controls_at_sea = :targetNumberOfControlsAtSea WHERE id = :controlObjectiveId",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun updateTargetNumberOfControlsAtSea(controlObjectiveId: Int, targetNumberOfControlsAtSea: Int)
 
     @Modifying(clearAutomatically = true)
     @Query(
         value = "UPDATE control_objectives SET target_number_of_controls_at_port = :targetNumberOfControlsAtPort WHERE id = :controlObjectiveId",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun updateTargetNumberOfControlsAtPort(controlObjectiveId: Int, targetNumberOfControlsAtPort: Int)
 
     @Modifying(clearAutomatically = true)
     @Query(
         value = "UPDATE control_objectives SET control_priority_level = :controlPriorityLevel WHERE id = :controlObjectiveId",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun updateControlPriorityLevel(controlObjectiveId: Int, controlPriorityLevel: Double)
 
@@ -41,7 +41,7 @@ interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity
         FROM control_objectives AS old
         WHERE old.year = :currentYear
     """,
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun duplicateCurrentYearAsNextYear(currentYear: Int, nextYear: Int)
 }

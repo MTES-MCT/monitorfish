@@ -12,5 +12,5 @@ class Rule(
     val lastUpdateDate: ZonedDateTime? = null,
     val lastRunDate: ZonedDateTime? = null,
     val lastRunSuccess: Boolean? = false,
-    val value: RuleType
+    val value: RuleType,
 )

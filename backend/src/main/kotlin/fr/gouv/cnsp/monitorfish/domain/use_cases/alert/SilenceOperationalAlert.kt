@@ -15,14 +15,14 @@ import java.time.ZonedDateTime
 class SilenceOperationalAlert(
     private val pendingAlertRepository: PendingAlertRepository,
     private val silencedAlertRepository: SilencedAlertRepository,
-    private val lastPositionRepository: LastPositionRepository
+    private val lastPositionRepository: LastPositionRepository,
 ) {
     private val logger = LoggerFactory.getLogger(SilenceOperationalAlert::class.java)
 
     fun execute(
         alertId: Int,
         silenceAlertPeriod: SilenceAlertPeriod,
-        beforeDateTime: ZonedDateTime? = null
+        beforeDateTime: ZonedDateTime? = null,
     ): SilencedAlert {
         if (silenceAlertPeriod == SilenceAlertPeriod.CUSTOM) {
             requireNotNull(beforeDateTime) {
@@ -48,7 +48,7 @@ class SilenceOperationalAlert(
         val savedSilencedAlert = silencedAlertRepository.save(
             alert = silencedAlert,
             silencedBeforeDate = before,
-            isValidated = false
+            isValidated = false,
         )
 
         pendingAlertRepository.delete(alertId)
@@ -68,7 +68,7 @@ class SilenceOperationalAlert(
                     silencedAlert.value.type,
                     silencedAlert.vesselIdentifier,
                     silencedAlert.internalReferenceNumber,
-                    isValidated = false
+                    isValidated = false,
                 )
             }
             VesselIdentifier.IRCS -> {
@@ -79,7 +79,7 @@ class SilenceOperationalAlert(
                     silencedAlert.value.type,
                     silencedAlert.vesselIdentifier,
                     silencedAlert.ircs,
-                    isValidated = false
+                    isValidated = false,
                 )
             }
             VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> {
@@ -90,7 +90,7 @@ class SilenceOperationalAlert(
                     silencedAlert.value.type,
                     silencedAlert.vesselIdentifier,
                     silencedAlert.externalReferenceNumber,
-                    isValidated = false
+                    isValidated = false,
                 )
             }
         }

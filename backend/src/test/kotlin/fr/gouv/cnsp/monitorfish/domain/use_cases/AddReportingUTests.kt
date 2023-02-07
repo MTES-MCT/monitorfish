@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.*
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
@@ -42,7 +43,7 @@ class AddReportingUTests {
             validationDate = ZonedDateTime.now(),
             value = ThreeMilesTrawlingAlert() as ReportingValue,
             isArchived = false,
-            isDeleted = false
+            isDeleted = false,
         )
 
         // When
@@ -57,7 +58,7 @@ class AddReportingUTests {
     @ParameterizedTest
     @EnumSource(ReportingActor::class)
     fun `execute Should throw an exception When fields of reporting actor are not rights`(
-        reportingActor: ReportingActor
+        reportingActor: ReportingActor,
     ) {
         // Given
         val reportingToAdd = Reporting(
@@ -70,9 +71,14 @@ class AddReportingUTests {
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             creationDate = ZonedDateTime.now(),
             validationDate = ZonedDateTime.now(),
-            value = Observation(reportingActor = reportingActor, authorTrigram = "LTH", title = "A title"),
+            value = Observation(
+                reportingActor = reportingActor,
+                authorTrigram = "LTH",
+                title = "A title",
+                flagState = CountryCode.FR.toString()
+            ),
             isArchived = false,
-            isDeleted = false
+            isDeleted = false,
         )
 
         // When
@@ -101,8 +107,9 @@ class AddReportingUTests {
                 dml = "DML 17",
                 natinfCode = "1235",
                 authorTrigram = "LTH",
-                title = "Chalut en boeuf illégal"
-            )
+                flagState = CountryCode.FR.toString(),
+                title = "Chalut en boeuf illégal",
+            ),
         )
         val reportingToAdd = Reporting(
             id = 1,
@@ -118,10 +125,11 @@ class AddReportingUTests {
                 reportingActor = ReportingActor.OPS,
                 natinfCode = "1235",
                 authorTrigram = "LTH",
-                title = "Chalut en boeuf illégal"
+                flagState = CountryCode.FR.toString(),
+                title = "Chalut en boeuf illégal",
             ),
             isArchived = false,
-            isDeleted = false
+            isDeleted = false,
         )
 
         // When

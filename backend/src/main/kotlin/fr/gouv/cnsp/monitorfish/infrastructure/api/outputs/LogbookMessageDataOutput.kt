@@ -27,7 +27,7 @@ data class LogbookMessageDataOutput(
     var deleted: Boolean? = false,
     val message: LogbookMessageValue? = null,
     var rawMessage: String? = null,
-    val isSentByFailoverSoftware: Boolean
+    val isSentByFailoverSoftware: Boolean,
 ) {
     companion object {
         fun fromLogbookMessage(logbookMessage: LogbookMessage) = LogbookMessageDataOutput(
@@ -51,7 +51,7 @@ data class LogbookMessageDataOutput(
             messageType = logbookMessage.messageType,
             message = logbookMessage.message,
             rawMessage = logbookMessage.rawMessage,
-            isSentByFailoverSoftware = logbookMessage.isSentByFailoverSoftware
+            isSentByFailoverSoftware = logbookMessage.isSentByFailoverSoftware,
         )
     }
 }

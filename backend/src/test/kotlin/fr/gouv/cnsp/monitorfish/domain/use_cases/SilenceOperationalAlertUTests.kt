@@ -42,7 +42,7 @@ class SilenceOperationalAlertUTests {
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             tripNumber = "123456",
             creationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert()
+            value = ThreeMilesTrawlingAlert(),
         )
         given(pendingAlertRepository.find(any())).willReturn(pendingAlert)
 
@@ -50,7 +50,7 @@ class SilenceOperationalAlertUTests {
         SilenceOperationalAlert(
             pendingAlertRepository,
             silencedAlertRepository,
-            lastPositionRepository
+            lastPositionRepository,
         ).execute(666, SilenceAlertPeriod.ONE_DAY)
 
         // Then
@@ -59,7 +59,7 @@ class SilenceOperationalAlertUTests {
             AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             "FRFGRGR",
-            false
+            false,
         )
         argumentCaptor<ZonedDateTime>().apply {
             verify(silencedAlertRepository, times(1)).save(eq(pendingAlert), capture(), any())
@@ -80,7 +80,7 @@ class SilenceOperationalAlertUTests {
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             tripNumber = "123456",
             creationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert()
+            value = ThreeMilesTrawlingAlert(),
         )
         given(pendingAlertRepository.find(any())).willReturn(pendingAlert)
 
@@ -88,11 +88,11 @@ class SilenceOperationalAlertUTests {
         SilenceOperationalAlert(
             pendingAlertRepository,
             silencedAlertRepository,
-            lastPositionRepository
+            lastPositionRepository,
         ).execute(
             666,
             SilenceAlertPeriod.CUSTOM,
-            ZonedDateTime.now().plusDays(26)
+            ZonedDateTime.now().plusDays(26),
         )
 
         // Then
@@ -116,7 +116,7 @@ class SilenceOperationalAlertUTests {
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             tripNumber = "123456",
             creationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert()
+            value = ThreeMilesTrawlingAlert(),
         )
         given(pendingAlertRepository.find(any())).willReturn(pendingAlert)
 
@@ -125,18 +125,18 @@ class SilenceOperationalAlertUTests {
             SilenceOperationalAlert(
                 pendingAlertRepository,
                 silencedAlertRepository,
-                lastPositionRepository
+                lastPositionRepository,
             ).execute(
                 666,
                 SilenceAlertPeriod.CUSTOM,
-                null
+                null,
             )
         }
 
         // Then
         assertThat(throwable).isNotNull
         assertThat(throwable.message).isEqualTo(
-            "end date must be not null when ignoring an operational alert with a custom period"
+            "end date must be not null when ignoring an operational alert with a custom period",
         )
     }
 }

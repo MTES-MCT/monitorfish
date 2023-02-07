@@ -10,5 +10,5 @@ enum class SilenceAlertPeriod {
     ONE_WEEK,
     ONE_MONTH,
     ONE_YEAR,
-    CUSTOM
+    CUSTOM,
 }

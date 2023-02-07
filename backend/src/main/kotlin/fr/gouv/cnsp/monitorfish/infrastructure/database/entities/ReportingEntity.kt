@@ -52,7 +52,7 @@ data class ReportingEntity(
     @Column(name = "latitude")
     val latitude: Double? = null,
     @Column(name = "longitude")
-    val longitude: Double? = null
+    val longitude: Double? = null,
 ) {
 
     fun toReporting(mapper: ObjectMapper): Reporting {
@@ -71,7 +71,7 @@ data class ReportingEntity(
             isArchived = isArchived,
             isDeleted = isDeleted,
             latitude = latitude,
-            longitude = longitude
+            longitude = longitude,
         )
     }
 
@@ -90,7 +90,7 @@ data class ReportingEntity(
             isArchived = false,
             isDeleted = false,
             latitude = alert.latitude,
-            longitude = alert.longitude
+            longitude = alert.longitude,
         )
 
         fun fromReporting(reporting: Reporting, mapper: ObjectMapper) = ReportingEntity(
@@ -105,7 +105,7 @@ data class ReportingEntity(
             validationDate = reporting.validationDate,
             value = mapper.writeValueAsString(reporting.value),
             isArchived = false,
-            isDeleted = false
+            isDeleted = false,
         )
     }
 }

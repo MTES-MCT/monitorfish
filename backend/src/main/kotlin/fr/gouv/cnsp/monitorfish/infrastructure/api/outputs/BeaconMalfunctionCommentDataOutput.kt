@@ -8,7 +8,7 @@ data class BeaconMalfunctionCommentDataOutput(
     val beaconMalfunctionId: Int,
     val comment: String,
     val userType: BeaconMalfunctionCommentUserType,
-    val dateTime: ZonedDateTime
+    val dateTime: ZonedDateTime,
 ) {
     companion object {
         fun fromBeaconMalfunctionComment(beaconMalfunctionComment: BeaconMalfunctionComment): BeaconMalfunctionCommentDataOutput {
@@ -16,7 +16,7 @@ data class BeaconMalfunctionCommentDataOutput(
                 beaconMalfunctionId = beaconMalfunctionComment.beaconMalfunctionId,
                 comment = beaconMalfunctionComment.comment,
                 userType = beaconMalfunctionComment.userType,
-                dateTime = beaconMalfunctionComment.dateTime
+                dateTime = beaconMalfunctionComment.dateTime,
             )
         }
     }

@@ -8,5 +8,5 @@ data class BeaconMalfunctionAction(
     val propertyName: BeaconMalfunctionActionPropertyName,
     val previousValue: String,
     val nextValue: String,
-    val dateTime: ZonedDateTime
+    val dateTime: ZonedDateTime,
 )

@@ -17,7 +17,7 @@ class UpdateFleetSegment(private val fleetSegmentRepository: FleetSegmentReposit
                 fields.faoAreas != null ||
                 fields.gears != null ||
                 fields.impactRiskFactor != null ||
-                fields.targetSpecies != null
+                fields.targetSpecies != null,
         ) {
             "No value to update"
         }

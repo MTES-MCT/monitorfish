@@ -71,6 +71,7 @@ class ReportingMapperUTests {
             "\"unit\": null, " +
             "\"authorTrigram\": \"LTH\"," +
             "\"authorContact\": null," +
+            "\"flagState\": \"FR\"," +
             "\"title\": \"A title !\"," +
             "\"description\": \"A description !\"" +
             "}"
@@ -98,6 +99,7 @@ class ReportingMapperUTests {
             "\"authorTrigram\": \"LTH\"," +
             "\"authorContact\": null," +
             "\"title\": \"A title !\"," +
+            "\"flagState\": \"FR\"," +
             "\"description\": \"A description !\"," +
             "\"natinfCode\": \"1234\"," +
             "\"dml\": \"DML 56\"" +
@@ -106,7 +108,7 @@ class ReportingMapperUTests {
         val parsedReporting = ReportingMapper.getReportingValueFromJSON(
             mapper,
             infraction,
-            ReportingType.INFRACTION_SUSPICION
+            ReportingType.INFRACTION_SUSPICION,
         )
 
         // Then
@@ -132,6 +134,7 @@ class ReportingMapperUTests {
             "\"authorTrigram\": \"LTH\"," +
             "\"authorContact\": null," +
             "\"title\": \"A title !\"," +
+            "\"flagState\": \"FR\"," +
             "\"description\": \"A description !\"," +
             "\"natinfCode\": \"1234\"," +
             "\"dml\": \"DML 56\"" +

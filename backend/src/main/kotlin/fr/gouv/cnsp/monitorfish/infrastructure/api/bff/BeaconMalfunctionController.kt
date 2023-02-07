@@ -21,7 +21,7 @@ class BeaconMalfunctionController(
     private val getBeaconMalfunction: GetBeaconMalfunction,
     private val saveBeaconMalfunctionComment: SaveBeaconMalfunctionComment,
     private val requestNotification: RequestNotification,
-    private val archiveBeaconMalfunctions: ArchiveBeaconMalfunctions
+    private val archiveBeaconMalfunctions: ArchiveBeaconMalfunctions,
 ) {
 
     @GetMapping(value = [""])
@@ -39,13 +39,13 @@ class BeaconMalfunctionController(
         @PathVariable(name = "beaconMalfunctionId")
         beaconMalfunctionId: Int,
         @RequestBody
-        updateBeaconMalfunctionData: UpdateBeaconMalfunctionDataInput
+        updateBeaconMalfunctionData: UpdateBeaconMalfunctionDataInput,
     ): BeaconMalfunctionResumeAndDetailsDataOutput {
         return updateBeaconMalfunction.execute(
             id = beaconMalfunctionId,
             vesselStatus = updateBeaconMalfunctionData.vesselStatus,
             stage = updateBeaconMalfunctionData.stage,
-            endOfBeaconMalfunctionReason = updateBeaconMalfunctionData.endOfBeaconMalfunctionReason
+            endOfBeaconMalfunctionReason = updateBeaconMalfunctionData.endOfBeaconMalfunctionReason,
         ).let {
             BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconMalfunctionResumeAndDetails(it)
         }
@@ -54,7 +54,7 @@ class BeaconMalfunctionController(
     @PutMapping(value = ["/archive"], consumes = ["application/json"])
     @Operation(summary = "Archive multiple beacon malfunctions")
     fun archiveBeaconMalfunctions(
-        @RequestBody ids: List<Int>
+        @RequestBody ids: List<Int>,
     ): List<BeaconMalfunctionResumeAndDetailsDataOutput> {
         return archiveBeaconMalfunctions.execute(ids).map {
             BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconMalfunctionResumeAndDetails(it)
@@ -69,12 +69,12 @@ class BeaconMalfunctionController(
         @PathVariable(name = "beaconMalfunctionId")
         beaconMalfunctionId: Int,
         @RequestBody
-        saveBeaconMalfunctionCommentDataInput: SaveBeaconMalfunctionCommentDataInput
+        saveBeaconMalfunctionCommentDataInput: SaveBeaconMalfunctionCommentDataInput,
     ): BeaconMalfunctionResumeAndDetailsDataOutput {
         return saveBeaconMalfunctionComment.execute(
             beaconMalfunctionId = beaconMalfunctionId,
             comment = saveBeaconMalfunctionCommentDataInput.comment,
-            userType = saveBeaconMalfunctionCommentDataInput.userType
+            userType = saveBeaconMalfunctionCommentDataInput.userType,
         ).let {
             BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconMalfunctionResumeAndDetails(it)
         }
@@ -85,10 +85,10 @@ class BeaconMalfunctionController(
     fun getBeaconMalfunction(
         @PathParam("Beacon malfunction id")
         @PathVariable(name = "beaconMalfunctionId")
-        beaconMalfunctionId: Int
+        beaconMalfunctionId: Int,
     ): BeaconMalfunctionResumeAndDetailsDataOutput {
         return BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconMalfunctionResumeAndDetails(
-            getBeaconMalfunction.execute(beaconMalfunctionId)
+            getBeaconMalfunction.execute(beaconMalfunctionId),
         )
     }
 
@@ -100,11 +100,11 @@ class BeaconMalfunctionController(
         beaconMalfunctionId: Int,
         @PathParam("Notification type requested")
         @PathVariable(name = "notificationRequested")
-        notificationRequested: BeaconMalfunctionNotificationType
+        notificationRequested: BeaconMalfunctionNotificationType,
     ) {
         return requestNotification.execute(
             id = beaconMalfunctionId,
-            notificationRequested = notificationRequested
+            notificationRequested = notificationRequested,
         )
     }
 }

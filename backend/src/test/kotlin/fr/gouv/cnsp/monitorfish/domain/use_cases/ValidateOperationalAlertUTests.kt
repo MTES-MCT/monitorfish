@@ -47,7 +47,7 @@ class ValidateOperationalAlertUTests {
             creationDate = ZonedDateTime.now(),
             value = ThreeMilesTrawlingAlert(),
             latitude = 12.123,
-            longitude = -5.5698
+            longitude = -5.5698,
         )
         given(pendingAlertRepository.find(any())).willReturn(pendingAlert)
 
@@ -56,7 +56,7 @@ class ValidateOperationalAlertUTests {
             pendingAlertRepository,
             reportingRepository,
             silencedAlertRepository,
-            lastPositionRepository
+            lastPositionRepository,
         ).execute(666)
 
         // Then
@@ -67,7 +67,7 @@ class ValidateOperationalAlertUTests {
             AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             "FRFGRGR",
-            true
+            true,
         )
     }
 }

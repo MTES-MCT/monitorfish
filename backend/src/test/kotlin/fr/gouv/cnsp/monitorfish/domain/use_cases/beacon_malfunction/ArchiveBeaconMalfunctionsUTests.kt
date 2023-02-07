@@ -28,7 +28,7 @@ class ArchiveBeaconMalfunctionsUTests {
                         1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                         "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDIBULE 1", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                         ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
                     ),
                     comments = listOf(
                         BeaconMalfunctionComment(
@@ -36,8 +36,8 @@ class ArchiveBeaconMalfunctionsUTests {
                             1,
                             "A comment",
                             BeaconMalfunctionCommentUserType.SIP,
-                            ZonedDateTime.now()
-                        )
+                            ZonedDateTime.now(),
+                        ),
                     ),
                     actions = listOf(
                         BeaconMalfunctionAction(
@@ -46,8 +46,8 @@ class ArchiveBeaconMalfunctionsUTests {
                             BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
                             "PREVIOUS",
                             "NEXT",
-                            ZonedDateTime.now()
-                        )
+                            ZonedDateTime.now(),
+                        ),
                     ),
                     notifications = listOf(
                         BeaconMalfunctionNotifications(
@@ -61,12 +61,12 @@ class ArchiveBeaconMalfunctionsUTests {
                                     communicationMeans = CommunicationMeans.SMS,
                                     recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
                                     recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000",
-                                    success = false, errorMessage = "This message could not be delivered"
-                                )
-                            )
-                        )
-                    )
-                )
+                                    success = false, errorMessage = "This message could not be delivered",
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
             )
         given(updateBeaconMalfunction.execute(eq(2), eq(null), eq(Stage.ARCHIVED), eq(null)))
             .willReturn(
@@ -75,7 +75,7 @@ class ArchiveBeaconMalfunctionsUTests {
                         2, "CFR", "EXTERNAL_IMMAT", "IRCS",
                         "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDIBULE 2", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                         ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
                     ),
                     comments = listOf(
                         BeaconMalfunctionComment(
@@ -83,8 +83,8 @@ class ArchiveBeaconMalfunctionsUTests {
                             1,
                             "A comment",
                             BeaconMalfunctionCommentUserType.SIP,
-                            ZonedDateTime.now()
-                        )
+                            ZonedDateTime.now(),
+                        ),
                     ),
                     actions = listOf(
                         BeaconMalfunctionAction(
@@ -93,8 +93,8 @@ class ArchiveBeaconMalfunctionsUTests {
                             BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
                             "PREVIOUS",
                             "NEXT",
-                            ZonedDateTime.now()
-                        )
+                            ZonedDateTime.now(),
+                        ),
                     ),
                     notifications = listOf(
                         BeaconMalfunctionNotifications(
@@ -108,12 +108,12 @@ class ArchiveBeaconMalfunctionsUTests {
                                     communicationMeans = CommunicationMeans.SMS,
                                     recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
                                     recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000",
-                                    success = false, errorMessage = "This message could not be delivered"
-                                )
-                            )
-                        )
-                    )
-                )
+                                    success = false, errorMessage = "This message could not be delivered",
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
             )
 
         // When

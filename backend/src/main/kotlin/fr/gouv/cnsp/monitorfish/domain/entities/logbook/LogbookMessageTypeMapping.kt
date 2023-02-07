@@ -32,7 +32,8 @@ enum class LogbookMessageTypeMapping(private val clazz: Class<out LogbookMessage
     GEAR_SHOT(NotImplementedMessage::class.java),
     GEAR_RETRIEVAL(NotImplementedMessage::class.java),
     START_ACTIVITY(NotImplementedMessage::class.java),
-    START_FISHING(NotImplementedMessage::class.java);
+    START_FISHING(NotImplementedMessage::class.java),
+    ;
 
     override fun getImplementation(): Class<out LogbookMessageValue> {
         return clazz

@@ -5,5 +5,5 @@ import java.time.ZonedDateTime
 
 data class SilenceOperationalAlertDataInput(
     var silencedAlertPeriod: SilenceAlertPeriod,
-    var beforeDateTime: ZonedDateTime? = null
+    var beforeDateTime: ZonedDateTime? = null,
 )

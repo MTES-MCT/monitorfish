@@ -21,11 +21,11 @@ data class PortEntity(
     @Column(name = "latitude")
     val latitude: Double? = null,
     @Column(name = "longitude")
-    val longitude: Double? = null
+    val longitude: Double? = null,
 ) {
 
     fun toPort() = Port(
         locode = locode,
-        name = portName
+        name = portName,
     )
 }

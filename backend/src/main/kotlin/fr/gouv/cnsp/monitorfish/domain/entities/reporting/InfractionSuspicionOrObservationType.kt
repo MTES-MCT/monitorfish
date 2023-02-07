@@ -11,8 +11,8 @@ abstract class InfractionSuspicionOrObservationType(
     open val authorContact: String? = null,
     open val title: String,
     open val description: String? = null,
-    open val flagState: String? = null,
-    override val natinfCode: String? = null
+    open val flagState: String,
+    override val natinfCode: String? = null,
 ) : ReportingValue(natinfCode) {
     fun checkReportingActorAndFieldsRequirements() = when (reportingActor) {
         ReportingActor.UNIT -> require(!unit.isNullOrEmpty()) {

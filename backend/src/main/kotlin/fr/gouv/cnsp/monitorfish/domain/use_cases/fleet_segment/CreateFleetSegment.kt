@@ -26,7 +26,7 @@ class CreateFleetSegment(private val fleetSegmentRepository: FleetSegmentReposit
                 targetSpecies = it.targetSpecies ?: listOf(),
                 bycatchSpecies = it.bycatchSpecies ?: listOf(),
                 impactRiskFactor = it.impactRiskFactor ?: 0.0,
-                year = it.year!!
+                year = it.year!!,
             )
         }
 

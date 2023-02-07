@@ -5,24 +5,24 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfun
 data class BeaconMalfunctionWithDetailsDataOutput(
     val beaconMalfunction: BeaconMalfunctionDataOutput,
     val comments: List<BeaconMalfunctionCommentDataOutput>,
-    val actions: List<BeaconMalfunctionActionDataOutput>
+    val actions: List<BeaconMalfunctionActionDataOutput>,
 ) {
     companion object {
         fun fromBeaconMalfunctionWithDetails(beaconMalfunctionWithDetails: BeaconMalfunctionWithDetails): BeaconMalfunctionWithDetailsDataOutput {
             return BeaconMalfunctionWithDetailsDataOutput(
                 beaconMalfunction = BeaconMalfunctionDataOutput.fromBeaconMalfunction(
-                    beaconMalfunctionWithDetails.beaconMalfunction
+                    beaconMalfunctionWithDetails.beaconMalfunction,
                 ),
                 comments = beaconMalfunctionWithDetails.comments.map {
                     BeaconMalfunctionCommentDataOutput.fromBeaconMalfunctionComment(
-                        it
+                        it,
                     )
                 },
                 actions = beaconMalfunctionWithDetails.actions.map {
                     BeaconMalfunctionActionDataOutput.fromBeaconMalfunctionAction(
-                        it
+                        it,
                     )
-                }
+                },
             )
         }
     }

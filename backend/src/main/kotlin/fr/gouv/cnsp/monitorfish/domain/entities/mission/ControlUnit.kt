@@ -8,5 +8,5 @@ data class ControlUnit(
     val administration: String,
     val name: String,
     val resources: List<ControlResource>,
-    val contact: String? = null
+    val contact: String? = null,
 )

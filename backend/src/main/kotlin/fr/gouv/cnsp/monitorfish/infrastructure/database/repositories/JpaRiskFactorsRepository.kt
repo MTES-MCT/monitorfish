@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository
 @Repository
 class JpaRiskFactorsRepository(
     private val dbRiskFactorsRepository: DBRiskFactorsRepository,
-    private val mapper: ObjectMapper
+    private val mapper: ObjectMapper,
 ) : RiskFactorsRepository {
     private val logger: Logger = LoggerFactory.getLogger(JpaRiskFactorsRepository::class.java)
 

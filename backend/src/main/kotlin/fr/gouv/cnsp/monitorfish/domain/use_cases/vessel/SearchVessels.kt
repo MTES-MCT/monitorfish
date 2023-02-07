@@ -8,7 +8,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 @UseCase
 class SearchVessels(
     private val vesselRepository: VesselRepository,
-    private val beaconRepository: BeaconRepository
+    private val beaconRepository: BeaconRepository,
 ) {
     fun execute(searched: String): List<Vessel> {
         val vessels = vesselRepository.search(searched).filter {

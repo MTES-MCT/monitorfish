@@ -5,5 +5,5 @@ import java.time.ZonedDateTime
 data class Health(
     val dateLastPositionUpdatedByPrefect: ZonedDateTime,
     val dateLastPositionReceivedByAPI: ZonedDateTime,
-    val dateLogbookMessageReceived: ZonedDateTime
+    val dateLogbookMessageReceived: ZonedDateTime,
 )

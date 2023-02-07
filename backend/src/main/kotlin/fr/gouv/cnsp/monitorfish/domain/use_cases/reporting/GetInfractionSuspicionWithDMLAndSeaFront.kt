@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory
 @UseCase
 class GetInfractionSuspicionWithDMLAndSeaFront(
     private val vesselRepository: VesselRepository,
-    private val districtRepository: DistrictRepository
+    private val districtRepository: DistrictRepository,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetInfractionSuspicionWithDMLAndSeaFront::class.java)
 

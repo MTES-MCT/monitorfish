@@ -10,7 +10,7 @@ data class CreateOrUpdateFleetSegmentDataInput(
     var targetSpecies: List<String>? = null,
     var bycatchSpecies: List<String>? = null,
     var impactRiskFactor: Double? = null,
-    var year: Int? = null
+    var year: Int? = null,
 ) {
     fun toCreateOrUpdateFleetSegmentFields() = CreateOrUpdateFleetSegmentFields(
         segment = this.segment,
@@ -20,6 +20,6 @@ data class CreateOrUpdateFleetSegmentDataInput(
         targetSpecies = this.targetSpecies,
         bycatchSpecies = this.bycatchSpecies,
         impactRiskFactor = this.impactRiskFactor,
-        year = this.year
+        year = this.year,
     )
 }

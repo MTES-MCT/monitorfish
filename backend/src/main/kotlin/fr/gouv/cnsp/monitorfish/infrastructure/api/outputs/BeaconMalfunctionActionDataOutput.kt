@@ -9,7 +9,7 @@ data class BeaconMalfunctionActionDataOutput(
     val propertyName: BeaconMalfunctionActionPropertyName,
     val previousValue: String,
     val nextValue: String,
-    val dateTime: ZonedDateTime
+    val dateTime: ZonedDateTime,
 ) {
     companion object {
         fun fromBeaconMalfunctionAction(beaconMalfunctionAction: BeaconMalfunctionAction): BeaconMalfunctionActionDataOutput {
@@ -18,7 +18,7 @@ data class BeaconMalfunctionActionDataOutput(
                 propertyName = beaconMalfunctionAction.propertyName,
                 previousValue = beaconMalfunctionAction.previousValue,
                 nextValue = beaconMalfunctionAction.nextValue,
-                dateTime = beaconMalfunctionAction.dateTime
+                dateTime = beaconMalfunctionAction.dateTime,
             )
         }
     }

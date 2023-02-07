@@ -10,7 +10,7 @@ import java.time.ZonedDateTime
 @UseCase
 class SaveBeaconMalfunctionComment(
     private val beaconMalfunctionCommentsRepository: BeaconMalfunctionCommentsRepository,
-    private val getBeaconMalfunction: GetBeaconMalfunction
+    private val getBeaconMalfunction: GetBeaconMalfunction,
 ) {
     @Throws(IllegalArgumentException::class)
     fun execute(beaconMalfunctionId: Int, comment: String, userType: BeaconMalfunctionCommentUserType): BeaconMalfunctionResumeAndDetails {
@@ -18,7 +18,7 @@ class SaveBeaconMalfunctionComment(
             beaconMalfunctionId = beaconMalfunctionId,
             comment = comment,
             userType = userType,
-            dateTime = ZonedDateTime.now()
+            dateTime = ZonedDateTime.now(),
         )
 
         beaconMalfunctionCommentsRepository.save(beaconMalfunctionComment)

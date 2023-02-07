@@ -13,11 +13,11 @@ data class GearCodeGroupEntity(
     @Column(name = "fishing_gear_code")
     val code: String,
     @Column(name = "fishing_gear_group_id")
-    val groupId: Int
+    val groupId: Int,
 ) {
 
     fun toGearCodeGroup() = GearCodeGroup(
         code = code,
-        groupId = groupId
+        groupId = groupId,
     )
 }

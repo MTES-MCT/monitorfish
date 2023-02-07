@@ -21,7 +21,7 @@ data class BeaconMalfunctionDataOutput(
     val vesselId: Int,
     var riskFactor: Double?,
     val notificationRequested: BeaconMalfunctionNotificationType? = null,
-    val beaconNumber: String? = null
+    val beaconNumber: String? = null,
 ) {
     companion object {
         fun fromBeaconMalfunction(beaconMalfunction: BeaconMalfunction): BeaconMalfunctionDataOutput {
@@ -42,7 +42,7 @@ data class BeaconMalfunctionDataOutput(
                 riskFactor = beaconMalfunction.riskFactor,
                 notificationRequested = beaconMalfunction.notificationRequested,
                 beaconNumber = beaconMalfunction.beaconNumber,
-                vesselId = beaconMalfunction.vesselId
+                vesselId = beaconMalfunction.vesselId,
             )
         }
     }

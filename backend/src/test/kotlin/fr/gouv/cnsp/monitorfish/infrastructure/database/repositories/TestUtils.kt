@@ -19,8 +19,8 @@ object TestUtils {
             LogbookInfraction(
                 InfractionType.WITH_RECORD,
                 27689,
-                "Poids à bord MNZ supérieur de 50% au poids déclaré"
-            )
+                "Poids à bord MNZ supérieur de 50% au poids déclaré",
+            ),
         ),
         gearInfractions = listOf(GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite")),
         controlQualityComments = "Ciblage CNSP respecté",
@@ -28,6 +28,6 @@ object TestUtils {
         userTrigram = "DEF",
         facade = "Manche ouest - Atlantique",
         longitude = -6.56,
-        latitude = 45.12
+        latitude = 45.12,
     )
 }

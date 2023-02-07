@@ -5,5 +5,5 @@ enum class EffortTargetSpeciesGroup(val value: String) {
     SCA("Coquille"),
     CRA("Crabe comestible et araignée de mer"),
     PEL("Pélagique"),
-    SAL("Truite de mer saumonée et poisson d'eau douce")
+    SAL("Truite de mer saumonée et poisson d'eau douce"),
 }

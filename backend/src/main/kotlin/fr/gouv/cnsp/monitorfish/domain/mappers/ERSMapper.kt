@@ -16,7 +16,7 @@ object ERSMapper {
         mapper: ObjectMapper,
         message: String?,
         messageType: String?,
-        operationType: LogbookOperationType
+        operationType: LogbookOperationType,
     ): LogbookMessageValue? {
         return try {
             if (operationType == LogbookOperationType.RET && !message.isNullOrEmpty() && message != jsonbNullString) {

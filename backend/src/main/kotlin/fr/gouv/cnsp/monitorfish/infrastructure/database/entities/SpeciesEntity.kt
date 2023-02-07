@@ -15,11 +15,11 @@ data class SpeciesEntity(
     @Column(name = "species_code")
     val code: String,
     @Column(name = "species_name")
-    val name: String
+    val name: String,
 ) {
 
     fun toSpecies() = Species(
         code = code,
-        name = name
+        name = name,
     )
 }

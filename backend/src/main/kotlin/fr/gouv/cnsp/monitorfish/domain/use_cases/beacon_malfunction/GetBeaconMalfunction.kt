@@ -12,7 +12,7 @@ class GetBeaconMalfunction(
     private val beaconMalfunctionCommentsRepository: BeaconMalfunctionCommentsRepository,
     private val beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository,
     private val lastPositionRepository: LastPositionRepository,
-    private val beaconMalfunctionNotificationsRepository: BeaconMalfunctionNotificationsRepository
+    private val beaconMalfunctionNotificationsRepository: BeaconMalfunctionNotificationsRepository,
 ) {
     private val logger = LoggerFactory.getLogger(GetBeaconMalfunction::class.java)
 
@@ -20,13 +20,13 @@ class GetBeaconMalfunction(
         val lastPositions = lastPositionRepository.findAll()
         val beaconMalfunction = beaconMalfunctionsRepository.find(beaconMalfunctionId)
         val beaconMalfunctionComments = beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(
-            beaconMalfunctionId
+            beaconMalfunctionId,
         )
         val beaconMalfunctionActions = beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(
-            beaconMalfunctionId
+            beaconMalfunctionId,
         )
         val beaconMalfunctionNotifications = beaconMalfunctionNotificationsRepository.findAllByBeaconMalfunctionId(
-            beaconMalfunctionId
+            beaconMalfunctionId,
         )
 
         val riskFactor = lastPositions.find(BeaconMalfunction.getVesselFromBeaconMalfunction(beaconMalfunction))?.riskFactor
@@ -34,14 +34,14 @@ class GetBeaconMalfunction(
 
         if (riskFactor == null) {
             logger.warn(
-                "No risk factor for vessel ${beaconMalfunction.internalReferenceNumber} found in last positions table"
+                "No risk factor for vessel ${beaconMalfunction.internalReferenceNumber} found in last positions table",
             )
         }
 
         val oneYearBefore = ZonedDateTime.now().minusYears(1)
         val vesselBeaconMalfunctions = beaconMalfunctionsRepository.findAllByVesselId(
             beaconMalfunction.vesselId,
-            oneYearBefore
+            oneYearBefore,
         )
 
         val beaconMalfunctionsWithDetails = vesselBeaconMalfunctions.map { vesselBeaconMalfunction ->
@@ -52,7 +52,7 @@ class GetBeaconMalfunction(
         }
 
         val vesselBeaconMalfunctionsResume = VesselBeaconMalfunctionsResume.fromBeaconMalfunctions(
-            beaconMalfunctionsWithDetails
+            beaconMalfunctionsWithDetails,
         )
 
         val notifications = beaconMalfunctionNotifications
@@ -62,7 +62,7 @@ class GetBeaconMalfunction(
                     dateTimeUtc = it.key.dateTimeUtc,
                     beaconMalfunctionId = it.key.beaconMalfunctionId,
                     notificationType = it.key.notificationType,
-                    notifications = it.value
+                    notifications = it.value,
                 )
             }
 
@@ -71,7 +71,7 @@ class GetBeaconMalfunction(
             resume = vesselBeaconMalfunctionsResume,
             comments = beaconMalfunctionComments,
             actions = beaconMalfunctionActions,
-            notifications = notifications
+            notifications = notifications,
         )
     }
 }

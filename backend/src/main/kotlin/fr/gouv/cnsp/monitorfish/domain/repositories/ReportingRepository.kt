@@ -18,14 +18,14 @@ interface ReportingRepository {
     fun findCurrentAndArchivedByVesselIdentifierEquals(
         vesselIdentifier: VesselIdentifier,
         value: String,
-        fromDate: ZonedDateTime
+        fromDate: ZonedDateTime,
     ): List<Reporting>
 
     fun findCurrentAndArchivedWithoutVesselIdentifier(
         internalReferenceNumber: String,
         externalReferenceNumber: String,
         ircs: String,
-        fromDate: ZonedDateTime
+        fromDate: ZonedDateTime,
     ): List<Reporting>
 
     fun archive(id: Int)

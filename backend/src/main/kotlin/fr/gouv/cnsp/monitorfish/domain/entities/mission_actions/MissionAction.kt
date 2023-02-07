@@ -39,5 +39,5 @@ data class MissionAction(
     val otherComments: String? = null,
     val gearOnboard: List<GearControl> = listOf(),
     val speciesOnboard: List<SpeciesControl> = listOf(),
-    var controlUnits: List<ControlUnit> = listOf()
+    var controlUnits: List<ControlUnit> = listOf(),
 )

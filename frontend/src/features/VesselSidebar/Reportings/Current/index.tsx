@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { ConfirmDeletionModal } from './ConfirmDeletionModal'
@@ -16,46 +16,56 @@ export const operationalAlertTypes = Object.keys(COMMON_ALERT_TYPE_OPTION)
   .map(alertTypeName => COMMON_ALERT_TYPE_OPTION[alertTypeName])
   .filter(alertType => alertType.isOperationalAlert)
 
-export function CurrentReporting() {
+export function Current() {
   const dispatch = useMainAppDispatch()
   const { currentAndArchivedReportingsOfSelectedVessel, editedReporting } = useMainAppSelector(state => state.reporting)
   const [deletionModalIsOpenForId, setDeletionModalIsOpenForId] = useState<number | undefined>(undefined)
+
+  const getAlertsOfType = useCallback(
+    alertType =>
+      currentAndArchivedReportingsOfSelectedVessel?.current
+        ?.filter(reporting => reporting.type === ReportingType.ALERT && reporting.value.type === alertType.code)
+        ?.sort((a, b) => sortByValidationDate(b, a)) || [],
+    [currentAndArchivedReportingsOfSelectedVessel]
+  )
+
+  const reportingsWithoutAlerts = useMemo(
+    () =>
+      (currentAndArchivedReportingsOfSelectedVessel?.current || [])
+        .filter(reporting => reporting.type !== ReportingType.ALERT)
+        .filter(reporting => reporting.id !== editedReporting?.id)
+        .sort((a, b) => sortByValidationDate(b, a)),
+    [currentAndArchivedReportingsOfSelectedVessel, editedReporting]
+  )
 
   return (
     <Wrapper>
       <CreateOrEditReporting />
       {operationalAlertTypes.map(alertType => {
-        const alertReportings =
-          currentAndArchivedReportingsOfSelectedVessel?.current
-            ?.filter(reporting => reporting.type === ReportingType.ALERT && reporting.value.type === alertType.code)
-            ?.sort((a, b) => sortByValidationDate(a, b)) || []
-
-        if (alertReportings?.length) {
-          return (
-            <ReportingCard
-              // TODO We need to change that with a proper cursor.
-              // eslint-disable-next-line no-unsafe-optional-chaining
-              key={(alertReportings as any)[alertReportings?.length - 1].id}
-              numberOfAlerts={alertReportings?.length}
-              openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
-              // eslint-disable-next-line no-unsafe-optional-chaining
-              reporting={alertReportings[alertReportings?.length - 1]!!}
-            />
-          )
+        const alertReportings = getAlertsOfType(alertType)
+        if (!alertReportings?.length) {
+          return null
         }
 
-        return null
-      })}
-      {currentAndArchivedReportingsOfSelectedVessel?.current
-        ?.filter(reporting => reporting.type !== ReportingType.ALERT)
-        ?.filter(reporting => reporting.id !== editedReporting?.id)
-        .map(reporting => (
+        return (
           <ReportingCard
-            key={reporting.id}
+            // TODO We need to change that with a proper cursor.
+            // eslint-disable-next-line no-unsafe-optional-chaining
+            key={(alertReportings as any)[alertReportings?.length - 1].id}
+            numberOfAlerts={alertReportings?.length}
             openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
-            reporting={reporting}
+            // eslint-disable-next-line no-unsafe-optional-chaining
+            reporting={alertReportings[alertReportings?.length - 1]!!}
           />
-        ))}
+        )
+      })}
+      {reportingsWithoutAlerts.map(reporting => (
+        <ReportingCard
+          key={reporting.id}
+          openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
+          reporting={reporting}
+        />
+      ))}
       {!currentAndArchivedReportingsOfSelectedVessel?.current?.length && <NoReporting>Aucun signalement</NoReporting>}
       <ConfirmDeletionModal
         closeModal={() => setDeletionModalIsOpenForId(undefined)}
@@ -71,13 +81,17 @@ function sortByValidationDate(a, b) {
     return a.validationDate.localeCompare(b.validationDate)
   }
 
+  if (a.creationDate && b.creationDate) {
+    return a.creationDate.localeCompare(b.creationDate)
+  }
+
   return null
 }
 
 const Wrapper = styled.div`
   background: ${COLORS.white};
   margin: 10px 5px 5px 5px;
-  padding: 15px 20px 10px 20px;
+  padding: 16px 16px 1px 16px;
   text-align: left;
   color: ${COLORS.slateGray};
 `

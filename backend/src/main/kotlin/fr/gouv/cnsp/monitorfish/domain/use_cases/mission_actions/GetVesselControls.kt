@@ -17,7 +17,7 @@ class GetVesselControls(
     private val missionActionsRepository: MissionActionsRepository,
     private val portRepository: PortRepository,
     private val gearRepository: GearRepository,
-    private val missionRepository: MissionRepository
+    private val missionRepository: MissionRepository,
 ) {
     private val logger = LoggerFactory.getLogger(GetVesselControls::class.java)
 
@@ -28,7 +28,7 @@ class GetVesselControls(
                 it.actionType in setOf(
                     MissionActionType.SEA_CONTROL,
                     MissionActionType.AIR_CONTROL,
-                    MissionActionType.LAND_CONTROL
+                    MissionActionType.LAND_CONTROL,
                 )
             }
         logger.debug("Found ${controls.size} controls for vessel $vesselId")
@@ -85,7 +85,7 @@ class GetVesselControls(
             numberOfDiversions = numberOfDiversions,
             numberOfGearSeized = numberOfGearSeized,
             numberOfSpeciesSeized = numberOfSpeciesSeized,
-            controls = controlsWithCodeValues
+            controls = controlsWithCodeValues,
         )
     }
 }

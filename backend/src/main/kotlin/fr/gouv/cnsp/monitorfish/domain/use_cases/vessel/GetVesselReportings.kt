@@ -12,7 +12,7 @@ import java.time.ZonedDateTime
 @UseCase
 class GetVesselReportings(
     private val reportingRepository: ReportingRepository,
-    private val infractionRepository: InfractionRepository
+    private val infractionRepository: InfractionRepository,
 ) {
     private val logger = LoggerFactory.getLogger(GetVesselReportings::class.java)
 
@@ -21,14 +21,14 @@ class GetVesselReportings(
         externalReferenceNumber: String,
         ircs: String,
         vesselIdentifier: VesselIdentifier?,
-        fromDate: ZonedDateTime
+        fromDate: ZonedDateTime,
     ): CurrentAndArchivedReportings {
         val reportings = when (vesselIdentifier) {
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER ->
                 reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
                     vesselIdentifier,
                     internalReferenceNumber,
-                    fromDate
+                    fromDate,
                 )
             VesselIdentifier.IRCS ->
                 reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier, ircs, fromDate)
@@ -36,13 +36,13 @@ class GetVesselReportings(
                 reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
                     vesselIdentifier,
                     externalReferenceNumber,
-                    fromDate
+                    fromDate,
                 )
             else -> reportingRepository.findCurrentAndArchivedWithoutVesselIdentifier(
                 internalReferenceNumber,
                 externalReferenceNumber,
                 ircs,
-                fromDate
+                fromDate,
             )
         }
 

@@ -20,7 +20,7 @@ class ReportingController(
     private val deleteReporting: DeleteReporting,
     private val deleteReportings: DeleteReportings,
     private val getAllCurrentReportings: GetAllCurrentReportings,
-    private val addReporting: AddReporting
+    private val addReporting: AddReporting,
 ) {
 
     @PostMapping(value = [""], consumes = ["application/json"])
@@ -28,7 +28,7 @@ class ReportingController(
     @ResponseStatus(HttpStatus.CREATED)
     fun createReporting(
         @RequestBody
-        reportingInput: CreateReportingDataInput
+        reportingInput: CreateReportingDataInput,
     ): ReportingDataOutput {
         return ReportingDataOutput.fromReporting(addReporting.execute(reportingInput.toReporting()))
     }
@@ -44,7 +44,7 @@ class ReportingController(
     fun archiveReporting(
         @PathParam("Reporting id")
         @PathVariable(name = "reportingId")
-        reportingId: Int
+        reportingId: Int,
     ) {
         archiveReporting.execute(reportingId)
     }
@@ -56,7 +56,7 @@ class ReportingController(
         @PathVariable(name = "reportingId")
         reportingId: Int,
         @RequestBody
-        updateReportingInput: UpdateReportingDataInput
+        updateReportingInput: UpdateReportingDataInput,
     ): ReportingDataOutput {
         val reporting = updateReporting.execute(reportingId, updateReportingInput.toUpdatedReportingValues())
 
@@ -74,7 +74,7 @@ class ReportingController(
     fun deleteReporting(
         @PathParam("Reporting id")
         @PathVariable(name = "reportingId")
-        reportingId: Int
+        reportingId: Int,
     ) {
         deleteReporting.execute(reportingId)
     }

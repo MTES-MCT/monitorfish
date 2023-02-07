@@ -7,7 +7,7 @@ data class GearControlDataOutput(
     var gearName: String? = null,
     var declaredMesh: Double? = null,
     var controlledMesh: Double? = null,
-    var gearWasControlled: Boolean? = null
+    var gearWasControlled: Boolean? = null,
 ) {
     companion object {
         fun fromGearControl(gearControl: GearControl) = GearControlDataOutput(
@@ -15,7 +15,7 @@ data class GearControlDataOutput(
             gearName = gearControl.gearName,
             declaredMesh = gearControl.declaredMesh,
             controlledMesh = gearControl.controlledMesh,
-            gearWasControlled = gearControl.gearWasControlled
+            gearWasControlled = gearControl.gearWasControlled,
         )
     }
 }

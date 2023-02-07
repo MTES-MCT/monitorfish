@@ -27,7 +27,7 @@ class JpaControlObjectivesRepository(private val dbControlObjectivesRepository: 
         id: Int,
         targetNumberOfControlsAtSea: Int?,
         targetNumberOfControlsAtPort: Int?,
-        controlPriorityLevel: Double?
+        controlPriorityLevel: Double?,
     ) {
         try {
             controlPriorityLevel?.let {

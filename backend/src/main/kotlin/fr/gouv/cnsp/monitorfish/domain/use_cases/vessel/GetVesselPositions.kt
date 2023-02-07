@@ -18,7 +18,7 @@ import java.time.ZonedDateTime
 @UseCase
 class GetVesselPositions(
     private val positionRepository: PositionRepository,
-    private val logbookReportRepository: LogbookReportRepository
+    private val logbookReportRepository: LogbookReportRepository,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetVesselPositions::class.java)
 
@@ -29,7 +29,7 @@ class GetVesselPositions(
         trackDepth: VesselTrackDepth,
         vesselIdentifier: VesselIdentifier?,
         fromDateTime: ZonedDateTime? = null,
-        toDateTime: ZonedDateTime? = null
+        toDateTime: ZonedDateTime? = null,
     ): Pair<Boolean, Deferred<List<Position>>> {
         var isTrackDepthModified = false
 
@@ -50,7 +50,7 @@ class GetVesselPositions(
                     // (the departure message may be sent after the departure)
                     logbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(
                         internalReferenceNumber,
-                        ZonedDateTime.now()
+                        ZonedDateTime.now(),
                     )
                         .minusHours(4)
                 } catch (e: NoLogbookFishingTripFound) {
@@ -81,12 +81,12 @@ class GetVesselPositions(
                 from,
                 to,
                 ircs,
-                externalReferenceNumber
+                externalReferenceNumber,
             )
 
             Pair(
                 isTrackDepthModified,
-                positionsFuture
+                positionsFuture,
             )
         }
     }
@@ -97,14 +97,14 @@ class GetVesselPositions(
         from: ZonedDateTime?,
         to: ZonedDateTime?,
         ircs: String,
-        externalReferenceNumber: String
+        externalReferenceNumber: String,
     ): Deferred<List<Position>> {
         return when (vesselIdentifier) {
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> async {
                 positionRepository.findVesselLastPositionsByInternalReferenceNumber(
                     internalReferenceNumber,
                     from!!,
-                    to!!
+                    to!!,
                 )
                     .sortedBy { it.dateTime }
             }
@@ -116,7 +116,7 @@ class GetVesselPositions(
                 positionRepository.findVesselLastPositionsByExternalReferenceNumber(
                     externalReferenceNumber,
                     from!!,
-                    to!!
+                    to!!,
                 )
                     .sortedBy { it.dateTime }
             }
@@ -126,7 +126,7 @@ class GetVesselPositions(
                     externalReferenceNumber = externalReferenceNumber,
                     ircs = ircs,
                     from = from!!,
-                    to = to!!
+                    to = to!!,
                 ).sortedBy { it.dateTime }
             }
         }

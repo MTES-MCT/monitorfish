@@ -9,5 +9,5 @@ data class Mission(
         monitorenv/backend/src/main/kotlin/fr/gouv/cacem/monitorenv/domain/entities/missions/MissionEntity.kt
         for the full entity structure
      */
-    val controlUnits: List<ControlUnit> = listOf()
+    val controlUnits: List<ControlUnit> = listOf(),
 )

@@ -10,7 +10,7 @@ import java.time.ZonedDateTime
 interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntity, Int> {
     @Query(
         value = "SELECT * FROM beacon_malfunctions where stage = 'ARCHIVED' ORDER BY vessel_status_last_modification_date_utc DESC LIMIT 60",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun findLastSixtyArchived(): List<BeaconMalfunctionEntity>
 
@@ -20,14 +20,14 @@ interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntit
     @Modifying(clearAutomatically = true)
     @Query(
         value = "UPDATE beacon_malfunctions SET vessel_status = CAST(:vesselStatus AS beacon_malfunctions_vessel_status), vessel_status_last_modification_date_utc = :updateDateTime WHERE id = :beaconMalfunctionId",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun updateVesselStatus(beaconMalfunctionId: Int, vesselStatus: String, updateDateTime: ZonedDateTime)
 
     @Modifying(clearAutomatically = true)
     @Query(
         value = "UPDATE beacon_malfunctions SET stage = CAST(:stage AS beacon_malfunctions_stage), vessel_status_last_modification_date_utc = :updateDateTime WHERE id = :beaconMalfunctionId",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun updateStage(beaconMalfunctionId: Int, stage: String, updateDateTime: ZonedDateTime)
 
@@ -40,24 +40,24 @@ interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntit
             malfunction_end_date_utc = :updateDateTime
         WHERE id = :beaconMalfunctionId
         """,
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun updateEndOfMalfunctionReason(
         beaconMalfunctionId: Int,
         endOfMalfunctionReason: String,
-        updateDateTime: ZonedDateTime
+        updateDateTime: ZonedDateTime,
     )
 
     @Query(
         value = "SELECT * FROM beacon_malfunctions WHERE vessel_id = :vesselId AND malfunction_start_date_utc >= :afterDateTime",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun findAllByVesselIdEqualsAfterDateTime(vesselId: Int, afterDateTime: Instant): List<BeaconMalfunctionEntity>
 
     @Modifying(clearAutomatically = true)
     @Query(
         value = "UPDATE beacon_malfunctions SET notification_requested = CAST(:notificationType AS beacon_malfunction_notification_type) WHERE id = :beaconMalfunctionId",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun updateRequestNotification(beaconMalfunctionId: Int, notificationType: String)
 }

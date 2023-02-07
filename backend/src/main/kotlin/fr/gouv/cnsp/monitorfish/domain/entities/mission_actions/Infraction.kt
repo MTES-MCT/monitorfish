@@ -5,5 +5,5 @@ data class Infraction(
     var natinfCode: String? = null,
     var regulation: String? = null,
     var infractionCategory: InfractionCategory? = null,
-    var infraction: String? = null
+    var infraction: String? = null,
 )

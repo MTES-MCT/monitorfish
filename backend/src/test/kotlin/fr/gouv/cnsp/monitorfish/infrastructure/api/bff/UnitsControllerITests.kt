@@ -30,8 +30,8 @@ class UnitsControllerITests {
         // Given
         given(getAllControllers.execute()).willReturn(
             listOf(
-                Controller(1, "ULAM 56", "Terrestre", "Affaires Maritimes")
-            )
+                Controller(1, "ULAM 56", "Terrestre", "Affaires Maritimes"),
+            ),
         )
 
         // When

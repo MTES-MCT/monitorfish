@@ -19,7 +19,7 @@ class ControlObjectiveController(
     private val addControlObjectiveYear: AddControlObjectiveYear,
     private val updateControlObjective: UpdateControlObjective,
     private val deleteControlObjective: DeleteControlObjective,
-    private val addControlObjective: AddControlObjective
+    private val addControlObjective: AddControlObjective,
 ) {
 
     @GetMapping("/{year}")
@@ -27,7 +27,7 @@ class ControlObjectiveController(
     fun getControlObjectivesOfYear(
         @PathParam("Year")
         @PathVariable(name = "year")
-        year: Int
+        year: Int,
     ): List<ControlObjectiveDataOutput> {
         return getControlObjectivesOfYear.execute(year).map { controlObjective ->
             ControlObjectiveDataOutput.fromControlObjective(controlObjective)
@@ -54,13 +54,13 @@ class ControlObjectiveController(
         @PathVariable(name = "controlObjectiveId")
         controlObjectiveId: Int,
         @RequestBody
-        updateControlObjectiveData: UpdateControlObjectiveDataInput
+        updateControlObjectiveData: UpdateControlObjectiveDataInput,
     ) {
         updateControlObjective.execute(
             id = controlObjectiveId,
             targetNumberOfControlsAtSea = updateControlObjectiveData.targetNumberOfControlsAtSea,
             targetNumberOfControlsAtPort = updateControlObjectiveData.targetNumberOfControlsAtPort,
-            controlPriorityLevel = updateControlObjectiveData.controlPriorityLevel
+            controlPriorityLevel = updateControlObjectiveData.controlPriorityLevel,
         )
     }
 
@@ -69,7 +69,7 @@ class ControlObjectiveController(
     fun deleteControlObjective(
         @PathParam("Control objective id")
         @PathVariable(name = "controlObjectiveId")
-        controlObjectiveId: Int
+        controlObjectiveId: Int,
     ) {
         deleteControlObjective.execute(controlObjectiveId)
     }
@@ -78,12 +78,12 @@ class ControlObjectiveController(
     @Operation(summary = "Add a control objective")
     fun addControlObjective(
         @RequestBody
-        addControlObjectiveData: AddControlObjectiveDataInput1
+        addControlObjectiveData: AddControlObjectiveDataInput1,
     ): Int {
         return addControlObjective.execute(
             segment = addControlObjectiveData.segment,
             facade = addControlObjectiveData.facade,
-            year = addControlObjectiveData.year
+            year = addControlObjectiveData.year,
         )
     }
 }

@@ -7,7 +7,7 @@ data class ControlsSummaryDataOutput(
     val numberOfDiversions: Int,
     val numberOfGearSeized: Int,
     val numberOfSpeciesSeized: Int,
-    val controls: List<MissionActionDataOutput>
+    val controls: List<MissionActionDataOutput>,
 ) {
     companion object {
         fun fromControlsSummary(controlsSummary: ControlsSummary) = ControlsSummaryDataOutput(
@@ -15,7 +15,7 @@ data class ControlsSummaryDataOutput(
             numberOfDiversions = controlsSummary.numberOfDiversions,
             numberOfGearSeized = controlsSummary.numberOfGearSeized,
             numberOfSpeciesSeized = controlsSummary.numberOfSpeciesSeized,
-            controls = controlsSummary.controls.map { MissionActionDataOutput.fromMissionAction(it) }
+            controls = controlsSummary.controls.map { MissionActionDataOutput.fromMissionAction(it) },
         )
     }
 }

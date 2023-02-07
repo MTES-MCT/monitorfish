@@ -5,8 +5,8 @@ import { AnimateToTrack } from './actions/animate_to_track'
 import { HideNonSelectedVessels } from './actions/hide_non_selected_vessels'
 import { ShowFishingActivitiesOnMap } from './actions/show_fishing_activities'
 import { TrackRequest } from './actions/TrackRequest'
-import { VesselSidebarBody } from './VesselSidebarBody'
-import VesselSidebarTabs from './VesselSidebarTabs'
+import { Body } from './Body'
+import { Tabs } from './Tabs'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 
@@ -42,8 +42,8 @@ export function VesselSidebar() {
       >
         <GrayOverlay isOverlayed={isFocusedOnVesselSearch && isFirstLoad} />
         <div>
-          <VesselSidebarTabs />
-          <VesselSidebarBody />
+          <Tabs />
+          <Body />
         </div>
       </Wrapper>
     </>

@@ -55,26 +55,26 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
         val firstPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                4
-            )
+                4,
+            ),
         )
         val secondPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                3
-            )
+                3,
+            ),
         )
         val thirdPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                2
-            )
+                2,
+            ),
         )
         val fourthPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusMinutes(
-                1
-            )
+                1,
+            ),
         )
 
         // When
@@ -87,7 +87,7 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
             "",
             "",
             ZonedDateTime.now().minusHours(2).minusMinutes(10),
-            ZonedDateTime.now()
+            ZonedDateTime.now(),
         )
 
         // Then
@@ -103,26 +103,26 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
         val firstPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                4
-            )
+                4,
+            ),
         )
         val secondPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                3
-            )
+                3,
+            ),
         )
         val thirdPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                2
-            )
+                2,
+            ),
         )
         val fourthPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                1
-            )
+                1,
+            ),
         )
 
         // When
@@ -135,7 +135,7 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
             "",
             "",
             ZonedDateTime.now().minusHours(6),
-            ZonedDateTime.now()
+            ZonedDateTime.now(),
         )
 
         // Then
@@ -151,26 +151,26 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
         val firstPosition = Position(
             null, "FR224226850", "224226850", null, "NOT_NULL", null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                4
-            )
+                4,
+            ),
         )
         val secondPosition = Position(
             null, "FR224226850", "224226850", null, "NOT_NULL", null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                3
-            )
+                3,
+            ),
         )
         val thirdPosition = Position(
             null, "FR224226850", "224226850", null, "NOT_NULL", null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                2
-            )
+                2,
+            ),
         )
         val fourthPosition = Position(
             null, "FR224226850", "224226850", null, "NOT_NULL", null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                1
-            )
+                1,
+            ),
         )
 
         // When
@@ -183,7 +183,7 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
             "NOT_NULL",
             "",
             ZonedDateTime.now().minusHours(6),
-            ZonedDateTime.now()
+            ZonedDateTime.now(),
         )
 
         // Then
@@ -198,26 +198,26 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
         val firstPosition = Position(
             null, "FR224226850", "224226850", "NOT_NULL", "", null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                4
-            )
+                4,
+            ),
         )
         val secondPosition = Position(
             null, "FR224226850", "224226850", "NOT_NULL", "", null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                3
-            )
+                3,
+            ),
         )
         val thirdPosition = Position(
             null, "FR224226850", "224226850", "NOT_NULL", "", null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                2
-            )
+                2,
+            ),
         )
         val fourthPosition = Position(
             null, "FR224226850", "224226850", "NOT_NULL", "", null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                1
-            )
+                1,
+            ),
         )
 
         // When
@@ -230,7 +230,7 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
             "",
             "NOT_NULL",
             ZonedDateTime.now().minusHours(6),
-            ZonedDateTime.now()
+            ZonedDateTime.now(),
         )
 
         // Then

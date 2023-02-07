@@ -63,9 +63,9 @@ class OperationalAlertControllerITests {
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     tripNumber = "123456",
                     creationDate = ZonedDateTime.now(),
-                    value = ThreeMilesTrawlingAlert()
-                )
-            )
+                    value = ThreeMilesTrawlingAlert(),
+                ),
+            ),
         )
 
         // When
@@ -96,8 +96,8 @@ class OperationalAlertControllerITests {
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 silencedBeforeDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert()
-            )
+                value = ThreeMilesTrawlingAlert(),
+            ),
         )
         val before = ZonedDateTime.now()
 
@@ -108,11 +108,11 @@ class OperationalAlertControllerITests {
                     objectMapper.writeValueAsString(
                         SilenceOperationalAlertDataInput(
                             silencedAlertPeriod = SilenceAlertPeriod.CUSTOM,
-                            beforeDateTime = before
-                        )
-                    )
+                            beforeDateTime = before,
+                        ),
+                    ),
                 )
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON),
         )
             // Then
             .andExpect(MockMvcResultMatchers.status().isOk)
@@ -124,7 +124,7 @@ class OperationalAlertControllerITests {
             verify(silenceOperationalAlert).execute(eq(666), eq(SilenceAlertPeriod.CUSTOM), capture())
 
             assertThat(allValues.first().withZoneSameInstant(UTC).toString()).isEqualTo(
-                before.withZoneSameInstant(UTC).toString()
+                before.withZoneSameInstant(UTC).toString(),
             )
         }
     }
@@ -140,9 +140,9 @@ class OperationalAlertControllerITests {
                     ircs = "6554fEE",
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     silencedBeforeDate = ZonedDateTime.now(),
-                    value = ThreeMilesTrawlingAlert()
-                )
-            )
+                    value = ThreeMilesTrawlingAlert(),
+                ),
+            ),
         )
 
         // When
@@ -153,7 +153,7 @@ class OperationalAlertControllerITests {
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].internalReferenceNumber", Matchers.equalTo("FRFGRGR")))
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].value.natinfCode", Matchers.equalTo("7059")))
             .andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].value.type", Matchers.equalTo("THREE_MILES_TRAWLING_ALERT"))
+                MockMvcResultMatchers.jsonPath("$[0].value.type", Matchers.equalTo("THREE_MILES_TRAWLING_ALERT")),
             )
     }
 

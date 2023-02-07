@@ -16,8 +16,8 @@ import java.util.*
         Index(columnList = "id", unique = true),
         Index(columnList = "cfr", unique = false),
         Index(columnList = "external_immatriculation", unique = false),
-        Index(columnList = "ircs", unique = false)
-    ]
+        Index(columnList = "ircs", unique = false),
+    ],
 )
 data class VesselEntity(
     @Id
@@ -85,7 +85,7 @@ data class VesselEntity(
     @Type(ListArrayType::class)
     val vesselEmails: List<String>? = null,
     @Column(name = "under_charter")
-    val underCharter: Boolean? = null
+    val underCharter: Boolean? = null,
 ) {
 
     fun toVessel() = Vessel(
@@ -102,7 +102,7 @@ data class VesselEntity(
                 logger.warn(e.message)
                 CountryCode.UNDEFINED
             }
-        },
+        } ?: CountryCode.UNDEFINED,
         width = width,
         length = length,
         district = district,
@@ -123,7 +123,7 @@ data class VesselEntity(
         proprietorEmails = proprietorEmails,
         vesselPhones = vesselPhones,
         vesselEmails = vesselEmails,
-        underCharter = underCharter
+        underCharter = underCharter,
     )
 
     companion object {

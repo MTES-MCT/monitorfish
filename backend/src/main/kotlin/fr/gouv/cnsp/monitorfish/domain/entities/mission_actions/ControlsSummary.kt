@@ -5,5 +5,5 @@ data class ControlsSummary(
     val numberOfDiversions: Int,
     val numberOfGearSeized: Int,
     val numberOfSpeciesSeized: Int,
-    val controls: List<MissionAction>
+    val controls: List<MissionAction>,
 )

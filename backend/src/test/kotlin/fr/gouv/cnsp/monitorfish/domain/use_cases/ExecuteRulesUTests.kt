@@ -35,7 +35,7 @@ class ExecuteRulesUTests {
             null,
             null,
             null,
-            PNOAndLANWeightTolerance(10.0)
+            PNOAndLANWeightTolerance(10.0),
         )
         given(rulesRepository.findAll()).willReturn(listOf(rule))
 

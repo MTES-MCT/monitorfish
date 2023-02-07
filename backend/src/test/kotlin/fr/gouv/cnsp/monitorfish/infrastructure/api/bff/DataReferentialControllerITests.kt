@@ -61,8 +61,8 @@ class DataReferentialControllerITests {
         given(this.getAllSpeciesAndSpeciesGroups.execute()).willReturn(
             SpeciesAndSpeciesGroups(
                 listOf(Species("FAK", "Facochère")),
-                listOf(SpeciesGroup("FAKOKO", "Facochère group"))
-            )
+                listOf(SpeciesGroup("FAKOKO", "Facochère group")),
+            ),
         )
 
         // When

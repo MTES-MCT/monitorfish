@@ -4,7 +4,7 @@ enum class Direction(val direction: String) {
     N("N"),
     S("S"),
     E("E"),
-    W("W")
+    W("W"),
 }
 
 fun degreeMinuteToDecimal(direction: String, degree: Int, minute: Int): Double {
@@ -15,12 +15,12 @@ fun degreeMinuteToDecimal(direction: String, degree: Int, minute: Int): Double {
 
     if (degree < 0 || degree > maxDegree) {
         throw IllegalArgumentException(
-            "Degrees value $degree is not an integer between 0 and $maxDegree"
+            "Degrees value $degree is not an integer between 0 and $maxDegree",
         )
     }
     if (minute < 0 || minute > maxMinute) {
         throw IllegalArgumentException(
-            "Minute value $minute is not an integer between 0 and $maxMinute"
+            "Minute value $minute is not an integer between 0 and $maxMinute",
         )
     }
 

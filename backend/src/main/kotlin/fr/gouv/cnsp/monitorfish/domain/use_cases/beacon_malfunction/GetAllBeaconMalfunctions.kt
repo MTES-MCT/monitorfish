@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory
 class GetAllBeaconMalfunctions(
     private val beaconMalfunctionsRepository: BeaconMalfunctionsRepository,
     private val lastPositionRepository: LastPositionRepository,
-    private val beaconRepository: BeaconRepository
+    private val beaconRepository: BeaconRepository,
 ) {
     private val logger = LoggerFactory.getLogger(GetAllBeaconMalfunctions::class.java)
     fun execute(): List<BeaconMalfunction> {
@@ -30,7 +30,7 @@ class GetAllBeaconMalfunctions(
 
                 if (riskFactor == null) {
                     logger.warn(
-                        "No risk factor for vessel ${beaconMalfunction.internalReferenceNumber} found in last positions table"
+                        "No risk factor for vessel ${beaconMalfunction.internalReferenceNumber} found in last positions table",
                     )
                 }
 

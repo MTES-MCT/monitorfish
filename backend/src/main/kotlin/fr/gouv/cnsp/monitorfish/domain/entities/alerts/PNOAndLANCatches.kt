@@ -6,5 +6,5 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Catch
 @JsonTypeName("pnoAndLanCatches")
 data class PNOAndLANCatches(
     var pno: Catch? = null,
-    var lan: Catch? = null
+    var lan: Catch? = null,
 )

@@ -22,7 +22,7 @@ data class PositionDataOutput(
     val tripNumber: String? = null,
     val positionType: PositionType,
     val isManual: Boolean? = null,
-    val isFishing: Boolean? = null
+    val isFishing: Boolean? = null,
 ) {
     companion object {
         fun fromPosition(position: Position): PositionDataOutput {
@@ -43,7 +43,7 @@ data class PositionDataOutput(
                 tripNumber = position.tripNumber,
                 positionType = position.positionType,
                 isManual = position.isManual,
-                isFishing = position.isFishing
+                isFishing = position.isFishing,
             )
         }
     }

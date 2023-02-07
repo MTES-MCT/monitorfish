@@ -34,6 +34,7 @@ const showAlertInSideWindow = (dispatch, selectedVessel) => {
     dispatch(
       focusOnAlert({
         externalReferenceNumber: selectedVessel.externalReferenceNumber,
+        flagState: selectedVessel.flagState,
         internalReferenceNumber: selectedVessel.internalReferenceNumber,
         ircs: selectedVessel.ircs,
         name: selectedVessel?.alerts[0]

@@ -11,13 +11,13 @@ import java.time.ZonedDateTime
 @Repository
 class JpaMissionActionsRepository(
     private val dbMissionActionsRepository: DBMissionActionsRepository,
-    private val mapper: ObjectMapper
+    private val mapper: ObjectMapper,
 ) : MissionActionsRepository {
 
     override fun findVesselMissionActionsAfterDateTime(vesselId: Int, afterDateTime: ZonedDateTime): List<MissionAction> {
         return dbMissionActionsRepository.findAllByVesselIdEqualsAndActionDatetimeUtcAfter(
             vesselId,
-            afterDateTime.toInstant()
+            afterDateTime.toInstant(),
         ).map { control -> control.toMissionAction(mapper) }
     }
 

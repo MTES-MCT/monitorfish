@@ -121,7 +121,7 @@ context('Reportings', () => {
 
     // Then
     cy.wait('@updateReporting').then(({ request, response }) => {
-      expect(request.body.reportingType).contains('OBSERVATION')
+      expect(request.body.type).contains('OBSERVATION')
       expect(response && response.statusCode).equal(200)
     })
     cy.wait(50)

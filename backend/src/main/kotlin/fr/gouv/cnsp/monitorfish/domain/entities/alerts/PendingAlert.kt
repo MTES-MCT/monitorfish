@@ -18,5 +18,5 @@ class PendingAlert(
     val value: AlertType,
     var infraction: Infraction? = null,
     val latitude: Double? = null,
-    val longitude: Double? = null
+    val longitude: Double? = null,
 )

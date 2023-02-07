@@ -7,5 +7,5 @@ data class ControlObjective(
     val year: Int?,
     val targetNumberOfControlsAtSea: Int,
     val targetNumberOfControlsAtPort: Int,
-    val controlPriorityLevel: Double
+    val controlPriorityLevel: Double,
 )

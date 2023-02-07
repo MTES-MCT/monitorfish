@@ -5,14 +5,14 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedInfractionSusp
 data class InfractionSuspicion(
     override val reportingActor: ReportingActor,
     override val unit: String? = null,
-    override val authorTrigram: String? = null,
+    override val authorTrigram: String,
     override val authorContact: String? = null,
     override val title: String,
     override val description: String? = null,
     override val natinfCode: String,
-    override val flagState: String? = null,
+    override val flagState: String,
     val seaFront: String? = null,
-    val dml: String? = null
+    val dml: String? = null,
 ) : InfractionSuspicionOrObservationType(
     reportingActor = reportingActor,
     unit = unit,
@@ -22,12 +22,12 @@ data class InfractionSuspicion(
     description = description,
     natinfCode = natinfCode,
     flagState = flagState,
-    type = ReportingTypeMapping.INFRACTION_SUSPICION
+    type = ReportingTypeMapping.INFRACTION_SUSPICION,
 ) {
     companion object {
         fun fromUpdatedReporting(
             updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation,
-            reportingValue: InfractionSuspicionOrObservationType
+            reportingValue: InfractionSuspicionOrObservationType,
         ): InfractionSuspicion {
             require(!updatedInfractionSuspicionOrObservation.natinfCode.isNullOrEmpty()) {
                 "NATINF code should not be null or empty"
@@ -41,7 +41,7 @@ data class InfractionSuspicion(
                 title = updatedInfractionSuspicionOrObservation.title,
                 description = updatedInfractionSuspicionOrObservation.description,
                 natinfCode = updatedInfractionSuspicionOrObservation.natinfCode,
-                flagState = reportingValue.flagState
+                flagState = reportingValue.flagState,
             )
         }
     }

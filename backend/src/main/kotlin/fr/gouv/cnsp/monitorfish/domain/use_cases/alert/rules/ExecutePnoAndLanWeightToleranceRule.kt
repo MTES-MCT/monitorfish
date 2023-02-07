@@ -22,7 +22,7 @@ import java.util.*
 @UseCase
 class ExecutePnoAndLanWeightToleranceRule(
     private val logbookReportRepository: LogbookReportRepository,
-    private val PNOAndLANAlertRepository: PNOAndLANAlertRepository
+    private val PNOAndLANAlertRepository: PNOAndLANAlertRepository,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(ExecutePnoAndLanWeightToleranceRule::class.java)
 
@@ -30,7 +30,7 @@ class ExecutePnoAndLanWeightToleranceRule(
     fun execute(rule: Rule) {
         rule.value as PNOAndLANWeightTolerance
         val lanAndPnos = logbookReportRepository.findLANAndPNOMessagesNotAnalyzedBy(
-            RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name
+            RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name,
         )
         logger.info("PNO_LAN_WEIGHT_TOLERANCE: Found ${lanAndPnos.size} LAN and PNOs to analyze")
 
@@ -40,7 +40,7 @@ class ExecutePnoAndLanWeightToleranceRule(
             if (pno == null) {
                 logger.warn(
                     "PNO_LAN_WEIGHT_TOLERANCE: No PNO associated to the LAN of " +
-                        "trip ${lan.tripNumber} of the vessel ${lan.internalReferenceNumber} found."
+                        "trip ${lan.tripNumber} of the vessel ${lan.internalReferenceNumber} found.",
                 )
             } else {
                 lan.message as LAN
@@ -51,7 +51,7 @@ class ExecutePnoAndLanWeightToleranceRule(
                 if (catchesOverTolerance.isNotEmpty()) {
                     logger.info(
                         "PNO_LAN_WEIGHT_TOLERANCE: Found ${catchesOverTolerance.size} catches which are over tolerance " +
-                            "for LAN ${lan.operationNumber} and PNO ${pno.operationNumber}"
+                            "for LAN ${lan.operationNumber} and PNO ${pno.operationNumber}",
                     )
                     val alert = buildAlert(lan, pno, rule.value, catchesOverTolerance)
 
@@ -67,7 +67,7 @@ class ExecutePnoAndLanWeightToleranceRule(
         if (listOfLanAndPnoIds.isNotEmpty()) {
             logbookReportRepository.updateLogbookMessagesAsProcessedByRule(
                 listOfLanAndPnoIds,
-                RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name
+                RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name,
             )
             logger.info("PNO_LAN_WEIGHT_TOLERANCE: ${listOfLanAndPnoIds.size} Logbook messages marked as processed")
         }
@@ -77,14 +77,14 @@ class ExecutePnoAndLanWeightToleranceRule(
         lan: LogbookMessage,
         pno: LogbookMessage,
         value: PNOAndLANWeightTolerance,
-        catchesOverTolerance: List<PNOAndLANCatches>
+        catchesOverTolerance: List<PNOAndLANCatches>,
     ): PNOAndLANAlert {
         val toleranceAlert = PNOAndLANWeightToleranceAlert(
             lan.operationNumber,
             pno.operationNumber,
             value.percentOfTolerance,
             value.minimumWeightThreshold,
-            catchesOverTolerance
+            catchesOverTolerance,
         )
 
         return PNOAndLANAlert(
@@ -94,7 +94,7 @@ class ExecutePnoAndLanWeightToleranceRule(
             ircs = lan.ircs,
             tripNumber = lan.tripNumber,
             creationDate = ZonedDateTime.now(),
-            value = toleranceAlert
+            value = toleranceAlert,
         )
     }
 

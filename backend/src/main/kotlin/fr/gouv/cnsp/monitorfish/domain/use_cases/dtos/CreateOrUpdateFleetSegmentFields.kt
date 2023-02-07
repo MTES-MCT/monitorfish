@@ -8,5 +8,5 @@ data class CreateOrUpdateFleetSegmentFields(
     var targetSpecies: List<String>? = null,
     var bycatchSpecies: List<String>? = null,
     var impactRiskFactor: Double? = null,
-    var year: Int? = null
+    var year: Int? = null,
 )

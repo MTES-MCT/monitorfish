@@ -11,7 +11,7 @@ data class FleetSegmentDataOutput(
     val targetSpecies: List<String>,
     val bycatchSpecies: List<String>,
     val impactRiskFactor: Double,
-    val year: Int
+    val year: Int,
 ) {
     companion object {
         fun fromFleetSegment(fleetSegment: FleetSegment): FleetSegmentDataOutput {
@@ -24,7 +24,7 @@ data class FleetSegmentDataOutput(
                 targetSpecies = fleetSegment.targetSpecies,
                 bycatchSpecies = fleetSegment.bycatchSpecies,
                 impactRiskFactor = fleetSegment.impactRiskFactor,
-                year = fleetSegment.year
+                year = fleetSegment.year,
             )
         }
     }

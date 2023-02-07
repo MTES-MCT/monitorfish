@@ -9,5 +9,5 @@ data class FleetSegment(
     val targetSpecies: List<String>,
     val bycatchSpecies: List<String>,
     val impactRiskFactor: Double,
-    val year: Int
+    val year: Int,
 )

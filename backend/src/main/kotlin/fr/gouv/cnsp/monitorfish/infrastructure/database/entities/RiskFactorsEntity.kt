@@ -60,7 +60,7 @@ data class RiskFactorsEntity(
     @Column(name = "number_seizures_last_5_years")
     val numberSeizuresLastFiveYears: Short,
     @Column(name = "number_escorts_to_quay_last_5_years")
-    val numberEscortsToQuayLastFiveYears: Short
+    val numberEscortsToQuayLastFiveYears: Short,
 ) : Serializable {
 
     fun toVesselRiskFactor(mapper: ObjectMapper) = VesselRiskFactor(
@@ -72,12 +72,12 @@ data class RiskFactorsEntity(
         gearOnboard = mapper.readValue(
             gearOnboard,
             mapper.typeFactory
-                .constructCollectionType(MutableList::class.java, Gear::class.java)
+                .constructCollectionType(MutableList::class.java, Gear::class.java),
         ),
         speciesOnboard = mapper.readValue(
             speciesOnboard,
             mapper.typeFactory
-                .constructCollectionType(MutableList::class.java, Species::class.java)
+                .constructCollectionType(MutableList::class.java, Species::class.java),
         ),
         segments = segments,
         controlPriorityLevel = controlPriorityLevel,
@@ -90,6 +90,6 @@ data class RiskFactorsEntity(
         numberInfractionsLastFiveYears = numberInfractionsLastFiveYears,
         numberDiversionsLastFiveYears = numberDiversionsLastFiveYears,
         numberSeizuresLastFiveYears = numberSeizuresLastFiveYears,
-        numberEscortsToQuayLastFiveYears = numberEscortsToQuayLastFiveYears
+        numberEscortsToQuayLastFiveYears = numberEscortsToQuayLastFiveYears,
     )
 }

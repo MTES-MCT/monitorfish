@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Repository
 class JpaBeaconMalfunctionActionsRepository(
-    private val dbBeaconMalfunctionActionsRepository: DBBeaconMalfunctionActionsRepository
+    private val dbBeaconMalfunctionActionsRepository: DBBeaconMalfunctionActionsRepository,
 ) : BeaconMalfunctionActionsRepository {
     override fun findAllByBeaconMalfunctionId(beaconMalfunctionId: Int): List<BeaconMalfunctionAction> {
         return dbBeaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(beaconMalfunctionId)
@@ -21,7 +21,7 @@ class JpaBeaconMalfunctionActionsRepository(
     @Transactional
     override fun save(beaconMalfunctionAction: BeaconMalfunctionAction) {
         dbBeaconMalfunctionActionsRepository.save(
-            BeaconMalfunctionActionEntity.fromBeaconMalfunctionAction(beaconMalfunctionAction)
+            BeaconMalfunctionActionEntity.fromBeaconMalfunctionAction(beaconMalfunctionAction),
         )
     }
 }

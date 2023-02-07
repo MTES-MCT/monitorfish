@@ -33,7 +33,7 @@ class JpaBeaconMalfunctionsRepository(private val dbBeaconMalfunctionsRepository
         vesselStatus: VesselStatus?,
         stage: Stage?,
         endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason?,
-        updateDateTime: ZonedDateTime
+        updateDateTime: ZonedDateTime,
     ) {
         try {
             vesselStatus?.let {
@@ -54,7 +54,7 @@ class JpaBeaconMalfunctionsRepository(private val dbBeaconMalfunctionsRepository
 
     override fun findAllByVesselId(
         vesselId: Int,
-        afterDateTime: ZonedDateTime
+        afterDateTime: ZonedDateTime,
     ): List<BeaconMalfunction> {
         return dbBeaconMalfunctionsRepository
             .findAllByVesselIdEqualsAfterDateTime(vesselId, afterDateTime.toInstant()).map {

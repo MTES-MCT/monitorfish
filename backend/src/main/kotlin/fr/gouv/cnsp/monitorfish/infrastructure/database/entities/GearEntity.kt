@@ -15,12 +15,12 @@ data class GearEntity(
     @Column(name = "fishing_gear")
     val name: String,
     @Column(name = "fishing_gear_category")
-    val category: String? = null
+    val category: String? = null,
 ) {
 
     fun toGear() = Gear(
         code = code,
         name = name,
-        category = category
+        category = category,
     )
 }

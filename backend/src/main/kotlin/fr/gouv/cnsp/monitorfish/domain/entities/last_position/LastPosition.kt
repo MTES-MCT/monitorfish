@@ -21,7 +21,7 @@ data class LastPosition(
     // i.e side number, registration number, IMO number or any other external marking identifying the vessel
     val externalReferenceNumber: String? = null,
     val vesselName: String? = null,
-    val flagState: CountryCode? = null,
+    val flagState: CountryCode,
     val positionType: PositionType,
 
     val latitude: Double? = null,
@@ -31,8 +31,6 @@ data class LastPosition(
     val speed: Double? = null,
     val course: Double? = null,
     val dateTime: ZonedDateTime,
-    val from: CountryCode? = null,
-    val destination: CountryCode? = null,
     val tripNumber: String? = null,
 
     val emissionPeriod: Duration? = null,
@@ -59,5 +57,5 @@ data class LastPosition(
     val isAtPort: Boolean? = null,
     val alerts: List<String>? = listOf(),
     val beaconMalfunctionId: Int? = null,
-    val reportings: List<String> = listOf()
+    val reportings: List<String> = listOf(),
 )

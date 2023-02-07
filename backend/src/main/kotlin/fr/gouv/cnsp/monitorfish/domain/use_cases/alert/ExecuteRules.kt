@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled
 @UseCase
 class ExecuteRules(
     private val ruleRepository: RuleRepository,
-    private val executePnoAndLanWeightToleranceRule: ExecutePnoAndLanWeightToleranceRule
+    private val executePnoAndLanWeightToleranceRule: ExecutePnoAndLanWeightToleranceRule,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(ExecuteRules::class.java)
 

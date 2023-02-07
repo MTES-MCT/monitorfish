@@ -4,5 +4,5 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfun
 
 data class SaveBeaconMalfunctionCommentDataInput(
     var comment: String,
-    var userType: BeaconMalfunctionCommentUserType
+    var userType: BeaconMalfunctionCommentUserType,
 )

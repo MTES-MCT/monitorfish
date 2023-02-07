@@ -24,7 +24,8 @@ enum class NAFCode(val code: String) {
     IMO_NUMBER("IM"),
     TRIP_NUMBER("TN"),
     LATITUDE("LA"),
-    LONGITUDE("LO");
+    LONGITUDE("LO"),
+    ;
 
     private val pattern: Pattern
 

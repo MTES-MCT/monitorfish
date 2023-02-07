@@ -7,7 +7,7 @@ import {
   ReportingTypeCharacteristics
 } from '../../../domain/entities/reporting'
 import { setEditedReporting } from '../../../domain/shared_slices/Reporting'
-import { ReportingType, Reporting } from '../../../domain/types/reporting'
+import { Reporting, ReportingType } from '../../../domain/types/reporting'
 import archiveReporting from '../../../domain/use_cases/reporting/archiveReporting'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { getDateTime } from '../../../utils'
@@ -60,6 +60,9 @@ export function ReportingCard({
         {reporting.type !== ReportingType.ALERT && <Description>{reporting.value.description}</Description>}
         {reporting.type !== ReportingType.ALERT && reporting.value.authorContact && (
           <Author>Émetteur: {reporting.value.authorContact}</Author>
+        )}
+        {reporting.type !== ReportingType.ALERT && reporting.value.authorTrigram && (
+          <Author>Saisi par: {reporting.value.authorTrigram}</Author>
         )}
         {reporting.type !== ReportingType.OBSERVATION && reporting.value.natinfCode && (
           <Natinf
@@ -114,10 +117,9 @@ const getReportingActor = (reportingActor, unit) => {
 const Wrapper = styled.div<{
   isInfractionSuspicion?: boolean
 }>`
-  background: ${p => (p.isInfractionSuspicion ? '#E1000F1A' : COLORS.cultured)} 0% 0% no-repeat padding-box;
-  border: 1px solid ${p => (p.isInfractionSuspicion ? '#E1000F59' : COLORS.lightGray)};
+  background: ${p => (p.isInfractionSuspicion ? '#E1000F1A' : COLORS.gainsboro)} 0% 0% no-repeat padding-box;
   display: flex;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
 `
 
 const Icon = styled.div`
@@ -137,10 +139,12 @@ const Actions = styled.div<{
   isAlert: boolean
   isInfractionSuspicion?: boolean
 }>`
-  border-left: 1px solid ${p => (p.isInfractionSuspicion ? '#E1000F59' : COLORS.lightGray)};
+  border-left: 2px solid ${p => p.theme.color.white};
   padding-top: ${p => (p.isAlert ? 8 : 3)}px;
+  padding-left: 1px;
   text-align: center;
-  width: 30px;
+  width: 29px;
+  margin-left: auto;
 `
 
 const NumberOfAlerts = styled.span`

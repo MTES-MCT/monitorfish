@@ -7,34 +7,34 @@ data class BeaconMalfunctionResumeAndDetailsDataOutput(
     val resume: VesselBeaconMalfunctionResumeDataOutput? = null,
     val comments: List<BeaconMalfunctionCommentDataOutput>,
     val actions: List<BeaconMalfunctionActionDataOutput>,
-    val notifications: List<BeaconMalfunctionNotificationsDataOutput>
+    val notifications: List<BeaconMalfunctionNotificationsDataOutput>,
 ) {
     companion object {
         fun fromBeaconMalfunctionResumeAndDetails(beaconMalfunctionResumeAndDetails: BeaconMalfunctionResumeAndDetails): BeaconMalfunctionResumeAndDetailsDataOutput {
             return BeaconMalfunctionResumeAndDetailsDataOutput(
                 beaconMalfunction = BeaconMalfunctionDataOutput.fromBeaconMalfunction(
-                    beaconMalfunctionResumeAndDetails.beaconMalfunction
+                    beaconMalfunctionResumeAndDetails.beaconMalfunction,
                 ),
                 resume = beaconMalfunctionResumeAndDetails.resume?.let {
                     VesselBeaconMalfunctionResumeDataOutput.fromVesselBeaconMalfunctionResume(
-                        beaconMalfunctionResumeAndDetails.resume
+                        beaconMalfunctionResumeAndDetails.resume,
                     )
                 },
                 comments = beaconMalfunctionResumeAndDetails.comments.map {
                     BeaconMalfunctionCommentDataOutput.fromBeaconMalfunctionComment(
-                        it
+                        it,
                     )
                 },
                 actions = beaconMalfunctionResumeAndDetails.actions.map {
                     BeaconMalfunctionActionDataOutput.fromBeaconMalfunctionAction(
-                        it
+                        it,
                     )
                 },
                 notifications = beaconMalfunctionResumeAndDetails.notifications.map {
                     BeaconMalfunctionNotificationsDataOutput.fromBeaconMalfunctionNotifications(
-                        it
+                        it,
                     )
-                }
+                },
             )
         }
     }

@@ -21,7 +21,7 @@ data class RiskFactorDataOutput(
     val impactRiskFactor: Double,
     val probabilityRiskFactor: Double,
     val detectabilityRiskFactor: Double,
-    val riskFactor: Double
+    val riskFactor: Double,
 ) {
     companion object {
         fun fromVesselRiskFactor(vesselRiskFactor: VesselRiskFactor) = RiskFactorDataOutput(
@@ -31,7 +31,7 @@ data class RiskFactorDataOutput(
             segmentHighestPriority = vesselRiskFactor.segmentHighestPriority,
             speciesOnboard = vesselRiskFactor.speciesOnboard?.map {
                 SpeciesLastPositionDataOutput.fromSpeciesLastPosition(
-                    it
+                    it,
                 )
             },
             controlPriorityLevel = vesselRiskFactor.controlPriorityLevel,
@@ -46,7 +46,7 @@ data class RiskFactorDataOutput(
             impactRiskFactor = vesselRiskFactor.impactRiskFactor,
             probabilityRiskFactor = vesselRiskFactor.probabilityRiskFactor,
             detectabilityRiskFactor = vesselRiskFactor.detectabilityRiskFactor,
-            riskFactor = vesselRiskFactor.riskFactor
+            riskFactor = vesselRiskFactor.riskFactor,
         )
     }
 }

@@ -22,7 +22,7 @@ data class BeaconMalfunctionCommentEntity(
     @Enumerated(EnumType.STRING)
     val userType: BeaconMalfunctionCommentUserType,
     @Column(name = "date_time_utc")
-    val dateTime: Instant
+    val dateTime: Instant,
 ) {
 
     fun toBeaconMalfunctionComment() = BeaconMalfunctionComment(
@@ -30,7 +30,7 @@ data class BeaconMalfunctionCommentEntity(
         beaconMalfunctionId = beaconMalfunctionId,
         comment = comment,
         userType = userType,
-        dateTime = dateTime.atZone(ZoneOffset.UTC)
+        dateTime = dateTime.atZone(ZoneOffset.UTC),
     )
 
     companion object {
@@ -39,7 +39,7 @@ data class BeaconMalfunctionCommentEntity(
             beaconMalfunctionId = beaconMalfunctionComment.beaconMalfunctionId,
             comment = beaconMalfunctionComment.comment,
             userType = beaconMalfunctionComment.userType,
-            dateTime = beaconMalfunctionComment.dateTime.toInstant()
+            dateTime = beaconMalfunctionComment.dateTime.toInstant(),
         )
     }
 }

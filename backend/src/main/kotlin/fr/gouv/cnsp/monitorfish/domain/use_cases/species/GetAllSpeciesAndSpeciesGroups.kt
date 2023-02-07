@@ -8,7 +8,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.SpeciesRepository
 @UseCase
 class GetAllSpeciesAndSpeciesGroups(
     private val speciesRepository: SpeciesRepository,
-    private val speciesGroupRepository: SpeciesGroupRepository
+    private val speciesGroupRepository: SpeciesGroupRepository,
 ) {
     fun execute(): SpeciesAndSpeciesGroups {
         val species = speciesRepository.findAll()

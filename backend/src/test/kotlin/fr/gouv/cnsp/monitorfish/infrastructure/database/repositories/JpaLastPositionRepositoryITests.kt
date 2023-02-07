@@ -114,7 +114,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
             AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             "ABC000926735",
-            isValidated = true
+            isValidated = true,
         )
 
         // Then
@@ -141,7 +141,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
             AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             "ABC000339263",
-            isValidated = false
+            isValidated = false,
         )
 
         // Then
@@ -167,7 +167,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
             AlertTypeMapping.MISSING_FAR_ALERT,
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             "ABC000498845",
-            isValidated = false
+            isValidated = false,
         )
 
         // Then
@@ -184,7 +184,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         // When
         val underCharter = jpaLastPositionRepository.findUnderCharterForVessel(
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            "ABC000180832"
+            "ABC000180832",
         )
 
         // Then

@@ -106,7 +106,7 @@ class JpaLogbookRawMessageRepositoryITests : AbstractDBTests() {
                 "</ers:LOG>\n" +
                 "</ers:ERS>\n" +
                 "</ers:DAT>\n" +
-                "</ers:OPS>"
+                "</ers:OPS>",
         )
     }
 

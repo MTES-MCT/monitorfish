@@ -24,7 +24,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
                 (archived IS FALSE AND
                     deleted IS FALSE))
         """,
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun findCurrentAndArchivedByVesselIdentifier(vesselIdentifier: String, value: String, fromDate: Instant): List<ReportingEntity>
 
@@ -32,7 +32,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         value = """
         SELECT * FROM reportings WHERE archived IS FALSE AND deleted IS FALSE AND type IN ('INFRACTION_SUSPICION', 'ALERT')
         """,
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun findAllCurrentReportings(): List<ReportingEntity>
 
@@ -43,7 +43,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         SET archived = TRUE
         WHERE id = :id
     """,
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun archiveReporting(id: Int)
 
@@ -54,7 +54,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         SET deleted = TRUE
         WHERE id = :id
     """,
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun deleteReporting(id: Int)
 
@@ -67,7 +67,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
             type = CAST(:type AS reporting_type)
         WHERE id = :id
     """,
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun update(id: Int, value: String, type: String)
 }

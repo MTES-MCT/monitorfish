@@ -18,7 +18,9 @@ class JpaInfractionRepository(private val dbInfractionRepository: DBInfractionRe
 
     @Cacheable(value = ["fishing_infractions"])
     override fun findFishingInfractions(): List<Infraction> {
-        return dbInfractionRepository.findAllByInfractionCategoryEquals(InfractionCategory.FISHING.value).map { it.toInfraction() }
+        return dbInfractionRepository.findAllByInfractionCategoryEquals(InfractionCategory.FISHING.value).map {
+            it.toInfraction()
+        }
     }
 
     @Cacheable(value = ["infraction"])

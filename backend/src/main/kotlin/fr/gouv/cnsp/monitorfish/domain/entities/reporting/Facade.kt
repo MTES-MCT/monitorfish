@@ -7,5 +7,5 @@ enum class Facade {
     MED,
     OUTREMEROA,
     OUTREMEROI,
-    UNDEFINED
+    UNDEFINED,
 }

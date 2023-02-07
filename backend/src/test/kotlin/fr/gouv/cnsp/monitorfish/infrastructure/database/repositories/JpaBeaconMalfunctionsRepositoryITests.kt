@@ -67,7 +67,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
             vesselStatus = VesselStatus.AT_SEA,
             null,
             null,
-            updateDateTime
+            updateDateTime,
         )
 
         // Then
@@ -75,7 +75,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         assertThat(updatedBeaconMalfunction?.vesselStatus).isEqualTo(VesselStatus.AT_SEA)
         assertThat(updatedBeaconMalfunction?.vesselStatusLastModificationDateTime).isCloseTo(
             updateDateTime,
-            within(100, ChronoUnit.MILLIS)
+            within(100, ChronoUnit.MILLIS),
         )
     }
 
@@ -93,7 +93,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
             null,
             Stage.END_OF_MALFUNCTION,
             EndOfBeaconMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED,
-            updateDateTime
+            updateDateTime,
         )
 
         // Then
@@ -101,14 +101,14 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         assertThat(updatedBeaconMalfunction?.stage).isEqualTo(Stage.END_OF_MALFUNCTION)
         assertThat(updatedBeaconMalfunction?.vesselStatusLastModificationDateTime).isCloseTo(
             updateDateTime,
-            within(100, ChronoUnit.MILLIS)
+            within(100, ChronoUnit.MILLIS),
         )
         assertThat(updatedBeaconMalfunction?.endOfBeaconMalfunctionReason).isEqualTo(
-            EndOfBeaconMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED
+            EndOfBeaconMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED,
         )
         assertThat(updatedBeaconMalfunction?.malfunctionEndDateTime).isCloseTo(
             updateDateTime,
-            within(100, ChronoUnit.MILLIS)
+            within(100, ChronoUnit.MILLIS),
         )
     }
 
@@ -126,7 +126,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         // then
         val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 2 }
         assertThat(updatedBeaconMalfunction?.notificationRequested).isEqualTo(
-            BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION
+            BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
         )
     }
 }

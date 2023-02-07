@@ -34,7 +34,7 @@ data class FleetSegmentEntity(
     @Column(name = "impact_risk_factor")
     val impactRiskFactor: Double,
     @Column(name = "year", nullable = false)
-    val year: Int
+    val year: Int,
 ) {
 
     fun toFleetSegment() = FleetSegment(
@@ -46,7 +46,7 @@ data class FleetSegmentEntity(
         targetSpecies = this.targetSpecies,
         bycatchSpecies = this.bycatchSpecies,
         impactRiskFactor = this.impactRiskFactor,
-        year = this.year
+        year = this.year,
     )
 
     companion object {
@@ -59,7 +59,7 @@ data class FleetSegmentEntity(
             targetSpecies = fleetSegment.targetSpecies,
             bycatchSpecies = fleetSegment.bycatchSpecies,
             impactRiskFactor = fleetSegment.impactRiskFactor,
-            year = fleetSegment.year
+            year = fleetSegment.year,
         )
     }
 }

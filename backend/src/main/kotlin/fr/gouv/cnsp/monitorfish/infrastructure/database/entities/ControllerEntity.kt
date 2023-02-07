@@ -17,13 +17,13 @@ data class ControllerEntity(
     @Column(name = "controller_type")
     var controllerType: String? = null,
     @Column(name = "administration")
-    var administration: String? = null
+    var administration: String? = null,
 ) {
 
     fun toController() = Controller(
         id = id,
         controller = controller,
         controllerType = controllerType,
-        administration = administration
+        administration = administration,
     )
 }

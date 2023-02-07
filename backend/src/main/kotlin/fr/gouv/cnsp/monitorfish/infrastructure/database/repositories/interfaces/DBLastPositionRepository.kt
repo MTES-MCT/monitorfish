@@ -16,7 +16,7 @@ interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
 
     @Query(
         "select last_position_datetime_utc from last_positions where last_position_datetime_utc < now() order by last_position_datetime_utc desc limit 1",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun findLastPositionDateTime(): Instant
 
@@ -37,13 +37,13 @@ interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
                 WHEN :vesselIdentifier = 'EXTERNAL_REFERENCE_NUMBER' THEN external_immatriculation
             END = :value
         """,
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun removeAlertByVesselIdentifierEquals(
         vesselIdentifier: String,
         value: String,
         alertType: String,
-        isValidated: Boolean
+        isValidated: Boolean,
     )
 
     @Query(
@@ -57,7 +57,7 @@ interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
                 WHEN :vesselIdentifier = 'EXTERNAL_REFERENCE_NUMBER' THEN external_immatriculation
             END = :value
         """,
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun findUnderCharterByVesselIdentifierEquals(vesselIdentifier: String, value: String): Boolean
 }

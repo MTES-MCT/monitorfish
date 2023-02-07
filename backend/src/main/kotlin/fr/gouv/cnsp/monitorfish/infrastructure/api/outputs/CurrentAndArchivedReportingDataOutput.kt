@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.CurrentAndArchivedRepo
 
 class CurrentAndArchivedReportingDataOutput(
     val current: List<ReportingDataOutput>,
-    val archived: List<ReportingDataOutput>
+    val archived: List<ReportingDataOutput>,
 ) {
     companion object {
         fun fromCurrentAndArchivedReporting(currentAndArchivedReportings: CurrentAndArchivedReportings) = CurrentAndArchivedReportingDataOutput(
@@ -13,7 +13,7 @@ class CurrentAndArchivedReportingDataOutput(
             },
             currentAndArchivedReportings.archived.map {
                 ReportingDataOutput.fromReporting(it)
-            }
+            },
         )
     }
 }

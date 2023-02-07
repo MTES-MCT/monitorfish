@@ -67,7 +67,7 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
             id = 9,
             targetNumberOfControlsAtPort = 153,
             targetNumberOfControlsAtSea = null,
-            controlPriorityLevel = null
+            controlPriorityLevel = null,
         )
 
         // Then
@@ -87,7 +87,7 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
             id = 9,
             targetNumberOfControlsAtPort = null,
             targetNumberOfControlsAtSea = 10,
-            controlPriorityLevel = null
+            controlPriorityLevel = null,
         )
 
         // Then
@@ -107,7 +107,7 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
             id = 9,
             targetNumberOfControlsAtPort = null,
             targetNumberOfControlsAtSea = null,
-            controlPriorityLevel = 2.0
+            controlPriorityLevel = 2.0,
         )
 
         // Then
@@ -130,8 +130,8 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
                 year = lastYear,
                 targetNumberOfControlsAtSea = 25,
                 targetNumberOfControlsAtPort = 64,
-                controlPriorityLevel = 2.0
-            )
+                controlPriorityLevel = 2.0,
+            ),
         )
 
         // Then

@@ -18,5 +18,5 @@ data class Catch(
     var economicZone: String? = null,
     var conversionFactor: Double? = null,
     var preservationState: String? = null,
-    var statisticalRectangle: String? = null
+    var statisticalRectangle: String? = null,
 )

@@ -20,12 +20,12 @@ interface DBLogbookReportRepository :
         AND e.operationType IN ('DAT', 'COR')
         AND e.operationDateTime < (SELECT MIN(er.operationDateTime) FROM LogbookReportEntity er WHERE er.internalReferenceNumber = ?1 AND er.tripNumber = ?2)
         GROUP BY e.tripNumber
-        ORDER BY 2 DESC"""
+        ORDER BY 2 DESC""",
     )
     fun findPreviousTripNumber(
         internalReferenceNumber: String,
         tripNumber: String,
-        pageable: Pageable
+        pageable: Pageable,
     ): List<VoyageTripNumberAndDate>
 
     @Query(
@@ -36,23 +36,23 @@ interface DBLogbookReportRepository :
         AND e.operationType IN ('DAT', 'COR')
         AND e.operationDateTime > (SELECT MAX(er.operationDateTime) FROM LogbookReportEntity er WHERE er.internalReferenceNumber = ?1 AND er.tripNumber = ?2)
         GROUP BY e.tripNumber
-        ORDER BY 2 ASC"""
+        ORDER BY 2 ASC""",
     )
     fun findNextTripNumber(
         internalReferenceNumber: String,
         tripNumber: String,
-        pageable: Pageable
+        pageable: Pageable,
     ): List<VoyageTripNumberAndDate>
 
     @Query(
         """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageDates(MIN(e.operationDateTime), MAX(e.operationDateTime))
         FROM LogbookReportEntity e
         WHERE e.internalReferenceNumber = ?1
-        AND e.tripNumber = ?2"""
+        AND e.tripNumber = ?2""",
     )
     fun findFirstAndLastOperationsDatesOfTrip(
         internalReferenceNumber: String,
-        tripNumber: String
+        tripNumber: String,
     ): VoyageDates
 
     @Query(
@@ -63,12 +63,12 @@ interface DBLogbookReportRepository :
         AND e.operationType IN ('DAT', 'COR')
         AND e.operationDateTime <= ?2
         GROUP BY e.tripNumber
-        ORDER BY 2 DESC """
+        ORDER BY 2 DESC """,
     )
     fun findTripsBeforeDatetime(
         internalReferenceNumber: String,
         beforeDateTime: Instant,
-        pageable: Pageable
+        pageable: Pageable,
     ): List<VoyageTripNumberAndDates>
 
     @Query(
@@ -91,7 +91,7 @@ interface DBLogbookReportRepository :
             WHERE
                 r.value->>'returnStatus' = '000' OR
                 dc.transmission_format = 'FLUX'""",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun findFirstAcknowledgedDateOfTrip(internalReferenceNumber: String, tripNumber: String): Instant
 
@@ -131,18 +131,18 @@ interface DBLogbookReportRepository :
         FROM dat_cor
         UNION ALL SELECT * from ret
         UNION ALL SELECT * from del""",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun findAllMessagesByTripNumberBetweenDates(
         internalReferenceNumber: String,
         afterDateTime: String,
         beforeDateTime: String,
-        tripNumber: String
+        tripNumber: String,
     ): List<LogbookReportEntity>
 
     @Query(
         "select operation_datetime_utc from logbook_reports where operation_datetime_utc < now() order by operation_datetime_utc desc limit 1",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun findLastOperationDateTime(): Instant
 
@@ -153,14 +153,14 @@ interface DBLogbookReportRepository :
                 (select distinct referenced_report_id from logbook_reports where operation_type = 'RET' and value->>'returnStatus' = '000')
                 and (log_type = 'LAN' or log_type = 'PNO')
                 and (:ruleType <> ANY(analyzed_by_rules) or analyzed_by_rules is null)""",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun findAllLANAndPNONotProcessedByRule(ruleType: String): List<LogbookReportEntity>
 
     @Modifying(clearAutomatically = true)
     @Query(
         "update logbook_reports set analyzed_by_rules = array_append(analyzed_by_rules, :ruleType) where id in (:ids)",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun updateERSMessagesAsProcessedByRule(ids: List<Long>, ruleType: String)
 }

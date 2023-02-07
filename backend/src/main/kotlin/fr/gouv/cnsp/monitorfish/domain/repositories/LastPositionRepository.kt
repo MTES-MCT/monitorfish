@@ -14,7 +14,7 @@ interface LastPositionRepository {
         alertType: AlertTypeMapping,
         vesselIdentifier: VesselIdentifier,
         value: String,
-        isValidated: Boolean
+        isValidated: Boolean,
     )
 
     fun findUnderCharterForVessel(vesselIdentifier: VesselIdentifier, value: String): Boolean

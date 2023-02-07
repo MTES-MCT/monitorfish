@@ -14,7 +14,7 @@ data class LastPositionDataOutput(
     val ircs: String? = null,
     val externalReferenceNumber: String? = null,
     val vesselName: String? = null,
-    val flagState: CountryCode? = null,
+    val flagState: CountryCode,
     val latitude: Double? = null,
     val longitude: Double? = null,
     val estimatedCurrentLatitude: Double? = null,
@@ -22,8 +22,6 @@ data class LastPositionDataOutput(
     val speed: Double? = null,
     val course: Double? = null,
     val dateTime: ZonedDateTime,
-    val from: CountryCode? = null,
-    val destination: CountryCode? = null,
     val tripNumber: String? = null,
     val positionType: PositionType,
     val emissionPeriod: Duration? = null,
@@ -50,7 +48,7 @@ data class LastPositionDataOutput(
     val isAtPort: Boolean? = null,
     val alerts: List<String>? = listOf(),
     val beaconMalfunctionId: Int? = null,
-    val reportings: List<String> = listOf()
+    val reportings: List<String> = listOf(),
 ) {
     companion object {
         fun fromLastPosition(position: LastPosition): LastPositionDataOutput {
@@ -69,8 +67,6 @@ data class LastPositionDataOutput(
                 speed = position.speed,
                 course = position.course,
                 flagState = position.flagState,
-                destination = position.destination,
-                from = position.from,
                 tripNumber = position.tripNumber,
                 positionType = position.positionType,
                 emissionPeriod = position.emissionPeriod,
@@ -85,7 +81,7 @@ data class LastPositionDataOutput(
                 segments = position.segments,
                 speciesOnboard = position.speciesOnboard?.map {
                     SpeciesLastPositionDataOutput.fromSpeciesLastPosition(
-                        it
+                        it,
                     )
                 },
                 totalWeightOnboard = position.totalWeightOnboard,
@@ -101,7 +97,7 @@ data class LastPositionDataOutput(
                 isAtPort = position.isAtPort,
                 alerts = position.alerts,
                 beaconMalfunctionId = position.beaconMalfunctionId,
-                reportings = position.reportings
+                reportings = position.reportings,
             )
         }
     }

@@ -38,7 +38,7 @@ class UpdateBeaconMalfunctionUTests {
             UpdateBeaconMalfunction(
                 beaconMalfunctionsRepository,
                 beaconMalfunctionActionRepository,
-                getBeaconMalfunction
+                getBeaconMalfunction,
             )
                 .execute(1, null, null, null)
         }
@@ -55,7 +55,7 @@ class UpdateBeaconMalfunctionUTests {
             UpdateBeaconMalfunction(
                 beaconMalfunctionsRepository,
                 beaconMalfunctionActionRepository,
-                getBeaconMalfunction
+                getBeaconMalfunction,
             )
                 .execute(1, null, Stage.END_OF_MALFUNCTION, null)
         }
@@ -73,8 +73,8 @@ class UpdateBeaconMalfunctionUTests {
                 1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                 "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                 ZonedDateTime.now(), null, ZonedDateTime.now(),
-                beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123
-            )
+                beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
+            ),
         )
         given(beaconMalfunctionActionRepository.findAllByBeaconMalfunctionId(any())).willReturn(
             listOf(
@@ -84,9 +84,9 @@ class UpdateBeaconMalfunctionUTests {
                     BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
                     "PREVIOUS",
                     "NEXT",
-                    ZonedDateTime.now()
-                )
-            )
+                    ZonedDateTime.now(),
+                ),
+            ),
         )
         given(getBeaconMalfunction.execute(1))
             .willReturn(
@@ -95,7 +95,7 @@ class UpdateBeaconMalfunctionUTests {
                         1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                         "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                         ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
                     ),
                     comments = listOf(
                         BeaconMalfunctionComment(
@@ -103,8 +103,8 @@ class UpdateBeaconMalfunctionUTests {
                             1,
                             "A comment",
                             BeaconMalfunctionCommentUserType.SIP,
-                            ZonedDateTime.now()
-                        )
+                            ZonedDateTime.now(),
+                        ),
                     ),
                     actions = listOf(
                         BeaconMalfunctionAction(
@@ -113,8 +113,8 @@ class UpdateBeaconMalfunctionUTests {
                             BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
                             "PREVIOUS",
                             "NEXT",
-                            ZonedDateTime.now()
-                        )
+                            ZonedDateTime.now(),
+                        ),
                     ),
                     notifications = listOf(
                         BeaconMalfunctionNotifications(
@@ -128,19 +128,19 @@ class UpdateBeaconMalfunctionUTests {
                                     communicationMeans = CommunicationMeans.SMS,
                                     recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
                                     recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000",
-                                    success = false, errorMessage = "This message could not be delivered"
-                                )
-                            )
-                        )
-                    )
-                )
+                                    success = false, errorMessage = "This message could not be delivered",
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
             )
 
         // When
         val updatedBeaconMalfunction = UpdateBeaconMalfunction(
             beaconMalfunctionsRepository,
             beaconMalfunctionActionRepository,
-            getBeaconMalfunction
+            getBeaconMalfunction,
         )
             .execute(1, VesselStatus.AT_SEA, null, null)
 

@@ -58,8 +58,8 @@ class MissionActionsControllerITests {
                 3,
                 4,
                 5,
-                listOf(MissionAction(1, 1, 1, MissionActionType.SEA_CONTROL, ZonedDateTime.now()))
-            )
+                listOf(MissionAction(1, 1, 1, MissionActionType.SEA_CONTROL, ZonedDateTime.now())),
+            ),
         )
 
         // When
@@ -98,11 +98,11 @@ class MissionActionsControllerITests {
                             """.trimIndent(),
                             gearOnboard = """
                                 [{"gearCode": "OTB", "declaredMesh": 60.0, "gearWasControlled": false}, {"gearCode": "OTM", "declaredMesh": 60.0, "controlledMesh": 52.8, "gearWasControlled": true}]
-                            """.trimIndent()
-                        )
-                    )
+                            """.trimIndent(),
+                        ),
+                    ),
                 )
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON),
         )
             // Then
             .andExpect(status().isCreated)
@@ -113,8 +113,8 @@ class MissionActionsControllerITests {
             .andExpect(
                 jsonPath(
                     "$.logbookInfractions[0].comments",
-                    equalTo("Poids à bord MNZ supérieur de 50% au poids déclaré")
-                )
+                    equalTo("Poids à bord MNZ supérieur de 50% au poids déclaré"),
+                ),
             )
     }
 
@@ -140,11 +140,11 @@ class MissionActionsControllerITests {
                             """.trimIndent(),
                             gearOnboard = """
                                 [{"gearCode": "OTB", "declaredMesh": 60.0, "gearWasControlled": false}, {"gearCode": "OTM", "declaredMesh": 60.0, "controlledMesh": 52.8, "gearWasControlled": true}]
-                            """.trimIndent()
-                        )
-                    )
+                            """.trimIndent(),
+                        ),
+                    ),
                 )
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON),
         )
             // Then
             .andExpect(status().isCreated)
@@ -155,8 +155,8 @@ class MissionActionsControllerITests {
             .andExpect(
                 jsonPath(
                     "$.logbookInfractions[0].comments",
-                    equalTo("Poids à bord MNZ supérieur de 50% au poids déclaré")
-                )
+                    equalTo("Poids à bord MNZ supérieur de 50% au poids déclaré"),
+                ),
             )
 
         runBlocking {

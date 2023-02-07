@@ -53,9 +53,9 @@ class ControlObjectiveControllerITests {
         mockMvc.perform(
             put("/bff/v1/control_objectives/123")
                 .content(
-                    objectMapper.writeValueAsString(UpdateControlObjectiveDataInput(targetNumberOfControlsAtSea = 123))
+                    objectMapper.writeValueAsString(UpdateControlObjectiveDataInput(targetNumberOfControlsAtSea = 123)),
                 )
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON),
         )
             // Then
             .andExpect(status().isOk)
@@ -76,10 +76,10 @@ class ControlObjectiveControllerITests {
             post("/bff/v1/control_objectives")
                 .content(
                     objectMapper.writeValueAsString(
-                        AddControlObjectiveDataInput(segment = "SEGMENT", facade = "FACADE", year = 2021)
-                    )
+                        AddControlObjectiveDataInput(segment = "SEGMENT", facade = "FACADE", year = 2021),
+                    ),
                 )
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON),
         )
             // Then
             .andExpect(status().isOk)
@@ -97,7 +97,7 @@ class ControlObjectiveControllerITests {
                     targetNumberOfControlsAtSea = 23,
                     targetNumberOfControlsAtPort = 102,
                     controlPriorityLevel = 1.0,
-                    year = 2021
+                    year = 2021,
                 ),
                 ControlObjective(
                     1,
@@ -106,7 +106,7 @@ class ControlObjectiveControllerITests {
                     targetNumberOfControlsAtSea = 23,
                     targetNumberOfControlsAtPort = 102,
                     controlPriorityLevel = 1.0,
-                    year = 2021
+                    year = 2021,
                 ),
                 ControlObjective(
                     1,
@@ -115,9 +115,9 @@ class ControlObjectiveControllerITests {
                     targetNumberOfControlsAtSea = 23,
                     targetNumberOfControlsAtPort = 102,
                     controlPriorityLevel = 1.0,
-                    year = 2021
-                )
-            )
+                    year = 2021,
+                ),
+            ),
         )
 
         // When

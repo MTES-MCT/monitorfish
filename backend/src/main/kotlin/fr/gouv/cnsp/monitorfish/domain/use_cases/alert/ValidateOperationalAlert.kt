@@ -15,7 +15,7 @@ class ValidateOperationalAlert(
     private val pendingAlertRepository: PendingAlertRepository,
     private val reportingRepository: ReportingRepository,
     private val silencedAlertRepository: SilencedAlertRepository,
-    private val lastPositionRepository: LastPositionRepository
+    private val lastPositionRepository: LastPositionRepository,
 ) {
     private val logger = LoggerFactory.getLogger(ValidateOperationalAlert::class.java)
 
@@ -26,7 +26,7 @@ class ValidateOperationalAlert(
         silencedAlertRepository.save(
             alert = validatedAlert,
             silencedBeforeDate = now.plusHours(4),
-            isValidated = true
+            isValidated = true,
         )
 
         reportingRepository.save(validatedAlert, now)
@@ -46,7 +46,7 @@ class ValidateOperationalAlert(
                     validatedAlert.value.type,
                     validatedAlert.vesselIdentifier,
                     validatedAlert.internalReferenceNumber,
-                    isValidated = true
+                    isValidated = true,
                 )
             }
             VesselIdentifier.IRCS -> {
@@ -57,7 +57,7 @@ class ValidateOperationalAlert(
                     validatedAlert.value.type,
                     validatedAlert.vesselIdentifier,
                     validatedAlert.ircs,
-                    isValidated = true
+                    isValidated = true,
                 )
             }
             VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> {
@@ -68,7 +68,7 @@ class ValidateOperationalAlert(
                     validatedAlert.value.type,
                     validatedAlert.vesselIdentifier,
                     validatedAlert.externalReferenceNumber,
-                    isValidated = true
+                    isValidated = true,
                 )
             }
         }

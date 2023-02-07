@@ -15,12 +15,12 @@ data class FAOAreasEntity(
     @Column(name = "f_subarea")
     val subArea: String? = null,
     @Column(name = "f_division")
-    val division: String? = null
+    val division: String? = null,
 ) {
 
     fun toFAOArea() = FAOArea(
         faoCode = faoCode,
         subArea = subArea,
-        division = division
+        division = division,
     )
 }

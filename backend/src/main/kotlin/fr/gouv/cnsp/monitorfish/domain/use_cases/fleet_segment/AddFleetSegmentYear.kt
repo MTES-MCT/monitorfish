@@ -8,7 +8,7 @@ import java.time.ZonedDateTime
 @UseCase
 class AddFleetSegmentYear(
     private val fleetSegmentRepository: FleetSegmentRepository,
-    private val clock: Clock
+    private val clock: Clock,
 ) {
     fun execute(nextYear: Int) {
         val currentYear = ZonedDateTime.now(clock).year

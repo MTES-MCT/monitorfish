@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
@@ -44,31 +45,31 @@ class GetVesselUTests {
         val firstPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                4
-            )
+                4,
+            ),
         )
         val secondPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                3
-            )
+                3,
+            ),
         )
         val thirdPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                2
-            )
+                2,
+            ),
         )
         val fourthPosition = Position(
             null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
-                1
-            )
+                1,
+            ),
         )
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
-            listOf(firstPosition, fourthPosition, secondPosition, thirdPosition)
+            listOf(firstPosition, fourthPosition, secondPosition, thirdPosition),
         )
-        given(vesselRepository.findVessel(any())).willReturn(Vessel(id = 123))
+        given(vesselRepository.findVessel(any())).willReturn(Vessel(id = 123, flagState = CountryCode.FR))
         given(riskFactorsRepository.findVesselRiskFactors(any())).willReturn(VesselRiskFactor(2.3, 2.0, 1.9, 3.2))
         given(beaconRepository.findBeaconNumberByVesselId(eq(123))).willReturn("A_BEACON_NUMBER")
 
@@ -79,7 +80,7 @@ class GetVesselUTests {
                 positionRepository,
                 logbookReportRepository,
                 riskFactorsRepository,
-                beaconRepository
+                beaconRepository,
             )
                 .execute(
                     123,
@@ -89,7 +90,7 @@ class GetVesselUTests {
                     VesselTrackDepth.TWELVE_HOURS,
                     VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     null,
-                    null
+                    null,
                 )
         }
 
@@ -107,7 +108,7 @@ class GetVesselUTests {
     fun `execute Should not throw an exception When no Vessel found And return null`() {
         // Given
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
-            listOf()
+            listOf(),
         )
         given(vesselRepository.findVessel(any())).willReturn(null)
         given(riskFactorsRepository.findVesselRiskFactors(any())).willReturn(VesselRiskFactor())
@@ -119,7 +120,7 @@ class GetVesselUTests {
                 positionRepository,
                 logbookReportRepository,
                 riskFactorsRepository,
-                beaconRepository
+                beaconRepository,
             )
                 .execute(
                     123,
@@ -129,7 +130,7 @@ class GetVesselUTests {
                     VesselTrackDepth.TWELVE_HOURS,
                     VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     null,
-                    null
+                    null,
                 )
         }
 
@@ -142,7 +143,7 @@ class GetVesselUTests {
     fun `execute Should not throw an exception When no beacon found`() {
         // Given
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
-            listOf()
+            listOf(),
         )
         given(vesselRepository.findVessel(any())).willReturn(null)
         given(riskFactorsRepository.findVesselRiskFactors(any())).willReturn(VesselRiskFactor())
@@ -155,7 +156,7 @@ class GetVesselUTests {
                 positionRepository,
                 logbookReportRepository,
                 riskFactorsRepository,
-                beaconRepository
+                beaconRepository,
             )
                 .execute(
                     123,
@@ -165,7 +166,7 @@ class GetVesselUTests {
                     VesselTrackDepth.TWELVE_HOURS,
                     VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     null,
-                    null
+                    null,
                 )
         }
 

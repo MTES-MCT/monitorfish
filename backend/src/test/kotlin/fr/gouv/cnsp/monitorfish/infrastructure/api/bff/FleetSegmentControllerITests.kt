@@ -54,7 +54,7 @@ class FleetSegmentControllerITests {
     fun `Should get all fleet segments of a year`() {
         // Given
         given(this.getAllFleetSegmentsByYear.execute(2021)).willReturn(
-            listOf(FleetSegment("SW1", "", listOf("NAMO", "SA"), listOf(), listOf(), listOf(), listOf(), 1.2, 2021))
+            listOf(FleetSegment("SW1", "", listOf("NAMO", "SA"), listOf(), listOf(), listOf(), listOf(), 1.2, 2021)),
         )
 
         // When
@@ -81,17 +81,17 @@ class FleetSegmentControllerITests {
                     listOf(),
                     listOf(),
                     1.2,
-                    2021
-                )
+                    2021,
+                ),
             )
 
         // When
         mockMvc.perform(
             put("/bff/v1/fleet_segments?year=2021&segment=A_SEGMENT/WITH/SLASH")
                 .content(
-                    objectMapper.writeValueAsString(CreateOrUpdateFleetSegmentDataInput(gears = listOf("OTB", "OTC")))
+                    objectMapper.writeValueAsString(CreateOrUpdateFleetSegmentDataInput(gears = listOf("OTB", "OTC"))),
                 )
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON),
         )
             // Then
             .andExpect(status().isOk)
@@ -101,7 +101,7 @@ class FleetSegmentControllerITests {
         Mockito.verify(updateFleetSegment).execute(
             "A_SEGMENT/WITH/SLASH",
             CreateOrUpdateFleetSegmentFields(gears = listOf("OTB", "OTC")),
-            2021
+            2021,
         )
     }
 
@@ -126,7 +126,7 @@ class FleetSegmentControllerITests {
         // Given
         given(createFleetSegment.execute(any()))
             .willReturn(
-                FleetSegment("SW1", "", listOf("NAMO", "SA"), listOf(), listOf(), listOf(), listOf(), 1.2, 2022)
+                FleetSegment("SW1", "", listOf("NAMO", "SA"), listOf(), listOf(), listOf(), listOf(), 1.2, 2022),
             )
 
         // When
@@ -137,17 +137,17 @@ class FleetSegmentControllerITests {
                         CreateOrUpdateFleetSegmentDataInput(
                             segment = "SEGMENT",
                             gears = listOf("OTB", "OTC"),
-                            year = 2022
-                        )
-                    )
+                            year = 2022,
+                        ),
+                    ),
                 )
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON),
         )
             // Then
             .andExpect(status().isCreated)
 
         Mockito.verify(createFleetSegment).execute(
-            CreateOrUpdateFleetSegmentFields(segment = "SEGMENT", gears = listOf("OTB", "OTC"), year = 2022)
+            CreateOrUpdateFleetSegmentFields(segment = "SEGMENT", gears = listOf("OTB", "OTC"), year = 2022),
         )
     }
 
@@ -162,16 +162,16 @@ class FleetSegmentControllerITests {
             post("/bff/v1/fleet_segments")
                 .content(
                     objectMapper.writeValueAsString(
-                        CreateOrUpdateFleetSegmentDataInput(segment = "SEGMENT", gears = listOf("OTB", "OTC"))
-                    )
+                        CreateOrUpdateFleetSegmentDataInput(segment = "SEGMENT", gears = listOf("OTB", "OTC")),
+                    ),
                 )
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON),
         )
             // Then
             .andExpect(status().isBadRequest)
 
         Mockito.verify(createFleetSegment).execute(
-            CreateOrUpdateFleetSegmentFields(segment = "SEGMENT", gears = listOf("OTB", "OTC"))
+            CreateOrUpdateFleetSegmentFields(segment = "SEGMENT", gears = listOf("OTB", "OTC")),
         )
     }
 }

@@ -11,7 +11,7 @@ class VersionController(val buildProperties: BuildProperties) {
     fun version(): Map<String, String> {
         return mapOf(
             "version" to buildProperties.version,
-            "commit" to buildProperties.get("commit.hash")
+            "commit" to buildProperties.get("commit.hash"),
         )
     }
 }

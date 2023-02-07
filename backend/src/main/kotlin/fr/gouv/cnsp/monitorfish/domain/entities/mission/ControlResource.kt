@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ControlResource(
     val id: Int,
-    val name: String
+    val name: String,
 )

@@ -25,19 +25,19 @@ export const updateReporting =
 
     return updateReportingFromAPI(id, nextReporting)
       .then(updatedReporting => {
-        if (nextReporting.reportingType === ReportingType.INFRACTION_SUSPICION) {
+        if (nextReporting.type === ReportingType.INFRACTION_SUSPICION) {
           dispatch(updateCurrentReporting(updatedReporting as InfractionSuspicionReporting))
         }
 
         if (
-          nextReporting.reportingType === ReportingType.OBSERVATION &&
+          nextReporting.type === ReportingType.OBSERVATION &&
           previousReportingType === ReportingType.INFRACTION_SUSPICION
         ) {
           dispatch(removeCurrentReporting(updatedReporting.id))
         }
 
         // We update the reportings of the last positions vessels state
-        if (previousReportingType !== nextReporting.reportingType) {
+        if (previousReportingType !== nextReporting.type) {
           const vesselFeatureId = Vessel.getVesselFeatureId(selectedVesselIdentity)
 
           dispatch(
@@ -48,7 +48,7 @@ export const updateReporting =
           )
           dispatch(
             addVesselReporting({
-              reportingType: nextReporting.reportingType,
+              reportingType: nextReporting.type,
               vesselFeatureId
             })
           )

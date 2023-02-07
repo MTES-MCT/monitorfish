@@ -63,7 +63,7 @@ class GetVesselControlsUTests {
                 portLocode = "AEFAT",
                 actionType = MissionActionType.LAND_CONTROL,
                 gearOnboard = gearControls,
-                seizureAndDiversion = true
+                seizureAndDiversion = true,
             ),
             MissionAction(
                 id = 2,
@@ -72,7 +72,7 @@ class GetVesselControlsUTests {
                 actionDatetimeUtc = ZonedDateTime.now(),
                 actionType = MissionActionType.SEA_CONTROL,
                 seizureAndDiversion = false,
-                speciesInfractions = listOf(speciesInfraction)
+                speciesInfractions = listOf(speciesInfraction),
             ),
             MissionAction(
                 id = 3,
@@ -81,11 +81,11 @@ class GetVesselControlsUTests {
                 actionDatetimeUtc = ZonedDateTime.now(),
                 actionType = MissionActionType.SEA_CONTROL,
                 seizureAndDiversion = false,
-                speciesInfractions = listOf(speciesInfraction)
-            )
+                speciesInfractions = listOf(speciesInfraction),
+            ),
         )
         given(missionActionsRepository.findVesselMissionActionsAfterDateTime(any(), any())).willReturn(
-            expectedControls
+            expectedControls,
         )
         given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
         given(gearRepository.find(eq("OTB"))).willReturn(Gear("OTB", "Chalut de fond"))
@@ -95,7 +95,7 @@ class GetVesselControlsUTests {
             missionActionsRepository,
             portRepository,
             gearRepository,
-            missionRepository
+            missionRepository,
         ).execute(vesselId, now)
 
         // Then
@@ -105,7 +105,7 @@ class GetVesselControlsUTests {
 
         assertThat(controlResumeAndControls.controls.first().portName).isEqualTo("Al Jazeera Port")
         assertThat(controlResumeAndControls.controls.first().gearOnboard.first().gearName).isEqualTo(
-            "Chalut de fond"
+            "Chalut de fond",
         )
     }
 }

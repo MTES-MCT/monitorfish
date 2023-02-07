@@ -58,13 +58,14 @@ const NewReportingButton = styled(PrimaryButton)`
 
 const FormWrapper = styled.div`
   margin-bottom: 10px;
-  background: ${COLORS.cultured} 0% 0% no-repeat padding-box;
-  border: 1px solid ${COLORS.lightGray};
+  width: 448px;
+  display: inline-block;
+  background: ${COLORS.gainsboro} 0% 0% no-repeat padding-box;
   color: ${COLORS.slateGray};
 `
 
 const Header = styled.div`
-  border-bottom: 1px solid ${COLORS.lightGray};
+  border-bottom: 2px solid ${COLORS.white};
   display: flex;
   height: 32px;
 `

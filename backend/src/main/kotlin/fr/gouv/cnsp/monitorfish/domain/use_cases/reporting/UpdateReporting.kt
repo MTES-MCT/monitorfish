@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory
 @UseCase
 class UpdateReporting(
     private val reportingRepository: ReportingRepository,
-    private val getInfractionSuspicionWithDMLAndSeaFront: GetInfractionSuspicionWithDMLAndSeaFront
+    private val getInfractionSuspicionWithDMLAndSeaFront: GetInfractionSuspicionWithDMLAndSeaFront,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(UpdateReporting::class.java)
 
@@ -21,13 +21,13 @@ class UpdateReporting(
             "The edited reporting must be an INFRACTION_SUSPICION or an OBSERVATION"
         }
 
-        return when (updatedInfractionSuspicionOrObservation.reportingType) {
+        return when (updatedInfractionSuspicionOrObservation.type) {
             ReportingType.OBSERVATION -> {
                 currentReporting.value as InfractionSuspicionOrObservationType
 
                 val nextObservation = Observation.fromUpdatedReporting(
                     updatedInfractionSuspicionOrObservation,
-                    currentReporting.value
+                    currentReporting.value,
                 )
                 nextObservation.checkReportingActorAndFieldsRequirements()
 
@@ -38,7 +38,7 @@ class UpdateReporting(
 
                 val nextInfractionSuspicion = InfractionSuspicion.fromUpdatedReporting(
                     updatedInfractionSuspicionOrObservation,
-                    currentReporting.value
+                    currentReporting.value,
                 ).let {
                     getInfractionSuspicionWithDMLAndSeaFront.execute(it, currentReporting.vesselId)
                 }
@@ -47,7 +47,7 @@ class UpdateReporting(
                 reportingRepository.update(reportingId, nextInfractionSuspicion)
             }
             else -> throw IllegalArgumentException(
-                "The new reporting type must be an INFRACTION_SUSPICION or an OBSERVATION"
+                "The new reporting type must be an INFRACTION_SUSPICION or an OBSERVATION",
             )
         }
     }

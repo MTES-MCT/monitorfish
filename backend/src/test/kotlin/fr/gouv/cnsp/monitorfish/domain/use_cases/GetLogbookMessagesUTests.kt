@@ -48,10 +48,10 @@ class GetLogbookMessagesUTests {
     fun `execute Should return an ordered list of last ERS messages with the codes' names`() {
         // Given
         given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
-            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now())
+            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
         )
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
-            getDummyLogbookMessages()
+            getDummyLogbookMessages(),
         )
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
@@ -68,7 +68,7 @@ class GetLogbookMessagesUTests {
             gearRepository,
             speciesRepository,
             portRepository,
-            logbookRawMessageRepository
+            logbookRawMessageRepository,
         )
             .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
@@ -124,10 +124,10 @@ class GetLogbookMessagesUTests {
     fun `execute Should flag a corrected message as true`() {
         // Given
         given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
-            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now())
+            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
         )
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
-            getDummyCorrectedLogbookMessages()
+            getDummyCorrectedLogbookMessages(),
         )
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
@@ -144,7 +144,7 @@ class GetLogbookMessagesUTests {
             gearRepository,
             speciesRepository,
             portRepository,
-            logbookRawMessageRepository
+            logbookRawMessageRepository,
         )
             .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
@@ -170,10 +170,10 @@ class GetLogbookMessagesUTests {
     fun `execute Should filter to return only DAT and COR messages and add the acknowledge property`() {
         // Given
         given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
-            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now())
+            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
         )
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
-            getDummyRETLogbookMessages()
+            getDummyRETLogbookMessages(),
         )
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
@@ -190,7 +190,7 @@ class GetLogbookMessagesUTests {
             gearRepository,
             speciesRepository,
             portRepository,
-            logbookRawMessageRepository
+            logbookRawMessageRepository,
         )
             .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
@@ -242,10 +242,10 @@ class GetLogbookMessagesUTests {
                     id = 2, analyzedByRules = listOf(), operationNumber = "", reportId = "9065646816", referencedReportId = "9065646811", operationType = LogbookOperationType.RET, messageType = "",
                     message = lastAck,
                     reportDateTime = ZonedDateTime.of(2021, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC).minusHours(
-                        12
+                        12,
                     ),
-                    transmissionFormat = LogbookTransmissionFormat.ERS
-                )
+                    transmissionFormat = LogbookTransmissionFormat.ERS,
+                ),
             )
         given(speciesRepository.find(any())).willThrow(CodeNotFoundException("not found"))
         given(gearRepository.find(any())).willThrow(CodeNotFoundException("not found"))
@@ -258,7 +258,7 @@ class GetLogbookMessagesUTests {
             gearRepository,
             speciesRepository,
             portRepository,
-            logbookRawMessageRepository
+            logbookRawMessageRepository,
         )
             .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
@@ -275,10 +275,10 @@ class GetLogbookMessagesUTests {
     fun `execute Should add the deleted property`() {
         // Given
         given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
-            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now())
+            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
         )
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
-            getDummyRETLogbookMessages()
+            getDummyRETLogbookMessages(),
         )
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
@@ -295,7 +295,7 @@ class GetLogbookMessagesUTests {
             gearRepository,
             speciesRepository,
             portRepository,
-            logbookRawMessageRepository
+            logbookRawMessageRepository,
         )
             .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
@@ -309,10 +309,10 @@ class GetLogbookMessagesUTests {
     fun `execute Should acknowledge FLUX and VISIOCAPTURE messages`() {
         // Given
         given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
-            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now())
+            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
         )
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
-            getDummyFluxAndVisioCaptureLogbookMessages()
+            getDummyFluxAndVisioCaptureLogbookMessages(),
         )
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
@@ -329,7 +329,7 @@ class GetLogbookMessagesUTests {
             gearRepository,
             speciesRepository,
             portRepository,
-            logbookRawMessageRepository
+            logbookRawMessageRepository,
         )
             .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
@@ -345,10 +345,10 @@ class GetLogbookMessagesUTests {
     fun `execute Should flag messages sent by the failover software e-Sacapt`() {
         // Given
         given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
-            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now())
+            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()),
         )
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
-            getDummyLogbookMessages()
+            getDummyLogbookMessages(),
         )
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
@@ -365,7 +365,7 @@ class GetLogbookMessagesUTests {
             gearRepository,
             speciesRepository,
             portRepository,
-            logbookRawMessageRepository
+            logbookRawMessageRepository,
         )
             .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 

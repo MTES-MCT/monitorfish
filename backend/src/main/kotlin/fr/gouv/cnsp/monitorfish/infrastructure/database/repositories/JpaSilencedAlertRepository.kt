@@ -12,16 +12,16 @@ import java.time.ZonedDateTime
 @Repository
 class JpaSilencedAlertRepository(
     private val dbSilencedAlertRepository: DBSilencedAlertRepository,
-    private val mapper: ObjectMapper
+    private val mapper: ObjectMapper,
 ) : SilencedAlertRepository {
 
     override fun save(
         alert: PendingAlert,
         silencedBeforeDate: ZonedDateTime,
-        isValidated: Boolean
+        isValidated: Boolean,
     ): SilencedAlert {
         return dbSilencedAlertRepository.save(
-            SilencedAlertEntity.fromPendingAlert(mapper, alert, silencedBeforeDate, isValidated)
+            SilencedAlertEntity.fromPendingAlert(mapper, alert, silencedBeforeDate, isValidated),
         ).toSilencedAlert(mapper)
     }
 

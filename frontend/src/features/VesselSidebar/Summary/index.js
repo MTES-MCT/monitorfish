@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { ReactComponent as NoVesselSVG } from '../icons/Picto_photo_navire_manquante.svg'
+import { ReactComponent as NoVesselSVG } from '../../icons/Picto_photo_navire_manquante.svg'
 
-import { getCoordinates } from '../../coordinates'
-import { getDateTime, timeagoFrenchLocale } from '../../utils'
-import { WSG84_PROJECTION } from '../../domain/entities/map/constants'
-import { COLORS } from '../../constants/constants'
+import { getCoordinates } from '../../../coordinates'
+import { getDateTime, timeagoFrenchLocale } from '../../../utils'
+import { WSG84_PROJECTION } from '../../../domain/entities/map/constants'
+import { COLORS } from '../../../constants/constants'
 import * as timeago from 'timeago.js'
-import { ReactComponent as InfoSVG } from '../icons/Information.svg'
+import { ReactComponent as InfoSVG } from '../../icons/Information.svg'
 import { useSelector } from 'react-redux'
 import { FingerprintSpinner } from 'react-epic-spinners'
-import RiskFactorResume from './risk_factor/RiskFactorResume'
+import RiskFactorResume from '../risk_factor/RiskFactorResume'
 
 timeago.register('fr', timeagoFrenchLocale)
 
-const VesselSummary = props => {
+export const VesselSummary = props => {
   const { coordinatesFormat } = useSelector(state => state.map)
   const {
     loadingVessel,
@@ -218,5 +218,3 @@ const Info = styled(InfoSVG)`
   margin-bottom: 2px;
   margin-left: ${props => props.$isInfoSegment ? '5px' : '2px'};
 `
-
-export default VesselSummary

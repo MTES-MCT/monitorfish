@@ -38,7 +38,7 @@ data class MissionActionDataOutput(
     val otherComments: String? = null,
     val gearOnboard: List<GearControl> = listOf(),
     val speciesOnboard: List<SpeciesControl> = listOf(),
-    val controlUnits: List<ControlUnit> = listOf()
+    val controlUnits: List<ControlUnit> = listOf(),
 ) {
     companion object {
         fun fromMissionAction(missionAction: MissionAction) = MissionActionDataOutput(
@@ -75,7 +75,7 @@ data class MissionActionDataOutput(
             otherComments = missionAction.otherComments,
             gearOnboard = missionAction.gearOnboard,
             speciesOnboard = missionAction.speciesOnboard,
-            controlUnits = missionAction.controlUnits
+            controlUnits = missionAction.controlUnits,
         )
     }
 }

@@ -84,7 +84,7 @@ class CaffeineConfiguration {
         val vesselsPositionsWithBeaconMalfunctionsCache = buildMinutesCache(
             vesselsPositionsWithBeaconMalfunctions,
             ticker,
-            1
+            1,
         )
         val searchVesselsCache = buildMinutesCache(searchVessels, ticker, 60)
         val searchBeaconsCache = buildMinutesCache(searchBeacons, ticker, 1)
@@ -124,8 +124,8 @@ class CaffeineConfiguration {
                 faoAreasCache,
                 districtCache,
                 findBeaconCache,
-                missionsCache
-            )
+                missionsCache,
+            ),
         )
 
         return manager
@@ -138,7 +138,7 @@ class CaffeineConfiguration {
                 .expireAfterWrite(minutesToExpire.toLong(), TimeUnit.MINUTES)
                 .recordStats()
                 .ticker(ticker)
-                .build()
+                .build(),
         )
     }
 
@@ -149,7 +149,7 @@ class CaffeineConfiguration {
                 .expireAfterWrite(secondsToExpire.toLong(), TimeUnit.SECONDS)
                 .recordStats()
                 .ticker(ticker)
-                .build()
+                .build(),
         )
     }
 

@@ -21,12 +21,12 @@ class SwaggerConfig {
                 Info().title("MonitorFish API")
                     .description("MonitorFish")
                     .version("v1.19.2")
-                    .license(License().name("Apache 2.0").url("https://monitorfish.readthedocs.io/en/latest"))
+                    .license(License().name("Apache 2.0").url("https://monitorfish.readthedocs.io/en/latest")),
             )
             .externalDocs(
                 ExternalDocumentation()
                     .description("MonitorFish Documentation")
-                    .url("https://monitorfish.readthedocs.io/en/latest")
+                    .url("https://monitorfish.readthedocs.io/en/latest"),
             )
     }
 }

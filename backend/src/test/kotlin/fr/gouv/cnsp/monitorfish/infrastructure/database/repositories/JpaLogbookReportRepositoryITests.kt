@@ -75,7 +75,9 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findLastTripBefore Should throw an exception When no parameter is given`() {
         // When
-        val throwable = catchThrowable { jpaLogbookReportRepository.findLastTripBeforeDateTime("", ZonedDateTime.now()) }
+        val throwable = catchThrowable {
+            jpaLogbookReportRepository.findLastTripBeforeDateTime("", ZonedDateTime.now())
+        }
 
         // Then
         assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
@@ -89,7 +91,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val throwable = catchThrowable {
             jpaLogbookReportRepository.findLastTripBeforeDateTime(
                 "ARGH",
-                ZonedDateTime.now()
+                ZonedDateTime.now(),
             )
         }
 
@@ -104,7 +106,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // When
         val secondTrip = jpaLogbookReportRepository.findTripBeforeTripNumber(
             "FAK000999999",
-            "9463714"
+            "9463714",
         )
 
         // Then
@@ -120,7 +122,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val throwable = catchThrowable {
             jpaLogbookReportRepository.findTripBeforeTripNumber(
                 "FAK000999999",
-                "9463712"
+                "9463712",
             )
         }
 
@@ -135,7 +137,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // When
         val secondTrip = jpaLogbookReportRepository.findTripBeforeTripNumber(
             "FAK000999999",
-            "9463715"
+            "9463715",
         )
 
         // Then
@@ -150,7 +152,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // When
         val secondTrip = jpaLogbookReportRepository.findTripAfterTripNumber(
             "FAK000999999",
-            "9463713"
+            "9463713",
         )
 
         // Then
@@ -165,7 +167,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // When
         val secondTrip = jpaLogbookReportRepository.findTripAfterTripNumber(
             "FAK000999999",
-            "9463714"
+            "9463714",
         )
 
         // Then
@@ -181,7 +183,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val throwable = catchThrowable {
             jpaLogbookReportRepository.findTripAfterTripNumber(
                 "FAK000999999",
-                "9463715"
+                "9463715",
             )
         }
 
@@ -408,12 +410,12 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(
             messages.any {
                 it.first.operationType == LogbookOperationType.DAT && it.first.reportId == lanMessageBeingCorrected
-            }
+            },
         ).isFalse
         assertThat(
             messages.any {
                 it.first.operationType == LogbookOperationType.COR && it.first.referencedReportId == lanMessageBeingCorrected
-            }
+            },
         ).isTrue
     }
 
@@ -464,7 +466,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // When
         val lastTrip = jpaLogbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(
             "FAK000999999",
-            ZonedDateTime.now()
+            ZonedDateTime.now(),
         )
 
         // Then
@@ -477,7 +479,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // When
         val lastTrip = jpaLogbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(
             "SOCR4T3",
-            ZonedDateTime.now()
+            ZonedDateTime.now(),
         )
 
         // Then

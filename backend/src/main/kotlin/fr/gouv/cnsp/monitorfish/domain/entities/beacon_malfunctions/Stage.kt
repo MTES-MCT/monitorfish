@@ -7,5 +7,5 @@ enum class Stage {
     AT_QUAY,
     TARGETING_VESSEL,
     END_OF_MALFUNCTION,
-    ARCHIVED
+    ARCHIVED,
 }

@@ -97,7 +97,7 @@ class MissionActionEntity(
     var gearOnboard: String? = null,
     @Type(JsonBinaryType::class)
     @Column(name = "species_onboard", columnDefinition = "jsonb")
-    var speciesOnboard: String? = null
+    var speciesOnboard: String? = null,
 ) {
     companion object {
         fun fromMissionAction(mapper: ObjectMapper, missionAction: MissionAction) = MissionActionEntity(
@@ -134,7 +134,7 @@ class MissionActionEntity(
             otherComments = missionAction.otherComments,
             gearOnboard = mapper.writeValueAsString(missionAction.gearOnboard),
             speciesOnboard = mapper.writeValueAsString(missionAction.speciesOnboard),
-            isFromPoseidon = false
+            isFromPoseidon = false,
         )
     }
 
@@ -172,14 +172,14 @@ class MissionActionEntity(
         seizureAndDiversionComments = seizureAndDiversionComments,
         otherComments = otherComments,
         gearOnboard = deserializeJSONList(mapper, gearOnboard, GearControl::class.java),
-        speciesOnboard = deserializeJSONList(mapper, speciesOnboard, SpeciesControl::class.java)
+        speciesOnboard = deserializeJSONList(mapper, speciesOnboard, SpeciesControl::class.java),
     )
 
     private fun <T> deserializeJSONList(mapper: ObjectMapper, json: String?, clazz: Class<T>): List<T> = json?.let {
         mapper.readValue(
             json,
             mapper.typeFactory
-                .constructCollectionType(MutableList::class.java, clazz)
+                .constructCollectionType(MutableList::class.java, clazz),
         )
     } ?: listOf()
 

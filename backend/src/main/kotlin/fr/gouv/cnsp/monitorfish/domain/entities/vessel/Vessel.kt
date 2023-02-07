@@ -11,7 +11,7 @@ data class Vessel(
     val ircs: String? = null,
     val externalReferenceNumber: String? = null,
     val vesselName: String? = null,
-    val flagState: CountryCode? = null,
+    val flagState: CountryCode,
     val width: Double? = null,
     val length: Double? = null,
     val district: String? = null,
@@ -34,5 +34,5 @@ data class Vessel(
     val vesselPhones: List<String>? = null,
     val vesselEmails: List<String>? = null,
     val beaconNumber: String? = null,
-    val underCharter: Boolean? = null
+    val underCharter: Boolean? = null,
 )

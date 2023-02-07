@@ -42,14 +42,14 @@ class GetBeaconMalfunctionUTests {
                     1, "FR224226850", "1236514", "IRCS",
                     null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
                     ZonedDateTime.now(), null, ZonedDateTime.now(),
-                    beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 1
-                )
+                    beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 1,
+                ),
             )
         given(
             beaconMalfunctionsRepository.findAllByVesselId(
                 eq(1),
-                any()
-            )
+                any(),
+            ),
         )
             .willReturn(
                 listOf(
@@ -57,15 +57,15 @@ class GetBeaconMalfunctionUTests {
                         1, "FR224226850", "1236514", "IRCS",
                         null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
                         ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 1
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 1,
                     ),
                     BeaconMalfunction(
                         2, "FR224226850", "1236514", "IRCS",
                         null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                         ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 1
-                    )
-                )
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 1,
+                    ),
+                ),
             )
         given(beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(1)).willReturn(
             listOf(
@@ -73,9 +73,9 @@ class GetBeaconMalfunctionUTests {
                     beaconMalfunctionId = 1,
                     comment = "A comment",
                     userType = BeaconMalfunctionCommentUserType.SIP,
-                    dateTime = now
-                )
-            )
+                    dateTime = now,
+                ),
+            ),
         )
         given(beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(1)).willReturn(
             listOf(
@@ -84,9 +84,9 @@ class GetBeaconMalfunctionUTests {
                     propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
                     nextValue = VesselStatus.ACTIVITY_DETECTED.toString(),
                     previousValue = VesselStatus.AT_PORT.toString(),
-                    dateTime = now
-                )
-            )
+                    dateTime = now,
+                ),
+            ),
         )
         given(beaconMalfunctionNotificationsRepository.findAllByBeaconMalfunctionId(1)).willReturn(
             listOf(
@@ -95,23 +95,23 @@ class GetBeaconMalfunctionUTests {
                     notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
                     communicationMeans = CommunicationMeans.SMS,
                     recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-                    recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000", success = true
+                    recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000", success = true,
                 ),
                 BeaconMalfunctionNotification(
                     id = 2, beaconMalfunctionId = 1, dateTimeUtc = now.plusDays(2),
                     notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_REMINDER,
                     communicationMeans = CommunicationMeans.SMS,
                     recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-                    recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000", success = true
+                    recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000", success = true,
                 ),
                 BeaconMalfunctionNotification(
                     id = 3, beaconMalfunctionId = 1, dateTimeUtc = now.plusNanos(123),
                     notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
                     communicationMeans = CommunicationMeans.EMAIL,
                     recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-                    recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000", success = true
-                )
-            )
+                    recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000", success = true,
+                ),
+            ),
         )
 
         // When
@@ -120,7 +120,7 @@ class GetBeaconMalfunctionUTests {
             beaconMalfunctionCommentsRepository,
             beaconMalfunctionActionsRepository,
             lastPositionRepository,
-            beaconMalfunctionNotificationsRepository
+            beaconMalfunctionNotificationsRepository,
         )
             .execute(1)
 
@@ -134,7 +134,7 @@ class GetBeaconMalfunctionUTests {
         assertThat(beaconMalfunctions.notifications).hasSize(2)
         assertThat(beaconMalfunctions.notifications[0].beaconMalfunctionId).isEqualTo(1)
         assertThat(beaconMalfunctions.notifications[0].notificationType).isEqualTo(
-            BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION
+            BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
         )
         assertThat(beaconMalfunctions.notifications[0].dateTimeUtc).isEqualTo(now.withNano(0))
         assertThat(beaconMalfunctions.notifications[0].notifications).hasSize(2)
@@ -142,7 +142,7 @@ class GetBeaconMalfunctionUTests {
 
         assertThat(beaconMalfunctions.notifications[1].beaconMalfunctionId).isEqualTo(1)
         assertThat(beaconMalfunctions.notifications[1].notificationType).isEqualTo(
-            BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_REMINDER
+            BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_REMINDER,
         )
         assertThat(beaconMalfunctions.notifications[1].dateTimeUtc).isEqualTo(now.withNano(0).plusDays(2))
         assertThat(beaconMalfunctions.notifications[1].notifications).hasSize(1)

@@ -5,5 +5,5 @@ enum class BeaconStatus {
     DEACTIVATED,
     IN_TEST,
     NON_APPROVED,
-    UNSUPERVISED
+    UNSUPERVISED,
 }

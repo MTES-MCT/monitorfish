@@ -49,7 +49,7 @@ export enum VesselIdentifier {
 export type VesselIdentity = {
   beaconNumber?: number | null
   externalReferenceNumber: string | null
-  flagState?: string | null
+  flagState: string
   internalReferenceNumber: string | null
   ircs: string | null
   mmsi?: string | null

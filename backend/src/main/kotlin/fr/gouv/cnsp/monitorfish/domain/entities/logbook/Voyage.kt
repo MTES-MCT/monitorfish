@@ -8,5 +8,5 @@ data class Voyage(
     val startDate: ZonedDateTime?,
     val endDate: ZonedDateTime?,
     val tripNumber: String,
-    val logbookMessagesAndAlerts: LogbookMessagesAndAlerts
+    val logbookMessagesAndAlerts: LogbookMessagesAndAlerts,
 )

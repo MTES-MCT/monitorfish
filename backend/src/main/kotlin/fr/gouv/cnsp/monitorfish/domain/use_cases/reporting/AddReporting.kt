@@ -12,13 +12,13 @@ import org.slf4j.LoggerFactory
 @UseCase
 class AddReporting(
     private val reportingRepository: ReportingRepository,
-    private val getInfractionSuspicionWithDMLAndSeaFront: GetInfractionSuspicionWithDMLAndSeaFront
+    private val getInfractionSuspicionWithDMLAndSeaFront: GetInfractionSuspicionWithDMLAndSeaFront,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(AddReporting::class.java)
 
     fun execute(newReporting: Reporting): Reporting {
         logger.info(
-            "Adding reporting for vessel ${newReporting.internalReferenceNumber}/${newReporting.ircs}/${newReporting.externalReferenceNumber}"
+            "Adding reporting for vessel ${newReporting.internalReferenceNumber}/${newReporting.ircs}/${newReporting.externalReferenceNumber}",
         )
 
         require(newReporting.type != ReportingType.ALERT) {
@@ -32,7 +32,7 @@ class AddReporting(
             newReporting.value as InfractionSuspicion
             val nextInfractionSuspicion = getInfractionSuspicionWithDMLAndSeaFront.execute(
                 newReporting.value,
-                newReporting.vesselId
+                newReporting.vesselId,
             )
             newReporting.copy(value = nextInfractionSuspicion)
         } else {

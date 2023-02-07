@@ -8,7 +8,7 @@ interface SilencedAlertRepository {
     fun save(
         alert: PendingAlert,
         silencedBeforeDate: ZonedDateTime,
-        isValidated: Boolean
+        isValidated: Boolean,
     ): SilencedAlert
 
     fun findAllCurrentSilencedAlerts(): List<SilencedAlert>

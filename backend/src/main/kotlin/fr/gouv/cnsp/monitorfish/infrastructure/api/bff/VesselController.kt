@@ -26,7 +26,7 @@ class VesselController(
     private val searchVessels: SearchVessels,
     private val getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions,
     private val getVesselReportings: GetVesselReportings,
-    private val getVesselRiskFactor: GetVesselRiskFactor
+    private val getVesselRiskFactor: GetVesselRiskFactor,
 ) {
 
     @GetMapping("")
@@ -69,7 +69,7 @@ class VesselController(
         @Parameter(description = "to date")
         @RequestParam(name = "beforeDateTime", required = false)
         @DateTimeFormat(pattern = zoneDateTimePattern)
-        beforeDateTime: ZonedDateTime?
+        beforeDateTime: ZonedDateTime?,
     ): ResponseEntity<VesselAndPositionsDataOutput> {
         return runBlocking {
             val (vesselTrackHasBeenModified, vesselWithData) = getVessel.execute(
@@ -80,7 +80,7 @@ class VesselController(
                 trackDepth,
                 vesselIdentifier,
                 afterDateTime,
-                beforeDateTime
+                beforeDateTime,
             )
 
             val returnCode = if (vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
@@ -98,15 +98,15 @@ class VesselController(
         @Parameter(description = "beacon malfunctions after date time")
         @RequestParam(name = "afterDateTime")
         @DateTimeFormat(pattern = zoneDateTimePattern)
-        afterDateTime: ZonedDateTime
+        afterDateTime: ZonedDateTime,
     ): BeaconMalfunctionsResumeAndHistoryDataOutput {
         val beaconMalfunctionsWithDetails = getVesselBeaconMalfunctions.execute(
             vesselId,
-            afterDateTime
+            afterDateTime,
         )
 
         return BeaconMalfunctionsResumeAndHistoryDataOutput.fromBeaconMalfunctionsResumeAndHistory(
-            beaconMalfunctionsWithDetails
+            beaconMalfunctionsWithDetails,
         )
     }
 
@@ -135,7 +135,7 @@ class VesselController(
         @Parameter(description = "to date")
         @RequestParam(name = "beforeDateTime", required = false)
         @DateTimeFormat(pattern = zoneDateTimePattern)
-        beforeDateTime: ZonedDateTime?
+        beforeDateTime: ZonedDateTime?,
     ): ResponseEntity<List<PositionDataOutput>> {
         return runBlocking {
             val (vesselTrackHasBeenModified, positions) = getVesselPositions.execute(
@@ -145,7 +145,7 @@ class VesselController(
                 trackDepth,
                 vesselIdentifier,
                 afterDateTime,
-                beforeDateTime
+                beforeDateTime,
             )
 
             val returnCode = if (vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
@@ -179,14 +179,14 @@ class VesselController(
         @Parameter(description = "Reporting from date time")
         @RequestParam(name = "fromDate")
         @DateTimeFormat(pattern = zoneDateTimePattern)
-        fromDate: ZonedDateTime
+        fromDate: ZonedDateTime,
     ): CurrentAndArchivedReportingDataOutput {
         val currentAndArchivedReportings = getVesselReportings.execute(
             internalReferenceNumber,
             externalReferenceNumber,
             IRCS,
             vesselIdentifier,
-            fromDate
+            fromDate,
         )
 
         return CurrentAndArchivedReportingDataOutput.fromCurrentAndArchivedReporting(currentAndArchivedReportings)
@@ -198,10 +198,10 @@ class VesselController(
         @Parameter(
             description =
             "Vessel internal reference number (CFR), external marker, IRCS, MMSI, name or beacon number",
-            required = true
+            required = true,
         )
         @RequestParam(name = "searched")
-        searched: String
+        searched: String,
     ): List<VesselIdentityDataOutput> {
         return searchVessels.execute(searched).map {
             VesselIdentityDataOutput.fromVessel(it)
@@ -217,13 +217,13 @@ class VesselController(
         @Parameter(
             description =
             "Voyage request (LAST, PREVIOUS or NEXT) with respect to date",
-            required = true
+            required = true,
         )
         @RequestParam(name = "voyageRequest")
         voyageRequest: VoyageRequest,
         @Parameter(description = "Trip number")
         @RequestParam(name = "tripNumber", required = false)
-        tripNumber: String?
+        tripNumber: String?,
     ): VoyageDataOutput {
         val voyage = getVesselVoyage.execute(internalReferenceNumber, voyageRequest, tripNumber)
         return VoyageDataOutput.fromVoyage(voyage)
@@ -234,7 +234,7 @@ class VesselController(
     fun getVesselRiskFactor(
         @Parameter(description = "Vessel internal reference number (CFR)")
         @RequestParam(name = "internalReferenceNumber")
-        internalReferenceNumber: String
+        internalReferenceNumber: String,
     ): RiskFactorDataOutput {
         val riskFactor = getVesselRiskFactor.execute(internalReferenceNumber)
 

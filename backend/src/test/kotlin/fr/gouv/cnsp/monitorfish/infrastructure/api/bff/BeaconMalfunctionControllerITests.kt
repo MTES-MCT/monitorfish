@@ -68,9 +68,9 @@ class BeaconMalfunctionControllerITests {
                     1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                     "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                     ZonedDateTime.now(), null, ZonedDateTime.now(),
-                    beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123
-                )
-            )
+                    beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
+                ),
+            ),
         )
 
         // When
@@ -93,7 +93,7 @@ class BeaconMalfunctionControllerITests {
                         1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                         "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                         ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
                     ),
                     comments = listOf(
                         BeaconMalfunctionComment(
@@ -101,8 +101,8 @@ class BeaconMalfunctionControllerITests {
                             1,
                             "A comment",
                             BeaconMalfunctionCommentUserType.SIP,
-                            ZonedDateTime.now()
-                        )
+                            ZonedDateTime.now(),
+                        ),
                     ),
                     actions = listOf(
                         BeaconMalfunctionAction(
@@ -111,10 +111,10 @@ class BeaconMalfunctionControllerITests {
                             BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
                             "PREVIOUS",
                             "NEXT",
-                            ZonedDateTime.now()
-                        )
-                    )
-                )
+                            ZonedDateTime.now(),
+                        ),
+                    ),
+                ),
             )
 
         // When
@@ -122,10 +122,10 @@ class BeaconMalfunctionControllerITests {
             put("/bff/v1/beacon_malfunctions/123")
                 .content(
                     objectMapper.writeValueAsString(
-                        UpdateBeaconMalfunctionDataInput(vesselStatus = VesselStatus.AT_SEA)
-                    )
+                        UpdateBeaconMalfunctionDataInput(vesselStatus = VesselStatus.AT_SEA),
+                    ),
                 )
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON),
         )
             // Then
             .andExpect(status().isOk)
@@ -144,7 +144,7 @@ class BeaconMalfunctionControllerITests {
         // When
         mockMvc.perform(
             put("/bff/v1/beacon_malfunctions/123", objectMapper.writeValueAsString(UpdateControlObjectiveDataInput()))
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON),
         )
             // Then
             .andExpect(status().isBadRequest)
@@ -160,7 +160,7 @@ class BeaconMalfunctionControllerITests {
                         1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                         "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                         ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
                     ),
                     resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
                     comments = listOf(
@@ -169,8 +169,8 @@ class BeaconMalfunctionControllerITests {
                             1,
                             "A comment",
                             BeaconMalfunctionCommentUserType.SIP,
-                            ZonedDateTime.now()
-                        )
+                            ZonedDateTime.now(),
+                        ),
                     ),
                     actions = listOf(
                         BeaconMalfunctionAction(
@@ -179,8 +179,8 @@ class BeaconMalfunctionControllerITests {
                             BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
                             "PREVIOUS",
                             "NEXT",
-                            ZonedDateTime.now()
-                        )
+                            ZonedDateTime.now(),
+                        ),
                     ),
                     notifications = listOf(
                         BeaconMalfunctionNotifications(
@@ -194,12 +194,12 @@ class BeaconMalfunctionControllerITests {
                                     communicationMeans = CommunicationMeans.SMS,
                                     recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
                                     recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000",
-                                    success = false, errorMessage = "This message could not be delivered"
-                                )
-                            )
-                        )
-                    )
-                )
+                                    success = false, errorMessage = "This message could not be delivered",
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
             )
 
         // When
@@ -213,15 +213,15 @@ class BeaconMalfunctionControllerITests {
             .andExpect(jsonPath("$.actions[0].propertyName", equalTo("VESSEL_STATUS")))
             .andExpect(jsonPath("$.beaconMalfunction.internalReferenceNumber", equalTo("CFR")))
             .andExpect(
-                jsonPath("$.notifications[0].notificationType", equalTo("MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION"))
+                jsonPath("$.notifications[0].notificationType", equalTo("MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION")),
             )
             .andExpect(jsonPath("$.notifications[0].notifications[0].recipientName", equalTo("Jack Sparrow")))
             .andExpect(jsonPath("$.notifications[0].notifications[0].success", equalTo(false)))
             .andExpect(
                 jsonPath(
                     "$.notifications[0].notifications[0].errorMessage",
-                    equalTo("This message could not be delivered")
-                )
+                    equalTo("This message could not be delivered"),
+                ),
             )
     }
 
@@ -234,7 +234,7 @@ class BeaconMalfunctionControllerITests {
                         1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                         "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                         ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
                     ),
                     comments = listOf(
                         BeaconMalfunctionComment(
@@ -242,8 +242,8 @@ class BeaconMalfunctionControllerITests {
                             1,
                             "A comment",
                             BeaconMalfunctionCommentUserType.SIP,
-                            ZonedDateTime.now()
-                        )
+                            ZonedDateTime.now(),
+                        ),
                     ),
                     actions = listOf(
                         BeaconMalfunctionAction(
@@ -252,10 +252,10 @@ class BeaconMalfunctionControllerITests {
                             BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
                             "PREVIOUS",
                             "NEXT",
-                            ZonedDateTime.now()
-                        )
-                    )
-                )
+                            ZonedDateTime.now(),
+                        ),
+                    ),
+                ),
             )
 
         // When
@@ -278,7 +278,7 @@ class BeaconMalfunctionControllerITests {
                     1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                     "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                     ZonedDateTime.now(), null, ZonedDateTime.now(),
-                    beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123
+                    beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
                 ),
                 comments = listOf(
                     BeaconMalfunctionComment(
@@ -286,8 +286,8 @@ class BeaconMalfunctionControllerITests {
                         1,
                         "A comment",
                         BeaconMalfunctionCommentUserType.SIP,
-                        ZonedDateTime.now()
-                    )
+                        ZonedDateTime.now(),
+                    ),
                 ),
                 actions = listOf(
                     BeaconMalfunctionAction(
@@ -296,10 +296,10 @@ class BeaconMalfunctionControllerITests {
                         BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
                         "PREVIOUS",
                         "NEXT",
-                        ZonedDateTime.now()
-                    )
-                )
-            )
+                        ZonedDateTime.now(),
+                    ),
+                ),
+            ),
         )
 
         // When
@@ -307,10 +307,10 @@ class BeaconMalfunctionControllerITests {
             post("/bff/v1/beacon_malfunctions/123/comments")
                 .content(
                     objectMapper.writeValueAsString(
-                        SaveBeaconMalfunctionCommentDataInput("A comment", BeaconMalfunctionCommentUserType.SIP)
-                    )
+                        SaveBeaconMalfunctionCommentDataInput("A comment", BeaconMalfunctionCommentUserType.SIP),
+                    ),
                 )
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON),
         )
             // Then
             .andExpect(status().isCreated)
@@ -328,7 +328,7 @@ class BeaconMalfunctionControllerITests {
 
         verify(requestNotification).execute(
             eq(123),
-            eq(BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION)
+            eq(BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION),
         )
     }
 
@@ -342,7 +342,7 @@ class BeaconMalfunctionControllerITests {
                             123, "CFR", "EXTERNAL_IMMAT", "IRCS",
                             "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDIBULE 1", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                             ZonedDateTime.now(), null, ZonedDateTime.now(),
-                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123
+                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
                         ),
                         comments = listOf(
                             BeaconMalfunctionComment(
@@ -350,8 +350,8 @@ class BeaconMalfunctionControllerITests {
                                 1,
                                 "A comment",
                                 BeaconMalfunctionCommentUserType.SIP,
-                                ZonedDateTime.now()
-                            )
+                                ZonedDateTime.now(),
+                            ),
                         ),
                         actions = listOf(
                             BeaconMalfunctionAction(
@@ -360,16 +360,16 @@ class BeaconMalfunctionControllerITests {
                                 BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
                                 "PREVIOUS",
                                 "NEXT",
-                                ZonedDateTime.now()
-                            )
-                        )
+                                ZonedDateTime.now(),
+                            ),
+                        ),
                     ),
                     BeaconMalfunctionResumeAndDetails(
                         beaconMalfunction = BeaconMalfunction(
                             465, "CFR", "EXTERNAL_IMMAT", "IRCS",
                             "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDIBULE 2", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                             ZonedDateTime.now(), null, ZonedDateTime.now(),
-                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123
+                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123,
                         ),
                         comments = listOf(
                             BeaconMalfunctionComment(
@@ -377,8 +377,8 @@ class BeaconMalfunctionControllerITests {
                                 1,
                                 "A comment",
                                 BeaconMalfunctionCommentUserType.SIP,
-                                ZonedDateTime.now()
-                            )
+                                ZonedDateTime.now(),
+                            ),
                         ),
                         actions = listOf(
                             BeaconMalfunctionAction(
@@ -387,11 +387,11 @@ class BeaconMalfunctionControllerITests {
                                 BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
                                 "PREVIOUS",
                                 "NEXT",
-                                ZonedDateTime.now()
-                            )
-                        )
-                    )
-                )
+                                ZonedDateTime.now(),
+                            ),
+                        ),
+                    ),
+                ),
             )
 
         // When
@@ -399,10 +399,10 @@ class BeaconMalfunctionControllerITests {
             put("/bff/v1/beacon_malfunctions/archive")
                 .content(
                     objectMapper.writeValueAsString(
-                        listOf(123, 456)
-                    )
+                        listOf(123, 456),
+                    ),
                 )
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON),
         )
             // Then
             .andExpect(status().isOk)

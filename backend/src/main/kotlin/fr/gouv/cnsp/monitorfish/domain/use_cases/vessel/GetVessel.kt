@@ -18,7 +18,7 @@ class GetVessel(
     private val positionRepository: PositionRepository,
     private val logbookReportRepository: LogbookReportRepository,
     private val riskFactorsRepository: RiskFactorsRepository,
-    private val beaconRepository: BeaconRepository
+    private val beaconRepository: BeaconRepository,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetVessel::class.java)
 
@@ -30,12 +30,12 @@ class GetVessel(
         trackDepth: VesselTrackDepth,
         vesselIdentifier: VesselIdentifier?,
         fromDateTime: ZonedDateTime? = null,
-        toDateTime: ZonedDateTime? = null
+        toDateTime: ZonedDateTime? = null,
     ): Pair<Boolean, VesselInformation> {
         return coroutineScope {
             val (vesselTrackHasBeenModified, positions) = GetVesselPositions(
                 positionRepository,
-                logbookReportRepository
+                logbookReportRepository,
             ).execute(
                 internalReferenceNumber = internalReferenceNumber,
                 externalReferenceNumber = externalReferenceNumber,
@@ -43,14 +43,16 @@ class GetVessel(
                 trackDepth = trackDepth,
                 vesselIdentifier = vesselIdentifier,
                 fromDateTime = fromDateTime,
-                toDateTime = toDateTime
+                toDateTime = toDateTime,
             )
 
             val vesselFuture = async {
                 vesselId?.let { vesselRepository.findVessel(vesselId) }
             }
 
-            val vesselRiskFactorsFuture = async { riskFactorsRepository.findVesselRiskFactors(internalReferenceNumber) }
+            val vesselRiskFactorsFuture = async {
+                riskFactorsRepository.findVesselRiskFactors(internalReferenceNumber)
+            }
 
             val vessel = vesselFuture.await()
             val vesselWithBeaconNumber = vessel?.id?.let { vesselId ->
@@ -66,8 +68,8 @@ class GetVessel(
                 VesselInformation(
                     vesselWithBeaconNumber,
                     positions.await(),
-                    vesselRiskFactorsFuture.await() ?: VesselRiskFactor()
-                )
+                    vesselRiskFactorsFuture.await() ?: VesselRiskFactor(),
+                ),
             )
         }
     }

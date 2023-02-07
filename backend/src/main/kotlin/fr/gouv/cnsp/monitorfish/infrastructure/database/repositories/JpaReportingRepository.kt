@@ -17,7 +17,7 @@ import java.time.ZonedDateTime
 @Repository
 class JpaReportingRepository(
     private val dbReportingRepository: DBReportingRepository,
-    private val mapper: ObjectMapper
+    private val mapper: ObjectMapper,
 ) : ReportingRepository {
 
     override fun save(alert: PendingAlert, validationDate: ZonedDateTime?) {
@@ -33,7 +33,7 @@ class JpaReportingRepository(
         dbReportingRepository.update(
             reportingId,
             mapper.writeValueAsString(updatedInfractionSuspicion),
-            ReportingType.INFRACTION_SUSPICION.toString()
+            ReportingType.INFRACTION_SUSPICION.toString(),
         )
 
         return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
@@ -44,7 +44,7 @@ class JpaReportingRepository(
         dbReportingRepository.update(
             reportingId,
             mapper.writeValueAsString(updatedObservation),
-            ReportingType.OBSERVATION.toString()
+            ReportingType.OBSERVATION.toString(),
         )
 
         return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
@@ -65,7 +65,7 @@ class JpaReportingRepository(
     override fun findCurrentAndArchivedByVesselIdentifierEquals(
         vesselIdentifier: VesselIdentifier,
         value: String,
-        fromDate: ZonedDateTime
+        fromDate: ZonedDateTime,
     ): List<Reporting> {
         return dbReportingRepository
             .findCurrentAndArchivedByVesselIdentifier(vesselIdentifier.toString(), value, fromDate.toInstant()).map {
@@ -77,14 +77,14 @@ class JpaReportingRepository(
         internalReferenceNumber: String,
         externalReferenceNumber: String,
         ircs: String,
-        fromDate: ZonedDateTime
+        fromDate: ZonedDateTime,
     ): List<Reporting> {
         if (internalReferenceNumber.isNotEmpty()) {
             return dbReportingRepository
                 .findCurrentAndArchivedByVesselIdentifier(
                     VesselIdentifier.INTERNAL_REFERENCE_NUMBER.toString(),
                     internalReferenceNumber,
-                    fromDate.toInstant()
+                    fromDate.toInstant(),
                 ).map {
                     it.toReporting(mapper)
                 }
@@ -102,7 +102,7 @@ class JpaReportingRepository(
                 .findCurrentAndArchivedByVesselIdentifier(
                     VesselIdentifier.EXTERNAL_REFERENCE_NUMBER.toString(),
                     externalReferenceNumber,
-                    fromDate.toInstant()
+                    fromDate.toInstant(),
                 ).map {
                     it.toReporting(mapper)
                 }

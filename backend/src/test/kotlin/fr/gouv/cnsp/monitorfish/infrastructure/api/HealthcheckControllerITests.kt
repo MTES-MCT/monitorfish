@@ -33,8 +33,8 @@ class HealthcheckControllerITests {
             Health(
                 ZonedDateTime.parse("2020-12-21T15:01:00Z"),
                 ZonedDateTime.parse("2020-12-21T16:01:00Z"),
-                ZonedDateTime.parse("2020-12-21T17:01:00Z")
-            )
+                ZonedDateTime.parse("2020-12-21T17:01:00Z"),
+            ),
         )
 
         // When

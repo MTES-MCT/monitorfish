@@ -8,7 +8,7 @@ import { COLORS } from '../../../constants/constants'
 import { SilencedAlertPeriod } from '../../../domain/entities/alerts/constants'
 import { useClickOutsideWhenOpenedWithinRef } from '../../../hooks/useClickOutsideWhenOpenedWithinRef'
 import { useForceUpdate } from '../../../hooks/useForceUpdate'
-import { DATE_RANGE_PICKER_LOCALE } from '../../vessel_sidebar/actions/TrackRequest/DateRange'
+import { DATE_RANGE_PICKER_LOCALE } from '../../VesselSidebar/actions/TrackRequest/DateRange'
 
 import type { SilencedAlertPeriodRequest } from '../../../domain/entities/alerts/types'
 import type { CSSProperties, MutableRefObject } from 'react'

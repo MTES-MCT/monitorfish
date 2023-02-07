@@ -12,7 +12,7 @@ interface DBVesselRepository : CrudRepository<VesselEntity, Int> {
             "OR vessel_name LIKE %:searched% " +
             "OR external_immatriculation LIKE %:searched% " +
             "OR ircs LIKE %:searched% limit 50",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun searchBy(@Param("searched") searched: String): List<VesselEntity>
     fun findByInternalReferenceNumber(internalReferenceNumber: String): VesselEntity

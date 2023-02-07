@@ -8,5 +8,5 @@ enum class VesselStatus {
     TECHNICAL_STOP,
     ON_SALE,
     SUSPENDED_BECAUSE_UNPAID,
-    IN_FOREIGN_EEZ
+    IN_FOREIGN_EEZ,
 }

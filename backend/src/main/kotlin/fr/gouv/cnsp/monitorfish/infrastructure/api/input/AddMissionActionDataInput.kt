@@ -36,7 +36,7 @@ data class AddMissionActionDataInput(
     var otherComments: String? = null,
     var gearOnboard: String? = null,
     var userTrigram: String? = null,
-    var speciesOnboard: String? = null
+    var speciesOnboard: String? = null,
 ) {
     fun toMissionAction(mapper: ObjectMapper) = MissionAction(
         vesselId = vesselId,
@@ -70,14 +70,14 @@ data class AddMissionActionDataInput(
         otherComments = otherComments,
         gearOnboard = deserializeJSONList(mapper, gearOnboard, GearControl::class.java),
         speciesOnboard = deserializeJSONList(mapper, speciesOnboard, SpeciesControl::class.java),
-        userTrigram = userTrigram
+        userTrigram = userTrigram,
     )
 
     private fun <T> deserializeJSONList(mapper: ObjectMapper, json: String?, clazz: Class<T>): List<T> = json?.let {
         mapper.readValue(
             json,
             mapper.typeFactory
-                .constructCollectionType(MutableList::class.java, clazz)
+                .constructCollectionType(MutableList::class.java, clazz),
         )
     } ?: listOf()
 }

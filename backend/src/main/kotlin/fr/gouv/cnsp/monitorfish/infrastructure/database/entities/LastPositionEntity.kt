@@ -34,8 +34,7 @@ data class LastPositionEntity(
     @Column(name = "vessel_name")
     val vesselName: String? = null,
     @Column(name = "flag_state")
-    @Enumerated(EnumType.STRING)
-    val flagState: CountryCode? = null,
+    val flagState: String? = null,
     @Column(name = "trip_number")
     val tripNumber: String? = null,
 
@@ -109,7 +108,7 @@ data class LastPositionEntity(
     val beaconMalfunctionId: Int?,
     @Type(ListArrayType::class)
     @Column(name = "reportings", columnDefinition = "varchar(200)[]")
-    val reportings: List<String>? = listOf()
+    val reportings: List<String>? = listOf(),
 ) : Serializable {
 
     fun toLastPosition(mapper: ObjectMapper) = LastPosition(
@@ -126,7 +125,13 @@ data class LastPositionEntity(
         vesselName = vesselName,
         speed = speed,
         course = course,
-        flagState = flagState,
+        flagState = flagState?.let {
+            try {
+                CountryCode.valueOf(it)
+            } catch (e: IllegalArgumentException) {
+                CountryCode.UNDEFINED
+            }
+        } ?: CountryCode.UNDEFINED,
         tripNumber = tripNumber,
         positionType = PositionType.VMS,
         emissionPeriod = emissionPeriod,
@@ -140,13 +145,13 @@ data class LastPositionEntity(
         gearOnboard = mapper.readValue(
             gearOnboard,
             mapper.typeFactory
-                .constructCollectionType(MutableList::class.java, Gear::class.java)
+                .constructCollectionType(MutableList::class.java, Gear::class.java),
         ),
         segments = segments,
         speciesOnboard = mapper.readValue(
             speciesOnboard,
             mapper.typeFactory
-                .constructCollectionType(MutableList::class.java, Species::class.java)
+                .constructCollectionType(MutableList::class.java, Species::class.java),
         ),
         totalWeightOnboard = totalWeightOnboard,
         lastControlDateTime = lastControlDateTime,
@@ -161,6 +166,6 @@ data class LastPositionEntity(
         isAtPort = isAtPort,
         alerts = alerts,
         beaconMalfunctionId = beaconMalfunctionId,
-        reportings = reportings ?: listOf()
+        reportings = reportings ?: listOf(),
     )
 }

@@ -25,7 +25,7 @@ class MissionActionsController(
     private val getVesselControls: GetVesselControls,
     private val addMissionAction: AddMissionAction,
     private val updateMissionAction: UpdateMissionAction,
-    private val mapper: ObjectMapper
+    private val mapper: ObjectMapper,
 ) {
 
     @GetMapping("")
@@ -37,7 +37,7 @@ class MissionActionsController(
         @Parameter(description = "actions after date time")
         @RequestParam(name = "afterDateTime")
         @DateTimeFormat(pattern = VesselController.zoneDateTimePattern)
-        afterDateTime: ZonedDateTime
+        afterDateTime: ZonedDateTime,
     ): ControlsSummaryDataOutput {
         return runBlocking {
             val actionsSummary = getVesselControls.execute(vesselId, afterDateTime)
@@ -51,7 +51,7 @@ class MissionActionsController(
     @ResponseStatus(HttpStatus.CREATED)
     fun createMissionAction(
         @RequestBody
-        actionInput: AddMissionActionDataInput
+        actionInput: AddMissionActionDataInput,
     ): MissionActionDataOutput {
         return MissionActionDataOutput.fromMissionAction(addMissionAction.execute(actionInput.toMissionAction(mapper)))
     }
@@ -64,7 +64,7 @@ class MissionActionsController(
         @PathVariable(name = "actionId")
         actionId: Int,
         @RequestBody
-        actionInput: AddMissionActionDataInput
+        actionInput: AddMissionActionDataInput,
     ): MissionActionDataOutput {
         val updatedMissionAction = updateMissionAction.execute(actionId, actionInput.toMissionAction(mapper))
         return MissionActionDataOutput.fromMissionAction(updatedMissionAction)

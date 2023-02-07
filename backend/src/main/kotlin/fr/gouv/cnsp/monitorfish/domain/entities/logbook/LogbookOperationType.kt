@@ -4,5 +4,5 @@ enum class LogbookOperationType {
     DAT,
     COR,
     DEL,
-    RET
+    RET,
 }

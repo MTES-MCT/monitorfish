@@ -15,7 +15,7 @@ class GetLogbookMessages(
     private val gearRepository: GearRepository,
     private val speciesRepository: SpeciesRepository,
     private val portRepository: PortRepository,
-    private val logbookRawMessageRepository: LogbookRawMessageRepository
+    private val logbookRawMessageRepository: LogbookRawMessageRepository,
 ) {
     private val logger = LoggerFactory.getLogger(GetLogbookMessages::class.java)
 
@@ -23,14 +23,14 @@ class GetLogbookMessages(
         internalReferenceNumber: String,
         afterDepartureDate: ZonedDateTime,
         beforeDepartureDate: ZonedDateTime,
-        tripNumber: String
+        tripNumber: String,
     ): List<LogbookMessage> {
         val messages = logbookReportRepository
             .findAllMessagesByTripNumberBetweenDates(
                 internalReferenceNumber,
                 afterDepartureDate,
                 beforeDepartureDate,
-                tripNumber
+                tripNumber,
             )
             .sortedBy { it.reportDateTime }
             .map {
@@ -97,7 +97,7 @@ class GetLogbookMessages(
             } else if (logbookMessage.transmissionFormat == LogbookTransmissionFormat.FLUX) {
                 flagMessageAsSuccess(logbookMessage)
             } else if (logbookMessage.software !== null && logbookMessage.software.contains(
-                    LogbookSoftware.VISIOCAPTURE.software
+                    LogbookSoftware.VISIOCAPTURE.software,
                 )
             ) {
                 flagMessageAsSuccess(logbookMessage)
@@ -146,14 +146,16 @@ class GetLogbookMessages(
             correctedMessage.isCorrected = true
         } else {
             logger.warn(
-                "Original message ${logbookMessage.referencedReportId} corrected by message COR ${logbookMessage.operationNumber} is not found."
+                "Original message ${logbookMessage.referencedReportId} corrected by message COR ${logbookMessage.operationNumber} is not found.",
             )
         }
     }
 
     private fun setNamesFromCodes(message: COE) {
         message.targetSpeciesOnEntry?.let { targetSpeciesOnEntry ->
-            message.targetSpeciesNameOnEntry = EffortTargetSpeciesGroup.values().find { it.name == targetSpeciesOnEntry }?.value
+            message.targetSpeciesNameOnEntry = EffortTargetSpeciesGroup.values().find {
+                it.name == targetSpeciesOnEntry
+            }?.value
 
             if (message.targetSpeciesNameOnEntry == null) {
                 try {
@@ -167,7 +169,9 @@ class GetLogbookMessages(
 
     private fun setNamesFromCodes(message: COX) {
         message.targetSpeciesOnExit?.let { targetSpeciesOnExit ->
-            message.targetSpeciesNameOnExit = EffortTargetSpeciesGroup.values().find { it.name == targetSpeciesOnExit }?.value
+            message.targetSpeciesNameOnExit = EffortTargetSpeciesGroup.values().find {
+                it.name == targetSpeciesOnExit
+            }?.value
 
             if (message.targetSpeciesNameOnExit == null) {
                 try {
@@ -181,7 +185,9 @@ class GetLogbookMessages(
 
     private fun setNamesFromCodes(message: CRO) {
         message.targetSpeciesOnExit?.let { targetSpeciesOnExit ->
-            message.targetSpeciesNameOnExit = EffortTargetSpeciesGroup.values().find { it.name == targetSpeciesOnExit }?.value
+            message.targetSpeciesNameOnExit = EffortTargetSpeciesGroup.values().find {
+                it.name == targetSpeciesOnExit
+            }?.value
 
             if (message.targetSpeciesNameOnExit == null) {
                 try {
@@ -193,7 +199,9 @@ class GetLogbookMessages(
         }
 
         message.targetSpeciesOnEntry?.let { targetSpeciesOnEntry ->
-            message.targetSpeciesNameOnEntry = EffortTargetSpeciesGroup.values().find { it.name == targetSpeciesOnEntry }?.value
+            message.targetSpeciesNameOnEntry = EffortTargetSpeciesGroup.values().find {
+                it.name == targetSpeciesOnEntry
+            }?.value
 
             if (message.targetSpeciesNameOnEntry == null) {
                 try {

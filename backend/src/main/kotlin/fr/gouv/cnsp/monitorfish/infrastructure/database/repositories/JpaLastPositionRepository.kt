@@ -16,7 +16,7 @@ import java.time.ZonedDateTime
 @Repository
 class JpaLastPositionRepository(
     private val dbLastPositionRepository: DBLastPositionRepository,
-    private val mapper: ObjectMapper
+    private val mapper: ObjectMapper,
 ) : LastPositionRepository {
 
     @Cacheable(value = ["vessels_all_position"])
@@ -65,19 +65,19 @@ class JpaLastPositionRepository(
         alertType: AlertTypeMapping,
         vesselIdentifier: VesselIdentifier,
         value: String,
-        isValidated: Boolean
+        isValidated: Boolean,
     ) {
         dbLastPositionRepository.removeAlertByVesselIdentifierEquals(
             vesselIdentifier.name,
             value,
             alertType.name,
-            isValidated
+            isValidated,
         )
     }
 
     override fun findUnderCharterForVessel(
         vesselIdentifier: VesselIdentifier,
-        value: String
+        value: String,
     ): Boolean {
         return dbLastPositionRepository.findUnderCharterByVesselIdentifierEquals(vesselIdentifier.name, value)
     }

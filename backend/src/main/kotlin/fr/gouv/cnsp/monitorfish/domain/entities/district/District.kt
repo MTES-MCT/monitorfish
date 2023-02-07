@@ -6,5 +6,5 @@ data class District(
     val departmentCode: String,
     val department: String,
     val dml: String? = null,
-    val facade: String? = null
+    val facade: String? = null,
 )

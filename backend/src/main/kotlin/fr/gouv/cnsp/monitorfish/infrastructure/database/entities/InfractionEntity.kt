@@ -17,14 +17,16 @@ data class InfractionEntity(
     @Column(name = "infraction_category")
     var infractionCategory: String? = null,
     @Column(name = "infraction")
-    var infraction: String? = null
+    var infraction: String? = null,
 ) {
 
     fun toInfraction() = Infraction(
         id = id,
         natinfCode = natinfCode,
         regulation = regulation,
-        infractionCategory = infractionCategory?.let { category -> InfractionCategory.values().firstOrNull { it.value == category } },
-        infraction = infraction
+        infractionCategory = infractionCategory?.let { category -> InfractionCategory.values().firstOrNull {
+            it.value == category
+        } },
+        infraction = infraction,
     )
 }

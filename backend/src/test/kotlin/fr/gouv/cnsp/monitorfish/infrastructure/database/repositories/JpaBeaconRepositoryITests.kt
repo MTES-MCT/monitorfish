@@ -37,7 +37,7 @@ class JpaBeaconRepositoryITests : AbstractDBTests() {
         val beaconNumbers = jpaBeaconRepository.findActivatedBeaconNumbers()
 
         assertThat(beaconNumbers).isEqualTo(
-            listOf("FGEDX85", "123456", "ETETE4", "A56CZ2", "NB56FR8", "PO8U9U4", "ABC1234")
+            listOf("FGEDX85", "123456", "ETETE4", "A56CZ2", "NB56FR8", "PO8U9U4", "ABC1234"),
         )
     }
 

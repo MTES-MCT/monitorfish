@@ -6,5 +6,5 @@ data class BeaconMalfunctionNotifications(
     val beaconMalfunctionId: Int,
     val dateTimeUtc: ZonedDateTime,
     val notificationType: BeaconMalfunctionNotificationType,
-    val notifications: List<BeaconMalfunctionNotification>
+    val notifications: List<BeaconMalfunctionNotification>,
 )

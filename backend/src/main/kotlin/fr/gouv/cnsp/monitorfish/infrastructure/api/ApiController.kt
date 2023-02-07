@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api")
 @Tag(name = "External API")
 class ApiController(
-    private val parseAndSavePosition: ParseAndSavePosition
+    private val parseAndSavePosition: ParseAndSavePosition,
 ) {
 
     @PostMapping(value = ["/v1/positions"])
@@ -20,7 +20,7 @@ class ApiController(
     fun postPosition(
         @Parameter(description = "VMS NAF", required = true)
         @RequestBody
-        naf: String
+        naf: String,
     ) {
         parseAndSavePosition.execute(naf)
     }

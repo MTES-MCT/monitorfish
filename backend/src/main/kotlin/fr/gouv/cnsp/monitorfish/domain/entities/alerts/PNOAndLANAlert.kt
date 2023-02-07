@@ -11,5 +11,5 @@ class PNOAndLANAlert(
     val ircs: String? = null,
     val creationDate: ZonedDateTime,
     val tripNumber: String? = null,
-    val value: AlertType
+    val value: AlertType,
 )

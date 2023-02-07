@@ -29,5 +29,5 @@ class LogbookMessage(
     var rawMessage: String? = null,
     val transmissionFormat: LogbookTransmissionFormat,
     val software: String? = null,
-    var isSentByFailoverSoftware: Boolean = false
+    var isSentByFailoverSoftware: Boolean = false,
 )

@@ -22,7 +22,7 @@ import java.time.ZonedDateTime
 @Repository
 class JpaLogbookReportRepository(
     private val dbERSRepository: DBLogbookReportRepository,
-    private val mapper: ObjectMapper
+    private val mapper: ObjectMapper,
 ) : LogbookReportRepository {
 
     private val postgresChunkSize = 5000
@@ -33,13 +33,13 @@ class JpaLogbookReportRepository(
                 val lastTrip = dbERSRepository.findTripsBeforeDatetime(
                     internalReferenceNumber,
                     beforeDateTime.toInstant(),
-                    PageRequest.of(0, 1)
+                    PageRequest.of(0, 1),
                 ).first()
 
                 return VoyageDatesAndTripNumber(
                     lastTrip.tripNumber,
                     lastTrip.startDate.atZone(UTC),
-                    lastTrip.endDate.atZone(UTC)
+                    lastTrip.endDate.atZone(UTC),
                 )
             }
 
@@ -58,17 +58,17 @@ class JpaLogbookReportRepository(
                 val previousTripNumber = dbERSRepository.findPreviousTripNumber(
                     internalReferenceNumber,
                     tripNumber,
-                    PageRequest.of(0, 1)
+                    PageRequest.of(0, 1),
                 ).first().tripNumber
                 val previousTrip = dbERSRepository.findFirstAndLastOperationsDatesOfTrip(
                     internalReferenceNumber,
-                    previousTripNumber
+                    previousTripNumber,
                 )
 
                 return VoyageDatesAndTripNumber(
                     previousTripNumber,
                     previousTrip.startDate.atZone(UTC),
-                    previousTrip.endDate.atZone(UTC)
+                    previousTrip.endDate.atZone(UTC),
                 )
             }
 
@@ -89,17 +89,17 @@ class JpaLogbookReportRepository(
                 val nextTripNumber = dbERSRepository.findNextTripNumber(
                     internalReferenceNumber,
                     tripNumber,
-                    PageRequest.of(0, 1)
+                    PageRequest.of(0, 1),
                 ).first().tripNumber
                 val nextTrip = dbERSRepository.findFirstAndLastOperationsDatesOfTrip(
                     internalReferenceNumber,
-                    nextTripNumber
+                    nextTripNumber,
                 )
 
                 return VoyageDatesAndTripNumber(
                     nextTripNumber,
                     nextTrip.startDate.atZone(UTC),
-                    nextTrip.endDate.atZone(UTC)
+                    nextTrip.endDate.atZone(UTC),
                 )
             }
 
@@ -121,7 +121,7 @@ class JpaLogbookReportRepository(
         internalReferenceNumber: String,
         afterDate: ZonedDateTime,
         beforeDate: ZonedDateTime,
-        tripNumber: String
+        tripNumber: String,
     ): List<LogbookMessage> {
         try {
             if (internalReferenceNumber.isNotEmpty()) {
@@ -129,7 +129,7 @@ class JpaLogbookReportRepository(
                     internalReferenceNumber,
                     afterDate.toInstant().toString(),
                     beforeDate.toInstant().toString(),
-                    tripNumber
+                    tripNumber,
                 ).map {
                     it.toLogbookMessage(mapper)
                 }
@@ -188,18 +188,18 @@ class JpaLogbookReportRepository(
 
     override fun findFirstAcknowledgedDateOfTripBeforeDateTime(
         internalReferenceNumber: String,
-        beforeDateTime: ZonedDateTime
+        beforeDateTime: ZonedDateTime,
     ): ZonedDateTime {
         try {
             if (internalReferenceNumber.isNotEmpty()) {
                 val lastTrip = dbERSRepository.findTripsBeforeDatetime(
                     internalReferenceNumber,
                     beforeDateTime.toInstant(),
-                    PageRequest.of(0, 1)
+                    PageRequest.of(0, 1),
                 ).first()
 
                 return dbERSRepository.findFirstAcknowledgedDateOfTrip(internalReferenceNumber, lastTrip.tripNumber).atZone(
-                    UTC
+                    UTC,
                 )
             }
 
@@ -213,7 +213,9 @@ class JpaLogbookReportRepository(
 
     private fun getCorrectedMessageIfAvailable(pnoMessage: LogbookReportEntity, messages: List<LogbookReportEntity>): Boolean {
         return if (pnoMessage.operationType == LogbookOperationType.DAT) {
-            !messages.any { it.operationType == LogbookOperationType.COR && it.referencedReportId == pnoMessage.reportId }
+            !messages.any {
+                it.operationType == LogbookOperationType.COR && it.referencedReportId == pnoMessage.reportId
+            }
         } else {
             true
         }

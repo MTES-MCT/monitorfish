@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { ConfirmDeletionModal } from './ConfirmDeletionModal'
@@ -21,41 +21,51 @@ export function Current() {
   const { currentAndArchivedReportingsOfSelectedVessel, editedReporting } = useMainAppSelector(state => state.reporting)
   const [deletionModalIsOpenForId, setDeletionModalIsOpenForId] = useState<number | undefined>(undefined)
 
+  const getAlertsOfType = useCallback(
+    alertType =>
+      currentAndArchivedReportingsOfSelectedVessel?.current
+        ?.filter(reporting => reporting.type === ReportingType.ALERT && reporting.value.type === alertType.code)
+        ?.sort((a, b) => sortByValidationDate(b, a)) || [],
+    [currentAndArchivedReportingsOfSelectedVessel]
+  )
+
+  const reportingsWithoutAlerts = useMemo(
+    () =>
+      (currentAndArchivedReportingsOfSelectedVessel?.current || [])
+        .filter(reporting => reporting.type !== ReportingType.ALERT)
+        .filter(reporting => reporting.id !== editedReporting?.id)
+        .sort((a, b) => sortByValidationDate(b, a)),
+    [currentAndArchivedReportingsOfSelectedVessel, editedReporting]
+  )
+
   return (
     <Wrapper>
       <CreateOrEditReporting />
       {operationalAlertTypes.map(alertType => {
-        const alertReportings =
-          currentAndArchivedReportingsOfSelectedVessel?.current
-            ?.filter(reporting => reporting.type === ReportingType.ALERT && reporting.value.type === alertType.code)
-            ?.sort((a, b) => sortByValidationDate(a, b)) || []
-
-        if (alertReportings?.length) {
-          return (
-            <ReportingCard
-              // TODO We need to change that with a proper cursor.
-              // eslint-disable-next-line no-unsafe-optional-chaining
-              key={(alertReportings as any)[alertReportings?.length - 1].id}
-              numberOfAlerts={alertReportings?.length}
-              openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
-              // eslint-disable-next-line no-unsafe-optional-chaining
-              reporting={alertReportings[alertReportings?.length - 1]!!}
-            />
-          )
+        const alertReportings = getAlertsOfType(alertType)
+        if (!alertReportings?.length) {
+          return null
         }
 
-        return null
-      })}
-      {currentAndArchivedReportingsOfSelectedVessel?.current
-        ?.filter(reporting => reporting.type !== ReportingType.ALERT)
-        ?.filter(reporting => reporting.id !== editedReporting?.id)
-        .map(reporting => (
+        return (
           <ReportingCard
-            key={reporting.id}
+            // TODO We need to change that with a proper cursor.
+            // eslint-disable-next-line no-unsafe-optional-chaining
+            key={(alertReportings as any)[alertReportings?.length - 1].id}
+            numberOfAlerts={alertReportings?.length}
             openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
-            reporting={reporting}
+            // eslint-disable-next-line no-unsafe-optional-chaining
+            reporting={alertReportings[alertReportings?.length - 1]!!}
           />
-        ))}
+        )
+      })}
+      {reportingsWithoutAlerts.map(reporting => (
+        <ReportingCard
+          key={reporting.id}
+          openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
+          reporting={reporting}
+        />
+      ))}
       {!currentAndArchivedReportingsOfSelectedVessel?.current?.length && <NoReporting>Aucun signalement</NoReporting>}
       <ConfirmDeletionModal
         closeModal={() => setDeletionModalIsOpenForId(undefined)}
@@ -69,6 +79,10 @@ export function Current() {
 function sortByValidationDate(a, b) {
   if (a.validationDate && b.validationDate) {
     return a.validationDate.localeCompare(b.validationDate)
+  }
+
+  if (a.creationDate && b.creationDate) {
+    return a.creationDate.localeCompare(b.creationDate)
   }
 
   return null

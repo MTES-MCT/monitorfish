@@ -12,6 +12,7 @@ import { ReactComponent as VesselIDSVG } from '../icons/Picto_identite.svg'
 import { ReactComponent as FisheriesSVG } from '../icons/Picto_peche.svg'
 import { ReactComponent as SummarySVG } from '../icons/Picto_resume.svg'
 
+// TODO Move the icons in Monitor UI : https://github.com/MTES-MCT/monitorfish/issues/1736
 export function Tabs() {
   const dispatch = useMainAppDispatch()
   const { selectedVessel, vesselSidebarTab } = useMainAppSelector(state => state.vessel)

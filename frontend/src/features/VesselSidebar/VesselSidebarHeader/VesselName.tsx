@@ -78,7 +78,7 @@ function getVesselName(selectedVesselIdentity) {
     flagState = `${selectedVesselIdentity.flagState}`
   }
 
-  return `${selectedVesselIdentity.vesselName} (${flagState?.toUpperCase()})`
+  return `${selectedVesselIdentity.vesselName} (${flagState.toUpperCase()})`
 }
 
 const Wrapper = styled.div<{

@@ -57,10 +57,10 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.logbookInfractions.first().infractionType).isEqualTo(InfractionType.WITH_RECORD)
         assertThat(firstControl.logbookInfractions.first().natinf).isEqualTo(27689)
         assertThat(firstControl.logbookInfractions.first().comments).contains(
-            "Poids à bord MNZ supérieur de 50% au poids déclaré"
+            "Poids à bord MNZ supérieur de 50% au poids déclaré",
         )
         assertThat(firstControl.licencesAndLogbookObservations).isEqualTo(
-            "C'est pas très très bien réglo toute cette poissecalle non déclarée"
+            "C'est pas très très bien réglo toute cette poissecalle non déclarée",
         )
         assertThat(firstControl.gearInfractions).hasSize(2)
         assertThat(firstControl.gearInfractions.first().infractionType).isEqualTo(InfractionType.WITH_RECORD)
@@ -78,7 +78,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.otherInfractions.first().infractionType).isNull()
         assertThat(firstControl.otherInfractions.first().natinf).isEqualTo(23588)
         assertThat(firstControl.otherInfractions.first().comments).isEqualTo(
-            "Chalutage répété dans les 3 milles sur Piste VMS - confirmé de visu"
+            "Chalutage répété dans les 3 milles sur Piste VMS - confirmé de visu",
         )
         assertThat(firstControl.numberOfVesselsFlownOver).isNull()
         assertThat(firstControl.unitWithoutOmegaGauge).isFalse

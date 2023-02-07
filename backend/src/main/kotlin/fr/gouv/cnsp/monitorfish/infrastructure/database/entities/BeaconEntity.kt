@@ -16,13 +16,13 @@ data class BeaconEntity(
     @Enumerated(EnumType.STRING)
     val beaconStatus: BeaconStatus? = null,
     @Column(name = "satellite_operator_id")
-    val satelliteOperatorId: Int? = null
+    val satelliteOperatorId: Int? = null,
 ) {
 
     fun toBeacon() = Beacon(
         beaconNumber = beaconNumber,
         vesselId = vesselId,
         beaconStatus = beaconStatus,
-        satelliteOperatorId = satelliteOperatorId
+        satelliteOperatorId = satelliteOperatorId,
     )
 }

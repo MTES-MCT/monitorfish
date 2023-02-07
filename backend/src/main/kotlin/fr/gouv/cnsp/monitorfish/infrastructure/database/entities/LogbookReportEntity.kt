@@ -64,7 +64,7 @@ data class LogbookReportEntity(
     @Enumerated(EnumType.STRING)
     val transmissionFormat: LogbookTransmissionFormat,
     @Column(name = "software")
-    val software: String? = null
+    val software: String? = null,
 ) {
 
     fun toLogbookMessage(mapper: ObjectMapper) = LogbookMessage(
@@ -87,6 +87,6 @@ data class LogbookReportEntity(
         analyzedByRules = analyzedByRules ?: listOf(),
         message = getERSMessageValueFromJSON(mapper, message, messageType, operationType),
         software = software,
-        transmissionFormat = transmissionFormat
+        transmissionFormat = transmissionFormat,
     )
 }

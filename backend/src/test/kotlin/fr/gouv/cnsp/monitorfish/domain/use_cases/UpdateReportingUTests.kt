@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.*
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
@@ -43,8 +44,8 @@ class UpdateReportingUTests {
                 validationDate = ZonedDateTime.now(),
                 value = ThreeMilesTrawlingAlert() as ReportingValue,
                 isArchived = false,
-                isDeleted = false
-            )
+                isDeleted = false,
+            ),
         )
 
         // When
@@ -54,10 +55,10 @@ class UpdateReportingUTests {
                     1,
                     UpdatedInfractionSuspicionOrObservation(
                         reportingActor = ReportingActor.UNIT,
-                        reportingType = ReportingType.OBSERVATION,
+                        type = ReportingType.OBSERVATION,
                         authorTrigram = "LTH",
-                        title = "A reporting"
-                    )
+                        title = "A reporting",
+                    ),
                 )
         }
 
@@ -79,10 +80,16 @@ class UpdateReportingUTests {
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, authorTrigram = "LTH", title = "Test", natinfCode = "1234") as ReportingValue,
+                value = InfractionSuspicion(
+                    reportingActor = ReportingActor.UNIT,
+                    authorTrigram = "LTH",
+                    title = "Test",
+                    flagState = CountryCode.FR.toString(),
+                    natinfCode = "1234"
+                ) as ReportingValue,
                 isArchived = false,
-                isDeleted = false
-            )
+                isDeleted = false,
+            ),
         )
 
         // When
@@ -92,23 +99,23 @@ class UpdateReportingUTests {
                     1,
                     UpdatedInfractionSuspicionOrObservation(
                         reportingActor = ReportingActor.UNIT,
-                        reportingType = ReportingType.ALERT,
+                        type = ReportingType.ALERT,
                         authorTrigram = "LTH",
-                        title = "A reporting"
-                    )
+                        title = "A reporting",
+                    ),
                 )
         }
 
         // Then
         assertThat(throwable.message).contains(
-            "The new reporting type must be an INFRACTION_SUSPICION or an OBSERVATION"
+            "The new reporting type must be an INFRACTION_SUSPICION or an OBSERVATION",
         )
     }
 
     @ParameterizedTest
     @EnumSource(ReportingActor::class)
     fun `execute Should throw an exception When fields of reporting actor are not rights`(
-        reportingActor: ReportingActor
+        reportingActor: ReportingActor,
     ) {
         // Given
         given(reportingRepository.findById(any())).willReturn(
@@ -122,13 +129,25 @@ class UpdateReportingUTests {
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, authorTrigram = "LTH", title = "Test", natinfCode = "1234") as ReportingValue,
+                value = InfractionSuspicion(
+                    reportingActor = ReportingActor.UNIT,
+                    authorTrigram = "LTH",
+                    title = "Test",
+                    flagState = CountryCode.FR.toString(),
+                    natinfCode = "1234"
+                ) as ReportingValue,
                 isArchived = false,
-                isDeleted = false
-            )
+                isDeleted = false,
+            ),
         )
         given(getInfractionSuspicionWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
-            InfractionSuspicion(reportingActor = reportingActor, title = "Test", authorTrigram = "LTH", natinfCode = "1234")
+            InfractionSuspicion(
+                reportingActor = reportingActor,
+                title = "Test",
+                flagState = CountryCode.FR.toString(),
+                authorTrigram = "LTH",
+                natinfCode = "1234"
+            ),
         )
 
         // When
@@ -138,11 +157,11 @@ class UpdateReportingUTests {
                     1,
                     UpdatedInfractionSuspicionOrObservation(
                         reportingActor = reportingActor,
-                        reportingType = ReportingType.INFRACTION_SUSPICION,
+                        type = ReportingType.INFRACTION_SUSPICION,
                         authorTrigram = "LTH",
                         title = "A reporting",
-                        natinfCode = "123456"
-                    )
+                        natinfCode = "123456",
+                    ),
                 )
         }
 
@@ -171,10 +190,16 @@ class UpdateReportingUTests {
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, authorTrigram = "LTH", title = "Test", natinfCode = "1234") as ReportingValue,
+                value = InfractionSuspicion(
+                    reportingActor = ReportingActor.UNIT,
+                    authorTrigram = "LTH",
+                    title = "Test",
+                    flagState = CountryCode.FR.toString(),
+                    natinfCode = "1234"
+                ) as ReportingValue,
                 isArchived = false,
-                isDeleted = false
-            )
+                isDeleted = false,
+            ),
         )
 
         // When
@@ -183,10 +208,10 @@ class UpdateReportingUTests {
                 1,
                 UpdatedInfractionSuspicionOrObservation(
                     reportingActor = ReportingActor.UNIT,
-                    reportingType = ReportingType.INFRACTION_SUSPICION,
+                    type = ReportingType.INFRACTION_SUSPICION,
                     authorTrigram = "LTH",
-                    title = "A reporting"
-                )
+                    title = "A reporting",
+                ),
             )
         }
 
@@ -213,11 +238,12 @@ class UpdateReportingUTests {
                     unit = "OPS",
                     title = "A title",
                     authorTrigram = "LTH",
-                    description = "Before update"
+                    flagState = CountryCode.FR.toString(),
+                    description = "Before update",
                 ) as ReportingValue,
                 isArchived = false,
-                isDeleted = false
-            )
+                isDeleted = false,
+            ),
         )
 
         // When
@@ -225,13 +251,13 @@ class UpdateReportingUTests {
             1,
             UpdatedInfractionSuspicionOrObservation(
                 reportingActor = ReportingActor.UNIT,
-                reportingType = ReportingType.OBSERVATION,
+                type = ReportingType.OBSERVATION,
                 unit = "AN UNIT",
                 authorTrigram = "LTH",
                 title = "A reporting",
                 description = "Test 2",
-                natinfCode = "1234"
-            )
+                natinfCode = "1234",
+            ),
         )
 
         // Then
@@ -256,10 +282,16 @@ class UpdateReportingUTests {
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, authorTrigram = "LTH", title = "Test", natinfCode = "1234") as ReportingValue,
+                value = InfractionSuspicion(
+                    reportingActor = ReportingActor.UNIT,
+                    authorTrigram = "LTH",
+                    title = "Test",
+                    flagState = CountryCode.FR.toString(),
+                    natinfCode = "1234"
+                ) as ReportingValue,
                 isArchived = false,
-                isDeleted = false
-            )
+                isDeleted = false,
+            ),
         )
 
         // When
@@ -267,13 +299,13 @@ class UpdateReportingUTests {
             1,
             UpdatedInfractionSuspicionOrObservation(
                 reportingActor = ReportingActor.UNIT,
-                reportingType = ReportingType.OBSERVATION,
+                type = ReportingType.OBSERVATION,
                 unit = "AN UNIT",
                 authorTrigram = "LTH",
                 title = "A reporting",
                 description = "Test 2",
-                natinfCode = "1234"
-            )
+                natinfCode = "1234",
+            ),
         )
 
         // Then
@@ -305,11 +337,11 @@ class UpdateReportingUTests {
                     title = "Test",
                     natinfCode = "1234",
                     authorTrigram = "LTH",
-                    flagState = "FR"
+                    flagState = "FR",
                 ) as ReportingValue,
                 isArchived = false,
-                isDeleted = false
-            )
+                isDeleted = false,
+            ),
         )
         given(getInfractionSuspicionWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
             InfractionSuspicion(
@@ -320,8 +352,8 @@ class UpdateReportingUTests {
                 flagState = "FR",
                 dml = "DML 56",
                 authorTrigram = "LTH",
-                seaFront = "NAMO"
-            )
+                seaFront = "NAMO",
+            ),
         )
 
         // When
@@ -329,12 +361,12 @@ class UpdateReportingUTests {
             1,
             UpdatedInfractionSuspicionOrObservation(
                 reportingActor = ReportingActor.UNIT,
-                reportingType = ReportingType.INFRACTION_SUSPICION,
+                type = ReportingType.INFRACTION_SUSPICION,
                 unit = "AN UNIT",
                 authorTrigram = "LTH",
                 title = "A reporting",
-                natinfCode = "1234"
-            )
+                natinfCode = "1234",
+            ),
         )
 
         // Then
@@ -361,10 +393,15 @@ class UpdateReportingUTests {
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value = Observation(reportingActor = ReportingActor.UNIT, title = "Test", authorTrigram = "LTH", flagState = "FR") as ReportingValue,
+                value = Observation(
+                    reportingActor = ReportingActor.UNIT,
+                    title = "Test",
+                    authorTrigram = "LTH",
+                    flagState = "FR"
+                ) as ReportingValue,
                 isArchived = false,
-                isDeleted = false
-            )
+                isDeleted = false,
+            ),
         )
 
         // When
@@ -372,12 +409,12 @@ class UpdateReportingUTests {
             1,
             UpdatedInfractionSuspicionOrObservation(
                 reportingActor = ReportingActor.UNIT,
-                reportingType = ReportingType.OBSERVATION,
+                type = ReportingType.OBSERVATION,
                 unit = "AN UNIT",
                 authorTrigram = "LTH",
                 title = "A reporting",
-                natinfCode = "1234"
-            )
+                natinfCode = "1234",
+            ),
         )
 
         // Then
@@ -402,10 +439,15 @@ class UpdateReportingUTests {
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value = Observation(reportingActor = ReportingActor.UNIT, title = "Test", authorTrigram = "LTH", flagState = "FR") as ReportingValue,
+                value = Observation(
+                    reportingActor = ReportingActor.UNIT,
+                    title = "Test",
+                    authorTrigram = "LTH",
+                    flagState = "FR"
+                ) as ReportingValue,
                 isArchived = false,
-                isDeleted = false
-            )
+                isDeleted = false,
+            ),
         )
         given(getInfractionSuspicionWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
             InfractionSuspicion(
@@ -414,8 +456,9 @@ class UpdateReportingUTests {
                 dml = "DML 17",
                 natinfCode = "1235",
                 authorTrigram = "LTH",
-                title = "Chalut en boeuf illégal"
-            )
+                flagState = CountryCode.FR.toString(),
+                title = "Chalut en boeuf illégal",
+            ),
         )
 
         // When
@@ -423,12 +466,12 @@ class UpdateReportingUTests {
             1,
             UpdatedInfractionSuspicionOrObservation(
                 reportingActor = ReportingActor.UNIT,
-                reportingType = ReportingType.INFRACTION_SUSPICION,
+                type = ReportingType.INFRACTION_SUSPICION,
                 unit = "AN UNIT",
                 authorTrigram = "LTH",
                 title = "A reporting",
-                natinfCode = "1234"
-            )
+                natinfCode = "1234",
+            ),
         )
 
         // Then

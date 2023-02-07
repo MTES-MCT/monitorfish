@@ -8,7 +8,7 @@ import java.time.ZonedDateTime
 @UseCase
 class AddControlObjectiveYear(
     private val controlObjectivesRepository: ControlObjectivesRepository,
-    private val clock: Clock
+    private val clock: Clock,
 ) {
     fun execute() {
         val lastYearFoundInEntries = controlObjectivesRepository.findYearEntries().first()

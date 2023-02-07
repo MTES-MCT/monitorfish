@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory
 @UseCase
 class GetAllCurrentReportings(
     private val reportingRepository: ReportingRepository,
-    private val lastPositionRepository: LastPositionRepository
+    private val lastPositionRepository: LastPositionRepository,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetAllCurrentReportings::class.java)
 
@@ -27,7 +27,7 @@ class GetAllCurrentReportings(
                         }
                         lastPositionRepository.findUnderCharterForVessel(
                             it.vesselIdentifier,
-                            it.internalReferenceNumber
+                            it.internalReferenceNumber,
                         )
                     }
                     VesselIdentifier.IRCS -> {
@@ -42,7 +42,7 @@ class GetAllCurrentReportings(
                         }
                         lastPositionRepository.findUnderCharterForVessel(
                             it.vesselIdentifier,
-                            it.externalReferenceNumber
+                            it.externalReferenceNumber,
                         )
                     }
                     else -> null
@@ -50,7 +50,7 @@ class GetAllCurrentReportings(
             } catch (e: Throwable) {
                 logger.error(
                     "Last position not found for vessel \"${it.internalReferenceNumber}/${it.ircs}/${it.externalReferenceNumber}\" " +
-                        "and vessel identifier \"${it.vesselIdentifier}\": ${e.message}"
+                        "and vessel identifier \"${it.vesselIdentifier}\": ${e.message}",
                 )
 
                 null

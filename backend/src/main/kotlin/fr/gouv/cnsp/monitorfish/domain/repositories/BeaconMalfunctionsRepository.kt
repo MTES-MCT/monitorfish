@@ -14,7 +14,7 @@ interface BeaconMalfunctionsRepository {
         vesselStatus: VesselStatus?,
         stage: Stage?,
         endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason?,
-        updateDateTime: ZonedDateTime
+        updateDateTime: ZonedDateTime,
     )
     fun requestNotification(id: Int, notificationType: BeaconMalfunctionNotificationType)
 }

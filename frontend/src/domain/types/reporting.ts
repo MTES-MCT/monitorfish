@@ -12,17 +12,17 @@ export enum ReportingType {
 
 export type BaseReporting = {
   creationDate: string
-  externalReferenceNumber: string
+  externalReferenceNumber: string | null
   id: number
   infraction: Infraction | null
-  internalReferenceNumber: string
-  ircs: string
+  internalReferenceNumber: string | null
+  ircs: string | null
   type: ReportingType
   underCharter: boolean
-  validationDate: string
+  validationDate: string | null
   vesselId: number | null
-  vesselIdentifier: VesselIdentifier
-  vesselName: string
+  vesselIdentifier: VesselIdentifier | null
+  vesselName: string | null
 
   // TODO These 2 props shouldn't be there at all and should be treated in a separated redux state.
   // eslint-disable-next-line typescript-sort-keys/interface
@@ -43,6 +43,13 @@ export type ObservationReporting = BaseReporting & {
 export type PendingAlertReporting = BaseReporting & {
   type: ReportingType.ALERT
   value: PendingAlertValue
+}
+
+export type BaseReportingCreation = Omit<BaseReporting, 'id' | 'infraction' | 'underCharter'>
+
+export type ReportingCreation = BaseReportingCreation & {
+  type: ReportingType.INFRACTION_SUSPICION | ReportingType.OBSERVATION
+  value: InfractionSuspicion | Observation
 }
 
 export type Reporting = InfractionSuspicionReporting | ObservationReporting | PendingAlertReporting
@@ -83,7 +90,7 @@ export type ReportingUpdate = {
   description: string | undefined
   natinfCode: string | null
   reportingActor: string
-  reportingType: ReportingType
   title: string
+  type: ReportingType
   unit: string | null
 }

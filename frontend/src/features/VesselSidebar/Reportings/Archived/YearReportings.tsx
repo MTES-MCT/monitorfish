@@ -33,7 +33,14 @@ export function YearReportings({ year, yearReportings }: YearReportingsProps) {
   const numberOfObservations = yearReportings.length - numberOfInfractionsSuspicion
 
   const sortedReportings = useMemo(
-    () => yearReportings.sort((a, b) => new Date(b.validationDate).getTime() - new Date(a.validationDate).getTime()),
+    () =>
+      yearReportings.sort((a, b) => {
+        if (!b.validationDate || !a.validationDate) {
+          return new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime()
+        }
+
+        return new Date(b.validationDate).getTime() - new Date(a.validationDate).getTime()
+      }),
     [yearReportings]
   )
 

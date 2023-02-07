@@ -111,9 +111,9 @@ export function SilencedAlertsList({ silencedAlerts }: SilencedAlertsListProps) 
                   <FlexboxGrid.Item style={vesselNameColumnStyle}>
                     <Flag
                       rel="preload"
-                      src={`${baseUrl ? `${baseUrl}/` : ''}flags/${alert.value.flagState?.toLowerCase()}.svg`}
+                      src={`${baseUrl ? `${baseUrl}/` : ''}flags/${alert.value.flagState.toLowerCase()}.svg`}
                       style={{ marginLeft: 0, marginRight: 5, marginTop: 1, width: 18 }}
-                      title={countries.getName(alert.value.flagState?.toLowerCase(), 'fr')}
+                      title={countries.getName(alert.value.flagState.toLowerCase(), 'fr')}
                     />
                     {alert.vesselName}
                   </FlexboxGrid.Item>

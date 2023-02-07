@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class JpaBeaconMalfunctionNotificationsRepository(
-    private val dbBeaconMalfunctionNotificationsRepository: DBBeaconMalfunctionNotificationsRepository
+    private val dbBeaconMalfunctionNotificationsRepository: DBBeaconMalfunctionNotificationsRepository,
 ) : BeaconMalfunctionNotificationsRepository {
     override fun findAllByBeaconMalfunctionId(beaconMalfunctionId: Int): List<BeaconMalfunctionNotification> {
         return dbBeaconMalfunctionNotificationsRepository.findAllByBeaconMalfunctionId(beaconMalfunctionId)

@@ -6,6 +6,7 @@ import type {
   InfractionSuspicionReporting,
   PendingAlertReporting,
   Reporting,
+  ReportingCreation,
   ReportingUpdate
 } from '../domain/types/reporting'
 
@@ -78,7 +79,7 @@ async function deleteReportingsFromAPI(ids: number[]) {
  *
  * @throws {@link ApiError}
  */
-async function addReportingFromAPI(newReporting: Reporting): Promise<Reporting> {
+async function addReportingFromAPI(newReporting: ReportingCreation): Promise<Reporting> {
   try {
     return await ky
       .post(`/bff/v1/reportings`, {

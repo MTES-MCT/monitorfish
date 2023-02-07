@@ -15,12 +15,12 @@ import java.time.ZonedDateTime
 class GetVesselBeaconMalfunctions(
     private val beaconMalfunctionsRepository: BeaconMalfunctionsRepository,
     private val beaconMalfunctionCommentsRepository: BeaconMalfunctionCommentsRepository,
-    private val beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository
+    private val beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository,
 ) {
     private val logger = LoggerFactory.getLogger(GetVesselBeaconMalfunctions::class.java)
     fun execute(
         vesselId: Int,
-        afterDateTime: ZonedDateTime
+        afterDateTime: ZonedDateTime,
     ): VesselBeaconMalfunctionsResumeAndHistory {
         val beaconMalfunctions = beaconMalfunctionsRepository.findAllByVesselId(vesselId, afterDateTime)
 
@@ -42,7 +42,7 @@ class GetVesselBeaconMalfunctions(
         return VesselBeaconMalfunctionsResumeAndHistory(
             resume = resume,
             current = currentBeaconMalfunction,
-            history = history
+            history = history,
         )
     }
 }

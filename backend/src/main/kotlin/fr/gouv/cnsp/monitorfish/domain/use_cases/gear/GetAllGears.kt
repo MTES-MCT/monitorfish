@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
 @UseCase
 class GetAllGears(
     private val gearRepository: GearRepository,
-    private val GearCodeGroupRepository: GearCodeGroupRepository
+    private val GearCodeGroupRepository: GearCodeGroupRepository,
 ) {
     private val logger = LoggerFactory.getLogger(GetAllGears::class.java)
     fun execute(): List<Gear> {

@@ -56,7 +56,7 @@ export function EditReporting() {
           <VesselName
             data-cy="side-window-beacon-malfunctions-detail-vessel-name"
             style={vesselNameStyle}
-            title={editedReportingInSideWindow?.vesselName}
+            title={editedReportingInSideWindow?.vesselName || 'Aucun nom'}
           >
             {editedReportingInSideWindow?.vesselName || 'Aucun nom'}
           </VesselName>

@@ -6,5 +6,5 @@ import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 data class VesselInformation(
     val vessel: Vessel?,
     val positions: List<Position>,
-    val vesselRiskFactor: VesselRiskFactor
+    val vesselRiskFactor: VesselRiskFactor,
 )

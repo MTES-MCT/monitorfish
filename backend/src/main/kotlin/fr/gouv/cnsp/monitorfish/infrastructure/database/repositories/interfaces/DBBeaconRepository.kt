@@ -13,7 +13,7 @@ interface DBBeaconRepository : CrudRepository<BeaconEntity, String> {
 
     @Query(
         value = "SELECT beacon_number FROM beacons WHERE beacon_status = CAST('ACTIVATED' AS beacon_status)",
-        nativeQuery = true
+        nativeQuery = true,
     )
     fun findActivatedBeaconNumbers(): List<String>
 }

@@ -10,7 +10,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 class GetHealthcheck(
     private val lastPositionRepository: LastPositionRepository,
     private val positionRepository: PositionRepository,
-    private val logbookReportRepository: LogbookReportRepository
+    private val logbookReportRepository: LogbookReportRepository,
 ) {
     fun execute(): Health {
         val dateLastPositionUpdatedByPrefect = lastPositionRepository.findLastPositionDate()
@@ -20,7 +20,7 @@ class GetHealthcheck(
         return Health(
             dateLastPositionUpdatedByPrefect = dateLastPositionUpdatedByPrefect,
             dateLastPositionReceivedByAPI = dateLastPositionReceivedByAPI,
-            dateLogbookMessageReceived = logbookMessageDateTime
+            dateLogbookMessageReceived = logbookMessageDateTime,
         )
     }
 }

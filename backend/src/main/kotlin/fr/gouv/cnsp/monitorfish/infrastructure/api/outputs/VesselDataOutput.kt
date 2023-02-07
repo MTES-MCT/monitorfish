@@ -13,7 +13,7 @@ data class VesselDataOutput(
     val ircs: String? = null,
     val externalReferenceNumber: String? = null,
     val vesselName: String? = null,
-    val flagState: CountryCode? = null,
+    val flagState: CountryCode,
     val width: Double? = null,
     val length: Double? = null,
     val district: String? = null,
@@ -37,7 +37,7 @@ data class VesselDataOutput(
     val vesselEmails: List<String>? = null,
     val beaconNumber: String? = null,
     val riskFactor: RiskFactorDataOutput? = null,
-    val underCharter: Boolean? = null
+    val underCharter: Boolean? = null,
 ) {
     companion object {
         fun fromVesselAndRiskFactor(vessel: Vessel?, vesselRiskFactor: VesselRiskFactor): VesselDataOutput? {
@@ -77,7 +77,7 @@ data class VesselDataOutput(
                 vesselEmails = vessel.vesselEmails,
                 beaconNumber = vessel.beaconNumber,
                 riskFactor = RiskFactorDataOutput.fromVesselRiskFactor(vesselRiskFactor),
-                underCharter = vessel.underCharter
+                underCharter = vessel.underCharter,
             )
         }
     }

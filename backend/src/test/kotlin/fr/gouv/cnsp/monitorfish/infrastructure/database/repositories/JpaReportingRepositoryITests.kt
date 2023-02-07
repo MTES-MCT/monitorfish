@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
@@ -31,7 +32,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             creationDate = creationDate,
             value = ThreeMilesTrawlingAlert("NAMO"),
             latitude = 5.5588,
-            longitude = -45.3698
+            longitude = -45.3698,
         )
 
         // When
@@ -63,10 +64,16 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             vesselId = 126,
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             creationDate = creationDate,
-            value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", authorTrigram = "LTH", title = "A title"),
+            value = InfractionSuspicion(
+                ReportingActor.OPS,
+                natinfCode = "123456",
+                authorTrigram = "LTH",
+                flagState = CountryCode.FR.toString(),
+                title = "A title"
+            ),
             type = ReportingType.INFRACTION_SUSPICION,
             isDeleted = false,
-            isArchived = false
+            isArchived = false,
         )
 
         // When
@@ -98,10 +105,16 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             ircs = "6554fEE",
             vesselId = 523,
             creationDate = creationDate,
-            value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", authorTrigram = "LTH", title = "A title"),
+            value = InfractionSuspicion(
+                ReportingActor.OPS,
+                natinfCode = "123456",
+                authorTrigram = "LTH",
+                flagState = CountryCode.FR.toString(),
+                title = "A title"
+            ),
             type = ReportingType.INFRACTION_SUSPICION,
             isDeleted = false,
-            isArchived = false
+            isArchived = false,
         )
 
         // When
@@ -129,7 +142,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reporting = jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             "ABC000180832",
-            ZonedDateTime.now().minusYears(1)
+            ZonedDateTime.now().minusYears(1),
         )
 
         // Then
@@ -154,7 +167,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reporting = jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             "ABC000180832",
-            ZonedDateTime.now()
+            ZonedDateTime.now(),
         )
 
         // Then
@@ -173,7 +186,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reportingToArchive = jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             "ABC000180832",
-            ZonedDateTime.now().minusYears(1)
+            ZonedDateTime.now().minusYears(1),
         ).first()
         assertThat(reportingToArchive.isArchived).isEqualTo(false)
 
@@ -184,7 +197,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val archivedReporting = jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             "ABC000180832",
-            ZonedDateTime.now().minusYears(1)
+            ZonedDateTime.now().minusYears(1),
         ).first()
         assertThat(archivedReporting.isArchived).isEqualTo(true)
     }
@@ -196,7 +209,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reportingList = jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             "ABC000180832",
-            ZonedDateTime.now().minusYears(1)
+            ZonedDateTime.now().minusYears(1),
         )
         assertThat(reportingList).hasSize(2)
 
@@ -207,7 +220,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val nextReportingList = jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             "ABC000180832",
-            ZonedDateTime.now().minusYears(1)
+            ZonedDateTime.now().minusYears(1),
         )
         assertThat(nextReportingList).hasSize(1)
     }
@@ -239,7 +252,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             "1236",
             "MEMN",
             "FR",
-            "DML 56"
+            "DML 56",
         )
 
         // When
@@ -270,7 +283,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             "Jean Bon",
             "Une observation",
             "Une description",
-            "MEMN"
+            "MEMN",
         )
 
         // When
@@ -298,7 +311,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             "Jean Bon",
             "Une observation",
             "Une description",
-            "1236"
+            "1236",
         )
 
         // When

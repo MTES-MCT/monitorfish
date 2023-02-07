@@ -145,7 +145,7 @@ export const getOnlyVesselIdentityProperties = (
 ): VesselIdentity => ({
   beaconNumber: 'beaconNumber' in vessel ? vessel.beaconNumber : null,
   externalReferenceNumber: vessel.externalReferenceNumber,
-  flagState: 'flagState' in vessel ? vessel.flagState : null,
+  flagState: 'flagState' in vessel ? vessel.flagState : vessel.value.flagState,
   internalReferenceNumber: vessel.internalReferenceNumber,
   ircs: vessel.ircs,
   mmsi: 'mmsi' in vessel ? vessel.mmsi : null,

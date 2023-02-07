@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository
 @Repository
 class APIMissionRepository(
     val monitorenvProperties: MonitorenvProperties,
-    val apiClient: ApiClient
+    val apiClient: ApiClient,
 ) : MissionRepository {
     private val logger: Logger = LoggerFactory.getLogger(MissionRepository::class.java)
 

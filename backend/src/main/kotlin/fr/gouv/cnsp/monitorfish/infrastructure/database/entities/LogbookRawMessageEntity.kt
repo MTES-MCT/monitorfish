@@ -12,5 +12,5 @@ data class LogbookRawMessageEntity(
     @Column(name = "operation_number")
     val operationNumber: String,
     @Column(name = "xml_message")
-    val rawMessage: String? = null
+    val rawMessage: String? = null,
 )

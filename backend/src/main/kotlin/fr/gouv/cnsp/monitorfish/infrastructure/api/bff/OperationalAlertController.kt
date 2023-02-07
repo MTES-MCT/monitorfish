@@ -17,7 +17,7 @@ class OperationalAlertController(
     private val validateOperationalAlert: ValidateOperationalAlert,
     private val silenceOperationalAlert: SilenceOperationalAlert,
     private val getSilencedAlerts: GetSilencedAlerts,
-    private val deleteSilencedOperationalAlert: DeleteSilencedOperationalAlert
+    private val deleteSilencedOperationalAlert: DeleteSilencedOperationalAlert,
 ) {
 
     @GetMapping("")
@@ -33,7 +33,7 @@ class OperationalAlertController(
     fun validateAlert(
         @PathParam("Alert id")
         @PathVariable(name = "id")
-        id: Int
+        id: Int,
     ) {
         return validateOperationalAlert.execute(id)
     }
@@ -45,12 +45,12 @@ class OperationalAlertController(
         @PathVariable(name = "id")
         id: Int,
         @RequestBody
-        silenceOperationalAlertData: SilenceOperationalAlertDataInput
+        silenceOperationalAlertData: SilenceOperationalAlertDataInput,
     ): SilencedAlertDataOutput {
         val silencedAlert = silenceOperationalAlert.execute(
             id,
             silenceOperationalAlertData.silencedAlertPeriod,
-            silenceOperationalAlertData.beforeDateTime
+            silenceOperationalAlertData.beforeDateTime,
         )
 
         return SilencedAlertDataOutput.fromSilencedAlert(silencedAlert)
@@ -69,7 +69,7 @@ class OperationalAlertController(
     fun getSilencedAlerts(
         @PathParam("Alert id")
         @PathVariable(name = "id")
-        id: Int
+        id: Int,
     ) {
         return deleteSilencedOperationalAlert.execute(id)
     }

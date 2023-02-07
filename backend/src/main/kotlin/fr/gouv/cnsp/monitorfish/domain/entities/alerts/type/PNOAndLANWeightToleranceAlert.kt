@@ -7,5 +7,5 @@ class PNOAndLANWeightToleranceAlert(
     var pnoOperationNumber: String? = null,
     var percentOfTolerance: Double? = null,
     var minimumWeightThreshold: Double? = null,
-    var catchesOverTolerance: List<PNOAndLANCatches>? = listOf()
+    var catchesOverTolerance: List<PNOAndLANCatches>? = listOf(),
 ) : AlertType(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT)

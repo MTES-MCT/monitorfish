@@ -32,7 +32,7 @@ data class RuleEntity(
     val lastRunSuccess: Boolean? = null,
     @Type(JsonBinaryType::class)
     @Column(name = "value", nullable = false, columnDefinition = "jsonb")
-    val value: String
+    val value: String,
 ) {
 
     fun toRule(mapper: ObjectMapper): Rule {
@@ -44,7 +44,7 @@ data class RuleEntity(
             lastUpdateDate = lastUpdateDate,
             lastRunDate = lastRunDate,
             lastRunSuccess = lastRunSuccess,
-            value = mapper.readValue(value, RuleType::class.java)
+            value = mapper.readValue(value, RuleType::class.java),
         )
     }
 }

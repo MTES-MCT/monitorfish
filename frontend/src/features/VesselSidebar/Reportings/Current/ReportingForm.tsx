@@ -14,7 +14,7 @@ import { PrimaryButton, SecondaryButton } from '../../../commonStyles/Buttons.st
 import { sortArrayByColumn } from '../../../vessel_list/tableSort'
 
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
-import type { Reporting, ReportingType, ReportingUpdate } from '../../../../domain/types/reporting'
+import type { Reporting, ReportingCreation, ReportingType, ReportingUpdate } from '../../../../domain/types/reporting'
 
 type ReportingFormProps = {
   closeForm: () => void
@@ -84,7 +84,6 @@ export function ReportingForm({
 
   function checkErrors(reportingValue) {
     const errors = getReportingValueErrors(reportingValue)
-
     setErrorFields(errors)
 
     return !!errors.length
@@ -109,22 +108,21 @@ export function ReportingForm({
   )
 
   const createReporting = useCallback(
-    nextReporting => {
+    (nextReporting: ReportingCreation) => {
       const nextReportingWithMissingProperties = {
-        ...nextReporting,
         creationDate: new Date().toISOString(),
-        externalReferenceNumber: selectedVesselIdentity?.externalReferenceNumber,
-        internalReferenceNumber: selectedVesselIdentity?.internalReferenceNumber,
-        ircs: selectedVesselIdentity?.ircs,
+        externalReferenceNumber: selectedVesselIdentity.externalReferenceNumber,
+        internalReferenceNumber: selectedVesselIdentity.internalReferenceNumber,
+        ircs: selectedVesselIdentity.ircs,
+        type: nextReporting.type,
         validationDate: null,
         value: {
           ...nextReporting.value,
-          flagState: selectedVesselIdentity?.flagState?.toUpperCase(),
-          type: nextReporting.type
+          flagState: selectedVesselIdentity.flagState.toUpperCase()
         },
-        vesselId: selectedVesselIdentity?.vesselId,
-        vesselIdentifier: selectedVesselIdentity?.vesselIdentifier,
-        vesselName: selectedVesselIdentity?.vesselName
+        vesselId: selectedVesselIdentity.vesselId || null,
+        vesselIdentifier: selectedVesselIdentity.vesselIdentifier || null,
+        vesselName: selectedVesselIdentity.vesselName || null
       }
 
       dispatch(addReporting(nextReportingWithMissingProperties)).then(() => {
@@ -135,14 +133,14 @@ export function ReportingForm({
   )
 
   const createOrEditReporting = useCallback(
-    (_reportingType: ReportingType, reportingValue: ReportingUpdate) => {
+    (reportingValue: ReportingUpdate) => {
       const hasErrors = checkErrors(reportingValue)
       if (hasErrors) {
         return
       }
 
       const nextReporting = {
-        type: _reportingType,
+        type: reportingValue.type,
         value: reportingValue
       }
 
@@ -152,7 +150,7 @@ export function ReportingForm({
         return
       }
 
-      createReporting(nextReporting)
+      createReporting(nextReporting as ReportingCreation)
     },
     [editedReporting, editReporting, createReporting]
   )
@@ -351,14 +349,14 @@ export function ReportingForm({
       <ValidateButton
         data-cy="new-reporting-create-button"
         onClick={() =>
-          createOrEditReporting(reportingType, {
+          createOrEditReporting({
             authorContact,
             authorTrigram,
             description,
             natinfCode,
             reportingActor,
-            reportingType,
             title,
+            type: reportingType,
             unit
           })
         }
@@ -372,30 +370,11 @@ export function ReportingForm({
       >
         Annuler
       </CancelButton>
-      {errorFields.includes('title') && (
-        <>
-          <br />
-          Le champ “Titre” est obligatoire.
-        </>
-      )}
-      {errorFields.includes('authorTrigram') && (
-        <>
-          <br />
-          Le champ “Identité de l&apos;émetteur” est obligatoire.
-        </>
-      )}
-      {errorFields.includes('unit') && (
-        <>
-          <br />
-          Le champ “Nom de l&apos;unité” est obligatoire.
-        </>
-      )}
-      {errorFields.includes('authorContact') && (
-        <>
-          <br />
-          Le champ “Nom et contact de l&apos;émetteur” est obligatoire.
-        </>
-      )}
+      {!!errorFields.length && <br />}
+      {errorFields.includes('title') && `Le champ “Titre” est obligatoire.`}
+      {errorFields.includes('authorTrigram') && `Le champ “Saisi par” est obligatoire.`}
+      {errorFields.includes('unit') && `Le champ “Nom de l&apos;unité” est obligatoire.`}
+      {errorFields.includes('authorContact') && `Le champ “Nom et contact de l&apos;émetteur” est obligatoire.`}
     </Form>
   )
 }

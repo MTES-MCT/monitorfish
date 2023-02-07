@@ -7,5 +7,5 @@ data class BeaconMalfunctionComment(
     val beaconMalfunctionId: Int,
     val comment: String,
     val userType: BeaconMalfunctionCommentUserType,
-    val dateTime: ZonedDateTime
+    val dateTime: ZonedDateTime,
 )

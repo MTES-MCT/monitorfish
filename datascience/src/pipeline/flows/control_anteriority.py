@@ -5,10 +5,11 @@ import numpy as np
 import pandas as pd
 import prefect
 from dateutil.relativedelta import relativedelta
-from prefect import Flow, case, task
+from prefect import Flow, Parameter, case, task
 from prefect.executors import LocalDaskExecutor
 
 from src.pipeline.generic_tasks import extract, load
+from src.pipeline.processing import remove_nones_from_list, try_get_factory
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 
 ######## Parameters for control rate and infraction rate risk factor components ########
@@ -153,7 +154,7 @@ def compute_control_ranks_coefficients(control_ranks: np.array) -> np.array:
 
 
 @task(checkpoint=False)
-def extract_last_5_years_controls() -> pd.DataFrame:
+def extract_last_years_controls(years: int) -> pd.DataFrame:
     """Extracts controls data of the last 5 years for all vessels.
 
     Returns:
@@ -163,17 +164,17 @@ def extract_last_5_years_controls() -> pd.DataFrame:
     return extract(
         db_name="monitorfish_remote",
         query_filepath="monitorfish/last_years_controls.sql",
-        params={"years": 5},
+        params={"years": years},
     )
 
 
 @task(checkpoint=False)
-def extract_fishing_infraction_ids() -> set:
-    """Extracts all ``ids`` of ``infractions`` related to fishing non-compliance
+def extract_fishing_infraction_natinfs() -> set:
+    """Extracts all ``natinf_code`` of ``infractions`` related to fishing non-compliance
     (safety non compliance events are excluded).
 
     Returns:
-        set: Set of infractions ids related to fishing
+        set: Set of infractions natinf_codes related to fishing
     """
 
     df = extract(
@@ -181,53 +182,56 @@ def extract_fishing_infraction_ids() -> set:
         query_filepath="monitorfish/fishing_infractions.sql",
     )
 
-    fishing_infraction_ids = set(df["id"])
+    fishing_infraction_ids = set(df["natinf_code"])
 
     return fishing_infraction_ids
 
 
 @task(checkpoint=False)
-def get_last_controls(controls: pd.DataFrame) -> pd.DataFrame:
-    """Filters the input ``pd.DataFrame`` of controls data to keep only
-
-    * the most recent control of each vessel
-    * the following columns:
-
-      * ``vessel_id``
-      * ``cfr``
-      * ``ircs``
-      * ``external_immatriculation``
-      * ``control_datetime_utc``
-      * ``infraction``
-      * ``post_control_comments``
-
-    Args:
-        controls (pd.DataFrame): ``pd.DataFrame`` with controls data
+def extract_vessels_most_recent_control(years: int) -> pd.DataFrame:
+    """
+    Extracts data about the most recent control of each vessel.
 
     Returns:
-        pd.DataFrame: filtered input with only the most recent control of each vessel
-        and a subset of columns
+        pd.DataFrame: DataFrame containing the most recent control of each vessel
+        within the last 5 years
     """
-    columns = {
-        "vessel_id": "vessel_id",
-        "cfr": "cfr",
-        "ircs": "ircs",
-        "external_immatriculation": "external_immatriculation",
-        "control_datetime_utc": "last_control_datetime_utc",
-        "infraction": "last_control_infraction",
-        "post_control_comments": "post_control_comments",
-    }
-
-    last_controls = (
-        controls[columns]
-        .sort_values("control_datetime_utc", ascending=False)
-        .groupby("vessel_id", as_index=True)
-        .head(1)
-        .copy(deep=True)
-        .rename(columns=columns)
+    return extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/vessels_most_recent_control.sql",
+        params={"years": years},
     )
 
-    return last_controls
+
+@task(checkpoint=False)
+def transform_vessels_most_recent_control(controls: pd.DataFrame) -> pd.DataFrame:
+    controls = controls.copy(deep=True)
+
+    controls["last_control_infraction"] = controls.last_control_infractions.astype(bool)
+
+    controls["infraction_comments"] = controls.last_control_infractions.map(
+        lambda l: ", ".join(remove_nones_from_list(map(try_get_factory("comments"), l)))
+    )
+    controls["infraction_comments"] = controls.infraction_comments.where(
+        controls.infraction_comments != "", None
+    )
+
+    controls["post_control_comments"] = controls.apply(
+        lambda row: " - ".join(
+            remove_nones_from_list(
+                [row["post_control_comments"], row["infraction_comments"]]
+            )
+        ),
+        axis=1,
+    )
+
+    controls["post_control_comments"] = controls.post_control_comments.where(
+        controls.post_control_comments != "", None
+    )
+    controls = controls.drop(
+        columns=["infraction_comments", "last_control_infractions"]
+    )
+    return controls
 
 
 @task(checkpoint=False)
@@ -310,7 +314,6 @@ def compute_control_rate_risk_factors(controls: pd.DataFrame) -> pd.DataFrame:
 
     control_rate_risk_factors = control_rate_risk_factors.drop(
         columns=[
-            "last_control_datetime_utc",
             "time_since_last_control",
             "number_recent_controls_bin",
             "time_since_last_control_bin",
@@ -322,7 +325,7 @@ def compute_control_rate_risk_factors(controls: pd.DataFrame) -> pd.DataFrame:
 
 @task(checkpoint=False)
 def compute_infraction_rate_risk_factors(
-    controls: pd.DataFrame, fishing_infraction_ids: set
+    controls: pd.DataFrame, fishing_infraction_natinfs: set
 ) -> pd.DataFrame:
     """Given control results data of vessels, computes the
     infraction rate risk factor of each vessel.
@@ -333,41 +336,41 @@ def compute_infraction_rate_risk_factors(
     Only violations related to fishing non-compliance are taken into account. Safety
     non-compliance evens are not taken into account.
 
-    If a vessel was controlled more than 10 times, only the 10 most recent contro
+    If a vessel was controlled more than 10 times, only the 10 most recent control
     results are taken into account.
 
     Args:
         controls (pd.DataFrame): control results data
-        fishing_infraction_ids (set): set of infractions ids related to fishing
-         non-compliance.
+        fishing_infraction_natinfs (set): set of infractions natinfs related to fishing
+          non-compliance.
 
     Returns:
         pd.DataFrame: for each vessel, the component of the risk factor related to the
         infraction rate of each vessel.
     """
-    columns = ["vessel_id", "control_datetime_utc", "infraction_ids"]
-    controls_ = controls[columns].copy(deep=True)
+    columns = ["vessel_id", "control_datetime_utc", "infractions_natinf_codes"]
+    controls = controls[columns].copy(deep=True)
 
-    controls_["n_fishing_infractions"] = controls_["infraction_ids"].map(
-        lambda l: sum(map(lambda x: x in fishing_infraction_ids, l))
+    controls["n_fishing_infractions"] = controls["infractions_natinf_codes"].map(
+        lambda l: sum(map(lambda x: x in fishing_infraction_natinfs, l))
     )
 
-    controls_["points"] = controls_["n_fishing_infractions"] * 10 - (
-        controls_["n_fishing_infractions"] == 0
+    controls["points"] = controls["n_fishing_infractions"] * 10 - (
+        controls["n_fishing_infractions"] == 0
     ).astype(int)
 
-    controls_["control_rank"] = controls_.groupby("vessel_id")[
+    controls["control_rank"] = controls.groupby("vessel_id")[
         "control_datetime_utc"
     ].rank(ascending=False, method="average")
 
-    controls_["coefficient"] = compute_control_ranks_coefficients(
-        controls_.control_rank.values
+    controls["coefficient"] = compute_control_ranks_coefficients(
+        controls.control_rank.values
     )
 
-    controls_["weighted_points"] = controls_["coefficient"] * controls_["points"]
+    controls["weighted_points"] = controls["coefficient"] * controls["points"]
 
     infraction_rate_risk_factors = (
-        controls_.groupby("vessel_id")["weighted_points"]
+        controls.groupby("vessel_id")["weighted_points"]
         .sum()
         .rename("infraction_score")
         .reset_index()
@@ -395,39 +398,38 @@ def compute_control_statistics(controls: pd.DataFrame) -> pd.DataFrame:
     """
 
     control_statistics_5_years = (
-        controls.fillna(
-            {
-                "infraction": False,
-                "diversion": False,
-                "seizure": False,
-                "escort_to_quay": False,
-            }
+        controls.fillna({"seizure_and_diversion": False})
+        .assign(
+            number_infractions_last_5_years=lambda x: x.infractions_natinf_codes.map(
+                len
+            )
         )
-        .assign(number_infractions_last_5_years=lambda x: x.infraction_ids.map(len))
         .groupby("vessel_id")[
             [
                 "id",
                 "number_infractions_last_5_years",
-                "diversion",
-                "seizure",
-                "escort_to_quay",
+                "seizure_and_diversion",
+                "number_infractions_species_seized",
+                "number_infractions_gear_seized",
             ]
         ]
         .agg(
             {
                 "id": "count",
                 "number_infractions_last_5_years": "sum",
-                "diversion": "sum",
-                "seizure": "sum",
-                "escort_to_quay": "sum",
+                "seizure_and_diversion": "sum",
+                "number_infractions_gear_seized": "sum",
+                "number_infractions_species_seized": "sum",
             }
         )
         .rename(
             columns={
                 "id": "number_controls_last_5_years",
-                "diversion": "number_diversions_last_5_years",
-                "seizure": "number_seizures_last_5_years",
-                "escort_to_quay": "number_escorts_to_quay_last_5_years",
+                "seizure_and_diversion": "number_vessel_seizures_last_5_years",
+                "number_infractions_gear_seized": "number_gear_seizures_last_5_years",
+                "number_infractions_species_seized": (
+                    "number_species_seizures_last_5_years"
+                ),
             }
         )
         .reset_index()
@@ -511,9 +513,17 @@ with Flow("Control anteriority", executor=LocalDaskExecutor()) as flow:
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
 
-        controls = extract_last_5_years_controls()
-        fishing_infraction_ids = extract_fishing_infraction_ids()
-        last_controls = get_last_controls(controls)
+        number_years = Parameter("number_years", 5)
+
+        # Extract
+        controls = extract_last_years_controls(number_years)
+        vessels_most_recent_control = extract_vessels_most_recent_control(number_years)
+        fishing_infraction_ids = extract_fishing_infraction_natinfs()
+
+        # Transform
+        vessels_most_recent_control = transform_vessels_most_recent_control(
+            vessels_most_recent_control
+        )
         control_statistics = compute_control_statistics(controls)
         control_rate_risk_factors = compute_control_rate_risk_factors(controls)
         infraction_rate_risk_factors = compute_infraction_rate_risk_factors(
@@ -522,7 +532,7 @@ with Flow("Control anteriority", executor=LocalDaskExecutor()) as flow:
         control_anteriority = merge(
             control_rate_risk_factors,
             infraction_rate_risk_factors,
-            last_controls,
+            vessels_most_recent_control,
             control_statistics,
         )
         load_control_anteriority(control_anteriority)

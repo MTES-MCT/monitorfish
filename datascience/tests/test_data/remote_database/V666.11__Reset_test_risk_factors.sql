@@ -8,7 +8,7 @@ INSERT INTO risk_factors
     last_control_datetime_utc, last_control_infraction, post_control_comments,
     impact_risk_factor, probability_risk_factor, detectability_risk_factor, risk_factor, 
     control_priority_level, control_rate_risk_factor, infraction_rate_risk_factor, infraction_score, 
-    number_controls_last_3_years, number_controls_last_5_years, number_diversions_last_5_years, number_escorts_to_quay_last_5_years, number_infractions_last_5_years, number_recent_controls, number_seizures_last_5_years)
+    number_controls_last_3_years, number_controls_last_5_years, number_gear_seizures_last_5_years, number_species_seizures_last_5_years, number_infractions_last_5_years, number_recent_controls, number_vessel_seizures_last_5_years)
 VALUES
 (
     1, 'ABC000306959', 'RV348407', 'LLUK',

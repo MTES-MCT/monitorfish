@@ -18,7 +18,7 @@ export function getReportingValueErrors(reportingValue: ReportingUpdate) {
   }
 
   if (!authorTrigramField) {
-    nextErrorsFields = nextErrorsFields.concat('authorTrigramField')
+    nextErrorsFields = nextErrorsFields.concat('authorTrigram')
   }
 
   switch (reportingActorField) {

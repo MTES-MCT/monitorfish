@@ -75,8 +75,10 @@ def test_extract_control_units(mock_extract):
 
 
 @patch("src.pipeline.flows.control_units.extract")
-def test_extract_administrations(mock_load):
-    extract_administrations.run()
+def test_extract_administrations(mock_extract):
+    mock_extract.side_effect = mock_extract_side_effect
+    query = extract_administrations.run()
+    assert isinstance(query, sqlalchemy.sql.elements.TextClause)
 
 
 def test_flow(reset_test_data, administrations, control_units):

@@ -68,7 +68,7 @@ controls.flow.schedule = Schedule(
         ),
         clocks.CronClock(
             "10 8 * * *",
-            parameter_defaults={"number_of_months": 120, "loading_mode": "replace"},
+            parameter_defaults={"number_of_months": 200, "loading_mode": "replace"},
         ),
     ]
 )

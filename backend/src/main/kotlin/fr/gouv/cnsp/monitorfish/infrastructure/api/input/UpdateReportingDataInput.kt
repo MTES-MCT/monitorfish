@@ -7,7 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedInfractionSusp
 class UpdateReportingDataInput(
     val reportingActor: ReportingActor,
     val type: ReportingType,
-    val unit: String? = null,
+    val controlUnitId: Int? = null,
     val authorTrigram: String,
     val authorContact: String? = null,
     val title: String,
@@ -17,7 +17,7 @@ class UpdateReportingDataInput(
     fun toUpdatedReportingValues() = UpdatedInfractionSuspicionOrObservation(
         reportingActor = this.reportingActor,
         type = this.type,
-        unit = this.unit,
+        controlUnitId = this.controlUnitId,
         authorTrigram = this.authorTrigram,
         authorContact = this.authorContact,
         title = this.title,

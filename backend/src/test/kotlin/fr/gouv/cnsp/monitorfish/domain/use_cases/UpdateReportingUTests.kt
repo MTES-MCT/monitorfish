@@ -235,7 +235,7 @@ class UpdateReportingUTests {
                 validationDate = ZonedDateTime.now(),
                 value = Observation(
                     reportingActor = ReportingActor.UNIT,
-                    unit = "OPS",
+                    controlUnitId = 1,
                     title = "A title",
                     authorTrigram = "LTH",
                     flagState = CountryCode.FR.toString(),
@@ -252,7 +252,7 @@ class UpdateReportingUTests {
             UpdatedInfractionSuspicionOrObservation(
                 reportingActor = ReportingActor.UNIT,
                 type = ReportingType.OBSERVATION,
-                unit = "AN UNIT",
+                controlUnitId = 1,
                 authorTrigram = "LTH",
                 title = "A reporting",
                 description = "Test 2",
@@ -300,7 +300,7 @@ class UpdateReportingUTests {
             UpdatedInfractionSuspicionOrObservation(
                 reportingActor = ReportingActor.UNIT,
                 type = ReportingType.OBSERVATION,
-                unit = "AN UNIT",
+                controlUnitId = 1,
                 authorTrigram = "LTH",
                 title = "A reporting",
                 description = "Test 2",
@@ -346,7 +346,7 @@ class UpdateReportingUTests {
         given(getInfractionSuspicionWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
             InfractionSuspicion(
                 reportingActor = ReportingActor.UNIT,
-                unit = "AN UNIT",
+                controlUnitId = 1,
                 title = "Test",
                 natinfCode = "1234",
                 flagState = "FR",
@@ -362,7 +362,7 @@ class UpdateReportingUTests {
             UpdatedInfractionSuspicionOrObservation(
                 reportingActor = ReportingActor.UNIT,
                 type = ReportingType.INFRACTION_SUSPICION,
-                unit = "AN UNIT",
+                controlUnitId = 1,
                 authorTrigram = "LTH",
                 title = "A reporting",
                 natinfCode = "1234",
@@ -410,7 +410,7 @@ class UpdateReportingUTests {
             UpdatedInfractionSuspicionOrObservation(
                 reportingActor = ReportingActor.UNIT,
                 type = ReportingType.OBSERVATION,
-                unit = "AN UNIT",
+                controlUnitId = 1,
                 authorTrigram = "LTH",
                 title = "A reporting",
                 natinfCode = "1234",
@@ -467,7 +467,7 @@ class UpdateReportingUTests {
             UpdatedInfractionSuspicionOrObservation(
                 reportingActor = ReportingActor.UNIT,
                 type = ReportingType.INFRACTION_SUSPICION,
-                unit = "AN UNIT",
+                controlUnitId = 1,
                 authorTrigram = "LTH",
                 title = "A reporting",
                 natinfCode = "1234",

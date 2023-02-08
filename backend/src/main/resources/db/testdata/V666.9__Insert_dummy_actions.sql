@@ -1,7 +1,3 @@
-INSERT INTO controllers (id, controller, controller_type, administration)
-VALUES (151, 'ULAM 56', 'Terrestre', 'Affaires Maritimes'),
-       (12, 'Unité XYZ', 'Aérien', 'Marine Nationale');
-
 INSERT INTO infractions
     (natinf_code,                                       regulation, infraction_category,                                                                                                                                                                    infraction)
 VALUES

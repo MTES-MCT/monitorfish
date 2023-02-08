@@ -82,7 +82,7 @@ class ReportingMapperUTests {
         assertThat(parsedReporting).isInstanceOf(Observation::class.java)
         parsedReporting as Observation
         assertThat(parsedReporting.reportingActor).isEqualTo(ReportingActor.OPS)
-        assertThat(parsedReporting.unit).isNull()
+        assertThat(parsedReporting.controlUnitId).isNull()
         assertThat(parsedReporting.authorTrigram).isEqualTo("LTH")
         assertThat(parsedReporting.authorContact).isNull()
         assertThat(parsedReporting.title).isEqualTo("A title !")
@@ -115,7 +115,7 @@ class ReportingMapperUTests {
         assertThat(parsedReporting).isInstanceOf(InfractionSuspicion::class.java)
         parsedReporting as InfractionSuspicion
         assertThat(parsedReporting.reportingActor).isEqualTo(ReportingActor.OPS)
-        assertThat(parsedReporting.unit).isNull()
+        assertThat(parsedReporting.controlUnitId).isNull()
         assertThat(parsedReporting.authorTrigram).isEqualTo("LTH")
         assertThat(parsedReporting.authorContact).isNull()
         assertThat(parsedReporting.title).isEqualTo("A title !")
@@ -146,7 +146,7 @@ class ReportingMapperUTests {
         assertThat(parsedReporting).isInstanceOf(InfractionSuspicion::class.java)
         parsedReporting as InfractionSuspicion
         assertThat(parsedReporting.reportingActor).isEqualTo(ReportingActor.OPS)
-        assertThat(parsedReporting.unit).isNull()
+        assertThat(parsedReporting.controlUnitId).isNull()
         assertThat(parsedReporting.authorTrigram).isEqualTo("LTH")
         assertThat(parsedReporting.authorContact).isNull()
         assertThat(parsedReporting.title).isEqualTo("A title !")

@@ -1,3 +1,4 @@
+TRUNCATE TABLE reportings;
 INSERT INTO reportings (type, vessel_name, internal_reference_number, external_reference_number, ircs,
                         vessel_identifier, creation_date, validation_date, archived, deleted, value, latitude, longitude, vessel_id)
 VALUES ('ALERT', 'MARIAGE ÎLE HASARD', 'ABC000180832', 'VP374069', 'CG1312', 'INTERNAL_REFERENCE_NUMBER',
@@ -43,7 +44,7 @@ VALUES ('ALERT', 'MARIAGE ÎLE HASARD', 'ABC000180832', 'VP374069', 'CG1312', 'I
        ('INFRACTION_SUSPICION', 'COURANT MAIN PROFESSEUR', 'ABC000042310', 'IW783219', 'QD0506',
         'INTERNAL_REFERENCE_NUMBER', NOW() - ('1 DAY')::interval, NOW() - ('1 DAY')::interval, false, false, ('{' ||
                                                                                                               '"reportingActor": "OPS",' ||
-                                                                                                              '"unit": "",' ||
+                                                                                                              '"controlUnitId": null,' ||
                                                                                                               '"authorTrigram": "LTH",' ||
                                                                                                               '"authorContact": "",' ||
                                                                                                               '"title": "Suspicion de chalutage dans les 3 milles",' ||
@@ -58,7 +59,7 @@ VALUES ('ALERT', 'MARIAGE ÎLE HASARD', 'ABC000180832', 'VP374069', 'CG1312', 'I
         'INTERNAL_REFERENCE_NUMBER', NOW() - ('1 DAY 1 HOUR')::interval, NOW() - ('1 DAY 1 HOUR')::interval, false,
         false, ('{' ||
                 '"reportingActor": "UNIT",' ||
-                '"unit": "ULAM 56",' ||
+                '"controlUnitId": 151,' ||
                 '"authorTrigram": "",' ||
                 '"authorContact": "Jean Bon (0600000000)",' ||
                 '"title": "Pêche sans VMS ni JPE",' ||
@@ -73,7 +74,7 @@ VALUES ('ALERT', 'MARIAGE ÎLE HASARD', 'ABC000180832', 'VP374069', 'CG1312', 'I
         'INTERNAL_REFERENCE_NUMBER', NOW() - ('1 DAY 1 HOUR')::interval, NOW() - ('1 DAY  1 HOUR')::interval, false,
         false, ('{' ||
                 '"reportingActor": "UNIT",' ||
-                '"unit": "ULAM 56",' ||
+                '"controlUnitId": 151,' ||
                 '"authorTrigram": "",' ||
                 '"authorContact": "Jean Bon (0600000000)",' ||
                 '"title": "OBSERVATION: Pêche sans VMS ni JPE",' ||

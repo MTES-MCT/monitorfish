@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedInfractionSusp
 
 data class InfractionSuspicion(
     override val reportingActor: ReportingActor,
-    override val unit: String? = null,
+    override val controlUnitId: Int? = null,
     override val authorTrigram: String,
     override val authorContact: String? = null,
     override val title: String,
@@ -15,7 +15,7 @@ data class InfractionSuspicion(
     val dml: String? = null,
 ) : InfractionSuspicionOrObservationType(
     reportingActor = reportingActor,
-    unit = unit,
+    controlUnitId = controlUnitId,
     authorTrigram = authorTrigram,
     authorContact = authorContact,
     title = title,
@@ -35,7 +35,7 @@ data class InfractionSuspicion(
 
             return InfractionSuspicion(
                 reportingActor = updatedInfractionSuspicionOrObservation.reportingActor,
-                unit = updatedInfractionSuspicionOrObservation.unit,
+                controlUnitId = updatedInfractionSuspicionOrObservation.controlUnitId,
                 authorTrigram = updatedInfractionSuspicionOrObservation.authorTrigram,
                 authorContact = updatedInfractionSuspicionOrObservation.authorContact,
                 title = updatedInfractionSuspicionOrObservation.title,

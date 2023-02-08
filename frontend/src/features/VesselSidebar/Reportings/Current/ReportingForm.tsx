@@ -11,7 +11,7 @@ import { updateReporting } from '../../../../domain/use_cases/reporting/updateRe
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { PrimaryButton, SecondaryButton } from '../../../commonStyles/Buttons.style'
-import { sortArrayByColumn } from '../../../vessel_list/tableSort'
+import { sortArrayByColumn } from '../../../VesselList/tableSort'
 
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
 import type { Reporting, ReportingCreation, ReportingType, ReportingUpdate } from '../../../../domain/types/reporting'

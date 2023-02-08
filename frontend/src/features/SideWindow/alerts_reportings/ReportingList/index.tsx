@@ -26,7 +26,7 @@ import { CardTableRow } from '../../../../ui/card-table/CardTableRow'
 import { EmptyCardTable } from '../../../../ui/card-table/EmptyCardTable'
 import { FilterTableInput } from '../../../../ui/card-table/FilterTableInput'
 import { downloadAsCsv } from '../../../../utils/downloadAsCsv'
-import { Flag } from '../../../vessel_list/tableCells'
+import { Flag } from '../../../VesselList/tableCells'
 import { EditReporting } from '../EditReporting'
 
 import type { MenuItem } from '../../../../types'

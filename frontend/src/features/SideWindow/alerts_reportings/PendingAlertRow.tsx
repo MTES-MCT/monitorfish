@@ -13,7 +13,7 @@ import { getVesselVoyage } from '../../../domain/use_cases/vessel/getVesselVoyag
 import { showVessel } from '../../../domain/use_cases/vessel/showVessel'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { Flag } from '../../vessel_list/tableCells'
+import { Flag } from '../../VesselList/tableCells'
 
 import type { LEGACY_PendingAlert } from '../../../domain/entities/alerts/types'
 import type { CSSProperties } from 'react'

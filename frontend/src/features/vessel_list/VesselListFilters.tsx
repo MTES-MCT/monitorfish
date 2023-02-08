@@ -1,5 +1,5 @@
 import Countries from 'i18n-iso-countries'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Checkbox, CheckboxGroup, MultiCascader, SelectPicker, Tag, TagPicker } from 'rsuite'
 import styled from 'styled-components'
 
@@ -7,6 +7,8 @@ import { lastControlAfterLabels, lastPositionTimeAgoLabels } from './dataFormatt
 import { COLORS } from '../../constants/constants'
 import { LayerType as LayersType } from '../../domain/entities/layers/constants'
 import { VesselLocation, vesselSize } from '../../domain/entities/vessel/vessel'
+import { getZonesAndSubZonesPromises } from '../../domain/use_cases/layer/administrative/getZonesAndSubZonesPromises'
+import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { ReactComponent as PolygonFilterSVG } from '../icons/Filtre_zone_polygone.svg'
 import { ReactComponent as BoxFilterSVG } from '../icons/Filtre_zone_rectangle.svg'
 import FilterTag from '../map/tools/vessel_filters/FilterTag'
@@ -42,6 +44,9 @@ function UnmemoizedVesselListFilters({
   species,
   zones
 }) {
+  const dispatch = useMainAppDispatch()
+  const [zoneGroups, setZoneGroups] = useState<string[]>([])
+
   const fleetSegmentsField = useMemo(() => {
     if (!fleetSegments.fleetSegments?.length) {
       return []
@@ -109,6 +114,25 @@ function UnmemoizedVesselListFilters({
     [zonesSelected, callRemoveZoneSelected]
   )
 
+  const getZones = useCallback(() => {
+    const nextZonesPromises = dispatch(getZonesAndSubZonesPromises())
+
+    Promise.all(nextZonesPromises).then(nextZones => {
+      let nextZonesWithoutNulls = nextZones.flat().filter(zone => zone)
+
+      const groups = [...new Set(nextZonesWithoutNulls.map(zone => zone.group))]
+      setZoneGroups(groups)
+
+      nextZonesWithoutNulls = groups.map(group => ({
+        children: nextZonesWithoutNulls.filter(zone => zone.group === group),
+        label: group,
+        value: group
+      }))
+
+      zones.setZonesFilter(nextZonesWithoutNulls)
+    })
+  }, [dispatch, zones])
+
   return (
     <Filters>
       <FilterDesc>Dernières positions depuis </FilterDesc>
@@ -166,9 +190,10 @@ function UnmemoizedVesselListFilters({
           menuWidth={250}
           onChange={zones.setAdministrativeZonesFiltered}
           onClean={() => zones.setAdministrativeZonesFiltered([])}
+          onEnter={() => getZones()}
           placeholder="Filtrer avec une zone existante"
           style={{ margin: '0 10px 10px -10px', verticalAlign: 'top', width: 200 }}
-          uncheckableItemValues={zones.zoneGroups}
+          uncheckableItemValues={zoneGroups}
           value={zones.administrativeZonesFiltered}
         />
         <CustomZone>ou définir une zone</CustomZone>

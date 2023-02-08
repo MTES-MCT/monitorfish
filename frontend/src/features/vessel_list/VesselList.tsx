@@ -19,7 +19,6 @@ import { animateToExtent } from '../../domain/shared_slices/Map'
 import { setProcessingRegulationSearchedZoneExtent } from '../../domain/shared_slices/Regulatory'
 import { setPreviewFilteredVesselsFeatures } from '../../domain/shared_slices/Vessel'
 import getAdministrativeZoneGeometry from '../../domain/use_cases/layer/administrative/getAdministrativeZoneGeometry'
-import { getZonesAndSubZonesPromises } from '../../domain/use_cases/layer/administrative/getZonesAndSubZonesPromises'
 import { addVesselListFilterZone } from '../../domain/use_cases/vessel/addVesselListFilterZone'
 import { getFilteredVessels } from '../../domain/use_cases/vessel/getFilteredVessels'
 import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
@@ -84,7 +83,6 @@ export function VesselList({ namespace }) {
   const [vesselsCountTotal, setVesselsCountTotal] = useState(0)
   const [vesselsCountShowed, setVesselsCountShowed] = useState(0)
   const [allVesselsChecked, setAllVesselsChecked] = useState(true)
-  const [zoneGroups, setZoneGroups] = useState<string[]>([])
 
   // Filters
   const zonesSelected = useMainAppSelector(state => state.vesselList.zonesSelected)
@@ -97,6 +95,10 @@ export function VesselList({ namespace }) {
   )
 
   const [zonesFilter, setZonesFilter] = useState<ZoneGroupAndChildren[]>([])
+  const setZonesFilterCallback = useCallback(filter => {
+    setZonesFilter(filter)
+  }, [])
+
   const [lastPositionTimeAgoFilter, setLastPositionTimeAgoFilter] = useState(3)
   const [lastControlMonthsAgo, setLastControlMonthsAgo] = useState(null)
   const [countriesFiltered, setCountriesFiltered] = useState([])
@@ -139,26 +141,7 @@ export function VesselList({ namespace }) {
   }, [dispatch, geometry])
 
   useEffect(() => {
-    const nextZonesPromises = dispatch(getZonesAndSubZonesPromises())
-
-    Promise.all(nextZonesPromises).then(nextZones => {
-      let nextZonesWithoutNulls = nextZones.flat().filter(zone => zone)
-
-      const groups = [...new Set(nextZonesWithoutNulls.map(zone => zone.group))]
-      setZoneGroups(groups)
-
-      nextZonesWithoutNulls = groups.map(group => ({
-        children: nextZonesWithoutNulls.filter(zone => zone.group === group),
-        label: group,
-        value: group
-      }))
-
-      setZonesFilter(nextZonesWithoutNulls)
-    })
-  }, [dispatch])
-
-  useEffect(() => {
-    if (isVesselListModalDisplayed === true) {
+    if (isVesselListModalDisplayed) {
       dispatch(unselectVessel())
       firstUpdate.current = false
 
@@ -450,7 +433,7 @@ export function VesselList({ namespace }) {
                 administrativeZonesFiltered,
                 callRemoveZoneSelected,
                 setAdministrativeZonesFiltered,
-                zoneGroups,
+                setZonesFilterCallback,
                 zonesFilter,
                 zonesSelected
               }}

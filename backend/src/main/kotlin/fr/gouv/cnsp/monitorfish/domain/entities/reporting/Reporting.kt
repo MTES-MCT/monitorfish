@@ -22,27 +22,4 @@ data class Reporting(
     var underCharter: Boolean? = null,
     val latitude: Double? = null,
     val longitude: Double? = null,
-) {
-    companion object {
-        fun checkReportingActorAndFieldsRequirements(value: InfractionSuspicionOrObservationType) = when (value.reportingActor) {
-            ReportingActor.OPS -> require(!value.authorTrigram.isNullOrEmpty()) {
-                "An author trigram must be set"
-            }
-            ReportingActor.SIP -> require(!value.authorTrigram.isNullOrEmpty()) {
-                "An author trigram must be set"
-            }
-            ReportingActor.UNIT -> require(!value.unit.isNullOrEmpty()) {
-                "An unit must be set"
-            }
-            ReportingActor.DML -> require(!value.authorContact.isNullOrEmpty()) {
-                "An author contact must be set"
-            }
-            ReportingActor.DIRM -> require(!value.authorContact.isNullOrEmpty()) {
-                "An author contact must be set"
-            }
-            ReportingActor.OTHER -> require(!value.authorContact.isNullOrEmpty()) {
-                "An author contact must be set"
-            }
-        }
-    }
-}
+)

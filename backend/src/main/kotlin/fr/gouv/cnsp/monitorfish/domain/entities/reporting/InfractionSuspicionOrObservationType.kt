@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 abstract class InfractionSuspicionOrObservationType(
     val type: ReportingTypeMapping,
     open val reportingActor: ReportingActor,
-    open val unit: String? = null,
+    open val controlUnitId: Int? = null,
     open val authorTrigram: String,
     open val authorContact: String? = null,
     open val title: String,
@@ -15,7 +15,7 @@ abstract class InfractionSuspicionOrObservationType(
     override val natinfCode: String? = null,
 ) : ReportingValue(natinfCode) {
     fun checkReportingActorAndFieldsRequirements() = when (reportingActor) {
-        ReportingActor.UNIT -> require(!unit.isNullOrEmpty()) {
+        ReportingActor.UNIT -> require(controlUnitId != null) {
             "An unit must be set"
         }
         ReportingActor.DML -> require(!authorContact.isNullOrEmpty()) {

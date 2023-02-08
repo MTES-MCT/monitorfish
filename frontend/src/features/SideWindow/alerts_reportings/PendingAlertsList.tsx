@@ -14,7 +14,7 @@ import { silenceAlert } from '../../../domain/use_cases/alert/silenceAlert'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
-import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
+import { sortArrayByColumn, SortType } from '../../VesselList/tableSort'
 
 import type { SilencedAlertPeriodRequest } from '../../../domain/entities/alerts/types'
 import type { MenuItem } from '../../../types'

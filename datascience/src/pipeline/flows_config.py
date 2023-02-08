@@ -22,6 +22,7 @@ from src.pipeline.flows import (
     anchorages,
     beacons,
     control_anteriority,
+    control_units,
     controllers,
     controls,
     controls_open_data,
@@ -58,6 +59,7 @@ from src.pipeline.helpers.country_codes import (
 beacons.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")
 control_anteriority.flow.schedule = CronSchedule("5 * * * *")
 controllers.flow.schedule = CronSchedule("0 8 * * *")
+control_units.flow.schedule = CronSchedule("12 8 * * *")
 controls.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
@@ -222,6 +224,7 @@ flows_to_register = [
     beacons.flow,
     control_anteriority.flow,
     controllers.flow,
+    control_units.flow,
     controls.flow,
     controls_open_data.flow,
     current_segments.flow,

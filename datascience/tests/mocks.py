@@ -73,17 +73,18 @@ def mock_check_flow_not_running():
 
 def get_monitorfish_healthcheck_mock_factory(
     *,
-    position_received_minutes_ago: int = 0,
-    last_position_minutes_ago: int = 0,
+    last_position_updated_by_prefect_minutes_ago: int = 0,
+    last_position_received_by_api_minutes_ago: int = 0,
     logbook_message_received_minutes_ago: int = 0,
 ):
     @task(checkpoint=False)
     def get_monitorfish_healthcheck() -> MonitorfishHealthcheck:
         utcnow = datetime.utcnow()
         return MonitorfishHealthcheck(
-            date_position_received=utcnow
-            - timedelta(minutes=position_received_minutes_ago),
-            date_last_position=utcnow - timedelta(minutes=last_position_minutes_ago),
+            date_last_position_updated_by_prefect=utcnow
+            - timedelta(minutes=last_position_updated_by_prefect_minutes_ago),
+            date_last_position_received_by_api=utcnow
+            - timedelta(minutes=last_position_received_by_api_minutes_ago),
             date_logbook_message_received=utcnow
             - timedelta(minutes=logbook_message_received_minutes_ago),
         )

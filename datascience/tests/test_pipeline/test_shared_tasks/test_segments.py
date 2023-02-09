@@ -33,15 +33,33 @@ def test_extract_all_segments(reset_test_data):
     current_year = datetime.utcnow().year
     expected_segments = pd.DataFrame(
         {
-            "year": [current_year, current_year],
-            "segment": ["SWW01/02/03", "SWW04"],
+            "year": [2022, 2022, current_year, current_year],
+            "segment": ["SWW01/02/03 - 2022", "SWW04 - 2022", "SWW01/02/03", "SWW04"],
+            "segment_name": [
+                "Bottom trawls",
+                "Midwater trawls",
+                "Bottom trawls",
+                "Midwater trawls",
+            ],
             "gears": [
                 ["OTB", "OTT", "PTB", "OT", "PT", "TBN", "TBS", "TX", "TB"],
                 ["OTM", "PTM"],
+                ["OTB", "OTT", "PTB", "OT", "PT", "TBN", "TBS", "TX", "TB"],
+                ["OTM", "PTM"],
             ],
-            "fao_areas": [["27.8.c", "27.8", "27.9"], ["27.8.c", "27.8"]],
-            "species": [["ANF", "HKE", "LEZ", "MNZ", "NEP", "SOL"], ["HKE"]],
-            "impact_risk_factor": [3.0, 2.1],
+            "fao_areas": [
+                ["27.8.c", "27.8", "27.9"],
+                ["27.8.c", "27.8"],
+                ["27.8.c", "27.8", "27.9"],
+                ["27.8.c", "27.8"],
+            ],
+            "species": [
+                ["ANF", "HKE", "LEZ", "MNZ", "NEP", "SOL"],
+                ["HKE"],
+                ["ANF", "HKE", "LEZ", "MNZ", "NEP", "SOL"],
+                ["HKE"],
+            ],
+            "impact_risk_factor": [3.0, 2.1, 3.0, 2.1],
         }
     )
 

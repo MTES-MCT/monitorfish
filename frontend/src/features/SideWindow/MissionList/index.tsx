@@ -1,7 +1,7 @@
 import { Button, getLocalizedDayjs, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
 import { noop } from 'lodash'
 import { pipe } from 'ramda'
-import { useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_LIST_TABLE_OPTIONS } from './constants'
@@ -21,12 +21,14 @@ import type { MutableRefObject } from 'react'
 
 export function MissionList() {
   const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
+
   const [filters, setFilters] = useState<MissionFilter[]>([])
-  const missionApiQuery = useGetMissionsQuery(undefined)
+
+  const getMissionsApiQuery = useGetMissionsQuery(undefined)
   const dispatch = useMainAppDispatch()
 
   const { renderTableHead, tableData } = useTable<Mission.Mission>(
-    missionApiQuery.data,
+    getMissionsApiQuery.data,
     MISSION_LIST_TABLE_OPTIONS,
     searchInputRef.current?.value
   )
@@ -36,12 +38,25 @@ export function MissionList() {
     [filters, tableData]
   )
 
+  const goToMissionForm = useCallback(
+    async (missionId?: Mission.Mission['id']) => {
+      if (missionId) {
+        dispatch(missionActions.setDraftId(missionId))
+      } else {
+        dispatch(missionActions.initializeDraft())
+      }
+
+      dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))
+    },
+    [dispatch]
+  )
+
   return (
     <Wrapper>
       <Header>
         <HeaderTitle>Missions et contrôles</HeaderTitle>
         <HeaderButtonGroup>
-          <Button Icon={Icon.Plus} onClick={() => dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))}>
+          <Button Icon={Icon.Plus} onClick={() => goToMissionForm()}>
             Ajouter une nouvelle mission
           </Button>
         </HeaderButtonGroup>
@@ -50,9 +65,9 @@ export function MissionList() {
       <Body>
         <FilterBar missions={tableData} onChange={setFilters} />
 
-        {missionApiQuery.isLoading && <p>Chargement en cours...</p>}
-        {missionApiQuery.error && <pre>{JSON.stringify(missionApiQuery.error)}</pre>}
-        {!missionApiQuery.isLoading && !missionApiQuery.error && (
+        {getMissionsApiQuery.isLoading && <p>Chargement en cours...</p>}
+        {getMissionsApiQuery.error && <pre>{JSON.stringify(getMissionsApiQuery.error)}</pre>}
+        {!getMissionsApiQuery.isLoading && !getMissionsApiQuery.error && (
           <>
             <div>{`${filteredMissions.length ? filteredMissions.length : 'Aucune'} mission${
               filteredMissions.length > 1 ? 's' : ''
@@ -106,11 +121,7 @@ export function MissionList() {
                     >
                       <IconButton
                         Icon={Icon.Edit}
-                        // TODO Move that into a useCallback.
-                        onClick={() => {
-                          dispatch(missionActions.setEditedMission(mission))
-                          dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))
-                        }}
+                        onClick={() => goToMissionForm(mission.id)}
                         size={Size.SMALL}
                         title="Éditer la mission"
                       />

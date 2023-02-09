@@ -1,5 +1,5 @@
 import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
-import { noop } from 'lodash'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
@@ -7,62 +7,82 @@ import { ActionForm } from './ActionForm'
 import { ActionList } from './ActionList'
 import { MainForm } from './MainForm'
 import {
-  getMissionFormInitialValues,
   getMissionDataFromMissionFormValues,
   getUpdatedMissionFromMissionFormValues,
-  isCompleteMissionFormValues
+  isMissionFormValuesComplete
 } from './utils'
-import { useCreateMissionMutation } from '../../../api/mission'
+import { useCreateMissionMutation, useGetMissionQuery } from '../../../api/mission'
+import { useGetMissionActionsQuery } from '../../../api/missionAction'
 import { missionActions } from '../../../domain/actions'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
-import { Mission } from '../../../domain/types/mission'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { FrontendError } from '../../../libs/FrontendError'
+import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
 import { SideWindowMenuKey } from '../constants'
 
-import type { MissionFormValues, PartialAction } from './types'
-import type { MutableRefObject } from 'react'
+import type { MissionActionFormValues, MissionFormValues } from './types'
 
 export function MissionForm() {
-  const headerDivRef = useRef() as MutableRefObject<HTMLDivElement>
+  const { mission } = useMainAppSelector(store => store)
+  if (!mission.draft && !mission.draftId) {
+    throw new FrontendError(
+      'Both `mission.draft` and `mission.draftId` are undefined. This should never happen.',
+      'features/SideWindow/MissionForm/index.tsx > MissionForm()'
+    )
+  }
 
-  const [selectedType, setSelectedType] = useState<Mission.MissionType>(Mission.MissionType.SEA)
+  const headerDivRef = useRef<HTMLDivElement | null>(null)
+
+  const [hasRenderedOnce, setHasRenderedOnce] = useState(false)
   /** Header height in pixels */
   const [headerHeight, setHeaderHeight] = useState<number>(0)
-  const [newAction, setNewAction] = useState<PartialAction | undefined>(undefined)
+
+  const dispatch = useMainAppDispatch()
+  const missionApiQuery = useGetMissionQuery(mission.draftId || skipToken)
+  const missionActionsApiQuery = useGetMissionActionsQuery(mission.draftId || skipToken)
   const [createMission] = useCreateMissionMutation()
   const [updateMission] = useCreateMissionMutation()
 
-  const dispatch = useMainAppDispatch()
-  const editedMission = useMainAppSelector(store => store.mission.editedMission)
-  const missionDraftFormValues = useMainAppSelector(store => store.mission.draftFormValues)
+  const actionFormKey = useMemo(() => `actionForm-${mission.editedDraftActionIndex}`, [mission.editedDraftActionIndex])
+  const isMissionFormValid = useMemo(() => isMissionFormValuesComplete(mission.draft), [mission.draft])
 
-  const mainFormInitialValues: MissionFormValues | undefined = useMemo(
-    () => getMissionFormInitialValues(editedMission),
-    [editedMission]
-  )
+  const actionFormInitialValues = useMemo(
+    () => {
+      if (mission.editedDraftActionIndex === undefined) {
+        return undefined
+      }
 
-  const isMissionFormValid = useMemo(
-    () => isCompleteMissionFormValues(missionDraftFormValues),
-    [missionDraftFormValues]
+      if (!mission.draft || !mission.draft.actions) {
+        throw new FrontendError(
+          'Either `mission.draft` or `mission.draft.actions` is undefined while `mission.editedDraftActionIndex` is not. This should never happen.',
+          'features/SideWindow/MissionForm/index.tsx > MissionForm()'
+        )
+      }
+
+      return mission.draft.actions[mission.editedDraftActionIndex]
+    },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [mission.editedDraftActionIndex]
   )
 
   const createOrUpdateMission = useCallback(() => {
-    if (!missionDraftFormValues) {
+    if (!mission.draft) {
       return
     }
 
-    if (!editedMission) {
-      const newMission = getMissionDataFromMissionFormValues(missionDraftFormValues)
+    if (!mission.draftId) {
+      const newMission = getMissionDataFromMissionFormValues(mission.draft)
 
       createMission(newMission)
     } else {
-      const updatedMission = getUpdatedMissionFromMissionFormValues(editedMission.id, missionDraftFormValues)
+      const updatedMission = getUpdatedMissionFromMissionFormValues(mission.draftId, mission.draft)
 
       updateMission(updatedMission)
     }
-  }, [createMission, editedMission, missionDraftFormValues, updateMission])
+  }, [createMission, mission.draftId, mission.draft, updateMission])
 
   const goToMissionList = useCallback(async () => {
     dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_LIST))
@@ -73,20 +93,66 @@ export function MissionForm() {
     goToMissionList()
   }, [createOrUpdateMission, goToMissionList])
 
-  const handleMainFormChange = useCallback(
-    (nextMissionFormValues: MissionFormValues) => {
-      dispatch(missionActions.setDraftFormValues(nextMissionFormValues))
+  const handleActionFormChange = useCallback(
+    (nextMissionActionFormValues: MissionActionFormValues) => {
+      dispatch(missionActions.setEditedDraftAction(nextMissionActionFormValues))
     },
     [dispatch]
   )
 
-  const unsetNewAction = useCallback(() => {
-    setNewAction(undefined)
-  }, [])
+  const handleMainFormChange = useCallback(
+    (nextMissionFormValues: MissionFormValues) => {
+      dispatch(missionActions.setDraft(nextMissionFormValues))
+    },
+    [dispatch]
+  )
 
-  const handleResize = useCallback(() => {
-    setHeaderHeight(headerDivRef.current.offsetHeight)
-  }, [])
+  // ---------------------------------------------------------------------------
+  // DATA
+
+  useEffect(() => {
+    if (mission.draft) {
+      return
+    }
+
+    if (missionApiQuery.isLoading || missionActionsApiQuery.isLoading) {
+      return
+    }
+
+    const editedMission = missionApiQuery.data
+    const editedMissionActions = missionActionsApiQuery.data
+    if (!editedMission || !editedMissionActions) {
+      throw new FrontendError(
+        '`editedMission` or `editedMissionActions` is undefined. This should never happen.',
+        'features/SideWindow/MissionForm/index.tsx > MissionForm()',
+        missionApiQuery.error || missionActionsApiQuery.error || undefined
+      )
+    }
+
+    dispatch(
+      missionActions.initializeDraft({
+        mission: editedMission,
+        missionActions: editedMissionActions
+      })
+    )
+  }, [dispatch, mission.draft, missionApiQuery, missionActionsApiQuery])
+
+  // ---------------------------------------------------------------------------
+  // DOM
+
+  const handleResize = useCallback(
+    () => {
+      if (!headerDivRef.current) {
+        return
+      }
+
+      setHasRenderedOnce(true)
+      setHeaderHeight(headerDivRef.current.offsetHeight)
+    },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [hasRenderedOnce]
+  )
 
   useEffect(() => {
     handleResize()
@@ -98,10 +164,23 @@ export function MissionForm() {
     }
   }, [handleResize])
 
+  // ---------------------------------------------------------------------------
+
+  if (!mission.draft) {
+    return <LoadingSpinnerWall />
+  }
+
+  // if (mission.draft.actions.length > 0) {
+  //   console.log(mission.draft.actions[0])
+  // }
+
   return (
     <Wrapper heightOffset={headerHeight}>
       <Header ref={headerDivRef}>
-        <HeaderTitle>Ajout d’une nouvelle mission</HeaderTitle>
+        <HeaderTitleGroup>
+          <HeaderTitle>{mission.draftId ? `Édition d’une mission` : `Nouvelle mission`}</HeaderTitle>
+        </HeaderTitleGroup>
+
         <HeaderButtonGroup>
           <Button accent={Accent.TERTIARY} onClick={goToMissionList}>
             Annuler
@@ -126,35 +205,23 @@ export function MissionForm() {
       </Header>
 
       <Body>
-        <MainForm
-          initialValues={mainFormInitialValues}
-          onChange={handleMainFormChange}
-          onTypeChange={setSelectedType}
-        />
-        <ActionList
-          actions={[]}
-          newAction={newAction}
-          onAddAction={setNewAction}
-          onDeleteAction={noop}
-          onDeleteNewAction={unsetNewAction}
-          selectedType={selectedType}
-        />
-        <ActionForm action={newAction} onChange={setNewAction} />
+        <MainForm initialValues={mission.draft} onChange={handleMainFormChange} />
+        <ActionList initialValues={mission.draft} />
+        <ActionForm key={actionFormKey} initialValues={actionFormInitialValues} onChange={handleActionFormChange} />
       </Body>
     </Wrapper>
   )
 }
 
 const Wrapper = styled(NoRsuiteOverrideWrapper)<{
-  // Height offset in pixels
+  /** Height offset in pixels */
   heightOffset: number
 }>`
   display: flex;
   flex-direction: column;
   /* TODO Switch to flex sizing once SideWindow is full-flex (and remove the dirty calc). */
   /* flex-grow: 1; */
-  height: calc(100% - ${p => p.heightOffset}px + 1rem);
-  /* max-height: calc(100% - 47px); */
+  height: calc(100% - ${p => p.heightOffset}px + 17px);
 `
 
 const Header = styled.div`
@@ -163,14 +230,19 @@ const Header = styled.div`
   border-bottom: solid 2px ${p => p.theme.color.gainsboro};
   display: flex;
   justify-content: space-between;
-  padding: 1.875rem 2rem 1.875rem 3rem;
+  padding: 30px 32px 30px 18px;
+`
+
+const HeaderTitleGroup = styled.div`
+  display: flex;
 `
 
 const HeaderTitle = styled.h1`
   color: ${p => p.theme.color.charcoal};
   font-size: 22px;
   font-weight: 700;
-  line-height: 1.4;
+  line-height: 31px;
+  margin: 0;
 `
 
 const HeaderButtonGroup = styled.div`

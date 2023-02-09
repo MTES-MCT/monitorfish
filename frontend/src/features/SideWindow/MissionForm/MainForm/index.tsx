@@ -7,12 +7,14 @@ import {
   FormikMultiSelect,
   FormikSelect,
   FormikTextarea,
-  FormikTextInput
+  FormikTextInput,
+  noop,
+  useForceUpdate
+  // useForceUpdate
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
-import { noop } from 'lodash'
-import { dissoc, equals, pipe } from 'ramda'
-import { useCallback, useRef, useState } from 'react'
+import { equals } from 'ramda'
+import { useCallback, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -33,55 +35,37 @@ import type { Promisable } from 'type-fest'
 
 export type MainFormProps = {
   initialValues: MissionFormValues
-  onChange: (nextPartialMission: MissionFormValues) => Promisable<void>
-  onTypeChange: (nextType: Mission.MissionType) => Promisable<void>
+  onChange: (nextValues: MissionFormValues) => Promisable<void>
 }
-export function MainForm({ initialValues, onChange, onTypeChange }: MainFormProps) {
+export function MainForm({ initialValues, onChange }: MainFormProps) {
   const currentValuesRef = useRef<MissionFormValues>(initialValues)
   const { newWindowContainerRef } = useNewWindow()
 
-  const [hasMissionUnderJdpType, setHasMissionUnderJdpType] = useState(false)
+  const { forceUpdate } = useForceUpdate()
+
+  const controlledInitialValues = useMemo(() => initialValues, [initialValues])
 
   const updateCurrentValues = useCallback(
     (nextValues: MissionFormValues) => {
       const previousValues = { ...currentValuesRef.current }
       currentValuesRef.current = nextValues
 
-      if (currentValuesRef.current.missionType !== previousValues.missionType) {
-        if (currentValuesRef.current.missionType !== Mission.MissionType.AIR) {
-          const nextValueWithoutExtraProps = pipe(dissoc('flightGoal'), dissoc('flightGoal'))(nextValues)
-
-          currentValuesRef.current = nextValueWithoutExtraProps
-        }
-
-        onTypeChange(currentValuesRef.current.missionType)
-      }
-
-      if (
-        !equals(nextValues.missionNature, previousValues.missionNature) ||
-        nextValues.hasOrder !== previousValues.hasOrder
-      ) {
-        // eslint-disable-next-line no-underscore-dangle, @typescript-eslint/naming-convention
-        const _hasMissionUnderJdpType =
-          (nextValues.missionNature !== undefined && nextValues.missionNature.includes(Mission.MissionNature.FISH)) ||
-          Boolean(nextValues.hasOrder)
-
-        if (!_hasMissionUnderJdpType) {
-          const nextValueWithoutExtraProps = pipe(dissoc('isUnderJdp'))(nextValues)
-
-          currentValuesRef.current = nextValueWithoutExtraProps
-        }
-
-        setHasMissionUnderJdpType(_hasMissionUnderJdpType)
+      if (!equals(nextValues.missionNature, previousValues.missionNature)) {
+        forceUpdate()
       }
 
       onChange(currentValuesRef.current)
     },
-    [onChange, onTypeChange]
+    [forceUpdate, onChange]
+  )
+
+  const hasMissionOrderField = Boolean(currentValuesRef.current.missionNature?.includes(Mission.MissionNature.FISH))
+  const isMissionUnderJdpCheckboxEnabled = Boolean(
+    currentValuesRef.current.missionNature?.includes(Mission.MissionNature.FISH)
   )
 
   return (
-    <Formik initialValues={initialValues || {}} onSubmit={noop}>
+    <Formik initialValues={controlledInitialValues} onSubmit={noop}>
       <Wrapper>
         <FormikEffect onChange={updateCurrentValues as any} />
 
@@ -109,7 +93,7 @@ export function MainForm({ initialValues, onChange, onTypeChange }: MainFormProp
             />
 
             {/* TODO What to do with this prop? */}
-            <FormikCheckbox disabled={!hasMissionUnderJdpType} label="Mission sous JDP" name="isUnderJdp" />
+            <FormikCheckbox disabled={!isMissionUnderJdpCheckboxEnabled} label="Mission sous JDP" name="isUnderJdp" />
           </MissionNatureWrapper>
 
           <FormikMultiControlUnitPicker name="controlUnits" />
@@ -117,16 +101,18 @@ export function MainForm({ initialValues, onChange, onTypeChange }: MainFormProp
           <FormikMultiZonePicker name="geom" />
 
           {/* TODO What to do with this prop? */}
-          <FormikMultiRadio
-            isInline
-            label="Ordre de mission"
-            name="hasOrder"
-            // TODO Allow more Monitor UI `Option` types.
-            options={[
-              { label: 'Oui', value: true as any },
-              { label: 'Non', value: false as any }
-            ]}
-          />
+          {hasMissionOrderField && (
+            <FormikMultiRadio
+              isInline
+              label="Ordre de mission"
+              name="hasOrder"
+              // TODO Allow more Monitor UI `Option` types.
+              options={[
+                { label: 'Oui', value: true as any },
+                { label: 'Non', value: false as any }
+              ]}
+            />
+          )}
 
           {/* TODO What to do with this prop? */}
           {currentValuesRef.current.missionType === Mission.MissionType.AIR && (

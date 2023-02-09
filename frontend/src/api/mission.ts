@@ -17,12 +17,17 @@ export const missionApi = monitorenvApi.injectEndpoints({
       })
     }),
 
-    deleteMission: builder.mutation<void, string>({
+    deleteMission: builder.mutation<void, Mission.Mission['id']>({
       invalidatesTags: () => [{ type: 'Missions' }],
       query: id => ({
         method: 'DELETE',
         url: `/missions/${id}`
       })
+    }),
+
+    getMission: builder.query<Mission.Mission, Mission.Mission['id']>({
+      providesTags: () => [{ type: 'Missions' }],
+      query: id => `missions/${id}`
     }),
 
     getMissions: builder.query<Mission.Mission[], void>({
@@ -41,8 +46,13 @@ export const missionApi = monitorenvApi.injectEndpoints({
   })
 })
 
-export const { useCreateMissionMutation, useDeleteMissionMutation, useGetMissionsQuery, useUpdateMissionMutation } =
-  missionApi
+export const {
+  useCreateMissionMutation,
+  useDeleteMissionMutation,
+  useGetMissionQuery,
+  useGetMissionsQuery,
+  useUpdateMissionMutation
+} = missionApi
 
 // TODO Let's move that part somewhere else.
 

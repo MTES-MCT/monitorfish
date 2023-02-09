@@ -1,6 +1,6 @@
 import { init } from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
-import { StrictMode } from 'react'
+// import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import { App } from './App'
@@ -35,7 +35,7 @@ if (!container) {
 const root = createRoot(container)
 
 root.render(
-  <StrictMode>
-    <App />
-  </StrictMode>
+  // <StrictMode>
+  <App />
+  // </StrictMode>
 )

@@ -36,5 +36,5 @@ export const monitorfishApi = createApi({
   // TODO Is this prop initialization necessary?
   endpoints: () => ({}),
   reducerPath: 'monitorfishApi',
-  tagTypes: []
+  tagTypes: ['FleetSegments', 'Gears', 'Infractions', 'MissionActions', 'Species']
 })

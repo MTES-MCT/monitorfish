@@ -5,7 +5,7 @@ export const FormBody = styled.div`
   flex-direction: column;
   flex-grow: 1;
   overflow-y: auto;
-  padding: 0 2rem 2rem;
+  padding: 0 32px 32px;
 
   > div:not(:first-child),
   > fieldset:not(:first-child) {
@@ -13,12 +13,12 @@ export const FormBody = styled.div`
   }
 
   hr {
-    background: ${p => p.theme.color.gainsboro};
+    background: ${p => p.theme.color.slateGray};
     height: 2px;
     margin: 24px 0 0;
   }
 
-  p {
+  /* p {
     color: ${p => p.theme.color.slateGray};
     font-size: 13px;
     line-height: 1.4;
@@ -27,5 +27,5 @@ export const FormBody = styled.div`
     &:not(:first-child) {
       margin-top: 8px;
     }
-  }
+  } */
 `

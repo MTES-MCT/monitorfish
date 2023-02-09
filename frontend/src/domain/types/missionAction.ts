@@ -1,45 +1,50 @@
 import type { ControlUnit } from './controlUnit'
+import type { Except } from 'type-fest'
 
 export namespace MissionAction {
   export interface MissionAction {
     actionDatetimeUtc: string
     actionType: MissionActionType
-    controlQualityComments: String | null
+    controlQualityComments: String | undefined
     controlUnits: ControlUnit[]
-    diversion: Boolean | null
-    emitsAis: ControlCheck | null
-    emitsVms: ControlCheck | null
-    facade: String | null
-    feedbackSheetRequired: Boolean | null
+    diversion: Boolean | undefined
+    emitsAis: ControlCheck | undefined
+    emitsVms: ControlCheck | undefined
+    facade: String | undefined
+    feedbackSheetRequired: Boolean | undefined
     gearInfractions: GearInfraction[]
     gearOnboard: GearControl[]
-    id: number | null
-    isFromPoseidon: boolean | null
-    latitude: number | null
-    licencesAndLogbookObservations: String | null
-    licencesMatchActivity: ControlCheck | null
+    id: number | undefined
+    isFromPoseidon: boolean | undefined
+    latitude: number | undefined
+    licencesAndLogbookObservations: String | undefined
+    licencesMatchActivity: ControlCheck | undefined
     logbookInfractions: LogbookInfraction[]
-    logbookMatchesActivity: ControlCheck | null
-    longitude: number | null
+    logbookMatchesActivity: ControlCheck | undefined
+    longitude: number | undefined
     missionId: number
-    numberOfVesselsFlownOver: number | null
-    otherComments: String | null
+    numberOfVesselsFlownOver: number | undefined
+    otherComments: String | undefined
     otherInfractions: OtherInfraction[]
-    portLocode: String | null
-    portName: String | null
+    portLocode: String | undefined
+    portName: String | undefined
     segments: FleetSegment[]
-    seizureAndDiversion: Boolean | null
-    seizureAndDiversionComments: String | null
-    separateStowageOfPreservedSpecies: Boolean | null
+    seizureAndDiversion: Boolean | undefined
+    seizureAndDiversionComments: String | undefined
+    separateStowageOfPreservedSpecies: Boolean | undefined
     speciesInfractions: SpeciesInfraction[]
-    speciesObservations: String | null
+    speciesObservations: String | undefined
     speciesOnboard: SpeciesControl[]
-    speciesSizeControlled: Boolean | null
-    speciesWeightControlled: Boolean | null
-    unitWithoutOmegaGauge: Boolean | null
-    userTrigram: String | null
+    speciesSizeControlled: Boolean | undefined
+    speciesWeightControlled: Boolean | undefined
+    unitWithoutOmegaGauge: Boolean | undefined
+    userTrigram: String | undefined
     vesselId: number
-    vesselTargeted: Boolean | null
+    vesselTargeted: Boolean | undefined
+
+    // TODO I had to add that.
+    // eslint-disable-next-line typescript-sort-keys/interface
+    vesselName: string
   }
 
   export type ControlAndText = {
@@ -47,7 +52,7 @@ export namespace MissionAction {
     text: string
   }
 
-  enum ControlCheck {
+  export enum ControlCheck {
     NO = 'NO',
     NOT_APPLICABLE = 'NOT_APPLICABLE',
     YES = 'YES'
@@ -62,15 +67,19 @@ export namespace MissionAction {
   export type FleetSegment = {
     segment: string | null
     segmentName: string | null
+
+    // TODO I had to add that.
+    // eslint-disable-next-line typescript-sort-keys/interface
+    faoAreas: string[]
   }
 
   export type GearControl = {
-    comments: string | null
-    controlledMesh: number | null
-    declaredMesh: number | null
+    comments: string | undefined
+    controlledMesh: number | undefined
+    declaredMesh: number | undefined
     gearCode: string
     gearName: string
-    gearWasControlled: boolean | null
+    gearWasControlled: boolean | undefined
   }
 
   export type GearInfraction = {
@@ -94,11 +103,18 @@ export namespace MissionAction {
     SPECIES = 'SPECIES'
   }
 
+  /* eslint-disable typescript-sort-keys/string-enum */
   export enum InfractionType {
-    PENDING = 'PENDING',
+    WITH_RECORD = 'WITH_RECORD',
     WITHOUT_RECORD = 'WITHOUT_RECORD',
-    WITH_RECORD = 'WITH_RECORD'
+    PENDING = 'PENDING'
   }
+  export const InfractionTypeLabel: Record<InfractionType, string> = {
+    [InfractionType.WITH_RECORD]: 'Avec PV',
+    [InfractionType.WITHOUT_RECORD]: 'Sans PV',
+    [InfractionType.PENDING]: 'En attente'
+  }
+  /* eslint-enable typescript-sort-keys/string-enum */
 
   export type LastControls = {
     LAND: ControlAndText
@@ -108,8 +124,11 @@ export namespace MissionAction {
   export type LogbookInfraction = {
     comments: string
     infractionType: InfractionType
+    // TODO This should be a plural.
     natinf: number
   }
+
+  export type MissionActionData = Except<MissionAction, 'id'>
 
   export enum MissionActionType {
     AIR_CONTROL = 'AIR_CONTROL',
@@ -130,6 +149,7 @@ export namespace MissionAction {
   export type OtherInfraction = {
     comments: string
     infractionType: InfractionType
+    // TODO This should be a plural.
     natinf: number
   }
 

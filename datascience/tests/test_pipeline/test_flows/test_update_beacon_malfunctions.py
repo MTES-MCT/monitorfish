@@ -908,7 +908,9 @@ def test_flow_fails_if_last_positions_healthcheck_fails(reset_test_data):
 
     flow.replace(
         flow.get_tasks("get_monitorfish_healthcheck")[0],
-        get_monitorfish_healthcheck_mock_factory(position_received_minutes_ago=15),
+        get_monitorfish_healthcheck_mock_factory(
+            last_position_updated_by_prefect_minutes_ago=15
+        ),
     )
 
     flow.schedule = None
@@ -916,7 +918,7 @@ def test_flow_fails_if_last_positions_healthcheck_fails(reset_test_data):
 
     assert not state.is_successful()
     assert isinstance(
-        state.result[flow.get_tasks("assert_last_positions_health")[0]].result,
+        state.result[flow.get_tasks("assert_last_positions_flow_health")[0]].result,
         MonitorfishHealthError,
     )
     assert isinstance(

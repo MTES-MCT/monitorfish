@@ -18,6 +18,7 @@ import { ReactComponent as InfractionSuspicionIconSVG } from '../../icons/Icone_
 import { ReactComponent as ObservationIconSVG } from '../../icons/Icone_observations.svg'
 import { getAlertNameFromType } from '../../SideWindow/alerts_reportings/utils'
 
+import type { ControlUnit } from '../../../domain/types/controlUnit'
 import type { Promisable } from 'type-fest'
 
 export type ReportingCardProps = {
@@ -46,7 +47,7 @@ export function ReportingCard({
         <Title>
           {reporting.type === ReportingType.ALERT
             ? reportingName
-            : getReportingActor(reporting.value.reportingActor, reporting.value.unit)}{' '}
+            : getReportingActor(reporting.value.reportingActor, reporting.value.controlUnit)}{' '}
           /{' '}
           {reporting.type === ReportingType.ALERT ? getAlertNameFromType(reporting.value.type) : reporting.value.title}
         </Title>
@@ -105,10 +106,10 @@ export function ReportingCard({
   )
 }
 
-const getReportingActor = (reportingActor, unit) => {
+const getReportingActor = (reportingActor, unit: ControlUnit | null) => {
   switch (reportingActor) {
     case ReportingOriginActor.UNIT.code:
-      return unit
+      return unit?.name
     default:
       return reportingActor
   }

@@ -40,7 +40,7 @@ class GetInfractionSuspicionWithDMLAndSeaFrontUTests {
         )
 
         given(vesselRepository.findVessel(eq(123))).willReturn(
-            Vessel(id = 1, districtCode = "LO", flagState = CountryCode.FR)
+            Vessel(id = 1, districtCode = "LO", flagState = CountryCode.FR),
         )
         given(districtRepository.find(eq("LO")))
             .willReturn(District("LO", "Lorient", "56", "Morbihan", "DML 56", "NAMO"))
@@ -105,7 +105,7 @@ class GetInfractionSuspicionWithDMLAndSeaFrontUTests {
     fun `execute Should not throw an exception When the district is not found`() {
         // Given
         given(vesselRepository.findVessel(eq(123))).willReturn(
-            Vessel(id = 1, flagState = CountryCode.FR, districtCode = "LO")
+            Vessel(id = 1, flagState = CountryCode.FR, districtCode = "LO"),
         )
         given(districtRepository.find(eq("LO")))
             .willThrow(CodeNotFoundException("oupsi"))

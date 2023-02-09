@@ -1,14 +1,16 @@
 import { ReportingOriginActor } from '../../../../domain/entities/reporting'
 
+import type { ControlUnit } from '../../../../domain/types/controlUnit'
 import type { ReportingUpdate } from '../../../../domain/types/reporting'
+import type { Option } from '@mtes-mct/monitor-ui'
 
 export function getReportingValueErrors(reportingValue: ReportingUpdate) {
   const {
     authorContact: authorContactField,
     authorTrigram: authorTrigramField,
+    controlUnitId: controlUnitIdField,
     reportingActor: reportingActorField,
-    title: titleField,
-    unit: unitField
+    title: titleField
   } = reportingValue
 
   let nextErrorsFields: string[] = []
@@ -23,8 +25,8 @@ export function getReportingValueErrors(reportingValue: ReportingUpdate) {
 
   switch (reportingActorField) {
     case ReportingOriginActor.UNIT.code: {
-      if (!unitField) {
-        nextErrorsFields = nextErrorsFields.concat('unit')
+      if (!controlUnitIdField) {
+        nextErrorsFields = nextErrorsFields.concat('controlUnitId')
       }
       break
     }
@@ -51,3 +53,11 @@ export function getReportingValueErrors(reportingValue: ReportingUpdate) {
 
   return nextErrorsFields
 }
+
+export const mapControlUnitsToUniqueSortedIdsAsOptions = (controlUnits: ControlUnit[]): Option<number>[] =>
+  Array.from(controlUnits)
+    .sort((a, b) => Number(b.name) - Number(a.name))
+    .map(controlUnit => ({
+      label: `${controlUnit.name} (${controlUnit.administration})`,
+      value: controlUnit.id
+    }))

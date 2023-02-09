@@ -7,7 +7,6 @@ import { getSilencedAlerts } from '../domain/use_cases/alert/getSilencedAlerts'
 import getAllBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
 import getVesselBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
 import { openBeaconMalfunctionInKanban } from '../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
-import getAllControllers from '../domain/use_cases/controller/getAllControllers'
 import { getAllFleetSegments } from '../domain/use_cases/fleetSegment/getAllFleetSegments'
 import getAllGearCodes from '../domain/use_cases/gearCode/getAllGearCodes'
 import getHealthcheck from '../domain/use_cases/healthcheck/getHealthcheck'
@@ -56,7 +55,6 @@ export function APIWorker() {
       dispatch(getAllCurrentReportings())
       dispatch(getSilencedAlerts())
       dispatch(getAllBeaconMalfunctions())
-      dispatch(getAllControllers())
     }
 
     dispatch(showVesselsLastPosition())

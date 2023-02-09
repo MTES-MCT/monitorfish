@@ -10,6 +10,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllControlUnits
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetAllCurrentReportings
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -28,6 +29,9 @@ class GetAllCurrentReportingsUTests {
     @MockBean
     private lateinit var lastPositionRepository: LastPositionRepository
 
+    @MockBean
+    private lateinit var getAllControlUnits: GetAllControlUnits
+
     @Test
     fun `execute Should get all reportings with the underCharter field`() {
         // Given
@@ -42,7 +46,7 @@ class GetAllCurrentReportingsUTests {
                 natinfCode = "123456",
                 authorTrigram = "LTH",
                 flagState = CountryCode.FR.toString(),
-                title = "A title"
+                title = "A title",
             ),
             type = ReportingType.INFRACTION_SUSPICION,
             isDeleted = false,
@@ -58,12 +62,13 @@ class GetAllCurrentReportingsUTests {
             .willReturn(true)
 
         // When
-        val reportings = GetAllCurrentReportings(reportingRepository, lastPositionRepository).execute()
+        val reportings = GetAllCurrentReportings(reportingRepository, lastPositionRepository, getAllControlUnits).execute()
 
         // Then
         assertThat(reportings).hasSize(1)
-        assertThat(reportings.first().internalReferenceNumber).isEqualTo("FRFGRGR")
-        assertThat(reportings.first().underCharter).isTrue
+        val (reporting, _) = reportings.first()
+        assertThat(reporting.internalReferenceNumber).isEqualTo("FRFGRGR")
+        assertThat(reporting.underCharter).isTrue
     }
 
     @Test
@@ -80,7 +85,7 @@ class GetAllCurrentReportingsUTests {
                 natinfCode = "123456",
                 authorTrigram = "LTH",
                 flagState = CountryCode.FR.toString(),
-                title = "A title"
+                title = "A title",
             ),
             type = ReportingType.INFRACTION_SUSPICION,
             isDeleted = false,
@@ -90,7 +95,7 @@ class GetAllCurrentReportingsUTests {
 
         // When
         val throwable = catchThrowable {
-            GetAllCurrentReportings(reportingRepository, lastPositionRepository).execute()
+            GetAllCurrentReportings(reportingRepository, lastPositionRepository, getAllControlUnits).execute()
         }
 
         // Then

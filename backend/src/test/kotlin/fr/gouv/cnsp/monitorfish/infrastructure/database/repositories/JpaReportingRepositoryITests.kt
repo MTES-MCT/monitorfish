@@ -69,7 +69,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                 natinfCode = "123456",
                 authorTrigram = "LTH",
                 flagState = CountryCode.FR.toString(),
-                title = "A title"
+                title = "A title",
             ),
             type = ReportingType.INFRACTION_SUSPICION,
             isDeleted = false,
@@ -110,7 +110,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                 natinfCode = "123456",
                 authorTrigram = "LTH",
                 flagState = CountryCode.FR.toString(),
-                title = "A title"
+                title = "A title",
             ),
             type = ReportingType.INFRACTION_SUSPICION,
             isDeleted = false,

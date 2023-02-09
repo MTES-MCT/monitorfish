@@ -9,10 +9,10 @@ class CurrentAndArchivedReportingDataOutput(
     companion object {
         fun fromCurrentAndArchivedReporting(currentAndArchivedReportings: CurrentAndArchivedReportings) = CurrentAndArchivedReportingDataOutput(
             currentAndArchivedReportings.current.map {
-                ReportingDataOutput.fromReporting(it)
+                ReportingDataOutput.fromReporting(it.first, it.second)
             },
             currentAndArchivedReportings.archived.map {
-                ReportingDataOutput.fromReporting(it)
+                ReportingDataOutput.fromReporting(it.first, it.second)
             },
         )
     }

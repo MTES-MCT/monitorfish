@@ -30,13 +30,17 @@ class ReportingController(
         @RequestBody
         reportingInput: CreateReportingDataInput,
     ): ReportingDataOutput {
-        return ReportingDataOutput.fromReporting(addReporting.execute(reportingInput.toReporting()))
+        val (createdReporting, controlUnit) = addReporting.execute(reportingInput.toReporting())
+
+        return ReportingDataOutput.fromReporting(createdReporting, controlUnit)
     }
 
     @GetMapping(value = [""])
     @Operation(summary = "Get all current reportings")
     fun getAllReportings(): List<ReportingDataOutput> {
-        return getAllCurrentReportings.execute().map { ReportingDataOutput.fromReporting(it) }
+        return getAllCurrentReportings.execute().map {
+            ReportingDataOutput.fromReporting(it.first, it.second)
+        }
     }
 
     @PutMapping(value = ["/{reportingId}/archive"])
@@ -58,9 +62,12 @@ class ReportingController(
         @RequestBody
         updateReportingInput: UpdateReportingDataInput,
     ): ReportingDataOutput {
-        val reporting = updateReporting.execute(reportingId, updateReportingInput.toUpdatedReportingValues())
+        val (updatedReporting, controlUnit) = updateReporting.execute(
+            reportingId,
+            updateReportingInput.toUpdatedReportingValues()
+        )
 
-        return ReportingDataOutput.fromReporting(reporting)
+        return ReportingDataOutput.fromReporting(updatedReporting, controlUnit)
     }
 
     @PutMapping(value = ["/archive"])

@@ -26,6 +26,11 @@ export type MenuItem<T = string> = {
   name: string
 }
 
+export type PartialExcept<T extends Record<string, any>, RequiredKeys extends keyof T> = Partial<
+  Omit<T, RequiredKeys>
+> &
+  Pick<T, RequiredKeys>
+
 export type PickStringKeys<T extends Record<any, any>> = Exact<
   {
     [Key in string]: T[Key]

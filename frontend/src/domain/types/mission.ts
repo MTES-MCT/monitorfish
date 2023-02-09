@@ -15,7 +15,7 @@ export namespace Mission {
     id: number
     isClosed: boolean
     isDeleted: boolean
-    missionNature?: MissionNature
+    missionNature?: MissionNature[]
     missionSource: MissionSource
     missionType: MissionType
     observationsCacem?: string

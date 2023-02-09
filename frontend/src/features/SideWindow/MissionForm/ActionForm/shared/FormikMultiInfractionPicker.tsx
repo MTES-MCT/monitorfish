@@ -1,0 +1,286 @@
+import {
+  Accent,
+  Button,
+  FormikMultiRadio,
+  FormikSelect,
+  FormikTextarea,
+  Icon,
+  IconButton,
+  Legend,
+  Option,
+  Tag,
+  TagGroup,
+  THEME
+} from '@mtes-mct/monitor-ui'
+import { Form, Formik, useField } from 'formik'
+import { remove as ramdaRemove, update } from 'ramda'
+import { Fragment, useCallback, useMemo, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
+import styled from 'styled-components'
+
+import { INFRACTION_TYPES_AS_OPTIONS, MissionActionInfractionSchema } from './constants'
+import { useGetInfractionsQuery } from '../../../../../api/infraction'
+import { MissionAction } from '../../../../../domain/types/missionAction'
+import { FrontendError } from '../../../../../libs/FrontendError'
+import { useNewWindow } from '../../../../../ui/NewWindow'
+import { FieldsetGroup } from '../../FieldsetGroup'
+import { FieldsetGroupSeparator } from '../../FieldsetGroupSeparator'
+
+import type { MissionActionFormValues } from '../../types'
+import type { FormikTextareaProps } from '@mtes-mct/monitor-ui'
+import type { ReactNode } from 'react'
+
+const ERROR_PATH = 'features/SideWindow/MissionForm/ActionForm/shared/FormikMultiInfractionPicker.tsx'
+
+export type FormikMultiInfractionPickerProps = {
+  addButtonLabel: string
+  children?: ReactNode
+  generalObservationTextareaProps?: Omit<FormikTextareaProps, 'name'> & {
+    name: keyof MissionActionFormValues
+  }
+  label: string
+  name: keyof MissionActionFormValues
+}
+export function FormikMultiInfractionPicker({
+  addButtonLabel,
+  children,
+  generalObservationTextareaProps,
+  label,
+  name
+}: FormikMultiInfractionPickerProps) {
+  const [input, , helper] = useField<MissionAction.OtherInfraction[] | undefined>(name)
+
+  const { newWindowContainerRef } = useNewWindow()
+
+  const [isEditedIndexNew, setIsEditedIndexNew] = useState(false)
+  const [editedIndex, setEditedIndex] = useState<number | undefined>(undefined)
+
+  const getInfractionsApiQuery = useGetInfractionsQuery()
+
+  const natinfsAsOptions: Option<number>[] = useMemo(() => {
+    if (!getInfractionsApiQuery.data) {
+      return []
+    }
+
+    return getInfractionsApiQuery.data.map(({ infraction, natinfCode }) => ({
+      label: `${natinfCode} - ${infraction}`,
+      value: Number(natinfCode)
+    }))
+  }, [getInfractionsApiQuery.data])
+
+  const add = useCallback(
+    () => {
+      const nextInfractions = [...(input.value || []), {}] as MissionAction.OtherInfraction[]
+
+      helper.setValue(nextInfractions)
+
+      setIsEditedIndexNew(true)
+      setEditedIndex(nextInfractions.length - 1)
+    },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [input.value]
+  )
+
+  const closeForm = useCallback(() => {
+    setEditedIndex(undefined)
+    setIsEditedIndexNew(false)
+  }, [])
+
+  const remove = useCallback(
+    (index: number) => {
+      if (!input.value) {
+        throw new FrontendError('`input.value` is undefined. This should never happen.', `${ERROR_PATH} > remove()`)
+      }
+
+      const nextInfractions = ramdaRemove(index, 1, input.value)
+
+      helper.setValue(nextInfractions)
+    },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [input.value]
+  )
+
+  const cancel = useCallback(() => {
+    if (editedIndex === undefined) {
+      throw new FrontendError('`editedIndex` is undefined. This should never happen.', `${ERROR_PATH} > cancel()`)
+    }
+
+    // If we clicked the cancellation button and the edition form was for a new item, we delete it
+    if (isEditedIndexNew) {
+      remove(editedIndex)
+    }
+
+    closeForm()
+  }, [closeForm, editedIndex, isEditedIndexNew, remove])
+
+  const submit = useCallback(
+    (updatedInfraction: MissionAction.OtherInfraction) => {
+      if (!input.value || editedIndex === undefined) {
+        throw new FrontendError(
+          '`input.value` or `editedIndex` is undefined. This should never happen.',
+          `${ERROR_PATH} > submit()`
+        )
+      }
+
+      const nextInfractions = update(editedIndex, updatedInfraction, input.value)
+
+      helper.setValue(nextInfractions)
+
+      closeForm()
+    },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [closeForm, editedIndex, input.value]
+  )
+
+  if (!natinfsAsOptions.length) {
+    return <>Loading...</>
+  }
+
+  return (
+    <FieldsetGroup isLight legend={label}>
+      {children}
+
+      <Button accent={Accent.SECONDARY} Icon={Icon.Plus} isFullWidth onClick={add}>
+        {addButtonLabel}
+      </Button>
+
+      {input.value && input.value.length > 0 && (
+        <Row>
+          {input.value.map((infraction, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Fragment key={`infraction-${index}`}>
+              <FieldsetGroupSeparator />
+
+              {index !== editedIndex && (
+                <>
+                  <Legend>Infraction obligations déclaratives et autorisations {index + 1}</Legend>
+
+                  <ItemWrapper>
+                    <div>
+                      <TagGroup>
+                        <Tag accent={Accent.PRIMARY}>
+                          {MissionAction.InfractionTypeLabel[infraction.infractionType]}
+                        </Tag>
+                        <Tag accent={Accent.PRIMARY}>NATINF : {infraction.natinf}</Tag>
+                      </TagGroup>
+
+                      <div>
+                        <IconButton
+                          accent={Accent.SECONDARY}
+                          Icon={Icon.Edit}
+                          onClick={() => setEditedIndex(index)}
+                          style={{ marginRight: '8px' }}
+                        />
+                        <IconButton
+                          accent={Accent.SECONDARY}
+                          color={THEME.color.chineseRed}
+                          Icon={Icon.Delete}
+                          onClick={() => remove(index)}
+                        />
+                      </div>
+                    </div>
+
+                    <article>
+                      <ReactMarkdown>{infraction.comments}</ReactMarkdown>
+                    </article>
+                  </ItemWrapper>
+                </>
+              )}
+
+              {index === editedIndex && (
+                <Formik initialValues={infraction} onSubmit={submit} validationSchema={MissionActionInfractionSchema}>
+                  {() => (
+                    <StyledForm>
+                      <FormikMultiRadio
+                        isInline
+                        label="Type d'infraction"
+                        name="infractionType"
+                        options={INFRACTION_TYPES_AS_OPTIONS}
+                      />
+                      <FormikSelect
+                        baseContainer={newWindowContainerRef.current}
+                        label="NATINF"
+                        name="natinf"
+                        options={natinfsAsOptions}
+                        searchable
+                      />
+                      <FormikTextarea label="Observations sur l'infraction" name="comments" />
+
+                      <FormButtonGroup>
+                        <Button accent={Accent.TERTIARY} onClick={cancel}>
+                          Annuler
+                        </Button>
+                        <Button accent={Accent.PRIMARY} type="submit">
+                          Valider l’infraction
+                        </Button>
+                      </FormButtonGroup>
+                    </StyledForm>
+                  )}
+                </Formik>
+              )}
+            </Fragment>
+          ))}
+        </Row>
+      )}
+
+      {generalObservationTextareaProps && (
+        <>
+          <FieldsetGroupSeparator />
+
+          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+          <FormikTextarea {...generalObservationTextareaProps} />
+        </>
+      )}
+    </FieldsetGroup>
+  )
+}
+
+const Row = styled.div`
+  > legend {
+    margin: 24px 0 8px;
+  }
+`
+
+const ItemWrapper = styled.div`
+  > div {
+    display: flex;
+    justify-content: space-between;
+
+    > div:last-child {
+      align-items: flex-start;
+      display: flex;
+    }
+  }
+
+  > article {
+    margin-top: 11px;
+  }
+`
+
+const StyledForm = styled(Form)`
+  background-color: transparent;
+  border: 0;
+  padding: 0;
+
+  > div:first-child,
+  > fieldset:first-child {
+    margin-top: 16px;
+  }
+
+  > div:not(:first-child),
+  > fieldset:not(:first-child) {
+    margin-top: 24px;
+  }
+`
+
+const FormButtonGroup = styled.div`
+  display: flex;
+  justify-content: flex-end;
+
+  > button:last-child {
+    margin-left: 16px;
+  }
+`

@@ -14,10 +14,11 @@ import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
-import type { MutableRefObject } from 'react'
+import type { CSSProperties, MutableRefObject } from 'react'
 
 type VesselSearchProps = {
   baseRef?: MutableRefObject<HTMLDivElement> | undefined
+  className?: string
   defaultValue?:
     | {
         flagState?: string | null | undefined
@@ -32,9 +33,11 @@ type VesselSearchProps = {
   onInputClick: () => void
   onSelectVessel: (selectedVessel: VesselIdentity) => void
   onUnselectVessel: () => void
+  style?: CSSProperties
 }
 export function VesselSearch({
   baseRef,
+  className,
   defaultValue,
   extendedWidth,
   hasVesselIdInResults,
@@ -43,7 +46,8 @@ export function VesselSearch({
   onClickOutsideOrEscape,
   onInputClick,
   onSelectVessel,
-  onUnselectVessel
+  onUnselectVessel,
+  style
 }: VesselSearchProps) {
   const dispatch = useMainAppDispatch()
   const baseUrl = useMemo(() => window.location.origin, [])
@@ -131,7 +135,7 @@ export function VesselSearch({
   }, [dispatch, searchQuery, hasVesselIdInResults, fuse])
 
   return (
-    <Wrapper ref={wrapperRef} extendedWidth={extendedWidth} isExtended={isExtended}>
+    <Wrapper ref={wrapperRef} className={className} extendedWidth={extendedWidth} isExtended={isExtended} style={style}>
       <Input
         ref={input => (selectedVesselIdentity ? input && input.focus() : null)}
         baseUrl={baseUrl}

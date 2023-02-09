@@ -1,9 +1,22 @@
 import ky from 'ky'
 
+import { monitorfishApi } from '.'
 import { ApiError } from '../libs/ApiError'
 import { dayjs } from '../utils/dayjs'
 
 import type { FleetSegment, UpdateFleetSegment } from '../domain/types/fleetSegment'
+
+export const fleetSegmentApi = monitorfishApi.injectEndpoints({
+  endpoints: builder => ({
+    getFleetSegments: builder.query<FleetSegment[], void>({
+      providesTags: () => [{ type: 'FleetSegments' }],
+      // TODO This will bug each 1st january at midnight.
+      query: () => `fleet_segments/${dayjs().year()}`
+    })
+  })
+})
+
+export const { useGetFleetSegmentsQuery } = fleetSegmentApi
 
 export const FLEET_SEGMENT_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les segments de flotte"
 export const UPDATE_FLEET_SEGMENT_ERROR_MESSAGE = "Nous n'avons pas pu modifier le segment de flotte"

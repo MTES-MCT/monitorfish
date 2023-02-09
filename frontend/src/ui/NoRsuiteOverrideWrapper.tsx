@@ -27,6 +27,28 @@ import styled from 'styled-components'
  *   font-size: 0.8125rem;
  * }
  * ```
+ *
+ * - The `form` element being heavily styled in `mini-default.min.css` (`mini.css` dependency):
+ *
+ * ```css
+ * form {
+ *   background: var(--form-back-color);
+ *   color: var(--form-fore-color);
+ *   border: 0.0625rem solid var(--form-border-color);
+ *   border-radius: var(--universal-border-radius);
+ *   margin: var(--universal-margin);
+ *   padding: calc(2 * var(--universal-padding)) var(--universal-padding);
+ * }
+ * ```
+ *
+ * - The `p` margin that doesn't maken sense in `mini-default.min.css` (`mini.css` dependency),
+ *   there is even an horizontal margin...:
+ *
+ * ```css
+ * p {
+ *   margin: var(--universal-margin);
+ * }
+ * ```
  */
 // TODO Fix these CSS issues.
 export const NoRsuiteOverrideWrapper = styled.div`
@@ -40,6 +62,19 @@ export const NoRsuiteOverrideWrapper = styled.div`
   * {
     box-sizing: border-box;
     line-height: 1.3846;
+  }
+
+  form {
+    background-color: transparent;
+    border-radius: 0;
+    border: 0;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+  }
+
+  p {
+    margin: 0;
   }
 
   .rs-checkbox {

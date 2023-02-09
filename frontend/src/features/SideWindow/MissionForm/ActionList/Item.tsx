@@ -1,61 +1,75 @@
-import { Accent, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, getLocalizedDayjs, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { formatDateLabel } from './utils'
-import { Mission } from '../../../../domain/types/mission'
-import { getLocalizedDayjs } from '../../../../utils/getLocalizedDayjs'
+import { MissionAction } from '../../../../domain/types/missionAction'
+import { FrontendError } from '../../../../libs/FrontendError'
 
-import type { Action, PartialAction } from '../types'
+import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
-export type ItemProps = (
-  | {
-      action: PartialAction
-      isNew: true
-    }
-  | {
-      action: Action
-      isNew?: false
-    }
-) & {
+export type ItemProps = {
+  initialValues: MissionActionFormValues
   onDelete: () => Promisable<void>
+  onDuplicate: () => Promisable<void>
 }
-export function Item({ action, isNew = false, onDelete }: ItemProps) {
+export function Item({ initialValues, onDelete, onDuplicate }: ItemProps) {
   const [actionLabel, ActionIcon] = useMemo(() => {
-    switch (isNew) {
+    switch (initialValues.isDraft) {
       case true:
-        switch (action.type) {
-          case Mission.MissionType.AIR:
+        switch (initialValues.actionType) {
+          case MissionAction.MissionActionType.AIR_CONTROL:
             return ['Contrôle aérien à renseigner', Icon.Plane]
 
-          case Mission.MissionType.LAND:
-            return ['Contrôle à la débarque à renseigner', Icon.Plane]
+          case MissionAction.MissionActionType.AIR_SURVEILLANCE:
+            return ['Surveillance aériennne à renseigner', Icon.Observation]
 
-          case Mission.MissionType.SEA:
+          case MissionAction.MissionActionType.LAND_CONTROL:
+            return ['Contrôle à la débarque à renseigner', Icon.Anchor]
+
+          case MissionAction.MissionActionType.OBSERVATION:
+            return [initialValues.otherComments || 'Note libre à renseigner', Icon.Note]
+
+          case MissionAction.MissionActionType.SEA_CONTROL:
             return ['Contrôle en mer à renseigner', Icon.FleetSegment]
 
           default:
-            return [action.note || 'Note libre à renseigner', Icon.Note]
+            throw new FrontendError(
+              'This should never happen.',
+              'features/SideWindow/MissionForm/ActionList/Item.tsx > <Item />'
+            )
         }
 
+      case false:
       default:
-        switch (action.type) {
-          case Mission.MissionType.AIR:
-            return ['', Icon.Plane]
+        switch (initialValues.actionType) {
+          case MissionAction.MissionActionType.AIR_CONTROL:
+            return [`Contrôle aérien - ${'TODO Vessel Name?'}`, Icon.Plane]
 
-          case Mission.MissionType.LAND:
-            return ['', Icon.Plane]
+          case MissionAction.MissionActionType.AIR_SURVEILLANCE:
+            return [`Surveillance aérienne - ${'TODO Vessel Name?'}`, Icon.Observation]
 
-          case Mission.MissionType.SEA:
-            return ['', Icon.Plane]
+          case MissionAction.MissionActionType.LAND_CONTROL:
+            return [`Contrôle à la débarque - ${'TODO Vessel Name?'}`, Icon.Anchor]
+
+          case MissionAction.MissionActionType.OBSERVATION:
+            // TODO Check this prop
+            return [initialValues.otherComments, Icon.Note]
+
+          case MissionAction.MissionActionType.SEA_CONTROL:
+            return [`Contrôle en mer - ${'TODO Vessel Name?'}`, Icon.FleetSegment]
 
           default:
-            return [action.note, Icon.Note]
+            throw new FrontendError(
+              'This should never happen.',
+              'features/SideWindow/MissionForm/ActionList/Item.tsx > <Item />'
+            )
         }
     }
-  }, [action, isNew])
-  const startDateAsDayjs = useMemo(() => getLocalizedDayjs(action.startDate), [action])
+  }, [initialValues])
+
+  const startDateAsDayjs = useMemo(() => getLocalizedDayjs(initialValues.actionDatetimeUtc), [initialValues])
 
   return (
     <Wrapper>
@@ -65,9 +79,15 @@ export function Item({ action, isNew = false, onDelete }: ItemProps) {
       <InnerWrapper>
         <ActionLabel>
           <ActionIcon color={THEME.color.charcoal} size={20} />
-          {actionLabel}
+          <p>{actionLabel}</p>
         </ActionLabel>
-        <IconButton accent={Accent.TERTIARY} color={THEME.color.slateGray} Icon={Icon.Duplicate} size={Size.NORMAL} />
+        <IconButton
+          accent={Accent.TERTIARY}
+          color={THEME.color.slateGray}
+          Icon={Icon.Duplicate}
+          onClick={onDuplicate}
+          size={Size.NORMAL}
+        />
         <IconButton
           accent={Accent.TERTIARY}
           color={THEME.color.maximumRed}
@@ -90,11 +110,13 @@ const Wrapper = styled.div`
 const DateLabel = styled.div`
   display: flex;
   flex-direction: column;
+  min-width: 80px;
   padding: 0.25rem 1.5rem 0.25rem 0;
   text-align: center;
 `
 
 const InnerWrapper = styled.div`
+  align-items: flex-start;
   border: solid 3px ${p => p.theme.color.blueGray['100']};
   display: flex;
   flex-grow: 1;
@@ -102,7 +124,6 @@ const InnerWrapper = styled.div`
 `
 
 const ActionLabel = styled.div`
-  align-items: center;
   display: flex;
   flex-grow: 1;
   padding: 0.25rem;
@@ -110,5 +131,9 @@ const ActionLabel = styled.div`
   /* The SVG icon is wrapper in a div */
   > div {
     margin-right: 8px;
+  }
+
+  > p {
+    padding-top: 1px;
   }
 `

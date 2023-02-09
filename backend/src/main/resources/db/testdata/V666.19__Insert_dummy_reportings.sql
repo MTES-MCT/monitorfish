@@ -1,4 +1,4 @@
-TRUNCATE TABLE reportings;
+TRUNCATE TABLE reportings RESTART IDENTITY CASCADE;
 INSERT INTO reportings (type, vessel_name, internal_reference_number, external_reference_number, ircs,
                         vessel_identifier, creation_date, validation_date, archived, deleted, value, latitude, longitude, vessel_id)
 VALUES ('ALERT', 'MARIAGE ÎLE HASARD', 'ABC000180832', 'VP374069', 'CG1312', 'INTERNAL_REFERENCE_NUMBER',

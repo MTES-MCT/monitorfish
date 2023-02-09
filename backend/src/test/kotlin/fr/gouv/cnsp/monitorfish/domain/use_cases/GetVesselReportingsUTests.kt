@@ -11,6 +11,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValue
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllControlUnits
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselReportings
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -28,6 +29,9 @@ class GetVesselReportingsUTests {
 
     @MockBean
     private lateinit var infractionRepository: InfractionRepository
+
+    @MockBean
+    private lateinit var getAllControlUnits: GetAllControlUnits
 
     @Test
     fun `execute Should return the reporting of a specified vessel`() {
@@ -83,7 +87,11 @@ class GetVesselReportingsUTests {
         )
 
         // When
-        val currentAndArchivedReportings = GetVesselReportings(reportingRepository, infractionRepository).execute(
+        val currentAndArchivedReportings = GetVesselReportings(
+            reportingRepository,
+            infractionRepository,
+            getAllControlUnits
+        ).execute(
             "FR224226850",
             "1236514",
             "IRCS",
@@ -93,9 +101,11 @@ class GetVesselReportingsUTests {
 
         // Then
         assertThat(currentAndArchivedReportings.current).hasSize(2)
-        assertThat(currentAndArchivedReportings.current.first().isArchived).isFalse
-        assertThat(currentAndArchivedReportings.current.first().infraction?.natinfCode).isEqualTo("7059")
+        val (currentReporting, _) = currentAndArchivedReportings.current.first()
+        assertThat(currentReporting.isArchived).isFalse
+        assertThat(currentReporting.infraction?.natinfCode).isEqualTo("7059")
         assertThat(currentAndArchivedReportings.archived).hasSize(1)
-        assertThat(currentAndArchivedReportings.archived.first().isArchived).isTrue
+        val (archivedReporting, _) = currentAndArchivedReportings.archived.first()
+        assertThat(archivedReporting.isArchived).isTrue
     }
 }

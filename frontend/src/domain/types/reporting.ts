@@ -1,3 +1,4 @@
+import type { ControlUnit } from './controlUnit'
 import type { Infraction } from './missionAction'
 import type { SeaFront } from '../entities/alerts/constants'
 import type { PendingAlertValue } from '../entities/alerts/types'
@@ -62,6 +63,8 @@ export type CurrentAndArchivedReportingsOfSelectedVessel = {
 export type InfractionSuspicion = {
   authorContact: string | null
   authorTrigram: string | null
+  controlUnit: ControlUnit | null
+  controlUnitId: number | null
   description: string
   dml: string
   flagState: string
@@ -70,27 +73,27 @@ export type InfractionSuspicion = {
   seaFront: SeaFront
   title: string
   type: string
-  unit: string | null
 }
 
 export type Observation = {
   authorContact: string | null
   authorTrigram: string | null
+  controlUnit: ControlUnit | null
+  controlUnitId: number | null
   description: string
   flagState: string
   reportingActor: string
   title: string
   type: string
-  unit: string | null
 }
 
 export type ReportingUpdate = {
   authorContact: string | undefined
   authorTrigram: string | undefined
+  controlUnitId: number | null
   description: string | undefined
   natinfCode: string | null
   reportingActor: string
   title: string
   type: ReportingType
-  unit: string | null
 }

@@ -3,8 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.monitorenv
 import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.MonitorenvProperties
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.Mission
-import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.ControlUnitRepository
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.CoroutineScope
@@ -16,21 +15,21 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 
 @Repository
-class APIMissionRepository(
+class APIControlUnitRepository(
     val monitorenvProperties: MonitorenvProperties,
     val apiClient: ApiClient,
-) : MissionRepository {
-    private val logger: Logger = LoggerFactory.getLogger(APIMissionRepository::class.java)
+) : ControlUnitRepository {
+    private val logger: Logger = LoggerFactory.getLogger(APIControlUnitRepository::class.java)
 
-    @Cacheable(value = ["missions"])
-    override fun findControlUnitsOfMission(scope: CoroutineScope, missionId: Int): Deferred<List<ControlUnit>> {
+    @Cacheable(value = ["control_units"])
+    override fun findAll(scope: CoroutineScope): Deferred<List<ControlUnit>> {
         return scope.async {
-            val missionsUrl = "${monitorenvProperties.url}/api/v1/missions/$missionId"
+            val missionsUrl = "${monitorenvProperties.url}/api/v1/control_units"
 
             try {
-                apiClient.httpClient.get(missionsUrl).body<Mission>().controlUnits
+                apiClient.httpClient.get(missionsUrl).body()
             } catch (e: Exception) {
-                logger.error("Could not fetch control units for mission $missionId at $missionsUrl", e)
+                logger.error("Could not fetch control units at $missionsUrl", e)
 
                 listOf()
             }

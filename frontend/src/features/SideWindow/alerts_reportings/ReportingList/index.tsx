@@ -36,8 +36,8 @@ type ReportingListProps = {
   selectedSeaFront: MenuItem<SeaFront>
 }
 export function ReportingList({ selectedSeaFront }: ReportingListProps) {
-  const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
   const dispatch = useMainAppDispatch()
+  const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
   const { currentReportings } = useMainAppSelector(state => state.reporting)
   const { forceDebouncedUpdate } = useForceUpdate()
 

@@ -8,7 +8,8 @@ CREATE TABLE public.analytics_missions (
     mission_nature text[],
     deleted boolean NOT NULL,
     mission_source text NOT NULL,
-    closed boolean NOT NULL
+    closed boolean NOT NULL,
+    mission_order boolean
 );
 
 CREATE INDEX analytics_missions_deleted_idx ON public.analytics_missions USING btree (deleted);

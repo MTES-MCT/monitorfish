@@ -58,6 +58,7 @@ missions_df = pd.DataFrame(
             "MONITORFISH",
         ],
         "closed": [True, True, True, False],
+        "mission_order": [True, True, None, False],
     }
 )
 
@@ -123,8 +124,8 @@ def test_flow(reset_test_data, loading_mode):
         flow.get_tasks("mock_extract_missions_control_units")[0]
     ].result
 
-    final_missions = read_query("monitorfish_remote", missions_query)
-    final_missions_control_units = read_query(
+    loaded_missions = read_query("monitorfish_remote", missions_query)
+    loaded_missions_control_units = read_query(
         "monitorfish_remote", missions_control_units_query
     )
 
@@ -144,9 +145,9 @@ def test_flow(reset_test_data, loading_mode):
     assert set(extracted_missions_control_units.mission_id) == {1, 2, 12}
 
     if loading_mode == "upsert":
-        assert len(final_missions) == 11
-        assert set(final_missions.id) == {1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13}
-        assert set(final_missions_control_units.mission_id) == {
+        assert len(loaded_missions) == 11
+        assert set(loaded_missions.id) == {1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13}
+        assert set(loaded_missions_control_units.mission_id) == {
             1,
             2,
             3,
@@ -167,7 +168,7 @@ def test_flow(reset_test_data, loading_mode):
             extracted_missions.loc[extracted_missions.id == 1, "facade"] == "Facade 1"
         ).all()
         assert (
-            final_missions.loc[final_missions.id == 1, "facade"] == "Facade 1"
+            loaded_missions.loc[loaded_missions.id == 1, "facade"] == "Facade 1"
         ).all()
         assert set(
             initial_missions_control_units.loc[
@@ -175,13 +176,13 @@ def test_flow(reset_test_data, loading_mode):
             ]
         ) == {5}
         assert set(
-            final_missions_control_units.loc[
-                final_missions_control_units.mission_id == 1, "control_unit_id"
+            loaded_missions_control_units.loc[
+                loaded_missions_control_units.mission_id == 1, "control_unit_id"
             ]
         ) == {7, 8}
 
     else:
-        pd.testing.assert_frame_equal(extracted_missions, final_missions)
+        pd.testing.assert_frame_equal(extracted_missions, loaded_missions)
         pd.testing.assert_frame_equal(
-            extracted_missions_control_units, final_missions_control_units
+            extracted_missions_control_units, loaded_missions_control_units
         )

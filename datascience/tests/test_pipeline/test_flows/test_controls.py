@@ -1065,7 +1065,7 @@ def test_flow(
             initial_mission_actions.loc[~initial_mission_actions.is_from_poseidon, "id"]
         )
         == len(final_mission_actions.loc[~final_mission_actions.is_from_poseidon, "id"])
-        == 22
+        == 23
     )
     pd.testing.assert_frame_equal(
         (

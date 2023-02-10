@@ -53,6 +53,7 @@ def last_years_controls():
                 20,
                 21,
                 22,
+                23,
             ],
             "vessel_id": [
                 483,
@@ -76,6 +77,7 @@ def last_years_controls():
                 2,
                 2,
                 3,
+                4,
                 4,
             ],
             "control_datetime_utc": [
@@ -101,6 +103,7 @@ def last_years_controls():
                 datetime(2023, 11, 1),
                 datetime(2023, 1, 1),
                 datetime(2025, 1, 1),
+                datetime(2025, 1, 2),
             ],
             "infractions_natinf_codes": [
                 [],
@@ -124,6 +127,7 @@ def last_years_controls():
                 [],
                 [],
                 [],
+                ["7061"],
                 [],
             ],
             "seizure_and_diversion": [
@@ -137,6 +141,7 @@ def last_years_controls():
                 False,
                 False,
                 True,
+                None,
                 None,
                 None,
                 None,
@@ -173,6 +178,7 @@ def last_years_controls():
                 0,
                 0,
                 0,
+                0,
             ],
             "number_infractions_gear_seized": [
                 0,
@@ -182,6 +188,7 @@ def last_years_controls():
                 0,
                 0,
                 1,
+                0,
                 0,
                 0,
                 0,
@@ -306,7 +313,7 @@ def infraction_rate_risk_factors() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "vessel_id": [1, 2, 3, 4, 483],
-            "infraction_score": [45.2, -5.5, -1.0, -1.0, -1.9],
+            "infraction_score": [45.2, -5.5, -1.0, -1.9, -1.9],
             "infraction_rate_risk_factor": [4, 1, 1, 1, 1],
         }
     )
@@ -317,12 +324,12 @@ def control_statistics() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "vessel_id": [1, 2, 3, 4, 483],
-            "number_controls_last_5_years": [7, 11, 1, 1, 2],
-            "number_infractions_last_5_years": [12, 1, 0, 0, 0],
+            "number_controls_last_5_years": [7, 11, 1, 2, 2],
+            "number_infractions_last_5_years": [12, 1, 0, 1, 0],
             "number_vessel_seizures_last_5_years": [2, 1, 0, 0, 2],
             "number_gear_seizures_last_5_years": [1, 0, 0, 0, 0],
             "number_species_seizures_last_5_years": [1, 0, 0, 0, 0],
-            "number_controls_last_3_years": [4, 11, 1, 1, 1],
+            "number_controls_last_3_years": [4, 11, 1, 2, 1],
         }
     )
 
@@ -344,10 +351,10 @@ def loaded_control_anteriority() -> pd.DataFrame:
                 None,
             ],
             "last_control_datetime_utc": [
-                now - relativedelta(months=3),
-                now - relativedelta(months=3),
+                now - relativedelta(weeks=3),
+                now - relativedelta(weeks=2),
                 now - relativedelta(weeks=1),
-                now - relativedelta(weeks=1, days=3),
+                now - relativedelta(weeks=1, days=2),
                 now - relativedelta(months=3),
             ],
             "last_control_infraction": [True, True, False, False, False],
@@ -366,11 +373,11 @@ def loaded_control_anteriority() -> pd.DataFrame:
                 "Contrôle Poséidon à mettre à jour",
             ],
             "number_recent_controls": [
-                2.38594889507262,
-                6.522810196897,
-                0.993613136678758,
-                0.990875910401386,
-                1.83211678430642,
+                2.45072991,
+                5.50638683,
+                0.99361314,
+                1.98266423,
+                1.83120437,
             ],
             "control_rate_risk_factor": [1.75, 1.75, 2.5, 2.5, 1.75],
             "infraction_score": [54.9, -5.5, -1.0, -1.0, -1.9],
@@ -492,6 +499,6 @@ def test_control_anteriority_flow(reset_test_data, loaded_control_anteriority):
         (
             control_anteriority.number_recent_controls
             - loaded_control_anteriority.number_recent_controls
-        )
+        ).abs()
         < 0.1
     ).all()

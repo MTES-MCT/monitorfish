@@ -281,7 +281,6 @@ def compute_control_rate_risk_factors(controls: pd.DataFrame) -> pd.DataFrame:
         )
         .reset_index()
     )
-
     # Put vessels into bins according their number of recent controls and time since
     # the last control
     control_rate_risk_factors["time_since_last_control"] = (

@@ -11,10 +11,12 @@ import type { Promisable } from 'type-fest'
 
 export type ItemProps = {
   initialValues: MissionActionFormValues
+  isSelected: boolean
   onDelete: () => Promisable<void>
   onDuplicate: () => Promisable<void>
+  onEdit: () => Promisable<void>
 }
-export function Item({ initialValues, onDelete, onDuplicate }: ItemProps) {
+export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit }: ItemProps) {
   const [actionLabel, ActionIcon] = useMemo(() => {
     switch (initialValues.isDraft) {
       case true:
@@ -76,7 +78,8 @@ export function Item({ initialValues, onDelete, onDuplicate }: ItemProps) {
       <DateLabel>
         <b>{formatDateLabel(startDateAsDayjs.format('DD MMM'))}</b> à {startDateAsDayjs.format('HH:mm')}
       </DateLabel>
-      <InnerWrapper>
+      {/* TODO How do we edit an action in terms of UX? */}
+      <InnerWrapper isSelected={isSelected} onClick={onEdit}>
         <ActionLabel>
           <ActionIcon color={THEME.color.charcoal} size={20} />
           <p>{actionLabel}</p>
@@ -105,6 +108,8 @@ const Wrapper = styled.div`
   color: ${p => p.theme.color.slateGray};
   display: flex;
   font-size: 13px;
+  /* This padding allows the top 2px outline to be visible in InnerWrapper */
+  padding-top: 2px;
 `
 
 const DateLabel = styled.div`
@@ -115,9 +120,13 @@ const DateLabel = styled.div`
   text-align: center;
 `
 
-const InnerWrapper = styled.div`
+const InnerWrapper = styled.div<{
+  isSelected: boolean
+}>`
   align-items: flex-start;
-  border: solid 3px ${p => p.theme.color.blueGray['100']};
+  border: solid 1px ${p => (p.isSelected ? p.theme.color.blueGray['100'] : p.theme.color.lightGray)};
+  outline: ${p => (p.isSelected ? `${p.theme.color.blueGray['100']} solid 2px` : 'none')};
+  cursor: pointer;
   display: flex;
   flex-grow: 1;
   padding: 1rem;

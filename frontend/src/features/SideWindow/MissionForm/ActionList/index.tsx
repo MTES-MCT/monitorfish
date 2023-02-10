@@ -8,6 +8,7 @@ import { missionActions } from '../../../../domain/actions'
 import { Mission } from '../../../../domain/types/mission'
 import { MissionAction } from '../../../../domain/types/missionAction'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FormBody } from '../FormBody'
 import { FormHead } from '../FormHead'
 
@@ -19,6 +20,8 @@ export type ActionListProps = {
 export function ActionList({ initialValues }: ActionListProps) {
   const dispatch = useMainAppDispatch()
 
+  const { mission } = useMainAppSelector(store => store)
+
   const currentMissionType = useMemo(() => initialValues.missionType, [initialValues.missionType])
 
   const add = useCallback(
@@ -26,6 +29,13 @@ export function ActionList({ initialValues }: ActionListProps) {
       const newMissionActionFormValues = getMissionActionFormInitialValues(type)
 
       dispatch(missionActions.addDraftAction(newMissionActionFormValues))
+    },
+    [dispatch]
+  )
+
+  const edit = useCallback(
+    (index: number) => {
+      dispatch(missionActions.setEditedDraftActionIndex(index))
     },
     [dispatch]
   )
@@ -87,8 +97,10 @@ export function ActionList({ initialValues }: ActionListProps) {
               // eslint-disable-next-line react/no-array-index-key
               key={index}
               initialValues={actionInitialValues}
+              isSelected={index === mission.editedDraftActionIndex}
               onDelete={() => remove(index)}
               onDuplicate={() => duplicate(index)}
+              onEdit={() => edit(index)}
             />
           ))}
       </FormBody>

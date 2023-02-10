@@ -153,6 +153,25 @@ const missionSlice = createSlice({
         actions: update(state.editedDraftActionIndex, action.payload, state.draft.actions)
       }
     },
+    /**
+     * Add a new action in mission draft and make it the currently edited
+     */
+    setEditedDraftActionIndex(state, action: PayloadAction<number>) {
+      if (!state.draft) {
+        throw new FrontendError(
+          '`state.draft` is undefined. This should never happen.',
+          'domain/shared_slices/Mission.ts > setEditedDraftActionIndex()'
+        )
+      }
+      if (!state.draft.actions[action.payload]) {
+        throw new FrontendError(
+          `\`state.draft.actions[${action.payload}]\` is undefined. This should never happen.`,
+          'domain/shared_slices/Mission.ts > setEditedDraftActionIndex()'
+        )
+      }
+
+      state.editedDraftActionIndex = action.payload
+    },
 
     /**
      * Unset mission draft

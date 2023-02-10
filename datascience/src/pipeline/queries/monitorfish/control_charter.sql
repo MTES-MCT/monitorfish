@@ -5,7 +5,7 @@ SELECT DISTINCT ON (vessel_id)
         CASE WHEN jsonb_typeof(gear_infractions) = 'array' THEN gear_infractions ELSE '[]' END ||
         CASE WHEN jsonb_typeof(species_infractions) = 'array' THEN species_infractions ELSE '[]' END ||
         CASE WHEN jsonb_typeof(other_infractions) = 'array' THEN other_infractions ELSE '[]' END
-    ) > 0 AS under_charter
+    ) = 0 AS under_charter
 FROM mission_actions a
 LEFT JOIN vessels v
 ON a.vessel_id = v.id

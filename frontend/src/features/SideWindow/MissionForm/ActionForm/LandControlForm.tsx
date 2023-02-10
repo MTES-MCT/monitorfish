@@ -41,7 +41,7 @@ export function LandControlForm({ initialValues, onChange }: LandControlFormProp
   )
 
   return (
-    <Formik initialValues={{}} onSubmit={noop}>
+    <Formik initialValues={initialValues} onSubmit={noop}>
       <>
         <FormikEffect onChange={onChange as any} />
 

@@ -9,6 +9,8 @@ import { FrontendError } from '../../../../libs/FrontendError'
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
+const ERROR_PATH = 'features/SideWindow/MissionForm/ActionList/Item.tsx'
+
 export type ItemProps = {
   initialValues: MissionActionFormValues
   isSelected: boolean
@@ -44,7 +46,6 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
         }
 
       case false:
-      default:
         switch (initialValues.actionType) {
           case MissionAction.MissionActionType.AIR_CONTROL:
             return [`Contrôle aérien - ${'TODO Vessel Name?'}`, Icon.Plane]
@@ -64,10 +65,16 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
 
           default:
             throw new FrontendError(
-              'This should never happen.',
-              'features/SideWindow/MissionForm/ActionList/Item.tsx > <Item />'
+              '`initialValues.actionType` does not match the enum. This should never happen.',
+              `${ERROR_PATH} > Item()`
             )
         }
+
+      default:
+        throw new FrontendError(
+          '`initialValues.isDraft` is not a boolean. This should never happen.',
+          `${ERROR_PATH} > Item()`
+        )
     }
   }, [initialValues])
 

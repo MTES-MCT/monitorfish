@@ -203,6 +203,7 @@ export function FormikMultiInfractionPicker({
                         name="infractionType"
                         options={INFRACTION_TYPES_AS_OPTIONS}
                       />
+                      {/* TODO I don't understand if it's a multiselect or a select here (XD vs types). */}
                       <FormikSelect
                         baseContainer={newWindowContainerRef.current}
                         label="NATINF"

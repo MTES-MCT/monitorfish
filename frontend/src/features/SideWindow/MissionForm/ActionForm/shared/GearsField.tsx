@@ -1,23 +1,23 @@
 import { Checkbox, FormikNumberInput, FormikTextarea, Select, SingleTag } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
-import { remove, update } from 'ramda'
-import { Fragment, useCallback, useMemo } from 'react'
+import { remove as ramdaRemove, update } from 'ramda'
+import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { useGetGearsQuery } from '../../../../../../api/gear'
-import { FrontendError } from '../../../../../../libs/FrontendError'
-import { useNewWindow } from '../../../../../../ui/NewWindow'
-import { FieldGroup } from '../../../FieldGroup'
-import { FieldsetGroupSeparator } from '../../../FieldsetGroupSeparator'
+import { FormikMultiInfractionPicker } from './FormikMultiInfractionPicker'
+import { useGetGearsQuery } from '../../../../../api/gear'
+import { FrontendError } from '../../../../../libs/FrontendError'
+import { useNewWindow } from '../../../../../ui/NewWindow'
+import { FieldGroup } from '../../FieldGroup'
 
-import type { Gear } from '../../../../../../domain/types/Gear'
-import type { MissionAction } from '../../../../../../domain/types/missionAction'
-import type { MissionActionFormValues } from '../../../types'
+import type { Gear } from '../../../../../domain/types/Gear'
+import type { MissionAction } from '../../../../../domain/types/missionAction'
+import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 const ERROR_PATH = 'features/SideWindow/MissionForm/ActionForm/SeaControlForm/GearsField/GearOnboardPicker.tsx'
 
-export function GearsPicker() {
+export function GearsField() {
   const [input, , helper] = useField<MissionActionFormValues['gearOnboard']>('gearOnboard')
 
   const { newWindowContainerRef } = useNewWindow()
@@ -91,16 +91,16 @@ export function GearsPicker() {
     [input.value]
   )
 
-  const removeDeviceInfraction = useCallback(
+  const remove = useCallback(
     (index: number) => {
       if (!input.value) {
         return
       }
 
-      const nextGearInfractions = remove(index, 1, input.value)
-      const normalizedNextGearInfractions = nextGearInfractions.length > 0 ? nextGearInfractions : undefined
+      const nextGearOnboard = ramdaRemove(index, 1, input.value)
+      const normalizedNextGearOnboard = nextGearOnboard.length > 0 ? nextGearOnboard : undefined
 
-      helper.setValue(normalizedNextGearInfractions)
+      helper.setValue(normalizedNextGearOnboard)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -112,54 +112,40 @@ export function GearsPicker() {
   }
 
   return (
-    <>
-      {input.value && input.value.length > 0 && (
-        <>
-          <Row>
-            {input.value &&
-              input.value.map((onboardGear, index) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <Fragment key={`deviceInfraction-${index}`}>
-                  {index > 0 && <FieldsetGroupSeparator />}
+    <FormikMultiInfractionPicker
+      addButtonLabel="Ajouter une infraction engins"
+      // TODO Check that prop (not in XD).
+      infractionCheckboxProps={{
+        label: 'Engin saisi',
+        name: 'gearSeized'
+      }}
+      label="Engins à bord"
+      name="speciesInfractions"
+    >
+      {input.value &&
+        input.value.length > 0 &&
+        input.value.map((onboardGear, index) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <Row key={`gearOnboard-${index}`}>
+            <RowInnerWrapper>
+              <SingleTag
+                onDelete={() => remove(index)}
+              >{`${onboardGear.gearCode} - ${onboardGear.gearName}`}</SingleTag>
 
-                  <RowInnerWrapper>
-                    <SingleTag
-                      onDelete={() => removeDeviceInfraction(index)}
-                    >{`${onboardGear.gearCode} - ${onboardGear.gearName}`}</SingleTag>
+              <FieldGroup isInline>
+                <FormikNumberInput label="Maillage déclaré" name={`gearOnboard[${index}].declaredMesh`} />
+                <FormikNumberInput label="Maillage mesuré" name={`gearOnboard[${index}].controlledMesh`} />
+                <Checkbox
+                  label="Maillage non mesuré"
+                  name="gearWasNotControlled"
+                  onChange={isChecked => handleGearWasNotControlledChange(index, isChecked)}
+                />
+              </FieldGroup>
 
-                    <FieldGroup isInline>
-                      <FormikNumberInput label="Maillage déclaré" name={`gearOnboard[${index}].declaredMesh`} />
-                      <FormikNumberInput label="Maillage mesuré" name={`gearOnboard[${index}].controlledMesh`} />
-                      <Checkbox
-                        label="Maillage non mesuré"
-                        name="gearWasNotControlled"
-                        onChange={isChecked => handleGearWasNotControlledChange(index, isChecked)}
-                      />
-                    </FieldGroup>
-
-                    {/* TODO V2. */}
-                    {/* <FormikMultiRadio
-                      isInline
-                      label="Pingers : dispositif conforme (présence, nombre, espacement…)"
-                      name={`gearOnboard[${index}].pingersState`}
-                      options={[
-                        { label: 'Oui', value: 'Oui' },
-                        { label: 'Non', value: 'Non' },
-                        { label: 'Non contrôlé', value: 'Non contrôlé' }
-                      ]}
-                    /> */}
-                    <FormikTextarea
-                      label="OTM : autres mesures et dispositifs"
-                      name={`gearOnboard[${index}].comments`}
-                    />
-                  </RowInnerWrapper>
-                </Fragment>
-              ))}
-
-            <FieldsetGroupSeparator />
+              <FormikTextarea label="OTM : autres mesures et dispositifs" name={`gearOnboard[${index}].comments`} />
+            </RowInnerWrapper>
           </Row>
-        </>
-      )}
+        ))}
 
       <FieldGroup>
         <Select
@@ -173,7 +159,7 @@ export function GearsPicker() {
           virtualized
         />
       </FieldGroup>
-    </>
+    </FormikMultiInfractionPicker>
   )
 }
 

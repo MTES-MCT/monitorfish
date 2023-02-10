@@ -154,11 +154,11 @@ export namespace MissionAction {
   }
 
   export type SpeciesControl = {
-    controlledWeight: number | null
-    declaredWeight: number | null
-    nbFish: number | null
+    controlledWeight: number | undefined
+    declaredWeight: number | undefined
+    nbFish: number | undefined
     speciesCode: string
-    underSized: boolean | null
+    underSized: boolean | undefined
   }
 
   export type SpeciesInfraction = {

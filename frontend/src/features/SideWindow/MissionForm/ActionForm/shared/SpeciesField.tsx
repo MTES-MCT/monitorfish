@@ -1,97 +1,78 @@
-import {
-  FormikCheckbox,
-  FormikMultiRadio,
-  FormikNumberInput,
-  FormikTextarea,
-  Select,
-  SingleTag
-} from '@mtes-mct/monitor-ui'
-import { useFormikContext } from 'formik'
-import { append, remove } from 'ramda'
-import { Fragment, useCallback, useMemo } from 'react'
+import { FormikCheckbox, FormikMultiRadio, FormikNumberInput, Select, SingleTag } from '@mtes-mct/monitor-ui'
+import { useField } from 'formik'
+import { append, remove as ramdaRemove } from 'ramda'
+import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
+import { FormikMultiInfractionPicker } from './FormikMultiInfractionPicker'
 import { useGetSpeciesQuery } from '../../../../../api/specy'
 import { BOOLEAN_AS_OPTIONS } from '../../../../../constants'
-import { MissionAction } from '../../../../../domain/types/missionAction'
+import { FrontendError } from '../../../../../libs/FrontendError'
 import { useNewWindow } from '../../../../../ui/NewWindow'
 import { FieldGroup } from '../../FieldGroup'
-import { FieldsetGroup } from '../../FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../FieldsetGroupSeparator'
 
+import type { Specy } from '../../../../../domain/types/specy'
 import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
+const ERROR_PATH = 'features/SideWindow/MissionForm/ActionForm/shared/SpeciesField.tsx'
+
 export function SpeciesField() {
-  const {
-    setFieldValue,
-    values: { speciesInfractions, speciesOnboard }
-  } = useFormikContext<MissionActionFormValues>()
+  const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
 
   const { newWindowContainerRef } = useNewWindow()
 
   const getSpeciesApiQuery = useGetSpeciesQuery()
 
-  const speciesAsOptions: Option[] = useMemo(() => {
+  const speciesAsOptions: Array<Option<Specy>> = useMemo(() => {
     if (!getSpeciesApiQuery.data) {
       return []
     }
 
-    return getSpeciesApiQuery.data.species.map(({ code, name }) => ({
-      label: `${code} - ${name}`,
-      value: code
+    return getSpeciesApiQuery.data.species.map(specy => ({
+      label: `${specy.code} - ${specy.name}`,
+      value: specy
     }))
   }, [getSpeciesApiQuery.data])
 
-  const addSpecyInfraction = useCallback(
-    (nextValue: string | undefined) => {
-      if (!nextValue) {
+  const add = useCallback(
+    (newSpecy: Specy | undefined) => {
+      if (!newSpecy) {
         return
       }
 
-      const nextSpeciesInfractions = append(
-        {
-          comments: '',
-          infractionType: MissionAction.InfractionType.PENDING,
-          natinf: 0,
-          speciesSeized: false
-        },
-        speciesInfractions || []
-      )
       const nextSpeciesOnboard = append(
         {
-          controlledWeight: 0,
-          declaredWeight: 0,
-          nbFish: 0,
-          speciesCode: '',
+          controlledWeight: undefined,
+          declaredWeight: undefined,
+          nbFish: undefined,
+          speciesCode: newSpecy.code,
           underSized: false
         },
-        speciesOnboard || []
+        input.value || []
       )
 
-      setFieldValue('speciesInfractions', nextSpeciesInfractions)
-      setFieldValue('speciesOnboard', nextSpeciesOnboard)
+      helper.setValue(nextSpeciesOnboard)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [speciesInfractions, speciesOnboard]
+    [input.value]
   )
 
-  const removeSpecyInfraction = useCallback(
+  const remove = useCallback(
     (index: number) => {
-      if (!speciesInfractions || !speciesOnboard) {
-        return
+      if (!input.value) {
+        throw new FrontendError('`input.value` is undefined. This should never happen.', `${ERROR_PATH} > remove()`)
       }
 
-      const nextSpeciesInfractions = remove(index, 1, speciesInfractions)
-      const nextSpeciesOnboard = remove(index, 1, speciesOnboard)
+      const nextSpeciesOnboard = ramdaRemove(index, 1, input.value)
 
-      setFieldValue('speciesInfractions', nextSpeciesInfractions)
-      setFieldValue('speciesOnboard', nextSpeciesOnboard)
+      helper.setValue(nextSpeciesOnboard)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [speciesInfractions, speciesOnboard]
+    [input.value]
   )
 
   if (!speciesAsOptions.length) {
@@ -99,8 +80,21 @@ export function SpeciesField() {
   }
 
   return (
-    <FieldsetGroup isLight legend="Espèces à bord">
-      {speciesInfractions && speciesInfractions.length > 0 && (
+    <FormikMultiInfractionPicker
+      addButtonLabel="Ajouter une infraction espèces"
+      generalObservationTextareaProps={{
+        label: 'Observations (hors infraction) sur les espèces',
+        name: 'speciesObservations'
+      }}
+      // TODO Check that prop (not in XD).
+      infractionCheckboxProps={{
+        label: 'Espèce saisie',
+        name: 'speciesSeized'
+      }}
+      label="Espèces à bord"
+      name="speciesInfractions"
+    >
+      {input.value && input.value.length > 0 && (
         <>
           {/* TODO Add a BooleanRadio field in monitor-ui. */}
           <FormikMultiRadio
@@ -122,53 +116,44 @@ export function SpeciesField() {
             options={BOOLEAN_AS_OPTIONS}
           />
 
-          <SpecyInfractionWrapper>
-            {speciesOnboard &&
-              speciesOnboard.map((specyOnboard, index) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <Fragment key={`speciesInfraction-${index}`}>
-                  <FieldsetGroupSeparator />
+          {input.value.map((specyOnboard, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Row key={`speciesOnboard-${index}`}>
+              <FieldsetGroupSeparator />
 
-                  <SpecyInfractionFormWrapper>
-                    <SingleTag
-                      onDelete={() => removeSpecyInfraction(index)}
-                    >{`${specyOnboard.speciesCode} - ${specyOnboard.speciesCode}`}</SingleTag>
+              <RowInnerWrapper>
+                <SingleTag
+                  onDelete={() => remove(index)}
+                >{`${specyOnboard.speciesCode} - ${specyOnboard.speciesCode}`}</SingleTag>
 
-                    <FieldGroup isInline>
-                      <FormikNumberInput label="Qté déclarée" name={`speciesInfractions[${index}].declaredWight`} />
-                      <FormikNumberInput label="Qté estimée" name={`speciesInfractions[${index}].estinatedWeight`} />
-                      <FormikCheckbox label="Sous-taille" name={`speciesInfractions[${index}].isUndersized`} />
-                    </FieldGroup>
-                  </SpecyInfractionFormWrapper>
-                </Fragment>
-              ))}
-          </SpecyInfractionWrapper>
-
-          <FieldsetGroupSeparator />
+                <FieldGroup isInline>
+                  <FormikNumberInput label="Qté déclarée" name={`speciesOnboard[${index}].declaredWeight`} />
+                  <FormikNumberInput label="Qté estimée" name={`speciesOnboard[${index}].controlledWeight`} />
+                  <FormikCheckbox label="Sous-taille" name={`speciesOnboard[${index}].underSized`} />
+                </FieldGroup>
+              </RowInnerWrapper>
+            </Row>
+          ))}
         </>
       )}
 
       <FieldGroup>
         <Select
-          key={`newSpecy.specyName-${speciesInfractions ? speciesInfractions.length : 0}`}
+          key={String(input.value?.length)}
           baseContainer={newWindowContainerRef.current}
           label="Ajouter une espèce"
           name="newSpecy.specyName"
-          onChange={addSpecyInfraction}
+          onChange={add}
           options={speciesAsOptions}
           searchable
           virtualized
         />
       </FieldGroup>
-
-      <FieldsetGroupSeparator />
-
-      <FormikTextarea label="Observations (hors infraction) sur les espèces" name="speciesObservations" />
-    </FieldsetGroup>
+    </FormikMultiInfractionPicker>
   )
 }
 
-const SpecyInfractionWrapper = styled.div`
+const Row = styled.div`
   > legend {
     margin: 24px 0 8px;
   }
@@ -178,7 +163,7 @@ const SpecyInfractionWrapper = styled.div`
   }
 `
 
-const SpecyInfractionFormWrapper = styled.div`
+const RowInnerWrapper = styled.div`
   > div {
     margin-top: 12px;
   }

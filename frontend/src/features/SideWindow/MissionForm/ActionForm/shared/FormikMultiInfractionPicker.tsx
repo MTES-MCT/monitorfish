@@ -1,6 +1,7 @@
 import {
   Accent,
   Button,
+  FormikCheckbox,
   FormikMultiRadio,
   FormikSelect,
   FormikTextarea,
@@ -27,7 +28,7 @@ import { FieldsetGroup } from '../../FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../FieldsetGroupSeparator'
 
 import type { MissionActionFormValues } from '../../types'
-import type { FormikTextareaProps } from '@mtes-mct/monitor-ui'
+import type { FormikCheckboxProps, FormikTextareaProps } from '@mtes-mct/monitor-ui'
 import type { ReactNode } from 'react'
 
 const ERROR_PATH = 'features/SideWindow/MissionForm/ActionForm/shared/FormikMultiInfractionPicker.tsx'
@@ -38,6 +39,7 @@ export type FormikMultiInfractionPickerProps = {
   generalObservationTextareaProps?: Omit<FormikTextareaProps, 'name'> & {
     name: keyof MissionActionFormValues
   }
+  infractionCheckboxProps?: FormikCheckboxProps
   label: string
   name: keyof MissionActionFormValues
 }
@@ -45,6 +47,7 @@ export function FormikMultiInfractionPicker({
   addButtonLabel,
   children,
   generalObservationTextareaProps,
+  infractionCheckboxProps,
   label,
   name
 }: FormikMultiInfractionPickerProps) {
@@ -207,6 +210,10 @@ export function FormikMultiInfractionPicker({
                         options={natinfsAsOptions}
                         searchable
                       />
+                      {infractionCheckboxProps && (
+                        // eslint-disable-next-line react/jsx-props-no-spreading
+                        <FormikCheckbox {...infractionCheckboxProps} />
+                      )}
                       <FormikTextarea label="Observations sur l'infraction" name="comments" />
 
                       <FormButtonGroup>

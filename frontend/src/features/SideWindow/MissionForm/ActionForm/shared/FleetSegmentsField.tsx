@@ -114,7 +114,7 @@ export function FleetSegmentsField() {
       )}
 
       <Select
-        key={`newFleetSegment.name-${input.value?.length}`}
+        key={String(input.value?.length)}
         baseContainer={newWindowContainerRef.current}
         label="Ajouter un segment"
         name="newFleetSegment.name"

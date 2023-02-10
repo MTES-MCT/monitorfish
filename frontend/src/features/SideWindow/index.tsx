@@ -116,8 +116,8 @@ function SideWindowWithRef(this: any, { isFromURL }: SideWindowProps, ref: Forwa
       dispatch(getAllCurrentReportings())
       dispatch(getFishingInfractions())
 
-      dispatch(openSideWindowTab(SideWindowMenuKey.ALERTS))
-      // dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))
+      // dispatch(openSideWindowTab(SideWindowMenuKey.ALERTS))
+      dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))
     }
   }, [dispatch, isFromURL])
 

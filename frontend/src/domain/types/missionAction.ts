@@ -47,15 +47,54 @@ export namespace MissionAction {
     vesselName: string
   }
 
-  export type ControlAndText = {
-    control: MissionAction | undefined
-    text: string
-  }
+  // ---------------------------------------------------------------------------
+  // Constants
 
   export enum ControlCheck {
     NO = 'NO',
     NOT_APPLICABLE = 'NOT_APPLICABLE',
     YES = 'YES'
+  }
+  export enum InfractionDomain {
+    GEAR = 'GEAR',
+    LOGBOOK = 'LOGBOOK',
+    OTHER = 'OTHER',
+    SPECIES = 'SPECIES'
+  }
+
+  /* eslint-disable typescript-sort-keys/string-enum */
+  export enum InfractionType {
+    WITH_RECORD = 'WITH_RECORD',
+    WITHOUT_RECORD = 'WITHOUT_RECORD',
+    PENDING = 'PENDING'
+  }
+  export const InfractionTypeLabel: Record<InfractionType, string> = {
+    [InfractionType.WITH_RECORD]: 'Avec PV',
+    [InfractionType.WITHOUT_RECORD]: 'Sans PV',
+    [InfractionType.PENDING]: 'En attente'
+  }
+  /* eslint-enable typescript-sort-keys/string-enum */
+
+  export enum MissionActionType {
+    AIR_CONTROL = 'AIR_CONTROL',
+    AIR_SURVEILLANCE = 'AIR_SURVEILLANCE',
+    LAND_CONTROL = 'LAND_CONTROL',
+    OBSERVATION = 'OBSERVATION',
+    SEA_CONTROL = 'SEA_CONTROL'
+  }
+
+  // ---------------------------------------------------------------------------
+  // Helpers
+
+  export const isGearInfraction = (p: any): p is GearInfraction => p.gearSeized !== undefined
+  export const isSpeciesInfraction = (p: any): p is SpeciesInfraction => p.speciesSeized !== undefined
+
+  // ---------------------------------------------------------------------------
+  // Types
+
+  export type ControlAndText = {
+    control: MissionAction | undefined
+    text: string
   }
 
   export type Controller = {
@@ -96,26 +135,6 @@ export namespace MissionAction {
     regulation: string
   }
 
-  export enum InfractionDomain {
-    GEAR = 'GEAR',
-    LOGBOOK = 'LOGBOOK',
-    OTHER = 'OTHER',
-    SPECIES = 'SPECIES'
-  }
-
-  /* eslint-disable typescript-sort-keys/string-enum */
-  export enum InfractionType {
-    WITH_RECORD = 'WITH_RECORD',
-    WITHOUT_RECORD = 'WITHOUT_RECORD',
-    PENDING = 'PENDING'
-  }
-  export const InfractionTypeLabel: Record<InfractionType, string> = {
-    [InfractionType.WITH_RECORD]: 'Avec PV',
-    [InfractionType.WITHOUT_RECORD]: 'Sans PV',
-    [InfractionType.PENDING]: 'En attente'
-  }
-  /* eslint-enable typescript-sort-keys/string-enum */
-
   export type LastControls = {
     LAND: ControlAndText
     SEA: ControlAndText
@@ -129,14 +148,6 @@ export namespace MissionAction {
   }
 
   export type MissionActionData = Except<MissionAction, 'id'>
-
-  export enum MissionActionType {
-    AIR_CONTROL = 'AIR_CONTROL',
-    AIR_SURVEILLANCE = 'AIR_SURVEILLANCE',
-    LAND_CONTROL = 'LAND_CONTROL',
-    OBSERVATION = 'OBSERVATION',
-    SEA_CONTROL = 'SEA_CONTROL'
-  }
 
   export type MissionControlsSummary = {
     controls: MissionAction[]

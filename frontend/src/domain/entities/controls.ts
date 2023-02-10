@@ -1,7 +1,17 @@
-import { INITIAL_LAST_CONTROLS } from '../../features/vessel_sidebar/Controls/constants'
 import { dayjs } from '../../utils/dayjs'
 import { getUtcDayjs } from '../../utils/getUtcDayjs'
 import { MissionAction } from '../types/missionAction'
+
+export const INITIAL_LAST_CONTROLS: MissionAction.LastControls = {
+  LAND: {
+    control: undefined,
+    text: 'Dernier contrôle à quai'
+  },
+  SEA: {
+    control: undefined,
+    text: 'Dernier contrôle en mer'
+  }
+}
 
 /**
  * Get last SEA and LAND controls

@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { isGearInfraction, isSpeciesInfraction } from './utils'
 import { COLORS } from '../../../constants/constants'
 import { MissionAction } from '../../../domain/types/missionAction'
 
@@ -49,13 +48,13 @@ export function Infraction({ index, infraction, infractionDomain }: InfractionPr
       <InfractionTag>
         <InfractionTagText>NATINF {infraction.natinf}</InfractionTagText>
       </InfractionTag>
-      {isGearInfraction(infraction) && infraction.gearSeized && (
+      {MissionAction.isGearInfraction(infraction) && infraction.gearSeized && (
         <InfractionTag>
           <RedCircle />
           <InfractionTagText>Appréhension engin</InfractionTagText>
         </InfractionTag>
       )}
-      {isSpeciesInfraction(infraction) && infraction.speciesSeized && (
+      {MissionAction.isSpeciesInfraction(infraction) && infraction.speciesSeized && (
         <InfractionTag>
           <RedCircle />
           <InfractionTagText>Appréhension espèce</InfractionTagText>

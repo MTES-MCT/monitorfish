@@ -24,11 +24,12 @@ export namespace Mission {
     startDateTimeUtc: string
   }
 
+  // ---------------------------------------------------------------------------
+  // Constants
+
   export enum MissionAlertType {
     WAITING_FOR_CLOSURE = 'Mission à clôturer'
   }
-
-  export type MissionData = Except<Mission, 'id'>
 
   /* eslint-disable typescript-sort-keys/string-enum */
   export enum MissionNature {
@@ -68,4 +69,9 @@ export namespace Mission {
     AIR = 'Air'
   }
   /* eslint-enable typescript-sort-keys/string-enum */
+
+  // ---------------------------------------------------------------------------
+  // Types
+
+  export type MissionData = Except<Mission, 'id'>
 }

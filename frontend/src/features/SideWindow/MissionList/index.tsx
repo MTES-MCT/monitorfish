@@ -152,7 +152,7 @@ const Header = styled.div`
   border-bottom: solid 2px ${p => p.theme.color.gainsboro};
   display: flex;
   justify-content: space-between;
-  padding: 1.875rem 2rem 1.875rem 3rem;
+  padding: 30px 32px 30px 48px;
 `
 
 const HeaderTitle = styled.h1`
@@ -166,12 +166,12 @@ const HeaderButtonGroup = styled.div`
   display: flex;
 
   > button:not(:first-child) {
-    margin-left: 1rem;
+    margin-left: 16px;
   }
 `
 
 const Body = styled.div`
-  padding: 2rem;
+  padding: 32px;
 `
 
 // TODO Integrate that into the UI with a clean code and design following the XD.

@@ -249,7 +249,7 @@ const HeaderButtonGroup = styled.div`
   display: flex;
 
   > button:not(:first-child) {
-    margin-left: 1rem;
+    margin-left: 16px;
   }
 `
 

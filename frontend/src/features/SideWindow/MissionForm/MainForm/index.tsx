@@ -163,17 +163,17 @@ const Wrapper = styled.div`
 const CustomFormBody = styled(FormBody)`
   > div:not(:first-child),
   > fieldset:not(:first-child) {
-    margin-top: 2rem;
+    margin-top: 32px;
   }
 
   > button {
-    margin-top: 1rem;
+    margin-top: 16px;
   }
 `
 
 const RelatedFieldGroupWrapper = styled.div`
   > div:not(:first-child) {
-    margin-top: 0.5rem;
+    margin-top: 8px;
   }
 `
 
@@ -181,12 +181,12 @@ const InlineFieldGroupWrapper = styled.div`
   display: flex;
 
   > div:first-child {
-    margin-right: 0.5rem;
+    margin-right: 8px;
     width: 50%;
   }
 
   > div:last-child {
-    margin-left: 0.5rem;
+    margin-left: 8px;
     width: 50%;
   }
 `

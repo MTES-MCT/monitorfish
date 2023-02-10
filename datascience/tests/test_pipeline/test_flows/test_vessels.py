@@ -130,7 +130,7 @@ licences_data = {
 
 control_charters_data = {
     "id": [1, 2, 4],
-    "under_charter": [True, True, False],
+    "under_charter": [False, False, True],
 }
 
 concat_merged_data = {
@@ -191,7 +191,7 @@ concat_merged_data = {
         None,
     ],
     "sailing_category": [None, "3ème", None, None, None, None],
-    "under_charter": [True, True, False, False, False, False],
+    "under_charter": [False, False, False, True, False, False],
 }
 
 concat_merged_dtype = {
@@ -313,7 +313,7 @@ cleaned_vessels_data = {
     ],
     "vessel_fax": [None, "159753", None, None, None, None],
     "vessel_telex": [None, "555", None, None, None, None],
-    "under_charter": [True, True, False, False, False, False],
+    "under_charter": [False, False, False, True, False, False],
 }
 
 cleaned_vessels_dtype = {

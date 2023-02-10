@@ -114,9 +114,9 @@ export function GearsField() {
   return (
     <FormikMultiInfractionPicker
       addButtonLabel="Ajouter une infraction engins"
-      // TODO Check that prop (not in XD).
+      // TODO Check that prop (it's a radio in the XD which doesn't make sense to me).
       infractionCheckboxProps={{
-        label: 'Engin saisi',
+        label: 'Appréhension engin',
         name: 'gearSeized'
       }}
       label="Engins à bord"

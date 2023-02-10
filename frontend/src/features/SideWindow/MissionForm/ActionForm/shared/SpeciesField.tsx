@@ -86,9 +86,9 @@ export function SpeciesField() {
         label: 'Observations (hors infraction) sur les espèces',
         name: 'speciesObservations'
       }}
-      // TODO Check that prop (not in XD).
+      // TODO Check that prop (it's a radio in the XD which doesn't make sense to me).
       infractionCheckboxProps={{
-        label: 'Espèce saisie',
+        label: 'Appréhension espèces',
         name: 'speciesSeized'
       }}
       label="Espèces à bord"

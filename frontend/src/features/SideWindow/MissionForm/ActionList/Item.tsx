@@ -116,7 +116,7 @@ const DateLabel = styled.div`
   display: flex;
   flex-direction: column;
   min-width: 80px;
-  padding: 0.25rem 1.5rem 0.25rem 0;
+  padding: 4px 24px 4px 0;
   text-align: center;
 `
 
@@ -129,13 +129,13 @@ const InnerWrapper = styled.div<{
   cursor: pointer;
   display: flex;
   flex-grow: 1;
-  padding: 1rem;
+  padding: 16px;
 `
 
 const ActionLabel = styled.div`
   display: flex;
   flex-grow: 1;
-  padding: 0.25rem;
+  padding: 4px;
 
   /* The SVG icon is wrapper in a div */
   > div {

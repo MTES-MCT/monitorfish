@@ -123,7 +123,7 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
 const Box = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.5rem;
+  margin-bottom: 24px;
 `
 
 const Title = styled.h4`
@@ -135,10 +135,10 @@ const Title = styled.h4`
 
 const FiltersBox = styled.div`
   display: flex;
-  margin-top: 1.5rem;
+  margin-top: 24px;
 
   > div:not(:first-child) {
-    margin-left: 1rem;
+    margin-left: 16px;
     width: 160px;
   }
 `

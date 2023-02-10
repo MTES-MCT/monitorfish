@@ -26,7 +26,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-sidebar-open-reporting"]').click()
     cy.get('*[data-cy="new-reporting-reporting-actor-UNIT"]').click()
     cy.get('*[data-cy="new-reporting-select-unit"]').click()
-    cy.get('[data-key="ULAM 56"] > .rs-picker-select-menu-item').click()
+    cy.get('[data-key="10012"] > .rs-picker-select-menu-item').click({ force: true })
     cy.get('*[data-cy="new-reporting-author-contact"]').type('Jean Bon (0612365896)')
     cy.get('*[data-cy="new-reporting-title"]').type('Sortie non autorisée')
     cy.get('*[data-cy="new-reporting-description"]').type(
@@ -39,7 +39,7 @@ context('Vessel sidebar reporting tab', () => {
 
     // Then
     cy.get('*[data-cy="vessel-menu-reporting"]').contains(1)
-    cy.get('*[data-cy="reporting-card"]').eq(0).contains('ULAM 56 / Sortie non autorisée')
+    cy.get('*[data-cy="reporting-card"]').eq(0).contains('Cross Etel / Sortie non autorisée')
     cy.get('*[data-cy="reporting-card"]')
       .eq(0)
       .contains("Ce navire ne devrait pas être en mer, il n'a plus de points sur son permis")

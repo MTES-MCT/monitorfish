@@ -114,23 +114,22 @@ function UnmemoizedVesselListFilters({
     [zonesSelected, callRemoveZoneSelected]
   )
 
-  const getZones = useCallback(() => {
+  const getZones = useCallback(async () => {
     const nextZonesPromises = dispatch(getZonesAndSubZonesPromises())
+    const nextZones = await Promise.all(nextZonesPromises)
 
-    Promise.all(nextZonesPromises).then(nextZones => {
-      let nextZonesWithoutNulls = nextZones.flat().filter(zone => zone)
+    let nextZonesWithoutNulls = nextZones.flat().filter(zone => zone)
 
-      const groups = [...new Set(nextZonesWithoutNulls.map(zone => zone.group))]
-      setZoneGroups(groups)
+    const groups = [...new Set(nextZonesWithoutNulls.map(zone => zone.group))]
+    setZoneGroups(groups)
 
-      nextZonesWithoutNulls = groups.map(group => ({
-        children: nextZonesWithoutNulls.filter(zone => zone.group === group),
-        label: group,
-        value: group
-      }))
+    nextZonesWithoutNulls = groups.map(group => ({
+      children: nextZonesWithoutNulls.filter(zone => zone.group === group),
+      label: group,
+      value: group
+    }))
 
-      zones.setZonesFilter(nextZonesWithoutNulls)
-    })
+    zones.setZonesFilter(nextZonesWithoutNulls)
   }, [dispatch, zones])
 
   return (

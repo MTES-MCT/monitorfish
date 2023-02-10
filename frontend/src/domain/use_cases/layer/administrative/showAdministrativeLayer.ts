@@ -10,6 +10,7 @@ import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../entities/map/c
 import LayerSlice from '../../../shared_slices/Layer'
 
 import type Feature from 'ol/Feature'
+import type Geometry from 'ol/geom/Geometry'
 
 const DEFAULT_NAMESPACE = 'homepage'
 
@@ -25,7 +26,11 @@ export const showAdministrativeLayer = (layerRequest: AdministrativeLayerRequest
   dispatch(addShowedLayer(layerRequest))
 }
 
-export const getVectorOLLayer = (type, zone, isBackoffice) => {
+export const getVectorOLLayer = (
+  type: string,
+  zone: string,
+  isBackoffice: boolean
+): VectorImageLayer<VectorSource<Geometry>> => {
   const layer = new VectorImageLayer({
     className: 'administrative',
     declutter: true,
@@ -38,7 +43,7 @@ export const getVectorOLLayer = (type, zone, isBackoffice) => {
   return layer
 }
 
-const getVectorSource = (type, subZone, isBackoffice) => {
+const getVectorSource = (type: string, subZone: string | null, isBackoffice): VectorSource<Geometry> => {
   if (subZone) {
     return buildWholeVectorSource(type, subZone, isBackoffice)
   }
@@ -46,7 +51,7 @@ const getVectorSource = (type, subZone, isBackoffice) => {
   return buildBBOXVectorSource(type, subZone, isBackoffice)
 }
 
-function buildWholeVectorSource(type, subZone, isBackoffice) {
+function buildWholeVectorSource(type: string, subZone: string | null, isBackoffice): VectorSource<Geometry> {
   const vectorSource = new VectorSource({
     format: new GeoJSON({
       dataProjection: WSG84_PROJECTION,
@@ -67,7 +72,7 @@ function buildWholeVectorSource(type, subZone, isBackoffice) {
   return vectorSource
 }
 
-function buildBBOXVectorSource(type, subZone, isBackoffice) {
+function buildBBOXVectorSource(type: string, subZone: string | null, isBackoffice): VectorSource<Geometry> {
   const vectorSource = new VectorSource({
     format: new GeoJSON({
       dataProjection: WSG84_PROJECTION,

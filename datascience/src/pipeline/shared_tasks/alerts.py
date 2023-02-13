@@ -85,10 +85,9 @@ def make_alerts(
         alerts.rename(
             columns={
                 "facade": "seaFront",
-                "flag_state": "flagState",
                 "risk_factor": "riskFactor",
             }
-        )[["seaFront", "flagState", "type", "riskFactor", "dml"]]
+        )[["seaFront", "type", "riskFactor", "dml"]]
     )
 
     alerts["alert_config_name"] = alert_config_name
@@ -99,6 +98,7 @@ def make_alerts(
             "internal_reference_number",
             "external_reference_number",
             "ircs",
+            "flag_state",
             "vessel_id",
             "vessel_identifier",
             "creation_date",

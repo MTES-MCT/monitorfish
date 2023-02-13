@@ -1,34 +1,42 @@
-WITH controls_agg AS (
-    select
+WITH controls_segment AS (
+    SELECT
+        id,
         EXTRACT(YEAR FROM control_datetime_utc) AS control_year,
-        analytics_control_types.control_type,
-        analytics_facade_names.facade,
-        analytics_segment_names.segment,
         EXTRACT(MONTH FROM control_datetime_utc) AS control_month,
+        control_type,
+        facade,
+        jsonb_array_elements(
+            COALESCE(
+                NULLIF(
+                    NULLIF(
+                        segments,
+                        'null'
+                    ),
+                    '[]'
+                ),
+                '[{"segment": "Hors segment"}]'
+            )
+        )->>'segment' AS segment,
+        infraction
+    FROM analytics_controls
+),
+
+ controls_agg AS (
+    select
+        control_year,
+        control_month,
+        control_type,
+        facade,
+        segment,
         COUNT(*) AS number_controls,
         (SUM(CASE WHEN infraction IS true THEN 1.0 ELSE 0.0 END)::DOUBLE PRECISION) / (COUNT(*)::DOUBLE PRECISION) AS infraction_rate
-    FROM analytics_controls
-    LEFT JOIN analytics_segment_names
-    ON analytics_segment_names.segment = ANY (analytics_controls.segments)
-    LEFT JOIN analytics_facade_names
-    ON analytics_facade_names.facade = analytics_controls.facade
-    LEFT JOIN analytics_control_types
-    ON analytics_control_types.control_type = analytics_controls.control_type
-    LEFT JOIN controllers
-    ON analytics_controls.controller_id = controllers.id
+    FROM controls_segment
     GROUP BY
-        EXTRACT(YEAR FROM control_datetime_utc),
-        analytics_control_types.control_type,
-        analytics_facade_names.facade,
-        analytics_segment_names.segment,
-        EXTRACT(MONTH FROM control_datetime_utc)
-    ORDER BY
-        EXTRACT(YEAR FROM control_datetime_utc),
-        analytics_control_types.control_type,
-        analytics_facade_names.facade,
-        analytics_segment_names.segment,
-        EXTRACT(MONTH FROM control_datetime_utc)
-
+        control_year,
+        control_month,
+        control_type,
+        facade,
+        segment
 ),
 
 controls_agg_cum AS (
@@ -84,3 +92,9 @@ ON
     targets.control_type = controls_agg_cum.control_type AND
     targets.facade = controls_agg_cum.facade AND
     targets.segment = controls_agg_cum.segment
+ORDER BY
+    control_year,
+    control_type,
+    facade,
+    segment,
+    control_month

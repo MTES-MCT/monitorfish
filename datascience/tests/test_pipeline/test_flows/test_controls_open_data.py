@@ -18,16 +18,33 @@ flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_ru
 def fleet_segments_open_data() -> pd.DataFrame:
     return pd.DataFrame(
         {
-            "year": [datetime.utcnow().year, datetime.utcnow().year],
-            "segment": ["SWW01/02/03", "SWW04"],
-            "segment_name": ["Bottom trawls", "Midwater trawls"],
+            "year": [2022, 2022, datetime.utcnow().year, datetime.utcnow().year],
+            "segment": ["SWW01/02/03 - 2022", "SWW04 - 2022", "SWW01/02/03", "SWW04"],
+            "segment_name": [
+                "Bottom trawls",
+                "Midwater trawls",
+                "Bottom trawls",
+                "Midwater trawls",
+            ],
             "gears": [
                 ["OTB", "OTT", "PTB", "OT", "PT", "TBN", "TBS", "TX", "TB"],
                 ["OTM", "PTM"],
+                ["OTB", "OTT", "PTB", "OT", "PT", "TBN", "TBS", "TX", "TB"],
+                ["OTM", "PTM"],
             ],
-            "fao_areas": [["27.8.c", "27.8", "27.9"], ["27.8.c", "27.8"]],
-            "species": [["HKE", "SOL", "ANF", "MNZ", "NEP", "LEZ", "ANF"], ["HKE"]],
-            "impact_risk_factor": [3.0, 2.1],
+            "fao_areas": [
+                ["27.8.c", "27.8", "27.9"],
+                ["27.8.c", "27.8"],
+                ["27.8.c", "27.8", "27.9"],
+                ["27.8.c", "27.8"],
+            ],
+            "species": [
+                ["HKE", "SOL", "ANF", "MNZ", "NEP", "LEZ", "ANF"],
+                ["HKE"],
+                ["HKE", "SOL", "ANF", "MNZ", "NEP", "LEZ", "ANF"],
+                ["HKE"],
+            ],
+            "impact_risk_factor": [3.0, 2.1, 3.0, 2.1],
         }
     )
 
@@ -36,13 +53,33 @@ def fleet_segments_open_data() -> pd.DataFrame:
 def transformed_fleet_segments_open_data() -> pd.DataFrame:
     return pd.DataFrame(
         {
-            "year": [datetime.utcnow().year, datetime.utcnow().year],
-            "segment": ["SWW01/02/03", "SWW04"],
-            "segment_name": ["Bottom trawls", "Midwater trawls"],
-            "gears": ["{OTB,OTT,PTB,OT,PT,TBN,TBS,TX,TB}", "{OTM,PTM}"],
-            "fao_areas": ["{27.8.c,27.8,27.9}", "{27.8.c,27.8}"],
-            "species": ["{HKE,SOL,ANF,MNZ,NEP,LEZ,ANF}", "{HKE}"],
-            "impact_risk_factor": [3.0, 2.1],
+            "year": [2022, 2022, datetime.utcnow().year, datetime.utcnow().year],
+            "segment": ["SWW01/02/03 - 2022", "SWW04 - 2022", "SWW01/02/03", "SWW04"],
+            "segment_name": [
+                "Bottom trawls",
+                "Midwater trawls",
+                "Bottom trawls",
+                "Midwater trawls",
+            ],
+            "gears": [
+                "{OTB,OTT,PTB,OT,PT,TBN,TBS,TX,TB}",
+                "{OTM,PTM}",
+                "{OTB,OTT,PTB,OT,PT,TBN,TBS,TX,TB}",
+                "{OTM,PTM}",
+            ],
+            "fao_areas": [
+                "{27.8.c,27.8,27.9}",
+                "{27.8.c,27.8}",
+                "{27.8.c,27.8,27.9}",
+                "{27.8.c,27.8}",
+            ],
+            "species": [
+                "{HKE,SOL,ANF,MNZ,NEP,LEZ,ANF}",
+                "{HKE}",
+                "{HKE,SOL,ANF,MNZ,NEP,LEZ,ANF}",
+                "{HKE}",
+            ],
+            "impact_risk_factor": [3.0, 2.1, 3.0, 2.1],
         }
     )
 
@@ -64,6 +101,7 @@ def controls_open_data_columns() -> list:
 
 
 def test_extract_controls_open_data(reset_test_data, controls_open_data_columns):
+
     controls = extract_controls_open_data.run()
     assert list(controls) == controls_open_data_columns
 
@@ -71,7 +109,7 @@ def test_extract_controls_open_data(reset_test_data, controls_open_data_columns)
     assert controls["infraction_rate"].max() <= 1.0001
 
     expected_controls_by_type = pd.Series(
-        {"Contrôle à la débarque": 12, "Contrôle à la mer": 10}, name="number_controls"
+        {"LAND_CONTROL": 15, "SEA_CONTROL": 12}, name="number_controls"
     )
     expected_controls_by_type.index.name = "control_type"
     controls_by_type = controls.groupby("control_type")["number_controls"].sum()
@@ -79,20 +117,37 @@ def test_extract_controls_open_data(reset_test_data, controls_open_data_columns)
 
     controls_by_segment = controls.groupby("segment")["number_controls"].sum()
     expected_controls_by_segment = pd.Series(
-        {"Hors segment": 14, "SWW01/02/03": 2}, name="number_controls"
+        {
+            "FR_SCE": 2,
+            "Hors segment": 17,
+            "MED05": 1,
+            "MED07": 1,
+            "NS13": 1,
+            "NWW01/02": 1,
+            "NWW08": 1,
+            "PEL05": 1,
+            "SWW01/02/03": 2,
+        },
+        name="number_controls",
     )
     expected_controls_by_segment.index.name = "segment"
     pd.testing.assert_series_equal(controls_by_segment, expected_controls_by_segment)
 
     controls_by_facade = controls.groupby("facade")["number_controls"].sum()
-    expected_controls_by_facade = pd.Series({"Hors façade": 5}, name="number_controls")
+    expected_controls_by_facade = pd.Series(
+        {"Hors façade": 7, "MED": 2, "MEMN": 6, "NAMO": 4, "SA": 8},
+        name="number_controls",
+    )
     expected_controls_by_facade.index.name = "facade"
     pd.testing.assert_series_equal(controls_by_facade, expected_controls_by_facade)
 
 
 def test_extract_fleet_segments_open_data(reset_test_data, fleet_segments_open_data):
     fleet_segments = extract_fleet_segments_open_data.run()
-    pd.testing.assert_frame_equal(fleet_segments, fleet_segments_open_data)
+    pd.testing.assert_frame_equal(
+        fleet_segments.sort_values(["year", "segment"]).reset_index(drop=True),
+        fleet_segments_open_data,
+    )
 
 
 def test_flow(

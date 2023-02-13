@@ -9,10 +9,10 @@ export type RiskFactor = {
   lastControlDatetime: string
   numberControlsLastFiveYears: number
   numberControlsLastThreeYears: number
-  numberDiversionsLastFiveYears: number
-  numberEscortsToQuayLastFiveYears: number
+  numberGearSeizuresLastFiveYears: number
   numberInfractionsLastFiveYears: number
-  numberSeizuresLastFiveYears: number
+  numberSpeciesSeizuresLastFiveYears: number
+  numberVesselSeizuresLastFiveYears: number
   probabilityRiskFactor: number
   riskFactor: number
   segmentHighestImpact: string

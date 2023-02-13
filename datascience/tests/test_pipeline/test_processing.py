@@ -27,6 +27,7 @@ from src.pipeline.processing import (
     join_on_multiple_keys,
     left_isin_right_by_decreasing_priority,
     prepare_df_for_loading,
+    remove_nones_from_list,
     rows_belong_to_sequence,
     to_json,
     to_pgarr,
@@ -50,6 +51,15 @@ def test_is_a_value():
     assert is_a_value("a")
     assert not is_a_value(None)
     assert not is_a_value(np.nan)
+
+
+def test_remove_nones_from_list():
+    assert remove_nones_from_list([1, 2, 3, None, 4]) == [1, 2, 3, 4]
+    assert remove_nones_from_list([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert remove_nones_from_list([1, None, None, None, 4]) == [1, 4]
+    assert remove_nones_from_list([None, None, None]) == []
+    assert remove_nones_from_list([]) == []
+    assert remove_nones_from_list([1, None, np.nan, None, 4]) == [1, np.nan, 4]
 
 
 def test_concatenate_values():

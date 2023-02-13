@@ -27,6 +27,14 @@ db_env = {
         "usr": "MONITORFISH_REMOTE_DB_USER",
         "pwd": "MONITORFISH_REMOTE_DB_PWD",
     },
+    "monitorenv_remote": {
+        "client": "MONITORENV_REMOTE_DB_CLIENT",
+        "host": "MONITORENV_REMOTE_DB_HOST",
+        "port": "MONITORENV_REMOTE_DB_PORT",
+        "sid": "MONITORENV_REMOTE_DB_NAME",
+        "usr": "MONITORENV_REMOTE_DB_USER",
+        "pwd": "MONITORENV_REMOTE_DB_PWD",
+    },
     "monitorfish_local": {
         "client": "MONITORFISH_LOCAL_CLIENT",
         "host": "MONITORFISH_LOCAL_HOST",

@@ -43,11 +43,11 @@ def compute_risk_factors(
         {
             "number_controls_last_3_years": 0,
             "number_controls_last_5_years": 0,
-            "number_diversions_last_5_years": 0,
-            "number_escorts_to_quay_last_5_years": 0,
+            "number_gear_seizures_last_5_years": 0,
+            "number_species_seizures_last_5_years": 0,
             "number_infractions_last_5_years": 0,
             "number_recent_controls": 0,
-            "number_seizures_last_5_years": 0,
+            "number_vessel_seizures_last_5_years": 0,
             **default_risk_factors,
         }
     )
@@ -77,11 +77,11 @@ def compute_risk_factors(
         {
             "number_controls_last_3_years": int,
             "number_controls_last_5_years": int,
-            "number_diversions_last_5_years": int,
-            "number_escorts_to_quay_last_5_years": int,
+            "number_gear_seizures_last_5_years": int,
+            "number_species_seizures_last_5_years": int,
             "number_infractions_last_5_years": int,
             "number_recent_controls": int,
-            "number_seizures_last_5_years": int,
+            "number_vessel_seizures_last_5_years": int,
         }
     )
 

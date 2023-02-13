@@ -18,11 +18,7 @@ export function getMissionActionsDataFromMissionActionsFormValues(
   return missionActionsFormValues.map(missionActionFormValues => {
     const missionActionFormValuesWithAllProps = {
       ...MISSION_ACTION_FORM_VALUES_SKELETON,
-      ...missionActionFormValues,
-
-      // TODO Fix FormikVesselSearch and remove that.
-      vesselId: 0,
-      vesselName: ''
+      ...missionActionFormValues
     }
 
     const maybeValidMissionActionData = omit(['isDraft'], missionActionFormValuesWithAllProps)

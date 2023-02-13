@@ -5,8 +5,8 @@ import { useMemo } from 'react'
 import * as Yup from 'yup'
 
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
-import { FormikVesselSearch } from './shared/FormikVesselSearch'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
+import { VesselField } from './shared/VesselField'
 import { useNewWindow } from '../../../../ui/NewWindow'
 import { FormBody } from '../FormBody'
 import { FormHead } from '../FormHead'
@@ -49,7 +49,7 @@ export function AirControlForm({ initialValues, onChange }: AirControlFormProps)
         </FormHead>
 
         <FormBody>
-          <FormikVesselSearch name="vesselId" />
+          <VesselField />
 
           <FormikDatePicker
             baseContainer={newWindowContainerRef.current}

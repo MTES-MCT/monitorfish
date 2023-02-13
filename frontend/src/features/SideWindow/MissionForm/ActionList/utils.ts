@@ -14,6 +14,7 @@ export function getMissionActionFormInitialValues(type: MissionAction.MissionAct
   return {
     actionDatetimeUtc: getUtcizedDayjs(new Date()).toISOString(),
     actionType: type,
-    isDraft: true
+    isDraft: true,
+    vesselTargeted: false
   }
 }

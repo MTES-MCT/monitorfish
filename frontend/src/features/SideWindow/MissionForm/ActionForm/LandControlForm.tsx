@@ -14,11 +14,11 @@ import { useMemo } from 'react'
 import { ControlQualityField } from './shared/ControlQualityField'
 import { FleetSegmentsField } from './shared/FleetSegmentsField'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
-import { FormikVesselSearch } from './shared/FormikVesselSearch'
 import { GearsField } from './shared/GearsField'
 import { LicencesAndLogbookField } from './shared/LicencesAndLogbookField'
 import { SpeciesField } from './shared/SpeciesField'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
+import { VesselField } from './shared/VesselField'
 import { useNewWindow } from '../../../../ui/NewWindow'
 import { FieldGroup } from '../FieldGroup'
 import { FieldsetGroup } from '../FieldsetGroup'
@@ -54,7 +54,7 @@ export function LandControlForm({ initialValues, onChange }: LandControlFormProp
 
         <FormBody>
           <FieldGroup isInline>
-            <FormikVesselSearch name="vesselId" />
+            <VesselField />
             <Checkbox label="Navire inconnu" name="isVesselUnknown" />
           </FieldGroup>
 

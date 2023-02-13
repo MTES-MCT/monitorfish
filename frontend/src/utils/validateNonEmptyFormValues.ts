@@ -3,7 +3,7 @@ import { hasIn } from 'ramda'
 import { FormError, FormErrorCode } from '../libs/FormError'
 import { FrontendError } from '../libs/FrontendError'
 
-import type { Undefine } from '../types'
+import type { Undefine } from '@mtes-mct/monitor-ui'
 
 const ERROR_PATH = 'utils/validateNonEmptyFormValues.ts'
 

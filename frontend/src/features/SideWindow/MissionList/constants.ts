@@ -2,7 +2,7 @@ import { Mission } from '../../../domain/types/mission'
 import { getOptionsFromLabelledEnum } from '../../../utils/getOptionsFromLabelledEnum'
 
 import type { TableOptions } from '../../../hooks/useTable/types'
-import type { Option } from '../../../types'
+import type { Option } from '@mtes-mct/monitor-ui'
 
 /* eslint-disable typescript-sort-keys/string-enum */
 export enum MissionDateRangeFilter {

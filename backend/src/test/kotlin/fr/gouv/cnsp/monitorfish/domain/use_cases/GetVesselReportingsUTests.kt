@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
@@ -49,6 +50,7 @@ class GetVesselReportingsUTests {
                     externalReferenceNumber = "1236514",
                     ircs = "IRCS",
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    flagState = CountryCode.FR,
                     creationDate = ZonedDateTime.now(),
                     validationDate = ZonedDateTime.now(),
                     value = ThreeMilesTrawlingAlert() as ReportingValue,
@@ -63,6 +65,7 @@ class GetVesselReportingsUTests {
                     externalReferenceNumber = "1236514",
                     ircs = "IRCS",
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    flagState = CountryCode.FR,
                     creationDate = ZonedDateTime.now(),
                     validationDate = ZonedDateTime.now(),
                     value = ThreeMilesTrawlingAlert() as ReportingValue,
@@ -77,6 +80,7 @@ class GetVesselReportingsUTests {
                     externalReferenceNumber = "1236514",
                     ircs = "IRCS",
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    flagState = CountryCode.FR,
                     creationDate = ZonedDateTime.now().minusYears(1),
                     validationDate = ZonedDateTime.now().minusYears(1),
                     value = ThreeMilesTrawlingAlert() as ReportingValue,

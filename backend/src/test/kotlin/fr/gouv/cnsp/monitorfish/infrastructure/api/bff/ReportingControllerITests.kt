@@ -117,12 +117,12 @@ class ReportingControllerITests {
             externalReferenceNumber = "RGD",
             ircs = "6554fEE",
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             creationDate = ZonedDateTime.now(),
             value = InfractionSuspicion(
                 ReportingActor.OPS,
                 natinfCode = "123456",
                 authorTrigram = "LTH",
-                flagState = CountryCode.FR.toString(),
                 title = "A title",
             ),
             type = ReportingType.INFRACTION_SUSPICION,
@@ -141,12 +141,12 @@ class ReportingControllerITests {
                             externalReferenceNumber = "RGD",
                             ircs = "6554fEE",
                             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            flagState = CountryCode.FR,
                             creationDate = ZonedDateTime.now(),
                             value = InfractionSuspicion(
                                 ReportingActor.OPS,
                                 natinfCode = "123456",
                                 authorTrigram = "LTH",
-                                flagState = CountryCode.FR.toString(),
                                 title = "A title",
                             ),
                             type = ReportingType.INFRACTION_SUSPICION,
@@ -158,6 +158,7 @@ class ReportingControllerITests {
             // Then
             .andExpect(status().isCreated)
             .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", equalTo("FRFGRGR")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.flagState", equalTo("FR")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingActor", equalTo("OPS")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.authorTrigram", equalTo("LTH")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo("123456")))
@@ -172,20 +173,20 @@ class ReportingControllerITests {
             externalReferenceNumber = "RGD",
             ircs = "6554fEE",
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             creationDate = ZonedDateTime.now(),
             value = InfractionSuspicion(
                 ReportingActor.UNIT,
                 natinfCode = "123456",
                 controlUnitId = 1234,
                 authorTrigram = "LTH",
-                flagState = CountryCode.FR.toString(),
                 title = "A title",
             ),
             type = ReportingType.INFRACTION_SUSPICION,
             isDeleted = false,
             isArchived = false,
         )
-        given(addReporting.execute(any())).willReturn(Pair(reporting, ControlUnit(1234, "DIRM", "ULAM 56", listOf())))
+        given(addReporting.execute(any())).willReturn(Pair(reporting, ControlUnit(1234, "DIRM", "Cross Etel", listOf())))
 
         // When
         mockMvc.perform(
@@ -197,13 +198,13 @@ class ReportingControllerITests {
                             externalReferenceNumber = "RGD",
                             ircs = "6554fEE",
                             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            flagState = CountryCode.FR,
                             creationDate = ZonedDateTime.now(),
                             value = InfractionSuspicion(
                                 ReportingActor.OPS,
                                 natinfCode = "123456",
                                 controlUnitId = 1234,
                                 authorTrigram = "LTH",
-                                flagState = CountryCode.FR.toString(),
                                 title = "A title",
                             ),
                             type = ReportingType.INFRACTION_SUSPICION,
@@ -218,7 +219,7 @@ class ReportingControllerITests {
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingActor", equalTo("UNIT")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.controlUnitId", equalTo(1234)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.controlUnit.id", equalTo(1234)))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.value.controlUnit.name", equalTo("ULAM 56")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.controlUnit.name", equalTo("Cross Etel")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.authorTrigram", equalTo("LTH")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo("123456")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))
@@ -232,12 +233,12 @@ class ReportingControllerITests {
             externalReferenceNumber = "RGD",
             ircs = "6554fEE",
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             creationDate = ZonedDateTime.now(),
             value = InfractionSuspicion(
                 ReportingActor.OPS,
                 natinfCode = "123456",
                 authorTrigram = "LTH",
-                flagState = CountryCode.FR.toString(),
                 title = "A title",
             ),
             type = ReportingType.INFRACTION_SUSPICION,
@@ -268,12 +269,12 @@ class ReportingControllerITests {
             externalReferenceNumber = "RGD",
             ircs = "6554fEE",
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             creationDate = ZonedDateTime.now(),
             value = InfractionSuspicion(
                 ReportingActor.OPS,
                 natinfCode = "123456",
                 authorTrigram = "LTH",
-                flagState = CountryCode.FR.toString(),
                 title = "A title",
             ),
             type = ReportingType.INFRACTION_SUSPICION,
@@ -311,13 +312,13 @@ class ReportingControllerITests {
         val reporting = Reporting(
             internalReferenceNumber = "FRFGRGR",
             externalReferenceNumber = "RGD",
+            flagState = CountryCode.FR,
             ircs = "6554fEE",
             creationDate = ZonedDateTime.now(),
             value = InfractionSuspicion(
                 ReportingActor.OPS,
                 natinfCode = "123456",
                 authorTrigram = "LTH",
-                flagState = CountryCode.FR.toString(),
                 title = "A title",
             ),
             type = ReportingType.INFRACTION_SUSPICION,
@@ -334,13 +335,13 @@ class ReportingControllerITests {
                         CreateReportingDataInput(
                             internalReferenceNumber = "FRFGRGR",
                             externalReferenceNumber = "RGD",
+                            flagState = CountryCode.FR,
                             ircs = "6554fEE",
                             creationDate = ZonedDateTime.now(),
                             value = InfractionSuspicion(
                                 ReportingActor.OPS,
                                 natinfCode = "123456",
                                 authorTrigram = "LTH",
-                                flagState = CountryCode.FR.toString(),
                                 title = "A title",
                             ),
                             type = ReportingType.INFRACTION_SUSPICION,

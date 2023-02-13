@@ -28,6 +28,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             ircs = "6554fEE",
             vesselId = 125,
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             tripNumber = "123456",
             creationDate = creationDate,
             value = ThreeMilesTrawlingAlert("NAMO"),
@@ -63,12 +64,12 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             ircs = "6554fEE",
             vesselId = 126,
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             creationDate = creationDate,
             value = InfractionSuspicion(
                 ReportingActor.OPS,
                 natinfCode = "123456",
                 authorTrigram = "LTH",
-                flagState = CountryCode.FR.toString(),
                 title = "A title",
             ),
             type = ReportingType.INFRACTION_SUSPICION,
@@ -105,11 +106,11 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             ircs = "6554fEE",
             vesselId = 523,
             creationDate = creationDate,
+            flagState = CountryCode.FR,
             value = InfractionSuspicion(
                 ReportingActor.OPS,
                 natinfCode = "123456",
                 authorTrigram = "LTH",
-                flagState = CountryCode.FR.toString(),
                 title = "A title",
             ),
             type = ReportingType.INFRACTION_SUSPICION,
@@ -251,7 +252,6 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             "Une description",
             "1236",
             "MEMN",
-            "FR",
             "DML 56",
         )
 
@@ -268,7 +268,6 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat((reporting.value as InfractionSuspicion).description).isEqualTo(updatedReporting.description)
         assertThat((reporting.value as InfractionSuspicion).natinfCode).isEqualTo(updatedReporting.natinfCode)
         assertThat((reporting.value as InfractionSuspicion).seaFront).isEqualTo(updatedReporting.seaFront)
-        assertThat((reporting.value as InfractionSuspicion).flagState).isEqualTo(updatedReporting.flagState)
         assertThat((reporting.value as InfractionSuspicion).dml).isEqualTo(updatedReporting.dml)
     }
 
@@ -283,7 +282,6 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             "Jean Bon",
             "Une observation",
             "Une description",
-            "MEMN",
         )
 
         // When
@@ -297,7 +295,6 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat((reporting.value as Observation).authorContact).isEqualTo(updatedReporting.authorContact)
         assertThat((reporting.value as Observation).title).isEqualTo(updatedReporting.title)
         assertThat((reporting.value as Observation).description).isEqualTo(updatedReporting.description)
-        assertThat((reporting.value as Observation).flagState).isEqualTo(updatedReporting.flagState)
     }
 
     @Test
@@ -311,7 +308,6 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             "Jean Bon",
             "Une observation",
             "Une description",
-            "1236",
         )
 
         // When
@@ -326,6 +322,5 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat((reporting.value as Observation).authorContact).isEqualTo(updatedReporting.authorContact)
         assertThat((reporting.value as Observation).title).isEqualTo(updatedReporting.title)
         assertThat((reporting.value as Observation).description).isEqualTo(updatedReporting.description)
-        assertThat((reporting.value as Observation).flagState).isEqualTo(updatedReporting.flagState)
     }
 }

@@ -12,7 +12,6 @@ class ObservationDataOutput(
     val authorContact: String? = null,
     val title: String,
     val description: String? = null,
-    val flagState: String,
 ) : ReportingValueDataOutput() {
     companion object {
         fun fromObservation(observation: Observation, controlUnit: ControlUnit? = null): ObservationDataOutput {
@@ -24,7 +23,6 @@ class ObservationDataOutput(
                 authorContact = observation.authorContact,
                 title = observation.title,
                 description = observation.description,
-                flagState = observation.flagState,
             )
         }
     }

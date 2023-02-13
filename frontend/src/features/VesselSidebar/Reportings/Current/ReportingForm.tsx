@@ -122,13 +122,13 @@ export function ReportingForm({
       const nextReportingWithMissingProperties = {
         creationDate: new Date().toISOString(),
         externalReferenceNumber: selectedVesselIdentity.externalReferenceNumber,
+        flagState: selectedVesselIdentity.flagState.toUpperCase(),
         internalReferenceNumber: selectedVesselIdentity.internalReferenceNumber,
         ircs: selectedVesselIdentity.ircs,
         type: nextReporting.type,
         validationDate: null,
         value: {
-          ...nextReporting.value,
-          flagState: selectedVesselIdentity.flagState.toUpperCase()
+          ...nextReporting.value
         },
         vesselId: selectedVesselIdentity.vesselId || null,
         vesselIdentifier: selectedVesselIdentity.vesselIdentifier || null,

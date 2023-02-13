@@ -13,7 +13,6 @@ data class InfractionSuspicionDataOutput(
     val title: String,
     val description: String? = null,
     val natinfCode: String,
-    val flagState: String,
     val seaFront: String? = null,
     val dml: String? = null,
 ) : ReportingValueDataOutput() {
@@ -28,7 +27,6 @@ data class InfractionSuspicionDataOutput(
                 title = infractionSuspicion.title,
                 description = infractionSuspicion.description,
                 natinfCode = infractionSuspicion.natinfCode,
-                flagState = infractionSuspicion.flagState,
                 dml = infractionSuspicion.dml,
                 seaFront = infractionSuspicion.seaFront,
             )

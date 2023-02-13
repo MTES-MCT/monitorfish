@@ -20,6 +20,22 @@ class PendingAlertMapperUTests {
     @Test
     fun `getReportingValueFromJSON Should deserialize a THREE_MILES_TRAWLING_ALERT and append the NATINF code`() {
         // Given
+        val alert = "{\"type\": \"THREE_MILES_TRAWLING_ALERT\", \"seaFront\": \"MEMN\", \"riskFactor\": 1.2311444133}"
+
+        // When
+        val parsedAlert = mapper.readValue(alert, AlertType::class.java)
+
+        // Then
+        assertThat(parsedAlert).isInstanceOf(ThreeMilesTrawlingAlert::class.java)
+        parsedAlert as ThreeMilesTrawlingAlert
+        assertThat(parsedAlert.seaFront).isEqualTo("MEMN")
+        assertThat(parsedAlert.riskFactor).isEqualTo(1.2311444133)
+        assertThat(parsedAlert.natinfCode).isEqualTo("7059")
+    }
+
+    @Test
+    fun `getReportingValueFromJSON Should deserialize a THREE_MILES_TRAWLING_ALERT When a legacy flagState property is found`() {
+        // Given
         val alert = "{\"type\": \"THREE_MILES_TRAWLING_ALERT\", \"seaFront\": \"MEMN\", \"flagState\": \"FR\", \"riskFactor\": 1.2311444133}"
 
         // When
@@ -29,7 +45,6 @@ class PendingAlertMapperUTests {
         assertThat(parsedAlert).isInstanceOf(ThreeMilesTrawlingAlert::class.java)
         parsedAlert as ThreeMilesTrawlingAlert
         assertThat(parsedAlert.seaFront).isEqualTo("MEMN")
-        assertThat(parsedAlert.flagState).isEqualTo("FR")
         assertThat(parsedAlert.riskFactor).isEqualTo(1.2311444133)
         assertThat(parsedAlert.natinfCode).isEqualTo("7059")
     }

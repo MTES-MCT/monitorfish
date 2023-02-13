@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionOrObservationType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -14,6 +15,7 @@ class CreateReportingDataInput(
     val externalReferenceNumber: String? = null,
     val ircs: String? = null,
     val vesselIdentifier: VesselIdentifier? = null,
+    val flagState: CountryCode,
     val creationDate: ZonedDateTime,
     val validationDate: ZonedDateTime? = null,
     val value: InfractionSuspicionOrObservationType,
@@ -26,6 +28,7 @@ class CreateReportingDataInput(
         externalReferenceNumber = this.externalReferenceNumber,
         ircs = this.ircs,
         vesselIdentifier = this.vesselIdentifier,
+        flagState = this.flagState,
         creationDate = this.creationDate,
         validationDate = this.validationDate,
         isDeleted = false,

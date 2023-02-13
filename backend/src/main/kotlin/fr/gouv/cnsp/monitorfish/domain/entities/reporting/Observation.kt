@@ -9,19 +9,16 @@ class Observation(
     override val authorContact: String? = null,
     override val title: String,
     override val description: String? = null,
-    override val flagState: String,
 ) : InfractionSuspicionOrObservationType(
     reportingActor = reportingActor,
     natinfCode = null,
     title = title,
     type = ReportingTypeMapping.OBSERVATION,
     authorTrigram = authorTrigram,
-    flagState = flagState,
 ) {
     companion object {
         fun fromUpdatedReporting(
             updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation,
-            reportingValue: InfractionSuspicionOrObservationType,
         ): Observation = Observation(
             reportingActor = updatedInfractionSuspicionOrObservation.reportingActor,
             controlUnitId = updatedInfractionSuspicionOrObservation.controlUnitId,
@@ -29,7 +26,6 @@ class Observation(
             authorContact = updatedInfractionSuspicionOrObservation.authorContact,
             title = updatedInfractionSuspicionOrObservation.title,
             description = updatedInfractionSuspicionOrObservation.description,
-            flagState = reportingValue.flagState,
         )
     }
 }

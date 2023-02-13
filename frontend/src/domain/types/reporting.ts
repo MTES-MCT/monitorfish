@@ -14,6 +14,7 @@ export enum ReportingType {
 export type BaseReporting = {
   creationDate: string
   externalReferenceNumber: string | null
+  flagState: string
   id: number
   infraction: Infraction | null
   internalReferenceNumber: string | null
@@ -67,7 +68,6 @@ export type InfractionSuspicion = {
   controlUnitId: number | null
   description: string
   dml: string
-  flagState: string
   natinfCode: string
   reportingActor: string
   seaFront: SeaFront
@@ -81,7 +81,6 @@ export type Observation = {
   controlUnit: ControlUnit | null
   controlUnitId: number | null
   description: string
-  flagState: string
   reportingActor: string
   title: string
   type: string

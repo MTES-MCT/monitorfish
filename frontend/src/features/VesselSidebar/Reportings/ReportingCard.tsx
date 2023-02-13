@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
@@ -40,15 +41,20 @@ export function ReportingCard({
     reportingType => reportingType.code === reporting.type
   )?.name
 
+  const reportingActor = useMemo(() => {
+    if (reporting.type === ReportingType.ALERT) {
+      return reportingName
+    }
+
+    return getReportingActor(reporting.value.reportingActor, reporting.value.controlUnit)
+  }, [reporting, reportingName])
+
   return (
     <Wrapper data-cy="reporting-card" isInfractionSuspicion={isAnInfractionSuspicion}>
       <Icon>{isAnInfractionSuspicion ? <InfractionSuspicionIcon /> : <ObservationIcon />}</Icon>
       <Body isInfractionSuspicion={isAnInfractionSuspicion}>
         <Title>
-          {reporting.type === ReportingType.ALERT
-            ? reportingName
-            : getReportingActor(reporting.value.reportingActor, reporting.value.controlUnit)}{' '}
-          /{' '}
+          {reportingActor} /{' '}
           {reporting.type === ReportingType.ALERT ? getAlertNameFromType(reporting.value.type) : reporting.value.title}
         </Title>
         <Date>
@@ -109,7 +115,7 @@ export function ReportingCard({
 const getReportingActor = (reportingActor, unit: ControlUnit | null) => {
   switch (reportingActor) {
     case ReportingOriginActor.UNIT.code:
-      return unit?.name
+      return unit?.name || 'Unité inconnue'
     default:
       return reportingActor
   }

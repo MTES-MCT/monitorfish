@@ -33,7 +33,7 @@ class ReportingMapperUTests {
     @Test
     fun `getReportingValueFromJSON Should deserialize an THREE_MILES_TRAWLING_ALERT When it is first serialized`() {
         // Given
-        val alert = ThreeMilesTrawlingAlert("NAMO", "DML 56", "FR", 2.356)
+        val alert = ThreeMilesTrawlingAlert("NAMO", "DML 56", 2.356)
 
         // When
         val jsonString = mapper.writeValueAsString(alert)
@@ -43,14 +43,13 @@ class ReportingMapperUTests {
         assertThat(parsedReporting).isInstanceOf(ThreeMilesTrawlingAlert::class.java)
         parsedReporting as ThreeMilesTrawlingAlert
         assertThat(parsedReporting.seaFront).isEqualTo("NAMO")
-        assertThat(parsedReporting.flagState).isEqualTo("FR")
         assertThat(parsedReporting.riskFactor).isEqualTo(2.356)
     }
 
     @Test
     fun `getReportingValueFromJSON Should deserialize an THREE_MILES_TRAWLING_ALERT json`() {
         // Given
-        val alert = "{\"type\": \"THREE_MILES_TRAWLING_ALERT\", \"seaFront\": \"MEMN\", \"flagState\": \"FR\", \"riskFactor\": 1.2311444133}"
+        val alert = "{\"type\": \"THREE_MILES_TRAWLING_ALERT\", \"seaFront\": \"MEMN\", \"riskFactor\": 1.2311444133}"
 
         val parsedReporting = ReportingMapper.getReportingValueFromJSON(mapper, alert, ReportingType.ALERT)
 
@@ -58,7 +57,6 @@ class ReportingMapperUTests {
         assertThat(parsedReporting).isInstanceOf(ThreeMilesTrawlingAlert::class.java)
         parsedReporting as ThreeMilesTrawlingAlert
         assertThat(parsedReporting.seaFront).isEqualTo("MEMN")
-        assertThat(parsedReporting.flagState).isEqualTo("FR")
         assertThat(parsedReporting.riskFactor).isEqualTo(1.2311444133)
     }
 
@@ -71,7 +69,6 @@ class ReportingMapperUTests {
             "\"unit\": null, " +
             "\"authorTrigram\": \"LTH\"," +
             "\"authorContact\": null," +
-            "\"flagState\": \"FR\"," +
             "\"title\": \"A title !\"," +
             "\"description\": \"A description !\"" +
             "}"
@@ -90,7 +87,7 @@ class ReportingMapperUTests {
     }
 
     @Test
-    fun `getReportingValueFromJSON Should deserialize an INFRACTION_SUSPICION`() {
+    fun `getReportingValueFromJSON Should deserialize an INFRACTION_SUSPICION When a legacy flagState property is found`() {
         // Given
         val infraction = "{" +
             "\"type\": \"INFRACTION_SUSPICION\"," +
@@ -134,7 +131,6 @@ class ReportingMapperUTests {
             "\"authorTrigram\": \"LTH\"," +
             "\"authorContact\": null," +
             "\"title\": \"A title !\"," +
-            "\"flagState\": \"FR\"," +
             "\"description\": \"A description !\"," +
             "\"natinfCode\": \"1234\"," +
             "\"dml\": \"DML 56\"" +

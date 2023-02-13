@@ -28,6 +28,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.Matchers
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito
@@ -39,6 +40,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDate.EPOCH
@@ -514,6 +516,7 @@ class VesselControllerITests {
                 externalReferenceNumber = "1236514",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 value = ThreeMilesTrawlingAlert() as ReportingValue,
@@ -535,6 +538,7 @@ class VesselControllerITests {
                 externalReferenceNumber = "1236514",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now().minusYears(1),
                 validationDate = ZonedDateTime.now().minusYears(1),
                 value = ThreeMilesTrawlingAlert() as ReportingValue,
@@ -571,6 +575,7 @@ class VesselControllerITests {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.current.length()", equalTo(2)))
             .andExpect(jsonPath("$.current[0].id", equalTo(1)))
+            .andExpect(jsonPath("$.current[0].flagState", equalTo("FR")))
             .andExpect(jsonPath("$.current[0].internalReferenceNumber", equalTo("FR224226850")))
             .andExpect(jsonPath("$.current[0].externalReferenceNumber", equalTo("1236514")))
             .andExpect(jsonPath("$.current[0].type", equalTo("ALERT")))

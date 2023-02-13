@@ -10,7 +10,6 @@ data class InfractionSuspicion(
     override val title: String,
     override val description: String? = null,
     override val natinfCode: String,
-    override val flagState: String,
     val seaFront: String? = null,
     val dml: String? = null,
 ) : InfractionSuspicionOrObservationType(
@@ -21,13 +20,11 @@ data class InfractionSuspicion(
     title = title,
     description = description,
     natinfCode = natinfCode,
-    flagState = flagState,
     type = ReportingTypeMapping.INFRACTION_SUSPICION,
 ) {
     companion object {
         fun fromUpdatedReporting(
-            updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation,
-            reportingValue: InfractionSuspicionOrObservationType,
+            updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation
         ): InfractionSuspicion {
             require(!updatedInfractionSuspicionOrObservation.natinfCode.isNullOrEmpty()) {
                 "NATINF code should not be null or empty"
@@ -41,7 +38,6 @@ data class InfractionSuspicion(
                 title = updatedInfractionSuspicionOrObservation.title,
                 description = updatedInfractionSuspicionOrObservation.description,
                 natinfCode = updatedInfractionSuspicionOrObservation.natinfCode,
-                flagState = reportingValue.flagState,
             )
         }
     }

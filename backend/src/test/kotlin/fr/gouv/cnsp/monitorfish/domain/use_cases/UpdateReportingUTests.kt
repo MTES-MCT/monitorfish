@@ -44,6 +44,7 @@ class UpdateReportingUTests {
                 externalReferenceNumber = "1236514",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 value = ThreeMilesTrawlingAlert() as ReportingValue,
@@ -82,13 +83,13 @@ class UpdateReportingUTests {
                 externalReferenceNumber = "1236514",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 value = InfractionSuspicion(
                     reportingActor = ReportingActor.UNIT,
                     authorTrigram = "LTH",
                     title = "Test",
-                    flagState = CountryCode.FR.toString(),
                     natinfCode = "1234",
                 ) as ReportingValue,
                 isArchived = false,
@@ -130,13 +131,13 @@ class UpdateReportingUTests {
             externalReferenceNumber = "1236514",
             ircs = "IRCS",
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             creationDate = ZonedDateTime.now(),
             validationDate = ZonedDateTime.now(),
             value = InfractionSuspicion(
                 reportingActor = ReportingActor.UNIT,
                 authorTrigram = "LTH",
                 title = "Test",
-                flagState = CountryCode.FR.toString(),
                 natinfCode = "1234",
             ) as ReportingValue,
             isArchived = false,
@@ -148,7 +149,6 @@ class UpdateReportingUTests {
             InfractionSuspicion(
                 reportingActor = reportingActor,
                 title = "Test",
-                flagState = CountryCode.FR.toString(),
                 authorTrigram = "LTH",
                 natinfCode = "1234",
             ),
@@ -192,13 +192,13 @@ class UpdateReportingUTests {
                 externalReferenceNumber = "1236514",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 value = InfractionSuspicion(
                     reportingActor = ReportingActor.UNIT,
                     authorTrigram = "LTH",
                     title = "Test",
-                    flagState = CountryCode.FR.toString(),
                     natinfCode = "1234",
                 ) as ReportingValue,
                 isArchived = false,
@@ -231,7 +231,6 @@ class UpdateReportingUTests {
             controlUnitId = 1,
             title = "A title",
             authorTrigram = "LTH",
-            flagState = CountryCode.FR.toString(),
             description = "Before update",
         )
         val reporting = Reporting(
@@ -242,6 +241,7 @@ class UpdateReportingUTests {
             externalReferenceNumber = "1236514",
             ircs = "IRCS",
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             creationDate = ZonedDateTime.now(),
             validationDate = ZonedDateTime.now(),
             value = observation as ReportingValue,
@@ -284,13 +284,13 @@ class UpdateReportingUTests {
             externalReferenceNumber = "1236514",
             ircs = "IRCS",
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             creationDate = ZonedDateTime.now(),
             validationDate = ZonedDateTime.now(),
             value = InfractionSuspicion(
                 reportingActor = ReportingActor.UNIT,
                 authorTrigram = "LTH",
                 title = "Test",
-                flagState = CountryCode.FR.toString(),
                 natinfCode = "1234",
             ) as ReportingValue,
             isArchived = false,
@@ -334,6 +334,7 @@ class UpdateReportingUTests {
             externalReferenceNumber = "1236514",
             ircs = "IRCS",
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             creationDate = ZonedDateTime.now(),
             validationDate = ZonedDateTime.now(),
             value = InfractionSuspicion(
@@ -341,7 +342,6 @@ class UpdateReportingUTests {
                 title = "Test",
                 natinfCode = "1234",
                 authorTrigram = "LTH",
-                flagState = "FR",
             ) as ReportingValue,
             isArchived = false,
             isDeleted = false,
@@ -354,7 +354,6 @@ class UpdateReportingUTests {
                 controlUnitId = 1,
                 title = "Test",
                 natinfCode = "1234",
-                flagState = "FR",
                 dml = "DML 56",
                 authorTrigram = "LTH",
                 seaFront = "NAMO",
@@ -378,7 +377,6 @@ class UpdateReportingUTests {
         argumentCaptor<InfractionSuspicion>().apply {
             verify(reportingRepository).update(any(), capture())
 
-            assertThat(allValues.first().flagState).isEqualTo("FR")
             assertThat(allValues.first().dml).isEqualTo("DML 56")
             assertThat(allValues.first().seaFront).isEqualTo("NAMO")
         }
@@ -395,13 +393,13 @@ class UpdateReportingUTests {
             externalReferenceNumber = "1236514",
             ircs = "IRCS",
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             creationDate = ZonedDateTime.now(),
             validationDate = ZonedDateTime.now(),
             value = Observation(
                 reportingActor = ReportingActor.UNIT,
                 title = "Test",
                 authorTrigram = "LTH",
-                flagState = "FR",
             ) as ReportingValue,
             isArchived = false,
             isDeleted = false,
@@ -425,8 +423,6 @@ class UpdateReportingUTests {
         // Then
         argumentCaptor<Observation>().apply {
             verify(reportingRepository).update(any(), capture())
-
-            assertThat(allValues.first().flagState).isEqualTo("FR")
         }
     }
 
@@ -441,13 +437,13 @@ class UpdateReportingUTests {
             externalReferenceNumber = "1236514",
             ircs = "IRCS",
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             creationDate = ZonedDateTime.now(),
             validationDate = ZonedDateTime.now(),
             value = Observation(
                 reportingActor = ReportingActor.UNIT,
                 title = "Test",
                 authorTrigram = "LTH",
-                flagState = "FR",
             ) as ReportingValue,
             isArchived = false,
             isDeleted = false,
@@ -461,7 +457,6 @@ class UpdateReportingUTests {
                 dml = "DML 17",
                 natinfCode = "1235",
                 authorTrigram = "LTH",
-                flagState = CountryCode.FR.toString(),
                 title = "Chalut en boeuf illégal",
             ),
         )

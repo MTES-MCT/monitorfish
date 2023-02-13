@@ -46,10 +46,10 @@ export function EditReporting() {
         <Row style={rowStyle(10)}>
           {editedReportingInSideWindow &&
             editedReportingInSideWindow.type === ReportingType.ALERT &&
-            editedReportingInSideWindow.value.flagState && (
+            editedReportingInSideWindow.flagState && (
               <Flag
                 rel="preload"
-                src={`${baseUrl}/flags/${editedReportingInSideWindow.value.flagState.toLowerCase()}.svg`}
+                src={`${baseUrl}/flags/${editedReportingInSideWindow.flagState.toLowerCase()}.svg`}
                 style={flagStyle}
               />
             )}

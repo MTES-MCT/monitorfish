@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilencedAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -27,6 +28,7 @@ class GetSilencedAlertsUTests {
             externalReferenceNumber = "RGD",
             ircs = "6554fEE",
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             value = ThreeMilesTrawlingAlert(),
             silencedBeforeDate = ZonedDateTime.now().plusHours(5),
         )
@@ -35,6 +37,7 @@ class GetSilencedAlertsUTests {
             externalReferenceNumber = "RGD",
             ircs = "6554fEE",
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             value = ThreeMilesTrawlingAlert(),
             silencedBeforeDate = ZonedDateTime.now().plusHours(5),
             wasValidated = true,
@@ -44,6 +47,7 @@ class GetSilencedAlertsUTests {
             externalReferenceNumber = "RGD",
             ircs = "6554fEE",
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             value = ThreeMilesTrawlingAlert(),
             silencedBeforeDate = ZonedDateTime.now().plusHours(5),
             wasValidated = false,

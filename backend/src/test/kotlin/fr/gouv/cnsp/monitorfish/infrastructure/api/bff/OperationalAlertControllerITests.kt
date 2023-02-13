@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.*
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
@@ -61,6 +62,7 @@ class OperationalAlertControllerITests {
                     ircs = "6554fEE",
                     vesselId = 123,
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    flagState = CountryCode.FR,
                     tripNumber = "123456",
                     creationDate = ZonedDateTime.now(),
                     value = ThreeMilesTrawlingAlert(),
@@ -95,6 +97,7 @@ class OperationalAlertControllerITests {
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
                 silencedBeforeDate = ZonedDateTime.now(),
                 value = ThreeMilesTrawlingAlert(),
             ),
@@ -117,6 +120,7 @@ class OperationalAlertControllerITests {
             // Then
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", Matchers.equalTo("FRFGRGR")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.flagState", Matchers.equalTo("FR")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo(666)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.type", Matchers.equalTo("THREE_MILES_TRAWLING_ALERT")))
 
@@ -139,6 +143,7 @@ class OperationalAlertControllerITests {
                     externalReferenceNumber = "RGD",
                     ircs = "6554fEE",
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    flagState = CountryCode.FR,
                     silencedBeforeDate = ZonedDateTime.now(),
                     value = ThreeMilesTrawlingAlert(),
                 ),

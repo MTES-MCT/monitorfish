@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.*
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilenceAlertPeriod
@@ -40,6 +41,7 @@ class SilenceOperationalAlertUTests {
             ircs = "6554fEE",
             vesselId = 123,
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             tripNumber = "123456",
             creationDate = ZonedDateTime.now(),
             value = ThreeMilesTrawlingAlert(),
@@ -78,6 +80,7 @@ class SilenceOperationalAlertUTests {
             ircs = "6554fEE",
             vesselId = 123,
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             tripNumber = "123456",
             creationDate = ZonedDateTime.now(),
             value = ThreeMilesTrawlingAlert(),
@@ -114,6 +117,7 @@ class SilenceOperationalAlertUTests {
             ircs = "6554fEE",
             vesselId = 123,
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             tripNumber = "123456",
             creationDate = ZonedDateTime.now(),
             value = ThreeMilesTrawlingAlert(),

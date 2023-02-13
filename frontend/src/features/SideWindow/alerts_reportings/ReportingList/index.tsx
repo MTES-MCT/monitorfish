@@ -73,6 +73,7 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
       creationDate: 'Ouvert le',
       dml: 'DML concernées',
       externalReferenceNumber: 'Marquage ext.',
+      flagState: 'Pavillon',
       internalReferenceNumber: 'CFR',
       ircs: 'C/S',
       reportingTitle: 'reportingTitle',
@@ -84,7 +85,6 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
         label: 'Navire sous charte ?',
         transform: reporting => (reporting.underCharter ? 'OUI' : 'NON')
       },
-      'value.flagState': 'Pavillon',
       'value.natinfCode': 'NATINF',
       'value.seaFront': 'Façade',
       'value.type': {
@@ -107,13 +107,8 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
 
   const focusOnMap = useCallback(
     (reporting: InfractionSuspicionReporting | PendingAlertReporting) => {
-      const vesselIdentity = {
-        ...reporting,
-        flagState: reporting.value.flagState
-      }
-
-      dispatch(showVessel(vesselIdentity, false, false))
-      dispatch(getVesselVoyage(vesselIdentity, undefined, false))
+      dispatch(showVessel(reporting, false, false))
+      dispatch(getVesselVoyage(reporting, undefined, false))
     },
     [dispatch]
   )
@@ -214,9 +209,9 @@ MMSI: ${reporting.mmsi || ''}`
                   <FlexboxGrid.Item style={columnStyles[5] as CSSProperties} title={getVesselNameTitle(reporting)}>
                     <Flag
                       rel="preload"
-                      src={`${baseUrl ? `${baseUrl}/` : ''}flags/${reporting.item.value.flagState.toLowerCase()}.svg`}
+                      src={`${baseUrl ? `${baseUrl}/` : ''}flags/${reporting.item.flagState.toLowerCase()}.svg`}
                       style={{ marginLeft: 0, marginRight: 5, marginTop: -2, width: 18 }}
-                      title={countries.getName(reporting.item.value.flagState.toLowerCase(), 'fr')}
+                      title={countries.getName(reporting.item.flagState.toLowerCase(), 'fr')}
                     />
                     {reporting.item.vesselName}
                   </FlexboxGrid.Item>

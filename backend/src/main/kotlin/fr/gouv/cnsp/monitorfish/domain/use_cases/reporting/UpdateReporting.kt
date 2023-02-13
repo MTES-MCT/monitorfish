@@ -31,7 +31,6 @@ class UpdateReporting(
 
                 val nextObservation = Observation.fromUpdatedReporting(
                     updatedInfractionSuspicionOrObservation,
-                    currentReporting.value,
                 )
                 nextObservation.checkReportingActorAndFieldsRequirements()
 
@@ -45,7 +44,6 @@ class UpdateReporting(
 
                 val nextInfractionSuspicion = InfractionSuspicion.fromUpdatedReporting(
                     updatedInfractionSuspicionOrObservation,
-                    currentReporting.value,
                 ).let {
                     getInfractionSuspicionWithDMLAndSeaFront.execute(it, currentReporting.vesselId)
                 }

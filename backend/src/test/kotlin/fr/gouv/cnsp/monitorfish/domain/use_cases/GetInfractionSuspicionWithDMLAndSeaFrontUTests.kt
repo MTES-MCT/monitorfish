@@ -35,7 +35,6 @@ class GetInfractionSuspicionWithDMLAndSeaFrontUTests {
             dml = "DML 17",
             natinfCode = "1235",
             authorTrigram = "LTH",
-            flagState = CountryCode.FR.toString(),
             title = "Chalut en boeuf illégal",
         )
 
@@ -66,7 +65,6 @@ class GetInfractionSuspicionWithDMLAndSeaFrontUTests {
                     dml = "",
                     natinfCode = "1235",
                     authorTrigram = "LTH",
-                    flagState = CountryCode.FR.toString(),
                     title = "Chalut en boeuf illégal",
                 ),
                 null,
@@ -90,7 +88,6 @@ class GetInfractionSuspicionWithDMLAndSeaFrontUTests {
                     dml = "",
                     natinfCode = "1235",
                     authorTrigram = "LTH",
-                    flagState = CountryCode.FR.toString(),
                     title = "Chalut en boeuf illégal",
                 ),
                 123,
@@ -118,7 +115,6 @@ class GetInfractionSuspicionWithDMLAndSeaFrontUTests {
                     dml = "",
                     natinfCode = "1235",
                     authorTrigram = "LTH",
-                    flagState = CountryCode.FR.toString(),
                     title = "Chalut en boeuf illégal",
                 ),
                 123,

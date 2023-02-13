@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -13,6 +14,7 @@ data class PendingAlertDataOutput(
     val externalReferenceNumber: String? = null,
     val ircs: String? = null,
     val vesselIdentifier: VesselIdentifier,
+    val flagState: CountryCode,
     val creationDate: ZonedDateTime,
     val tripNumber: String? = null,
     val value: AlertType,
@@ -27,6 +29,7 @@ data class PendingAlertDataOutput(
             externalReferenceNumber = pendingAlert.externalReferenceNumber,
             ircs = pendingAlert.ircs,
             vesselIdentifier = pendingAlert.vesselIdentifier,
+            flagState = pendingAlert.flagState,
             creationDate = pendingAlert.creationDate,
             tripNumber = pendingAlert.tripNumber,
             value = pendingAlert.value,

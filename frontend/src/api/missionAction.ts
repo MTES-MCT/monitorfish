@@ -8,7 +8,7 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
       invalidatesTags: () => [{ type: 'MissionActions' }],
       query: missionAction => ({
         body: missionAction,
-        method: 'PUT',
+        method: 'POST',
         url: `/mission_actions`
       })
     }),

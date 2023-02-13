@@ -8,7 +8,7 @@ import type { MissionAction } from '../domain/types/missionAction'
 
 export const missionApi = monitorenvApi.injectEndpoints({
   endpoints: builder => ({
-    createMission: builder.mutation<void, Mission.MissionData>({
+    createMission: builder.mutation<Pick<Mission.Mission, 'id'>, Mission.MissionData>({
       invalidatesTags: () => [{ type: 'Missions' }],
       query: mission => ({
         body: mission,

@@ -22,6 +22,7 @@ from src.pipeline.flows import (
     anchorages,
     beacons,
     control_anteriority,
+    control_units,
     controllers,
     controls,
     controls_open_data,
@@ -37,6 +38,7 @@ from src.pipeline.flows import (
     logbook,
     missing_far_alerts,
     missing_trip_numbers,
+    missions,
     notify_beacon_malfunctions,
     ports,
     position_alerts,
@@ -58,6 +60,7 @@ from src.pipeline.helpers.country_codes import (
 beacons.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")
 control_anteriority.flow.schedule = CronSchedule("5 * * * *")
 controllers.flow.schedule = CronSchedule("0 8 * * *")
+control_units.flow.schedule = CronSchedule("12 8 * * *")
 controls.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
@@ -66,7 +69,7 @@ controls.flow.schedule = Schedule(
         ),
         clocks.CronClock(
             "10 8 * * *",
-            parameter_defaults={"number_of_months": 120, "loading_mode": "replace"},
+            parameter_defaults={"number_of_months": 200, "loading_mode": "replace"},
         ),
     ]
 )
@@ -117,6 +120,18 @@ missing_far_alerts.flow.schedule = Schedule(
     ]
 )
 missing_trip_numbers.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")
+missions.flow.schedule = Schedule(
+    clocks=[
+        clocks.CronClock(
+            "*/2 * * * *",
+            parameter_defaults={"number_of_months": 1, "loading_mode": "upsert"},
+        ),
+        clocks.CronClock(
+            "16 8 * * *",
+            parameter_defaults={"number_of_months": 200, "loading_mode": "replace"},
+        ),
+    ]
+)
 notify_beacon_malfunctions.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
@@ -222,6 +237,7 @@ flows_to_register = [
     beacons.flow,
     control_anteriority.flow,
     controllers.flow,
+    control_units.flow,
     controls.flow,
     controls_open_data.flow,
     current_segments.flow,

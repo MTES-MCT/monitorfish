@@ -34,15 +34,14 @@ def assert_positions_received_by_api_health(
     max_minutes_without_data: int = 10,
 ):
     """
-    Checks if the `date_last_position_received_by_api` of the input `MonitorfishHealthcheck` is within
-    `max_minutes_without_data` minutes of `utcnow`.
+    Checks if the `date_last_position_received_by_api` of the input
+    `MonitorfishHealthcheck` is within `max_minutes_without_data` minutes of `utcnow`.
 
     Args:
         healthcheck (MonitorfishHealthcheck): `MonitorfishHealthcheck` to check.
         utcnow (datetime, optional): Date with which to compare the latest
-          position's reception date and from which the `recent_positions_histogram` is
-          expected to be supplied.
-          If not supplied, the current server time is used. Defaults to None.
+          position's reception date. If not supplied, the current server time is used.
+          Defaults to None.
         max_minutes_without_data (int, optional): maximum number of minutes allow
           between `date_position_received` and `utcnow`. Defaults to 10.
     Raises:
@@ -74,8 +73,9 @@ def assert_last_positions_flow_health(
     max_minutes_without_data: int = 10,
 ):
     """
-    Checks if the date_time of most recent `date_last_position_updated_by_prefect` is in the last
-    `max_minutes_without_data` minutes in the input `MonitorfishHealthcheck`.
+    Checks if the date_time of most recent `date_last_position_updated_by_prefect` is
+    in the last `max_minutes_without_data` minutes in the input
+    `MonitorfishHealthcheck`.
 
     Args:
         healthcheck (MonitorfishHealthcheck): `MonitorfishHealthcheck` to check.

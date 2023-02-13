@@ -97,6 +97,9 @@ MAX_FISHING_SPEED_THRESHOLD = 5.5
 MINIMUM_CONSECUTIVE_POSITIONS = 2
 MINIMUM_MINUTES_OF_EMISSION_AT_SEA = 60
 
+# Historic controls configuration
+POSEIDON_CONTROL_ID_TO_MONITORENV_MISSION_ID_SHIFT = -200000
+
 # Risk factor configuration
 risk_factor_coefficients = {
     "probability": 0.3,

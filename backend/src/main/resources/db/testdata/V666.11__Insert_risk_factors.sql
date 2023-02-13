@@ -26,9 +26,9 @@ insert into risk_factors (cfr,
                           number_controls_last_5_years,
                           number_controls_last_3_years,
                           number_infractions_last_5_years,
-                          number_diversions_last_5_years,
-                          number_seizures_last_5_years,
-                          number_escorts_to_quay_last_5_years)
+                          number_gear_seizures_last_5_years,
+                          number_species_seizures_last_5_years,
+                          number_vessel_seizures_last_5_years)
 values ('FAK000999999',
         2.1,
         2,
@@ -57,6 +57,6 @@ values ('FAK000999999',
         8,
         1,
         5,
-        0,
-        1,
-        0);
+        4,
+        3,
+        2);

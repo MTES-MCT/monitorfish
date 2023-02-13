@@ -187,6 +187,24 @@ def remove_nones_from_dict(d: dict) -> dict:
     return {k: v for k, v in d.items() if v is not None}
 
 
+def remove_nones_from_list(li: list) -> list:
+    """
+    Takes a list and removes ``None`` values from it.
+
+    Args:
+        li (list): a list
+
+    Returns:
+        list: the input list, with all `None` removed.
+
+    Examples:
+        >>> li = [1, 3, None, "a", "b", None]
+        >>> remove_nones_from_dict(li)
+        [1, 3, "a", "b"]
+    """
+    return [x for x in li if x is not None]
+
+
 def df_to_dict_series(
     df: pd.DataFrame, result_colname: str = "json_col", remove_nulls: bool = False
 ):

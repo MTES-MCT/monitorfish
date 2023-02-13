@@ -8,10 +8,8 @@ import jakarta.persistence.*
 @Table(name = "infractions")
 data class InfractionEntity(
     @Id
-    @Column(name = "id")
-    var id: Int,
     @Column(name = "natinf_code")
-    var natinfCode: String? = null,
+    var natinfCode: String,
     @Column(name = "regulation")
     var regulation: String? = null,
     @Column(name = "infraction_category")
@@ -21,7 +19,6 @@ data class InfractionEntity(
 ) {
 
     fun toInfraction() = Infraction(
-        id = id,
         natinfCode = natinfCode,
         regulation = regulation,
         infractionCategory = infractionCategory?.let { category -> InfractionCategory.values().firstOrNull {

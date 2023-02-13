@@ -1,10 +1,11 @@
 import logging
 from pathlib import Path
-from typing import Union
+from typing import List, Union
 
 import geopandas as gpd
 import pandas as pd
 from prefect import task
+from sqlalchemy import DDL
 from sqlalchemy.engine import Connection
 from sqlalchemy.sql import Select
 
@@ -98,6 +99,8 @@ def load(
     timedelta_columns: list = None,
     enum_columns: list = None,
     connection: Connection = None,
+    init_ddls: List[DDL] = None,
+    end_ddls: List[DDL] = None,
 ):
     """
     Load a DataFrame or GeoDataFrame to a database table using sqlalchemy. The table
@@ -116,7 +119,8 @@ def load(
             already
 
         db_name (str, optional): Required if a `connection` is not provided.
-          'monitorfish_remote' or 'monitorfish_local'. Defaults to None.
+          'monitorfish_remote', 'monitorenv_remote' or 'monitorfish_local'.
+          Defaults to None.
         pg_array_columns (list, optional): columns containing sequences that must be
           serialized before loading into columns with Postgresql `Array` type
         handle_array_conversion_errors (bool): whether to handle or raise upon error
@@ -147,6 +151,10 @@ def load(
           operation. If not provided, `db_name` must be given and a connection to the
           designated database will be created for the insert operation.
           Defaults to None.
+        init_ddls: (List[DDL], optional): If given, these DDLs will be executed before
+          the loading operation. Defaults to None.
+        end_ddls: (List[DDL], optional): If given, these DDLs will be executed after
+          the loading operation. Defaults to None.
     """
 
     df = prepare_df_for_loading(
@@ -173,6 +181,8 @@ def load(
                 how=how,
                 table_id_column=table_id_column,
                 df_id_column=df_id_column,
+                init_ddls=init_ddls,
+                end_ddls=end_ddls,
             )
     else:
         load_with_connection(
@@ -184,6 +194,8 @@ def load(
             how=how,
             table_id_column=table_id_column,
             df_id_column=df_id_column,
+            init_ddls=init_ddls,
+            end_ddls=end_ddls,
         )
 
 
@@ -197,7 +209,13 @@ def load_with_connection(
     how: str = "replace",
     table_id_column: Union[None, str] = None,
     df_id_column: Union[None, str] = None,
+    init_ddls: List[DDL] = None,
+    end_ddls: List[DDL] = None,
 ):
+    if init_ddls:
+        for ddl in init_ddls:
+            connection.execute(ddl)
+
     table = get_table(table_name, schema, connection, logger)
     if how == "replace":
         # Delete all rows from table
@@ -257,6 +275,10 @@ def load_with_connection(
 
     else:
         raise ValueError("df must be DataFrame or GeoDataFrame.")
+
+    if end_ddls:
+        for ddl in end_ddls:
+            connection.execute(ddl)
 
 
 def delete_rows(

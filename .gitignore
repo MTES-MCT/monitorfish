@@ -170,6 +170,7 @@ datascience/monitorfish.egg-info
 
 # IDEs
 .vscode
+.idea
 
 # Doc
 docs/redmine_wiki/*

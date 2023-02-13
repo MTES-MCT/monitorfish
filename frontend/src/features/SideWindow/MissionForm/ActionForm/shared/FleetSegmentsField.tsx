@@ -33,7 +33,7 @@ export function FleetSegmentsField() {
       value: {
         faoAreas: faoAreas || [],
         segment,
-        segmentName
+        segmentName: segmentName || undefined
       }
     }))
   }, [getFleetSegmentsApiQuery.data])
@@ -59,13 +59,13 @@ export function FleetSegmentsField() {
         const riskFactor = await dispatch(getVesselRiskFactor(''))
 
         const faoZones = getFaoZonesFromSpeciesOnboard(riskFactor.speciesOnboard)
-        // TODO Remove this `console.log`.
+        // TODO Remove this `console.debug`.
         // eslint-disable-next-line no-console
-        console.log('riskfactor', faoZones)
+        console.debug('riskfactor', faoZones)
       } catch (err) {
-        // TODO Remove this `console.log`.
+        // TODO Remove this `console.debug`.
         // eslint-disable-next-line no-console
-        console.log(err)
+        console.debug(err)
       }
     }
 

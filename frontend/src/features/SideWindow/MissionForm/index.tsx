@@ -7,12 +7,17 @@ import { ActionForm } from './ActionForm'
 import { ActionList } from './ActionList'
 import { MainForm } from './MainForm'
 import {
+  getMissionActionsDataFromMissionActionsFormValues,
   getMissionDataFromMissionFormValues,
   getUpdatedMissionFromMissionFormValues,
   isMissionFormValuesComplete
 } from './utils'
 import { useCreateMissionMutation, useGetMissionQuery } from '../../../api/mission'
-import { useGetMissionActionsQuery } from '../../../api/missionAction'
+import {
+  useCreateMissionActionMutation,
+  useGetMissionActionsQuery,
+  useUpdateMissionActionMutation
+} from '../../../api/missionAction'
 import { missionActions } from '../../../domain/actions'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
@@ -23,6 +28,8 @@ import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
 import { SideWindowMenuKey } from '../constants'
 
 import type { MissionActionFormValues, MissionFormValues } from './types'
+
+const ERROR_PATH = 'features/SideWindow/MissionForm/index.tsx'
 
 export function MissionForm() {
   const { mission } = useMainAppSelector(store => store)
@@ -43,7 +50,9 @@ export function MissionForm() {
   const missionApiQuery = useGetMissionQuery(mission.draftId || skipToken)
   const missionActionsApiQuery = useGetMissionActionsQuery(mission.draftId || skipToken)
   const [createMission] = useCreateMissionMutation()
+  const [createMissionAction] = useCreateMissionActionMutation()
   const [updateMission] = useCreateMissionMutation()
+  const [updateMissionAction] = useUpdateMissionActionMutation()
 
   const actionFormKey = useMemo(() => `actionForm-${mission.editedDraftActionIndex}`, [mission.editedDraftActionIndex])
   const isMissionFormValid = useMemo(() => isMissionFormValuesComplete(mission.draft), [mission.draft])
@@ -57,7 +66,7 @@ export function MissionForm() {
       if (!mission.draft || !mission.draft.actions) {
         throw new FrontendError(
           'Either `mission.draft` or `mission.draft.actions` is undefined while `mission.editedDraftActionIndex` is not. This should never happen.',
-          'features/SideWindow/MissionForm/index.tsx > MissionForm()'
+          ERROR_PATH
         )
       }
 
@@ -68,21 +77,52 @@ export function MissionForm() {
     [mission.editedDraftActionIndex]
   )
 
-  const createOrUpdateMission = useCallback(() => {
+  const createOrUpdateMission = useCallback(async () => {
     if (!mission.draft) {
       return
     }
 
-    if (!mission.draftId) {
-      const newMission = getMissionDataFromMissionFormValues(mission.draft)
+    let missionId: number
 
-      createMission(newMission)
-    } else {
-      const updatedMission = getUpdatedMissionFromMissionFormValues(mission.draftId, mission.draft)
+    // TODO Dev only. Remove that try/catch before merging.
+    try {
+      if (!mission.draftId) {
+        const newMission = getMissionDataFromMissionFormValues(mission.draft)
+        // TODO Override Redux RTK typings globally.
+        // Redux RTK typing is wrong, this should be a tuple-like to help TS discriminate `data` from `error`.
+        const { data, error } = (await createMission(newMission)) as any
+        if (!data) {
+          throw new FrontendError('`createMission()` failed', `${ERROR_PATH} > createOrUpdateMission()`, error)
+        }
 
-      updateMission(updatedMission)
-    }
-  }, [createMission, mission.draftId, mission.draft, updateMission])
+        missionId = data.id
+      } else {
+        const updatedMission = getUpdatedMissionFromMissionFormValues(mission.draftId, mission.draft)
+        await updateMission(updatedMission)
+
+        missionId = mission.draftId
+      }
+      // eslint-disable-next-line no-empty
+    } catch (_) {}
+
+    // TODO Dev only. Remove that before merging.
+    missionId = Math.ceil(Math.random() * 2)
+
+    const missionActionsData = getMissionActionsDataFromMissionActionsFormValues(missionId, mission.draft.actions)
+
+    await Promise.all(
+      missionActionsData.map(async missionActionData => {
+        if (missionActionData.id === undefined) {
+          await createMissionAction(missionActionData)
+        } else {
+          await updateMissionAction({
+            ...missionActionData,
+            id: missionActionData.id
+          })
+        }
+      })
+    )
+  }, [createMission, createMissionAction, mission.draftId, mission.draft, updateMission, updateMissionAction])
 
   const goToMissionList = useCallback(async () => {
     dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_LIST))
@@ -169,10 +209,6 @@ export function MissionForm() {
   if (!mission.draft) {
     return <LoadingSpinnerWall />
   }
-
-  // if (mission.draft.actions.length > 0) {
-  //   console.log(mission.draft.actions[0])
-  // }
 
   return (
     <Wrapper heightOffset={headerHeight}>

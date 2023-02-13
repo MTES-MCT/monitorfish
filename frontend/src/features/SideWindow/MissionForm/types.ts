@@ -5,7 +5,7 @@ import type { PartialExcept, Undefine } from '../../../types'
 import type { DateAsStringRange } from '@mtes-mct/monitor-ui'
 
 export type MissionActionFormValues = PartialExcept<
-  MissionAction.MissionActionData,
+  Omit<MissionAction.MissionActionData, 'missionId'>,
   'actionType' | 'actionDatetimeUtc'
 > & {
   // If it's a draft, that means the user just added this new action (and we'll show "à renseigner" in the list)

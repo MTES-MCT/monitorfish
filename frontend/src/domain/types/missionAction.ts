@@ -1,44 +1,43 @@
 import type { ControlUnit } from './controlUnit'
-import type { Except } from 'type-fest'
 
 export namespace MissionAction {
   export interface MissionAction {
     actionDatetimeUtc: string
     actionType: MissionActionType
-    controlQualityComments: String | undefined
+    controlQualityComments: string | undefined
     controlUnits: ControlUnit[]
     diversion: Boolean | undefined
     emitsAis: ControlCheck | undefined
     emitsVms: ControlCheck | undefined
-    facade: String | undefined
+    facade: string | undefined
     feedbackSheetRequired: Boolean | undefined
     gearInfractions: GearInfraction[]
     gearOnboard: GearControl[]
-    id: number | undefined
+    id: number
     isFromPoseidon: boolean | undefined
     latitude: number | undefined
-    licencesAndLogbookObservations: String | undefined
+    licencesAndLogbookObservations: string | undefined
     licencesMatchActivity: ControlCheck | undefined
     logbookInfractions: LogbookInfraction[]
     logbookMatchesActivity: ControlCheck | undefined
     longitude: number | undefined
     missionId: number
     numberOfVesselsFlownOver: number | undefined
-    otherComments: String | undefined
+    otherComments: string | undefined
     otherInfractions: OtherInfraction[]
-    portLocode: String | undefined
-    portName: String | undefined
+    portLocode: string | undefined
+    portName: string | undefined
     segments: FleetSegment[]
     seizureAndDiversion: Boolean | undefined
-    seizureAndDiversionComments: String | undefined
+    seizureAndDiversionComments: string | undefined
     separateStowageOfPreservedSpecies: Boolean | undefined
     speciesInfractions: SpeciesInfraction[]
-    speciesObservations: String | undefined
+    speciesObservations: string | undefined
     speciesOnboard: SpeciesControl[]
     speciesSizeControlled: Boolean | undefined
     speciesWeightControlled: Boolean | undefined
     unitWithoutOmegaGauge: Boolean | undefined
-    userTrigram: String | undefined
+    userTrigram: string | undefined
     vesselId: number
     vesselTargeted: Boolean | undefined
 
@@ -104,8 +103,8 @@ export namespace MissionAction {
   }
 
   export type FleetSegment = {
-    segment: string | null
-    segmentName: string | null
+    segment: string | undefined
+    segmentName: string | undefined
 
     // TODO I had to add that.
     // eslint-disable-next-line typescript-sort-keys/interface
@@ -147,7 +146,9 @@ export namespace MissionAction {
     natinf: number
   }
 
-  export type MissionActionData = Except<MissionAction, 'id'>
+  export type MissionActionData = Omit<MissionAction, 'id'> & {
+    id: MissionAction['id'] | undefined
+  }
 
   export type MissionControlsSummary = {
     controls: MissionAction[]

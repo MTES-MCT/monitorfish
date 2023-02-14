@@ -50,7 +50,9 @@ function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
           source: new XYZ({
             maxZoom: 19,
             tileLoadFunction: loadTileFromCacheOrFetch,
-            url: `https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png`
+            urls: ['a', 'b', 'c', 'd'].map(
+              subdomain => `https://${subdomain}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png`
+            )
           }),
           zIndex: 0
         }),
@@ -60,7 +62,9 @@ function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
           source: new XYZ({
             maxZoom: 19,
             tileLoadFunction: loadTileFromCacheOrFetch,
-            url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}.png'
+            urls: ['a', 'b', 'c', 'd'].map(
+              subdomain => `https://${subdomain}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png`
+            )
           }),
           zIndex: 0
         }),

@@ -107,7 +107,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.wait('@reporting')
     cy.wait(100)
 
-    cy.get('*[data-cy="reporting-card"]').eq(0).contains('ULAM 56 / Sortie non autorisée')
+    cy.get('*[data-cy="reporting-card"]').eq(0).contains('Cross Etel / Sortie non autorisée')
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('NATINF 2608')
     cy.get('*[data-cy="archive-reporting-card"]').eq(0).click()
 
@@ -117,7 +117,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-history"]').should('exist')
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-archive-year"]').eq(0).contains("1 suspicion d'infraction")
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-archive-year"]').eq(0).click()
-    cy.get('*[data-cy="reporting-card"]').eq(0).contains('ULAM 56 / Sortie non autorisée')
+    cy.get('*[data-cy="reporting-card"]').eq(0).contains('Cross Etel / Sortie non autorisée')
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()
 
     // Reporting Should be deleted and not found in the archived reporting nor in the map

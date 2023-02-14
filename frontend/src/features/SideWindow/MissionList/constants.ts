@@ -54,7 +54,6 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission.Mission> = {
       label: 'Date de fin'
     },
     {
-      fixedWidth: 160,
       isSortable: true,
       key: 'unit',
       label: 'Unité (Administration)'

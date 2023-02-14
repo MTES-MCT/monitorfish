@@ -9,5 +9,4 @@ export const Table = styled.table`
   font-weight: 500;
   line-height: 18px;
   padding: 0;
-  width: 100%;
 `

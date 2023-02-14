@@ -53,8 +53,9 @@ export function SideWindowMenu({ selectedMenu }: SideWindowMenuProps) {
 const Menu = styled.div`
   background-color: ${p => p.theme.color.charcoal};
   display: flex;
+  height: 100%;
   flex-direction: column;
-  height: 100vh;
+  max-width: 70px;
   padding: 70px 0 0;
 `
 

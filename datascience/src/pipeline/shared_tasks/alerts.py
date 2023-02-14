@@ -131,6 +131,7 @@ def filter_silenced_alerts(
       - vessel_id
       - vessel_name
       - vessel_identifier
+      - flag_state
       - creation_date
       - latitude
       - longitude
@@ -170,6 +171,7 @@ def filter_silenced_alerts(
             "internal_reference_number",
             "external_reference_number",
             "ircs",
+            "flag_state",
             "vessel_id",
             "vessel_identifier",
             "creation_date",

@@ -15,8 +15,8 @@ import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { getDateTime } from '../../../utils'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
-import { Flag } from '../../vessel_list/tableCells'
-import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
+import { Flag } from '../../VesselList/tableCells'
+import { sortArrayByColumn, SortType } from '../../VesselList/tableSort'
 
 import type { LEGACY_SilencedAlert } from '../../../domain/entities/alerts/types'
 import type { CSSProperties } from 'react'
@@ -111,9 +111,9 @@ export function SilencedAlertsList({ silencedAlerts }: SilencedAlertsListProps) 
                   <FlexboxGrid.Item style={vesselNameColumnStyle}>
                     <Flag
                       rel="preload"
-                      src={`${baseUrl ? `${baseUrl}/` : ''}flags/${alert.value.flagState.toLowerCase()}.svg`}
+                      src={`${baseUrl ? `${baseUrl}/` : ''}flags/${alert.flagState.toLowerCase()}.svg`}
                       style={{ marginLeft: 0, marginRight: 5, marginTop: 1, width: 18 }}
-                      title={countries.getName(alert.value.flagState.toLowerCase(), 'fr')}
+                      title={countries.getName(alert.flagState.toLowerCase(), 'fr')}
                     />
                     {alert.vesselName}
                   </FlexboxGrid.Item>
@@ -131,9 +131,8 @@ export function SilencedAlertsList({ silencedAlerts }: SilencedAlertsListProps) 
                       alt="Voir sur la carte"
                       data-cy="side-window-silenced-alerts-show-vessel"
                       onClick={() => {
-                        const vesselIdentity = { ...alert, flagState: alert.value.flagState }
-                        dispatch(showVessel(vesselIdentity, false, false))
-                        dispatch(getVesselVoyage(vesselIdentity, undefined, false))
+                        dispatch(showVessel(alert, false, false))
+                        dispatch(getVesselVoyage(alert, undefined, false))
                       }}
                       src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
                       style={showIconStyle}

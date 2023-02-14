@@ -1,4 +1,4 @@
-import { addZoneSelected } from '../../../../features/vessel_list/VesselList.slice'
+import { addZoneSelected } from '../../../../features/VesselList/VesselList.slice'
 import layer from '../../../shared_slices/Layer'
 import { getAdministrativeZoneFromAPI } from '../../../../api/geoserver'
 

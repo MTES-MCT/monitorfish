@@ -13,7 +13,7 @@ import {
   SegmentCellWithTitle
 } from '../tableCells'
 import updateControlObjective from '../../../domain/use_cases/controlObjective/updateControlObjective'
-import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
+import { sortArrayByColumn, SortType } from '../../VesselList/tableSort'
 import deleteControlObjective from '../../../domain/use_cases/controlObjective/deleteControlObjective'
 import addControlObjective from '../../../domain/use_cases/controlObjective/addControlObjective'
 

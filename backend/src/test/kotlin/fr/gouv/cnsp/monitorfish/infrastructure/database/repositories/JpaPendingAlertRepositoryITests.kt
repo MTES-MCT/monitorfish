@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
@@ -25,6 +26,7 @@ class JpaPendingAlertRepositoryITests : AbstractDBTests() {
             ircs = "6554fEE",
             vesselId = 123,
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             tripNumber = "123456",
             creationDate = ZonedDateTime.now(),
             value = ThreeMilesTrawlingAlert(),

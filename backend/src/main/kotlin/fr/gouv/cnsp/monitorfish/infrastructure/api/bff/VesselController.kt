@@ -153,7 +153,8 @@ class VesselController(
             val positionsDataOutput = positions.await().map {
                 PositionDataOutput.fromPosition(it)
             }
-            ResponseEntity.status(returnCode).body(positionsDataOutput)
+
+            return@runBlocking ResponseEntity.status(returnCode).body(positionsDataOutput)
         }
     }
 

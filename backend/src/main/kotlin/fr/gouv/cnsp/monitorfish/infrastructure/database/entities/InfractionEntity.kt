@@ -21,9 +21,11 @@ data class InfractionEntity(
     fun toInfraction() = Infraction(
         natinfCode = natinfCode,
         regulation = regulation,
-        infractionCategory = infractionCategory?.let { category -> InfractionCategory.values().firstOrNull {
-            it.value == category
-        } },
+        infractionCategory = infractionCategory?.let { category ->
+            InfractionCategory.values().firstOrNull {
+                it.value == category
+            }
+        },
         infraction = infraction,
     )
 }

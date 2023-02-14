@@ -20,7 +20,7 @@ class APIMissionRepository(
     val monitorenvProperties: MonitorenvProperties,
     val apiClient: ApiClient,
 ) : MissionRepository {
-    private val logger: Logger = LoggerFactory.getLogger(MissionRepository::class.java)
+    private val logger: Logger = LoggerFactory.getLogger(APIMissionRepository::class.java)
 
     @Cacheable(value = ["missions"])
     override fun findControlUnitsOfMission(scope: CoroutineScope, missionId: Int): Deferred<List<ControlUnit>> {

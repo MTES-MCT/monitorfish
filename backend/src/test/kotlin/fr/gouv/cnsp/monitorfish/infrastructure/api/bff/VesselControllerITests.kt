@@ -28,6 +28,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.Matchers
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito
@@ -39,6 +40,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDate.EPOCH
@@ -505,6 +507,47 @@ class VesselControllerITests {
     @Test
     fun `Should get vessel's reporting`() {
         // Given
+        val currentReportingAndControlUnit = Pair(
+            Reporting(
+                id = 1,
+                type = ReportingType.ALERT,
+                vesselName = "BIDUBULE",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                validationDate = ZonedDateTime.now(),
+                value = ThreeMilesTrawlingAlert() as ReportingValue,
+                isArchived = false,
+                isDeleted = false,
+                infraction = Infraction(
+                    natinfCode = "7059",
+                    infractionCategory = InfractionCategory.FISHING,
+                ),
+            ),
+            null,
+        )
+        val archivedReportingAndControlUnit = Pair(
+            Reporting(
+                id = 666,
+                type = ReportingType.ALERT,
+                vesselName = "BIDUBULE",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now().minusYears(1),
+                validationDate = ZonedDateTime.now().minusYears(1),
+                value = ThreeMilesTrawlingAlert() as ReportingValue,
+                isArchived = true,
+                isDeleted = false,
+            ),
+            null,
+        )
+
         given(
             this.getVesselReportings.execute(
                 eq("FR224226850"),
@@ -516,56 +559,8 @@ class VesselControllerITests {
         )
             .willReturn(
                 CurrentAndArchivedReportings(
-                    current = listOf(
-                        Reporting(
-                            id = 1,
-                            type = ReportingType.ALERT,
-                            vesselName = "BIDUBULE",
-                            internalReferenceNumber = "FR224226850",
-                            externalReferenceNumber = "1236514",
-                            ircs = "IRCS",
-                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                            creationDate = ZonedDateTime.now(),
-                            validationDate = ZonedDateTime.now(),
-                            value = ThreeMilesTrawlingAlert() as ReportingValue,
-                            isArchived = false,
-                            isDeleted = false,
-                            infraction = Infraction(
-                                natinfCode = "7059",
-                                infractionCategory = InfractionCategory.FISHING,
-                            ),
-                        ),
-                        Reporting(
-                            id = 1,
-                            type = ReportingType.ALERT,
-                            vesselName = "BIDUBULE",
-                            internalReferenceNumber = "FR224226850",
-                            externalReferenceNumber = "1236514",
-                            ircs = "IRCS",
-                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                            creationDate = ZonedDateTime.now(),
-                            validationDate = ZonedDateTime.now(),
-                            value = ThreeMilesTrawlingAlert() as ReportingValue,
-                            isArchived = false,
-                            isDeleted = false,
-                        ),
-                    ),
-                    archived = listOf(
-                        Reporting(
-                            id = 666,
-                            type = ReportingType.ALERT,
-                            vesselName = "BIDUBULE",
-                            internalReferenceNumber = "FR224226850",
-                            externalReferenceNumber = "1236514",
-                            ircs = "IRCS",
-                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                            creationDate = ZonedDateTime.now().minusYears(1),
-                            validationDate = ZonedDateTime.now().minusYears(1),
-                            value = ThreeMilesTrawlingAlert() as ReportingValue,
-                            isArchived = true,
-                            isDeleted = false,
-                        ),
-                    ),
+                    current = listOf(currentReportingAndControlUnit, currentReportingAndControlUnit),
+                    archived = listOf(archivedReportingAndControlUnit),
                 ),
             )
 
@@ -580,12 +575,15 @@ class VesselControllerITests {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.current.length()", equalTo(2)))
             .andExpect(jsonPath("$.current[0].id", equalTo(1)))
+            .andExpect(jsonPath("$.current[0].flagState", equalTo("FR")))
             .andExpect(jsonPath("$.current[0].internalReferenceNumber", equalTo("FR224226850")))
             .andExpect(jsonPath("$.current[0].externalReferenceNumber", equalTo("1236514")))
             .andExpect(jsonPath("$.current[0].type", equalTo("ALERT")))
             .andExpect(jsonPath("$.current[0].isArchived", equalTo(false)))
             .andExpect(jsonPath("$.current[0].isDeleted", equalTo(false)))
             .andExpect(jsonPath("$.current[0].infraction.natinfCode", equalTo("7059")))
+            .andExpect(jsonPath("$.current[0].value.type", equalTo("THREE_MILES_TRAWLING_ALERT")))
+            .andExpect(jsonPath("$.current[0].value.natinfCode", equalTo("7059")))
             .andExpect(jsonPath("$.archived[0].id", equalTo(666)))
             .andExpect(jsonPath("$.archived[0].internalReferenceNumber", equalTo("FR224226850")))
             .andExpect(jsonPath("$.archived[0].externalReferenceNumber", equalTo("1236514")))

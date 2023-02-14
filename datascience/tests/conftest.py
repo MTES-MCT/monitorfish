@@ -30,6 +30,7 @@ class Migration:
     path: Path
     major: int
     minor: int
+    patch: int
     script: str = field(init=False)
 
     def __post_init__(self):
@@ -47,12 +48,14 @@ def read_sql_file(script_path: Path) -> str:
 
 
 def sort_migrations(migrations: List[Migration]) -> List[Migration]:
-    return sorted(migrations, key=lambda m: (m.major, m.minor))
+    return sorted(migrations, key=lambda m: (m.major, m.minor, m.patch))
 
 
 def get_migrations_in_folder(folder: Path) -> List[Migration]:
     files = os.listdir(folder)
-    migration_regex = re.compile(r"V(?P<major>\d+)\.(?P<minor>\d+)__(?P<name>.*)\.sql")
+    migration_regex = re.compile(
+      r"V(?P<major>\d+)\.(?P<minor>\d+)(\.(?P<patch>\d+))?__(?P<name>.*)\.sql"
+    )
     migrations = []
 
     for file in files:
@@ -60,8 +63,11 @@ def get_migrations_in_folder(folder: Path) -> List[Migration]:
         if match:
             major = int(match.group("major"))
             minor = int(match.group("minor"))
+            patch = int(match.group("patch") or "0")
             path = (folder / Path(file)).resolve()
-            migrations.append(Migration(path=path, major=major, minor=minor))
+            migrations.append(
+              Migration(path=path, major=major, minor=minor, patch=patch)
+            )
 
     return sort_migrations(migrations)
 
@@ -126,5 +132,5 @@ def reset_test_data(create_tables):
     test_data_scripts = get_migrations_in_folder(test_data_scripts_folder)
     print("Inserting test data")
     for s in test_data_scripts:
-        print(f"{s.major}.{s.minor}: {s.path.name}")
+        print(f"{s.major}.{s.minor}.{s.patch}: {s.path.name}")
         e.execute(s.script)

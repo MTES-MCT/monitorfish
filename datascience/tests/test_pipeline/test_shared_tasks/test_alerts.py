@@ -40,8 +40,8 @@ def test_make_alerts():
             "cfr": ["A", "B"],
             "external_immatriculation": ["AA", "BB"],
             "ircs": ["AAA", "BBB"],
-            "vessel_name": ["Vessel_A", "Vessel_B"],
             "flag_state": ["FR", "BE"],
+            "vessel_name": ["Vessel_A", "Vessel_B"],
             "facade": ["NAMO", "MEMN"],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
@@ -68,6 +68,7 @@ def test_make_alerts():
             "internal_reference_number": ["A", "B"],
             "external_reference_number": ["AA", "BB"],
             "ircs": ["AAA", "BBB"],
+            "flag_state": ["FR", "BE"],
             "vessel_id": [1, 12],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
@@ -81,14 +82,12 @@ def test_make_alerts():
             "value": [
                 {
                     "seaFront": "NAMO",
-                    "flagState": "FR",
                     "type": "MISSING_FAR_ALERT",
                     "riskFactor": 1.23,
                     "dml": "dml 007",
                 },
                 {
                     "seaFront": "MEMN",
-                    "flagState": "BE",
                     "type": "MISSING_FAR_ALERT",
                     "riskFactor": 3.56,
                     "dml": "dml 22",
@@ -134,6 +133,7 @@ def test_filter_silenced_alerts():
             "internal_reference_number": ["A", "B"],
             "external_reference_number": ["AA", "BB"],
             "ircs": ["AAA", "BBB"],
+            "flag_state": ["FR", "FR"],
             "vessel_id": [1, 12],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
@@ -147,14 +147,12 @@ def test_filter_silenced_alerts():
             "value": [
                 {
                     "seaFront": "NAMO",
-                    "flagState": "FR",
                     "type": alert_type,
                     "riskFactor": 1.23,
                     "dml": "dml A",
                 },
                 {
                     "seaFront": "MEMN",
-                    "flagState": "FR",
                     "type": alert_type,
                     "riskFactor": None,
                     "dml": "dml B",
@@ -182,6 +180,7 @@ def test_filter_silenced_alerts():
             "internal_reference_number": ["B"],
             "external_reference_number": ["BB"],
             "ircs": ["BBB"],
+            "flag_state": ["FR"],
             "vessel_id": [12],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
@@ -192,7 +191,6 @@ def test_filter_silenced_alerts():
             "value": [
                 {
                     "seaFront": "MEMN",
-                    "flagState": "FR",
                     "type": alert_type,
                     "riskFactor": None,
                     "dml": "dml B",
@@ -219,6 +217,7 @@ def test_filter_silenced_alerts_when_multiple_silenced_alerts_facade():
             "internal_reference_number": ["A", "B"],
             "external_reference_number": ["AA", "BB"],
             "ircs": ["AAA", "BBB"],
+            "flag_state": ["FR", "FR"],
             "vessel_id": [1, 12],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
@@ -232,14 +231,12 @@ def test_filter_silenced_alerts_when_multiple_silenced_alerts_facade():
             "value": [
                 {
                     "seaFront": "NAMO",
-                    "flagState": "FR",
                     "type": alert_type,
                     "riskFactor": 1.23,
                     "dml": "dml A",
                 },
                 {
                     "seaFront": "MEMN",
-                    "flagState": "FR",
                     "type": alert_type,
                     "riskFactor": None,
                     "dml": "dml B",
@@ -271,6 +268,7 @@ def test_filter_silenced_alerts_when_multiple_silenced_alerts_facade():
             "internal_reference_number": ["B"],
             "external_reference_number": ["BB"],
             "ircs": ["BBB"],
+            "flag_state": ["FR"],
             "vessel_id": [12],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
@@ -281,7 +279,6 @@ def test_filter_silenced_alerts_when_multiple_silenced_alerts_facade():
             "value": [
                 {
                     "seaFront": "MEMN",
-                    "flagState": "FR",
                     "type": alert_type,
                     "riskFactor": None,
                     "dml": "dml B",
@@ -309,6 +306,7 @@ def test_load_alerts(reset_test_data):
             "internal_reference_number": ["B"],
             "external_reference_number": ["BB"],
             "ircs": ["BBB"],
+            "flag_state": ["FR"],
             "vessel_id": [12],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
@@ -319,7 +317,6 @@ def test_load_alerts(reset_test_data):
             "value": [
                 {
                     "seaFront": "MEMN",
-                    "flagState": "FR",
                     "type": alert_type,
                     "riskFactor": None,
                     "dml": "dml B",

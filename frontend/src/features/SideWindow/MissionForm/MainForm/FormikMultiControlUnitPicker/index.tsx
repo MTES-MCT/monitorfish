@@ -4,7 +4,7 @@ import { remove, update } from 'ramda'
 import { useCallback, useMemo, useRef } from 'react'
 
 import { ControlUnitSelect } from './ControlUnitSelect'
-import { mapControlUnitsToUniqueSortedAdmistrationsAsOptions } from './utils'
+import { mapControlUnitsToUniqueSortedAdministrationsAsOptions } from './utils'
 import { useGetControlUnitsQuery } from '../../../../../api/controlUnit'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 
@@ -30,7 +30,7 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
       return []
     }
 
-    return mapControlUnitsToUniqueSortedAdmistrationsAsOptions(controlUnitsQuery.data)
+    return mapControlUnitsToUniqueSortedAdministrationsAsOptions(controlUnitsQuery.data)
   }, [controlUnitsQuery.data])
 
   const addUnit = useCallback(

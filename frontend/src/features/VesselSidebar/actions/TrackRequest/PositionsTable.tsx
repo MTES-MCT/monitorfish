@@ -12,8 +12,8 @@ import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { isNumeric } from '../../../../utils/isNumeric'
 import { ReactComponent as ManualPositionSVG } from '../../../icons/Pastille_position_manuelle.svg'
-import { CSVOptions } from '../../../vessel_list/dataFormatting'
-import { sortArrayByColumn, SortType } from '../../../vessel_list/tableSort'
+import { CSVOptions } from '../../../VesselList/dataFormatting'
+import { sortArrayByColumn, SortType } from '../../../VesselList/tableSort'
 
 import type { CellProps } from 'rsuite'
 

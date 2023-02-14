@@ -13,7 +13,7 @@ export function findControlUnitByAdministrationAndName(
   return controlUnits.find(controlUnit => controlUnit.administration === administration && controlUnit.name === name)
 }
 
-export const mapControlUnitsToUniqueSortedAdmistrationsAsOptions: (controlUnits: ControlUnit[]) => Option[] = pipe(
+export const mapControlUnitsToUniqueSortedAdministrationsAsOptions: (controlUnits: ControlUnit[]) => Option[] = pipe(
   map(prop('administration')),
   uniq,
   sortByAscendingValue,

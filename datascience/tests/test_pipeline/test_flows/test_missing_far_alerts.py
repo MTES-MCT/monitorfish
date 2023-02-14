@@ -316,6 +316,7 @@ def test_flow_when_an_alert_is_silenced(reset_test_data):
             "internal_reference_number": ["ABC000055481"],
             "external_reference_number": ["AS761555"],
             "ircs": ["IL2468"],
+            "flag_state": ["NL"],
             "vessel_id": [3],
             "vessel_identifier": ["INTERNAL_REFERENCE_NUMBER"],
             "latitude": 53.424,
@@ -323,7 +324,6 @@ def test_flow_when_an_alert_is_silenced(reset_test_data):
             "value": [
                 {
                     "seaFront": None,
-                    "flagState": "NL",
                     "type": "MISSING_FAR_ALERT",
                     "riskFactor": 1.7411011266,
                     "dml": "DML 29",

@@ -87,7 +87,7 @@ function getAllGeometryWithoutProperty (fromBackoffice) {
  * Get the administrative zone GeoJSON feature
  * @memberOf API
  * @param {string} administrativeZone
- * @param {string[]|null} extent
+ * @param {import("ol/extent.js").Extent|null} extent
  * @param {string|null} subZone
  * @param {boolean} fromBackoffice - From backoffice
  * @returns {Promise<GeoJSON>} The feature GeoJSON

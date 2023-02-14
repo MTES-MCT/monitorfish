@@ -38,6 +38,7 @@ class CaffeineConfiguration {
     val infraction = "infraction"
     val currentSegments = "current_segment"
     val controlAnteriority = "control_anteriority"
+    val controlUnits = "control_units"
     val riskFactors = "risk_factors"
     val faoAreas = "fao_areas"
     val findBeacon = "find_beacon"
@@ -91,6 +92,7 @@ class CaffeineConfiguration {
         val findBeaconCache = buildMinutesCache(findBeacon, ticker, 60)
 
         val missionsCache = buildMinutesCache(missions, ticker, 120)
+        val controlUnitsCache = buildMinutesCache(controlUnits, ticker, oneWeek)
 
         val manager = SimpleCacheManager()
         manager.setCaches(
@@ -125,6 +127,7 @@ class CaffeineConfiguration {
                 districtCache,
                 findBeaconCache,
                 missionsCache,
+                controlUnitsCache,
             ),
         )
 

@@ -1,8 +1,9 @@
-import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
+import { MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Input, Radio, RadioGroup, SelectPicker } from 'rsuite'
 import styled from 'styled-components'
 
-import { getReportingValueErrors } from './utils'
+import { getReportingValueErrors, mapControlUnitsToUniqueSortedIdsAsOptions } from './utils'
+import { useGetControlUnitsQuery } from '../../../../api/controlUnit'
 import { COLORS } from '../../../../constants/constants'
 import { ReportingOriginActor, ReportingTypeCharacteristics } from '../../../../domain/entities/reporting'
 import { getOnlyVesselIdentityProperties } from '../../../../domain/entities/vessel/vessel'
@@ -11,10 +12,11 @@ import { updateReporting } from '../../../../domain/use_cases/reporting/updateRe
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { PrimaryButton, SecondaryButton } from '../../../commonStyles/Buttons.style'
-import { sortArrayByColumn } from '../../../vessel_list/tableSort'
+import { sortArrayByColumn } from '../../../VesselList/tableSort'
 
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
 import type { Reporting, ReportingCreation, ReportingType, ReportingUpdate } from '../../../../domain/types/reporting'
+import type { Option } from '@mtes-mct/monitor-ui'
 
 type ReportingFormProps = {
   closeForm: () => void
@@ -34,12 +36,20 @@ export function ReportingForm({
   const unitSelectRef = useRef() as MutableRefObject<HTMLDivElement>
   const natinfSelectRef = useRef() as MutableRefObject<HTMLDivElement>
   const infractions = useMainAppSelector(state => state.infraction.infractions)
-  const controllers = useMainAppSelector(state => state.controls.controllers)
+  const controlUnitsQuery = useGetControlUnitsQuery(undefined)
+
+  const controlUnitsAsOptions = useMemo((): Option<number>[] => {
+    if (!controlUnitsQuery.data) {
+      return []
+    }
+
+    return mapControlUnitsToUniqueSortedIdsAsOptions(controlUnitsQuery.data)
+  }, [controlUnitsQuery.data])
 
   const [reportingType, setReportingType] = useState<ReportingType>(
     ReportingTypeCharacteristics.INFRACTION_SUSPICION.code
   )
-  const [unit, setUnit] = useState<string | null>('')
+  const [controlUnitId, setControlUnitId] = useState<number | null>(null)
   const [authorTrigram, setAuthorTrigram] = useState('')
   const [authorContact, setAuthorContact] = useState('')
   const [reportingActor, setReportingActor] = useState(ReportingOriginActor.OPS.code)
@@ -52,7 +62,7 @@ export function ReportingForm({
   function fillForm(editedOrSavedReporting) {
     setErrorFields([])
     setReportingType(editedOrSavedReporting.type || ReportingTypeCharacteristics.INFRACTION_SUSPICION.code)
-    setUnit(editedOrSavedReporting.value.unit || '')
+    setControlUnitId(editedOrSavedReporting.value.controlUnitId || null)
     setAuthorTrigram(editedOrSavedReporting.value.authorTrigram || '')
     setAuthorContact(editedOrSavedReporting.value.authorContact || '')
     setReportingActor(editedOrSavedReporting.value.reportingActor || ReportingOriginActor.OPS.code)
@@ -112,13 +122,13 @@ export function ReportingForm({
       const nextReportingWithMissingProperties = {
         creationDate: new Date().toISOString(),
         externalReferenceNumber: selectedVesselIdentity.externalReferenceNumber,
+        flagState: selectedVesselIdentity.flagState.toUpperCase(),
         internalReferenceNumber: selectedVesselIdentity.internalReferenceNumber,
         ircs: selectedVesselIdentity.ircs,
         type: nextReporting.type,
         validationDate: null,
         value: {
-          ...nextReporting.value,
-          flagState: selectedVesselIdentity.flagState.toUpperCase()
+          ...nextReporting.value
         },
         vesselId: selectedVesselIdentity.vesselId || null,
         vesselIdentifier: selectedVesselIdentity.vesselIdentifier || null,
@@ -160,12 +170,12 @@ export function ReportingForm({
 
     switch (nextReportingActor) {
       case ReportingOriginActor.OPS.code: {
-        setUnit('')
+        setControlUnitId(null)
         setAuthorContact('')
         break
       }
       case ReportingOriginActor.SIP.code: {
-        setUnit('')
+        setControlUnitId(null)
         setAuthorContact('')
         break
       }
@@ -174,17 +184,17 @@ export function ReportingForm({
         break
       }
       case ReportingOriginActor.DML.code: {
-        setUnit('')
+        setControlUnitId(null)
         setAuthorTrigram('')
         break
       }
       case ReportingOriginActor.DIRM.code: {
-        setUnit('')
+        setControlUnitId(null)
         setAuthorTrigram('')
         break
       }
       case ReportingOriginActor.OTHER.code: {
-        setUnit('')
+        setControlUnitId(null)
         setAuthorTrigram('')
         break
       }
@@ -237,19 +247,14 @@ export function ReportingForm({
           <Label>Nom de l&apos;unité</Label>
           <SelectPicker
             container={(fromSideWindow ? () => unitSelectRef.current : undefined) as any}
-            data={controllers
-              ?.map(controller => ({
-                label: `${controller.controller} (${controller.administration})`,
-                value: controller.controller
-              }))
-              .sort((a, b) => sortArrayByColumn(a, b, 'label', 'asc'))}
+            data={controlUnitsAsOptions}
             data-cy="new-reporting-select-unit"
             menuStyle={fromSideWindow ? { marginLeft: 40, marginTop: 270, position: 'absolute' } : {}}
-            onChange={_unit => setUnit(_unit)}
+            onChange={_unit => setControlUnitId(Number(_unit))}
             placeholder="Choisir l'unité"
             searchable
-            style={{ margin: '5px 10px 0px 0px', width: unit ? 250 : 80 }}
-            value={unit}
+            style={{ margin: '5px 10px 0px 0px', width: controlUnitId ? 250 : 80 }}
+            value={controlUnitId}
           />
           <div ref={unitSelectRef} />
         </>
@@ -352,12 +357,12 @@ export function ReportingForm({
           createOrEditReporting({
             authorContact,
             authorTrigram,
+            controlUnitId,
             description,
             natinfCode,
             reportingActor,
             title,
-            type: reportingType,
-            unit
+            type: reportingType
           })
         }
       >
@@ -373,7 +378,7 @@ export function ReportingForm({
       {!!errorFields.length && <br />}
       {errorFields.includes('title') && `Le champ “Titre” est obligatoire.`}
       {errorFields.includes('authorTrigram') && `Le champ “Saisi par” est obligatoire.`}
-      {errorFields.includes('unit') && `Le champ “Nom de l&apos;unité” est obligatoire.`}
+      {errorFields.includes('controlUnitId') && `Le champ “Nom de l&apos;unité” est obligatoire.`}
       {errorFields.includes('authorContact') && `Le champ “Nom et contact de l&apos;émetteur” est obligatoire.`}
     </Form>
   )

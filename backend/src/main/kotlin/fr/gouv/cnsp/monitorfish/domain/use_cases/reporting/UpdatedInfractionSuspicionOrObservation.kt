@@ -6,7 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 class UpdatedInfractionSuspicionOrObservation(
     val reportingActor: ReportingActor,
     val type: ReportingType,
-    val unit: String? = null,
+    val controlUnitId: Int? = null,
     val authorTrigram: String,
     val authorContact: String? = null,
     val title: String,

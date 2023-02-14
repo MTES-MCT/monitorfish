@@ -28,6 +28,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             ircs = "6554fEE",
             vesselId = 125,
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             tripNumber = "123456",
             creationDate = creationDate,
             value = ThreeMilesTrawlingAlert("NAMO"),
@@ -63,13 +64,13 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             ircs = "6554fEE",
             vesselId = 126,
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             creationDate = creationDate,
             value = InfractionSuspicion(
                 ReportingActor.OPS,
                 natinfCode = "123456",
                 authorTrigram = "LTH",
-                flagState = CountryCode.FR.toString(),
-                title = "A title"
+                title = "A title",
             ),
             type = ReportingType.INFRACTION_SUSPICION,
             isDeleted = false,
@@ -105,12 +106,12 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             ircs = "6554fEE",
             vesselId = 523,
             creationDate = creationDate,
+            flagState = CountryCode.FR,
             value = InfractionSuspicion(
                 ReportingActor.OPS,
                 natinfCode = "123456",
                 authorTrigram = "LTH",
-                flagState = CountryCode.FR.toString(),
-                title = "A title"
+                title = "A title",
             ),
             type = ReportingType.INFRACTION_SUSPICION,
             isDeleted = false,
@@ -244,14 +245,13 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         // Given
         val updatedReporting = InfractionSuspicion(
             ReportingActor.UNIT,
-            "An unit",
+            1,
             "",
             "Jean Bon",
             "Une observation",
             "Une description",
             "1236",
             "MEMN",
-            "FR",
             "DML 56",
         )
 
@@ -261,14 +261,13 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000042310")
         assertThat((reporting.value as InfractionSuspicion).reportingActor).isEqualTo(updatedReporting.reportingActor)
-        assertThat((reporting.value as InfractionSuspicion).unit).isEqualTo(updatedReporting.unit)
+        assertThat((reporting.value as InfractionSuspicion).controlUnitId).isEqualTo(updatedReporting.controlUnitId)
         assertThat((reporting.value as InfractionSuspicion).authorTrigram).isEqualTo(updatedReporting.authorTrigram)
         assertThat((reporting.value as InfractionSuspicion).authorContact).isEqualTo(updatedReporting.authorContact)
         assertThat((reporting.value as InfractionSuspicion).title).isEqualTo(updatedReporting.title)
         assertThat((reporting.value as InfractionSuspicion).description).isEqualTo(updatedReporting.description)
         assertThat((reporting.value as InfractionSuspicion).natinfCode).isEqualTo(updatedReporting.natinfCode)
         assertThat((reporting.value as InfractionSuspicion).seaFront).isEqualTo(updatedReporting.seaFront)
-        assertThat((reporting.value as InfractionSuspicion).flagState).isEqualTo(updatedReporting.flagState)
         assertThat((reporting.value as InfractionSuspicion).dml).isEqualTo(updatedReporting.dml)
     }
 
@@ -278,12 +277,11 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         // Given
         val updatedReporting = Observation(
             ReportingActor.UNIT,
-            "An unit",
+            1,
             "",
             "Jean Bon",
             "Une observation",
             "Une description",
-            "MEMN",
         )
 
         // When
@@ -292,12 +290,11 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000597493")
         assertThat((reporting.value as Observation).reportingActor).isEqualTo(updatedReporting.reportingActor)
-        assertThat((reporting.value as Observation).unit).isEqualTo(updatedReporting.unit)
+        assertThat((reporting.value as Observation).controlUnitId).isEqualTo(updatedReporting.controlUnitId)
         assertThat((reporting.value as Observation).authorTrigram).isEqualTo(updatedReporting.authorTrigram)
         assertThat((reporting.value as Observation).authorContact).isEqualTo(updatedReporting.authorContact)
         assertThat((reporting.value as Observation).title).isEqualTo(updatedReporting.title)
         assertThat((reporting.value as Observation).description).isEqualTo(updatedReporting.description)
-        assertThat((reporting.value as Observation).flagState).isEqualTo(updatedReporting.flagState)
     }
 
     @Test
@@ -306,12 +303,11 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         // Given
         val updatedReporting = Observation(
             ReportingActor.UNIT,
-            "An unit",
+            1,
             "",
             "Jean Bon",
             "Une observation",
             "Une description",
-            "1236",
         )
 
         // When
@@ -321,11 +317,10 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000042310")
         assertThat(reporting.type).isEqualTo(ReportingType.OBSERVATION)
         assertThat((reporting.value as Observation).reportingActor).isEqualTo(updatedReporting.reportingActor)
-        assertThat((reporting.value as Observation).unit).isEqualTo(updatedReporting.unit)
+        assertThat((reporting.value as Observation).controlUnitId).isEqualTo(updatedReporting.controlUnitId)
         assertThat((reporting.value as Observation).authorTrigram).isEqualTo(updatedReporting.authorTrigram)
         assertThat((reporting.value as Observation).authorContact).isEqualTo(updatedReporting.authorContact)
         assertThat((reporting.value as Observation).title).isEqualTo(updatedReporting.title)
         assertThat((reporting.value as Observation).description).isEqualTo(updatedReporting.description)
-        assertThat((reporting.value as Observation).flagState).isEqualTo(updatedReporting.flagState)
     }
 }

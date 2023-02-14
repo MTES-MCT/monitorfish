@@ -29,7 +29,7 @@ services:
     container_name: monitorfish_backend
     environment:
       - ENV_DB_URL=jdbc:postgresql://db:5432/monitorfishdb?user=postgres&password=postgres
-      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_PROFILES_ACTIVE=local
       - HOST_IP=127.0.0.1
       - REACT_APP_GEOSERVER_LOCAL_URL=http://0.0.0.0:8081
       - REACT_APP_MONITORENV_URL=http://0.0.0.0:8081

@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.neovisionaries.i18n.CountryCode
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
@@ -31,6 +32,9 @@ data class SilencedAlertEntity(
     @Type(PostgreSQLEnumType::class)
     @Column(name = "vessel_identifier", columnDefinition = "vessel_identifier")
     val vesselIdentifier: VesselIdentifier,
+    @Column(name = "flag_state")
+    @Enumerated(EnumType.STRING)
+    val flagState: CountryCode,
     @Column(name = "silenced_before_date", nullable = false)
     val silencedBeforeDate: ZonedDateTime,
     @Type(JsonBinaryType::class)
@@ -48,6 +52,7 @@ data class SilencedAlertEntity(
             externalReferenceNumber = externalReferenceNumber,
             ircs = ircs,
             vesselIdentifier = vesselIdentifier,
+            flagState = flagState,
             silencedBeforeDate = silencedBeforeDate,
             value = mapper.readValue(value, AlertType::class.java),
             wasValidated = wasValidated,
@@ -66,6 +71,7 @@ data class SilencedAlertEntity(
             externalReferenceNumber = alert.externalReferenceNumber,
             ircs = alert.ircs,
             vesselIdentifier = alert.vesselIdentifier,
+            flagState = alert.flagState,
             silencedBeforeDate = silencedBeforeDate,
             value = mapper.writeValueAsString(alert.value),
             wasValidated = isValidated,

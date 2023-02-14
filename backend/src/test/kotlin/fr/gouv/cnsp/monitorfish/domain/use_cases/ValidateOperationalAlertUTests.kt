@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
@@ -43,6 +44,7 @@ class ValidateOperationalAlertUTests {
             ircs = "6554fEE",
             vesselId = 123,
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             tripNumber = "123456",
             creationDate = ZonedDateTime.now(),
             value = ThreeMilesTrawlingAlert(),

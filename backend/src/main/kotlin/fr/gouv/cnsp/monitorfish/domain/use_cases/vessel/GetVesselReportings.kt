@@ -2,10 +2,13 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.CurrentAndArchivedReportings
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionOrObservationType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NatinfCodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllControlUnits
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
@@ -13,6 +16,7 @@ import java.time.ZonedDateTime
 class GetVesselReportings(
     private val reportingRepository: ReportingRepository,
     private val infractionRepository: InfractionRepository,
+    private val getAllControlUnits: GetAllControlUnits,
 ) {
     private val logger = LoggerFactory.getLogger(GetVesselReportings::class.java)
 
@@ -23,6 +27,8 @@ class GetVesselReportings(
         vesselIdentifier: VesselIdentifier?,
         fromDate: ZonedDateTime,
     ): CurrentAndArchivedReportings {
+        val controlUnits = getAllControlUnits.execute()
+
         val reportings = when (vesselIdentifier) {
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER ->
                 reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
@@ -57,7 +63,12 @@ class GetVesselReportings(
                     }
                 }
 
-                report
+                if (report.type == ReportingType.ALERT) {
+                    return@map Pair(report, null)
+                }
+
+                val controlUnitId = (report.value as InfractionSuspicionOrObservationType).controlUnitId
+                return@map Pair(report, controlUnits.find { it.id == controlUnitId })
             }
 
         val archived = reportings
@@ -71,7 +82,12 @@ class GetVesselReportings(
                     }
                 }
 
-                report
+                if (report.type == ReportingType.ALERT) {
+                    return@map Pair(report, null)
+                }
+
+                val controlUnitId = (report.value as InfractionSuspicionOrObservationType).controlUnitId
+                return@map Pair(report, controlUnits.find { it.id == controlUnitId })
             }
 
         return CurrentAndArchivedReportings(current, archived)

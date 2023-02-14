@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAl
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllControlUnits
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.AddReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetInfractionSuspicionWithDMLAndSeaFront
 import org.assertj.core.api.Assertions.assertThat
@@ -28,6 +29,9 @@ class AddReportingUTests {
     @Mock
     private lateinit var getInfractionSuspicionWithDMLAndSeaFront: GetInfractionSuspicionWithDMLAndSeaFront
 
+    @Mock
+    private lateinit var getAllControlUnits: GetAllControlUnits
+
     @Test
     fun `execute Should throw an exception When the reporting is an alert`() {
         // Given
@@ -39,6 +43,7 @@ class AddReportingUTests {
             externalReferenceNumber = "1236514",
             ircs = "IRCS",
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             creationDate = ZonedDateTime.now(),
             validationDate = ZonedDateTime.now(),
             value = ThreeMilesTrawlingAlert() as ReportingValue,
@@ -48,7 +53,9 @@ class AddReportingUTests {
 
         // When
         val throwable = catchThrowable {
-            AddReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront).execute(reportingToAdd)
+            AddReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront, getAllControlUnits).execute(
+                reportingToAdd
+            )
         }
 
         // Then
@@ -69,21 +76,24 @@ class AddReportingUTests {
             externalReferenceNumber = "1236514",
             ircs = "IRCS",
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             creationDate = ZonedDateTime.now(),
             validationDate = ZonedDateTime.now(),
             value = Observation(
                 reportingActor = reportingActor,
                 authorTrigram = "LTH",
                 title = "A title",
-                flagState = CountryCode.FR.toString()
             ),
             isArchived = false,
             isDeleted = false,
         )
+        given(reportingRepository.save(any())).willReturn(reportingToAdd)
 
         // When
         val throwable = catchThrowable {
-            AddReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront).execute(reportingToAdd)
+            AddReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront, getAllControlUnits).execute(
+                reportingToAdd
+            )
         }
 
         // Then
@@ -107,7 +117,6 @@ class AddReportingUTests {
                 dml = "DML 17",
                 natinfCode = "1235",
                 authorTrigram = "LTH",
-                flagState = CountryCode.FR.toString(),
                 title = "Chalut en boeuf illégal",
             ),
         )
@@ -119,21 +128,24 @@ class AddReportingUTests {
             externalReferenceNumber = "1236514",
             ircs = "IRCS",
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
             creationDate = ZonedDateTime.now(),
             validationDate = ZonedDateTime.now(),
             value = InfractionSuspicion(
                 reportingActor = ReportingActor.OPS,
                 natinfCode = "1235",
                 authorTrigram = "LTH",
-                flagState = CountryCode.FR.toString(),
                 title = "Chalut en boeuf illégal",
             ),
             isArchived = false,
             isDeleted = false,
         )
+        given(reportingRepository.save(any())).willReturn(reportingToAdd)
 
         // When
-        AddReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront).execute(reportingToAdd)
+        AddReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront, getAllControlUnits).execute(
+            reportingToAdd
+        )
 
         // Then
         argumentCaptor<Reporting>().apply {

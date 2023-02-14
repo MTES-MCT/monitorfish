@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.neovisionaries.i18n.CountryCode
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
@@ -32,6 +33,9 @@ data class PendingAlertEntity(
     @Enumerated(EnumType.STRING)
     @Type(PostgreSQLEnumType::class)
     val vesselIdentifier: VesselIdentifier,
+    @Column(name = "flag_state")
+    @Enumerated(EnumType.STRING)
+    val flagState: CountryCode,
     @Column(name = "creation_date", nullable = false)
     val creationDate: ZonedDateTime,
     @Column(name = "trip_number")
@@ -54,6 +58,7 @@ data class PendingAlertEntity(
             ircs = ircs,
             vesselId = vesselId,
             vesselIdentifier = vesselIdentifier,
+            flagState = flagState,
             creationDate = creationDate,
             tripNumber = tripNumber,
             value = mapper.readValue(value, AlertType::class.java),
@@ -70,6 +75,7 @@ data class PendingAlertEntity(
             ircs = alert.ircs,
             vesselId = alert.vesselId,
             vesselIdentifier = alert.vesselIdentifier,
+            flagState = alert.flagState,
             creationDate = alert.creationDate,
             tripNumber = alert.tripNumber,
             value = mapper.writeValueAsString(alert.value),

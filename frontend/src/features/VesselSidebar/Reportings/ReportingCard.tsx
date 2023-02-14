@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
@@ -18,6 +19,7 @@ import { ReactComponent as InfractionSuspicionIconSVG } from '../../icons/Icone_
 import { ReactComponent as ObservationIconSVG } from '../../icons/Icone_observations.svg'
 import { getAlertNameFromType } from '../../SideWindow/alerts_reportings/utils'
 
+import type { ControlUnit } from '../../../domain/types/controlUnit'
 import type { Promisable } from 'type-fest'
 
 export type ReportingCardProps = {
@@ -39,15 +41,20 @@ export function ReportingCard({
     reportingType => reportingType.code === reporting.type
   )?.name
 
+  const reportingActor = useMemo(() => {
+    if (reporting.type === ReportingType.ALERT) {
+      return reportingName
+    }
+
+    return getReportingActor(reporting.value.reportingActor, reporting.value.controlUnit)
+  }, [reporting, reportingName])
+
   return (
     <Wrapper data-cy="reporting-card" isInfractionSuspicion={isAnInfractionSuspicion}>
       <Icon>{isAnInfractionSuspicion ? <InfractionSuspicionIcon /> : <ObservationIcon />}</Icon>
       <Body isInfractionSuspicion={isAnInfractionSuspicion}>
         <Title>
-          {reporting.type === ReportingType.ALERT
-            ? reportingName
-            : getReportingActor(reporting.value.reportingActor, reporting.value.unit)}{' '}
-          /{' '}
+          {reportingActor} /{' '}
           {reporting.type === ReportingType.ALERT ? getAlertNameFromType(reporting.value.type) : reporting.value.title}
         </Title>
         <Date>
@@ -105,10 +112,10 @@ export function ReportingCard({
   )
 }
 
-const getReportingActor = (reportingActor, unit) => {
+const getReportingActor = (reportingActor, unit: ControlUnit | null) => {
   switch (reportingActor) {
     case ReportingOriginActor.UNIT.code:
-      return unit
+      return unit?.name || 'Unité inconnue'
     default:
       return reportingActor
   }

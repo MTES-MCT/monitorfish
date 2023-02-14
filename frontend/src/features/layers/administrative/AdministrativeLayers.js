@@ -11,7 +11,7 @@ import NamespaceContext from '../../../domain/context/NamespaceContext'
 import layer from '../../../domain/shared_slices/Layer'
 import { Layer, LayerType } from '../../../domain/entities/layers/constants'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
-import showAdministrativeLayer from '../../../domain/use_cases/layer/administrative/showAdministrativeLayer'
+import { showAdministrativeLayer } from '../../../domain/use_cases/layer/administrative/showAdministrativeLayer'
 import { closeRegulatoryZoneMetadata } from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 
 const AdministrativeLayers = props => {

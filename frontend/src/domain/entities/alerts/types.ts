@@ -11,6 +11,7 @@ export enum PendingAlertValueType {
 export type PendingAlert = {
   creationDate: string
   externalReferenceNumber: string
+  flagState: string
   id: string
   infraction: Infraction | null
   internalReferenceNumber: string
@@ -23,7 +24,6 @@ export type PendingAlert = {
 
 export type PendingAlertValue = {
   dml: string
-  flagState: string
   natinfCode: string | null
   riskFactor: number
   seaFront: string
@@ -37,6 +37,7 @@ export type LEGACY_PendingAlert = PendingAlert & {
 
 export type SilencedAlert = {
   externalReferenceNumber: string
+  flagState: string
   id: string
   internalReferenceNumber: string
   ircs: string

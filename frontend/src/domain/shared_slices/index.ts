@@ -22,7 +22,7 @@ import { vesselSliceReducer } from './Vessel'
 import { monitorenvApi, monitorfishApi } from '../../api'
 import { regulationReducer } from '../../features/backoffice/Regulation.slice'
 import { regulatoryLayerSearchReducer } from '../../features/layers/regulatory/search/RegulatoryLayerSearch.slice'
-import { vesselListReducer } from '../../features/vessel_list/VesselList.slice'
+import { vesselListReducer } from '../../features/VesselList/VesselList.slice'
 
 const commonReducerList = {
   gear: gearReducer,

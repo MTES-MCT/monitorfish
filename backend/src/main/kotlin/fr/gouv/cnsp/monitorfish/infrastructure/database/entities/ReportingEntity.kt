@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.neovisionaries.i18n.CountryCode
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
@@ -38,6 +39,9 @@ data class ReportingEntity(
     @Type(PostgreSQLEnumType::class)
     @Column(name = "vessel_identifier", columnDefinition = "vessel_identifier")
     val vesselIdentifier: VesselIdentifier? = null,
+    @Column(name = "flag_state")
+    @Enumerated(EnumType.STRING)
+    val flagState: CountryCode,
     @Column(name = "creation_date", nullable = false)
     val creationDate: ZonedDateTime,
     @Column(name = "validation_date", nullable = true)
@@ -65,6 +69,7 @@ data class ReportingEntity(
             externalReferenceNumber = externalReferenceNumber,
             ircs = ircs,
             vesselIdentifier = vesselIdentifier,
+            flagState = flagState,
             creationDate = creationDate,
             validationDate = validationDate,
             value = ReportingMapper.getReportingValueFromJSON(mapper, value, type),
@@ -84,6 +89,7 @@ data class ReportingEntity(
             externalReferenceNumber = alert.externalReferenceNumber,
             ircs = alert.ircs,
             vesselIdentifier = alert.vesselIdentifier,
+            flagState = alert.flagState,
             creationDate = alert.creationDate,
             validationDate = validationDate,
             value = mapper.writeValueAsString(alert.value),
@@ -101,6 +107,7 @@ data class ReportingEntity(
             externalReferenceNumber = reporting.externalReferenceNumber,
             ircs = reporting.ircs,
             vesselIdentifier = reporting.vesselIdentifier,
+            flagState = reporting.flagState,
             creationDate = reporting.creationDate,
             validationDate = reporting.validationDate,
             value = mapper.writeValueAsString(reporting.value),

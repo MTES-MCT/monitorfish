@@ -13,9 +13,9 @@ import persistStore from 'redux-persist/es/persistStore'
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
 import storage from 'redux-persist/es/storage' // LocalStorage
 
+import { backofficeReducer, mainReducer } from './reducers'
 import { monitorenvApi, monitorfishApi } from '../api'
 import { mapToProcessingRegulation } from '../domain/entities/regulation'
-import { backofficeReducer, mainReducer } from '../domain/shared_slices'
 
 import type { RegulationState } from '../features/backoffice/Regulation.slice'
 import type { AnyAction } from '@reduxjs/toolkit'

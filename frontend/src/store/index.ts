@@ -28,10 +28,8 @@ import type { ThunkAction } from 'redux-thunk'
 export const mainStore = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
-      serializableCheck: {
-        // TODO Replace all Redux state Dates by strings & Error by a strict-typed POJO.
-        isSerializable: (value: any) => isPlain(value) || value instanceof Date || value instanceof Error
-      }
+      // TODO Replace all Redux state Dates by strings & Error by a strict-typed POJO.
+      serializableCheck: false
     }).concat(monitorenvApi.middleware, monitorfishApi.middleware),
   reducer: mainReducer
 })
@@ -59,16 +57,15 @@ const SetRegulationStateTransform = createTransform<RegulationState, RegulationS
   { whitelist: ['regulation'] }
 )
 
-const persistedReducerConfig: PersistConfig<typeof backofficeReducer> = {
+const persistedBackofficeReducerConfig: PersistConfig<typeof backofficeReducer> = {
   key: 'backofficePersistor',
   stateReconciler: autoMergeLevel2,
   storage,
   transforms: [SetRegulationStateTransform],
   whitelist: ['regulation']
 }
-
-const persistedReducer = persistReducer(
-  persistedReducerConfig,
+const persistedBackofficeReducer = persistReducer(
+  persistedBackofficeReducerConfig,
   combineReducers(backofficeReducer)
 ) as typeof backofficeReducer
 
@@ -81,7 +78,7 @@ export const backofficeStore = configureStore({
         isSerializable: (value: any) => isPlain(value) || value instanceof Date || value instanceof Error
       }
     }),
-  reducer: persistedReducer
+  reducer: persistedBackofficeReducer
 })
 
 export const backofficeStorePersistor = persistStore(backofficeStore)

@@ -2,6 +2,7 @@ import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { ActionForm } from './ActionForm'
 import { ActionList } from './ActionList'
@@ -128,17 +129,14 @@ export function MissionForm() {
     dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_LIST))
   }, [dispatch])
 
-  const createOrUpdateMissionAndClose = useCallback(async () => {
+  const createOrUpdateMissionAndClose = useDebouncedCallback(async () => {
     createOrUpdateMission()
     goToMissionList()
-  }, [createOrUpdateMission, goToMissionList])
+  }, 500)
 
-  const handleActionFormChange = useCallback(
-    (nextMissionActionFormValues: MissionActionFormValues) => {
-      dispatch(missionActions.setEditedDraftAction(nextMissionActionFormValues))
-    },
-    [dispatch]
-  )
+  const handleActionFormChange = useDebouncedCallback((nextMissionActionFormValues: MissionActionFormValues) => {
+    dispatch(missionActions.setEditedDraftAction(nextMissionActionFormValues))
+  }, 500)
 
   const handleMainFormChange = useCallback(
     (nextMissionFormValues: MissionFormValues) => {
@@ -175,7 +173,16 @@ export function MissionForm() {
         missionActions: editedMissionActions
       })
     )
-  }, [dispatch, mission.draft, missionApiQuery, missionActionsApiQuery])
+  }, [
+    dispatch,
+    mission.draft,
+    missionApiQuery.data,
+    missionApiQuery.error,
+    missionApiQuery.isLoading,
+    missionActionsApiQuery.data,
+    missionActionsApiQuery.error,
+    missionActionsApiQuery.isLoading
+  ])
 
   // ---------------------------------------------------------------------------
   // DOM

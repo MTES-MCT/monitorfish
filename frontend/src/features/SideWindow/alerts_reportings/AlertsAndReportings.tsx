@@ -67,7 +67,7 @@ export function AlertsAndReportings({
   }, [focusedPendingAlertId, pendingAlerts, setSelectedSeaFront])
 
   return (
-    <>
+    <Wrapper>
       <Title
         isSelected={selectedTab === AlertAndReportingTab.ALERT}
         onClick={() => setSelectedTab(AlertAndReportingTab.ALERT)}
@@ -92,9 +92,14 @@ export function AlertsAndReportings({
         </>
       )}
       {selectedTab === AlertAndReportingTab.REPORTING && <ReportingList selectedSeaFront={selectedSubMenu} />}
-    </>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+  flex-grow: 1;
+  overflow: auto;
+`
 
 const Title = styled.h2<{
   isSelected: boolean

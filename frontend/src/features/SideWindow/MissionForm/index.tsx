@@ -1,6 +1,6 @@
 import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -43,10 +43,6 @@ export function MissionForm() {
 
   const headerDivRef = useRef<HTMLDivElement | null>(null)
 
-  const [hasRenderedOnce, setHasRenderedOnce] = useState(false)
-  /** Header height in pixels */
-  const [headerHeight, setHeaderHeight] = useState<number>(0)
-
   const dispatch = useMainAppDispatch()
   const missionApiQuery = useGetMissionQuery(mission.draftId || skipToken)
   const missionActionsApiQuery = useGetMissionActionsQuery(mission.draftId || skipToken)
@@ -56,6 +52,7 @@ export function MissionForm() {
   const [updateMissionAction] = useUpdateMissionActionMutation()
 
   const actionFormKey = useMemo(() => `actionForm-${mission.editedDraftActionIndex}`, [mission.editedDraftActionIndex])
+  const isLoading = useMemo(() => !mission.draft, [mission.draft])
   const isMissionFormValid = useMemo(() => isMissionFormValuesComplete(mission.draft), [mission.draft])
 
   const actionFormInitialValues = useMemo(
@@ -185,40 +182,9 @@ export function MissionForm() {
   ])
 
   // ---------------------------------------------------------------------------
-  // DOM
-
-  const handleResize = useCallback(
-    () => {
-      if (!headerDivRef.current) {
-        return
-      }
-
-      setHasRenderedOnce(true)
-      setHeaderHeight(headerDivRef.current.offsetHeight)
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [hasRenderedOnce]
-  )
-
-  useEffect(() => {
-    handleResize()
-
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [handleResize])
-
-  // ---------------------------------------------------------------------------
-
-  if (!mission.draft) {
-    return <LoadingSpinnerWall />
-  }
 
   return (
-    <Wrapper heightOffset={headerHeight}>
+    <Wrapper>
       <Header ref={headerDivRef}>
         <HeaderTitleGroup>
           <HeaderTitle>{mission.draftId ? `Édition d’une mission` : `Nouvelle mission`}</HeaderTitle>
@@ -248,23 +214,25 @@ export function MissionForm() {
       </Header>
 
       <Body>
-        <MainForm initialValues={mission.draft} onChange={handleMainFormChange} />
-        <ActionList initialValues={mission.draft} />
-        <ActionForm key={actionFormKey} initialValues={actionFormInitialValues} onChange={handleActionFormChange} />
+        {isLoading && <LoadingSpinnerWall />}
+
+        {!isLoading && mission.draft && (
+          <>
+            <MainForm initialValues={mission.draft} onChange={handleMainFormChange} />
+            <ActionList initialValues={mission.draft} />
+            <ActionForm key={actionFormKey} initialValues={actionFormInitialValues} onChange={handleActionFormChange} />
+          </>
+        )}
       </Body>
     </Wrapper>
   )
 }
 
-const Wrapper = styled(NoRsuiteOverrideWrapper)<{
-  /** Height offset in pixels */
-  heightOffset: number
-}>`
+// All containers within Wrapper should now be only using flexboxes
+const Wrapper = styled(NoRsuiteOverrideWrapper)`
   display: flex;
   flex-direction: column;
-  /* TODO Switch to flex sizing once SideWindow is full-flex (and remove the dirty calc). */
-  /* flex-grow: 1; */
-  height: calc(100% - ${p => p.heightOffset}px + 17px);
+  flex-grow: 1;
 `
 
 const Header = styled.div`
@@ -300,5 +268,5 @@ const Body = styled.div`
   background-color: ${p => p.theme.color.gainsboro};
   display: flex;
   flex-grow: 1;
-  max-height: calc(100% - 67px);
+  min-height: 0;
 `

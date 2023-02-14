@@ -86,7 +86,7 @@ export function MissionList() {
                         ? getLocalizedDayjs(mission.endDateTimeUtc).format('D MMM YY, HH:MM')
                         : '-'}
                     </TableBodyCell>
-                    <TableBodyCell $fixedWidth={160}>
+                    <TableBodyCell>
                       {mission.controlUnits
                         ?.map(controlUnit => `${controlUnit.name} (${controlUnit.administration || '-'})`)
                         .join(', ')}
@@ -171,6 +171,8 @@ const HeaderButtonGroup = styled.div`
 `
 
 const Body = styled.div`
+  display: flex;
+  flex-direction: column;
   padding: 32px;
 `
 
@@ -179,7 +181,6 @@ const Body = styled.div`
 
 const Table = styled.div`
   box-sizing: border-box;
-  flex-grow: 1;
   font-size: 13px;
   margin-top: 10px;
 
@@ -215,13 +216,15 @@ const TableBodyRow = styled.div`
 `
 
 const TableBodyCell = styled.div<{
-  $fixedWidth: number
+  $fixedWidth?: number
 }>`
   border-bottom: solid 1px ${p => p.theme.color.lightGray};
   border-right: solid 1px ${p => p.theme.color.lightGray};
+  flex-grow: ${p => (p.$fixedWidth ? 0 : 1)};
+  max-width: ${p => (p.$fixedWidth ? `${p.$fixedWidth}px` : 'auto')};
+  min-width: ${p => (p.$fixedWidth ? `${p.$fixedWidth}px` : 'auto')};
   overflow: hidden;
   padding: 9px 10px;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: ${p => p.$fixedWidth}px;
 `

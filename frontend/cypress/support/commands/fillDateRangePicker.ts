@@ -2,12 +2,12 @@ import dayjs from 'dayjs'
 
 export function fillDateRangePicker(label: string, startDate: Date, endDate: Date): void {
   // eslint-disable-next-line cypress/no-assigning-return-values
-  const cypressLegendElement = cy.get('fieldset > div > legend').contains(label)
+  const cypressLegendElement = cy.get('fieldset > legend').contains(label)
   if (!cypressLegendElement) {
     throw new Error(`Could not find label (legend) element with text "${label}".`)
   }
 
-  const cypressFieldsetElement = cypressLegendElement.parent().parent()
+  const cypressFieldsetElement = cypressLegendElement.parent()
   if (!cypressFieldsetElement) {
     throw new Error(`Could not find fieldset wrapping label (legend) element with text "${label}".`)
   }

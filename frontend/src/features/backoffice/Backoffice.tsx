@@ -18,7 +18,6 @@ import { EmptyResult } from '../commonStyles/Text.style'
 import RegulatoryZoneMetadata from '../layers/regulatory/RegulatoryZoneMetadata'
 import BaseMap from '../map/BaseMap'
 import { AdministrativeLayers } from '../map/layers/AdministrativeLayers'
-import { BaseLayer } from '../map/layers/BaseLayer'
 import { RegulatoryLayers } from '../map/layers/RegulatoryLayers'
 import { RegulatoryPreviewLayer } from '../map/layers/RegulatoryPreviewLayer'
 import { ShowRegulatoryMetadata } from '../map/ShowRegulatoryMetadata'
@@ -153,7 +152,6 @@ export function Backoffice() {
           )}
         </RegulatoryZonePanel>
         <BaseMap handleMovingAndZoom={handleMovingAndZoom}>
-          <BaseLayer />
           <RegulatoryLayers mapMovingAndZoomEvent={mapMovingAndZoomEvent} />
           <AdministrativeLayers />
           <ShowRegulatoryMetadata hasClickEvent />

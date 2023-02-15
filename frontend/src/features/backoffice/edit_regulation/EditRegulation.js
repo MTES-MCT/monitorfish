@@ -22,7 +22,6 @@ import {
 } from './'
 import ConfirmRegulationModal from './ConfirmRegulationModal'
 import BaseMap from '../../map/BaseMap'
-import { BaseLayer } from '../../map/layers/BaseLayer'
 
 import { RegulatoryPreviewLayer } from '../../map/layers/RegulatoryPreviewLayer'
 import {
@@ -351,7 +350,6 @@ const EditRegulation = ({ title, isEdition }) => {
       </CreateRegulationWrapper>
       { showRegulatoryPreview &&
         <BaseMap >
-          <BaseLayer />
           <RegulatoryPreviewLayer />
         </BaseMap>}
     </Wrapper>

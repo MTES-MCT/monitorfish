@@ -7,7 +7,6 @@ import VesselsLayer from './layers/VesselsLayer'
 import FilterLayer from './layers/FilterLayer'
 import { RegulatoryLayerSearch } from './layers/RegulatoryLayerSearch'
 import { DrawLayer } from './layers/DrawLayer'
-import { BaseLayer } from './layers/BaseLayer'
 import { RegulatoryLayers } from './layers/RegulatoryLayers'
 import { AdministrativeLayers } from './layers/AdministrativeLayers'
 import { ShowRegulatoryMetadata } from './ShowRegulatoryMetadata'
@@ -60,7 +59,6 @@ const Map = () => {
       showAttributions={true}
       container={'map'}
     >
-      <BaseLayer />
       <RegulatoryLayers mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
       <AdministrativeLayers />
       <ShowRegulatoryMetadata hasClickEvent/>

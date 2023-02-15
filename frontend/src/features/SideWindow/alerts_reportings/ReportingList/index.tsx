@@ -71,20 +71,20 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
 
     downloadAsCsv(fileName, checkedCurrentSeaFrontReportings, {
       creationDate: 'Ouvert le',
-      dml: 'DML concernées',
       externalReferenceNumber: 'Marquage ext.',
       flagState: 'Pavillon',
       internalReferenceNumber: 'CFR',
       ircs: 'C/S',
-      reportingTitle: 'reportingTitle',
       type: {
         label: 'Origine',
         transform: getReportingOrigin
       },
       underCharter: {
-        label: 'Navire sous charte ?',
+        label: 'Navire sous charte',
         transform: reporting => (reporting.underCharter ? 'OUI' : 'NON')
       },
+      'value.description': 'Description',
+      'value.dml': 'DML concernée',
       'value.natinfCode': 'NATINF',
       'value.seaFront': 'Façade',
       'value.type': {

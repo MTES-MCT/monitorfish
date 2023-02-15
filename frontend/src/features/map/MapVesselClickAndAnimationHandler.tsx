@@ -90,10 +90,14 @@ export function MapVesselClickAndAnimationHandler({ map, mapClickEvent }) {
       .filter(vesselCompositeIdentifier => {
         const track = vesselsTracksShowed[vesselCompositeIdentifier]
 
-        return track.toZoom && track.extent && !track.toShow
+        return track?.toZoom && track?.extent && !track?.toShow
       })
       .forEach(vesselCompositeIdentifier => {
-        const { extent } = vesselsTracksShowed[vesselCompositeIdentifier]
+        if (!vesselsTracksShowed[vesselCompositeIdentifier]) {
+          return
+        }
+
+        const { extent } = vesselsTracksShowed[vesselCompositeIdentifier]!
 
         map.getView().fit(extent, {
           callback: () => {

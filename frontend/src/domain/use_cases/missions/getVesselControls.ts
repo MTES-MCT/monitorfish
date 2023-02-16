@@ -17,9 +17,11 @@ export const getVesselControls = userRequest => (dispatch, getState) => {
     batch(() => {
       dispatch(setError(new NoControlsFoundError('Aucun contrôle connu')))
       dispatch(
+        // TODO Why this is an empty controllSummary and not a simple `unsetControlSummary()` setting it to undefined?
+        // This forces to add a wrong any.
         setControlSummary({
           controls: []
-        })
+        } as any)
       )
     })
 

@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
 import pandas as pd
+import pytest
 import sqlalchemy
 
 from src.pipeline.flows.infractions import (
@@ -8,6 +9,7 @@ from src.pipeline.flows.infractions import (
     extract_infractions,
     load_infractions,
 )
+from src.read_query import read_query
 from tests.mocks import mock_extract_side_effect
 
 
@@ -18,27 +20,63 @@ def test_extract_infractions(mock_extract):
     assert isinstance(query, sqlalchemy.sql.elements.TextClause)
 
 
-def test_clean_infractions():
-    infractions = pd.DataFrame(
+@pytest.fixture
+def infractions() -> pd.DataFrame:
+    return pd.DataFrame(
         {
+            "natinf_code": [20978, 22564, 30771, 30788, 40409],
+            "regulation": [None, None, None, None, "d89-273"],
+            "infraction_category": [
+                "Environnement",
+                "Environnement",
+                "Environnement",
+                "Environnement",
+                "Pêche",
+            ],
             "infraction": [
-                "INFRACTION_1",
-                "Infraction numéro 2",
-                "T.y.p.e d'infraction",
-            ]
+                "DETENTION D'ESPECE ANIMALE NON DOMESTIQUE - ESPECE PROTEGEE",
+                "USAGE DE FOYER LUMINEUX POUR LA PECHE SOUS-MARINE DE LOISIR",
+                "USAGE ILLEGAL SCOOTER SOUS-MARIN",
+                "EXERCICE DE LA PECHE SOUS-MARINE DE LOISIR INTERDITE",
+                "DECLARATION ERRONEE",
+            ],
         }
     )
 
-    cleaned_infractions = clean_infractions.run(infractions)
 
-    assert cleaned_infractions.values.tolist() == [
-        ["Infraction_1"],
-        ["Infraction numéro 2"],
-        ["T.y.p.e d'infraction"],
-    ]
+@pytest.fixture
+def cleaned_infractions() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "natinf_code": [20978, 22564, 30771, 30788, 40409],
+            "regulation": [None, None, None, None, "d89-273"],
+            "infraction_category": [
+                "Environnement",
+                "Environnement",
+                "Environnement",
+                "Environnement",
+                "Pêche",
+            ],
+            "infraction": [
+                "Detention d'espece animale non domestique - espece protegee",
+                "Usage de foyer lumineux pour la peche sous-marine de loisir",
+                "Usage illegal scooter sous-marin",
+                "Exercice de la peche sous-marine de loisir interdite",
+                "Declaration erronee",
+            ],
+        }
+    )
 
 
-@patch("src.pipeline.flows.infractions.load", autospec=True)
-def test_load_infractions(mock_load):
-    dummy_infractions = pd.DataFrame()
-    load_infractions.run(dummy_infractions)
+def test_clean_infractions(infractions, cleaned_infractions):
+    res = clean_infractions.run(infractions)
+    pd.testing.assert_frame_equal(res, cleaned_infractions)
+
+
+def test_load_infractions(reset_test_data, cleaned_infractions):
+    load_infractions.run(cleaned_infractions)
+    loaded_infractions = read_query(
+        "monitorfish_remote", "SELECT * FROM infractions ORDER BY natinf_code"
+    )
+
+    pd.testing.assert_frame_equal(loaded_infractions, cleaned_infractions)

@@ -127,7 +127,7 @@ BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_PORT = 60
 
 # App URL
 MONITORFISH_URL = os.getenv("MONITORFISH_URL")  # http://monitor.fish/
-BACKOFFICE_URL = MONITORFISH_URL + "backoffice/"
+BACKOFFICE_REGULATION_URL = MONITORFISH_URL + "backoffice/regulation"
 
 # Prefect Server endpoint
 PREFECT_SERVER_URL = os.getenv("PREFECT_SERVER_URL")

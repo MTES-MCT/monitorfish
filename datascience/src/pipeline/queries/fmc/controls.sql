@@ -5,6 +5,7 @@ WITH infractions AS (
     FROM FMC2.FMC_BC_RESULTAT_CONT_INFR i
     JOIN FMC2.FMC_CODE_NATINF n
     ON i.idc_fmc_natinf = n.idc_fmc_natinf
+    WHERE REGEXP_LIKE(TRIM(BOTH ' ' FROM n.code), '^[-+]?[0-9]+$') -- exclude natinfs that are not integers
     GROUP BY i.id_fmc_bc_resultat_controle
 )
 

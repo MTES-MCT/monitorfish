@@ -4,6 +4,7 @@ import { noop } from 'lodash'
 import { useMemo } from 'react'
 import * as Yup from 'yup'
 
+import { MissionActionInfractionSchema } from './shared/constants'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
@@ -13,12 +14,6 @@ import { FormHead } from '../FormHead'
 
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
-
-const MissionActionInfractionSchema = Yup.object().shape({
-  comments: Yup.string().required(),
-  infractionType: Yup.string().required(),
-  natinf: Yup.number().required()
-})
 
 const AirControlFormSchema = Yup.object().shape({
   otherInfractions: Yup.array(MissionActionInfractionSchema).notRequired()

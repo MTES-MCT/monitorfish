@@ -141,8 +141,6 @@ export function VesselSearch({
         return
       }
 
-      findVessels(searchQuery)
-
       const nextFoundVessels = await findVessels(searchQuery)
 
       setFoundVessels(nextFoundVessels)

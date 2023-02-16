@@ -3,7 +3,7 @@ import { HttpStatusCode } from './constants'
 
 import type { MissionAction } from '../domain/types/missionAction'
 
-export const fleetSegmentApi = monitorfishApi.injectEndpoints({
+export const infractionApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
     getInfractions: builder.query<MissionAction.Infraction[], void>({
       providesTags: () => [{ type: 'Infractions' }],
@@ -12,7 +12,7 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
   })
 })
 
-export const { useGetInfractionsQuery } = fleetSegmentApi
+export const { useGetInfractionsQuery } = infractionApi
 
 export const INFRACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les NATINFs"
 

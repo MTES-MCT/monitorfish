@@ -25,6 +25,8 @@ import { regulatoryLayerSearchReducer } from '../features/layers/regulatory/sear
 import { vesselListReducer } from '../features/VesselList/VesselList.slice'
 
 const commonReducerList = {
+  [monitorfishApi.reducerPath]: monitorfishApi.reducer,
+
   gear: gearReducer,
   global: globalSliceReducer,
   map: mapReducer,
@@ -34,7 +36,6 @@ const commonReducerList = {
 
 export const mainReducer = {
   [monitorenvApi.reducerPath]: monitorenvApi.reducer,
-  [monitorfishApi.reducerPath]: monitorfishApi.reducer,
 
   ...commonReducerList,
   alert: alertReducer,

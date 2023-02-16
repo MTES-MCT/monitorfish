@@ -77,7 +77,7 @@ export const backofficeStore = configureStore({
         // TODO Replace all Redux state Dates by strings & Error by a strict-typed POJO.
         isSerializable: (value: any) => isPlain(value) || value instanceof Date || value instanceof Error
       }
-    }),
+    }).concat(monitorfishApi.middleware),
   reducer: persistedBackofficeReducer
 })
 

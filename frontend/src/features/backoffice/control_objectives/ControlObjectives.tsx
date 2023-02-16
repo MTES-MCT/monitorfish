@@ -3,11 +3,11 @@ import { InputPicker } from 'rsuite'
 import styled from 'styled-components'
 
 import SeaFrontControlObjectives from './SeaFrontControlObjectives'
+import { fleetSegmentApi } from '../../../api/fleetSegment'
 import { COLORS } from '../../../constants/constants'
 import addControlObjectiveYear from '../../../domain/use_cases/controlObjective/addControlObjectiveYear'
 import getAllControlObjectives from '../../../domain/use_cases/controlObjective/getAllControlObjectives'
 import getControlObjectivesYearEntries from '../../../domain/use_cases/controlObjective/getControlObjectivesYearEntries'
-import { getAllFleetSegments } from '../../../domain/use_cases/fleetSegment/getAllFleetSegments'
 import { useBackofficeAppDispatch } from '../../../hooks/useBackofficeAppDispatch'
 
 import type { ControlObjective } from '../../../domain/types/controlObjective'
@@ -45,7 +45,8 @@ export function ControlObjectives() {
   )
 
   useEffect(() => {
-    dispatch(getAllFleetSegments())
+    // TODO The point of this effect is just to warm up the cache?
+    dispatch(fleetSegmentApi.endpoints.getFleetSegments.initiate())
   }, [dispatch])
 
   useEffect(() => {

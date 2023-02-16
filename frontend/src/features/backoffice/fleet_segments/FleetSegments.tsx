@@ -6,13 +6,13 @@ import styled from 'styled-components'
 
 import { FleetSegmentsTable } from './FleetSegmentsTable'
 import { NewFleetSegmentModal } from './NewFleetSegmentModal'
+import { fleetSegmentApi } from '../../../api/fleetSegment'
 import { COLORS } from '../../../constants/constants'
 import getFAOAreas from '../../../domain/use_cases/faoAreas/getFAOAreas'
 import { addFleetSegmentYear } from '../../../domain/use_cases/fleetSegment/addFleetSegmentYear'
 import { createFleetSegment } from '../../../domain/use_cases/fleetSegment/createFleetSegment'
-import { getAllFleetSegmentsForBackoffice } from '../../../domain/use_cases/fleetSegment/getAllFleetSegmentsForBackoffice'
 import { getFleetSegmentsYearEntries } from '../../../domain/use_cases/fleetSegment/getFleetSegmentsYearEntries'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useBackofficeAppDispatch } from '../../../hooks/useBackofficeAppDispatch'
 import { theme } from '../../../ui/theme'
 import { dayjs } from '../../../utils/dayjs'
 
@@ -24,7 +24,7 @@ function getLabeledYear(_year) {
 
 export function FleetSegments() {
   const currentYear = dayjs().year()
-  const dispatch = useMainAppDispatch()
+  const dispatch = useBackofficeAppDispatch()
   const [fleetSegments, setFleetSegments] = useState<FleetSegment[]>([])
   const [faoAreas, setFAOAreas] = useState<string[]>([])
   const [year, setYear] = useState<number | undefined>(currentYear)
@@ -44,11 +44,11 @@ export function FleetSegments() {
   )
 
   const fetchFleetSegments = useCallback(
-    _year => {
-      dispatch(getAllFleetSegmentsForBackoffice(_year)).then(nextFleetSegments => {
-        setYear(_year || currentYear)
-        setFleetSegments(nextFleetSegments || [])
-      })
+    async (_year?: number) => {
+      const { data: nextFleetSegments } = await dispatch(fleetSegmentApi.endpoints.getFleetSegments.initiate(_year))
+
+      setYear(_year || currentYear)
+      setFleetSegments(nextFleetSegments || [])
     },
     [dispatch, currentYear]
   )

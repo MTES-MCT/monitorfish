@@ -43,8 +43,10 @@ export namespace MissionAction {
 
     // TODO I had to add that.
     // eslint-disable-next-line typescript-sort-keys/interface
+    vesselExternalReferenceNumber: string
     vesselFlagState: string
     vesselInternalReferenceNumber: string
+    vesselIrcs: string
     vesselName: string
   }
 
@@ -96,12 +98,6 @@ export namespace MissionAction {
   export type ControlAndText = {
     control: MissionAction | undefined
     text: string
-  }
-
-  export type Controller = {
-    administration: string
-    controller: string
-    controllerType: string
   }
 
   export type FleetSegment = {

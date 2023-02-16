@@ -195,7 +195,7 @@ export function FormikMultiInfractionPicker({
 
               {index === editedIndex && (
                 <Formik initialValues={infraction} onSubmit={submit} validationSchema={MissionActionInfractionSchema}>
-                  {() => (
+                  {({ isValid }) => (
                     <StyledForm>
                       <FormikMultiRadio
                         isInline
@@ -222,7 +222,7 @@ export function FormikMultiInfractionPicker({
                         <Button accent={Accent.TERTIARY} onClick={cancel}>
                           Annuler
                         </Button>
-                        <Button accent={Accent.PRIMARY} type="submit">
+                        <Button accent={Accent.PRIMARY} disabled={!isValid} type="submit">
                           Valider l’infraction
                         </Button>
                       </FormButtonGroup>

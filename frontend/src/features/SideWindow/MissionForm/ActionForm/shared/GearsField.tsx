@@ -120,7 +120,7 @@ export function GearsField() {
         name: 'gearSeized'
       }}
       label="Engins à bord"
-      name="speciesInfractions"
+      name="gearInfractions"
     >
       {input.value &&
         input.value.length > 0 &&

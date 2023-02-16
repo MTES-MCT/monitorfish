@@ -6,28 +6,23 @@ import {
   FormikSelect,
   FormikTextarea,
   Icon,
-  IconButton,
-  Legend,
-  Option,
-  Tag,
-  TagGroup,
-  THEME
+  Option
 } from '@mtes-mct/monitor-ui'
 import { Form, Formik, useField } from 'formik'
 import { remove as ramdaRemove, update } from 'ramda'
 import { Fragment, useCallback, useMemo, useState } from 'react'
-import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
-import { INFRACTION_TYPES_AS_OPTIONS, MissionActionInfractionSchema } from './constants'
-import { useGetInfractionsQuery } from '../../../../../api/infraction'
-import { MissionAction } from '../../../../../domain/types/missionAction'
-import { FrontendError } from '../../../../../libs/FrontendError'
-import { useNewWindow } from '../../../../../ui/NewWindow'
-import { FieldsetGroup } from '../../FieldsetGroup'
-import { FieldsetGroupSeparator } from '../../FieldsetGroupSeparator'
+import { Infraction } from './Infraction'
+import { useGetInfractionsQuery } from '../../../../../../api/infraction'
+import { FrontendError } from '../../../../../../libs/FrontendError'
+import { useNewWindow } from '../../../../../../ui/NewWindow'
+import { FieldsetGroup } from '../../../FieldsetGroup'
+import { FieldsetGroupSeparator } from '../../../FieldsetGroupSeparator'
+import { INFRACTION_TYPES_AS_OPTIONS, MissionActionInfractionSchema } from '../constants'
 
-import type { MissionActionFormValues } from '../../types'
+import type { MissionAction } from '../../../../../../domain/types/missionAction'
+import type { MissionActionFormValues } from '../../../types'
 import type { FormikCheckboxProps, FormikTextareaProps } from '@mtes-mct/monitor-ui'
 import type { ReactNode } from 'react'
 
@@ -97,8 +92,9 @@ export function FormikMultiInfractionPicker({
       }
 
       const nextInfractions = ramdaRemove(index, 1, input.value)
+      const nornalizedNextInfractions = nextInfractions.length > 0 ? nextInfractions : undefined
 
-      helper.setValue(nextInfractions)
+      helper.setValue(nornalizedNextInfractions)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -154,43 +150,11 @@ export function FormikMultiInfractionPicker({
         <Row>
           {input.value.map((infraction, index) => (
             // eslint-disable-next-line react/no-array-index-key
-            <Fragment key={`infraction-${index}`}>
+            <Fragment key={`${name}-infraction-${index}`}>
               <FieldsetGroupSeparator />
 
               {index !== editedIndex && (
-                <>
-                  <Legend>Infraction obligations déclaratives et autorisations {index + 1}</Legend>
-
-                  <ItemWrapper>
-                    <div>
-                      <TagGroup>
-                        <Tag accent={Accent.PRIMARY}>
-                          {MissionAction.InfractionTypeLabel[infraction.infractionType]}
-                        </Tag>
-                        <Tag accent={Accent.PRIMARY}>NATINF : {infraction.natinf}</Tag>
-                      </TagGroup>
-
-                      <div>
-                        <IconButton
-                          accent={Accent.SECONDARY}
-                          Icon={Icon.Edit}
-                          onClick={() => setEditedIndex(index)}
-                          style={{ marginRight: '8px' }}
-                        />
-                        <IconButton
-                          accent={Accent.SECONDARY}
-                          color={THEME.color.chineseRed}
-                          Icon={Icon.Delete}
-                          onClick={() => remove(index)}
-                        />
-                      </div>
-                    </div>
-
-                    <article>
-                      <ReactMarkdown>{infraction.comments}</ReactMarkdown>
-                    </article>
-                  </ItemWrapper>
-                </>
+                <Infraction data={infraction} index={index} onDelete={remove} onEdit={setEditedIndex} />
               )}
 
               {index === editedIndex && (
@@ -249,22 +213,6 @@ export function FormikMultiInfractionPicker({
 const Row = styled.div`
   > legend {
     margin: 24px 0 8px;
-  }
-`
-
-const ItemWrapper = styled.div`
-  > div {
-    display: flex;
-    justify-content: space-between;
-
-    > div:last-child {
-      align-items: flex-start;
-      display: flex;
-    }
-  }
-
-  > article {
-    margin-top: 11px;
   }
 `
 

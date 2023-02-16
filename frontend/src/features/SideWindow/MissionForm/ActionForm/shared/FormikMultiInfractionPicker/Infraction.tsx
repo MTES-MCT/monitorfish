@@ -1,0 +1,65 @@
+import { Accent, Icon, IconButton, Legend, Tag, TagGroup, THEME } from '@mtes-mct/monitor-ui'
+import ReactMarkdown from 'react-markdown'
+import styled from 'styled-components'
+
+import { MissionAction } from '../../../../../../domain/types/missionAction'
+
+import type { Promisable } from 'type-fest'
+
+export type InfractionProps = {
+  data: MissionAction.OtherInfraction
+  index: number
+  onDelete: (index: number) => Promisable<void>
+  onEdit: (index: number) => Promisable<void>
+}
+export function Infraction({ data, index, onDelete, onEdit }: InfractionProps) {
+  return (
+    <>
+      <Legend>Infraction obligations déclaratives et autorisations {index + 1}</Legend>
+
+      <InnerWrapper>
+        <div>
+          <TagGroup>
+            <Tag accent={Accent.PRIMARY}>{MissionAction.InfractionTypeLabel[data.infractionType]}</Tag>
+            <Tag accent={Accent.PRIMARY}>NATINF : {data.natinf}</Tag>
+          </TagGroup>
+
+          <div>
+            <IconButton
+              accent={Accent.SECONDARY}
+              Icon={Icon.Edit}
+              onClick={() => onEdit(index)}
+              style={{ marginRight: '8px' }}
+            />
+            <IconButton
+              accent={Accent.SECONDARY}
+              color={THEME.color.chineseRed}
+              Icon={Icon.Delete}
+              onClick={() => onDelete(index)}
+            />
+          </div>
+        </div>
+
+        <article>
+          <ReactMarkdown>{data.comments}</ReactMarkdown>
+        </article>
+      </InnerWrapper>
+    </>
+  )
+}
+
+const InnerWrapper = styled.div`
+  > div {
+    display: flex;
+    justify-content: space-between;
+
+    > div:last-child {
+      align-items: flex-start;
+      display: flex;
+    }
+  }
+
+  > article {
+    margin-top: 11px;
+  }
+`

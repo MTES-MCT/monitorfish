@@ -10,7 +10,6 @@ import {
   FormikTextInput,
   noop,
   useForceUpdate
-  // useForceUpdate
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { equals } from 'ramda'

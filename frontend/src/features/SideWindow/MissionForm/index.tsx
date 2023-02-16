@@ -80,29 +80,23 @@ export function MissionForm() {
 
     let missionId: number
 
-    // TODO Dev only. Remove that try/catch before merging.
-    try {
-      if (!mission.draftId) {
-        const newMission = getMissionDataFromMissionFormValues(mission.draft)
-        // TODO Override Redux RTK typings globally.
-        // Redux RTK typing is wrong, this should be a tuple-like to help TS discriminate `data` from `error`.
-        const { data, error } = (await createMission(newMission)) as any
-        if (!data) {
-          throw new FrontendError('`createMission()` failed', 'createOrUpdateMission()', error)
-        }
-
-        missionId = data.id
-      } else {
-        const updatedMission = getUpdatedMissionFromMissionFormValues(mission.draftId, mission.draft)
-        await updateMission(updatedMission)
-
-        missionId = mission.draftId
+    if (!mission.draftId) {
+      const newMission = getMissionDataFromMissionFormValues(mission.draft)
+      // TODO Override Redux RTK typings globally.
+      // Redux RTK typing is wrong, this should be a tuple-like to help TS discriminate `data` from `error`.
+      const { data, error } = (await createMission(newMission)) as any
+      if (!data) {
+        throw new FrontendError('`createMission()` failed', 'createOrUpdateMission()', error)
       }
-      // eslint-disable-next-line no-empty
-    } catch (_) {}
 
-    // TODO Dev only. Remove that before merging.
-    missionId = Math.ceil(Math.random() * 2)
+      missionId = data.id
+    } else {
+      const updatedMission = getUpdatedMissionFromMissionFormValues(mission.draftId, mission.draft)
+      await updateMission(updatedMission)
+
+      missionId = mission.draftId
+    }
+    // eslint-disable-next-line no-empty
 
     const missionActionsData = getMissionActionsDataFromMissionActionsFormValues(missionId, mission.draft.actions)
 

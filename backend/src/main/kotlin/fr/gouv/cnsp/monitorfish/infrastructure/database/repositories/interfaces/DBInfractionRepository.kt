@@ -4,6 +4,6 @@ import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.InfractionEntit
 import org.springframework.data.repository.CrudRepository
 
 interface DBInfractionRepository : CrudRepository<InfractionEntity, Long> {
-    fun findByNatinfCodeEquals(natinfCode: String): InfractionEntity
+    fun findByNatinfCodeEquals(natinfCode: Int): InfractionEntity
     fun findAllByInfractionCategoryEquals(infractionCategory: String): List<InfractionEntity>
 }

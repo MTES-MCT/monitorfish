@@ -121,7 +121,7 @@ class ReportingControllerITests {
             creationDate = ZonedDateTime.now(),
             value = InfractionSuspicion(
                 ReportingActor.OPS,
-                natinfCode = "123456",
+                natinfCode = 123456,
                 authorTrigram = "LTH",
                 title = "A title",
             ),
@@ -145,7 +145,7 @@ class ReportingControllerITests {
                             creationDate = ZonedDateTime.now(),
                             value = InfractionSuspicion(
                                 ReportingActor.OPS,
-                                natinfCode = "123456",
+                                natinfCode = 123456,
                                 authorTrigram = "LTH",
                                 title = "A title",
                             ),
@@ -161,7 +161,7 @@ class ReportingControllerITests {
             .andExpect(MockMvcResultMatchers.jsonPath("$.flagState", equalTo("FR")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingActor", equalTo("OPS")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.authorTrigram", equalTo("LTH")))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo("123456")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo(123456)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))
     }
 
@@ -177,7 +177,7 @@ class ReportingControllerITests {
             creationDate = ZonedDateTime.now(),
             value = InfractionSuspicion(
                 ReportingActor.UNIT,
-                natinfCode = "123456",
+                natinfCode = 123456,
                 controlUnitId = 1234,
                 authorTrigram = "LTH",
                 title = "A title",
@@ -202,7 +202,7 @@ class ReportingControllerITests {
                             creationDate = ZonedDateTime.now(),
                             value = InfractionSuspicion(
                                 ReportingActor.OPS,
-                                natinfCode = "123456",
+                                natinfCode = 123456,
                                 controlUnitId = 1234,
                                 authorTrigram = "LTH",
                                 title = "A title",
@@ -221,7 +221,7 @@ class ReportingControllerITests {
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.controlUnit.id", equalTo(1234)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.controlUnit.name", equalTo("Cross Etel")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.authorTrigram", equalTo("LTH")))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo("123456")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo(123456)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))
     }
 
@@ -237,7 +237,7 @@ class ReportingControllerITests {
             creationDate = ZonedDateTime.now(),
             value = InfractionSuspicion(
                 ReportingActor.OPS,
-                natinfCode = "123456",
+                natinfCode = 123456,
                 authorTrigram = "LTH",
                 title = "A title",
             ),
@@ -273,7 +273,7 @@ class ReportingControllerITests {
             creationDate = ZonedDateTime.now(),
             value = InfractionSuspicion(
                 ReportingActor.OPS,
-                natinfCode = "123456",
+                natinfCode = 123456,
                 authorTrigram = "LTH",
                 title = "A title",
             ),
@@ -292,7 +292,7 @@ class ReportingControllerITests {
                         UpdateReportingDataInput(
                             reportingActor = ReportingActor.OPS,
                             type = ReportingType.INFRACTION_SUSPICION,
-                            natinfCode = "123456",
+                            natinfCode = 123456,
                             authorTrigram = "LTH",
                             title = "A title",
                         ),
@@ -317,7 +317,7 @@ class ReportingControllerITests {
             creationDate = ZonedDateTime.now(),
             value = InfractionSuspicion(
                 ReportingActor.OPS,
-                natinfCode = "123456",
+                natinfCode = 123456,
                 authorTrigram = "LTH",
                 title = "A title",
             ),
@@ -340,7 +340,7 @@ class ReportingControllerITests {
                             creationDate = ZonedDateTime.now(),
                             value = InfractionSuspicion(
                                 ReportingActor.OPS,
-                                natinfCode = "123456",
+                                natinfCode = 123456,
                                 authorTrigram = "LTH",
                                 title = "A title",
                             ),
@@ -354,7 +354,7 @@ class ReportingControllerITests {
             .andExpect(status().isCreated)
             .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", equalTo("FRFGRGR")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingActor", equalTo("OPS")))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo("123456")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo(123456)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))
     }
 }

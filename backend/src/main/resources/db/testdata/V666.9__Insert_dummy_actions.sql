@@ -1,3 +1,5 @@
+DELETE FROM infractions;
+
 INSERT INTO infractions
     (natinf_code,                                       regulation, infraction_category,                                                                                                                                                                    infraction)
 VALUES

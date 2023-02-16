@@ -30,7 +30,7 @@ class PendingAlertMapperUTests {
         parsedAlert as ThreeMilesTrawlingAlert
         assertThat(parsedAlert.seaFront).isEqualTo("MEMN")
         assertThat(parsedAlert.riskFactor).isEqualTo(1.2311444133)
-        assertThat(parsedAlert.natinfCode).isEqualTo("7059")
+        assertThat(parsedAlert.natinfCode).isEqualTo(7059)
     }
 
     @Test
@@ -46,6 +46,6 @@ class PendingAlertMapperUTests {
         parsedAlert as ThreeMilesTrawlingAlert
         assertThat(parsedAlert.seaFront).isEqualTo("MEMN")
         assertThat(parsedAlert.riskFactor).isEqualTo(1.2311444133)
-        assertThat(parsedAlert.natinfCode).isEqualTo("7059")
+        assertThat(parsedAlert.natinfCode).isEqualTo(7059)
     }
 }

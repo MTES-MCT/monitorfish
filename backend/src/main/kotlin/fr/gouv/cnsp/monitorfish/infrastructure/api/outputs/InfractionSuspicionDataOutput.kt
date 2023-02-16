@@ -12,7 +12,7 @@ data class InfractionSuspicionDataOutput(
     val authorContact: String? = null,
     val title: String,
     val description: String? = null,
-    val natinfCode: String,
+    val natinfCode: Int,
     val seaFront: String? = null,
     val dml: String? = null,
 ) : ReportingValueDataOutput() {

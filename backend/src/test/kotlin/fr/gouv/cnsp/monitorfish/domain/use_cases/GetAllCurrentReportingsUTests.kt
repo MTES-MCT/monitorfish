@@ -44,7 +44,7 @@ class GetAllCurrentReportingsUTests {
             creationDate = ZonedDateTime.now(),
             value = InfractionSuspicion(
                 ReportingActor.OPS,
-                natinfCode = "123456",
+                natinfCode = 123456,
                 authorTrigram = "LTH",
                 title = "A title",
             ),
@@ -83,7 +83,7 @@ class GetAllCurrentReportingsUTests {
             creationDate = ZonedDateTime.now(),
             value = InfractionSuspicion(
                 ReportingActor.OPS,
-                natinfCode = "123456",
+                natinfCode = 123456,
                 authorTrigram = "LTH",
                 title = "A title",
             ),

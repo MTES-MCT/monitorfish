@@ -37,7 +37,7 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
             return ['Contrôle en mer à renseigner', Icon.FleetSegment]
 
           default:
-            throw new FrontendError('This should never happen.')
+            throw new FrontendError('`initialValues.actionType` doesn not match the enum. This should never happen.')
         }
 
       case false:

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { fleetSegmentApi } from './fleetSegment'
 import { VesselSidebarTab } from '../domain/entities/vessel/vessel'
 import { setIsUpdatingVessels } from '../domain/shared_slices/Global'
 import { getOperationalAlerts } from '../domain/use_cases/alert/getOperationalAlerts'
@@ -7,7 +8,6 @@ import { getSilencedAlerts } from '../domain/use_cases/alert/getSilencedAlerts'
 import getAllBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
 import getVesselBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
 import { openBeaconMalfunctionInKanban } from '../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
-import { getAllFleetSegments } from '../domain/use_cases/fleetSegment/getAllFleetSegments'
 import getAllGearCodes from '../domain/use_cases/gearCode/getAllGearCodes'
 import getHealthcheck from '../domain/use_cases/healthcheck/getHealthcheck'
 import getFishingInfractions from '../domain/use_cases/infraction/getFishingInfractions'
@@ -50,7 +50,7 @@ export function APIWorker() {
     dispatch(getAllGearCodes())
 
     if (isAdmin) {
-      dispatch(getAllFleetSegments())
+      dispatch(fleetSegmentApi.endpoints.getFleetSegments.initiate())
       dispatch(getOperationalAlerts())
       dispatch(getAllCurrentReportings())
       dispatch(getSilencedAlerts())

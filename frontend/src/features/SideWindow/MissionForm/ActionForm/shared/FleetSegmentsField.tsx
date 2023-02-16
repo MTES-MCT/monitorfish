@@ -1,13 +1,13 @@
-import { Field, Label, noop, Select, SingleTag, TagGroup } from '@mtes-mct/monitor-ui'
+import { Field, Label, Select, SingleTag, TagGroup } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
-// import { includes } from 'ramda'
+import { remove as ramdaRemove, update } from 'ramda'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useGetFleetSegmentsQuery } from '../../../../../api/fleetSegment'
 import { getFaoZonesFromSpeciesOnboard } from '../../../../../domain/entities/vessel/riskFactor'
 import { getVesselRiskFactor } from '../../../../../domain/use_cases/vessel/getVesselRiskFactor'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
-// import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { FrontendError } from '../../../../../libs/FrontendError'
 import { useNewWindow } from '../../../../../ui/NewWindow'
 import { includesSome } from '../../../../../utils/includesSome'
 import { FieldsetGroup } from '../../FieldsetGroup'
@@ -49,40 +49,50 @@ export function FleetSegmentsField() {
     [getFleetSegmentsApiQuery.data, isUpdatingDefaultFleetSegments]
   )
 
-  const faoAreaTags = useMemo(
-    () =>
-      input.value
-        ? input.value
-            .map(({ faoAreas }) => faoAreas)
-            .flat()
-            .map(faoArea => (
-              <SingleTag key={faoArea} onDelete={noop}>
-                {faoArea}
-              </SingleTag>
-            ))
-        : [],
-    [input.value]
-  )
-
-  const fleetSegmentTags = useMemo(
-    () =>
-      input.value
-        ? input.value.map(({ segment, segmentName }) => (
-            <SingleTag key={segment} onDelete={noop}>{`${segment} - ${segmentName}`}</SingleTag>
-          ))
-        : [],
-    [input.value]
-  )
-
   const add = useCallback(
     (newSegment: MissionAction.FleetSegment | undefined) => {
       if (!newSegment) {
-        return
+        throw new FrontendError('`newSegment` is undefined. This should never happen.', 'add()')
       }
 
       const nextSegments: MissionAction.FleetSegment[] = [...(input.value || []), newSegment]
 
       helper.setValue(nextSegments)
+    },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [input.value]
+  )
+
+  const remove = useCallback(
+    (index: number, faoArea?: string) => {
+      if (!input.value) {
+        throw new FrontendError('`input.value` is undefined. This should never happen.', 'remove()')
+      }
+
+      // If we only wish to delete an faoArea from an existing fleet segment
+      if (faoArea) {
+        const foundSegment = input.value[index]
+        if (!foundSegment) {
+          throw new FrontendError('`foundSegment` is undefined. This should never happen.', 'remove()')
+        }
+
+        const updatedSegment: MissionAction.FleetSegment = {
+          ...foundSegment,
+          faoAreas: foundSegment.faoAreas.filter(segmentFaoArea => segmentFaoArea !== faoArea)
+        }
+
+        const nextSegments = update(index, updatedSegment, input.value)
+
+        helper.setValue(nextSegments)
+
+        return
+      }
+
+      const nextSegments = ramdaRemove(index, 1, input.value)
+      const nornalizedNextSegments = nextSegments.length > 0 ? nextSegments : undefined
+
+      helper.setValue(nornalizedNextSegments)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -124,6 +134,32 @@ export function FleetSegmentsField() {
 
     // We observe `vesselInternalReferenceNumber` changes in order to update the default fleet segments
     [updateDefaultFleetSegments, vesselInternalReferenceNumber]
+  )
+
+  const faoAreaTags = useMemo(
+    () =>
+      input.value
+        ? input.value
+            .map(({ faoAreas }, fleetSegmentIndex) =>
+              faoAreas.map(faoArea => (
+                <SingleTag key={faoArea} onDelete={() => remove(fleetSegmentIndex, faoArea)}>
+                  {faoArea}
+                </SingleTag>
+              ))
+            )
+            .flat()
+        : [],
+    [input.value, remove]
+  )
+
+  const fleetSegmentTags = useMemo(
+    () =>
+      input.value
+        ? input.value.map(({ segment, segmentName }, index) => (
+            <SingleTag key={segment} onDelete={() => remove(index)}>{`${segment} - ${segmentName}`}</SingleTag>
+          ))
+        : [],
+    [input.value, remove]
   )
 
   if (isLoading) {

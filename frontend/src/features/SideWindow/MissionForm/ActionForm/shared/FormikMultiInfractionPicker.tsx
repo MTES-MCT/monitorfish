@@ -204,13 +204,12 @@ export function FormikMultiInfractionPicker({
                         options={INFRACTION_TYPES_AS_OPTIONS}
                       />
                       {/* TODO I don't understand if it's a multiselect or a select here (XD vs types). */}
-                      <FormikSelect
+                      <HackedFormikSelect
                         baseContainer={newWindowContainerRef.current}
                         label="NATINF"
                         name="natinf"
                         options={natinfsAsOptions}
                         searchable
-                        virtualized
                       />
                       {infractionCheckboxProps && (
                         // eslint-disable-next-line react/jsx-props-no-spreading
@@ -291,5 +290,12 @@ const FormButtonGroup = styled.div`
 
   > button:last-child {
     margin-left: 16px;
+  }
+`
+
+const HackedFormikSelect = styled(FormikSelect)`
+  > .rs-picker-toggle {
+    /* TODO Investigate both these props which are a hack to fix long NATINFs breaking the layout. */
+    max-width: 360px;
   }
 `

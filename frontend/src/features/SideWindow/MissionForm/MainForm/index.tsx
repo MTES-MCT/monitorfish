@@ -153,7 +153,8 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  width: 33.33%;
+  max-width: 33.34%;
+  min-width: 33.34%;
 
   /* TODO Handle that in @mtes-mct/monitor-ui. */
   legend {

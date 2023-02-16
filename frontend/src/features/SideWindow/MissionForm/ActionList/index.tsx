@@ -112,7 +112,8 @@ const Wrapper = styled.div`
   background-color: ${p => p.theme.color.cultured};
   display: flex;
   flex-direction: column;
-  width: 33.33%;
+  max-width: 33.33%;
+  min-width: 33.33%;
 `
 
 const Placeholder = styled.div`

@@ -15,8 +15,6 @@ import type { MissionAction } from '../../../../../domain/types/missionAction'
 import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
-const ERROR_PATH = 'features/SideWindow/MissionForm/ActionForm/SeaControlForm/GearsField/GearOnboardPicker.tsx'
-
 export function GearsField() {
   const [input, , helper] = useField<MissionActionFormValues['gearOnboard']>('gearOnboard')
 
@@ -65,7 +63,7 @@ export function GearsField() {
       if (!input.value) {
         throw new FrontendError(
           '`input.value` is undefined. This should never happen.',
-          `${ERROR_PATH} > handleGearWasNotControlledChange()`
+          'handleGearWasNotControlledChange()'
         )
       }
 
@@ -73,7 +71,7 @@ export function GearsField() {
       if (!gearOnboard) {
         throw new FrontendError(
           '`gearOnboard` is undefined. This should never happen.',
-          `${ERROR_PATH} > handleGearWasNotControlledChange()`
+          'handleGearWasNotControlledChange()'
         )
       }
 

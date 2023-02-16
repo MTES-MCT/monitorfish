@@ -30,8 +30,6 @@ import { SideWindowMenuKey } from '../constants'
 
 import type { MissionActionFormValues, MissionFormValues } from './types'
 
-const ERROR_PATH = 'features/SideWindow/MissionForm/index.tsx'
-
 export function MissionForm() {
   const { mission } = useMainAppSelector(store => store)
   if (!mission.draft && !mission.draftId) {
@@ -64,7 +62,7 @@ export function MissionForm() {
       if (!mission.draft || !mission.draft.actions) {
         throw new FrontendError(
           'Either `mission.draft` or `mission.draft.actions` is undefined while `mission.editedDraftActionIndex` is not. This should never happen.',
-          ERROR_PATH
+          'actionFormInitialValues'
         )
       }
 
@@ -90,7 +88,7 @@ export function MissionForm() {
         // Redux RTK typing is wrong, this should be a tuple-like to help TS discriminate `data` from `error`.
         const { data, error } = (await createMission(newMission)) as any
         if (!data) {
-          throw new FrontendError('`createMission()` failed', `${ERROR_PATH} > createOrUpdateMission()`, error)
+          throw new FrontendError('`createMission()` failed', 'createOrUpdateMission()', error)
         }
 
         missionId = data.id

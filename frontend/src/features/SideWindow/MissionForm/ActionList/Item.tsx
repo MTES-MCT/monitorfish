@@ -9,8 +9,6 @@ import { FrontendError } from '../../../../libs/FrontendError'
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
-const ERROR_PATH = 'features/SideWindow/MissionForm/ActionList/Item.tsx'
-
 export type ItemProps = {
   initialValues: MissionActionFormValues
   isSelected: boolean
@@ -39,10 +37,7 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
             return ['Contrôle en mer à renseigner', Icon.FleetSegment]
 
           default:
-            throw new FrontendError(
-              'This should never happen.',
-              'features/SideWindow/MissionForm/ActionList/Item.tsx > <Item />'
-            )
+            throw new FrontendError('This should never happen.')
         }
 
       case false:
@@ -64,17 +59,11 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
             return [`Contrôle en mer - ${'TODO Vessel Name?'}`, Icon.FleetSegment]
 
           default:
-            throw new FrontendError(
-              '`initialValues.actionType` does not match the enum. This should never happen.',
-              `${ERROR_PATH} > Item()`
-            )
+            throw new FrontendError('`initialValues.actionType` does not match the enum. This should never happen.')
         }
 
       default:
-        throw new FrontendError(
-          '`initialValues.isDraft` is not a boolean. This should never happen.',
-          `${ERROR_PATH} > Item()`
-        )
+        throw new FrontendError('`initialValues.isDraft` is not a boolean. This should never happen.')
     }
   }, [initialValues])
 

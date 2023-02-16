@@ -26,8 +26,6 @@ import type { MissionActionFormValues } from '../../../types'
 import type { FormikCheckboxProps, FormikTextareaProps } from '@mtes-mct/monitor-ui'
 import type { ReactNode } from 'react'
 
-const ERROR_PATH = 'features/SideWindow/MissionForm/ActionForm/shared/FormikMultiInfractionPicker.tsx'
-
 export type FormikMultiInfractionPickerProps = {
   addButtonLabel: string
   children?: ReactNode
@@ -88,7 +86,7 @@ export function FormikMultiInfractionPicker({
   const remove = useCallback(
     (index: number) => {
       if (!input.value) {
-        throw new FrontendError('`input.value` is undefined. This should never happen.', `${ERROR_PATH} > remove()`)
+        throw new FrontendError('`input.value` is undefined. This should never happen.', 'remove()')
       }
 
       const nextInfractions = ramdaRemove(index, 1, input.value)
@@ -103,7 +101,7 @@ export function FormikMultiInfractionPicker({
 
   const cancel = useCallback(() => {
     if (editedIndex === undefined) {
-      throw new FrontendError('`editedIndex` is undefined. This should never happen.', `${ERROR_PATH} > cancel()`)
+      throw new FrontendError('`editedIndex` is undefined. This should never happen.', 'acancel()')
     }
 
     // If we clicked the cancellation button and the edition form was for a new item, we delete it
@@ -117,10 +115,7 @@ export function FormikMultiInfractionPicker({
   const submit = useCallback(
     (updatedInfraction: MissionAction.OtherInfraction) => {
       if (!input.value || editedIndex === undefined) {
-        throw new FrontendError(
-          '`input.value` or `editedIndex` is undefined. This should never happen.',
-          `${ERROR_PATH} > submit()`
-        )
+        throw new FrontendError('`input.value` or `editedIndex` is undefined. This should never happen.', 'submit()')
       }
 
       const nextInfractions = update(editedIndex, updatedInfraction, input.value)

@@ -9,7 +9,7 @@ data class InfractionSuspicion(
     override val authorContact: String? = null,
     override val title: String,
     override val description: String? = null,
-    override val natinfCode: String,
+    override val natinfCode: Int,
     val seaFront: String? = null,
     val dml: String? = null,
 ) : InfractionSuspicionOrObservationType(
@@ -26,8 +26,8 @@ data class InfractionSuspicion(
         fun fromUpdatedReporting(
             updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation
         ): InfractionSuspicion {
-            require(!updatedInfractionSuspicionOrObservation.natinfCode.isNullOrEmpty()) {
-                "NATINF code should not be null or empty"
+            require(updatedInfractionSuspicionOrObservation.natinfCode != null) {
+                "NATINF code should not be null"
             }
 
             return InfractionSuspicion(

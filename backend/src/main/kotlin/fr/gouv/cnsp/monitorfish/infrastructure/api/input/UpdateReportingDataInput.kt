@@ -12,7 +12,7 @@ class UpdateReportingDataInput(
     val authorContact: String? = null,
     val title: String,
     val description: String? = null,
-    val natinfCode: String? = null,
+    val natinfCode: Int? = null,
 ) {
     fun toUpdatedReportingValues() = UpdatedInfractionSuspicionOrObservation(
         reportingActor = this.reportingActor,

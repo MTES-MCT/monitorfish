@@ -9,7 +9,7 @@ import jakarta.persistence.*
 data class InfractionEntity(
     @Id
     @Column(name = "natinf_code")
-    var natinfCode: String,
+    var natinfCode: Int,
     @Column(name = "regulation")
     var regulation: String? = null,
     @Column(name = "infraction_category")

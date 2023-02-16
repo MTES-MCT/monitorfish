@@ -31,8 +31,8 @@ class InfractionControllerITests {
         // Given
         given(this.getFishingInfractions.execute()).willReturn(
             listOf(
-                Infraction(natinfCode = "7059", infractionCategory = InfractionCategory.FISHING),
-                Infraction(natinfCode = "7065", infractionCategory = InfractionCategory.FISHING)
+                Infraction(natinfCode = 7059, infractionCategory = InfractionCategory.FISHING),
+                Infraction(natinfCode = 7065, infractionCategory = InfractionCategory.FISHING)
             )
         )
 
@@ -41,7 +41,7 @@ class InfractionControllerITests {
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))
-            .andExpect(jsonPath("$[0].natinfCode", equalTo("7059")))
-            .andExpect(jsonPath("$[1].natinfCode", equalTo("7065")))
+            .andExpect(jsonPath("$[0].natinfCode", equalTo(7059)))
+            .andExpect(jsonPath("$[1].natinfCode", equalTo(7065)))
     }
 }

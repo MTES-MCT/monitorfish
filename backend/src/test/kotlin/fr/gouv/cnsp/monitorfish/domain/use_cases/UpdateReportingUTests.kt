@@ -90,7 +90,7 @@ class UpdateReportingUTests {
                     reportingActor = ReportingActor.UNIT,
                     authorTrigram = "LTH",
                     title = "Test",
-                    natinfCode = "1234",
+                    natinfCode = 1234,
                 ) as ReportingValue,
                 isArchived = false,
                 isDeleted = false,
@@ -138,7 +138,7 @@ class UpdateReportingUTests {
                 reportingActor = ReportingActor.UNIT,
                 authorTrigram = "LTH",
                 title = "Test",
-                natinfCode = "1234",
+                natinfCode = 1234,
             ) as ReportingValue,
             isArchived = false,
             isDeleted = false,
@@ -150,7 +150,7 @@ class UpdateReportingUTests {
                 reportingActor = reportingActor,
                 title = "Test",
                 authorTrigram = "LTH",
-                natinfCode = "1234",
+                natinfCode = 1234,
             ),
         )
 
@@ -164,7 +164,7 @@ class UpdateReportingUTests {
                         type = ReportingType.INFRACTION_SUSPICION,
                         authorTrigram = "LTH",
                         title = "A reporting",
-                        natinfCode = "123456",
+                        natinfCode = 123456,
                     ),
                 )
         }
@@ -199,7 +199,7 @@ class UpdateReportingUTests {
                     reportingActor = ReportingActor.UNIT,
                     authorTrigram = "LTH",
                     title = "Test",
-                    natinfCode = "1234",
+                    natinfCode = 1234,
                 ) as ReportingValue,
                 isArchived = false,
                 isDeleted = false,
@@ -220,7 +220,7 @@ class UpdateReportingUTests {
         }
 
         // Then
-        assertThat(throwable.message).contains("NATINF code should not be null or empty")
+        assertThat(throwable.message).contains("NATINF code should not be null")
     }
 
     @Test
@@ -261,7 +261,7 @@ class UpdateReportingUTests {
                 authorTrigram = "LTH",
                 title = "A reporting",
                 description = "Test 2",
-                natinfCode = "1234",
+                natinfCode = 1234,
             ),
         )
 
@@ -291,7 +291,7 @@ class UpdateReportingUTests {
                 reportingActor = ReportingActor.UNIT,
                 authorTrigram = "LTH",
                 title = "Test",
-                natinfCode = "1234",
+                natinfCode = 1234,
             ) as ReportingValue,
             isArchived = false,
             isDeleted = false,
@@ -309,7 +309,7 @@ class UpdateReportingUTests {
                 authorTrigram = "LTH",
                 title = "A reporting",
                 description = "Test 2",
-                natinfCode = "1234",
+                natinfCode = 1234,
             ),
         )
 
@@ -340,7 +340,7 @@ class UpdateReportingUTests {
             value = InfractionSuspicion(
                 reportingActor = ReportingActor.UNIT,
                 title = "Test",
-                natinfCode = "1234",
+                natinfCode = 1234,
                 authorTrigram = "LTH",
             ) as ReportingValue,
             isArchived = false,
@@ -353,7 +353,7 @@ class UpdateReportingUTests {
                 reportingActor = ReportingActor.UNIT,
                 controlUnitId = 1,
                 title = "Test",
-                natinfCode = "1234",
+                natinfCode = 1234,
                 dml = "DML 56",
                 authorTrigram = "LTH",
                 seaFront = "NAMO",
@@ -369,7 +369,7 @@ class UpdateReportingUTests {
                 controlUnitId = 1,
                 authorTrigram = "LTH",
                 title = "A reporting",
-                natinfCode = "1234",
+                natinfCode = 1234,
             ),
         )
 
@@ -416,7 +416,7 @@ class UpdateReportingUTests {
                 controlUnitId = 1,
                 authorTrigram = "LTH",
                 title = "A reporting",
-                natinfCode = "1234",
+                natinfCode = 1234,
             ),
         )
 
@@ -455,7 +455,7 @@ class UpdateReportingUTests {
                 reportingActor = ReportingActor.OPS,
                 seaFront = "NAMO",
                 dml = "DML 17",
-                natinfCode = "1235",
+                natinfCode = 1235,
                 authorTrigram = "LTH",
                 title = "Chalut en boeuf illégal",
             ),
@@ -470,7 +470,7 @@ class UpdateReportingUTests {
                 controlUnitId = 1,
                 authorTrigram = "LTH",
                 title = "A reporting",
-                natinfCode = "1234",
+                natinfCode = 1234,
             ),
         )
 

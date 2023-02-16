@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Infraction
 
 data class InfractionDataOutput(
-    var natinfCode: String? = null,
+    var natinfCode: Int? = null,
     var regulation: String? = null,
     var infractionCategory: String? = null,
     var infraction: String? = null,

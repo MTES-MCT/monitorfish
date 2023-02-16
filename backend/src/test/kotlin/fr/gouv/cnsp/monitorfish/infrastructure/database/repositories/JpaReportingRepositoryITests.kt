@@ -68,7 +68,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             creationDate = creationDate,
             value = InfractionSuspicion(
                 ReportingActor.OPS,
-                natinfCode = "123456",
+                natinfCode = 123456,
                 authorTrigram = "LTH",
                 title = "A title",
             ),
@@ -88,7 +88,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(reportings.last().type).isEqualTo(ReportingType.INFRACTION_SUSPICION)
         val infraction = reportings.last().value as InfractionSuspicion
         assertThat(infraction.reportingActor).isEqualTo(ReportingActor.OPS)
-        assertThat(infraction.natinfCode).isEqualTo("123456")
+        assertThat(infraction.natinfCode).isEqualTo(123456)
         assertThat(infraction.title).isEqualTo("A title")
         assertThat(reportings.last().creationDate).isEqualTo(creationDate)
         assertThat(reportings.last().validationDate).isNull()
@@ -109,7 +109,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             flagState = CountryCode.FR,
             value = InfractionSuspicion(
                 ReportingActor.OPS,
-                natinfCode = "123456",
+                natinfCode = 123456,
                 authorTrigram = "LTH",
                 title = "A title",
             ),
@@ -129,7 +129,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(reportings.last().type).isEqualTo(ReportingType.INFRACTION_SUSPICION)
         val infraction = reportings.last().value as InfractionSuspicion
         assertThat(infraction.reportingActor).isEqualTo(ReportingActor.OPS)
-        assertThat(infraction.natinfCode).isEqualTo("123456")
+        assertThat(infraction.natinfCode).isEqualTo(123456)
         assertThat(infraction.title).isEqualTo("A title")
         assertThat(reportings.last().creationDate).isEqualTo(creationDate)
         assertThat(reportings.last().validationDate).isNull()
@@ -250,7 +250,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             "Jean Bon",
             "Une observation",
             "Une description",
-            "1236",
+            1236,
             "MEMN",
             "DML 56",
         )

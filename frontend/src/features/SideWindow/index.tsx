@@ -43,7 +43,7 @@ import type { CSSProperties, ForwardedRef, HTMLAttributes } from 'react'
 export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
   isFromURL: boolean
 }
-function SideWindowWithRef(this: any, { isFromURL }: SideWindowProps, ref: ForwardedRef<HTMLDivElement | null>) {
+function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTMLDivElement | null>) {
   // eslint-disable-next-line no-null/no-null
   const wrapperRef = useRef<HTMLDivElement | null>(null)
 

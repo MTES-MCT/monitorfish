@@ -5,8 +5,6 @@ import { FrontendError } from '../libs/FrontendError'
 
 import type { Undefine } from '@mtes-mct/monitor-ui'
 
-const ERROR_PATH = 'utils/validateRequiredFormValues.ts'
-
 export function validateRequiredFormValues<T extends Record<string, any>>(
   requiredProps: Array<keyof T>,
   record: Partial<Undefine<T>>
@@ -27,7 +25,11 @@ export function validateRequiredFormValues<T extends Record<string, any>>(
     return [record as T, undefined]
   } catch (err: any) {
     if (!(err instanceof FormError)) {
-      throw new FrontendError('`err` is not an instance of `FormError`. This should never happen.', ERROR_PATH, err)
+      throw new FrontendError(
+        '`err` is not an instance of `FormError`. This should never happen.',
+        'validateRequiredFormValues()',
+        err
+      )
     }
 
     return [undefined, err]

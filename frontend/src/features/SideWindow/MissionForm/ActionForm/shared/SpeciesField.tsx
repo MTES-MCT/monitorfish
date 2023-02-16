@@ -16,8 +16,6 @@ import type { Specy } from '../../../../../domain/types/specy'
 import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
-const ERROR_PATH = 'features/SideWindow/MissionForm/ActionForm/shared/SpeciesField.tsx'
-
 export function SpeciesField() {
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
 
@@ -39,6 +37,8 @@ export function SpeciesField() {
   const add = useCallback(
     (newSpecy: Specy | undefined) => {
       if (!newSpecy) {
+        // TODO Add a form validation to avoid `undefined`.
+
         return
       }
 
@@ -63,7 +63,7 @@ export function SpeciesField() {
   const remove = useCallback(
     (index: number) => {
       if (!input.value) {
-        throw new FrontendError('`input.value` is undefined. This should never happen.', `${ERROR_PATH} > remove()`)
+        throw new FrontendError('`input.value` is undefined. This should never happen.', 'remove()')
       }
 
       const nextSpeciesOnboard = ramdaRemove(index, 1, input.value)

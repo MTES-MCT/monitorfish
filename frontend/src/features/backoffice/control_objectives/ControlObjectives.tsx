@@ -1,76 +1,95 @@
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
-import SeaFrontControlObjectives from './SeaFrontControlObjectives'
-import { useDispatch } from 'react-redux'
-import getAllControlObjectives from '../../../domain/use_cases/controlObjective/getAllControlObjectives'
-import { getAllFleetSegments } from '../../../domain/use_cases/fleetSegment/getAllFleetSegments'
+import { useEffect, useMemo, useState } from 'react'
 import { InputPicker } from 'rsuite'
-import getControlObjectivesYearEntries from '../../../domain/use_cases/controlObjective/getControlObjectivesYearEntries'
+import styled from 'styled-components'
+
+import SeaFrontControlObjectives from './SeaFrontControlObjectives'
+import { COLORS } from '../../../constants/constants'
 import addControlObjectiveYear from '../../../domain/use_cases/controlObjective/addControlObjectiveYear'
+import getAllControlObjectives from '../../../domain/use_cases/controlObjective/getAllControlObjectives'
+import getControlObjectivesYearEntries from '../../../domain/use_cases/controlObjective/getControlObjectivesYearEntries'
+import { getAllFleetSegments } from '../../../domain/use_cases/fleetSegment/getAllFleetSegments'
+import { useBackofficeAppDispatch } from '../../../hooks/useBackofficeAppDispatch'
+
+import type { ControlObjective } from '../../../domain/types/controlObjective'
+import type { Option } from '@mtes-mct/monitor-ui'
 
 const currentYear = new Date().getFullYear()
 const nextYear = currentYear + 1
 const lastYear = currentYear - 1
 const LAST_ITEM = -1
 
-const ControlObjectives = () => {
-  const dispatch = useDispatch()
-  const [controlObjectives, setControlObjectives] = useState([])
+export function ControlObjectives() {
+  const dispatch = useBackofficeAppDispatch()
+  const [controlObjectives, setControlObjectives] = useState<ControlObjective[]>([])
   const [year, setYear] = useState(currentYear)
-  const [yearEntries, setYearEntries] = useState([{ label: `Année ${currentYear}`, value: currentYear }])
-  const nextYearToAddFromEntries =
-    yearEntries
-      ?.map(year => year.value)
-      .sort()
-      .at(LAST_ITEM) + 1
-  const lastYearFoundInYearEntries =
-    yearEntries
-      ?.map(year => year.value)
-      .sort()
-      .at(LAST_ITEM) === lastYear
+  const [yearEntries, setYearEntries] = useState<Array<Option<number>>>([
+    { label: `Année ${currentYear}`, value: currentYear }
+  ])
+
+  const nextYearToAddFromEntries = useMemo(
+    () =>
+      (yearEntries
+        .map(yearEntry => yearEntry.value)
+        .sort()
+        .at(LAST_ITEM) || 0) + 1,
+    [yearEntries]
+  )
+
+  const lastYearFoundInYearEntries = useMemo(
+    () =>
+      yearEntries
+        .map(yearEntry => yearEntry.value)
+        .sort()
+        .at(LAST_ITEM) === lastYear,
+    [yearEntries]
+  )
 
   useEffect(() => {
     dispatch(getAllFleetSegments())
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
-    if (!yearEntries?.map(_year => year.value).includes(year)) {
+    if (!yearEntries?.map(yearEntry => yearEntry.value).includes(year)) {
       setYearEntries(yearEntries.concat([{ label: `Année ${year}`, value: year }]))
     }
     dispatch(getControlObjectivesYearEntries()).then(years => {
       if (years?.length) {
         if (!years.includes(currentYear)) {
           setYear(years.at(LAST_ITEM))
+
           return
         }
-        const yearsWithLabel = years.map(year => ({ label: `Année ${year}`, value: year }))
+        const yearsWithLabel = years.map(_year => ({ label: `Année ${_year}`, value: year }))
         setYearEntries(yearsWithLabel)
 
-        dispatch(getAllControlObjectives(year)).then(controlObjectives => {
-          setControlObjectives(controlObjectives)
+        dispatch(getAllControlObjectives(year)).then(_controlObjectives => {
+          if (!_controlObjectives) {
+            return
+          }
+
+          setControlObjectives(_controlObjectives)
         })
       }
     })
-  }, [year])
+  }, [dispatch, year, yearEntries])
 
   return (
     <Wrapper>
       <Header>
-        <Year data-cy={'control-objectives-year'}>
+        <Year data-cy="control-objectives-year">
           <InputPicker
-            value={year}
-            onChange={_year => setYear(_year)}
-            data={yearEntries}
-            style={{ width: 0 }}
-            menuStyle={{ top: 46 }}
-            creatable={false}
             cleanable={false}
-            size={'xs'}
+            creatable={false}
+            data={yearEntries}
+            menuStyle={{ top: 46 }}
+            onChange={_year => setYear(_year)}
+            size="xs"
+            style={{ width: 0 }}
+            value={year}
           />
         </Year>
         <AddYear
-          data-cy={'control-objectives-add-year'}
+          data-cy="control-objectives-add-year"
           isVisible={lastYearFoundInYearEntries || nextYearToAddFromEntries === nextYear}
           onClick={() => dispatch(addControlObjectiveYear()).then(() => setYear(nextYearToAddFromEntries))}
         >
@@ -79,28 +98,28 @@ const ControlObjectives = () => {
       </Header>
       <ControlObjectivesContainer>
         <SeaFrontControlObjectives
-          title={'NORD ATLANTIQUE - MANCHE OUEST (NAMO)'}
-          facade={'NAMO'}
-          year={year}
           data={controlObjectives?.filter(controlObjective => controlObjective.facade === 'NAMO')}
+          facade="NAMO"
+          title="NORD ATLANTIQUE - MANCHE OUEST (NAMO)"
+          year={year}
         />
         <SeaFrontControlObjectives
-          title={'MANCHE EST – MER DU NORD (MEMN)'}
-          facade={'MEMN'}
-          year={year}
           data={controlObjectives?.filter(controlObjective => controlObjective.facade === 'MEMN')}
+          facade="MEMN"
+          title="MANCHE EST – MER DU NORD (MEMN)"
+          year={year}
         />
         <SeaFrontControlObjectives
-          title={'SUD-ATLANTIQUE (SA)'}
-          facade={'SA'}
-          year={year}
           data={controlObjectives?.filter(controlObjective => controlObjective.facade === 'SA')}
+          facade="SA"
+          title="SUD-ATLANTIQUE (SA)"
+          year={year}
         />
         <SeaFrontControlObjectives
-          title={'Méditerranée (MED)'}
-          facade={'MED'}
-          year={year}
           data={controlObjectives?.filter(controlObjective => controlObjective.facade === 'MED')}
+          facade="MED"
+          title="Méditerranée (MED)"
+          year={year}
         />
       </ControlObjectivesContainer>
     </Wrapper>
@@ -120,7 +139,9 @@ const ControlObjectivesContainer = styled.div`
   overflow: auto;
 `
 
-const AddYear = styled.a`
+const AddYear = styled.a<{
+  isVisible: boolean
+}>`
   visibility: ${props => (props.isVisible ? 'visible' : 'hidden')};
   height: fit-content;
   width: fit-content;
@@ -194,5 +215,3 @@ const Year = styled.div`
 const Wrapper = styled.div`
   background-color: ${COLORS.white};
 `
-
-export default ControlObjectives

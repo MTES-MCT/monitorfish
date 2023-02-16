@@ -146,7 +146,7 @@ export function FormikMultiInfractionPicker({
     <FieldsetGroup isLight legend={label}>
       {children}
 
-      <Button accent={Accent.SECONDARY} Icon={Icon.Plus} isFullWidth onClick={add}>
+      <Button accent={Accent.SECONDARY} disabled={isEditedIndexNew} Icon={Icon.Plus} isFullWidth onClick={add}>
         {addButtonLabel}
       </Button>
 

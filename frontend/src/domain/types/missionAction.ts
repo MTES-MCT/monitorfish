@@ -44,6 +44,7 @@ export namespace MissionAction {
     // TODO I had to add that.
     // eslint-disable-next-line typescript-sort-keys/interface
     vesselFlagState: string
+    vesselInternalReferenceNumber: string
     vesselName: string
   }
 

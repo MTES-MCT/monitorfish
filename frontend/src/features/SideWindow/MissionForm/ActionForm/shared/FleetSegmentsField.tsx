@@ -1,6 +1,7 @@
 import { Field, Label, noop, Select, SingleTag, TagGroup } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
-import { useCallback, useEffect, useMemo } from 'react'
+// import { includes } from 'ramda'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useGetFleetSegmentsQuery } from '../../../../../api/fleetSegment'
 import { getFaoZonesFromSpeciesOnboard } from '../../../../../domain/entities/vessel/riskFactor'
@@ -8,6 +9,7 @@ import { getVesselRiskFactor } from '../../../../../domain/use_cases/vessel/getV
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 // import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { useNewWindow } from '../../../../../ui/NewWindow'
+import { includesSome } from '../../../../../utils/includesSome'
 import { FieldsetGroup } from '../../FieldsetGroup'
 
 import type { MissionAction } from '../../../../../domain/types/missionAction'
@@ -16,11 +18,15 @@ import type { Option } from '@mtes-mct/monitor-ui'
 
 export function FleetSegmentsField() {
   const [input, , helper] = useField<MissionActionFormValues['segments']>('segments')
+  const [{ value: vesselInternalReferenceNumber }] = useField<MissionActionFormValues['vesselInternalReferenceNumber']>(
+    'vesselInternalReferenceNumber'
+  )
 
   const { newWindowContainerRef } = useNewWindow()
 
-  const dispatch = useMainAppDispatch()
+  const [isUpdatingDefaultFleetSegments, setIsUpdatingDefaultFleetSegments] = useState(false)
 
+  const dispatch = useMainAppDispatch()
   const getFleetSegmentsApiQuery = useGetFleetSegmentsQuery()
 
   const fleetSegmentsAsOptions: Option<MissionAction.FleetSegment>[] = useMemo(() => {
@@ -38,6 +44,36 @@ export function FleetSegmentsField() {
     }))
   }, [getFleetSegmentsApiQuery.data])
 
+  const isLoading = useMemo(
+    () => !getFleetSegmentsApiQuery.data || isUpdatingDefaultFleetSegments,
+    [getFleetSegmentsApiQuery.data, isUpdatingDefaultFleetSegments]
+  )
+
+  const faoAreaTags = useMemo(
+    () =>
+      input.value
+        ? input.value
+            .map(({ faoAreas }) => faoAreas)
+            .flat()
+            .map(faoArea => (
+              <SingleTag key={faoArea} onDelete={noop}>
+                {faoArea}
+              </SingleTag>
+            ))
+        : [],
+    [input.value]
+  )
+
+  const fleetSegmentTags = useMemo(
+    () =>
+      input.value
+        ? input.value.map(({ segment, segmentName }) => (
+            <SingleTag key={segment} onDelete={noop}>{`${segment} - ${segmentName}`}</SingleTag>
+          ))
+        : [],
+    [input.value]
+  )
+
   const add = useCallback(
     (newSegment: MissionAction.FleetSegment | undefined) => {
       if (!newSegment) {
@@ -53,27 +89,44 @@ export function FleetSegmentsField() {
     [input.value]
   )
 
-  useEffect(() => {
-    const getRiskFactor = async () => {
+  const updateDefaultFleetSegments = useCallback(
+    async (_vesselInternalReferenceNumber: string) => {
+      setIsUpdatingDefaultFleetSegments(true)
+
       try {
-        const riskFactor = await dispatch(getVesselRiskFactor(''))
-
+        const riskFactor = await dispatch(getVesselRiskFactor(_vesselInternalReferenceNumber))
         const faoZones = getFaoZonesFromSpeciesOnboard(riskFactor.speciesOnboard)
-        // TODO Remove this `console.debug`.
-        // eslint-disable-next-line no-console
-        console.debug('riskfactor', faoZones)
-      } catch (err) {
-        // TODO Remove this `console.debug`.
-        // eslint-disable-next-line no-console
-        console.debug(err)
+        const includesSomeFaoZones = includesSome(faoZones)
+        const defaultFleetSegments = fleetSegmentsAsOptions
+          .filter(({ value }) => includesSomeFaoZones(value.faoAreas))
+          .map(({ value }) => value)
+
+        helper.setValue(defaultFleetSegments)
+      } catch (_) {
+        // If there is an error (because we didn't find a no risk factor), there is no need to update anything
       }
-    }
 
-    getRiskFactor()
+      setIsUpdatingDefaultFleetSegments(false)
+    },
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch])
+    [dispatch, fleetSegmentsAsOptions]
+  )
 
-  if (!fleetSegmentsAsOptions.length) {
+  useEffect(
+    () => {
+      if (!vesselInternalReferenceNumber) {
+        return
+      }
+
+      updateDefaultFleetSegments(vesselInternalReferenceNumber)
+    },
+
+    // We observe `vesselInternalReferenceNumber` changes in order to update the default fleet segments
+    [updateDefaultFleetSegments, vesselInternalReferenceNumber]
+  )
+
+  if (isLoading) {
     return <>Loading...</>
   }
 
@@ -92,23 +145,12 @@ export function FleetSegmentsField() {
         <>
           <Field>
             <Label>Zones de pêche de la marée (issues des FAR)</Label>
-            <TagGroup>
-              {input.value
-                .map(({ faoAreas }) => faoAreas)
-                .flat()
-                .map(faoArea => (
-                  <SingleTag onDelete={noop}>{faoArea}</SingleTag>
-                ))}
-            </TagGroup>
+            <TagGroup>{faoAreaTags}</TagGroup>
           </Field>
 
           <Field>
             <Label>Segment de flotte de la marée</Label>
-            <TagGroup>
-              {input.value.map(({ segment, segmentName }) => (
-                <SingleTag onDelete={noop}>{`${segment} - ${segmentName}`}</SingleTag>
-              ))}
-            </TagGroup>
+            <TagGroup>{fleetSegmentTags}</TagGroup>
           </Field>
         </>
       )}

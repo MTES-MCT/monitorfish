@@ -210,6 +210,7 @@ export function FormikMultiInfractionPicker({
                         name="natinf"
                         options={natinfsAsOptions}
                         searchable
+                        virtualized
                       />
                       {infractionCheckboxProps && (
                         // eslint-disable-next-line react/jsx-props-no-spreading

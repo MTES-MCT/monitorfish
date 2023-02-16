@@ -27,6 +27,7 @@ export function VesselField() {
       if (!nextVessel) {
         setFieldValue('vesselFlagState', undefined)
         setFieldValue('vesselId', undefined)
+        setFieldValue('vesselInternalReferenceNumber', undefined)
         setFieldValue('vesselName', undefined)
 
         return
@@ -38,6 +39,7 @@ export function VesselField() {
 
       setFieldValue('vesselFlagState', nextVessel.flagState)
       setFieldValue('vesselId', nextVessel.vesselId)
+      setFieldValue('vesselInternalReferenceNumber', nextVessel.internalReferenceNumber)
       setFieldValue('vesselName', nextVessel.vesselName)
     },
 

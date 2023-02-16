@@ -25,20 +25,31 @@ export function VesselField() {
   const handleVesselChange = useCallback(
     (nextVessel: VesselIdentity | undefined) => {
       if (!nextVessel) {
+        setFieldValue('vesselExternalReferenceNumber', undefined)
         setFieldValue('vesselFlagState', undefined)
         setFieldValue('vesselId', undefined)
         setFieldValue('vesselInternalReferenceNumber', undefined)
+        setFieldValue('vesselIrcs', undefined)
         setFieldValue('vesselName', undefined)
 
         return
       }
 
-      if (!nextVessel.flagState || !nextVessel.vesselId || !nextVessel.vesselName) {
+      // TODO I don't really know why these fields can be null in the original types.
+      if (
+        !nextVessel.externalReferenceNumber ||
+        !nextVessel.internalReferenceNumber ||
+        !nextVessel.ircs ||
+        !nextVessel.vesselId ||
+        !nextVessel.vesselName
+      ) {
         return
       }
 
+      setFieldValue('vesselExternalReferenceNumber', nextVessel.externalReferenceNumber)
       setFieldValue('vesselFlagState', nextVessel.flagState)
       setFieldValue('vesselId', nextVessel.vesselId)
+      setFieldValue('vesselIrcs', nextVessel.ircs)
       setFieldValue('vesselInternalReferenceNumber', nextVessel.internalReferenceNumber)
       setFieldValue('vesselName', nextVessel.vesselName)
     },

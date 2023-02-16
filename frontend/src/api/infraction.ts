@@ -1,18 +1,11 @@
 import { monitorfishApi } from '.'
 import { HttpStatusCode } from './constants'
 
+import type { MissionAction } from '../domain/types/missionAction'
+
 export const fleetSegmentApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
-    // TODO This type must be somewhere.
-    getInfractions: builder.query<
-      Array<{
-        infraction: string
-        infractionCategory: string
-        natinfCode: string
-        regulation: string
-      }>,
-      void
-    >({
+    getInfractions: builder.query<MissionAction.Infraction[], void>({
       providesTags: () => [{ type: 'Infractions' }],
       query: () => `infractions`
     })

@@ -19,8 +19,16 @@ const ControlObjectives = () => {
   const [controlObjectives, setControlObjectives] = useState([])
   const [year, setYear] = useState(currentYear)
   const [yearEntries, setYearEntries] = useState([{ label: `Année ${currentYear}`, value: currentYear }])
-  const nextYearToAddFromEntries = yearEntries?.map(year => year.value).sort().at(LAST_ITEM) + 1
-  const lastYearFoundInYearEntries = yearEntries?.map(year => year.value).sort().at(LAST_ITEM) === lastYear
+  const nextYearToAddFromEntries =
+    yearEntries
+      ?.map(year => year.value)
+      .sort()
+      .at(LAST_ITEM) + 1
+  const lastYearFoundInYearEntries =
+    yearEntries
+      ?.map(year => year.value)
+      .sort()
+      .at(LAST_ITEM) === lastYear
 
   useEffect(() => {
     dispatch(getAllFleetSegments())
@@ -113,7 +121,7 @@ const ControlObjectivesContainer = styled.div`
 `
 
 const AddYear = styled.a`
-  visibility: ${props => props.isVisible ? 'visible' : 'hidden'};
+  visibility: ${props => (props.isVisible ? 'visible' : 'hidden')};
   height: fit-content;
   width: fit-content;
   margin-top: 23px;
@@ -142,7 +150,8 @@ const Year = styled.div`
     width: 120px;
   }
 
-  .rs-picker-has-value .rs-btn .rs-picker-toggle-value, .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
+  .rs-picker-has-value .rs-btn .rs-picker-toggle-value,
+  .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
     font-size: 18px;
     color: ${COLORS.gunMetal};
     font-weight: 700;
@@ -150,11 +159,17 @@ const Year = styled.div`
     width: fit-content;
   }
 
-  .rs-picker-default .rs-picker-toggle.rs-btn-xs .rs-picker-toggle-caret, .rs-picker-default .rs-picker-toggle.rs-btn-xs .rs-picker-toggle-clean {
+  .rs-picker-default .rs-picker-toggle.rs-btn-xs .rs-picker-toggle-caret,
+  .rs-picker-default .rs-picker-toggle.rs-btn-xs .rs-picker-toggle-clean {
     top: 6px;
   }
 
-  .rs-picker-input .rs-picker-default .rs-picker-toggle-wrapper .rs-picker-placement-bottom-start .rs-picker-has-value .rs-picker-focused {
+  .rs-picker-input
+    .rs-picker-default
+    .rs-picker-toggle-wrapper
+    .rs-picker-placement-bottom-start
+    .rs-picker-has-value
+    .rs-picker-focused {
     top: 46px;
   }
 

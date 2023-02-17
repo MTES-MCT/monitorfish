@@ -129,7 +129,7 @@ context('Reportings', () => {
 
       // Then
       cy.wait('@updateReporting').then(({ request, response }) => {
-        expect(request.body.natinfCode).contains(23581)
+        expect(request.body.natinfCode).equal(23581)
         expect(request.body.title).contains('Suspicion de chalutage dans les 3  km')
         expect(response && response.statusCode).equal(200)
       })

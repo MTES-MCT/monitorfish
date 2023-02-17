@@ -16,7 +16,7 @@ const NOW_YEAR = dayjs.utc().year()
 const LAST_YEAR_FROM_NOW = NOW_YEAR - 1
 const NEXT_YEAR_FROM_NOW = NOW_YEAR + 1
 
-export function ControlObjectives() {
+export function ControlObjectiveList() {
   const dispatch = useBackofficeAppDispatch()
   const [selectedYear, setSelectedYear] = useState<number | undefined>(undefined)
 

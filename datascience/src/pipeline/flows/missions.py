@@ -56,7 +56,7 @@ def extract_missions(number_of_months: int) -> pd.DataFrame:
         )
 
     return extract(
-        db_name="monitorenv",
+        db_name="monitorenv_remote",
         query_filepath="monitorenv/missions.sql",
         parse_dates=parse_dates,
         dtypes=dtypes,
@@ -74,7 +74,7 @@ def extract_missions_control_units() -> pd.DataFrame:
     """
 
     return extract(
-        db_name="monitorenv",
+        db_name="monitorenv_remote",
         query_filepath="monitorenv/missions_control_units.sql",
     )
 

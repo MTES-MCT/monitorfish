@@ -5,7 +5,7 @@ import { setInfractions } from '../../shared_slices/Infraction'
 const getFishingInfractions = () => dispatch => {
   getFishingInfractionsFromAPI().then(infractions => {
     dispatch(setInfractions(infractions
-      .sort((a, b) => a.natinfCode.localeCompare(b.natinfCode))))
+      .sort((a, b) => a.natinfCode - b.natinfCode)))
   }).catch(error => {
     dispatch(setError(error))
   })

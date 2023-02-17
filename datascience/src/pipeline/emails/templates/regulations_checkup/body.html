@@ -8,7 +8,7 @@
 {% if modified_regulations %}
 <p>Les {{ n_modified_regulations }} réglementations suivantes de Monitorfish font référence à une page de Légipêche sur laquelle des documents ont été ajoutés ou supprimés entre le {{ previous_extraction_datetime_utc }} et le {{ latest_extraction_datetime_utc }}:</p>
 {{ modified_regulations }}
-<p>Pensez à vérifier que les résumés réglementaires correspondants ont bien été mis à jour dans le <a href={{ backoffice_url }}>Back'O'Fish</a> ( ˘ ³˘)♥</p>
+<p>Pensez à vérifier que les résumés réglementaires correspondants ont bien été mis à jour dans le <a href={{ backoffice_regulation_url }}>Back'O'Fish</a> ( ˘ ³˘)♥</p>
 {% else %}
 <p>Aucun document n'a été ajouté ou supprimé d'une page de Légipêche référencée dans une réglementation de Monitorfish entre le {{ previous_extraction_datetime_utc }} et le {{ latest_extraction_datetime_utc }} (っ▀¯▀)つ</p>
 {% endif %}
@@ -22,7 +22,7 @@
 {% if missing_references %}
     <p>Les {{ n_missing_references }} réglementations suivantes ne comportent pas de référence réglementaire ¯\_(ツ)_/¯</p>
     {{ missing_references }}
-    <p>Pensez à ajouter des références réglementaires dans le <a href={{ backoffice_url }}>Back'O'Fish</a> `·.¸¸ ><((((º>.·´¯`·><((((º> </p>
+    <p>Pensez à ajouter des références réglementaires dans le <a href={{ backoffice_regulation_url }}>Back'O'Fish</a> `·.¸¸ ><((((º>.·´¯`·><((((º> </p>
 {% else %}
     <p>Aucune référence réglementaire manquante dans Monitorfish: au moins une référence réglementaire est indiquée pour chaque zone! ♪♪ ヽ(ˇ∀ˇ )ゞ</p>
 {% endif %}

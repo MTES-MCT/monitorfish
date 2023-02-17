@@ -15,7 +15,7 @@ from prefect import Flow, Parameter, case, task
 from prefect.executors import LocalDaskExecutor
 
 from config import (
-    BACKOFFICE_URL,
+    BACKOFFICE_REGULATION_URL,
     CNSP_FRANCE_EMAIL_ADDRESS,
     EMAIL_STYLESHEETS_LOCATION,
     EMAIL_TEMPLATES_LOCATION,
@@ -641,7 +641,7 @@ def render_body(
     modified_regulations: pd.DataFrame,
     dead_links: pd.DataFrame,
     outdated_references: pd.DataFrame,
-    backoffice_url: str,
+    backoffice_regulation_url: str,
     utcnow: datetime.datetime,
 ) -> str:
     """
@@ -652,7 +652,7 @@ def render_body(
         "previous_extraction_datetime_utc": previous_extraction_datetime_utc,
         "latest_extraction_datetime_utc": latest_extraction_datetime_utc,
         "verification_date": utcnow.date().strftime("%d/%m/%Y"),
-        "backoffice_url": backoffice_url,
+        "backoffice_regulation_url": backoffice_regulation_url,
     }
 
     if len(missing_references) > 0:
@@ -725,7 +725,9 @@ with Flow("Regulations checkup", executor=LocalDaskExecutor()) as flow:
 
         # Parameters
         proxies = Parameter("proxies", default=PROXIES)
-        backoffice_url = Parameter("backoffice_url", default=BACKOFFICE_URL)
+        backoffice_regulation_url = Parameter(
+            "backoffice_regulation_url", default=BACKOFFICE_REGULATION_URL
+        )
 
         # Extract data
         monitorfish_regulations = extract_monitorfish_regulations()
@@ -778,7 +780,7 @@ with Flow("Regulations checkup", executor=LocalDaskExecutor()) as flow:
             modified_regulations=modified_regulations,
             dead_links=dead_links,
             outdated_references=outdated_references,
-            backoffice_url=backoffice_url,
+            backoffice_regulation_url=backoffice_regulation_url,
             utcnow=utcnow,
         )
 

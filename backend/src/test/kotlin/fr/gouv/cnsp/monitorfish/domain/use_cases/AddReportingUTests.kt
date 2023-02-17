@@ -115,7 +115,7 @@ class AddReportingUTests {
                 reportingActor = ReportingActor.OPS,
                 seaFront = "NAMO",
                 dml = "DML 17",
-                natinfCode = "1235",
+                natinfCode = 1235,
                 authorTrigram = "LTH",
                 title = "Chalut en boeuf illégal",
             ),
@@ -133,7 +133,7 @@ class AddReportingUTests {
             validationDate = ZonedDateTime.now(),
             value = InfractionSuspicion(
                 reportingActor = ReportingActor.OPS,
-                natinfCode = "1235",
+                natinfCode = 1235,
                 authorTrigram = "LTH",
                 title = "Chalut en boeuf illégal",
             ),

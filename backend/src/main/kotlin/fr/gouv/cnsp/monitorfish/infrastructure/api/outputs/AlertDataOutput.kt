@@ -7,7 +7,7 @@ class AlertDataOutput(
     val type: AlertTypeMapping,
     val seaFront: String? = null,
     val dml: String? = null,
-    val natinfCode: String? = null,
+    val natinfCode: Int? = null,
 ) : ReportingValueDataOutput() {
     companion object {
         fun fromAlertType(alertType: AlertType) = AlertDataOutput(

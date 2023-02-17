@@ -37,8 +37,8 @@ class GetVesselReportingsUTests {
     @Test
     fun `execute Should return the reporting of a specified vessel`() {
         // Given
-        given(infractionRepository.findInfractionByNatinfCode(eq("7059"))).willReturn(
-            Infraction(natinfCode = "7059", infractionCategory = InfractionCategory.FISHING)
+        given(infractionRepository.findInfractionByNatinfCode(eq(7059))).willReturn(
+            Infraction(natinfCode = 7059, infractionCategory = InfractionCategory.FISHING)
         )
         given(reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(any(), any(), any())).willReturn(
             listOf(
@@ -107,7 +107,7 @@ class GetVesselReportingsUTests {
         assertThat(currentAndArchivedReportings.current).hasSize(2)
         val (currentReporting, _) = currentAndArchivedReportings.current.first()
         assertThat(currentReporting.isArchived).isFalse
-        assertThat(currentReporting.infraction?.natinfCode).isEqualTo("7059")
+        assertThat(currentReporting.infraction?.natinfCode).isEqualTo(7059)
         assertThat(currentAndArchivedReportings.archived).hasSize(1)
         val (archivedReporting, _) = currentAndArchivedReportings.archived.first()
         assertThat(archivedReporting.isArchived).isTrue

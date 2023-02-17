@@ -98,7 +98,7 @@ class ReportingMapperUTests {
             "\"title\": \"A title !\"," +
             "\"flagState\": \"FR\"," +
             "\"description\": \"A description !\"," +
-            "\"natinfCode\": \"1234\"," +
+            "\"natinfCode\": 1234," +
             "\"dml\": \"DML 56\"" +
             "}"
 
@@ -117,7 +117,7 @@ class ReportingMapperUTests {
         assertThat(parsedReporting.authorContact).isNull()
         assertThat(parsedReporting.title).isEqualTo("A title !")
         assertThat(parsedReporting.description).isEqualTo("A description !")
-        assertThat(parsedReporting.natinfCode).isEqualTo("1234")
+        assertThat(parsedReporting.natinfCode).isEqualTo(1234)
         assertThat(parsedReporting.dml).isEqualTo("DML 56")
     }
 
@@ -132,7 +132,7 @@ class ReportingMapperUTests {
             "\"authorContact\": null," +
             "\"title\": \"A title !\"," +
             "\"description\": \"A description !\"," +
-            "\"natinfCode\": \"1234\"," +
+            "\"natinfCode\": 1234," +
             "\"dml\": \"DML 56\"" +
             "}"
 
@@ -147,7 +147,7 @@ class ReportingMapperUTests {
         assertThat(parsedReporting.authorContact).isNull()
         assertThat(parsedReporting.title).isEqualTo("A title !")
         assertThat(parsedReporting.description).isEqualTo("A description !")
-        assertThat(parsedReporting.natinfCode).isEqualTo("1234")
+        assertThat(parsedReporting.natinfCode).isEqualTo(1234)
         assertThat(parsedReporting.dml).isEqualTo("DML 56")
     }
 }

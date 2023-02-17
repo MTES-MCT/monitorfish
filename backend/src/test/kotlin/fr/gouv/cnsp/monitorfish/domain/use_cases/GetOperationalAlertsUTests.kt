@@ -44,8 +44,8 @@ class GetOperationalAlertsUTests {
             creationDate = ZonedDateTime.now(),
             value = ThreeMilesTrawlingAlert()
         )
-        given(infractionRepository.findInfractionByNatinfCode(eq("7059"))).willReturn(
-            Infraction(natinfCode = "7059", infractionCategory = InfractionCategory.FISHING)
+        given(infractionRepository.findInfractionByNatinfCode(eq(7059))).willReturn(
+            Infraction(natinfCode = 7059, infractionCategory = InfractionCategory.FISHING)
         )
         given(pendingAlertRepository.findAlertsOfTypes(any())).willReturn(listOf(pendingAlert))
 
@@ -53,8 +53,8 @@ class GetOperationalAlertsUTests {
         val alerts = GetOperationalAlerts(pendingAlertRepository, infractionRepository).execute()
 
         // Then
-        assertThat(alerts.first().value.natinfCode).isEqualTo("7059")
-        assertThat(alerts.first().infraction?.natinfCode).isEqualTo("7059")
+        assertThat(alerts.first().value.natinfCode).isEqualTo(7059)
+        assertThat(alerts.first().infraction?.natinfCode).isEqualTo(7059)
         assertThat(alerts.first().infraction?.infractionCategory).isEqualTo(InfractionCategory.FISHING)
 
         Mockito.verify(pendingAlertRepository).findAlertsOfTypes(
@@ -65,6 +65,6 @@ class GetOperationalAlertsUTests {
                 AlertTypeMapping.MISSING_FAR_ALERT
             )
         )
-        Mockito.verify(infractionRepository, Mockito.times(1)).findInfractionByNatinfCode(eq("7059"))
+        Mockito.verify(infractionRepository, Mockito.times(1)).findInfractionByNatinfCode(eq(7059))
     }
 }

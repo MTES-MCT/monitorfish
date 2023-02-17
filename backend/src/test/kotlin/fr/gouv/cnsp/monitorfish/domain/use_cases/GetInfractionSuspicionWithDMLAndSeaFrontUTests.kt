@@ -33,7 +33,7 @@ class GetInfractionSuspicionWithDMLAndSeaFrontUTests {
         val expectedInfractionSuspicion = InfractionSuspicion(
             reportingActor = ReportingActor.OPS,
             dml = "DML 17",
-            natinfCode = "1235",
+            natinfCode = 1235,
             authorTrigram = "LTH",
             title = "Chalut en boeuf illégal",
         )
@@ -63,7 +63,7 @@ class GetInfractionSuspicionWithDMLAndSeaFrontUTests {
                 InfractionSuspicion(
                     reportingActor = ReportingActor.OPS,
                     dml = "",
-                    natinfCode = "1235",
+                    natinfCode = 1235,
                     authorTrigram = "LTH",
                     title = "Chalut en boeuf illégal",
                 ),
@@ -86,7 +86,7 @@ class GetInfractionSuspicionWithDMLAndSeaFrontUTests {
                 InfractionSuspicion(
                     reportingActor = ReportingActor.OPS,
                     dml = "",
-                    natinfCode = "1235",
+                    natinfCode = 1235,
                     authorTrigram = "LTH",
                     title = "Chalut en boeuf illégal",
                 ),
@@ -113,7 +113,7 @@ class GetInfractionSuspicionWithDMLAndSeaFrontUTests {
                 InfractionSuspicion(
                     reportingActor = ReportingActor.OPS,
                     dml = "",
-                    natinfCode = "1235",
+                    natinfCode = 1235,
                     authorTrigram = "LTH",
                     title = "Chalut en boeuf illégal",
                 ),

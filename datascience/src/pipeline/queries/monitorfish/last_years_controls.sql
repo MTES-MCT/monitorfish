@@ -1,12 +1,12 @@
 WITH controls_natinfs_codes AS (
     SELECT
         id,
-        jsonb_array_elements(
+        (jsonb_array_elements(
             CASE WHEN jsonb_typeof(logbook_infractions) = 'array' THEN logbook_infractions ELSE '[]' END ||
             CASE WHEN jsonb_typeof(gear_infractions) = 'array' THEN gear_infractions ELSE '[]' END ||
             CASE WHEN jsonb_typeof(species_infractions) = 'array' THEN species_infractions ELSE '[]' END ||
             CASE WHEN jsonb_typeof(other_infractions) = 'array' THEN other_infractions ELSE '[]' END
-        )->>'natinf' AS infraction_natinf_code
+        )->'natinf')::INTEGER AS infraction_natinf_code
     FROM mission_actions
     WHERE
         action_datetime_utc > CURRENT_TIMESTAMP - INTERVAL ':years years' AND

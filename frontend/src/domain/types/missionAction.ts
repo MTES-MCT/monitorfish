@@ -9,11 +9,15 @@ export namespace MissionAction {
     diversion: Boolean | undefined
     emitsAis: ControlCheck | undefined
     emitsVms: ControlCheck | undefined
+    externalReferenceNumber: string
     facade: string | undefined
     feedbackSheetRequired: Boolean | undefined
+    flagState: string
     gearInfractions: GearInfraction[]
     gearOnboard: GearControl[]
     id: number
+    internalReferenceNumber: string
+    ircs: string
     isFromPoseidon: boolean | undefined
     latitude: number | undefined
     licencesAndLogbookObservations: string | undefined
@@ -39,15 +43,8 @@ export namespace MissionAction {
     unitWithoutOmegaGauge: Boolean | undefined
     userTrigram: string | undefined
     vesselId: number
-    vesselTargeted: Boolean | undefined
-
-    // TODO I had to add that.
-    // eslint-disable-next-line typescript-sort-keys/interface
-    vesselExternalReferenceNumber: string
-    vesselFlagState: string
-    vesselInternalReferenceNumber: string
-    vesselIrcs: string
     vesselName: string
+    vesselTargeted: Boolean | undefined
   }
 
   // ---------------------------------------------------------------------------

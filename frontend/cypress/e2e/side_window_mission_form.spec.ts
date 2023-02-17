@@ -48,7 +48,13 @@ context('Mission Form', () => {
     const getSaveButton = () => cy.get('button').contains('Enregistrer')
     const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer et clôturer')
 
-    cy.intercept('PUT', '/api/v1/missions').as('createMission')
+    cy.intercept('PUT', '/api/v1/missions', {
+      // TODO This should be removed once the API works as expected.
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('createMission')
 
     getSaveButton().should('be.disabled')
     getSaveAndCloseButton().should('be.disabled')
@@ -105,7 +111,13 @@ context('Mission Form', () => {
   })
 
   it('Should send the expected data to the API', () => {
-    cy.intercept('PUT', '/api/v1/missions').as('createMission')
+    cy.intercept('PUT', '/api/v1/missions', {
+      // TODO This should be removed once the API works as expected.
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('createMission')
 
     cy.fill('Type de mission', 'Mer')
 

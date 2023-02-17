@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { INFINITE } from '../../../backoffice/constants'
+import { INFINITE } from '../../../Backoffice/constants'
 import { ReactComponent as AlertSVG } from '../../../icons/Picto_alerte.svg'
 
 export function OutdatedRegulatoryReferences() {

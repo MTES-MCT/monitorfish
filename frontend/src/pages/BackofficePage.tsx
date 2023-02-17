@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { BackofficeMode } from '../api/BackofficeMode'
 import { Backoffice } from '../features/backoffice/Backoffice'
-import { ControlObjectives } from '../features/backoffice/control_objectives/ControlObjectives'
+import { ControlObjectiveList } from '../features/backoffice/ControlObjectiveList'
 import EditRegulation from '../features/backoffice/edit_regulation/EditRegulation'
 import { FleetSegments } from '../features/backoffice/fleet_segments/FleetSegments'
 import Menu from '../features/backoffice/menu/Menu'
@@ -32,7 +32,7 @@ export function BackofficePage() {
             <EditRegulation isEdition title="Modifier la réglementation de la zone" />
           </Route>
           <Route exact path={`${match.path}/control_objectives`}>
-            <ControlObjectives />
+            <ControlObjectiveList />
           </Route>
           <Route exact path={`${match.path}/fleet_segments`}>
             <FleetSegments />

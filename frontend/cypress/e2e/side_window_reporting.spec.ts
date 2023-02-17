@@ -129,7 +129,7 @@ context('Reportings', () => {
 
       // Then
       cy.wait('@updateReporting').then(({ request, response }) => {
-        expect(request.body.natinfCode).contains('23581')
+        expect(request.body.natinfCode).contains(23581)
         expect(request.body.title).contains('Suspicion de chalutage dans les 3  km')
         expect(response && response.statusCode).equal(200)
       })
@@ -138,7 +138,7 @@ context('Reportings', () => {
       cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', numberOfReportings)
       // The DML is modified as this is the DML fetched from the vessels table
       cy.get('*[data-cy="side-window-current-reportings"]').first().contains('DML 56')
-      cy.get('*[data-cy="side-window-current-reportings"]').first().contains('23581')
+      cy.get('*[data-cy="side-window-current-reportings"]').first().contains(23581)
     })
   })
 

@@ -16,12 +16,12 @@ class JpaInfractionRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findInfractionByNatinfCode Should return the infraction`() {
         // When
-        val infraction = jpaInfractionRepository.findInfractionByNatinfCode("23581")
+        val infraction = jpaInfractionRepository.findInfractionByNatinfCode(23581)
 
         // Then
         assertThat(infraction.infraction).isEqualTo("Taille de maille non réglementaire")
         assertThat(infraction.infractionCategory).isEqualTo(InfractionCategory.FISHING)
-        assertThat(infraction.natinfCode).isEqualTo("23581")
+        assertThat(infraction.natinfCode).isEqualTo(23581)
         assertThat(infraction.regulation).isEqualTo("Arreté du 12/01/3021")
     }
 
@@ -30,7 +30,7 @@ class JpaInfractionRepositoryITests : AbstractDBTests() {
     fun `findInfractionByNatinfCode Should throw an exception When the natinf code is not found`() {
         // When
         val throwable = catchThrowable {
-            jpaInfractionRepository.findInfractionByNatinfCode("666")
+            jpaInfractionRepository.findInfractionByNatinfCode(666)
         }
 
         // Then
@@ -45,7 +45,7 @@ class JpaInfractionRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(infractions).hasSize(7)
-        assertThat(infractions.first().natinfCode).isEqualTo("23581")
+        assertThat(infractions.first().natinfCode).isEqualTo(23581)
         assertThat(infractions.first().regulation).isEqualTo("Arreté du 12/01/3021")
         assertThat(infractions.first().infraction).isEqualTo("Taille de maille non réglementaire")
         assertThat(infractions.first().infractionCategory).isEqualTo(InfractionCategory.FISHING)

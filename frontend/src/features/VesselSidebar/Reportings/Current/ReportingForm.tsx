@@ -54,7 +54,7 @@ export function ReportingForm({
   const [authorContact, setAuthorContact] = useState('')
   const [reportingActor, setReportingActor] = useState(ReportingOriginActor.OPS.code)
   const [title, setTitle] = useState('')
-  const [natinfCode, setNatinfCode] = useState<string | null>('')
+  const [natinfCode, setNatinfCode] = useState<number | null>(null)
   const [description, setDescription] = useState('')
   const [errorFields, setErrorFields] = useState<string[]>([])
   const previousReportingType = useRef() as MutableRefObject<ReportingType>
@@ -67,7 +67,7 @@ export function ReportingForm({
     setAuthorContact(editedOrSavedReporting.value.authorContact || '')
     setReportingActor(editedOrSavedReporting.value.reportingActor || ReportingOriginActor.OPS.code)
     setTitle(editedOrSavedReporting.value.title || '')
-    setNatinfCode(editedOrSavedReporting.value.natinfCode || '')
+    setNatinfCode(editedOrSavedReporting.value.natinfCode || null)
     setDescription(editedOrSavedReporting.value.description || '')
   }
 
@@ -88,7 +88,7 @@ export function ReportingForm({
 
   useEffect(() => {
     if (reportingType === ReportingTypeCharacteristics.OBSERVATION.code) {
-      setNatinfCode('')
+      setNatinfCode(null)
     }
   }, [reportingType])
 
@@ -332,7 +332,7 @@ export function ReportingForm({
             searchable
             style={{ margin: '5px 0px 0px 0px', width: natinfCode ? 335 : 70 }}
             // @ts-ignore
-            title={infractions?.find(infraction => infraction.natinfCode === natinfCode)?.infraction || ''}
+            title={infractions?.find(infraction => infraction.natinfCode === natinfCode)?.infraction || null}
             value={natinfCode}
             virtualized={false}
           />

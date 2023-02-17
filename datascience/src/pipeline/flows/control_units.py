@@ -13,13 +13,15 @@ from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 
 @task(checkpoint=False)
 def extract_control_units() -> pd.DataFrame:
-    return extract(db_name="monitorenv", query_filepath="monitorenv/control_units.sql")
+    return extract(
+        db_name="monitorenv_remote", query_filepath="monitorenv/control_units.sql"
+    )
 
 
 @task(checkpoint=False)
 def extract_administrations() -> pd.DataFrame:
     return extract(
-        db_name="monitorenv", query_filepath="monitorenv/administrations.sql"
+        db_name="monitorenv_remote", query_filepath="monitorenv/administrations.sql"
     )
 
 

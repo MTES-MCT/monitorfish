@@ -23,7 +23,7 @@ flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_ru
 
 @pytest.fixture
 def infraction_natinf_codes() -> set:
-    return {"27724", "17", "1030", "22206", "22222"}
+    return {27724, 17, 1030, 22206, 22222}
 
 
 @pytest.fixture
@@ -108,16 +108,14 @@ def last_years_controls():
             "infractions_natinf_codes": [
                 [],
                 [],
-                ["17", "1030", "1031", "22206"],
-                ["22182"],
-                ["20233"],
+                [17, 1030, 1031, 22206],
+                [22182],
+                [20233],
                 [],
-                ["27724", "2606", "4761", "22206"],
-                ["17"],
-                ["1030"],
-                ["7061"],
-                [],
-                [],
+                [27724, 2606, 4761, 22206],
+                [17],
+                [1030],
+                [7061],
                 [],
                 [],
                 [],
@@ -127,7 +125,9 @@ def last_years_controls():
                 [],
                 [],
                 [],
-                ["7061"],
+                [],
+                [],
+                [7061],
                 [],
             ],
             "seizure_and_diversion": [

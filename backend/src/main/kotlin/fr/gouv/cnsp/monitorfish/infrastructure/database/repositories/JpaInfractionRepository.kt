@@ -19,7 +19,7 @@ class JpaInfractionRepository(private val dbInfractionRepository: DBInfractionRe
     }
 
     @Cacheable(value = ["infraction"])
-    override fun findInfractionByNatinfCode(natinfCode: String): Infraction {
+    override fun findInfractionByNatinfCode(natinfCode: Int): Infraction {
         return try {
             dbInfractionRepository.findByNatinfCodeEquals(natinfCode).toInfraction()
         } catch (e: EmptyResultDataAccessException) {

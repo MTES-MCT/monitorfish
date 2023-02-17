@@ -28,7 +28,6 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.Matchers
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito
@@ -40,7 +39,6 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDate.EPOCH
@@ -523,7 +521,7 @@ class VesselControllerITests {
                 isArchived = false,
                 isDeleted = false,
                 infraction = Infraction(
-                    natinfCode = "7059",
+                    natinfCode = 7059,
                     infractionCategory = InfractionCategory.FISHING,
                 ),
             ),
@@ -581,9 +579,9 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.current[0].type", equalTo("ALERT")))
             .andExpect(jsonPath("$.current[0].isArchived", equalTo(false)))
             .andExpect(jsonPath("$.current[0].isDeleted", equalTo(false)))
-            .andExpect(jsonPath("$.current[0].infraction.natinfCode", equalTo("7059")))
+            .andExpect(jsonPath("$.current[0].infraction.natinfCode", equalTo(7059)))
             .andExpect(jsonPath("$.current[0].value.type", equalTo("THREE_MILES_TRAWLING_ALERT")))
-            .andExpect(jsonPath("$.current[0].value.natinfCode", equalTo("7059")))
+            .andExpect(jsonPath("$.current[0].value.natinfCode", equalTo(7059)))
             .andExpect(jsonPath("$.archived[0].id", equalTo(666)))
             .andExpect(jsonPath("$.archived[0].internalReferenceNumber", equalTo("FR224226850")))
             .andExpect(jsonPath("$.archived[0].externalReferenceNumber", equalTo("1236514")))

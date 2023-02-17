@@ -167,7 +167,7 @@ context('Control objectives', () => {
     cy.get('*[data-cy="control-objectives-add-year"]').contains(nextYear)
   })
 
-  it.only('Should add the next control objective year', () => {
+  it('Should add the next control objective year', () => {
     // Given
     cy.get('.rs-table-row').should('have.length', 57)
     cy.get('*[data-cy^="control-objectives-year"]').click()

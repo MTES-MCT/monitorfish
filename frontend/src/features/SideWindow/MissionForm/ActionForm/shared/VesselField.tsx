@@ -16,20 +16,20 @@ export function VesselField() {
 
   const defaultValue = useMemo(
     () => ({
-      flagState: values.vesselFlagState,
+      flagState: values.flagState,
       vesselName: values.vesselName
     }),
-    [values.vesselFlagState, values.vesselName]
+    [values.flagState, values.vesselName]
   )
 
   const handleVesselChange = useCallback(
     (nextVessel: VesselIdentity | undefined) => {
       if (!nextVessel) {
-        setFieldValue('vesselExternalReferenceNumber', undefined)
-        setFieldValue('vesselFlagState', undefined)
+        setFieldValue('externalReferenceNumber', undefined)
+        setFieldValue('flagState', undefined)
+        setFieldValue('internalReferenceNumber', undefined)
+        setFieldValue('ircs', undefined)
         setFieldValue('vesselId', undefined)
-        setFieldValue('vesselInternalReferenceNumber', undefined)
-        setFieldValue('vesselIrcs', undefined)
         setFieldValue('vesselName', undefined)
 
         return
@@ -46,11 +46,11 @@ export function VesselField() {
         return
       }
 
-      setFieldValue('vesselExternalReferenceNumber', nextVessel.externalReferenceNumber)
-      setFieldValue('vesselFlagState', nextVessel.flagState)
+      setFieldValue('externalReferenceNumber', nextVessel.externalReferenceNumber)
+      setFieldValue('flagState', nextVessel.flagState)
+      setFieldValue('internalReferenceNumber', nextVessel.internalReferenceNumber)
+      setFieldValue('ircs', nextVessel.ircs)
       setFieldValue('vesselId', nextVessel.vesselId)
-      setFieldValue('vesselIrcs', nextVessel.ircs)
-      setFieldValue('vesselInternalReferenceNumber', nextVessel.internalReferenceNumber)
       setFieldValue('vesselName', nextVessel.vesselName)
     },
 

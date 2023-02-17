@@ -18,9 +18,8 @@ import type { Option } from '@mtes-mct/monitor-ui'
 
 export function FleetSegmentsField() {
   const [input, , helper] = useField<MissionActionFormValues['segments']>('segments')
-  const [{ value: vesselInternalReferenceNumber }] = useField<MissionActionFormValues['vesselInternalReferenceNumber']>(
-    'vesselInternalReferenceNumber'
-  )
+  const [{ value: internalReferenceNumber }] =
+    useField<MissionActionFormValues['internalReferenceNumber']>('internalReferenceNumber')
 
   const { newWindowContainerRef } = useNewWindow()
 
@@ -100,11 +99,11 @@ export function FleetSegmentsField() {
   )
 
   const updateDefaultFleetSegments = useCallback(
-    async (_vesselInternalReferenceNumber: string) => {
+    async (_internalReferenceNumber: string) => {
       setIsUpdatingDefaultFleetSegments(true)
 
       try {
-        const riskFactor = await dispatch(getVesselRiskFactor(_vesselInternalReferenceNumber))
+        const riskFactor = await dispatch(getVesselRiskFactor(_internalReferenceNumber))
         const faoZones = getFaoZonesFromSpeciesOnboard(riskFactor.speciesOnboard)
         const includesSomeFaoZones = includesSome(faoZones)
         const defaultFleetSegments = fleetSegmentsAsOptions
@@ -125,15 +124,15 @@ export function FleetSegmentsField() {
 
   useEffect(
     () => {
-      if (!vesselInternalReferenceNumber) {
+      if (!internalReferenceNumber) {
         return
       }
 
-      updateDefaultFleetSegments(vesselInternalReferenceNumber)
+      updateDefaultFleetSegments(internalReferenceNumber)
     },
 
-    // We observe `vesselInternalReferenceNumber` changes in order to update the default fleet segments
-    [updateDefaultFleetSegments, vesselInternalReferenceNumber]
+    // We observe `internalReferenceNumber` changes in order to update the default fleet segments
+    [updateDefaultFleetSegments, internalReferenceNumber]
   )
 
   const faoAreaTags = useMemo(

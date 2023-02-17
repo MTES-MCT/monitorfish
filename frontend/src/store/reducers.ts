@@ -20,7 +20,7 @@ import { regulatoryReducer } from '../domain/shared_slices/Regulatory'
 import { reportingReducer } from '../domain/shared_slices/Reporting'
 import { speciesReducer } from '../domain/shared_slices/Species'
 import { vesselSliceReducer } from '../domain/shared_slices/Vessel'
-import { regulationReducer } from '../features/backoffice/Regulation.slice'
+import { regulationReducer } from '../features/Backoffice/Regulation.slice'
 import { regulatoryLayerSearchReducer } from '../features/layers/regulatory/search/RegulatoryLayerSearch.slice'
 import { vesselListReducer } from '../features/VesselList/VesselList.slice'
 

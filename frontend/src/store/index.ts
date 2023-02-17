@@ -17,7 +17,7 @@ import { backofficeReducer, mainReducer } from './reducers'
 import { monitorenvApi, monitorfishApi } from '../api'
 import { mapToProcessingRegulation } from '../domain/entities/regulation'
 
-import type { RegulationState } from '../features/backoffice/Regulation.slice'
+import type { RegulationState } from '../features/Backoffice/Regulation.slice'
 import type { AnyAction } from '@reduxjs/toolkit'
 import type { PersistConfig } from 'redux-persist'
 import type { ThunkAction } from 'redux-thunk'

@@ -42,7 +42,7 @@ type SeaControl = {
   compliance: {
     ais: string
     customInfractions: Array<{
-      natinfs: string[]
+      natinfs: number[]
       note: string
       type: string
     }>

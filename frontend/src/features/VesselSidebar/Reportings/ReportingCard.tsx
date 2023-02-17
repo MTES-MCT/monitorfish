@@ -75,7 +75,7 @@ export function ReportingCard({
           <Natinf
             title={
               reporting.infraction
-                ? `${reporting.infraction?.natinfCode || ''}: ${
+                ? `${reporting.infraction?.natinfCode || null}: ${
                     reporting.infraction?.infraction || ''
                   } (réglementation "${reporting.infraction?.regulation || ''}")`
                 : ''

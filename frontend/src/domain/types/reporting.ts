@@ -68,7 +68,7 @@ export type InfractionSuspicion = {
   controlUnitId: number | null
   description: string
   dml: string
-  natinfCode: string
+  natinfCode: number
   reportingActor: string
   seaFront: SeaFront
   title: string
@@ -91,7 +91,7 @@ export type ReportingUpdate = {
   authorTrigram: string | undefined
   controlUnitId: number | null
   description: string | undefined
-  natinfCode: string | null
+  natinfCode: number | null
   reportingActor: string
   title: string
   type: ReportingType

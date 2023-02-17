@@ -18,6 +18,9 @@ export const INPUT_TYPE = {
   DOUBLE: 'DOUBLE'
 }
 
+/**
+ * @param {*} props
+ */
 export const ModifiableCell = ({ dataKey, id, inputType, maxLength, onChange, afterChange, isDisabled, ...props }) => {
   const { rowData } = props
   const dataCy = `row-${rowData[id]}-${dataKey}-${rowData[dataKey]}`
@@ -142,6 +145,9 @@ export const FleetSegmentInput = ({ maxLength, value, inputType, id, dataKey, wi
   />
 }
 
+/**
+ * @param {*} props
+ */
 export const ControlPriorityCell = ({ rowData, dataKey, onChange, ...props }) => {
   const dataCy = `row-${rowData.id}-${dataKey}-${rowData[dataKey]}`
 
@@ -168,6 +174,9 @@ export const ControlPriorityCell = ({ rowData, dataKey, onChange, ...props }) =>
   )
 }
 
+/**
+ * @param {*} props
+*/
 export const SegmentCellWithTitle = ({ rowData, dataKey, ...props }) => (
   <Cell
     title={`Segment ${rowData[dataKey] || 'inconnu'}`}
@@ -178,6 +187,9 @@ export const SegmentCellWithTitle = ({ rowData, dataKey, ...props }) => (
   </Cell>
 )
 
+/**
+ * @param {*} props
+ */
 export const ExpandCell = ({ rowData, dataKey, expandedRowKeys, onChange, ...props }) => (
   <Cell
     {...props}
@@ -196,6 +208,9 @@ export const ExpandCell = ({ rowData, dataKey, expandedRowKeys, onChange, ...pro
   </Cell>
 )
 
+/**
+ * @param {*} props
+ */
 export const ImpactRiskFactorCell = ({ rowData, expandedRowKeys, onChange, ...props }) =>
   <Cell
     {...props}

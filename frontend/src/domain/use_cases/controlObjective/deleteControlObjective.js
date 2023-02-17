@@ -3,7 +3,7 @@ import { deleteControlObjectiveFromAPI } from '../../../api/controlObjective'
 
 /**
  * Delete a control Objective
- * @param {string} id - The id of the control objective
+ * @param {number} id - The id of the control objective
  */
 const deleteControlObjective = (id) => dispatch => {
   return deleteControlObjectiveFromAPI(id).catch(error => {

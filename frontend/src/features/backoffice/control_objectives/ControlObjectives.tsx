@@ -1,78 +1,75 @@
-import { useEffect, useMemo, useState } from 'react'
+import { dayjs, Option } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
+import { last } from 'ramda'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { InputPicker } from 'rsuite'
 import styled from 'styled-components'
 
-import SeaFrontControlObjectives from './SeaFrontControlObjectives'
-import { fleetSegmentApi } from '../../../api/fleetSegment'
+import { SeaFrontControlObjectives } from './SeaFrontControlObjectives'
+import { useGetControlObjectivesQuery, useGetControlObjectiveYearsQuery } from '../../../api/controlObjective'
 import { COLORS } from '../../../constants/constants'
 import addControlObjectiveYear from '../../../domain/use_cases/controlObjective/addControlObjectiveYear'
-import getAllControlObjectives from '../../../domain/use_cases/controlObjective/getAllControlObjectives'
-import getControlObjectivesYearEntries from '../../../domain/use_cases/controlObjective/getControlObjectivesYearEntries'
 import { useBackofficeAppDispatch } from '../../../hooks/useBackofficeAppDispatch'
+import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
 
-import type { ControlObjective } from '../../../domain/types/controlObjective'
-import type { Option } from '@mtes-mct/monitor-ui'
-
-const currentYear = new Date().getFullYear()
-const nextYear = currentYear + 1
-const lastYear = currentYear - 1
-const LAST_ITEM = -1
+const NOW_YEAR = dayjs.utc().year()
+const LAST_YEAR_FROM_NOW = NOW_YEAR - 1
+const NEXT_YEAR_FROM_NOW = NOW_YEAR + 1
 
 export function ControlObjectives() {
   const dispatch = useBackofficeAppDispatch()
-  const [controlObjectives, setControlObjectives] = useState<ControlObjective[]>([])
-  const [year, setYear] = useState(currentYear)
-  const [yearEntries, setYearEntries] = useState<Array<Option<number>>>([
-    { label: `Année ${currentYear}`, value: currentYear }
-  ])
+  const [selectedYear, setSelectedYear] = useState<number | undefined>(undefined)
+
+  const getControlObjectivesQuery = useGetControlObjectivesQuery(selectedYear || skipToken)
+  const getControlObjectiveYearsQuery = useGetControlObjectiveYearsQuery()
 
   const nextYearToAddFromEntries = useMemo(
     () =>
-      (yearEntries
-        .map(yearEntry => yearEntry.value)
-        .sort()
-        .at(LAST_ITEM) || 0) + 1,
-    [yearEntries]
+      getControlObjectiveYearsQuery.data && getControlObjectiveYearsQuery.data.length > 0
+        ? (last(getControlObjectiveYearsQuery.data) as number) + 1
+        : undefined,
+    [getControlObjectiveYearsQuery]
   )
 
-  const lastYearFoundInYearEntries = useMemo(
+  const hasLastYearInControlObjectiveYears = useMemo(
     () =>
-      yearEntries
-        .map(yearEntry => yearEntry.value)
-        .sort()
-        .at(LAST_ITEM) === lastYear,
-    [yearEntries]
+      getControlObjectiveYearsQuery.data ? last(getControlObjectiveYearsQuery.data) === LAST_YEAR_FROM_NOW : false,
+    [getControlObjectiveYearsQuery]
   )
 
-  useEffect(() => {
-    // TODO The point of this effect is just to warm up the cache?
-    dispatch(fleetSegmentApi.endpoints.getFleetSegments.initiate())
-  }, [dispatch])
+  const yearsAsOptions: Array<Option<number>> = useMemo(
+    () =>
+      (getControlObjectiveYearsQuery.data || []).map(year => ({
+        label: `Année ${year}`,
+        value: year
+      })),
+    [getControlObjectiveYearsQuery]
+  )
 
-  useEffect(() => {
-    if (!yearEntries?.map(yearEntry => yearEntry.value).includes(year)) {
-      setYearEntries(yearEntries.concat([{ label: `Année ${year}`, value: year }]))
+  const addYear = useCallback(async () => {
+    if (!nextYearToAddFromEntries) {
+      return
     }
-    dispatch(getControlObjectivesYearEntries()).then(years => {
-      if (years?.length) {
-        if (!years.includes(currentYear)) {
-          setYear(years.at(LAST_ITEM))
 
-          return
-        }
-        const yearsWithLabel = years.map(_year => ({ label: `Année ${_year}`, value: year }))
-        setYearEntries(yearsWithLabel)
+    await dispatch(addControlObjectiveYear())
 
-        dispatch(getAllControlObjectives(year)).then(_controlObjectives => {
-          if (!_controlObjectives) {
-            return
-          }
+    // Since there is no query param, we need to explicitely ask for a refetch
+    getControlObjectiveYearsQuery.refetch()
 
-          setControlObjectives(_controlObjectives)
-        })
-      }
-    })
-  }, [dispatch, year, yearEntries])
+    setSelectedYear(nextYearToAddFromEntries)
+  }, [dispatch, getControlObjectiveYearsQuery, nextYearToAddFromEntries])
+
+  useEffect(() => {
+    if (!getControlObjectiveYearsQuery.data) {
+      return
+    }
+
+    setSelectedYear(last(getControlObjectiveYearsQuery.data))
+  }, [getControlObjectiveYearsQuery])
+
+  if (!getControlObjectivesQuery.data || !getControlObjectiveYearsQuery.data || !selectedYear) {
+    return <LoadingSpinnerWall />
+  }
 
   return (
     <Wrapper>
@@ -81,51 +78,55 @@ export function ControlObjectives() {
           <InputPicker
             cleanable={false}
             creatable={false}
-            data={yearEntries}
+            data={yearsAsOptions}
             menuStyle={{ top: 46 }}
-            onChange={_year => setYear(_year)}
+            onChange={setSelectedYear}
             size="xs"
             style={{ width: 0 }}
-            value={year}
+            value={selectedYear}
           />
         </Year>
         <AddYear
           data-cy="control-objectives-add-year"
-          isVisible={lastYearFoundInYearEntries || nextYearToAddFromEntries === nextYear}
-          onClick={() => dispatch(addControlObjectiveYear()).then(() => setYear(nextYearToAddFromEntries))}
+          isVisible={hasLastYearInControlObjectiveYears || nextYearToAddFromEntries === NEXT_YEAR_FROM_NOW}
+          onClick={addYear}
         >
-          Ajouter l&apos;année {nextYearToAddFromEntries}
+          Ajouter l’année {nextYearToAddFromEntries || 'inconnue'}
         </AddYear>
       </Header>
       <ControlObjectivesContainer>
         <SeaFrontControlObjectives
-          data={controlObjectives?.filter(controlObjective => controlObjective.facade === 'NAMO')}
+          data={getControlObjectivesQuery.data.filter(controlObjective => controlObjective.facade === 'NAMO')}
           facade="NAMO"
           title="NORD ATLANTIQUE - MANCHE OUEST (NAMO)"
-          year={year}
+          year={selectedYear}
         />
         <SeaFrontControlObjectives
-          data={controlObjectives?.filter(controlObjective => controlObjective.facade === 'MEMN')}
+          data={getControlObjectivesQuery.data.filter(controlObjective => controlObjective.facade === 'MEMN')}
           facade="MEMN"
           title="MANCHE EST – MER DU NORD (MEMN)"
-          year={year}
+          year={selectedYear}
         />
         <SeaFrontControlObjectives
-          data={controlObjectives?.filter(controlObjective => controlObjective.facade === 'SA')}
+          data={getControlObjectivesQuery.data.filter(controlObjective => controlObjective.facade === 'SA')}
           facade="SA"
           title="SUD-ATLANTIQUE (SA)"
-          year={year}
+          year={selectedYear}
         />
         <SeaFrontControlObjectives
-          data={controlObjectives?.filter(controlObjective => controlObjective.facade === 'MED')}
+          data={getControlObjectivesQuery.data.filter(controlObjective => controlObjective.facade === 'MED')}
           facade="MED"
           title="Méditerranée (MED)"
-          year={year}
+          year={selectedYear}
         />
       </ControlObjectivesContainer>
     </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+  background-color: ${COLORS.white};
+`
 
 const Header = styled.div`
   display: flex;
@@ -211,8 +212,4 @@ const Year = styled.div`
   .rs-picker-select-menu-items {
     width: 100px !important;
   }
-`
-
-const Wrapper = styled.div`
-  background-color: ${COLORS.white};
 `

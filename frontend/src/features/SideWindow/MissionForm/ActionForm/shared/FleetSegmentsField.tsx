@@ -10,7 +10,7 @@ import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { FrontendError } from '../../../../../libs/FrontendError'
 import { useNewWindow } from '../../../../../ui/NewWindow'
 import { includesSome } from '../../../../../utils/includesSome'
-import { FieldsetGroup } from '../../FieldsetGroup'
+import { FieldsetGroup, FieldsetGroupSpinner } from '../../FieldsetGroup'
 
 import type { MissionAction } from '../../../../../domain/types/missionAction'
 import type { MissionActionFormValues } from '../../types'
@@ -162,7 +162,7 @@ export function FleetSegmentsField() {
   )
 
   if (isLoading) {
-    return <>Loading...</>
+    return <FieldsetGroupSpinner isLight legend="Segment de flotte" />
   }
 
   return (

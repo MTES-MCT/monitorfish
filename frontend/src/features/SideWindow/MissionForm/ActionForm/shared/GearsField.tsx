@@ -9,6 +9,7 @@ import { useGetGearsQuery } from '../../../../../api/gear'
 import { FrontendError } from '../../../../../libs/FrontendError'
 import { useNewWindow } from '../../../../../ui/NewWindow'
 import { FieldGroup } from '../../FieldGroup'
+import { FieldsetGroupSpinner } from '../../FieldsetGroup'
 
 import type { Gear } from '../../../../../domain/types/Gear'
 import type { MissionAction } from '../../../../../domain/types/missionAction'
@@ -106,7 +107,7 @@ export function GearsField() {
   )
 
   if (!gearsAsOptions.length) {
-    return <>Loading...</>
+    return <FieldsetGroupSpinner isLight legend="Espèces à bord" />
   }
 
   return (

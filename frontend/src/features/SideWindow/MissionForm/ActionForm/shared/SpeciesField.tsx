@@ -10,6 +10,7 @@ import { BOOLEAN_AS_OPTIONS } from '../../../../../constants'
 import { FrontendError } from '../../../../../libs/FrontendError'
 import { useNewWindow } from '../../../../../ui/NewWindow'
 import { FieldGroup } from '../../FieldGroup'
+import { FieldsetGroupSpinner } from '../../FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../FieldsetGroupSeparator'
 
 import type { Specy } from '../../../../../domain/types/specy'
@@ -76,7 +77,7 @@ export function SpeciesField() {
   )
 
   if (!speciesAsOptions.length) {
-    return <>Loading...</>
+    return <FieldsetGroupSpinner isLight legend="Espèces à bord" />
   }
 
   return (

@@ -1,13 +1,16 @@
-import { Fieldset } from '@mtes-mct/monitor-ui'
+import { Fieldset, FieldsetProps, THEME } from '@mtes-mct/monitor-ui'
+import { LoopingRhombusesSpinner } from 'react-epic-spinners'
 import styled, { css } from 'styled-components'
 
-export const FieldsetGroup = styled(Fieldset)<{
+export type FieldsetGroupProps = FieldsetProps & {
   isInline?: boolean
-}>`
-  /* TODO Add this prop in monitor-ui. */
+}
+export const FieldsetGroup = styled(Fieldset)<FieldsetGroupProps>`
+  /* TODO Add these props in monitor-ui. */
   min-width: 0;
 
   > div {
+    display: flex;
     flex-direction: ${p => (p.isInline ? 'row' : 'column')};
 
     ${p =>
@@ -25,5 +28,21 @@ export const FieldsetGroup = styled(Fieldset)<{
     > hr {
       margin-top: 24px;
     }
+  }
+`
+
+export function FieldsetGroupSpinner(props: FieldsetGroupProps) {
+  return (
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    <Wrapper {...props}>
+      <LoopingRhombusesSpinner color={THEME.color.lightGray} size={13} />
+    </Wrapper>
+  )
+}
+
+const Wrapper = styled(FieldsetGroup)`
+  > div {
+    flex-direction: row;
+    justify-content: center;
   }
 `

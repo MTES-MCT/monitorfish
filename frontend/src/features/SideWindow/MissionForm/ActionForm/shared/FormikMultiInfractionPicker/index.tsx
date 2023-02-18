@@ -17,7 +17,7 @@ import { Infraction } from './Infraction'
 import { useGetInfractionsQuery } from '../../../../../../api/infraction'
 import { FrontendError } from '../../../../../../libs/FrontendError'
 import { useNewWindow } from '../../../../../../ui/NewWindow'
-import { FieldsetGroup } from '../../../FieldsetGroup'
+import { FieldsetGroup, FieldsetGroupSpinner } from '../../../FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../../FieldsetGroupSeparator'
 import { INFRACTION_TYPES_AS_OPTIONS, MissionActionInfractionSchema } from '../constants'
 
@@ -130,7 +130,7 @@ export function FormikMultiInfractionPicker({
   )
 
   if (!natinfsAsOptions.length) {
-    return <>Loading...</>
+    return <FieldsetGroupSpinner isLight legend={label} />
   }
 
   return (

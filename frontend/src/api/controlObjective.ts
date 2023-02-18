@@ -1,4 +1,5 @@
 import ky from 'ky'
+import { ascend, identity } from 'ramda'
 
 import { monitorfishApi } from '.'
 import { ApiError } from '../libs/ApiError'
@@ -19,7 +20,7 @@ export const controlObjectiveApi = monitorfishApi.injectEndpoints({
     getControlObjectiveYears: builder.query<number[], void>({
       providesTags: () => [{ type: 'ControlObjectives' }],
       query: () => 'control_objectives/years',
-      transformResponse: (baseQueryReturnValue: number[]) => baseQueryReturnValue.sort()
+      transformResponse: (baseQueryReturnValue: number[]) => baseQueryReturnValue.sort(ascend(identity))
     })
   })
 })

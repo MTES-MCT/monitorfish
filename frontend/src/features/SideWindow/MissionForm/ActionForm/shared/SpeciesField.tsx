@@ -142,11 +142,11 @@ export function SpeciesField() {
           key={String(input.value?.length)}
           baseContainer={newWindowContainerRef.current}
           label="Ajouter une espèce"
-          name="newSpecy.specyName"
+          name="newSpecy"
           onChange={add}
           options={speciesAsOptions}
           searchable
-          virtualized
+          // virtualized
         />
       </FieldGroup>
     </FormikMultiInfractionPicker>

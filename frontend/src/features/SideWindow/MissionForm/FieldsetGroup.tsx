@@ -4,6 +4,9 @@ import styled, { css } from 'styled-components'
 export const FieldsetGroup = styled(Fieldset)<{
   isInline?: boolean
 }>`
+  /* TODO Add this prop in monitor-ui. */
+  min-width: 0;
+
   > div {
     flex-direction: ${p => (p.isInline ? 'row' : 'column')};
 

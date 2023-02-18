@@ -78,7 +78,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
       newWindowContainerRef: wrapperRef.current
         ? (wrapperRef as MutableRefObject<HTMLDivElement>)
         : {
-            current: window.document.createElement('div')
+            current: isFromURL ? undefined : window.document.createElement('div')
           }
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps

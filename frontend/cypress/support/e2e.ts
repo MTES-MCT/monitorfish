@@ -26,7 +26,7 @@ declare global {
           isSmooth: boolean
         }>
       ): void
-      fill(label: string, value: boolean | string | string[] | undefined): Chainable<Element>
+      fill(label: string | undefined, value: boolean | number | string | string[] | undefined): Chainable<Element>
       fillDateRangePicker(label: string, startDate: Date, endDate: Date): Chainable<Element>
       forceClick(): Chainable<JQuery<HTMLElement>>
       getDataCy(dataCy: string): Chainable<JQuery<HTMLElement>>

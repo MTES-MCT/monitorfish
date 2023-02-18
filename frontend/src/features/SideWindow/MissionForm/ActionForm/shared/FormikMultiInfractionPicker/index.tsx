@@ -158,7 +158,7 @@ export function FormikMultiInfractionPicker({
                     <StyledForm>
                       <FormikMultiRadio
                         isInline
-                        label="Type d'infraction"
+                        label="Type d’infraction"
                         name="infractionType"
                         options={INFRACTION_TYPES_AS_OPTIONS}
                       />
@@ -174,7 +174,7 @@ export function FormikMultiInfractionPicker({
                         // eslint-disable-next-line react/jsx-props-no-spreading
                         <FormikCheckbox {...infractionCheckboxProps} />
                       )}
-                      <FormikTextarea label="Observations sur l'infraction" name="comments" />
+                      <FormikTextarea label="Observations sur l’infraction" name="comments" />
 
                       <FormButtonGroup>
                         <Button accent={Accent.TERTIARY} onClick={cancel}>

@@ -1,19 +1,9 @@
 /// <reference types="cypress" />
 
-import { SideWindowMenuKey } from 'src/features/SideWindow/constants'
+import { openSideWindowNewMission } from './utils'
 
-context('Mission Form', () => {
-  beforeEach(() => {
-    cy.visit('/side_window').wait(500)
-    if (document.querySelector('[data-cy="first-loader"]')) {
-      cy.getDataCy('first-loader').should('not.be.visible')
-    }
-    cy.clickButton(SideWindowMenuKey.MISSION_LIST).click()
-    if (document.querySelector('[data-cy="first-loader"]')) {
-      cy.getDataCy('first-loader').should('not.be.visible')
-    }
-    cy.clickButton('Ajouter une nouvelle mission')
-  })
+context('Side Window > Mission Form > Main Form', () => {
+  beforeEach(openSideWindowNewMission)
 
   it('Should enable or disable under JDP checkbox depending on other field values', () => {
     const getHasMissionUnderJdpTypeCheckbox = () =>

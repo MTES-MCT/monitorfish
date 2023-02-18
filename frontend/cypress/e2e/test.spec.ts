@@ -2,7 +2,7 @@
 
 context('Test', () => {
   beforeEach(() => {
-    cy.visit('/test')
+    cy.visit('/test').wait(250)
   })
 
   it('Should fill and clear the text input', () => {

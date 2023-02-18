@@ -2,9 +2,8 @@
 // instead of using a cleaner FP `.filter()`
 // but real experience made me think it greatly improves results stability.
 
-export function findElementBytext(
+export function findElementBySelector(
   selector: string,
-  text: string,
   {
     fallbackSelector,
     index = 0,
@@ -15,8 +14,6 @@ export function findElementBytext(
     index: number
   }> = {}
 ) {
-  const trimmedText = text.trim()
-
   if (inElement) {
     let foundElement
     let foundElementIndex = 0
@@ -25,7 +22,7 @@ export function findElementBytext(
       .find(selector)
       // eslint-disable-next-line func-names
       .each(function (this: HTMLElement) {
-        if (!foundElement && Cypress.$(this).text().trim() === trimmedText) {
+        if (!foundElement) {
           if (foundElementIndex < index) {
             foundElementIndex += 1
 
@@ -50,7 +47,7 @@ export function findElementBytext(
   let foundElementIndex = 0
   // eslint-disable-next-line func-names, @typescript-eslint/no-unused-expressions
   Cypress.$(selector).each(function () {
-    if (!foundElement && Cypress.$(this).text().trim() === trimmedText) {
+    if (!foundElement) {
       if (foundElementIndex < index) {
         foundElementIndex += 1
 

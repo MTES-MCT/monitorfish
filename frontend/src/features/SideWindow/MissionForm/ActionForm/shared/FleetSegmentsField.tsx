@@ -194,7 +194,7 @@ export function FleetSegmentsField() {
         key={String(input.value?.length)}
         baseContainer={newWindowContainerRef.current}
         label="Ajouter un segment"
-        name="newFleetSegment.name"
+        name="newFleetSegment"
         onChange={add}
         options={fleetSegmentsAsOptions}
         virtualized

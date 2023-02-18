@@ -20,7 +20,7 @@ import type { ChangeEvent, CSSProperties, MutableRefObject } from 'react'
 import type { Promisable } from 'type-fest'
 
 type VesselSearchProps = {
-  baseRef?: MutableRefObject<HTMLDivElement> | undefined
+  baseRef?: MutableRefObject<HTMLDivElement | undefined> | undefined
   className?: string
   defaultValue?:
     | {

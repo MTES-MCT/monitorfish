@@ -15,6 +15,9 @@ export function getMissionActionFormInitialValues(type: MissionAction.MissionAct
     actionDatetimeUtc: getUtcizedDayjs(new Date()).toISOString(),
     actionType: type,
     isDraft: true,
+    separateStowageOfPreservedSpecies: false,
+    speciesSizeControlled: false,
+    speciesWeightControlled: false,
     vesselTargeted: false
   }
 }

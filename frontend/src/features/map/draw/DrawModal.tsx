@@ -113,7 +113,7 @@ export function DrawLayerModal() {
             Réinitialiser
           </ResetButton>
           <ValidateButton onClick={handleValidate}>
-            Valider {interactionType && validateButtonPlaceholder[interactionType]}
+            {`Valider ${interactionType ? validateButtonPlaceholder[interactionType] : ''}`}
           </ValidateButton>
         </ActionWrapper>
       </ContentWrapper>

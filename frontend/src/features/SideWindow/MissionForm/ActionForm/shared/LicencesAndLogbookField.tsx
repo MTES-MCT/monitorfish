@@ -36,7 +36,7 @@ export function LicencesAndLogbookField() {
       />
       <FormikMultiRadio
         isInline
-        label="Déclarations journal de pêche conformes à l'activité du navire"
+        label="Déclarations journal de pêche conformes à l’activité du navire"
         name="logbookMatchesActivity"
         options={[
           { label: 'Oui', value: MissionAction.ControlCheck.YES },
@@ -46,7 +46,7 @@ export function LicencesAndLogbookField() {
       />
       <FormikMultiRadio
         isInline
-        label="Autorisations de pêche conformes à l'activité du navire (zone, engins, espèces)"
+        label="Autorisations de pêche conformes à l’activité du navire (zone, engins, espèces)"
         name="licencesMatchActivity"
         options={[
           { label: 'Oui', value: MissionAction.ControlCheck.YES },

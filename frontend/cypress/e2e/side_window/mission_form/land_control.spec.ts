@@ -18,6 +18,7 @@ context('Side Window > Mission Form > Land Control', () => {
     // -------------------------------------------------------------------------
     // Form
 
+    // TODO Handle Automplete in custom `cy.fill()` command once it's used via monitor-ui.
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     cy.get('input[placeholder="Rechercher un navire..."]').type('pheno')
     cy.contains('mark', 'PHENO').click()

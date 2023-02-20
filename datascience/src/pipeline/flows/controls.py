@@ -732,7 +732,7 @@ with Flow("Controls", executor=LocalDaskExecutor()) as flow:
         ) = make_missions_actions_and_missions_control_units(controls)
 
         # Load
-        loaded_missions_and_missions_control_unitsloaded_missions = (
+        loaded_missions_and_missions_control_units = (
             load_missions_and_missions_control_units(
                 missions, missions_control_units, loading_mode=loading_mode
             )
@@ -741,7 +741,7 @@ with Flow("Controls", executor=LocalDaskExecutor()) as flow:
         load_mission_actions(
             mission_actions,
             loading_mode=loading_mode,
-            upstream_tasks=[loaded_missions_and_missions_control_unitsloaded_missions],
+            upstream_tasks=[loaded_missions_and_missions_control_units],
         )
 
 

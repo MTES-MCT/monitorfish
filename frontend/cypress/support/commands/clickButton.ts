@@ -13,8 +13,6 @@ export function clickButton(
   }> = {},
   leftRetries: number = RETRIES
 ): Cypress.Chainable<JQuery<HTMLButtonElement>> {
-  cy.wait(500)
-
   const preSelector = withinSelector ? `${withinSelector} ` : ''
 
   const iconButtonElement = Cypress.$(`${preSelector}button[aria-label="${label}"]`).get(index) as HTMLButtonElement

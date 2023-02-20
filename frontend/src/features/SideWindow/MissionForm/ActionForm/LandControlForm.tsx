@@ -91,7 +91,7 @@ export function LandControlForm({ initialValues, onChange }: LandControlFormProp
 
           <hr />
 
-          <FleetSegmentsField />
+          <FleetSegmentsField label="Segment de flotte" />
 
           <ControlQualityField />
 

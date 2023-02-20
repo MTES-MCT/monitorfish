@@ -9,15 +9,15 @@ export namespace MissionAction {
     diversion: Boolean | undefined
     emitsAis: ControlCheck | undefined
     emitsVms: ControlCheck | undefined
-    externalReferenceNumber: string
+    externalReferenceNumber: string | undefined
     facade: string | undefined
     feedbackSheetRequired: Boolean | undefined
-    flagState: string
+    flagState: string | undefined
     gearInfractions: GearInfraction[]
     gearOnboard: GearControl[]
     id: number
-    internalReferenceNumber: string
-    ircs: string
+    internalReferenceNumber: string | undefined
+    ircs: string | undefined
     isFromPoseidon: boolean | undefined
     latitude: number | undefined
     licencesAndLogbookObservations: string | undefined
@@ -42,8 +42,8 @@ export namespace MissionAction {
     speciesWeightControlled: Boolean | undefined
     unitWithoutOmegaGauge: Boolean | undefined
     userTrigram: string | undefined
-    vesselId: number
-    vesselName: string
+    vesselId: number | undefined
+    vesselName: string | undefined
     vesselTargeted: Boolean | undefined
   }
 

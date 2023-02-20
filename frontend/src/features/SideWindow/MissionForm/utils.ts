@@ -144,9 +144,7 @@ export function getValidMissionActionData(
       'otherInfractions',
       'segments',
       'speciesInfractions',
-      'speciesOnboard',
-      'vesselId',
-      'vesselName'
+      'speciesOnboard'
     ],
     maybeValidMissionActionData
   )

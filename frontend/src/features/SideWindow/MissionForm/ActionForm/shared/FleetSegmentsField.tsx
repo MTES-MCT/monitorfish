@@ -17,7 +17,10 @@ import type { MissionAction } from '../../../../../domain/types/missionAction'
 import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
-export function FleetSegmentsField() {
+export type FleetSegmentsFieldProps = {
+  label: string
+}
+export function FleetSegmentsField({ label }) {
   const [input, , helper] = useField<MissionActionFormValues['segments']>('segments')
   const [{ value: internalReferenceNumber }] =
     useField<MissionActionFormValues['internalReferenceNumber']>('internalReferenceNumber')
@@ -159,11 +162,11 @@ export function FleetSegmentsField() {
   )
 
   if (isLoading) {
-    return <FieldsetGroupSpinner isLight legend="Segment de flotte" />
+    return <FieldsetGroupSpinner isLight legend={label} />
   }
 
   return (
-    <FieldsetGroup isLight legend="Segment de flotte">
+    <FieldsetGroup isLight legend={label}>
       {(!input.value || !input.value.length) && (
         <p>
           <em>

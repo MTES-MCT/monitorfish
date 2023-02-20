@@ -3,7 +3,6 @@ import {
   FormikEffect,
   FormikMultiSelect,
   FormikNumberInput,
-  FormikSelect,
   FormikTextarea,
   FormikTextInput,
   Icon
@@ -12,6 +11,7 @@ import { Formik } from 'formik'
 import { noop } from 'lodash'
 import { useMemo } from 'react'
 
+import { FleetSegmentsField } from './shared/FleetSegmentsField'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { useNewWindow } from '../../../../ui/NewWindow'
 import { FieldsetGroup } from '../FieldsetGroup'
@@ -46,33 +46,28 @@ export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillance
         </FormHead>
 
         <FormBody>
-          {/* TODO Check this prop (is this the right label?). */}
+          {/* TODO Where is this prop? */}
           <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}
             isLight
-            label="Espèces protégées"
+            label="Objectifs du vol"
             name="???"
-            options={[]}
+            options={[
+              { label: 'Vérifications VMS/AIS', value: 'Vérifications VMS/AIS' },
+              { label: 'Pêche sans autorisation', value: 'Pêche sans autorisation' },
+              { label: 'Zones fermées', value: 'Zones fermées' }
+            ]}
           />
 
-          {/* TODO Check this prop (it's a singular). */}
-          <FormikSelect
-            baseContainer={newWindowContainerRef.current}
-            isLight
-            label="Segment ciblé (si pertinent)"
-            name="???"
-            options={[]}
-          />
+          <FleetSegmentsField label="Segments ciblés (si pertinent)" />
 
           <FormikNumberInput isLight label="Nb de navires survolés" name="numberOfVesselsFlownOver" />
 
-          {/* TODO Check this prop. */}
           <FormikTextarea isLight label="Observations générales sur le vol" name="otherComments" />
 
           <hr />
 
           <FieldsetGroup isLight legend="Qualité du contrôle">
-            {/* TODO Check this prop. */}
             <FormikTextarea
               label="Observations sur le déroulé de la surveillance"
               name="controlQualityComments"

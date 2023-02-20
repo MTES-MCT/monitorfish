@@ -99,7 +99,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
 
           <hr />
 
-          <FleetSegmentsField />
+          <FleetSegmentsField label="Segment de flotte" />
 
           <ControlQualityField />
 

@@ -14,13 +14,19 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.clickButton('Ajouter un contrôle à la débarque')
   })
 
-  it('Should enable or disable under JDP checkbox depending on other field values', () => {
+  it('Should fill the form and send the expected data to the API', () => {
     // -------------------------------------------------------------------------
     // Form
 
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     cy.get('input[placeholder="Rechercher un navire..."]').type('pheno')
     cy.contains('mark', 'PHENO').click()
+
+    // Date et heure du contrôle
+    // TODO Add this test.
+
+    // Lieu du contrôle
+    // TODO Add this test.
 
     // Obligations déclaratives et autorisations de pêche
     cy.fill('Bonne émission VMS', 'Oui')

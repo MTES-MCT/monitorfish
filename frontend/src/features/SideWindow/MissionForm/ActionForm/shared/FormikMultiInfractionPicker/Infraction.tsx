@@ -20,7 +20,7 @@ export function Infraction({ data, index, onDelete, onEdit }: InfractionProps) {
       <InnerWrapper>
         <div>
           <TagGroup>
-            <Tag accent={Accent.PRIMARY}>{MissionAction.InfractionTypeLabel[data.infractionType]}</Tag>
+            <Tag accent={Accent.PRIMARY}>{MissionAction.INFRACTION_TYPE_LABEL[data.infractionType]}</Tag>
             <Tag accent={Accent.PRIMARY}>NATINF : {data.natinf}</Tag>
           </TagGroup>
 

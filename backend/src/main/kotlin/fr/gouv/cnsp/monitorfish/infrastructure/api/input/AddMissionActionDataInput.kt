@@ -5,8 +5,14 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
 import java.time.ZonedDateTime
 
 data class AddMissionActionDataInput(
-    var vesselId: Int,
     var missionId: Int,
+    var vesselId: Int? = null,
+    var vesselName: String? = null,
+    var internalReferenceNumber: String? = null,
+    var externalReferenceNumber: String? = null,
+    var ircs: String? = null,
+    var flagState: String? = null,
+    var flightGoals: List<FlightGoal> = listOf(),
     var actionType: MissionActionType,
     var actionDatetimeUtc: ZonedDateTime,
     var emitsVms: ControlCheck? = null,
@@ -40,6 +46,12 @@ data class AddMissionActionDataInput(
 ) {
     fun toMissionAction(mapper: ObjectMapper) = MissionAction(
         vesselId = vesselId,
+        vesselName = vesselName,
+        internalReferenceNumber = internalReferenceNumber,
+        externalReferenceNumber = externalReferenceNumber,
+        ircs = ircs,
+        flagState = flagState,
+        flightGoals = flightGoals,
         missionId = missionId,
         actionType = actionType,
         actionDatetimeUtc = actionDatetimeUtc,

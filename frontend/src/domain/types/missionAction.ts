@@ -50,11 +50,25 @@ export namespace MissionAction {
   // ---------------------------------------------------------------------------
   // Constants
 
+  /* eslint-disable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
   export enum ControlCheck {
     NO = 'NO',
     NOT_APPLICABLE = 'NOT_APPLICABLE',
     YES = 'YES'
   }
+
+  // TODO Update that once it's included in the API data.
+  export enum FlightGoal {
+    VMS_AIS_CHECK = 'VMS_AIS_CHECK',
+    UNAUTHORIZED_FISHING = 'UNAUTHORIZED_FISHING',
+    CLOSED_AREA = 'CLOSED_AREA'
+  }
+  export const FLIGHT_GOAL_LABEL: Record<FlightGoal, string> = {
+    VMS_AIS_CHECK: 'Vérifications VMS/AIS',
+    UNAUTHORIZED_FISHING: 'Pêche sans autorisation',
+    CLOSED_AREA: 'Zones fermées'
+  }
+
   export enum InfractionDomain {
     GEAR = 'GEAR',
     LOGBOOK = 'LOGBOOK',
@@ -62,18 +76,16 @@ export namespace MissionAction {
     SPECIES = 'SPECIES'
   }
 
-  /* eslint-disable typescript-sort-keys/string-enum */
   export enum InfractionType {
     WITH_RECORD = 'WITH_RECORD',
     WITHOUT_RECORD = 'WITHOUT_RECORD',
     PENDING = 'PENDING'
   }
-  export const InfractionTypeLabel: Record<InfractionType, string> = {
+  export const INFRACTION_TYPE_LABEL: Record<InfractionType, string> = {
     [InfractionType.WITH_RECORD]: 'Avec PV',
     [InfractionType.WITHOUT_RECORD]: 'Sans PV',
     [InfractionType.PENDING]: 'En attente'
   }
-  /* eslint-enable typescript-sort-keys/string-enum */
 
   export enum MissionActionType {
     AIR_CONTROL = 'AIR_CONTROL',
@@ -82,6 +94,7 @@ export namespace MissionAction {
     OBSERVATION = 'OBSERVATION',
     SEA_CONTROL = 'SEA_CONTROL'
   }
+  /* eslint-enable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
 
   // ---------------------------------------------------------------------------
   // Helpers

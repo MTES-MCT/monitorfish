@@ -1,16 +1,17 @@
 import {
   FormikCheckbox,
   FormikEffect,
-  FormikMultiSelect,
   FormikNumberInput,
   FormikTextarea,
   FormikTextInput,
-  Icon
+  Icon,
+  MultiSelect
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash'
 import { useMemo } from 'react'
 
+import { FLIGHT_GOALS_AS_OPTIONS } from './shared/constants'
 import { FleetSegmentsField } from './shared/FleetSegmentsField'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { useNewWindow } from '../../../../ui/NewWindow'
@@ -46,17 +47,14 @@ export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillance
         </FormHead>
 
         <FormBody>
-          {/* TODO Where is this prop? */}
-          <FormikMultiSelect
+          {/* TODO Update that once it's included in the API data. */}
+          <MultiSelect
+            // <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}
             isLight
             label="Objectifs du vol"
-            name="???"
-            options={[
-              { label: 'Vérifications VMS/AIS', value: 'Vérifications VMS/AIS' },
-              { label: 'Pêche sans autorisation', value: 'Pêche sans autorisation' },
-              { label: 'Zones fermées', value: 'Zones fermées' }
-            ]}
+            name="flightGoals"
+            options={FLIGHT_GOALS_AS_OPTIONS}
           />
 
           <FleetSegmentsField label="Segments ciblés (si pertinent)" />

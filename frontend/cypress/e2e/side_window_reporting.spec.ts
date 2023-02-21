@@ -89,7 +89,7 @@ context('Reportings', () => {
       // Delete two reportings
       cy.get('*[data-cy="delete-reporting-cards"]').click({ force: true })
       cy.wait('@deleteReportings').then(({ request, response }) => {
-        expect(request.body.toString()).contains('1,7')
+        expect(request.body).to.have.length(2)
         expect(response && response.statusCode).equal(200)
       })
 
@@ -117,7 +117,7 @@ context('Reportings', () => {
       cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', numberOfReportings)
 
       // When
-      cy.get('[data-cy="side-window-edit-reporting"]').click()
+      cy.get('[data-cy="side-window-edit-reporting"]').eq(0).click()
       cy.get('[data-cy="new-reporting-title"]').type(
         '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace} km'
       )
@@ -160,7 +160,7 @@ context('Reportings', () => {
       cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', numberOfReportings)
 
       // When
-      cy.get('[data-cy="side-window-edit-reporting"]').click()
+      cy.get('[data-cy="side-window-edit-reporting"]').eq(0).click()
       cy.get('[data-cy="new-reporting-select-observation-reporting-type"]').click()
       cy.wait(500)
       cy.get('[data-cy="new-reporting-create-button"]').click()

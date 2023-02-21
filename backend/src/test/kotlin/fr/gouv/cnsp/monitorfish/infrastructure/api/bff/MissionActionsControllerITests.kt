@@ -58,7 +58,7 @@ class MissionActionsControllerITests {
                 3,
                 4,
                 5,
-                listOf(MissionAction(1, 1, 1, MissionActionType.SEA_CONTROL, ZonedDateTime.now())),
+                listOf(MissionAction(1, 1, 1, actionType = MissionActionType.SEA_CONTROL, actionDatetimeUtc = ZonedDateTime.now())),
             ),
         )
 

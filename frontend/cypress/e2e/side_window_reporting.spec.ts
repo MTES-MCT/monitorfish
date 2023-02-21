@@ -178,6 +178,7 @@ context('Reportings', () => {
 
   it('A reporting Should be downloaded', () => {
     // Given
+    cy.cleanFiles()
     cy.get('*[data-cy="side-window-reporting-tab"]').click()
     cy.get('[data-cy="side-window-sub-menu-SA"]').click()
     cy.get('.rs-checkbox-checker').eq(0).click({ timeout: 10000 })

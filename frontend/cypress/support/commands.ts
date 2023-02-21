@@ -35,7 +35,7 @@ Cypress.Commands.add('cleanScreenshots', (fromNumber: number): void => {
 })
 
 Cypress.Commands.add('cleanFiles', () => {
-  cy.exec(`rm cypress/downloads/* \n`)
+  cy.exec(`rm cypress/downloads/*`)
 })
 
 Cypress.Commands.add('clickButton', clickButton)

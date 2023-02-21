@@ -85,7 +85,7 @@ export function FleetSegmentsField({ label }) {
         return
       }
 
-      if (!fleetSegmentIndex) {
+      if (fleetSegmentIndex === undefined) {
         throw new FrontendError('`fleetSegmentIndex` is undefined. This should never happen.', 'remove()')
       }
 

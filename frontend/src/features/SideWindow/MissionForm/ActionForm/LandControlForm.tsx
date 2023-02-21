@@ -5,12 +5,14 @@ import {
   FormikEffect,
   FormikTextarea,
   FormikTextInput,
-  Icon
+  Icon,
+  Select
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash'
 import { useMemo } from 'react'
 
+import { PORTS_AS_OPTION } from './shared/constants'
 import { ControlQualityField } from './shared/ControlQualityField'
 import { FleetSegmentsField } from './shared/FleetSegmentsField'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
@@ -67,7 +69,15 @@ export function LandControlForm({ initialValues, onChange }: LandControlFormProp
             withTime
           />
 
-          {/* TODO Add "Lieu du contrôle". */}
+          {/* TODO Update that once it's included in the API data. */}
+          <Select
+            // <FormikSelect
+            baseContainer={newWindowContainerRef.current}
+            isLight
+            label="Lieu du contrôle"
+            name="port"
+            options={PORTS_AS_OPTION}
+          />
 
           <LicencesAndLogbookField />
 

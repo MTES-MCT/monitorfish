@@ -57,6 +57,12 @@ export namespace MissionAction {
     YES = 'YES'
   }
 
+  // TODO Remove that once it's included in the API data.
+  export const PORT = {
+    'LE HAVRE': 'HAVRE',
+    MARSEILLE: 'MARSEILLE'
+  }
+
   // TODO Update that once it's included in the API data.
   export enum FlightGoal {
     VMS_AIS_CHECK = 'VMS_AIS_CHECK',

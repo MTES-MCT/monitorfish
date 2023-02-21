@@ -433,7 +433,7 @@ export function VesselList({ namespace }) {
                 administrativeZonesFiltered,
                 callRemoveZoneSelected,
                 setAdministrativeZonesFiltered,
-                setZonesFilterCallback,
+                setZonesFilter: setZonesFilterCallback,
                 zonesFilter,
                 zonesSelected
               }}

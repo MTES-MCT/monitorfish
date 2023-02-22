@@ -69,31 +69,33 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
     const checkedCurrentSeaFrontReportings = getTableCheckedData()
     const fileName = `${checkedCurrentSeaFrontReportings.length}-signalements-${dayjs().format('DD-MM-YYYY')}`
 
+    /* eslint-disable sort-keys-fix/sort-keys-fix */
     downloadAsCsv(fileName, checkedCurrentSeaFrontReportings, {
       creationDate: 'Ouvert le',
-      externalReferenceNumber: 'Marquage ext.',
-      flagState: 'Pavillon',
-      internalReferenceNumber: 'CFR',
-      ircs: 'C/S',
+      'value.dml': 'DML concernée',
       type: {
         label: 'Origine',
         transform: getReportingOrigin
       },
-      underCharter: {
-        label: 'Navire sous charte',
-        transform: reporting => (reporting.underCharter ? 'OUI' : 'NON')
-      },
-      'value.description': 'Description',
-      'value.dml': 'DML concernée',
-      'value.natinfCode': 'NATINF',
-      'value.seaFront': 'Façade',
       'value.type': {
         label: 'Titre',
         transform: getReportingTitle
       },
+      'value.description': 'Description',
+      'value.natinfCode': 'NATINF',
+      flagState: 'Pavillon',
       vesselName: 'Navire'
+      internalReferenceNumber: 'CFR',
+      externalReferenceNumber: 'Marquage ext.',
+      ircs: 'C/S',
+      underCharter: {
+        label: 'Navire sous charte',
+        transform: reporting => (reporting.underCharter ? 'OUI' : 'NON')
+      },
+      'value.seaFront': 'Façade',
     })
   }, [getTableCheckedData])
+  /* eslint-enable sort-keys-fix/sort-keys-fix */
 
   // TODO Rather use a reporting id here than passing a copy of the whole Reporting object.
   const edit = useCallback(

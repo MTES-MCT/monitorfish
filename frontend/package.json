@@ -36,7 +36,7 @@
     "@reduxjs/toolkit": "1.9.3",
     "@sentry/react": "7.29.0",
     "@sentry/tracing": "7.29.0",
-    "@svgr/webpack": "5.5.0",
+    "@svgr/webpack": "6.5.1",
     "comlink": "4.3.1",
     "date-fns": "2.29.3",
     "dayjs": "1.11.7",

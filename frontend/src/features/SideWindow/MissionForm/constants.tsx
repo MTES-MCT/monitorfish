@@ -22,7 +22,6 @@ export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValu
   gearInfractions: [],
   gearOnboard: [],
   id: undefined,
-  isDraft: undefined,
   isFromPoseidon: undefined,
   latitude: undefined,
   licencesAndLogbookObservations: undefined,

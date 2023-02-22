@@ -18,52 +18,40 @@ export type ItemProps = {
 }
 export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit }: ItemProps) {
   const [actionLabel, ActionIcon] = useMemo(() => {
-    switch (initialValues.isDraft) {
-      case true:
-        switch (initialValues.actionType) {
-          case MissionAction.MissionActionType.AIR_CONTROL:
-            return ['Contrôle aérien à renseigner', Icon.Plane]
+    switch (initialValues.actionType) {
+      case MissionAction.MissionActionType.AIR_CONTROL:
+        return [
+          initialValues.vesselName ? `Contrôle aérien - ${initialValues.vesselName}` : 'Contrôle aérien à renseigner',
+          Icon.FleetSegment
+        ]
 
-          case MissionAction.MissionActionType.AIR_SURVEILLANCE:
-            return ['Surveillance aériennne à renseigner', Icon.Observation]
+      case MissionAction.MissionActionType.AIR_SURVEILLANCE:
+        return [
+          initialValues.numberOfVesselsFlownOver
+            ? `Surveillance aérienne - ${initialValues.numberOfVesselsFlownOver} pistes survolées`
+            : 'Surveillance aérienne à renseigner',
+          Icon.Observation
+        ]
 
-          case MissionAction.MissionActionType.LAND_CONTROL:
-            return ['Contrôle à la débarque à renseigner', Icon.Anchor]
+      case MissionAction.MissionActionType.LAND_CONTROL:
+        return [
+          initialValues.vesselName
+            ? `Contrôle à la débarque - ${initialValues.vesselName}`
+            : 'Contrôle à la débarque à renseigner',
+          Icon.Anchor
+        ]
 
-          case MissionAction.MissionActionType.OBSERVATION:
-            return [initialValues.otherComments || 'Note libre à renseigner', Icon.Note]
+      case MissionAction.MissionActionType.OBSERVATION:
+        return [initialValues.otherComments ? initialValues.otherComments : 'Note libre à renseigner', Icon.Note]
 
-          case MissionAction.MissionActionType.SEA_CONTROL:
-            return ['Contrôle en mer à renseigner', Icon.FleetSegment]
-
-          default:
-            throw new FrontendError('`initialValues.actionType` doesn not match the enum. This should never happen.')
-        }
-
-      case false:
-        switch (initialValues.actionType) {
-          case MissionAction.MissionActionType.AIR_CONTROL:
-            return [`Contrôle aérien - ${'TODO Vessel Name?'}`, Icon.Plane]
-
-          case MissionAction.MissionActionType.AIR_SURVEILLANCE:
-            return [`Surveillance aérienne - ${'TODO Vessel Name?'}`, Icon.Observation]
-
-          case MissionAction.MissionActionType.LAND_CONTROL:
-            return [`Contrôle à la débarque - ${'TODO Vessel Name?'}`, Icon.Anchor]
-
-          case MissionAction.MissionActionType.OBSERVATION:
-            // TODO Check this prop
-            return [initialValues.otherComments, Icon.Note]
-
-          case MissionAction.MissionActionType.SEA_CONTROL:
-            return [`Contrôle en mer - ${'TODO Vessel Name?'}`, Icon.FleetSegment]
-
-          default:
-            throw new FrontendError('`initialValues.actionType` does not match the enum. This should never happen.')
-        }
+      case MissionAction.MissionActionType.SEA_CONTROL:
+        return [
+          initialValues.vesselName ? `Contrôle en mer - ${initialValues.vesselName}` : 'Contrôle en mer à renseigner',
+          Icon.FleetSegment
+        ]
 
       default:
-        throw new FrontendError('`initialValues.isDraft` is not a boolean. This should never happen.')
+        throw new FrontendError('`initialValues.actionType` does not match the enum. This should never happen.')
     }
   }, [initialValues])
 

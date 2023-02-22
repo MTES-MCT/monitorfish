@@ -80,14 +80,9 @@ export function getMissionFormInitialValues(
     mission.endDateTimeUtc ? mission.endDateTimeUtc : defaultEndDateAsStringUtc
   ]
 
-  const missionActionsAsFormValues = missionActions.map(missionAction => ({
-    ...missionAction,
-    isDraft: false
-  }))
-
   return {
     ...omit(['dateTimeRangeUtc'], mission),
-    actions: missionActionsAsFormValues,
+    actions: missionActions,
     dateTimeRangeUtc
   }
 }

@@ -199,7 +199,7 @@ context('Reportings', () => {
         )
         .should(
           'contains',
-          '"Alerte auto.","12 milles - Pêche sans droits historiques","","2610","FR","PROMETTRE INTÉRIEUR SAINT","ABC000232227","ZJ472279","TMG5756","NON","SA"'
+          '"Alerte auto.","12 milles - Pêche sans droits historiques","",2610,"FR","PROMETTRE INTÉRIEUR SAINT","ABC000232227","ZJ472279","TMG5756","NON","SA"'
         )
     })
   })

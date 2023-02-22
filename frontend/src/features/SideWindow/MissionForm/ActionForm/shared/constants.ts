@@ -8,7 +8,7 @@ export const INFRACTION_TYPES_AS_OPTIONS = getOptionsFromLabelledEnum(MissionAct
 export const PORTS_AS_OPTION = getOptionsFromLabelledEnum(MissionAction.PORT)
 
 export const MissionActionInfractionSchema = Yup.object().shape({
-  comments: Yup.string().required('L’observation est un champ obligatoire.'),
+  comments: Yup.string().default(''),
   infractionType: Yup.string().required('Le type d’infraction est un champ obligatoire.'),
   natinf: Yup.number().required('Le NATINF est un champ obligatoire.')
 })

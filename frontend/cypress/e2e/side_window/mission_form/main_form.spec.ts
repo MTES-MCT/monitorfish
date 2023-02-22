@@ -35,8 +35,8 @@ context('Side Window > Mission Form > Main Form', () => {
   })
 
   it('Should send the expected data to the API (required fields only)', () => {
-    const getSaveButton = () => cy.get('button').contains('Enregistrer')
-    const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer et clôturer')
+    const getSaveButton = () => cy.get('button').contains('Enregistrer').parent()
+    const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer et clôturer').parent()
 
     cy.intercept('PUT', '/api/v1/missions', {
       // TODO This should be removed once the API works as expected.

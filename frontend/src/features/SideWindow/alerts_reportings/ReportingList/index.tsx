@@ -84,7 +84,7 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
       'value.description': 'Description',
       'value.natinfCode': 'NATINF',
       flagState: 'Pavillon',
-      vesselName: 'Navire'
+      vesselName: 'Navire',
       internalReferenceNumber: 'CFR',
       externalReferenceNumber: 'Marquage ext.',
       ircs: 'C/S',
@@ -92,7 +92,7 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
         label: 'Navire sous charte',
         transform: reporting => (reporting.underCharter ? 'OUI' : 'NON')
       },
-      'value.seaFront': 'Façade',
+      'value.seaFront': 'Façade'
     })
   }, [getTableCheckedData])
   /* eslint-enable sort-keys-fix/sort-keys-fix */

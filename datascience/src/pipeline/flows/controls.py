@@ -614,7 +614,6 @@ def load_missions_and_missions_control_units(
 
     e = create_engine("monitorenv_remote")
     with e.begin() as connection:
-        breakpoint()
 
         load(
             missions,

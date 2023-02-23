@@ -1,8 +1,18 @@
-import { Accent, getLocalizedDayjs, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor-ui'
+import {
+  Accent,
+  getLocalizedDayjs,
+  Icon,
+  IconButton,
+  Size,
+  Tag,
+  TagGroup,
+  THEME,
+  TagBullet
+} from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { formatDateLabel } from './utils'
+import { formatDateLabel, getMissionActionInfractionsFromMissionActionFromFormValues } from './utils'
 import { MissionAction } from '../../../../domain/types/missionAction'
 import { FrontendError } from '../../../../libs/FrontendError'
 
@@ -55,6 +65,32 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
     }
   }, [initialValues])
 
+  const infractionTags = useMemo(() => {
+    const infractions = getMissionActionInfractionsFromMissionActionFromFormValues(initialValues)
+    const infractionsWithRecord = infractions.filter(
+      ({ infractionType }) => infractionType === MissionAction.InfractionType.WITH_RECORD
+    )
+
+    return [
+      ...(infractionsWithRecord.length > 0 ? [`${infractionsWithRecord.length} INF AVEC PV`] : []),
+      ...infractions.map(({ natinf }) => `NATINF : ${natinf}`)
+    ].map(label => (
+      <Tag key={label} accent={Accent.PRIMARY}>
+        {label}
+      </Tag>
+    ))
+  }, [initialValues])
+
+  const redTags = useMemo(() => {
+    const gearInfractionsWithGearSeized = (initialValues.gearInfractions || []).filter(({ gearSeized }) => gearSeized)
+
+    return [...(gearInfractionsWithGearSeized.length > 0 ? ['Appréhension engin'] : [])].map(label => (
+      <Tag accent={Accent.PRIMARY} bullet={TagBullet.DISK} bulletColor={THEME.color.maximumRed}>
+        {label}
+      </Tag>
+    ))
+  }, [initialValues])
+
   const startDateAsDayjs = useMemo(() => getLocalizedDayjs(initialValues.actionDatetimeUtc), [initialValues])
 
   return (
@@ -62,26 +98,33 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
       <DateLabel>
         <b>{formatDateLabel(startDateAsDayjs.format('DD MMM'))}</b> à {startDateAsDayjs.format('HH:mm')}
       </DateLabel>
+
       {/* TODO How do we edit an action in terms of UX? */}
       <InnerWrapper isSelected={isSelected} onClick={onEdit}>
-        <ActionLabel>
-          <ActionIcon color={THEME.color.charcoal} size={20} />
-          <p>{actionLabel}</p>
-        </ActionLabel>
-        <IconButton
-          accent={Accent.TERTIARY}
-          color={THEME.color.slateGray}
-          Icon={Icon.Duplicate}
-          onClick={onDuplicate}
-          size={Size.NORMAL}
-        />
-        <IconButton
-          accent={Accent.TERTIARY}
-          color={THEME.color.maximumRed}
-          Icon={Icon.Delete}
-          onClick={onDelete}
-          size={Size.NORMAL}
-        />
+        <Head>
+          <ActionLabel>
+            <ActionIcon color={THEME.color.charcoal} size={20} />
+            <p>{actionLabel}</p>
+          </ActionLabel>
+
+          <IconButton
+            accent={Accent.TERTIARY}
+            color={THEME.color.slateGray}
+            Icon={Icon.Duplicate}
+            onClick={onDuplicate}
+            size={Size.NORMAL}
+          />
+          <IconButton
+            accent={Accent.TERTIARY}
+            color={THEME.color.maximumRed}
+            Icon={Icon.Delete}
+            onClick={onDelete}
+            size={Size.NORMAL}
+          />
+        </Head>
+
+        <StyledTagGroup>{infractionTags}</StyledTagGroup>
+        <StyledTagGroup>{redTags}</StyledTagGroup>
       </InnerWrapper>
     </Wrapper>
   )
@@ -107,11 +150,11 @@ const DateLabel = styled.div`
 const InnerWrapper = styled.div<{
   isSelected: boolean
 }>`
-  align-items: flex-start;
   border: solid 1px ${p => (p.isSelected ? p.theme.color.blueGray['100'] : p.theme.color.lightGray)};
   outline: ${p => (p.isSelected ? `${p.theme.color.blueGray['100']} solid 2px` : 'none')};
   cursor: pointer;
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
   padding: 16px;
 `
@@ -129,4 +172,15 @@ const ActionLabel = styled.div`
   > p {
     padding-top: 1px;
   }
+`
+
+const Head = styled.div`
+  align-items: flex-start;
+  display: flex;
+  padding-bottom: 4px;
+`
+
+const StyledTagGroup = styled(TagGroup)`
+  margin-top: 8px;
+  padding-left: 32px;
 `

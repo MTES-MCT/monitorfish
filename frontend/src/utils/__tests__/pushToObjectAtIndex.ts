@@ -2,7 +2,7 @@ import { describe, expect, it } from '@jest/globals'
 
 import { pushToObjectAtIndex } from '../pushToObjectAtIndex'
 
-describe('utils/pushOrInitArray()', () => {
+describe('utils/pushToObjectAtIndex()', () => {
   it('should push to an existing index', () => {
     // Given
     const object = {

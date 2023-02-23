@@ -127,12 +127,9 @@ export function MissionForm() {
     dispatch(missionActions.setEditedDraftAction(nextMissionActionFormValues))
   }, 500)
 
-  const handleMainFormChange = useCallback(
-    (nextMissionFormValues: MissionFormValues) => {
-      dispatch(missionActions.setDraft(nextMissionFormValues))
-    },
-    [dispatch]
-  )
+  const handleMainFormChange = useDebouncedCallback((nextMissionFormValues: MissionFormValues) => {
+    dispatch(missionActions.setDraft(nextMissionFormValues))
+  }, 500)
 
   // ---------------------------------------------------------------------------
   // DATA

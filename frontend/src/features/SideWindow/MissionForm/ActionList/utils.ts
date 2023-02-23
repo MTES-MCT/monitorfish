@@ -10,6 +10,22 @@ export function formatDateLabel(dateLabel: string) {
   )
 }
 
+export function getMissionActionInfractionsFromMissionActionFromFormValues(
+  missionActionFormValues: MissionActionFormValues
+): Array<
+  | MissionAction.GearInfraction
+  | MissionAction.LogbookInfraction
+  | MissionAction.SpeciesInfraction
+  | MissionAction.OtherInfraction
+> {
+  return [
+    ...(missionActionFormValues.gearInfractions ? missionActionFormValues.gearInfractions : []),
+    ...(missionActionFormValues.logbookInfractions ? missionActionFormValues.logbookInfractions : []),
+    ...(missionActionFormValues.speciesInfractions ? missionActionFormValues.speciesInfractions : []),
+    ...(missionActionFormValues.otherInfractions ? missionActionFormValues.otherInfractions : [])
+  ].filter(({ natinf }) => Boolean(natinf))
+}
+
 export function getMissionActionFormInitialValues(type: MissionAction.MissionActionType): MissionActionFormValues {
   return {
     actionDatetimeUtc: getUtcizedDayjs(new Date()).toISOString(),

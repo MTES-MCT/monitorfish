@@ -5,7 +5,7 @@
  * @see https://redux-toolkit.js.org/tutorials/rtk-query#add-the-service-to-your-store
  */
 
-import { combineReducers, configureStore, isPlain } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { createTransform, FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
 import persistReducer from 'redux-persist/es/persistReducer'
@@ -28,6 +28,7 @@ import type { ThunkAction } from 'redux-thunk'
 export const mainStore = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
+      immutableCheck: false,
       // TODO Replace all Redux state Dates by strings & Error by a strict-typed POJO.
       serializableCheck: false
     }).concat(monitorenvApi.middleware, monitorfishApi.middleware),
@@ -74,8 +75,9 @@ export const backofficeStore = configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        immutableCheck: false,
         // TODO Replace all Redux state Dates by strings & Error by a strict-typed POJO.
-        isSerializable: (value: any) => isPlain(value) || value instanceof Date || value instanceof Error
+        serializableCheck: false
       }
     }).concat(monitorfishApi.middleware),
   reducer: persistedBackofficeReducer

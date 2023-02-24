@@ -147,7 +147,7 @@ export function SpeciesField() {
           onChange={add}
           options={speciesAsOptions}
           searchable
-          // virtualized
+          virtualized
         />
       </FieldGroup>
     </FormikMultiInfractionPicker>

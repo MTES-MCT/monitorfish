@@ -41,6 +41,19 @@ import styled from 'styled-components'
  * }
  * ```
  *
+ * - The `legend` element has a font-weight set in `mini-default.min.css` (`mini.css` dependency):
+ *
+ * ```css
+ * legend {
+ *   box-sizing: border-box;
+ *   display: table;
+ *   max-width: 100%;
+ *   white-space: normal;
+ *   font-weight: 700;
+ *   padding: calc(var(--universal-padding) / 2);
+ * }
+ * ```
+ *
  * - The `p` margin that doesn't maken sense in `mini-default.min.css` (`mini.css` dependency),
  *   there is even an horizontal margin...:
  *
@@ -71,6 +84,10 @@ export const NoRsuiteOverrideWrapper = styled.div`
     color: inherit;
     margin: 0;
     padding: 0;
+  }
+
+  legend {
+    font-weight: 400;
   }
 
   p {

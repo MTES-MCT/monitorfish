@@ -179,7 +179,6 @@ const Menu = styled.div<{
   font-size: 16;
   font-weight: 500;
   height: 100%;
-  margin-left: ${p => (p.isFixed ? 0 : 70)};
   padding: 14px 0;
   position: ${p => (p.isFixed ? 'unset' : 'absolute')};
   transition: 'width 0.5s';

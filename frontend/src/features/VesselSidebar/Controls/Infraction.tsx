@@ -42,8 +42,12 @@ export function Infraction({ index, infraction, infractionDomain }: InfractionPr
       <InfractionDomainText>
         {index}. Infraction {infractionDomainText}
       </InfractionDomainText>
-      {infraction.comments}
-      <br />
+      {infraction.comments && (
+        <>
+          {infraction.comments}
+          <br />
+        </>
+      )}
       <InfractionTag>
         <InfractionTagText>
           {infraction.infractionType === InfractionType.WITH_RECORD ? 'Avec' : 'Sans'} PV

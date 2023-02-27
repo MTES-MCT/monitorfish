@@ -108,6 +108,8 @@ const OtherCommentsTitle = styled.div`
 
 const OtherComments = styled.div`
   margin-top: 16px;
+  white-space: normal;
+  width: 100%;
 `
 
 const NoInfraction = styled.div`

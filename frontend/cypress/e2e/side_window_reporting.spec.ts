@@ -175,4 +175,32 @@ context('Reportings', () => {
       cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', numberOfReportings - 1)
     })
   })
+
+  it('A reporting Should be downloaded', () => {
+    // Given
+    cy.cleanFiles()
+    cy.get('*[data-cy="side-window-reporting-tab"]').click()
+    cy.get('[data-cy="side-window-sub-menu-SA"]').click()
+    cy.get('.rs-checkbox-checker').eq(0).click({ timeout: 10000 })
+
+    // When
+    cy.get('[title="Télécharger 1 signalement"]').click()
+
+    // Then
+    cy.wait(400)
+    cy.exec('cd cypress/downloads && ls').then(result => {
+      const downloadedCSVFilename = result.stdout
+
+      return cy
+        .readFile(`cypress/downloads/${downloadedCSVFilename}`)
+        .should(
+          'contains',
+          'Ouvert le,DML concernée,Origine,Titre,Description,NATINF,Pavillon,Navire,CFR,Marquage ext.,C/S,Navire sous charte,Façade'
+        )
+        .should(
+          'contains',
+          '"Alerte auto.","12 milles - Pêche sans droits historiques","",2610,"FR","PROMETTRE INTÉRIEUR SAINT","ABC000232227","ZJ472279","TMG5756","NON","SA"'
+        )
+    })
+  })
 })

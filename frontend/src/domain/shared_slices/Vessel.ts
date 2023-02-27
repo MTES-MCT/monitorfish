@@ -15,6 +15,7 @@ import type {
   AugmentedSelectedVessel,
   FishingActivityShowedOnMap,
   SelectedVessel,
+  ShowedVesselTrack,
   TrackRequest,
   VesselEnhancedLastPositionWebGLObject,
   VesselFeatureId,
@@ -73,7 +74,7 @@ export type VesselState = {
   vesselTrackExtent: any | null
   vessels: VesselEnhancedLastPositionWebGLObject[]
   vesselsEstimatedPositions: any[]
-  vesselsTracksShowed: any
+  vesselsTracksShowed: Record<string, ShowedVesselTrack>
 }
 const INITIAL_STATE: VesselState = {
   fishingActivitiesShowedOnMap: [],
@@ -606,18 +607,20 @@ const vesselSlice = createSlice({
 
     /**
      * Update a given vessel track as showed by the layer
-     * @function updateVesselTrackAsShowed
-     * @param {Object} state
-     * @param {{payload: {
-     *   vesselCompositeIdentifier: string,
-     *   extent: number[]
-     * }}} action - the vessel id and extent
      */
-    updateVesselTrackAsShowedWithExtend(state, action) {
+    updateVesselTrackAsShowedWithExtend(
+      state,
+      action: PayloadAction<{
+        extent: number[]
+        vesselCompositeIdentifier: string
+      }>
+    ) {
       const { extent, vesselCompositeIdentifier } = action.payload
-      if (state.vesselsTracksShowed[vesselCompositeIdentifier]) {
-        state.vesselsTracksShowed[vesselCompositeIdentifier].toShow = false
-        state.vesselsTracksShowed[vesselCompositeIdentifier].extent = extent
+
+      const isFound = !!state.vesselsTracksShowed[vesselCompositeIdentifier]
+      if (isFound) {
+        state.vesselsTracksShowed[vesselCompositeIdentifier]!.toShow = false
+        state.vesselsTracksShowed[vesselCompositeIdentifier]!.extent = extent
       }
     },
 
@@ -627,9 +630,9 @@ const vesselSlice = createSlice({
      * @param {Object} state
      * @param {{payload: string}} action - the vessel id
      */
-    updateVesselTrackAsToHide(state, action) {
+    updateVesselTrackAsToHide(state, action: PayloadAction<string>) {
       if (state.vesselsTracksShowed[action.payload]) {
-        state.vesselsTracksShowed[action.payload].toHide = true
+        state.vesselsTracksShowed[action.payload]!.toHide = true
       }
     },
 
@@ -642,7 +645,7 @@ const vesselSlice = createSlice({
      */
     updateVesselTrackAsZoomed(state, action) {
       if (state.vesselsTracksShowed[action.payload]) {
-        state.vesselsTracksShowed[action.payload].toZoom = false
+        state.vesselsTracksShowed[action.payload]!.toZoom = false
       }
     },
 

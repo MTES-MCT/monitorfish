@@ -9,6 +9,7 @@ declare global {
   namespace Cypress {
     interface Chainable {
       before(property: string): string
+      cleanFiles(): void
       cleanScreenshots(fromNumber: number): void
       clickButton(
         label: string,

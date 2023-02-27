@@ -62,7 +62,7 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
       Object.keys(vesselsTracksShowed)
         .map(vesselCompositeIdentifier => vesselsTracksShowed[vesselCompositeIdentifier])
         // TODO Move these toShow and toHide properties in another state
-        .filter(vesselTrack => !vesselTrack.toShow && !vesselTrack.toHide),
+        .filter(vesselTrack => !vesselTrack?.toShow && !vesselTrack?.toHide),
     [vesselsTracksShowed]
   )
 
@@ -274,10 +274,10 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
     <>
       {vesselsTracksShowedAndDefined.map(vesselTrack => (
         <CloseVesselTrackOverlay
-          key={vesselTrack.vesselCompositeIdentifier}
-          coordinates={vesselTrack.coordinates}
+          key={vesselTrack?.vesselCompositeIdentifier}
+          coordinates={vesselTrack?.coordinates}
           map={map}
-          vesselCompositeIdentifier={vesselTrack.vesselCompositeIdentifier}
+          vesselCompositeIdentifier={vesselTrack?.vesselCompositeIdentifier}
         />
       ))}
       {fishingActivitiesShowedOnMapWithCoordinates.map(fishingActivity => (

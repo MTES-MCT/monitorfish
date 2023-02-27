@@ -155,7 +155,7 @@ export function getValidMissionDataControlUnit(
   maybeValidMissionDataControlUnit: MissionFormValues['controlUnits'][0]
 ): Mission.MissionData['controlUnits'][0] {
   const [validMissionDataControlUnit, formError] = validateRequiredFormValues(
-    ['administration', 'id', 'name', 'resources'],
+    ['administration', 'id', 'name'],
     maybeValidMissionDataControlUnit
   )
   if (formError) {

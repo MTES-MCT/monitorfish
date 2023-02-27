@@ -18,7 +18,7 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       return cypressPlugins(on, config) as any
     },
-    specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}'
+    specPattern: 'cypress/e2e/**/*.spec.ts'
   },
   env: {
     'cypress-plugin-snapshots': {

@@ -1,9 +1,27 @@
 import ky from 'ky'
 
+import { monitorfishApi } from '.'
 import { ApiError } from '../libs/ApiError'
 import { dayjs } from '../utils/dayjs'
 
 import type { FleetSegment, UpdateFleetSegment } from '../domain/types/fleetSegment'
+
+export const fleetSegmentApi = monitorfishApi.injectEndpoints({
+  endpoints: builder => ({
+    getFleetSegments: builder.query<FleetSegment[], number | void>({
+      providesTags: () => [{ type: 'FleetSegments' }],
+      query: year => {
+        const controlledYear = year || dayjs.utc().year()
+
+        return `fleet_segments/${controlledYear}`
+      },
+      transformResponse: (baseQueryReturnValue: FleetSegment[]) =>
+        baseQueryReturnValue.sort((a, b) => a.segment.localeCompare(b.segment))
+    })
+  })
+})
+
+export const { useGetFleetSegmentsQuery } = fleetSegmentApi
 
 export const FLEET_SEGMENT_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les segments de flotte"
 export const UPDATE_FLEET_SEGMENT_ERROR_MESSAGE = "Nous n'avons pas pu modifier le segment de flotte"
@@ -13,21 +31,6 @@ export const GET_FLEET_SEGMENT_YEAR_ENTRIES_ERROR_MESSAGE =
   "Nous n'avons pas pu récupérer les années des segments de flotte"
 export const ADD_FLEET_SEGMENT_YEAR_ERROR_MESSAGE =
   "Nous n'avons pas pu ajouter une nouvelle année de segments de flotte"
-
-/**
- * Get Fleet segments
- *
- * @throws {@link ApiError}
- */
-async function getAllFleetSegmentFromAPI(year?: number): Promise<FleetSegment[]> {
-  const currentYear = year || dayjs().year()
-
-  try {
-    return await ky.get(`/bff/v1/fleet_segments/${currentYear}`).json<FleetSegment[]>()
-  } catch (err) {
-    throw new ApiError(FLEET_SEGMENT_ERROR_MESSAGE, err)
-  }
-}
 
 /**
  * Update a fleet segment
@@ -107,7 +110,6 @@ async function getFleetSegmentYearEntriesFromAPI(): Promise<number[]> {
 }
 
 export {
-  getAllFleetSegmentFromAPI,
   updateFleetSegmentFromAPI,
   deleteFleetSegmentFromAPI,
   createFleetSegmentFromAPI,

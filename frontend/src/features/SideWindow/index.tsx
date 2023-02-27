@@ -11,7 +11,7 @@ import {
   useState
 } from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
-import styled from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
 
 import { AlertsAndReportings } from './alerts_reportings/AlertsAndReportings'
 import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
@@ -43,7 +43,7 @@ import type { CSSProperties, ForwardedRef, HTMLAttributes } from 'react'
 export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
   isFromURL: boolean
 }
-function SideWindowWithRef(this: any, { isFromURL }: SideWindowProps, ref: ForwardedRef<HTMLDivElement | null>) {
+function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTMLDivElement | null>) {
   // eslint-disable-next-line no-null/no-null
   const wrapperRef = useRef<HTMLDivElement | null>(null)
 
@@ -78,7 +78,7 @@ function SideWindowWithRef(this: any, { isFromURL }: SideWindowProps, ref: Forwa
       newWindowContainerRef: wrapperRef.current
         ? (wrapperRef as MutableRefObject<HTMLDivElement>)
         : {
-            current: window.document.createElement('div')
+            current: isFromURL ? undefined : window.document.createElement('div')
           }
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -185,6 +185,8 @@ function SideWindowWithRef(this: any, { isFromURL }: SideWindowProps, ref: Forwa
     <Wrapper ref={wrapperRef}>
       {!isFirstRender && (
         <NewWindowContext.Provider value={newWindowContextProviderValue}>
+          <GlobalStyle />
+
           <SideWindowMenu selectedMenu={openedSideWindowTab} />
           {hasSubmenu && (
             <SideWindowSubMenu
@@ -196,10 +198,13 @@ function SideWindowWithRef(this: any, { isFromURL }: SideWindowProps, ref: Forwa
               setSelectedSubMenu={setSelectedSubMenu}
             />
           )}
-          <BeaconMalfunctionsBoardGrayOverlay
-            onClick={closeRightSidebar}
-            style={beaconMalfunctionBoardGrayOverlayStyle}
-          />
+          {/* TODO Move that within BeaconMalfunctionList. */}
+          {openedSideWindowTab === SideWindowMenuKey.BEACON_MALFUNCTIONS && (
+            <BeaconMalfunctionsBoardGrayOverlay
+              onClick={closeRightSidebar}
+              style={beaconMalfunctionBoardGrayOverlayStyle}
+            />
+          )}
           {isPreloading && (
             <Loading>
               <FulfillingBouncingCircleSpinner className="update-vessels" color={THEME.color.lightGray} size={100} />
@@ -208,7 +213,6 @@ function SideWindowWithRef(this: any, { isFromURL }: SideWindowProps, ref: Forwa
           )}
           {!isPreloading && (
             <Content
-              height={window.innerHeight + 50}
               noMargin={
                 openedSideWindowTab &&
                 [SideWindowMenuKey.MISSION_FORM, SideWindowMenuKey.MISSION_LIST].includes(openedSideWindowTab)
@@ -238,35 +242,19 @@ function SideWindowWithRef(this: any, { isFromURL }: SideWindowProps, ref: Forwa
   )
 }
 
-const Content = styled.div<{
-  height: number
-  noMargin: boolean | undefined
-}>`
-  height: ${p => p.height}px;
-  margin-left: ${p => (p.noMargin ? 0 : '30px')};
-  min-height: 1000px;
-  overflow: auto;
-  width: 100%;
+const GlobalStyle = createGlobalStyle`
+  html, body, #root {
+    height: 100%;
+  }
 `
 
-const BeaconMalfunctionsBoardGrayOverlay = styled.div``
-
-const Loading = styled.div`
-  margin-left: 550px;
-  margin-top: 350px;
-`
-
-const Text = styled.span`
-  bottom: -17px;
-  color: ${p => p.theme.color.slateGray};
-  font-size: 13px;
-  margin-top: 10px;
-  position: relative;
-`
-
+// All containers within this SideWindow root wrapper should now only use flexboxes
 const Wrapper = styled.div`
   background: ${p => p.theme.color.white};
   display: flex;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
 
   @keyframes blink {
     0% {
@@ -320,6 +308,31 @@ const Wrapper = styled.div`
       transform: rotate(360deg);
     }
   }
+`
+
+const Content = styled.div<{
+  noMargin: boolean | undefined
+}>`
+  display: flex;
+  flex-grow: 1;
+  min-height: 0;
+  min-width: 0;
+  padding-left: ${p => (p.noMargin ? 0 : '30px')};
+`
+
+const BeaconMalfunctionsBoardGrayOverlay = styled.div``
+
+const Loading = styled.div`
+  margin-left: 550px;
+  margin-top: 350px;
+`
+
+const Text = styled.span`
+  bottom: -17px;
+  color: ${p => p.theme.color.slateGray};
+  font-size: 13px;
+  margin-top: 10px;
+  position: relative;
 `
 
 export const SideWindow = forwardRef(SideWindowWithRef)

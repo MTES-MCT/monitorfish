@@ -5,7 +5,7 @@
  * @see https://redux-toolkit.js.org/tutorials/rtk-query#add-the-service-to-your-store
  */
 
-import { combineReducers, configureStore, isPlain } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { createTransform, FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
 import persistReducer from 'redux-persist/es/persistReducer'
@@ -13,11 +13,11 @@ import persistStore from 'redux-persist/es/persistStore'
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
 import storage from 'redux-persist/es/storage' // LocalStorage
 
+import { backofficeReducer, mainReducer } from './reducers'
 import { monitorenvApi, monitorfishApi } from '../api'
 import { mapToProcessingRegulation } from '../domain/entities/regulation'
-import { backofficeReducer, mainReducer } from '../domain/shared_slices'
 
-import type { RegulationState } from '../features/backoffice/Regulation.slice'
+import type { RegulationState } from '../features/Backoffice/Regulation.slice'
 import type { AnyAction } from '@reduxjs/toolkit'
 import type { PersistConfig } from 'redux-persist'
 import type { ThunkAction } from 'redux-thunk'
@@ -28,10 +28,9 @@ import type { ThunkAction } from 'redux-thunk'
 export const mainStore = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
-      serializableCheck: {
-        // TODO Replace all Redux state Dates by strings & Error by a strict-typed POJO.
-        isSerializable: (value: any) => isPlain(value) || value instanceof Date || value instanceof Error
-      }
+      immutableCheck: false,
+      // TODO Replace all Redux state Dates by strings & Error by a strict-typed POJO.
+      serializableCheck: false
     }).concat(monitorenvApi.middleware, monitorfishApi.middleware),
   reducer: mainReducer
 })
@@ -59,16 +58,15 @@ const SetRegulationStateTransform = createTransform<RegulationState, RegulationS
   { whitelist: ['regulation'] }
 )
 
-const persistedReducerConfig: PersistConfig<typeof backofficeReducer> = {
+const persistedBackofficeReducerConfig: PersistConfig<typeof backofficeReducer> = {
   key: 'backofficePersistor',
   stateReconciler: autoMergeLevel2,
   storage,
   transforms: [SetRegulationStateTransform],
   whitelist: ['regulation']
 }
-
-const persistedReducer = persistReducer(
-  persistedReducerConfig,
+const persistedBackofficeReducer = persistReducer(
+  persistedBackofficeReducerConfig,
   combineReducers(backofficeReducer)
 ) as typeof backofficeReducer
 
@@ -77,11 +75,12 @@ export const backofficeStore = configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        immutableCheck: false,
         // TODO Replace all Redux state Dates by strings & Error by a strict-typed POJO.
-        isSerializable: (value: any) => isPlain(value) || value instanceof Date || value instanceof Error
+        serializableCheck: false
       }
-    }),
-  reducer: persistedReducer
+    }).concat(monitorfishApi.middleware),
+  reducer: persistedBackofficeReducer
 })
 
 export const backofficeStorePersistor = persistStore(backofficeStore)

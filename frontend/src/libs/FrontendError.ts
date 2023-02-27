@@ -3,13 +3,13 @@
 export class FrontendError extends Error {
   scope: string
 
-  constructor(message: string, scope: string, err?: any) {
+  constructor(message: string, scope?: string | undefined, err?: any) {
     super(message)
 
-    this.scope = scope
+    this.scope = scope || 'Unknown Scope'
 
     // TODO Create an error handler (surely an Error Boundary for fatal cases)
-    console.error(`[${scope}]`, message, err)
+    console.error(`[${this.scope}]`, message, err)
     console.debug(err)
   }
 }

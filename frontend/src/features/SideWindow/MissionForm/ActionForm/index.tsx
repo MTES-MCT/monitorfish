@@ -1,29 +1,41 @@
 import styled from 'styled-components'
 
-import { AirControl } from './AirControl'
-import { FreeNote } from './FreeNote'
-import { GroundControl } from './GroundControl'
-import { SeaControl } from './SeaControl'
-import { MissionType } from '../../../../domain/types/mission'
+import { AirControlForm } from './AirControlForm'
+import { AirSurveillanceForm } from './AirSurveillanceForm'
+import { LandControlForm } from './LandControlForm'
+import { ObservationForm } from './ObservationForm'
+import { SeaControlForm } from './SeaControlForm'
+import { MissionAction } from '../../../../domain/types/missionAction'
 
-import type { PartialAction } from '../types'
+import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
 export type ActionFormProps = {
-  action: PartialAction | undefined
-  onChange: (nextNewAction: PartialAction) => Promisable<void>
+  initialValues: MissionActionFormValues | undefined
+  onChange: (nextValues: MissionActionFormValues) => Promisable<void>
 }
-export function ActionForm({ action, onChange }: ActionFormProps) {
-  if (!action) {
+export function ActionForm({ initialValues, onChange }: ActionFormProps) {
+  if (!initialValues) {
     return <Wrapper />
   }
 
   return (
     <Wrapper>
-      {action.type === MissionType.AIR && <AirControl action={action} />}
-      {action.type === MissionType.LAND && <GroundControl action={action} />}
-      {action.type === MissionType.SEA && <SeaControl action={action} onChange={onChange} />}
-      {!action.type && <FreeNote action={action} onChange={onChange} />}
+      {initialValues.actionType === MissionAction.MissionActionType.AIR_CONTROL && (
+        <AirControlForm initialValues={initialValues} onChange={onChange} />
+      )}
+      {initialValues.actionType === MissionAction.MissionActionType.AIR_SURVEILLANCE && (
+        <AirSurveillanceForm initialValues={initialValues} onChange={onChange} />
+      )}
+      {initialValues.actionType === MissionAction.MissionActionType.LAND_CONTROL && (
+        <LandControlForm initialValues={initialValues} onChange={onChange} />
+      )}
+      {initialValues.actionType === MissionAction.MissionActionType.OBSERVATION && (
+        <ObservationForm initialValues={initialValues} onChange={onChange} />
+      )}
+      {initialValues.actionType === MissionAction.MissionActionType.SEA_CONTROL && (
+        <SeaControlForm initialValues={initialValues} onChange={onChange} />
+      )}
     </Wrapper>
   )
 }
@@ -32,6 +44,7 @@ const Wrapper = styled.div`
   background-color: ${p => p.theme.color.gainsboro};
   display: flex;
   flex-direction: column;
+  max-width: 33.33%;
+  min-width: 33.33%;
   overflow-y: auto;
-  width: 33.33%;
 `

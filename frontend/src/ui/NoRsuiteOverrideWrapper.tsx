@@ -27,6 +27,41 @@ import styled from 'styled-components'
  *   font-size: 0.8125rem;
  * }
  * ```
+ *
+ * - The `form` element being heavily styled in `mini-default.min.css` (`mini.css` dependency):
+ *
+ * ```css
+ * form {
+ *   background: var(--form-back-color);
+ *   color: var(--form-fore-color);
+ *   border: 0.0625rem solid var(--form-border-color);
+ *   border-radius: var(--universal-border-radius);
+ *   margin: var(--universal-margin);
+ *   padding: calc(2 * var(--universal-padding)) var(--universal-padding);
+ * }
+ * ```
+ *
+ * - The `legend` element has a font-weight set in `mini-default.min.css` (`mini.css` dependency):
+ *
+ * ```css
+ * legend {
+ *   box-sizing: border-box;
+ *   display: table;
+ *   max-width: 100%;
+ *   white-space: normal;
+ *   font-weight: 700;
+ *   padding: calc(var(--universal-padding) / 2);
+ * }
+ * ```
+ *
+ * - The `p` margin that doesn't maken sense in `mini-default.min.css` (`mini.css` dependency),
+ *   there is even an horizontal margin...:
+ *
+ * ```css
+ * p {
+ *   margin: var(--universal-margin);
+ * }
+ * ```
  */
 // TODO Fix these CSS issues.
 export const NoRsuiteOverrideWrapper = styled.div`
@@ -42,6 +77,23 @@ export const NoRsuiteOverrideWrapper = styled.div`
     line-height: 1.3846;
   }
 
+  form {
+    background-color: transparent;
+    border-radius: 0;
+    border: 0;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+  }
+
+  legend {
+    font-weight: 400;
+  }
+
+  p {
+    margin: 0;
+  }
+
   .rs-checkbox {
     > .rs-checkbox-checker {
       > label {
@@ -50,11 +102,45 @@ export const NoRsuiteOverrideWrapper = styled.div`
     }
   }
 
+  .rs-picker-select {
+    height: 36px;
+
+    > .rs-picker-toggle {
+      padding-bottom: 7px;
+      width: 100%;
+
+      > .rs-stack {
+        > .rs-stack-item {
+          > .rs-picker-toggle-value {
+          }
+
+          > .rs-picker-toggle-clean {
+            line-height: 1;
+            padding: 4.5px 0 3.5px;
+          }
+        }
+      }
+    }
+
+    > .rs-picker-tag-wrapper {
+      min-height: 29px;
+
+      > .rs-tag {
+        margin-top: 6px !important;
+
+        > .rs-btn-close {
+          line-height: 1;
+          padding: 5px 6px 7px;
+        }
+      }
+    }
+  }
+
   .rs-picker-tag {
     height: 36px;
 
     * {
-      font-size: 1rem;
+      font-size: 13px;
     }
 
     > .rs-picker-toggle {
@@ -73,12 +159,25 @@ export const NoRsuiteOverrideWrapper = styled.div`
             font-size: 13px;
             line-height: 1.125;
           }
+
+          > .rs-picker-toggle-clean {
+            line-height: 1;
+          }
         }
       }
     }
 
     > .rs-picker-tag-wrapper {
       min-height: 29px;
+
+      > .rs-tag {
+        margin-top: 6px !important;
+
+        > .rs-btn-close {
+          line-height: 1;
+          padding: 5px 6px 7px;
+        }
+      }
     }
   }
 

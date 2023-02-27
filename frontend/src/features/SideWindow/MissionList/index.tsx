@@ -1,7 +1,7 @@
 import { Button, getLocalizedDayjs, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
 import { noop } from 'lodash'
 import { pipe } from 'ramda'
-import { useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_LIST_TABLE_OPTIONS } from './constants'
@@ -21,12 +21,14 @@ import type { MutableRefObject } from 'react'
 
 export function MissionList() {
   const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
+
   const [filters, setFilters] = useState<MissionFilter[]>([])
-  const missionApiQuery = useGetMissionsQuery(undefined)
+
+  const getMissionsApiQuery = useGetMissionsQuery(undefined)
   const dispatch = useMainAppDispatch()
 
-  const { renderTableHead, tableData } = useTable<Mission>(
-    missionApiQuery.data,
+  const { renderTableHead, tableData } = useTable<Mission.Mission>(
+    getMissionsApiQuery.data,
     MISSION_LIST_TABLE_OPTIONS,
     searchInputRef.current?.value
   )
@@ -36,12 +38,25 @@ export function MissionList() {
     [filters, tableData]
   )
 
+  const goToMissionForm = useCallback(
+    async (missionId?: Mission.Mission['id']) => {
+      if (missionId) {
+        dispatch(missionActions.setDraftId(missionId))
+      } else {
+        dispatch(missionActions.initializeDraft())
+      }
+
+      dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))
+    },
+    [dispatch]
+  )
+
   return (
     <Wrapper>
       <Header>
         <HeaderTitle>Missions et contrôles</HeaderTitle>
         <HeaderButtonGroup>
-          <Button Icon={Icon.Plus} onClick={() => dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))}>
+          <Button Icon={Icon.Plus} onClick={() => goToMissionForm()}>
             Ajouter une nouvelle mission
           </Button>
         </HeaderButtonGroup>
@@ -50,9 +65,9 @@ export function MissionList() {
       <Body>
         <FilterBar missions={tableData} onChange={setFilters} />
 
-        {missionApiQuery.isLoading && <p>Chargement en cours...</p>}
-        {missionApiQuery.error && <pre>{JSON.stringify(missionApiQuery.error)}</pre>}
-        {!missionApiQuery.isLoading && !missionApiQuery.error && (
+        {getMissionsApiQuery.isLoading && <p>Chargement en cours...</p>}
+        {getMissionsApiQuery.error && <pre>{JSON.stringify(getMissionsApiQuery.error)}</pre>}
+        {!getMissionsApiQuery.isLoading && !getMissionsApiQuery.error && (
           <>
             <div>{`${filteredMissions.length ? filteredMissions.length : 'Aucune'} mission${
               filteredMissions.length > 1 ? 's' : ''
@@ -71,7 +86,7 @@ export function MissionList() {
                         ? getLocalizedDayjs(mission.endDateTimeUtc).format('D MMM YY, HH:MM')
                         : '-'}
                     </TableBodyCell>
-                    <TableBodyCell $fixedWidth={160}>
+                    <TableBodyCell>
                       {mission.controlUnits
                         ?.map(controlUnit => `${controlUnit.name} (${controlUnit.administration || '-'})`)
                         .join(', ')}
@@ -106,11 +121,7 @@ export function MissionList() {
                     >
                       <IconButton
                         Icon={Icon.Edit}
-                        // TODO Move that into a useCallback.
-                        onClick={() => {
-                          dispatch(missionActions.setEditedMission(mission))
-                          dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))
-                        }}
+                        onClick={() => goToMissionForm(mission.id)}
                         size={Size.SMALL}
                         title="Éditer la mission"
                       />
@@ -141,7 +152,7 @@ const Header = styled.div`
   border-bottom: solid 2px ${p => p.theme.color.gainsboro};
   display: flex;
   justify-content: space-between;
-  padding: 1.875rem 2rem 1.875rem 3rem;
+  padding: 30px 32px 30px 48px;
 `
 
 const HeaderTitle = styled.h1`
@@ -155,12 +166,14 @@ const HeaderButtonGroup = styled.div`
   display: flex;
 
   > button:not(:first-child) {
-    margin-left: 1rem;
+    margin-left: 16px;
   }
 `
 
 const Body = styled.div`
-  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  padding: 32px;
 `
 
 // TODO Integrate that into the UI with a clean code and design following the XD.
@@ -168,7 +181,6 @@ const Body = styled.div`
 
 const Table = styled.div`
   box-sizing: border-box;
-  flex-grow: 1;
   font-size: 13px;
   margin-top: 10px;
 
@@ -204,13 +216,15 @@ const TableBodyRow = styled.div`
 `
 
 const TableBodyCell = styled.div<{
-  $fixedWidth: number
+  $fixedWidth?: number
 }>`
   border-bottom: solid 1px ${p => p.theme.color.lightGray};
   border-right: solid 1px ${p => p.theme.color.lightGray};
+  flex-grow: ${p => (p.$fixedWidth ? 0 : 1)};
+  max-width: ${p => (p.$fixedWidth ? `${p.$fixedWidth}px` : 'auto')};
+  min-width: ${p => (p.$fixedWidth ? `${p.$fixedWidth}px` : 'auto')};
   overflow: hidden;
   padding: 9px 10px;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: ${p => p.$fixedWidth}px;
 `

@@ -2,36 +2,32 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import {
-  InfractionDomain,
-  InfractionType,
-  isGearInfraction,
-  isSpeciesInfraction
-} from '../../../domain/types/missionAction'
-
-import type {
-  GearInfraction,
-  LogbookInfraction,
-  OtherInfraction,
-  SpeciesInfraction
-} from '../../../domain/types/missionAction'
+import { MissionAction } from '../../../domain/types/missionAction'
 
 type InfractionProps = {
   index: number
-  infraction: GearInfraction | SpeciesInfraction | LogbookInfraction | OtherInfraction
-  infractionDomain: InfractionDomain
+  infraction:
+    | MissionAction.GearInfraction
+    | MissionAction.SpeciesInfraction
+    | MissionAction.LogbookInfraction
+    | MissionAction.OtherInfraction
+  infractionDomain: MissionAction.InfractionDomain
 }
 export function Infraction({ index, infraction, infractionDomain }: InfractionProps) {
   const infractionDomainText = useMemo(() => {
     switch (infractionDomain) {
-      case InfractionDomain.GEAR:
+      case MissionAction.InfractionDomain.GEAR:
         return 'engin'
-      case InfractionDomain.SPECIES:
+
+      case MissionAction.InfractionDomain.SPECIES:
         return 'espèce'
-      case InfractionDomain.LOGBOOK:
+
+      case MissionAction.InfractionDomain.LOGBOOK:
         return 'JPE'
-      case InfractionDomain.OTHER:
+
+      case MissionAction.InfractionDomain.OTHER:
         return 'autre'
+
       default:
         return ''
     }
@@ -50,19 +46,19 @@ export function Infraction({ index, infraction, infractionDomain }: InfractionPr
       )}
       <InfractionTag>
         <InfractionTagText>
-          {infraction.infractionType === InfractionType.WITH_RECORD ? 'Avec' : 'Sans'} PV
+          {infraction.infractionType === MissionAction.InfractionType.WITH_RECORD ? 'Avec' : 'Sans'} PV
         </InfractionTagText>
       </InfractionTag>
       <InfractionTag>
         <InfractionTagText>NATINF {infraction.natinf}</InfractionTagText>
       </InfractionTag>
-      {isGearInfraction(infraction) && infraction.gearSeized && (
+      {MissionAction.isGearInfraction(infraction) && infraction.gearSeized && (
         <InfractionTag>
           <RedCircle />
           <InfractionTagText>Appréhension engin</InfractionTagText>
         </InfractionTag>
       )}
-      {isSpeciesInfraction(infraction) && infraction.speciesSeized && (
+      {MissionAction.isSpeciesInfraction(infraction) && infraction.speciesSeized && (
         <InfractionTag>
           <RedCircle />
           <InfractionTagText>Appréhension espèce</InfractionTagText>

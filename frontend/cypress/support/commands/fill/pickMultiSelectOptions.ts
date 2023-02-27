@@ -54,7 +54,10 @@ export function pickMultiSelectOptions(
                   return (rsuiteMultiSelectElement.offsetParent as HTMLBodyElement).offsetTop
                 })()
 
-          cy.clickOutside(offsetLeft, offsetTop - 1)
+          // TODO Investigate that (this should be -1).
+          cy.clickOutside(offsetLeft, offsetTop - 16)
+
+          cy.wait(250)
         })
       }
     })

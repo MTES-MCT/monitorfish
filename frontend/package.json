@@ -32,7 +32,7 @@
   "dependencies": {
     "@dnd-kit/core": "4.0.3",
     "@dnd-kit/modifiers": "4.0.0",
-    "@mtes-mct/monitor-ui": "2.10.0",
+    "@mtes-mct/monitor-ui": "3.1.1",
     "@reduxjs/toolkit": "1.9.3",
     "@sentry/react": "7.29.0",
     "@sentry/tracing": "7.29.0",
@@ -52,7 +52,6 @@
     "lodash": "4.17.21",
     "mini.css": "3.0.1",
     "nouislider": "14.7.0",
-    "nouislider-react": "3.4.1",
     "ol": "7.1.0",
     "ol-mapbox-style": "9.4.0",
     "ramda": "0.28.0",

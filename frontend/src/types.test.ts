@@ -1,6 +1,6 @@
 import { describe, it } from '@jest/globals'
 
-import type { Undefine } from './types'
+import type { Undefine } from '@mtes-mct/monitor-ui'
 
 interface TestInterface {
   firstProp: number

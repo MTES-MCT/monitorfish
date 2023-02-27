@@ -2,7 +2,7 @@
 
 context('Test', () => {
   beforeEach(() => {
-    cy.visit('/test')
+    cy.visit('/test').wait(250)
   })
 
   it('Should fill and clear the text input', () => {
@@ -10,13 +10,18 @@ context('Test', () => {
 
     cy.get('pre').contains(
       JSON.stringify({
+        checkbox: false,
         textInput: 'A text input value'
       })
     )
 
     cy.fill('Text input', undefined)
 
-    cy.get('pre').contains(JSON.stringify({}))
+    cy.get('pre').contains(
+      JSON.stringify({
+        checkbox: false
+      })
+    )
   })
 
   it('Should fill the text input with a hidden label', () => {
@@ -24,6 +29,7 @@ context('Test', () => {
 
     cy.get('pre').contains(
       JSON.stringify({
+        checkbox: false,
         textInputWithHiddenLabel: 'A text input with hidden label value'
       })
     )
@@ -34,13 +40,18 @@ context('Test', () => {
 
     cy.get('pre').contains(
       JSON.stringify({
+        checkbox: false,
         textarea: 'A textarea value'
       })
     )
 
     cy.fill('Textarea', undefined)
 
-    cy.get('pre').contains(JSON.stringify({}))
+    cy.get('pre').contains(
+      JSON.stringify({
+        checkbox: false
+      })
+    )
   })
 
   it('Should fill the textarea with a hidden label', () => {
@@ -48,6 +59,7 @@ context('Test', () => {
 
     cy.get('pre').contains(
       JSON.stringify({
+        checkbox: false,
         textareaWithHiddenLabel: 'A textarea with hidden label value'
       })
     )
@@ -76,13 +88,18 @@ context('Test', () => {
 
     cy.get('pre').contains(
       JSON.stringify({
+        checkbox: false,
         select: 'SECOND_SELECT_OPTION'
       })
     )
 
     cy.fill('Select', undefined)
 
-    cy.get('pre').contains(JSON.stringify({}))
+    cy.get('pre').contains(
+      JSON.stringify({
+        checkbox: false
+      })
+    )
   })
 
   it('Should select the 42th option in the select with a search input', () => {
@@ -90,6 +107,7 @@ context('Test', () => {
 
     cy.get('pre').contains(
       JSON.stringify({
+        checkbox: false,
         selectWithSearchInput: 'SELECT_WITH_SEARCH_INPUT_OPTION_42'
       })
     )
@@ -100,6 +118,7 @@ context('Test', () => {
 
     cy.get('pre').contains(
       JSON.stringify({
+        checkbox: false,
         selectWithHiddenLabel: 'SECOND_SELECT_WITH_HIDDEN_LABEL_OPTION'
       })
     )
@@ -110,30 +129,36 @@ context('Test', () => {
 
     cy.get('pre').contains(
       JSON.stringify({
+        checkbox: false,
         multiSelect: ['SECOND_MULTI_SELECT_OPTION', 'THIRD_MULTI_SELECT_OPTION']
       })
     )
 
     cy.fill('Multi select', undefined)
 
-    cy.get('pre').contains(JSON.stringify({}))
+    cy.get('pre').contains(
+      JSON.stringify({
+        checkbox: false
+      })
+    )
   })
 
-  // it('Should select the 21st and 42th option in the multi select with a search input', () => {
-  //   cy.fill('Multi select with search input', [
-  //     'Multi select with search input option 21',
-  //     'Multi select with search input option 42'
-  //   ])
+  it('Should select the 21st and 42th option in the multi select with a search input', () => {
+    cy.fill('Multi select with search input', [
+      'Multi select with search input option 21',
+      'Multi select with search input option 42'
+    ])
 
-  //   cy.get('pre').contains(
-  //     JSON.stringify({
-  //       multiSelectWithSearchInput: [
-  //         'MULTI_SELECT_WITH_SEARCH_INPUT_OPTION_21',
-  //         'MULTI_SELECT_WITH_SEARCH_INPUT_OPTION_42'
-  //       ]
-  //     })
-  //   )
-  // })
+    cy.get('pre').contains(
+      JSON.stringify({
+        checkbox: false,
+        multiSelectWithSearchInput: [
+          'MULTI_SELECT_WITH_SEARCH_INPUT_OPTION_21',
+          'MULTI_SELECT_WITH_SEARCH_INPUT_OPTION_42'
+        ]
+      })
+    )
+  })
 
   it('Should select the 2nd and 3rd option in the multi select with a hidden label', () => {
     cy.fill('Multi select with hidden label', [
@@ -143,6 +168,7 @@ context('Test', () => {
 
     cy.get('pre').contains(
       JSON.stringify({
+        checkbox: false,
         multiSelectWithHiddenLabel: [
           'SECOND_MULTI_SELECT_WITH_HIDDEN_LABEL_OPTION',
           'THIRD_MULTI_SELECT_WITH_HIDDEN_LABEL_OPTION'
@@ -156,13 +182,18 @@ context('Test', () => {
 
     cy.get('pre').contains(
       JSON.stringify({
+        checkbox: false,
         multiCheckbox: ['SECOND_MULTI_CHECKBOX_OPTION', 'THIRD_MULTI_CHECKBOX_OPTION']
       })
     )
 
     cy.fill('Multi checkbox', undefined)
 
-    cy.get('pre').contains(JSON.stringify({}))
+    cy.get('pre').contains(
+      JSON.stringify({
+        checkbox: false
+      })
+    )
   })
 
   it('Should check the 2nd and 3rd option in the multi checkbox with a hidden label', () => {
@@ -173,6 +204,7 @@ context('Test', () => {
 
     cy.get('pre').contains(
       JSON.stringify({
+        checkbox: false,
         multiCheckboxWithHiddenLabel: [
           'SECOND_MULTI_CHECKBOX_WITH_HIDDEN_LABEL_OPTION',
           'THIRD_MULTI_CHECKBOX_WITH_HIDDEN_LABEL_OPTION'
@@ -186,6 +218,7 @@ context('Test', () => {
 
     cy.get('pre').contains(
       JSON.stringify({
+        checkbox: false,
         multiRadio: 'SECOND_MULTI_RADIO_OPTION'
       })
     )
@@ -196,6 +229,7 @@ context('Test', () => {
 
     cy.get('pre').contains(
       JSON.stringify({
+        checkbox: false,
         multiRadioWithHiddenLabel: 'SECOND_MULTI_RADIO_WITH_HIDDEN_LABEL_OPTION'
       })
     )

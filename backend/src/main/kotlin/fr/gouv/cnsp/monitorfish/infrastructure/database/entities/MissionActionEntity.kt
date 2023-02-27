@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.vladmihalcea.hibernate.type.array.ListArrayType
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
 import jakarta.persistence.*
@@ -19,7 +20,20 @@ class MissionActionEntity(
     @Column(name = "id", unique = true, nullable = false)
     var id: Int? = null,
     @Column(name = "vessel_id")
-    var vesselId: Int,
+    var vesselId: Int? = null,
+    @Column(name = "vessel_name")
+    var vesselName: String? = null,
+    @Column(name = "cfr")
+    var internalReferenceNumber: String? = null,
+    @Column(name = "external_immatriculation")
+    var externalReferenceNumber: String? = null,
+    @Column(name = "ircs")
+    var ircs: String? = null,
+    @Column(name = "flag_state")
+    var flagState: String? = null,
+    @Type(ListArrayType::class)
+    @Column(name = "flight_goals", columnDefinition = "varchar(100)[]")
+    val flightGoals: List<String>? = listOf(),
     @Column(name = "mission_id")
     var missionId: Int,
     @Column(name = "action_type")
@@ -101,8 +115,14 @@ class MissionActionEntity(
 ) {
     companion object {
         fun fromMissionAction(mapper: ObjectMapper, missionAction: MissionAction) = MissionActionEntity(
-            vesselId = missionAction.vesselId,
             missionId = missionAction.missionId,
+            vesselId = missionAction.vesselId,
+            vesselName = missionAction.vesselName,
+            internalReferenceNumber = missionAction.internalReferenceNumber,
+            externalReferenceNumber = missionAction.externalReferenceNumber,
+            ircs = missionAction.ircs,
+            flagState = missionAction.flagState,
+            flightGoals = missionAction.flightGoals.map { it.value },
             actionType = missionAction.actionType,
             actionDatetimeUtc = missionAction.actionDatetimeUtc.toInstant(),
             emitsVms = missionAction.emitsVms,
@@ -140,8 +160,14 @@ class MissionActionEntity(
 
     fun toMissionAction(mapper: ObjectMapper) = MissionAction(
         id = id,
-        vesselId = vesselId,
         missionId = missionId,
+        vesselId = vesselId,
+        vesselName = vesselName,
+        internalReferenceNumber = internalReferenceNumber,
+        externalReferenceNumber = externalReferenceNumber,
+        ircs = ircs,
+        flagState = flagState,
+        flightGoals = flightGoals?.map { FlightGoal.valueOf(it) } ?: listOf(),
         actionType = actionType,
         actionDatetimeUtc = ZonedDateTime.from(actionDatetimeUtc.atOffset(ZoneOffset.UTC)),
         emitsVms = emitsVms,
@@ -196,7 +222,6 @@ class MissionActionEntity(
 
     override fun hashCode(): Int {
         var result = id ?: 0
-        result = 31 * result + vesselId
         result = 31 * result + missionId
         result = 31 * result + actionType.hashCode()
         result = 31 * result + actionDatetimeUtc.hashCode()

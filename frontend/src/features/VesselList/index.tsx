@@ -7,6 +7,7 @@ import DownloadVesselListModal from './DownloadVesselListModal'
 import { addZoneSelected, removeZoneSelected, resetZonesSelected, setZonesSelected } from './VesselList.slice'
 import { VesselListFilters } from './VesselListFilters'
 import { VesselListTable } from './VesselListTable'
+import { useGetFleetSegmentsQuery } from '../../api/fleetSegment'
 import { COLORS } from '../../constants/constants'
 import { LayerType as LayersType, LayerType } from '../../domain/entities/layers/constants'
 import { InteractionListener, InteractionType } from '../../domain/entities/map/constants'
@@ -70,7 +71,7 @@ export function VesselList({ namespace }) {
     uniqueVesselsSpecies: species,
     vessels
   } = useMainAppSelector(state => state.vessel)
-  const fleetSegments = useMainAppSelector(state => state.fleetSegment.fleetSegments)
+  const getFleetSegmentsQuery = useGetFleetSegmentsQuery()
   const gears = useMainAppSelector(state => state.gear.gears)
 
   const firstUpdate = useRef(true)
@@ -395,7 +396,7 @@ export function VesselList({ namespace }) {
                 setDistrictsFiltered
               }}
               fleetSegments={{
-                fleetSegments,
+                fleetSegments: getFleetSegmentsQuery.data || [],
                 fleetSegmentsFiltered,
                 setFleetSegmentsFiltered
               }}

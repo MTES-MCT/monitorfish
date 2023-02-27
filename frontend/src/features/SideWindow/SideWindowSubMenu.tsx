@@ -75,79 +75,116 @@ export function SideWindowSubMenu({
   }, [selectedMenu, setIsFixed])
 
   return (
-    <Menu
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => !isFixed && setIsOpen(false)}
-      style={menuStyle(isOpen, isFixed)}
-    >
-      <Chevron data-cy="side-window-sub-menu-trigger" onClick={() => setIsFixed(!isFixed)} style={chevronStyle(isOpen)}>
-        <ChevronIcon style={chevronIconStyle(isOpen)} />
-      </Chevron>
-      <Title style={titleStyle(isOpen)}>Vue d’ensemble</Title>
-      {selectedMenu === SideWindowMenuKey.ALERTS && (
-        <>
+    <Wrapper isOpen={isOpen}>
+      <Menu
+        isFixed={isFixed}
+        isOpen={isOpen}
+        onMouseEnter={() => setIsOpen(true)}
+        onMouseLeave={() => !isFixed && setIsOpen(false)}
+      >
+        <Chevron
+          data-cy="side-window-sub-menu-trigger"
+          onClick={() => setIsFixed(!isFixed)}
+          style={chevronStyle(isOpen)}
+        >
+          <ChevronIcon style={chevronIconStyle(isOpen)} />
+        </Chevron>
+        <Title style={titleStyle(isOpen)}>Vue d’ensemble</Title>
+        {selectedMenu === SideWindowMenuKey.ALERTS && (
+          <>
+            <SideWindowSubMenuLink
+              isOneLine
+              isOpen={isOpen}
+              isSelected={selectedSubMenu.code === ALERTS_SUBMENU.MEMN.code}
+              menu={ALERTS_SUBMENU.MEMN}
+              number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.MEMN.seaFronts)}
+              setSelectedSubMenu={setSelectedSubMenu}
+            />
+            <SideWindowSubMenuLink
+              isOneLine
+              isOpen={isOpen}
+              isSelected={selectedSubMenu.code === ALERTS_SUBMENU.NAMO.code}
+              menu={ALERTS_SUBMENU.NAMO}
+              number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.NAMO.seaFronts)}
+              setSelectedSubMenu={setSelectedSubMenu}
+            />
+            <SideWindowSubMenuLink
+              isOneLine
+              isOpen={isOpen}
+              isSelected={selectedSubMenu.code === ALERTS_SUBMENU.SA.code}
+              menu={ALERTS_SUBMENU.SA}
+              number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.SA.seaFronts)}
+              setSelectedSubMenu={setSelectedSubMenu}
+            />
+            <SideWindowSubMenuLink
+              isOneLine
+              isOpen={isOpen}
+              isSelected={selectedSubMenu.code === ALERTS_SUBMENU.MED.code}
+              menu={ALERTS_SUBMENU.MED}
+              number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.MED.seaFronts)}
+              setSelectedSubMenu={setSelectedSubMenu}
+            />
+            <SideWindowSubMenuLink
+              isOneLine
+              isOpen={isOpen}
+              isSelected={selectedSubMenu.code === ALERTS_SUBMENU.OUTREMEROA.code}
+              menu={ALERTS_SUBMENU.OUTREMEROA}
+              number={getNumberOfAlertsOrReportingFromSeaFronts(
+                ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.OUTREMEROA.seaFronts
+              )}
+              setSelectedSubMenu={setSelectedSubMenu}
+            />
+            <SideWindowSubMenuLink
+              isOneLine
+              isOpen={isOpen}
+              isSelected={selectedSubMenu.code === ALERTS_SUBMENU.OUTREMEROI.code}
+              menu={ALERTS_SUBMENU.OUTREMEROI}
+              number={getNumberOfAlertsOrReportingFromSeaFronts(
+                ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.OUTREMEROI.seaFronts
+              )}
+              setSelectedSubMenu={setSelectedSubMenu}
+            />
+          </>
+        )}
+        {selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTIONS && (
           <SideWindowSubMenuLink
-            isOneLine
             isOpen={isOpen}
-            isSelected={selectedSubMenu.code === ALERTS_SUBMENU.MEMN.code}
-            menu={ALERTS_SUBMENU.MEMN}
-            number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.MEMN.seaFronts)}
+            isSelected={selectedSubMenu.code === BeaconMalfunctionsSubMenu.MALFUNCTIONING.code}
+            menu={BeaconMalfunctionsSubMenu.MALFUNCTIONING as MenuItem<SeaFront>}
+            number={numberOfBeaconMalfunctions}
             setSelectedSubMenu={setSelectedSubMenu}
           />
-          <SideWindowSubMenuLink
-            isOneLine
-            isOpen={isOpen}
-            isSelected={selectedSubMenu.code === ALERTS_SUBMENU.NAMO.code}
-            menu={ALERTS_SUBMENU.NAMO}
-            number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.NAMO.seaFronts)}
-            setSelectedSubMenu={setSelectedSubMenu}
-          />
-          <SideWindowSubMenuLink
-            isOneLine
-            isOpen={isOpen}
-            isSelected={selectedSubMenu.code === ALERTS_SUBMENU.SA.code}
-            menu={ALERTS_SUBMENU.SA}
-            number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.SA.seaFronts)}
-            setSelectedSubMenu={setSelectedSubMenu}
-          />
-          <SideWindowSubMenuLink
-            isOneLine
-            isOpen={isOpen}
-            isSelected={selectedSubMenu.code === ALERTS_SUBMENU.MED.code}
-            menu={ALERTS_SUBMENU.MED}
-            number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.MED.seaFronts)}
-            setSelectedSubMenu={setSelectedSubMenu}
-          />
-          <SideWindowSubMenuLink
-            isOneLine
-            isOpen={isOpen}
-            isSelected={selectedSubMenu.code === ALERTS_SUBMENU.OUTREMEROA.code}
-            menu={ALERTS_SUBMENU.OUTREMEROA}
-            number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.OUTREMEROA.seaFronts)}
-            setSelectedSubMenu={setSelectedSubMenu}
-          />
-          <SideWindowSubMenuLink
-            isOneLine
-            isOpen={isOpen}
-            isSelected={selectedSubMenu.code === ALERTS_SUBMENU.OUTREMEROI.code}
-            menu={ALERTS_SUBMENU.OUTREMEROI}
-            number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.OUTREMEROI.seaFronts)}
-            setSelectedSubMenu={setSelectedSubMenu}
-          />
-        </>
-      )}
-      {selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTIONS && (
-        <SideWindowSubMenuLink
-          isOpen={isOpen}
-          isSelected={selectedSubMenu.code === BeaconMalfunctionsSubMenu.MALFUNCTIONING.code}
-          menu={BeaconMalfunctionsSubMenu.MALFUNCTIONING as MenuItem<SeaFront>}
-          number={numberOfBeaconMalfunctions}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      )}
-    </Menu>
+        )}
+      </Menu>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div<{
+  isOpen: boolean
+}>`
+  flex-grow: 1;
+  position: relative;
+  width: ${p => (p.isOpen ? '200px' : '30px')};
+`
+const Menu = styled.div<{
+  isFixed: boolean
+  isOpen: boolean
+}>`
+  background: ${p => p.theme.color.gainsboro};
+  border-right: 1px solid ${p => p.theme.color.lightGray};
+  box-shadow: ${p => (p.isOpen && !p.isFixed ? '#CCCFD6 10px 0px 10px -8px' : 'unset')};
+  color: ${p => p.theme.color.slateGray};
+  flex-shrink: 0;
+  font-size: 16;
+  font-weight: 500;
+  height: 100%;
+  padding: 14px 0;
+  position: ${p => (p.isFixed ? 'unset' : 'absolute')};
+  transition: 'width 0.5s';
+  width: ${p => (p.isOpen ? '200px' : '30px')};
+  z-index: 999;
+`
 
 const Chevron = styled.div``
 const chevronStyle = (isOpen: boolean): CSSProperties => ({
@@ -169,24 +206,6 @@ const chevronIconStyle = isOpen => ({
   marginTop: 8,
   transform: isOpen ? 'rotate(270deg)' : 'rotate(90deg)',
   transition: 'all 0.5s'
-})
-
-const Menu = styled.div``
-const menuStyle = (isOpen: boolean, isFixed: boolean): CSSProperties => ({
-  background: COLORS.gainsboro,
-  borderRight: `1px solid ${COLORS.lightGray}`,
-  boxShadow: isOpen && !isFixed ? '#CCCFD6 10px 0px 10px -8px' : 'unset',
-  color: COLORS.slateGray,
-  flexShrink: 0,
-  fontSize: 16,
-  fontWeight: 500,
-  height: 'calc(100vh - 28px)',
-  marginLeft: isFixed ? 0 : 70,
-  padding: '14px 0',
-  position: isFixed ? 'unset' : 'absolute',
-  transition: 'width 0.5s',
-  width: isOpen ? 200 : 30,
-  zIndex: 999
 })
 
 const Title = styled.span``

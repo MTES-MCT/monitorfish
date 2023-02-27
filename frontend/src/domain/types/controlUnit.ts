@@ -1,10 +1,10 @@
 import type { ControlResource } from './controlResource'
-import type { Undefine } from '../../types'
+import type { Undefine } from '@mtes-mct/monitor-ui'
 import type { Except } from 'type-fest'
 
 export interface ControlUnit {
   administration: string
-  contact: string | undefined
+  contact: string
   id: number
   name: string
   resources: ControlResource[]

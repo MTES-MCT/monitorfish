@@ -9,7 +9,7 @@ import type { MissionAction } from '../../../domain/types/missionAction'
 
 type YearsToControlListProps = {
   controlsFromDate: Date
-  yearsToControls: Record<number, MissionAction[]>
+  yearsToControls: Record<number, MissionAction.MissionAction[]>
 }
 export function YearsToControlList({ controlsFromDate, yearsToControls }: YearsToControlListProps) {
   const sortedYears = useMemo(

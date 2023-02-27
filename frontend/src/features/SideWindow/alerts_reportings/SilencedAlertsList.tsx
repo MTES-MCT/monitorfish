@@ -306,6 +306,6 @@ const Content = styled.div``
 const contentStyle = {
   marginBottom: 20,
   marginTop: 20,
-  padding: '30px 40px 40px',
+  padding: '30px 40px 40px 10px',
   width: 'fit-content'
 }

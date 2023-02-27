@@ -7,12 +7,13 @@ import {
   FormikMultiSelect,
   FormikSelect,
   FormikTextarea,
-  FormikTextInput
+  FormikTextInput,
+  noop,
+  useForceUpdate
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
-import { noop } from 'lodash'
-import { dissoc, equals, pipe } from 'ramda'
-import { useCallback, useRef, useState } from 'react'
+import { equals } from 'ramda'
+import { useCallback, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -23,7 +24,8 @@ import {
 } from './constants'
 import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'
 import { FormikMultiZonePicker } from './FormikMultiZonePicker'
-import { MissionNature, MissionType } from '../../../../domain/types/mission'
+import { BOOLEAN_AS_OPTIONS } from '../../../../constants'
+import { Mission } from '../../../../domain/types/mission'
 import { useNewWindow } from '../../../../ui/NewWindow'
 import { FormBody } from '../FormBody'
 import { FormHead } from '../FormHead'
@@ -33,55 +35,37 @@ import type { Promisable } from 'type-fest'
 
 export type MainFormProps = {
   initialValues: MissionFormValues
-  onChange: (nextPartialMission: MissionFormValues) => Promisable<void>
-  onTypeChange: (nextType: MissionType) => Promisable<void>
+  onChange: (nextValues: MissionFormValues) => Promisable<void>
 }
-export function MainForm({ initialValues, onChange, onTypeChange }: MainFormProps) {
+export function MainForm({ initialValues, onChange }: MainFormProps) {
   const currentValuesRef = useRef<MissionFormValues>(initialValues)
   const { newWindowContainerRef } = useNewWindow()
 
-  const [hasMissionUnderJdpType, setHasMissionUnderJdpType] = useState(false)
+  const { forceUpdate } = useForceUpdate()
+
+  const controlledInitialValues = useMemo(() => initialValues, [initialValues])
 
   const updateCurrentValues = useCallback(
     (nextValues: MissionFormValues) => {
       const previousValues = { ...currentValuesRef.current }
       currentValuesRef.current = nextValues
 
-      if (currentValuesRef.current.missionType !== previousValues.missionType) {
-        if (currentValuesRef.current.missionType !== MissionType.AIR) {
-          const nextValueWithoutExtraProps = pipe(dissoc('flightGoal'), dissoc('flightGoal'))(nextValues)
-
-          currentValuesRef.current = nextValueWithoutExtraProps
-        }
-
-        onTypeChange(currentValuesRef.current.missionType)
-      }
-
-      if (
-        !equals(nextValues.missionNature, previousValues.missionNature) ||
-        nextValues.hasOrder !== previousValues.hasOrder
-      ) {
-        // eslint-disable-next-line no-underscore-dangle, @typescript-eslint/naming-convention
-        const _hasMissionUnderJdpType =
-          (nextValues.missionNature !== undefined && nextValues.missionNature.includes(MissionNature.FISH)) ||
-          Boolean(nextValues.hasOrder)
-
-        if (!_hasMissionUnderJdpType) {
-          const nextValueWithoutExtraProps = pipe(dissoc('isUnderJdp'))(nextValues)
-
-          currentValuesRef.current = nextValueWithoutExtraProps
-        }
-
-        setHasMissionUnderJdpType(_hasMissionUnderJdpType)
+      if (!equals(nextValues.missionNature, previousValues.missionNature)) {
+        forceUpdate()
       }
 
       onChange(currentValuesRef.current)
     },
-    [onChange, onTypeChange]
+    [forceUpdate, onChange]
+  )
+
+  const hasMissionOrderField = Boolean(currentValuesRef.current.missionNature?.includes(Mission.MissionNature.FISH))
+  const isMissionUnderJdpCheckboxEnabled = Boolean(
+    currentValuesRef.current.missionNature?.includes(Mission.MissionNature.FISH)
   )
 
   return (
-    <Formik initialValues={initialValues || {}} onSubmit={noop}>
+    <Formik initialValues={controlledInitialValues} onSubmit={noop}>
       <Wrapper>
         <FormikEffect onChange={updateCurrentValues as any} />
 
@@ -109,7 +93,10 @@ export function MainForm({ initialValues, onChange, onTypeChange }: MainFormProp
             />
 
             {/* TODO What to do with this prop? */}
-            <FormikCheckbox disabled={!hasMissionUnderJdpType} label="Mission sous JDP" name="isUnderJdp" />
+            {/* TODO Fix that in Monitor UI: */}
+            {/* Re-enabling a checkbox that has been disabled should set the related FormValues prop
+                to a boolean matching the checkbox `checked` state. */}
+            <FormikCheckbox disabled={!isMissionUnderJdpCheckboxEnabled} label="Mission sous JDP" name="isUnderJdp" />
           </MissionNatureWrapper>
 
           <FormikMultiControlUnitPicker name="controlUnits" />
@@ -117,27 +104,28 @@ export function MainForm({ initialValues, onChange, onTypeChange }: MainFormProp
           <FormikMultiZonePicker name="geom" />
 
           {/* TODO What to do with this prop? */}
-          <FormikMultiRadio
-            isInline
-            label="Ordre de mission"
-            name="hasOrder"
-            // TODO Allow more Monitor UI `Option` types.
-            options={[
-              { label: 'Oui', value: true as any },
-              { label: 'Non', value: false as any }
-            ]}
-          />
+          {hasMissionOrderField && (
+            <FormikMultiRadio
+              isInline
+              label="Ordre de mission"
+              name="hasOrder"
+              // TODO Allow more Monitor UI `Option` types.
+              options={BOOLEAN_AS_OPTIONS}
+            />
+          )}
 
           {/* TODO What to do with this prop? */}
-          {currentValuesRef.current.missionType === MissionType.AIR && (
+          {currentValuesRef.current.missionType === Mission.MissionType.AIR && (
             <InlineFieldGroupWrapper>
               <FormikMultiSelect
+                baseContainer={newWindowContainerRef.current}
                 fixedWidth={218}
                 label="Objectifs du vol"
                 name="flightGoal"
                 options={FLIGHT_GOALS_AS_OPTIONS}
               />
               <FormikSelect
+                baseContainer={newWindowContainerRef.current}
                 label="Segment ciblé (si pertinent)"
                 name="targettedSegment"
                 options={TARGETTED_SEGMENTS_AS_OPTIONS}
@@ -166,7 +154,8 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  width: 33.33%;
+  max-width: 33.34%;
+  min-width: 33.34%;
 
   /* TODO Handle that in @mtes-mct/monitor-ui. */
   legend {
@@ -177,17 +166,17 @@ const Wrapper = styled.div`
 const CustomFormBody = styled(FormBody)`
   > div:not(:first-child),
   > fieldset:not(:first-child) {
-    margin-top: 2rem;
+    margin-top: 32px;
   }
 
   > button {
-    margin-top: 1rem;
+    margin-top: 16px;
   }
 `
 
 const RelatedFieldGroupWrapper = styled.div`
   > div:not(:first-child) {
-    margin-top: 0.5rem;
+    margin-top: 8px;
   }
 `
 
@@ -195,12 +184,12 @@ const InlineFieldGroupWrapper = styled.div`
   display: flex;
 
   > div:first-child {
-    margin-right: 0.5rem;
+    margin-right: 8px;
     width: 50%;
   }
 
   > div:last-child {
-    margin-left: 0.5rem;
+    margin-left: 8px;
     width: 50%;
   }
 `

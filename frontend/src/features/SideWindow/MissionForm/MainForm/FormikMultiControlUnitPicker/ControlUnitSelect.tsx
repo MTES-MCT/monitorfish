@@ -217,7 +217,7 @@ const Wrapper = styled.div`
   display: flex;
 
   > button {
-    margin: 22px 0 0 0.5rem;
+    margin: 22px 0 0 8px;
   }
 `
 
@@ -228,6 +228,6 @@ const UnitWrapper = styled.div`
   flex-wrap: wrap;
 
   > div:not(:first-child) {
-    margin-top: 0.5rem;
+    margin-top: 8px;
   }
 `

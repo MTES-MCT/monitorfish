@@ -5,7 +5,7 @@ import { sendNotificationFromAPI } from '../../../api/beaconMalfunction'
  * Send a notification
  * @function sendNotification
  * @param {number} beaconMalfunctionId
- * @param {string} notificationType
+ * @param {string | null} notificationType
  */
 const sendNotification = (beaconMalfunctionId, notificationType) => dispatch => {
   return sendNotificationFromAPI(beaconMalfunctionId, notificationType).catch(error => {

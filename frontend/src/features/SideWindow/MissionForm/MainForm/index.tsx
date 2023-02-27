@@ -118,12 +118,14 @@ export function MainForm({ initialValues, onChange }: MainFormProps) {
           {currentValuesRef.current.missionType === Mission.MissionType.AIR && (
             <InlineFieldGroupWrapper>
               <FormikMultiSelect
+                baseContainer={newWindowContainerRef.current}
                 fixedWidth={218}
                 label="Objectifs du vol"
                 name="flightGoal"
                 options={FLIGHT_GOALS_AS_OPTIONS}
               />
               <FormikSelect
+                baseContainer={newWindowContainerRef.current}
                 label="Segment ciblé (si pertinent)"
                 name="targettedSegment"
                 options={TARGETTED_SEGMENTS_AS_OPTIONS}

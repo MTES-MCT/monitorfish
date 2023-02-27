@@ -14,6 +14,8 @@ import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
 import { ReactComponent as SearchIconSVG } from '../../icons/Loupe.svg'
 import { VesselSearch } from '../../VesselSearch'
 
+import type { VesselIdentity } from '../../../domain/entities/vessel/types'
+
 export function VesselSidebarHeader() {
   const dispatch = useMainAppDispatch()
 
@@ -28,8 +30,12 @@ export function VesselSidebarHeader() {
   const isVesselNameShown = !isFocusedOnVesselSearch && selectedVesselIdentity
   const isRightMenuShrinked = vesselSidebarIsOpen && !rightMenuIsOpen
 
-  const onSelectVessel = useCallback(
-    vesselIdentity => {
+  const handleVesselChange = useCallback(
+    (vesselIdentity: VesselIdentity | undefined) => {
+      if (!vesselIdentity) {
+        return
+      }
+
       if (!vesselsAreEquals(vesselIdentity, selectedVesselIdentity)) {
         dispatch(showVessel(vesselIdentity, true, false))
         dispatch(getVesselVoyage(vesselIdentity, undefined, false))
@@ -53,13 +59,15 @@ export function VesselSidebarHeader() {
         {!isVesselNameShown && (
           <VesselSearch
             extendedWidth={500}
-            hasVesselIdInResults={false}
             isExtended={isFocusedOnVesselSearch || vesselSidebarIsOpen}
             isLastSearchedVesselsShowed={isFocusedOnVesselSearch || vesselSidebarIsOpen}
-            onClickOutsideOrEscape={() => dispatch(setIsFocusedOnVesselSearch(false))}
-            onInputClick={() => dispatch(setIsFocusedOnVesselSearch(true))}
-            onSelectVessel={onSelectVessel}
-            onUnselectVessel={() => {}}
+            onChange={handleVesselChange}
+            onClickOutsideOrEscape={() => {
+              dispatch(setIsFocusedOnVesselSearch(false))
+            }}
+            onInputClick={() => {
+              dispatch(setIsFocusedOnVesselSearch(true))
+            }}
           />
         )}
       </VesselNameOrInput>

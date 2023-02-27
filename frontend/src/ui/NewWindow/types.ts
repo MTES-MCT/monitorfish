@@ -1,5 +1,5 @@
 import type { MutableRefObject } from 'react'
 
 export type NewWindowContextValue = {
-  newWindowContainerRef: MutableRefObject<HTMLDivElement>
+  newWindowContainerRef: MutableRefObject<HTMLDivElement | undefined>
 }

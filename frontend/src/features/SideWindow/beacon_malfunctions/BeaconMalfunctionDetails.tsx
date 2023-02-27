@@ -4,7 +4,7 @@ import * as timeago from 'timeago.js'
 
 import { BeaconMalfunctionDetailsFollowUp } from './BeaconMalfunctionDetailsFollowUp'
 import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
-import SendNotification from './SendNotification'
+import { SendNotification } from './SendNotification'
 import { VesselStatusSelect } from './VesselStatusSelect'
 import { COLORS } from '../../../constants/constants'
 import { getFirstVesselStatus, getMalfunctionStartDateText } from '../../../domain/entities/beaconMalfunction'

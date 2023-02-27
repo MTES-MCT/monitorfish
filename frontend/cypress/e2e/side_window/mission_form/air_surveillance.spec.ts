@@ -1,0 +1,102 @@
+/// <reference types="cypress" />
+
+import { Mission } from 'src/domain/types/mission'
+
+import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
+
+context('Side Window > Mission Form > Air Surveillance', () => {
+  beforeEach(() => {
+    openSideWindowNewMission()
+
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.AIR)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter une surveillance aérienne')
+  })
+
+  it('Should fill the form and send the expected data to the API', () => {
+    // -------------------------------------------------------------------------
+    // Form
+
+    // Objectifs du vol
+    // TODO Add this test.
+    // cy.fill('Objectifs du vol', 'Vérifications VMS/AIS')
+
+    // Segments ciblés
+    cy.fill('Ajouter un segment', 'ATL01')
+
+    // Nb de navires survolés
+    cy.fill('Nb de navires survolés', 15)
+
+    // Observations générales sur le vol
+    cy.fill('Observations générales sur le vol', 'Une observation générale sur le vol.')
+
+    // Qualité du contrôle
+    cy.fill('Observations sur le déroulé de la surveillance', 'Une observation sur le déroulé de la surveillance.')
+    cy.fill('Fiche RETEX nécessaire', true)
+
+    // Saisi par
+    cy.fill('Saisi par', 'Marlin')
+
+    // -------------------------------------------------------------------------
+    // Request
+
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      // TODO This should be removed once the API works as expected.
+      statusCode: 201
+    }).as('createMissionAction')
+
+    cy.clickButton('Enregistrer et clôturer')
+
+    cy.wait('@createMissionAction').then(interception => {
+      if (!interception.response) {
+        assert.fail('`interception.response` is undefined.')
+      }
+
+      assert.deepInclude(interception.request.body, {
+        // actionDatetimeUtc: '2023-02-20T12:27:49.727Z',
+        actionType: 'AIR_SURVEILLANCE',
+        controlQualityComments: 'Une observation sur le déroulé de la surveillance.',
+        controlUnits: [],
+        diversion: null,
+        emitsAis: null,
+        emitsVms: null,
+        facade: null,
+        feedbackSheetRequired: true,
+        gearInfractions: [],
+        gearOnboard: [],
+        id: null,
+        isFromPoseidon: null,
+        latitude: null,
+        licencesAndLogbookObservations: null,
+        licencesMatchActivity: null,
+        logbookInfractions: [],
+        logbookMatchesActivity: null,
+        longitude: null,
+        missionId: 1,
+        numberOfVesselsFlownOver: 15,
+        otherComments: 'Une observation générale sur le vol.',
+        otherInfractions: [],
+        portLocode: null,
+        portName: null,
+        segments: [{ faoAreas: ['27.7', '27.8', '27.9', '27.10'], segment: 'ATL01', segmentName: 'All Trawls 3' }],
+        seizureAndDiversion: null,
+        seizureAndDiversionComments: null,
+        separateStowageOfPreservedSpecies: false,
+        speciesInfractions: [],
+        speciesObservations: null,
+        speciesOnboard: [],
+        speciesSizeControlled: false,
+        speciesWeightControlled: false,
+        unitWithoutOmegaGauge: null,
+        userTrigram: 'Marlin',
+        vesselId: null,
+        vesselName: null,
+        vesselTargeted: false
+      })
+      assert.isString(interception.request.body.actionDatetimeUtc)
+
+      cy.get('h1').should('contain.text', 'Missions et contrôles')
+    })
+  })
+})

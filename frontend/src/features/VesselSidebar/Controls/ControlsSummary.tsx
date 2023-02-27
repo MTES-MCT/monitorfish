@@ -7,12 +7,12 @@ import { theme } from '../../../ui/theme'
 import { ReactComponent as SeaSVG } from '../../icons/Avarie_statut_navire_en_mer.svg'
 import { Header, Zone } from '../common_styles/common.style'
 
-import type { MissionControlsSummary, LastControls } from '../../../domain/types/missionAction'
+import type { MissionAction } from '../../../domain/types/missionAction'
 
 type ControlsResumeZoneProps = {
   controlsFromDate: Date
-  lastControls: LastControls
-  summary: MissionControlsSummary
+  lastControls: MissionAction.LastControls
+  summary: MissionAction.MissionControlsSummary
 }
 export function ControlsSummary({ controlsFromDate, lastControls, summary }: ControlsResumeZoneProps) {
   const { numberOfDiversions, numberOfGearSeized, numberOfSpeciesSeized } = summary

@@ -1,7 +1,8 @@
-import Nouislider from 'nouislider-react'
 import { useEffect, useState } from 'react'
 import { RangeSlider } from 'rsuite'
 import styled from 'styled-components'
+
+import Nouislider from '../../../../ui/Nouislider'
 
 import type { LastPositionVisibility } from '../../../../domain/types/map'
 
@@ -28,7 +29,7 @@ export function LastPositionsSlider({
     }
   }, [value, vesselsLastPositionVisibility])
 
-  function updateValue(nextValue) {
+  function updateValue(nextValue: any) {
     if (nextValue[0] !== value[0] || nextValue[1] !== value[1]) {
       const nextValueInt = [parseInt(nextValue[0], 10), parseInt(nextValue[1], 10)]
       setValue(nextValueInt as Range)

@@ -6,7 +6,13 @@ import java.time.ZonedDateTime
 
 data class MissionActionDataOutput(
     val id: Int? = null,
-    val vesselId: Int,
+    val vesselId: Int? = null,
+    val vesselName: String? = null,
+    val internalReferenceNumber: String? = null,
+    val externalReferenceNumber: String? = null,
+    val ircs: String? = null,
+    val flagState: String? = null,
+    val flightGoals: List<FlightGoal> = listOf(),
     val missionId: Int,
     val actionType: MissionActionType,
     val actionDatetimeUtc: ZonedDateTime,
@@ -44,6 +50,12 @@ data class MissionActionDataOutput(
         fun fromMissionAction(missionAction: MissionAction) = MissionActionDataOutput(
             id = missionAction.id,
             vesselId = missionAction.vesselId,
+            vesselName = missionAction.vesselName,
+            internalReferenceNumber = missionAction.internalReferenceNumber,
+            externalReferenceNumber = missionAction.externalReferenceNumber,
+            ircs = missionAction.ircs,
+            flagState = missionAction.flagState,
+            flightGoals = missionAction.flightGoals,
             missionId = missionAction.missionId,
             actionType = missionAction.actionType,
             actionDatetimeUtc = missionAction.actionDatetimeUtc,

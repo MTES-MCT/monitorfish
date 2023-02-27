@@ -53,14 +53,16 @@ export function TableHead({
 }
 
 const CellWrapper = styled(FlexboxGrid.Item)<{
-  $fixedWidth: number
+  $fixedWidth: number | undefined
 }>`
   align-items: center;
   display: flex;
   height: 36px;
+  max-width: ${p => (p.$fixedWidth ? `${p.$fixedWidth}px` : 'auto')};
+  min-width: ${p => (p.$fixedWidth ? `${p.$fixedWidth}px` : 'auto')};
   padding: 0 10px;
   user-select: 'none';
-  width: ${p => p.$fixedWidth}px;
+  flex-grow: ${p => (p.$fixedWidth ? 0 : 1)};
 `
 
 export const StyledCheckbox = styled(Checkbox)`

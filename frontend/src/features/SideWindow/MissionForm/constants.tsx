@@ -1,13 +1,5 @@
-import { MissionType } from '../../../domain/types/mission'
-
-import type {
-  MissionFormValues,
-  PartialAction,
-  PartialAirControl,
-  PartialFreeNote,
-  PartialGroundControl,
-  PartialSeaControl
-} from './types'
+import type { MissionActionFormValues, MissionFormValues } from './types'
+import type { Undefine } from '@mtes-mct/monitor-ui'
 
 export const INITIAL_MISSION_CONTROL_UNIT: MissionFormValues['controlUnits'][0] = {
   administration: undefined,
@@ -17,45 +9,46 @@ export const INITIAL_MISSION_CONTROL_UNIT: MissionFormValues['controlUnits'][0] 
   resources: undefined
 }
 
-export const NEW_AIR_CONTROL_ACTION = (): PartialAirControl => ({
-  startDate: new Date(),
-  type: MissionType.AIR
-})
+export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValues> = {
+  actionDatetimeUtc: undefined,
+  actionType: undefined,
+  controlQualityComments: undefined,
+  controlUnits: [],
+  diversion: undefined,
+  emitsAis: undefined,
+  emitsVms: undefined,
+  facade: undefined,
+  feedbackSheetRequired: undefined,
+  gearInfractions: [],
+  gearOnboard: [],
+  id: undefined,
+  isFromPoseidon: undefined,
+  latitude: undefined,
+  licencesAndLogbookObservations: undefined,
+  licencesMatchActivity: undefined,
+  logbookInfractions: [],
+  logbookMatchesActivity: undefined,
+  longitude: undefined,
+  numberOfVesselsFlownOver: undefined,
+  otherComments: undefined,
+  otherInfractions: [],
+  portLocode: undefined,
+  portName: undefined,
+  segments: [],
+  seizureAndDiversion: undefined,
+  seizureAndDiversionComments: undefined,
+  separateStowageOfPreservedSpecies: undefined,
+  speciesInfractions: [],
+  speciesObservations: undefined,
+  speciesOnboard: [],
+  speciesSizeControlled: undefined,
+  speciesWeightControlled: undefined,
+  unitWithoutOmegaGauge: undefined,
+  userTrigram: undefined,
+  vesselId: undefined,
+  vesselTargeted: undefined,
 
-export const NEW_GROUND_CONTROL_ACTION = (): PartialGroundControl => ({
-  startDate: new Date(),
-  type: MissionType.LAND
-})
-
-export const NEW_SEA_CONTROL_ACTION = (): PartialSeaControl => ({
-  compliance: {
-    customInfractions: []
-  },
-  deviceInfractions: [],
-  specyInfractions: [],
-  startDate: new Date(),
-  tideFishingZones: [],
-  tideFleetSegments: [],
-  type: MissionType.SEA,
-  vessel: {
-    externalReferenceNumber: undefined,
-    flagState: undefined,
-    internalReferenceNumber: undefined,
-    ircs: undefined,
-    mmsi: undefined,
-    vesselId: undefined,
-    vesselName: undefined
-  }
-})
-
-export const NEW_FREE_NOTE_ACTION = (): PartialFreeNote => ({
-  startDate: new Date(),
-  type: undefined
-})
-
-export const NEW_ACTION_BY_TYPE: Record<MissionType | 'default', () => PartialAction> = {
-  [MissionType.AIR]: NEW_AIR_CONTROL_ACTION,
-  [MissionType.LAND]: NEW_GROUND_CONTROL_ACTION,
-  [MissionType.SEA]: NEW_SEA_CONTROL_ACTION,
-  default: NEW_FREE_NOTE_ACTION
+  // TODO I had to add that.
+  // eslint-disable-next-line sort-keys-fix/sort-keys-fix
+  vesselName: undefined
 }

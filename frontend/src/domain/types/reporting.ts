@@ -1,5 +1,5 @@
 import type { ControlUnit } from './controlUnit'
-import type { Infraction } from './missionAction'
+import type { MissionAction } from './missionAction'
 import type { SeaFront } from '../entities/alerts/constants'
 import type { PendingAlertValue } from '../entities/alerts/types'
 import type { VesselIdentifier } from '../entities/vessel/types'
@@ -16,7 +16,7 @@ export type BaseReporting = {
   externalReferenceNumber: string | null
   flagState: string
   id: number
-  infraction: Infraction | null
+  infraction: MissionAction.Infraction | null
   internalReferenceNumber: string | null
   ircs: string | null
   type: ReportingType

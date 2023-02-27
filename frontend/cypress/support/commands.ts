@@ -34,6 +34,10 @@ Cypress.Commands.add('cleanScreenshots', (fromNumber: number): void => {
   cy.exec(`cd cypress/e2e/__image_snapshots__/ && find . | grep -P "[${fromNumber}-7]\\.png" | xargs -i rm {}\n`)
 })
 
+Cypress.Commands.add('cleanFiles', () => {
+  cy.exec(`rm -f cypress/downloads/*`)
+})
+
 Cypress.Commands.add('clickButton', clickButton)
 
 Cypress.Commands.add(

@@ -54,12 +54,17 @@ export class FrontendErrorBoundary extends Component<FrontendErrorBoundaryProps,
 
   override render() {
     const { children } = this.props
+    // For the moment, we do not show any error message
+    // TODO Should we remove that part ? We should not throw matrix-style error message
+    //  to the user but fetch them from Sentry
+    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasError, isHandled, message, scope } = this.state
 
-    if (!hasError) {
-      return children
-    }
+    return children
 
+    // For the moment, we do not show any error message
+    // @ts-ignore
     return (
       <Wrapper>
         <p>Une erreur est survenue :</p>

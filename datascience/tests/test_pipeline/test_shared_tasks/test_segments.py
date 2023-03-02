@@ -25,7 +25,10 @@ def test_extract_segments_of_current_year(reset_test_data):
         }
     )
 
-    pd.testing.assert_frame_equal(segments, expected_segments)
+    pd.testing.assert_frame_equal(
+        segments.sort_values("segment").reset_index(drop=True),
+        expected_segments.sort_values("segment").reset_index(drop=True),
+    )
 
 
 def test_extract_all_segments(reset_test_data):
@@ -63,7 +66,10 @@ def test_extract_all_segments(reset_test_data):
         }
     )
 
-    pd.testing.assert_frame_equal(segments, expected_segments)
+    pd.testing.assert_frame_equal(
+        segments.sort_values(["year", "segment"]).reset_index(drop=True),
+        expected_segments.sort_values(["year", "segment"]).reset_index(drop=True),
+    )
 
 
 def test_unnest_segments():

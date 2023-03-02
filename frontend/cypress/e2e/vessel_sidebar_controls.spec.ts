@@ -39,7 +39,7 @@ context('Vessel sidebar controls tab', () => {
     cy.get('*[data-cy="vessel-controls-year"]').first().click({ timeout: 10000 })
 
     // Then
-    cy.get('*[data-cy="vessel-control-title"]').first().contains(`CONTRÔLE AÉRIEN DU ${date}`)
+    cy.get('*[data-cy="vessel-control-title"]').first().contains(`CONTRÔLE EN MER DU ${date}`)
     cy.get('*[data-cy="vessel-control"]')
       .first()
       .should('contain', '1. Infraction engin')

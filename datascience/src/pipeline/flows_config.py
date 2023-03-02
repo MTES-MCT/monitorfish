@@ -249,6 +249,7 @@ flows_to_register = [
     last_positions.flow,
     missing_far_alerts.flow,
     missing_trip_numbers.flow,
+    missions.flow,
     notify_beacon_malfunctions.flow,
     update_beacon_malfunctions.flow,
     ports.flow,

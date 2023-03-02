@@ -29,11 +29,11 @@ export function Control({ control, isLastItem }: ControlProps) {
   const controlType = useMemo(() => {
     switch (control.actionType) {
       case MissionAction.MissionActionType.AIR_CONTROL:
-        return 'EN MER'
+        return 'AÉRIEN'
       case MissionAction.MissionActionType.LAND_CONTROL:
         return `À QUAI (${control.portName?.toUpperCase()})`
       case MissionAction.MissionActionType.SEA_CONTROL:
-        return 'AÉRIEN'
+        return 'EN MER'
       default:
         return ''
     }

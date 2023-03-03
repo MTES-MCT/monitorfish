@@ -64,9 +64,9 @@ missions_df = pd.DataFrame(
 
 missions_control_units_df = pd.DataFrame(
     {
-        "id": [20, 21, 22, 23],
-        "mission_id": [1, 1, 2, 12],
-        "control_unit_id": [8, 7, 6, 2],
+        "id": [20, 21, 22, 23, 24],
+        "mission_id": [1, 1, 2, 12, 999],
+        "control_unit_id": [8, 7, 6, 2, 2],
     }
 )
 
@@ -124,6 +124,10 @@ def test_flow(reset_test_data, loading_mode):
         flow.get_tasks("mock_extract_missions_control_units")[0]
     ].result
 
+    filtered_missions_control_units = state.result[
+        flow.get_tasks("filter_missions_control_units")[0]
+    ].result
+
     loaded_missions = read_query("monitorfish_remote", missions_query)
     loaded_missions_control_units = read_query(
         "monitorfish_remote", missions_control_units_query
@@ -141,8 +145,11 @@ def test_flow(reset_test_data, loading_mode):
     assert len(extracted_missions) == 4
     assert set(extracted_missions.id) == {1, 2, 12, 13}
 
-    assert len(extracted_missions_control_units) == 4
-    assert set(extracted_missions_control_units.mission_id) == {1, 2, 12}
+    assert len(extracted_missions_control_units) == 5
+    assert set(extracted_missions_control_units.mission_id) == {1, 2, 12, 999}
+
+    assert len(filtered_missions_control_units) == 4
+    assert set(filtered_missions_control_units.mission_id) == {1, 2, 12}
 
     if loading_mode == "upsert":
         assert len(loaded_missions) == 11
@@ -184,5 +191,5 @@ def test_flow(reset_test_data, loading_mode):
     else:
         pd.testing.assert_frame_equal(extracted_missions, loaded_missions)
         pd.testing.assert_frame_equal(
-            extracted_missions_control_units, loaded_missions_control_units
+            filtered_missions_control_units, loaded_missions_control_units
         )

@@ -179,6 +179,11 @@ with Flow("missions", executor=LocalDaskExecutor()) as flow:
         missions = extract_missions(number_of_months=number_of_months)
         missions_control_units = extract_missions_control_units()
 
+        # Transform
+        missions_control_units = filter_missions_control_units(
+            missions, missions_control_units
+        )
+
         # Load
         load_missions_and_missions_control_units(
             missions, missions_control_units, loading_mode=loading_mode

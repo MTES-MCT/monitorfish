@@ -1,11 +1,8 @@
+import { Icon } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
-import { ReactComponent as HideIconSVG } from '../../icons/oeil_masque.svg'
 
-export const HideIcon = styled(HideIconSVG)`
-  width: 25px;
-  padding-right: 7px;
-  float: right;
-  flex-shrink: 0;
-  height: 30px;
-  cursor: pointer;
+export const HideIcon = styled(Icon.Display)`
+  padding-right: 16px;
+  padding-top: 4px;
+  color: ${p => p.theme.color.lightGray};
 `

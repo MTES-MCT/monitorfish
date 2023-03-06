@@ -4,7 +4,7 @@ import TileWMS from 'ol/source/TileWMS'
 import XYZ from 'ol/source/XYZ'
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 
-import { Layer } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
 import type { ImageTile } from 'ol'
@@ -46,7 +46,7 @@ function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
     () => ({
       DARK: () =>
         new TileLayer({
-          className: Layer.BASE_LAYER.code,
+          className: LayerProperties.BASE_LAYER.code,
           source: new XYZ({
             maxZoom: 19,
             tileLoadFunction: loadTileFromCacheOrFetch,
@@ -58,7 +58,7 @@ function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
         }),
       LIGHT: () =>
         new TileLayer({
-          className: Layer.BASE_LAYER.code,
+          className: LayerProperties.BASE_LAYER.code,
           source: new XYZ({
             maxZoom: 19,
             tileLoadFunction: loadTileFromCacheOrFetch,
@@ -70,7 +70,7 @@ function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
         }),
       OSM: () =>
         new TileLayer({
-          className: Layer.BASE_LAYER.code,
+          className: LayerProperties.BASE_LAYER.code,
           source: new OSM({
             attributions:
               '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
@@ -79,7 +79,7 @@ function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
         }),
       SATELLITE: () =>
         new TileLayer({
-          className: Layer.BASE_LAYER.code,
+          className: LayerProperties.BASE_LAYER.code,
           source: new XYZ({
             maxZoom: 19,
             url: `https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg90?access_token=${process.env.REACT_APP_MAPBOX_KEY}`
@@ -88,7 +88,7 @@ function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
         }),
       SHOM: () =>
         new TileLayer({
-          className: Layer.BASE_LAYER.code,
+          className: LayerProperties.BASE_LAYER.code,
           source: new TileWMS({
             params: { LAYERS: 'RASTER_MARINE_3857_WMSR', TILED: true },
             serverType: 'geoserver',
@@ -111,7 +111,7 @@ function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
     function showAnotherBaseLayer() {
       const olLayers = map.getLayers()
       // eslint-disable-next-line no-underscore-dangle
-      const layerToRemove = olLayers.getArray().find(layer => layer.className_ === Layer.BASE_LAYER.code)
+      const layerToRemove = olLayers.getArray().find(layer => layer.className_ === LayerProperties.BASE_LAYER.code)
 
       olLayers.insertAt(0, baseLayersObjects[selectedBaseLayer]())
 

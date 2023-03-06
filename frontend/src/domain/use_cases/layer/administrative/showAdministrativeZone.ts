@@ -14,16 +14,16 @@ import type Geometry from 'ol/geom/Geometry'
 
 const DEFAULT_NAMESPACE = 'homepage'
 
-type AdministrativeLayerRequest = {
+type AdministrativeZoneRequest = {
   namespace: string
   type: string
   zone: string | null
 }
-export const showAdministrativeLayer = (layerRequest: AdministrativeLayerRequest) => dispatch => {
-  const currentNamespace = layerRequest.namespace || DEFAULT_NAMESPACE
+export const showAdministrativeZone = (zoneRequest: AdministrativeZoneRequest) => dispatch => {
+  const currentNamespace = zoneRequest.namespace || DEFAULT_NAMESPACE
   const { addShowedLayer } = LayerSlice[currentNamespace].actions
 
-  dispatch(addShowedLayer(layerRequest))
+  dispatch(addShowedLayer(zoneRequest))
 }
 
 export const getVectorOLLayer = (

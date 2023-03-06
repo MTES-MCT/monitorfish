@@ -1,6 +1,6 @@
 import { getVectorOLLayer } from './showRegulatoryZone'
 import { getLayerNameNormalized } from '../../../entities/layers'
-import { Layer } from '../../../entities/layers/constants'
+import { LayerProperties } from '../../../entities/layers/constants'
 
 export const getRegulatoryLayersToAdd = (olLayers, showedLayers) => (dispatch, getState) => {
   if (!showedLayers.length) {
@@ -22,9 +22,11 @@ export const getRegulatoryLayersToAdd = (olLayers, showedLayers) => (dispatch, g
 }
 
 function layersNotInCurrentOLMap(olLayers, layer) {
-  return !olLayers.some(olLayer => olLayer.name === getLayerNameNormalized({ type: Layer.REGULATORY.code, ...layer }))
+  return !olLayers.some(
+    olLayer => olLayer.name === getLayerNameNormalized({ type: LayerProperties.REGULATORY.code, ...layer })
+  )
 }
 
 function layersOfTypeRegulatoryLayer(layer) {
-  return layer.type === Layer.REGULATORY.code
+  return layer.type === LayerProperties.REGULATORY.code
 }

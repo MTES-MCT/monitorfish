@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import Overlay from 'ol/Overlay'
 import { COLORS } from '../../../constants/constants'
-import { Layer } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 import VesselEstimatedPositionCard from '../cards/VesselEstimatedPositionCard'
 import { getCoordinates } from '../../../coordinates'
 import { WSG84_PROJECTION } from '../../../domain/entities/map/constants'
@@ -38,7 +38,7 @@ const VesselEstimatedPositionCardOverlay = ({ map, pointerMoveEventPixel, featur
 
   useEffect(() => {
     if (overlayRef.current && overlayObjectRef.current) {
-      if (feature?.getId()?.toString()?.includes(`${Layer.VESSEL_ESTIMATED_POSITION.code}:circle`)) {
+      if (feature?.getId()?.toString()?.includes(`${LayerProperties.VESSEL_ESTIMATED_POSITION.code}:circle`)) {
         overlayRef.current.style.display = 'block'
 
         const latitude = feature.estimatedPosition.latitude

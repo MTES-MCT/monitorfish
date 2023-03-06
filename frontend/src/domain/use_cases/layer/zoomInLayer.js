@@ -1,5 +1,5 @@
 import { animateToRegulatoryLayer } from '../../shared_slices/Map'
-import { Layer } from '../../entities/layers/constants'
+import { LayerProperties } from '../../entities/layers/constants'
 import { getCenter } from 'ol/extent'
 import { isNumeric } from '../../../utils/isNumeric'
 
@@ -14,14 +14,14 @@ import { isNumeric } from '../../../utils/isNumeric'
  */
 const zoomInLayer = ({ topicAndZone, feature }) => (dispatch, getState) => {
   if (topicAndZone) {
-    const name = `${Layer.REGULATORY.code}:${topicAndZone.topic}:${topicAndZone.zone}`
+    const name = `${LayerProperties.REGULATORY.code}:${topicAndZone.topic}:${topicAndZone.zone}`
     const layerToZoomIn = getState().layer.layersToFeatures.find(layer => layer.name === name)
     if (layerToZoomIn) {
       dispatchAnimateToRegulatoryLayer(layerToZoomIn.center, dispatch, name)
     }
   } else if (feature) {
     const center = getCenter(feature.getGeometry().getExtent())
-    dispatchAnimateToRegulatoryLayer(center, dispatch, Layer.REGULATORY_PREVIEW)
+    dispatchAnimateToRegulatoryLayer(center, dispatch, LayerProperties.REGULATORY_PREVIEW)
   }
 }
 

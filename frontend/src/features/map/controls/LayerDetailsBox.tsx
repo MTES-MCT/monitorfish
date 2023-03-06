@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { Layer } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { getRegulatoryLayerStyle } from '../layers/styles/regulatoryLayer.style'
 
 import type { BaseRegulatoryZone } from '../../../domain/types/regulation'
@@ -14,7 +14,7 @@ type LayerDetailsBoxProps = {
 }
 export function LayerDetailsBox({ feature }: LayerDetailsBoxProps) {
   const regulatoryFeatureProperties = useMemo(() => {
-    if (!feature.getId()?.toString()?.includes(`${Layer.REGULATORY.code}`)) {
+    if (!feature.getId()?.toString()?.includes(`${LayerProperties.REGULATORY.code}`)) {
       return null
     }
 

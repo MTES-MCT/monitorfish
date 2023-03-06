@@ -4,7 +4,7 @@ import React, { MutableRefObject, useCallback, useEffect, useRef } from 'react'
 
 import { getRegulatoryLayerStyle } from './styles/regulatoryLayer.style'
 import { getFeaturesFromRegulatoryZones } from './utils'
-import { Layer } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 import zoomInLayer from '../../../domain/use_cases/layer/zoomInLayer'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
@@ -67,7 +67,7 @@ function UnmemoizedRegulatoryPreviewLayer({ map }: RegulatoryPreviewLayerProps) 
       return undefined
     }
 
-    getLayer().name = Layer.REGULATORY_PREVIEW.code
+    getLayer().name = LayerProperties.REGULATORY_PREVIEW.code
     map.getLayers().push(getLayer())
 
     return () => {

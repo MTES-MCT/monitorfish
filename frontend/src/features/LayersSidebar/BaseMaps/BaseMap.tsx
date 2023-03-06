@@ -6,7 +6,7 @@ import { BaseLayers } from '../../../domain/entities/layers/constants'
 type BaseLayerRowProps = {
   layer: string
 }
-export function BaseLayerRow({ layer }: BaseLayerRowProps) {
+export function BaseMap({ layer }: BaseLayerRowProps) {
   return (
     <Row className="base-layers-selection">
       <Radio value={layer}>{BaseLayers[layer].text}</Radio>

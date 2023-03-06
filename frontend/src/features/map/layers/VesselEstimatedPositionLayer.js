@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
-import { Layer } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { EstimatedPosition } from '../../../domain/entities/estimatedPosition'
 import { getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../../../domain/entities/vessel/vessel'
 import { Vector } from 'ol/layer'
@@ -48,7 +48,7 @@ const VesselEstimatedPositionLayer = ({ map }) => {
       layerRef.current = new Vector({
         renderBuffer: 4,
         source: getVectorSource(),
-        zIndex: Layer.VESSEL_ESTIMATED_POSITION.zIndex,
+        zIndex: LayerProperties.VESSEL_ESTIMATED_POSITION.zIndex,
         updateWhileAnimating: true,
         updateWhileInteracting: true,
         style: feature => getEstimatedPositionStyle(feature)
@@ -60,7 +60,7 @@ const VesselEstimatedPositionLayer = ({ map }) => {
   useEffect(() => {
     function addLayerToMap () {
       if (map) {
-        getLayer().name = Layer.VESSEL_ESTIMATED_POSITION.code
+        getLayer().name = LayerProperties.VESSEL_ESTIMATED_POSITION.code
         map.getLayers().push(getLayer())
       }
 

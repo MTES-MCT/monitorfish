@@ -286,11 +286,19 @@ context('LayersSidebar', () => {
 
   it('An administrative zone Should be showed and hidden', () => {
     cy.cleanScreenshots(1)
+    expect(JSON.parse(localStorage.getItem('homepagelayersShowedOnMap') || '')).length(0)
 
     // When
     cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
     cy.get('*[data-cy="administrative-zones-open"]').click({ force: true, timeout: 10000 })
-    cy.get('*[data-cy="administrative-layer-toggle"]').eq(0).click({ timeout: 10000 })
+    cy.get('*[data-cy="administrative-layer-toggle"]')
+      .eq(0)
+      .click({ timeout: 10000 })
+      .then(() => {
+        const showedLayers = JSON.parse(localStorage.getItem('homepagelayersShowedOnMap') || '')
+        expect(showedLayers).length(1)
+        expect(showedLayers[0].type).equal('eez_areas')
+      })
     cy.wait(500)
 
     // Then
@@ -305,5 +313,17 @@ context('LayersSidebar', () => {
     })
 
     cy.cleanScreenshots(1)
+
+    // Refresh and check the item in local storage is not deleted
+    cy.loadPath('/#@-224002.65,6302673.54,8.70')
+    cy.wait(500)
+    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="administrative-zones-open"]')
+      .click({ force: true, timeout: 10000 })
+      .then(() => {
+        const showedLayers = JSON.parse(localStorage.getItem('homepagelayersShowedOnMap') || '')
+        expect(showedLayers).length(1)
+        expect(showedLayers[0].type).equal('eez_areas')
+      })
   })
 })

@@ -1,4 +1,4 @@
-import type { CodeAndName, ShowableLayer, MonitorFishLayer } from './types'
+import type { CodeAndName, MonitorFishLayer, ShowableLayer } from './types'
 
 export const layersGroups: Record<string, CodeAndName> = {
   NAVIGATION_CATEGORY: {
@@ -389,10 +389,12 @@ export const BaseLayers = {
   }
 }
 
-export const AdministrativeLayers: ShowableLayer[] = Object.keys(LayerProperties)
-  .map(layer => LayerProperties[layer])
-  .filter((zone): zone is ShowableLayer => zone !== undefined)
-  .filter(layer => layer.type === LayerType.ADMINISTRATIVE)
+export function getAdministrativeLayers(): ShowableLayer[] {
+  return Object.keys(LayerProperties)
+    .map(layer => LayerProperties[layer])
+    .filter((zone): zone is ShowableLayer => zone !== undefined)
+    .filter(layer => layer.type === LayerType.ADMINISTRATIVE)
+}
 
 export const SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY = 'selectedRegulatoryZoneIds'
 export const SELECTED_REG_ZONES_LOCAL_STORAGE_KEY = 'selectedRegulatoryZones'

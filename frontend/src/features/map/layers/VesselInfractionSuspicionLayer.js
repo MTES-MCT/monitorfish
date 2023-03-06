@@ -4,7 +4,7 @@ import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import { Vector } from 'ol/layer'
-import { Layer } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 
 import { getVesselInfractionSuspicionStyle } from './styles/vessel.style'
 import { getVesselCompositeIdentifier, getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../../../domain/entities/vessel/vessel'
@@ -48,7 +48,7 @@ const VesselInfractionSuspicionLayer = ({ map }) => {
     if (layerRef.current === null) {
       layerRef.current = new Vector({
         source: getVectorSource(),
-        zIndex: Layer.VESSEL_INFRACTION_SUSPICION.zIndex,
+        zIndex: LayerProperties.VESSEL_INFRACTION_SUSPICION.zIndex,
         updateWhileAnimating: true,
         updateWhileInteracting: true,
         style: (feature, resolution) => getVesselInfractionSuspicionStyle(feature, resolution)
@@ -59,7 +59,7 @@ const VesselInfractionSuspicionLayer = ({ map }) => {
 
   useEffect(() => {
     if (isAdmin && map) {
-      getLayer().name = Layer.VESSEL_INFRACTION_SUSPICION.code
+      getLayer().name = LayerProperties.VESSEL_INFRACTION_SUSPICION.code
       map.getLayers().push(getLayer())
     }
 
@@ -85,7 +85,7 @@ const VesselInfractionSuspicionLayer = ({ map }) => {
         const feature = new Feature({
           geometry: new Point(vessel.coordinates)
         })
-        feature.setId(`${Layer.VESSEL_INFRACTION_SUSPICION.code}:${getVesselCompositeIdentifier(vessel.vesselProperties)}`)
+        feature.setId(`${LayerProperties.VESSEL_INFRACTION_SUSPICION.code}:${getVesselCompositeIdentifier(vessel.vesselProperties)}`)
         features.push(feature)
 
         return features

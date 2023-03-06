@@ -4,7 +4,7 @@ import VectorSource from 'ol/source/Vector'
 import { MutableRefObject, useCallback, useEffect, useRef } from 'react'
 
 import { dottedLayerStyle } from './styles/dottedLayer.style'
-import { Layer } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
@@ -40,9 +40,9 @@ export function RegulatoryLayerSearch({ map }) {
           style: [dottedLayerStyle],
           updateWhileAnimating: true,
           updateWhileInteracting: true,
-          zIndex: Layer.DRAW.zIndex
+          zIndex: LayerProperties.DRAW.zIndex
         })
-        vectorLayerRef.current.name = Layer.DRAW.code
+        vectorLayerRef.current.name = LayerProperties.DRAW.code
       }
 
       return vectorLayerRef.current

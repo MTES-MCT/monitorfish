@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from
 import { batch, useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import RegulatoryLayerZone from './RegulatoryZone'
-import { Layer } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { COLORS } from '../../../constants/constants'
 import NamespaceContext from '../../../domain/context/NamespaceContext'
 import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
@@ -69,7 +69,7 @@ const RegulatoryTopic = props => {
   const showTopic = namespace => {
     dispatch(
       showRegulatoryTopic({
-        type: Layer.REGULATORY.code,
+        type: LayerProperties.REGULATORY.code,
         regulatoryZones,
         namespace
       })
@@ -79,7 +79,7 @@ const RegulatoryTopic = props => {
   const hideTopic = namespace => {
     dispatch(
       hideLayer({
-        type: Layer.REGULATORY.code,
+        type: LayerProperties.REGULATORY.code,
         topic: regulatoryTopic,
         namespace
       })

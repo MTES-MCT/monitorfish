@@ -24,7 +24,7 @@ import saveMeasurement from '../../../domain/use_cases/measurement/saveMeasureme
 import { measurementStyle, measurementStyleWithCenter } from './styles/measurement.style'
 import { transform } from 'ol/proj'
 import { getCenter } from 'ol/extent'
-import { Layer } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 
 const DRAW_START_EVENT = 'drawstart'
 const DRAW_ABORT_EVENT = 'drawabort'
@@ -75,8 +75,8 @@ const MeasurementLayer = ({ map }) => {
     updateWhileAnimating: true,
     updateWhileInteracting: true,
     style: [measurementStyle, measurementStyleWithCenter],
-    className: Layer.MEASUREMENT.code,
-    zIndex: Layer.MEASUREMENT.zIndex
+    className: LayerProperties.MEASUREMENT.code,
+    zIndex: LayerProperties.MEASUREMENT.zIndex
   }))
 
   useEffect(() => {

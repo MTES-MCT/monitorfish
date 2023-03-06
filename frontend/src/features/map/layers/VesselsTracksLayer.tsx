@@ -2,7 +2,7 @@ import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react'
 
-import { Layer } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { getFishingActivityFeatureOnTrackLine } from '../../../domain/entities/logbook'
 import {
   fishingActivityIsWithinTrackLineDates,
@@ -86,7 +86,7 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
         source: getVectorSource(),
         updateWhileAnimating: true,
         updateWhileInteracting: true,
-        zIndex: Layer.VESSEL_TRACK.zIndex
+        zIndex: LayerProperties.VESSEL_TRACK.zIndex
       })
     }
 
@@ -95,7 +95,7 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
 
   useEffect(() => {
     if (map) {
-      getLayer().name = Layer.VESSEL_TRACK.code
+      getLayer().name = LayerProperties.VESSEL_TRACK.code
       map.getLayers().push(getLayer())
     }
 

@@ -72,14 +72,12 @@ export function FavoriteVessel({
               }
             }}
             style={buttonStyle}
-            title="Cacher la piste"
           />
         ) : (
           <HideIcon
             data-cy="favorite-vessel-show-vessel-track"
             onClick={() => dispatch(showVesselTrack(favorite, false, null, true))}
             style={buttonStyle}
-            title="Afficher la piste"
           />
         )}
         <CloseIcon
@@ -94,7 +92,8 @@ export function FavoriteVessel({
 }
 
 const buttonStyle = {
-  marginTop: 3
+  marginTop: 4,
+  paddingRight: 8
 }
 
 const Text = styled.span`

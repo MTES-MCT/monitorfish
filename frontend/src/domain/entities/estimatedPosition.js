@@ -1,7 +1,7 @@
 import { transform } from 'ol/proj'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './map/constants'
 import Feature from 'ol/Feature'
-import { Layer } from './layers/constants'
+import { LayerProperties } from './layers/constants'
 import LineString from 'ol/geom/LineString'
 import Point from 'ol/geom/Point'
 import { COLORS } from '../../constants/constants'
@@ -38,7 +38,7 @@ class EstimatedPosition {
 
     const currentCoordinates = transform([longitude, latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
     const estimatedCoordinates = transform([estimatedCurrentLongitude, estimatedCurrentLatitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-    const vesselCompositeIdentifier = vessel.vesselFeatureId.replace(`${Layer.VESSELS.code}:`, '')
+    const vesselCompositeIdentifier = vessel.vesselFeatureId.replace(`${LayerProperties.VESSELS.code}:`, '')
 
     const estimatedPositionObject = {
       latitude: estimatedCurrentLatitude,
@@ -66,7 +66,7 @@ class EstimatedPosition {
       isHidden: options.hideNonSelectedVessels
     })
     lineFeature.estimatedPosition = estimatedPositionObject
-    lineFeature.setId(`${Layer.VESSEL_ESTIMATED_POSITION.code}:${vesselCompositeIdentifier}`)
+    lineFeature.setId(`${LayerProperties.VESSEL_ESTIMATED_POSITION.code}:${vesselCompositeIdentifier}`)
 
     const circleFeature = new Feature({
       geometry: new Point(estimatedCoordinates),
@@ -76,7 +76,7 @@ class EstimatedPosition {
       isHidden: options.hideNonSelectedVessels
     })
     circleFeature.estimatedPosition = estimatedPositionObject
-    circleFeature.setId(`${Layer.VESSEL_ESTIMATED_POSITION.code}:circle:${vesselCompositeIdentifier}`)
+    circleFeature.setId(`${LayerProperties.VESSEL_ESTIMATED_POSITION.code}:circle:${vesselCompositeIdentifier}`)
 
     features.push(lineFeature, circleFeature)
 

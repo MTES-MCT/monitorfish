@@ -8,7 +8,7 @@ import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef } from
 
 import { dottedLayerStyle } from './styles/dottedLayer.style'
 import { drawStyle, editStyle } from './styles/draw.style'
-import { Layer } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 import {
   InteractionType,
   OLGeometryType,
@@ -72,9 +72,9 @@ function UnmemoizedDrawLayer({ map }) {
           style: [dottedLayerStyle, editStyle],
           updateWhileAnimating: true,
           updateWhileInteracting: true,
-          zIndex: Layer.DRAW.zIndex
+          zIndex: LayerProperties.DRAW.zIndex
         })
-        vectorLayerRef.current.name = Layer.DRAW.code
+        vectorLayerRef.current.name = LayerProperties.DRAW.code
       }
 
       return vectorLayerRef.current

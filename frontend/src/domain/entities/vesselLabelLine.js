@@ -1,6 +1,6 @@
 import Feature from 'ol/Feature'
 import LineString from 'ol/geom/LineString'
-import { Layer } from './layers/constants'
+import { LayerProperties } from './layers/constants'
 import { getVesselCompositeIdentifier } from './vessel/vessel'
 
 export class VesselLabelLine {
@@ -24,7 +24,7 @@ export class VesselLabelLine {
   }
 
   static getFeatureId (identity) {
-    return `${Layer.VESSELS_LABEL.code}:${getVesselCompositeIdentifier(identity)}`
+    return `${LayerProperties.VESSELS_LABEL.code}:${getVesselCompositeIdentifier(identity)}`
   }
 }
 

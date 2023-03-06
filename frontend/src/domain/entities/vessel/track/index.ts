@@ -9,7 +9,7 @@ import { TRACK_TYPE_RECORD } from './constants'
 import { getArrowStyle, getCircleStyle, getLineStyle } from '../../../../features/map/layers/styles/vesselTrack.style'
 import { calculatePointsDistance, calculateSplitPointCoordinates } from '../../../../utils'
 import { dayjs } from '../../../../utils/dayjs'
-import { Layer } from '../../layers/constants'
+import { LayerProperties } from '../../layers/constants'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../map/constants'
 
 import type {
@@ -100,13 +100,13 @@ function buildPointFeature(
     geometry: new Point(coordinates)
   }) as VesselPointFeature
   // TODO Properties are removed when included directly in the `geometryOrProperties` of the Feature instantiation
-  pointFeature.name = `${Layer.VESSEL_TRACK.code}:position:${index}`
+  pointFeature.name = `${LayerProperties.VESSEL_TRACK.code}:position:${index}`
   pointFeature.course = position.course
   pointFeature.positionType = position.positionType
   pointFeature.speed = position.speed
   pointFeature.dateTime = position.dateTime
 
-  pointFeature.setId(`${Layer.VESSEL_TRACK.code}:${vesselCompositeIdentifier}:position:${index}`)
+  pointFeature.setId(`${LayerProperties.VESSEL_TRACK.code}:${vesselCompositeIdentifier}:position:${index}`)
   const trackColor = getTrackType([position], false).color
   pointFeature.setStyle(getCircleStyle(trackColor))
 
@@ -134,10 +134,10 @@ function buildArrowPointFeatures(
         geometry: new Point(arrowPointCoordinates)
       }) as VesselArrowFeature
       // TODO Properties are removed when included directly in the `geometryOrProperties` of the Feature instantiation
-      arrowFeature.name = `${Layer.VESSEL_TRACK.code}:arrow:${index}`
+      arrowFeature.name = `${LayerProperties.VESSEL_TRACK.code}:arrow:${index}`
       arrowFeature.course = feature.course
 
-      arrowFeature.setId(`${Layer.VESSEL_TRACK.code}:${vesselCompositeIdentifier}:arrow:${index}`)
+      arrowFeature.setId(`${LayerProperties.VESSEL_TRACK.code}:${vesselCompositeIdentifier}:arrow:${index}`)
       const trackArrow = TRACK_TYPE_RECORD[feature.trackType.code].arrow
       const arrowStyle = getArrowStyle(trackArrow, arrowFeature.course)
 
@@ -196,7 +196,7 @@ function buildLineStringFeatures(
       }
       feature.speed = firstPosition.speed
 
-      feature.setId(`${Layer.VESSEL_TRACK.code}:${vesselCompositeIdentifier}:line:${index}`)
+      feature.setId(`${LayerProperties.VESSEL_TRACK.code}:${vesselCompositeIdentifier}:line:${index}`)
       feature.setStyle(getLineStyle(feature.isTimeEllipsis, feature.trackType))
 
       return feature
@@ -256,7 +256,8 @@ function isTimeEllipsisBetweenPositions(firstPositionDate: Date, secondPositionD
 export function getVesselTrackLines(features) {
   return features.filter(
     feature =>
-      feature?.getId()?.toString()?.includes(Layer.VESSEL_TRACK.code) && feature?.getId()?.toString()?.includes('line')
+      feature?.getId()?.toString()?.includes(LayerProperties.VESSEL_TRACK.code) &&
+      feature?.getId()?.toString()?.includes('line')
   )
 }
 
@@ -264,7 +265,7 @@ export function removeFishingActivitiesFeatures(features, vectorSource) {
   features
     .filter(
       feature =>
-        feature?.getId()?.toString()?.includes(Layer.VESSEL_TRACK.code) &&
+        feature?.getId()?.toString()?.includes(LayerProperties.VESSEL_TRACK.code) &&
         feature?.getId()?.toString()?.includes('logbook')
     )
     .forEach(feature => vectorSource.removeFeature(feature))

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useStore } from 'react-redux'
 
 import { getLayerNameNormalized } from '../../../domain/entities/layers'
-import { Layer } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { showSimplifiedGeometries, showWholeGeometries } from '../../../domain/shared_slices/Regulatory'
 import { getRegulatoryLayersToAdd } from '../../../domain/use_cases/layer/regulation/getRegulatoryLayersToAdd'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
@@ -57,7 +57,7 @@ export function RegulatoryLayers({ map, mapMovingAndZoomEvent }: RegulatoryLayer
       const regulatoryLayers = map
         .getLayers()
         .getArray()
-        .filter(layer => layer?.name?.includes(Layer.REGULATORY.code))
+        .filter(layer => layer?.name?.includes(LayerProperties.REGULATORY.code))
 
       if (!regulatoryZoneMetadata) {
         removeMetadataIsShowedProperty(regulatoryLayers)
@@ -67,7 +67,8 @@ export function RegulatoryLayers({ map, mapMovingAndZoomEvent }: RegulatoryLayer
 
       const layerToAddProperty = regulatoryLayers.find(
         layer =>
-          layer?.name === `${Layer.REGULATORY.code}:${regulatoryZoneMetadata.topic}:${regulatoryZoneMetadata.zone}`
+          layer?.name ===
+          `${LayerProperties.REGULATORY.code}:${regulatoryZoneMetadata.topic}:${regulatoryZoneMetadata.zone}`
       )
 
       if (layerToAddProperty) {
@@ -97,7 +98,7 @@ export function RegulatoryLayers({ map, mapMovingAndZoomEvent }: RegulatoryLayer
         const regulatoryLayers = map
           .getLayers()
           .getArray()
-          .filter(layer => layer?.name?.includes(Layer.REGULATORY.code))
+          .filter(layer => layer?.name?.includes(LayerProperties.REGULATORY.code))
         regulatoryLayers.forEach(layer => {
           const vectorSource = layer.getSource()
 
@@ -169,7 +170,7 @@ function layersNotPresentInShowedLayers(showedLayers, olLayer) {
 }
 
 function layersOfTypeRegulatoryLayerInCurrentMap(olLayer) {
-  return olLayer?.name?.includes(Layer.REGULATORY.code)
+  return olLayer?.name?.includes(LayerProperties.REGULATORY.code)
 }
 
 function addMetadataIsShowedProperty(lastShowedFeatures, layerToAddProperty) {

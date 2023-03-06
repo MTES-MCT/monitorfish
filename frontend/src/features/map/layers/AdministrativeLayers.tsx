@@ -6,8 +6,8 @@ import {
   layersNotInCurrentOLMap,
   layersNotInShowedLayers
 } from '../../../domain/entities/administrative'
-import { Layer, LayerType } from '../../../domain/entities/layers/constants'
-import { getVectorOLLayer } from '../../../domain/use_cases/layer/administrative/showAdministrativeLayer'
+import { LayerProperties, LayerType } from '../../../domain/entities/layers/constants'
+import { getVectorOLLayer } from '../../../domain/use_cases/layer/administrative/showAdministrativeZone'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
 export type AdministrativeLayersProps = {
@@ -17,8 +17,8 @@ function UnmemoizedAdministrativeLayers({ map }: AdministrativeLayersProps) {
   const { showedLayers } = useMainAppSelector(state => state.layer)
   const isBackoffice = useMainAppSelector(state => state.global.isBackoffice)
 
-  const administrativeLayers = Object.keys(Layer)
-    .map(topic => Layer[topic])
+  const administrativeLayers = Object.keys(LayerProperties)
+    .map(topic => LayerProperties[topic])
     .filter(layer => layer.type === LayerType.ADMINISTRATIVE)
 
   useEffect(() => {

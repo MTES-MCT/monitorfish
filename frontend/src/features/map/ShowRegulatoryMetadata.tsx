@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { Layer } from '../../domain/entities/layers/constants'
+import { LayerProperties } from '../../domain/entities/layers/constants'
 import { showRegulatoryZoneMetadata } from '../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 
@@ -19,7 +19,7 @@ export function ShowRegulatoryMetadata({ mapClickEvent }: ShowRegulatoryMetadata
     }
 
     function showRegulatoryZoneMetadataOnClick(feature) {
-      if (feature?.getId()?.toString()?.includes(Layer.REGULATORY.code)) {
+      if (feature?.getId()?.toString()?.includes(LayerProperties.REGULATORY.code)) {
         const zone = {
           topic: feature.getProperties().topic,
           zone: feature.getProperties().zone

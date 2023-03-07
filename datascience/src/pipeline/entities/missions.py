@@ -37,3 +37,39 @@ class MissionType(Enum):
             MissionActionType.AIR_CONTROL: MissionType.AIR,
         }
         return mapping[mission_action_type]
+
+
+class InfractionType(Enum):
+    WITH_RECORD = "WITH_RECORD"
+    WITHOUT_RECORD = "WITHOUT_RECORD"
+
+    def from_poseidon_infraction_field(infraction: int):
+        """
+        Translates the `infraction` field of the Poseidon database into the
+        corresponding InfractionType.
+
+        The `infraction` field of the Poseidon database holds values:
+
+        - 0 for controls without infraction
+        - 1 for controls with infraction(s)
+        - 2 for controls with infraction(s) but without record ("PV" in french)
+
+        In some rare cases, the `infraction` field has the value 0 although some
+        infractions are present in the control results. In these cases, we'll consider
+        there was no record.
+
+        Args:
+            infraction (int): 0, 1 or 2
+
+        Returns:
+            InfractionType
+        """
+        assert infraction in (0, 1, 2)
+
+        infraction_types = [
+            InfractionType.WITHOUT_RECORD,
+            InfractionType.WITH_RECORD,
+            InfractionType.WITHOUT_RECORD,
+        ]
+
+        return infraction_types[infraction]

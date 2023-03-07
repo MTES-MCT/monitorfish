@@ -14,9 +14,9 @@ context('Fleet segments', () => {
   it('Should render the fleet segments', () => {
     // Then
     cy.get('.rs-table-row').should('have.length', 44)
-    cy.get('[data-cy="row-ATL01-impactRiskFactor-1.7"]').should('exist')
-    cy.get('[data-cy="row-ATL01-segment-ATL01"]').should('exist')
-    cy.get('[data-cy="row-ATL01-segmentName-All Trawls 3"]').should('exist')
+    cy.get('[data-cy="row-ATL01-impactRiskFactor"]').contains(1.7)
+    cy.get('[data-cy="row-ATL01-segment"]').should('have.value', 'ATL01')
+    cy.get('[data-cy="row-ATL01-segmentName"]').should('have.value', 'All Trawls 3')
     cy.get('.rs-table-cell-content').eq(11).contains('OTM')
     cy.get('.rs-table-cell-content').eq(11).contains('PTM')
     cy.get('.rs-table-cell-content').eq(12).contains('BFT')
@@ -29,60 +29,64 @@ context('Fleet segments', () => {
   it('Should update the impact factor field', () => {
     // When
     cy.intercept('PUT', `/bff/v1/fleet_segments?year=${currentYear}&segment=ATL01`).as('updateFleetSegment')
-    cy.get('[data-cy="row-ATL01-impactRiskFactor-1.7"]').click()
+    cy.get('[data-cy="row-ATL01-impactRiskFactor"]').click()
     cy.get('[data-key="1.2"] > .rs-picker-select-menu-item').click()
     cy.wait('@updateFleetSegment')
 
     // Then
     cy.wait(50)
-    cy.get('[data-cy="row-ATL01-impactRiskFactor-1.2"]').should('exist')
+    cy.get('[data-cy="row-ATL01-impactRiskFactor"]').contains(1.2)
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
     cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
     cy.wait(50)
-    cy.get('[data-cy="row-ATL01-impactRiskFactor-1.2"]').should('exist')
+    cy.get('[data-cy="row-ATL01-impactRiskFactor"]').contains(1.2)
   })
 
   it('Should update the segment field', () => {
     // When
     cy.intercept('PUT', `/bff/v1/fleet_segments?year=${currentYear}&segment=ATL01`).as('updateFleetSegment')
-    cy.get('[data-cy="row-ATL01-segment-ATL01"]').type('{backspace}')
-    cy.get('[data-cy="row-ATL0-segment-ATL0"]').type('3')
-    cy.get('[data-cy="row-ATL03-segment-ATL03"]').type('6')
+    cy.get('[data-cy="row-ATL01-segment"]').type('{backspace}')
+    cy.wait(200)
+    cy.get('[data-cy="row-ATL0-segment"]').type('3')
+    cy.wait(200)
+    cy.get('[data-cy="row-ATL03-segment"]').type('6')
     cy.wait('@updateFleetSegment')
 
     // Then
     cy.wait(50)
-    cy.get('[data-cy="row-ATL036-segment-ATL036"]').should('exist')
+    cy.get('[data-cy="row-ATL036-segment"]').should('have.value', 'ATL036')
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
     cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
     cy.wait(50)
-    cy.get('[data-cy="row-ATL036-segment-ATL036"]').should('exist')
+    cy.get('[data-cy="row-ATL036-segment"]').should('have.value', 'ATL036')
   })
 
   it('Should update the segment name field', () => {
     // When
     cy.intercept('PUT', `/bff/v1/fleet_segments?year=${currentYear}&segment=ATL036`).as('updateFleetSegment')
-    cy.get('[data-cy="row-ATL036-segmentName-All Trawls 3"]').type('{backspace}')
-    cy.get('[data-cy="row-ATL036-segmentName-All Trawls "]').type('4')
-    cy.get('[data-cy="row-ATL036-segmentName-All Trawls 4"]').type('5')
+    cy.get('[data-cy="row-ATL036-segmentName"]').type('{backspace}')
+    cy.wait(200)
+    cy.get('[data-cy="row-ATL036-segmentName"]').type('4')
+    cy.wait(200)
+    cy.get('[data-cy="row-ATL036-segmentName"]').type('5')
     cy.wait('@updateFleetSegment')
 
     // Then
     cy.wait(50)
-    cy.get('[data-cy="row-ATL036-segmentName-All Trawls 45"]').should('exist')
+    cy.get('[data-cy="row-ATL036-segmentName"]').should('have.value', 'All Trawls 45')
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
     cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
     cy.wait(50)
-    cy.get('[data-cy="row-ATL036-segmentName-All Trawls 45"]').should('exist')
+    cy.get('[data-cy="row-ATL036-segmentName"]').should('have.value', 'All Trawls 45')
   })
 
   it('Should update the gears field', () => {
@@ -187,9 +191,11 @@ context('Fleet segments', () => {
 
     cy.get('[data-cy="create-fleet-segment-targeted-species"]').click({ force: true })
     cy.get('[data-cy="create-fleet-segment-targeted-species"] input').type('COD', { force: true })
-    cy.get('[data-key="COD"]').click()
+    cy.wait(200)
+    cy.get('[data-key="COD"]').click({ force: true })
     cy.get('[data-cy="create-fleet-segment-targeted-species"] input').type('SOL', { force: true })
-    cy.get('[data-key="SOL"]').click()
+    cy.wait(200)
+    cy.get('[data-key="SOL"]').click({ force: true })
 
     // TODO Investigate why this is not working
     // cy.get('[data-cy="create-fleet-segment-incidental-species"]').click({ force: true })
@@ -199,11 +205,13 @@ context('Fleet segments', () => {
     cy.get(':nth-child(9) > .rs-picker-tag-wrapper > .rs-picker-search > .rs-picker-search-input > input').type('BF', {
       force: true
     })
-    cy.get('[data-key="BFT"]').scrollIntoView().click()
+    cy.wait(200)
+    cy.get('[data-key="BFT"]').scrollIntoView().click({ force: true })
 
     cy.get('*[data-cy="create-fleet-segment-fao-zones"]').click({ force: true })
-    cy.get('[data-key="21.1.A"]').click()
-    cy.get('[data-key="21.1.B"]').click()
+    cy.wait(200)
+    cy.get('[data-key="21.1.A"]').click({ force: true })
+    cy.get('[data-key="21.1.B"]').click({ force: true })
 
     cy.get('*[data-cy="create-fleet-segment"]').click()
     cy.wait('@createFleetSegment')
@@ -248,7 +256,8 @@ context('Fleet segments', () => {
 
     // When
     cy.get('[data-cy="fleet-segments-add-year"]').click()
-    cy.get(`[data-key="${yearToAdd}"]`).click()
+    cy.wait(200)
+    cy.get(`[data-key="${yearToAdd}"]`).click({ force: true })
 
     // Then
     cy.get('[data-cy="fleet-segments-add-year"]').click()

@@ -76,7 +76,7 @@ const SubRiskDetails = styled.div`
 const TableBody = styled.tbody``
 
 const InfractionsResumeZone = styled.div`
-  margin: 5px 5px 0 25px;
+  margin: 5px 5px 0 5px;
 `
 
 const Zone = styled.div`

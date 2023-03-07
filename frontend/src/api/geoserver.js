@@ -4,6 +4,7 @@ import WFS from 'ol/format/WFS'
 import GML from 'ol/format/GML'
 import { REGULATION_ACTION_TYPE } from '../domain/entities/regulation'
 import { HttpStatusCode } from './constants'
+import { ApiError } from '../libs/ApiError'
 
 export const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la couche réglementaire'
 const REGULATORY_ZONES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les zones réglementaires'
@@ -12,7 +13,7 @@ const GEOMETRY_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la liste des tr
 const UPDATE_REGULATION_MESSAGE = 'Une erreur est survenue lors de la mise à jour de la zone réglementaire dans GeoServer'
 
 function throwIrretrievableAdministrativeZoneError (e, type) {
-  throw Error(`Nous n'avons pas pu récupérer la zone ${type} : ${e}`)
+  throw new ApiError(`Nous n'avons pas pu récupérer la zone ${type}`, e)
 }
 
 function getIrretrievableRegulatoryZoneError (e, regulatoryZone) {

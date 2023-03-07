@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react'
 import { RadioGroup } from 'rsuite'
 import styled from 'styled-components'
 
-import { BaseLayerRow } from './BaseLayerRow'
+import { BaseMap } from './BaseMap'
 import { COLORS } from '../../../constants/constants'
 import { BaseLayers, LayerType } from '../../../domain/entities/layers/constants'
 import LayerSlice from '../../../domain/shared_slices/Layer'
@@ -12,7 +12,7 @@ import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
 
-export function BaseLayerList({ namespace }) {
+export function BaseMaps({ namespace }) {
   const dispatch = useMainAppDispatch()
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
   const layersSidebarOpenedLayerType = useMainAppSelector(state => state.layer.layersSidebarOpenedLayerType)
@@ -49,7 +49,7 @@ export function BaseLayerList({ namespace }) {
       <RadioGroup onChange={showLayer} value={selectedBaseLayer}>
         <List isShowed={isBaseLayersShowed} layersLength={baseLayers.length}>
           {baseLayers.map(layer => (
-            <BaseLayerRow key={layer} layer={layer} />
+            <BaseMap key={layer} layer={layer} />
           ))}
         </List>
       </RadioGroup>
@@ -74,6 +74,11 @@ const Title = styled.div<{
   border-top-right-radius: 2px;
   border-bottom-left-radius: ${p => (p.isShowed ? '0' : '2px')};
   border-bottom-right-radius: ${p => (p.isShowed ? '0' : '2px')};
+
+  > div {
+    float: right;
+    margin-top: 4px;
+  }
 `
 
 const List = styled.ul<{

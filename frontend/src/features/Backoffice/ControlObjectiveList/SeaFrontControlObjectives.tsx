@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { SelectPicker, Table } from 'rsuite'
 import styled from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { useGetFleetSegmentsQuery } from '../../../api/fleetSegment'
 import { COLORS } from '../../../constants/constants'
@@ -98,31 +99,13 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
     [controlObjectivesWithMaybeFleetSegment, dispatch]
   )
 
-  const handleChangeModifiableKey = useCallback(
+  const updateControlObjectiveDebounced = useDebouncedCallback(
     (
       id: number,
       key: keyof ControlObjective,
       value,
-      nextSortColumn: keyof ControlObjective,
-      nextSortType: SortType
+      previousControlObjectivesWithMaybeFleetSegment: ControlObjectiveWithMaybeFleetSegment[]
     ) => {
-      const previousControlObjectivesWithMaybeFleetSegment = [...controlObjectivesWithMaybeFleetSegment]
-      const nextControlObjectivesWithMaybeFleetSegment = controlObjectivesWithMaybeFleetSegment.map(
-        controlObjectiveWithMaybeFleetSegment =>
-          controlObjectiveWithMaybeFleetSegment.id === id
-            ? {
-                ...controlObjectiveWithMaybeFleetSegment,
-                [key]: value
-              }
-            : controlObjectiveWithMaybeFleetSegment
-      )
-
-      const sortedNextControlObjectivesWithMaybeFleetSegment = nextControlObjectivesWithMaybeFleetSegment.sort((a, b) =>
-        sortArrayByColumn(a, b, nextSortColumn, nextSortType)
-      )
-
-      setControlObjectivesWithMaybeFleetSegment(sortedNextControlObjectivesWithMaybeFleetSegment)
-
       const updateData = {
         controlPriorityLevel: null,
         targetNumberOfControlsAtPort: null,
@@ -135,7 +118,32 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
         setControlObjectivesWithMaybeFleetSegment(previousControlObjectivesWithMaybeFleetSegment)
       })
     },
-    [controlObjectivesWithMaybeFleetSegment, dispatch]
+    500
+  )
+
+  const handleChangeModifiableKey = useCallback(
+    (
+      id: number,
+      key: keyof ControlObjective,
+      value,
+      _controlObjectivesWithMaybeFleetSegment: ControlObjectiveWithMaybeFleetSegment[]
+    ) => {
+      const previousControlObjectivesWithMaybeFleetSegment = [..._controlObjectivesWithMaybeFleetSegment]
+      const nextControlObjectivesWithMaybeFleetSegment = _controlObjectivesWithMaybeFleetSegment.map(
+        controlObjectiveWithMaybeFleetSegment =>
+          controlObjectiveWithMaybeFleetSegment.id === id
+            ? {
+                ...controlObjectiveWithMaybeFleetSegment,
+                [key]: value
+              }
+            : controlObjectiveWithMaybeFleetSegment
+      )
+
+      setControlObjectivesWithMaybeFleetSegment(nextControlObjectivesWithMaybeFleetSegment)
+
+      updateControlObjectiveDebounced(id, key, value, previousControlObjectivesWithMaybeFleetSegment)
+    },
+    [updateControlObjectiveDebounced]
   )
 
   // TODO Make that functional programming friendly.
@@ -241,7 +249,9 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
             id="id"
             inputType={INPUT_TYPE.INT}
             maxLength={3}
-            onChange={(id, key, value) => handleChangeModifiableKey(id, key, value, sortColumn, sortType)}
+            onChange={(id, key, value) =>
+              handleChangeModifiableKey(id, key, value, controlObjectivesWithMaybeFleetSegment)
+            }
           />
         </Table.Column>
 
@@ -252,7 +262,9 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
             id="id"
             inputType={INPUT_TYPE.INT}
             maxLength={3}
-            onChange={(id, key, value) => handleChangeModifiableKey(id, key, value, sortColumn, sortType)}
+            onChange={(id, key, value) =>
+              handleChangeModifiableKey(id, key, value, controlObjectivesWithMaybeFleetSegment)
+            }
           />
         </Table.Column>
 
@@ -265,7 +277,9 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
           <Table.HeaderCell>Priorité</Table.HeaderCell>
           <ControlPriorityCell
             dataKey="controlPriorityLevel"
-            onChange={(id, key, value) => handleChangeModifiableKey(id, key, value, sortColumn, sortType)}
+            onChange={(id, key, value) =>
+              handleChangeModifiableKey(id, key, value, controlObjectivesWithMaybeFleetSegment)
+            }
           />
         </Table.Column>
 

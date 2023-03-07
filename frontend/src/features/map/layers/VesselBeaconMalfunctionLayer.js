@@ -4,7 +4,7 @@ import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import { Vector } from 'ol/layer'
-import { Layer } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 
 import { getVesselBeaconMalfunctionStyle } from './styles/vessel.style'
 import { getVesselCompositeIdentifier, vesselIsShowed } from '../../../domain/entities/vessel/vessel'
@@ -46,7 +46,7 @@ const VesselBeaconMalfunctionLayer = ({ map }) => {
     if (layerRef.current === null) {
       layerRef.current = new Vector({
         source: getVectorSource(),
-        zIndex: Layer.VESSEL_BEACON_MALFUNCTION.zIndex,
+        zIndex: LayerProperties.VESSEL_BEACON_MALFUNCTION.zIndex,
         updateWhileAnimating: true,
         updateWhileInteracting: true,
         style: (_, resolution) => getVesselBeaconMalfunctionStyle(resolution)
@@ -57,7 +57,7 @@ const VesselBeaconMalfunctionLayer = ({ map }) => {
 
   useEffect(() => {
     if (isAdmin && map) {
-      getLayer().name = Layer.VESSEL_BEACON_MALFUNCTION.code
+      getLayer().name = LayerProperties.VESSEL_BEACON_MALFUNCTION.code
       map.getLayers().push(getLayer())
     }
 
@@ -81,7 +81,7 @@ const VesselBeaconMalfunctionLayer = ({ map }) => {
         const feature = new Feature({
           geometry: new Point(vessel.coordinates)
         })
-        feature.setId(`${Layer.VESSEL_BEACON_MALFUNCTION.code}:${getVesselCompositeIdentifier(vessel.vesselProperties)}`)
+        feature.setId(`${LayerProperties.VESSEL_BEACON_MALFUNCTION.code}:${getVesselCompositeIdentifier(vessel.vesselProperties)}`)
         _features.push(feature)
 
         return _features

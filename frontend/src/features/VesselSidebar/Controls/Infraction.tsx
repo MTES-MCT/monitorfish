@@ -82,7 +82,7 @@ const Wrapper = styled.div<{
 
 const InfractionTagText = styled.span`
   color: ${COLORS.gunMetal};
-  margin: 0 5px 0 5px;
+  margin: 0 8px 0 8px;
   font-weight: 500;
 `
 

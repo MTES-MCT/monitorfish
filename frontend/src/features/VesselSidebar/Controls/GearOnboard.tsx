@@ -9,7 +9,7 @@ export function GearOnboard({ gearOnboard }: GearOnboardProps) {
   return (
     <Wrapper>
       <Title>
-        Engin {gearOnboard.gearWasControlled || 'non '}contrôlé - {gearOnboard.gearName} ({gearOnboard.gearCode})
+        {gearOnboard.gearName} ({gearOnboard.gearCode}) – {gearOnboard.gearWasControlled || 'non '}contrôlé
       </Title>
       Maillage {gearOnboard.declaredMesh ? `déclaré ${gearOnboard.declaredMesh} mm, ` : ''}
       {gearOnboard.controlledMesh ? `mesuré ${gearOnboard.controlledMesh} mm` : 'non mesuré'}
@@ -21,6 +21,8 @@ export function GearOnboard({ gearOnboard }: GearOnboardProps) {
 
 const Title = styled.div`
   font-weight: bold;
+  white-space: normal;
+  width: 100%;
 `
 
 const Wrapper = styled.div`

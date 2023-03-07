@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
 import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/layer/regulation/getAllRegulatoryLayersByRegTerritory'
-import { Layer } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 import showRegulatoryZone from '../../../domain/use_cases/layer/regulation/showRegulatoryZone'
 
 import {
@@ -125,7 +125,7 @@ const EditRegulation = ({ title, isEdition }) => {
       if (isEdition && processingRegulation?.geometry) {
         dispatch(
           showRegulatoryZone({
-            type: Layer.REGULATORY.code,
+            type: LayerProperties.REGULATORY.code,
             ...processingRegulation,
             namespace: 'backoffice'
           })

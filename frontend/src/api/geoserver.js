@@ -1,9 +1,10 @@
-import { Layer } from '../domain/entities/layers/constants'
+import { LayerProperties } from '../domain/entities/layers/constants'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map/constants'
 import WFS from 'ol/format/WFS'
 import GML from 'ol/format/GML'
 import { REGULATION_ACTION_TYPE } from '../domain/entities/regulation'
 import { HttpStatusCode } from './constants'
+import { ApiError } from '../libs/ApiError'
 
 export const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la couche réglementaire'
 const REGULATORY_ZONES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les zones réglementaires'
@@ -12,7 +13,7 @@ const GEOMETRY_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la liste des tr
 const UPDATE_REGULATION_MESSAGE = 'Une erreur est survenue lors de la mise à jour de la zone réglementaire dans GeoServer'
 
 function throwIrretrievableAdministrativeZoneError (e, type) {
-  throw Error(`Nous n'avons pas pu récupérer la zone ${type} : ${e}`)
+  throw new ApiError(`Nous n'avons pas pu récupérer la zone ${type}`, e)
 }
 
 function getIrretrievableRegulatoryZoneError (e, regulatoryZone) {
@@ -30,7 +31,7 @@ function getAllRegulatoryLayersFromAPI (fromBackoffice) {
   const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
   return fetch(`${geoserverURL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
-    `${Layer.REGULATORY.code}&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`)
+    `${LayerProperties.REGULATORY.code}&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`)
     .then(response => {
       if (response.status === HttpStatusCode.OK) {
         return response.json()
@@ -65,7 +66,7 @@ function getAllGeometryWithoutProperty (fromBackoffice) {
 
   const filter = 'regulatory_references IS NULL AND zone IS NULL AND region IS NULL AND law_type IS NULL AND topic IS NULL'
   const REQUEST = `${geoserverURL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
-    `${Layer.REGULATORY.code}&outputFormat=application/json&propertyName=geometry,id&CQL_FILTER=` + filter.replace(/'/g, '%27').replace(/ /g, '%20')
+    `${LayerProperties.REGULATORY.code}&outputFormat=application/json&propertyName=geometry,id&CQL_FILTER=` + filter.replace(/'/g, '%27').replace(/ /g, '%20')
   return fetch(REQUEST)
     .then(response => {
       if (response.status === HttpStatusCode.OK) {
@@ -198,7 +199,7 @@ export function getRegulatoryZonesInExtentFromAPI (extent, fromBackoffice) {
     const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
     return fetch(`${geoserverURL}/geoserver/wfs?service=WFS` +
-      `&version=1.1.0&request=GetFeature&typename=monitorfish:${Layer.REGULATORY.code}` +
+      `&version=1.1.0&request=GetFeature&typename=monitorfish:${LayerProperties.REGULATORY.code}` +
       `&outputFormat=application/json&srsname=${WSG84_PROJECTION}` +
       `&bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}` +
       '&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region'
@@ -246,7 +247,7 @@ function getRegulatoryFeatureMetadataFromAPI (regulatorySubZone, fromBackoffice)
   try {
     const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
-    url = getRegulatoryZoneURL(Layer.REGULATORY.code, regulatorySubZone, geoserverURL)
+    url = getRegulatoryZoneURL(LayerProperties.REGULATORY.code, regulatorySubZone, geoserverURL)
   } catch (e) {
     return Promise.reject(e)
   }
@@ -273,7 +274,7 @@ function getAdministrativeSubZonesFromAPI (type, fromBackoffice) {
   const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
   let query
-  if (type === Layer.FAO.code) {
+  if (type === LayerProperties.FAO.code) {
     const filter = 'f_level=\'DIVISION\''
 
     query = `${geoserverURL}/geoserver/wfs?service=WFS&` +

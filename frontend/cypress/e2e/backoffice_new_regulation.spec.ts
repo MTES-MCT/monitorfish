@@ -18,12 +18,14 @@ context('Edit Regulation', () => {
   it('Select, change and remove law type Reg. MEMN', () => {
     // Open menu and select "Reg. MEMN",  the tag is displayed
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
-    cy.get('[data-key="Reg. MEMN"]').eq(0).click()
+    cy.wait(200)
+    cy.get('[data-key="Reg. MEMN"]').click({ force: true })
     cy.get('[data-cy="tag-Reg. MEMN"]').should('exist')
 
     // Change selected law type, select "Reg. NAMO"
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
-    cy.get('[data-key="Reg. NAMO"]').eq(0).click()
+    cy.wait(200)
+    cy.get('[data-key="Reg. NAMO"]').click({ force: true })
     cy.get('[data-cy="tag-Reg. NAMO"]').should('exist')
 
     // Remove tag
@@ -34,17 +36,21 @@ context('Edit Regulation', () => {
   it('Change law type update the layer name list', () => {
     // Select Reg. MEMN in the dropdown menu
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
-    cy.get('[data-key="Reg. MEMN"]').eq(0).click()
+    cy.wait(200)
+    cy.get('[data-key="Reg. MEMN"]').eq(0).click({ force: true })
     // Select the first layer name in the dropdown menu
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(1).click()
+    cy.wait(200)
     cy.get('[data-key="Ouest Cotentin Bivalves"]').should('exist')
 
     // Select Reg. NAMO law type in the dropdown menu
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
-    cy.get('[data-key="Reg. NAMO"]').eq(0).click()
+    cy.wait(200)
+    cy.get('[data-key="Reg. NAMO"]').eq(0).click({ force: true })
     // Select the first layer name in the dropdown menu
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(1).click()
     // layer name should have changed
+    cy.wait(200)
     cy.get('[data-key="Armor CSJ Dragues"]').should('exist')
   })
 
@@ -53,7 +59,7 @@ context('Edit Regulation', () => {
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
     // Since this input is virtualized, we need to scroll and wait for it to render new items
     cy.get('.rs-picker-select-menu-items > div > div').eq(0).scrollTo(0, 500).wait(500)
-    cy.get('[data-key="R(CE) 494/2002"]').eq(0).click()
+    cy.get('[data-key="R(CE) 494/2002"]').eq(0).click({ force: true })
 
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(1).click({ force: true })
     cy.get('.rs-picker-none').contains('aucune thématique à afficher')
@@ -69,7 +75,8 @@ context('Edit Regulation', () => {
   it('If a french law type has been selected, region list contains 13 elements', () => {
     // Select a french law type
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
-    cy.get('[data-key="Reg. MED"]').eq(0).click()
+    cy.wait(200)
+    cy.get('[data-key="Reg. MED"]').eq(0).click({ force: true })
     // Region select picker should not be disabled
     cy.get('.rs-picker-toggle-placeholder').eq(2).should('have.text', 'Choisir une région')
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(2).click()
@@ -84,7 +91,8 @@ context('Edit Regulation', () => {
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
     // Since this input is virtualized, we need to scroll and wait for it to render new items
     cy.get('.rs-picker-select-menu-items > div > div').eq(0).scrollTo(0, 500).wait(500)
-    cy.get('[data-key="R(UE) 2019/1241"]').eq(0).click()
+    cy.wait(200)
+    cy.get('[data-key="R(UE) 2019/1241"]').eq(0).click({ force: true })
     // Region select picker should be disabled
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(2).should('have.attr', 'aria-disabled', 'true')
   })
@@ -92,14 +100,17 @@ context('Edit Regulation', () => {
   it('Select "Grand Est" and "Auvergne-Rhône-Alpes" region and remove it', () => {
     // Select a french law type
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
-    cy.get('[data-key="Reg. MED"]').eq(0).click()
+    cy.wait(200)
+    cy.get('[data-key="Reg. MED"]').eq(0).click({ force: true })
     // Select "Auvergne-Rhône-Alpes" region
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(2).click()
-    cy.get('[data-key="Auvergne-Rhône-Alpes"]').click()
+    cy.wait(200)
+    cy.get('[data-key="Auvergne-Rhône-Alpes"]').click({ force: true })
     cy.get('[data-cy="tag-Auvergne-Rhône-Alpes"]').should('exist')
     // Select "Grand Est" region
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(2).click()
-    cy.get('[data-key="Grand Est"]').click()
+    cy.wait(200)
+    cy.get('[data-key="Grand Est"]').click({ force: true })
     cy.get('[data-cy="tag-Grand Est"]').should('exist')
     // 3 tags exists (1 seafront and 2 regions)
     cy.get('[data-cy^="tag"]').should('have.length', 3)
@@ -242,9 +253,11 @@ context('Edit Regulation', () => {
   it('Modification of inputs Should be kept in local storage when refreshing the page', () => {
     // Given
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
-    cy.get('[data-key="Reg. MEMN"]').eq(0).click()
+    cy.wait(200)
+    cy.get('[data-key="Reg. MEMN"]').eq(0).click({ force: true })
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(2).click()
-    cy.get('[data-key="Auvergne-Rhône-Alpes"]').click()
+    cy.wait(200)
+    cy.get('[data-key="Auvergne-Rhône-Alpes"]').click({ force: true })
     cy.get('[data-cy="reg-text-name"]').type('zone name')
     cy.get('[data-cy="reg-text-url"]').type('http://url.com')
     cy.get('[data-cy="save-reg-text-name"]').click()

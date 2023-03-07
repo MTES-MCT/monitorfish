@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 
 import {
+  getAdministrativeLayers,
   layerOfTypeAdministrativeLayer,
   layerOfTypeAdministrativeLayerInCurrentMap,
   layersNotInCurrentOLMap,
   layersNotInShowedLayers
-} from '../../../domain/entities/administrative'
-import { Layer, LayerType } from '../../../domain/entities/layers/constants'
-import { getVectorOLLayer } from '../../../domain/use_cases/layer/administrative/showAdministrativeLayer'
+} from '../../../domain/entities/layers'
+import { getVectorOLLayer } from '../../../domain/use_cases/layer/administrative/showAdministrativeZone'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
 export type AdministrativeLayersProps = {
@@ -17,9 +17,7 @@ function UnmemoizedAdministrativeLayers({ map }: AdministrativeLayersProps) {
   const { showedLayers } = useMainAppSelector(state => state.layer)
   const isBackoffice = useMainAppSelector(state => state.global.isBackoffice)
 
-  const administrativeLayers = Object.keys(Layer)
-    .map(topic => Layer[topic])
-    .filter(layer => layer.type === LayerType.ADMINISTRATIVE)
+  const administrativeLayers = getAdministrativeLayers()
 
   useEffect(() => {
     if (!map && !showedLayers) {

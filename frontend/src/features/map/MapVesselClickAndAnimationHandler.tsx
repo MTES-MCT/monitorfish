@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { Layer } from '../../domain/entities/layers/constants'
+import { LayerProperties } from '../../domain/entities/layers/constants'
 import { resetAnimateToCoordinates, resetAnimateToExtent, resetFitToExtent } from '../../domain/shared_slices/Map'
 import { updateVesselTrackAsZoomed } from '../../domain/shared_slices/Vessel'
 import { getVesselVoyage } from '../../domain/use_cases/vessel/getVesselVoyage'
@@ -112,7 +112,7 @@ export function MapVesselClickAndAnimationHandler({ map, mapClickEvent }) {
 
   useEffect(() => {
     const clickedFeatureId = mapClickEvent?.feature?.getId()
-    if (!previewFilteredVesselsMode && clickedFeatureId?.toString()?.includes(Layer.VESSELS.code)) {
+    if (!previewFilteredVesselsMode && clickedFeatureId?.toString()?.includes(LayerProperties.VESSELS.code)) {
       const clickedVessel = vessels.find(vessel => clickedFeatureId?.toString()?.includes(vessel.vesselFeatureId))
 
       if (!clickedVessel) {

@@ -23,7 +23,7 @@ export const INPUT_TYPE = {
  */
 export const ModifiableCell = ({ dataKey, id, inputType, maxLength, onChange, afterChange, isDisabled, ...props }) => {
   const { rowData } = props
-  const dataCy = `row-${rowData[id]}-${dataKey}-${rowData[dataKey]}`
+  const dataCy = `row-${rowData[id]}-${dataKey}`
 
   return (
     <ModifiableCellWrapper>
@@ -64,7 +64,7 @@ const impactRange = _.range(1, 4, 0.1).map(num => {
 
 export const ImpactCell = ({ dataKey, id, onChange, ...props }) => {
   const { rowData } = props
-  const dataCy = `row-${rowData[id]}-${dataKey}-${rowData[dataKey]}`
+  const dataCy = `row-${rowData[id]}-${dataKey}`
 
   return (
     <Cell
@@ -149,7 +149,7 @@ export const FleetSegmentInput = ({ maxLength, value, inputType, id, dataKey, wi
  * @param {*} props
  */
 export const ControlPriorityCell = ({ rowData, dataKey, onChange, ...props }) => {
-  const dataCy = `row-${rowData.id}-${dataKey}-${rowData[dataKey]}`
+  const dataCy = `row-${rowData.id}-${dataKey}`
 
   return (
     <Cell

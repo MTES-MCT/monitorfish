@@ -10,7 +10,12 @@ from sqlalchemy import DDL
 
 from config import POSEIDON_CONTROL_ID_TO_MONITORENV_MISSION_ID_SHIFT
 from src.db_config import create_engine
-from src.pipeline.entities.missions import MissionActionType, MissionOrigin, MissionType
+from src.pipeline.entities.missions import (
+    InfractionType,
+    MissionActionType,
+    MissionOrigin,
+    MissionType,
+)
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.controls import make_infractions
 from src.pipeline.helpers.fao_areas import remove_redundant_fao_area_codes
@@ -262,28 +267,52 @@ def transform_controls(controls: pd.DataFrame):
         lambda s: set(map(int, s.split(", "))), na_action="ignore"
     )
 
+    logger.info("Transformation `infraction` field to InfractionType objects.")
+    controls["infraction_type"] = controls.infraction.map(
+        InfractionType.from_poseidon_infraction_field
+    )
+
     logger.info("Creating gear_infractions")
-    controls["gear_infractions"] = controls.infraction_natinfs.apply(
-        make_infractions, only_natinfs=gear_natinfs
+    controls["gear_infractions"] = controls.apply(
+        lambda row: make_infractions(
+            row["infraction_natinfs"], row["infraction_type"], only_natinfs=gear_natinfs
+        ),
+        axis=1,
     )
 
     logger.info("Creating species_infractions")
-    controls["species_infractions"] = controls.infraction_natinfs.apply(
-        make_infractions, only_natinfs=species_natinfs
+    controls["species_infractions"] = controls.apply(
+        lambda row: make_infractions(
+            row["infraction_natinfs"],
+            row["infraction_type"],
+            only_natinfs=species_natinfs,
+        ),
+        axis=1,
     )
 
     logger.info("Creating logbook_infractions")
-    controls["logbook_infractions"] = controls.infraction_natinfs.apply(
-        make_infractions, only_natinfs=logbook_natinfs
+    controls["logbook_infractions"] = controls.apply(
+        lambda row: make_infractions(
+            row["infraction_natinfs"],
+            row["infraction_type"],
+            only_natinfs=logbook_natinfs,
+        ),
+        axis=1,
     )
 
     logger.info("Creating other_infractions")
-    controls["other_infractions"] = controls.infraction_natinfs.apply(
-        make_infractions,
-        exclude_natinfs=set.union(logbook_natinfs, gear_natinfs, species_natinfs),
+    controls["other_infractions"] = controls.apply(
+        lambda row: make_infractions(
+            row["infraction_natinfs"],
+            row["infraction_type"],
+            exclude_natinfs=set.union(logbook_natinfs, gear_natinfs, species_natinfs),
+        ),
+        axis=1,
     )
 
-    controls = controls.drop(columns=["infraction_natinfs"])
+    controls = controls.drop(
+        columns=["infraction_natinfs", "infraction", "infraction_type"]
+    )
 
     controls["action_type"] = controls.control_type.map(
         MissionActionType.from_poseidon_control_type

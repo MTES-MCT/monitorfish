@@ -4,7 +4,7 @@ import { useHistory, useRouteMatch } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { COLORS } from '../../../constants/constants'
-import { Layer } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 
 import { showRegulatoryZoneMetadata } from '../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
 import { closeRegulatoryZoneMetadata } from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
@@ -83,13 +83,13 @@ const RegulatoryZone = props => {
   const triggerShowRegulatoryZone = () => {
     if (!zoneIsShown && isReadyToShowRegulatoryLayers) {
       dispatch(showRegulatoryZone({
-        type: Layer.REGULATORY.code,
+        type: LayerProperties.REGULATORY.code,
         ...regulatoryZone,
         namespace
       }))
     } else {
       dispatch(hideLayer({
-        type: Layer.REGULATORY.code,
+        type: LayerProperties.REGULATORY.code,
         ...regulatoryZone,
         namespace
       }))

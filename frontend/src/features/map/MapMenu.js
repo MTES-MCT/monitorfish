@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import MapMenuOverlay from './overlays/MapMenuOverlay'
 import { HIT_PIXEL_TO_TOLERANCE } from '../../constants/constants'
-import { Layer } from '../../domain/entities/layers/constants'
+import { LayerProperties } from '../../domain/entities/layers/constants'
 import { useSelector } from 'react-redux'
 
 /**
@@ -24,7 +24,7 @@ const MapMenu = ({ map }) => {
         const feature = map.forEachFeatureAtPixel(pixel, feature => feature, { hitTolerance: HIT_PIXEL_TO_TOLERANCE })
         const clickedFeatureId = feature?.getId()
 
-        if (!clickedFeatureId?.toString()?.includes(Layer.VESSELS.code)) {
+        if (!clickedFeatureId?.toString()?.includes(LayerProperties.VESSELS.code)) {
           vessel.current = null
           setCoordinates([])
           return

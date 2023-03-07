@@ -6,7 +6,7 @@ import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 
 import { getVesselLastPositionVisibilityDates, Vessel } from '../../../domain/entities/vessel/vessel'
-import { Layer } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 
 import { applyFilterToVessels } from '../../../domain/use_cases/vessel/applyFilterAndSetVessels'
 import { COLORS } from '../../../constants/constants'
@@ -85,11 +85,11 @@ const VesselsLayer = ({ map }) => {
       style.current = getWebGLVesselStyle(initStyles)
       const vesselsVectorLayer = new WebGLPointsLayer({
         style: style.current,
-        className: Layer.VESSELS.code,
-        zIndex: Layer.VESSELS.zIndex,
+        className: LayerProperties.VESSELS.code,
+        zIndex: LayerProperties.VESSELS.zIndex,
         source: getVesselsVectorSource()
       })
-      vesselsVectorLayer.name = Layer.VESSELS.code
+      vesselsVectorLayer.name = LayerProperties.VESSELS.code
       map.getLayers().push(vesselsVectorLayer)
       vesselWebGLPointsLayerRef.current = vesselsVectorLayer
     }

@@ -7,13 +7,13 @@ import Stroke from 'ol/style/Stroke'
 import Text from 'ol/style/Text'
 
 import { getColorWithAlpha } from './utils'
-import { Layer } from '../../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../../domain/entities/layers/constants'
 
 import type Feature from 'ol/Feature'
 
 export function getAdministrativeLayerStyle(type: string) {
   switch (type) {
-    case Layer.EEZ.code:
+    case LayerProperties.EEZ.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -24,10 +24,10 @@ export function getAdministrativeLayerStyle(type: string) {
             fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.9)', width: 2 }),
-            text: `${feature?.get(Layer.EEZ.subZoneFieldKey) || ''}`
+            text: `${(LayerProperties.EEZ.subZoneFieldKey && feature?.get(LayerProperties.EEZ.subZoneFieldKey)) || ''}`
           })
         })
-    case Layer.FAO.code:
+    case LayerProperties.FAO.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -39,10 +39,10 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             overflow: true,
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: Layer.FAO.getZoneName(feature)
+            text: LayerProperties.FAO.getZoneName && LayerProperties.FAO.getZoneName(feature)
           })
         })
-    case Layer.AEM.code:
+    case LayerProperties.AEM.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -53,10 +53,10 @@ export function getAdministrativeLayerStyle(type: string) {
             fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${feature?.get(Layer.AEM.subZoneFieldKey) || ''}`
+            text: `${(LayerProperties.AEM.subZoneFieldKey && feature?.get(LayerProperties.AEM.subZoneFieldKey)) || ''}`
           })
         })
-    case Layer.effort_zones_areas.code:
+    case LayerProperties.effort_zones_areas.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -67,10 +67,14 @@ export function getAdministrativeLayerStyle(type: string) {
             fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${feature?.get(Layer.effort_zones_areas.subZoneFieldKey) || ''}`
+            text: `${
+              (LayerProperties.effort_zones_areas.subZoneFieldKey &&
+                feature?.get(LayerProperties.effort_zones_areas.subZoneFieldKey)) ||
+              ''
+            }`
           })
         })
-    case Layer.cormoran.code:
+    case LayerProperties.cormoran.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -81,10 +85,12 @@ export function getAdministrativeLayerStyle(type: string) {
             fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${feature?.get(Layer.cormoran.subZoneFieldKey) || ''}`
+            text: `${
+              (LayerProperties.cormoran.subZoneFieldKey && feature?.get(LayerProperties.cormoran.subZoneFieldKey)) || ''
+            }`
           })
         })
-    case Layer.situations.code:
+    case LayerProperties.situations.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -95,10 +101,14 @@ export function getAdministrativeLayerStyle(type: string) {
             fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${feature?.get(Layer.situations.subZoneFieldKey) || ''}`
+            text: `${
+              (LayerProperties.situations.subZoneFieldKey &&
+                feature?.get(LayerProperties.situations.subZoneFieldKey)) ||
+              ''
+            }`
           })
         })
-    case Layer.brexit.code:
+    case LayerProperties.brexit.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -109,10 +119,12 @@ export function getAdministrativeLayerStyle(type: string) {
             fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${feature?.get(Layer.brexit.subZoneFieldKey) || ''}`
+            text: `${
+              (LayerProperties.brexit.subZoneFieldKey && feature?.get(LayerProperties.brexit.subZoneFieldKey)) || ''
+            }`
           })
         })
-    case Layer.rectangles_stat.code:
+    case LayerProperties.rectangles_stat.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -123,10 +135,14 @@ export function getAdministrativeLayerStyle(type: string) {
             fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${feature?.get(Layer.rectangles_stat.subZoneFieldKey) || ''}`
+            text: `${
+              (LayerProperties.rectangles_stat.subZoneFieldKey &&
+                feature?.get(LayerProperties.rectangles_stat.subZoneFieldKey)) ||
+              ''
+            }`
           })
         })
-    case Layer.THREE_MILES.code:
+    case LayerProperties.THREE_MILES.code:
       return () =>
         new Style({
           stroke: new Stroke({
@@ -134,7 +150,7 @@ export function getAdministrativeLayerStyle(type: string) {
             width: 2
           })
         })
-    case Layer.SIX_MILES.code:
+    case LayerProperties.SIX_MILES.code:
       return () =>
         new Style({
           stroke: new Stroke({
@@ -142,7 +158,7 @@ export function getAdministrativeLayerStyle(type: string) {
             width: 2
           })
         })
-    case Layer.TWELVE_MILES.code:
+    case LayerProperties.TWELVE_MILES.code:
       return () =>
         new Style({
           stroke: new Stroke({
@@ -150,7 +166,7 @@ export function getAdministrativeLayerStyle(type: string) {
             width: 2
           })
         })
-    case Layer.cgpm_areas.code:
+    case LayerProperties.cgpm_areas.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -161,10 +177,14 @@ export function getAdministrativeLayerStyle(type: string) {
             fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${feature?.get(Layer.cgpm_areas.subZoneFieldKey) || ''}`
+            text: `${
+              (LayerProperties.cgpm_areas.subZoneFieldKey &&
+                feature?.get(LayerProperties.cgpm_areas.subZoneFieldKey)) ||
+              ''
+            }`
           })
         })
-    case Layer.cgpm_statistical_rectangles_areas.code:
+    case LayerProperties.cgpm_statistical_rectangles_areas.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -175,10 +195,14 @@ export function getAdministrativeLayerStyle(type: string) {
             fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${feature?.get(Layer.cgpm_statistical_rectangles_areas.subZoneFieldKey) || ''}`
+            text: `${
+              (LayerProperties.cgpm_statistical_rectangles_areas.subZoneFieldKey &&
+                feature?.get(LayerProperties.cgpm_statistical_rectangles_areas.subZoneFieldKey)) ||
+              ''
+            }`
           })
         })
-    case Layer.saltwater_limit.code:
+    case LayerProperties.saltwater_limit.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -189,10 +213,14 @@ export function getAdministrativeLayerStyle(type: string) {
             fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${feature?.get(Layer.saltwater_limit.subZoneFieldKey) || ''}`
+            text: `${
+              (LayerProperties.saltwater_limit.subZoneFieldKey &&
+                feature?.get(LayerProperties.saltwater_limit.subZoneFieldKey)) ||
+              ''
+            }`
           })
         })
-    case Layer.transversal_sea_limit.code:
+    case LayerProperties.transversal_sea_limit.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -203,7 +231,11 @@ export function getAdministrativeLayerStyle(type: string) {
             fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${feature?.get(Layer.transversal_sea_limit.subZoneFieldKey) || ''}`
+            text: `${
+              (LayerProperties.transversal_sea_limit.subZoneFieldKey &&
+                feature?.get(LayerProperties.transversal_sea_limit.subZoneFieldKey)) ||
+              ''
+            }`
           })
         })
     default:

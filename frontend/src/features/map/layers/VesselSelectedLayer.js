@@ -7,7 +7,7 @@ import { Vector } from 'ol/layer'
 import { transform } from 'ol/proj'
 
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
-import { Layer } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { Vessel } from '../../../domain/entities/vessel/vessel'
 
 import { getSelectedVesselStyle } from './styles/vessel.style'
@@ -25,7 +25,7 @@ const VesselSelectedLayer = ({ map }) => {
   const layerRef = useRef(new Vector({
     renderBuffer: 4,
     source: vectorSourceRef.current,
-    zIndex: Layer.SELECTED_VESSEL.zIndex,
+    zIndex: LayerProperties.SELECTED_VESSEL.zIndex,
     updateWhileAnimating: true,
     updateWhileInteracting: true,
     style
@@ -37,7 +37,7 @@ const VesselSelectedLayer = ({ map }) => {
 
   useEffect(() => {
     if (map) {
-      layerRef.current.name = Layer.SELECTED_VESSEL.code
+      layerRef.current.name = LayerProperties.SELECTED_VESSEL.code
       map.getLayers().push(layerRef.current)
     }
 

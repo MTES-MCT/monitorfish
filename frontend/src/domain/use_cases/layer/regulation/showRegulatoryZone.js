@@ -6,7 +6,7 @@ import { all } from 'ol/loadingstrategy'
 import VectorSource from 'ol/source/Vector'
 import simplify from 'simplify-geojson'
 
-import { Layer } from '../../../entities/layers/constants'
+import { LayerProperties } from '../../../entities/layers/constants'
 import { animateToRegulatoryLayer } from '../../../shared_slices/Map'
 import layer from '../../../shared_slices/Layer'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../entities/map/constants'
@@ -43,7 +43,7 @@ const showRegulatoryZone = zoneToShow => dispatch => {
 }
 
 export const getVectorOLLayer = (dispatch, getState) => nextVisibleLayer => {
-  const name = `${Layer.REGULATORY.code}:${nextVisibleLayer.topic}:${nextVisibleLayer.zone}`
+  const name = `${LayerProperties.REGULATORY.code}:${nextVisibleLayer.topic}:${nextVisibleLayer.zone}`
   const source = getRegulatoryVectorSource(dispatch, getState)(nextVisibleLayer)
 
   const _layer = new VectorImageLayer({
@@ -57,7 +57,7 @@ export const getVectorOLLayer = (dispatch, getState) => nextVisibleLayer => {
 }
 
 const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperties => {
-  const zoneName = `${Layer.REGULATORY.code}:${regulatoryZoneProperties.topic}:${regulatoryZoneProperties.zone}`
+  const zoneName = `${LayerProperties.REGULATORY.code}:${regulatoryZoneProperties.topic}:${regulatoryZoneProperties.zone}`
 
   const {
     setLastShowedFeatures,
@@ -70,7 +70,7 @@ const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperti
       featureProjection: OPENLAYERS_PROJECTION
     }),
     loader: extent => {
-      getRegulatoryZoneFromAPI(Layer.REGULATORY.code, regulatoryZoneProperties, getState().global.isBackoffice)
+      getRegulatoryZoneFromAPI(LayerProperties.REGULATORY.code, regulatoryZoneProperties, getState().global.isBackoffice)
         .then(regulatoryZone => {
           if (!regulatoryZone.geometry) {
             vectorSource.dispatchEvent(setIrretrievableFeaturesEvent(new Error('Aucune géometrie dans la zone')))

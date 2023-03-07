@@ -1,5 +1,5 @@
 import { formatDataForSelectPicker, getTextForSearch } from '../../../utils'
-import { Layer } from '../layers/constants'
+import { LayerProperties } from '../layers/constants'
 
 import type {
   FishingPeriod,
@@ -190,7 +190,7 @@ export const mapToRegulatoryFeatureObject = properties => {
   }
 }
 
-export const getRegulatoryFeatureId = id => `${Layer.REGULATORY.code}_write.${id}`
+export const getRegulatoryFeatureId = id => `${LayerProperties.REGULATORY.code}_write.${id}`
 
 export const emptyRegulatoryFeatureObject = {
   law_type: null,

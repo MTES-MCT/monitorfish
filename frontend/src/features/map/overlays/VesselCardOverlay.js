@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Overlay from 'ol/Overlay'
 import VesselCard from '../cards/VesselCard'
 import { COLORS } from '../../../constants/constants'
-import { Layer } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from './position'
 import { useSelector } from 'react-redux'
 
@@ -65,7 +65,7 @@ const VesselCardOverlay = ({ feature, map }) => {
 
   useEffect(() => {
     if (overlayRef.current && overlayObjectRef.current) {
-      if (feature?.getId()?.toString()?.includes(Layer.VESSELS.code)) {
+      if (feature?.getId()?.toString()?.includes(LayerProperties.VESSELS.code)) {
         setVesselFeatureToShowOnCard(feature)
         numberOfWarnings.current = isAdmin
           ? feature?.vesselProperties?.hasAlert + !!feature?.vesselProperties?.beaconMalfunctionId + feature?.vesselProperties?.hasInfractionSuspicion

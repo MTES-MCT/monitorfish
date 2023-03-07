@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { Layer } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { TrackTypeCard } from '../cards/TrackTypeCard'
 
 export function TrackTypeCardOverlay({ feature, map, pointerMoveEventPixel }) {
@@ -42,7 +42,7 @@ export function TrackTypeCardOverlay({ feature, map, pointerMoveEventPixel }) {
     }
 
     if (
-      !feature?.getId()?.toString()?.includes(Layer.VESSEL_TRACK.code) ||
+      !feature?.getId()?.toString()?.includes(LayerProperties.VESSEL_TRACK.code) ||
       !feature?.getId()?.toString()?.includes('line')
     ) {
       setTrackTypeToShowOnCard(null)

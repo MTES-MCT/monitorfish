@@ -1,15 +1,10 @@
+import { Icon } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
-
-export const ChevronIcon = styled(ChevronIconSVG)<{
+export const ChevronIcon = styled(Icon.Chevron)<{
   $isOpen: boolean
 }>`
-  width: 17px;
-  float: right;
-  margin-right: 10px;
-  margin-top: 9px;
+  margin-right: 16px;
   transform: ${props => (!props.$isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
-  transition: all 0.5s
-  cursor: pointer;
+  transition: all 0.5s;
 `

@@ -31,9 +31,18 @@ export function Control({ control, isLastItem }: ControlProps) {
       case MissionAction.MissionActionType.AIR_CONTROL:
         return 'AÉRIEN'
       case MissionAction.MissionActionType.LAND_CONTROL:
-        return `À QUAI (${control.portName?.toUpperCase()})`
+        return `À QUAI`
       case MissionAction.MissionActionType.SEA_CONTROL:
         return 'EN MER'
+      default:
+        return ''
+    }
+  }, [control])
+
+  const controlPort = useMemo(() => {
+    switch (control.actionType) {
+      case MissionAction.MissionActionType.LAND_CONTROL:
+        return `${control.portName?.toUpperCase()} (${control.portLocode?.toUpperCase()})`
       default:
         return ''
     }
@@ -48,11 +57,19 @@ export function Control({ control, isLastItem }: ControlProps) {
     <Wrapper isLastItem={isLastItem}>
       <GyroColumn>{numberOfInfractions ? <GyroRed /> : <GyroGreen />}</GyroColumn>
       <ContentColumn data-cy="vessel-control">
-        <Title data-cy="vessel-control-title" title={controlTitle}>
+        <Title data-cy="vessel-control-title" title={`${controlTitle} ${controlPort}`}>
           {controlTitle}
+          {controlPort && (
+            <>
+              <br />
+              {controlPort}
+            </>
+          )}
           <br />
           <Unit>
-            {control.controlUnits.map(controlUnit => `${controlUnit.name} (${controlUnit.administration})`).join(', ')}
+            {control.controlUnits
+              .map(controlUnit => `${controlUnit.name.replace('(historique)', '')} – ${controlUnit.administration}`)
+              .join(', ')}
           </Unit>
         </Title>
         <NoInfraction>{!numberOfInfractions && "Pas d'infraction"}</NoInfraction>
@@ -140,7 +157,7 @@ const Wrapper = styled.div<{
   width: -moz-available;
   width: -webkit-fill-available;
   margin: 16px;
-  padding: 12px 12px 16px 12px;
+  padding: 12px 24px 16px 12px;
   color: ${COLORS.gunMetal};
   display: flex;
 `

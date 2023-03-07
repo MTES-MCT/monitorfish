@@ -2,8 +2,9 @@
 
 import { createGenericSlice, getLocalStorageState } from '../../utils'
 import { getLayerNameNormalized } from '../entities/layers'
-import { Layer } from '../entities/layers/constants'
+import { LayerProperties } from '../entities/layers/constants'
 
+import type { ShowedLayer } from '../entities/layers/types'
 import type { AdministrativeOrRegulatoryLayerIdentity } from '../types/layer'
 import type { PayloadAction, Slice } from '@reduxjs/toolkit'
 
@@ -15,7 +16,7 @@ export type LayerState = {
   lastShowedFeatures: Record<string, any>[]
   layersSidebarOpenedLayerType: string | undefined
   layersToFeatures: Record<string, any>[]
-  showedLayers: Record<string, any>[]
+  showedLayers: ShowedLayer[]
 }
 const INITIAL_STATE: LayerState = {
   administrativeZonesGeometryCache: [],
@@ -59,7 +60,7 @@ const reducers = {
   addShowedLayer(state, action: PayloadAction<AdministrativeOrRegulatoryLayerIdentity>) {
     const { id, namespace, topic, type, zone } = action.payload
 
-    if (type !== Layer.VESSELS.code) {
+    if (type !== LayerProperties.VESSELS.code) {
       const searchedLayerName = getLayerNameNormalized({ topic, type, zone })
       const found = !!state.showedLayers.find(layer => getLayerNameNormalized(layer) === searchedLayerName)
 
@@ -107,11 +108,11 @@ const reducers = {
   removeShowedLayer(state, action: PayloadAction<AdministrativeOrRegulatoryLayerIdentity>) {
     const { namespace, topic, type, zone } = action.payload
 
-    if (type === Layer.VESSELS.code) {
+    if (type === LayerProperties.VESSELS.code) {
       return
     }
 
-    if (type === Layer.REGULATORY.code) {
+    if (type === LayerProperties.REGULATORY.code) {
       if (zone && topic) {
         state.showedLayers = state.showedLayers
           .filter(layer => !(layer.topic === topic && layer.zone === zone))
@@ -160,7 +161,7 @@ const reducers = {
       nextShowedLayers = showedLayersInLocalStorage
         .filter(layer => layer)
         .map(showedLayer => {
-          if (showedLayer.type === Layer.REGULATORY.code) {
+          if (showedLayer.type === LayerProperties.REGULATORY.code) {
             let nextRegulatoryZone = regulatoryZones.find(regulatoryZone => {
               if (showedLayer.id) {
                 return regulatoryZone.id === showedLayer.id

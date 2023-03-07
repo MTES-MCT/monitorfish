@@ -25,76 +25,78 @@ context('Control objectives', () => {
     cy.get('*[data-cy^="control-objectives-year"]').contains(currentYear)
 
     cy.log('Check the FR_SCE control objectives of MEMN')
-    cy.get('[data-cy="row-68-targetNumberOfControlsAtPort-247"]').should('exist')
-    cy.get('[data-cy="row-68-targetNumberOfControlsAtSea-242"]').should('exist')
+    cy.get('[data-cy="row-68-targetNumberOfControlsAtPort"]').should('exist')
+    cy.get('[data-cy="row-68-targetNumberOfControlsAtSea"]').should('exist')
 
     cy.log('Navigate to previous year')
     cy.get('*[data-cy^="control-objectives-year"]').click()
     cy.get(`[data-key="${currentYear - 1}"] > .rs-picker-select-menu-item`).click()
-    cy.get('[data-cy="row-15-targetNumberOfControlsAtPort-147"]').should('exist')
-    cy.get('[data-cy="row-15-targetNumberOfControlsAtSea-141"]').should('exist')
+    cy.get('[data-cy="row-15-targetNumberOfControlsAtPort"]').should('exist')
+    cy.get('[data-cy="row-15-targetNumberOfControlsAtSea"]').should('exist')
   })
 
   it('Should update the targetNumberOfControlsAtPort field on an objective', () => {
     // When
     cy.intercept('PUT', '/bff/v1/control_objectives/78').as('updateObjective')
     cy.wait(50)
-    cy.get('*[data-cy="row-78-targetNumberOfControlsAtPort-0"]')
+    cy.get('*[data-cy="row-78-targetNumberOfControlsAtPort"]')
       .type('{backspace}{backspace}{backspace}{backspace}{backspace}')
-      .type('23')
+      .type('2')
+      .type('3')
     cy.wait('@updateObjective')
 
     // Then
     cy.wait(50)
-    cy.get('*[data-cy="row-78-targetNumberOfControlsAtPort-23"]').should('have.value', '23')
+    cy.get('*[data-cy="row-78-targetNumberOfControlsAtPort"]').should('have.value', '23')
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/control_objectives').as('controlObjectives')
     cy.visit('/backoffice/control_objectives')
     cy.wait('@controlObjectives')
     cy.wait(50)
-    cy.get('*[data-cy="row-78-targetNumberOfControlsAtPort-23"]').should('have.value', '23')
+    cy.get('*[data-cy="row-78-targetNumberOfControlsAtPort"]').should('have.value', '23')
   })
 
   it('Should update the targetNumberOfControlsAtSea field on an objective', () => {
     // When
     cy.intercept('PUT', '/bff/v1/control_objectives/78').as('updateObjective')
     cy.wait(50)
-    cy.get('*[data-cy="row-78-targetNumberOfControlsAtSea-20"]')
+    cy.get('*[data-cy="row-78-targetNumberOfControlsAtSea"]')
       .type('{backspace}{backspace}{backspace}{backspace}{backspace}')
-      .type('23')
+      .type('2')
+      .type('3')
     cy.wait('@updateObjective')
 
     // Then
     cy.wait(50)
-    cy.get('*[data-cy="row-78-targetNumberOfControlsAtSea-23"]').should('have.value', '23')
+    cy.get('*[data-cy="row-78-targetNumberOfControlsAtSea"]').should('have.value', '23')
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/control_objectives').as('controlObjectives')
     cy.visit('/backoffice/control_objectives')
     cy.wait('@controlObjectives')
     cy.wait(50)
-    cy.get('*[data-cy="row-78-targetNumberOfControlsAtSea-23"]').should('have.value', '23')
+    cy.get('*[data-cy="row-78-targetNumberOfControlsAtSea"]').should('have.value', '23')
   })
 
   it('Should update the controlPriorityLevel field on an objective', () => {
     // When
     cy.intercept('PUT', '/bff/v1/control_objectives/78').as('updateObjective')
     cy.wait(50)
-    cy.get('[data-cy="row-78-controlPriorityLevel-1"]').parent().click()
+    cy.get('[data-cy="row-78-controlPriorityLevel"]').parent().click()
     cy.get('.rs-picker-select-menu-item').eq(2).click()
     cy.wait('@updateObjective')
 
     // Then
     cy.wait(50)
-    cy.get('[data-cy="row-78-controlPriorityLevel-3"]').should('exist')
+    cy.get('[data-cy="row-78-controlPriorityLevel"]').should('exist')
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/control_objectives').as('controlObjectives')
     cy.visit('/backoffice/control_objectives')
     cy.wait('@controlObjectives')
     cy.wait(50)
-    cy.get('[data-cy="row-78-controlPriorityLevel-3"]').should('exist')
+    cy.get('[data-cy="row-78-controlPriorityLevel"]').should('exist')
   })
 
   it('Should delete an objective', () => {
@@ -135,13 +137,13 @@ context('Control objectives', () => {
 
     // Update the row when the value is updated in local memory
     cy.intercept('PUT', '/bff/v1/control_objectives/107').as('updateObjective')
-    cy.get('[data-cy="row-107-targetNumberOfControlsAtPort-0"]').type(
+    cy.get('[data-cy="row-107-targetNumberOfControlsAtPort"]').type(
       '{backspace}{backspace}{backspace}{backspace}{backspace}'
     )
-    cy.get('[data-cy="row-107-targetNumberOfControlsAtPort-0"]').type('26')
+    cy.get('[data-cy="row-107-targetNumberOfControlsAtPort"]').type('26')
     cy.wait('@updateObjective')
     cy.wait(50)
-    cy.get('[data-cy="row-107-targetNumberOfControlsAtPort-26"]').should('exist')
+    cy.get('[data-cy="row-107-targetNumberOfControlsAtPort"]').should('exist')
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/control_objectives').as('controlObjectives')

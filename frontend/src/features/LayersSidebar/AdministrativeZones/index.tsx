@@ -50,13 +50,13 @@ export function AdministrativeZones({ hideLayersListWhenSearching, namespace }) 
   }, [hideLayersListWhenSearching])
 
   const showOrHideZone = useCallback(
-    (layer: ShowableLayer) => (isShown: boolean) => {
+    (zone: ShowableLayer) => (isShown: boolean) => {
       if (isShown) {
         dispatch(
           hideLayer({
             namespace,
-            type: layer.hasFetchableZones ? layer.group?.code!! : layer.code,
-            zone: layer.hasFetchableZones ? layer.code : null
+            type: zone.hasFetchableZones ? zone.group?.code!! : zone.code,
+            zone: zone.hasFetchableZones ? zone.code : null
           })
         )
 
@@ -66,8 +66,8 @@ export function AdministrativeZones({ hideLayersListWhenSearching, namespace }) 
       dispatch(
         showAdministrativeZone({
           namespace,
-          type: layer.hasFetchableZones ? layer.group?.code!! : layer.code,
-          zone: layer.hasFetchableZones ? layer.code : null
+          type: zone.hasFetchableZones ? zone.group?.code!! : zone.code,
+          zone: zone.hasFetchableZones ? zone.code : null
         })
       )
     },

@@ -66,6 +66,12 @@ export type ShowableLayer = {
   zoneFieldKey?: string
 }
 
+export type ShowedLayer = {
+  namespace: string
+  type: string
+  zone: string | null
+}
+
 export type CodeAndName = {
   code: string
   name: string

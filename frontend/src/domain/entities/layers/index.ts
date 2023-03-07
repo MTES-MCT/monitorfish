@@ -1,7 +1,9 @@
 import { GeoJSON } from 'ol/format'
 
+import { LayerProperties, LayerType } from './constants'
 import { OLGeometryType, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../map/constants'
 
+import type { ShowableLayer } from './types'
 import type { GeoJSON as GeoJSONType } from '../../types/GeoJSON'
 import type { MultiPolygon, Polygon } from 'ol/geom'
 import type Geometry from 'ol/geom/Geometry'
@@ -61,4 +63,27 @@ export function keepOnlyInitialGeometriesOfMultiPolygon(
   nextGeometry?.setCoordinates(nextCoordinates)
 
   return convertToGeoJSONGeometryObject(nextGeometry)
+}
+
+export function layersNotInCurrentOLMap(olLayers, layer) {
+  return !olLayers.getArray().some(layer_ => layer_.name === getLayerNameNormalized(layer))
+}
+
+export function layerOfTypeAdministrativeLayer(administrativeLayers: ShowableLayer[], layer) {
+  return administrativeLayers.some(administrativeLayer => layer.type?.includes(administrativeLayer.code))
+}
+
+export function layerOfTypeAdministrativeLayerInCurrentMap(administrativeLayers, olLayer) {
+  return administrativeLayers.some(administrativeLayer => olLayer.name?.includes(administrativeLayer.code))
+}
+
+export function layersNotInShowedLayers(_showedLayers, olLayer) {
+  return !_showedLayers.some(layer_ => getLayerNameNormalized(layer_) === olLayer.name)
+}
+
+export function getAdministrativeLayers(): ShowableLayer[] {
+  return Object.keys(LayerProperties)
+    .map(layer => LayerProperties[layer])
+    .filter((zone): zone is ShowableLayer => zone !== undefined)
+    .filter(layer => layer.type === LayerType.ADMINISTRATIVE)
 }

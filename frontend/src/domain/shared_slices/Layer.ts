@@ -4,6 +4,7 @@ import { createGenericSlice, getLocalStorageState } from '../../utils'
 import { getLayerNameNormalized } from '../entities/layers'
 import { LayerProperties } from '../entities/layers/constants'
 
+import type { ShowedLayer } from '../entities/layers/types'
 import type { AdministrativeOrRegulatoryLayerIdentity } from '../types/layer'
 import type { PayloadAction, Slice } from '@reduxjs/toolkit'
 
@@ -15,7 +16,7 @@ export type LayerState = {
   lastShowedFeatures: Record<string, any>[]
   layersSidebarOpenedLayerType: string | undefined
   layersToFeatures: Record<string, any>[]
-  showedLayers: Record<string, any>[]
+  showedLayers: ShowedLayer[]
 }
 const INITIAL_STATE: LayerState = {
   administrativeZonesGeometryCache: [],

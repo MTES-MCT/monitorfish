@@ -73,10 +73,10 @@ context('Vessel sidebar controls tab', () => {
       .and('contain', 'Sans PV')
       .and('contain', 'NATINF 23584')
 
-      .and('contain', 'Engin non contrôlé - Chaluts de fond à panneaux (OTB)')
+      .and('contain', 'Chaluts de fond à panneaux (OTB) – non contrôlé')
       .and('contain', 'Maillage déclaré 60 mm, non mesuré')
 
-      .and('contain', 'Engin contrôlé - Chaluts pélagiques à panneaux (OTM)')
+      .and('contain', 'Chaluts pélagiques à panneaux (OTM) – contrôlé')
       .and('contain', 'Maillage déclaré 60 mm, mesuré 52.8 mm')
 
       .and('contain', 'Observations')

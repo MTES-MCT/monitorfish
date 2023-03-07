@@ -14,11 +14,11 @@ export const layersGroups: Record<string, CodeAndName> = {
     name: 'Zones du 1241'
   },
   VMS_SITUATION: {
-    code: 'vms_situation',
+    code: 'situs_areas',
     name: 'Zones pour situation VMS'
   },
   VMS_SITUATION_BREXIT: {
-    code: 'vms_situation_brexit',
+    code: 'brexit_areas',
     name: 'Zones pour situation VMS Brexit'
   }
 }
@@ -387,13 +387,6 @@ export const BaseLayers = {
     code: 'SHOM',
     text: 'Carte marine (SHOM)'
   }
-}
-
-export function getAdministrativeLayers(): ShowableLayer[] {
-  return Object.keys(LayerProperties)
-    .map(layer => LayerProperties[layer])
-    .filter((zone): zone is ShowableLayer => zone !== undefined)
-    .filter(layer => layer.type === LayerType.ADMINISTRATIVE)
 }
 
 export const SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY = 'selectedRegulatoryZoneIds'

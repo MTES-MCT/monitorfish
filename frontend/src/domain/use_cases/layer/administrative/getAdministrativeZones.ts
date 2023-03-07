@@ -1,5 +1,6 @@
 import { getAdministrativeSubZonesFromAPI } from '../../../../api/geoserver'
-import { getAdministrativeLayers, LayerProperties as LayersEnum, LayerType } from '../../../entities/layers/constants'
+import { getAdministrativeLayers } from '../../../entities/layers'
+import { LayerProperties as LayersEnum, LayerType } from '../../../entities/layers/constants'
 
 import type { CodeAndName, ShowableLayer } from '../../../entities/layers/types'
 import type { GeoJSON } from '../../../types/GeoJSON'

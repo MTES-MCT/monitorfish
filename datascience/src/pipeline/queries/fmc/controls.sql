@@ -27,7 +27,7 @@ SELECT
     c.ordre_mission as mission_order,
     c.navire_cible as vessel_targeted,
     infractions.infraction_natinfs,
-    rc.infraction AS infraction_type,
+    CAST(COALESCE(rc.infraction, '0') AS INTEGER) AS infraction,
     rc.deroutement as diversion,
     rc.apprehension as seizure,
     rc.precision_apprehension as seizure_and_diversion_comments,

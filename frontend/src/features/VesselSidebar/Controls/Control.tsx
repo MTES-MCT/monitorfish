@@ -143,7 +143,6 @@ const Title = styled.div`
   font-size: 13px;
   font-weight: bold;
   margin-bottom: 12px;
-  height: 40px;
   text-overflow: ellipsis;
   overflow: hidden !important;
   white-space: nowrap;

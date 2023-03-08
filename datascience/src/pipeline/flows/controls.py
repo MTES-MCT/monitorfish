@@ -273,42 +273,58 @@ def transform_controls(controls: pd.DataFrame):
     )
 
     logger.info("Creating gear_infractions")
-    controls["gear_infractions"] = controls.apply(
-        lambda row: make_infractions(
-            row["infraction_natinfs"], row["infraction_type"], only_natinfs=gear_natinfs
-        ),
-        axis=1,
-    )
+    if len(controls) == 0:
+        controls["gear_infractions"] = None
+    else:
+        controls["gear_infractions"] = controls.apply(
+            lambda row: make_infractions(
+                row["infraction_natinfs"],
+                row["infraction_type"],
+                only_natinfs=gear_natinfs,
+            ),
+            axis=1,
+        )
 
     logger.info("Creating species_infractions")
-    controls["species_infractions"] = controls.apply(
-        lambda row: make_infractions(
-            row["infraction_natinfs"],
-            row["infraction_type"],
-            only_natinfs=species_natinfs,
-        ),
-        axis=1,
-    )
+    if len(controls) == 0:
+        controls["species_infractions"] = None
+    else:
+        controls["species_infractions"] = controls.apply(
+            lambda row: make_infractions(
+                row["infraction_natinfs"],
+                row["infraction_type"],
+                only_natinfs=species_natinfs,
+            ),
+            axis=1,
+        )
 
     logger.info("Creating logbook_infractions")
-    controls["logbook_infractions"] = controls.apply(
-        lambda row: make_infractions(
-            row["infraction_natinfs"],
-            row["infraction_type"],
-            only_natinfs=logbook_natinfs,
-        ),
-        axis=1,
-    )
+    if len(controls) == 0:
+        controls["logbook_infractions"] = None
+    else:
+        controls["logbook_infractions"] = controls.apply(
+            lambda row: make_infractions(
+                row["infraction_natinfs"],
+                row["infraction_type"],
+                only_natinfs=logbook_natinfs,
+            ),
+            axis=1,
+        )
 
     logger.info("Creating other_infractions")
-    controls["other_infractions"] = controls.apply(
-        lambda row: make_infractions(
-            row["infraction_natinfs"],
-            row["infraction_type"],
-            exclude_natinfs=set.union(logbook_natinfs, gear_natinfs, species_natinfs),
-        ),
-        axis=1,
-    )
+    if len(controls) == 0:
+        controls["other_infractions"] = None
+    else:
+        controls["other_infractions"] = controls.apply(
+            lambda row: make_infractions(
+                row["infraction_natinfs"],
+                row["infraction_type"],
+                exclude_natinfs=set.union(
+                    logbook_natinfs, gear_natinfs, species_natinfs
+                ),
+            ),
+            axis=1,
+        )
 
     controls = controls.drop(
         columns=["infraction_natinfs", "infraction", "infraction_type"]

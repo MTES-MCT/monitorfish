@@ -169,24 +169,37 @@ def attribute_segments_to_catches_by_year(
 
     segmented_catches = []
 
-    for year in catches.year.unique():
-        year_catches = (
-            catches[catches.year == year].copy(deep=True).reset_index(drop=True)
-        )
-
-        year_segments = (
-            segments[segments.year == year]
-            .drop(columns=["year"])
-            .copy(deep=True)
-            .reset_index(drop=True)
-        )
-
+    if len(catches) == 0:
         segmented_catches.append(
             attribute_segments_to_catches(
-                catches=year_catches,
-                segments=year_segments,
+                catches=catches,
+                segments=segments.drop(columns=["year"])
+                .copy(deep=True)
+                .reset_index(drop=True),
                 append_unassigned_catches=append_unassigned_catches,
                 unassigned_catches_segment_label=unassigned_catches_segment_label,
             )
         )
+    else:
+        for year in catches.year.unique():
+            year_catches = (
+                catches[catches.year == year].copy(deep=True).reset_index(drop=True)
+            )
+
+            year_segments = (
+                segments[segments.year == year]
+                .drop(columns=["year"])
+                .copy(deep=True)
+                .reset_index(drop=True)
+            )
+
+            segmented_catches.append(
+                attribute_segments_to_catches(
+                    catches=year_catches,
+                    segments=year_segments,
+                    append_unassigned_catches=append_unassigned_catches,
+                    unassigned_catches_segment_label=unassigned_catches_segment_label,
+                )
+            )
+
     return pd.concat(segmented_catches).reset_index(drop=True)

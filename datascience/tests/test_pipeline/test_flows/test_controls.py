@@ -8,7 +8,12 @@ from prefect import task
 
 from config import POSEIDON_CONTROL_ID_TO_MONITORENV_MISSION_ID_SHIFT
 from src.pipeline.entities.missions import MissionActionType, MissionOrigin, MissionType
-from src.pipeline.flows.controls import extract_catch_controls, extract_controls, flow
+from src.pipeline.flows.controls import (
+    extract_catch_controls,
+    extract_controls,
+    flow,
+    transform_controls,
+)
 from src.read_query import read_query
 from tests.mocks import mock_check_flow_not_running, mock_extract_side_effect
 
@@ -920,6 +925,11 @@ def controls() -> pd.DataFrame:
 
 
 @pytest.fixture
+def empty_controls() -> pd.DataFrame:
+    return controls_df.head(0)
+
+
+@pytest.fixture
 def catch_controls() -> pd.DataFrame:
     return catch_controls_df
 
@@ -1182,3 +1192,7 @@ def test_flow(
 
     else:
         raise ValueError(f"Unexpected loading mode: {loading_mode}")
+
+
+def test_transform_empty_controls(empty_controls):
+    transform_controls.run(empty_controls)

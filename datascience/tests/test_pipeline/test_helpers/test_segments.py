@@ -272,6 +272,20 @@ def test_attribute_segments_to_catches(catches, segments, expected_segmented_cat
     )
 
 
+def test_attribute_segments_to_catches_with_empty_input(
+    catches, segments, expected_segmented_catches
+):
+
+    empty_catches = catches.head(0)
+    segmented_catches = attribute_segments_to_catches(
+        catches=empty_catches, segments=segments
+    )
+    pd.testing.assert_frame_equal(
+        segmented_catches,
+        expected_segmented_catches.head(0),
+    )
+
+
 def test_attribute_segments_to_catches_with_unsassigned_catches(
     catches, segments, expected_segmented_catches
 ):
@@ -312,4 +326,17 @@ def test_attribute_segments_to_catches_by_year_with_unsassigned_catches(
 
     pd.testing.assert_frame_equal(
         segmented_catches, expected_segmented_catches_by_year, check_like=True
+    )
+
+
+def test_attribute_segments_to_catches_by_year_with_empty_input(
+    catches_by_year, segments_by_year, expected_segmented_catches_by_year
+):
+    empty_catches_by_year = catches_by_year.head(0)
+
+    segmented_catches = attribute_segments_to_catches_by_year(
+        empty_catches_by_year, segments_by_year
+    )
+    pd.testing.assert_frame_equal(
+        segmented_catches, expected_segmented_catches_by_year.head(0)
     )

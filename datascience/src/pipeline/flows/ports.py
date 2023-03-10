@@ -397,13 +397,6 @@ def add_manual_fixes(ports):
 
 
 @task(checkpoint=False)
-def load_active_ports():
-    return pd.read_csv(
-        LIBRARY_LOCATION / "pipeline/data/ports_controls_pnos_and_lans.csv"
-    )
-
-
-@task(checkpoint=False)
 def load_processed_ports_1(ports):
     engine = create_engine("monitorfish_remote")
     ports.to_sql(

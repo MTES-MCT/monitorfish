@@ -460,6 +460,16 @@ def compute_ports_fao_areas():
 
 
 @task(checkpoint=False)
+def compute_active_ports():
+    active_ports = extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/compute_active_ports.sql",
+    )
+
+    return active_ports
+
+
+@task(checkpoint=False)
 def compute_ports_facade():
     ports_facade = extract(
         db_name="monitorfish_remote",
@@ -551,6 +561,16 @@ def merge_ports_facade_fao_areas(ports, ports_facade, ports_fao_areas):
 
 
 @task(checkpoint=False)
+def merge_active_ports(ports, active_ports):
+    return pd.merge(
+        ports,
+        active_ports,
+        on="locode",
+        how="left",
+    )
+
+
+@task(checkpoint=False)
 def load_processed_ports_2(ports):
     query = """
     ALTER TABLE processed.ports
@@ -583,11 +603,13 @@ with Flow(
     processed_ports_1 = load_processed_ports_1(ports)
     buffer_and_index_1 = add_buffer_and_index(upstream_tasks=[processed_ports_1])
 
+    active_ports = compute_active_ports()
     ports_fao_areas = compute_ports_fao_areas(upstream_tasks=[buffer_and_index_1])
     ports_facade = compute_ports_facade(upstream_tasks=[buffer_and_index_1])
     ports = extract_processed_ports_tmp(upstream_tasks=[buffer_and_index_1])
 
     ports = merge_ports_facade_fao_areas(ports, ports_facade, ports_fao_areas)
+    ports = merge_active_ports(ports, active_ports)
     processed_ports_2 = load_processed_ports_2(ports)
 
 

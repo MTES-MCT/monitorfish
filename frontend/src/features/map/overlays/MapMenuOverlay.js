@@ -24,9 +24,9 @@ const MapMenuOverlay = ({
   /** @type {React.MutableRefObject<import('ol').Overlay | undefined>} */
   const overlayRef = useRef()
   const [isTrackRangeModalOpen, setIsTrackRangeModalOpen] = useState(false)
-  const clickedOutsideComponent = useClickOutsideWhenOpened(ref, isTrackRangeModalOpen)
   const [showTrackDepthSubMenu, setShowTrackDepthSubMenu] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
+  const clickedOutsideComponent = useClickOutsideWhenOpened(ref, isOpen)
   /** @type {[string | undefined, *]} */
   const [selectedTrackDepth, setSelectedTrackDepth] = useState()
   /** @type {[[Date, Date] | undefined, *]} */

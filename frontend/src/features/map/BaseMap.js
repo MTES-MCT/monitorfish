@@ -13,6 +13,7 @@ import MapCoordinatesBox from './controls/MapCoordinatesBox'
 import MapAttributionsBox from './controls/MapAttributionsBox'
 import { HIT_PIXEL_TO_TOLERANCE } from '../../constants/constants'
 import { platformModifierKeyOnly } from 'ol/events/condition'
+import { clickOnMapFeature } from '../../domain/use_cases/map/clickOnMapFeature'
 
 let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove
 
@@ -56,7 +57,8 @@ const BaseMap = props => {
     if (event && map) {
       const feature = map.forEachFeatureAtPixel(event.pixel, feature => feature, { hitTolerance: HIT_PIXEL_TO_TOLERANCE })
       const isCtrl = platformModifierKeyOnly(event)
-      setMapClickEvent({ feature, ctrlKeyPressed: isCtrl })
+      const mapClickEvent = { feature, ctrlKeyPressed: isCtrl }
+      dispatch(clickOnMapFeature(mapClickEvent))
     }
   }
 
@@ -216,6 +218,7 @@ const BaseMap = props => {
         const props = { map }
         if (child.props.hasClickEvent) {
           props.mapClickEvent = mapClickEvent
+          props.setMapClickEvent = setMapClickEvent
         }
         return cloneElement(child, props)
       })}

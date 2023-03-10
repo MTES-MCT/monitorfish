@@ -1,29 +1,18 @@
 import { useEffect } from 'react'
 
-import { LayerProperties } from '../../domain/entities/layers/constants'
 import { resetAnimateToCoordinates, resetAnimateToExtent, resetFitToExtent } from '../../domain/shared_slices/Map'
 import { updateVesselTrackAsZoomed } from '../../domain/shared_slices/Vessel'
-import { getVesselVoyage } from '../../domain/use_cases/vessel/getVesselVoyage'
-import { showVessel } from '../../domain/use_cases/vessel/showVessel'
-import { showVesselTrack } from '../../domain/use_cases/vessel/showVesselTrack'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 /**
- * Handle map animations - Note that the map  and mapClickEvent parameters are given from
- * the BaseMap component, event if it's not seen in the props passed to MapVesselAnimation
+ * Handle map animations
  * @param {Object} map
- * @param {MapClickEvent} mapClickEvent
- * @param {boolean} hasClickEvent
  */
-export function MapVesselClickAndAnimationHandler({ map, mapClickEvent }) {
+export function MapVesselClickAndAnimationHandler({ map }) {
   const dispatch = useMainAppDispatch()
   const { animateToCoordinates, animateToExtent, fitToExtent } = useMainAppSelector(state => state.map)
-  const { vessels, vesselSidebarIsOpen, vesselsTracksShowed, vesselTrackExtent } = useMainAppSelector(
-    state => state.vessel
-  )
-  const { previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
-
+  const { vesselSidebarIsOpen, vesselsTracksShowed, vesselTrackExtent } = useMainAppSelector(state => state.vessel)
   useEffect(() => {
     function createAnimateObject(_animateToCoordinates, resolution, duration, zoom) {
       return {
@@ -109,24 +98,6 @@ export function MapVesselClickAndAnimationHandler({ map, mapClickEvent }) {
         })
       })
   }, [dispatch, map, vesselsTracksShowed])
-
-  useEffect(() => {
-    const clickedFeatureId = mapClickEvent?.feature?.getId()
-    if (!previewFilteredVesselsMode && clickedFeatureId?.toString()?.includes(LayerProperties.VESSELS.code)) {
-      const clickedVessel = vessels.find(vessel => clickedFeatureId?.toString()?.includes(vessel.vesselFeatureId))
-
-      if (!clickedVessel) {
-        return
-      }
-
-      if (mapClickEvent.ctrlKeyPressed) {
-        dispatch(showVesselTrack(clickedVessel.vesselProperties, false, null))
-      } else {
-        dispatch(showVessel(clickedVessel.vesselProperties, false, false))
-        dispatch(getVesselVoyage(clickedVessel.vesselProperties, undefined, false))
-      }
-    }
-  }, [dispatch, mapClickEvent, previewFilteredVesselsMode, vessels])
 
   return null
 }

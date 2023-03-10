@@ -22,6 +22,8 @@ data class PortEntity(
     val latitude: Double? = null,
     @Column(name = "longitude")
     val longitude: Double? = null,
+    @Column(name = "is_active")
+    val isActive: Boolean? = null,
 ) {
 
     fun toPort() = Port(

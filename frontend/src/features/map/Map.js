@@ -62,7 +62,7 @@ const Map = () => {
       <BaseLayer />
       <RegulatoryLayers mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
       <AdministrativeLayers />
-      <MapVesselClickAndAnimationHandler hasClickEvent/>
+      <MapVesselClickAndAnimationHandler/>
       <MapHistory
         shouldUpdateView={shouldUpdateView}
         setShouldUpdateView={setShouldUpdateView}

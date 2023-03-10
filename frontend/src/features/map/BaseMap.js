@@ -18,7 +18,7 @@ import { clickOnMapFeature } from '../../domain/use_cases/map/clickOnMapFeature'
 let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove
 
 /**
- * BaseMap forwards map & mapClickEvent (when hasClickEvent is true) as props to children
+ * BaseMap forwards map as props to children
  */
 const BaseMap = props => {
   const {
@@ -46,8 +46,6 @@ const BaseMap = props => {
   const [isAnimating, setIsAnimating] = useState(false)
   const [initRenderIsDone, setInitRenderIsDone] = useState(false)
   const [cursorCoordinates, setCursorCoordinates] = useState('')
-  /** @type {MapClickEvent} mapClickEvent */
-  const [mapClickEvent, setMapClickEvent] = useState(null)
 
   const mapElement = useRef()
   const mapRef = useRef()
@@ -216,10 +214,6 @@ const BaseMap = props => {
         }
 
         const props = { map }
-        if (child.props.hasClickEvent) {
-          props.mapClickEvent = mapClickEvent
-          props.setMapClickEvent = setMapClickEvent
-        }
         return cloneElement(child, props)
       })}
     </MapWrapper>

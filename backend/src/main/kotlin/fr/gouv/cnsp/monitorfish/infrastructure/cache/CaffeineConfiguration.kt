@@ -21,6 +21,7 @@ class CaffeineConfiguration {
     val gears = "gears"
     val gear = "gear"
     val ports = "ports"
+    val activePorts = "active_ports"
     val port = "port"
     val allSpecies = "all_species"
     val allSpeciesGroups = "all_species_groups"
@@ -48,6 +49,7 @@ class CaffeineConfiguration {
     @Bean
     fun cacheManager(ticker: Ticker): CacheManager? {
         val oneWeek = 10080
+        val oneDay = 1440
 
         val logbookCache = buildMinutesCache(logbook, ticker, 10)
         val nextLogbookCache = buildMinutesCache(nextLogbook, ticker, 10)
@@ -66,7 +68,9 @@ class CaffeineConfiguration {
         val allSpeciesGroupsCache = buildMinutesCache(allSpeciesGroups, ticker, oneWeek)
 
         val portsCache = buildMinutesCache(ports, ticker, oneWeek)
+        val activePortsCache = buildMinutesCache(activePorts, ticker, oneDay)
         val portCache = buildMinutesCache(port, ticker, oneWeek)
+
         val currentSegmentsCache = buildMinutesCache(currentSegments, ticker, 1)
         val controlAnteriorityCache = buildMinutesCache(controlAnteriority, ticker, 1)
         val riskFactorsCache = buildMinutesCache(riskFactors, ticker, 1)
@@ -107,6 +111,7 @@ class CaffeineConfiguration {
                 gearsCache,
                 gearCache,
                 portsCache,
+                activePortsCache,
                 portCache,
                 allSpeciesCache,
                 speciesCache,

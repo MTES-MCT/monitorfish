@@ -18,6 +18,13 @@ class JpaPortRepository(private val dbPortRepository: DBPortRepository) : PortRe
         }
     }
 
+    @Cacheable(value = ["active_ports"])
+    override fun findAllActive(): List<Port> {
+        return dbPortRepository.findAllByIsActiveIsTrue().map {
+            it.toPort()
+        }
+    }
+
     @Cacheable(value = ["port"])
     override fun find(code: String): Port {
         return try {

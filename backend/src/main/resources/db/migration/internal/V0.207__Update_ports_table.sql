@@ -1,2 +1,2 @@
-ALTER TABLE mission_actions
-    ADD COLUMN flight_goals varchar(100)[];
+ALTER TABLE ports
+    ADD COLUMN is_active boolean NOT NULL DEFAULT false;

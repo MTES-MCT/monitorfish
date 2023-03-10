@@ -21,7 +21,6 @@ import { AdministrativeLayers } from '../map/layers/AdministrativeLayers'
 import { BaseLayer } from '../map/layers/BaseLayer'
 import { RegulatoryLayers } from '../map/layers/RegulatoryLayers'
 import { RegulatoryPreviewLayer } from '../map/layers/RegulatoryPreviewLayer'
-import { ShowRegulatoryMetadata } from '../map/ShowRegulatoryMetadata'
 
 export function Backoffice() {
   const [foundRegulatoryZonesByRegTerritory, setFoundRegulatoryZonesByRegTerritory] = useState({})
@@ -156,7 +155,6 @@ export function Backoffice() {
           <BaseLayer />
           <RegulatoryLayers mapMovingAndZoomEvent={mapMovingAndZoomEvent} />
           <AdministrativeLayers />
-          <ShowRegulatoryMetadata hasClickEvent />
           <RegulatoryPreviewLayer />
         </BaseMap>
       </BackofficeContainer>

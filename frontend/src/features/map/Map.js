@@ -10,7 +10,6 @@ import { DrawLayer } from './layers/DrawLayer'
 import { BaseLayer } from './layers/BaseLayer'
 import { RegulatoryLayers } from './layers/RegulatoryLayers'
 import { AdministrativeLayers } from './layers/AdministrativeLayers'
-import { ShowRegulatoryMetadata } from './ShowRegulatoryMetadata'
 import { RegulatoryPreviewLayer } from './layers/RegulatoryPreviewLayer'
 import MeasurementLayer from './layers/MeasurementLayer'
 import MapHistory from './MapHistory'
@@ -63,7 +62,6 @@ const Map = () => {
       <BaseLayer />
       <RegulatoryLayers mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
       <AdministrativeLayers />
-      <ShowRegulatoryMetadata hasClickEvent/>
       <MapVesselClickAndAnimationHandler hasClickEvent/>
       <MapHistory
         shouldUpdateView={shouldUpdateView}

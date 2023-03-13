@@ -66,6 +66,7 @@ export function FormikPortSelect() {
       onChange={handleChange}
       options={portsAsOptions}
       searchable
+      virtualized
     />
   )
 }

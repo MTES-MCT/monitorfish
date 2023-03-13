@@ -267,6 +267,8 @@ export type VesselEnhancedLastPositionWebGLObject = {
   vesselProperties: VesselEnhancedObject
 }
 
+export type VesselLastPositionFeature = Feature<Point> & VesselEnhancedLastPositionWebGLObject
+
 export type VesselEnhancedObject = VesselLastPosition & {
   alerts: string[]
   flagState: string

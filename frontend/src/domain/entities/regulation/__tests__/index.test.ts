@@ -23,6 +23,11 @@ describe('regulation/index', () => {
         lawType: 'Reg. NAMO',
         topic: 'Armor CSJ Dragues',
         zone: 'Secteur 3'
+      },
+      {
+        lawType: null,
+        topic: 'Une thématique perdue',
+        zone: 'Ne doit pas être affichée'
       }
     ]
 

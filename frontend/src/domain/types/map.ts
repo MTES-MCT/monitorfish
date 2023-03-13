@@ -1,7 +1,7 @@
 import type { InteractionListener, InteractionType } from '../entities/map/constants'
 import type { Feature } from 'ol'
 
-export type MapClickEvent = {
+export type MapClick = {
   ctrlKeyPressed: boolean
   feature: Feature | undefined
 }

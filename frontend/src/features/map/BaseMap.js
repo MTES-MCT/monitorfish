@@ -55,8 +55,8 @@ const BaseMap = props => {
     if (event && map) {
       const feature = map.forEachFeatureAtPixel(event.pixel, feature => feature, { hitTolerance: HIT_PIXEL_TO_TOLERANCE })
       const isCtrl = platformModifierKeyOnly(event)
-      const mapClickEvent = { feature, ctrlKeyPressed: isCtrl }
-      dispatch(clickOnMapFeature(mapClickEvent))
+      const mapClick = { feature, ctrlKeyPressed: isCtrl }
+      dispatch(clickOnMapFeature(mapClick))
     }
   }
 

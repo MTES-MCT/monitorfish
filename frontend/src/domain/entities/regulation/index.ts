@@ -43,7 +43,7 @@ export const mapToProcessingRegulation = persistProcessingRegulation => {
 }
 
 export const getRegulatoryLawTypesFromZones = (regulatoryZones: RegulatoryZone[]): RegulatoryLawTypes => {
-  const lawTypes: string[] = regulatoryZones.map(regulatoryZone => regulatoryZone.lawType)
+  const lawTypes: string[] = regulatoryZones.map(regulatoryZone => regulatoryZone.lawType).filter(lawType => lawType)
   const uniqueLawTypes = [...new Set(lawTypes)]
 
   return uniqueLawTypes.reduce((lawTypeAccumulator, lawType) => {

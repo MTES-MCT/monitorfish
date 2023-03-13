@@ -1,11 +1,9 @@
 import * as Comlink from 'comlink'
 import {
   FRANCE,
-  getMergedRegulatoryLayers, getRegulatoryLawTypesFromZones,
+  getRegulatoryLawTypesFromZones,
   LAWTYPES_TO_TERRITORY,
-  mapToRegulatoryZone,
-  orderByAlphabeticalLayer,
-  searchByLawType
+  mapToRegulatoryZone
 } from '../domain/entities/regulation'
 import { getDateMonthsBefore } from '../utils'
 import { VesselLocation, vesselSize } from '../domain/entities/vessel/vessel'
@@ -311,31 +309,6 @@ class MonitorFishWebWorker {
     if (vesselsSizeValuesChecked.includes(vesselSize.ABOVE_TWELVE_METERS.code)) {
       return vesselSize.ABOVE_TWELVE_METERS.evaluate(length)
     }
-  }
-
-  searchLayers (searchFields, regulatoryLayers, gears, species) {
-    let foundRegulatoryLayers = {}
-
-    Object.keys(searchFields).forEach(searchProperty => {
-      if (searchFields[searchProperty].searchText.length > 0) {
-        const searchResultByLawType = searchByLawType(
-          regulatoryLayers,
-          searchFields[searchProperty].properties,
-          searchFields[searchProperty].searchText,
-          gears,
-          species)
-
-        if (foundRegulatoryLayers && Object.keys(foundRegulatoryLayers).length === 0) {
-          foundRegulatoryLayers = searchResultByLawType
-        } else if (foundRegulatoryLayers) {
-          foundRegulatoryLayers = getMergedRegulatoryLayers(foundRegulatoryLayers, searchResultByLawType)
-        }
-      }
-    })
-
-    orderByAlphabeticalLayer(foundRegulatoryLayers)
-
-    return foundRegulatoryLayers
   }
 }
 

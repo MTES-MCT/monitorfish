@@ -2,7 +2,7 @@ import { monitorfishApi } from '.'
 
 import type { Port } from '../domain/types/port'
 
-export const fleetSegmentApi = monitorfishApi.injectEndpoints({
+export const portApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
     getPorts: builder.query<Port.Port[], number | void>({
       providesTags: () => [{ type: 'Ports' }],
@@ -11,4 +11,4 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
   })
 })
 
-export const { useGetPortsQuery } = fleetSegmentApi
+export const { useGetPortsQuery } = portApi

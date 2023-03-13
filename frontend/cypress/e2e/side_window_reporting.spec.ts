@@ -136,9 +136,20 @@ context('Reportings', () => {
       cy.wait(200)
 
       cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', numberOfReportings)
-      // The DML is modified as this is the DML fetched from the vessels table
-      cy.get('*[data-cy="side-window-current-reportings"]').first().contains('DML 56')
-      cy.get('*[data-cy="side-window-current-reportings"]').first().contains(23581)
+      // We do not know if the edited reporting is the first or second row in the list
+      cy.get('*[data-cy="side-window-current-reportings"]')
+        .first()
+        .then($firstRow => {
+          // The DML is modified as this is the DML fetched from the vessels table
+          if ($firstRow.text().includes('DML 56')) {
+            cy.get('*[data-cy="side-window-current-reportings"]').first().contains(23581)
+
+            return
+          }
+
+          cy.get('*[data-cy="side-window-current-reportings"]').eq(1).contains('DML 56')
+          cy.get('*[data-cy="side-window-current-reportings"]').eq(1).contains(23581)
+        })
     })
   })
 
@@ -160,27 +171,64 @@ context('Reportings', () => {
       cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', numberOfReportings)
 
       // When
-      cy.get('[data-cy="side-window-edit-reporting"]').eq(0).click()
-      cy.get('[data-cy="new-reporting-select-observation-reporting-type"]').click()
-      cy.wait(500)
-      cy.get('[data-cy="new-reporting-create-button"]').click()
-
-      // Then
-      cy.wait('@updateReporting').then(({ request, response }) => {
-        expect(request.body.type).contains('OBSERVATION')
-        expect(response && response.statusCode).equal(200)
-      })
-      cy.wait(50)
-
-      cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', numberOfReportings - 1)
+      // We do not know if the edited reporting is the first or second row in the list
+      cy.get('[data-cy="side-window-current-reportings"]')
+        .eq(0)
+        .then($firstRow => {
+          // The DML is modified as this is the DML fetched from the vessels table
+          if ($firstRow.text().includes('DML 56')) {
+            modifyReportingToObservation(0, numberOfReportings)
+          } else {
+            modifyReportingToObservation(1, numberOfReportings)
+          }
+        })
     })
   })
+
+  function modifyReportingToObservation(rowNumber, numberOfReportings) {
+    cy.get('[data-cy="side-window-edit-reporting"]').eq(rowNumber).click()
+    cy.get('[data-cy="new-reporting-select-observation-reporting-type"]').click()
+    cy.get('[data-cy="new-reporting-author-trigram"]').type('{backspace}{backspace}{backspace}LTH')
+    cy.wait(500)
+    cy.get('[data-cy="new-reporting-create-button"]').click()
+
+    // Then
+    cy.wait('@updateReporting').then(({ request, response }) => {
+      expect(request.body.type).contains('OBSERVATION')
+      expect(request.body.authorTrigram).contains('LTH')
+      expect(response && response.statusCode).equal(200)
+    })
+    cy.wait(50)
+
+    cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', numberOfReportings - 1)
+  }
 
   it('A reporting Should be downloaded', () => {
     // Given
     cy.cleanFiles()
     cy.get('*[data-cy="side-window-reporting-tab"]').click()
-    cy.get('[data-cy="side-window-sub-menu-SA"]').click()
+
+    // There should be one reporting either in SA or NAME sea front, depending of the previous
+    // Cypress test file runned by the CI
+    cy.get('*[data-cy^="side-window-sub-menu-NAMO"]').then($number => {
+      if ($number.text().includes('1')) {
+        downloadReporting(
+          'NAMO',
+          '"DML 29","Cross Etel","Pêche sans VMS ni JPE","Pêche thon rouge sans VMS détecté ni JPE",27689,"FR","RENCONTRER VEILLER APPARTEMENT""","ABC000597493","JL026591","CMQ7994","NON","NAMO"'
+        )
+
+        return
+      }
+
+      downloadReporting(
+        'SA',
+        '"Alerte auto.","12 milles - Pêche sans droits historiques","",2610,"FR","PROMETTRE INTÉRIEUR SAINT","ABC000232227","ZJ472279","TMG5756","NON","SA"'
+      )
+    })
+  })
+
+  function downloadReporting(seaFront, csvValues) {
+    cy.get(`[data-cy="side-window-sub-menu-${seaFront}"]`).click()
     cy.get('.rs-checkbox-checker').eq(0).click({ timeout: 10000 })
 
     // When
@@ -197,10 +245,7 @@ context('Reportings', () => {
           'contains',
           'Ouvert le,DML concernée,Origine,Titre,Description,NATINF,Pavillon,Navire,CFR,Marquage ext.,C/S,Navire sous charte,Façade'
         )
-        .should(
-          'contains',
-          '"Alerte auto.","12 milles - Pêche sans droits historiques","",2610,"FR","PROMETTRE INTÉRIEUR SAINT","ABC000232227","ZJ472279","TMG5756","NON","SA"'
-        )
+        .should('contains', csvValues)
     })
-  })
+  }
 })

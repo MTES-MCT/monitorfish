@@ -13,11 +13,12 @@ import MapCoordinatesBox from './controls/MapCoordinatesBox'
 import MapAttributionsBox from './controls/MapAttributionsBox'
 import { HIT_PIXEL_TO_TOLERANCE } from '../../constants/constants'
 import { platformModifierKeyOnly } from 'ol/events/condition'
+import { clickOnMapFeature } from '../../domain/use_cases/map/clickOnMapFeature'
 
 let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove
 
 /**
- * BaseMap forwards map & mapClickEvent (when hasClickEvent is true) as props to children
+ * BaseMap forwards map as props to children
  */
 const BaseMap = props => {
   const {
@@ -45,8 +46,6 @@ const BaseMap = props => {
   const [isAnimating, setIsAnimating] = useState(false)
   const [initRenderIsDone, setInitRenderIsDone] = useState(false)
   const [cursorCoordinates, setCursorCoordinates] = useState('')
-  /** @type {MapClickEvent} mapClickEvent */
-  const [mapClickEvent, setMapClickEvent] = useState(null)
 
   const mapElement = useRef()
   const mapRef = useRef()
@@ -56,7 +55,8 @@ const BaseMap = props => {
     if (event && map) {
       const feature = map.forEachFeatureAtPixel(event.pixel, feature => feature, { hitTolerance: HIT_PIXEL_TO_TOLERANCE })
       const isCtrl = platformModifierKeyOnly(event)
-      setMapClickEvent({ feature, ctrlKeyPressed: isCtrl })
+      const mapClick = { feature, ctrlKeyPressed: isCtrl }
+      dispatch(clickOnMapFeature(mapClick))
     }
   }
 
@@ -214,9 +214,6 @@ const BaseMap = props => {
         }
 
         const props = { map }
-        if (child.props.hasClickEvent) {
-          props.mapClickEvent = mapClickEvent
-        }
         return cloneElement(child, props)
       })}
     </MapWrapper>

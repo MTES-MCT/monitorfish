@@ -10,7 +10,6 @@ import { DrawLayer } from './layers/DrawLayer'
 import { BaseLayer } from './layers/BaseLayer'
 import { RegulatoryLayers } from './layers/RegulatoryLayers'
 import { AdministrativeLayers } from './layers/AdministrativeLayers'
-import { ShowRegulatoryMetadata } from './ShowRegulatoryMetadata'
 import { RegulatoryPreviewLayer } from './layers/RegulatoryPreviewLayer'
 import MeasurementLayer from './layers/MeasurementLayer'
 import MapHistory from './MapHistory'
@@ -52,7 +51,7 @@ const Map = () => {
 
   return (
     <BaseMap
-      // BaseMap forwards map & mapClickEvent as props to children
+      // BaseMap forwards map as props to children
       handleMovingAndZoom={handleMovingAndZoom}
       handlePointerMove={handlePointerMove}
       setCurrentFeature={setCurrentFeature}
@@ -63,8 +62,7 @@ const Map = () => {
       <BaseLayer />
       <RegulatoryLayers mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
       <AdministrativeLayers />
-      <ShowRegulatoryMetadata hasClickEvent/>
-      <MapVesselClickAndAnimationHandler hasClickEvent/>
+      <MapVesselClickAndAnimationHandler/>
       <MapHistory
         shouldUpdateView={shouldUpdateView}
         setShouldUpdateView={setShouldUpdateView}

@@ -3,7 +3,7 @@ import type { Feature } from 'ol'
 
 export type MapClickEvent = {
   ctrlKeyPressed: boolean
-  feature: Feature
+  feature: Feature | undefined
 }
 
 export type LastPositionVisibility = {

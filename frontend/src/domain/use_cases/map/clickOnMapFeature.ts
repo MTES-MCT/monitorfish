@@ -9,6 +9,9 @@ import type { MapClickEvent } from '../../types/map'
 
 export const clickOnMapFeature = (clickEvent: MapClickEvent) => (dispatch, getState) => {
   const { previewFilteredVesselsMode } = getState().global
+  if (!clickEvent.feature) {
+    return
+  }
 
   const clickedFeatureId = clickEvent.feature.getId()?.toString()
   if (!clickedFeatureId) {

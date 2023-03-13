@@ -16,7 +16,7 @@ import { ReactComponent as DeleteSVG } from '../../icons/Suppression.svg'
 
 const X = 0
 const Y = 1
-export const initialOffsetValue = [-90, 10]
+export const initialOffsetValue = [-90, 60]
 const MIN_ZOOM = 7
 
 // TODO Type that.

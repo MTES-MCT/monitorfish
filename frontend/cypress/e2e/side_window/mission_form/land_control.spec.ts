@@ -27,7 +27,7 @@ context('Side Window > Mission Form > Land Control', () => {
     // TODO Add this test.
 
     // Lieu du contrôle
-    // TODO Add this test.
+    cy.fill('Lieu du contrôle', 'Free Port')
 
     // Obligations déclaratives et autorisations de pêche
     cy.fill('Bonne émission VMS', 'Oui')
@@ -144,8 +144,8 @@ context('Side Window > Mission Form > Land Control', () => {
         otherInfractions: [
           { comments: 'Une observation sur l’infraction autre.', infractionType: 'WITHOUT_RECORD', natinf: 27689 }
         ],
-        portLocode: null,
-        portName: null,
+        portLocode: 'AEFRP',
+        portName: 'Free Port',
         segments: [
           {
             faoAreas: ['37.1', '37.2', '37.3', '27.8.a', '27.8.b', '27.7.h', '27.7.e', '27.7.d'],

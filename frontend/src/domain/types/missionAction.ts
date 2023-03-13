@@ -1,3 +1,6 @@
+// TODO Maybe avoid using `Boolean` instead of `boolean`?
+// Because of https://stackoverflow.com/a/64443353/2736233
+
 import type { ControlUnit } from './controlUnit'
 
 export namespace MissionAction {

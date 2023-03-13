@@ -51,7 +51,7 @@ const Map = () => {
 
   return (
     <BaseMap
-      // BaseMap forwards map & mapClickEvent as props to children
+      // BaseMap forwards map as props to children
       handleMovingAndZoom={handleMovingAndZoom}
       handlePointerMove={handlePointerMove}
       setCurrentFeature={setCurrentFeature}

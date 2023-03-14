@@ -37,5 +37,5 @@ export const fillSideWindowMissionFormBase = (missionTypeLabel: Mission.MissionT
 
   cy.fill('Administration 1', 'DDTM')
   cy.fill('Unité 1', 'Cultures marines – DDTM 40')
-  cy.fill('Ressource 1', ['Semi-rigide 2'])
+  cy.fill('Moyen 1', ['Semi-rigide 2'])
 }

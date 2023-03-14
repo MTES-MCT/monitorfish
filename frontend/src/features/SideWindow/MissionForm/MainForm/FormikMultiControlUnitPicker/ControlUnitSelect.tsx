@@ -177,15 +177,12 @@ export function ControlUnitSelect({
         />
         <MultiSelect
           baseContainer={newWindowContainerRef.current}
-          // TODO Allow for different Option value type than string in monitor-ui.
-          defaultValue={controlledValueResourceIds as any}
+          defaultValue={controlledValueResourceIds}
           disabled={!controlUnits || !controlledValueRef.current.administration}
-          label={`Ressource ${index + 1}`}
-          name={`resouces_${index}`}
-          // TODO Allow for different Option value type than string in monitor-ui.
-          onChange={handleResourcesChange as any}
-          // TODO Allow for different Option value type than string in monitor-ui.
-          options={resourcesAsOptions as any}
+          label={`Moyen ${index + 1}`}
+          name={`resources_${index}`}
+          onChange={handleResourcesChange}
+          options={resourcesAsOptions}
         />
         <TextInput
           defaultValue={controlledValueRef.current.contact}

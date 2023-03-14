@@ -165,6 +165,8 @@ export function ControlUnitSelect({
           name={`administration_${index}`}
           onChange={handleAdministrationChange}
           options={administrationsAsOptions}
+          searchable
+          virtualized
         />
         <Select
           baseContainer={newWindowContainerRef.current}
@@ -174,6 +176,8 @@ export function ControlUnitSelect({
           name={`name_${index}`}
           onChange={handleNameChange}
           options={unitsAsOptions}
+          searchable
+          virtualized
         />
         <MultiSelect
           baseContainer={newWindowContainerRef.current}

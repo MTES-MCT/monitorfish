@@ -230,7 +230,8 @@ const Header = styled.div`
   border-bottom: solid 2px ${p => p.theme.color.gainsboro};
   display: flex;
   justify-content: space-between;
-  padding: 30px 32px 30px 18px;
+  min-height: 80px;
+  padding: 0 32px 0 18px;
 `
 
 const HeaderTitleGroup = styled.div`

@@ -2,6 +2,7 @@ import { Accent, Button, useForceUpdate } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
 import { remove, update } from 'ramda'
 import { useCallback, useMemo, useRef } from 'react'
+import styled from 'styled-components'
 
 import { ControlUnitSelect } from './ControlUnitSelect'
 import {
@@ -111,12 +112,18 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
   )
 
   return (
-    <>
+    <Wrapper>
       {controlUnitSelects}
 
       <Button accent={Accent.SECONDARY} onClick={addUnit}>
         Ajouter une autre unité
       </Button>
-    </>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+  > button {
+    margin-top: 16px;
+  }
+`

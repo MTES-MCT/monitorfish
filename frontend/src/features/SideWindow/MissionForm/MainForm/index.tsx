@@ -20,8 +20,8 @@ import { FormikMultiZonePicker } from './FormikMultiZonePicker'
 import { BOOLEAN_AS_OPTIONS } from '../../../../constants'
 import { Mission } from '../../../../domain/types/mission'
 import { useNewWindow } from '../../../../ui/NewWindow'
-import { FormBody } from '../FormBody'
-import { FormHead } from '../FormHead'
+import { FormBody, FormBodyInnerWrapper } from '../shared/FormBody'
+import { FormHead } from '../shared/FormHead'
 
 import type { MissionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
@@ -66,57 +66,61 @@ export function MainForm({ initialValues, onChange }: MainFormProps) {
           <h2>Informations générales</h2>
         </FormHead>
 
-        <CustomFormBody>
-          <FormikDateRangePicker
-            baseContainer={newWindowContainerRef.current}
-            isCompact
-            isStringDate
-            label="Début et fin de mission"
-            // `startDateTimeUtc` & `endDateTimeUtc` in API
-            name="dateTimeRangeUtc"
-            withTime
-          />
-          <FormikMultiRadio isInline label="Type de mission" name="missionType" options={MISSION_TYPES_AS_OPTIONS} />
-          <MissionNatureWrapper>
-            <FormikMultiCheckbox
-              isInline
-              label="Intentions principales de mission"
-              name="missionNature"
-              options={MISSION_NATURES_AS_OPTIONS}
+        <FormBody>
+          <CustomFormBodyInnerWrapper>
+            <FormikDateRangePicker
+              baseContainer={newWindowContainerRef.current}
+              isCompact
+              isStringDate
+              label="Début et fin de mission"
+              // `startDateTimeUtc` & `endDateTimeUtc` in API
+              name="dateTimeRangeUtc"
+              withTime
             />
+            <FormikMultiRadio isInline label="Type de mission" name="missionType" options={MISSION_TYPES_AS_OPTIONS} />
+            <MissionNatureWrapper>
+              <FormikMultiCheckbox
+                isInline
+                label="Intentions principales de mission"
+                name="missionNature"
+                options={MISSION_NATURES_AS_OPTIONS}
+              />
+            </MissionNatureWrapper>
 
             {/* TODO What to do with this prop? */}
             {/* TODO Fix that in Monitor UI: */}
             {/* Re-enabling a checkbox that has been disabled should set the related FormValues prop
                 to a boolean matching the checkbox `checked` state. */}
             <FormikCheckbox disabled={!isMissionUnderJdpCheckboxEnabled} label="Mission sous JDP" name="isUnderJdp" />
-          </MissionNatureWrapper>
+          </CustomFormBodyInnerWrapper>
 
           <FormikMultiControlUnitPicker name="controlUnits" />
 
           <FormikMultiZonePicker name="geom" />
 
-          {/* TODO What to do with this prop? */}
-          {hasMissionOrderField && (
-            <FormikMultiRadio
-              isInline
-              label="Ordre de mission"
-              name="hasOrder"
-              // TODO Allow more Monitor UI `Option` types.
-              options={BOOLEAN_AS_OPTIONS}
-            />
-          )}
+          <CustomFormBodyInnerWrapper>
+            {/* TODO What to do with this prop? */}
+            {hasMissionOrderField && (
+              <FormikMultiRadio
+                isInline
+                label="Ordre de mission"
+                name="hasOrder"
+                // TODO Allow more Monitor UI `Option` types.
+                options={BOOLEAN_AS_OPTIONS}
+              />
+            )}
 
-          <RelatedFieldGroupWrapper>
-            <FormikTextarea label="CACEM : orientations, observations" name="observationsCacem" />
-            <FormikTextarea label="CNSP : orientations, observations" name="observationsCnsp" />
-          </RelatedFieldGroupWrapper>
+            <RelatedFieldGroupWrapper>
+              <FormikTextarea label="CACEM : orientations, observations" name="observationsCacem" />
+              <FormikTextarea label="CNSP : orientations, observations" name="observationsCnsp" />
+            </RelatedFieldGroupWrapper>
 
-          <InlineFieldGroupWrapper>
-            <FormikTextInput label="Ouvert par" name="openBy" />
-            <FormikTextInput label="Clôturé par" name="closedBy" />
-          </InlineFieldGroupWrapper>
-        </CustomFormBody>
+            <InlineFieldGroupWrapper>
+              <FormikTextInput label="Ouvert par" name="openBy" />
+              <FormikTextInput label="Clôturé par" name="closedBy" />
+            </InlineFieldGroupWrapper>
+          </CustomFormBodyInnerWrapper>
+        </FormBody>
       </Wrapper>
     </Formik>
   )
@@ -130,6 +134,7 @@ const Wrapper = styled.div`
   flex-grow: 1;
   max-width: 33.34%;
   min-width: 33.34%;
+  overflow-y: auto;
 
   /* TODO Handle that in @mtes-mct/monitor-ui. */
   legend {
@@ -137,14 +142,10 @@ const Wrapper = styled.div`
   }
 `
 
-const CustomFormBody = styled(FormBody)`
+const CustomFormBodyInnerWrapper = styled(FormBodyInnerWrapper)`
   > div:not(:first-child),
   > fieldset:not(:first-child) {
     margin-top: 32px;
-  }
-
-  > button {
-    margin-top: 16px;
   }
 `
 

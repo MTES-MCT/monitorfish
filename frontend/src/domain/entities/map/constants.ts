@@ -47,8 +47,6 @@ export enum OLGeometryType {
   POLYGON = 'Polygon'
 }
 
-export const GeoJSONWithMultipleCoordinates = [OLGeometryType.MULTIPOLYGON, OLGeometryType.MULTIPOINT]
-
 export const InteractionListenerToOLGeometryType: Record<InteractionListener, OLGeometryType | undefined> = {
   [InteractionListener.CONTROL_POINT]: undefined,
   [InteractionListener.INTEREST_POINT]: undefined,

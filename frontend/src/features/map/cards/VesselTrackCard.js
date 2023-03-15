@@ -5,7 +5,7 @@ import { getDateTime, timeagoFrenchLocale } from '../../../utils'
 import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map/constants'
 import { COLORS } from '../../../constants/constants'
 import * as timeago from 'timeago.js'
-import { OverlayPosition } from '../overlays/position'
+import { OverlayPosition } from '../overlays/VesselCardOverlay/position'
 import { useSelector } from 'react-redux'
 
 timeago.register('fr', timeagoFrenchLocale)

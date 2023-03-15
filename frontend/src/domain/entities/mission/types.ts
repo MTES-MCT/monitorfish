@@ -1,6 +1,7 @@
-import type { ControlUnit } from './controlUnit'
-import type { GeoJSON } from './GeoJSON'
-import type { SeaFront } from '../entities/alerts/constants'
+import type { ControlUnit } from '../../types/controlUnit'
+import type { GeoJSON } from '../../types/GeoJSON'
+import type { MissionAction } from '../../types/missionAction'
+import type { SeaFront } from '../alerts/constants'
 import type { Except } from 'type-fest'
 
 export namespace Mission {
@@ -54,7 +55,8 @@ export namespace Mission {
   export enum MissionStatus {
     CLOSED = 'Clôturée',
     DONE = 'Terminée',
-    IN_PROGRESS = 'En cours'
+    IN_PROGRESS = 'En cours',
+    UPCOMING = 'À venir'
   }
 
   /* eslint-disable typescript-sort-keys/string-enum */
@@ -74,4 +76,9 @@ export namespace Mission {
   // Types
 
   export type MissionData = Except<Mission, 'id'>
+}
+
+export type MissionAndActions = {
+  actions: MissionAction.MissionAction[]
+  mission: Mission.Mission
 }

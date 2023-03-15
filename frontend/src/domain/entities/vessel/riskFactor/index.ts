@@ -59,18 +59,18 @@ export const getProbabilityRiskFactorText = (riskFactor: number, hasBeenControll
   return undefined
 }
 
-export const getDetectabilityRiskFactorText = (riskFactor: number, reducedText: string) => {
+export const getDetectabilityRiskFactorText = (riskFactor: number, isTextReduced: boolean) => {
   if (riskFactor >= 1 && riskFactor < 1.75) {
-    return `Priorité ${reducedText ? '' : 'de contrôle '}faible`
+    return `Priorité ${isTextReduced ? '' : 'de contrôle '}faible`
   }
   if (riskFactor >= 1.75 && riskFactor < 2.5) {
-    return `Priorité ${reducedText ? '' : 'de contrôle '}moyenne`
+    return `Priorité ${isTextReduced ? '' : 'de contrôle '}moyenne`
   }
   if (riskFactor >= 2.5 && riskFactor < 3.25) {
-    return `Priorité ${reducedText ? '' : 'de contrôle '}élevée`
+    return `Priorité ${isTextReduced ? '' : 'de contrôle '}élevée`
   }
   if (riskFactor >= 3.25 && riskFactor <= 4) {
-    return `Priorité ${reducedText ? '' : 'de contrôle '}très élevée`
+    return `Priorité ${isTextReduced ? '' : 'de contrôle '}très élevée`
   }
 
   return undefined

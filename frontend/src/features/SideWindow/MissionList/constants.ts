@@ -1,4 +1,4 @@
-import { Mission } from '../../../domain/types/mission'
+import { Mission } from '../../../domain/entities/mission/types'
 import { getOptionsFromLabelledEnum } from '../../../utils/getOptionsFromLabelledEnum'
 
 import type { TableOptions } from '../../../hooks/useTable/types'

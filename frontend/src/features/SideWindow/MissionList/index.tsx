@@ -16,7 +16,7 @@ import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
 import { SideWindowMenuKey } from '../constants'
 
 import type { MissionFilter } from './types'
-import type { Mission } from '../../../domain/types/mission'
+import type { Mission } from '../../../domain/entities/mission/types'
 import type { MutableRefObject } from 'react'
 
 export function MissionList() {

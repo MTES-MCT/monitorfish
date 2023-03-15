@@ -2,7 +2,7 @@
 
 import { SideWindowMenuKey } from 'src/features/SideWindow/constants'
 
-import type { Mission } from 'src/domain/types/mission'
+import type { Mission } from 'src/domain/entities/mission/types'
 
 export const openSideWindowNewMission = () => {
   cy.visit('/side_window')

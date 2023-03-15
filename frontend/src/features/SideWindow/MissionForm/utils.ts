@@ -1,7 +1,7 @@
 import { omit } from 'ramda'
 
 import { INITIAL_MISSION_CONTROL_UNIT, MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
-import { Mission } from '../../../domain/types/mission'
+import { Mission } from '../../../domain/entities/mission/types'
 import { FormError, FormErrorCode } from '../../../libs/FormError'
 import { dayjs } from '../../../utils/dayjs'
 import { getUtcizedDayjs } from '../../../utils/getUtcizedDayjs'

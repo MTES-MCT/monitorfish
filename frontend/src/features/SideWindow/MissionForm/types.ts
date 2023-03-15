@@ -1,5 +1,5 @@
+import type { Mission } from '../../../domain/entities/mission/types'
 import type { ControlUnit } from '../../../domain/types/controlUnit'
-import type { Mission } from '../../../domain/types/mission'
 import type { MissionAction } from '../../../domain/types/missionAction'
 import type { PartialExcept } from '../../../types'
 import type { DateAsStringRange, Undefine } from '@mtes-mct/monitor-ui'

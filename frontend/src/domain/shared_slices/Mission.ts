@@ -5,7 +5,7 @@ import { getMissionFormInitialValues } from '../../features/SideWindow/MissionFo
 import { FrontendError } from '../../libs/FrontendError'
 
 import type { MissionActionFormValues, MissionFormValues } from '../../features/SideWindow/MissionForm/types'
-import type { Mission } from '../types/mission'
+import type { Mission } from '../entities/mission/types'
 import type { MissionAction } from '../types/missionAction'
 import type { PayloadAction } from '@reduxjs/toolkit'
 

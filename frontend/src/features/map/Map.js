@@ -13,20 +13,22 @@ import { AdministrativeLayers } from './layers/AdministrativeLayers'
 import { RegulatoryPreviewLayer } from './layers/RegulatoryPreviewLayer'
 import MeasurementLayer from './layers/MeasurementLayer'
 import MapHistory from './MapHistory'
-import VesselCardOverlay from './overlays/VesselCardOverlay'
+import { VesselCardOverlay } from './overlays/VesselCardOverlay'
 import VesselTrackCardOverlay from './overlays/VesselTrackCardOverlay'
 import { TrackTypeCardOverlay } from './overlays/TrackTypeCardOverlay'
 import { MapVesselClickAndAnimationHandler } from './MapVesselClickAndAnimationHandler'
 import VesselEstimatedPositionLayer from './layers/VesselEstimatedPositionLayer'
 import VesselSelectedLayer from './layers/VesselSelectedLayer'
 import VesselEstimatedPositionCardOverlay from './overlays/VesselEstimatedPositionCardOverlay'
-import VesselsLabelsLayer from './layers/VesselsLabelsLayer'
+import { VesselsLabelsLayer } from './layers/VesselsLabelsLayer'
 import InterestPointLayer from './layers/InterestPointLayer'
 import MapMenu from './MapMenu'
 import VesselAlertLayer from './layers/VesselAlertLayer'
 import VesselBeaconMalfunctionLayer from './layers/VesselBeaconMalfunctionLayer'
 import VesselAlertAndBeaconMalfunctionLayer from './layers/VesselAlertAndBeaconMalfunctionLayer'
 import VesselInfractionSuspicionLayer from './layers/VesselInfractionSuspicionLayer'
+import { MissionLayer } from './layers/MissionLayer'
+import { MissionHoveredLayer } from './layers/MissionHoveredLayer'
 
 const Map = () => {
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
@@ -74,6 +76,8 @@ const Map = () => {
       <FilterLayer/>
       <VesselsTracksLayerMemoized/>
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
+      <MissionLayer/>
+      <MissionHoveredLayer feature={currentFeature}/>
       <DrawLayer/>
       <RegulatoryLayerSearch/>
       <VesselEstimatedPositionLayer/>

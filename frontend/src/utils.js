@@ -11,9 +11,9 @@ import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './domain/entities/map/c
  * @param {number[]} defaultColor
  * @returns
  */
-export const customHexToRGB = (hexColor, defaultColor) => {
+export const customHexToRGB = (hexColor) => {
   if (!hexColor || !(typeof hexColor === 'string')) {
-    return defaultColor || [0, 0, 0]
+    return [0, 0, 0]
   }
   const aRgbHex = hexColor.substring(1).match(/.{1,2}/g)
   const aRgb = [

@@ -3,7 +3,7 @@ import ky from 'ky'
 import { monitorenvApi } from '.'
 import { ApiError } from '../libs/ApiError'
 
-import type { Mission } from '../domain/types/mission'
+import type { Mission } from '../domain/entities/mission/types'
 import type { MissionAction } from '../domain/types/missionAction'
 
 export const missionApi = monitorenvApi.injectEndpoints({

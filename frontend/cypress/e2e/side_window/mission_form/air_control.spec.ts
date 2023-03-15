@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { Mission } from 'src/domain/types/mission'
+import { Mission } from 'src/domain/entities/mission/types'
 
 import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
 

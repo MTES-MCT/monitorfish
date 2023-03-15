@@ -113,6 +113,7 @@ export type VesselLastPosition = {
   dateTime: string
   departureDateTime: string
   destination: string
+  detectabilityRiskFactor: number
   district: string
   districtCode: string
   emissionPeriod: number
@@ -122,6 +123,7 @@ export type VesselLastPosition = {
   flagState: string
   from: string
   gearOnboard: Gear[]
+  impactRiskFactor: number
   internalReferenceNumber: string
   ircs: string
   isAtPort: boolean
@@ -134,9 +136,11 @@ export type VesselLastPosition = {
   mmsi: string
   positionType: string
   postControlComment: number
+  probabilityRiskFactor: number
   registryPortLocode: string
   registryPortName: string
   reportings: ReportingType[]
+  riskFactor: number
   segments: string[]
   speciesOnboard: Species[]
   speed: number

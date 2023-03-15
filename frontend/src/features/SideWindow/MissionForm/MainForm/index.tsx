@@ -18,7 +18,7 @@ import { MISSION_NATURES_AS_OPTIONS, MISSION_TYPES_AS_OPTIONS } from './constant
 import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'
 import { FormikMultiZonePicker } from './FormikMultiZonePicker'
 import { BOOLEAN_AS_OPTIONS } from '../../../../constants'
-import { Mission } from '../../../../domain/types/mission'
+import { Mission } from '../../../../domain/entities/mission/types'
 import { useNewWindow } from '../../../../ui/NewWindow'
 import { FormBody, FormBodyInnerWrapper } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'

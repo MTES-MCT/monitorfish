@@ -2,7 +2,7 @@ import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import React, { MutableRefObject, useCallback, useEffect, useRef } from 'react'
 
-import { missionZoneStyle } from './styles/mission.style'
+import { missionZoneStyle } from './MissionLayer/styles'
 import { LayerProperties, LayerType } from '../../../domain/entities/layers/constants'
 import { getMissionFeatureZone } from '../../../domain/entities/mission'
 import { useGetMissionsAndActions } from '../../../domain/entities/mission/hooks/useGetMissionsAndActions'

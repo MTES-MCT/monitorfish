@@ -29,6 +29,7 @@ import VesselAlertAndBeaconMalfunctionLayer from './layers/VesselAlertAndBeaconM
 import VesselInfractionSuspicionLayer from './layers/VesselInfractionSuspicionLayer'
 import { MissionLayer } from './layers/MissionLayer'
 import { MissionHoveredLayer } from './layers/MissionHoveredLayer'
+import { MissionsLabelsLayer } from './layers/MissionsLabelsLayer/MissionsLabelsLayer'
 
 const Map = () => {
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
@@ -78,6 +79,7 @@ const Map = () => {
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
       <MissionLayer/>
       <MissionHoveredLayer feature={currentFeature}/>
+      <MissionsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
       <DrawLayer/>
       <RegulatoryLayerSearch/>
       <VesselEstimatedPositionLayer/>

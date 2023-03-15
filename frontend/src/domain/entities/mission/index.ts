@@ -4,8 +4,8 @@ import { GeoJSON } from 'ol/format'
 import Point from 'ol/geom/Point'
 
 import { Mission } from './types'
-import { getMissionMarkerColor } from '../../../features/map/layers/styles/mission.style'
-import { customHexToRGB } from '../../../utils'
+import { getMissionColor } from '../../../features/map/layers/MissionLayer/styles'
+import { booleanToInt } from '../../../utils'
 import { LayerType } from '../layers/constants'
 import { OLGeometryType } from '../map/constants'
 
@@ -13,6 +13,10 @@ import type { MissionAction } from '../../types/missionAction'
 import type { MultiPolygon } from 'ol/geom'
 
 import MissionStatus = Mission.MissionStatus
+
+export function getMissionFeaturePointId(id: number) {
+  return `${LayerType.MISSION}:${id}`
+}
 
 export const getMissionFeaturePoint = (
   mission: Mission.Mission,
@@ -31,24 +35,23 @@ export const getMissionFeaturePoint = (
   const point = (geometry as MultiPolygon).getInteriorPoints().getFirstCoordinate()
 
   const missionStatus = getMissionStatus(mission)
-  const color = getMissionMarkerColor(missionStatus)
-  const colorRGBArray = customHexToRGB(color)
 
   const feature = new Feature({
     actions,
-    colorBlue: colorRGBArray[2],
-    colorGreen: colorRGBArray[1],
-    colorRed: colorRGBArray[0],
+    color: getMissionColor(missionStatus),
     controlUnits: mission.controlUnits,
     endDateTimeUtc: mission.endDateTimeUtc,
     geometry: new Point(point),
+    isClosed: booleanToInt(missionStatus === MissionStatus.CLOSED),
+    isDone: booleanToInt(missionStatus === MissionStatus.DONE),
+    isInProgress: booleanToInt(missionStatus === MissionStatus.IN_PROGRESS),
+    isUpcoming: booleanToInt(missionStatus === MissionStatus.UPCOMING),
     missionId: mission.id,
     missionNature: mission.missionNature,
-    missionStatus,
     missionType: mission.missionType,
     startDateTimeUtc: mission.startDateTimeUtc
   })
-  feature.setId(`${LayerType.MISSION}:${mission.id}`)
+  feature.setId(getMissionFeaturePointId(mission.id))
 
   return feature
 }

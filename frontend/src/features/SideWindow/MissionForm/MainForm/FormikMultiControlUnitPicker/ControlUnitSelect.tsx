@@ -191,12 +191,7 @@ export function ControlUnitSelect({
         />
         <TextInput
           defaultValue={controlledValueRef.current.contact}
-          disabled={
-            !controlUnits ||
-            !controlledValueRef.current.name ||
-            !controlledValueRef.current.resources ||
-            !controlledValueRef.current.resources.length
-          }
+          disabled={!controlUnits || !controlledValueRef.current.name}
           label={`Contact de l’unité ${index + 1}`}
           name={`contact_${index}`}
           onChange={handleContactChange}

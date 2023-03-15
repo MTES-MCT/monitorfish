@@ -2,15 +2,15 @@ import WebGLPointsLayer from 'ol/layer/WebGLPoints'
 import VectorSource from 'ol/source/Vector'
 import React, { MutableRefObject, useCallback, useEffect, useRef } from 'react'
 
-import { getMissionPointWebGLStyle } from './styles/mission.style'
-import { LayerProperties, LayerType } from '../../../domain/entities/layers/constants'
-import { getMissionFeaturePoint } from '../../../domain/entities/mission'
-import { useGetMissionsAndActions } from '../../../domain/entities/mission/hooks/useGetMissionsAndActions'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { getMissionPointWebGLStyle } from './styles'
+import { LayerProperties, LayerType } from '../../../../domain/entities/layers/constants'
+import { getMissionFeaturePoint } from '../../../../domain/entities/mission'
+import { useGetMissionsAndActions } from '../../../../domain/entities/mission/hooks/useGetMissionsAndActions'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 
+import type { WebGLPointsLayerWithName } from '../../../../domain/types/layer'
 import type { Feature } from 'ol'
 import type { Point } from 'ol/geom'
-import type { Layer } from 'ol/layer'
 
 export type MissionLayerProps = {
   map?: any
@@ -20,7 +20,7 @@ function UnmemoizedMissionLayer({ map }: MissionLayerProps) {
   const missionsAndActions = useGetMissionsAndActions()
 
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource<Point>>
-  const layerRef = useRef() as MutableRefObject<Layer>
+  const layerRef = useRef() as MutableRefObject<WebGLPointsLayerWithName>
 
   function getVectorSource() {
     if (!vectorSourceRef.current) {
@@ -64,6 +64,7 @@ function UnmemoizedMissionLayer({ map }: MissionLayerProps) {
       return undefined
     }
 
+    getLayer().name = LayerProperties.MISSION.code
     map.getLayers().push(getLayer())
 
     return () => {
@@ -75,5 +76,4 @@ function UnmemoizedMissionLayer({ map }: MissionLayerProps) {
 }
 
 export const MissionLayer = React.memo(UnmemoizedMissionLayer)
-
 MissionLayer.displayName = 'MissionLayer'

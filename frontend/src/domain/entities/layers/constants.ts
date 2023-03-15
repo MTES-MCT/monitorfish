@@ -62,6 +62,11 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
     type: LayerType.MISSION_HOVER,
     zIndex: 80
   },
+  MISSIONS_LABEL: {
+    code: 'mission_label',
+    type: LayerType.MISSION,
+    zIndex: 980
+  },
   SELECTED_VESSEL: {
     code: 'selected_vessel',
     type: LayerType.VESSEL,

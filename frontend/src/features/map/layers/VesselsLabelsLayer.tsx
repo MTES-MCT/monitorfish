@@ -5,12 +5,13 @@ import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'reac
 
 import { getLabelLineStyle } from './styles/vesselLabelLine.style'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
+import { drawMovedLabelLineIfFoundAndReturnOffset } from '../../../domain/entities/vessel/label'
 import {
   getVesselCompositeIdentifier,
   getVesselLastPositionVisibilityDates,
   Vessel
 } from '../../../domain/entities/vessel/vessel'
-import { drawMovedLabelIfFoundAndReturnOffset, VesselLabelLine } from '../../../domain/entities/vesselLabelLine'
+import { VesselLabelLine } from '../../../domain/entities/vesselLabelLine'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { usePrevious } from '../../../hooks/usePrevious'
 import { VesselLabelOverlay } from '../overlays/VesselLabelOverlay'
@@ -241,7 +242,7 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
           vesselProperties?.beaconMalfunctionId
             ? 1
             : 0
-        const offset = drawMovedLabelIfFoundAndReturnOffset(
+        const offset = drawMovedLabelLineIfFoundAndReturnOffset(
           getVectorSource(),
           vesselToCoordinates,
           labelLineFeatureId,

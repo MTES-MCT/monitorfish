@@ -92,15 +92,16 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
     }
   }, [initialValues])
 
-  const infractionTags = useMemo(() => {
+  const infractionTag = useMemo(() => {
     const infractions = getMissionActionInfractionsFromMissionActionFromFormValues(initialValues)
     const infractionsWithRecord = infractions.filter(
       ({ infractionType }) => infractionType === MissionAction.InfractionType.WITH_RECORD
     )
+    const infractionsNatinfs = infractions.map(({ natinf }) => natinf)
 
     return [
       ...(infractionsWithRecord.length > 0 ? [`${infractionsWithRecord.length} INF AVEC PV`] : []),
-      ...infractions.map(({ natinf }) => `NATINF : ${natinf}`)
+      ...(infractions.length > 0 ? [`${infractions.length} NATINF: ${infractionsNatinfs.join(', ')}`] : [])
     ].map(label => (
       <Tag key={label} accent={Accent.PRIMARY}>
         {label}
@@ -156,8 +157,8 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
           />
         </Head>
 
-        <StyledTagGroup>{infractionTags}</StyledTagGroup>
         <StyledTagGroup>{redTags}</StyledTagGroup>
+        <StyledTagGroup>{infractionTag}</StyledTagGroup>
       </InnerWrapper>
     </Wrapper>
   )

@@ -1,14 +1,4 @@
-import {
-  Accent,
-  getLocalizedDayjs,
-  Icon,
-  IconButton,
-  Size,
-  Tag,
-  TagGroup,
-  THEME,
-  TagBullet
-} from '@mtes-mct/monitor-ui'
+import { Accent, getLocalizedDayjs, Icon, IconButton, Tag, TagGroup, THEME, TagBullet } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -92,7 +82,7 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
     }
   }, [initialValues])
 
-  const infractionTag = useMemo(() => {
+  const infractionTags = useMemo(() => {
     const infractions = getMissionActionInfractionsFromMissionActionFromFormValues(initialValues)
     const infractionsWithRecord = infractions.filter(
       ({ infractionType }) => infractionType === MissionAction.InfractionType.WITH_RECORD
@@ -134,7 +124,7 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
         <b>{formatDateLabel(startDateAsDayjs.format('DD MMM'))}</b> à {startDateAsDayjs.format('HH:mm')}
       </DateLabel>
 
-      <InnerWrapper isSelected={isSelected} onClick={onEdit}>
+      <InnerWrapper isSelected={isSelected} onClick={onEdit} type={initialValues.actionType}>
         <Head>
           <ActionLabel>
             <ActionIcon color={THEME.color.charcoal} size={20} />
@@ -145,20 +135,20 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
             accent={Accent.TERTIARY}
             color={THEME.color.slateGray}
             Icon={Icon.Duplicate}
+            iconSize={20}
             onClick={onDuplicate}
-            size={Size.NORMAL}
           />
           <IconButton
             accent={Accent.TERTIARY}
             color={THEME.color.maximumRed}
             Icon={Icon.Delete}
+            iconSize={20}
             onClick={onDelete}
-            size={Size.NORMAL}
           />
         </Head>
 
-        <StyledTagGroup>{redTags}</StyledTagGroup>
-        <StyledTagGroup>{infractionTag}</StyledTagGroup>
+        {redTags.length > 0 && <StyledTagGroup>{redTags}</StyledTagGroup>}
+        {infractionTags.length > 0 && <StyledTagGroup>{infractionTags}</StyledTagGroup>}
       </InnerWrapper>
     </Wrapper>
   )
@@ -183,7 +173,13 @@ const DateLabel = styled.div`
 
 const InnerWrapper = styled.div<{
   isSelected: boolean
+  type: MissionAction.MissionActionType
 }>`
+  background-color: ${p =>
+    ({
+      [MissionAction.MissionActionType.AIR_SURVEILLANCE]: p.theme.color.gainsboro,
+      [MissionAction.MissionActionType.OBSERVATION]: p.theme.color.blueYonder[25]
+    }[p.type] || p.theme.color.white)};
   border: solid 1px ${p => (p.isSelected ? p.theme.color.blueGray['100'] : p.theme.color.lightGray)};
   outline: ${p => (p.isSelected ? `${p.theme.color.blueGray['100']} solid 2px` : 'none')};
   cursor: pointer;
@@ -196,7 +192,6 @@ const InnerWrapper = styled.div<{
 const ActionLabel = styled.div`
   display: flex;
   flex-grow: 1;
-  padding: 4px;
 
   /* The SVG icon is wrapper in a div */
   > div {
@@ -211,7 +206,11 @@ const ActionLabel = styled.div`
 const Head = styled.div`
   align-items: flex-start;
   display: flex;
-  padding-bottom: 4px;
+
+  /* TODO Remove the padding if iconSize is set in monitor-ui. */
+  > button {
+    padding: 0;
+  }
 `
 
 const StyledTagGroup = styled(TagGroup)`

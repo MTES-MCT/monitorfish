@@ -4,8 +4,6 @@ import {
   FormikEffect,
   FormikMultiCheckbox,
   FormikMultiRadio,
-  FormikMultiSelect,
-  FormikSelect,
   FormikTextarea,
   FormikTextInput,
   noop,
@@ -16,12 +14,7 @@ import { equals } from 'ramda'
 import { useCallback, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
-import {
-  FLIGHT_GOALS_AS_OPTIONS,
-  MISSION_NATURES_AS_OPTIONS,
-  MISSION_TYPES_AS_OPTIONS,
-  TARGETTED_SEGMENTS_AS_OPTIONS
-} from './constants'
+import { MISSION_NATURES_AS_OPTIONS, MISSION_TYPES_AS_OPTIONS } from './constants'
 import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'
 import { FormikMultiZonePicker } from './FormikMultiZonePicker'
 import { BOOLEAN_AS_OPTIONS } from '../../../../constants'
@@ -112,25 +105,6 @@ export function MainForm({ initialValues, onChange }: MainFormProps) {
               // TODO Allow more Monitor UI `Option` types.
               options={BOOLEAN_AS_OPTIONS}
             />
-          )}
-
-          {/* TODO What to do with this prop? */}
-          {currentValuesRef.current.missionType === Mission.MissionType.AIR && (
-            <InlineFieldGroupWrapper>
-              <FormikMultiSelect
-                baseContainer={newWindowContainerRef.current}
-                fixedWidth={218}
-                label="Objectifs du vol"
-                name="flightGoal"
-                options={FLIGHT_GOALS_AS_OPTIONS}
-              />
-              <FormikSelect
-                baseContainer={newWindowContainerRef.current}
-                label="Segment ciblé (si pertinent)"
-                name="targettedSegment"
-                options={TARGETTED_SEGMENTS_AS_OPTIONS}
-              />
-            </InlineFieldGroupWrapper>
           )}
 
           <RelatedFieldGroupWrapper>

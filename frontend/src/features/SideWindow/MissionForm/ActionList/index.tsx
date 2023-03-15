@@ -9,8 +9,8 @@ import { Mission } from '../../../../domain/types/mission'
 import { MissionAction } from '../../../../domain/types/missionAction'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { FormBody } from '../FormBody'
-import { FormHead } from '../FormHead'
+import { FormBody } from '../shared/FormBody'
+import { FormHead } from '../shared/FormHead'
 
 import type { MissionActionFormValues, MissionFormValues } from '../types'
 
@@ -114,6 +114,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   max-width: 33.33%;
   min-width: 33.33%;
+  overflow-y: auto;
 `
 
 const Placeholder = styled.div`

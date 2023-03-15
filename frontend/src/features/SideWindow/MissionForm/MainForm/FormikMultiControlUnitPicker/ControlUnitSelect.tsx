@@ -198,13 +198,14 @@ export function ControlUnitSelect({
         />
       </UnitWrapper>
 
-      <IconButton
-        accent={Accent.SECONDARY}
-        aria-label="Supprimer cette unité"
-        disabled={index === 0}
-        Icon={Icon.Delete}
-        onClick={handleDelete}
-      />
+      {index > 0 && (
+        <IconButton
+          accent={Accent.SECONDARY}
+          aria-label="Supprimer cette unité"
+          Icon={Icon.Delete}
+          onClick={handleDelete}
+        />
+      )}
     </Wrapper>
   )
 }
@@ -223,6 +224,9 @@ const UnitWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
+  min-width: 384px;
+  max-width: 384px;
+  width: 384px;
 
   > div:not(:first-child) {
     margin-top: 8px;

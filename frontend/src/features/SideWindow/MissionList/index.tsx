@@ -151,8 +151,9 @@ const Header = styled.div`
   background-color: ${p => p.theme.color.white};
   border-bottom: solid 2px ${p => p.theme.color.gainsboro};
   display: flex;
+  min-height: 80px;
   justify-content: space-between;
-  padding: 30px 32px 30px 48px;
+  padding: 0 32px 0 48px;
 `
 
 const HeaderTitle = styled.h1`

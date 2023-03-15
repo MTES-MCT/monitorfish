@@ -31,32 +31,59 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
     switch (initialValues.actionType) {
       case MissionAction.MissionActionType.AIR_CONTROL:
         return [
-          initialValues.vesselName ? `Contrôle aérien - ${initialValues.vesselName}` : 'Contrôle aérien à renseigner',
+          initialValues.vesselName ? (
+            <span>
+              Contrôle aérien - <strong>{initialValues.vesselName}</strong>
+            </span>
+          ) : (
+            <span>Contrôle aérien à renseigner</span>
+          ),
           Icon.FleetSegment
         ]
 
       case MissionAction.MissionActionType.AIR_SURVEILLANCE:
         return [
-          initialValues.numberOfVesselsFlownOver
-            ? `Surveillance aérienne - ${initialValues.numberOfVesselsFlownOver} pistes survolées`
-            : 'Surveillance aérienne à renseigner',
+          initialValues.numberOfVesselsFlownOver ? (
+            <span>
+              Surveillance aérienne - <strong>{initialValues.numberOfVesselsFlownOver} pistes survolées</strong>
+            </span>
+          ) : (
+            <span>Surveillance aérienne à renseigner</span>
+          ),
           Icon.Observation
         ]
 
       case MissionAction.MissionActionType.LAND_CONTROL:
         return [
-          initialValues.vesselName
-            ? `Contrôle à la débarque - ${initialValues.vesselName}`
-            : 'Contrôle à la débarque à renseigner',
+          initialValues.vesselName ? (
+            <span>
+              Contrôle à la débarque - <strong>{initialValues.vesselName}</strong>
+            </span>
+          ) : (
+            <span>Contrôle à la débarque à renseigner</span>
+          ),
           Icon.Anchor
         ]
 
       case MissionAction.MissionActionType.OBSERVATION:
-        return [initialValues.otherComments ? initialValues.otherComments : 'Note libre à renseigner', Icon.Note]
+        return [
+          initialValues.otherComments ? (
+            <span>{initialValues.otherComments}</span>
+          ) : (
+            <span>Note libre à renseigner</span>
+          ),
+          Icon.Note
+        ]
 
       case MissionAction.MissionActionType.SEA_CONTROL:
         return [
-          initialValues.vesselName ? `Contrôle en mer - ${initialValues.vesselName}` : 'Contrôle en mer à renseigner',
+          initialValues.vesselName ? (
+            <span>
+              Contrôle en mer - <strong>{initialValues.vesselName}</strong>
+            </span>
+          ) : (
+            <span>Contrôle en mer à renseigner</span>
+          ),
           Icon.FleetSegment
         ]
 
@@ -83,8 +110,15 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
 
   const redTags = useMemo(() => {
     const gearInfractionsWithGearSeized = (initialValues.gearInfractions || []).filter(({ gearSeized }) => gearSeized)
+    const speciesInfractionsWithSpeciesSeized = (initialValues.speciesInfractions || []).filter(
+      ({ speciesSeized }) => speciesSeized
+    )
 
-    return [...(gearInfractionsWithGearSeized.length > 0 ? ['Appréhension engin'] : [])].map(label => (
+    return [
+      ...(gearInfractionsWithGearSeized.length > 0 ? ['Appréhension engin'] : []),
+      ...(speciesInfractionsWithSpeciesSeized.length > 0 ? ['Appréhension espèce'] : []),
+      ...(initialValues.seizureAndDiversion ? ['Appréhension navire'] : [])
+    ].map(label => (
       <Tag accent={Accent.PRIMARY} bullet={TagBullet.DISK} bulletColor={THEME.color.maximumRed}>
         {label}
       </Tag>
@@ -99,7 +133,6 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
         <b>{formatDateLabel(startDateAsDayjs.format('DD MMM'))}</b> à {startDateAsDayjs.format('HH:mm')}
       </DateLabel>
 
-      {/* TODO How do we edit an action in terms of UX? */}
       <InnerWrapper isSelected={isSelected} onClick={onEdit}>
         <Head>
           <ActionLabel>

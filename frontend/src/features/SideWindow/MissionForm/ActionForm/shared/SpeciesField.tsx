@@ -95,28 +95,28 @@ export function SpeciesField() {
       label="Espèces à bord"
       name="speciesInfractions"
     >
+      {/* TODO Add a BooleanRadio field in monitor-ui. */}
+      <FormikMultiRadio
+        isInline
+        label="Poids des espèces vérifiés"
+        name="speciesWeightControlled"
+        options={BOOLEAN_AS_OPTIONS}
+      />
+      <FormikMultiRadio
+        isInline
+        label="Taille des espèces vérifiées"
+        name="speciesSizeControlled"
+        options={BOOLEAN_AS_OPTIONS}
+      />
+      <FormikMultiRadio
+        isInline
+        label="Arrimage séparé des espèces soumises à plan"
+        name="separateStowageOfPreservedSpecies"
+        options={BOOLEAN_AS_OPTIONS}
+      />
+
       {input.value && input.value.length > 0 && (
         <>
-          {/* TODO Add a BooleanRadio field in monitor-ui. */}
-          <FormikMultiRadio
-            isInline
-            label="Poids des espèces vérifiés"
-            name="speciesWeightControlled"
-            options={BOOLEAN_AS_OPTIONS}
-          />
-          <FormikMultiRadio
-            isInline
-            label="Taille des espèces vérifiées"
-            name="speciesSizeControlled"
-            options={BOOLEAN_AS_OPTIONS}
-          />
-          <FormikMultiRadio
-            isInline
-            label="Arrimage séparé des espèces soumises à plan"
-            name="separateStowageOfPreservedSpecies"
-            options={BOOLEAN_AS_OPTIONS}
-          />
-
           {input.value.map((specyOnboard, index) => (
             // eslint-disable-next-line react/no-array-index-key
             <Row key={`speciesOnboard-${index}`}>

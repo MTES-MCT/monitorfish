@@ -49,10 +49,10 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('OTM : autres mesures et dispositifs', 'Autres mesures.')
 
     // Espèces à bord
-    cy.fill('Ajouter une espèce', 'COD')
     cy.fill('Poids des espèces vérifiés', 'Oui')
     cy.fill('Taille des espèces vérifiées', 'Non')
     cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
+    cy.fill('Ajouter une espèce', 'COD')
     cy.fill('Qté déclarée', 10)
     cy.fill('Qté estimée', 20)
     cy.fill('Sous-taille', true)

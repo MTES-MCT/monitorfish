@@ -61,6 +61,13 @@ import styled from 'styled-components'
  * p {
  *   margin: var(--universal-margin);
  * }
+ *
+ * - `mini-default.min.css`:
+ *
+ * ```css
+ * .rs-picker-check-menu {
+ *   width: 280px;
+ * }
  * ```
  */
 // TODO Fix these CSS issues.
@@ -100,6 +107,10 @@ export const NoRsuiteOverrideWrapper = styled.div`
         line-height: 1.5384; // = 20px
       }
     }
+  }
+
+  .rs-picker-check-menu {
+    width: auto;
   }
 
   .rs-picker-select {

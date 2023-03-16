@@ -12,7 +12,6 @@ import { noop } from 'lodash'
 import { useMemo } from 'react'
 
 import { ControlQualityField } from './shared/ControlQualityField'
-import { FleetSegmentsField } from './shared/FleetSegmentsField'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
 import { FormikPortSelect } from './shared/FormikPortSelect'
 import { GearsField } from './shared/GearsField'
@@ -20,6 +19,7 @@ import { LicencesAndLogbookField } from './shared/LicencesAndLogbookField'
 import { SpeciesField } from './shared/SpeciesField'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
+import { VesselFleetSegmentsField } from './shared/VesselFleetSegmentsField'
 import { useNewWindow } from '../../../../ui/NewWindow'
 import { FieldGroup } from '../shared/FieldGroup'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
@@ -92,7 +92,7 @@ export function LandControlForm({ initialValues, onChange }: LandControlFormProp
 
           <hr />
 
-          <FleetSegmentsField label="Segment de flotte" />
+          <VesselFleetSegmentsField label="Segment de flotte" />
 
           <ControlQualityField />
 

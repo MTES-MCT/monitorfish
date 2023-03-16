@@ -17,7 +17,10 @@ import type { Specy } from '../../../../../domain/types/specy'
 import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
-export function SpeciesField() {
+export type SpeciesFieldProps = {
+  controlledWeightLabel: string
+}
+export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
 
   const { newWindowContainerRef } = useNewWindow()
@@ -145,7 +148,7 @@ export function SpeciesField() {
 
                 <FieldGroup isInline>
                   <FormikNumberInput label="Qté déclarée" name={`speciesOnboard[${index}].declaredWeight`} />
-                  <FormikNumberInput label="Qté estimée" name={`speciesOnboard[${index}].controlledWeight`} />
+                  <FormikNumberInput label={controlledWeightLabel} name={`speciesOnboard[${index}].controlledWeight`} />
                   <FormikCheckbox label="Sous-taille" name={`speciesOnboard[${index}].underSized`} />
                 </FieldGroup>
               </RowInnerWrapper>

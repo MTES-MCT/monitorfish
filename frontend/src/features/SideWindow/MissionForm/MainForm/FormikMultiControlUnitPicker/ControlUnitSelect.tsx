@@ -12,14 +12,13 @@ import { useNewWindow } from '../../../../../ui/NewWindow'
 import { mapToProp } from '../../../../../utils/mapToProp'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 
-import type { PartialControlUnitOption } from './types'
 import type { ControlUnit } from '../../../../../domain/types/controlUnit'
 import type { MissionFormValues } from '../../types'
 import type { Promisable } from 'type-fest'
 
 export type ControlUnitSelectProps = {
   allAdministrationsAsOptions: Option[]
-  allNamesAsOptions: PartialControlUnitOption[]
+  allNamesAsOptions: Array<Option<number>>
   controlUnits: ControlUnit[] | undefined
   defaultValue: MissionFormValues['controlUnits'][0]
   index: number
@@ -50,7 +49,7 @@ export function ControlUnitSelect({
   )
 
   const filteredNamesAsOptions = useMemo(
-    (): PartialControlUnitOption[] => {
+    (): Array<Option<number>> => {
       if (!controlUnits || !controlledValueRef.current.administration) {
         return allNamesAsOptions
       }

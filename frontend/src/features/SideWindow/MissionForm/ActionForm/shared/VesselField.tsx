@@ -91,12 +91,7 @@ export function VesselField() {
         onChange={handleVesselSearchChange}
       />
 
-      <Checkbox
-        disabled={Boolean(values.vesselId)}
-        label="Navire inconnu"
-        name="isUnknownVessel"
-        onChange={handleIsUnknownVesselChange}
-      />
+      <Checkbox label="Navire inconnu" name="isUnknownVessel" onChange={handleIsUnknownVesselChange} />
     </Wrapper>
   )
 }

@@ -76,7 +76,7 @@ export function GearsField() {
         )
       }
 
-      const updatedGearOnboard = {
+      const updatedGearOnboard: MissionAction.GearControl = {
         ...gearOnboard,
         gearWasControlled: !isChecked
       }
@@ -123,17 +123,26 @@ export function GearsField() {
     >
       {input.value &&
         input.value.length > 0 &&
-        input.value.map((onboardGear, index) => (
+        input.value.map((gearOnboard, index) => (
           // eslint-disable-next-line react/no-array-index-key
           <Row key={`gearOnboard-${index}`}>
             <RowInnerWrapper>
               <SingleTag
                 onDelete={() => remove(index)}
-              >{`${onboardGear.gearCode} - ${onboardGear.gearName}`}</SingleTag>
+              >{`${gearOnboard.gearCode} - ${gearOnboard.gearName}`}</SingleTag>
 
               <FieldGroup isInline>
-                <FormikNumberInput label="Maillage déclaré" name={`gearOnboard[${index}].declaredMesh`} />
-                <FormikNumberInput label="Maillage mesuré" name={`gearOnboard[${index}].controlledMesh`} />
+                <FormikNumberInput
+                  disabled={gearOnboard.gearWasControlled === false}
+                  label="Maillage déclaré"
+                  name={`gearOnboard[${index}].declaredMesh`}
+                />
+                <FormikNumberInput
+                  disabled={gearOnboard.gearWasControlled === false}
+                  label="Maillage mesuré"
+                  name={`gearOnboard[${index}].controlledMesh`}
+                />
+
                 <Checkbox
                   label="Maillage non mesuré"
                   name="gearWasNotControlled"

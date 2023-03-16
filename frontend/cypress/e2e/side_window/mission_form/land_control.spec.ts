@@ -63,8 +63,8 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.clickButton('Valider l’infraction')
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
-    // Appréhension et déroutement du navire
-    cy.fill('Appréhension et déroutement du navire', true)
+    // Appréhension du navire
+    cy.fill('Appréhension du navire', true)
 
     // Autres infractions
     cy.clickButton('Ajouter une autre infraction')

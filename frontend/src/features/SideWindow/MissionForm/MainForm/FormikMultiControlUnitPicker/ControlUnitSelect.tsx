@@ -1,11 +1,10 @@
 import { Accent, Icon, IconButton, MultiSelect, Option, Select, TextInput, useForceUpdate } from '@mtes-mct/monitor-ui'
-import { pick } from 'ramda'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
 import {
-  findControlUnitByAdministrationAndName,
+  findControlUnitById,
   mapControlUnitsToUniqueSortedNamesAsOptions,
   mapControlUnitToResourcesAsOptions
 } from './utils'
@@ -13,12 +12,14 @@ import { useNewWindow } from '../../../../../ui/NewWindow'
 import { mapToProp } from '../../../../../utils/mapToProp'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 
+import type { PartialControlUnitOption } from './types'
 import type { ControlUnit } from '../../../../../domain/types/controlUnit'
 import type { MissionFormValues } from '../../types'
 import type { Promisable } from 'type-fest'
 
 export type ControlUnitSelectProps = {
-  administrationsAsOptions: Option[]
+  allAdministrationsAsOptions: Option[]
+  allNamesAsOptions: PartialControlUnitOption[]
   controlUnits: ControlUnit[] | undefined
   defaultValue: MissionFormValues['controlUnits'][0]
   index: number
@@ -26,7 +27,8 @@ export type ControlUnitSelectProps = {
   onDelete: (index: number) => Promisable<void>
 }
 export function ControlUnitSelect({
-  administrationsAsOptions,
+  allAdministrationsAsOptions,
+  allNamesAsOptions,
   controlUnits,
   defaultValue,
   index,
@@ -40,14 +42,6 @@ export function ControlUnitSelect({
 
   const { forceUpdate } = useForceUpdate()
 
-  const resourcesAsOptions = useMemo((): Option<number>[] => {
-    if (!selectedControlUnit) {
-      return []
-    }
-
-    return mapControlUnitToResourcesAsOptions(selectedControlUnit)
-  }, [selectedControlUnit])
-
   const controlledValueResourceIds = useMemo(
     () => (controlledValueRef.current.resources ? mapToProp(controlledValueRef.current.resources, 'id') : []),
 
@@ -55,10 +49,10 @@ export function ControlUnitSelect({
     [controlledValueRef.current]
   )
 
-  const unitsAsOptions = useMemo(
-    (): Option[] => {
+  const filteredNamesAsOptions = useMemo(
+    (): PartialControlUnitOption[] => {
       if (!controlUnits || !controlledValueRef.current.administration) {
-        return []
+        return allNamesAsOptions
       }
 
       const selectedAdministrationControlUnits = controlUnits.filter(
@@ -69,8 +63,16 @@ export function ControlUnitSelect({
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [controlledValueRef.current, controlUnits]
+    [allNamesAsOptions, controlledValueRef.current, controlUnits]
   )
+
+  const filteredResourcesAsOptions = useMemo((): Option<number>[] => {
+    if (!selectedControlUnit) {
+      return []
+    }
+
+    return mapControlUnitToResourcesAsOptions(selectedControlUnit)
+  }, [selectedControlUnit])
 
   const handleAdministrationChange = useCallback(
     (nextAdministration: string | undefined) => {
@@ -88,20 +90,19 @@ export function ControlUnitSelect({
   )
 
   const handleNameChange = useCallback(
-    (nextName: string | undefined) => {
-      if (!controlUnits || !controlledValueRef.current.administration) {
+    (nextControlUnitId: number | undefined) => {
+      if (!controlUnits) {
         return
       }
 
-      const nextSelectedControlUnit = nextName
-        ? findControlUnitByAdministrationAndName(controlUnits, controlledValueRef.current.administration, nextName)
+      const nextSelectedControlUnit = nextControlUnitId
+        ? findControlUnitById(controlUnits, nextControlUnitId)
         : undefined
-
       const nextControlUnit: MissionFormValues['controlUnits'][0] = {
         ...INITIAL_MISSION_CONTROL_UNIT,
-        ...pick(['administration'])(controlledValueRef.current),
+        administration: nextSelectedControlUnit ? nextSelectedControlUnit.administration : undefined,
         id: nextSelectedControlUnit ? nextSelectedControlUnit.id : undefined,
-        name: nextName
+        name: nextSelectedControlUnit ? nextSelectedControlUnit.name : undefined
       }
 
       controlledValueRef.current = nextControlUnit
@@ -164,50 +165,47 @@ export function ControlUnitSelect({
           label={`Administration ${index + 1}`}
           name={`administration_${index}`}
           onChange={handleAdministrationChange}
-          options={administrationsAsOptions}
+          options={allAdministrationsAsOptions}
+          searchable
+          virtualized
         />
         <Select
           baseContainer={newWindowContainerRef.current}
-          defaultValue={controlledValueRef.current.administration}
-          disabled={!controlUnits || !controlledValueRef.current.administration}
+          defaultValue={selectedControlUnit?.id}
+          disabled={!controlUnits}
           label={`Unité ${index + 1}`}
-          name={`name_${index}`}
+          name={`unit_${index}`}
           onChange={handleNameChange}
-          options={unitsAsOptions}
+          options={filteredNamesAsOptions as any}
+          searchable
+          virtualized
         />
         <MultiSelect
           baseContainer={newWindowContainerRef.current}
-          // TODO Allow for different Option value type than string in monitor-ui.
-          defaultValue={controlledValueResourceIds as any}
-          disabled={!controlUnits || !controlledValueRef.current.administration}
-          label={`Ressource ${index + 1}`}
-          name={`resouces_${index}`}
-          // TODO Allow for different Option value type than string in monitor-ui.
-          onChange={handleResourcesChange as any}
-          // TODO Allow for different Option value type than string in monitor-ui.
-          options={resourcesAsOptions as any}
+          defaultValue={controlledValueResourceIds}
+          disabled={!controlUnits || !controlledValueRef.current.administration || !controlledValueRef.current.name}
+          label={`Moyen ${index + 1}`}
+          name={`resources_${index}`}
+          onChange={handleResourcesChange}
+          options={filteredResourcesAsOptions}
         />
         <TextInput
           defaultValue={controlledValueRef.current.contact}
-          disabled={
-            !controlUnits ||
-            !controlledValueRef.current.name ||
-            !controlledValueRef.current.resources ||
-            !controlledValueRef.current.resources.length
-          }
+          disabled={!controlUnits || !controlledValueRef.current.name}
           label={`Contact de l’unité ${index + 1}`}
           name={`contact_${index}`}
           onChange={handleContactChange}
         />
       </UnitWrapper>
 
-      <IconButton
-        accent={Accent.SECONDARY}
-        aria-label="Supprimer cette unité"
-        disabled={index === 0}
-        Icon={Icon.Delete}
-        onClick={handleDelete}
-      />
+      {index > 0 && (
+        <IconButton
+          accent={Accent.SECONDARY}
+          aria-label="Supprimer cette unité"
+          Icon={Icon.Delete}
+          onClick={handleDelete}
+        />
+      )}
     </Wrapper>
   )
 }
@@ -226,6 +224,9 @@ const UnitWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
+  min-width: 384px;
+  max-width: 384px;
+  width: 384px;
 
   > div:not(:first-child) {
     margin-top: 8px;

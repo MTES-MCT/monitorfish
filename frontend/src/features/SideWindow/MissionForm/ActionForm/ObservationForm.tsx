@@ -4,8 +4,8 @@ import { noop } from 'lodash'
 import { useMemo } from 'react'
 
 import { getTitleDateFromUtcStringDate } from './shared/utils'
-import { FormBody } from '../FormBody'
-import { FormHead } from '../FormHead'
+import { FormBody } from '../shared/FormBody'
+import { FormHead } from '../shared/FormHead'
 
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'

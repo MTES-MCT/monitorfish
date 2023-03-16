@@ -14,15 +14,15 @@ import { theme } from '../../../ui/theme'
 
 import type { MultiPolygon } from 'ol/geom'
 
-const titlePlaceholder = {
-  CONTROL_POINT: 'un point de contrôle',
-  MISSION_ZONE: 'une zone de mission',
-  SURVEILLANCE_ZONE: 'une zone de surveillance'
+const INTERACTION_LISTENER_TITLE_PLACEHOLDER: Partial<Record<InteractionListener, string>> = {
+  [InteractionListener.CONTROL_POINT]: 'un point de contrôle',
+  [InteractionListener.MISSION_ZONE]: 'une zone de mission',
+  [InteractionListener.SURVEILLANCE_ZONE]: 'une zone de surveillance'
 }
-const validateButtonPlaceholder = {
-  CONTROL_POINT: 'le point de contrôle',
-  MISSION_ZONE: 'la zone de mission',
-  SURVEILLANCE_ZONE: 'la zone de surveillance'
+const INTERACTION_LISTENER_BUTTON_LABEL: Partial<Record<InteractionListener, string>> = {
+  [InteractionListener.CONTROL_POINT]: 'le point de contrôle',
+  [InteractionListener.MISSION_ZONE]: 'la zone de mission',
+  [InteractionListener.SURVEILLANCE_ZONE]: 'la zone de surveillance'
 }
 
 export function DrawLayerModal() {
@@ -64,8 +64,8 @@ export function DrawLayerModal() {
   const handleQuit = () => {
     dispatch(closeAddMissionZone())
   }
-  const handleSelectInteraction = nextInteraction => () => {
-    dispatch(setInteractionType(nextInteraction))
+  const handleSelectInteraction = (nextInteractionType: InteractionType) => () => {
+    dispatch(setInteractionType(nextInteractionType))
   }
   const handleReset = () => {
     dispatch(eraseDrawedGeometries(initialFeatureNumberRef.current))
@@ -78,7 +78,7 @@ export function DrawLayerModal() {
     <Wrapper>
       <ContentWrapper>
         <Header>
-          Vous êtes en train d&apos;ajouter {listener && titlePlaceholder[listener]}
+          Vous êtes en train d&apos;ajouter {listener && INTERACTION_LISTENER_TITLE_PLACEHOLDER[listener]}
           <QuitButton Icon={Icon.Close} onClick={handleQuit} size={Size.NORMAL}>
             Quitter
           </QuitButton>
@@ -113,7 +113,7 @@ export function DrawLayerModal() {
             Réinitialiser
           </ResetButton>
           <ValidateButton onClick={handleValidate}>
-            {`Valider ${interactionType ? validateButtonPlaceholder[interactionType] : ''}`}
+            {`Valider ${listener ? INTERACTION_LISTENER_BUTTON_LABEL[listener] : ''}`}
           </ValidateButton>
         </ActionWrapper>
       </ContentWrapper>

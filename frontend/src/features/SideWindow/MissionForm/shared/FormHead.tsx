@@ -3,7 +3,7 @@ import styled from 'styled-components'
 export const FormHead = styled.div`
   align-items: center;
   display: flex;
-  padding: 32px;
+  padding: 32px 40px;
 
   > div {
     margin-left: 24px;

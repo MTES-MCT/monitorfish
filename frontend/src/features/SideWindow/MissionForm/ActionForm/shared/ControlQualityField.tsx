@@ -1,7 +1,7 @@
 import { FormikCheckbox, FormikMultiRadio, FormikTextarea } from '@mtes-mct/monitor-ui'
 
 import { BOOLEAN_AS_OPTIONS } from '../../../../../constants'
-import { FieldsetGroup } from '../../FieldsetGroup'
+import { FieldsetGroup } from '../../shared/FieldsetGroup'
 
 export function ControlQualityField() {
   return (

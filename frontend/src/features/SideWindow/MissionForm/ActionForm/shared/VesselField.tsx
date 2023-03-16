@@ -1,5 +1,6 @@
+import { Checkbox } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { useNewWindow } from '../../../../../ui/NewWindow'
@@ -14,6 +15,8 @@ export function VesselField() {
 
   const { newWindowContainerRef } = useNewWindow()
 
+  const [isVesselSearchDisabled, setIsVesselSearchDisabled] = useState(false)
+
   const defaultValue = useMemo(
     () => ({
       flagState: values.flagState,
@@ -22,7 +25,7 @@ export function VesselField() {
     [values.flagState, values.vesselName]
   )
 
-  const handleVesselChange = useCallback(
+  const handleVesselSearchChange = useCallback(
     (nextVessel: VesselIdentity | undefined) => {
       if (!nextVessel) {
         setFieldValue('externalReferenceNumber', undefined)
@@ -58,17 +61,62 @@ export function VesselField() {
     []
   )
 
+  const handleIsUnknownVesselChange = useCallback(
+    (isChecked: boolean) => {
+      if (isChecked) {
+        setIsVesselSearchDisabled(true)
+
+        handleVesselSearchChange(undefined)
+
+        return
+      }
+
+      // TODO I don't really know why these fields can be null in the original types.
+      setIsVesselSearchDisabled(false)
+    },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [handleVesselSearchChange]
+  )
+
   return (
-    <StyledVesselSearch
-      baseRef={newWindowContainerRef}
-      defaultValue={defaultValue}
-      extendedWidth={400}
-      hasVesselIdInResults
-      isExtended
-      onChange={handleVesselChange}
-    />
+    <Wrapper>
+      <StyledVesselSearch
+        baseRef={newWindowContainerRef}
+        defaultValue={defaultValue}
+        disabled={isVesselSearchDisabled}
+        extendedWidth={400}
+        hasVesselIdInResults
+        isExtended
+        onChange={handleVesselSearchChange}
+      />
+
+      <Checkbox
+        disabled={Boolean(values.vesselId)}
+        label="Navire inconnu"
+        name="isUnknownVessel"
+        onChange={handleIsUnknownVesselChange}
+      />
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+  align-items: center;
+  display: flex;
+
+  > div:first-child {
+    flex-grow: 1;
+    margin-right: 16px;
+  }
+
+  /* TODO CHange that in monitor-ui */
+  > div:last-child {
+    label {
+      white-space: nowrap;
+    }
+  }
+`
 
 const StyledVesselSearch = styled(VesselSearch)`
   width: auto;

@@ -1,14 +1,4 @@
-import {
-  Accent,
-  getLocalizedDayjs,
-  Icon,
-  IconButton,
-  Size,
-  Tag,
-  TagGroup,
-  THEME,
-  TagBullet
-} from '@mtes-mct/monitor-ui'
+import { Accent, getLocalizedDayjs, Icon, IconButton, Tag, TagGroup, THEME, TagBullet } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -31,32 +21,59 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
     switch (initialValues.actionType) {
       case MissionAction.MissionActionType.AIR_CONTROL:
         return [
-          initialValues.vesselName ? `Contrôle aérien - ${initialValues.vesselName}` : 'Contrôle aérien à renseigner',
+          initialValues.vesselName ? (
+            <span>
+              Contrôle aérien - <strong>{initialValues.vesselName}</strong>
+            </span>
+          ) : (
+            <span>Contrôle aérien à renseigner</span>
+          ),
           Icon.FleetSegment
         ]
 
       case MissionAction.MissionActionType.AIR_SURVEILLANCE:
         return [
-          initialValues.numberOfVesselsFlownOver
-            ? `Surveillance aérienne - ${initialValues.numberOfVesselsFlownOver} pistes survolées`
-            : 'Surveillance aérienne à renseigner',
+          initialValues.numberOfVesselsFlownOver ? (
+            <span>
+              Surveillance aérienne - <strong>{initialValues.numberOfVesselsFlownOver} pistes survolées</strong>
+            </span>
+          ) : (
+            <span>Surveillance aérienne à renseigner</span>
+          ),
           Icon.Observation
         ]
 
       case MissionAction.MissionActionType.LAND_CONTROL:
         return [
-          initialValues.vesselName
-            ? `Contrôle à la débarque - ${initialValues.vesselName}`
-            : 'Contrôle à la débarque à renseigner',
+          initialValues.vesselName ? (
+            <span>
+              Contrôle à la débarque - <strong>{initialValues.vesselName}</strong>
+            </span>
+          ) : (
+            <span>Contrôle à la débarque à renseigner</span>
+          ),
           Icon.Anchor
         ]
 
       case MissionAction.MissionActionType.OBSERVATION:
-        return [initialValues.otherComments ? initialValues.otherComments : 'Note libre à renseigner', Icon.Note]
+        return [
+          initialValues.otherComments ? (
+            <span>{initialValues.otherComments}</span>
+          ) : (
+            <span>Note libre à renseigner</span>
+          ),
+          Icon.Note
+        ]
 
       case MissionAction.MissionActionType.SEA_CONTROL:
         return [
-          initialValues.vesselName ? `Contrôle en mer - ${initialValues.vesselName}` : 'Contrôle en mer à renseigner',
+          initialValues.vesselName ? (
+            <span>
+              Contrôle en mer - <strong>{initialValues.vesselName}</strong>
+            </span>
+          ) : (
+            <span>Contrôle en mer à renseigner</span>
+          ),
           Icon.FleetSegment
         ]
 
@@ -70,10 +87,11 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
     const infractionsWithRecord = infractions.filter(
       ({ infractionType }) => infractionType === MissionAction.InfractionType.WITH_RECORD
     )
+    const infractionsNatinfs = infractions.map(({ natinf }) => natinf)
 
     return [
       ...(infractionsWithRecord.length > 0 ? [`${infractionsWithRecord.length} INF AVEC PV`] : []),
-      ...infractions.map(({ natinf }) => `NATINF : ${natinf}`)
+      ...(infractions.length > 0 ? [`${infractions.length} NATINF: ${infractionsNatinfs.join(', ')}`] : [])
     ].map(label => (
       <Tag key={label} accent={Accent.PRIMARY}>
         {label}
@@ -83,8 +101,15 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
 
   const redTags = useMemo(() => {
     const gearInfractionsWithGearSeized = (initialValues.gearInfractions || []).filter(({ gearSeized }) => gearSeized)
+    const speciesInfractionsWithSpeciesSeized = (initialValues.speciesInfractions || []).filter(
+      ({ speciesSeized }) => speciesSeized
+    )
 
-    return [...(gearInfractionsWithGearSeized.length > 0 ? ['Appréhension engin'] : [])].map(label => (
+    return [
+      ...(gearInfractionsWithGearSeized.length > 0 ? ['Appréhension engin'] : []),
+      ...(speciesInfractionsWithSpeciesSeized.length > 0 ? ['Appréhension espèce'] : []),
+      ...(initialValues.seizureAndDiversion ? ['Appréhension navire'] : [])
+    ].map(label => (
       <Tag accent={Accent.PRIMARY} bullet={TagBullet.DISK} bulletColor={THEME.color.maximumRed}>
         {label}
       </Tag>
@@ -99,8 +124,7 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
         <b>{formatDateLabel(startDateAsDayjs.format('DD MMM'))}</b> à {startDateAsDayjs.format('HH:mm')}
       </DateLabel>
 
-      {/* TODO How do we edit an action in terms of UX? */}
-      <InnerWrapper isSelected={isSelected} onClick={onEdit}>
+      <InnerWrapper isSelected={isSelected} onClick={onEdit} type={initialValues.actionType}>
         <Head>
           <ActionLabel>
             <ActionIcon color={THEME.color.charcoal} size={20} />
@@ -111,20 +135,20 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
             accent={Accent.TERTIARY}
             color={THEME.color.slateGray}
             Icon={Icon.Duplicate}
+            iconSize={20}
             onClick={onDuplicate}
-            size={Size.NORMAL}
           />
           <IconButton
             accent={Accent.TERTIARY}
             color={THEME.color.maximumRed}
             Icon={Icon.Delete}
+            iconSize={20}
             onClick={onDelete}
-            size={Size.NORMAL}
           />
         </Head>
 
-        <StyledTagGroup>{infractionTags}</StyledTagGroup>
-        <StyledTagGroup>{redTags}</StyledTagGroup>
+        {redTags.length > 0 && <StyledTagGroup>{redTags}</StyledTagGroup>}
+        {infractionTags.length > 0 && <StyledTagGroup>{infractionTags}</StyledTagGroup>}
       </InnerWrapper>
     </Wrapper>
   )
@@ -149,7 +173,13 @@ const DateLabel = styled.div`
 
 const InnerWrapper = styled.div<{
   isSelected: boolean
+  type: MissionAction.MissionActionType
 }>`
+  background-color: ${p =>
+    ({
+      [MissionAction.MissionActionType.AIR_SURVEILLANCE]: p.theme.color.gainsboro,
+      [MissionAction.MissionActionType.OBSERVATION]: p.theme.color.blueYonder[25]
+    }[p.type] || p.theme.color.white)};
   border: solid 1px ${p => (p.isSelected ? p.theme.color.blueGray['100'] : p.theme.color.lightGray)};
   outline: ${p => (p.isSelected ? `${p.theme.color.blueGray['100']} solid 2px` : 'none')};
   cursor: pointer;
@@ -162,7 +192,6 @@ const InnerWrapper = styled.div<{
 const ActionLabel = styled.div`
   display: flex;
   flex-grow: 1;
-  padding: 4px;
 
   /* The SVG icon is wrapper in a div */
   > div {
@@ -177,7 +206,11 @@ const ActionLabel = styled.div`
 const Head = styled.div`
   align-items: flex-start;
   display: flex;
-  padding-bottom: 4px;
+
+  /* TODO Remove the padding if iconSize is set in monitor-ui. */
+  > button {
+    padding: 0;
+  }
 `
 
 const StyledTagGroup = styled(TagGroup)`

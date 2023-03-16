@@ -23,7 +23,7 @@ context('Side Window > Mission Form > Air Surveillance', () => {
     // cy.fill('Objectifs du vol', 'Vérifications VMS/AIS')
 
     // Segments ciblés
-    cy.fill('Ajouter un segment', 'ATL01')
+    cy.fill('Segments ciblés (si pertinent)', ['ATL01', 'FR_DRB'])
 
     // Nb de navires survolés
     cy.fill('Nb de navires survolés', 15)
@@ -79,7 +79,10 @@ context('Side Window > Mission Form > Air Surveillance', () => {
         otherInfractions: [],
         portLocode: null,
         portName: null,
-        segments: [{ faoAreas: ['27.7', '27.8', '27.9', '27.10'], segment: 'ATL01', segmentName: 'All Trawls 3' }],
+        segments: [
+          { faoAreas: ['27.7', '27.8', '27.9', '27.10'], segment: 'ATL01', segmentName: 'All Trawls 3' },
+          { faoAreas: ['37.1', '37.2', '37.3'], segment: 'FR_DRB', segmentName: "Drague de mer et d'étang" }
+        ],
         seizureAndDiversion: null,
         seizureAndDiversionComments: null,
         separateStowageOfPreservedSpecies: false,

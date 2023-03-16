@@ -11,13 +11,13 @@ import { Formik } from 'formik'
 import { useMemo } from 'react'
 
 import { ControlQualityField } from './shared/ControlQualityField'
-import { FleetSegmentsField } from './shared/FleetSegmentsField'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
 import { GearsField } from './shared/GearsField'
 import { LicencesAndLogbookField } from './shared/LicencesAndLogbookField'
 import { SpeciesField } from './shared/SpeciesField'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
+import { VesselFleetSegmentsField } from './shared/VesselFleetSegmentsField'
 import { useNewWindow } from '../../../../ui/NewWindow'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
@@ -94,7 +94,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
 
           <hr />
 
-          <FleetSegmentsField label="Segment de flotte" />
+          <VesselFleetSegmentsField label="Segment de flotte" />
 
           <ControlQualityField />
 

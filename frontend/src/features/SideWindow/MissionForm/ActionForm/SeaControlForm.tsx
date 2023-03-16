@@ -1,5 +1,4 @@
 import {
-  Checkbox,
   FormikCheckbox,
   FormikDatePicker,
   FormikEffect,
@@ -20,7 +19,6 @@ import { SpeciesField } from './shared/SpeciesField'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
 import { useNewWindow } from '../../../../ui/NewWindow'
-import { FieldGroup } from '../shared/FieldGroup'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
@@ -53,10 +51,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
         </FormHead>
 
         <FormBody>
-          <FieldGroup isInline>
-            <VesselField />
-            <Checkbox label="Navire inconnu" name="isVesselUnknown" />
-          </FieldGroup>
+          <VesselField />
 
           <FormikDatePicker
             baseContainer={newWindowContainerRef.current}

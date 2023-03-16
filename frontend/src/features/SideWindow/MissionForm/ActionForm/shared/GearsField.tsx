@@ -1,12 +1,12 @@
-import { Checkbox, FormikNumberInput, FormikTextarea, Select, SingleTag } from '@mtes-mct/monitor-ui'
+import { Checkbox, FormikMultiRadio, FormikNumberInput, FormikTextarea, Select, SingleTag } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
-import { remove as ramdaRemove, update } from 'ramda'
-import { useCallback, useMemo } from 'react'
+import { remove as ramdaRemove } from 'ramda'
+import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { FormikMultiInfractionPicker } from './FormikMultiInfractionPicker'
 import { useGetGearsQuery } from '../../../../../api/gear'
-import { FrontendError } from '../../../../../libs/FrontendError'
+import { BOOLEAN_AS_OPTIONS } from '../../../../../constants'
 import { useNewWindow } from '../../../../../ui/NewWindow'
 import { FieldGroup } from '../../shared/FieldGroup'
 import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
@@ -20,6 +20,8 @@ export function GearsField() {
   const [input, , helper] = useField<MissionActionFormValues['gearOnboard']>('gearOnboard')
 
   const { newWindowContainerRef } = useNewWindow()
+
+  const [uncontrolledMeshGearCodes, setUncontrolledMeshGearCodes] = useState<string[]>([])
 
   const getGearsApiQuery = useGetGearsQuery()
 
@@ -59,31 +61,13 @@ export function GearsField() {
     [input.value]
   )
 
-  const handleGearWasNotControlledChange = useCallback(
-    (index: number, isChecked: boolean) => {
-      if (!input.value) {
-        throw new FrontendError(
-          '`input.value` is undefined. This should never happen.',
-          'handleGearWasNotControlledChange()'
-        )
-      }
+  const handleMeshWasNotControlledChange = useCallback(
+    (gearCode: MissionAction.GearControl['gearCode'], isChecked: boolean) => {
+      const nextUncontrolledMeshGearCodes = isChecked
+        ? [...uncontrolledMeshGearCodes, gearCode]
+        : uncontrolledMeshGearCodes.filter(uncontrolledGearCode => uncontrolledGearCode !== gearCode)
 
-      const gearOnboard = input.value[index]
-      if (!gearOnboard) {
-        throw new FrontendError(
-          '`gearOnboard` is undefined. This should never happen.',
-          'handleGearWasNotControlledChange()'
-        )
-      }
-
-      const updatedGearOnboard: MissionAction.GearControl = {
-        ...gearOnboard,
-        gearWasControlled: !isChecked
-      }
-
-      const nextGearOnboard = update(index, updatedGearOnboard, input.value)
-
-      helper.setValue(nextGearOnboard)
+      setUncontrolledMeshGearCodes(nextUncontrolledMeshGearCodes)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -131,14 +115,21 @@ export function GearsField() {
                 onDelete={() => remove(index)}
               >{`${gearOnboard.gearCode} - ${gearOnboard.gearName}`}</SingleTag>
 
+              <FormikMultiRadio
+                isInline
+                label="Engin contrôlé"
+                name={`gearOnboard[${index}].gearWasControlled`}
+                options={BOOLEAN_AS_OPTIONS}
+              />
+
               <FieldGroup isInline>
                 <FormikNumberInput
-                  disabled={gearOnboard.gearWasControlled === false}
+                  disabled={uncontrolledMeshGearCodes.includes(gearOnboard.gearCode)}
                   label="Maillage déclaré"
                   name={`gearOnboard[${index}].declaredMesh`}
                 />
                 <FormikNumberInput
-                  disabled={gearOnboard.gearWasControlled === false}
+                  disabled={uncontrolledMeshGearCodes.includes(gearOnboard.gearCode)}
                   label="Maillage mesuré"
                   name={`gearOnboard[${index}].controlledMesh`}
                 />
@@ -146,7 +137,7 @@ export function GearsField() {
                 <Checkbox
                   label="Maillage non mesuré"
                   name="gearWasNotControlled"
-                  onChange={isChecked => handleGearWasNotControlledChange(index, isChecked)}
+                  onChange={isChecked => handleMeshWasNotControlledChange(gearOnboard.gearCode, isChecked)}
                 />
               </FieldGroup>
 

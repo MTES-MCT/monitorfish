@@ -11,7 +11,7 @@ import { FrontendError } from '../../../../../libs/FrontendError'
 import { useNewWindow } from '../../../../../ui/NewWindow'
 import { includesSome } from '../../../../../utils/includesSome'
 import { sortByAscendingValue } from '../../../../../utils/sortByAscendingValue'
-import { FieldsetGroup, FieldsetGroupSpinner } from '../../FieldsetGroup'
+import { FieldsetGroup, FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 
 import type { MissionAction } from '../../../../../domain/types/missionAction'
 import type { MissionActionFormValues } from '../../types'

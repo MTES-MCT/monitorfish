@@ -29,7 +29,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.get('label').contains('Administration 2').should('exist')
 
-    cy.clickButton('Supprimer cette unité', { index: 1 })
+    cy.clickButton('Supprimer cette unité')
 
     cy.get('label').contains('Administration 2').should('not.exist')
   })
@@ -56,7 +56,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.fill('Administration 1', 'DDTM')
     cy.fill('Unité 1', 'Cultures marines – DDTM 40')
-    cy.fill('Ressource 1', ['Semi-rigide 2'])
+    cy.fill('Moyen 1', ['Semi-rigide 2'])
 
     getSaveButton().should('be.enabled')
     getSaveAndCloseButton().should('be.enabled')
@@ -116,14 +116,14 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.fill('Administration 1', 'DDTM')
     cy.fill('Unité 1', 'Cultures marines – DDTM 40')
-    cy.fill('Ressource 1', ['Semi-rigide 1'])
+    cy.fill('Moyen 1', ['Semi-rigide 1'])
     cy.fill('Contact de l’unité 1', 'Bob')
 
     cy.clickButton('Ajouter une autre unité')
 
     cy.fill('Administration 2', 'DREAL')
     cy.fill('Unité 2', 'DREAL Pays-de-La-Loire')
-    cy.fill('Ressource 2', ['ALTAIR', 'ARIOLA'])
+    cy.fill('Moyen 2', ['ALTAIR', 'ARIOLA'])
     cy.fill('Contact de l’unité 2', 'Bob 2')
 
     cy.fill('CACEM : orientations, observations', 'Une note.')

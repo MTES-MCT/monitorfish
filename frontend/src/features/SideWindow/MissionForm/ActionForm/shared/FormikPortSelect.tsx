@@ -5,7 +5,7 @@ import { useCallback, useMemo } from 'react'
 import { useGetPortsQuery } from '../../../../../api/port'
 import { FrontendError } from '../../../../../libs/FrontendError'
 import { useNewWindow } from '../../../../../ui/NewWindow'
-import { FieldsetGroupSpinner } from '../../FieldsetGroup'
+import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 
 import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'

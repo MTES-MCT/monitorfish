@@ -9,8 +9,8 @@ import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicke
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
 import { useNewWindow } from '../../../../ui/NewWindow'
-import { FormBody } from '../FormBody'
-import { FormHead } from '../FormHead'
+import { FormBody } from '../shared/FormBody'
+import { FormHead } from '../shared/FormHead'
 
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'

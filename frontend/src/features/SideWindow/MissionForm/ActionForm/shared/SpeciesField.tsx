@@ -61,6 +61,22 @@ export function SpeciesField() {
     [input.value]
   )
 
+  const getSpecyNameFromSpecyCode = useCallback(
+    (specyCode: Specy['code']) => {
+      if (!getSpeciesApiQuery.data) {
+        throw new FrontendError('`getSpeciesApiQuery.data` is undefined. This should never happen.')
+      }
+
+      const foundSpecy = getSpeciesApiQuery.data.species.find(({ code }) => code === specyCode)
+      if (!foundSpecy) {
+        throw new FrontendError('`specyName.data` is undefined. This should never happen.')
+      }
+
+      return foundSpecy.name
+    },
+    [getSpeciesApiQuery.data]
+  )
+
   const remove = useCallback(
     (index: number) => {
       if (!input.value) {
@@ -123,9 +139,9 @@ export function SpeciesField() {
               <FieldsetGroupSeparator />
 
               <RowInnerWrapper>
-                <SingleTag
-                  onDelete={() => remove(index)}
-                >{`${specyOnboard.speciesCode} - ${specyOnboard.speciesCode}`}</SingleTag>
+                <SingleTag onDelete={() => remove(index)}>{`${specyOnboard.speciesCode} - ${getSpecyNameFromSpecyCode(
+                  specyOnboard.speciesCode
+                )}`}</SingleTag>
 
                 <FieldGroup isInline>
                   <FormikNumberInput label="Qté déclarée" name={`speciesOnboard[${index}].declaredWeight`} />

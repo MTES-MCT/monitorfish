@@ -13,9 +13,12 @@ import { FieldGroup } from '../../shared/FieldGroup'
 import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../shared/FieldsetGroupSeparator'
 
+import type { MissionAction } from '../../../../../domain/types/missionAction'
 import type { Specy } from '../../../../../domain/types/specy'
 import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
+
+const TypedFormikMultiInfractionPicker = FormikMultiInfractionPicker<MissionAction.SpeciesInfraction>
 
 export type SpeciesFieldProps = {
   controlledWeightLabel: string
@@ -100,7 +103,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   }
 
   return (
-    <FormikMultiInfractionPicker
+    <TypedFormikMultiInfractionPicker
       addButtonLabel="Ajouter une infraction espèces"
       generalObservationTextareaProps={{
         label: 'Observations (hors infraction) sur les espèces',
@@ -113,6 +116,8 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
       }}
       label="Espèces à bord"
       name="speciesInfractions"
+      seizurePropName="speciesSeized"
+      seizureTagLabel="Appréhension espèce"
     >
       {/* TODO Add a BooleanRadio field in monitor-ui. */}
       <FormikMultiRadio
@@ -167,7 +172,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
         searchable
         virtualized
       />
-    </FormikMultiInfractionPicker>
+    </TypedFormikMultiInfractionPicker>
   )
 }
 

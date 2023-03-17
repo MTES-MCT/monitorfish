@@ -26,7 +26,7 @@ import type { MissionActionFormValues } from '../../../types'
 import type { FormikCheckboxProps, FormikTextareaProps } from '@mtes-mct/monitor-ui'
 import type { ReactNode } from 'react'
 
-export type FormikMultiInfractionPickerProps = {
+export type FormikMultiInfractionPickerProps<AnyInfraction extends MissionAction.OtherInfraction> = {
   addButtonLabel: string
   children?: ReactNode
   generalObservationTextareaProps?: Omit<FormikTextareaProps, 'name'> & {
@@ -35,16 +35,20 @@ export type FormikMultiInfractionPickerProps = {
   infractionCheckboxProps?: FormikCheckboxProps
   label: string
   name: keyof MissionActionFormValues
+  seizurePropName?: keyof AnyInfraction
+  seizureTagLabel?: string
 }
-export function FormikMultiInfractionPicker({
+export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.OtherInfraction>({
   addButtonLabel,
   children,
   generalObservationTextareaProps,
   infractionCheckboxProps,
   label,
-  name
-}: FormikMultiInfractionPickerProps) {
-  const [input, , helper] = useField<MissionAction.OtherInfraction[] | undefined>(name)
+  name,
+  seizurePropName,
+  seizureTagLabel
+}: FormikMultiInfractionPickerProps<AnyInfraction>) {
+  const [input, , helper] = useField<AnyInfraction[] | undefined>(name)
 
   const { newWindowContainerRef } = useNewWindow()
 
@@ -66,7 +70,7 @@ export function FormikMultiInfractionPicker({
 
   const add = useCallback(
     () => {
-      const nextInfractions = [...(input.value || []), {}] as MissionAction.OtherInfraction[]
+      const nextInfractions = [...(input.value || []), {}] as AnyInfraction[]
 
       helper.setValue(nextInfractions)
 
@@ -113,13 +117,13 @@ export function FormikMultiInfractionPicker({
   }, [closeForm, editedIndex, isEditedIndexNew, remove])
 
   const submit = useCallback(
-    (updatedInfraction: MissionAction.OtherInfraction) => {
+    (updatedInfraction: AnyInfraction) => {
       if (!input.value || editedIndex === undefined) {
         throw new FrontendError('`input.value` or `editedIndex` is undefined. This should never happen.', 'submit()')
       }
 
       // TODO For some unknown reason, `Yup.string().default('')` doesn't fill `comments`.
-      const updatedInfractionWithComments: MissionAction.OtherInfraction = {
+      const updatedInfractionWithComments: AnyInfraction = {
         ...updatedInfraction,
         comments: updatedInfraction.comments || ''
       }
@@ -155,7 +159,14 @@ export function FormikMultiInfractionPicker({
               <FieldsetGroupSeparator />
 
               {index !== editedIndex && (
-                <Infraction data={infraction} index={index} onDelete={remove} onEdit={setEditedIndex} />
+                <Infraction
+                  data={infraction}
+                  index={index}
+                  onDelete={remove}
+                  onEdit={setEditedIndex}
+                  seizurePropName={seizurePropName}
+                  seizureTagLabel={seizureTagLabel}
+                />
               )}
 
               {index === editedIndex && (

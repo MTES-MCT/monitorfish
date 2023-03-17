@@ -118,7 +118,13 @@ export function FormikMultiInfractionPicker({
         throw new FrontendError('`input.value` or `editedIndex` is undefined. This should never happen.', 'submit()')
       }
 
-      const nextInfractions = update(editedIndex, updatedInfraction, input.value)
+      // TODO For some unknown reason, `Yup.string().default('')` doesn't fill `comments`.
+      const updatedInfractionWithComments: MissionAction.OtherInfraction = {
+        ...updatedInfraction,
+        comments: updatedInfraction.comments || ''
+      }
+
+      const nextInfractions = update(editedIndex, updatedInfractionWithComments, input.value)
 
       helper.setValue(nextInfractions)
 
@@ -162,7 +168,6 @@ export function FormikMultiInfractionPicker({
                         name="infractionType"
                         options={INFRACTION_TYPES_AS_OPTIONS}
                       />
-                      {/* TODO I don't understand if it's a multiselect or a select here (XD vs types). */}
                       <HackedFormikSelect
                         baseContainer={newWindowContainerRef.current}
                         label="NATINF"
@@ -207,7 +212,7 @@ export function FormikMultiInfractionPicker({
 
 const Row = styled.div`
   > legend {
-    margin: 24px 0 8px;
+    margin: 12px 0 8px;
   }
 `
 
@@ -216,20 +221,16 @@ const StyledForm = styled(Form)`
   border: 0;
   padding: 0;
 
-  > div:first-child,
-  > fieldset:first-child {
+  > .Field,
+  > fieldset {
     margin-top: 16px;
-  }
-
-  > div:not(:first-child),
-  > fieldset:not(:first-child) {
-    margin-top: 24px;
   }
 `
 
 const FormButtonGroup = styled.div`
   display: flex;
   justify-content: flex-end;
+  margin-top: 16px;
 
   > button:last-child {
     margin-left: 16px;

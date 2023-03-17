@@ -115,11 +115,6 @@ const Box = styled.div`
     max-width: 312px;
   }
 
-  /* TODO Fix that in monitor-ui. */
-  .rs-picker-tag {
-    height: auto;
-  }
-
   div[role='option'] {
     > .rs-check-item {
       > .rs-checkbox-checker {

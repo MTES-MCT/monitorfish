@@ -16,6 +16,8 @@ import type { MissionAction } from '../../../../../domain/types/missionAction'
 import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
+const TypedFormikMultiInfractionPicker = FormikMultiInfractionPicker<MissionAction.GearInfraction>
+
 export function GearsField() {
   const [input, , helper] = useField<MissionActionFormValues['gearOnboard']>('gearOnboard')
 
@@ -95,7 +97,7 @@ export function GearsField() {
   }
 
   return (
-    <FormikMultiInfractionPicker
+    <TypedFormikMultiInfractionPicker
       addButtonLabel="Ajouter une infraction engins"
       // TODO Check that prop (it's a radio in the XD which doesn't make sense to me).
       infractionCheckboxProps={{
@@ -104,6 +106,8 @@ export function GearsField() {
       }}
       label="Engins à bord"
       name="gearInfractions"
+      seizurePropName="gearSeized"
+      seizureTagLabel="Appréhension engin"
     >
       {input.value &&
         input.value.length > 0 &&
@@ -156,7 +160,7 @@ export function GearsField() {
         searchable
         virtualized
       />
-    </FormikMultiInfractionPicker>
+    </TypedFormikMultiInfractionPicker>
   )
 }
 

@@ -40,9 +40,11 @@ export function Infraction({ data, index, onDelete, onEdit }: InfractionProps) {
           </div>
         </div>
 
-        <article>
-          <ReactMarkdown>{data.comments}</ReactMarkdown>
-        </article>
+        {data.comments.trim().length > 0 && (
+          <article>
+            <ReactMarkdown>{data.comments}</ReactMarkdown>
+          </article>
+        )}
       </InnerWrapper>
     </>
   )

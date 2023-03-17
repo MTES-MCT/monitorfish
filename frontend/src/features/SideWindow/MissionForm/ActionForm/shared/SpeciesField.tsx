@@ -157,18 +157,16 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
         </>
       )}
 
-      <FieldGroup>
-        <Select
-          key={String(input.value?.length)}
-          baseContainer={newWindowContainerRef.current}
-          label="Ajouter une espèce"
-          name="newSpecy"
-          onChange={add}
-          options={speciesAsOptions}
-          searchable
-          virtualized
-        />
-      </FieldGroup>
+      <Select
+        key={String(input.value?.length)}
+        baseContainer={newWindowContainerRef.current}
+        label="Ajouter une espèce"
+        name="newSpecy"
+        onChange={add}
+        options={speciesAsOptions}
+        searchable
+        virtualized
+      />
     </FormikMultiInfractionPicker>
   )
 }
@@ -180,6 +178,10 @@ const Row = styled.div`
 
   > hr {
     margin-bottom: 16px;
+  }
+
+  input[type='number'] {
+    width: 112px;
   }
 `
 

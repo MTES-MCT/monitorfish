@@ -148,13 +148,12 @@ export const NoRsuiteOverrideWrapper = styled.div`
   }
 
   .rs-picker-tag {
-    height: 36px;
-
     * {
       font-size: 13px;
     }
 
     > .rs-picker-toggle {
+      height: 30px;
       width: 100%;
 
       > .rs-stack {
@@ -173,20 +172,37 @@ export const NoRsuiteOverrideWrapper = styled.div`
 
           > .rs-picker-toggle-clean {
             line-height: 1;
+            top: 8px;
+
+            :hover {
+              top: 4px;
+            }
           }
         }
       }
     }
 
     > .rs-picker-tag-wrapper {
-      min-height: 29px;
+      min-height: 30px;
 
       > .rs-tag {
+        font-size: 11px;
+        line-height: 1.3636; // = 15px
         margin-top: 6px !important;
 
-        > .rs-btn-close {
-          line-height: 1;
-          padding: 5px 6px 7px;
+        > span {
+          font-size: 11px !important;
+          line-height: 1.3636; // = 15px
+        }
+
+        > .rs-tag-icon-close {
+          bottom: 0;
+          padding: 0 6px;
+
+          > svg {
+            height: 10px;
+            width: 10px;
+          }
         }
       }
     }

@@ -146,18 +146,16 @@ export function GearsField() {
           </Row>
         ))}
 
-      <FieldGroup>
-        <Select
-          key={String(input.value?.length)}
-          baseContainer={newWindowContainerRef.current}
-          label="Ajouter un engin"
-          name="newGear"
-          onChange={add}
-          options={gearsAsOptions}
-          searchable
-          virtualized
-        />
-      </FieldGroup>
+      <Select
+        key={String(input.value?.length)}
+        baseContainer={newWindowContainerRef.current}
+        label="Ajouter un engin"
+        name="newGear"
+        onChange={add}
+        options={gearsAsOptions}
+        searchable
+        virtualized
+      />
     </FormikMultiInfractionPicker>
   )
 }
@@ -169,6 +167,10 @@ const Row = styled.div`
 
   > hr {
     margin-bottom: 16px;
+  }
+
+  input[type='number'] {
+    width: 112px;
   }
 `
 

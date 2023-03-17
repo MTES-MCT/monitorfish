@@ -96,9 +96,9 @@ export function MainForm({ initialValues, onChange }: MainFormProps) {
 
           <FormikMultiControlUnitPicker name="controlUnits" />
 
-          <FormikMultiZonePicker name="geom" />
-
           <CustomFormBodyInnerWrapper>
+            <FormikMultiZonePicker name="geom" />
+
             {/* TODO What to do with this prop? */}
             {hasMissionOrderField && (
               <FormikMultiRadio

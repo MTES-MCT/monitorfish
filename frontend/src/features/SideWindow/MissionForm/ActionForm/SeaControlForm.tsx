@@ -1,5 +1,4 @@
 import {
-  Checkbox,
   FormikCheckbox,
   FormikDatePicker,
   FormikEffect,
@@ -12,15 +11,14 @@ import { Formik } from 'formik'
 import { useMemo } from 'react'
 
 import { ControlQualityField } from './shared/ControlQualityField'
-import { FleetSegmentsField } from './shared/FleetSegmentsField'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
 import { GearsField } from './shared/GearsField'
 import { LicencesAndLogbookField } from './shared/LicencesAndLogbookField'
 import { SpeciesField } from './shared/SpeciesField'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
+import { VesselFleetSegmentsField } from './shared/VesselFleetSegmentsField'
 import { useNewWindow } from '../../../../ui/NewWindow'
-import { FieldGroup } from '../shared/FieldGroup'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
@@ -53,10 +51,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
         </FormHead>
 
         <FormBody>
-          <FieldGroup isInline>
-            <VesselField />
-            <Checkbox label="Navire inconnu" name="isVesselUnknown" />
-          </FieldGroup>
+          <VesselField />
 
           <FormikDatePicker
             baseContainer={newWindowContainerRef.current}
@@ -81,7 +76,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
 
           <GearsField />
 
-          <SpeciesField />
+          <SpeciesField controlledWeightLabel="Qté estimée" />
 
           <FieldsetGroup isLight legend="Appréhension et déroutement du navire">
             <FormikCheckbox label="Appréhension et déroutement du navire" name="seizureAndDiversion" />
@@ -99,7 +94,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
 
           <hr />
 
-          <FleetSegmentsField label="Segment de flotte" />
+          <VesselFleetSegmentsField label="Segment de flotte" />
 
           <ControlQualityField />
 

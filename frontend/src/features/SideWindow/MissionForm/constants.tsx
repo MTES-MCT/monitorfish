@@ -46,9 +46,6 @@ export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValu
   unitWithoutOmegaGauge: undefined,
   userTrigram: undefined,
   vesselId: undefined,
-  vesselTargeted: undefined,
-
-  // TODO I had to add that.
-  // eslint-disable-next-line sort-keys-fix/sort-keys-fix
-  vesselName: undefined
+  vesselName: undefined,
+  vesselTargeted: undefined
 }

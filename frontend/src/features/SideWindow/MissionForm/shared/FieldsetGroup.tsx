@@ -23,10 +23,10 @@ export const FieldsetGroup = styled(Fieldset)<FieldsetGroupProps>`
       `}
 
     > button:not(:first-child),
-    > div:not(:first-child),
+    > .Field:not(:first-child),
     > fieldset:not(:first-child),
     > hr {
-      margin-top: 24px;
+      margin-top: 16px;
     }
   }
 `

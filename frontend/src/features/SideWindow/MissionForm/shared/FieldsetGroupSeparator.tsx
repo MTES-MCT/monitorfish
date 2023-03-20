@@ -12,6 +12,7 @@ export function FieldsetGroupSeparator() {
 
 const Wrapper = styled.div`
   height: 4px;
+  margin-top: 16px;
   position: relative;
 `
 

@@ -53,7 +53,7 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Taille des espèces vérifiées', 'Non')
     cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
     cy.fill('Qté déclarée', 10)
-    cy.fill('Qté estimée', 20)
+    cy.fill('Qté pesée', 20)
     cy.fill('Sous-taille', true)
     cy.clickButton('Ajouter une infraction espèces')
     cy.fill('Type d’infraction', 'Sans PV')
@@ -63,8 +63,8 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.clickButton('Valider l’infraction')
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
-    // Appréhension et déroutement du navire
-    cy.fill('Appréhension et déroutement du navire', true)
+    // Appréhension du navire
+    cy.fill('Appréhension du navire', true)
 
     // Autres infractions
     cy.clickButton('Ajouter une autre infraction')

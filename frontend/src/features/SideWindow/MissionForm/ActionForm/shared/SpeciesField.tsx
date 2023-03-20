@@ -13,11 +13,17 @@ import { FieldGroup } from '../../shared/FieldGroup'
 import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../shared/FieldsetGroupSeparator'
 
+import type { MissionAction } from '../../../../../domain/types/missionAction'
 import type { Specy } from '../../../../../domain/types/specy'
 import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
-export function SpeciesField() {
+const TypedFormikMultiInfractionPicker = FormikMultiInfractionPicker<MissionAction.SpeciesInfraction>
+
+export type SpeciesFieldProps = {
+  controlledWeightLabel: string
+}
+export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
 
   const { newWindowContainerRef } = useNewWindow()
@@ -61,6 +67,22 @@ export function SpeciesField() {
     [input.value]
   )
 
+  const getSpecyNameFromSpecyCode = useCallback(
+    (specyCode: Specy['code']) => {
+      if (!getSpeciesApiQuery.data) {
+        throw new FrontendError('`getSpeciesApiQuery.data` is undefined. This should never happen.')
+      }
+
+      const foundSpecy = getSpeciesApiQuery.data.species.find(({ code }) => code === specyCode)
+      if (!foundSpecy) {
+        throw new FrontendError('`specyName.data` is undefined. This should never happen.')
+      }
+
+      return foundSpecy.name
+    },
+    [getSpeciesApiQuery.data]
+  )
+
   const remove = useCallback(
     (index: number) => {
       if (!input.value) {
@@ -81,7 +103,7 @@ export function SpeciesField() {
   }
 
   return (
-    <FormikMultiInfractionPicker
+    <TypedFormikMultiInfractionPicker
       addButtonLabel="Ajouter une infraction espèces"
       generalObservationTextareaProps={{
         label: 'Observations (hors infraction) sur les espèces',
@@ -94,42 +116,44 @@ export function SpeciesField() {
       }}
       label="Espèces à bord"
       name="speciesInfractions"
+      seizurePropName="speciesSeized"
+      seizureTagLabel="Appréhension espèce"
     >
+      {/* TODO Add a BooleanRadio field in monitor-ui. */}
+      <FormikMultiRadio
+        isInline
+        label="Poids des espèces vérifiés"
+        name="speciesWeightControlled"
+        options={BOOLEAN_AS_OPTIONS}
+      />
+      <FormikMultiRadio
+        isInline
+        label="Taille des espèces vérifiées"
+        name="speciesSizeControlled"
+        options={BOOLEAN_AS_OPTIONS}
+      />
+      <FormikMultiRadio
+        isInline
+        label="Arrimage séparé des espèces soumises à plan"
+        name="separateStowageOfPreservedSpecies"
+        options={BOOLEAN_AS_OPTIONS}
+      />
+
       {input.value && input.value.length > 0 && (
         <>
-          {/* TODO Add a BooleanRadio field in monitor-ui. */}
-          <FormikMultiRadio
-            isInline
-            label="Poids des espèces vérifiés"
-            name="speciesWeightControlled"
-            options={BOOLEAN_AS_OPTIONS}
-          />
-          <FormikMultiRadio
-            isInline
-            label="Taille des espèces vérifiées"
-            name="speciesSizeControlled"
-            options={BOOLEAN_AS_OPTIONS}
-          />
-          <FormikMultiRadio
-            isInline
-            label="Arrimage séparé des espèces soumises à plan"
-            name="separateStowageOfPreservedSpecies"
-            options={BOOLEAN_AS_OPTIONS}
-          />
-
           {input.value.map((specyOnboard, index) => (
             // eslint-disable-next-line react/no-array-index-key
             <Row key={`speciesOnboard-${index}`}>
               <FieldsetGroupSeparator />
 
               <RowInnerWrapper>
-                <SingleTag
-                  onDelete={() => remove(index)}
-                >{`${specyOnboard.speciesCode} - ${specyOnboard.speciesCode}`}</SingleTag>
+                <SingleTag onDelete={() => remove(index)}>{`${specyOnboard.speciesCode} - ${getSpecyNameFromSpecyCode(
+                  specyOnboard.speciesCode
+                )}`}</SingleTag>
 
                 <FieldGroup isInline>
                   <FormikNumberInput label="Qté déclarée" name={`speciesOnboard[${index}].declaredWeight`} />
-                  <FormikNumberInput label="Qté estimée" name={`speciesOnboard[${index}].controlledWeight`} />
+                  <FormikNumberInput label={controlledWeightLabel} name={`speciesOnboard[${index}].controlledWeight`} />
                   <FormikCheckbox label="Sous-taille" name={`speciesOnboard[${index}].underSized`} />
                 </FieldGroup>
               </RowInnerWrapper>
@@ -138,19 +162,17 @@ export function SpeciesField() {
         </>
       )}
 
-      <FieldGroup>
-        <Select
-          key={String(input.value?.length)}
-          baseContainer={newWindowContainerRef.current}
-          label="Ajouter une espèce"
-          name="newSpecy"
-          onChange={add}
-          options={speciesAsOptions}
-          searchable
-          virtualized
-        />
-      </FieldGroup>
-    </FormikMultiInfractionPicker>
+      <Select
+        key={String(input.value?.length)}
+        baseContainer={newWindowContainerRef.current}
+        label="Ajouter une espèce"
+        name="newSpecy"
+        onChange={add}
+        options={speciesAsOptions}
+        searchable
+        virtualized
+      />
+    </TypedFormikMultiInfractionPicker>
   )
 }
 
@@ -161,6 +183,10 @@ const Row = styled.div`
 
   > hr {
     margin-bottom: 16px;
+  }
+
+  input[type='number'] {
+    width: 112px;
   }
 `
 

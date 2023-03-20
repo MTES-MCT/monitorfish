@@ -43,12 +43,16 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     // Engins à bord
     cy.fill('Ajouter un engin', 'MIS')
+    cy.fill('Engin contrôlé', 'Oui')
+    cy.fill('Maillage déclaré', '10')
+    cy.fill('Maillage mesuré', '20')
+    cy.fill('OTM : autres mesures et dispositifs', 'Autres mesures.')
 
     // Espèces à bord
-    cy.fill('Ajouter une espèce', 'COD')
     cy.fill('Poids des espèces vérifiés', 'Oui')
     cy.fill('Taille des espèces vérifiées', 'Non')
     cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
+    cy.fill('Ajouter une espèce', 'COD')
     cy.fill('Qté déclarée', 10)
     cy.fill('Qté estimée', 20)
     cy.fill('Sous-taille', true)
@@ -115,12 +119,12 @@ context('Side Window > Mission Form > Sea Control', () => {
         gearInfractions: [],
         gearOnboard: [
           {
-            comments: null,
-            controlledMesh: null,
-            declaredMesh: null,
+            comments: 'Autres mesures.',
+            controlledMesh: 20,
+            declaredMesh: 10,
             gearCode: 'MIS',
             gearName: 'Engin divers',
-            gearWasControlled: null
+            gearWasControlled: true
           }
         ],
         id: null,

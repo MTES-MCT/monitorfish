@@ -1,12 +1,12 @@
-import { Checkbox, FormikNumberInput, FormikTextarea, Select, SingleTag } from '@mtes-mct/monitor-ui'
+import { Checkbox, FormikMultiRadio, FormikNumberInput, FormikTextarea, Select, SingleTag } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
-import { remove as ramdaRemove, update } from 'ramda'
-import { useCallback, useMemo } from 'react'
+import { remove as ramdaRemove } from 'ramda'
+import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { FormikMultiInfractionPicker } from './FormikMultiInfractionPicker'
 import { useGetGearsQuery } from '../../../../../api/gear'
-import { FrontendError } from '../../../../../libs/FrontendError'
+import { BOOLEAN_AS_OPTIONS } from '../../../../../constants'
 import { useNewWindow } from '../../../../../ui/NewWindow'
 import { FieldGroup } from '../../shared/FieldGroup'
 import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
@@ -16,10 +16,14 @@ import type { MissionAction } from '../../../../../domain/types/missionAction'
 import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
+const TypedFormikMultiInfractionPicker = FormikMultiInfractionPicker<MissionAction.GearInfraction>
+
 export function GearsField() {
   const [input, , helper] = useField<MissionActionFormValues['gearOnboard']>('gearOnboard')
 
   const { newWindowContainerRef } = useNewWindow()
+
+  const [uncontrolledMeshGearCodes, setUncontrolledMeshGearCodes] = useState<string[]>([])
 
   const getGearsApiQuery = useGetGearsQuery()
 
@@ -59,31 +63,13 @@ export function GearsField() {
     [input.value]
   )
 
-  const handleGearWasNotControlledChange = useCallback(
-    (index: number, isChecked: boolean) => {
-      if (!input.value) {
-        throw new FrontendError(
-          '`input.value` is undefined. This should never happen.',
-          'handleGearWasNotControlledChange()'
-        )
-      }
+  const handleMeshWasNotControlledChange = useCallback(
+    (gearCode: MissionAction.GearControl['gearCode'], isChecked: boolean) => {
+      const nextUncontrolledMeshGearCodes = isChecked
+        ? [...uncontrolledMeshGearCodes, gearCode]
+        : uncontrolledMeshGearCodes.filter(uncontrolledGearCode => uncontrolledGearCode !== gearCode)
 
-      const gearOnboard = input.value[index]
-      if (!gearOnboard) {
-        throw new FrontendError(
-          '`gearOnboard` is undefined. This should never happen.',
-          'handleGearWasNotControlledChange()'
-        )
-      }
-
-      const updatedGearOnboard = {
-        ...gearOnboard,
-        gearWasControlled: !isChecked
-      }
-
-      const nextGearOnboard = update(index, updatedGearOnboard, input.value)
-
-      helper.setValue(nextGearOnboard)
+      setUncontrolledMeshGearCodes(nextUncontrolledMeshGearCodes)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -111,7 +97,7 @@ export function GearsField() {
   }
 
   return (
-    <FormikMultiInfractionPicker
+    <TypedFormikMultiInfractionPicker
       addButtonLabel="Ajouter une infraction engins"
       // TODO Check that prop (it's a radio in the XD which doesn't make sense to me).
       infractionCheckboxProps={{
@@ -120,24 +106,42 @@ export function GearsField() {
       }}
       label="Engins à bord"
       name="gearInfractions"
+      seizurePropName="gearSeized"
+      seizureTagLabel="Appréhension engin"
     >
       {input.value &&
         input.value.length > 0 &&
-        input.value.map((onboardGear, index) => (
+        input.value.map((gearOnboard, index) => (
           // eslint-disable-next-line react/no-array-index-key
           <Row key={`gearOnboard-${index}`}>
             <RowInnerWrapper>
               <SingleTag
                 onDelete={() => remove(index)}
-              >{`${onboardGear.gearCode} - ${onboardGear.gearName}`}</SingleTag>
+              >{`${gearOnboard.gearCode} - ${gearOnboard.gearName}`}</SingleTag>
+
+              <FormikMultiRadio
+                isInline
+                label="Engin contrôlé"
+                name={`gearOnboard[${index}].gearWasControlled`}
+                options={BOOLEAN_AS_OPTIONS}
+              />
 
               <FieldGroup isInline>
-                <FormikNumberInput label="Maillage déclaré" name={`gearOnboard[${index}].declaredMesh`} />
-                <FormikNumberInput label="Maillage mesuré" name={`gearOnboard[${index}].controlledMesh`} />
+                <FormikNumberInput
+                  disabled={uncontrolledMeshGearCodes.includes(gearOnboard.gearCode)}
+                  label="Maillage déclaré"
+                  name={`gearOnboard[${index}].declaredMesh`}
+                />
+                <FormikNumberInput
+                  disabled={uncontrolledMeshGearCodes.includes(gearOnboard.gearCode)}
+                  label="Maillage mesuré"
+                  name={`gearOnboard[${index}].controlledMesh`}
+                />
+
                 <Checkbox
                   label="Maillage non mesuré"
                   name="gearWasNotControlled"
-                  onChange={isChecked => handleGearWasNotControlledChange(index, isChecked)}
+                  onChange={isChecked => handleMeshWasNotControlledChange(gearOnboard.gearCode, isChecked)}
                 />
               </FieldGroup>
 
@@ -146,19 +150,17 @@ export function GearsField() {
           </Row>
         ))}
 
-      <FieldGroup>
-        <Select
-          key={String(input.value?.length)}
-          baseContainer={newWindowContainerRef.current}
-          label="Ajouter un engin"
-          name="newGear"
-          onChange={add}
-          options={gearsAsOptions}
-          searchable
-          virtualized
-        />
-      </FieldGroup>
-    </FormikMultiInfractionPicker>
+      <Select
+        key={String(input.value?.length)}
+        baseContainer={newWindowContainerRef.current}
+        label="Ajouter un engin"
+        name="newGear"
+        onChange={add}
+        options={gearsAsOptions}
+        searchable
+        virtualized
+      />
+    </TypedFormikMultiInfractionPicker>
   )
 }
 
@@ -169,6 +171,10 @@ const Row = styled.div`
 
   > hr {
     margin-bottom: 16px;
+  }
+
+  input[type='number'] {
+    width: 112px;
   }
 `
 

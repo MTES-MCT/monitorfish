@@ -110,7 +110,7 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
       ...(speciesInfractionsWithSpeciesSeized.length > 0 ? ['Appréhension espèce'] : []),
       ...(initialValues.seizureAndDiversion ? ['Appréhension navire'] : [])
     ].map(label => (
-      <Tag accent={Accent.PRIMARY} bullet={TagBullet.DISK} bulletColor={THEME.color.maximumRed}>
+      <Tag key={label} accent={Accent.PRIMARY} bullet={TagBullet.DISK} bulletColor={THEME.color.maximumRed}>
         {label}
       </Tag>
     ))

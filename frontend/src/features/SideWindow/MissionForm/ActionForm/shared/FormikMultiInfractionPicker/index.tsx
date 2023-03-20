@@ -26,7 +26,7 @@ import type { MissionActionFormValues } from '../../../types'
 import type { FormikCheckboxProps, FormikTextareaProps } from '@mtes-mct/monitor-ui'
 import type { ReactNode } from 'react'
 
-export type FormikMultiInfractionPickerProps = {
+export type FormikMultiInfractionPickerProps<AnyInfraction extends MissionAction.OtherInfraction> = {
   addButtonLabel: string
   children?: ReactNode
   generalObservationTextareaProps?: Omit<FormikTextareaProps, 'name'> & {
@@ -35,16 +35,20 @@ export type FormikMultiInfractionPickerProps = {
   infractionCheckboxProps?: FormikCheckboxProps
   label: string
   name: keyof MissionActionFormValues
+  seizurePropName?: keyof AnyInfraction
+  seizureTagLabel?: string
 }
-export function FormikMultiInfractionPicker({
+export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.OtherInfraction>({
   addButtonLabel,
   children,
   generalObservationTextareaProps,
   infractionCheckboxProps,
   label,
-  name
-}: FormikMultiInfractionPickerProps) {
-  const [input, , helper] = useField<MissionAction.OtherInfraction[] | undefined>(name)
+  name,
+  seizurePropName,
+  seizureTagLabel
+}: FormikMultiInfractionPickerProps<AnyInfraction>) {
+  const [input, , helper] = useField<AnyInfraction[] | undefined>(name)
 
   const { newWindowContainerRef } = useNewWindow()
 
@@ -66,7 +70,7 @@ export function FormikMultiInfractionPicker({
 
   const add = useCallback(
     () => {
-      const nextInfractions = [...(input.value || []), {}] as MissionAction.OtherInfraction[]
+      const nextInfractions = [...(input.value || []), {}] as AnyInfraction[]
 
       helper.setValue(nextInfractions)
 
@@ -113,12 +117,18 @@ export function FormikMultiInfractionPicker({
   }, [closeForm, editedIndex, isEditedIndexNew, remove])
 
   const submit = useCallback(
-    (updatedInfraction: MissionAction.OtherInfraction) => {
+    (updatedInfraction: AnyInfraction) => {
       if (!input.value || editedIndex === undefined) {
         throw new FrontendError('`input.value` or `editedIndex` is undefined. This should never happen.', 'submit()')
       }
 
-      const nextInfractions = update(editedIndex, updatedInfraction, input.value)
+      // TODO For some unknown reason, `Yup.string().default('')` doesn't fill `comments`.
+      const updatedInfractionWithComments: AnyInfraction = {
+        ...updatedInfraction,
+        comments: updatedInfraction.comments || ''
+      }
+
+      const nextInfractions = update(editedIndex, updatedInfractionWithComments, input.value)
 
       helper.setValue(nextInfractions)
 
@@ -149,7 +159,14 @@ export function FormikMultiInfractionPicker({
               <FieldsetGroupSeparator />
 
               {index !== editedIndex && (
-                <Infraction data={infraction} index={index} onDelete={remove} onEdit={setEditedIndex} />
+                <Infraction
+                  data={infraction}
+                  index={index}
+                  onDelete={remove}
+                  onEdit={setEditedIndex}
+                  seizurePropName={seizurePropName}
+                  seizureTagLabel={seizureTagLabel}
+                />
               )}
 
               {index === editedIndex && (
@@ -162,7 +179,6 @@ export function FormikMultiInfractionPicker({
                         name="infractionType"
                         options={INFRACTION_TYPES_AS_OPTIONS}
                       />
-                      {/* TODO I don't understand if it's a multiselect or a select here (XD vs types). */}
                       <HackedFormikSelect
                         baseContainer={newWindowContainerRef.current}
                         label="NATINF"
@@ -207,7 +223,7 @@ export function FormikMultiInfractionPicker({
 
 const Row = styled.div`
   > legend {
-    margin: 24px 0 8px;
+    margin: 12px 0 8px;
   }
 `
 
@@ -216,20 +232,16 @@ const StyledForm = styled(Form)`
   border: 0;
   padding: 0;
 
-  > div:first-child,
-  > fieldset:first-child {
+  > .Field,
+  > fieldset {
     margin-top: 16px;
-  }
-
-  > div:not(:first-child),
-  > fieldset:not(:first-child) {
-    margin-top: 24px;
   }
 `
 
 const FormButtonGroup = styled.div`
   display: flex;
   justify-content: flex-end;
+  margin-top: 16px;
 
   > button:last-child {
     margin-left: 16px;

@@ -16,12 +16,11 @@ import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { undefinedize } from '../../utils/undefinedize'
 
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
-import type { ChangeEvent, CSSProperties, MutableRefObject } from 'react'
+import type { ChangeEvent, InputHTMLAttributes, MutableRefObject } from 'react'
 import type { Promisable } from 'type-fest'
 
-type VesselSearchProps = {
+type VesselSearchProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultValue' | 'onChange'> & {
   baseRef?: MutableRefObject<HTMLDivElement | undefined> | undefined
-  className?: string
   defaultValue?:
     | {
         flagState?: string | null | undefined
@@ -35,7 +34,6 @@ type VesselSearchProps = {
   onChange: (selectedVessel: VesselIdentity | undefined) => Promisable<void>
   onClickOutsideOrEscape?: () => Promisable<void>
   onInputClick?: () => Promisable<void>
-  style?: CSSProperties
 }
 export function VesselSearch({
   baseRef,
@@ -48,7 +46,8 @@ export function VesselSearch({
   onChange,
   onClickOutsideOrEscape,
   onInputClick,
-  style
+  style,
+  ...inputNativeProps
 }: VesselSearchProps) {
   const searchQueryRef = useRef('')
   const wrapperRef = useRef(null)
@@ -184,6 +183,8 @@ export function VesselSearch({
           onClick={onVesselInputClick}
           placeholder="Rechercher un navire..."
           type="text"
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...inputNativeProps}
         />
         {controlledDefaultValue && (
           <IconButton accent={Accent.TERTIARY} Icon={Icon.Close} iconSize={14} onClick={clean} />
@@ -231,6 +232,10 @@ const Input = styled.input<{
   background-position-y: center;
   background-position-x: 16px;
   padding-left: ${p => (p.flagState ? 45 : 16)}px;
+
+  :disabled {
+    background-color: var(--rs-input-disabled-bg);
+  }
 
   :hover,
   :focus {

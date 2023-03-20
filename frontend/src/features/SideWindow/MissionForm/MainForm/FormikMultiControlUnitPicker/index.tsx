@@ -12,7 +12,6 @@ import {
 import { useGetControlUnitsQuery } from '../../../../../api/controlUnit'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 
-import type { PartialControlUnitOption } from './types'
 import type { MissionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
@@ -39,7 +38,7 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
   }, [controlUnitsQuery.data])
 
   // Users must be able to select either by administration or by unit if they don't know the administration name
-  const allNamesAsOptions = useMemo((): PartialControlUnitOption[] => {
+  const allNamesAsOptions = useMemo((): Array<Option<number>> => {
     if (!controlUnitsQuery.data) {
       return []
     }

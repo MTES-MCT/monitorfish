@@ -2,7 +2,6 @@ import { ascend, map, pipe, prop, sort, sortWith, uniq, uniqBy } from 'ramda'
 
 import { sortByAscendingValue } from '../../../../../utils/sortByAscendingValue'
 
-import type { PartialControlUnitOption } from './types'
 import type { ControlUnit } from '../../../../../domain/types/controlUnit'
 import type { Option } from '@mtes-mct/monitor-ui'
 
@@ -20,20 +19,14 @@ export const mapControlUnitsToUniqueSortedAdministrationsAsOptions: (controlUnit
   }))
 )
 
-export const mapControlUnitsToUniqueSortedNamesAsOptions: (controlUnits: ControlUnit[]) => PartialControlUnitOption[] =
-  pipe(
-    uniqBy<ControlUnit, string>(({ administration, name }) => `${administration}-${name}`),
-    sortWith([ascend(prop('administration')), ascend(prop('name'))]),
-    map(({ administration, id, name }) => ({
-      label: name,
-      optionValue: {
-        administration,
-        id,
-        name
-      },
-      value: id
-    }))
-  )
+export const mapControlUnitsToUniqueSortedNamesAsOptions: (controlUnits: ControlUnit[]) => Array<Option<number>> = pipe(
+  uniqBy<ControlUnit, string>(({ administration, name }) => `${administration}-${name}`),
+  sortWith([ascend(prop('administration')), ascend(prop('name'))]),
+  map(({ id, name }) => ({
+    label: name,
+    value: id
+  }))
+)
 
 export const mapControlUnitToResourcesAsOptions: (controlUnit: ControlUnit) => Option<number>[] = pipe(
   prop('resources'),

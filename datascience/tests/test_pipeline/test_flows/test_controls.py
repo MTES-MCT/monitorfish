@@ -7,7 +7,7 @@ import sqlalchemy
 from prefect import task
 
 from config import POSEIDON_CONTROL_ID_TO_MONITORENV_MISSION_ID_SHIFT
-from src.pipeline.entities.missions import MissionActionType, MissionOrigin, MissionType
+from src.pipeline.entities.missions import MissionActionType, MissionOrigin
 from src.pipeline.flows.controls import (
     extract_catch_controls,
     extract_controls,
@@ -811,17 +811,17 @@ expected_missions_df = pd.DataFrame(
             False,
             True,
         ],
-        "mission_type": [
-            MissionType.SEA,
-            MissionType.LAND,
-            MissionType.AIR,
-            MissionType.SEA,
-            MissionType.SEA,
-            MissionType.SEA,
-            MissionType.SEA,
-            MissionType.LAND,
-            MissionType.SEA,
-            MissionType.LAND,
+        "mission_types": [
+            ["SEA"],
+            ["LAND"],
+            ["AIR"],
+            ["SEA"],
+            ["SEA"],
+            ["SEA"],
+            ["SEA"],
+            ["LAND"],
+            ["SEA"],
+            ["LAND"],
         ],
         "closed_by": [
             "DEF",

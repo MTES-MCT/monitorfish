@@ -21,7 +21,7 @@ day = timedelta(days=1)
 missions_df = pd.DataFrame(
     {
         "id": [1, 2, 12, 13],
-        "mission_type": ["SEA", "LAND", "AIR", "SEA"],
+        "mission_types": [["SEA"], ["LAND"], ["AIR", "SEA"], []],
         "facade": ["Facade 1", "Facade 1", "Facade 3", "Facade 4"],
         "start_datetime_utc": [
             d,
@@ -189,7 +189,9 @@ def test_flow(reset_test_data, loading_mode):
         ) == {7, 8}
 
     else:
-        pd.testing.assert_frame_equal(extracted_missions, loaded_missions)
+        pd.testing.assert_frame_equal(
+            extracted_missions, loaded_missions, check_like=True
+        )
         pd.testing.assert_frame_equal(
             filtered_missions_control_units, loaded_missions_control_units
         )

@@ -335,9 +335,9 @@ def transform_controls(controls: pd.DataFrame):
     )
     controls = controls.drop(columns=["control_type"])
 
-    controls["mission_type"] = controls.action_type.map(
+    controls["mission_types"] = controls.action_type.map(
         MissionType.from_mission_action_type
-    )
+    ).map(lambda mission_type: [mission_type.value])
 
     controls["seizure_and_diversion"] = controls[["seizure", "diversion"]].any(axis=1)
     controls = controls.drop(columns=["seizure", "diversion"])
@@ -582,7 +582,7 @@ def make_missions_actions_and_missions_control_units(
         "open_by",
         "facade",
         "mission_order",
-        "mission_type",
+        "mission_types",
         "closed_by",
     ]
 
@@ -666,11 +666,11 @@ def load_missions_and_missions_control_units(
             schema="public",
             connection=connection,
             logger=prefect.context.get("logger"),
-            pg_array_columns=["mission_nature"],
+            pg_array_columns=["mission_nature", "mission_types"],
             how="upsert",
             table_id_column=id_column,
             df_id_column=id_column,
-            enum_columns=["mission_type", "mission_source"],
+            enum_columns=["mission_source"],
             init_ddls=[
                 DDL(
                     "ALTER TABLE public.missions_control_units "

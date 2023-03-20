@@ -34,7 +34,6 @@ def extract_missions(number_of_months: int) -> pd.DataFrame:
     ]
 
     dtypes = {
-        "mission_type": "category",
         "facade": "category",
         "deleted": bool,
         "mission_source": "category",
@@ -123,7 +122,7 @@ def load_missions_and_missions_control_units(
             schema="public",
             connection=connection,
             logger=prefect.context.get("logger"),
-            pg_array_columns=["mission_nature"],
+            pg_array_columns=["mission_nature", "mission_types"],
             how=loading_mode,
             table_id_column=missions_id_column,
             df_id_column=missions_id_column,

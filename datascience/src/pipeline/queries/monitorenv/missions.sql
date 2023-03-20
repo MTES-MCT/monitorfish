@@ -1,6 +1,6 @@
 SELECT
     id,
-    mission_type,
+    mission_types,
     facade,
     start_datetime_utc,
     end_datetime_utc,

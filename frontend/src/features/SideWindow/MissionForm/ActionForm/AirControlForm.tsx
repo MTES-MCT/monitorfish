@@ -50,11 +50,11 @@ export function AirControlForm({ initialValues, onChange }: AirControlFormProps)
             baseContainer={newWindowContainerRef.current}
             isLight
             isStringDate
-            label="Heure du contrôle"
+            label="Date et heure du contrôle"
             name="actionDatetimeUtc"
+            withTime
           />
 
-          {/* TODO Formik that in monitor-ui. */}
           <MultiZoneEditor
             addButtonLabel="Ajouter un point de contrôle"
             initialZone={{

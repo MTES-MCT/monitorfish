@@ -1,6 +1,6 @@
 import type { ControlUnit } from './controlUnit'
 import type { MissionAction } from './missionAction'
-import type { SeaFront } from '../entities/alerts/constants'
+import type { SeaFront } from '../../constants'
 import type { PendingAlertValue } from '../entities/alerts/types'
 import type { VesselIdentifier } from '../entities/vessel/types'
 

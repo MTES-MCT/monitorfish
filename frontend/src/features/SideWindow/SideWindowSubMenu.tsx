@@ -5,11 +5,12 @@ import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfuncti
 import { AlertAndReportingTab, SideWindowMenuKey } from './constants'
 import { SideWindowSubMenuLink } from './SideWindowSubMenuLink'
 import { COLORS } from '../../constants/constants'
-import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, ALERTS_SUBMENU, SeaFront } from '../../domain/entities/alerts/constants'
+import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, ALERTS_SUBMENU } from '../../domain/entities/alerts/constants'
 import { STAGE_RECORD } from '../../domain/entities/beaconMalfunction/constants'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 
+import type { SeaFront } from '../../constants'
 import type { MenuItem } from '../../types'
 import type { CSSProperties } from 'react'
 import type { Promisable } from 'type-fest'

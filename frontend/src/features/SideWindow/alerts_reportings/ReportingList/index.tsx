@@ -8,7 +8,7 @@ import * as timeago from 'timeago.js'
 
 import { REPORTING_LIST_TABLE_OPTIONS } from './constants'
 import { getReportingOrigin, getReportingTitle } from './utils'
-import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, SeaFront } from '../../../../domain/entities/alerts/constants'
+import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS } from '../../../../domain/entities/alerts/constants'
 import { setEditedReportingInSideWindow } from '../../../../domain/shared_slices/Reporting'
 import { InfractionSuspicionReporting, PendingAlertReporting, ReportingType } from '../../../../domain/types/reporting'
 import archiveReportings from '../../../../domain/use_cases/reporting/archiveReportings'
@@ -29,6 +29,7 @@ import { downloadAsCsv } from '../../../../utils/downloadAsCsv'
 import { Flag } from '../../../VesselList/tableCells'
 import { EditReporting } from '../EditReporting'
 
+import type { SeaFront } from '../../../../constants'
 import type { MenuItem } from '../../../../types'
 import type { CSSProperties, MutableRefObject } from 'react'
 

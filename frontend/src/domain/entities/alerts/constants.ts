@@ -1,6 +1,7 @@
 // TODO This is a bit shady to mix up pending/silenced alerts with PNO ones here.
 
 import { PendingAlertValueType } from './types'
+import { SeaFront } from '../../../constants'
 
 import type { MenuItem } from '../../../types'
 
@@ -38,16 +39,6 @@ export const COMMON_ALERT_TYPE_OPTION: Record<
     isOperationalAlert: true,
     name: '12 milles - Pêche sans droits historiques'
   }
-}
-
-// TODO Move that into a more global file since it's at least used by both reportings and missions.
-export enum SeaFront {
-  MED = 'MED',
-  MEMN = 'MEMN',
-  NAMO = 'NAMO',
-  OUTREMEROA = 'OUTREMEROA',
-  OUTREMEROI = 'OUTREMEROI',
-  SA = 'SA'
 }
 
 export const ALERTS_SUBMENU: Record<SeaFront, MenuItem<SeaFront>> = {

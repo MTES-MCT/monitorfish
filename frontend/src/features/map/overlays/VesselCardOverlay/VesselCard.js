@@ -1,20 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
-import { getCoordinates } from '../../../coordinates'
-import { timeagoFrenchLocale } from '../../../utils'
-import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map/constants'
-import { COLORS } from '../../../constants/constants'
+import { getCoordinates } from '../../../../coordinates'
+import { timeagoFrenchLocale } from '../../../../utils'
+import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
+import { COLORS } from '../../../../constants/constants'
 import * as timeago from 'timeago.js'
 import {
   marginsWithOneWarning,
   marginsWithoutAlert,
-  marginsWithTwoWarning,
-  OverlayPosition
-} from '../overlays/VesselCardOverlay/position'
+  marginsWithTwoWarning
+} from './constants'
 import { useSelector } from 'react-redux'
-import { ReactComponent as AlertSVG } from '../../icons/Icone_alertes.svg'
-import { ReactComponent as BeaconMalfunctionSVG } from '../../icons/Icone_VMS_dark.svg'
-import { getAlertNameFromType } from '../../SideWindow/alerts_reportings/utils'
+import { ReactComponent as AlertSVG } from '../../../icons/Icone_alertes.svg'
+import { ReactComponent as BeaconMalfunctionSVG } from '../../../icons/Icone_VMS_dark.svg'
+import { getAlertNameFromType } from '../../../SideWindow/alerts_reportings/utils'
+import { OverlayPosition } from '../Overlay'
 
 timeago.register('fr', timeagoFrenchLocale)
 

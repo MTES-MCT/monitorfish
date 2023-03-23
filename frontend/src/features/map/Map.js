@@ -31,12 +31,9 @@ import { MissionLayer } from './layers/Mission/MissionLayer'
 import { SelectedMissionLayer } from './layers/Mission/SelectedMissionLayer'
 import { MissionsLabelsLayer } from './layers/Mission/MissionsLabelsLayer/MissionsLabelsLayer'
 import { MissionOverlay } from './overlays/MissionOverlay'
-import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { SelectedMissionOverlay } from './overlays/SelectedMissionOverlay/Index'
-import { HoveredMissionLayer } from './layers/Mission/HoveredMissionLayer'
 
 const Map = () => {
-  const selectedMissionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionGeoJSON)
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
   const [currentFeature, setCurrentFeature] = useState(null)
@@ -87,7 +84,6 @@ const Map = () => {
       <MissionsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
       <MissionOverlay feature={currentFeature}/>
       <SelectedMissionOverlay/>
-      <HoveredMissionLayer feature={currentFeature}/>
       <DrawLayer/>
       <RegulatoryLayerSearch/>
       <VesselEstimatedPositionLayer/>

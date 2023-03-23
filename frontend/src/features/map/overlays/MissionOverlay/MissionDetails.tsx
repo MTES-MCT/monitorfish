@@ -1,7 +1,12 @@
+import { Accent, Button, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { margins } from './constants'
+import { missionActions } from '../../../../domain/actions'
 import { Mission } from '../../../../domain/entities/mission/types'
+import { openSideWindowTab } from '../../../../domain/shared_slices/Global'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { SideWindowMenuKey } from '../../../SideWindow/constants'
 import { OverlayPosition } from '../Overlay'
 
 import type { ControlUnit } from '../../../../domain/types/controlUnit'
@@ -9,21 +14,51 @@ import type { ControlUnit } from '../../../../domain/types/controlUnit'
 import MissionStatus = Mission.MissionStatus
 
 type MissionDetailsProps = {
+  isSelected: boolean
   mission: Mission.MissionPointFeatureProperties
   overlayPosition: OverlayPosition
 }
-export function MissionDetails({ mission, overlayPosition }: MissionDetailsProps) {
+export function MissionDetails({ isSelected, mission, overlayPosition }: MissionDetailsProps) {
+  const dispatch = useMainAppDispatch()
+
+  const openMissionInSideWindow = () => {
+    dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))
+    dispatch(missionActions.setDraftId(mission.missionId))
+  }
+
   return (
     <>
       <Wrapper>
+        {isSelected && (
+          <CloseButton
+            accent={Accent.TERTIARY}
+            Icon={Icon.Close}
+            iconSize={14}
+            onClick={() => dispatch(missionActions.unsetSelectedMissionGeoJSON())}
+          />
+        )}
         <ZoneText data-cy="mission-label-text">
           <Title>
-            {mission.controlUnits.map((controlUnit: ControlUnit) => (
+            {mission.controlUnits.length === 1 &&
+              mission.controlUnits.map((controlUnit: ControlUnit) => (
+                <>
+                  <div>{controlUnit.name.toUpperCase()}</div>
+                  {controlUnit.contact ? (
+                    <div>{controlUnit.contact}</div>
+                  ) : (
+                    <NoContact>Aucun contact renseigné</NoContact>
+                  )}
+                </>
+              ))}
+            {mission.controlUnits.length > 1 && mission.controlUnits[0] && (
               <>
-                <div>{controlUnit.name.toUpperCase()}</div>
-                {controlUnit.contact && <div>{controlUnit.contact}</div>}
+                <div>{mission.controlUnits[0].name.toUpperCase()}</div>
+                <MultipleControlUnits>
+                  et {mission.controlUnits.length - 1} autre{mission.controlUnits.length - 1 > 1 && 's'} unité
+                  {mission.controlUnits.length - 1 > 1 && 's'}
+                </MultipleControlUnits>
               </>
-            ))}
+            )}
           </Title>
           <Details>
             <div>
@@ -39,16 +74,48 @@ export function MissionDetails({ mission, overlayPosition }: MissionDetailsProps
             </div>
           </Details>
         </ZoneText>
+        <EditButton
+          accent={Accent.PRIMARY}
+          disabled={!isSelected}
+          Icon={Icon.Calendar}
+          onClick={openMissionInSideWindow}
+          size={Size.SMALL}
+        >
+          Editer la mission
+        </EditButton>
       </Wrapper>
-      <TrianglePointer>
-        {overlayPosition === OverlayPosition.BOTTOM && <BottomTriangleShadow />}
-        {overlayPosition === OverlayPosition.TOP && <TopTriangleShadow />}
-        {overlayPosition === OverlayPosition.RIGHT && <RightTriangleShadow />}
-        {overlayPosition === OverlayPosition.LEFT && <LeftTriangleShadow />}
-      </TrianglePointer>
+      {!isSelected && (
+        <TrianglePointer>
+          {overlayPosition === OverlayPosition.BOTTOM && <BottomTriangleShadow />}
+          {overlayPosition === OverlayPosition.TOP && <TopTriangleShadow />}
+          {overlayPosition === OverlayPosition.RIGHT && <RightTriangleShadow />}
+          {overlayPosition === OverlayPosition.LEFT && <LeftTriangleShadow />}
+        </TrianglePointer>
+      )}
     </>
   )
 }
+
+const NoContact = styled.div`
+  color: ${p => p.theme.color.slateGray};
+  font-weight: 400;
+  font-style: italic;
+`
+
+const MultipleControlUnits = styled.div`
+  color: ${p => p.theme.color.slateGray};
+`
+
+const EditButton = styled(Button)`
+  margin-left: 12px;
+  margin-top: 12px;
+`
+
+const CloseButton = styled(IconButton)`
+  position: absolute;
+  right: 0;
+  margin: 5px;
+`
 
 const Details = styled.div`
   margin-top: 8px;
@@ -56,18 +123,21 @@ const Details = styled.div`
 `
 
 const Title = styled.div`
+  height: 40px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   font: normal normal bold 13px/18px Marianne;
   color: ${p => p.theme.color.gunMetal};
 `
 
 const Wrapper = styled.div`
+  padding-top: 1px;
   box-shadow: 0px 3px 6px #70778540;
   line-height: 20px;
-  cursor: grabbing;
   text-align: left;
   height: 168px;
   width: 260px;
-  display: flex;
   border-radius: 1px;
   background-color: ${p => p.theme.color.white};
 `
@@ -81,9 +151,12 @@ const InProgressIcon = styled.span`
   display: inline-block;
 `
 
-const ZoneText = styled.span`
-  margin: 12px;
+const ZoneText = styled.div`
+  margin: 11px 12px 0px 12px;
   font-size: 13px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `
 
 const TrianglePointer = styled.div`

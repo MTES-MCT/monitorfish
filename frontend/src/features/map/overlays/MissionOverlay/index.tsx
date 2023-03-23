@@ -1,17 +1,24 @@
+import GeoJSON from 'ol/format/GeoJSON'
 import Overlay from 'ol/Overlay'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { margins } from './constants'
 import { MissionDetails } from './MissionDetails'
 import { LayerType } from '../../../../domain/entities/layers/constants'
+import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { useMoveOverlayWhenDragging } from '../../../../hooks/useMoveOverlayWhenDragging'
 import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../Overlay'
 
 import type { Mission } from '../../../../domain/entities/mission/types'
 
 const overlayHeight = 200
+const INITIAL_OFFSET_VALUE = [0, 0]
 
-export function MissionDetailsOverlay({ feature, map }) {
+export function MissionOverlay({ feature, isSelected = false, map }) {
+  const selectedMissionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionGeoJSON)
+  const currentOffsetRef = useRef(INITIAL_OFFSET_VALUE)
   const [missionProperties, setMissionProperties] = useState<Mission.MissionPointFeatureProperties | undefined>(
     undefined
   )
@@ -19,6 +26,16 @@ export function MissionDetailsOverlay({ feature, map }) {
   const overlayObjectRef = useRef<Overlay | undefined>()
   const [overlayTopLeftMargin, setOverlayTopLeftMargin] = useState<[number, number]>([margins.yBottom, margins.xMiddle])
   const [overlayPosition, setOverlayPosition] = useState(OverlayPosition.BOTTOM)
+
+  const selectedMission = useMemo(() => {
+    if (!selectedMissionGeoJSON) {
+      return undefined
+    }
+
+    return new GeoJSON({
+      featureProjection: OPENLAYERS_PROJECTION
+    }).readFeature(selectedMissionGeoJSON)
+  }, [selectedMissionGeoJSON])
 
   const overlayCallback = useCallback(
     ref => {
@@ -32,10 +49,27 @@ export function MissionDetailsOverlay({ feature, map }) {
       overlayObjectRef.current = new Overlay({
         autoPan: false,
         className: 'ol-overlay-container ol-selectable vessel-card',
-        element: ref
+        element: ref,
+        offset: currentOffsetRef.current
       })
     },
     [overlayRef, overlayObjectRef]
+  )
+
+  useEffect(() => {
+    if (overlayObjectRef.current) {
+      currentOffsetRef.current = INITIAL_OFFSET_VALUE
+      overlayObjectRef.current.setOffset(INITIAL_OFFSET_VALUE)
+    }
+  }, [feature])
+
+  useMoveOverlayWhenDragging(
+    overlayObjectRef.current,
+    map,
+    currentOffsetRef,
+    () => {},
+    true,
+    () => {}
   )
 
   useEffect(() => {
@@ -66,6 +100,14 @@ export function MissionDetailsOverlay({ feature, map }) {
       return
     }
 
+    // Prevent the hovered mission overlay to bo on top of the same selected mission overlay
+    if (!isSelected && selectedMission?.getId() === feature.getId()) {
+      overlayRef.current.style.display = 'none'
+      setMissionProperties(undefined)
+
+      return
+    }
+
     setMissionProperties(feature.getProperties() as Mission.MissionPointFeatureProperties)
     overlayRef.current.style.display = 'block'
     overlayObjectRef.current.setPosition(feature.getGeometry().getCoordinates())
@@ -74,11 +116,13 @@ export function MissionDetailsOverlay({ feature, map }) {
     setOverlayPosition(nextOverlayPosition)
 
     setOverlayTopLeftMargin(getTopLeftMargin(nextOverlayPosition, margins))
-  }, [feature, setMissionProperties, overlayRef, overlayObjectRef, getNextOverlayPosition])
+  }, [feature, isSelected, selectedMission, setMissionProperties, overlayRef, overlayObjectRef, getNextOverlayPosition])
 
   return (
     <VesselCardOverlayComponent ref={overlayCallback} overlayTopLeftMargin={overlayTopLeftMargin}>
-      {missionProperties && <MissionDetails mission={missionProperties} overlayPosition={overlayPosition} />}
+      {missionProperties && (
+        <MissionDetails isSelected={isSelected} mission={missionProperties} overlayPosition={overlayPosition} />
+      )}
     </VesselCardOverlayComponent>
   )
 }
@@ -91,4 +135,5 @@ const VesselCardOverlayComponent = styled.div<{
   left: ${p => p.overlayTopLeftMargin[1]}px;
   border-radius: 2px;
   z-index: 1000;
+  cursor: grabbing;
 `

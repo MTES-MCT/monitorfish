@@ -1,5 +1,4 @@
 import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
@@ -13,10 +12,10 @@ import {
   getUpdatedMissionFromMissionFormValues,
   isMissionFormValuesComplete
 } from './utils'
-import { useCreateMissionMutation, useGetMissionQuery } from '../../../api/mission'
+import { missionApi, useCreateMissionMutation } from '../../../api/mission'
 import {
+  missionActionApi,
   useCreateMissionActionMutation,
-  useGetMissionActionsQuery,
   useUpdateMissionActionMutation
 } from '../../../api/missionAction'
 import { missionActions } from '../../../domain/actions'
@@ -42,8 +41,6 @@ export function MissionForm() {
   const headerDivRef = useRef<HTMLDivElement | null>(null)
 
   const dispatch = useMainAppDispatch()
-  const missionApiQuery = useGetMissionQuery(mission.draftId || skipToken)
-  const missionActionsApiQuery = useGetMissionActionsQuery(mission.draftId || skipToken)
   const [createMission] = useCreateMissionMutation()
   const [createMissionAction] = useCreateMissionActionMutation()
   const [updateMission] = useCreateMissionMutation()
@@ -135,40 +132,33 @@ export function MissionForm() {
   // DATA
 
   useEffect(() => {
-    if (mission.draft) {
-      return
-    }
+    const init = async () => {
+      if (!mission.draftId) {
+        return
+      }
 
-    if (missionApiQuery.isLoading || missionActionsApiQuery.isLoading) {
-      return
-    }
+      const { data: editedMission } = await dispatch(missionApi.endpoints.getMission.initiate(mission.draftId))
+      const { data: editedMissionActions } = await dispatch(
+        missionActionApi.endpoints.getMissionActions.initiate(mission.draftId)
+      )
+      if (!editedMission || !editedMissionActions) {
+        throw new FrontendError(
+          '`editedMission` or `editedMissionActions` is undefined. This should never happen.',
+          'features/SideWindow/MissionForm/index.tsx > MissionForm()',
+          undefined
+        )
+      }
 
-    const editedMission = missionApiQuery.data
-    const editedMissionActions = missionActionsApiQuery.data
-    if (!editedMission || !editedMissionActions) {
-      throw new FrontendError(
-        '`editedMission` or `editedMissionActions` is undefined. This should never happen.',
-        'features/SideWindow/MissionForm/index.tsx > MissionForm()',
-        missionApiQuery.error || missionActionsApiQuery.error || undefined
+      dispatch(
+        missionActions.initializeDraft({
+          mission: editedMission,
+          missionActions: editedMissionActions
+        })
       )
     }
 
-    dispatch(
-      missionActions.initializeDraft({
-        mission: editedMission,
-        missionActions: editedMissionActions
-      })
-    )
-  }, [
-    dispatch,
-    mission.draft,
-    missionApiQuery.data,
-    missionApiQuery.error,
-    missionApiQuery.isLoading,
-    missionActionsApiQuery.data,
-    missionActionsApiQuery.error,
-    missionActionsApiQuery.isLoading
-  ])
+    init()
+  }, [dispatch, mission.draftId])
 
   // ---------------------------------------------------------------------------
 

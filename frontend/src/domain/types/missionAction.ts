@@ -5,7 +5,7 @@ import type { ControlUnit } from './controlUnit'
 
 export namespace MissionAction {
   export interface MissionAction {
-    actionDatetimeUtc: string
+    actionDatetimeUtc: string | undefined
     actionType: MissionActionType
     controlQualityComments: string | undefined
     controlUnits: ControlUnit[]

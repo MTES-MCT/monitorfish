@@ -6,6 +6,7 @@ import { FrontendError } from '../../libs/FrontendError'
 
 import type { MissionActionFormValues, MissionFormValues } from '../../features/SideWindow/MissionForm/types'
 import type { Mission } from '../entities/mission/types'
+import type { GeoJSON } from '../types/GeoJSON'
 import type { MissionAction } from '../types/missionAction'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
@@ -13,11 +14,13 @@ export interface MissionState {
   draft: MissionFormValues | undefined
   draftId: Mission.Mission['id'] | undefined
   editedDraftActionIndex: number | undefined
+  selectedMissionGeoJSON: GeoJSON.GeoJson | undefined
 }
 const INITIAL_STATE: MissionState = {
   draft: getMissionFormInitialValues(undefined, []),
   draftId: undefined,
-  editedDraftActionIndex: undefined
+  editedDraftActionIndex: undefined,
+  selectedMissionGeoJSON: undefined
 }
 
 const missionSlice = createSlice({
@@ -174,6 +177,13 @@ const missionSlice = createSlice({
     },
 
     /**
+     * Set selected mission GeoJSON
+     */
+    setSelectedMissionGeoJSON(state, action: PayloadAction<GeoJSON.GeoJson>) {
+      state.selectedMissionGeoJSON = action.payload
+    },
+
+    /**
      * Unset mission draft
      */
     unsetDraft(state) {
@@ -186,6 +196,13 @@ const missionSlice = createSlice({
      */
     unsetEditedDraftActionIndex(state) {
       state.editedDraftActionIndex = undefined
+    },
+
+    /**
+     * Unset selected mission ID
+     */
+    unsetSelectedMissionGeoJSON(state) {
+      state.selectedMissionGeoJSON = undefined
     }
   }
 })

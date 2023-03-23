@@ -2,18 +2,12 @@ import Overlay from 'ol/Overlay'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import {
-  getOverlayPosition,
-  getTopLeftMargin,
-  marginsWithOneWarning,
-  marginsWithoutAlert,
-  marginsWithTwoWarning,
-  OverlayPosition
-} from './position'
+import { marginsWithOneWarning, marginsWithoutAlert, marginsWithTwoWarning } from './constants'
+import VesselCard from './VesselCard'
 import { COLORS } from '../../../../constants/constants'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import VesselCard from '../../cards/VesselCard'
+import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../Overlay'
 
 const overlayHeight = 260
 

@@ -1,7 +1,7 @@
-import { MissionLabelLine } from '../../../../domain/entities/missionLabelLine'
-import { drawMovedLabelLine } from '../../../../domain/entities/vessel/label'
+import { MissionLabelLine } from '../../../../../domain/entities/missionLabelLine'
+import { drawMovedLabelLine } from '../../../../../domain/entities/vessel/label'
 
-import type { ControlUnit } from '../../../../domain/types/controlUnit'
+import type { ControlUnit } from '../../../../../domain/types/controlUnit'
 
 const NOT_FOUND = -1
 const MAX_MISSIONS_LABELS_DISPLAYED = 100

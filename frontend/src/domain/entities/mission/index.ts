@@ -4,15 +4,17 @@ import { GeoJSON } from 'ol/format'
 import Point from 'ol/geom/Point'
 
 import { Mission } from './types'
-import { getMissionColor } from '../../../features/map/layers/MissionLayer/styles'
-import { booleanToInt } from '../../../utils'
+import { getMissionColor } from '../../../features/map/layers/Mission/MissionLayer/styles'
+import { booleanToInt, getDate } from '../../../utils'
+import { MissionAction } from '../../types/missionAction'
 import { LayerType } from '../layers/constants'
 import { OLGeometryType } from '../map/constants'
 
-import type { MissionAction } from '../../types/missionAction'
 import type { MultiPolygon } from 'ol/geom'
 
 import MissionStatus = Mission.MissionStatus
+import MissionTypeLabel = Mission.MissionTypeLabel
+import MissionActionType = MissionAction.MissionActionType
 
 export function getMissionFeaturePointId(id: number) {
   return `${LayerType.MISSION}:${id}`
@@ -35,9 +37,15 @@ export const getMissionFeaturePoint = (
   const point = (geometry as MultiPolygon).getInteriorPoints().getFirstCoordinate()
 
   const missionStatus = getMissionStatus(mission)
+  const numberOfControls = actions.filter(
+    action =>
+      action.actionType === MissionActionType.AIR_CONTROL ||
+      action.actionType === MissionActionType.LAND_CONTROL ||
+      action.actionType === MissionActionType.SEA_CONTROL
+  ).length
+  const numberOfSurveillance = actions.filter(action => action.actionType === MissionActionType.AIR_SURVEILLANCE).length
 
   const feature = new Feature({
-    actions,
     color: getMissionColor(missionStatus),
     controlUnits: mission.controlUnits,
     endDateTimeUtc: mission.endDateTimeUtc,
@@ -48,8 +56,11 @@ export const getMissionFeaturePoint = (
     isUpcoming: booleanToInt(missionStatus === MissionStatus.UPCOMING),
     missionId: mission.id,
     missionNature: mission.missionNature,
-    missionType: mission.missionType,
-    startDateTimeUtc: mission.startDateTimeUtc
+    missionStatus,
+    missionType: MissionTypeLabel[mission.missionType],
+    numberOfControls,
+    numberOfSurveillance,
+    startDateTimeUtc: getDate(mission.startDateTimeUtc)
   })
   feature.setId(getMissionFeaturePointId(mission.id))
 

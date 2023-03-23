@@ -3,12 +3,12 @@ import VectorSource from 'ol/source/Vector'
 import React, { MutableRefObject, useCallback, useEffect, useRef } from 'react'
 
 import { getMissionPointWebGLStyle } from './styles'
-import { LayerProperties, LayerType } from '../../../../domain/entities/layers/constants'
-import { getMissionFeaturePoint } from '../../../../domain/entities/mission'
-import { useGetMissionsAndActions } from '../../../../domain/entities/mission/hooks/useGetMissionsAndActions'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { LayerProperties, LayerType } from '../../../../../domain/entities/layers/constants'
+import { getMissionFeaturePoint } from '../../../../../domain/entities/mission'
+import { useGetMissionsAndActions } from '../../../../../domain/entities/mission/hooks/useGetMissionsAndActions'
+import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 
-import type { WebGLPointsLayerWithName } from '../../../../domain/types/layer'
+import type { WebGLPointsLayerWithName } from '../../../../../domain/types/layer'
 import type { Feature } from 'ol'
 import type { Point } from 'ol/geom'
 

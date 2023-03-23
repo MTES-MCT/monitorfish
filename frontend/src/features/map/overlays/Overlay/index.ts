@@ -1,6 +1,6 @@
 import { containsXY, Extent } from 'ol/extent'
 
-import type { VesselCardMargins } from './types'
+import type { OverlayCardMargins } from './types'
 
 function getOuterExtentPosition(boxSize: number, x: number, y: number) {
   return {
@@ -54,7 +54,7 @@ export enum OverlayPosition {
  * Get the [top, left] overlay margins to use for overlay placement
  * @returns {[number, number]} margins - The [top, left] overlay margins (and not the x, y margins)
  */
-export function getTopLeftMargin(nextOverlayPosition: OverlayPosition, margins: VesselCardMargins): [number, number] {
+export function getTopLeftMargin(nextOverlayPosition: OverlayPosition, margins: OverlayCardMargins): [number, number] {
   const { xLeft, xMiddle, xRight, yBottom, yMiddle, yTop } = margins
 
   switch (nextOverlayPosition) {
@@ -114,29 +114,4 @@ export function getOverlayPosition(boxSize: number, x: number, y: number, extent
   }
 
   return OverlayPosition.BOTTOM
-}
-
-export const marginsWithoutAlert: VesselCardMargins = {
-  xLeft: 20,
-  xMiddle: -185,
-  xRight: -407,
-  yBottom: -277,
-  yMiddle: -127,
-  yTop: 20
-}
-export const marginsWithOneWarning: VesselCardMargins = {
-  xLeft: 20,
-  xMiddle: -185,
-  xRight: -407,
-  yBottom: -307,
-  yMiddle: -141,
-  yTop: 20
-}
-export const marginsWithTwoWarning: VesselCardMargins = {
-  xLeft: 20,
-  xMiddle: -185,
-  xRight: -407,
-  yBottom: -337,
-  yMiddle: -155,
-  yTop: 20
 }

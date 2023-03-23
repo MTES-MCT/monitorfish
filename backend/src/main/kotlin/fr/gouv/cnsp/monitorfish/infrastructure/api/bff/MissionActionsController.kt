@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.AddMissionAction
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.GetMissionActions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.GetVesselControls
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.UpdateMissionAction
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.*
@@ -23,12 +24,13 @@ import java.time.ZonedDateTime
 @Tag(name = "APIs for mission actions")
 class MissionActionsController(
     private val getVesselControls: GetVesselControls,
+    private val getMissionActions: GetMissionActions,
     private val addMissionAction: AddMissionAction,
     private val updateMissionAction: UpdateMissionAction,
     private val mapper: ObjectMapper,
 ) {
 
-    @GetMapping("")
+    @GetMapping("/controls")
     @Operation(summary = "Get vessel's controls")
     fun getVesselControls(
         @Parameter(description = "Vessel id")
@@ -44,6 +46,16 @@ class MissionActionsController(
 
             ControlsSummaryDataOutput.fromControlsSummary(actionsSummary)
         }
+    }
+
+    @GetMapping("")
+    @Operation(summary = "Get mission actions of specified mission")
+    fun getMissionActions(
+        @Parameter(description = "Mission id")
+        @RequestParam(name = "missionId")
+        missionId: Int
+    ): List<MissionActionDataOutput> {
+        return getMissionActions.execute(missionId).map { MissionActionDataOutput.fromMissionAction(it) }
     }
 
     @PostMapping(value = [""], consumes = ["application/json"])

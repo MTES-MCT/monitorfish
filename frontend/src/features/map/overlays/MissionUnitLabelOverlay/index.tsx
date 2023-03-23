@@ -2,7 +2,7 @@ import Overlay from 'ol/Overlay'
 import { MutableRefObject, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { MissionLabel } from './MissionLabel'
+import { MissionUnitLabel } from './MissionUnitLabel'
 import { useMoveOverlayWhenDragging } from '../../../../hooks/useMoveOverlayWhenDragging'
 import { useMoveOverlayWhenZooming } from '../../../../hooks/useMoveOverlayWhenZooming'
 
@@ -96,7 +96,7 @@ export function MissionLabelOverlay({ color, coordinates, featureId, map, moveLi
           }
         }}
       >
-        <MissionLabel color={color} showed={showed} text={text} />
+        <MissionUnitLabel color={color} showed={showed} text={text} />
       </Wrapper>
     </WrapperToBeKeptForDOMManagement>
   )

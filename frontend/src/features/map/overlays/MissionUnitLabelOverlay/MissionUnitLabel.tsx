@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export function MissionLabel({ color, showed, text }) {
+export function MissionUnitLabel({ color, showed, text }) {
   if (!showed || !text) {
     return null
   }

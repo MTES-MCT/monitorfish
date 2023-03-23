@@ -76,6 +76,27 @@ export namespace Mission {
   // Types
 
   export type MissionData = Except<Mission, 'id'>
+
+  export type MissionPointFeatureProperties = {
+    color: string
+    controlUnits: ControlUnit[]
+    endDateTimeUtc: string
+    isClosed: number
+    // A 0 ou 1 number is required for WebGL to understand boolean
+    isDone: number
+    // A 0 ou 1 number is required for WebGL to understand boolean
+    isInProgress: number
+    // A 0 ou 1 number is required for WebGL to understand boolean
+    isUpcoming: number
+    missionId: number
+    missionNature?: MissionNature[]
+    missionSource: MissionSource // A 0 ou 1 number is required for WebGL to understand boolean
+    missionStatus: MissionStatus | undefined
+    missionType: MissionTypeLabel
+    numberOfControls: number
+    numberOfSurveillance: number
+    startDateTimeUtc: string
+  }
 }
 
 export type MissionAndActions = {

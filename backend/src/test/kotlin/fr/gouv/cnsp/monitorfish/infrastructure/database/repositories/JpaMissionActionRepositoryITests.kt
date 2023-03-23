@@ -135,7 +135,19 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         val missionAction = jpaMissionActionsRepository.save(newMission)
 
         // Then
-        assertThat(missionAction.id).isEqualTo(8)
+        assertThat(missionAction.id).isEqualTo(10)
         assertThat(missionAction.actionDatetimeUtc).isEqualTo(dateTime)
+    }
+
+    @Test
+    @Transactional
+    fun `findMissionActions Should filter vessel's controls around the date time`() {
+        // When
+        val actions = jpaMissionActionsRepository.findMissionActions(1)
+
+        // Then
+        assertThat(actions).hasSize(1)
+        assertThat(actions.first().actionType).isEqualTo(MissionActionType.SEA_CONTROL)
+        assertThat(actions.first().otherComments).isEqualTo("Commentaires post contrôle")
     }
 }

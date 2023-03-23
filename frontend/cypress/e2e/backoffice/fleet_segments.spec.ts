@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-import { dayjs } from '../../src/utils/dayjs'
+import { dayjs } from '../../../src/utils/dayjs'
 
 const currentYear = dayjs().year()
 context('Fleet segments', () => {

@@ -4,7 +4,7 @@ import Overlay from 'ol/Overlay'
 import VesselTrackCard from '../cards/VesselTrackCard'
 import { COLORS } from '../../../constants/constants'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from './VesselCardOverlay/position'
+import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from './Overlay'
 
 const overlayBoxSize = 240
 const margins = {

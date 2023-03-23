@@ -1,9 +1,9 @@
 import { THEME } from '@mtes-mct/monitor-ui'
 import { Fill, Stroke, Style } from 'ol/style'
 
-import { Mission } from '../../../../domain/entities/mission/types'
-import { getColorWithAlpha } from '../styles/utils'
-import { featureHas } from '../styles/utils/webgl'
+import { Mission } from '../../../../../domain/entities/mission/types'
+import { getColorWithAlpha } from '../../styles/utils'
+import { featureHas } from '../../styles/utils/webgl'
 
 export const missionZoneStyle = new Style({
   fill: new Fill({

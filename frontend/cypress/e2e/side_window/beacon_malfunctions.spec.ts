@@ -1,7 +1,7 @@
 import { dayjs } from 'src/utils/dayjs'
 
-import { getDate } from '../../src/utils'
-import { getUtcizedDayjs } from '../../src/utils/getUtcizedDayjs'
+import { getDate } from '../../../src/utils'
+import { getUtcizedDayjs } from '../../../src/utils/getUtcizedDayjs'
 
 context('Side window beacon malfunctions', () => {
   beforeEach(() => {

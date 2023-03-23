@@ -23,7 +23,7 @@ export const getLastControls = (yearsToControls: {
 
   const controlsInDatetimeDescendingOrder = Object.values(yearsToControls)
     .flat()
-    .sort((a, b) => (a.actionDatetimeUtc < b.actionDatetimeUtc ? 1 : -1))
+    .sort((a, b) => (a.actionDatetimeUtc && b.actionDatetimeUtc && a.actionDatetimeUtc < b.actionDatetimeUtc ? 1 : -1))
 
   lastControls.SEA.control = controlsInDatetimeDescendingOrder.find(
     control => control.actionType === MissionAction.MissionActionType.SEA_CONTROL

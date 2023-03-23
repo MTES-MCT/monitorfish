@@ -4,15 +4,15 @@ import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'reac
 import { useDebouncedCallback } from 'use-debounce'
 
 import { clearPreviousLineFeatures, getLabelsOfFeaturesInExtent } from './utils'
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { usePrevious } from '../../../../hooks/usePrevious'
-import { MissionLabelOverlay } from '../../overlays/MissionLabelOverlay'
-import { useGetLineFeatureIdToCoordinates } from '../hooks/useGetLineFeatureIdToCoordinates'
-import { useIsZooming } from '../hooks/useIsZooming'
-import { getLabelLineStyle } from '../styles/vesselLabelLine.style'
+import { LayerProperties } from '../../../../../domain/entities/layers/constants'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { usePrevious } from '../../../../../hooks/usePrevious'
+import { MissionLabelOverlay } from '../../../overlays/MissionUnitLabelOverlay'
+import { useGetLineFeatureIdToCoordinates } from '../../hooks/useGetLineFeatureIdToCoordinates'
+import { useIsZooming } from '../../hooks/useIsZooming'
+import { getLabelLineStyle } from '../../styles/vesselLabelLine.style'
 
-import type { VectorLayerWithName } from '../../../../domain/types/layer'
+import type { VectorLayerWithName } from '../../../../../domain/types/layer'
 
 export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
   const { isAdmin } = useMainAppSelector(state => state.global)

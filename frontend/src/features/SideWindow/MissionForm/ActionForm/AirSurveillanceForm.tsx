@@ -9,11 +9,9 @@ import {
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash'
-import { useMemo } from 'react'
 
 import { FLIGHT_GOALS_AS_OPTIONS } from './shared/constants'
 import { FleetSegmentsField } from './shared/FleetSegmentsField'
-import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { useNewWindow } from '../../../../ui/NewWindow'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
@@ -29,11 +27,6 @@ export type AirSurveillanceFormProps = {
 export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillanceFormProps) {
   const { newWindowContainerRef } = useNewWindow()
 
-  const titleDate = useMemo(
-    () => getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),
-    [initialValues.actionDatetimeUtc]
-  )
-
   return (
     <Formik initialValues={initialValues} onSubmit={noop}>
       <>
@@ -42,7 +35,7 @@ export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillance
         <FormHead>
           <h2>
             <Icon.Observation />
-            Surveillance aérienne ({titleDate})
+            Surveillance aérienne
           </h2>
         </FormHead>
 

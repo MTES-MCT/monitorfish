@@ -1,4 +1,4 @@
-export type VesselCardMargins = {
+export type OverlayCardMargins = {
   xLeft: number
   xMiddle: number
   xRight: number

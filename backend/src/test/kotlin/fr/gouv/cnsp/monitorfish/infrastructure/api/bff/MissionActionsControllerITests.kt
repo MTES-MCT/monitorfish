@@ -8,6 +8,7 @@ import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.AddMissionAction
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.GetMissionActions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.GetVesselControls
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.UpdateMissionAction
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
@@ -39,6 +40,9 @@ class MissionActionsControllerITests {
     private lateinit var getVesselControls: GetVesselControls
 
     @MockBean
+    private lateinit var getMissionActions: GetMissionActions
+
+    @MockBean
     private lateinit var addMissionAction: AddMissionAction
 
     @MockBean
@@ -63,7 +67,7 @@ class MissionActionsControllerITests {
         )
 
         // When
-        mockMvc.perform(get("/bff/v1/mission_actions?vesselId=123&afterDateTime=2020-05-04T03:04:05.000Z"))
+        mockMvc.perform(get("/bff/v1/mission_actions/controls?vesselId=123&afterDateTime=2020-05-04T03:04:05.000Z"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.numberOfDiversions", equalTo(3)))
@@ -73,6 +77,24 @@ class MissionActionsControllerITests {
 
         runBlocking {
             Mockito.verify(getVesselControls).execute(123, ZonedDateTime.parse("2020-05-04T03:04:05Z"))
+        }
+    }
+
+    @Test
+    fun `Should get all mission actions for a mission`() {
+        // Given
+        givenSuspended { this.getMissionActions.execute(any()) }.willReturn(
+            listOf(MissionAction(123, 1, 1, actionType = MissionActionType.SEA_CONTROL, actionDatetimeUtc = ZonedDateTime.now())),
+        )
+
+        // When
+        mockMvc.perform(get("/bff/v1/mission_actions?missionId=123"))
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(1)))
+
+        runBlocking {
+            Mockito.verify(getMissionActions).execute(123)
         }
     }
 

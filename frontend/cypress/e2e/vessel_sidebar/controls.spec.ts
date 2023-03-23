@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-import { getDate } from '../../src/utils'
+import { getDate } from '../../../src/utils'
 
 context('Vessel sidebar controls tab', () => {
   beforeEach(() => {

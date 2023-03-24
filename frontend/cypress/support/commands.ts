@@ -3,6 +3,7 @@ import { clickOutside } from './commands/clickOutside'
 import { fill } from './commands/fill'
 import { fillDateRangePicker } from './commands/fillDateRangePicker'
 import { forceClick } from './commands/forceClick'
+import { getComputedStyle } from './commands/getComputedStyle'
 import { getDataCy } from './commands/getDataCy'
 
 function unquote(str: string): string {
@@ -39,6 +40,8 @@ Cypress.Commands.add('cleanFiles', () => {
 })
 
 Cypress.Commands.add('clickButton', clickButton)
+
+Cypress.Commands.add('getComputedStyle', getComputedStyle)
 
 Cypress.Commands.add(
   'clickLink',

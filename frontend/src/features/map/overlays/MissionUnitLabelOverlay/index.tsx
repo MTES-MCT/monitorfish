@@ -89,7 +89,7 @@ export function MissionLabelOverlay({ color, coordinates, featureId, map, moveLi
     <WrapperToBeKeptForDOMManagement>
       <Wrapper
         ref={overlayElementRef}
-        data-cy={`vessel-label-draggable-${featureId}`}
+        data-cy={`mission-label-draggable-${featureId}`}
         onClick={() => {
           if (overlayIsPanning.current) {
             overlayIsPanning.current = false

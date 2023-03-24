@@ -32,8 +32,11 @@ import { SelectedMissionLayer } from './layers/Mission/SelectedMissionLayer'
 import { MissionsLabelsLayer } from './layers/Mission/MissionsLabelsLayer/MissionsLabelsLayer'
 import { MissionOverlay } from './overlays/MissionOverlay'
 import { SelectedMissionOverlay } from './overlays/SelectedMissionOverlay/Index'
+import { MissionHoveredLayer } from './layers/Mission/HoveredMissionLayer'
+import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 const Map = () => {
+  const { isAdmin } = useMainAppSelector(state => state.global)
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
   const [currentFeature, setCurrentFeature] = useState(null)
@@ -79,11 +82,12 @@ const Map = () => {
       <FilterLayer/>
       <VesselsTracksLayerMemoized/>
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
-      <MissionLayer/>
-      <SelectedMissionLayer feature={currentFeature}/>
-      <MissionsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
-      <MissionOverlay feature={currentFeature}/>
-      <SelectedMissionOverlay/>
+      {isAdmin && <MissionLayer/>}
+      {isAdmin && <SelectedMissionLayer feature={currentFeature}/>}
+      {isAdmin && <MissionHoveredLayer feature={currentFeature}/>}
+      {isAdmin && <MissionsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>}
+      {isAdmin && <MissionOverlay feature={currentFeature}/>}
+      {isAdmin && <SelectedMissionOverlay/>}
       <DrawLayer/>
       <RegulatoryLayerSearch/>
       <VesselEstimatedPositionLayer/>

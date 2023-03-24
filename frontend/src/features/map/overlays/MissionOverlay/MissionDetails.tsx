@@ -28,16 +28,17 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
 
   return (
     <>
-      <Wrapper>
+      <Wrapper data-cy="mission-overlay">
         {isSelected && (
           <CloseButton
             accent={Accent.TERTIARY}
+            data-cy="mission-overlay-close"
             Icon={Icon.Close}
             iconSize={14}
             onClick={() => dispatch(missionActions.unsetSelectedMissionGeoJSON())}
           />
         )}
-        <ZoneText data-cy="mission-label-text">
+        <ZoneText>
           <Title>
             {mission.controlUnits.length === 1 &&
               mission.controlUnits.map((controlUnit: ControlUnit) => (

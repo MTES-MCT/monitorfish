@@ -1,11 +1,10 @@
 /// <reference types="cypress" />
 
 context('TritonFish', () => {
-  beforeEach(() => {
-    cy.loadPath('/ext#@-824534.42,6082993.21,8.70')
-  })
-
   it('view Should have some features removed', () => {
+    // Given
+    cy.loadPath('/ext#@-824534.42,6082993.21,8.70')
+
     // Then
     // Vessel sidebar is minimized
     cy.get('.vessels').click(460, 480, { force: true, timeout: 10000 })
@@ -45,5 +44,12 @@ context('TritonFish', () => {
 
     // No beacon malfunctions
     cy.get('*[data-cy="beacon-malfunction-button"]').should('not.exist')
+
+    // Given
+    cy.loadPath('/ext#@-188008.06,6245230.27,8.70')
+
+    // Then
+    // No missions
+    cy.get('*[data-cy="mission-label-text"]').should('not.exist')
   })
 })

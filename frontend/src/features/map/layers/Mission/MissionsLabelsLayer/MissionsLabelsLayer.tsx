@@ -105,6 +105,10 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
   )
 
   useEffect(() => {
+    if (!map) {
+      return
+    }
+
     addLabelsToAllFeaturesInExtent(
       isAdmin,
       getVectorSource(),

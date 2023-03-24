@@ -30,6 +30,7 @@ declare global {
       fill(label: string | undefined, value: boolean | number | string | string[] | undefined): Chainable<Element>
       fillDateRangePicker(label: string, startDate: Date, endDate: Date): Chainable<Element>
       forceClick(): Chainable<JQuery<HTMLElement>>
+      getComputedStyle(dataCy: string, backUpToParentNumber?: number): Cypress.Chainable<CSSStyleDeclaration>
       getDataCy(dataCy: string): Chainable<JQuery<HTMLElement>>
       loadPath(path: string): void
       toMatchImageSnapshot(settings: any): Chainable<Element>

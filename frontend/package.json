@@ -55,7 +55,7 @@
     "ol": "7.1.0",
     "ol-mapbox-style": "10.2.0",
     "ramda": "0.28.0",
-    "ramda-adjunct": "3.3.0",
+    "ramda-adjunct": "3.4.0",
     "react": "18.2.0",
     "react-color": "2.19.3",
     "react-coordinate-input": "1.0.0",

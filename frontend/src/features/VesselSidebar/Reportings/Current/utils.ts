@@ -54,7 +54,7 @@ export function getReportingValueErrors(reportingValue: ReportingUpdate) {
   return nextErrorsFields
 }
 
-export const mapControlUnitsToUniqueSortedIdsAsOptions = (controlUnits: ControlUnit[]): Option<number>[] =>
+export const mapControlUnitsToUniqueSortedIdsAsOptions = (controlUnits: ControlUnit.ControlUnit[]): Option<number>[] =>
   Array.from(controlUnits)
     .sort((a, b) => Number(b.name) - Number(a.name))
     .map(controlUnit => ({

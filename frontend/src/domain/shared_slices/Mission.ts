@@ -32,10 +32,7 @@ const missionSlice = createSlice({
      */
     addDraftAction(state, action: PayloadAction<MissionActionFormValues>) {
       if (!state.draft) {
-        throw new FrontendError(
-          '`state.draft` is undefined. This should never happen.',
-          'domain/shared_slices/Mission.ts > addDraftAction()'
-        )
+        throw new FrontendError('`state.draft` is undefined')
       }
 
       const nextDraft = {
@@ -52,18 +49,12 @@ const missionSlice = createSlice({
      */
     duplicateDraftActionAtIndex(state, action: PayloadAction<number>) {
       if (!state.draft) {
-        throw new FrontendError(
-          '`state.draft` is undefined. This should never happen.',
-          'domain/shared_slices/Mission.ts > duplicateDraftActionAtIndex()'
-        )
+        throw new FrontendError('`state.draft` is undefined')
       }
 
       const sourceDraftAction = state.draft.actions[action.payload]
       if (!sourceDraftAction) {
-        throw new FrontendError(
-          '`sourceDraftAction` is undefined. This should never happen.',
-          'domain/shared_slices/Mission.ts > duplicateDraftActionAtIndex()'
-        )
+        throw new FrontendError('`sourceDraftAction` is undefined')
       }
 
       const nextDraft = {
@@ -76,7 +67,7 @@ const missionSlice = createSlice({
     },
 
     /**
-     * Initialize mission draft either from scratch or from a mission and its actions
+     * Initialize mission draft either from scratch (with an `undefined` payload) or from a mission and its actions
      */
     initializeDraft(
       state,
@@ -88,8 +79,14 @@ const missionSlice = createSlice({
         | undefined
       >
     ) {
+      // console.log('initializeDraft()', 'action.payload', action.payload)
+
       if (!action.payload) {
         state.draft = getMissionFormInitialValues(undefined, [])
+        state.draftId = undefined
+
+        // console.log('initializeDraft()', 'state.draft', state.draft)
+        // console.log('initializeDraft()', 'state.draftId', state.draftId)
 
         return
       }
@@ -103,10 +100,7 @@ const missionSlice = createSlice({
      */
     removeDraftActionAtIndex(state, action: PayloadAction<number>) {
       if (!state.draft) {
-        throw new FrontendError(
-          '`state.draft` is undefined. This should never happen.',
-          'domain/shared_slices/Mission.ts > removeDraftActionAtIndex()'
-        )
+        throw new FrontendError('`state.draft` is undefined')
       }
 
       state.draft = {
@@ -137,7 +131,11 @@ const missionSlice = createSlice({
      * Set mission draft ID (= missionId to edit)
      */
     setDraftId(state, action: PayloadAction<Mission.Mission['id']>) {
+      // We have to reset the `draft` since it's a new mission draft
+      state.draft = undefined
       state.draftId = action.payload
+      // We have to reset the `editedDraftActionIndex` since it's a new mission draft
+      state.editedDraftActionIndex = undefined
     },
 
     /**
@@ -146,8 +144,7 @@ const missionSlice = createSlice({
     setEditedDraftAction(state, action: PayloadAction<MissionActionFormValues>) {
       if (!state.draft || !state.draft.actions || state.editedDraftActionIndex === undefined) {
         throw new FrontendError(
-          'Either  `state.draft`, `state.draft.actions` or `state.editedDraftActionIndex` is undefined. This should never happen.',
-          'domain/shared_slices/Mission.ts > setDraftAction()'
+          'Either  `state.draft`, `state.draft.actions` or `state.editedDraftActionIndex` is undefined'
         )
       }
 
@@ -161,16 +158,10 @@ const missionSlice = createSlice({
      */
     setEditedDraftActionIndex(state, action: PayloadAction<number>) {
       if (!state.draft) {
-        throw new FrontendError(
-          '`state.draft` is undefined. This should never happen.',
-          'domain/shared_slices/Mission.ts > setEditedDraftActionIndex()'
-        )
+        throw new FrontendError('`state.draft` is undefined')
       }
       if (!state.draft.actions[action.payload]) {
-        throw new FrontendError(
-          `\`state.draft.actions[${action.payload}]\` is undefined. This should never happen.`,
-          'domain/shared_slices/Mission.ts > setEditedDraftActionIndex()'
-        )
+        throw new FrontendError(`\`state.draft.actions[${action.payload}]\` is undefined`)
       }
 
       state.editedDraftActionIndex = action.payload
@@ -189,6 +180,7 @@ const missionSlice = createSlice({
     unsetDraft(state) {
       state.draft = undefined
       state.draftId = undefined
+      state.editedDraftActionIndex = undefined
     },
 
     /**

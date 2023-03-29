@@ -78,7 +78,7 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
         ]
 
       default:
-        throw new FrontendError('`initialValues.actionType` does not match the enum. This should never happen.')
+        throw new FrontendError('`initialValues.actionType` does not match the enum')
     }
   }, [initialValues])
 

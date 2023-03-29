@@ -91,7 +91,12 @@ export function MainForm({ initialValues, onChange }: MainFormProps) {
             {/* TODO Fix that in Monitor UI: */}
             {/* Re-enabling a checkbox that has been disabled should set the related FormValues prop
                 to a boolean matching the checkbox `checked` state. */}
-            <FormikCheckbox disabled={!isMissionUnderJdpCheckboxEnabled} label="Mission sous JDP" name="isUnderJdp" />
+            <FormikCheckbox
+              disabled={!isMissionUnderJdpCheckboxEnabled}
+              isUndefinedWhenDisabled
+              label="Mission sous JDP"
+              name="isUnderJdp"
+            />
           </CustomFormBodyInnerWrapper>
 
           <FormikMultiControlUnitPicker name="controlUnits" />

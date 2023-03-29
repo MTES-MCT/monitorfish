@@ -112,7 +112,7 @@ export function ReportingCard({
   )
 }
 
-const getReportingActor = (reportingActor, unit: ControlUnit | null) => {
+const getReportingActor = (reportingActor, unit: ControlUnit.ControlUnit | null) => {
   switch (reportingActor) {
     case ReportingOriginActor.UNIT.code:
       return unit?.name || 'Unité inconnue'

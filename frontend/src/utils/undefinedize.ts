@@ -49,7 +49,7 @@ export function undefinedize<T extends NativeAny>(value: T): Undefinedized<T> | 
       return undefinedizeObjectProps(value) as any
     }
 
-    throw new FrontendError(`Can't handle type \`${(value as Object).constructor.name}\`.`, 'undefinedize()')
+    throw new FrontendError(`Can't handle type \`${(value as Object).constructor.name}\`.`)
   }
 
   return value as any

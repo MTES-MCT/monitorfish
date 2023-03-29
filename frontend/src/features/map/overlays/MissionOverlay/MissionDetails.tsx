@@ -41,7 +41,7 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
         <ZoneText>
           <Title>
             {mission.controlUnits.length === 1 &&
-              mission.controlUnits.map((controlUnit: ControlUnit) => (
+              mission.controlUnits.map((controlUnit: ControlUnit.ControlUnit) => (
                 <>
                   <div>{controlUnit.name.toUpperCase()}</div>
                   {controlUnit.contact ? (

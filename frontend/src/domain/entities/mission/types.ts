@@ -7,7 +7,7 @@ import type { Except } from 'type-fest'
 export namespace Mission {
   export interface Mission {
     closedBy?: string
-    controlUnits: ControlUnit[]
+    controlUnits: ControlUnit.ControlUnit[]
     endDateTimeUtc?: string
     // We type it as `undefined` because we don't need that prop in Fish
     envActions: undefined
@@ -79,7 +79,7 @@ export namespace Mission {
 
   export type MissionPointFeatureProperties = {
     color: string
-    controlUnits: ControlUnit[]
+    controlUnits: ControlUnit.ControlUnit[]
     endDateTimeUtc: string
     isClosed: number
     // A 0 ou 1 number is required for WebGL to understand boolean

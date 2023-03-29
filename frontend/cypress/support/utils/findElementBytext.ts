@@ -11,7 +11,7 @@ export function findElementBytext(
     inElement
   }: Partial<{
     fallbackSelector: string
-    inElement: HTMLElement
+    inElement: HTMLElement | undefined
     index: number
   }> = {}
 ) {

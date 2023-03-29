@@ -1,11 +1,12 @@
 /// <reference types="cypress" />
 
 import { openSideWindowNewMission } from './utils'
+import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Main Form', () => {
-  beforeEach(openSideWindowNewMission)
-
   it('Should enable or disable under JDP checkbox depending on other field values', () => {
+    openSideWindowNewMission()
+
     const getHasMissionUnderJdpTypeCheckbox = () =>
       cy.get('label').contains('Mission sous JDP').find('input[type="checkbox"]')
     const getMissionOrderMultiRadioLegend = () => cy.get('legend').contains('Ordre de mission')
@@ -25,6 +26,8 @@ context('Side Window > Mission Form > Main Form', () => {
   })
 
   it('Should add and remove a control unit', () => {
+    openSideWindowNewMission()
+
     cy.clickButton('Ajouter une autre unité')
 
     cy.get('label').contains('Administration 2').should('exist')
@@ -34,7 +37,9 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.get('label').contains('Administration 2').should('not.exist')
   })
 
-  it('Should send the expected data to the API (required fields only)', () => {
+  it('Should send the expected data to the API when creating a new mission (required fields only)', () => {
+    openSideWindowNewMission()
+
     const getSaveButton = () => cy.get('button').contains('Enregistrer').parent()
     const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer et clôturer').parent()
 
@@ -100,7 +105,9 @@ context('Side Window > Mission Form > Main Form', () => {
     })
   })
 
-  it('Should send the expected data to the API', () => {
+  it('Should send the expected data to the API when creation a new mission', () => {
+    openSideWindowNewMission()
+
     cy.intercept('PUT', '/api/v1/missions', {
       // TODO This should be removed once the API works as expected.
       body: {
@@ -187,5 +194,73 @@ context('Side Window > Mission Form > Main Form', () => {
 
       cy.get('h1').should('contain.text', 'Missions et contrôles')
     })
+  })
+
+  it('Should send the expected data to the API when editing an existing mission', () => {
+    editSideWindowMissionListMissionWithId(2)
+
+    // const getSaveButton = () => cy.get('button').contains('Enregistrer').parent()
+    // const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer et clôturer').parent()
+
+    // cy.intercept('PUT', '/api/v1/missions', {
+    //   // TODO This should be removed once the API works as expected.
+    //   body: {
+    //     id: 1
+    //   },
+    //   statusCode: 201
+    // }).as('createMission')
+
+    // getSaveButton().should('be.disabled')
+    // getSaveAndCloseButton().should('be.disabled')
+
+    // cy.fill('Type de mission', 'Mer')
+
+    // cy.fill('Intentions principales de mission', ['Pêche'])
+    // cy.fill('Mission sous JDP', true)
+
+    // cy.fill('Administration 1', 'DDTM')
+    // cy.fill('Unité 1', 'Cultures marines – DDTM 40')
+    // cy.fill('Moyen 1', ['Semi-rigide 2'])
+
+    // getSaveButton().should('be.enabled')
+    // getSaveAndCloseButton().should('be.enabled')
+
+    // cy.clickButton('Enregistrer et clôturer')
+
+    // cy.wait('@createMission').then(interception => {
+    //   if (!interception.response) {
+    //     assert.fail('`interception.response` is undefined.')
+    //   }
+
+    //   assert.deepInclude(interception.request.body, {
+    //     controlUnits: [
+    //       {
+    //         administration: 'DDTM',
+    //         contact: null,
+    //         id: 10001,
+    //         name: 'Cultures marines – DDTM 40',
+    //         resources: [
+    //           {
+    //             id: 2,
+    //             name: 'Semi-rigide 2'
+    //           }
+    //         ]
+    //       }
+    //     ],
+    //     // endDateTimeUtc: '2023-02-01T01:33:22.988Z',
+    //     envActions: null,
+    //     isClosed: false,
+    //     isDeleted: false,
+    //     // isUnderJdp: false,
+    //     missionNature: ['FISH'],
+    //     missionSource: 'MONITORFISH',
+    //     missionType: 'SEA'
+    //     // startDateTimeUtc: '2023-02-01T00:33:22.988Z'
+    //   })
+    //   assert.isString(interception.request.body.endDateTimeUtc)
+    //   assert.isString(interception.request.body.startDateTimeUtc)
+
+    //   cy.get('h1').should('contain.text', 'Missions et contrôles')
+    // })
   })
 })

@@ -39,7 +39,9 @@ Cypress.Commands.add('cleanFiles', () => {
   cy.exec(`rm -f cypress/downloads/*`)
 })
 
-Cypress.Commands.add('clickButton', clickButton)
+// Cypress typings are wrong and only allow a boolean for `prevSubject` despite the doc:
+// https://docs.cypress.io/api/cypress-api/custom-commands#Dual-Commands
+Cypress.Commands.add('clickButton', { prevSubject: 'optional' } as any, clickButton)
 
 Cypress.Commands.add('getComputedStyle', getComputedStyle)
 

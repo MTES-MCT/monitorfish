@@ -5,11 +5,16 @@ import { sortByAscendingValue } from '../../../../../utils/sortByAscendingValue'
 import type { ControlUnit } from '../../../../../domain/types/controlUnit'
 import type { Option } from '@mtes-mct/monitor-ui'
 
-export function findControlUnitById(controlUnits: ControlUnit[], id: ControlUnit['id']): ControlUnit | undefined {
+export function findControlUnitById(
+  controlUnits: ControlUnit.ControlUnit[],
+  id: ControlUnit.ControlUnit['id']
+): ControlUnit.ControlUnit | undefined {
   return controlUnits.find(controlUnit => controlUnit.id === id)
 }
 
-export const mapControlUnitsToUniqueSortedAdministrationsAsOptions: (controlUnits: ControlUnit[]) => Option[] = pipe(
+export const mapControlUnitsToUniqueSortedAdministrationsAsOptions: (
+  controlUnits: ControlUnit.ControlUnit[]
+) => Option[] = pipe(
   map(prop('administration')),
   uniq,
   sortByAscendingValue,
@@ -19,8 +24,10 @@ export const mapControlUnitsToUniqueSortedAdministrationsAsOptions: (controlUnit
   }))
 )
 
-export const mapControlUnitsToUniqueSortedNamesAsOptions: (controlUnits: ControlUnit[]) => Array<Option<number>> = pipe(
-  uniqBy<ControlUnit, string>(({ administration, name }) => `${administration}-${name}`),
+export const mapControlUnitsToUniqueSortedNamesAsOptions: (
+  controlUnits: ControlUnit.ControlUnit[]
+) => Array<Option<number>> = pipe(
+  uniqBy<ControlUnit.ControlUnit, string>(({ administration, name }) => `${administration}-${name}`),
   sortWith([ascend(prop('administration')), ascend(prop('name'))]),
   map(({ id, name }) => ({
     label: name,
@@ -28,10 +35,10 @@ export const mapControlUnitsToUniqueSortedNamesAsOptions: (controlUnits: Control
   }))
 )
 
-export const mapControlUnitToResourcesAsOptions: (controlUnit: ControlUnit) => Option<number>[] = pipe(
+export const mapControlUnitToResourcesAsOptions: (controlUnit: ControlUnit.ControlUnit) => Option<number>[] = pipe(
   prop('resources'),
   sort(ascend(prop('name'))),
-  map(({ id, name }: ControlUnit['resources'][0]) => ({
+  map(({ id, name }: ControlUnit.ControlUnit['resources'][0]) => ({
     label: name,
     value: id
   }))

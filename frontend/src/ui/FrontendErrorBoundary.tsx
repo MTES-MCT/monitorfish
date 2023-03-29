@@ -13,17 +13,17 @@ export type FrontendErrorBoundaryState = {
   hasError: boolean
   isHandled: boolean
   message: string | undefined
-  scope: string | undefined
 }
 export class FrontendErrorBoundary extends Component<FrontendErrorBoundaryProps, FrontendErrorBoundaryState> {
-  constructor(props) {
+  constructor(props: FrontendErrorBoundaryProps) {
     super(props)
 
     this.state = {
       hasError: false,
+      // eslint-disable-next-line react/no-unused-state
       isHandled: false,
-      message: undefined,
-      scope: undefined
+      // eslint-disable-next-line react/no-unused-state
+      message: undefined
     }
   }
 
@@ -32,8 +32,7 @@ export class FrontendErrorBoundary extends Component<FrontendErrorBoundaryProps,
       return {
         hasError: true,
         isHandled: true,
-        message: error.message,
-        scope: error.scope
+        message: error.message
       }
     }
 
@@ -45,20 +44,41 @@ export class FrontendErrorBoundary extends Component<FrontendErrorBoundaryProps,
   }
 
   override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // TODO Add a log to Sentry?
+    // TODO Log that into Sentry.
 
-    console.debug('[FrontendErrorBoundary]', 'error:', error)
-    console.debug('[FrontendErrorBoundary]', 'errorInfo:', errorInfo)
+    if (error instanceof FrontendError) {
+      console.group('FrontendErrorBoundary > Handled Error')
+      console.debug('error', error)
+      console.debug('originalError', error.originalError)
+      console.groupEnd()
+    } else {
+      console.group('FrontendErrorBoundary > Unhandled Error')
+      console.debug('error', error)
+      console.debug('errorInfo', errorInfo)
+      console.groupEnd()
+    }
   }
 
   override render() {
     const { children } = this.props
-    // For the moment, we do not show any error message
-    // TODO Should we remove that part ? We should not throw matrix-style error message
-    //  to the user but fetch them from Sentry
-    // @ts-ignore
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { hasError, isHandled, message, scope } = this.state
+    const { hasError } = this.state
+
+    if (hasError) {
+      return (
+        <div
+          style={{
+            alignItems: 'center',
+            display: 'flex',
+            flexGrow: 1,
+            height: '100%',
+            justifyContent: 'center',
+            width: '100%'
+          }}
+        >
+          Une erreur est survenue.
+        </div>
+      )
+    }
 
     return children
   }

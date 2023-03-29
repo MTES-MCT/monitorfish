@@ -8,7 +8,7 @@ export namespace MissionAction {
     actionDatetimeUtc: string | undefined
     actionType: MissionActionType
     controlQualityComments: string | undefined
-    controlUnits: ControlUnit[]
+    controlUnits: ControlUnit.ControlUnit[]
     diversion: Boolean | undefined
     emitsAis: ControlCheck | undefined
     emitsVms: ControlCheck | undefined
@@ -120,12 +120,9 @@ export namespace MissionAction {
   }
 
   export type FleetSegment = {
+    faoAreas: string[]
     segment: string | undefined
     segmentName: string | undefined
-
-    // TODO I had to add that.
-    // eslint-disable-next-line typescript-sort-keys/interface
-    faoAreas: string[]
   }
 
   export type GearControl = {

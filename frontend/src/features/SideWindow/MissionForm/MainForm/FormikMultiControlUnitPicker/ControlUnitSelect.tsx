@@ -11,6 +11,7 @@ import {
 import { useNewWindow } from '../../../../../ui/NewWindow'
 import { mapToProp } from '../../../../../utils/mapToProp'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
+import { isValidControlUnit } from '../../utils'
 
 import type { ControlUnit } from '../../../../../domain/types/controlUnit'
 import type { MissionFormValues } from '../../types'
@@ -19,10 +20,10 @@ import type { Promisable } from 'type-fest'
 export type ControlUnitSelectProps = {
   allAdministrationsAsOptions: Option[]
   allNamesAsOptions: Array<Option<number>>
-  controlUnits: ControlUnit[] | undefined
-  defaultValue: MissionFormValues['controlUnits'][0]
+  controlUnits: ControlUnit.ControlUnit[] | undefined
+  defaultValue: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft
   index: number
-  onChange: (index: number, nextControlUnit: MissionFormValues['controlUnits'][0]) => Promisable<void>
+  onChange: (index: number, nextControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft) => Promisable<void>
   onDelete: (index: number) => Promisable<void>
 }
 export function ControlUnitSelect({
@@ -37,7 +38,9 @@ export function ControlUnitSelect({
   const controlledValueRef = useRef(defaultValue)
   const { newWindowContainerRef } = useNewWindow()
 
-  const [selectedControlUnit, setSelectedControlUnit] = useState<ControlUnit | undefined>(undefined)
+  const [selectedControlUnit, setSelectedControlUnit] = useState<ControlUnit.ControlUnit | undefined>(
+    isValidControlUnit(defaultValue) ? defaultValue : undefined
+  )
 
   const { forceUpdate } = useForceUpdate()
 
@@ -97,7 +100,7 @@ export function ControlUnitSelect({
       const nextSelectedControlUnit = nextControlUnitId
         ? findControlUnitById(controlUnits, nextControlUnitId)
         : undefined
-      const nextControlUnit: MissionFormValues['controlUnits'][0] = {
+      const nextControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft = {
         ...INITIAL_MISSION_CONTROL_UNIT,
         administration: nextSelectedControlUnit ? nextSelectedControlUnit.administration : undefined,
         id: nextSelectedControlUnit ? nextSelectedControlUnit.id : undefined,
@@ -114,7 +117,7 @@ export function ControlUnitSelect({
   )
 
   const handleResourcesChange = useCallback(
-    (nextResourceIds: Array<ControlUnit['resources'][0]['id']> | undefined) => {
+    (nextResourceIds: Array<ControlUnit.ControlUnit['resources'][0]['id']> | undefined) => {
       if (!selectedControlUnit) {
         return
       }
@@ -123,7 +126,7 @@ export function ControlUnitSelect({
         ? selectedControlUnit.resources.filter(({ id }) => nextResourceIds.includes(id))
         : []
 
-      const nextControlUnit: MissionFormValues['controlUnits'][0] = {
+      const nextControlUnit: ControlUnit.ControlUnitDraft = {
         ...controlledValueRef.current,
         resources: nextResources
       }
@@ -139,7 +142,7 @@ export function ControlUnitSelect({
   // Let's be careful here, this should normally depend on `[index, onChange]` dependencies
   // but since there is no reason these 2 values would change, this seems like an acceptable trade-off
   const handleContactChange = useDebouncedCallback((nextValue: string | undefined) => {
-    const nextControlUnit: MissionFormValues['controlUnits'][0] = {
+    const nextControlUnit: ControlUnit.ControlUnitDraft = {
       ...controlledValueRef.current,
       contact: nextValue
     }
@@ -159,41 +162,41 @@ export function ControlUnitSelect({
       <UnitWrapper>
         <Select
           baseContainer={newWindowContainerRef.current}
-          defaultValue={controlledValueRef.current.administration}
           disabled={!controlUnits}
           label={`Administration ${index + 1}`}
           name={`administration_${index}`}
           onChange={handleAdministrationChange}
           options={allAdministrationsAsOptions}
           searchable
+          value={controlledValueRef.current.administration}
           virtualized
         />
         <Select
           baseContainer={newWindowContainerRef.current}
-          defaultValue={selectedControlUnit?.id}
           disabled={!controlUnits}
           label={`Unité ${index + 1}`}
           name={`unit_${index}`}
           onChange={handleNameChange}
           options={filteredNamesAsOptions as any}
           searchable
+          value={selectedControlUnit?.id}
           virtualized
         />
         <MultiSelect
           baseContainer={newWindowContainerRef.current}
-          defaultValue={controlledValueResourceIds}
           disabled={!controlUnits || !controlledValueRef.current.administration || !controlledValueRef.current.name}
           label={`Moyen ${index + 1}`}
           name={`resources_${index}`}
           onChange={handleResourcesChange}
           options={filteredResourcesAsOptions}
+          value={controlledValueResourceIds}
         />
         <TextInput
-          defaultValue={controlledValueRef.current.contact}
           disabled={!controlUnits || !controlledValueRef.current.name}
           label={`Contact de l’unité ${index + 1}`}
           name={`contact_${index}`}
           onChange={handleContactChange}
+          value={controlledValueRef.current.contact}
         />
       </UnitWrapper>
 

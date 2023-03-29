@@ -74,7 +74,6 @@ export function TestPage() {
 
             <hr />
             <FormikMultiSelect
-              fixedWidth={160}
               label="Multi select"
               name="multiSelect"
               options={[
@@ -85,7 +84,6 @@ export function TestPage() {
             />
             <hr />
             <FormikMultiSelect
-              fixedWidth={160}
               label="Multi select with search input"
               name="multiSelectWithSearchInput"
               options={new Array(50).fill(undefined).map((_, index) => ({
@@ -96,7 +94,6 @@ export function TestPage() {
             />
             <hr />
             <FormikMultiSelect
-              fixedWidth={160}
               isLabelHidden
               label="Multi select with hidden label"
               name="multiSelectWithHiddenLabel"

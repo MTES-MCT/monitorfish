@@ -70,12 +70,12 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   const getSpecyNameFromSpecyCode = useCallback(
     (specyCode: Specy['code']) => {
       if (!getSpeciesApiQuery.data) {
-        throw new FrontendError('`getSpeciesApiQuery.data` is undefined. This should never happen.')
+        throw new FrontendError('`getSpeciesApiQuery.data` is undefined')
       }
 
       const foundSpecy = getSpeciesApiQuery.data.species.find(({ code }) => code === specyCode)
       if (!foundSpecy) {
-        throw new FrontendError('`specyName.data` is undefined. This should never happen.')
+        throw new FrontendError('`foundSpecy` is undefined')
       }
 
       return foundSpecy.name
@@ -86,7 +86,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   const remove = useCallback(
     (index: number) => {
       if (!input.value) {
-        throw new FrontendError('`input.value` is undefined. This should never happen.', 'remove()')
+        throw new FrontendError('`input.value` is undefined')
       }
 
       const nextSpeciesOnboard = ramdaRemove(index, 1, input.value)

@@ -41,9 +41,10 @@ export function MissionList() {
   const goToMissionForm = useCallback(
     async (missionId?: Mission.Mission['id']) => {
       if (missionId) {
+        // TODO Replace that with the virtual router route once it's integrated.
         dispatch(missionActions.setDraftId(missionId))
       } else {
-        dispatch(missionActions.initializeDraft())
+        dispatch(missionActions.unsetDraft())
       }
 
       dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))
@@ -72,12 +73,12 @@ export function MissionList() {
             <div>{`${filteredMissions.length ? filteredMissions.length : 'Aucune'} mission${
               filteredMissions.length > 1 ? 's' : ''
             }`}</div>
-            <Table data-cy="side-window-reporting-list">
+            <Table>
               {renderTableHead()}
 
               <TableBody>
                 {filteredMissions.map(mission => (
-                  <TableBodyRow key={mission.id} data-cy="side-window-current-reportings">
+                  <TableBodyRow key={mission.id} data-id={mission.id}>
                     <TableBodyCell $fixedWidth={144}>
                       {getLocalizedDayjs(mission.startDateTimeUtc).format('D MMM YY, HH:MM')}
                     </TableBodyCell>
@@ -180,7 +181,9 @@ const Body = styled.div`
 // TODO Integrate that into the UI with a clean code and design following the XD.
 // https://xd.adobe.com/view/973ae2b4-ecd1-419f-b092-8545e0d8ce57-c269/screen/a2a88bd8-4965-4ac3-ad20-2da95408c36a/
 
-const Table = styled.div`
+const Table = styled.div.attrs(() => ({
+  className: 'Table'
+}))`
   box-sizing: border-box;
   font-size: 13px;
   margin-top: 10px;
@@ -195,7 +198,9 @@ const Table = styled.div`
   }
 `
 
-const TableBody = styled.div`
+const TableBody = styled.div.attrs(() => ({
+  className: 'TableBody'
+}))`
   color: ${p => p.theme.color.gunMetal};
   display: flex;
   flex-direction: column;
@@ -207,7 +212,9 @@ const TableBody = styled.div`
   }
 `
 
-const TableBodyRow = styled.div`
+const TableBodyRow = styled.div.attrs(() => ({
+  className: 'TableBodyRow'
+}))`
   background-color: ${p => p.theme.color.cultured};
   display: flex;
 
@@ -216,7 +223,9 @@ const TableBodyRow = styled.div`
   }
 `
 
-const TableBodyCell = styled.div<{
+const TableBodyCell = styled.div.attrs(() => ({
+  className: 'TableBodyCell'
+}))<{
   $fixedWidth?: number
 }>`
   border-bottom: solid 1px ${p => p.theme.color.lightGray};

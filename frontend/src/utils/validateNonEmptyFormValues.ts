@@ -35,11 +35,7 @@ export function validateNonEmptyFormValues<T extends Record<string, any>>(
     return [record as T, undefined]
   } catch (err: any) {
     if (!(err instanceof FormError)) {
-      throw new FrontendError(
-        '`err` is not an instance of `FormError`. This should never happen.',
-        'validateNonEmptyFormValues()',
-        err
-      )
+      throw new FrontendError('`err` is not an instance of `FormError`', err)
     }
 
     return [undefined, err]

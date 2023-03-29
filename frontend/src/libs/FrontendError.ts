@@ -1,15 +1,11 @@
 /* eslint-disable no-console */
 
 export class FrontendError extends Error {
-  scope: string
+  originalError: any | undefined
 
-  constructor(message: string, scope?: string | undefined, err?: any) {
+  constructor(message: string, originalError?: any) {
     super(message)
 
-    this.scope = scope || 'Unknown Scope'
-
-    // TODO Create an error handler (surely an Error Boundary for fatal cases)
-    console.error(`[${this.scope}]`, message, err)
-    console.debug(err)
+    this.originalError = originalError
   }
 }

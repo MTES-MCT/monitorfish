@@ -64,7 +64,7 @@ export type CurrentAndArchivedReportingsOfSelectedVessel = {
 export type InfractionSuspicion = {
   authorContact: string | null
   authorTrigram: string | null
-  controlUnit: ControlUnit | null
+  controlUnit: ControlUnit.ControlUnit | null
   controlUnitId: number | null
   description: string
   dml: string
@@ -78,7 +78,7 @@ export type InfractionSuspicion = {
 export type Observation = {
   authorContact: string | null
   authorTrigram: string | null
-  controlUnit: ControlUnit | null
+  controlUnit: ControlUnit.ControlUnit | null
   controlUnitId: number | null
   description: string
   reportingActor: string

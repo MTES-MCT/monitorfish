@@ -75,7 +75,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.speciesObservations).isEqualTo("Saisie de l'ensemble des captures à bord")
         assertThat(firstControl.seizureAndDiversion).isTrue
         assertThat(firstControl.otherInfractions).hasSize(2)
-        assertThat(firstControl.otherInfractions.first().infractionType).isNull()
+        assertThat(firstControl.otherInfractions.first().infractionType).isEqualTo(InfractionType.WITH_RECORD)
         assertThat(firstControl.otherInfractions.first().natinf).isEqualTo(23588)
         assertThat(firstControl.otherInfractions.first().comments).isEqualTo(
             "Chalutage répété dans les 3 milles sur Piste VMS - confirmé de visu",

@@ -10,7 +10,7 @@ export const openSideWindowMissionList = () => {
   if (document.querySelector('[data-cy="first-loader"]')) {
     cy.getDataCy('first-loader').should('not.be.visible')
   }
-  cy.clickButton(SideWindowMenuKey.MISSION_LIST).click()
+  cy.clickButton(SideWindowMenuKey.MISSION_LIST)
   if (document.querySelector('[data-cy="first-loader"]')) {
     cy.getDataCy('first-loader').should('not.be.visible')
   }

@@ -1,6 +1,6 @@
 import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -24,6 +24,7 @@ import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { FrontendError } from '../../../libs/FrontendError'
+import { FrontendErrorBoundary } from '../../../ui/FrontendErrorBoundary'
 import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
 import { SideWindowMenuKey } from '../constants'
@@ -32,14 +33,10 @@ import type { MissionActionFormValues, MissionFormValues } from './types'
 
 export function MissionForm() {
   const { mission } = useMainAppSelector(store => store)
-  if (!mission.draft && !mission.draftId) {
-    throw new FrontendError(
-      'Both `mission.draft` and `mission.draftId` are undefined. This should never happen.',
-      'features/SideWindow/MissionForm/index.tsx > MissionForm()'
-    )
-  }
 
   const headerDivRef = useRef<HTMLDivElement | null>(null)
+
+  const [isLoading, setIsLoading] = useState(true)
 
   const dispatch = useMainAppDispatch()
   const missionApiQuery = useGetMissionQuery(mission.draftId || skipToken)
@@ -50,7 +47,6 @@ export function MissionForm() {
   const [updateMissionAction] = useUpdateMissionActionMutation()
 
   const actionFormKey = useMemo(() => `actionForm-${mission.editedDraftActionIndex}`, [mission.editedDraftActionIndex])
-  const isLoading = useMemo(() => !mission.draft, [mission.draft])
   const isMissionFormValid = useMemo(() => isMissionFormValuesComplete(mission.draft), [mission.draft])
 
   const actionFormInitialValues = useMemo(
@@ -61,8 +57,7 @@ export function MissionForm() {
 
       if (!mission.draft || !mission.draft.actions) {
         throw new FrontendError(
-          'Either `mission.draft` or `mission.draft.actions` is undefined while `mission.editedDraftActionIndex` is not. This should never happen.',
-          'actionFormInitialValues'
+          'Either `mission.draft` or `mission.draft.actions` is undefined while `mission.editedDraftActionIndex` is not'
         )
       }
 
@@ -86,7 +81,7 @@ export function MissionForm() {
       // Redux RTK typing is wrong, this should be a tuple-like to help TS discriminate `data` from `error`.
       const { data, error } = (await createMission(newMission)) as any
       if (!data) {
-        throw new FrontendError('`createMission()` failed', 'createOrUpdateMission()', error)
+        throw new FrontendError('`createMission()` failed', error)
       }
 
       missionId = data.id
@@ -135,40 +130,33 @@ export function MissionForm() {
   // DATA
 
   useEffect(() => {
-    if (mission.draft) {
+    if (!isLoading) {
       return
     }
 
-    if (missionApiQuery.isLoading || missionActionsApiQuery.isLoading) {
+    // New mission
+    if (!mission.draftId) {
+      setIsLoading(false)
+
+      dispatch(missionActions.initializeDraft())
+
       return
     }
 
-    const editedMission = missionApiQuery.data
-    const editedMissionActions = missionActionsApiQuery.data
-    if (!editedMission || !editedMissionActions) {
-      throw new FrontendError(
-        '`editedMission` or `editedMissionActions` is undefined. This should never happen.',
-        'features/SideWindow/MissionForm/index.tsx > MissionForm()',
-        missionApiQuery.error || missionActionsApiQuery.error || undefined
-      )
+    // Mission edition
+    if (!missionApiQuery.data || !missionActionsApiQuery.data) {
+      return
     }
+
+    setIsLoading(false)
 
     dispatch(
       missionActions.initializeDraft({
-        mission: editedMission,
-        missionActions: editedMissionActions
+        mission: missionApiQuery.data,
+        missionActions: missionActionsApiQuery.data
       })
     )
-  }, [
-    dispatch,
-    mission.draft,
-    missionApiQuery.data,
-    missionApiQuery.error,
-    missionApiQuery.isLoading,
-    missionActionsApiQuery.data,
-    missionActionsApiQuery.error,
-    missionActionsApiQuery.isLoading
-  ])
+  }, [dispatch, isLoading, mission.draftId, missionActionsApiQuery.data, missionApiQuery.data])
 
   // ---------------------------------------------------------------------------
 
@@ -185,7 +173,7 @@ export function MissionForm() {
           </Button>
           <Button
             accent={Accent.SECONDARY}
-            disabled={!isMissionFormValid}
+            disabled={isLoading || !isMissionFormValid}
             Icon={Icon.Save}
             onClick={createOrUpdateMission}
           >
@@ -193,7 +181,7 @@ export function MissionForm() {
           </Button>
           <Button
             accent={Accent.SECONDARY}
-            disabled={!isMissionFormValid}
+            disabled={isLoading || !isMissionFormValid}
             Icon={Icon.Confirm}
             onClick={createOrUpdateMissionAndClose}
           >
@@ -203,15 +191,21 @@ export function MissionForm() {
       </Header>
 
       <Body>
-        {isLoading && <LoadingSpinnerWall />}
+        <FrontendErrorBoundary>
+          {(isLoading || !mission.draft) && <LoadingSpinnerWall />}
 
-        {!isLoading && mission.draft && (
-          <>
-            <MainForm initialValues={mission.draft} onChange={handleMainFormChange} />
-            <ActionList initialValues={mission.draft} />
-            <ActionForm key={actionFormKey} initialValues={actionFormInitialValues} onChange={handleActionFormChange} />
-          </>
-        )}
+          {!isLoading && mission.draft && (
+            <>
+              <MainForm initialValues={mission.draft} onChange={handleMainFormChange} />
+              <ActionList initialValues={mission.draft} />
+              <ActionForm
+                key={actionFormKey}
+                initialValues={actionFormInitialValues}
+                onChange={handleActionFormChange}
+              />
+            </>
+          )}
+        </FrontendErrorBoundary>
       </Body>
     </Wrapper>
   )

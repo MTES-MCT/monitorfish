@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.MissionActionEn
 import org.springframework.data.repository.CrudRepository
 import java.time.Instant
 
-interface DBMissionActionsRepository : CrudRepository<MissionActionEntity, Long> {
+interface DBMissionActionsRepository : CrudRepository<MissionActionEntity, Int> {
     fun findAllByVesselIdEqualsAndActionDatetimeUtcAfter(vesselId: Int, afterDateTime: Instant): List<MissionActionEntity>
+    fun findAllByMissionId(missionId: Int): List<MissionActionEntity>
 }

@@ -34,26 +34,31 @@ export function FleetSegmentsField({ label }: FleetSegmentsFieldProps) {
     }))
   }, [getFleetSegmentsApiQuery.data])
 
-  const initialValue: number[] | undefined = useMemo(
-    () => {
-      if (!fleetSegmentsAsMissionActionFleetSegments || !input.value) {
-        return undefined
-      }
+  const initialValue: number[] | undefined = useMemo(() => {
+    if (!fleetSegmentsAsMissionActionFleetSegments || !input.value) {
+      return undefined
+    }
 
-      return input.value
-        .map(missionActionFleetSegment =>
-          fleetSegmentsAsMissionActionFleetSegments.findIndex(
-            fleetSegment =>
-              fleetSegment.segment === missionActionFleetSegment.segment &&
-              fleetSegment.segmentName === missionActionFleetSegment.segmentName
-          )
+    // console.log(
+    //   input.value.map(missionActionFleetSegment =>
+    //     fleetSegmentsAsMissionActionFleetSegments.findIndex(
+    //       fleetSegment =>
+    //         fleetSegment.segment === missionActionFleetSegment.segment &&
+    //         fleetSegment.segmentName === missionActionFleetSegment.segmentName
+    //     )
+    //   )
+    // )
+
+    return input.value
+      .map(missionActionFleetSegment =>
+        fleetSegmentsAsMissionActionFleetSegments.findIndex(
+          fleetSegment =>
+            fleetSegment.segment === missionActionFleetSegment.segment &&
+            fleetSegment.segmentName === missionActionFleetSegment.segmentName
         )
-        .filter((fleetSegmentIndex): fleetSegmentIndex is number => !!fleetSegmentIndex)
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fleetSegmentsAsMissionActionFleetSegments]
-  )
+      )
+      .filter((fleetSegmentIndex): fleetSegmentIndex is number => fleetSegmentIndex !== -1)
+  }, [fleetSegmentsAsMissionActionFleetSegments, input.value])
 
   const fleetSegmentsAsOptions: Array<Option<number>> = useMemo(() => {
     if (!fleetSegmentsAsMissionActionFleetSegments) {
@@ -69,7 +74,7 @@ export function FleetSegmentsField({ label }: FleetSegmentsFieldProps) {
   const handleChange = useCallback(
     (nextFleetSegmentIndexes: number[] | undefined) => {
       if (!fleetSegmentsAsMissionActionFleetSegments) {
-        throw new FrontendError('`fleetSegmentsAsMissionActionFleetSegments` is undefined. This should never happen.')
+        throw new FrontendError('`fleetSegmentsAsMissionActionFleetSegments` is undefined')
       }
 
       if (nextFleetSegmentIndexes === undefined) {
@@ -97,12 +102,12 @@ export function FleetSegmentsField({ label }: FleetSegmentsFieldProps) {
     <Box>
       <MultiSelect
         baseContainer={newWindowContainerRef.current}
-        defaultValue={initialValue}
         isLight
         label={label}
         name="newFleetSegment"
         onChange={handleChange as any}
         options={fleetSegmentsAsOptions}
+        value={initialValue}
         virtualized
       />
     </Box>

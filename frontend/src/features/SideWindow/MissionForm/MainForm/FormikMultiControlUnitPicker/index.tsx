@@ -12,6 +12,7 @@ import {
 import { useGetControlUnitsQuery } from '../../../../../api/controlUnit'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 
+import type { ControlUnit } from '../../../../../domain/types/controlUnit'
 import type { MissionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
@@ -77,7 +78,7 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
   )
 
   const handleChange = useCallback(
-    (index: number, nextControlUnit: MissionFormValues['controlUnits'][0]) => {
+    (index: number, nextControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft) => {
       const nextControlUnits = update(index, nextControlUnit, controlledValueRef.current)
 
       controlledValueRef.current = nextControlUnits

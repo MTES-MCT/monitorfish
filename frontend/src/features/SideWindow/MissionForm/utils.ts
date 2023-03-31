@@ -1,13 +1,14 @@
 import { omit } from 'ramda'
 
 import { INITIAL_MISSION_CONTROL_UNIT, MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
-import { Mission } from '../../../domain/types/mission'
+import { Mission } from '../../../domain/entities/mission/types'
 import { FormError, FormErrorCode } from '../../../libs/FormError'
 import { dayjs } from '../../../utils/dayjs'
 import { getUtcizedDayjs } from '../../../utils/getUtcizedDayjs'
 import { validateRequiredFormValues } from '../../../utils/validateRequiredFormValues'
 
 import type { MissionActionFormValues, MissionFormValues } from './types'
+import type { ControlUnit } from '../../../domain/types/controlUnit'
 import type { MissionAction } from '../../../domain/types/missionAction'
 import type { DateAsStringRange, Undefine } from '@mtes-mct/monitor-ui'
 
@@ -81,7 +82,7 @@ export function getMissionFormInitialValues(
   ]
 
   return {
-    ...omit(['dateTimeRangeUtc'], mission),
+    ...mission,
     actions: missionActions,
     dateTimeRangeUtc
   }
@@ -117,12 +118,14 @@ export function isMissionFormValuesComplete(missionFormValues: MissionFormValues
 }
 
 export function isValidControlUnit(
-  controlUnitFormValues: MissionFormValues['controlUnits'][0]
-): controlUnitFormValues is Mission.Mission['controlUnits'][0] {
-  return (
-    !validateRequiredFormValues(['administration', 'id', 'name', 'resources'], controlUnitFormValues) &&
-    (controlUnitFormValues.resources as Mission.Mission['controlUnits'][0]['resources']).length > 0
+  controlUnitFormValues: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft
+): controlUnitFormValues is ControlUnit.ControlUnit {
+  const [, error] = validateRequiredFormValues(
+    ['administration', 'id', 'name', 'resources'],
+    controlUnitFormValues as ControlUnit.ControlUnit
   )
+
+  return !error
 }
 
 export function getValidMissionActionData(
@@ -152,11 +155,11 @@ export function getValidMissionActionData(
 }
 
 export function getValidMissionDataControlUnit(
-  maybeValidMissionDataControlUnit: MissionFormValues['controlUnits'][0]
+  maybeValidMissionDataControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft
 ): Mission.MissionData['controlUnits'][0] {
   const [validMissionDataControlUnit, formError] = validateRequiredFormValues(
     ['administration', 'id', 'name'],
-    maybeValidMissionDataControlUnit
+    maybeValidMissionDataControlUnit as ControlUnit.ControlUnit
   )
   if (formError) {
     throw formError

@@ -40,7 +40,7 @@ class MissionActionEntity(
     @Enumerated(EnumType.STRING)
     var actionType: MissionActionType,
     @Column(name = "action_datetime_utc")
-    var actionDatetimeUtc: Instant,
+    var actionDatetimeUtc: Instant? = null,
     @Column(name = "emits_vms")
     @Enumerated(EnumType.STRING)
     var emitsVms: ControlCheck? = null,
@@ -124,7 +124,7 @@ class MissionActionEntity(
             flagState = missionAction.flagState,
             flightGoals = missionAction.flightGoals.map { it.value },
             actionType = missionAction.actionType,
-            actionDatetimeUtc = missionAction.actionDatetimeUtc.toInstant(),
+            actionDatetimeUtc = missionAction.actionDatetimeUtc?.toInstant(),
             emitsVms = missionAction.emitsVms,
             emitsAis = missionAction.emitsAis,
             logbookMatchesActivity = missionAction.logbookMatchesActivity,
@@ -169,7 +169,7 @@ class MissionActionEntity(
         flagState = flagState,
         flightGoals = flightGoals?.map { FlightGoal.valueOf(it) } ?: listOf(),
         actionType = actionType,
-        actionDatetimeUtc = ZonedDateTime.from(actionDatetimeUtc.atOffset(ZoneOffset.UTC)),
+        actionDatetimeUtc = actionDatetimeUtc?.let { ZonedDateTime.from(it.atOffset(ZoneOffset.UTC)) },
         emitsVms = emitsVms,
         emitsAis = emitsAis,
         logbookMatchesActivity = logbookMatchesActivity,

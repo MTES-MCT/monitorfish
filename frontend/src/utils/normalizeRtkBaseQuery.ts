@@ -27,6 +27,6 @@ export const normalizeRtkBaseQuery: BaseQueryEnhancer<unknown, {}, {} | void> =
 
       return normalizedResult
     } catch (err) {
-      throw new FrontendError('An unexpected error happened.', 'normalizeRtkBaseQuery()', err)
+      throw new FrontendError('An unexpected error happened.', err)
     }
   }

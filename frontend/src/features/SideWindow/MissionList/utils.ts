@@ -4,7 +4,7 @@ import { MissionDateRangeFilter, MissionFilterType } from './constants'
 import { dayjs } from '../../../utils/dayjs'
 
 import type { MissionFilter } from './types'
-import type { Mission } from '../../../domain/types/mission'
+import type { Mission } from '../../../domain/entities/mission/types'
 import type { DateRange } from '@mtes-mct/monitor-ui'
 
 // TODO Add unit tests.

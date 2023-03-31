@@ -34,7 +34,6 @@ import UpdatingVesselLoader from './features/VesselSidebar/UpdatingVesselLoader'
 import { VesselSidebarHeader } from './features/VesselSidebar/VesselSidebarHeader'
 import { useMainAppSelector } from './hooks/useMainAppSelector'
 import { BackofficePage } from './pages/BackofficePage'
-import { TestPage } from './pages/TestPage'
 import { UnsupportedBrowserPage } from './pages/UnsupportedBrowserPage'
 import { backofficeStore, backofficeStorePersistor, mainStore } from './store'
 import { FrontendErrorBoundary } from './ui/FrontendErrorBoundary'
@@ -75,8 +74,6 @@ export function App() {
                   </NamespaceContext.Provider>
                 </Provider>
               </Route>
-
-              <Route component={TestPage} exact path="/test" />
 
               <Route path="/">
                 <Provider store={mainStore}>

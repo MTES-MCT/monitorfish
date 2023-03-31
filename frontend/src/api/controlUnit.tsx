@@ -4,7 +4,7 @@ import type { ControlUnit } from '../domain/types/controlUnit'
 
 export const controlUnitApi = monitorenvApi.injectEndpoints({
   endpoints: builder => ({
-    getControlUnits: builder.query<ControlUnit[], void>({
+    getControlUnits: builder.query<ControlUnit.ControlUnit[], void>({
       providesTags: () => [{ type: 'ControlUnits' }],
       query: () => `/control_units`
     })

@@ -90,7 +90,7 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
   const remove = useCallback(
     (index: number) => {
       if (!input.value) {
-        throw new FrontendError('`input.value` is undefined. This should never happen.', 'remove()')
+        throw new FrontendError('`input.value` is undefined')
       }
 
       const nextInfractions = ramdaRemove(index, 1, input.value)
@@ -105,7 +105,7 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
 
   const cancel = useCallback(() => {
     if (editedIndex === undefined) {
-      throw new FrontendError('`editedIndex` is undefined. This should never happen.', 'acancel()')
+      throw new FrontendError('`editedIndex` is undefined')
     }
 
     // If we clicked the cancellation button and the edition form was for a new item, we delete it
@@ -119,7 +119,7 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
   const submit = useCallback(
     (updatedInfraction: AnyInfraction) => {
       if (!input.value || editedIndex === undefined) {
-        throw new FrontendError('`input.value` or `editedIndex` is undefined. This should never happen.', 'submit()')
+        throw new FrontendError('`input.value` or `editedIndex` is undefined')
       }
 
       // TODO For some unknown reason, `Yup.string().default('')` doesn't fill `comments`.

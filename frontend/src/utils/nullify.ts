@@ -46,7 +46,7 @@ export function nullify<T extends NativeAny>(value: T): Nullify<T> | null {
       return nullifyObjectProps(value) as any
     }
 
-    throw new FrontendError(`Can't handle type \`${(value as Object).constructor.name}\`.`, 'nullify()')
+    throw new FrontendError(`Can't handle type \`${(value as Object).constructor.name}\`.`)
   }
 
   return value as any

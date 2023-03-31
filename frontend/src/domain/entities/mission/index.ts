@@ -16,6 +16,7 @@ import MissionStatus = Mission.MissionStatus
 import MissionTypeLabel = Mission.MissionTypeLabel
 import MissionActionType = MissionAction.MissionActionType
 import MissionType = Mission.MissionType
+import MissionSource = Mission.MissionSource
 
 export function getMissionFeaturePointId(id: number) {
   return `${LayerType.MISSION}:${id}`
@@ -59,7 +60,6 @@ export const getMissionFeaturePoint = (
     isSeaMission: mission.missionType === MissionType.SEA,
     isUpcoming: booleanToInt(missionStatus === MissionStatus.UPCOMING),
     missionId: mission.id,
-    missionNature: mission.missionNature,
     missionSource: mission.missionSource,
     missionStatus,
     missionType: MissionTypeLabel[mission.missionType],
@@ -85,7 +85,6 @@ export const getMissionFeatureZone = (mission: Mission.Mission): Feature => {
     endDateTimeUtc: mission.endDateTimeUtc,
     geometry,
     missionId: mission.id,
-    missionNature: mission.missionNature,
     missionStatus,
     missionType: mission.missionType,
     startDateTimeUtc: mission.startDateTimeUtc
@@ -122,4 +121,19 @@ export const getMissionStatus = ({
   }
 
   return MissionStatus.IN_PROGRESS
+}
+
+export function getMissionSourceTagText(missionSource: MissionSource | undefined) {
+  switch (missionSource) {
+    case Mission.MissionSource.MONITORFISH:
+      return 'Ouverte par le CNSP'
+    case Mission.MissionSource.POSEIDON_CACEM:
+      return 'Ouverte par le CACEM (POSEIDON)'
+    case Mission.MissionSource.POSEIDON_CNSP:
+      return 'Ouverte par le CNSP (POSEIDON)'
+    case Mission.MissionSource.MONITORENV:
+      return 'Ouverte par le CACEM'
+    default:
+      return 'Origine inconnue'
+  }
 }

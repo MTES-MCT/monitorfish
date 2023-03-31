@@ -37,7 +37,7 @@ export function LandControlForm({ initialValues, onChange }: LandControlFormProp
   const { newWindowContainerRef } = useNewWindow()
 
   const titleDate = useMemo(
-    () => getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),
+    () => initialValues.actionDatetimeUtc && getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),
     [initialValues.actionDatetimeUtc]
   )
 

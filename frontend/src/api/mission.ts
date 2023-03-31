@@ -3,7 +3,7 @@ import ky from 'ky'
 import { monitorenvApi } from '.'
 import { ApiError } from '../libs/ApiError'
 
-import type { Mission } from '../domain/types/mission'
+import type { Mission } from '../domain/entities/mission/types'
 import type { MissionAction } from '../domain/types/missionAction'
 
 export const missionApi = monitorenvApi.injectEndpoints({
@@ -67,7 +67,7 @@ const MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu r√©cuperer les contr√
 export async function getVesselControlsFromAPI(vesselId: number, fromDate: Date) {
   try {
     return await ky
-      .get(`/bff/v1/mission_actions?vesselId=${vesselId}&afterDateTime=${fromDate.toISOString()}`)
+      .get(`/bff/v1/mission_actions/controls?vesselId=${vesselId}&afterDateTime=${fromDate.toISOString()}`)
       .json<MissionAction.MissionControlsSummary>()
   } catch (err) {
     throw new ApiError(MISSION_ACTIONS_ERROR_MESSAGE, err)

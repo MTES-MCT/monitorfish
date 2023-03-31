@@ -23,7 +23,7 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
 
     getMissionActions: builder.query<MissionAction.MissionAction[], number>({
       providesTags: () => [{ type: 'MissionActions' }],
-      query: missionId => `mission_actions?missionId=${missionId}`
+      query: missionId => `/mission_actions?missionId=${missionId}`
     }),
 
     updateMissionAction: builder.mutation<void, MissionAction.MissionAction>({

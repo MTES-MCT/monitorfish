@@ -8,7 +8,7 @@
     "exactOptionalPropertyTypes": true,
     "incremental": true,
     "importsNotUsedAsValues": "error",
-    "isolatedModules": true,
+    "isolatedModules": false,
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,

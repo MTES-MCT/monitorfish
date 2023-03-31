@@ -41,7 +41,7 @@ export function FormikPortSelect() {
 
       const port = getPortsApiQuery.data.find(({ locode }) => locode === nextPortLocode)
       if (!port) {
-        throw new FrontendError('`port` is undefined. This should never happen.')
+        throw new FrontendError('`port` is undefined')
       }
 
       setFieldValue('portLocode', port.locode)
@@ -59,13 +59,13 @@ export function FormikPortSelect() {
   return (
     <Select
       baseContainer={newWindowContainerRef.current}
-      defaultValue={values.portLocode}
       isLight
       label="Lieu du contrôle"
       name="port"
       onChange={handleChange}
       options={portsAsOptions}
       searchable
+      value={values.portLocode}
       virtualized
     />
   )

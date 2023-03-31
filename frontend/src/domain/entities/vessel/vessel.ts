@@ -7,10 +7,11 @@ import type {
   SelectedVessel,
   ShowedVesselTrack,
   Vessel as VesselType,
+  VesselCompositeIdentifier,
   VesselEnhancedObject,
-  VesselIdentity,
-  VesselCompositeIdentifier
+  VesselIdentity
 } from './types'
+import type { LastPositionVisibility } from '../../types/map'
 import type { Reporting } from '../../types/reporting'
 
 export const VESSEL_ALERT_STYLE = 1
@@ -43,26 +44,27 @@ export class Vessel {
 
   /**
    * Add text label to vessel feature
-   * @param {Object} feature - The OpenLayers feature.getProperties() object
-   * @param {{
-   *   isAdmin: any
-   *   vesselLabel: string
-   *   vesselsLastPositionVisibility: Object
-   *   vesselLabelsShowedOnMap: boolean
-   *   hideVesselsAtPort: boolean
-   *   riskFactorShowedOnMap: boolean
-   * }} options
-   * @return {{
-        labelText: string | null
-        riskFactor: {
-          globalRisk: int
-          impactRiskFactor: int
-          probabilityRiskFactor: int
-          detectabilityRiskFactor: int
-        } | null,
-      }} - The label object
+   * @return The label object
    */
-  static getVesselFeatureLabel(feature, options) {
+  static getVesselFeatureLabel(
+    feature: VesselEnhancedObject,
+    options: {
+      hideVesselsAtPort: boolean
+      isAdmin: any
+      riskFactorShowedOnMap: boolean
+      vesselLabel: string
+      vesselLabelsShowedOnMap: boolean
+      vesselsLastPositionVisibility: LastPositionVisibility
+    }
+  ): {
+    labelText: string | null
+    riskFactor: {
+      detectabilityRiskFactor: number
+      globalRisk: number
+      impactRiskFactor: number
+      probabilityRiskFactor: number
+    } | null
+  } {
     const {
       hideVesselsAtPort,
       isAdmin,

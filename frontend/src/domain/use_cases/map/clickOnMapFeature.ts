@@ -1,4 +1,8 @@
-import { LayerProperties } from '../../entities/layers/constants'
+import GeoJSON from 'ol/format/GeoJSON'
+
+import { missionActions } from '../../actions'
+import { LayerProperties, LayerType } from '../../entities/layers/constants'
+import { OPENLAYERS_PROJECTION } from '../../entities/map/constants'
 import { showRegulatoryZoneMetadata } from '../layer/regulation/showRegulatoryZoneMetadata'
 import { getVesselVoyage } from '../vessel/getVesselVoyage'
 import { showVessel } from '../vessel/showVessel'
@@ -24,6 +28,14 @@ export const clickOnMapFeature = (mapClick: MapClick) => (dispatch, getState) =>
       zone: mapClick.feature.getProperties().zone
     }
     dispatch(showRegulatoryZoneMetadata(zone, false))
+
+    return
+  }
+
+  if (clickedFeatureId.includes(LayerType.MISSION)) {
+    const parser = new GeoJSON()
+    const featureGeoJSON = parser.writeFeatureObject(mapClick.feature, { featureProjection: OPENLAYERS_PROJECTION })
+    dispatch(missionActions.setSelectedMissionGeoJSON(featureGeoJSON))
 
     return
   }

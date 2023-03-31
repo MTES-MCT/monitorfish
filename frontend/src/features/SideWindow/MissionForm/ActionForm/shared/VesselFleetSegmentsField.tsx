@@ -1,4 +1,4 @@
-import { Field, Label, Select, SingleTag, TagGroup } from '@mtes-mct/monitor-ui'
+import { Field, getPseudoRandomString, Label, Select, SingleTag, TagGroup } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
 import { remove as ramdaRemove, uniq } from 'ramda'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -28,6 +28,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
   const { newWindowContainerRef } = useNewWindow()
 
   const [isUpdatingDefaultFleetSegments, setIsUpdatingDefaultFleetSegments] = useState(false)
+  const [selectComponentKey, setSelectComponentKey] = useState(getPseudoRandomString())
 
   const dispatch = useMainAppDispatch()
   const getFleetSegmentsApiQuery = useGetFleetSegmentsQuery()
@@ -55,7 +56,13 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
   const add = useCallback(
     (newSegment: MissionAction.FleetSegment | undefined) => {
       if (!newSegment) {
-        throw new FrontendError('`newSegment` is undefined. This should never happen.', 'add()')
+        throw new FrontendError('`newSegment` is undefined')
+      }
+
+      setSelectComponentKey(getPseudoRandomString)
+
+      if ((input.value || []).find(({ segment }) => segment === newSegment.segment)) {
+        return
       }
 
       const nextFleetSegments: MissionAction.FleetSegment[] = [...(input.value || []), newSegment]
@@ -70,7 +77,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
   const remove = useCallback(
     (fleetSegmentIndex: number | undefined, faoArea?: string) => {
       if (!input.value) {
-        throw new FrontendError('`input.value` is undefined. This should never happen.', 'remove()')
+        throw new FrontendError('`input.value` is undefined')
       }
 
       // If we only wish to delete a specific faoArea from existing fleet segments
@@ -86,7 +93,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
       }
 
       if (fleetSegmentIndex === undefined) {
-        throw new FrontendError('`fleetSegmentIndex` is undefined. This should never happen.', 'remove()')
+        throw new FrontendError('`fleetSegmentIndex` is undefined')
       }
 
       const nextFleetSegments = ramdaRemove(fleetSegmentIndex, 1, input.value)
@@ -178,20 +185,24 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
 
       {input.value && input.value.length > 0 && (
         <>
-          <Field>
-            <Label>Zones de pêche de la marée (issues des FAR)</Label>
-            <TagGroup>{faoAreaTags}</TagGroup>
-          </Field>
+          {faoAreaTags.length > 0 && (
+            <Field>
+              <Label>Zones de pêche de la marée (issues des FAR)</Label>
+              <TagGroup>{faoAreaTags}</TagGroup>
+            </Field>
+          )}
 
-          <Field>
-            <Label>Segment de flotte de la marée</Label>
-            <TagGroup>{fleetSegmentTags}</TagGroup>
-          </Field>
+          {fleetSegmentTags.length > 0 && (
+            <Field>
+              <Label>Segment de flotte de la marée</Label>
+              <TagGroup>{fleetSegmentTags}</TagGroup>
+            </Field>
+          )}
         </>
       )}
 
       <Select
-        key={String(input.value?.length)}
+        key={selectComponentKey}
         baseContainer={newWindowContainerRef.current}
         label="Ajouter un segment"
         name="newFleetSegment"

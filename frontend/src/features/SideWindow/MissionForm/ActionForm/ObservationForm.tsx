@@ -16,7 +16,7 @@ export type ObservationFormProps = {
 }
 export function ObservationForm({ initialValues, onChange }: ObservationFormProps) {
   const titleDate = useMemo(
-    () => getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),
+    () => initialValues.actionDatetimeUtc && getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),
     [initialValues.actionDatetimeUtc]
   )
 

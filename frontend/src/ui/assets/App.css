@@ -24,8 +24,12 @@ html {
   z-index: 9999999999;
 }
 
-.menu-overlay {
+.selected-mission-card {
   z-index: 99999999999;
+}
+
+.menu-overlay {
+  z-index: 999999999999;
 }
 
 .zoom {

@@ -78,7 +78,7 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
         ]
 
       default:
-        throw new FrontendError('`initialValues.actionType` does not match the enum. This should never happen.')
+        throw new FrontendError('`initialValues.actionType` does not match the enum')
     }
   }, [initialValues])
 
@@ -116,13 +116,18 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
     ))
   }, [initialValues])
 
-  const startDateAsDayjs = useMemo(() => getLocalizedDayjs(initialValues.actionDatetimeUtc), [initialValues])
+  const startDateAsDayjs = useMemo(
+    () => initialValues.actionDatetimeUtc && getLocalizedDayjs(initialValues.actionDatetimeUtc),
+    [initialValues]
+  )
 
   return (
     <Wrapper>
-      <DateLabel>
-        <b>{formatDateLabel(startDateAsDayjs.format('DD MMM'))}</b> à {startDateAsDayjs.format('HH:mm')}
-      </DateLabel>
+      {startDateAsDayjs && (
+        <DateLabel>
+          <b>{formatDateLabel(startDateAsDayjs.format('DD MMM'))}</b> à {startDateAsDayjs.format('HH:mm')}
+        </DateLabel>
+      )}
 
       <InnerWrapper isSelected={isSelected} onClick={onEdit} type={initialValues.actionType}>
         <Head>

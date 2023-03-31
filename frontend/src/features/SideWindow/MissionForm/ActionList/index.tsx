@@ -5,10 +5,11 @@ import styled from 'styled-components'
 import { Item } from './Item'
 import { getMissionActionFormInitialValues } from './utils'
 import { missionActions } from '../../../../domain/actions'
-import { Mission } from '../../../../domain/types/mission'
+import { Mission } from '../../../../domain/entities/mission/types'
 import { MissionAction } from '../../../../domain/types/missionAction'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { FrontendErrorBoundary } from '../../../../ui/FrontendErrorBoundary'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
 
@@ -90,19 +91,22 @@ export function ActionList({ initialValues }: ActionListProps) {
       </FormHead>
 
       <FormBody>
-        {!initialValues.actions.length && <Placeholder>Aucune action n’est ajoutée pour le moment.</Placeholder>}
-        {Boolean(initialValues.actions.length) &&
-          initialValues.actions.map((actionInitialValues, index) => (
-            <Item
-              // eslint-disable-next-line react/no-array-index-key
-              key={index}
-              initialValues={actionInitialValues}
-              isSelected={index === mission.editedDraftActionIndex}
-              onDelete={() => remove(index)}
-              onDuplicate={() => duplicate(index)}
-              onEdit={() => edit(index)}
-            />
-          ))}
+        <FrontendErrorBoundary>
+          {!initialValues.actions.length && <Placeholder>Aucune action n’est ajoutée pour le moment.</Placeholder>}
+
+          {Boolean(initialValues.actions.length) &&
+            initialValues.actions.map((actionInitialValues, index) => (
+              <Item
+                // eslint-disable-next-line react/no-array-index-key
+                key={index}
+                initialValues={actionInitialValues}
+                isSelected={index === mission.editedDraftActionIndex}
+                onDelete={() => remove(index)}
+                onDuplicate={() => duplicate(index)}
+                onEdit={() => edit(index)}
+              />
+            ))}
+        </FrontendErrorBoundary>
       </FormBody>
     </Wrapper>
   )

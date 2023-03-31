@@ -1,5 +1,7 @@
 import type { RegulatoryZone } from './regulation'
+import type { Point } from 'ol/geom'
 import type VectorLayer from 'ol/layer/Vector'
+import type WebGLPointsLayer from 'ol/layer/WebGLPoints'
 import type VectorSource from 'ol/source/Vector'
 
 export type TopicContainingMultipleZones = {
@@ -25,5 +27,9 @@ export type LayerToFeatures = {
 }
 
 export type VectorLayerWithName = VectorLayer<VectorSource> & {
+  name?: string
+}
+
+export type WebGLPointsLayerWithName = WebGLPointsLayer<VectorSource<Point>> & {
   name?: string
 }

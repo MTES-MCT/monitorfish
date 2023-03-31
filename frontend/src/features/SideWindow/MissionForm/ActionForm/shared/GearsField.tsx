@@ -113,7 +113,7 @@ export function GearsField() {
         input.value.length > 0 &&
         input.value.map((gearOnboard, index) => (
           // eslint-disable-next-line react/no-array-index-key
-          <Row key={`gearOnboard-${index}`}>
+          <Row key={`gearOnboard-${index}`} $isFirst={index === 0}>
             <RowInnerWrapper>
               <SingleTag
                 onDelete={() => remove(index)}
@@ -129,11 +129,13 @@ export function GearsField() {
               <FieldGroup isInline>
                 <FormikNumberInput
                   disabled={uncontrolledMeshGearCodes.includes(gearOnboard.gearCode)}
+                  isUndefinedWhenDisabled
                   label="Maillage déclaré"
                   name={`gearOnboard[${index}].declaredMesh`}
                 />
                 <FormikNumberInput
                   disabled={uncontrolledMeshGearCodes.includes(gearOnboard.gearCode)}
+                  isUndefinedWhenDisabled
                   label="Maillage mesuré"
                   name={`gearOnboard[${index}].controlledMesh`}
                 />
@@ -164,7 +166,11 @@ export function GearsField() {
   )
 }
 
-const Row = styled.div`
+const Row = styled.div<{
+  $isFirst?: boolean
+}>`
+  margin-top: ${p => (p.$isFirst ? 0 : 16)}px;
+
   > legend {
     margin: 24px 0 8px;
   }

@@ -11,15 +11,6 @@ declare global {
       before(property: string): string
       cleanFiles(): void
       cleanScreenshots(fromNumber: number): void
-      clickButton(
-        label: string,
-        options?: Partial<{
-          index: number
-          withinSelector: string
-        }>
-      ): Chainable<JQuery<HTMLButtonElement>>
-      clickLink(linkText: string): Chainable<JQuery<HTMLAnchorElement>>
-      clickOutside(xPosition?: number, yPosition?: number): Chainable<JQuery<HTMLBodyElement>>
       dragTo(
         selector: string,
         options?: Partial<{
@@ -27,10 +18,8 @@ declare global {
           isSmooth: boolean
         }>
       ): void
-      fill(label: string | undefined, value: boolean | number | string | string[] | undefined): Chainable<Element>
       fillDateRangePicker(label: string, startDate: Date, endDate: Date): Chainable<Element>
-      forceClick(): Chainable<JQuery<HTMLElement>>
-      getDataCy(dataCy: string): Chainable<JQuery<HTMLElement>>
+      getComputedStyle(dataCy: string, backUpToParentNumber?: number): Cypress.Chainable<CSSStyleDeclaration>
       loadPath(path: string): void
       toMatchImageSnapshot(settings: any): Chainable<Element>
     }

@@ -27,7 +27,7 @@ export function AirControlForm({ initialValues, onChange }: AirControlFormProps)
   const { newWindowContainerRef } = useNewWindow()
 
   const titleDate = useMemo(
-    () => getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),
+    () => initialValues.actionDatetimeUtc && getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),
     [initialValues.actionDatetimeUtc]
   )
 

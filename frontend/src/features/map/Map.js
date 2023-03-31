@@ -13,22 +13,30 @@ import { AdministrativeLayers } from './layers/AdministrativeLayers'
 import { RegulatoryPreviewLayer } from './layers/RegulatoryPreviewLayer'
 import MeasurementLayer from './layers/MeasurementLayer'
 import MapHistory from './MapHistory'
-import VesselCardOverlay from './overlays/VesselCardOverlay'
+import { VesselCardOverlay } from './overlays/VesselCardOverlay'
 import VesselTrackCardOverlay from './overlays/VesselTrackCardOverlay'
 import { TrackTypeCardOverlay } from './overlays/TrackTypeCardOverlay'
 import { MapVesselClickAndAnimationHandler } from './MapVesselClickAndAnimationHandler'
 import VesselEstimatedPositionLayer from './layers/VesselEstimatedPositionLayer'
 import VesselSelectedLayer from './layers/VesselSelectedLayer'
 import VesselEstimatedPositionCardOverlay from './overlays/VesselEstimatedPositionCardOverlay'
-import VesselsLabelsLayer from './layers/VesselsLabelsLayer'
+import { VesselsLabelsLayer } from './layers/VesselsLabelsLayer'
 import InterestPointLayer from './layers/InterestPointLayer'
 import MapMenu from './MapMenu'
 import VesselAlertLayer from './layers/VesselAlertLayer'
 import VesselBeaconMalfunctionLayer from './layers/VesselBeaconMalfunctionLayer'
 import VesselAlertAndBeaconMalfunctionLayer from './layers/VesselAlertAndBeaconMalfunctionLayer'
 import VesselInfractionSuspicionLayer from './layers/VesselInfractionSuspicionLayer'
+import { MissionLayer } from './layers/Mission/MissionLayer'
+import { SelectedMissionLayer } from './layers/Mission/SelectedMissionLayer'
+import { MissionsLabelsLayer } from './layers/Mission/MissionsLabelsLayer/MissionsLabelsLayer'
+import { MissionOverlay } from './overlays/MissionOverlay'
+import { SelectedMissionOverlay } from './overlays/SelectedMissionOverlay/Index'
+import { MissionHoveredLayer } from './layers/Mission/HoveredMissionLayer'
+import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 const Map = () => {
+  const { isAdmin } = useMainAppSelector(state => state.global)
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
   const [currentFeature, setCurrentFeature] = useState(null)
@@ -74,6 +82,12 @@ const Map = () => {
       <FilterLayer/>
       <VesselsTracksLayerMemoized/>
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
+      {isAdmin && <MissionLayer/>}
+      {isAdmin && <SelectedMissionLayer feature={currentFeature}/>}
+      {isAdmin && <MissionHoveredLayer feature={currentFeature}/>}
+      {isAdmin && <MissionsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>}
+      {isAdmin && <MissionOverlay feature={currentFeature}/>}
+      {isAdmin && <SelectedMissionOverlay/>}
       <DrawLayer/>
       <RegulatoryLayerSearch/>
       <VesselEstimatedPositionLayer/>

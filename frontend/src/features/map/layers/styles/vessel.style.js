@@ -13,10 +13,7 @@ import { booleanToInt } from '../../../../utils'
 import Circle from 'ol/style/Circle'
 import Stroke from 'ol/style/Stroke'
 import { theme } from '../../../../ui/theme'
-
-const featureHas = (key) => ['==', ['get', key], 1]
-const featureHasNot = (key) => ['==', ['get', key], 0]
-const stateIs = (key) => ['==', ['var', key], 1]
+import { featureHas, featureHasNot, stateIs } from './utils/webgl'
 
 const hideVesselsAtPortCondition = [
   'case',

@@ -2,7 +2,7 @@
 
 import { SideWindowMenuKey } from 'src/features/SideWindow/constants'
 
-import type { Mission } from 'src/domain/types/mission'
+import type { Mission } from 'src/domain/entities/mission/types'
 
 export const openSideWindowNewMission = () => {
   cy.visit('/side_window')
@@ -12,7 +12,7 @@ export const openSideWindowNewMission = () => {
   if (document.querySelector('[data-cy="first-loader"]')) {
     cy.getDataCy('first-loader').should('not.be.visible')
   }
-  cy.clickButton(SideWindowMenuKey.MISSION_LIST).click()
+  cy.clickButton(SideWindowMenuKey.MISSION_LIST)
   if (document.querySelector('[data-cy="first-loader"]')) {
     cy.getDataCy('first-loader').should('not.be.visible')
   }

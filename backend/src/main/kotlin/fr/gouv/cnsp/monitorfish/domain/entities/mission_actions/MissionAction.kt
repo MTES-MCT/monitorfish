@@ -13,7 +13,7 @@ data class MissionAction(
     val ircs: String? = null,
     val flagState: String? = null,
     val actionType: MissionActionType,
-    val actionDatetimeUtc: ZonedDateTime,
+    val actionDatetimeUtc: ZonedDateTime? = null,
     val emitsVms: ControlCheck? = null,
     val emitsAis: ControlCheck? = null,
     val flightGoals: List<FlightGoal> = listOf(),

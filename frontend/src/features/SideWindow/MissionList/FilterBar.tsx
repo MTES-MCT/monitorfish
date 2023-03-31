@@ -11,7 +11,7 @@ import { useNewWindow } from '../../../ui/NewWindow'
 import { getOptionsFromStrings } from '../../../utils/getOptionsFromStrings'
 
 import type { MissionFilter } from './types'
-import type { Mission } from '../../../domain/types/mission'
+import type { Mission } from '../../../domain/entities/mission/types'
 import type { Promisable } from 'type-fest'
 
 export type FilterBarProps = {

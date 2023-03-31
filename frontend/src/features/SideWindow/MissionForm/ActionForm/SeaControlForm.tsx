@@ -34,7 +34,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
   const { newWindowContainerRef } = useNewWindow()
 
   const titleDate = useMemo(
-    () => getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),
+    () => initialValues.actionDatetimeUtc && getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),
     [initialValues.actionDatetimeUtc]
   )
 

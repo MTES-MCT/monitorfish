@@ -18,7 +18,7 @@ import { MISSION_NATURES_AS_OPTIONS, MISSION_TYPES_AS_OPTIONS } from './constant
 import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'
 import { FormikMultiZonePicker } from './FormikMultiZonePicker'
 import { BOOLEAN_AS_OPTIONS } from '../../../../constants'
-import { Mission } from '../../../../domain/types/mission'
+import { Mission } from '../../../../domain/entities/mission/types'
 import { useNewWindow } from '../../../../ui/NewWindow'
 import { FormBody, FormBodyInnerWrapper } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
@@ -91,7 +91,12 @@ export function MainForm({ initialValues, onChange }: MainFormProps) {
             {/* TODO Fix that in Monitor UI: */}
             {/* Re-enabling a checkbox that has been disabled should set the related FormValues prop
                 to a boolean matching the checkbox `checked` state. */}
-            <FormikCheckbox disabled={!isMissionUnderJdpCheckboxEnabled} label="Mission sous JDP" name="isUnderJdp" />
+            <FormikCheckbox
+              disabled={!isMissionUnderJdpCheckboxEnabled}
+              isUndefinedWhenDisabled
+              label="Mission sous JDP"
+              name="isUnderJdp"
+            />
           </CustomFormBodyInnerWrapper>
 
           <FormikMultiControlUnitPicker name="controlUnits" />

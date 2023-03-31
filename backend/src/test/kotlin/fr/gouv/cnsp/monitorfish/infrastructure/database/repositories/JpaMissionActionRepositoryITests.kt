@@ -75,7 +75,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.speciesObservations).isEqualTo("Saisie de l'ensemble des captures à bord")
         assertThat(firstControl.seizureAndDiversion).isTrue
         assertThat(firstControl.otherInfractions).hasSize(2)
-        assertThat(firstControl.otherInfractions.first().infractionType).isNull()
+        assertThat(firstControl.otherInfractions.first().infractionType).isEqualTo(InfractionType.WITH_RECORD)
         assertThat(firstControl.otherInfractions.first().natinf).isEqualTo(23588)
         assertThat(firstControl.otherInfractions.first().comments).isEqualTo(
             "Chalutage répété dans les 3 milles sur Piste VMS - confirmé de visu",
@@ -135,7 +135,19 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         val missionAction = jpaMissionActionsRepository.save(newMission)
 
         // Then
-        assertThat(missionAction.id).isEqualTo(8)
+        assertThat(missionAction.id).isEqualTo(10)
         assertThat(missionAction.actionDatetimeUtc).isEqualTo(dateTime)
+    }
+
+    @Test
+    @Transactional
+    fun `findMissionActions Should filter vessel's controls around the date time`() {
+        // When
+        val actions = jpaMissionActionsRepository.findMissionActions(1)
+
+        // Then
+        assertThat(actions).hasSize(1)
+        assertThat(actions.first().actionType).isEqualTo(MissionActionType.SEA_CONTROL)
+        assertThat(actions.first().otherComments).isEqualTo("Commentaires post contrôle")
     }
 }

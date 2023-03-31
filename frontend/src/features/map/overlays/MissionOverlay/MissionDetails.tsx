@@ -1,4 +1,5 @@
-import { Accent, Button, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Icon, IconButton, Size, Tag } from '@mtes-mct/monitor-ui'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { margins } from './constants'
@@ -25,6 +26,21 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
     dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))
     dispatch(missionActions.setDraftId(mission.missionId))
   }
+
+  const missionSourceText = useMemo(() => {
+    switch (mission.missionSource) {
+      case Mission.MissionSource.MONITORFISH:
+        return 'Ouverte par le CNSP'
+      case Mission.MissionSource.POSEIDON_CACEM:
+        return 'Ouverte par le CACEM (POSEIDON)'
+      case Mission.MissionSource.POSEIDON_CNSP:
+        return 'Ouverte par le CNSP (POSEIDON)'
+      case Mission.MissionSource.MONITORENV:
+        return 'Ouverte par le CACEM'
+      default:
+        return 'Origine inconnue'
+    }
+  }, [mission.missionSource])
 
   return (
     <>
@@ -62,6 +78,7 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
             )}
           </Title>
           <Details>
+            <StyledTag>{missionSourceText}</StyledTag>
             <div>
               Mission {mission.missionType} – {mission.startDateTimeUtc}
             </div>
@@ -96,6 +113,13 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
     </>
   )
 }
+
+const StyledTag = styled(Tag)`
+  background: ${p => p.theme.color.blueGray[100]};
+  color: ${p => p.theme.color.white};
+  margin-bottom: 8px;
+  margin-top: 4px;
+`
 
 const NoContact = styled.div`
   color: ${p => p.theme.color.slateGray};
@@ -137,7 +161,7 @@ const Wrapper = styled.div`
   box-shadow: 0px 3px 6px #70778540;
   line-height: 20px;
   text-align: left;
-  height: 168px;
+  height: 201px;
   width: 260px;
   border-radius: 1px;
   background-color: ${p => p.theme.color.white};

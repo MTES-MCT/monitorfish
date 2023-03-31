@@ -6,16 +6,17 @@ export function MissionUnitLabel({ color, showed, text }) {
   }
 
   return (
-    <VesselLabelOverlayElement color={color}>
+    <Wrapper color={color}>
       <ZoneText data-cy="mission-label-text">{text.toUpperCase()}</ZoneText>
-    </VesselLabelOverlayElement>
+    </Wrapper>
   )
 }
 
-const VesselLabelOverlayElement = styled.div<{
+const Wrapper = styled.div<{
   color: string
 }>`
-  box-shadow: 0px 2px 3px #d4dadc;
+  border: 1px solid ${p => p.theme.color.lightGray};
+  box-shadow: 0px 2px 3px #70778580;
   line-height: 20px;
   cursor: grabbing;
   height: 22px;

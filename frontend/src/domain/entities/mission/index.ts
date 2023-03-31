@@ -15,6 +15,7 @@ import type { MultiPolygon } from 'ol/geom'
 import MissionStatus = Mission.MissionStatus
 import MissionTypeLabel = Mission.MissionTypeLabel
 import MissionActionType = MissionAction.MissionActionType
+import MissionType = Mission.MissionType
 
 export function getMissionFeaturePointId(id: number) {
   return `${LayerType.MISSION}:${id}`
@@ -50,12 +51,16 @@ export const getMissionFeaturePoint = (
     controlUnits: mission.controlUnits,
     endDateTimeUtc: mission.endDateTimeUtc,
     geometry: new Point(point),
+    isAirMission: mission.missionType === MissionType.AIR,
     isClosed: booleanToInt(missionStatus === MissionStatus.CLOSED),
     isDone: booleanToInt(missionStatus === MissionStatus.DONE),
     isInProgress: booleanToInt(missionStatus === MissionStatus.IN_PROGRESS),
+    isLandMission: mission.missionType === MissionType.LAND,
+    isSeaMission: mission.missionType === MissionType.SEA,
     isUpcoming: booleanToInt(missionStatus === MissionStatus.UPCOMING),
     missionId: mission.id,
     missionNature: mission.missionNature,
+    missionSource: mission.missionSource,
     missionStatus,
     missionType: MissionTypeLabel[mission.missionType],
     numberOfControls,

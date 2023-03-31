@@ -28,7 +28,7 @@ declare global {
 
 Cypress.on('uncaught:exception', err => {
   // We ignore uncaught exceptions `Error: ResizeObserver loop completed with undelivered notifications.`
-  // since they only seem to happen (sporadically) within e2e tests
+  // since they only seem to happen (sporadically) within e2e tes
   if (err.message.includes('ResizeObserver loop completed with undelivered notifications.')) {
     return false
   }

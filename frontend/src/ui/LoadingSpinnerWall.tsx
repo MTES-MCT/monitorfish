@@ -7,7 +7,7 @@ export type LoadingSpinnerWallProps = {
 }
 export function LoadingSpinnerWall({ message = 'Chargement...' }: LoadingSpinnerWallProps) {
   return (
-    <Wrapper data-cy="loading-spinner-wall">
+    <Wrapper data-cy="first-loader">
       <FulfillingBouncingCircleSpinner className="update-vessels" color={THEME.color.lightGray} size={48} />
       <p style={{ marginTop: '16px' }}>{message}</p>
     </Wrapper>

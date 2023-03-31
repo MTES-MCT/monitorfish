@@ -47,7 +47,7 @@ export function ControlsSummary({ controlsFromDate, lastControls, summary }: Con
 }
 
 const Body = styled.div`
-  padding: 8px 0px 14px 10px;
+  padding: 8px 5px 14px 10px;
   width: 100%;
   margin: 0;
   line-height: 0.2em;

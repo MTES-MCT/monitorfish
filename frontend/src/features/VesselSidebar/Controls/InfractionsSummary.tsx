@@ -36,7 +36,6 @@ export function InfractionsSummary({
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-right: 5px;
 `
 
 const Text = styled.span`

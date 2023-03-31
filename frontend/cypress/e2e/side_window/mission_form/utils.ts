@@ -32,7 +32,6 @@ export const fillSideWindowMissionFormBase = (missionTypeLabel: Mission.MissionT
 
   cy.fill('Type de mission', missionTypeLabel)
 
-  cy.fill('Intentions principales de mission', ['Pêche'])
   cy.fill('Mission sous JDP', true)
 
   cy.fill('Administration 1', 'DDTM')

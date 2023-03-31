@@ -1,9 +1,9 @@
 import { Accent, Button, Icon, IconButton, Size, Tag } from '@mtes-mct/monitor-ui'
-import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { margins } from './constants'
 import { missionActions } from '../../../../domain/actions'
+import { getMissionSourceTagText } from '../../../../domain/entities/mission'
 import { Mission } from '../../../../domain/entities/mission/types'
 import { openSideWindowTab } from '../../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
@@ -26,21 +26,6 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
     dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))
     dispatch(missionActions.setDraftId(mission.missionId))
   }
-
-  const missionSourceText = useMemo(() => {
-    switch (mission.missionSource) {
-      case Mission.MissionSource.MONITORFISH:
-        return 'Ouverte par le CNSP'
-      case Mission.MissionSource.POSEIDON_CACEM:
-        return 'Ouverte par le CACEM (POSEIDON)'
-      case Mission.MissionSource.POSEIDON_CNSP:
-        return 'Ouverte par le CNSP (POSEIDON)'
-      case Mission.MissionSource.MONITORENV:
-        return 'Ouverte par le CACEM'
-      default:
-        return 'Origine inconnue'
-    }
-  }, [mission.missionSource])
 
   return (
     <>
@@ -78,13 +63,13 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
             )}
           </Title>
           <Details>
-            <StyledTag>{missionSourceText}</StyledTag>
+            <MissionSourceTag>{getMissionSourceTagText(mission.missionSource)}</MissionSourceTag>
             <div>
               Mission {mission.missionType} – {mission.startDateTimeUtc}
             </div>
             <div>
               {mission.numberOfControls} contrôle{mission.numberOfControls > 1 && 's'} réalisé
-              {mission.numberOfControls > 0 && 's'}
+              {mission.numberOfControls > 1 && 's'}
             </div>
             <div>
               {mission.missionStatus === MissionStatus.IN_PROGRESS && <InProgressIcon />}
@@ -114,7 +99,7 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
   )
 }
 
-const StyledTag = styled(Tag)`
+const MissionSourceTag = styled(Tag)`
   background: ${p => p.theme.color.blueGray[100]};
   color: ${p => p.theme.color.white};
   margin-bottom: 8px;

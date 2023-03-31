@@ -4,27 +4,6 @@ import { openSideWindowNewMission } from './utils'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Main Form', () => {
-  it('Should enable or disable under JDP checkbox depending on other field values', () => {
-    openSideWindowNewMission()
-
-    const getHasMissionUnderJdpTypeCheckbox = () =>
-      cy.get('label').contains('Mission sous JDP').find('input[type="checkbox"]')
-    const getMissionOrderMultiRadioLegend = () => cy.get('legend').contains('Ordre de mission')
-
-    getHasMissionUnderJdpTypeCheckbox().should('be.disabled')
-    getMissionOrderMultiRadioLegend().should('not.exist')
-
-    cy.fill('Intentions principales de mission', ['Pêche'])
-
-    getHasMissionUnderJdpTypeCheckbox().should('be.enabled')
-    getMissionOrderMultiRadioLegend().should('exist')
-
-    cy.fill('Intentions principales de mission', ['Env', 'Autre'])
-
-    getHasMissionUnderJdpTypeCheckbox().should('be.disabled')
-    getMissionOrderMultiRadioLegend().should('not.exist')
-  })
-
   it('Should add and remove a control unit', () => {
     openSideWindowNewMission()
 
@@ -56,7 +35,6 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.fill('Type de mission', 'Mer')
 
-    cy.fill('Intentions principales de mission', ['Pêche'])
     cy.fill('Mission sous JDP', true)
 
     cy.fill('Administration 1', 'DDTM')
@@ -118,9 +96,6 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.fill('Type de mission', 'Mer')
 
-    cy.fill('Intentions principales de mission', ['Pêche'])
-    // cy.fill('Mission sous JDP', true)
-
     cy.fill('Administration 1', 'DDTM')
     cy.fill('Unité 1', 'Cultures marines – DDTM 40')
     cy.fill('Moyen 1', ['Semi-rigide 1'])
@@ -181,7 +156,6 @@ context('Side Window > Mission Form > Main Form', () => {
         isClosed: false,
         isDeleted: false,
         // isUnderJdp: true,
-        missionNature: ['FISH'],
         missionSource: 'MONITORFISH',
         missionType: 'SEA',
         observationsCacem: 'Une note.',
@@ -233,7 +207,6 @@ context('Side Window > Mission Form > Main Form', () => {
         id: 2,
         isClosed: false,
         isDeleted: false,
-        missionNature: ['FISH'],
         missionSource: 'MONITORFISH',
         missionType: 'SEA',
         observationsCacem:

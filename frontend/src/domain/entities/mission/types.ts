@@ -81,16 +81,22 @@ export namespace Mission {
     color: string
     controlUnits: ControlUnit.ControlUnit[]
     endDateTimeUtc: string
+    // A 0 ou 1 number is required for WebGL to understand boolean
+    isAirMission: number
     isClosed: number
     // A 0 ou 1 number is required for WebGL to understand boolean
     isDone: number
     // A 0 ou 1 number is required for WebGL to understand boolean
     isInProgress: number
     // A 0 ou 1 number is required for WebGL to understand boolean
+    isLandMission: number
+    // A 0 ou 1 number is required for WebGL to understand boolean
+    isSeaMission: number
+    // A 0 ou 1 number is required for WebGL to understand boolean
     isUpcoming: number
     missionId: number
     missionNature?: MissionNature[]
-    missionSource: MissionSource // A 0 ou 1 number is required for WebGL to understand boolean
+    missionSource: MissionSource
     missionStatus: MissionStatus | undefined
     missionType: MissionTypeLabel
     numberOfControls: number

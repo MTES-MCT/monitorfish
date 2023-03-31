@@ -20,15 +20,15 @@ export const missionZoneStyle = new Style({
 export const getMissionColor = (missionStatus: Mission.MissionStatus | undefined) => {
   switch (missionStatus) {
     case Mission.MissionStatus.UPCOMING:
-      return '#70A5FF'
+      return '#52B0FF'
     case Mission.MissionStatus.IN_PROGRESS:
-      return '#4967FD'
+      return '#3660FA'
     case Mission.MissionStatus.DONE:
-      return '#390099'
+      return '#1400AD'
     case Mission.MissionStatus.CLOSED:
-      return '#4E4545'
+      return '#463939'
     default:
-      return '#4E4545'
+      return '#52B0FF'
   }
 }
 
@@ -38,17 +38,54 @@ export const getMissionPointWebGLStyle = () => ({
     size: [34, 39],
     src: 'map-icons/icon_mission_sprite.png',
     symbolType: 'image',
+    // Icons contained in sprite are of size 68x78 pixels
     textureCoord: [
       'case',
       featureHas('isClosed'),
-      [0, 0, 0.25, 1],
+      [
+        'case',
+        featureHas('isSeaMission'),
+        [0, 0, 0.25, 0.333],
+        featureHas('isLandMission'),
+        [0, 0.333, 0.25, 0.666],
+        featureHas('isAirMission'),
+        [0, 0.666, 0.25, 1],
+        [0, 0, 0.25, 0.333]
+      ],
       featureHas('isDone'),
-      [0.25, 0, 0.5, 1],
+      [
+        'case',
+        featureHas('isSeaMission'),
+        [0.25, 0, 0.5, 0.333],
+        featureHas('isLandMission'),
+        [0.25, 0.333, 0.5, 0.666],
+        featureHas('isAirMission'),
+        [0.25, 0.666, 0.5, 1],
+        [0.25, 0, 0.5, 0.333]
+      ],
       featureHas('isInProgress'),
-      [0.5, 0, 0.75, 1],
+      [
+        'case',
+        featureHas('isSeaMission'),
+        [0.5, 0, 0.75, 0.333],
+        featureHas('isLandMission'),
+        [0.5, 0.333, 0.75, 0.666],
+        featureHas('isAirMission'),
+        [0.5, 0.666, 0.75, 1],
+        [0.5, 0, 0.75, 0.333]
+      ],
       featureHas('isUpcoming'),
-      [0.75, 0, 1, 1],
-      [0.5, 0, 1, 0.25]
+      [
+        'case',
+        featureHas('isSeaMission'),
+        [0.75, 0, 1, 0.333],
+        featureHas('isLandMission'),
+        [0.75, 0.333, 1, 0.666],
+        featureHas('isAirMission'),
+        [0.75, 0.666, 1, 1],
+        [0.75, 0, 1, 0.333]
+      ],
+      [0.75, 0, 1, 0.333]
     ]
   }
 })

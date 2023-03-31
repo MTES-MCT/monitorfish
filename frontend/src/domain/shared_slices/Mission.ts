@@ -79,14 +79,9 @@ const missionSlice = createSlice({
         | undefined
       >
     ) {
-      // console.log('initializeDraft()', 'action.payload', action.payload)
-
       if (!action.payload) {
         state.draft = getMissionFormInitialValues(undefined, [])
         state.draftId = undefined
-
-        // console.log('initializeDraft()', 'state.draft', state.draft)
-        // console.log('initializeDraft()', 'state.draftId', state.draftId)
 
         return
       }

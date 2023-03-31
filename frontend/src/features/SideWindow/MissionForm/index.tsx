@@ -173,7 +173,7 @@ export function MissionForm() {
           </Button>
           <Button
             accent={Accent.SECONDARY}
-            disabled={!isMissionFormValid}
+            disabled={isLoading || !isMissionFormValid}
             Icon={Icon.Save}
             onClick={createOrUpdateMission}
           >
@@ -181,7 +181,7 @@ export function MissionForm() {
           </Button>
           <Button
             accent={Accent.SECONDARY}
-            disabled={!isMissionFormValid}
+            disabled={isLoading || !isMissionFormValid}
             Icon={Icon.Confirm}
             onClick={createOrUpdateMissionAndClose}
           >

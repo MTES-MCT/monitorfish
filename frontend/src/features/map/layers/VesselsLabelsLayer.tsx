@@ -260,6 +260,7 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
             internalReferenceNumber: vesselProperties.internalReferenceNumber,
             ircs: vesselProperties.ircs,
             key: feature.ol_uid,
+            vesselId: vesselProperties.vesselId,
             vesselIdentifier: vesselProperties.vesselIdentifier,
             vesselName: vesselProperties.vesselName
           },

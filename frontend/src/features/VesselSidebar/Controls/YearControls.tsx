@@ -15,10 +15,30 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const isEmpty = yearControls.length === 0
 
-  const numberOfInfractions = useMemo(
-    () => yearControls.reduce((accumulator, control) => accumulator + getNumberOfInfractions(control), 0),
-    [yearControls]
-  )
+  const numberOfInfractionsText = useMemo(() => {
+    const numberOfInfractions = yearControls.reduce(
+      (accumulator, control) => accumulator + getNumberOfInfractions(control),
+      0
+    )
+
+    if (isEmpty) {
+      return null
+    }
+
+    if (!numberOfInfractions) {
+      return (
+        <>
+          , pas d&apos;infraction <Green />
+        </>
+      )
+    }
+
+    return (
+      <>
+        , {numberOfInfractions} infraction{numberOfInfractions > 1 ? 's' : ''} <Red />
+      </>
+    )
+  }, [yearControls, isEmpty])
 
   const sortedControls = useMemo(
     () =>
@@ -41,17 +61,9 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
                   {yearControls.length} contrôle{yearControls.length > 1 ? 's' : ''}
                 </>
               ) : (
-                'Pas de contrôle'
+                'Aucun contrôle'
               )}
-              {numberOfInfractions ? (
-                <>
-                  , {numberOfInfractions} infraction{numberOfInfractions > 1 ? 's' : ''} <Red />
-                </>
-              ) : (
-                <>
-                  , pas d&apos;infraction <Green />
-                </>
-              )}
+              {numberOfInfractionsText}
             </YearResume>
           </YearListTitleText>
         </YearListTitle>
@@ -87,6 +99,8 @@ const Green = styled.span`
 const Year = styled.span`
   color: ${p => p.theme.color.slateGray};
   font-size: 16px;
+  width: 39px;
+  display: inline-block;
 `
 
 const YearResume = styled.span`

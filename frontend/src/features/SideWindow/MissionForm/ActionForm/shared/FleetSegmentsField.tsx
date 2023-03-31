@@ -39,16 +39,6 @@ export function FleetSegmentsField({ label }: FleetSegmentsFieldProps) {
       return undefined
     }
 
-    // console.log(
-    //   input.value.map(missionActionFleetSegment =>
-    //     fleetSegmentsAsMissionActionFleetSegments.findIndex(
-    //       fleetSegment =>
-    //         fleetSegment.segment === missionActionFleetSegment.segment &&
-    //         fleetSegment.segmentName === missionActionFleetSegment.segmentName
-    //     )
-    //   )
-    // )
-
     return input.value
       .map(missionActionFleetSegment =>
         fleetSegmentsAsMissionActionFleetSegments.findIndex(

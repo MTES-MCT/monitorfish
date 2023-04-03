@@ -22,7 +22,8 @@ import { MissionList } from './MissionList'
 import { SideWindowMenu } from './SideWindowMenu'
 import { SideWindowSubMenu } from './SideWindowSubMenu'
 import { getSelectedSubMenu } from './utils'
-import { ALERTS_SUBMENU, SeaFront } from '../../domain/entities/alerts/constants'
+import { SeaFront } from '../../constants'
+import { ALERTS_SUBMENU } from '../../domain/entities/alerts/constants'
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
 import { openSideWindowTab } from '../../domain/shared_slices/Global'
 import { setEditedReportingInSideWindow } from '../../domain/shared_slices/Reporting'
@@ -69,7 +70,9 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
   const hasSubmenu = useMemo(
     () =>
       openedSideWindowTab !== undefined &&
-      [SideWindowMenuKey.ALERTS, SideWindowMenuKey.BEACON_MALFUNCTIONS].includes(openedSideWindowTab),
+      [SideWindowMenuKey.ALERTS, SideWindowMenuKey.BEACON_MALFUNCTIONS, SideWindowMenuKey.MISSION_LIST].includes(
+        openedSideWindowTab
+      ),
     [openedSideWindowTab]
   )
 
@@ -232,7 +235,9 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
                 />
               )}
               {openedSideWindowTab === SideWindowMenuKey.BEACON_MALFUNCTIONS && <BeaconMalfunctionsBoard />}
-              {openedSideWindowTab === SideWindowMenuKey.MISSION_LIST && <MissionList />}
+              {openedSideWindowTab === SideWindowMenuKey.MISSION_LIST && (
+                <MissionList selectedSubMenu={selectedSubMenu.code} />
+              )}
               {openedSideWindowTab === SideWindowMenuKey.MISSION_FORM && <MissionForm />}
             </Content>
           )}

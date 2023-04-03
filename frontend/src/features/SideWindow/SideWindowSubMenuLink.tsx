@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
 
-import type { SeaFront } from '../../domain/entities/alerts/constants'
+import type { SeaFront } from '../../constants'
 import type { MenuItem } from '../../types'
 import type { CSSProperties } from 'react'
 import type { Promisable } from 'type-fest'

@@ -6,6 +6,7 @@ import styled from 'styled-components'
 
 import { MISSION_LIST_TABLE_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
+import { getSeaFrontFilter } from './utils'
 import { useGetMissionsQuery } from '../../../api/mission'
 import { missionActions } from '../../../domain/actions'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
@@ -19,7 +20,10 @@ import type { MissionFilter } from './types'
 import type { Mission } from '../../../domain/entities/mission/types'
 import type { MutableRefObject } from 'react'
 
-export function MissionList() {
+type MissionListProps = {
+  selectedSubMenu: string
+}
+export function MissionList({ selectedSubMenu }: MissionListProps) {
   const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
 
   const [filters, setFilters] = useState<MissionFilter[]>([])
@@ -33,9 +37,11 @@ export function MissionList() {
     searchInputRef.current?.value
   )
 
+  const seaFrontGroupFilter = useMemo(() => getSeaFrontFilter(selectedSubMenu), [selectedSubMenu])
+
   const filteredMissions = useMemo(
-    () => (filters.length ? (pipe as (...args: MissionFilter[]) => MissionFilter)(...filters)(tableData) : tableData),
-    [filters, tableData]
+    () => (pipe as (...args: MissionFilter[]) => MissionFilter)(seaFrontGroupFilter, ...filters)(tableData),
+    [filters, seaFrontGroupFilter, tableData]
   )
 
   const goToMissionForm = useCallback(

@@ -223,10 +223,11 @@ context('Side Window > Mission Form > Main Form', () => {
       if (!interception.response) {
         assert.fail('`interception.response` is undefined.')
       }
-      const now = getUtcizedDayjs()
+
+      const nowAsDayjs = getUtcizedDayjs()
 
       assert.deepInclude(interception.request.body, {
-        actionDatetimeUtc: `${now.format('YYYY-MM-DD')}-T00:00:00Z`,
+        actionDatetimeUtc: `${nowAsDayjs.format('YYYY-MM-DD')}T00:00:00Z`,
         actionType: 'SEA_CONTROL',
         controlQualityComments: 'Ciblage CNSP non respecté',
         controlUnits: [],

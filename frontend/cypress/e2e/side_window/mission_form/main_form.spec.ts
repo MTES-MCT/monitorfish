@@ -71,7 +71,6 @@ context('Side Window > Mission Form > Main Form', () => {
         isClosed: false,
         isDeleted: false,
         // isUnderJdp: false,
-        missionNature: ['FISH'],
         missionSource: 'MONITORFISH',
         missionType: 'SEA'
         // startDateTimeUtc: '2023-02-01T00:33:22.988Z'

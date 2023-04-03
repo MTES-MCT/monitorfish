@@ -14,7 +14,6 @@
       {
         "id": 38,
         "missionType": "LAND",
-        "missionNature": ["ENV", "FISH"],
         "controlUnits": [
           {
             "id": 10003,
@@ -90,7 +89,6 @@
       {
         "id": 49,
         "missionType": "SEA",
-        "missionNature": ["FISH", "OTHER"],
         "controlUnits": [
           {
             "id": 10003,

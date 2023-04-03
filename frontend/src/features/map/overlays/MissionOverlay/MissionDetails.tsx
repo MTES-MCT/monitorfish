@@ -7,6 +7,7 @@ import { getMissionSourceTagText } from '../../../../domain/entities/mission'
 import { Mission } from '../../../../domain/entities/mission/types'
 import { openSideWindowTab } from '../../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { pluralize } from '../../../../utils/pluralize'
 import { SideWindowMenuKey } from '../../../SideWindow/constants'
 import { OverlayPosition } from '../Overlay'
 
@@ -56,8 +57,8 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
               <>
                 <div>{mission.controlUnits[0].name.toUpperCase()}</div>
                 <MultipleControlUnits>
-                  et {mission.controlUnits.length - 1} autre{mission.controlUnits.length - 1 > 1 && 's'} unité
-                  {mission.controlUnits.length - 1 > 1 && 's'}
+                  et {mission.controlUnits.length - 1} {pluralize('autre', mission.controlUnits.length - 1)}{' '}
+                  {pluralize('unité', mission.controlUnits.length - 1)}
                 </MultipleControlUnits>
               </>
             )}
@@ -68,8 +69,8 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
               Mission {mission.missionType} – {mission.startDateTimeUtc}
             </div>
             <div>
-              {mission.numberOfControls} contrôle{mission.numberOfControls > 1 && 's'} réalisé
-              {mission.numberOfControls > 1 && 's'}
+              {mission.numberOfControls} {pluralize('contrôle', mission.numberOfControls)}{' '}
+              {pluralize('réalisé', mission.numberOfControls)}
             </div>
             <div>
               {mission.missionStatus === MissionStatus.IN_PROGRESS && <InProgressIcon />}

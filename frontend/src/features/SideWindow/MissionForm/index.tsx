@@ -70,6 +70,12 @@ export function MissionForm() {
     [mission.editedDraftActionIndex]
   )
 
+  const missionTitle = mission.draftId
+    ? `Mission ${
+        mission.draft?.missionType && Mission.MissionTypeLabel[mission.draft?.missionType]
+      } – ${mission.draft?.controlUnits.map(controlUnit => controlUnit.name?.replace('(historique)', '')).join(', ')}`
+    : `Nouvelle mission`
+
   const createOrUpdateMission = useCallback(async () => {
     if (!mission.draft) {
       return
@@ -168,13 +174,7 @@ export function MissionForm() {
         <HeaderTitleGroup>
           <HeaderTitle>
             <BackToListIcon onClick={goToMissionList} />
-            {mission.draftId
-              ? `Mission ${
-                  mission.draft?.missionType && Mission.MissionTypeLabel[mission.draft?.missionType]
-                } – ${mission.draft?.controlUnits
-                  .map(controlUnit => controlUnit.name?.replace('(historique)', ''))
-                  .join(', ')}`
-              : `Nouvelle mission`}
+            {missionTitle}
             {mission.draftId && (
               <MissionSourceTag>{getMissionSourceTagText(mission.draft?.missionSource)}</MissionSourceTag>
             )}

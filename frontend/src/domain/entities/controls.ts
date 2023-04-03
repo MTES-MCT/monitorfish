@@ -2,6 +2,8 @@ import { dayjs } from '../../utils/dayjs'
 import { getUtcDayjs } from '../../utils/getUtcDayjs'
 import { MissionAction } from '../types/missionAction'
 
+import InfractionType = MissionAction.InfractionType
+
 export const INITIAL_LAST_CONTROLS: MissionAction.LastControls = {
   LAND: {
     control: undefined,
@@ -80,5 +82,23 @@ export const getNumberOfInfractions = (control: MissionAction.MissionAction | un
     control.logbookInfractions.length +
     control.speciesInfractions.length +
     control.otherInfractions.length
+  )
+}
+
+/**
+ * Get the number of infractions with records in a control
+ */
+export const getNumberOfInfractionsWithRecord = (control: MissionAction.MissionAction | undefined): number => {
+  if (!control) {
+    return 0
+  }
+
+  const infractionWithRecordFilter = infraction => infraction.infractionType === InfractionType.WITH_RECORD
+
+  return (
+    control.gearInfractions.filter(infractionWithRecordFilter).length +
+    control.logbookInfractions.filter(infractionWithRecordFilter).length +
+    control.speciesInfractions.filter(infractionWithRecordFilter).length +
+    control.otherInfractions.filter(infractionWithRecordFilter).length
   )
 }

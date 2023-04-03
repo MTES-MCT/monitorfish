@@ -32,6 +32,7 @@ export enum LayerType {
   INTEREST_POINT = 'INTEREST_POINT',
   MEASUREMENT = 'MEASUREMENT',
   MISSION = 'MISSION_PIN_POINT',
+  MISSION_ACTION_SELECTED = 'MISSION_ACTION_SELECTED',
   MISSION_HOVER = 'MISSION_HOVER',
   MISSION_SELECTED = 'MISSION_SELECTED',
   REGULATORY = 'REGULATORY',
@@ -67,6 +68,11 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
     code: 'MISSION_SELECTED',
     type: LayerType.MISSION_SELECTED,
     zIndex: 81
+  },
+  MISSION_ACTION_SELECTED: {
+    code: 'MISSION_ACTION_SELECTED',
+    type: LayerType.MISSION_ACTION_SELECTED,
+    zIndex: 82
   },
   MISSIONS_LABEL: {
     code: 'mission_label',

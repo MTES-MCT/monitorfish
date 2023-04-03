@@ -1,4 +1,4 @@
-import type { SeaFront } from '../../../constants'
+import type { SeaFrontGroup } from '../../../constants'
 import type { ControlUnit } from '../../types/controlUnit'
 import type { GeoJSON } from '../../types/GeoJSON'
 import type { MissionAction } from '../../types/missionAction'
@@ -11,7 +11,7 @@ export namespace Mission {
     endDateTimeUtc?: string
     // We type it as `undefined` because we don't need that prop in Fish
     envActions: undefined
-    facade?: SeaFront
+    facade?: SeaFrontGroup
     geom?: GeoJSON.MultiPolygon
     id: number
     isClosed: boolean

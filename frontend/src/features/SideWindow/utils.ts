@@ -1,12 +1,10 @@
-import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
+import { BeaconMalFunctionSubMenuFilter } from './beacon_malfunctions/constants'
 import { SideWindowMenuKey } from './constants'
-import { ALERTS_SUBMENU } from '../../domain/entities/alerts/constants'
+import { SeaFrontGroup } from '../../constants'
 
-import type { SeaFront } from '../../constants'
-import type { MenuItem } from '../../types'
-
-export function getSelectedSubMenu(openedSideWindowTab: SideWindowMenuKey | undefined): MenuItem<SeaFront | string> {
+export function getSelectedSubMenu(openedSideWindowTab: SideWindowMenuKey | undefined): string {
   return !openedSideWindowTab || openedSideWindowTab === SideWindowMenuKey.ALERTS
-    ? ALERTS_SUBMENU.MEMN
-    : BeaconMalfunctionsSubMenu.MALFUNCTIONING
+    ? // Alert list is the default side window selected menu and this is its default selected submenu
+      SeaFrontGroup.MEMN
+    : BeaconMalFunctionSubMenuFilter.MALFUNCTIONING
 }

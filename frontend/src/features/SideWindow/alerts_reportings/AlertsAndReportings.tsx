@@ -1,68 +1,37 @@
-import { propEq } from 'ramda'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { PendingAlertsList } from './PendingAlertsList'
 import { ReportingList } from './ReportingList'
 import { SilencedAlertsList } from './SilencedAlertsList'
+import { SeaFrontGroup, SEA_FRONT_GROUP_SEA_FRONTS } from '../../../constants'
 import { COLORS } from '../../../constants/constants'
-import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, ALERTS_SUBMENU } from '../../../domain/entities/alerts/constants'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { AlertAndReportingTab } from '../constants'
 
-import type { SeaFront } from '../../../constants'
-import type { MenuItem } from '../../../types'
 import type { RefObject } from 'react'
-import type { Promisable } from 'type-fest'
 
 type AlertsAndReportingsProps = {
   baseRef: RefObject<HTMLDivElement>
-  selectedSubMenu: MenuItem<SeaFront>
+  selectedSubMenu: SeaFrontGroup
   selectedTab: any
-  // TODO Change this param to only use the `SeaFront` enum.
-  setSelectedSeaFront: (nextSeaFront: SeaFront) => Promisable<void>
   setSelectedTab: any
 }
 export function AlertsAndReportings({
   baseRef,
   selectedSubMenu,
   selectedTab,
-  setSelectedSeaFront,
   setSelectedTab
 }: AlertsAndReportingsProps) {
-  const { focusedPendingAlertId, pendingAlerts, silencedAlerts } = useMainAppSelector(state => state.alert)
+  const { silencedAlerts } = useMainAppSelector(state => state.alert)
 
   const filteredSilencedAlerts = useMemo(
     () =>
       silencedAlerts.filter(silencedAlert =>
-        (ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSubMenu.code]
-          ? ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSubMenu.code].seaFronts
-          : []
-        ).includes(silencedAlert.value.seaFront)
+        (SEA_FRONT_GROUP_SEA_FRONTS[selectedSubMenu] || []).includes(silencedAlert.value.seaFront)
       ),
     [silencedAlerts, selectedSubMenu]
   )
-
-  useEffect(() => {
-    if (!focusedPendingAlertId) {
-      return
-    }
-
-    const focusedPendingAlert = pendingAlerts.find(propEq('id', focusedPendingAlertId))
-    if (!focusedPendingAlert) {
-      return
-    }
-    // TODO Remove the `as` as soon as the discriminator is added.
-    const { seaFront } = focusedPendingAlert.value
-
-    const menuSeaFrontName = Object.keys(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS)
-      .map(menuSeaFrontKey => ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[menuSeaFrontKey])
-      .find(item => item.seaFronts.includes(seaFront))
-
-    if (menuSeaFrontName) {
-      setSelectedSeaFront(ALERTS_SUBMENU[menuSeaFrontName.menuSeaFront])
-    }
-  }, [focusedPendingAlertId, pendingAlerts, setSelectedSeaFront])
 
   return (
     <Wrapper>
@@ -84,12 +53,12 @@ export function AlertsAndReportings({
           <PendingAlertsList
             baseRef={baseRef}
             numberOfSilencedAlerts={filteredSilencedAlerts.length}
-            selectedSeaFront={selectedSubMenu}
+            selectedSeaFrontGroup={selectedSubMenu}
           />
           <SilencedAlertsList silencedAlerts={filteredSilencedAlerts} />
         </>
       )}
-      {selectedTab === AlertAndReportingTab.REPORTING && <ReportingList selectedSeaFront={selectedSubMenu} />}
+      {selectedTab === AlertAndReportingTab.REPORTING && <ReportingList selectedSeaFrontGroup={selectedSubMenu} />}
     </Wrapper>
   )
 }

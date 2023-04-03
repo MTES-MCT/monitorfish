@@ -2,28 +2,22 @@ import { Tag, TagBullet, customDayjs } from '@mtes-mct/monitor-ui'
 import { filter, identity } from 'ramda'
 
 import { MissionDateRangeFilter, MissionFilterType } from './types'
-import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS } from '../../../domain/entities/alerts/constants'
+import { SEA_FRONT_GROUP_SEA_FRONTS } from '../../../constants'
 import { getMissionStatus } from '../../../domain/entities/mission'
 import { Mission } from '../../../domain/entities/mission/types'
 import { FrontendError } from '../../../libs/FrontendError'
 import { includesSome } from '../../../utils/includesSome'
 
-import type { SeaFront } from '../../../constants'
 import type { MissionWithActions } from '../../../domain/entities/mission/types'
 import type { AugmentedDataFilter, AugmentedDataItem } from '../../../hooks/useTable/types'
 import type { OpUnitType, QUnitType } from 'dayjs'
 
 export const getSeaFrontFilter = (selectedSubMenu: string): AugmentedDataFilter<MissionWithActions> => {
-  const seaFrontGroup = ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSubMenu] as
-    | {
-        menuSeaFront: SeaFront
-        seaFronts: string[]
-      }
-    | undefined
+  const seaFrontGroupSeaFronts = SEA_FRONT_GROUP_SEA_FRONTS[selectedSubMenu]
 
   return (augmentedMissions: Array<AugmentedDataItem<MissionWithActions>>) =>
     augmentedMissions.filter(({ item: { facade } }) =>
-      facade && seaFrontGroup ? seaFrontGroup.seaFronts.includes(facade) : true
+      facade && seaFrontGroupSeaFronts ? seaFrontGroupSeaFronts.includes(facade) : true
     )
 }
 

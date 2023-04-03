@@ -1,34 +1,33 @@
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../constants/constants'
+import { COLORS } from '../../../constants/constants'
 
-import type { SeaFront } from '../../constants'
-import type { MenuItem } from '../../types'
+import type { Option } from '@mtes-mct/monitor-ui'
 import type { CSSProperties } from 'react'
 import type { Promisable } from 'type-fest'
 
-export type SideWindowSubMenuLinkProps = {
+export type ItemProps = {
+  counter: ((subMenu: string) => number) | undefined
   isOneLine?: boolean
   isOpen: boolean
   isSelected: boolean
-  menu: MenuItem<SeaFront>
-  number: number
-  setSelectedSubMenu: (nextSubMenu: MenuItem<SeaFront | string>) => Promisable<void>
+  onClick: (nextSubMenu: string) => Promisable<void>
+  option: Option
 }
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
  */
-export function SideWindowSubMenuLink({
+export function Item({
+  counter,
   isOneLine = false,
   isOpen,
   isSelected,
-  menu,
   // TODO Rename this prop.
-  number,
-  setSelectedSubMenu
-}: SideWindowSubMenuLinkProps) {
+  onClick,
+  option
+}: ItemProps) {
   const linkStyle: CSSProperties = useMemo(
     () => ({
       alignItems: 'center',
@@ -64,16 +63,18 @@ export function SideWindowSubMenuLink({
     [isOneLine, isOpen, isSelected]
   )
 
+  const count = counter ? counter(option.value) : 0
+
   return (
     <MenuButton
-      data-cy={`side-window-sub-menu-${menu.name}`}
-      onClick={() => setSelectedSubMenu(menu)}
+      data-cy={`side-window-sub-menu-${option.value}`}
+      onClick={() => onClick(option.value)}
       style={linkStyle}
     >
-      <Text style={textStyle}>{menu.name}</Text>
-      {number > 0 && (
-        <CircleWithKeyMetric data-cy={`side-window-sub-menu-${menu.name}-number`} style={circleMetricStyle(isOpen)}>
-          {number}
+      <Text style={textStyle}>{option.name}</Text>
+      {count > 0 && (
+        <CircleWithKeyMetric data-cy={`side-window-sub-menu-${option.value}-number`} style={circleMetricStyle(isOpen)}>
+          {count}
         </CircleWithKeyMetric>
       )}
     </MenuButton>

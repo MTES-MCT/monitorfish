@@ -7,8 +7,8 @@ import styled from 'styled-components'
 import { PENDING_ALERTS_SEARCH_OPTIONS } from './constants'
 import { PendingAlertRow } from './PendingAlertRow'
 import { SilenceAlertMenu } from './SilenceAlertMenu'
+import { SeaFrontGroup, SEA_FRONT_GROUP_SEA_FRONTS } from '../../../constants'
 import { COLORS } from '../../../constants/constants'
-import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS } from '../../../domain/entities/alerts/constants'
 import { resetFocusOnPendingAlert } from '../../../domain/shared_slices/Alert'
 import { silenceAlert } from '../../../domain/use_cases/alert/silenceAlert'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
@@ -16,20 +16,18 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { sortArrayByColumn, SortType } from '../../VesselList/tableSort'
 
-import type { SeaFront } from '../../../constants'
 import type { SilencedAlertPeriodRequest } from '../../../domain/entities/alerts/types'
-import type { MenuItem } from '../../../types'
 import type { CSSProperties, MutableRefObject, RefObject } from 'react'
 
 export type PendingAlertsListProps = {
   baseRef: RefObject<HTMLDivElement>
   numberOfSilencedAlerts: number
-  selectedSeaFront: MenuItem<SeaFront>
+  selectedSeaFrontGroup: SeaFrontGroup
 }
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
  */
-export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSeaFront }: PendingAlertsListProps) {
+export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSeaFrontGroup }: PendingAlertsListProps) {
   const dispatch = useMainAppDispatch()
   const { focusedPendingAlertId, pendingAlerts } = useMainAppSelector(state => state.alert)
   const baseUrl = window.location.origin
@@ -43,18 +41,16 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
   const currentSeaFrontAlerts = useMemo(
     () =>
       pendingAlerts.filter(pendingAlert =>
-        (ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code].seaFronts || []).includes(
-          pendingAlert.value.seaFront
-        )
+        (SEA_FRONT_GROUP_SEA_FRONTS[selectedSeaFrontGroup] || []).includes(pendingAlert.value.seaFront)
       ),
-    [pendingAlerts, selectedSeaFront]
+    [pendingAlerts, selectedSeaFrontGroup]
   )
   const numberOfAlertsMessage = useMemo(
     () =>
-      `Suspension d’alerte sur ${numberOfSilencedAlerts} navire${numberOfSilencedAlerts > 1 ? 's' : ''} en ${
-        selectedSeaFront.name
-      }`,
-    [numberOfSilencedAlerts, selectedSeaFront.name]
+      `Suspension d’alerte sur ${numberOfSilencedAlerts} navire${
+        numberOfSilencedAlerts > 1 ? 's' : ''
+      } en ${selectedSeaFrontGroup}`,
+    [numberOfSilencedAlerts, selectedSeaFrontGroup]
   )
 
   const fuse = useMemo(() => new Fuse(currentSeaFrontAlerts, PENDING_ALERTS_SEARCH_OPTIONS), [currentSeaFrontAlerts])

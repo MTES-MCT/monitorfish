@@ -1,7 +1,6 @@
 // TODO This is a bit shady to mix up pending/silenced alerts with PNO ones here.
 
 import { PendingAlertValueType } from './types'
-import { SeaFront } from '../../../constants'
 
 import type { MenuItem } from '../../../types'
 
@@ -38,67 +37,6 @@ export const COMMON_ALERT_TYPE_OPTION: Record<
     code: PendingAlertValueType.TWELVE_MILES_FISHING_ALERT,
     isOperationalAlert: true,
     name: '12 milles - Pêche sans droits historiques'
-  }
-}
-
-export const ALERTS_SUBMENU: Record<SeaFront, MenuItem<SeaFront>> = {
-  MED: {
-    code: SeaFront.MED,
-    name: 'MED'
-  },
-  MEMN: {
-    code: SeaFront.MEMN,
-    name: 'MEMN'
-  },
-  NAMO: {
-    code: SeaFront.NAMO,
-    name: 'NAMO'
-  },
-  OUTREMEROA: {
-    code: SeaFront.OUTREMEROA,
-    name: 'OUTRE-MER OA'
-  },
-  OUTREMEROI: {
-    code: SeaFront.OUTREMEROI,
-    name: 'OUTRE-MER OI'
-  },
-  SA: {
-    code: SeaFront.SA,
-    name: 'SA'
-  }
-}
-
-// TODO Rename the `seaFronts` prop to clarify the difference. They don't look like seas fronts.
-export const ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS: Record<
-  SeaFront,
-  {
-    menuSeaFront: SeaFront
-    seaFronts: string[]
-  }
-> = {
-  MED: {
-    menuSeaFront: SeaFront.MED,
-    seaFronts: ['MED']
-  },
-  MEMN: {
-    menuSeaFront: SeaFront.MEMN,
-    seaFronts: ['MEMN']
-  },
-  NAMO: {
-    menuSeaFront: SeaFront.NAMO,
-    seaFronts: ['NAMO']
-  },
-  OUTREMEROA: {
-    menuSeaFront: SeaFront.OUTREMEROA,
-    seaFronts: ['Guadeloupe', 'Guyane', 'Martinique']
-  },
-  OUTREMEROI: {
-    menuSeaFront: SeaFront.OUTREMEROI,
-    seaFronts: ['Sud Océan Indien']
-  },
-  SA: {
-    menuSeaFront: SeaFront.SA,
-    seaFronts: [SeaFront.SA]
   }
 }
 

@@ -8,7 +8,7 @@ import * as timeago from 'timeago.js'
 
 import { REPORTING_LIST_TABLE_OPTIONS } from './constants'
 import { getReportingOrigin, getReportingTitle } from './utils'
-import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS } from '../../../../domain/entities/alerts/constants'
+import { SeaFrontGroup, SEA_FRONT_GROUP_SEA_FRONTS } from '../../../../constants'
 import { setEditedReportingInSideWindow } from '../../../../domain/shared_slices/Reporting'
 import { ReportingType } from '../../../../domain/types/reporting'
 import archiveReportings from '../../../../domain/use_cases/reporting/archiveReportings'
@@ -29,15 +29,13 @@ import { downloadAsCsv } from '../../../../utils/downloadAsCsv'
 import { Flag } from '../../../VesselList/tableCells'
 import { EditReporting } from '../EditReporting'
 
-import type { SeaFront } from '../../../../constants'
 import type { InfractionSuspicionReporting, PendingAlertReporting } from '../../../../domain/types/reporting'
-import type { MenuItem } from '../../../../types'
 import type { CSSProperties, MutableRefObject } from 'react'
 
 type ReportingListProps = {
-  selectedSeaFront: MenuItem<SeaFront>
+  selectedSeaFrontGroup: SeaFrontGroup
 }
-export function ReportingList({ selectedSeaFront }: ReportingListProps) {
+export function ReportingList({ selectedSeaFrontGroup }: ReportingListProps) {
   const dispatch = useMainAppDispatch()
   const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
   const { currentReportings } = useMainAppSelector(state => state.reporting)
@@ -47,12 +45,10 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
 
   const currentSeaFrontReportings = useMemo(
     () =>
-      currentReportings.filter(
-        reporting =>
-          ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code] &&
-          ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code].seaFronts.includes(reporting.value.seaFront)
+      currentReportings.filter(reporting =>
+        (SEA_FRONT_GROUP_SEA_FRONTS[selectedSeaFrontGroup] || []).includes(reporting.value.seaFront)
       ),
-    [currentReportings, selectedSeaFront]
+    [currentReportings, selectedSeaFrontGroup]
   )
 
   const { getTableCheckedData, renderTableHead, tableAugmentedData, tableCheckedIds, toggleTableCheckForId } = useTable<

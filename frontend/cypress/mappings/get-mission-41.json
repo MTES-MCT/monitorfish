@@ -32,7 +32,7 @@
       "startDateTimeUtc": "2023-02-15T13:11:59.923703Z",
       "endDateTimeUtc": "2023-03-09T04:28:10.923703Z",
       "envActions": [],
-      "missionSource": "CACEM",
+      "missionSource": "MONITORENV",
       "isClosed": false
     }
   }

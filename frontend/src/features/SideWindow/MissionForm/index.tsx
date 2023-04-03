@@ -1,4 +1,4 @@
-import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Icon, Tag } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -20,6 +20,8 @@ import {
   useUpdateMissionActionMutation
 } from '../../../api/missionAction'
 import { missionActions } from '../../../domain/actions'
+import { getMissionSourceTagText } from '../../../domain/entities/mission'
+import { Mission } from '../../../domain/entities/mission/types'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
@@ -67,6 +69,12 @@ export function MissionForm() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [mission.editedDraftActionIndex]
   )
+
+  const missionTitle = mission.draftId
+    ? `Mission ${
+        mission.draft?.missionType && Mission.MissionTypeLabel[mission.draft?.missionType]
+      } – ${mission.draft?.controlUnits.map(controlUnit => controlUnit.name?.replace('(historique)', '')).join(', ')}`
+    : `Nouvelle mission`
 
   const createOrUpdateMission = useCallback(async () => {
     if (!mission.draft) {
@@ -164,7 +172,13 @@ export function MissionForm() {
     <Wrapper>
       <Header ref={headerDivRef}>
         <HeaderTitleGroup>
-          <HeaderTitle>{mission.draftId ? `Édition d’une mission` : `Nouvelle mission`}</HeaderTitle>
+          <HeaderTitle>
+            <BackToListIcon onClick={goToMissionList} />
+            {missionTitle}
+            {mission.draftId && (
+              <MissionSourceTag>{getMissionSourceTagText(mission.draft?.missionSource)}</MissionSourceTag>
+            )}
+          </HeaderTitle>
         </HeaderTitleGroup>
 
         <HeaderButtonGroup>
@@ -211,6 +225,19 @@ export function MissionForm() {
   )
 }
 
+const MissionSourceTag = styled(Tag)`
+  background: ${p => p.theme.color.blueGray[100]};
+  color: ${p => p.theme.color.white};
+  margin-left: 24px;
+  vertical-align: middle;
+`
+
+const BackToListIcon = styled(Icon.Chevron)`
+  margin-right: 12px;
+  transform: rotate(90deg);
+  cursor: pointer;
+`
+
 // All containers within Wrapper should now be only using flexboxes
 const Wrapper = styled(NoRsuiteOverrideWrapper)`
   display: flex;
@@ -238,6 +265,10 @@ const HeaderTitle = styled.h1`
   font-weight: 700;
   line-height: 31px;
   margin: 0;
+
+  > div {
+    vertical-align: middle;
+  }
 `
 
 const HeaderButtonGroup = styled.div`

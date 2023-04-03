@@ -1,11 +1,13 @@
-import { Accent, Button, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Icon, IconButton, Size, Tag } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { margins } from './constants'
 import { missionActions } from '../../../../domain/actions'
+import { getMissionSourceTagText } from '../../../../domain/entities/mission'
 import { Mission } from '../../../../domain/entities/mission/types'
 import { openSideWindowTab } from '../../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { pluralize } from '../../../../utils/pluralize'
 import { SideWindowMenuKey } from '../../../SideWindow/constants'
 import { OverlayPosition } from '../Overlay'
 
@@ -55,19 +57,20 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
               <>
                 <div>{mission.controlUnits[0].name.toUpperCase()}</div>
                 <MultipleControlUnits>
-                  et {mission.controlUnits.length - 1} autre{mission.controlUnits.length - 1 > 1 && 's'} unité
-                  {mission.controlUnits.length - 1 > 1 && 's'}
+                  et {mission.controlUnits.length - 1} {pluralize('autre', mission.controlUnits.length - 1)}{' '}
+                  {pluralize('unité', mission.controlUnits.length - 1)}
                 </MultipleControlUnits>
               </>
             )}
           </Title>
           <Details>
+            <MissionSourceTag>{getMissionSourceTagText(mission.missionSource)}</MissionSourceTag>
             <div>
               Mission {mission.missionType} – {mission.startDateTimeUtc}
             </div>
             <div>
-              {mission.numberOfControls} contrôle{mission.numberOfControls > 1 && 's'} réalisé
-              {mission.numberOfControls > 0 && 's'}
+              {mission.numberOfControls} {pluralize('contrôle', mission.numberOfControls)}{' '}
+              {pluralize('réalisé', mission.numberOfControls)}
             </div>
             <div>
               {mission.missionStatus === MissionStatus.IN_PROGRESS && <InProgressIcon />}
@@ -96,6 +99,13 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
     </>
   )
 }
+
+const MissionSourceTag = styled(Tag)`
+  background: ${p => p.theme.color.blueGray[100]};
+  color: ${p => p.theme.color.white};
+  margin-bottom: 8px;
+  margin-top: 4px;
+`
 
 const NoContact = styled.div`
   color: ${p => p.theme.color.slateGray};
@@ -137,7 +147,7 @@ const Wrapper = styled.div`
   box-shadow: 0px 3px 6px #70778540;
   line-height: 20px;
   text-align: left;
-  height: 168px;
+  height: 201px;
   width: 260px;
   border-radius: 1px;
   background-color: ${p => p.theme.color.white};

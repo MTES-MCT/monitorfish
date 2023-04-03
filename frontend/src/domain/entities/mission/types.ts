@@ -16,7 +16,6 @@ export namespace Mission {
     id: number
     isClosed: boolean
     isDeleted: boolean
-    missionNature?: MissionNature[]
     missionSource: MissionSource
     missionType: MissionType
     observationsCacem?: string
@@ -31,19 +30,6 @@ export namespace Mission {
   export enum MissionAlertType {
     WAITING_FOR_CLOSURE = 'Mission à clôturer'
   }
-
-  /* eslint-disable typescript-sort-keys/string-enum */
-  export enum MissionNature {
-    ENV = 'ENV',
-    FISH = 'FISH',
-    OTHER = 'OTHER'
-  }
-  export enum MissionNatureLabel {
-    ENV = 'Env',
-    FISH = 'Pêche',
-    OTHER = 'Autre'
-  }
-  /* eslint-enable typescript-sort-keys/string-enum */
 
   export enum MissionSource {
     MONITORENV = 'MONITORENV',
@@ -81,16 +67,21 @@ export namespace Mission {
     color: string
     controlUnits: ControlUnit.ControlUnit[]
     endDateTimeUtc: string
+    // A 0 ou 1 number is required for WebGL to understand boolean
+    isAirMission: number
     isClosed: number
     // A 0 ou 1 number is required for WebGL to understand boolean
     isDone: number
     // A 0 ou 1 number is required for WebGL to understand boolean
     isInProgress: number
     // A 0 ou 1 number is required for WebGL to understand boolean
+    isLandMission: number
+    // A 0 ou 1 number is required for WebGL to understand boolean
+    isSeaMission: number
+    // A 0 ou 1 number is required for WebGL to understand boolean
     isUpcoming: number
     missionId: number
-    missionNature?: MissionNature[]
-    missionSource: MissionSource // A 0 ou 1 number is required for WebGL to understand boolean
+    missionSource: MissionSource
     missionStatus: MissionStatus | undefined
     missionType: MissionTypeLabel
     numberOfControls: number

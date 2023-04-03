@@ -1,30 +1,10 @@
 /// <reference types="cypress" />
 
 import { openSideWindowNewMission } from './utils'
+import { getUtcizedDayjs } from '../../../../src/utils/getUtcizedDayjs'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Main Form', () => {
-  it('Should enable or disable under JDP checkbox depending on other field values', () => {
-    openSideWindowNewMission()
-
-    const getHasMissionUnderJdpTypeCheckbox = () =>
-      cy.get('label').contains('Mission sous JDP').find('input[type="checkbox"]')
-    const getMissionOrderMultiRadioLegend = () => cy.get('legend').contains('Ordre de mission')
-
-    getHasMissionUnderJdpTypeCheckbox().should('be.disabled')
-    getMissionOrderMultiRadioLegend().should('not.exist')
-
-    cy.fill('Intentions principales de mission', ['Pêche'])
-
-    getHasMissionUnderJdpTypeCheckbox().should('be.enabled')
-    getMissionOrderMultiRadioLegend().should('exist')
-
-    cy.fill('Intentions principales de mission', ['Env', 'Autre'])
-
-    getHasMissionUnderJdpTypeCheckbox().should('be.disabled')
-    getMissionOrderMultiRadioLegend().should('not.exist')
-  })
-
   it('Should add and remove a control unit', () => {
     openSideWindowNewMission()
 
@@ -56,7 +36,6 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.fill('Type de mission', 'Mer')
 
-    cy.fill('Intentions principales de mission', ['Pêche'])
     cy.fill('Mission sous JDP', true)
 
     cy.fill('Administration 1', 'DDTM')
@@ -93,7 +72,6 @@ context('Side Window > Mission Form > Main Form', () => {
         isClosed: false,
         isDeleted: false,
         // isUnderJdp: false,
-        missionNature: ['FISH'],
         missionSource: 'MONITORFISH',
         missionType: 'SEA'
         // startDateTimeUtc: '2023-02-01T00:33:22.988Z'
@@ -117,9 +95,6 @@ context('Side Window > Mission Form > Main Form', () => {
     }).as('createMission')
 
     cy.fill('Type de mission', 'Mer')
-
-    cy.fill('Intentions principales de mission', ['Pêche'])
-    // cy.fill('Mission sous JDP', true)
 
     cy.fill('Administration 1', 'DDTM')
     cy.fill('Unité 1', 'Cultures marines – DDTM 40')
@@ -181,7 +156,6 @@ context('Side Window > Mission Form > Main Form', () => {
         isClosed: false,
         isDeleted: false,
         // isUnderJdp: true,
-        missionNature: ['FISH'],
         missionSource: 'MONITORFISH',
         missionType: 'SEA',
         observationsCacem: 'Une note.',
@@ -233,7 +207,6 @@ context('Side Window > Mission Form > Main Form', () => {
         id: 2,
         isClosed: false,
         isDeleted: false,
-        missionNature: ['FISH'],
         missionSource: 'MONITORFISH',
         missionType: 'SEA',
         observationsCacem:
@@ -250,9 +223,10 @@ context('Side Window > Mission Form > Main Form', () => {
       if (!interception.response) {
         assert.fail('`interception.response` is undefined.')
       }
+      const now = getUtcizedDayjs()
 
       assert.deepInclude(interception.request.body, {
-        actionDatetimeUtc: '2023-03-31T00:00:00Z',
+        actionDatetimeUtc: `${now.format('YYYY-MM-DD')}-T00:00:00Z`,
         actionType: 'SEA_CONTROL',
         controlQualityComments: 'Ciblage CNSP non respecté',
         controlUnits: [],

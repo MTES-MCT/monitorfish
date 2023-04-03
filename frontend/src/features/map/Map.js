@@ -31,7 +31,7 @@ import { MissionLayer } from './layers/Mission/MissionLayer'
 import { SelectedMissionLayer } from './layers/Mission/SelectedMissionLayer'
 import { MissionsLabelsLayer } from './layers/Mission/MissionsLabelsLayer/MissionsLabelsLayer'
 import { MissionOverlay } from './overlays/MissionOverlay'
-import { SelectedMissionOverlay } from './overlays/SelectedMissionOverlay/Index'
+import { SelectedMissionOverlay } from './overlays/SelectedMissionOverlay'
 import { MissionHoveredLayer } from './layers/Mission/HoveredMissionLayer'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 

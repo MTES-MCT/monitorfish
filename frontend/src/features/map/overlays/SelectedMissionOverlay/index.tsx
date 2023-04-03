@@ -1,7 +1,8 @@
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { useMemo } from 'react'
 import GeoJSON from 'ol/format/GeoJSON'
+import { useMemo } from 'react'
+
 import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { MissionOverlay } from '../MissionOverlay'
 
 export function SelectedMissionOverlay({ map }) {
@@ -16,9 +17,5 @@ export function SelectedMissionOverlay({ map }) {
     }).readFeature(selectedMissionGeoJSON)
   }, [selectedMissionGeoJSON])
 
-  return <MissionOverlay
-    feature={selectedMission}
-    map={map}
-    isSelected={true}
-  />
+  return <MissionOverlay feature={selectedMission} isSelected map={map} />
 }

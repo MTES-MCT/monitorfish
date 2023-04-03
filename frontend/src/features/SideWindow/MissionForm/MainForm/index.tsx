@@ -2,23 +2,19 @@ import {
   FormikCheckbox,
   FormikDateRangePicker,
   FormikEffect,
-  FormikMultiCheckbox,
   FormikMultiRadio,
   FormikTextarea,
   FormikTextInput,
-  noop,
-  useForceUpdate
+  noop
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
-import { equals } from 'ramda'
 import { useCallback, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
-import { MISSION_NATURES_AS_OPTIONS, MISSION_TYPES_AS_OPTIONS } from './constants'
+import { MISSION_TYPES_AS_OPTIONS } from './constants'
 import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'
 import { FormikMultiZonePicker } from './FormikMultiZonePicker'
 import { BOOLEAN_AS_OPTIONS } from '../../../../constants'
-import { Mission } from '../../../../domain/entities/mission/types'
 import { useNewWindow } from '../../../../ui/NewWindow'
 import { FormBody, FormBodyInnerWrapper } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
@@ -34,27 +30,15 @@ export function MainForm({ initialValues, onChange }: MainFormProps) {
   const currentValuesRef = useRef<MissionFormValues>(initialValues)
   const { newWindowContainerRef } = useNewWindow()
 
-  const { forceUpdate } = useForceUpdate()
-
   const controlledInitialValues = useMemo(() => initialValues, [initialValues])
 
   const updateCurrentValues = useCallback(
     (nextValues: MissionFormValues) => {
-      const previousValues = { ...currentValuesRef.current }
       currentValuesRef.current = nextValues
-
-      if (!equals(nextValues.missionNature, previousValues.missionNature)) {
-        forceUpdate()
-      }
 
       onChange(currentValuesRef.current)
     },
-    [forceUpdate, onChange]
-  )
-
-  const hasMissionOrderField = Boolean(currentValuesRef.current.missionNature?.includes(Mission.MissionNature.FISH))
-  const isMissionUnderJdpCheckboxEnabled = Boolean(
-    currentValuesRef.current.missionNature?.includes(Mission.MissionNature.FISH)
+    [onChange]
   )
 
   return (
@@ -77,25 +61,26 @@ export function MainForm({ initialValues, onChange }: MainFormProps) {
               name="dateTimeRangeUtc"
               withTime
             />
-            <FormikMultiRadio isInline label="Type de mission" name="missionType" options={MISSION_TYPES_AS_OPTIONS} />
-            <MissionNatureWrapper>
-              <FormikMultiCheckbox
+            <MultiCheckColumns>
+              <FormikMultiRadio
                 isInline
-                label="Intentions principales de mission"
-                name="missionNature"
-                options={MISSION_NATURES_AS_OPTIONS}
+                label="Type de mission"
+                name="missionType"
+                options={MISSION_TYPES_AS_OPTIONS}
               />
-            </MissionNatureWrapper>
 
-            {/* TODO What to do with this prop? */}
-            {/* TODO Fix that in Monitor UI: */}
-            {/* Re-enabling a checkbox that has been disabled should set the related FormValues prop
-                to a boolean matching the checkbox `checked` state. */}
-            <FormikCheckbox
-              disabled={!isMissionUnderJdpCheckboxEnabled}
-              isUndefinedWhenDisabled
-              label="Mission sous JDP"
-              name="isUnderJdp"
+              {/* TODO Fix that in Monitor UI: */}
+              {/* Re-enabling a checkbox that has been disabled should set the related FormValues prop
+                  to a boolean matching the checkbox `checked` state. */}
+              <IsUnderJdpFormikCheckbox isUndefinedWhenDisabled label="Mission sous JDP" name="isUnderJdp" />
+            </MultiCheckColumns>
+
+            <FormikMultiRadio
+              isInline
+              label="Ordre de mission"
+              name="hasOrder"
+              // TODO Allow more Monitor UI `Option` types.
+              options={BOOLEAN_AS_OPTIONS}
             />
           </CustomFormBodyInnerWrapper>
 
@@ -103,17 +88,6 @@ export function MainForm({ initialValues, onChange }: MainFormProps) {
 
           <CustomFormBodyInnerWrapper>
             <FormikMultiZonePicker name="geom" />
-
-            {/* TODO What to do with this prop? */}
-            {hasMissionOrderField && (
-              <FormikMultiRadio
-                isInline
-                label="Ordre de mission"
-                name="hasOrder"
-                // TODO Allow more Monitor UI `Option` types.
-                options={BOOLEAN_AS_OPTIONS}
-              />
-            )}
 
             <RelatedFieldGroupWrapper>
               <FormikTextarea label="CACEM : orientations, observations" name="observationsCacem" />
@@ -130,6 +104,15 @@ export function MainForm({ initialValues, onChange }: MainFormProps) {
     </Formik>
   )
 }
+
+const IsUnderJdpFormikCheckbox = styled(FormikCheckbox)`
+  margin-left: 48px;
+  margin-top: 20px;
+`
+
+const MultiCheckColumns = styled.div`
+  display: flex;
+`
 
 // TODO Why is there a `font-weight: 700` for legends in mini.css?
 const Wrapper = styled.div`
@@ -171,14 +154,5 @@ const InlineFieldGroupWrapper = styled.div`
   > div:last-child {
     margin-left: 8px;
     width: 50%;
-  }
-`
-
-const MissionNatureWrapper = styled.div`
-  align-items: flex-end;
-  display: flex;
-
-  > div {
-    margin-left: 10px;
   }
 `

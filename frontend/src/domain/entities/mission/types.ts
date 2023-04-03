@@ -1,7 +1,7 @@
+import type { SeaFront } from '../../../constants'
 import type { ControlUnit } from '../../types/controlUnit'
 import type { GeoJSON } from '../../types/GeoJSON'
 import type { MissionAction } from '../../types/missionAction'
-import type { SeaFront } from '../alerts/constants'
 import type { Except } from 'type-fest'
 
 export namespace Mission {

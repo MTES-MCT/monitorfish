@@ -6,14 +6,11 @@ import { PendingAlertsList } from './PendingAlertsList'
 import { ReportingList } from './ReportingList'
 import { SilencedAlertsList } from './SilencedAlertsList'
 import { COLORS } from '../../../constants/constants'
-import {
-  ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS,
-  ALERTS_SUBMENU,
-  SeaFront
-} from '../../../domain/entities/alerts/constants'
+import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, ALERTS_SUBMENU } from '../../../domain/entities/alerts/constants'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { AlertAndReportingTab } from '../constants'
 
+import type { SeaFront } from '../../../constants'
 import type { MenuItem } from '../../../types'
 import type { Promisable } from 'type-fest'
 

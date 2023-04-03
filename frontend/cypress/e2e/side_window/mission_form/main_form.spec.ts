@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 import { openSideWindowNewMission } from './utils'
-import { dayjs } from '../../../../src/utils/dayjs'
+import { getUtcizedDayjs } from '../../../../src/utils/getUtcizedDayjs'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Main Form', () => {
@@ -223,7 +223,7 @@ context('Side Window > Mission Form > Main Form', () => {
       if (!interception.response) {
         assert.fail('`interception.response` is undefined.')
       }
-      const now = dayjs()
+      const now = getUtcizedDayjs()
 
       assert.deepInclude(interception.request.body, {
         actionDatetimeUtc: `${now.format('YYYY-MM-DD')}-T00:00:00Z`,

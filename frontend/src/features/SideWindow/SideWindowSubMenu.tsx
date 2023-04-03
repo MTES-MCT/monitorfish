@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
 import { AlertAndReportingTab, SideWindowMenuKey } from './constants'
 import { SideWindowSubMenuLink } from './SideWindowSubMenuLink'
+import { useGetMissionsQuery } from '../../api/mission'
 import { COLORS } from '../../constants/constants'
 import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, ALERTS_SUBMENU } from '../../domain/entities/alerts/constants'
 import { STAGE_RECORD } from '../../domain/entities/beaconMalfunction/constants'
@@ -40,6 +41,9 @@ export function SideWindowSubMenu({
   const pendingAlerts = useMainAppSelector(state => state.alert.pendingAlerts)
   const currentReportings = useMainAppSelector(state => state.reporting.currentReportings)
   const beaconMalfunctions = useMainAppSelector(state => state.beaconMalfunction.beaconMalfunctions)
+  const getMissionsApiQuery = useGetMissionsQuery()
+
+  const missions = useMemo(() => getMissionsApiQuery.data || [], [getMissionsApiQuery.data])
 
   const numberOfBeaconMalfunctions = useMemo(
     () =>
@@ -64,6 +68,12 @@ export function SideWindowSubMenu({
       return 0
     },
     [currentReportings, pendingAlerts, selectedTab]
+  )
+
+  const getMissionCountFromSeaFrontGroup = useCallback(
+    (seaFronts: string[]): number =>
+      missions.filter(({ facade }) => (facade ? seaFronts.includes(facade) : true)).length,
+    [missions]
   )
 
   useEffect(() => {
@@ -147,6 +157,7 @@ export function SideWindowSubMenu({
             />
           </>
         )}
+
         {selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTIONS && (
           <SideWindowSubMenuLink
             isOpen={isOpen}
@@ -155,6 +166,59 @@ export function SideWindowSubMenu({
             number={numberOfBeaconMalfunctions}
             setSelectedSubMenu={setSelectedSubMenu}
           />
+        )}
+
+        {selectedMenu === SideWindowMenuKey.MISSION_LIST && (
+          <>
+            <SideWindowSubMenuLink
+              isOneLine
+              isOpen={isOpen}
+              isSelected={selectedSubMenu.code === ALERTS_SUBMENU.MEMN.code}
+              menu={ALERTS_SUBMENU.MEMN}
+              number={getMissionCountFromSeaFrontGroup(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.MEMN.seaFronts)}
+              setSelectedSubMenu={setSelectedSubMenu}
+            />
+            <SideWindowSubMenuLink
+              isOneLine
+              isOpen={isOpen}
+              isSelected={selectedSubMenu.code === ALERTS_SUBMENU.NAMO.code}
+              menu={ALERTS_SUBMENU.NAMO}
+              number={getMissionCountFromSeaFrontGroup(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.NAMO.seaFronts)}
+              setSelectedSubMenu={setSelectedSubMenu}
+            />
+            <SideWindowSubMenuLink
+              isOneLine
+              isOpen={isOpen}
+              isSelected={selectedSubMenu.code === ALERTS_SUBMENU.SA.code}
+              menu={ALERTS_SUBMENU.SA}
+              number={getMissionCountFromSeaFrontGroup(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.SA.seaFronts)}
+              setSelectedSubMenu={setSelectedSubMenu}
+            />
+            <SideWindowSubMenuLink
+              isOneLine
+              isOpen={isOpen}
+              isSelected={selectedSubMenu.code === ALERTS_SUBMENU.MED.code}
+              menu={ALERTS_SUBMENU.MED}
+              number={getMissionCountFromSeaFrontGroup(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.MED.seaFronts)}
+              setSelectedSubMenu={setSelectedSubMenu}
+            />
+            <SideWindowSubMenuLink
+              isOneLine
+              isOpen={isOpen}
+              isSelected={selectedSubMenu.code === ALERTS_SUBMENU.OUTREMEROA.code}
+              menu={ALERTS_SUBMENU.OUTREMEROA}
+              number={getMissionCountFromSeaFrontGroup(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.OUTREMEROA.seaFronts)}
+              setSelectedSubMenu={setSelectedSubMenu}
+            />
+            <SideWindowSubMenuLink
+              isOneLine
+              isOpen={isOpen}
+              isSelected={selectedSubMenu.code === ALERTS_SUBMENU.OUTREMEROI.code}
+              menu={ALERTS_SUBMENU.OUTREMEROI}
+              number={getMissionCountFromSeaFrontGroup(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.OUTREMEROI.seaFronts)}
+              setSelectedSubMenu={setSelectedSubMenu}
+            />
+          </>
         )}
       </Menu>
     </Wrapper>

@@ -1,0 +1,65 @@
+import { THEME } from '@mtes-mct/monitor-ui'
+import { getCenter } from 'ol/extent'
+import { MultiPoint, MultiPolygon } from 'ol/geom'
+import { Fill, Icon, Stroke, Style } from 'ol/style'
+
+import { MissionAction } from '../../../../../domain/types/missionAction'
+import { getColorWithAlpha } from '../../styles/utils'
+
+import MissionActionType = MissionAction.MissionActionType
+
+export const selectedMissionActionsStyles = [
+  new Style({
+    fill: new Fill({
+      color: getColorWithAlpha(THEME.color.blueGray['100'], 0.35)
+    }),
+    image: new Icon({
+      displacement: [0, 14],
+      scale: 1.1,
+      src: 'map-icons/Control.svg'
+    }),
+    stroke: new Stroke({
+      color: THEME.color.blueGray['100'],
+      width: 2
+    })
+  }),
+  new Style({
+    geometry: feature => {
+      const actionType = feature.get('actionType')
+      if (
+        actionType !== MissionActionType.AIR_CONTROL &&
+        actionType !== MissionActionType.LAND_CONTROL &&
+        actionType !== MissionActionType.SEA_CONTROL
+      ) {
+        return undefined
+      }
+
+      return feature.getGeometry()
+    },
+    image: new Icon({
+      scale: 0.6,
+      src: 'map-icons/Close.svg'
+    })
+  }),
+  new Style({
+    geometry: feature => {
+      if (feature.get('actionType') !== MissionActionType.AIR_SURVEILLANCE) {
+        return undefined
+      }
+
+      const geometry = feature?.getGeometry() as MultiPolygon
+      const polygons = geometry?.getPolygons()
+      const points = polygons?.map(p => getCenter(p.getExtent()))
+
+      if (!points) {
+        return undefined
+      }
+
+      return new MultiPoint(points)
+    },
+    image: new Icon({
+      scale: 1.1,
+      src: 'map-icons/Observation.svg'
+    })
+  })
+]

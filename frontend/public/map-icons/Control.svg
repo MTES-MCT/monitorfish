@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"
+     viewBox="0 0 20 20">
+  <defs>
+    <clipPath id="clip">
+      <use xlink:href="#fill" />
+    </clipPath>
+    <clipPath id="clip-2">
+      <use xlink:href="#fill-2" />
+    </clipPath>
+    <clipPath id="clip-3">
+      <use xlink:href="#fill-3" />
+    </clipPath>
+  </defs>
+  <g id="Control" transform="translate(120 -41)">
+    <g>
+      <g transform="translate(-104 58) rotate(90)" fill="none" stroke="currentColor" stroke-miterlimit="10"
+         stroke-width="2">
+        <rect width="2" height="12" stroke="none" />
+        <rect x="1" y="1" height="10" fill="none" />
+      </g>
+      <path
+        d="M-107.694,47l1.333,8h-7.277l1.336-8Zm0-2h-4.6a2,2,0,0,0-1.977,1.675L-116,57h12l-1.721-10.325A2,2,0,0,0-107.7,45Z"
+        fill="currentColor" />
+      <g transform="translate(-110.75 41.75)" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2">
+        <rect id="fill" width="1.5" height="2.25" stroke="none" />
+        <path d="M0,1h1.5M1,0v2.25M1.5,1.25h-1.5M0.5,2.25v-2.25" fill="none" clip-path="url(#clip)" />
+      </g>
+      <g transform="translate(-104.061 43) rotate(45)" fill="none" stroke="currentColor" stroke-miterlimit="10"
+         stroke-width="2">
+        <rect id="fill-2" width="1.5" height="2.25" stroke="none" />
+        <path d="M0,1h1.5M1,0v2.25M1.5,1.25h-1.5M0.5,2.25v-2.25" fill="none" clip-path="url(#clip-2)" />
+      </g>
+      <g transform="translate(-117 44.061) rotate(-45)" fill="none" stroke="currentColor" stroke-miterlimit="10"
+         stroke-width="2">
+        <rect id="fill-3" width="1.5" height="2.25" stroke="none" />
+        <path d="M0,1h1.5M1,0v2.25M1.5,1.25h-1.5M0.5,2.25v-2.25" fill="none" clip-path="url(#clip-3)" />
+      </g>
+    </g>
+    <rect width="20" height="20" transform="translate(-120 41)" fill="none" />
+  </g>
+</svg>

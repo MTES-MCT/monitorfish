@@ -2,11 +2,13 @@ import { dayjs, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monito
 import { Feature } from 'ol'
 import { GeoJSON } from 'ol/format'
 import Point from 'ol/geom/Point'
+import { transform } from 'ol/proj'
 
 import { Mission } from './types'
 import { getMissionColor } from '../../../features/map/layers/Mission/MissionLayer/styles'
-import { booleanToInt, getDate } from '../../../utils'
+import { booleanToInt, getDate, getDateTime } from '../../../utils'
 import { MissionAction } from '../../types/missionAction'
+import { getNumberOfInfractions, getNumberOfInfractionsWithRecord } from '../controls'
 import { LayerType } from '../layers/constants'
 import { OLGeometryType } from '../map/constants'
 
@@ -90,6 +92,33 @@ export const getMissionFeatureZone = (mission: Mission.Mission): Feature => {
     startDateTimeUtc: mission.startDateTimeUtc
   })
   feature.setId(`${LayerType.MISSION_HOVER}:${mission.id}`)
+
+  return feature
+}
+
+export const getMissionActionFeature = (action: MissionAction.MissionAction): Feature | undefined => {
+  if (!action.longitude || !action.latitude) {
+    return undefined
+  }
+
+  const coordinates = transform([action.longitude, action.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+  const numberOfInfractions = getNumberOfInfractions(action)
+  const numberOfInfractionsWithRecords = getNumberOfInfractionsWithRecord(action)
+  const hasSpeciesSeized = action.speciesInfractions.find(infraction => infraction.speciesSeized)
+  const hasGearSeized = action.gearInfractions.find(infraction => infraction.gearSeized)
+
+  const feature = new Feature({
+    actionType: action.actionType,
+    dateTime: getDateTime(action.actionDatetimeUtc, true),
+    geometry: new Point(coordinates),
+    hasGearSeized,
+    hasSpeciesSeized,
+    missionId: action.id,
+    numberOfInfractions,
+    numberOfInfractionsWithRecords,
+    vesselName: action.vesselName
+  })
+  feature.setId(`${LayerType.MISSION_ACTION_SELECTED}:${action.id}`)
 
   return feature
 }

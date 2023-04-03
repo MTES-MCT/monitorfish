@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+import { getUtcDayjs } from '@mtes-mct/monitor-ui/utils/getUtcDayjs'
+
 import { openSideWindowNewMission } from './utils'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
@@ -222,9 +224,10 @@ context('Side Window > Mission Form > Main Form', () => {
       if (!interception.response) {
         assert.fail('`interception.response` is undefined.')
       }
+      const now = getUtcDayjs()
 
       assert.deepInclude(interception.request.body, {
-        actionDatetimeUtc: '2023-03-31T00:00:00Z',
+        actionDatetimeUtc: `${now.format('YYYY-MM-DD')}-T00:00:00Z`,
         actionType: 'SEA_CONTROL',
         controlQualityComments: 'Ciblage CNSP non respecté',
         controlUnits: [],

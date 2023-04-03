@@ -1,11 +1,25 @@
 import { filter, identity } from 'ramda'
 
 import { MissionDateRangeFilter, MissionFilterType } from './constants'
+import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS } from '../../../domain/entities/alerts/constants'
 import { dayjs } from '../../../utils/dayjs'
 
 import type { MissionFilter } from './types'
+import type { SeaFront } from '../../../constants'
 import type { Mission } from '../../../domain/entities/mission/types'
 import type { DateRange } from '@mtes-mct/monitor-ui'
+
+export const getSeaFrontFilter = (selectedSubMenu: string): MissionFilter => {
+  const seaFrontGroup = ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSubMenu] as
+    | {
+        menuSeaFront: SeaFront
+        seaFronts: string[]
+      }
+    | undefined
+
+  return (missions: Mission.Mission[]) =>
+    missions.filter(({ facade }) => (facade && seaFrontGroup ? seaFrontGroup.seaFronts.includes(facade) : true))
+}
 
 // TODO Add unit tests.
 export const mapFilterFormRecordsToFilters = ([key, valueOrValues]: [MissionFilterType, any]): MissionFilter => {

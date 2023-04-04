@@ -35,6 +35,8 @@ import { SelectedMissionOverlay } from './overlays/SelectedMissionOverlay'
 import { MissionHoveredLayer } from './layers/Mission/HoveredMissionLayer'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { SelectedMissionActionsLayer } from './layers/Mission/SelectedMissionActionsLayer'
+import { ControlOverlay } from './overlays/ControlOverlay'
+import { SelectedControlOverlay } from './overlays/SelectedControlOverlay'
 
 const Map = () => {
   const { isAdmin } = useMainAppSelector(state => state.global)
@@ -90,6 +92,8 @@ const Map = () => {
       {isAdmin && <MissionOverlay feature={currentFeature}/>}
       {isAdmin && <SelectedMissionOverlay/>}
       {isAdmin && <SelectedMissionActionsLayer/>}
+      {isAdmin && <ControlOverlay feature={currentFeature}/>}
+      {isAdmin && <SelectedControlOverlay/>}
       <DrawLayer/>
       <RegulatoryLayerSearch/>
       <VesselEstimatedPositionLayer/>

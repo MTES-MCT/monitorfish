@@ -89,8 +89,8 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.segments.first().segment).isEqualTo("SWW04")
         assertThat(firstControl.segments.first().segmentName).isEqualTo("Midwater trawls")
         assertThat(firstControl.facade).isEqualTo("Manche ouest - Atlantique")
-        assertThat(firstControl.longitude).isEqualTo(-6.56)
-        assertThat(firstControl.latitude).isEqualTo(45.12)
+        assertThat(firstControl.longitude).isEqualTo(-0.52)
+        assertThat(firstControl.latitude).isEqualTo(47.44)
         assertThat(firstControl.portLocode).isNull()
         assertThat(firstControl.vesselTargeted).isFalse
         assertThat(firstControl.seizureAndDiversion).isTrue

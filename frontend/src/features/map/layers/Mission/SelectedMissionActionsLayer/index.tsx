@@ -42,7 +42,6 @@ export function UnmemoizedSelectedMissionActionsLayer({ map }) {
     if (vectorLayerRef.current === undefined) {
       vectorLayerRef.current = new VectorLayer({
         className: LayerType.MISSION_ACTION_SELECTED,
-        renderBuffer: 7,
         source: getVectorSource(),
         style: selectedMissionActionsStyles,
         updateWhileAnimating: true,

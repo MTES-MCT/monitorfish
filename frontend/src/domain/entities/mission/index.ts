@@ -113,7 +113,7 @@ export const getMissionActionFeature = (action: MissionAction.MissionAction): Fe
     geometry: new Point(coordinates),
     hasGearSeized,
     hasSpeciesSeized,
-    missionId: action.id,
+    missionId: action.missionId,
     numberOfInfractions,
     numberOfInfractionsWithRecords,
     vesselName: action.vesselName

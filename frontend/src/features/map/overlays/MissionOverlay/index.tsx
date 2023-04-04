@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { margins } from './constants'
 import { MissionDetails } from './MissionDetails'
-import { LayerType } from '../../../../domain/entities/layers/constants'
+import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { useMoveOverlayWhenDragging } from '../../../../hooks/useMoveOverlayWhenDragging'
@@ -93,7 +93,7 @@ export function MissionOverlay({ feature, isSelected = false, map }) {
       return
     }
 
-    if (!feature?.getId()?.toString()?.includes(LayerType.MISSION)) {
+    if (!feature?.getId()?.toString()?.includes(MonitorFishLayer.MISSION)) {
       overlayRef.current.style.display = 'none'
       setMissionProperties(undefined)
 
@@ -114,7 +114,6 @@ export function MissionOverlay({ feature, isSelected = false, map }) {
 
     const nextOverlayPosition = getNextOverlayPosition()
     setOverlayPosition(nextOverlayPosition)
-
     setOverlayTopLeftMargin(getTopLeftMargin(nextOverlayPosition, margins))
   }, [feature, isSelected, selectedMission, setMissionProperties, overlayRef, overlayObjectRef, getNextOverlayPosition])
 

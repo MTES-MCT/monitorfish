@@ -4,7 +4,8 @@ import VectorSource from 'ol/source/Vector'
 import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { missionZoneStyle } from './MissionLayer/styles'
-import { LayerProperties, LayerType } from '../../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
 import { getMissionFeatureZone } from '../../../../domain/entities/mission'
 import { useGetMissionsAndActions } from '../../../../domain/entities/mission/hooks/useGetMissionsAndActions'
@@ -38,7 +39,7 @@ export function UnmemoizedSelectedMissionLayer({ map }) {
   const getVectorLayer = useCallback(() => {
     if (vectorLayerRef.current === undefined) {
       vectorLayerRef.current = new VectorLayer({
-        className: LayerType.MISSION_SELECTED,
+        className: MonitorFishLayer.MISSION_SELECTED,
         renderBuffer: 7,
         source: getVectorSource(),
         style: missionZoneStyle,
@@ -53,7 +54,7 @@ export function UnmemoizedSelectedMissionLayer({ map }) {
 
   useEffect(() => {
     if (map) {
-      getVectorLayer().name = LayerType.MISSION_SELECTED
+      getVectorLayer().name = MonitorFishLayer.MISSION_SELECTED
       map.getLayers().push(getVectorLayer())
     }
 
@@ -67,7 +68,7 @@ export function UnmemoizedSelectedMissionLayer({ map }) {
   useEffect(() => {
     getVectorSource().clear(true)
 
-    if (!selectedMission?.getId()?.toString()?.includes(LayerType.MISSION)) {
+    if (!selectedMission?.getId()?.toString()?.includes(MonitorFishLayer.MISSION)) {
       return
     }
 

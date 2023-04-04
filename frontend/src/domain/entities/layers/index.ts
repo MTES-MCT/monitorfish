@@ -81,9 +81,19 @@ export function layersNotInShowedLayers(_showedLayers, olLayer) {
   return !_showedLayers.some(layer_ => getLayerNameNormalized(layer_) === olLayer.name)
 }
 
-export function getAdministrativeLayers(): ShowableLayer[] {
-  return Object.keys(LayerProperties)
-    .map(layer => LayerProperties[layer])
-    .filter((zone): zone is ShowableLayer => zone !== undefined)
-    .filter(layer => layer.type === LayerType.ADMINISTRATIVE)
-}
+export const administrativeLayers = Object.keys(LayerProperties)
+  .map(layer => LayerProperties[layer])
+  .filter((layer): layer is ShowableLayer => layer !== undefined)
+  .filter(layer => layer.type === LayerType.ADMINISTRATIVE)
+
+export const hoverableLayerCodes = Object.keys(LayerProperties)
+  .map(layer => LayerProperties[layer])
+  .filter((layer): layer is ShowableLayer => layer !== undefined)
+  .filter(layer => layer.isHoverable)
+  .map(layer => layer.code)
+
+export const clickableLayerCodes = Object.keys(LayerProperties)
+  .map(layer => LayerProperties[layer])
+  .filter((layer): layer is ShowableLayer => layer !== undefined)
+  .filter(layer => layer.isClickable)
+  .map(layer => layer.code)

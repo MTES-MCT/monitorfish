@@ -69,7 +69,7 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
       const missionsLayer = map
         .getLayers()
         .getArray()
-        ?.find(olLayer => olLayer.name === LayerProperties.MISSION.code)
+        ?.find(olLayer => olLayer.name === LayerProperties.MISSION_PIN_POINT.code)
       missionsLayerSourceRef.current = missionsLayer?.getSource()
     }
 

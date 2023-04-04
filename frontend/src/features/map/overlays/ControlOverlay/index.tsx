@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { margins } from './constants'
 import { ControlDetails } from './ControlDetails'
-import { LayerType } from '../../../../domain/entities/layers/constants'
+import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { useMoveOverlayWhenDragging } from '../../../../hooks/useMoveOverlayWhenDragging'
@@ -93,7 +93,7 @@ export function ControlOverlay({ feature, isSelected = false, map }) {
       return
     }
 
-    if (!feature?.getId()?.toString()?.includes(LayerType.MISSION_ACTION_SELECTED)) {
+    if (!feature?.getId()?.toString()?.includes(MonitorFishLayer.MISSION_ACTION_SELECTED)) {
       overlayRef.current.style.display = 'none'
       setControlProperties(undefined)
 
@@ -114,7 +114,6 @@ export function ControlOverlay({ feature, isSelected = false, map }) {
 
     const nextOverlayPosition = getNextOverlayPosition()
     setOverlayPosition(nextOverlayPosition)
-
     setOverlayTopLeftMargin(getTopLeftMargin(nextOverlayPosition, margins))
   }, [feature, isSelected, selectedControl, setControlProperties, overlayRef, overlayObjectRef, getNextOverlayPosition])
 

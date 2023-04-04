@@ -6,8 +6,8 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 
 @UseCase
 class UpdateMissionAction(private val missionActionsRepository: MissionActionsRepository) {
-    fun execute(missionID: Int, action: MissionAction): MissionAction {
-        val actionWithId = action.copy(id = missionID)
+    fun execute(actionId: Int, action: MissionAction): MissionAction {
+        val actionWithId = action.copy(id = actionId)
 
         return missionActionsRepository.save(actionWithId)
     }

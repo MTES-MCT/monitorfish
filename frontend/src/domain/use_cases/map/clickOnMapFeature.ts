@@ -3,6 +3,7 @@ import GeoJSON from 'ol/format/GeoJSON'
 import { missionActions } from '../../actions'
 import { LayerProperties, LayerType } from '../../entities/layers/constants'
 import { OPENLAYERS_PROJECTION } from '../../entities/map/constants'
+import { MissionAction } from '../../types/missionAction'
 import { showRegulatoryZoneMetadata } from '../layer/regulation/showRegulatoryZoneMetadata'
 import { getVesselVoyage } from '../vessel/getVesselVoyage'
 import { showVessel } from '../vessel/showVessel'
@@ -10,6 +11,8 @@ import { showVesselTrack } from '../vessel/showVesselTrack'
 
 import type { VesselLastPositionFeature } from '../../entities/vessel/types'
 import type { MapClick } from '../../types/map'
+
+const geoJSONParser = new GeoJSON()
 
 export const clickOnMapFeature = (mapClick: MapClick) => (dispatch, getState) => {
   const { previewFilteredVesselsMode } = getState().global
@@ -33,9 +36,19 @@ export const clickOnMapFeature = (mapClick: MapClick) => (dispatch, getState) =>
   }
 
   if (clickedFeatureId.includes(LayerType.MISSION)) {
-    const parser = new GeoJSON()
-    const featureGeoJSON = parser.writeFeatureObject(mapClick.feature, { featureProjection: OPENLAYERS_PROJECTION })
+    const featureGeoJSON = geoJSONParser.writeFeatureObject(mapClick.feature, {
+      featureProjection: OPENLAYERS_PROJECTION
+    })
     dispatch(missionActions.setSelectedMissionGeoJSON(featureGeoJSON))
+
+    return
+  }
+
+  if (clickedFeatureId.includes(LayerType.MISSION_ACTION_SELECTED) && isControl(mapClick.feature.get('actionType'))) {
+    const featureGeoJSON = geoJSONParser.writeFeatureObject(mapClick.feature, {
+      featureProjection: OPENLAYERS_PROJECTION
+    })
+    dispatch(missionActions.setSelectedMissionActionGeoJSON(featureGeoJSON))
 
     return
   }
@@ -55,3 +68,8 @@ export const clickOnMapFeature = (mapClick: MapClick) => (dispatch, getState) =>
     }
   }
 }
+
+const isControl = actionType =>
+  actionType === MissionAction.MissionActionType.SEA_CONTROL ||
+  actionType === MissionAction.MissionActionType.LAND_CONTROL ||
+  actionType === MissionAction.MissionActionType.AIR_CONTROL

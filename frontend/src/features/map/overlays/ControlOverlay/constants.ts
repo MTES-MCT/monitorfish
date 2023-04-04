@@ -1,14 +1,14 @@
 import type { OverlayCardMargins } from '../Overlay/types'
 
 /**
- * height: 201px
- * width: 260px
+ * height: 155px
+ * width: 310px
  */
 export const margins: OverlayCardMargins = {
   xLeft: 30,
-  xMiddle: -135,
-  xRight: -300,
-  yBottom: -254,
-  yMiddle: -127,
-  yTop: 10
+  xMiddle: -155,
+  xRight: -340,
+  yBottom: -195,
+  yMiddle: -80,
+  yTop: 20
 }

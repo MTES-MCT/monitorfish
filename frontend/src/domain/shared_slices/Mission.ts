@@ -14,12 +14,14 @@ export interface MissionState {
   draft: MissionFormValues | undefined
   draftId: Mission.Mission['id'] | undefined
   editedDraftActionIndex: number | undefined
+  selectedMissionActionGeoJSON: GeoJSON.GeoJson | undefined
   selectedMissionGeoJSON: GeoJSON.GeoJson | undefined
 }
 const INITIAL_STATE: MissionState = {
   draft: getMissionFormInitialValues(undefined, []),
   draftId: undefined,
   editedDraftActionIndex: undefined,
+  selectedMissionActionGeoJSON: undefined,
   selectedMissionGeoJSON: undefined
 }
 
@@ -163,6 +165,13 @@ const missionSlice = createSlice({
     },
 
     /**
+     * Set selected mission action GeoJSON
+     */
+    setSelectedMissionActionGeoJSON(state, action: PayloadAction<GeoJSON.GeoJson>) {
+      state.selectedMissionActionGeoJSON = action.payload
+    },
+
+    /**
      * Set selected mission GeoJSON
      */
     setSelectedMissionGeoJSON(state, action: PayloadAction<GeoJSON.GeoJson>) {
@@ -186,10 +195,18 @@ const missionSlice = createSlice({
     },
 
     /**
+     * Unset selected mission action GeoJSON
+     */
+    unsetSelectedMissionActionGeoJSON(state) {
+      state.selectedMissionActionGeoJSON = undefined
+    },
+
+    /**
      * Unset selected mission ID
      */
     unsetSelectedMissionGeoJSON(state) {
       state.selectedMissionGeoJSON = undefined
+      state.selectedMissionActionGeoJSON = undefined
     }
   }
 })

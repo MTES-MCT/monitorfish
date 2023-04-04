@@ -88,6 +88,17 @@ export namespace Mission {
     numberOfSurveillance: number
     startDateTimeUtc: string
   }
+
+  export type MissionActionFeatureProperties = {
+    actionType: MissionAction.MissionActionType
+    dateTime: string
+    hasGearSeized: boolean
+    hasSpeciesSeized: boolean
+    missionId: number
+    numberOfInfractions: number
+    numberOfInfractionsWithRecords: number
+    vesselName: string | undefined
+  }
 }
 
 export type MissionAndActions = {

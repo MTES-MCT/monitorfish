@@ -65,7 +65,7 @@ class MissionActionsController(
         @RequestBody
         actionInput: AddMissionActionDataInput,
     ): MissionActionDataOutput {
-        return MissionActionDataOutput.fromMissionAction(addMissionAction.execute(actionInput.toMissionAction(mapper)))
+        return MissionActionDataOutput.fromMissionAction(addMissionAction.execute(actionInput.toMissionAction()))
     }
 
     @PutMapping(value = ["/{actionId}"], consumes = ["application/json"])
@@ -78,7 +78,7 @@ class MissionActionsController(
         @RequestBody
         actionInput: AddMissionActionDataInput,
     ): MissionActionDataOutput {
-        val updatedMissionAction = updateMissionAction.execute(actionId, actionInput.toMissionAction(mapper))
+        val updatedMissionAction = updateMissionAction.execute(actionId, actionInput.toMissionAction())
         return MissionActionDataOutput.fromMissionAction(updatedMissionAction)
     }
 }

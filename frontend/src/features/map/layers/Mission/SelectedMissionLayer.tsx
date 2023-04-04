@@ -68,7 +68,7 @@ export function UnmemoizedSelectedMissionLayer({ map }) {
   useEffect(() => {
     getVectorSource().clear(true)
 
-    if (!selectedMission?.getId()?.toString()?.includes(MonitorFishLayer.MISSION)) {
+    if (!selectedMission?.getId()?.toString()?.includes(MonitorFishLayer.MISSION_PIN_POINT)) {
       return
     }
 

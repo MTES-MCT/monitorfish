@@ -38,7 +38,7 @@ export const clickOnMapFeature = (mapClick: MapClick) => (dispatch, getState) =>
     return
   }
 
-  if (clickedFeatureId.includes(MonitorFishLayer.MISSION)) {
+  if (clickedFeatureId.includes(MonitorFishLayer.MISSION_PIN_POINT)) {
     const featureGeoJSON = geoJSONParser.writeFeatureObject(mapClick.feature as Feature<Geometry>, {
       featureProjection: OPENLAYERS_PROJECTION
     })

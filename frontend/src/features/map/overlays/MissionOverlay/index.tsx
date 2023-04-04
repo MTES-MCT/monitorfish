@@ -93,7 +93,7 @@ export function MissionOverlay({ feature, isSelected = false, map }) {
       return
     }
 
-    if (!feature?.getId()?.toString()?.includes(MonitorFishLayer.MISSION)) {
+    if (!feature?.getId()?.toString()?.includes(MonitorFishLayer.MISSION_PIN_POINT)) {
       overlayRef.current.style.display = 'none'
       setMissionProperties(undefined)
 

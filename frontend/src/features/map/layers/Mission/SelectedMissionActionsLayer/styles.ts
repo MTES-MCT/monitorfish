@@ -3,6 +3,7 @@ import { getCenter } from 'ol/extent'
 import { MultiPoint, MultiPolygon } from 'ol/geom'
 import { Fill, Icon, Stroke, Style } from 'ol/style'
 
+import { isControl } from '../../../../../domain/entities/controls'
 import { MissionAction } from '../../../../../domain/types/missionAction'
 import { getColorWithAlpha } from '../../styles/utils'
 
@@ -20,12 +21,7 @@ export const selectedMissionActionsStyles = [
   }),
   new Style({
     geometry: feature => {
-      const actionType = feature.get('actionType')
-      if (
-        actionType !== MissionActionType.AIR_CONTROL &&
-        actionType !== MissionActionType.LAND_CONTROL &&
-        actionType !== MissionActionType.SEA_CONTROL
-      ) {
+      if (!isControl(feature.get('actionType'))) {
         return undefined
       }
 
@@ -43,12 +39,7 @@ export const selectedMissionActionsStyles = [
   }),
   new Style({
     geometry: feature => {
-      const actionType = feature.get('actionType')
-      if (
-        actionType !== MissionActionType.AIR_CONTROL &&
-        actionType !== MissionActionType.LAND_CONTROL &&
-        actionType !== MissionActionType.SEA_CONTROL
-      ) {
+      if (!isControl(feature.get('actionType'))) {
         return undefined
       }
 

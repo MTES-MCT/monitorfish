@@ -13,11 +13,6 @@ export const selectedMissionActionsStyles = [
     fill: new Fill({
       color: getColorWithAlpha(THEME.color.blueGray['100'], 0.35)
     }),
-    image: new Icon({
-      displacement: [0, 14],
-      scale: 1.1,
-      src: 'map-icons/Control.svg'
-    }),
     stroke: new Stroke({
       color: THEME.color.blueGray['100'],
       width: 2
@@ -34,11 +29,39 @@ export const selectedMissionActionsStyles = [
         return undefined
       }
 
+      if (!(feature.get('numberOfInfractionsWithRecords') > 0)) {
+        return undefined
+      }
+
       return feature.getGeometry()
     },
     image: new Icon({
-      scale: 0.6,
-      src: 'map-icons/Close.svg'
+      displacement: [-1, 12],
+      scale: 0.8,
+      src: 'map-icons/Icone_controle_avec_infraction.svg'
+    })
+  }),
+  new Style({
+    geometry: feature => {
+      const actionType = feature.get('actionType')
+      if (
+        actionType !== MissionActionType.AIR_CONTROL &&
+        actionType !== MissionActionType.LAND_CONTROL &&
+        actionType !== MissionActionType.SEA_CONTROL
+      ) {
+        return undefined
+      }
+
+      if (!(feature.get('numberOfInfractionsWithRecords') === 0)) {
+        return undefined
+      }
+
+      return feature.getGeometry()
+    },
+    image: new Icon({
+      displacement: [-1, 12],
+      scale: 0.8,
+      src: 'map-icons/Icone_controle_sans_infraction.svg'
     })
   }),
   new Style({
@@ -58,7 +81,7 @@ export const selectedMissionActionsStyles = [
       return new MultiPoint(points)
     },
     image: new Icon({
-      scale: 1.1,
+      scale: 1,
       src: 'map-icons/Observation.svg'
     })
   })

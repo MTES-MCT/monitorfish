@@ -8,7 +8,7 @@ context('Vessel sidebar identity tab', () => {
 
   it('Identity Should contain the vessel identity', () => {
     // Given
-    cy.get('.vessels').click(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS').click(460, 480, { force: true, timeout: 10000 })
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 

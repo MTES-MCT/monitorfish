@@ -21,7 +21,7 @@ import MissionType = Mission.MissionType
 import MissionSource = Mission.MissionSource
 
 export function getMissionFeaturePointId(id: number) {
-  return `${MonitorFishLayer.MISSION}:${id}`
+  return `${MonitorFishLayer.MISSION_PIN_POINT}:${id}`
 }
 
 export const getMissionFeaturePoint = (

@@ -105,6 +105,7 @@ export function ControlDetails({ control, isSelected, overlayPosition }: Control
         </ZoneText>
         <EditButton
           accent={Accent.PRIMARY}
+          data-cy="edit-mission-control"
           disabled={!isSelected}
           Icon={Icon.Calendar}
           onClick={openMissionInSideWindow}

@@ -55,7 +55,7 @@ export function UnmemoizedMissionHoveredLayer({ feature, map }) {
   useEffect(() => {
     getVectorSource().clear(true)
 
-    if (!feature?.getId()?.toString()?.includes(MonitorFishLayer.MISSION)) {
+    if (!feature?.getId()?.toString()?.includes(MonitorFishLayer.MISSION_PIN_POINT)) {
       return
     }
 

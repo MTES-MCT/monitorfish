@@ -34,7 +34,7 @@ function UnmemoizedMissionLayer({ map }: MissionLayerProps) {
   const getLayer = useCallback(() => {
     if (!layerRef.current) {
       layerRef.current = new WebGLPointsLayer({
-        className: MonitorFishLayer.MISSION,
+        className: MonitorFishLayer.MISSION_PIN_POINT,
         source: getVectorSource(),
         style: getMissionPointWebGLStyle(),
         zIndex: LayerProperties.MISSION_PIN_POINT.zIndex

@@ -42,131 +42,134 @@ export enum LayerType {
   VESSEL_BEACON_MALFUNCTION = 'VESSEL_BEACON_MALFUNCTION'
 }
 
+/**
+ * /!\ Do not modify the code property : in some cases, it is the Geoserver layer name, hence the name of the PostGIS table
+ */
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
-  BASE_LAYER: {
+  [MonitorFishLayer.BASE_LAYER]: {
     code: 'ol-layer',
     type: LayerType.BASE_LAYER
   },
-  VESSELS: {
+  [MonitorFishLayer.VESSELS]: {
     code: MonitorFishLayer.VESSELS,
     type: LayerType.VESSEL,
     zIndex: 1000,
     isClickable: true,
     isHoverable: true
   },
-  MISSION_PIN_POINT: {
-    code: MonitorFishLayer.MISSION,
+  [MonitorFishLayer.MISSION_PIN_POINT]: {
+    code: MonitorFishLayer.MISSION_PIN_POINT,
     type: LayerType.MISSION,
     zIndex: 970,
     isClickable: true,
     isHoverable: true
   },
-  MISSION_HOVER: {
+  [MonitorFishLayer.MISSION_HOVER]: {
     code: MonitorFishLayer.MISSION_HOVER,
     type: LayerType.MISSION,
     zIndex: 80
   },
-  MISSION_SELECTED: {
+  [MonitorFishLayer.MISSION_SELECTED]: {
     code: MonitorFishLayer.MISSION_SELECTED,
     type: LayerType.MISSION,
     zIndex: 81
   },
-  MISSION_ACTION_SELECTED: {
+  [MonitorFishLayer.MISSION_ACTION_SELECTED]: {
     code: MonitorFishLayer.MISSION_ACTION_SELECTED,
     type: LayerType.MISSION,
     zIndex: 82,
     isClickable: true,
     isHoverable: true
   },
-  MISSIONS_LABEL: {
+  [MonitorFishLayer.MISSIONS_LABEL]: {
     code: MonitorFishLayer.MISSIONS_LABEL,
     type: LayerType.MISSION,
     zIndex: 980
   },
-  SELECTED_VESSEL: {
+  [MonitorFishLayer.SELECTED_VESSEL]: {
     code: MonitorFishLayer.SELECTED_VESSEL,
     type: LayerType.VESSEL,
     zIndex: 995,
     isClickable: true,
     isHoverable: true
   },
-  DRAW: {
+  [MonitorFishLayer.DRAW]: {
     code: MonitorFishLayer.DRAW,
     type: LayerType.DRAW,
     zIndex: 999
   },
-  FILTERED_VESSELS: {
+  [MonitorFishLayer.FILTERED_VESSELS]: {
     code: MonitorFishLayer.FILTERED_VESSELS,
     type: LayerType.VESSEL,
     zIndex: 1000,
     isClickable: true,
     isHoverable: true
   },
-  VESSEL_ALERT: {
+  [MonitorFishLayer.VESSEL_ALERT]: {
     code: MonitorFishLayer.VESSEL_ALERT,
     type: LayerType.VESSEL_ALERT,
     zIndex: 990
   },
-  VESSEL_INFRACTION_SUSPICION: {
+  [MonitorFishLayer.VESSEL_INFRACTION_SUSPICION]: {
     code: MonitorFishLayer.VESSEL_INFRACTION_SUSPICION,
     type: LayerType.VESSEL_ALERT,
     zIndex: 989
   },
-  VESSEL_BEACON_MALFUNCTION: {
+  [MonitorFishLayer.VESSEL_BEACON_MALFUNCTION]: {
     code: MonitorFishLayer.VESSEL_BEACON_MALFUNCTION,
     type: LayerType.VESSEL_BEACON_MALFUNCTION,
     zIndex: 990
   },
-  VESSEL_ALERT_AND_BEACON_MALFUNCTION: {
+  [MonitorFishLayer.VESSEL_ALERT_AND_BEACON_MALFUNCTION]: {
     code: MonitorFishLayer.VESSEL_ALERT_AND_BEACON_MALFUNCTION,
     type: LayerType.VESSEL_BEACON_MALFUNCTION,
     zIndex: 990
   },
-  VESSELS_LABEL: {
+  [MonitorFishLayer.VESSELS_LABEL]: {
     code: MonitorFishLayer.VESSELS_LABEL,
     type: LayerType.VESSEL,
     zIndex: 980
   },
-  VESSEL_TRACK: {
+  [MonitorFishLayer.VESSEL_TRACK]: {
     code: MonitorFishLayer.VESSEL_TRACK,
     type: LayerType.VESSEL,
     zIndex: 990,
     isClickable: true,
     isHoverable: true
   },
-  VESSEL_ESTIMATED_POSITION: {
+  [MonitorFishLayer.VESSEL_ESTIMATED_POSITION]: {
     code: MonitorFishLayer.VESSEL_ESTIMATED_POSITION,
     type: LayerType.VESSEL,
     zIndex: 99,
     isHoverable: true
   },
-  MEASUREMENT: {
+  [MonitorFishLayer.MEASUREMENT]: {
     code: MonitorFishLayer.MEASUREMENT,
     type: LayerType.MEASUREMENT,
     zIndex: 1010
   },
-  INTEREST_POINT: {
+  [MonitorFishLayer.INTEREST_POINT]: {
     code: MonitorFishLayer.INTEREST_POINT,
     type: LayerType.INTEREST_POINT,
     zIndex: 1020
   },
-  REGULATORY: {
-    code: MonitorFishLayer.REGULATORY,
+  [MonitorFishLayer.REGULATORY]: {
+    code: 'regulations',
     type: LayerType.REGULATORY,
     isClickable: true,
     isHoverable: true
   },
-  EEZ: {
-    code: MonitorFishLayer.EEZ,
+  [MonitorFishLayer.EEZ]: {
+    code: 'eez_areas',
     name: 'Zones ZEE',
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
     subZoneFieldKey: 'union',
     isIntersectable: true
   },
-  FAO: {
-    code: MonitorFishLayer.FAO,
+  [MonitorFishLayer.FAO]: {
+    code: 'fao_areas',
     name: 'Zones FAO / CIEM',
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
@@ -192,136 +195,136 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
       return ''
     }
   },
-  THREE_MILES: {
-    code: MonitorFishLayer.THREE_MILES,
+  [MonitorFishLayer.THREE_MILES]: {
+    code: '3_miles_areas',
     name: '3 Milles',
     type: LayerType.ADMINISTRATIVE
   },
-  SIX_MILES: {
-    code: MonitorFishLayer.SIX_MILES,
+  [MonitorFishLayer.SIX_MILES]: {
+    code: '6_miles_areas',
     name: '6 Milles',
     type: LayerType.ADMINISTRATIVE
   },
-  TWELVE_MILES: {
-    code: MonitorFishLayer.TWELVE_MILES,
+  [MonitorFishLayer.TWELVE_MILES]: {
+    code: '12_miles_areas',
     name: '12 Milles',
     type: LayerType.ADMINISTRATIVE
   },
-  eaux_occidentales_australes: {
-    code: MonitorFishLayer.eaux_occidentales_australes,
+  [MonitorFishLayer.eaux_occidentales_australes]: {
+    code: '1241_eaux_occidentales_australes_areas',
     name: 'Eaux occidentales australes',
     group: layersGroups.TWELVE_FORTY_ONE,
     type: LayerType.ADMINISTRATIVE,
     isIntersectable: true
   },
-  eaux_occidentales_septentrionales: {
-    code: MonitorFishLayer.eaux_occidentales_septentrionales,
+  [MonitorFishLayer.eaux_occidentales_septentrionales]: {
+    code: '1241_eaux_occidentales_septentrionales_areas',
     name: 'Eaux occidentales septentrionales',
     group: layersGroups.TWELVE_FORTY_ONE,
     type: LayerType.ADMINISTRATIVE,
     isIntersectable: true
   },
-  eaux_union_dans_oi_et_atl_ouest: {
-    code: MonitorFishLayer.eaux_union_dans_oi_et_atl_ouest,
+  [MonitorFishLayer.eaux_union_dans_oi_et_atl_ouest]: {
+    code: '1241_eaux_union_dans_oi_et_atl_ouest_areas',
     name: "Eaux de l'Union dans l'OI et l'Atl. ouest",
     group: layersGroups.TWELVE_FORTY_ONE,
     type: LayerType.ADMINISTRATIVE,
     isIntersectable: true
   },
-  mer_baltique: {
-    code: MonitorFishLayer.mer_baltique,
+  [MonitorFishLayer.mer_baltique]: {
+    code: '1241_mer_baltique_areas',
     name: 'Mer Baltique',
     group: layersGroups.TWELVE_FORTY_ONE,
     type: LayerType.ADMINISTRATIVE,
     isIntersectable: true
   },
-  mer_du_nord: {
-    code: MonitorFishLayer.mer_du_nord,
+  [MonitorFishLayer.mer_du_nord]: {
+    code: '1241_mer_du_nord_areas',
     name: 'Mer du Nord',
     group: layersGroups.TWELVE_FORTY_ONE,
     type: LayerType.ADMINISTRATIVE,
     isIntersectable: true
   },
-  mer_mediterranee: {
-    code: MonitorFishLayer.mer_mediterranee,
+  [MonitorFishLayer.mer_mediterranee]: {
+    code: '1241_mer_mediterranee_areas',
     name: 'Mer Méditerranée',
     group: layersGroups.TWELVE_FORTY_ONE,
     type: LayerType.ADMINISTRATIVE,
     isIntersectable: true
   },
-  mer_noire: {
-    code: MonitorFishLayer.mer_noire,
+  [MonitorFishLayer.mer_noire]: {
+    code: '1241_mer_noire_areas',
     name: 'Mer Noire',
     group: layersGroups.TWELVE_FORTY_ONE,
     type: LayerType.ADMINISTRATIVE,
     isIntersectable: true
   },
-  cormoran: {
-    code: MonitorFishLayer.cormoran,
+  [MonitorFishLayer.cormoran]: {
+    code: 'cormoran_areas',
     name: 'Zones Cormoran (NAMO-SA)',
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
     subZoneFieldKey: 'zonex',
     isIntersectable: true
   },
-  AEM: {
-    code: MonitorFishLayer.AEM,
+  [MonitorFishLayer.AEM]: {
+    code: 'aem_areas',
     name: 'Zones AEM (MED)',
     type: LayerType.ADMINISTRATIVE,
     subZoneFieldKey: 'name'
   },
-  CCAMLR: {
-    code: MonitorFishLayer.CCAMLR,
+  [MonitorFishLayer.CCAMLR]: {
+    code: 'fao_ccamlr_areas',
     name: 'CCAMLR',
     group: layersGroups.ORGP,
     type: LayerType.ADMINISTRATIVE,
     isIntersectable: true
   },
-  ICCAT: {
-    code: MonitorFishLayer.ICCAT,
+  [MonitorFishLayer.ICCAT]: {
+    code: 'fao_iccat_areas',
     name: 'ICCAT',
     group: layersGroups.ORGP,
     type: LayerType.ADMINISTRATIVE,
     isIntersectable: true
   },
-  IOTC: {
-    code: MonitorFishLayer.IOTC,
+  [MonitorFishLayer.IOTC]: {
+    code: 'fao_iotc_areas',
     name: 'IOTC',
     group: layersGroups.ORGP,
     type: LayerType.ADMINISTRATIVE,
     isIntersectable: true
   },
-  NEAFC: {
-    code: MonitorFishLayer.NEAFC,
+  [MonitorFishLayer.NEAFC]: {
+    code: 'neafc_regulatory_area',
     name: 'NEAFC',
     group: layersGroups.ORGP,
     type: LayerType.ADMINISTRATIVE,
     isIntersectable: true
   },
-  NAFO: {
-    code: MonitorFishLayer.NAFO,
+  [MonitorFishLayer.NAFO]: {
+    code: 'nafo_regulatory_area',
     name: 'NAFO',
     group: layersGroups.ORGP,
     type: LayerType.ADMINISTRATIVE,
     isIntersectable: true
   },
-  SIOFA: {
-    code: MonitorFishLayer.SIOFA,
+  [MonitorFishLayer.SIOFA]: {
+    code: 'fao_siofa_areas',
     name: 'SIOFA',
     group: layersGroups.ORGP,
     type: LayerType.ADMINISTRATIVE,
     isIntersectable: true
   },
-  rectangles_stat: {
-    code: MonitorFishLayer.rectangles_stat,
+  [MonitorFishLayer.rectangles_stat]: {
+    code: 'rectangles_stat_areas',
     name: 'Rectangles statistiques',
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
     subZoneFieldKey: 'icesname',
     isIntersectable: true
   },
-  cgpm_areas: {
-    code: MonitorFishLayer.cgpm_areas,
+  [MonitorFishLayer.cgpm_areas]: {
+    code: 'cgpm_areas',
     name: 'CGPM',
     group: layersGroups.ORGP,
     type: LayerType.ADMINISTRATIVE,
@@ -329,8 +332,8 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
     subZoneFieldKey: 'SMU_CODE',
     isIntersectable: true
   },
-  cgpm_statistical_rectangles_areas: {
-    code: MonitorFishLayer.cgpm_statistical_rectangles_areas,
+  [MonitorFishLayer.cgpm_statistical_rectangles_areas]: {
+    code: 'cgpm_statistical_rectangles_areas',
     name: 'CGPM (Rectangles statistiques)',
     group: layersGroups.ORGP,
     type: LayerType.ADMINISTRATIVE,
@@ -338,16 +341,16 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
     subZoneFieldKey: 'sect_cod',
     isIntersectable: true
   },
-  effort_zones_areas: {
-    code: MonitorFishLayer.effort_zones_areas,
+  [MonitorFishLayer.effort_zones_areas]: {
+    code: 'effort_zones_areas',
     name: "Zones d'effort",
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
     subZoneFieldKey: 'zone',
     isIntersectable: true
   },
-  situations: {
-    code: MonitorFishLayer.situations,
+  [MonitorFishLayer.situations]: {
+    code: 'situs_areas',
     name: 'Zones pour situation VMS',
     group: layersGroups.VMS_SITUATION,
     type: LayerType.ADMINISTRATIVE,
@@ -356,8 +359,8 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
     subZoneFieldKey: 'libelle',
     isIntersectable: true
   },
-  brexit: {
-    code: MonitorFishLayer.brexit,
+  [MonitorFishLayer.brexit]: {
+    code: 'brexit_areas',
     name: 'Zones pour situation Brexit',
     group: layersGroups.VMS_SITUATION_BREXIT,
     type: LayerType.ADMINISTRATIVE,
@@ -366,42 +369,42 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
     subZoneFieldKey: 'nom',
     isIntersectable: true
   },
-  REGULATORY_PREVIEW: {
-    code: MonitorFishLayer.REGULATORY_PREVIEW,
+  [MonitorFishLayer.REGULATORY_PREVIEW]: {
+    code: 'regulatory_preview',
     type: LayerType.REGULATORY_PREVIEW
   },
-  navigation_category_two: {
-    code: MonitorFishLayer.navigation_category_two,
+  [MonitorFishLayer.navigation_category_two]: {
+    code: 'navigation_category_two_areas',
     name: '2ème',
     group: layersGroups.NAVIGATION_CATEGORY,
     type: LayerType.ADMINISTRATIVE
   },
-  navigation_category_three: {
-    code: MonitorFishLayer.navigation_category_three,
+  [MonitorFishLayer.navigation_category_three]: {
+    code: 'navigation_category_three_areas',
     name: '3ème',
     group: layersGroups.NAVIGATION_CATEGORY,
     type: LayerType.ADMINISTRATIVE
   },
-  navigation_category_four: {
-    code: MonitorFishLayer.navigation_category_four,
+  [MonitorFishLayer.navigation_category_four]: {
+    code: 'navigation_category_four_areas',
     name: '4ème',
     group: layersGroups.NAVIGATION_CATEGORY,
     type: LayerType.ADMINISTRATIVE
   },
-  navigation_category_five: {
-    code: MonitorFishLayer.navigation_category_five,
+  [MonitorFishLayer.navigation_category_five]: {
+    code: 'navigation_category_five_areas',
     name: '5ème',
     group: layersGroups.NAVIGATION_CATEGORY,
     type: LayerType.ADMINISTRATIVE
   },
-  saltwater_limit: {
-    code: MonitorFishLayer.saltwater_limit,
+  [MonitorFishLayer.saltwater_limit]: {
+    code: 'saltwater_limit_areas',
     name: 'Limites de salure des eaux',
     type: LayerType.ADMINISTRATIVE,
     subZoneFieldKey: 'objnam'
   },
-  transversal_sea_limit: {
-    code: MonitorFishLayer.transversal_sea_limit,
+  [MonitorFishLayer.transversal_sea_limit]: {
+    code: 'transversal_sea_limit_areas',
     name: 'Limites transversales de mer',
     type: LayerType.ADMINISTRATIVE,
     subZoneFieldKey: 'objnam'

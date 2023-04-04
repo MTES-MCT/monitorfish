@@ -9,7 +9,7 @@ import { getMissionColor } from '../../../features/map/layers/Mission/MissionLay
 import { booleanToInt, getDate, getDateTime } from '../../../utils'
 import { MissionAction } from '../../types/missionAction'
 import { getNumberOfInfractions, getNumberOfInfractionsWithRecord } from '../controls'
-import { LayerType } from '../layers/constants'
+import { MonitorFishLayer } from '../layers/types'
 import { OLGeometryType } from '../map/constants'
 
 import type { MultiPolygon } from 'ol/geom'
@@ -21,7 +21,7 @@ import MissionType = Mission.MissionType
 import MissionSource = Mission.MissionSource
 
 export function getMissionFeaturePointId(id: number) {
-  return `${LayerType.MISSION}:${id}`
+  return `${MonitorFishLayer.MISSION}:${id}`
 }
 
 export const getMissionFeaturePoint = (
@@ -91,7 +91,7 @@ export const getMissionFeatureZone = (mission: Mission.Mission): Feature => {
     missionType: mission.missionType,
     startDateTimeUtc: mission.startDateTimeUtc
   })
-  feature.setId(`${LayerType.MISSION_HOVER}:${mission.id}`)
+  feature.setId(`${MonitorFishLayer.MISSION_HOVER}:${mission.id}`)
 
   return feature
 }
@@ -118,7 +118,7 @@ export const getMissionActionFeature = (action: MissionAction.MissionAction): Fe
     numberOfInfractionsWithRecords,
     vesselName: action.vesselName
   })
-  feature.setId(`${LayerType.MISSION_ACTION_SELECTED}:${action.id}`)
+  feature.setId(`${MonitorFishLayer.MISSION_ACTION_SELECTED}:${action.id}`)
 
   return feature
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import BaseMap from './BaseMap'
+import { BaseMap } from './BaseMap'
 import { LayerDetailsBox } from './controls/LayerDetailsBox'
 import { VesselsTracksLayerMemoized } from './layers/VesselsTracksLayer'
 import VesselsLayer from './layers/VesselsLayer'
@@ -68,7 +68,7 @@ const Map = () => {
       setCurrentFeature={setCurrentFeature}
       showCoordinates={true}
       showAttributions={true}
-      container={'map'}
+      isMainApp
     >
       <BaseLayer />
       <RegulatoryLayers mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>

@@ -3,7 +3,8 @@ import VectorSource from 'ol/source/Vector'
 import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { selectedMissionActionsStyles } from './styles'
-import { LayerProperties, LayerType } from '../../../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../../../domain/entities/layers/constants'
+import { MonitorFishLayer } from '../../../../../domain/entities/layers/types'
 import { getMissionActionFeature } from '../../../../../domain/entities/mission'
 import { useGetMissionsAndActions } from '../../../../../domain/entities/mission/hooks/useGetMissionsAndActions'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
@@ -41,7 +42,7 @@ export function UnmemoizedSelectedMissionActionsLayer({ map }) {
   const getVectorLayer = useCallback(() => {
     if (vectorLayerRef.current === undefined) {
       vectorLayerRef.current = new VectorLayer({
-        className: LayerType.MISSION_ACTION_SELECTED,
+        className: MonitorFishLayer.MISSION_ACTION_SELECTED,
         source: getVectorSource(),
         style: selectedMissionActionsStyles,
         updateWhileAnimating: true,
@@ -55,7 +56,7 @@ export function UnmemoizedSelectedMissionActionsLayer({ map }) {
 
   useEffect(() => {
     if (map) {
-      getVectorLayer().name = LayerType.MISSION_ACTION_SELECTED
+      getVectorLayer().name = MonitorFishLayer.MISSION_ACTION_SELECTED
       map.getLayers().push(getVectorLayer())
     }
 

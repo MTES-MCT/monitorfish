@@ -20,7 +20,7 @@ import {
   RemoveRegulationModal
 } from '.'
 import ConfirmRegulationModal from './ConfirmRegulationModal'
-import BaseMap from '../../map/BaseMap'
+import { BaseMap } from '../../map/BaseMap'
 import { BaseLayer } from '../../map/layers/BaseLayer'
 
 import { RegulatoryPreviewLayer } from '../../map/layers/RegulatoryPreviewLayer'

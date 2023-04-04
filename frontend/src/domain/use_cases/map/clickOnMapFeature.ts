@@ -1,7 +1,8 @@
 import GeoJSON from 'ol/format/GeoJSON'
 
 import { missionActions } from '../../actions'
-import { LayerProperties, LayerType } from '../../entities/layers/constants'
+import { LayerProperties } from '../../entities/layers/constants'
+import { MonitorFishLayer } from '../../entities/layers/types'
 import { OPENLAYERS_PROJECTION } from '../../entities/map/constants'
 import { MissionAction } from '../../types/missionAction'
 import { showRegulatoryZoneMetadata } from '../layer/regulation/showRegulatoryZoneMetadata'
@@ -11,6 +12,8 @@ import { showVesselTrack } from '../vessel/showVesselTrack'
 
 import type { VesselLastPositionFeature } from '../../entities/vessel/types'
 import type { MapClick } from '../../types/map'
+import type { Feature } from 'ol'
+import type { Geometry } from 'ol/geom'
 
 const geoJSONParser = new GeoJSON()
 
@@ -35,8 +38,8 @@ export const clickOnMapFeature = (mapClick: MapClick) => (dispatch, getState) =>
     return
   }
 
-  if (clickedFeatureId.includes(LayerType.MISSION)) {
-    const featureGeoJSON = geoJSONParser.writeFeatureObject(mapClick.feature, {
+  if (clickedFeatureId.includes(MonitorFishLayer.MISSION)) {
+    const featureGeoJSON = geoJSONParser.writeFeatureObject(mapClick.feature as Feature<Geometry>, {
       featureProjection: OPENLAYERS_PROJECTION
     })
     dispatch(missionActions.setSelectedMissionGeoJSON(featureGeoJSON))
@@ -44,8 +47,11 @@ export const clickOnMapFeature = (mapClick: MapClick) => (dispatch, getState) =>
     return
   }
 
-  if (clickedFeatureId.includes(LayerType.MISSION_ACTION_SELECTED) && isControl(mapClick.feature.get('actionType'))) {
-    const featureGeoJSON = geoJSONParser.writeFeatureObject(mapClick.feature, {
+  if (
+    clickedFeatureId.includes(MonitorFishLayer.MISSION_ACTION_SELECTED) &&
+    isControl(mapClick.feature.get('actionType'))
+  ) {
+    const featureGeoJSON = geoJSONParser.writeFeatureObject(mapClick.feature as Feature<Geometry>, {
       featureProjection: OPENLAYERS_PROJECTION
     })
     dispatch(missionActions.setSelectedMissionActionGeoJSON(featureGeoJSON))

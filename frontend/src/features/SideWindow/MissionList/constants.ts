@@ -1,28 +1,11 @@
+import { getLocalizedDayjs, Option } from '@mtes-mct/monitor-ui'
+
+import { MissionDateRangeFilter, MissionFilterType, MissionStatus } from './types'
 import { Mission } from '../../../domain/entities/mission/types'
 import { getOptionsFromLabelledEnum } from '../../../utils/getOptionsFromLabelledEnum'
 
+import type { MissionWithActions } from './types'
 import type { TableOptions } from '../../../hooks/useTable/types'
-import type { Option } from '@mtes-mct/monitor-ui'
-
-/* eslint-disable typescript-sort-keys/string-enum */
-export enum MissionDateRangeFilter {
-  CURRENT_DAY = 'Aujourd’hui',
-  CURRENT_WEEK = 'Semaine en cours',
-  CURRENT_MONTH = 'Mois en cours',
-  CURRENT_QUARTER = 'Trimestre en cours',
-  CUSTOM = 'Période spécifique'
-}
-/* eslint-enable typescript-sort-keys/string-enum */
-
-export enum MissionFilterType {
-  ALERT_TYPE = 'alertType',
-  CUSTOM_DATE_RANGE = 'customDateRange',
-  DATE_RANGE = 'dateRange',
-  INSPECTION_TYPE = 'inspectionType',
-  MISSION_TYPE = 'missionType',
-  STATUS = 'status',
-  UNIT = 'unit'
-}
 
 export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option[]> = {
   [MissionFilterType.ALERT_TYPE]: getOptionsFromLabelledEnum(Mission.MissionAlertType),
@@ -39,59 +22,90 @@ export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option[]> = {
   [MissionFilterType.UNIT]: []
 }
 
-export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission.Mission> = {
+export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
   columns: [
     {
-      fixedWidth: 144,
+      fixedWidth: 136,
       isSortable: true,
-      key: 'startDate',
-      label: 'Date de début'
+      key: 'startDateTimeUtc',
+      label: 'Début',
+      labelTransform: missionWithActions =>
+        getLocalizedDayjs(missionWithActions.startDateTimeUtc).format('D MMM YY, HH:MM')
     },
     {
-      fixedWidth: 144,
+      fixedWidth: 136,
       isSortable: true,
-      key: 'endDate',
-      label: 'Date de fin'
-    },
-    {
-      isSortable: true,
-      key: 'unit',
-      label: 'Unité (Administration)'
-    },
-    {
-      fixedWidth: 80,
-      isSortable: true,
-      key: 'type',
-      label: 'Type'
+      key: 'endDateTimeUtc',
+      label: 'Fin',
+      labelTransform: missionWithActions =>
+        missionWithActions.endDateTimeUtc
+          ? getLocalizedDayjs(missionWithActions.endDateTimeUtc).format('D MMM YY, HH:MM')
+          : ''
     },
     {
       fixedWidth: 80,
       isSortable: true,
-      key: 'seaFront',
-      label: 'Façade'
+      key: 'missionType',
+      label: 'Type',
+      transform: missionWithActions => MISSION_TYPE_LABEL[missionWithActions.missionType]
+    },
+    {
+      fixedWidth: 80,
+      isSortable: true,
+      key: 'missionSource',
+      label: 'Origine',
+      transform: missionWithActions => MISSION_SOURCE_LABEL[missionWithActions.missionSource]
     },
     {
       fixedWidth: 160,
-      key: 'themes',
-      label: 'Thématiques'
+      isSortable: true,
+      key: 'controlUnits',
+      label: 'Unité (Administration)',
+      transform: missionWithActions =>
+        missionWithActions.controlUnits
+          .map(controlUnit => `${controlUnit.name} (${controlUnit.administration})`)
+          .join(', ')
     },
     {
-      fixedWidth: 48,
+      isSortable: false,
+      key: 'inspectedVessels',
+      label: 'Navires contrôlés',
+      labelTransform: missionWithActions =>
+        missionWithActions.actions
+          .map(action => action.vesselName)
+          .filter((vesselName: string | undefined): vesselName is string => !!vesselName)
+          .sort()
+          .join(', ')
+    },
+    {
+      fixedWidth: 128,
       isSortable: true,
       key: 'inspectionsCount',
-      label: 'Nombre de contrôles'
+      label: 'Contrôles',
+      labelTransform: missionWithActions =>
+        missionWithActions.actions.length > 0 ? missionWithActions.actions.length : '-',
+      transform: missionWithActions => missionWithActions.actions.length
     },
     {
       fixedWidth: 128,
       isSortable: true,
       key: 'status',
-      label: 'Statut'
-    },
-    {
-      fixedWidth: 160,
-      isSortable: true,
-      key: 'alertType',
-      label: 'Alerte'
+      label: 'Statut',
+      transform: missionWithActions => {
+        switch (true) {
+          // case ???:
+          //   return MissionStatus.INCOMING
+
+          // case ???:
+          //   return MissionStatus.DONE
+
+          case missionWithActions.isClosed:
+            return MissionStatus.CLOSED
+
+          default:
+            return MissionStatus.IN_PROGRESS
+        }
+      }
     },
     {
       fixedWidth: 48,
@@ -105,4 +119,17 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission.Mission> = {
     }
   ],
   searchableKeys: ['seaFront', 'unit']
+}
+
+export const MISSION_SOURCE_LABEL: Record<Mission.MissionSource, string> = {
+  [Mission.MissionSource.MONITORENV]: 'CACEM',
+  [Mission.MissionSource.MONITORFISH]: 'CNSP',
+  [Mission.MissionSource.POSEIDON_CACEM]: 'CACEM (Poseidon)',
+  [Mission.MissionSource.POSEIDON_CNSP]: 'CNSP (Poseidon)'
+}
+
+export const MISSION_TYPE_LABEL: Record<Mission.MissionType, string> = {
+  [Mission.MissionType.AIR]: 'Air',
+  [Mission.MissionType.LAND]: 'Terre',
+  [Mission.MissionType.SEA]: 'Mer'
 }

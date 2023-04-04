@@ -5,21 +5,22 @@ import { concat, flatten, map, pipe, uniq } from 'ramda'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { MissionDateRangeFilter, MissionFilterType, MISSION_FILTER_OPTIONS } from './constants'
+import { MISSION_FILTER_OPTIONS } from './constants'
+import { MissionDateRangeFilter, MissionFilterType } from './types'
 import { mapFilterFormRecordsToFilters } from './utils'
 import { useNewWindow } from '../../../ui/NewWindow'
 import { getOptionsFromStrings } from '../../../utils/getOptionsFromStrings'
 
-import type { MissionFilter } from './types'
-import type { Mission } from '../../../domain/entities/mission/types'
+import type { MissionWithActions } from './types'
+import type { AugmentedDataFilter, AugmentedDataItem } from '../../../hooks/useTable/types'
 import type { Promisable } from 'type-fest'
 
 export type FilterBarProps = {
-  missions: Mission.Mission[]
-  onChange: (filters: Array<MissionFilter>) => Promisable<void>
+  augmentedMissionsWithActions: Array<AugmentedDataItem<MissionWithActions>>
+  onChange: (filters: Array<AugmentedDataFilter<MissionWithActions>>) => Promisable<void>
 }
-export function FilterBar({ missions, onChange }: FilterBarProps) {
-  const customFiltersRef = useRef<MissionFilter[]>([])
+export function FilterBar({ augmentedMissionsWithActions, onChange }: FilterBarProps) {
+  const customFiltersRef = useRef<Array<AugmentedDataFilter<MissionWithActions>>>([])
   const [isCustomDateRangeOpen, setIsCustomDateRangeOpen] = useState(false)
 
   const { newWindowContainerRef } = useNewWindow()
@@ -27,12 +28,14 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
   const unitsAsOptions = useMemo(
     () =>
       pipe(
-        map<Mission.Mission, string[]>(({ controlUnits }) => (controlUnits || []).map(({ name }) => name)),
+        map<AugmentedDataItem<MissionWithActions>, string[]>(({ item: { controlUnits } }) =>
+          (controlUnits || []).map(({ name }) => name)
+        ),
         flatten,
         uniq,
         getOptionsFromStrings
-      )(missions),
-    [missions]
+      )(augmentedMissionsWithActions),
+    [augmentedMissionsWithActions]
   )
 
   const handleFilterChange = useCallback(

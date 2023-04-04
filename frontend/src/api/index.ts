@@ -18,7 +18,6 @@ const monitorenvBaseQuery = fetchBaseQuery({
 })
 export const monitorenvApi = createApi({
   baseQuery: normalizeRtkBaseQuery(monitorenvBaseQuery),
-  // TODO Is this prop initialization necessary?
   endpoints: () => ({}),
   reducerPath: 'monitorenvApi',
   tagTypes: ['ControlUnits', 'Missions']
@@ -33,7 +32,6 @@ const monitorfishBaseQuery = fetchBaseQuery({
 })
 export const monitorfishApi = createApi({
   baseQuery: normalizeRtkBaseQuery(monitorfishBaseQuery),
-  // TODO Is this prop initialization necessary?
   endpoints: () => ({}),
   reducerPath: 'monitorfishApi',
   tagTypes: ['ControlObjectives', 'FleetSegments', 'Gears', 'Infractions', 'MissionActions', 'Ports', 'Species']

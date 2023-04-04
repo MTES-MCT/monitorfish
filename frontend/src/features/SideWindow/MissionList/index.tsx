@@ -1,12 +1,12 @@
-import { Button, getLocalizedDayjs, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
+import { Button, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
 import { noop } from 'lodash'
-import { pipe } from 'ramda'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_LIST_TABLE_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
-import { getSeaFrontFilter } from './utils'
+import { getSeaFrontFilter, renderStatus } from './utils'
+import { monitorfishApi } from '../../../api'
 import { useGetMissionsQuery } from '../../../api/mission'
 import { missionActions } from '../../../domain/actions'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
@@ -16,32 +16,30 @@ import { EmptyCardTable } from '../../../ui/card-table/EmptyCardTable'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
 import { SideWindowMenuKey } from '../constants'
 
-import type { MissionFilter } from './types'
+import type { MissionStatus, MissionWithActions } from './types'
 import type { Mission } from '../../../domain/entities/mission/types'
-import type { MutableRefObject } from 'react'
+import type { MissionAction } from '../../../domain/types/missionAction'
+import type { AugmentedDataFilter } from '../../../hooks/useTable/types'
 
 type MissionListProps = {
   selectedSubMenu: string
 }
 export function MissionList({ selectedSubMenu }: MissionListProps) {
-  const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
+  const missionsWithActionsRef = useRef<MissionWithActions[]>([])
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
-  const [filters, setFilters] = useState<MissionFilter[]>([])
+  const [filters, setFilters] = useState<Array<AugmentedDataFilter<MissionWithActions>>>([])
 
   const getMissionsApiQuery = useGetMissionsQuery(undefined)
   const dispatch = useMainAppDispatch()
 
-  const { renderTableHead, tableData } = useTable<Mission.Mission>(
-    getMissionsApiQuery.data,
-    MISSION_LIST_TABLE_OPTIONS,
-    searchInputRef.current?.value
-  )
-
   const seaFrontGroupFilter = useMemo(() => getSeaFrontFilter(selectedSubMenu), [selectedSubMenu])
 
-  const filteredMissions = useMemo(
-    () => (pipe as (...args: MissionFilter[]) => MissionFilter)(seaFrontGroupFilter, ...filters)(tableData),
-    [filters, seaFrontGroupFilter, tableData]
+  const { renderTableHead, tableAugmentedData } = useTable<MissionWithActions>(
+    missionsWithActionsRef.current,
+    MISSION_LIST_TABLE_OPTIONS,
+    [seaFrontGroupFilter, ...filters],
+    searchInputRef.current?.value
   )
 
   const goToMissionForm = useCallback(
@@ -58,6 +56,27 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
     [dispatch]
   )
 
+  useEffect(() => {
+    ;(async () => {
+      if (!getMissionsApiQuery.data || !getMissionsApiQuery.data.length || missionsWithActionsRef.current.length > 0) {
+        return
+      }
+
+      const nextMissionsWithActions: MissionWithActions[] = await Promise.all(
+        getMissionsApiQuery.data.map(async mission => {
+          const { data } = await dispatch((monitorfishApi.endpoints as any).getMissionActions.initiate(mission.id))
+
+          return {
+            ...mission,
+            actions: (data || []) as MissionAction.MissionAction[]
+          }
+        })
+      )
+
+      missionsWithActionsRef.current = nextMissionsWithActions
+    })()
+  }, [dispatch, getMissionsApiQuery.data])
+
   return (
     <Wrapper>
       <Header>
@@ -70,46 +89,31 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
       </Header>
 
       <Body>
-        <FilterBar missions={tableData} onChange={setFilters} />
+        <FilterBar augmentedMissionsWithActions={tableAugmentedData} onChange={setFilters} />
 
         {getMissionsApiQuery.isLoading && <p>Chargement en cours...</p>}
         {getMissionsApiQuery.error && <pre>{JSON.stringify(getMissionsApiQuery.error)}</pre>}
         {!getMissionsApiQuery.isLoading && !getMissionsApiQuery.error && (
           <>
-            <div>{`${filteredMissions.length ? filteredMissions.length : 'Aucune'} mission${
-              filteredMissions.length > 1 ? 's' : ''
+            <div>{`${tableAugmentedData.length ? tableAugmentedData.length : 'Aucune'} mission${
+              tableAugmentedData.length > 1 ? 's' : ''
             }`}</div>
             <Table>
               {renderTableHead()}
 
               <TableBody>
-                {filteredMissions.map(mission => (
-                  <TableBodyRow key={mission.id} data-id={mission.id}>
-                    <TableBodyCell $fixedWidth={144}>
-                      {getLocalizedDayjs(mission.startDateTimeUtc).format('D MMM YY, HH:MM')}
+                {tableAugmentedData.map(augmentedMission => (
+                  <TableBodyRow key={augmentedMission.id} data-id={augmentedMission.id}>
+                    <TableBodyCell $fixedWidth={136}>{augmentedMission.labelled.startDateTimeUtc}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={136}>{augmentedMission.labelled.endDateTimeUtc}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={80}>{augmentedMission.labelled.missionType}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={80}>{augmentedMission.labelled.missionSource}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={160}>{augmentedMission.labelled.controlUnits}</TableBodyCell>
+                    <TableBodyCell>{augmentedMission.labelled.inspectedVessels}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={128}>{augmentedMission.labelled.inspectionsCount}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={128}>
+                      {renderStatus(augmentedMission.labelled.status as MissionStatus)}
                     </TableBodyCell>
-                    <TableBodyCell $fixedWidth={144}>
-                      {mission.endDateTimeUtc
-                        ? getLocalizedDayjs(mission.endDateTimeUtc).format('D MMM YY, HH:MM')
-                        : '-'}
-                    </TableBodyCell>
-                    <TableBodyCell>
-                      {mission.controlUnits
-                        ?.map(controlUnit => `${controlUnit.name} (${controlUnit.administration || '-'})`)
-                        .join(', ')}
-                    </TableBodyCell>
-                    <TableBodyCell $fixedWidth={80}>{mission.missionType}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={80}>{mission.facade}</TableBodyCell>
-                    {/* TODO Inspect that. */}
-                    {/* <TableBodyCell $fixedWidth={160}>{mission.themes?.join(', ')}</TableBodyCell> */}
-                    <TableBodyCell $fixedWidth={160}>THEMES</TableBodyCell>
-                    {/* TODO Inspect that. */}
-                    {/* <TableBodyCell $fixedWidth={48}>{mission.inspectionsCount}</TableBodyCell> */}
-                    <TableBodyCell $fixedWidth={48}>0</TableBodyCell>
-                    {/* TODO Inspect that. */}
-                    {/* <TableBodyCell $fixedWidth={128}>{mission.status}</TableBodyCell> */}
-                    <TableBodyCell $fixedWidth={128}>STATUS</TableBodyCell>
-                    <TableBodyCell $fixedWidth={160}>ALERTE</TableBodyCell>
                     <TableBodyCell
                       $fixedWidth={48}
                       style={{
@@ -128,7 +132,7 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
                     >
                       <IconButton
                         Icon={Icon.Edit}
-                        onClick={() => goToMissionForm(mission.id)}
+                        onClick={() => goToMissionForm(augmentedMission.id)}
                         size={Size.SMALL}
                         title="Éditer la mission"
                       />
@@ -137,7 +141,7 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
                 ))}
               </TableBody>
 
-              {!tableData.length && <EmptyCardTable>Aucun signalement</EmptyCardTable>}
+              {!tableAugmentedData.length && <EmptyCardTable>Aucune mission</EmptyCardTable>}
             </Table>
           </>
         )}

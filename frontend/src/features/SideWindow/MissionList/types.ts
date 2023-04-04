@@ -1,6 +1,3 @@
-import type { Mission } from '../../../domain/entities/mission/types'
-import type { MissionAction } from '../../../domain/types/missionAction'
-
 /* eslint-disable typescript-sort-keys/string-enum */
 export enum MissionDateRangeFilter {
   CURRENT_DAY = 'Aujourd’hui',
@@ -29,7 +26,3 @@ export enum MissionStatus {
   CLOSED = 'Clotûrée'
 }
 /* eslint-enable typescript-sort-keys/string-enum */
-
-export interface MissionWithActions extends Mission.Mission {
-  actions: MissionAction.MissionAction[]
-}

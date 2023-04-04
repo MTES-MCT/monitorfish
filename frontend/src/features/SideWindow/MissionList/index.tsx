@@ -1,14 +1,14 @@
 import { Button, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
 import { noop } from 'lodash'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_LIST_TABLE_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
 import { getSeaFrontFilter, renderStatus } from './utils'
-import { monitorfishApi } from '../../../api'
 import { useGetMissionsQuery } from '../../../api/mission'
 import { missionActions } from '../../../domain/actions'
+import { useGetMissionsWithActions } from '../../../domain/entities/mission/hooks/useGetMissionsWithActions'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useTable } from '../../../hooks/useTable'
@@ -16,16 +16,15 @@ import { EmptyCardTable } from '../../../ui/card-table/EmptyCardTable'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
 import { SideWindowMenuKey } from '../constants'
 
-import type { MissionStatus, MissionWithActions } from './types'
-import type { Mission } from '../../../domain/entities/mission/types'
-import type { MissionAction } from '../../../domain/types/missionAction'
+import type { MissionStatus } from './types'
+import type { Mission, MissionWithActions } from '../../../domain/entities/mission/types'
 import type { AugmentedDataFilter } from '../../../hooks/useTable/types'
 
 type MissionListProps = {
   selectedSubMenu: string
 }
 export function MissionList({ selectedSubMenu }: MissionListProps) {
-  const missionsWithActionsRef = useRef<MissionWithActions[]>([])
+  const missionsWithActions = useGetMissionsWithActions()
   const searchInputRef = useRef<HTMLInputElement>(null)
 
   const [filters, setFilters] = useState<Array<AugmentedDataFilter<MissionWithActions>>>([])
@@ -36,7 +35,7 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
   const seaFrontGroupFilter = useMemo(() => getSeaFrontFilter(selectedSubMenu), [selectedSubMenu])
 
   const { renderTableHead, tableAugmentedData } = useTable<MissionWithActions>(
-    missionsWithActionsRef.current,
+    missionsWithActions,
     MISSION_LIST_TABLE_OPTIONS,
     [seaFrontGroupFilter, ...filters],
     searchInputRef.current?.value
@@ -55,27 +54,6 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
     },
     [dispatch]
   )
-
-  useEffect(() => {
-    ;(async () => {
-      if (!getMissionsApiQuery.data || !getMissionsApiQuery.data.length || missionsWithActionsRef.current.length > 0) {
-        return
-      }
-
-      const nextMissionsWithActions: MissionWithActions[] = await Promise.all(
-        getMissionsApiQuery.data.map(async mission => {
-          const { data } = await dispatch((monitorfishApi.endpoints as any).getMissionActions.initiate(mission.id))
-
-          return {
-            ...mission,
-            actions: (data || []) as MissionAction.MissionAction[]
-          }
-        })
-      )
-
-      missionsWithActionsRef.current = nextMissionsWithActions
-    })()
-  }, [dispatch, getMissionsApiQuery.data])
 
   return (
     <Wrapper>

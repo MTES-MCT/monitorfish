@@ -102,3 +102,8 @@ export const getNumberOfInfractionsWithRecord = (control: MissionAction.MissionA
     control.otherInfractions.filter(infractionWithRecordFilter).length
   )
 }
+
+export const isControl = actionType =>
+  actionType === MissionAction.MissionActionType.SEA_CONTROL ||
+  actionType === MissionAction.MissionActionType.LAND_CONTROL ||
+  actionType === MissionAction.MissionActionType.AIR_CONTROL

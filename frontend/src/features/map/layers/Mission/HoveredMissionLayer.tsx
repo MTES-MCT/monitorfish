@@ -6,12 +6,12 @@ import { missionZoneStyle } from './MissionLayer/styles'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { getMissionFeatureZone } from '../../../../domain/entities/mission'
-import { useGetMissionsAndActions } from '../../../../domain/entities/mission/hooks/useGetMissionsAndActions'
+import { useGetMissionsWithActions } from '../../../../domain/entities/mission/hooks/useGetMissionsWithActions'
 
 import type { VectorLayerWithName } from '../../../../domain/types/layer'
 
 export function UnmemoizedMissionHoveredLayer({ feature, map }) {
-  const missionsAndActions = useGetMissionsAndActions()
+  const missionsWithActions = useGetMissionsWithActions()
 
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
   const getVectorSource = useCallback(() => {
@@ -59,14 +59,16 @@ export function UnmemoizedMissionHoveredLayer({ feature, map }) {
       return
     }
 
-    const hoveredMission = missionsAndActions.find(mission => mission.mission.id === feature.get('missionId'))
-    if (!hoveredMission) {
+    const hoveredMissionWithActions = missionsWithActions.find(
+      missionWithActions => missionWithActions.id === feature.get('missionId')
+    )
+    if (!hoveredMissionWithActions) {
       return
     }
 
-    const missionFeature = getMissionFeatureZone(hoveredMission.mission)
+    const missionFeature = getMissionFeatureZone(hoveredMissionWithActions)
     getVectorSource().addFeature(missionFeature)
-  }, [missionsAndActions, feature, getVectorSource])
+  }, [feature, getVectorSource, missionsWithActions])
 
   return null
 }

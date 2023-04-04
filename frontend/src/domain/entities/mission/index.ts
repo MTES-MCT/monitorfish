@@ -4,7 +4,7 @@ import { GeoJSON } from 'ol/format'
 import Point from 'ol/geom/Point'
 import { transform } from 'ol/proj'
 
-import { Mission } from './types'
+import { Mission, MissionWithActions } from './types'
 import { getMissionColor } from '../../../features/map/layers/Mission/MissionLayer/styles'
 import { booleanToInt, getDate, getDateTime } from '../../../utils'
 import { MissionAction } from '../../types/missionAction'
@@ -24,10 +24,7 @@ export function getMissionFeaturePointId(id: number) {
   return `${MonitorFishLayer.MISSION_PIN_POINT}:${id}`
 }
 
-export const getMissionFeaturePoint = (
-  mission: Mission.Mission,
-  actions: MissionAction.MissionAction[]
-): Feature<Point> | undefined => {
+export const getMissionFeaturePoint = ({ actions, ...mission }: MissionWithActions): Feature<Point> | undefined => {
   const geoJSON = new GeoJSON()
   const geometry = geoJSON.readGeometry(mission.geom, {
     dataProjection: WSG84_PROJECTION,

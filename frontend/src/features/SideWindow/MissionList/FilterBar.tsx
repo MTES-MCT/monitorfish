@@ -11,7 +11,7 @@ import { mapFilterFormRecordsToFilters } from './utils'
 import { useNewWindow } from '../../../ui/NewWindow'
 import { getOptionsFromStrings } from '../../../utils/getOptionsFromStrings'
 
-import type { MissionWithActions } from './types'
+import type { MissionWithActions } from '../../../domain/entities/mission/types'
 import type { AugmentedDataFilter, AugmentedDataItem } from '../../../hooks/useTable/types'
 import type { Promisable } from 'type-fest'
 

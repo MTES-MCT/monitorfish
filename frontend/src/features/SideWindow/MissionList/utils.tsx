@@ -6,8 +6,8 @@ import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS } from '../../../domain/entities/al
 import { FrontendError } from '../../../libs/FrontendError'
 import { dayjs } from '../../../utils/dayjs'
 
-import type { MissionWithActions } from './types'
 import type { SeaFront } from '../../../constants'
+import type { MissionWithActions } from '../../../domain/entities/mission/types'
 import type { AugmentedDataFilter, AugmentedDataItem } from '../../../hooks/useTable/types'
 
 export const getSeaFrontFilter = (selectedSubMenu: string): AugmentedDataFilter<MissionWithActions> => {

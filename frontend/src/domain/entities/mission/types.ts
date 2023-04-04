@@ -101,7 +101,6 @@ export namespace Mission {
   }
 }
 
-export type MissionAndActions = {
+export interface MissionWithActions extends Mission.Mission {
   actions: MissionAction.MissionAction[]
-  mission: Mission.Mission
 }

@@ -1,10 +1,9 @@
 import { getLocalizedDayjs, Option } from '@mtes-mct/monitor-ui'
 
 import { MissionDateRangeFilter, MissionFilterType, MissionStatus } from './types'
-import { Mission } from '../../../domain/entities/mission/types'
+import { Mission, MissionWithActions } from '../../../domain/entities/mission/types'
 import { getOptionsFromLabelledEnum } from '../../../utils/getOptionsFromLabelledEnum'
 
-import type { MissionWithActions } from './types'
 import type { TableOptions } from '../../../hooks/useTable/types'
 
 export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option[]> = {

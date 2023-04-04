@@ -48,7 +48,7 @@ export function ControlOverlay({ feature, isSelected = false, map }) {
 
       overlayObjectRef.current = new Overlay({
         autoPan: false,
-        className: 'ol-overlay-container ol-selectable',
+        className: 'ol-overlay-container ol-selectable mission-control-overlay',
         element: ref,
         offset: currentOffsetRef.current
       })

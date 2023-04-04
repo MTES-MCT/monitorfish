@@ -16,7 +16,7 @@ context('Beacon malfunction', () => {
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('not.exist')
 
     // When
-    cy.get('.vessels')
+    cy.get('.VESSELS')
       .eq(0)
       .toMatchImageSnapshot({
         imageConfig: {

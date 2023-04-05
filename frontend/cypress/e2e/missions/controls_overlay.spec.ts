@@ -1,8 +1,12 @@
 /// <reference types="cypress" />
 
+import { stubSideWindowOptions } from '../../support/commands'
+
 context('Controls overlay', () => {
   beforeEach(() => {
-    cy.loadPath('/#@-27112.04,6363415.43,10.02')
+    cy.intercept('GET', `/bff/v1/mission_actions?missionId=49`).as('missionAction')
+    cy.visit('/#@-27112.04,6363415.43,10.02', stubSideWindowOptions)
+    cy.wait('@missionAction')
   })
 
   it('A control overlay Should be showed and closed', () => {
@@ -18,6 +22,7 @@ context('Controls overlay', () => {
 
     // Open the control overlay
     cy.get('#root').click(405, 644)
+    cy.get('#root').click(404, 644)
 
     cy.get('*[data-cy="mission-action-overlay"]').contains('Contrôle du navire NOM INCONNU')
     cy.get('*[data-cy="mission-action-overlay"]').contains('Aucune infraction')
@@ -25,7 +30,7 @@ context('Controls overlay', () => {
 
     cy.intercept('GET', '/api/v1/missions/34').as('getMission')
     cy.get('[data-cy="edit-mission-control"]').click()
-    cy.wait('@getMission')
+    cy.get('@windowOpen').should('have.been.calledOnce')
 
     // Close the mission and the control overlay
     cy.get('*[data-cy="mission-overlay-close"]').click()

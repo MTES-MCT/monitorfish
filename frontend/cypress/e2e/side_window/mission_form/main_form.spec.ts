@@ -265,7 +265,7 @@ context('Side Window > Mission Form > Main Form', () => {
         internalReferenceNumber: null,
         ircs: null,
         isFromPoseidon: null,
-        latitude: 45.12,
+        latitude: 47.44,
         licencesAndLogbookObservations: "C'est pas très très bien réglo toute cette poissecalle non déclarée",
         licencesMatchActivity: 'NO',
         logbookInfractions: [
@@ -276,7 +276,7 @@ context('Side Window > Mission Form > Main Form', () => {
           }
         ],
         logbookMatchesActivity: 'NO',
-        longitude: -6.56,
+        longitude: -0.52,
         missionId: 2,
         numberOfVesselsFlownOver: null,
         otherComments: 'Commentaires post contrôle',

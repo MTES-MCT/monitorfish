@@ -12,9 +12,10 @@ export enum MonitorFishLayer {
   INTEREST_POINT = 'INTEREST_POINT',
   IOTC = 'IOTC',
   MEASUREMENT = 'MEASUREMENT',
-  MISSION = 'MISSION',
   MISSIONS_LABEL = 'MISSIONS_LABEL',
+  MISSION_ACTION_SELECTED = 'MISSION_ACTION_SELECTED',
   MISSION_HOVER = 'MISSION_HOVER',
+  MISSION_PIN_POINT = 'MISSION_PIN_POINT',
   MISSION_SELECTED = 'MISSION_SELECTED',
   NAFO = 'NAFO',
   NEAFC = 'NEAFC',
@@ -56,11 +57,13 @@ export enum MonitorFishLayer {
 }
 
 export type ShowableLayer = {
-  code: string
+  code: MonitorFishLayer | string
   getZoneName?: (feature: any) => string
   group?: CodeAndName | undefined
   hasFetchableZones?: boolean
   hasSearchableZones?: boolean
+  isClickable?: boolean
+  isHoverable?: boolean
   isIntersectable?: boolean
   name?: string
   subSubZoneFieldKey?: string

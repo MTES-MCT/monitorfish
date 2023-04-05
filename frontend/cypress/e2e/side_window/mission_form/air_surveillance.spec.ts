@@ -23,7 +23,7 @@ context('Side Window > Mission Form > Air Surveillance', () => {
     // cy.fill('Objectifs du vol', 'Vérifications VMS/AIS')
 
     // Segments ciblés
-    cy.fill('Segments ciblés (si pertinent)', ['ATL01', 'FR_DRB'])
+    cy.fill('Segments ciblés', ['ATL01', 'FR_DRB'])
 
     // Nb de navires survolés
     cy.fill('Nb de navires survolés', 15)

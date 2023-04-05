@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 
 import {
-  getAdministrativeLayers,
+  administrativeLayers,
   layerOfTypeAdministrativeLayer,
   layerOfTypeAdministrativeLayerInCurrentMap,
   layersNotInCurrentOLMap,
@@ -16,8 +16,6 @@ export type AdministrativeLayersProps = {
 function UnmemoizedAdministrativeLayers({ map }: AdministrativeLayersProps) {
   const { showedLayers } = useMainAppSelector(state => state.layer)
   const isBackoffice = useMainAppSelector(state => state.global.isBackoffice)
-
-  const administrativeLayers = getAdministrativeLayers()
 
   useEffect(() => {
     if (!map && !showedLayers) {
@@ -53,7 +51,7 @@ function UnmemoizedAdministrativeLayers({ map }: AdministrativeLayersProps) {
 
     addAdministrativeLayersToMap()
     removeAdministrativeLayersToMap()
-  }, [administrativeLayers, isBackoffice, map, showedLayers])
+  }, [isBackoffice, map, showedLayers])
 
   return <></>
 }

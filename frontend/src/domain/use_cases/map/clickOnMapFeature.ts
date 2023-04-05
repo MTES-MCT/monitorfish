@@ -1,7 +1,9 @@
 import GeoJSON from 'ol/format/GeoJSON'
 
 import { missionActions } from '../../actions'
-import { LayerProperties, LayerType } from '../../entities/layers/constants'
+import { isControl } from '../../entities/controls'
+import { LayerProperties } from '../../entities/layers/constants'
+import { MonitorFishLayer } from '../../entities/layers/types'
 import { OPENLAYERS_PROJECTION } from '../../entities/map/constants'
 import { showRegulatoryZoneMetadata } from '../layer/regulation/showRegulatoryZoneMetadata'
 import { getVesselVoyage } from '../vessel/getVesselVoyage'
@@ -10,6 +12,10 @@ import { showVesselTrack } from '../vessel/showVesselTrack'
 
 import type { VesselLastPositionFeature } from '../../entities/vessel/types'
 import type { MapClick } from '../../types/map'
+import type { Feature } from 'ol'
+import type { Geometry } from 'ol/geom'
+
+const geoJSONParser = new GeoJSON()
 
 export const clickOnMapFeature = (mapClick: MapClick) => (dispatch, getState) => {
   const { previewFilteredVesselsMode } = getState().global
@@ -32,10 +38,23 @@ export const clickOnMapFeature = (mapClick: MapClick) => (dispatch, getState) =>
     return
   }
 
-  if (clickedFeatureId.includes(LayerType.MISSION)) {
-    const parser = new GeoJSON()
-    const featureGeoJSON = parser.writeFeatureObject(mapClick.feature, { featureProjection: OPENLAYERS_PROJECTION })
+  if (clickedFeatureId.includes(MonitorFishLayer.MISSION_PIN_POINT)) {
+    const featureGeoJSON = geoJSONParser.writeFeatureObject(mapClick.feature as Feature<Geometry>, {
+      featureProjection: OPENLAYERS_PROJECTION
+    })
     dispatch(missionActions.setSelectedMissionGeoJSON(featureGeoJSON))
+
+    return
+  }
+
+  if (
+    clickedFeatureId.includes(MonitorFishLayer.MISSION_ACTION_SELECTED) &&
+    isControl(mapClick.feature.get('actionType'))
+  ) {
+    const featureGeoJSON = geoJSONParser.writeFeatureObject(mapClick.feature as Feature<Geometry>, {
+      featureProjection: OPENLAYERS_PROJECTION
+    })
+    dispatch(missionActions.setSelectedMissionActionGeoJSON(featureGeoJSON))
 
     return
   }

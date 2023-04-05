@@ -7,6 +7,12 @@ function unquote(str: string): string {
   return str.replace(/(^")|("$)/g, '')
 }
 
+export const stubSideWindowOptions = {
+  onBeforeLoad(window) {
+    cy.stub(window, 'open', () => window).as('windowOpen')
+  }
+}
+
 Cypress.Commands.add(
   'before',
   {

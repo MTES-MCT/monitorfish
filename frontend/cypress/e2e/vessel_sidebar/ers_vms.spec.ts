@@ -8,7 +8,7 @@ context('Vessel sidebar ers/vms tab', () => {
 
   it('ERS/VMS tab Should contain history of beacon malfunctions and show a malfunction detail in history', () => {
     // Given
-    cy.get('.vessels').click(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS').click(460, 480, { force: true, timeout: 10000 })
     cy.wait(50)
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.intercept('GET', '/bff/v1/vessels/beacon_malfunctions*').as('vesselBeaconMalfunctions')
@@ -53,7 +53,7 @@ context('Vessel sidebar ers/vms tab', () => {
 
   it('ERS/VMS tab Should contain current and history of beacon malfunctions', () => {
     // Go to the detail of a beacon malfunction and go back to resume
-    cy.get('.vessels').click(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS').click(460, 480, { force: true, timeout: 10000 })
     cy.get('*[data-cy="vessel-menu-ers-vms"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-beacon-malfunctions-history"]', { timeout: 10000 }).children().eq(0).click()
     cy.get('*[data-cy="vessel-beacon-malfunction-single-history"]', { timeout: 10000 }).click({ force: true })

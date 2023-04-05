@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="44.5" viewBox="0 0 24 44.5">
+  <g id="Groupe_4636" data-name="Groupe 4636" transform="translate(-465 -518)">
+    <g id="Close" transform="translate(469 546)">
+      <path id="Tracé_1377" data-name="Tracé 1377" d="M-146,85.061-147.061,84-152,88.939-156.939,84-158,85.061-153.061,90-158,94.939-156.939,96-152,91.061-147.061,96-146,94.939-150.939,90Z" transform="translate(160 -82)" fill="#3b4559"/>
+      <rect id="Rectangle_6129" data-name="Rectangle 6129" width="16" height="16" fill="none" stroke="rgba(0,0,0,0)" stroke-width="1"/>
+    </g>
+    <g id="Groupe_4650" data-name="Groupe 4650" transform="translate(482.053 492)">
+      <g id="Groupe_4404" data-name="Groupe 4404">
+        <rect id="Rectangle_6313" data-name="Rectangle 6313" width="2.4" height="14.4" transform="translate(2.147 46.496) rotate(90)" fill="#3b4559"/>
+        <g id="Tracé_1476" data-name="Tracé 1476" fill="none">
+          <path d="M-2.291,31.9H-7.816a2.355,2.355,0,0,0-2.372,1.843L-12.253,45.1h14.4L.082,33.747A2.356,2.356,0,0,0-2.291,31.9Z" stroke="none"/>
+          <path d="M -7.815999984741211 33.90399932861328 C -8.053979873657227 33.90399932861328 -8.207830429077148 34.03630828857422 -8.220259666442871 34.10478591918945 L -9.856552124023438 43.10399627685547 L -0.2494468688964844 43.10399627685547 L -1.885499954223633 34.1060676574707 C -1.898019790649414 34.0374870300293 -2.052490234375 33.90399932861328 -2.290999889373779 33.90399932861328 L -7.815999984741211 33.90399932861328 M -7.815999984741211 31.90399932861328 L -2.290999889373779 31.90399932861328 C -1.114999771118164 31.90399932861328 -0.11199951171875 32.68399810791016 0.08199977874755859 33.74699783325195 L 2.147000312805176 45.10399627685547 L -12.25300025939941 45.10399627685547 L -10.1879997253418 33.74699783325195 C -9.994999885559082 32.68399810791016 -8.991000175476074 31.90399932861328 -7.815999984741211 31.90399932861328 Z" stroke="none" fill="#3b4559"/>
+        </g>
+        <rect id="Rectangle_6314" data-name="Rectangle 6314" width="1.789" height="3" transform="translate(-5.948 26.104)" fill="#3b4559"/>
+        <rect id="Rectangle_6315" data-name="Rectangle 6315" width="1.8" height="3.343" transform="translate(2.074 28.304) rotate(45)" fill="#3b4559"/>
+        <rect id="Rectangle_6316" data-name="Rectangle 6316" width="1.8" height="3.343" transform="translate(-13.453 29.577) rotate(-45)" fill="#3b4559"/>
+      </g>
+      <rect id="Rectangle_6317" data-name="Rectangle 6317" width="24" height="24" transform="translate(-17.053 26)" fill="none"/>
+    </g>
+  </g>
+</svg>

@@ -22,6 +22,7 @@ context('Controls overlay', () => {
 
     // Open the control overlay
     cy.get('#root').click(405, 644)
+    // Double the click to avoid many Cypress retries
     cy.get('#root').click(404, 644)
 
     cy.get('*[data-cy="mission-action-overlay"]').contains('Contrôle du navire NOM INCONNU')
@@ -44,6 +45,8 @@ context('Controls overlay', () => {
 
     // Open the control overlay
     cy.get('#root').click(405, 644)
+    // Double the click to avoid many Cypress retries
+    cy.get('#root').click(404, 644)
 
     cy.getComputedStyle('*[data-cy="mission-action-overlay"]', 2).then(styleBefore => {
       expect(styleBefore.transform).contains('matrix(1, 0, 0, 1, 406, 602)')

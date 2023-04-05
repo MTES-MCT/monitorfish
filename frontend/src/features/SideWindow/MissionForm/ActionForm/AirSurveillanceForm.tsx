@@ -50,7 +50,7 @@ export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillance
             options={FLIGHT_GOALS_AS_OPTIONS}
           />
 
-          <FleetSegmentsField label="Segments ciblés (si pertinent)" />
+          <FleetSegmentsField label="Segments ciblés" />
 
           <FormikNumberInput isLight label="Nb de navires survolés" name="numberOfVesselsFlownOver" />
 

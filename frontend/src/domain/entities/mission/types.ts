@@ -42,6 +42,12 @@ export namespace Mission {
 
   /* eslint-disable typescript-sort-keys/string-enum */
   export enum MissionStatus {
+    UPCOMING = 'UPCOMING',
+    IN_PROGRESS = 'IN_PROGRESS',
+    DONE = 'DONE',
+    CLOSED = 'CLOSED'
+  }
+  export enum MissionStatusLabel {
     UPCOMING = 'À venir',
     IN_PROGRESS = 'En cours',
     DONE = 'Terminée',

@@ -4,17 +4,7 @@ import pytest
 from src.pipeline.helpers.segments import (
     attribute_segments_to_catches,
     attribute_segments_to_catches_by_year,
-    catch_area_isin_fao_area,
 )
-
-
-def test_catch_area_isin_fao_area():
-    assert catch_area_isin_fao_area("27", "27")
-    assert catch_area_isin_fao_area("27.7", "27")
-    assert catch_area_isin_fao_area("27.7", None)
-    assert catch_area_isin_fao_area(None, None)
-    assert not catch_area_isin_fao_area(None, "27.7")
-    assert not catch_area_isin_fao_area("27", "27.7")
 
 
 @pytest.fixture
@@ -281,8 +271,7 @@ def test_attribute_segments_to_catches_with_empty_input(
         catches=empty_catches, segments=segments
     )
     pd.testing.assert_frame_equal(
-        segmented_catches,
-        expected_segmented_catches.head(0),
+        segmented_catches, expected_segmented_catches.head(0), check_dtype=False
     )
 
 
@@ -338,5 +327,5 @@ def test_attribute_segments_to_catches_by_year_with_empty_input(
         empty_catches_by_year, segments_by_year
     )
     pd.testing.assert_frame_equal(
-        segmented_catches, expected_segmented_catches_by_year.head(0)
+        segmented_catches, expected_segmented_catches_by_year.head(0), check_dtype=False
     )

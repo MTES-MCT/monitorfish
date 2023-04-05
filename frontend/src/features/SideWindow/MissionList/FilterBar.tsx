@@ -1,4 +1,4 @@
-import { FormikDateRangePicker, FormikEffect, FormikMultiSelect, FormikSelect } from '@mtes-mct/monitor-ui'
+import { FormikDateRangePicker, FormikEffect, FormikMultiSelect, FormikSelect, TextInput } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop, toPairs } from 'lodash'
 import { concat, flatten, map, pipe, uniq } from 'ramda'
@@ -12,42 +12,54 @@ import { useNewWindow } from '../../../ui/NewWindow'
 import { getOptionsFromStrings } from '../../../utils/getOptionsFromStrings'
 
 import type { MissionWithActions } from '../../../domain/entities/mission/types'
-import type { AugmentedDataFilter, AugmentedDataItem } from '../../../hooks/useTable/types'
+import type { AugmentedDataFilter } from '../../../hooks/useTable/types'
 import type { Promisable } from 'type-fest'
 
 export type FilterBarProps = {
-  augmentedMissionsWithActions: Array<AugmentedDataItem<MissionWithActions>>
+  missionsWithActions: MissionWithActions[]
   onChange: (filters: Array<AugmentedDataFilter<MissionWithActions>>) => Promisable<void>
+  onQueryChange: (nextQuery: string | undefined) => Promisable<void>
 }
-export function FilterBar({ augmentedMissionsWithActions, onChange }: FilterBarProps) {
+export function FilterBar({ missionsWithActions, onChange, onQueryChange }: FilterBarProps) {
   const customFiltersRef = useRef<Array<AugmentedDataFilter<MissionWithActions>>>([])
   const [isCustomDateRangeOpen, setIsCustomDateRangeOpen] = useState(false)
 
   const { newWindowContainerRef } = useNewWindow()
 
-  const unitsAsOptions = useMemo(
+  const administrationsAsOptions = useMemo(
     () =>
       pipe(
-        map<AugmentedDataItem<MissionWithActions>, string[]>(({ item: { controlUnits } }) =>
-          (controlUnits || []).map(({ name }) => name)
+        map<MissionWithActions, string[]>(({ controlUnits }) =>
+          (controlUnits || []).map(({ administration }) => administration)
         ),
         flatten,
         uniq,
         getOptionsFromStrings
-      )(augmentedMissionsWithActions),
-    [augmentedMissionsWithActions]
+      )(missionsWithActions),
+    [missionsWithActions]
+  )
+
+  const unitsAsOptions = useMemo(
+    () =>
+      pipe(
+        map<MissionWithActions, string[]>(({ controlUnits }) => (controlUnits || []).map(({ name }) => name)),
+        flatten,
+        uniq,
+        getOptionsFromStrings
+      )(missionsWithActions),
+    [missionsWithActions]
   )
 
   const handleFilterChange = useCallback(
-    (values: Partial<Record<MissionFilterType, string | string[]>>) => {
-      const willCustomDateRangeOpen = values.dateRange === MissionDateRangeFilter.CUSTOM
-      setIsCustomDateRangeOpen(willCustomDateRangeOpen)
+    (filters: Partial<Record<MissionFilterType, string | string[]>>) => {
+      const willOpenCustomDateRange = filters.DATE_RANGE === MissionDateRangeFilter.CUSTOM
+      setIsCustomDateRangeOpen(willOpenCustomDateRange)
 
       const nextFilters = pipe(
-        toPairs as (values: Partial<Record<MissionFilterType, string | string[]>>) => [MissionFilterType, any][],
+        toPairs as (filters: Partial<Record<MissionFilterType, string | string[]>>) => [MissionFilterType, any][],
         map(mapFilterFormRecordsToFilters),
         concat(customFiltersRef.current)
-      )(values)
+      )(filters)
 
       onChange(nextFilters)
     },
@@ -57,11 +69,19 @@ export function FilterBar({ augmentedMissionsWithActions, onChange }: FilterBarP
   return (
     <Formik initialValues={{}} onSubmit={noop}>
       <Box>
-        <Title>FILTRER LA LISTE</Title>
-
         <FormikEffect onChange={handleFilterChange} />
 
-        <FiltersBox>
+        <Row>
+          <TextInput
+            isLabelHidden
+            label="Rechercher un navire"
+            name="searchInput"
+            onChange={onQueryChange}
+            placeholder="Rechercher un navire"
+          />
+        </Row>
+
+        <Row>
           <FormikSelect
             baseContainer={newWindowContainerRef.current}
             isLabelHidden
@@ -70,6 +90,14 @@ export function FilterBar({ augmentedMissionsWithActions, onChange }: FilterBarP
             options={MISSION_FILTER_OPTIONS[MissionFilterType.DATE_RANGE]}
             placeholder="Période"
           />
+          <FormikSelect
+            baseContainer={newWindowContainerRef.current}
+            isLabelHidden
+            label="Origine"
+            name={MissionFilterType.SOURCE}
+            options={MISSION_FILTER_OPTIONS[MissionFilterType.SOURCE]}
+            placeholder="Origine"
+          />
           <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}
             isLabelHidden
@@ -77,6 +105,14 @@ export function FilterBar({ augmentedMissionsWithActions, onChange }: FilterBarP
             name={MissionFilterType.STATUS}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.STATUS]}
             placeholder="Status"
+          />
+          <FormikMultiSelect
+            baseContainer={newWindowContainerRef.current}
+            isLabelHidden
+            label="Administration"
+            name={MissionFilterType.ADMINISTRATION}
+            options={administrationsAsOptions}
+            placeholder="Administration"
           />
           <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}
@@ -90,33 +126,16 @@ export function FilterBar({ augmentedMissionsWithActions, onChange }: FilterBarP
             baseContainer={newWindowContainerRef.current}
             isLabelHidden
             label="Type de mission"
-            name={MissionFilterType.MISSION_TYPE}
-            options={MISSION_FILTER_OPTIONS[MissionFilterType.MISSION_TYPE]}
+            name={MissionFilterType.TYPE}
+            options={MISSION_FILTER_OPTIONS[MissionFilterType.TYPE]}
             placeholder="Type de mission"
           />
-          <FormikMultiSelect
-            baseContainer={newWindowContainerRef.current}
-            isLabelHidden
-            label="Type de contrôle"
-            name={MissionFilterType.INSPECTION_TYPE}
-            options={MISSION_FILTER_OPTIONS[MissionFilterType.INSPECTION_TYPE]}
-            placeholder="Type de contrôle"
-          />
-          <FormikMultiSelect
-            baseContainer={newWindowContainerRef.current}
-            isLabelHidden
-            label="Alerte"
-            name={MissionFilterType.ALERT_TYPE}
-            options={MISSION_FILTER_OPTIONS[MissionFilterType.ALERT_TYPE]}
-            placeholder="Alerte"
-          />
-        </FiltersBox>
+        </Row>
 
         {isCustomDateRangeOpen && (
-          <FiltersBox>
-            isLabelHidden
+          <Row>
             <FormikDateRangePicker label="Période spécifique" name={MissionFilterType.CUSTOM_DATE_RANGE} />
-          </FiltersBox>
+          </Row>
         )}
       </Box>
     </Formik>
@@ -127,18 +146,14 @@ const Box = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 24px;
+
+  > div:first-child {
+    margin-bottom: 24px;
+  }
 `
 
-const Title = styled.h4`
-  color: ${p => p.theme.color.slateGray};
-  font-size: 16px;
-  font-weight: 500;
-  margin: 0;
-`
-
-const FiltersBox = styled.div`
+const Row = styled.div`
   display: flex;
-  margin-top: 24px;
 
   > div:not(:first-child) {
     margin-left: 16px;

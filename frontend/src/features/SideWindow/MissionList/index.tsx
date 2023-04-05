@@ -1,6 +1,6 @@
 import { Button, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
 import { noop } from 'lodash'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_LIST_TABLE_OPTIONS } from './constants'
@@ -16,7 +16,6 @@ import { EmptyCardTable } from '../../../ui/card-table/EmptyCardTable'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
 import { SideWindowMenuKey } from '../constants'
 
-import type { MissionStatus } from './types'
 import type { Mission, MissionWithActions } from '../../../domain/entities/mission/types'
 import type { AugmentedDataFilter } from '../../../hooks/useTable/types'
 
@@ -25,9 +24,9 @@ type MissionListProps = {
 }
 export function MissionList({ selectedSubMenu }: MissionListProps) {
   const missionsWithActions = useGetMissionsWithActions()
-  const searchInputRef = useRef<HTMLInputElement>(null)
 
   const [filters, setFilters] = useState<Array<AugmentedDataFilter<MissionWithActions>>>([])
+  const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
 
   const getMissionsApiQuery = useGetMissionsQuery(undefined)
   const dispatch = useMainAppDispatch()
@@ -38,7 +37,7 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
     missionsWithActions,
     MISSION_LIST_TABLE_OPTIONS,
     [seaFrontGroupFilter, ...filters],
-    searchInputRef.current?.value
+    searchQuery
   )
 
   const goToMissionForm = useCallback(
@@ -67,7 +66,7 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
       </Header>
 
       <Body>
-        <FilterBar augmentedMissionsWithActions={tableAugmentedData} onChange={setFilters} />
+        <FilterBar missionsWithActions={missionsWithActions} onChange={setFilters} onQueryChange={setSearchQuery} />
 
         {getMissionsApiQuery.isLoading && <p>Chargement en cours...</p>}
         {getMissionsApiQuery.error && <pre>{JSON.stringify(getMissionsApiQuery.error)}</pre>}
@@ -90,7 +89,7 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
                     <TableBodyCell>{augmentedMission.labelled.inspectedVessels}</TableBodyCell>
                     <TableBodyCell $fixedWidth={128}>{augmentedMission.labelled.inspectionsCount}</TableBodyCell>
                     <TableBodyCell $fixedWidth={128}>
-                      {renderStatus(augmentedMission.labelled.status as MissionStatus)}
+                      {renderStatus(augmentedMission.labelled.status as Mission.MissionStatus)}
                     </TableBodyCell>
                     <TableBodyCell
                       $fixedWidth={48}

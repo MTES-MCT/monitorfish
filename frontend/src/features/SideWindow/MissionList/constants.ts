@@ -1,23 +1,20 @@
-import { getLocalizedDayjs, Option } from '@mtes-mct/monitor-ui'
+import { dayjs } from '@mtes-mct/monitor-ui'
 
-import { MissionDateRangeFilter, MissionFilterType, MissionStatus } from './types'
-import { Mission, MissionWithActions } from '../../../domain/entities/mission/types'
+import { MissionDateRangeFilterLabel, MissionFilterType } from './types'
+import { Mission } from '../../../domain/entities/mission/types'
 import { getOptionsFromLabelledEnum } from '../../../utils/getOptionsFromLabelledEnum'
 
+import type { MissionWithActions } from '../../../domain/entities/mission/types'
 import type { TableOptions } from '../../../hooks/useTable/types'
+import type { Option } from '@mtes-mct/monitor-ui'
 
 export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option[]> = {
-  [MissionFilterType.ALERT_TYPE]: getOptionsFromLabelledEnum(Mission.MissionAlertType),
+  [MissionFilterType.ADMINISTRATION]: [],
   [MissionFilterType.CUSTOM_DATE_RANGE]: [],
-  [MissionFilterType.DATE_RANGE]: getOptionsFromLabelledEnum(MissionDateRangeFilter),
-  [MissionFilterType.INSPECTION_TYPE]: [
-    {
-      label: 'Inconnu',
-      value: 'UNKNOWN'
-    }
-  ],
-  [MissionFilterType.MISSION_TYPE]: getOptionsFromLabelledEnum(Mission.MissionType),
+  [MissionFilterType.DATE_RANGE]: getOptionsFromLabelledEnum(MissionDateRangeFilterLabel),
+  [MissionFilterType.SOURCE]: getOptionsFromLabelledEnum(Mission.MissionSourceLabel),
   [MissionFilterType.STATUS]: getOptionsFromLabelledEnum(Mission.MissionStatus),
+  [MissionFilterType.TYPE]: getOptionsFromLabelledEnum(Mission.MissionTypeLabel),
   [MissionFilterType.UNIT]: []
 }
 
@@ -28,8 +25,7 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
       isSortable: true,
       key: 'startDateTimeUtc',
       label: 'Début',
-      labelTransform: missionWithActions =>
-        getLocalizedDayjs(missionWithActions.startDateTimeUtc).format('D MMM YY, HH:MM')
+      labelTransform: missionWithActions => dayjs(missionWithActions.startDateTimeUtc).utc().format('D MMM YY, HH:mm')
     },
     {
       fixedWidth: 136,
@@ -38,7 +34,7 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
       label: 'Fin',
       labelTransform: missionWithActions =>
         missionWithActions.endDateTimeUtc
-          ? getLocalizedDayjs(missionWithActions.endDateTimeUtc).format('D MMM YY, HH:MM')
+          ? dayjs(missionWithActions.endDateTimeUtc).utc().format('D MMM YY, HH:mm')
           : ''
     },
     {
@@ -53,7 +49,7 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
       isSortable: true,
       key: 'missionSource',
       label: 'Origine',
-      transform: missionWithActions => MISSION_SOURCE_LABEL[missionWithActions.missionSource]
+      labelTransform: missionWithActions => MISSION_SOURCE_LABEL[missionWithActions.missionSource]
     },
     {
       fixedWidth: 160,
@@ -69,7 +65,7 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
       isSortable: false,
       key: 'inspectedVessels',
       label: 'Navires contrôlés',
-      labelTransform: missionWithActions =>
+      transform: missionWithActions =>
         missionWithActions.actions
           .map(action => action.vesselName)
           .filter((vesselName: string | undefined): vesselName is string => !!vesselName)
@@ -93,16 +89,16 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
       transform: missionWithActions => {
         switch (true) {
           // case ???:
-          //   return MissionStatus.INCOMING
+          //   return Mission.MissionStatus.INCOMING
 
           // case ???:
-          //   return MissionStatus.DONE
+          //   return Mission.MissionStatus.DONE
 
           case missionWithActions.isClosed:
-            return MissionStatus.CLOSED
+            return Mission.MissionStatus.CLOSED
 
           default:
-            return MissionStatus.IN_PROGRESS
+            return Mission.MissionStatus.IN_PROGRESS
         }
       }
     },
@@ -117,7 +113,7 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
       label: ''
     }
   ],
-  searchableKeys: ['seaFront', 'unit']
+  searchableKeys: ['inspectedVessels']
 }
 
 export const MISSION_SOURCE_LABEL: Record<Mission.MissionSource, string> = {

@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v1/missions/35"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": {
+      "id": 35,
+      "missionType": "SEA",
+      "missionNature": ["FISH"],
+      "controlUnits": [
+        {
+          "id": 10015,
+          "administration": "Douane",
+          "name": "BGC Bastia",
+          "resources": [],
+          "contact": null
+        }
+      ],
+      "openBy": "Brittany Graham",
+      "closedBy": "Samantha Jones",
+      "observationsCacem": "Maybe own each college away likely major. Former space technology million cell. Outside body my drop require.",
+      "observationsCnsp": null,
+      "facade": "MEMN",
+      "geom": null,
+      "startDateTimeUtc": "2022-12-31T23:30:00.000000Z",
+      "endDateTimeUtc": null,
+      "envActions": [],
+      "missionSource": "CNSP",
+      "isClosed": false
+    }
+  }
+}

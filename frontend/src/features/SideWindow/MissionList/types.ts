@@ -1,28 +1,28 @@
 /* eslint-disable typescript-sort-keys/string-enum */
 export enum MissionDateRangeFilter {
+  CURRENT_DAY = 'CURRENT_DAY',
+  CURRENT_WEEK = 'CURRENT_WEEK',
+  CURRENT_MONTH = 'CURRENT_MONTH',
+  CURRENT_QUARTER = 'CURRENT_QUARTER',
+  CURRENT_YEAR = 'CURRENT_YEAR',
+  CUSTOM = 'CUSTOM'
+}
+export enum MissionDateRangeFilterLabel {
   CURRENT_DAY = 'Aujourd’hui',
   CURRENT_WEEK = 'Semaine en cours',
   CURRENT_MONTH = 'Mois en cours',
   CURRENT_QUARTER = 'Trimestre en cours',
+  CURRENT_YEAR = 'Année en cours',
   CUSTOM = 'Période spécifique'
 }
 /* eslint-enable typescript-sort-keys/string-enum */
 
 export enum MissionFilterType {
-  ALERT_TYPE = 'alertType',
-  CUSTOM_DATE_RANGE = 'customDateRange',
-  DATE_RANGE = 'dateRange',
-  INSPECTION_TYPE = 'inspectionType',
-  MISSION_TYPE = 'missionType',
-  STATUS = 'status',
-  UNIT = 'unit'
+  ADMINISTRATION = 'ADMINISTRATION',
+  CUSTOM_DATE_RANGE = 'CUSTOM_DATE_RANGE',
+  DATE_RANGE = 'DATE_RANGE',
+  SOURCE = 'SOURCE',
+  STATUS = 'STATUS',
+  TYPE = 'TYPE',
+  UNIT = 'UNIT'
 }
-
-/* eslint-disable typescript-sort-keys/string-enum */
-export enum MissionStatus {
-  INCOMING = 'À venir',
-  IN_PROGRESS = 'En cours',
-  DONE = 'Terminée',
-  CLOSED = 'Clotûrée'
-}
-/* eslint-enable typescript-sort-keys/string-enum */

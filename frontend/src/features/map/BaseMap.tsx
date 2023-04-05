@@ -17,6 +17,9 @@ import { clickOnMapFeature } from '../../domain/use_cases/map/clickOnMapFeature'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
+import type { VectorLayerWithName } from '../../domain/types/layer'
+import type { FeatureLike } from 'ol/Feature'
+
 let lastEventForPointerMove
 let timeoutForPointerMove
 let timeoutForMove
@@ -61,10 +64,12 @@ export function BaseMap({
         return
       }
 
-      const feature = _map.forEachFeatureAtPixel(event.pixel, clickedFeature => clickedFeature, {
+      const feature = _map.forEachFeatureAtPixel<FeatureLike>(event.pixel, clickedFeature => clickedFeature, {
         hitTolerance: HIT_PIXEL_TO_TOLERANCE,
-        // @ts-ignore
-        layerFilter: layer => clickableLayerCodes.includes(layer.name)
+        layerFilter: layer =>
+          !!clickableLayerCodes.find(clickableLayerName =>
+            (layer as VectorLayerWithName).name?.includes(clickableLayerName)
+          )
       })
       const isCtrl = platformModifierKeyOnly(event)
       const mapClick = { ctrlKeyPressed: isCtrl, feature }
@@ -80,10 +85,12 @@ export function BaseMap({
       }
 
       const pixel = _map.getEventPixel(event.originalEvent)
-      const feature = _map.forEachFeatureAtPixel(pixel, hoveredFeature => hoveredFeature, {
+      const feature = _map.forEachFeatureAtPixel<FeatureLike>(pixel, hoveredFeature => hoveredFeature, {
         hitTolerance: HIT_PIXEL_TO_TOLERANCE,
-        // @ts-ignore
-        layerFilter: layer => hoverableLayerCodes.includes(layer.name)
+        layerFilter: layer =>
+          !!hoverableLayerCodes.find(hoverableLayerName =>
+            (layer as VectorLayerWithName).name?.includes(hoverableLayerName)
+          )
       })
 
       if (handlePointerMove) {

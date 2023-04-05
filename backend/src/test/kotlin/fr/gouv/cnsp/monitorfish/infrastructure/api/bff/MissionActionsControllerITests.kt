@@ -115,12 +115,15 @@ class MissionActionsControllerITests {
                             missionId = 2,
                             vesselId = 2,
                             actionType = MissionActionType.SEA_CONTROL,
-                            logbookInfractions = """
-                                [{"natinf": 27689, "comments": "Poids à bord MNZ supérieur de 50% au poids déclaré", "infractionType": "WITH_RECORD"}]
-                            """.trimIndent(),
-                            gearOnboard = """
-                                [{"gearCode": "OTB", "declaredMesh": 60.0, "gearWasControlled": false}, {"gearCode": "OTM", "declaredMesh": 60.0, "controlledMesh": 52.8, "gearWasControlled": true}]
-                            """.trimIndent(),
+                            logbookInfractions = listOf(
+                                LogbookInfraction(
+                                    InfractionType.WITH_RECORD,
+                                    27689,
+                                    "Poids à bord MNZ supérieur de 50% au poids déclaré",
+                                ),
+                            ),
+                            segments = listOf(FleetSegment(faoAreas = listOf("25.6.9", "25.7.9"), segment = "WWSS10", segmentName = "World Wide Segment")),
+                            gearInfractions = listOf(GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite")),
                         ),
                     ),
                 )
@@ -147,6 +150,10 @@ class MissionActionsControllerITests {
         val newMission = TestUtils.getDummyMissionAction(dateTime)
         given(updateMissionAction.execute(any(), any())).willReturn(newMission)
 
+        val gearControl = GearControl()
+        gearControl.declaredMesh = 60.0
+        gearControl.gearCode = "OTB"
+        gearControl.gearWasControlled = false
         // When
         mockMvc.perform(
             put("/bff/v1/mission_actions/123")
@@ -157,12 +164,16 @@ class MissionActionsControllerITests {
                             missionId = 2,
                             vesselId = 2,
                             actionType = MissionActionType.SEA_CONTROL,
-                            logbookInfractions = """
-                                [{"natinf": 27689, "comments": "Poids à bord MNZ supérieur de 50% au poids déclaré", "infractionType": "WITH_RECORD"}]
-                            """.trimIndent(),
-                            gearOnboard = """
-                                [{"gearCode": "OTB", "declaredMesh": 60.0, "gearWasControlled": false}, {"gearCode": "OTM", "declaredMesh": 60.0, "controlledMesh": 52.8, "gearWasControlled": true}]
-                            """.trimIndent(),
+                            logbookInfractions = listOf(
+                                LogbookInfraction(
+                                    InfractionType.WITH_RECORD,
+                                    27689,
+                                    "Poids à bord MNZ supérieur de 50% au poids déclaré",
+                                ),
+                            ),
+                            segments = listOf(FleetSegment(faoAreas = listOf("25.6.9", "25.7.9"), segment = "WWSS10", segmentName = "World Wide Segment")),
+                            gearInfractions = listOf(GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite")),
+                            gearOnboard = listOf(gearControl)
                         ),
                     ),
                 )
@@ -172,6 +183,10 @@ class MissionActionsControllerITests {
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.missionId", equalTo(2)))
             .andExpect(jsonPath("$.vesselId", equalTo(2)))
+            .andExpect(jsonPath("$.segments[0].faoAreas[0]", equalTo("25.6.9")))
+            .andExpect(jsonPath("$.segments[0].faoAreas[1]", equalTo("25.7.9")))
+            .andExpect(jsonPath("$.segments[0].segment", equalTo("WWSS10")))
+            .andExpect(jsonPath("$.segments[0].segmentName", equalTo("World Wide Segment")))
             .andExpect(jsonPath("$.logbookInfractions[0].infractionType", equalTo("WITH_RECORD")))
             .andExpect(jsonPath("$.logbookInfractions[0].natinf", equalTo(27689)))
             .andExpect(

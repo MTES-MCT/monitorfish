@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { margins } from './constants'
-import { MissionDetails } from './MissionDetails'
+import { ControlDetails } from './ControlDetails'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
@@ -13,13 +13,13 @@ import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../Overla
 
 import type { Mission } from '../../../../domain/entities/mission/types'
 
-const overlayHeight = 200
+const overlayHeight = 130
 const INITIAL_OFFSET_VALUE = [0, 0]
 
-export function MissionOverlay({ feature, isSelected = false, map }) {
-  const selectedMissionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionGeoJSON)
+export function ControlOverlay({ feature, isSelected = false, map }) {
+  const selectedMissionActionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionActionGeoJSON)
   const currentOffsetRef = useRef(INITIAL_OFFSET_VALUE)
-  const [missionProperties, setMissionProperties] = useState<Mission.MissionPointFeatureProperties | undefined>(
+  const [controlProperties, setControlProperties] = useState<Mission.MissionActionFeatureProperties | undefined>(
     undefined
   )
   const overlayRef = useRef<HTMLDivElement>()
@@ -27,15 +27,15 @@ export function MissionOverlay({ feature, isSelected = false, map }) {
   const [overlayTopLeftMargin, setOverlayTopLeftMargin] = useState<[number, number]>([margins.yBottom, margins.xMiddle])
   const [overlayPosition, setOverlayPosition] = useState(OverlayPosition.BOTTOM)
 
-  const selectedMission = useMemo(() => {
-    if (!selectedMissionGeoJSON) {
+  const selectedControl = useMemo(() => {
+    if (!selectedMissionActionGeoJSON) {
       return undefined
     }
 
     return new GeoJSON({
       featureProjection: OPENLAYERS_PROJECTION
-    }).readFeature(selectedMissionGeoJSON)
-  }, [selectedMissionGeoJSON])
+    }).readFeature(selectedMissionActionGeoJSON)
+  }, [selectedMissionActionGeoJSON])
 
   const overlayCallback = useCallback(
     ref => {
@@ -48,7 +48,7 @@ export function MissionOverlay({ feature, isSelected = false, map }) {
 
       overlayObjectRef.current = new Overlay({
         autoPan: false,
-        className: 'ol-overlay-container ol-selectable',
+        className: 'ol-overlay-container ol-selectable mission-control-overlay',
         element: ref,
         offset: currentOffsetRef.current
       })
@@ -93,34 +93,34 @@ export function MissionOverlay({ feature, isSelected = false, map }) {
       return
     }
 
-    if (!feature?.getId()?.toString()?.includes(MonitorFishLayer.MISSION_PIN_POINT)) {
+    if (!feature?.getId()?.toString()?.includes(MonitorFishLayer.MISSION_ACTION_SELECTED)) {
       overlayRef.current.style.display = 'none'
-      setMissionProperties(undefined)
+      setControlProperties(undefined)
 
       return
     }
 
-    // Prevent the hovered mission overlay to bo on top of the same selected mission overlay
-    if (!isSelected && selectedMission?.getId() === feature.getId()) {
+    // Prevent the hovered control overlay to bo on top of the same selected control overlay
+    if (!isSelected && selectedControl?.getId() === feature.getId()) {
       overlayRef.current.style.display = 'none'
-      setMissionProperties(undefined)
+      setControlProperties(undefined)
 
       return
     }
 
-    setMissionProperties(feature.getProperties() as Mission.MissionPointFeatureProperties)
+    setControlProperties(feature.getProperties() as Mission.MissionActionFeatureProperties)
     overlayRef.current.style.display = 'block'
     overlayObjectRef.current.setPosition(feature.getGeometry().getCoordinates())
 
     const nextOverlayPosition = getNextOverlayPosition()
     setOverlayPosition(nextOverlayPosition)
     setOverlayTopLeftMargin(getTopLeftMargin(nextOverlayPosition, margins))
-  }, [feature, isSelected, selectedMission, setMissionProperties, overlayRef, overlayObjectRef, getNextOverlayPosition])
+  }, [feature, isSelected, selectedControl, setControlProperties, overlayRef, overlayObjectRef, getNextOverlayPosition])
 
   return (
     <Wrapper ref={overlayCallback} overlayTopLeftMargin={overlayTopLeftMargin}>
-      {missionProperties && (
-        <MissionDetails isSelected={isSelected} mission={missionProperties} overlayPosition={overlayPosition} />
+      {controlProperties && (
+        <ControlDetails control={controlProperties} isSelected={isSelected} overlayPosition={overlayPosition} />
       )}
     </Wrapper>
   )

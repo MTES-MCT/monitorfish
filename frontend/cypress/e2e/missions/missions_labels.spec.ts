@@ -8,11 +8,11 @@ context('Missions labels', () => {
   it('Missions labels Should be showed on map and movable', () => {
     cy.get('*[data-cy="mission-label-text"]').should('have.length', 3)
 
-    cy.getComputedStyle('*[data-cy="mission-label-draggable-mission_label:43"]', 1).then(styleBefore => {
+    cy.getComputedStyle('*[data-cy="mission-label-draggable-MISSIONS_LABEL:43"]', 1).then(styleBefore => {
       expect(styleBefore.transform).contains('matrix(1, 0, 0, 1, 32, 466)')
     })
 
-    cy.get('*[data-cy="mission-label-draggable-mission_label:43"]')
+    cy.get('*[data-cy="mission-label-draggable-MISSIONS_LABEL:43"]')
       .trigger('pointerdown', {
         animationDistanceThreshold: 100,
         eventConstructor: 'MouseEvent',
@@ -24,7 +24,7 @@ context('Missions labels', () => {
       .trigger('pointermove', { clientX: 600, clientY: 600, force: true, pointerId: 1 })
       .trigger('pointerup', { force: true, pointerId: 1 })
 
-    cy.getComputedStyle('*[data-cy="mission-label-draggable-mission_label:43"]', 1).then(styleAfter => {
+    cy.getComputedStyle('*[data-cy="mission-label-draggable-MISSIONS_LABEL:43"]', 1).then(styleAfter => {
       expect(styleAfter.transform).contains('matrix(1, 0, 0, 1, 510, 538)')
     })
   })

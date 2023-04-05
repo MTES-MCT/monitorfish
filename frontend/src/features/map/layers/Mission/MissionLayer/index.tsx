@@ -3,7 +3,8 @@ import VectorSource from 'ol/source/Vector'
 import React, { MutableRefObject, useCallback, useEffect, useRef } from 'react'
 
 import { getMissionPointWebGLStyle } from './styles'
-import { LayerProperties, LayerType } from '../../../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../../../domain/entities/layers/constants'
+import { MonitorFishLayer } from '../../../../../domain/entities/layers/types'
 import { getMissionFeaturePoint } from '../../../../../domain/entities/mission'
 import { useGetMissionsAndActions } from '../../../../../domain/entities/mission/hooks/useGetMissionsAndActions'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
@@ -33,10 +34,10 @@ function UnmemoizedMissionLayer({ map }: MissionLayerProps) {
   const getLayer = useCallback(() => {
     if (!layerRef.current) {
       layerRef.current = new WebGLPointsLayer({
-        className: LayerType.MISSION,
+        className: MonitorFishLayer.MISSION_PIN_POINT,
         source: getVectorSource(),
         style: getMissionPointWebGLStyle(),
-        zIndex: LayerProperties.MISSION.zIndex
+        zIndex: LayerProperties.MISSION_PIN_POINT.zIndex
       })
     }
 
@@ -64,7 +65,7 @@ function UnmemoizedMissionLayer({ map }: MissionLayerProps) {
       return undefined
     }
 
-    getLayer().name = LayerProperties.MISSION.code
+    getLayer().name = LayerProperties.MISSION_PIN_POINT.code
     map.getLayers().push(getLayer())
 
     return () => {

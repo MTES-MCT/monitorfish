@@ -1,6 +1,5 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
 import java.time.ZonedDateTime
 
@@ -22,29 +21,29 @@ data class AddMissionActionDataInput(
     var speciesWeightControlled: Boolean? = null,
     var speciesSizeControlled: Boolean? = null,
     var separateStowageOfPreservedSpecies: Boolean? = null,
-    var logbookInfractions: String? = null,
+    var logbookInfractions: List<LogbookInfraction> = listOf(),
     var licencesAndLogbookObservations: String? = null,
-    var gearInfractions: String? = null,
-    var speciesInfractions: String? = null,
+    var gearInfractions: List<GearInfraction> = listOf(),
+    var speciesInfractions: List<SpeciesInfraction> = listOf(),
     var speciesObservations: String? = null,
     var seizureAndDiversion: Boolean? = null,
-    var otherInfractions: String? = null,
+    var otherInfractions: List<OtherInfraction> = listOf(),
     var numberOfVesselsFlownOver: Int? = null,
     var unitWithoutOmegaGauge: Boolean? = null,
     var controlQualityComments: String? = null,
     var feedbackSheetRequired: Boolean? = null,
-    var segments: String? = null,
+    var segments: List<FleetSegment> = listOf(),
     var facade: String? = null,
     var longitude: Double? = null,
     var latitude: Double? = null,
     var portLocode: String? = null,
     var seizureAndDiversionComments: String? = null,
     var otherComments: String? = null,
-    var gearOnboard: String? = null,
+    var gearOnboard: List<GearControl> = listOf(),
     var userTrigram: String? = null,
-    var speciesOnboard: String? = null,
+    var speciesOnboard: List<SpeciesControl> = listOf(),
 ) {
-    fun toMissionAction(mapper: ObjectMapper) = MissionAction(
+    fun toMissionAction() = MissionAction(
         vesselId = vesselId,
         vesselName = vesselName,
         internalReferenceNumber = internalReferenceNumber,
@@ -62,34 +61,26 @@ data class AddMissionActionDataInput(
         speciesWeightControlled = speciesWeightControlled,
         speciesSizeControlled = speciesSizeControlled,
         separateStowageOfPreservedSpecies = separateStowageOfPreservedSpecies,
-        logbookInfractions = deserializeJSONList(mapper, logbookInfractions, LogbookInfraction::class.java),
+        logbookInfractions = logbookInfractions,
         licencesAndLogbookObservations = licencesAndLogbookObservations,
-        gearInfractions = deserializeJSONList(mapper, gearInfractions, GearInfraction::class.java),
-        speciesInfractions = deserializeJSONList(mapper, speciesInfractions, SpeciesInfraction::class.java),
+        gearInfractions = gearInfractions,
+        speciesInfractions = speciesInfractions,
         speciesObservations = speciesObservations,
         seizureAndDiversion = seizureAndDiversion,
-        otherInfractions = deserializeJSONList(mapper, otherInfractions, OtherInfraction::class.java),
+        otherInfractions = otherInfractions,
         numberOfVesselsFlownOver = numberOfVesselsFlownOver,
         unitWithoutOmegaGauge = unitWithoutOmegaGauge,
         controlQualityComments = controlQualityComments,
         feedbackSheetRequired = feedbackSheetRequired,
-        segments = deserializeJSONList(mapper, segments, FleetSegment::class.java),
+        segments = segments,
         facade = facade,
         longitude = longitude,
         latitude = latitude,
         portLocode = portLocode,
         seizureAndDiversionComments = seizureAndDiversionComments,
         otherComments = otherComments,
-        gearOnboard = deserializeJSONList(mapper, gearOnboard, GearControl::class.java),
-        speciesOnboard = deserializeJSONList(mapper, speciesOnboard, SpeciesControl::class.java),
+        gearOnboard = gearOnboard,
+        speciesOnboard = speciesOnboard,
         userTrigram = userTrigram,
     )
-
-    private fun <T> deserializeJSONList(mapper: ObjectMapper, json: String?, clazz: Class<T>): List<T> = json?.let {
-        mapper.readValue(
-            json,
-            mapper.typeFactory
-                .constructCollectionType(MutableList::class.java, clazz),
-        )
-    } ?: listOf()
 }

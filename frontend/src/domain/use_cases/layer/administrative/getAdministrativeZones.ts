@@ -1,5 +1,5 @@
 import { getAdministrativeSubZonesFromAPI } from '../../../../api/geoserver'
-import { getAdministrativeLayers } from '../../../entities/layers'
+import { administrativeLayers } from '../../../entities/layers'
 import { LayerProperties as LayersEnum, LayerType } from '../../../entities/layers/constants'
 
 import type { CodeAndName, ShowableLayer } from '../../../entities/layers/types'
@@ -18,16 +18,16 @@ export type GroupedZonesAndZones = {
 export const getAdministrativeZones =
   () =>
   async (_, getState): Promise<GroupedZonesAndZones> => {
-    const nonGroupedZones = getAdministrativeLayers().filter(zone => !zone.group)
+    const nonGroupedZones = administrativeLayers.filter(zone => !zone.group)
 
-    const groups = getAdministrativeLayers()
+    const groups = administrativeLayers
       .filter(zone => zone.group)
       .filter(zone => !zone.hasFetchableZones)
       .map(zone => zone.group)
     const uniqueGroups = [...new Set(groups)]
     const groupedZones: GroupAndZones[] = uniqueGroups.map(group => ({
       group: group!,
-      zones: getAdministrativeLayers().filter(zone => zone.group && zone.group === group)
+      zones: administrativeLayers.filter(zone => zone.group && zone.group === group)
     }))
 
     const groupedZonesToFetch: Promise<GroupAndZones>[] = Object.keys(LayersEnum)

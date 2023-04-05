@@ -25,7 +25,7 @@ export type MapState = {
   /** End of vessels map properties */
   animateToCoordinates: null
   animateToExtent: boolean
-  animateToRegulatoryLayer: null
+  animateToRegulatoryLayer: { center?: [number, number]; extent?: [number, number] } | undefined
   coordinatesFormat: string
   defaultVesselTrackDepth: VesselTrackDepth
   doNotAnimate: boolean
@@ -47,7 +47,7 @@ export type MapState = {
 const INITIAL_STATE: MapState = {
   animateToCoordinates: null,
   animateToExtent: false,
-  animateToRegulatoryLayer: null,
+  animateToRegulatoryLayer: undefined,
   coordinatesFormat: getLocalStorageState(CoordinatesFormat.DEGREES_MINUTES_SECONDS, coordinatesFormatLocalStorageKey),
   defaultVesselTrackDepth: getLocalStorageState(VesselTrackDepth.TWELVE_HOURS, vesselTrackDepthLocalStorageKey),
   doNotAnimate: false,
@@ -115,7 +115,7 @@ const mapSlice = createSlice({
       state.animateToExtent = false
     },
     resetAnimateToRegulatoryLayer(state) {
-      state.animateToRegulatoryLayer = null
+      state.animateToRegulatoryLayer = undefined
     },
     resetFitToExtent(state) {
       state.fitToExtent = undefined

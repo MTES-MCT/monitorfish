@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import BaseMap from './BaseMap'
+import { BaseMap } from './BaseMap'
 import { LayerDetailsBox } from './controls/LayerDetailsBox'
 import { VesselsTracksLayerMemoized } from './layers/VesselsTracksLayer'
 import VesselsLayer from './layers/VesselsLayer'
@@ -34,6 +34,9 @@ import { MissionOverlay } from './overlays/MissionOverlay'
 import { SelectedMissionOverlay } from './overlays/SelectedMissionOverlay'
 import { MissionHoveredLayer } from './layers/Mission/HoveredMissionLayer'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
+import { SelectedMissionActionsLayer } from './layers/Mission/SelectedMissionActionsLayer'
+import { ControlOverlay } from './overlays/ControlOverlay'
+import { SelectedControlOverlay } from './overlays/SelectedControlOverlay'
 
 const Map = () => {
   const { isAdmin } = useMainAppSelector(state => state.global)
@@ -65,7 +68,7 @@ const Map = () => {
       setCurrentFeature={setCurrentFeature}
       showCoordinates={true}
       showAttributions={true}
-      container={'map'}
+      isMainApp
     >
       <BaseLayer />
       <RegulatoryLayers mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
@@ -88,6 +91,9 @@ const Map = () => {
       {isAdmin && <MissionsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>}
       {isAdmin && <MissionOverlay feature={currentFeature}/>}
       {isAdmin && <SelectedMissionOverlay/>}
+      {isAdmin && <SelectedMissionActionsLayer/>}
+      {isAdmin && <ControlOverlay feature={currentFeature}/>}
+      {isAdmin && <SelectedControlOverlay/>}
       <DrawLayer/>
       <RegulatoryLayerSearch/>
       <VesselEstimatedPositionLayer/>

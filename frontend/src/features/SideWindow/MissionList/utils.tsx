@@ -3,6 +3,7 @@ import { filter, identity } from 'ramda'
 
 import { MissionDateRangeFilter, MissionFilterType } from './types'
 import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS } from '../../../domain/entities/alerts/constants'
+import { getMissionStatus } from '../../../domain/entities/mission'
 import { Mission } from '../../../domain/entities/mission/types'
 import { FrontendError } from '../../../libs/FrontendError'
 import { dayjs } from '../../../utils/dayjs'
@@ -91,9 +92,16 @@ export const mapFilterFormRecordsToFilters = ([key, valueOrValues]: [
       }
 
     case MissionFilterType.SOURCE:
-      return filter<AugmentedDataItem<MissionWithActions>>(
-        ({ item: { missionSource } }) => missionSource === valueOrValues
+      return filter<AugmentedDataItem<MissionWithActions>>(({ item: { missionSource } }) =>
+        valueOrValues.includes(missionSource)
       )
+
+    case MissionFilterType.STATUS:
+      return filter<AugmentedDataItem<MissionWithActions>>(({ item: missionWithActions }) => {
+        const status = getMissionStatus(missionWithActions)
+
+        return valueOrValues.includes(status)
+      })
 
     case MissionFilterType.TYPE:
       return filter<AugmentedDataItem<MissionWithActions>>(({ item: { missionType } }) =>

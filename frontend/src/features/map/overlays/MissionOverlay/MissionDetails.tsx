@@ -74,7 +74,7 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
             </div>
             <div>
               {mission.missionStatus === MissionStatus.IN_PROGRESS && <InProgressIcon />}
-              {mission.missionStatus}
+              {mission.missionStatus ? Mission.MissionStatusLabel[mission.missionStatus] : undefined}
             </div>
           </Details>
         </ZoneText>

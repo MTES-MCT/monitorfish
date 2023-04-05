@@ -20,8 +20,8 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     // TODO Handle Automplete in custom `cy.fill()` command once it's used via monitor-ui.
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    cy.get('input[placeholder="Rechercher un navire..."]').type('pheno')
-    cy.contains('mark', 'PHENO').click()
+    cy.get('input[placeholder="Rechercher un navire..."]').type('malot')
+    cy.contains('mark', 'MALOT').click()
 
     // Date et heure du contrôle
     // TODO Add this test.
@@ -112,10 +112,10 @@ context('Side Window > Mission Form > Sea Control', () => {
         diversion: null,
         emitsAis: 'NO',
         emitsVms: 'YES',
-        externalReferenceNumber: 'DONTSINK',
+        externalReferenceNumber: 'TALK2ME',
         facade: null,
         feedbackSheetRequired: true,
-        flagState: 'FR',
+        flagState: 'UNDEFINED',
         gearInfractions: [],
         gearOnboard: [
           {
@@ -128,8 +128,8 @@ context('Side Window > Mission Form > Sea Control', () => {
           }
         ],
         id: null,
-        internalReferenceNumber: 'FAK000999999',
-        ircs: 'CALLME',
+        internalReferenceNumber: 'U_W0NTFINDME',
+        ircs: 'QGDF',
         isFromPoseidon: null,
         latitude: null,
         licencesAndLogbookObservations: 'Une observation hors infraction sur les obligations déclaaratives.',
@@ -147,8 +147,9 @@ context('Side Window > Mission Form > Sea Control', () => {
         ],
         portLocode: null,
         portName: null,
-        segments: [
-          {
+        // TODO Test the retrieval of the vessel segment (with the get risk factors API)
+        /*
+        {
             faoAreas: ['37.1', '37.2', '37.3', '27.8.a', '27.8.b', '27.7.h', '27.7.e', '27.7.d'],
             segment: 'FR_ELE',
             segmentName: 'Eel sea fisheries'
@@ -168,8 +169,8 @@ context('Side Window > Mission Form > Sea Control', () => {
             segment: 'SWW11',
             segmentName: 'Hooks and Lines targeting GFB and ALF'
           },
-          { faoAreas: ['27.7', '27.8', '27.9', '27.10'], segment: 'ATL01', segmentName: 'All Trawls 3' }
-        ],
+         */
+        segments: [{ faoAreas: ['27.7', '27.8', '27.9', '27.10'], segment: 'ATL01', segmentName: 'All Trawls 3' }],
         seizureAndDiversion: true,
         seizureAndDiversionComments: null,
         separateStowageOfPreservedSpecies: true,
@@ -189,8 +190,8 @@ context('Side Window > Mission Form > Sea Control', () => {
         speciesWeightControlled: true,
         unitWithoutOmegaGauge: true,
         userTrigram: 'Marlin',
-        vesselId: 1,
-        vesselName: 'PHENOMENE',
+        vesselId: 2,
+        vesselName: 'MALOTRU',
         vesselTargeted: true
       })
       assert.isString(interception.request.body.actionDatetimeUtc)

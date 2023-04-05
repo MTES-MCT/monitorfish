@@ -27,23 +27,27 @@ export namespace Mission {
   // ---------------------------------------------------------------------------
   // Constants
 
-  export enum MissionAlertType {
-    WAITING_FOR_CLOSURE = 'Mission à clôturer'
-  }
-
   export enum MissionSource {
     MONITORENV = 'MONITORENV',
     MONITORFISH = 'MONITORFISH',
     POSEIDON_CACEM = 'POSEIDON_CACEM',
     POSEIDON_CNSP = 'POSEIDON_CNSP'
   }
-
-  export enum MissionStatus {
-    CLOSED = 'Clôturée',
-    DONE = 'Terminée',
-    IN_PROGRESS = 'En cours',
-    UPCOMING = 'À venir'
+  export enum MissionSourceLabel {
+    MONITORENV = 'CACEM',
+    MONITORFISH = 'CNSP',
+    POSEIDON_CACEM = 'CACEM (Poseidon)',
+    POSEIDON_CNSP = 'CNSP (Poseidon)'
   }
+
+  /* eslint-disable typescript-sort-keys/string-enum */
+  export enum MissionStatus {
+    UPCOMING = 'À venir',
+    IN_PROGRESS = 'En cours',
+    DONE = 'Terminée',
+    CLOSED = 'Clôturée'
+  }
+  /* eslint-enable typescript-sort-keys/string-enum */
 
   /* eslint-disable typescript-sort-keys/string-enum */
   export enum MissionType {

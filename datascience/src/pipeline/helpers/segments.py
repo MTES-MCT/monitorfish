@@ -1,30 +1,7 @@
 import warnings
-from typing import Union
 
+import duckdb
 import pandas as pd
-
-
-def catch_area_isin_fao_area(
-    catch_area: Union[None, str], fao_area: Union[None, str]
-) -> bool:
-    """
-    Returns:
-        bool :
-
-          - `True` if a catch area (e.g. '27.7.b') is in a given fao_area (e.g. '27.7.b' or
-            '27')
-          - False if a catch area (e.g. '27.7.b') is NOT in a given fao_area (e.g. '28.6' or
-            '27.7.b.4')
-          - `True` if the fao_area if None (whatever the value of the catch_area)
-          - `False` if the fao_area is not None and the catch_area is None
-
-    """
-    if fao_area is None:
-        return True
-    elif catch_area is None:
-        return False
-    else:
-        return fao_area in catch_area
 
 
 def attribute_segments_to_catches(
@@ -118,16 +95,16 @@ def attribute_segments_to_catches(
     # that satisfy the fao_area criterion. A catch made in '27.7.b' will satisfy
     # the fao criterion of a segment whose fao_area is '27.7', so we check that the
     # fao area of the segment is a substring of the fao area of the catch.
-    segmented_catches = segmented_catches[
-        (
-            segmented_catches.apply(
-                lambda row: catch_area_isin_fao_area(
-                    row.fao_area_of_catch, row.fao_area_of_segment
-                ),
-                axis=1,
-            )
-        )
-    ]
+
+    segmented_catches = duckdb.sql(
+        """
+        SELECT *
+        FROM segmented_catches
+        WHERE
+            fao_area_of_segment IS NULL OR
+            fao_area_of_catch LIKE fao_area_of_segment || '%'
+    """
+    ).to_df()
 
     segmented_catches = segmented_catches.drop_duplicates(
         subset=["catch_id", "segment"]

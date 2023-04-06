@@ -7,7 +7,7 @@ context('TritonFish', () => {
 
     // Then
     // Vessel sidebar is minimized
-    cy.get('.VESSELS').click(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').click(460, 480, { force: true, timeout: 10000 })
     cy.wait(50)
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy="global-risk-factor"]').should('not.exist')

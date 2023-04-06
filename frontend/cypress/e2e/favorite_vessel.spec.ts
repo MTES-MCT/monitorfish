@@ -25,7 +25,7 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="favorite-vessel-name"]').should('not.exist')
 
     // When
-    cy.get('.VESSELS').rightclick(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').rightclick(460, 480, { force: true, timeout: 10000 })
     cy.get('*[data-cy="add-vessel-to-favorites"]').click()
 
     // Then
@@ -46,7 +46,7 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="favorite-vessel-name"]').should('not.exist')
 
     // When
-    cy.get('.VESSELS').click(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').click(460, 480, { force: true, timeout: 10000 })
     cy.get('*[data-cy="sidebar-add-vessel-to-favorites"]').click()
     cy.get('*[data-cy="sidebar-add-vessel-to-favorites"]').children().should('have.css', 'fill', 'rgb(229, 229, 235)')
 
@@ -64,7 +64,7 @@ context('Favorite Vessel', () => {
   it('A favorite vessel track Should be shown and then the vessel sidebar opened', () => {
     // Given
     cy.get('*[data-cy="favorite-vessels"]').click()
-    cy.get('.VESSELS').rightclick(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').rightclick(460, 480, { force: true, timeout: 10000 })
     cy.get('*[data-cy="add-vessel-to-favorites"]').click()
     cy.get('*[data-cy="favorite-vessel-show-vessel-track"]').click()
     cy.get('*[data-cy="close-vessel-track"]').should('have.length', 1)
@@ -90,7 +90,7 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="vessel-visibility"]').click()
     cy.get('[data-cy="global-vessel-track-depth-twelve-hours"] input').click()
     cy.get('*[data-cy="vessel-visibility"]').click()
-    cy.get('.VESSELS').rightclick(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').rightclick(460, 480, { force: true, timeout: 10000 })
     cy.get('*[data-cy="add-vessel-to-favorites"]').click()
     cy.get('*[data-cy="favorite-vessels"]').click()
 
@@ -99,7 +99,7 @@ context('Favorite Vessel', () => {
     cy.wait(1500)
 
     // Then
-    cy.get('.VESSELS').toMatchImageSnapshot({
+    cy.get('.VESSELS_POINTS').toMatchImageSnapshot({
       imageConfig: {
         threshold: 0.05,
         thresholdType: 'percent'
@@ -113,7 +113,7 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="global-vessel-track-depth-one-week"]').click()
     cy.wait(1500)
 
-    cy.get('.VESSELS').toMatchImageSnapshot({
+    cy.get('.VESSELS_POINTS').toMatchImageSnapshot({
       imageConfig: {
         threshold: 0.05,
         thresholdType: 'percent'

@@ -1,28 +1,31 @@
-import React from 'react'
+/* eslint-disable no-nested-ternary */
+
 import styled from 'styled-components'
-import { getCoordinates } from '../../../../coordinates'
-import { timeagoFrenchLocale } from '../../../../utils'
-import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
-import { COLORS } from '../../../../constants/constants'
 import * as timeago from 'timeago.js'
-import {
-  marginsWithOneWarning,
-  marginsWithoutAlert,
-  marginsWithTwoWarning
-} from './constants'
-import { useSelector } from 'react-redux'
+
+import { marginsWithOneWarning, marginsWithoutAlert, marginsWithTwoWarning } from './constants'
+import { COLORS } from '../../../../constants/constants'
+import { getCoordinates } from '../../../../coordinates'
+import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { timeagoFrenchLocale } from '../../../../utils'
 import { ReactComponent as AlertSVG } from '../../../icons/Icone_alertes.svg'
 import { ReactComponent as BeaconMalfunctionSVG } from '../../../icons/Icone_VMS_dark.svg'
 import { getAlertNameFromType } from '../../../SideWindow/alerts_reportings/utils'
 import { OverlayPosition } from '../Overlay'
 
+// @ts-ignore
 timeago.register('fr', timeagoFrenchLocale)
 
-const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
-  const { coordinatesFormat } = useSelector(state => state.map)
-  const { isAdmin } = useSelector(state => state.global)
+export function VesselCard({ feature, numberOfWarnings, overlayPosition }) {
+  const { coordinatesFormat } = useMainAppSelector(state => state.map)
+  const { isAdmin } = useMainAppSelector(state => state.global)
   const { vesselProperties } = feature
   const featureCoordinates = feature.getGeometry().getCoordinates()
+
+  if (!vesselProperties) {
+    return null
+  }
 
   return (
     <>
@@ -32,7 +35,7 @@ const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
             <Flag rel="preload" src={`flags/${vesselProperties.flagState.toLowerCase()}.svg`} />{' '}
           </>
         ) : null}
-        <VesselCardTitle data-cy={'vessel-card-name'}>
+        <VesselCardTitle data-cy="vessel-card-name">
           {vesselProperties.vesselName ? vesselProperties.vesselName : 'NOM INCONNU'}{' '}
           {vesselProperties.flagState ? <>({vesselProperties.flagState.toUpperCase()})</> : ''}
         </VesselCardTitle>
@@ -49,7 +52,7 @@ const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
         )}
       </VesselCardHeader>
       {isAdmin && vesselProperties.alerts?.length ? (
-        <VesselCardAlert data-cy={'vessel-card-alert'}>
+        <VesselCardAlert data-cy="vessel-card-alert">
           <AlertIcon />
           {vesselProperties.alerts?.length === 1
             ? getAlertNameFromType(vesselProperties.alerts[0])
@@ -63,7 +66,7 @@ const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
         </VesselCardAlert>
       ) : null}
       {isAdmin && vesselProperties.beaconMalfunctionId ? (
-        <VesselCardBeaconMalfunction data-cy={'vessel-card-beacon-malfunction'}>
+        <VesselCardBeaconMalfunction data-cy="vessel-card-beacon-malfunction">
           <BeaconMalfunctionIcon />
           NON-ÉMISSION VMS
         </VesselCardBeaconMalfunction>
@@ -71,11 +74,11 @@ const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
       <VesselCardBody>
         <LatLon>
           <FieldName>Latitude</FieldName>
-          <FieldValue data-cy={'vessel-card-latitude'}>
+          <FieldValue data-cy="vessel-card-latitude">
             {getCoordinates(featureCoordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[0]}
           </FieldValue>
           <FieldName>Longitude</FieldName>
-          <FieldValue data-cy={'vessel-card-longitude'}>
+          <FieldValue data-cy="vessel-card-longitude">
             {getCoordinates(featureCoordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[1]}
           </FieldValue>
         </LatLon>
@@ -118,7 +121,7 @@ const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
             <Body>
               <Field>
                 <Key>CFR</Key>
-                <Value data-cy={'vessel-card-internal-reference-number'}>
+                <Value data-cy="vessel-card-internal-reference-number">
                   {vesselProperties.internalReferenceNumber ? (
                     vesselProperties.internalReferenceNumber
                   ) : (
@@ -128,7 +131,7 @@ const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
               </Field>
               <Field>
                 <Key>MMSI</Key>
-                <Value data-cy={'vessel-card-mmsi'}>
+                <Value data-cy="vessel-card-mmsi">
                   {vesselProperties.mmsi ? vesselProperties.mmsi : <NoValue>-</NoValue>}
                 </Value>
               </Field>
@@ -140,7 +143,7 @@ const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
             <Body>
               <Field>
                 <Key>Marquage ext.</Key>
-                <Value data-cy={'vessel-card-external-reference-number'}>
+                <Value data-cy="vessel-card-external-reference-number">
                   {vesselProperties.externalReferenceNumber ? (
                     vesselProperties.externalReferenceNumber
                   ) : (
@@ -150,7 +153,7 @@ const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
               </Field>
               <Field>
                 <Key>Call Sign (IRCS)</Key>
-                <Value data-cy={'vessel-card-ircs'}>
+                <Value data-cy="vessel-card-ircs">
                   {vesselProperties.ircs ? vesselProperties.ircs : <NoValue>-</NoValue>}
                 </Value>
               </Field>
@@ -258,7 +261,9 @@ const Logbook = styled.span`
   display: inline;
 `
 
-const Flag = styled.img`
+const Flag = styled.img<{
+  rel?: 'preload'
+}>`
   height: 20px;
   display: inline-block;
   vertical-align: middle;
@@ -318,7 +323,9 @@ const TrianglePointer = styled.div`
   width: auto;
 `
 
-const BottomTriangleShadow = styled.div`
+const BottomTriangleShadow = styled.div<{
+  numberOfWarnings: number
+}>`
   position: absolute;
   width: 0;
   height: 0;
@@ -335,7 +342,9 @@ const BottomTriangleShadow = styled.div`
   clear: top;
 `
 
-const TopTriangleShadow = styled.div`
+const TopTriangleShadow = styled.div<{
+  numberOfWarnings: number
+}>`
   position: absolute;
   width: 0;
   height: 0;
@@ -358,7 +367,9 @@ const TopTriangleShadow = styled.div`
   clear: top;
 `
 
-const RightTriangleShadow = styled.div`
+const RightTriangleShadow = styled.div<{
+  numberOfWarnings: number
+}>`
   position: absolute;
   width: 0;
   height: 0;
@@ -381,7 +392,9 @@ const RightTriangleShadow = styled.div`
   clear: top;
 `
 
-const LeftTriangleShadow = styled.div`
+const LeftTriangleShadow = styled.div<{
+  numberOfWarnings: number
+}>`
   position: absolute;
   width: 0;
   height: 0;
@@ -488,5 +501,3 @@ const VesselCardBody = styled.div`
   display: flex;
   text-align: center;
 `
-
-export default VesselCard

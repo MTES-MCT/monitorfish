@@ -26,7 +26,7 @@ export class Vessel {
   static vesselIsMovingSpeed = 0.1
 
   static getVesselFeatureId(vessel) {
-    return `${LayerProperties.VESSELS.code}:${getVesselCompositeIdentifier(vessel)}`
+    return `${LayerProperties.VESSELS_POINTS.code}:${getVesselCompositeIdentifier(vessel)}`
   }
 
   static getVesselOpacity(dateTime, vesselIsHidden, vesselIsOpacityReduced) {

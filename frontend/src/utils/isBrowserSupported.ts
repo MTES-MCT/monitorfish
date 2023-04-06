@@ -5,8 +5,8 @@ export function isBrowserSupported(): boolean {
   const browserVersionAsNumber = Number(browserVersion)
 
   switch (browserName) {
-    case 'Internet Explorer':
-      return false
+    case 'Brave':
+      return browserVersionAsNumber >= 112
 
     case 'Edge':
       return browserVersionAsNumber >= 79
@@ -20,11 +20,14 @@ export function isBrowserSupported(): boolean {
     case 'Firefox':
       return browserVersionAsNumber >= 62
 
-    case 'Safari':
-      return browserVersionAsNumber >= 12
+    case 'Internet Explorer':
+      return false
 
     case 'Opera':
       return browserVersionAsNumber >= 56
+
+    case 'Safari':
+      return browserVersionAsNumber >= 12
 
     default:
       toast.error(`Navigateur inconnu: "${browserName} v${browserVersion}"`)

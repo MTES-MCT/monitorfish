@@ -26,7 +26,7 @@ export type MapState = {
   animateToCoordinates: null
   animateToExtent: boolean
   animateToRegulatoryLayer: { center?: [number, number]; extent?: [number, number] } | undefined
-  coordinatesFormat: string
+  coordinatesFormat: CoordinatesFormat
   defaultVesselTrackDepth: VesselTrackDepth
   doNotAnimate: boolean
   extent: null

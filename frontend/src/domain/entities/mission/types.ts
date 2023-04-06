@@ -93,7 +93,7 @@ export namespace Mission {
     missionId: number
     missionSource: MissionSource
     missionStatus: MissionStatus | undefined
-    missionTypes: MissionTypeLabel
+    missionTypes: MissionType[]
     numberOfControls: number
     numberOfSurveillance: number
     startDateTimeUtc: string

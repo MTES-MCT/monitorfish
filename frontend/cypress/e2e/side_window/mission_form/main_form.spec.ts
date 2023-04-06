@@ -34,7 +34,7 @@ context('Side Window > Mission Form > Main Form', () => {
     getSaveButton().should('be.disabled')
     getSaveAndCloseButton().should('be.disabled')
 
-    cy.fill('Type de mission', 'Mer')
+    cy.fill('Types de mission', ['Mer'])
 
     cy.fill('Mission sous JDP', true)
 
@@ -94,7 +94,7 @@ context('Side Window > Mission Form > Main Form', () => {
       statusCode: 201
     }).as('createMission')
 
-    cy.fill('Type de mission', 'Air')
+    cy.fill('Types de mission', ['Air'])
 
     cy.fill('Administration 1', 'DDTM')
     cy.fill('Unité 1', 'Cultures marines – DDTM 40')

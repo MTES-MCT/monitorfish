@@ -19,6 +19,5 @@ export type MissionFormValues = Partial<
   dateTimeRangeUtc: DateAsStringRange | undefined
   hasOrder?: boolean | undefined
   isUnderJdp?: boolean | undefined
-  missionType: Mission.MissionType
-  missionTypes: Mission.MissionType[]
+  missionTypes?: Mission.MissionType[]
 }

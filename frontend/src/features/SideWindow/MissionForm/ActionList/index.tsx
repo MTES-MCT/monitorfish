@@ -23,7 +23,7 @@ export function ActionList({ initialValues }: ActionListProps) {
 
   const { mission } = useMainAppSelector(store => store)
 
-  const currentMissionTypes = useMemo(() => initialValues.missionTypes, [initialValues.missionTypes])
+  const currentMissionTypes = useMemo(() => initialValues.missionTypes || [], [initialValues.missionTypes])
 
   const add = useCallback(
     (type: MissionActionFormValues['actionType']) => {

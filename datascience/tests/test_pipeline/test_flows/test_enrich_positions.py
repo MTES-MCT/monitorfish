@@ -69,13 +69,16 @@ def test_extract_positions(reset_test_data):
 
 
 def test_filter_already_enriched_vessels():
+
+    td = pd.Timedelta("1hour").to_numpy()
+
     positions = pd.DataFrame(
         {
             "cfr": ["A", "B", "A", "C", "C", "B"],
             "external_immatriculation": ["AA", "BB", None, "CC", "CC", "BBB"],
             "ircs": ["AAA", "BBB", "AAA", "CCC", "CCC", "BBB"],
-            "is_at_port": [None, False, False, True, None, False],
-            "time_emitting_at_sea": [pd.NaT, pd.NaT, pd.NaT, pd.NaT, pd.NaT, pd.NaT],
+            "time_emitting_at_sea": [pd.NaT, td, td, td, None, 2 * td],
+            "other_data": [None, False, False, True, None, False],
         }
     )
 
@@ -411,7 +414,6 @@ def test_load_then_reset_fishing_activity(reset_test_data):
         13635518,
         13639642,
         13740935,
-        13786523,
     ]
 
     positions_reset = read_query(
@@ -576,7 +578,7 @@ def test_extract_enrich_load(reset_test_data):
             [13635518, "RO237719", 0.000000, True, timedelta(), False],
             [13638407, "RO237719", 0.000000, True, timedelta(), False],
             [13640935, "RO237719", 0.000000, True, timedelta(), False],
-            [13786523, "OHMYGOSH", 0.7, None, timedelta(days=3, hours=12), True],
+            [13786523, "OHMYGOSH", 0.7, False, timedelta(days=3, hours=12), True],
             [13732807, "ZZTOPACDC", 0.4, True, timedelta(days=3), False],
             [13735518, "ZZTOPACDC", 0.4, False, timedelta(days=3, hours=4), False],
             [13738407, "ZZTOPACDC", 0.4, False, timedelta(days=3, hours=8), False],

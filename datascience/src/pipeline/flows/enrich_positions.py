@@ -58,14 +58,14 @@ def filter_already_enriched_vessels(positions: pd.DataFrame) -> pd.DataFrame:
           - 'cfr'
           - 'external_immatriculation'
           - 'ircs'
-          - 'is_at_port'
+          - 'time_emitting_at_sea'
           - any other column required for the rest of the flow (latitude, longitude,
             datetime...)
 
     Returns:
         pd.DataFrame: same as input with some rows removed.
     """
-    vessels_to_enrich = positions[positions.is_at_port.isna()][
+    vessels_to_enrich = positions[positions.time_emitting_at_sea.isna()][
         ["cfr", "external_immatriculation", "ircs"]
     ].drop_duplicates()
 

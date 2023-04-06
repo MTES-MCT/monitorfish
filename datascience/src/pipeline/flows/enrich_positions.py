@@ -5,7 +5,6 @@ import numpy as np
 import pandas as pd
 import prefect
 from prefect import Flow, Parameter, case, task, unmapped
-from prefect.executors import LocalDaskExecutor
 from sqlalchemy import text
 
 from src.db_config import create_engine
@@ -324,7 +323,7 @@ def extract_enrich_load(
     load_fishing_activity(positions, period, logger)
 
 
-with Flow("Enrich positions", executor=LocalDaskExecutor()) as flow:
+with Flow("Enrich positions") as flow:
 
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):

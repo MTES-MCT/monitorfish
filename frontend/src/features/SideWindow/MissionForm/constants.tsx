@@ -6,7 +6,7 @@ export const INITIAL_MISSION_CONTROL_UNIT: MissionFormValues['controlUnits'][0] 
   contact: undefined,
   id: undefined,
   name: undefined,
-  resources: undefined
+  resources: []
 }
 
 export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValues> = {

@@ -10,7 +10,7 @@ context('Vessel sidebar controls buttons', () => {
 
   it('Vessel track depth Should be changed', () => {
     // Given
-    cy.get('.VESSELS').click(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').click(460, 480, { force: true, timeout: 10000 })
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
@@ -44,7 +44,7 @@ context('Vessel sidebar controls buttons', () => {
 
   it('Vessel track dates Should be changed When walking in fishing trips', () => {
     // Given
-    cy.get('.VESSELS').click(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').click(460, 480, { force: true, timeout: 10000 })
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
@@ -68,7 +68,7 @@ context('Vessel sidebar controls buttons', () => {
     const endDateAsDayjs = dayjs().hour(3).minute(4)
 
     // Given
-    cy.get('.VESSELS').click(460, 480, { force: true })
+    cy.get('.VESSELS_POINTS').click(460, 480, { force: true })
     cy.wait(200)
     cy.getDataCy('vessel-sidebar').should('be.visible')
 
@@ -97,7 +97,7 @@ context('Vessel sidebar controls buttons', () => {
   it('Fishing activities Should be seen on the vessel track and showed from the map', () => {
     // Given
     cy.wait(50)
-    cy.get('.VESSELS').click(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').click(460, 480, { force: true, timeout: 10000 })
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 10000 })
@@ -122,7 +122,7 @@ context('Vessel sidebar controls buttons', () => {
     cy.cleanScreenshots(1)
 
     // Given
-    cy.get('.VESSELS').click(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').click(460, 480, { force: true, timeout: 10000 })
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
@@ -131,7 +131,7 @@ context('Vessel sidebar controls buttons', () => {
     cy.wait(1500)
 
     // Then, the last position should be positioned in the bottom of the window
-    cy.get('.VESSELS')
+    cy.get('.VESSELS_POINTS')
       .eq(0)
       .toMatchImageSnapshot({
         imageConfig: {

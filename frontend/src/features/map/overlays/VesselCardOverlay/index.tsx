@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { marginsWithOneWarning, marginsWithoutAlert, marginsWithTwoWarning } from './constants'
-import VesselCard from './VesselCard'
+import { VesselCard } from './VesselCard'
 import { COLORS } from '../../../../constants/constants'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
@@ -65,7 +65,7 @@ export function VesselCardOverlay({ feature, map }) {
       return
     }
 
-    if (!feature?.getId()?.toString()?.includes(LayerProperties.VESSELS.code)) {
+    if (!feature?.getId()?.toString()?.includes(LayerProperties.VESSELS_POINTS.code)) {
       overlayRef.current.style.display = 'none'
       setVesselFeatureToShowOnCard(null)
 

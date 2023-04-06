@@ -31,7 +31,7 @@ context('Vessel sidebar fishing tab', () => {
 
   it('Fishing Should contain the vessel fishing resume', () => {
     // Given
-    cy.get('.VESSELS').click(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').click(460, 480, { force: true, timeout: 10000 })
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
@@ -51,7 +51,7 @@ context('Vessel sidebar fishing tab', () => {
 
   it('Fishing trips Should be walkable', () => {
     // Given
-    cy.get('.VESSELS').click(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').click(460, 480, { force: true, timeout: 10000 })
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
@@ -76,7 +76,7 @@ context('Vessel sidebar fishing tab', () => {
 
   it('Fishing Should contain the vessel ERS logbook messages', () => {
     // Given
-    cy.get('.VESSELS').click(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').click(460, 480, { force: true, timeout: 10000 })
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
@@ -122,7 +122,7 @@ context('Vessel sidebar fishing tab', () => {
 
   it('Fishing Should contain the vessel FLUX logbook messages', () => {
     // Given
-    cy.get('.VESSELS').click(460, 40, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').click(460, 40, { force: true, timeout: 10000 })
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
@@ -144,7 +144,7 @@ context('Vessel sidebar fishing tab', () => {
 
   it('Fishing activities Should be changed according to the actual trip When walking in fishing trips', () => {
     // Given
-    cy.get('.VESSELS').click(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').click(460, 480, { force: true, timeout: 10000 })
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })
@@ -196,7 +196,7 @@ context('Vessel sidebar fishing tab', () => {
 
   it('Single fishing activity Should be seen on map When clicking on the position icon', () => {
     // Given
-    cy.get('.VESSELS').click(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').click(460, 480, { force: true, timeout: 10000 })
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })

@@ -13,9 +13,9 @@ context('Side Window > Mission List > Filter Bar', () => {
 
     cy.get('.TableBodyRow').should('have.length', 7)
     // Expected first row
-    cy.get('[data-id="36"]').should('exist')
+    cy.get('[data-id="24"]').should('exist')
     // Expected last row
-    cy.get('[data-id="45"]').should('exist')
+    cy.get('[data-id="49"]').should('exist')
   })
 
   it('Should filter missions by source', () => {
@@ -23,9 +23,9 @@ context('Side Window > Mission List > Filter Bar', () => {
 
     cy.get('.TableBodyRow').should('have.length', 5)
     // Expected first row
-    cy.get('[data-id="38"]').should('exist')
-    // Expected last row
     cy.get('[data-id="24"]').should('exist')
+    // Expected last row
+    cy.get('[data-id="49"]').should('exist')
   })
 
   it('Should filter missions by status', () => {
@@ -33,9 +33,9 @@ context('Side Window > Mission List > Filter Bar', () => {
 
     cy.get('.TableBodyRow').should('have.length', 4)
     // Expected first row
-    cy.get('[data-id="41"]').should('exist')
-    // Expected last row
     cy.get('[data-id="2"]').should('exist')
+    // Expected last row
+    cy.get('[data-id="45"]').should('exist')
   })
 
   it('Should filter missions by administration', () => {
@@ -43,9 +43,9 @@ context('Side Window > Mission List > Filter Bar', () => {
 
     cy.get('.TableBodyRow').should('have.length', 5)
     // Expected first row
-    cy.get('[data-id="35"]').should('exist')
-    // Expected last row
     cy.get('[data-id="2"]').should('exist')
+    // Expected last row
+    cy.get('[data-id="45"]').should('exist')
   })
 
   it('Should filter missions by unit', () => {
@@ -55,13 +55,16 @@ context('Side Window > Mission List > Filter Bar', () => {
     // Expected first row
     cy.get('[data-id="38"]').should('exist')
     // Expected last row
-    cy.get('[data-id="41"]').should('exist')
+    cy.get('[data-id="49"]').should('exist')
   })
 
   it('Should filter missions by type', () => {
     cy.fill('Type de mission', ['Terre'])
 
-    cy.get('.TableBodyRow').should('have.length', 1)
+    cy.get('.TableBodyRow').should('have.length', 2)
+    // Expected first row
+    cy.get('[data-id="34"]').should('exist')
+    // Expected last row
     cy.get('[data-id="38"]').should('exist')
   })
 })

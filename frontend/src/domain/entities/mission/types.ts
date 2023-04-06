@@ -17,7 +17,7 @@ export namespace Mission {
     isClosed: boolean
     isDeleted: boolean
     missionSource: MissionSource
-    missionType: MissionType
+    missionTypes: MissionType[]
     observationsCacem?: string
     observationsCnsp?: string
     openBy?: string
@@ -93,7 +93,7 @@ export namespace Mission {
     missionId: number
     missionSource: MissionSource
     missionStatus: MissionStatus | undefined
-    missionType: MissionTypeLabel
+    missionTypes: MissionTypeLabel
     numberOfControls: number
     numberOfSurveillance: number
     startDateTimeUtc: string

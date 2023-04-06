@@ -12,7 +12,7 @@
     },
     "jsonBody": {
       "id": 49,
-      "missionType": "SEA",
+      "missionTypes": ["SEA"],
       "missionNature": ["FISH", "OTHER"],
       "controlUnits": [
         {

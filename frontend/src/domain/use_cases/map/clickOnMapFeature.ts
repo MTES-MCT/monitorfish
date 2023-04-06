@@ -63,7 +63,7 @@ export const clickOnMapFeature = (mapClick: MapClick) => (dispatch, getState) =>
     return
   }
 
-  if (clickedFeatureId.includes(LayerProperties.VESSELS.code)) {
+  if (clickedFeatureId.includes(LayerProperties.VESSELS_POINTS.code)) {
     const clickedVessel = (mapClick.feature as VesselLastPositionFeature).vesselProperties
 
     if (mapClick.ctrlKeyPressed) {

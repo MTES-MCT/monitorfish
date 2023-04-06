@@ -85,11 +85,11 @@ const VesselsLayer = ({ map }) => {
       style.current = getWebGLVesselStyle(initStyles)
       const vesselsVectorLayer = new WebGLPointsLayer({
         style: style.current,
-        className: LayerProperties.VESSELS.code,
-        zIndex: LayerProperties.VESSELS.zIndex,
+        className: LayerProperties.VESSELS_POINTS.code,
+        zIndex: LayerProperties.VESSELS_POINTS.zIndex,
         source: getVesselsVectorSource()
       })
-      vesselsVectorLayer.name = LayerProperties.VESSELS.code
+      vesselsVectorLayer.name = LayerProperties.VESSELS_POINTS.code
       map.getLayers().push(vesselsVectorLayer)
       vesselWebGLPointsLayerRef.current = vesselsVectorLayer
     }

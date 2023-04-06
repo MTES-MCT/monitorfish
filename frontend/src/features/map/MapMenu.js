@@ -24,7 +24,7 @@ const MapMenu = ({ map }) => {
         const feature = map.forEachFeatureAtPixel(pixel, feature => feature, { hitTolerance: HIT_PIXEL_TO_TOLERANCE })
         const clickedFeatureId = feature?.getId()
 
-        if (!clickedFeatureId?.toString()?.includes(LayerProperties.VESSELS.code)) {
+        if (!clickedFeatureId?.toString()?.includes(LayerProperties.VESSELS_POINTS.code)) {
           vessel.current = null
           setCoordinates([])
           return

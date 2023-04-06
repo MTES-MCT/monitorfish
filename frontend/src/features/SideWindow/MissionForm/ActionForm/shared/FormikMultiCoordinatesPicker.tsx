@@ -115,35 +115,3 @@ function getGeometryFromCoordinates(longitudeValue: number, latitudeValue: numbe
 
   return convertToGeoJSONGeometryObject(feature.getGeometry() as Point)
 }
-
-/*
-<Fieldset>
-      <Label>Localisations</Label>
-      <Button accent={Accent.SECONDARY} Icon={Icon.Plus} isFullWidth onClick={addZone}>
-        Ajouter une zone de mission
-      </Button>
-
-      <>
-        {coordinates.map((polygonCoordinates, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <Row key={`zone-${index}`}>
-            <ZoneWrapper>
-              Polygone dessiné {index + 1}
-<Link onClick={() => handleCenterOnMap(polygonCoordinates as Coordinate[][])}>
-  <Icon.SelectRectangle />
-  <span>Centrer sur la carte</span>
-</Link>
-</ZoneWrapper>
-
-<IconButton accent={Accent.SECONDARY} Icon={Icon.Edit} onClick={addZone} />
-<IconButton
-accent={Accent.SECONDARY}
-aria-label="Supprimer cette zone"
-Icon={Icon.Delete}
-onClick={() => deleteZone(index)}
-/>
-</Row>
-))}
-</>
-</Fieldset>
- */

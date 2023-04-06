@@ -39,14 +39,14 @@ export function getMissionDataFromMissionFormValues(missionFormValues: MissionFo
   }
 
   const missionBaseValues = omit(
-    ['actions', 'controlUnits', 'dateTimeRangeUtc', 'hasOrder', 'isUnderJdp', 'missionType', 'missionTypes'],
+    ['actions', 'controlUnits', 'dateTimeRangeUtc', 'hasOrder', 'isUnderJdp'],
     missionFormValues
   )
 
   const validControlUnits = missionFormValues.controlUnits.map(getValidMissionDataControlUnit)
   const [startDateTimeUtc, endDateTimeUtc] = missionFormValues.dateTimeRangeUtc
   const missionSource = Mission.MissionSource.MONITORFISH
-  const missionTypes = [missionFormValues.missionType]
+  const missionTypes = missionFormValues.missionTypes || []
 
   return {
     ...missionBaseValues,
@@ -74,7 +74,6 @@ export function getMissionFormInitialValues(
       actions: [],
       controlUnits: [INITIAL_MISSION_CONTROL_UNIT],
       dateTimeRangeUtc: [utcizedLocalDateAsString, utcizedLocalDateAsStringPlusOneHour],
-      missionType: Mission.MissionType.SEA,
       missionTypes: [Mission.MissionType.SEA]
     }
   }
@@ -92,8 +91,7 @@ export function getMissionFormInitialValues(
   return {
     ...mission,
     actions: missionActions,
-    dateTimeRangeUtc,
-    missionType
+    dateTimeRangeUtc
   }
 }
 

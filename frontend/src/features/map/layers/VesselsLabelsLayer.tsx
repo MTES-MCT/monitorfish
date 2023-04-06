@@ -97,7 +97,7 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
       const vesselsLayer = map
         .getLayers()
         .getArray()
-        ?.find(olLayer => olLayer.name === LayerProperties.VESSELS.code)
+        ?.find(olLayer => olLayer.name === LayerProperties.VESSELS_POINTS.code)
       vesselsLayerSourceRef.current = vesselsLayer?.getSource()
     }
 

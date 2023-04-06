@@ -60,7 +60,7 @@ const reducers = {
   addShowedLayer(state, action: PayloadAction<AdministrativeOrRegulatoryLayerIdentity>) {
     const { id, namespace, topic, type, zone } = action.payload
 
-    if (type !== LayerProperties.VESSELS.code) {
+    if (type !== LayerProperties.VESSELS_POINTS.code) {
       const searchedLayerName = getLayerNameNormalized({ topic, type, zone })
       const found = !!state.showedLayers.find(layer => getLayerNameNormalized(layer) === searchedLayerName)
 
@@ -108,7 +108,7 @@ const reducers = {
   removeShowedLayer(state, action: PayloadAction<AdministrativeOrRegulatoryLayerIdentity>) {
     const { namespace, topic, type, zone } = action.payload
 
-    if (type === LayerProperties.VESSELS.code) {
+    if (type === LayerProperties.VESSELS_POINTS.code) {
       return
     }
 

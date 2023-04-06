@@ -38,7 +38,7 @@ class EstimatedPosition {
 
     const currentCoordinates = transform([longitude, latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
     const estimatedCoordinates = transform([estimatedCurrentLongitude, estimatedCurrentLatitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-    const vesselCompositeIdentifier = vessel.vesselFeatureId.replace(`${LayerProperties.VESSELS.code}:`, '')
+    const vesselCompositeIdentifier = vessel.vesselFeatureId.replace(`${LayerProperties.VESSELS_POINTS.code}:`, '')
 
     const estimatedPositionObject = {
       latitude: estimatedCurrentLatitude,

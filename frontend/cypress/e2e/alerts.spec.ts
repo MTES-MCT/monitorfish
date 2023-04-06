@@ -16,7 +16,7 @@ context('Alerts', () => {
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('not.exist')
 
     // When
-    cy.get('.VESSELS').toMatchImageSnapshot({
+    cy.get('.VESSELS_POINTS').toMatchImageSnapshot({
       imageConfig: {
         threshold: 0.05,
         thresholdType: 'percent'

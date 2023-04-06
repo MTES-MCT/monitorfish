@@ -104,8 +104,8 @@ export const mapFilterFormRecordsToFilters = ([key, valueOrValues]: [
       })
 
     case MissionFilterType.TYPE:
-      return filter<AugmentedDataItem<MissionWithActions>>(({ item: { missionType } }) =>
-        valueOrValues.includes(missionType)
+      return filter<AugmentedDataItem<MissionWithActions>>(({ item: { missionTypes } }) =>
+        includesSome(valueOrValues, missionTypes)
       )
 
     case MissionFilterType.UNIT:

@@ -23,7 +23,7 @@ export function ActionList({ initialValues }: ActionListProps) {
 
   const { mission } = useMainAppSelector(store => store)
 
-  const currentMissionType = useMemo(() => initialValues.missionType, [initialValues.missionType])
+  const currentMissionTypes = useMemo(() => initialValues.missionTypes, [initialValues.missionTypes])
 
   const add = useCallback(
     (type: MissionActionFormValues['actionType']) => {
@@ -61,7 +61,7 @@ export function ActionList({ initialValues }: ActionListProps) {
         <h2>Actions réalisées en mission</h2>
 
         <Dropdown Icon={Icon.Plus} title="Ajouter">
-          {currentMissionType === Mission.MissionType.AIR && (
+          {currentMissionTypes.includes(Mission.MissionType.AIR) && (
             <>
               <Dropdown.Item Icon={Icon.Plane} onClick={() => add(MissionAction.MissionActionType.AIR_CONTROL)}>
                 Ajouter un contrôle aérien
@@ -74,12 +74,12 @@ export function ActionList({ initialValues }: ActionListProps) {
               </Dropdown.Item>
             </>
           )}
-          {currentMissionType === Mission.MissionType.LAND && (
+          {currentMissionTypes.includes(Mission.MissionType.LAND) && (
             <Dropdown.Item Icon={Icon.Anchor} onClick={() => add(MissionAction.MissionActionType.LAND_CONTROL)}>
               Ajouter un contrôle à la débarque
             </Dropdown.Item>
           )}
-          {currentMissionType === Mission.MissionType.SEA && (
+          {currentMissionTypes.includes(Mission.MissionType.SEA) && (
             <Dropdown.Item Icon={Icon.FleetSegment} onClick={() => add(MissionAction.MissionActionType.SEA_CONTROL)}>
               Ajouter un contrôle en mer
             </Dropdown.Item>

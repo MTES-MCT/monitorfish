@@ -15,9 +15,9 @@ context('Side Window > Mission List > Sea Front Filter (= submenu)', () => {
   it('Should only show missions for MEMN sea front', () => {
     cy.get('.TableBodyRow').should('have.length', 9)
     // Expected first row
-    cy.get('[data-id="38"]').should('exist')
-    // Expected last row
     cy.get('[data-id="2"]').should('exist')
+    // Expected last row
+    cy.get('[data-id="49"]').should('exist')
   })
 
   it('Should only show missions for NAMO sea front', () => {

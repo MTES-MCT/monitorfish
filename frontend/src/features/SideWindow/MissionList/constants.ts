@@ -50,9 +50,10 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
     {
       fixedWidth: 80,
       isSortable: true,
-      key: 'missionType',
+      key: 'missionTypes',
       label: 'Type',
-      transform: missionWithActions => MISSION_TYPE_LABEL[missionWithActions.missionType]
+      transform: missionWithActions =>
+        missionWithActions.missionTypes.map(missionType => MISSION_TYPE_LABEL[missionType]).join(', ')
     },
     {
       fixedWidth: 80,

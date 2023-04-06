@@ -66,7 +66,7 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
           <Details>
             <MissionSourceTag>{getMissionSourceTagText(mission.missionSource)}</MissionSourceTag>
             <div>
-              Mission {mission.missionType} – {mission.startDateTimeUtc}
+              Mission {mission.missionTypes} – {mission.startDateTimeUtc}
             </div>
             <div>
               {mission.numberOfControls} {pluralize('contrôle', mission.numberOfControls)}{' '}

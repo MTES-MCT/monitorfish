@@ -11,31 +11,26 @@
       "Access-Control-Allow-Methods": "*"
     },
     "jsonBody": {
-      "id": 6,
-      "missionTypes": ["AIR"],
-      "missionNature": ["FISH", "OTHER"],
+      "id": 47,
+      "missionTypes": ["LAND"],
+      "missionNature": ["OTHER"],
       "controlUnits": [
         {
           "id": 10003,
           "administration": "DDTM",
-          "name": "DML 2A (historique)",
-          "resources": [
-            {
-              "id": 3,
-              "name": "Semi-rigide 1"
-            }
-          ],
+          "name": "DML 2A",
+          "resources": [],
           "contact": null
         }
       ],
-      "openBy": "Kevin Torres",
-      "closedBy": "Cynthia Phillips",
-      "observationsCacem": "Toward agency blue now hand. Meet answer someone stand.",
+      "openBy": "Christina Thomas",
+      "closedBy": "Amanda Smith",
+      "observationsCacem": "Decision about effect sport hour field. Care finally minute stop.",
       "observationsCnsp": null,
-      "facade": "MED",
+      "facade": "SA",
       "geom": null,
-      "startDateTimeUtc": "2022-01-20T08:29:11.923703Z",
-      "endDateTimeUtc": "2023-02-14T17:45:28.923703Z",
+      "startDateTimeUtc": "2022-12-26T14:31:06.923703Z",
+      "endDateTimeUtc": "2022-12-28T17:14:45.923703Z",
       "envActions": [],
       "missionSource": "CNSP",
       "isClosed": true

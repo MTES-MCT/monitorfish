@@ -83,7 +83,7 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
                   <TableBodyRow key={augmentedMission.id} data-id={augmentedMission.id}>
                     <TableBodyCell $fixedWidth={136}>{augmentedMission.labelled.startDateTimeUtc}</TableBodyCell>
                     <TableBodyCell $fixedWidth={136}>{augmentedMission.labelled.endDateTimeUtc}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={80}>{augmentedMission.labelled.missionType}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={80}>{augmentedMission.labelled.missionTypes}</TableBodyCell>
                     <TableBodyCell $fixedWidth={80}>{augmentedMission.labelled.missionSource}</TableBodyCell>
                     <TableBodyCell $fixedWidth={160}>{augmentedMission.labelled.controlUnits}</TableBodyCell>
                     <TableBodyCell>{augmentedMission.labelled.inspectedVessels}</TableBodyCell>

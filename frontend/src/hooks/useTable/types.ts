@@ -44,13 +44,17 @@ export type TableOptions<T extends CollectionItem> = {
   searchableKeys?: string[]
 }
 
+export type AugmentedDataFilter<T extends CollectionItem> = (
+  augmentedData: Array<AugmentedDataItem<T>>
+) => Array<AugmentedDataItem<T>>
+
 export type AugmentedDataItem<T extends CollectionItem> = {
-  id: number | string
+  id: T['id']
   isChecked: boolean
   item: T
-  labelled: Partial<T>
-  searchable: Partial<T>
-  sortable: Partial<T>
+  labelled: Record<string, string>
+  searchable: Record<string, any>
+  sortable: Record<string, any>
 }
 
 export type AugmentedDataItemBase<T extends CollectionItem> = Pick<AugmentedDataItem<T>, 'id' | 'item'>

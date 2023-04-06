@@ -34,7 +34,7 @@ context('Side Window > Mission Form > Main Form', () => {
     getSaveButton().should('be.disabled')
     getSaveAndCloseButton().should('be.disabled')
 
-    cy.fill('Type de mission', 'Mer')
+    cy.fill('Types de mission', ['Mer'])
 
     cy.fill('Mission sous JDP', true)
 
@@ -73,7 +73,7 @@ context('Side Window > Mission Form > Main Form', () => {
         isDeleted: false,
         // isUnderJdp: false,
         missionSource: 'MONITORFISH',
-        missionType: 'SEA'
+        missionTypes: ['SEA']
         // startDateTimeUtc: '2023-02-01T00:33:22.988Z'
       })
       assert.isString(interception.request.body.endDateTimeUtc)
@@ -94,7 +94,7 @@ context('Side Window > Mission Form > Main Form', () => {
       statusCode: 201
     }).as('createMission')
 
-    cy.fill('Type de mission', 'Mer')
+    cy.fill('Types de mission', ['Air'])
 
     cy.fill('Administration 1', 'DDTM')
     cy.fill('Unité 1', 'Cultures marines – DDTM 40')
@@ -157,7 +157,7 @@ context('Side Window > Mission Form > Main Form', () => {
         isDeleted: false,
         // isUnderJdp: true,
         missionSource: 'MONITORFISH',
-        missionType: 'SEA',
+        missionTypes: ['AIR'],
         observationsCacem: 'Une note.',
         observationsCnsp: 'Une autre note.',
         openBy: 'Nemo'
@@ -208,7 +208,7 @@ context('Side Window > Mission Form > Main Form', () => {
         isClosed: false,
         isDeleted: false,
         missionSource: 'MONITORFISH',
-        missionType: 'SEA',
+        missionTypes: ['SEA'],
         observationsCacem:
           'Maybe own each college away likely major. Former space technology million cell. Outside body my drop require.',
         observationsCnsp: null,

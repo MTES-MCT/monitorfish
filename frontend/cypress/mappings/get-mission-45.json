@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "url": "/api/v1/missions/2"
+    "url": "/api/v1/missions/6"
   },
   "response": {
     "status": 200,
@@ -11,7 +11,7 @@
       "Access-Control-Allow-Methods": "*"
     },
     "jsonBody": {
-      "id": 2,
+      "id": 45,
       "missionTypes": ["SEA"],
       "missionNature": ["FISH"],
       "controlUnits": [
@@ -29,7 +29,7 @@
       "observationsCnsp": null,
       "facade": "MEMN",
       "geom": null,
-      "startDateTimeUtc": "2022-01-20T04:53:35.923703Z",
+      "startDateTimeUtc": "2023-01-20T04:53:35.923703Z",
       "endDateTimeUtc": "2023-01-23T02:49:25.923703Z",
       "envActions": [],
       "missionSource": "CNSP",

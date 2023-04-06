@@ -4,14 +4,14 @@ import { useGetMissionsQuery } from '../../../../api/mission'
 import { missionActionApi } from '../../../../api/missionAction'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 
-import type { Mission, MissionAndActions } from '../types'
+import type { Mission, MissionWithActions } from '../types'
 
-export function useGetMissionsAndActions(): MissionAndActions[] {
+export function useGetMissionsWithActions(): MissionWithActions[] {
   const dispatch = useMainAppDispatch()
   const missions = useGetMissionsQuery(undefined).data
-  const [missionsAndActions, setMissionAndActions] = useState<MissionAndActions[]>([])
+  const [missionsAndActions, setMissionWithActions] = useState<MissionWithActions[]>([])
 
-  const getMissionsAndActions = useCallback(
+  const getMissionsWithActions = useCallback(
     (_missions: Mission.Mission[] | undefined) => {
       if (!_missions) {
         return []
@@ -23,21 +23,21 @@ export function useGetMissionsAndActions(): MissionAndActions[] {
         )
 
         return {
-          actions: missionActions || [],
-          mission
+          ...mission,
+          actions: missionActions || []
         }
       })
 
-      return Promise.all(missionActionsPromises).then(nextMissionsAndActions =>
-        setMissionAndActions(nextMissionsAndActions)
+      return Promise.all(missionActionsPromises).then(nextMissionsWithActions =>
+        setMissionWithActions(nextMissionsWithActions)
       )
     },
     [dispatch]
   )
 
   useEffect(() => {
-    getMissionsAndActions(missions)
-  }, [missions, getMissionsAndActions])
+    getMissionsWithActions(missions)
+  }, [missions, getMissionsWithActions])
 
   return missionsAndActions
 }

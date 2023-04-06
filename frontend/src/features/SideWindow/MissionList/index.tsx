@@ -1,14 +1,14 @@
-import { Button, getLocalizedDayjs, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
+import { Button, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
 import { noop } from 'lodash'
-import { pipe } from 'ramda'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_LIST_TABLE_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
-import { getSeaFrontFilter } from './utils'
+import { getSeaFrontFilter, renderStatus } from './utils'
 import { useGetMissionsQuery } from '../../../api/mission'
 import { missionActions } from '../../../domain/actions'
+import { useGetMissionsWithActions } from '../../../domain/entities/mission/hooks/useGetMissionsWithActions'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useTable } from '../../../hooks/useTable'
@@ -16,32 +16,28 @@ import { EmptyCardTable } from '../../../ui/card-table/EmptyCardTable'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
 import { SideWindowMenuKey } from '../constants'
 
-import type { MissionFilter } from './types'
-import type { Mission } from '../../../domain/entities/mission/types'
-import type { MutableRefObject } from 'react'
+import type { Mission, MissionWithActions } from '../../../domain/entities/mission/types'
+import type { AugmentedDataFilter } from '../../../hooks/useTable/types'
 
 type MissionListProps = {
   selectedSubMenu: string
 }
 export function MissionList({ selectedSubMenu }: MissionListProps) {
-  const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
+  const missionsWithActions = useGetMissionsWithActions()
 
-  const [filters, setFilters] = useState<MissionFilter[]>([])
+  const [filters, setFilters] = useState<Array<AugmentedDataFilter<MissionWithActions>>>([])
+  const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
 
   const getMissionsApiQuery = useGetMissionsQuery(undefined)
   const dispatch = useMainAppDispatch()
 
-  const { renderTableHead, tableData } = useTable<Mission.Mission>(
-    getMissionsApiQuery.data,
-    MISSION_LIST_TABLE_OPTIONS,
-    searchInputRef.current?.value
-  )
-
   const seaFrontGroupFilter = useMemo(() => getSeaFrontFilter(selectedSubMenu), [selectedSubMenu])
 
-  const filteredMissions = useMemo(
-    () => (pipe as (...args: MissionFilter[]) => MissionFilter)(seaFrontGroupFilter, ...filters)(tableData),
-    [filters, seaFrontGroupFilter, tableData]
+  const { renderTableHead, tableAugmentedData } = useTable<MissionWithActions>(
+    missionsWithActions,
+    MISSION_LIST_TABLE_OPTIONS,
+    [seaFrontGroupFilter, ...filters],
+    searchQuery
   )
 
   const goToMissionForm = useCallback(
@@ -70,46 +66,31 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
       </Header>
 
       <Body>
-        <FilterBar missions={tableData} onChange={setFilters} />
+        <FilterBar missionsWithActions={missionsWithActions} onChange={setFilters} onQueryChange={setSearchQuery} />
 
         {getMissionsApiQuery.isLoading && <p>Chargement en cours...</p>}
         {getMissionsApiQuery.error && <pre>{JSON.stringify(getMissionsApiQuery.error)}</pre>}
         {!getMissionsApiQuery.isLoading && !getMissionsApiQuery.error && (
           <>
-            <div>{`${filteredMissions.length ? filteredMissions.length : 'Aucune'} mission${
-              filteredMissions.length > 1 ? 's' : ''
+            <div>{`${tableAugmentedData.length ? tableAugmentedData.length : 'Aucune'} mission${
+              tableAugmentedData.length > 1 ? 's' : ''
             }`}</div>
             <Table>
               {renderTableHead()}
 
               <TableBody>
-                {filteredMissions.map(mission => (
-                  <TableBodyRow key={mission.id} data-id={mission.id}>
-                    <TableBodyCell $fixedWidth={144}>
-                      {getLocalizedDayjs(mission.startDateTimeUtc).format('D MMM YY, HH:MM')}
+                {tableAugmentedData.map(augmentedMission => (
+                  <TableBodyRow key={augmentedMission.id} data-id={augmentedMission.id}>
+                    <TableBodyCell $fixedWidth={136}>{augmentedMission.labelled.startDateTimeUtc}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={136}>{augmentedMission.labelled.endDateTimeUtc}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={80}>{augmentedMission.labelled.missionTypes}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={80}>{augmentedMission.labelled.missionSource}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={160}>{augmentedMission.labelled.controlUnits}</TableBodyCell>
+                    <TableBodyCell>{augmentedMission.labelled.inspectedVessels}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={128}>{augmentedMission.labelled.inspectionsCount}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={128}>
+                      {renderStatus(augmentedMission.labelled.status as Mission.MissionStatus)}
                     </TableBodyCell>
-                    <TableBodyCell $fixedWidth={144}>
-                      {mission.endDateTimeUtc
-                        ? getLocalizedDayjs(mission.endDateTimeUtc).format('D MMM YY, HH:MM')
-                        : '-'}
-                    </TableBodyCell>
-                    <TableBodyCell>
-                      {mission.controlUnits
-                        ?.map(controlUnit => `${controlUnit.name} (${controlUnit.administration || '-'})`)
-                        .join(', ')}
-                    </TableBodyCell>
-                    <TableBodyCell $fixedWidth={80}>{mission.missionType}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={80}>{mission.facade}</TableBodyCell>
-                    {/* TODO Inspect that. */}
-                    {/* <TableBodyCell $fixedWidth={160}>{mission.themes?.join(', ')}</TableBodyCell> */}
-                    <TableBodyCell $fixedWidth={160}>THEMES</TableBodyCell>
-                    {/* TODO Inspect that. */}
-                    {/* <TableBodyCell $fixedWidth={48}>{mission.inspectionsCount}</TableBodyCell> */}
-                    <TableBodyCell $fixedWidth={48}>0</TableBodyCell>
-                    {/* TODO Inspect that. */}
-                    {/* <TableBodyCell $fixedWidth={128}>{mission.status}</TableBodyCell> */}
-                    <TableBodyCell $fixedWidth={128}>STATUS</TableBodyCell>
-                    <TableBodyCell $fixedWidth={160}>ALERTE</TableBodyCell>
                     <TableBodyCell
                       $fixedWidth={48}
                       style={{
@@ -128,7 +109,7 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
                     >
                       <IconButton
                         Icon={Icon.Edit}
-                        onClick={() => goToMissionForm(mission.id)}
+                        onClick={() => goToMissionForm(augmentedMission.id)}
                         size={Size.SMALL}
                         title="Éditer la mission"
                       />
@@ -137,7 +118,7 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
                 ))}
               </TableBody>
 
-              {!tableData.length && <EmptyCardTable>Aucun signalement</EmptyCardTable>}
+              {!tableAugmentedData.length && <EmptyCardTable>Aucune mission</EmptyCardTable>}
             </Table>
           </>
         )}

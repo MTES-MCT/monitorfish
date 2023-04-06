@@ -13,5 +13,5 @@ export namespace ControlUnit {
 
   export type ControlUnitData = Except<ControlUnit, 'id'>
 
-  export type ControlUnitDraft = Undefine<ControlUnitData>
+  export type ControlUnitDraft = Omit<Undefine<ControlUnitData>, 'resources'> & Pick<ControlUnitData, 'resources'>
 }

@@ -6,7 +6,7 @@ import { selectedMissionActionsStyles } from './styles'
 import { LayerProperties } from '../../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../../domain/entities/layers/types'
 import { getMissionActionFeature } from '../../../../../domain/entities/mission'
-import { useGetMissionsAndActions } from '../../../../../domain/entities/mission/hooks/useGetMissionsAndActions'
+import { useGetMissionsWithActions } from '../../../../../domain/entities/mission/hooks/useGetMissionsWithActions'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 
 import type { GeoJSON } from '../../../../../domain/types/GeoJSON'
@@ -14,7 +14,7 @@ import type { VectorLayerWithName } from '../../../../../domain/types/layer'
 import type { Feature } from 'ol'
 
 export function UnmemoizedSelectedMissionActionsLayer({ map }) {
-  const missionsAndActions = useGetMissionsAndActions()
+  const missionsAndActions = useGetMissionsWithActions()
   const selectedMissionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionGeoJSON)
   const selectedMissionActions = useMemo(() => {
     if (!selectedMissionGeoJSON) {
@@ -23,7 +23,10 @@ export function UnmemoizedSelectedMissionActionsLayer({ map }) {
 
     return (
       missionsAndActions
-        .find(mission => mission.mission.id === (selectedMissionGeoJSON as GeoJSON.Feature).properties?.missionId)
+        .find(
+          missionsAndAction =>
+            missionsAndAction.id === (selectedMissionGeoJSON as GeoJSON.Feature).properties?.missionId
+        )
         ?.actions?.map(action => getMissionActionFeature(action))
         .filter((feature): feature is Feature => Boolean(feature)) || []
     )

@@ -2,6 +2,7 @@ import {
   FormikCheckbox,
   FormikDateRangePicker,
   FormikEffect,
+  FormikMultiCheckbox,
   FormikMultiRadio,
   FormikTextarea,
   FormikTextInput,
@@ -62,10 +63,10 @@ export function MainForm({ initialValues, onChange }: MainFormProps) {
               withTime
             />
             <MultiCheckColumns>
-              <FormikMultiRadio
+              <FormikMultiCheckbox
                 isInline
-                label="Type de mission"
-                name="missionType"
+                label="Types de mission"
+                name="missionTypes"
                 options={MISSION_TYPES_AS_OPTIONS}
               />
 

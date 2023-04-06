@@ -1,12 +1,12 @@
 import diacritics from 'diacritics'
 import Fuse from 'fuse.js'
-import { ascend, assocPath, descend, equals, path, pipe, prop, propEq, sort } from 'ramda'
+import { ascend, assocPath, descend, equals, path, pipe, propEq, sort } from 'ramda'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { TableHead } from './TableHead'
 import { getArrayPathFromStringPath, normalizeSearchQuery } from './utils'
 
-import type { AugmentedDataItem, AugmentedDataItemBase, TableOptions } from './types'
+import type { AugmentedDataFilter, AugmentedDataItem, AugmentedDataItemBase, TableOptions } from './types'
 import type { CollectionItem } from '../../types'
 
 export function useTable<T extends CollectionItem = CollectionItem>(
@@ -19,6 +19,7 @@ export function useTable<T extends CollectionItem = CollectionItem>(
     searchableKeys = [],
     searchFuseOptions = {}
   }: TableOptions<T>,
+  filters: Array<AugmentedDataFilter<T>>,
   searchQuery?: string
 ) {
   const [checkedIds, setCheckedIds] = useState<(number | string)[]>([])
@@ -95,7 +96,7 @@ export function useTable<T extends CollectionItem = CollectionItem>(
   )
 
   const augmentedData = useMemo(() => {
-    const augmentedDataBase: AugmentedDataItem<T>[] = rawData.map(rawDataItem => ({
+    const augmentedDataBase: Array<AugmentedDataItem<T>> = rawData.map(rawDataItem => ({
       id: rawDataItem.id,
       isChecked: false,
       item: rawDataItem,
@@ -112,8 +113,16 @@ export function useTable<T extends CollectionItem = CollectionItem>(
     return augmentedDataBase.map(
       // @ts-ignore
       pipe(...attachIsCheckedProps, ...attachLabelProps, ...attachSearchableProps, ...attachSortableProps)
-    ) as unknown as AugmentedDataItem<T>[]
+    ) as unknown as Array<AugmentedDataItem<T>>
   }, [attachIsCheckedProps, attachLabelProps, attachSearchableProps, attachSortableProps, rawData])
+
+  const filteredAugmentedData = useMemo(
+    () =>
+      filters.length > 0
+        ? (pipe as (...args: Array<AugmentedDataFilter<T>>) => AugmentedDataFilter<T>)(...filters)(augmentedData)
+        : augmentedData,
+    [filters, augmentedData]
+  )
 
   // TODO It may make sense to create a separate reusable hook for search.
   const fuse = useMemo(
@@ -127,49 +136,51 @@ export function useTable<T extends CollectionItem = CollectionItem>(
     [augmentedData, columns, searchFuseOptions]
   )
 
-  const filteredAugmentedData = useMemo(() => {
+  const filteredAndSearchedAugmentedData = useMemo(() => {
     const normalizedSearchQuery = normalizeSearchQuery(searchQuery)
 
     return normalizedSearchQuery
       ? fuse.search<AugmentedDataItem<T>>(normalizedSearchQuery).map(({ item }) => item)
-      : augmentedData
-  }, [augmentedData, fuse, searchQuery])
+      : filteredAugmentedData
+  }, [filteredAugmentedData, fuse, searchQuery])
 
   const filteredCheckedIds = useMemo(() => {
-    const filteredDataIds = filteredAugmentedData.map(filteredAugmentedDataItem => filteredAugmentedDataItem.id)
+    const filteredDataIds = filteredAndSearchedAugmentedData.map(
+      filteredAndSearchedAugmentedDataItem => filteredAndSearchedAugmentedDataItem.id
+    )
 
     return checkedIds.filter(checkedId => filteredDataIds.includes(checkedId))
-  }, [checkedIds, filteredAugmentedData])
+  }, [checkedIds, filteredAndSearchedAugmentedData])
 
   const isAllChecked = useMemo(
     () => filteredCheckedIds.length > 0 && filteredCheckedIds.length === filteredAugmentedData.length,
     [filteredAugmentedData, filteredCheckedIds]
   )
 
-  const filteredAndSortedAugmentedData = useMemo(() => {
+  const filteredAndSearchedAndSortedAugmentedData = useMemo(() => {
     if (!sortingKey) {
-      return filteredAugmentedData
+      return filteredAndSearchedAugmentedData
     }
 
     const sortingKeyPath = path(['sortable', sortingKey]) as any
     const bySortingKey = isSortingDesc ? descend(sortingKeyPath) : ascend(sortingKeyPath)
 
-    return sort(bySortingKey, filteredAugmentedData)
-  }, [filteredAugmentedData, isSortingDesc, sortingKey])
+    return sort(bySortingKey, filteredAndSearchedAugmentedData)
+  }, [filteredAndSearchedAugmentedData, isSortingDesc, sortingKey])
 
-  const filteredAndSortedData = useMemo(
-    () => filteredAndSortedAugmentedData.map(({ item }) => item),
-    [filteredAndSortedAugmentedData]
+  const filteredAndSearchedAndSortedData = useMemo(
+    () => filteredAndSearchedAndSortedAugmentedData.map(({ item }) => item),
+    [filteredAndSearchedAndSortedAugmentedData]
   )
 
   const getCheckedData = useCallback(
-    () => filteredAndSortedData.filter(({ id }) => checkedIds.includes(id)),
-    [checkedIds, filteredAndSortedData]
+    () => filteredAndSearchedAndSortedData.filter(({ id }) => checkedIds.includes(id)),
+    [checkedIds, filteredAndSearchedAndSortedData]
   )
 
   const toggleCheckAll = useCallback(() => {
-    setCheckedIds(isAllChecked ? [] : filteredAndSortedAugmentedData.map(prop('id')).sort())
-  }, [filteredAndSortedAugmentedData, isAllChecked])
+    setCheckedIds(isAllChecked ? [] : filteredAndSearchedAndSortedAugmentedData.map(({ id }) => id).sort())
+  }, [filteredAndSearchedAndSortedAugmentedData, isAllChecked])
 
   const sortColumn = useCallback((key: string, isDesc: boolean) => {
     setSortingKey(key)
@@ -216,9 +227,9 @@ export function useTable<T extends CollectionItem = CollectionItem>(
   return {
     getTableCheckedData: getCheckedData,
     renderTableHead,
-    tableAugmentedData: filteredAndSortedAugmentedData,
+    tableAugmentedData: filteredAndSearchedAndSortedAugmentedData,
     tableCheckedIds: filteredCheckedIds,
-    tableData: filteredAndSortedData,
+    tableData: filteredAndSearchedAndSortedData,
     toggleTableAllCheck: toggleCheckAll,
     toggleTableCheckForId
   }

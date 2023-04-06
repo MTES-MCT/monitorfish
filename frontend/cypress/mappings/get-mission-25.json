@@ -11,14 +11,14 @@
       "Access-Control-Allow-Methods": "*"
     },
     "jsonBody": {
-      "id": 6,
-      "missionTypes": ["AIR"],
+      "id": 25,
+      "missionTypes": ["LAND"],
       "missionNature": ["FISH", "OTHER"],
       "controlUnits": [
         {
           "id": 10003,
           "administration": "DDTM",
-          "name": "DML 2A (historique)",
+          "name": "DML 2A",
           "resources": [
             {
               "id": 3,
@@ -34,7 +34,7 @@
       "observationsCnsp": null,
       "facade": "MED",
       "geom": null,
-      "startDateTimeUtc": "2022-01-20T08:29:11.923703Z",
+      "startDateTimeUtc": "2023-01-20T08:29:11.923703Z",
       "endDateTimeUtc": "2023-02-14T17:45:28.923703Z",
       "envActions": [],
       "missionSource": "CNSP",

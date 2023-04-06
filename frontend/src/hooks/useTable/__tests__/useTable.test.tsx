@@ -14,7 +14,7 @@ describe('hooks/useTable()', () => {
       columns: []
     }
 
-    const { result } = renderHook(() => useTable(rawData, tableOptions))
+    const { result } = renderHook(() => useTable(rawData, tableOptions, []))
 
     expect(result.current.tableAugmentedData).toMatchObject([])
   })
@@ -36,7 +36,7 @@ describe('hooks/useTable()', () => {
       searchableKeys: ['id']
     }
 
-    const { result: firstResult } = renderHook(() => useTable(rawData, tableOptions, '12'))
+    const { result: firstResult } = renderHook(() => useTable(rawData, tableOptions, [], '12'))
 
     expect(firstResult.current.tableAugmentedData).toMatchObject([
       {
@@ -71,7 +71,7 @@ describe('hooks/useTable()', () => {
       }
     ])
 
-    const { result: secondResult } = renderHook(() => useTable(rawData, tableOptions, '23'))
+    const { result: secondResult } = renderHook(() => useTable(rawData, tableOptions, [], '23'))
 
     expect(secondResult.current.tableAugmentedData).toMatchObject([
       {
@@ -91,7 +91,7 @@ describe('hooks/useTable()', () => {
       }
     ])
 
-    const { result: thirdResult } = renderHook(() => useTable(rawData, tableOptions, '1 2'))
+    const { result: thirdResult } = renderHook(() => useTable(rawData, tableOptions, [], '1 2'))
 
     expect(thirdResult.current.tableAugmentedData).toMatchObject([
       {

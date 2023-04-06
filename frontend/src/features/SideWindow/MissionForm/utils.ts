@@ -3,6 +3,7 @@ import { omit } from 'ramda'
 import { INITIAL_MISSION_CONTROL_UNIT, MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
 import { Mission } from '../../../domain/entities/mission/types'
 import { FormError, FormErrorCode } from '../../../libs/FormError'
+import { FrontendError } from '../../../libs/FrontendError'
 import { dayjs } from '../../../utils/dayjs'
 import { getUtcizedDayjs } from '../../../utils/getUtcizedDayjs'
 import { validateRequiredFormValues } from '../../../utils/validateRequiredFormValues'
@@ -45,6 +46,7 @@ export function getMissionDataFromMissionFormValues(missionFormValues: MissionFo
   const validControlUnits = missionFormValues.controlUnits.map(getValidMissionDataControlUnit)
   const [startDateTimeUtc, endDateTimeUtc] = missionFormValues.dateTimeRangeUtc
   const missionSource = Mission.MissionSource.MONITORFISH
+  const missionTypes = missionFormValues.missionTypes || []
 
   return {
     ...missionBaseValues,
@@ -54,6 +56,7 @@ export function getMissionDataFromMissionFormValues(missionFormValues: MissionFo
     isClosed: false,
     isDeleted: false,
     missionSource,
+    missionTypes,
     startDateTimeUtc
   }
 }
@@ -71,7 +74,7 @@ export function getMissionFormInitialValues(
       actions: [],
       controlUnits: [INITIAL_MISSION_CONTROL_UNIT],
       dateTimeRangeUtc: [utcizedLocalDateAsString, utcizedLocalDateAsStringPlusOneHour],
-      missionType: Mission.MissionType.SEA
+      missionTypes: [Mission.MissionType.SEA]
     }
   }
 
@@ -80,6 +83,10 @@ export function getMissionFormInitialValues(
     mission.startDateTimeUtc,
     mission.endDateTimeUtc ? mission.endDateTimeUtc : defaultEndDateAsStringUtc
   ]
+  const missionType = mission.missionTypes[0]
+  if (!missionType) {
+    throw new FrontendError('`missionType` is undefined.')
+  }
 
   return {
     ...mission,
@@ -158,7 +165,7 @@ export function getValidMissionDataControlUnit(
   maybeValidMissionDataControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft
 ): Mission.MissionData['controlUnits'][0] {
   const [validMissionDataControlUnit, formError] = validateRequiredFormValues(
-    ['administration', 'id', 'name'],
+    ['administration', 'id', 'name', 'resources'],
     maybeValidMissionDataControlUnit as ControlUnit.ControlUnit
   )
   if (formError) {

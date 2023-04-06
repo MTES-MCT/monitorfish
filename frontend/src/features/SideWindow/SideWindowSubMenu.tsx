@@ -230,6 +230,7 @@ const Wrapper = styled.div<{
 }>`
   flex-grow: 1;
   position: relative;
+  max-width: ${p => (p.isOpen ? '200px' : '30px')};
   width: ${p => (p.isOpen ? '200px' : '30px')};
 `
 const Menu = styled.div<{

@@ -8,13 +8,13 @@ import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
 import { getMissionFeatureZone } from '../../../../domain/entities/mission'
-import { useGetMissionsAndActions } from '../../../../domain/entities/mission/hooks/useGetMissionsAndActions'
+import { useGetMissionsWithActions } from '../../../../domain/entities/mission/hooks/useGetMissionsWithActions'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 
 import type { VectorLayerWithName } from '../../../../domain/types/layer'
 
 export function UnmemoizedSelectedMissionLayer({ map }) {
-  const missionsAndActions = useGetMissionsAndActions()
+  const missionsAndActions = useGetMissionsWithActions()
   const selectedMissionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionGeoJSON)
   const selectedMission = useMemo(() => {
     if (!selectedMissionGeoJSON) {
@@ -72,12 +72,14 @@ export function UnmemoizedSelectedMissionLayer({ map }) {
       return
     }
 
-    const hoveredMission = missionsAndActions.find(mission => mission.mission.id === selectedMission.get('missionId'))
-    if (!hoveredMission) {
+    const hoveredMissionWithActions = missionsAndActions.find(
+      missionWithAction => missionWithAction.id === selectedMission.get('missionId')
+    )
+    if (!hoveredMissionWithActions) {
       return
     }
 
-    const missionFeature = getMissionFeatureZone(hoveredMission.mission)
+    const missionFeature = getMissionFeatureZone(hoveredMissionWithActions)
     getVectorSource().addFeature(missionFeature)
   }, [selectedMission, missionsAndActions, getVectorSource])
 

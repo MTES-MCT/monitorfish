@@ -56,7 +56,7 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
 
   const { getTableCheckedData, renderTableHead, tableAugmentedData, tableCheckedIds, toggleTableCheckForId } = useTable<
     InfractionSuspicionReporting | PendingAlertReporting
-  >(currentSeaFrontReportings, REPORTING_LIST_TABLE_OPTIONS, searchInputRef.current?.value)
+  >(currentSeaFrontReportings, REPORTING_LIST_TABLE_OPTIONS, [], searchInputRef.current?.value)
 
   const archive = useCallback(async () => {
     if (!tableCheckedIds.length) {

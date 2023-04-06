@@ -4,14 +4,15 @@ import { platform } from 'os'
 import cypressPlugins from './cypress/plugins'
 
 const IS_CI = Boolean(process.env.CI)
-const DEFAULT_PORT = IS_CI || platform() === 'darwin' ? 8880 : 3000
+const IS_DARWIN = platform() === 'darwin'
+const DEFAULT_PORT = IS_CI ? 8880 : 3000
 
 export default defineConfig({
   // We do that to avoid e2e logs pollution with useless`GET /security-state-staging/intermediates/` lines
   // Despite the name, this aso applies to Firefox
   chromeWebSecurity: false,
   e2e: {
-    baseUrl: `http://localhost:${DEFAULT_PORT}`,
+    baseUrl: `http://${IS_DARWIN ? '0.0.0.0' : 'localhost'}:${DEFAULT_PORT}`,
     excludeSpecPattern: ['**/__snapshots__/*', '**/__image_snapshots__/*'],
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.

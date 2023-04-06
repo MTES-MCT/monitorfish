@@ -4,7 +4,7 @@ import { GeoJSON } from 'ol/format'
 import Point from 'ol/geom/Point'
 import { transform } from 'ol/proj'
 
-import { Mission } from './types'
+import { Mission, MissionWithActions } from './types'
 import { getMissionColor } from '../../../features/map/layers/Mission/MissionLayer/styles'
 import { booleanToInt, getDate, getDateTime } from '../../../utils'
 import { MissionAction } from '../../types/missionAction'
@@ -15,7 +15,6 @@ import { OLGeometryType } from '../map/constants'
 import type { MultiPolygon } from 'ol/geom'
 
 import MissionStatus = Mission.MissionStatus
-import MissionTypeLabel = Mission.MissionTypeLabel
 import MissionActionType = MissionAction.MissionActionType
 import MissionType = Mission.MissionType
 import MissionSource = Mission.MissionSource
@@ -24,10 +23,7 @@ export function getMissionFeaturePointId(id: number) {
   return `${MonitorFishLayer.MISSION_PIN_POINT}:${id}`
 }
 
-export const getMissionFeaturePoint = (
-  mission: Mission.Mission,
-  actions: MissionAction.MissionAction[]
-): Feature<Point> | undefined => {
+export const getMissionFeaturePoint = ({ actions, ...mission }: MissionWithActions): Feature<Point> | undefined => {
   const geoJSON = new GeoJSON()
   const geometry = geoJSON.readGeometry(mission.geom, {
     dataProjection: WSG84_PROJECTION,
@@ -54,17 +50,17 @@ export const getMissionFeaturePoint = (
     controlUnits: mission.controlUnits,
     endDateTimeUtc: mission.endDateTimeUtc,
     geometry: new Point(point),
-    isAirMission: mission.missionType === MissionType.AIR,
+    isAirMission: mission.missionTypes.includes(MissionType.AIR),
     isClosed: booleanToInt(missionStatus === MissionStatus.CLOSED),
     isDone: booleanToInt(missionStatus === MissionStatus.DONE),
     isInProgress: booleanToInt(missionStatus === MissionStatus.IN_PROGRESS),
-    isLandMission: mission.missionType === MissionType.LAND,
-    isSeaMission: mission.missionType === MissionType.SEA,
+    isLandMission: mission.missionTypes.includes(MissionType.LAND),
+    isSeaMission: mission.missionTypes.includes(MissionType.SEA),
     isUpcoming: booleanToInt(missionStatus === MissionStatus.UPCOMING),
     missionId: mission.id,
     missionSource: mission.missionSource,
     missionStatus,
-    missionType: MissionTypeLabel[mission.missionType],
+    missionTypes: mission.missionTypes,
     numberOfControls,
     numberOfSurveillance,
     startDateTimeUtc: getDate(mission.startDateTimeUtc)
@@ -88,7 +84,7 @@ export const getMissionFeatureZone = (mission: Mission.Mission): Feature => {
     geometry,
     missionId: mission.id,
     missionStatus,
-    missionType: mission.missionType,
+    missionTypes: mission.missionTypes,
     startDateTimeUtc: mission.startDateTimeUtc
   })
   feature.setId(`${MonitorFishLayer.MISSION_HOVER}:${mission.id}`)

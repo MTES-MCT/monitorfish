@@ -6,7 +6,7 @@ import { getMissionPointWebGLStyle } from './styles'
 import { LayerProperties } from '../../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../../domain/entities/layers/types'
 import { getMissionFeaturePoint } from '../../../../../domain/entities/mission'
-import { useGetMissionsAndActions } from '../../../../../domain/entities/mission/hooks/useGetMissionsAndActions'
+import { useGetMissionsWithActions } from '../../../../../domain/entities/mission/hooks/useGetMissionsWithActions'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 
 import type { WebGLPointsLayerWithName } from '../../../../../domain/types/layer'
@@ -18,7 +18,7 @@ export type MissionLayerProps = {
 }
 function UnmemoizedMissionLayer({ map }: MissionLayerProps) {
   const dispatch = useMainAppDispatch()
-  const missionsAndActions = useGetMissionsAndActions()
+  const missionsAndActions = useGetMissionsWithActions()
 
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource<Point>>
   const layerRef = useRef() as MutableRefObject<WebGLPointsLayerWithName>
@@ -51,7 +51,7 @@ function UnmemoizedMissionLayer({ map }: MissionLayerProps) {
     getVectorSource().clear()
 
     const features = missionsAndActions
-      .map(missionAndActions => getMissionFeaturePoint(missionAndActions.mission, missionAndActions.actions))
+      .map(getMissionFeaturePoint)
       .filter((feature): feature is Feature<Point> => Boolean(feature))
     if (!features?.length) {
       return

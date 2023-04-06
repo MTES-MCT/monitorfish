@@ -120,7 +120,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
       dispatch(getFishingInfractions())
 
       dispatch(openSideWindowTab(SideWindowMenuKey.ALERTS))
-      // dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))
+      // dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_LIST))
     }
   }, [dispatch, isFromURL])
 

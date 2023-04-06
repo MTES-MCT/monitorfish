@@ -30,7 +30,7 @@ export const fillSideWindowMissionFormBase = (missionTypeLabel: Mission.MissionT
     statusCode: 201
   })
 
-  cy.fill('Type de mission', missionTypeLabel)
+  cy.fill('Types de mission', [missionTypeLabel])
 
   cy.fill('Mission sous JDP', true)
 

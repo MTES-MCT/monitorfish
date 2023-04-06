@@ -72,7 +72,8 @@ export function MissionForm() {
 
   const missionTitle = mission.draftId
     ? `Mission ${
-        mission.draft?.missionType && Mission.MissionTypeLabel[mission.draft?.missionType]
+        mission.draft?.missionTypes &&
+        mission.draft.missionTypes.map(missionType => Mission.MissionTypeLabel[missionType]).join(' / ')
       } – ${mission.draft?.controlUnits.map(controlUnit => controlUnit.name?.replace('(historique)', '')).join(', ')}`
     : `Nouvelle mission`
 

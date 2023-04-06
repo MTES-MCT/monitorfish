@@ -20,7 +20,7 @@ class APIMissionRepositoryITest {
                     content = ByteReadChannel(
                         """{
                       "id": 34,
-                      "missionType": "SEA",
+                      "missionTypes": ["SEA"],
                       "missionNature": ["OTHER"],
                       "controlUnits": [
                         {

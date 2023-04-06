@@ -66,7 +66,8 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
           <Details>
             <MissionSourceTag>{getMissionSourceTagText(mission.missionSource)}</MissionSourceTag>
             <div>
-              Mission {mission.missionType} – {mission.startDateTimeUtc}
+              Mission {mission.missionTypes.map(missionType => Mission.MissionTypeLabel[missionType]).join(' / ')} –{' '}
+              {mission.startDateTimeUtc}
             </div>
             <div>
               {mission.numberOfControls} {pluralize('contrôle', mission.numberOfControls)}{' '}
@@ -74,7 +75,7 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
             </div>
             <div>
               {mission.missionStatus === MissionStatus.IN_PROGRESS && <InProgressIcon />}
-              {mission.missionStatus}
+              {mission.missionStatus ? Mission.MissionStatusLabel[mission.missionStatus] : undefined}
             </div>
           </Details>
         </ZoneText>

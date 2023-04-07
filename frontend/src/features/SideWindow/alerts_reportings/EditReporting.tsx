@@ -1,4 +1,4 @@
-import { CSSProperties, useCallback, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
@@ -10,6 +10,8 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes_gris.svg'
 import { ReportingForm } from '../../VesselSidebar/Reportings/Current/ReportingForm'
+
+import type { CSSProperties } from 'react'
 
 export function EditReporting() {
   const dispatch = useMainAppDispatch()

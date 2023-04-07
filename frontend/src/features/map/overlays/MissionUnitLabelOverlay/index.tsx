@@ -1,10 +1,12 @@
 import Overlay from 'ol/Overlay'
-import { MutableRefObject, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { MissionUnitLabel } from './MissionUnitLabel'
 import { useMoveOverlayWhenDragging } from '../../../../hooks/useMoveOverlayWhenDragging'
 import { useMoveOverlayWhenZooming } from '../../../../hooks/useMoveOverlayWhenZooming'
+
+import type { MutableRefObject } from 'react'
 
 const X = 0
 const Y = 1

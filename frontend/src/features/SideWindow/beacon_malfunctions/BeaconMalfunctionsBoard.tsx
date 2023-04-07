@@ -9,7 +9,7 @@ import {
   useSensors
 } from '@dnd-kit/core'
 import { createSelector } from '@reduxjs/toolkit'
-import { CSSProperties, MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
@@ -32,6 +32,7 @@ import type {
   BeaconMalfunctionStageColumnValue,
   BeaconMalfunctionStatusValue
 } from '../../../domain/entities/beaconMalfunction/types'
+import type { CSSProperties, MutableRefObject } from 'react'
 
 const getMemoizedBeaconMalfunctionsByStage = createSelector(
   state => state.beaconMalfunction.beaconMalfunctions,

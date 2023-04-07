@@ -1,5 +1,5 @@
 import countries from 'i18n-iso-countries'
-import { HTMLProps, useMemo } from 'react'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
@@ -7,6 +7,7 @@ import { LogbookSpeciesPresentation, LogbookSpeciesPreservationState } from '../
 
 import type { WeightType } from './LogbookMessageSpecy'
 import type { LogbookCatch } from '../../../../domain/types/fishingActivities'
+import type { HTMLProps } from 'react'
 
 type SpecyCatchDetailType = {
   specyCatch: LogbookCatch

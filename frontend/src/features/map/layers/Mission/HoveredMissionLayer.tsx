@@ -1,6 +1,6 @@
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
-import React, { MutableRefObject, useCallback, useEffect, useRef } from 'react'
+import { memo, useCallback, useEffect, useRef } from 'react'
 
 import { missionZoneStyle } from './MissionLayer/styles'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
@@ -9,6 +9,7 @@ import { getMissionFeatureZone } from '../../../../domain/entities/mission'
 import { useGetMissionsWithActions } from '../../../../domain/entities/mission/hooks/useGetMissionsWithActions'
 
 import type { VectorLayerWithName } from '../../../../domain/types/layer'
+import type { MutableRefObject } from 'react'
 
 export function UnmemoizedMissionHoveredLayer({ feature, map }) {
   const missionsWithActions = useGetMissionsWithActions()
@@ -73,6 +74,6 @@ export function UnmemoizedMissionHoveredLayer({ feature, map }) {
   return null
 }
 
-export const MissionHoveredLayer = React.memo(UnmemoizedMissionHoveredLayer)
+export const MissionHoveredLayer = memo(UnmemoizedMissionHoveredLayer)
 
 MissionHoveredLayer.displayName = 'MissionHoveredLayer'

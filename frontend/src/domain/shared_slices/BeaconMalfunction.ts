@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 import { BeaconMalfunctionsTab } from '../entities/beaconMalfunction/constants'
 
@@ -7,6 +7,7 @@ import type {
   BeaconMalfunctionResumeAndDetails,
   VesselBeaconMalfunctionsResumeAndHistory
 } from '../entities/beaconMalfunction/types'
+import type { PayloadAction } from '@reduxjs/toolkit'
 import type { ValueOf } from 'type-fest'
 
 export type BeaconMalfunctionState = {

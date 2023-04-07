@@ -1,5 +1,5 @@
 import { propEq } from 'ramda'
-import { RefObject, useEffect, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { PendingAlertsList } from './PendingAlertsList'
@@ -12,6 +12,7 @@ import { AlertAndReportingTab } from '../constants'
 
 import type { SeaFront } from '../../../constants'
 import type { MenuItem } from '../../../types'
+import type { RefObject } from 'react'
 import type { Promisable } from 'type-fest'
 
 type AlertsAndReportingsProps = {

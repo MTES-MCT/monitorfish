@@ -1,4 +1,4 @@
-import { CSSProperties, MutableRefObject, useRef } from 'react'
+import { useRef } from 'react'
 import styled from 'styled-components'
 
 import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
@@ -11,6 +11,7 @@ import type {
   BeaconMalfunction,
   BeaconMalfunctionStageColumnValue
 } from '../../../domain/entities/beaconMalfunction/types'
+import type { CSSProperties, MutableRefObject } from 'react'
 
 type StageColumnType = {
   activeBeaconMalfunction: BeaconMalfunction | null

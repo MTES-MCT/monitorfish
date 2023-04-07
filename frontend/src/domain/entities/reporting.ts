@@ -1,4 +1,6 @@
-import { Reporting, ReportingType } from '../types/reporting'
+import { ReportingType } from '../types/reporting'
+
+import type { Reporting } from '../types/reporting'
 
 type ReportingTypeCharacteristic = {
   // TODO It should be useless now that types are discriminated.

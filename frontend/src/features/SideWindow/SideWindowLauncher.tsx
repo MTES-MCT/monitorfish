@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { batch } from 'react-redux'
 import { StyleSheetManager } from 'styled-components'
 
@@ -8,6 +8,8 @@ import { closeSideWindow } from '../../domain/shared_slices/Global'
 import { useForceUpdate } from '../../hooks/useForceUpdate'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { LegacyNewWindow } from '../../ui/NewWindow/LegacyNewWindow'
+
+import type { MutableRefObject } from 'react'
 
 export function SideWindowLauncher() {
   const dispatch = useMainAppDispatch()

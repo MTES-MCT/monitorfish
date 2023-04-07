@@ -1,8 +1,9 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 import type { InteractionListener, InteractionType } from '../entities/map/constants'
 import type { GeoJSON, GeoJSON as GeoJSONType } from '../types/GeoJSON'
 import type { InteractionTypeAndListener } from '../types/map'
+import type { PayloadAction } from '@reduxjs/toolkit'
 
 export type DrawState = {
   geometry: GeoJSON.Geometry | undefined

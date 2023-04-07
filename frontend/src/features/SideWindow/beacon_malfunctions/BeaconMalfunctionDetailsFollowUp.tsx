@@ -1,4 +1,4 @@
-import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Toggle } from 'rsuite'
 import styled from 'styled-components'
 
@@ -21,6 +21,7 @@ import type {
   BeaconMalfunctionFollowUpItem,
   BeaconMalfunctionStatusValue
 } from '../../../domain/entities/beaconMalfunction/types'
+import type { CSSProperties } from 'react'
 
 export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails, firstStatus, smallSize }) {
   const { actions, beaconMalfunction, comments, notifications } = beaconMalfunctionWithDetails

@@ -1,6 +1,6 @@
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
-import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { clearPreviousLineFeatures, getLabelsOfFeaturesInExtent } from './utils'
@@ -13,6 +13,7 @@ import { useIsZooming } from '../../hooks/useIsZooming'
 import { getLabelLineStyle } from '../../styles/vesselLabelLine.style'
 
 import type { VectorLayerWithName } from '../../../../../domain/types/layer'
+import type { MutableRefObject } from 'react'
 
 export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
   const { isAdmin } = useMainAppSelector(state => state.global)

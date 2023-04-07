@@ -4,7 +4,7 @@ import { GeoJSON } from 'ol/format'
 import Point from 'ol/geom/Point'
 import { transform } from 'ol/proj'
 
-import { Mission, MissionWithActions } from './types'
+import { Mission } from './types'
 import { getMissionColor } from '../../../features/map/layers/Mission/MissionLayer/styles'
 import { booleanToInt, getDate, getDateTime } from '../../../utils'
 import { MissionAction } from '../../types/missionAction'
@@ -12,6 +12,7 @@ import { getNumberOfInfractions, getNumberOfInfractionsWithRecord } from '../con
 import { MonitorFishLayer } from '../layers/types'
 import { OpenLayersGeometryType } from '../map/constants'
 
+import type { MissionWithActions } from './types'
 import type { MultiPolygon } from 'ol/geom'
 
 import MissionStatus = Mission.MissionStatus

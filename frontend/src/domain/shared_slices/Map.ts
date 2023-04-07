@@ -1,12 +1,13 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 import { getLocalStorageState } from '../../utils'
 import { BaseLayers } from '../entities/layers/constants'
 import { CoordinatesFormat } from '../entities/map/constants'
-import { vesselLabel } from '../entities/vessel/label/types'
+import { VesselLabel } from '../entities/vessel/label/types'
 import { VesselTrackDepth } from '../entities/vesselTrackDepth'
 
 import type { LastPositionVisibility } from '../types/map'
+import type { PayloadAction } from '@reduxjs/toolkit'
 import type { Extent } from 'ol/extent'
 
 const vesselLabelsShowedOnMapLocalStorageKey = 'vesselLabelsShowedOnMap'
@@ -57,7 +58,7 @@ const INITIAL_STATE: MapState = {
   riskFactorShowedOnMap: getLocalStorageState(true, riskFactorLocalStorageKey),
   selectedBaseLayer: getLocalStorageState(BaseLayers.LIGHT.code, baseLayerLocalStorageKey),
   showingVesselsEstimatedPositions: getLocalStorageState(true, estimatedPositionsLocalStorageKey),
-  vesselLabel: getLocalStorageState(vesselLabel.VESSEL_NAME, vesselLabelLocalStorageKey),
+  vesselLabel: getLocalStorageState(VesselLabel.VESSEL_NAME, vesselLabelLocalStorageKey),
   vesselLabelsShowedOnMap: getLocalStorageState(false, vesselLabelsShowedOnMapLocalStorageKey),
   vesselsLastPositionVisibility: getLocalStorageState(
     {

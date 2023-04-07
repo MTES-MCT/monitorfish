@@ -1,6 +1,6 @@
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
-import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { getFishingActivityFeatureOnTrackLine } from '../../../domain/entities/logbook'
@@ -34,6 +34,7 @@ import type { FishingActivityShowedOnMap } from '../../../domain/entities/vessel
 import type { FishingActivityFeatureIdAndCoordinates } from '../../../domain/types/fishingActivities'
 import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { Coordinate } from 'ol/coordinate'
+import type { MutableRefObject } from 'react'
 
 type VesselsTracksLayerProps = {
   map?: any
@@ -295,4 +296,4 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
   )
 }
 
-export const VesselsTracksLayerMemoized = React.memo(VesselsTracksLayer)
+export const VesselsTracksLayerMemoized = memo(VesselsTracksLayer)

@@ -1,10 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import countries from 'i18n-iso-countries'
 import { useMemo } from 'react'
-import { CellProps, Checkbox, Table } from 'rsuite'
+import { Checkbox, Table } from 'rsuite'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
+import type { CellProps } from 'rsuite'
 import type { InnerCellProps } from 'rsuite-table/es/Cell'
 
 const { Cell } = Table

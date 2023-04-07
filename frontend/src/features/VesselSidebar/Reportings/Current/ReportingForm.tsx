@@ -1,4 +1,4 @@
-import { MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Input, Radio, RadioGroup, SelectPicker } from 'rsuite'
 import styled from 'styled-components'
 
@@ -17,6 +17,7 @@ import { sortArrayByColumn } from '../../../VesselList/tableSort'
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
 import type { Reporting, ReportingCreation, ReportingType, ReportingUpdate } from '../../../../domain/types/reporting'
 import type { Option } from '@mtes-mct/monitor-ui'
+import type { MutableRefObject } from 'react'
 
 type ReportingFormProps = {
   closeForm: () => void

@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import { transform } from 'ol/proj'
 
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map/constants'
@@ -22,6 +22,7 @@ import type {
   VesselIdentity,
   VesselPosition
 } from '../entities/vessel/types'
+import type { PayloadAction } from '@reduxjs/toolkit'
 
 const NOT_FOUND = -1
 

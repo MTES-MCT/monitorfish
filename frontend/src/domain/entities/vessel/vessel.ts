@@ -1,6 +1,6 @@
 import countries from 'i18n-iso-countries'
 
-import { vesselLabel as vesselLabelEnum } from './label/types'
+import { VesselLabel } from './label/types'
 import { BaseLayers, LayerProperties } from '../layers/constants'
 
 import type {
@@ -100,19 +100,19 @@ export class Vessel {
 
     if (vesselLabelsShowedOnMap) {
       switch (vesselLabel) {
-        case vesselLabelEnum.VESSEL_NAME: {
+        case VesselLabel.VESSEL_NAME: {
           label.labelText = feature.vesselName
           break
         }
-        case vesselLabelEnum.VESSEL_INTERNAL_REFERENCE_NUMBER: {
+        case VesselLabel.VESSEL_INTERNAL_REFERENCE_NUMBER: {
           label.labelText = feature.internalReferenceNumber
           break
         }
-        case vesselLabelEnum.VESSEL_NATIONALITY: {
+        case VesselLabel.VESSEL_NATIONALITY: {
           label.labelText = feature.flagState ? countries.getName(feature.flagState, 'fr') : null
           break
         }
-        case vesselLabelEnum.VESSEL_FLEET_SEGMENT: {
+        case VesselLabel.VESSEL_FLEET_SEGMENT: {
           label.labelText = feature.segments.join(', ')
           break
         }

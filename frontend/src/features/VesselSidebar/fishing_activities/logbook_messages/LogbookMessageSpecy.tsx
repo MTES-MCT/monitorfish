@@ -1,4 +1,4 @@
-import { HTMLProps, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { SpecyCatchDetail } from './SpecyCatchDetail'
@@ -7,6 +7,7 @@ import { ReactComponent as ChevronIconSVG } from '../../../icons/Chevron_simple_
 import { ReactComponent as WarningSVG } from '../../../icons/Point_exclamation_info.svg'
 
 import type { LogbookCatchesBySpecy } from '../../../../domain/types/fishingActivities'
+import type { HTMLProps } from 'react'
 
 export enum WeightType {
   LIVE = 'vif',

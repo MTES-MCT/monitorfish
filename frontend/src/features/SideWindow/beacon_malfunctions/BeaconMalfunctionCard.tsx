@@ -1,4 +1,4 @@
-import { CSSProperties, MutableRefObject, useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
@@ -11,6 +11,7 @@ import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_case
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 
 import type { BeaconMalfunction } from '../../../domain/entities/beaconMalfunction/types'
+import type { CSSProperties, MutableRefObject } from 'react'
 
 export type BeaconMalfunctionCardProps = {
   activeBeaconId: number | undefined

@@ -1,7 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 import type { GeoJSON } from '../../../../domain/types/GeoJSON'
 import type { RegulatoryLawTypes, RegulatoryZone } from '../../../../domain/types/regulation'
+import type { PayloadAction } from '@reduxjs/toolkit'
 
 type ZoneSelected = {
   code: string

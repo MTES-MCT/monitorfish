@@ -1,4 +1,4 @@
-import { CSSProperties, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
@@ -21,6 +21,7 @@ import type {
   BeaconMalfunction,
   BeaconMalfunctionResumeAndDetails
 } from '../../../domain/entities/beaconMalfunction/types'
+import type { CSSProperties } from 'react'
 
 export type BeaconMalfunctionDetailsProps = {
   beaconMalfunctionWithDetails: BeaconMalfunctionResumeAndDetails

@@ -1,7 +1,7 @@
 import GeoJSON from 'ol/format/GeoJSON'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
-import { MutableRefObject, useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
 import { dottedLayerStyle } from './styles/dottedLayer.style'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
@@ -11,6 +11,7 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { Feature } from 'ol'
 import type Geometry from 'ol/geom/Geometry'
+import type { MutableRefObject } from 'react'
 
 export function RegulatoryLayerSearch({ map }) {
   const { zoneSelected } = useMainAppSelector(state => state.regulatoryLayerSearch)

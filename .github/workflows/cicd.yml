@@ -97,7 +97,8 @@ jobs:
           node-version: 18
 
       - name: Install Node.js dependencies
-        run: npm ci
+        # TODO Remove `--legacy-peer-deps` option as soon as we replace `react-scripts` by something else.
+        run: npm ci --legacy-peer-deps
         working-directory: ./frontend
 
       - name: Lint Frontend
@@ -231,7 +232,8 @@ jobs:
           browser: firefox
           env: PORT=8880
           install: true
-          install-command: npm ci
+          # TODO Remove `--legacy-peer-deps` option as soon as we replace `react-scripts` by something else.
+          install-command: npm ci --legacy-peer-deps
           parallel: true
           record: true
           wait-on: "http://localhost:8880"

@@ -1,10 +1,10 @@
 import { isEmpty } from 'lodash'
 import GeoJSON from 'ol/format/GeoJSON'
 import { Modify } from 'ol/interaction'
-import Draw, { createBox, createRegularPolygon, GeometryFunction } from 'ol/interaction/Draw'
+import Draw, { createBox, createRegularPolygon } from 'ol/interaction/Draw'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
-import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { dottedLayerStyle } from './styles/dottedLayer.style'
 import { drawStyle, editStyle } from './styles/draw.style'
@@ -22,6 +22,8 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
 import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type Geometry from 'ol/geom/Geometry'
+import type { GeometryFunction } from 'ol/interaction/Draw'
+import type { MutableRefObject } from 'react'
 
 function UnmemoizedDrawLayer({ map }) {
   const dispatch = useMainAppDispatch()
@@ -210,4 +212,4 @@ function resetDrawInteractions(map) {
   })
 }
 
-export const DrawLayer = React.memo(UnmemoizedDrawLayer)
+export const DrawLayer = memo(UnmemoizedDrawLayer)

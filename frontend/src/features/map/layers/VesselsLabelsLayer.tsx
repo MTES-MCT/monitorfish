@@ -1,7 +1,7 @@
 import LineString from 'ol/geom/LineString'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
-import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { getLabelLineStyle } from './styles/vesselLabelLine.style'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
@@ -18,6 +18,7 @@ import { VesselLabelOverlay } from '../overlays/VesselLabelOverlay'
 
 import type { VesselLastPositionFeature } from '../../../domain/entities/vessel/types'
 import type { VectorLayerWithName } from '../../../domain/types/layer'
+import type { MutableRefObject } from 'react'
 
 const MAX_LABELS_DISPLAYED = 200
 const MAX_LABELS_DISPLAYED_IN_PREVIEW = 400

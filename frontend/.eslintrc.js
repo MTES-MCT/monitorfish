@@ -66,7 +66,6 @@ module.exports = {
     ],
 
     'no-null/no-null': 'off',
-    '@typescript/no-use-before-define': 'off',
     '@typescript-eslint/no-restricted-imports': [
       'error',
       {
@@ -74,13 +73,7 @@ module.exports = {
         importNames: ['useSelector', 'useDispatch'],
         message: 'Use typed hooks `useMainAppDispatch` and `useMainAppSelector` instead.'
       }
-    ],
-    '@typescript-eslint/no-use-before-define': 'off',
-
-    'react/jsx-no-useless-fragment': 'off',
-    // See https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/default_props/#you-may-not-need-defaultprops
-    'react/require-default-props': 'off',
-    'react/react-in-jsx-scope': 'off'
+    ]
   },
   overrides: [
     {

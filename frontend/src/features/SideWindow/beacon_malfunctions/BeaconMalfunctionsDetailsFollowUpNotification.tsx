@@ -1,4 +1,4 @@
-import { CSSProperties, useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
@@ -9,6 +9,8 @@ import {
 } from '../../../domain/entities/beaconMalfunction/constants'
 import { ReactComponent as NotOkSVG } from '../../icons/Icon_not_OK.svg'
 import { ReactComponent as OkSVG } from '../../icons/Icon_OK.svg'
+
+import type { CSSProperties } from 'react'
 
 export function BeaconMalfunctionsDetailsFollowUpNotification({ notification }) {
   const [showDetails, setShowDetails] = useState(false)

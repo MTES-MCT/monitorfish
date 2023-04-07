@@ -1,4 +1,4 @@
-import { dayjs, Option } from '@mtes-mct/monitor-ui'
+import { dayjs } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { last } from 'ramda'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -11,6 +11,8 @@ import { COLORS } from '../../../constants/constants'
 import addControlObjectiveYear from '../../../domain/use_cases/controlObjective/addControlObjectiveYear'
 import { useBackofficeAppDispatch } from '../../../hooks/useBackofficeAppDispatch'
 import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
+
+import type { Option } from '@mtes-mct/monitor-ui'
 
 const NOW_YEAR = dayjs.utc().year()
 const LAST_YEAR_FROM_NOW = NOW_YEAR - 1

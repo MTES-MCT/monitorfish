@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 import { deleteListItems } from '../../utils/deleteListItems'
 
@@ -8,6 +8,7 @@ import type {
   LEGACY_SilencedAlert,
   SilenceAlertQueueItem
 } from '../entities/alerts/types'
+import type { PayloadAction } from '@reduxjs/toolkit'
 
 export type AlertState = {
   focusedPendingAlertId: string | undefined

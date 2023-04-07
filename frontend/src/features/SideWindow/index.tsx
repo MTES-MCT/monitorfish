@@ -1,15 +1,6 @@
 import { THEME } from '@mtes-mct/monitor-ui'
 import { propEq } from 'ramda'
-import {
-  forwardRef,
-  MutableRefObject,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState
-} from 'react'
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled, { createGlobalStyle } from 'styled-components'
 
@@ -39,7 +30,7 @@ import { NewWindowContext } from '../../ui/NewWindow'
 
 import type { MenuItem } from '../../types'
 import type { NewWindowContextValue } from '../../ui/NewWindow'
-import type { CSSProperties, ForwardedRef, HTMLAttributes } from 'react'
+import type { MutableRefObject, CSSProperties, ForwardedRef, HTMLAttributes } from 'react'
 
 export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
   isFromURL: boolean

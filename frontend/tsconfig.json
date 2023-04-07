@@ -7,7 +7,6 @@
     "checkJs": true,
     "exactOptionalPropertyTypes": true,
     "incremental": true,
-    "importsNotUsedAsValues": "error",
     "isolatedModules": false,
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "noEmit": true,
@@ -26,7 +25,8 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "target": "ES2022",
-    "useUnknownInCatchVariables": true
+    "useUnknownInCatchVariables": true,
+    "verbatimModuleSyntax": true
   },
   "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "src/ui/styled.d.ts"],
   "exclude": ["node_modules/*"],

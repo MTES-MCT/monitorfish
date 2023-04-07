@@ -1,4 +1,4 @@
-import { Accent, Icon, IconButton, MultiSelect, Option, Select, TextInput, useForceUpdate } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, MultiSelect, Select, TextInput, useForceUpdate } from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
@@ -15,6 +15,7 @@ import { isValidControlUnit } from '../../utils'
 
 import type { ControlUnit } from '../../../../../domain/types/controlUnit'
 import type { MissionFormValues } from '../../types'
+import type { Option } from '@mtes-mct/monitor-ui'
 import type { Promisable } from 'type-fest'
 
 export type ControlUnitSelectProps = {

@@ -3,8 +3,8 @@ import Zoom from 'ol/control/Zoom'
 import { platformModifierKeyOnly } from 'ol/events/condition'
 import OpenLayerMap from 'ol/Map'
 import { transform } from 'ol/proj'
-import View, { AnimationOptions } from 'ol/View'
-import { Children, cloneElement, HTMLProps, PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react'
+import View from 'ol/View'
+import { Children, cloneElement, useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import MapAttributionsBox from './controls/MapAttributionsBox'
@@ -19,6 +19,8 @@ import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 import type { VectorLayerWithName } from '../../domain/types/layer'
 import type { FeatureLike } from 'ol/Feature'
+import type { AnimationOptions } from 'ol/View'
+import type { HTMLProps, PropsWithChildren } from 'react'
 
 let lastEventForPointerMove
 let timeoutForPointerMove

@@ -1,8 +1,9 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 import { getLocalStorageState } from '../../utils'
 
 import type { VesselFilter } from '../types/filter'
+import type { PayloadAction } from '@reduxjs/toolkit'
 
 const vesselsFiltersLocalStorageKey = 'vesselsFilters'
 const nonFilteredVesselsAreHiddenLocalStorageKey = 'nonFilteredVesselsAreHidden'

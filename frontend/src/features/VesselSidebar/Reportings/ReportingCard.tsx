@@ -8,7 +8,7 @@ import {
   ReportingTypeCharacteristics
 } from '../../../domain/entities/reporting'
 import { setEditedReporting } from '../../../domain/shared_slices/Reporting'
-import { Reporting, ReportingType } from '../../../domain/types/reporting'
+import { ReportingType } from '../../../domain/types/reporting'
 import archiveReporting from '../../../domain/use_cases/reporting/archiveReporting'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { getDateTime } from '../../../utils'
@@ -20,6 +20,7 @@ import { ReactComponent as ObservationIconSVG } from '../../icons/Icone_observat
 import { getAlertNameFromType } from '../../SideWindow/alerts_reportings/utils'
 
 import type { ControlUnit } from '../../../domain/types/controlUnit'
+import type { Reporting } from '../../../domain/types/reporting'
 import type { Promisable } from 'type-fest'
 
 export type ReportingCardProps = {

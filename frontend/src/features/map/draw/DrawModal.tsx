@@ -1,4 +1,4 @@
-import { Accent, Button, Coordinates, CoordinatesInput, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
+import { Accent, Button, CoordinatesInput, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
 import { Feature } from 'ol'
 import GeoJSON from 'ol/format/GeoJSON'
 import { Point } from 'ol/geom'
@@ -22,6 +22,7 @@ import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { theme } from '../../../ui/theme'
 
+import type { Coordinates } from '@mtes-mct/monitor-ui'
 import type { MultiPolygon } from 'ol/geom'
 
 const INTERACTION_LISTENER_TITLE_PLACEHOLDER: Partial<Record<InteractionListener, string>> = {

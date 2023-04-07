@@ -97,7 +97,7 @@ jobs:
           node-version: 18
 
       - name: Install Node.js dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
         working-directory: ./frontend
 
       - name: Lint Frontend
@@ -231,7 +231,7 @@ jobs:
           browser: firefox
           env: PORT=8880
           install: true
-          install-command: npm ci
+          install-command: npm ci --legacy-peer-deps
           parallel: true
           record: true
           wait-on: "http://localhost:8880"

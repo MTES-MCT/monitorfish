@@ -14,11 +14,10 @@ import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
   const dispatch = useMainAppDispatch()
   const { healthcheckTextWarning, rightMenuIsOpen } = useMainAppSelector(state => state.global)
-  const { areFishingActivitiesShowedOnMap: _areFishingActivitiesShowedOnMap, fishingActivitiesShowedOnMap } =
-    useMainAppSelector(state => state.fishingActivities)
+  const { fishingActivities } = useMainAppSelector(state => state)
   const areFishingActivitiesShowedOnMap = useMemo(
-    () => _areFishingActivitiesShowedOnMap || fishingActivitiesShowedOnMap?.length,
-    [_areFishingActivitiesShowedOnMap, fishingActivitiesShowedOnMap]
+    () => fishingActivities.areFishingActivitiesShowedOnMap || fishingActivities.fishingActivitiesShowedOnMap?.length,
+    [fishingActivities.areFishingActivitiesShowedOnMap, fishingActivities.fishingActivitiesShowedOnMap]
   )
 
   useEffect(() => {
@@ -28,12 +27,12 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
   }, [dispatch, isSidebarOpen])
 
   const showOrHideFishingActivities = useCallback(() => {
-    if (areFishingActivitiesShowedOnMap || fishingActivitiesShowedOnMap?.length) {
+    if (areFishingActivitiesShowedOnMap || fishingActivities.fishingActivitiesShowedOnMap?.length) {
       dispatch(hideFishingActivitiesOnMap())
     } else {
       dispatch(showFishingActivitiesOnMap())
     }
-  }, [dispatch, areFishingActivitiesShowedOnMap, fishingActivitiesShowedOnMap])
+  }, [areFishingActivitiesShowedOnMap, dispatch, fishingActivities.fishingActivitiesShowedOnMap])
 
   return (
     <VesselSidebarActionButton

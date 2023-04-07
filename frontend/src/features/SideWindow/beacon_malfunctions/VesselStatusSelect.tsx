@@ -22,8 +22,8 @@ export function VesselStatusSelect({
   domRef,
   isAbsolute = false,
   isCleanable = false,
-  updateVesselStatus,
   marginTop = undefined,
+  updateVesselStatus,
   vesselStatus
 }: VesselStatusSelectProps) {
   useEffect(() => {

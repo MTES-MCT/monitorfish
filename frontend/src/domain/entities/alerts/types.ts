@@ -31,6 +31,7 @@ export type PendingAlertValue = {
   type: PendingAlertValueType
 }
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export type LEGACY_PendingAlert = PendingAlert & {
   isValidated: boolean
 }
@@ -48,6 +49,7 @@ export type SilencedAlert = {
   vesselName: string
 }
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export type LEGACY_SilencedAlert = SilencedAlert & {
   silencedPeriod?: SilencedAlertPeriodRequest
 }

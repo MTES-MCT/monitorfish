@@ -39,7 +39,7 @@ export enum MapToolType {
   VESSEL_VISIBILITY = 'VESSEL_VISIBILITY'
 }
 
-export enum OLGeometryType {
+export enum OpenLayersGeometryType {
   CIRCLE = 'Circle',
   MULTIPOINT = 'MultiPoint',
   MULTIPOLYGON = 'MultiPolygon',
@@ -47,12 +47,12 @@ export enum OLGeometryType {
   POLYGON = 'Polygon'
 }
 
-export const InteractionListenerToOLGeometryType: Record<InteractionListener, OLGeometryType | undefined> = {
+export const InteractionListenerToOLGeometryType: Record<InteractionListener, OpenLayersGeometryType | undefined> = {
   [InteractionListener.CONTROL_POINT]: undefined,
   [InteractionListener.INTEREST_POINT]: undefined,
   [InteractionListener.MEASUREMENT]: undefined,
   [InteractionListener.REGULATION]: undefined,
   [InteractionListener.SURVEILLANCE_ZONE]: undefined,
   [InteractionListener.VESSELS_LIST]: undefined,
-  [InteractionListener.MISSION_ZONE]: OLGeometryType.MULTIPOLYGON
+  [InteractionListener.MISSION_ZONE]: OpenLayersGeometryType.MULTIPOLYGON
 }

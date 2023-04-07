@@ -1,7 +1,7 @@
 import { GeoJSON } from 'ol/format'
 
 import { LayerProperties, LayerType } from './constants'
-import { OLGeometryType, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../map/constants'
+import { OpenLayersGeometryType, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../map/constants'
 
 import type { ShowableLayer } from './types'
 import type { GeoJSON as GeoJSONType } from '../../types/GeoJSON'
@@ -39,7 +39,10 @@ export function addGeometryToMultiPolygonGeoJSON(
     return undefined
   }
 
-  if (nextGeometry.getType() === OLGeometryType.MULTIPOLYGON && polygonToAdd.getType() === OLGeometryType.POLYGON) {
+  if (
+    nextGeometry.getType() === OpenLayersGeometryType.MULTIPOLYGON &&
+    polygonToAdd.getType() === OpenLayersGeometryType.POLYGON
+  ) {
     ;(nextGeometry as MultiPolygon).appendPolygon(polygonToAdd as Polygon)
   }
 

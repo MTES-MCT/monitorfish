@@ -8,7 +8,7 @@ import styled from 'styled-components'
 
 import {
   InteractionListener,
-  OLGeometryType,
+  OpenLayersGeometryType,
   OPENLAYERS_PROJECTION,
   WSG84_PROJECTION
 } from '../../../../domain/entities/map/constants'
@@ -40,7 +40,7 @@ export function FormikMultiZonePicker({ name }: FormikMultiZonePickerProps) {
 
   useEffect(
     () => {
-      if (geometry?.type === OLGeometryType.MULTIPOLYGON) {
+      if (geometry?.type === OpenLayersGeometryType.MULTIPOLYGON) {
         helpers.setValue(geometry)
       }
     },

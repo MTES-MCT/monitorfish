@@ -10,7 +10,7 @@ import { booleanToInt, getDate, getDateTime } from '../../../utils'
 import { MissionAction } from '../../types/missionAction'
 import { getNumberOfInfractions, getNumberOfInfractionsWithRecord } from '../controls'
 import { MonitorFishLayer } from '../layers/types'
-import { OLGeometryType } from '../map/constants'
+import { OpenLayersGeometryType } from '../map/constants'
 
 import type { MultiPolygon } from 'ol/geom'
 
@@ -30,7 +30,7 @@ export const getMissionFeaturePoint = ({ actions, ...mission }: MissionWithActio
     featureProjection: OPENLAYERS_PROJECTION
   })
 
-  if (geometry?.getType() !== OLGeometryType.MULTIPOLYGON) {
+  if (geometry?.getType() !== OpenLayersGeometryType.MULTIPOLYGON) {
     return undefined
   }
 

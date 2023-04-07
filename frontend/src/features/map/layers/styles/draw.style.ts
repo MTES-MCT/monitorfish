@@ -3,6 +3,7 @@ import { Circle, Icon, Style } from 'ol/style'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 
+import { OpenLayersGeometryType } from '../../../../domain/entities/map/constants'
 import { theme } from '../../../../ui/theme'
 
 import type { MultiPolygon } from 'ol/geom'
@@ -26,6 +27,10 @@ export const editStyle = new Style({
   geometry: feature => {
     if (!feature.getGeometry()) {
       return undefined
+    }
+
+    if (feature.getGeometry()?.getType() === OpenLayersGeometryType.POINT) {
+      return feature.getGeometry()
     }
 
     const coordinates = (feature.getGeometry() as MultiPolygon).getCoordinates()

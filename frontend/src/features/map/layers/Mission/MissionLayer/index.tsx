@@ -1,6 +1,6 @@
 import WebGLPointsLayer from 'ol/layer/WebGLPoints'
 import VectorSource from 'ol/source/Vector'
-import React, { MutableRefObject, useCallback, useEffect, useRef } from 'react'
+import { memo, useCallback, useEffect, useRef } from 'react'
 
 import { getMissionPointWebGLStyle } from './styles'
 import { LayerProperties } from '../../../../../domain/entities/layers/constants'
@@ -12,6 +12,7 @@ import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import type { WebGLPointsLayerWithName } from '../../../../../domain/types/layer'
 import type { Feature } from 'ol'
 import type { Point } from 'ol/geom'
+import type { MutableRefObject } from 'react'
 
 export type MissionLayerProps = {
   map?: any
@@ -76,5 +77,5 @@ function UnmemoizedMissionLayer({ map }: MissionLayerProps) {
   return <></>
 }
 
-export const MissionLayer = React.memo(UnmemoizedMissionLayer)
+export const MissionLayer = memo(UnmemoizedMissionLayer)
 MissionLayer.displayName = 'MissionLayer'

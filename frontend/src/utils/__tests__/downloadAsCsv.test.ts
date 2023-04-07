@@ -1,8 +1,9 @@
 import { expect } from '@jest/globals'
 import dayjs from 'dayjs'
 
-import { downloadAsCsv, DownloadAsCsvMap } from '../downloadAsCsv'
+import { downloadAsCsv } from '../downloadAsCsv'
 
+import type { DownloadAsCsvMap } from '../downloadAsCsv'
 import type { Options } from 'export-to-csv'
 
 jest.mock('export-to-csv', () => {

@@ -1,6 +1,7 @@
-import { containsXY, Extent } from 'ol/extent'
+import { containsXY } from 'ol/extent'
 
 import type { OverlayCardMargins } from './types'
+import type { Extent } from 'ol/extent'
 
 function getOuterExtentPosition(boxSize: number, x: number, y: number) {
   return {

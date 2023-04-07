@@ -1,6 +1,6 @@
 import { THEME } from '@mtes-mct/monitor-ui'
 import Fuse from 'fuse.js'
-import { CSSProperties, MutableRefObject, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FlexboxGrid, List } from 'rsuite'
 import styled from 'styled-components'
 
@@ -19,6 +19,7 @@ import { sortArrayByColumn, SortType } from '../../VesselList/tableSort'
 import type { SeaFront } from '../../../constants'
 import type { SilencedAlertPeriodRequest } from '../../../domain/entities/alerts/types'
 import type { MenuItem } from '../../../types'
+import type { CSSProperties, MutableRefObject, RefObject } from 'react'
 
 export type PendingAlertsListProps = {
   baseRef: RefObject<HTMLDivElement>

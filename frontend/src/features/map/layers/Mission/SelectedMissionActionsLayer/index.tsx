@@ -1,6 +1,6 @@
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
-import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { selectedMissionActionsStyles } from './styles'
 import { LayerProperties } from '../../../../../domain/entities/layers/constants'
@@ -12,6 +12,7 @@ import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import type { GeoJSON } from '../../../../../domain/types/GeoJSON'
 import type { VectorLayerWithName } from '../../../../../domain/types/layer'
 import type { Feature } from 'ol'
+import type { MutableRefObject } from 'react'
 
 export function UnmemoizedSelectedMissionActionsLayer({ map }) {
   const missionsAndActions = useGetMissionsWithActions()
@@ -79,6 +80,6 @@ export function UnmemoizedSelectedMissionActionsLayer({ map }) {
   return null
 }
 
-export const SelectedMissionActionsLayer = React.memo(UnmemoizedSelectedMissionActionsLayer)
+export const SelectedMissionActionsLayer = memo(UnmemoizedSelectedMissionActionsLayer)
 
 SelectedMissionActionsLayer.displayName = 'SelectedMissionActionsLayer'

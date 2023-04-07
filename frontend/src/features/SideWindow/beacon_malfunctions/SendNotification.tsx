@@ -1,4 +1,4 @@
-import { CSSProperties, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { SelectPicker } from 'rsuite'
 import styled from 'styled-components'
 
@@ -6,6 +6,8 @@ import { COLORS } from '../../../constants/constants'
 import { NOTIFICATION_TYPE } from '../../../domain/entities/beaconMalfunction/constants'
 import sendNotification from '../../../domain/use_cases/beaconMalfunction/sendNotification'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+
+import type { CSSProperties } from 'react'
 
 export function SendNotification({ beaconMalfunction }) {
   const dispatch = useMainAppDispatch()

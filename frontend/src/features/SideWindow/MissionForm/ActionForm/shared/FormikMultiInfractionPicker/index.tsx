@@ -5,8 +5,7 @@ import {
   FormikMultiRadio,
   FormikSelect,
   FormikTextarea,
-  Icon,
-  Option
+  Icon
 } from '@mtes-mct/monitor-ui'
 import { Form, Formik, useField } from 'formik'
 import { remove as ramdaRemove, update } from 'ramda'
@@ -23,7 +22,7 @@ import { INFRACTION_TYPES_AS_OPTIONS, MissionActionInfractionSchema } from '../c
 
 import type { MissionAction } from '../../../../../../domain/types/missionAction'
 import type { MissionActionFormValues } from '../../../types'
-import type { FormikCheckboxProps, FormikTextareaProps } from '@mtes-mct/monitor-ui'
+import type { Option, FormikCheckboxProps, FormikTextareaProps } from '@mtes-mct/monitor-ui'
 import type { ReactNode } from 'react'
 
 export type FormikMultiInfractionPickerProps<AnyInfraction extends MissionAction.OtherInfraction> = {

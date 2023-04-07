@@ -1,5 +1,5 @@
 import countries from 'i18n-iso-countries'
-import { MutableRefObject, useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { batch } from 'react-redux'
 import { FlexboxGrid, List } from 'rsuite'
 import styled from 'styled-components'
@@ -16,7 +16,7 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { Flag } from '../../VesselList/tableCells'
 
 import type { LEGACY_PendingAlert } from '../../../domain/entities/alerts/types'
-import type { CSSProperties } from 'react'
+import type { MutableRefObject, CSSProperties } from 'react'
 import type { Promisable } from 'type-fest'
 
 // TODO Type these props.

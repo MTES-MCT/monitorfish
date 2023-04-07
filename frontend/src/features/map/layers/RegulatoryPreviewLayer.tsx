@@ -1,6 +1,6 @@
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
-import React, { MutableRefObject, useCallback, useEffect, useRef } from 'react'
+import { memo, useCallback, useEffect, useRef } from 'react'
 
 import { getRegulatoryLayerStyle } from './styles/regulatoryLayer.style'
 import { getFeaturesFromRegulatoryZones } from './utils'
@@ -12,6 +12,7 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { BaseRegulatoryZone } from '../../../domain/types/regulation'
 import type { Feature } from 'ol'
+import type { MutableRefObject } from 'react'
 
 export type RegulatoryPreviewLayerProps = {
   map?: any
@@ -78,6 +79,6 @@ function UnmemoizedRegulatoryPreviewLayer({ map }: RegulatoryPreviewLayerProps) 
   return <></>
 }
 
-export const RegulatoryPreviewLayer = React.memo(UnmemoizedRegulatoryPreviewLayer)
+export const RegulatoryPreviewLayer = memo(UnmemoizedRegulatoryPreviewLayer)
 
 RegulatoryPreviewLayer.displayName = 'RegulatoryPreviewLayer'

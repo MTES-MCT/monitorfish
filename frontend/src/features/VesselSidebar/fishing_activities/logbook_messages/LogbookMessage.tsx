@@ -1,4 +1,4 @@
-import { HTMLProps, useMemo } from 'react'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -33,6 +33,7 @@ import { ReactComponent as ShowActivitySVG } from '../../../icons/Position_messa
 import { ReactComponent as HideActivitySVG } from '../../../icons/Position_message_JPE_Pin_masquer.svg'
 
 import type { LogbookMessage as LogbookMessageType } from '../../../../domain/types/fishingActivities'
+import type { HTMLProps } from 'react'
 
 type LogbookMessageComponentType = {
   isFirst: boolean

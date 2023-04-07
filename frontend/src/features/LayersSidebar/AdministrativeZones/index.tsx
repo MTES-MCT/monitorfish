@@ -6,10 +6,7 @@ import { AdministrativeZonesGroup } from './AdministrativeZonesGroup'
 import { COLORS } from '../../../constants/constants'
 import { LayerType } from '../../../domain/entities/layers/constants'
 import LayerSlice from '../../../domain/shared_slices/Layer'
-import {
-  getAdministrativeZones,
-  GroupedZonesAndZones
-} from '../../../domain/use_cases/layer/administrative/getAdministrativeZones'
+import { getAdministrativeZones } from '../../../domain/use_cases/layer/administrative/getAdministrativeZones'
 import { showAdministrativeZone } from '../../../domain/use_cases/layer/administrative/showAdministrativeZone'
 import hideLayer from '../../../domain/use_cases/layer/hideLayer'
 import { closeRegulatoryZoneMetadata } from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
@@ -18,6 +15,7 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
 
 import type { ShowableLayer } from '../../../domain/entities/layers/types'
+import type { GroupedZonesAndZones } from '../../../domain/use_cases/layer/administrative/getAdministrativeZones'
 
 export function AdministrativeZones({ hideLayersListWhenSearching, namespace }) {
   const { setLayersSideBarOpenedLayerType } = LayerSlice[namespace].actions

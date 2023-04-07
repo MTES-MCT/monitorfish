@@ -4,13 +4,13 @@ import {
   FormikEffect,
   FormikTextarea,
   FormikTextInput,
-  Icon,
-  MultiZoneEditor
+  Icon
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { useMemo } from 'react'
 
 import { ControlQualityField } from './shared/ControlQualityField'
+import { FormikMultiCoordinatesPicker } from './shared/FormikMultiCoordinatesPicker'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
 import { GearsField } from './shared/GearsField'
 import { LicencesAndLogbookField } from './shared/LicencesAndLogbookField'
@@ -62,15 +62,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
             withTime
           />
 
-          {/* TODO Formik that in monitor-ui. */}
-          <MultiZoneEditor
-            addButtonLabel="Ajouter un point de contrôle"
-            initialZone={{
-              name: 'Nouvelle zone'
-            }}
-            label="Lieu du contrôle"
-            labelPropName="name"
-          />
+          <FormikMultiCoordinatesPicker />
 
           <LicencesAndLogbookField />
 

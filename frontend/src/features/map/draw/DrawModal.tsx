@@ -1,13 +1,23 @@
-import { Accent, Button, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Coordinates, CoordinatesInput, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
+import { Feature } from 'ol'
 import GeoJSON from 'ol/format/GeoJSON'
-import { useEffect, useMemo, useRef } from 'react'
+import { Point } from 'ol/geom'
+import { transform } from 'ol/proj'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
-import { InteractionListener, InteractionType, OPENLAYERS_PROJECTION } from '../../../domain/entities/map/constants'
+import {
+  InteractionListener,
+  InteractionType,
+  OPENLAYERS_PROJECTION,
+  OpenLayersGeometryType,
+  WSG84_PROJECTION
+} from '../../../domain/entities/map/constants'
 import { setInteractionType } from '../../../domain/shared_slices/Draw'
+import { fitToExtent } from '../../../domain/shared_slices/Map'
+import { addFeatureToDrawedFeature } from '../../../domain/use_cases/draw/addFeatureToDrawedFeature'
 import { eraseDrawedGeometries } from '../../../domain/use_cases/draw/eraseDrawedGeometries'
-import { closeAddMissionZone } from '../../../domain/use_cases/missions/closeAddMissionZone'
-import { validateMissionZone } from '../../../domain/use_cases/missions/validateMissionZone'
+import { closeDraw } from '../../../domain/use_cases/missions/closeDraw'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { theme } from '../../../ui/theme'
@@ -29,6 +39,7 @@ export function DrawLayerModal() {
   const dispatch = useMainAppDispatch()
   const { geometry, interactionType, listener } = useMainAppSelector(state => state.draw)
   const openedSideWindowTab = useMainAppSelector(state => state.global.openedSideWindowTab)
+  const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const initialFeatureNumberRef = useRef<number | undefined>(undefined)
 
   const feature = useMemo(() => {
@@ -52,27 +63,63 @@ export function DrawLayerModal() {
       return
     }
 
-    initialFeatureNumberRef.current = (feature.getGeometry() as MultiPolygon).getPolygons().length
+    if (feature.getGeometry()?.getType() === OpenLayersGeometryType.MULTIPOLYGON) {
+      initialFeatureNumberRef.current = (feature.getGeometry() as MultiPolygon).getPolygons().length
+
+      return
+    }
+
+    initialFeatureNumberRef.current = 0
   }, [feature])
 
   useEffect(() => {
     if (!openedSideWindowTab) {
-      dispatch(closeAddMissionZone())
+      dispatch(closeDraw())
     }
   }, [dispatch, openedSideWindowTab])
 
   const handleQuit = () => {
-    dispatch(closeAddMissionZone())
+    dispatch(closeDraw())
   }
+
   const handleSelectInteraction = (nextInteractionType: InteractionType) => () => {
     dispatch(setInteractionType(nextInteractionType))
   }
+
   const handleReset = () => {
     dispatch(eraseDrawedGeometries(initialFeatureNumberRef.current))
   }
+
   const handleValidate = () => {
-    dispatch(validateMissionZone())
+    dispatch(closeDraw())
   }
+
+  const handleWriteCoordinates = useCallback(
+    (nextCoordinates: Coordinates | undefined) => {
+      if (!nextCoordinates) {
+        return
+      }
+
+      const [latitude, longitude] = nextCoordinates
+      if (!latitude || !longitude) {
+        return
+      }
+
+      const nextTransformedCoordinates = transform([longitude, latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+      const nextFeature = new Feature({
+        geometry: new Point(nextTransformedCoordinates)
+      })
+
+      dispatch(addFeatureToDrawedFeature(nextFeature))
+      const extent = nextFeature.getGeometry()?.getExtent()
+      if (!extent) {
+        return
+      }
+
+      dispatch(fitToExtent(extent))
+    },
+    [dispatch]
+  )
 
   return (
     <Wrapper>
@@ -109,6 +156,16 @@ export function DrawLayerModal() {
               />
             </>
           )}
+          {listener === InteractionListener.CONTROL_POINT && (
+            <StyledCoordinatesInput
+              coordinatesFormat={coordinatesFormat}
+              defaultValue={undefined}
+              isLabelHidden
+              isLight
+              label=""
+              onChange={handleWriteCoordinates}
+            />
+          )}
           <ResetButton accent={Accent.TERTIARY} onClick={handleReset}>
             Réinitialiser
           </ResetButton>
@@ -121,14 +178,23 @@ export function DrawLayerModal() {
   )
 }
 
+const StyledCoordinatesInput = styled(CoordinatesInput)`
+  > div {
+    padding: 12px;
+  }
+`
+
 const Wrapper = styled.div`
   display: flex;
   margin-left: calc(50% - 225px);
   margin-right: calc(50% - 225px);
   position: absolute;
   top: 0;
+  width: 620px;
 `
-const ContentWrapper = styled.div``
+const ContentWrapper = styled.div`
+  width: inherit;
+`
 
 const Header = styled.h1`
   background: ${theme.color.charcoal};
@@ -140,13 +206,13 @@ const Header = styled.h1`
   line-height: 27px;
   margin: 0;
   padding: 10px 24px;
-  width: 502px;
 `
 
 const QuitButton = styled(Button)`
   background: ${theme.color.cultured};
   color: ${theme.color.maximumRed};
   margin-left: auto;
+  height: 30px;
 
   &:hover {
     background: ${theme.color.cultured};
@@ -156,11 +222,18 @@ const QuitButton = styled(Button)`
 
 const ResetButton = styled(Button)`
   margin-left: auto;
+  height: 30px;
+  margin-top: 12px;
+  margin-bottom: 12px;
 `
 
 const ValidateButton = styled(Button)`
   background: ${theme.color.mediumSeaGreen};
+  height: 30px;
   color: ${theme.color.white};
+  margin-top: 12px;
+  margin-bottom: 12px;
+  margin-right: 12px;
 
   &:hover {
     background: ${theme.color.mediumSeaGreen};

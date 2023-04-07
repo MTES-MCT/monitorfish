@@ -11,8 +11,8 @@ import { drawStyle, editStyle } from './styles/draw.style'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 import {
   InteractionType,
-  OLGeometryType,
   OPENLAYERS_PROJECTION,
+  OpenLayersGeometryType,
   WSG84_PROJECTION
 } from '../../../domain/entities/map/constants'
 import { addFeatureToDrawedFeature } from '../../../domain/use_cases/draw/addFeatureToDrawedFeature'
@@ -163,33 +163,33 @@ function UnmemoizedDrawLayer({ map }) {
 
 function getOLTypeAndGeometryFunctionFromInteractionType(interactionType: InteractionType | null): {
   geometryFunction: GeometryFunction | undefined
-  geometryType: OLGeometryType
+  geometryType: OpenLayersGeometryType
 } {
   switch (interactionType) {
     case InteractionType.SQUARE:
       return {
         geometryFunction: createBox(),
-        geometryType: OLGeometryType.CIRCLE
+        geometryType: OpenLayersGeometryType.CIRCLE
       }
     case InteractionType.CIRCLE:
       return {
         geometryFunction: createRegularPolygon(),
-        geometryType: OLGeometryType.CIRCLE
+        geometryType: OpenLayersGeometryType.CIRCLE
       }
     case InteractionType.POLYGON:
       return {
         geometryFunction: undefined,
-        geometryType: OLGeometryType.POLYGON
+        geometryType: OpenLayersGeometryType.POLYGON
       }
     case InteractionType.POINT:
       return {
         geometryFunction: undefined,
-        geometryType: OLGeometryType.POINT
+        geometryType: OpenLayersGeometryType.POINT
       }
     default:
       return {
         geometryFunction: undefined,
-        geometryType: OLGeometryType.POINT
+        geometryType: OpenLayersGeometryType.POINT
       }
   }
 }

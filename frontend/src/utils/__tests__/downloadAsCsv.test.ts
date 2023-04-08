@@ -49,7 +49,7 @@ const TEST_FILENAME = 'a-filename.csv'
 
 describe('utils/downloadAsCsv()', () => {
   it('should return the expected CSV', () => {
-    const csvMap: DownloadAsCsvMap<typeof TEST_DATA[0]> = {
+    const csvMap: DownloadAsCsvMap<(typeof TEST_DATA)[0]> = {
       aDayjsInstance: {
         label: 'Année',
         transform: item => item.aDayjsInstance.year()

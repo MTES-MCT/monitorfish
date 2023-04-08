@@ -77,7 +77,7 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Autres observations', 'Une autre observation.')
 
     // Segment de flotte
-    cy.fill('Ajouter un segment', 'ATL01')
+    cy.fill('Ajouter un segment', 'FR_DRB')
 
     // Qualité du contrôle
     cy.fill('Navire ciblé par le CNSP', 'Oui')
@@ -167,7 +167,7 @@ context('Side Window > Mission Form > Land Control', () => {
             segment: 'SWW11',
             segmentName: 'Hooks and Lines targeting GFB and ALF'
           },
-          { faoAreas: ['27.7', '27.8', '27.9', '27.10'], segment: 'ATL01', segmentName: 'All Trawls 3' }
+          { faoAreas: ['37.1', '37.2', '37.3'], segment: 'FR_DRB', segmentName: "Drague de mer et d'étang" }
         ],
         seizureAndDiversion: true,
         seizureAndDiversionComments: null,

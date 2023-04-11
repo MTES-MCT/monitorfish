@@ -1,3 +1,43 @@
 {
-  "extends": ["github>ivangabriele/renovate-config"]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    ":preserveSemverRanges",
+    ":timezone(Europe/Paris)",
+    "docker:enableMajor",
+    "group:allNonMajor",
+    "schedule:earlyMondays"
+  ],
+  "semanticCommits": "enabled",
+  "semanticCommitType": "build",
+  "packageRules": [
+    {
+      "groupName": "Backend",
+      "description": "Group backend dependencies",
+      "matchPaths": ["backend/**"],
+      "assignees": ["louptheron"],
+      "semanticCommitScope": "backend"
+    },
+    {
+      "groupName": "Data",
+      "description": "Group frontend dependencies",
+      "matchPaths": ["data/**"],
+      "assignees": ["VincentAntoine"],
+      "semanticCommitScope": "frontend"
+    },
+    {
+      "groupName": "Frontend",
+      "description": "Group data dependencies",
+      "matchPaths": ["frontend/**"],
+      "assignees": ["ivangabriele", "louptheron"],
+      "semanticCommitScope": "data"
+    },
+    {
+      "groupName": "Infra",
+      "description": "Group frontend dependencies",
+      "matchPaths": ["infra/**"],
+      "assignees": ["ivangabriele", "louptheron", "VincentAntoine"],
+      "semanticCommitScope": "infra"
+    }
+  ]
 }

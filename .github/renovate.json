@@ -21,23 +21,23 @@
     },
     {
       "groupName": "Data",
-      "description": "Group frontend dependencies",
+      "description": "Group data dependencies",
       "matchPaths": ["datascience/**"],
       "assignees": ["VincentAntoine"],
-      "semanticCommitScope": "frontend",
-      "semanticCommitType": "build"
-    },
-    {
-      "groupName": "Frontend",
-      "description": "Group data dependencies",
-      "matchPaths": ["frontend/**"],
-      "assignees": ["ivangabriele", "louptheron"],
       "semanticCommitScope": "data",
       "semanticCommitType": "build"
     },
     {
-      "groupName": "Infra",
+      "groupName": "Frontend",
       "description": "Group frontend dependencies",
+      "matchPaths": ["frontend/**"],
+      "assignees": ["ivangabriele", "louptheron"],
+      "semanticCommitScope": "frontend",
+      "semanticCommitType": "build"
+    },
+    {
+      "groupName": "Infra",
+      "description": "Group infra dependencies",
       "matchPaths": ["infra/**"],
       "assignees": ["ivangabriele", "louptheron", "VincentAntoine"],
       "semanticCommitScope": "infra",

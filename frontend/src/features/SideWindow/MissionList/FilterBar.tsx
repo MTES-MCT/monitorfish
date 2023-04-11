@@ -122,6 +122,7 @@ export function FilterBar({ missionsWithActions, onChange, onQueryChange }: Filt
             renderValue={(_, items) =>
               items.length > 0 ? <OptionValue>Administration ({items.length}) </OptionValue> : <></>
             }
+            searchable
           />
           <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}
@@ -131,6 +132,7 @@ export function FilterBar({ missionsWithActions, onChange, onQueryChange }: Filt
             options={unitsAsOptions}
             placeholder="Unité"
             renderValue={(_, items) => (items.length > 0 ? <OptionValue>Unité ({items.length}) </OptionValue> : <></>)}
+            searchable
           />
           <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}

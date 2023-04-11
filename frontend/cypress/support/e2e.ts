@@ -20,7 +20,8 @@ declare global {
       ): void
       getComputedStyle(dataCy: string, backUpToParentNumber?: number): Cypress.Chainable<CSSStyleDeclaration>
       loadPath(path: string): void
-      toMatchImageSnapshot(settings: any): Chainable<Element>
+      // TODO Re-enable this E2E test with an alternative solution.
+      // toMatchImageSnapshot(settings: any): Chainable<Element>
 
       // eslint-disable-next-line typescript-sort-keys/interface
       clickButton(

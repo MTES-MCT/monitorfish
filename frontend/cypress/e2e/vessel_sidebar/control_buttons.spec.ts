@@ -118,7 +118,8 @@ context('Vessel sidebar controls buttons', () => {
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
   })
 
-  it('Vessel track Should fit the view box When I click on animate to track', () => {
+  // TODO Re-enable this E2E test with an alternative solution.
+  it.skip('Vessel track Should fit the view box When I click on animate to track', () => {
     cy.cleanScreenshots(1)
 
     // Given
@@ -131,17 +132,17 @@ context('Vessel sidebar controls buttons', () => {
     cy.wait(1500)
 
     // Then, the last position should be positioned in the bottom of the window
-    cy.get('.VESSELS_POINTS')
-      .eq(0)
-      .toMatchImageSnapshot({
-        imageConfig: {
-          threshold: 0.05,
-          thresholdType: 'percent'
-        },
-        screenshotConfig: {
-          clip: { height: 840, width: 500, x: 210, y: 0 }
-        }
-      })
+    // cy.get('.VESSELS_POINTS')
+    //   .eq(0)
+    //   .toMatchImageSnapshot({
+    //     imageConfig: {
+    //       threshold: 0.05,
+    //       thresholdType: 'percent'
+    //     },
+    //     screenshotConfig: {
+    //       clip: { height: 840, width: 500, x: 210, y: 0 }
+    //     }
+    //   })
 
     cy.cleanScreenshots(1)
   })

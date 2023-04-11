@@ -1,7 +1,8 @@
-import '@mtes-mct/monitor-ui/cypress'
+import { registerMonitorUiCustomCommands } from '@mtes-mct/monitor-ui/cypress'
 
-import { fillDateRangePicker } from './commands/fillDateRangePicker'
 import { getComputedStyle } from './commands/getComputedStyle'
+
+registerMonitorUiCustomCommands()
 
 function unquote(str: string): string {
   return str.replace(/(^")|("$)/g, '')
@@ -43,5 +44,3 @@ Cypress.Commands.add('cleanFiles', () => {
 })
 
 Cypress.Commands.add('getComputedStyle', getComputedStyle)
-
-Cypress.Commands.add('fillDateRangePicker', fillDateRangePicker)

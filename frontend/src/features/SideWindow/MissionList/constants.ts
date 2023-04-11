@@ -1,4 +1,4 @@
-import { dayjs } from '@mtes-mct/monitor-ui'
+import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import { MissionDateRangeFilterLabel, MissionFilterType } from './types'
 import { Mission } from '../../../domain/entities/mission/types'
@@ -35,7 +35,8 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
       isSortable: true,
       key: 'startDateTimeUtc',
       label: 'Début',
-      labelTransform: missionWithActions => dayjs(missionWithActions.startDateTimeUtc).utc().format('D MMM YY, HH:mm')
+      labelTransform: missionWithActions =>
+        customDayjs(missionWithActions.startDateTimeUtc).utc().format('D MMM YY, HH:mm')
     },
     {
       fixedWidth: 136,
@@ -44,7 +45,7 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
       label: 'Fin',
       labelTransform: missionWithActions =>
         missionWithActions.endDateTimeUtc
-          ? dayjs(missionWithActions.endDateTimeUtc).utc().format('D MMM YY, HH:mm')
+          ? customDayjs(missionWithActions.endDateTimeUtc).utc().format('D MMM YY, HH:mm')
           : ''
     },
     {

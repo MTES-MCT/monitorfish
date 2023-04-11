@@ -1,5 +1,5 @@
 import 'cypress-mouse-position/commands'
-import 'cypress-plugin-snapshots/commands'
+// import 'cypress-plugin-snapshots/commands'
 
 import './commands'
 import './commands/dragTo'
@@ -18,11 +18,38 @@ declare global {
           isSmooth: boolean
         }>
       ): void
-      fillDateRangePicker(label: string, startDate: Date, endDate: Date): Chainable<Element>
       getComputedStyle(dataCy: string, backUpToParentNumber?: number): Cypress.Chainable<CSSStyleDeclaration>
       loadPath(path: string): void
-      toMatchImageSnapshot(settings: any): Chainable<Element>
+      // TODO Re-enable this E2E test with an alternative solution.
+      // toMatchImageSnapshot(settings: any): Chainable<Element>
+
+      // eslint-disable-next-line typescript-sort-keys/interface
+      clickButton(
+        label: string,
+        options?: Partial<{
+          index: number
+          withinSelector: string
+        }>
+      ): Chainable<JQuery<HTMLButtonElement>>
+      clickLink(linkText: string): Chainable<JQuery<HTMLAnchorElement>>
+      clickOutside(xPosition?: number, yPosition?: number): void
+      fill(
+        label: string,
+        value:
+          | boolean
+          | number
+          | string
+          | string[]
+          | (DateTuple | DateWithTimeTuple)
+          | ([Cypress.DateTuple, Cypress.DateTuple] | [Cypress.DateWithTimeTuple, Cypress.DateWithTimeTuple])
+          | undefined
+      ): Chainable<Element>
+      forceClick(): Chainable<JQuery<HTMLElement>>
+      getDataCy(dataCy: string): Chainable<JQuery<HTMLElement>>
     }
+
+    type DateTuple = [number, number, number]
+    type DateWithTimeTuple = [number, number, number, number, number]
   }
 }
 

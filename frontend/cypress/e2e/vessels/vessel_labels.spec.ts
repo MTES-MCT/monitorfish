@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 context('Vessel labels', () => {
   beforeEach(() => {
     cy.loadPath('/#@-824534.42,6082993.21,8.70')

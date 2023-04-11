@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 context('TritonFish', () => {
   it('view Should have some features removed', () => {
     // Given

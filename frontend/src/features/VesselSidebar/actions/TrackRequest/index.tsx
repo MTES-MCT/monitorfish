@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { DateRangeRadio } from './DateRangeRadio'
 import { ExportTrack } from './ExportTrack'
 import { PositionsTable } from './PositionsTable'
-import { VesselTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
+import { VesselTrackDepth, getTrackRequestFromTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
 import { updateSelectedVesselTrackRequest } from '../../../../domain/use_cases/vessel/updateSelectedVesselTrackRequest'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
@@ -49,15 +49,22 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
         trackDepth: nextTrackDepth
       }
 
-      // TODO Find why dispatch doesn't type actions correctly.
       dispatch(updateSelectedVesselTrackRequest(selectedVesselIdentity, trackRequest))
     },
     [dispatch, selectedVesselIdentity]
   )
 
   const handleDateRangePickerChange = useCallback(
-    (dateRange: DateRange) => {
+    (dateRange: DateRange | undefined) => {
       if (!selectedVesselIdentity) {
+        return
+      }
+
+      if (!dateRange) {
+        const trackRequest = getTrackRequestFromTrackDepth(VesselTrackDepth.TWELVE_HOURS)
+
+        dispatch(updateSelectedVesselTrackRequest(selectedVesselIdentity, trackRequest))
+
         return
       }
 
@@ -68,7 +75,6 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
         trackDepth: VesselTrackDepth.CUSTOM
       }
 
-      // TODO Find why dispatch doesn't type actions correctly.
       dispatch(updateSelectedVesselTrackRequest(selectedVesselIdentity, trackRequest))
     },
     [dispatch, selectedVesselIdentity]

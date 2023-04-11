@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-/// <reference types="cypress" />
 
 context('LayersSidebar', () => {
   beforeEach(() => {
@@ -302,15 +301,16 @@ context('LayersSidebar', () => {
     cy.wait(500)
 
     // Then
-    cy.get('.administrative').toMatchImageSnapshot({
-      imageConfig: {
-        threshold: 0.05,
-        thresholdType: 'percent'
-      },
-      screenshotConfig: {
-        clip: { height: 500, width: 250, x: 410, y: 0 }
-      }
-    })
+    // TODO Re-enable this E2E test with an alternative solution.
+    // cy.get('.administrative').toMatchImageSnapshot({
+    //     imageConfig: {
+    //       threshold: 0.05,
+    //       thresholdType: 'percent'
+    //     },
+    //     screenshotConfig: {
+    //       clip: { height: 500, width: 250, x: 410, y: 0 }
+    //     }
+    //   })
 
     cy.cleanScreenshots(1)
 

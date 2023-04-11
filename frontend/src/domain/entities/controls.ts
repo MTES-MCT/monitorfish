@@ -1,5 +1,5 @@
-import { dayjs } from '../../utils/dayjs'
-import { getUtcDayjs } from '../../utils/getUtcDayjs'
+import { customDayjs } from '@mtes-mct/monitor-ui'
+
 import { MissionAction } from '../types/missionAction'
 
 import InfractionType = MissionAction.InfractionType
@@ -49,15 +49,15 @@ export const getYearsToActions = (
     return {}
   }
 
-  let fromYear = dayjs(controlsFromDate).year()
-  const toYear = getUtcDayjs().year()
+  let fromYear = customDayjs(controlsFromDate).year()
+  const toYear = customDayjs().utc().year()
   while (fromYear <= toYear) {
     nextYearsToControls[fromYear] = []
     fromYear += 1
   }
 
   controls.forEach(control => {
-    const year = dayjs(control.actionDatetimeUtc).year()
+    const year = customDayjs(control.actionDatetimeUtc).year()
 
     if (nextYearsToControls[year].length) {
       nextYearsToControls[year] = nextYearsToControls[year].concat(control)

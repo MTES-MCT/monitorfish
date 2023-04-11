@@ -1,7 +1,6 @@
-/// <reference types="cypress" />
+import { getUtcizedDayjs } from '@mtes-mct/monitor-ui'
 
 import { openSideWindowNewMission } from './utils'
-import { getUtcizedDayjs } from '../../../../src/utils/getUtcizedDayjs'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Main Form', () => {

@@ -1,9 +1,9 @@
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import { batch } from 'react-redux'
 
 import { updateSelectedVesselTrackRequest } from './updateSelectedVesselTrackRequest'
 import { getVesselVoyageFromAPI } from '../../../api/vessel'
 import NoLogbookMessagesFoundError from '../../../errors/NoLogbookMessagesFoundError'
-import { dayjs } from '../../../utils/dayjs'
 import { vesselsAreEquals } from '../../entities/vessel/vessel'
 import { getTrackRequestFromDates } from '../../entities/vesselTrackDepth'
 import {
@@ -112,8 +112,8 @@ function modifyVesselTrackAndVoyage(voyage, dispatch, vesselIdentity, areFishing
 }
 
 function getDateRangeMinusFourHoursPlusOneHour(afterDateTime, beforeDateTime) {
-  const nextAfterDateTime = dayjs(afterDateTime).subtract(4, 'hours')
-  const nextBeforeDateTime = dayjs(beforeDateTime).add(1, 'hour')
+  const nextAfterDateTime = customDayjs(afterDateTime).subtract(4, 'hours')
+  const nextBeforeDateTime = customDayjs(beforeDateTime).add(1, 'hour')
 
   return {
     afterDateTime: nextAfterDateTime.toDate(),

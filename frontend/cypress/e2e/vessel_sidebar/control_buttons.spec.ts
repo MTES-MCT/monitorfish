@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 /// <reference types="cypress" />
 
 import dayjs from 'dayjs'
@@ -75,7 +74,10 @@ context('Vessel sidebar controls buttons', () => {
     // When
     cy.intercept('GET', '/bff/v1/vessels/positions*').as('getPositions')
     cy.getDataCy('vessel-track-depth-selection').click()
-    cy.fillDateRangePicker('Plage de temps sur mesure', startDateAsDayjs.toDate(), endDateAsDayjs.toDate())
+    cy.fill('Plage de temps sur mesure', [
+      [startDateAsDayjs.year(), startDateAsDayjs.month() + 1, startDateAsDayjs.date()],
+      [endDateAsDayjs.year(), endDateAsDayjs.month() + 1, endDateAsDayjs.date()]
+    ])
 
     // Then
     cy.wait('@getPositions').then(({ request }) => {

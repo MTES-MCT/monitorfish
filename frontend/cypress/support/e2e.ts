@@ -18,7 +18,6 @@ declare global {
           isSmooth: boolean
         }>
       ): void
-      fillDateRangePicker(label: string, startDate: Date, endDate: Date): Chainable<Element>
       getComputedStyle(dataCy: string, backUpToParentNumber?: number): Cypress.Chainable<CSSStyleDeclaration>
       loadPath(path: string): void
       toMatchImageSnapshot(settings: any): Chainable<Element>

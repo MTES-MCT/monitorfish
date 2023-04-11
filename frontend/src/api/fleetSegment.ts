@@ -1,8 +1,8 @@
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import ky from 'ky'
 
 import { monitorfishApi } from '.'
 import { ApiError } from '../libs/ApiError'
-import { dayjs } from '../utils/dayjs'
 
 import type { FleetSegment, UpdateFleetSegment } from '../domain/types/fleetSegment'
 
@@ -11,7 +11,7 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
     getFleetSegments: builder.query<FleetSegment[], number | void>({
       providesTags: () => [{ type: 'FleetSegments' }],
       query: year => {
-        const controlledYear = year || dayjs.utc().year()
+        const controlledYear = year || customDayjs.utc().year()
 
         return `fleet_segments/${controlledYear}`
       },

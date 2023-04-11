@@ -1,7 +1,7 @@
-import { dayjs } from 'src/utils/dayjs'
+import dayjs from 'dayjs'
+import { getUtcizedDayjs } from 'node_modules/@mtes-mct/monitor-ui'
 
 import { getDate } from '../../../src/utils'
-import { getUtcizedDayjs } from '../../../src/utils/getUtcizedDayjs'
 
 context('Side window beacon malfunctions', () => {
   beforeEach(() => {

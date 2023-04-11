@@ -1,9 +1,9 @@
 import { describe, expect, it } from '@jest/globals'
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import Feature from 'ol/Feature'
 
 import { isForbiddenPeriod } from './isForbiddenPeriod'
 import { WEEKDAYS } from '../../../../domain/entities/regulation'
-import { getUtcDayjs } from '../../../../utils/getUtcDayjs'
 
 describe('isForbiddenPeriod', () => {
   it('Should return false When the regulation date range is out of a not authorized range', async () => {
@@ -22,7 +22,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs()
+    const currentDate = customDayjs().utc()
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
@@ -43,7 +43,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs()
+    const currentDate = customDayjs().utc()
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
@@ -64,7 +64,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs()
+    const currentDate = customDayjs().utc()
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
@@ -84,13 +84,13 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs()
+    const currentDate = customDayjs().utc()
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
   it('Should return true When the regulation unauthorized dates equals the current date', async () => {
     // Given
-    const now = getUtcDayjs().toISOString()
+    const now = customDayjs().utc().toISOString()
     const feature = new Feature({
       // The JSON is a string in geoserver
       fishing_period: JSON.stringify({
@@ -105,13 +105,13 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs()
+    const currentDate = customDayjs().utc()
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
   it('Should return false When the regulation unauthorized dates do not equals the current date', async () => {
     // Given
-    const nowPlusOneDay = getUtcDayjs().add(1, 'day').toISOString()
+    const nowPlusOneDay = customDayjs().utc().add(1, 'day').toISOString()
     const feature = new Feature({
       // The JSON is a string in geoserver
       fishing_period: JSON.stringify({
@@ -126,14 +126,14 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs()
+    const currentDate = customDayjs().utc()
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
   it('Should return false When the regulation unauthorized dates equals the current date', async () => {
     // Given
-    const now = getUtcDayjs().toISOString()
-    const nowPlusOneDay = getUtcDayjs().add(1, 'day').toISOString()
+    const now = customDayjs().utc().toISOString()
+    const nowPlusOneDay = customDayjs().utc().add(1, 'day').toISOString()
     const feature = new Feature({
       // The JSON is a string in geoserver
       fishing_period: JSON.stringify({
@@ -148,13 +148,13 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs()
+    const currentDate = customDayjs().utc()
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
   it('Should return true When the regulation authorized dates do not equals the current date', async () => {
     // Given
-    const nowPlusOneDay = getUtcDayjs().add(1, 'day').toISOString()
+    const nowPlusOneDay = customDayjs().utc().add(1, 'day').toISOString()
     const feature = new Feature({
       // The JSON is a string in geoserver
       fishing_period: JSON.stringify({
@@ -169,13 +169,13 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs()
+    const currentDate = customDayjs().utc()
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
   it('Should return true When the regulation unauthorized week days equals the current week day', async () => {
     // Given
-    const currentWeekDay = getUtcDayjs().day()
+    const currentWeekDay = customDayjs().utc().day()
     const weekDay = Object.keys(WEEKDAYS).find((_, index) => index === currentWeekDay)
     const feature = new Feature({
       // The JSON is a string in geoserver
@@ -191,7 +191,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs()
+    const currentDate = customDayjs().utc()
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
@@ -211,13 +211,13 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs()
+    const currentDate = customDayjs().utc()
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
   it('Should return false When the regulation authorized week days equals the current week day', async () => {
     // Given
-    const currentWeekDay = getUtcDayjs().day()
+    const currentWeekDay = customDayjs().utc().day()
     const weekDay = Object.keys(WEEKDAYS).find((_, index) => index === currentWeekDay)
     const weekDayPlusOneDay = Object.keys(WEEKDAYS).find((_, index) => index === currentWeekDay + 1)
     const feature = new Feature({
@@ -234,7 +234,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs()
+    const currentDate = customDayjs().utc()
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
@@ -254,7 +254,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs()
+    const currentDate = customDayjs().utc()
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
@@ -273,7 +273,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs()
+    const currentDate = customDayjs().utc()
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
@@ -292,7 +292,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs()
+    const currentDate = customDayjs().utc()
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
@@ -316,7 +316,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('year', 2021).set('month', 11) // 11 (12 from 1) is inside [09 -> 04]
+    const currentDate = customDayjs().utc().set('year', 2021).set('month', 11) // 11 (12 from 1) is inside [09 -> 04]
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
@@ -340,7 +340,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('year', 2022).set('month', 5) // 5 (6 from 1) is outside [09 -> 04]
+    const currentDate = customDayjs().utc().set('year', 2022).set('month', 5) // 5 (6 from 1) is outside [09 -> 04]
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
@@ -364,7 +364,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('year', 2022).set('month', 10) // 10 (11 from 1) is inside [09 -> 04]
+    const currentDate = customDayjs().utc().set('year', 2022).set('month', 10) // 10 (11 from 1) is inside [09 -> 04]
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
@@ -388,7 +388,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('year', 2022).set('month', 2) // 3 (4 from 1) is inside [09 -> 04]
+    const currentDate = customDayjs().utc().set('year', 2022).set('month', 2) // 3 (4 from 1) is inside [09 -> 04]
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
@@ -412,7 +412,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('year', 2022).set('month', 6) // 6 (7 from 1) is outside [09 -> 04]
+    const currentDate = customDayjs().utc().set('year', 2022).set('month', 6) // 6 (7 from 1) is outside [09 -> 04]
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
@@ -436,7 +436,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('year', 2022).set('month', 9) // 9 (10 from 1) is inside [09 -> 04]
+    const currentDate = customDayjs().utc().set('year', 2022).set('month', 9) // 9 (10 from 1) is inside [09 -> 04]
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
@@ -460,7 +460,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('year', 2022).set('month', 7) // 7 (8 from 1) is outside [09 -> 04]
+    const currentDate = customDayjs().utc().set('year', 2022).set('month', 7) // 7 (8 from 1) is outside [09 -> 04]
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
@@ -484,7 +484,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('year', 2022).set('month', 10).set('date', 22) // 11 (12 from 1) is outside [09 -> 11]
+    const currentDate = customDayjs().utc().set('year', 2022).set('month', 10).set('date', 22) // 11 (12 from 1) is outside [09 -> 11]
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
@@ -508,7 +508,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('year', 2022).set('month', 1).set('date', 22) // 11 (12 from 1) is outside [09 -> 11]
+    const currentDate = customDayjs().utc().set('year', 2022).set('month', 1).set('date', 22) // 11 (12 from 1) is outside [09 -> 11]
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
@@ -528,7 +528,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('month', 1).set('date', 1) // Monday
+    const currentDate = customDayjs().utc().set('month', 1).set('date', 1) // Monday
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
@@ -548,7 +548,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().day(1) // Monday
+    const currentDate = customDayjs().utc().day(1) // Monday
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
@@ -567,7 +567,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs()
+    const currentDate = customDayjs().utc()
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
@@ -586,14 +586,14 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().day(1) // Monday
+    const currentDate = customDayjs().utc().day(1) // Monday
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 })
 
 function getDateInTheFuture() {
   const MAX_MONTH_IN_YEAR = 12
-  const now = getUtcDayjs()
+  const now = customDayjs().utc()
   const currentMonth = now.month() + 1
 
   if (currentMonth === MAX_MONTH_IN_YEAR) {

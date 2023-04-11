@@ -1,3 +1,4 @@
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import _ from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
@@ -14,7 +15,6 @@ import { createFleetSegment } from '../../../domain/use_cases/fleetSegment/creat
 import { getFleetSegmentsYearEntries } from '../../../domain/use_cases/fleetSegment/getFleetSegmentsYearEntries'
 import { useBackofficeAppDispatch } from '../../../hooks/useBackofficeAppDispatch'
 import { theme } from '../../../ui/theme'
-import { dayjs } from '../../../utils/dayjs'
 
 import type { FleetSegment } from '../../../domain/types/fleetSegment'
 
@@ -23,7 +23,7 @@ function getLabeledYear(_year) {
 }
 
 export function FleetSegments() {
-  const currentYear = dayjs().year()
+  const currentYear = customDayjs().year()
   const dispatch = useBackofficeAppDispatch()
   const [fleetSegments, setFleetSegments] = useState<FleetSegment[]>([])
   const [faoAreas, setFAOAreas] = useState<string[]>([])

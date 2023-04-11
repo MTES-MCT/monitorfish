@@ -9,48 +9,46 @@ import { MISSION_FILTER_LABEL_ENUMERATORS, MISSION_FILTER_OPTIONS } from './cons
 import { FilterTagBar } from './FilterTagBar'
 import { MissionDateRangeFilter, MissionFilterType } from './types'
 import { mapFilterFormRecordsToFilters } from './utils'
+import { useGetControlUnitsQuery } from '../../../api/controlUnit'
 import { useNewWindow } from '../../../ui/NewWindow'
 import { getOptionsFromStrings } from '../../../utils/getOptionsFromStrings'
 
 import type { MissionWithActions } from '../../../domain/entities/mission/types'
+import type { ControlUnit } from '../../../domain/types/controlUnit'
 import type { AugmentedDataFilter } from '../../../hooks/useTable/types'
 import type { Promisable } from 'type-fest'
 
 export type FilterBarProps = {
-  missionsWithActions: MissionWithActions[]
   onChange: (filters: Array<AugmentedDataFilter<MissionWithActions>>) => Promisable<void>
   onQueryChange: (nextQuery: string | undefined) => Promisable<void>
 }
-export function FilterBar({ missionsWithActions, onChange, onQueryChange }: FilterBarProps) {
+export function FilterBar({ onChange, onQueryChange }: FilterBarProps) {
   const { newWindowContainerRef } = useNewWindow()
 
   const [isCustomDateRangeOpen, setIsCustomDateRangeOpen] = useState(false)
-  // const [filterTags, setFilterTags] = useState<Array<{
-  //   value
-  // }>>([])
+
+  const controlUnitsQuery = useGetControlUnitsQuery(undefined)
 
   const administrationsAsOptions = useMemo(
     () =>
       pipe(
-        map<MissionWithActions, string[]>(({ controlUnits }) =>
-          (controlUnits || []).map(({ administration }) => administration)
-        ),
+        map<ControlUnit.ControlUnit, string>(({ administration }) => administration),
         flatten,
         uniq,
         getOptionsFromStrings
-      )(missionsWithActions),
-    [missionsWithActions]
+      )(controlUnitsQuery.data || []),
+    [controlUnitsQuery.data]
   )
 
   const unitsAsOptions = useMemo(
     () =>
       pipe(
-        map<MissionWithActions, string[]>(({ controlUnits }) => (controlUnits || []).map(({ name }) => name)),
+        map<ControlUnit.ControlUnit, string>(({ name }) => name),
         flatten,
         uniq,
         getOptionsFromStrings
-      )(missionsWithActions),
-    [missionsWithActions]
+      )(controlUnitsQuery.data || []),
+    [controlUnitsQuery.data]
   )
 
   const handleFilterFormChange = useCallback(
@@ -114,6 +112,7 @@ export function FilterBar({ missionsWithActions, onChange, onQueryChange }: Filt
           />
           <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}
+            disabled={administrationsAsOptions.length === 0}
             isLabelHidden
             label="Administration"
             name={MissionFilterType.ADMINISTRATION}
@@ -126,6 +125,7 @@ export function FilterBar({ missionsWithActions, onChange, onQueryChange }: Filt
           />
           <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}
+            disabled={unitsAsOptions.length === 0}
             isLabelHidden
             label="Unité"
             name={MissionFilterType.UNIT}

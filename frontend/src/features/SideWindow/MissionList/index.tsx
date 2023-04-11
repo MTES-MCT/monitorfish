@@ -66,7 +66,7 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
       </Header>
 
       <Body>
-        <FilterBar missionsWithActions={missionsWithActions} onChange={setFilters} onQueryChange={setSearchQuery} />
+        <FilterBar onChange={setFilters} onQueryChange={setSearchQuery} />
 
         {getMissionsApiQuery.isLoading && <p>Chargement en cours...</p>}
         {getMissionsApiQuery.error && <pre>{JSON.stringify(getMissionsApiQuery.error)}</pre>}

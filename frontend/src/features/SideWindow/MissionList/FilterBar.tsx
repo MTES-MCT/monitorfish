@@ -172,6 +172,11 @@ const Box = styled.div`
 const Row = styled.div`
   display: flex;
 
+  > div {
+    max-width: 200px;
+    min-width: 200px;
+    width: 200px;
+  }
   > div:not(:first-child) {
     margin-left: 16px;
     width: 160px;

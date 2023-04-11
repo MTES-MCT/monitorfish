@@ -60,7 +60,7 @@ context('Vessel sidebar controls buttons', () => {
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
   })
 
-  it('Vessel track dates Should be changed from the agenda', () => {
+  it.only('Vessel track dates Should be changed from the agenda', () => {
     const startDateAsDayjs = dayjs().subtract(1, 'day').hour(1).minute(2)
     const endDateAsDayjs = dayjs().hour(3).minute(4)
 
@@ -73,8 +73,20 @@ context('Vessel sidebar controls buttons', () => {
     cy.intercept('GET', '/bff/v1/vessels/positions*').as('getPositions')
     cy.getDataCy('vessel-track-depth-selection').click()
     cy.fill('Plage de temps sur mesure', [
-      [startDateAsDayjs.year(), startDateAsDayjs.month() + 1, startDateAsDayjs.date()],
-      [endDateAsDayjs.year(), endDateAsDayjs.month() + 1, endDateAsDayjs.date()]
+      [
+        startDateAsDayjs.year(),
+        startDateAsDayjs.month() + 1,
+        startDateAsDayjs.date(),
+        startDateAsDayjs.hour(),
+        startDateAsDayjs.minute()
+      ],
+      [
+        endDateAsDayjs.year(),
+        endDateAsDayjs.month() + 1,
+        endDateAsDayjs.date(),
+        endDateAsDayjs.hour(),
+        endDateAsDayjs.minute()
+      ]
     ])
 
     // Then

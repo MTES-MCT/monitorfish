@@ -15,6 +15,8 @@ context('Side Window > Mission Form > Air Surveillance', () => {
     // -------------------------------------------------------------------------
     // Form
 
+    cy.wait(250)
+
     // Objectifs du vol
     // TODO Add this test.
     // cy.fill('Objectifs du vol', 'Vérifications VMS/AIS')

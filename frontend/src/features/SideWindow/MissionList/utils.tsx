@@ -124,28 +124,28 @@ export const renderStatus = (missionStatus: Mission.MissionStatus): JSX.Element 
     case Mission.MissionStatus.UPCOMING:
       return (
         <Tag bullet={TagBullet.DISK} bulletColor="#52B0FF" style={{ color: '#52B0FF' }}>
-          {Mission.MissionStatus.UPCOMING}
+          {Mission.MissionStatusLabel.UPCOMING}
         </Tag>
       )
 
     case Mission.MissionStatus.IN_PROGRESS:
       return (
         <Tag bullet={TagBullet.DISK} bulletColor="#3660FA" style={{ color: '#3660FA' }}>
-          {Mission.MissionStatus.IN_PROGRESS}
+          {Mission.MissionStatusLabel.IN_PROGRESS}
         </Tag>
       )
 
     case Mission.MissionStatus.DONE:
       return (
         <Tag bullet={TagBullet.DISK} bulletColor="#1400AD" style={{ color: '#1400AD' }}>
-          {Mission.MissionStatus.DONE}
+          {Mission.MissionStatusLabel.DONE}
         </Tag>
       )
 
     case Mission.MissionStatus.CLOSED:
       return (
         <Tag bullet={TagBullet.DISK} bulletColor="#463939" style={{ color: '#463939' }}>
-          {Mission.MissionStatus.CLOSED}
+          {Mission.MissionStatusLabel.CLOSED}
         </Tag>
       )
 

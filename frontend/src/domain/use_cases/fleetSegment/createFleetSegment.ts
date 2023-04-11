@@ -1,5 +1,6 @@
+import { customDayjs } from '@mtes-mct/monitor-ui'
+
 import { createFleetSegmentFromAPI } from '../../../api/fleetSegment'
-import { dayjs } from '../../../utils/dayjs'
 import { setFleetSegments } from '../../shared_slices/FleetSegment'
 import { setError } from '../../shared_slices/Global'
 
@@ -19,7 +20,7 @@ export const createFleetSegment =
         throw new Error("Le segment de flotte n'a pas d'année")
       }
 
-      const currentYear = dayjs().year()
+      const currentYear = customDayjs().year()
       const previousFleetSegmentsOfCurrentYear = Object.assign([], getState().fleetSegment.fleetSegments)
 
       const newSegment = await createFleetSegmentFromAPI(segmentFields)

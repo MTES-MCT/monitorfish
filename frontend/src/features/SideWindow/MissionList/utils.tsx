@@ -1,4 +1,4 @@
-import { Tag, TagBullet } from '@mtes-mct/monitor-ui'
+import { Tag, TagBullet, customDayjs } from '@mtes-mct/monitor-ui'
 import { filter, identity } from 'ramda'
 
 import { MissionDateRangeFilter, MissionFilterType } from './types'
@@ -6,7 +6,6 @@ import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS } from '../../../domain/entities/al
 import { getMissionStatus } from '../../../domain/entities/mission'
 import { Mission } from '../../../domain/entities/mission/types'
 import { FrontendError } from '../../../libs/FrontendError'
-import { dayjs } from '../../../utils/dayjs'
 import { includesSome } from '../../../utils/includesSome'
 
 import type { SeaFront } from '../../../constants'
@@ -30,7 +29,7 @@ export const getSeaFrontFilter = (selectedSubMenu: string): AugmentedDataFilter<
 }
 
 const isSameOrAfterStartOf = (unit: QUnitType | OpUnitType, utcDateIsoString: string): boolean =>
-  dayjs(utcDateIsoString).utc().isSameOrAfter(dayjs().utc().startOf(unit))
+  customDayjs(utcDateIsoString).utc().isSameOrAfter(customDayjs().utc().startOf(unit))
 
 // TODO Add unit tests.
 export const mapFilterFormRecordsToFilters = ([key, valueOrValues]: [
@@ -48,15 +47,15 @@ export const mapFilterFormRecordsToFilters = ([key, valueOrValues]: [
     case MissionFilterType.CUSTOM_DATE_RANGE:
       return filter<AugmentedDataItem<MissionWithActions>>(({ item: { endDateTimeUtc, startDateTimeUtc } }) =>
         endDateTimeUtc
-          ? dayjs(startDateTimeUtc)
+          ? customDayjs(startDateTimeUtc)
               .utc()
-              .isSameOrAfter(dayjs((valueOrValues as DateRange)[0]).utc()) &&
-            dayjs(endDateTimeUtc)
+              .isSameOrAfter(customDayjs((valueOrValues as DateRange)[0]).utc()) &&
+            customDayjs(endDateTimeUtc)
               .utc()
-              .isSameOrBefore(dayjs((valueOrValues as DateRange)[1]).utc())
-          : dayjs(startDateTimeUtc)
+              .isSameOrBefore(customDayjs((valueOrValues as DateRange)[1]).utc())
+          : customDayjs(startDateTimeUtc)
               .utc()
-              .isSameOrAfter(dayjs((valueOrValues as DateRange)[0]).utc())
+              .isSameOrAfter(customDayjs((valueOrValues as DateRange)[0]).utc())
       )
 
     case MissionFilterType.DATE_RANGE:

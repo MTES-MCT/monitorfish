@@ -1,11 +1,11 @@
 import { expect } from '@jest/globals'
+import { customDayjs } from '@mtes-mct/monitor-ui'
 
-import { dayjs } from '../../../../../utils/dayjs'
 import { formatDateLabel } from '../utils'
 
 describe('utils/formatDateLabel()', () => {
   it('should return the expected string in February', () => {
-    const dateLabel = dayjs('1 Feb 2022 12:00:00 GMT').format('DD MMM')
+    const dateLabel = customDayjs('1 Feb 2022 12:00:00 GMT').format('DD MMM')
 
     const result = formatDateLabel(dateLabel)
 
@@ -13,7 +13,7 @@ describe('utils/formatDateLabel()', () => {
   })
 
   it('should return the expected string in August', () => {
-    const dateLabel = dayjs('8 Aug 2022 12:00:00 GMT').format('DD MMM')
+    const dateLabel = customDayjs('8 Aug 2022 12:00:00 GMT').format('DD MMM')
 
     const result = formatDateLabel(dateLabel)
 
@@ -21,7 +21,7 @@ describe('utils/formatDateLabel()', () => {
   })
 
   it('should return the expected string in December', () => {
-    const dateLabel = dayjs('11 Dec 2022 12:00:00 GMT').format('DD MMM')
+    const dateLabel = customDayjs('11 Dec 2022 12:00:00 GMT').format('DD MMM')
 
     const result = formatDateLabel(dateLabel)
 

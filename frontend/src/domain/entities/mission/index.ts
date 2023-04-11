@@ -1,4 +1,4 @@
-import { dayjs, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
+import { customDayjs, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
 import { Feature } from 'ol'
 import { GeoJSON } from 'ol/format'
 import Point from 'ol/geom/Point'
@@ -137,12 +137,12 @@ export const getMissionStatus = ({
     return undefined
   }
 
-  const now = dayjs()
-  if (dayjs(startDateTimeUtc).isAfter(now)) {
+  const now = customDayjs()
+  if (customDayjs(startDateTimeUtc).isAfter(now)) {
     return Mission.MissionStatus.UPCOMING
   }
 
-  if (endDateTimeUtc && dayjs(endDateTimeUtc).isBefore(now)) {
+  if (endDateTimeUtc && customDayjs(endDateTimeUtc).isBefore(now)) {
     return Mission.MissionStatus.DONE
   }
 

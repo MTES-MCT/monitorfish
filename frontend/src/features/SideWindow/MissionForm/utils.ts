@@ -1,11 +1,10 @@
+import { customDayjs, getUtcizedDayjs } from '@mtes-mct/monitor-ui'
 import { omit } from 'ramda'
 
 import { INITIAL_MISSION_CONTROL_UNIT, MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
 import { Mission } from '../../../domain/entities/mission/types'
 import { FormError, FormErrorCode } from '../../../libs/FormError'
 import { FrontendError } from '../../../libs/FrontendError'
-import { dayjs } from '../../../utils/dayjs'
-import { getUtcizedDayjs } from '../../../utils/getUtcizedDayjs'
 import { validateRequiredFormValues } from '../../../utils/validateRequiredFormValues'
 
 import type { MissionActionFormValues, MissionFormValues } from './types'
@@ -78,7 +77,7 @@ export function getMissionFormInitialValues(
     }
   }
 
-  const defaultEndDateAsStringUtc = dayjs(mission.startDateTimeUtc).add(1, 'hour').toISOString()
+  const defaultEndDateAsStringUtc = customDayjs(mission.startDateTimeUtc).add(1, 'hour').toISOString()
   const dateTimeRangeUtc: DateAsStringRange = [
     mission.startDateTimeUtc,
     mission.endDateTimeUtc ? mission.endDateTimeUtc : defaultEndDateAsStringUtc

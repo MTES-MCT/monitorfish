@@ -1,12 +1,11 @@
 // TODO This component is still use by 2 others, we need to replace it and delete this file.
 
+import { getLocalizedDayjs, getUtcizedDayjs } from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo } from 'react'
 import { DateRangePicker } from 'rsuite'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
-import { getLocalizedDayjs } from '../../../../utils/getLocalizedDayjs'
-import { getUtcizedDayjs } from '../../../../utils/getUtcizedDayjs'
 
 /** @type {import('rsuite').DateRangePickerLocale} */
 export const DATE_RANGE_PICKER_LOCALE = {

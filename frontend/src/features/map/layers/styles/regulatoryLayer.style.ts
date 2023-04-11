@@ -1,16 +1,15 @@
-import { THEME } from '@mtes-mct/monitor-ui'
+import { THEME, customDayjs } from '@mtes-mct/monitor-ui'
 
 import { isForbiddenPeriod } from './isForbiddenPeriod'
 import { getColorWithAlpha, getHashDigitsFromRegulation, getStyle } from './utils'
 import { theme } from '../../../../ui/theme'
-import { getUtcDayjs } from '../../../../utils/getUtcDayjs'
 
 import type { BaseRegulatoryZone } from '../../../../domain/types/regulation'
 import type Feature from 'ol/Feature'
 
 export function getRegulatoryLayerStyle(feature: Feature | undefined, regulation: BaseRegulatoryZone | null) {
   const randomDigits = getHashDigitsFromRegulation(regulation)
-  const currentDate = getUtcDayjs()
+  const currentDate = customDayjs().utc()
   const isForbidden = isForbiddenPeriod(feature, currentDate)
   const metadataIsShowed = feature?.get('metadataIsShowed')
 

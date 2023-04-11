@@ -1,9 +1,8 @@
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import { asArray, asString } from 'ol/color'
 import { Style } from 'ol/style'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
-
-import { dayjs } from '../../../../utils/dayjs'
 
 import type { DateInterval, BaseRegulatoryZone } from '../../../../domain/types/regulation'
 import type { Dayjs } from 'dayjs'
@@ -93,8 +92,8 @@ export function getStartAndEndDatesSetWithCurrentYear(
   currentDate: Dayjs
 ): Record<string, Dayjs> {
   const currentYear = currentDate.get('year')
-  const endDateWithCurrentYear = dayjs(dateRange.endDate).set('year', currentYear)
-  const startDateWithCurrentYear = dayjs(dateRange.startDate).set('year', currentYear)
+  const endDateWithCurrentYear = customDayjs(dateRange.endDate).set('year', currentYear)
+  const startDateWithCurrentYear = customDayjs(dateRange.startDate).set('year', currentYear)
 
   return {
     endDateWithOffsetApplied: endDateWithCurrentYear,

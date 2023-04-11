@@ -1,6 +1,4 @@
-/// <reference types="cypress" />
-
-import { SideWindowMenuKey } from 'src/features/SideWindow/constants'
+import { SideWindowMenuKey } from '../../../../src/features/SideWindow/constants'
 
 export const openSideWindowMissionList = () => {
   cy.visit('/side_window')

@@ -230,6 +230,7 @@ jobs:
       - uses: cypress-io/github-action@v4
         with:
           browser: firefox
+          config-file: config/cypress.config.ts
           env: PORT=8880
           install: true
           # TODO Remove `--legacy-peer-deps` option as soon as we replace `react-scripts` by something else.

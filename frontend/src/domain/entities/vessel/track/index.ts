@@ -1,3 +1,4 @@
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import { uniqWith, isEqual } from 'lodash'
 import { extend } from 'ol/extent'
 import Feature from 'ol/Feature'
@@ -8,7 +9,6 @@ import { transform } from 'ol/proj'
 import { TRACK_TYPE_RECORD } from './constants'
 import { getArrowStyle, getCircleStyle, getLineStyle } from '../../../../features/map/layers/styles/vesselTrack.style'
 import { calculatePointsDistance, calculateSplitPointCoordinates } from '../../../../utils'
-import { dayjs } from '../../../../utils/dayjs'
 import { LayerProperties } from '../../layers/constants'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../map/constants'
 
@@ -246,7 +246,7 @@ function calculateCourse(secondPoint: Array<number>, firstPoint: Array<number>):
 }
 
 function isTimeEllipsisBetweenPositions(firstPositionDate: Date, secondPositionDate: Date) {
-  const positionDateWithFourHoursOffset = dayjs(new Date(firstPositionDate.getTime()))
+  const positionDateWithFourHoursOffset = customDayjs(new Date(firstPositionDate.getTime()))
     .add(NUMBER_HOURS_TIME_ELLIPSIS, 'hours')
     .toDate()
 

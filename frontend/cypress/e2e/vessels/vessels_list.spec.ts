@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-/// <reference types="cypress" />
 
 context('Vessels list', () => {
   beforeEach(() => {

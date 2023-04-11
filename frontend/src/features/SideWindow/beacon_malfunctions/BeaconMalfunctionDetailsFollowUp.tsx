@@ -1,3 +1,4 @@
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Toggle } from 'rsuite'
 import styled from 'styled-components'
@@ -13,7 +14,6 @@ import { useListenForScroll } from '../../../hooks/useListenForScroll'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { getDate, mergeObjects } from '../../../utils'
-import { dayjs } from '../../../utils/dayjs'
 import { pushToObjectAtIndex } from '../../../utils/pushToObjectAtIndex'
 import { ReactComponent as CommentsSVG } from '../../icons/Commentaires.svg'
 
@@ -94,7 +94,7 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
     if (firstVesselStatus) {
       let malfunctionCreationDateTime = beaconMalfunction.malfunctionStartDateTime
       if (firstVesselStatus.hoursOffsetToRetrieveMalfunctionCreation) {
-        malfunctionCreationDateTime = dayjs(beaconMalfunction.malfunctionStartDateTime)
+        malfunctionCreationDateTime = customDayjs(beaconMalfunction.malfunctionStartDateTime)
           .add(firstVesselStatus.hoursOffsetToRetrieveMalfunctionCreation, 'hours')
           .toISOString()
       }

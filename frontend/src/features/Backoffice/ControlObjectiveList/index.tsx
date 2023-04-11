@@ -1,4 +1,4 @@
-import { dayjs } from '@mtes-mct/monitor-ui'
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { last } from 'ramda'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -14,7 +14,7 @@ import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
 
 import type { Option } from '@mtes-mct/monitor-ui'
 
-const NOW_YEAR = dayjs.utc().year()
+const NOW_YEAR = customDayjs.utc().year()
 const LAST_YEAR_FROM_NOW = NOW_YEAR - 1
 const NEXT_YEAR_FROM_NOW = NOW_YEAR + 1
 

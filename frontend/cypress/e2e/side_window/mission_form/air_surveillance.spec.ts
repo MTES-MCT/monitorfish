@@ -1,8 +1,5 @@
-/// <reference types="cypress" />
-
-import { Mission } from 'src/domain/entities/mission/types'
-
 import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
+import { Mission } from '../../../../src/domain/entities/mission/types'
 
 context('Side Window > Mission Form > Air Surveillance', () => {
   beforeEach(() => {
@@ -17,6 +14,8 @@ context('Side Window > Mission Form > Air Surveillance', () => {
   it('Should fill the form and send the expected data to the API', () => {
     // -------------------------------------------------------------------------
     // Form
+
+    cy.wait(250)
 
     // Objectifs du vol
     // TODO Add this test.

@@ -1,9 +1,11 @@
 /* eslint-disable no-undef */
-/// <reference types="cypress" />
 
-import { dayjs } from '../../../src/utils/dayjs'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 
-const currentYear = dayjs().year()
+dayjs.extend(utc)
+
+const currentYear = dayjs().utc().year()
 context('Fleet segments', () => {
   beforeEach(() => {
     cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')

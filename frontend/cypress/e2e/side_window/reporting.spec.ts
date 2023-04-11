@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 context('Reportings', () => {
   beforeEach(() => {
     cy.visit('/side_window')

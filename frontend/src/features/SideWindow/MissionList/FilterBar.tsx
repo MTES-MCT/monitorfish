@@ -1,6 +1,6 @@
 import { FormikDateRangePicker, FormikEffect, FormikMultiSelect, FormikSelect, TextInput } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
-import { noop, toPairs } from 'lodash'
+import { noop, omit, toPairs } from 'lodash'
 import { flatten, map, pipe, uniq } from 'ramda'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
@@ -53,13 +53,19 @@ export function FilterBar({ onChange, onQueryChange }: FilterBarProps) {
 
   const handleFilterFormChange = useCallback(
     (nextFilterValues: Partial<Record<MissionFilterType, string | string[]>>) => {
-      const willOpenCustomDateRange = nextFilterValues.DATE_RANGE === MissionDateRangeFilter.CUSTOM
-      setIsCustomDateRangeOpen(willOpenCustomDateRange)
+      const normalizedNextFilterValues =
+        nextFilterValues[MissionFilterType.CUSTOM_DATE_RANGE] &&
+        nextFilterValues[MissionFilterType.DATE_RANGE] !== MissionDateRangeFilter.CUSTOM
+          ? omit(nextFilterValues, MissionFilterType.CUSTOM_DATE_RANGE)
+          : nextFilterValues
 
       const nextFilters = pipe(
         toPairs as (filters: Partial<Record<MissionFilterType, string | string[]>>) => [MissionFilterType, any][],
         map(mapFilterFormRecordsToFilters)
-      )(nextFilterValues)
+      )(normalizedNextFilterValues)
+
+      const willOpenCustomDateRange = normalizedNextFilterValues.DATE_RANGE === MissionDateRangeFilter.CUSTOM
+      setIsCustomDateRangeOpen(willOpenCustomDateRange)
 
       onChange(nextFilters)
     },

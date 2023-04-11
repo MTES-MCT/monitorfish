@@ -1,6 +1,4 @@
-/// <reference types="cypress" />
-
-import { getLocalizedDayjs, getUtcizedDayjs } from 'node_modules/@mtes-mct/monitor-ui'
+import { getLocalizedDayjs, getUtcizedDayjs } from '@mtes-mct/monitor-ui'
 
 context('Vessels Track', () => {
   beforeEach(() => {

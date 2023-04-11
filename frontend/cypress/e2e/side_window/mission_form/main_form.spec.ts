@@ -1,6 +1,4 @@
-/// <reference types="cypress" />
-
-import { getUtcizedDayjs } from 'node_modules/@mtes-mct/monitor-ui'
+import { getUtcizedDayjs } from '@mtes-mct/monitor-ui'
 
 import { openSideWindowNewMission } from './utils'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'

@@ -1,6 +1,8 @@
-import '@mtes-mct/monitor-ui/cypress'
+import { registerMonitorUiCustomCommands } from '@mtes-mct/monitor-ui/cypress'
 
 import { getComputedStyle } from './commands/getComputedStyle'
+
+registerMonitorUiCustomCommands()
 
 function unquote(str: string): string {
   return str.replace(/(^")|("$)/g, '')

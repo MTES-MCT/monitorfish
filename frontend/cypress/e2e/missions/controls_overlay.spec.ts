@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 import { stubSideWindowOptions } from '../../support/commands'
 
 context('Controls overlay', () => {

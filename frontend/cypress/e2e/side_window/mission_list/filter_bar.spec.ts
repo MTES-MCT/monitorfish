@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 import { openSideWindowMissionList } from './utils'
 
 // TODO Add search query, custom period and filter reset E2E tests.

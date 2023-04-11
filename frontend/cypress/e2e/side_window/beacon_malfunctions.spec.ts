@@ -1,5 +1,5 @@
+import { getUtcizedDayjs } from '@mtes-mct/monitor-ui'
 import dayjs from 'dayjs'
-import { getUtcizedDayjs } from 'node_modules/@mtes-mct/monitor-ui'
 
 import { getDate } from '../../../src/utils'
 

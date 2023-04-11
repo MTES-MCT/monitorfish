@@ -1,23 +1,24 @@
+import webpackPreprocessor from '@cypress/webpack-preprocessor'
 import { defineConfig } from 'cypress'
+import initCypressMousePositionPlugin from 'cypress-mouse-position/plugin'
+import { initPlugin } from 'cypress-plugin-snapshots/plugin'
 import { platform } from 'os'
 
-import cypressPlugins from './cypress/plugins'
+import { config as webpackConfig } from './webpack.config'
 
 const IS_CI = Boolean(process.env.CI)
 const IS_DARWIN = platform() === 'darwin'
 const DEFAULT_PORT = IS_CI ? 8880 : 3000
 
 export default defineConfig({
-  // We do that to avoid e2e logs pollution with useless`GET /security-state-staging/intermediates/` lines
-  // Despite the name, this aso applies to Firefox
-  chromeWebSecurity: false,
   e2e: {
     baseUrl: `http://${IS_DARWIN ? '0.0.0.0' : 'localhost'}:${DEFAULT_PORT}`,
     excludeSpecPattern: ['**/__snapshots__/*', '**/__image_snapshots__/*'],
-    // We've imported your old cypress plugins here.
-    // You may want to clean this up later by importing these.
     setupNodeEvents(on, config) {
-      return cypressPlugins(on, config) as any
+      on('file:preprocessor', webpackPreprocessor({ webpackOptions: webpackConfig }))
+
+      initCypressMousePositionPlugin(on)
+      initPlugin(on, config)
     },
     specPattern: 'cypress/e2e/**/*.spec.ts'
   },

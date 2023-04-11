@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 context('Beacon malfunction', () => {
   beforeEach(() => {
     cy.loadPath('/#@-689844.87,6014092.52,10.57')

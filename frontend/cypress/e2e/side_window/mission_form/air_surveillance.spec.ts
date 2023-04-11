@@ -1,8 +1,5 @@
-/// <reference types="cypress" />
-
-import { Mission } from 'src/domain/entities/mission/types'
-
 import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
+import { Mission } from '../../../../src/domain/entities/mission/types'
 
 context('Side Window > Mission Form > Air Surveillance', () => {
   beforeEach(() => {

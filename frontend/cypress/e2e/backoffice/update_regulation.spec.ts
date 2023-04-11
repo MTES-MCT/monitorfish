@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-/// <reference types="cypress" />
 import { getDate } from '../../../src/utils'
 
 context('Update Regulation', () => {

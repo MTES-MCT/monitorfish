@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 context('Missions overlay', () => {
   beforeEach(() => {
     cy.loadPath('/#@-188008.06,6245230.27,8.70')

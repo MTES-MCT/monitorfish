@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 import dayjs from 'dayjs'
 
 context('Vessel sidebar controls buttons', () => {

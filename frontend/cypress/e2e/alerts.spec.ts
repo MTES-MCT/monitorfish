@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 context('Alerts', () => {
   beforeEach(() => {
     cy.loadPath('/#@-824534.42,6082993.21,8.70')

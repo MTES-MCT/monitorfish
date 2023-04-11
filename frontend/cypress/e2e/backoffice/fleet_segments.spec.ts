@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-/// <reference types="cypress" />
 
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'

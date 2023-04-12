@@ -43,7 +43,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Engin contrôlé', 'Oui')
     cy.fill('Maillage déclaré', '10')
     cy.fill('Maillage mesuré', '20')
-    cy.fill('OTM : autres mesures et dispositifs', 'Autres mesures.')
+    cy.fill('MIS : autres mesures et dispositifs', 'Autres mesures.')
 
     // Espèces à bord
     cy.fill('Poids des espèces vérifiés', 'Oui')

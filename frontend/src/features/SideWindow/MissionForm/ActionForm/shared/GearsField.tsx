@@ -149,7 +149,10 @@ export function GearsField() {
                 />
               </FieldGroup>
 
-              <FormikTextarea label="OTM : autres mesures et dispositifs" name={`gearOnboard[${index}].comments`} />
+              <FormikTextarea
+                label={`${gearOnboard.gearCode} : autres mesures et dispositifs`}
+                name={`gearOnboard[${index}].comments`}
+              />
             </RowInnerWrapper>
           </Row>
         ))}

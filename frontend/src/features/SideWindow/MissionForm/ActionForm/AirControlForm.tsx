@@ -38,7 +38,7 @@ export function AirControlForm({ initialValues, onChange }: AirControlFormProps)
 
         <FormHead>
           <h2>
-            <Icon.FishingEngine />
+            <Icon.Plane />
             Contrôle aérien ({titleDate})
           </h2>
         </FormHead>

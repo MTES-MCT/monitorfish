@@ -18,8 +18,7 @@ context('Side Window > Mission Form > Air Surveillance', () => {
     cy.wait(250)
 
     // Objectifs du vol
-    // TODO Add this test.
-    // cy.fill('Objectifs du vol', 'Vérifications VMS/AIS')
+    cy.fill('Objectifs du vol', ['Vérifications VMS/AIS'])
 
     // Segments ciblés
     cy.fill('Segments ciblés', ['ATL01', 'FR_DRB'])
@@ -62,6 +61,7 @@ context('Side Window > Mission Form > Air Surveillance', () => {
         emitsVms: null,
         facade: null,
         feedbackSheetRequired: true,
+        flightGoals: ['VMS_AIS_CHECK'],
         gearInfractions: [],
         gearOnboard: [],
         id: null,
@@ -84,12 +84,12 @@ context('Side Window > Mission Form > Air Surveillance', () => {
         ],
         seizureAndDiversion: null,
         seizureAndDiversionComments: null,
-        separateStowageOfPreservedSpecies: false,
+        separateStowageOfPreservedSpecies: null,
         speciesInfractions: [],
         speciesObservations: null,
         speciesOnboard: [],
-        speciesSizeControlled: false,
-        speciesWeightControlled: false,
+        speciesSizeControlled: null,
+        speciesWeightControlled: null,
         unitWithoutOmegaGauge: null,
         userTrigram: 'Marlin',
         vesselId: null,

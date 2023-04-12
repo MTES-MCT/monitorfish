@@ -3,6 +3,7 @@ import { useFormikContext } from 'formik'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
+import { MissionFilterType } from './types'
 import { FrontendError } from '../../../libs/FrontendError'
 
 type FilterTagBarProps = {
@@ -44,6 +45,9 @@ export function FilterTagBar({ labelEnumerators }: FilterTagBarProps) {
   const filterTags = useMemo(
     () =>
       Object.keys(formValues)
+        .filter(
+          key => ![MissionFilterType.CUSTOM_DATE_RANGE, MissionFilterType.DATE_RANGE].includes(key as MissionFilterType)
+        )
         .map(key => {
           const labelEnumerator = labelEnumerators[key]
 

@@ -66,7 +66,7 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
       </Header>
 
       <Body>
-        <FilterBar missionsWithActions={missionsWithActions} onChange={setFilters} onQueryChange={setSearchQuery} />
+        <FilterBar onChange={setFilters} onQueryChange={setSearchQuery} />
 
         {getMissionsApiQuery.isLoading && <p>Chargement en cours...</p>}
         {getMissionsApiQuery.error && <pre>{JSON.stringify(getMissionsApiQuery.error)}</pre>}
@@ -86,7 +86,9 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
                     <TableBodyCell $fixedWidth={80}>{augmentedMission.labelled.missionTypes}</TableBodyCell>
                     <TableBodyCell $fixedWidth={80}>{augmentedMission.labelled.missionSource}</TableBodyCell>
                     <TableBodyCell $fixedWidth={160}>{augmentedMission.labelled.controlUnits}</TableBodyCell>
-                    <TableBodyCell>{augmentedMission.labelled.inspectedVessels}</TableBodyCell>
+                    <TableBodyCell title={augmentedMission.labelled.inspectedVessels}>
+                      {augmentedMission.labelled.inspectedVessels}
+                    </TableBodyCell>
                     <TableBodyCell $fixedWidth={128}>{augmentedMission.labelled.inspectionsCount}</TableBodyCell>
                     <TableBodyCell $fixedWidth={128}>
                       {renderStatus(augmentedMission.labelled.status as Mission.MissionStatus)}

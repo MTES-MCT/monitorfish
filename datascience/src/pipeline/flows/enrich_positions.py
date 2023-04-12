@@ -5,7 +5,6 @@ import numpy as np
 import pandas as pd
 import prefect
 from prefect import Flow, Parameter, case, task, unmapped
-from prefect.executors import LocalDaskExecutor
 from sqlalchemy import text
 
 from src.db_config import create_engine
@@ -59,14 +58,14 @@ def filter_already_enriched_vessels(positions: pd.DataFrame) -> pd.DataFrame:
           - 'cfr'
           - 'external_immatriculation'
           - 'ircs'
-          - 'is_at_port'
+          - 'time_emitting_at_sea'
           - any other column required for the rest of the flow (latitude, longitude,
             datetime...)
 
     Returns:
         pd.DataFrame: same as input with some rows removed.
     """
-    vessels_to_enrich = positions[positions.is_at_port.isna()][
+    vessels_to_enrich = positions[positions.time_emitting_at_sea.isna()][
         ["cfr", "external_immatriculation", "ircs"]
     ].drop_duplicates()
 
@@ -324,7 +323,7 @@ def extract_enrich_load(
     load_fishing_activity(positions, period, logger)
 
 
-with Flow("Enrich positions", executor=LocalDaskExecutor()) as flow:
+with Flow("Enrich positions") as flow:
 
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):

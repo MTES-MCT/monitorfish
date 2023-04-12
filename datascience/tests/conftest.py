@@ -54,7 +54,7 @@ def sort_migrations(migrations: List[Migration]) -> List[Migration]:
 def get_migrations_in_folder(folder: Path) -> List[Migration]:
     files = os.listdir(folder)
     migration_regex = re.compile(
-      r"V(?P<major>\d+)\.(?P<minor>\d+)(\.(?P<patch>\d+))?__(?P<name>.*)\.sql"
+        r"V(?P<major>\d+)\.(?P<minor>\d+)(\.(?P<patch>\d+))?__(?P<name>.*)\.sql"
     )
     migrations = []
 
@@ -66,7 +66,7 @@ def get_migrations_in_folder(folder: Path) -> List[Migration]:
             patch = int(match.group("patch") or "0")
             path = (folder / Path(file)).resolve()
             migrations.append(
-              Migration(path=path, major=major, minor=minor, patch=patch)
+                Migration(path=path, major=major, minor=minor, patch=patch)
             )
 
     return sort_migrations(migrations)
@@ -122,6 +122,7 @@ def create_tables(start_remote_database_container):
     print("Creating tables")
     with e.connect() as connection:
         for m in migrations:
+            print(f"{m.major}.{m.minor}.{m.patch}: {m.path.name}")
             connection.execute("COMMIT")
             connection.execute(m.script)
 

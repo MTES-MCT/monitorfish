@@ -41,6 +41,7 @@ from src.pipeline.flows import (
     notify_beacon_malfunctions,
     ports,
     position_alerts,
+    refresh_materialized_view,
     regulations,
     regulations_checkup,
     regulations_open_data,
@@ -219,7 +220,16 @@ position_alerts.flow.schedule = Schedule(
         ),
     ]
 )
-
+refresh_materialized_view.flow.schedule = Schedule(
+    clocks=[
+        clocks.CronClock(
+            "30 12 * * *",
+            parameter_defaults={
+                "view_name": "analytics_controls_full_data",
+            },
+        ),
+    ]
+)
 regulations.flow.schedule = CronSchedule("6,16,26,36,46,56 * * * *")
 regulations_checkup.flow.schedule = CronSchedule("58 5 * * 1,2,3,4,5")
 regulations_open_data.flow.schedule = CronSchedule("18 1 * * 5")
@@ -254,6 +264,7 @@ flows_to_register = [
     update_beacon_malfunctions.flow,
     ports.flow,
     position_alerts.flow,
+    refresh_materialized_view.flow,
     regulations.flow,
     regulations_checkup.flow,
     regulations_open_data.flow,

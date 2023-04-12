@@ -40,7 +40,7 @@ def get_table(
 
     try:
         logger.info(f"Searching for table {schema}.{table_name}...")
-        meta.reflect(only=[table_name])
+        meta.reflect(only=[table_name], views=True)
         table = Table(table_name, meta, mustexist=True)
         logger.info(f"Table {schema}.{table_name} found.")
     except InvalidRequestError:

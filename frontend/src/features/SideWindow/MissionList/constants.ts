@@ -1,6 +1,7 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import { MissionDateRangeFilterLabel, MissionFilterType } from './types'
+import { getMissionStatus } from '../../../domain/entities/mission'
 import { Mission } from '../../../domain/entities/mission/types'
 import { getOptionsFromLabelledEnum } from '../../../utils/getOptionsFromLabelledEnum'
 
@@ -98,21 +99,7 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
       isSortable: true,
       key: 'status',
       label: 'Statut',
-      transform: missionWithActions => {
-        switch (true) {
-          // case ???:
-          //   return Mission.MissionStatus.INCOMING
-
-          // case ???:
-          //   return Mission.MissionStatus.DONE
-
-          case missionWithActions.isClosed:
-            return Mission.MissionStatus.CLOSED
-
-          default:
-            return Mission.MissionStatus.IN_PROGRESS
-        }
-      }
+      transform: getMissionStatus
     },
     {
       fixedWidth: 48,

@@ -22,7 +22,7 @@ export function getMissionActionsDataFromMissionActionsFormValues(
       ...missionActionFormValues
     }
 
-    const maybeValidMissionActionData = omit(['isDraft'], missionActionFormValuesWithAllProps)
+    const maybeValidMissionActionData = omit(['isDraft', 'isVesselUnknown'], missionActionFormValuesWithAllProps)
     const validMissionActionData = getValidMissionActionData(maybeValidMissionActionData)
 
     return {

@@ -7,7 +7,9 @@ import type { DateAsStringRange } from '@mtes-mct/monitor-ui'
 export type MissionActionFormValues = PartialExcept<
   Omit<MissionAction.MissionActionData, 'missionId'>,
   'actionType' | 'actionDatetimeUtc'
->
+> & {
+  isVesselUnknown?: boolean | undefined
+}
 
 export type MissionFormValues = Partial<
   Omit<Mission.MissionData, 'controlUnits' | 'endDateTimeUtc' | 'startDateTimeUtc' | 'missionTypes'>

@@ -1,11 +1,11 @@
 import {
   FormikCheckbox,
   FormikEffect,
+  FormikMultiSelect,
   FormikNumberInput,
   FormikTextarea,
   FormikTextInput,
-  Icon,
-  MultiSelect
+  Icon
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash'
@@ -40,9 +40,7 @@ export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillance
         </FormHead>
 
         <FormBody>
-          {/* TODO Update that once it's included in the API data. */}
-          <MultiSelect
-            // <FormikMultiSelect
+          <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}
             isLight
             label="Objectifs du vol"

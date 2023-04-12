@@ -105,11 +105,6 @@ export function FleetSegmentsField({ label }: FleetSegmentsFieldProps) {
 }
 
 const Box = styled.div`
-  width: 312px;
-  .rs-picker-toggle {
-    max-width: 312px;
-  }
-
   div[role='option'] {
     > .rs-check-item {
       > .rs-checkbox-checker {

@@ -1,5 +1,4 @@
 import {
-  Checkbox,
   FormikCheckbox,
   FormikDatePicker,
   FormikEffect,
@@ -21,7 +20,6 @@ import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
 import { VesselFleetSegmentsField } from './shared/VesselFleetSegmentsField'
 import { useNewWindow } from '../../../../ui/NewWindow'
-import { FieldGroup } from '../shared/FieldGroup'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
@@ -48,16 +46,13 @@ export function LandControlForm({ initialValues, onChange }: LandControlFormProp
 
         <FormHead>
           <h2>
-            <Icon.FishingEngine />
+            <Icon.Anchor />
             Contrôle à la débarque ({titleDate})
           </h2>
         </FormHead>
 
         <FormBody>
-          <FieldGroup isInline>
-            <VesselField />
-            <Checkbox label="Navire inconnu" name="isVesselUnknown" />
-          </FieldGroup>
+          <VesselField />
 
           <FormikDatePicker
             baseContainer={newWindowContainerRef.current}

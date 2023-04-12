@@ -2,7 +2,7 @@ import { Accent, getLocalizedDayjs, Icon, IconButton, Tag, TagGroup, THEME, TagB
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { formatDateLabel, getMissionActionInfractionsFromMissionActionFromFormValues } from './utils'
+import { formatDateLabel, getMissionActionInfractionsFromMissionActionFromFormValues, getTitleSuffix } from './utils'
 import { MissionAction } from '../../../../domain/types/missionAction'
 import { FrontendError } from '../../../../libs/FrontendError'
 
@@ -20,16 +20,7 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
   const [actionLabel, ActionIcon] = useMemo(() => {
     switch (initialValues.actionType) {
       case MissionAction.MissionActionType.AIR_CONTROL:
-        return [
-          initialValues.vesselName ? (
-            <span>
-              Contrôle aérien - <strong>{initialValues.vesselName}</strong>
-            </span>
-          ) : (
-            <span>Contrôle aérien à renseigner</span>
-          ),
-          Icon.FleetSegment
-        ]
+        return [<span>Contrôle aérien {getTitleSuffix(initialValues)}</span>, Icon.Plane]
 
       case MissionAction.MissionActionType.AIR_SURVEILLANCE:
         return [
@@ -44,16 +35,7 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
         ]
 
       case MissionAction.MissionActionType.LAND_CONTROL:
-        return [
-          initialValues.vesselName ? (
-            <span>
-              Contrôle à la débarque - <strong>{initialValues.vesselName}</strong>
-            </span>
-          ) : (
-            <span>Contrôle à la débarque à renseigner</span>
-          ),
-          Icon.Anchor
-        ]
+        return [<span>Contrôle à la débarque {getTitleSuffix(initialValues)}</span>, Icon.Anchor]
 
       case MissionAction.MissionActionType.OBSERVATION:
         return [
@@ -66,16 +48,7 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
         ]
 
       case MissionAction.MissionActionType.SEA_CONTROL:
-        return [
-          initialValues.vesselName ? (
-            <span>
-              Contrôle en mer - <strong>{initialValues.vesselName}</strong>
-            </span>
-          ) : (
-            <span>Contrôle en mer à renseigner</span>
-          ),
-          Icon.FleetSegment
-        ]
+        return [<span>Contrôle en mer {getTitleSuffix(initialValues)}</span>, Icon.FleetSegment]
 
       default:
         throw new FrontendError('`initialValues.actionType` does not match the enum')
@@ -204,6 +177,7 @@ const ActionLabel = styled.div`
   }
 
   > p {
+    color: ${p => p.theme.color.gunMetal};
     padding-top: 1px;
   }
 `

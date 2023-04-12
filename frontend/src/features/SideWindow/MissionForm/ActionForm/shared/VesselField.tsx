@@ -1,6 +1,6 @@
-import { Checkbox } from '@mtes-mct/monitor-ui'
+import { Checkbox, useKey } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useNewWindow } from '../../../../../ui/NewWindow'
@@ -15,7 +15,7 @@ export function VesselField() {
 
   const { newWindowContainerRef } = useNewWindow()
 
-  const [isVesselSearchDisabled, setIsVesselSearchDisabled] = useState(false)
+  const vesselSearchKey = useKey([values.isVesselUnknown])
 
   const defaultValue = useMemo(
     () => ({
@@ -64,15 +64,14 @@ export function VesselField() {
   const handleIsUnknownVesselChange = useCallback(
     (isChecked: boolean) => {
       if (isChecked) {
-        setIsVesselSearchDisabled(true)
+        setFieldValue('isVesselUnknown', true)
 
         handleVesselSearchChange(undefined)
 
         return
       }
 
-      // TODO I don't really know why these fields can be null in the original types.
-      setIsVesselSearchDisabled(false)
+      setFieldValue('isVesselUnknown', false)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,9 +81,10 @@ export function VesselField() {
   return (
     <Wrapper>
       <StyledVesselSearch
+        key={vesselSearchKey}
         baseRef={newWindowContainerRef}
         defaultValue={defaultValue}
-        disabled={isVesselSearchDisabled}
+        disabled={values.isVesselUnknown}
         extendedWidth={400}
         hasVesselIdInResults
         isExtended

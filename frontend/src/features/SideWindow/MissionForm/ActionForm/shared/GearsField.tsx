@@ -128,19 +128,21 @@ export function GearsField() {
 
               <FieldGroup isInline>
                 <FormikNumberInput
-                  disabled={uncontrolledMeshGearCodes.includes(gearOnboard.gearCode)}
+                  disabled={!gearOnboard.gearWasControlled}
                   isUndefinedWhenDisabled
                   label="Maillage déclaré"
                   name={`gearOnboard[${index}].declaredMesh`}
                 />
                 <FormikNumberInput
-                  disabled={uncontrolledMeshGearCodes.includes(gearOnboard.gearCode)}
+                  disabled={!gearOnboard.gearWasControlled || uncontrolledMeshGearCodes.includes(gearOnboard.gearCode)}
                   isUndefinedWhenDisabled
                   label="Maillage mesuré"
                   name={`gearOnboard[${index}].controlledMesh`}
                 />
 
                 <Checkbox
+                  disabled={!gearOnboard.gearWasControlled}
+                  isUndefinedWhenDisabled
                   label="Maillage non mesuré"
                   name="gearWasNotControlled"
                   onChange={isChecked => handleMeshWasNotControlledChange(gearOnboard.gearCode, isChecked)}

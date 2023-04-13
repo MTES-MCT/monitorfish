@@ -21,7 +21,7 @@ context('Side Window > Mission Form > Air Surveillance', () => {
     cy.fill('Objectifs du vol', ['Vérifications VMS/AIS'])
 
     // Segments ciblés
-    cy.fill('Segments ciblés', ['ATL01', 'FR_DRB'])
+    cy.fill('Segments ciblés', ['FR_DRB', 'FR_ELE'])
 
     // Nb de navires survolés
     cy.fill('Nb de navires survolés', 15)
@@ -39,10 +39,7 @@ context('Side Window > Mission Form > Air Surveillance', () => {
     // -------------------------------------------------------------------------
     // Request
 
-    cy.intercept('POST', '/bff/v1/mission_actions', {
-      // TODO This should be removed once the API works as expected.
-      statusCode: 201
-    }).as('createMissionAction')
+    cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
 
     cy.clickButton('Enregistrer et clôturer')
 
@@ -79,8 +76,16 @@ context('Side Window > Mission Form > Air Surveillance', () => {
         portLocode: null,
         portName: null,
         segments: [
-          { faoAreas: ['27.7', '27.8', '27.9', '27.10'], segment: 'ATL01', segmentName: 'All Trawls 3' },
-          { faoAreas: ['37.1', '37.2', '37.3'], segment: 'FR_DRB', segmentName: "Drague de mer et d'étang" }
+          {
+            faoAreas: ['37.1', '37.2', '37.3'],
+            segment: 'FR_DRB',
+            segmentName: "Drague de mer et d'étang"
+          },
+          {
+            faoAreas: ['37.1', '37.2', '37.3', '27.8.a', '27.8.b', '27.7.h', '27.7.e', '27.7.d'],
+            segment: 'FR_ELE',
+            segmentName: 'Eel sea fisheries'
+          }
         ],
         seizureAndDiversion: null,
         seizureAndDiversionComments: null,

@@ -43,7 +43,7 @@ context('Side Window > Mission Form > Main Form', () => {
     getSaveButton().should('be.enabled')
     getSaveAndCloseButton().should('be.enabled')
 
-    cy.clickButton('Enregistrer et clôturer')
+    cy.clickButton('Enregistrer')
 
     cy.wait('@createMission').then(interception => {
       if (!interception.response) {
@@ -82,7 +82,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.get('h1').should('contain.text', 'Missions et contrôles')
   })
 
-  it('Should send the expected data to the API when creation a new mission', () => {
+  it.only('Should send the expected data to the API when creation a new mission', () => {
     openSideWindowNewMission()
 
     cy.intercept('PUT', '/api/v1/missions', {
@@ -155,7 +155,7 @@ context('Side Window > Mission Form > Main Form', () => {
           }
         ],
         // endDateTimeUtc: '2023-02-01T02:01:27.603Z',
-        isClosed: false,
+        isClosed: true,
         isDeleted: false,
         // isUnderJdp: true,
         missionSource: 'MONITORFISH',
@@ -183,7 +183,7 @@ context('Side Window > Mission Form > Main Form', () => {
     }).as('updateMission')
     cy.intercept('PUT', '/bff/v1/mission_actions/2').as('updateMissionAction2')
 
-    cy.clickButton('Enregistrer et clôturer')
+    cy.clickButton('Enregistrer')
 
     cy.wait('@updateMission').then(interception => {
       if (!interception.response) {

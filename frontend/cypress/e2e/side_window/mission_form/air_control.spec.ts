@@ -38,7 +38,7 @@ context('Side Window > Mission Form > Air Control', () => {
 
     cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
 
-    cy.clickButton('Enregistrer et clôturer')
+    cy.clickButton('Enregistrer')
 
     cy.wait('@createMissionAction').then(interception => {
       if (!interception.response) {

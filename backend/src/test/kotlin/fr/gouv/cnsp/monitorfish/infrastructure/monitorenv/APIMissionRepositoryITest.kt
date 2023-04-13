@@ -26,6 +26,7 @@ class APIMissionRepositoryITest {
                         {
                           "id": 10016,
                           "administration": "Douane",
+                          "isArchived": false,
                           "name": "BSN Ste Maxime",
                           "resources": [],
                           "contact": null
@@ -33,6 +34,7 @@ class APIMissionRepositoryITest {
                         {
                           "id": 10017,
                           "administration": "Douane",
+                          "isArchived": false,
                           "name": "DF 25 Libecciu",
                           "resources": [],
                           "contact": null
@@ -40,6 +42,7 @@ class APIMissionRepositoryITest {
                         {
                           "id": 10018,
                           "administration": "Douane",
+                          "isArchived": false,
                           "name": "DF 61 Port-de-Bouc",
                           "resources": [],
                           "contact": null

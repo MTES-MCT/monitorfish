@@ -1,10 +1,12 @@
-import type { MissionActionFormValues, MissionFormValues } from './types'
+import type { MissionActionFormValues } from './types'
+import type { ControlUnit } from '../../../domain/types/controlUnit'
 import type { Undefine } from '@mtes-mct/monitor-ui'
 
-export const INITIAL_MISSION_CONTROL_UNIT: MissionFormValues['controlUnits'][0] = {
+export const INITIAL_MISSION_CONTROL_UNIT: ControlUnit.ControlUnitDraft = {
   administration: undefined,
   contact: undefined,
   id: undefined,
+  isArchived: undefined,
   name: undefined,
   resources: []
 }

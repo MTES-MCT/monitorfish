@@ -20,7 +20,8 @@
           "administration": "DREAL",
           "name": "DREAL Pays-de-La-Loire",
           "resources": [],
-          "contact": null
+          "contact": null,
+          "isArchived": false
         }
       ],
       "openBy": "Darren Clark",

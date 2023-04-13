@@ -127,7 +127,7 @@ export function isValidControlUnit(
   controlUnitFormValues: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft
 ): controlUnitFormValues is ControlUnit.ControlUnit {
   const [, error] = validateRequiredFormValues(
-    ['administration', 'id', 'name', 'resources'],
+    ['administration', 'id', 'isArchived', 'name', 'resources'],
     controlUnitFormValues as ControlUnit.ControlUnit
   )
 
@@ -164,7 +164,7 @@ export function getValidMissionDataControlUnit(
   maybeValidMissionDataControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft
 ): Mission.MissionData['controlUnits'][0] {
   const [validMissionDataControlUnit, formError] = validateRequiredFormValues(
-    ['administration', 'id', 'name', 'resources'],
+    ['administration', 'id', 'isArchived', 'name', 'resources'],
     maybeValidMissionDataControlUnit as ControlUnit.ControlUnit
   )
   if (formError) {

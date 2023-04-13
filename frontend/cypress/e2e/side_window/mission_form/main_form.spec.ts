@@ -57,6 +57,7 @@ context('Side Window > Mission Form > Main Form', () => {
             administration: 'DDTM',
             contact: null,
             id: 10001,
+            isArchived: false,
             name: 'Cultures marines – DDTM 40',
             resources: [
               {
@@ -126,6 +127,7 @@ context('Side Window > Mission Form > Main Form', () => {
             administration: 'DDTM',
             contact: 'Bob',
             id: 10001,
+            isArchived: false,
             name: 'Cultures marines – DDTM 40',
             resources: [
               {
@@ -138,6 +140,7 @@ context('Side Window > Mission Form > Main Form', () => {
             administration: 'DREAL',
             contact: 'Bob 2',
             id: 10019,
+            isArchived: false,
             name: 'DREAL Pays-de-La-Loire',
             resources: [
               {
@@ -173,7 +176,6 @@ context('Side Window > Mission Form > Main Form', () => {
     editSideWindowMissionListMissionWithId(2)
 
     cy.intercept('PUT', '/api/v1/missions', {
-      // TODO This should be removed once the API works as expected.
       body: {
         id: 1
       },
@@ -195,6 +197,7 @@ context('Side Window > Mission Form > Main Form', () => {
             administration: 'Douane',
             contact: null,
             id: 10015,
+            isArchived: false,
             name: 'BGC Bastia',
             resources: []
           }

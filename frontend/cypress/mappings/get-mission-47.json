@@ -20,7 +20,8 @@
           "administration": "DDTM",
           "name": "DML 2A",
           "resources": [],
-          "contact": null
+          "contact": null,
+          "isArchived": false
         }
       ],
       "openBy": "Christina Thomas",

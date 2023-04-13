@@ -9,7 +9,7 @@ import {
   noop
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
-import { useCallback, useMemo, useRef } from 'react'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_TYPES_AS_OPTIONS } from './constants'
@@ -28,24 +28,14 @@ export type MainFormProps = {
   onChange: (nextValues: MissionFormValues) => Promisable<void>
 }
 export function MainForm({ initialValues, onChange }: MainFormProps) {
-  const currentValuesRef = useRef<MissionFormValues>(initialValues)
   const { newWindowContainerRef } = useNewWindow()
 
   const controlledInitialValues = useMemo(() => initialValues, [initialValues])
 
-  const updateCurrentValues = useCallback(
-    (nextValues: MissionFormValues) => {
-      currentValuesRef.current = nextValues
-
-      onChange(currentValuesRef.current)
-    },
-    [onChange]
-  )
-
   return (
     <Formik initialValues={controlledInitialValues} onSubmit={noop}>
       <Wrapper>
-        <FormikEffect onChange={updateCurrentValues as any} />
+        <FormikEffect onChange={onChange as any} />
 
         <FormHead>
           <h2>Informations générales</h2>

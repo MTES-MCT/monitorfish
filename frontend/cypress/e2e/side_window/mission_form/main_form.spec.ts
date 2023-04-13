@@ -1,6 +1,7 @@
 import { getUtcizedDayjs } from '@mtes-mct/monitor-ui'
 
-import { openSideWindowNewMission } from './utils'
+import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
+import { Mission } from '../../../../src/domain/entities/mission/types'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Main Form', () => {
@@ -20,7 +21,7 @@ context('Side Window > Mission Form > Main Form', () => {
     openSideWindowNewMission()
 
     const getSaveButton = () => cy.get('button').contains('Enregistrer').parent()
-    const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer et clôturer').parent()
+    const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer').parent()
 
     cy.intercept('PUT', '/api/v1/missions', {
       body: {
@@ -40,10 +41,12 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.fill('Unité 1', 'Cultures marines – DDTM 40')
     cy.fill('Moyen 1', ['Semi-rigide 2'])
 
+    cy.wait(500)
+
     getSaveButton().should('be.enabled')
     getSaveAndCloseButton().should('be.enabled')
 
-    cy.clickButton('Enregistrer et clôturer')
+    cy.clickButton('Enregistrer')
 
     cy.wait('@createMission').then(interception => {
       if (!interception.response) {
@@ -82,7 +85,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.get('h1').should('contain.text', 'Missions et contrôles')
   })
 
-  it('Should send the expected data to the API when creation a new mission', () => {
+  it('Should send the expected data to the API when creating a new mission', () => {
     openSideWindowNewMission()
 
     cy.intercept('PUT', '/api/v1/missions', {
@@ -113,7 +116,9 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.fill('Ouvert par', 'Nemo')
     cy.fill('Clôturé par', 'Doris')
 
-    cy.clickButton('Enregistrer et clôturer')
+    cy.wait(500)
+
+    cy.clickButton('Enregistrer')
 
     cy.wait('@createMission').then(interception => {
       if (!interception.response) {
@@ -183,7 +188,7 @@ context('Side Window > Mission Form > Main Form', () => {
     }).as('updateMission')
     cy.intercept('PUT', '/bff/v1/mission_actions/2').as('updateMissionAction2')
 
-    cy.clickButton('Enregistrer et clôturer')
+    cy.clickButton('Enregistrer')
 
     cy.wait('@updateMission').then(interception => {
       if (!interception.response) {
@@ -314,6 +319,65 @@ context('Side Window > Mission Form > Main Form', () => {
         vesselId: 1,
         vesselName: null,
         vesselTargeted: null
+      })
+    })
+
+    cy.get('h1').should('contain.text', 'Missions et contrôles')
+  })
+
+  it('Should close a new mission', () => {
+    openSideWindowNewMission()
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.fill('Clôturé par', 'Doris')
+
+    cy.wait(500)
+
+    cy.clickButton('Enregistrer et clôturer')
+
+    cy.wait('@createMission').then(interception => {
+      if (!interception.response) {
+        assert.fail('`interception.response` is undefined.')
+      }
+
+      assert.deepInclude(interception.request.body, {
+        // We check this prop to be sure all the data is there (this is the last field to be filled)
+        closedBy: 'Doris',
+        isClosed: true
+      })
+    })
+
+    cy.get('h1').should('contain.text', 'Missions et contrôles')
+  })
+
+  it('Should close an existing mission', () => {
+    editSideWindowMissionListMissionWithId(2)
+
+    cy.intercept('PUT', '/api/v1/missions/2', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('updateMission')
+
+    // TODO Fix that in `monitor-ui`.
+    cy.fill('Clôturé par', undefined)
+    cy.fill('Clôturé par', 'Doris')
+
+    cy.wait(500)
+
+    cy.clickButton('Enregistrer et clôturer')
+
+    cy.wait('@updateMission').then(interception => {
+      if (!interception.response) {
+        assert.fail('`interception.response` is undefined.')
+      }
+
+      assert.deepInclude(interception.request.body, {
+        // We check this prop to be sure all the data is there (this is the last field to be filled)
+        closedBy: 'Doris',
+        id: 2,
+        isClosed: true
       })
     })
 

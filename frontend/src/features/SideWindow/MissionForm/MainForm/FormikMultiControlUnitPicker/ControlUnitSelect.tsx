@@ -85,11 +85,16 @@ export function ControlUnitSelect({
       }
 
       controlledValueRef.current = nextControlUnit
-      forceUpdate()
+
+      if (selectedControlUnit) {
+        setSelectedControlUnit(undefined)
+      } else {
+        forceUpdate()
+      }
 
       onChange(index, nextControlUnit)
     },
-    [forceUpdate, index, onChange]
+    [forceUpdate, index, onChange, selectedControlUnit]
   )
 
   const handleNameChange = useCallback(
@@ -101,12 +106,16 @@ export function ControlUnitSelect({
       const nextSelectedControlUnit = nextControlUnitId
         ? findControlUnitById(controlUnits, nextControlUnitId)
         : undefined
-      const nextControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft = {
-        ...INITIAL_MISSION_CONTROL_UNIT,
-        administration: nextSelectedControlUnit ? nextSelectedControlUnit.administration : undefined,
-        id: nextSelectedControlUnit ? nextSelectedControlUnit.id : undefined,
-        name: nextSelectedControlUnit ? nextSelectedControlUnit.name : undefined
-      }
+      const nextControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft = nextSelectedControlUnit
+        ? {
+            ...nextSelectedControlUnit,
+            contact: controlledValueRef.current.contact,
+            resources: controlledValueRef.current.resources
+          }
+        : {
+            ...INITIAL_MISSION_CONTROL_UNIT,
+            administration: controlledValueRef.current.administration
+          }
 
       controlledValueRef.current = nextControlUnit
 
@@ -180,12 +189,13 @@ export function ControlUnitSelect({
           onChange={handleNameChange}
           options={filteredNamesAsOptions as any}
           searchable
-          value={selectedControlUnit?.id}
+          value={controlledValueRef.current.id}
           virtualized
         />
         <MultiSelect
           baseContainer={newWindowContainerRef.current}
           disabled={!controlUnits || !controlledValueRef.current.administration || !controlledValueRef.current.name}
+          isUndefinedWhenDisabled
           label={`Moyen ${index + 1}`}
           name={`resources_${index}`}
           onChange={handleResourcesChange}
@@ -194,6 +204,7 @@ export function ControlUnitSelect({
         />
         <TextInput
           disabled={!controlUnits || !controlledValueRef.current.name}
+          isUndefinedWhenDisabled
           label={`Contact de l’unité ${index + 1}`}
           name={`contact_${index}`}
           onChange={handleContactChange}

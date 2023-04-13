@@ -13,7 +13,7 @@ import {
   getUpdatedMissionFromMissionFormValues,
   isMissionFormValuesComplete
 } from './utils'
-import { useCreateMissionMutation, useGetMissionQuery } from '../../../api/mission'
+import { useCreateMissionMutation, useGetMissionQuery, useUpdateMissionMutation } from '../../../api/mission'
 import {
   useCreateMissionActionMutation,
   useGetMissionActionsQuery,
@@ -45,7 +45,7 @@ export function MissionForm() {
   const missionActionsApiQuery = useGetMissionActionsQuery(mission.draftId || skipToken)
   const [createMission] = useCreateMissionMutation()
   const [createMissionAction] = useCreateMissionActionMutation()
-  const [updateMission] = useCreateMissionMutation()
+  const [updateMission] = useUpdateMissionMutation()
   const [updateMissionAction] = useUpdateMissionActionMutation()
 
   const actionFormKey = useMemo(() => `actionForm-${mission.editedDraftActionIndex}`, [mission.editedDraftActionIndex])

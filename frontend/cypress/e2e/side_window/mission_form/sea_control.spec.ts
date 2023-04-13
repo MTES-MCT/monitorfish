@@ -89,10 +89,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // -------------------------------------------------------------------------
     // Request
 
-    cy.intercept('POST', '/bff/v1/mission_actions', {
-      // TODO This should be removed once the API works as expected.
-      statusCode: 201
-    }).as('createMissionAction')
+    cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
 
     cy.clickButton('Enregistrer et clôturer')
 

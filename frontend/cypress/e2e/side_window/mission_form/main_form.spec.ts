@@ -23,7 +23,6 @@ context('Side Window > Mission Form > Main Form', () => {
     const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer et clôturer').parent()
 
     cy.intercept('PUT', '/api/v1/missions', {
-      // TODO This should be removed once the API works as expected.
       body: {
         id: 1
       },
@@ -87,7 +86,6 @@ context('Side Window > Mission Form > Main Form', () => {
     openSideWindowNewMission()
 
     cy.intercept('PUT', '/api/v1/missions', {
-      // TODO This should be removed once the API works as expected.
       body: {
         id: 1
       },
@@ -107,6 +105,8 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.fill('Unité 2', 'DREAL Pays-de-La-Loire')
     cy.fill('Moyen 2', ['ALTAIR', 'ARIOLA'])
     cy.fill('Contact de l’unité 2', 'Bob 2')
+
+    // cy.fill('Lieu du contrôle', 'Free Port')
 
     cy.fill('CACEM : orientations, observations', 'Une note.')
     cy.fill('CNSP : orientations, observations', 'Une autre note.')

@@ -32,7 +32,13 @@ export function getMissionActionsDataFromMissionActionsFormValues(
   })
 }
 
-export function getMissionDataFromMissionFormValues(missionFormValues: MissionFormValues): Mission.MissionData {
+/**
+ * @param mustClose Should the mission be closed?
+ */
+export function getMissionDataFromMissionFormValues(
+  missionFormValues: MissionFormValues,
+  mustClose: boolean = false
+): Mission.MissionData {
   if (!missionFormValues.dateTimeRangeUtc) {
     throw new FormError(missionFormValues, 'dateTimeRangeUtc', FormErrorCode.MISSING_OR_UNDEFINED)
   }
@@ -52,7 +58,7 @@ export function getMissionDataFromMissionFormValues(missionFormValues: MissionFo
     controlUnits: validControlUnits,
     endDateTimeUtc,
     envActions: undefined,
-    isClosed: false,
+    isClosed: mustClose || !!missionBaseValues.isClosed,
     isDeleted: false,
     missionSource,
     missionTypes,
@@ -94,11 +100,15 @@ export function getMissionFormInitialValues(
   }
 }
 
+/**
+ * @param mustClose Should the mission be closed?
+ */
 export function getUpdatedMissionFromMissionFormValues(
   missionId: Mission.Mission['id'],
-  missionFormValues: MissionFormValues
+  missionFormValues: MissionFormValues,
+  mustClose: boolean
 ): Mission.Mission {
-  const missionData = getMissionDataFromMissionFormValues(missionFormValues)
+  const missionData = getMissionDataFromMissionFormValues(missionFormValues, mustClose)
 
   return {
     id: missionId,

@@ -33,12 +33,14 @@ context('Side Window > Mission Form > Air Control', () => {
     cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction.')
     cy.clickButton('Valider l’infraction')
 
+    cy.wait(500)
+
     // -------------------------------------------------------------------------
     // Request
 
     cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
 
-    cy.clickButton('Enregistrer et clôturer')
+    cy.clickButton('Enregistrer')
 
     cy.wait('@createMissionAction').then(interception => {
       if (!interception.response) {

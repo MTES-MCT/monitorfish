@@ -26,7 +26,7 @@ export const fillSideWindowMissionFormBase = (missionTypeLabel: Mission.MissionT
       id: 1
     },
     statusCode: 201
-  })
+  }).as('createMission')
 
   cy.fill('Types de mission', [missionTypeLabel])
 

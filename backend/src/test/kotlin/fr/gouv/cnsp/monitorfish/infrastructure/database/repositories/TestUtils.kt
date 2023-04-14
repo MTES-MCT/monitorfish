@@ -4,7 +4,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
 import java.time.ZonedDateTime
 
 object TestUtils {
-    fun getDummyMissionAction(dateTime: ZonedDateTime) = MissionAction(
+    fun getDummyMissionAction(dateTime: ZonedDateTime, id: Int? = null) = MissionAction(
+        id,
         actionDatetimeUtc = dateTime,
         missionId = 2,
         vesselId = 2,

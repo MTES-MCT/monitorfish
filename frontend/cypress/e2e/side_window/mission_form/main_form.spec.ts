@@ -180,7 +180,7 @@ context('Side Window > Mission Form > Main Form', () => {
   it('Should send the expected data to the API when editing an existing mission', () => {
     editSideWindowMissionListMissionWithId(2)
 
-    cy.intercept('PUT', '/api/v1/missions/2', {
+    cy.intercept('POST', '/api/v1/missions/2', {
       body: {
         id: 1
       },
@@ -353,7 +353,7 @@ context('Side Window > Mission Form > Main Form', () => {
   it('Should close an existing mission', () => {
     editSideWindowMissionListMissionWithId(2)
 
-    cy.intercept('PUT', '/api/v1/missions/2', {
+    cy.intercept('POST', '/api/v1/missions/2', {
       body: {
         id: 1
       },

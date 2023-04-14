@@ -115,6 +115,7 @@ class MissionActionEntity(
 ) {
     companion object {
         fun fromMissionAction(mapper: ObjectMapper, missionAction: MissionAction) = MissionActionEntity(
+            id = missionAction.id,
             missionId = missionAction.missionId,
             vesselId = missionAction.vesselId,
             vesselName = missionAction.vesselName,

@@ -23,7 +23,7 @@ context('Side Window > Mission Form > Main Form', () => {
     const getSaveButton = () => cy.get('button').contains('Enregistrer').parent()
     const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer').parent()
 
-    cy.intercept('PUT', '/api/v1/missions', {
+    cy.intercept('POST', '/api/v1/missions', {
       body: {
         id: 1
       },
@@ -88,7 +88,7 @@ context('Side Window > Mission Form > Main Form', () => {
   it('Should send the expected data to the API when creating a new mission', () => {
     openSideWindowNewMission()
 
-    cy.intercept('PUT', '/api/v1/missions', {
+    cy.intercept('POST', '/api/v1/missions', {
       body: {
         id: 1
       },
@@ -187,6 +187,8 @@ context('Side Window > Mission Form > Main Form', () => {
       statusCode: 201
     }).as('updateMission')
     cy.intercept('PUT', '/bff/v1/mission_actions/2').as('updateMissionAction2')
+
+    cy.wait(250)
 
     cy.clickButton('Enregistrer')
 

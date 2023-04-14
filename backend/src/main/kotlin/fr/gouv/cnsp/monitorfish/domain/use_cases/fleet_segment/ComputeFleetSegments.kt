@@ -27,10 +27,10 @@ class ComputeFleetSegments(
 ) {
     fun execute(
         faoAreas: List<String>,
-        gearCodes: List<String>,
-        specyCodes: List<String>,
-        controlLatitude: Double? = null,
-        controlLongitude: Double? = null,
+        gears: List<String>,
+        species: List<String>,
+        latitude: Double? = null,
+        longitude: Double? = null,
         portLocode: String? = null,
     ): List<FleetSegment> {
         val currentYear = ZonedDateTime.now(clock).year
@@ -45,19 +45,19 @@ class ComputeFleetSegments(
             }
 
             // Else, we take the longitude and latitude given
-            require(controlLongitude != null && controlLatitude != null) {
+            require(longitude != null && latitude != null) {
                 "A port Locode or the control coordinates must be given"
             }
 
-            val point = GeometryFactory().createPoint(Coordinate(controlLongitude, controlLatitude))
+            val point = GeometryFactory().createPoint(Coordinate(longitude, latitude))
             val allFaoAreas = faoAreasRepository.findByIncluding(point)
 
             return@ifEmpty removeRedundantFaoArea(allFaoAreas)
         }
 
         val computedSegments = fleetSegments.filter { fleetSegment ->
-            val isContainingGearFromList = fleetSegment.gears.any { gearCodes.contains(it) }
-            val isContainingSpecyFromList = fleetSegment.targetSpecies.any { specyCodes.contains(it) }
+            val isContainingGearFromList = fleetSegment.gears.any { gears.contains(it) }
+            val isContainingSpecyFromList = fleetSegment.targetSpecies.any { species.contains(it) }
             val isContainingFaoAreaFromList = fleetSegment.faoAreas.any { faoArea ->
                 calculatedOrGivenFaoAreas.any { it.hasFaoCodeIncludedIn(faoArea) }
             }

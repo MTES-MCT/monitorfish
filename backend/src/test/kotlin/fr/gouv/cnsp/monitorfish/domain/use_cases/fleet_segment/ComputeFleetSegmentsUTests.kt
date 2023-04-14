@@ -89,7 +89,7 @@ class ComputeFleetSegmentsUTests {
     fun `execute Should return the segments associated to the AEFAT port`() {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
         BDDMockito.given(portRepository.find(eq("AEFAT"))).willReturn(
-            Port("AEFAT", "Al Jazeera Port", faoAreas = listOf("27.7.d", "27.7"))
+            Port("AEFAT", "Al Jazeera Port", faoAreas = listOf("27.7.d", "27.7")),
         )
 
         // When

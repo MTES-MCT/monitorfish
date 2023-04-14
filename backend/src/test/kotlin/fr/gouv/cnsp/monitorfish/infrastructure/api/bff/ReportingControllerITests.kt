@@ -187,7 +187,7 @@ class ReportingControllerITests {
             isArchived = false,
         )
         given(addReporting.execute(any())).willReturn(
-            Pair(reporting, ControlUnit(1234, "DIRM", false, "Cross Etel", listOf()))
+            Pair(reporting, ControlUnit(1234, "DIRM", false, "Cross Etel", listOf())),
         )
 
         // When

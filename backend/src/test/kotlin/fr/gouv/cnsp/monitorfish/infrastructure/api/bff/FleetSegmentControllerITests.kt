@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
@@ -46,6 +47,9 @@ class FleetSegmentControllerITests {
 
     @MockBean
     private lateinit var addFleetSegmentYear: AddFleetSegmentYear
+
+    @MockBean
+    private lateinit var computeFleetSegments: ComputeFleetSegments
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -172,6 +176,34 @@ class FleetSegmentControllerITests {
 
         Mockito.verify(createFleetSegment).execute(
             CreateOrUpdateFleetSegmentFields(segment = "SEGMENT", gears = listOf("OTB", "OTC")),
+        )
+    }
+
+    @Test
+    fun `Should compute fleet segments`() {
+        // Given
+        given(this.computeFleetSegments.execute(any(), any(), any(), anyOrNull(), anyOrNull(), anyOrNull())).willReturn(
+            listOf(FleetSegment("SWW01", "", listOf("NAMO", "SA"), listOf(), listOf(), listOf(), listOf(), 1.2, 2021)),
+        )
+
+        // When
+        mockMvc.perform(
+            get(
+                "/bff/v1/fleet_segments/compute?faoAreas=27.1.c,27.1.b&gears=OTB&species=HKE,BFT&latitude=47.585&longitude=0.4355678&portLocode=LOCODE"
+            )
+        )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(1)))
+            .andExpect(jsonPath("$[0].segment", equalTo("SWW01")))
+
+        Mockito.verify(computeFleetSegments).execute(
+            listOf("27.1.c", "27.1.b"),
+            listOf("OTB"),
+            listOf("HKE", "BFT"),
+            47.585,
+            0.4355678,
+            "LOCODE",
         )
     }
 }

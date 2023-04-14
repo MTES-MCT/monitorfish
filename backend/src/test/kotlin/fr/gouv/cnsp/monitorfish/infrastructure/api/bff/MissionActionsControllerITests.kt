@@ -68,8 +68,8 @@ class MissionActionsControllerITests {
                         1,
                         1,
                         actionType = MissionActionType.SEA_CONTROL,
-                        actionDatetimeUtc = ZonedDateTime.now()
-                    )
+                        actionDatetimeUtc = ZonedDateTime.now(),
+                    ),
                 ),
             ),
         )
@@ -98,8 +98,8 @@ class MissionActionsControllerITests {
                     1,
                     1,
                     actionType = MissionActionType.SEA_CONTROL,
-                    actionDatetimeUtc = ZonedDateTime.now()
-                )
+                    actionDatetimeUtc = ZonedDateTime.now(),
+                ),
             ),
         )
 
@@ -142,11 +142,11 @@ class MissionActionsControllerITests {
                                 FleetSegment(
                                     faoAreas = listOf("25.6.9", "25.7.9"),
                                     segment = "WWSS10",
-                                    segmentName = "World Wide Segment"
-                                )
+                                    segmentName = "World Wide Segment",
+                                ),
                             ),
                             gearInfractions = listOf(
-                                GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite")
+                                GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite"),
                             ),
                         ),
                     ),
@@ -199,11 +199,11 @@ class MissionActionsControllerITests {
                                 FleetSegment(
                                     faoAreas = listOf("25.6.9", "25.7.9"),
                                     segment = "WWSS10",
-                                    segmentName = "World Wide Segment"
-                                )
+                                    segmentName = "World Wide Segment",
+                                ),
                             ),
                             gearInfractions = listOf(
-                                GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite")
+                                GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite"),
                             ),
                             gearOnboard = listOf(gearControl),
                         ),

@@ -141,6 +141,22 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `saveMissionActions Should update an existing mission action`() {
+        // Given
+        val dateTime = ZonedDateTime.now()
+        val id = 2
+        val updatedMission = getDummyMissionAction(dateTime, 2)
+
+        // When
+        val missionAction = jpaMissionActionsRepository.save(updatedMission)
+
+        // Then
+        assertThat(missionAction.id).isEqualTo(2)
+        assertThat(missionAction.actionDatetimeUtc).isEqualTo(dateTime)
+    }
+
+    @Test
+    @Transactional
     fun `findMissionActions Should filter vessel's controls around the date time`() {
         // When
         val actions = jpaMissionActionsRepository.findMissionActions(1)

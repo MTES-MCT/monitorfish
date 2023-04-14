@@ -13,14 +13,6 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
       })
     }),
 
-    deleteMissionAction: builder.mutation<void, string>({
-      invalidatesTags: () => [{ type: 'MissionActions' }],
-      query: id => ({
-        method: 'DELETE',
-        url: `/mission_actions/${id}`
-      })
-    }),
-
     getMissionActions: builder.query<MissionAction.MissionAction[], number>({
       providesTags: () => [{ type: 'MissionActions' }],
       query: missionId => `/mission_actions?missionId=${missionId}`
@@ -37,9 +29,5 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
   })
 })
 
-export const {
-  useCreateMissionActionMutation,
-  useDeleteMissionActionMutation,
-  useGetMissionActionsQuery,
-  useUpdateMissionActionMutation
-} = missionActionApi
+export const { useCreateMissionActionMutation, useGetMissionActionsQuery, useUpdateMissionActionMutation } =
+  missionActionApi

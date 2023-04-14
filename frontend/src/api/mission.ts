@@ -39,7 +39,7 @@ export const missionApi = monitorenvApi.injectEndpoints({
       invalidatesTags: () => [{ type: 'Missions' }],
       query: mission => ({
         body: mission,
-        method: 'PUT',
+        method: 'POST',
         url: `/missions/${mission.id}`
       })
     })

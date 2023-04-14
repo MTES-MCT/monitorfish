@@ -1,4 +1,5 @@
 import { customDayjs, getUtcizedDayjs } from '@mtes-mct/monitor-ui'
+import { difference } from 'lodash'
 import { omit } from 'ramda'
 
 import { INITIAL_MISSION_CONTROL_UNIT, MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
@@ -12,11 +13,16 @@ import type { ControlUnit } from '../../../domain/types/controlUnit'
 import type { MissionAction } from '../../../domain/types/missionAction'
 import type { DateAsStringRange, Undefine } from '@mtes-mct/monitor-ui'
 
+/**
+ *
+ * @param originalMissionActions Mission actions as they were previous to the mission edition
+ */
 export function getMissionActionsDataFromMissionActionsFormValues(
   missionId: MissionAction.MissionAction['missionId'],
-  missionActionsFormValues: MissionActionFormValues[]
+  missionActionsFormValues: MissionActionFormValues[],
+  originalMissionActions: MissionAction.MissionAction[] = []
 ): MissionAction.MissionActionData[] {
-  return missionActionsFormValues.map(missionActionFormValues => {
+  const updatedMissionActionDatas = missionActionsFormValues.map(missionActionFormValues => {
     const missionActionFormValuesWithAllProps = {
       ...MISSION_ACTION_FORM_VALUES_SKELETON,
       ...missionActionFormValues
@@ -30,6 +36,21 @@ export function getMissionActionsDataFromMissionActionsFormValues(
       missionId
     }
   })
+
+  const missionActionOriginalIds = originalMissionActions.map(({ id }) => id as number)
+  const missionActionUpdatedIds = updatedMissionActionDatas
+    .filter(({ id }) => typeof id === 'number')
+    .map(({ id }) => id as number)
+  const missionActionDeletedIds = difference(missionActionOriginalIds, missionActionUpdatedIds)
+
+  const softDeletedMissionActionDatas = originalMissionActions
+    .filter(({ id }) => missionActionDeletedIds.includes(id))
+    .map(missionAction => ({
+      ...missionAction,
+      isDeleted: true
+    }))
+
+  return [...updatedMissionActionDatas, ...softDeletedMissionActionDatas]
 }
 
 /**

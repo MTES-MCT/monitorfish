@@ -21,7 +21,7 @@ import {
 } from '../../../api/missionAction'
 import { missionActions } from '../../../domain/actions'
 import { getMissionSourceTagText } from '../../../domain/entities/mission'
-import { Mission } from '../../../domain/entities/mission/types'
+import { Mission, type MissionWithActions } from '../../../domain/entities/mission/types'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { useDebouncedValue } from '../../../hooks/useDebouncedValue'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
@@ -38,6 +38,7 @@ export function MissionForm() {
   const { mission } = useMainAppSelector(store => store)
 
   const headerDivRef = useRef<HTMLDivElement | null>(null)
+  const originalMissionWithActionsRef = useRef<MissionWithActions | undefined>(undefined)
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -118,10 +119,14 @@ export function MissionForm() {
       }
       // eslint-disable-next-line no-empty
 
-      const missionActionsData = getMissionActionsDataFromMissionActionsFormValues(missionId, mission.draft.actions)
+      const missionActionDatas = getMissionActionsDataFromMissionActionsFormValues(
+        missionId,
+        mission.draft.actions,
+        originalMissionWithActionsRef.current?.actions
+      )
 
       await Promise.all(
-        missionActionsData.map(async missionActionData => {
+        missionActionDatas.map(async missionActionData => {
           if (missionActionData.id === undefined) {
             await createMissionAction(missionActionData)
           } else {
@@ -174,6 +179,11 @@ export function MissionForm() {
     // Mission edition
     if (!missionApiQuery.data || !missionActionsApiQuery.data) {
       return
+    }
+
+    originalMissionWithActionsRef.current = {
+      ...missionApiQuery.data,
+      actions: missionActionsApiQuery.data
     }
 
     setIsLoading(false)

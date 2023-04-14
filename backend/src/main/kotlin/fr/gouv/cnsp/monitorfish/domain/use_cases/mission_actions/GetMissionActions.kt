@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory
 
 @UseCase
 class GetMissionActions(
-    private val missionActionsRepository: MissionActionsRepository
+    private val missionActionsRepository: MissionActionsRepository,
 ) {
     private val logger = LoggerFactory.getLogger(GetMissionActions::class.java)
 

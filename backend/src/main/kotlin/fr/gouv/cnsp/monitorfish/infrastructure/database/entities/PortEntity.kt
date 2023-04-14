@@ -31,6 +31,6 @@ data class PortEntity(
     fun toPort() = Port(
         locode = locode,
         name = portName,
-        faoAreas = faoAreas
+        faoAreas = faoAreas,
     )
 }

@@ -64,7 +64,7 @@ class ReportingController(
     ): ReportingDataOutput {
         val (updatedReporting, controlUnit) = updateReporting.execute(
             reportingId,
-            updateReportingInput.toUpdatedReportingValues()
+            updateReportingInput.toUpdatedReportingValues(),
         )
 
         return ReportingDataOutput.fromReporting(updatedReporting, controlUnit)

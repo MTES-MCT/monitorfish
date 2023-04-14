@@ -52,7 +52,7 @@ class ComputeFleetSegmentsUTests {
 
         // When
         val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
-            .execute(listOf("27.1", "27.8.c"), listOf("OTB","OTT"), listOf())
+            .execute(listOf("27.1", "27.8.c"), listOf("OTB", "OTT"), listOf())
 
         // Then
         assertThat(segment).isEmpty()
@@ -64,7 +64,7 @@ class ComputeFleetSegmentsUTests {
 
         // When
         val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
-            .execute(listOf("27.1", "27.8.c"), listOf("OTB","OTT"), listOf("HKE", "SOL"))
+            .execute(listOf("27.1", "27.8.c"), listOf("OTB", "OTT"), listOf("HKE", "SOL"))
 
         // Then
         assertThat(segment).hasSize(1)
@@ -77,7 +77,7 @@ class ComputeFleetSegmentsUTests {
 
         // When
         val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
-            .execute(listOf("27.1", "27.8.c"), listOf("OTB","OTT", "OTM"), listOf("HKE", "SOL"))
+            .execute(listOf("27.1", "27.8.c"), listOf("OTB", "OTT", "OTM"), listOf("HKE", "SOL"))
 
         // Then
         assertThat(segment).hasSize(2)
@@ -88,11 +88,13 @@ class ComputeFleetSegmentsUTests {
     @Test
     fun `execute Should return the segments associated to the AEFAT port`() {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
-        BDDMockito.given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port", faoAreas = listOf("27.7.d", "27.7")))
+        BDDMockito.given(portRepository.find(eq("AEFAT"))).willReturn(
+            Port("AEFAT", "Al Jazeera Port", faoAreas = listOf("27.7.d", "27.7"))
+        )
 
         // When
         val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
-            .execute(listOf(), listOf("OTB","OTT", "OTM"), listOf("HKE", "SOL"), portLocode = "AEFAT")
+            .execute(listOf(), listOf("OTB", "OTT", "OTM"), listOf("HKE", "SOL"), portLocode = "AEFAT")
 
         // Then
         assertThat(segment).hasSize(1)
@@ -102,14 +104,16 @@ class ComputeFleetSegmentsUTests {
     @Test
     fun `execute Should return the segments associated to the given longitude and latitude`() {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
-        given(faoAreasRepository.findByIncluding(any())).willReturn(listOf(
-            FAOArea("27.8.c"),
-            FAOArea("27.8")
-        ))
+        given(faoAreasRepository.findByIncluding(any())).willReturn(
+            listOf(
+                FAOArea("27.8.c"),
+                FAOArea("27.8"),
+            ),
+        )
 
         // When
         val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
-            .execute(listOf(), listOf("OTB","OTT", "OTM"), listOf("HKE", "SOL"), 53.3543093, -10.8558547)
+            .execute(listOf(), listOf("OTB", "OTT", "OTM"), listOf("HKE", "SOL"), 53.3543093, -10.8558547)
 
         // Then
         assertThat(segment).hasSize(2)

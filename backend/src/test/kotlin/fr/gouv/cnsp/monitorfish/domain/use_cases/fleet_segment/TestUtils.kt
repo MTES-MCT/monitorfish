@@ -11,56 +11,56 @@ object TestUtils {
             FleetSegment(
                 "SWW01/02/03",
                 "Bottom trawls",
-                gears = listOf("OTB","OTT","PTB","OT","PT","TBN","TBS","TX","TB"),
-                targetSpecies = listOf("HKE","SOL","NEP","ANF"),
-                faoAreas = listOf("27.8.c","27.8","27.9"),
+                gears = listOf("OTB", "OTT", "PTB", "OT", "PT", "TBN", "TBS", "TX", "TB"),
+                targetSpecies = listOf("HKE", "SOL", "NEP", "ANF"),
+                faoAreas = listOf("27.8.c", "27.8", "27.9"),
                 year = currentYear,
-                impactRiskFactor = 2.56
+                impactRiskFactor = 2.56,
             ),
             FleetSegment(
                 "SWW04",
                 "Midwater trawls",
-                gears = listOf("OTM","PTM"),
+                gears = listOf("OTM", "PTM"),
                 targetSpecies = listOf("HKE"),
-                faoAreas = listOf("27.8.c","27.8"),
+                faoAreas = listOf("27.8.c", "27.8"),
                 year = currentYear,
-                impactRiskFactor = 2.56
+                impactRiskFactor = 2.56,
             ),
             FleetSegment(
                 "SWW06",
                 "Seines",
-                gears = listOf("SDN","SSC","SPR","SX","SV"),
+                gears = listOf("SDN", "SSC", "SPR", "SX", "SV"),
                 targetSpecies = listOf("HKE"),
-                faoAreas = listOf("27.8.c","27.8","27.9"),
+                faoAreas = listOf("27.8.c", "27.8", "27.9"),
                 year = currentYear,
-                impactRiskFactor = 2.56
+                impactRiskFactor = 2.56,
             ),
             FleetSegment(
                 "SWW07/08",
                 "Gill and trammel nets",
-                gears = listOf("GNS","GN","GND","GNC","GTN","GTR","GEN"),
-                targetSpecies = listOf("HKE","SOL","PLE","ANF"),
-                faoAreas = listOf("27.8.c","27.8","27.9"),
+                gears = listOf("GNS", "GN", "GND", "GNC", "GTN", "GTR", "GEN"),
+                targetSpecies = listOf("HKE", "SOL", "PLE", "ANF"),
+                faoAreas = listOf("27.8.c", "27.8", "27.9"),
                 year = currentYear,
-                impactRiskFactor = 2.56
+                impactRiskFactor = 2.56,
             ),
             FleetSegment(
                 "SWW10",
                 "Longlines targeting demersal",
-                gears = listOf("LL","LLS"),
+                gears = listOf("LL", "LLS"),
                 targetSpecies = listOf("HKE"),
-                faoAreas = listOf("27.8.c","27.8","27.9"),
+                faoAreas = listOf("27.8.c", "27.8", "27.9"),
                 year = currentYear,
-                impactRiskFactor = 2.56
+                impactRiskFactor = 2.56,
             ),
             FleetSegment(
                 "NWW01/02",
                 "Trawl",
-                gears = listOf("OT","OTB","OTM","OTT","PTB","PT","PTM","TBN","TBS","TX","TB"),
-                targetSpecies = listOf("COD","HAD","WHG","POK","NEP","SOL","PLE","HKE"),
-                faoAreas = listOf("27.5.b","27.6","27.7.a","27.7.d","27.7"),
+                gears = listOf("OT", "OTB", "OTM", "OTT", "PTB", "PT", "PTM", "TBN", "TBS", "TX", "TB"),
+                targetSpecies = listOf("COD", "HAD", "WHG", "POK", "NEP", "SOL", "PLE", "HKE"),
+                faoAreas = listOf("27.5.b", "27.6", "27.7.a", "27.7.d", "27.7"),
                 year = currentYear,
-                impactRiskFactor = 2.56
+                impactRiskFactor = 2.56,
             ),
         )
     }

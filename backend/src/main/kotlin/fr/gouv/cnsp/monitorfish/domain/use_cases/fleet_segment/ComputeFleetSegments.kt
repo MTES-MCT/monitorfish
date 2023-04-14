@@ -25,8 +25,14 @@ class ComputeFleetSegments(
     private val portRepository: PortRepository,
     private val clock: Clock,
 ) {
-    fun execute(faoAreas: List<String>, gearCodes: List<String>, specyCodes: List<String>, controlLatitude: Double? = null, controlLongitude: Double? = null,
-                portLocode: String? = null): List<FleetSegment> {
+    fun execute(
+        faoAreas: List<String>,
+        gearCodes: List<String>,
+        specyCodes: List<String>,
+        controlLatitude: Double? = null,
+        controlLongitude: Double? = null,
+        portLocode: String? = null,
+    ): List<FleetSegment> {
         val currentYear = ZonedDateTime.now(clock).year
         val fleetSegments = fleetSegmentRepository.findAllByYear(currentYear)
 
@@ -62,4 +68,3 @@ class ComputeFleetSegments(
         return computedSegments
     }
 }
-

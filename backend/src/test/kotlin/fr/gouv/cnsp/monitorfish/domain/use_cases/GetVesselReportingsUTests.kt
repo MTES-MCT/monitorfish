@@ -38,7 +38,7 @@ class GetVesselReportingsUTests {
     fun `execute Should return the reporting of a specified vessel`() {
         // Given
         given(infractionRepository.findInfractionByNatinfCode(eq(7059))).willReturn(
-            Infraction(natinfCode = 7059, infractionCategory = InfractionCategory.FISHING)
+            Infraction(natinfCode = 7059, infractionCategory = InfractionCategory.FISHING),
         )
         given(reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(any(), any(), any())).willReturn(
             listOf(
@@ -55,7 +55,7 @@ class GetVesselReportingsUTests {
                     validationDate = ZonedDateTime.now(),
                     value = ThreeMilesTrawlingAlert() as ReportingValue,
                     isArchived = false,
-                    isDeleted = false
+                    isDeleted = false,
                 ),
                 Reporting(
                     id = 1,
@@ -70,7 +70,7 @@ class GetVesselReportingsUTests {
                     validationDate = ZonedDateTime.now(),
                     value = ThreeMilesTrawlingAlert() as ReportingValue,
                     isArchived = false,
-                    isDeleted = false
+                    isDeleted = false,
                 ),
                 Reporting(
                     id = 666,
@@ -85,22 +85,22 @@ class GetVesselReportingsUTests {
                     validationDate = ZonedDateTime.now().minusYears(1),
                     value = ThreeMilesTrawlingAlert() as ReportingValue,
                     isArchived = true,
-                    isDeleted = false
-                )
-            )
+                    isDeleted = false,
+                ),
+            ),
         )
 
         // When
         val currentAndArchivedReportings = GetVesselReportings(
             reportingRepository,
             infractionRepository,
-            getAllControlUnits
+            getAllControlUnits,
         ).execute(
             "FR224226850",
             "1236514",
             "IRCS",
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            ZonedDateTime.now().minusYears(1)
+            ZonedDateTime.now().minusYears(1),
         )
 
         // Then

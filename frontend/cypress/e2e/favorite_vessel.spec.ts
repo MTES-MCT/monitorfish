@@ -81,8 +81,7 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="favorite-vessels"]').click()
   })
 
-  // TODO Re-enable this E2E test with an alternative solution.
-  it.skip('A favorite vessel track Should be seen on the map and the global track depth Should update the track', () => {
+  it('A favorite vessel track Should be seen on the map and the global track depth Should update the track', () => {
     cy.cleanScreenshots(2)
 
     // Given
@@ -98,29 +97,29 @@ context('Favorite Vessel', () => {
     cy.wait(1500)
 
     // Then
-    // cy.get('.VESSELS_POINTS').toMatchImageSnapshot({
-    //   imageConfig: {
-    //     threshold: 0.05,
-    //     thresholdType: 'percent'
-    //   },
-    //   screenshotConfig: {
-    //     clip: { height: 900, width: 400, x: 300, y: 50 }
-    //   }
-    // })
+    cy.get('.VESSELS_POINTS').toMatchImageSnapshot({
+      imageConfig: {
+        threshold: 0.05,
+        thresholdType: 'percent'
+      },
+      screenshotConfig: {
+        clip: { height: 900, width: 400, x: 300, y: 50 }
+      }
+    })
 
     cy.get('*[data-cy="vessel-visibility"]').click()
     cy.get('*[data-cy="global-vessel-track-depth-one-week"]').click()
     cy.wait(1500)
 
-    // cy.get('.VESSELS_POINTS').toMatchImageSnapshot({
-    //   imageConfig: {
-    //     threshold: 0.05,
-    //     thresholdType: 'percent'
-    //   },
-    //   screenshotConfig: {
-    //     clip: { height: 900, width: 400, x: 300, y: 50 }
-    //   }
-    // })
+    cy.get('.VESSELS_POINTS').toMatchImageSnapshot({
+      imageConfig: {
+        threshold: 0.05,
+        thresholdType: 'percent'
+      },
+      screenshotConfig: {
+        clip: { height: 900, width: 400, x: 300, y: 50 }
+      }
+    })
 
     cy.get('*[data-cy^="close-vessel-track"]').click()
     cy.get('*[data-cy^="close-vessel-track"]').should('not.exist')

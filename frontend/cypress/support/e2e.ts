@@ -1,6 +1,5 @@
 import 'cypress-mouse-position/commands'
-// import 'cypress-plugin-snapshots/commands'
-
+import 'cypress-plugin-snapshots/commands'
 import './commands'
 import './commands/dragTo'
 import './commands/loadPath'
@@ -20,8 +19,31 @@ declare global {
       ): void
       getComputedStyle(dataCy: string, backUpToParentNumber?: number): Cypress.Chainable<CSSStyleDeclaration>
       loadPath(path: string): void
-      // TODO Re-enable this E2E test with an alternative solution.
-      // toMatchImageSnapshot(settings: any): Chainable<Element>
+
+      /* eslint-disable typescript-sort-keys/interface */
+      toMatchSnapshot(
+        options?: Partial<{
+          ignoreExtralFields: boolean
+          ignoreExtraArrayItems: boolean
+          normalizeJson: boolean
+          replace: any
+          name: string
+        }>
+      ): Chainable<null>
+      toMatchImageSnapshot(
+        options?: Partial<{
+          imageConfig: Partial<{
+            createDiffImage: boolean
+            threshold: number
+            thresholdType: 'percent' | 'pixels'
+            resizeDevicePixelRatio: boolean
+          }>
+          screenshotConfig: Partial<ScreenshotDefaultsOptions>
+          name: string
+          separator: string
+        }>
+      ): Chainable<null>
+      /* eslint-enable typescript-sort-keys/interface */
 
       // eslint-disable-next-line typescript-sort-keys/interface
       clickButton(

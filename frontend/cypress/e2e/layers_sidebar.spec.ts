@@ -301,16 +301,15 @@ context('LayersSidebar', () => {
     cy.wait(500)
 
     // Then
-    // TODO Re-enable this E2E test with an alternative solution.
-    // cy.get('.administrative').toMatchImageSnapshot({
-    //     imageConfig: {
-    //       threshold: 0.05,
-    //       thresholdType: 'percent'
-    //     },
-    //     screenshotConfig: {
-    //       clip: { height: 500, width: 250, x: 410, y: 0 }
-    //     }
-    //   })
+    cy.get('.administrative').toMatchImageSnapshot({
+      imageConfig: {
+        threshold: 0.05,
+        thresholdType: 'percent'
+      },
+      screenshotConfig: {
+        clip: { height: 500, width: 250, x: 410, y: 0 }
+      }
+    })
 
     cy.cleanScreenshots(1)
 

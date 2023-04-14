@@ -30,7 +30,6 @@ class JpaFAOAreasRepositoryITests : AbstractDBTests() {
 
         assertThat(faoAreas).hasSize(152)
         assertThat(faoAreas.first().faoCode).isEqualTo("18")
-
     }
 
     @Test
@@ -43,6 +42,5 @@ class JpaFAOAreasRepositoryITests : AbstractDBTests() {
         assertThat(faoAreas).hasSize(2)
         assertThat(faoAreas.first().faoCode).isEqualTo("27.7")
         assertThat(faoAreas.last().faoCode).isEqualTo("27.7.b")
-
     }
 }

@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 
 interface DBFAOAreasRepository : CrudRepository<FAOAreasEntity, Long> {
-    @Query("""
+    @Query(
+        """
     SELECT *
     FROM fao_areas
     WHERE ST_Contains(
@@ -16,6 +17,8 @@ interface DBFAOAreasRepository : CrudRepository<FAOAreasEntity, Long> {
             4326
         )
     )
-    """, nativeQuery = true)
+    """,
+        nativeQuery = true,
+    )
     fun findByIncluding(point: Point): List<FAOAreasEntity>
 }

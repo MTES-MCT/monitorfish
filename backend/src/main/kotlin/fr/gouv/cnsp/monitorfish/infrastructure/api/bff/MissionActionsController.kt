@@ -53,7 +53,7 @@ class MissionActionsController(
     fun getMissionActions(
         @Parameter(description = "Mission id")
         @RequestParam(name = "missionId")
-        missionId: Int
+        missionId: Int,
     ): List<MissionActionDataOutput> {
         return getMissionActions.execute(missionId).map { MissionActionDataOutput.fromMissionAction(it) }
     }

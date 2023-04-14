@@ -34,5 +34,5 @@ data class VesselRiskFactor(
     val numberInfractionsLastFiveYears: Short? = null,
     val numberGearSeizuresLastFiveYears: Short? = null,
     val numberSpeciesSeizuresLastFiveYears: Short? = null,
-    val numberVesselSeizuresLastFiveYears: Short? = null
+    val numberVesselSeizuresLastFiveYears: Short? = null,
 )

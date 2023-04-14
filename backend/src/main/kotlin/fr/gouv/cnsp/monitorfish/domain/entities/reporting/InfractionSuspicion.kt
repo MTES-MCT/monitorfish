@@ -24,7 +24,7 @@ data class InfractionSuspicion(
 ) {
     companion object {
         fun fromUpdatedReporting(
-            updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation
+            updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation,
         ): InfractionSuspicion {
             require(updatedInfractionSuspicionOrObservation.natinfCode != null) {
                 "NATINF code should not be null"

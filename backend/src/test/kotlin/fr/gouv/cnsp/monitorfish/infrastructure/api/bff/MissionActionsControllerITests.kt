@@ -62,7 +62,15 @@ class MissionActionsControllerITests {
                 3,
                 4,
                 5,
-                listOf(MissionAction(1, 1, 1, actionType = MissionActionType.SEA_CONTROL, actionDatetimeUtc = ZonedDateTime.now())),
+                listOf(
+                    MissionAction(
+                        1,
+                        1,
+                        1,
+                        actionType = MissionActionType.SEA_CONTROL,
+                        actionDatetimeUtc = ZonedDateTime.now()
+                    )
+                ),
             ),
         )
 
@@ -84,7 +92,15 @@ class MissionActionsControllerITests {
     fun `Should get all mission actions for a mission`() {
         // Given
         givenSuspended { this.getMissionActions.execute(any()) }.willReturn(
-            listOf(MissionAction(123, 1, 1, actionType = MissionActionType.SEA_CONTROL, actionDatetimeUtc = ZonedDateTime.now())),
+            listOf(
+                MissionAction(
+                    123,
+                    1,
+                    1,
+                    actionType = MissionActionType.SEA_CONTROL,
+                    actionDatetimeUtc = ZonedDateTime.now()
+                )
+            ),
         )
 
         // When
@@ -122,8 +138,16 @@ class MissionActionsControllerITests {
                                     "Poids à bord MNZ supérieur de 50% au poids déclaré",
                                 ),
                             ),
-                            segments = listOf(FleetSegment(faoAreas = listOf("25.6.9", "25.7.9"), segment = "WWSS10", segmentName = "World Wide Segment")),
-                            gearInfractions = listOf(GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite")),
+                            segments = listOf(
+                                FleetSegment(
+                                    faoAreas = listOf("25.6.9", "25.7.9"),
+                                    segment = "WWSS10",
+                                    segmentName = "World Wide Segment"
+                                )
+                            ),
+                            gearInfractions = listOf(
+                                GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite")
+                            ),
                         ),
                     ),
                 )
@@ -171,9 +195,17 @@ class MissionActionsControllerITests {
                                     "Poids à bord MNZ supérieur de 50% au poids déclaré",
                                 ),
                             ),
-                            segments = listOf(FleetSegment(faoAreas = listOf("25.6.9", "25.7.9"), segment = "WWSS10", segmentName = "World Wide Segment")),
-                            gearInfractions = listOf(GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite")),
-                            gearOnboard = listOf(gearControl)
+                            segments = listOf(
+                                FleetSegment(
+                                    faoAreas = listOf("25.6.9", "25.7.9"),
+                                    segment = "WWSS10",
+                                    segmentName = "World Wide Segment"
+                                )
+                            ),
+                            gearInfractions = listOf(
+                                GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite")
+                            ),
+                            gearOnboard = listOf(gearControl),
                         ),
                     ),
                 )

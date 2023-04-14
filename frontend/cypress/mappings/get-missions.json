@@ -21,7 +21,8 @@
             "administration": "Douane",
             "name": "BGC Bastia",
             "resources": [],
-            "contact": null
+            "contact": null,
+            "isArchived": false
           }
         ],
         "openBy": "Brittany Graham",
@@ -51,7 +52,8 @@
                 "name": "Semi-rigide 1"
               }
             ],
-            "contact": null
+            "contact": null,
+            "isArchived": false
           }
         ],
         "openBy": "Kevin Torres",
@@ -81,7 +83,8 @@
                 "name": "Semi-rigide 1"
               }
             ],
-            "contact": null
+            "contact": null,
+            "isArchived": false
           }
         ],
         "openBy": "Kara Heath",
@@ -111,7 +114,8 @@
                 "name": "Semi-rigide 1"
               }
             ],
-            "contact": null
+            "contact": null,
+            "isArchived": false
           }
         ],
         "openBy": "Kevin Torres",
@@ -136,21 +140,24 @@
             "administration": "Douane",
             "name": "BSN Ste Maxime",
             "resources": [],
-            "contact": null
+            "contact": null,
+            "isArchived": false
           },
           {
             "id": 10017,
             "administration": "Douane",
             "name": "DF 25 Libecciu",
             "resources": [],
-            "contact": null
+            "contact": null,
+            "isArchived": false
           },
           {
             "id": 10018,
             "administration": "Douane",
             "name": "DF 61 Port-de-Bouc",
             "resources": [],
-            "contact": null
+            "contact": null,
+            "isArchived": false
           }
         ],
         "openBy": "Steve Snyder",
@@ -236,7 +243,8 @@
             "administration": "Douane",
             "name": "BGC Bastia",
             "resources": [],
-            "contact": null
+            "contact": null,
+            "isArchived": false
           }
         ],
         "openBy": "Brittany Graham",
@@ -261,7 +269,8 @@
             "administration": "Douane",
             "name": "BGC Bastia",
             "resources": [],
-            "contact": null
+            "contact": null,
+            "isArchived": false
           }
         ],
         "openBy": "Brittany Graham",
@@ -285,7 +294,8 @@
             "administration": "DDTM",
             "name": "DML 2A",
             "resources": [],
-            "contact": null
+            "contact": null,
+            "isArchived": false
           }
         ],
         "openBy": "Randy Woodward",
@@ -361,7 +371,8 @@
             "administration": "DDTM",
             "name": "DML 2A",
             "resources": [],
-            "contact": null
+            "contact": null,
+            "isArchived": false
           }
         ],
         "openBy": "Brian Gibbs",
@@ -425,7 +436,8 @@
             "administration": "Douane",
             "name": "BGC Bastia",
             "resources": [],
-            "contact": null
+            "contact": null,
+            "isArchived": false
           }
         ],
         "openBy": "Brittany Graham",
@@ -450,7 +462,8 @@
             "administration": "DDTM",
             "name": "DML 2A",
             "resources": [],
-            "contact": null
+            "contact": null,
+            "isArchived": false
           }
         ],
         "openBy": "Christina Thomas",
@@ -475,7 +488,8 @@
             "administration": "DIRM DM",
             "name": "Cross Etel",
             "resources": [],
-            "contact": null
+            "contact": null,
+            "isArchived": false
           }
         ],
         "openBy": "Chase Hernandez",
@@ -499,7 +513,8 @@
             "administration": "DDTM",
             "name": "DML 2A",
             "resources": [],
-            "contact": null
+            "contact": null,
+            "isArchived": false
           }
         ],
         "openBy": "Michael Wilson",

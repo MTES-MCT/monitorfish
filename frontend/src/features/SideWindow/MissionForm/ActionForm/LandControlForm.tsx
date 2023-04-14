@@ -12,7 +12,6 @@ import { useMemo } from 'react'
 
 import { ControlQualityField } from './shared/ControlQualityField'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
-import { FormikPortSelect } from './shared/FormikPortSelect'
 import { GearsField } from './shared/GearsField'
 import { LicencesAndLogbookField } from './shared/LicencesAndLogbookField'
 import { SpeciesField } from './shared/SpeciesField'
@@ -62,8 +61,6 @@ export function LandControlForm({ initialValues, onChange }: LandControlFormProp
             name="actionDatetimeUtc"
             withTime
           />
-
-          <FormikPortSelect />
 
           <LicencesAndLogbookField />
 

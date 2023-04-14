@@ -1,6 +1,7 @@
 import { getUtcizedDayjs } from '@mtes-mct/monitor-ui'
 
-import { openSideWindowNewMission } from './utils'
+import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
+import { Mission } from '../../../../src/domain/entities/mission/types'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Main Form', () => {
@@ -20,10 +21,9 @@ context('Side Window > Mission Form > Main Form', () => {
     openSideWindowNewMission()
 
     const getSaveButton = () => cy.get('button').contains('Enregistrer').parent()
-    const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer et clôturer').parent()
+    const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer').parent()
 
-    cy.intercept('PUT', '/api/v1/missions', {
-      // TODO This should be removed once the API works as expected.
+    cy.intercept('POST', '/api/v1/missions', {
       body: {
         id: 1
       },
@@ -41,10 +41,12 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.fill('Unité 1', 'Cultures marines – DDTM 40')
     cy.fill('Moyen 1', ['Semi-rigide 2'])
 
+    cy.wait(500)
+
     getSaveButton().should('be.enabled')
     getSaveAndCloseButton().should('be.enabled')
 
-    cy.clickButton('Enregistrer et clôturer')
+    cy.clickButton('Enregistrer')
 
     cy.wait('@createMission').then(interception => {
       if (!interception.response) {
@@ -57,6 +59,7 @@ context('Side Window > Mission Form > Main Form', () => {
             administration: 'DDTM',
             contact: null,
             id: 10001,
+            isArchived: false,
             name: 'Cultures marines – DDTM 40',
             resources: [
               {
@@ -82,11 +85,10 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.get('h1').should('contain.text', 'Missions et contrôles')
   })
 
-  it('Should send the expected data to the API when creation a new mission', () => {
+  it('Should send the expected data to the API when creating a new mission', () => {
     openSideWindowNewMission()
 
-    cy.intercept('PUT', '/api/v1/missions', {
-      // TODO This should be removed once the API works as expected.
+    cy.intercept('POST', '/api/v1/missions', {
       body: {
         id: 1
       },
@@ -107,12 +109,16 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.fill('Moyen 2', ['ALTAIR', 'ARIOLA'])
     cy.fill('Contact de l’unité 2', 'Bob 2')
 
+    // cy.fill('Lieu du contrôle', 'Free Port')
+
     cy.fill('CACEM : orientations, observations', 'Une note.')
     cy.fill('CNSP : orientations, observations', 'Une autre note.')
     cy.fill('Ouvert par', 'Nemo')
     cy.fill('Clôturé par', 'Doris')
 
-    cy.clickButton('Enregistrer et clôturer')
+    cy.wait(500)
+
+    cy.clickButton('Enregistrer')
 
     cy.wait('@createMission').then(interception => {
       if (!interception.response) {
@@ -126,6 +132,7 @@ context('Side Window > Mission Form > Main Form', () => {
             administration: 'DDTM',
             contact: 'Bob',
             id: 10001,
+            isArchived: false,
             name: 'Cultures marines – DDTM 40',
             resources: [
               {
@@ -138,6 +145,7 @@ context('Side Window > Mission Form > Main Form', () => {
             administration: 'DREAL',
             contact: 'Bob 2',
             id: 10019,
+            isArchived: false,
             name: 'DREAL Pays-de-La-Loire',
             resources: [
               {
@@ -172,8 +180,7 @@ context('Side Window > Mission Form > Main Form', () => {
   it('Should send the expected data to the API when editing an existing mission', () => {
     editSideWindowMissionListMissionWithId(2)
 
-    cy.intercept('PUT', '/api/v1/missions', {
-      // TODO This should be removed once the API works as expected.
+    cy.intercept('POST', '/api/v1/missions/2', {
       body: {
         id: 1
       },
@@ -181,7 +188,9 @@ context('Side Window > Mission Form > Main Form', () => {
     }).as('updateMission')
     cy.intercept('PUT', '/bff/v1/mission_actions/2').as('updateMissionAction2')
 
-    cy.clickButton('Enregistrer et clôturer')
+    cy.wait(250)
+
+    cy.clickButton('Enregistrer')
 
     cy.wait('@updateMission').then(interception => {
       if (!interception.response) {
@@ -195,6 +204,7 @@ context('Side Window > Mission Form > Main Form', () => {
             administration: 'Douane',
             contact: null,
             id: 10015,
+            isArchived: false,
             name: 'BGC Bastia',
             resources: []
           }
@@ -311,6 +321,65 @@ context('Side Window > Mission Form > Main Form', () => {
         vesselId: 1,
         vesselName: null,
         vesselTargeted: null
+      })
+    })
+
+    cy.get('h1').should('contain.text', 'Missions et contrôles')
+  })
+
+  it('Should close a new mission', () => {
+    openSideWindowNewMission()
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.fill('Clôturé par', 'Doris')
+
+    cy.wait(500)
+
+    cy.clickButton('Enregistrer et clôturer')
+
+    cy.wait('@createMission').then(interception => {
+      if (!interception.response) {
+        assert.fail('`interception.response` is undefined.')
+      }
+
+      assert.deepInclude(interception.request.body, {
+        // We check this prop to be sure all the data is there (this is the last field to be filled)
+        closedBy: 'Doris',
+        isClosed: true
+      })
+    })
+
+    cy.get('h1').should('contain.text', 'Missions et contrôles')
+  })
+
+  it('Should close an existing mission', () => {
+    editSideWindowMissionListMissionWithId(2)
+
+    cy.intercept('POST', '/api/v1/missions/2', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('updateMission')
+
+    // TODO Fix that in `monitor-ui`.
+    cy.fill('Clôturé par', undefined)
+    cy.fill('Clôturé par', 'Doris')
+
+    cy.wait(500)
+
+    cy.clickButton('Enregistrer et clôturer')
+
+    cy.wait('@updateMission').then(interception => {
+      if (!interception.response) {
+        assert.fail('`interception.response` is undefined.')
+      }
+
+      assert.deepInclude(interception.request.body, {
+        // We check this prop to be sure all the data is there (this is the last field to be filled)
+        closedBy: 'Doris',
+        id: 2,
+        isClosed: true
       })
     })
 

@@ -21,15 +21,14 @@ context('Side Window > Mission Form > Observation', () => {
     // Saisi par
     cy.fill('Saisi par', 'Marlin')
 
+    cy.wait(500)
+
     // -------------------------------------------------------------------------
     // Request
 
-    cy.intercept('POST', '/bff/v1/mission_actions', {
-      // TODO This should be removed once the API works as expected.
-      statusCode: 201
-    }).as('createMissionAction')
+    cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
 
-    cy.clickButton('Enregistrer et clôturer')
+    cy.clickButton('Enregistrer')
 
     cy.wait('@createMissionAction').then(interception => {
       if (!interception.response) {

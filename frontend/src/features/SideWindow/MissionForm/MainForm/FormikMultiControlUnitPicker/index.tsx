@@ -27,9 +27,6 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
   const controlUnitsQuery = useGetControlUnitsQuery(undefined)
   const { forceUpdate } = useForceUpdate()
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const defaultValues = useMemo(() => input.value || [], [input.value.length])
-
   const allAdministrationsAsOptions = useMemo((): Option[] => {
     if (!controlUnitsQuery.data) {
       return []
@@ -90,30 +87,23 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
     []
   )
 
-  const controlUnitSelects = useMemo(
-    () => (
+  return (
+    <Wrapper>
       <>
-        {defaultValues.map((defaultValue, index) => (
+        {(input.value || []).map((value, index) => (
           <ControlUnitSelect
             // eslint-disable-next-line react/no-array-index-key
             key={`unit${index}`}
             allAdministrationsAsOptions={allAdministrationsAsOptions}
             allNamesAsOptions={allNamesAsOptions}
             controlUnits={controlUnitsQuery.data}
-            defaultValue={defaultValue}
             index={index}
             onChange={handleChange}
             onDelete={removeUnit}
+            value={value}
           />
         ))}
       </>
-    ),
-    [allAdministrationsAsOptions, allNamesAsOptions, controlUnitsQuery.data, defaultValues, handleChange, removeUnit]
-  )
-
-  return (
-    <Wrapper>
-      {controlUnitSelects}
 
       <Button accent={Accent.SECONDARY} onClick={addUnit}>
         Ajouter une autre unité

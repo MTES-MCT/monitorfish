@@ -20,13 +20,12 @@ export const openSideWindowNewMission = () => {
 }
 
 export const fillSideWindowMissionFormBase = (missionTypeLabel: Mission.MissionTypeLabel) => {
-  // TODO This should be removed once the API works as expected.
-  cy.intercept('PUT', '/api/v1/missions', {
+  cy.intercept('POST', '/api/v1/missions', {
     body: {
       id: 1
     },
     statusCode: 201
-  })
+  }).as('createMission')
 
   cy.fill('Types de mission', [missionTypeLabel])
 

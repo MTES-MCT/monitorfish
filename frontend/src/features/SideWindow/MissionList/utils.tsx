@@ -11,7 +11,6 @@ import { includesSome } from '../../../utils/includesSome'
 import type { SeaFront } from '../../../constants'
 import type { MissionWithActions } from '../../../domain/entities/mission/types'
 import type { AugmentedDataFilter, AugmentedDataItem } from '../../../hooks/useTable/types'
-import type { DateRange } from '@mtes-mct/monitor-ui'
 import type { OpUnitType, QUnitType } from 'dayjs'
 
 export const getSeaFrontFilter = (selectedSubMenu: string): AugmentedDataFilter<MissionWithActions> => {
@@ -47,15 +46,9 @@ export const mapFilterFormRecordsToFilters = ([key, valueOrValues]: [
     case MissionFilterType.CUSTOM_DATE_RANGE:
       return filter<AugmentedDataItem<MissionWithActions>>(({ item: { endDateTimeUtc, startDateTimeUtc } }) =>
         endDateTimeUtc
-          ? customDayjs(startDateTimeUtc)
-              .utc()
-              .isSameOrAfter(customDayjs((valueOrValues as DateRange)[0]).utc()) &&
-            customDayjs(endDateTimeUtc)
-              .utc()
-              .isSameOrBefore(customDayjs((valueOrValues as DateRange)[1]).utc())
-          : customDayjs(startDateTimeUtc)
-              .utc()
-              .isSameOrAfter(customDayjs((valueOrValues as DateRange)[0]).utc())
+          ? customDayjs(startDateTimeUtc).utc().isSameOrAfter(customDayjs(valueOrValues[0]).utc()) &&
+            customDayjs(endDateTimeUtc).utc().isSameOrBefore(customDayjs(valueOrValues[1]).utc())
+          : customDayjs(startDateTimeUtc).utc().isSameOrAfter(customDayjs(valueOrValues[0]).utc())
       )
 
     case MissionFilterType.DATE_RANGE:

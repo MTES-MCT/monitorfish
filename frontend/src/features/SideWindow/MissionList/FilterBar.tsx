@@ -1,7 +1,6 @@
 import { FormikDateRangePicker, FormikEffect, FormikMultiSelect, FormikSelect, TextInput } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
-import { noop, omit, toPairs } from 'lodash'
-import { flatten, map, pipe, uniq } from 'ramda'
+import { noop, omit, toPairs, uniq } from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -14,7 +13,6 @@ import { useNewWindow } from '../../../ui/NewWindow'
 import { getOptionsFromStrings } from '../../../utils/getOptionsFromStrings'
 
 import type { MissionWithActions } from '../../../domain/entities/mission/types'
-import type { ControlUnit } from '../../../domain/types/controlUnit'
 import type { AugmentedDataFilter } from '../../../hooks/useTable/types'
 import type { Promisable } from 'type-fest'
 
@@ -29,27 +27,26 @@ export function FilterBar({ onChange, onQueryChange }: FilterBarProps) {
 
   const controlUnitsQuery = useGetControlUnitsQuery(undefined)
 
-  const administrationsAsOptions = useMemo(
-    () =>
-      pipe(
-        map<ControlUnit.ControlUnit, string>(({ administration }) => administration),
-        flatten,
-        uniq,
-        getOptionsFromStrings
-      )(controlUnitsQuery.data || []),
+  const activeControlUnits = useMemo(
+    () => (controlUnitsQuery.data || []).filter(({ isArchived }) => !isArchived),
     [controlUnitsQuery.data]
   )
 
-  const unitsAsOptions = useMemo(
-    () =>
-      pipe(
-        map<ControlUnit.ControlUnit, string>(({ name }) => name),
-        flatten,
-        uniq,
-        getOptionsFromStrings
-      )(controlUnitsQuery.data || []),
-    [controlUnitsQuery.data]
-  )
+  const administrationsAsOptions = useMemo(() => {
+    const administrations = activeControlUnits.map(({ administration }) => administration)
+    const uniqueAdministrations = uniq(administrations)
+    const uniqueAdministrationsAsOptions = getOptionsFromStrings(uniqueAdministrations)
+
+    return uniqueAdministrationsAsOptions
+  }, [activeControlUnits])
+
+  const unitsAsOptions = useMemo(() => {
+    const units = activeControlUnits.map(({ name }) => name)
+    const uniqueUnits = uniq(units)
+    const uniqueUnitsAsOptions = getOptionsFromStrings(uniqueUnits)
+
+    return uniqueUnitsAsOptions
+  }, [activeControlUnits])
 
   const handleFilterFormChange = useCallback(
     (nextFilterValues: Partial<Record<MissionFilterType, string | string[]>>) => {
@@ -59,10 +56,8 @@ export function FilterBar({ onChange, onQueryChange }: FilterBarProps) {
           ? omit(nextFilterValues, MissionFilterType.CUSTOM_DATE_RANGE)
           : nextFilterValues
 
-      const nextFilters = pipe(
-        toPairs as (filters: Partial<Record<MissionFilterType, string | string[]>>) => [MissionFilterType, any][],
-        map(mapFilterFormRecordsToFilters)
-      )(normalizedNextFilterValues)
+      const normalizedNextFilterValuePairs = toPairs(normalizedNextFilterValues) as Array<[MissionFilterType, any]>
+      const nextFilters = normalizedNextFilterValuePairs.map(mapFilterFormRecordsToFilters)
 
       const willOpenCustomDateRange = normalizedNextFilterValues.DATE_RANGE === MissionDateRangeFilter.CUSTOM
       setIsCustomDateRangeOpen(willOpenCustomDateRange)

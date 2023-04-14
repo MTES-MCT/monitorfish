@@ -7,11 +7,12 @@ export namespace ControlUnit {
     administration: string
     contact: string | undefined
     id: number
+    isArchived: boolean
     name: string
     resources: ControlResource[]
   }
 
   export type ControlUnitData = Except<ControlUnit, 'id'>
 
-  export type ControlUnitDraft = Omit<Undefine<ControlUnitData>, 'resources'> & Pick<ControlUnitData, 'resources'>
+  export type ControlUnitDraft = Omit<Undefine<ControlUnit>, 'resources'> & Pick<ControlUnit, 'resources'>
 }

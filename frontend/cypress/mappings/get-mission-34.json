@@ -20,21 +20,24 @@
           "administration": "Douane",
           "name": "BSN Ste Maxime",
           "resources": [],
-          "contact": null
+          "contact": null,
+          "isArchived": false
         },
         {
           "id": 10017,
           "administration": "Douane",
           "name": "DF 25 Libecciu",
           "resources": [],
-          "contact": null
+          "contact": null,
+          "isArchived": false
         },
         {
           "id": 10018,
           "administration": "Douane",
           "name": "DF 61 Port-de-Bouc",
           "resources": [],
-          "contact": null
+          "contact": null,
+          "isArchived": false
         }
       ],
       "openBy": "Steve Snyder",

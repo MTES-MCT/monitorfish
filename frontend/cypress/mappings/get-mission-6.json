@@ -25,7 +25,8 @@
               "name": "Semi-rigide 1"
             }
           ],
-          "contact": null
+          "contact": null,
+          "isArchived": false
         }
       ],
       "openBy": "Kevin Torres",

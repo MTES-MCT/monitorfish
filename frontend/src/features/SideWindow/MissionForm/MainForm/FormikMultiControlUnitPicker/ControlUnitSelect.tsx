@@ -1,7 +1,6 @@
-import { Accent, Icon, IconButton, MultiSelect, Select, TextInput, useForceUpdate } from '@mtes-mct/monitor-ui'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { Accent, Icon, IconButton, MultiSelect, Select, TextInput } from '@mtes-mct/monitor-ui'
+import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { useDebouncedCallback } from 'use-debounce'
 
 import {
   findControlUnitById,
@@ -22,52 +21,44 @@ export type ControlUnitSelectProps = {
   allAdministrationsAsOptions: Option[]
   allNamesAsOptions: Array<Option<number>>
   controlUnits: ControlUnit.ControlUnit[] | undefined
-  defaultValue: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft
   index: number
   onChange: (index: number, nextControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft) => Promisable<void>
   onDelete: (index: number) => Promisable<void>
+  value: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft
 }
 export function ControlUnitSelect({
   allAdministrationsAsOptions,
   allNamesAsOptions,
   controlUnits,
-  defaultValue,
   index,
   onChange,
-  onDelete
+  onDelete,
+  value
 }: ControlUnitSelectProps) {
-  const controlledValueRef = useRef(defaultValue)
   const { newWindowContainerRef } = useNewWindow()
 
+  const [controlledValue, setControlledValue] = useState(value)
   const [selectedControlUnit, setSelectedControlUnit] = useState<ControlUnit.ControlUnit | undefined>(
-    isValidControlUnit(defaultValue) ? defaultValue : undefined
+    isValidControlUnit(value) ? value : undefined
   )
-
-  const { forceUpdate } = useForceUpdate()
 
   const controlledValueResourceIds = useMemo(
-    () => (controlledValueRef.current.resources ? mapToProp(controlledValueRef.current.resources, 'id') : []),
+    () => (controlledValue.resources ? mapToProp(controlledValue.resources, 'id') : []),
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [controlledValueRef.current]
+    [controlledValue]
   )
 
-  const filteredNamesAsOptions = useMemo(
-    (): Array<Option<number>> => {
-      if (!controlUnits || !controlledValueRef.current.administration) {
-        return allNamesAsOptions
-      }
+  const filteredNamesAsOptions = useMemo((): Array<Option<number>> => {
+    if (!controlUnits || !controlledValue.administration) {
+      return allNamesAsOptions
+    }
 
-      const selectedAdministrationControlUnits = controlUnits.filter(
-        ({ administration }) => administration === controlledValueRef.current.administration
-      )
+    const selectedAdministrationControlUnits = controlUnits.filter(
+      ({ administration }) => administration === controlledValue.administration
+    )
 
-      return mapControlUnitsToUniqueSortedNamesAsOptions(selectedAdministrationControlUnits)
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [allNamesAsOptions, controlledValueRef.current, controlUnits]
-  )
+    return mapControlUnitsToUniqueSortedNamesAsOptions(selectedAdministrationControlUnits)
+  }, [allNamesAsOptions, controlledValue, controlUnits])
 
   const filteredResourcesAsOptions = useMemo((): Option<number>[] => {
     if (!selectedControlUnit) {
@@ -84,17 +75,12 @@ export function ControlUnitSelect({
         administration: nextAdministration
       }
 
-      controlledValueRef.current = nextControlUnit
-
-      if (selectedControlUnit) {
-        setSelectedControlUnit(undefined)
-      } else {
-        forceUpdate()
-      }
+      setControlledValue(nextControlUnit)
+      setSelectedControlUnit(undefined)
 
       onChange(index, nextControlUnit)
     },
-    [forceUpdate, index, onChange, selectedControlUnit]
+    [index, onChange]
   )
 
   const handleNameChange = useCallback(
@@ -109,21 +95,20 @@ export function ControlUnitSelect({
       const nextControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft = nextSelectedControlUnit
         ? {
             ...nextSelectedControlUnit,
-            contact: controlledValueRef.current.contact,
-            resources: controlledValueRef.current.resources
+            contact: controlledValue.contact,
+            resources: controlledValue.resources
           }
         : {
             ...INITIAL_MISSION_CONTROL_UNIT,
-            administration: controlledValueRef.current.administration
+            administration: controlledValue.administration
           }
 
-      controlledValueRef.current = nextControlUnit
-
+      setControlledValue(nextControlUnit)
       setSelectedControlUnit(nextSelectedControlUnit)
 
       onChange(index, nextControlUnit)
     },
-    [controlUnits, index, onChange]
+    [controlledValue, controlUnits, index, onChange]
   )
 
   const handleResourcesChange = useCallback(
@@ -137,30 +122,30 @@ export function ControlUnitSelect({
         : []
 
       const nextControlUnit: ControlUnit.ControlUnitDraft = {
-        ...controlledValueRef.current,
+        ...controlledValue,
         resources: nextResources
       }
 
-      controlledValueRef.current = nextControlUnit
-      forceUpdate()
+      setControlledValue(nextControlUnit)
 
       onChange(index, nextControlUnit)
     },
-    [forceUpdate, index, onChange, selectedControlUnit]
+    [controlledValue, index, onChange, selectedControlUnit]
   )
 
-  // Let's be careful here, this should normally depend on `[index, onChange]` dependencies
-  // but since there is no reason these 2 values would change, this seems like an acceptable trade-off
-  const handleContactChange = useDebouncedCallback((nextValue: string | undefined) => {
-    const nextControlUnit: ControlUnit.ControlUnitDraft = {
-      ...controlledValueRef.current,
-      contact: nextValue
-    }
+  const handleContactChange = useCallback(
+    (nextValue: string | undefined) => {
+      const nextControlUnit: ControlUnit.ControlUnitDraft = {
+        ...controlledValue,
+        contact: nextValue
+      }
 
-    controlledValueRef.current = nextControlUnit
+      setControlledValue(nextControlUnit)
 
-    onChange(index, nextControlUnit)
-  }, 500)
+      onChange(index, nextControlUnit)
+    },
+    [controlledValue, index, onChange]
+  )
 
   const handleDelete = useCallback(() => {
     onDelete(index)
@@ -178,7 +163,7 @@ export function ControlUnitSelect({
           onChange={handleAdministrationChange}
           options={allAdministrationsAsOptions}
           searchable
-          value={controlledValueRef.current.administration}
+          value={controlledValue.administration}
           virtualized
         />
         <Select
@@ -189,12 +174,12 @@ export function ControlUnitSelect({
           onChange={handleNameChange}
           options={filteredNamesAsOptions as any}
           searchable
-          value={controlledValueRef.current.id}
+          value={controlledValue.id}
           virtualized
         />
         <MultiSelect
           baseContainer={newWindowContainerRef.current}
-          disabled={!controlUnits || !controlledValueRef.current.administration || !controlledValueRef.current.name}
+          disabled={!controlUnits || !controlledValue.administration || !controlledValue.name}
           isUndefinedWhenDisabled
           label={`Moyen ${index + 1}`}
           name={`resources_${index}`}
@@ -203,12 +188,11 @@ export function ControlUnitSelect({
           value={controlledValueResourceIds}
         />
         <TextInput
-          disabled={!controlUnits || !controlledValueRef.current.name}
-          isUndefinedWhenDisabled
+          disabled={!controlUnits || !controlledValue.name}
           label={`Contact de l’unité ${index + 1}`}
           name={`contact_${index}`}
           onChange={handleContactChange}
-          value={controlledValueRef.current.contact}
+          value={controlledValue.contact}
         />
       </UnitWrapper>
 

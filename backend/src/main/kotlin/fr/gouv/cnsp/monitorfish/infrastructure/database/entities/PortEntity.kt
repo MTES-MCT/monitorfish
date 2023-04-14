@@ -25,12 +25,12 @@ data class PortEntity(
     @Column(name = "is_active")
     val isActive: Boolean? = null,
     @Column(name = "fao_areas")
-    val faoAreas: List<String> = listOf(),
+    val faoAreas: List<String>? = listOf(),
 ) {
 
     fun toPort() = Port(
         locode = locode,
         name = portName,
-        faoAreas = faoAreas,
+        faoAreas = faoAreas ?: listOf(),
     )
 }

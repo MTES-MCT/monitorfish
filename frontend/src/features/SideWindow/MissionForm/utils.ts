@@ -1,4 +1,5 @@
 import { customDayjs, getUtcizedDayjs } from '@mtes-mct/monitor-ui'
+import { difference } from 'lodash'
 import { omit } from 'ramda'
 
 import { INITIAL_MISSION_CONTROL_UNIT, MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
@@ -12,11 +13,16 @@ import type { ControlUnit } from '../../../domain/types/controlUnit'
 import type { MissionAction } from '../../../domain/types/missionAction'
 import type { DateAsStringRange, Undefine } from '@mtes-mct/monitor-ui'
 
+/**
+ *
+ * @param originalMissionActions Mission actions as they were previous to the mission edition
+ */
 export function getMissionActionsDataFromMissionActionsFormValues(
   missionId: MissionAction.MissionAction['missionId'],
-  missionActionsFormValues: MissionActionFormValues[]
+  missionActionsFormValues: MissionActionFormValues[],
+  originalMissionActions: MissionAction.MissionAction[] = []
 ): MissionAction.MissionActionData[] {
-  return missionActionsFormValues.map(missionActionFormValues => {
+  const updatedMissionActionDatas = missionActionsFormValues.map(missionActionFormValues => {
     const missionActionFormValuesWithAllProps = {
       ...MISSION_ACTION_FORM_VALUES_SKELETON,
       ...missionActionFormValues
@@ -30,9 +36,30 @@ export function getMissionActionsDataFromMissionActionsFormValues(
       missionId
     }
   })
+
+  const missionActionOriginalIds = originalMissionActions.map(({ id }) => id as number)
+  const missionActionUpdatedIds = updatedMissionActionDatas
+    .filter(({ id }) => typeof id === 'number')
+    .map(({ id }) => id as number)
+  const missionActionDeletedIds = difference(missionActionOriginalIds, missionActionUpdatedIds)
+
+  const softDeletedMissionActionDatas = originalMissionActions
+    .filter(({ id }) => missionActionDeletedIds.includes(id))
+    .map(missionAction => ({
+      ...missionAction,
+      isDeleted: true
+    }))
+
+  return [...updatedMissionActionDatas, ...softDeletedMissionActionDatas]
 }
 
-export function getMissionDataFromMissionFormValues(missionFormValues: MissionFormValues): Mission.MissionData {
+/**
+ * @param mustClose Should the mission be closed?
+ */
+export function getMissionDataFromMissionFormValues(
+  missionFormValues: MissionFormValues,
+  mustClose: boolean = false
+): Mission.MissionData {
   if (!missionFormValues.dateTimeRangeUtc) {
     throw new FormError(missionFormValues, 'dateTimeRangeUtc', FormErrorCode.MISSING_OR_UNDEFINED)
   }
@@ -52,7 +79,7 @@ export function getMissionDataFromMissionFormValues(missionFormValues: MissionFo
     controlUnits: validControlUnits,
     endDateTimeUtc,
     envActions: undefined,
-    isClosed: false,
+    isClosed: mustClose || !!missionBaseValues.isClosed,
     isDeleted: false,
     missionSource,
     missionTypes,
@@ -94,11 +121,15 @@ export function getMissionFormInitialValues(
   }
 }
 
+/**
+ * @param mustClose Should the mission be closed?
+ */
 export function getUpdatedMissionFromMissionFormValues(
   missionId: Mission.Mission['id'],
-  missionFormValues: MissionFormValues
+  missionFormValues: MissionFormValues,
+  mustClose: boolean
 ): Mission.Mission {
-  const missionData = getMissionDataFromMissionFormValues(missionFormValues)
+  const missionData = getMissionDataFromMissionFormValues(missionFormValues, mustClose)
 
   return {
     id: missionId,
@@ -127,7 +158,7 @@ export function isValidControlUnit(
   controlUnitFormValues: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft
 ): controlUnitFormValues is ControlUnit.ControlUnit {
   const [, error] = validateRequiredFormValues(
-    ['administration', 'id', 'name', 'resources'],
+    ['administration', 'id', 'isArchived', 'name', 'resources'],
     controlUnitFormValues as ControlUnit.ControlUnit
   )
 
@@ -164,7 +195,7 @@ export function getValidMissionDataControlUnit(
   maybeValidMissionDataControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft
 ): Mission.MissionData['controlUnits'][0] {
   const [validMissionDataControlUnit, formError] = validateRequiredFormValues(
-    ['administration', 'id', 'name', 'resources'],
+    ['administration', 'id', 'isArchived', 'name', 'resources'],
     maybeValidMissionDataControlUnit as ControlUnit.ControlUnit
   )
   if (formError) {

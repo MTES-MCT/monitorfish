@@ -21,8 +21,9 @@ import {
 } from '../../../api/missionAction'
 import { missionActions } from '../../../domain/actions'
 import { getMissionSourceTagText } from '../../../domain/entities/mission'
-import { Mission } from '../../../domain/entities/mission/types'
+import { Mission, type MissionWithActions } from '../../../domain/entities/mission/types'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
+import { useDebouncedValue } from '../../../hooks/useDebouncedValue'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { FrontendError } from '../../../libs/FrontendError'
@@ -37,6 +38,7 @@ export function MissionForm() {
   const { mission } = useMainAppSelector(store => store)
 
   const headerDivRef = useRef<HTMLDivElement | null>(null)
+  const originalMissionWithActionsRef = useRef<MissionWithActions | undefined>(undefined)
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -49,7 +51,8 @@ export function MissionForm() {
   const [updateMissionAction] = useUpdateMissionActionMutation()
 
   const actionFormKey = useMemo(() => `actionForm-${mission.editedDraftActionIndex}`, [mission.editedDraftActionIndex])
-  const isMissionFormValid = useMemo(() => isMissionFormValuesComplete(mission.draft), [mission.draft])
+  const [debouncedMissionDraft] = useDebouncedValue(mission.draft, 250)
+  const isMissionFormValid = useMemo(() => isMissionFormValuesComplete(debouncedMissionDraft), [debouncedMissionDraft])
 
   const actionFormInitialValues = useMemo(
     () => {
@@ -70,62 +73,83 @@ export function MissionForm() {
     [mission.editedDraftActionIndex]
   )
 
-  const missionTitle = mission.draftId
-    ? `Mission ${
-        mission.draft?.missionTypes &&
-        mission.draft.missionTypes.map(missionType => Mission.MissionTypeLabel[missionType]).join(' / ')
-      } – ${mission.draft?.controlUnits.map(controlUnit => controlUnit.name?.replace('(historique)', '')).join(', ')}`
-    : `Nouvelle mission`
-
-  const createOrUpdateMission = useCallback(async () => {
-    if (!mission.draft) {
-      return
-    }
-
-    let missionId: number
-
-    if (!mission.draftId) {
-      const newMission = getMissionDataFromMissionFormValues(mission.draft)
-      // TODO Override Redux RTK typings globally.
-      // Redux RTK typing is wrong, this should be a tuple-like to help TS discriminate `data` from `error`.
-      const { data, error } = (await createMission(newMission)) as any
-      if (!data) {
-        throw new FrontendError('`createMission()` failed', error)
-      }
-
-      missionId = data.id
-    } else {
-      const updatedMission = getUpdatedMissionFromMissionFormValues(mission.draftId, mission.draft)
-      await updateMission(updatedMission)
-
-      missionId = mission.draftId
-    }
-    // eslint-disable-next-line no-empty
-
-    const missionActionsData = getMissionActionsDataFromMissionActionsFormValues(missionId, mission.draft.actions)
-
-    await Promise.all(
-      missionActionsData.map(async missionActionData => {
-        if (missionActionData.id === undefined) {
-          await createMissionAction(missionActionData)
-        } else {
-          await updateMissionAction({
-            ...missionActionData,
-            id: missionActionData.id
-          })
-        }
-      })
-    )
-  }, [createMission, createMissionAction, mission.draftId, mission.draft, updateMission, updateMissionAction])
+  const missionTitle = useMemo(
+    () =>
+      mission.draftId
+        ? `Mission ${
+            debouncedMissionDraft?.missionTypes &&
+            debouncedMissionDraft.missionTypes.map(missionType => Mission.MissionTypeLabel[missionType]).join(' / ')
+          } – ${debouncedMissionDraft?.controlUnits
+            .map(controlUnit => controlUnit.name?.replace('(historique)', ''))
+            .join(', ')}`
+        : `Nouvelle mission`,
+    [debouncedMissionDraft, mission.draftId]
+  )
 
   const goToMissionList = useCallback(async () => {
     dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_LIST))
   }, [dispatch])
 
-  const createOrUpdateMissionAndClose = useDebouncedCallback(async () => {
-    createOrUpdateMission()
-    goToMissionList()
-  }, 500)
+  /**
+   * @param mustClose Should the mission be closed?
+   */
+  const createOrUpdateMission = useCallback(
+    async (mustClose: boolean = false) => {
+      if (!mission.draft) {
+        return
+      }
+
+      let missionId: number
+
+      if (!mission.draftId) {
+        const newMission = getMissionDataFromMissionFormValues(mission.draft, mustClose)
+        // TODO Override Redux RTK typings globally.
+        // Redux RTK typing is wrong, this should be a tuple-like to help TS discriminate `data` from `error`.
+        const { data, error } = (await createMission(newMission)) as any
+        if (!data) {
+          throw new FrontendError('`createMission()` failed', error)
+        }
+
+        missionId = data.id
+      } else {
+        const updatedMission = getUpdatedMissionFromMissionFormValues(mission.draftId, mission.draft, mustClose)
+        await updateMission(updatedMission)
+
+        missionId = mission.draftId
+      }
+      // eslint-disable-next-line no-empty
+
+      const missionActionDatas = getMissionActionsDataFromMissionActionsFormValues(
+        missionId,
+        mission.draft.actions,
+        originalMissionWithActionsRef.current?.actions
+      )
+
+      await Promise.all(
+        missionActionDatas.map(async missionActionData => {
+          if (missionActionData.id === undefined) {
+            await createMissionAction(missionActionData)
+          } else {
+            await updateMissionAction({
+              ...missionActionData,
+              id: missionActionData.id
+            })
+          }
+        })
+      )
+
+      goToMissionList()
+    },
+    [
+      createMission,
+      createMissionAction,
+      goToMissionList,
+      mission.draft,
+      mission.draftId,
+      updateMission,
+      updateMissionAction
+    ]
+  )
 
   const handleActionFormChange = useDebouncedCallback((nextMissionActionFormValues: MissionActionFormValues) => {
     dispatch(missionActions.setEditedDraftAction(nextMissionActionFormValues))
@@ -157,6 +181,11 @@ export function MissionForm() {
       return
     }
 
+    originalMissionWithActionsRef.current = {
+      ...missionApiQuery.data,
+      actions: missionActionsApiQuery.data
+    }
+
     setIsLoading(false)
 
     dispatch(
@@ -177,7 +206,7 @@ export function MissionForm() {
             <BackToListIcon onClick={goToMissionList} />
             {missionTitle}
             {mission.draftId && (
-              <MissionSourceTag>{getMissionSourceTagText(mission.draft?.missionSource)}</MissionSourceTag>
+              <MissionSourceTag>{getMissionSourceTagText(debouncedMissionDraft?.missionSource)}</MissionSourceTag>
             )}
           </HeaderTitle>
         </HeaderTitleGroup>
@@ -190,7 +219,7 @@ export function MissionForm() {
             accent={Accent.SECONDARY}
             disabled={isLoading || !isMissionFormValid}
             Icon={Icon.Save}
-            onClick={createOrUpdateMission}
+            onClick={() => createOrUpdateMission()}
           >
             Enregistrer
           </Button>
@@ -198,7 +227,7 @@ export function MissionForm() {
             accent={Accent.SECONDARY}
             disabled={isLoading || !isMissionFormValid}
             Icon={Icon.Confirm}
-            onClick={createOrUpdateMissionAndClose}
+            onClick={() => createOrUpdateMission(true)}
           >
             Enregistrer et clôturer
           </Button>
@@ -207,12 +236,12 @@ export function MissionForm() {
 
       <Body>
         <FrontendErrorBoundary>
-          {(isLoading || !mission.draft) && <LoadingSpinnerWall />}
+          {(isLoading || !debouncedMissionDraft) && <LoadingSpinnerWall />}
 
-          {!isLoading && mission.draft && (
+          {!isLoading && debouncedMissionDraft && (
             <>
-              <MainForm initialValues={mission.draft} onChange={handleMainFormChange} />
-              <ActionList initialValues={mission.draft} />
+              <MainForm initialValues={debouncedMissionDraft} onChange={handleMainFormChange} />
+              <ActionList initialValues={debouncedMissionDraft} />
               <ActionForm
                 key={actionFormKey}
                 initialValues={actionFormInitialValues}

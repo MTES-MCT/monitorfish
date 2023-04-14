@@ -186,7 +186,7 @@ class ReportingControllerITests {
             isDeleted = false,
             isArchived = false,
         )
-        given(addReporting.execute(any())).willReturn(Pair(reporting, ControlUnit(1234, "DIRM", "Cross Etel", listOf())))
+        given(addReporting.execute(any())).willReturn(Pair(reporting, ControlUnit(1234, "DIRM", false, "Cross Etel", listOf())))
 
         // When
         mockMvc.perform(

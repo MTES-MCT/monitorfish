@@ -60,7 +60,7 @@ context('Vessel sidebar controls buttons', () => {
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
   })
 
-  it.only('Vessel track dates Should be changed from the agenda', () => {
+  it('Vessel track dates Should be changed from the agenda', () => {
     const startDateAsDayjs = dayjs().subtract(1, 'day').hour(1).minute(2)
     const endDateAsDayjs = dayjs().hour(3).minute(4)
 

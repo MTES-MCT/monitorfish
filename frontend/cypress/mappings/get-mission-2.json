@@ -20,7 +20,8 @@
           "administration": "Douane",
           "name": "BGC Bastia",
           "resources": [],
-          "contact": null
+          "contact": null,
+          "isArchived": false
         }
       ],
       "openBy": "Brittany Graham",

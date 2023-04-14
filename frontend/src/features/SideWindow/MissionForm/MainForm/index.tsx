@@ -9,12 +9,12 @@ import {
   noop
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
-import { useCallback, useMemo, useRef } from 'react'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_TYPES_AS_OPTIONS } from './constants'
+import { FormikLocationPicker } from './FormikLocationPicker'
 import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'
-import { FormikMultiZonePicker } from './FormikMultiZonePicker'
 import { BOOLEAN_AS_OPTIONS } from '../../../../constants'
 import { useNewWindow } from '../../../../ui/NewWindow'
 import { FormBody, FormBodyInnerWrapper } from '../shared/FormBody'
@@ -28,24 +28,14 @@ export type MainFormProps = {
   onChange: (nextValues: MissionFormValues) => Promisable<void>
 }
 export function MainForm({ initialValues, onChange }: MainFormProps) {
-  const currentValuesRef = useRef<MissionFormValues>(initialValues)
   const { newWindowContainerRef } = useNewWindow()
 
   const controlledInitialValues = useMemo(() => initialValues, [initialValues])
 
-  const updateCurrentValues = useCallback(
-    (nextValues: MissionFormValues) => {
-      currentValuesRef.current = nextValues
-
-      onChange(currentValuesRef.current)
-    },
-    [onChange]
-  )
-
   return (
     <Formik initialValues={controlledInitialValues} onSubmit={noop}>
       <Wrapper>
-        <FormikEffect onChange={updateCurrentValues as any} />
+        <FormikEffect onChange={onChange as any} />
 
         <FormHead>
           <h2>Informations générales</h2>
@@ -70,25 +60,16 @@ export function MainForm({ initialValues, onChange }: MainFormProps) {
                 options={MISSION_TYPES_AS_OPTIONS}
               />
 
-              {/* TODO Fix that in Monitor UI: */}
-              {/* Re-enabling a checkbox that has been disabled should set the related FormValues prop
-                  to a boolean matching the checkbox `checked` state. */}
               <IsUnderJdpFormikCheckbox isUndefinedWhenDisabled label="Mission sous JDP" name="isUnderJdp" />
             </MultiCheckColumns>
 
-            <FormikMultiRadio
-              isInline
-              label="Ordre de mission"
-              name="hasOrder"
-              // TODO Allow more Monitor UI `Option` types.
-              options={BOOLEAN_AS_OPTIONS}
-            />
+            <FormikMultiRadio isInline label="Ordre de mission" name="hasOrder" options={BOOLEAN_AS_OPTIONS} />
           </CustomFormBodyInnerWrapper>
 
           <FormikMultiControlUnitPicker name="controlUnits" />
 
           <CustomFormBodyInnerWrapper>
-            <FormikMultiZonePicker name="geom" />
+            <FormikLocationPicker />
 
             <RelatedFieldGroupWrapper>
               <FormikTextarea label="CACEM : orientations, observations" name="observationsCacem" />

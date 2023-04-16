@@ -1,7 +1,7 @@
 version: "3"
 services:
   db:
-    image: timescale/timescaledb-postgis:1.7.4-pg11
+    image: timescale/timescaledb-postgis:1.7.5-pg11
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -26,7 +26,7 @@ services:
         condition: service_healthy
 
   geoserver:
-    image: kartoza/geoserver:2.18.0
+    image: kartoza/geoserver:2.23.0
     restart: unless-stopped
     ports:
       - 8081:8080

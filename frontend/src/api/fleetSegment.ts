@@ -6,8 +6,26 @@ import { ApiError } from '../libs/ApiError'
 
 import type { FleetSegment, UpdateFleetSegment } from '../domain/types/fleetSegment'
 
+export type ComputeFleetSegmentsParams = {
+  faoAreas: string[]
+  gears: string[]
+  latitude: number | undefined
+  longitude: number | undefined
+  portLocode: string | undefined
+  species: string[]
+}
+
 export const fleetSegmentApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
+    computeFleetSegments: builder.query<FleetSegment[], ComputeFleetSegmentsParams>({
+      providesTags: () => [{ type: 'FleetSegments' }],
+      query: params =>
+        `fleet_segments/compute?faoAreas=${params.faoAreas}&gears=${params.gears}&species=${params.species}&latitude=${
+          params.latitude || ''
+        }&longitude=${params.longitude || ''}&portLocode=${params.portLocode || ''}`,
+      transformResponse: (baseQueryReturnValue: FleetSegment[]) =>
+        baseQueryReturnValue.sort((a, b) => a.segment.localeCompare(b.segment))
+    }),
     getFleetSegments: builder.query<FleetSegment[], number | void>({
       providesTags: () => [{ type: 'FleetSegments' }],
       query: year => {

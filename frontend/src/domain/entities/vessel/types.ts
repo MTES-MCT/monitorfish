@@ -122,7 +122,7 @@ export type VesselLastPosition = {
   externalReferenceNumber: string
   flagState: string
   from: string
-  gearOnboard: Gear[]
+  gearOnboard: DeclaredLogbookGear[]
   impactRiskFactor: number
   internalReferenceNumber: string
   ircs: string
@@ -142,7 +142,7 @@ export type VesselLastPosition = {
   reportings: ReportingType[]
   riskFactor: number
   segments: string[]
-  speciesOnboard: Species[]
+  speciesOnboard: DeclaredLogbookSpecies[]
   speed: number
   totalWeightOnboard: number
   tripNumber: number
@@ -188,7 +188,7 @@ export type FishingActivityShowedOnMap = {
   name: string
 }
 
-export type Gear = {
+export type DeclaredLogbookGear = {
   dimension: number
   gear: string
   mesh: number
@@ -208,7 +208,7 @@ export type ShowedVesselTrack = {
 }
 
 // TODO Exist both in Vessel and Species.
-export type Species = {
+export type DeclaredLogbookSpecies = {
   faoZone: string
   gear: string
   species: string

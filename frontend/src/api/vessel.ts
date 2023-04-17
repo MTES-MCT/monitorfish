@@ -1,6 +1,7 @@
 import ky, { HTTPError } from 'ky'
 
 import { HttpStatusCode } from './constants'
+import { monitorfishApi } from './index'
 import { ApiError } from '../libs/ApiError'
 
 import type { RiskFactor } from '../domain/entities/vessel/riskFactor/types'
@@ -21,6 +22,17 @@ const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu chercher les navires da
 const LOGBOOK_ERROR_MESSAGE = "Nous n'avons pas pu chercher les messages JPE de ce navire"
 const REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu récuperer les signalements de ce navire"
 const RISK_FACTOR_ERROR_MESSAGE = "Nous n'avons pas pu récuperer le facteur de risque du navire"
+
+export const vesselApi = monitorfishApi.injectEndpoints({
+  endpoints: builder => ({
+    getRiskFactor: builder.query<RiskFactor, string>({
+      providesTags: () => [{ type: 'Vessel' }],
+      query: internalReferenceNumber => `/vessels/risk_factor?internalReferenceNumber=${internalReferenceNumber}`
+    })
+  })
+})
+
+export const { useGetRiskFactorQuery } = vesselApi
 
 /**
  * Get all vessels last positions

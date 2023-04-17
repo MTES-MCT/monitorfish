@@ -1,11 +1,13 @@
 import { FormikCheckbox, FormikMultiRadio, FormikNumberInput, Select, SingleTag } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { useField } from 'formik'
 import { append, remove as ramdaRemove } from 'ramda'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { FormikMultiInfractionPicker } from './FormikMultiInfractionPicker'
 import { useGetSpeciesQuery } from '../../../../../api/specy'
+import { useGetRiskFactorQuery } from '../../../../../api/vessel'
 import { BOOLEAN_AS_OPTIONS } from '../../../../../constants'
 import { FrontendError } from '../../../../../libs/FrontendError'
 import { useNewWindow } from '../../../../../ui/NewWindow'
@@ -13,6 +15,7 @@ import { FieldGroup } from '../../shared/FieldGroup'
 import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../shared/FieldsetGroupSeparator'
 
+import type { DeclaredLogbookSpecies } from '../../../../../domain/entities/vessel/types'
 import type { MissionAction } from '../../../../../domain/types/missionAction'
 import type { Specy } from '../../../../../domain/types/specy'
 import type { MissionActionFormValues } from '../../types'
@@ -25,8 +28,12 @@ export type SpeciesFieldProps = {
 }
 export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
-
   const { newWindowContainerRef } = useNewWindow()
+
+  // Other field controlling this field
+  const [{ value: internalReferenceNumber }] =
+    useField<MissionActionFormValues['internalReferenceNumber']>('internalReferenceNumber')
+  const riskFactorApiQuery = useGetRiskFactorQuery(internalReferenceNumber || skipToken)
 
   const getSpeciesApiQuery = useGetSpeciesQuery()
 
@@ -96,6 +103,38 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [input.value]
+  )
+
+  useEffect(
+    () => {
+      if (input.value?.length) {
+        return
+      }
+
+      if (!internalReferenceNumber) {
+        return
+      }
+
+      if (!riskFactorApiQuery.data) {
+        return
+      }
+
+      const speciesOnBoard: DeclaredLogbookSpecies[] = riskFactorApiQuery.data.speciesOnboard
+      const speciesOnboardToAdd = speciesOnBoard.map(specy => ({
+        controlledWeight: undefined,
+        declaredWeight: specy.weight,
+        nbFish: undefined,
+        speciesCode: specy.species,
+        underSized: false
+      }))
+
+      const nextSpeciesOnboard = (input.value || []).concat(speciesOnboardToAdd)
+      helper.setValue(nextSpeciesOnboard)
+    },
+
+    // We observe `internalReferenceNumber` changes in order to update the species
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [internalReferenceNumber, riskFactorApiQuery]
   )
 
   if (!speciesAsOptions.length) {

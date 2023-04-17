@@ -28,8 +28,9 @@ object TestUtils {
                 "Poids à bord MNZ supérieur de 50% au poids déclaré",
             ),
         ),
+        faoAreas = listOf("25.6.9", "25.7.9"),
         segments = listOf(
-            FleetSegment(faoAreas = listOf("25.6.9", "25.7.9"), segment = "WWSS10", segmentName = "World Wide Segment"),
+            FleetSegment(segment = "WWSS10", segmentName = "World Wide Segment"),
         ),
         gearInfractions = listOf(GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite")),
         controlQualityComments = "Ciblage CNSP respecté",

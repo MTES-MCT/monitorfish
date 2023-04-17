@@ -12,6 +12,7 @@ data class MissionAction(
     val externalReferenceNumber: String? = null,
     val ircs: String? = null,
     val flagState: String? = null,
+    val faoAreas: List<String> = listOf(),
     val actionType: MissionActionType,
     val actionDatetimeUtc: ZonedDateTime? = null,
     val emitsVms: ControlCheck? = null,

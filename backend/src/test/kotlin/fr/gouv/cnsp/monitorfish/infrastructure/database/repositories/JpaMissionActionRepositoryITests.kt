@@ -16,8 +16,6 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
     @Autowired
     private lateinit var jpaMissionActionsRepository: JpaMissionActionsRepository
 
-    // 2019-01-18T07:19:28.384921Z
-
     @Test
     @Transactional
     fun `findVesselMissionActionsAfterDateTime Should filter vessel's controls around the date time`() {
@@ -137,6 +135,28 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(missionAction.id).isEqualTo(10)
         assertThat(missionAction.actionDatetimeUtc).isEqualTo(dateTime)
+    }
+
+    @Test
+    @Transactional
+    fun `saveMissionActions Should update an existing mission action`() {
+        // Given
+        val dateTime = ZonedDateTime.now()
+        val expectedId = 2
+        val updatedMission = getDummyMissionAction(dateTime, expectedId)
+
+        val existingAction = jpaMissionActionsRepository.findMissionActions(2)
+        assertThat(existingAction.first().latitude).isEqualTo(47.44)
+        assertThat(existingAction.first().longitude).isEqualTo(-0.52)
+
+        // When
+        val updatedMissionAction = jpaMissionActionsRepository.save(updatedMission)
+
+        // Then
+        assertThat(updatedMissionAction.id).isEqualTo(expectedId)
+        assertThat(updatedMissionAction.actionDatetimeUtc).isEqualTo(dateTime)
+        assertThat(updatedMissionAction.latitude).isEqualTo(45.12)
+        assertThat(updatedMissionAction.longitude).isEqualTo(-6.56)
     }
 
     @Test

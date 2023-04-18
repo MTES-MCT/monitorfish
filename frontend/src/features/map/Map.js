@@ -37,6 +37,9 @@ import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { SelectedMissionActionsLayer } from './layers/Mission/SelectedMissionActionsLayer'
 import { ControlOverlay } from './overlays/ControlOverlay'
 import { SelectedControlOverlay } from './overlays/SelectedControlOverlay'
+import { getEnvironmentVariable } from '../../api/utils'
+
+const IS_DEV_ENV = getEnvironmentVariable('REACT_APP_IS_DEV_ENV')
 
 const Map = () => {
   const { isAdmin } = useMainAppSelector(state => state.global)
@@ -85,15 +88,15 @@ const Map = () => {
       <FilterLayer/>
       <VesselsTracksLayerMemoized/>
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
-      {isAdmin && <MissionLayer/>}
-      {isAdmin && <SelectedMissionLayer feature={currentFeature}/>}
-      {isAdmin && <MissionHoveredLayer feature={currentFeature}/>}
-      {isAdmin && <MissionsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>}
-      {isAdmin && <MissionOverlay feature={currentFeature}/>}
-      {isAdmin && <SelectedMissionOverlay/>}
-      {isAdmin && <SelectedMissionActionsLayer/>}
-      {isAdmin && <ControlOverlay feature={currentFeature}/>}
-      {isAdmin && <SelectedControlOverlay/>}
+      {IS_DEV_ENV && isAdmin && <MissionLayer/>}
+      {IS_DEV_ENV && isAdmin && <SelectedMissionLayer feature={currentFeature}/>}
+      {IS_DEV_ENV && isAdmin && <MissionHoveredLayer feature={currentFeature}/>}
+      {IS_DEV_ENV && isAdmin && <MissionsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>}
+      {IS_DEV_ENV && isAdmin && <MissionOverlay feature={currentFeature}/>}
+      {IS_DEV_ENV && isAdmin && <SelectedMissionOverlay/>}
+      {IS_DEV_ENV && isAdmin && <SelectedMissionActionsLayer/>}
+      {IS_DEV_ENV && isAdmin && <ControlOverlay feature={currentFeature}/>}
+      {IS_DEV_ENV && isAdmin && <SelectedControlOverlay/>}
       <DrawLayer/>
       <RegulatoryLayerSearch/>
       <VesselEstimatedPositionLayer/>

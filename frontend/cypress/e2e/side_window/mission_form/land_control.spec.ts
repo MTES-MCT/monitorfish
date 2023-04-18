@@ -70,9 +70,6 @@ context('Side Window > Mission Form > Land Control', () => {
     // Autres observations
     cy.fill('Autres observations', 'Une autre observation.')
 
-    // Segment de flotte
-    cy.fill('Ajouter un segment', 'FR_DRB')
-
     // Qualité du contrôle
     cy.fill('Navire ciblé par le CNSP', 'Oui')
     cy.fill('Unité sans jauge oméga', true)
@@ -139,26 +136,22 @@ context('Side Window > Mission Form > Land Control', () => {
         ],
         segments: [
           {
-            faoAreas: ['37.1', '37.2', '37.3', '27.8.a', '27.8.b', '27.7.h', '27.7.e', '27.7.d'],
             segment: 'FR_ELE',
             segmentName: 'Eel sea fisheries'
           },
           {
-            faoAreas: ['27.8.a', '27.8.b', '27.7.h', '27.7.e', '27.7.d', '27.4.c'],
             segment: 'FR_SCE',
             segmentName: 'Scallop fisheries'
           },
-          { faoAreas: ['27.8.c', '27.8', '27.9'], segment: 'SWW01/02/03', segmentName: 'Bottom trawls' },
-          { faoAreas: ['27.8.c', '27.8'], segment: 'SWW04', segmentName: 'Midwater trawls' },
-          { faoAreas: ['27.8.c', '27.8', '27.9'], segment: 'SWW06', segmentName: 'Seines' },
-          { faoAreas: ['27.8.c', '27.8', '27.9'], segment: 'SWW07/08', segmentName: 'Gill and trammel nets' },
-          { faoAreas: ['27.8.c', '27.8', '27.9'], segment: 'SWW10', segmentName: 'Longlines targeting demersal' },
+          { segment: 'SWW01/02/03', segmentName: 'Bottom trawls' },
+          { segment: 'SWW04', segmentName: 'Midwater trawls' },
+          { segment: 'SWW06', segmentName: 'Seines' },
+          { segment: 'SWW07/08', segmentName: 'Gill and trammel nets' },
+          { segment: 'SWW10', segmentName: 'Longlines targeting demersal' },
           {
-            faoAreas: ['27.8.c', '27.8', '27.9'],
             segment: 'SWW11',
             segmentName: 'Hooks and Lines targeting GFB and ALF'
-          },
-          { faoAreas: ['37.1', '37.2', '37.3'], segment: 'FR_DRB', segmentName: "Drague de mer et d'étang" }
+          }
         ],
         seizureAndDiversion: true,
         seizureAndDiversionComments: null,

@@ -25,7 +25,7 @@ const REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu récuperer les signalements
 export const vesselApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
     getRiskFactor: builder.query<RiskFactor, string>({
-      providesTags: () => [{ type: 'Vessel' }],
+      providesTags: () => [{ type: 'RiskFactor' }],
       query: internalReferenceNumber => `/vessels/risk_factor?internalReferenceNumber=${internalReferenceNumber}`
     })
   })

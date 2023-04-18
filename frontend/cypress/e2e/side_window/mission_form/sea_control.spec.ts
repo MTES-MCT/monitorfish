@@ -71,9 +71,6 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Autres observations
     cy.fill('Autres observations', 'Une autre observation.')
 
-    // Segment de flotte
-    cy.fill('Ajouter un segment', 'FR_DRB')
-
     // Qualité du contrôle
     cy.fill('Navire ciblé par le CNSP', 'Oui')
     cy.fill('Unité sans jauge oméga', true)

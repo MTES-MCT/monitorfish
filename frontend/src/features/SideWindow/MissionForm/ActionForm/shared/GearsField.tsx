@@ -108,19 +108,7 @@ export function GearsField() {
 
   useEffect(
     () => {
-      if (input.value?.length) {
-        return
-      }
-
-      if (!internalReferenceNumber) {
-        return
-      }
-
-      if (!gearsByCode) {
-        return
-      }
-
-      if (!riskFactorApiQuery.data) {
+      if (input.value?.length || !gearsByCode || !riskFactorApiQuery.data) {
         return
       }
 
@@ -139,9 +127,8 @@ export function GearsField() {
       helper.setValue(nextGears)
     },
 
-    // We observe `internalReferenceNumber` changes in order to update the gears
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [internalReferenceNumber, riskFactorApiQuery, gearsByCode]
+    [riskFactorApiQuery.data, gearsByCode]
   )
 
   if (!gearsAsOptions.length) {

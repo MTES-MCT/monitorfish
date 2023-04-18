@@ -299,8 +299,8 @@ context('Side Window > Mission Form > Main Form', () => {
         portLocode: null,
         portName: null,
         segments: [
-          { faoAreas: ['27.8c', '27.8'], segment: 'SWW04', segmentName: 'Midwater trawls' },
-          { faoAreas: ['27.3.a', '27.7', '27.8', '27.9'], segment: 'PEL03', segmentName: 'Polyvalent - Bottom trawl' }
+          { segment: 'SWW04', segmentName: 'Midwater trawls' },
+          { segment: 'PEL03', segmentName: 'Polyvalent - Bottom trawl' }
         ],
         seizureAndDiversion: true,
         seizureAndDiversionComments: 'Saisie de la pêche',

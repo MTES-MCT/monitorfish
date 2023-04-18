@@ -21,7 +21,6 @@ const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les info
 const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu chercher les navires dans notre base"
 const LOGBOOK_ERROR_MESSAGE = "Nous n'avons pas pu chercher les messages JPE de ce navire"
 const REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu récuperer les signalements de ce navire"
-const RISK_FACTOR_ERROR_MESSAGE = "Nous n'avons pas pu récuperer le facteur de risque du navire"
 
 export const vesselApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
@@ -172,27 +171,11 @@ async function getVesselReportingsFromAPI(identity: VesselIdentity, fromDate: Da
   }
 }
 
-/**
- * Get vessel risk factor
- *
- * @throws {@link ApiError}
- */
-async function getVesselRiskFactorFromAPI(internalReferenceNumber: string) {
-  try {
-    return await ky
-      .get(`/bff/v1/vessels/risk_factor?internalReferenceNumber=${internalReferenceNumber}`)
-      .json<RiskFactor>()
-  } catch (err) {
-    throw new ApiError(RISK_FACTOR_ERROR_MESSAGE, err)
-  }
-}
-
 export {
   searchVesselsFromAPI,
   getVesselPositionsFromAPI,
   getVesselFromAPI,
   getVesselsLastPositionsFromAPI,
   getVesselVoyageFromAPI,
-  getVesselReportingsFromAPI,
-  getVesselRiskFactorFromAPI
+  getVesselReportingsFromAPI
 }

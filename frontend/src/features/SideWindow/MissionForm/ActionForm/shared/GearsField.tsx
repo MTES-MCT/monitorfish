@@ -165,7 +165,7 @@ export function GearsField() {
         input.value.length > 0 &&
         input.value.map((gearOnboard, index) => (
           // eslint-disable-next-line react/no-array-index-key
-          <Row key={`gearOnboard-${gearOnboard.gearCode}`} $isFirst={index === 0}>
+          <Row key={`gearOnboard-${gearOnboard.gearCode}-${index}`} $isFirst={index === 0}>
             <RowInnerWrapper>
               <SingleTag
                 onDelete={() => remove(index)}

@@ -1,17 +1,14 @@
-import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
+import { editSideWindowMission, fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
 import { Mission } from '../../../../src/domain/entities/mission/types'
 
 context('Side Window > Mission Form > Sea Control', () => {
-  beforeEach(() => {
+  it('Should fill the form for MALOTRU and send the expected data to the API', () => {
     openSideWindowNewMission()
-
     fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
 
     cy.clickButton('Ajouter')
     cy.clickButton('Ajouter un contrôle en mer')
-  })
 
-  it('Should fill the form and send the expected data to the API', () => {
     // -------------------------------------------------------------------------
     // Form
 
@@ -101,7 +98,6 @@ context('Side Window > Mission Form > Sea Control', () => {
       }
 
       assert.deepInclude(interception.request.body, {
-        // actionDatetimeUtc: '2023-02-18T12:09:45.874Z',
         actionType: 'SEA_CONTROL',
         controlQualityComments: 'Une observation sur le déroulé du contrôle.',
         controlUnits: [],
@@ -143,30 +139,7 @@ context('Side Window > Mission Form > Sea Control', () => {
         ],
         portLocode: null,
         portName: null,
-        // TODO Test the retrieval of the vessel segment (with the get risk factors API)
-        /*
-        {
-            faoAreas: ['37.1', '37.2', '37.3', '27.8.a', '27.8.b', '27.7.h', '27.7.e', '27.7.d'],
-            segment: 'FR_ELE',
-            segmentName: 'Eel sea fisheries'
-          },
-          {
-            faoAreas: ['27.8.a', '27.8.b', '27.7.h', '27.7.e', '27.7.d', '27.4.c'],
-            segment: 'FR_SCE',
-            segmentName: 'Scallop fisheries'
-          },
-          { faoAreas: ['27.8.c', '27.8', '27.9'], segment: 'SWW01/02/03', segmentName: 'Bottom trawls' },
-          { faoAreas: ['27.8.c', '27.8'], segment: 'SWW04', segmentName: 'Midwater trawls' },
-          { faoAreas: ['27.8.c', '27.8', '27.9'], segment: 'SWW06', segmentName: 'Seines' },
-          { faoAreas: ['27.8.c', '27.8', '27.9'], segment: 'SWW07/08', segmentName: 'Gill and trammel nets' },
-          { faoAreas: ['27.8.c', '27.8', '27.9'], segment: 'SWW10', segmentName: 'Longlines targeting demersal' },
-          {
-            faoAreas: ['27.8.c', '27.8', '27.9'],
-            segment: 'SWW11',
-            segmentName: 'Hooks and Lines targeting GFB and ALF'
-          },
-         */
-        segments: [{ faoAreas: ['37.1', '37.2', '37.3'], segment: 'FR_DRB', segmentName: "Drague de mer et d'étang" }],
+        segments: [{ segment: 'FR_DRB', segmentName: "Drague de mer et d'étang" }],
         seizureAndDiversion: true,
         seizureAndDiversionComments: null,
         separateStowageOfPreservedSpecies: true,
@@ -195,4 +168,186 @@ context('Side Window > Mission Form > Sea Control', () => {
       cy.get('h1').should('contain.text', 'Missions et contrôles')
     })
   })
+
+  it('Should fill the form for a vessel with logbook and prefill the gears, species, fao areas and segments fields', () => {
+    openSideWindowNewMission()
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
+    // -------------------------------------------------------------------------
+    // Form
+
+    cy.get('input[placeholder="Rechercher un navire..."]').type('pheno')
+    cy.contains('mark', 'PHENO').click()
+
+    cy.wait(500)
+
+    cy.fill('Saisi par', 'Gaumont')
+    cy.wait(500)
+
+    // -------------------------------------------------------------------------
+    // Request
+
+    cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
+
+    cy.clickButton('Enregistrer')
+
+    cy.wait('@createMissionAction').then(interception => {
+      if (!interception.response) {
+        assert.fail('`interception.response` is undefined.')
+      }
+      assert.deepInclude(interception.request.body, {
+        actionType: 'SEA_CONTROL',
+        controlQualityComments: null,
+        controlUnits: [],
+        diversion: null,
+        emitsAis: null,
+        emitsVms: null,
+        externalReferenceNumber: 'DONTSINK',
+        facade: null,
+        faoAreas: ['27.8.b', '27.8.c'],
+        feedbackSheetRequired: false,
+        flagState: 'FR',
+        gearInfractions: [],
+        gearOnboard: [
+          {
+            comments: null,
+            controlledMesh: null,
+            declaredMesh: null,
+            gearCode: 'OTB',
+            gearName: 'Chaluts de fond à panneaux',
+            gearWasControlled: null
+          }
+        ],
+        id: null,
+        internalReferenceNumber: 'FAK000999999',
+        ircs: 'CALLME',
+        isFromPoseidon: null,
+        latitude: null,
+        licencesAndLogbookObservations: null,
+        licencesMatchActivity: null,
+        logbookInfractions: [],
+        logbookMatchesActivity: null,
+        longitude: null,
+        missionId: 1,
+        numberOfVesselsFlownOver: null,
+        otherComments: null,
+        otherInfractions: [],
+        portLocode: null,
+        portName: null,
+        segments: [{ segment: 'SWW01/02/03', segmentName: 'Bottom trawls' }],
+        seizureAndDiversion: false,
+        seizureAndDiversionComments: null,
+        separateStowageOfPreservedSpecies: null,
+        speciesInfractions: [],
+        speciesObservations: null,
+        speciesOnboard: [
+          { controlledWeight: null, declaredWeight: 13.46, nbFish: null, speciesCode: 'BLI', underSized: false },
+          { controlledWeight: null, declaredWeight: 235.6, nbFish: null, speciesCode: 'HKE', underSized: false }
+        ],
+        speciesSizeControlled: null,
+        speciesWeightControlled: null,
+        unitWithoutOmegaGauge: false,
+        userTrigram: 'Gaumont',
+        vesselId: 1,
+        vesselName: 'PHENOMENE',
+        vesselTargeted: false
+      })
+      assert.isString(interception.request.body.actionDatetimeUtc)
+
+      cy.get('h1').should('contain.text', 'Missions et contrôles')
+    })
+  })
+
+  it('Should fill the form for a vessel with a control position and prefill the gears, species, fao areas and segments fields', () => {
+    editSideWindowMission('MALOTRU')
+
+    // -------------------------------------------------------------------------
+    // Form
+    cy.get('*[data-cy="action-list-item"]').click()
+    cy.wait(500)
+
+    // Engins à bord
+    cy.fill('Ajouter un engin', 'PTM')
+
+    // Espèces à bord
+    cy.fill('Ajouter une espèce', 'SPR')
+
+    // -------------------------------------------------------------------------
+    // Request
+
+    cy.intercept('PUT', '/bff/v1/mission_actions/4').as('updateMissionAction')
+
+    cy.clickButton('Enregistrer')
+
+    cy.wait('@updateMissionAction').then(interception => {
+      if (!interception.response) {
+        assert.fail('`interception.response` is undefined.')
+      }
+      assert.deepInclude(interception.request.body, {
+        actionType: 'SEA_CONTROL',
+        controlQualityComments: null,
+        controlUnits: [],
+        diversion: null,
+        emitsAis: null,
+        emitsVms: 'NOT_APPLICABLE',
+        externalReferenceNumber: null,
+        facade: 'Manche ouest - Mer du Nord',
+        faoAreas: ['27.8.a'],
+        feedbackSheetRequired: false,
+        flagState: 'FR',
+        gearInfractions: [],
+        gearOnboard: [
+          {
+            comments: null,
+            controlledMesh: null,
+            declaredMesh: null,
+            gearCode: 'PTM',
+            gearName: 'Chaluts-bœufs pélagiques',
+            gearWasControlled: null
+          }
+        ],
+        id: 4,
+        internalReferenceNumber: 'U_W0NTFINDME',
+        ircs: null,
+        isFromPoseidon: null,
+        latitude: 53.35,
+        licencesAndLogbookObservations: null,
+        licencesMatchActivity: 'NOT_APPLICABLE',
+        logbookInfractions: [],
+        logbookMatchesActivity: 'NOT_APPLICABLE',
+        longitude: -10.85,
+        missionId: 4,
+        numberOfVesselsFlownOver: null,
+        otherComments: 'Commentaires post contrôle',
+        otherInfractions: [],
+        portLocode: null,
+        portName: null,
+        segments: [{ segment: 'PEL01', segmentName: 'Freezer Trawls - Mid water and mid water pair trawl' }],
+        seizureAndDiversion: false,
+        seizureAndDiversionComments: null,
+        separateStowageOfPreservedSpecies: false,
+        speciesInfractions: [],
+        speciesObservations: null,
+        speciesOnboard: [
+          { controlledWeight: null, declaredWeight: null, nbFish: null, speciesCode: 'SPR', underSized: false }
+        ],
+        speciesSizeControlled: null,
+        speciesWeightControlled: null,
+        unitWithoutOmegaGauge: false,
+        userTrigram: null,
+        vesselId: 2,
+        vesselName: 'MALOTRU',
+        vesselTargeted: null
+      })
+      assert.isString(interception.request.body.actionDatetimeUtc)
+
+      cy.get('h1').should('contain.text', 'Missions et contrôles')
+    })
+  })
+
+  // PTM
+  // SPR
 })

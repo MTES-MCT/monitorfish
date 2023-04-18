@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "url": "/api/v1/missions/41"
+    "url": "/api/v1/missions/4"
   },
   "response": {
     "status": 200,
@@ -11,14 +11,14 @@
       "Access-Control-Allow-Methods": "*"
     },
     "jsonBody": {
-      "id": 41,
+      "id": 4,
       "missionTypes": ["SEA"],
       "missionNature": ["FISH", "OTHER"],
       "controlUnits": [
         {
           "id": 10003,
           "administration": "DDTM",
-          "name": "DML 2A (historique)",
+          "name": "DML 2A",
           "resources": [],
           "contact": null,
           "isArchived": false
@@ -31,9 +31,9 @@
       "facade": "MEMN",
       "geom": null,
       "startDateTimeUtc": "2023-02-15T13:11:59.923703Z",
-      "endDateTimeUtc": "2023-03-09T04:28:10.923703Z",
+      "endDateTimeUtc": null,
       "envActions": [],
-      "missionSource": "MONITORENV",
+      "missionSource": "MONITORFISH",
       "isClosed": false
     }
   }

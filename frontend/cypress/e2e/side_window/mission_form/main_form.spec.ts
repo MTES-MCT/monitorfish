@@ -270,7 +270,7 @@ context('Side Window > Mission Form > Main Form', () => {
           }
         ],
         id: 2,
-        internalReferenceNumber: null,
+        internalReferenceNumber: 'FAK000999999',
         ircs: null,
         isFromPoseidon: null,
         latitude: 47.44,
@@ -318,7 +318,7 @@ context('Side Window > Mission Form > Main Form', () => {
         unitWithoutOmegaGauge: false,
         userTrigram: null,
         vesselId: 1,
-        vesselName: null,
+        vesselName: 'PHENOMENE',
         vesselTargeted: null
       })
     })

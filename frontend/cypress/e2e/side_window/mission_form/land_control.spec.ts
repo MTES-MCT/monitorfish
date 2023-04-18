@@ -103,10 +103,19 @@ context('Side Window > Mission Form > Land Control', () => {
         emitsVms: 'YES',
         externalReferenceNumber: 'DONTSINK',
         facade: null,
+        faoAreas: ['27.8.b', '27.8.c'],
         feedbackSheetRequired: true,
         flagState: 'FR',
         gearInfractions: [],
         gearOnboard: [
+          {
+            comments: null,
+            controlledMesh: null,
+            declaredMesh: null,
+            gearCode: 'OTB',
+            gearName: 'Chaluts de fond à panneaux',
+            gearWasControlled: null
+          },
           {
             comments: null,
             controlledMesh: null,
@@ -134,25 +143,7 @@ context('Side Window > Mission Form > Land Control', () => {
         otherInfractions: [
           { comments: 'Une observation sur l’infraction autre.', infractionType: 'WITHOUT_RECORD', natinf: 27689 }
         ],
-        segments: [
-          {
-            segment: 'FR_ELE',
-            segmentName: 'Eel sea fisheries'
-          },
-          {
-            segment: 'FR_SCE',
-            segmentName: 'Scallop fisheries'
-          },
-          { segment: 'SWW01/02/03', segmentName: 'Bottom trawls' },
-          { segment: 'SWW04', segmentName: 'Midwater trawls' },
-          { segment: 'SWW06', segmentName: 'Seines' },
-          { segment: 'SWW07/08', segmentName: 'Gill and trammel nets' },
-          { segment: 'SWW10', segmentName: 'Longlines targeting demersal' },
-          {
-            segment: 'SWW11',
-            segmentName: 'Hooks and Lines targeting GFB and ALF'
-          }
-        ],
+        segments: [{ segment: 'SWW01/02/03', segmentName: 'Bottom trawls' }],
         seizureAndDiversion: true,
         seizureAndDiversionComments: null,
         separateStowageOfPreservedSpecies: true,
@@ -166,7 +157,9 @@ context('Side Window > Mission Form > Land Control', () => {
         ],
         speciesObservations: 'Une observation hors infraction sur les espèces.',
         speciesOnboard: [
-          { controlledWeight: 20, declaredWeight: 10, nbFish: null, speciesCode: 'COD', underSized: true }
+          { controlledWeight: 20, declaredWeight: 13.461, nbFish: null, speciesCode: 'BLI', underSized: true },
+          { controlledWeight: null, declaredWeight: 235.6, nbFish: null, speciesCode: 'HKE', underSized: false },
+          { controlledWeight: null, declaredWeight: null, nbFish: null, speciesCode: 'COD', underSized: false }
         ],
         speciesSizeControlled: false,
         speciesWeightControlled: true,

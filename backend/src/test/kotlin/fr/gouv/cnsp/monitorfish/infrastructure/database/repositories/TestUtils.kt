@@ -5,7 +5,7 @@ import java.time.ZonedDateTime
 
 object TestUtils {
     fun getDummyMissionAction(dateTime: ZonedDateTime, id: Int? = null) = MissionAction(
-        id,
+        id = id,
         actionDatetimeUtc = dateTime,
         missionId = 2,
         vesselId = 2,

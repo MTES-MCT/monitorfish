@@ -245,7 +245,7 @@ context('Side Window > Mission Form > Main Form', () => {
         externalReferenceNumber: null,
         facade: 'Manche ouest - Atlantique',
         feedbackSheetRequired: true,
-        flagState: null,
+        flagState: 'GB',
         flightGoals: [],
         gearInfractions: [
           { comments: 'Maille trop petite', gearSeized: null, infractionType: 'WITH_RECORD', natinf: 23581 },

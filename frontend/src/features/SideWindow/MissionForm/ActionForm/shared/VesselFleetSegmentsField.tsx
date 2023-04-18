@@ -1,6 +1,6 @@
 import { Field, Label, SingleTag, TagGroup } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
-import { useField } from 'formik'
+import { useFormikContext } from 'formik'
 import { remove as ramdaRemove, uniq } from 'ramda'
 import { useCallback, useEffect, useMemo } from 'react'
 
@@ -24,18 +24,8 @@ export type VesselFleetSegmentsFieldProps = {
 export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProps) {
   const dispatch = useMainAppDispatch()
 
-  // Fields
-  const [{ value: segmentsValue }, , segmentsHelper] = useField<MissionActionFormValues['segments']>('segments')
-  const [{ value: faoAreasValue }, , faoAreasHelper] = useField<MissionActionFormValues['faoAreas']>('faoAreas')
-
-  // Other fields controlling this field
-  const [{ value: internalReferenceNumber }] =
-    useField<MissionActionFormValues['internalReferenceNumber']>('internalReferenceNumber')
-  const riskFactorApiQuery = useGetRiskFactorQuery(internalReferenceNumber || skipToken)
-  const [{ value: gearOnBoard }] = useField<MissionActionFormValues['gearOnboard']>('gearOnboard')
-  const [{ value: speciesOnboard }] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
-  const [{ value: longitude }] = useField<MissionActionFormValues['longitude']>('longitude')
-  const [{ value: latitude }] = useField<MissionActionFormValues['latitude']>('latitude')
+  const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
+  const riskFactorApiQuery = useGetRiskFactorQuery(values.internalReferenceNumber || skipToken)
 
   const getFleetSegmentsApiQuery = useGetFleetSegmentsQuery()
 
@@ -57,31 +47,22 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
 
   useEffect(
     () => {
-      if (faoAreasValue?.length) {
-        return
-      }
-
-      if (!internalReferenceNumber) {
-        return
-      }
-
-      if (!riskFactorApiQuery.data) {
+      if (values.faoAreas?.length || !riskFactorApiQuery.data) {
         return
       }
 
       const declaredSpeciesOnboard: DeclaredLogbookSpecies[] = riskFactorApiQuery.data.speciesOnboard
       const faoAreas = getFaoZonesFromSpeciesOnboard(declaredSpeciesOnboard || [])
 
-      faoAreasHelper.setValue(faoAreas)
+      setFieldValue('faoAreas', faoAreas)
     },
 
-    // We observe `internalReferenceNumber` changes in order to update the faoAreas
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [internalReferenceNumber, riskFactorApiQuery]
+    [riskFactorApiQuery.data]
   )
 
   useEffect(() => {
-    if (segmentsValue?.length) {
+    if (values.segments?.length) {
       return
     }
 
@@ -90,34 +71,49 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
 
       // TODO Add the port Locode
       const computedFleetSegments = await dispatch(
-        getFleetSegments(declaredSpeciesOnboard, gearOnBoard, speciesOnboard, longitude, latitude, undefined)
+        getFleetSegments(
+          declaredSpeciesOnboard,
+          values.gearOnboard,
+          values.speciesOnboard,
+          values.longitude,
+          values.latitude,
+          undefined
+        )
       )
 
       const nextFleetSegments = fleetSegmentsAsOptions
         .filter(({ value }) => computedFleetSegments?.find(fleetSegment => fleetSegment.segment === value.segment))
         .map(({ value }) => value)
 
-      segmentsHelper.setValue(nextFleetSegments)
+      setFieldValue('segments', nextFleetSegments)
     }
 
     getFleetSegmentsAsync()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, fleetSegmentsAsOptions, gearOnBoard, speciesOnboard, longitude, latitude, riskFactorApiQuery])
+  }, [
+    dispatch,
+    fleetSegmentsAsOptions,
+    values.gearOnboard,
+    values.speciesOnboard,
+    values.longitude,
+    values.latitude,
+    riskFactorApiQuery
+  ])
 
   const removeFaoArea = useCallback(
     (faoAreaToDelete: string) => {
-      const nextFaoAreas = faoAreasValue?.filter(faoArea => faoArea !== faoAreaToDelete) || []
+      const nextFaoAreas = values.faoAreas?.filter(faoArea => faoArea !== faoAreaToDelete) || []
 
-      faoAreasHelper.setValue(nextFaoAreas)
+      setFieldValue('faoAreas', nextFaoAreas)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [faoAreasValue]
+    [values.faoAreas]
   )
 
   const removeFleetSegment = useCallback(
     (fleetSegmentIndex: number | undefined) => {
-      if (!segmentsValue) {
+      if (!values.segments) {
         throw new FrontendError('`segments` is undefined')
       }
 
@@ -125,41 +121,41 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
         throw new FrontendError('`fleetSegmentIndex` is undefined')
       }
 
-      const nextFleetSegments = ramdaRemove(fleetSegmentIndex, 1, segmentsValue)
+      const nextFleetSegments = ramdaRemove(fleetSegmentIndex, 1, values.segments)
       const normalizedNextSegments = nextFleetSegments.length > 0 ? nextFleetSegments : undefined
 
-      segmentsHelper.setValue(normalizedNextSegments)
+      setFieldValue('segments', normalizedNextSegments)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [segmentsValue]
+    [values.segments]
   )
 
   const faoAreaTags = useMemo(() => {
-    if (!faoAreasValue) {
+    if (!values.faoAreas) {
       return []
     }
 
-    const faoAreas = sortByAscendingValue(uniq(faoAreasValue))
+    const faoAreas = sortByAscendingValue(uniq(values.faoAreas))
 
     return faoAreas.map(faoArea => (
       <SingleTag key={faoArea} onDelete={() => removeFaoArea(faoArea)}>
         {faoArea}
       </SingleTag>
     ))
-  }, [faoAreasValue, removeFaoArea])
+  }, [values.faoAreas, removeFaoArea])
 
   const fleetSegmentTags = useMemo(
     () =>
-      segmentsValue
-        ? segmentsValue.map(({ segment, segmentName }, index) => (
+      values.segments
+        ? values.segments.map(({ segment, segmentName }, index) => (
             <SingleTag
               key={segment}
               onDelete={() => removeFleetSegment(index)}
             >{`${segment} - ${segmentName}`}</SingleTag>
           ))
         : [],
-    [segmentsValue, removeFleetSegment]
+    [values.segments, removeFleetSegment]
   )
 
   if (isLoading) {
@@ -168,7 +164,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
 
   return (
     <FieldsetGroup isLight legend={label}>
-      {(!segmentsValue || !segmentsValue.length) && (
+      {(!values.segments || !values.segments.length) && (
         <p>
           <em>
             Renseignez un point de contrôle, les engins utilisés et les espèce pêchées pour qu’un segment de flotte soit
@@ -177,7 +173,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
         </p>
       )}
 
-      {segmentsValue && segmentsValue.length > 0 && (
+      {values.segments && values.segments.length > 0 && (
         <>
           {faoAreaTags.length > 0 && (
             <Field>

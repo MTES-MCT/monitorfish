@@ -107,15 +107,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
 
   useEffect(
     () => {
-      if (input.value?.length) {
-        return
-      }
-
-      if (!internalReferenceNumber) {
-        return
-      }
-
-      if (!riskFactorApiQuery.data) {
+      if (input.value?.length || !riskFactorApiQuery.data) {
         return
       }
 
@@ -132,9 +124,8 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
       helper.setValue(nextSpeciesOnboard)
     },
 
-    // We observe `internalReferenceNumber` changes in order to update the species
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [internalReferenceNumber, riskFactorApiQuery]
+    [riskFactorApiQuery.data]
   )
 
   if (!speciesAsOptions.length) {

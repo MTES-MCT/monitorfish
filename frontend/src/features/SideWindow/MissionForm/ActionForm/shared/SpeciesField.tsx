@@ -77,12 +77,12 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   const getSpecyNameFromSpecyCode = useCallback(
     (specyCode: Specy['code']) => {
       if (!getSpeciesApiQuery.data) {
-        throw new FrontendError('`getSpeciesApiQuery.data` is undefined')
+        return ''
       }
 
       const foundSpecy = getSpeciesApiQuery.data.species.find(({ code }) => code === specyCode)
       if (!foundSpecy) {
-        throw new FrontendError('`foundSpecy` is undefined')
+        return ''
       }
 
       return foundSpecy.name

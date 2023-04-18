@@ -42,6 +42,6 @@ export const monitorfishApi = createApi({
     'MissionActions',
     'Ports',
     'Species',
-    'Vessel'
+    'RiskFactor'
   ]
 })

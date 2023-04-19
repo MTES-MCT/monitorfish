@@ -48,8 +48,10 @@ export function getMissionActionInfractionsFromMissionActionFromFormValues(
 }
 
 export function getMissionActionFormInitialValues(type: MissionAction.MissionActionType): MissionActionFormValues {
+  const actionDatetimeUtc = getUtcizedDayjs().startOf('minute').toISOString()
+
   return {
-    actionDatetimeUtc: getUtcizedDayjs(new Date()).toISOString(),
+    actionDatetimeUtc,
     actionType: type,
     vesselTargeted: false
   }

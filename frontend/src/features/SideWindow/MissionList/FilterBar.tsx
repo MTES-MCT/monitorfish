@@ -35,17 +35,19 @@ export function FilterBar({ onChange, onQueryChange }: FilterBarProps) {
   const administrationsAsOptions = useMemo(() => {
     const administrations = activeControlUnits.map(({ administration }) => administration)
     const uniqueAdministrations = uniq(administrations)
-    const uniqueAdministrationsAsOptions = getOptionsFromStrings(uniqueAdministrations)
+    const uniqueSortedAdministrations = uniqueAdministrations.sort()
+    const uniqueSortedAdministrationsAsOptions = getOptionsFromStrings(uniqueSortedAdministrations)
 
-    return uniqueAdministrationsAsOptions
+    return uniqueSortedAdministrationsAsOptions
   }, [activeControlUnits])
 
   const unitsAsOptions = useMemo(() => {
     const units = activeControlUnits.map(({ name }) => name)
     const uniqueUnits = uniq(units)
-    const uniqueUnitsAsOptions = getOptionsFromStrings(uniqueUnits)
+    const uniqueSortedUnits = uniqueUnits.sort()
+    const uniqueSortedUnitsAsOptions = getOptionsFromStrings(uniqueSortedUnits)
 
-    return uniqueUnitsAsOptions
+    return uniqueSortedUnitsAsOptions
   }, [activeControlUnits])
 
   const handleFilterFormChange = useCallback(

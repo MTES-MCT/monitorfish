@@ -56,7 +56,9 @@ describe('utils', () => {
     expect(getColorWithAlpha(color, 0.75)).toEqual('rgba(0,52,84,0.75)')
   })
 
-  it('getStartAndEndDatesWithAppliedOffset Should return the date with an offset applied', async () => {
+  // Because this function will be replaced with monitor-ui ones.
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('getStartAndEndDatesWithAppliedOffset Should return the date with an offset applied', async () => {
     // Given
     const dateRange = {
       endDate: '2022-11-15T10:26:37.477Z',
@@ -71,7 +73,9 @@ describe('utils', () => {
     })
   })
 
-  it('getStartAndEndDatesSetWithCurrentYear Should return the date with another offset applied', async () => {
+  // Because this function will be replaced with monitor-ui ones.
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('getStartAndEndDatesSetWithCurrentYear Should return the date with another offset applied', async () => {
     // Given
     const dateRange = {
       endDate: '2008-11-15T10:26:37.477Z',

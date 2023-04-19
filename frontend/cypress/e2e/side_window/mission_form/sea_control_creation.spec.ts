@@ -1,7 +1,7 @@
 import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
 import { Mission } from '../../../../src/domain/entities/mission/types'
 
-context('Side Window > Mission Form > Sea Control', () => {
+context('Side Window > Mission Form > Sea Control Creation', () => {
   beforeEach(() => {
     openSideWindowNewMission()
     fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)

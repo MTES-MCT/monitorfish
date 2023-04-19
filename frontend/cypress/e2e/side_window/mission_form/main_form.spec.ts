@@ -21,6 +21,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
     const getSaveButton = () => cy.get('button').contains('Enregistrer').parent()
     const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer').parent()
+    const expectedStartDateTimeUtc = new RegExp(`${getUtcizedDayjs().utc().format('YYYY-MM-DDTHH')}:\\d{2}:00\\.000Z`)
 
     cy.intercept('POST', '/api/v1/missions', {
       body: {
@@ -34,11 +35,8 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.fill('Types de mission', ['Mer'])
 
-    cy.fill('Mission sous JDP', true)
-
     cy.fill('Administration 1', 'DDTM')
     cy.fill('Unité 1', 'Cultures marines – DDTM 40')
-    cy.fill('Moyen 1', ['Semi-rigide 2'])
 
     cy.wait(500)
 
@@ -52,6 +50,9 @@ context('Side Window > Mission Form > Main Form', () => {
         assert.fail('`interception.response` is undefined.')
       }
 
+      assert.isUndefined(interception.request.body.endDateTimeUtc)
+      // We only need to accurately test this prop in one test, no need to repeat it for each case
+      assert.match(interception.request.body.startDateTimeUtc, expectedStartDateTimeUtc)
       assert.deepInclude(interception.request.body, {
         controlUnits: [
           {
@@ -60,25 +61,16 @@ context('Side Window > Mission Form > Main Form', () => {
             id: 10001,
             isArchived: false,
             name: 'Cultures marines – DDTM 40',
-            resources: [
-              {
-                id: 2,
-                name: 'Semi-rigide 2'
-              }
-            ]
+            resources: []
           }
         ],
-        // endDateTimeUtc: '2023-02-01T01:33:22.988Z',
         envActions: null,
         isClosed: false,
         isDeleted: false,
-        // isUnderJdp: false,
+        isUnderJdp: false,
         missionSource: 'MONITORFISH',
         missionTypes: ['SEA']
-        // startDateTimeUtc: '2023-02-01T00:33:22.988Z'
       })
-      assert.isString(interception.request.body.endDateTimeUtc)
-      assert.isString(interception.request.body.startDateTimeUtc)
     })
 
     cy.get('h1').should('contain.text', 'Missions et contrôles')
@@ -94,7 +86,13 @@ context('Side Window > Mission Form > Main Form', () => {
       statusCode: 201
     }).as('createMission')
 
+    cy.fill('Début de mission', [2023, 2, 1, 12, 31])
+    cy.fill('Fin de mission', [2023, 2, 1, 12, 31])
+
     cy.fill('Types de mission', ['Air'])
+    cy.fill('Mission sous JDP', true)
+
+    cy.fill('Ordre de mission', 'Oui')
 
     cy.fill('Administration 1', 'DDTM')
     cy.fill('Unité 1', 'Cultures marines – DDTM 40')
@@ -158,19 +156,18 @@ context('Side Window > Mission Form > Main Form', () => {
             ]
           }
         ],
-        // endDateTimeUtc: '2023-02-01T02:01:27.603Z',
+        endDateTimeUtc: '2023-02-01T12:31:00.000Z',
+        hasOrder: true,
         isClosed: false,
         isDeleted: false,
-        // isUnderJdp: true,
+        isUnderJdp: true,
         missionSource: 'MONITORFISH',
         missionTypes: ['AIR'],
         observationsCacem: 'Une note.',
         observationsCnsp: 'Une autre note.',
-        openBy: 'Nemo'
-        // startDateTimeUtc: '2023-02-01T01:01:27.603Z'
+        openBy: 'Nemo',
+        startDateTimeUtc: '2023-02-01T12:31:00.000Z'
       })
-      assert.isString(interception.request.body.endDateTimeUtc)
-      assert.isString(interception.request.body.startDateTimeUtc)
     })
 
     cy.get('h1').should('contain.text', 'Missions et contrôles')
@@ -196,6 +193,8 @@ context('Side Window > Mission Form > Main Form', () => {
         assert.fail('`interception.response` is undefined.')
       }
 
+      assert.isString(interception.request.body.endDateTimeUtc)
+      assert.isString(interception.request.body.startDateTimeUtc)
       assert.deepInclude(interception.request.body, {
         closedBy: 'Samantha Jones',
         controlUnits: [
@@ -208,7 +207,6 @@ context('Side Window > Mission Form > Main Form', () => {
             resources: []
           }
         ],
-        // endDateTimeUtc: '2023-01-23T02:49:25.923703Z',
         envActions: null,
         facade: 'MEMN',
         geom: null,
@@ -221,10 +219,7 @@ context('Side Window > Mission Form > Main Form', () => {
           'Maybe own each college away likely major. Former space technology million cell. Outside body my drop require.',
         observationsCnsp: null,
         openBy: 'Brittany Graham'
-        // startDateTimeUtc: '2022-01-20T04:53:35.923703Z'
       })
-      assert.isString(interception.request.body.endDateTimeUtc)
-      assert.isString(interception.request.body.startDateTimeUtc)
     })
 
     cy.wait('@updateMissionAction2').then(interception => {
@@ -232,10 +227,8 @@ context('Side Window > Mission Form > Main Form', () => {
         assert.fail('`interception.response` is undefined.')
       }
 
-      const nowAsDayjs = getUtcizedDayjs()
-
+      assert.isString(interception.request.body.actionDatetimeUtc)
       assert.deepInclude(interception.request.body, {
-        actionDatetimeUtc: `${nowAsDayjs.format('YYYY-MM-DD')}T00:00:00Z`,
         actionType: 'SEA_CONTROL',
         controlQualityComments: 'Ciblage CNSP non respecté',
         controlUnits: [],
@@ -361,8 +354,6 @@ context('Side Window > Mission Form > Main Form', () => {
       statusCode: 201
     }).as('updateMission')
 
-    // TODO Fix that in `monitor-ui`.
-    cy.fill('Clôturé par', undefined)
     cy.fill('Clôturé par', 'Doris')
 
     cy.wait(500)

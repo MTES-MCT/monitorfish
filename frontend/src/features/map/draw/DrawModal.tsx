@@ -134,21 +134,21 @@ export function DrawLayerModal() {
         <ActionWrapper>
           {listener === InteractionListener.MISSION_ZONE && (
             <>
-              <IconButton
+              <StyledIconButton
                 accent={Accent.PRIMARY}
                 className={interactionType === InteractionType.POLYGON ? '_active' : ''}
                 Icon={Icon.SelectPolygon}
                 onClick={handleSelectInteraction(InteractionType.POLYGON)}
                 size={Size.NORMAL}
               />
-              <IconButton
+              <StyledIconButton
                 accent={Accent.PRIMARY}
                 className={interactionType === InteractionType.SQUARE ? '_active' : ''}
                 Icon={Icon.SelectRectangle}
                 onClick={handleSelectInteraction(InteractionType.SQUARE)}
                 size={Size.NORMAL}
               />
-              <IconButton
+              <StyledIconButton
                 accent={Accent.PRIMARY}
                 className={interactionType === InteractionType.CIRCLE ? '_active' : ''}
                 Icon={Icon.Info}
@@ -179,6 +179,12 @@ export function DrawLayerModal() {
   )
 }
 
+const StyledIconButton = styled(IconButton)`
+  width: 30px;
+  height: 30px;
+  margin-top: 12px;
+`
+
 const StyledCoordinatesInput = styled(CoordinatesInput)`
   > div {
     padding: 12px;
@@ -187,11 +193,12 @@ const StyledCoordinatesInput = styled(CoordinatesInput)`
 
 const Wrapper = styled.div`
   display: flex;
-  margin-left: calc(50% - 225px);
-  margin-right: calc(50% - 225px);
+  margin-left: calc(50% - 310px);
+  margin-right: calc(50% - 310px);
   position: absolute;
   top: 0;
   width: 620px;
+  box-shadow: 0px 3px 6px #00000029;
 `
 const ContentWrapper = styled.div`
   width: inherit;
@@ -244,6 +251,10 @@ const ActionWrapper = styled.div`
   background-color: ${theme.color.white};
   display: flex;
   padding: 10px;
+
+  & > :first-child {
+    margin-left: 14px;
+  }
 
   & > :not(:last-child) {
     margin-right: 10px;

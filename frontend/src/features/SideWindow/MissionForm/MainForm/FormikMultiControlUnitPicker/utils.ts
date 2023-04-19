@@ -1,45 +1,46 @@
-import { ascend, map, pipe, prop, sort, sortWith, uniq, uniqBy } from 'ramda'
+import { sortBy, uniq } from 'lodash'
 
-import { sortByAscendingValue } from '../../../../../utils/sortByAscendingValue'
+import { getOptionsFromStrings } from '../../../../../utils/getOptionsFromStrings'
 
+import type { ControlResource } from '../../../../../domain/types/controlResource'
 import type { ControlUnit } from '../../../../../domain/types/controlUnit'
 import type { Option } from '@mtes-mct/monitor-ui'
 
-export function findControlUnitById(
+export function findControlUnitByname(
   controlUnits: ControlUnit.ControlUnit[],
-  id: ControlUnit.ControlUnit['id']
+  name: ControlUnit.ControlUnit['name']
 ): ControlUnit.ControlUnit | undefined {
-  return controlUnits.find(controlUnit => controlUnit.id === id)
+  return controlUnits.find(controlUnit => controlUnit.name === name)
 }
 
-export const mapControlUnitsToUniqueSortedAdministrationsAsOptions: (
+export function mapControlUnitsToUniqueSortedAdministrationsAsOptions(
   controlUnits: ControlUnit.ControlUnit[]
-) => Option[] = pipe(
-  map(prop('administration')),
-  uniq,
-  sortByAscendingValue,
-  map(administration => ({
-    label: administration,
-    value: administration
-  }))
-)
+): Option[] {
+  const administrations = controlUnits.map(({ administration }) => administration)
+  const uniqueAdministrations = uniq(administrations)
+  const uniqueSortedAdministrations = uniqueAdministrations.sort()
+  const uniqueSortedAdministrationsAsOptions = getOptionsFromStrings(uniqueSortedAdministrations)
 
-export const mapControlUnitsToUniqueSortedNamesAsOptions: (
-  controlUnits: ControlUnit.ControlUnit[]
-) => Array<Option<number>> = pipe(
-  uniqBy<ControlUnit.ControlUnit, string>(({ administration, name }) => `${administration}-${name}`),
-  sortWith([ascend(prop('administration')), ascend(prop('name'))]),
-  map(({ id, name }) => ({
-    label: name,
-    value: id
-  }))
-)
+  return uniqueSortedAdministrationsAsOptions
+}
 
-export const mapControlUnitToResourcesAsOptions: (controlUnit: ControlUnit.ControlUnit) => Option<number>[] = pipe(
-  prop('resources'),
-  sort(ascend(prop('name'))),
-  map(({ id, name }: ControlUnit.ControlUnit['resources'][0]) => ({
-    label: name,
-    value: id
+export function mapControlUnitsToUniqueSortedNamesAsOptions(controlUnits: ControlUnit.ControlUnit[]): Option[] {
+  const names = controlUnits.map(({ name }) => name)
+  const uniqueNames = uniq(names)
+  const uniqueSortedNames = uniqueNames.sort()
+  const uniqueSortedNamesAsOptions = getOptionsFromStrings(uniqueSortedNames)
+
+  return uniqueSortedNamesAsOptions
+}
+
+export function mapControlUnitToSortedResourcesAsOptions(
+  controlUnit: ControlUnit.ControlUnit
+): Array<Option<ControlResource>> {
+  const sortedResources = sortBy(controlUnit.resources, ({ name }) => name)
+  const sortedResourcesAsOptions = sortedResources.map(sortedResource => ({
+    label: sortedResource.name,
+    value: sortedResource
   }))
-)
+
+  return sortedResourcesAsOptions
+}

@@ -27,22 +27,21 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
   const controlUnitsQuery = useGetControlUnitsQuery(undefined)
   const { forceUpdate } = useForceUpdate()
 
-  const allAdministrationsAsOptions = useMemo((): Option[] => {
-    if (!controlUnitsQuery.data) {
-      return []
-    }
+  const activeControlUnits = useMemo(
+    () => (controlUnitsQuery.data || []).filter(({ isArchived }) => !isArchived),
+    [controlUnitsQuery.data]
+  )
 
-    return mapControlUnitsToUniqueSortedAdministrationsAsOptions(controlUnitsQuery.data)
-  }, [controlUnitsQuery.data])
+  const allAdministrationsAsOptions = useMemo(
+    (): Option[] => mapControlUnitsToUniqueSortedAdministrationsAsOptions(activeControlUnits),
+    [activeControlUnits]
+  )
 
   // Users must be able to select either by administration or by unit if they don't know the administration name
-  const allNamesAsOptions = useMemo((): Array<Option<number>> => {
-    if (!controlUnitsQuery.data) {
-      return []
-    }
-
-    return mapControlUnitsToUniqueSortedNamesAsOptions(controlUnitsQuery.data)
-  }, [controlUnitsQuery.data])
+  const allNamesAsOptions = useMemo(
+    (): Option[] => mapControlUnitsToUniqueSortedNamesAsOptions(activeControlUnits),
+    [activeControlUnits]
+  )
 
   const addUnit = useCallback(
     () => {

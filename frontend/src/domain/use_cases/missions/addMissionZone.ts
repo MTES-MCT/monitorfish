@@ -26,7 +26,11 @@ export const addMissionZone =
 const openDrawLayerModal = dispatch => {
   dispatch(
     setDisplayedComponents({
+      areVesselsDisplayed: false,
+      isAlertsMapButtonDisplayed: false,
+      isBeaconMalfunctionsMapButtonDisplayed: false,
       isDrawLayerModalDisplayed: true,
+      isFavoriteVesselsMapButtonDisplayed: false,
       isInterestPointMapButtonDisplayed: false,
       isMeasurementMapButtonDisplayed: false,
       isVesselFiltersMapButtonDisplayed: false,
@@ -41,7 +45,11 @@ const openDrawLayerModal = dispatch => {
 export const closeDrawLayerModal = dispatch => {
   dispatch(
     setDisplayedComponents({
+      areVesselsDisplayed: true,
+      isAlertsMapButtonDisplayed: true,
+      isBeaconMalfunctionsMapButtonDisplayed: true,
       isDrawLayerModalDisplayed: false,
+      isFavoriteVesselsMapButtonDisplayed: true,
       isInterestPointMapButtonDisplayed: true,
       isMeasurementMapButtonDisplayed: true,
       isVesselFiltersMapButtonDisplayed: true,

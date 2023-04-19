@@ -88,6 +88,7 @@ export function MissionForm() {
 
   const goToMissionList = useCallback(async () => {
     dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_LIST))
+    dispatch(missionActions.unsetDraft())
   }, [dispatch])
 
   /**

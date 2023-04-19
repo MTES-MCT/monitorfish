@@ -30,7 +30,7 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
   const { hideNonSelectedVessels, selectedVessel, vessels, vesselsTracksShowed } = useMainAppSelector(
     state => state.vessel
   )
-
+  const { areVesselsDisplayed } = useMainAppSelector(state => state.displayedComponent)
   const { isAdmin, previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
 
   const {
@@ -218,6 +218,7 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
     if (isThrottled.current || !vessels) {
       return
     }
+
     // functions definition
     function addLabelToFeatures(features) {
       const { vesselIsHidden, vesselIsOpacityReduced } =
@@ -277,7 +278,10 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
 
     function addVesselLabelToAllFeaturesInExtent() {
       const doNotShowLabels =
-        (isAdmin && !vesselLabelsShowedOnMap && !riskFactorShowedOnMap) || (!isAdmin && !vesselLabelsShowedOnMap)
+        (isAdmin && !vesselLabelsShowedOnMap && !riskFactorShowedOnMap) ||
+        (!isAdmin && !vesselLabelsShowedOnMap) ||
+        !areVesselsDisplayed
+
       if (doNotShowLabels) {
         setFeaturesAndLabels([])
         getVectorSource().clear()
@@ -344,7 +348,8 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
     hideNonSelectedVessels,
     vesselsTracksShowed,
     hideVesselsAtPort,
-    getVectorSource
+    getVectorSource,
+    areVesselsDisplayed
   ])
 
   useEffect(() => {
@@ -362,6 +367,7 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
 
   return (
     <>
+      <div />
       {currentLabels}
       <div /> {/* returns at least a div */}
     </>

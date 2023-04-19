@@ -14,6 +14,7 @@ import { booleanToInt, customHexToRGB } from '../../../utils'
 
 import { getWebGLVesselStyle } from './styles/vessel.style'
 import { theme } from '../../../ui/theme'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
 export const MIN_ZOOM_VESSEL_LABELS = 8
 

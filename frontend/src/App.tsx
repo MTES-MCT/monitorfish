@@ -92,7 +92,10 @@ export function App() {
 
 function HomePage() {
   const {
+    isAlertsMapButtonDisplayed,
+    isBeaconMalfunctionsMapButtonDisplayed,
     isDrawLayerModalDisplayed,
+    isFavoriteVesselsMapButtonDisplayed,
     isInterestPointMapButtonDisplayed,
     isMeasurementMapButtonDisplayed,
     isVesselFiltersMapButtonDisplayed,
@@ -119,13 +122,13 @@ function HomePage() {
             <Map />
             <LayersSidebar />
             {isVesselSearchDisplayed && <VesselSidebarHeader />}
-            <AlertsMapButton />
-            <BeaconMalfunctionsMapButton />
+            {isAlertsMapButtonDisplayed && <AlertsMapButton />}
+            {isBeaconMalfunctionsMapButtonDisplayed && <BeaconMalfunctionsMapButton />}
             <RightMenuOnHoverArea />
             {isVesselListDisplayed && <VesselList namespace="homepage" />}
             {isVesselFiltersMapButtonDisplayed && <VesselFiltersMapButton />}
             {isVesselVisibilityMapButtonDisplayed && <VesselVisibilityMapButton />}
-            <FavoriteVessels />
+            {isFavoriteVesselsMapButtonDisplayed && <FavoriteVessels />}
             {isVesselSidebarOpen && <VesselSidebar />}
             <UpdatingVesselLoader />
             {isMeasurementMapButtonDisplayed && <MeasurementMapButton />}

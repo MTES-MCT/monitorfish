@@ -13,17 +13,6 @@ export function findControlUnitByname(
   return controlUnits.find(controlUnit => controlUnit.name === name)
 }
 
-export function mapControlUnitsToUniqueSortedAdministrationsAsOptions(
-  controlUnits: ControlUnit.ControlUnit[]
-): Option[] {
-  const administrations = controlUnits.map(({ administration }) => administration)
-  const uniqueAdministrations = uniq(administrations)
-  const uniqueSortedAdministrations = uniqueAdministrations.sort()
-  const uniqueSortedAdministrationsAsOptions = getOptionsFromStrings(uniqueSortedAdministrations)
-
-  return uniqueSortedAdministrationsAsOptions
-}
-
 export function mapControlUnitsToUniqueSortedNamesAsOptions(controlUnits: ControlUnit.ControlUnit[]): Option[] {
   const names = controlUnits.map(({ name }) => name)
   const uniqueNames = uniq(names)

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { MISSION_LIST_TABLE_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
-import { getSeaFrontFilter, renderStatus } from './utils'
+import { getSeaFrontFilterFunction, renderStatus } from './utils'
 import { useGetMissionsQuery } from '../../../api/mission'
 import { missionActions } from '../../../domain/actions'
 import { useGetMissionsWithActions } from '../../../domain/entities/mission/hooks/useGetMissionsWithActions'
@@ -17,7 +17,7 @@ import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
 import { SideWindowMenuKey } from '../constants'
 
 import type { Mission, MissionWithActions } from '../../../domain/entities/mission/types'
-import type { AugmentedDataFilter } from '../../../hooks/useTable/types'
+import type { FilterFunction } from '../../../hooks/useTable/types'
 
 type MissionListProps = {
   selectedSubMenu: string
@@ -25,22 +25,22 @@ type MissionListProps = {
 export function MissionList({ selectedSubMenu }: MissionListProps) {
   const { fetchMissions, missionsWithActions } = useGetMissionsWithActions()
 
-  const [filters, setFilters] = useState<Array<AugmentedDataFilter<MissionWithActions>>>([])
+  const [filterFunctions, setFilterFunctions] = useState<FilterFunction<MissionWithActions>[]>([])
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
 
   const getMissionsApiQuery = useGetMissionsQuery(undefined)
   const dispatch = useMainAppDispatch()
 
-  const seaFrontGroupFilter = useMemo(() => getSeaFrontFilter(selectedSubMenu), [selectedSubMenu])
+  const seaFrontGroupFilter = useMemo(() => getSeaFrontFilterFunction(selectedSubMenu), [selectedSubMenu])
 
   useEffect(() => {
     fetchMissions()
   }, [fetchMissions])
 
-  const { renderTableHead, tableAugmentedData } = useTable<MissionWithActions>(
+  const { renderTableHead, tableData } = useTable<MissionWithActions>(
     missionsWithActions,
     MISSION_LIST_TABLE_OPTIONS,
-    [seaFrontGroupFilter, ...filters],
+    [seaFrontGroupFilter, ...filterFunctions],
     searchQuery
   )
 
@@ -70,32 +70,30 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
       </Header>
 
       <Body>
-        <FilterBar onChange={setFilters} onQueryChange={setSearchQuery} />
+        <FilterBar onChange={setFilterFunctions} onQueryChange={setSearchQuery} />
 
         {getMissionsApiQuery.isLoading && <p>Chargement en cours...</p>}
         {getMissionsApiQuery.error && <pre>{JSON.stringify(getMissionsApiQuery.error)}</pre>}
         {!getMissionsApiQuery.isLoading && !getMissionsApiQuery.error && (
           <>
-            <div>{`${tableAugmentedData.length ? tableAugmentedData.length : 'Aucune'} mission${
-              tableAugmentedData.length > 1 ? 's' : ''
-            }`}</div>
+            <div>{`${tableData.length ? tableData.length : 'Aucune'} mission${tableData.length > 1 ? 's' : ''}`}</div>
             <Table>
               {renderTableHead()}
 
               <TableBody>
-                {tableAugmentedData.map(augmentedMission => (
+                {tableData.map(augmentedMission => (
                   <TableBodyRow key={augmentedMission.id} data-id={augmentedMission.id}>
-                    <TableBodyCell $fixedWidth={136}>{augmentedMission.labelled.startDateTimeUtc}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={136}>{augmentedMission.labelled.endDateTimeUtc}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={80}>{augmentedMission.labelled.missionTypes}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={80}>{augmentedMission.labelled.missionSource}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={160}>{augmentedMission.labelled.controlUnits}</TableBodyCell>
-                    <TableBodyCell title={augmentedMission.labelled.inspectedVessels}>
-                      {augmentedMission.labelled.inspectedVessels}
+                    <TableBodyCell $fixedWidth={136}>{augmentedMission.$labelled.startDateTimeUtc}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={136}>{augmentedMission.$labelled.endDateTimeUtc}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={80}>{augmentedMission.$labelled.missionTypes}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={80}>{augmentedMission.$labelled.missionSource}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={160}>{augmentedMission.$labelled.controlUnits}</TableBodyCell>
+                    <TableBodyCell title={augmentedMission.$labelled.inspectedVessels}>
+                      {augmentedMission.$labelled.inspectedVessels}
                     </TableBodyCell>
-                    <TableBodyCell $fixedWidth={128}>{augmentedMission.labelled.inspectionsCount}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={128}>{augmentedMission.$labelled.inspectionsCount}</TableBodyCell>
                     <TableBodyCell $fixedWidth={128}>
-                      {renderStatus(augmentedMission.labelled.status as Mission.MissionStatus)}
+                      {renderStatus(augmentedMission.$labelled.status as Mission.MissionStatus)}
                     </TableBodyCell>
                     <TableBodyCell
                       $fixedWidth={48}
@@ -124,7 +122,7 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
                 ))}
               </TableBody>
 
-              {!tableAugmentedData.length && <EmptyCardTable>Aucune mission</EmptyCardTable>}
+              {!tableData.length && <EmptyCardTable>Aucune mission</EmptyCardTable>}
             </Table>
           </>
         )}

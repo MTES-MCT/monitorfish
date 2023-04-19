@@ -26,3 +26,5 @@ export enum MissionFilterType {
   TYPE = 'TYPE',
   UNIT = 'UNIT'
 }
+
+export type FilterValues = Partial<Record<MissionFilterType, any>>

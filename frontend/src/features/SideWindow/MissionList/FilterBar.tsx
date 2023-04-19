@@ -1,23 +1,23 @@
 import { FormikDateRangePicker, FormikEffect, FormikMultiSelect, FormikSelect, TextInput } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
-import { noop, omit, toPairs, uniq } from 'lodash'
+import { noop, omit } from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_FILTER_LABEL_ENUMERATORS, MISSION_FILTER_OPTIONS } from './constants'
 import { FilterTagBar } from './FilterTagBar'
-import { MissionDateRangeFilter, MissionFilterType } from './types'
-import { mapFilterFormRecordsToFilters } from './utils'
+import { MissionDateRangeFilter, MissionFilterType, type FilterValues } from './types'
+import { mapFilterValuesToFilterFunctions } from './utils'
 import { useGetControlUnitsQuery } from '../../../api/controlUnit'
+import { getControlUnitsOptionsFromControlUnits } from '../../../domain/controlUnits/utils'
 import { useNewWindow } from '../../../ui/NewWindow'
-import { getOptionsFromStrings } from '../../../utils/getOptionsFromStrings'
 
 import type { MissionWithActions } from '../../../domain/entities/mission/types'
-import type { AugmentedDataFilter } from '../../../hooks/useTable/types'
+import type { FilterFunction } from '../../../hooks/useTable/types'
 import type { Promisable } from 'type-fest'
 
 export type FilterBarProps = {
-  onChange: (filters: Array<AugmentedDataFilter<MissionWithActions>>) => Promisable<void>
+  onChange: (nextFilterFunctions: FilterFunction<MissionWithActions>[]) => Promisable<void>
   onQueryChange: (nextQuery: string | undefined) => Promisable<void>
 }
 export function FilterBar({ onChange, onQueryChange }: FilterBarProps) {
@@ -27,44 +27,28 @@ export function FilterBar({ onChange, onQueryChange }: FilterBarProps) {
 
   const controlUnitsQuery = useGetControlUnitsQuery(undefined)
 
-  const activeControlUnits = useMemo(
-    () => (controlUnitsQuery.data || []).filter(({ isArchived }) => !isArchived),
+  const { administrationsAsOptions, unitsAsOptions } = useMemo(
+    () => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data),
     [controlUnitsQuery.data]
   )
 
-  const administrationsAsOptions = useMemo(() => {
-    const administrations = activeControlUnits.map(({ administration }) => administration)
-    const uniqueAdministrations = uniq(administrations)
-    const uniqueSortedAdministrations = uniqueAdministrations.sort()
-    const uniqueSortedAdministrationsAsOptions = getOptionsFromStrings(uniqueSortedAdministrations)
-
-    return uniqueSortedAdministrationsAsOptions
-  }, [activeControlUnits])
-
-  const unitsAsOptions = useMemo(() => {
-    const units = activeControlUnits.map(({ name }) => name)
-    const uniqueUnits = uniq(units)
-    const uniqueSortedUnits = uniqueUnits.sort()
-    const uniqueSortedUnitsAsOptions = getOptionsFromStrings(uniqueSortedUnits)
-
-    return uniqueSortedUnitsAsOptions
-  }, [activeControlUnits])
-
   const handleFilterFormChange = useCallback(
-    (nextFilterValues: Partial<Record<MissionFilterType, string | string[]>>) => {
+    (nextFilterValues: FilterValues) => {
       const normalizedNextFilterValues =
+        // If there is a custom date range filter and the date range filter is not set to "custom",
         nextFilterValues[MissionFilterType.CUSTOM_DATE_RANGE] &&
         nextFilterValues[MissionFilterType.DATE_RANGE] !== MissionDateRangeFilter.CUSTOM
-          ? omit(nextFilterValues, MissionFilterType.CUSTOM_DATE_RANGE)
+          ? // we need to omit the hidden custom date range filter
+            omit(nextFilterValues, MissionFilterType.CUSTOM_DATE_RANGE)
           : nextFilterValues
 
-      const normalizedNextFilterValuePairs = toPairs(normalizedNextFilterValues) as Array<[MissionFilterType, any]>
-      const nextFilters = normalizedNextFilterValuePairs.map(mapFilterFormRecordsToFilters)
+      const nextFilterFunctions = mapFilterValuesToFilterFunctions(normalizedNextFilterValues)
 
-      const willOpenCustomDateRange = normalizedNextFilterValues.DATE_RANGE === MissionDateRangeFilter.CUSTOM
-      setIsCustomDateRangeOpen(willOpenCustomDateRange)
+      // Depending the date range filter is set to "custom" or not, we need to toggle the custom date range filter
+      const willCustomDateRangeOpen = normalizedNextFilterValues.DATE_RANGE === MissionDateRangeFilter.CUSTOM
+      setIsCustomDateRangeOpen(willCustomDateRangeOpen)
 
-      onChange(nextFilters)
+      onChange(nextFilterFunctions)
     },
     [onChange]
   )

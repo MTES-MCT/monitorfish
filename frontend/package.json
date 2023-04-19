@@ -104,7 +104,7 @@
     "assert": "2.0.0",
     "babel-eslint": "10.1.0",
     "codecov": "3.8.3",
-    "cypress": "12.9.0",
+    "cypress": "12.10.0",
     "cypress-mouse-position": "1.0.0",
     "cypress-plugin-snapshots": "github:ivangabriele/cypress-plugin-snapshots",
     "eslint": "8.37.0",

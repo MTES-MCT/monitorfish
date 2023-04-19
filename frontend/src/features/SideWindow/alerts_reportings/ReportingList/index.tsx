@@ -55,7 +55,7 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
     [currentReportings, selectedSeaFront]
   )
 
-  const { getTableCheckedData, renderTableHead, tableAugmentedData, tableCheckedIds, toggleTableCheckForId } = useTable<
+  const { getTableCheckedData, renderTableHead, tableCheckedIds, tableData, toggleTableCheckForId } = useTable<
     InfractionSuspicionReporting | PendingAlertReporting
   >(currentSeaFrontReportings, REPORTING_LIST_TABLE_OPTIONS, [], searchInputRef.current?.value)
 
@@ -169,7 +169,7 @@ MMSI: ${reporting.mmsi || ''}`
       </CardTableFilters>
 
       <CardTable
-        $hasScroll={tableAugmentedData.length > 9}
+        $hasScroll={tableData.length > 9}
         $width={1513}
         data-cy="side-window-reporting-list"
         style={{ marginTop: 10 }}
@@ -177,53 +177,48 @@ MMSI: ${reporting.mmsi || ''}`
         {renderTableHead()}
 
         <CardTableBody>
-          {tableAugmentedData.map((reporting, index) => {
-            const editingIsDisabled = reporting.item.type === ReportingType.ALERT
+          {tableData.map((reporting, index) => {
+            const editingIsDisabled = reporting.type === ReportingType.ALERT
 
             return (
               <CardTableRow key={reporting.id} data-cy="side-window-current-reportings" index={index + 1} style={{}}>
                 <FlexboxGrid>
                   <FlexboxGrid.Item style={columnStyles[0] as CSSProperties}>
                     <StyledCheckbox
-                      checked={reporting.isChecked}
+                      checked={reporting.$isChecked}
                       onChange={() => toggleTableCheckForId(reporting.id)}
                     />
                   </FlexboxGrid.Item>
                   <FlexboxGrid.Item
                     style={columnStyles[1] as CSSProperties}
-                    title={reporting.item.validationDate || reporting.item.creationDate}
+                    title={reporting.validationDate || reporting.creationDate}
                   >
-                    {timeago.format(reporting.item.validationDate || reporting.item.creationDate, 'fr')}
+                    {timeago.format(reporting.validationDate || reporting.creationDate, 'fr')}
                   </FlexboxGrid.Item>
                   <FlexboxGrid.Item
                     style={columnStyles[2] as CSSProperties}
-                    title={getReportingOrigin(reporting.item, true)}
+                    title={getReportingOrigin(reporting, true)}
                   >
-                    {getReportingOrigin(reporting.item)}
+                    {getReportingOrigin(reporting)}
                   </FlexboxGrid.Item>
-                  <FlexboxGrid.Item
-                    style={columnStyles[3] as CSSProperties}
-                    title={getReportingTitle(reporting.item, true)}
-                  >
-                    {getReportingTitle(reporting.item)}
+                  <FlexboxGrid.Item style={columnStyles[3] as CSSProperties} title={getReportingTitle(reporting, true)}>
+                    {getReportingTitle(reporting)}
                   </FlexboxGrid.Item>
                   <FlexboxGrid.Item style={columnStyles[4] as CSSProperties}>
-                    {reporting.item.value.natinfCode}
+                    {reporting.value.natinfCode}
                   </FlexboxGrid.Item>
                   <FlexboxGrid.Item style={columnStyles[5] as CSSProperties} title={getVesselNameTitle(reporting)}>
                     <Flag
                       rel="preload"
-                      src={`${baseUrl ? `${baseUrl}/` : ''}flags/${reporting.item.flagState.toLowerCase()}.svg`}
+                      src={`${baseUrl ? `${baseUrl}/` : ''}flags/${reporting.flagState.toLowerCase()}.svg`}
                       style={{ marginLeft: 0, marginRight: 5, marginTop: -2, width: 18 }}
-                      title={countries.getName(reporting.item.flagState.toLowerCase(), 'fr')}
+                      title={countries.getName(reporting.flagState.toLowerCase(), 'fr')}
                     />
-                    {reporting.item.vesselName}
+                    {reporting.vesselName}
                   </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[6] as CSSProperties}>
-                    {reporting.item.value.dml}
-                  </FlexboxGrid.Item>
+                  <FlexboxGrid.Item style={columnStyles[6] as CSSProperties}>{reporting.value.dml}</FlexboxGrid.Item>
                   <FlexboxGrid.Item style={columnStyles[7] as CSSProperties}>
-                    {reporting.item.underCharter && <UnderCharter>Navire sous charte</UnderCharter>}
+                    {reporting.underCharter && <UnderCharter>Navire sous charte</UnderCharter>}
                   </FlexboxGrid.Item>
                   <Separator />
                   <FlexboxGrid.Item style={columnStyles[8] as CSSProperties}>
@@ -231,7 +226,7 @@ MMSI: ${reporting.mmsi || ''}`
                       accent={Accent.TERTIARY}
                       data-cy="side-window-silenced-alerts-show-vessel"
                       Icon={Icon.ViewOnMap}
-                      onClick={() => focusOnMap(reporting.item)}
+                      onClick={() => focusOnMap(reporting)}
                       style={showIconStyle}
                       title="Voir sur la carte"
                     />
@@ -242,7 +237,7 @@ MMSI: ${reporting.mmsi || ''}`
                       data-cy="side-window-edit-reporting"
                       disabled={editingIsDisabled}
                       Icon={Icon.Edit}
-                      onClick={() => edit(editingIsDisabled, reporting.item)}
+                      onClick={() => edit(editingIsDisabled, reporting)}
                       title="Editer le signalement"
                     />
                   </FlexboxGrid.Item>
@@ -251,7 +246,7 @@ MMSI: ${reporting.mmsi || ''}`
             )
           })}
         </CardTableBody>
-        {!tableAugmentedData.length && <EmptyCardTable>Aucun signalement</EmptyCardTable>}
+        {!tableData.length && <EmptyCardTable>Aucun signalement</EmptyCardTable>}
       </CardTable>
       <EditReporting />
     </Content>

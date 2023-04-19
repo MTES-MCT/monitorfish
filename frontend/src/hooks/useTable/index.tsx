@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { TableHead } from './TableHead'
 import { getArrayPathFromStringPath, normalizeSearchQuery } from './utils'
 
-import type { AugmentedDataFilter, AugmentedDataItem, AugmentedDataItemBase, TableOptions } from './types'
+import type { TableItem, FilterFunction, TableOptions } from './types'
 import type { CollectionItem } from '../../types'
 
 export function useTable<T extends CollectionItem = CollectionItem>(
@@ -19,7 +19,7 @@ export function useTable<T extends CollectionItem = CollectionItem>(
     searchableKeys = [],
     searchFuseOptions = {}
   }: TableOptions<T>,
-  filters: Array<AugmentedDataFilter<T>>,
+  filterFunctions: FilterFunction<T>[],
   searchQuery?: string
 ) {
   const [checkedIds, setCheckedIds] = useState<(number | string)[]>([])
@@ -29,11 +29,7 @@ export function useTable<T extends CollectionItem = CollectionItem>(
   const rawData = useMemo(() => maybeRawData || [], [maybeRawData])
 
   const attachIsCheckedProps = useMemo(
-    () =>
-      columns.map(
-        () => (dataItem: AugmentedDataItemBase<T>) =>
-          assocPath(['isChecked'], checkedIds.includes(dataItem.id), dataItem)
-      ),
+    () => columns.map(() => (dataItem: T) => assocPath(['$isChecked'], checkedIds.includes(dataItem.id), dataItem)),
     [checkedIds, columns]
   )
 
@@ -43,13 +39,11 @@ export function useTable<T extends CollectionItem = CollectionItem>(
         const keyAsArrayPath = getArrayPathFromStringPath(key)
         const maybeLabelTransform = labelTransform || transform
 
-        return (augmentedDataItem: AugmentedDataItemBase<T>) =>
+        return (rawItem: T) =>
           assocPath(
-            ['labelled', ...keyAsArrayPath],
-            maybeLabelTransform
-              ? maybeLabelTransform(augmentedDataItem.item)
-              : path(keyAsArrayPath, augmentedDataItem.item),
-            augmentedDataItem
+            ['$labelled', ...keyAsArrayPath],
+            maybeLabelTransform ? maybeLabelTransform(rawItem as any) : path(keyAsArrayPath, rawItem),
+            rawItem
           )
       }),
     [columns]
@@ -62,14 +56,14 @@ export function useTable<T extends CollectionItem = CollectionItem>(
         const maybeColumn = columns.find(propEq('key', key))
         const maybeSearchTransform = maybeColumn && (maybeColumn.searchTransform || maybeColumn.transform)
 
-        return (augmentedDataItem: AugmentedDataItemBase<T>) => {
+        return (rawItem: T) => {
           const searchableValue = maybeSearchTransform
-            ? maybeSearchTransform(augmentedDataItem.item)
-            : path(keyAsArrayPath, augmentedDataItem.item)
+            ? maybeSearchTransform(rawItem as any)
+            : path(keyAsArrayPath, rawItem)
 
           const normalizedSearchableValue = diacritics.remove(String(searchableValue))
 
-          return assocPath(['searchable', ...keyAsArrayPath], normalizedSearchableValue, augmentedDataItem)
+          return assocPath(['$searchable', ...keyAsArrayPath], normalizedSearchableValue, rawItem)
         }
       }),
     [columns, searchableKeys]
@@ -83,94 +77,90 @@ export function useTable<T extends CollectionItem = CollectionItem>(
           const keyAsArrayPath = getArrayPathFromStringPath(key)
           const maybeSortingTransform = sortingTransform || transform
 
-          return (augmentedDataItem: AugmentedDataItemBase<T>) =>
+          return (rawItem: T) =>
             assocPath(
-              ['sortable', ...keyAsArrayPath],
-              maybeSortingTransform
-                ? maybeSortingTransform(augmentedDataItem.item)
-                : path(keyAsArrayPath, augmentedDataItem.item),
-              augmentedDataItem
+              ['$sortable', ...keyAsArrayPath],
+              maybeSortingTransform ? maybeSortingTransform(rawItem as any) : path(keyAsArrayPath, rawItem),
+              rawItem
             )
         }),
     [columns]
   )
 
-  const augmentedData = useMemo(() => {
-    const augmentedDataBase: Array<AugmentedDataItem<T>> = rawData.map(rawDataItem => ({
-      id: rawDataItem.id,
-      isChecked: false,
-      item: rawDataItem,
-      labelled: {},
-      searchable: {},
-      sortable: {}
+  const tableData = useMemo(() => {
+    const tableDataBase: TableItem<T>[] = rawData.map(rawDataItem => ({
+      ...rawDataItem,
+      $isChecked: false,
+      $labelled: {},
+      $searchable: {},
+      $sortable: {}
     }))
 
     const tasks = [...attachIsCheckedProps, ...attachLabelProps, ...attachSearchableProps, ...attachSortableProps]
     if (!tasks.length) {
-      return augmentedDataBase
+      return tableDataBase
     }
 
-    return augmentedDataBase.map(
+    return tableDataBase.map(
       // @ts-ignore
       pipe(...attachIsCheckedProps, ...attachLabelProps, ...attachSearchableProps, ...attachSortableProps)
-    ) as unknown as Array<AugmentedDataItem<T>>
+    ) as unknown as Array<TableItem<T>>
   }, [attachIsCheckedProps, attachLabelProps, attachSearchableProps, attachSortableProps, rawData])
 
-  const filteredAugmentedData = useMemo(
-    () =>
-      filters.length > 0
-        ? (pipe as (...args: Array<AugmentedDataFilter<T>>) => AugmentedDataFilter<T>)(...filters)(augmentedData)
-        : augmentedData,
-    [filters, augmentedData]
+  const filteredTableData: TableItem<T>[] = useMemo(
+    // @ts-ignore
+    () => (filterFunctions.length ? (pipe(...filterFunctions)(tableData) as any) : tableData),
+    [filterFunctions, tableData]
   )
 
-  // TODO It may make sense to create a separate reusable hook for search.
+  // TODO It may make sense to create a separate reusable hook for searc that would generate a FilterFunction.
+  // We could then pass it among the `filterFunctions` prop
   const fuse = useMemo(
     () =>
-      new Fuse(augmentedData, {
+      new Fuse(tableData, {
         ignoreLocation: true,
-        keys: columns.map(({ key }) => `searchable.${key}`),
+        keys: columns.map(({ key }) => `$searchable.${key}`),
         useExtendedSearch: true,
         ...searchFuseOptions
       }),
-    [augmentedData, columns, searchFuseOptions]
+    [tableData, columns, searchFuseOptions]
   )
 
-  const filteredAndSearchedAugmentedData = useMemo(() => {
+  const filteredAndSearchedTableData = useMemo(() => {
     const normalizedSearchQuery = normalizeSearchQuery(searchQuery)
 
     return normalizedSearchQuery
-      ? fuse.search<AugmentedDataItem<T>>(normalizedSearchQuery).map(({ item }) => item)
-      : filteredAugmentedData
-  }, [filteredAugmentedData, fuse, searchQuery])
+      ? fuse.search<TableItem<T>>(normalizedSearchQuery).map(({ item }) => item)
+      : filteredTableData
+  }, [filteredTableData, fuse, searchQuery])
 
   const filteredCheckedIds = useMemo(() => {
-    const filteredDataIds = filteredAndSearchedAugmentedData.map(
-      filteredAndSearchedAugmentedDataItem => filteredAndSearchedAugmentedDataItem.id
+    const filteredDataIds = filteredAndSearchedTableData.map(
+      filteredAndSearchedTableItem => filteredAndSearchedTableItem.id
     )
 
     return checkedIds.filter(checkedId => filteredDataIds.includes(checkedId))
-  }, [checkedIds, filteredAndSearchedAugmentedData])
+  }, [checkedIds, filteredAndSearchedTableData])
 
   const isAllChecked = useMemo(
-    () => filteredCheckedIds.length > 0 && filteredCheckedIds.length === filteredAugmentedData.length,
-    [filteredAugmentedData, filteredCheckedIds]
+    () => filteredCheckedIds.length > 0 && filteredCheckedIds.length === filteredTableData.length,
+    [filteredTableData, filteredCheckedIds]
   )
 
-  const filteredAndSearchedAndSortedAugmentedData = useMemo(() => {
+  const filteredAndSearchedAndSortedTableData = useMemo(() => {
     if (!sortingKey) {
-      return filteredAndSearchedAugmentedData
+      return filteredAndSearchedTableData
     }
 
     const sortingKeyPath = path(['sortable', sortingKey]) as any
     const bySortingKey = isSortingDesc ? descend(sortingKeyPath) : ascend(sortingKeyPath)
 
-    return sort(bySortingKey, filteredAndSearchedAugmentedData)
-  }, [filteredAndSearchedAugmentedData, isSortingDesc, sortingKey])
+    return sort(bySortingKey, filteredAndSearchedTableData)
+  }, [filteredAndSearchedTableData, isSortingDesc, sortingKey])
 
   const filteredAndSearchedAndSortedData = useMemo(
-    () => filteredAndSearchedAndSortedAugmentedData.map(({ item }) => item),
-    [filteredAndSearchedAndSortedAugmentedData]
+    () => filteredAndSearchedAndSortedTableData.map(({ item }) => item),
+    [filteredAndSearchedAndSortedTableData]
   )
 
   const getCheckedData = useCallback(
@@ -179,8 +169,8 @@ export function useTable<T extends CollectionItem = CollectionItem>(
   )
 
   const toggleCheckAll = useCallback(() => {
-    setCheckedIds(isAllChecked ? [] : filteredAndSearchedAndSortedAugmentedData.map(({ id }) => id).sort())
-  }, [filteredAndSearchedAndSortedAugmentedData, isAllChecked])
+    setCheckedIds(isAllChecked ? [] : filteredAndSearchedAndSortedTableData.map(({ id }) => id).sort())
+  }, [filteredAndSearchedAndSortedTableData, isAllChecked])
 
   const sortColumn = useCallback((key: string, isDesc: boolean) => {
     setSortingKey(key)
@@ -227,9 +217,8 @@ export function useTable<T extends CollectionItem = CollectionItem>(
   return {
     getTableCheckedData: getCheckedData,
     renderTableHead,
-    tableAugmentedData: filteredAndSearchedAndSortedAugmentedData,
     tableCheckedIds: filteredCheckedIds,
-    tableData: filteredAndSearchedAndSortedData,
+    tableData: filteredAndSearchedAndSortedTableData,
     toggleTableAllCheck: toggleCheckAll,
     toggleTableCheckForId
   }

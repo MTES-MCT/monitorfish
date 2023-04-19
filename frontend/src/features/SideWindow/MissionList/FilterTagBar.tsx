@@ -10,66 +10,68 @@ type FilterTagBarProps = {
   labelEnumerators: Record<string, Record<string, string> | undefined>
 }
 export function FilterTagBar({ labelEnumerators }: FilterTagBarProps) {
-  const { setFieldValue, setValues, values: formValues } = useFormikContext<Record<string, string | string[]>>()
+  const {
+    setFieldValue: setFilterValue,
+    setValues: setFilterValues,
+    values: filterValues
+  } = useFormikContext<Record<string, string | string[]>>()
 
   const remove = useCallback(
     (key: string, offValue: string) => {
-      const currentKeyValueOrValues = formValues[key]
+      const filterValue = filterValues[key]
 
-      if (!currentKeyValueOrValues) {
-        throw new FrontendError('`currentKeyValueOrValues` is undefined.')
+      if (!filterValue) {
+        throw new FrontendError('`filterValue` is undefined.')
       }
 
-      const nextValueOrValues = Array.isArray(currentKeyValueOrValues)
-        ? currentKeyValueOrValues.filter(value => value !== offValue)
-        : undefined
-      const normalizedNextValueOrValues =
-        Array.isArray(nextValueOrValues) && !nextValueOrValues.length ? undefined : nextValueOrValues
+      const nextFilterValue = Array.isArray(filterValue) ? filterValue.filter(value => value !== offValue) : undefined
+      const normalizedNextFilterValue =
+        Array.isArray(nextFilterValue) && !nextFilterValue.length ? undefined : nextFilterValue
 
-      setFieldValue(key, normalizedNextValueOrValues)
+      setFilterValue(key, normalizedNextFilterValue)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [formValues]
+    [filterValues]
   )
 
   const removeAll = useCallback(
     () => {
-      setValues({})
+      setFilterValues({})
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [formValues]
+    [filterValues]
   )
 
   const filterTags = useMemo(
     () =>
-      Object.keys(formValues)
+      Object.keys(filterValues)
         .filter(
           key => ![MissionFilterType.CUSTOM_DATE_RANGE, MissionFilterType.DATE_RANGE].includes(key as MissionFilterType)
         )
         .map(key => {
           const labelEnumerator = labelEnumerators[key]
 
-          const valueOrValues: string | string[] | undefined = formValues[key]
-          if (!valueOrValues) {
+          const filterValue: string | string[] | undefined = filterValues[key]
+          if (!filterValue) {
             return []
           }
 
-          return Array.isArray(valueOrValues) ? (
-            valueOrValues.map(value => (
+          return Array.isArray(filterValue) ? (
+            filterValue.map(value => (
               <SingleTag key={`${key}.${value}`} onDelete={() => remove(key, value)}>
                 {String(labelEnumerator ? labelEnumerator[value] : value)}
               </SingleTag>
             ))
           ) : (
-            <SingleTag key={key} onDelete={() => remove(key, valueOrValues)}>
-              {String(labelEnumerator ? labelEnumerator[valueOrValues] : valueOrValues)}
+            <SingleTag key={key} onDelete={() => remove(key, filterValue)}>
+              {String(labelEnumerator ? labelEnumerator[filterValue] : filterValue)}
             </SingleTag>
           )
         })
         .flat(),
-    [formValues, labelEnumerators, remove]
+    [filterValues, labelEnumerators, remove]
   )
 
   if (!filterTags.length) {

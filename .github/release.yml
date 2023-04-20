@@ -1,0 +1,12 @@
+changelog:
+  categories:
+    - title: 🎉 Fonctionnalités
+      labels:
+        - '*'
+      exclude:
+        labels:
+          - dependencies
+    - title: 🐛 Corrections
+    - title: 👒 Dépendances
+      labels:
+        - dependencies

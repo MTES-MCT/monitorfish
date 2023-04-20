@@ -25,7 +25,6 @@ context('Controls overlay', () => {
 
     cy.get('*[data-cy="mission-action-overlay"]').contains('Contrôle du navire NOM INCONNU')
     cy.get('*[data-cy="mission-action-overlay"]').contains('Aucune infraction')
-    cy.get('*[data-cy="mission-action-overlay"]').contains('Aucune appréhension')
 
     cy.intercept('GET', '/api/v1/missions/34').as('getMission')
     cy.get('[data-cy="edit-mission-control"]').click()
@@ -65,7 +64,7 @@ context('Controls overlay', () => {
 
     // Then
     cy.getComputedStyle('*[data-cy="mission-action-overlay"]', 2).then(styleAfter => {
-      expect(styleAfter.transform).contains('matrix(1, 0, 0, 1, 300, 367)')
+      expect(styleAfter.transform).contains('matrix(1, 0, 0, 1, 300, 347)')
     })
   })
 })

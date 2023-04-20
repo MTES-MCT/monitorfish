@@ -152,7 +152,7 @@ export function useTable<T extends CollectionItem = CollectionItem>(
       return filteredAndSearchedTableData
     }
 
-    const sortingKeyPath = path(['sortable', sortingKey]) as any
+    const sortingKeyPath = path(['$sortable', sortingKey]) as any
     const bySortingKey = isSortingDesc ? descend(sortingKeyPath) : ascend(sortingKeyPath)
 
     return sort(bySortingKey, filteredAndSearchedTableData)

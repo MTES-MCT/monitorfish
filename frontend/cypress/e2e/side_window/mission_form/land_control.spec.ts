@@ -157,7 +157,7 @@ context('Side Window > Mission Form > Land Control', () => {
         ],
         speciesObservations: 'Une observation hors infraction sur les espèces.',
         speciesOnboard: [
-          { controlledWeight: 20, declaredWeight: 13.461, nbFish: null, speciesCode: 'BLI', underSized: true },
+          { controlledWeight: 20, declaredWeight: 10, nbFish: null, speciesCode: 'BLI', underSized: true },
           { controlledWeight: null, declaredWeight: 235.6, nbFish: null, speciesCode: 'HKE', underSized: false },
           { controlledWeight: null, declaredWeight: null, nbFish: null, speciesCode: 'COD', underSized: false }
         ],

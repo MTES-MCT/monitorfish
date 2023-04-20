@@ -15,7 +15,7 @@ import type { VectorLayerWithName } from '../../../../domain/types/layer'
 import type { MutableRefObject } from 'react'
 
 export function UnmemoizedSelectedMissionLayer({ map }) {
-  const missionsAndActions = useGetMissionsWithActions()
+  const { missionsWithActions } = useGetMissionsWithActions()
   const { draft, draftId, selectedMissionGeoJSON } = useMainAppSelector(store => store.mission)
 
   const selectedMission = useMemo(() => {
@@ -74,7 +74,7 @@ export function UnmemoizedSelectedMissionLayer({ map }) {
       return
     }
 
-    const hoveredMissionWithActions = missionsAndActions.find(
+    const hoveredMissionWithActions = missionsWithActions.find(
       missionWithAction => missionWithAction.id === selectedMission.get('missionId')
     )
     if (!hoveredMissionWithActions) {
@@ -83,7 +83,7 @@ export function UnmemoizedSelectedMissionLayer({ map }) {
 
     const missionFeature = getMissionFeatureZone(hoveredMissionWithActions)
     getVectorSource().addFeature(missionFeature)
-  }, [selectedMission, missionsAndActions, getVectorSource])
+  }, [selectedMission, missionsWithActions, getVectorSource])
 
   useEffect(() => {
     getVectorSource().clear(true)

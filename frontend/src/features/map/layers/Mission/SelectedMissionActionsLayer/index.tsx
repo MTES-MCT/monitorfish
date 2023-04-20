@@ -15,7 +15,7 @@ import type { Feature } from 'ol'
 import type { MutableRefObject } from 'react'
 
 export function UnmemoizedSelectedMissionActionsLayer({ map }) {
-  const missionsAndActions = useGetMissionsWithActions()
+  const { missionsWithActions } = useGetMissionsWithActions()
   const selectedMissionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionGeoJSON)
   const selectedMissionActions = useMemo(() => {
     if (!selectedMissionGeoJSON) {
@@ -23,7 +23,7 @@ export function UnmemoizedSelectedMissionActionsLayer({ map }) {
     }
 
     return (
-      missionsAndActions
+      missionsWithActions
         .find(
           missionsAndAction =>
             missionsAndAction.id === (selectedMissionGeoJSON as GeoJSON.Feature).properties?.missionId
@@ -31,7 +31,7 @@ export function UnmemoizedSelectedMissionActionsLayer({ map }) {
         ?.actions?.map(action => getMissionActionFeature(action))
         .filter((feature): feature is Feature => Boolean(feature)) || []
     )
-  }, [missionsAndActions, selectedMissionGeoJSON])
+  }, [missionsWithActions, selectedMissionGeoJSON])
 
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
   const getVectorSource = useCallback(() => {

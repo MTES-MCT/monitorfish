@@ -18,7 +18,7 @@ import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import type { MissionActionFormValues } from '../../types'
 import type { Coordinate } from 'ol/coordinate'
 
-export function FormikMultiCoordinatesPicker() {
+export function FormikCoordinatesPicker() {
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const listener = useMainAppSelector(state => state.draw.listener)
 

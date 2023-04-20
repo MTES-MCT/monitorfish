@@ -12,7 +12,7 @@ import type { VectorLayerWithName } from '../../../../domain/types/layer'
 import type { MutableRefObject } from 'react'
 
 export function UnmemoizedMissionHoveredLayer({ feature, map }) {
-  const missionsWithActions = useGetMissionsWithActions()
+  const { missionsWithActions } = useGetMissionsWithActions()
 
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
   const getVectorSource = useCallback(() => {

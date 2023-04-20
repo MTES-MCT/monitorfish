@@ -1,7 +1,7 @@
 import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
 import { Mission } from '../../../../src/domain/entities/mission/types'
 
-context('Side Window > Mission Form > Sea Control Creation three', () => {
+context('Side Window > Mission Form > Sea Control', () => {
   beforeEach(() => {
     openSideWindowNewMission()
     fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
@@ -10,7 +10,7 @@ context('Side Window > Mission Form > Sea Control Creation three', () => {
     cy.clickButton('Ajouter un contrôle en mer')
   })
 
-  it('Should fill the form with MALOTRU vessel and send the expected data to the API', () => {
+  it('Should fill the form and send the expected data to the API', () => {
     // -------------------------------------------------------------------------
     // Form
 

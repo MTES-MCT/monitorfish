@@ -13,14 +13,9 @@ context('Side Window > Mission Form > Sea Control Creation One', () => {
   it('Should fill the form for MALOTRU and send the expected data to the API', () => {
     // -------------------------------------------------------------------------
     // Form
-
-    // TODO Handle Automplete in custom `cy.fill()` command once it's used via monitor-ui.
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     cy.get('input[placeholder="Rechercher un navire..."]').type('malot')
     cy.contains('mark', 'MALOT').click()
-
-    // Date et heure du contrôle
-    // TODO Add this test.
+    cy.wait(500)
 
     // Obligations déclaratives et autorisations de pêche
     cy.fill('Bonne émission VMS', 'Oui')

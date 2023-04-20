@@ -4,12 +4,12 @@ import { noop, omit } from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { MISSION_FILTER_LABEL_ENUMERATORS, MISSION_FILTER_OPTIONS } from './constants'
-import { FilterTagBar } from './FilterTagBar'
+import { MISSION_FILTER_LABEL_ENUMS, MISSION_FILTER_OPTIONS } from './constants'
 import { MissionDateRangeFilter, MissionFilterType, type FilterValues } from './types'
 import { mapFilterValuesToFilterFunctions } from './utils'
 import { useGetControlUnitsQuery } from '../../../api/controlUnit'
 import { getControlUnitsOptionsFromControlUnits } from '../../../domain/controlUnits/utils'
+import { FormikFilterTagBar } from '../../../ui/formiks/FormikFilterTagBar'
 import { useNewWindow } from '../../../ui/NewWindow'
 
 import type { MissionWithActions } from '../../../domain/entities/mission/types'
@@ -44,7 +44,7 @@ export function FilterBar({ onChange, onQueryChange }: FilterBarProps) {
 
       const nextFilterFunctions = mapFilterValuesToFilterFunctions(normalizedNextFilterValues)
 
-      // Depending the date range filter is set to "custom" or not, we need to toggle the custom date range filter
+      // Depending on the date range filter being set to "custom" or not, we need to toggle the custom date range filter
       const willCustomDateRangeOpen = normalizedNextFilterValues.DATE_RANGE === MissionDateRangeFilter.CUSTOM
       setIsCustomDateRangeOpen(willCustomDateRangeOpen)
 
@@ -77,16 +77,13 @@ export function FilterBar({ onChange, onQueryChange }: FilterBarProps) {
             options={MISSION_FILTER_OPTIONS[MissionFilterType.DATE_RANGE]}
             placeholder="Période"
           />
-          <FormikMultiSelect
+          <FormikSelect
             baseContainer={newWindowContainerRef.current}
             isLabelHidden
             label="Origine"
             name={MissionFilterType.SOURCE}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.SOURCE]}
             placeholder="Origine"
-            renderValue={(_, items) =>
-              items.length > 0 ? <OptionValue>Origine ({items.length}) </OptionValue> : <></>
-            }
           />
           <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}
@@ -140,7 +137,14 @@ export function FilterBar({ onChange, onQueryChange }: FilterBarProps) {
           </Row>
         )}
 
-        <FilterTagBar labelEnumerators={MISSION_FILTER_LABEL_ENUMERATORS} />
+        <FormikFilterTagBar
+          filterLabelEnums={MISSION_FILTER_LABEL_ENUMS}
+          ignoredFilterKeys={[
+            MissionFilterType.CUSTOM_DATE_RANGE,
+            MissionFilterType.DATE_RANGE,
+            MissionFilterType.SOURCE
+          ]}
+        />
       </Box>
     </Formik>
   )

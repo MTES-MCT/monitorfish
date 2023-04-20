@@ -3,13 +3,11 @@ import { useFormikContext } from 'formik'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { MissionFilterType } from './types'
-import { FrontendError } from '../../../libs/FrontendError'
-
-type FilterTagBarProps = {
-  labelEnumerators: Record<string, Record<string, string> | undefined>
+type FormikFilterTagBarProps = {
+  filterLabelEnums: Record<string, Record<string, string> | undefined>
+  ignoredFilterKeys?: string[]
 }
-export function FilterTagBar({ labelEnumerators }: FilterTagBarProps) {
+export function FormikFilterTagBar({ filterLabelEnums, ignoredFilterKeys = [] }: FormikFilterTagBarProps) {
   const {
     setFieldValue: setFilterValue,
     setValues: setFilterValues,
@@ -21,7 +19,7 @@ export function FilterTagBar({ labelEnumerators }: FilterTagBarProps) {
       const filterValue = filterValues[key]
 
       if (!filterValue) {
-        throw new FrontendError('`filterValue` is undefined.')
+        throw new Error('`filterValue` is undefined.')
       }
 
       const nextFilterValue = Array.isArray(filterValue) ? filterValue.filter(value => value !== offValue) : undefined
@@ -47,11 +45,9 @@ export function FilterTagBar({ labelEnumerators }: FilterTagBarProps) {
   const filterTags = useMemo(
     () =>
       Object.keys(filterValues)
-        .filter(
-          key => ![MissionFilterType.CUSTOM_DATE_RANGE, MissionFilterType.DATE_RANGE].includes(key as MissionFilterType)
-        )
+        .filter(key => !ignoredFilterKeys.includes(key))
         .map(key => {
-          const labelEnumerator = labelEnumerators[key]
+          const filterLabelEnum = filterLabelEnums[key]
 
           const filterValue: string | string[] | undefined = filterValues[key]
           if (!filterValue) {
@@ -61,17 +57,17 @@ export function FilterTagBar({ labelEnumerators }: FilterTagBarProps) {
           return Array.isArray(filterValue) ? (
             filterValue.map(value => (
               <SingleTag key={`${key}.${value}`} onDelete={() => remove(key, value)}>
-                {String(labelEnumerator ? labelEnumerator[value] : value)}
+                {String(filterLabelEnum ? filterLabelEnum[value] : value)}
               </SingleTag>
             ))
           ) : (
             <SingleTag key={key} onDelete={() => remove(key, filterValue)}>
-              {String(labelEnumerator ? labelEnumerator[filterValue] : filterValue)}
+              {String(filterLabelEnum ? filterLabelEnum[filterValue] : filterValue)}
             </SingleTag>
           )
         })
         .flat(),
-    [filterValues, labelEnumerators, remove]
+    [filterValues, ignoredFilterKeys, filterLabelEnums, remove]
   )
 
   if (!filterTags.length) {

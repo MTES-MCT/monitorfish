@@ -9,7 +9,7 @@ import type { MissionWithActions } from '../../../domain/entities/mission/types'
 import type { TableOptions } from '../../../hooks/useTable/types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
-export const MISSION_FILTER_LABEL_ENUMERATORS: Record<MissionFilterType, Record<string, string> | undefined> = {
+export const MISSION_FILTER_LABEL_ENUMS: Record<MissionFilterType, Record<string, string> | undefined> = {
   [MissionFilterType.ADMINISTRATION]: undefined,
   [MissionFilterType.CUSTOM_DATE_RANGE]: undefined,
   [MissionFilterType.DATE_RANGE]: MissionDateRangeFilterLabel,
@@ -23,7 +23,7 @@ export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option[]> = {
   [MissionFilterType.ADMINISTRATION]: [],
   [MissionFilterType.CUSTOM_DATE_RANGE]: [],
   [MissionFilterType.DATE_RANGE]: getOptionsFromLabelledEnum(MissionDateRangeFilterLabel),
-  [MissionFilterType.SOURCE]: getOptionsFromLabelledEnum(Mission.MissionSourceLabel),
+  [MissionFilterType.SOURCE]: getOptionsFromLabelledEnum(Mission.MissionSourceLabelWithoutPoseidon),
   [MissionFilterType.STATUS]: getOptionsFromLabelledEnum(Mission.MissionStatusLabel),
   [MissionFilterType.TYPE]: getOptionsFromLabelledEnum(Mission.MissionTypeLabel),
   [MissionFilterType.UNIT]: []

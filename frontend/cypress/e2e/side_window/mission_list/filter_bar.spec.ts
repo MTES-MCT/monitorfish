@@ -17,7 +17,7 @@ context('Side Window > Mission List > Filter Bar', () => {
   })
 
   it('Should filter missions by source', () => {
-    cy.fill('Origine', ['CACEM'])
+    cy.fill('Origine', 'CACEM')
 
     cy.get('[data-id="24"]').should('exist')
     cy.get('[data-id="49"]').should('exist')

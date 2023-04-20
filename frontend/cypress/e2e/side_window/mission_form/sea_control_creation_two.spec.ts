@@ -25,7 +25,12 @@ context('Side Window > Mission Form > Sea Control Creation two', () => {
     // -------------------------------------------------------------------------
     // Request
 
-    cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('createMissionAction')
 
     cy.clickButton('Enregistrer')
 

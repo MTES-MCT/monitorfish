@@ -6,26 +6,28 @@ import styled from 'styled-components'
 
 import { MISSION_FILTER_LABEL_ENUMS, MISSION_FILTER_OPTIONS } from './constants'
 import { MissionDateRangeFilter, MissionFilterType, type FilterValues } from './types'
-import { mapFilterValuesToFilterFunctions } from './utils'
 import { useGetControlUnitsQuery } from '../../../api/controlUnit'
+import { missionActions } from '../../../domain/actions'
 import { getControlUnitsOptionsFromControlUnits } from '../../../domain/controlUnits/utils'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { FormikFilterTagBar } from '../../../ui/formiks/FormikFilterTagBar'
 import { useNewWindow } from '../../../ui/NewWindow'
 
-import type { MissionWithActions } from '../../../domain/entities/mission/types'
-import type { FilterFunction } from '../../../hooks/useTable/types'
 import type { Promisable } from 'type-fest'
 
 export type FilterBarProps = {
-  onChange: (nextFilterFunctions: FilterFunction<MissionWithActions>[]) => Promisable<void>
   onQueryChange: (nextQuery: string | undefined) => Promisable<void>
 }
-export function FilterBar({ onChange, onQueryChange }: FilterBarProps) {
+export function FilterBar({ onQueryChange }: FilterBarProps) {
   const { newWindowContainerRef } = useNewWindow()
+
+  const { mission } = useMainAppSelector(store => store)
 
   const [isCustomDateRangeOpen, setIsCustomDateRangeOpen] = useState(false)
 
   const controlUnitsQuery = useGetControlUnitsQuery(undefined)
+  const dispatch = useMainAppDispatch()
 
   const { administrationsAsOptions, unitsAsOptions } = useMemo(
     () => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data),
@@ -42,19 +44,17 @@ export function FilterBar({ onChange, onQueryChange }: FilterBarProps) {
             omit(nextFilterValues, MissionFilterType.CUSTOM_DATE_RANGE)
           : nextFilterValues
 
-      const nextFilterFunctions = mapFilterValuesToFilterFunctions(normalizedNextFilterValues)
-
       // Depending on the date range filter being set to "custom" or not, we need to toggle the custom date range filter
       const willCustomDateRangeOpen = normalizedNextFilterValues.DATE_RANGE === MissionDateRangeFilter.CUSTOM
       setIsCustomDateRangeOpen(willCustomDateRangeOpen)
 
-      onChange(nextFilterFunctions)
+      dispatch(missionActions.setListFilterValues(normalizedNextFilterValues))
     },
-    [onChange]
+    [dispatch]
   )
 
   return (
-    <Formik initialValues={{}} onSubmit={noop}>
+    <Formik initialValues={mission.listFilterValues} onSubmit={noop}>
       <Box>
         <FormikEffect onChange={handleFilterFormChange} />
 

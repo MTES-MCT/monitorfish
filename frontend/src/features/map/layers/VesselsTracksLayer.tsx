@@ -292,6 +292,7 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
           name={fishingActivity.name}
         />
       ))}
+      <div /> {/* returns at least a div */}
     </>
   )
 }

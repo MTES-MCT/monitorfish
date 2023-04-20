@@ -61,7 +61,6 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
 
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
   const layerRef = useRef() as MutableRefObject<VectorLayerWithName>
-  const vesselsLayerSourceRef = useRef() as MutableRefObject<VectorSource>
   const [currentLabels, setCurrentLabels] = useState<JSX.Element[]>([])
 
   const getVectorSource = useCallback(() => {
@@ -94,12 +93,6 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
     if (map) {
       getLayer().name = LayerProperties.VESSELS_LABEL.code
       map.getLayers().push(getLayer())
-
-      const vesselsLayer = map
-        .getLayers()
-        .getArray()
-        ?.find(olLayer => olLayer.name === LayerProperties.VESSELS_POINTS.code)
-      vesselsLayerSourceRef.current = vesselsLayer?.getSource()
     }
 
     return () => {
@@ -198,21 +191,24 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
   ])
 
   useEffect(() => {
-    if (vesselsLayerSourceRef) {
-      const { vesselIsHidden, vesselIsOpacityReduced } =
-        getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
+    const { vesselIsHidden, vesselIsOpacityReduced } =
+      getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
 
-      vesselsLayerSourceRef?.current?.forEachFeatureInExtent(map.getView().calculateExtent(), vesselFeature => {
-        const { vesselProperties } = vesselFeature as VesselLastPositionFeature
-        const opacity = Vessel.getVesselOpacity(vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced)
-        const labelLineFeatureId = VesselLabelLine.getFeatureId(vesselProperties)
-        const feature = vectorSourceRef?.current?.getFeatureById(labelLineFeatureId)
-        if (feature) {
-          feature.set(VesselLabelLine.opacityProperty, opacity)
-        }
-      })
-    }
-  }, [map, vesselsLayerSourceRef, vesselsLastPositionVisibility])
+    const vesselsLayer = map
+      .getLayers()
+      .getArray()
+      ?.find(olLayer => olLayer.name === LayerProperties.VESSELS_POINTS.code)
+      ?.getSource()
+    vesselsLayer?.current?.forEachFeatureInExtent(map.getView().calculateExtent(), vesselFeature => {
+      const { vesselProperties } = vesselFeature as VesselLastPositionFeature
+      const opacity = Vessel.getVesselOpacity(vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced)
+      const labelLineFeatureId = VesselLabelLine.getFeatureId(vesselProperties)
+      const feature = vectorSourceRef?.current?.getFeatureById(labelLineFeatureId)
+      if (feature) {
+        feature.set(VesselLabelLine.opacityProperty, opacity)
+      }
+    })
+  }, [map, vesselsLastPositionVisibility])
 
   useEffect(() => {
     if (isThrottled.current || !vessels) {
@@ -296,8 +292,13 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
         return
       }
 
-      const featuresInExtent =
-        vesselsLayerSourceRef?.current?.getFeaturesInExtent(map.getView().calculateExtent()) || []
+      const vesselsLayer = map
+        .getLayers()
+        .getArray()
+        ?.find(olLayer => olLayer.name === LayerProperties.VESSELS_POINTS.code)
+        ?.getSource()
+      const featuresInExtent = vesselsLayer?.getFeaturesInExtent(map.getView().calculateExtent()) || []
+
       const filterShowed = filters.find(filter => filter.showed)
       const isFiltered = filterShowed && nonFilteredVesselsAreHidden // && filteredVesselsFeaturesUids?.length FIXME: if filterShowed, is it really necessary to check filteredVesselsFeaturesUids ?
       let featuresRequiringLabel
@@ -367,7 +368,6 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
 
   return (
     <>
-      <div />
       {currentLabels}
       <div /> {/* returns at least a div */}
     </>

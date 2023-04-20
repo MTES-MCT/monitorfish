@@ -103,7 +103,7 @@ export function ControlDetails({ control, isSelected, overlayPosition }: Control
                 et 1 autre
               </>
             )}
-            {control.infractionsNatinfs.length && (
+            {!!control.infractionsNatinfs.length && (
               <Tag accent={Accent.PRIMARY}>
                 {`${control.infractionsNatinfs.length} NATINF: ${control.infractionsNatinfs.join(', ')}`}
               </Tag>

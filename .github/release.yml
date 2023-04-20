@@ -6,12 +6,10 @@ changelog:
       exclude:
         labels:
           - dependencies
+          - bug
     - title: 🐛 Corrections
       labels:
         - bug
     - title: 👒 Dépendances
       labels:
         - dependencies
-    - title: Toutes les PRs
-      labels:
-        - '*'

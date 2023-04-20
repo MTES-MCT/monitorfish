@@ -7,6 +7,11 @@ changelog:
         labels:
           - dependencies
     - title: 🐛 Corrections
+      labels:
+        - bug
     - title: 👒 Dépendances
       labels:
         - dependencies
+    - title: Toutes les PRs
+      labels:
+        - '*'

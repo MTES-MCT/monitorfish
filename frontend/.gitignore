@@ -9,7 +9,8 @@
 .DS_Store
 
 # Test exports directory
-/cypress/downloads
+/cypress/downloads/*
+!/cypress/downloads/.gitkeep
 
 # Test snapshots diffs & failures
 /cypress/e2e/__image_snapshots__/*.actual.png

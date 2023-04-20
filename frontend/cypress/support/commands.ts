@@ -40,7 +40,7 @@ Cypress.Commands.add('cleanScreenshots', (fromNumber: number): void => {
 })
 
 Cypress.Commands.add('cleanFiles', () => {
-  cy.exec(`rm -f cypress/downloads/*`)
+  cy.exec(`rm -f cypress/downloads/*.csv`, { failOnNonZeroExit: false })
 })
 
 Cypress.Commands.add('getComputedStyle', getComputedStyle)

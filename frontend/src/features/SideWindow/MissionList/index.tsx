@@ -210,7 +210,7 @@ const TableBody = styled.div.attrs(() => ({
 const TableBodyRow = styled.div.attrs(() => ({
   className: 'TableBodyRow'
 }))`
-  background-color: ${p => p.theme.color.cultured};
+  background-color: white;
   display: flex;
 
   :hover {

@@ -6,6 +6,7 @@ import { transform } from 'ol/proj'
 
 import { Mission } from './types'
 import { getMissionColor } from '../../../features/map/layers/Mission/MissionLayer/styles'
+import { getMissionActionInfractionsFromMissionActionFromFormValues } from '../../../features/SideWindow/MissionForm/ActionList/utils'
 import { booleanToInt, getDate, getDateTime } from '../../../utils'
 import { MissionAction } from '../../types/missionAction'
 import { getNumberOfInfractions, getNumberOfInfractionsWithRecord } from '../controls'
@@ -13,6 +14,7 @@ import { MonitorFishLayer } from '../layers/types'
 import { OpenLayersGeometryType } from '../map/constants'
 
 import type { MissionWithActions } from './types'
+import type { MissionFormValues } from '../../../features/SideWindow/MissionForm/types'
 import type { MultiPolygon } from 'ol/geom'
 
 import MissionStatus = Mission.MissionStatus
@@ -71,6 +73,32 @@ export const getMissionFeaturePoint = ({ actions, ...mission }: MissionWithActio
   return feature
 }
 
+export type MissionFormValuesWithId = MissionFormValues & {
+  id: number
+}
+
+export const getMissionFeatureZoneFromDraft = (mission: MissionFormValuesWithId): Feature => {
+  const geoJSON = new GeoJSON()
+  const geometry = geoJSON.readGeometry(mission.geom, {
+    dataProjection: WSG84_PROJECTION,
+    featureProjection: OPENLAYERS_PROJECTION
+  })
+
+  const missionStatus = getMissionStatus(mission)
+  const feature = new Feature({
+    controlUnits: mission.controlUnits,
+    endDateTimeUtc: mission.dateTimeRangeUtc?.length && mission.dateTimeRangeUtc[1],
+    geometry,
+    missionId: mission.id,
+    missionStatus,
+    missionTypes: mission.missionTypes,
+    startDateTimeUtc: mission.dateTimeRangeUtc?.length && mission.dateTimeRangeUtc[0]
+  })
+  feature.setId(`${MonitorFishLayer.MISSION_HOVER}:${mission.id}`)
+
+  return feature
+}
+
 export const getMissionFeatureZone = (mission: Mission.Mission): Feature => {
   const geoJSON = new GeoJSON()
   const geometry = geoJSON.readGeometry(mission.geom, {
@@ -103,13 +131,17 @@ export const getMissionActionFeature = (action: MissionAction.MissionAction): Fe
   const numberOfInfractionsWithRecords = getNumberOfInfractionsWithRecord(action)
   const hasSpeciesSeized = action.speciesInfractions.find(infraction => infraction.speciesSeized)
   const hasGearSeized = action.gearInfractions.find(infraction => infraction.gearSeized)
+  const infractions = getMissionActionInfractionsFromMissionActionFromFormValues(action)
+  const infractionsNatinfs = infractions.map(({ natinf }) => natinf)
 
   const feature = new Feature({
     actionType: action.actionType,
     dateTime: getDateTime(action.actionDatetimeUtc, true),
+    flagState: action.flagState,
     geometry: new Point(coordinates),
     hasGearSeized,
     hasSpeciesSeized,
+    infractionsNatinfs,
     missionId: action.missionId,
     numberOfInfractions,
     numberOfInfractionsWithRecords,

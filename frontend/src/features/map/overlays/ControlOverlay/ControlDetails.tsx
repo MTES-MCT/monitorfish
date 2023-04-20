@@ -1,14 +1,14 @@
-import { Accent, Button, Icon, IconButton, Size, Tag, TagBullet, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, Tag, TagBullet, THEME } from '@mtes-mct/monitor-ui'
+import countries from 'i18n-iso-countries'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { margins } from './constants'
 import { missionActions } from '../../../../domain/actions'
-import { openSideWindowTab } from '../../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { pluralize } from '../../../../utils/pluralize'
 import { GreenCircle, RedCircle } from '../../../commonStyles/Circle.style'
-import { SideWindowMenuKey } from '../../../SideWindow/constants'
+import { Flag } from '../../../VesselList/tableCells'
 import { OverlayPosition } from '../Overlay'
 
 import type { Mission } from '../../../../domain/entities/mission/types'
@@ -20,11 +20,6 @@ type ControlDetailsProps = {
 }
 export function ControlDetails({ control, isSelected, overlayPosition }: ControlDetailsProps) {
   const dispatch = useMainAppDispatch()
-
-  const openMissionInSideWindow = () => {
-    dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))
-    dispatch(missionActions.setDraftId(control.missionId))
-  }
 
   const numberOfInfractions = useMemo(() => {
     const allInfractionsText = `${control.numberOfInfractions ? control.numberOfInfractions : 'Aucune'} ${pluralize(
@@ -78,10 +73,18 @@ export function ControlDetails({ control, isSelected, overlayPosition }: Control
         <ZoneText>
           <Title>
             Contrôle du navire {control.vesselName || 'NOM INCONNU'}
+            {control.flagState && (
+              <Flag
+                rel="preload"
+                src={`flags/${control.flagState.toLowerCase()}.svg`}
+                style={{ marginLeft: 8, marginTop: -2, width: 17 }}
+                title={countries.getName(control.flagState.toLowerCase(), 'fr')}
+              />
+            )}
             {numberOfInfractions}
           </Title>
-          <Seizure>
-            {!control.hasGearSeized && !control.hasSpeciesSeized && 'Aucune appréhension'}
+          <Details>{control.dateTime}</Details>
+          <SeizureOrInfractions>
             {!control.hasGearSeized && control.hasSpeciesSeized && (
               <Tag accent={Accent.PRIMARY} bullet={TagBullet.DISK} bulletColor={THEME.color.maximumRed}>
                 Appréhension espèce
@@ -100,19 +103,13 @@ export function ControlDetails({ control, isSelected, overlayPosition }: Control
                 et 1 autre
               </>
             )}
-          </Seizure>
-          <Details>{control.dateTime}</Details>
+            {!!control.infractionsNatinfs.length && (
+              <Tag accent={Accent.PRIMARY}>
+                {`${control.infractionsNatinfs.length} NATINF: ${control.infractionsNatinfs.join(', ')}`}
+              </Tag>
+            )}
+          </SeizureOrInfractions>
         </ZoneText>
-        <EditButton
-          accent={Accent.PRIMARY}
-          data-cy="edit-mission-control"
-          disabled={!isSelected}
-          Icon={Icon.Calendar}
-          onClick={openMissionInSideWindow}
-          size={Size.SMALL}
-        >
-          Editer
-        </EditButton>
       </Wrapper>
       {!isSelected && (
         <TrianglePointer>
@@ -126,11 +123,6 @@ export function ControlDetails({ control, isSelected, overlayPosition }: Control
   )
 }
 
-const EditButton = styled(Button)`
-  margin-left: 12px;
-  margin-top: 12px;
-`
-
 const CloseButton = styled(IconButton)`
   position: absolute;
   right: 0;
@@ -141,11 +133,14 @@ const Details = styled.div`
   color: ${p => p.theme.color.slateGray};
 `
 
-const Seizure = styled.div`
+const SeizureOrInfractions = styled.div`
   line-height: 22px;
   margin-top: 6px;
   margin-bottom: 6px;
   color: ${p => p.theme.color.slateGray};
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `
 
 const Title = styled.div`
@@ -162,7 +157,7 @@ const Wrapper = styled.div`
   box-shadow: 0px 3px 6px #70778540;
   line-height: 20px;
   text-align: left;
-  height: 155px;
+  height: 115px;
   width: 310px;
   border-radius: 1px;
   background-color: ${p => p.theme.color.white};

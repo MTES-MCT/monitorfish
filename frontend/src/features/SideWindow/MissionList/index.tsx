@@ -1,6 +1,6 @@
 import { Button, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
 import { noop } from 'lodash'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_LIST_TABLE_OPTIONS } from './constants'
@@ -23,7 +23,7 @@ type MissionListProps = {
   selectedSubMenu: string
 }
 export function MissionList({ selectedSubMenu }: MissionListProps) {
-  const missionsWithActions = useGetMissionsWithActions()
+  const { fetchMissions, missionsWithActions } = useGetMissionsWithActions()
 
   const [filters, setFilters] = useState<Array<AugmentedDataFilter<MissionWithActions>>>([])
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
@@ -32,6 +32,10 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
   const dispatch = useMainAppDispatch()
 
   const seaFrontGroupFilter = useMemo(() => getSeaFrontFilter(selectedSubMenu), [selectedSubMenu])
+
+  useEffect(() => {
+    fetchMissions()
+  }, [fetchMissions])
 
   const { renderTableHead, tableAugmentedData } = useTable<MissionWithActions>(
     missionsWithActions,

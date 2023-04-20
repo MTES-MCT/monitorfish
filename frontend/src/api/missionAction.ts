@@ -5,7 +5,6 @@ import type { MissionAction } from '../domain/types/missionAction'
 export const missionActionApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
     createMissionAction: builder.mutation<void, MissionAction.MissionActionData>({
-      invalidatesTags: () => [{ type: 'MissionActions' }],
       query: missionAction => ({
         body: missionAction,
         method: 'POST',
@@ -14,12 +13,10 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
     }),
 
     getMissionActions: builder.query<MissionAction.MissionAction[], number>({
-      providesTags: () => [{ type: 'MissionActions' }],
       query: missionId => `/mission_actions?missionId=${missionId}`
     }),
 
     updateMissionAction: builder.mutation<void, MissionAction.MissionAction>({
-      invalidatesTags: () => [{ type: 'MissionActions' }],
       query: missionAction => ({
         body: missionAction,
         method: 'PUT',

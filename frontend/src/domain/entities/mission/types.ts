@@ -102,8 +102,10 @@ export namespace Mission {
   export type MissionActionFeatureProperties = {
     actionType: MissionAction.MissionActionType
     dateTime: string
+    flagState: string | undefined
     hasGearSeized: boolean
     hasSpeciesSeized: boolean
+    infractionsNatinfs: string[]
     missionId: number
     numberOfInfractions: number
     numberOfInfractionsWithRecords: number

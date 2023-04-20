@@ -7,7 +7,7 @@ import { missionZoneStyle } from './MissionLayer/styles'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
-import { getMissionFeatureZone } from '../../../../domain/entities/mission'
+import { getMissionFeatureZone, getMissionFeatureZoneFromDraft } from '../../../../domain/entities/mission'
 import { useGetMissionsWithActions } from '../../../../domain/entities/mission/hooks/useGetMissionsWithActions'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 
@@ -15,8 +15,9 @@ import type { VectorLayerWithName } from '../../../../domain/types/layer'
 import type { MutableRefObject } from 'react'
 
 export function UnmemoizedSelectedMissionLayer({ map }) {
-  const missionsAndActions = useGetMissionsWithActions()
-  const selectedMissionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionGeoJSON)
+  const { missionsWithActions } = useGetMissionsWithActions()
+  const { draft, draftId, selectedMissionGeoJSON } = useMainAppSelector(store => store.mission)
+
   const selectedMission = useMemo(() => {
     if (!selectedMissionGeoJSON) {
       return undefined
@@ -73,7 +74,7 @@ export function UnmemoizedSelectedMissionLayer({ map }) {
       return
     }
 
-    const hoveredMissionWithActions = missionsAndActions.find(
+    const hoveredMissionWithActions = missionsWithActions.find(
       missionWithAction => missionWithAction.id === selectedMission.get('missionId')
     )
     if (!hoveredMissionWithActions) {
@@ -82,7 +83,17 @@ export function UnmemoizedSelectedMissionLayer({ map }) {
 
     const missionFeature = getMissionFeatureZone(hoveredMissionWithActions)
     getVectorSource().addFeature(missionFeature)
-  }, [selectedMission, missionsAndActions, getVectorSource])
+  }, [selectedMission, missionsWithActions, getVectorSource])
+
+  useEffect(() => {
+    getVectorSource().clear(true)
+    if (!draft || !draftId) {
+      return
+    }
+
+    const missionFeature = getMissionFeatureZoneFromDraft({ ...draft, id: draftId })
+    getVectorSource().addFeature(missionFeature)
+  }, [draft, draftId, getVectorSource])
 
   return null
 }

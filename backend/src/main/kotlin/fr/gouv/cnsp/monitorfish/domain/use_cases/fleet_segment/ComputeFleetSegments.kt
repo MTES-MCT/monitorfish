@@ -8,6 +8,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.FleetSegmentRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
+import org.slf4j.LoggerFactory
 import java.time.Clock
 import java.time.ZonedDateTime
 
@@ -25,6 +26,8 @@ class ComputeFleetSegments(
     private val portRepository: PortRepository,
     private val clock: Clock,
 ) {
+    private val logger = LoggerFactory.getLogger(ComputeFleetSegments::class.java)
+
     fun execute(
         faoAreas: List<String>,
         gears: List<String>,
@@ -45,8 +48,9 @@ class ComputeFleetSegments(
             }
 
             // Else, we take the longitude and latitude given
-            require(longitude != null && latitude != null) {
-                "A port Locode or the control coordinates must be given"
+            if (longitude == null || latitude == null) {
+                logger.info("A port Locode or the control coordinates must be given")
+                return listOf()
             }
 
             val point = GeometryFactory().createPoint(Coordinate(longitude, latitude))

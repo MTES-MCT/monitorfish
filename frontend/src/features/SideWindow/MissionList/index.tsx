@@ -1,4 +1,4 @@
-import { Button, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
 import { noop } from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
@@ -104,7 +104,13 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
                         textAlign: 'center'
                       }}
                     >
-                      <IconButton Icon={Icon.ViewOnMap} onClick={noop} size={Size.SMALL} title="Voir sur la carte" />
+                      <IconButton
+                        accent={Accent.TERTIARY}
+                        Icon={Icon.ViewOnMap}
+                        onClick={noop}
+                        size={Size.SMALL}
+                        title="Voir sur la carte"
+                      />
                     </TableBodyCell>
                     <TableBodyCell
                       $fixedWidth={48}
@@ -114,6 +120,7 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
                       }}
                     >
                       <IconButton
+                        accent={Accent.TERTIARY}
                         Icon={Icon.Edit}
                         onClick={() => goToMissionForm(augmentedMission.id)}
                         size={Size.SMALL}

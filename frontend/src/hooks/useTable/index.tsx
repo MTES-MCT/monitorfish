@@ -158,14 +158,9 @@ export function useTable<T extends CollectionItem = CollectionItem>(
     return sort(bySortingKey, filteredAndSearchedTableData)
   }, [filteredAndSearchedTableData, isSortingDesc, sortingKey])
 
-  const filteredAndSearchedAndSortedData = useMemo(
-    () => filteredAndSearchedAndSortedTableData.map(({ item }) => item),
-    [filteredAndSearchedAndSortedTableData]
-  )
-
   const getCheckedData = useCallback(
-    () => filteredAndSearchedAndSortedData.filter(({ id }) => checkedIds.includes(id)),
-    [checkedIds, filteredAndSearchedAndSortedData]
+    () => filteredAndSearchedAndSortedTableData.filter(({ id }) => checkedIds.includes(id)),
+    [checkedIds, filteredAndSearchedAndSortedTableData]
   )
 
   const toggleCheckAll = useCallback(() => {

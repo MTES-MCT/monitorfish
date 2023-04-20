@@ -24,7 +24,7 @@ context('Side Window > Mission List > Filter Bar', () => {
   })
 
   it('Should filter missions by status', () => {
-    cy.fill('Status', ['Terminée'])
+    cy.fill('Statut', ['Terminée'])
 
     cy.get('[data-id="2"]').should('exist')
     cy.get('[data-id="45"]').should('exist')

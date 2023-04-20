@@ -91,7 +91,7 @@ export function FilterBar({ onChange, onQueryChange }: FilterBarProps) {
             label="Status"
             name={MissionFilterType.STATUS}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.STATUS]}
-            placeholder="Status"
+            placeholder="Statut"
             renderValue={(_, items) => (items.length > 0 ? <OptionValue>Status ({items.length}) </OptionValue> : <></>)}
           />
           <FormikMultiSelect

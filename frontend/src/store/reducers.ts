@@ -1,3 +1,7 @@
+import persistReducer from 'redux-persist/es/persistReducer'
+import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
+import storage from 'redux-persist/es/storage' // LocalStorage
+
 import { monitorenvApi, monitorfishApi } from '../api'
 import { alertReducer } from '../domain/shared_slices/Alert'
 import { beaconMalfunctionReducer } from '../domain/shared_slices/BeaconMalfunction'
@@ -15,7 +19,7 @@ import { interestPointReducer } from '../domain/shared_slices/InterestPoint'
 import layer from '../domain/shared_slices/Layer'
 import { mapReducer } from '../domain/shared_slices/Map'
 import { measurementReducer } from '../domain/shared_slices/Measurement'
-import { missionReducer } from '../domain/shared_slices/Mission'
+import { missionReducer, type MissionState } from '../domain/shared_slices/Mission'
 import { regulatoryReducer } from '../domain/shared_slices/Regulatory'
 import { reportingReducer } from '../domain/shared_slices/Reporting'
 import { speciesReducer } from '../domain/shared_slices/Species'
@@ -23,6 +27,19 @@ import { vesselSliceReducer } from '../domain/shared_slices/Vessel'
 import { regulationReducer } from '../features/Backoffice/Regulation.slice'
 import { regulatoryLayerSearchReducer } from '../features/LayersSidebar/RegulatoryZones/search/RegulatoryLayerSearch.slice'
 import { vesselListReducer } from '../features/VesselList/VesselList.slice'
+
+import type { Reducer } from 'redux'
+import type { PersistConfig } from 'redux-persist'
+
+const persistReducerTyped: <S>(config: PersistConfig<S>, baseReducer: Reducer<S>) => Reducer<S> = persistReducer as any
+
+// We do that to "type" the persisted reducer
+const getCommonPersistReducerConfig = <S>(key: string, whitelist?: Array<keyof S>): PersistConfig<S> => ({
+  key,
+  stateReconciler: autoMergeLevel2,
+  storage,
+  ...(whitelist ? ({ whitelist } as any) : {})
+})
 
 const commonReducerList = {
   [monitorfishApi.reducerPath]: monitorfishApi.reducer,
@@ -52,7 +69,10 @@ export const mainReducer = {
   interestPoint: interestPointReducer,
   layer: layer.homepage.reducer,
   measurement: measurementReducer,
-  mission: missionReducer,
+  mission: persistReducerTyped(
+    { ...getCommonPersistReducerConfig<MissionState>('mainPersistorMission', ['listSeaFront']) },
+    missionReducer
+  ),
   regulatoryLayerSearch: regulatoryLayerSearchReducer,
   reporting: reportingReducer,
   vessel: vesselSliceReducer,

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Alert" transform="translate(-220 -208)">
+    <path id="Tracé_1348" data-name="Tracé 1348"
+      d="M295,13V8a5,5,0,0,0-4-4.9V1h-2V3.1A5,5,0,0,0,285,8v5l-2,2v2h4.5a2.5,2.5,0,0,0,5,0H297V15Zm-5,5a1,1,0,0,1-1-1h2A1,1,0,0,1,290,18Zm1.486-3H285l2-2V8a3,3,0,0,1,6,0v5l2,2Z"
+      transform="translate(-60 208)" fill="currentColor" />
+    <rect id="Rectangle_6090" data-name="Rectangle 6090" width="20" height="20" transform="translate(220 208)"
+      fill="none" />
+  </g>
+</svg>

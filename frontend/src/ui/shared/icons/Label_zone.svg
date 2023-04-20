@@ -1,20 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="13.5" height="13.5" viewBox="0 0 13.5 13.5">
-    <g id="Label_zone" transform="translate(0.75 0.75)">
-        <path id="Tracé_386" data-name="Tracé 386" d="M14.85,12.85v2h-2" transform="translate(-2.85 -2.85)" fill="none"
-              stroke="#707785" stroke-width="1.5"/>
-        <line id="Ligne_1181" data-name="Ligne 1181" x1="5.5" transform="translate(2.676 12)" fill="none"
-              stroke="#707785" stroke-width="1.5" stroke-dasharray="4 3"/>
-        <path id="Tracé_387" data-name="Tracé 387" d="M2.85,14.85h-2v-2" transform="translate(-0.85 -2.85)" fill="none"
-              stroke="#707785" stroke-width="1.5"/>
-        <line id="Ligne_1182" data-name="Ligne 1182" y1="5.5" transform="translate(0 2.676)" fill="none"
-              stroke="#707785" stroke-width="1.5" stroke-dasharray="4 3"/>
-        <path id="Tracé_388" data-name="Tracé 388" d="M.85,2.85v-2h2" transform="translate(-0.85 -0.85)" fill="none"
-              stroke="#707785" stroke-width="1.5"/>
-        <line id="Ligne_1183" data-name="Ligne 1183" x2="5.5" transform="translate(3.823 0)" fill="none"
-              stroke="#707785" stroke-width="1.5" stroke-dasharray="4 3"/>
-        <path id="Tracé_389" data-name="Tracé 389" d="M12.85.85h2v2" transform="translate(-2.85 -0.85)" fill="none"
-              stroke="#707785" stroke-width="1.5"/>
-        <line id="Ligne_1184" data-name="Ligne 1184" y2="5.5" transform="translate(12 3.823)" fill="none"
-              stroke="#707785" stroke-width="1.5" stroke-dasharray="4 3"/>
-    </g>
+      <g id="Label_zone" transform="translate(0.75 0.75)">
+            <path id="Tracé_386" data-name="Tracé 386" d="M14.85,12.85v2h-2" transform="translate(-2.85 -2.85)"
+                  fill="none" stroke="currentColor" stroke-width="1.5" />
+            <line id="Ligne_1181" data-name="Ligne 1181" x1="5.5" transform="translate(2.676 12)" fill="none"
+                  stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3" />
+            <path id="Tracé_387" data-name="Tracé 387" d="M2.85,14.85h-2v-2" transform="translate(-0.85 -2.85)"
+                  fill="none" stroke="currentColor" stroke-width="1.5" />
+            <line id="Ligne_1182" data-name="Ligne 1182" y1="5.5" transform="translate(0 2.676)" fill="none"
+                  stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3" />
+            <path id="Tracé_388" data-name="Tracé 388" d="M.85,2.85v-2h2" transform="translate(-0.85 -0.85)" fill="none"
+                  stroke="currentColor" stroke-width="1.5" />
+            <line id="Ligne_1183" data-name="Ligne 1183" x2="5.5" transform="translate(3.823 0)" fill="none"
+                  stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3" />
+            <path id="Tracé_389" data-name="Tracé 389" d="M12.85.85h2v2" transform="translate(-2.85 -0.85)" fill="none"
+                  stroke="currentColor" stroke-width="1.5" />
+            <line id="Ligne_1184" data-name="Ligne 1184" y2="5.5" transform="translate(12 3.823)" fill="none"
+                  stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3" />
+      </g>
 </svg>

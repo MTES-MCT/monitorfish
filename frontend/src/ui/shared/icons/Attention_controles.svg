@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="18.305" height="16.12" viewBox="0 0 18.305 16.12">
-    <g id="Groupe_325" data-name="Groupe 325" transform="translate(-119.522 -160.46)">
-        <path id="Tracé_380" data-name="Tracé 380" d="M120.174,175.83h17l-8.5-15Z" transform="translate(0 0)"
-              fill="none" stroke="#707785" stroke-linejoin="bevel" stroke-width="1.5"/>
-        <line id="Ligne_1207" data-name="Ligne 1207" y2="4.684" transform="translate(128.674 165.989)" fill="none"
-              stroke="#707785" stroke-linejoin="round" stroke-width="1.5"/>
-        <line id="Ligne_1208" data-name="Ligne 1208" y2="1.756" transform="translate(128.674 171.77)" fill="none"
-              stroke="#707785" stroke-linejoin="round" stroke-width="1.5"/>
-    </g>
+      <g id="Groupe_325" data-name="Groupe 325" transform="translate(-119.522 -160.46)">
+            <path id="Tracé_380" data-name="Tracé 380" d="M120.174,175.83h17l-8.5-15Z" transform="translate(0 0)"
+                  fill="none" stroke="currentColor" stroke-linejoin="bevel" stroke-width="1.5" />
+            <line id="Ligne_1207" data-name="Ligne 1207" y2="4.684" transform="translate(128.674 165.989)" fill="none"
+                  stroke="currentColor" stroke-linejoin="round" stroke-width="1.5" />
+            <line id="Ligne_1208" data-name="Ligne 1208" y2="1.756" transform="translate(128.674 171.77)" fill="none"
+                  stroke="currentColor" stroke-linejoin="round" stroke-width="1.5" />
+      </g>
 </svg>

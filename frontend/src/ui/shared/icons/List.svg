@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="List" transform="translate(160 -41)">
+    <g>
+      <g transform="translate(-142 45) rotate(90)" fill="none" stroke="currentColor" stroke-miterlimit="10"
+        stroke-width="2">
+        <rect width="2" height="12" stroke="none" />
+        <rect x="1" y="1" height="10" fill="none" />
+      </g>
+      <g transform="translate(-142 50) rotate(90)" fill="none" stroke="currentColor" stroke-miterlimit="10"
+        stroke-width="2">
+        <rect width="2" height="12" stroke="none" />
+        <rect x="1" y="1" height="10" fill="none" />
+      </g>
+      <g transform="translate(-142 55) rotate(90)" fill="none" stroke="currentColor" stroke-miterlimit="10"
+        stroke-width="2">
+        <rect width="2" height="12" stroke="none" />
+        <rect x="1" y="1" height="10" fill="none" />
+      </g>
+      <g transform="translate(-158 44.5)" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2">
+        <circle cx="1.5" cy="1.5" r="1.5" stroke="none" />
+        <circle cx="1.5" cy="1.5" r="0.5" fill="none" />
+      </g>
+      <g transform="translate(-158 49.5)" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2">
+        <circle cx="1.5" cy="1.5" r="1.5" stroke="none" />
+        <circle cx="1.5" cy="1.5" r="0.5" fill="none" />
+      </g>
+      <g transform="translate(-158 54.5)" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2">
+        <circle cx="1.5" cy="1.5" r="1.5" stroke="none" />
+        <circle cx="1.5" cy="1.5" r="0.5" fill="none" />
+      </g>
+    </g>
+    <rect width="20" height="20" transform="translate(-160 41)" fill="none" />
+  </g>
+</svg>

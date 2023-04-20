@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 26 26">
+  <g transform="translate(147.647 125.977)">
+    <path d="M-134.647-110.8l-13-7.588,13-7.588,13,7.588Zm-9.522-7.588,9.522,5.558,9.521-5.558-9.521-5.558Z"
+      fill="currentColor" />
+    <path d="M-134.647-108.4l-11.261-6.573-1.739,1.015,13,7.588,13-7.588-1.739-1.015Z" transform="translate(0 1)"
+      fill="currentColor" />
+    <path d="M-134.647-104.006l-11.261-6.573-1.739,1.015,13,7.588,13-7.588-1.739-1.015Z" transform="translate(0 2)"
+      fill="currentColor" />
+  </g>
+</svg>

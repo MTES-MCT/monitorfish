@@ -1,20 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15">
   <g id="Groupe_699" data-name="Groupe 699" transform="translate(-1484 -357)">
     <g id="Tracé_492" data-name="Tracé 492" transform="translate(1431.559 357)" fill="none" stroke-miterlimit="10">
-      <path d="M52.441,0V12h2.787v3l4.52-3h7.693V0Z" stroke="none"/>
-      <path d="M 53.94094848632813 1.5 L 53.94094848632813 10.49983787536621 L 56.72792434692383 10.49954032897949 L 56.72792434692383 12.20397853851318 L 59.29503631591797 10.5 L 65.94094848632813 10.5 L 65.94094848632813 1.5 L 53.94094848632813 1.5 M 52.44094848632813 0 L 67.44094848632813 0 L 67.44094848632813 12 L 59.74755477905273 12 L 55.22792816162109 15 L 55.22792816162109 11.99970054626465 L 52.44094848632813 12 L 52.44094848632813 0 Z" stroke="none" fill="#707785"/>
+      <path d="M52.441,0V12h2.787v3l4.52-3h7.693V0Z" stroke="none" />
+      <path
+        d="M 53.94094848632813 1.5 L 53.94094848632813 10.49983787536621 L 56.72792434692383 10.49954032897949 L 56.72792434692383 12.20397853851318 L 59.29503631591797 10.5 L 65.94094848632813 10.5 L 65.94094848632813 1.5 L 53.94094848632813 1.5 M 52.44094848632813 0 L 67.44094848632813 0 L 67.44094848632813 12 L 59.74755477905273 12 L 55.22792816162109 15 L 55.22792816162109 11.99970054626465 L 52.44094848632813 12 L 52.44094848632813 0 Z"
+        stroke="none" fill="currentColor" />
     </g>
-    <g id="Ellipse_32" data-name="Ellipse 32" transform="translate(1487.714 361.643)" fill="#3b4559" stroke="#707785" stroke-width="1">
-      <circle cx="1" cy="1" r="1" stroke="none"/>
-      <circle cx="1" cy="1" r="0.5" fill="none"/>
+    <g id="Ellipse_32" data-name="Ellipse 32" transform="translate(1487.714 361.643)" fill="#3b4559"
+      stroke="currentColor" stroke-width="1">
+      <circle cx="1" cy="1" r="1" stroke="none" />
+      <circle cx="1" cy="1" r="0.5" fill="none" />
     </g>
-    <g id="Ellipse_33" data-name="Ellipse 33" transform="translate(1490.5 361.643)" fill="#3b4559" stroke="#707785" stroke-width="1">
-      <circle cx="1" cy="1" r="1" stroke="none"/>
-      <circle cx="1" cy="1" r="0.5" fill="none"/>
+    <g id="Ellipse_33" data-name="Ellipse 33" transform="translate(1490.5 361.643)" fill="#3b4559" stroke="currentColor"
+      stroke-width="1">
+      <circle cx="1" cy="1" r="1" stroke="none" />
+      <circle cx="1" cy="1" r="0.5" fill="none" />
     </g>
-    <g id="Ellipse_34" data-name="Ellipse 34" transform="translate(1493.286 361.643)" fill="#3b4559" stroke="#707785" stroke-width="1">
-      <circle cx="1" cy="1" r="1" stroke="none"/>
-      <circle cx="1" cy="1" r="0.5" fill="none"/>
+    <g id="Ellipse_34" data-name="Ellipse 34" transform="translate(1493.286 361.643)" fill="#3b4559"
+      stroke="currentColor" stroke-width="1">
+      <circle cx="1" cy="1" r="1" stroke="none" />
+      <circle cx="1" cy="1" r="0.5" fill="none" />
     </g>
   </g>
 </svg>

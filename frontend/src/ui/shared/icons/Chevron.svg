@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Chevron" transform="translate(0 -82)">
+    <g fill="none" stroke-miterlimit="10">
+      <path d="M16.585,87.293,10,93.878,3.415,87.293,2,88.707l6.585,6.585L10,96.707l1.415-1.415L18,88.707Z"
+        stroke="none" />
+      <path
+        d="M 3.414670944213867 87.29266357421875 L 10 93.87799072265625 L 16.58533096313477 87.29266357421875 L 18 88.70733642578125 L 10 96.70733642578125 L 2 88.70733642578125 L 3.414670944213867 87.29266357421875 Z"
+        stroke="none" fill="currentColor" />
+    </g>
+    <rect width="20" height="20" transform="translate(0 82)" fill="none" />
+  </g>
+</svg>

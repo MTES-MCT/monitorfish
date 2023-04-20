@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Focus" transform="translate(320 -82)">
+    <g>
+      <g fill="none" stroke-miterlimit="10">
+        <path d="M-319,83v7h2V85h5V83Z" stroke="none" />
+        <path d="M -319 83 L -312 83 L -312 85 L -317 85 L -317 90 L -319 90 L -319 83 Z" stroke="none"
+          fill="currentColor" />
+      </g>
+      <g fill="none" stroke-miterlimit="10">
+        <path d="M-317,94h-2v7h7V99h-5Z" stroke="none" />
+        <path d="M -319 94 L -317 94 L -317 99 L -312 99 L -312 101 L -319 101 L -319 94 Z" stroke="none"
+          fill="currentColor" />
+      </g>
+      <g fill="none" stroke-miterlimit="10">
+        <path d="M-308,83v2h5v5h2V83Z" stroke="none" />
+        <path d="M -308 83 L -301 83 L -301 90 L -303 90 L -303 85 L -308 85 L -308 83 Z" stroke="none"
+          fill="currentColor" />
+      </g>
+      <g fill="none" stroke-miterlimit="10">
+        <path d="M-303,99h-5v2h7V94h-2Z" stroke="none" />
+        <path d="M -301 101 L -308 101 L -308 99 L -303 99 L -303 94 L -301 94 L -301 101 Z" stroke="none"
+          fill="currentColor" />
+      </g>
+    </g>
+    <rect width="20" height="20" transform="translate(-320 82)" fill="none" />
+  </g>
+</svg>

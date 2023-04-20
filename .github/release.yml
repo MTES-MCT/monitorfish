@@ -1,5 +1,11 @@
 changelog:
   categories:
+    - title: 🎉 Fonctionnalités
+      labels:
+        - '*'
+      exclude:
+        labels:
+          - dependencies
     - title: 🐛 Corrections
       labels:
         - bug

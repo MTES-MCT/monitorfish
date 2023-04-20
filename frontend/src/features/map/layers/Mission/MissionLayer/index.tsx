@@ -19,7 +19,7 @@ export type MissionLayerProps = {
 }
 function UnmemoizedMissionLayer({ map }: MissionLayerProps) {
   const dispatch = useMainAppDispatch()
-  const missionsAndActions = useGetMissionsWithActions()
+  const { missionsWithActions } = useGetMissionsWithActions()
 
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource<Point>>
   const layerRef = useRef() as MutableRefObject<WebGLPointsLayerWithName>
@@ -51,7 +51,7 @@ function UnmemoizedMissionLayer({ map }: MissionLayerProps) {
     }
     getVectorSource().clear()
 
-    const features = missionsAndActions
+    const features = missionsWithActions
       .map(getMissionFeaturePoint)
       .filter((feature): feature is Feature<Point> => Boolean(feature))
     if (!features?.length) {
@@ -59,7 +59,7 @@ function UnmemoizedMissionLayer({ map }: MissionLayerProps) {
     }
 
     getVectorSource().addFeatures(features)
-  }, [dispatch, map, missionsAndActions])
+  }, [dispatch, map, missionsWithActions])
 
   useEffect(() => {
     if (!map) {

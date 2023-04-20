@@ -9,8 +9,8 @@ import styled from 'styled-components'
 import { useGetPortsQuery } from '../../../../api/port'
 import {
   InteractionListener,
-  OpenLayersGeometryType,
   OPENLAYERS_PROJECTION,
+  OpenLayersGeometryType,
   WSG84_PROJECTION
 } from '../../../../domain/entities/map/constants'
 import { fitToExtent } from '../../../../domain/shared_slices/Map'

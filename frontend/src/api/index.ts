@@ -20,7 +20,7 @@ export const monitorenvApi = createApi({
   baseQuery: normalizeRtkBaseQuery(monitorenvBaseQuery),
   endpoints: () => ({}),
   reducerPath: 'monitorenvApi',
-  tagTypes: ['ControlUnits', 'Missions']
+  tagTypes: ['ControlUnits']
 })
 
 // =============================================================================
@@ -34,5 +34,5 @@ export const monitorfishApi = createApi({
   baseQuery: normalizeRtkBaseQuery(monitorfishBaseQuery),
   endpoints: () => ({}),
   reducerPath: 'monitorfishApi',
-  tagTypes: ['ControlObjectives', 'FleetSegments', 'Gears', 'Infractions', 'MissionActions', 'Ports', 'Species']
+  tagTypes: ['ControlObjectives', 'FleetSegments', 'Gears', 'Infractions', 'Ports', 'Species']
 })

@@ -1,15 +1,34 @@
 import { useCallback, useEffect, useState } from 'react'
 
-import { useGetMissionsQuery } from '../../../../api/mission'
+import { missionApi } from '../../../../api/mission'
 import { missionActionApi } from '../../../../api/missionAction'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 
 import type { Mission, MissionWithActions } from '../types'
 
-export function useGetMissionsWithActions(): MissionWithActions[] {
+export function useGetMissionsWithActions(): {
+  fetchMissions: () => void
+  missionsWithActions: MissionWithActions[]
+} {
   const dispatch = useMainAppDispatch()
-  const missions = useGetMissionsQuery(undefined).data
-  const [missionsAndActions, setMissionWithActions] = useState<MissionWithActions[]>([])
+  const [missionsWithActions, setMissionWithActions] = useState<MissionWithActions[]>([])
+  const [missions, setMissions] = useState<Mission.Mission[]>([])
+
+  const getMissions = useCallback(async () => {
+    const { data: nextMissions } = await dispatch(
+      missionApi.endpoints.getMissions.initiate(undefined, { forceRefetch: true })
+    )
+
+    if (!nextMissions) {
+      return
+    }
+
+    setMissions(nextMissions)
+  }, [dispatch])
+
+  useEffect(() => {
+    getMissions()
+  }, [getMissions])
 
   const getMissionsWithActions = useCallback(
     (_missions: Mission.Mission[] | undefined) => {
@@ -19,7 +38,7 @@ export function useGetMissionsWithActions(): MissionWithActions[] {
 
       const missionActionsPromises = _missions.map(async mission => {
         const { data: missionActions } = await dispatch(
-          missionActionApi.endpoints.getMissionActions.initiate(mission.id)
+          missionActionApi.endpoints.getMissionActions.initiate(mission.id, { forceRefetch: true })
         )
 
         return {
@@ -39,5 +58,8 @@ export function useGetMissionsWithActions(): MissionWithActions[] {
     getMissionsWithActions(missions)
   }, [missions, getMissionsWithActions])
 
-  return missionsAndActions
+  return {
+    fetchMissions: getMissions,
+    missionsWithActions
+  }
 }

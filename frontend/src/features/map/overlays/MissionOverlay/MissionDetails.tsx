@@ -2,6 +2,7 @@ import { Accent, Button, Icon, IconButton, Size, Tag } from '@mtes-mct/monitor-u
 import styled from 'styled-components'
 
 import { margins } from './constants'
+import { MissionStatusLabel } from './MissionStatusLabel'
 import { missionActions } from '../../../../domain/actions'
 import { getMissionSourceTagText } from '../../../../domain/entities/mission'
 import { Mission } from '../../../../domain/entities/mission/types'
@@ -12,8 +13,6 @@ import { SideWindowMenuKey } from '../../../SideWindow/constants'
 import { OverlayPosition } from '../Overlay'
 
 import type { ControlUnit } from '../../../../domain/types/controlUnit'
-
-import MissionStatus = Mission.MissionStatus
 
 type MissionDetailsProps = {
   isSelected: boolean
@@ -41,13 +40,13 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
           />
         )}
         <ZoneText>
-          <Title>
+          <Title isSelected={isSelected}>
             {mission.controlUnits.length === 1 &&
               mission.controlUnits.map((controlUnit: ControlUnit.ControlUnit) => (
                 <>
-                  <div>{controlUnit.name.toUpperCase()}</div>
+                  <TextWithEllipsis>{controlUnit.name.toUpperCase()}</TextWithEllipsis>
                   {controlUnit.contact ? (
-                    <div>{controlUnit.contact}</div>
+                    <TextWithEllipsis>{controlUnit.contact}</TextWithEllipsis>
                   ) : (
                     <NoContact>Aucun contact renseigné</NoContact>
                   )}
@@ -64,7 +63,14 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
             )}
           </Title>
           <Details>
-            <MissionSourceTag>{getMissionSourceTagText(mission.missionSource)}</MissionSourceTag>
+            <MissionSourceTag
+              isFromCacem={
+                mission.missionSource === Mission.MissionSource.POSEIDON_CACEM ||
+                mission.missionSource === Mission.MissionSource.MONITORENV
+              }
+            >
+              {getMissionSourceTagText(mission.missionSource)}
+            </MissionSourceTag>
             <div>
               Mission {mission.missionTypes.map(missionType => Mission.MissionTypeLabel[missionType]).join(' / ')} –{' '}
               {mission.startDateTimeUtc}
@@ -73,16 +79,13 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
               {mission.numberOfControls} {pluralize('contrôle', mission.numberOfControls)}{' '}
               {pluralize('réalisé', mission.numberOfControls)}
             </div>
-            <div>
-              {mission.missionStatus === MissionStatus.IN_PROGRESS && <InProgressIcon />}
-              {mission.missionStatus ? Mission.MissionStatusLabel[mission.missionStatus] : undefined}
-            </div>
+            <MissionStatusLabel missionStatus={mission.missionStatus} />
           </Details>
         </ZoneText>
         <EditButton
           accent={Accent.PRIMARY}
           disabled={!isSelected}
-          Icon={Icon.Calendar}
+          Icon={Icon.Edit}
           onClick={openMissionInSideWindow}
           size={Size.SMALL}
         >
@@ -101,8 +104,16 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
   )
 }
 
-const MissionSourceTag = styled(Tag)`
-  background: ${p => p.theme.color.blueGray[100]};
+const TextWithEllipsis = styled.div`
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+`
+
+const MissionSourceTag = styled(Tag)<{
+  isFromCacem: boolean
+}>`
+  background: ${p => (p.isFromCacem ? p.theme.color.mediumSeaGreen : p.theme.color.blueGray[100])};
   color: ${p => p.theme.color.white};
   margin-bottom: 8px;
   margin-top: 4px;
@@ -134,13 +145,13 @@ const Details = styled.div`
   color: ${p => p.theme.color.slateGray};
 `
 
-const Title = styled.div`
+const Title = styled.div<{
+  isSelected: boolean
+}>`
   height: 40px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
   font: normal normal bold 13px/18px Marianne;
   color: ${p => p.theme.color.gunMetal};
+  width: ${p => (p.isSelected ? 90 : 100)}%;
 `
 
 const Wrapper = styled.div`
@@ -152,15 +163,6 @@ const Wrapper = styled.div`
   width: 260px;
   border-radius: 1px;
   background-color: ${p => p.theme.color.white};
-`
-
-const InProgressIcon = styled.span`
-  height: 8px;
-  width: 8px;
-  margin-right: 5px;
-  background-color: #33a02c;
-  border-radius: 50%;
-  display: inline-block;
 `
 
 const ZoneText = styled.div`

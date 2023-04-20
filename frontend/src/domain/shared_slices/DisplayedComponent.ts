@@ -3,7 +3,11 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export type OptionalDisplayedComponentAction = {
+  areVesselsDisplayed?: boolean
+  isAlertsMapButtonDisplayed?: boolean
+  isBeaconMalfunctionsMapButtonDisplayed?: boolean
   isDrawLayerModalDisplayed?: boolean
+  isFavoriteVesselsMapButtonDisplayed?: boolean
   isInterestPointMapButtonDisplayed?: boolean
   isMeasurementMapButtonDisplayed?: boolean
   isVesselFiltersMapButtonDisplayed?: boolean
@@ -15,7 +19,11 @@ export type OptionalDisplayedComponentAction = {
 }
 
 export type DisplayedComponentState = {
+  areVesselsDisplayed: boolean
+  isAlertsMapButtonDisplayed: boolean
+  isBeaconMalfunctionsMapButtonDisplayed: boolean
   isDrawLayerModalDisplayed: boolean
+  isFavoriteVesselsMapButtonDisplayed: boolean
   isInterestPointMapButtonDisplayed: boolean
   isMeasurementMapButtonDisplayed: boolean
   isVesselFiltersMapButtonDisplayed: boolean
@@ -26,7 +34,11 @@ export type DisplayedComponentState = {
   isVesselVisibilityMapButtonDisplayed: boolean
 }
 const INITIAL_STATE: DisplayedComponentState = {
+  areVesselsDisplayed: true,
+  isAlertsMapButtonDisplayed: true,
+  isBeaconMalfunctionsMapButtonDisplayed: true,
   isDrawLayerModalDisplayed: false,
+  isFavoriteVesselsMapButtonDisplayed: true,
   isInterestPointMapButtonDisplayed: true,
   isMeasurementMapButtonDisplayed: true,
   isVesselFiltersMapButtonDisplayed: true,
@@ -42,39 +54,9 @@ const displayedComponentSlice = createSlice({
   name: 'displayedComponent',
   reducers: {
     setDisplayedComponents(state, action: PayloadAction<OptionalDisplayedComponentAction>) {
-      state.isDrawLayerModalDisplayed = getValueOrDefault(
-        action.payload.isDrawLayerModalDisplayed,
-        state.isDrawLayerModalDisplayed
-      )
-      state.isVesselSearchDisplayed = getValueOrDefault(
-        action.payload.isVesselSearchDisplayed,
-        state.isVesselSearchDisplayed
-      )
-      state.isVesselFiltersMapButtonDisplayed = getValueOrDefault(
-        action.payload.isVesselFiltersMapButtonDisplayed,
-        state.isVesselFiltersMapButtonDisplayed
-      )
-      state.isVesselVisibilityMapButtonDisplayed = getValueOrDefault(
-        action.payload.isVesselVisibilityMapButtonDisplayed,
-        state.isVesselVisibilityMapButtonDisplayed
-      )
-      state.isMeasurementMapButtonDisplayed = getValueOrDefault(
-        action.payload.isMeasurementMapButtonDisplayed,
-        state.isMeasurementMapButtonDisplayed
-      )
-      state.isVesselLabelsMapButtonDisplayed = getValueOrDefault(
-        action.payload.isVesselLabelsMapButtonDisplayed,
-        state.isVesselLabelsMapButtonDisplayed
-      )
-      state.isInterestPointMapButtonDisplayed = getValueOrDefault(
-        action.payload.isInterestPointMapButtonDisplayed,
-        state.isInterestPointMapButtonDisplayed
-      )
-      state.isVesselListDisplayed = getValueOrDefault(action.payload.isVesselListDisplayed, state.isVesselListDisplayed)
-      state.isVesselListModalDisplayed = getValueOrDefault(
-        action.payload.isVesselListModalDisplayed,
-        state.isVesselListModalDisplayed
-      )
+      Object.keys(INITIAL_STATE).forEach(key => {
+        state[key] = getValueOrDefault(action.payload[key], state[key])
+      })
     }
   }
 })

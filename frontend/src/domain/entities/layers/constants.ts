@@ -61,7 +61,7 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
   [MonitorFishLayer.MISSION_PIN_POINT]: {
     code: MonitorFishLayer.MISSION_PIN_POINT,
     type: LayerType.MISSION,
-    zIndex: 970,
+    zIndex: 1001,
     isClickable: true,
     isHoverable: true
   },

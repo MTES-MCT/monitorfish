@@ -63,15 +63,15 @@ const VesselEstimatedPositionLayer = ({ map }) => {
         getLayer().name = LayerProperties.VESSEL_ESTIMATED_POSITION.code
         map.getLayers().push(getLayer())
       }
-
-      return () => {
-        if (map) {
-          map.removeLayer(getLayer())
-        }
-      }
     }
 
     addLayerToMap()
+
+    return () => {
+      if (map) {
+        map.removeLayer(getLayer())
+      }
+    }
   }, [map])
 
   useEffect(() => {

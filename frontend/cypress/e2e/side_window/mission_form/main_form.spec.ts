@@ -1,7 +1,6 @@
-import { getUtcizedDayjs } from '@mtes-mct/monitor-ui'
-
 import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
 import { Mission } from '../../../../src/domain/entities/mission/types'
+import { getUtcizedDayjs } from '../../utils/getUtcizedDayjs'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Main Form', () => {

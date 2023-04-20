@@ -1,10 +1,7 @@
-import webpackPreprocessor from '@cypress/webpack-preprocessor'
 import { defineConfig } from 'cypress'
 import initCypressMousePositionPlugin from 'cypress-mouse-position/plugin'
 import { initPlugin } from 'cypress-plugin-snapshots/plugin'
 import { platform } from 'os'
-
-import { config as webpackConfig } from './webpack.config'
 
 const IS_CI = Boolean(process.env.CI)
 const IS_DARWIN = platform() === 'darwin'
@@ -15,8 +12,6 @@ export default defineConfig({
     baseUrl: `http://${IS_DARWIN ? '0.0.0.0' : 'localhost'}:${DEFAULT_PORT}`,
     excludeSpecPattern: ['**/__snapshots__/*', '**/__image_snapshots__/*'],
     setupNodeEvents(on, config) {
-      on('file:preprocessor', webpackPreprocessor({ webpackOptions: webpackConfig }))
-
       initCypressMousePositionPlugin(on)
       initPlugin(on, config)
     },

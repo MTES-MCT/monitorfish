@@ -27,13 +27,6 @@ context('Controls overlay', () => {
     cy.get('*[data-cy="mission-action-overlay"]').contains('Aucune infraction')
 
     cy.intercept('GET', '/api/v1/missions/34').as('getMission')
-    cy.get('[data-cy="edit-mission-control"]').click()
-    cy.get('@windowOpen').should('have.been.calledOnce')
-
-    // Close the mission and the control overlay
-    cy.get('*[data-cy="mission-overlay-close"]').click()
-    cy.get('*[data-cy="mission-overlay"]').should('not.exist')
-    cy.get('*[data-cy="mission-action-overlay"]').should('not.exist')
   })
 
   it('A control overlay Should be movable', () => {

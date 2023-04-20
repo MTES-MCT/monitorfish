@@ -1,4 +1,5 @@
-import { getLocalizedDayjs, getUtcizedDayjs } from '@mtes-mct/monitor-ui'
+import { getLocalizedDayjs } from '../utils/getLocalizedDayjs'
+import { getUtcizedDayjs } from '../utils/getUtcizedDayjs'
 
 context('Vessels Track', () => {
   beforeEach(() => {

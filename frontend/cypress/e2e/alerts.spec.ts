@@ -3,8 +3,7 @@ context('Alerts', () => {
     cy.loadPath('/#@-824534.42,6082993.21,8.70')
   })
 
-  // TODO Re-enable this E2E test with an alternative solution.
-  it.skip('Should be showed on map When vessels have alerts', () => {
+  it('Should be showed on map When vessels have alerts', () => {
     cy.cleanScreenshots(1)
 
     // Given
@@ -15,15 +14,15 @@ context('Alerts', () => {
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('not.exist')
 
     // When
-    // cy.get('.VESSELS_POINTS').toMatchImageSnapshot({
-    //   imageConfig: {
-    //     threshold: 0.05,
-    //     thresholdType: 'percent'
-    //   },
-    //   screenshotConfig: {
-    //     clip: { height: 200, width: 200, x: 400, y: 400 }
-    //   }
-    // })
+    cy.get('.VESSELS_POINTS').toMatchImageSnapshot({
+      imageConfig: {
+        threshold: 0.05,
+        thresholdType: 'percent'
+      },
+      screenshotConfig: {
+        clip: { height: 200, width: 200, x: 400, y: 400 }
+      }
+    })
 
     cy.cleanScreenshots(1)
   })

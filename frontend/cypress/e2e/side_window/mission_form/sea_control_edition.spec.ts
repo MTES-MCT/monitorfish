@@ -22,7 +22,12 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     // -------------------------------------------------------------------------
     // Request
 
-    cy.intercept('PUT', '/bff/v1/mission_actions/4').as('updateMissionAction')
+    cy.intercept('PUT', '/bff/v1/mission_actions/4', {
+      body: {
+        id: 4
+      },
+      statusCode: 201
+    }).as('updateMissionAction')
 
     cy.clickButton('Enregistrer')
 

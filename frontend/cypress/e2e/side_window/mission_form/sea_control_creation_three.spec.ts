@@ -1,7 +1,7 @@
 import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
 import { Mission } from '../../../../src/domain/entities/mission/types'
 
-context('Side Window > Mission Form > Sea Control Creation One', () => {
+context('Side Window > Mission Form > Sea Control Creation three', () => {
   beforeEach(() => {
     openSideWindowNewMission()
     fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
@@ -10,11 +10,13 @@ context('Side Window > Mission Form > Sea Control Creation One', () => {
     cy.clickButton('Ajouter un contrôle en mer')
   })
 
-  it('Should fill the form for MALOTRU and send the expected data to the API', () => {
+  it('Should fill the form with MALOTRU vessel and send the expected data to the API', () => {
     // -------------------------------------------------------------------------
     // Form
+
     cy.get('input[placeholder="Rechercher un navire..."]').type('malot')
     cy.contains('mark', 'MALOT').click()
+
     cy.wait(500)
 
     // Obligations déclaratives et autorisations de pêche
@@ -82,7 +84,12 @@ context('Side Window > Mission Form > Sea Control Creation One', () => {
     // -------------------------------------------------------------------------
     // Request
 
-    cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('createMissionAction')
 
     cy.clickButton('Enregistrer')
 

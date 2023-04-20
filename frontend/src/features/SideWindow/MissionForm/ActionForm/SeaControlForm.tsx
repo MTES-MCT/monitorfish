@@ -10,7 +10,7 @@ import { Formik } from 'formik'
 import { useMemo } from 'react'
 
 import { ControlQualityField } from './shared/ControlQualityField'
-import { FormikMultiCoordinatesPicker } from './shared/FormikMultiCoordinatesPicker'
+import { FormikCoordinatesPicker } from './shared/FormikCoordinatesPicker'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
 import { GearsField } from './shared/GearsField'
 import { LicencesAndLogbookField } from './shared/LicencesAndLogbookField'
@@ -62,7 +62,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
             withTime
           />
 
-          <FormikMultiCoordinatesPicker />
+          <FormikCoordinatesPicker />
 
           <LicencesAndLogbookField />
 

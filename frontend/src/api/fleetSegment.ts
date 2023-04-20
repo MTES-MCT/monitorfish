@@ -18,7 +18,6 @@ export type ComputeFleetSegmentsParams = {
 export const fleetSegmentApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
     computeFleetSegments: builder.query<FleetSegment[], ComputeFleetSegmentsParams>({
-      providesTags: () => [{ type: 'FleetSegments' }],
       query: params =>
         `fleet_segments/compute?faoAreas=${params.faoAreas}&gears=${params.gears}&species=${params.species}&latitude=${
           params.latitude || ''

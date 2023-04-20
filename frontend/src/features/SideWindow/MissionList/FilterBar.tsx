@@ -88,7 +88,7 @@ export function FilterBar({ onQueryChange }: FilterBarProps) {
           <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}
             isLabelHidden
-            label="Status"
+            label="Statut"
             name={MissionFilterType.STATUS}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.STATUS]}
             placeholder="Statut"

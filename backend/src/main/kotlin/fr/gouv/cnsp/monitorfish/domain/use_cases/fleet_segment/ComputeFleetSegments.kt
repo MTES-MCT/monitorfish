@@ -53,7 +53,6 @@ class ComputeFleetSegments(
                 val allFaoAreas = faoAreasRepository.findByIncluding(point)
 
                 return@ifEmpty removeRedundantFaoArea(allFaoAreas)
-
             }
 
             return@ifEmpty listOf()

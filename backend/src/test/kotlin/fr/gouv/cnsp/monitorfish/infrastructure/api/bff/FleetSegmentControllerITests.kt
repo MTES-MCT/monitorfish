@@ -189,8 +189,8 @@ class FleetSegmentControllerITests {
         // When
         mockMvc.perform(
             get(
-                "/bff/v1/fleet_segments/compute?faoAreas=27.1.c,27.1.b&gears=OTB&species=HKE,BFT&latitude=47.585&longitude=0.4355678&portLocode=LOCODE"
-            )
+                "/bff/v1/fleet_segments/compute?faoAreas=27.1.c,27.1.b&gears=OTB&species=HKE,BFT&latitude=47.585&longitude=0.4355678&portLocode=LOCODE",
+            ),
         )
             // Then
             .andExpect(status().isOk)

@@ -74,7 +74,7 @@ object TestUtils {
             FleetSegment(
                 "SWW06 WITH NO SPECIES",
                 "Trawl",
-                gears =  listOf("SDN", "SSC", "SPR", "SX", "SV"),
+                gears = listOf("SDN", "SSC", "SPR", "SX", "SV"),
                 targetSpecies = listOf(),
                 faoAreas = listOf("27.9"),
                 year = currentYear,
@@ -83,7 +83,7 @@ object TestUtils {
             FleetSegment(
                 "SWW06 WITH NO FAO AREAS",
                 "Trawl",
-                gears =  listOf("SDN", "SSC", "SPR", "SX", "SV"),
+                gears = listOf("SDN", "SSC", "SPR", "SX", "SV"),
                 targetSpecies = listOf("HKE"),
                 faoAreas = listOf(),
                 year = currentYear,

@@ -102,7 +102,7 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
         </DateLabel>
       )}
 
-      <InnerWrapper isSelected={isSelected} onClick={onEdit} type={initialValues.actionType}>
+      <InnerWrapper data-cy="action-list-item" isSelected={isSelected} onClick={onEdit} type={initialValues.actionType}>
         <Head>
           <ActionLabel>
             <ActionIcon color={THEME.color.charcoal} size={20} />

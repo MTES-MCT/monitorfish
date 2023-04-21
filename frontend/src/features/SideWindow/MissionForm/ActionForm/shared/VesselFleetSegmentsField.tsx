@@ -1,18 +1,19 @@
-import { Field, getPseudoRandomString, Label, Select, SingleTag, TagGroup } from '@mtes-mct/monitor-ui'
-import { useField } from 'formik'
+import { Field, Label, SingleTag, TagGroup } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
+import { useFormikContext } from 'formik'
 import { remove as ramdaRemove, uniq } from 'ramda'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 
 import { useGetFleetSegmentsQuery } from '../../../../../api/fleetSegment'
+import { useGetRiskFactorQuery } from '../../../../../api/vessel'
 import { getFaoZonesFromSpeciesOnboard } from '../../../../../domain/entities/vessel/riskFactor'
-import { getVesselRiskFactor } from '../../../../../domain/use_cases/vessel/getVesselRiskFactor'
+import { getFleetSegments } from '../../../../../domain/use_cases/vessel/getFleetSegments'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { FrontendError } from '../../../../../libs/FrontendError'
-import { useNewWindow } from '../../../../../ui/NewWindow'
-import { includesSome } from '../../../../../utils/includesSome'
 import { sortByAscendingValue } from '../../../../../utils/sortByAscendingValue'
 import { FieldsetGroup, FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 
+import type { DeclaredLogbookSpecies } from '../../../../../domain/entities/vessel/types'
 import type { MissionAction } from '../../../../../domain/types/missionAction'
 import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
@@ -21,16 +22,11 @@ export type VesselFleetSegmentsFieldProps = {
   label: string
 }
 export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProps) {
-  const [input, , helper] = useField<MissionActionFormValues['segments']>('segments')
-  const [{ value: internalReferenceNumber }] =
-    useField<MissionActionFormValues['internalReferenceNumber']>('internalReferenceNumber')
-
-  const { newWindowContainerRef } = useNewWindow()
-
-  const [isUpdatingDefaultFleetSegments, setIsUpdatingDefaultFleetSegments] = useState(false)
-  const [selectComponentKey, setSelectComponentKey] = useState(getPseudoRandomString())
-
   const dispatch = useMainAppDispatch()
+
+  const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
+  const riskFactorApiQuery = useGetRiskFactorQuery(values.internalReferenceNumber || skipToken)
+
   const getFleetSegmentsApiQuery = useGetFleetSegmentsQuery()
 
   const fleetSegmentsAsOptions: Option<MissionAction.FleetSegment>[] = useMemo(() => {
@@ -38,134 +34,128 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
       return []
     }
 
-    return getFleetSegmentsApiQuery.data.map(({ faoAreas, segment, segmentName }) => ({
+    return getFleetSegmentsApiQuery.data.map(({ segment, segmentName }) => ({
       label: `${segment} - ${segmentName}`,
       value: {
-        faoAreas: faoAreas || [],
         segment,
         segmentName: segmentName || undefined
       }
     }))
   }, [getFleetSegmentsApiQuery.data])
 
-  const isLoading = useMemo(
-    () => !getFleetSegmentsApiQuery.data || isUpdatingDefaultFleetSegments,
-    [getFleetSegmentsApiQuery.data, isUpdatingDefaultFleetSegments]
-  )
+  const isLoading = useMemo(() => !getFleetSegmentsApiQuery.data, [getFleetSegmentsApiQuery.data])
 
-  const add = useCallback(
-    (newSegment: MissionAction.FleetSegment | undefined) => {
-      if (!newSegment) {
-        throw new FrontendError('`newSegment` is undefined')
-      }
-
-      setSelectComponentKey(getPseudoRandomString)
-
-      if ((input.value || []).find(({ segment }) => segment === newSegment.segment)) {
+  useEffect(
+    () => {
+      if (values.faoAreas?.length || !riskFactorApiQuery.data) {
         return
       }
 
-      const nextFleetSegments: MissionAction.FleetSegment[] = [...(input.value || []), newSegment]
+      const declaredSpeciesOnboard: DeclaredLogbookSpecies[] = riskFactorApiQuery.data.speciesOnboard
+      const faoAreas = getFaoZonesFromSpeciesOnboard(declaredSpeciesOnboard || [])
 
-      helper.setValue(nextFleetSegments)
+      setFieldValue('faoAreas', faoAreas)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [input.value]
+    [riskFactorApiQuery.data]
   )
 
-  const remove = useCallback(
-    (fleetSegmentIndex: number | undefined, faoArea?: string) => {
-      if (!input.value) {
-        throw new FrontendError('`input.value` is undefined')
-      }
+  useEffect(() => {
+    if (values.segments?.length) {
+      return
+    }
 
-      // If we only wish to delete a specific faoArea from existing fleet segments
-      if (faoArea) {
-        const nextFleetSegments = input.value.map(fleetSegment => ({
-          ...fleetSegment,
-          faoAreas: fleetSegment.faoAreas.filter(fleetSegmentFaoArea => fleetSegmentFaoArea !== faoArea)
-        }))
+    const getFleetSegmentsAsync = async () => {
+      const declaredSpeciesOnboard = riskFactorApiQuery.data?.speciesOnboard
 
-        helper.setValue(nextFleetSegments)
+      // TODO Add the port Locode
+      const computedFleetSegments = await dispatch(
+        getFleetSegments(
+          declaredSpeciesOnboard,
+          values.gearOnboard,
+          values.speciesOnboard,
+          values.longitude,
+          values.latitude,
+          undefined
+        )
+      )
 
-        return
+      const nextFleetSegments = fleetSegmentsAsOptions
+        .filter(({ value }) => computedFleetSegments?.find(fleetSegment => fleetSegment.segment === value.segment))
+        .map(({ value }) => value)
+
+      setFieldValue('segments', nextFleetSegments)
+    }
+
+    getFleetSegmentsAsync()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    dispatch,
+    fleetSegmentsAsOptions,
+    values.gearOnboard,
+    values.speciesOnboard,
+    values.longitude,
+    values.latitude,
+    riskFactorApiQuery
+  ])
+
+  const removeFaoArea = useCallback(
+    (faoAreaToDelete: string) => {
+      const nextFaoAreas = values.faoAreas?.filter(faoArea => faoArea !== faoAreaToDelete) || []
+
+      setFieldValue('faoAreas', nextFaoAreas)
+    },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [values.faoAreas]
+  )
+
+  const removeFleetSegment = useCallback(
+    (fleetSegmentIndex: number | undefined) => {
+      if (!values.segments) {
+        throw new FrontendError('`segments` is undefined')
       }
 
       if (fleetSegmentIndex === undefined) {
         throw new FrontendError('`fleetSegmentIndex` is undefined')
       }
 
-      const nextFleetSegments = ramdaRemove(fleetSegmentIndex, 1, input.value)
-      const nornalizedNextSegments = nextFleetSegments.length > 0 ? nextFleetSegments : undefined
+      const nextFleetSegments = ramdaRemove(fleetSegmentIndex, 1, values.segments)
+      const normalizedNextSegments = nextFleetSegments.length > 0 ? nextFleetSegments : undefined
 
-      helper.setValue(nornalizedNextSegments)
+      setFieldValue('segments', normalizedNextSegments)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [input.value]
-  )
-
-  const updateDefaultFleetSegments = useCallback(
-    async (_internalReferenceNumber: string) => {
-      setIsUpdatingDefaultFleetSegments(true)
-
-      try {
-        const riskFactor = await dispatch(getVesselRiskFactor(_internalReferenceNumber))
-        const faoZones = getFaoZonesFromSpeciesOnboard(riskFactor.speciesOnboard)
-        const includesSomeFaoZones = includesSome(faoZones)
-        const defaultFleetSegments = fleetSegmentsAsOptions
-          .filter(({ value }) => includesSomeFaoZones(value.faoAreas))
-          .map(({ value }) => value)
-
-        helper.setValue(defaultFleetSegments)
-      } catch (_) {
-        // If there is an error (because we didn't find a no risk factor), there is no need to update anything
-      }
-
-      setIsUpdatingDefaultFleetSegments(false)
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch, fleetSegmentsAsOptions]
-  )
-
-  useEffect(
-    () => {
-      if (!internalReferenceNumber) {
-        return
-      }
-
-      updateDefaultFleetSegments(internalReferenceNumber)
-    },
-
-    // We observe `internalReferenceNumber` changes in order to update the default fleet segments
-    [internalReferenceNumber, updateDefaultFleetSegments]
+    [values.segments]
   )
 
   const faoAreaTags = useMemo(() => {
-    if (!input.value) {
+    if (!values.faoAreas) {
       return []
     }
 
-    const allFaoAreas = input.value.map(({ faoAreas }) => faoAreas).flat()
-    const faoAreas = sortByAscendingValue(uniq(allFaoAreas))
+    const faoAreas = sortByAscendingValue(uniq(values.faoAreas))
 
     return faoAreas.map(faoArea => (
-      <SingleTag key={faoArea} onDelete={() => remove(undefined, faoArea)}>
+      <SingleTag key={faoArea} onDelete={() => removeFaoArea(faoArea)}>
         {faoArea}
       </SingleTag>
     ))
-  }, [input.value, remove])
+  }, [values.faoAreas, removeFaoArea])
 
   const fleetSegmentTags = useMemo(
     () =>
-      input.value
-        ? input.value.map(({ segment, segmentName }, index) => (
-            <SingleTag key={segment} onDelete={() => remove(index)}>{`${segment} - ${segmentName}`}</SingleTag>
+      values.segments
+        ? values.segments.map(({ segment, segmentName }, index) => (
+            <SingleTag
+              key={segment}
+              onDelete={() => removeFleetSegment(index)}
+            >{`${segment} - ${segmentName}`}</SingleTag>
           ))
         : [],
-    [input.value, remove]
+    [values.segments, removeFleetSegment]
   )
 
   if (isLoading) {
@@ -174,7 +164,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
 
   return (
     <FieldsetGroup isLight legend={label}>
-      {(!input.value || !input.value.length) && (
+      {(!values.segments || !values.segments.length) && (
         <p>
           <em>
             Renseignez un point de contrôle, les engins utilisés et les espèce pêchées pour qu’un segment de flotte soit
@@ -183,7 +173,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
         </p>
       )}
 
-      {input.value && input.value.length > 0 && (
+      {values.segments && values.segments.length > 0 && (
         <>
           {faoAreaTags.length > 0 && (
             <Field>
@@ -200,16 +190,6 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
           )}
         </>
       )}
-
-      <Select
-        key={selectComponentKey}
-        baseContainer={newWindowContainerRef.current}
-        label="Ajouter un segment"
-        name="newFleetSegment"
-        onChange={add}
-        options={fleetSegmentsAsOptions}
-        virtualized
-      />
     </FieldsetGroup>
   )
 }

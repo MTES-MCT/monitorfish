@@ -1,16 +1,20 @@
 import { Checkbox, FormikMultiRadio, FormikNumberInput, FormikTextarea, Select, SingleTag } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { useField } from 'formik'
 import { remove as ramdaRemove } from 'ramda'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { FormikMultiInfractionPicker } from './FormikMultiInfractionPicker'
 import { useGetGearsQuery } from '../../../../../api/gear'
+import { useGetRiskFactorQuery } from '../../../../../api/vessel'
 import { BOOLEAN_AS_OPTIONS } from '../../../../../constants'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { useNewWindow } from '../../../../../ui/NewWindow'
 import { FieldGroup } from '../../shared/FieldGroup'
 import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 
+import type { DeclaredLogbookGear } from '../../../../../domain/entities/vessel/types'
 import type { Gear } from '../../../../../domain/types/Gear'
 import type { MissionAction } from '../../../../../domain/types/missionAction'
 import type { MissionActionFormValues } from '../../types'
@@ -19,7 +23,13 @@ import type { Option } from '@mtes-mct/monitor-ui'
 const TypedFormikMultiInfractionPicker = FormikMultiInfractionPicker<MissionAction.GearInfraction>
 
 export function GearsField() {
+  const gearsByCode = useMainAppSelector(state => state.gear.gearsByCode)
   const [input, , helper] = useField<MissionActionFormValues['gearOnboard']>('gearOnboard')
+
+  // Other field controlling this field
+  const [{ value: internalReferenceNumber }] =
+    useField<MissionActionFormValues['internalReferenceNumber']>('internalReferenceNumber')
+  const riskFactorApiQuery = useGetRiskFactorQuery(internalReferenceNumber || skipToken)
 
   const { newWindowContainerRef } = useNewWindow()
 
@@ -64,7 +74,11 @@ export function GearsField() {
   )
 
   const handleMeshWasNotControlledChange = useCallback(
-    (gearCode: MissionAction.GearControl['gearCode'], isChecked: boolean) => {
+    (gearCode: MissionAction.GearControl['gearCode'], isChecked: boolean | undefined) => {
+      if (!uncontrolledMeshGearCodes.length) {
+        return
+      }
+
       const nextUncontrolledMeshGearCodes = isChecked
         ? [...uncontrolledMeshGearCodes, gearCode]
         : uncontrolledMeshGearCodes.filter(uncontrolledGearCode => uncontrolledGearCode !== gearCode)
@@ -73,7 +87,7 @@ export function GearsField() {
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [input.value]
+    [uncontrolledMeshGearCodes]
   )
 
   const remove = useCallback(
@@ -90,6 +104,31 @@ export function GearsField() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [input.value]
+  )
+
+  useEffect(
+    () => {
+      if (input.value?.length || !gearsByCode || !riskFactorApiQuery.data) {
+        return
+      }
+
+      const { gearOnboard } = riskFactorApiQuery.data
+      const nextGears = (gearOnboard as DeclaredLogbookGear[])
+        .map(gear => gearsByCode[gear.gear])
+        .map(gear => ({
+          comments: undefined,
+          controlledMesh: undefined,
+          declaredMesh: undefined,
+          gearCode: gear.code,
+          gearName: gear.name,
+          gearWasControlled: undefined
+        }))
+
+      helper.setValue(nextGears)
+    },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [riskFactorApiQuery.data, gearsByCode]
   )
 
   if (!gearsAsOptions.length) {
@@ -113,7 +152,7 @@ export function GearsField() {
         input.value.length > 0 &&
         input.value.map((gearOnboard, index) => (
           // eslint-disable-next-line react/no-array-index-key
-          <Row key={`gearOnboard-${index}`} $isFirst={index === 0}>
+          <Row key={`gearOnboard-${gearOnboard.gearCode}-${index}`} $isFirst={index === 0}>
             <RowInnerWrapper>
               <SingleTag
                 onDelete={() => remove(index)}

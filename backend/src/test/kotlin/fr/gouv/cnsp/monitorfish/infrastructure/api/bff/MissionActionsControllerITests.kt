@@ -62,7 +62,15 @@ class MissionActionsControllerITests {
                 3,
                 4,
                 5,
-                listOf(MissionAction(1, 1, 1, actionType = MissionActionType.SEA_CONTROL, actionDatetimeUtc = ZonedDateTime.now())),
+                listOf(
+                    MissionAction(
+                        1,
+                        1,
+                        1,
+                        actionType = MissionActionType.SEA_CONTROL,
+                        actionDatetimeUtc = ZonedDateTime.now(),
+                    ),
+                ),
             ),
         )
 
@@ -84,7 +92,15 @@ class MissionActionsControllerITests {
     fun `Should get all mission actions for a mission`() {
         // Given
         givenSuspended { this.getMissionActions.execute(any()) }.willReturn(
-            listOf(MissionAction(123, 1, 1, actionType = MissionActionType.SEA_CONTROL, actionDatetimeUtc = ZonedDateTime.now())),
+            listOf(
+                MissionAction(
+                    123,
+                    1,
+                    1,
+                    actionType = MissionActionType.SEA_CONTROL,
+                    actionDatetimeUtc = ZonedDateTime.now(),
+                ),
+            ),
         )
 
         // When
@@ -122,8 +138,16 @@ class MissionActionsControllerITests {
                                     "Poids à bord MNZ supérieur de 50% au poids déclaré",
                                 ),
                             ),
-                            segments = listOf(FleetSegment(faoAreas = listOf("25.6.9", "25.7.9"), segment = "WWSS10", segmentName = "World Wide Segment")),
-                            gearInfractions = listOf(GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite")),
+                            faoAreas = listOf("25.6.9", "25.7.9"),
+                            segments = listOf(
+                                FleetSegment(
+                                    segment = "WWSS10",
+                                    segmentName = "World Wide Segment",
+                                ),
+                            ),
+                            gearInfractions = listOf(
+                                GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite"),
+                            ),
                         ),
                     ),
                 )
@@ -171,9 +195,17 @@ class MissionActionsControllerITests {
                                     "Poids à bord MNZ supérieur de 50% au poids déclaré",
                                 ),
                             ),
-                            segments = listOf(FleetSegment(faoAreas = listOf("25.6.9", "25.7.9"), segment = "WWSS10", segmentName = "World Wide Segment")),
-                            gearInfractions = listOf(GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite")),
-                            gearOnboard = listOf(gearControl)
+                            faoAreas = listOf("25.6.9", "25.7.9"),
+                            segments = listOf(
+                                FleetSegment(
+                                    segment = "WWSS10",
+                                    segmentName = "World Wide Segment",
+                                ),
+                            ),
+                            gearInfractions = listOf(
+                                GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite"),
+                            ),
+                            gearOnboard = listOf(gearControl),
                         ),
                     ),
                 )
@@ -183,8 +215,8 @@ class MissionActionsControllerITests {
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.missionId", equalTo(2)))
             .andExpect(jsonPath("$.vesselId", equalTo(2)))
-            .andExpect(jsonPath("$.segments[0].faoAreas[0]", equalTo("25.6.9")))
-            .andExpect(jsonPath("$.segments[0].faoAreas[1]", equalTo("25.7.9")))
+            .andExpect(jsonPath("$.faoAreas[0]", equalTo("25.6.9")))
+            .andExpect(jsonPath("$.faoAreas[1]", equalTo("25.7.9")))
             .andExpect(jsonPath("$.segments[0].segment", equalTo("WWSS10")))
             .andExpect(jsonPath("$.segments[0].segmentName", equalTo("World Wide Segment")))
             .andExpect(jsonPath("$.logbookInfractions[0].infractionType", equalTo("WITH_RECORD")))

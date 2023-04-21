@@ -245,7 +245,7 @@ context('Side Window > Mission Form > Main Form', () => {
         externalReferenceNumber: null,
         facade: 'Manche ouest - Atlantique',
         feedbackSheetRequired: true,
-        flagState: null,
+        flagState: 'GB',
         flightGoals: [],
         gearInfractions: [
           { comments: 'Maille trop petite', gearSeized: null, infractionType: 'WITH_RECORD', natinf: 23581 },
@@ -270,7 +270,7 @@ context('Side Window > Mission Form > Main Form', () => {
           }
         ],
         id: 2,
-        internalReferenceNumber: null,
+        internalReferenceNumber: 'FAK000999999',
         ircs: null,
         isFromPoseidon: null,
         latitude: 47.44,
@@ -299,8 +299,8 @@ context('Side Window > Mission Form > Main Form', () => {
         portLocode: null,
         portName: null,
         segments: [
-          { faoAreas: ['27.8c', '27.8'], segment: 'SWW04', segmentName: 'Midwater trawls' },
-          { faoAreas: ['27.3.a', '27.7', '27.8', '27.9'], segment: 'PEL03', segmentName: 'Polyvalent - Bottom trawl' }
+          { segment: 'SWW04', segmentName: 'Midwater trawls' },
+          { segment: 'PEL03', segmentName: 'Polyvalent - Bottom trawl' }
         ],
         seizureAndDiversion: true,
         seizureAndDiversionComments: 'Saisie de la pêche',
@@ -318,7 +318,7 @@ context('Side Window > Mission Form > Main Form', () => {
         unitWithoutOmegaGauge: false,
         userTrigram: null,
         vesselId: 1,
-        vesselName: null,
+        vesselName: 'PHENOMENE',
         vesselTargeted: null
       })
     })

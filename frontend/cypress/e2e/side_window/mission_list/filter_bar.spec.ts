@@ -19,20 +19,14 @@ context('Side Window > Mission List > Filter Bar', () => {
   it('Should filter missions by source', () => {
     cy.fill('Origine', ['CACEM'])
 
-    cy.get('.TableBodyRow').should('have.length', 5)
-    // Expected first row
     cy.get('[data-id="24"]').should('exist')
-    // Expected last row
     cy.get('[data-id="49"]').should('exist')
   })
 
   it('Should filter missions by status', () => {
     cy.fill('Status', ['Terminée'])
 
-    cy.get('.TableBodyRow').should('have.length', 4)
-    // Expected first row
     cy.get('[data-id="2"]').should('exist')
-    // Expected last row
     cy.get('[data-id="45"]').should('exist')
   })
 

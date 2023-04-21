@@ -32,7 +32,7 @@ class PortControllerITests {
             listOf(
                 Port("ET", "Etel"),
                 Port("AY", "Auray"),
-            )
+            ),
         )
 
         // When

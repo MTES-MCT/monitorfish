@@ -166,7 +166,7 @@ class ReportingControllerITests {
     }
 
     @Test
-    fun `Should create a reporting And returned an augmented payload with the control unit object When a control unit id is given`() {
+    fun `Should create a reporting And return an augmented payload with the control unit object When a control unit id is given`() {
         // Given
         val reporting = Reporting(
             internalReferenceNumber = "FRFGRGR",
@@ -186,7 +186,9 @@ class ReportingControllerITests {
             isDeleted = false,
             isArchived = false,
         )
-        given(addReporting.execute(any())).willReturn(Pair(reporting, ControlUnit(1234, "DIRM", false, "Cross Etel", listOf())))
+        given(addReporting.execute(any())).willReturn(
+            Pair(reporting, ControlUnit(1234, "DIRM", false, "Cross Etel", listOf())),
+        )
 
         // When
         mockMvc.perform(

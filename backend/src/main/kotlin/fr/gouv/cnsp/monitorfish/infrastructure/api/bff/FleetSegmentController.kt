@@ -20,6 +20,7 @@ class FleetSegmentController(
     private val createFleetSegment: CreateFleetSegment,
     private val getFleetSegmentYearEntries: GetFleetSegmentYearEntries,
     private val addFleetSegmentYear: AddFleetSegmentYear,
+    private val computeFleetSegments: ComputeFleetSegments,
 ) {
 
     @GetMapping("/{year}")
@@ -97,5 +98,34 @@ class FleetSegmentController(
         year: Int,
     ) {
         return addFleetSegmentYear.execute(year)
+    }
+
+    @GetMapping("/compute")
+    @Operation(summary = "compute fleet segments for the current year")
+    fun computeFleetSegments(
+        @Parameter(description = "Year")
+        @RequestParam(name = "faoAreas")
+        faoAreas: List<String>,
+        @Parameter(description = "Gears")
+        @RequestParam(name = "gears")
+        gears: List<String>,
+        @Parameter(description = "Species")
+        @RequestParam(name = "species")
+        species: List<String>,
+        @Parameter(description = "Control latitude")
+        @RequestParam(name = "latitude", required = false)
+        latitude: Double?,
+        @Parameter(description = "Control longitude")
+        @RequestParam(name = "longitude", required = false)
+        longitude: Double?,
+        @Parameter(description = "Port Locode")
+        @RequestParam(name = "portLocode", required = false)
+        portLocode: String?,
+    ): List<FleetSegmentDataOutput> {
+        val fleetSegments = computeFleetSegments.execute(faoAreas, gears, species, latitude, longitude, portLocode)
+
+        return fleetSegments.map {
+            FleetSegmentDataOutput.fromFleetSegment(it)
+        }
     }
 }

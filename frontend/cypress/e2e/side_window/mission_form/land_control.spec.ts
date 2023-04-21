@@ -70,9 +70,6 @@ context('Side Window > Mission Form > Land Control', () => {
     // Autres observations
     cy.fill('Autres observations', 'Une autre observation.')
 
-    // Segment de flotte
-    cy.fill('Ajouter un segment', 'FR_DRB')
-
     // Qualité du contrôle
     cy.fill('Navire ciblé par le CNSP', 'Oui')
     cy.fill('Unité sans jauge oméga', true)
@@ -106,10 +103,19 @@ context('Side Window > Mission Form > Land Control', () => {
         emitsVms: 'YES',
         externalReferenceNumber: 'DONTSINK',
         facade: null,
+        faoAreas: ['27.8.b', '27.8.c'],
         feedbackSheetRequired: true,
         flagState: 'FR',
         gearInfractions: [],
         gearOnboard: [
+          {
+            comments: null,
+            controlledMesh: null,
+            declaredMesh: null,
+            gearCode: 'OTB',
+            gearName: 'Chaluts de fond à panneaux',
+            gearWasControlled: null
+          },
           {
             comments: null,
             controlledMesh: null,
@@ -137,29 +143,7 @@ context('Side Window > Mission Form > Land Control', () => {
         otherInfractions: [
           { comments: 'Une observation sur l’infraction autre.', infractionType: 'WITHOUT_RECORD', natinf: 27689 }
         ],
-        segments: [
-          {
-            faoAreas: ['37.1', '37.2', '37.3', '27.8.a', '27.8.b', '27.7.h', '27.7.e', '27.7.d'],
-            segment: 'FR_ELE',
-            segmentName: 'Eel sea fisheries'
-          },
-          {
-            faoAreas: ['27.8.a', '27.8.b', '27.7.h', '27.7.e', '27.7.d', '27.4.c'],
-            segment: 'FR_SCE',
-            segmentName: 'Scallop fisheries'
-          },
-          { faoAreas: ['27.8.c', '27.8', '27.9'], segment: 'SWW01/02/03', segmentName: 'Bottom trawls' },
-          { faoAreas: ['27.8.c', '27.8'], segment: 'SWW04', segmentName: 'Midwater trawls' },
-          { faoAreas: ['27.8.c', '27.8', '27.9'], segment: 'SWW06', segmentName: 'Seines' },
-          { faoAreas: ['27.8.c', '27.8', '27.9'], segment: 'SWW07/08', segmentName: 'Gill and trammel nets' },
-          { faoAreas: ['27.8.c', '27.8', '27.9'], segment: 'SWW10', segmentName: 'Longlines targeting demersal' },
-          {
-            faoAreas: ['27.8.c', '27.8', '27.9'],
-            segment: 'SWW11',
-            segmentName: 'Hooks and Lines targeting GFB and ALF'
-          },
-          { faoAreas: ['37.1', '37.2', '37.3'], segment: 'FR_DRB', segmentName: "Drague de mer et d'étang" }
-        ],
+        segments: [{ segment: 'SWW01/02/03', segmentName: 'Bottom trawls' }],
         seizureAndDiversion: true,
         seizureAndDiversionComments: null,
         separateStowageOfPreservedSpecies: true,
@@ -173,7 +157,9 @@ context('Side Window > Mission Form > Land Control', () => {
         ],
         speciesObservations: 'Une observation hors infraction sur les espèces.',
         speciesOnboard: [
-          { controlledWeight: 20, declaredWeight: 10, nbFish: null, speciesCode: 'COD', underSized: true }
+          { controlledWeight: 20, declaredWeight: 10, nbFish: null, speciesCode: 'BLI', underSized: true },
+          { controlledWeight: null, declaredWeight: 235.6, nbFish: null, speciesCode: 'HKE', underSized: false },
+          { controlledWeight: null, declaredWeight: null, nbFish: null, speciesCode: 'COD', underSized: false }
         ],
         speciesSizeControlled: false,
         speciesWeightControlled: true,

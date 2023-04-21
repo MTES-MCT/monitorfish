@@ -21,5 +21,4 @@ class JpaPortRepositoryITests : AbstractDBTests() {
         assertThat(activePorts.first().locode).isEqualTo("ADALV")
         assertThat(activePorts.first().name).isEqualTo("Andorra la Vella")
     }
-
 }

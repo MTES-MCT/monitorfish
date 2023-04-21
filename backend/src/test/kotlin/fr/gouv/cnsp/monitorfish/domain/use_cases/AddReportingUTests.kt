@@ -54,7 +54,7 @@ class AddReportingUTests {
         // When
         val throwable = catchThrowable {
             AddReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront, getAllControlUnits).execute(
-                reportingToAdd
+                reportingToAdd,
             )
         }
 
@@ -92,7 +92,7 @@ class AddReportingUTests {
         // When
         val throwable = catchThrowable {
             AddReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront, getAllControlUnits).execute(
-                reportingToAdd
+                reportingToAdd,
             )
         }
 
@@ -144,7 +144,7 @@ class AddReportingUTests {
 
         // When
         AddReporting(reportingRepository, getInfractionSuspicionWithDMLAndSeaFront, getAllControlUnits).execute(
-            reportingToAdd
+            reportingToAdd,
         )
 
         // Then

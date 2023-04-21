@@ -1,10 +1,10 @@
-import type { Gear, Species } from '../types'
+import type { DeclaredLogbookGear, DeclaredLogbookSpecies } from '../types'
 
 export type RiskFactor = {
   controlPriorityLevel: number
   controlRateRiskFactor: number
   detectabilityRiskFactor: number
-  gearOnboard: Gear[]
+  gearOnboard: DeclaredLogbookGear[]
   impactRiskFactor: number
   lastControlDatetime: string
   numberControlsLastFiveYears: number
@@ -18,5 +18,5 @@ export type RiskFactor = {
   segmentHighestImpact: string
   segmentHighestPriority: string
   segments: string[]
-  speciesOnboard: Species[]
+  speciesOnboard: DeclaredLogbookSpecies[]
 }

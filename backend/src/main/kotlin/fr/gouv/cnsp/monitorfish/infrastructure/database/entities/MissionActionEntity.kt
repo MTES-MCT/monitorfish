@@ -34,6 +34,9 @@ class MissionActionEntity(
     @Type(ListArrayType::class)
     @Column(name = "flight_goals", columnDefinition = "varchar(100)[]")
     val flightGoals: List<String>? = listOf(),
+    @Type(ListArrayType::class)
+    @Column(name = "fao_areas", columnDefinition = "varchar(100)[]")
+    val faoAreas: List<String>? = listOf(),
     @Column(name = "mission_id")
     var missionId: Int,
     @Column(name = "action_type")
@@ -123,6 +126,7 @@ class MissionActionEntity(
             externalReferenceNumber = missionAction.externalReferenceNumber,
             ircs = missionAction.ircs,
             flagState = missionAction.flagState,
+            faoAreas = missionAction.faoAreas,
             flightGoals = missionAction.flightGoals.map { it.value },
             actionType = missionAction.actionType,
             actionDatetimeUtc = missionAction.actionDatetimeUtc?.toInstant(),
@@ -168,6 +172,7 @@ class MissionActionEntity(
         externalReferenceNumber = externalReferenceNumber,
         ircs = ircs,
         flagState = flagState,
+        faoAreas = faoAreas ?: listOf(),
         flightGoals = flightGoals?.map { FlightGoal.valueOf(it) } ?: listOf(),
         actionType = actionType,
         actionDatetimeUtc = actionDatetimeUtc?.let { ZonedDateTime.from(it.atOffset(ZoneOffset.UTC)) },
@@ -216,9 +221,7 @@ class MissionActionEntity(
 
         other as MissionActionEntity
 
-        if (id != other.id) return false
-
-        return true
+        return id == other.id
     }
 
     override fun hashCode(): Int {

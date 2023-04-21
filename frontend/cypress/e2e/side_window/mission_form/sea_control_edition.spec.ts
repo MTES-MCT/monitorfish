@@ -15,9 +15,15 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     cy.fill('Ajouter un engin', 'PTM')
 
     // Espèces à bord
+    cy.intercept(
+      'GET',
+      'bff/v1/fleet_segments/compute?faoAreas=&gears=PTM&species=SPR&latitude=53.35&longitude=-10.85&portLocode='
+    ).as('computeSegment')
     cy.fill('Ajouter une espèce', 'SPR')
+    cy.wait('@computeSegment')
 
     cy.wait(500)
+    // We need to wait for some time because there is a throttle on the form
     cy.wait(500)
 
     // -------------------------------------------------------------------------

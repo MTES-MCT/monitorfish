@@ -45,5 +45,5 @@ fun FAOArea.hasFaoCodeIncludedIn(faoCode: String?): Boolean {
         return false
     }
 
-    return this.faoCode.contains(faoCode)
+    return this.faoCode.startsWith(faoCode)
 }

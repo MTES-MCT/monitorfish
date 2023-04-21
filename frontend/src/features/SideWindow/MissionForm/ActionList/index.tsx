@@ -118,6 +118,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   max-width: 33.33%;
   min-width: 33.33%;
+  overflow-y: auto;
 `
 
 const Placeholder = styled.div`

@@ -17,6 +17,9 @@ class MissionController(
     private val getAllMissions: GetAllMissions,
 ) {
 
+    // TODO Add the proxy for the other paths
+    // TODO Invalidate cache when requests are made to these other paths
+    
     @GetMapping("")
     @Operation(summary = "Get all missions")
     fun getAllMissionsController(

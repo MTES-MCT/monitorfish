@@ -37,7 +37,7 @@ data class MissionDataResponse(
         observationsCacem = observationsCacem,
         observationsCnsp = observationsCnsp,
         facade = facade,
-        geom = geom, // ?.let { GeoJsonReader().read(it) as MultiPolygon }
+        geom = geom,
         startDateTimeUtc = ZonedDateTime.parse(startDateTimeUtc),
         endDateTimeUtc = endDateTimeUtc?.let { ZonedDateTime.parse(endDateTimeUtc) },
         missionSource = missionSource,

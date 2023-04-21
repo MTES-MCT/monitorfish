@@ -17,6 +17,8 @@ class GetAllMissions(private val missionRepository: MissionRepository) {
         missionStatuses: List<String>?,
         seaFronts: List<String>?,
     ): List<Mission> {
+        // TODO Add the fetch of the mission actions
+
         return missionRepository.findAllMissions(
             pageNumber,
             pageSize,

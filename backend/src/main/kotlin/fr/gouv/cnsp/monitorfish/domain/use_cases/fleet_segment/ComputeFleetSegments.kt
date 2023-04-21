@@ -48,21 +48,22 @@ class ComputeFleetSegments(
             }
 
             // Else, we take the longitude and latitude given
-            if (longitude == null || latitude == null) {
-                logger.info("A port Locode or the control coordinates must be given")
-                return listOf()
+            if (longitude != null && latitude != null) {
+                val point = GeometryFactory().createPoint(Coordinate(longitude, latitude))
+                val allFaoAreas = faoAreasRepository.findByIncluding(point)
+
+                return@ifEmpty removeRedundantFaoArea(allFaoAreas)
+
             }
 
-            val point = GeometryFactory().createPoint(Coordinate(longitude, latitude))
-            val allFaoAreas = faoAreasRepository.findByIncluding(point)
-
-            return@ifEmpty removeRedundantFaoArea(allFaoAreas)
+            return@ifEmpty listOf()
         }
 
         val computedSegments = fleetSegments.filter { fleetSegment ->
-            val isContainingGearFromList = fleetSegment.gears.any { gears.contains(it) }
-            val isContainingSpecyFromList = fleetSegment.targetSpecies.any { species.contains(it) }
-            val isContainingFaoAreaFromList = fleetSegment.faoAreas.any { faoArea ->
+            val isContainingGearFromList = fleetSegment.gears.isEmpty() || fleetSegment.gears.any { gears.contains(it) }
+            val isContainingSpecyFromList = fleetSegment.targetSpecies.isEmpty() ||
+                fleetSegment.targetSpecies.any { species.contains(it) }
+            val isContainingFaoAreaFromList = fleetSegment.faoAreas.isEmpty() || fleetSegment.faoAreas.any { faoArea ->
                 calculatedOrGivenFaoAreas.any { it.hasFaoCodeIncludedIn(faoArea) }
             }
 

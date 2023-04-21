@@ -64,10 +64,11 @@ const missionSlice = createSlice({
       if (!sourceDraftAction) {
         throw new FrontendError('`sourceDraftAction` is undefined')
       }
+      const duplicatedAction = omit(['id'], sourceDraftAction)
 
       const nextDraft = {
         ...state.draft,
-        actions: [...state.draft.actions, { ...sourceDraftAction }]
+        actions: [...state.draft.actions, duplicatedAction]
       }
 
       state.draft = nextDraft

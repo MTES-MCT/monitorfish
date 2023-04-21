@@ -120,4 +120,43 @@ class ComputeFleetSegmentsUTests {
         assertThat(segment.first().segment).isEqualTo("SWW01/02/03")
         assertThat(segment.last().segment).isEqualTo("SWW04")
     }
+
+    @Test
+    fun `execute Should return the SWW06 WITH NO GEAR segment When there is no gear associated to this segment`() {
+        given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
+
+        // When
+        val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
+            .execute(listOf("27.9"), listOf(), listOf("HKE", "SOL"))
+
+        // Then
+        assertThat(segment).hasSize(1)
+        assertThat(segment.first().segment).isEqualTo("SWW06 WITH NO GEAR")
+    }
+
+    @Test
+    fun `execute Should return the SWW06 WITH NO SPECIES segment When there is no species associated to this segment`() {
+        given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
+
+        // When
+        val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
+            .execute(listOf("27.9"), listOf("SDN"), listOf())
+
+        // Then
+        assertThat(segment).hasSize(1)
+        assertThat(segment.first().segment).isEqualTo("SWW06 WITH NO SPECIES")
+    }
+
+    @Test
+    fun `execute Should return the SWW06 WITH NO FAO AREAS segment When there is no species associated to this segment`() {
+        given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
+
+        // When
+        val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
+            .execute(listOf(), listOf("SDN"), listOf("HKE"))
+
+        // Then
+        assertThat(segment).hasSize(1)
+        assertThat(segment.first().segment).isEqualTo("SWW06 WITH NO FAO AREAS")
+    }
 }

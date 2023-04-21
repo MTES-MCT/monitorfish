@@ -1,13 +1,26 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.mission
 
-import kotlinx.serialization.Serializable
+import java.time.ZonedDateTime
 
-@Serializable
+/**
+@see monitorenv/backend/src/main/kotlin/fr/gouv/cacem/monitorenv/domain/entities/missions/MissionEntity.kt
+for the full entity structure
+ */
 data class Mission(
-    /*
-        Other fields are not required for the moment, see
-        monitorenv/backend/src/main/kotlin/fr/gouv/cacem/monitorenv/domain/entities/missions/MissionEntity.kt
-        for the full entity structure
-     */
+    val id: Int,
+    val missionTypes: List<MissionType>,
+    val missionNature: List<MissionNature>? = null,
+    val openBy: String? = null,
+    val closedBy: String? = null,
+    val observationsCacem: String? = null,
+    val observationsCnsp: String? = null,
+    val facade: String? = null,
+    val geom: MultiPolygon? = null,
+    val startDateTimeUtc: ZonedDateTime,
+    val endDateTimeUtc: ZonedDateTime? = null,
+    val missionSource: MissionSource,
+    val isClosed: Boolean,
+    val hasMissionOrder: Boolean? = false,
+    val isUnderJdp: Boolean? = false,
     val controlUnits: List<ControlUnit> = listOf(),
 )

@@ -289,7 +289,8 @@ class TestUtils {
                     "envActions":[],
                     "missionSource":"MONITORFISH",
                     "isClosed":false
-                }]""".trimIndent()
+                }]
+            """.trimIndent()
         }
     }
 }

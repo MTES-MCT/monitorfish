@@ -55,9 +55,8 @@ class MissionController(
             missionTypes = missionTypes,
             seaFronts = seaFronts,
             pageNumber = pageNumber,
-            pageSize = pageSize
+            pageSize = pageSize,
         )
         return missions.map { MissionDataOutput.fromMission(it) }
     }
-
 }

@@ -1,8 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
-import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.Mission
@@ -12,8 +10,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.missions.GetAllMissions
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -22,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
-import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
@@ -43,8 +38,18 @@ class MissionsControllerITests {
     @Test
     fun `Should get all missions`() {
         // Given
-        given { this.getAllMission.execute(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull()
-        , anyOrNull(), anyOrNull(), anyOrNull()) }.willReturn(
+        given {
+            this.getAllMission.execute(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull()
+            )
+        }.willReturn(
             listOf(
                 Mission(
                     123,
@@ -52,13 +57,15 @@ class MissionsControllerITests {
                     missionNature = listOf(MissionNature.FISH),
                     missionSource = MissionSource.MONITORFISH,
                     isClosed = false,
-                    startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC)
+                    startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
                 ),
             ),
         )
 
         // When
-        mockMvc.perform(get("""
+        mockMvc.perform(
+            get(
+                """
                     /bff/v1/missions?
                     pageNumber=1&
                     pageSize=&
@@ -68,7 +75,9 @@ class MissionsControllerITests {
                     missionTypes=SEA,LAND&
                     missionStatus=&
                     seaFronts=MED
-                """.trim().replace("\\s+".toRegex(), "")))
+                """.trim().replace("\\s+".toRegex(), ""),
+            ),
+        )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
@@ -82,7 +91,7 @@ class MissionsControllerITests {
                 listOf(),
                 listOf("SEA", "LAND"),
                 listOf(),
-                listOf("MED")
+                listOf("MED"),
             )
         }
     }

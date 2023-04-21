@@ -14,6 +14,7 @@ export namespace MissionAction {
     emitsVms: ControlCheck | undefined
     externalReferenceNumber: string | undefined
     facade: string | undefined
+    faoAreas: string[]
     feedbackSheetRequired: Boolean | undefined
     flagState: string | undefined
     gearInfractions: GearInfraction[]
@@ -120,7 +121,6 @@ export namespace MissionAction {
   }
 
   export type FleetSegment = {
-    faoAreas: string[]
     segment: string | undefined
     segmentName: string | undefined
   }

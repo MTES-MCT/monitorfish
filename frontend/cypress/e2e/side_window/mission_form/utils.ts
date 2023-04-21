@@ -19,6 +19,25 @@ export const openSideWindowNewMission = () => {
   cy.wait(500)
 }
 
+export const editSideWindowMission = (vesselName: string) => {
+  cy.visit('/side_window')
+
+  cy.wait(500)
+
+  if (document.querySelector('[data-cy="first-loader"]')) {
+    cy.getDataCy('first-loader').should('not.be.visible')
+  }
+  cy.clickButton(SideWindowMenuKey.MISSION_LIST)
+  if (document.querySelector('[data-cy="first-loader"]')) {
+    cy.getDataCy('first-loader').should('not.be.visible')
+  }
+  cy.fill('Rechercher un navire', vesselName)
+
+  cy.clickButton('Éditer la mission')
+
+  cy.wait(500)
+}
+
 export const fillSideWindowMissionFormBase = (missionTypeLabel: Mission.MissionTypeLabel) => {
   cy.intercept('POST', '/api/v1/missions', {
     body: {

@@ -34,5 +34,14 @@ export const monitorfishApi = createApi({
   baseQuery: normalizeRtkBaseQuery(monitorfishBaseQuery),
   endpoints: () => ({}),
   reducerPath: 'monitorfishApi',
-  tagTypes: ['ControlObjectives', 'FleetSegments', 'Gears', 'Infractions', 'Ports', 'Species']
+  tagTypes: [
+    'ControlObjectives',
+    'FleetSegments',
+    'Gears',
+    'Infractions',
+    'MissionActions',
+    'Ports',
+    'Species',
+    'RiskFactor'
+  ]
 })

@@ -51,6 +51,9 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.speciesWeightControlled).isTrue
         assertThat(firstControl.speciesSizeControlled).isTrue
         assertThat(firstControl.separateStowageOfPreservedSpecies).isTrue
+        assertThat(firstControl.faoAreas).hasSize(2)
+        assertThat(firstControl.faoAreas.first()).isEqualTo("27.7.d")
+        assertThat(firstControl.faoAreas.last()).isEqualTo("27.7.e")
         assertThat(firstControl.logbookInfractions).hasSize(1)
         assertThat(firstControl.logbookInfractions.first().infractionType).isEqualTo(InfractionType.WITH_RECORD)
         assertThat(firstControl.logbookInfractions.first().natinf).isEqualTo(27689)

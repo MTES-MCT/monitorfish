@@ -136,7 +136,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         val missionAction = jpaMissionActionsRepository.save(newMission)
 
         // Then
-        assertThat(missionAction.id).isEqualTo(10)
+        assertThat(missionAction.id).isEqualTo(11)
         assertThat(missionAction.actionDatetimeUtc).isEqualTo(dateTime)
     }
 

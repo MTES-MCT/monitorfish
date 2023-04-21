@@ -16,6 +16,7 @@ import {
 import { useCreateMissionMutation, useGetMissionQuery, useUpdateMissionMutation } from '../../../api/mission'
 import {
   useCreateMissionActionMutation,
+  useDeleteMissionActionMutation,
   useGetMissionActionsQuery,
   useUpdateMissionActionMutation
 } from '../../../api/missionAction'
@@ -47,6 +48,7 @@ export function MissionForm() {
   const missionActionsApiQuery = useGetMissionActionsQuery(mission.draftId || skipToken)
   const [createMission] = useCreateMissionMutation()
   const [createMissionAction] = useCreateMissionActionMutation()
+  const [deletedMissionAction] = useDeleteMissionActionMutation()
   const [updateMission] = useUpdateMissionMutation()
   const [updateMissionAction] = useUpdateMissionActionMutation()
 
@@ -120,14 +122,17 @@ export function MissionForm() {
       }
       // eslint-disable-next-line no-empty
 
-      const missionActionDatas = getMissionActionsDataFromMissionActionsFormValues(
+      const { deletedMissionActionIds, updatedMissionActionDatas } = getMissionActionsDataFromMissionActionsFormValues(
         missionId,
         mission.draft.actions,
         originalMissionWithActionsRef.current?.actions
       )
 
-      await Promise.all(
-        missionActionDatas.map(async missionActionData => {
+      await Promise.all([
+        ...deletedMissionActionIds.map(async missionActionId => {
+          await deletedMissionAction(missionActionId)
+        }),
+        ...updatedMissionActionDatas.map(async missionActionData => {
           if (missionActionData.id === undefined) {
             await createMissionAction(missionActionData)
           } else {
@@ -137,13 +142,14 @@ export function MissionForm() {
             })
           }
         })
-      )
+      ])
 
       goToMissionList()
     },
     [
       createMission,
       createMissionAction,
+      deletedMissionAction,
       goToMissionList,
       mission.draft,
       mission.draftId,

@@ -24,13 +24,16 @@ test: test-back
 	cd frontend && CI=true npm run test:unit -- --coverage
 test-back: check-clean-archi
 	cd backend && ./mvnw clean && ./mvnw test
-
 clean:
 	make erase-db
 	rm -Rf ./backend/target
-
 dev: clean
 	make run-back
+lint-back:
+	cd ./backend && ./mvnw antrun:run@ktlint-format | grep -v \
+		-e "Exceeded max line length" \
+		-e "Package name must not contain underscore" \
+		-e "Wildcard import"
 
 # CI commands - app
 docker-build:

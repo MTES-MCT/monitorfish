@@ -16,7 +16,7 @@ class JpaMissionActionsRepository(
 
     override fun findVesselMissionActionsAfterDateTime(
         vesselId: Int,
-        afterDateTime: ZonedDateTime
+        afterDateTime: ZonedDateTime,
     ): List<MissionAction> {
         return dbMissionActionsRepository.findAllByVesselIdEqualsAndActionDatetimeUtcAfter(
             vesselId,

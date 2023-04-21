@@ -7,14 +7,15 @@ import java.time.ZonedDateTime
 
 @UseCase
 class GetAllMissions(private val missionRepository: MissionRepository) {
-    fun execute(pageNumber: Int?,
-                pageSize: Int?,
-                startedAfterDateTime: ZonedDateTime?,
-                startedBeforeDateTime: ZonedDateTime?,
-                missionNatures: List<String>?,
-                missionTypes: List<String>?,
-                missionStatuses: List<String>?,
-                seaFronts: List<String>?
+    fun execute(
+        pageNumber: Int?,
+        pageSize: Int?,
+        startedAfterDateTime: ZonedDateTime?,
+        startedBeforeDateTime: ZonedDateTime?,
+        missionNatures: List<String>?,
+        missionTypes: List<String>?,
+        missionStatuses: List<String>?,
+        seaFronts: List<String>?,
     ): List<Mission> {
         return missionRepository.findAllMissions(
             pageNumber,
@@ -24,6 +25,7 @@ class GetAllMissions(private val missionRepository: MissionRepository) {
             missionNatures,
             missionTypes,
             missionStatuses,
-            seaFronts)
+            seaFronts,
+        )
     }
 }

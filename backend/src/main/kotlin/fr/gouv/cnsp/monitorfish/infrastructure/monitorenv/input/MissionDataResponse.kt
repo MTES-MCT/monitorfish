@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 import java.time.ZonedDateTime
 
 /**
-    @see monitorenv/backend/src/main/kotlin/fr/gouv/cacem/monitorenv/domain/entities/missions/MissionEntity.kt
-    for the full entity structure
+ @see monitorenv/backend/src/main/kotlin/fr/gouv/cacem/monitorenv/domain/entities/missions/MissionEntity.kt
+ for the full entity structure
  */
 @Serializable
 data class MissionDataResponse(

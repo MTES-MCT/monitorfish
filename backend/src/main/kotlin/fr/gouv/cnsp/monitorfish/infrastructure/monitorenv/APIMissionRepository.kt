@@ -19,7 +19,6 @@ import org.springframework.stereotype.Repository
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-
 @Repository
 class APIMissionRepository(
     val monitorenvProperties: MonitorenvProperties,
@@ -52,7 +51,7 @@ class APIMissionRepository(
         missionNatures: List<String>?,
         missionTypes: List<String>?,
         missionStatuses: List<String>?,
-        seaFronts: List<String>?
+        seaFronts: List<String>?,
     ): List<Mission> {
         val missionsUrl = """
             ${monitorenvProperties.url}/api/v1/missions?

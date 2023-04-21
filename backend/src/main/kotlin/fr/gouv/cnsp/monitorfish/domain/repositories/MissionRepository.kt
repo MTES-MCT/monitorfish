@@ -16,6 +16,6 @@ interface MissionRepository {
         missionNatures: List<String>?,
         missionTypes: List<String>?,
         missionStatuses: List<String>?,
-        seaFronts: List<String>?
+        seaFronts: List<String>?,
     ): List<Mission>
 }

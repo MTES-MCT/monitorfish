@@ -189,13 +189,23 @@ class APIMissionRepositoryITest {
 
             // When
             val missions = APIMissionRepository(monitorenvProperties, apiClient)
-                .findAllMissions(null, null, null,
-                    null, null, null, null, null)
+                .findAllMissions(
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                )
 
             // Then
             assertThat(missions).hasSize(12)
             assertThat(mockEngine.requestHistory.first().url.toString())
-                .isEqualTo("http://test/api/v1/missions?pageNumber=&pageSize=&startedAfterDateTime=&startedBeforeDateTime=&missionNature=&missionTypes=&missionStatus=&seaFronts=")
+                .isEqualTo(
+                    "http://test/api/v1/missions?pageNumber=&pageSize=&startedAfterDateTime=&startedBeforeDateTime=&missionNature=&missionTypes=&missionStatus=&seaFronts="
+                )
         }
     }
 
@@ -224,12 +234,14 @@ class APIMissionRepositoryITest {
                     listOf(MissionNature.FISH.toString()),
                     listOf(MissionType.SEA.toString(), MissionType.LAND.toString()),
                     listOf(),
-                    listOf("MED"))
+                    listOf("MED"),
+                )
 
             // Then
             assertThat(missions).hasSize(12)
             assertThat(mockEngine.requestHistory.first().url.toString())
-                .isEqualTo("""
+                .isEqualTo(
+                    """
                     http://test/api/v1/missions?
                     pageNumber=1&
                     pageSize=2&
@@ -239,7 +251,8 @@ class APIMissionRepositoryITest {
                     missionTypes=SEA,LAND&
                     missionStatus=&
                     seaFronts=MED
-                """.trim().replace("\\s+".toRegex(), ""))
+                """.trim().replace("\\s+".toRegex(), ""),
+                )
         }
     }
 }

@@ -22,6 +22,7 @@ export namespace MissionAction {
     id: number
     internalReferenceNumber: string | undefined
     ircs: string | undefined
+    isDeleted: boolean
     isFromPoseidon: boolean | undefined
     latitude: number | undefined
     licencesAndLogbookObservations: string | undefined

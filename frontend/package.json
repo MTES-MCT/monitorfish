@@ -17,7 +17,7 @@
     "cypress:run": "cypress run --browser firefox --config-file ./config/cypress.config.ts --e2e",
     "dev": "BROWSER=none DISABLE_ESLINT_PLUGIN=true sh -ac '. ../infra/configurations/frontend/.env.local; react-scripts start'",
     "eject": "react-scripts eject",
-    "prepare": "cd .. && husky install ./frontend/config/husky",
+    "prepare": "cd .. && ./frontend/node_modules/.bin/husky install ./frontend/config/husky",
     "start": "sh -ac '. ../infra/configurations/frontend/.env.local; react-scripts start'",
     "test:css": "stylelint --ignore-path .gitignore '**/*.(css|tsx)'",
     "test:e2e": "cypress run --browser firefox --config-file ./config/cypress.config.ts --e2e",

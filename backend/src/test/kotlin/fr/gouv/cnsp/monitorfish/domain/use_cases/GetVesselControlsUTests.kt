@@ -64,6 +64,7 @@ class GetVesselControlsUTests {
                 actionType = MissionActionType.LAND_CONTROL,
                 gearOnboard = gearControls,
                 seizureAndDiversion = true,
+                isDeleted = false,
             ),
             MissionAction(
                 id = 2,
@@ -73,6 +74,7 @@ class GetVesselControlsUTests {
                 actionType = MissionActionType.SEA_CONTROL,
                 seizureAndDiversion = false,
                 speciesInfractions = listOf(speciesInfraction),
+                isDeleted = false,
             ),
             MissionAction(
                 id = 3,
@@ -82,6 +84,7 @@ class GetVesselControlsUTests {
                 actionType = MissionActionType.SEA_CONTROL,
                 seizureAndDiversion = false,
                 speciesInfractions = listOf(speciesInfraction),
+                isDeleted = false,
             ),
         )
         given(missionActionsRepository.findVesselMissionActionsAfterDateTime(any(), any())).willReturn(

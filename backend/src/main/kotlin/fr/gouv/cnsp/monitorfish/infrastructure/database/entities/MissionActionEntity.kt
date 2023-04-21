@@ -115,6 +115,8 @@ class MissionActionEntity(
     @Type(JsonBinaryType::class)
     @Column(name = "species_onboard", columnDefinition = "jsonb")
     var speciesOnboard: String? = null,
+    @Column(name = "is_deleted")
+    var isDeleted: Boolean,
 ) {
     companion object {
         fun fromMissionAction(mapper: ObjectMapper, missionAction: MissionAction) = MissionActionEntity(
@@ -160,6 +162,7 @@ class MissionActionEntity(
             gearOnboard = mapper.writeValueAsString(missionAction.gearOnboard),
             speciesOnboard = mapper.writeValueAsString(missionAction.speciesOnboard),
             isFromPoseidon = false,
+            isDeleted = missionAction.isDeleted,
         )
     }
 
@@ -205,6 +208,7 @@ class MissionActionEntity(
         otherComments = otherComments,
         gearOnboard = deserializeJSONList(mapper, gearOnboard, GearControl::class.java),
         speciesOnboard = deserializeJSONList(mapper, speciesOnboard, SpeciesControl::class.java),
+        isDeleted = isDeleted,
     )
 
     private fun <T> deserializeJSONList(mapper: ObjectMapper, json: String?, clazz: Class<T>): List<T> = json?.let {

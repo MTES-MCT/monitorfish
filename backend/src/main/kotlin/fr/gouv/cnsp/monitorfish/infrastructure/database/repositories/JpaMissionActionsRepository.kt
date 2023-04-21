@@ -14,7 +14,10 @@ class JpaMissionActionsRepository(
     private val mapper: ObjectMapper,
 ) : MissionActionsRepository {
 
-    override fun findVesselMissionActionsAfterDateTime(vesselId: Int, afterDateTime: ZonedDateTime): List<MissionAction> {
+    override fun findVesselMissionActionsAfterDateTime(
+        vesselId: Int,
+        afterDateTime: ZonedDateTime
+    ): List<MissionAction> {
         return dbMissionActionsRepository.findAllByVesselIdEqualsAndActionDatetimeUtcAfter(
             vesselId,
             afterDateTime.toInstant(),
@@ -28,5 +31,9 @@ class JpaMissionActionsRepository(
     override fun save(missionAction: MissionAction): MissionAction {
         return dbMissionActionsRepository.save(MissionActionEntity.fromMissionAction(mapper, missionAction))
             .toMissionAction(mapper)
+    }
+
+    override fun findById(missionId: Int): MissionAction {
+        return dbMissionActionsRepository.findById(missionId).get().toMissionAction(mapper)
     }
 }

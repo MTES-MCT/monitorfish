@@ -43,6 +43,7 @@ data class AddMissionActionDataInput(
     var gearOnboard: List<GearControl> = listOf(),
     var userTrigram: String? = null,
     var speciesOnboard: List<SpeciesControl> = listOf(),
+    var isDeleted: Boolean,
 ) {
     fun toMissionAction() = MissionAction(
         vesselId = vesselId,
@@ -84,5 +85,6 @@ data class AddMissionActionDataInput(
         gearOnboard = gearOnboard,
         speciesOnboard = speciesOnboard,
         userTrigram = userTrigram,
+        isDeleted = isDeleted,
     )
 }

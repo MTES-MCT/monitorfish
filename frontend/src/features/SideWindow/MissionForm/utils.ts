@@ -21,7 +21,10 @@ export function getMissionActionsDataFromMissionActionsFormValues(
   missionId: MissionAction.MissionAction['missionId'],
   missionActionsFormValues: MissionActionFormValues[],
   originalMissionActions: MissionAction.MissionAction[] = []
-): MissionAction.MissionActionData[] {
+): {
+  deletedMissionActionIds: number[]
+  updatedMissionActionDatas: MissionAction.MissionActionData[]
+} {
   const updatedMissionActionDatas = missionActionsFormValues.map(missionActionFormValues => {
     const missionActionFormValuesWithAllProps = {
       ...MISSION_ACTION_FORM_VALUES_SKELETON,
@@ -37,20 +40,16 @@ export function getMissionActionsDataFromMissionActionsFormValues(
     }
   })
 
-  const missionActionOriginalIds = originalMissionActions.map(({ id }) => id as number)
-  const missionActionUpdatedIds = updatedMissionActionDatas
+  const orginalMissionActionIds = originalMissionActions.map(({ id }) => id as number)
+  const updatedMissionActionIds = updatedMissionActionDatas
     .filter(({ id }) => typeof id === 'number')
     .map(({ id }) => id as number)
-  const missionActionDeletedIds = difference(missionActionOriginalIds, missionActionUpdatedIds)
+  const deletedMissionActionIds = difference(orginalMissionActionIds, updatedMissionActionIds)
 
-  const softDeletedMissionActionDatas = originalMissionActions
-    .filter(({ id }) => missionActionDeletedIds.includes(id))
-    .map(missionAction => ({
-      ...missionAction,
-      isDeleted: true
-    }))
-
-  return [...updatedMissionActionDatas, ...softDeletedMissionActionDatas]
+  return {
+    deletedMissionActionIds,
+    updatedMissionActionDatas
+  }
 }
 
 /**

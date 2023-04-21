@@ -30,6 +30,22 @@ class UtilsUTests {
     }
 
     @Test
+    fun `removeRedundantFaoArea Should not remove redundant fao codes When fao code is not located at the start of the string`() {
+        // Given
+        val faoAreas = listOf(
+            FAOArea(faoCode = "27", null, null),
+            FAOArea(faoCode = "22.1.27", null, null),
+            FAOArea(faoCode = "18", null, null),
+        )
+
+        // When
+        val filteredFaoAreas = removeRedundantFaoArea(faoAreas)
+
+        // Then
+        assertThat(filteredFaoAreas).hasSize(3)
+    }
+
+    @Test
     fun `hasFaoCodeIncludedIn Should test fao areas included in another fao area`() {
         val faoAreaOne = FAOArea(faoCode = "27.1.B", null, null)
         assertThat(faoAreaOne.hasFaoCodeIncludedIn("27.1")).isTrue()

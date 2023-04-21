@@ -20,8 +20,8 @@ fun removeRedundantFaoArea(faoAreas: List<FAOArea>): List<FAOArea> {
             val anotherFaoAreaContainingCurrent = faoAreas
                 // We remove the currentFaoArea from the list
                 .filter { it !== currentFaoArea }
-                // We check if another faoArea contains the currentFaoArea
-                .any { it.faoCode?.contains(faoCode) ?: false }
+                // We check if another faoArea starts with the currentFaoArea
+                .any { it.faoCode?.startsWith(faoCode) ?: false }
 
             // If another faoArea contains the currentFaoArea, then we filter the currentFaoArea
             !anotherFaoAreaContainingCurrent

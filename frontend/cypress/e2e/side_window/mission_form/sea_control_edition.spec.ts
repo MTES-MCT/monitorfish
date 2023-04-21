@@ -18,6 +18,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     cy.fill('Ajouter une espèce', 'SPR')
 
     cy.wait(500)
+    cy.wait(500)
 
     // -------------------------------------------------------------------------
     // Request

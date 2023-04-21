@@ -55,5 +55,8 @@ class UtilsUTests {
 
         val faoAreaThree = FAOArea(faoCode = "28.1", null, null)
         assertThat(faoAreaThree.hasFaoCodeIncludedIn("27.1")).isFalse()
+
+        val faoAreaFour = FAOArea(faoCode = "28.1.56", null, null)
+        assertThat(faoAreaFour.hasFaoCodeIncludedIn("56")).isFalse()
     }
 }

@@ -87,12 +87,12 @@ export const getMissionFeatureZoneFromDraft = (mission: MissionFormValuesWithId)
   const missionStatus = getMissionStatus(mission)
   const feature = new Feature({
     controlUnits: mission.controlUnits,
-    endDateTimeUtc: mission.dateTimeRangeUtc?.length && mission.dateTimeRangeUtc[1],
+    endDateTimeUtc: mission.endDateTimeUtc,
     geometry,
     missionId: mission.id,
     missionStatus,
     missionTypes: mission.missionTypes,
-    startDateTimeUtc: mission.dateTimeRangeUtc?.length && mission.dateTimeRangeUtc[0]
+    startDateTimeUtc: mission.startDateTimeUtc
   })
   feature.setId(`${MonitorFishLayer.MISSION_HOVER}:${mission.id}`)
 

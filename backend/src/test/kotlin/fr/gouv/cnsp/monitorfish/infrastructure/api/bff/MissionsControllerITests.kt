@@ -44,7 +44,7 @@ class MissionsControllerITests {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
-                anyOrNull()
+                anyOrNull(),
             )
         }.willReturn(
             listOf(
@@ -66,9 +66,10 @@ class MissionsControllerITests {
                             actionType = MissionActionType.SEA_CONTROL,
                             seizureAndDiversion = false,
                             speciesInfractions = listOf(),
-                            isDeleted = false
-                        )
-                    )),
+                            isDeleted = false,
+                        ),
+                    ),
+                ),
             ),
         )
 

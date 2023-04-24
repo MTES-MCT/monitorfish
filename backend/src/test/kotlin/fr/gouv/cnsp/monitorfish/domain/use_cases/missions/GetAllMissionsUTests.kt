@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.missions
 
 import com.nhaarman.mockitokotlin2.*
 import fr.gouv.cnsp.monitorfish.config.DatabaseProperties
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.TestUtils.getDummyMissionActions
@@ -30,8 +29,18 @@ class GetAllMissionsUTests {
         databaseProperties.missionsActionsChunkSize = 5
 
         val missions = getDummyMissions(20)
-        given(missionRepository.findAllMissions(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull()
-        , anyOrNull(), anyOrNull())).willReturn(missions)
+        given(
+            missionRepository.findAllMissions(
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            ),
+        ).willReturn(missions)
 
         val firstChunk = (1..5).toList()
         val secondChunk = (6..10).toList()
@@ -47,8 +56,16 @@ class GetAllMissionsUTests {
             .willReturn(getDummyMissionActions(fourthChunk))
 
         // When
-        val missionsAndActions = GetAllMissions(missionRepository, missionActionsRepository, databaseProperties).execute(null, null, null, null, null, null,
-            null, null)
+        val missionsAndActions = GetAllMissions(missionRepository, missionActionsRepository, databaseProperties).execute(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        )
 
         // Then
         assertThat(missionsAndActions).hasSize(20)

@@ -8,7 +8,7 @@ import java.time.ZonedDateTime
 
 object TestUtils {
     fun getDummyMissions(number: Int): List<Mission> {
-        val ids = (1.. number).toList()
+        val ids = (1..number).toList()
 
         return ids.map {
             return@map Mission(

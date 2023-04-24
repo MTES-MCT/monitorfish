@@ -66,6 +66,7 @@ class MissionsControllerITests {
                             actionType = MissionActionType.SEA_CONTROL,
                             seizureAndDiversion = false,
                             speciesInfractions = listOf(),
+                            isDeleted = false
                         )
                     )),
             ),

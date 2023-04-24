@@ -46,7 +46,6 @@ data class MissionActionDataOutput(
     val gearOnboard: List<GearControl> = listOf(),
     val speciesOnboard: List<SpeciesControl> = listOf(),
     val controlUnits: List<ControlUnit> = listOf(),
-    val isDeleted: Boolean,
 ) {
     companion object {
         fun fromMissionAction(missionAction: MissionAction) = MissionActionDataOutput(
@@ -91,7 +90,6 @@ data class MissionActionDataOutput(
             gearOnboard = missionAction.gearOnboard,
             speciesOnboard = missionAction.speciesOnboard,
             controlUnits = missionAction.controlUnits,
-            isDeleted = missionAction.isDeleted,
         )
     }
 }

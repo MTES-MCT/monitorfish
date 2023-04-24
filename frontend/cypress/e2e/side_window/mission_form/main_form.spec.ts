@@ -67,7 +67,6 @@ context('Side Window > Mission Form > Main Form', () => {
         ],
         envActions: null,
         isClosed: false,
-        isDeleted: false,
         isUnderJdp: false,
         missionSource: 'MONITORFISH',
         missionTypes: ['SEA']
@@ -160,7 +159,6 @@ context('Side Window > Mission Form > Main Form', () => {
         endDateTimeUtc: '2023-02-01T12:31:00.000Z',
         hasOrder: true,
         isClosed: false,
-        isDeleted: false,
         isUnderJdp: true,
         missionSource: 'MONITORFISH',
         missionTypes: ['AIR'],
@@ -213,7 +211,6 @@ context('Side Window > Mission Form > Main Form', () => {
         geom: null,
         id: 2,
         isClosed: false,
-        isDeleted: false,
         missionSource: 'MONITORFISH',
         missionTypes: ['SEA'],
         observationsCacem:

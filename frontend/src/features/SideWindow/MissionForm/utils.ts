@@ -74,7 +74,6 @@ export function getMissionDataFromMissionFormValues(
     controlUnits: validControlUnits,
     envActions: undefined,
     isClosed: mustClose || !!missionBaseValues.isClosed,
-    isDeleted: false,
     missionSource,
     missionTypes
   }

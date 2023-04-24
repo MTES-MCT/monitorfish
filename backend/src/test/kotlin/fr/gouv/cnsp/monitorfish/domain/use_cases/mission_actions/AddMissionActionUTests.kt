@@ -5,7 +5,6 @@ import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.AddMissionAction
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test

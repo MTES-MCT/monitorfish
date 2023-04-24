@@ -48,7 +48,6 @@ context('Side Window > Mission Form > Action List', () => {
         id: null,
         internalReferenceNumber: 'U_W0NTFINDME',
         ircs: null,
-        isDeleted: false,
         isFromPoseidon: null,
         latitude: 53.35,
         licencesAndLogbookObservations: null,

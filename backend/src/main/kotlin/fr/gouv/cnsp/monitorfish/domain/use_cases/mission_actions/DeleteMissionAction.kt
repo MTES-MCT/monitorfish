@@ -9,9 +9,8 @@ class DeleteMissionAction(private val missionActionsRepository: MissionActionsRe
     @Throws(CouldNotDeleteException::class)
     fun execute(actionId: Int) {
         try {
-            val targettedAction = missionActionsRepository.findById(actionId)
-            val sofDeletedAction = targettedAction.copy(isDeleted = true)
-            sofDeletedAction.isDeleted = true
+            val targetedAction = missionActionsRepository.findById(actionId)
+            val sofDeletedAction = targetedAction.copy(isDeleted = true)
 
             missionActionsRepository.save(sofDeletedAction)
         } catch (e: Throwable) {

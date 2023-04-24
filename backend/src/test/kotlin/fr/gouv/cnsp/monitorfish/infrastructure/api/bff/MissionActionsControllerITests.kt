@@ -150,7 +150,6 @@ class MissionActionsControllerITests {
                             gearInfractions = listOf(
                                 GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite"),
                             ),
-                            isDeleted = false,
                         ),
                     ),
                 )
@@ -209,7 +208,6 @@ class MissionActionsControllerITests {
                                 GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite"),
                             ),
                             gearOnboard = listOf(gearControl),
-                            isDeleted = false,
                         ),
                     ),
                 )

@@ -10,7 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
-class UpdateMissionActionObjectiveUTests {
+class UpdateControlObjectiveUTests {
 
     @MockBean
     private lateinit var controlObjectivesRepository: ControlObjectivesRepository

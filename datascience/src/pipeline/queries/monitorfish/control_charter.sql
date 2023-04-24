@@ -7,7 +7,7 @@ SELECT DISTINCT ON (vessel_id)
         CASE WHEN jsonb_typeof(other_infractions) = 'array' THEN other_infractions ELSE '[]' END
     ) = 0 AS under_charter
 FROM mission_actions a
-LEFT JOIN vessels v
+JOIN vessels v
 ON a.vessel_id = v.id
 WHERE
     action_type IN ('SEA_CONTROL', 'LAND_CONTROL') AND

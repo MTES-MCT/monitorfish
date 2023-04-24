@@ -29,7 +29,11 @@ class JpaMissionActionsRepository(
     }
 
     override fun findMissionActionsIn(missionIds: List<Int>): List<MissionAction> {
-        return dbMissionActionsRepository.findAllByMissionIdIn(missionIds).map { action -> action.toMissionAction(mapper) }
+        return dbMissionActionsRepository.findAllByMissionIdIn(missionIds).map { action ->
+            action.toMissionAction(
+                mapper,
+            )
+        }
     }
 
     override fun save(missionAction: MissionAction): MissionAction {

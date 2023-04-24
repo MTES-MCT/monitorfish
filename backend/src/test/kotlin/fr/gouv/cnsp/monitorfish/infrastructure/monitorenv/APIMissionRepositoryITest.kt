@@ -204,7 +204,7 @@ class APIMissionRepositoryITest {
             assertThat(missions).hasSize(12)
             assertThat(mockEngine.requestHistory.first().url.toString())
                 .isEqualTo(
-                    "http://test/api/v1/missions?pageNumber=&pageSize=&startedAfterDateTime=&startedBeforeDateTime=&missionNature=&missionTypes=&missionStatus=&seaFronts="
+                    "http://test/api/v1/missions?pageNumber=&pageSize=&startedAfterDateTime=&startedBeforeDateTime=&missionNature=&missionTypes=&missionStatus=&seaFronts=",
                 )
         }
     }

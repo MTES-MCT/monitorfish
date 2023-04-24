@@ -44,7 +44,7 @@ data class MissionWithActionsDataOutput(
             hasMissionOrder = missionAndActions.mission.hasMissionOrder,
             isUnderJdp = missionAndActions.mission.isUnderJdp,
             controlUnits = missionAndActions.mission.controlUnits,
-            actions = missionAndActions.actions.map { MissionActionDataOutput.fromMissionAction(it) }
+            actions = missionAndActions.actions.map { MissionActionDataOutput.fromMissionAction(it) },
         )
     }
 }

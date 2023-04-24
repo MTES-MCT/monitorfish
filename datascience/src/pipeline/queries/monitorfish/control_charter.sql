@@ -7,10 +7,10 @@ SELECT DISTINCT ON (vessel_id)
         CASE WHEN jsonb_typeof(other_infractions) = 'array' THEN other_infractions ELSE '[]' END
     ) = 0 AS under_charter
 FROM mission_actions a
-LEFT JOIN vessels v
+JOIN vessels v
 ON a.vessel_id = v.id
 WHERE
-    action_type IN ('SEA_CONTROL', 'LAND_CONTROL', 'AIR_CONTROL') AND
+    action_type IN ('SEA_CONTROL', 'LAND_CONTROL') AND
     v.flag_state = 'FR' AND
     action_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '1 month'
 ORDER BY vessel_id, action_datetime_utc DESC

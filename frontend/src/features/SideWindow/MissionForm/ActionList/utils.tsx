@@ -1,4 +1,5 @@
 import { getUtcizedDayjs } from '@mtes-mct/monitor-ui'
+import styled from 'styled-components'
 
 import type { MissionAction } from '../../../../domain/types/missionAction'
 import type { MissionActionFormValues } from '../types'
@@ -11,24 +12,20 @@ export function formatDateLabel(dateLabel: string) {
   )
 }
 
-export function getTitleSuffix({ isVesselUnknown, vesselName }: MissionActionFormValues): ReactNode {
-  if (isVesselUnknown) {
+export function getTitle(base: string, label: string | undefined, placeholder: string): ReactNode {
+  if (!label) {
     return (
-      <>
-        - <strong>Navire inconnu</strong>
-      </>
+      <Placeholder>
+        {base} {placeholder}
+      </Placeholder>
     )
   }
 
-  if (vesselName) {
-    return (
-      <>
-        - <strong>{vesselName}</strong>
-      </>
-    )
-  }
-
-  return 'à renseigner'
+  return (
+    <span>
+      {base} - <strong>{label}</strong>
+    </span>
+  )
 }
 
 export function getMissionActionInfractionsFromMissionActionFromFormValues(
@@ -48,9 +45,15 @@ export function getMissionActionInfractionsFromMissionActionFromFormValues(
 }
 
 export function getMissionActionFormInitialValues(type: MissionAction.MissionActionType): MissionActionFormValues {
+  const actionDatetimeUtc = getUtcizedDayjs().startOf('minute').toISOString()
+
   return {
-    actionDatetimeUtc: getUtcizedDayjs(new Date()).toISOString(),
+    actionDatetimeUtc,
     actionType: type,
     vesselTargeted: false
   }
 }
+
+const Placeholder = styled.span`
+  color: ${p => p.theme.color.slateGray};
+`

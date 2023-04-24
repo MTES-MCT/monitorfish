@@ -1,47 +1,63 @@
-import { Button, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
 import { noop } from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { MISSION_LIST_TABLE_OPTIONS } from './constants'
+import { MISSION_LIST_SUB_MENU_OPTIONS, MISSION_LIST_TABLE_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
-import { getSeaFrontFilter, renderStatus } from './utils'
+import { getSeaFrontFilterFunction, mapFilterValuesToFilterFunctions, renderStatus } from './utils'
 import { useGetMissionsQuery } from '../../../api/mission'
+import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFront } from '../../../constants'
 import { missionActions } from '../../../domain/actions'
 import { useGetMissionsWithActions } from '../../../domain/entities/mission/hooks/useGetMissionsWithActions'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { useTable } from '../../../hooks/useTable'
 import { EmptyCardTable } from '../../../ui/card-table/EmptyCardTable'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
 import { SideWindowMenuKey } from '../constants'
+import { SubMenu } from '../SubMenu'
 
 import type { Mission, MissionWithActions } from '../../../domain/entities/mission/types'
-import type { AugmentedDataFilter } from '../../../hooks/useTable/types'
 
-type MissionListProps = {
-  selectedSubMenu: string
-}
-export function MissionList({ selectedSubMenu }: MissionListProps) {
+export function MissionList() {
   const { fetchMissions, missionsWithActions } = useGetMissionsWithActions()
+  const { mission } = useMainAppSelector(store => store)
 
-  const [filters, setFilters] = useState<Array<AugmentedDataFilter<MissionWithActions>>>([])
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
 
   const getMissionsApiQuery = useGetMissionsQuery(undefined)
   const dispatch = useMainAppDispatch()
 
-  const seaFrontGroupFilter = useMemo(() => getSeaFrontFilter(selectedSubMenu), [selectedSubMenu])
+  const filterBarFilterFunctions = useMemo(
+    () => mapFilterValuesToFilterFunctions(mission.listFilterValues),
+    [mission.listFilterValues]
+  )
+  const seaFrontGroupFilterFunction = useMemo(
+    () => getSeaFrontFilterFunction(mission.listSeaFront),
+    [mission.listSeaFront]
+  )
 
   useEffect(() => {
     fetchMissions()
   }, [fetchMissions])
 
-  const { renderTableHead, tableAugmentedData } = useTable<MissionWithActions>(
+  const { renderTableHead, tableData } = useTable<MissionWithActions>(
     missionsWithActions,
     MISSION_LIST_TABLE_OPTIONS,
-    [seaFrontGroupFilter, ...filters],
+    [seaFrontGroupFilterFunction, ...filterBarFilterFunctions],
     searchQuery
+  )
+
+  const countMissionsForSeaFrontGroup = useCallback(
+    (seaFrontGroup: SeaFront): number =>
+      missionsWithActions.filter(({ facade }) =>
+        facade && SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup]
+          ? SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup].includes(facade as any)
+          : true
+      ).length,
+    [missionsWithActions]
   )
 
   const goToMissionForm = useCallback(
@@ -58,78 +74,101 @@ export function MissionList({ selectedSubMenu }: MissionListProps) {
     [dispatch]
   )
 
+  const handleSubMenuChange = useCallback(
+    (nextSeaFrontGroup: SeaFront) => {
+      dispatch(missionActions.setListSeaFront(nextSeaFrontGroup))
+    },
+    [dispatch]
+  )
+
   return (
-    <Wrapper>
-      <Header>
-        <HeaderTitle>Missions et contrôles</HeaderTitle>
-        <HeaderButtonGroup>
-          <Button Icon={Icon.Plus} onClick={() => goToMissionForm()}>
-            Ajouter une nouvelle mission
-          </Button>
-        </HeaderButtonGroup>
-      </Header>
+    <>
+      <SubMenu
+        counter={countMissionsForSeaFrontGroup}
+        onChange={handleSubMenuChange}
+        options={MISSION_LIST_SUB_MENU_OPTIONS}
+        value={mission.listSeaFront}
+      />
 
-      <Body>
-        <FilterBar onChange={setFilters} onQueryChange={setSearchQuery} />
+      <Wrapper>
+        <Header>
+          <HeaderTitle>Missions et contrôles</HeaderTitle>
+          <HeaderButtonGroup>
+            <Button Icon={Icon.Plus} onClick={() => goToMissionForm()}>
+              Ajouter une nouvelle mission
+            </Button>
+          </HeaderButtonGroup>
+        </Header>
 
-        {getMissionsApiQuery.isLoading && <p>Chargement en cours...</p>}
-        {getMissionsApiQuery.error && <pre>{JSON.stringify(getMissionsApiQuery.error)}</pre>}
-        {!getMissionsApiQuery.isLoading && !getMissionsApiQuery.error && (
-          <>
-            <div>{`${tableAugmentedData.length ? tableAugmentedData.length : 'Aucune'} mission${
-              tableAugmentedData.length > 1 ? 's' : ''
-            }`}</div>
-            <Table>
-              {renderTableHead()}
+        <Body>
+          <FilterBar onQueryChange={setSearchQuery} />
 
-              <TableBody>
-                {tableAugmentedData.map(augmentedMission => (
-                  <TableBodyRow key={augmentedMission.id} data-id={augmentedMission.id}>
-                    <TableBodyCell $fixedWidth={136}>{augmentedMission.labelled.startDateTimeUtc}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={136}>{augmentedMission.labelled.endDateTimeUtc}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={80}>{augmentedMission.labelled.missionTypes}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={80}>{augmentedMission.labelled.missionSource}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={160}>{augmentedMission.labelled.controlUnits}</TableBodyCell>
-                    <TableBodyCell title={augmentedMission.labelled.inspectedVessels}>
-                      {augmentedMission.labelled.inspectedVessels}
-                    </TableBodyCell>
-                    <TableBodyCell $fixedWidth={128}>{augmentedMission.labelled.inspectionsCount}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={128}>
-                      {renderStatus(augmentedMission.labelled.status as Mission.MissionStatus)}
-                    </TableBodyCell>
-                    <TableBodyCell
-                      $fixedWidth={48}
-                      style={{
-                        padding: '8px 12px',
-                        textAlign: 'center'
-                      }}
-                    >
-                      <IconButton Icon={Icon.ViewOnMap} onClick={noop} size={Size.SMALL} title="Voir sur la carte" />
-                    </TableBodyCell>
-                    <TableBodyCell
-                      $fixedWidth={48}
-                      style={{
-                        padding: '8px 12px',
-                        textAlign: 'center'
-                      }}
-                    >
-                      <IconButton
-                        Icon={Icon.Edit}
-                        onClick={() => goToMissionForm(augmentedMission.id)}
-                        size={Size.SMALL}
-                        title="Éditer la mission"
-                      />
-                    </TableBodyCell>
-                  </TableBodyRow>
-                ))}
-              </TableBody>
+          {getMissionsApiQuery.isLoading && <p>Chargement en cours...</p>}
+          {getMissionsApiQuery.error && <pre>{JSON.stringify(getMissionsApiQuery.error)}</pre>}
+          {!getMissionsApiQuery.isLoading && !getMissionsApiQuery.error && (
+            <>
+              <div>{`${tableData.length ? tableData.length : 'Aucune'} mission${tableData.length > 1 ? 's' : ''}`}</div>
+              <Table>
+                {renderTableHead()}
 
-              {!tableAugmentedData.length && <EmptyCardTable>Aucune mission</EmptyCardTable>}
-            </Table>
-          </>
-        )}
-      </Body>
-    </Wrapper>
+                <TableBody>
+                  {tableData.map(augmentedMission => (
+                    <TableBodyRow key={augmentedMission.id} data-id={augmentedMission.id}>
+                      <TableBodyCell $fixedWidth={136}>{augmentedMission.$labelled.startDateTimeUtc}</TableBodyCell>
+                      <TableBodyCell $fixedWidth={136}>{augmentedMission.$labelled.endDateTimeUtc}</TableBodyCell>
+                      <TableBodyCell $fixedWidth={80}>{augmentedMission.$labelled.missionTypes}</TableBodyCell>
+                      <TableBodyCell $fixedWidth={80}>{augmentedMission.$labelled.missionSource}</TableBodyCell>
+                      <TableBodyCell $fixedWidth={160} title={augmentedMission.$labelled.controlUnits}>
+                        {augmentedMission.$labelled.controlUnits}
+                      </TableBodyCell>
+                      <TableBodyCell title={augmentedMission.$labelled.inspectedVessels}>
+                        {augmentedMission.$labelled.inspectedVessels}
+                      </TableBodyCell>
+                      <TableBodyCell $fixedWidth={128}>{augmentedMission.$labelled.inspectionsCount}</TableBodyCell>
+                      <TableBodyCell $fixedWidth={128}>
+                        {renderStatus(augmentedMission.$labelled.status as Mission.MissionStatus)}
+                      </TableBodyCell>
+                      <TableBodyCell
+                        $fixedWidth={48}
+                        style={{
+                          padding: '8px 12px',
+                          textAlign: 'center'
+                        }}
+                      >
+                        <IconButton
+                          accent={Accent.TERTIARY}
+                          Icon={Icon.ViewOnMap}
+                          onClick={noop}
+                          size={Size.SMALL}
+                          title="Voir sur la carte"
+                        />
+                      </TableBodyCell>
+                      <TableBodyCell
+                        $fixedWidth={48}
+                        style={{
+                          padding: '8px 12px',
+                          textAlign: 'center'
+                        }}
+                      >
+                        <IconButton
+                          accent={Accent.TERTIARY}
+                          Icon={Icon.Edit}
+                          onClick={() => goToMissionForm(augmentedMission.id)}
+                          size={Size.SMALL}
+                          title="Éditer la mission"
+                        />
+                      </TableBodyCell>
+                    </TableBodyRow>
+                  ))}
+                </TableBody>
+
+                {!tableData.length && <EmptyCardTable>Aucune mission</EmptyCardTable>}
+              </Table>
+            </>
+          )}
+        </Body>
+      </Wrapper>
+    </>
   )
 }
 
@@ -210,7 +249,7 @@ const TableBody = styled.div.attrs(() => ({
 const TableBodyRow = styled.div.attrs(() => ({
   className: 'TableBodyRow'
 }))`
-  background-color: ${p => p.theme.color.cultured};
+  background-color: white;
   display: flex;
 
   :hover {

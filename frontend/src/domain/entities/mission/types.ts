@@ -15,7 +15,6 @@ export namespace Mission {
     geom?: GeoJSON.MultiPolygon
     id: number
     isClosed: boolean
-    isDeleted: boolean
     missionSource: MissionSource
     missionTypes: MissionType[]
     observationsCacem?: string
@@ -38,6 +37,10 @@ export namespace Mission {
     MONITORFISH = 'CNSP',
     POSEIDON_CACEM = 'CACEM (Poseidon)',
     POSEIDON_CNSP = 'CNSP (Poseidon)'
+  }
+  export enum MissionSourceLabelWithoutPoseidon {
+    MONITORENV = 'CACEM',
+    MONITORFISH = 'CNSP'
   }
 
   /* eslint-disable typescript-sort-keys/string-enum */

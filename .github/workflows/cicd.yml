@@ -109,6 +109,10 @@ jobs:
         run: npm run test:type:partial
         working-directory: ./frontend
 
+      - name: Unit test
+        run: npm run test:unit --coverage
+        working-directory: ./frontend
+
       - name: Upload coverage
         run: npx codecov
         working-directory: ./frontend

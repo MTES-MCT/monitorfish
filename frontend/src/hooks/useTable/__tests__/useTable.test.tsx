@@ -16,7 +16,7 @@ describe('hooks/useTable()', () => {
 
     const { result } = renderHook(() => useTable(rawData, tableOptions, []))
 
-    expect(result.current.tableAugmentedData).toMatchObject([])
+    expect(result.current.tableData).toMatchObject([])
   })
 
   it('should return the expected augmented data from simple queries with untransformed columns', () => {
@@ -38,91 +38,76 @@ describe('hooks/useTable()', () => {
 
     const { result: firstResult } = renderHook(() => useTable(rawData, tableOptions, [], '12'))
 
-    expect(firstResult.current.tableAugmentedData).toMatchObject([
+    expect(firstResult.current.tableData).toMatchObject([
       {
+        $isChecked: false,
+        $labelled: {
+          id: '12'
+        },
+        $searchable: {
+          id: '12'
+        },
+        $sortable: {},
         id: '12',
-        isChecked: false,
-        item: {
-          id: '12',
-          title: 'Twelfth Item'
-        },
-        labelled: {
-          id: '12'
-        },
-        searchable: {
-          id: '12'
-        },
-        sortable: {}
+        title: 'Twelfth Item'
       },
       {
+        $isChecked: false,
+        $labelled: {
+          id: '123'
+        },
+        $searchable: {
+          id: '123'
+        },
+        $sortable: {},
         id: '123',
-        isChecked: false,
-        item: {
-          id: '123',
-          title: 'Hundred and twenty-third Item'
-        },
-        labelled: {
-          id: '123'
-        },
-        searchable: {
-          id: '123'
-        },
-        sortable: {}
+        title: 'Hundred and twenty-third Item'
       }
     ])
 
     const { result: secondResult } = renderHook(() => useTable(rawData, tableOptions, [], '23'))
 
-    expect(secondResult.current.tableAugmentedData).toMatchObject([
+    expect(secondResult.current.tableData).toMatchObject([
       {
+        $isChecked: false,
+        $labelled: {
+          id: '123'
+        },
+        $searchable: {
+          id: '123'
+        },
+        $sortable: {},
         id: '123',
-        isChecked: false,
-        item: {
-          id: '123',
-          title: 'Hundred and twenty-third Item'
-        },
-        labelled: {
-          id: '123'
-        },
-        searchable: {
-          id: '123'
-        },
-        sortable: {}
+        title: 'Hundred and twenty-third Item'
       }
     ])
 
     const { result: thirdResult } = renderHook(() => useTable(rawData, tableOptions, [], '1 2'))
 
-    expect(thirdResult.current.tableAugmentedData).toMatchObject([
+    expect(thirdResult.current.tableData).toMatchObject([
       {
+        $isChecked: false,
+        $labelled: {
+          id: '12'
+        },
+        $searchable: {
+          id: '12'
+        },
+        $sortable: {},
         id: '12',
-        isChecked: false,
-        item: {
-          id: '12',
-          title: 'Twelfth Item'
-        },
-        labelled: {
-          id: '12'
-        },
-        searchable: {
-          id: '12'
-        },
-        sortable: {}
+        title: 'Twelfth Item'
       },
       {
+        $isChecked: false,
+        $labelled: {
+          id: '123'
+        },
+        $searchable: {
+          id: '123'
+        },
+        $sortable: {},
         id: '123',
-        isChecked: false,
-        item: {
-          id: '123',
-          title: 'Hundred and twenty-third Item'
-        },
-        labelled: {
-          id: '123'
-        },
-        searchable: {
-          id: '123'
-        },
-        sortable: {}
+        title: 'Hundred and twenty-third Item'
       }
     ])
   })

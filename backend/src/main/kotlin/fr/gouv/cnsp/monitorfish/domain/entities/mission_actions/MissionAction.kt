@@ -47,4 +47,5 @@ data class MissionAction(
     val gearOnboard: List<GearControl> = listOf(),
     val speciesOnboard: List<SpeciesControl> = listOf(),
     var controlUnits: List<ControlUnit> = listOf(),
+    var isDeleted: Boolean,
 )

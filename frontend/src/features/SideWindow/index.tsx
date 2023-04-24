@@ -62,9 +62,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
   const hasSubmenu = useMemo(
     () =>
       openedSideWindowTab !== undefined &&
-      [SideWindowMenuKey.ALERTS, SideWindowMenuKey.BEACON_MALFUNCTIONS, SideWindowMenuKey.MISSION_LIST].includes(
-        openedSideWindowTab
-      ),
+      [SideWindowMenuKey.ALERTS, SideWindowMenuKey.BEACON_MALFUNCTIONS].includes(openedSideWindowTab),
     [openedSideWindowTab]
   )
 
@@ -227,9 +225,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
                 />
               )}
               {openedSideWindowTab === SideWindowMenuKey.BEACON_MALFUNCTIONS && <BeaconMalfunctionsBoard />}
-              {openedSideWindowTab === SideWindowMenuKey.MISSION_LIST && (
-                <MissionList selectedSubMenu={selectedSubMenu.code} />
-              )}
+              {openedSideWindowTab === SideWindowMenuKey.MISSION_LIST && <MissionList />}
               {openedSideWindowTab === SideWindowMenuKey.MISSION_FORM && <MissionForm />}
             </Content>
           )}

@@ -84,5 +84,6 @@ data class AddMissionActionDataInput(
         gearOnboard = gearOnboard,
         speciesOnboard = speciesOnboard,
         userTrigram = userTrigram,
+        isDeleted = false,
     )
 }

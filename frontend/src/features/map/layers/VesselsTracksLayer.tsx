@@ -34,7 +34,6 @@ import type { FishingActivityShowedOnMap } from '../../../domain/entities/vessel
 import type { FishingActivityFeatureIdAndCoordinates } from '../../../domain/types/fishingActivities'
 import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { Coordinate } from 'ol/coordinate'
-import type { MutableRefObject } from 'react'
 
 type VesselsTracksLayerProps = {
   map?: any
@@ -67,7 +66,7 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
     [vesselsTracksShowed]
   )
 
-  const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
+  const vectorSourceRef = useRef<VectorSource>()
   const getVectorSource = useCallback(() => {
     if (vectorSourceRef.current === undefined) {
       vectorSourceRef.current = new VectorSource({
@@ -76,10 +75,10 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
       })
     }
 
-    return vectorSourceRef.current
+    return vectorSourceRef.current as VectorSource
   }, [])
 
-  const layerRef = useRef() as MutableRefObject<VectorLayerWithName>
+  const layerRef = useRef<VectorLayerWithName>()
   const getLayer = useCallback(() => {
     if (layerRef.current === undefined) {
       layerRef.current = new Vector({
@@ -91,7 +90,7 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
       })
     }
 
-    return layerRef.current
+    return layerRef.current as VectorLayerWithName
   }, [getVectorSource])
 
   useEffect(() => {

@@ -2,7 +2,7 @@ import { Accent, getLocalizedDayjs, Icon, IconButton, Tag, TagGroup, THEME, TagB
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { formatDateLabel, getMissionActionInfractionsFromMissionActionFromFormValues, getTitleSuffix } from './utils'
+import { formatDateLabel, getMissionActionInfractionsFromMissionActionFromFormValues, getTitle } from './utils'
 import { MissionAction } from '../../../../domain/types/missionAction'
 import { FrontendError } from '../../../../libs/FrontendError'
 
@@ -20,35 +20,28 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
   const [actionLabel, ActionIcon] = useMemo(() => {
     switch (initialValues.actionType) {
       case MissionAction.MissionActionType.AIR_CONTROL:
-        return [<span>Contrôle aérien {getTitleSuffix(initialValues)}</span>, Icon.Plane]
+        return [getTitle('Contrôle aérien', initialValues.vesselName, '- Navire inconnu'), Icon.Plane]
 
       case MissionAction.MissionActionType.AIR_SURVEILLANCE:
         return [
-          initialValues.numberOfVesselsFlownOver ? (
-            <span>
-              Surveillance aérienne - <strong>{initialValues.numberOfVesselsFlownOver} pistes survolées</strong>
-            </span>
-          ) : (
-            <span>Surveillance aérienne à renseigner</span>
+          getTitle(
+            'Surveillance aérienne',
+            initialValues.numberOfVesselsFlownOver
+              ? `${initialValues.numberOfVesselsFlownOver} pistes survolées`
+              : undefined,
+            'à renseigner'
           ),
           Icon.Observation
         ]
 
       case MissionAction.MissionActionType.LAND_CONTROL:
-        return [<span>Contrôle à la débarque {getTitleSuffix(initialValues)}</span>, Icon.Anchor]
+        return [getTitle('Contrôle à la débarque', initialValues.vesselName, '- Navire inconnu'), Icon.Anchor]
 
       case MissionAction.MissionActionType.OBSERVATION:
-        return [
-          initialValues.otherComments ? (
-            <span>{initialValues.otherComments}</span>
-          ) : (
-            <span>Note libre à renseigner</span>
-          ),
-          Icon.Note
-        ]
+        return [getTitle('', initialValues.otherComments, 'Note libre à renseigner'), Icon.Note]
 
       case MissionAction.MissionActionType.SEA_CONTROL:
-        return [<span>Contrôle en mer {getTitleSuffix(initialValues)}</span>, Icon.FleetSegment]
+        return [getTitle('Contrôle en mer', initialValues.vesselName, '- Navire inconnu'), Icon.FleetSegment]
 
       default:
         throw new FrontendError('`initialValues.actionType` does not match the enum')
@@ -111,6 +104,7 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
 
           <IconButton
             accent={Accent.TERTIARY}
+            aria-label="Dupliquer l’action"
             color={THEME.color.slateGray}
             Icon={Icon.Duplicate}
             iconSize={20}
@@ -118,6 +112,7 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
           />
           <IconButton
             accent={Accent.TERTIARY}
+            aria-label="Supprimer l’action"
             color={THEME.color.maximumRed}
             Icon={Icon.Delete}
             iconSize={20}

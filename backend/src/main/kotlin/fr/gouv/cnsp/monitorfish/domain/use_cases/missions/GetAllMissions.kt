@@ -1,12 +1,16 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.missions
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.Mission
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionAndActions
+import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
 import java.time.ZonedDateTime
 
 @UseCase
-class GetAllMissions(private val missionRepository: MissionRepository) {
+class GetAllMissions(
+    private val missionRepository: MissionRepository,
+    private val missionActionsRepository: MissionActionsRepository
+) {
     fun execute(
         pageNumber: Int?,
         pageSize: Int?,
@@ -16,10 +20,8 @@ class GetAllMissions(private val missionRepository: MissionRepository) {
         missionTypes: List<String>?,
         missionStatuses: List<String>?,
         seaFronts: List<String>?,
-    ): List<Mission> {
-        // TODO Add the fetch of the mission actions
-
-        return missionRepository.findAllMissions(
+    ): List<MissionAndActions> {
+        val missions = missionRepository.findAllMissions(
             pageNumber,
             pageSize,
             startedAfterDateTime,
@@ -29,5 +31,19 @@ class GetAllMissions(private val missionRepository: MissionRepository) {
             missionStatuses,
             seaFronts,
         )
+
+        val allMissionsActions = missions
+            .chunked(100)
+            .map { chunkedMissions ->
+                val ids = chunkedMissions.map { it.id }
+                return@map missionActionsRepository.findMissionActionsIn(ids)
+            }
+            .flatten()
+
+        return missions.map { mission ->
+            val missionActions = allMissionsActions.filter { it.missionId == mission.id }
+
+            return@map MissionAndActions(mission, missionActions)
+        }
     }
 }

@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.use_cases.missions.GetAllMissions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.*
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissionDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissionWithActionsDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -19,7 +19,7 @@ class MissionController(
 
     // TODO Add the proxy for the other paths
     // TODO Invalidate cache when requests are made to these other paths
-    
+
     @GetMapping("")
     @Operation(summary = "Get all missions")
     fun getAllMissionsController(
@@ -49,8 +49,8 @@ class MissionController(
         @Parameter(description = "Facades")
         @RequestParam(name = "seaFronts", required = false)
         seaFronts: List<String>?,
-    ): List<MissionDataOutput> {
-        val missions = getAllMissions.execute(
+    ): List<MissionWithActionsDataOutput> {
+        val missionsAndActions = getAllMissions.execute(
             startedAfterDateTime = startedAfterDateTime,
             startedBeforeDateTime = startedBeforeDateTime,
             missionNatures = missionNatures,
@@ -60,6 +60,6 @@ class MissionController(
             pageNumber = pageNumber,
             pageSize = pageSize,
         )
-        return missions.map { MissionDataOutput.fromMission(it) }
+        return missionsAndActions.map { MissionWithActionsDataOutput.fromMissionAndActions(it) }
     }
 }

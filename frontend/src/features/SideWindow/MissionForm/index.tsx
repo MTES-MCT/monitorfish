@@ -48,7 +48,7 @@ export function MissionForm() {
   const missionActionsApiQuery = useGetMissionActionsQuery(mission.draftId || skipToken)
   const [createMission] = useCreateMissionMutation()
   const [createMissionAction] = useCreateMissionActionMutation()
-  const [deletedMissionAction] = useDeleteMissionActionMutation()
+  const [deleteMissionAction] = useDeleteMissionActionMutation()
   const [updateMission] = useUpdateMissionMutation()
   const [updateMissionAction] = useUpdateMissionActionMutation()
 
@@ -130,7 +130,7 @@ export function MissionForm() {
 
       await Promise.all([
         ...deletedMissionActionIds.map(async missionActionId => {
-          await deletedMissionAction(missionActionId)
+          await deleteMissionAction(missionActionId)
         }),
         ...updatedMissionActionDatas.map(async missionActionData => {
           if (missionActionData.id === undefined) {
@@ -149,7 +149,7 @@ export function MissionForm() {
     [
       createMission,
       createMissionAction,
-      deletedMissionAction,
+      deleteMissionAction,
       goToMissionList,
       mission.draft,
       mission.draftId,

@@ -1,20 +1,16 @@
-import { Accent, Button, useForceUpdate } from '@mtes-mct/monitor-ui'
+import { Accent, Button } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
 import { remove, update } from 'ramda'
-import { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { ControlUnitSelect } from './ControlUnitSelect'
-import {
-  mapControlUnitsToUniqueSortedAdministrationsAsOptions,
-  mapControlUnitsToUniqueSortedNamesAsOptions
-} from './utils'
 import { useGetControlUnitsQuery } from '../../../../../api/controlUnit'
+import { getControlUnitsOptionsFromControlUnits } from '../../../../../domain/controlUnits/utils'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 
 import type { ControlUnit } from '../../../../../domain/types/controlUnit'
 import type { MissionFormValues } from '../../types'
-import type { Option } from '@mtes-mct/monitor-ui'
 
 export type FormikMultiControlUnitPickerProps = {
   name: string
@@ -22,69 +18,44 @@ export type FormikMultiControlUnitPickerProps = {
 export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPickerProps) {
   const [input, , helpers] = useField<MissionFormValues['controlUnits']>(name)
 
-  const controlledValueRef = useRef<MissionFormValues['controlUnits']>(input.value)
-
   const controlUnitsQuery = useGetControlUnitsQuery(undefined)
-  const { forceUpdate } = useForceUpdate()
 
-  const allAdministrationsAsOptions = useMemo((): Option[] => {
-    if (!controlUnitsQuery.data) {
-      return []
-    }
-
-    return mapControlUnitsToUniqueSortedAdministrationsAsOptions(controlUnitsQuery.data)
-  }, [controlUnitsQuery.data])
-
-  // Users must be able to select either by administration or by unit if they don't know the administration name
-  const allNamesAsOptions = useMemo((): Array<Option<number>> => {
-    if (!controlUnitsQuery.data) {
-      return []
-    }
-
-    return mapControlUnitsToUniqueSortedNamesAsOptions(controlUnitsQuery.data)
-  }, [controlUnitsQuery.data])
+  const { administrationsAsOptions: allAdministrationsAsOptions, unitsAsOptions: allNamesAsOptions } = useMemo(
+    () => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data),
+    [controlUnitsQuery.data]
+  )
 
   const addUnit = useCallback(
     () => {
-      const nextControlUnits = [...controlledValueRef.current, INITIAL_MISSION_CONTROL_UNIT]
-
-      controlledValueRef.current = nextControlUnits
+      const nextControlUnits = [...input.value, INITIAL_MISSION_CONTROL_UNIT]
 
       helpers.setValue(nextControlUnits)
-
-      forceUpdate()
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [input.value]
   )
 
   const removeUnit = useCallback(
     (index: number) => {
-      const nextControlUnits = remove(index, 1, controlledValueRef.current)
-
-      controlledValueRef.current = nextControlUnits
+      const nextControlUnits = remove(index, 1, input.value)
 
       helpers.setValue(nextControlUnits)
-
-      forceUpdate()
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [input.value]
   )
 
   const handleChange = useCallback(
     (index: number, nextControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft) => {
-      const nextControlUnits = update(index, nextControlUnit, controlledValueRef.current)
-
-      controlledValueRef.current = nextControlUnits
+      const nextControlUnits = update(index, nextControlUnit, input.value)
 
       helpers.setValue(nextControlUnits)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [input.value]
   )
 
   return (

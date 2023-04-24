@@ -1,6 +1,7 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import { MissionDateRangeFilterLabel, MissionFilterType } from './types'
+import { SeaFront, SeaFrontLabel } from '../../../constants'
 import { getMissionStatus } from '../../../domain/entities/mission'
 import { Mission } from '../../../domain/entities/mission/types'
 import { getOptionsFromLabelledEnum } from '../../../utils/getOptionsFromLabelledEnum'
@@ -9,7 +10,7 @@ import type { MissionWithActions } from '../../../domain/entities/mission/types'
 import type { TableOptions } from '../../../hooks/useTable/types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
-export const MISSION_FILTER_LABEL_ENUMERATORS: Record<MissionFilterType, Record<string, string> | undefined> = {
+export const MISSION_FILTER_LABEL_ENUMS: Record<MissionFilterType, Record<string, string> | undefined> = {
   [MissionFilterType.ADMINISTRATION]: undefined,
   [MissionFilterType.CUSTOM_DATE_RANGE]: undefined,
   [MissionFilterType.DATE_RANGE]: MissionDateRangeFilterLabel,
@@ -19,15 +20,17 @@ export const MISSION_FILTER_LABEL_ENUMERATORS: Record<MissionFilterType, Record<
   [MissionFilterType.UNIT]: undefined
 }
 
-export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option[]> = {
+export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option<any>[]> = {
   [MissionFilterType.ADMINISTRATION]: [],
   [MissionFilterType.CUSTOM_DATE_RANGE]: [],
   [MissionFilterType.DATE_RANGE]: getOptionsFromLabelledEnum(MissionDateRangeFilterLabel),
-  [MissionFilterType.SOURCE]: getOptionsFromLabelledEnum(Mission.MissionSourceLabel),
+  [MissionFilterType.SOURCE]: getOptionsFromLabelledEnum(Mission.MissionSourceLabelWithoutPoseidon),
   [MissionFilterType.STATUS]: getOptionsFromLabelledEnum(Mission.MissionStatusLabel),
   [MissionFilterType.TYPE]: getOptionsFromLabelledEnum(Mission.MissionTypeLabel),
   [MissionFilterType.UNIT]: []
 }
+
+export const MISSION_LIST_SUB_MENU_OPTIONS = getOptionsFromLabelledEnum(SeaFrontLabel) as Option<SeaFront>[]
 
 export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
   columns: [

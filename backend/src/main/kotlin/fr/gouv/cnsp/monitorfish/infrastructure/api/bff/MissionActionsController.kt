@@ -1,10 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.AddMissionAction
-import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.GetMissionActions
-import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.GetVesselControls
-import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.UpdateMissionAction
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ControlsSummaryDataOutput
@@ -27,7 +23,7 @@ class MissionActionsController(
     private val getMissionActions: GetMissionActions,
     private val addMissionAction: AddMissionAction,
     private val updateMissionAction: UpdateMissionAction,
-    private val mapper: ObjectMapper,
+    private val deleteMissionAction: DeleteMissionAction,
 ) {
 
     @GetMapping("/controls")
@@ -80,5 +76,16 @@ class MissionActionsController(
     ): MissionActionDataOutput {
         val updatedMissionAction = updateMissionAction.execute(actionId, actionInput.toMissionAction())
         return MissionActionDataOutput.fromMissionAction(updatedMissionAction)
+    }
+
+    @DeleteMapping(value = ["/{actionId}"])
+    @Operation(summary = "Delete a mission action")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteMissionAction(
+        @PathParam("Action id")
+        @PathVariable(name = "actionId")
+        actionId: Int,
+    ) {
+        return deleteMissionAction.execute(actionId)
     }
 }

@@ -3,4 +3,5 @@
 
 [ -n "$CI" ] && exit 0
 
+make lint-back
 npx lint-staged --cwd ./frontend

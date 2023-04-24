@@ -3,15 +3,15 @@ import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import {
-  findControlUnitById,
+  findControlUnitByname,
   mapControlUnitsToUniqueSortedNamesAsOptions,
-  mapControlUnitToResourcesAsOptions
+  mapControlUnitToSortedResourcesAsOptions
 } from './utils'
 import { useNewWindow } from '../../../../../ui/NewWindow'
-import { mapToProp } from '../../../../../utils/mapToProp'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 import { isValidControlUnit } from '../../utils'
 
+import type { ControlResource } from '../../../../../domain/types/controlResource'
 import type { ControlUnit } from '../../../../../domain/types/controlUnit'
 import type { MissionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
@@ -19,7 +19,7 @@ import type { Promisable } from 'type-fest'
 
 export type ControlUnitSelectProps = {
   allAdministrationsAsOptions: Option[]
-  allNamesAsOptions: Array<Option<number>>
+  allNamesAsOptions: Option[]
   controlUnits: ControlUnit.ControlUnit[] | undefined
   index: number
   onChange: (index: number, nextControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft) => Promisable<void>
@@ -42,13 +42,7 @@ export function ControlUnitSelect({
     isValidControlUnit(value) ? value : undefined
   )
 
-  const controlledValueResourceIds = useMemo(
-    () => (controlledValue.resources ? mapToProp(controlledValue.resources, 'id') : []),
-
-    [controlledValue]
-  )
-
-  const filteredNamesAsOptions = useMemo((): Array<Option<number>> => {
+  const filteredNamesAsOptions = useMemo((): Option[] => {
     if (!controlUnits || !controlledValue.administration) {
       return allNamesAsOptions
     }
@@ -60,13 +54,11 @@ export function ControlUnitSelect({
     return mapControlUnitsToUniqueSortedNamesAsOptions(selectedAdministrationControlUnits)
   }, [allNamesAsOptions, controlledValue, controlUnits])
 
-  const filteredResourcesAsOptions = useMemo((): Option<number>[] => {
-    if (!selectedControlUnit) {
-      return []
-    }
-
-    return mapControlUnitToResourcesAsOptions(selectedControlUnit)
-  }, [selectedControlUnit])
+  const selectedControlUnitResourcesAsOptions = useMemo(
+    (): Option<ControlResource>[] =>
+      selectedControlUnit ? mapControlUnitToSortedResourcesAsOptions(selectedControlUnit) : [],
+    [selectedControlUnit]
+  )
 
   const handleAdministrationChange = useCallback(
     (nextAdministration: string | undefined) => {
@@ -84,14 +76,12 @@ export function ControlUnitSelect({
   )
 
   const handleNameChange = useCallback(
-    (nextControlUnitId: number | undefined) => {
+    (nextName: string | undefined) => {
       if (!controlUnits) {
         return
       }
 
-      const nextSelectedControlUnit = nextControlUnitId
-        ? findControlUnitById(controlUnits, nextControlUnitId)
-        : undefined
+      const nextSelectedControlUnit = nextName ? findControlUnitByname(controlUnits, nextName) : undefined
       const nextControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft = nextSelectedControlUnit
         ? {
             ...nextSelectedControlUnit,
@@ -112,25 +102,17 @@ export function ControlUnitSelect({
   )
 
   const handleResourcesChange = useCallback(
-    (nextResourceIds: Array<ControlUnit.ControlUnit['resources'][0]['id']> | undefined) => {
-      if (!selectedControlUnit) {
-        return
-      }
-
-      const nextResources = nextResourceIds
-        ? selectedControlUnit.resources.filter(({ id }) => nextResourceIds.includes(id))
-        : []
-
+    (nextResources: ControlResource[] | undefined) => {
       const nextControlUnit: ControlUnit.ControlUnitDraft = {
         ...controlledValue,
-        resources: nextResources
+        resources: nextResources || []
       }
 
       setControlledValue(nextControlUnit)
 
       onChange(index, nextControlUnit)
     },
-    [controlledValue, index, onChange, selectedControlUnit]
+    [controlledValue, index, onChange]
   )
 
   const handleContactChange = useCallback(
@@ -172,9 +154,9 @@ export function ControlUnitSelect({
           label={`Unité ${index + 1}`}
           name={`unit_${index}`}
           onChange={handleNameChange}
-          options={filteredNamesAsOptions as any}
+          options={filteredNamesAsOptions}
           searchable
-          value={controlledValue.id}
+          value={controlledValue.name}
           virtualized
         />
         <MultiSelect
@@ -184,8 +166,9 @@ export function ControlUnitSelect({
           label={`Moyen ${index + 1}`}
           name={`resources_${index}`}
           onChange={handleResourcesChange}
-          options={filteredResourcesAsOptions}
-          value={controlledValueResourceIds}
+          options={selectedControlUnitResourcesAsOptions}
+          optionValueKey="name"
+          value={controlledValue.resources}
         />
         <TextInput
           disabled={!controlUnits || !controlledValue.name}

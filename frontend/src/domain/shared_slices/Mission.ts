@@ -1,10 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { omit, remove, update } from 'ramda'
 
+import { SeaFront } from '../../constants'
 import { getMissionFormInitialValues } from '../../features/SideWindow/MissionForm/utils'
 import { FrontendError } from '../../libs/FrontendError'
 
 import type { MissionActionFormValues, MissionFormValues } from '../../features/SideWindow/MissionForm/types'
+import type { FilterValues } from '../../features/SideWindow/MissionList/types'
 import type { Mission } from '../entities/mission/types'
 import type { GeoJSON } from '../types/GeoJSON'
 import type { MissionAction } from '../types/missionAction'
@@ -14,6 +16,8 @@ export interface MissionState {
   draft: MissionFormValues | undefined
   draftId: Mission.Mission['id'] | undefined
   editedDraftActionIndex: number | undefined
+  listFilterValues: FilterValues
+  listSeaFront: SeaFront
   selectedMissionActionGeoJSON: GeoJSON.GeoJson | undefined
   selectedMissionGeoJSON: GeoJSON.GeoJson | undefined
 }
@@ -21,6 +25,8 @@ const INITIAL_STATE: MissionState = {
   draft: getMissionFormInitialValues(undefined, []),
   draftId: undefined,
   editedDraftActionIndex: undefined,
+  listFilterValues: {},
+  listSeaFront: SeaFront.MED,
   selectedMissionActionGeoJSON: undefined,
   selectedMissionGeoJSON: undefined
 }
@@ -58,10 +64,11 @@ const missionSlice = createSlice({
       if (!sourceDraftAction) {
         throw new FrontendError('`sourceDraftAction` is undefined')
       }
+      const duplicatedAction = omit(['id'], sourceDraftAction)
 
       const nextDraft = {
         ...state.draft,
-        actions: [...state.draft.actions, { ...sourceDraftAction }]
+        actions: [...state.draft.actions, duplicatedAction]
       }
 
       state.draft = nextDraft
@@ -162,6 +169,20 @@ const missionSlice = createSlice({
       }
 
       state.editedDraftActionIndex = action.payload
+    },
+
+    /**
+     * Set filter values in missions list
+     */
+    setListFilterValues(state, action: PayloadAction<FilterValues>) {
+      state.listFilterValues = action.payload
+    },
+
+    /**
+     * Set sea front filter in missions list
+     */
+    setListSeaFront(state, action: PayloadAction<SeaFront>) {
+      state.listSeaFront = action.payload
     },
 
     /**

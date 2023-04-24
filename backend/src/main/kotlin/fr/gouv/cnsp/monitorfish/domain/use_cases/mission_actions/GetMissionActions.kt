@@ -13,7 +13,7 @@ class GetMissionActions(
 
     fun execute(missionId: Int): List<MissionAction> {
         logger.debug("Searching actions for mission $missionId")
-        val actions = missionActionsRepository.findMissionActions(missionId)
+        val actions = missionActionsRepository.findMissionActions(missionId).filter { !it.isDeleted }
         logger.debug("Found ${actions.size} actions for mission $missionId")
 
         return actions

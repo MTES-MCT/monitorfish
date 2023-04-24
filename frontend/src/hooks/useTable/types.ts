@@ -39,22 +39,16 @@ export type TableOptions<T extends CollectionItem> = {
   defaultSortedKey?: string
   isCheckable?: boolean
   isDefaultSortingDesc?: boolean
-  searchFuseOptions?: Fuse.IFuseOptions<AugmentedDataItem<T>>
+  searchFuseOptions?: Fuse.IFuseOptions<TableItem<T>>
   searchQuery?: string
   searchableKeys?: string[]
 }
 
-export type AugmentedDataFilter<T extends CollectionItem> = (
-  augmentedData: Array<AugmentedDataItem<T>>
-) => Array<AugmentedDataItem<T>>
-
-export type AugmentedDataItem<T extends CollectionItem> = {
-  id: T['id']
-  isChecked: boolean
-  item: T
-  labelled: Record<string, string>
-  searchable: Record<string, any>
-  sortable: Record<string, any>
+export type TableItem<T extends CollectionItem> = T & {
+  $isChecked: boolean
+  $labelled: Record<string, string>
+  $searchable: Record<string, any>
+  $sortable: Record<string, any>
 }
 
-export type AugmentedDataItemBase<T extends CollectionItem> = Pick<AugmentedDataItem<T>, 'id' | 'item'>
+export type FilterFunction<T extends CollectionItem> = (collection: T[]) => T[]

@@ -39,5 +39,6 @@ object TestUtils {
         facade = "Manche ouest - Atlantique",
         longitude = -6.56,
         latitude = 45.12,
+        isDeleted = false,
     )
 }

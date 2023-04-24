@@ -1,6 +1,5 @@
 import {
   FormikCheckbox,
-  FormikDateRangePicker,
   FormikEffect,
   FormikMultiCheckbox,
   FormikMultiRadio,
@@ -13,10 +12,10 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_TYPES_AS_OPTIONS } from './constants'
+import { FormikDoubleDatePicker } from './FormikDoubleDatePicker'
 import { FormikLocationPicker } from './FormikLocationPicker'
 import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'
 import { BOOLEAN_AS_OPTIONS } from '../../../../constants'
-import { useNewWindow } from '../../../../ui/NewWindow'
 import { FormBody, FormBodyInnerWrapper } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
 
@@ -28,8 +27,6 @@ export type MainFormProps = {
   onChange: (nextValues: MissionFormValues) => Promisable<void>
 }
 export function MainForm({ initialValues, onChange }: MainFormProps) {
-  const { newWindowContainerRef } = useNewWindow()
-
   const controlledInitialValues = useMemo(() => initialValues, [initialValues])
 
   return (
@@ -43,15 +40,8 @@ export function MainForm({ initialValues, onChange }: MainFormProps) {
 
         <FormBody>
           <CustomFormBodyInnerWrapper>
-            <FormikDateRangePicker
-              baseContainer={newWindowContainerRef.current}
-              isCompact
-              isStringDate
-              label="Début et fin de mission"
-              // `startDateTimeUtc` & `endDateTimeUtc` in API
-              name="dateTimeRangeUtc"
-              withTime
-            />
+            <FormikDoubleDatePicker />
+
             <MultiCheckColumns>
               <FormikMultiCheckbox
                 isInline

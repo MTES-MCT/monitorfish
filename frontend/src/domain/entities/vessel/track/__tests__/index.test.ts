@@ -42,10 +42,10 @@ describe('vessel/track', () => {
     expect(feature).toMatchObject({
       course: 356,
       dateTime: '2022-10-27T16:10:20.4564+02:00',
-      name: 'vessel_track:position:0',
+      name: 'VESSEL_TRACK:position:0',
       speed: 2.8
     })
-    expect(feature!.getId()).toEqual('vessel_track:VESSEL_ID:position:0')
+    expect(feature!.getId()).toEqual('VESSEL_TRACK:VESSEL_ID:position:0')
     expect(feature!.getGeometry()?.getFlatCoordinates()[0]).toEqual(-370471.26536001445)
     expect(feature!.getGeometry()?.getFlatCoordinates()[1]).toEqual(5842423.238503429)
   })
@@ -77,7 +77,7 @@ describe('vessel/track', () => {
     expect(firstLineFeature!.isTimeEllipsis).toEqual(false)
     // Line should be fishing as N+1 and N+1 positions have the isFishing property set to true
     expect(firstLineFeature!.trackType!.code).toEqual('FISHING')
-    expect(firstLineFeature!.getId()).toEqual('vessel_track:VESSEL_ID:line:0')
+    expect(firstLineFeature!.getId()).toEqual('VESSEL_TRACK:VESSEL_ID:line:0')
     expect(firstLineFeature!.getGeometry()?.getLength().toString()).toContain('7411')
     // A LineString geometry is of type Coordinate[][]
     expect(firstLineFeature!.getGeometry()?.getCoordinates()).toEqual([
@@ -91,7 +91,7 @@ describe('vessel/track', () => {
     expect(secondLineFeature!.speed).toEqual(2.9)
     expect(secondLineFeature!.isTimeEllipsis).toEqual(false)
     expect(secondLineFeature!.trackType!.code).toEqual('TRANSIT')
-    expect(secondLineFeature!.getId()).toEqual('vessel_track:VESSEL_ID:line:1')
+    expect(secondLineFeature!.getId()).toEqual('VESSEL_TRACK:VESSEL_ID:line:1')
     expect(secondLineFeature!.getGeometry()?.getLength().toString()).toContain('8439')
     // A LineString geometry is of type Coordinate[][]
     expect(secondLineFeature!.getGeometry()?.getCoordinates()).toEqual([
@@ -102,7 +102,7 @@ describe('vessel/track', () => {
     // Last position
     const positionFeature = positionFeatures[5] as VesselPointFeature
     expect(positionFeature!.course).toEqual(263)
-    expect(positionFeature!.getId()).toEqual('vessel_track:VESSEL_ID:position:5')
+    expect(positionFeature!.getId()).toEqual('VESSEL_TRACK:VESSEL_ID:position:5')
     // A Point geometry is of type Coordinate[]
     expect(positionFeature!.getGeometry()?.getCoordinates()).toEqual([-402308.6397268907, 5852757.632510743])
   })
@@ -126,7 +126,7 @@ describe('vessel/track', () => {
     expect(arrowFeatures).toHaveLength(0)
 
     const position = positionFeatures[0] as VesselPointFeature
-    expect(position.getId()).toEqual('vessel_track:VESSEL_ID:position:0')
+    expect(position.getId()).toEqual('VESSEL_TRACK:VESSEL_ID:position:0')
     expect(position.dateTime).toEqual('2022-11-14T07:23:00Z')
   })
 

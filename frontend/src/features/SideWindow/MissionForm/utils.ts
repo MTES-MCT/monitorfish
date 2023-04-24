@@ -1,4 +1,4 @@
-import { customDayjs, getUtcizedDayjs } from '@mtes-mct/monitor-ui'
+import { getUtcizedDayjs } from '@mtes-mct/monitor-ui'
 import { difference } from 'lodash'
 import { omit } from 'ramda'
 
@@ -11,7 +11,7 @@ import { validateRequiredFormValues } from '../../../utils/validateRequiredFormV
 import type { MissionActionFormValues, MissionFormValues } from './types'
 import type { ControlUnit } from '../../../domain/types/controlUnit'
 import type { MissionAction } from '../../../domain/types/missionAction'
-import type { DateAsStringRange, Undefine } from '@mtes-mct/monitor-ui'
+import type { Undefine } from '@mtes-mct/monitor-ui'
 
 /**
  *
@@ -21,7 +21,10 @@ export function getMissionActionsDataFromMissionActionsFormValues(
   missionId: MissionAction.MissionAction['missionId'],
   missionActionsFormValues: MissionActionFormValues[],
   originalMissionActions: MissionAction.MissionAction[] = []
-): MissionAction.MissionActionData[] {
+): {
+  deletedMissionActionIds: number[]
+  updatedMissionActionDatas: MissionAction.MissionActionData[]
+} {
   const updatedMissionActionDatas = missionActionsFormValues.map(missionActionFormValues => {
     const missionActionFormValuesWithAllProps = {
       ...MISSION_ACTION_FORM_VALUES_SKELETON,
@@ -37,20 +40,16 @@ export function getMissionActionsDataFromMissionActionsFormValues(
     }
   })
 
-  const missionActionOriginalIds = originalMissionActions.map(({ id }) => id as number)
-  const missionActionUpdatedIds = updatedMissionActionDatas
+  const orginalMissionActionIds = originalMissionActions.map(({ id }) => id as number)
+  const updatedMissionActionIds = updatedMissionActionDatas
     .filter(({ id }) => typeof id === 'number')
     .map(({ id }) => id as number)
-  const missionActionDeletedIds = difference(missionActionOriginalIds, missionActionUpdatedIds)
+  const deletedMissionActionIds = difference(orginalMissionActionIds, updatedMissionActionIds)
 
-  const softDeletedMissionActionDatas = originalMissionActions
-    .filter(({ id }) => missionActionDeletedIds.includes(id))
-    .map(missionAction => ({
-      ...missionAction,
-      isDeleted: true
-    }))
-
-  return [...updatedMissionActionDatas, ...softDeletedMissionActionDatas]
+  return {
+    deletedMissionActionIds,
+    updatedMissionActionDatas
+  }
 }
 
 /**
@@ -60,30 +59,23 @@ export function getMissionDataFromMissionFormValues(
   missionFormValues: MissionFormValues,
   mustClose: boolean = false
 ): Mission.MissionData {
-  if (!missionFormValues.dateTimeRangeUtc) {
-    throw new FormError(missionFormValues, 'dateTimeRangeUtc', FormErrorCode.MISSING_OR_UNDEFINED)
+  if (!missionFormValues.startDateTimeUtc) {
+    throw new FormError(missionFormValues, 'startDateTimeUtc', FormErrorCode.MISSING_OR_UNDEFINED)
   }
 
-  const missionBaseValues = omit(
-    ['actions', 'controlUnits', 'dateTimeRangeUtc', 'hasOrder', 'isUnderJdp'],
-    missionFormValues
-  )
+  const missionBaseValues = omit(['actions', 'controlUnits'], missionFormValues)
 
   const validControlUnits = missionFormValues.controlUnits.map(getValidMissionDataControlUnit)
-  const [startDateTimeUtc, endDateTimeUtc] = missionFormValues.dateTimeRangeUtc
   const missionSource = Mission.MissionSource.MONITORFISH
   const missionTypes = missionFormValues.missionTypes || []
 
   return {
     ...missionBaseValues,
     controlUnits: validControlUnits,
-    endDateTimeUtc,
     envActions: undefined,
     isClosed: mustClose || !!missionBaseValues.isClosed,
-    isDeleted: false,
     missionSource,
-    missionTypes,
-    startDateTimeUtc
+    missionTypes
   }
 }
 
@@ -92,23 +84,16 @@ export function getMissionFormInitialValues(
   missionActions: MissionAction.MissionAction[]
 ): MissionFormValues {
   if (!mission) {
-    const utcizedLocalDateAsDayjs = getUtcizedDayjs()
-    const utcizedLocalDateAsString = utcizedLocalDateAsDayjs.toISOString()
-    const utcizedLocalDateAsStringPlusOneHour = utcizedLocalDateAsDayjs.add(1, 'hour').toISOString()
+    const startDateTimeUtc = getUtcizedDayjs().startOf('minute').toISOString()
 
     return {
       actions: [],
       controlUnits: [INITIAL_MISSION_CONTROL_UNIT],
-      dateTimeRangeUtc: [utcizedLocalDateAsString, utcizedLocalDateAsStringPlusOneHour],
-      missionTypes: [Mission.MissionType.SEA]
+      missionTypes: [Mission.MissionType.SEA],
+      startDateTimeUtc
     }
   }
 
-  const defaultEndDateAsStringUtc = customDayjs(mission.startDateTimeUtc).add(1, 'hour').toISOString()
-  const dateTimeRangeUtc: DateAsStringRange = [
-    mission.startDateTimeUtc,
-    mission.endDateTimeUtc ? mission.endDateTimeUtc : defaultEndDateAsStringUtc
-  ]
   const missionType = mission.missionTypes[0]
   if (!missionType) {
     throw new FrontendError('`missionType` is undefined.')
@@ -116,8 +101,7 @@ export function getMissionFormInitialValues(
 
   return {
     ...mission,
-    actions: missionActions,
-    dateTimeRangeUtc
+    actions: missionActions
   }
 }
 

@@ -7,10 +7,7 @@ import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.*
-import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.AddMissionAction
-import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.GetMissionActions
-import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.GetVesselControls
-import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.UpdateMissionAction
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
 import kotlinx.coroutines.runBlocking
@@ -48,6 +45,9 @@ class MissionActionsControllerITests {
     @MockBean
     private lateinit var updateMissionAction: UpdateMissionAction
 
+    @MockBean
+    private lateinit var deleteMissionAction: DeleteMissionAction
+
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
@@ -69,6 +69,7 @@ class MissionActionsControllerITests {
                         1,
                         actionType = MissionActionType.SEA_CONTROL,
                         actionDatetimeUtc = ZonedDateTime.now(),
+                        isDeleted = false,
                     ),
                 ),
             ),
@@ -99,6 +100,7 @@ class MissionActionsControllerITests {
                     1,
                     actionType = MissionActionType.SEA_CONTROL,
                     actionDatetimeUtc = ZonedDateTime.now(),
+                    isDeleted = false,
                 ),
             ),
         )
@@ -231,5 +233,15 @@ class MissionActionsControllerITests {
         runBlocking {
             Mockito.verify(updateMissionAction).execute(eq(123), any())
         }
+    }
+
+    @Test
+    fun `Should delete a mission action`() {
+        // When
+        mockMvc.perform(delete("/bff/v1/mission_actions/2"))
+            // Then
+            .andExpect(status().isNoContent())
+
+        Mockito.verify(deleteMissionAction).execute(2)
     }
 }

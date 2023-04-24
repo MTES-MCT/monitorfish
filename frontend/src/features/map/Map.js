@@ -102,13 +102,13 @@ const Map = () => {
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
       {/** <></> can't be used to group condition as BaseMap needs the layers to be direct children **/}
       {areVesselsDisplayed && <VesselsLayer/>}
-      {areVesselsDisplayed && <VesselsTracksLayerMemoized/>}
       {areVesselsDisplayed && <VesselEstimatedPositionLayer/>}
       {areVesselsDisplayed && <VesselSelectedLayer/>}
       {areVesselsDisplayed && <VesselAlertLayer/>}
       {areVesselsDisplayed && <VesselBeaconMalfunctionLayer/>}
       {areVesselsDisplayed && <VesselAlertAndBeaconMalfunctionLayer/>}
       {areVesselsDisplayed && <VesselInfractionSuspicionLayer/>}
+      {<VesselsTracksLayerMemoized/>}
       <VesselCardOverlay feature={currentFeature}/>
       <TrackTypeCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>
       <VesselEstimatedPositionCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>

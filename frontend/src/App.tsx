@@ -35,7 +35,7 @@ import { VesselSidebarHeader } from './features/VesselSidebar/VesselSidebarHeade
 import { useMainAppSelector } from './hooks/useMainAppSelector'
 import { BackofficePage } from './pages/BackofficePage'
 import { UnsupportedBrowserPage } from './pages/UnsupportedBrowserPage'
-import { backofficeStore, backofficeStorePersistor, mainStore } from './store'
+import { backofficeStore, backofficeStorePersistor, mainStore, mainStorePersistor } from './store'
 import { FrontendErrorBoundary } from './ui/FrontendErrorBoundary'
 import { isBrowserSupported } from './utils/isBrowserSupported'
 
@@ -77,9 +77,12 @@ export function App() {
 
               <Route path="/">
                 <Provider store={mainStore}>
-                  <NamespaceContext.Provider value="homepage">
-                    <HomePage />
-                  </NamespaceContext.Provider>
+                  {/* eslint-disable-next-line no-null/no-null */}
+                  <PersistGate loading={null} persistor={mainStorePersistor}>
+                    <NamespaceContext.Provider value="homepage">
+                      <HomePage />
+                    </NamespaceContext.Provider>
+                  </PersistGate>
                 </Provider>
               </Route>
             </Switch>

@@ -25,6 +25,17 @@ import type { ThunkAction } from 'redux-thunk'
 // =============================================================================
 // Main Store
 
+const persistedMainReducerConfig: PersistConfig<typeof backofficeReducer> = {
+  key: 'mainPersistor',
+  stateReconciler: autoMergeLevel2,
+  storage,
+  whitelist: []
+}
+const persistedMainReducer = persistReducer(
+  persistedMainReducerConfig,
+  combineReducers(mainReducer)
+) as typeof mainReducer
+
 export const mainStore = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -32,9 +43,11 @@ export const mainStore = configureStore({
       // TODO Replace all Redux state Dates by strings & Error by a strict-typed POJO.
       serializableCheck: false
     }).concat(monitorenvApi.middleware, monitorfishApi.middleware),
-  reducer: mainReducer
+  reducer: persistedMainReducer
 })
 setupListeners(mainStore.dispatch)
+
+export const mainStorePersistor = persistStore(mainStore)
 
 // https://react-redux.js.org/using-react-redux/usage-with-typescript#define-root-state-and-dispatch-types
 // Infer the `MainRootState` and `AppDispatch` types from the store itself

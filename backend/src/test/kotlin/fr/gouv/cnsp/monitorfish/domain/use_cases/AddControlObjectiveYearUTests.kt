@@ -16,7 +16,7 @@ import java.time.Month
 import java.time.ZoneOffset
 
 @ExtendWith(SpringExtension::class)
-class AddMissionActionObjectiveYearUTests {
+class AddControlObjectiveYearUTests {
 
     @MockBean
     private lateinit var controlObjectivesRepository: ControlObjectivesRepository

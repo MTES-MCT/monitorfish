@@ -173,4 +173,16 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(actions.first().actionType).isEqualTo(MissionActionType.SEA_CONTROL)
         assertThat(actions.first().otherComments).isEqualTo("Commentaires post contrôle")
     }
+
+    @Test
+    @Transactional
+    fun `findMissionActionsIn Should return all mission actions with multiple mission ids`() {
+        // When
+        val actions = jpaMissionActionsRepository.findMissionActionsIn(listOf(1, 2, 3))
+
+        // Then
+        assertThat(actions).hasSize(3)
+        assertThat(actions.first().vesselName).isEqualTo("PHENOMENE")
+        assertThat(actions.first().internalReferenceNumber).isEqualTo("FAK000999999")
+    }
 }

@@ -3,10 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.Mission
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionNature
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionSource
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.*
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.missions.GetAllMissions
@@ -51,14 +48,26 @@ class MissionsControllerITests {
             )
         }.willReturn(
             listOf(
-                Mission(
-                    123,
-                    missionTypes = listOf(MissionType.SEA),
-                    missionNature = listOf(MissionNature.FISH),
-                    missionSource = MissionSource.MONITORFISH,
-                    isClosed = false,
-                    startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
-                ),
+                MissionAndActions(
+                    mission = Mission(
+                        123,
+                        missionTypes = listOf(MissionType.SEA),
+                        missionNature = listOf(MissionNature.FISH),
+                        missionSource = MissionSource.MONITORFISH,
+                        isClosed = false,
+                        startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                    ),
+                    actions = listOf(
+                        MissionAction(
+                            id = 3,
+                            vesselId = 1,
+                            missionId = 123,
+                            actionDatetimeUtc = ZonedDateTime.now(),
+                            actionType = MissionActionType.SEA_CONTROL,
+                            seizureAndDiversion = false,
+                            speciesInfractions = listOf(),
+                        )
+                    )),
             ),
         )
 
@@ -81,6 +90,7 @@ class MissionsControllerITests {
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
+            .andExpect(jsonPath("$[0].actions.length()", equalTo(1)))
 
         runBlocking {
             Mockito.verify(getAllMission).execute(

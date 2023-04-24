@@ -7,4 +7,5 @@ import java.time.Instant
 interface DBMissionActionsRepository : CrudRepository<MissionActionEntity, Int> {
     fun findAllByVesselIdEqualsAndActionDatetimeUtcAfter(vesselId: Int, afterDateTime: Instant): List<MissionActionEntity>
     fun findAllByMissionId(missionId: Int): List<MissionActionEntity>
+    fun findAllByMissionIdIn(missionIds: List<Int>): List<MissionActionEntity>
 }

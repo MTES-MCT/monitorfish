@@ -7,5 +7,6 @@ interface MissionActionsRepository {
     fun findById(missionId: Int): MissionAction
     fun findMissionActions(missionId: Int): List<MissionAction>
     fun findVesselMissionActionsAfterDateTime(vesselId: Int, afterDateTime: ZonedDateTime): List<MissionAction>
+    fun findMissionActionsIn(missionIds: List<Int>): List<MissionAction>
     fun save(missionAction: MissionAction): MissionAction
 }

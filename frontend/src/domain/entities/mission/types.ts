@@ -15,7 +15,6 @@ export namespace Mission {
     geom?: GeoJSON.MultiPolygon
     id: number
     isClosed: boolean
-    isDeleted: boolean
     missionSource: MissionSource
     missionTypes: MissionType[]
     observationsCacem?: string

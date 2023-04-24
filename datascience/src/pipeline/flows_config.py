@@ -18,6 +18,7 @@ from config import (
     TEST_MODE,
 )
 from src.pipeline.flows import (
+    active_ports,
     admin_areas,
     anchorages,
     beacons,
@@ -57,6 +58,7 @@ from src.pipeline.helpers.country_codes import (
 )
 
 ################################ Define flow schedules ################################
+active_ports.flow.schedule = CronSchedule("40 2 * * *")
 beacons.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")
 control_anteriority.flow.schedule = CronSchedule("5 * * * *")
 control_units.flow.schedule = CronSchedule("12 8 * * *")
@@ -240,6 +242,7 @@ vessels.flow.schedule = CronSchedule("5 2,5,8,11,14,17,20,23 * * *")
 
 ###################### List flows to register with prefect server #####################
 flows_to_register = [
+    active_ports.flow,
     admin_areas.flow,
     anchorages.flow,
     beacons.flow,

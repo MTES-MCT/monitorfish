@@ -39,50 +39,44 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
       isSortable: true,
       key: 'startDateTimeUtc',
       label: 'Début',
-      labelTransform: missionWithActions =>
-        customDayjs(missionWithActions.startDateTimeUtc).utc().format('D MMM YY, HH:mm')
+      labelTransform: mission => customDayjs(mission.startDateTimeUtc).utc().format('D MMM YY, HH:mm')
     },
     {
       fixedWidth: 136,
       isSortable: true,
       key: 'endDateTimeUtc',
       label: 'Fin',
-      labelTransform: missionWithActions =>
-        missionWithActions.endDateTimeUtc
-          ? customDayjs(missionWithActions.endDateTimeUtc).utc().format('D MMM YY, HH:mm')
-          : ''
+      labelTransform: mission =>
+        mission.endDateTimeUtc ? customDayjs(mission.endDateTimeUtc).utc().format('D MMM YY, HH:mm') : ''
     },
     {
       fixedWidth: 80,
       isSortable: true,
       key: 'missionTypes',
       label: 'Type',
-      transform: missionWithActions =>
-        missionWithActions.missionTypes.map(missionType => MISSION_TYPE_LABEL[missionType]).join(', ')
+      transform: mission => mission.missionTypes.map(missionType => MISSION_TYPE_LABEL[missionType]).join(', ')
     },
     {
       fixedWidth: 80,
       isSortable: true,
       key: 'missionSource',
       label: 'Origine',
-      labelTransform: missionWithActions => MISSION_SOURCE_LABEL[missionWithActions.missionSource]
+      labelTransform: mission => MISSION_SOURCE_LABEL[mission.missionSource]
     },
     {
       fixedWidth: 160,
       isSortable: true,
       key: 'controlUnits',
       label: 'Unité (Administration)',
-      transform: missionWithActions =>
-        missionWithActions.controlUnits
-          .map(controlUnit => `${controlUnit.name} (${controlUnit.administration})`)
-          .join(', ')
+      transform: mission =>
+        mission.controlUnits.map(controlUnit => `${controlUnit.name} (${controlUnit.administration})`).join(', ')
     },
     {
       isSortable: false,
       key: 'inspectedVessels',
       label: 'Navires contrôlés',
-      transform: missionWithActions =>
-        missionWithActions.actions
+      transform: mission =>
+        mission.actions
           .map(action => action.vesselName)
           .filter((vesselName: string | undefined): vesselName is string => !!vesselName)
           .sort()
@@ -93,9 +87,8 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
       isSortable: true,
       key: 'inspectionsCount',
       label: 'Contrôles',
-      labelTransform: missionWithActions =>
-        missionWithActions.actions.length > 0 ? missionWithActions.actions.length : '-',
-      transform: missionWithActions => missionWithActions.actions.length
+      labelTransform: mission => (mission.actions.length > 0 ? mission.actions.length : '-'),
+      transform: mission => mission.actions.length
     },
     {
       fixedWidth: 128,

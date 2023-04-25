@@ -22,7 +22,7 @@ class GetVesselControls(
     private val logger = LoggerFactory.getLogger(GetVesselControls::class.java)
 
     suspend fun execute(vesselId: Int, afterDateTime: ZonedDateTime): ControlsSummary = coroutineScope {
-        logger.debug("Searching controls for vessel $vesselId after $afterDateTime")
+        logger.debug("Searching controls for vessel {} after {}", vesselId, afterDateTime)
         val controls = missionActionsRepository.findVesselMissionActionsAfterDateTime(vesselId, afterDateTime)
             .filter {
                 it.actionType in setOf(

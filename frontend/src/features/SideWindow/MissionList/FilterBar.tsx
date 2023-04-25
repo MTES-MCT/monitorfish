@@ -5,7 +5,7 @@ import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_FILTER_LABEL_ENUMS, MISSION_FILTER_OPTIONS } from './constants'
-import { MissionDateRangeFilter, MissionFilterType, type FilterValues } from './types'
+import { MissionDateRangeFilter, MissionFilterType } from './types'
 import { useGetControlUnitsQuery } from '../../../api/controlUnit'
 import { missionActions } from '../../../domain/actions'
 import { getControlUnitsOptionsFromControlUnits } from '../../../domain/controlUnits/utils'
@@ -14,6 +14,7 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { FormikFilterTagBar } from '../../../ui/formiks/FormikFilterTagBar'
 import { useNewWindow } from '../../../ui/NewWindow'
 
+import type { FilterValues } from './types'
 import type { Promisable } from 'type-fest'
 
 export type FilterBarProps = {

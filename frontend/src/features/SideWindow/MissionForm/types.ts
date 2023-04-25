@@ -11,7 +11,7 @@ export type MissionActionFormValues = PartialExcept<
 }
 
 export type MissionFormValues = Partial<
-  Omit<Mission.MissionData, 'controlUnits' | 'startDateTimeUtc' | 'missionTypes'>
+  Omit<Mission.MissionData, 'actions' | 'controlUnits' | 'startDateTimeUtc' | 'missionTypes'>
 > & {
   // This property is only used for the mission draft,
   // it is split as individual mission actions before being pushed to the API

@@ -1,4 +1,7 @@
+import ky from 'ky'
+
 import { monitorfishApi } from '.'
+import { ApiError } from '../libs/ApiError'
 
 import type { MissionAction } from '../domain/types/missionAction'
 
@@ -40,3 +43,21 @@ export const {
   useGetMissionActionsQuery,
   useUpdateMissionActionMutation
 } = missionActionApi
+
+const MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récuperer les contrôles de ce navire"
+
+/**
+ * Get vessel controls
+ *
+ * @throws {@link ApiError}
+ *
+ */
+export async function getVesselControlsFromAPI(vesselId: number, fromDate: Date) {
+  try {
+    return await ky
+      .get(`/bff/v1/mission_actions/controls?vesselId=${vesselId}&afterDateTime=${fromDate.toISOString()}`)
+      .json<MissionAction.MissionControlsSummary>()
+  } catch (err) {
+    throw new ApiError(MISSION_ACTIONS_ERROR_MESSAGE, err)
+  }
+}

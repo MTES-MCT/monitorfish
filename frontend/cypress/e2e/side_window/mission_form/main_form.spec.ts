@@ -65,7 +65,6 @@ context('Side Window > Mission Form > Main Form', () => {
             resources: []
           }
         ],
-        envActions: null,
         isClosed: false,
         isUnderJdp: false,
         missionSource: 'MONITORFISH',
@@ -206,7 +205,6 @@ context('Side Window > Mission Form > Main Form', () => {
             resources: []
           }
         ],
-        envActions: null,
         facade: 'MEMN',
         geom: null,
         id: 2,

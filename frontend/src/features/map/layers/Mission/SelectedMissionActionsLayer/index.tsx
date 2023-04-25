@@ -6,7 +6,7 @@ import { selectedMissionActionsStyles } from './styles'
 import { LayerProperties } from '../../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../../domain/entities/layers/types'
 import { getMissionActionFeature } from '../../../../../domain/entities/mission'
-import { useGetMissionsWithActions } from '../../../../../domain/entities/mission/hooks/useGetMissionsWithActions'
+import { useGetFilteredMissionsQuery } from '../../../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 
 import type { GeoJSON } from '../../../../../domain/types/GeoJSON'
@@ -15,7 +15,7 @@ import type { Feature } from 'ol'
 import type { MutableRefObject } from 'react'
 
 export function UnmemoizedSelectedMissionActionsLayer({ map }) {
-  const { missionsWithActions } = useGetMissionsWithActions()
+  const { missions } = useGetFilteredMissionsQuery()
   const selectedMissionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionGeoJSON)
   const selectedMissionActions = useMemo(() => {
     if (!selectedMissionGeoJSON) {
@@ -23,7 +23,7 @@ export function UnmemoizedSelectedMissionActionsLayer({ map }) {
     }
 
     return (
-      missionsWithActions
+      missions
         .find(
           missionsAndAction =>
             missionsAndAction.id === (selectedMissionGeoJSON as GeoJSON.Feature).properties?.missionId
@@ -31,7 +31,7 @@ export function UnmemoizedSelectedMissionActionsLayer({ map }) {
         ?.actions?.map(action => getMissionActionFeature(action))
         .filter((feature): feature is Feature => Boolean(feature)) || []
     )
-  }, [missionsWithActions, selectedMissionGeoJSON])
+  }, [missions, selectedMissionGeoJSON])
 
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
   const getVectorSource = useCallback(() => {

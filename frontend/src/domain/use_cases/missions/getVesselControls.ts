@@ -1,6 +1,6 @@
 import { batch } from 'react-redux'
 
-import { getVesselControlsFromAPI } from '../../../api/mission'
+import { getVesselControlsFromAPI } from '../../../api/missionAction'
 import NoControlsFoundError from '../../../errors/NoControlsFoundError'
 import { loadControls, setControlSummary, setNextControlSummary } from '../../shared_slices/Control'
 import { removeError, setError } from '../../shared_slices/Global'

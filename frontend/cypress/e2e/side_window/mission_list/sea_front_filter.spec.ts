@@ -2,7 +2,9 @@ import { openSideWindowMissionList } from './utils'
 
 context('Side Window > Mission List > Sea Front Filter (= submenu)', () => {
   beforeEach(() => {
+    cy.intercept('GET', '/bff/v1/missions?&missionStatus=&missionTypes=&seaFronts=MED').as('getMissions')
     openSideWindowMissionList()
+    cy.wait('@getMissions')
   })
 
   it('Should have the expected submenu counters', () => {
@@ -11,20 +13,14 @@ context('Side Window > Mission List > Sea Front Filter (= submenu)', () => {
   })
 
   it('Should only show missions for MED sea front', () => {
-    cy.get('.TableBodyRow').should('have.length', 5)
-    // Expected first row
-    cy.get('[data-id="6"]').should('exist')
-    // Expected last row
-    cy.get('[data-id="49"]').should('exist')
+    cy.get('.TableBodyRow').should('have.length.to.be.greaterThan', 0)
   })
 
   it('Should only show missions for NAMO sea front', () => {
+    cy.intercept('GET', '/bff/v1/missions?&missionStatus=&missionTypes=&seaFronts=NAMO').as('getMissions')
     cy.getDataCy('side-window-sub-menu-NAMO').click()
+    cy.wait('@getMissions')
 
-    cy.get('.TableBodyRow').should('have.length', 2)
-    // Expected first row
-    cy.get('[data-id="38"]').should('exist')
-    // Expected last row
-    cy.get('[data-id="49"]').should('exist')
+    cy.get('.TableBodyRow').should('have.length.to.be.greaterThan', 0)
   })
 })

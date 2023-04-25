@@ -76,7 +76,7 @@ export function FormikFilterTagBar({ filterLabelEnums, ignoredFilterKeys = [] }:
 
   return (
     <>
-      <Row>{filterTags}</Row>
+      <Row data-cy="mission-list-filter-tags">{filterTags}</Row>
 
       <Row>
         {/* TODO Use `<Button accent={Accent.LINK} />` once available in Monitor UI. */}

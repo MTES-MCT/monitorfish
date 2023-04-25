@@ -2,9 +2,10 @@ import { stubSideWindowOptions } from '../../support/commands'
 
 context('Controls overlay', () => {
   beforeEach(() => {
-    cy.intercept('GET', `/bff/v1/mission_actions?missionId=49`).as('missionAction')
+    cy.intercept('GET', `/bff/v1/missions*`).as('missions')
     cy.visit('/#@-27112.04,6363415.43,10.02', stubSideWindowOptions)
-    cy.wait('@missionAction')
+    cy.wait('@missions')
+    cy.wait(500)
   })
 
   it('A control overlay Should be showed and closed', () => {
@@ -35,6 +36,7 @@ context('Controls overlay', () => {
 
     // Open the control overlay
     cy.get('#root').click(405, 644)
+    cy.wait(100)
     // Double the click to avoid many Cypress retries
     cy.get('#root').click(404, 644)
 

@@ -21,25 +21,25 @@ export const useGetFilteredMissionsQuery = (): {
   const startedAfterDateTime = () => {
     const isCustom = listFilterValues[MissionFilterType.CUSTOM_DATE_RANGE]?.length
     if (isCustom) {
-      return listFilterValues[MissionFilterType.CUSTOM_DATE_RANGE][0]
+      return listFilterValues[MissionFilterType.CUSTOM_DATE_RANGE][0].toISOString()
     }
 
     if (listFilterValues[MissionFilterType.DATE_RANGE]) {
       switch (listFilterValues[MissionFilterType.DATE_RANGE]) {
         case MissionDateRangeFilter.CURRENT_DAY:
-          return customDayjs().utc().startOf('day')
+          return customDayjs().utc().startOf('day').toISOString()
 
         case MissionDateRangeFilter.CURRENT_WEEK:
-          return customDayjs().utc().startOf('week')
+          return customDayjs().utc().startOf('week').toISOString()
 
         case MissionDateRangeFilter.CURRENT_MONTH:
-          return customDayjs().utc().startOf('month')
+          return customDayjs().utc().startOf('month').toISOString()
 
         case MissionDateRangeFilter.CURRENT_QUARTER:
-          return customDayjs().utc().startOf('quarter')
+          return customDayjs().utc().startOf('quarter').toISOString()
 
         case MissionDateRangeFilter.CURRENT_YEAR:
-          return customDayjs().utc().startOf('year')
+          return customDayjs().utc().startOf('year').toISOString()
 
         default:
           return undefined
@@ -52,7 +52,7 @@ export const useGetFilteredMissionsQuery = (): {
   const startedBeforeDateTime = () => {
     const isCustom = listFilterValues[MissionFilterType.CUSTOM_DATE_RANGE]?.length
     if (isCustom) {
-      return listFilterValues[MissionFilterType.CUSTOM_DATE_RANGE][1]
+      return listFilterValues[MissionFilterType.CUSTOM_DATE_RANGE][1].toISOString()
     }
 
     return undefined

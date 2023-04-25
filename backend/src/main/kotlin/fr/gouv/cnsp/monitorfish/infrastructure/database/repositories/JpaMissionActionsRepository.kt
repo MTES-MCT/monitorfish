@@ -25,9 +25,11 @@ class JpaMissionActionsRepository(
     }
 
     override fun findByMissionId(missionId: Int): List<MissionAction> {
-        return dbMissionActionsRepository.findAllByMissionIdAndIsDeletedIsFalse(missionId).map { action -> action.toMissionAction(
-            mapper
-        ) }
+        return dbMissionActionsRepository.findAllByMissionIdAndIsDeletedIsFalse(missionId).map { action ->
+            action.toMissionAction(
+                mapper,
+            )
+        }
     }
 
     override fun findMissionActionsIn(missionIds: List<Int>): List<MissionAction> {

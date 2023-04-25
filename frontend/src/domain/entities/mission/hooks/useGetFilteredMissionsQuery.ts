@@ -75,8 +75,8 @@ export const useGetFilteredMissionsQuery = (): {
       return []
     }
 
-    const administrationFilter = listFilterValues[MissionFilterType.ADMINISTRATION]
-    const unitFilter = listFilterValues[MissionFilterType.UNIT]
+    const administrationFilter = listFilterValues[MissionFilterType.ADMINISTRATION] || []
+    const unitFilter = listFilterValues[MissionFilterType.UNIT] || []
     if (!administrationFilter?.length && !unitFilter?.length) {
       return data
     }

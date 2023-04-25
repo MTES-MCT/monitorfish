@@ -2,12 +2,17 @@ package fr.gouv.cnsp.monitorfish.infrastructure.monitorenv
 
 import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.MonitorenvProperties
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionNature
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionType
+import fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.TestUtils.Companion.getDummyMissions
 import io.ktor.client.engine.mock.*
 import io.ktor.http.*
 import io.ktor.utils.io.*
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 
 class APIMissionRepositoryITest {
 
@@ -118,7 +123,7 @@ class APIMissionRepositoryITest {
                           ]
                         }
                       ],
-                      "missionSource": "CACEM",
+                      "missionSource": "MONITORENV",
                       "isClosed": false
                     }""",
                     ),
@@ -164,6 +169,90 @@ class APIMissionRepositoryITest {
 
             // Then
             assertThat(controlUnits).hasSize(0)
+        }
+    }
+
+    @Test
+    fun `findMissions Should return the missions`() {
+        runBlocking {
+            // Given
+            val mockEngine = MockEngine { _ ->
+                respond(
+                    content = ByteReadChannel(getDummyMissions()),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            }
+            val apiClient = ApiClient(mockEngine)
+            val monitorenvProperties = MonitorenvProperties()
+            monitorenvProperties.url = "http://test"
+
+            // When
+            val missions = APIMissionRepository(monitorenvProperties, apiClient)
+                .findAllMissions(
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                )
+
+            // Then
+            assertThat(missions).hasSize(12)
+            assertThat(mockEngine.requestHistory.first().url.toString())
+                .isEqualTo(
+                    "http://test/api/v1/missions?pageNumber=&pageSize=&startedAfterDateTime=&startedBeforeDateTime=&missionNature=&missionTypes=&missionStatus=&seaFronts=",
+                )
+        }
+    }
+
+    @Test
+    fun `findMissions Should return the missions When some parameters are given`() {
+        runBlocking {
+            // Given
+            val mockEngine = MockEngine { _ ->
+                respond(
+                    content = ByteReadChannel(getDummyMissions()),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            }
+            val apiClient = ApiClient(mockEngine)
+            val monitorenvProperties = MonitorenvProperties()
+            monitorenvProperties.url = "http://test"
+
+            // When
+            val missions = APIMissionRepository(monitorenvProperties, apiClient)
+                .findAllMissions(
+                    1,
+                    2,
+                    ZonedDateTime.of(2021, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                    ZonedDateTime.of(2022, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                    listOf(MissionNature.FISH.toString()),
+                    listOf(MissionType.SEA.toString(), MissionType.LAND.toString()),
+                    listOf(),
+                    listOf("MED"),
+                )
+
+            // Then
+            assertThat(missions).hasSize(12)
+            assertThat(mockEngine.requestHistory.first().url.toString())
+                .isEqualTo(
+                    """
+                    http://test/api/v1/missions?
+                    pageNumber=1&
+                    pageSize=2&
+                    startedAfterDateTime=2021-05-05T03:04:05.000Z&
+                    startedBeforeDateTime=2022-05-05T03:04:05.000Z&
+                    missionNature=FISH&
+                    missionTypes=SEA,LAND&
+                    missionStatus=&
+                    seaFronts=MED
+                """.trim().replace("\\s+".toRegex(), ""),
+                )
         }
     }
 }

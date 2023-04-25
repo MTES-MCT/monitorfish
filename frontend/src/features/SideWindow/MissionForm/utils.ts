@@ -15,6 +15,8 @@ import type { Undefine } from '@mtes-mct/monitor-ui'
 
 /**
  *
+ * @param missionId
+ * @param missionActionsFormValues
  * @param originalMissionActions Mission actions as they were previous to the mission edition
  */
 export function getMissionActionsDataFromMissionActionsFormValues(
@@ -40,11 +42,11 @@ export function getMissionActionsDataFromMissionActionsFormValues(
     }
   })
 
-  const orginalMissionActionIds = originalMissionActions.map(({ id }) => id as number)
+  const originalMissionActionIds = originalMissionActions.map(({ id }) => id as number)
   const updatedMissionActionIds = updatedMissionActionDatas
     .filter(({ id }) => typeof id === 'number')
     .map(({ id }) => id as number)
-  const deletedMissionActionIds = difference(orginalMissionActionIds, updatedMissionActionIds)
+  const deletedMissionActionIds = difference(originalMissionActionIds, updatedMissionActionIds)
 
   return {
     deletedMissionActionIds,
@@ -72,7 +74,6 @@ export function getMissionDataFromMissionFormValues(
   return {
     ...missionBaseValues,
     controlUnits: validControlUnits,
-    envActions: undefined,
     isClosed: mustClose || !!missionBaseValues.isClosed,
     missionSource,
     missionTypes

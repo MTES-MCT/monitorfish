@@ -33,7 +33,7 @@
       "startDateTimeUtc": "2022-12-31T23:30:00.000000Z",
       "endDateTimeUtc": null,
       "envActions": [],
-      "missionSource": "CNSP",
+      "missionSource": "POSEIDON_CNSP",
       "isClosed": false
     }
   }

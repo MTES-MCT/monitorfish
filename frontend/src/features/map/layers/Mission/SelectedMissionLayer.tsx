@@ -8,14 +8,13 @@ import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
 import { getMissionFeatureZone, getMissionFeatureZoneFromDraft } from '../../../../domain/entities/mission'
-import { useGetMissionsWithActions } from '../../../../domain/entities/mission/hooks/useGetMissionsWithActions'
+import { useGetFilteredMissionsQuery } from '../../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 
 import type { VectorLayerWithName } from '../../../../domain/types/layer'
-import type { MutableRefObject } from 'react'
 
 export function UnmemoizedSelectedMissionLayer({ map }) {
-  const { missionsWithActions } = useGetMissionsWithActions()
+  const { missions } = useGetFilteredMissionsQuery()
   const { draft, draftId, selectedMissionGeoJSON } = useMainAppSelector(store => store.mission)
 
   const selectedMission = useMemo(() => {
@@ -28,16 +27,16 @@ export function UnmemoizedSelectedMissionLayer({ map }) {
     }).readFeature(selectedMissionGeoJSON)
   }, [selectedMissionGeoJSON])
 
-  const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
+  const vectorSourceRef = useRef<VectorSource>()
   const getVectorSource = useCallback(() => {
     if (vectorSourceRef.current === undefined) {
       vectorSourceRef.current = new VectorSource()
     }
 
-    return vectorSourceRef.current
+    return vectorSourceRef.current as VectorSource
   }, [])
 
-  const vectorLayerRef = useRef() as MutableRefObject<VectorLayerWithName>
+  const vectorLayerRef = useRef<VectorLayerWithName>()
   const getVectorLayer = useCallback(() => {
     if (vectorLayerRef.current === undefined) {
       vectorLayerRef.current = new VectorLayer({
@@ -51,7 +50,7 @@ export function UnmemoizedSelectedMissionLayer({ map }) {
       })
     }
 
-    return vectorLayerRef.current
+    return vectorLayerRef.current as VectorLayerWithName
   }, [getVectorSource])
 
   useEffect(() => {
@@ -74,7 +73,7 @@ export function UnmemoizedSelectedMissionLayer({ map }) {
       return
     }
 
-    const hoveredMissionWithActions = missionsWithActions.find(
+    const hoveredMissionWithActions = missions.find(
       missionWithAction => missionWithAction.id === selectedMission.get('missionId')
     )
     if (!hoveredMissionWithActions) {
@@ -83,7 +82,7 @@ export function UnmemoizedSelectedMissionLayer({ map }) {
 
     const missionFeature = getMissionFeatureZone(hoveredMissionWithActions)
     getVectorSource().addFeature(missionFeature)
-  }, [selectedMission, missionsWithActions, getVectorSource])
+  }, [selectedMission, missions, getVectorSource])
 
   useEffect(() => {
     getVectorSource().clear(true)

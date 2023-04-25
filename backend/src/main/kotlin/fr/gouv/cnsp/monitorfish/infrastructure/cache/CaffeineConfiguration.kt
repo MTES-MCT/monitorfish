@@ -44,7 +44,7 @@ class CaffeineConfiguration {
     val faoAreas = "fao_areas"
     val findBeacon = "find_beacon"
     val district = "district"
-    val missions = "missions"
+    val missionControlUnits = "mission_control_units"
 
     @Bean
     fun cacheManager(ticker: Ticker): CacheManager? {
@@ -95,7 +95,7 @@ class CaffeineConfiguration {
         val searchBeaconsCache = buildMinutesCache(searchBeacons, ticker, 1)
         val findBeaconCache = buildMinutesCache(findBeacon, ticker, 60)
 
-        val missionsCache = buildMinutesCache(missions, ticker, 120)
+        val missionControlUnitsCache = buildMinutesCache(missionControlUnits, ticker, 120)
         val controlUnitsCache = buildMinutesCache(controlUnits, ticker, oneWeek)
 
         val manager = SimpleCacheManager()
@@ -131,7 +131,7 @@ class CaffeineConfiguration {
                 faoAreasCache,
                 districtCache,
                 findBeaconCache,
-                missionsCache,
+                missionControlUnitsCache,
                 controlUnitsCache,
             ),
         )

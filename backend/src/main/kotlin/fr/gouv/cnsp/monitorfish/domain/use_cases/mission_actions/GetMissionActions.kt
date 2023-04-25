@@ -12,9 +12,9 @@ class GetMissionActions(
     private val logger = LoggerFactory.getLogger(GetMissionActions::class.java)
 
     fun execute(missionId: Int): List<MissionAction> {
-        logger.debug("Searching actions for mission $missionId")
-        val actions = missionActionsRepository.findMissionActions(missionId).filter { !it.isDeleted }
-        logger.debug("Found ${actions.size} actions for mission $missionId")
+        logger.debug("Searching undeleted actions for mission $missionId")
+        val actions = missionActionsRepository.findByMissionId(missionId)
+        logger.debug("Found ${actions.size} undeleted actions for mission $missionId")
 
         return actions
     }

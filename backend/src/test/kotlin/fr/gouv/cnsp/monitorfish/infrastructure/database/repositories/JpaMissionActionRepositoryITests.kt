@@ -148,7 +148,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         val expectedId = 2
         val updatedMission = getDummyMissionAction(dateTime, expectedId)
 
-        val existingAction = jpaMissionActionsRepository.findMissionActions(2)
+        val existingAction = jpaMissionActionsRepository.findByMissionId(2)
         assertThat(existingAction.first().latitude).isEqualTo(47.44)
         assertThat(existingAction.first().longitude).isEqualTo(-0.52)
 
@@ -166,7 +166,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findMissionActions Should filter vessel's controls around the date time`() {
         // When
-        val actions = jpaMissionActionsRepository.findMissionActions(1)
+        val actions = jpaMissionActionsRepository.findByMissionId(1)
 
         // Then
         assertThat(actions).hasSize(1)
@@ -178,10 +178,10 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findMissionActionsIn Should return all mission actions with multiple mission ids`() {
         // When
-        val actions = jpaMissionActionsRepository.findMissionActionsIn(listOf(1, 2, 3))
+        val actions = jpaMissionActionsRepository.findMissionActionsIn(listOf(1, 2, 3, 34))
 
         // Then
-        assertThat(actions).hasSize(3)
+        assertThat(actions).hasSize(4)
         assertThat(actions.first().vesselName).isEqualTo("PHENOMENE")
         assertThat(actions.first().internalReferenceNumber).isEqualTo("FAK000999999")
     }

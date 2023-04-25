@@ -42,7 +42,6 @@ class APIMissionRepository(
         }
     }
 
-    @Cacheable(value = ["missions"])
     override fun findAllMissions(
         pageNumber: Int?,
         pageSize: Int?,

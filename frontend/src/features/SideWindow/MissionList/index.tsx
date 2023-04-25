@@ -1,14 +1,14 @@
 import { Accent, Button, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
 import { noop } from 'lodash'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_LIST_SUB_MENU_OPTIONS, MISSION_LIST_TABLE_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
 import { renderStatus } from './utils'
-import { useGetMissionsQuery } from '../../../api/mission'
 import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFront } from '../../../constants'
 import { missionActions } from '../../../domain/actions'
+import { useGetFilteredMissionsQuery } from '../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
@@ -25,13 +25,12 @@ export function MissionList() {
 
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
 
-  const getMissionsApiQuery = useGetMissionsQuery(undefined)
   const dispatch = useMainAppDispatch()
 
-  const missionsWithActions = useMemo(() => getMissionsApiQuery.data || [], [getMissionsApiQuery.data])
+  const { isError, isLoading, missions } = useGetFilteredMissionsQuery()
 
   const { renderTableHead, tableData } = useTable<MissionWithActions>(
-    missionsWithActions,
+    missions,
     MISSION_LIST_TABLE_OPTIONS,
     [],
     searchQuery
@@ -39,12 +38,12 @@ export function MissionList() {
 
   const countMissionsForSeaFrontGroup = useCallback(
     (seaFrontGroup: SeaFront): number =>
-      missionsWithActions.filter(({ facade }) =>
+      missions.filter(({ facade }) =>
         facade && SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup]
           ? SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup].includes(facade as any)
           : true
       ).length,
-    [missionsWithActions]
+    [missions]
   )
 
   const goToMissionForm = useCallback(
@@ -90,11 +89,17 @@ export function MissionList() {
         <Body>
           <FilterBar onQueryChange={setSearchQuery} />
 
-          {getMissionsApiQuery.isLoading && <p>Chargement en cours...</p>}
-          {getMissionsApiQuery.error && <pre>{JSON.stringify(getMissionsApiQuery.error)}</pre>}
-          {!getMissionsApiQuery.isLoading && !getMissionsApiQuery.error && (
+          {isLoading && <p>Chargement en cours...</p>}
+          {isError && <pre>{JSON.stringify(isError)}</pre>}
+          {!isLoading && !isError && (
             <>
-              <div>{`${tableData.length ? tableData.length : 'Aucune'} mission${tableData.length > 1 ? 's' : ''}`}</div>
+              <div>
+                {!!tableData.length && (
+                  <>
+                    {tableData.length} mission{tableData.length > 1 ? 's' : ''}
+                  </>
+                )}
+              </div>
               <Table>
                 {renderTableHead()}
 
@@ -196,9 +201,6 @@ const Body = styled.div`
   flex-direction: column;
   padding: 32px;
 `
-
-// TODO Integrate that into the UI with a clean code and design following the XD.
-// https://xd.adobe.com/view/973ae2b4-ecd1-419f-b092-8545e0d8ce57-c269/screen/a2a88bd8-4965-4ac3-ad20-2da95408c36a/
 
 const Table = styled.div.attrs(() => ({
   className: 'Table'

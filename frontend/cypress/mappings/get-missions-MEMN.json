@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "url": "/api/v1/missions?startedAfterDateTime=&startedBeforeDateTime="
+    "url": "/api/v1/missions?pageNumber=&pageSize=&startedAfterDateTime=&startedBeforeDateTime=&missionNature=&missionTypes=&missionStatus=&seaFronts=MEMN"
   },
   "response": {
     "status": 200,
@@ -397,7 +397,8 @@
             "administration": "DREAL",
             "name": "DREAL Pays-de-La-Loire",
             "resources": [],
-            "contact": "06 68 70 34 37 (Commandant Regino)"
+            "contact": "06 68 70 34 37 (Commandant Regino)",
+            "isArchived": false
           }
         ],
         "openBy": "Darren Clark",

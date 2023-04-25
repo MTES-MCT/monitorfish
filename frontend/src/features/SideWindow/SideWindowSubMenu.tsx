@@ -4,10 +4,10 @@ import styled from 'styled-components'
 import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
 import { AlertAndReportingTab, SideWindowMenuKey } from './constants'
 import { SideWindowSubMenuLink } from './SideWindowSubMenuLink'
-import { useGetMissionsQuery } from '../../api/mission'
 import { COLORS } from '../../constants/constants'
 import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, ALERTS_SUBMENU } from '../../domain/entities/alerts/constants'
 import { STAGE_RECORD } from '../../domain/entities/beaconMalfunction/constants'
+import { useGetFilteredMissionsQuery } from '../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 
@@ -41,9 +41,8 @@ export function SideWindowSubMenu({
   const pendingAlerts = useMainAppSelector(state => state.alert.pendingAlerts)
   const currentReportings = useMainAppSelector(state => state.reporting.currentReportings)
   const beaconMalfunctions = useMainAppSelector(state => state.beaconMalfunction.beaconMalfunctions)
-  const getMissionsApiQuery = useGetMissionsQuery()
 
-  const missions = useMemo(() => getMissionsApiQuery.data || [], [getMissionsApiQuery.data])
+  const { missions } = useGetFilteredMissionsQuery()
 
   const numberOfBeaconMalfunctions = useMemo(
     () =>

@@ -18,18 +18,18 @@ class JpaMissionActionsRepository(
         vesselId: Int,
         afterDateTime: ZonedDateTime,
     ): List<MissionAction> {
-        return dbMissionActionsRepository.findAllByVesselIdEqualsAndActionDatetimeUtcAfter(
+        return dbMissionActionsRepository.findAllByVesselIdEqualsAndActionDatetimeUtcAfterAndIsDeletedIsFalse(
             vesselId,
             afterDateTime.toInstant(),
         ).map { control -> control.toMissionAction(mapper) }
     }
 
-    override fun findMissionActions(missionId: Int): List<MissionAction> {
-        return dbMissionActionsRepository.findAllByMissionId(missionId).map { action -> action.toMissionAction(mapper) }
+    override fun findByMissionId(missionId: Int): List<MissionAction> {
+        return dbMissionActionsRepository.findAllByMissionIdAndIsDeletedIsFalse(missionId).map { action -> action.toMissionAction(mapper) }
     }
 
     override fun findMissionActionsIn(missionIds: List<Int>): List<MissionAction> {
-        return dbMissionActionsRepository.findAllByMissionIdIn(missionIds).map { action ->
+        return dbMissionActionsRepository.findAllByMissionIdInAndIsDeletedIsFalse(missionIds).map { action ->
             action.toMissionAction(
                 mapper,
             )
@@ -41,7 +41,7 @@ class JpaMissionActionsRepository(
             .toMissionAction(mapper)
     }
 
-    override fun findById(missionId: Int): MissionAction {
-        return dbMissionActionsRepository.findById(missionId).get().toMissionAction(mapper)
+    override fun findById(id: Int): MissionAction {
+        return dbMissionActionsRepository.findById(id).get().toMissionAction(mapper)
     }
 }

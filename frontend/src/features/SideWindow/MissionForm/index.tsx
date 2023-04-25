@@ -22,7 +22,7 @@ import {
 } from '../../../api/missionAction'
 import { missionActions } from '../../../domain/actions'
 import { getMissionSourceTagText } from '../../../domain/entities/mission'
-import { Mission, type MissionWithActions } from '../../../domain/entities/mission/types'
+import { Mission } from '../../../domain/entities/mission/types'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { useDebouncedValue } from '../../../hooks/useDebouncedValue'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
@@ -34,12 +34,13 @@ import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
 import { SideWindowMenuKey } from '../constants'
 
 import type { MissionActionFormValues, MissionFormValues } from './types'
+import type { MissionWithActions } from '../../../domain/entities/mission/types'
 
 export function MissionForm() {
   const { mission } = useMainAppSelector(store => store)
 
   const headerDivRef = useRef<HTMLDivElement | null>(null)
-  const originalMissionWithActionsRef = useRef<MissionWithActions | undefined>(undefined)
+  const originalMissionRef = useRef<MissionWithActions | undefined>(undefined)
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -125,7 +126,7 @@ export function MissionForm() {
       const { deletedMissionActionIds, updatedMissionActionDatas } = getMissionActionsDataFromMissionActionsFormValues(
         missionId,
         mission.draft.actions,
-        originalMissionWithActionsRef.current?.actions
+        originalMissionRef.current?.actions
       )
 
       await Promise.all([
@@ -188,7 +189,7 @@ export function MissionForm() {
       return
     }
 
-    originalMissionWithActionsRef.current = {
+    originalMissionRef.current = {
       ...missionApiQuery.data,
       actions: missionActionsApiQuery.data
     }

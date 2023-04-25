@@ -9,8 +9,6 @@ export namespace Mission {
     closedBy?: string
     controlUnits: ControlUnit.ControlUnit[]
     endDateTimeUtc?: string
-    // We type it as `undefined` because we don't need that prop in Fish
-    envActions: undefined
     facade?: SeaFront
     geom?: GeoJSON.MultiPolygon
     id: number

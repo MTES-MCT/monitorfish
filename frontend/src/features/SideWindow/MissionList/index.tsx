@@ -1,15 +1,14 @@
 import { Accent, Button, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
 import { noop } from 'lodash'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_LIST_SUB_MENU_OPTIONS, MISSION_LIST_TABLE_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
-import { getSeaFrontFilterFunction, mapFilterValuesToFilterFunctions, renderStatus } from './utils'
+import { renderStatus } from './utils'
 import { useGetMissionsQuery } from '../../../api/mission'
 import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFront } from '../../../constants'
 import { missionActions } from '../../../domain/actions'
-import { useGetMissionsWithActions } from '../../../domain/entities/mission/hooks/useGetMissionsWithActions'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
@@ -22,7 +21,6 @@ import { SubMenu } from '../SubMenu'
 import type { Mission, MissionWithActions } from '../../../domain/entities/mission/types'
 
 export function MissionList() {
-  const { fetchMissions, missionsWithActions } = useGetMissionsWithActions()
   const { mission } = useMainAppSelector(store => store)
 
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
@@ -30,23 +28,12 @@ export function MissionList() {
   const getMissionsApiQuery = useGetMissionsQuery(undefined)
   const dispatch = useMainAppDispatch()
 
-  const filterBarFilterFunctions = useMemo(
-    () => mapFilterValuesToFilterFunctions(mission.listFilterValues),
-    [mission.listFilterValues]
-  )
-  const seaFrontGroupFilterFunction = useMemo(
-    () => getSeaFrontFilterFunction(mission.listSeaFront),
-    [mission.listSeaFront]
-  )
-
-  useEffect(() => {
-    fetchMissions()
-  }, [fetchMissions])
+  const missionsWithActions = useMemo(() => getMissionsApiQuery.data || [], [getMissionsApiQuery.data])
 
   const { renderTableHead, tableData } = useTable<MissionWithActions>(
     missionsWithActions,
     MISSION_LIST_TABLE_OPTIONS,
-    [seaFrontGroupFilterFunction, ...filterBarFilterFunctions],
+    [],
     searchQuery
   )
 

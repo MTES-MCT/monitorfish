@@ -1,14 +1,11 @@
-import ky from 'ky'
+import { monitorenvApi, monitorfishApi } from '.'
 
-import { monitorenvApi } from '.'
-import { ApiError } from '../libs/ApiError'
+import type { Mission, MissionWithActions } from '../domain/entities/mission/types'
 
-import type { Mission } from '../domain/entities/mission/types'
-import type { MissionAction } from '../domain/types/missionAction'
-
-export const missionApi = monitorenvApi.injectEndpoints({
+export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
   endpoints: builder => ({
     createMission: builder.mutation<Pick<Mission.Mission, 'id'>, Mission.MissionData>({
+      invalidatesTags: [{ type: 'Missions' }],
       query: mission => ({
         body: mission,
         method: 'POST',
@@ -17,6 +14,7 @@ export const missionApi = monitorenvApi.injectEndpoints({
     }),
 
     deleteMission: builder.mutation<void, Mission.Mission['id']>({
+      invalidatesTags: [{ type: 'Missions' }],
       query: id => ({
         method: 'DELETE',
         url: `/missions/${id}`
@@ -27,11 +25,8 @@ export const missionApi = monitorenvApi.injectEndpoints({
       query: id => `missions/${id}`
     }),
 
-    getMissions: builder.query<Mission.Mission[], void>({
-      query: () => `missions?startedAfterDateTime=&startedBeforeDateTime=`
-    }),
-
     updateMission: builder.mutation<void, Mission.Mission>({
+      invalidatesTags: [{ type: 'Missions' }],
       query: mission => ({
         body: mission,
         method: 'POST',
@@ -41,30 +36,47 @@ export const missionApi = monitorenvApi.injectEndpoints({
   })
 })
 
-export const {
-  useCreateMissionMutation,
-  useDeleteMissionMutation,
-  useGetMissionQuery,
-  useGetMissionsQuery,
-  useUpdateMissionMutation
-} = missionApi
-
-// TODO Let's move that part somewhere else.
-
-const MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récuperer les contrôles de ce navire"
-
-/**
- * Get vessel controls
- *
- * @throws {@link ApiError}
- *
- */
-export async function getVesselControlsFromAPI(vesselId: number, fromDate: Date) {
-  try {
-    return await ky
-      .get(`/bff/v1/mission_actions/controls?vesselId=${vesselId}&afterDateTime=${fromDate.toISOString()}`)
-      .json<MissionAction.MissionControlsSummary>()
-  } catch (err) {
-    throw new ApiError(MISSION_ACTIONS_ERROR_MESSAGE, err)
-  }
+type GetMissionsFilter = {
+  missionSource?: string
+  missionStatus?: string[]
+  missionTypes?: string[]
+  seaFronts: string[]
+  startedAfterDateTime?: string
+  startedBeforeDateTime?: string
 }
+
+const getStartDateFilter = startedAfterDateTime =>
+  startedAfterDateTime && `startedAfterDateTime=${encodeURIComponent(startedAfterDateTime)}`
+const getEndDateFilter = startedBeforeDateTime =>
+  startedBeforeDateTime && `startedBeforeDateTime=${encodeURIComponent(startedBeforeDateTime)}`
+const getMissionSourceFilter = missionSource => missionSource && `missionSource=${encodeURIComponent(missionSource)}`
+const getMissionStatusFilter = missionStatus =>
+  missionStatus?.length > 0 && `missionStatus=${encodeURIComponent(missionStatus)}`
+const getMissionTypesFilter = missionTypes =>
+  missionTypes?.length > 0 && `missionTypes=${encodeURIComponent(missionTypes)}`
+const getSeaFrontsFilter = seaFronts => seaFronts?.length > 0 && `seaFronts=${encodeURIComponent(seaFronts)}`
+
+export const monitorfishMissionApi = monitorfishApi.injectEndpoints({
+  endpoints: builder => ({
+    getMissions: builder.query<MissionWithActions[], GetMissionsFilter | void>({
+      providesTags: [{ type: 'Missions' }],
+      query: (filter: GetMissionsFilter) =>
+        [
+          'missions?',
+          getStartDateFilter(filter.startedAfterDateTime),
+          getEndDateFilter(filter.startedBeforeDateTime),
+          getMissionSourceFilter(filter.missionSource),
+          getMissionStatusFilter(filter.missionStatus),
+          getMissionTypesFilter(filter.missionTypes),
+          getSeaFrontsFilter(filter.seaFronts)
+        ]
+          .filter(v => v)
+          .join('&')
+    })
+  })
+})
+
+export const { useCreateMissionMutation, useDeleteMissionMutation, useGetMissionQuery, useUpdateMissionMutation } =
+  monitorenvMissionApi
+
+export const { useGetMissionsQuery } = monitorfishMissionApi

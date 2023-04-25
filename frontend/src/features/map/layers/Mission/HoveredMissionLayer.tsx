@@ -6,24 +6,23 @@ import { missionZoneStyle } from './MissionLayer/styles'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { getMissionFeatureZone } from '../../../../domain/entities/mission'
-import { useGetMissionsWithActions } from '../../../../domain/entities/mission/hooks/useGetMissionsWithActions'
+import { useGetFilteredMissionsQuery } from '../../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 
 import type { VectorLayerWithName } from '../../../../domain/types/layer'
-import type { MutableRefObject } from 'react'
 
 export function UnmemoizedMissionHoveredLayer({ feature, map }) {
-  const { missionsWithActions } = useGetMissionsWithActions()
+  const { missions } = useGetFilteredMissionsQuery()
 
-  const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
+  const vectorSourceRef = useRef<VectorSource>()
   const getVectorSource = useCallback(() => {
     if (vectorSourceRef.current === undefined) {
       vectorSourceRef.current = new VectorSource()
     }
 
-    return vectorSourceRef.current
+    return vectorSourceRef.current as VectorSource
   }, [])
 
-  const vectorLayerRef = useRef() as MutableRefObject<VectorLayerWithName>
+  const vectorLayerRef = useRef<VectorLayerWithName>()
   const getVectorLayer = useCallback(() => {
     if (vectorLayerRef.current === undefined) {
       vectorLayerRef.current = new VectorLayer({
@@ -37,7 +36,7 @@ export function UnmemoizedMissionHoveredLayer({ feature, map }) {
       })
     }
 
-    return vectorLayerRef.current
+    return vectorLayerRef.current as VectorLayerWithName
   }, [getVectorSource])
 
   useEffect(() => {
@@ -60,7 +59,7 @@ export function UnmemoizedMissionHoveredLayer({ feature, map }) {
       return
     }
 
-    const hoveredMissionWithActions = missionsWithActions.find(
+    const hoveredMissionWithActions = missions.find(
       missionWithActions => missionWithActions.id === feature.get('missionId')
     )
     if (!hoveredMissionWithActions) {
@@ -69,7 +68,7 @@ export function UnmemoizedMissionHoveredLayer({ feature, map }) {
 
     const missionFeature = getMissionFeatureZone(hoveredMissionWithActions)
     getVectorSource().addFeature(missionFeature)
-  }, [feature, getVectorSource, missionsWithActions])
+  }, [feature, getVectorSource, missions])
 
   return null
 }

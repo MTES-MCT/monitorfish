@@ -72,6 +72,7 @@ export function FilterBar({ onQueryChange }: FilterBarProps) {
         <Row>
           <FormikSelect
             baseContainer={newWindowContainerRef.current}
+            isCleanable={false}
             isLabelHidden
             label="Période"
             name={MissionFilterType.DATE_RANGE}

@@ -28,6 +28,7 @@ type VesselSearchProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultVal
       }
     | undefined
   extendedWidth: number
+  hasError?: boolean | undefined
   hasVesselIdInResults?: boolean
   isExtended: boolean
   isLastSearchedVesselsShowed?: boolean
@@ -40,6 +41,7 @@ export function VesselSearch({
   className,
   defaultValue,
   extendedWidth,
+  hasError,
   hasVesselIdInResults = false,
   isExtended = false,
   isLastSearchedVesselsShowed = false,
@@ -178,6 +180,7 @@ export function VesselSearch({
           defaultValue={controlledDefaultValue}
           extendedWidth={extendedWidth}
           flagState={flagState}
+          hasError={hasError}
           isExtended={isExtended}
           onChange={handleChange}
           onClick={onVesselInputClick}
@@ -212,10 +215,11 @@ const Input = styled.input<{
   baseUrl: string
   extendedWidth: number
   flagState: string | undefined
+  hasError: boolean | undefined
   isExtended: boolean
 }>`
   margin: 0;
-  border: none;
+  border: ${p => (p.hasError ? '1px solid red' : 'none')};
   border-radius: 0;
   border-radius: 2px;
   color: ${COLORS.gunMetal};

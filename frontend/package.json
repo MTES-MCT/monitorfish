@@ -81,7 +81,7 @@
     "timeago.js": "4.0.2",
     "use-debounce": "9.0.4",
     "worker-loader": "3.0.8",
-    "yup": "0.32.11"
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@ivangabriele/eslint-config-typescript-react": "7.1.0",

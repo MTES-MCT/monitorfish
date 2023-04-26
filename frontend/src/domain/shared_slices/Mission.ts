@@ -3,6 +3,7 @@ import { omit, remove, update } from 'ramda'
 
 import { SeaFront } from '../../constants'
 import { getMissionFormInitialValues } from '../../features/SideWindow/MissionForm/utils'
+import { MissionDateRangeFilter, MissionFilterType } from '../../features/SideWindow/MissionList/types'
 import { FrontendError } from '../../libs/FrontendError'
 
 import type { MissionActionFormValues, MissionFormValues } from '../../features/SideWindow/MissionForm/types'
@@ -25,7 +26,9 @@ const INITIAL_STATE: MissionState = {
   draft: getMissionFormInitialValues(undefined, []),
   draftId: undefined,
   editedDraftActionIndex: undefined,
-  listFilterValues: {},
+  listFilterValues: {
+    [MissionFilterType.DATE_RANGE]: MissionDateRangeFilter.CURRENT_MONTH
+  },
   listSeaFront: SeaFront.MED,
   selectedMissionActionGeoJSON: undefined,
   selectedMissionGeoJSON: undefined

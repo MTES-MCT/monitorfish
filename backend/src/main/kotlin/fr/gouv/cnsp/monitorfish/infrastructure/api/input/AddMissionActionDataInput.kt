@@ -14,7 +14,7 @@ data class AddMissionActionDataInput(
     var faoAreas: List<String> = listOf(),
     var flightGoals: List<FlightGoal> = listOf(),
     var actionType: MissionActionType,
-    var actionDatetimeUtc: ZonedDateTime? = null,
+    var actionDatetimeUtc: ZonedDateTime,
     var emitsVms: ControlCheck? = null,
     var emitsAis: ControlCheck? = null,
     var logbookMatchesActivity: ControlCheck? = null,

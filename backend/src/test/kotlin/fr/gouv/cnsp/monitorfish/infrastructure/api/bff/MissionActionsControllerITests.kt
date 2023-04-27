@@ -1,9 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.*
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.*
@@ -11,6 +9,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
 import kotlinx.coroutines.runBlocking
+import org.assertj.core.api.Assertions
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito
@@ -99,7 +98,7 @@ class MissionActionsControllerITests {
                     1,
                     1,
                     actionType = MissionActionType.SEA_CONTROL,
-                    actionDatetimeUtc = ZonedDateTime.now(),
+                    actionDatetimeUtc = ZonedDateTime.parse("2020-10-06T16:25Z"),
                     isDeleted = false,
                 ),
             ),
@@ -110,6 +109,7 @@ class MissionActionsControllerITests {
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
+            .andExpect(jsonPath("$[0].actionDatetimeUtc", equalTo("2020-10-06T16:25:00Z")))
 
         runBlocking {
             Mockito.verify(getMissionActions).execute(123)
@@ -119,7 +119,7 @@ class MissionActionsControllerITests {
     @Test
     fun `Should create a mission action`() {
         // Given
-        val dateTime = ZonedDateTime.now()
+        val dateTime = ZonedDateTime.parse("2023-04-27T16:05:00Z")
         val newMission = TestUtils.getDummyMissionAction(dateTime)
         given(addMissionAction.execute(any())).willReturn(newMission)
 
@@ -129,7 +129,7 @@ class MissionActionsControllerITests {
                 .content(
                     objectMapper.writeValueAsString(
                         AddMissionActionDataInput(
-                            actionDatetimeUtc = ZonedDateTime.now(),
+                            actionDatetimeUtc = dateTime,
                             missionId = 2,
                             vesselId = 2,
                             actionType = MissionActionType.SEA_CONTROL,
@@ -167,12 +167,18 @@ class MissionActionsControllerITests {
                     equalTo("Poids à bord MNZ supérieur de 50% au poids déclaré"),
                 ),
             )
+
+        argumentCaptor<MissionAction>().apply {
+            verify(addMissionAction).execute(capture())
+
+            Assertions.assertThat(allValues[0].actionDatetimeUtc.toString()).isEqualTo("2023-04-27T16:05Z[UTC]")
+        }
     }
 
     @Test
     fun `Should update a mission action`() {
         // Given
-        val dateTime = ZonedDateTime.now()
+        val dateTime = ZonedDateTime.parse("2022-05-05T03:04:05.000Z")
         val newMission = TestUtils.getDummyMissionAction(dateTime)
         given(updateMissionAction.execute(any(), any())).willReturn(newMission)
 
@@ -186,7 +192,7 @@ class MissionActionsControllerITests {
                 .content(
                     objectMapper.writeValueAsString(
                         AddMissionActionDataInput(
-                            actionDatetimeUtc = ZonedDateTime.now(),
+                            actionDatetimeUtc = dateTime,
                             missionId = 2,
                             vesselId = 2,
                             actionType = MissionActionType.SEA_CONTROL,
@@ -217,6 +223,7 @@ class MissionActionsControllerITests {
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.missionId", equalTo(2)))
             .andExpect(jsonPath("$.vesselId", equalTo(2)))
+            .andExpect(jsonPath("$.actionDatetimeUtc", equalTo("2022-05-05T03:04:05Z")))
             .andExpect(jsonPath("$.faoAreas[0]", equalTo("25.6.9")))
             .andExpect(jsonPath("$.faoAreas[1]", equalTo("25.7.9")))
             .andExpect(jsonPath("$.segments[0].segment", equalTo("WWSS10")))

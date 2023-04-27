@@ -8,6 +8,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
+import java.time.Clock
+import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
@@ -129,7 +131,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `saveMissionActions Should save a new mission action`() {
         // Given
-        val dateTime = ZonedDateTime.now()
+        val dateTime = ZonedDateTime.now(ZoneId.of("UTC"))
         val newMission = getDummyMissionAction(dateTime)
 
         // When
@@ -164,14 +166,14 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findMissionActions Should filter vessel's controls around the date time`() {
+    fun `findByMissionId Should return actions of a given mission`() {
         // When
-        val actions = jpaMissionActionsRepository.findByMissionId(1)
+        val actions = jpaMissionActionsRepository.findByMissionId(6)
 
         // Then
-        assertThat(actions).hasSize(1)
-        assertThat(actions.first().actionType).isEqualTo(MissionActionType.SEA_CONTROL)
-        assertThat(actions.first().otherComments).isEqualTo("Commentaires post contrôle")
+        assertThat(actions).hasSize(2)
+        assertThat(actions.last().actionDatetimeUtc).isEqualTo(ZonedDateTime.parse("2021-02-10T12:11:18.884456Z"))
+        assertThat(actions.last().actionType).isEqualTo(MissionActionType.AIR_CONTROL)
     }
 
     @Test

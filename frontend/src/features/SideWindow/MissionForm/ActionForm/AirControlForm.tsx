@@ -1,4 +1,4 @@
-import { FormikDatePicker, FormikEffect, Icon, MultiZoneEditor } from '@mtes-mct/monitor-ui'
+import { FormikDatePicker, FormikEffect, FormikTextarea, Icon, MultiZoneEditor } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash'
 import { useMemo } from 'react'
@@ -9,6 +9,7 @@ import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicke
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
 import { useNewWindow } from '../../../../ui/NewWindow'
+import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
 
@@ -70,6 +71,10 @@ export function AirControlForm({ initialValues, onChange }: AirControlFormProps)
             label="Infractions"
             name="otherInfractions"
           />
+
+          <FieldsetGroup isLight legend="Autres observations">
+            <FormikTextarea isLabelHidden label="Autres observations" name="otherComments" />
+          </FieldsetGroup>
         </FormBody>
       </>
     </Formik>

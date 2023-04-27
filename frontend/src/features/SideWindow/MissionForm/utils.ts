@@ -165,20 +165,7 @@ export function getValidMissionActionData(
     maybeValidMissionActionData?.actionType === MissionActionType.SEA_CONTROL
   ) {
     const [validMissionActionData, formError] = validateRequiredFormValues(
-      [
-        'actionDatetimeUtc',
-        'actionType',
-        'controlUnits',
-        'gearInfractions',
-        'gearOnboard',
-        'logbookInfractions',
-        'otherInfractions',
-        'segments',
-        'speciesInfractions',
-        'speciesOnboard',
-        'vesselId',
-        'vesselName'
-      ],
+      ['actionDatetimeUtc', 'actionType', 'gearOnboard', 'segments', 'speciesOnboard', 'vesselId', 'vesselName'],
       maybeValidMissionActionData
     )
 

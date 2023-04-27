@@ -48,11 +48,11 @@ const missionSlice = createSlice({
 
       const nextDraft = {
         ...state.draft,
-        actions: [...state.draft.actions, action.payload]
+        actions: [action.payload, ...state.draft.actions]
       }
 
       state.draft = nextDraft
-      state.editedDraftActionIndex = nextDraft.actions.length - 1
+      state.editedDraftActionIndex = 0
     },
 
     /**
@@ -71,11 +71,11 @@ const missionSlice = createSlice({
 
       const nextDraft = {
         ...state.draft,
-        actions: [...state.draft.actions, duplicatedAction]
+        actions: [duplicatedAction, ...state.draft.actions]
       }
 
       state.draft = nextDraft
-      state.editedDraftActionIndex = nextDraft.actions.length - 1
+      state.editedDraftActionIndex = 0
     },
 
     /**
@@ -151,7 +151,7 @@ const missionSlice = createSlice({
     setEditedDraftAction(state, action: PayloadAction<MissionActionFormValues>) {
       if (!state.draft || !state.draft.actions || state.editedDraftActionIndex === undefined) {
         throw new FrontendError(
-          'Either  `state.draft`, `state.draft.actions` or `state.editedDraftActionIndex` is undefined'
+          'Either `state.draft`, `state.draft.actions` or `state.editedDraftActionIndex` is undefined'
         )
       }
 

@@ -13,7 +13,7 @@ import { MissionList } from './MissionList'
 import { SideWindowMenu } from './SideWindowMenu'
 import { SideWindowSubMenu } from './SideWindowSubMenu'
 import { getSelectedSubMenu } from './utils'
-import { SeaFront } from '../../constants'
+import { SeaFrontGroup } from '../../constants'
 import { ALERTS_SUBMENU } from '../../domain/entities/alerts/constants'
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
 import { openSideWindowTab } from '../../domain/shared_slices/Global'
@@ -44,7 +44,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
 
   const [isFirstRender, setIsFirstRender] = useState(true)
   const [isPreloading, setIsPreloading] = useState(true)
-  const [selectedSubMenu, setSelectedSubMenu] = useState<MenuItem<SeaFront | string>>(
+  const [selectedSubMenu, setSelectedSubMenu] = useState<MenuItem<SeaFrontGroup | string>>(
     getSelectedSubMenu(openedSideWindowTab)
   )
   const [selectedTab, setSelectedTab] = useState(AlertAndReportingTab.ALERT)
@@ -122,7 +122,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
     if (selectedSubMenu) {
       switch (openedSideWindowTab) {
         case SideWindowMenuKey.BEACON_MALFUNCTIONS:
-          setSelectedSubMenu(BeaconMalfunctionsSubMenu.MALFUNCTIONING as unknown as MenuItem<SeaFront>)
+          setSelectedSubMenu(BeaconMalfunctionsSubMenu.MALFUNCTIONING as unknown as MenuItem<SeaFrontGroup>)
           break
 
         case SideWindowMenuKey.ALERTS:
@@ -215,8 +215,8 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
                 <AlertsAndReportings
                   baseRef={wrapperRef as MutableRefObject<HTMLDivElement>}
                   selectedSubMenu={
-                    Object.values<string>(SeaFront).includes(selectedSubMenu.code)
-                      ? (selectedSubMenu as MenuItem<SeaFront>)
+                    Object.values<string>(SeaFrontGroup).includes(selectedSubMenu.code)
+                      ? (selectedSubMenu as MenuItem<SeaFrontGroup>)
                       : ALERTS_SUBMENU.MEMN
                   }
                   selectedTab={selectedTab}

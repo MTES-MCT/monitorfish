@@ -16,7 +16,7 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { sortArrayByColumn, SortType } from '../../VesselList/tableSort'
 
-import type { SeaFront } from '../../../constants'
+import type { SeaFrontGroup } from '../../../constants'
 import type { SilencedAlertPeriodRequest } from '../../../domain/entities/alerts/types'
 import type { MenuItem } from '../../../types'
 import type { CSSProperties, MutableRefObject, RefObject } from 'react'
@@ -24,7 +24,7 @@ import type { CSSProperties, MutableRefObject, RefObject } from 'react'
 export type PendingAlertsListProps = {
   baseRef: RefObject<HTMLDivElement>
   numberOfSilencedAlerts: number
-  selectedSeaFront: MenuItem<SeaFront>
+  selectedSeaFront: MenuItem<SeaFrontGroup>
 }
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way

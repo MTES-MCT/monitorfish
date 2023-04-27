@@ -10,17 +10,17 @@ import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, ALERTS_SUBMENU } from '../../../do
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { AlertAndReportingTab } from '../constants'
 
-import type { SeaFront } from '../../../constants'
+import type { SeaFrontGroup } from '../../../constants'
 import type { MenuItem } from '../../../types'
 import type { RefObject } from 'react'
 import type { Promisable } from 'type-fest'
 
 type AlertsAndReportingsProps = {
   baseRef: RefObject<HTMLDivElement>
-  selectedSubMenu: MenuItem<SeaFront>
+  selectedSubMenu: MenuItem<SeaFrontGroup>
   selectedTab: any
   // TODO Change this param to only use the `SeaFront` enum.
-  setSelectedSeaFront: (nextSeaFront: SeaFront) => Promisable<void>
+  setSelectedSeaFront: (nextSeaFront: SeaFrontGroup) => Promisable<void>
   setSelectedTab: any
 }
 export function AlertsAndReportings({

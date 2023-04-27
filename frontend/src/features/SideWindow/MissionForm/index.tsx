@@ -73,7 +73,7 @@ export function MissionForm() {
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mission.editedDraftActionIndex]
+    [mission.editedDraftActionIndex, mission.draft?.actions]
   )
 
   const missionTitle = useMemo(

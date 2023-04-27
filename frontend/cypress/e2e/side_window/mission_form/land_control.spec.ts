@@ -146,7 +146,7 @@ context('Side Window > Mission Form > Land Control', () => {
         segments: [{ segment: 'SWW01/02/03', segmentName: 'Bottom trawls' }],
         seizureAndDiversion: true,
         seizureAndDiversionComments: null,
-        separateStowageOfPreservedSpecies: true,
+        separateStowageOfPreservedSpecies: 'YES',
         speciesInfractions: [
           {
             comments: 'Une observation sur l’infraction espèce.',
@@ -167,7 +167,7 @@ context('Side Window > Mission Form > Land Control', () => {
         userTrigram: 'Marlin',
         vesselId: 1,
         vesselName: 'PHENOMENE',
-        vesselTargeted: true
+        vesselTargeted: 'YES'
       })
       assert.isString(interception.request.body.actionDatetimeUtc)
 

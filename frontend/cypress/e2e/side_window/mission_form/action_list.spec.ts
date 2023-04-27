@@ -1,12 +1,12 @@
 // TODO We should find a way to either reset data after each test to make them independant and easily re-runnable or reset them via the UI (with e2e commands).
 // https://glebbahmutov.com/blog/dependent-test/
 
-import { SeaFront } from '../../../../src/constants'
+import { SeaFrontGroup } from '../../../../src/constants'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Action List', () => {
   it('Should send the expected data to the API when duplicating a mission action', () => {
-    editSideWindowMissionListMissionWithId(4, SeaFront.MEMN)
+    editSideWindowMissionListMissionWithId(4, SeaFrontGroup.MEMN)
 
     cy.intercept('POST', '/api/v1/missions/4', {
       body: {
@@ -64,7 +64,7 @@ context('Side Window > Mission Form > Action List', () => {
         segments: [],
         seizureAndDiversion: false,
         seizureAndDiversionComments: null,
-        separateStowageOfPreservedSpecies: false,
+        separateStowageOfPreservedSpecies: 'NO',
         speciesInfractions: [],
         speciesObservations: null,
         speciesOnboard: [],
@@ -74,7 +74,7 @@ context('Side Window > Mission Form > Action List', () => {
         userTrigram: null,
         vesselId: 2,
         vesselName: 'MALOTRU',
-        vesselTargeted: null
+        vesselTargeted: 'YES'
       })
     })
 
@@ -82,7 +82,7 @@ context('Side Window > Mission Form > Action List', () => {
   })
 
   it('Should send the expected data to the API when deleting a mission action', () => {
-    editSideWindowMissionListMissionWithId(34, SeaFront.MEMN)
+    editSideWindowMissionListMissionWithId(34, SeaFrontGroup.MEMN)
 
     cy.intercept('POST', '/api/v1/missions/34', {
       body: {

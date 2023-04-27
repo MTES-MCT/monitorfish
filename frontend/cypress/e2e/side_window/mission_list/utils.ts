@@ -1,6 +1,6 @@
 import { SideWindowMenuKey } from '../../../../src/features/SideWindow/constants'
 
-import type { SeaFront } from '../../../../src/constants'
+import type { SeaFrontGroup } from '../../../../src/constants'
 
 export const openSideWindowMissionList = () => {
   cy.visit('/side_window')
@@ -18,7 +18,7 @@ export const openSideWindowMissionList = () => {
   cy.wait(500)
 }
 
-export const editSideWindowMissionListMissionWithId = (missionId: number, seaFrontGroup?: SeaFront) => {
+export const editSideWindowMissionListMissionWithId = (missionId: number, seaFrontGroup?: SeaFrontGroup) => {
   openSideWindowMissionList()
 
   if (seaFrontGroup) {

@@ -84,7 +84,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
         segments: [{ segment: 'PEL01', segmentName: 'Freezer Trawls - Mid water and mid water pair trawl' }],
         seizureAndDiversion: false,
         seizureAndDiversionComments: null,
-        separateStowageOfPreservedSpecies: false,
+        separateStowageOfPreservedSpecies: 'NO',
         speciesInfractions: [],
         speciesObservations: null,
         speciesOnboard: [
@@ -96,7 +96,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
         userTrigram: null,
         vesselId: 2,
         vesselName: 'MALOTRU',
-        vesselTargeted: null
+        vesselTargeted: 'YES'
       })
       assert.isString(interception.request.body.actionDatetimeUtc)
 

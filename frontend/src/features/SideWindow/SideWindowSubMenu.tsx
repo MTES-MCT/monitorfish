@@ -11,7 +11,7 @@ import { useGetFilteredMissionsQuery } from '../../domain/entities/mission/hooks
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 
-import type { SeaFront } from '../../constants'
+import type { SeaFrontGroup } from '../../constants'
 import type { MenuItem } from '../../types'
 import type { CSSProperties } from 'react'
 import type { Promisable } from 'type-fest'
@@ -19,11 +19,11 @@ import type { Promisable } from 'type-fest'
 export type SideWindowSubMenuProps = {
   isFixed: boolean
   selectedMenu: string | undefined
-  selectedSubMenu: MenuItem<SeaFront | string>
+  selectedSubMenu: MenuItem<SeaFrontGroup | string>
   selectedTab: AlertAndReportingTab
   // TODO Rename that.
   setIsFixed: (isFixed: boolean) => Promisable<void>
-  setSelectedSubMenu: (nexSubMenu: MenuItem<SeaFront | string>) => Promisable<void>
+  setSelectedSubMenu: (nexSubMenu: MenuItem<SeaFrontGroup | string>) => Promisable<void>
 }
 
 /**
@@ -161,7 +161,7 @@ export function SideWindowSubMenu({
           <SideWindowSubMenuLink
             isOpen={isOpen}
             isSelected={selectedSubMenu.code === BeaconMalfunctionsSubMenu.MALFUNCTIONING.code}
-            menu={BeaconMalfunctionsSubMenu.MALFUNCTIONING as MenuItem<SeaFront>}
+            menu={BeaconMalfunctionsSubMenu.MALFUNCTIONING as MenuItem<SeaFrontGroup>}
             number={numberOfBeaconMalfunctions}
             setSelectedSubMenu={setSelectedSubMenu}
           />

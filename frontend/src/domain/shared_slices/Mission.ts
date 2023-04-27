@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { omit, remove, update } from 'ramda'
 
-import { SeaFront } from '../../constants'
+import { SeaFrontGroup } from '../../constants'
 import { getMissionFormInitialValues } from '../../features/SideWindow/MissionForm/utils'
+import { MissionDateRangeFilter, MissionFilterType } from '../../features/SideWindow/MissionList/types'
 import { FrontendError } from '../../libs/FrontendError'
 
 import type { MissionActionFormValues, MissionFormValues } from '../../features/SideWindow/MissionForm/types'
@@ -17,7 +18,7 @@ export interface MissionState {
   draftId: Mission.Mission['id'] | undefined
   editedDraftActionIndex: number | undefined
   listFilterValues: FilterValues
-  listSeaFront: SeaFront
+  listSeaFront: SeaFrontGroup
   selectedMissionActionGeoJSON: GeoJSON.GeoJson | undefined
   selectedMissionGeoJSON: GeoJSON.GeoJson | undefined
 }
@@ -25,8 +26,10 @@ const INITIAL_STATE: MissionState = {
   draft: getMissionFormInitialValues(undefined, []),
   draftId: undefined,
   editedDraftActionIndex: undefined,
-  listFilterValues: {},
-  listSeaFront: SeaFront.MED,
+  listFilterValues: {
+    [MissionFilterType.DATE_RANGE]: MissionDateRangeFilter.CURRENT_MONTH
+  },
+  listSeaFront: SeaFrontGroup.MED,
   selectedMissionActionGeoJSON: undefined,
   selectedMissionGeoJSON: undefined
 }
@@ -45,11 +48,11 @@ const missionSlice = createSlice({
 
       const nextDraft = {
         ...state.draft,
-        actions: [...state.draft.actions, action.payload]
+        actions: [action.payload, ...state.draft.actions]
       }
 
       state.draft = nextDraft
-      state.editedDraftActionIndex = nextDraft.actions.length - 1
+      state.editedDraftActionIndex = 0
     },
 
     /**
@@ -68,11 +71,11 @@ const missionSlice = createSlice({
 
       const nextDraft = {
         ...state.draft,
-        actions: [...state.draft.actions, duplicatedAction]
+        actions: [duplicatedAction, ...state.draft.actions]
       }
 
       state.draft = nextDraft
-      state.editedDraftActionIndex = nextDraft.actions.length - 1
+      state.editedDraftActionIndex = 0
     },
 
     /**
@@ -148,7 +151,7 @@ const missionSlice = createSlice({
     setEditedDraftAction(state, action: PayloadAction<MissionActionFormValues>) {
       if (!state.draft || !state.draft.actions || state.editedDraftActionIndex === undefined) {
         throw new FrontendError(
-          'Either  `state.draft`, `state.draft.actions` or `state.editedDraftActionIndex` is undefined'
+          'Either `state.draft`, `state.draft.actions` or `state.editedDraftActionIndex` is undefined'
         )
       }
 
@@ -181,7 +184,7 @@ const missionSlice = createSlice({
     /**
      * Set sea front filter in missions list
      */
-    setListSeaFront(state, action: PayloadAction<SeaFront>) {
+    setListSeaFront(state, action: PayloadAction<SeaFrontGroup>) {
       state.listSeaFront = action.payload
     },
 

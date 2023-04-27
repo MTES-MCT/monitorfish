@@ -61,7 +61,8 @@ class MissionActionEntity(
     @Column(name = "species_size_controlled")
     var speciesSizeControlled: Boolean? = null,
     @Column(name = "separate_stowage_of_preserved_species")
-    var separateStowageOfPreservedSpecies: Boolean? = null,
+    @Enumerated(EnumType.STRING)
+    var separateStowageOfPreservedSpecies: ControlCheck? = null,
     @Type(JsonBinaryType::class)
     @Column(name = "logbook_infractions", columnDefinition = "jsonb")
     var logbookInfractions: String? = null,
@@ -104,7 +105,8 @@ class MissionActionEntity(
     @Column(name = "port_locode")
     var portLocode: String? = null,
     @Column(name = "vessel_targeted")
-    var vesselTargeted: Boolean? = null,
+    @Enumerated(EnumType.STRING)
+    var vesselTargeted: ControlCheck? = null,
     @Column(name = "seizure_and_diversion_comments")
     var seizureAndDiversionComments: String? = null,
     @Column(name = "other_comments")

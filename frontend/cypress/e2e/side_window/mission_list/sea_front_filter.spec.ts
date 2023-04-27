@@ -1,8 +1,15 @@
 import { openSideWindowMissionList } from './utils'
+import { getUtcizedDayjs } from '../../utils/getUtcizedDayjs'
 
 context('Side Window > Mission List > Sea Front Filter (= submenu)', () => {
+  // By default, the mission list is filtered from the start of month
+  const currentMonth = encodeURIComponent(getUtcizedDayjs().utc().startOf('month').toISOString())
+
   beforeEach(() => {
-    cy.intercept('GET', '/bff/v1/missions?&missionStatus=&missionTypes=&seaFronts=MED').as('getMissions')
+    cy.intercept(
+      'GET',
+      `/bff/v1/missions?&startedAfterDateTime=${currentMonth}&missionStatus=&missionTypes=&seaFronts=MED`
+    ).as('getMissions')
     openSideWindowMissionList()
     cy.wait('@getMissions')
   })
@@ -17,7 +24,10 @@ context('Side Window > Mission List > Sea Front Filter (= submenu)', () => {
   })
 
   it('Should only show missions for NAMO sea front', () => {
-    cy.intercept('GET', '/bff/v1/missions?&missionStatus=&missionTypes=&seaFronts=NAMO').as('getMissions')
+    cy.intercept(
+      'GET',
+      `/bff/v1/missions?&startedAfterDateTime=${currentMonth}&missionStatus=&missionTypes=&seaFronts=NAMO`
+    ).as('getMissions')
     cy.getDataCy('side-window-sub-menu-NAMO').click()
     cy.wait('@getMissions')
 

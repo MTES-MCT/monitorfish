@@ -29,13 +29,13 @@ import { downloadAsCsv } from '../../../../utils/downloadAsCsv'
 import { Flag } from '../../../VesselList/tableCells'
 import { EditReporting } from '../EditReporting'
 
-import type { SeaFront } from '../../../../constants'
+import type { SeaFrontGroup } from '../../../../constants'
 import type { InfractionSuspicionReporting, PendingAlertReporting } from '../../../../domain/types/reporting'
 import type { MenuItem } from '../../../../types'
 import type { CSSProperties, MutableRefObject } from 'react'
 
 type ReportingListProps = {
-  selectedSeaFront: MenuItem<SeaFront>
+  selectedSeaFront: MenuItem<SeaFrontGroup>
 }
 export function ReportingList({ selectedSeaFront }: ReportingListProps) {
   const dispatch = useMainAppDispatch()

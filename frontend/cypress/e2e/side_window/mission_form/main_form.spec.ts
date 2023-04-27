@@ -1,5 +1,5 @@
 import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
-import { SeaFront } from '../../../../src/constants'
+import { SeaFrontGroup } from '../../../../src/constants'
 import { Mission } from '../../../../src/domain/entities/mission/types'
 import { getUtcizedDayjs } from '../../utils/getUtcizedDayjs'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
@@ -172,7 +172,7 @@ context('Side Window > Mission Form > Main Form', () => {
   })
 
   it('Should send the expected data to the API when editing an existing mission', () => {
-    editSideWindowMissionListMissionWithId(2, SeaFront.MEMN)
+    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
 
     cy.intercept('POST', '/api/v1/missions/2', {
       body: {
@@ -293,7 +293,7 @@ context('Side Window > Mission Form > Main Form', () => {
         ],
         seizureAndDiversion: true,
         seizureAndDiversionComments: 'Saisie de la pêche',
-        separateStowageOfPreservedSpecies: true,
+        separateStowageOfPreservedSpecies: 'YES',
         speciesInfractions: [
           { comments: 'Sous taille de 8cm', infractionType: 'WITHOUT_RECORD', natinf: 28346, speciesSeized: true }
         ],
@@ -308,7 +308,7 @@ context('Side Window > Mission Form > Main Form', () => {
         userTrigram: null,
         vesselId: 1,
         vesselName: 'PHENOMENE',
-        vesselTargeted: null
+        vesselTargeted: 'NO'
       })
     })
 
@@ -341,7 +341,7 @@ context('Side Window > Mission Form > Main Form', () => {
   })
 
   it('Should close an existing mission', () => {
-    editSideWindowMissionListMissionWithId(2, SeaFront.MEMN)
+    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
 
     cy.intercept('POST', '/api/v1/missions/2', {
       body: {

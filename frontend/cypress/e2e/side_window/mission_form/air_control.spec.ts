@@ -92,7 +92,7 @@ context('Side Window > Mission Form > Air Control', () => {
         userTrigram: null,
         vesselId: 1,
         vesselName: 'PHENOMENE',
-        vesselTargeted: false
+        vesselTargeted: 'NO'
       })
       assert.isString(interception.request.body.actionDatetimeUtc)
 

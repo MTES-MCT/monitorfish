@@ -73,7 +73,7 @@ export function MissionForm() {
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mission.editedDraftActionIndex]
+    [mission.editedDraftActionIndex, mission.draft?.actions]
   )
 
   const missionTitle = useMemo(
@@ -214,7 +214,14 @@ export function MissionForm() {
             <BackToListIcon onClick={goToMissionList} />
             {missionTitle}
             {mission.draftId && (
-              <MissionSourceTag>{getMissionSourceTagText(debouncedMissionDraft?.missionSource)}</MissionSourceTag>
+              <MissionSourceTag
+                isFromCacem={
+                  debouncedMissionDraft?.missionSource === Mission.MissionSource.POSEIDON_CACEM ||
+                  debouncedMissionDraft?.missionSource === Mission.MissionSource.MONITORENV
+                }
+              >
+                {getMissionSourceTagText(debouncedMissionDraft?.missionSource)}
+              </MissionSourceTag>
             )}
           </HeaderTitle>
         </HeaderTitleGroup>
@@ -263,8 +270,10 @@ export function MissionForm() {
   )
 }
 
-const MissionSourceTag = styled(Tag)`
-  background: ${p => p.theme.color.blueGray[100]};
+const MissionSourceTag = styled(Tag)<{
+  isFromCacem: boolean
+}>`
+  background: ${p => (p.isFromCacem ? p.theme.color.mediumSeaGreen : p.theme.color.blueGray[100])};
   color: ${p => p.theme.color.white};
   margin-left: 24px;
   vertical-align: middle;

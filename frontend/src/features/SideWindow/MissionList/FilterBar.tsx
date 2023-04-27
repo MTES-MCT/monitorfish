@@ -19,8 +19,9 @@ import type { Promisable } from 'type-fest'
 
 export type FilterBarProps = {
   onQueryChange: (nextQuery: string | undefined) => Promisable<void>
+  searchQuery: string | undefined
 }
-export function FilterBar({ onQueryChange }: FilterBarProps) {
+export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
   const { newWindowContainerRef } = useNewWindow()
 
   const { mission } = useMainAppSelector(store => store)
@@ -66,12 +67,14 @@ export function FilterBar({ onQueryChange }: FilterBarProps) {
             name="searchInput"
             onChange={onQueryChange}
             placeholder="Rechercher un navire"
+            value={searchQuery}
           />
         </Row>
 
         <Row>
           <FormikSelect
             baseContainer={newWindowContainerRef.current}
+            isCleanable={false}
             isLabelHidden
             label="Période"
             name={MissionFilterType.DATE_RANGE}

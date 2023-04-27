@@ -20,7 +20,7 @@ object TestUtils {
         logbookMatchesActivity = ControlCheck.NO,
         speciesWeightControlled = true,
         speciesSizeControlled = true,
-        separateStowageOfPreservedSpecies = true,
+        separateStowageOfPreservedSpecies = ControlCheck.YES,
         logbookInfractions = listOf(
             LogbookInfraction(
                 InfractionType.WITH_RECORD,

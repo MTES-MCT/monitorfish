@@ -2,6 +2,7 @@ import { customDayjs } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 
 import { useGetMissionsQuery } from '../../../../api/mission'
+import { SEA_FRONT_GROUP_SEA_FRONTS } from '../../../../constants'
 import { MissionDateRangeFilter, MissionFilterType } from '../../../../features/SideWindow/MissionList/types'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { administrationFilterFunction } from '../filters/administrationFilterFunction'
@@ -17,6 +18,8 @@ export const useGetFilteredMissionsQuery = (): {
   missions: MissionWithActions[]
 } => {
   const { listFilterValues, listSeaFront } = useMainAppSelector(state => state.mission)
+
+  const filteredSeaFronts = useMemo(() => SEA_FRONT_GROUP_SEA_FRONTS[listSeaFront], [listSeaFront])
 
   const startedAfterDateTime = () => {
     const isCustom = listFilterValues[MissionFilterType.CUSTOM_DATE_RANGE]?.length
@@ -63,7 +66,7 @@ export const useGetFilteredMissionsQuery = (): {
       missionSource: listFilterValues[MissionFilterType.SOURCE],
       missionStatus: [listFilterValues[MissionFilterType.STATUS]],
       missionTypes: [listFilterValues[MissionFilterType.TYPE]],
-      seaFronts: [listSeaFront],
+      seaFronts: filteredSeaFronts,
       startedAfterDateTime: startedAfterDateTime(),
       startedBeforeDateTime: startedBeforeDateTime()
     },

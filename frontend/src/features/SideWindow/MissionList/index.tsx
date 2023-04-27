@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { MISSION_LIST_SUB_MENU_OPTIONS, MISSION_LIST_TABLE_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
 import { renderStatus } from './utils'
-import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFront } from '../../../constants'
+import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFrontGroup } from '../../../constants'
 import { missionActions } from '../../../domain/actions'
 import { useGetFilteredMissionsQuery } from '../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
@@ -37,7 +37,7 @@ export function MissionList() {
   )
 
   const countMissionsForSeaFrontGroup = useCallback(
-    (seaFrontGroup: SeaFront): number =>
+    (seaFrontGroup: SeaFrontGroup): number =>
       missions.filter(({ facade }) =>
         facade && SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup]
           ? SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup].includes(facade as any)
@@ -61,7 +61,7 @@ export function MissionList() {
   )
 
   const handleSubMenuChange = useCallback(
-    (nextSeaFrontGroup: SeaFront) => {
+    (nextSeaFrontGroup: SeaFrontGroup) => {
       dispatch(missionActions.setListSeaFront(nextSeaFrontGroup))
     },
     [dispatch]
@@ -87,7 +87,7 @@ export function MissionList() {
         </Header>
 
         <Body>
-          <FilterBar onQueryChange={setSearchQuery} />
+          <FilterBar onQueryChange={setSearchQuery} searchQuery={searchQuery} />
 
           {isLoading && <p>Chargement en cours...</p>}
           {isError && <pre>{JSON.stringify(isError)}</pre>}

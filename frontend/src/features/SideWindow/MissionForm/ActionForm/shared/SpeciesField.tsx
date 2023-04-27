@@ -9,6 +9,7 @@ import { FormikMultiInfractionPicker } from './FormikMultiInfractionPicker'
 import { useGetSpeciesQuery } from '../../../../../api/specy'
 import { useGetRiskFactorQuery } from '../../../../../api/vessel'
 import { BOOLEAN_AS_OPTIONS } from '../../../../../constants'
+import { MissionAction } from '../../../../../domain/types/missionAction'
 import { FrontendError } from '../../../../../libs/FrontendError'
 import { useNewWindow } from '../../../../../ui/NewWindow'
 import { FieldGroup } from '../../shared/FieldGroup'
@@ -16,7 +17,6 @@ import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../shared/FieldsetGroupSeparator'
 
 import type { DeclaredLogbookSpecies } from '../../../../../domain/entities/vessel/types'
-import type { MissionAction } from '../../../../../domain/types/missionAction'
 import type { Specy } from '../../../../../domain/types/specy'
 import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
@@ -166,7 +166,11 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
         isInline
         label="Arrimage séparé des espèces soumises à plan"
         name="separateStowageOfPreservedSpecies"
-        options={BOOLEAN_AS_OPTIONS}
+        options={[
+          { label: 'Oui', value: MissionAction.ControlCheck.YES },
+          { label: 'Non', value: MissionAction.ControlCheck.NO },
+          { label: 'Non concerné', value: MissionAction.ControlCheck.NOT_APPLICABLE }
+        ]}
       />
 
       {input.value && input.value.length > 0 && (

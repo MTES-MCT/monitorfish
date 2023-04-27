@@ -18,6 +18,7 @@ import { SpeciesField } from './shared/SpeciesField'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
 import { VesselFleetSegmentsField } from './shared/VesselFleetSegmentsField'
+import { SeaControlFormSchema } from './validationSchema'
 import { useNewWindow } from '../../../../ui/NewWindow'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
@@ -38,8 +39,14 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
     [initialValues.actionDatetimeUtc]
   )
 
+  // TODO Fix the validation: it can't be used as the formik state is inconsistent (due to FormikEffect ?)
   return (
-    <Formik initialValues={initialValues} onSubmit={onChange as any}>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={onChange as any}
+      validateOnChange
+      validationSchema={SeaControlFormSchema}
+    >
       <>
         <FormikEffect onChange={onChange as any} />
 

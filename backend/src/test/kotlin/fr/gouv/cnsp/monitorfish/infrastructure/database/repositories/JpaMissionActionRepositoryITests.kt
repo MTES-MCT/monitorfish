@@ -50,7 +50,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.logbookMatchesActivity).isEqualTo(ControlCheck.NO)
         assertThat(firstControl.speciesWeightControlled).isTrue
         assertThat(firstControl.speciesSizeControlled).isTrue
-        assertThat(firstControl.separateStowageOfPreservedSpecies).isTrue
+        assertThat(firstControl.separateStowageOfPreservedSpecies).isEqualTo(ControlCheck.YES)
         assertThat(firstControl.faoAreas).hasSize(2)
         assertThat(firstControl.faoAreas.first()).isEqualTo("27.7.d")
         assertThat(firstControl.faoAreas.last()).isEqualTo("27.7.e")
@@ -93,7 +93,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.longitude).isEqualTo(-0.52)
         assertThat(firstControl.latitude).isEqualTo(47.44)
         assertThat(firstControl.portLocode).isNull()
-        assertThat(firstControl.vesselTargeted).isFalse
+        assertThat(firstControl.vesselTargeted).isEqualTo(ControlCheck.NO)
         assertThat(firstControl.seizureAndDiversion).isTrue
         assertThat(firstControl.seizureAndDiversionComments).isEqualTo("Saisie de la pêche")
         assertThat(firstControl.otherComments).isEqualTo("Commentaires post contrôle")

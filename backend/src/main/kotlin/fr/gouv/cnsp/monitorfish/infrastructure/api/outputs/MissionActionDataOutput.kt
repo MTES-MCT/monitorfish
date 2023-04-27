@@ -23,7 +23,7 @@ data class MissionActionDataOutput(
     val licencesMatchActivity: ControlCheck? = null,
     val speciesWeightControlled: Boolean? = null,
     val speciesSizeControlled: Boolean? = null,
-    val separateStowageOfPreservedSpecies: Boolean? = null,
+    val separateStowageOfPreservedSpecies: ControlCheck? = null,
     val logbookInfractions: List<LogbookInfraction> = listOf(),
     val licencesAndLogbookObservations: String? = null,
     val gearInfractions: List<GearInfraction> = listOf(),
@@ -46,6 +46,7 @@ data class MissionActionDataOutput(
     val gearOnboard: List<GearControl> = listOf(),
     val speciesOnboard: List<SpeciesControl> = listOf(),
     val controlUnits: List<ControlUnit> = listOf(),
+    val vesselTargeted: ControlCheck? = null,
 ) {
     companion object {
         fun fromMissionAction(missionAction: MissionAction) = MissionActionDataOutput(
@@ -90,6 +91,7 @@ data class MissionActionDataOutput(
             gearOnboard = missionAction.gearOnboard,
             speciesOnboard = missionAction.speciesOnboard,
             controlUnits = missionAction.controlUnits,
+            vesselTargeted = missionAction.vesselTargeted,
         )
     }
 }

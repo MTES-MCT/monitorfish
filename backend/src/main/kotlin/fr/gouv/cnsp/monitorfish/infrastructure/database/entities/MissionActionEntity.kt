@@ -4,11 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.vladmihalcea.hibernate.type.array.ListArrayType
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
-import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.ExecuteRules
 import jakarta.persistence.*
 import org.hibernate.annotations.Type
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import java.time.Instant
 import java.time.ZoneOffset
 

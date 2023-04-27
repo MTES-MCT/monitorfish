@@ -87,7 +87,7 @@ export function MissionList() {
         </Header>
 
         <Body>
-          <FilterBar onQueryChange={setSearchQuery} />
+          <FilterBar onQueryChange={setSearchQuery} searchQuery={searchQuery} />
 
           {isLoading && <p>Chargement en cours...</p>}
           {isError && <pre>{JSON.stringify(isError)}</pre>}

@@ -5,7 +5,11 @@ import type { Mission, MissionWithActions } from '../domain/entities/mission/typ
 export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
   endpoints: builder => ({
     createMission: builder.mutation<Pick<Mission.Mission, 'id'>, Mission.MissionData>({
-      invalidatesTags: [{ type: 'Missions' }],
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        await queryFulfilled
+
+        dispatch(monitorfishApi.util.invalidateTags([{ type: 'Missions' }]))
+      },
       query: mission => ({
         body: mission,
         method: 'POST',
@@ -14,7 +18,11 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
     }),
 
     deleteMission: builder.mutation<void, Mission.Mission['id']>({
-      invalidatesTags: [{ type: 'Missions' }],
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        await queryFulfilled
+
+        dispatch(monitorfishApi.util.invalidateTags([{ type: 'Missions' }]))
+      },
       query: id => ({
         method: 'DELETE',
         url: `/missions/${id}`
@@ -26,7 +34,6 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
     }),
 
     updateMission: builder.mutation<void, Mission.Mission>({
-      invalidatesTags: [{ type: 'Missions' }],
       query: mission => ({
         body: mission,
         method: 'POST',

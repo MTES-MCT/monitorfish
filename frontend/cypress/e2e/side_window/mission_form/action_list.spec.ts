@@ -74,7 +74,7 @@ context('Side Window > Mission Form > Action List', () => {
         userTrigram: null,
         vesselId: 2,
         vesselName: 'MALOTRU',
-        vesselTargeted: null
+        vesselTargeted: 'YES'
       })
     })
 

@@ -308,7 +308,7 @@ context('Side Window > Mission Form > Main Form', () => {
         userTrigram: null,
         vesselId: 1,
         vesselName: 'PHENOMENE',
-        vesselTargeted: null
+        vesselTargeted: 'NO'
       })
     })
 

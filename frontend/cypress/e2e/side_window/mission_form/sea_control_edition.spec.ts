@@ -96,7 +96,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
         userTrigram: null,
         vesselId: 2,
         vesselName: 'MALOTRU',
-        vesselTargeted: null
+        vesselTargeted: 'YES'
       })
       assert.isString(interception.request.body.actionDatetimeUtc)
 

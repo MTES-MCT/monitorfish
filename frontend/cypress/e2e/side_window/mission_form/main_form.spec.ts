@@ -1,5 +1,5 @@
 import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
-import { SeaFront } from '../../../../src/constants'
+import { SeaFrontGroup } from '../../../../src/constants'
 import { Mission } from '../../../../src/domain/entities/mission/types'
 import { getUtcizedDayjs } from '../../utils/getUtcizedDayjs'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
@@ -172,7 +172,7 @@ context('Side Window > Mission Form > Main Form', () => {
   })
 
   it('Should send the expected data to the API when editing an existing mission', () => {
-    editSideWindowMissionListMissionWithId(2, SeaFront.MEMN)
+    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
 
     cy.intercept('POST', '/api/v1/missions/2', {
       body: {
@@ -341,7 +341,7 @@ context('Side Window > Mission Form > Main Form', () => {
   })
 
   it('Should close an existing mission', () => {
-    editSideWindowMissionListMissionWithId(2, SeaFront.MEMN)
+    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
 
     cy.intercept('POST', '/api/v1/missions/2', {
       body: {

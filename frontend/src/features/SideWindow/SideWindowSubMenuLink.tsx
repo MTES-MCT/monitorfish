@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
 
-import type { SeaFront } from '../../constants'
+import type { SeaFrontGroup } from '../../constants'
 import type { MenuItem } from '../../types'
 import type { CSSProperties } from 'react'
 import type { Promisable } from 'type-fest'
@@ -12,9 +12,9 @@ export type SideWindowSubMenuLinkProps = {
   isOneLine?: boolean
   isOpen: boolean
   isSelected: boolean
-  menu: MenuItem<SeaFront>
+  menu: MenuItem<SeaFrontGroup>
   number: number
-  setSelectedSubMenu: (nextSubMenu: MenuItem<SeaFront | string>) => Promisable<void>
+  setSelectedSubMenu: (nextSubMenu: MenuItem<SeaFrontGroup | string>) => Promisable<void>
 }
 
 /**

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { omit, remove, update } from 'ramda'
 
-import { SeaFront } from '../../constants'
+import { SeaFrontGroup } from '../../constants'
 import { getMissionFormInitialValues } from '../../features/SideWindow/MissionForm/utils'
 import { MissionDateRangeFilter, MissionFilterType } from '../../features/SideWindow/MissionList/types'
 import { FrontendError } from '../../libs/FrontendError'
@@ -18,7 +18,7 @@ export interface MissionState {
   draftId: Mission.Mission['id'] | undefined
   editedDraftActionIndex: number | undefined
   listFilterValues: FilterValues
-  listSeaFront: SeaFront
+  listSeaFront: SeaFrontGroup
   selectedMissionActionGeoJSON: GeoJSON.GeoJson | undefined
   selectedMissionGeoJSON: GeoJSON.GeoJson | undefined
 }
@@ -29,7 +29,7 @@ const INITIAL_STATE: MissionState = {
   listFilterValues: {
     [MissionFilterType.DATE_RANGE]: MissionDateRangeFilter.CURRENT_MONTH
   },
-  listSeaFront: SeaFront.MED,
+  listSeaFront: SeaFrontGroup.MED,
   selectedMissionActionGeoJSON: undefined,
   selectedMissionGeoJSON: undefined
 }
@@ -184,7 +184,7 @@ const missionSlice = createSlice({
     /**
      * Set sea front filter in missions list
      */
-    setListSeaFront(state, action: PayloadAction<SeaFront>) {
+    setListSeaFront(state, action: PayloadAction<SeaFrontGroup>) {
       state.listSeaFront = action.payload
     },
 

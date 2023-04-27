@@ -1,4 +1,4 @@
-import type { SeaFront } from '../../../constants'
+import type { SeaFrontGroup } from '../../../constants'
 import type { ControlUnit } from '../../types/controlUnit'
 import type { GeoJSON } from '../../types/GeoJSON'
 import type { MissionAction } from '../../types/missionAction'
@@ -9,7 +9,7 @@ export namespace Mission {
     closedBy?: string
     controlUnits: ControlUnit.ControlUnit[]
     endDateTimeUtc?: string
-    facade?: SeaFront
+    facade?: SeaFrontGroup
     geom?: GeoJSON.MultiPolygon
     id: number
     isClosed: boolean

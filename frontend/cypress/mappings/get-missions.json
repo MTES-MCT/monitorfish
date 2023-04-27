@@ -4,7 +4,7 @@
     "urlPath": "/api/v1/missions",
     "queryParameters": {
       "startedAfterDateTime": {
-        "matches": "(.|\\s)*\\S(.|\\s)*"
+        "matches": ".*"
       }
     }
   },

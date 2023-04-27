@@ -28,7 +28,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         val controls = jpaMissionActionsRepository.findVesselMissionActionsAfterDateTime(1, dateTime)
 
         // Then
-        assertThat(controls).hasSize(5)
+        assertThat(controls).hasSize(6)
     }
 
     @Test

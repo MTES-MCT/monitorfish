@@ -23,6 +23,9 @@ context('Side Window > Mission Form > Land Control', () => {
     // Date et heure du contrôle
     // TODO Add this test.
 
+    // Lieu du contrôle
+    cy.fill('Lieu du contrôle', 'Free Port')
+
     // Obligations déclaratives et autorisations de pêche
     cy.fill('Bonne émission VMS', 'Oui')
     cy.fill('Bonne émission AIS', 'Non')
@@ -143,6 +146,8 @@ context('Side Window > Mission Form > Land Control', () => {
         otherInfractions: [
           { comments: 'Une observation sur l’infraction autre.', infractionType: 'WITHOUT_RECORD', natinf: 27689 }
         ],
+        portLocode: 'AEFRP',
+        portName: 'Free Port',
         segments: [{ segment: 'SWW01/02/03', segmentName: 'Bottom trawls' }],
         seizureAndDiversion: true,
         seizureAndDiversionComments: null,

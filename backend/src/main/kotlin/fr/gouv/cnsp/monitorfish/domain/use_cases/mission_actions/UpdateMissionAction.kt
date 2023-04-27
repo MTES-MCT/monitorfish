@@ -13,8 +13,10 @@ class UpdateMissionAction(private val missionActionsRepository: MissionActionsRe
             MissionActionType.LAND_CONTROL,
             MissionActionType.LAND_CONTROL,
         )
-        require(controlRequiringVesselId.any { it == action.actionType && action.vesselId != null }) {
-            "A control must specify a vessel: the `vesselId` must be given."
+        if (controlRequiringVesselId.any { it == action.actionType }) {
+            require(action.vesselId != null) {
+                "A control must specify a vessel: the `vesselId` must be given."
+            }
         }
 
         val actionWithId = action.copy(id = actionId)

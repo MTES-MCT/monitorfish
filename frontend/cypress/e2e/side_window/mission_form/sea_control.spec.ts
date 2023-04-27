@@ -11,8 +11,11 @@ context('Side Window > Mission Form > Sea Control', () => {
   })
 
   it('Should fill the form and send the expected data to the API', () => {
+    const getSaveButton = () => cy.get('button').contains('Enregistrer').parent()
     // -------------------------------------------------------------------------
     // Form
+
+    getSaveButton().should('be.disabled')
 
     cy.get('input[placeholder="Rechercher un navire..."]').type('malot')
     cy.contains('mark', 'MALOT').click()

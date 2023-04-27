@@ -45,7 +45,7 @@ context('VesselSearch', () => {
     cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).eq(1).contains('PHENOMENE')
 
     // Reload page
-    cy.wait(200)
+    cy.wait(500)
     cy.reload()
     cy.get('*[data-cy^="first-loader"]', { timeout: 10000 }).should('not.exist')
 

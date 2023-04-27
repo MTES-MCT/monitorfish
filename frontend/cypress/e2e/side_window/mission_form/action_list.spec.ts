@@ -64,7 +64,7 @@ context('Side Window > Mission Form > Action List', () => {
         segments: [],
         seizureAndDiversion: false,
         seizureAndDiversionComments: null,
-        separateStowageOfPreservedSpecies: false,
+        separateStowageOfPreservedSpecies: 'NO',
         speciesInfractions: [],
         speciesObservations: null,
         speciesOnboard: [],

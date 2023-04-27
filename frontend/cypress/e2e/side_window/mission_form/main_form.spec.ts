@@ -293,7 +293,7 @@ context('Side Window > Mission Form > Main Form', () => {
         ],
         seizureAndDiversion: true,
         seizureAndDiversionComments: 'Saisie de la pêche',
-        separateStowageOfPreservedSpecies: true,
+        separateStowageOfPreservedSpecies: 'YES',
         speciesInfractions: [
           { comments: 'Sous taille de 8cm', infractionType: 'WITHOUT_RECORD', natinf: 28346, speciesSeized: true }
         ],

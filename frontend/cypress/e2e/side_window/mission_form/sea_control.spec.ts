@@ -147,7 +147,7 @@ context('Side Window > Mission Form > Sea Control', () => {
         segments: [],
         seizureAndDiversion: true,
         seizureAndDiversionComments: null,
-        separateStowageOfPreservedSpecies: true,
+        separateStowageOfPreservedSpecies: 'YES',
         speciesInfractions: [
           {
             comments: 'Une observation sur l’infraction espèce.',
@@ -166,7 +166,7 @@ context('Side Window > Mission Form > Sea Control', () => {
         userTrigram: 'Marlin',
         vesselId: 2,
         vesselName: 'MALOTRU',
-        vesselTargeted: true
+        vesselTargeted: 'YES'
       })
       assert.isString(interception.request.body.actionDatetimeUtc)
 
@@ -175,9 +175,11 @@ context('Side Window > Mission Form > Sea Control', () => {
   })
 
   it('Should fill the form for a vessel with logbook and prefill the gears, species, fao areas and segments fields', () => {
+    const getSaveButton = () => cy.get('button').contains('Enregistrer').parent()
     // -------------------------------------------------------------------------
     // Form
 
+    getSaveButton().should('be.disabled')
     cy.get('input[placeholder="Rechercher un navire..."]').type('pheno')
     cy.contains('mark', 'PHENO').click()
 
@@ -185,6 +187,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.fill('Saisi par', 'Gaumont')
     cy.wait(500)
+    getSaveButton().should('not.be.disabled')
 
     // -------------------------------------------------------------------------
     // Request
@@ -257,7 +260,7 @@ context('Side Window > Mission Form > Sea Control', () => {
         userTrigram: 'Gaumont',
         vesselId: 1,
         vesselName: 'PHENOMENE',
-        vesselTargeted: false
+        vesselTargeted: 'NO'
       })
       assert.isString(interception.request.body.actionDatetimeUtc)
 

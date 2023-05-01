@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import Overlay from 'ol/Overlay'
-import VesselTrackCard from '../cards/VesselTrackCard'
-import { COLORS } from '../../../constants/constants'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from './Overlay'
+import VesselTrackCard from './VesselTrackCard'
+import { COLORS } from '../../../../constants/constants'
+import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../Overlay'
 
 const overlayBoxSize = 240
 const margins = {
@@ -16,7 +16,7 @@ const margins = {
   yBottom: -170
 }
 
-const VesselTrackCardOverlay = ({ map, feature }) => {
+const VesselTrackOverlay = ({ map, feature }) => {
   const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
   const overlayRef = useRef(null)
   const overlayObjectRef = useRef(null)
@@ -90,4 +90,4 @@ const VesselTrackCardOverlayComponent = styled.div`
   border-radius: 2px;
   z-index: 300;
 `
-export default VesselTrackCardOverlay
+export default VesselTrackOverlay

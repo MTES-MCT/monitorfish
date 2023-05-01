@@ -16,7 +16,7 @@ data class MissionActionDataOutput(
     val flightGoals: List<FlightGoal> = listOf(),
     val missionId: Int,
     val actionType: MissionActionType,
-    val actionDatetimeUtc: ZonedDateTime? = null,
+    val actionDatetimeUtc: ZonedDateTime,
     val emitsVms: ControlCheck? = null,
     val emitsAis: ControlCheck? = null,
     val logbookMatchesActivity: ControlCheck? = null,

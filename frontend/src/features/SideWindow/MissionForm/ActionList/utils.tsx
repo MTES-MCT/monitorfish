@@ -1,4 +1,4 @@
-import { getUtcizedDayjs } from '@mtes-mct/monitor-ui'
+import dayjs from 'dayjs'
 import styled from 'styled-components'
 
 import { MissionAction } from '../../../../domain/types/missionAction'
@@ -48,7 +48,7 @@ export function getMissionActionInfractionsFromMissionActionFromFormValues(
 }
 
 export function getMissionActionFormInitialValues(type: MissionAction.MissionActionType): MissionActionFormValues {
-  const actionDatetimeUtc = getUtcizedDayjs().startOf('minute').toISOString()
+  const actionDatetimeUtc = dayjs().startOf('minute').toISOString()
 
   return {
     actionDatetimeUtc,

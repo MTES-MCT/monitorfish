@@ -225,7 +225,7 @@ const TableBody = styled.div.attrs(() => ({
   color: ${p => p.theme.color.gunMetal};
   display: flex;
   flex-direction: column;
-  max-height: 410px;
+  max-height: 650px;
   overflow-y: auto;
 
   > div {

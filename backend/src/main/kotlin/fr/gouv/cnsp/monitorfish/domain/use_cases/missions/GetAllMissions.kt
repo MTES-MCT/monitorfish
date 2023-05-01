@@ -7,6 +7,9 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
 import java.time.ZonedDateTime
 
+/**
+ * Get all missions and related action: actions query (`findMissionActionsIn`) is chunked by `missionsActionsChunkSize`
+ */
 @UseCase
 class GetAllMissions(
     private val missionRepository: MissionRepository,
@@ -43,7 +46,9 @@ class GetAllMissions(
             .flatten()
 
         return missions.map { mission ->
-            val missionActions = allMissionsActions.filter { it.missionId == mission.id }
+            val missionActions = allMissionsActions
+                .filter { it.missionId == mission.id }
+                .sortedByDescending { it.actionDatetimeUtc }
 
             return@map MissionAndActions(mission, missionActions)
         }

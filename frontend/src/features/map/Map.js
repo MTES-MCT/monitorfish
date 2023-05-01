@@ -14,12 +14,12 @@ import { RegulatoryPreviewLayer } from './layers/RegulatoryPreviewLayer'
 import MeasurementLayer from './layers/MeasurementLayer'
 import MapHistory from './MapHistory'
 import { VesselCardOverlay } from './overlays/VesselCardOverlay'
-import VesselTrackCardOverlay from './overlays/VesselTrackCardOverlay'
-import { TrackTypeCardOverlay } from './overlays/TrackTypeCardOverlay'
+import VesselTrackOverlay from './overlays/VesselTrackOverlay'
+import { TrackTypeOverlay } from './overlays/TrackTypeOverlay'
 import { MapVesselClickAndAnimationHandler } from './MapVesselClickAndAnimationHandler'
 import VesselEstimatedPositionLayer from './layers/VesselEstimatedPositionLayer'
 import VesselSelectedLayer from './layers/VesselSelectedLayer'
-import VesselEstimatedPositionCardOverlay from './overlays/VesselEstimatedPositionCardOverlay'
+import VesselEstimatedPositionOverlay from './overlays/VesselEstimatedPositionOverlay'
 import { VesselsLabelsLayer } from './layers/VesselsLabelsLayer'
 import InterestPointLayer from './layers/InterestPointLayer'
 import MapMenu from './MapMenu'
@@ -44,7 +44,7 @@ const IS_DEV_ENV = getEnvironmentVariable('REACT_APP_IS_DEV_ENV')
 
 const Map = () => {
   const { isAdmin } = useMainAppSelector(state => state.global)
-  const { areVesselsDisplayed } = useSelector(state => state.displayedComponent)
+  const { areVesselsDisplayed, isMissionsLayerDisplayed } = useSelector(state => state.displayedComponent)
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
   const [currentFeature, setCurrentFeature] = useState(null)
@@ -88,10 +88,10 @@ const Map = () => {
       <MeasurementLayer/>
       <FilterLayer/>
       {/** <></> can't be used to group condition as BaseMap needs the layers to be direct children **/}
-      {IS_DEV_ENV && isAdmin && <MissionLayer/>}
+      {IS_DEV_ENV && isAdmin && isMissionsLayerDisplayed && <MissionLayer/>}
+      {IS_DEV_ENV && isAdmin && <MissionsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>}
       {IS_DEV_ENV && isAdmin && <SelectedMissionLayer feature={currentFeature}/>}
       {IS_DEV_ENV && isAdmin && <MissionHoveredLayer feature={currentFeature}/>}
-      {IS_DEV_ENV && isAdmin && <MissionsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>}
       {IS_DEV_ENV && isAdmin && <MissionOverlay feature={currentFeature}/>}
       {IS_DEV_ENV && isAdmin && <SelectedMissionOverlay/>}
       {IS_DEV_ENV && isAdmin && <SelectedMissionActionsLayer/>}
@@ -110,9 +110,9 @@ const Map = () => {
       {areVesselsDisplayed && <VesselInfractionSuspicionLayer/>}
       {<VesselsTracksLayerMemoized/>}
       <VesselCardOverlay feature={currentFeature}/>
-      <TrackTypeCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>
-      <VesselEstimatedPositionCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>
-      <VesselTrackCardOverlay feature={currentFeature}/>
+      <TrackTypeOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>
+      <VesselEstimatedPositionOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>
+      <VesselTrackOverlay feature={currentFeature}/>
       {currentFeature && <LayerDetailsBox feature={currentFeature}/>}
       <InterestPointLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
       <RegulatoryPreviewLayer />

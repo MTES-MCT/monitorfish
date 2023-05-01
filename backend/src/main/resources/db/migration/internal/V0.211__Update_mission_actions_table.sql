@@ -1,12 +1,17 @@
+DELETE FROM mission_actions;
+
 ALTER TABLE mission_actions
     ALTER COLUMN separate_stowage_of_preserved_species TYPE VARCHAR(100);
 
 -- We need to drop the views `analytics_controls_full_data` and `analytics_controls` as the `vessel_targeted` column is used
 DROP MATERIALIZED VIEW analytics_controls_full_data;
-DROP view analytics_controls;
+DROP VIEW analytics_controls;
 
 ALTER TABLE mission_actions
     ALTER COLUMN vessel_targeted TYPE VARCHAR(100);
+
+ALTER TABLE mission_actions
+    ALTER COLUMN action_datetime_utc TYPE timestamp with time zone;
 
 -- We recreate the view `analytics_controls_full_data`
 CREATE MATERIALIZED VIEW public.analytics_controls_full_data AS

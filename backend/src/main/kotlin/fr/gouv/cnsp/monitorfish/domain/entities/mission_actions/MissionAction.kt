@@ -14,7 +14,7 @@ data class MissionAction(
     val flagState: String? = null,
     val faoAreas: List<String> = listOf(),
     val actionType: MissionActionType,
-    val actionDatetimeUtc: ZonedDateTime? = null,
+    val actionDatetimeUtc: ZonedDateTime,
     val emitsVms: ControlCheck? = null,
     val emitsAis: ControlCheck? = null,
     val flightGoals: List<FlightGoal> = listOf(),

@@ -15,12 +15,12 @@ import getAllSpecies from '../../domain/use_cases/species/getAllSpecies'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { EmptyResult } from '../commonStyles/Text.style'
-import RegulatoryZoneMetadata from '../LayersSidebar/RegulatoryZones/RegulatoryZoneMetadata'
 import { BaseMap } from '../map/BaseMap'
 import { AdministrativeLayers } from '../map/layers/AdministrativeLayers'
 import { BaseLayer } from '../map/layers/BaseLayer'
 import { RegulatoryLayers } from '../map/layers/RegulatoryLayers'
 import { RegulatoryPreviewLayer } from '../map/layers/RegulatoryPreviewLayer'
+import RegulatoryZoneMetadata from '../MapButtons/LayersSidebar/RegulatoryZones/RegulatoryZoneMetadata'
 
 export function Backoffice() {
   const [foundRegulatoryZonesByRegTerritory, setFoundRegulatoryZonesByRegTerritory] = useState({})

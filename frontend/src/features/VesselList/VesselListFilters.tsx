@@ -11,7 +11,7 @@ import { getZonesAndSubZonesPromises } from '../../domain/use_cases/layer/admini
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { ReactComponent as PolygonFilterSVG } from '../icons/Filtre_zone_polygone.svg'
 import { ReactComponent as BoxFilterSVG } from '../icons/Filtre_zone_rectangle.svg'
-import FilterTag from '../map/tools/vessel_filters/FilterTag'
+import FilterTag from '../MapButtons/VesselFilters/FilterTag'
 
 Countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 

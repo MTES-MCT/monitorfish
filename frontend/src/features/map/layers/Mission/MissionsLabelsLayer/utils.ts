@@ -21,13 +21,13 @@ export function getFeaturesAndLabels(featureIdToCoordinates, feature, labelLineF
 }
 
 export function getLabelsOfFeaturesInExtent(
-  isAdmin,
+  isHidden,
   vectorSource,
   missionsLayerSource,
   extent,
   featureIdToCoordinates
 ) {
-  if (!isAdmin) {
+  if (isHidden) {
     return []
   }
 

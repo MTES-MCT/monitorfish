@@ -26,7 +26,7 @@ export function MapToolButton({
   const { healthcheckTextWarning, previewFilteredVesselsMode, rightMenuIsOpen } = useMainAppSelector(
     state => state.global
   )
-  const isRightMenuShrinked = !rightMenuIsOpen
+  const isRightMenuShrinked = !rightMenuIsOpen && !isLeftButton
 
   return (
     <StyledMapToolButton

@@ -42,6 +42,7 @@ export function MissionsMenu() {
             <Title>Missions et contrôles</Title>
             <ToggleMissionsButton
               accent={Accent.TERTIARY}
+              data-cy="toggle-mission-layer"
               Icon={isMissionsLayerDisplayed ? Icon.Hide : Icon.Display}
               onClick={toggleMissionsLayer}
               size={Size.NORMAL}
@@ -58,7 +59,7 @@ export function MissionsMenu() {
         </MissionsMenuWrapper>
       </MissionMenuBox>
       <MissionMenuButton
-        dataCy="missions-menu"
+        dataCy="missions-map-button"
         isLeftButton
         isOpen={leftBoxOpened === LeftBoxOpened.MISSIONS}
         onClick={toggleMissionsMenu}

@@ -151,7 +151,7 @@ const MeasurementOptions = styled(MapComponentStyle)<{
   top: 249px;
   transition: all 0.5s;
   width: 175px;
-  z-index: 999;
+  z-index: 1000;
 `
 
 const MeasurementButton = styled(MapToolButton)``

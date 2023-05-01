@@ -44,7 +44,7 @@ const IS_DEV_ENV = getEnvironmentVariable('REACT_APP_IS_DEV_ENV')
 
 const Map = () => {
   const { isAdmin } = useMainAppSelector(state => state.global)
-  const { areVesselsDisplayed } = useSelector(state => state.displayedComponent)
+  const { areVesselsDisplayed, isMissionsLayerDisplayed } = useSelector(state => state.displayedComponent)
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
   const [currentFeature, setCurrentFeature] = useState(null)
@@ -88,10 +88,10 @@ const Map = () => {
       <MeasurementLayer/>
       <FilterLayer/>
       {/** <></> can't be used to group condition as BaseMap needs the layers to be direct children **/}
-      {IS_DEV_ENV && isAdmin && <MissionLayer/>}
+      {IS_DEV_ENV && isAdmin && isMissionsLayerDisplayed && <MissionLayer/>}
+      {IS_DEV_ENV && isAdmin && <MissionsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>}
       {IS_DEV_ENV && isAdmin && <SelectedMissionLayer feature={currentFeature}/>}
       {IS_DEV_ENV && isAdmin && <MissionHoveredLayer feature={currentFeature}/>}
-      {IS_DEV_ENV && isAdmin && <MissionsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>}
       {IS_DEV_ENV && isAdmin && <MissionOverlay feature={currentFeature}/>}
       {IS_DEV_ENV && isAdmin && <SelectedMissionOverlay/>}
       {IS_DEV_ENV && isAdmin && <SelectedMissionActionsLayer/>}

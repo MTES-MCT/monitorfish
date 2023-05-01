@@ -17,6 +17,7 @@ import type { MutableRefObject } from 'react'
 
 export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
   const { isAdmin } = useMainAppSelector(state => state.global)
+  const { isMissionsLayerDisplayed } = useMainAppSelector(state => state.displayedComponent)
 
   const [featuresAndLabels, setFeaturesAndLabels] = useState<
     {
@@ -82,9 +83,9 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
   }, [map, getLayer])
 
   const addLabelsToAllFeaturesInExtent = useDebouncedCallback(
-    (_isAdmin, vectorSource, missionsLayerSource, extent, _lineFeatureIdToCoordinates, _previousFeaturesAndLabels) => {
+    (isHidden, vectorSource, missionsLayerSource, extent, _lineFeatureIdToCoordinates, _previousFeaturesAndLabels) => {
       const nextFeaturesAndLabels = getLabelsOfFeaturesInExtent(
-        _isAdmin,
+        isHidden,
         vectorSource,
         missionsLayerSource,
         extent,
@@ -110,8 +111,9 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
       return
     }
 
+    const isHidden = !isAdmin || !isMissionsLayerDisplayed
     addLabelsToAllFeaturesInExtent(
-      isAdmin,
+      isHidden,
       getVectorSource(),
       missionsLayerSourceRef?.current,
       map.getView().calculateExtent(),
@@ -120,6 +122,7 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
     )
   }, [
     isAdmin,
+    isMissionsLayerDisplayed,
     map,
     isZooming,
     lineFeatureIdToCoordinates,

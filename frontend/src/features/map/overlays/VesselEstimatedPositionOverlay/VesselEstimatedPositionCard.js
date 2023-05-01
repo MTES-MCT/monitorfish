@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
+import { COLORS } from '../../../../constants/constants'
 
 const VesselEstimatedPositionCard = ({ coordinates }) => {
   return (
@@ -25,7 +25,7 @@ const Text = styled.div`
 const TrianglePointer = styled.div`
   margin-left: auto;
   margin-right: auto;
-  height: auto; 
+  height: auto;
   width: auto;
 `
 

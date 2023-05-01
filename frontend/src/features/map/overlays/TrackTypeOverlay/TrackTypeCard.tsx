@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { COLORS } from '../../../constants/constants'
+import { COLORS } from '../../../../constants/constants'
 
 export function TrackTypeCard({ trackType }) {
   return (

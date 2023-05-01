@@ -2,11 +2,11 @@ import Overlay from 'ol/Overlay'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../constants/constants'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { TrackTypeCard } from '../cards/TrackTypeCard'
+import { TrackTypeCard } from './TrackTypeCard'
+import { COLORS } from '../../../../constants/constants'
+import { LayerProperties } from '../../../../domain/entities/layers/constants'
 
-export function TrackTypeCardOverlay({ feature, map, pointerMoveEventPixel }) {
+export function TrackTypeOverlay({ feature, map, pointerMoveEventPixel }) {
   const [trackTypeToShowOnCard, setTrackTypeToShowOnCard] = useState(null)
   const overlayRef = useRef<HTMLDivElement | null>(null)
   const overlayObjectRef = useRef<Overlay | null>(null)

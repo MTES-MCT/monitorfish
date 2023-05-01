@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import Overlay from 'ol/Overlay'
-import { COLORS } from '../../../constants/constants'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
-import VesselEstimatedPositionCard from '../cards/VesselEstimatedPositionCard'
-import { getCoordinates } from '../../../coordinates'
-import { WSG84_PROJECTION } from '../../../domain/entities/map/constants'
+import { COLORS } from '../../../../constants/constants'
+import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import VesselEstimatedPositionCard from './VesselEstimatedPositionCard'
+import { getCoordinates } from '../../../../coordinates'
+import { WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
 import { useSelector } from 'react-redux'
 
-const VesselEstimatedPositionCardOverlay = ({ map, pointerMoveEventPixel, feature }) => {
+const VesselEstimatedPositionOverlay = ({ map, pointerMoveEventPixel, feature }) => {
   const { coordinatesFormat } = useSelector(state => state.map)
   const [coordinates, setCoordinates] = useState(null)
   const overlayRef = useRef(null)
@@ -74,4 +74,4 @@ const VesselEstimatedPositionCardOverlayComponent = styled.div`
   z-index: 100;
 `
 
-export default VesselEstimatedPositionCardOverlay
+export default VesselEstimatedPositionOverlay

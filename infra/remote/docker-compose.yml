@@ -1,7 +1,7 @@
 version: '3'
 services:
   db:
-    image: timescale/timescaledb-postgis:1.7.4-pg11
+    image: timescale/timescaledb-postgis:1.7.5-pg11
     container_name: monitorfish_database
     user: ":${MONITORFISH_LOGS_AND_BACKUPS_GID}"
     environment:
@@ -46,7 +46,7 @@ services:
 
   geoserver:
     container_name: monitorfish_geoserver
-    image: kartoza/geoserver:2.18.0
+    image: kartoza/geoserver:2.23.0
     restart: always
     ports:
       - 8001:8080

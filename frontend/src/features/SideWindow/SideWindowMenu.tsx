@@ -29,7 +29,7 @@ export function SideWindowMenu({ selectedMenu }: SideWindowMenuProps) {
         <MenuButton
           aria-label={SideWindowMenuKey.MISSION_LIST}
           data-cy="side-window-menu-mission-list"
-          Icon={Icon.Target}
+          Icon={Icon.MissionAction}
           iconSize={26}
           onClick={() => dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_LIST))}
           role="menuitem"

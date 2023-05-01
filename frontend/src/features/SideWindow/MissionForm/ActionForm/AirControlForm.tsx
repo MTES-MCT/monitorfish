@@ -1,10 +1,11 @@
-import { FormikDatePicker, FormikEffect, FormikTextarea, Icon, MultiZoneEditor } from '@mtes-mct/monitor-ui'
+import { FormikDatePicker, FormikEffect, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash'
 import { useMemo } from 'react'
 import * as Yup from 'yup'
 
 import { MissionActionInfractionSchema } from './shared/constants'
+import { FormikCoordinatesPicker } from './shared/FormikCoordinatesPicker'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
@@ -56,15 +57,7 @@ export function AirControlForm({ initialValues, onChange }: AirControlFormProps)
             withTime
           />
 
-          <MultiZoneEditor
-            addButtonLabel="Ajouter un point de contrôle"
-            initialZone={{
-              name: 'Nouvelle zone'
-            }}
-            isLight
-            label="Lieu du contrôle"
-            labelPropName="name"
-          />
+          <FormikCoordinatesPicker />
 
           <FormikMultiInfractionPicker
             addButtonLabel="Ajouter une infraction"

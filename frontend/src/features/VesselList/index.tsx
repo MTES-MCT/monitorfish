@@ -34,8 +34,8 @@ import { PrimaryButton, SecondaryButton } from '../commonStyles/Buttons.style'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { ReactComponent as VesselListSVG } from '../icons/Icone_liste_navires.svg'
 import { ReactComponent as PreviewSVG } from '../icons/Oeil_apercu_carte.svg'
-import { MapToolButton } from '../map/tools/MapToolButton'
-import SaveVesselFiltersModal from '../map/tools/vessel_filters/SaveVesselFiltersModal'
+import { MapToolButton } from '../MapButtons/shared/MapToolButton'
+import SaveVesselFiltersModal from '../MapButtons/VesselFilters/SaveVesselFiltersModal'
 
 import type { VesselEnhancedLastPositionWebGLObject } from '../../domain/entities/vessel/types'
 

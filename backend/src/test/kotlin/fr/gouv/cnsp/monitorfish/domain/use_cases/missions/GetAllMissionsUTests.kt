@@ -71,6 +71,9 @@ class GetAllMissionsUTests {
         assertThat(missionsAndActions).hasSize(20)
         assertThat(missionsAndActions.first().actions).hasSize(20)
         assertThat(missionsAndActions.last().actions).hasSize(1)
+        val firstMissionActions = missionsAndActions.first().actions
+        assertThat(firstMissionActions.first().actionDatetimeUtc)
+            .isAfter(firstMissionActions.last().actionDatetimeUtc)
 
         argumentCaptor<List<Int>>().apply {
             verify(missionActionsRepository, times(4)).findMissionActionsIn(capture())

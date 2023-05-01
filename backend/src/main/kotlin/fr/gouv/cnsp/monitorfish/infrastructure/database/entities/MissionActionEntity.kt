@@ -8,7 +8,6 @@ import jakarta.persistence.*
 import org.hibernate.annotations.Type
 import java.time.Instant
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 @Entity
 @Table(name = "mission_actions")
@@ -43,7 +42,7 @@ class MissionActionEntity(
     @Enumerated(EnumType.STRING)
     var actionType: MissionActionType,
     @Column(name = "action_datetime_utc")
-    var actionDatetimeUtc: Instant? = null,
+    var actionDatetimeUtc: Instant,
     @Column(name = "emits_vms")
     @Enumerated(EnumType.STRING)
     var emitsVms: ControlCheck? = null,
@@ -120,52 +119,54 @@ class MissionActionEntity(
     @Column(name = "is_deleted")
     var isDeleted: Boolean,
 ) {
+
     companion object {
-        fun fromMissionAction(mapper: ObjectMapper, missionAction: MissionAction) = MissionActionEntity(
-            id = missionAction.id,
-            missionId = missionAction.missionId,
-            vesselId = missionAction.vesselId,
-            vesselName = missionAction.vesselName,
-            internalReferenceNumber = missionAction.internalReferenceNumber,
-            externalReferenceNumber = missionAction.externalReferenceNumber,
-            ircs = missionAction.ircs,
-            flagState = missionAction.flagState,
-            faoAreas = missionAction.faoAreas,
-            flightGoals = missionAction.flightGoals.map { it.value },
-            actionType = missionAction.actionType,
-            actionDatetimeUtc = missionAction.actionDatetimeUtc?.toInstant(),
-            emitsVms = missionAction.emitsVms,
-            emitsAis = missionAction.emitsAis,
-            logbookMatchesActivity = missionAction.logbookMatchesActivity,
-            licencesMatchActivity = missionAction.licencesMatchActivity,
-            speciesWeightControlled = missionAction.speciesWeightControlled,
-            speciesSizeControlled = missionAction.speciesSizeControlled,
-            separateStowageOfPreservedSpecies = missionAction.separateStowageOfPreservedSpecies,
-            logbookInfractions = mapper.writeValueAsString(missionAction.logbookInfractions),
-            licencesAndLogbookObservations = missionAction.licencesAndLogbookObservations,
-            gearInfractions = mapper.writeValueAsString(missionAction.gearInfractions),
-            speciesInfractions = mapper.writeValueAsString(missionAction.speciesInfractions),
-            speciesObservations = missionAction.speciesObservations,
-            seizureAndDiversion = missionAction.seizureAndDiversion,
-            otherInfractions = mapper.writeValueAsString(missionAction.otherInfractions),
-            numberOfVesselsFlownOver = missionAction.numberOfVesselsFlownOver,
-            unitWithoutOmegaGauge = missionAction.unitWithoutOmegaGauge,
-            controlQualityComments = missionAction.controlQualityComments,
-            feedbackSheetRequired = missionAction.feedbackSheetRequired,
-            userTrigram = missionAction.userTrigram,
-            segments = mapper.writeValueAsString(missionAction.segments),
-            facade = missionAction.facade,
-            longitude = missionAction.longitude,
-            latitude = missionAction.latitude,
-            portLocode = missionAction.portLocode,
-            vesselTargeted = missionAction.vesselTargeted,
-            seizureAndDiversionComments = missionAction.seizureAndDiversionComments,
-            otherComments = missionAction.otherComments,
-            gearOnboard = mapper.writeValueAsString(missionAction.gearOnboard),
-            speciesOnboard = mapper.writeValueAsString(missionAction.speciesOnboard),
-            isFromPoseidon = false,
-            isDeleted = missionAction.isDeleted,
-        )
+        fun fromMissionAction(mapper: ObjectMapper, missionAction: MissionAction): MissionActionEntity =
+            MissionActionEntity(
+                id = missionAction.id,
+                missionId = missionAction.missionId,
+                vesselId = missionAction.vesselId,
+                vesselName = missionAction.vesselName,
+                internalReferenceNumber = missionAction.internalReferenceNumber,
+                externalReferenceNumber = missionAction.externalReferenceNumber,
+                ircs = missionAction.ircs,
+                flagState = missionAction.flagState,
+                faoAreas = missionAction.faoAreas,
+                flightGoals = missionAction.flightGoals.map { it.value },
+                actionType = missionAction.actionType,
+                actionDatetimeUtc = missionAction.actionDatetimeUtc.toInstant(),
+                emitsVms = missionAction.emitsVms,
+                emitsAis = missionAction.emitsAis,
+                logbookMatchesActivity = missionAction.logbookMatchesActivity,
+                licencesMatchActivity = missionAction.licencesMatchActivity,
+                speciesWeightControlled = missionAction.speciesWeightControlled,
+                speciesSizeControlled = missionAction.speciesSizeControlled,
+                separateStowageOfPreservedSpecies = missionAction.separateStowageOfPreservedSpecies,
+                logbookInfractions = mapper.writeValueAsString(missionAction.logbookInfractions),
+                licencesAndLogbookObservations = missionAction.licencesAndLogbookObservations,
+                gearInfractions = mapper.writeValueAsString(missionAction.gearInfractions),
+                speciesInfractions = mapper.writeValueAsString(missionAction.speciesInfractions),
+                speciesObservations = missionAction.speciesObservations,
+                seizureAndDiversion = missionAction.seizureAndDiversion,
+                otherInfractions = mapper.writeValueAsString(missionAction.otherInfractions),
+                numberOfVesselsFlownOver = missionAction.numberOfVesselsFlownOver,
+                unitWithoutOmegaGauge = missionAction.unitWithoutOmegaGauge,
+                controlQualityComments = missionAction.controlQualityComments,
+                feedbackSheetRequired = missionAction.feedbackSheetRequired,
+                userTrigram = missionAction.userTrigram,
+                segments = mapper.writeValueAsString(missionAction.segments),
+                facade = missionAction.facade,
+                longitude = missionAction.longitude,
+                latitude = missionAction.latitude,
+                portLocode = missionAction.portLocode,
+                vesselTargeted = missionAction.vesselTargeted,
+                seizureAndDiversionComments = missionAction.seizureAndDiversionComments,
+                otherComments = missionAction.otherComments,
+                gearOnboard = mapper.writeValueAsString(missionAction.gearOnboard),
+                speciesOnboard = mapper.writeValueAsString(missionAction.speciesOnboard),
+                isFromPoseidon = false,
+                isDeleted = missionAction.isDeleted,
+            )
     }
 
     fun toMissionAction(mapper: ObjectMapper) = MissionAction(
@@ -180,7 +181,7 @@ class MissionActionEntity(
         faoAreas = faoAreas ?: listOf(),
         flightGoals = flightGoals?.map { FlightGoal.valueOf(it) } ?: listOf(),
         actionType = actionType,
-        actionDatetimeUtc = actionDatetimeUtc?.let { ZonedDateTime.from(it.atOffset(ZoneOffset.UTC)) },
+        actionDatetimeUtc = actionDatetimeUtc.atZone(ZoneOffset.UTC),
         emitsVms = emitsVms,
         emitsAis = emitsAis,
         logbookMatchesActivity = logbookMatchesActivity,

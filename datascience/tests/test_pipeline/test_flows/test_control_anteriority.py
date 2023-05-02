@@ -1,8 +1,9 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
 
 import pandas as pd
 import pytest
+import pytz
 from dateutil.relativedelta import relativedelta
 
 from src.pipeline.flows.control_anteriority import (
@@ -394,7 +395,7 @@ def loaded_control_anteriority() -> pd.DataFrame:
 
 def test_extract_last_5_years_controls(reset_test_data, last_years_controls):
 
-    now = datetime.utcnow()
+    now = pytz.utc.localize(datetime.utcnow())
     five_years = timedelta(days=5 * 366)
 
     controls = extract_last_years_controls.run(years=5)

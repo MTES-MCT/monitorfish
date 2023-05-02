@@ -5,6 +5,9 @@ import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionAndActions
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.APIMissionRepository
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 /**
@@ -16,6 +19,8 @@ class GetAllMissions(
     private val missionActionsRepository: MissionActionsRepository,
     private val databaseProperties: DatabaseProperties,
 ) {
+    private val logger: Logger = LoggerFactory.getLogger(GetAllMissions::class.java)
+
     fun execute(
         pageNumber: Int?,
         pageSize: Int?,
@@ -44,6 +49,7 @@ class GetAllMissions(
                 return@map missionActionsRepository.findMissionActionsIn(ids)
             }
             .flatten()
+        logger.info("Got ${allMissionsActions.size} mission actions associated to fetched missions.")
 
         return missions.map { mission ->
             val missionActions = allMissionsActions

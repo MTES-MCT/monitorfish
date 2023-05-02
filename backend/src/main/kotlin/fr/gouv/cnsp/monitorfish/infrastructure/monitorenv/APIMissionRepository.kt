@@ -64,9 +64,11 @@ class APIMissionRepository(
                 seaFronts=${seaFronts?.joinToString(",") ?: ""}
         """.trimIndent()
 
+        logger.info("Fetching missions at URL: $missionsUrl")
         return runBlocking {
             try {
                 val missions = apiClient.httpClient.get(missionsUrl).body<List<MissionDataResponse>>()
+                logger.info("Fetched ${missions.size}.")
 
                 return@runBlocking missions.map { it.toMission() }
             } catch (e: Exception) {

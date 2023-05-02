@@ -173,6 +173,7 @@ def transform_controls(controls: pd.DataFrame):
     ]
 
     controls[bool_cols] = zeros_ones_to_bools(controls[bool_cols])
+    controls["vessel_targeted"] = controls["vessel_targeted"].map({True: "YES", False: "NO"})
 
     # ---------------------------------------------------------------------------------
     # Transform gear control data

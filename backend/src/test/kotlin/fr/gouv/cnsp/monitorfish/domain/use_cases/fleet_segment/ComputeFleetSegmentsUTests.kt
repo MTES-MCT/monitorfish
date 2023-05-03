@@ -102,6 +102,22 @@ class ComputeFleetSegmentsUTests {
     }
 
     @Test
+    fun `execute Should return the segments associated to the AEFAT port When there is both port and fao areas given`() {
+        given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
+        BDDMockito.given(portRepository.find(eq("AEFAT"))).willReturn(
+            Port("AEFAT", "Al Jazeera Port", faoAreas = listOf("27.7.d", "27.7")),
+        )
+
+        // When
+        val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
+            .execute(listOf("27.8.c"), listOf("OTB", "OTT", "OTM"), listOf("HKE", "SOL"), portLocode = "AEFAT")
+
+        // Then
+        assertThat(segment).hasSize(1)
+        assertThat(segment.first().segment).isEqualTo("NWW01/02")
+    }
+
+    @Test
     fun `execute Should return the segments associated to the given longitude and latitude`() {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
         given(faoAreasRepository.findByIncluding(any())).willReturn(

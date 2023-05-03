@@ -105,8 +105,6 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.fill('Moyen 2', ['ALTAIR', 'ARIOLA'])
     cy.fill('Contact de l’unité 2', 'Bob 2')
 
-    // cy.fill('Lieu du contrôle', 'Free Port')
-
     cy.fill('CACEM : orientations, observations', 'Une note.')
     cy.fill('CNSP : orientations, observations', 'Une autre note.')
     cy.fill('Ouvert par', 'Nemo')

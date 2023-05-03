@@ -69,7 +69,6 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
     const getFleetSegmentsAsync = async () => {
       const declaredSpeciesOnboard = riskFactorApiQuery.data?.speciesOnboard
 
-      // TODO Add the port Locode
       const computedFleetSegments = await dispatch(
         getFleetSegments(
           declaredSpeciesOnboard,
@@ -77,7 +76,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
           values.speciesOnboard,
           values.longitude,
           values.latitude,
-          undefined
+          values.portLocode
         )
       )
 

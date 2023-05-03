@@ -1,5 +1,6 @@
 insert into ports (country_code_iso2, region, locode, port_name, latitude, longitude, is_active)
 values ('AD', null, 'ADALV', 'Andorra la Vella', 42.5, 1.01666666666667, true),
+       ('FR', null, 'FRZEG', 'Auray', 53.3543093, -10.8558547, true),
        ('AE', null, 'AEABU', 'Abu al Bukhoosh', 25.4833333333333, 53.05, true),
        ('AE', 'AZ', 'AEAUH', 'Abu Dhabi', 24.4666666666667, 54.0666666666667, false),
        ('AE', null, 'AEAMU', 'Abu Musa', 25.8666666666667, 55.0833333333333, true),

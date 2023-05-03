@@ -14,7 +14,6 @@ import { useNewWindow } from '../../../../../ui/NewWindow'
 import { FieldGroup } from '../../shared/FieldGroup'
 import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 
-import type { DeclaredLogbookGear } from '../../../../../domain/entities/vessel/types'
 import type { Gear } from '../../../../../domain/types/Gear'
 import type { MissionAction } from '../../../../../domain/types/missionAction'
 import type { MissionActionFormValues } from '../../types'
@@ -113,7 +112,11 @@ export function GearsField() {
       }
 
       const { gearOnboard } = riskFactorApiQuery.data
-      const nextGears = (gearOnboard as DeclaredLogbookGear[])
+      if (!gearOnboard) {
+        return
+      }
+
+      const nextGears = gearOnboard
         .map(gear => gearsByCode[gear.gear])
         .map(gear => ({
           comments: undefined,

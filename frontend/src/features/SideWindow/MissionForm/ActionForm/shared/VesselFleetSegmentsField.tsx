@@ -13,7 +13,6 @@ import { FrontendError } from '../../../../../libs/FrontendError'
 import { sortByAscendingValue } from '../../../../../utils/sortByAscendingValue'
 import { FieldsetGroup, FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 
-import type { DeclaredLogbookSpecies } from '../../../../../domain/entities/vessel/types'
 import type { MissionAction } from '../../../../../domain/types/missionAction'
 import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
@@ -51,7 +50,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
         return
       }
 
-      const declaredSpeciesOnboard: DeclaredLogbookSpecies[] = riskFactorApiQuery.data.speciesOnboard
+      const declaredSpeciesOnboard = riskFactorApiQuery.data.speciesOnboard
       const faoAreas = getFaoZonesFromSpeciesOnboard(declaredSpeciesOnboard || [])
 
       setFieldValue('faoAreas', faoAreas)
@@ -62,10 +61,6 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
   )
 
   useEffect(() => {
-    if (values.segments?.length) {
-      return
-    }
-
     const getFleetSegmentsAsync = async () => {
       const declaredSpeciesOnboard = riskFactorApiQuery.data?.speciesOnboard
 

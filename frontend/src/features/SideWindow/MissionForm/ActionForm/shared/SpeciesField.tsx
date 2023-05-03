@@ -16,7 +16,6 @@ import { FieldGroup } from '../../shared/FieldGroup'
 import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../shared/FieldsetGroupSeparator'
 
-import type { DeclaredLogbookSpecies } from '../../../../../domain/entities/vessel/types'
 import type { Specy } from '../../../../../domain/types/specy'
 import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
@@ -111,7 +110,11 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
         return
       }
 
-      const speciesOnBoard: DeclaredLogbookSpecies[] = riskFactorApiQuery.data.speciesOnboard
+      const speciesOnBoard = riskFactorApiQuery.data.speciesOnboard
+      if (!speciesOnBoard) {
+        return
+      }
+
       const speciesOnboardToAdd = speciesOnBoard.map(specy => ({
         controlledWeight: undefined,
         declaredWeight: specy.weight,

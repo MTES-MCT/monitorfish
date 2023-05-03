@@ -4,6 +4,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import prefect
+import pytz
 from dateutil.relativedelta import relativedelta
 from prefect import Flow, Parameter, case, task
 from prefect.executors import LocalDaskExecutor
@@ -259,7 +260,7 @@ def compute_control_rate_risk_factors(controls: pd.DataFrame) -> pd.DataFrame:
 
     controls_ = controls[columns].copy(deep=True)
 
-    now = datetime.utcnow()
+    now = pytz.utc.localize(datetime.utcnow())
 
     # Compute the number of "recent controls" of each vessen with a discount
     # coefficient on control dates and get the datetime of the last control of each
@@ -436,7 +437,10 @@ def compute_control_statistics(controls: pd.DataFrame) -> pd.DataFrame:
 
     control_statistics_3_years = (
         controls[
-            (controls.control_datetime_utc > datetime.utcnow() - relativedelta(years=3))
+            (
+                controls.control_datetime_utc
+                > pytz.utc.localize(datetime.utcnow()) - relativedelta(years=3)
+            )
         ]
         .groupby("vessel_id")["id"]
         .count()

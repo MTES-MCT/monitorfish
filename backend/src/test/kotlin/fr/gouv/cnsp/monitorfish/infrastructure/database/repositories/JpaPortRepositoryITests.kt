@@ -20,5 +20,6 @@ class JpaPortRepositoryITests : AbstractDBTests() {
         assertThat(activePorts).hasSize(17)
         assertThat(activePorts.first().locode).isEqualTo("ADALV")
         assertThat(activePorts.first().name).isEqualTo("Andorra la Vella")
+        assertThat(activePorts.first().faoAreas.first()).isEqualTo("27.8")
     }
 }

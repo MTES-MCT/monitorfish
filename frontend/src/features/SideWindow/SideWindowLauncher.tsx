@@ -1,3 +1,4 @@
+import { NewWindow } from '@mtes-mct/monitor-ui'
 import { useEffect, useRef } from 'react'
 import { batch } from 'react-redux'
 import { StyleSheetManager } from 'styled-components'
@@ -7,7 +8,6 @@ import { resetFocusOnPendingAlert } from '../../domain/shared_slices/Alert'
 import { closeSideWindow } from '../../domain/shared_slices/Global'
 import { useForceUpdate } from '../../hooks/useForceUpdate'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
-import { LegacyNewWindow } from '../../ui/NewWindow/LegacyNewWindow'
 
 import type { MutableRefObject } from 'react'
 
@@ -19,10 +19,10 @@ export function SideWindowLauncher() {
 
   return (
     <StyleSheetManager target={newWindowRef.current}>
-      <LegacyNewWindow
+      <NewWindow
         closeOnUnmount
         copyStyles
-        features={{ height: '1200px', scrollbars: true, width: window.innerWidth }}
+        features={{ height: 1200, width: window.innerWidth }}
         name="MonitorFish"
         onUnload={() => {
           batch(() => {
@@ -33,7 +33,7 @@ export function SideWindowLauncher() {
         title="MonitorFish"
       >
         <SideWindow ref={newWindowRef} isFromURL={false} />
-      </LegacyNewWindow>
+      </NewWindow>
     </StyleSheetManager>
   )
 }

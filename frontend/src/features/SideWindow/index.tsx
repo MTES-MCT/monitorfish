@@ -1,4 +1,4 @@
-import { THEME } from '@mtes-mct/monitor-ui'
+import { THEME, type NewWindowContextValue, NewWindowContext } from '@mtes-mct/monitor-ui'
 import { propEq } from 'ramda'
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
@@ -27,10 +27,8 @@ import { getAllCurrentReportings } from '../../domain/use_cases/reporting/getAll
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { usePrevious } from '../../hooks/usePrevious'
-import { NewWindowContext } from '../../ui/NewWindow'
 
 import type { MenuItem } from '../../types'
-import type { NewWindowContextValue } from '../../ui/NewWindow'
 import type { MutableRefObject, CSSProperties, ForwardedRef, HTMLAttributes } from 'react'
 
 export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
@@ -43,13 +41,13 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
   const { openedSideWindowTab } = useMainAppSelector(state => state.global)
 
   const [isFirstRender, setIsFirstRender] = useState(true)
+  const [isOverlayed, setIsOverlayed] = useState(false)
   const [isPreloading, setIsPreloading] = useState(true)
+  const [isSubmenuFixed, setIsSubmenuFixed] = useState(false)
   const [selectedSubMenu, setSelectedSubMenu] = useState<MenuItem<SeaFrontGroup | string>>(
     getSelectedSubMenu(openedSideWindowTab)
   )
   const [selectedTab, setSelectedTab] = useState(AlertAndReportingTab.ALERT)
-  const [isOverlayed, setIsOverlayed] = useState(false)
-  const [isSubmenuFixed, setIsSubmenuFixed] = useState(false)
 
   const openedBeaconMalfunctionInKanban = useMainAppSelector(
     state => state.beaconMalfunction.openedBeaconMalfunctionInKanban
@@ -71,7 +69,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
       newWindowContainerRef: wrapperRef.current
         ? (wrapperRef as MutableRefObject<HTMLDivElement>)
         : {
-            current: isFromURL ? undefined : window.document.createElement('div')
+            current: window.document.createElement('div')
           }
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps

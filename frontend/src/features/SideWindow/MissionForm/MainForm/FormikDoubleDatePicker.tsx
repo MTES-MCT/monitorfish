@@ -1,7 +1,5 @@
-import { FormikDatePicker } from '@mtes-mct/monitor-ui'
+import { FormikDatePicker, useNewWindow } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
-
-import { useNewWindow } from '../../../../ui/NewWindow'
 
 export function FormikDoubleDatePicker() {
   const { newWindowContainerRef } = useNewWindow()

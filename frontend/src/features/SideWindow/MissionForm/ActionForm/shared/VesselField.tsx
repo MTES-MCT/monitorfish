@@ -1,8 +1,8 @@
+import { useNewWindow } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { useNewWindow } from '../../../../../ui/NewWindow'
 import { VesselSearch } from '../../../../VesselSearch'
 
 import type { VesselIdentity } from '../../../../../domain/entities/vessel/types'

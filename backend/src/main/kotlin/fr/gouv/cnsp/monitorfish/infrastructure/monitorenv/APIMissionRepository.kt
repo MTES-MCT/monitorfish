@@ -62,7 +62,9 @@ class APIMissionRepository(
                 missionTypes=${missionTypes?.joinToString(",") ?: ""}&
                 missionStatus=${missionStatuses?.joinToString(",") ?: ""}&
                 seaFronts=${seaFronts?.joinToString(",") ?: ""}
-        """.trimIndent()
+        """ .trimIndent()
+            .replace("\n", "")
+            .replace(" ", "")
 
         logger.info("Fetching missions at URL: $missionsUrl")
         return runBlocking {

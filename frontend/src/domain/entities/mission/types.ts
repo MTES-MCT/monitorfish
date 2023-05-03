@@ -11,8 +11,10 @@ export namespace Mission {
     endDateTimeUtc?: string
     facade?: SeaFrontGroup
     geom?: GeoJSON.MultiPolygon
+    hasMissionOrder?: boolean | undefined
     id: number
     isClosed: boolean
+    isUnderJdp?: boolean | undefined
     missionSource: MissionSource
     missionTypes: MissionType[]
     observationsCacem?: string

@@ -53,7 +53,7 @@ export function MainForm({ initialValues, onChange }: MainFormProps) {
               <IsUnderJdpFormikCheckbox isUndefinedWhenDisabled label="Mission sous JDP" name="isUnderJdp" />
             </MultiCheckColumns>
 
-            <FormikMultiRadio isInline label="Ordre de mission" name="hasOrder" options={BOOLEAN_AS_OPTIONS} />
+            <FormikMultiRadio isInline label="Ordre de mission" name="hasMissionOrder" options={BOOLEAN_AS_OPTIONS} />
           </CustomFormBodyInnerWrapper>
 
           <FormikMultiControlUnitPicker name="controlUnits" />

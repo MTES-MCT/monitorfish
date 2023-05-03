@@ -1,5 +1,5 @@
-import { Accent, Button, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
-import { noop } from 'lodash'
+import { Accent, Button, Icon, IconButton, OPENLAYERS_PROJECTION, Size } from '@mtes-mct/monitor-ui'
+import { GeoJSON } from 'ol/format'
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
@@ -10,6 +10,7 @@ import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFrontGroup } from '../../../constants'
 import { missionActions } from '../../../domain/actions'
 import { useGetFilteredMissionsQuery } from '../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
+import { fitToExtent } from '../../../domain/shared_slices/Map'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { useTable } from '../../../hooks/useTable'
@@ -19,6 +20,7 @@ import { SideWindowMenuKey } from '../constants'
 import { SubMenu } from '../SubMenu'
 
 import type { Mission, MissionWithActions } from '../../../domain/entities/mission/types'
+import type { GeoJSON as GeoJSONType } from '../../../domain/types/GeoJSON'
 
 export function MissionList() {
   const { mission } = useMainAppSelector(store => store)
@@ -66,6 +68,23 @@ export function MissionList() {
     },
     [dispatch]
   )
+
+  const handleZoomToMission = (geometry: GeoJSONType.MultiPolygon | undefined) => {
+    if (!geometry) {
+      return
+    }
+
+    const feature = new GeoJSON({
+      featureProjection: OPENLAYERS_PROJECTION
+    }).readFeature(geometry)
+
+    const extent = feature?.getGeometry()?.getExtent()
+    if (!extent) {
+      return
+    }
+
+    dispatch(fitToExtent(extent))
+  }
 
   return (
     <>
@@ -129,8 +148,9 @@ export function MissionList() {
                       >
                         <IconButton
                           accent={Accent.TERTIARY}
+                          disabled={!augmentedMission.geom}
                           Icon={Icon.ViewOnMap}
-                          onClick={noop}
+                          onClick={() => handleZoomToMission(augmentedMission.geom)}
                           size={Size.SMALL}
                           title="Voir sur la carte"
                         />

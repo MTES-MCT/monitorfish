@@ -24,7 +24,7 @@ export type FilterBarProps = {
 export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
   const { newWindowContainerRef } = useNewWindow()
 
-  const { mission } = useMainAppSelector(store => store)
+  const { listFilterValues } = useMainAppSelector(store => store.mission)
 
   const [isCustomDateRangeOpen, setIsCustomDateRangeOpen] = useState(false)
 
@@ -32,8 +32,12 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
   const dispatch = useMainAppDispatch()
 
   const { administrationsAsOptions, unitsAsOptions } = useMemo(
-    () => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data),
-    [controlUnitsQuery.data]
+    () =>
+      getControlUnitsOptionsFromControlUnits(
+        controlUnitsQuery.data,
+        listFilterValues[MissionFilterType.ADMINISTRATION]
+      ),
+    [controlUnitsQuery.data, listFilterValues]
   )
 
   const handleFilterFormChange = useCallback(
@@ -56,7 +60,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
   )
 
   return (
-    <Formik initialValues={mission.listFilterValues} onSubmit={noop}>
+    <Formik initialValues={listFilterValues} onSubmit={noop}>
       <Box>
         <FormikEffect onChange={handleFilterFormChange} />
 

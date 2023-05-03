@@ -41,6 +41,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Ajouter un engin', 'MIS')
     cy.fill('Engin contrôlé', 'Oui')
     // TODO Fix these fields which makes the test and Cypress hangs
+    // TODO Theses three fields makes the test to be broken
     // cy.fill('Maillage déclaré', '10')
     // cy.fill('Maillage mesuré', '20')
     // cy.fill('MIS : autres mesures et dispositifs', 'Autres mesures.')
@@ -50,6 +51,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Taille des espèces vérifiées', 'Non')
     cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
     cy.fill('Ajouter une espèce', 'COD')
+    // TODO Theses two fields makes the test to be broken
     // cy.fill('Qté déclarée', 10)
     // cy.fill('Qté estimée', 20)
     cy.fill('Sous-taille', true)

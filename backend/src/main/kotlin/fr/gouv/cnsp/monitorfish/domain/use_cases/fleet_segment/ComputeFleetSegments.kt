@@ -15,8 +15,9 @@ import java.time.ZonedDateTime
 /**
  * Return the computed fleet segments from the given parameters.
  *
- * If the faoAreas parameter is empty:
- *  - The port fao areas will be fetched if the port is given
+ * The port is used to get fao areas.
+ * If the portLocode parameter is empty:
+ *  - The fao areas will be used if not empty
  *  - Else, the fao area will be computed from the latitude/longitude
  */
 @UseCase
@@ -39,23 +40,24 @@ class ComputeFleetSegments(
         val currentYear = ZonedDateTime.now(clock).year
         val fleetSegments = fleetSegmentRepository.findAllByYear(currentYear)
 
-        val calculatedOrGivenFaoAreas = faoAreas.map { FAOArea(it) }.ifEmpty {
-            // When the port is given
-            if (!portLocode.isNullOrEmpty()) {
-                val port = portRepository.find(portLocode)
+        // The port is taken for a land control (priority over the faoAreas and latitude/longitude)
+        val calculatedOrGivenFaoAreas = if (!portLocode.isNullOrEmpty()) {
+            val port = portRepository.find(portLocode)
 
-                return@ifEmpty port.faoAreas.map { FAOArea(it) }
+            port.faoAreas.map { FAOArea(it) }
+        } else {
+            // We are in a sea or aerial control
+            faoAreas.map { FAOArea(it) }.ifEmpty {
+                // Else, we take the longitude and latitude given
+                if (longitude != null && latitude != null) {
+                    val point = GeometryFactory().createPoint(Coordinate(longitude, latitude))
+                    val allFaoAreas = faoAreasRepository.findByIncluding(point)
+
+                    return@ifEmpty removeRedundantFaoArea(allFaoAreas)
+                }
+
+                return@ifEmpty listOf()
             }
-
-            // Else, we take the longitude and latitude given
-            if (longitude != null && latitude != null) {
-                val point = GeometryFactory().createPoint(Coordinate(longitude, latitude))
-                val allFaoAreas = faoAreasRepository.findByIncluding(point)
-
-                return@ifEmpty removeRedundantFaoArea(allFaoAreas)
-            }
-
-            return@ifEmpty listOf()
         }
 
         val computedSegments = fleetSegments.filter { fleetSegment ->

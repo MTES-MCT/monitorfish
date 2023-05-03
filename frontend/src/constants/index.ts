@@ -6,6 +6,7 @@ export const BOOLEAN_AS_OPTIONS: Array<Option<boolean>> = [
 ]
 
 export enum SeaFrontGroup {
+  ALL = 'ALL',
   MED = 'MED',
   MEMN = 'MEMN',
   NAMO = 'NAMO',
@@ -13,7 +14,9 @@ export enum SeaFrontGroup {
   OUTREMEROI = 'OUTREMEROI',
   SA = 'SA'
 }
+
 export enum SeaFrontGroupLabel {
+  ALL = 'Toutes les missions',
   MED = 'MED',
   MEMN = 'MEMN',
   NAMO = 'NAMO',
@@ -44,6 +47,7 @@ export enum SeaFrontLabel {
 }
 
 export const SEA_FRONT_GROUP_SEA_FRONTS: Record<SeaFrontGroup, SeaFront[]> = {
+  [SeaFrontGroup.ALL]: [],
   [SeaFrontGroup.MED]: [SeaFront.MED],
   [SeaFrontGroup.MEMN]: [SeaFront.MEMN],
   [SeaFrontGroup.NAMO]: [SeaFront.NAMO],

@@ -96,6 +96,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
     values.speciesOnboard,
     values.longitude,
     values.latitude,
+    values.portLocode,
     riskFactorApiQuery
   ])
 

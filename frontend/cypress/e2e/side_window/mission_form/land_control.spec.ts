@@ -148,10 +148,7 @@ context('Side Window > Mission Form > Land Control', () => {
         ],
         portLocode: 'FRZEG',
         portName: 'Auray',
-        segments: [
-          { segment: 'SWW01/02/03', segmentName: 'Bottom trawls' },
-          { segment: 'NWW01/02 - Trawl', segmentName: 'NWW01/02 - Trawl' }
-        ],
+        segments: [{ segment: 'NWW01/02', segmentName: 'Trawl' }],
         seizureAndDiversion: true,
         seizureAndDiversionComments: null,
         separateStowageOfPreservedSpecies: 'YES',

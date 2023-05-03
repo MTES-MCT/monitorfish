@@ -3,27 +3,22 @@ import { getUtcizedDayjs } from '../../utils/getUtcizedDayjs'
 
 // TODO Add search query, custom period and filter reset E2E tests.
 context('Side Window > Mission List > Filter Bar', () => {
-  // By default, the mission list is filtered from the start of month
-  const currentMonth = encodeURIComponent(getUtcizedDayjs().utc().startOf('month').toISOString())
-
   beforeEach(() => {
     openSideWindowMissionList()
   })
 
-  it('Should filter missions for the current year', () => {
-    const currentYear = encodeURIComponent(getUtcizedDayjs().utc().startOf('year').toISOString())
-    cy.intercept('GET', `/bff/v1/missions?&startedAfterDateTime=${currentYear}*`).as('getMissions')
-    cy.fill('Période', 'Année en cours')
+  it('Should filter missions for the current day', () => {
+    const currentDay = encodeURIComponent(getUtcizedDayjs().utc().startOf('day').toISOString())
+    cy.intercept('GET', `/bff/v1/missions?&startedAfterDateTime=${currentDay}*`).as('getMissions')
+
+    cy.fill('Période', 'Aujourd’hui')
     cy.wait('@getMissions')
 
     cy.get('.TableBodyRow').should('have.length.to.be.greaterThan', 0)
   })
 
   it('Should filter missions by source', () => {
-    cy.intercept(
-      'GET',
-      `/bff/v1/missions?&startedAfterDateTime=${currentMonth}&missionSource=MONITORENV&missionStatus=&missionTypes=&seaFronts=MED`
-    ).as('getMissions')
+    cy.intercept('GET', `*missionSource=MONITORENV&missionStatus=&missionTypes=&seaFronts=MED`).as('getMissions')
     cy.fill('Origine', 'CACEM')
     cy.wait('@getMissions')
 
@@ -31,10 +26,7 @@ context('Side Window > Mission List > Filter Bar', () => {
   })
 
   it('Should filter missions by status', () => {
-    cy.intercept(
-      'GET',
-      `/bff/v1/missions?&startedAfterDateTime=${currentMonth}&missionStatus=DONE&missionTypes=&seaFronts=MED`
-    ).as('getMissions')
+    cy.intercept('GET', `*missionStatus=DONE&missionTypes=&seaFronts=MED`).as('getMissions')
     cy.fill('Statut', ['Terminée'])
     cy.wait('@getMissions')
 
@@ -61,10 +53,7 @@ context('Side Window > Mission List > Filter Bar', () => {
   })
 
   it('Should filter missions by type', () => {
-    cy.intercept(
-      'GET',
-      `/bff/v1/missions?&startedAfterDateTime=${currentMonth}&missionStatus=&missionTypes=LAND&seaFronts=MED`
-    ).as('getMissions')
+    cy.intercept('GET', `*missionStatus=&missionTypes=LAND&seaFronts=MED`).as('getMissions')
     cy.fill('Type de mission', ['Terre'])
     cy.wait('@getMissions')
 

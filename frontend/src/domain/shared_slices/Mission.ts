@@ -27,7 +27,7 @@ const INITIAL_STATE: MissionState = {
   draftId: undefined,
   editedDraftActionIndex: undefined,
   listFilterValues: {
-    [MissionFilterType.DATE_RANGE]: MissionDateRangeFilter.CURRENT_MONTH
+    [MissionFilterType.DATE_RANGE]: MissionDateRangeFilter.MONTH
   },
   listSeaFront: SeaFrontGroup.MED,
   selectedMissionActionGeoJSON: undefined,

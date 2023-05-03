@@ -32,17 +32,11 @@ export const useGetFilteredMissionsQuery = (): {
         case MissionDateRangeFilter.CURRENT_DAY:
           return customDayjs().utc().startOf('day').toISOString()
 
-        case MissionDateRangeFilter.CURRENT_WEEK:
-          return customDayjs().utc().startOf('week').toISOString()
+        case MissionDateRangeFilter.WEEK:
+          return customDayjs().utc().startOf('day').subtract(7, 'day').toISOString()
 
-        case MissionDateRangeFilter.CURRENT_MONTH:
-          return customDayjs().utc().startOf('month').toISOString()
-
-        case MissionDateRangeFilter.CURRENT_QUARTER:
-          return customDayjs().utc().startOf('quarter').toISOString()
-
-        case MissionDateRangeFilter.CURRENT_YEAR:
-          return customDayjs().utc().startOf('year').toISOString()
+        case MissionDateRangeFilter.MONTH:
+          return customDayjs().utc().startOf('day').subtract(30, 'day').toISOString()
 
         default:
           return undefined

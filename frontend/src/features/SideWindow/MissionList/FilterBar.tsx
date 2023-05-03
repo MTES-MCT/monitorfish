@@ -1,4 +1,11 @@
-import { FormikDateRangePicker, FormikEffect, FormikMultiSelect, FormikSelect, TextInput } from '@mtes-mct/monitor-ui'
+import {
+  FormikDateRangePicker,
+  FormikEffect,
+  FormikMultiSelect,
+  FormikSelect,
+  TextInput,
+  useNewWindow
+} from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop, omit } from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
@@ -12,7 +19,6 @@ import { getControlUnitsOptionsFromControlUnits } from '../../../domain/controlU
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { FormikFilterTagBar } from '../../../ui/formiks/FormikFilterTagBar'
-import { useNewWindow } from '../../../ui/NewWindow'
 
 import type { FilterValues } from './types'
 import type { Promisable } from 'type-fest'

@@ -5,14 +5,14 @@ import {
   FormikNumberInput,
   FormikTextarea,
   FormikTextInput,
-  Icon
+  Icon,
+  useNewWindow
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash'
 
 import { FLIGHT_GOALS_AS_OPTIONS } from './shared/constants'
 import { FleetSegmentsField } from './shared/FleetSegmentsField'
-import { useNewWindow } from '../../../../ui/NewWindow'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'

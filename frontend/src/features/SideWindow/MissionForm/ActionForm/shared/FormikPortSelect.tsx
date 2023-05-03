@@ -53,14 +53,14 @@ export function FormikPortSelect() {
   )
 
   if (!portsAsOptions.length) {
-    return <FieldsetGroupSpinner legend="Lieu du contrôle" />
+    return <FieldsetGroupSpinner legend="Port de contrôle" />
   }
 
   return (
     <Select
       baseContainer={newWindowContainerRef.current}
       isLight
-      label="Lieu du contrôle"
+      label="Port de contrôle"
       name="port"
       onChange={handleChange}
       options={portsAsOptions}

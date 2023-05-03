@@ -24,7 +24,7 @@ context('Side Window > Mission Form > Land Control', () => {
     // TODO Add this test.
 
     // Lieu du contrôle
-    cy.fill('Lieu du contrôle', 'Free Port')
+    cy.fill('Port de contrôle', 'Free Port')
 
     // Obligations déclaratives et autorisations de pêche
     cy.fill('Bonne émission VMS', 'Oui')

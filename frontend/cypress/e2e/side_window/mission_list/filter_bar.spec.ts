@@ -44,6 +44,18 @@ context('Side Window > Mission List > Filter Bar', () => {
     cy.get('[data-id="43"]').should('exist')
   })
 
+  it('Should filter missions by unit When an administration filter is set', () => {
+    cy.fill('Administration', ['Gendarmerie Maritime'])
+
+    cy.get('[data-cy="mission-list-filter-tags"]').contains('Gendarmerie Maritime')
+    cy.fill('Unité', ['P602 Verdon'])
+    // There is only one unit in the unit select
+    cy.get('.rs-checkbox-checker > label').should('have.length', 1)
+
+    // This filter does the filtering in the frontend
+    cy.get('.TableBodyRow').should('have.length', 0)
+  })
+
   it('Should filter missions by unit', () => {
     cy.fill('Unité', ['BGC Ajaccio'])
 

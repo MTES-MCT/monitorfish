@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "datascience/**"
+      - "backend/src/main/resources/db/migration/**"
       - ".github/workflows/*"
       - "infra/docker/Dockerfile.DataPipeline"
       - "Makefile"

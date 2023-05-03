@@ -24,7 +24,7 @@ context('Side Window > Mission Form > Land Control', () => {
     // TODO Add this test.
 
     // Lieu du contrôle
-    cy.fill('Port de contrôle', 'Free Port')
+    cy.fill('Port de contrôle', 'Auray')
 
     // Obligations déclaratives et autorisations de pêche
     cy.fill('Bonne émission VMS', 'Oui')
@@ -146,9 +146,12 @@ context('Side Window > Mission Form > Land Control', () => {
         otherInfractions: [
           { comments: 'Une observation sur l’infraction autre.', infractionType: 'WITHOUT_RECORD', natinf: 27689 }
         ],
-        portLocode: 'AEFRP',
-        portName: 'Free Port',
-        segments: [{ segment: 'SWW01/02/03', segmentName: 'Bottom trawls' }],
+        portLocode: 'FRZEG',
+        portName: 'Auray',
+        segments: [
+          { segment: 'SWW01/02/03', segmentName: 'Bottom trawls' },
+          { segment: 'NWW01/02 - Trawl', segmentName: 'NWW01/02 - Trawl' }
+        ],
         seizureAndDiversion: true,
         seizureAndDiversionComments: null,
         separateStowageOfPreservedSpecies: 'YES',

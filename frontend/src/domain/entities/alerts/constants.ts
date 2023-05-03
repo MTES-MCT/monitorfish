@@ -42,6 +42,10 @@ export const COMMON_ALERT_TYPE_OPTION: Record<
 }
 
 export const ALERTS_SUBMENU: Record<SeaFrontGroup, MenuItem<SeaFrontGroup>> = {
+  ALL: {
+    code: SeaFrontGroup.ALL,
+    name: 'ALL'
+  },
   MED: {
     code: SeaFrontGroup.MED,
     name: 'MED'
@@ -76,6 +80,10 @@ export const ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS: Record<
     seaFronts: string[]
   }
 > = {
+  ALL: {
+    menuSeaFront: SeaFrontGroup.ALL,
+    seaFronts: []
+  },
   MED: {
     menuSeaFront: SeaFrontGroup.MED,
     seaFronts: ['MED']

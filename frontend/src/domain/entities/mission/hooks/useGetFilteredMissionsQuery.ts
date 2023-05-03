@@ -6,6 +6,7 @@ import { SEA_FRONT_GROUP_SEA_FRONTS } from '../../../../constants'
 import { MissionDateRangeFilter, MissionFilterType } from '../../../../features/SideWindow/MissionList/types'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { administrationFilterFunction } from '../filters/administrationFilterFunction'
+import { seaFrontFilterFunction } from '../filters/seaFrontFilterFunction'
 import { unitFilterFunction } from '../filters/unitFilterFunction'
 
 import type { MissionWithActions } from '../types'
@@ -60,7 +61,8 @@ export const useGetFilteredMissionsQuery = (): {
       missionSource: listFilterValues[MissionFilterType.SOURCE],
       missionStatus: [listFilterValues[MissionFilterType.STATUS]],
       missionTypes: [listFilterValues[MissionFilterType.TYPE]],
-      seaFronts: filteredSeaFronts,
+      // seaFronts are filtered in memory
+      seaFronts: [],
       startedAfterDateTime: startedAfterDateTime(),
       startedBeforeDateTime: startedBeforeDateTime()
     },
@@ -79,9 +81,12 @@ export const useGetFilteredMissionsQuery = (): {
     }
 
     return data.filter(
-      mission => administrationFilterFunction(mission, administrationFilter) && unitFilterFunction(mission, unitFilter)
+      mission =>
+        seaFrontFilterFunction(mission, filteredSeaFronts) &&
+        administrationFilterFunction(mission, administrationFilter) &&
+        unitFilterFunction(mission, unitFilter)
     )
-  }, [data, listFilterValues])
+  }, [data, listFilterValues, filteredSeaFronts])
 
   return {
     isError,

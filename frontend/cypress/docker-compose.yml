@@ -1,6 +1,6 @@
 services:
   db:
-    image: timescale/timescaledb-postgis:1.7.4-pg11
+    image: timescale/timescaledb-postgis:1.7.5-pg11
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres

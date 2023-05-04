@@ -5,17 +5,14 @@ updates:
     assignees:
       - "louptheron"
     schedule:
-      interval: "monthly"
-    # Disable all dependencies update
-    # https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#open-pull-requests-limit
-    open-pull-requests-limit: 0
+      interval: "weekly"
 
   - package-ecosystem: "pip"
     directory: "/datascience"
     assignees:
       - "VincentAntoine"
     schedule:
-      interval: "monthly"
+      interval: "weekly"
     # Disable all dependencies update
     # https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#open-pull-requests-limit
     open-pull-requests-limit: 0
@@ -26,7 +23,4 @@ updates:
       - "ivangabriele"
       - "louptheron"
     schedule:
-      interval: "monthly"
-    # Disable all dependencies update
-    # https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#open-pull-requests-limit
-    open-pull-requests-limit: 0
+      interval: "weekly"

@@ -38,16 +38,16 @@ function UnmemoizedVesselsLayer({ map }) {
     }
   })
 
-  const vesselsVectorSource = useRef<VectorSource<Point>>()
+  const vesselsVectorSourceRef = useRef<VectorSource<Point>>()
   const vesselWebGLPointsLayerRef = useRef<WebGLPointsLayerWithName>()
   const style = useRef<any>()
 
   function getVesselsVectorSource() {
-    if (!vesselsVectorSource.current) {
-      vesselsVectorSource.current = new VectorSource()
+    if (!vesselsVectorSourceRef.current) {
+      vesselsVectorSourceRef.current = new VectorSource()
     }
 
-    return vesselsVectorSource.current
+    return vesselsVectorSourceRef.current
   }
 
   useEffect(() => {

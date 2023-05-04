@@ -4,17 +4,17 @@ import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import { Vector } from 'ol/layer'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../../domain/entities/layers/constants'
 
-import { getVesselBeaconMalfunctionStyle } from './styles/vessel.style'
-import { getVesselCompositeIdentifier, vesselIsShowed } from '../../../domain/entities/vessel/vessel'
+import { getVesselAlertAndBeaconMalfunctionStyle } from './style'
+import { getVesselCompositeIdentifier, vesselIsShowed } from '../../../../domain/entities/vessel/vessel'
 
-const VesselBeaconMalfunctionLayer = ({ map }) => {
+const VesselAlertAndBeaconMalfunctionLayer = ({ map }) => {
   const {
     vessels,
     hideNonSelectedVessels,
-    vesselsTracksShowed,
-    selectedVesselIdentity
+    selectedVesselIdentity,
+    vesselsTracksShowed
   } = useSelector(state => state.vessel)
 
   const {
@@ -49,7 +49,7 @@ const VesselBeaconMalfunctionLayer = ({ map }) => {
         zIndex: LayerProperties.VESSEL_BEACON_MALFUNCTION.zIndex,
         updateWhileAnimating: true,
         updateWhileInteracting: true,
-        style: (_, resolution) => getVesselBeaconMalfunctionStyle(resolution)
+        style: (_, resolution) => getVesselAlertAndBeaconMalfunctionStyle(resolution)
       })
     }
     return layerRef.current
@@ -72,7 +72,7 @@ const VesselBeaconMalfunctionLayer = ({ map }) => {
     if (isAdmin && vessels?.length) {
       const features = vessels.reduce((_features, vessel) => {
         if (!vessel.hasBeaconMalfunction) return _features
-        if (vessel.vesselProperties.hasAlert) return _features
+        if (!vessel.vesselProperties.hasAlert) return _features
         if (nonFilteredVesselsAreHidden && !vessel.isFiltered) return _features
         if (previewFilteredVesselsMode && !vessel.filterPreview) return _features
         if (hideVesselsAtPort && vessel.isAtPort) return _features
@@ -104,4 +104,4 @@ const VesselBeaconMalfunctionLayer = ({ map }) => {
   return null
 }
 
-export default React.memo(VesselBeaconMalfunctionLayer)
+export default React.memo(VesselAlertAndBeaconMalfunctionLayer)

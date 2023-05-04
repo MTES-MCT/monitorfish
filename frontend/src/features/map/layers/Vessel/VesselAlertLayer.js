@@ -4,10 +4,10 @@ import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import { Vector } from 'ol/layer'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../../domain/entities/layers/constants'
 
-import { getVesselAlertStyle } from './styles/vessel.style'
-import { getVesselCompositeIdentifier, getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../../../domain/entities/vessel/vessel'
+import { getVesselAlertStyle } from './style'
+import { getVesselCompositeIdentifier, getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../../../../domain/entities/vessel/vessel'
 
 const VesselAlertLayer = ({ map }) => {
   const {
@@ -51,7 +51,7 @@ const VesselAlertLayer = ({ map }) => {
         zIndex: LayerProperties.VESSEL_ALERT.zIndex,
         updateWhileAnimating: true,
         updateWhileInteracting: true,
-        style: (feature, resolution) => getVesselAlertStyle(feature, resolution)
+        style: (_, resolution) => getVesselAlertStyle(resolution)
       })
     }
     return layerRef.current

@@ -4,10 +4,10 @@ import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import { Vector } from 'ol/layer'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
+import { LayerProperties } from '../../../../domain/entities/layers/constants'
 
-import { getVesselInfractionSuspicionStyle } from './styles/vessel.style'
-import { getVesselCompositeIdentifier, getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../../../domain/entities/vessel/vessel'
+import { getVesselInfractionSuspicionStyle } from './style'
+import { getVesselCompositeIdentifier, getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../../../../domain/entities/vessel/vessel'
 
 const VesselInfractionSuspicionLayer = ({ map }) => {
   const {
@@ -51,7 +51,7 @@ const VesselInfractionSuspicionLayer = ({ map }) => {
         zIndex: LayerProperties.VESSEL_INFRACTION_SUSPICION.zIndex,
         updateWhileAnimating: true,
         updateWhileInteracting: true,
-        style: (feature, resolution) => getVesselInfractionSuspicionStyle(feature, resolution)
+        style: (_, resolution) => getVesselInfractionSuspicionStyle(resolution)
       })
     }
     return layerRef.current

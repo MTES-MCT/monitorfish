@@ -3,21 +3,21 @@ import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { getLabelLineStyle } from './styles/vesselLabelLine.style'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { drawMovedLabelLineIfFoundAndReturnOffset } from '../../../domain/entities/vessel/label'
+import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import { drawMovedLabelLineIfFoundAndReturnOffset } from '../../../../domain/entities/vessel/label'
 import {
   getVesselCompositeIdentifier,
   getVesselLastPositionVisibilityDates,
   Vessel
-} from '../../../domain/entities/vessel/vessel'
-import { VesselLabelLine } from '../../../domain/entities/vesselLabelLine'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { usePrevious } from '../../../hooks/usePrevious'
-import { VesselLabelOverlay } from '../overlays/VesselLabelOverlay'
+} from '../../../../domain/entities/vessel/vessel'
+import { VesselLabelLine } from '../../../../domain/entities/vesselLabelLine'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { usePrevious } from '../../../../hooks/usePrevious'
+import { VesselLabelOverlay } from '../../overlays/VesselLabelOverlay'
+import { getLabelLineStyle } from '../styles/vesselLabelLine.style'
 
-import type { VesselLastPositionFeature } from '../../../domain/entities/vessel/types'
-import type { VectorLayerWithName } from '../../../domain/types/layer'
+import type { VesselLastPositionFeature } from '../../../../domain/entities/vessel/types'
+import type { VectorLayerWithName } from '../../../../domain/types/layer'
 import type { MutableRefObject } from 'react'
 
 const MAX_LABELS_DISPLAYED = 200

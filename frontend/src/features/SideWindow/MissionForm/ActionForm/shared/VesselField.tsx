@@ -38,14 +38,7 @@ export function VesselField() {
         return
       }
 
-      // TODO I don't really know why these fields can be null in the original types.
-      if (
-        !nextVessel.externalReferenceNumber ||
-        !nextVessel.internalReferenceNumber ||
-        !nextVessel.ircs ||
-        !nextVessel.vesselId ||
-        !nextVessel.vesselName
-      ) {
+      if (!nextVessel.vesselId || !nextVessel.vesselName) {
         return
       }
 

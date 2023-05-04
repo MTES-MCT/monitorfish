@@ -2,8 +2,8 @@ import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
-import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { getFishingActivityFeatureOnTrackLine } from '../../../domain/entities/logbook'
+import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import { getFishingActivityFeatureOnTrackLine } from '../../../../domain/entities/logbook'
 import {
   fishingActivityIsWithinTrackLineDates,
   getFeaturesFromPositions,
@@ -12,27 +12,27 @@ import {
   removeFishingActivitiesFeatures,
   removeVesselTrackFeatures,
   updateTrackCircleStyle
-} from '../../../domain/entities/vessel/track'
-import { getVesselCompositeIdentifier } from '../../../domain/entities/vessel/vessel'
+} from '../../../../domain/entities/vessel/track'
+import { getVesselCompositeIdentifier } from '../../../../domain/entities/vessel/vessel'
 import {
   endRedrawFishingActivitiesOnMap,
   updateFishingActivitiesOnMapCoordinates
-} from '../../../domain/shared_slices/FishingActivities'
-import { animateToCoordinates } from '../../../domain/shared_slices/Map'
+} from '../../../../domain/shared_slices/FishingActivities'
+import { animateToCoordinates } from '../../../../domain/shared_slices/Map'
 import {
   setVesselTrackExtent,
   updateVesselTrackAsHidden,
   updateVesselTrackAsShowedWithExtend
-} from '../../../domain/shared_slices/Vessel'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { usePrevious } from '../../../hooks/usePrevious'
-import CloseVesselTrackOverlay from '../overlays/CloseVesselTrackOverlay'
-import FishingActivityOverlay from '../overlays/FishingActivityOverlay'
+} from '../../../../domain/shared_slices/Vessel'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { usePrevious } from '../../../../hooks/usePrevious'
+import CloseVesselTrackOverlay from '../../overlays/CloseVesselTrackOverlay'
+import FishingActivityOverlay from '../../overlays/FishingActivityOverlay'
 
-import type { FishingActivityShowedOnMap } from '../../../domain/entities/vessel/types'
-import type { FishingActivityFeatureIdAndCoordinates } from '../../../domain/types/fishingActivities'
-import type { VectorLayerWithName } from '../../../domain/types/layer'
+import type { FishingActivityShowedOnMap } from '../../../../domain/entities/vessel/types'
+import type { FishingActivityFeatureIdAndCoordinates } from '../../../../domain/types/fishingActivities'
+import type { VectorLayerWithName } from '../../../../domain/types/layer'
 import type { Coordinate } from 'ol/coordinate'
 
 type VesselsTracksLayerProps = {

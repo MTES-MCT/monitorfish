@@ -18,7 +18,7 @@ context('Side Window > Mission List > Filter Bar', () => {
   })
 
   it('Should filter missions by source', () => {
-    cy.intercept('GET', `*missionSource=MONITORENV&missionStatus=&missionTypes=&seaFronts=MED`).as('getMissions')
+    cy.intercept('GET', `*missionSource=MONITORENV*`).as('getMissions')
     cy.fill('Origine', 'CACEM')
     cy.wait('@getMissions')
 
@@ -26,7 +26,7 @@ context('Side Window > Mission List > Filter Bar', () => {
   })
 
   it('Should filter missions by status', () => {
-    cy.intercept('GET', `*missionStatus=DONE&missionTypes=&seaFronts=MED`).as('getMissions')
+    cy.intercept('GET', `*missionStatus=DONE&*`).as('getMissions')
     cy.fill('Statut', ['Terminée'])
     cy.wait('@getMissions')
 
@@ -65,7 +65,7 @@ context('Side Window > Mission List > Filter Bar', () => {
   })
 
   it('Should filter missions by type', () => {
-    cy.intercept('GET', `*missionStatus=&missionTypes=LAND&seaFronts=MED`).as('getMissions')
+    cy.intercept('GET', `*missionTypes=LAND*`).as('getMissions')
     cy.fill('Type de mission', ['Terre'])
     cy.wait('@getMissions')
 

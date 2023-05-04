@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 
 import { BaseMap } from './BaseMap'
 import { LayerDetailsBox } from './controls/LayerDetailsBox'
-import { VesselsTracksLayerMemoized } from './layers/VesselsTracksLayer'
-import VesselsLayer from './layers/VesselsLayer'
+import { VesselsTracksLayerMemoized } from './layers/Vessel/VesselsTracksLayer'
+import { VesselsLayer } from './layers/Vessel/VesselsLayer'
 import FilterLayer from './layers/FilterLayer'
 import { RegulatoryLayerSearch } from './layers/RegulatoryLayerSearch'
 import { DrawLayer } from './layers/DrawLayer'
@@ -17,16 +17,16 @@ import { VesselCardOverlay } from './overlays/VesselCardOverlay'
 import VesselTrackOverlay from './overlays/VesselTrackOverlay'
 import { TrackTypeOverlay } from './overlays/TrackTypeOverlay'
 import { MapVesselClickAndAnimationHandler } from './MapVesselClickAndAnimationHandler'
-import VesselEstimatedPositionLayer from './layers/VesselEstimatedPositionLayer'
-import VesselSelectedLayer from './layers/VesselSelectedLayer'
+import VesselEstimatedPositionLayer from './layers/Vessel/VesselEstimatedPositionLayer'
+import VesselSelectedLayer from './layers/Vessel/VesselSelectedLayer'
 import VesselEstimatedPositionOverlay from './overlays/VesselEstimatedPositionOverlay'
-import { VesselsLabelsLayer } from './layers/VesselsLabelsLayer'
+import { VesselsLabelsLayer } from './layers/Vessel/VesselsLabelsLayer'
 import InterestPointLayer from './layers/InterestPointLayer'
 import MapMenu from './MapMenu'
-import VesselAlertLayer from './layers/VesselAlertLayer'
-import VesselBeaconMalfunctionLayer from './layers/VesselBeaconMalfunctionLayer'
-import VesselAlertAndBeaconMalfunctionLayer from './layers/VesselAlertAndBeaconMalfunctionLayer'
-import VesselInfractionSuspicionLayer from './layers/VesselInfractionSuspicionLayer'
+import VesselAlertLayer from './layers/Vessel/VesselAlertLayer'
+import VesselBeaconMalfunctionLayer from './layers/Vessel/VesselBeaconMalfunctionLayer'
+import VesselAlertAndBeaconMalfunctionLayer from './layers/Vessel/VesselAlertAndBeaconMalfunctionLayer'
+import VesselInfractionSuspicionLayer from './layers/Vessel/VesselInfractionSuspicionLayer'
 import { MissionLayer } from './layers/Mission/MissionLayer'
 import { SelectedMissionLayer } from './layers/Mission/SelectedMissionLayer'
 import { MissionsLabelsLayer } from './layers/Mission/MissionsLabelsLayer/MissionsLabelsLayer'
@@ -101,7 +101,7 @@ const Map = () => {
       <RegulatoryLayerSearch/>
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
       {/** <></> can't be used to group condition as BaseMap needs the layers to be direct children **/}
-      {areVesselsDisplayed && <VesselsLayer/>}
+      {<VesselsLayer/>}
       {areVesselsDisplayed && <VesselEstimatedPositionLayer/>}
       {areVesselsDisplayed && <VesselSelectedLayer/>}
       {areVesselsDisplayed && <VesselAlertLayer/>}

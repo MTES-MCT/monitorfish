@@ -154,7 +154,7 @@ context('Side Window > Mission Form > Main Form', () => {
           }
         ],
         endDateTimeUtc: '2023-02-01T12:31:00.000Z',
-        hasOrder: true,
+        hasMissionOrder: true,
         isClosed: false,
         isUnderJdp: true,
         missionSource: 'MONITORFISH',

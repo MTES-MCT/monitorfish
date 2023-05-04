@@ -26,9 +26,9 @@ export function Item<T extends string = string>({ counter, isOpen, isSelected, o
       display: 'flex',
       height: 47,
       opacity: isOpen ? 1 : 0,
-      padding: '0px 20px',
+      padding: '0px 16px',
       transition: 'all 0.5s ease',
-      width: isOpen ? 160 : 0
+      width: isOpen ? 190 : 0
     }),
     [isOpen, isSelected]
   )
@@ -46,7 +46,7 @@ export function Item<T extends string = string>({ counter, isOpen, isSelected, o
       textOverflow: 'clip',
       transition: 'max-width 0.5s ease, opacity 0.5s ease',
       whiteSpace: 'nowrap',
-      width: isOpen ? 160 : 0
+      width: isOpen ? 190 : 0
     }),
     [isOpen, isSelected]
   )

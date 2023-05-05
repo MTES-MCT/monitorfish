@@ -1,6 +1,7 @@
+import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
+import { SideWindowMenuKey, SideWindowStatus } from '../../domain/entities/sideWindow/constants'
 import { sideWindowActions } from '../../domain/shared_slices/SideWindow'
 import { sideWindowDispatchers } from '../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
@@ -13,23 +14,27 @@ export function BeaconMalfunctionsMapButton() {
   const { healthcheckTextWarning, previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
   const { sideWindow } = useMainAppSelector(state => state)
 
+  const isActive =
+    sideWindow.status !== SideWindowStatus.CLOSED &&
+    sideWindow.selectedMenuWithSubMenu.menu === SideWindowMenuKey.BEACON_MALFUNCTION_LIST
+
+  const toggleSideWindow = useCallback(() => {
+    if (isActive) {
+      dispatch(sideWindowActions.close())
+
+      return
+    }
+
+    dispatch(sideWindowDispatchers.openMenuWithSubMenu(SideWindowMenuKey.BEACON_MALFUNCTION_LIST))
+  }, [dispatch, isActive])
+
   return (
     <BeaconMalfunctionsButton
+      $isActive={isActive}
       data-cy="beacon-malfunction-button"
       healthcheckTextWarning={!!healthcheckTextWarning}
       isHidden={!!previewFilteredVesselsMode}
-      isVisible={sideWindow.selectedMenuWithSubMenu.menu === SideWindowMenuKey.BEACON_MALFUNCTION_LIST}
-      onClick={() => {
-        if (sideWindow.selectedMenuWithSubMenu.menu !== SideWindowMenuKey.BEACON_MALFUNCTION_LIST) {
-          dispatch(sideWindowDispatchers.openMenuWithSubMenu(SideWindowMenuKey.BEACON_MALFUNCTION_LIST))
-
-          return
-        }
-
-        if (sideWindow.selectedMenuWithSubMenu.menu === SideWindowMenuKey.BEACON_MALFUNCTION_LIST) {
-          dispatch(sideWindowActions.close())
-        }
-      }}
+      onClick={toggleSideWindow}
       title="Avaries VMS"
     >
       <BeaconMalfunctionsIcon />
@@ -38,11 +43,11 @@ export function BeaconMalfunctionsMapButton() {
 }
 
 const BeaconMalfunctionsButton = styled(MapButtonStyle)<{
-  isVisible: boolean
+  $isActive: boolean
 }>`
   position: absolute;
   display: inline-block;
-  background: ${p => (p.isVisible ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
+  background: ${p => (p.$isActive ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
   padding: 2px 2px 2px 2px;
   top: 204px;
   left: 10px;
@@ -52,7 +57,7 @@ const BeaconMalfunctionsButton = styled(MapButtonStyle)<{
 
   :hover,
   :focus {
-    background: ${p => (p.isVisible ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
+    background: ${p => (p.$isActive ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
   }
 `
 

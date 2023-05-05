@@ -34,7 +34,7 @@ export function VesselLabelsMapButton() {
     <Wrapper ref={wrapperRef}>
       <VesselLabelsButton
         dataCy="vessel-labels"
-        isOpen={isOpen}
+        isActive={isOpen}
         onClick={openOrCloseVesselLabels}
         style={{ top: 194 }}
         title="Affichage des dernières positions"

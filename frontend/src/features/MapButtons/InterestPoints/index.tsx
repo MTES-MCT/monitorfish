@@ -48,7 +48,7 @@ export function InterestPointMapButton() {
     <Wrapper ref={wrapperRef}>
       <InterestPointButton
         dataCy="interest-point"
-        isOpen={isOpen}
+        isActive={isOpen}
         onClick={openOrCloseInterestPoint}
         style={{ top: 291 }}
         title={"Créer un point d'intérêt"}

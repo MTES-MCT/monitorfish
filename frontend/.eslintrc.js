@@ -98,6 +98,9 @@ module.exports = {
       files: ['cypress/**/*.js', 'cypress/**/*.ts', 'cypress.config.ts'],
       plugins: ['cypress'],
       rules: {
+        // TODO Check why either Prettier or ESLint auto-formatting does that and why this rule is not enabled.
+        // 'max-len': ['warn', { code: 120 }],
+
         '@typescript-eslint/naming-convention': 'off',
 
         'cypress/no-assigning-return-values': 'error',

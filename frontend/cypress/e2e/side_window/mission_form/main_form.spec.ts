@@ -1,6 +1,7 @@
 import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
 import { SeaFrontGroup } from '../../../../src/constants'
 import { Mission } from '../../../../src/domain/entities/mission/types'
+import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 import { getUtcizedDayjs } from '../../utils/getUtcizedDayjs'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
@@ -366,6 +367,35 @@ context('Side Window > Mission Form > Main Form', () => {
         isClosed: true
       })
     })
+
+    cy.get('h1').should('contain.text', 'Missions et contrôles')
+  })
+
+  it('Should show cancellation confirmation dialog when switching to another menu while a draft is dirty', () => {
+    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
+
+    cy.wait(500)
+
+    cy.clickButton(SideWindowMenuLabel.MISSION_LIST)
+
+    cy.get('h1').should('contain.text', 'Missions et contrôles')
+
+    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
+
+    cy.fill('Clôturé par', 'Nemo')
+
+    cy.wait(500)
+
+    cy.clickButton(SideWindowMenuLabel.MISSION_LIST)
+
+    cy.get('.Component-Dialog').should('be.visible')
+
+    cy.clickButton('Retourner à l’édition')
+
+    cy.get('h1').should('contain.text', 'Mission Mer – BGC Bastia')
+
+    cy.clickButton(SideWindowMenuLabel.MISSION_LIST)
+    cy.clickButton('Quitter sans enregistrer')
 
     cy.get('h1').should('contain.text', 'Missions et contrôles')
   })

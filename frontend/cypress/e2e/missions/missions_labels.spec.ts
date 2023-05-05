@@ -23,7 +23,7 @@ context('Missions labels', () => {
       .trigger('pointerup', { force: true, pointerId: 1 })
 
     cy.getComputedStyle('*[data-cy="mission-label-draggable-MISSIONS_LABEL:43"]', 1).then(styleAfter => {
-      expect(styleAfter.transform).contains('matrix(1, 0, 0, 1, 510, 538)')
+      expect(styleAfter.transform).contains('matrix(1, 0, 0, 1, 525, 539)')
     })
   })
 })

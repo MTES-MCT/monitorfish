@@ -1,12 +1,13 @@
 import { Accent, Button, Icon, Tag } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { ActionForm } from './ActionForm'
 import { ActionList } from './ActionList'
 import { MainForm } from './MainForm'
+import { DraftCancellationConfirmationDialog } from './shared/DraftCancellationConfirmationDialog'
 import {
   getMissionActionsDataFromMissionActionsFormValues,
   getMissionDataFromMissionFormValues,
@@ -23,7 +24,8 @@ import {
 import { missionActions } from '../../../domain/actions'
 import { getMissionSourceTagText } from '../../../domain/entities/mission'
 import { Mission } from '../../../domain/entities/mission/types'
-import { openSideWindowTab } from '../../../domain/shared_slices/Global'
+import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
+import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
 import { useDebouncedValue } from '../../../hooks/useDebouncedValue'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
@@ -31,13 +33,12 @@ import { FrontendError } from '../../../libs/FrontendError'
 import { FrontendErrorBoundary } from '../../../ui/FrontendErrorBoundary'
 import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
-import { SideWindowMenuKey } from '../constants'
 
 import type { MissionActionFormValues, MissionFormValues } from './types'
 import type { MissionWithActions } from '../../../domain/entities/mission/types'
 
-export function MissionForm() {
-  const { mission } = useMainAppSelector(store => store)
+export function UnmemoizedMissionForm() {
+  const { mission, sideWindow } = useMainAppSelector(store => store)
 
   const headerDivRef = useRef<HTMLDivElement | null>(null)
   const originalMissionRef = useRef<MissionWithActions | undefined>(undefined)
@@ -90,8 +91,7 @@ export function MissionForm() {
   )
 
   const goToMissionList = useCallback(async () => {
-    dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_LIST))
-    dispatch(missionActions.unsetDraft())
+    dispatch(sideWindowActions.openOrFocusAndGoTo({ menu: SideWindowMenuKey.MISSION_LIST }))
   }, [dispatch])
 
   /**
@@ -204,6 +204,13 @@ export function MissionForm() {
     )
   }, [dispatch, isLoading, mission.draftId, missionActionsApiQuery.data, missionApiQuery.data])
 
+  useEffect(
+    () => () => {
+      dispatch(missionActions.unsetDraft())
+    },
+    [dispatch]
+  )
+
   // ---------------------------------------------------------------------------
 
   return (
@@ -266,9 +273,13 @@ export function MissionForm() {
           )}
         </FrontendErrorBoundary>
       </Body>
+
+      {sideWindow.isDraftCancellationConfirmationDialogVisible && <DraftCancellationConfirmationDialog />}
     </Wrapper>
   )
 }
+
+export const MissionForm = memo(UnmemoizedMissionForm)
 
 const MissionSourceTag = styled(Tag)<{
   isFromCacem: boolean

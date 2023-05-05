@@ -8,7 +8,7 @@ import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { getDateTime } from '../../../../utils'
 import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
-import { BeaconMalfunctionDetailsFollowUp } from '../../../SideWindow/beacon_malfunctions/BeaconMalfunctionDetailsFollowUp'
+import { BeaconMalfunctionDetailsFollowUp } from '../../../SideWindow/BeaconMalfunctionList/BeaconMalfunctionDetailsFollowUp'
 import BeaconMalfunctionDetailBody from '../resume/BeaconMalfunctionBody'
 import CurrentBeaconMalfunctionBody from '../resume/CurrentBeaconMalfunctionBody'
 

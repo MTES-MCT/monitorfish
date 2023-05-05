@@ -1,4 +1,4 @@
-import { SideWindowMenuKey } from '../../../../src/features/SideWindow/constants'
+import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 
 import type { Mission } from '../../../../src/domain/entities/mission/types'
 
@@ -10,7 +10,7 @@ export const openSideWindowNewMission = () => {
   if (document.querySelector('[data-cy="first-loader"]')) {
     cy.getDataCy('first-loader').should('not.be.visible')
   }
-  cy.clickButton(SideWindowMenuKey.MISSION_LIST)
+  cy.clickButton(SideWindowMenuLabel.MISSION_LIST)
   if (document.querySelector('[data-cy="first-loader"]')) {
     cy.getDataCy('first-loader').should('not.be.visible')
   }
@@ -27,7 +27,7 @@ export const editSideWindowMission = (vesselName: string) => {
   if (document.querySelector('[data-cy="first-loader"]')) {
     cy.getDataCy('first-loader').should('not.be.visible')
   }
-  cy.clickButton(SideWindowMenuKey.MISSION_LIST)
+  cy.clickButton(SideWindowMenuLabel.MISSION_LIST)
   if (document.querySelector('[data-cy="first-loader"]')) {
     cy.getDataCy('first-loader').should('not.be.visible')
   }

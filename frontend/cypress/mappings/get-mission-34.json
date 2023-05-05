@@ -111,7 +111,8 @@
         }
       ],
       "missionSource": "MONITORENV",
-      "isClosed": false
+      "isClosed": false,
+      "isUnderJdp": false
     }
   }
 }

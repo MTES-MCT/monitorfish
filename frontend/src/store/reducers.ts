@@ -22,6 +22,7 @@ import { measurementReducer } from '../domain/shared_slices/Measurement'
 import { missionReducer, type MissionState } from '../domain/shared_slices/Mission'
 import { regulatoryReducer } from '../domain/shared_slices/Regulatory'
 import { reportingReducer } from '../domain/shared_slices/Reporting'
+import { sideWindowReducer } from '../domain/shared_slices/SideWindow'
 import { speciesReducer } from '../domain/shared_slices/Species'
 import { vesselSliceReducer } from '../domain/shared_slices/Vessel'
 import { regulationReducer } from '../features/Backoffice/Regulation.slice'
@@ -75,6 +76,7 @@ export const mainReducer = {
   ),
   regulatoryLayerSearch: regulatoryLayerSearchReducer,
   reporting: reportingReducer,
+  sideWindow: sideWindowReducer,
   vessel: vesselSliceReducer,
   vesselList: vesselListReducer
 }

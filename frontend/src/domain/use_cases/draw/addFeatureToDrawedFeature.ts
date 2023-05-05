@@ -28,8 +28,8 @@ export const addFeatureToDrawedFeature = (featureToAdd: Feature<Geometry>) => (d
     return
   }
 
-  const nextGeometryTwo = addGeometryToMultiPolygonGeoJSON(geometry, geometryToAdd)
-  if (nextGeometryTwo) {
-    dispatch(setGeometry(nextGeometryTwo))
+  const nextGeometry = addGeometryToMultiPolygonGeoJSON(geometry, geometryToAdd)
+  if (nextGeometry) {
+    dispatch(setGeometry(nextGeometry))
   }
 }

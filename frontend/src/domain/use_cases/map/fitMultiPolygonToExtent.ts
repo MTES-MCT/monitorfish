@@ -10,7 +10,7 @@ import type { Coordinate } from 'ol/coordinate'
 import type { MultiPolygon } from 'ol/geom'
 
 export const fitMultiPolygonToExtent = (geometry: GeoJSONNamespace.Geometry | undefined) => dispatch => {
-  if (!geometry) {
+  if (!(geometry as GeoJSONNamespace.MultiPolygon)?.coordinates?.length) {
     return
   }
 
@@ -19,6 +19,10 @@ export const fitMultiPolygonToExtent = (geometry: GeoJSONNamespace.Geometry | un
   }).readGeometry(geometry)
 
   const coordinates = (geometryObject as MultiPolygon).getCoordinates()
+  const extent = boundingExtent(flattenDepth<Coordinate>(coordinates, 2))
+  if (!extent) {
+    return
+  }
 
-  dispatch(fitToExtent(boundingExtent(flattenDepth<Coordinate>(coordinates, 2))))
+  dispatch(fitToExtent(extent))
 }

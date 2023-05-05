@@ -13,14 +13,14 @@ export const addFeatureToDrawedFeature = (featureToAdd: Feature<Geometry>) => (d
     return
   }
 
+  if (geometryToAdd.getType() === OpenLayersGeometryType.POINT) {
+    const nextGeometry = convertToGeoJSONGeometryObject(geometryToAdd)
+    dispatch(setGeometry(nextGeometry))
+
+    return
+  }
+
   if (!geometry) {
-    if (geometryToAdd.getType() === OpenLayersGeometryType.POINT) {
-      const nextGeometry = convertToGeoJSONGeometryObject(geometryToAdd)
-      dispatch(setGeometry(nextGeometry))
-
-      return
-    }
-
     // @ts-ignore
     const nextGeometry = convertToGeoJSONGeometryObject(new MultiPolygon([geometryToAdd]))
     dispatch(setGeometry(nextGeometry))
@@ -28,8 +28,8 @@ export const addFeatureToDrawedFeature = (featureToAdd: Feature<Geometry>) => (d
     return
   }
 
-  const nextGeometry = addGeometryToMultiPolygonGeoJSON(geometry, geometryToAdd)
-  if (nextGeometry) {
-    dispatch(setGeometry(nextGeometry))
+  const nextGeometryTwo = addGeometryToMultiPolygonGeoJSON(geometry, geometryToAdd)
+  if (nextGeometryTwo) {
+    dispatch(setGeometry(nextGeometryTwo))
   }
 }

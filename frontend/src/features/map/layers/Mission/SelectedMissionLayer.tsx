@@ -7,7 +7,7 @@ import { missionZoneStyle } from './MissionLayer/styles'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
-import { getMissionFeatureZone, getMissionFeatureZoneFromDraft } from '../../../../domain/entities/mission'
+import { getMissionFeatureZone } from '../../../../domain/entities/mission'
 import { useGetFilteredMissionsQuery } from '../../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 
@@ -90,7 +90,7 @@ export function UnmemoizedSelectedMissionLayer({ map }) {
       return
     }
 
-    const missionFeature = getMissionFeatureZoneFromDraft({ ...draft, id: draftId })
+    const missionFeature = getMissionFeatureZone({ ...draft, id: draftId })
     getVectorSource().addFeature(missionFeature)
   }, [draft, draftId, getVectorSource])
 

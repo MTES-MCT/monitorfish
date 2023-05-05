@@ -131,11 +131,12 @@ const CloseButton = styled(IconButton)`
 
 const Details = styled.div`
   color: ${p => p.theme.color.slateGray};
+  margin-top: 4px;
 `
 
 const SeizureOrInfractions = styled.div`
   line-height: 22px;
-  margin-top: 6px;
+  margin-top: 8px;
   margin-bottom: 6px;
   color: ${p => p.theme.color.slateGray};
   white-space: nowrap;

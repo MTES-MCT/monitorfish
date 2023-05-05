@@ -61,6 +61,9 @@ export function FormikLocationPicker() {
       }
 
       const extent = transformExtent(boundingExtent(firstRing), WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+      if (!extent) {
+        return
+      }
 
       dispatch(fitToExtent(extent))
     },

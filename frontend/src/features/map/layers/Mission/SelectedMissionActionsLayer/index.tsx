@@ -5,7 +5,7 @@ import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { selectedMissionActionsStyles } from './styles'
 import { LayerProperties } from '../../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../../domain/entities/layers/types'
-import { getMissionActionFeature } from '../../../../../domain/entities/mission'
+import { getMissionActionFeature, getMissionActionFeatures } from '../../../../../domain/entities/mission'
 import { useGetFilteredMissionsQuery } from '../../../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 
@@ -16,7 +16,7 @@ import type { MutableRefObject } from 'react'
 
 export function UnmemoizedSelectedMissionActionsLayer({ map }) {
   const { missions } = useGetFilteredMissionsQuery()
-  const selectedMissionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionGeoJSON)
+  const { draft, draftId, selectedMissionGeoJSON } = useMainAppSelector(store => store.mission)
   const selectedMissionActions = useMemo(() => {
     if (!selectedMissionGeoJSON) {
       return []
@@ -76,6 +76,16 @@ export function UnmemoizedSelectedMissionActionsLayer({ map }) {
 
     getVectorSource().addFeatures(selectedMissionActions)
   }, [selectedMissionActions, getVectorSource])
+
+  useEffect(() => {
+    getVectorSource().clear(true)
+    if (!draft || !draftId) {
+      return
+    }
+
+    const actionFeatures = getMissionActionFeatures({ ...draft, id: draftId })
+    getVectorSource().addFeatures(actionFeatures)
+  }, [draft, draftId, getVectorSource])
 
   return null
 }

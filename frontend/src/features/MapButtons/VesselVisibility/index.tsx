@@ -34,7 +34,7 @@ export function VesselVisibilityMapButton() {
     <Wrapper ref={wrapperRef}>
       <VesselVisibilityButton
         dataCy="vessel-visibility"
-        isOpen={isOpen}
+        isActive={isOpen}
         onClick={openOrCloseVesselVisibility}
         style={{ top: 152 }}
         title="Affichage des dernières positions"

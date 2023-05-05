@@ -1,11 +1,13 @@
 import { Accent, Button, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor-ui'
+import { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import { LeftBoxOpened } from '../../../domain/entities/global'
-import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
+import { SideWindowMenuKey, SideWindowStatus } from '../../../domain/entities/sideWindow/constants'
 import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedComponent'
 import { setLeftBoxOpened } from '../../../domain/shared_slices/Global'
+import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
 import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
@@ -14,12 +16,23 @@ import { MapToolButton } from '../shared/MapToolButton'
 
 export function MissionsMenu() {
   const dispatch = useMainAppDispatch()
+  const { sideWindow } = useMainAppSelector(state => state)
   const { healthcheckTextWarning, leftBoxOpened } = useMainAppSelector(state => state.global)
   const { isMissionsLayerDisplayed } = useMainAppSelector(state => state.displayedComponent)
 
-  const toggleMissionsWindow = () => {
+  const isActive =
+    sideWindow.status !== SideWindowStatus.CLOSED &&
+    sideWindow.selectedMenuWithSubMenu.menu === SideWindowMenuKey.MISSION_LIST
+
+  const toggleMissionsWindow = useCallback(() => {
+    if (isActive) {
+      dispatch(sideWindowActions.close())
+
+      return
+    }
+
     dispatch(sideWindowDispatchers.openMenuWithSubMenu(SideWindowMenuKey.MISSION_LIST))
-  }
+  }, [dispatch, isActive])
 
   const toggleMissionsMenu = () => {
     dispatch(setLeftBoxOpened(leftBoxOpened === LeftBoxOpened.MISSIONS ? null : LeftBoxOpened.MISSIONS))
@@ -61,8 +74,8 @@ export function MissionsMenu() {
       </MissionMenuBox>
       <MissionMenuButton
         dataCy="missions-map-button"
+        isActive={leftBoxOpened === LeftBoxOpened.MISSIONS}
         isLeftButton
-        isOpen={leftBoxOpened === LeftBoxOpened.MISSIONS}
         onClick={toggleMissionsMenu}
         style={{ color: THEME.color.gainsboro, top: 120 }}
         title="Missions et contrôles"

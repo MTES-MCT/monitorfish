@@ -7,7 +7,7 @@ import { YearsToControlList } from './YearsToControlList'
 import { COLORS } from '../../../constants/constants'
 import { getLastControls, getYearsToActions, INITIAL_LAST_CONTROLS } from '../../../domain/entities/controls'
 import { resetNextControlSummary, setControlFromDate, setControlSummary } from '../../../domain/shared_slices/Control'
-import { getVesselControls } from '../../../domain/use_cases/missions/getVesselControls'
+import { getVesselControls } from '../../../domain/use_cases/mission/getVesselControls'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 

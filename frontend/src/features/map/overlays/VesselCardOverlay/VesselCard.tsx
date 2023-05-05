@@ -11,7 +11,7 @@ import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { timeagoFrenchLocale } from '../../../../utils'
 import { ReactComponent as AlertSVG } from '../../../icons/Icone_alertes.svg'
 import { ReactComponent as BeaconMalfunctionSVG } from '../../../icons/Icone_VMS_dark.svg'
-import { getAlertNameFromType } from '../../../SideWindow/alerts_reportings/utils'
+import { getAlertNameFromType } from '../../../SideWindow/AlertListAndReportingList/utils'
 import { OverlayPosition } from '../Overlay'
 
 // @ts-ignore

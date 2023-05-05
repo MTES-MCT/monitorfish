@@ -3,11 +3,12 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import { LeftBoxOpened } from '../../../domain/entities/global'
+import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
 import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedComponent'
-import { openSideWindowTab, setLeftBoxOpened } from '../../../domain/shared_slices/Global'
+import { setLeftBoxOpened } from '../../../domain/shared_slices/Global'
+import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { SideWindowMenuKey } from '../../SideWindow/constants'
 import { MapToolBox } from '../shared/MapToolBox'
 import { MapToolButton } from '../shared/MapToolButton'
 
@@ -17,7 +18,7 @@ export function MissionsMenu() {
   const { isMissionsLayerDisplayed } = useMainAppSelector(state => state.displayedComponent)
 
   const toggleMissionsWindow = () => {
-    dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_LIST))
+    dispatch(sideWindowDispatchers.openMenuWithSubMenu(SideWindowMenuKey.MISSION_LIST))
   }
 
   const toggleMissionsMenu = () => {

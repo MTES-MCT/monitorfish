@@ -34,7 +34,8 @@
       "endDateTimeUtc": null,
       "envActions": [],
       "missionSource": "POSEIDON_CNSP",
-      "isClosed": false
+      "isClosed": false,
+      "isUnderJdp": false
     }
   }
 }

@@ -77,7 +77,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['src/domain/shared_slices/**/*.ts'],
+      files: ['src/domain/shared_slices/**/*.ts', 'src/**/slice.ts'],
       rules: {
         'no-param-reassign': 'off'
       }

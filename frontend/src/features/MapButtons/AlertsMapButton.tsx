@@ -1,33 +1,33 @@
 import styled from 'styled-components'
 
-import { closeSideWindow, openSideWindowTab } from '../../domain/shared_slices/Global'
+import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
+import { sideWindowActions } from '../../domain/shared_slices/SideWindow'
+import { sideWindowDispatchers } from '../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { ReactComponent as AlertsSVG } from '../icons/Icone_alertes.svg'
-import { SideWindowMenuKey } from '../SideWindow/constants'
 
 export function AlertsMapButton() {
   const dispatch = useMainAppDispatch()
-  const { healthcheckTextWarning, openedSideWindowTab, previewFilteredVesselsMode } = useMainAppSelector(
-    state => state.global
-  )
+  const { healthcheckTextWarning, previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
+  const { sideWindow } = useMainAppSelector(state => state)
 
   return (
     <AlertsButton
       data-cy="alerts-button"
       healthcheckTextWarning={!!healthcheckTextWarning}
       isHidden={Boolean(previewFilteredVesselsMode)}
-      isVisible={openedSideWindowTab === SideWindowMenuKey.ALERTS}
+      isVisible={sideWindow.selectedMenuWithSubMenu.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST}
       onClick={() => {
-        if (openedSideWindowTab !== SideWindowMenuKey.ALERTS) {
-          dispatch(openSideWindowTab(SideWindowMenuKey.ALERTS))
+        if (sideWindow.selectedMenuWithSubMenu.menu !== SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST) {
+          dispatch(sideWindowDispatchers.openMenuWithSubMenu(SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST))
 
           return
         }
 
-        if (openedSideWindowTab === SideWindowMenuKey.ALERTS) {
-          dispatch(closeSideWindow())
+        if (sideWindow.selectedMenuWithSubMenu.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST) {
+          dispatch(sideWindowActions.close())
         }
       }}
       title="Alertes"

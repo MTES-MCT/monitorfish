@@ -1,29 +1,31 @@
 import { Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { SideWindowMenuKey } from './constants'
-import { getEnvironmentVariable } from '../../api/utils'
-import { openSideWindowTab } from '../../domain/shared_slices/Global'
-import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
+import { getEnvironmentVariable } from '../../../api/utils'
+import { SideWindowMenuKey, SideWindowMenuLabel } from '../../../domain/entities/sideWindow/constants'
+import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 
 const IS_DEV_ENV = getEnvironmentVariable('REACT_APP_IS_DEV_ENV')
 
-export type SideWindowMenuProps = {
+export type MenuProps = {
   selectedMenu: string | undefined
 }
-export function SideWindowMenu({ selectedMenu }: SideWindowMenuProps) {
+export function Menu({ selectedMenu }: MenuProps) {
   const dispatch = useMainAppDispatch()
 
   return (
-    <Menu role="menu">
+    <Wrapper role="menu">
       <MenuButton
         data-cy="side-window-menu-alerts"
         Icon={Icon.Alert}
         iconSize={26}
-        onClick={() => dispatch(openSideWindowTab(SideWindowMenuKey.ALERTS))}
+        onClick={() =>
+          dispatch(sideWindowDispatchers.openMenuWithSubMenu(SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST))
+        }
         role="menuitem"
-        selected={selectedMenu === SideWindowMenuKey.ALERTS}
-        title={SideWindowMenuKey.ALERTS}
+        selected={selectedMenu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST}
+        title={SideWindowMenuLabel.ALERT_LIST_AND_REPORTING_LIST}
       />
       {IS_DEV_ENV && (
         <MenuButton
@@ -31,26 +33,26 @@ export function SideWindowMenu({ selectedMenu }: SideWindowMenuProps) {
           data-cy="side-window-menu-mission-list"
           Icon={Icon.MissionAction}
           iconSize={26}
-          onClick={() => dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_LIST))}
+          onClick={() => dispatch(sideWindowDispatchers.openMenuWithSubMenu(SideWindowMenuKey.MISSION_LIST))}
           role="menuitem"
           selected={selectedMenu === SideWindowMenuKey.MISSION_LIST}
-          title={SideWindowMenuKey.MISSION_LIST}
+          title={SideWindowMenuLabel.MISSION_LIST}
         />
       )}
       <MenuButton
         data-cy="side-window-menu-beacon-malfunctions"
         Icon={Icon.Vms}
         iconSize={26}
-        onClick={() => dispatch(openSideWindowTab(SideWindowMenuKey.BEACON_MALFUNCTIONS))}
+        onClick={() => dispatch(sideWindowDispatchers.openMenuWithSubMenu(SideWindowMenuKey.BEACON_MALFUNCTION_LIST))}
         role="menuitem"
-        selected={selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTIONS}
-        title={SideWindowMenuKey.BEACON_MALFUNCTIONS}
+        selected={selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTION_LIST}
+        title={SideWindowMenuLabel.BEACON_MALFUNCTION_LIST}
       />
-    </Menu>
+    </Wrapper>
   )
 }
 
-const Menu = styled.div`
+const Wrapper = styled.div`
   background-color: ${p => p.theme.color.charcoal};
   box-sizing: border-box;
   display: flex;

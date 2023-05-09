@@ -37,10 +37,7 @@ import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { SelectedMissionActionsLayer } from './layers/Mission/SelectedMissionActionsLayer'
 import { ControlOverlay } from './overlays/ControlOverlay'
 import { SelectedControlOverlay } from './overlays/SelectedControlOverlay'
-import { getEnvironmentVariable } from '../../api/utils'
 import { useSelector } from 'react-redux'
-
-const IS_DEV_ENV = getEnvironmentVariable('REACT_APP_IS_DEV_ENV')
 
 const Map = () => {
   const { isAdmin } = useMainAppSelector(state => state.global)
@@ -88,15 +85,15 @@ const Map = () => {
       <MeasurementLayer/>
       <FilterLayer/>
       {/** <></> can't be used to group condition as BaseMap needs the layers to be direct children **/}
-      {IS_DEV_ENV && isAdmin && isMissionsLayerDisplayed && <MissionLayer/>}
-      {IS_DEV_ENV && isAdmin && <MissionsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>}
-      {IS_DEV_ENV && isAdmin && <SelectedMissionLayer feature={currentFeature}/>}
-      {IS_DEV_ENV && isAdmin && <MissionHoveredLayer feature={currentFeature}/>}
-      {IS_DEV_ENV && isAdmin && <MissionOverlay feature={currentFeature}/>}
-      {IS_DEV_ENV && isAdmin && <SelectedMissionOverlay/>}
-      {IS_DEV_ENV && isAdmin && <SelectedMissionActionsLayer/>}
-      {IS_DEV_ENV && isAdmin && <ControlOverlay feature={currentFeature}/>}
-      {IS_DEV_ENV && isAdmin && <SelectedControlOverlay/>}
+      {isAdmin && isMissionsLayerDisplayed && <MissionLayer/>}
+      {isAdmin && <MissionsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>}
+      {isAdmin && <SelectedMissionLayer feature={currentFeature}/>}
+      {isAdmin && <MissionHoveredLayer feature={currentFeature}/>}
+      {isAdmin && <MissionOverlay feature={currentFeature}/>}
+      {isAdmin && <SelectedMissionOverlay/>}
+      {isAdmin && <SelectedMissionActionsLayer/>}
+      {isAdmin && <ControlOverlay feature={currentFeature}/>}
+      {isAdmin && <SelectedControlOverlay/>}
       <DrawLayer/>
       <RegulatoryLayerSearch/>
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>

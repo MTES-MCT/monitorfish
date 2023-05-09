@@ -1,12 +1,9 @@
 import { Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { getEnvironmentVariable } from '../../../api/utils'
 import { SideWindowMenuKey, SideWindowMenuLabel } from '../../../domain/entities/sideWindow/constants'
 import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-
-const IS_DEV_ENV = getEnvironmentVariable('REACT_APP_IS_DEV_ENV')
 
 export type MenuProps = {
   selectedMenu: string | undefined
@@ -27,18 +24,16 @@ export function Menu({ selectedMenu }: MenuProps) {
         selected={selectedMenu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST}
         title={SideWindowMenuLabel.ALERT_LIST_AND_REPORTING_LIST}
       />
-      {IS_DEV_ENV && (
-        <MenuButton
-          aria-label={SideWindowMenuKey.MISSION_LIST}
-          data-cy="side-window-menu-mission-list"
-          Icon={Icon.MissionAction}
-          iconSize={26}
-          onClick={() => dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_LIST }))}
-          role="menuitem"
-          selected={selectedMenu === SideWindowMenuKey.MISSION_LIST}
-          title={SideWindowMenuLabel.MISSION_LIST}
-        />
-      )}
+      <MenuButton
+        aria-label={SideWindowMenuKey.MISSION_LIST}
+        data-cy="side-window-menu-mission-list"
+        Icon={Icon.MissionAction}
+        iconSize={26}
+        onClick={() => dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_LIST }))}
+        role="menuitem"
+        selected={selectedMenu === SideWindowMenuKey.MISSION_LIST}
+        title={SideWindowMenuLabel.MISSION_LIST}
+      />
       <MenuButton
         data-cy="side-window-menu-beacon-malfunctions"
         Icon={Icon.Vms}

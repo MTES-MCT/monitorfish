@@ -13,6 +13,7 @@ interface MissionRepository {
         pageSize: Int?,
         startedAfterDateTime: ZonedDateTime?,
         startedBeforeDateTime: ZonedDateTime?,
+        missionSources: List<String>?,
         missionNatures: List<String>?,
         missionTypes: List<String>?,
         missionStatuses: List<String>?,

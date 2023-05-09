@@ -1,10 +1,11 @@
-import { SideWindowStatus, type SideWindowMenuKey } from '../../entities/sideWindow/constants'
+import { SideWindowStatus } from '../../entities/sideWindow/constants'
 import { sideWindowActions } from '../../shared_slices/SideWindow'
 
 import type { MainAppThunk } from '../../../store'
+import type { SideWindow } from '../../entities/sideWindow/types'
 
-export const openMenuWithSubMenu =
-  (menu: SideWindowMenuKey /** , maybeSubMenu?: string */): MainAppThunk<void> =>
+export const openPath =
+  (path: SideWindow.Path): MainAppThunk<void> =>
   (dispatch, getState) => {
     const { mission, sideWindow } = getState()
 
@@ -12,8 +13,10 @@ export const openMenuWithSubMenu =
     // const subMenu = maybeSubMenu || 'TO_FILL'
 
     if (sideWindow.status !== SideWindowStatus.CLOSED && mission.isDraftDirty) {
-      return dispatch(sideWindowActions.askForDraftCancellationConfirmationBeforeGoingTo({ menu }))
+      dispatch(sideWindowActions.askForDraftCancellationConfirmationBeforeGoingTo(path))
+
+      return
     }
 
-    return dispatch(sideWindowActions.openOrFocusAndGoTo({ menu }))
+    dispatch(sideWindowActions.openOrFocusAndGoTo(path))
   }

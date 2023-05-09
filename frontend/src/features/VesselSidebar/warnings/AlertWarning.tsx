@@ -30,7 +30,7 @@ export function AlertWarning({ selectedVessel }) {
 
 const showAlertInSideWindow = (dispatch, selectedVessel) => {
   batch(() => {
-    dispatch(sideWindowDispatchers.openMenuWithSubMenu(SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST))
+    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
     dispatch(
       focusOnAlert({
         externalReferenceNumber: selectedVessel.externalReferenceNumber,

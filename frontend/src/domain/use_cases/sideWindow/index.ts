@@ -1,5 +1,5 @@
-import { openMenuWithSubMenu } from './openMenuWithSubMenu'
+import { openPath } from './openPath'
 
 export const sideWindowDispatchers = {
-  openMenuWithSubMenu
+  openPath
 }

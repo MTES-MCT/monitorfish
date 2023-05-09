@@ -1,4 +1,5 @@
 import { Accent, Button, Icon, IconButton, Size, Tag } from '@mtes-mct/monitor-ui'
+import { Fragment } from 'react'
 import styled from 'styled-components'
 
 import { margins } from './constants'
@@ -23,8 +24,12 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
   const dispatch = useMainAppDispatch()
 
   const openMissionInSideWindow = () => {
-    dispatch(sideWindowDispatchers.openMenuWithSubMenu(SideWindowMenuKey.MISSION_FORM))
-    dispatch(missionActions.setDraftId(mission.missionId))
+    dispatch(
+      sideWindowDispatchers.openPath({
+        id: mission.missionId,
+        menu: SideWindowMenuKey.MISSION_FORM
+      })
+    )
   }
 
   return (
@@ -43,14 +48,14 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
           <Title isSelected={isSelected}>
             {mission.controlUnits.length === 1 &&
               mission.controlUnits.map((controlUnit: ControlUnit.ControlUnit) => (
-                <>
+                <Fragment key={controlUnit.id}>
                   <TextWithEllipsis>{controlUnit.name.toUpperCase()}</TextWithEllipsis>
                   {controlUnit.contact ? (
                     <TextWithEllipsis>{controlUnit.contact}</TextWithEllipsis>
                   ) : (
                     <NoContact>Aucun contact renseigné</NoContact>
                   )}
-                </>
+                </Fragment>
               ))}
             {mission.controlUnits.length > 1 && mission.controlUnits[0] && (
               <>

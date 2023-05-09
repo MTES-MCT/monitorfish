@@ -1,5 +1,4 @@
-import { Accent, Button, Icon, Tag } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/dist/query'
+import { Accent, Button, Icon, Tag, usePrevious } from '@mtes-mct/monitor-ui'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
@@ -14,11 +13,11 @@ import {
   getUpdatedMissionFromMissionFormValues,
   isMissionFormValuesComplete
 } from './utils'
-import { useCreateMissionMutation, useGetMissionQuery, useUpdateMissionMutation } from '../../../api/mission'
+import { monitorenvMissionApi, useCreateMissionMutation, useUpdateMissionMutation } from '../../../api/mission'
 import {
+  missionActionApi,
   useCreateMissionActionMutation,
   useDeleteMissionActionMutation,
-  useGetMissionActionsQuery,
   useUpdateMissionActionMutation
 } from '../../../api/missionAction'
 import { missionActions } from '../../../domain/actions'
@@ -43,11 +42,10 @@ export function UnmemoizedMissionForm() {
   const headerDivRef = useRef<HTMLDivElement | null>(null)
   const originalMissionRef = useRef<MissionWithActions | undefined>(undefined)
 
+  const previousMissionId = usePrevious(sideWindow.selectedPath.id)
   const [isLoading, setIsLoading] = useState(true)
 
   const dispatch = useMainAppDispatch()
-  const missionApiQuery = useGetMissionQuery(mission.draftId || skipToken)
-  const missionActionsApiQuery = useGetMissionActionsQuery(mission.draftId || skipToken)
   const [createMission] = useCreateMissionMutation()
   const [createMissionAction] = useCreateMissionActionMutation()
   const [deleteMissionAction] = useDeleteMissionActionMutation()
@@ -79,7 +77,7 @@ export function UnmemoizedMissionForm() {
 
   const missionTitle = useMemo(
     () =>
-      mission.draftId
+      sideWindow.selectedPath.id
         ? `Mission ${
             debouncedMissionDraft?.missionTypes &&
             debouncedMissionDraft.missionTypes.map(missionType => Mission.MissionTypeLabel[missionType]).join(' / ')
@@ -87,7 +85,7 @@ export function UnmemoizedMissionForm() {
             .map(controlUnit => controlUnit.name?.replace('(historique)', ''))
             .join(', ')}`
         : `Nouvelle mission`,
-    [debouncedMissionDraft, mission.draftId]
+    [debouncedMissionDraft, sideWindow.selectedPath.id]
   )
 
   const goToMissionList = useCallback(async () => {
@@ -105,7 +103,7 @@ export function UnmemoizedMissionForm() {
 
       let missionId: number
 
-      if (!mission.draftId) {
+      if (!sideWindow.selectedPath.id) {
         const newMission = getMissionDataFromMissionFormValues(mission.draft, mustClose)
         // TODO Override Redux RTK typings globally.
         // Redux RTK typing is wrong, this should be a tuple-like to help TS discriminate `data` from `error`.
@@ -116,10 +114,14 @@ export function UnmemoizedMissionForm() {
 
         missionId = data.id
       } else {
-        const updatedMission = getUpdatedMissionFromMissionFormValues(mission.draftId, mission.draft, mustClose)
+        const updatedMission = getUpdatedMissionFromMissionFormValues(
+          sideWindow.selectedPath.id,
+          mission.draft,
+          mustClose
+        )
         await updateMission(updatedMission)
 
-        missionId = mission.draftId
+        missionId = sideWindow.selectedPath.id
       }
       // eslint-disable-next-line no-empty
 
@@ -153,9 +155,9 @@ export function UnmemoizedMissionForm() {
       deleteMissionAction,
       goToMissionList,
       mission.draft,
-      mission.draftId,
       updateMission,
-      updateMissionAction
+      updateMissionAction,
+      sideWindow.selectedPath.id
     ]
   )
 
@@ -171,38 +173,52 @@ export function UnmemoizedMissionForm() {
   // DATA
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && sideWindow.selectedPath.id === previousMissionId) {
       return
     }
 
-    // New mission
-    if (!mission.draftId) {
+    if (sideWindow.selectedPath.id !== previousMissionId) {
+      setIsLoading(true)
+    }
+
+    ;(async () => {
+      // New mission
+      if (!sideWindow.selectedPath.id) {
+        dispatch(missionActions.initializeDraft())
+
+        setIsLoading(false)
+
+        return
+      }
+
+      const missionResponse = await dispatch(
+        monitorenvMissionApi.endpoints.getMission.initiate(sideWindow.selectedPath.id)
+      )
+      const missionActionsResponse = await dispatch(
+        missionActionApi.endpoints.getMissionActions.initiate(sideWindow.selectedPath.id)
+      )
+      if (!missionResponse.data) {
+        throw new FrontendError('`missionResponse.data` is undefined.')
+      }
+      if (!missionActionsResponse.data) {
+        throw new FrontendError('`missionActionsResponse.data` is undefined.')
+      }
+
+      originalMissionRef.current = {
+        ...missionResponse.data,
+        actions: missionActionsResponse.data
+      }
+
       setIsLoading(false)
 
-      dispatch(missionActions.initializeDraft())
-
-      return
-    }
-
-    // Mission edition
-    if (!missionApiQuery.data || !missionActionsApiQuery.data) {
-      return
-    }
-
-    originalMissionRef.current = {
-      ...missionApiQuery.data,
-      actions: missionActionsApiQuery.data
-    }
-
-    setIsLoading(false)
-
-    dispatch(
-      missionActions.initializeDraft({
-        mission: missionApiQuery.data,
-        missionActions: missionActionsApiQuery.data
-      })
-    )
-  }, [dispatch, isLoading, mission.draftId, missionActionsApiQuery.data, missionApiQuery.data])
+      dispatch(
+        missionActions.initializeDraft({
+          mission: missionResponse.data,
+          missionActions: missionActionsResponse.data
+        })
+      )
+    })()
+  }, [dispatch, isLoading, previousMissionId, sideWindow.selectedPath.id])
 
   useEffect(
     () => () => {
@@ -220,7 +236,7 @@ export function UnmemoizedMissionForm() {
           <HeaderTitle>
             <BackToListIcon onClick={goToMissionList} />
             {missionTitle}
-            {mission.draftId && (
+            {sideWindow.selectedPath.id && (
               <MissionSourceTag
                 isFromCacem={
                   debouncedMissionDraft?.missionSource === Mission.MissionSource.POSEIDON_CACEM ||

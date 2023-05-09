@@ -16,7 +16,7 @@ export function AlertsMapButton() {
 
   const isActive =
     sideWindow.status !== SideWindowStatus.CLOSED &&
-    sideWindow.selectedMenuWithSubMenu.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST
+    sideWindow.selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST
 
   const toggleSideWindow = useCallback(() => {
     if (isActive) {
@@ -25,7 +25,7 @@ export function AlertsMapButton() {
       return
     }
 
-    dispatch(sideWindowDispatchers.openMenuWithSubMenu(SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST))
+    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
   }, [dispatch, isActive])
 
   return (

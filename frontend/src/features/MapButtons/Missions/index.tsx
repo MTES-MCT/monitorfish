@@ -21,8 +21,7 @@ export function MissionsMenu() {
   const { isMissionsLayerDisplayed } = useMainAppSelector(state => state.displayedComponent)
 
   const isActive =
-    sideWindow.status !== SideWindowStatus.CLOSED &&
-    sideWindow.selectedMenuWithSubMenu.menu === SideWindowMenuKey.MISSION_LIST
+    sideWindow.status !== SideWindowStatus.CLOSED && sideWindow.selectedPath.menu === SideWindowMenuKey.MISSION_LIST
 
   const toggleMissionsWindow = useCallback(() => {
     if (isActive) {
@@ -31,7 +30,7 @@ export function MissionsMenu() {
       return
     }
 
-    dispatch(sideWindowDispatchers.openMenuWithSubMenu(SideWindowMenuKey.MISSION_LIST))
+    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_LIST }))
   }, [dispatch, isActive])
 
   const toggleMissionsMenu = () => {

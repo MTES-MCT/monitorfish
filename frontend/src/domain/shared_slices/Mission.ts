@@ -16,7 +16,6 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface MissionState {
   draft: MissionFormValues | undefined
-  draftId: Mission.Mission['id'] | undefined
   editedDraftActionIndex: number | undefined
   isDraftDirty: boolean
   listFilterValues: FilterValues
@@ -26,7 +25,6 @@ export interface MissionState {
 }
 const INITIAL_STATE: MissionState = {
   draft: undefined,
-  draftId: undefined,
   editedDraftActionIndex: undefined,
   isDraftDirty: false,
   listFilterValues: {
@@ -102,13 +100,11 @@ const missionSlice = createSlice({
     ) {
       if (!action.payload) {
         state.draft = getMissionFormInitialValues(undefined, [])
-        state.draftId = undefined
 
         return
       }
 
       state.draft = getMissionFormInitialValues(action.payload.mission, action.payload.missionActions)
-      state.draftId = action.payload.mission.id
     },
 
     /**
@@ -152,17 +148,6 @@ const missionSlice = createSlice({
       }
 
       state.draft = nextDraft
-    },
-
-    /**
-     * Set mission draft ID (= missionId to edit)
-     */
-    setDraftId(state, action: PayloadAction<Mission.Mission['id']>) {
-      // We have to reset the `draft` since it's a new mission draft
-      state.draft = undefined
-      state.draftId = action.payload
-      // We have to reset the `editedDraftActionIndex` since it's a new mission draft
-      state.editedDraftActionIndex = undefined
     },
 
     /**
@@ -234,7 +219,6 @@ const missionSlice = createSlice({
      */
     unsetDraft(state) {
       state.draft = undefined
-      state.draftId = undefined
       state.editedDraftActionIndex = undefined
       state.isDraftDirty = false
     },

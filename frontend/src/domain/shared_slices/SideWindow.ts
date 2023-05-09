@@ -4,27 +4,20 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { FrontendError } from '../../libs/FrontendError'
 import { SideWindowMenuKey, SideWindowStatus } from '../entities/sideWindow/constants'
 
+import type { SideWindow } from '../entities/sideWindow/types'
+
 export interface SideWindowState {
   // hasBeenRenderedOnce: boolean
   isDraftCancellationConfirmationDialogVisible: boolean
-  nextMenuWithSubmenu:
-    | {
-        menu: SideWindowMenuKey
-        // subMenu: string
-      }
-    | undefined
-  selectedMenuWithSubMenu: {
-    menu: SideWindowMenuKey
-    // subMenu: string
-  }
+  nextPath: SideWindow.Path | undefined
+  selectedPath: SideWindow.Path
   status: SideWindowStatus
 }
 const INITIAL_STATE: SideWindowState = {
   isDraftCancellationConfirmationDialogVisible: false,
-  nextMenuWithSubmenu: undefined,
-  selectedMenuWithSubMenu: {
+  nextPath: undefined,
+  selectedPath: {
     menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST
-    // subMenu: SeaFrontGroup.MED
   },
   status: SideWindowStatus.CLOSED
 }
@@ -36,15 +29,9 @@ const sideWindowSlice = createSlice({
     /**
      * Show confirmation dialog when a draft is both in progress and dirty before going to menu + submenu
      */
-    askForDraftCancellationConfirmationBeforeGoingTo(
-      state,
-      action: PayloadAction<{
-        menu: SideWindowMenuKey
-        // subMenu: string
-      }>
-    ) {
+    askForDraftCancellationConfirmationBeforeGoingTo(state, action: PayloadAction<SideWindow.Path>) {
       state.isDraftCancellationConfirmationDialogVisible = true
-      state.nextMenuWithSubmenu = action.payload
+      state.nextPath = action.payload
       state.status = SideWindowStatus.FOCUSED
     },
 
@@ -61,22 +48,22 @@ const sideWindowSlice = createSlice({
     closeDraftCancellationConfirmationDialog(state) {
       state.isDraftCancellationConfirmationDialogVisible = false
       // We reset this prop that was set by `askForDraftCancellationConfirmationBeforeGoingTo()`
-      state.nextMenuWithSubmenu = undefined
+      state.nextPath = undefined
     },
 
     /**
      * Confirm cancellation of a draft that is both in progress and dirty
      */
     confirmDraftCancellationAndGoToNextMenuWithSubMenu(state) {
-      if (!state.nextMenuWithSubmenu) {
-        throw new FrontendError('`state.nextMenuWithSubmenu` is undefined.')
+      if (!state.nextPath) {
+        throw new FrontendError('`state.nextPath` is undefined.')
       }
 
       state.isDraftCancellationConfirmationDialogVisible = false
-      state.selectedMenuWithSubMenu = state.nextMenuWithSubmenu
+      state.selectedPath = state.nextPath
       state.status = SideWindowStatus.FOCUSED
 
-      state.nextMenuWithSubmenu = undefined
+      state.nextPath = undefined
     },
 
     /**
@@ -84,16 +71,10 @@ const sideWindowSlice = createSlice({
      *
      * @description
      * ⚠️ You should only use this action when you are willingly cancelling or saving a current draft in progress.
-     * In all other cases, you should use `sideWindowDispatchers.openMenuWithSubMenu()`.
+     * In all other cases, you should use `sideWindowDispatchers.openPath()`.
      */
-    openOrFocusAndGoTo(
-      state,
-      action: PayloadAction<{
-        menu: SideWindowMenuKey
-        // subMenu: string
-      }>
-    ) {
-      state.selectedMenuWithSubMenu = action.payload
+    openOrFocusAndGoTo(state, action: PayloadAction<SideWindow.Path>) {
+      state.selectedPath = action.payload
       state.status = SideWindowStatus.FOCUSED
     },
 

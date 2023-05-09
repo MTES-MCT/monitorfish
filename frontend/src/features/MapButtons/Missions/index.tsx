@@ -20,6 +20,12 @@ export function MissionsMenu() {
     dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_LIST))
   }
 
+  const addMission = () => {
+    // TODO Replace this call with the call of the use-case to handle the case
+    //  of a mission already opened in this form
+    dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))
+  }
+
   const toggleMissionsMenu = () => {
     dispatch(setLeftBoxOpened(leftBoxOpened === LeftBoxOpened.MISSIONS ? null : LeftBoxOpened.MISSIONS))
   }
@@ -50,6 +56,11 @@ export function MissionsMenu() {
             />
           </MissionsMenuHeader>
           <MissionsMenuBody>
+            <Section>
+              <BlockIconButton accent={Accent.PRIMARY} Icon={Icon.Plus} onClick={addMission}>
+                Ouvrir une nouvelle mission
+              </BlockIconButton>
+            </Section>
             <Section>
               <BlockIconButton accent={Accent.SECONDARY} Icon={Icon.Expand} onClick={toggleMissionsWindow}>
                 Voir la vue détaillée des missions

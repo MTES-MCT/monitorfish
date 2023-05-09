@@ -45,6 +45,7 @@ class MissionsControllerITests {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
+                anyOrNull(),
             )
         }.willReturn(
             listOf(
@@ -100,6 +101,7 @@ class MissionsControllerITests {
                 null,
                 ZonedDateTime.parse("2021-05-05T03:04:05.000Z"),
                 ZonedDateTime.parse("2022-05-05T03:04:05.000Z"),
+                listOf(),
                 listOf(),
                 listOf("SEA", "LAND"),
                 listOf(),

@@ -199,6 +199,7 @@ class APIMissionRepositoryITest {
                     null,
                     null,
                     null,
+                    null,
                 )
 
             // Then
@@ -232,6 +233,7 @@ class APIMissionRepositoryITest {
                     2,
                     ZonedDateTime.of(2021, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
                     ZonedDateTime.of(2022, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                    listOf("MONITORFISH"),
                     listOf(MissionNature.FISH.toString()),
                     listOf(MissionType.SEA.toString(), MissionType.LAND.toString()),
                     listOf(),
@@ -248,6 +250,7 @@ class APIMissionRepositoryITest {
                     pageSize=2&
                     startedAfterDateTime=2021-05-05T03:04:05.000Z&
                     startedBeforeDateTime=2022-05-05T03:04:05.000Z&
+                    missionSource=MONITORFISH&
                     missionNature=FISH&
                     missionTypes=SEA,LAND&
                     seaFronts=MED

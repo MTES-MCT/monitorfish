@@ -2,7 +2,7 @@ import { customDayjs } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 
 import { useGetMissionsQuery } from '../../../../api/mission'
-import { SEA_FRONT_GROUP_SEA_FRONTS } from '../../../../constants'
+import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFrontLabel } from '../../../../constants'
 import { MissionDateRangeFilter, MissionFilterType } from '../../../../features/SideWindow/MissionList/types'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { administrationFilterFunction } from '../filters/administrationFilterFunction'
@@ -17,10 +17,14 @@ export const useGetFilteredMissionsQuery = (): {
   isError: boolean
   isLoading: boolean
   missions: MissionWithActions[]
+  missionsSeaFrontFiltered: MissionWithActions[]
 } => {
   const { listFilterValues, listSeaFront } = useMainAppSelector(state => state.mission)
 
-  const filteredSeaFronts = useMemo(() => SEA_FRONT_GROUP_SEA_FRONTS[listSeaFront], [listSeaFront])
+  const filteredSeaFronts = useMemo(
+    () => SEA_FRONT_GROUP_SEA_FRONTS[listSeaFront].map(seaFront => SeaFrontLabel[seaFront]),
+    [listSeaFront]
+  )
 
   const startedAfterDateTime = () => {
     const isCustom = listFilterValues[MissionFilterType.CUSTOM_DATE_RANGE]?.length
@@ -76,21 +80,24 @@ export const useGetFilteredMissionsQuery = (): {
 
     const administrationFilter = listFilterValues[MissionFilterType.ADMINISTRATION] || []
     const unitFilter = listFilterValues[MissionFilterType.UNIT] || []
-    if (!administrationFilter?.length && !unitFilter?.length) {
-      return data
-    }
 
     return data.filter(
-      mission =>
-        seaFrontFilterFunction(mission, filteredSeaFronts) &&
-        administrationFilterFunction(mission, administrationFilter) &&
-        unitFilterFunction(mission, unitFilter)
+      mission => administrationFilterFunction(mission, administrationFilter) && unitFilterFunction(mission, unitFilter)
     )
-  }, [data, listFilterValues, filteredSeaFronts])
+  }, [data, listFilterValues])
+
+  const missionsSeaFrontFiltered: MissionWithActions[] = useMemo(() => {
+    if (!missions) {
+      return []
+    }
+
+    return missions.filter(mission => seaFrontFilterFunction(mission, filteredSeaFronts))
+  }, [missions, filteredSeaFronts])
 
   return {
     isError,
     isLoading,
-    missions
+    missions,
+    missionsSeaFrontFiltered
   }
 }

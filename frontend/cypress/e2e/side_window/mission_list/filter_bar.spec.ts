@@ -26,7 +26,7 @@ context('Side Window > Mission List > Filter Bar', () => {
   })
 
   it('Should filter missions by status', () => {
-    cy.intercept('GET', `*missionStatus=DONE&*`).as('getMissions')
+    cy.intercept('GET', `*missionStatus=ENDED&*`).as('getMissions')
     cy.fill('Statut', ['Terminée'])
     cy.wait('@getMissions')
 

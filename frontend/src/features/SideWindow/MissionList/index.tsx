@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { MISSION_LIST_SUB_MENU_OPTIONS, MISSION_LIST_TABLE_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
 import { renderStatus } from './utils'
-import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFrontGroup } from '../../../constants'
+import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFrontGroup, SeaFrontLabel } from '../../../constants'
 import { missionActions } from '../../../domain/actions'
 import { useGetFilteredMissionsQuery } from '../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
@@ -29,10 +29,10 @@ export function MissionList() {
 
   const dispatch = useMainAppDispatch()
 
-  const { isError, isLoading, missions } = useGetFilteredMissionsQuery()
+  const { isError, isLoading, missions, missionsSeaFrontFiltered } = useGetFilteredMissionsQuery()
 
   const { renderTableHead, tableData } = useTable<MissionWithActions>(
-    missions,
+    missionsSeaFrontFiltered,
     MISSION_LIST_TABLE_OPTIONS,
     [],
     searchQuery
@@ -40,11 +40,15 @@ export function MissionList() {
 
   const countMissionsForSeaFrontGroup = useCallback(
     (seaFrontGroup: SeaFrontGroup): number =>
-      missions.filter(({ facade }) =>
-        facade && SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup]
-          ? SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup].includes(facade as any)
-          : true
-      ).length,
+      missions.filter(({ facade }) => {
+        if (seaFrontGroup === SeaFrontGroup.ALL) {
+          return true
+        }
+
+        return facade && SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup]
+          ? SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup].map(seaFront => SeaFrontLabel[seaFront]).includes(facade as any)
+          : false
+      }).length,
     [missions]
   )
 

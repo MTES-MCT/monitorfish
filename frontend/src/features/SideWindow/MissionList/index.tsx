@@ -50,12 +50,7 @@ export function MissionList() {
 
   const goToMissionForm = useCallback(
     async (missionId?: Mission.Mission['id']) => {
-      if (missionId) {
-        // TODO Replace that with the virtual router route once it's integrated.
-        dispatch(missionActions.setDraftId(missionId))
-      }
-
-      dispatch(sideWindowDispatchers.openMenuWithSubMenu(SideWindowMenuKey.MISSION_FORM))
+      dispatch(sideWindowDispatchers.openPath({ id: missionId, menu: SideWindowMenuKey.MISSION_FORM }))
     },
     [dispatch]
   )

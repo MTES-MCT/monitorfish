@@ -15,17 +15,17 @@ import type { VectorLayerWithName } from '../../../../domain/types/layer'
 
 export function UnmemoizedSelectedMissionLayer({ map }) {
   const { missions } = useGetFilteredMissionsQuery()
-  const { draft, draftId, selectedMissionGeoJSON } = useMainAppSelector(store => store.mission)
+  const { mission, sideWindow } = useMainAppSelector(store => store)
 
   const selectedMission = useMemo(() => {
-    if (!selectedMissionGeoJSON) {
+    if (!mission.selectedMissionGeoJSON) {
       return undefined
     }
 
     return new GeoJSON({
       featureProjection: OPENLAYERS_PROJECTION
-    }).readFeature(selectedMissionGeoJSON)
-  }, [selectedMissionGeoJSON])
+    }).readFeature(mission.selectedMissionGeoJSON)
+  }, [mission.selectedMissionGeoJSON])
 
   const vectorSourceRef = useRef<VectorSource>()
   const getVectorSource = useCallback(() => {
@@ -86,13 +86,13 @@ export function UnmemoizedSelectedMissionLayer({ map }) {
 
   useEffect(() => {
     getVectorSource().clear(true)
-    if (!draft || !draftId) {
+    if (!mission.draft || !sideWindow.selectedPath.id) {
       return
     }
 
-    const missionFeature = getMissionFeatureZone({ ...draft, id: draftId })
+    const missionFeature = getMissionFeatureZone({ ...mission.draft, id: sideWindow.selectedPath.id })
     getVectorSource().addFeature(missionFeature)
-  }, [draft, draftId, getVectorSource])
+  }, [getVectorSource, mission.draft, sideWindow.selectedPath.id])
 
   return null
 }

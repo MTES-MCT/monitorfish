@@ -16,9 +16,10 @@ import type { MutableRefObject } from 'react'
 
 export function UnmemoizedSelectedMissionActionsLayer({ map }) {
   const { missions } = useGetFilteredMissionsQuery()
-  const { draft, draftId, selectedMissionGeoJSON } = useMainAppSelector(store => store.mission)
+  const { mission, sideWindow } = useMainAppSelector(store => store)
+
   const selectedMissionActions = useMemo(() => {
-    if (!selectedMissionGeoJSON) {
+    if (!mission.selectedMissionGeoJSON) {
       return []
     }
 
@@ -26,12 +27,12 @@ export function UnmemoizedSelectedMissionActionsLayer({ map }) {
       missions
         .find(
           missionsAndAction =>
-            missionsAndAction.id === (selectedMissionGeoJSON as GeoJSON.Feature).properties?.missionId
+            missionsAndAction.id === (mission.selectedMissionGeoJSON as GeoJSON.Feature).properties?.missionId
         )
         ?.actions?.map(action => getMissionActionFeature(action))
         .filter((feature): feature is Feature => Boolean(feature)) || []
     )
-  }, [missions, selectedMissionGeoJSON])
+  }, [mission.selectedMissionGeoJSON, missions])
 
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
   const getVectorSource = useCallback(() => {
@@ -79,13 +80,13 @@ export function UnmemoizedSelectedMissionActionsLayer({ map }) {
 
   useEffect(() => {
     getVectorSource().clear(true)
-    if (!draft || !draftId) {
+    if (!mission.draft || !sideWindow.selectedPath.id) {
       return
     }
 
-    const actionFeatures = getMissionActionFeatures({ ...draft, id: draftId })
+    const actionFeatures = getMissionActionFeatures({ ...mission.draft, id: sideWindow.selectedPath.id })
     getVectorSource().addFeatures(actionFeatures)
-  }, [draft, draftId, getVectorSource])
+  }, [getVectorSource, mission.draft, sideWindow.selectedPath.id])
 
   return null
 }

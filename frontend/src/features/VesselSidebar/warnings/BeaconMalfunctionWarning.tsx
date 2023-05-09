@@ -27,7 +27,7 @@ export function BeaconMalfunctionWarning({ selectedVessel }) {
 }
 
 const showBeaconMalfunctionInSideWindow = (dispatch, selectedVessel) => {
-  dispatch(sideWindowDispatchers.openMenuWithSubMenu(SideWindowMenuKey.BEACON_MALFUNCTION_LIST))
+  dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.BEACON_MALFUNCTION_LIST }))
   dispatch(openBeaconMalfunctionInKanban(selectedVessel?.beaconMalfunctionId))
 }
 

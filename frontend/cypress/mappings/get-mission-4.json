@@ -34,7 +34,8 @@
       "endDateTimeUtc": null,
       "envActions": [],
       "missionSource": "MONITORFISH",
-      "isClosed": false
+      "isClosed": false,
+      "isUnderJdp": false
     }
   }
 }

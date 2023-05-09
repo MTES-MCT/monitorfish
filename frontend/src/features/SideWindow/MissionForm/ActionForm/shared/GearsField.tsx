@@ -1,4 +1,12 @@
-import { Checkbox, FormikMultiRadio, FormikNumberInput, FormikTextarea, Select, SingleTag } from '@mtes-mct/monitor-ui'
+import {
+  Checkbox,
+  FormikMultiRadio,
+  FormikNumberInput,
+  FormikTextarea,
+  Select,
+  SingleTag,
+  useNewWindow
+} from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useField } from 'formik'
 import { remove as ramdaRemove } from 'ramda'
@@ -10,7 +18,6 @@ import { useGetGearsQuery } from '../../../../../api/gear'
 import { useGetRiskFactorQuery } from '../../../../../api/vessel'
 import { BOOLEAN_AS_OPTIONS } from '../../../../../constants'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import { useNewWindow } from '../../../../../ui/NewWindow'
 import { FieldGroup } from '../../shared/FieldGroup'
 import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 

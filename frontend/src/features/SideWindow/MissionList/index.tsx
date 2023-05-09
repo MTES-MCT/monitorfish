@@ -9,14 +9,14 @@ import { renderStatus } from './utils'
 import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFrontGroup } from '../../../constants'
 import { missionActions } from '../../../domain/actions'
 import { useGetFilteredMissionsQuery } from '../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
-import { openSideWindowTab } from '../../../domain/shared_slices/Global'
+import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
 import { fitToExtent } from '../../../domain/shared_slices/Map'
+import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { useTable } from '../../../hooks/useTable'
 import { EmptyCardTable } from '../../../ui/card-table/EmptyCardTable'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
-import { SideWindowMenuKey } from '../constants'
 import { SubMenu } from '../SubMenu'
 
 import type { Mission, MissionWithActions } from '../../../domain/entities/mission/types'
@@ -50,14 +50,7 @@ export function MissionList() {
 
   const goToMissionForm = useCallback(
     async (missionId?: Mission.Mission['id']) => {
-      if (missionId) {
-        // TODO Replace that with the virtual router route once it's integrated.
-        dispatch(missionActions.setDraftId(missionId))
-      } else {
-        dispatch(missionActions.unsetDraft())
-      }
-
-      dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))
+      dispatch(sideWindowDispatchers.openPath({ id: missionId, menu: SideWindowMenuKey.MISSION_FORM }))
     },
     [dispatch]
   )

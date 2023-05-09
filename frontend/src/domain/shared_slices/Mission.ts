@@ -1,4 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, current } from '@reduxjs/toolkit'
+import { isEqual } from 'lodash'
 import { omit, remove, update } from 'ramda'
 
 import { SeaFrontGroup } from '../../constants'
@@ -15,17 +16,17 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface MissionState {
   draft: MissionFormValues | undefined
-  draftId: Mission.Mission['id'] | undefined
   editedDraftActionIndex: number | undefined
+  isDraftDirty: boolean
   listFilterValues: FilterValues
   listSeaFront: SeaFrontGroup
   selectedMissionActionGeoJSON: GeoJSON.GeoJson | undefined
   selectedMissionGeoJSON: GeoJSON.GeoJson | undefined
 }
 const INITIAL_STATE: MissionState = {
-  draft: getMissionFormInitialValues(undefined, []),
-  draftId: undefined,
+  draft: undefined,
   editedDraftActionIndex: undefined,
+  isDraftDirty: false,
   listFilterValues: {
     [MissionFilterType.DATE_RANGE]: MissionDateRangeFilter.MONTH
   },
@@ -46,13 +47,18 @@ const missionSlice = createSlice({
         throw new FrontendError('`state.draft` is undefined')
       }
 
+      const currentDraft = current(state.draft)
       const nextDraft = {
-        ...state.draft,
-        actions: [action.payload, ...state.draft.actions]
+        ...currentDraft,
+        actions: [action.payload, ...currentDraft.actions]
       }
 
       state.draft = nextDraft
       state.editedDraftActionIndex = 0
+
+      if (!state.isDraftDirty) {
+        state.isDraftDirty = true
+      }
     },
 
     /**
@@ -63,15 +69,16 @@ const missionSlice = createSlice({
         throw new FrontendError('`state.draft` is undefined')
       }
 
-      const sourceDraftAction = state.draft.actions[action.payload]
+      const currentDraft = current(state.draft)
+      const sourceDraftAction = currentDraft.actions[action.payload]
       if (!sourceDraftAction) {
         throw new FrontendError('`sourceDraftAction` is undefined')
       }
       const duplicatedAction = omit(['id'], sourceDraftAction)
 
       const nextDraft = {
-        ...state.draft,
-        actions: [duplicatedAction, ...state.draft.actions]
+        ...currentDraft,
+        actions: [duplicatedAction, ...currentDraft.actions]
       }
 
       state.draft = nextDraft
@@ -93,13 +100,11 @@ const missionSlice = createSlice({
     ) {
       if (!action.payload) {
         state.draft = getMissionFormInitialValues(undefined, [])
-        state.draftId = undefined
 
         return
       }
 
       state.draft = getMissionFormInitialValues(action.payload.mission, action.payload.missionActions)
-      state.draftId = action.payload.mission.id
     },
 
     /**
@@ -111,13 +116,17 @@ const missionSlice = createSlice({
       }
 
       state.draft = {
-        ...state.draft,
-        actions: remove(action.payload, 1, state.draft.actions)
+        ...current(state.draft),
+        actions: remove(action.payload, 1, current(state.draft.actions))
       }
 
       // If we removed the currently edited mission draft action, we also must unset that
       if (action.payload === state.editedDraftActionIndex) {
         state.editedDraftActionIndex = undefined
+      }
+
+      if (!state.isDraftDirty) {
+        state.isDraftDirty = true
       }
     },
 
@@ -128,21 +137,17 @@ const missionSlice = createSlice({
      * This is used to synchronize the creation/edition form values with the Local Storage via `redux-persist`.
      */
     setDraft(state, action: PayloadAction<MissionFormValues>) {
-      state.draft = {
+      const currentDraft = current(state.draft)
+      const nextDraft = {
         ...omit(['actions'], action.payload),
-        actions: state.draft ? state.draft.actions : []
+        actions: currentDraft ? currentDraft.actions : []
       }
-    },
 
-    /**
-     * Set mission draft ID (= missionId to edit)
-     */
-    setDraftId(state, action: PayloadAction<Mission.Mission['id']>) {
-      // We have to reset the `draft` since it's a new mission draft
-      state.draft = undefined
-      state.draftId = action.payload
-      // We have to reset the `editedDraftActionIndex` since it's a new mission draft
-      state.editedDraftActionIndex = undefined
+      if (!state.isDraftDirty && state.draft && !isEqual(nextDraft, currentDraft)) {
+        state.isDraftDirty = true
+      }
+
+      state.draft = nextDraft
     },
 
     /**
@@ -155,10 +160,17 @@ const missionSlice = createSlice({
         )
       }
 
-      state.draft = {
-        ...state.draft,
-        actions: update(state.editedDraftActionIndex, action.payload, state.draft.actions)
+      const currentDraft = current(state.draft)
+      const nextDraft = {
+        ...currentDraft,
+        actions: update(state.editedDraftActionIndex, action.payload, currentDraft.actions)
       }
+
+      if (!state.isDraftDirty && state.draft && !isEqual(nextDraft, current(state.draft))) {
+        state.isDraftDirty = true
+      }
+
+      state.draft = nextDraft
     },
     /**
      * Add a new action in mission draft and make it the currently edited
@@ -207,8 +219,8 @@ const missionSlice = createSlice({
      */
     unsetDraft(state) {
       state.draft = undefined
-      state.draftId = undefined
       state.editedDraftActionIndex = undefined
+      state.isDraftDirty = false
     },
 
     /**

@@ -1,35 +1,40 @@
+import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { closeSideWindow, openSideWindowTab } from '../../domain/shared_slices/Global'
+import { SideWindowMenuKey, SideWindowStatus } from '../../domain/entities/sideWindow/constants'
+import { sideWindowActions } from '../../domain/shared_slices/SideWindow'
+import { sideWindowDispatchers } from '../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { ReactComponent as AlertsSVG } from '../icons/Icone_alertes.svg'
-import { SideWindowMenuKey } from '../SideWindow/constants'
 
 export function AlertsMapButton() {
   const dispatch = useMainAppDispatch()
-  const { healthcheckTextWarning, openedSideWindowTab, previewFilteredVesselsMode } = useMainAppSelector(
-    state => state.global
-  )
+  const { healthcheckTextWarning, previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
+  const { sideWindow } = useMainAppSelector(state => state)
+
+  const isActive =
+    sideWindow.status !== SideWindowStatus.CLOSED &&
+    sideWindow.selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST
+
+  const toggleSideWindow = useCallback(() => {
+    if (isActive) {
+      dispatch(sideWindowActions.close())
+
+      return
+    }
+
+    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
+  }, [dispatch, isActive])
 
   return (
     <AlertsButton
+      $isActive={isActive}
       data-cy="alerts-button"
       healthcheckTextWarning={!!healthcheckTextWarning}
       isHidden={Boolean(previewFilteredVesselsMode)}
-      isVisible={openedSideWindowTab === SideWindowMenuKey.ALERTS}
-      onClick={() => {
-        if (openedSideWindowTab !== SideWindowMenuKey.ALERTS) {
-          dispatch(openSideWindowTab(SideWindowMenuKey.ALERTS))
-
-          return
-        }
-
-        if (openedSideWindowTab === SideWindowMenuKey.ALERTS) {
-          dispatch(closeSideWindow())
-        }
-      }}
+      onClick={toggleSideWindow}
       title="Alertes"
     >
       <AlertsIcon />
@@ -38,11 +43,11 @@ export function AlertsMapButton() {
 }
 
 const AlertsButton = styled(MapButtonStyle)<{
-  isVisible: boolean
+  $isActive: boolean
 }>`
   position: absolute;
   display: inline-block;
-  background: ${p => (p.isVisible ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
+  background: ${p => (p.$isActive ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
   padding: 2px 2px 2px 2px;
   top: 162px;
   left: 10px;
@@ -52,7 +57,7 @@ const AlertsButton = styled(MapButtonStyle)<{
 
   :hover,
   :focus {
-    background: ${p => (p.isVisible ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
+    background: ${p => (p.$isActive ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
   }
 `
 

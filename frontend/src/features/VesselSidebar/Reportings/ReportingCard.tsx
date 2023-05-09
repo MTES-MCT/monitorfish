@@ -17,7 +17,7 @@ import { ReactComponent as EditIconSVG } from '../../icons/Bouton_editer.svg'
 import { ReactComponent as DeleteIconSVG } from '../../icons/Bouton_supprimer.svg'
 import { ReactComponent as InfractionSuspicionIconSVG } from '../../icons/Icone_alerte_signalement_rouge_16.svg'
 import { ReactComponent as ObservationIconSVG } from '../../icons/Icone_observations.svg'
-import { getAlertNameFromType } from '../../SideWindow/alerts_reportings/utils'
+import { getAlertNameFromType } from '../../SideWindow/AlertListAndReportingList/utils'
 
 import type { ControlUnit } from '../../../domain/types/controlUnit'
 import type { Reporting } from '../../../domain/types/reporting'

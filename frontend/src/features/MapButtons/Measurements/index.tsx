@@ -68,7 +68,7 @@ export function MeasurementMapButton() {
     <Wrapper ref={wrapperRef}>
       <MeasurementButton
         dataCy="measurement"
-        isOpen={isOpen || !!measurementTypeToAdd}
+        isActive={isOpen || !!measurementTypeToAdd}
         onClick={openOrCloseMeasurementMenu}
         style={{ top: 249 }}
         title="Mesurer une distance"

@@ -1,10 +1,9 @@
-import { Select } from '@mtes-mct/monitor-ui'
+import { Select, useNewWindow } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { useCallback, useMemo } from 'react'
 
 import { useGetPortsQuery } from '../../../../../api/port'
 import { FrontendError } from '../../../../../libs/FrontendError'
-import { useNewWindow } from '../../../../../ui/NewWindow'
 import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 
 import type { MissionActionFormValues } from '../../types'

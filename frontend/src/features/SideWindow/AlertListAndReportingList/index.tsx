@@ -23,7 +23,7 @@ type AlertsAndReportingsProps = {
   setSelectedSeaFront: (nextSeaFront: SeaFrontGroup) => Promisable<void>
   setSelectedTab: any
 }
-export function AlertsAndReportings({
+export function AlertListAndReportingList({
   baseRef,
   selectedSubMenu,
   selectedTab,

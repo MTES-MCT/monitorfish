@@ -41,7 +41,7 @@ const getMemoizedBeaconMalfunctionsByStage = createSelector(
 
 const baseUrl = window.location.origin
 
-export function BeaconMalfunctionsBoard() {
+export function BeaconMalfunctionBoard() {
   const dispatch = useMainAppDispatch()
   const { openedBeaconMalfunctionInKanban } = useMainAppSelector(state => state.beaconMalfunction)
   const beaconMalfunctions = useMainAppSelector(state => getMemoizedBeaconMalfunctionsByStage(state))

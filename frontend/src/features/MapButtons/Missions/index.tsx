@@ -34,9 +34,7 @@ export function MissionsMenu() {
   }, [dispatch, isActive])
 
   const addMission = () => {
-    // TODO Replace this call with the call of the use-case to handle the case
-    //  of a mission already opened in this form
-    dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))
+    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_FORM }))
   }
 
   const toggleMissionsMenu = () => {

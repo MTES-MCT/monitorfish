@@ -124,7 +124,8 @@ class APIMissionRepositoryITest {
                         }
                       ],
                       "missionSource": "MONITORENV",
-                      "isClosed": false
+                      "isClosed": false,
+                      "isUnderJdp": false
                     }""",
                     ),
                     status = HttpStatusCode.OK,

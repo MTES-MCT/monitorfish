@@ -4,7 +4,8 @@ import {
   FormikEffect,
   FormikTextarea,
   FormikTextInput,
-  Icon
+  Icon,
+  useNewWindow
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { useMemo } from 'react'
@@ -19,7 +20,6 @@ import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
 import { VesselFleetSegmentsField } from './shared/VesselFleetSegmentsField'
 import { SeaControlFormSchema } from './validationSchema'
-import { useNewWindow } from '../../../../ui/NewWindow'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'

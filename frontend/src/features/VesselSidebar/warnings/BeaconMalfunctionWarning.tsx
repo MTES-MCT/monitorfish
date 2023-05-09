@@ -1,21 +1,21 @@
-import { useDispatch } from 'react-redux'
-import { openSideWindowTab } from '../../../domain/shared_slices/Global'
-import React from 'react'
+import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
-import { ReactComponent as BeaconMalfunctionSVG } from '../../icons/Icone_VMS_dark.svg'
-import { openBeaconMalfunctionInKanban } from '../../../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
-import { SideWindowMenuKey } from '../../SideWindow/constants'
 
-const BeaconMalfunctionWarning = ({ selectedVessel }) => {
-  const dispatch = useDispatch()
+import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
+import { openBeaconMalfunctionInKanban } from '../../../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
+import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { ReactComponent as BeaconMalfunctionSVG } from '../../icons/Icone_VMS_dark.svg'
+
+export function BeaconMalfunctionWarning({ selectedVessel }) {
+  const dispatch = useMainAppDispatch()
 
   return (
     <>
       {selectedVessel?.beaconMalfunctionId ? (
         <BeaconMalfunction
+          data-cy="vessel-sidebar-beacon-malfunction"
           onClick={() => showBeaconMalfunctionInSideWindow(dispatch, selectedVessel)}
-          data-cy={'vessel-sidebar-beacon-malfunction'}
         >
           <BeaconMalfunctionIcon />
           NON-ÉMISSION VMS
@@ -27,7 +27,7 @@ const BeaconMalfunctionWarning = ({ selectedVessel }) => {
 }
 
 const showBeaconMalfunctionInSideWindow = (dispatch, selectedVessel) => {
-  dispatch(openSideWindowTab(SideWindowMenuKey.BEACON_MALFUNCTIONS))
+  dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.BEACON_MALFUNCTION_BOARD }))
   dispatch(openBeaconMalfunctionInKanban(selectedVessel?.beaconMalfunctionId))
 }
 
@@ -73,7 +73,7 @@ const BeaconMalfunctionIcon = styled(BeaconMalfunctionSVG)`
 const BeaconMalfunction = styled.div`
   cursor: pointer;
   background: ${p => p.theme.color.goldenPoppy};
-  color: ${COLORS.gunMetal};
+  color: ${THEME.color.gunMetal};
   font-weight: 500;
   font-size: 13px;
   text-transform: uppercase;
@@ -82,5 +82,3 @@ const BeaconMalfunction = styled.div`
   padding: 5px 0;
   margin-top: 1px;
 `
-
-export default BeaconMalfunctionWarning

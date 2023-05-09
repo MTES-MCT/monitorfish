@@ -11,6 +11,7 @@ import styled from 'styled-components'
 import { APIWorker } from './api/APIWorker'
 import { BackofficeMode } from './api/BackofficeMode'
 import NamespaceContext from './domain/context/NamespaceContext'
+import { SideWindowStatus } from './domain/entities/sideWindow/constants'
 import { ErrorToastNotification } from './features/commonComponents/ErrorToastNotification'
 import { Healthcheck } from './features/Healthcheck'
 import { DrawLayerModal } from './features/map/draw/DrawModal'
@@ -97,7 +98,7 @@ function HomePage() {
     state => state.displayedComponent
   )
   const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
-  const openedSideWindowTab = useMainAppSelector(state => state.global.openedSideWindowTab)
+  const { sideWindow } = useMainAppSelector(state => state)
   const ref = useRef() as MutableRefObject<HTMLDivElement>
 
   return (
@@ -121,7 +122,7 @@ function HomePage() {
             <UpdatingVesselLoader />
             <APIWorker />
             <ErrorToastNotification />
-            {openedSideWindowTab && <SideWindowLauncher />}
+            {sideWindow.status !== SideWindowStatus.CLOSED && <SideWindowLauncher />}
             {isDrawLayerModalDisplayed && <DrawLayerModal />}
           </Wrapper>
         </Route>

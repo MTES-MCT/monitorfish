@@ -13,7 +13,7 @@ import {
   WSG84_PROJECTION
 } from '../../../../domain/entities/map/constants'
 import { fitToExtent } from '../../../../domain/shared_slices/Map'
-import { addMissionZone } from '../../../../domain/use_cases/missions/addMissionZone'
+import { addMissionZone } from '../../../../domain/use_cases/mission/addMissionZone'
 import { useListenForDrawedGeometry } from '../../../../hooks/useListenForDrawing'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 

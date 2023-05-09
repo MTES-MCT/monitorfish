@@ -350,7 +350,7 @@ export function VesselList({ namespace }) {
       <Wrapper healthcheckTextWarning={false}>
         <VesselListButton
           dataCy="vessel-list"
-          isOpen={isVesselListModalDisplayed}
+          isActive={isVesselListModalDisplayed}
           onClick={() =>
             dispatch(
               setDisplayedComponents({

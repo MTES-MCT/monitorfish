@@ -1,4 +1,4 @@
-import { Accent, Icon, IconButton, MultiSelect, Select, TextInput } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, MultiSelect, Select, TextInput, useNewWindow } from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -7,7 +7,6 @@ import {
   mapControlUnitsToUniqueSortedNamesAsOptions,
   mapControlUnitToSortedResourcesAsOptions
 } from './utils'
-import { useNewWindow } from '../../../../../ui/NewWindow'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 import { isValidControlUnit } from '../../utils'
 

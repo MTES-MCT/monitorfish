@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
-import { AlertAndReportingTab, SideWindowMenuKey } from './constants'
+import { BeaconMalfunctionsSubMenu } from './BeaconMalfunctionBoard/beaconMalfunctions'
+import { AlertAndReportingTab } from './constants'
 import { SideWindowSubMenuLink } from './SideWindowSubMenuLink'
 import { COLORS } from '../../constants/constants'
 import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, ALERTS_SUBMENU } from '../../domain/entities/alerts/constants'
 import { STAGE_RECORD } from '../../domain/entities/beaconMalfunction/constants'
 import { useGetFilteredMissionsQuery } from '../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
+import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 
@@ -76,10 +77,10 @@ export function SideWindowSubMenu({
   )
 
   useEffect(() => {
-    if (selectedMenu === SideWindowMenuKey.ALERTS) {
+    if (selectedMenu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST) {
       setIsFixed(true)
       setIsOpen(true)
-    } else if (selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTIONS) {
+    } else if (selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD) {
       setIsFixed(false)
     }
   }, [selectedMenu, setIsFixed])
@@ -100,7 +101,7 @@ export function SideWindowSubMenu({
           <ChevronIcon style={chevronIconStyle(isOpen)} />
         </Chevron>
         <Title style={titleStyle(isOpen)}>Vue d’ensemble</Title>
-        {selectedMenu === SideWindowMenuKey.ALERTS && (
+        {selectedMenu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST && (
           <>
             <SideWindowSubMenuLink
               isOneLine
@@ -157,7 +158,7 @@ export function SideWindowSubMenu({
           </>
         )}
 
-        {selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTIONS && (
+        {selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && (
           <SideWindowSubMenuLink
             isOpen={isOpen}
             isSelected={selectedSubMenu.code === BeaconMalfunctionsSubMenu.MALFUNCTIONING.code}

@@ -24,7 +24,7 @@ import { missionActions } from '../../../domain/actions'
 import { getMissionSourceTagText } from '../../../domain/entities/mission'
 import { Mission } from '../../../domain/entities/mission/types'
 import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
-import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
+import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { useDebouncedValue } from '../../../hooks/useDebouncedValue'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
@@ -89,7 +89,7 @@ export function UnmemoizedMissionForm() {
   )
 
   const goToMissionList = useCallback(async () => {
-    dispatch(sideWindowActions.openOrFocusAndGoTo({ menu: SideWindowMenuKey.MISSION_LIST }))
+    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_LIST }))
   }, [dispatch])
 
   /**

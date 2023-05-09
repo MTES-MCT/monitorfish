@@ -1,5 +1,6 @@
 import { Accent, Button, Dialog } from '@mtes-mct/monitor-ui'
 import { useCallback } from 'react'
+import styled from 'styled-components'
 
 import { sideWindowActions } from '../../../../domain/shared_slices/SideWindow'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
@@ -17,7 +18,7 @@ export function DraftCancellationConfirmationDialog() {
 
   return (
     <Dialog isAbsolute>
-      <Dialog.Title>Enregistrer les modifications ?</Dialog.Title>
+      <StyledDialogTitle>Enregistrer les modifications ?</StyledDialogTitle>
       <Dialog.Body>
         <p>Vous êtes en train d’abandonner l’édition d’une mission.</p>
         <p>Voulez-vous enregistrer les modifications avant de quitter ?</p>
@@ -34,3 +35,8 @@ export function DraftCancellationConfirmationDialog() {
     </Dialog>
   )
 }
+
+// TODO Remove that once we get rid of global legacy CSS.
+const StyledDialogTitle = styled(Dialog.Title)`
+  line-height: 48px;
+`

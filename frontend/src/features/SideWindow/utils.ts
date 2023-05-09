@@ -1,4 +1,4 @@
-import { BeaconMalfunctionsSubMenu } from './BeaconMalfunctionList/beaconMalfunctions'
+import { BeaconMalfunctionsSubMenu } from './BeaconMalfunctionBoard/beaconMalfunctions'
 import { ALERTS_SUBMENU } from '../../domain/entities/alerts/constants'
 import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
 

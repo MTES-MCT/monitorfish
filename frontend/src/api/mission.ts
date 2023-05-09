@@ -63,6 +63,13 @@ const getMissionTypesFilter = missionTypes =>
   missionTypes?.length > 0 && `missionTypes=${encodeURIComponent(missionTypes)}`
 const getSeaFrontsFilter = seaFronts => seaFronts?.length > 0 && `seaFronts=${encodeURIComponent(seaFronts)}`
 
+enum MonitorenvStatusMapping {
+  CLOSED = 'CLOSED',
+  DONE = 'ENDED',
+  IN_PROGRESS = 'PENDING',
+  UPCOMING = 'UPCOMING'
+}
+
 export const monitorfishMissionApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
     getMissions: builder.query<MissionWithActions[], GetMissionsFilter | void>({
@@ -73,7 +80,7 @@ export const monitorfishMissionApi = monitorfishApi.injectEndpoints({
           getStartDateFilter(filter.startedAfterDateTime),
           getEndDateFilter(filter.startedBeforeDateTime),
           getMissionSourceFilter(filter.missionSource),
-          getMissionStatusFilter(filter.missionStatus),
+          getMissionStatusFilter(filter.missionStatus?.map(status => MonitorenvStatusMapping[status])),
           getMissionTypesFilter(filter.missionTypes),
           getSeaFrontsFilter(filter.seaFronts)
         ]

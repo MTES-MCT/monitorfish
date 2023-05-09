@@ -70,9 +70,13 @@ class APIMissionRepository(
             ""
         }
         val seaFrontsParameter = if (!seaFronts.isNullOrEmpty()) "seaFronts=${seaFronts.joinToString(",")}&" else ""
-        val missionSourcesParameter = if (!missionSources.isNullOrEmpty()) "missionSource=${missionSources.joinToString(
-            ","
-        )}&" else ""
+        val missionSourcesParameter = if (!missionSources.isNullOrEmpty()) {
+            "missionSource=${missionSources.joinToString(
+                ",",
+            )}&"
+        } else {
+            ""
+        }
 
         val missionsUrl = """
             ${monitorenvProperties.url}/api/v1/missions?

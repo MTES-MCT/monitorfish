@@ -1,5 +1,4 @@
 import { Accent, Button, Dialog } from '@mtes-mct/monitor-ui'
-import { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { sideWindowActions } from '../../../../domain/shared_slices/SideWindow'
@@ -8,13 +7,13 @@ import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 export function DraftCancellationConfirmationDialog() {
   const dispatch = useMainAppDispatch()
 
-  const cancel = useCallback(() => {
+  const cancel = () => {
     dispatch(sideWindowActions.closeDraftCancellationConfirmationDialog())
-  }, [dispatch])
+  }
 
-  const confirm = useCallback(() => {
+  const confirm = () => {
     dispatch(sideWindowActions.confirmDraftCancellationAndGoToNextMenuWithSubMenu())
-  }, [dispatch])
+  }
 
   return (
     <Dialog isAbsolute>

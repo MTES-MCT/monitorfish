@@ -1,4 +1,4 @@
-context('Alerts', () => {
+context('Side Window > Alert List', () => {
   beforeEach(() => {
     cy.visit('/side_window')
   })

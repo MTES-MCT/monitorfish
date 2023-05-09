@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { BeaconMalfunctionsSubMenu } from './BeaconMalfunctionList/beaconMalfunctions'
+import { BeaconMalfunctionsSubMenu } from './BeaconMalfunctionBoard/beaconMalfunctions'
 import { AlertAndReportingTab } from './constants'
 import { SideWindowSubMenuLink } from './SideWindowSubMenuLink'
 import { COLORS } from '../../constants/constants'
@@ -80,7 +80,7 @@ export function SideWindowSubMenu({
     if (selectedMenu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST) {
       setIsFixed(true)
       setIsOpen(true)
-    } else if (selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTION_LIST) {
+    } else if (selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD) {
       setIsFixed(false)
     }
   }, [selectedMenu, setIsFixed])
@@ -158,7 +158,7 @@ export function SideWindowSubMenu({
           </>
         )}
 
-        {selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTION_LIST && (
+        {selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && (
           <SideWindowSubMenuLink
             isOpen={isOpen}
             isSelected={selectedSubMenu.code === BeaconMalfunctionsSubMenu.MALFUNCTIONING.code}

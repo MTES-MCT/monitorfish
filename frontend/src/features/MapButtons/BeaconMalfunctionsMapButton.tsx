@@ -16,7 +16,7 @@ export function BeaconMalfunctionsMapButton() {
 
   const isActive =
     sideWindow.status !== SideWindowStatus.CLOSED &&
-    sideWindow.selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_LIST
+    sideWindow.selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD
 
   const toggleSideWindow = useCallback(() => {
     if (isActive) {
@@ -25,7 +25,7 @@ export function BeaconMalfunctionsMapButton() {
       return
     }
 
-    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.BEACON_MALFUNCTION_LIST }))
+    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.BEACON_MALFUNCTION_BOARD }))
   }, [dispatch, isActive])
 
   return (

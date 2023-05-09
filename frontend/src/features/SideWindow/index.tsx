@@ -5,8 +5,8 @@ import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled, { createGlobalStyle } from 'styled-components'
 
 import { AlertListAndReportingList } from './AlertListAndReportingList'
-import { BeaconMalfunctionList } from './BeaconMalfunctionList'
-import { BeaconMalfunctionsSubMenu } from './BeaconMalfunctionList/beaconMalfunctions'
+import { BeaconMalfunctionBoard } from './BeaconMalfunctionBoard'
+import { BeaconMalfunctionsSubMenu } from './BeaconMalfunctionBoard/beaconMalfunctions'
 import { AlertAndReportingTab } from './constants'
 import { Menu } from './Menu'
 import { MissionForm } from './MissionForm'
@@ -72,7 +72,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
 
   const hasSubmenu = useMemo(
     () =>
-      [SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST, SideWindowMenuKey.BEACON_MALFUNCTION_LIST].includes(
+      [SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST, SideWindowMenuKey.BEACON_MALFUNCTION_BOARD].includes(
         sideWindow.selectedPath.menu
       ),
     [sideWindow.selectedPath.menu]
@@ -136,7 +136,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
 
     if (selectedSubMenu) {
       switch (sideWindow.selectedPath.menu) {
-        case SideWindowMenuKey.BEACON_MALFUNCTION_LIST:
+        case SideWindowMenuKey.BEACON_MALFUNCTION_BOARD:
           setSelectedSubMenu(BeaconMalfunctionsSubMenu.MALFUNCTIONING as unknown as MenuItem<SeaFrontGroup>)
           break
 
@@ -194,8 +194,8 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
               setSelectedSubMenu={setSelectedSubMenu}
             />
           )}
-          {/* TODO Move that within BeaconMalfunctionList. */}
-          {sideWindow.selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_LIST && (
+          {/* TODO Move that within BeaconMalfunctionBoard. */}
+          {sideWindow.selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && (
             <BeaconMalfunctionsBoardGrayOverlay
               onClick={closeRightSidebar}
               style={beaconMalfunctionBoardGrayOverlayStyle}
@@ -227,7 +227,9 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
                   setSelectedTab={setSelectedTab}
                 />
               )}
-              {sideWindow.selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_LIST && <BeaconMalfunctionList />}
+              {sideWindow.selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && (
+                <BeaconMalfunctionBoard />
+              )}
               {sideWindow.selectedPath.menu === SideWindowMenuKey.MISSION_LIST && <MissionList />}
               {sideWindow.selectedPath.menu === SideWindowMenuKey.MISSION_FORM && <MissionForm />}
             </Content>

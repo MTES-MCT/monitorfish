@@ -43,10 +43,10 @@ export function Menu({ selectedMenu }: MenuProps) {
         data-cy="side-window-menu-beacon-malfunctions"
         Icon={Icon.Vms}
         iconSize={26}
-        onClick={() => dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.BEACON_MALFUNCTION_LIST }))}
+        onClick={() => dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.BEACON_MALFUNCTION_BOARD }))}
         role="menuitem"
-        selected={selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTION_LIST}
-        title={SideWindowMenuLabel.BEACON_MALFUNCTION_LIST}
+        selected={selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD}
+        title={SideWindowMenuLabel.BEACON_MALFUNCTION_BOARD}
       />
     </Wrapper>
   )

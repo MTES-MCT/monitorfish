@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import { getDate } from '../../../src/utils'
 import { getUtcizedDayjs } from '../utils/getUtcizedDayjs'
 
-context('Side window beacon malfunctions', () => {
+context('Side Window > Beacon Malfunction Board', () => {
   beforeEach(() => {
     cy.visit('/side_window')
     cy.get('*[data-cy="side-window-menu-beacon-malfunctions"]').click()

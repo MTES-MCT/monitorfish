@@ -75,7 +75,7 @@ export function DrawLayerModal() {
   }, [feature])
 
   useEffect(() => {
-    if (sideWindow.status !== SideWindowStatus.CLOSED) {
+    if (sideWindow.status === SideWindowStatus.CLOSED) {
       dispatch(closeDraw())
     }
   }, [dispatch, sideWindow.status])

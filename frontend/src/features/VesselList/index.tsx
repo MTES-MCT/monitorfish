@@ -4,7 +4,7 @@ import { Modal } from 'rsuite'
 import styled from 'styled-components'
 
 import DownloadVesselListModal from './DownloadVesselListModal'
-import { addZoneSelected, removeZoneSelected, resetZonesSelected, setZonesSelected } from './VesselList.slice'
+import { addZoneSelected, removeZoneSelected, resetZonesSelected, setZonesSelected } from './slice'
 import { VesselListFilters } from './VesselListFilters'
 import { VesselListTable } from './VesselListTable'
 import { useGetFleetSegmentsQuery } from '../../api/fleetSegment'

@@ -5,7 +5,7 @@ import { Section, Title } from '../../../commonStyles/Backoffice.style'
 import { ValidateButton } from '../../../commonStyles/Buttons.style'
 import RegulatoryText from './RegulatoryText'
 import { DEFAULT_REGULATORY_TEXT, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulation'
-import { updateProcessingRegulationByKey } from '../../Regulation.slice'
+import { updateProcessingRegulationByKey } from '../../slice'
 import { useDispatch } from 'react-redux'
 
 /**
@@ -16,17 +16,16 @@ import { useDispatch } from 'react-redux'
  * @prop {Boolean} saveForm
  */
 const RegulatoryTextSection = props => {
-  const {
-    regulatoryTextList,
-    source,
-    saveForm
-  } = props
+  const { regulatoryTextList, source, saveForm } = props
   const dispatch = useDispatch()
 
-  const setRegulatoryTextList = texts => dispatch(updateProcessingRegulationByKey({
-    key: REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES,
-    value: texts
-  }))
+  const setRegulatoryTextList = texts =>
+    dispatch(
+      updateProcessingRegulationByKey({
+        key: REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES,
+        value: texts
+      })
+    )
 
   const addOrRemoveRegulatoryTextInList = id => {
     let newRegulatoryTextList = regulatoryTextList ? [...regulatoryTextList] : []
@@ -52,14 +51,13 @@ const RegulatoryTextSection = props => {
     setRegulatoryTextList(newRegulatoryTextList)
   }
 
-  return <Section show>
-    <Title>
-      références réglementaires en vigueur
-    </Title>
-    {
-      (regulatoryTextList && regulatoryTextList.length > 0)
-        ? regulatoryTextList.map((regulatoryText, id) => {
-          return <RegulatoryText
+  return (
+    <Section show>
+      <Title>références réglementaires en vigueur</Title>
+      {regulatoryTextList && regulatoryTextList.length > 0 ? (
+        regulatoryTextList.map((regulatoryText, id) => {
+          return (
+            <RegulatoryText
               key={regulatoryText}
               id={id}
               regulatoryText={regulatoryText}
@@ -69,8 +67,10 @@ const RegulatoryTextSection = props => {
               saveForm={saveForm}
               setRegulatoryText={setRegulatoryText}
             />
+          )
         })
-        : <RegulatoryText
+      ) : (
+        <RegulatoryText
           regulatoryText={DEFAULT_REGULATORY_TEXT}
           key={0}
           id={0}
@@ -80,16 +80,14 @@ const RegulatoryTextSection = props => {
           saveForm={saveForm}
           setRegulatoryText={setRegulatoryText}
         />
-    }
-    <ButtonLine>
-      <ValidateButton
-        disabled={false}
-        isLast={false}
-        onClick={addRegRefInEffect}>
-        Ajouter un autre texte en vigueur
-      </ValidateButton>
-    </ButtonLine>
-  </Section>
+      )}
+      <ButtonLine>
+        <ValidateButton disabled={false} isLast={false} onClick={addRegRefInEffect}>
+          Ajouter un autre texte en vigueur
+        </ValidateButton>
+      </ButtonLine>
+    </Section>
+  )
 }
 
 const ButtonLine = styled.div`

@@ -1,10 +1,6 @@
 import { mapToRegulatoryZone, DEFAULT_REGULATORY_TEXT } from '../../../entities/regulation'
 import { setError } from '../../../shared_slices/Global'
-import {
-  setProcessingRegulation,
-  setSelectedRegulatoryZoneId,
-  setStatus
-} from '../../../../features/Backoffice/Regulation.slice'
+import { setProcessingRegulation, setSelectedRegulatoryZoneId, setStatus } from '../../../../features/Backoffice/slice'
 import { LayerProperties } from '../../../entities/layers/constants'
 import { getRegulatoryZoneFromAPI, REGULATORY_ZONE_METADATA_ERROR_MESSAGE } from '../../../../api/geoserver'
 import { STATUS } from '../../../../features/Backoffice/constants'

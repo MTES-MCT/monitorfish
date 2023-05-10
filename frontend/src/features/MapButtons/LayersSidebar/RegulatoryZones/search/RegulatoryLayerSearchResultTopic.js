@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { Checkbox, CheckboxGroup } from 'rsuite'
 import RegulatoryLayerSearchResultZones from './RegulatoryLayerSearchResultZones'
-import { checkRegulatoryZones, uncheckRegulatoryZones } from './RegulatoryLayerSearch.slice'
+import { checkRegulatoryZones, uncheckRegulatoryZones } from './slice'
 import { COLORS } from '../../../../../constants/constants'
 import { closeRegulatoryZoneMetadata } from '../../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 import { theme } from '../../../../../ui/theme'
@@ -11,13 +11,10 @@ import { theme } from '../../../../../ui/theme'
 const RegulatoryLayerSearchResultTopic = ({ regulatoryLayerLawType, regulatoryLayerTopic, topicDetails }) => {
   const dispatch = useDispatch()
 
-  const {
-    searchResultZones,
-    searchResultZonesLength,
-    regulatoryZonesChecked
-  } = useSelector(state => {
+  const { searchResultZones, searchResultZonesLength, regulatoryZonesChecked } = useSelector(state => {
     if (state.regulatoryLayerSearch.regulatoryLayersSearchResult && regulatoryLayerLawType && regulatoryLayerTopic) {
-      const searchResultZones = state.regulatoryLayerSearch.regulatoryLayersSearchResult[regulatoryLayerLawType][regulatoryLayerTopic]
+      const searchResultZones =
+        state.regulatoryLayerSearch.regulatoryLayersSearchResult[regulatoryLayerLawType][regulatoryLayerTopic]
 
       return {
         searchResultZones: searchResultZones,
@@ -27,10 +24,7 @@ const RegulatoryLayerSearchResultTopic = ({ regulatoryLayerLawType, regulatoryLa
     }
   })
 
-  const {
-    regulatoryZoneMetadata,
-    selectedRegulatoryLayers
-  } = useSelector(state => state.regulatory)
+  const { regulatoryZoneMetadata, selectedRegulatoryLayers } = useSelector(state => state.regulatory)
 
   const numberOfTotalZones = useSelector(state => {
     const regulatoryLayerLawTypes = state.regulatory.regulatoryLayerLawTypes
@@ -54,8 +48,7 @@ const RegulatoryLayerSearchResultTopic = ({ regulatoryLayerLawType, regulatoryLa
       return false
     }
 
-    const zonesCheckedLength = regulatoryZonesChecked
-      .filter(zone => zone.topic === regulatoryLayerTopic).length
+    const zonesCheckedLength = regulatoryZonesChecked.filter(zone => zone.topic === regulatoryLayerTopic).length
     const allZonesLength = topicDetails.length
     if (!zonesCheckedLength || !allZonesLength) {
       return false
@@ -76,25 +69,16 @@ const RegulatoryLayerSearchResultTopic = ({ regulatoryLayerLawType, regulatoryLa
 
   return (
     <>
-      <LayerTopic
-        onClick={() => setZonesAreOpen(!zonesAreOpen)}
-      >
-        <TopicName
-          data-cy={'regulatory-layer-topic'}
-          title={regulatoryLayerTopic}
-        >
+      <LayerTopic onClick={() => setZonesAreOpen(!zonesAreOpen)}>
+        <TopicName data-cy={'regulatory-layer-topic'} title={regulatoryLayerTopic}>
           {regulatoryLayerTopic}
         </TopicName>
-        <ZonesNumber>
-          {`${topicDetails?.length}/${numberOfTotalZones}`}
-        </ZonesNumber>
+        <ZonesNumber>{`${topicDetails?.length}/${numberOfTotalZones}`}</ZonesNumber>
         <CheckboxGroup
           onClick={e => e.stopPropagation()}
           inline
           name="checkboxList"
-          value={allTopicZonesAreChecked || allZonesAreAlreadySelected
-            ? [regulatoryLayerTopic]
-            : []}
+          value={allTopicZonesAreChecked || allZonesAreAlreadySelected ? [regulatoryLayerTopic] : []}
           onChange={handleCheckAllZones}
           style={{ marginLeft: 0, height: 20 }}
         >
@@ -148,7 +132,7 @@ const LayerTopic = styled.div`
   border-bottom: 1px solid ${COLORS.lightGray};
 
   :hover {
-    background: ${theme.color.blueGray["25"]};
+    background: ${theme.color.blueGray['25']};
   }
 
   .rs-checkbox-checker {

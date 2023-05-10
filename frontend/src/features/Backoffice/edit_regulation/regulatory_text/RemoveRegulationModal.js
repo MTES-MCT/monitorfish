@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
-import { setIsRemoveModalOpen } from '../../Regulation.slice'
+import { setIsRemoveModalOpen } from '../../slice'
 import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
 import { FooterButton } from '../../../commonStyles/Backoffice.style'
 import { ReactComponent as CloseIconSVG } from '../../../icons/Croix_grise_clair.svg'
@@ -13,10 +13,7 @@ import { REGULATION_ACTION_TYPE, getRegulatoryFeatureId } from '../../../../doma
 
 const RemoveRegulationModal = () => {
   const dispatch = useDispatch()
-  const {
-    isRemoveModalOpen,
-    processingRegulation
-  } = useSelector(state => state.regulation)
+  const { isRemoveModalOpen, processingRegulation } = useSelector(state => state.regulation)
 
   const deleteRegulation = () => {
     const feature = new Feature({})
@@ -24,35 +21,33 @@ const RemoveRegulationModal = () => {
     dispatch(updateRegulation(feature, REGULATION_ACTION_TYPE.DELETE))
   }
 
-  return (<RegulationModal isOpen={isRemoveModalOpen}>
-    <ModalContent>
-      <Body>
-        <ModalTitle>
-          Supprimer la réglementation
-          <CloseIcon onClick={() => dispatch(setIsRemoveModalOpen(false))}/>
-        </ModalTitle>
-        <Section>
-          {'Confirmez-vous la suppression définitive de cette réglementation et de son tracé ? \n Cette action est irréversible.'}
-        </Section>
-      </Body>
-      <Footer>
-        <FooterButton>
-          <ValidateButton
-            onClick={deleteRegulation}
-            width={'120px'}
-          >
-            Oui
-          </ValidateButton>
-          <CancelButton
-            onClick={() => dispatch(setIsRemoveModalOpen(false))}
-            width={'120px'}
-          >
-            Annuler
-          </CancelButton>
-        </FooterButton>
-      </Footer>
-    </ModalContent>
-  </RegulationModal>)
+  return (
+    <RegulationModal isOpen={isRemoveModalOpen}>
+      <ModalContent>
+        <Body>
+          <ModalTitle>
+            Supprimer la réglementation
+            <CloseIcon onClick={() => dispatch(setIsRemoveModalOpen(false))} />
+          </ModalTitle>
+          <Section>
+            {
+              'Confirmez-vous la suppression définitive de cette réglementation et de son tracé ? \n Cette action est irréversible.'
+            }
+          </Section>
+        </Body>
+        <Footer>
+          <FooterButton>
+            <ValidateButton onClick={deleteRegulation} width={'120px'}>
+              Oui
+            </ValidateButton>
+            <CancelButton onClick={() => dispatch(setIsRemoveModalOpen(false))} width={'120px'}>
+              Annuler
+            </CancelButton>
+          </FooterButton>
+        </Footer>
+      </ModalContent>
+    </RegulationModal>
+  )
 }
 
 const Body = styled.div`
@@ -75,7 +70,7 @@ const CloseIcon = styled(CloseIconSVG)`
 `
 
 const RegulationModal = styled.div`
-  display: ${props => props.isOpen ? 'block' : 'none'};
+  display: ${props => (props.isOpen ? 'block' : 'none')};
   overflow: none;
   width: 100%;
   height: 100vh;

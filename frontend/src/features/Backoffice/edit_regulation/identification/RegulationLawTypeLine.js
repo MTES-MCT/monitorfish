@@ -11,14 +11,14 @@ import {
   UE,
   REGULATORY_REFERENCE_KEYS
 } from '../../../../domain/entities/regulation'
-import { updateProcessingRegulationByKey } from '../../Regulation.slice'
+import { updateProcessingRegulationByKey } from '../../slice'
 
 const RegulationLawTypeLine = ({ selectData, lawTypeIsMissing }) => {
   const dispatch = useDispatch()
 
   const { lawType } = useSelector(state => state.regulation.processingRegulation)
 
-  const onLawTypeChange = (value) => {
+  const onLawTypeChange = value => {
     if (LAWTYPES_TO_TERRITORY[value] !== UE) {
       dispatch(updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGION, value: [] }))
     }
@@ -34,26 +34,17 @@ const RegulationLawTypeLine = ({ selectData, lawTypeIsMissing }) => {
       <CustomSelectComponent
         searchable={false}
         menuStyle={{ width: 250, overflowY: 'scroll', textOverflow: 'ellipsis' }}
-        placeholder='Choisir un ensemble'
+        placeholder="Choisir un ensemble"
         value={'Choisir un ensemble'}
         onChange={onLawTypeChange}
         data={selectData}
         data-cy={'regulation-lawtype-select'}
         emptyMessage={'aucun ensemble à afficher'}
-        renderMenuItem={(_, item) =>
-          <MenuItem
-            checked={item.value === onLawTypeChange}
-            item={item}
-            tag={'Radio'} />}
+        renderMenuItem={(_, item) => <MenuItem checked={item.value === onLawTypeChange} item={item} tag={'Radio'} />}
         valueIsMissing={lawTypeIsMissing}
         menuClassName={DEFAULT_MENU_CLASSNAME}
       />
-      {lawType &&
-        <Tag
-          tagValue={lawType}
-          onCloseIconClicked={_ => onLawTypeChange()}
-        />
-      }
+      {lawType && <Tag tagValue={lawType} onCloseIconClicked={_ => onLawTypeChange()} />}
     </ContentLine>
   )
 }

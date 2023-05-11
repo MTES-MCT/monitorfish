@@ -8,13 +8,13 @@ import type { SideWindow } from '../entities/sideWindow/types'
 
 export interface SideWindowState {
   // hasBeenRenderedOnce: boolean
-  isDraftCancellationConfirmationDialogVisible: boolean
+  isDraftCancellationConfirmationDialogOpen: boolean
   nextPath: SideWindow.Path | undefined
   selectedPath: SideWindow.Path
   status: SideWindowStatus
 }
 const INITIAL_STATE: SideWindowState = {
-  isDraftCancellationConfirmationDialogVisible: false,
+  isDraftCancellationConfirmationDialogOpen: false,
   nextPath: undefined,
   selectedPath: {
     menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST
@@ -30,7 +30,7 @@ const sideWindowSlice = createSlice({
      * Show confirmation dialog when a draft is both in progress and dirty before going to menu + submenu
      */
     askForDraftCancellationConfirmationBeforeGoingTo(state, action: PayloadAction<SideWindow.Path>) {
-      state.isDraftCancellationConfirmationDialogVisible = true
+      state.isDraftCancellationConfirmationDialogOpen = true
       state.nextPath = action.payload
       state.status = SideWindowStatus.FOCUSED
     },
@@ -46,7 +46,7 @@ const sideWindowSlice = createSlice({
      * Toggle side window confirmation modal when a draft is both in progress and dirty
      */
     closeDraftCancellationConfirmationDialog(state) {
-      state.isDraftCancellationConfirmationDialogVisible = false
+      state.isDraftCancellationConfirmationDialogOpen = false
       // We reset this prop that was set by `askForDraftCancellationConfirmationBeforeGoingTo()`
       state.nextPath = undefined
     },
@@ -59,7 +59,7 @@ const sideWindowSlice = createSlice({
         throw new FrontendError('`state.nextPath` is undefined.')
       }
 
-      state.isDraftCancellationConfirmationDialogVisible = false
+      state.isDraftCancellationConfirmationDialogOpen = false
       state.selectedPath = state.nextPath
       state.status = SideWindowStatus.FOCUSED
 

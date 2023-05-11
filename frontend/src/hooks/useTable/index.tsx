@@ -1,6 +1,6 @@
 import diacritics from 'diacritics'
 import Fuse from 'fuse.js'
-import { ascend, assocPath, descend, equals, path, pipe, propEq, sort } from 'ramda'
+import { ascend, assocPath, descend, equals, path, pipe, propEq, sortWith } from 'ramda'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { TableHead } from './TableHead'
@@ -155,7 +155,25 @@ export function useTable<T extends CollectionItem = CollectionItem>(
     const sortingKeyPath = path(['$sortable', sortingKey]) as any
     const bySortingKey = isSortingDesc ? descend(sortingKeyPath) : ascend(sortingKeyPath)
 
-    return sort(bySortingKey, filteredAndSearchedTableData)
+    return sortWith(
+      [
+        bySortingKey,
+        // Sort undefined values (to the bottom when ascending and to the top when descending)
+        (firstDataItem, secondDataItem) => {
+          const firstDataItemProp = sortingKeyPath(firstDataItem)
+          const secondDataItemProp = sortingKeyPath(secondDataItem)
+
+          if (isSortingDesc) {
+            // eslint-disable-next-line no-nested-ternary
+            return firstDataItemProp === undefined ? (secondDataItemProp === undefined ? 0 : -1) : 1
+          }
+
+          // eslint-disable-next-line no-nested-ternary
+          return firstDataItemProp === undefined ? (secondDataItemProp === undefined ? 0 : 1) : -1
+        }
+      ],
+      filteredAndSearchedTableData
+    )
   }, [filteredAndSearchedTableData, isSortingDesc, sortingKey])
 
   const getCheckedData = useCallback(

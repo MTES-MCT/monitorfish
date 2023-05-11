@@ -197,7 +197,6 @@ class APIMissionRepositoryITest {
                     null,
                     null,
                     null,
-                    null,
                 )
 
             // Then

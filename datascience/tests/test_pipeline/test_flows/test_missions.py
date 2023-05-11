@@ -49,7 +49,6 @@ missions_df = pd.DataFrame(
             "CD5455446407A715E737969F3BFEAD7CEDEB655464036ED5A29A137F4BF97F69352CC3446"
             "40F57994631533F2BFE2B98CD545544640",
         ],
-        "mission_nature": [["FISH"], [], ["FISH", "ENV"], []],
         "deleted": [True, False, False, False],
         "mission_source": [
             "POSEIDON_CNSP",

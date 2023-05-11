@@ -48,19 +48,11 @@ class APIMissionRepository(
         startedAfterDateTime: ZonedDateTime?,
         startedBeforeDateTime: ZonedDateTime?,
         missionSources: List<String>?,
-        missionNatures: List<String>?,
         missionTypes: List<String>?,
         missionStatuses: List<String>?,
         seaFronts: List<String>?,
     ): List<Mission> {
         // For these parameters, if the list is null or empty, we don't send the param to the server to avoid filtering results
-        val missionNatureParameter = if (!missionNatures.isNullOrEmpty()) {
-            "missionNature=${missionNatures.joinToString(
-                ",",
-            )}&"
-        } else {
-            ""
-        }
         val missionTypesParameter = if (!missionTypes.isNullOrEmpty()) "missionTypes=${missionTypes.joinToString(",")}&" else ""
         val missionStatusesParameter = if (!missionStatuses.isNullOrEmpty()) {
             "missionStatus=${missionStatuses.joinToString(
@@ -85,7 +77,6 @@ class APIMissionRepository(
                 startedAfterDateTime=${startedAfterDateTime?.format(zoneDateTimeFormatter) ?: ""}&
                 startedBeforeDateTime=${startedBeforeDateTime?.format(zoneDateTimeFormatter) ?: ""}&
                 $missionSourcesParameter
-                $missionNatureParameter
                 $missionTypesParameter
                 $missionStatusesParameter
                 $seaFrontsParameter

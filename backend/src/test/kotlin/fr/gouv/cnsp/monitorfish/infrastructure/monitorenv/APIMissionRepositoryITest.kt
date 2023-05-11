@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.monitorenv
 
 import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.MonitorenvProperties
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionNature
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionType
 import fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.TestUtils.Companion.getDummyMissions
 import io.ktor.client.engine.mock.*
@@ -26,7 +25,6 @@ class APIMissionRepositoryITest {
                         """{
                       "id": 34,
                       "missionTypes": ["SEA"],
-                      "missionNature": ["OTHER"],
                       "controlUnits": [
                         {
                           "id": 10016,
@@ -234,7 +232,6 @@ class APIMissionRepositoryITest {
                     ZonedDateTime.of(2021, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
                     ZonedDateTime.of(2022, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
                     listOf("MONITORFISH"),
-                    listOf(MissionNature.FISH.toString()),
                     listOf(MissionType.SEA.toString(), MissionType.LAND.toString()),
                     listOf(),
                     listOf("MED"),
@@ -251,7 +248,6 @@ class APIMissionRepositoryITest {
                     startedAfterDateTime=2021-05-05T03:04:05.000Z&
                     startedBeforeDateTime=2022-05-05T03:04:05.000Z&
                     missionSource=MONITORFISH&
-                    missionNature=FISH&
                     missionTypes=SEA,LAND&
                     seaFronts=MED
                 """.trim().replace("\\s+".toRegex(), ""),

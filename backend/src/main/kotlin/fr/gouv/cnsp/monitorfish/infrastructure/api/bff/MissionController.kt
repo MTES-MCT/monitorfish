@@ -37,9 +37,6 @@ class MissionController(
         @Parameter(description = "Origin")
         @RequestParam(name = "missionSource", required = false)
         missionSources: List<String>?,
-        @Parameter(description = "Natures de mission")
-        @RequestParam(name = "missionNature", required = false)
-        missionNatures: List<String>?,
         @Parameter(description = "Types de mission")
         @RequestParam(name = "missionTypes", required = false)
         missionTypes: List<String>?,
@@ -54,7 +51,6 @@ class MissionController(
             startedAfterDateTime = startedAfterDateTime,
             startedBeforeDateTime = startedBeforeDateTime,
             missionSources = missionSources,
-            missionNatures = missionNatures,
             missionStatuses = missionStatuses,
             missionTypes = missionTypes,
             seaFronts = seaFronts,

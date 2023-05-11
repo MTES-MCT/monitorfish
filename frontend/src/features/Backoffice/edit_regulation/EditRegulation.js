@@ -47,7 +47,7 @@ import {
   setSaveOrUpdateRegulation,
   setStatus,
   updateProcessingRegulationByKey
-} from '../Regulation.slice'
+} from '../slice'
 import { setError } from '../../../domain/shared_slices/Global'
 import {
   DEFAULT_REGULATION,

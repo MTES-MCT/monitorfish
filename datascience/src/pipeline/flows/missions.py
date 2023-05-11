@@ -122,7 +122,7 @@ def load_missions_and_missions_control_units(
             schema="public",
             connection=connection,
             logger=prefect.context.get("logger"),
-            pg_array_columns=["mission_nature", "mission_types"],
+            pg_array_columns=["mission_types"],
             how=loading_mode,
             table_id_column=missions_id_column,
             df_id_column=missions_id_column,

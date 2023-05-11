@@ -10,7 +10,6 @@ for the full entity structure
 data class MissionWithActionsDataOutput(
     val id: Int,
     val missionTypes: List<MissionType>,
-    val missionNature: List<MissionNature>? = null,
     val openBy: String? = null,
     val closedBy: String? = null,
     val observationsCacem: String? = null,
@@ -30,7 +29,6 @@ data class MissionWithActionsDataOutput(
         fun fromMissionAndActions(missionAndActions: MissionAndActions) = MissionWithActionsDataOutput(
             id = missionAndActions.mission.id,
             missionTypes = missionAndActions.mission.missionTypes,
-            missionNature = missionAndActions.mission.missionNature,
             openBy = missionAndActions.mission.openBy,
             closedBy = missionAndActions.mission.closedBy,
             observationsCacem = missionAndActions.mission.observationsCacem,

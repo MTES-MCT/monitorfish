@@ -835,18 +835,6 @@ expected_missions_df = pd.DataFrame(
             "DEF",
             "DEF",
         ],
-        "mission_nature": [
-            ["FISH"],
-            ["FISH"],
-            ["FISH"],
-            ["FISH"],
-            ["FISH"],
-            ["FISH"],
-            ["FISH"],
-            ["FISH"],
-            ["FISH"],
-            ["FISH"],
-        ],
         "deleted": [
             False,
             False,

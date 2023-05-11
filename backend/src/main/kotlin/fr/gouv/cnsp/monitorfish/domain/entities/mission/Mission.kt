@@ -9,7 +9,6 @@ for the full entity structure
 data class Mission(
     val id: Int,
     val missionTypes: List<MissionType>,
-    val missionNature: List<MissionNature>? = null,
     val openBy: String? = null,
     val closedBy: String? = null,
     val observationsCacem: String? = null,

@@ -7,7 +7,6 @@ class TestUtils {
                 [{
                     "id":263,
                     "missionTypes":["SEA"],
-                    "missionNature":[],
                     "controlUnits":[{"id":10197,
                     "administration":"Marine Nationale",
                     "isArchived":false,
@@ -29,7 +28,6 @@ class TestUtils {
                 {
                     "id":264,
                     "missionTypes":["SEA"],
-                    "missionNature":["ENV"],
                     "controlUnits":[{"id":10062,
                     "administration":"DDTM",
                     "isArchived":false,
@@ -51,7 +49,6 @@ class TestUtils {
                 {
                     "id":262,
                     "missionTypes":["SEA"],
-                    "missionNature":[],
                     "controlUnits":[{"id":10318,
                     "administration":"DDTM",
                     "isArchived":false,
@@ -73,7 +70,6 @@ class TestUtils {
                 {
                     "id":257,
                     "missionTypes":["LAND"],
-                    "missionNature":[],
                     "controlUnits":[{"id":10434,
                     "administration":"Gendarmerie Maritime",
                     "isArchived":false,
@@ -95,7 +91,6 @@ class TestUtils {
                 {
                     "id":261,
                     "missionTypes":["SEA"],
-                    "missionNature":[],
                     "controlUnits":[{"id":10380,
                     "administration":"Gendarmerie Maritime",
                     "isArchived":false,
@@ -135,7 +130,6 @@ class TestUtils {
                 {
                     "id":258,
                     "missionTypes":["SEA"],
-                    "missionNature":[],
                     "controlUnits":[{"id":1245,
                     "administration":"AFB",
                     "isArchived":true,
@@ -157,7 +151,6 @@ class TestUtils {
                 {
                     "id":259,
                     "missionTypes":["SEA"],
-                    "missionNature":[],
                     "controlUnits":[{"id":10099,
                     "administration":"Gendarmerie Maritime",
                     "isArchived":false,
@@ -185,7 +178,6 @@ class TestUtils {
                 {
                     "id":260,
                     "missionTypes":["SEA"],
-                    "missionNature":[],
                     "controlUnits":[{"id":10020,
                     "administration":"Douane",
                     "isArchived":false,
@@ -207,7 +199,6 @@ class TestUtils {
                 {
                     "id":250,
                     "missionTypes":["SEA"],
-                    "missionNature":["ENV"],
                     "controlUnits":[{"id":10345,
                     "administration":"DIRM / DM",
                     "isArchived":false,
@@ -227,7 +218,6 @@ class TestUtils {
                 {
                     "id":256,
                     "missionTypes":["SEA"],
-                    "missionNature":[],
                     "controlUnits":[{"id":10062,
                     "administration":"DDTM",
                     "isArchived":false,
@@ -251,7 +241,6 @@ class TestUtils {
                     "id":254,
                     "missionTypes":["SEA",
                     "LAND"],
-                    "missionNature":["ENV"],
                     "controlUnits":[{"id":10105,
                     "administration":"Port",
                     "isArchived":false,
@@ -271,7 +260,6 @@ class TestUtils {
                 {
                     "id":253,
                     "missionTypes":["SEA"],
-                    "missionNature":["FISH"],
                     "controlUnits":[{"id":10067,
                     "administration":"Conservatoire du littoral",
                     "isArchived":false,

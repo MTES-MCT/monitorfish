@@ -53,7 +53,6 @@ class MissionsControllerITests {
                     mission = Mission(
                         123,
                         missionTypes = listOf(MissionType.SEA),
-                        missionNature = listOf(MissionNature.FISH),
                         missionSource = MissionSource.MONITORFISH,
                         isClosed = false,
                         startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
@@ -83,7 +82,6 @@ class MissionsControllerITests {
                     pageSize=&
                     startedAfterDateTime=2021-05-05T03:04:05.000Z&
                     startedBeforeDateTime=2022-05-05T03:04:05.000Z&
-                    missionNature=&
                     missionTypes=SEA,LAND&
                     missionStatus=&
                     seaFronts=MED

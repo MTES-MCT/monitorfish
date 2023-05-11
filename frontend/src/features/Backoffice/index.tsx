@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import LawType from './list_regulation/LawType'
 import SearchRegulations from './list_regulation/SearchRegulations'
-import { setProcessingRegulationSaved } from './Regulation.slice'
+import { setProcessingRegulationSaved } from './slice'
 import { FRANCE, ORGP, UE, UK } from '../../domain/entities/regulation'
 import layer from '../../domain/shared_slices/Layer'
 import { setRegulatoryZoneMetadata } from '../../domain/shared_slices/Regulatory'

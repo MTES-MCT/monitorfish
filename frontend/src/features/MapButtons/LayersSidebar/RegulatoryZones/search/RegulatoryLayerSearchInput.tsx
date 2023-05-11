@@ -8,7 +8,7 @@ import {
   setAdvancedSearchIsOpen,
   setRegulatoryLayersSearchResult,
   setZoneSelected
-} from './RegulatoryLayerSearch.slice'
+} from './slice'
 import { COLORS } from '../../../../../constants/constants'
 import { LayerType as LayersType } from '../../../../../domain/entities/layers/constants'
 import { InteractionListener, InteractionType } from '../../../../../domain/entities/map/constants'

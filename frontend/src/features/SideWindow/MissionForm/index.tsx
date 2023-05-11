@@ -1,4 +1,5 @@
 import { Accent, Button, Icon, Tag, usePrevious } from '@mtes-mct/monitor-ui'
+import { captureMessage } from '@sentry/react'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
@@ -6,6 +7,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { ActionForm } from './ActionForm'
 import { ActionList } from './ActionList'
 import { MainForm } from './MainForm'
+import { DeletionConfirmationDialog } from './shared/DeletionConfirmationDialog'
 import { DraftCancellationConfirmationDialog } from './shared/DraftCancellationConfirmationDialog'
 import {
   getMissionActionsDataFromMissionActionsFormValues,
@@ -13,7 +15,12 @@ import {
   getUpdatedMissionFromMissionFormValues,
   isMissionFormValuesComplete
 } from './utils'
-import { monitorenvMissionApi, useCreateMissionMutation, useUpdateMissionMutation } from '../../../api/mission'
+import {
+  monitorenvMissionApi,
+  useCreateMissionMutation,
+  useDeleteMissionMutation,
+  useUpdateMissionMutation
+} from '../../../api/mission'
 import {
   missionActionApi,
   useCreateMissionActionMutation,
@@ -45,9 +52,11 @@ export function UnmemoizedMissionForm() {
 
   const previousMissionId = usePrevious(sideWindow.selectedPath.id)
   const [isLoading, setIsLoading] = useState(true)
+  const [isDeletionConfirmationDialogOpen, setIsDeletionConfirmationDialogOpen] = useState(false)
 
   const dispatch = useMainAppDispatch()
   const [createMission] = useCreateMissionMutation()
+  const [deleteMission] = useDeleteMissionMutation()
   const [createMissionAction] = useCreateMissionActionMutation()
   const [deleteMissionAction] = useDeleteMissionActionMutation()
   const [updateMission] = useUpdateMissionMutation()
@@ -89,14 +98,10 @@ export function UnmemoizedMissionForm() {
     [debouncedMissionDraft, sideWindow.selectedPath.id]
   )
 
-  const goToMissionList = useCallback(async () => {
-    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_LIST }))
-  }, [dispatch])
-
   /**
    * @param mustClose Should the mission be closed?
    */
-  const createOrUpdateMission = useCallback(
+  const createOrUpdate = useCallback(
     async (mustClose: boolean = false) => {
       if (!mission.draft) {
         return
@@ -162,6 +167,23 @@ export function UnmemoizedMissionForm() {
     ]
   )
 
+  // eslint-disable-next-line no-underscore-dangle
+  const _delete = useCallback(async () => {
+    if (!sideWindow.selectedPath.id) {
+      captureMessage('`sideWindow.selectedPath.id` is undefined')
+
+      return
+    }
+
+    await deleteMission(sideWindow.selectedPath.id)
+
+    dispatch(sideWindowActions.openOrFocusAndGoTo({ menu: SideWindowMenuKey.MISSION_LIST }))
+  }, [deleteMission, dispatch, sideWindow.selectedPath.id])
+
+  const goToMissionList = useCallback(async () => {
+    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_LIST }))
+  }, [dispatch])
+
   const handleActionFormChange = useDebouncedCallback((nextMissionActionFormValues: MissionActionFormValues) => {
     dispatch(missionActions.setEditedDraftAction(nextMissionActionFormValues))
   }, 500)
@@ -169,6 +191,10 @@ export function UnmemoizedMissionForm() {
   const handleMainFormChange = useDebouncedCallback((nextMissionFormValues: MissionFormValues) => {
     dispatch(missionActions.setDraft(nextMissionFormValues))
   }, 500)
+
+  const toggleDeletionConfirmationDialog = useCallback(async () => {
+    setIsDeletionConfirmationDialogOpen(!isDeletionConfirmationDialogOpen)
+  }, [isDeletionConfirmationDialogOpen])
 
   // ---------------------------------------------------------------------------
   // DATA
@@ -231,68 +257,86 @@ export function UnmemoizedMissionForm() {
   // ---------------------------------------------------------------------------
 
   return (
-    <Wrapper>
-      <Header ref={headerDivRef}>
-        <HeaderTitleGroup>
-          <HeaderTitle>
-            <BackToListIcon onClick={goToMissionList} />
-            {missionTitle}
-            {sideWindow.selectedPath.id && (
-              <MissionSourceTag
-                isFromCacem={
-                  debouncedMissionDraft?.missionSource === Mission.MissionSource.POSEIDON_CACEM ||
-                  debouncedMissionDraft?.missionSource === Mission.MissionSource.MONITORENV
-                }
-              >
-                {getMissionSourceTagText(debouncedMissionDraft?.missionSource)}
-              </MissionSourceTag>
-            )}
-          </HeaderTitle>
-        </HeaderTitleGroup>
+    <>
+      <Wrapper>
+        <Header ref={headerDivRef}>
+          <BackToListIcon onClick={goToMissionList} />
 
-        <HeaderButtonGroup>
-          <Button accent={Accent.TERTIARY} onClick={goToMissionList}>
-            Annuler
-          </Button>
-          <Button
-            accent={Accent.SECONDARY}
-            disabled={isLoading || !isMissionFormValid}
-            Icon={Icon.Save}
-            onClick={() => createOrUpdateMission()}
-          >
-            Enregistrer
-          </Button>
-          <Button
-            accent={Accent.SECONDARY}
-            disabled={isLoading || !isMissionFormValid}
-            Icon={Icon.Confirm}
-            onClick={() => createOrUpdateMission(true)}
-          >
-            Enregistrer et clôturer
-          </Button>
-        </HeaderButtonGroup>
-      </Header>
+          <HeaderTitle>{missionTitle}</HeaderTitle>
 
-      <Body>
-        <FrontendErrorBoundary>
-          {(isLoading || !debouncedMissionDraft) && <LoadingSpinnerWall />}
-
-          {!isLoading && debouncedMissionDraft && (
-            <>
-              <MainForm initialValues={debouncedMissionDraft} onChange={handleMainFormChange} />
-              <ActionList initialValues={debouncedMissionDraft} />
-              <ActionForm
-                key={actionFormKey}
-                initialValues={actionFormInitialValues}
-                onChange={handleActionFormChange}
-              />
-            </>
+          {sideWindow.selectedPath.id && (
+            <MissionSourceTag
+              isFromCacem={
+                debouncedMissionDraft?.missionSource === Mission.MissionSource.POSEIDON_CACEM ||
+                debouncedMissionDraft?.missionSource === Mission.MissionSource.MONITORENV
+              }
+            >
+              {getMissionSourceTagText(debouncedMissionDraft?.missionSource)}
+            </MissionSourceTag>
           )}
-        </FrontendErrorBoundary>
-      </Body>
+        </Header>
 
-      {sideWindow.isDraftCancellationConfirmationDialogVisible && <DraftCancellationConfirmationDialog />}
-    </Wrapper>
+        <Body>
+          <FrontendErrorBoundary>
+            {(isLoading || !debouncedMissionDraft) && <LoadingSpinnerWall />}
+
+            {!isLoading && debouncedMissionDraft && (
+              <>
+                <MainForm initialValues={debouncedMissionDraft} onChange={handleMainFormChange} />
+                <ActionList initialValues={debouncedMissionDraft} />
+                <ActionForm
+                  key={actionFormKey}
+                  initialValues={actionFormInitialValues}
+                  onChange={handleActionFormChange}
+                />
+              </>
+            )}
+          </FrontendErrorBoundary>
+        </Body>
+
+        <Footer>
+          <div>
+            {sideWindow.selectedPath.id && (
+              <Button
+                accent={Accent.SECONDARY}
+                disabled={isLoading}
+                Icon={Icon.Delete}
+                onClick={toggleDeletionConfirmationDialog}
+              >
+                Supprimer la mission
+              </Button>
+            )}
+          </div>
+
+          <div>
+            <Button accent={Accent.TERTIARY} onClick={goToMissionList}>
+              Annuler
+            </Button>
+            <Button
+              accent={Accent.SECONDARY}
+              disabled={isLoading || !isMissionFormValid}
+              Icon={Icon.Save}
+              onClick={() => createOrUpdate()}
+            >
+              Enregistrer
+            </Button>
+            <Button
+              accent={Accent.SECONDARY}
+              disabled={isLoading || !isMissionFormValid}
+              Icon={Icon.Confirm}
+              onClick={() => createOrUpdate(true)}
+            >
+              Enregistrer et clôturer
+            </Button>
+          </div>
+        </Footer>
+      </Wrapper>
+
+      {isDeletionConfirmationDialogOpen && (
+        <DeletionConfirmationDialog onCancel={toggleDeletionConfirmationDialog} onConfirm={_delete} />
+      )}
+      {sideWindow.isDraftCancellationConfirmationDialogOpen && <DraftCancellationConfirmationDialog />}
+    </>
   )
 }
 
@@ -325,33 +369,22 @@ const Header = styled.div`
   background-color: ${p => p.theme.color.white};
   border-bottom: solid 2px ${p => p.theme.color.gainsboro};
   display: flex;
-  justify-content: space-between;
-  min-height: 80px;
+  max-height: 62px;
+  min-height: 62px;
   padding: 0 32px 0 18px;
-`
-
-const HeaderTitleGroup = styled.div`
-  display: flex;
-`
-
-const HeaderTitle = styled.h1`
-  color: ${p => p.theme.color.charcoal};
-  font-size: 22px;
-  font-weight: 700;
-  line-height: 31px;
-  margin: 0;
 
   > div {
     vertical-align: middle;
   }
 `
 
-const HeaderButtonGroup = styled.div`
-  display: flex;
-
-  > button:not(:first-child) {
-    margin-left: 16px;
-  }
+const HeaderTitle = styled.h1`
+  color: ${p => p.theme.color.charcoal};
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  margin: 0 0 4px !important;
+  vertical-align: 2px;
 `
 
 const Body = styled.div`
@@ -359,4 +392,29 @@ const Body = styled.div`
   display: flex;
   flex-grow: 1;
   min-height: 0;
+`
+
+const Footer = styled.div`
+  background-color: ${p => p.theme.color.white};
+  border-top: solid 2px ${p => p.theme.color.gainsboro};
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-between;
+  max-height: 62px;
+  min-height: 62px;
+
+  > div {
+    align-items: center;
+    display: flex;
+    flex-grow: 1;
+    padding: 0 24px;
+
+    :last-child {
+      justify-content: flex-end;
+
+      > button {
+        margin-left: 16px;
+      }
+    }
+  }
 `

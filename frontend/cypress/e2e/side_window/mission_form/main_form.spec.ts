@@ -371,7 +371,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.get('h1').should('contain.text', 'Missions et contrôles')
   })
 
-  it('Should show cancellation confirmation dialog when switching to another menu while a draft is dirty', () => {
+  it('Should show the cancellation confirmation dialog when switching to another menu while a draft is dirty', () => {
     editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
 
     cy.wait(500)
@@ -396,6 +396,34 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.clickButton(SideWindowMenuLabel.MISSION_LIST)
     cy.clickButton('Quitter sans enregistrer')
+
+    cy.get('h1').should('contain.text', 'Missions et contrôles')
+  })
+
+  it('Should delete a mission', () => {
+    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
+
+    cy.intercept('DELETE', '/api/v1/missions/2', {
+      statusCode: 204
+    }).as('deleteMission')
+
+    cy.wait(500)
+
+    cy.clickButton('Supprimer la mission')
+
+    cy.get('.Component-Dialog').should('be.visible')
+
+    cy.clickButton('Retourner à l’édition')
+
+    cy.get('.Component-Dialog').should('not.exist')
+
+    cy.clickButton('Supprimer la mission')
+
+    cy.get('.Component-Dialog').should('be.visible')
+
+    cy.clickButton('Confirmer la suppression')
+
+    cy.wait('@deleteMission')
 
     cy.get('h1').should('contain.text', 'Missions et contrôles')
   })

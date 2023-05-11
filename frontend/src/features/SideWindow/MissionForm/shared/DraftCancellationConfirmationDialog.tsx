@@ -38,4 +38,5 @@ export function DraftCancellationConfirmationDialog() {
 // TODO Remove that once we get rid of global legacy CSS.
 const StyledDialogTitle = styled(Dialog.Title)`
   line-height: 48px;
+  margin: 0;
 `

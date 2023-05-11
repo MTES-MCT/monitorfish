@@ -20,31 +20,39 @@ export function CardTableColumnTitle({
   onClick
 }: CardTableColumnTitleProps) {
   return (
-    <StyledCardTableColumnTitle data-cy={dataCy} isSortable={isSortable} onClick={onClick} title={String(children)}>
-      {children}
+    <StyledCardTableColumnTitle $isSortable={isSortable} data-cy={dataCy} onClick={onClick} title={String(children)}>
+      <span>{children}</span>
       {isSortable && isSortColumn && (
-        <Sort isAscending={isAscending} title={isAscending ? 'Croissant' : 'Décroissant'} />
+        <Sort $isAscending={isAscending} title={isAscending ? 'Croissant' : 'Décroissant'} />
       )}
     </StyledCardTableColumnTitle>
   )
 }
 
 const StyledCardTableColumnTitle = styled.div<{
-  isSortable?: boolean
+  $isSortable?: boolean
 }>`
-  cursor: ${p => (p.isSortable ? 'pointer' : '')};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  align-items: center;
+  cursor: ${p => (p.$isSortable ? 'pointer' : '')};
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-between;
+
+  > span {
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 `
 
 const Sort = styled(SortSVG)<{
-  isAscending?: boolean
+  $isAscending?: boolean
 }>`
   width: 37px;
   height: 14px;
   padding: 0px;
   margin-left: auto;
   cursor: pointer;
-  transform: ${p => (p.isAscending ? 'rotate(180deg)' : 'none')};
+  transform: ${p => (p.$isAscending ? 'rotate(180deg)' : 'none')};
 `

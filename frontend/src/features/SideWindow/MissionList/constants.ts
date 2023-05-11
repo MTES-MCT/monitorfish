@@ -108,6 +108,7 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
       label: ''
     }
   ],
+  defaultSortedKey: 'startDateTimeUtc',
   searchableKeys: ['inspectedVessels']
 }
 

@@ -1,5 +1,4 @@
 import { Accent, Button, Icon, Tag, usePrevious } from '@mtes-mct/monitor-ui'
-import { captureMessage } from '@sentry/react'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
@@ -85,18 +84,20 @@ export function UnmemoizedMissionForm() {
     [mission.editedDraftActionIndex, mission.draft?.actions]
   )
 
-  const missionTitle = useMemo(
-    () =>
-      sideWindow.selectedPath.id
-        ? `Mission ${
-            debouncedMissionDraft?.missionTypes &&
-            debouncedMissionDraft.missionTypes.map(missionType => Mission.MissionTypeLabel[missionType]).join(' / ')
-          } – ${debouncedMissionDraft?.controlUnits
-            .map(controlUnit => controlUnit.name?.replace('(historique)', ''))
-            .join(', ')}`
-        : `Nouvelle mission`,
-    [debouncedMissionDraft, sideWindow.selectedPath.id]
-  )
+  const missionTitle = useMemo(() => {
+    if (!debouncedMissionDraft) {
+      return 'Mission en cours de chargement...'
+    }
+
+    return sideWindow.selectedPath.id
+      ? `Mission ${
+          debouncedMissionDraft.missionTypes &&
+          debouncedMissionDraft.missionTypes.map(missionType => Mission.MissionTypeLabel[missionType]).join(' / ')
+        } – ${debouncedMissionDraft.controlUnits
+          .map(controlUnit => controlUnit.name?.replace('(historique)', ''))
+          .join(', ')}`
+      : `Nouvelle mission`
+  }, [debouncedMissionDraft, sideWindow.selectedPath.id])
 
   /**
    * @param mustClose Should the mission be closed?
@@ -168,15 +169,12 @@ export function UnmemoizedMissionForm() {
   )
 
   // eslint-disable-next-line no-underscore-dangle
-  const _delete = useCallback(async () => {
+  const handleDelete = useCallback(async () => {
     if (!sideWindow.selectedPath.id) {
-      captureMessage('`sideWindow.selectedPath.id` is undefined')
-
-      return
+      throw new FrontendError('`sideWindow.selectedPath.id` is undefined')
     }
 
     await deleteMission(sideWindow.selectedPath.id)
-
     dispatch(sideWindowActions.openOrFocusAndGoTo({ menu: SideWindowMenuKey.MISSION_LIST }))
   }, [deleteMission, dispatch, sideWindow.selectedPath.id])
 
@@ -333,7 +331,7 @@ export function UnmemoizedMissionForm() {
       </Wrapper>
 
       {isDeletionConfirmationDialogOpen && (
-        <DeletionConfirmationDialog onCancel={toggleDeletionConfirmationDialog} onConfirm={_delete} />
+        <DeletionConfirmationDialog onCancel={toggleDeletionConfirmationDialog} onConfirm={handleDelete} />
       )}
       {sideWindow.isDraftCancellationConfirmationDialogOpen && <DraftCancellationConfirmationDialog />}
     </>

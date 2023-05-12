@@ -8,31 +8,46 @@ import {
   noop
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
+import { omit } from 'lodash'
 import { useMemo } from 'react'
 import styled from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { MISSION_TYPES_AS_OPTIONS } from './constants'
 import { FormikDoubleDatePicker } from './FormikDoubleDatePicker'
+import { FormikIsClosedEffect } from './FormikIsClosedEffect'
 import { FormikLocationPicker } from './FormikLocationPicker'
 import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'
 import { BOOLEAN_AS_OPTIONS } from '../../../../constants'
+import { missionActions } from '../../../../domain/actions'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { FrontendError } from '../../../../libs/FrontendError'
 import { FormBody, FormBodyInnerWrapper } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
 
 import type { MissionFormValues } from '../types'
-import type { Promisable } from 'type-fest'
 
-export type MainFormProps = {
-  initialValues: MissionFormValues
-  onChange: (nextValues: MissionFormValues) => Promisable<void>
-}
-export function MainForm({ initialValues, onChange }: MainFormProps) {
-  const controlledInitialValues = useMemo(() => initialValues, [initialValues])
+export function MainForm() {
+  const { mission } = useMainAppSelector(store => store)
+  const dispatch = useMainAppDispatch()
+
+  const initialMissionFormValues = useMemo(() => {
+    if (!mission.draft) {
+      throw new FrontendError('`mission.draft` is undefined')
+    }
+
+    return omit(mission.draft, ['actions'])
+  }, [mission.draft])
+
+  const handleMainFormChange = useDebouncedCallback((nextMissionFormValues: MissionFormValues) => {
+    dispatch(missionActions.setDraft(nextMissionFormValues))
+  }, 250)
 
   return (
-    <Formik initialValues={controlledInitialValues} onSubmit={noop}>
+    <Formik initialValues={initialMissionFormValues} onSubmit={noop}>
       <Wrapper>
-        <FormikEffect onChange={onChange as any} />
+        <FormikEffect onChange={handleMainFormChange as any} />
 
         <FormHead>
           <h2>Informations générales</h2>
@@ -40,6 +55,8 @@ export function MainForm({ initialValues, onChange }: MainFormProps) {
 
         <FormBody>
           <CustomFormBodyInnerWrapper>
+            <FormikIsClosedEffect />
+
             <FormikDoubleDatePicker />
 
             <MultiCheckColumns>

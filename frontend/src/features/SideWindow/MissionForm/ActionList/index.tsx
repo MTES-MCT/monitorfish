@@ -13,17 +13,14 @@ import { FrontendErrorBoundary } from '../../../../ui/FrontendErrorBoundary'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
 
-import type { MissionActionFormValues, MissionFormValues } from '../types'
+import type { MissionActionFormValues } from '../types'
 
-export type ActionListProps = {
-  initialValues: MissionFormValues
-}
-export function ActionList({ initialValues }: ActionListProps) {
+export function ActionList() {
   const dispatch = useMainAppDispatch()
 
   const { mission } = useMainAppSelector(store => store)
 
-  const currentMissionTypes = useMemo(() => initialValues.missionTypes || [], [initialValues.missionTypes])
+  const currentMissionTypes = useMemo(() => mission.draft?.missionTypes || [], [mission.draft?.missionTypes])
 
   const add = useCallback(
     (type: MissionActionFormValues['actionType']) => {
@@ -92,10 +89,10 @@ export function ActionList({ initialValues }: ActionListProps) {
 
       <FormBody>
         <FrontendErrorBoundary>
-          {!initialValues.actions.length && <Placeholder>Aucune action n’est ajoutée pour le moment.</Placeholder>}
+          {!mission.draft?.actions.length && <Placeholder>Aucune action n’est ajoutée pour le moment.</Placeholder>}
 
-          {Boolean(initialValues.actions.length) &&
-            initialValues.actions.map((actionInitialValues, index) => (
+          {Boolean(mission.draft?.actions.length) &&
+            mission.draft?.actions.map((actionInitialValues, index) => (
               <Item
                 // eslint-disable-next-line react/no-array-index-key
                 key={index}

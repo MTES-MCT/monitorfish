@@ -1,7 +1,6 @@
 import { Accent, Button, Icon, Tag, usePrevious } from '@mtes-mct/monitor-ui'
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { useDebouncedCallback } from 'use-debounce'
 
 import { ActionForm } from './ActionForm'
 import { ActionList } from './ActionList'
@@ -28,11 +27,10 @@ import {
 } from '../../../api/missionAction'
 import { missionActions } from '../../../domain/actions'
 import { getMissionSourceTagText } from '../../../domain/entities/mission'
-import { Mission } from '../../../domain/entities/mission/types'
+import { Mission, type MissionWithActions } from '../../../domain/entities/mission/types'
 import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
 import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
 import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
-import { useDebouncedValue } from '../../../hooks/useDebouncedValue'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { FrontendError } from '../../../libs/FrontendError'
@@ -40,10 +38,9 @@ import { FrontendErrorBoundary } from '../../../ui/FrontendErrorBoundary'
 import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
 
-import type { MissionActionFormValues, MissionFormValues } from './types'
-import type { MissionWithActions } from '../../../domain/entities/mission/types'
+import type { MissionFormValues } from './types'
 
-export function UnmemoizedMissionForm() {
+export function MissionForm() {
   const { mission, sideWindow } = useMainAppSelector(store => store)
 
   const headerDivRef = useRef<HTMLDivElement | null>(null)
@@ -61,43 +58,20 @@ export function UnmemoizedMissionForm() {
   const [updateMission] = useUpdateMissionMutation()
   const [updateMissionAction] = useUpdateMissionActionMutation()
 
-  const actionFormKey = useMemo(() => `actionForm-${mission.editedDraftActionIndex}`, [mission.editedDraftActionIndex])
-  const [debouncedMissionDraft] = useDebouncedValue(mission.draft, 250)
-  const isMissionFormValid = useMemo(() => isMissionFormValuesComplete(debouncedMissionDraft), [debouncedMissionDraft])
-
-  const actionFormInitialValues = useMemo(
-    () => {
-      if (mission.editedDraftActionIndex === undefined) {
-        return undefined
-      }
-
-      if (!mission.draft || !mission.draft.actions) {
-        throw new FrontendError(
-          'Either `mission.draft` or `mission.draft.actions` is undefined while `mission.editedDraftActionIndex` is not'
-        )
-      }
-
-      return mission.draft.actions[mission.editedDraftActionIndex]
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mission.editedDraftActionIndex, mission.draft?.actions]
-  )
+  const isMissionFormValid = useMemo(() => isMissionFormValuesComplete(mission.draft), [mission.draft])
 
   const missionTitle = useMemo(() => {
-    if (!debouncedMissionDraft) {
+    if (!mission.draft) {
       return 'Mission en cours de chargement...'
     }
 
     return sideWindow.selectedPath.id
       ? `Mission ${
-          debouncedMissionDraft.missionTypes &&
-          debouncedMissionDraft.missionTypes.map(missionType => Mission.MissionTypeLabel[missionType]).join(' / ')
-        } – ${debouncedMissionDraft.controlUnits
-          .map(controlUnit => controlUnit.name?.replace('(historique)', ''))
-          .join(', ')}`
+          mission.draft.missionTypes &&
+          mission.draft.missionTypes.map(missionType => Mission.MissionTypeLabel[missionType]).join(' / ')
+        } – ${mission.draft.controlUnits.map(controlUnit => controlUnit.name?.replace('(historique)', '')).join(', ')}`
       : `Nouvelle mission`
-  }, [debouncedMissionDraft, sideWindow.selectedPath.id])
+  }, [mission.draft, sideWindow.selectedPath.id])
 
   /**
    * @param mustClose Should the mission be closed?
@@ -178,17 +152,22 @@ export function UnmemoizedMissionForm() {
     dispatch(sideWindowActions.openOrFocusAndGoTo({ menu: SideWindowMenuKey.MISSION_LIST }))
   }, [deleteMission, dispatch, sideWindow.selectedPath.id])
 
+  const reopen = useCallback(() => {
+    if (!mission.draft) {
+      throw new FrontendError('`mission.draft` is undefined.')
+    }
+
+    const nextDraft: MissionFormValues = {
+      ...mission.draft,
+      isClosed: false
+    }
+
+    dispatch(missionActions.setDraft(nextDraft))
+  }, [dispatch, mission.draft])
+
   const goToMissionList = useCallback(async () => {
     dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_LIST }))
   }, [dispatch])
-
-  const handleActionFormChange = useDebouncedCallback((nextMissionActionFormValues: MissionActionFormValues) => {
-    dispatch(missionActions.setEditedDraftAction(nextMissionActionFormValues))
-  }, 500)
-
-  const handleMainFormChange = useDebouncedCallback((nextMissionFormValues: MissionFormValues) => {
-    dispatch(missionActions.setDraft(nextMissionFormValues))
-  }, 500)
 
   const toggleDeletionConfirmationDialog = useCallback(async () => {
     setIsDeletionConfirmationDialogOpen(!isDeletionConfirmationDialogOpen)
@@ -265,28 +244,24 @@ export function UnmemoizedMissionForm() {
           {sideWindow.selectedPath.id && (
             <MissionSourceTag
               isFromCacem={
-                debouncedMissionDraft?.missionSource === Mission.MissionSource.POSEIDON_CACEM ||
-                debouncedMissionDraft?.missionSource === Mission.MissionSource.MONITORENV
+                mission.draft?.missionSource === Mission.MissionSource.POSEIDON_CACEM ||
+                mission.draft?.missionSource === Mission.MissionSource.MONITORENV
               }
             >
-              {getMissionSourceTagText(debouncedMissionDraft?.missionSource)}
+              {getMissionSourceTagText(mission.draft?.missionSource)}
             </MissionSourceTag>
           )}
         </Header>
 
         <Body>
           <FrontendErrorBoundary>
-            {(isLoading || !debouncedMissionDraft) && <LoadingSpinnerWall />}
+            {(isLoading || !mission.draft) && <LoadingSpinnerWall />}
 
-            {!isLoading && debouncedMissionDraft && (
+            {!isLoading && mission.draft && (
               <>
-                <MainForm initialValues={debouncedMissionDraft} onChange={handleMainFormChange} />
-                <ActionList initialValues={debouncedMissionDraft} />
-                <ActionForm
-                  key={actionFormKey}
-                  initialValues={actionFormInitialValues}
-                  onChange={handleActionFormChange}
-                />
+                <MainForm />
+                <ActionList />
+                <ActionForm />
               </>
             )}
           </FrontendErrorBoundary>
@@ -307,25 +282,39 @@ export function UnmemoizedMissionForm() {
           </div>
 
           <div>
+            {mission.draft?.isClosed && (
+              <FooterMessage>Veuillez rouvrir la mission avant d’en modifier les informations.</FooterMessage>
+            )}
+
             <Button accent={Accent.TERTIARY} onClick={goToMissionList}>
               Annuler
             </Button>
-            <Button
-              accent={Accent.SECONDARY}
-              disabled={isLoading || !isMissionFormValid}
-              Icon={Icon.Save}
-              onClick={() => createOrUpdate()}
-            >
-              Enregistrer
-            </Button>
-            <Button
-              accent={Accent.SECONDARY}
-              disabled={isLoading || !isMissionFormValid}
-              Icon={Icon.Confirm}
-              onClick={() => createOrUpdate(true)}
-            >
-              Enregistrer et clôturer
-            </Button>
+
+            {!mission.draft?.isClosed && (
+              <>
+                <Button
+                  accent={Accent.SECONDARY}
+                  disabled={isLoading || !isMissionFormValid}
+                  Icon={Icon.Save}
+                  onClick={() => createOrUpdate()}
+                >
+                  Enregistrer
+                </Button>
+                <Button
+                  accent={Accent.SECONDARY}
+                  disabled={isLoading || !isMissionFormValid}
+                  Icon={Icon.Confirm}
+                  onClick={() => createOrUpdate(true)}
+                >
+                  Enregistrer et clôturer
+                </Button>
+              </>
+            )}
+            {mission.draft?.isClosed && (
+              <Button accent={Accent.PRIMARY} disabled={isLoading} Icon={Icon.Unlock} onClick={reopen} type="button">
+                Ré-ouvrir la mission
+              </Button>
+            )}
           </div>
         </Footer>
       </Wrapper>
@@ -337,8 +326,6 @@ export function UnmemoizedMissionForm() {
     </>
   )
 }
-
-export const MissionForm = memo(UnmemoizedMissionForm)
 
 const MissionSourceTag = styled(Tag)<{
   isFromCacem: boolean
@@ -415,4 +402,8 @@ const Footer = styled.div`
       }
     }
   }
+`
+
+const FooterMessage = styled.p`
+  font-style: italic;
 `

@@ -20,10 +20,11 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
 
   const controlUnitsQuery = useGetControlUnitsQuery(undefined)
 
-  const { administrationsAsOptions: allAdministrationsAsOptions, unitsAsOptions: allNamesAsOptions } = useMemo(
-    () => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data),
-    [controlUnitsQuery.data]
-  )
+  const {
+    activeControlUnits: allActiveControlUnits,
+    administrationsAsOptions: allAdministrationsAsOptions,
+    unitsAsOptions: allNamesAsOptions
+  } = useMemo(() => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data), [controlUnitsQuery.data])
 
   const addUnit = useCallback(
     () => {
@@ -66,8 +67,8 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
             // eslint-disable-next-line react/no-array-index-key
             key={`unit${index}`}
             allAdministrationsAsOptions={allAdministrationsAsOptions}
+            allControlUnits={allActiveControlUnits}
             allNamesAsOptions={allNamesAsOptions}
-            controlUnits={controlUnitsQuery.data}
             index={index}
             onChange={handleChange}
             onDelete={removeUnit}

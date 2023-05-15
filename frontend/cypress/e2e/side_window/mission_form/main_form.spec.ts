@@ -181,8 +181,6 @@ context('Side Window > Mission Form > Main Form', () => {
     }).as('updateMission')
     cy.intercept('PUT', '/bff/v1/mission_actions/2').as('updateMissionAction2')
 
-    cy.wait(250)
-
     cy.clickButton('Enregistrer')
 
     cy.wait('@updateMission').then(interception => {
@@ -374,8 +372,6 @@ context('Side Window > Mission Form > Main Form', () => {
   it('Should show the cancellation confirmation dialog when switching to another menu while a draft is dirty', () => {
     editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
 
-    cy.wait(500)
-
     cy.clickButton(SideWindowMenuLabel.MISSION_LIST)
 
     cy.get('h1').should('contain.text', 'Missions et contrôles')
@@ -400,14 +396,68 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.get('h1').should('contain.text', 'Missions et contrôles')
   })
 
+  it('Should reopen a closed mission', () => {
+    editSideWindowMissionListMissionWithId(6, SeaFrontGroup.MED)
+
+    cy.intercept('POST', '/api/v1/missions/6', {
+      body: {
+        id: 1
+      },
+      statusCode: 204
+    }).as('updateMission')
+
+    cy.contains('Veuillez rouvrir la mission avant d’en modifier les informations.').should('be.visible')
+
+    cy.wait(1000)
+
+    cy.clickButton('Ré-ouvrir la mission')
+
+    cy.wait(1000)
+
+    cy.contains('Veuillez rouvrir la mission avant d’en modifier les informations.').should('not.exist')
+
+    cy.clickButton('Enregistrer')
+
+    cy.wait('@updateMission').then(interception => {
+      if (!interception.response) {
+        assert.fail('`interception.response` is undefined.')
+      }
+
+      assert.isString(interception.request.body.endDateTimeUtc)
+      assert.isString(interception.request.body.startDateTimeUtc)
+      assert.deepInclude(interception.request.body, {
+        closedBy: 'Cynthia Phillips',
+        controlUnits: [
+          {
+            administration: 'DDTM',
+            contact: null,
+            id: 10003,
+            isArchived: false,
+            name: 'DML 2A (historique)',
+            resources: [{ id: 3, name: 'Semi-rigide 1' }]
+          }
+        ],
+        envActions: [],
+        facade: 'MED',
+        geom: null,
+        id: 6,
+        isClosed: false,
+        missionNature: ['FISH', 'OTHER'],
+        missionSource: 'MONITORFISH',
+        missionTypes: ['AIR'],
+        observationsCacem: 'Toward agency blue now hand. Meet answer someone stand.',
+        observationsCnsp: null,
+        openBy: 'Kevin Torres'
+      })
+    })
+  })
+
   it('Should delete a mission', () => {
     editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
 
     cy.intercept('DELETE', '/api/v1/missions/2', {
       statusCode: 204
     }).as('deleteMission')
-
-    cy.wait(500)
 
     cy.clickButton('Supprimer la mission')
 

@@ -37,6 +37,10 @@ export const editSideWindowMission = (vesselName: string) => {
 
   cy.clickButton('Éditer la mission')
 
+  if (document.querySelector('[data-cy="first-loader"]')) {
+    cy.getDataCy('first-loader').should('not.be.visible')
+  }
+
   cy.wait(500)
 }
 

@@ -1,4 +1,4 @@
-import { getUtcizedDayjs } from '@mtes-mct/monitor-ui'
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import { difference } from 'lodash'
 import { omit } from 'ramda'
 
@@ -87,7 +87,7 @@ export function getMissionFormInitialValues(
   missionActions: MissionAction.MissionAction[]
 ): MissionFormValues {
   if (!mission) {
-    const startDateTimeUtc = getUtcizedDayjs().startOf('minute').toISOString()
+    const startDateTimeUtc = customDayjs().startOf('minute').toISOString()
 
     return {
       actions: [],

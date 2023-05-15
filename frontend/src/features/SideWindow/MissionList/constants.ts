@@ -2,8 +2,8 @@ import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import { MissionDateRangeFilterLabel, MissionFilterType } from './types'
 import { SeaFrontGroup, SeaFrontGroupLabel } from '../../../constants'
-import { getMissionStatus } from '../../../domain/entities/mission'
 import { Mission } from '../../../domain/entities/mission/types'
+import { getMissionStatus } from '../../../domain/entities/mission/utils'
 import { getOptionsFromLabelledEnum } from '../../../utils/getOptionsFromLabelledEnum'
 
 import type { MissionWithActions } from '../../../domain/entities/mission/types'

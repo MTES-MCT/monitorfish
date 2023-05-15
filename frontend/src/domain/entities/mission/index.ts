@@ -1,10 +1,11 @@
-import { customDayjs, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
 import { Feature } from 'ol'
 import { GeoJSON } from 'ol/format'
 import Point from 'ol/geom/Point'
 import { transform } from 'ol/proj'
 
 import { Mission } from './types'
+import { getMissionStatus } from './utils'
 import { getMissionColor } from '../../../features/map/layers/Mission/MissionLayer/styles'
 import { getMissionActionInfractionsFromMissionActionFromFormValues } from '../../../features/SideWindow/MissionForm/ActionList/utils'
 import { booleanToInt, getDate, getDateTime } from '../../../utils'
@@ -139,35 +140,6 @@ export const getMissionActionFeature = (
   feature.setId(`${MonitorFishLayer.MISSION_ACTION_SELECTED}:${action.id}`)
 
   return feature
-}
-
-export const getMissionStatus = ({
-  endDateTimeUtc,
-  isClosed,
-  startDateTimeUtc
-}: {
-  endDateTimeUtc?: string
-  isClosed?: Boolean
-  startDateTimeUtc?: string
-}): Mission.MissionStatus | undefined => {
-  if (isClosed) {
-    return Mission.MissionStatus.CLOSED
-  }
-
-  if (!startDateTimeUtc) {
-    return undefined
-  }
-
-  const now = customDayjs()
-  if (customDayjs(startDateTimeUtc).isAfter(now)) {
-    return Mission.MissionStatus.UPCOMING
-  }
-
-  if (endDateTimeUtc && customDayjs(endDateTimeUtc).isBefore(now)) {
-    return Mission.MissionStatus.DONE
-  }
-
-  return MissionStatus.IN_PROGRESS
 }
 
 export function getMissionSourceTagText(missionSource: MissionSource | undefined) {

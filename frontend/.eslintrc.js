@@ -151,24 +151,27 @@ module.exports = {
     // Cypress
     {
       files: ['cypress/**/*.js', 'cypress/**/*.ts', 'cypress.config.ts'],
-      plugins: ['cypress'],
+      plugins: ['cypress', 'mocha'],
       rules: {
         // TODO Check why either Prettier or ESLint auto-formatting does that and why this rule is not enabled.
         // 'max-len': ['warn', { code: 120 }],
 
         '@typescript-eslint/naming-convention': 'off',
 
-        'cypress/no-assigning-return-values': 'error',
-        // TODO Hopefully we'll able to enforce that rule someday.
-        'cypress/no-unnecessary-waiting': 'off',
         'cypress/assertion-before-screenshot': 'error',
+        'cypress/no-assigning-return-values': 'error',
+        'cypress/no-async-tests': 'error',
         // TODO Hopefully we'll able to enforce that rule someday.
         'cypress/no-force': 'off',
-        'cypress/no-async-tests': 'error',
         'cypress/no-pause': 'error',
+        // TODO Hopefully we'll able to enforce that rule someday.
+        'cypress/no-unnecessary-waiting': 'off',
 
         'import/no-default-export': 'off',
-        'import/no-extraneous-dependencies': 'off'
+        'import/no-extraneous-dependencies': 'off',
+
+        'mocha/no-exclusive-tests': 'error',
+        'mocha/no-skipped-tests': 'error'
       }
     },
 

@@ -1,4 +1,4 @@
-import { Accent, Button, Icon, IconButton, OPENLAYERS_PROJECTION, Size } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Icon, IconButton, OPENLAYERS_PROJECTION } from '@mtes-mct/monitor-ui'
 import { GeoJSON } from 'ol/format'
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
@@ -147,8 +147,8 @@ export function MissionList() {
                           accent={Accent.TERTIARY}
                           disabled={!augmentedMission.geom}
                           Icon={Icon.ViewOnMap}
+                          iconSize={20}
                           onClick={() => handleZoomToMission(augmentedMission.geom)}
-                          size={Size.SMALL}
                           title="Voir sur la carte"
                         />
                       </TableBodyCell>
@@ -162,8 +162,8 @@ export function MissionList() {
                         <IconButton
                           accent={Accent.TERTIARY}
                           Icon={Icon.Edit}
+                          iconSize={20}
                           onClick={() => goToMissionForm(augmentedMission.id)}
-                          size={Size.SMALL}
                           title="Éditer la mission"
                         />
                       </TableBodyCell>
@@ -268,8 +268,10 @@ const TableBodyCell = styled.div.attrs(() => ({
 }))<{
   $fixedWidth?: number
 }>`
+  align-items: center;
   border-bottom: solid 1px ${p => p.theme.color.lightGray};
   border-right: solid 1px ${p => p.theme.color.lightGray};
+  display: flex;
   flex-grow: ${p => (p.$fixedWidth ? 0 : 1)};
   max-width: ${p => (p.$fixedWidth ? `${p.$fixedWidth}px` : 'auto')};
   min-width: ${p => (p.$fixedWidth ? `${p.$fixedWidth}px` : 'auto')};

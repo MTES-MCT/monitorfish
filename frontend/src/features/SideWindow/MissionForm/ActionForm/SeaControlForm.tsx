@@ -9,7 +9,7 @@ import {
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { ControlQualityField } from './shared/ControlQualityField'
@@ -60,15 +60,6 @@ export function SeaControlForm({ index, initialValues }: SeaControlFormProps) {
       })
     )
   }, 500)
-
-  useEffect(
-    () => () => {
-      handleChange.cancel()
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  )
 
   // TODO Fix the validation: it can't be used as the formik state is inconsistent (due to FormikEffect ?)
   return (

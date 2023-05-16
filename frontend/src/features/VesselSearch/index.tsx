@@ -69,7 +69,6 @@ export function VesselSearch({
     () => (selectedVessel ? undefinedize(selectedVessel.vesselName) : defaultValue?.vesselName),
     [defaultValue, selectedVessel]
   )
-  // TODO Replace by `useKey` once it's exposed in Monitor UI.
   const flagState = useMemo(
     () => (selectedVessel ? selectedVessel.flagState : undefinedize(defaultValue?.flagState)),
     [defaultValue, selectedVessel]

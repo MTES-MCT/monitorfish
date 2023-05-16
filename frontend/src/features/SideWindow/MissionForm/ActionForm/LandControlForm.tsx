@@ -9,7 +9,7 @@ import {
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { ControlQualityField } from './shared/ControlQualityField'
@@ -59,15 +59,6 @@ export function LandControlForm({ index, initialValues }: LandControlFormProps) 
       })
     )
   }, 500)
-
-  useEffect(
-    () => () => {
-      handleChange.cancel()
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  )
 
   return (
     <Formik key={key} initialValues={initialValues} onSubmit={noop}>

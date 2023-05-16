@@ -1,7 +1,7 @@
 import { FormikDatePicker, FormikEffect, FormikTextarea, Icon, useNewWindow } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import * as Yup from 'yup'
 
@@ -52,15 +52,6 @@ export function AirControlForm({ index, initialValues }: AirControlFormProps) {
       })
     )
   }, 500)
-
-  useEffect(
-    () => () => {
-      handleChange.cancel()
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  )
 
   return (
     <Formik key={key} initialValues={initialValues} onSubmit={noop} validationSchema={AirControlFormSchema}>

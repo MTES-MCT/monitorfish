@@ -1,7 +1,7 @@
 import { FormikEffect, FormikTextarea, FormikTextInput, Icon } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { getTitleDateFromUtcStringDate } from './shared/utils'
@@ -40,15 +40,6 @@ export function ObservationForm({ index, initialValues }: ObservationFormProps) 
       })
     )
   }, 500)
-
-  useEffect(
-    () => () => {
-      handleChange.cancel()
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  )
 
   return (
     <Formik key={key} initialValues={initialValues} onSubmit={noop}>

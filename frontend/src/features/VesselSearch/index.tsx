@@ -69,7 +69,6 @@ export function VesselSearch({
     () => (selectedVessel ? undefinedize(selectedVessel.vesselName) : defaultValue?.vesselName),
     [defaultValue, selectedVessel]
   )
-  // TODO Replace by `useKey` once it's exposed in Monitor UI.
   const flagState = useMemo(
     () => (selectedVessel ? selectedVessel.flagState : undefinedize(defaultValue?.flagState)),
     [defaultValue, selectedVessel]
@@ -174,7 +173,9 @@ export function VesselSearch({
       <InputWrapper>
         <Input
           key={controlledKey}
-          ref={input => (selectedVesselIdentity ? input && input.focus() : null)}
+          // Disable this behavior when VesselSearch is used within side window
+          // (`baseRef` prop is only provided in side window case)
+          autoFocus={!baseRef && !!selectedVesselIdentity}
           baseUrl={baseUrl}
           data-cy="vessel-search-input"
           defaultValue={controlledDefaultValue}

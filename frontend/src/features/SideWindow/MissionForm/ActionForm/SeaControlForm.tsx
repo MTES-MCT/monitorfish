@@ -8,7 +8,9 @@ import {
   useNewWindow
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
+import { noop } from 'lodash'
 import { useMemo } from 'react'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { ControlQualityField } from './shared/ControlQualityField'
 import { FormikCoordinatesPicker } from './shared/FormikCoordinatesPicker'
@@ -20,35 +22,56 @@ import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
 import { VesselFleetSegmentsField } from './shared/VesselFleetSegmentsField'
 import { SeaControlFormSchema } from './validationSchema'
+import { missionActions } from '../../../../domain/actions'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
 
 import type { MissionActionFormValues } from '../types'
-import type { Promisable } from 'type-fest'
 
 export type SeaControlFormProps = {
+  index: number
   initialValues: MissionActionFormValues
-  onChange: (nextMissionAction: MissionActionFormValues) => Promisable<void>
 }
-export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps) {
+export function SeaControlForm({ index, initialValues }: SeaControlFormProps) {
   const { newWindowContainerRef } = useNewWindow()
 
+  const { mission } = useMainAppSelector(store => store)
+  const dispatch = useMainAppDispatch()
+
+  const key = useMemo(() => JSON.stringify(initialValues), [initialValues])
   const titleDate = useMemo(
     () => initialValues.actionDatetimeUtc && getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),
     [initialValues.actionDatetimeUtc]
   )
 
+  const handleChange = useDebouncedCallback((nextMissionActionFormValues: MissionActionFormValues) => {
+    // Since it's debounced, we don't want to update this draft action which could have just been deleted
+    if (!mission.draft || !mission.draft.actions[index]) {
+      return
+    }
+
+    dispatch(
+      missionActions.setDraftAction({
+        index,
+        nextAction: nextMissionActionFormValues
+      })
+    )
+  }, 500)
+
   // TODO Fix the validation: it can't be used as the formik state is inconsistent (due to FormikEffect ?)
   return (
     <Formik
+      key={key}
       initialValues={initialValues}
-      onSubmit={onChange as any}
+      onSubmit={noop}
       validateOnChange
       validationSchema={SeaControlFormSchema}
     >
       <>
-        <FormikEffect onChange={onChange as any} />
+        <FormikEffect onChange={handleChange as any} />
 
         <FormHead>
           <h2>

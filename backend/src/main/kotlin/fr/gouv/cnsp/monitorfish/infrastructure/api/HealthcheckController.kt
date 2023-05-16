@@ -16,7 +16,7 @@ class HealthcheckController(
 ) {
 
     @GetMapping("")
-    @Operation(summary = "Get healtcheck of positions and logbook")
+    @Operation(summary = "Get healthcheck of positions and logbook")
     fun getHealthcheck(): HealthDataOutput {
         return HealthDataOutput.fromHealth(getHealthcheck.execute())
     }

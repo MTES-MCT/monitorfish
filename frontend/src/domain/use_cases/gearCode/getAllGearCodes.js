@@ -2,7 +2,7 @@ import { setCategoriesToGears, setGears, setGroupsToCategories, setGearsByCode }
 import { setIsReadyToShowRegulatoryZones } from '../../shared_slices/Regulatory'
 import { setError } from '../../shared_slices/Global'
 import { batch } from 'react-redux'
-import { getAllGearCodesFromAPI } from '../../../api/gearCode'
+import { getAllGearsFromAPI } from '../../../api/gearCode'
 import { REGULATED_GEARS_KEYS } from '../../entities/backoffice'
 
 /***
@@ -28,7 +28,7 @@ const getAllGearCodes = () => (dispatch, getState) => {
     return
   }
 
-  getAllGearCodesFromAPI().then(gears => {
+  getAllGearsFromAPI().then(gears => {
     /** @type {Map<string, Gear[]>} */
     const categoriesToGears = {}
     /** @type {Map<string, string>} */

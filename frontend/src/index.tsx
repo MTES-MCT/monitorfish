@@ -1,10 +1,9 @@
 import { BrowserTracing } from '@sentry/browser'
 import { init } from '@sentry/react'
-// import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { AuthProvider, withAuth } from 'react-oidc-context'
 
 import { App } from './App'
-
 import 'rsuite/dist/rsuite.css'
 import 'mini.css'
 import 'nouislider/distribute/nouislider.css'
@@ -13,6 +12,7 @@ import 'ol/ol.css'
 import './ui/assets/App.css'
 import './ui/shared/ol-override.css'
 import './ui/shared/rsuite-override.css'
+import { getOIDCConfig } from './auth/getOIDCConfig'
 // eslint-disable-next-line import/no-relative-packages
 // import '@mtes-mct/monitor-ui/assets/stylesheets/rsuite-override.css'
 
@@ -31,8 +31,17 @@ if (!container) {
 }
 const root = createRoot(container)
 
-root.render(
-  // <StrictMode>
-  <App />
-  // </StrictMode>
-)
+const { IS_OIDC_ENABLED, oidcConfig } = getOIDCConfig()
+
+if (IS_OIDC_ENABLED) {
+  const AppWithAuth = withAuth(App)
+
+  root.render(
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    <AuthProvider {...oidcConfig}>
+      <AppWithAuth />
+    </AuthProvider>
+  )
+} else {
+  root.render(<App />)
+}

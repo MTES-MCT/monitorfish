@@ -1,6 +1,7 @@
 import { OnlyFontGlobalStyle, THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
+import { hasAuthParams } from 'react-oidc-context'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
@@ -10,7 +11,7 @@ import styled from 'styled-components'
 
 import { APIWorker } from './api/APIWorker'
 import { BackofficeMode } from './api/BackofficeMode'
-import NamespaceContext from './domain/context/NamespaceContext'
+import { NamespaceContext } from './context/NamespaceContext'
 import { SideWindowStatus } from './domain/entities/sideWindow/constants'
 import { ErrorToastNotification } from './features/commonComponents/ErrorToastNotification'
 import { Healthcheck } from './features/Healthcheck'
@@ -40,10 +41,29 @@ import { FrontendErrorBoundary } from './ui/FrontendErrorBoundary'
 import { isBrowserSupported } from './utils/isBrowserSupported'
 
 import type { MutableRefObject } from 'react'
+import type { AuthContextProps } from 'react-oidc-context'
 
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
-export function App() {
+type AppProps = {
+  auth?: AuthContextProps | undefined
+}
+export function App({ auth }: AppProps) {
+  useEffect(() => {
+    if (!auth) {
+      return
+    }
+
+    // automatically sign-in
+    if (!hasAuthParams() && !auth?.isAuthenticated && !auth?.activeNavigator && !auth?.isLoading) {
+      auth?.signinRedirect()
+    }
+  }, [auth, auth?.isAuthenticated, auth?.activeNavigator, auth?.isLoading, auth?.signinRedirect])
+
+  if (auth && !auth.isAuthenticated) {
+    return <div>Unable to log in</div>
+  }
+
   if (!isBrowserSupported()) {
     return <UnsupportedBrowserPage />
   }

@@ -151,19 +151,32 @@ const missionSlice = createSlice({
     },
 
     /**
-     * Update edited mission action in mission draft values
+     * Update mission action at <index> in mission draft values
      */
-    setEditedDraftAction(state, action: PayloadAction<MissionActionFormValues>) {
-      if (!state.draft || !state.draft.actions || state.editedDraftActionIndex === undefined) {
-        throw new FrontendError(
-          'Either `state.draft`, `state.draft.actions` or `state.editedDraftActionIndex` is undefined'
-        )
+    setDraftAction(
+      state,
+      action: PayloadAction<{
+        index: number
+        nextAction: MissionActionFormValues
+      }>
+    ) {
+      if (!state.draft) {
+        throw new FrontendError('`state.draft` is undefined.')
+      }
+      if (!state.draft.actions) {
+        throw new FrontendError('`state.draft.actions` is undefined.')
+      }
+      if (state.editedDraftActionIndex === undefined) {
+        throw new FrontendError('`state.editedDraftActionIndex` is undefined.')
       }
 
-      const currentDraft = current(state.draft)
+      if (!state.draft.actions[action.payload.index]) {
+        throw new FrontendError(`\`state.draft.actions[${action.payload.index}]\` is undefined.`)
+      }
+
       const nextDraft = {
-        ...currentDraft,
-        actions: update(state.editedDraftActionIndex, action.payload, currentDraft.actions)
+        ...state.draft,
+        actions: update(action.payload.index, action.payload.nextAction, state.draft.actions)
       }
 
       if (!state.isDraftDirty && state.draft && !isEqual(nextDraft, current(state.draft))) {
@@ -172,6 +185,7 @@ const missionSlice = createSlice({
 
       state.draft = nextDraft
     },
+
     /**
      * Add a new action in mission draft and make it the currently edited
      */

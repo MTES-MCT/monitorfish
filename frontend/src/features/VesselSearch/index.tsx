@@ -60,7 +60,7 @@ export function VesselSearch({
 
   const dispatch = useMainAppDispatch()
   const baseUrl = useMemo(() => window.location.origin, [])
-  const { vessels } = useMainAppSelector(state => state.vessel)
+  const { selectedVesselIdentity, vessels } = useMainAppSelector(state => state.vessel)
 
   const escapeFromKeyboard = useEscapeFromKeyboard()
   const clickedOutsideComponent = useClickOutsideWhenOpenedWithinRef(wrapperRef, isExtended, baseRef)
@@ -173,7 +173,9 @@ export function VesselSearch({
       <InputWrapper>
         <Input
           key={controlledKey}
-          autoFocus={!controlledDefaultValue}
+          // Disable this behavior when VesselSearch is used within side window
+          // (`baseRef` prop is only provided in side window case)
+          autoFocus={!baseRef && !!selectedVesselIdentity}
           baseUrl={baseUrl}
           data-cy="vessel-search-input"
           defaultValue={controlledDefaultValue}

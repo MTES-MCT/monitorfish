@@ -60,7 +60,7 @@ export function VesselSearch({
 
   const dispatch = useMainAppDispatch()
   const baseUrl = useMemo(() => window.location.origin, [])
-  const { selectedVesselIdentity, vessels } = useMainAppSelector(state => state.vessel)
+  const { vessels } = useMainAppSelector(state => state.vessel)
 
   const escapeFromKeyboard = useEscapeFromKeyboard()
   const clickedOutsideComponent = useClickOutsideWhenOpenedWithinRef(wrapperRef, isExtended, baseRef)
@@ -174,7 +174,7 @@ export function VesselSearch({
       <InputWrapper>
         <Input
           key={controlledKey}
-          ref={input => (selectedVesselIdentity ? input && input.focus() : null)}
+          autoFocus={!controlledDefaultValue}
           baseUrl={baseUrl}
           data-cy="vessel-search-input"
           defaultValue={controlledDefaultValue}

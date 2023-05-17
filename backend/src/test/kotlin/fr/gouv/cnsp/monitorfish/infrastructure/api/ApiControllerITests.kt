@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
+import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NAFMessageParsingException
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.ParseAndSavePosition
@@ -15,7 +16,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@Import(WebSecurityConfig::class)
+@Import(WebSecurityConfig::class, OIDCProperties::class)
 @WebMvcTest(value = [(ApiController::class)])
 class ApiControllerITests {
 

@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.given
+import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.*
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
@@ -22,7 +23,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
-@Import(WebSecurityConfig::class)
+@Import(WebSecurityConfig::class, OIDCProperties::class)
 @WebMvcTest(value = [(MissionController::class)])
 class MissionsControllerITests {
 

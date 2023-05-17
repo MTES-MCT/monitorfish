@@ -214,7 +214,6 @@ export function GearsField() {
         onChange={add}
         options={gearsAsOptions}
         searchable
-        virtualized
       />
     </TypedFormikMultiInfractionPicker>
   )

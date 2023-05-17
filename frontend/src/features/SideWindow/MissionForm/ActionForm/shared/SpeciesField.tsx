@@ -213,7 +213,6 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
         onChange={add}
         options={speciesAsOptions}
         searchable
-        virtualized
       />
     </TypedFormikMultiInfractionPicker>
   )

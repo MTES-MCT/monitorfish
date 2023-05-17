@@ -453,9 +453,17 @@ context('Side Window > Mission Form > Main Form', () => {
   })
 
   it('Should delete a mission', () => {
+    // We shouldn't be able to delete a CACEM mission:
+
     editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
 
-    cy.intercept('DELETE', '/api/v1/missions/2', {
+    cy.contains('Supprimer la mission').should('be.disabled')
+
+    // But we should be able to delete a CNSP one:
+
+    editSideWindowMissionListMissionWithId(4, SeaFrontGroup.MEMN)
+
+    cy.intercept('DELETE', '/api/v1/missions/4', {
       statusCode: 204
     }).as('deleteMission')
 

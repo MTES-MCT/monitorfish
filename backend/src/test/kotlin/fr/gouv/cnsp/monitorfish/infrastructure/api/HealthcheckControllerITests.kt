@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
+import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.health.Health
 import fr.gouv.cnsp.monitorfish.domain.use_cases.healthcheck.GetHealthcheck
@@ -16,7 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.ZonedDateTime
 
-@Import(WebSecurityConfig::class)
+@Import(WebSecurityConfig::class, OIDCProperties::class)
 @WebMvcTest(value = [(HealthcheckController::class)])
 class HealthcheckControllerITests {
 

@@ -2,8 +2,9 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 
 import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
+import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.security.input.UserInfo
-import fr.gouv.cnsp.monitorfish.infrastructure.hash
+import fr.gouv.cnsp.monitorfish.domain.hash
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.HttpHeaders.Authorization
@@ -23,12 +24,14 @@ import org.springframework.core.annotation.Order
 class UserAuthorizationCheckFilter(
     private val oidcProperties: OIDCProperties,
     private val apiClient: ApiClient,
+    private val getIsAuthorizedUser: GetIsAuthorizedUser,
 ) : HttpFilter() {
     private val logger = LoggerFactory.getLogger(UserAuthorizationCheckFilter::class.java)
     private val BEARER_HEADER_TYPE = "Bearer"
     private val MALFORMED_BEARER_MESSAGE = "Malformed authorization header, header type should be 'Bearer'"
     private val MISSING_OIDC_ENDPOINT_MESSAGE = "Missing OIDC user info endpoint"
     private val COULD_NOT_FETCH_USER_INFO_MESSAGE = "Could not fetch user info at ${oidcProperties.userinfoEndpoint}"
+    private val INSUFFICIENT_AUTHORIZATION_MESSAGE = "Insufficient authorization"
 
     override fun doFilter(request: HttpServletRequest?, response: HttpServletResponse?, chain: FilterChain?) = runBlocking {
         val authorizationHeaderContent = request?.getHeader("Authorization")
@@ -58,18 +61,21 @@ class UserAuthorizationCheckFilter(
         }
 
         try {
-            val useInfoResponse = apiClient.httpClient.get(oidcProperties.userinfoEndpoint!!) {
+            val userInfoResponse = apiClient.httpClient.get(oidcProperties.userinfoEndpoint!!) {
                 headers {
                     append(Authorization, authorizationHeaderContent!!)
                 }
             }.body<UserInfo>()
 
-            // TODO Get user authorization
+            val isAuthorized = getIsAuthorizedUser.execute(userInfoResponse.email)
+            if (!isAuthorized) {
+                logger.debug(INSUFFICIENT_AUTHORIZATION_MESSAGE)
+                response!!.sendError(HttpServletResponse.SC_UNAUTHORIZED, INSUFFICIENT_AUTHORIZATION_MESSAGE)
+            }
 
             logger.debug(
-                LoggedMessage("HTTP request: access granted.", hash(useInfoResponse.email), request!!.requestURI!!).toString(),
+                LoggedMessage("HTTP request: access granted.", hash(userInfoResponse.email), request!!.requestURI!!).toString(),
             )
-
             chain?.doFilter(request, response)
         } catch (e: Exception) {
             logger.error(COULD_NOT_FETCH_USER_INFO_MESSAGE, e)

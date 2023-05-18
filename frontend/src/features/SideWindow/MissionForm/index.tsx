@@ -272,7 +272,7 @@ export function MissionForm() {
             {sideWindow.selectedPath.id && (
               <Button
                 accent={Accent.SECONDARY}
-                disabled={isLoading}
+                disabled={isLoading || mission.draft?.missionSource !== Mission.MissionSource.MONITORFISH}
                 Icon={Icon.Delete}
                 onClick={toggleDeletionConfirmationDialog}
               >

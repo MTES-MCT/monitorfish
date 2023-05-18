@@ -30,10 +30,12 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
     }),
 
     getMission: builder.query<Mission.Mission, Mission.Mission['id']>({
+      providesTags: [{ type: 'Missions' }],
       query: id => `missions/${id}`
     }),
 
     updateMission: builder.mutation<void, Mission.Mission>({
+      invalidatesTags: [{ type: 'Missions' }],
       query: mission => ({
         body: mission,
         method: 'POST',

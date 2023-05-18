@@ -122,19 +122,29 @@ export function MissionList() {
                 <TableBody>
                   {tableData.map(augmentedMission => (
                     <TableBodyRow key={augmentedMission.id} data-id={augmentedMission.id}>
-                      <TableBodyCell $fixedWidth={136}>{augmentedMission.$labelled.startDateTimeUtc}</TableBodyCell>
-                      <TableBodyCell $fixedWidth={136}>{augmentedMission.$labelled.endDateTimeUtc}</TableBodyCell>
-                      <TableBodyCell $fixedWidth={80}>{augmentedMission.$labelled.missionTypes}</TableBodyCell>
-                      <TableBodyCell $fixedWidth={80}>{augmentedMission.$labelled.missionSource}</TableBodyCell>
+                      <TableBodyCell $fixedWidth={136}>
+                        <span>{augmentedMission.$labelled.startDateTimeUtc}</span>
+                      </TableBodyCell>
+                      <TableBodyCell $fixedWidth={136}>
+                        <span>{augmentedMission.$labelled.endDateTimeUtc}</span>
+                      </TableBodyCell>
+                      <TableBodyCell $fixedWidth={80}>
+                        <span>{augmentedMission.$labelled.missionTypes}</span>
+                      </TableBodyCell>
+                      <TableBodyCell $fixedWidth={80}>
+                        <span>{augmentedMission.$labelled.missionSource}</span>
+                      </TableBodyCell>
                       <TableBodyCell $fixedWidth={160} title={augmentedMission.$labelled.controlUnits}>
-                        {augmentedMission.$labelled.controlUnits}
+                        <span>{augmentedMission.$labelled.controlUnits}</span>
                       </TableBodyCell>
-                      <TableBodyCell title={augmentedMission.$labelled.inspectedVessels}>
-                        {augmentedMission.$labelled.inspectedVessels}
+                      <TableBodyCell $fixedWidth={320} title={augmentedMission.$labelled.inspectedVessels}>
+                        <span>{augmentedMission.$labelled.inspectedVessels}</span>
                       </TableBodyCell>
-                      <TableBodyCell $fixedWidth={128}>{augmentedMission.$labelled.inspectionsCount}</TableBodyCell>
                       <TableBodyCell $fixedWidth={128}>
-                        {renderStatus(augmentedMission.$labelled.status as Mission.MissionStatus)}
+                        <span>{augmentedMission.$labelled.inspectionsCount}</span>
+                      </TableBodyCell>
+                      <TableBodyCell $fixedWidth={128}>
+                        <span>{renderStatus(augmentedMission.$labelled.status as Mission.MissionStatus)}</span>
                       </TableBodyCell>
                       <TableBodyCell
                         $fixedWidth={48}
@@ -222,6 +232,7 @@ const Body = styled.div`
 const Table = styled.div.attrs(() => ({
   className: 'Table'
 }))`
+  align-self: flex-start;
   box-sizing: border-box;
   font-size: 13px;
   margin-top: 10px;
@@ -275,8 +286,11 @@ const TableBodyCell = styled.div.attrs(() => ({
   flex-grow: ${p => (p.$fixedWidth ? 0 : 1)};
   max-width: ${p => (p.$fixedWidth ? `${p.$fixedWidth}px` : 'auto')};
   min-width: ${p => (p.$fixedWidth ? `${p.$fixedWidth}px` : 'auto')};
-  overflow: hidden;
   padding: 9px 10px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+
+  > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 `

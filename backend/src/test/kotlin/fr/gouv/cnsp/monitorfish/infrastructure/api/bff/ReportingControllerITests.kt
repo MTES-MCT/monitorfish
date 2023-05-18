@@ -36,7 +36,7 @@ import java.time.ZonedDateTime
 class ReportingControllerITests {
 
     @Autowired
-    private lateinit var mockMvc: MockMvc
+    private lateinit var api: MockMvc
 
     @MockBean
     private lateinit var archiveReporting: ArchiveReporting
@@ -65,7 +65,7 @@ class ReportingControllerITests {
     @Test
     fun `Should archive a reporting`() {
         // When
-        mockMvc.perform(put("/bff/v1/reportings/123/archive"))
+        api.perform(put("/bff/v1/reportings/123/archive"))
             // Then
             .andExpect(status().isOk)
 
@@ -75,7 +75,7 @@ class ReportingControllerITests {
     @Test
     fun `Should archive multiple reportings`() {
         // When
-        mockMvc.perform(
+        api.perform(
             put("/bff/v1/reportings/archive")
                 .content(objectMapper.writeValueAsString(listOf(1, 2, 3)))
                 .contentType(MediaType.APPLICATION_JSON),
@@ -89,7 +89,7 @@ class ReportingControllerITests {
     @Test
     fun `Should delete a reporting`() {
         // When
-        mockMvc.perform(put("/bff/v1/reportings/123/delete"))
+        api.perform(put("/bff/v1/reportings/123/delete"))
             // Then
             .andExpect(status().isOk)
 
@@ -99,7 +99,7 @@ class ReportingControllerITests {
     @Test
     fun `Should delete multiple reportings`() {
         // When
-        mockMvc.perform(
+        api.perform(
             put("/bff/v1/reportings/delete")
                 .content(objectMapper.writeValueAsString(listOf(1, 2, 3)))
                 .contentType(MediaType.APPLICATION_JSON),
@@ -133,7 +133,7 @@ class ReportingControllerITests {
         given(addReporting.execute(any())).willReturn(Pair(reporting, null))
 
         // When
-        mockMvc.perform(
+        api.perform(
             post("/bff/v1/reportings")
                 .content(
                     objectMapper.writeValueAsString(
@@ -192,7 +192,7 @@ class ReportingControllerITests {
         )
 
         // When
-        mockMvc.perform(
+        api.perform(
             post("/bff/v1/reportings")
                 .content(
                     objectMapper.writeValueAsString(
@@ -254,7 +254,7 @@ class ReportingControllerITests {
         )
 
         // When
-        mockMvc.perform(get("/bff/v1/reportings"))
+        api.perform(get("/bff/v1/reportings"))
             // Then
             .andExpect(status().isOk)
             .andExpect(MockMvcResultMatchers.jsonPath("$.length()", equalTo(1)))
@@ -288,7 +288,7 @@ class ReportingControllerITests {
         given(updateReporting.execute(any(), any())).willReturn(Pair(reporting, null))
 
         // When
-        mockMvc.perform(
+        api.perform(
             put("/bff/v1/reportings/123/update")
                 .content(
                     objectMapper.writeValueAsString(
@@ -331,7 +331,7 @@ class ReportingControllerITests {
         given(addReporting.execute(any())).willReturn(Pair(reporting, null))
 
         // When
-        mockMvc.perform(
+        api.perform(
             post("/bff/v1/reportings")
                 .content(
                     objectMapper.writeValueAsString(

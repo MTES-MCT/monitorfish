@@ -32,7 +32,7 @@ import java.time.ZonedDateTime
 class OperationalAlertControllerITests {
 
     @Autowired
-    private lateinit var mockMvc: MockMvc
+    private lateinit var api: MockMvc
 
     @MockBean
     private lateinit var getOperationalAlerts: GetOperationalAlerts
@@ -72,7 +72,7 @@ class OperationalAlertControllerITests {
         )
 
         // When
-        mockMvc.perform(MockMvcRequestBuilders.get("/bff/v1/operational_alerts"))
+        api.perform(MockMvcRequestBuilders.get("/bff/v1/operational_alerts"))
             // Then
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.jsonPath("$.length()", Matchers.equalTo(1)))
@@ -83,7 +83,7 @@ class OperationalAlertControllerITests {
     @Test
     fun `Should validate an operational alert`() {
         // When
-        mockMvc.perform(MockMvcRequestBuilders.put("/bff/v1/operational_alerts/666/validate"))
+        api.perform(MockMvcRequestBuilders.put("/bff/v1/operational_alerts/666/validate"))
             // Then
             .andExpect(MockMvcResultMatchers.status().isOk)
     }
@@ -106,7 +106,7 @@ class OperationalAlertControllerITests {
         val before = ZonedDateTime.now()
 
         // When
-        mockMvc.perform(
+        api.perform(
             MockMvcRequestBuilders.put("/bff/v1/operational_alerts/666/silence")
                 .content(
                     objectMapper.writeValueAsString(
@@ -152,7 +152,7 @@ class OperationalAlertControllerITests {
         )
 
         // When
-        mockMvc.perform(MockMvcRequestBuilders.get("/bff/v1/operational_alerts/silenced"))
+        api.perform(MockMvcRequestBuilders.get("/bff/v1/operational_alerts/silenced"))
             // Then
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.jsonPath("$.length()", Matchers.equalTo(1)))
@@ -166,7 +166,7 @@ class OperationalAlertControllerITests {
     @Test
     fun `Should delete a silenced alert`() {
         // When
-        mockMvc.perform(MockMvcRequestBuilders.delete("/bff/v1/operational_alerts/silenced/666"))
+        api.perform(MockMvcRequestBuilders.delete("/bff/v1/operational_alerts/silenced/666"))
             // Then
             .andExpect(MockMvcResultMatchers.status().isOk)
     }

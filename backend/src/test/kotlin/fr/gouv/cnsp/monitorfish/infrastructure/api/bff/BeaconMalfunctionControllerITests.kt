@@ -34,7 +34,7 @@ import java.time.ZonedDateTime
 class BeaconMalfunctionControllerITests {
 
     @Autowired
-    private lateinit var mockMvc: MockMvc
+    private lateinit var api: MockMvc
 
     @MockBean
     private lateinit var getAllBeaconMalfunctions: GetAllBeaconMalfunctions
@@ -75,7 +75,7 @@ class BeaconMalfunctionControllerITests {
         )
 
         // When
-        mockMvc.perform(get("/bff/v1/beacon_malfunctions"))
+        api.perform(get("/bff/v1/beacon_malfunctions"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
@@ -119,7 +119,7 @@ class BeaconMalfunctionControllerITests {
             )
 
         // When
-        mockMvc.perform(
+        api.perform(
             put("/bff/v1/beacon_malfunctions/123")
                 .content(
                     objectMapper.writeValueAsString(
@@ -143,7 +143,7 @@ class BeaconMalfunctionControllerITests {
             .willThrow(CouldNotUpdateBeaconMalfunctionException("FAIL"))
 
         // When
-        mockMvc.perform(
+        api.perform(
             put("/bff/v1/beacon_malfunctions/123", objectMapper.writeValueAsString(UpdateControlObjectiveDataInput()))
                 .contentType(MediaType.APPLICATION_JSON),
         )
@@ -204,7 +204,7 @@ class BeaconMalfunctionControllerITests {
             )
 
         // When
-        mockMvc.perform(get("/bff/v1/beacon_malfunctions/123"))
+        api.perform(get("/bff/v1/beacon_malfunctions/123"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.resume.numberOfBeaconsAtSea", equalTo(1)))
@@ -260,7 +260,7 @@ class BeaconMalfunctionControllerITests {
             )
 
         // When
-        mockMvc.perform(get("/bff/v1/beacon_malfunctions/123"))
+        api.perform(get("/bff/v1/beacon_malfunctions/123"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.resume", equalTo(null)))
@@ -304,7 +304,7 @@ class BeaconMalfunctionControllerITests {
         )
 
         // When
-        mockMvc.perform(
+        api.perform(
             post("/bff/v1/beacon_malfunctions/123/comments")
                 .content(
                     objectMapper.writeValueAsString(
@@ -323,7 +323,7 @@ class BeaconMalfunctionControllerITests {
     @Test
     fun `Should request a notification`() {
         // When
-        mockMvc.perform(put("/bff/v1/beacon_malfunctions/123/MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION"))
+        api.perform(put("/bff/v1/beacon_malfunctions/123/MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION"))
             // Then
             .andExpect(status().isOk)
 
@@ -415,7 +415,7 @@ class BeaconMalfunctionControllerITests {
             )
 
         // When
-        mockMvc.perform(
+        api.perform(
             put("/bff/v1/beacon_malfunctions/archive")
                 .content(
                     objectMapper.writeValueAsString(

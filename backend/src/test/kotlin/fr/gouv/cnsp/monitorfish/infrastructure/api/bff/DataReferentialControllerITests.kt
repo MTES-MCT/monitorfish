@@ -27,7 +27,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 class DataReferentialControllerITests {
 
     @Autowired
-    private lateinit var mockMvc: MockMvc
+    private lateinit var api: MockMvc
 
     @MockBean
     private lateinit var getAllGears: GetAllGears
@@ -47,7 +47,7 @@ class DataReferentialControllerITests {
         given(this.getAllGears.execute()).willReturn(listOf(Gear("CHL", "SUPER CHALUT", "CHALUT")))
 
         // When
-        mockMvc.perform(get("/bff/v1/gears"))
+        api.perform(get("/bff/v1/gears"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
@@ -67,7 +67,7 @@ class DataReferentialControllerITests {
         )
 
         // When
-        mockMvc.perform(get("/bff/v1/species"))
+        api.perform(get("/bff/v1/species"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.species.length()", equalTo(1)))
@@ -80,7 +80,7 @@ class DataReferentialControllerITests {
         given(this.getFAOAreas.execute()).willReturn(listOf("27.1", "27.1.0", "28.1", "28.1.0", "28.1.1"))
 
         // When
-        mockMvc.perform(get("/bff/v1/fao_areas"))
+        api.perform(get("/bff/v1/fao_areas"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(5)))

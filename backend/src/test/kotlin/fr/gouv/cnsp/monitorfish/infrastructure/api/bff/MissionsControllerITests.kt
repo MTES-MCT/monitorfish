@@ -6,7 +6,6 @@ import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.*
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
-import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.missions.GetAllMissions
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.equalTo
@@ -28,7 +27,7 @@ import java.time.ZonedDateTime
 class MissionsControllerITests {
 
     @Autowired
-    private lateinit var mockMvc: MockMvc
+    private lateinit var api: MockMvc
 
     @MockBean
     private lateinit var getAllMission: GetAllMissions
@@ -74,7 +73,7 @@ class MissionsControllerITests {
         )
 
         // When
-        mockMvc.perform(
+        api.perform(
             get(
                 """
                     /bff/v1/missions?

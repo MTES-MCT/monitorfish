@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Import
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import org.springframework.web.client.RestTemplate
 
 class WebSecurityConfigITests {
     /**
@@ -42,9 +41,6 @@ class WebSecurityConfigITests {
 
         @MockBean
         private lateinit var buildProperties: BuildProperties
-
-        @MockBean
-        private lateinit var restTemplate: RestTemplate
 
         @Test
         fun `Should return 401 When the path is protected and contains an invalid public key (not validating the JWT)`() {
@@ -90,9 +86,6 @@ class WebSecurityConfigITests {
         @MockBean
         private lateinit var buildProperties: BuildProperties
 
-        @MockBean
-        private lateinit var restTemplate: RestTemplate
-
         @Test
         fun `Should return 401 When the path is protected`() {
             // Given
@@ -122,7 +115,7 @@ class WebSecurityConfigITests {
         }
 
         @Test
-        fun `Should return Ok When the path is protected and contains an valid public key (validating the JWT)`() {
+        fun `Should return Ok When the path is protected and contains a valid public key (validating the JWT)`() {
             // Given
             /**
              * JWT build with https://dinochiesa.github.io/jwt/

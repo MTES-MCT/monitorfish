@@ -19,7 +19,6 @@
       {
         "id": 2,
         "missionTypes": ["SEA"],
-        "missionNature": ["FISH"],
         "controlUnits": [
           {
             "id": 10015,
@@ -46,7 +45,6 @@
       {
         "id": 6,
         "missionTypes": ["AIR"],
-        "missionNature": ["FISH", "OTHER"],
         "controlUnits": [
           {
             "id": 10003,
@@ -78,7 +76,6 @@
       {
         "id": 24,
         "missionTypes": ["AIR"],
-        "missionNature": ["OTHER"],
         "controlUnits": [
           {
             "id": 10001,
@@ -110,7 +107,6 @@
       {
         "id": 25,
         "missionTypes": ["LAND"],
-        "missionNature": ["FISH", "OTHER"],
         "controlUnits": [
           {
             "id": 10003,
@@ -142,7 +138,6 @@
       {
         "id": 34,
         "missionTypes": ["LAND", "SEA"],
-        "missionNature": ["OTHER"],
         "controlUnits": [
           {
             "id": 10016,
@@ -246,7 +241,6 @@
       {
         "id": 35,
         "missionTypes": ["SEA"],
-        "missionNature": ["FISH"],
         "controlUnits": [
           {
             "id": 10015,
@@ -273,7 +267,6 @@
       {
         "id": 36,
         "missionTypes": ["SEA"],
-        "missionNature": ["FISH"],
         "controlUnits": [
           {
             "id": 10015,
@@ -377,7 +370,6 @@
       {
         "id": 4,
         "missionTypes": ["SEA"],
-        "missionNature": ["FISH", "OTHER"],
         "controlUnits": [
           {
             "id": 10003,
@@ -404,7 +396,6 @@
       {
         "id": 43,
         "missionTypes": ["SEA"],
-        "missionNature": ["FISH", "OTHER"],
         "controlUnits": [
           {
             "id": 10019,
@@ -445,7 +436,6 @@
       {
         "id": 45,
         "missionTypes": ["SEA"],
-        "missionNature": ["FISH"],
         "controlUnits": [
           {
             "id": 10015,
@@ -472,7 +462,6 @@
       {
         "id": 47,
         "missionTypes": ["LAND"],
-        "missionNature": ["OTHER"],
         "controlUnits": [
           {
             "id": 10003,
@@ -499,7 +488,6 @@
       {
         "id": 48,
         "missionTypes": ["LAND"],
-        "missionNature": ["ENV", "FISH"],
         "controlUnits": [
           {
             "id": 10012,

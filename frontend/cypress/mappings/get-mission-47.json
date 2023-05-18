@@ -13,7 +13,6 @@
     "jsonBody": {
       "id": 47,
       "missionTypes": ["LAND"],
-      "missionNature": ["OTHER"],
       "controlUnits": [
         {
           "id": 10003,

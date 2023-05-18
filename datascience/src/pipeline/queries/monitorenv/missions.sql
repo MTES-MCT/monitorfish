@@ -5,7 +5,6 @@ SELECT
     start_datetime_utc,
     end_datetime_utc,
     geom,
-    mission_nature,
     deleted,
     mission_source,
     closed,

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component
 
 @Component
 @ConfigurationProperties(prefix = "monitorfish.oidc")
-class OIDCProperties {
-    var enabled: Boolean? = false
-}
+data class OIDCProperties(
+    var enabled: Boolean? = false,
+    var userinfoEndpoint: String? = null,
+)

@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 class PortControllerITests {
 
     @Autowired
-    private lateinit var mockMvc: MockMvc
+    private lateinit var api: MockMvc
 
     @MockBean
     private lateinit var getActivePorts: GetActivePorts
@@ -37,7 +37,7 @@ class PortControllerITests {
         )
 
         // When
-        mockMvc.perform(get("/bff/v1/ports"))
+        api.perform(get("/bff/v1/ports"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))

@@ -22,7 +22,7 @@ import java.time.ZonedDateTime
 class HealthcheckControllerITests {
 
     @Autowired
-    private lateinit var mockMvc: MockMvc
+    private lateinit var api: MockMvc
 
     @MockBean
     private lateinit var getHealthcheck: GetHealthcheck
@@ -39,7 +39,7 @@ class HealthcheckControllerITests {
         )
 
         // When
-        mockMvc.perform(get("/bff/v1/healthcheck"))
+        api.perform(get("/bff/v1/healthcheck"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.dateLastPositionUpdatedByPrefect", equalTo("2020-12-21T15:01:00Z")))

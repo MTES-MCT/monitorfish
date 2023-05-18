@@ -588,7 +588,6 @@ def make_missions_actions_and_missions_control_units(
     ]
 
     missions = controls[missions_columns].copy(deep=True)
-    missions["mission_nature"] = [["FISH"]] * len(missions)
     missions["deleted"] = False
     missions["mission_source"] = MissionOrigin.POSEIDON_CNSP
     missions["closed"] = missions.closed_by.notnull()
@@ -667,7 +666,7 @@ def load_missions_and_missions_control_units(
             schema="public",
             connection=connection,
             logger=prefect.context.get("logger"),
-            pg_array_columns=["mission_nature", "mission_types"],
+            pg_array_columns=["mission_types"],
             how="upsert",
             table_id_column=id_column,
             df_id_column=id_column,

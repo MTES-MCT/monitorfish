@@ -442,7 +442,6 @@ context('Side Window > Mission Form > Main Form', () => {
         geom: null,
         id: 6,
         isClosed: false,
-        missionNature: ['FISH', 'OTHER'],
         missionSource: 'MONITORFISH',
         missionTypes: ['AIR'],
         observationsCacem: 'Toward agency blue now hand. Meet answer someone stand.',

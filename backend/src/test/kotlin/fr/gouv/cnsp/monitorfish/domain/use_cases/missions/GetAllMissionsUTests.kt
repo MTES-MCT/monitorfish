@@ -39,7 +39,6 @@ class GetAllMissionsUTests {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
-                anyOrNull(),
             ),
         ).willReturn(missions)
 
@@ -58,7 +57,6 @@ class GetAllMissionsUTests {
 
         // When
         val missionsAndActions = GetAllMissions(missionRepository, missionActionsRepository, databaseProperties).execute(
-            null,
             null,
             null,
             null,

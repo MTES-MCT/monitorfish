@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.infrastructure
+package fr.gouv.cnsp.monitorfish.domain
 
 import java.security.MessageDigest
 

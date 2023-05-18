@@ -26,7 +26,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
     OIDCProperties::class,
     SuperUserAPIProperties::class,
     BffFilterConfig::class,
-    ApiClient::class
+    ApiClient::class,
 )
 @WebMvcTest(
     value = [PortController::class, VersionController::class],
@@ -52,7 +52,7 @@ class BffFilterConfigITests {
     private lateinit var buildProperties: BuildProperties
 
     @Test
-    fun `Should return 401 When the path is protected`() {
+    fun `Should return 401 for all protected paths`() {
         // Given
         given(getActivePorts.execute()).willReturn(
             listOf(
@@ -63,8 +63,17 @@ class BffFilterConfigITests {
         given(getIsAuthorizedUser.execute(any())).willReturn(true)
 
         // When
+        /**
+         * This test return a 401 http code as the issuer uri could not be fetched (404 not found because of the dummy url).
+         * Hence, the bearer is valid but the request is invalid
+         * When this test is failing, a 404 http code will be returned (as the controllers are notre mounted in this test)
+         */
         listOf(
-            "/bff/v1/risk_factors",
+            "/bff/v1/beacon_malfunctions",
+            "/bff/v1/missions",
+            "/bff/v1/operational_alerts",
+            "/bff/v1/reportings",
+            "/bff/v1/vessels/risk_factors"
         ).forEach {
             mockMvc.perform(
                 get(it)

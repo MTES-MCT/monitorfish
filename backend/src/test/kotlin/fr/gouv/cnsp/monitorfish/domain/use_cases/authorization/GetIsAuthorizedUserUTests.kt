@@ -22,7 +22,7 @@ class GetIsAuthorizedUserUTests {
     @Test
     fun `execute Should return true When the authorization is found`() {
         given(userAuthorizationRepository.findByHashedEmail(any())).willReturn(
-            UserAuthorization("58GE5S8VXE871FGGd2", true)
+            UserAuthorization("58GE5S8VXE871FGGd2", true),
         )
 
         // When
@@ -35,7 +35,7 @@ class GetIsAuthorizedUserUTests {
     @Test
     fun `execute Should return false When the authorization bad`() {
         given(userAuthorizationRepository.findByHashedEmail(any())).willReturn(
-            UserAuthorization("58GE5S8VXE871FGGd2", false)
+            UserAuthorization("58GE5S8VXE871FGGd2", false),
         )
 
         // When
@@ -48,7 +48,7 @@ class GetIsAuthorizedUserUTests {
     @Test
     fun `execute Should return false When the user authorization is not found`() {
         given(userAuthorizationRepository.findByHashedEmail(any())).willThrow(
-            EmptyResultDataAccessException("User not found", 1)
+            EmptyResultDataAccessException("User not found", 1),
         )
 
         // When

@@ -73,7 +73,7 @@ class BffFilterConfigITests {
             "/bff/v1/missions",
             "/bff/v1/operational_alerts",
             "/bff/v1/reportings",
-            "/bff/v1/vessels/risk_factors"
+            "/bff/v1/vessels/risk_factors",
         ).forEach {
             mockMvc.perform(
                 get(it)

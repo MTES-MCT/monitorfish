@@ -21,7 +21,9 @@ class GetIsAuthorizedUserUTests {
 
     @Test
     fun `execute Should return true When the authorization is found`() {
-        given(userAuthorizationRepository.findByHashedEmail(any())).willReturn(UserAuthorization("58GE5S8VXE871FGGd2", true))
+        given(userAuthorizationRepository.findByHashedEmail(any())).willReturn(
+            UserAuthorization("58GE5S8VXE871FGGd2", true)
+        )
 
         // When
         val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute("test")
@@ -32,7 +34,9 @@ class GetIsAuthorizedUserUTests {
 
     @Test
     fun `execute Should return false When the authorization bad`() {
-        given(userAuthorizationRepository.findByHashedEmail(any())).willReturn(UserAuthorization("58GE5S8VXE871FGGd2", false))
+        given(userAuthorizationRepository.findByHashedEmail(any())).willReturn(
+            UserAuthorization("58GE5S8VXE871FGGd2", false)
+        )
 
         // When
         val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute("test")
@@ -43,7 +47,9 @@ class GetIsAuthorizedUserUTests {
 
     @Test
     fun `execute Should return false When the user authorization is not found`() {
-        given(userAuthorizationRepository.findByHashedEmail(any())).willThrow(EmptyResultDataAccessException("User not found", 1))
+        given(userAuthorizationRepository.findByHashedEmail(any())).willThrow(
+            EmptyResultDataAccessException("User not found", 1)
+        )
 
         // When
         val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute("test")

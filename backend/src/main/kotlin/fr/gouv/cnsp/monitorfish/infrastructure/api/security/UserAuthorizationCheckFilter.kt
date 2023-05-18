@@ -2,9 +2,9 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 
 import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
+import fr.gouv.cnsp.monitorfish.domain.hash
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.security.input.UserInfo
-import fr.gouv.cnsp.monitorfish.domain.hash
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.HttpHeaders.Authorization

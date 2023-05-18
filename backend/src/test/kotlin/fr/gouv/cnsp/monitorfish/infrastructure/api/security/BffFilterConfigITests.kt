@@ -21,7 +21,13 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@Import(WebSecurityConfig::class, OIDCProperties::class, SuperUserAPIProperties::class, BffFilterConfig::class, ApiClient::class)
+@Import(
+    WebSecurityConfig::class,
+    OIDCProperties::class,
+    SuperUserAPIProperties::class,
+    BffFilterConfig::class,
+    ApiClient::class
+)
 @WebMvcTest(
     value = [PortController::class, VersionController::class],
     properties = [
@@ -58,10 +64,12 @@ class BffFilterConfigITests {
 
         // When
         listOf(
-            "/bff/v1/risk_factors"
+            "/bff/v1/risk_factors",
         ).forEach {
-            mockMvc.perform(get(it)
-                .header("Authorization", "Bearer $VALID_JWT"),)
+            mockMvc.perform(
+                get(it)
+                    .header("Authorization", "Bearer $VALID_JWT"),
+            )
                 // Then
                 .andExpect(status().isUnauthorized)
         }

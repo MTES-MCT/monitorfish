@@ -3,7 +3,9 @@ import styled from 'styled-components'
 
 import { InfractionsSummary } from './InfractionsSummary'
 import { LastControl } from './LastControl'
+import { LawReminders } from './LawReminders'
 import { theme } from '../../../ui/theme'
+import { ReactComponent as CautionSVG } from '../../icons/Attention_controles.svg'
 import { ReactComponent as SeaSVG } from '../../icons/Avarie_statut_navire_en_mer.svg'
 import { Header, Zone } from '../common_styles/common.style'
 
@@ -16,6 +18,7 @@ type ControlsResumeZoneProps = {
 }
 export function ControlsSummary({ controlsFromDate, lastControls, summary }: ControlsResumeZoneProps) {
   const { numberOfDiversions, numberOfGearSeized, numberOfSpeciesSeized } = summary
+  const { controls } = summary
 
   return (
     <Zone data-cy="vessel-controls-summary">
@@ -40,6 +43,12 @@ export function ControlsSummary({ controlsFromDate, lastControls, summary }: Con
             <Icon.Anchor color={theme.color.slateGray} />
           </IconColumn>
           <LastControl field={lastControls.LAND} />
+        </Columns>
+        <Columns isFirst={false}>
+          <IconColumn>
+            <Caution />
+          </IconColumn>
+          <LawReminders controlsData={controls} />
         </Columns>
       </Body>
     </Zone>
@@ -73,4 +82,9 @@ const Sea = styled(SeaSVG)`
   path {
     fill: ${p => p.theme.color.slateGray};
   }
+`
+
+const Caution = styled(CautionSVG)`
+  vertical-align: sub;
+  width: 20px;
 `

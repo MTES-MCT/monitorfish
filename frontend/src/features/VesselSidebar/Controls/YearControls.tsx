@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { Control } from './Control'
-import { getNumberOfInfractions } from '../../../domain/entities/controls'
+import { getNumberOfInfractions, getNumberOfInfractionsWithoutRecord } from '../../../domain/entities/controls'
 import { YearListChevronIcon, YearListContent, YearListTitle, YearListTitleText } from '../common_styles/YearList.style'
 
 import type { MissionAction } from '../../../domain/types/missionAction'
@@ -21,14 +21,37 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
       0
     )
 
+    const numberOfInfractionsWithoutRecord = yearControls.reduce(
+      (accumulator, control) => accumulator + getNumberOfInfractionsWithoutRecord(control),
+      0
+    )
+
     if (isEmpty) {
       return null
     }
 
-    if (!numberOfInfractions) {
+    if (!numberOfInfractions && !numberOfInfractionsWithoutRecord) {
       return (
         <>
           , pas d&apos;infraction <Green />
+        </>
+      )
+    }
+
+    if (!numberOfInfractions && numberOfInfractionsWithoutRecord) {
+      return (
+        <>
+          , {numberOfInfractionsWithoutRecord} infraction{numberOfInfractionsWithoutRecord > 1 ? 's' : ''} sans PV{' '}
+          <GlodenPuppy />
+        </>
+      )
+    }
+
+    if (numberOfInfractions && numberOfInfractionsWithoutRecord) {
+      return (
+        <>
+          , {numberOfInfractions} infraction{numberOfInfractions > 1 ? 's' : ''} dont {numberOfInfractionsWithoutRecord}{' '}
+          sans PV <Red /> <GlodenPuppy />
         </>
       )
     }
@@ -92,6 +115,15 @@ const Green = styled.span`
   width: 8px;
   margin-left: 5px;
   background-color: ${p => p.theme.color.mediumSeaGreen};
+  border-radius: 50%;
+  display: inline-block;
+`
+
+const GlodenPuppy = styled.span`
+  height: 8px;
+  width: 8px;
+  margin-left: 5px;
+  background-color: ${p => p.theme.color.goldenPoppy};
   border-radius: 50%;
   display: inline-block;
 `

@@ -357,16 +357,16 @@ expected_loaded_mission_actions_df = pd.merge(
                 "Facade B",
             ],
             "vessel_targeted": [
-                False,
+                "NO",
                 None,
                 None,
-                False,
-                False,
-                True,
+                "NO",
+                "NO",
+                "YES",
                 None,
-                False,
-                False,
-                False,
+                "NO",
+                "NO",
+                "NO",
             ],
             "seizure_and_diversion": [
                 True,
@@ -835,18 +835,6 @@ expected_missions_df = pd.DataFrame(
             "DEF",
             "DEF",
         ],
-        "mission_nature": [
-            ["FISH"],
-            ["FISH"],
-            ["FISH"],
-            ["FISH"],
-            ["FISH"],
-            ["FISH"],
-            ["FISH"],
-            ["FISH"],
-            ["FISH"],
-            ["FISH"],
-        ],
         "deleted": [
             False,
             False,
@@ -1051,7 +1039,9 @@ def test_flow(
 
     mission_actions_query = "SELECT * FROM mission_actions ORDER BY id"
 
-    initial_mission_actions = read_query("monitorfish_remote", mission_actions_query)
+    initial_mission_actions = read_query(
+        "monitorfish_remote", mission_actions_query
+    ).drop(columns=["is_deleted"])
 
     flow.schedule = None
     state = flow.run(loading_mode=loading_mode, number_of_months=12)
@@ -1075,7 +1065,9 @@ def test_flow(
         missions_control_units.sort_values("mission_id").reset_index(drop=True),
     )
 
-    final_mission_actions = read_query("monitorfish_remote", mission_actions_query)
+    final_mission_actions = read_query(
+        "monitorfish_remote", mission_actions_query
+    ).drop(columns=["is_deleted"])
 
     # mission_actions not from Poseidon should not be altered by the flow
     assert (

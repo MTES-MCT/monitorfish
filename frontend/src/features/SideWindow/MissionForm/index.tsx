@@ -1,103 +1,82 @@
-import { Accent, Button, Icon, Tag } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/dist/query'
+import { Accent, Button, Icon, Tag, usePrevious } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { useDebouncedCallback } from 'use-debounce'
 
 import { ActionForm } from './ActionForm'
 import { ActionList } from './ActionList'
 import { MainForm } from './MainForm'
+import { DeletionConfirmationDialog } from './shared/DeletionConfirmationDialog'
+import { DraftCancellationConfirmationDialog } from './shared/DraftCancellationConfirmationDialog'
 import {
   getMissionActionsDataFromMissionActionsFormValues,
   getMissionDataFromMissionFormValues,
   getUpdatedMissionFromMissionFormValues,
   isMissionFormValuesComplete
 } from './utils'
-import { useCreateMissionMutation, useGetMissionQuery, useUpdateMissionMutation } from '../../../api/mission'
 import {
+  monitorenvMissionApi,
+  useCreateMissionMutation,
+  useDeleteMissionMutation,
+  useUpdateMissionMutation
+} from '../../../api/mission'
+import {
+  missionActionApi,
   useCreateMissionActionMutation,
   useDeleteMissionActionMutation,
-  useGetMissionActionsQuery,
   useUpdateMissionActionMutation
 } from '../../../api/missionAction'
 import { missionActions } from '../../../domain/actions'
 import { getMissionSourceTagText } from '../../../domain/entities/mission'
-import { Mission } from '../../../domain/entities/mission/types'
-import { openSideWindowTab } from '../../../domain/shared_slices/Global'
-import { useDebouncedValue } from '../../../hooks/useDebouncedValue'
+import { Mission, type MissionWithActions } from '../../../domain/entities/mission/types'
+import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
+import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
+import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { FrontendError } from '../../../libs/FrontendError'
 import { FrontendErrorBoundary } from '../../../ui/FrontendErrorBoundary'
 import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
-import { SideWindowMenuKey } from '../constants'
 
-import type { MissionActionFormValues, MissionFormValues } from './types'
-import type { MissionWithActions } from '../../../domain/entities/mission/types'
+import type { MissionFormValues } from './types'
 
 export function MissionForm() {
-  const { mission } = useMainAppSelector(store => store)
+  const { mission, sideWindow } = useMainAppSelector(store => store)
 
   const headerDivRef = useRef<HTMLDivElement | null>(null)
   const originalMissionRef = useRef<MissionWithActions | undefined>(undefined)
 
+  const previousMissionId = usePrevious(sideWindow.selectedPath.id)
   const [isLoading, setIsLoading] = useState(true)
+  const [isDeletionConfirmationDialogOpen, setIsDeletionConfirmationDialogOpen] = useState(false)
 
   const dispatch = useMainAppDispatch()
-  const missionApiQuery = useGetMissionQuery(mission.draftId || skipToken)
-  const missionActionsApiQuery = useGetMissionActionsQuery(mission.draftId || skipToken)
   const [createMission] = useCreateMissionMutation()
+  const [deleteMission] = useDeleteMissionMutation()
   const [createMissionAction] = useCreateMissionActionMutation()
   const [deleteMissionAction] = useDeleteMissionActionMutation()
   const [updateMission] = useUpdateMissionMutation()
   const [updateMissionAction] = useUpdateMissionActionMutation()
 
-  const actionFormKey = useMemo(() => `actionForm-${mission.editedDraftActionIndex}`, [mission.editedDraftActionIndex])
-  const [debouncedMissionDraft] = useDebouncedValue(mission.draft, 250)
-  const isMissionFormValid = useMemo(() => isMissionFormValuesComplete(debouncedMissionDraft), [debouncedMissionDraft])
+  const isMissionFormValid = useMemo(() => isMissionFormValuesComplete(mission.draft), [mission.draft])
 
-  const actionFormInitialValues = useMemo(
-    () => {
-      if (mission.editedDraftActionIndex === undefined) {
-        return undefined
-      }
+  const missionTitle = useMemo(() => {
+    if (!mission.draft) {
+      return 'Mission en cours de chargement...'
+    }
 
-      if (!mission.draft || !mission.draft.actions) {
-        throw new FrontendError(
-          'Either `mission.draft` or `mission.draft.actions` is undefined while `mission.editedDraftActionIndex` is not'
-        )
-      }
-
-      return mission.draft.actions[mission.editedDraftActionIndex]
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mission.editedDraftActionIndex]
-  )
-
-  const missionTitle = useMemo(
-    () =>
-      mission.draftId
-        ? `Mission ${
-            debouncedMissionDraft?.missionTypes &&
-            debouncedMissionDraft.missionTypes.map(missionType => Mission.MissionTypeLabel[missionType]).join(' / ')
-          } – ${debouncedMissionDraft?.controlUnits
-            .map(controlUnit => controlUnit.name?.replace('(historique)', ''))
-            .join(', ')}`
-        : `Nouvelle mission`,
-    [debouncedMissionDraft, mission.draftId]
-  )
-
-  const goToMissionList = useCallback(async () => {
-    dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_LIST))
-    dispatch(missionActions.unsetDraft())
-  }, [dispatch])
+    return sideWindow.selectedPath.id
+      ? `Mission ${
+          mission.draft.missionTypes &&
+          mission.draft.missionTypes.map(missionType => Mission.MissionTypeLabel[missionType]).join(' / ')
+        } – ${mission.draft.controlUnits.map(controlUnit => controlUnit.name?.replace('(historique)', '')).join(', ')}`
+      : `Nouvelle mission`
+  }, [mission.draft, sideWindow.selectedPath.id])
 
   /**
    * @param mustClose Should the mission be closed?
    */
-  const createOrUpdateMission = useCallback(
+  const createOrUpdate = useCallback(
     async (mustClose: boolean = false) => {
       if (!mission.draft) {
         return
@@ -105,7 +84,7 @@ export function MissionForm() {
 
       let missionId: number
 
-      if (!mission.draftId) {
+      if (!sideWindow.selectedPath.id) {
         const newMission = getMissionDataFromMissionFormValues(mission.draft, mustClose)
         // TODO Override Redux RTK typings globally.
         // Redux RTK typing is wrong, this should be a tuple-like to help TS discriminate `data` from `error`.
@@ -116,10 +95,14 @@ export function MissionForm() {
 
         missionId = data.id
       } else {
-        const updatedMission = getUpdatedMissionFromMissionFormValues(mission.draftId, mission.draft, mustClose)
+        const updatedMission = getUpdatedMissionFromMissionFormValues(
+          sideWindow.selectedPath.id,
+          mission.draft,
+          mustClose
+        )
         await updateMission(updatedMission)
 
-        missionId = mission.draftId
+        missionId = sideWindow.selectedPath.id
       }
       // eslint-disable-next-line no-empty
 
@@ -145,126 +128,209 @@ export function MissionForm() {
         })
       ])
 
-      goToMissionList()
+      dispatch(sideWindowActions.openOrFocusAndGoTo({ menu: SideWindowMenuKey.MISSION_LIST }))
     },
     [
       createMission,
       createMissionAction,
       deleteMissionAction,
-      goToMissionList,
+      dispatch,
       mission.draft,
-      mission.draftId,
       updateMission,
-      updateMissionAction
+      updateMissionAction,
+      sideWindow.selectedPath.id
     ]
   )
 
-  const handleActionFormChange = useDebouncedCallback((nextMissionActionFormValues: MissionActionFormValues) => {
-    dispatch(missionActions.setEditedDraftAction(nextMissionActionFormValues))
-  }, 500)
+  // eslint-disable-next-line no-underscore-dangle
+  const handleDelete = useCallback(async () => {
+    if (!sideWindow.selectedPath.id) {
+      throw new FrontendError('`sideWindow.selectedPath.id` is undefined')
+    }
 
-  const handleMainFormChange = useDebouncedCallback((nextMissionFormValues: MissionFormValues) => {
-    dispatch(missionActions.setDraft(nextMissionFormValues))
-  }, 500)
+    await deleteMission(sideWindow.selectedPath.id)
+    dispatch(sideWindowActions.openOrFocusAndGoTo({ menu: SideWindowMenuKey.MISSION_LIST }))
+  }, [deleteMission, dispatch, sideWindow.selectedPath.id])
+
+  const reopen = useCallback(() => {
+    if (!mission.draft) {
+      throw new FrontendError('`mission.draft` is undefined.')
+    }
+
+    const nextDraft: MissionFormValues = {
+      ...mission.draft,
+      isClosed: false
+    }
+
+    dispatch(missionActions.setDraft(nextDraft))
+  }, [dispatch, mission.draft])
+
+  const goToMissionList = useCallback(async () => {
+    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_LIST }))
+  }, [dispatch])
+
+  const toggleDeletionConfirmationDialog = useCallback(async () => {
+    setIsDeletionConfirmationDialogOpen(!isDeletionConfirmationDialogOpen)
+  }, [isDeletionConfirmationDialogOpen])
 
   // ---------------------------------------------------------------------------
   // DATA
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && sideWindow.selectedPath.id === previousMissionId) {
       return
     }
 
-    // New mission
-    if (!mission.draftId) {
+    if (sideWindow.selectedPath.id !== previousMissionId) {
+      setIsLoading(true)
+    }
+
+    ;(async () => {
+      // New mission
+      if (!sideWindow.selectedPath.id) {
+        dispatch(missionActions.initializeDraft())
+
+        setIsLoading(false)
+
+        return
+      }
+
+      const missionResponse = await dispatch(
+        monitorenvMissionApi.endpoints.getMission.initiate(sideWindow.selectedPath.id)
+      )
+      const missionActionsResponse = await dispatch(
+        missionActionApi.endpoints.getMissionActions.initiate(sideWindow.selectedPath.id)
+      )
+      if (!missionResponse.data) {
+        throw new FrontendError('`missionResponse.data` is undefined.')
+      }
+      if (!missionActionsResponse.data) {
+        throw new FrontendError('`missionActionsResponse.data` is undefined.')
+      }
+
+      originalMissionRef.current = {
+        ...missionResponse.data,
+        actions: missionActionsResponse.data
+      }
+
       setIsLoading(false)
 
-      dispatch(missionActions.initializeDraft())
+      dispatch(
+        missionActions.initializeDraft({
+          mission: missionResponse.data,
+          missionActions: missionActionsResponse.data
+        })
+      )
+    })()
+  }, [dispatch, isLoading, previousMissionId, sideWindow.selectedPath.id])
 
-      return
-    }
-
-    // Mission edition
-    if (!missionApiQuery.data || !missionActionsApiQuery.data) {
-      return
-    }
-
-    originalMissionRef.current = {
-      ...missionApiQuery.data,
-      actions: missionActionsApiQuery.data
-    }
-
-    setIsLoading(false)
-
-    dispatch(
-      missionActions.initializeDraft({
-        mission: missionApiQuery.data,
-        missionActions: missionActionsApiQuery.data
-      })
-    )
-  }, [dispatch, isLoading, mission.draftId, missionActionsApiQuery.data, missionApiQuery.data])
+  useEffect(
+    () => () => {
+      dispatch(missionActions.unsetDraft())
+    },
+    [dispatch]
+  )
 
   // ---------------------------------------------------------------------------
 
   return (
-    <Wrapper>
-      <Header ref={headerDivRef}>
-        <HeaderTitleGroup>
-          <HeaderTitle>
-            <BackToListIcon onClick={goToMissionList} />
-            {missionTitle}
-            {mission.draftId && (
-              <MissionSourceTag>{getMissionSourceTagText(debouncedMissionDraft?.missionSource)}</MissionSourceTag>
-            )}
-          </HeaderTitle>
-        </HeaderTitleGroup>
+    <>
+      <Wrapper>
+        <Header ref={headerDivRef}>
+          <BackToListIcon onClick={goToMissionList} />
 
-        <HeaderButtonGroup>
-          <Button accent={Accent.TERTIARY} onClick={goToMissionList}>
-            Annuler
-          </Button>
-          <Button
-            accent={Accent.SECONDARY}
-            disabled={isLoading || !isMissionFormValid}
-            Icon={Icon.Save}
-            onClick={() => createOrUpdateMission()}
-          >
-            Enregistrer
-          </Button>
-          <Button
-            accent={Accent.SECONDARY}
-            disabled={isLoading || !isMissionFormValid}
-            Icon={Icon.Confirm}
-            onClick={() => createOrUpdateMission(true)}
-          >
-            Enregistrer et clôturer
-          </Button>
-        </HeaderButtonGroup>
-      </Header>
+          <HeaderTitle>{missionTitle}</HeaderTitle>
 
-      <Body>
-        <FrontendErrorBoundary>
-          {(isLoading || !debouncedMissionDraft) && <LoadingSpinnerWall />}
-
-          {!isLoading && debouncedMissionDraft && (
-            <>
-              <MainForm initialValues={debouncedMissionDraft} onChange={handleMainFormChange} />
-              <ActionList initialValues={debouncedMissionDraft} />
-              <ActionForm
-                key={actionFormKey}
-                initialValues={actionFormInitialValues}
-                onChange={handleActionFormChange}
-              />
-            </>
+          {sideWindow.selectedPath.id && (
+            <MissionSourceTag
+              isFromCacem={
+                mission.draft?.missionSource === Mission.MissionSource.POSEIDON_CACEM ||
+                mission.draft?.missionSource === Mission.MissionSource.MONITORENV
+              }
+            >
+              {getMissionSourceTagText(mission.draft?.missionSource)}
+            </MissionSourceTag>
           )}
-        </FrontendErrorBoundary>
-      </Body>
-    </Wrapper>
+        </Header>
+
+        <Body>
+          <FrontendErrorBoundary>
+            {(isLoading || !mission.draft) && <LoadingSpinnerWall />}
+
+            {!isLoading && mission.draft && (
+              <>
+                <MainForm />
+                <ActionList />
+                <ActionForm />
+              </>
+            )}
+          </FrontendErrorBoundary>
+        </Body>
+
+        <Footer>
+          <div>
+            {sideWindow.selectedPath.id && (
+              <Button
+                accent={Accent.SECONDARY}
+                disabled={isLoading || mission.draft?.missionSource !== Mission.MissionSource.MONITORFISH}
+                Icon={Icon.Delete}
+                onClick={toggleDeletionConfirmationDialog}
+              >
+                Supprimer la mission
+              </Button>
+            )}
+          </div>
+
+          <div>
+            {mission.draft?.isClosed && (
+              <FooterMessage>Veuillez rouvrir la mission avant d’en modifier les informations.</FooterMessage>
+            )}
+
+            <Button accent={Accent.TERTIARY} onClick={goToMissionList}>
+              Annuler
+            </Button>
+
+            {!mission.draft?.isClosed && (
+              <>
+                <Button
+                  accent={Accent.SECONDARY}
+                  disabled={isLoading || !isMissionFormValid}
+                  Icon={Icon.Save}
+                  onClick={() => createOrUpdate()}
+                >
+                  Enregistrer
+                </Button>
+                <Button
+                  accent={Accent.SECONDARY}
+                  disabled={isLoading || !isMissionFormValid}
+                  Icon={Icon.Confirm}
+                  onClick={() => createOrUpdate(true)}
+                >
+                  Enregistrer et clôturer
+                </Button>
+              </>
+            )}
+            {mission.draft?.isClosed && (
+              <Button accent={Accent.PRIMARY} disabled={isLoading} Icon={Icon.Unlock} onClick={reopen} type="button">
+                Ré-ouvrir la mission
+              </Button>
+            )}
+          </div>
+        </Footer>
+      </Wrapper>
+
+      {isDeletionConfirmationDialogOpen && (
+        <DeletionConfirmationDialog onCancel={toggleDeletionConfirmationDialog} onConfirm={handleDelete} />
+      )}
+      {sideWindow.isDraftCancellationConfirmationDialogOpen && <DraftCancellationConfirmationDialog />}
+    </>
   )
 }
 
-const MissionSourceTag = styled(Tag)`
-  background: ${p => p.theme.color.blueGray[100]};
+const MissionSourceTag = styled(Tag)<{
+  isFromCacem: boolean
+}>`
+  background: ${p => (p.isFromCacem ? p.theme.color.mediumSeaGreen : p.theme.color.blueGray[100])};
   color: ${p => p.theme.color.white};
   margin-left: 24px;
   vertical-align: middle;
@@ -288,33 +354,22 @@ const Header = styled.div`
   background-color: ${p => p.theme.color.white};
   border-bottom: solid 2px ${p => p.theme.color.gainsboro};
   display: flex;
-  justify-content: space-between;
-  min-height: 80px;
+  max-height: 62px;
+  min-height: 62px;
   padding: 0 32px 0 18px;
-`
-
-const HeaderTitleGroup = styled.div`
-  display: flex;
-`
-
-const HeaderTitle = styled.h1`
-  color: ${p => p.theme.color.charcoal};
-  font-size: 22px;
-  font-weight: 700;
-  line-height: 31px;
-  margin: 0;
 
   > div {
     vertical-align: middle;
   }
 `
 
-const HeaderButtonGroup = styled.div`
-  display: flex;
-
-  > button:not(:first-child) {
-    margin-left: 16px;
-  }
+const HeaderTitle = styled.h1`
+  color: ${p => p.theme.color.charcoal};
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  margin: 0 0 4px !important;
+  vertical-align: 2px;
 `
 
 const Body = styled.div`
@@ -322,4 +377,33 @@ const Body = styled.div`
   display: flex;
   flex-grow: 1;
   min-height: 0;
+`
+
+const Footer = styled.div`
+  background-color: ${p => p.theme.color.white};
+  border-top: solid 2px ${p => p.theme.color.gainsboro};
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-between;
+  max-height: 62px;
+  min-height: 62px;
+
+  > div {
+    align-items: center;
+    display: flex;
+    flex-grow: 1;
+    padding: 0 24px;
+
+    :last-child {
+      justify-content: flex-end;
+
+      > button {
+        margin-left: 16px;
+      }
+    }
+  }
+`
+
+const FooterMessage = styled.p`
+  font-style: italic;
 `

@@ -10,6 +10,8 @@ export type OptionalDisplayedComponentAction = {
   isFavoriteVesselsMapButtonDisplayed?: boolean
   isInterestPointMapButtonDisplayed?: boolean
   isMeasurementMapButtonDisplayed?: boolean
+  isMissionsLayerDisplayed?: boolean
+  isMissionsMapButtonDisplayed?: boolean
   isVesselFiltersMapButtonDisplayed?: boolean
   isVesselLabelsMapButtonDisplayed?: boolean
   isVesselListDisplayed?: boolean
@@ -26,6 +28,8 @@ export type DisplayedComponentState = {
   isFavoriteVesselsMapButtonDisplayed: boolean
   isInterestPointMapButtonDisplayed: boolean
   isMeasurementMapButtonDisplayed: boolean
+  isMissionsLayerDisplayed: boolean
+  isMissionsMapButtonDisplayed: boolean
   isVesselFiltersMapButtonDisplayed: boolean
   isVesselLabelsMapButtonDisplayed: boolean
   isVesselListDisplayed: boolean
@@ -41,6 +45,8 @@ const INITIAL_STATE: DisplayedComponentState = {
   isFavoriteVesselsMapButtonDisplayed: true,
   isInterestPointMapButtonDisplayed: true,
   isMeasurementMapButtonDisplayed: true,
+  isMissionsLayerDisplayed: false,
+  isMissionsMapButtonDisplayed: true,
   isVesselFiltersMapButtonDisplayed: true,
   isVesselLabelsMapButtonDisplayed: true,
   isVesselListDisplayed: true,

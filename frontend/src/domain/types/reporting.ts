@@ -1,6 +1,6 @@
 import type { ControlUnit } from './controlUnit'
 import type { MissionAction } from './missionAction'
-import type { SeaFront } from '../../constants'
+import type { SeaFrontGroup } from '../../constants'
 import type { PendingAlertValue } from '../entities/alerts/types'
 import type { VesselIdentifier } from '../entities/vessel/types'
 
@@ -70,7 +70,7 @@ export type InfractionSuspicion = {
   dml: string
   natinfCode: number
   reportingActor: string
-  seaFront: SeaFront
+  seaFront: SeaFrontGroup
   title: string
   type: string
 }

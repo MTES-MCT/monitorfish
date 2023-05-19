@@ -22,11 +22,12 @@ import { measurementReducer } from '../domain/shared_slices/Measurement'
 import { missionReducer, type MissionState } from '../domain/shared_slices/Mission'
 import { regulatoryReducer } from '../domain/shared_slices/Regulatory'
 import { reportingReducer } from '../domain/shared_slices/Reporting'
+import { sideWindowReducer } from '../domain/shared_slices/SideWindow'
 import { speciesReducer } from '../domain/shared_slices/Species'
 import { vesselSliceReducer } from '../domain/shared_slices/Vessel'
-import { regulationReducer } from '../features/Backoffice/Regulation.slice'
-import { regulatoryLayerSearchReducer } from '../features/LayersSidebar/RegulatoryZones/search/RegulatoryLayerSearch.slice'
-import { vesselListReducer } from '../features/VesselList/VesselList.slice'
+import { regulationReducer } from '../features/Backoffice/slice'
+import { regulatoryLayerSearchReducer } from '../features/MapButtons/LayersSidebar/RegulatoryZones/search/slice'
+import { vesselListReducer } from '../features/VesselList/slice'
 
 import type { Reducer } from 'redux'
 import type { PersistConfig } from 'redux-persist'
@@ -75,6 +76,7 @@ export const mainReducer = {
   ),
   regulatoryLayerSearch: regulatoryLayerSearchReducer,
   reporting: reportingReducer,
+  sideWindow: sideWindowReducer,
   vessel: vesselSliceReducer,
   vesselList: vesselListReducer
 }

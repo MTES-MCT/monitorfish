@@ -13,14 +13,14 @@ export const addFeatureToDrawedFeature = (featureToAdd: Feature<Geometry>) => (d
     return
   }
 
+  if (geometryToAdd.getType() === OpenLayersGeometryType.POINT) {
+    const nextGeometry = convertToGeoJSONGeometryObject(geometryToAdd)
+    dispatch(setGeometry(nextGeometry))
+
+    return
+  }
+
   if (!geometry) {
-    if (geometryToAdd.getType() === OpenLayersGeometryType.POINT) {
-      const nextGeometry = convertToGeoJSONGeometryObject(geometryToAdd)
-      dispatch(setGeometry(nextGeometry))
-
-      return
-    }
-
     // @ts-ignore
     const nextGeometry = convertToGeoJSONGeometryObject(new MultiPolygon([geometryToAdd]))
     dispatch(setGeometry(nextGeometry))

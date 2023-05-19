@@ -1,9 +1,12 @@
-import { getUtcizedDayjs } from '@mtes-mct/monitor-ui'
+import dayjs from 'dayjs'
 import styled from 'styled-components'
 
-import type { MissionAction } from '../../../../domain/types/missionAction'
+import { MissionAction } from '../../../../domain/types/missionAction'
+
 import type { MissionActionFormValues } from '../types'
 import type { ReactNode } from 'react'
+
+import ControlCheck = MissionAction.ControlCheck
 
 export function formatDateLabel(dateLabel: string) {
   return dateLabel.replace(
@@ -45,12 +48,12 @@ export function getMissionActionInfractionsFromMissionActionFromFormValues(
 }
 
 export function getMissionActionFormInitialValues(type: MissionAction.MissionActionType): MissionActionFormValues {
-  const actionDatetimeUtc = getUtcizedDayjs().startOf('minute').toISOString()
+  const actionDatetimeUtc = dayjs().startOf('minute').toISOString()
 
   return {
     actionDatetimeUtc,
     actionType: type,
-    vesselTargeted: false
+    vesselTargeted: ControlCheck.NO
   }
 }
 

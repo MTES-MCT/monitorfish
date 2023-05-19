@@ -1,6 +1,6 @@
-import { SideWindowMenuKey } from '../../../../src/features/SideWindow/constants'
+import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 
-import type { SeaFront } from '../../../../src/constants'
+import type { SeaFrontGroup } from '../../../../src/constants'
 
 export const openSideWindowMissionList = () => {
   cy.visit('/side_window')
@@ -10,7 +10,7 @@ export const openSideWindowMissionList = () => {
   if (document.querySelector('[data-cy="first-loader"]')) {
     cy.getDataCy('first-loader').should('not.be.visible')
   }
-  cy.clickButton(SideWindowMenuKey.MISSION_LIST)
+  cy.clickButton(SideWindowMenuLabel.MISSION_LIST)
   if (document.querySelector('[data-cy="first-loader"]')) {
     cy.getDataCy('first-loader').should('not.be.visible')
   }
@@ -18,7 +18,7 @@ export const openSideWindowMissionList = () => {
   cy.wait(500)
 }
 
-export const editSideWindowMissionListMissionWithId = (missionId: number, seaFrontGroup?: SeaFront) => {
+export const editSideWindowMissionListMissionWithId = (missionId: number, seaFrontGroup?: SeaFrontGroup) => {
   openSideWindowMissionList()
 
   if (seaFrontGroup) {

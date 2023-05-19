@@ -14,14 +14,14 @@ data class AddMissionActionDataInput(
     var faoAreas: List<String> = listOf(),
     var flightGoals: List<FlightGoal> = listOf(),
     var actionType: MissionActionType,
-    var actionDatetimeUtc: ZonedDateTime? = null,
+    var actionDatetimeUtc: ZonedDateTime,
     var emitsVms: ControlCheck? = null,
     var emitsAis: ControlCheck? = null,
     var logbookMatchesActivity: ControlCheck? = null,
     var licencesMatchActivity: ControlCheck? = null,
     var speciesWeightControlled: Boolean? = null,
     var speciesSizeControlled: Boolean? = null,
-    var separateStowageOfPreservedSpecies: Boolean? = null,
+    var separateStowageOfPreservedSpecies: ControlCheck? = null,
     var logbookInfractions: List<LogbookInfraction> = listOf(),
     var licencesAndLogbookObservations: String? = null,
     var gearInfractions: List<GearInfraction> = listOf(),
@@ -43,6 +43,7 @@ data class AddMissionActionDataInput(
     var gearOnboard: List<GearControl> = listOf(),
     var userTrigram: String? = null,
     var speciesOnboard: List<SpeciesControl> = listOf(),
+    var vesselTargeted: ControlCheck? = null,
 ) {
     fun toMissionAction() = MissionAction(
         vesselId = vesselId,
@@ -84,6 +85,7 @@ data class AddMissionActionDataInput(
         gearOnboard = gearOnboard,
         speciesOnboard = speciesOnboard,
         userTrigram = userTrigram,
+        vesselTargeted = vesselTargeted,
         isDeleted = false,
     )
 }

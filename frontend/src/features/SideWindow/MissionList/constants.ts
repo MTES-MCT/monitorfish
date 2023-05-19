@@ -1,9 +1,9 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import { MissionDateRangeFilterLabel, MissionFilterType } from './types'
-import { SeaFront, SeaFrontLabel } from '../../../constants'
-import { getMissionStatus } from '../../../domain/entities/mission'
+import { SeaFrontGroup, SeaFrontGroupLabel } from '../../../constants'
 import { Mission } from '../../../domain/entities/mission/types'
+import { getMissionStatus } from '../../../domain/entities/mission/utils'
 import { getOptionsFromLabelledEnum } from '../../../utils/getOptionsFromLabelledEnum'
 
 import type { MissionWithActions } from '../../../domain/entities/mission/types'
@@ -30,7 +30,7 @@ export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option<any>[]> = 
   [MissionFilterType.UNIT]: []
 }
 
-export const MISSION_LIST_SUB_MENU_OPTIONS = getOptionsFromLabelledEnum(SeaFrontLabel) as Option<SeaFront>[]
+export const MISSION_LIST_SUB_MENU_OPTIONS = getOptionsFromLabelledEnum(SeaFrontGroupLabel) as Option<SeaFrontGroup>[]
 
 export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
   columns: [
@@ -72,6 +72,7 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
         mission.controlUnits.map(controlUnit => `${controlUnit.name} (${controlUnit.administration})`).join(', ')
     },
     {
+      fixedWidth: 320,
       isSortable: false,
       key: 'inspectedVessels',
       label: 'Navires contrôlés',
@@ -108,6 +109,8 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
       label: ''
     }
   ],
+  defaultSortedKey: 'startDateTimeUtc',
+  isDefaultSortingDesc: true,
   searchableKeys: ['inspectedVessels']
 }
 

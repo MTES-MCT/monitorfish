@@ -47,26 +47,46 @@ class APIMissionRepository(
         pageSize: Int?,
         startedAfterDateTime: ZonedDateTime?,
         startedBeforeDateTime: ZonedDateTime?,
-        missionNatures: List<String>?,
+        missionSources: List<String>?,
         missionTypes: List<String>?,
         missionStatuses: List<String>?,
         seaFronts: List<String>?,
     ): List<Mission> {
+        // For these parameters, if the list is null or empty, we don't send the param to the server to avoid filtering results
+        val missionTypesParameter = if (!missionTypes.isNullOrEmpty()) "missionTypes=${missionTypes.joinToString(",")}&" else ""
+        val missionStatusesParameter = if (!missionStatuses.isNullOrEmpty()) {
+            "missionStatus=${missionStatuses.joinToString(
+                ",",
+            )}&"
+        } else {
+            ""
+        }
+        val seaFrontsParameter = if (!seaFronts.isNullOrEmpty()) "seaFronts=${seaFronts.joinToString(",")}&" else ""
+        val missionSourcesParameter = if (!missionSources.isNullOrEmpty()) {
+            "missionSource=${missionSources.joinToString(
+                ",",
+            )}&"
+        } else {
+            ""
+        }
+
         val missionsUrl = """
             ${monitorenvProperties.url}/api/v1/missions?
                 pageNumber=${pageNumber ?: ""}&
                 pageSize=${pageSize ?: ""}&
                 startedAfterDateTime=${startedAfterDateTime?.format(zoneDateTimeFormatter) ?: ""}&
                 startedBeforeDateTime=${startedBeforeDateTime?.format(zoneDateTimeFormatter) ?: ""}&
-                missionNature=${missionNatures?.joinToString(",") ?: ""}&
-                missionTypes=${missionTypes?.joinToString(",") ?: ""}&
-                missionStatus=${missionStatuses?.joinToString(",") ?: ""}&
-                seaFronts=${seaFronts?.joinToString(",") ?: ""}
+                $missionSourcesParameter
+                $missionTypesParameter
+                $missionStatusesParameter
+                $seaFrontsParameter
         """.trimIndent()
 
+        logger.info("Fetching missions at URL: $missionsUrl")
         return runBlocking {
             try {
                 val missions = apiClient.httpClient.get(missionsUrl).body<List<MissionDataResponse>>()
+                logger.info("Fetched ${missions.size}.")
 
                 return@runBlocking missions.map { it.toMission() }
             } catch (e: Exception) {

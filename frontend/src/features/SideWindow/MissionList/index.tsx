@@ -1,24 +1,26 @@
-import { Accent, Button, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
-import { noop } from 'lodash'
+import { Accent, Button, Icon, IconButton, OPENLAYERS_PROJECTION } from '@mtes-mct/monitor-ui'
+import { GeoJSON } from 'ol/format'
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_LIST_SUB_MENU_OPTIONS, MISSION_LIST_TABLE_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
 import { renderStatus } from './utils'
-import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFront } from '../../../constants'
+import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFrontGroup, SeaFrontLabel } from '../../../constants'
 import { missionActions } from '../../../domain/actions'
 import { useGetFilteredMissionsQuery } from '../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
-import { openSideWindowTab } from '../../../domain/shared_slices/Global'
+import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
+import { fitToExtent } from '../../../domain/shared_slices/Map'
+import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { useTable } from '../../../hooks/useTable'
 import { EmptyCardTable } from '../../../ui/card-table/EmptyCardTable'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
-import { SideWindowMenuKey } from '../constants'
 import { SubMenu } from '../SubMenu'
 
 import type { Mission, MissionWithActions } from '../../../domain/entities/mission/types'
+import type { GeoJSON as GeoJSONType } from '../../../domain/types/GeoJSON'
 
 export function MissionList() {
   const { mission } = useMainAppSelector(store => store)
@@ -27,45 +29,59 @@ export function MissionList() {
 
   const dispatch = useMainAppDispatch()
 
-  const { isError, isLoading, missions } = useGetFilteredMissionsQuery()
+  const { isError, isLoading, missions, missionsSeaFrontFiltered } = useGetFilteredMissionsQuery()
 
   const { renderTableHead, tableData } = useTable<MissionWithActions>(
-    missions,
+    missionsSeaFrontFiltered,
     MISSION_LIST_TABLE_OPTIONS,
     [],
     searchQuery
   )
 
   const countMissionsForSeaFrontGroup = useCallback(
-    (seaFrontGroup: SeaFront): number =>
-      missions.filter(({ facade }) =>
-        facade && SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup]
-          ? SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup].includes(facade as any)
-          : true
-      ).length,
+    (seaFrontGroup: SeaFrontGroup): number =>
+      missions.filter(({ facade }) => {
+        if (seaFrontGroup === SeaFrontGroup.ALL) {
+          return true
+        }
+
+        return facade && SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup]
+          ? SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup].map(seaFront => SeaFrontLabel[seaFront]).includes(facade as any)
+          : false
+      }).length,
     [missions]
   )
 
   const goToMissionForm = useCallback(
     async (missionId?: Mission.Mission['id']) => {
-      if (missionId) {
-        // TODO Replace that with the virtual router route once it's integrated.
-        dispatch(missionActions.setDraftId(missionId))
-      } else {
-        dispatch(missionActions.unsetDraft())
-      }
-
-      dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))
+      dispatch(sideWindowDispatchers.openPath({ id: missionId, menu: SideWindowMenuKey.MISSION_FORM }))
     },
     [dispatch]
   )
 
   const handleSubMenuChange = useCallback(
-    (nextSeaFrontGroup: SeaFront) => {
+    (nextSeaFrontGroup: SeaFrontGroup) => {
       dispatch(missionActions.setListSeaFront(nextSeaFrontGroup))
     },
     [dispatch]
   )
+
+  const handleZoomToMission = (geometry: GeoJSONType.MultiPolygon | undefined) => {
+    if (!geometry) {
+      return
+    }
+
+    const feature = new GeoJSON({
+      featureProjection: OPENLAYERS_PROJECTION
+    }).readFeature(geometry)
+
+    const extent = feature?.getGeometry()?.getExtent()
+    if (!extent) {
+      return
+    }
+
+    dispatch(fitToExtent(extent))
+  }
 
   return (
     <>
@@ -87,7 +103,7 @@ export function MissionList() {
         </Header>
 
         <Body>
-          <FilterBar onQueryChange={setSearchQuery} />
+          <FilterBar onQueryChange={setSearchQuery} searchQuery={searchQuery} />
 
           {isLoading && <p>Chargement en cours...</p>}
           {isError && <pre>{JSON.stringify(isError)}</pre>}
@@ -106,19 +122,29 @@ export function MissionList() {
                 <TableBody>
                   {tableData.map(augmentedMission => (
                     <TableBodyRow key={augmentedMission.id} data-id={augmentedMission.id}>
-                      <TableBodyCell $fixedWidth={136}>{augmentedMission.$labelled.startDateTimeUtc}</TableBodyCell>
-                      <TableBodyCell $fixedWidth={136}>{augmentedMission.$labelled.endDateTimeUtc}</TableBodyCell>
-                      <TableBodyCell $fixedWidth={80}>{augmentedMission.$labelled.missionTypes}</TableBodyCell>
-                      <TableBodyCell $fixedWidth={80}>{augmentedMission.$labelled.missionSource}</TableBodyCell>
+                      <TableBodyCell $fixedWidth={136}>
+                        <span>{augmentedMission.$labelled.startDateTimeUtc}</span>
+                      </TableBodyCell>
+                      <TableBodyCell $fixedWidth={136}>
+                        <span>{augmentedMission.$labelled.endDateTimeUtc}</span>
+                      </TableBodyCell>
+                      <TableBodyCell $fixedWidth={80}>
+                        <span>{augmentedMission.$labelled.missionTypes}</span>
+                      </TableBodyCell>
+                      <TableBodyCell $fixedWidth={80}>
+                        <span>{augmentedMission.$labelled.missionSource}</span>
+                      </TableBodyCell>
                       <TableBodyCell $fixedWidth={160} title={augmentedMission.$labelled.controlUnits}>
-                        {augmentedMission.$labelled.controlUnits}
+                        <span>{augmentedMission.$labelled.controlUnits}</span>
                       </TableBodyCell>
-                      <TableBodyCell title={augmentedMission.$labelled.inspectedVessels}>
-                        {augmentedMission.$labelled.inspectedVessels}
+                      <TableBodyCell $fixedWidth={320} title={augmentedMission.$labelled.inspectedVessels}>
+                        <span>{augmentedMission.$labelled.inspectedVessels}</span>
                       </TableBodyCell>
-                      <TableBodyCell $fixedWidth={128}>{augmentedMission.$labelled.inspectionsCount}</TableBodyCell>
                       <TableBodyCell $fixedWidth={128}>
-                        {renderStatus(augmentedMission.$labelled.status as Mission.MissionStatus)}
+                        <span>{augmentedMission.$labelled.inspectionsCount}</span>
+                      </TableBodyCell>
+                      <TableBodyCell $fixedWidth={128}>
+                        <span>{renderStatus(augmentedMission.$labelled.status as Mission.MissionStatus)}</span>
                       </TableBodyCell>
                       <TableBodyCell
                         $fixedWidth={48}
@@ -129,9 +155,10 @@ export function MissionList() {
                       >
                         <IconButton
                           accent={Accent.TERTIARY}
+                          disabled={!augmentedMission.geom}
                           Icon={Icon.ViewOnMap}
-                          onClick={noop}
-                          size={Size.SMALL}
+                          iconSize={20}
+                          onClick={() => handleZoomToMission(augmentedMission.geom)}
                           title="Voir sur la carte"
                         />
                       </TableBodyCell>
@@ -145,8 +172,8 @@ export function MissionList() {
                         <IconButton
                           accent={Accent.TERTIARY}
                           Icon={Icon.Edit}
+                          iconSize={20}
                           onClick={() => goToMissionForm(augmentedMission.id)}
-                          size={Size.SMALL}
                           title="Éditer la mission"
                         />
                       </TableBodyCell>
@@ -205,6 +232,7 @@ const Body = styled.div`
 const Table = styled.div.attrs(() => ({
   className: 'Table'
 }))`
+  align-self: flex-start;
   box-sizing: border-box;
   font-size: 13px;
   margin-top: 10px;
@@ -225,7 +253,7 @@ const TableBody = styled.div.attrs(() => ({
   color: ${p => p.theme.color.gunMetal};
   display: flex;
   flex-direction: column;
-  max-height: 410px;
+  max-height: 650px;
   overflow-y: auto;
 
   > div {
@@ -251,13 +279,18 @@ const TableBodyCell = styled.div.attrs(() => ({
 }))<{
   $fixedWidth?: number
 }>`
+  align-items: center;
   border-bottom: solid 1px ${p => p.theme.color.lightGray};
   border-right: solid 1px ${p => p.theme.color.lightGray};
+  display: flex;
   flex-grow: ${p => (p.$fixedWidth ? 0 : 1)};
   max-width: ${p => (p.$fixedWidth ? `${p.$fixedWidth}px` : 'auto')};
   min-width: ${p => (p.$fixedWidth ? `${p.$fixedWidth}px` : 'auto')};
-  overflow: hidden;
   padding: 9px 10px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+
+  > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 `

@@ -49,7 +49,7 @@ const Wrapper = styled.div<{
 }>`
   flex-grow: 1;
   position: relative;
-  min-width: ${p => (p.$isOpen ? '200px' : '30px')};
+  min-width: ${p => (p.$isOpen ? '222px' : '30px')};
 `
 
 const Menu = styled.div<{
@@ -67,7 +67,7 @@ const Menu = styled.div<{
   padding-top: 50px;
   position: ${p => (p.$isFixed ? 'unset' : 'absolute')};
   transition: 'width 0.5s';
-  width: ${p => (p.$isOpen ? '200px' : '30px')};
+  width: ${p => (p.$isOpen ? '222px' : '30px')};
   z-index: 999;
 `
 

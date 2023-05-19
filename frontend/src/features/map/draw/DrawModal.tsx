@@ -13,11 +13,12 @@ import {
   OpenLayersGeometryType,
   WSG84_PROJECTION
 } from '../../../domain/entities/map/constants'
+import { SideWindowStatus } from '../../../domain/entities/sideWindow/constants'
 import { setInteractionType } from '../../../domain/shared_slices/Draw'
 import { fitToExtent } from '../../../domain/shared_slices/Map'
 import { addFeatureToDrawedFeature } from '../../../domain/use_cases/draw/addFeatureToDrawedFeature'
 import { eraseDrawedGeometries } from '../../../domain/use_cases/draw/eraseDrawedGeometries'
-import { closeDraw } from '../../../domain/use_cases/missions/closeDraw'
+import { closeDraw } from '../../../domain/use_cases/mission/closeDraw'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { theme } from '../../../ui/theme'
@@ -39,7 +40,7 @@ const INTERACTION_LISTENER_BUTTON_LABEL: Partial<Record<InteractionListener, str
 export function DrawLayerModal() {
   const dispatch = useMainAppDispatch()
   const { geometry, interactionType, listener } = useMainAppSelector(state => state.draw)
-  const openedSideWindowTab = useMainAppSelector(state => state.global.openedSideWindowTab)
+  const { sideWindow } = useMainAppSelector(state => state)
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const initialFeatureNumberRef = useRef<number | undefined>(undefined)
 
@@ -74,10 +75,10 @@ export function DrawLayerModal() {
   }, [feature])
 
   useEffect(() => {
-    if (!openedSideWindowTab) {
+    if (sideWindow.status === SideWindowStatus.CLOSED) {
       dispatch(closeDraw())
     }
-  }, [dispatch, openedSideWindowTab])
+  }, [dispatch, sideWindow.status])
 
   const handleQuit = () => {
     dispatch(closeDraw())

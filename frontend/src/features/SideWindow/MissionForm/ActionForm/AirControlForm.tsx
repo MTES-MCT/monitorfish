@@ -1,40 +1,62 @@
-import { FormikDatePicker, FormikEffect, Icon, MultiZoneEditor } from '@mtes-mct/monitor-ui'
+import { FormikDatePicker, FormikEffect, FormikTextarea, Icon, useNewWindow } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash'
 import { useMemo } from 'react'
+import { useDebouncedCallback } from 'use-debounce'
 import * as Yup from 'yup'
 
 import { MissionActionInfractionSchema } from './shared/constants'
+import { FormikCoordinatesPicker } from './shared/FormikCoordinatesPicker'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
-import { useNewWindow } from '../../../../ui/NewWindow'
+import { missionActions } from '../../../../domain/actions'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
 
 import type { MissionActionFormValues } from '../types'
-import type { Promisable } from 'type-fest'
 
 const AirControlFormSchema = Yup.object().shape({
   otherInfractions: Yup.array(MissionActionInfractionSchema).notRequired()
 })
 
 export type AirControlFormProps = {
+  index: number
   initialValues: MissionActionFormValues
-  onChange: (nextValues: MissionActionFormValues) => Promisable<void>
 }
-export function AirControlForm({ initialValues, onChange }: AirControlFormProps) {
+export function AirControlForm({ index, initialValues }: AirControlFormProps) {
   const { newWindowContainerRef } = useNewWindow()
 
+  const { mission } = useMainAppSelector(store => store)
+  const dispatch = useMainAppDispatch()
+
+  const key = useMemo(() => JSON.stringify(initialValues), [initialValues])
   const titleDate = useMemo(
     () => initialValues.actionDatetimeUtc && getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),
     [initialValues.actionDatetimeUtc]
   )
 
+  const handleChange = useDebouncedCallback((nextMissionActionFormValues: MissionActionFormValues) => {
+    // Since it's debounced, we don't want to update this draft action which could have just been deleted
+    if (!mission.draft || !mission.draft.actions[index]) {
+      return
+    }
+
+    dispatch(
+      missionActions.setDraftAction({
+        index,
+        nextAction: nextMissionActionFormValues
+      })
+    )
+  }, 500)
+
   return (
-    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={AirControlFormSchema}>
+    <Formik key={key} initialValues={initialValues} onSubmit={noop} validationSchema={AirControlFormSchema}>
       <>
-        <FormikEffect onChange={onChange as any} />
+        <FormikEffect onChange={handleChange as any} />
 
         <FormHead>
           <h2>
@@ -55,21 +77,17 @@ export function AirControlForm({ initialValues, onChange }: AirControlFormProps)
             withTime
           />
 
-          <MultiZoneEditor
-            addButtonLabel="Ajouter un point de contrôle"
-            initialZone={{
-              name: 'Nouvelle zone'
-            }}
-            isLight
-            label="Lieu du contrôle"
-            labelPropName="name"
-          />
+          <FormikCoordinatesPicker />
 
           <FormikMultiInfractionPicker
             addButtonLabel="Ajouter une infraction"
             label="Infractions"
             name="otherInfractions"
           />
+
+          <FieldsetGroup isLight legend="Autres observations">
+            <FormikTextarea isLabelHidden label="Autres observations" name="otherComments" />
+          </FieldsetGroup>
         </FormBody>
       </>
     </Formik>

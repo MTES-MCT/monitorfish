@@ -13,10 +13,10 @@ import { useIsZooming } from '../../hooks/useIsZooming'
 import { getLabelLineStyle } from '../../styles/vesselLabelLine.style'
 
 import type { VectorLayerWithName } from '../../../../../domain/types/layer'
-import type { MutableRefObject } from 'react'
 
 export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
   const { isAdmin } = useMainAppSelector(state => state.global)
+  const { isMissionsLayerDisplayed } = useMainAppSelector(state => state.displayedComponent)
 
   const [featuresAndLabels, setFeaturesAndLabels] = useState<
     {
@@ -30,12 +30,11 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
   const isZooming = useIsZooming(map, mapMovingAndZoomEvent)
   const previousFeaturesAndLabels = usePrevious(featuresAndLabels)
 
-  const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
-  const layerRef = useRef() as MutableRefObject<VectorLayerWithName>
-  const missionsLayerSourceRef = useRef() as MutableRefObject<VectorSource>
+  const vectorSourceRef = useRef<VectorSource>()
+  const layerRef = useRef<VectorLayerWithName>()
 
   const getVectorSource = useCallback(() => {
-    if (vectorSourceRef.current === undefined) {
+    if (!vectorSourceRef.current) {
       vectorSourceRef.current = new VectorSource({
         features: [],
         wrapX: false
@@ -48,7 +47,7 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
   const { lineFeatureIdToCoordinates, moveVesselLabelLine } = useGetLineFeatureIdToCoordinates(getVectorSource())
 
   const getLayer = useCallback(() => {
-    if (layerRef.current === undefined) {
+    if (!layerRef.current) {
       layerRef.current = new Vector({
         renderBuffer: 7,
         source: getVectorSource(),
@@ -66,12 +65,6 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
     if (map) {
       getLayer().name = LayerProperties.MISSIONS_LABEL.code
       map.getLayers().push(getLayer())
-
-      const missionsLayer = map
-        .getLayers()
-        .getArray()
-        ?.find(olLayer => olLayer.name === LayerProperties.MISSION_PIN_POINT.code)
-      missionsLayerSourceRef.current = missionsLayer?.getSource()
     }
 
     return () => {
@@ -82,9 +75,9 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
   }, [map, getLayer])
 
   const addLabelsToAllFeaturesInExtent = useDebouncedCallback(
-    (_isAdmin, vectorSource, missionsLayerSource, extent, _lineFeatureIdToCoordinates, _previousFeaturesAndLabels) => {
+    (isHidden, vectorSource, missionsLayerSource, extent, _lineFeatureIdToCoordinates, _previousFeaturesAndLabels) => {
       const nextFeaturesAndLabels = getLabelsOfFeaturesInExtent(
-        _isAdmin,
+        isHidden,
         vectorSource,
         missionsLayerSource,
         extent,
@@ -110,16 +103,24 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
       return
     }
 
+    const missionsLayer = map
+      .getLayers()
+      .getArray()
+      ?.find(olLayer => olLayer.name === LayerProperties.MISSION_PIN_POINT.code)
+    const missionsLayerSource = missionsLayer?.getSource()
+
+    const isHidden = !isAdmin || !isMissionsLayerDisplayed || !missionsLayerSource
     addLabelsToAllFeaturesInExtent(
-      isAdmin,
+      isHidden,
       getVectorSource(),
-      missionsLayerSourceRef?.current,
+      missionsLayerSource,
       map.getView().calculateExtent(),
       lineFeatureIdToCoordinates,
       previousFeaturesAndLabels
     )
   }, [
     isAdmin,
+    isMissionsLayerDisplayed,
     map,
     isZooming,
     lineFeatureIdToCoordinates,

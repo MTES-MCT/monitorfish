@@ -5,7 +5,7 @@ import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { selectedMissionActionsStyles } from './styles'
 import { LayerProperties } from '../../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../../domain/entities/layers/types'
-import { getMissionActionFeature } from '../../../../../domain/entities/mission'
+import { getMissionActionFeature, getMissionActionFeatures } from '../../../../../domain/entities/mission'
 import { useGetFilteredMissionsQuery } from '../../../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 
@@ -16,9 +16,10 @@ import type { MutableRefObject } from 'react'
 
 export function UnmemoizedSelectedMissionActionsLayer({ map }) {
   const { missions } = useGetFilteredMissionsQuery()
-  const selectedMissionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionGeoJSON)
+  const { mission, sideWindow } = useMainAppSelector(store => store)
+
   const selectedMissionActions = useMemo(() => {
-    if (!selectedMissionGeoJSON) {
+    if (!mission.selectedMissionGeoJSON) {
       return []
     }
 
@@ -26,12 +27,12 @@ export function UnmemoizedSelectedMissionActionsLayer({ map }) {
       missions
         .find(
           missionsAndAction =>
-            missionsAndAction.id === (selectedMissionGeoJSON as GeoJSON.Feature).properties?.missionId
+            missionsAndAction.id === (mission.selectedMissionGeoJSON as GeoJSON.Feature).properties?.missionId
         )
         ?.actions?.map(action => getMissionActionFeature(action))
         .filter((feature): feature is Feature => Boolean(feature)) || []
     )
-  }, [missions, selectedMissionGeoJSON])
+  }, [mission.selectedMissionGeoJSON, missions])
 
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
   const getVectorSource = useCallback(() => {
@@ -76,6 +77,16 @@ export function UnmemoizedSelectedMissionActionsLayer({ map }) {
 
     getVectorSource().addFeatures(selectedMissionActions)
   }, [selectedMissionActions, getVectorSource])
+
+  useEffect(() => {
+    getVectorSource().clear(true)
+    if (!mission.draft || !sideWindow.selectedPath.id) {
+      return
+    }
+
+    const actionFeatures = getMissionActionFeatures({ ...mission.draft, id: sideWindow.selectedPath.id })
+    getVectorSource().addFeatures(actionFeatures)
+  }, [getVectorSource, mission.draft, sideWindow.selectedPath.id])
 
   return null
 }

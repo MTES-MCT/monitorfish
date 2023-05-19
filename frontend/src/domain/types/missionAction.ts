@@ -5,7 +5,7 @@ import type { ControlUnit } from './controlUnit'
 
 export namespace MissionAction {
   export interface MissionAction {
-    actionDatetimeUtc: string | undefined
+    actionDatetimeUtc: string
     actionType: MissionActionType
     controlQualityComments: string | undefined
     controlUnits: ControlUnit.ControlUnit[]
@@ -38,7 +38,7 @@ export namespace MissionAction {
     segments: FleetSegment[]
     seizureAndDiversion: Boolean | undefined
     seizureAndDiversionComments: string | undefined
-    separateStowageOfPreservedSpecies: Boolean | undefined
+    separateStowageOfPreservedSpecies: ControlCheck | undefined
     speciesInfractions: SpeciesInfraction[]
     speciesObservations: string | undefined
     speciesOnboard: SpeciesControl[]
@@ -48,7 +48,7 @@ export namespace MissionAction {
     userTrigram: string | undefined
     vesselId: number | undefined
     vesselName: string | undefined
-    vesselTargeted: Boolean | undefined
+    vesselTargeted: ControlCheck | undefined
   }
 
   // ---------------------------------------------------------------------------

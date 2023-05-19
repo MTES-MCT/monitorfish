@@ -4,7 +4,6 @@ import { getLocalStorageState } from '../../utils'
 import { UserType } from '../entities/beaconMalfunction/constants'
 import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel/vessel'
 
-import type { SideWindowMenuKey } from '../../features/SideWindow/constants'
 import type { MapToolType } from '../entities/map/constants'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
@@ -23,7 +22,6 @@ export type GlobalState = {
   lastSearchedVessels: any[]
   leftBoxOpened: any
   mapToolOpened: MapToolType | undefined
-  openedSideWindowTab: SideWindowMenuKey | undefined
   // TODO Rename this prop.
   // TODO Investigate that. Should be a defined boolean.
   previewFilteredVesselsMode: boolean | undefined
@@ -41,7 +39,6 @@ const INITIAL_STATE: GlobalState = {
   lastSearchedVessels: getLocalStorageState([], lastSearchedVesselsLocalStorageKey),
   leftBoxOpened: null,
   mapToolOpened: undefined,
-  openedSideWindowTab: undefined,
   previewFilteredVesselsMode: undefined,
   rightMenuIsOpen: false,
   userType: getLocalStorageState(UserType.SIP, userTypeLocalStorageKey),
@@ -80,15 +77,6 @@ export const globalSlice = createSlice({
       window.localStorage.setItem(lastSearchedVesselsLocalStorageKey, JSON.stringify(state.lastSearchedVessels))
     },
 
-    /**
-     * Close side window
-     * @function closeSideWindow
-     * @param {Object=} state
-     */
-    closeSideWindow(state) {
-      state.openedSideWindowTab = undefined
-    },
-
     closeVesselListModal(state) {
       state.vesselListModalIsOpen = false
     },
@@ -99,13 +87,6 @@ export const globalSlice = createSlice({
 
     expandRightMenu(state) {
       state.rightMenuIsOpen = true
-    },
-
-    /**
-     * Open a side window tab
-     */
-    openSideWindowTab(state, action: PayloadAction<SideWindowMenuKey>) {
-      state.openedSideWindowTab = action.payload
     },
 
     openVesselListModal(state) {
@@ -203,11 +184,9 @@ export const globalSlice = createSlice({
 
 export const {
   addSearchedVessel,
-  closeSideWindow,
   closeVesselListModal,
   contractRightMenu,
   expandRightMenu,
-  openSideWindowTab,
   openVesselListModal,
   removeError,
   resetIsUpdatingVessels,

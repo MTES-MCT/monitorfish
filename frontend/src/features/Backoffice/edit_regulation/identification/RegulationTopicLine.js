@@ -12,18 +12,13 @@ import InfoBox from '../InfoBox'
 import { INFO_TEXT } from '../../constants'
 import { formatDataForSelectPicker } from '../../../../utils'
 import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulation'
-import { updateProcessingRegulationByKey } from '../../Regulation.slice'
+import { updateProcessingRegulationByKey } from '../../slice'
 const RegulationTopicLine = props => {
-  const {
-    disabled,
-    regulationTopicIsMissing
-  } = props
+  const { disabled, regulationTopicIsMissing } = props
 
   const dispatch = useDispatch()
 
-  const {
-    regulatoryTopics
-  } = useSelector(state => state.regulatory)
+  const { regulatoryTopics } = useSelector(state => state.regulatory)
 
   const { topic } = useSelector(state => state.regulation.processingRegulation)
 
@@ -37,22 +32,19 @@ const RegulationTopicLine = props => {
   const [isAddTopicClicked, setIsAddTopicClicked] = useState(false)
   const [isInfoTextShown, setIsInfoTextShown] = useState(false)
 
-  const updateTopic = (value) => {
+  const updateTopic = value => {
     dispatch(updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.TOPIC, value }))
   }
 
-  return <ContentLine
-    isFormOpened={isAddTopicClicked}
-    isInfoTextShown={isInfoTextShown}
-    disabled={disabled}
-    >
+  return (
+    <ContentLine isFormOpened={isAddTopicClicked} isInfoTextShown={isInfoTextShown} disabled={disabled}>
       <Wrapper>
         <Label>Thématique de la zone</Label>
         <CustomSelectComponent
           disabled={disabled || isAddTopicClicked}
           searchable={true}
           menuStyle={{ width: 250, overflowY: 'hidden', textOverflow: 'ellipsis' }}
-          placeholder='Choisir une thématique'
+          placeholder="Choisir une thématique"
           value={'Choisir une thématique'}
           onChange={updateTopic}
           data={layerTypeList}
@@ -61,42 +53,47 @@ const RegulationTopicLine = props => {
           emptyMessage={'aucune thématique à afficher'}
           menuClassName={DEFAULT_MENU_CLASSNAME}
         />
-        {topic && !isAddTopicClicked &&
-          <Tag
-            data-cy={`${topic}`}
-            tagValue={topic}
-            onCloseIconClicked={_ => updateTopic()}
-          />}
-        {
-        isAddTopicClicked
-          ? <CreateRegulationTopicForm
-              updateTopic={updateTopic}
-              onCancelEdit={_ => {
-                setIsAddTopicClicked(false)
-                setIsInfoTextShown(false)
-              }}
-            />
-          : !topic && !disabled && <><SquareButton
-              onClick={() => {
-                setIsAddTopicClicked(true)
-                setIsInfoTextShown(true)
-              }}
-            />
-            <CustomLabel >Créer une nouvelle thématique</CustomLabel></>
-        }
+        {topic && !isAddTopicClicked && (
+          <Tag data-cy={`${topic}`} tagValue={topic} onCloseIconClicked={_ => updateTopic()} />
+        )}
+        {isAddTopicClicked ? (
+          <CreateRegulationTopicForm
+            updateTopic={updateTopic}
+            onCancelEdit={_ => {
+              setIsAddTopicClicked(false)
+              setIsInfoTextShown(false)
+            }}
+          />
+        ) : (
+          !topic &&
+          !disabled && (
+            <>
+              <SquareButton
+                onClick={() => {
+                  setIsAddTopicClicked(true)
+                  setIsInfoTextShown(true)
+                }}
+              />
+              <CustomLabel>Créer une nouvelle thématique</CustomLabel>
+            </>
+          )
+        )}
       </Wrapper>
-      {!disabled && <CustomInfoBox
-        isInfoTextShown={isInfoTextShown}
-        setIsInfoTextShown={setIsInfoTextShown}
-        isFormOpened={isAddTopicClicked}
-        pointer
-      >
-        <InfoTextWrapper>
-          <InfoText bold>{INFO_TEXT.TOPIC}</InfoText>
-          <InfoText >{INFO_TEXT.TOPIC_NEXT}</InfoText>
-        </InfoTextWrapper>
-      </CustomInfoBox>}
+      {!disabled && (
+        <CustomInfoBox
+          isInfoTextShown={isInfoTextShown}
+          setIsInfoTextShown={setIsInfoTextShown}
+          isFormOpened={isAddTopicClicked}
+          pointer
+        >
+          <InfoTextWrapper>
+            <InfoText bold>{INFO_TEXT.TOPIC}</InfoText>
+            <InfoText>{INFO_TEXT.TOPIC_NEXT}</InfoText>
+          </InfoTextWrapper>
+        </CustomInfoBox>
+      )}
     </ContentLine>
+  )
 }
 
 const CustomLabel = styled(Label)`
@@ -104,7 +101,7 @@ const CustomLabel = styled(Label)`
 `
 
 const CustomInfoBox = styled(InfoBox)`
-  ${props => props.isFormOpened ? '' : 'margin-top: 2px'};
+  ${props => (props.isFormOpened ? '' : 'margin-top: 2px')};
 `
 
 const Wrapper = styled.div`

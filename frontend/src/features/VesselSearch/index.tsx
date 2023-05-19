@@ -28,6 +28,7 @@ type VesselSearchProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultVal
       }
     | undefined
   extendedWidth: number
+  hasError?: boolean | undefined
   hasVesselIdInResults?: boolean
   isExtended: boolean
   isLastSearchedVesselsShowed?: boolean
@@ -40,6 +41,7 @@ export function VesselSearch({
   className,
   defaultValue,
   extendedWidth,
+  hasError,
   hasVesselIdInResults = false,
   isExtended = false,
   isLastSearchedVesselsShowed = false,
@@ -67,7 +69,6 @@ export function VesselSearch({
     () => (selectedVessel ? undefinedize(selectedVessel.vesselName) : defaultValue?.vesselName),
     [defaultValue, selectedVessel]
   )
-  // TODO Replace by `useKey` once it's exposed in Monitor UI.
   const flagState = useMemo(
     () => (selectedVessel ? selectedVessel.flagState : undefinedize(defaultValue?.flagState)),
     [defaultValue, selectedVessel]
@@ -172,12 +173,15 @@ export function VesselSearch({
       <InputWrapper>
         <Input
           key={controlledKey}
-          ref={input => (selectedVesselIdentity ? input && input.focus() : null)}
+          // Disable this behavior when VesselSearch is used within side window
+          // (`baseRef` prop is only provided in side window case)
+          autoFocus={!baseRef && !!selectedVesselIdentity}
           baseUrl={baseUrl}
           data-cy="vessel-search-input"
           defaultValue={controlledDefaultValue}
           extendedWidth={extendedWidth}
           flagState={flagState}
+          hasError={hasError}
           isExtended={isExtended}
           onChange={handleChange}
           onClick={onVesselInputClick}
@@ -212,10 +216,11 @@ const Input = styled.input<{
   baseUrl: string
   extendedWidth: number
   flagState: string | undefined
+  hasError: boolean | undefined
   isExtended: boolean
 }>`
   margin: 0;
-  border: none;
+  border: ${p => (p.hasError ? '1px solid red' : 'none')};
   border-radius: 0;
   border-radius: 2px;
   color: ${COLORS.gunMetal};

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import LawType from './list_regulation/LawType'
 import SearchRegulations from './list_regulation/SearchRegulations'
-import { setProcessingRegulationSaved } from './Regulation.slice'
+import { setProcessingRegulationSaved } from './slice'
 import { FRANCE, ORGP, UE, UK } from '../../domain/entities/regulation'
 import layer from '../../domain/shared_slices/Layer'
 import { setRegulatoryZoneMetadata } from '../../domain/shared_slices/Regulatory'
@@ -15,12 +15,12 @@ import getAllSpecies from '../../domain/use_cases/species/getAllSpecies'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { EmptyResult } from '../commonStyles/Text.style'
-import RegulatoryZoneMetadata from '../LayersSidebar/RegulatoryZones/RegulatoryZoneMetadata'
 import { BaseMap } from '../map/BaseMap'
 import { AdministrativeLayers } from '../map/layers/AdministrativeLayers'
 import { BaseLayer } from '../map/layers/BaseLayer'
 import { RegulatoryLayers } from '../map/layers/RegulatoryLayers'
 import { RegulatoryPreviewLayer } from '../map/layers/RegulatoryPreviewLayer'
+import RegulatoryZoneMetadata from '../MapButtons/LayersSidebar/RegulatoryZones/RegulatoryZoneMetadata'
 
 export function Backoffice() {
   const [foundRegulatoryZonesByRegTerritory, setFoundRegulatoryZonesByRegTerritory] = useState({})

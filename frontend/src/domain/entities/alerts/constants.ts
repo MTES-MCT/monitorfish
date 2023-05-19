@@ -1,7 +1,7 @@
 // TODO This is a bit shady to mix up pending/silenced alerts with PNO ones here.
 
 import { PendingAlertValueType } from './types'
-import { SeaFront } from '../../../constants'
+import { SeaFrontGroup } from '../../../constants'
 
 import type { MenuItem } from '../../../types'
 
@@ -41,64 +41,72 @@ export const COMMON_ALERT_TYPE_OPTION: Record<
   }
 }
 
-export const ALERTS_SUBMENU: Record<SeaFront, MenuItem<SeaFront>> = {
+export const ALERTS_SUBMENU: Record<SeaFrontGroup, MenuItem<SeaFrontGroup>> = {
+  ALL: {
+    code: SeaFrontGroup.ALL,
+    name: 'ALL'
+  },
   MED: {
-    code: SeaFront.MED,
+    code: SeaFrontGroup.MED,
     name: 'MED'
   },
   MEMN: {
-    code: SeaFront.MEMN,
+    code: SeaFrontGroup.MEMN,
     name: 'MEMN'
   },
   NAMO: {
-    code: SeaFront.NAMO,
+    code: SeaFrontGroup.NAMO,
     name: 'NAMO'
   },
   OUTREMEROA: {
-    code: SeaFront.OUTREMEROA,
+    code: SeaFrontGroup.OUTREMEROA,
     name: 'OUTRE-MER OA'
   },
   OUTREMEROI: {
-    code: SeaFront.OUTREMEROI,
+    code: SeaFrontGroup.OUTREMEROI,
     name: 'OUTRE-MER OI'
   },
   SA: {
-    code: SeaFront.SA,
+    code: SeaFrontGroup.SA,
     name: 'SA'
   }
 }
 
 // TODO Rename the `seaFronts` prop to clarify the difference. They don't look like seas fronts.
 export const ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS: Record<
-  SeaFront,
+  SeaFrontGroup,
   {
-    menuSeaFront: SeaFront
+    menuSeaFront: SeaFrontGroup
     seaFronts: string[]
   }
 > = {
+  ALL: {
+    menuSeaFront: SeaFrontGroup.ALL,
+    seaFronts: []
+  },
   MED: {
-    menuSeaFront: SeaFront.MED,
+    menuSeaFront: SeaFrontGroup.MED,
     seaFronts: ['MED']
   },
   MEMN: {
-    menuSeaFront: SeaFront.MEMN,
+    menuSeaFront: SeaFrontGroup.MEMN,
     seaFronts: ['MEMN']
   },
   NAMO: {
-    menuSeaFront: SeaFront.NAMO,
+    menuSeaFront: SeaFrontGroup.NAMO,
     seaFronts: ['NAMO']
   },
   OUTREMEROA: {
-    menuSeaFront: SeaFront.OUTREMEROA,
+    menuSeaFront: SeaFrontGroup.OUTREMEROA,
     seaFronts: ['Guadeloupe', 'Guyane', 'Martinique']
   },
   OUTREMEROI: {
-    menuSeaFront: SeaFront.OUTREMEROI,
+    menuSeaFront: SeaFrontGroup.OUTREMEROI,
     seaFronts: ['Sud Océan Indien']
   },
   SA: {
-    menuSeaFront: SeaFront.SA,
-    seaFronts: [SeaFront.SA]
+    menuSeaFront: SeaFrontGroup.SA,
+    seaFronts: [SeaFrontGroup.SA]
   }
 }
 

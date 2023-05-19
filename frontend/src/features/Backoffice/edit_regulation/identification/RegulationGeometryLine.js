@@ -9,16 +9,11 @@ import Tag from '../Tag'
 import { ReactComponent as ShowIconSVG } from '../../../icons/oeil_affiche.svg'
 import { ReactComponent as HideIconSVG } from '../../../icons/oeil_masque.svg'
 import { COLORS } from '../../../../constants/constants'
-import { updateProcessingRegulationByKey } from '../../Regulation.slice'
+import { updateProcessingRegulationByKey } from '../../slice'
 import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulation'
 
 const RegulationGeometryLine = props => {
-  const {
-    geometryIdList,
-    setShowRegulatoryPreview,
-    showRegulatoryPreview,
-    geometryIsMissing
-  } = props
+  const { geometryIdList, setShowRegulatoryPreview, showRegulatoryPreview, geometryIsMissing } = props
 
   const dispatch = useDispatch()
 
@@ -29,35 +24,34 @@ const RegulationGeometryLine = props => {
     setShowRegulatoryPreview(false)
   }
 
-  return <CustomContentLine>
-    <Label>Géométrie</Label>
-    <CustomSelectComponent
+  return (
+    <CustomContentLine>
+      <Label>Géométrie</Label>
+      <CustomSelectComponent
         searchable={false}
-        placeholder='Choisir un tracé'
+        placeholder="Choisir un tracé"
         value={'Choisir un tracé'}
         onChange={value => dispatch(updateProcessingRegulationByKey({ key: 'id', value }))}
         data={geometryIdList}
         valueIsMissing={geometryIsMissing}
         emptyMessage={'aucun tracé à associer'}
-        renderMenuItem={(_, item) =>
-          <MenuItem checked={item.value === id}
-            item={item} tag={'Radio'}/>}
+        renderMenuItem={(_, item) => <MenuItem checked={item.value === id} item={item} tag={'Radio'} />}
         menuClassName={DEFAULT_MENU_CLASSNAME}
       />
-    {id &&
-      <><Tag
-        tagValue={id}
-        onCloseIconClicked={onCloseIconClicked}
-      />
-      <EyeWrapper>
-        { showRegulatoryPreview
-          ? <ShowIcon onClick={() => setShowRegulatoryPreview(false)}/>
-          : <HideIcon onClick={() => setShowRegulatoryPreview(true)}/>
-        }
-      </EyeWrapper>
-      </>
-    }
-  </CustomContentLine>
+      {id && (
+        <>
+          <Tag tagValue={id} onCloseIconClicked={onCloseIconClicked} />
+          <EyeWrapper>
+            {showRegulatoryPreview ? (
+              <ShowIcon onClick={() => setShowRegulatoryPreview(false)} />
+            ) : (
+              <HideIcon onClick={() => setShowRegulatoryPreview(true)} />
+            )}
+          </EyeWrapper>
+        </>
+      )}
+    </CustomContentLine>
+  )
 }
 
 const CustomContentLine = styled(ContentLine)`

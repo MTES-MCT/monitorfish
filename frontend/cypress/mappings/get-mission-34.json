@@ -13,7 +13,6 @@
     "jsonBody": {
       "id": 34,
       "missionTypes": ["LAND", "SEA"],
-      "missionNature": ["OTHER"],
       "controlUnits": [
         {
           "id": 10016,
@@ -111,7 +110,8 @@
         }
       ],
       "missionSource": "MONITORENV",
-      "isClosed": false
+      "isClosed": false,
+      "isUnderJdp": false
     }
   }
 }

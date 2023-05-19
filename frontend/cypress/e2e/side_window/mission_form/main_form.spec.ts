@@ -1,6 +1,7 @@
 import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
-import { SeaFront } from '../../../../src/constants'
+import { SeaFrontGroup } from '../../../../src/constants'
 import { Mission } from '../../../../src/domain/entities/mission/types'
+import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 import { getUtcizedDayjs } from '../../utils/getUtcizedDayjs'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
@@ -105,8 +106,6 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.fill('Moyen 2', ['ALTAIR', 'ARIOLA'])
     cy.fill('Contact de l’unité 2', 'Bob 2')
 
-    // cy.fill('Lieu du contrôle', 'Free Port')
-
     cy.fill('CACEM : orientations, observations', 'Une note.')
     cy.fill('CNSP : orientations, observations', 'Une autre note.')
     cy.fill('Ouvert par', 'Nemo')
@@ -156,7 +155,7 @@ context('Side Window > Mission Form > Main Form', () => {
           }
         ],
         endDateTimeUtc: '2023-02-01T12:31:00.000Z',
-        hasOrder: true,
+        hasMissionOrder: true,
         isClosed: false,
         isUnderJdp: true,
         missionSource: 'MONITORFISH',
@@ -172,7 +171,7 @@ context('Side Window > Mission Form > Main Form', () => {
   })
 
   it('Should send the expected data to the API when editing an existing mission', () => {
-    editSideWindowMissionListMissionWithId(2, SeaFront.MEMN)
+    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
 
     cy.intercept('POST', '/api/v1/missions/2', {
       body: {
@@ -181,8 +180,6 @@ context('Side Window > Mission Form > Main Form', () => {
       statusCode: 201
     }).as('updateMission')
     cy.intercept('PUT', '/bff/v1/mission_actions/2').as('updateMissionAction2')
-
-    cy.wait(250)
 
     cy.clickButton('Enregistrer')
 
@@ -293,7 +290,7 @@ context('Side Window > Mission Form > Main Form', () => {
         ],
         seizureAndDiversion: true,
         seizureAndDiversionComments: 'Saisie de la pêche',
-        separateStowageOfPreservedSpecies: true,
+        separateStowageOfPreservedSpecies: 'YES',
         speciesInfractions: [
           { comments: 'Sous taille de 8cm', infractionType: 'WITHOUT_RECORD', natinf: 28346, speciesSeized: true }
         ],
@@ -308,7 +305,7 @@ context('Side Window > Mission Form > Main Form', () => {
         userTrigram: null,
         vesselId: 1,
         vesselName: 'PHENOMENE',
-        vesselTargeted: null
+        vesselTargeted: 'NO'
       })
     })
 
@@ -341,7 +338,7 @@ context('Side Window > Mission Form > Main Form', () => {
   })
 
   it('Should close an existing mission', () => {
-    editSideWindowMissionListMissionWithId(2, SeaFront.MEMN)
+    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
 
     cy.intercept('POST', '/api/v1/missions/2', {
       body: {
@@ -368,6 +365,122 @@ context('Side Window > Mission Form > Main Form', () => {
         isClosed: true
       })
     })
+
+    cy.get('h1').should('contain.text', 'Missions et contrôles')
+  })
+
+  it('Should show the cancellation confirmation dialog when switching to another menu while a draft is dirty', () => {
+    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
+
+    cy.clickButton(SideWindowMenuLabel.MISSION_LIST)
+
+    cy.get('h1').should('contain.text', 'Missions et contrôles')
+
+    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
+
+    cy.fill('Clôturé par', 'Nemo')
+
+    cy.wait(500)
+
+    cy.clickButton(SideWindowMenuLabel.MISSION_LIST)
+
+    cy.get('.Component-Dialog').should('be.visible')
+
+    cy.clickButton('Retourner à l’édition')
+
+    cy.get('h1').should('contain.text', 'Mission Mer – BGC Bastia')
+
+    cy.clickButton(SideWindowMenuLabel.MISSION_LIST)
+    cy.clickButton('Quitter sans enregistrer')
+
+    cy.get('h1').should('contain.text', 'Missions et contrôles')
+  })
+
+  it('Should reopen a closed mission', () => {
+    editSideWindowMissionListMissionWithId(6, SeaFrontGroup.MED)
+
+    cy.intercept('POST', '/api/v1/missions/6', {
+      body: {
+        id: 1
+      },
+      statusCode: 204
+    }).as('updateMission')
+
+    cy.contains('Veuillez rouvrir la mission avant d’en modifier les informations.').should('be.visible')
+
+    cy.wait(1000)
+
+    cy.clickButton('Ré-ouvrir la mission')
+
+    cy.wait(1000)
+
+    cy.contains('Veuillez rouvrir la mission avant d’en modifier les informations.').should('not.exist')
+
+    cy.clickButton('Enregistrer')
+
+    cy.wait('@updateMission').then(interception => {
+      if (!interception.response) {
+        assert.fail('`interception.response` is undefined.')
+      }
+
+      assert.isString(interception.request.body.endDateTimeUtc)
+      assert.isString(interception.request.body.startDateTimeUtc)
+      assert.deepInclude(interception.request.body, {
+        closedBy: 'Cynthia Phillips',
+        controlUnits: [
+          {
+            administration: 'DDTM',
+            contact: null,
+            id: 10003,
+            isArchived: false,
+            name: 'DML 2A (historique)',
+            resources: [{ id: 3, name: 'Semi-rigide 1' }]
+          }
+        ],
+        envActions: [],
+        facade: 'MED',
+        geom: null,
+        id: 6,
+        isClosed: false,
+        missionSource: 'MONITORFISH',
+        missionTypes: ['AIR'],
+        observationsCacem: 'Toward agency blue now hand. Meet answer someone stand.',
+        observationsCnsp: null,
+        openBy: 'Kevin Torres'
+      })
+    })
+  })
+
+  it('Should delete a mission', () => {
+    // We shouldn't be able to delete a CACEM mission:
+
+    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
+
+    cy.contains('Supprimer la mission').should('be.disabled')
+
+    // But we should be able to delete a CNSP one:
+
+    editSideWindowMissionListMissionWithId(4, SeaFrontGroup.MEMN)
+
+    cy.intercept('DELETE', '/api/v1/missions/4', {
+      statusCode: 204
+    }).as('deleteMission')
+
+    cy.clickButton('Supprimer la mission')
+
+    cy.get('.Component-Dialog').should('be.visible')
+
+    cy.clickButton('Retourner à l’édition')
+
+    cy.get('.Component-Dialog').should('not.exist')
+
+    cy.clickButton('Supprimer la mission')
+
+    cy.get('.Component-Dialog').should('be.visible')
+
+    cy.clickButton('Confirmer la suppression')
+
+    cy.wait('@deleteMission')
 
     cy.get('h1').should('contain.text', 'Missions et contrôles')
   })

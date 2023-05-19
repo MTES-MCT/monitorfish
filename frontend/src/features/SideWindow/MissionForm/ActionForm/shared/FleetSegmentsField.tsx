@@ -1,11 +1,10 @@
-import { MultiSelect } from '@mtes-mct/monitor-ui'
+import { MultiSelect, useNewWindow } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useGetFleetSegmentsQuery } from '../../../../../api/fleetSegment'
 import { FrontendError } from '../../../../../libs/FrontendError'
-import { useNewWindow } from '../../../../../ui/NewWindow'
 import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 
 import type { MissionAction } from '../../../../../domain/types/missionAction'
@@ -98,7 +97,6 @@ export function FleetSegmentsField({ label }: FleetSegmentsFieldProps) {
         onChange={handleChange as any}
         options={fleetSegmentsAsOptions}
         value={initialValue}
-        virtualized
       />
     </Box>
   )

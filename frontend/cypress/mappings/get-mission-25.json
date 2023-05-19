@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "url": "/api/v1/missions/6"
+    "url": "/api/v1/missions/25"
   },
   "response": {
     "status": 200,
@@ -13,7 +13,6 @@
     "jsonBody": {
       "id": 25,
       "missionTypes": ["LAND"],
-      "missionNature": ["FISH", "OTHER"],
       "controlUnits": [
         {
           "id": 10003,

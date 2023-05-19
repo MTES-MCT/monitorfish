@@ -91,7 +91,7 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
     <Wrapper>
       {startDateAsDayjs && (
         <DateLabel>
-          <b>{formatDateLabel(startDateAsDayjs.format('DD MMM'))}</b> à {startDateAsDayjs.format('HH:mm')}
+          <b>{formatDateLabel(startDateAsDayjs.format('DD MMM'))}</b> à {startDateAsDayjs.format('HH:mm')} (UTC)
         </DateLabel>
       )}
 

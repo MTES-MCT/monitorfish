@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
-import { setFishingPeriod } from '../../features/Backoffice/Regulation.slice'
+import { setFishingPeriod } from '../../features/Backoffice/slice'
 
 const useSetFishingPeriod = key => {
   const dispatch = useDispatch()

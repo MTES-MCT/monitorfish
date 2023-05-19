@@ -11,22 +11,22 @@ import styled from 'styled-components'
 import { APIWorker } from './api/APIWorker'
 import { BackofficeMode } from './api/BackofficeMode'
 import NamespaceContext from './domain/context/NamespaceContext'
+import { SideWindowStatus } from './domain/entities/sideWindow/constants'
 import { ErrorToastNotification } from './features/commonComponents/ErrorToastNotification'
-import { FavoriteVessels } from './features/FavoriteVessels'
 import { Healthcheck } from './features/Healthcheck'
-import { LayersSidebar } from './features/LayersSidebar'
 import { DrawLayerModal } from './features/map/draw/DrawModal'
 import Map from './features/map/Map'
-import { InterestPointMapButton } from './features/map/tools/interest_points/InterestPointMapButton'
-import { MeasurementMapButton } from './features/map/tools/measurements/MeasurementMapButton'
-import { RightMenuOnHoverArea } from './features/map/tools/RightMenuOnHoverArea'
-import { VesselFiltersMapButton } from './features/map/tools/vessel_filters/VesselFiltersMapButton'
-import { VesselLabelsMapButton } from './features/map/tools/vessel_labels/VesselLabelsMapButton'
-import { VesselVisibilityMapButton } from './features/map/tools/vessel_visibility/VesselVisibilityMapButton'
+import { MapButtons } from './features/MapButtons'
+import { FavoriteVessels } from './features/MapButtons/FavoriteVessels'
+import { InterestPointMapButton } from './features/MapButtons/InterestPoints'
+import { LayersSidebar } from './features/MapButtons/LayersSidebar'
+import { MeasurementMapButton } from './features/MapButtons/Measurements'
+import { RightMenuOnHoverArea } from './features/MapButtons/shared/RightMenuOnHoverArea'
+import { VesselFiltersMapButton } from './features/MapButtons/VesselFilters'
+import { VesselLabelsMapButton } from './features/MapButtons/VesselLabels'
+import { VesselVisibilityMapButton } from './features/MapButtons/VesselVisibility'
 import PreviewFilteredVessels from './features/preview_filtered_vessels/PreviewFilteredVessels'
 import { SideWindow } from './features/SideWindow'
-import { AlertsMapButton } from './features/SideWindow/alerts_reportings/AlertsMapButton'
-import { BeaconMalfunctionsMapButton } from './features/SideWindow/beacon_malfunctions/BeaconMalfunctionsMapButton'
 import { SideWindowLauncher } from './features/SideWindow/SideWindowLauncher'
 import { VesselList } from './features/VesselList'
 import { VesselSidebar } from './features/VesselSidebar'
@@ -94,21 +94,11 @@ export function App() {
 }
 
 function HomePage() {
-  const {
-    isAlertsMapButtonDisplayed,
-    isBeaconMalfunctionsMapButtonDisplayed,
-    isDrawLayerModalDisplayed,
-    isFavoriteVesselsMapButtonDisplayed,
-    isInterestPointMapButtonDisplayed,
-    isMeasurementMapButtonDisplayed,
-    isVesselFiltersMapButtonDisplayed,
-    isVesselLabelsMapButtonDisplayed,
-    isVesselListDisplayed,
-    isVesselSearchDisplayed,
-    isVesselVisibilityMapButtonDisplayed
-  } = useMainAppSelector(state => state.displayedComponent)
+  const { isDrawLayerModalDisplayed, isVesselListDisplayed, isVesselSearchDisplayed } = useMainAppSelector(
+    state => state.displayedComponent
+  )
   const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
-  const openedSideWindowTab = useMainAppSelector(state => state.global.openedSideWindowTab)
+  const { sideWindow } = useMainAppSelector(state => state)
   const ref = useRef() as MutableRefObject<HTMLDivElement>
 
   return (
@@ -125,21 +115,14 @@ function HomePage() {
             <Map />
             <LayersSidebar />
             {isVesselSearchDisplayed && <VesselSidebarHeader />}
-            {isAlertsMapButtonDisplayed && <AlertsMapButton />}
-            {isBeaconMalfunctionsMapButtonDisplayed && <BeaconMalfunctionsMapButton />}
+            <MapButtons />
             <RightMenuOnHoverArea />
             {isVesselListDisplayed && <VesselList namespace="homepage" />}
-            {isVesselFiltersMapButtonDisplayed && <VesselFiltersMapButton />}
-            {isVesselVisibilityMapButtonDisplayed && <VesselVisibilityMapButton />}
-            {isFavoriteVesselsMapButtonDisplayed && <FavoriteVessels />}
             {isVesselSidebarOpen && <VesselSidebar />}
             <UpdatingVesselLoader />
-            {isMeasurementMapButtonDisplayed && <MeasurementMapButton />}
-            {isInterestPointMapButtonDisplayed && <InterestPointMapButton />}
-            {isVesselLabelsMapButtonDisplayed && <VesselLabelsMapButton />}
             <APIWorker />
             <ErrorToastNotification />
-            {openedSideWindowTab && <SideWindowLauncher />}
+            {sideWindow.status !== SideWindowStatus.CLOSED && <SideWindowLauncher />}
             {isDrawLayerModalDisplayed && <DrawLayerModal />}
           </Wrapper>
         </Route>

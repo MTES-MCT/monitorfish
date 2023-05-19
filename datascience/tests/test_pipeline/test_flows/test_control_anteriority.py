@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 import pandas as pd
 import pytest
+import pytz
 from dateutil.relativedelta import relativedelta
 
 from src.pipeline.flows.control_anteriority import (
@@ -81,29 +82,29 @@ def last_years_controls():
                 4,
             ],
             "control_datetime_utc": [
-                datetime(2015, 1, 1),
-                datetime(2021, 1, 1),
-                datetime(2015, 1, 1),
-                datetime(2020, 1, 1),
-                datetime(2020, 4, 1),
-                datetime(2021, 1, 1),
-                datetime(2021, 5, 1),
-                datetime(2021, 6, 1),
-                datetime(2021, 7, 1),
-                datetime(2021, 8, 1),
-                datetime(2022, 1, 1),
-                datetime(2022, 2, 1),
-                datetime(2022, 5, 1),
-                datetime(2022, 11, 1),
-                datetime(2022, 12, 31),
-                datetime(2023, 1, 1),
-                datetime(2023, 2, 15),
-                datetime(2023, 5, 1),
-                datetime(2023, 7, 1),
-                datetime(2023, 11, 1),
-                datetime(2023, 1, 1),
-                datetime(2025, 1, 1),
-                datetime(2025, 1, 2),
+                pytz.utc.localize(datetime(2015, 1, 1)),
+                pytz.utc.localize(datetime(2021, 1, 1)),
+                pytz.utc.localize(datetime(2015, 1, 1)),
+                pytz.utc.localize(datetime(2020, 1, 1)),
+                pytz.utc.localize(datetime(2020, 4, 1)),
+                pytz.utc.localize(datetime(2021, 1, 1)),
+                pytz.utc.localize(datetime(2021, 5, 1)),
+                pytz.utc.localize(datetime(2021, 6, 1)),
+                pytz.utc.localize(datetime(2021, 7, 1)),
+                pytz.utc.localize(datetime(2021, 8, 1)),
+                pytz.utc.localize(datetime(2022, 1, 1)),
+                pytz.utc.localize(datetime(2022, 2, 1)),
+                pytz.utc.localize(datetime(2022, 5, 1)),
+                pytz.utc.localize(datetime(2022, 11, 1)),
+                pytz.utc.localize(datetime(2022, 12, 31)),
+                pytz.utc.localize(datetime(2023, 1, 1)),
+                pytz.utc.localize(datetime(2023, 2, 15)),
+                pytz.utc.localize(datetime(2023, 5, 1)),
+                pytz.utc.localize(datetime(2023, 7, 1)),
+                pytz.utc.localize(datetime(2023, 11, 1)),
+                pytz.utc.localize(datetime(2023, 1, 1)),
+                pytz.utc.localize(datetime(2025, 1, 1)),
+                pytz.utc.localize(datetime(2025, 1, 2)),
             ],
             "infractions_natinf_codes": [
                 [],
@@ -336,7 +337,7 @@ def control_statistics() -> pd.DataFrame:
 
 @pytest.fixture
 def loaded_control_anteriority() -> pd.DataFrame:
-    now = datetime.utcnow()
+    now = pytz.utc.localize(datetime.utcnow())
 
     return pd.DataFrame(
         {
@@ -394,7 +395,7 @@ def loaded_control_anteriority() -> pd.DataFrame:
 
 def test_extract_last_5_years_controls(reset_test_data, last_years_controls):
 
-    now = datetime.utcnow()
+    now = pytz.utc.localize(datetime.utcnow())
     five_years = timedelta(days=5 * 366)
 
     controls = extract_last_years_controls.run(years=5)

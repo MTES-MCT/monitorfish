@@ -8,6 +8,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
+import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
@@ -27,7 +28,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         val controls = jpaMissionActionsRepository.findVesselMissionActionsAfterDateTime(1, dateTime)
 
         // Then
-        assertThat(controls).hasSize(5)
+        assertThat(controls).hasSize(6)
     }
 
     @Test
@@ -50,7 +51,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.logbookMatchesActivity).isEqualTo(ControlCheck.NO)
         assertThat(firstControl.speciesWeightControlled).isTrue
         assertThat(firstControl.speciesSizeControlled).isTrue
-        assertThat(firstControl.separateStowageOfPreservedSpecies).isTrue
+        assertThat(firstControl.separateStowageOfPreservedSpecies).isEqualTo(ControlCheck.YES)
         assertThat(firstControl.faoAreas).hasSize(2)
         assertThat(firstControl.faoAreas.first()).isEqualTo("27.7.d")
         assertThat(firstControl.faoAreas.last()).isEqualTo("27.7.e")
@@ -93,7 +94,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.longitude).isEqualTo(-0.52)
         assertThat(firstControl.latitude).isEqualTo(47.44)
         assertThat(firstControl.portLocode).isNull()
-        assertThat(firstControl.vesselTargeted).isFalse
+        assertThat(firstControl.vesselTargeted).isEqualTo(ControlCheck.NO)
         assertThat(firstControl.seizureAndDiversion).isTrue
         assertThat(firstControl.seizureAndDiversionComments).isEqualTo("Saisie de la pêche")
         assertThat(firstControl.otherComments).isEqualTo("Commentaires post contrôle")
@@ -129,7 +130,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `saveMissionActions Should save a new mission action`() {
         // Given
-        val dateTime = ZonedDateTime.now()
+        val dateTime = ZonedDateTime.now(ZoneId.of("UTC"))
         val newMission = getDummyMissionAction(dateTime)
 
         // When
@@ -164,14 +165,14 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findMissionActions Should filter vessel's controls around the date time`() {
+    fun `findByMissionId Should return actions of a given mission`() {
         // When
-        val actions = jpaMissionActionsRepository.findByMissionId(1)
+        val actions = jpaMissionActionsRepository.findByMissionId(6)
 
         // Then
-        assertThat(actions).hasSize(1)
-        assertThat(actions.first().actionType).isEqualTo(MissionActionType.SEA_CONTROL)
-        assertThat(actions.first().otherComments).isEqualTo("Commentaires post contrôle")
+        assertThat(actions).hasSize(2)
+        assertThat(actions.last().actionDatetimeUtc).isEqualTo(ZonedDateTime.parse("2021-02-10T12:11:18.884456Z"))
+        assertThat(actions.last().actionType).isEqualTo(MissionActionType.AIR_CONTROL)
     }
 
     @Test

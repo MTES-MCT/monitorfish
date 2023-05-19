@@ -1,4 +1,5 @@
 import { Accent, Button, Icon, IconButton, Size, Tag } from '@mtes-mct/monitor-ui'
+import { Fragment } from 'react'
 import styled from 'styled-components'
 
 import { margins } from './constants'
@@ -6,10 +7,10 @@ import { MissionStatusLabel } from './MissionStatusLabel'
 import { missionActions } from '../../../../domain/actions'
 import { getMissionSourceTagText } from '../../../../domain/entities/mission'
 import { Mission } from '../../../../domain/entities/mission/types'
-import { openSideWindowTab } from '../../../../domain/shared_slices/Global'
+import { SideWindowMenuKey } from '../../../../domain/entities/sideWindow/constants'
+import { sideWindowDispatchers } from '../../../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { pluralize } from '../../../../utils/pluralize'
-import { SideWindowMenuKey } from '../../../SideWindow/constants'
 import { OverlayPosition } from '../Overlay'
 
 import type { ControlUnit } from '../../../../domain/types/controlUnit'
@@ -23,8 +24,12 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
   const dispatch = useMainAppDispatch()
 
   const openMissionInSideWindow = () => {
-    dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))
-    dispatch(missionActions.setDraftId(mission.missionId))
+    dispatch(
+      sideWindowDispatchers.openPath({
+        id: mission.missionId,
+        menu: SideWindowMenuKey.MISSION_FORM
+      })
+    )
   }
 
   return (
@@ -43,14 +48,14 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
           <Title isSelected={isSelected}>
             {mission.controlUnits.length === 1 &&
               mission.controlUnits.map((controlUnit: ControlUnit.ControlUnit) => (
-                <>
+                <Fragment key={controlUnit.id}>
                   <TextWithEllipsis>{controlUnit.name.toUpperCase()}</TextWithEllipsis>
                   {controlUnit.contact ? (
                     <TextWithEllipsis>{controlUnit.contact}</TextWithEllipsis>
                   ) : (
                     <NoContact>Aucun contact renseigné</NoContact>
                   )}
-                </>
+                </Fragment>
               ))}
             {mission.controlUnits.length > 1 && mission.controlUnits[0] && (
               <>

@@ -17,8 +17,6 @@ export type MissionFormValues = Partial<
   // it is split as individual mission actions before being pushed to the API
   actions: MissionActionFormValues[]
   controlUnits: Array<ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft>
-  hasOrder?: boolean | undefined
-  isUnderJdp?: boolean | undefined
   missionTypes?: Mission.MissionType[]
   startDateTimeUtc: string
 }

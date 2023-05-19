@@ -1,4 +1,4 @@
-import { Accent, Icon, IconButton, MultiSelect, Select, TextInput } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, MultiSelect, Select, TextInput, useNewWindow } from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -7,7 +7,6 @@ import {
   mapControlUnitsToUniqueSortedNamesAsOptions,
   mapControlUnitToSortedResourcesAsOptions
 } from './utils'
-import { useNewWindow } from '../../../../../ui/NewWindow'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 import { isValidControlUnit } from '../../utils'
 
@@ -19,8 +18,8 @@ import type { Promisable } from 'type-fest'
 
 export type ControlUnitSelectProps = {
   allAdministrationsAsOptions: Option[]
+  allControlUnits: ControlUnit.ControlUnit[]
   allNamesAsOptions: Option[]
-  controlUnits: ControlUnit.ControlUnit[] | undefined
   index: number
   onChange: (index: number, nextControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft) => Promisable<void>
   onDelete: (index: number) => Promisable<void>
@@ -28,8 +27,8 @@ export type ControlUnitSelectProps = {
 }
 export function ControlUnitSelect({
   allAdministrationsAsOptions,
+  allControlUnits,
   allNamesAsOptions,
-  controlUnits,
   index,
   onChange,
   onDelete,
@@ -42,17 +41,19 @@ export function ControlUnitSelect({
     isValidControlUnit(value) ? value : undefined
   )
 
+  const isLoading = !allControlUnits.length
+
   const filteredNamesAsOptions = useMemo((): Option[] => {
-    if (!controlUnits || !controlledValue.administration) {
+    if (!allControlUnits || !controlledValue.administration) {
       return allNamesAsOptions
     }
 
-    const selectedAdministrationControlUnits = controlUnits.filter(
+    const selectedAdministrationControlUnits = allControlUnits.filter(
       ({ administration }) => administration === controlledValue.administration
     )
 
     return mapControlUnitsToUniqueSortedNamesAsOptions(selectedAdministrationControlUnits)
-  }, [allNamesAsOptions, controlledValue, controlUnits])
+  }, [allControlUnits, allNamesAsOptions, controlledValue])
 
   const selectedControlUnitResourcesAsOptions = useMemo(
     (): Option<ControlResource>[] =>
@@ -77,11 +78,11 @@ export function ControlUnitSelect({
 
   const handleNameChange = useCallback(
     (nextName: string | undefined) => {
-      if (!controlUnits) {
+      if (isLoading) {
         return
       }
 
-      const nextSelectedControlUnit = nextName ? findControlUnitByname(controlUnits, nextName) : undefined
+      const nextSelectedControlUnit = nextName ? findControlUnitByname(allControlUnits, nextName) : undefined
       const nextControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft = nextSelectedControlUnit
         ? {
             ...nextSelectedControlUnit,
@@ -98,7 +99,7 @@ export function ControlUnitSelect({
 
       onChange(index, nextControlUnit)
     },
-    [controlledValue, controlUnits, index, onChange]
+    [allControlUnits, controlledValue, index, isLoading, onChange]
   )
 
   const handleResourcesChange = useCallback(
@@ -139,29 +140,27 @@ export function ControlUnitSelect({
       <UnitWrapper>
         <Select
           baseContainer={newWindowContainerRef.current}
-          disabled={!controlUnits}
+          disabled={isLoading}
           label={`Administration ${index + 1}`}
           name={`administration_${index}`}
           onChange={handleAdministrationChange}
           options={allAdministrationsAsOptions}
           searchable
           value={controlledValue.administration}
-          virtualized
         />
         <Select
           baseContainer={newWindowContainerRef.current}
-          disabled={!controlUnits}
+          disabled={isLoading}
           label={`Unité ${index + 1}`}
           name={`unit_${index}`}
           onChange={handleNameChange}
           options={filteredNamesAsOptions}
           searchable
           value={controlledValue.name}
-          virtualized
         />
         <MultiSelect
           baseContainer={newWindowContainerRef.current}
-          disabled={!controlUnits || !controlledValue.administration || !controlledValue.name}
+          disabled={isLoading || !controlledValue.administration || !controlledValue.name}
           isUndefinedWhenDisabled
           label={`Moyen ${index + 1}`}
           name={`resources_${index}`}
@@ -171,7 +170,7 @@ export function ControlUnitSelect({
           value={controlledValue.resources}
         />
         <TextInput
-          disabled={!controlUnits || !controlledValue.name}
+          disabled={isLoading || !controlledValue.name}
           label={`Contact de l’unité ${index + 1}`}
           name={`contact_${index}`}
           onChange={handleContactChange}

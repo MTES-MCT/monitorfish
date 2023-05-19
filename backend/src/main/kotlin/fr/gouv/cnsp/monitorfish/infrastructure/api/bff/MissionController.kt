@@ -34,9 +34,9 @@ class MissionController(
         @RequestParam(name = "startedBeforeDateTime", required = false)
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         startedBeforeDateTime: ZonedDateTime?,
-        @Parameter(description = "Natures de mission")
-        @RequestParam(name = "missionNature", required = false)
-        missionNatures: List<String>?,
+        @Parameter(description = "Origin")
+        @RequestParam(name = "missionSource", required = false)
+        missionSources: List<String>?,
         @Parameter(description = "Types de mission")
         @RequestParam(name = "missionTypes", required = false)
         missionTypes: List<String>?,
@@ -50,7 +50,7 @@ class MissionController(
         val missionsAndActions = getAllMissions.execute(
             startedAfterDateTime = startedAfterDateTime,
             startedBeforeDateTime = startedBeforeDateTime,
-            missionNatures = missionNatures,
+            missionSources = missionSources,
             missionStatuses = missionStatuses,
             missionTypes = missionTypes,
             seaFronts = seaFronts,

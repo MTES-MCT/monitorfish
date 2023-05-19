@@ -7,7 +7,11 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { getEnvironmentVariable } from './utils'
 import { normalizeRtkBaseQuery } from '../utils/normalizeRtkBaseQuery'
 
+// Using local MonitorEnv stubs:
 const MONITORENV_API_URL = getEnvironmentVariable('REACT_APP_MONITORENV_URL')
+
+// Using local MonitorEnv instance:
+// const MONITORENV_API_URL = 'http://0.0.0.0:9880'
 
 // =============================================================================
 // Monitorenv API

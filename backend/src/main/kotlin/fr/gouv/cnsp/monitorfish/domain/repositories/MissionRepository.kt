@@ -13,7 +13,7 @@ interface MissionRepository {
         pageSize: Int?,
         startedAfterDateTime: ZonedDateTime?,
         startedBeforeDateTime: ZonedDateTime?,
-        missionNatures: List<String>?,
+        missionSources: List<String>?,
         missionTypes: List<String>?,
         missionStatuses: List<String>?,
         seaFronts: List<String>?,

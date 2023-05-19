@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "url": "/api/v1/missions/6"
+    "url": "/api/v1/missions/48"
   },
   "response": {
     "status": 200,
@@ -13,7 +13,6 @@
     "jsonBody": {
       "id": 48,
       "missionTypes": ["LAND"],
-      "missionNature": ["ENV", "FISH"],
       "controlUnits": [
         {
           "id": 10012,
@@ -34,7 +33,8 @@
       "endDateTimeUtc": null,
       "envActions": [],
       "missionSource": "MONITORENV",
-      "isClosed": false
+      "isClosed": false,
+      "isUnderJdp": false
     }
   }
 }

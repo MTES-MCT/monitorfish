@@ -1,10 +1,11 @@
-import { customDayjs, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
 import { Feature } from 'ol'
 import { GeoJSON } from 'ol/format'
 import Point from 'ol/geom/Point'
 import { transform } from 'ol/proj'
 
 import { Mission } from './types'
+import { getMissionStatus } from './utils'
 import { getMissionColor } from '../../../features/map/layers/Mission/MissionLayer/styles'
 import { getMissionActionInfractionsFromMissionActionFromFormValues } from '../../../features/SideWindow/MissionForm/ActionList/utils'
 import { booleanToInt, getDate, getDateTime } from '../../../utils'
@@ -14,7 +15,7 @@ import { MonitorFishLayer } from '../layers/types'
 import { OpenLayersGeometryType } from '../map/constants'
 
 import type { MissionWithActions } from './types'
-import type { MissionFormValues } from '../../../features/SideWindow/MissionForm/types'
+import type { MissionFormValues, MissionActionFormValues } from '../../../features/SideWindow/MissionForm/types'
 import type { MultiPolygon } from 'ol/geom'
 
 import MissionStatus = Mission.MissionStatus
@@ -77,7 +78,11 @@ export type MissionFormValuesWithId = MissionFormValues & {
   id: number
 }
 
-export const getMissionFeatureZoneFromDraft = (mission: MissionFormValuesWithId): Feature => {
+export type MissionActionFormValuesWithMissionId = MissionActionFormValues & {
+  missionId: number
+}
+
+export const getMissionFeatureZone = (mission: Mission.Mission | MissionFormValuesWithId): Feature => {
   const geoJSON = new GeoJSON()
   const geometry = geoJSON.readGeometry(mission.geom, {
     dataProjection: WSG84_PROJECTION,
@@ -99,29 +104,14 @@ export const getMissionFeatureZoneFromDraft = (mission: MissionFormValuesWithId)
   return feature
 }
 
-export const getMissionFeatureZone = (mission: Mission.Mission): Feature => {
-  const geoJSON = new GeoJSON()
-  const geometry = geoJSON.readGeometry(mission.geom, {
-    dataProjection: WSG84_PROJECTION,
-    featureProjection: OPENLAYERS_PROJECTION
-  })
+export const getMissionActionFeatures = (mission: MissionFormValuesWithId): Feature[] =>
+  mission.actions
+    .map(action => getMissionActionFeature({ ...action, missionId: mission.id }))
+    .filter((action): action is Feature => !!action)
 
-  const missionStatus = getMissionStatus(mission)
-  const feature = new Feature({
-    controlUnits: mission.controlUnits,
-    endDateTimeUtc: mission.endDateTimeUtc,
-    geometry,
-    missionId: mission.id,
-    missionStatus,
-    missionTypes: mission.missionTypes,
-    startDateTimeUtc: mission.startDateTimeUtc
-  })
-  feature.setId(`${MonitorFishLayer.MISSION_HOVER}:${mission.id}`)
-
-  return feature
-}
-
-export const getMissionActionFeature = (action: MissionAction.MissionAction): Feature | undefined => {
+export const getMissionActionFeature = (
+  action: MissionAction.MissionAction | MissionActionFormValuesWithMissionId
+): Feature | undefined => {
   if (!action.longitude || !action.latitude) {
     return undefined
   }
@@ -129,8 +119,8 @@ export const getMissionActionFeature = (action: MissionAction.MissionAction): Fe
   const coordinates = transform([action.longitude, action.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
   const numberOfInfractions = getNumberOfInfractions(action)
   const numberOfInfractionsWithRecords = getNumberOfInfractionsWithRecord(action)
-  const hasSpeciesSeized = action.speciesInfractions.find(infraction => infraction.speciesSeized)
-  const hasGearSeized = action.gearInfractions.find(infraction => infraction.gearSeized)
+  const hasSpeciesSeized = action.speciesInfractions?.find(infraction => infraction.speciesSeized)
+  const hasGearSeized = action.gearInfractions?.find(infraction => infraction.gearSeized)
   const infractions = getMissionActionInfractionsFromMissionActionFromFormValues(action)
   const infractionsNatinfs = infractions.map(({ natinf }) => natinf)
 
@@ -150,35 +140,6 @@ export const getMissionActionFeature = (action: MissionAction.MissionAction): Fe
   feature.setId(`${MonitorFishLayer.MISSION_ACTION_SELECTED}:${action.id}`)
 
   return feature
-}
-
-export const getMissionStatus = ({
-  endDateTimeUtc,
-  isClosed,
-  startDateTimeUtc
-}: {
-  endDateTimeUtc?: string
-  isClosed?: Boolean
-  startDateTimeUtc?: string
-}): Mission.MissionStatus | undefined => {
-  if (isClosed) {
-    return Mission.MissionStatus.CLOSED
-  }
-
-  if (!startDateTimeUtc) {
-    return undefined
-  }
-
-  const now = customDayjs()
-  if (customDayjs(startDateTimeUtc).isAfter(now)) {
-    return Mission.MissionStatus.UPCOMING
-  }
-
-  if (endDateTimeUtc && customDayjs(endDateTimeUtc).isBefore(now)) {
-    return Mission.MissionStatus.DONE
-  }
-
-  return MissionStatus.IN_PROGRESS
 }
 
 export function getMissionSourceTagText(missionSource: MissionSource | undefined) {

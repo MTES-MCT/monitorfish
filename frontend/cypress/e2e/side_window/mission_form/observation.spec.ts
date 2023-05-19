@@ -74,7 +74,7 @@ context('Side Window > Mission Form > Observation', () => {
         userTrigram: 'Marlin',
         vesselId: null,
         vesselName: null,
-        vesselTargeted: false
+        vesselTargeted: 'NO'
       })
       assert.isString(interception.request.body.actionDatetimeUtc)
 

@@ -4,7 +4,7 @@ export type RiskFactor = {
   controlPriorityLevel: number
   controlRateRiskFactor: number
   detectabilityRiskFactor: number
-  gearOnboard: DeclaredLogbookGear[]
+  gearOnboard: DeclaredLogbookGear[] | undefined
   impactRiskFactor: number
   lastControlDatetime: string
   numberControlsLastFiveYears: number
@@ -18,5 +18,5 @@ export type RiskFactor = {
   segmentHighestImpact: string
   segmentHighestPriority: string
   segments: string[]
-  speciesOnboard: DeclaredLogbookSpecies[]
+  speciesOnboard: DeclaredLogbookSpecies[] | undefined
 }

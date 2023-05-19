@@ -12,7 +12,6 @@ import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import type { WebGLPointsLayerWithName } from '../../../../../domain/types/layer'
 import type { Feature } from 'ol'
 import type { Point } from 'ol/geom'
-import type { MutableRefObject } from 'react'
 
 export type MissionLayerProps = {
   map?: any
@@ -21,8 +20,8 @@ function UnmemoizedMissionLayer({ map }: MissionLayerProps) {
   const dispatch = useMainAppDispatch()
   const { missions } = useGetFilteredMissionsQuery()
 
-  const vectorSourceRef = useRef() as MutableRefObject<VectorSource<Point>>
-  const layerRef = useRef() as MutableRefObject<WebGLPointsLayerWithName>
+  const vectorSourceRef = useRef<VectorSource<Point>>()
+  const layerRef = useRef<WebGLPointsLayerWithName>()
 
   function getVectorSource() {
     if (!vectorSourceRef.current) {
@@ -71,6 +70,7 @@ function UnmemoizedMissionLayer({ map }: MissionLayerProps) {
 
     return () => {
       map.removeLayer(getLayer())
+      getLayer().dispose()
     }
   }, [getLayer, map])
 

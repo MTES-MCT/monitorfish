@@ -2,6 +2,8 @@ import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import { MissionAction } from '../types/missionAction'
 
+import type { MissionActionFormValues } from '../../features/SideWindow/MissionForm/types'
+
 import InfractionType = MissionAction.InfractionType
 
 export const INITIAL_LAST_CONTROLS: MissionAction.LastControls = {
@@ -72,23 +74,27 @@ export const getYearsToActions = (
 /**
  * Get the number of infractions in a control - Take care of infractions without NATINF
  */
-export const getNumberOfInfractions = (control: MissionAction.MissionAction | undefined): number => {
+export const getNumberOfInfractions = (
+  control: MissionAction.MissionAction | MissionActionFormValues | undefined
+): number => {
   if (!control) {
     return 0
   }
 
   return (
-    control.gearInfractions.length +
-    control.logbookInfractions.length +
-    control.speciesInfractions.length +
-    control.otherInfractions.length
+    (control.gearInfractions?.length || 0) +
+    (control.logbookInfractions?.length || 0) +
+    (control.speciesInfractions?.length || 0) +
+    (control.otherInfractions?.length || 0)
   )
 }
 
 /**
  * Get the number of infractions with records in a control
  */
-export const getNumberOfInfractionsWithRecord = (control: MissionAction.MissionAction | undefined): number => {
+export const getNumberOfInfractionsWithRecord = (
+  control: MissionAction.MissionAction | MissionActionFormValues | undefined
+): number => {
   if (!control) {
     return 0
   }
@@ -96,10 +102,10 @@ export const getNumberOfInfractionsWithRecord = (control: MissionAction.MissionA
   const infractionWithRecordFilter = infraction => infraction.infractionType === InfractionType.WITH_RECORD
 
   return (
-    control.gearInfractions.filter(infractionWithRecordFilter).length +
-    control.logbookInfractions.filter(infractionWithRecordFilter).length +
-    control.speciesInfractions.filter(infractionWithRecordFilter).length +
-    control.otherInfractions.filter(infractionWithRecordFilter).length
+    (control.gearInfractions?.filter(infractionWithRecordFilter).length || 0) +
+    (control.logbookInfractions?.filter(infractionWithRecordFilter).length || 0) +
+    (control.speciesInfractions?.filter(infractionWithRecordFilter).length || 0) +
+    (control.otherInfractions?.filter(infractionWithRecordFilter).length || 0)
   )
 }
 

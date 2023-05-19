@@ -10,7 +10,7 @@ import { convertToGeoJSONGeometryObject } from '../../../../../domain/entities/l
 import { InteractionListener, OpenLayersGeometryType } from '../../../../../domain/entities/map/constants'
 import { fitToExtent } from '../../../../../domain/shared_slices/Map'
 import { getCoordinatesExtent } from '../../../../../domain/use_cases/map/getCoordinatesExtent'
-import { addControlCoordinates } from '../../../../../domain/use_cases/missions/addControlCoordinates'
+import { addControlCoordinates } from '../../../../../domain/use_cases/mission/addControlCoordinates'
 import { useListenForDrawedGeometry } from '../../../../../hooks/useListenForDrawing'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'

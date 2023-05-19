@@ -1,3 +1,5 @@
+import { useKey, usePrevious } from '@mtes-mct/monitor-ui'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { AirControlForm } from './AirControlForm'
@@ -5,38 +7,63 @@ import { AirSurveillanceForm } from './AirSurveillanceForm'
 import { LandControlForm } from './LandControlForm'
 import { ObservationForm } from './ObservationForm'
 import { SeaControlForm } from './SeaControlForm'
+import { getInitialMissionActionFormValues } from './utils'
 import { MissionAction } from '../../../../domain/types/missionAction'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FrontendErrorBoundary } from '../../../../ui/FrontendErrorBoundary'
 
 import type { MissionActionFormValues } from '../types'
-import type { Promisable } from 'type-fest'
 
-export type ActionFormProps = {
-  initialValues: MissionActionFormValues | undefined
-  onChange: (nextValues: MissionActionFormValues) => Promisable<void>
-}
-export function ActionForm({ initialValues, onChange }: ActionFormProps) {
-  if (!initialValues) {
+export function ActionForm() {
+  const { mission } = useMainAppSelector(store => store)
+
+  const previousEditedDraftActionLength = usePrevious(mission.draft?.actions.length || 0)
+  const previousEditedDraftActionIndex = usePrevious(mission.editedDraftActionIndex)
+
+  const [initialMissionActionFormValues, setInitialMissionActionFormValues] = useState<
+    MissionActionFormValues | undefined
+  >(undefined)
+
+  const key = useKey([mission.draft?.actions.length, mission.editedDraftActionIndex])
+
+  useEffect(() => {
+    if (
+      !mission.draft ||
+      (mission.editedDraftActionIndex === previousEditedDraftActionIndex &&
+        mission.draft.actions.length === previousEditedDraftActionLength)
+    ) {
+      return
+    }
+
+    const nextInitialMissionActionFormValues = getInitialMissionActionFormValues(
+      mission.draft.actions,
+      mission.editedDraftActionIndex
+    )
+
+    setInitialMissionActionFormValues(nextInitialMissionActionFormValues)
+  }, [mission.draft, mission.editedDraftActionIndex, previousEditedDraftActionIndex, previousEditedDraftActionLength])
+
+  if (mission.editedDraftActionIndex === undefined || !initialMissionActionFormValues) {
     return <Wrapper />
   }
 
   return (
-    <Wrapper>
+    <Wrapper key={key}>
       <FrontendErrorBoundary>
-        {initialValues.actionType === MissionAction.MissionActionType.AIR_CONTROL && (
-          <AirControlForm initialValues={initialValues} onChange={onChange} />
+        {initialMissionActionFormValues.actionType === MissionAction.MissionActionType.AIR_CONTROL && (
+          <AirControlForm index={mission.editedDraftActionIndex} initialValues={initialMissionActionFormValues} />
         )}
-        {initialValues.actionType === MissionAction.MissionActionType.AIR_SURVEILLANCE && (
-          <AirSurveillanceForm initialValues={initialValues} onChange={onChange} />
+        {initialMissionActionFormValues.actionType === MissionAction.MissionActionType.AIR_SURVEILLANCE && (
+          <AirSurveillanceForm index={mission.editedDraftActionIndex} initialValues={initialMissionActionFormValues} />
         )}
-        {initialValues.actionType === MissionAction.MissionActionType.LAND_CONTROL && (
-          <LandControlForm initialValues={initialValues} onChange={onChange} />
+        {initialMissionActionFormValues.actionType === MissionAction.MissionActionType.LAND_CONTROL && (
+          <LandControlForm index={mission.editedDraftActionIndex} initialValues={initialMissionActionFormValues} />
         )}
-        {initialValues.actionType === MissionAction.MissionActionType.OBSERVATION && (
-          <ObservationForm initialValues={initialValues} onChange={onChange} />
+        {initialMissionActionFormValues.actionType === MissionAction.MissionActionType.OBSERVATION && (
+          <ObservationForm index={mission.editedDraftActionIndex} initialValues={initialMissionActionFormValues} />
         )}
-        {initialValues.actionType === MissionAction.MissionActionType.SEA_CONTROL && (
-          <SeaControlForm initialValues={initialValues} onChange={onChange} />
+        {initialMissionActionFormValues.actionType === MissionAction.MissionActionType.SEA_CONTROL && (
+          <SeaControlForm index={mission.editedDraftActionIndex} initialValues={initialMissionActionFormValues} />
         )}
       </FrontendErrorBoundary>
     </Wrapper>

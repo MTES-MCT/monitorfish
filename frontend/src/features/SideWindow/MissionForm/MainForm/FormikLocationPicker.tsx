@@ -1,12 +1,11 @@
-import { Accent, Button, Fieldset, Icon, IconButton, Label, Select, type Option } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Fieldset, Icon, IconButton, Label } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { boundingExtent } from 'ol/extent'
 import { transformExtent } from 'ol/proj'
 import { remove } from 'ramda'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { useGetPortsQuery } from '../../../../api/port'
 import {
   InteractionListener,
   OPENLAYERS_PROJECTION,
@@ -14,37 +13,18 @@ import {
   WSG84_PROJECTION
 } from '../../../../domain/entities/map/constants'
 import { fitToExtent } from '../../../../domain/shared_slices/Map'
-import { addMissionZone } from '../../../../domain/use_cases/missions/addMissionZone'
+import { addMissionZone } from '../../../../domain/use_cases/mission/addMissionZone'
 import { useListenForDrawedGeometry } from '../../../../hooks/useListenForDrawing'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { FrontendError } from '../../../../libs/FrontendError'
-import { useNewWindow } from '../../../../ui/NewWindow'
 
-import type { Port } from '../../../../domain/types/port'
 import type { MissionFormValues } from '../types'
 import type { Coordinate } from 'ol/coordinate'
 
 export function FormikLocationPicker() {
   const { setFieldValue, values } = useFormikContext<MissionFormValues>()
 
-  const { newWindowContainerRef } = useNewWindow()
-
-  const [selectedDummyPort, setSelectedDummyPort] = useState<Port.Port | undefined>(undefined)
-
-  const getPortsApiQuery = useGetPortsQuery()
   const { geometry } = useListenForDrawedGeometry(InteractionListener.MISSION_ZONE)
   const dispatch = useMainAppDispatch()
-
-  const portsAsOptions: Option[] = useMemo(() => {
-    if (!getPortsApiQuery.data) {
-      return []
-    }
-
-    return getPortsApiQuery.data.map(({ locode, name }) => ({
-      label: `${name} (${locode})`,
-      value: locode
-    }))
-  }, [getPortsApiQuery.data])
 
   const polygons = useMemo(() => {
     if (!values.geom) {
@@ -81,42 +61,13 @@ export function FormikLocationPicker() {
       }
 
       const extent = transformExtent(boundingExtent(firstRing), WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+      if (!extent) {
+        return
+      }
 
       dispatch(fitToExtent(extent))
     },
     [dispatch]
-  )
-
-  const handlePortChange = useCallback(
-    (nextPortLocode: string | undefined) => {
-      if (!getPortsApiQuery.data) {
-        return
-      }
-
-      if (!nextPortLocode) {
-        // setFieldValue('portLocode', undefined)
-        // setFieldValue('portName', undefined)
-
-        setSelectedDummyPort(undefined)
-
-        return
-      }
-
-      const port = getPortsApiQuery.data.find(({ locode }) => locode === nextPortLocode)
-      if (!port) {
-        throw new FrontendError('`port` is undefined')
-      }
-
-      // TODO We'll have to replace that with the port geometry.
-      setFieldValue('geom', undefined)
-      // setFieldValue('portLocode', port.locode)
-      // setFieldValue('portLocode', port.locode)
-
-      setSelectedDummyPort(port)
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [getPortsApiQuery.data]
   )
 
   useEffect(
@@ -135,7 +86,7 @@ export function FormikLocationPicker() {
       <Label>Localisations</Label>
 
       <div>
-        <Button accent={Accent.SECONDARY} disabled={!!selectedDummyPort} Icon={Icon.Plus} isFullWidth onClick={addZone}>
+        <Button accent={Accent.SECONDARY} Icon={Icon.Plus} isFullWidth onClick={addZone}>
           Ajouter une zone de mission
         </Button>
 
@@ -163,23 +114,6 @@ export function FormikLocationPicker() {
             </Row>
           ))}
         </>
-      </div>
-
-      <div>
-        <StyledSelect
-          baseContainer={newWindowContainerRef.current}
-          isLabelHidden
-          isLight
-          label="Lieu du contrôle"
-          name="port"
-          onChange={handlePortChange}
-          options={portsAsOptions}
-          placeholder="ou sélectionnez un port"
-          searchable
-          // value={values.portLocode}
-          value={selectedDummyPort?.locode}
-          virtualized
-        />
       </div>
     </Fieldset>
   )
@@ -215,8 +149,4 @@ const Link = styled.a`
     line-height: 1;
     margin: -2px 0 0 8px;
   }
-`
-
-const StyledSelect = styled(Select<string>)`
-  margin-top: 12px;
 `

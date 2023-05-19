@@ -5,7 +5,11 @@ import type { Mission, MissionWithActions } from '../domain/entities/mission/typ
 export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
   endpoints: builder => ({
     createMission: builder.mutation<Pick<Mission.Mission, 'id'>, Mission.MissionData>({
-      invalidatesTags: [{ type: 'Missions' }],
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        await queryFulfilled
+
+        dispatch(monitorfishApi.util.invalidateTags([{ type: 'Missions' }]))
+      },
       query: mission => ({
         body: mission,
         method: 'POST',
@@ -14,7 +18,11 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
     }),
 
     deleteMission: builder.mutation<void, Mission.Mission['id']>({
-      invalidatesTags: [{ type: 'Missions' }],
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        await queryFulfilled
+
+        dispatch(monitorfishApi.util.invalidateTags([{ type: 'Missions' }]))
+      },
       query: id => ({
         method: 'DELETE',
         url: `/missions/${id}`
@@ -22,6 +30,7 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
     }),
 
     getMission: builder.query<Mission.Mission, Mission.Mission['id']>({
+      providesTags: [{ type: 'Missions' }],
       query: id => `missions/${id}`
     }),
 
@@ -56,6 +65,13 @@ const getMissionTypesFilter = missionTypes =>
   missionTypes?.length > 0 && `missionTypes=${encodeURIComponent(missionTypes)}`
 const getSeaFrontsFilter = seaFronts => seaFronts?.length > 0 && `seaFronts=${encodeURIComponent(seaFronts)}`
 
+enum MonitorenvStatusMapping {
+  CLOSED = 'CLOSED',
+  DONE = 'ENDED',
+  IN_PROGRESS = 'PENDING',
+  UPCOMING = 'UPCOMING'
+}
+
 export const monitorfishMissionApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
     getMissions: builder.query<MissionWithActions[], GetMissionsFilter | void>({
@@ -66,7 +82,7 @@ export const monitorfishMissionApi = monitorfishApi.injectEndpoints({
           getStartDateFilter(filter.startedAfterDateTime),
           getEndDateFilter(filter.startedBeforeDateTime),
           getMissionSourceFilter(filter.missionSource),
-          getMissionStatusFilter(filter.missionStatus),
+          getMissionStatusFilter(filter.missionStatus?.map(status => MonitorenvStatusMapping[status])),
           getMissionTypesFilter(filter.missionTypes),
           getSeaFrontsFilter(filter.seaFronts)
         ]

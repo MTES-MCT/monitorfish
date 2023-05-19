@@ -65,8 +65,8 @@ import styled from 'styled-components'
  * - `mini-default.min.css`:
  *
  * ```css
- * .rs-picker-check-menu {
- *   width: 280px;
+ * h1, h2, h3, h4, h5, h6 {
+ *   margin: calc(1.5 * var(--universal-margin)) var(--universal-margin);
  * }
  * ```
  */
@@ -91,6 +91,15 @@ export const NoRsuiteOverrideWrapper = styled.div`
     color: inherit;
     margin: 0;
     padding: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
   }
 
   legend {

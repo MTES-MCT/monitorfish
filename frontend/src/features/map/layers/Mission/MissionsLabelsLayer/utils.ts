@@ -4,7 +4,7 @@ import { drawMovedLabelLine } from '../../../../../domain/entities/vessel/label'
 import type { ControlUnit } from '../../../../../domain/types/controlUnit'
 
 const NOT_FOUND = -1
-const MAX_MISSIONS_LABELS_DISPLAYED = 100
+const MAX_MISSIONS_LABELS_DISPLAYED = 13
 
 export function getFeaturesAndLabels(featureIdToCoordinates, feature, labelLineFeatureId) {
   const controlUnits = feature.get('controlUnits') as ControlUnit.ControlUnit[]
@@ -21,13 +21,13 @@ export function getFeaturesAndLabels(featureIdToCoordinates, feature, labelLineF
 }
 
 export function getLabelsOfFeaturesInExtent(
-  isAdmin,
+  isHidden,
   vectorSource,
   missionsLayerSource,
   extent,
   featureIdToCoordinates
 ) {
-  if (!isAdmin) {
+  if (isHidden) {
     return []
   }
 

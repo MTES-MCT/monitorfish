@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { fleetSegmentApi } from './fleetSegment'
+import { SideWindowStatus } from '../domain/entities/sideWindow/constants'
 import { VesselSidebarTab } from '../domain/entities/vessel/vessel'
 import { setIsUpdatingVessels } from '../domain/shared_slices/Global'
 import { getOperationalAlerts } from '../domain/use_cases/alert/getOperationalAlerts'
@@ -12,7 +13,7 @@ import getAllGearCodes from '../domain/use_cases/gearCode/getAllGearCodes'
 import getHealthcheck from '../domain/use_cases/healthcheck/getHealthcheck'
 import getFishingInfractions from '../domain/use_cases/infraction/getFishingInfractions'
 import getAllRegulatoryLayers from '../domain/use_cases/layer/regulation/getAllRegulatoryLayers'
-import { getVesselControls } from '../domain/use_cases/missions/getVesselControls'
+import { getVesselControls } from '../domain/use_cases/mission/getVesselControls'
 import { getAllCurrentReportings } from '../domain/use_cases/reporting/getAllCurrentReportings'
 import getAllSpecies from '../domain/use_cases/species/getAllSpecies'
 import getVesselReportings from '../domain/use_cases/vessel/getVesselReportings'
@@ -29,7 +30,8 @@ export const THIRTY_SECONDS = 30 * 1000
 export function APIWorker() {
   const dispatch = useMainAppDispatch()
   const { selectedVesselIdentity, vesselSidebarTab } = useMainAppSelector(state => state.vessel)
-  const { isAdmin, openedSideWindowTab } = useMainAppSelector(state => state.global)
+  const { isAdmin } = useMainAppSelector(state => state.global)
+  const { sideWindow } = useMainAppSelector(state => state)
   const { openedBeaconMalfunctionInKanban, vesselBeaconMalfunctionsResumeAndHistory } = useMainAppSelector(
     state => state.beaconMalfunction
   )
@@ -75,7 +77,7 @@ export function APIWorker() {
   }, [dispatch, isAdmin])
 
   useEffect(() => {
-    if (isAdmin && openedSideWindowTab) {
+    if (isAdmin && sideWindow.status !== SideWindowStatus.CLOSED) {
       if (sideWindowInterval?.current) {
         clearInterval(sideWindowInterval.current)
       }
@@ -91,10 +93,10 @@ export function APIWorker() {
     return () => {
       clearInterval(sideWindowInterval?.current)
     }
-  }, [dispatch, isAdmin, openedSideWindowTab])
+  }, [dispatch, isAdmin, sideWindow.status])
 
   useEffect(() => {
-    if (isAdmin && openedSideWindowTab && openedBeaconMalfunctionInKanban) {
+    if (isAdmin && sideWindow.status !== SideWindowStatus.CLOSED && openedBeaconMalfunctionInKanban) {
       if (beaconMalfunctionInKanbanInterval?.current) {
         clearInterval(beaconMalfunctionInKanbanInterval.current)
       }
@@ -107,7 +109,7 @@ export function APIWorker() {
     return () => {
       clearInterval(beaconMalfunctionInKanbanInterval?.current)
     }
-  }, [dispatch, isAdmin, openedSideWindowTab, openedBeaconMalfunctionInKanban])
+  }, [dispatch, isAdmin, openedBeaconMalfunctionInKanban, sideWindow.status])
 
   useEffect(() => {
     if (isAdmin && vesselBeaconMalfunctionsResumeAndHistory) {

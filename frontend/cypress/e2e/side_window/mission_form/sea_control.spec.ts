@@ -11,8 +11,11 @@ context('Side Window > Mission Form > Sea Control', () => {
   })
 
   it('Should fill the form and send the expected data to the API', () => {
+    const getSaveButton = () => cy.get('button').contains('Enregistrer').parent()
     // -------------------------------------------------------------------------
     // Form
+
+    getSaveButton().should('be.disabled')
 
     cy.get('input[placeholder="Rechercher un navire..."]').type('malot')
     cy.contains('mark', 'MALOT').click()
@@ -38,6 +41,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Ajouter un engin', 'MIS')
     cy.fill('Engin contrôlé', 'Oui')
     // TODO Fix these fields which makes the test and Cypress hangs
+    // TODO Theses three fields makes the test to be broken
     // cy.fill('Maillage déclaré', '10')
     // cy.fill('Maillage mesuré', '20')
     // cy.fill('MIS : autres mesures et dispositifs', 'Autres mesures.')
@@ -47,6 +51,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Taille des espèces vérifiées', 'Non')
     cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
     cy.fill('Ajouter une espèce', 'COD')
+    // TODO Theses two fields makes the test to be broken
     // cy.fill('Qté déclarée', 10)
     // cy.fill('Qté estimée', 20)
     cy.fill('Sous-taille', true)
@@ -144,7 +149,7 @@ context('Side Window > Mission Form > Sea Control', () => {
         segments: [],
         seizureAndDiversion: true,
         seizureAndDiversionComments: null,
-        separateStowageOfPreservedSpecies: true,
+        separateStowageOfPreservedSpecies: 'YES',
         speciesInfractions: [
           {
             comments: 'Une observation sur l’infraction espèce.',
@@ -163,7 +168,7 @@ context('Side Window > Mission Form > Sea Control', () => {
         userTrigram: 'Marlin',
         vesselId: 2,
         vesselName: 'MALOTRU',
-        vesselTargeted: true
+        vesselTargeted: 'YES'
       })
       assert.isString(interception.request.body.actionDatetimeUtc)
 
@@ -172,9 +177,11 @@ context('Side Window > Mission Form > Sea Control', () => {
   })
 
   it('Should fill the form for a vessel with logbook and prefill the gears, species, fao areas and segments fields', () => {
+    const getSaveButton = () => cy.get('button').contains('Enregistrer').parent()
     // -------------------------------------------------------------------------
     // Form
 
+    getSaveButton().should('be.disabled')
     cy.get('input[placeholder="Rechercher un navire..."]').type('pheno')
     cy.contains('mark', 'PHENO').click()
 
@@ -182,6 +189,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.fill('Saisi par', 'Gaumont')
     cy.wait(500)
+    getSaveButton().should('not.be.disabled')
 
     // -------------------------------------------------------------------------
     // Request
@@ -254,7 +262,7 @@ context('Side Window > Mission Form > Sea Control', () => {
         userTrigram: 'Gaumont',
         vesselId: 1,
         vesselName: 'PHENOMENE',
-        vesselTargeted: false
+        vesselTargeted: 'NO'
       })
       assert.isString(interception.request.body.actionDatetimeUtc)
 

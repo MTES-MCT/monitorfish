@@ -14,7 +14,6 @@
     "jsonBody": {
       "id": 2,
       "missionTypes": "SEA",
-      "missionNature": ["FISH"],
       "controlUnits": [
         {
           "id": 10015,
@@ -34,7 +33,8 @@
       "endDateTimeUtc": "2023-01-23T02:49:25.923703Z",
       "envActions": [],
       "missionSource": "POSEIDON_CNSP",
-      "isClosed": false
+      "isClosed": false,
+      "isUnderJdp": false
     }
   }
 }

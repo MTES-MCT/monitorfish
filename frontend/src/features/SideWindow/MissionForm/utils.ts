@@ -1,17 +1,19 @@
-import { getUtcizedDayjs } from '@mtes-mct/monitor-ui'
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import { difference } from 'lodash'
 import { omit } from 'ramda'
 
 import { INITIAL_MISSION_CONTROL_UNIT, MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
 import { Mission } from '../../../domain/entities/mission/types'
+import { MissionAction } from '../../../domain/types/missionAction'
 import { FormError, FormErrorCode } from '../../../libs/FormError'
 import { FrontendError } from '../../../libs/FrontendError'
 import { validateRequiredFormValues } from '../../../utils/validateRequiredFormValues'
 
 import type { MissionActionFormValues, MissionFormValues } from './types'
 import type { ControlUnit } from '../../../domain/types/controlUnit'
-import type { MissionAction } from '../../../domain/types/missionAction'
 import type { Undefine } from '@mtes-mct/monitor-ui'
+
+import MissionActionType = MissionAction.MissionActionType
 
 /**
  *
@@ -85,7 +87,7 @@ export function getMissionFormInitialValues(
   missionActions: MissionAction.MissionAction[]
 ): MissionFormValues {
   if (!mission) {
-    const startDateTimeUtc = getUtcizedDayjs().startOf('minute').toISOString()
+    const startDateTimeUtc = customDayjs().startOf('minute').toISOString()
 
     return {
       actions: [],
@@ -133,6 +135,10 @@ export function isMissionFormValuesComplete(missionFormValues: MissionFormValues
 
     getMissionDataFromMissionFormValues(missionFormValues)
 
+    if (missionFormValues.actions?.length) {
+      missionFormValues.actions.forEach(action => getValidMissionActionData(action))
+    }
+
     return true
   } catch (_) {
     return false
@@ -153,19 +159,25 @@ export function isValidControlUnit(
 export function getValidMissionActionData(
   maybeValidMissionActionData: Omit<Undefine<MissionActionFormValues>, 'isDraft'>
 ): Omit<MissionAction.MissionActionData, 'missionId'> {
+  if (
+    maybeValidMissionActionData?.actionType === MissionActionType.AIR_CONTROL ||
+    maybeValidMissionActionData?.actionType === MissionActionType.LAND_CONTROL ||
+    maybeValidMissionActionData?.actionType === MissionActionType.SEA_CONTROL
+  ) {
+    const [validMissionActionData, formError] = validateRequiredFormValues(
+      ['actionDatetimeUtc', 'actionType', 'vesselId', 'vesselName'],
+      maybeValidMissionActionData
+    )
+
+    if (formError) {
+      throw formError
+    }
+
+    return validMissionActionData
+  }
+
   const [validMissionActionData, formError] = validateRequiredFormValues(
-    [
-      'actionDatetimeUtc',
-      'actionType',
-      'controlUnits',
-      'gearInfractions',
-      'gearOnboard',
-      'logbookInfractions',
-      'otherInfractions',
-      'segments',
-      'speciesInfractions',
-      'speciesOnboard'
-    ],
+    ['actionDatetimeUtc', 'actionType'],
     maybeValidMissionActionData
   )
 

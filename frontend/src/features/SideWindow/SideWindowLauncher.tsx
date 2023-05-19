@@ -1,39 +1,62 @@
-import { useEffect, useRef } from 'react'
+import { NewWindow } from '@mtes-mct/monitor-ui'
+import { useCallback, useEffect, useRef } from 'react'
 import { batch } from 'react-redux'
 import { StyleSheetManager } from 'styled-components'
 
 import { SideWindow } from '.'
+import { SideWindowStatus } from '../../domain/entities/sideWindow/constants'
 import { resetFocusOnPendingAlert } from '../../domain/shared_slices/Alert'
-import { closeSideWindow } from '../../domain/shared_slices/Global'
+import { sideWindowActions } from '../../domain/shared_slices/SideWindow'
 import { useForceUpdate } from '../../hooks/useForceUpdate'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
-import { LegacyNewWindow } from '../../ui/NewWindow/LegacyNewWindow'
+import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 import type { MutableRefObject } from 'react'
 
 export function SideWindowLauncher() {
-  const dispatch = useMainAppDispatch()
   const newWindowRef = useRef() as MutableRefObject<HTMLDivElement>
+
+  const { mission, sideWindow } = useMainAppSelector(store => store)
+  const dispatch = useMainAppDispatch()
   const { forceUpdate } = useForceUpdate()
-  useEffect(() => forceUpdate(), [forceUpdate])
+
+  const hasDraftInProgress = !!mission.draft
+
+  const handleChangeFocus = useCallback(
+    (isFocused: boolean) => {
+      const nextStatus = isFocused ? SideWindowStatus.FOCUSED : SideWindowStatus.BLURRED
+
+      dispatch(sideWindowActions.setStatus(nextStatus))
+    },
+    [dispatch]
+  )
+
+  const handleUnload = useCallback(() => {
+    batch(() => {
+      dispatch(sideWindowActions.close())
+      dispatch(resetFocusOnPendingAlert())
+    })
+  }, [dispatch])
+
+  useEffect(() => {
+    forceUpdate()
+  }, [forceUpdate])
 
   return (
     <StyleSheetManager target={newWindowRef.current}>
-      <LegacyNewWindow
+      <NewWindow
         closeOnUnmount
         copyStyles
-        features={{ height: '1200px', scrollbars: true, width: window.innerWidth }}
+        features={{ height: 1200, width: window.innerWidth }}
         name="MonitorFish"
-        onUnload={() => {
-          batch(() => {
-            dispatch(closeSideWindow())
-            dispatch(resetFocusOnPendingAlert())
-          })
-        }}
+        onChangeFocus={handleChangeFocus}
+        onUnload={handleUnload}
+        shouldHaveFocus={sideWindow.status === SideWindowStatus.FOCUSED}
+        showPrompt={hasDraftInProgress}
         title="MonitorFish"
       >
         <SideWindow ref={newWindowRef} isFromURL={false} />
-      </LegacyNewWindow>
+      </NewWindow>
     </StyleSheetManager>
   )
 }

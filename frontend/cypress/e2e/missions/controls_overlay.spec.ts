@@ -6,6 +6,10 @@ context('Controls overlay', () => {
     cy.visit('/#@-27112.04,6363415.43,10.02', stubSideWindowOptions)
     cy.wait('@missions')
     cy.wait(500)
+    cy.get('*[data-cy^="missions-map-button"]').click()
+    cy.get('*[data-cy^="missions-menu-box"]').should('be.visible')
+    cy.get('*[data-cy^="toggle-mission-layer"]').click()
+    cy.get('*[data-cy^="missions-map-button"]').click()
   })
 
   it('A control overlay Should be showed and closed', () => {

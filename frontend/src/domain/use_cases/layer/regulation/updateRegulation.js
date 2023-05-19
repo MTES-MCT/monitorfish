@@ -1,7 +1,4 @@
-import {
-  setProcessingRegulationSaved,
-  setProcessingRegulationDeleted
-} from '../../../../features/Backoffice/Regulation.slice'
+import { setProcessingRegulationSaved, setProcessingRegulationDeleted } from '../../../../features/Backoffice/slice'
 import { setError } from '../../../shared_slices/Global'
 import { REGULATION_ACTION_TYPE } from '../../../entities/regulation'
 import { sendRegulationTransaction } from '../../../../api/geoserver'

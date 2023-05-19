@@ -5,7 +5,8 @@ import {
   FormikMultiRadio,
   FormikSelect,
   FormikTextarea,
-  Icon
+  Icon,
+  useNewWindow
 } from '@mtes-mct/monitor-ui'
 import { Form, Formik, useField } from 'formik'
 import { remove as ramdaRemove, update } from 'ramda'
@@ -15,7 +16,6 @@ import styled from 'styled-components'
 import { Infraction } from './Infraction'
 import { useGetInfractionsQuery } from '../../../../../../api/infraction'
 import { FrontendError } from '../../../../../../libs/FrontendError'
-import { useNewWindow } from '../../../../../../ui/NewWindow'
 import { FieldsetGroup, FieldsetGroupSpinner } from '../../../shared/FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../../shared/FieldsetGroupSeparator'
 import { INFRACTION_TYPES_AS_OPTIONS, MissionActionInfractionSchema } from '../constants'

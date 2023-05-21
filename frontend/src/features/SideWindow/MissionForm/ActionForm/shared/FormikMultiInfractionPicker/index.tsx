@@ -143,7 +143,7 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
   }
 
   return (
-    <FieldsetGroup isLight legend={label}>
+    <Wrapper isLight legend={label}>
       {children}
 
       <Button accent={Accent.SECONDARY} disabled={isEditedIndexNew} Icon={Icon.Plus} isFullWidth onClick={add}>
@@ -218,9 +218,22 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
           <FormikTextarea {...generalObservationTextareaProps} />
         </>
       )}
-    </FieldsetGroup>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled(FieldsetGroup)`
+  > div {
+    > .Element-Field,
+    > .Element-Fieldset:not(:first-child) {
+      margin-top: 16px;
+    }
+
+    > .Field-Select {
+      margin-bottom: 8px;
+    }
+  }
+`
 
 const Row = styled.div`
   > legend {
@@ -233,8 +246,8 @@ const StyledForm = styled(Form)`
   border: 0;
   padding: 0;
 
-  > .Field,
-  > fieldset {
+  > .Element-Field,
+  > .Element-Fieldset {
     margin-top: 16px;
   }
 `

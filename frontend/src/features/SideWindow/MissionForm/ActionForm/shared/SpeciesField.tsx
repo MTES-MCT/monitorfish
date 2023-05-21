@@ -194,11 +194,11 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
                   specyOnboard.speciesCode
                 )}`}</SingleTag>
 
-                <FieldGroup isInline>
+                <StyledFieldGroup isInline>
                   <FormikNumberInput label="Qté déclarée" name={`speciesOnboard[${index}].declaredWeight`} />
                   <FormikNumberInput label={controlledWeightLabel} name={`speciesOnboard[${index}].controlledWeight`} />
                   <FormikCheckbox label="Sous-taille" name={`speciesOnboard[${index}].underSized`} />
-                </FieldGroup>
+                </StyledFieldGroup>
               </RowInnerWrapper>
             </Row>
           ))}
@@ -220,6 +220,8 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
 }
 
 const Row = styled.div`
+  margin-bottom: 16px;
+
   > legend {
     margin: 24px 0 8px;
   }
@@ -236,5 +238,14 @@ const Row = styled.div`
 const RowInnerWrapper = styled.div`
   > div {
     margin-top: 12px;
+  }
+`
+
+const StyledFieldGroup = styled(FieldGroup)`
+  justify-content: flex-start;
+  margin-top: 8px !important;
+
+  > .Field-NumberInput {
+    margin-right: 16px;
   }
 `

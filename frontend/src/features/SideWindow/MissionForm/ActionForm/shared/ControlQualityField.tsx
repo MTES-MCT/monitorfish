@@ -1,11 +1,12 @@
 import { FormikCheckbox, FormikMultiRadio, FormikTextarea } from '@mtes-mct/monitor-ui'
+import styled from 'styled-components'
 
 import { MissionAction } from '../../../../../domain/types/missionAction'
 import { FieldsetGroup } from '../../shared/FieldsetGroup'
 
 export function ControlQualityField() {
   return (
-    <FieldsetGroup isLight legend="Qualité du contrôle">
+    <Wrapper isLight legend="Qualité du contrôle">
       <FormikMultiRadio
         isInline
         label="Navire ciblé par le CNSP"
@@ -23,6 +24,15 @@ export function ControlQualityField() {
         placeholder="Éléments marquants dans vos échanges avec l’unité, problèmes rencontrés..."
       />
       <FormikCheckbox label="Fiche RETEX nécessaire" name="feedbackSheetRequired" />
-    </FieldsetGroup>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled(FieldsetGroup)`
+  > div {
+    > .Element-Fieldset:not(:first-child),
+    > .Element-Field {
+      margin-top: 16px;
+    }
+  }
+`

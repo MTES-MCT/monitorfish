@@ -173,6 +173,7 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
                   {({ isValid }) => (
                     <StyledForm>
                       <FormikMultiRadio
+                        isErrorMessageHidden
                         isInline
                         label="Type d’infraction"
                         name="infractionType"
@@ -180,6 +181,7 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
                       />
                       <HackedFormikSelect
                         baseContainer={newWindowContainerRef.current}
+                        isErrorMessageHidden
                         label="NATINF"
                         name="natinf"
                         options={natinfsAsOptions}
@@ -187,9 +189,9 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
                       />
                       {infractionCheckboxProps && (
                         // eslint-disable-next-line react/jsx-props-no-spreading
-                        <FormikCheckbox {...infractionCheckboxProps} />
+                        <FormikCheckbox isErrorMessageHidden {...infractionCheckboxProps} />
                       )}
-                      <FormikTextarea label="Observations sur l’infraction" name="comments" />
+                      <FormikTextarea isErrorMessageHidden label="Observations sur l’infraction" name="comments" />
 
                       <FormButtonGroup>
                         <Button accent={Accent.TERTIARY} onClick={cancel}>

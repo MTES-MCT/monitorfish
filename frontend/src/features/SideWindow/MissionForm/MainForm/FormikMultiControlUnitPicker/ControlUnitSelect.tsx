@@ -147,6 +147,7 @@ export function ControlUnitSelect({
           options={allAdministrationsAsOptions}
           searchable
           value={controlledValue.administration}
+          virtualized
         />
         <Select
           baseContainer={newWindowContainerRef.current}
@@ -157,6 +158,7 @@ export function ControlUnitSelect({
           options={filteredNamesAsOptions}
           searchable
           value={controlledValue.name}
+          virtualized
         />
         <MultiSelect
           baseContainer={newWindowContainerRef.current}
@@ -168,6 +170,7 @@ export function ControlUnitSelect({
           options={selectedControlUnitResourcesAsOptions}
           optionValueKey="name"
           value={controlledValue.resources}
+          virtualized
         />
         <TextInput
           disabled={isLoading || !controlledValue.name}

@@ -20,7 +20,6 @@ import { MissionAction } from '../../../../../domain/types/missionAction'
 import { FrontendError } from '../../../../../libs/FrontendError'
 import { FieldGroup } from '../../shared/FieldGroup'
 import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
-import { FieldsetGroupSeparator } from '../../shared/FieldsetGroupSeparator'
 
 import type { Specy } from '../../../../../domain/types/specy'
 import type { MissionActionFormValues } from '../../types'
@@ -186,9 +185,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
         <>
           {input.value.map((specyOnboard, index) => (
             // eslint-disable-next-line react/no-array-index-key
-            <Row key={`speciesOnboard-${index}`}>
-              <FieldsetGroupSeparator />
-
+            <Row key={`speciesOnboard-${index}`} style={{ marginTop: index === 0 ? '16px' : 0 }}>
               <RowInnerWrapper>
                 <SingleTag onDelete={() => remove(index)}>{`${specyOnboard.speciesCode} - ${getSpecyNameFromSpecyCode(
                   specyOnboard.speciesCode
@@ -237,7 +234,7 @@ const Row = styled.div`
 
 const RowInnerWrapper = styled.div`
   > div {
-    margin-top: 12px;
+    margin-top: 8px;
   }
 `
 

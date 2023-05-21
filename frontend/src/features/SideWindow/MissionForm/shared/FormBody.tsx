@@ -19,10 +19,16 @@ export const FormBody = styled.div`
     min-height: 1px;
   }
 
-  /* TODO Normalize that in monitor-ui (check with Adeline). */
+  /* TODO Normalize that in monitor-ui (check with Adeline). Maybe Size.NORMAL vs Size.LARGE? */
   .Field-Textarea {
     textarea {
       height: 48px !important;
+    }
+  }
+
+  .Field-TextInput {
+    input[name='userTrigram'] {
+      width: 120px;
     }
   }
 `

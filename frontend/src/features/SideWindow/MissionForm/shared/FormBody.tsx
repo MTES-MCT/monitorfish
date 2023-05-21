@@ -18,6 +18,13 @@ export const FormBody = styled.div`
     /* Otherwise it "mysteriously disappears" since it's in an horizontal flex context */
     min-height: 2px;
   }
+
+  /* TODO Normalize that in monitor-ui (check with Adeline). */
+  .Field-Textarea {
+    textarea {
+      height: 48px !important;
+    }
+  }
 `
 
 export const FormBodyInnerWrapper = styled.div`

@@ -3,6 +3,7 @@ import { skipToken } from '@reduxjs/toolkit/query'
 import { useFormikContext } from 'formik'
 import { remove as ramdaRemove, uniq } from 'ramda'
 import { useCallback, useEffect, useMemo } from 'react'
+import styled from 'styled-components'
 
 import { useGetFleetSegmentsQuery } from '../../../../../api/fleetSegment'
 import { useGetRiskFactorQuery } from '../../../../../api/vessel'
@@ -160,12 +161,10 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
   return (
     <FieldsetGroup isLight legend={label}>
       {(!values.segments || !values.segments.length) && (
-        <p>
-          <em>
-            Renseignez un point de contrôle, les engins utilisés et les espèce pêchées pour qu’un segment de flotte soit
-            attribué au navire.
-          </em>
-        </p>
+        <Helper>
+          Renseignez un point de contrôle, les engins utilisés et les espèce pêchées pour qu’un segment de flotte soit
+          attribué au navire.
+        </Helper>
       )}
 
       {values.segments && values.segments.length > 0 && (
@@ -188,3 +187,8 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
     </FieldsetGroup>
   )
 }
+
+const Helper = styled.p`
+  color: ${p => p.theme.color.slateGray};
+  font-style: italic;
+`

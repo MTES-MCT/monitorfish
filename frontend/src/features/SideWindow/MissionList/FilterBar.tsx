@@ -76,6 +76,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           <TextInput
             Icon={Icon.Search}
             isLabelHidden
+            isLight
             label="Rechercher un navire"
             name="searchInput"
             onChange={onQueryChange}
@@ -90,6 +91,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             baseContainer={newWindowContainerRef.current}
             isCleanable={false}
             isLabelHidden
+            isLight
             label="Période"
             name={MissionFilterType.DATE_RANGE}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.DATE_RANGE]}
@@ -98,6 +100,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           <FormikSelect
             baseContainer={newWindowContainerRef.current}
             isLabelHidden
+            isLight
             label="Origine"
             name={MissionFilterType.SOURCE}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.SOURCE]}
@@ -106,6 +109,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}
             isLabelHidden
+            isLight
             label="Statut"
             name={MissionFilterType.STATUS}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.STATUS]}
@@ -116,6 +120,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             baseContainer={newWindowContainerRef.current}
             disabled={administrationsAsOptions.length === 0}
             isLabelHidden
+            isLight
             label="Administration"
             name={MissionFilterType.ADMINISTRATION}
             options={administrationsAsOptions}
@@ -129,6 +134,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             baseContainer={newWindowContainerRef.current}
             disabled={unitsAsOptions.length === 0}
             isLabelHidden
+            isLight
             label="Unité"
             name={MissionFilterType.UNIT}
             options={unitsAsOptions}
@@ -139,6 +145,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}
             isLabelHidden
+            isLight
             label="Type de mission"
             name={MissionFilterType.TYPE}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.TYPE]}

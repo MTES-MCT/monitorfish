@@ -13,10 +13,10 @@ export const FormBody = styled.div`
 
   hr {
     background: ${p => p.theme.color.slateGray};
-    height: 2px;
+    height: 1px;
     margin: 24px 0 0;
     /* Otherwise it "mysteriously disappears" since it's in an horizontal flex context */
-    min-height: 2px;
+    min-height: 1px;
   }
 
   /* TODO Normalize that in monitor-ui (check with Adeline). */

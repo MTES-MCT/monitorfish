@@ -3,6 +3,8 @@ import {
   FormikEffect,
   FormikMultiSelect,
   FormikSelect,
+  Icon,
+  Size,
   TextInput,
   useNewWindow
 } from '@mtes-mct/monitor-ui'
@@ -72,11 +74,13 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
 
         <Row>
           <TextInput
+            Icon={Icon.Search}
             isLabelHidden
             label="Rechercher un navire"
             name="searchInput"
             onChange={onQueryChange}
             placeholder="Rechercher un navire"
+            size={Size.LARGE}
             value={searchQuery}
           />
         </Row>
@@ -145,12 +149,6 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           />
         </Row>
 
-        {isCustomDateRangeOpen && (
-          <Row>
-            <FormikDateRangePicker label="Période spécifique" name={MissionFilterType.CUSTOM_DATE_RANGE} />
-          </Row>
-        )}
-
         <FormikFilterTagBar
           filterLabelEnums={MISSION_FILTER_LABEL_ENUMS}
           ignoredFilterKeys={[
@@ -158,7 +156,11 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             MissionFilterType.DATE_RANGE,
             MissionFilterType.SOURCE
           ]}
-        />
+        >
+          {isCustomDateRangeOpen && (
+            <FormikDateRangePicker label="Période spécifique" name={MissionFilterType.CUSTOM_DATE_RANGE} />
+          )}
+        </FormikFilterTagBar>
       </Box>
     </Formik>
   )
@@ -185,6 +187,16 @@ const Row = styled.div`
   > div:not(:first-child) {
     margin-left: 16px;
     width: 160px;
+  }
+  /* TODO Remove this fix once we get rid of local CSS. */
+  > .Field-TextInput {
+    > div {
+      width: 264px;
+
+      > [name='searchInput'] {
+        height: 40px;
+      }
+    }
   }
 `
 

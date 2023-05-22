@@ -109,6 +109,7 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
             Icon={Icon.Duplicate}
             iconSize={20}
             onClick={onDuplicate}
+            withUnpropagatedClick
           />
           <IconButton
             accent={Accent.TERTIARY}
@@ -117,6 +118,7 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
             Icon={Icon.Delete}
             iconSize={20}
             onClick={onDelete}
+            withUnpropagatedClick
           />
         </Head>
 

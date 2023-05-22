@@ -1,13 +1,14 @@
 import { SingleTag } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, type ReactNode } from 'react'
 import styled from 'styled-components'
 
 type FormikFilterTagBarProps = {
+  children: ReactNode
   filterLabelEnums: Record<string, Record<string, string> | undefined>
   ignoredFilterKeys?: string[]
 }
-export function FormikFilterTagBar({ filterLabelEnums, ignoredFilterKeys = [] }: FormikFilterTagBarProps) {
+export function FormikFilterTagBar({ children, filterLabelEnums, ignoredFilterKeys = [] }: FormikFilterTagBarProps) {
   const {
     setFieldValue: setFilterValue,
     setValues: setFilterValues,
@@ -70,29 +71,38 @@ export function FormikFilterTagBar({ filterLabelEnums, ignoredFilterKeys = [] }:
     [filterValues, ignoredFilterKeys, filterLabelEnums, remove]
   )
 
-  if (!filterTags.length) {
+  if (!filterTags.length && !children) {
     return <></>
   }
 
   return (
     <>
-      <Row data-cy="mission-list-filter-tags">{filterTags}</Row>
+      <Row data-cy="mission-list-filter-tags">
+        {children}
 
-      <Row>
-        {/* TODO Use `<Button accent={Accent.LINK} />` once available in Monitor UI. */}
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <Link onClick={removeAll}>Réinitialiser les filtres</Link>
+        {filterTags}
       </Row>
+
+      {!!filterTags.length && (
+        <Row>
+          {/* TODO Use `<Button accent={Accent.LINK} />` once available in Monitor UI. */}
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <Link onClick={removeAll}>Réinitialiser les filtres</Link>
+        </Row>
+      )}
     </>
   )
 }
 
 const Row = styled.div`
+  align-items: flex-end;
   display: flex;
+  flex-wrap: wrap;
   margin-top: 12px;
 
-  > div:not(:first-child) {
-    margin-left: 24px;
+  > div,
+  > .Field-DateRangePicker {
+    margin: 0 24px 12px 0;
   }
 `
 

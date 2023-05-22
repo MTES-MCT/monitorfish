@@ -143,7 +143,7 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
   }
 
   return (
-    <FieldsetGroup isLight legend={label}>
+    <Wrapper isLight legend={label}>
       {children}
 
       <Button accent={Accent.SECONDARY} disabled={isEditedIndexNew} Icon={Icon.Plus} isFullWidth onClick={add}>
@@ -173,6 +173,7 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
                   {({ isValid }) => (
                     <StyledForm>
                       <FormikMultiRadio
+                        isErrorMessageHidden
                         isInline
                         label="Type d’infraction"
                         name="infractionType"
@@ -180,6 +181,7 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
                       />
                       <HackedFormikSelect
                         baseContainer={newWindowContainerRef.current}
+                        isErrorMessageHidden
                         label="NATINF"
                         name="natinf"
                         options={natinfsAsOptions}
@@ -187,9 +189,9 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
                       />
                       {infractionCheckboxProps && (
                         // eslint-disable-next-line react/jsx-props-no-spreading
-                        <FormikCheckbox {...infractionCheckboxProps} />
+                        <FormikCheckbox isErrorMessageHidden {...infractionCheckboxProps} />
                       )}
-                      <FormikTextarea label="Observations sur l’infraction" name="comments" />
+                      <FormikTextarea isErrorMessageHidden label="Observations sur l’infraction" name="comments" />
 
                       <FormButtonGroup>
                         <Button accent={Accent.TERTIARY} onClick={cancel}>
@@ -216,9 +218,22 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
           <FormikTextarea {...generalObservationTextareaProps} />
         </>
       )}
-    </FieldsetGroup>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled(FieldsetGroup)`
+  > div {
+    > .Element-Field,
+    > .Element-Fieldset:not(:first-child) {
+      margin-top: 16px;
+    }
+
+    > .Field-Select {
+      margin-bottom: 8px;
+    }
+  }
+`
 
 const Row = styled.div`
   > legend {
@@ -231,8 +246,8 @@ const StyledForm = styled(Form)`
   border: 0;
   padding: 0;
 
-  > .Field,
-  > fieldset {
+  > .Element-Field,
+  > .Element-Fieldset {
     margin-top: 16px;
   }
 `

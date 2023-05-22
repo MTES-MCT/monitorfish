@@ -161,8 +161,12 @@ export function GearsField() {
       {input.value &&
         input.value.length > 0 &&
         input.value.map((gearOnboard, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <Row key={`gearOnboard-${gearOnboard.gearCode}-${index}`} $isFirst={index === 0}>
+          <Row
+            // eslint-disable-next-line react/no-array-index-key
+            key={`gearOnboard-${gearOnboard.gearCode}-${index}`}
+            $isFirst={index === 0}
+            style={{ marginTop: index > 0 ? '24px' : 0 }}
+          >
             <RowInnerWrapper>
               <SingleTag
                 onDelete={() => remove(index)}
@@ -175,7 +179,7 @@ export function GearsField() {
                 options={BOOLEAN_AS_OPTIONS}
               />
 
-              <FieldGroup isInline>
+              <StyledFieldGroup isInline>
                 <FormikNumberInput
                   disabled={!gearOnboard.gearWasControlled}
                   isUndefinedWhenDisabled
@@ -196,7 +200,7 @@ export function GearsField() {
                   name="gearWasNotControlled"
                   onChange={isChecked => handleMeshWasNotControlledChange(gearOnboard.gearCode, isChecked)}
                 />
-              </FieldGroup>
+              </StyledFieldGroup>
 
               <FormikTextarea
                 label={`${gearOnboard.gearCode} : autres mesures et dispositifs`}
@@ -214,6 +218,7 @@ export function GearsField() {
         onChange={add}
         options={gearsAsOptions}
         searchable
+        virtualized
       />
     </TypedFormikMultiInfractionPicker>
   )
@@ -240,6 +245,15 @@ const Row = styled.div<{
 const RowInnerWrapper = styled.div`
   > div:not(:first-child),
   > fieldset:not(:first-child) {
-    margin-top: 24px;
+    margin-top: 16px;
+  }
+`
+
+const StyledFieldGroup = styled(FieldGroup)`
+  justify-content: flex-start;
+  margin-top: 8px !important;
+
+  > .Field-NumberInput {
+    margin-right: 16px;
   }
 `

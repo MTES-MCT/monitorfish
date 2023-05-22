@@ -3,6 +3,8 @@ import {
   FormikEffect,
   FormikMultiSelect,
   FormikSelect,
+  Icon,
+  Size,
   TextInput,
   useNewWindow
 } from '@mtes-mct/monitor-ui'
@@ -72,11 +74,14 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
 
         <Row>
           <TextInput
+            Icon={Icon.Search}
             isLabelHidden
+            isLight
             label="Rechercher un navire"
             name="searchInput"
             onChange={onQueryChange}
             placeholder="Rechercher un navire"
+            size={Size.LARGE}
             value={searchQuery}
           />
         </Row>
@@ -86,6 +91,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             baseContainer={newWindowContainerRef.current}
             isCleanable={false}
             isLabelHidden
+            isLight
             label="Période"
             name={MissionFilterType.DATE_RANGE}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.DATE_RANGE]}
@@ -94,6 +100,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           <FormikSelect
             baseContainer={newWindowContainerRef.current}
             isLabelHidden
+            isLight
             label="Origine"
             name={MissionFilterType.SOURCE}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.SOURCE]}
@@ -102,6 +109,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}
             isLabelHidden
+            isLight
             label="Statut"
             name={MissionFilterType.STATUS}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.STATUS]}
@@ -112,6 +120,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             baseContainer={newWindowContainerRef.current}
             disabled={administrationsAsOptions.length === 0}
             isLabelHidden
+            isLight
             label="Administration"
             name={MissionFilterType.ADMINISTRATION}
             options={administrationsAsOptions}
@@ -125,6 +134,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             baseContainer={newWindowContainerRef.current}
             disabled={unitsAsOptions.length === 0}
             isLabelHidden
+            isLight
             label="Unité"
             name={MissionFilterType.UNIT}
             options={unitsAsOptions}
@@ -135,6 +145,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}
             isLabelHidden
+            isLight
             label="Type de mission"
             name={MissionFilterType.TYPE}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.TYPE]}
@@ -145,12 +156,6 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           />
         </Row>
 
-        {isCustomDateRangeOpen && (
-          <Row>
-            <FormikDateRangePicker label="Période spécifique" name={MissionFilterType.CUSTOM_DATE_RANGE} />
-          </Row>
-        )}
-
         <FormikFilterTagBar
           filterLabelEnums={MISSION_FILTER_LABEL_ENUMS}
           ignoredFilterKeys={[
@@ -158,7 +163,11 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             MissionFilterType.DATE_RANGE,
             MissionFilterType.SOURCE
           ]}
-        />
+        >
+          {isCustomDateRangeOpen && (
+            <FormikDateRangePicker label="Période spécifique" name={MissionFilterType.CUSTOM_DATE_RANGE} />
+          )}
+        </FormikFilterTagBar>
       </Box>
     </Formik>
   )
@@ -185,6 +194,16 @@ const Row = styled.div`
   > div:not(:first-child) {
     margin-left: 16px;
     width: 160px;
+  }
+  /* TODO Remove this fix once we get rid of local CSS. */
+  > .Field-TextInput {
+    > div {
+      width: 264px;
+
+      > [name='searchInput'] {
+        height: 40px;
+      }
+    }
   }
 `
 

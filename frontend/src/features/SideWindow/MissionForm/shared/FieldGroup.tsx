@@ -12,7 +12,6 @@ export const FieldGroup = styled.div<{
       align-items: flex-end;
 
       > div:not(:last-child) {
-        flex-grow: 1;
         margin-right: 16px;
       }
 

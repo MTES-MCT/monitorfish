@@ -2,6 +2,7 @@ import datetime
 from unittest.mock import patch
 
 import pandas as pd
+import pytest
 import sqlalchemy
 
 from src.pipeline.flows.vessels import (
@@ -334,6 +335,54 @@ cleaned_vessels_dtype = {
 }
 
 
+@pytest.fixture
+def french_vessels() -> pd.DataFrame:
+    return pd.DataFrame(french_vessels_data)
+
+
+@pytest.fixture
+def eu_vessels() -> pd.DataFrame:
+    return pd.DataFrame(eu_vessels_data)
+
+
+@pytest.fixture
+def non_eu_vessels() -> pd.DataFrame:
+    return pd.DataFrame(non_eu_vessels_data)
+
+
+@pytest.fixture
+def vessels_operators() -> pd.DataFrame:
+    return pd.DataFrame(vessels_operators_data)
+
+
+@pytest.fixture
+def licences() -> pd.DataFrame:
+    return pd.DataFrame(licences_data)
+
+
+@pytest.fixture
+def control_charters() -> pd.DataFrame:
+    return pd.DataFrame(control_charters_data)
+
+
+@pytest.fixture
+def expected_all_vessels() -> pd.DataFrame:
+    return pd.DataFrame(concat_merged_data).astype(concat_merged_dtype)
+
+
+@pytest.fixture
+def expected_vessels_under_charter() -> pd.DataFrame:
+    vessels = pd.DataFrame(control_charters_data)
+    return vessels
+
+
+@pytest.fixture
+def cleaned_vessels() -> pd.DataFrame:
+    vessels = pd.DataFrame(cleaned_vessels_data)
+    vessels = vessels.astype(cleaned_vessels_dtype)
+    return vessels
+
+
 @patch("src.pipeline.flows.vessels.extract")
 def test_extract_eu_vessels(mock_extract):
     mock_extract.side_effect = mock_extract_side_effect
@@ -362,9 +411,8 @@ def test_extract_non_eu_vessels(mock_extract):
     assert isinstance(query, sqlalchemy.sql.elements.TextClause)
 
 
-def test_extract_control_charters(reset_test_data):
+def test_extract_control_charters(reset_test_data, expected_vessels_under_charter):
     vessels_under_charter = extract_control_charters.run()
-    expected_vessels_under_charter = pd.DataFrame(control_charters_data)
     pd.testing.assert_frame_equal(vessels_under_charter, expected_vessels_under_charter)
 
 
@@ -375,13 +423,15 @@ def test_extract_vessels_operators(mock_extract):
     assert isinstance(query, sqlalchemy.sql.elements.TextClause)
 
 
-def test_concat_merge_vessels():
-    french_vessels = pd.DataFrame(french_vessels_data)
-    eu_vessels = pd.DataFrame(eu_vessels_data)
-    non_eu_vessels = pd.DataFrame(non_eu_vessels_data)
-    vessels_operators = pd.DataFrame(vessels_operators_data)
-    licences = pd.DataFrame(licences_data)
-    control_charters = pd.DataFrame(control_charters_data)
+def test_concat_merge_vessels(
+    french_vessels,
+    eu_vessels,
+    non_eu_vessels,
+    vessels_operators,
+    licences,
+    control_charters,
+    expected_all_vessels,
+):
 
     all_vessels = concat_merge_vessels.run(
         french_vessels,
@@ -391,9 +441,6 @@ def test_concat_merge_vessels():
         licences,
         control_charters,
     )
-
-    expected_all_vessels = pd.DataFrame(concat_merged_data)
-    expected_all_vessels = expected_all_vessels.astype(concat_merged_dtype)
 
     pd.testing.assert_frame_equal(all_vessels, expected_all_vessels)
 
@@ -411,8 +458,5 @@ def test_clean_vessels():
     pd.testing.assert_frame_equal(cleaned_vessels, expected_cleaned_vessels)
 
 
-def test_load_vessels(reset_test_data):
-
-    cleaned_vessels = pd.DataFrame(cleaned_vessels_data)
-    cleaned_vessels = cleaned_vessels.astype(cleaned_vessels_dtype)
+def test_load_vessels(reset_test_data, cleaned_vessels):
     load_vessels.run(cleaned_vessels)

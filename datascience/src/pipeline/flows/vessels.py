@@ -5,6 +5,7 @@ import prefect
 from prefect import Flow, case, task
 from prefect.executors import LocalDaskExecutor
 
+from config import UNKNOWN_VESSEL_ID
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.processing import coalesce, concatenate_columns
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
@@ -317,6 +318,49 @@ def clean_vessels(all_vessels: pd.DataFrame) -> pd.DataFrame:
 
 
 @task(checkpoint=False)
+def add_unknown_vessel(all_vessels: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds an "UNKNOWN" vessel to the list, to be used when reporting an action on a
+    vessel that is not part of the officiel vessels list.
+
+    Args:
+        all_vessels (pd.DataFrame): List of vessels
+
+    Returns:
+        pd.DataFrame: Same as input with one added "Unknown vessel"
+
+    Raises:
+        AssertionError: if one of the input vessels has the id reserved for the UNKNOWN
+        vessel
+    """
+
+    try:
+        assert UNKNOWN_VESSEL_ID not in all_vessels.id.values
+    except AssertionError:
+
+        logger = prefect.context.get("logger")
+        logger.error(
+            f"Reserved unkwnown vessel id {UNKNOWN_VESSEL_ID} "
+            "was found in the vessels list."
+        )
+        raise
+
+    unknown_vessel = pd.DataFrame(
+        {
+            "id": [UNKNOWN_VESSEL_ID],
+            "cfr": ["UNKNOWN"],
+            "ircs": ["UNKNOWN"],
+            "external_immatriculation": ["UNKNOWN"],
+            "vessel_name": ["UNKNOWN"],
+        }
+    )
+
+    all_vessels = pd.concat([all_vessels, unknown_vessel])
+
+    return all_vessels
+
+
+@task(checkpoint=False)
 def load_vessels(all_vessels: pd.DataFrame):
     """
     Replaces the content of the `vessels` table with the content of the `all_vessels`
@@ -367,6 +411,7 @@ with Flow("Vessels", executor=LocalDaskExecutor()) as flow:
             control_charters,
         )
         all_vessels = clean_vessels(all_vessels)
+        all_vessels = add_unknown_vessel(all_vessels)
 
         # Load
         load_vessels(all_vessels)

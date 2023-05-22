@@ -5,7 +5,9 @@ import pandas as pd
 import pytest
 import sqlalchemy
 
+from config import UNKNOWN_VESSEL_ID
 from src.pipeline.flows.vessels import (
+    add_unknown_vessel,
     clean_vessels,
     concat_merge_vessels,
     extract_control_charters,
@@ -366,7 +368,7 @@ def control_charters() -> pd.DataFrame:
 
 
 @pytest.fixture
-def expected_all_vessels() -> pd.DataFrame:
+def all_vessels() -> pd.DataFrame:
     return pd.DataFrame(concat_merged_data).astype(concat_merged_dtype)
 
 
@@ -430,10 +432,10 @@ def test_concat_merge_vessels(
     vessels_operators,
     licences,
     control_charters,
-    expected_all_vessels,
+    all_vessels,
 ):
 
-    all_vessels = concat_merge_vessels.run(
+    res = concat_merge_vessels.run(
         french_vessels,
         eu_vessels,
         non_eu_vessels,
@@ -442,20 +444,31 @@ def test_concat_merge_vessels(
         control_charters,
     )
 
-    pd.testing.assert_frame_equal(all_vessels, expected_all_vessels)
+    pd.testing.assert_frame_equal(res, all_vessels)
 
 
-def test_clean_vessels():
+def test_clean_vessels(all_vessels, cleaned_vessels):
 
-    all_vessels = pd.DataFrame(concat_merged_data)
-    all_vessels = all_vessels.astype(concat_merged_dtype)
+    res = clean_vessels.run(all_vessels)
+    pd.testing.assert_frame_equal(res, cleaned_vessels)
 
-    cleaned_vessels = clean_vessels.run(all_vessels)
 
-    expected_cleaned_vessels = pd.DataFrame(cleaned_vessels_data)
-    expected_cleaned_vessels = expected_cleaned_vessels.astype(cleaned_vessels_dtype)
+def test_add_unknown_vessel(cleaned_vessels):
+    vessels = add_unknown_vessel.run(cleaned_vessels)
 
-    pd.testing.assert_frame_equal(cleaned_vessels, expected_cleaned_vessels)
+    pd.testing.assert_frame_equal(
+        vessels.iloc[:-1], cleaned_vessels, check_dtype=False, check_categorical=False
+    )
+
+    last_vessel = vessels.iloc[-1]
+    assert last_vessel["id"] == UNKNOWN_VESSEL_ID
+    assert last_vessel["cfr"] == "UNKNOWN"
+    assert last_vessel["external_immatriculation"] == "UNKNOWN"
+    assert last_vessel["ircs"] == "UNKNOWN"
+    assert last_vessel["vessel_name"] == "UNKNOWN"
+
+    with pytest.raises(AssertionError):
+        add_unknown_vessel.run(vessels)
 
 
 def test_load_vessels(reset_test_data, cleaned_vessels):

@@ -71,7 +71,7 @@ export const mainReducer = {
   layer: layer.homepage.reducer,
   measurement: measurementReducer,
   mission: persistReducerTyped(
-    { ...getCommonPersistReducerConfig<MissionState>('mainPersistorMission', ['listSeaFront']) },
+    { ...getCommonPersistReducerConfig<MissionState>('mainPersistorMission', ['listFilterValues', 'listSeaFront']) },
     missionReducer
   ),
   regulatoryLayerSearch: regulatoryLayerSearchReducer,

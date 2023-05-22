@@ -224,7 +224,7 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
 
 const Wrapper = styled(FieldsetGroup)`
   > div {
-    > .Element-Field,
+    > .Element-Field:not(:first-child),
     > .Element-Fieldset:not(:first-child) {
       margin-top: 16px;
     }

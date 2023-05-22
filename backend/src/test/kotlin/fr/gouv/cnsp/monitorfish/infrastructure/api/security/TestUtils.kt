@@ -7,7 +7,7 @@ import io.ktor.utils.io.*
 
 class TestUtils {
     companion object {
-        fun mockApiClient(): ApiClient {
+        fun getMockApiClient(): ApiClient {
             val mockEngine = MockEngine { _ ->
                 respond(
                     content = ByteReadChannel(

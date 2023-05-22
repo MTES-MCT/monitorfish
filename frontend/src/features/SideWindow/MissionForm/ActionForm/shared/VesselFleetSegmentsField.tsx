@@ -4,6 +4,7 @@ import { useFormikContext } from 'formik'
 import { remove as ramdaRemove, uniq } from 'ramda'
 import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { useGetFleetSegmentsQuery } from '../../../../../api/fleetSegment'
 import { useGetRiskFactorQuery } from '../../../../../api/vessel'
@@ -45,6 +46,27 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
 
   const isLoading = useMemo(() => !getFleetSegmentsApiQuery.data, [getFleetSegmentsApiQuery.data])
 
+  const updadeSegments = useDebouncedCallback(async () => {
+    const declaredSpeciesOnboard = riskFactorApiQuery.data?.speciesOnboard
+
+    const computedFleetSegments = await dispatch(
+      getFleetSegments(
+        declaredSpeciesOnboard,
+        values.gearOnboard,
+        values.speciesOnboard,
+        values.longitude,
+        values.latitude,
+        values.portLocode
+      )
+    )
+
+    const nextFleetSegments = fleetSegmentsAsOptions
+      .filter(({ value }) => computedFleetSegments?.find(fleetSegment => fleetSegment.segment === value.segment))
+      .map(({ value }) => value)
+
+    setFieldValue('segments', nextFleetSegments)
+  }, 500)
+
   useEffect(
     () => {
       if (values.faoAreas?.length || !riskFactorApiQuery.data) {
@@ -62,28 +84,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
   )
 
   useEffect(() => {
-    const getFleetSegmentsAsync = async () => {
-      const declaredSpeciesOnboard = riskFactorApiQuery.data?.speciesOnboard
-
-      const computedFleetSegments = await dispatch(
-        getFleetSegments(
-          declaredSpeciesOnboard,
-          values.gearOnboard,
-          values.speciesOnboard,
-          values.longitude,
-          values.latitude,
-          values.portLocode
-        )
-      )
-
-      const nextFleetSegments = fleetSegmentsAsOptions
-        .filter(({ value }) => computedFleetSegments?.find(fleetSegment => fleetSegment.segment === value.segment))
-        .map(({ value }) => value)
-
-      setFieldValue('segments', nextFleetSegments)
-    }
-
-    getFleetSegmentsAsync()
+    updadeSegments()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     dispatch,

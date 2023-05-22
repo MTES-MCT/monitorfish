@@ -184,8 +184,11 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
       {input.value && input.value.length > 0 && (
         <>
           {input.value.map((specyOnboard, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <Row key={`speciesOnboard-${index}`} style={{ marginTop: index === 0 ? '16px' : 0 }}>
+            <Row
+              // eslint-disable-next-line react/no-array-index-key
+              key={`speciesOnboard-${specyOnboard.speciesCode}-${index}`}
+              style={{ marginTop: index === 0 ? '16px' : 0 }}
+            >
               <RowInnerWrapper>
                 <SingleTag onDelete={() => remove(index)}>{`${specyOnboard.speciesCode} - ${getSpecyNameFromSpecyCode(
                   specyOnboard.speciesCode

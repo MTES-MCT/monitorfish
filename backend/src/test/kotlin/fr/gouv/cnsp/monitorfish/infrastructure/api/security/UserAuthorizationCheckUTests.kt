@@ -4,7 +4,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
-import fr.gouv.cnsp.monitorfish.infrastructure.api.security.TestUtils.Companion.mockApiClient
+import fr.gouv.cnsp.monitorfish.infrastructure.api.security.TestUtils.Companion.getMockApiClient
 import io.ktor.client.engine.mock.*
 import io.ktor.http.*
 import io.ktor.http.HttpHeaders.Authorization
@@ -32,7 +32,7 @@ class UserAuthorizationCheckUTests {
             enabled = false,
             userinfoEndpoint = null,
         )
-        val mockApi = mockApiClient()
+        val mockApi = getMockApiClient()
         val request = MockHttpServletRequest()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
@@ -51,7 +51,7 @@ class UserAuthorizationCheckUTests {
             enabled = true,
             userinfoEndpoint = null,
         )
-        val mockApi = mockApiClient()
+        val mockApi = getMockApiClient()
         val request = MockHttpServletRequest()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
@@ -71,7 +71,7 @@ class UserAuthorizationCheckUTests {
             enabled = true,
             userinfoEndpoint = null,
         )
-        val mockApi = mockApiClient()
+        val mockApi = getMockApiClient()
         val request = MockHttpServletRequest()
         request.addHeader(Authorization, "Bearer $VALID_JWT")
         val response = MockHttpServletResponse()
@@ -92,7 +92,7 @@ class UserAuthorizationCheckUTests {
             enabled = true,
             userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user",
         )
-        val mockApi = mockApiClient()
+        val mockApi = getMockApiClient()
         val request = MockHttpServletRequest()
         request.addHeader(Authorization, "Bearer $VALID_JWT")
         val response = MockHttpServletResponse()
@@ -113,7 +113,7 @@ class UserAuthorizationCheckUTests {
             enabled = true,
             userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user",
         )
-        val mockApi = mockApiClient()
+        val mockApi = getMockApiClient()
         val request = MockHttpServletRequest()
         request.addHeader(Authorization, "Bearer $VALID_JWT")
         val response = MockHttpServletResponse()

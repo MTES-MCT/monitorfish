@@ -1,17 +1,12 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 
-import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SuperUserAPIProperties
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
-import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
-import fr.gouv.cnsp.monitorfish.domain.use_cases.port.GetActivePorts
 import fr.gouv.cnsp.monitorfish.infrastructure.api.VersionController
-import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.PortController
 import org.junit.jupiter.api.Test
-import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.info.BuildProperties
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -29,7 +24,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
     ApiClient::class,
 )
 @WebMvcTest(
-    value = [PortController::class, VersionController::class],
+    value = [VersionController::class],
     properties = [
         "monitorfish.oidc.enabled=true",
         "spring.security.oauth2.resourceserver.jwt.public-key-location=classpath:oidc-issuer.pub",
@@ -43,9 +38,6 @@ class BffFilterConfigITests {
     private lateinit var mockMvc: MockMvc
 
     @MockBean
-    private lateinit var getActivePorts: GetActivePorts
-
-    @MockBean
     private lateinit var getIsAuthorizedUser: GetIsAuthorizedUser
 
     @MockBean
@@ -53,15 +45,6 @@ class BffFilterConfigITests {
 
     @Test
     fun `Should return 401 for all protected paths`() {
-        // Given
-        given(getActivePorts.execute()).willReturn(
-            listOf(
-                Port("ET", "Etel"),
-                Port("AY", "Auray"),
-            ),
-        )
-        given(getIsAuthorizedUser.execute(any())).willReturn(true)
-
         // When
         /**
          * This test return a 401 http code as the issuer uri could not be fetched (404 not found because of the dummy url).
@@ -74,6 +57,7 @@ class BffFilterConfigITests {
             "/bff/v1/operational_alerts",
             "/bff/v1/reportings",
             "/bff/v1/vessels/risk_factors",
+            "/bff/v1/authorization/is_super_user",
         ).forEach {
             mockMvc.perform(
                 get(it)

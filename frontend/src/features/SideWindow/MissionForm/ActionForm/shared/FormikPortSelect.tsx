@@ -36,6 +36,8 @@ export function FormikPortSelect() {
       if (!nextPortLocode) {
         setFieldValue('portLocode', undefined)
         setFieldValue('portName', undefined)
+
+        return
       }
 
       const port = getPortsApiQuery.data.find(({ locode }) => locode === nextPortLocode)

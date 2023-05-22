@@ -29,9 +29,10 @@ export const renderStatus = (missionStatus: Mission.MissionStatus): JSX.Element 
 
     case Mission.MissionStatus.CLOSED:
       return (
-        <StyledTag bullet={TagBullet.DISK} bulletColor="#463939" style={{ color: '#463939' }}>
+        <StyledTagWithCheck bulletColor="#463939" style={{ color: '#463939' }}>
+          <span>✓</span>
           {Mission.MissionStatusLabel.CLOSED}
-        </StyledTag>
+        </StyledTagWithCheck>
       )
 
     default:
@@ -39,6 +40,7 @@ export const renderStatus = (missionStatus: Mission.MissionStatus): JSX.Element 
   }
 }
 
+// TODO Remove this hack once we get rid of local CSS.
 const StyledTag = styled(Tag)`
   align-items: flex-end;
   display: flex;
@@ -46,6 +48,18 @@ const StyledTag = styled(Tag)`
 
   > span {
     height: 10px;
+    margin-right: 6px;
+    width: 10px;
+  }
+`
+
+// TODO Add check in icons and `TagBullet` in monitor-ui.
+const StyledTagWithCheck = styled(StyledTag)`
+  > span {
+    font-size: 16px;
+    height: auto;
+    line-height: 13px;
+    margin-right: 6px;
     width: 10px;
   }
 `

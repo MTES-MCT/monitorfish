@@ -65,6 +65,7 @@ export function FormikPortSelect() {
       options={portsAsOptions}
       searchable
       value={values.portLocode}
+      virtualized
     />
   )
 }

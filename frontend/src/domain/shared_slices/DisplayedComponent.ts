@@ -45,7 +45,7 @@ const INITIAL_STATE: DisplayedComponentState = {
   isFavoriteVesselsMapButtonDisplayed: true,
   isInterestPointMapButtonDisplayed: true,
   isMeasurementMapButtonDisplayed: true,
-  isMissionsLayerDisplayed: false,
+  isMissionsLayerDisplayed: true,
   isMissionsMapButtonDisplayed: true,
   isVesselFiltersMapButtonDisplayed: true,
   isVesselLabelsMapButtonDisplayed: true,

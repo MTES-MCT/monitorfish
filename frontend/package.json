@@ -35,7 +35,7 @@
     "@mtes-mct/monitor-ui": "6.2.2",
     "@reduxjs/toolkit": "1.9.3",
     "@sentry/browser": "7.47.0",
-    "@sentry/react": "7.47.0",
+    "@sentry/react": "7.52.1",
     "@sentry/tracing": "7.47.0",
     "@svgr/webpack": "6.5.1",
     "comlink": "4.4.1",

@@ -3,7 +3,7 @@ import countries from 'i18n-iso-countries'
 import { useEffect, useRef } from 'react'
 import { hasAuthParams } from 'react-oidc-context'
 import { Provider } from 'react-redux'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
 import { CustomProvider as RsuiteCustomProvider } from 'rsuite'
 import rsuiteFrFr from 'rsuite/locales/fr_FR'
@@ -11,6 +11,7 @@ import styled from 'styled-components'
 
 import { APIWorker } from './api/APIWorker'
 import { BackofficeMode } from './api/BackofficeMode'
+import { AuthorizationContext } from './context/AuthorizationContext'
 import { NamespaceContext } from './context/NamespaceContext'
 import { SideWindowStatus } from './domain/entities/sideWindow/constants'
 import { ErrorToastNotification } from './features/commonComponents/ErrorToastNotification'
@@ -33,6 +34,7 @@ import { VesselList } from './features/VesselList'
 import { VesselSidebar } from './features/VesselSidebar'
 import UpdatingVesselLoader from './features/VesselSidebar/UpdatingVesselLoader'
 import { VesselSidebarHeader } from './features/VesselSidebar/VesselSidebarHeader'
+import { useIsSuperUser } from './hooks/useIsSuperUser'
 import { useMainAppSelector } from './hooks/useMainAppSelector'
 import { BackofficePage } from './pages/BackofficePage'
 import { UnsupportedBrowserPage } from './pages/UnsupportedBrowserPage'
@@ -49,6 +51,8 @@ type AppProps = {
   auth?: AuthContextProps | undefined
 }
 export function App({ auth }: AppProps) {
+  const isSuperUser = useIsSuperUser()
+
   useEffect(() => {
     if (!auth) {
       return
@@ -68,46 +72,67 @@ export function App({ auth }: AppProps) {
     return <UnsupportedBrowserPage />
   }
 
+  if (isSuperUser === undefined) {
+    return <>Logging...</>
+  }
+
   return (
     <ThemeProvider theme={THEME}>
       <OnlyFontGlobalStyle />
 
       <FrontendErrorBoundary>
-        <RsuiteCustomProvider locale={rsuiteFrFr}>
-          <Router>
-            <Switch>
-              <Route path="/backoffice">
-                <Provider store={backofficeStore}>
-                  {/* eslint-disable-next-line no-null/no-null */}
-                  <PersistGate loading={null} persistor={backofficeStorePersistor}>
-                    <NamespaceContext.Provider value="backoffice">
-                      <BackofficePage />
-                    </NamespaceContext.Provider>
-                  </PersistGate>
-                </Provider>
-              </Route>
+        <AuthorizationContext.Provider value={isSuperUser}>
+          <RsuiteCustomProvider locale={rsuiteFrFr}>
+            <Router>
+              <Switch>
+                <Route path="/backoffice">
+                  {
+                    /**
+                     * Redirect to /ext when the user is not logged as a super user
+                     */
+                    !isSuperUser && <Redirect to="/ext" />
+                  }
+                  {isSuperUser && (
+                    <Provider store={backofficeStore}>
+                      {/* eslint-disable-next-line no-null/no-null */}
+                      <PersistGate loading={null} persistor={backofficeStorePersistor}>
+                        <NamespaceContext.Provider value="backoffice">
+                          <BackofficePage />
+                        </NamespaceContext.Provider>
+                      </PersistGate>
+                    </Provider>
+                  )}
+                </Route>
 
-              <Route exact path="/ext">
-                <Provider store={mainStore}>
-                  <NamespaceContext.Provider value="homepage">
-                    <TritonFish />
-                  </NamespaceContext.Provider>
-                </Provider>
-              </Route>
-
-              <Route path="/">
-                <Provider store={mainStore}>
-                  {/* eslint-disable-next-line no-null/no-null */}
-                  <PersistGate loading={null} persistor={mainStorePersistor}>
+                <Route exact path="/ext">
+                  <Provider store={mainStore}>
                     <NamespaceContext.Provider value="homepage">
-                      <HomePage />
+                      <TritonFish />
                     </NamespaceContext.Provider>
-                  </PersistGate>
-                </Provider>
-              </Route>
-            </Switch>
-          </Router>
-        </RsuiteCustomProvider>
+                  </Provider>
+                </Route>
+                <Route path="/">
+                  {
+                    /**
+                     * Redirect to /ext when the user is not logged as a super user
+                     */
+                    !isSuperUser && <Redirect to="/ext" />
+                  }
+                  {isSuperUser && (
+                    <Provider store={mainStore}>
+                      {/* eslint-disable-next-line no-null/no-null */}
+                      <PersistGate loading={null} persistor={mainStorePersistor}>
+                        <NamespaceContext.Provider value="homepage">
+                          <HomePage />
+                        </NamespaceContext.Provider>
+                      </PersistGate>
+                    </Provider>
+                  )}
+                </Route>
+              </Switch>
+            </Router>
+          </RsuiteCustomProvider>
+        </AuthorizationContext.Provider>
       </FrontendErrorBoundary>
     </ThemeProvider>
   )

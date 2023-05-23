@@ -31,6 +31,7 @@ export enum SeaFront {
   GUADELOUPE = 'GUADELOUPE',
   GUYANE = 'GUYANE',
   MARTINIQUE = 'MARTINIQUE',
+  MAYOTTE = 'MAYOTTE',
   MED = 'MED',
   MEMN = 'MEMN',
   NAMO = 'NAMO',
@@ -41,6 +42,7 @@ export enum SeaFrontLabel {
   GUADELOUPE = 'Guadeloupe',
   GUYANE = 'Guyane',
   MARTINIQUE = 'Martinique',
+  MAYOTTE = 'Mayotte',
   MED = 'MED',
   MEMN = 'MEMN',
   NAMO = 'NAMO',
@@ -54,6 +56,6 @@ export const SEA_FRONT_GROUP_SEA_FRONTS: Record<SeaFrontGroup, SeaFront[]> = {
   [SeaFrontGroup.MEMN]: [SeaFront.MEMN],
   [SeaFrontGroup.NAMO]: [SeaFront.NAMO],
   [SeaFrontGroup.OUTREMEROA]: [SeaFront.GUADELOUPE, SeaFront.GUYANE, SeaFront.MARTINIQUE],
-  [SeaFrontGroup.OUTREMEROI]: [SeaFront.SUD_OCEAN_INDIEN],
+  [SeaFrontGroup.OUTREMEROI]: [SeaFront.MAYOTTE, SeaFront.SUD_OCEAN_INDIEN],
   [SeaFrontGroup.SA]: [SeaFront.SA]
 }

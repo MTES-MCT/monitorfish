@@ -4,27 +4,25 @@ import {
   getNumberOfInfractionsWithoutRecord,
   getNatinfForInfractionsWithoutRecord
 } from '../../../domain/entities/controls'
+import { pluralize } from '../../../utils/pluralize'
 
 import type { MissionAction } from '../../../domain/types/missionAction'
 
-type ControlsProps = {
-  controlsData: MissionAction.MissionAction[]
+type LawRemindersProps = {
+  controls: MissionAction.MissionAction[]
 }
 
-export function LawReminders({ controlsData }: ControlsProps) {
-  const infractionsWithoutRecord = controlsData.reduce(
+export function LawReminders({ controls }: LawRemindersProps) {
+  const infractionsWithoutRecord = controls.reduce(
     (accumulator, control) => accumulator + getNumberOfInfractionsWithoutRecord(control),
     0
   )
 
-  const natinfList: number[] = []
-  controlsData.forEach(control => {
-    natinfList.push(...getNatinfForInfractionsWithoutRecord(control))
-  })
+  const natinfs: number[] = controls.map(control => getNatinfForInfractionsWithoutRecord(control)).flat()
 
-  const natinfTags = natinfList.map(item => (
+  const natinfTags = natinfs.map(natinf => (
     <InfractionTag>
-      <InfractionTagText>NATINF {item}</InfractionTagText>
+      <InfractionTagText>NATINF {natinf}</InfractionTagText>
     </InfractionTag>
   ))
 
@@ -36,7 +34,7 @@ export function LawReminders({ controlsData }: ControlsProps) {
       </Row>
       {infractionsWithoutRecord > 0 && (
         <Row isGrey={false} isStrong>
-          {infractionsWithoutRecord} infraction{infractionsWithoutRecord > 1 ? 's' : ''} sans PV <GoldenPoppy />
+          {infractionsWithoutRecord} {pluralize('infraction', infractionsWithoutRecord)} sans PV <GoldenPoppy />
           {natinfTags}
         </Row>
       )}

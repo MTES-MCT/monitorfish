@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { Control } from './Control'
 import { getNumberOfInfractions, getNumberOfInfractionsWithoutRecord } from '../../../domain/entities/controls'
+import { pluralize } from '../../../utils/pluralize'
 import { YearListChevronIcon, YearListContent, YearListTitle, YearListTitleText } from '../common_styles/YearList.style'
 
 import type { MissionAction } from '../../../domain/types/missionAction'
@@ -41,7 +42,7 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
     if (!numberOfInfractions && numberOfInfractionsWithoutRecord) {
       return (
         <>
-          , {numberOfInfractionsWithoutRecord} infraction{numberOfInfractionsWithoutRecord > 1 ? 's' : ''} sans PV{' '}
+          , {numberOfInfractionsWithoutRecord} {pluralize('infraction', numberOfInfractionsWithoutRecord)} sans PV{' '}
           <GlodenPuppy />
         </>
       )
@@ -50,7 +51,7 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
     if (numberOfInfractions && numberOfInfractionsWithoutRecord) {
       return (
         <>
-          , {numberOfInfractions} infraction{numberOfInfractions > 1 ? 's' : ''} dont {numberOfInfractionsWithoutRecord}{' '}
+          , {numberOfInfractions} {pluralize('infraction', numberOfInfractions)} dont {numberOfInfractionsWithoutRecord}{' '}
           sans PV <Red /> <GlodenPuppy />
         </>
       )
@@ -58,7 +59,7 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
 
     return (
       <>
-        , {numberOfInfractions} infraction{numberOfInfractions > 1 ? 's' : ''} <Red />
+        , {numberOfInfractions} {pluralize('infraction', numberOfInfractions)} <Red />
       </>
     )
   }, [yearControls, isEmpty])
@@ -81,7 +82,7 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
             <YearResume data-cy="vessel-controls-year">
               {!isEmpty ? (
                 <>
-                  {yearControls.length} contrôle{yearControls.length > 1 ? 's' : ''}
+                  {yearControls.length} {pluralize('contrôle', yearControls.length)}
                 </>
               ) : (
                 'Aucun contrôle'

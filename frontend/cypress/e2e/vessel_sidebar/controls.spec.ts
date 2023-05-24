@@ -32,7 +32,10 @@ context('Vessel sidebar controls tab', () => {
       .eq(1)
       .contains("Le 18/01/2020 (Unité manquante), pas d'infraction")
 
-    cy.get('*[data-cy="vessel-controls-year"]').first().contains('1 contrôle, 6 infractions')
+    cy.get('*[data-cy="vessel-controls-summary-law-reminders"]').first().contains('Rappels à la loi')
+    cy.get('*[data-cy="vessel-controls-summary-law-reminders"]').first().contains('3 infractions sans PV')
+
+    cy.get('*[data-cy="vessel-controls-year"]').first().contains('1 contrôle, 6 infractions dont 3 sans PV')
 
     // When
     cy.get('*[data-cy="vessel-controls-year"]').first().click({ timeout: 10000 })

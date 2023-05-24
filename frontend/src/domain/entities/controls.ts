@@ -113,3 +113,45 @@ export const isControl = actionType =>
   actionType === MissionAction.MissionActionType.SEA_CONTROL ||
   actionType === MissionAction.MissionActionType.LAND_CONTROL ||
   actionType === MissionAction.MissionActionType.AIR_CONTROL
+
+const infractionWithoutRecordFilter = (
+  infraction:
+    | MissionAction.GearInfraction
+    | MissionAction.LogbookInfraction
+    | MissionAction.SpeciesInfraction
+    | MissionAction.OtherInfraction
+) => infraction.infractionType === InfractionType.WITHOUT_RECORD || infraction.infractionType === InfractionType.PENDING
+
+/**
+ * Get the number of infractions without records in a control
+ */
+export const getNumberOfInfractionsWithoutRecord = (control: MissionAction.MissionAction | undefined): number => {
+  if (!control) {
+    return 0
+  }
+
+  return (
+    control.gearInfractions.filter(infractionWithoutRecordFilter).length +
+    control.logbookInfractions.filter(infractionWithoutRecordFilter).length +
+    control.speciesInfractions.filter(infractionWithoutRecordFilter).length +
+    control.otherInfractions.filter(infractionWithoutRecordFilter).length
+  )
+}
+
+/**
+ * Get the natinf of infractions without records in a control
+ */
+export const getNatinfForInfractionsWithoutRecord = (control: MissionAction.MissionAction | undefined): number[] => {
+  if (!control) {
+    return []
+  }
+
+  const listOfNatinfForInfractionsWithoutRecords: number[] = [
+    ...control.gearInfractions.filter(infractionWithoutRecordFilter).map(infraction => infraction.natinf),
+    ...control.logbookInfractions.filter(infractionWithoutRecordFilter).map(infraction => infraction.natinf),
+    ...control.speciesInfractions.filter(infractionWithoutRecordFilter).map(infraction => infraction.natinf),
+    ...control.otherInfractions.filter(infractionWithoutRecordFilter).map(infraction => infraction.natinf)
+  ]
+
+  return listOfNatinfForInfractionsWithoutRecords
+}

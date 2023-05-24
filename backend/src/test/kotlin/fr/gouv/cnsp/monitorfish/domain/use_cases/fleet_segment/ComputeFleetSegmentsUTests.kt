@@ -77,7 +77,7 @@ class ComputeFleetSegmentsUTests {
 
         // When
         val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
-            .execute(listOf("27.5.b"), listOf("TB"), listOf("HKE"))
+            .execute(listOf("27.5.b"), listOf("TB"), listOf("ANF"))
 
         // Then
         assertThat(segment).hasSize(1)

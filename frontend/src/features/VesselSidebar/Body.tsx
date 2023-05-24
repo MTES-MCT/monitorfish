@@ -1,3 +1,4 @@
+import { useContext } from 'react'
 import styled from 'styled-components'
 
 import { VesselBeaconMalfunctions } from './beacon_malfunctions/VesselBeaconMalfunctions'
@@ -9,18 +10,19 @@ import { VesselSummary } from './Summary'
 import { AlertWarning } from './warnings/AlertWarning'
 import { BeaconMalfunctionWarning } from './warnings/BeaconMalfunctionWarning'
 import { COLORS } from '../../constants/constants'
+import { AuthorizationContext } from '../../context/AuthorizationContext'
 import { VesselSidebarTab } from '../../domain/entities/vessel/vessel'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 export function Body() {
+  const isSuperUser = useContext(AuthorizationContext)
   const { healthcheckTextWarning } = useMainAppSelector(state => state.global)
   const { selectedVessel, vesselSidebarTab } = useMainAppSelector(state => state.vessel)
-  const isAdmin = useMainAppSelector(state => state.global.isAdmin)
 
   return (
     <Wrapper healthcheckTextWarning={healthcheckTextWarning}>
-      {isAdmin && <AlertWarning selectedVessel={selectedVessel} />}
-      {isAdmin && <BeaconMalfunctionWarning selectedVessel={selectedVessel} />}
+      {isSuperUser && <AlertWarning selectedVessel={selectedVessel} />}
+      {isSuperUser && <BeaconMalfunctionWarning selectedVessel={selectedVessel} />}
       {vesselSidebarTab === VesselSidebarTab.SUMMARY && <VesselSummary />}
       {vesselSidebarTab === VesselSidebarTab.IDENTITY && <VesselIdentity />}
       {vesselSidebarTab === VesselSidebarTab.VOYAGES && <VesselFishingActivities />}

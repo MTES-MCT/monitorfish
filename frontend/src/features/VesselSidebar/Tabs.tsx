@@ -1,6 +1,8 @@
+import { useContext } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
+import { AuthorizationContext } from '../../context/AuthorizationContext'
 import { VesselSidebarTab } from '../../domain/entities/vessel/vessel'
 import { showVesselSidebarTab } from '../../domain/shared_slices/Vessel'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
@@ -15,12 +17,12 @@ import { ReactComponent as SummarySVG } from '../icons/Picto_resume.svg'
 // TODO Move the icons in Monitor UI : https://github.com/MTES-MCT/monitorfish/issues/1736
 export function Tabs() {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useContext(AuthorizationContext)
   const { selectedVessel, vesselSidebarTab } = useMainAppSelector(state => state.vessel)
-  const isAdmin = useMainAppSelector(state => state.global.isAdmin)
 
   return (
     <TabList>
-      {isAdmin && (
+      {isSuperUser && (
         <Tab
           data-cy="vessel-menu-resume"
           isActive={vesselSidebarTab === VesselSidebarTab.SUMMARY}
@@ -31,7 +33,10 @@ export function Tabs() {
       )}
       <Tab
         data-cy="vessel-menu-identity"
-        isActive={vesselSidebarTab === VesselSidebarTab.IDENTITY}
+        isActive={
+          vesselSidebarTab === VesselSidebarTab.IDENTITY ||
+          (!isSuperUser && vesselSidebarTab === VesselSidebarTab.SUMMARY)
+        }
         onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.IDENTITY))}
       >
         <VesselIDIcon /> <br /> Identité
@@ -43,7 +48,7 @@ export function Tabs() {
       >
         <FisheriesIcon /> <br /> Pêche
       </Tab>
-      {isAdmin && (
+      {isSuperUser && (
         <Tab
           data-cy="vessel-menu-reporting"
           isActive={vesselSidebarTab === VesselSidebarTab.REPORTING}
@@ -64,7 +69,7 @@ export function Tabs() {
       >
         <ControlsIcon /> <br /> Contrôles
       </Tab>
-      {isAdmin && (
+      {isSuperUser && (
         <Tab
           data-cy="vessel-menu-ers-vms"
           isActive={vesselSidebarTab === VesselSidebarTab.ERSVMS}

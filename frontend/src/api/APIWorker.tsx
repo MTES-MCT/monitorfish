@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 
 import { fleetSegmentApi } from './fleetSegment'
+import { AuthorizationContext } from '../context/AuthorizationContext'
 import { SideWindowStatus } from '../domain/entities/sideWindow/constants'
 import { VesselSidebarTab } from '../domain/entities/vessel/vessel'
 import { setIsUpdatingVessels } from '../domain/shared_slices/Global'
@@ -29,8 +30,8 @@ export const THIRTY_SECONDS = 30 * 1000
 // TODO Move these `useEffect`s to dispatchers, in order to remove logic from this component
 export function APIWorker() {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useContext(AuthorizationContext)
   const { selectedVesselIdentity, vesselSidebarTab } = useMainAppSelector(state => state.vessel)
-  const { isAdmin } = useMainAppSelector(state => state.global)
   const { sideWindow } = useMainAppSelector(state => state)
   const { openedBeaconMalfunctionInKanban, vesselBeaconMalfunctionsResumeAndHistory } = useMainAppSelector(
     state => state.beaconMalfunction
@@ -42,7 +43,7 @@ export function APIWorker() {
   const [updateVesselSidebarTab, setUpdateVesselSidebarTab] = useState(false)
 
   useEffect(() => {
-    if (isAdmin === undefined) {
+    if (isSuperUser === undefined) {
       return () => {}
     }
 
@@ -51,7 +52,7 @@ export function APIWorker() {
     dispatch(getAllSpecies()).then(() => dispatch(getAllRegulatoryLayers()))
     dispatch(getAllGearCodes())
 
-    if (isAdmin) {
+    if (isSuperUser) {
       dispatch(fleetSegmentApi.endpoints.getFleetSegments.initiate())
       dispatch(getOperationalAlerts())
       dispatch(getAllCurrentReportings())
@@ -74,10 +75,10 @@ export function APIWorker() {
     return () => {
       clearInterval(interval)
     }
-  }, [dispatch, isAdmin])
+  }, [dispatch, isSuperUser])
 
   useEffect(() => {
-    if (isAdmin && sideWindow.status !== SideWindowStatus.CLOSED) {
+    if (isSuperUser && sideWindow.status !== SideWindowStatus.CLOSED) {
       if (sideWindowInterval?.current) {
         clearInterval(sideWindowInterval.current)
       }
@@ -93,10 +94,10 @@ export function APIWorker() {
     return () => {
       clearInterval(sideWindowInterval?.current)
     }
-  }, [dispatch, isAdmin, sideWindow.status])
+  }, [dispatch, isSuperUser, sideWindow.status])
 
   useEffect(() => {
-    if (isAdmin && sideWindow.status !== SideWindowStatus.CLOSED && openedBeaconMalfunctionInKanban) {
+    if (isSuperUser && sideWindow.status !== SideWindowStatus.CLOSED && openedBeaconMalfunctionInKanban) {
       if (beaconMalfunctionInKanbanInterval?.current) {
         clearInterval(beaconMalfunctionInKanbanInterval.current)
       }
@@ -109,10 +110,10 @@ export function APIWorker() {
     return () => {
       clearInterval(beaconMalfunctionInKanbanInterval?.current)
     }
-  }, [dispatch, isAdmin, openedBeaconMalfunctionInKanban, sideWindow.status])
+  }, [dispatch, isSuperUser, openedBeaconMalfunctionInKanban, sideWindow.status])
 
   useEffect(() => {
-    if (isAdmin && vesselBeaconMalfunctionsResumeAndHistory) {
+    if (isSuperUser && vesselBeaconMalfunctionsResumeAndHistory) {
       if (vesselBeaconMalfunctionInterval?.current) {
         clearInterval(vesselBeaconMalfunctionInterval.current)
       }
@@ -125,7 +126,7 @@ export function APIWorker() {
     return () => {
       clearInterval(vesselBeaconMalfunctionInterval?.current)
     }
-  }, [dispatch, isAdmin, vesselBeaconMalfunctionsResumeAndHistory])
+  }, [dispatch, isSuperUser, vesselBeaconMalfunctionsResumeAndHistory])
 
   useEffect(() => {
     if (!updateVesselSidebarTab) {
@@ -138,12 +139,12 @@ export function APIWorker() {
       dispatch(getVesselControls(false))
     } else if (vesselSidebarTab === VesselSidebarTab.REPORTING) {
       dispatch(getVesselReportings())
-    } else if (isAdmin && vesselSidebarTab === VesselSidebarTab.ERSVMS) {
+    } else if (isSuperUser && vesselSidebarTab === VesselSidebarTab.ERSVMS) {
       dispatch(getVesselBeaconMalfunctions(true))
     }
 
     setUpdateVesselSidebarTab(false)
-  }, [dispatch, isAdmin, selectedVesselIdentity, updateVesselSidebarTab, vesselSidebarTab])
+  }, [dispatch, isSuperUser, selectedVesselIdentity, updateVesselSidebarTab, vesselSidebarTab])
 
   return null
 }

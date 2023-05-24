@@ -10,7 +10,6 @@ import rsuiteFrFr from 'rsuite/locales/fr_FR'
 import styled from 'styled-components'
 
 import { APIWorker } from './api/APIWorker'
-import { BackofficeMode } from './api/BackofficeMode'
 import { AuthorizationContext } from './context/AuthorizationContext'
 import { NamespaceContext } from './context/NamespaceContext'
 import { SideWindowStatus } from './domain/entities/sideWindow/constants'
@@ -37,6 +36,7 @@ import { VesselSidebarHeader } from './features/VesselSidebar/VesselSidebarHeade
 import { useIsSuperUser } from './hooks/useIsSuperUser'
 import { useMainAppSelector } from './hooks/useMainAppSelector'
 import { BackofficePage } from './pages/BackofficePage'
+import { LandingPage } from './pages/LandingPage'
 import { UnsupportedBrowserPage } from './pages/UnsupportedBrowserPage'
 import { backofficeStore, backofficeStorePersistor, mainStore, mainStorePersistor } from './store'
 import { FrontendErrorBoundary } from './ui/FrontendErrorBoundary'
@@ -65,7 +65,7 @@ export function App({ auth }: AppProps) {
   }, [auth, auth?.isAuthenticated, auth?.activeNavigator, auth?.isLoading, auth?.signinRedirect])
 
   if (auth && !auth.isAuthenticated) {
-    return <div>Unable to log in</div>
+    return <LandingPage hasInsufficientRights />
   }
 
   if (!isBrowserSupported()) {
@@ -73,7 +73,7 @@ export function App({ auth }: AppProps) {
   }
 
   if (isSuperUser === undefined) {
-    return <>Logging...</>
+    return <LandingPage />
   }
 
   return (
@@ -105,6 +105,12 @@ export function App({ auth }: AppProps) {
                 </Route>
 
                 <Route exact path="/ext">
+                  {
+                    /**
+                     * Redirect to / when the user is logged as a super user
+                     */
+                    isSuperUser && <Redirect to="/" />
+                  }
                   <Provider store={mainStore}>
                     <NamespaceContext.Provider value="homepage">
                       <TritonFish />
@@ -148,7 +154,6 @@ function HomePage() {
 
   return (
     <>
-      <BackofficeMode isAdmin />
       <Switch>
         <Route exact path="/side_window">
           <SideWindow ref={ref} isFromURL />
@@ -181,7 +186,6 @@ function TritonFish() {
 
   return (
     <>
-      <BackofficeMode />
       <Healthcheck />
       <PreviewFilteredVessels />
       <Wrapper>

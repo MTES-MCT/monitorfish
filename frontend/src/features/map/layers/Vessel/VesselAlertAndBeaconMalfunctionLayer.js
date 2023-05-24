@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
@@ -8,8 +8,10 @@ import { LayerProperties } from '../../../../domain/entities/layers/constants'
 
 import { getVesselAlertAndBeaconMalfunctionStyle } from './style'
 import { getVesselCompositeIdentifier, vesselIsShowed } from '../../../../domain/entities/vessel/vessel'
+import { AuthorizationContext } from '../../../../context/AuthorizationContext'
 
 const VesselAlertAndBeaconMalfunctionLayer = ({ map }) => {
+  const isSuperUser = useContext(AuthorizationContext)
   const {
     vessels,
     hideNonSelectedVessels,
@@ -22,8 +24,7 @@ const VesselAlertAndBeaconMalfunctionLayer = ({ map }) => {
   } = useSelector(state => state.filter)
 
   const {
-    previewFilteredVesselsMode,
-    isAdmin
+    previewFilteredVesselsMode
   } = useSelector(state => state.global)
 
   const {
@@ -56,7 +57,7 @@ const VesselAlertAndBeaconMalfunctionLayer = ({ map }) => {
   }
 
   useEffect(() => {
-    if (isAdmin && map) {
+    if (isSuperUser && map) {
       getLayer().name = LayerProperties.VESSEL_BEACON_MALFUNCTION.code
       map.getLayers().push(getLayer())
     }
@@ -66,10 +67,10 @@ const VesselAlertAndBeaconMalfunctionLayer = ({ map }) => {
         map.removeLayer(getLayer())
       }
     }
-  }, [isAdmin, map, getLayer])
+  }, [isSuperUser, map, getLayer])
 
   useEffect(() => {
-    if (isAdmin && vessels?.length) {
+    if (isSuperUser && vessels?.length) {
       const features = vessels.reduce((_features, vessel) => {
         if (!vessel.hasBeaconMalfunction) return _features
         if (!vessel.vesselProperties.hasAlert) return _features
@@ -91,7 +92,7 @@ const VesselAlertAndBeaconMalfunctionLayer = ({ map }) => {
       getVectorSource()?.addFeatures(features)
     }
   }, [
-    isAdmin,
+    isSuperUser,
     vessels,
     selectedVesselIdentity,
     vesselsTracksShowed,

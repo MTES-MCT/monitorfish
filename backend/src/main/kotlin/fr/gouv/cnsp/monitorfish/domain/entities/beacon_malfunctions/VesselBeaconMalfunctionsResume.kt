@@ -54,8 +54,8 @@ data class VesselBeaconMalfunctionsResume(
                 false ->
                     beaconMalfunctionVesselStatusActions
                         .minByOrNull { action -> action.dateTime }?.let { action ->
-                        VesselStatus.valueOf(action.previousValue)
-                    }!!
+                            VesselStatus.valueOf(action.previousValue)
+                        }!!
             }
         }
 

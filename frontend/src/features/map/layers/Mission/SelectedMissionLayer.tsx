@@ -3,6 +3,7 @@ import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
+import { NEW_MISSION_ID } from './constants'
 import { missionZoneStyle } from './MissionLayer/styles'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
@@ -86,11 +87,14 @@ export function UnmemoizedSelectedMissionLayer({ map }) {
 
   useEffect(() => {
     getVectorSource().clear(true)
-    if (!mission.draft || !sideWindow.selectedPath.id) {
+
+    // When creating a new mission, dummy NEW_MISSION_ID is used
+    const missionId = sideWindow.selectedPath.id || NEW_MISSION_ID
+    if (!mission.draft) {
       return
     }
 
-    const missionFeature = getMissionFeatureZone({ ...mission.draft, id: sideWindow.selectedPath.id })
+    const missionFeature = getMissionFeatureZone({ ...mission.draft, id: missionId })
     getVectorSource().addFeature(missionFeature)
   }, [getVectorSource, mission.draft, sideWindow.selectedPath.id])
 

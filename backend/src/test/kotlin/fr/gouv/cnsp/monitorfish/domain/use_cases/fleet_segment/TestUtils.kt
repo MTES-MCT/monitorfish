@@ -58,6 +58,7 @@ object TestUtils {
                 "Trawl",
                 gears = listOf("OT", "OTB", "OTM", "OTT", "PTB", "PT", "PTM", "TBN", "TBS", "TX", "TB"),
                 targetSpecies = listOf("COD", "HAD", "WHG", "POK", "NEP", "SOL", "PLE", "HKE"),
+                bycatchSpecies = listOf("HKE", "ANF"),
                 faoAreas = listOf("27.5.b", "27.6", "27.7.a", "27.7.d", "27.7"),
                 year = currentYear,
                 impactRiskFactor = 2.56,

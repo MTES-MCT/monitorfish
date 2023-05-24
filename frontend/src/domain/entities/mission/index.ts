@@ -1,4 +1,5 @@
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
+import { random } from 'lodash'
 import { Feature } from 'ol'
 import { GeoJSON } from 'ol/format'
 import Point from 'ol/geom/Point'
@@ -124,6 +125,7 @@ export const getMissionActionFeature = (
   const infractions = getMissionActionInfractionsFromMissionActionFromFormValues(action)
   const infractionsNatinfs = infractions.map(({ natinf }) => natinf)
 
+  const actionId = action.id || random(1000)
   const feature = new Feature({
     actionType: action.actionType,
     dateTime: getDateTime(action.actionDatetimeUtc, true),
@@ -137,7 +139,7 @@ export const getMissionActionFeature = (
     numberOfInfractionsWithRecords,
     vesselName: action.vesselName
   })
-  feature.setId(`${MonitorFishLayer.MISSION_ACTION_SELECTED}:${action.id}`)
+  feature.setId(`${MonitorFishLayer.MISSION_ACTION_SELECTED}:${actionId}`)
 
   return feature
 }

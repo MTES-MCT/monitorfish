@@ -50,7 +50,7 @@ export class Vessel {
     feature: VesselEnhancedObject,
     options: {
       hideVesselsAtPort: boolean
-      isSuperUser: any
+      isSuperUser: boolean
       riskFactorShowedOnMap: boolean
       vesselLabel: string
       vesselLabelsShowedOnMap: boolean

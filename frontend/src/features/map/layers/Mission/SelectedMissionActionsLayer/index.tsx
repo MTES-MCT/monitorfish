@@ -8,6 +8,7 @@ import { MonitorFishLayer } from '../../../../../domain/entities/layers/types'
 import { getMissionActionFeature, getMissionActionFeatures } from '../../../../../domain/entities/mission'
 import { useGetFilteredMissionsQuery } from '../../../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { NEW_MISSION_ID } from '../constants'
 
 import type { GeoJSON } from '../../../../../domain/types/GeoJSON'
 import type { VectorLayerWithName } from '../../../../../domain/types/layer'
@@ -80,11 +81,12 @@ export function UnmemoizedSelectedMissionActionsLayer({ map }) {
 
   useEffect(() => {
     getVectorSource().clear(true)
-    if (!mission.draft || !sideWindow.selectedPath.id) {
+    const missionId = sideWindow.selectedPath.id || NEW_MISSION_ID
+    if (!mission.draft) {
       return
     }
 
-    const actionFeatures = getMissionActionFeatures({ ...mission.draft, id: sideWindow.selectedPath.id })
+    const actionFeatures = getMissionActionFeatures({ ...mission.draft, id: missionId })
     getVectorSource().addFeatures(actionFeatures)
   }, [getVectorSource, mission.draft, sideWindow.selectedPath.id])
 

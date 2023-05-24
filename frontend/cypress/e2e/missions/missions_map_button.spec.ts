@@ -1,10 +1,6 @@
 context('Missions Map Button', () => {
   beforeEach(() => {
     cy.loadPath('/#@-47979.79,6309598.10,8.70')
-    cy.get('*[data-cy^="missions-map-button"]').click()
-    cy.get('*[data-cy^="missions-menu-box"]').should('be.visible')
-    cy.get('*[data-cy^="toggle-mission-layer"]').click()
-    cy.get('*[data-cy^="missions-map-button"]').click()
   })
 
   it('Mission layer Should be showed and hidden', () => {

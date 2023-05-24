@@ -6,10 +6,10 @@ import { SeaFrontGroup } from '../../constants'
 import { getMissionFormInitialValues } from '../../features/SideWindow/MissionForm/utils'
 import { MissionDateRangeFilter, MissionFilterType } from '../../features/SideWindow/MissionList/types'
 import { FrontendError } from '../../libs/FrontendError'
+import { Mission } from '../entities/mission/types'
 
 import type { MissionActionFormValues, MissionFormValues } from '../../features/SideWindow/MissionForm/types'
 import type { FilterValues } from '../../features/SideWindow/MissionList/types'
-import type { Mission } from '../entities/mission/types'
 import type { GeoJSON } from '../types/GeoJSON'
 import type { MissionAction } from '../types/missionAction'
 import type { PayloadAction } from '@reduxjs/toolkit'
@@ -28,7 +28,8 @@ const INITIAL_STATE: MissionState = {
   editedDraftActionIndex: undefined,
   isDraftDirty: false,
   listFilterValues: {
-    [MissionFilterType.DATE_RANGE]: MissionDateRangeFilter.MONTH
+    [MissionFilterType.DATE_RANGE]: MissionDateRangeFilter.WEEK,
+    [MissionFilterType.STATUS]: [Mission.MissionStatus.IN_PROGRESS]
   },
   listSeaFront: SeaFrontGroup.MED,
   selectedMissionActionGeoJSON: undefined,

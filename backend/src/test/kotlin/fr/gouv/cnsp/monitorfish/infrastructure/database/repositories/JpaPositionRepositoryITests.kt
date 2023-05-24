@@ -31,7 +31,8 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
     fun `save Should save the position`() {
         // Given
         val farPastFixedDateTime = ZonedDateTime.of(LocalDate.EPOCH, LocalTime.MAX.plusSeconds(1), ZoneId.of("UTC"))
-        val expectedPosition = Position(null, "REF_NUMBER", "224136470", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0, farPastFixedDateTime)
+        val expectedPosition =
+            Position(null, "REF_NUMBER", "224136470", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0, farPastFixedDateTime)
 
         // When
         jpaPositionRepository.save(expectedPosition)

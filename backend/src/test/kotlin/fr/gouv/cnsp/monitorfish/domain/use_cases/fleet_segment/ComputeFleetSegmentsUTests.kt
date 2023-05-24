@@ -72,6 +72,19 @@ class ComputeFleetSegmentsUTests {
     }
 
     @Test
+    fun `execute Should return the NWW01 02 segment When a bycatch specy is found in the species list`() {
+        given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
+
+        // When
+        val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
+            .execute(listOf("27.5.b"), listOf("TB"), listOf("ANF"))
+
+        // Then
+        assertThat(segment).hasSize(1)
+        assertThat(segment.first().segment).isEqualTo("NWW01/02")
+    }
+
+    @Test
     fun `execute Should return two segments is SWW`() {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
 

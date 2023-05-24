@@ -46,7 +46,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
 
   const isLoading = useMemo(() => !getFleetSegmentsApiQuery.data, [getFleetSegmentsApiQuery.data])
 
-  const updadeSegments = useDebouncedCallback(async () => {
+  const updateSegments = useDebouncedCallback(async () => {
     const declaredSpeciesOnboard = riskFactorApiQuery.data?.speciesOnboard
 
     const computedFleetSegments = await dispatch(
@@ -84,7 +84,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
   )
 
   useEffect(() => {
-    updadeSegments()
+    updateSegments()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     dispatch,

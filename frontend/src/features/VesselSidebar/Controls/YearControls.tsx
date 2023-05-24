@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { Control } from './Control'
-import { getNumberOfInfractions } from '../../../domain/entities/controls'
+import { getNumberOfInfractions, getNumberOfInfractionsWithoutRecord } from '../../../domain/entities/controls'
+import { pluralize } from '../../../utils/pluralize'
 import { YearListChevronIcon, YearListContent, YearListTitle, YearListTitleText } from '../common_styles/YearList.style'
 
 import type { MissionAction } from '../../../domain/types/missionAction'
@@ -21,11 +22,16 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
       0
     )
 
+    const numberOfInfractionsWithoutRecord = yearControls.reduce(
+      (accumulator, control) => accumulator + getNumberOfInfractionsWithoutRecord(control),
+      0
+    )
+
     if (isEmpty) {
       return null
     }
 
-    if (!numberOfInfractions) {
+    if (!numberOfInfractions && !numberOfInfractionsWithoutRecord) {
       return (
         <>
           , pas d&apos;infraction <Green />
@@ -33,9 +39,27 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
       )
     }
 
+    if (!numberOfInfractions && numberOfInfractionsWithoutRecord) {
+      return (
+        <>
+          , {numberOfInfractionsWithoutRecord} {pluralize('infraction', numberOfInfractionsWithoutRecord)} sans PV{' '}
+          <GlodenPuppy />
+        </>
+      )
+    }
+
+    if (numberOfInfractions && numberOfInfractionsWithoutRecord) {
+      return (
+        <>
+          , {numberOfInfractions} {pluralize('infraction', numberOfInfractions)} dont {numberOfInfractionsWithoutRecord}{' '}
+          sans PV <Red /> <GlodenPuppy />
+        </>
+      )
+    }
+
     return (
       <>
-        , {numberOfInfractions} infraction{numberOfInfractions > 1 ? 's' : ''} <Red />
+        , {numberOfInfractions} {pluralize('infraction', numberOfInfractions)} <Red />
       </>
     )
   }, [yearControls, isEmpty])
@@ -58,7 +82,7 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
             <YearResume data-cy="vessel-controls-year">
               {!isEmpty ? (
                 <>
-                  {yearControls.length} contrôle{yearControls.length > 1 ? 's' : ''}
+                  {yearControls.length} {pluralize('contrôle', yearControls.length)}
                 </>
               ) : (
                 'Aucun contrôle'
@@ -92,6 +116,15 @@ const Green = styled.span`
   width: 8px;
   margin-left: 5px;
   background-color: ${p => p.theme.color.mediumSeaGreen};
+  border-radius: 50%;
+  display: inline-block;
+`
+
+const GlodenPuppy = styled.span`
+  height: 8px;
+  width: 8px;
+  margin-left: 5px;
+  background-color: ${p => p.theme.color.goldenPoppy};
   border-radius: 50%;
   display: inline-block;
 `

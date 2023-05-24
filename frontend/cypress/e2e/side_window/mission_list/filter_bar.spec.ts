@@ -26,6 +26,8 @@ context('Side Window > Mission List > Filter Bar', () => {
   })
 
   it('Should filter missions by status', () => {
+    // Default status
+    cy.get('[data-cy="mission-list-filter-tags"]').contains('En cours')
     cy.intercept('GET', `*missionStatus=ENDED&*`).as('getMissions')
     cy.fill('Statut', ['Terminée'])
     cy.wait('@getMissions')

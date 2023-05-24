@@ -1,10 +1,6 @@
 context('Missions labels', () => {
   beforeEach(() => {
     cy.loadPath('/#@-188008.06,6245230.27,8.70')
-    cy.get('*[data-cy^="missions-map-button"]').click()
-    cy.get('*[data-cy^="missions-menu-box"]').should('be.visible')
-    cy.get('*[data-cy^="toggle-mission-layer"]').click()
-    cy.get('*[data-cy^="missions-map-button"]').click()
   })
 
   it('Missions labels Should be showed on map and movable', () => {

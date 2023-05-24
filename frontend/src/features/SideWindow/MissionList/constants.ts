@@ -4,6 +4,7 @@ import { MissionDateRangeFilterLabel, MissionFilterType } from './types'
 import { SeaFrontGroup, SeaFrontGroupLabel } from '../../../constants'
 import { Mission } from '../../../domain/entities/mission/types'
 import { getMissionStatus } from '../../../domain/entities/mission/utils'
+import { UNKNOWN_VESSEL } from '../../../domain/entities/vessel/vessel'
 import { MissionAction } from '../../../domain/types/missionAction'
 import { getOptionsFromLabelledEnum } from '../../../utils/getOptionsFromLabelledEnum'
 
@@ -85,7 +86,7 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
       label: 'Navires contrôlés',
       transform: mission =>
         mission.actions
-          .map(action => action.vesselName)
+          .map(action => (action.vesselName === UNKNOWN_VESSEL.vesselName ? 'INCONNU' : action.vesselName))
           .filter((vesselName: string | undefined): vesselName is string => !!vesselName)
           .sort()
           .join(', ')

@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { formatDateLabel, getMissionActionInfractionsFromMissionActionFormValues, getTitle } from './utils'
+import { UNKNOWN_VESSEL } from '../../../../domain/entities/vessel/vessel'
 import { MissionAction } from '../../../../domain/types/missionAction'
 import { FrontendError } from '../../../../libs/FrontendError'
 
@@ -18,9 +19,11 @@ export type ItemProps = {
 }
 export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit }: ItemProps) {
   const [actionLabel, ActionIcon] = useMemo(() => {
+    const vesselName = initialValues.vesselName === UNKNOWN_VESSEL.vesselName ? 'INCONNU' : initialValues.vesselName
+
     switch (initialValues.actionType) {
       case MissionAction.MissionActionType.AIR_CONTROL:
-        return [getTitle('Contrôle aérien', initialValues.vesselName, '- Navire inconnu'), Icon.Plane]
+        return [getTitle('Contrôle aérien', vesselName, '- Navire inconnu'), Icon.Plane]
 
       case MissionAction.MissionActionType.AIR_SURVEILLANCE:
         return [
@@ -35,13 +38,13 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
         ]
 
       case MissionAction.MissionActionType.LAND_CONTROL:
-        return [getTitle('Contrôle à la débarque', initialValues.vesselName, '- Navire inconnu'), Icon.Anchor]
+        return [getTitle('Contrôle à la débarque', vesselName, '- Navire inconnu'), Icon.Anchor]
 
       case MissionAction.MissionActionType.OBSERVATION:
         return [getTitle('', initialValues.otherComments, 'Note libre à renseigner'), Icon.Note]
 
       case MissionAction.MissionActionType.SEA_CONTROL:
-        return [getTitle('Contrôle en mer', initialValues.vesselName, '- Navire inconnu'), Icon.FleetSegment]
+        return [getTitle('Contrôle en mer', vesselName, '- Navire inconnu'), Icon.FleetSegment]
 
       default:
         throw new FrontendError('`initialValues.actionType` does not match the enum')

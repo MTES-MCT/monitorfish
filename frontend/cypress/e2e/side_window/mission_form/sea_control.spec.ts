@@ -11,6 +11,51 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter un contrôle en mer')
   })
 
+  it('Should fill the form with an unknown vessel and send the expected data to the API', () => {
+    const getSaveButton = () => cy.get('button').contains('Enregistrer').parent()
+    // -------------------------------------------------------------------------
+    // Form
+
+    getSaveButton().should('be.disabled')
+
+    cy.fill('Navire inconnu', true)
+
+    cy.wait(500)
+
+    cy.fill('Saisi par', 'Marlin')
+
+    cy.wait(500)
+
+    // -------------------------------------------------------------------------
+    // Request
+
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('createMissionAction')
+
+    cy.clickButton('Enregistrer')
+
+    cy.wait('@createMissionAction').then(interception => {
+      if (!interception.response) {
+        assert.fail('`interception.response` is undefined.')
+      }
+
+      assert.deepInclude(interception.request.body, {
+        externalReferenceNumber: 'UNKNOWN',
+        flagState: 'UNKNOWN',
+        internalReferenceNumber: 'UNKNOWN',
+        ircs: 'UNKNOWN',
+        vesselId: -1,
+        vesselName: 'UNKNOWN'
+      })
+
+      cy.get('h1').should('contain.text', 'Missions et contrôles')
+    })
+  })
+
   it('Should fill the form and send the expected data to the API', () => {
     const getSaveButton = () => cy.get('button').contains('Enregistrer').parent()
     const now = getUtcDateInMultipleFormats()

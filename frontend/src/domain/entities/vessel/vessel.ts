@@ -268,3 +268,16 @@ export enum FishingActivitiesTab {
   SUMMARY = 1,
   MESSAGES = 2
 }
+
+/**
+ * An unknown vessel to use when no vessel is found
+ * @see https://github.com/MTES-MCT/monitorfish/pull/2045/files#diff-bcb14fe011ecfdcd40c018e16578c292cd8ba9d5bd39ad19600172865980caadR104
+ */
+export const UNKNOWN_VESSEL: VesselIdentity = {
+  externalReferenceNumber: 'UNKNOWN',
+  flagState: 'UNKNOWN',
+  internalReferenceNumber: 'UNKNOWN',
+  ircs: 'UNKNOWN',
+  vesselId: -1,
+  vesselName: 'UNKNOWN'
+}

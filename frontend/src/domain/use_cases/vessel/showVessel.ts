@@ -1,11 +1,11 @@
 import { getVesselFromAPI } from '../../../api/vessel'
 import { addVesselIdentifierToVesselIdentity } from '../../../features/VesselSearch/utils'
-import { Vessel, VesselSidebarTab } from '../../entities/vessel/vessel'
+import { Vessel } from '../../entities/vessel/vessel'
 import { getCustomOrDefaultTrackRequest, throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
 import { removeFishingActivitiesFromMap } from '../../shared_slices/FishingActivities'
 import { addSearchedVessel, removeError, setError } from '../../shared_slices/Global'
 import { doNotAnimate } from '../../shared_slices/Map'
-import { loadingVessel, resetLoadingVessel, setSelectedVessel, showVesselSidebarTab } from '../../shared_slices/Vessel'
+import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../../shared_slices/Vessel'
 
 import type { VesselIdentity } from '../../entities/vessel/types'
 
@@ -15,11 +15,10 @@ import type { VesselIdentity } from '../../entities/vessel/types'
 export const showVessel =
   (vesselIdentity: VesselIdentity, isFromSearch: boolean, isCalledFromCron: boolean) => async (dispatch, getState) => {
     try {
-      const { fishingActivities, global, map, vessel } = getState()
+      const { fishingActivities, map, vessel } = getState()
       const { selectedVesselTrackRequest, vessels } = vessel
       const { defaultVesselTrackDepth } = map
       const { areFishingActivitiesShowedOnMap } = fishingActivities
-      const { isAdmin } = global
 
       const vesselFeatureId = Vessel.getVesselFeatureId(vesselIdentity)
       const selectedVesselLastPosition = vessels.find(
@@ -38,10 +37,6 @@ export const showVessel =
 
       if (isFromSearch) {
         dispatch(addSearchedVessel(vesselIdentity))
-      }
-
-      if (!isAdmin) {
-        dispatch(showVesselSidebarTab(VesselSidebarTab.IDENTITY))
       }
 
       const { isTrackDepthModified, vesselAndPositions } = await getVesselFromAPI(vesselIdentity, nextTrackRequest)

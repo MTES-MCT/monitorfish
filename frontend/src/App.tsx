@@ -109,7 +109,7 @@ export function App({ auth }: AppProps) {
                     /**
                      * Redirect to / when the user is logged as a super user
                      */
-                    isSuperUser && <Redirect to="/" />
+                    auth && isSuperUser && <Redirect to="/" />
                   }
                   <Provider store={mainStore}>
                     <NamespaceContext.Provider value="homepage">

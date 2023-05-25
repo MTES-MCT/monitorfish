@@ -43,8 +43,6 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
 
   const { administrationsAsOptions, unitsAsOptions } = useMemo(
     () => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data, listFilterValues.ADMINISTRATION),
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [controlUnitsQuery.data, listFilterValues.ADMINISTRATION]
   )
 
@@ -53,10 +51,6 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
 
   const handleFilterFormChange = useCallback(
     (nextFilterValues: FilterValues) => {
-      if (!controlUnitsQuery.data) {
-        return
-      }
-
       const normalizedNextFilterValues = { ...nextFilterValues }
 
       // If there is a custom date range filter and the date range filter is not set to "custom",
@@ -69,7 +63,12 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
       }
 
       // We remove selected units that are not linked to the currently selected administrations when some are
-      if (nextFilterValues.ADMINISTRATION && nextFilterValues.ADMINISTRATION.length > 0 && nextFilterValues.UNIT) {
+      if (
+        controlUnitsQuery.data &&
+        nextFilterValues.ADMINISTRATION &&
+        nextFilterValues.ADMINISTRATION.length > 0 &&
+        nextFilterValues.UNIT
+      ) {
         const selectedAdministrationsUnits = getControlUnitsNamesFromAdministrations(
           controlUnitsQuery.data,
           normalizedNextFilterValues.ADMINISTRATION
@@ -234,6 +233,7 @@ const OptionValue = styled.span`
   display: flex;
   overflow: hidden;
   padding: 4px 0 0 8px;
+  pointer-events: none;
   text-overflow: ellipsis;
   white-space: nowrap;
 `

@@ -4,6 +4,7 @@ import { MissionDateRangeFilterLabel, MissionFilterType } from './types'
 import { SeaFrontGroup, SeaFrontGroupLabel } from '../../../constants'
 import { Mission } from '../../../domain/entities/mission/types'
 import { getMissionStatus } from '../../../domain/entities/mission/utils'
+import { MissionAction } from '../../../domain/types/missionAction'
 import { getOptionsFromLabelledEnum } from '../../../utils/getOptionsFromLabelledEnum'
 
 import type { MissionWithActions } from '../../../domain/entities/mission/types'
@@ -88,7 +89,13 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
       isSortable: true,
       key: 'inspectionsCount',
       label: 'Contrôles',
-      labelTransform: mission => (mission.actions.length > 0 ? mission.actions.length : '-'),
+      labelTransform: mission => {
+        const nonObservationActions = mission.actions.filter(
+          ({ actionType }) => actionType !== MissionAction.MissionActionType.OBSERVATION
+        )
+
+        return nonObservationActions.length > 0 ? nonObservationActions.length : '-'
+      },
       transform: mission => mission.actions.length
     },
     {

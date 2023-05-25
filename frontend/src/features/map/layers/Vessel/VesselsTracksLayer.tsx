@@ -3,7 +3,7 @@ import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
-import { getFishingActivityFeatureOnTrackLine } from '../../../../domain/entities/logbook'
+import { getFishingActivityFeatureOnTrackLine } from '../../../../domain/entities/logbook/logbook'
 import {
   fishingActivityIsWithinTrackLineDates,
   getFeaturesFromPositions,

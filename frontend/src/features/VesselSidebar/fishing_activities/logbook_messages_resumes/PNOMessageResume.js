@@ -4,7 +4,7 @@ import { COLORS } from '../../../../constants/constants'
 import LogbookMessageResumeHeader from './LogbookMessageResumeHeader'
 import SpeciesAndWeightChart from './SpeciesAndWeightChart'
 import { getDateTime } from '../../../../utils'
-import { LogbookMessagePNOPurposeType, LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook'
+import { LogbookMessagePNOPurposeType, LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook/logbook'
 
 const PNOMessageResume = props => {
   const [isOpen, setIsOpen] = useState(false)

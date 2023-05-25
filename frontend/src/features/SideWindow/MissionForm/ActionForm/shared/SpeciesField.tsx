@@ -16,6 +16,7 @@ import { FormikMultiInfractionPicker } from './FormikMultiInfractionPicker'
 import { useGetSpeciesQuery } from '../../../../../api/specy'
 import { useGetRiskFactorQuery } from '../../../../../api/vessel'
 import { BOOLEAN_AS_OPTIONS } from '../../../../../constants'
+import { getSummedSpeciesOnBoard } from '../../../../../domain/entities/logbook/species'
 import { MissionAction } from '../../../../../domain/types/missionAction'
 import { FrontendError } from '../../../../../libs/FrontendError'
 import { FieldGroup } from '../../shared/FieldGroup'
@@ -108,7 +109,6 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [input.value]
   )
-
   useEffect(
     () => {
       if (input.value?.length || !riskFactorApiQuery.data) {
@@ -120,13 +120,16 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
         return
       }
 
-      const speciesOnboardToAdd = speciesOnBoard.map(specy => ({
-        controlledWeight: undefined,
-        declaredWeight: specy.weight,
-        nbFish: undefined,
-        speciesCode: specy.species,
-        underSized: false
-      }))
+      const summedSpeciesOnBoard = getSummedSpeciesOnBoard(speciesOnBoard)
+      const speciesOnboardToAdd = summedSpeciesOnBoard
+        .sort((a, b) => b.weight - a.weight)
+        .map(specy => ({
+          controlledWeight: undefined,
+          declaredWeight: specy.weight,
+          nbFish: undefined,
+          speciesCode: specy.species,
+          underSized: false
+        }))
 
       const nextSpeciesOnboard = (input.value || []).concat(speciesOnboardToAdd)
       helper.setValue(nextSpeciesOnboard)

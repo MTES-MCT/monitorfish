@@ -80,7 +80,6 @@
     "styled-components": "5.3.6",
     "timeago.js": "4.0.2",
     "use-debounce": "9.0.4",
-    "use-deep-compare-effect": "1.8.1",
     "worker-loader": "3.0.8",
     "yup": "^0.32.11"
   },

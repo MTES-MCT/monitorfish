@@ -6,6 +6,7 @@ import {
   Icon,
   Size,
   TextInput,
+  useKey,
   useNewWindow
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
@@ -45,8 +46,12 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
         controlUnitsQuery.data,
         listFilterValues[MissionFilterType.ADMINISTRATION]
       ),
-    [controlUnitsQuery.data, listFilterValues]
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [controlUnitsQuery.data, listFilterValues[MissionFilterType.ADMINISTRATION]]
   )
+
+  const unitMultiSelectKey = useKey([unitsAsOptions])
 
   const handleFilterFormChange = useCallback(
     (nextFilterValues: FilterValues) => {
@@ -131,6 +136,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             searchable
           />
           <FormikMultiSelect
+            key={unitMultiSelectKey}
             baseContainer={newWindowContainerRef.current}
             disabled={unitsAsOptions.length === 0}
             isLabelHidden

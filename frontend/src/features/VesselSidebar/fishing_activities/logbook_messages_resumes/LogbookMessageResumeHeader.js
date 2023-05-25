@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook/logbook'
 import { ReactComponent as ChevronIconSVG } from '../../../icons/Chevron_simple_gris.svg'
 import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
 import { ReactComponent as NotAcknowledgedSVG } from '../../../icons/Message_non_acquitte.svg'
@@ -138,7 +138,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
   float: left;
   margin-right: 10px;
   margin-top: 12px;
-  
+
   animation: ${props => props.$isOpen ? `chevron-${props.name}-resume-opening` : `chevron-${props.name}-resume-closing`} 0.2s ease forwards;
 
   ${props => `
@@ -146,7 +146,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
         0%   { transform: rotate(180deg); }
         100% { transform: rotate(0deg); }
       }
-    
+
       @keyframes chevron-${props.name}-resume-closing {
         0%   { transform: rotate(0deg); }
         100% { transform: rotate(180deg);   }

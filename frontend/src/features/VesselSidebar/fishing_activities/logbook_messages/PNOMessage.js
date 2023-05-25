@@ -7,7 +7,7 @@ import {
   buildCatchArray,
   getTotalPNOWeightFromMessage,
   LogbookMessagePNOPurposeType
-} from '../../../../domain/entities/logbook'
+} from '../../../../domain/entities/logbook/logbook'
 
 const PNOMessage = props => {
   const [catches, setCatches] = useState([])

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { getDateTime } from '../../../../utils'
-import { LogbookMessageActivityType } from '../../../../domain/entities/logbook'
+import { LogbookMessageActivityType } from '../../../../domain/entities/logbook/logbook'
 
 const DEPMessage = props => {
   const getPortName = message => {

@@ -32,7 +32,7 @@
   "dependencies": {
     "@dnd-kit/core": "4.0.3",
     "@dnd-kit/modifiers": "4.0.0",
-    "@mtes-mct/monitor-ui": "6.2.2",
+    "@mtes-mct/monitor-ui": "6.3.3",
     "@reduxjs/toolkit": "1.9.3",
     "@sentry/browser": "7.47.0",
     "@sentry/react": "7.47.0",
@@ -80,6 +80,7 @@
     "styled-components": "5.3.6",
     "timeago.js": "4.0.2",
     "use-debounce": "9.0.4",
+    "use-deep-compare-effect": "1.8.1",
     "worker-loader": "3.0.8",
     "yup": "^0.32.11"
   },

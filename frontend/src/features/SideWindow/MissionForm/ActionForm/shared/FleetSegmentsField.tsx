@@ -97,7 +97,6 @@ export function FleetSegmentsField({ label }: FleetSegmentsFieldProps) {
         onChange={handleChange as any}
         options={fleetSegmentsAsOptions}
         value={initialValue}
-        virtualized
       />
     </Box>
   )

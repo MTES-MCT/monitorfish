@@ -1,4 +1,5 @@
 import {
+  CustomSearch,
   FormikCheckbox,
   FormikMultiRadio,
   FormikNumberInput,
@@ -41,16 +42,37 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
 
   const getSpeciesApiQuery = useGetSpeciesQuery()
 
-  const speciesAsOptions: Array<Option<Specy>> = useMemo(() => {
-    if (!getSpeciesApiQuery.data) {
-      return []
-    }
+  const speciesAsOptions: Array<Option<Specy>> = useMemo(
+    () =>
+      getSpeciesApiQuery.data
+        ? getSpeciesApiQuery.data.species.map(specy => ({
+            label: `${specy.code} - ${specy.name}`,
+            value: specy
+          }))
+        : [],
+    [getSpeciesApiQuery.data]
+  )
 
-    return getSpeciesApiQuery.data.species.map(specy => ({
-      label: `${specy.code} - ${specy.name}`,
-      value: specy
-    }))
-  }, [getSpeciesApiQuery.data])
+  const customSearch = useMemo(
+    () =>
+      getSpeciesApiQuery.data
+        ? new CustomSearch(
+            speciesAsOptions,
+            [
+              {
+                name: 'value.code',
+                weight: 0.9
+              },
+              {
+                name: 'value.name',
+                weight: 0.1
+              }
+            ],
+            { cacheKey: 'SPECIES_AS_OPTIONS', isStrict: true }
+          )
+        : undefined,
+    [getSpeciesApiQuery.data, speciesAsOptions]
+  )
 
   const add = useCallback(
     (newSpecy: Specy | undefined) => {
@@ -136,7 +158,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
     [riskFactorApiQuery.data]
   )
 
-  if (!speciesAsOptions.length) {
+  if (!speciesAsOptions.length || !customSearch) {
     return <FieldsetGroupSpinner isLight legend="Espèces à bord" />
   }
 
@@ -208,6 +230,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
       <Select
         key={String(input.value?.length)}
         baseContainer={newWindowContainerRef.current}
+        customSearch={customSearch}
         label="Ajouter une espèce"
         name="newSpecy"
         onChange={add}

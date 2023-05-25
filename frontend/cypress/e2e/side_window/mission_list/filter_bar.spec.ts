@@ -1,5 +1,5 @@
 import { openSideWindowMissionList } from './utils'
-import { getUtcizedDayjs } from '../../utils/getUtcizedDayjs'
+import { customDayjs } from '../../utils/customDayjs'
 
 // TODO Add search query, custom period and filter reset E2E tests.
 context('Side Window > Mission List > Filter Bar', () => {
@@ -8,7 +8,7 @@ context('Side Window > Mission List > Filter Bar', () => {
   })
 
   it('Should filter missions for the current day', () => {
-    const currentDay = encodeURIComponent(getUtcizedDayjs().utc().startOf('day').toISOString())
+    const currentDay = encodeURIComponent(customDayjs().utc().startOf('day').toISOString())
     cy.intercept('GET', `/bff/v1/missions?&startedAfterDateTime=${currentDay}*`).as('getMissions')
 
     cy.fill('Période', 'Aujourd’hui')
@@ -28,8 +28,9 @@ context('Side Window > Mission List > Filter Bar', () => {
   it('Should filter missions by status', () => {
     // Default status
     cy.get('[data-cy="mission-list-filter-tags"]').contains('En cours')
-    cy.intercept('GET', `*missionStatus=PENDING%2CENDED&*`).as('getMissions')
-    cy.fill('Statut', ['Terminée', 'En cours'])
+    cy.intercept('GET', `*missionStatus=ENDED&*`).as('getMissions')
+    cy.fill('Statut', undefined).wait(500)
+    cy.fill('Statut', ['Terminée'])
     cy.wait('@getMissions')
 
     cy.get('[data-cy="mission-list-filter-tags"]').contains('Terminée')
@@ -50,9 +51,10 @@ context('Side Window > Mission List > Filter Bar', () => {
     cy.fill('Administration', ['Gendarmerie Maritime'])
 
     cy.get('[data-cy="mission-list-filter-tags"]').contains('Gendarmerie Maritime')
-    cy.fill('Unité', ['P602 Verdon'])
+    cy.get('input[id="UNIT"]').parent().parent().parent().forceClick()
     // There is only one unit in the unit select
     cy.get('.rs-checkbox-checker > label').should('have.length', 1)
+    cy.get('.rs-checkbox-checker > label').contains('P602 Verdon').click()
 
     // This filter does the filtering in the frontend
     cy.get('.TableBodyRow').should('have.length', 0)

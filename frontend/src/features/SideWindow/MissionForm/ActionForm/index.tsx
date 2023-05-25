@@ -35,6 +35,7 @@ export function ActionForm() {
       return
     }
 
+    // TODO BUG Check the switch of actions in the action list
     const nextInitialMissionActionFormValues = getInitialMissionActionFormValues(
       mission.draft.actions,
       mission.editedDraftActionIndex

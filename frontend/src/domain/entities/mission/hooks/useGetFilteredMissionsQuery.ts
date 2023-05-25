@@ -60,7 +60,7 @@ export const useGetFilteredMissionsQuery = (): {
     return undefined
   }
 
-  const { data, isError, isLoading } = useGetMissionsQuery(
+  const { data, isError, isFetching } = useGetMissionsQuery(
     {
       missionSource: listFilterValues[MissionFilterType.SOURCE],
       missionStatus: listFilterValues[MissionFilterType.STATUS],
@@ -96,7 +96,7 @@ export const useGetFilteredMissionsQuery = (): {
 
   return {
     isError,
-    isLoading,
+    isLoading: isFetching,
     missions,
     missionsSeaFrontFiltered
   }

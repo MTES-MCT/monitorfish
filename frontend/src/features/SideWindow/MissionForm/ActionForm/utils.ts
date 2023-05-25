@@ -1,3 +1,5 @@
+import * as Sentry from '@sentry/react'
+
 import { FrontendError } from '../../../../libs/FrontendError'
 
 import type { MissionActionFormValues } from '../types'
@@ -12,7 +14,14 @@ export function getInitialMissionActionFormValues(
 
   const missionActionFormValues = actions[editedDraftActionIndex]
   if (!missionActionFormValues) {
-    throw new FrontendError('`missionActionFormValues` is undefined.')
+    Sentry.captureException(new FrontendError('`missionActionFormValues` is undefined.'), {
+      extra: {
+        actions,
+        editedDraftActionIndex
+      }
+    })
+
+    return undefined
   }
 
   return missionActionFormValues

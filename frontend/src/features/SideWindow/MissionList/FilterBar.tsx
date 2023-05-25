@@ -6,15 +6,17 @@ import {
   Icon,
   Size,
   TextInput,
+  useKey,
   useNewWindow
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
-import { noop, omit } from 'lodash'
+import { noop } from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_FILTER_LABEL_ENUMS, MISSION_FILTER_OPTIONS } from './constants'
 import { MissionDateRangeFilter, MissionFilterType } from './types'
+import { getControlUnitsNamesFromAdministrations } from './utils'
 import { useGetControlUnitsQuery } from '../../../api/controlUnit'
 import { missionActions } from '../../../domain/actions'
 import { getControlUnitsOptionsFromControlUnits } from '../../../domain/controlUnits/utils'
@@ -40,23 +42,42 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
   const dispatch = useMainAppDispatch()
 
   const { administrationsAsOptions, unitsAsOptions } = useMemo(
-    () =>
-      getControlUnitsOptionsFromControlUnits(
-        controlUnitsQuery.data,
-        listFilterValues[MissionFilterType.ADMINISTRATION]
-      ),
-    [controlUnitsQuery.data, listFilterValues]
+    () => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data, listFilterValues.ADMINISTRATION),
+    [controlUnitsQuery.data, listFilterValues.ADMINISTRATION]
   )
+
+  const formikKey = useKey([listFilterValues])
+  const unitMultiSelectKey = useKey([unitsAsOptions])
 
   const handleFilterFormChange = useCallback(
     (nextFilterValues: FilterValues) => {
-      const normalizedNextFilterValues =
-        // If there is a custom date range filter and the date range filter is not set to "custom",
-        nextFilterValues[MissionFilterType.CUSTOM_DATE_RANGE] &&
-        nextFilterValues[MissionFilterType.DATE_RANGE] !== MissionDateRangeFilter.CUSTOM
-          ? // we need to omit the hidden custom date range filter
-            omit(nextFilterValues, MissionFilterType.CUSTOM_DATE_RANGE)
-          : nextFilterValues
+      const normalizedNextFilterValues = { ...nextFilterValues }
+
+      // If there is a custom date range filter and the date range filter is not set to "custom",
+      if (
+        nextFilterValues.CUSTOM_DATE_RANGE &&
+        normalizedNextFilterValues.CUSTOM_DATE_RANGE !== MissionDateRangeFilter.CUSTOM
+      ) {
+        // we need to undefined custom date range filter
+        normalizedNextFilterValues.CUSTOM_DATE_RANGE = undefined
+      }
+
+      // We remove selected units that are not linked to the currently selected administrations when some are
+      if (
+        controlUnitsQuery.data &&
+        nextFilterValues.ADMINISTRATION &&
+        nextFilterValues.ADMINISTRATION.length > 0 &&
+        nextFilterValues.UNIT
+      ) {
+        const selectedAdministrationsUnits = getControlUnitsNamesFromAdministrations(
+          controlUnitsQuery.data,
+          normalizedNextFilterValues.ADMINISTRATION
+        )
+
+        normalizedNextFilterValues.UNIT = nextFilterValues.UNIT.filter(unit =>
+          selectedAdministrationsUnits.includes(unit)
+        )
+      }
 
       // Depending on the date range filter being set to "custom" or not, we need to toggle the custom date range filter
       const willCustomDateRangeOpen = normalizedNextFilterValues.DATE_RANGE === MissionDateRangeFilter.CUSTOM
@@ -64,12 +85,12 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
 
       dispatch(missionActions.setListFilterValues(normalizedNextFilterValues))
     },
-    [dispatch]
+    [controlUnitsQuery.data, dispatch]
   )
 
   return (
-    <Formik initialValues={listFilterValues} onSubmit={noop}>
-      <Box>
+    <Formik key={formikKey} initialValues={listFilterValues} onSubmit={noop}>
+      <Wrapper>
         <FormikEffect onChange={handleFilterFormChange} />
 
         <Row>
@@ -131,6 +152,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             searchable
           />
           <FormikMultiSelect
+            key={unitMultiSelectKey}
             baseContainer={newWindowContainerRef.current}
             disabled={unitsAsOptions.length === 0}
             isLabelHidden
@@ -168,12 +190,12 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             <FormikDateRangePicker label="Période spécifique" name={MissionFilterType.CUSTOM_DATE_RANGE} />
           )}
         </FormikFilterTagBar>
-      </Box>
+      </Wrapper>
     </Formik>
   )
 }
 
-const Box = styled.div`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 24px;
@@ -211,6 +233,7 @@ const OptionValue = styled.span`
   display: flex;
   overflow: hidden;
   padding: 4px 0 0 8px;
+  pointer-events: none;
   text-overflow: ellipsis;
   white-space: nowrap;
 `

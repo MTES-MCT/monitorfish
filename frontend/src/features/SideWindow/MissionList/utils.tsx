@@ -1,8 +1,24 @@
 import { Tag, TagBullet } from '@mtes-mct/monitor-ui'
+import { uniq } from 'lodash/fp'
 import styled from 'styled-components'
 
 import { Mission } from '../../../domain/entities/mission/types'
 import { FrontendError } from '../../../libs/FrontendError'
+
+import type { ControlUnit } from '../../../domain/types/controlUnit'
+
+export function getControlUnitsNamesFromAdministrations(
+  controlUnits: ControlUnit.ControlUnit[],
+  administrations: string[]
+): string[] {
+  const names = controlUnits
+    .filter(({ administration }) => administrations.includes(administration))
+    .map(({ name }) => name)
+  const uniqueNames = uniq(names)
+  const uniqueSortedNames = uniqueNames.sort()
+
+  return uniqueSortedNames
+}
 
 export const renderStatus = (missionStatus: Mission.MissionStatus): JSX.Element => {
   switch (missionStatus) {

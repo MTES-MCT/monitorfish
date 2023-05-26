@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import LogbookMessageResumeHeader from './LogbookMessageResumeHeader'
 import { getDateTime } from '../../../../utils'
-import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook/logbook'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook'
 import { COMMON_ALERT_TYPE_OPTION } from '../../../../domain/entities/alerts/constants'
 
 const LANMessageResume = props => {

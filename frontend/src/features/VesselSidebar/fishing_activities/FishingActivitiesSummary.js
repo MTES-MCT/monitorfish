@@ -30,7 +30,7 @@ import {
   getTotalPNOWeightFromMessage,
   LogbookOperationType,
   getAllFAROrDISMessagesAreNotAcknowledged
-} from '../../../domain/entities/logbook/logbook'
+} from '../../../domain/entities/logbook'
 import CustomDatesShowedInfo from './CustomDatesShowedInfo'
 import { COMMON_ALERT_TYPE_OPTION } from '../../../domain/entities/alerts/constants'
 

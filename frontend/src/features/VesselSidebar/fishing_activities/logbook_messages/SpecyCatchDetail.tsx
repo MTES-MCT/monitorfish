@@ -3,10 +3,7 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
-import {
-  LogbookSpeciesPresentation,
-  LogbookSpeciesPreservationState
-} from '../../../../domain/entities/logbook/logbook'
+import { LogbookSpeciesPresentation, LogbookSpeciesPreservationState } from '../../../../domain/entities/logbook'
 
 import type { WeightType } from './LogbookMessageSpecy'
 import type { LogbookCatch } from '../../../../domain/types/fishingActivities'

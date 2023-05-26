@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { getDateTime } from '../../../../utils'
 import LogbookMessageResumeHeader from './LogbookMessageResumeHeader'
-import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook/logbook'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook'
 
 const DEPMessageResume = props => {
   const [isOpen, setIsOpen] = useState(false)

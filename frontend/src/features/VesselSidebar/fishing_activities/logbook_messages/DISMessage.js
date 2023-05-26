@@ -5,7 +5,7 @@ import { getCoordinates } from '../../../../coordinates'
 import { getDateTime } from '../../../../utils'
 import { WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
 import { LogbookMessageSpecy, WeightType } from './LogbookMessageSpecy'
-import { buildCatchArray } from '../../../../domain/entities/logbook/logbook'
+import { buildCatchArray } from '../../../../domain/entities/logbook'
 import { useSelector } from 'react-redux'
 
 const DISMessage = props => {

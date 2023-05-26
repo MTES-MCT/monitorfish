@@ -4,6 +4,7 @@ import { MissionDateRangeFilterLabel, MissionFilterType } from './types'
 import { SeaFrontGroup, SeaFrontGroupLabel } from '../../../constants'
 import { Mission } from '../../../domain/entities/mission/types'
 import { getMissionStatus } from '../../../domain/entities/mission/utils'
+import { MissionAction } from '../../../domain/types/missionAction'
 import { getOptionsFromLabelledEnum } from '../../../utils/getOptionsFromLabelledEnum'
 
 import type { MissionWithActions } from '../../../domain/entities/mission/types'
@@ -31,6 +32,12 @@ export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option<any>[]> = 
 }
 
 export const MISSION_LIST_SUB_MENU_OPTIONS = getOptionsFromLabelledEnum(SeaFrontGroupLabel) as Option<SeaFrontGroup>[]
+
+const MISSION_ACTION_CONTROL_TYPES = [
+  MissionAction.MissionActionType.AIR_CONTROL,
+  MissionAction.MissionActionType.LAND_CONTROL,
+  MissionAction.MissionActionType.SEA_CONTROL
+]
 
 export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
   columns: [
@@ -88,7 +95,11 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
       isSortable: true,
       key: 'inspectionsCount',
       label: 'Contrôles',
-      labelTransform: mission => (mission.actions.length > 0 ? mission.actions.length : '-'),
+      labelTransform: mission => {
+        const controls = mission.actions.filter(({ actionType }) => MISSION_ACTION_CONTROL_TYPES.includes(actionType))
+
+        return controls.length > 0 ? controls.length : '-'
+      },
       transform: mission => mission.actions.length
     },
     {

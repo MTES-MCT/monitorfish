@@ -124,11 +124,11 @@ export function GearsField() {
       }
 
       const nextGears = gearOnboard
-        .map(gear => gearsByCode[gear.gear])
+        .map(gear => ({ ...gearsByCode[gear.gear], declaredMesh: gear.mesh }))
         .map(gear => ({
           comments: undefined,
           controlledMesh: undefined,
-          declaredMesh: undefined,
+          declaredMesh: gear.declaredMesh,
           gearCode: gear.code,
           gearName: gear.name,
           gearWasControlled: undefined
@@ -181,7 +181,6 @@ export function GearsField() {
 
               <StyledFieldGroup isInline>
                 <FormikNumberInput
-                  disabled={!gearOnboard.gearWasControlled}
                   isUndefinedWhenDisabled
                   label="Maillage déclaré"
                   name={`gearOnboard[${index}].declaredMesh`}

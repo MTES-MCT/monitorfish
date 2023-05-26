@@ -5,7 +5,6 @@ import { getOptionsFromLabelledEnum } from '../../../../../utils/getOptionsFromL
 
 export const FLIGHT_GOALS_AS_OPTIONS = getOptionsFromLabelledEnum(MissionAction.FLIGHT_GOAL_LABEL)
 export const INFRACTION_TYPES_AS_OPTIONS = getOptionsFromLabelledEnum(MissionAction.INFRACTION_TYPE_LABEL)
-export const PORTS_AS_OPTION = getOptionsFromLabelledEnum(MissionAction.PORT)
 
 export const MissionActionInfractionSchema = Yup.object().shape({
   comments: Yup.string().default(''),

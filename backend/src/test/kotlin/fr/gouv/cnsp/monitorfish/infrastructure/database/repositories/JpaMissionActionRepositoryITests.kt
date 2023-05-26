@@ -139,6 +139,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(missionAction.id).isEqualTo(11)
         assertThat(missionAction.actionDatetimeUtc).isEqualTo(dateTime)
+        assertThat(missionAction.userTrigram).isEqualTo("DEF")
     }
 
     @Test

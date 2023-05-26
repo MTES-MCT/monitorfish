@@ -61,18 +61,12 @@ export namespace MissionAction {
     YES = 'YES'
   }
 
-  // TODO Remove that once it's included in the API data.
-  export const PORT = {
-    'LE HAVRE': 'HAVRE',
-    MARSEILLE: 'MARSEILLE'
-  }
-
-  // TODO Update that once it's included in the API data.
   export enum FlightGoal {
     VMS_AIS_CHECK = 'VMS_AIS_CHECK',
     UNAUTHORIZED_FISHING = 'UNAUTHORIZED_FISHING',
     CLOSED_AREA = 'CLOSED_AREA'
   }
+
   export const FLIGHT_GOAL_LABEL: Record<FlightGoal, string> = {
     VMS_AIS_CHECK: 'Vérifications VMS/AIS',
     UNAUTHORIZED_FISHING: 'Pêche sans autorisation',
@@ -91,6 +85,7 @@ export namespace MissionAction {
     WITHOUT_RECORD = 'WITHOUT_RECORD',
     PENDING = 'PENDING'
   }
+
   export const INFRACTION_TYPE_LABEL: Record<InfractionType, string> = {
     [InfractionType.WITH_RECORD]: 'Avec PV',
     [InfractionType.WITHOUT_RECORD]: 'Sans PV',
@@ -175,7 +170,6 @@ export namespace MissionAction {
   export type OtherInfraction = {
     comments: string
     infractionType: InfractionType
-    // TODO This should be a plural.
     natinf: number
   }
 

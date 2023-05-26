@@ -71,7 +71,7 @@ context('Side Window > Mission Form > Action List', () => {
         speciesSizeControlled: null,
         speciesWeightControlled: null,
         unitWithoutOmegaGauge: false,
-        userTrigram: null,
+        userTrigram: 'JKL',
         vesselId: 2,
         vesselName: 'MALOTRU',
         vesselTargeted: 'YES'

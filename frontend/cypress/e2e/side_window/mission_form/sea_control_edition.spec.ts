@@ -93,7 +93,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
         speciesSizeControlled: null,
         speciesWeightControlled: null,
         unitWithoutOmegaGauge: false,
-        userTrigram: null,
+        userTrigram: 'JKL',
         vesselId: 2,
         vesselName: 'MALOTRU',
         vesselTargeted: 'YES'

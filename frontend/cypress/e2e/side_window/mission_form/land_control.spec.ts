@@ -115,7 +115,7 @@ context('Side Window > Mission Form > Land Control', () => {
           {
             comments: null,
             controlledMesh: null,
-            declaredMesh: null,
+            declaredMesh: 70,
             gearCode: 'OTB',
             gearName: 'Chaluts de fond à panneaux',
             gearWasControlled: null

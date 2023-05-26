@@ -18,7 +18,7 @@ import { COLORS } from '../../../../constants/constants'
 import {
   getLogbookMessageType,
   LogbookMessageType as LogbookMessageTypeEnum
-} from '../../../../domain/entities/logbook/logbook'
+} from '../../../../domain/entities/logbook'
 import {
   removeFishingActivityFromMap,
   showFishingActivityOnMap

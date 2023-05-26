@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import LogbookMessageResumeHeader from './LogbookMessageResumeHeader'
 import SpeciesAndWeightChart from './SpeciesAndWeightChart'
-import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook/logbook'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook'
 
 const DISMessageResume = props => {
   const [isOpen, setIsOpen] = useState(false)

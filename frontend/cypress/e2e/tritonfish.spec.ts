@@ -1,7 +1,15 @@
 context('TritonFish', () => {
   it('view Should have some features removed', () => {
     // Given
+    // This only works in CI as locally, the env variables are found in process
+    cy.window().then(win => {
+      // @ts-ignore
+      // eslint-disable-next-line no-param-reassign
+      win.env.REACT_APP_OIDC_ENABLED = 'true'
+    })
+    cy.intercept('/bff/v1/is_super_user', { statusCode: 401 }).as('getIsSuperUser')
     cy.loadPath('/ext#@-824534.42,6082993.21,8.70')
+    cy.wait('@getIsSuperUser')
 
     // Then
     // Vessel sidebar is minimized

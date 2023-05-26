@@ -29,7 +29,14 @@ export const useGetFilteredMissionsQuery = (): {
   const startedAfterDateTime = () => {
     const isCustom = listFilterValues[MissionFilterType.CUSTOM_DATE_RANGE]?.length
     if (isCustom) {
-      return listFilterValues[MissionFilterType.CUSTOM_DATE_RANGE][0].toISOString()
+      const date = listFilterValues[MissionFilterType.CUSTOM_DATE_RANGE][0]
+
+      /**
+       * This date could either be:
+       * - a string date when fetched from the localstorage
+       * - a Date object when modified directly from the mission list (see `FormikDateRangePicker` component)
+       */
+      return typeof date === 'string' ? date : date.toISOString()
     }
 
     if (listFilterValues[MissionFilterType.DATE_RANGE]) {
@@ -54,7 +61,14 @@ export const useGetFilteredMissionsQuery = (): {
   const startedBeforeDateTime = () => {
     const isCustom = listFilterValues[MissionFilterType.CUSTOM_DATE_RANGE]?.length
     if (isCustom) {
-      return listFilterValues[MissionFilterType.CUSTOM_DATE_RANGE][1].toISOString()
+      const date = listFilterValues[MissionFilterType.CUSTOM_DATE_RANGE][1]
+
+      /**
+       * This date could either be:
+       * - a string date when fetched from the localstorage
+       * - a Date object when modified directly from the mission list (see `FormikDateRangePicker` component)
+       */
+      return typeof date === 'string' ? date : date.toISOString()
     }
 
     return undefined

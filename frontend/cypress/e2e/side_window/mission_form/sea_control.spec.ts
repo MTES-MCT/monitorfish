@@ -224,7 +224,7 @@ context('Side Window > Mission Form > Sea Control', () => {
           {
             comments: null,
             controlledMesh: null,
-            declaredMesh: null,
+            declaredMesh: 70,
             gearCode: 'OTB',
             gearName: 'Chaluts de fond à panneaux',
             gearWasControlled: null
@@ -253,8 +253,8 @@ context('Side Window > Mission Form > Sea Control', () => {
         speciesInfractions: [],
         speciesObservations: null,
         speciesOnboard: [
-          { controlledWeight: null, declaredWeight: 13.46, nbFish: null, speciesCode: 'BLI', underSized: false },
-          { controlledWeight: null, declaredWeight: 235.6, nbFish: null, speciesCode: 'HKE', underSized: false }
+          { controlledWeight: null, declaredWeight: 471.2, nbFish: null, speciesCode: 'HKE', underSized: false },
+          { controlledWeight: null, declaredWeight: 13.46, nbFish: null, speciesCode: 'BLI', underSized: false }
         ],
         speciesSizeControlled: null,
         speciesWeightControlled: null,

@@ -1,7 +1,7 @@
 import { Feature } from 'ol'
 import Point from 'ol/geom/Point'
-import { getFishingActivityCircleStyle } from '../../features/map/layers/styles/vesselTrack.style'
-import { LayerProperties } from './layers/constants'
+import { getFishingActivityCircleStyle } from '../../../features/map/layers/styles/vesselTrack.style'
+import { LayerProperties } from '../layers/constants'
 
 export const LogbookMessageType = {
   DEP: {

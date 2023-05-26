@@ -1,4 +1,4 @@
-import { FrontendError } from '../../../../libs/FrontendError'
+import { logSoftError } from '../../../../libs/logSoftError'
 
 import type { MissionActionFormValues } from '../types'
 
@@ -12,7 +12,12 @@ export function getInitialMissionActionFormValues(
 
   const missionActionFormValues = actions[editedDraftActionIndex]
   if (!missionActionFormValues) {
-    throw new FrontendError('`missionActionFormValues` is undefined.')
+    logSoftError('`missionActionFormValues` is undefined.', {
+      actions,
+      editedDraftActionIndex
+    })
+
+    return undefined
   }
 
   return missionActionFormValues

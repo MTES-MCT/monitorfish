@@ -302,7 +302,7 @@ context('Side Window > Mission Form > Main Form', () => {
         speciesSizeControlled: true,
         speciesWeightControlled: true,
         unitWithoutOmegaGauge: false,
-        userTrigram: null,
+        userTrigram: 'DEF',
         vesselId: 1,
         vesselName: 'PHENOMENE',
         vesselTargeted: 'NO'

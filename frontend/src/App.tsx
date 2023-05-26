@@ -103,14 +103,7 @@ export function App({ auth }: AppProps) {
                     </Provider>
                   )}
                 </Route>
-
                 <Route exact path="/ext">
-                  {
-                    /**
-                     * Redirect to / when the user is logged as a super user
-                     */
-                    auth && isSuperUser && <Redirect to="/" />
-                  }
                   <Provider store={mainStore}>
                     <NamespaceContext.Provider value="homepage">
                       <TritonFish />

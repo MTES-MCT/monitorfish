@@ -1,3 +1,5 @@
+/* eslint-disable typescript-sort-keys/string-enum */
+
 import type { Option } from '@mtes-mct/monitor-ui'
 
 export const BOOLEAN_AS_OPTIONS: Array<Option<boolean>> = [
@@ -20,9 +22,9 @@ export enum SeaFrontGroupLabel {
   MED = 'MED',
   MEMN = 'MEMN',
   NAMO = 'NAMO',
+  SA = 'SA',
   OUTREMEROA = 'OUTRE-MER OA',
-  OUTREMEROI = 'OUTRE-MER OI',
-  SA = 'SA'
+  OUTREMEROI = 'OUTRE-MER OI'
 }
 
 export enum SeaFront {

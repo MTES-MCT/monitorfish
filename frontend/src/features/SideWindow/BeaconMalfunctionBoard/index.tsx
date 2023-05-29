@@ -304,7 +304,7 @@ const searchVesselInputStyle = {
     borderBottom: `1px ${COLORS.lightGray} solid`
   },
   backgroundColor: 'white',
-  backgroundImage: `url(${baseUrl}/${SearchIconSVG})`,
+  backgroundImage: `url(${baseUrl}${SearchIconSVG})`.replace(/\/{2}/, '/'),
   backgroundPosition: 'bottom 3px right 5px',
   backgroundRepeat: 'no-repeat',
   backgroundSize: 30,

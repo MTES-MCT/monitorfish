@@ -148,7 +148,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
               return
             }
 
-            const focusedPendingAlert = pendingAlerts.find(propEq('id', focusedPendingAlertId))
+            const focusedPendingAlert = pendingAlerts.find(propEq(focusedPendingAlertId, 'id'))
             if (!focusedPendingAlert) {
               setSelectedSubMenu(ALERTS_SUBMENU.MEMN)
 

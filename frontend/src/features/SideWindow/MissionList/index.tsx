@@ -128,16 +128,16 @@ export function MissionList() {
                       <TableBodyCell $fixedWidth={136}>
                         <span>{augmentedMission.$labelled.endDateTimeUtc}</span>
                       </TableBodyCell>
-                      <TableBodyCell $fixedWidth={80}>
+                      <TableBodyCell $fixedWidth={90}>
                         <span>{augmentedMission.$labelled.missionTypes}</span>
                       </TableBodyCell>
                       <TableBodyCell $fixedWidth={80}>
                         <span>{augmentedMission.$labelled.missionSource}</span>
                       </TableBodyCell>
-                      <TableBodyCell $fixedWidth={160} title={augmentedMission.$labelled.controlUnits}>
+                      <TableBodyCell $fixedWidth={400} title={augmentedMission.$labelled.controlUnits}>
                         <span>{augmentedMission.$labelled.controlUnits}</span>
                       </TableBodyCell>
-                      <TableBodyCell $fixedWidth={320} title={augmentedMission.$labelled.inspectedVessels}>
+                      <TableBodyCell $fixedWidth={360} title={augmentedMission.$labelled.inspectedVessels}>
                         <span>{augmentedMission.$labelled.inspectedVessels}</span>
                       </TableBodyCell>
                       <TableBodyCell $fixedWidth={128}>
@@ -146,13 +146,7 @@ export function MissionList() {
                       <TableBodyCell $fixedWidth={128}>
                         <span>{renderStatus(augmentedMission.$labelled.status as Mission.MissionStatus)}</span>
                       </TableBodyCell>
-                      <TableBodyCell
-                        $fixedWidth={48}
-                        style={{
-                          padding: '8px 12px',
-                          textAlign: 'center'
-                        }}
-                      >
+                      <TableBodyCell $fixedWidth={51} style={{ padding: '4px 7px 4px 9px' }}>
                         <IconButton
                           accent={Accent.TERTIARY}
                           disabled={!augmentedMission.geom}
@@ -162,13 +156,7 @@ export function MissionList() {
                           title="Voir sur la carte"
                         />
                       </TableBodyCell>
-                      <TableBodyCell
-                        $fixedWidth={48}
-                        style={{
-                          padding: '8px 12px',
-                          textAlign: 'center'
-                        }}
-                      >
+                      <TableBodyCell $fixedWidth={51} style={{ padding: '4px 7px 4px 9px' }}>
                         <IconButton
                           accent={Accent.TERTIARY}
                           Icon={Icon.Edit}

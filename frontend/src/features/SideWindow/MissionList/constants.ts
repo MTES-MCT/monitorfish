@@ -57,7 +57,7 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
         mission.endDateTimeUtc ? customDayjs(mission.endDateTimeUtc).utc().format('D MMM YY, HH:mm') : ''
     },
     {
-      fixedWidth: 80,
+      fixedWidth: 90,
       isSortable: true,
       key: 'missionTypes',
       label: 'Type',
@@ -71,7 +71,7 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
       labelTransform: mission => MISSION_SOURCE_LABEL[mission.missionSource]
     },
     {
-      fixedWidth: 160,
+      fixedWidth: 400,
       isSortable: true,
       key: 'controlUnits',
       label: 'Unité (Administration)',
@@ -79,7 +79,7 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
         mission.controlUnits.map(controlUnit => `${controlUnit.name} (${controlUnit.administration})`).join(', ')
     },
     {
-      fixedWidth: 320,
+      fixedWidth: 360,
       isSortable: false,
       key: 'inspectedVessels',
       label: 'Navires contrôlés',
@@ -110,12 +110,12 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
       transform: getMissionStatus
     },
     {
-      fixedWidth: 48,
+      fixedWidth: 50,
       key: 'mapAction',
       label: ''
     },
     {
-      fixedWidth: 48,
+      fixedWidth: 50,
       key: 'editionAction',
       label: ''
     }

@@ -42,7 +42,7 @@ class MissionController(
         missionTypes: List<String>?,
         @Parameter(description = "Statuts de mission")
         @RequestParam(name = "missionStatus", required = false)
-        missionStatuses: List<String>?,
+        missionStatus: List<String>?,
         @Parameter(description = "Facades")
         @RequestParam(name = "seaFronts", required = false)
         seaFronts: List<String>?,
@@ -51,7 +51,7 @@ class MissionController(
             startedAfterDateTime = startedAfterDateTime,
             startedBeforeDateTime = startedBeforeDateTime,
             missionSources = missionSources,
-            missionStatuses = missionStatuses,
+            missionStatus = missionStatus,
             missionTypes = missionTypes,
             seaFronts = seaFronts,
             pageNumber = pageNumber,

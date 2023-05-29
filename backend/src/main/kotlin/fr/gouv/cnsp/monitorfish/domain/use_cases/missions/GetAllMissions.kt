@@ -27,7 +27,7 @@ class GetAllMissions(
         startedBeforeDateTime: ZonedDateTime?,
         missionSources: List<String>?,
         missionTypes: List<String>?,
-        missionStatuses: List<String>?,
+        missionStatus: List<String>?,
         seaFronts: List<String>?,
     ): List<MissionAndActions> {
         val missions = missionRepository.findAllMissions(
@@ -37,7 +37,7 @@ class GetAllMissions(
             startedBeforeDateTime,
             missionSources,
             missionTypes,
-            missionStatuses,
+            missionStatus,
             seaFronts,
         )
 

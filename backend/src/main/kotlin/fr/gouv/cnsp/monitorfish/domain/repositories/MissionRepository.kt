@@ -15,7 +15,7 @@ interface MissionRepository {
         startedBeforeDateTime: ZonedDateTime?,
         missionSources: List<String>?,
         missionTypes: List<String>?,
-        missionStatuses: List<String>?,
+        missionStatus: List<String>?,
         seaFronts: List<String>?,
     ): List<Mission>
 }

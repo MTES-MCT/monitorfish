@@ -54,7 +54,7 @@ context('Side Window > Mission List > Filter Bar', () => {
     cy.get('input[id="UNIT"]').parent().parent().parent().forceClick()
     // There is only one unit in the unit select
     cy.get('.rs-checkbox-checker > label').should('have.length', 1)
-    cy.get('.rs-checkbox-checker > label').contains('P602 Verdon').click()
+    cy.get('.rs-checkbox-checker > label').contains('P602 Verdon').click({ force: true })
 
     // This filter does the filtering in the frontend
     cy.get('.TableBodyRow').should('have.length', 0)

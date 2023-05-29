@@ -37,7 +37,7 @@
     "@sentry/browser": "7.47.0",
     "@sentry/react": "7.52.1",
     "@sentry/tracing": "7.47.0",
-    "@svgr/webpack": "6.5.1",
+    "@svgr/webpack": "8.0.1",
     "comlink": "4.4.1",
     "date-fns": "2.29.3",
     "dayjs": "1.11.7",

@@ -1,12 +1,12 @@
-import { customDayjs } from '@mtes-mct/monitor-ui'
 import { difference } from 'lodash'
 import { omit } from 'ramda'
 
-import { INITIAL_MISSION_CONTROL_UNIT, MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
+import { AirControlFormSchema, LandControlFormSchema, SeaControlFormSchema } from './ActionForm/schemas'
+import { MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
+import { MainFormSchema } from './MainForm/schemas'
 import { Mission } from '../../../domain/entities/mission/types'
 import { MissionAction } from '../../../domain/types/missionAction'
 import { FormError, FormErrorCode } from '../../../libs/FormError'
-import { FrontendError } from '../../../libs/FrontendError'
 import { validateRequiredFormValues } from '../../../utils/validateRequiredFormValues'
 
 import type { MissionActionFormValues, MissionFormValues } from './types'
@@ -14,6 +14,40 @@ import type { ControlUnit } from '../../../domain/types/controlUnit'
 import type { Undefine } from '@mtes-mct/monitor-ui'
 
 import MissionActionType = MissionAction.MissionActionType
+
+export function areMissionFormValuesValid(missionFormValues: MissionFormValues | undefined): boolean {
+  if (!missionFormValues) {
+    return false
+  }
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const missionActionFormValues of missionFormValues.actions) {
+    switch (missionActionFormValues.actionType) {
+      case MissionAction.MissionActionType.AIR_CONTROL:
+        if (!AirControlFormSchema.isValidSync(missionActionFormValues)) {
+          return false
+        }
+        break
+
+      case MissionAction.MissionActionType.LAND_CONTROL:
+        if (!LandControlFormSchema.isValidSync(missionActionFormValues)) {
+          return false
+        }
+        break
+
+      case MissionAction.MissionActionType.SEA_CONTROL:
+        if (!SeaControlFormSchema.isValidSync(missionActionFormValues)) {
+          return false
+        }
+        break
+
+      default:
+        break
+    }
+  }
+
+  return MainFormSchema.isValidSync(missionFormValues)
+}
 
 /**
  *
@@ -82,32 +116,6 @@ export function getMissionDataFromMissionFormValues(
   }
 }
 
-export function getMissionFormInitialValues(
-  mission: Mission.Mission | undefined,
-  missionActions: MissionAction.MissionAction[]
-): MissionFormValues {
-  if (!mission) {
-    const startDateTimeUtc = customDayjs().startOf('minute').toISOString()
-
-    return {
-      actions: [],
-      controlUnits: [INITIAL_MISSION_CONTROL_UNIT],
-      missionTypes: [Mission.MissionType.SEA],
-      startDateTimeUtc
-    }
-  }
-
-  const missionType = mission.missionTypes[0]
-  if (!missionType) {
-    throw new FrontendError('`missionType` is undefined.')
-  }
-
-  return {
-    ...mission,
-    actions: missionActions
-  }
-}
-
 /**
  * @param mustClose Should the mission be closed?
  */
@@ -127,6 +135,7 @@ export function getUpdatedMissionFromMissionFormValues(
 /**
  * Are `<missionFormValues>` complete enough to be transformed into a `MissionData` type and sent to the API?
  */
+// TODO Remove that once it's fully validated via Yup.
 export function isMissionFormValuesComplete(missionFormValues: MissionFormValues | undefined): boolean {
   try {
     if (!missionFormValues) {

@@ -10,11 +10,11 @@ import { Formik } from 'formik'
 import { noop } from 'lodash'
 import { useMemo } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
-import * as Yup from 'yup'
 
-import { MissionActionInfractionSchema } from './shared/constants'
+import { AirControlFormSchema } from './schemas'
 import { FormikCoordinatesPicker } from './shared/FormikCoordinatesPicker'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
+import { FormikRevalidationEffect } from './shared/FormikRevalidationEffect'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
 import { missionActions } from '../../../../domain/actions'
@@ -25,10 +25,6 @@ import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
 
 import type { MissionActionFormValues } from '../types'
-
-const AirControlFormSchema = Yup.object().shape({
-  otherInfractions: Yup.array(MissionActionInfractionSchema).notRequired()
-})
 
 export type AirControlFormProps = {
   index: number
@@ -64,6 +60,7 @@ export function AirControlForm({ index, initialValues }: AirControlFormProps) {
     <Formik key={key} initialValues={initialValues} onSubmit={noop} validationSchema={AirControlFormSchema}>
       <>
         <FormikEffect onChange={handleChange as any} />
+        <FormikRevalidationEffect />
 
         <FormHead>
           <h2>

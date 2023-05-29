@@ -1,5 +1,3 @@
-// TODO Replace all options values with value-based enums.
-
 import { Mission } from '../../../../domain/entities/mission/types'
 import { getOptionsFromLabelledEnum } from '../../../../utils/getOptionsFromLabelledEnum'
 

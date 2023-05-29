@@ -11,6 +11,7 @@ import {
   getMissionActionsDataFromMissionActionsFormValues,
   getMissionDataFromMissionFormValues,
   getUpdatedMissionFromMissionFormValues,
+  areMissionFormValuesValid,
   isMissionFormValuesComplete
 } from './utils'
 import {
@@ -58,7 +59,7 @@ export function MissionForm() {
   const [updateMission] = useUpdateMissionMutation()
   const [updateMissionAction] = useUpdateMissionActionMutation()
 
-  const isMissionFormValid = useMemo(() => isMissionFormValuesComplete(mission.draft), [mission.draft])
+  const isMissionFormValid = areMissionFormValuesValid(mission.draft) && isMissionFormValuesComplete(mission.draft)
 
   const missionTitle = useMemo(() => {
     if (!mission.draft) {

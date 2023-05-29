@@ -31,7 +31,7 @@ export function getTitle(base: string, label: string | undefined, placeholder: s
   )
 }
 
-export function getMissionActionInfractionsFromMissionActionFromFormValues(
+export function getMissionActionInfractionsFromMissionActionFormValues(
   missionActionFormValues: MissionActionFormValues
 ): Array<
   | MissionAction.GearInfraction

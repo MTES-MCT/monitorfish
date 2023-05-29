@@ -17,6 +17,7 @@ import { FormikDoubleDatePicker } from './FormikDoubleDatePicker'
 import { FormikIsClosedEffect } from './FormikIsClosedEffect'
 import { FormikLocationPicker } from './FormikLocationPicker'
 import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'
+import { MainFormSchema } from './schemas'
 import { BOOLEAN_AS_OPTIONS } from '../../../../constants'
 import { missionActions } from '../../../../domain/actions'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
@@ -39,14 +40,14 @@ export function MainForm() {
     return omit(['actions'], mission.draft)
   }, [mission.draft])
 
-  const handleMainFormChange = useDebouncedCallback((nextMissionFormValues: MissionFormValues) => {
+  const handleChange = useDebouncedCallback((nextMissionFormValues: MissionFormValues) => {
     dispatch(missionActions.setDraft(nextMissionFormValues))
   }, 250)
 
   return (
-    <Formik initialValues={initialMissionFormValues} onSubmit={noop}>
+    <Formik initialValues={initialMissionFormValues} onSubmit={noop} validationSchema={MainFormSchema}>
       <Wrapper>
-        <FormikEffect onChange={handleMainFormChange as any} />
+        <FormikEffect onChange={handleChange as any} />
 
         <FormHead>
           <h2>Informations générales</h2>

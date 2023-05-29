@@ -12,9 +12,11 @@ import { noop } from 'lodash'
 import { useMemo } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
+import { LandControlFormSchema } from './schemas'
 import { ControlQualityField } from './shared/ControlQualityField'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
 import { FormikPortSelect } from './shared/FormikPortSelect'
+import { FormikRevalidationEffect } from './shared/FormikRevalidationEffect'
 import { GearsField } from './shared/GearsField'
 import { LicencesAndLogbookField } from './shared/LicencesAndLogbookField'
 import { SpeciesField } from './shared/SpeciesField'
@@ -61,9 +63,10 @@ export function LandControlForm({ index, initialValues }: LandControlFormProps) 
   }, 500)
 
   return (
-    <Formik key={key} initialValues={initialValues} onSubmit={noop}>
+    <Formik key={key} initialValues={initialValues} onSubmit={noop} validationSchema={LandControlFormSchema}>
       <>
         <FormikEffect onChange={handleChange as any} />
+        <FormikRevalidationEffect />
 
         <FormHead>
           <h2>

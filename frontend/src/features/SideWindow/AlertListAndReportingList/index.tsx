@@ -48,7 +48,7 @@ export function AlertListAndReportingList({
       return
     }
 
-    const focusedPendingAlert = pendingAlerts.find(propEq('id', focusedPendingAlertId))
+    const focusedPendingAlert = pendingAlerts.find(propEq(focusedPendingAlertId, 'id'))
     if (!focusedPendingAlert) {
       return
     }

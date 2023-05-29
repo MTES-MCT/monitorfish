@@ -150,6 +150,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
               items.length > 0 ? <OptionValue>Administration ({items.length}) </OptionValue> : <></>
             }
             searchable
+            style={{ minWidth: 320 }}
           />
           <FormikMultiSelect
             key={unitMultiSelectKey}
@@ -163,6 +164,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             placeholder="Unité"
             renderValue={(_, items) => (items.length > 0 ? <OptionValue>Unité ({items.length}) </OptionValue> : <></>)}
             searchable
+            style={{ minWidth: 320 }}
           />
           <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}
@@ -209,14 +211,13 @@ const Row = styled.div`
   display: flex;
 
   > div {
-    max-width: 200px;
     min-width: 200px;
-    width: 200px;
   }
   > div:not(:first-child) {
     margin-left: 16px;
     width: 160px;
   }
+
   /* TODO Remove this fix once we get rid of local CSS. */
   > .Field-TextInput {
     > div {

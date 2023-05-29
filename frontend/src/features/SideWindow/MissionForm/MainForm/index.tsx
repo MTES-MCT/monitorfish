@@ -4,11 +4,10 @@ import {
   FormikMultiCheckbox,
   FormikMultiRadio,
   FormikTextarea,
-  FormikTextInput,
-  noop
+  FormikTextInput
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
-import { omit } from 'lodash'
+import { noop, omit } from 'lodash/fp'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
@@ -37,7 +36,7 @@ export function MainForm() {
       throw new FrontendError('`mission.draft` is undefined')
     }
 
-    return omit(mission.draft, ['actions'])
+    return omit(['actions'], mission.draft)
   }, [mission.draft])
 
   const handleMainFormChange = useDebouncedCallback((nextMissionFormValues: MissionFormValues) => {

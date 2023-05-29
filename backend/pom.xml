@@ -110,7 +110,7 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>9.18.0</version>
+            <version>9.19.1</version>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>

@@ -7,6 +7,7 @@ export type MissionActionFormValues = PartialExcept<
   Omit<MissionAction.MissionActionData, 'missionId'>,
   'actionType' | 'actionDatetimeUtc'
 > & {
+  /** Form validation state */
   isVesselUnknown?: boolean | undefined
 }
 
@@ -17,6 +18,7 @@ export type MissionFormValues = Partial<
   // it is split as individual mission actions before being pushed to the API
   actions: MissionActionFormValues[]
   controlUnits: Array<ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft>
+  /** Form validation state */
   missionTypes?: Mission.MissionType[]
   startDateTimeUtc: string
 }

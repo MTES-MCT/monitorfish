@@ -3,10 +3,10 @@ import { isEqual } from 'lodash'
 import { omit, remove, update } from 'ramda'
 
 import { SeaFrontGroup } from '../../constants'
-import { getMissionFormInitialValues } from '../../features/SideWindow/MissionForm/utils'
 import { MissionDateRangeFilter, MissionFilterType } from '../../features/SideWindow/MissionList/types'
 import { FrontendError } from '../../libs/FrontendError'
 import { Mission } from '../entities/mission/types'
+import { getMissionFormInitialValues } from '../entities/mission/utils'
 
 import type { MissionActionFormValues, MissionFormValues } from '../../features/SideWindow/MissionForm/types'
 import type { FilterValues } from '../../features/SideWindow/MissionList/types'

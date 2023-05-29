@@ -8,7 +8,7 @@ import { transform } from 'ol/proj'
 import { Mission } from './types'
 import { getMissionStatus } from './utils'
 import { getMissionColor } from '../../../features/map/layers/Mission/MissionLayer/styles'
-import { getMissionActionInfractionsFromMissionActionFromFormValues } from '../../../features/SideWindow/MissionForm/ActionList/utils'
+import { getMissionActionInfractionsFromMissionActionFormValues } from '../../../features/SideWindow/MissionForm/ActionList/utils'
 import { booleanToInt, getDate, getDateTime } from '../../../utils'
 import { MissionAction } from '../../types/missionAction'
 import { getNumberOfInfractions, getNumberOfInfractionsWithRecord } from '../controls'
@@ -122,7 +122,7 @@ export const getMissionActionFeature = (
   const numberOfInfractionsWithRecords = getNumberOfInfractionsWithRecord(action)
   const hasSpeciesSeized = action.speciesInfractions?.find(infraction => infraction.speciesSeized)
   const hasGearSeized = action.gearInfractions?.find(infraction => infraction.gearSeized)
-  const infractions = getMissionActionInfractionsFromMissionActionFromFormValues(action)
+  const infractions = getMissionActionInfractionsFromMissionActionFormValues(action)
   const infractionsNatinfs = infractions.map(({ natinf }) => natinf)
 
   const actionId = action.id || random(1000)

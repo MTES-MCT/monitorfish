@@ -1,4 +1,11 @@
-import { FormikDatePicker, FormikEffect, FormikTextarea, Icon, useNewWindow } from '@mtes-mct/monitor-ui'
+import {
+  FormikDatePicker,
+  FormikEffect,
+  FormikTextInput,
+  FormikTextarea,
+  Icon,
+  useNewWindow
+} from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash'
 import { useMemo } from 'react'
@@ -88,6 +95,8 @@ export function AirControlForm({ index, initialValues }: AirControlFormProps) {
           <FieldsetGroup isLight legend="Autres observations">
             <FormikTextarea isLabelHidden label="Autres observations" name="otherComments" />
           </FieldsetGroup>
+
+          <FormikTextInput isLight label="Saisi par" name="userTrigram" />
         </FormBody>
       </>
     </Formik>

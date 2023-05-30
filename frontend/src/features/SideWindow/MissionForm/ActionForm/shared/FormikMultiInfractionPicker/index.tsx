@@ -18,7 +18,8 @@ import { useGetInfractionsQuery } from '../../../../../../api/infraction'
 import { FrontendError } from '../../../../../../libs/FrontendError'
 import { FieldsetGroup, FieldsetGroupSpinner } from '../../../shared/FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../../shared/FieldsetGroupSeparator'
-import { INFRACTION_TYPES_AS_OPTIONS, MissionActionInfractionSchema } from '../constants'
+import { InfractionFormSchema } from '../../schemas'
+import { INFRACTION_TYPES_AS_OPTIONS } from '../constants'
 
 import type { MissionAction } from '../../../../../../domain/types/missionAction'
 import type { MissionActionFormValues } from '../../../types'
@@ -169,7 +170,7 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
               )}
 
               {index === editedIndex && (
-                <Formik initialValues={infraction} onSubmit={submit} validationSchema={MissionActionInfractionSchema}>
+                <Formik initialValues={infraction} onSubmit={submit} validationSchema={InfractionFormSchema}>
                   {({ isValid }) => (
                     <StyledForm>
                       <FormikMultiRadio

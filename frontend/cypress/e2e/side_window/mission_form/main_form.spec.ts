@@ -2,7 +2,7 @@ import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils
 import { SeaFrontGroup } from '../../../../src/constants'
 import { Mission } from '../../../../src/domain/entities/mission/types'
 import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
-import { getUtcizedDayjs } from '../../utils/getUtcizedDayjs'
+import { customDayjs } from '../../utils/customDayjs'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Main Form', () => {
@@ -23,7 +23,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
     const getSaveButton = () => cy.get('button').contains('Enregistrer').parent()
     const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer').parent()
-    const expectedStartDateTimeUtc = new RegExp(`${getUtcizedDayjs().utc().format('YYYY-MM-DDTHH')}:\\d{2}:00\\.000Z`)
+    const expectedStartDateTimeUtc = new RegExp(`${customDayjs().utc().format('YYYY-MM-DDTHH')}:\\d{2}:00\\.000Z`)
 
     cy.intercept('POST', '/api/v1/missions', {
       body: {
@@ -86,8 +86,8 @@ context('Side Window > Mission Form > Main Form', () => {
       statusCode: 201
     }).as('createMission')
 
-    cy.fill('Début de mission', [2023, 2, 1, 12, 31])
-    cy.fill('Fin de mission', [2023, 2, 1, 12, 31])
+    cy.fill('Début de mission', [2023, 2, 1, 12, 34])
+    cy.fill('Fin de mission', [2023, 2, 1, 13, 45])
 
     cy.fill('Types de mission', ['Air'])
     cy.fill('Mission sous JDP', true)
@@ -154,7 +154,7 @@ context('Side Window > Mission Form > Main Form', () => {
             ]
           }
         ],
-        endDateTimeUtc: '2023-02-01T12:31:00.000Z',
+        endDateTimeUtc: '2023-02-01T13:45:00.000Z',
         hasMissionOrder: true,
         isClosed: false,
         isUnderJdp: true,
@@ -163,7 +163,7 @@ context('Side Window > Mission Form > Main Form', () => {
         observationsCacem: 'Une note.',
         observationsCnsp: 'Une autre note.',
         openBy: 'Nemo',
-        startDateTimeUtc: '2023-02-01T12:31:00.000Z'
+        startDateTimeUtc: '2023-02-01T12:34:00.000Z'
       })
     })
 

@@ -12,16 +12,17 @@ import { noop } from 'lodash'
 import { useMemo } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
+import { SeaControlFormSchema } from './schemas'
 import { ControlQualityField } from './shared/ControlQualityField'
 import { FormikCoordinatesPicker } from './shared/FormikCoordinatesPicker'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
+import { FormikRevalidationEffect } from './shared/FormikRevalidationEffect'
 import { GearsField } from './shared/GearsField'
 import { LicencesAndLogbookField } from './shared/LicencesAndLogbookField'
 import { SpeciesField } from './shared/SpeciesField'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
 import { VesselFleetSegmentsField } from './shared/VesselFleetSegmentsField'
-import { SeaControlFormSchema } from './validationSchema'
 import { missionActions } from '../../../../domain/actions'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
@@ -63,15 +64,10 @@ export function SeaControlForm({ index, initialValues }: SeaControlFormProps) {
 
   // TODO Fix the validation: it can't be used as the formik state is inconsistent (due to FormikEffect ?)
   return (
-    <Formik
-      key={key}
-      initialValues={initialValues}
-      onSubmit={noop}
-      validateOnChange
-      validationSchema={SeaControlFormSchema}
-    >
+    <Formik key={key} initialValues={initialValues} onSubmit={noop} validationSchema={SeaControlFormSchema}>
       <>
         <FormikEffect onChange={handleChange as any} />
+        <FormikRevalidationEffect />
 
         <FormHead>
           <h2>

@@ -2,7 +2,7 @@ import { Accent, getLocalizedDayjs, Icon, IconButton, Tag, TagGroup, THEME, TagB
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { formatDateLabel, getMissionActionInfractionsFromMissionActionFromFormValues, getTitle } from './utils'
+import { formatDateLabel, getMissionActionInfractionsFromMissionActionFormValues, getTitle } from './utils'
 import { MissionAction } from '../../../../domain/types/missionAction'
 import { FrontendError } from '../../../../libs/FrontendError'
 
@@ -49,7 +49,7 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
   }, [initialValues])
 
   const infractionTags = useMemo(() => {
-    const infractions = getMissionActionInfractionsFromMissionActionFromFormValues(initialValues)
+    const infractions = getMissionActionInfractionsFromMissionActionFormValues(initialValues)
     const infractionsWithRecord = infractions.filter(
       ({ infractionType }) => infractionType === MissionAction.InfractionType.WITH_RECORD
     )

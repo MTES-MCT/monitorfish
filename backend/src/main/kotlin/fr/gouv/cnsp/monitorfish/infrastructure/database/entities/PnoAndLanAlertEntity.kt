@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType
+import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PNOAndLANAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import jakarta.persistence.*

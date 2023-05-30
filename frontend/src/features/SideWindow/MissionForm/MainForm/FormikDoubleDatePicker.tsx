@@ -1,45 +1,58 @@
-import { FormikDatePicker, useNewWindow } from '@mtes-mct/monitor-ui'
+import { FieldError, FormikDatePicker, useNewWindow } from '@mtes-mct/monitor-ui'
+import { useFormikContext } from 'formik'
 import styled from 'styled-components'
+
+import type { MissionFormValues } from '../types'
 
 export function FormikDoubleDatePicker() {
   const { newWindowContainerRef } = useNewWindow()
+  const { errors } = useFormikContext<MissionFormValues>()
+
+  const error = errors.endDateTimeUtc || errors.startDateTimeUtc
 
   return (
     <Wrapper>
-      Du
-      <FormikDatePicker
-        baseContainer={newWindowContainerRef.current}
-        isCompact
-        isLabelHidden
-        isStringDate
-        label="Début de mission"
-        name="startDateTimeUtc"
-        withTime
-      />
-      au
-      <FormikDatePicker
-        baseContainer={newWindowContainerRef.current}
-        isCompact
-        isEndDate
-        isLabelHidden
-        isStringDate
-        label="Fin de mission"
-        name="endDateTimeUtc"
-        withTime
-      />
+      <div>
+        Du
+        <FormikDatePicker
+          baseContainer={newWindowContainerRef.current}
+          isCompact
+          isErrorMessageHidden
+          isLabelHidden
+          isStringDate
+          label="Début de mission"
+          name="startDateTimeUtc"
+          withTime
+        />
+        au
+        <FormikDatePicker
+          baseContainer={newWindowContainerRef.current}
+          isCompact
+          isEndDate
+          isErrorMessageHidden
+          isLabelHidden
+          isStringDate
+          label="Fin de mission"
+          name="endDateTimeUtc"
+          withTime
+        />
+      </div>
+      {error && <FieldError>{error}</FieldError>}
     </Wrapper>
   )
 }
 
 const Wrapper = styled.div`
-  align-items: center;
-  display: flex;
+  > div {
+    align-items: center;
+    display: flex;
 
-  > .Field-DatePicker {
-    margin-left: 12px;
+    > .Field-DatePicker {
+      margin-left: 12px;
 
-    :first-child {
-      margin-right: 12px;
+      :first-child {
+        margin-right: 12px;
+      }
     }
   }
 `

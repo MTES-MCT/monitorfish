@@ -15,7 +15,7 @@ import type { Coordinate } from 'ol/coordinate'
 export const addControlCoordinates =
   (geometry: GeoJSONNamespace.Geometry | undefined): MainAppThunk<void> =>
   (dispatch, getState) => {
-    const missionGeometry = getPolygons(getState().mission.draft?.geom)
+    const missionGeometry = getPolygons(getState().mission.draft?.mainFormValues.geom)
 
     if (geometry) {
       dispatch(setGeometry(geometry))

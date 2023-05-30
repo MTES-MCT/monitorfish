@@ -12,7 +12,7 @@ import { isValidControlUnit } from '../../utils'
 
 import type { ControlResource } from '../../../../../domain/types/controlResource'
 import type { ControlUnit } from '../../../../../domain/types/controlUnit'
-import type { MissionFormValues } from '../../types'
+import type { MissionMainFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 import type { Promisable } from 'type-fest'
 
@@ -63,7 +63,7 @@ export function ControlUnitSelect({
 
   const handleAdministrationChange = useCallback(
     (nextAdministration: string | undefined) => {
-      const nextControlUnit: MissionFormValues['controlUnits'][0] = {
+      const nextControlUnit: MissionMainFormValues['controlUnits'][0] = {
         ...INITIAL_MISSION_CONTROL_UNIT,
         administration: nextAdministration
       }

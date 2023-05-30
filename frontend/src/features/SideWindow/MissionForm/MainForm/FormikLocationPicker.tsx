@@ -17,11 +17,11 @@ import { addMissionZone } from '../../../../domain/use_cases/mission/addMissionZ
 import { useListenForDrawedGeometry } from '../../../../hooks/useListenForDrawing'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 
-import type { MissionFormValues } from '../types'
+import type { MissionMainFormValues } from '../types'
 import type { Coordinate } from 'ol/coordinate'
 
 export function FormikLocationPicker() {
-  const { setFieldValue, values } = useFormikContext<MissionFormValues>()
+  const { setFieldValue, values } = useFormikContext<MissionMainFormValues>()
 
   const { geometry } = useListenForDrawedGeometry(InteractionListener.MISSION_ZONE)
   const dispatch = useMainAppDispatch()

@@ -9,51 +9,28 @@ import {
   useNewWindow
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
-import { noop } from 'lodash'
-import { useMemo } from 'react'
-import { useDebouncedCallback } from 'use-debounce'
+import { noop } from 'lodash/fp'
 
 import { FLIGHT_GOALS_AS_OPTIONS } from './shared/constants'
 import { FleetSegmentsField } from './shared/FleetSegmentsField'
-import { missionActions } from '../../../../domain/actions'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
 
 import type { MissionActionFormValues } from '../types'
+import type { Promisable } from 'type-fest'
 
 export type AirSurveillanceFormProps = {
-  index: number
   initialValues: MissionActionFormValues
+  onChange: (nextValues: MissionActionFormValues) => Promisable<void>
 }
-export function AirSurveillanceForm({ index, initialValues }: AirSurveillanceFormProps) {
+export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillanceFormProps) {
   const { newWindowContainerRef } = useNewWindow()
 
-  const { mission } = useMainAppSelector(store => store)
-  const dispatch = useMainAppDispatch()
-
-  const key = useMemo(() => JSON.stringify(initialValues), [initialValues])
-
-  const handleChange = useDebouncedCallback((nextMissionActionFormValues: MissionActionFormValues) => {
-    // Since it's debounced, we don't want to update this draft action which could have just been deleted
-    if (!mission.draft || !mission.draft.actions[index]) {
-      return
-    }
-
-    dispatch(
-      missionActions.setDraftAction({
-        index,
-        nextAction: nextMissionActionFormValues
-      })
-    )
-  }, 500)
-
   return (
-    <Formik key={key} initialValues={initialValues} onSubmit={noop}>
+    <Formik initialValues={initialValues} onSubmit={noop}>
       <>
-        <FormikEffect onChange={handleChange as any} />
+        <FormikEffect onChange={onChange as any} />
 
         <FormHead>
           <h2>

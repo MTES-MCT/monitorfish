@@ -2,11 +2,11 @@ import { FieldError, FormikDatePicker, useNewWindow } from '@mtes-mct/monitor-ui
 import { useFormikContext } from 'formik'
 import styled from 'styled-components'
 
-import type { MissionFormValues } from '../types'
+import type { MissionMainFormValues } from '../types'
 
 export function FormikDoubleDatePicker() {
   const { newWindowContainerRef } = useNewWindow()
-  const { errors } = useFormikContext<MissionFormValues>()
+  const { errors } = useFormikContext<MissionMainFormValues>()
 
   const error = errors.endDateTimeUtc || errors.startDateTimeUtc
 

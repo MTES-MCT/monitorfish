@@ -53,7 +53,7 @@ export function useTable<T extends CollectionItem = CollectionItem>(
     () =>
       searchableKeys.map(key => {
         const keyAsArrayPath = getArrayPathFromStringPath(key)
-        const maybeColumn = columns.find(propEq('key', key))
+        const maybeColumn = columns.find(propEq(key, 'key'))
         const maybeSearchTransform = maybeColumn && (maybeColumn.searchTransform || maybeColumn.transform)
 
         return (rawItem: T) => {

@@ -16,7 +16,7 @@ export function deleteListItems<
   const predicate: (obj: Item) => boolean =
     typeof equalsOrSatisfies === 'function'
       ? propSatisfies(equalsOrSatisfies as any, whereProp)
-      : propEq<any>(whereProp, equalsOrSatisfies)
+      : propEq<any>(equalsOrSatisfies, whereProp)
 
   return reject(predicate)(list)
 }

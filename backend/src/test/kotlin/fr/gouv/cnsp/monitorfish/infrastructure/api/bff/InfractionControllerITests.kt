@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionCategory
-import fr.gouv.cnsp.monitorfish.domain.use_cases.infraction.GetFishingInfractions
+import fr.gouv.cnsp.monitorfish.domain.use_cases.infraction.GetFishingAndSecurityInfractions
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -24,12 +24,12 @@ class InfractionControllerITests {
     private lateinit var mockMvc: MockMvc
 
     @MockBean
-    private lateinit var getFishingInfractions: GetFishingInfractions
+    private lateinit var getFishingAndSecurityInfractions: GetFishingAndSecurityInfractions
 
     @Test
     fun `Should get all fishing infractions`() {
         // Given
-        given(this.getFishingInfractions.execute()).willReturn(
+        given(this.getFishingAndSecurityInfractions.execute()).willReturn(
             listOf(
                 Infraction(natinfCode = 7059, infractionCategory = InfractionCategory.FISHING),
                 Infraction(natinfCode = 7065, infractionCategory = InfractionCategory.FISHING),

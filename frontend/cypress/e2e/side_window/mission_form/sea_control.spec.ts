@@ -1,5 +1,6 @@
 import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
 import { Mission } from '../../../../src/domain/entities/mission/types'
+import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
 context('Side Window > Mission Form > Sea Control', () => {
   beforeEach(() => {
@@ -12,15 +13,21 @@ context('Side Window > Mission Form > Sea Control', () => {
 
   it('Should fill the form and send the expected data to the API', () => {
     const getSaveButton = () => cy.get('button').contains('Enregistrer').parent()
+    const now = getUtcDateInMultipleFormats()
+
     // -------------------------------------------------------------------------
     // Form
 
     getSaveButton().should('be.disabled')
 
+    // Rechercher un navire...
     cy.get('input[placeholder="Rechercher un navire..."]').type('malot')
     cy.contains('mark', 'MALOT').click()
 
     cy.wait(500)
+
+    // Date et heure du contrôle
+    cy.fill('Date et heure du contrôle', now.utcDateTupleWithTime)
 
     // Obligations déclaratives et autorisations de pêche
     cy.fill('Bonne émission VMS', 'Oui')
@@ -104,6 +111,7 @@ context('Side Window > Mission Form > Sea Control', () => {
         assert.fail('`interception.response` is undefined.')
       }
 
+      assert.include(interception.request.body.actionDatetimeUtc, now.utcDateAsShortString)
       assert.deepInclude(interception.request.body, {
         actionType: 'SEA_CONTROL',
         controlQualityComments: 'Une observation sur le déroulé du contrôle.',
@@ -170,7 +178,6 @@ context('Side Window > Mission Form > Sea Control', () => {
         vesselName: 'MALOTRU',
         vesselTargeted: 'YES'
       })
-      assert.isString(interception.request.body.actionDatetimeUtc)
 
       cy.get('h1').should('contain.text', 'Missions et contrôles')
     })

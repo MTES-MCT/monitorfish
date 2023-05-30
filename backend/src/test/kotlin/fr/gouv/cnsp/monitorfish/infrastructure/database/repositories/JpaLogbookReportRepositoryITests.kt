@@ -232,13 +232,13 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(pnoMessage.catchOnboard.first().effortZone).isEqualTo("C")
         assertThat(pnoMessage.catchOnboard.first().economicZone).isEqualTo("FRA")
         assertThat(pnoMessage.catchOnboard.first().statisticalRectangle).isEqualTo("23E6")
-        assertThat(pnoMessage.tripStartDate.toString()).isEqualTo("2019-10-11T00:00Z[UTC]")
+        assertThat(pnoMessage.tripStartDate.toString()).isEqualTo("2019-10-11T00:00Z")
         assertThat(pnoMessage.predictedArrivalDateTime).isAfter(ZonedDateTime.now().minusDays(5))
 
         // EOF
         assertThat(messages[3].message).isInstanceOf(EOF::class.java)
         val eofMessage = messages[3].message as EOF
-        assertThat(eofMessage.endOfFishingDateTime.toString()).isEqualTo("2019-10-20T12:16Z[UTC]")
+        assertThat(eofMessage.endOfFishingDateTime.toString()).isEqualTo("2019-10-20T12:16Z")
 
         // DIS
         assertThat(messages[4].message).isInstanceOf(DIS::class.java)
@@ -279,7 +279,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(farMessageOneHaul.gear).isEqualTo("GTN")
         assertThat(farMessageOneHaul.mesh).isEqualTo(100.0)
         assertThat(farMessageOneHaul.mesh).isEqualTo(100.0)
-        assertThat(farMessageOneHaul.catchDateTime.toString()).isEqualTo("2019-10-17T11:32Z[UTC]")
+        assertThat(farMessageOneHaul.catchDateTime.toString()).isEqualTo("2019-10-17T11:32Z")
         assertThat(farMessageOneHaul.catches).hasSize(4)
         assertThat(farMessageOneHaul.catches.first().weight).isEqualTo(1500.0)
         assertThat(farMessageOneHaul.catches.first().numberFish).isEqualTo(null)
@@ -312,7 +312,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(depMessage.gearOnboard.first().mesh).isEqualTo(100.0)
         assertThat(depMessage.departurePort).isEqualTo("AEJAZ")
         assertThat(depMessage.anticipatedActivity).isEqualTo("FSH")
-        assertThat(depMessage.departureDateTime.toString()).isEqualTo("2019-10-11T01:40Z[UTC]")
+        assertThat(depMessage.departureDateTime.toString()).isEqualTo("2019-10-11T01:40Z")
 
         // RET
         assertThat(messages[12].reportDateTime.toString()).isEqualTo("2021-01-18T07:19:29.384921Z")
@@ -382,7 +382,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(depMessage.gearOnboard.first().mesh).isEqualTo(100.0)
         assertThat(depMessage.departurePort).isEqualTo("AEJAZ")
         assertThat(depMessage.anticipatedActivity).isEqualTo("FSH")
-        assertThat(depMessage.departureDateTime.toString()).isEqualTo("2019-10-11T01:40Z[UTC]")
+        assertThat(depMessage.departureDateTime.toString()).isEqualTo("2019-10-11T01:40Z")
     }
 
     @Test

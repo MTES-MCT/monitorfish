@@ -5,10 +5,10 @@ import type { Self } from '../domain/types/env'
  * - injected by the `env.sh` script at runtime in `window`
  * - or from `process.env` when running locally
  */
-export function getEnvironmentVariable(string: string) {
+export function getEnvironmentVariable(name: string) {
   // eslint-disable-next-line no-restricted-globals
-  const injectedValue = (self as Self).env[string]
-  if (injectedValue !== `__${string}__`) {
+  const injectedValue = (self as Self).env[name]
+  if (injectedValue !== `__${name}__`) {
     if (injectedValue === 'true') {
       return true
     }
@@ -20,7 +20,7 @@ export function getEnvironmentVariable(string: string) {
     return injectedValue
   }
 
-  const valueFromProcess = process.env[string]
+  const valueFromProcess = process.env[name]
   if (valueFromProcess) {
     if (valueFromProcess === 'true') {
       return true
@@ -30,7 +30,7 @@ export function getEnvironmentVariable(string: string) {
       return false
     }
 
-    return process.env[string]
+    return process.env[name]
   }
 
   return undefined

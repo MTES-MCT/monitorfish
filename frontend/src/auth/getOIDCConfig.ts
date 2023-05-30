@@ -25,7 +25,7 @@ export function getOIDCConfig() {
   }
 
   return {
-    IS_OIDC_ENABLED,
+    IS_OIDC_ENABLED: getEnvironmentVariable('REACT_APP_CYPRESS_TEST') ? false : IS_OIDC_ENABLED,
     oidcConfig
   }
 }

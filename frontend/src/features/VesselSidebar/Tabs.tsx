@@ -1,8 +1,9 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
 import { AuthorizationContext } from '../../context/AuthorizationContext'
+import { forbiddenVesselSidebarPaths } from '../../domain/entities/authorization/constants'
 import { VesselSidebarTab } from '../../domain/entities/vessel/vessel'
 import { showVesselSidebarTab } from '../../domain/shared_slices/Vessel'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
@@ -20,6 +21,12 @@ export function Tabs() {
   const isSuperUser = useContext(AuthorizationContext)
   const { selectedVessel, vesselSidebarTab } = useMainAppSelector(state => state.vessel)
 
+  useEffect(() => {
+    if (!isSuperUser && forbiddenVesselSidebarPaths.includes(vesselSidebarTab)) {
+      dispatch(showVesselSidebarTab(VesselSidebarTab.IDENTITY))
+    }
+  }, [dispatch, isSuperUser, vesselSidebarTab])
+
   return (
     <TabList>
       {isSuperUser && (
@@ -33,10 +40,7 @@ export function Tabs() {
       )}
       <Tab
         data-cy="vessel-menu-identity"
-        isActive={
-          vesselSidebarTab === VesselSidebarTab.IDENTITY ||
-          (!isSuperUser && vesselSidebarTab === VesselSidebarTab.SUMMARY)
-        }
+        isActive={vesselSidebarTab === VesselSidebarTab.IDENTITY}
         onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.IDENTITY))}
       >
         <VesselIDIcon /> <br /> Identité

@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
-import com.vladmihalcea.hibernate.type.array.ListArrayType
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
+import io.hypersistence.utils.hibernate.type.array.ListArrayType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id

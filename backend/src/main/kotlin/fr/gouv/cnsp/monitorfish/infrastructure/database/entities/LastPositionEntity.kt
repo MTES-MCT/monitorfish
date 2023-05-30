@@ -2,13 +2,13 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.neovisionaries.i18n.CountryCode
-import com.vladmihalcea.hibernate.type.array.ListArrayType
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import io.hypersistence.utils.hibernate.type.array.ListArrayType
+import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
 import org.hibernate.annotations.Type
 import java.io.Serializable

@@ -110,7 +110,7 @@ class ERSMapperUTests {
 
         assertThat(parsedHaul.gear).isEqualTo("GTN")
         assertThat(parsedHaul.mesh).isEqualTo(100.0)
-        assertThat(parsedHaul.catchDateTime.toString()).isEqualTo("2019-12-05T11:55Z[UTC]")
+        assertThat(parsedHaul.catchDateTime.toString()).isEqualTo("2019-12-05T11:55Z")
         assertThat(parsedHaul.catches).hasSize(14)
 
         val receivedCatch = parsedHaul.catches.first()

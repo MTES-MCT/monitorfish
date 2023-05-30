@@ -1,8 +1,8 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.neovisionaries.i18n.CountryCode
-import io.hypersistence.utils.hibernate.type.array.ListArrayType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import io.hypersistence.utils.hibernate.type.array.ListArrayType
 import jakarta.persistence.*
 import org.hibernate.annotations.Type
 import org.slf4j.Logger

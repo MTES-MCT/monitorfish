@@ -1,18 +1,23 @@
-import { Accent, Button, Icon, Tag, usePrevious } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Icon, useForceUpdate, usePrevious } from '@mtes-mct/monitor-ui'
+import { isEqual, omit, pick } from 'lodash/fp'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { ActionForm } from './ActionForm'
 import { ActionList } from './ActionList'
+import { getMissionActionFormInitialValues } from './ActionList/utils'
 import { MainForm } from './MainForm'
 import { DeletionConfirmationDialog } from './shared/DeletionConfirmationDialog'
 import { DraftCancellationConfirmationDialog } from './shared/DraftCancellationConfirmationDialog'
+import { TitleSourceTag } from './shared/TitleSourceTag'
 import {
+  areMissionFormValuesValid,
   getMissionActionsDataFromMissionActionsFormValues,
   getMissionDataFromMissionFormValues,
-  getUpdatedMissionFromMissionFormValues,
-  areMissionFormValuesValid,
-  isMissionFormValuesComplete
+  getMissionFormInitialValues,
+  getTitleFromMissionMainFormValues,
+  getUpdatedMissionFromMissionMainFormValues
 } from './utils'
 import {
   monitorenvMissionApi,
@@ -27,7 +32,6 @@ import {
   useUpdateMissionActionMutation
 } from '../../../api/missionAction'
 import { missionActions } from '../../../domain/actions'
-import { getMissionSourceTagText } from '../../../domain/entities/mission'
 import { Mission, type MissionWithActions } from '../../../domain/entities/mission/types'
 import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
 import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
@@ -40,18 +44,24 @@ import { FrontendErrorBoundary } from '../../../ui/FrontendErrorBoundary'
 import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
 
-import type { MissionFormValues } from './types'
+import type { MissionActionFormValues, MissionMainFormValues } from './types'
+import type { MissionAction } from '../../../domain/types/missionAction'
 
 export function MissionForm() {
-  const { mission, sideWindow } = useMainAppSelector(store => store)
+  const { sideWindow } = useMainAppSelector(store => store)
 
+  const actionsFormValuesRef = useRef<MissionActionFormValues[]>([])
   const headerDivRef = useRef<HTMLDivElement | null>(null)
+  const mainFormValuesRef = useRef<MissionMainFormValues | undefined>(undefined)
   const originalMissionRef = useRef<MissionWithActions | undefined>(undefined)
 
-  const previousMissionId = usePrevious(sideWindow.selectedPath.id)
+  const [actionFormKey, setActionFormKey] = useState<number>(0)
+  const [editedActionIndex, setEditedActionIndex] = useState<number | undefined>(undefined)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [isDeletionConfirmationDialogOpen, setIsDeletionConfirmationDialogOpen] = useState(false)
+  const [title, setTitle] = useState(getTitleFromMissionMainFormValues(undefined, undefined))
+  const previousMissionId = usePrevious(sideWindow.selectedPath.id)
 
   const dispatch = useMainAppDispatch()
   const [createMission] = useCreateMissionMutation()
@@ -60,28 +70,40 @@ export function MissionForm() {
   const [deleteMissionAction] = useDeleteMissionActionMutation()
   const [updateMission] = useUpdateMissionMutation()
   const [updateMissionAction] = useUpdateMissionActionMutation()
+  const { forceUpdate } = useForceUpdate()
 
-  const isMissionFormValid = areMissionFormValuesValid(mission.draft) && isMissionFormValuesComplete(mission.draft)
+  const editedActionFormValues = useMemo(
+    () => (editedActionIndex !== undefined ? actionsFormValuesRef.current[editedActionIndex] : undefined),
+    [editedActionIndex]
+  )
+  const isMissionFormValid = areMissionFormValuesValid(mainFormValuesRef.current, actionsFormValuesRef.current)
 
-  const missionTitle = useMemo(() => {
-    if (!mission.draft) {
-      return 'Mission en cours de chargement...'
-    }
+  const addAction = useCallback(
+    (actionType: MissionAction.MissionActionType) => {
+      if (!mainFormValuesRef.current) {
+        logSoftError('`mainFormValuesRef.current` is undefined.')
 
-    return sideWindow.selectedPath.id
-      ? `Mission ${
-          mission.draft.missionTypes &&
-          mission.draft.missionTypes.map(missionType => Mission.MissionTypeLabel[missionType]).join(' / ')
-        } – ${mission.draft.controlUnits.map(controlUnit => controlUnit.name?.replace('(historique)', '')).join(', ')}`
-      : `Nouvelle mission`
-  }, [mission.draft, sideWindow.selectedPath.id])
+        return
+      }
+
+      const newActionFormValues = getMissionActionFormInitialValues(actionType)
+
+      actionsFormValuesRef.current = [...actionsFormValuesRef.current, newActionFormValues]
+
+      setActionFormKey(actionFormKey + 1)
+      setEditedActionIndex(actionsFormValuesRef.current.length - 1)
+    },
+    [actionFormKey]
+  )
 
   /**
    * @param mustClose Should the mission be closed?
    */
   const createOrUpdate = useCallback(
     async (mustClose: boolean = false) => {
-      if (!mission.draft) {
+      if (!mainFormValuesRef.current) {
+        logSoftError('`mainFormValuesRef.current` is undefined.')
+
         return
       }
 
@@ -91,7 +113,7 @@ export function MissionForm() {
         let missionId: number
 
         if (!sideWindow.selectedPath.id) {
-          const newMission = getMissionDataFromMissionFormValues(mission.draft, mustClose)
+          const newMission = getMissionDataFromMissionFormValues(mainFormValuesRef.current, mustClose)
           // TODO Override Redux RTK typings globally.
           // Redux RTK typing is wrong, this should be a tuple-like to help TS discriminate `data` from `error`.
           const { data, error } = (await createMission(newMission)) as any
@@ -101,9 +123,9 @@ export function MissionForm() {
 
           missionId = data.id
         } else {
-          const updatedMission = getUpdatedMissionFromMissionFormValues(
+          const updatedMission = getUpdatedMissionFromMissionMainFormValues(
             sideWindow.selectedPath.id,
-            mission.draft,
+            mainFormValuesRef.current,
             mustClose
           )
           await updateMission(updatedMission)
@@ -114,7 +136,7 @@ export function MissionForm() {
         const { deletedMissionActionIds, updatedMissionActionDatas } =
           getMissionActionsDataFromMissionActionsFormValues(
             missionId,
-            mission.draft.actions,
+            actionsFormValuesRef.current,
             originalMissionRef.current?.actions
           )
 
@@ -136,7 +158,7 @@ export function MissionForm() {
 
         dispatch(sideWindowActions.openOrFocusAndGoTo({ menu: SideWindowMenuKey.MISSION_LIST }))
       } catch (err) {
-        logSoftError('createOrUpdate() failed.', { err })
+        logSoftError('`createOrUpdate()` failed.', { err })
 
         setIsSaving(false)
       }
@@ -146,14 +168,24 @@ export function MissionForm() {
       createMissionAction,
       deleteMissionAction,
       dispatch,
-      mission.draft,
       updateMission,
       updateMissionAction,
       sideWindow.selectedPath.id
     ]
   )
 
-  // eslint-disable-next-line no-underscore-dangle
+  const duplicateAction = useCallback(
+    (actionIndex: number) => {
+      const sourceAction = omit(['id'], actionsFormValuesRef.current[actionIndex]) as MissionActionFormValues
+
+      actionsFormValuesRef.current = [...actionsFormValuesRef.current, sourceAction]
+
+      setActionFormKey(actionFormKey + 1)
+      setEditedActionIndex(actionsFormValuesRef.current.length - 1)
+    },
+    [actionFormKey]
+  )
+
   const handleDelete = useCallback(async () => {
     if (!sideWindow.selectedPath.id) {
       throw new FrontendError('`sideWindow.selectedPath.id` is undefined')
@@ -166,25 +198,122 @@ export function MissionForm() {
   }, [deleteMission, dispatch, sideWindow.selectedPath.id])
 
   const reopen = useCallback(() => {
-    if (!mission.draft) {
-      throw new FrontendError('`mission.draft` is undefined.')
+    if (!mainFormValuesRef.current) {
+      throw new FrontendError('`mainFormValuesRef.current` is undefined.')
     }
 
     setIsSaving(true)
 
-    const nextDraft: MissionFormValues = {
-      ...mission.draft,
+    mainFormValuesRef.current = {
+      ...mainFormValuesRef.current,
       isClosed: false
     }
 
-    dispatch(missionActions.setDraft(nextDraft))
-
     setIsSaving(false)
-  }, [dispatch, mission.draft])
+  }, [])
 
   const goToMissionList = useCallback(async () => {
     dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_LIST }))
   }, [dispatch])
+
+  const removeAction = useCallback(
+    (actionIndex: number) => {
+      actionsFormValuesRef.current = actionsFormValuesRef.current.reduce(
+        (nextActions, action, index) => (index === actionIndex ? nextActions : [...nextActions, action]),
+        [] as MissionActionFormValues[]
+      )
+
+      if (editedActionIndex === actionIndex) {
+        setEditedActionIndex(undefined)
+      } else {
+        forceUpdate()
+      }
+    },
+    [editedActionIndex, forceUpdate]
+  )
+
+  const updateDraft = useDebouncedCallback(
+    // We need to use a callback within to memoize it
+    // https://codesandbox.io/s/4wvmp1xlw4?file=/src/InputWithCallback.js:357-386
+    useCallback(() => {
+      if (!mainFormValuesRef.current) {
+        logSoftError('`mainFormValuesRef.current` is undefined.')
+
+        return
+      }
+
+      dispatch(
+        missionActions.setDraft({
+          actionsFormValues: actionsFormValuesRef.current,
+          mainFormValues: mainFormValuesRef.current
+        })
+      )
+    }, [dispatch]),
+    500,
+    {
+      // Maximum time this function is allowed to be delayed before it's invoked
+      maxWait: 500
+    }
+  )
+
+  const updateEditedActionFormValues = useCallback(
+    (nextActionFormValues: MissionActionFormValues) => {
+      if (editedActionIndex === undefined) {
+        logSoftError('`editedActionIndex` is undefined.')
+
+        return
+      }
+
+      // We must re-render if these props change since the action list dropdown menu depends on it
+      const currentActionFormValues = { ...actionsFormValuesRef.current[editedActionIndex] }
+      const shouldUpdate = !isEqual(
+        pick(['numberOfVesselsFlownOver', 'otherComments', 'vesselName'], currentActionFormValues),
+        pick(['numberOfVesselsFlownOver', 'otherComments', 'vesselName'], nextActionFormValues)
+      )
+
+      actionsFormValuesRef.current = actionsFormValuesRef.current.reduce(
+        (nextActions, action, index) => [...nextActions, index === editedActionIndex ? nextActionFormValues : action],
+        [] as MissionActionFormValues[]
+      )
+
+      if (shouldUpdate) {
+        forceUpdate()
+      }
+
+      updateDraft()
+    },
+    [editedActionIndex, forceUpdate, updateDraft]
+  )
+
+  const updateEditedActionIndex = useCallback(
+    (nextActionIndex: number | undefined) => {
+      setActionFormKey(actionFormKey + 1)
+      setEditedActionIndex(nextActionIndex)
+    },
+    [actionFormKey]
+  )
+
+  const updateMainFormValues = useCallback(
+    (nextMissionMainFormValues: MissionMainFormValues) => {
+      if (!mainFormValuesRef.current) {
+        logSoftError('`mainFormValuesRef.current` is undefined.')
+
+        return
+      }
+
+      // We must re-render if mission types change since the action list dropdown menu depends on it
+      const shouldUpdate = !isEqual(mainFormValuesRef.current.missionTypes, nextMissionMainFormValues.missionTypes)
+
+      mainFormValuesRef.current = { ...nextMissionMainFormValues }
+
+      if (shouldUpdate) {
+        forceUpdate()
+      }
+
+      updateDraft()
+    },
+    [forceUpdate, updateDraft]
+  )
 
   const toggleDeletionConfirmationDialog = useCallback(async () => {
     setIsDeletionConfirmationDialogOpen(!isDeletionConfirmationDialogOpen)
@@ -203,14 +332,22 @@ export function MissionForm() {
     }
 
     ;(async () => {
-      // New mission
+      // When we create a new mission
+
       if (!sideWindow.selectedPath.id) {
-        dispatch(missionActions.initializeDraft())
+        const { initialActionsFormValues, initialMainFormValues } = getMissionFormInitialValues(undefined, [])
+        mainFormValuesRef.current = initialMainFormValues
+        actionsFormValuesRef.current = initialActionsFormValues
 
         setIsLoading(false)
+        setTitle(getTitleFromMissionMainFormValues(initialMainFormValues, undefined))
+
+        updateDraft()
 
         return
       }
+
+      // When we edit an existing mission
 
       const missionResponse = await dispatch(
         monitorenvMissionApi.endpoints.getMission.initiate(sideWindow.selectedPath.id)
@@ -229,17 +366,19 @@ export function MissionForm() {
         ...missionResponse.data,
         actions: missionActionsResponse.data
       }
-
-      dispatch(
-        missionActions.initializeDraft({
-          mission: missionResponse.data,
-          missionActions: missionActionsResponse.data
-        })
+      const { initialActionsFormValues, initialMainFormValues } = getMissionFormInitialValues(
+        missionResponse.data,
+        missionActionsResponse.data
       )
+      mainFormValuesRef.current = initialMainFormValues
+      actionsFormValuesRef.current = initialActionsFormValues
 
       setIsLoading(false)
+      setTitle(getTitleFromMissionMainFormValues(initialMainFormValues, sideWindow.selectedPath.id))
+
+      updateDraft()
     })()
-  }, [dispatch, isLoading, previousMissionId, sideWindow.selectedPath.id])
+  }, [dispatch, isLoading, previousMissionId, sideWindow.selectedPath.id, updateDraft])
 
   useEffect(
     () => () => {
@@ -256,29 +395,34 @@ export function MissionForm() {
         <Header ref={headerDivRef}>
           <BackToListIcon onClick={goToMissionList} />
 
-          <HeaderTitle>{missionTitle}</HeaderTitle>
-
-          {sideWindow.selectedPath.id && (
-            <MissionSourceTag
-              isFromCacem={
-                mission.draft?.missionSource === Mission.MissionSource.POSEIDON_CACEM ||
-                mission.draft?.missionSource === Mission.MissionSource.MONITORENV
-              }
-            >
-              {getMissionSourceTagText(mission.draft?.missionSource)}
-            </MissionSourceTag>
-          )}
+          <HeaderTitle>{title}</HeaderTitle>
+          <TitleSourceTag
+            missionId={sideWindow.selectedPath.id}
+            missionSource={mainFormValuesRef.current?.missionSource}
+          />
         </Header>
 
         <Body>
           <FrontendErrorBoundary>
-            {(isLoading || !mission.draft) && <LoadingSpinnerWall />}
+            {(isLoading || !mainFormValuesRef.current) && <LoadingSpinnerWall />}
 
-            {!isLoading && mission.draft && (
+            {!isLoading && mainFormValuesRef.current && (
               <>
-                <MainForm />
-                <ActionList />
-                <ActionForm />
+                <MainForm initialValues={mainFormValuesRef.current} onChange={updateMainFormValues} />
+                <ActionList
+                  actionsFormValues={actionsFormValuesRef.current}
+                  currentIndex={editedActionIndex}
+                  missionTypes={mainFormValuesRef.current.missionTypes}
+                  onAdd={addAction}
+                  onDuplicate={duplicateAction}
+                  onRemove={removeAction}
+                  onSelect={updateEditedActionIndex}
+                />
+                <ActionForm
+                  key={`action-form-${actionFormKey}`}
+                  initialActionFormValues={editedActionFormValues}
+                  onChange={updateEditedActionFormValues}
+                />
               </>
             )}
           </FrontendErrorBoundary>
@@ -289,7 +433,11 @@ export function MissionForm() {
             {sideWindow.selectedPath.id && (
               <Button
                 accent={Accent.SECONDARY}
-                disabled={isLoading || isSaving || mission.draft?.missionSource !== Mission.MissionSource.MONITORFISH}
+                disabled={
+                  isLoading ||
+                  isSaving ||
+                  mainFormValuesRef.current?.missionSource !== Mission.MissionSource.MONITORFISH
+                }
                 Icon={Icon.Delete}
                 onClick={toggleDeletionConfirmationDialog}
               >
@@ -299,7 +447,7 @@ export function MissionForm() {
           </div>
 
           <div>
-            {mission.draft?.isClosed && (
+            {mainFormValuesRef.current?.isClosed && (
               <FooterMessage>Veuillez rouvrir la mission avant d’en modifier les informations.</FooterMessage>
             )}
 
@@ -307,7 +455,7 @@ export function MissionForm() {
               Annuler
             </Button>
 
-            {!mission.draft?.isClosed && (
+            {!mainFormValuesRef.current?.isClosed && (
               <>
                 <Button
                   accent={Accent.SECONDARY}
@@ -327,7 +475,7 @@ export function MissionForm() {
                 </Button>
               </>
             )}
-            {mission.draft?.isClosed && (
+            {mainFormValuesRef.current?.isClosed && (
               <Button
                 accent={Accent.PRIMARY}
                 disabled={isLoading || isSaving}
@@ -349,15 +497,6 @@ export function MissionForm() {
     </>
   )
 }
-
-const MissionSourceTag = styled(Tag)<{
-  isFromCacem: boolean
-}>`
-  background: ${p => (p.isFromCacem ? p.theme.color.mediumSeaGreen : p.theme.color.blueGray[100])};
-  color: ${p => p.theme.color.white};
-  margin-left: 24px;
-  vertical-align: middle;
-`
 
 const BackToListIcon = styled(Icon.Chevron)`
   margin-right: 12px;

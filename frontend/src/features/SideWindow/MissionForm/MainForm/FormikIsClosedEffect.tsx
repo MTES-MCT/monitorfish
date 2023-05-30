@@ -13,11 +13,11 @@ export function FormikIsClosedEffect() {
         return
       }
 
-      helper.setValue(mission.draft.isClosed)
+      helper.setValue(mission.draft.mainFormValues.isClosed)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mission.draft?.isClosed]
+    [mission.draft?.mainFormValues.isClosed]
   )
 
   return <></>

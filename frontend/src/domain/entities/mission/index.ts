@@ -16,7 +16,7 @@ import { MonitorFishLayer } from '../layers/types'
 import { OpenLayersGeometryType } from '../map/constants'
 
 import type { MissionWithActions } from './types'
-import type { MissionFormValues, MissionActionFormValues } from '../../../features/SideWindow/MissionForm/types'
+import type { MissionActionFormValues, MissionMainFormValues } from '../../../features/SideWindow/MissionForm/types'
 import type { MultiPolygon } from 'ol/geom'
 
 import MissionStatus = Mission.MissionStatus
@@ -75,7 +75,7 @@ export const getMissionFeaturePoint = ({ actions, ...mission }: MissionWithActio
   return feature
 }
 
-export type MissionFormValuesWithId = MissionFormValues & {
+export type MissionMainFormValuesWithId = MissionMainFormValues & {
   id: number
 }
 
@@ -83,7 +83,7 @@ export type MissionActionFormValuesWithMissionId = MissionActionFormValues & {
   missionId: number
 }
 
-export const getMissionFeatureZone = (mission: Mission.Mission | MissionFormValuesWithId): Feature => {
+export const getMissionFeatureZone = (mission: Mission.Mission | MissionMainFormValuesWithId): Feature => {
   const geoJSON = new GeoJSON()
   const geometry = geoJSON.readGeometry(mission.geom, {
     dataProjection: WSG84_PROJECTION,
@@ -105,9 +105,12 @@ export const getMissionFeatureZone = (mission: Mission.Mission | MissionFormValu
   return feature
 }
 
-export const getMissionActionFeatures = (mission: MissionFormValuesWithId): Feature[] =>
-  mission.actions
-    .map(action => getMissionActionFeature({ ...action, missionId: mission.id }))
+export const getMissionActionFeatures = (
+  mainFormValues: MissionMainFormValuesWithId,
+  actionsFormValues: MissionActionFormValues[]
+): Feature[] =>
+  actionsFormValues
+    .map(action => getMissionActionFeature({ ...action, missionId: mainFormValues.id }))
     .filter((action): action is Feature => !!action)
 
 export const getMissionActionFeature = (

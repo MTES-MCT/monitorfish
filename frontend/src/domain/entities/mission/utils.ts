@@ -1,37 +1,6 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import { Mission } from './types'
-import { INITIAL_MISSION_CONTROL_UNIT } from '../../../features/SideWindow/MissionForm/constants'
-import { FrontendError } from '../../../libs/FrontendError'
-
-import type { MissionFormValues } from '../../../features/SideWindow/MissionForm/types'
-import type { MissionAction } from '../../types/missionAction'
-
-export function getMissionFormInitialValues(
-  mission: Mission.Mission | undefined,
-  missionActions: MissionAction.MissionAction[]
-): MissionFormValues {
-  if (!mission) {
-    const startDateTimeUtc = customDayjs().startOf('minute').toISOString()
-
-    return {
-      actions: [],
-      controlUnits: [INITIAL_MISSION_CONTROL_UNIT],
-      missionTypes: [Mission.MissionType.SEA],
-      startDateTimeUtc
-    }
-  }
-
-  const missionType = mission.missionTypes[0]
-  if (!missionType) {
-    throw new FrontendError('`missionType` is undefined.')
-  }
-
-  return {
-    ...mission,
-    actions: missionActions
-  }
-}
 
 export const getMissionStatus = ({
   endDateTimeUtc,

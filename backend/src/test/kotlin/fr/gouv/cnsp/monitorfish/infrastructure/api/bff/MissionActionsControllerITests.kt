@@ -171,7 +171,7 @@ class MissionActionsControllerITests {
         argumentCaptor<MissionAction>().apply {
             verify(addMissionAction).execute(capture())
 
-            Assertions.assertThat(allValues[0].actionDatetimeUtc.toString()).isEqualTo("2023-04-27T16:05Z[UTC]")
+            Assertions.assertThat(allValues[0].actionDatetimeUtc.toString()).isEqualTo("2023-04-27T16:05Z")
         }
     }
 

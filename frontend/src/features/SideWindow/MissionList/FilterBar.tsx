@@ -7,10 +7,12 @@ import {
   Size,
   TextInput,
   useKey,
-  useNewWindow
+  useNewWindow,
+  usePrevious
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash'
+import { isEqual } from 'lodash/fp'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -41,6 +43,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
   const controlUnitsQuery = useGetControlUnitsQuery(undefined)
   const dispatch = useMainAppDispatch()
 
+  const previousAdministrationFiterValue = usePrevious(listFilterValues.ADMINISTRATION)
   const { administrationsAsOptions, unitsAsOptions } = useMemo(
     () => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data, listFilterValues.ADMINISTRATION),
     [controlUnitsQuery.data, listFilterValues.ADMINISTRATION]
@@ -65,14 +68,13 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
       // We remove selected units that are not linked to the currently selected administrations when some are
       if (
         controlUnitsQuery.data &&
-        nextFilterValues.ADMINISTRATION &&
-        nextFilterValues.ADMINISTRATION.length > 0 &&
-        nextFilterValues.UNIT
+        nextFilterValues.UNIT &&
+        // We don't want to run that when the user check new units without touching the administrations select
+        !isEqual(previousAdministrationFiterValue, normalizedNextFilterValues.ADMINISTRATION)
       ) {
-        const selectedAdministrationsUnits = getControlUnitsNamesFromAdministrations(
-          controlUnitsQuery.data,
-          normalizedNextFilterValues.ADMINISTRATION
-        )
+        const selectedAdministrationsUnits = normalizedNextFilterValues.ADMINISTRATION
+          ? getControlUnitsNamesFromAdministrations(controlUnitsQuery.data, normalizedNextFilterValues.ADMINISTRATION)
+          : []
 
         normalizedNextFilterValues.UNIT = nextFilterValues.UNIT.filter(unit =>
           selectedAdministrationsUnits.includes(unit)
@@ -85,7 +87,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
 
       dispatch(missionActions.setListFilterValues(normalizedNextFilterValues))
     },
-    [controlUnitsQuery.data, dispatch]
+    [controlUnitsQuery.data, dispatch, previousAdministrationFiterValue]
   )
 
   return (

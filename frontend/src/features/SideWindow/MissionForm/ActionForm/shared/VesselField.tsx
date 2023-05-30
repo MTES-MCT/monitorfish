@@ -1,8 +1,9 @@
-import { useNewWindow } from '@mtes-mct/monitor-ui'
+import { Checkbox, useNewWindow } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
+import { UNKNOWN_VESSEL } from '../../../../../domain/entities/vessel/vessel'
 import { VesselSearch } from '../../../../VesselSearch'
 
 import type { VesselIdentity } from '../../../../../domain/entities/vessel/types'
@@ -14,13 +15,10 @@ export function VesselField() {
 
   const { newWindowContainerRef } = useNewWindow()
 
-  // TODO A vessel can't be unknown so this checkbox can't be implementedco: clarify this screen
-  // const vesselSearchKey = useKey([values.isVesselUnknown])
-
   const defaultValue = useMemo(
     () => ({
       flagState: values.flagState,
-      vesselName: values.vesselName
+      vesselName: values.vesselName === UNKNOWN_VESSEL.vesselName ? 'INCONNU' : values.vesselName
     }),
     [values.flagState, values.vesselName]
   )
@@ -54,41 +52,38 @@ export function VesselField() {
     []
   )
 
-  /** A vessel can't be unknown so this checkbox can't be implemented
-   * TODO Clarify this screen
-
-   const handleIsVesselUnknownChange = useCallback(
-   (isChecked: boolean) => {
+  const handleIsVesselUnknownChange = useCallback(
+    (isChecked: boolean) => {
       if (isChecked) {
-        setFieldValue('isVesselUnknown', true)
-
-        handleVesselSearchChange(undefined)
+        handleVesselSearchChange(UNKNOWN_VESSEL)
 
         return
       }
 
-      setFieldValue('isVesselUnknown', false)
+      handleVesselSearchChange(undefined)
     },
 
-   // eslint-disable-next-line react-hooks/exhaustive-deps
-   [handleVesselSearchChange]
-   )
-
-   <Checkbox label="Navire inconnu" checked={!!values.isVesselUnknown} name="isVesselUnknown" onChange={handleIsVesselUnknownChange} />
-   */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [handleVesselSearchChange]
+  )
 
   return (
     <Wrapper>
       <StyledVesselSearch
-        // key={vesselSearchKey}
         baseRef={newWindowContainerRef}
         defaultValue={defaultValue}
-        disabled={values.isVesselUnknown}
+        disabled={values.vesselId === UNKNOWN_VESSEL.vesselId}
         extendedWidth={400}
         hasError={!!errors.vesselId}
         hasVesselIdInResults
         isExtended
         onChange={handleVesselSearchChange}
+      />
+      <Checkbox
+        checked={values.vesselId === UNKNOWN_VESSEL.vesselId}
+        label="Navire inconnu"
+        name="isVesselUnknown"
+        onChange={handleIsVesselUnknownChange}
       />
       {errors.vesselId && <Error>{errors.vesselId}</Error>}
     </Wrapper>
@@ -101,6 +96,7 @@ const Error = styled.span`
 
 const Wrapper = styled.div`
   align-items: center;
+  display: flex;
 
   > div:first-child {
     flex-grow: 1;

@@ -56,3 +56,6 @@ VALUES (1, 'FAK000999999', '224103750', 'CALLME', 'DONTSINK', 'PHENOMENE', 'FR',
         'LORIENT', 108, 'Pêche côtière', '3', 'Pêche', ARRAY ['PTM', 'OTM'], CURRENT_DATE + INTERVAL '5 days', 'DUPOND',
         ARRAY ['+33 6 84 56 32 14'], 'dupond@gmail.com', 'DURAND', ARRAY ['+33 6 45 25 14'], ARRAY ['durand@gmail.com'],
         ARRAY ['escogriffe@dgse.spy', 'henri.duflot@dgse.spy'], ARRAY ['0918273645', '+33 6 00 00 00 00'], true);
+
+INSERT INTO vessels (id, cfr, ircs, external_immatriculation, vessel_name)
+VALUES (-1, 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN');

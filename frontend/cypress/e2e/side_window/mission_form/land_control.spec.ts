@@ -1,5 +1,6 @@
 import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
 import { Mission } from '../../../../src/domain/entities/mission/types'
+import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
 context('Side Window > Mission Form > Land Control', () => {
   beforeEach(() => {
@@ -12,6 +13,8 @@ context('Side Window > Mission Form > Land Control', () => {
   })
 
   it('Should fill the form and send the expected data to the API', () => {
+    const now = getUtcDateInMultipleFormats()
+
     // -------------------------------------------------------------------------
     // Form
 
@@ -21,7 +24,7 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.contains('mark', 'PHENO').click()
 
     // Date et heure du contrôle
-    // TODO Add this test.
+    cy.fill('Date et heure du contrôle', now.utcDateTupleWithTime)
 
     // Lieu du contrôle
     cy.fill('Port de contrôle', 'Auray')
@@ -97,6 +100,7 @@ context('Side Window > Mission Form > Land Control', () => {
         assert.fail('`interception.response` is undefined.')
       }
 
+      assert.include(interception.request.body.actionDatetimeUtc, now.utcDateAsShortString)
       assert.deepInclude(interception.request.body, {
         // actionDatetimeUtc: '2023-02-18T12:09:45.874Z',
         actionType: 'LAND_CONTROL',
@@ -175,7 +179,6 @@ context('Side Window > Mission Form > Land Control', () => {
         vesselName: 'PHENOMENE',
         vesselTargeted: 'YES'
       })
-      assert.isString(interception.request.body.actionDatetimeUtc)
 
       cy.get('h1').should('contain.text', 'Missions et contrôles')
     })

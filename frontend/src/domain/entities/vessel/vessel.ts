@@ -50,8 +50,7 @@ export class Vessel {
     feature: VesselEnhancedObject,
     options: {
       hideVesselsAtPort: boolean
-      isSuperUser: boolean
-      riskFactorShowedOnMap: boolean
+      isRiskFactorShowed: boolean
       vesselLabel: string
       vesselLabelsShowedOnMap: boolean
       vesselsLastPositionVisibility: LastPositionVisibility
@@ -67,8 +66,7 @@ export class Vessel {
   } {
     const {
       hideVesselsAtPort,
-      isSuperUser,
-      riskFactorShowedOnMap,
+      isRiskFactorShowed,
       vesselLabel,
       vesselLabelsShowedOnMap,
       vesselsLastPositionVisibility
@@ -121,7 +119,7 @@ export class Vessel {
       }
     }
 
-    if (isSuperUser && riskFactorShowedOnMap) {
+    if (isRiskFactorShowed) {
       label.riskFactor = {
         detectabilityRiskFactor: feature.detectabilityRiskFactor,
         globalRisk: feature.riskFactor,

@@ -1,3 +1,5 @@
+import { useContext } from 'react'
+
 import { AlertsMapButton } from './AlertsMapButton'
 import { BeaconMalfunctionsMapButton } from './BeaconMalfunctionsMapButton'
 import { FavoriteVessels } from './FavoriteVessels'
@@ -7,9 +9,11 @@ import { MissionsMenu } from './Missions'
 import { VesselFiltersMapButton } from './VesselFilters'
 import { VesselLabelsMapButton } from './VesselLabels'
 import { VesselVisibilityMapButton } from './VesselVisibility'
+import { AuthorizationContext } from '../../context/AuthorizationContext'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 export function MapButtons() {
+  const isSuperUser = useContext(AuthorizationContext)
   const {
     isAlertsMapButtonDisplayed,
     isBeaconMalfunctionsMapButtonDisplayed,
@@ -23,15 +27,15 @@ export function MapButtons() {
 
   return (
     <>
-      {isAlertsMapButtonDisplayed && <AlertsMapButton />}
-      {isBeaconMalfunctionsMapButtonDisplayed && <BeaconMalfunctionsMapButton />}
+      {isSuperUser && isAlertsMapButtonDisplayed && <AlertsMapButton />}
+      {isSuperUser && isBeaconMalfunctionsMapButtonDisplayed && <BeaconMalfunctionsMapButton />}
       {isVesselFiltersMapButtonDisplayed && <VesselFiltersMapButton />}
       {isVesselVisibilityMapButtonDisplayed && <VesselVisibilityMapButton />}
       {isMeasurementMapButtonDisplayed && <MeasurementMapButton />}
       {isInterestPointMapButtonDisplayed && <InterestPointMapButton />}
       {isVesselLabelsMapButtonDisplayed && <VesselLabelsMapButton />}
       {isFavoriteVesselsMapButtonDisplayed && <FavoriteVessels />}
-      {isFavoriteVesselsMapButtonDisplayed && <MissionsMenu />}
+      {isSuperUser && isFavoriteVesselsMapButtonDisplayed && <MissionsMenu />}
     </>
   )
 }

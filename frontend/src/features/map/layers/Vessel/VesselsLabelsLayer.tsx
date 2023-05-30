@@ -231,8 +231,7 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
         const { vesselProperties } = feature
         const label = Vessel.getVesselFeatureLabel(vesselProperties, {
           hideVesselsAtPort,
-          isSuperUser,
-          riskFactorShowedOnMap,
+          isRiskFactorShowed: isSuperUser && riskFactorShowedOnMap,
           vesselLabel,
           vesselLabelsShowedOnMap,
           vesselsLastPositionVisibility

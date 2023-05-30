@@ -1,23 +1,26 @@
-context('TritonFish', () => {
-  it('view Should have some features removed', () => {
+context('External MonitorFish', () => {
+  it('Should redirect to /', () => {
     // Given
-    cy.intercept('/bff/v1/is_super_user', { statusCode: 401 }).as('getIsSuperUser')
-    cy.loadPath('/ext#@-824534.42,6082993.21,8.70')
+    cy.intercept('/env.js', { fixture: 'env' })
+    cy.intercept('/bff/v1/authorization/is_super_user', { statusCode: 401 }).as('getIsSuperUser')
+    cy.visit('/ext#@-824534.42,6082993.21,8.70')
     cy.wait('@getIsSuperUser')
 
-    // This only works in CI as locally, the env variables are found in process
-    cy.window().then(win => {
-      // eslint-disable-next-line no-console
-      console.log(win)
-      // @ts-ignore
-      // eslint-disable-next-line no-param-reassign
-      win.env.REACT_APP_OIDC_ENABLED = 'true'
-    })
+    cy.url().should('not.contain', 'ext')
+  })
+
+  it('Should have some features removed When not logged as super user', () => {
+    // Given
+    cy.intercept('/env.js', { fixture: 'env' })
+    cy.intercept('/bff/v1/authorization/is_super_user', { statusCode: 401 }).as('getIsSuperUser')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait('@getIsSuperUser')
 
     // Then
     // Vessel sidebar is minimized
-    cy.get('.VESSELS_POINTS').click(460, 480, { force: true, timeout: 10000 })
-    cy.wait(50)
+    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('Pheno')
+    cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
+    cy.wait(200)
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy="global-risk-factor"]').should('not.exist')
     cy.get('*[data-cy="vessel-sidebar-alert"]').should('not.exist')
@@ -53,6 +56,9 @@ context('TritonFish', () => {
 
     // No beacon malfunctions
     cy.get('*[data-cy="beacon-malfunction-button"]').should('not.exist')
+
+    // Missions
+    cy.get('*[data-cy="missions-menu-box"]').should('not.exist')
 
     // Given
     cy.loadPath('/ext#@-188008.06,6245230.27,8.70')

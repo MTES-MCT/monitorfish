@@ -23,12 +23,12 @@ export function Body() {
     <Wrapper healthcheckTextWarning={healthcheckTextWarning}>
       {isSuperUser && <AlertWarning selectedVessel={selectedVessel} />}
       {isSuperUser && <BeaconMalfunctionWarning selectedVessel={selectedVessel} />}
-      {vesselSidebarTab === VesselSidebarTab.SUMMARY && <VesselSummary />}
+      {isSuperUser && vesselSidebarTab === VesselSidebarTab.SUMMARY && <VesselSummary />}
       {vesselSidebarTab === VesselSidebarTab.IDENTITY && <VesselIdentity />}
       {vesselSidebarTab === VesselSidebarTab.VOYAGES && <VesselFishingActivities />}
       {vesselSidebarTab === VesselSidebarTab.CONTROLS && <Controls />}
-      {vesselSidebarTab === VesselSidebarTab.REPORTING && <Reportings />}
-      {vesselSidebarTab === VesselSidebarTab.ERSVMS && <VesselBeaconMalfunctions />}
+      {isSuperUser && vesselSidebarTab === VesselSidebarTab.REPORTING && <Reportings />}
+      {isSuperUser && vesselSidebarTab === VesselSidebarTab.ERSVMS && <VesselBeaconMalfunctions />}
     </Wrapper>
   )
 }

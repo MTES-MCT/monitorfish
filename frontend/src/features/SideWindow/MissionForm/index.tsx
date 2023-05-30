@@ -35,6 +35,7 @@ import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { FrontendError } from '../../../libs/FrontendError'
+import { logSoftError } from '../../../libs/logSoftError'
 import { FrontendErrorBoundary } from '../../../ui/FrontendErrorBoundary'
 import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
@@ -49,6 +50,7 @@ export function MissionForm() {
 
   const previousMissionId = usePrevious(sideWindow.selectedPath.id)
   const [isLoading, setIsLoading] = useState(true)
+  const [isSaving, setIsSaving] = useState(false)
   const [isDeletionConfirmationDialogOpen, setIsDeletionConfirmationDialogOpen] = useState(false)
 
   const dispatch = useMainAppDispatch()
@@ -83,53 +85,61 @@ export function MissionForm() {
         return
       }
 
-      let missionId: number
+      setIsSaving(true)
 
-      if (!sideWindow.selectedPath.id) {
-        const newMission = getMissionDataFromMissionFormValues(mission.draft, mustClose)
-        // TODO Override Redux RTK typings globally.
-        // Redux RTK typing is wrong, this should be a tuple-like to help TS discriminate `data` from `error`.
-        const { data, error } = (await createMission(newMission)) as any
-        if (!data) {
-          throw new FrontendError('`createMission()` failed', error)
+      try {
+        let missionId: number
+
+        if (!sideWindow.selectedPath.id) {
+          const newMission = getMissionDataFromMissionFormValues(mission.draft, mustClose)
+          // TODO Override Redux RTK typings globally.
+          // Redux RTK typing is wrong, this should be a tuple-like to help TS discriminate `data` from `error`.
+          const { data, error } = (await createMission(newMission)) as any
+          if (!data) {
+            throw new FrontendError('`createMission()` failed', error)
+          }
+
+          missionId = data.id
+        } else {
+          const updatedMission = getUpdatedMissionFromMissionFormValues(
+            sideWindow.selectedPath.id,
+            mission.draft,
+            mustClose
+          )
+          await updateMission(updatedMission)
+
+          missionId = sideWindow.selectedPath.id
         }
 
-        missionId = data.id
-      } else {
-        const updatedMission = getUpdatedMissionFromMissionFormValues(
-          sideWindow.selectedPath.id,
-          mission.draft,
-          mustClose
-        )
-        await updateMission(updatedMission)
+        const { deletedMissionActionIds, updatedMissionActionDatas } =
+          getMissionActionsDataFromMissionActionsFormValues(
+            missionId,
+            mission.draft.actions,
+            originalMissionRef.current?.actions
+          )
 
-        missionId = sideWindow.selectedPath.id
+        await Promise.all([
+          ...deletedMissionActionIds.map(async missionActionId => {
+            await deleteMissionAction(missionActionId)
+          }),
+          ...updatedMissionActionDatas.map(async missionActionData => {
+            if (missionActionData.id === undefined) {
+              await createMissionAction(missionActionData)
+            } else {
+              await updateMissionAction({
+                ...missionActionData,
+                id: missionActionData.id
+              })
+            }
+          })
+        ])
+
+        dispatch(sideWindowActions.openOrFocusAndGoTo({ menu: SideWindowMenuKey.MISSION_LIST }))
+      } catch (err) {
+        logSoftError('createOrUpdate() failed.', { err })
+
+        setIsSaving(false)
       }
-      // eslint-disable-next-line no-empty
-
-      const { deletedMissionActionIds, updatedMissionActionDatas } = getMissionActionsDataFromMissionActionsFormValues(
-        missionId,
-        mission.draft.actions,
-        originalMissionRef.current?.actions
-      )
-
-      await Promise.all([
-        ...deletedMissionActionIds.map(async missionActionId => {
-          await deleteMissionAction(missionActionId)
-        }),
-        ...updatedMissionActionDatas.map(async missionActionData => {
-          if (missionActionData.id === undefined) {
-            await createMissionAction(missionActionData)
-          } else {
-            await updateMissionAction({
-              ...missionActionData,
-              id: missionActionData.id
-            })
-          }
-        })
-      ])
-
-      dispatch(sideWindowActions.openOrFocusAndGoTo({ menu: SideWindowMenuKey.MISSION_LIST }))
     },
     [
       createMission,
@@ -149,6 +159,8 @@ export function MissionForm() {
       throw new FrontendError('`sideWindow.selectedPath.id` is undefined')
     }
 
+    setIsSaving(true)
+
     await deleteMission(sideWindow.selectedPath.id)
     dispatch(sideWindowActions.openOrFocusAndGoTo({ menu: SideWindowMenuKey.MISSION_LIST }))
   }, [deleteMission, dispatch, sideWindow.selectedPath.id])
@@ -158,12 +170,16 @@ export function MissionForm() {
       throw new FrontendError('`mission.draft` is undefined.')
     }
 
+    setIsSaving(true)
+
     const nextDraft: MissionFormValues = {
       ...mission.draft,
       isClosed: false
     }
 
     dispatch(missionActions.setDraft(nextDraft))
+
+    setIsSaving(false)
   }, [dispatch, mission.draft])
 
   const goToMissionList = useCallback(async () => {
@@ -214,14 +230,14 @@ export function MissionForm() {
         actions: missionActionsResponse.data
       }
 
-      setIsLoading(false)
-
       dispatch(
         missionActions.initializeDraft({
           mission: missionResponse.data,
           missionActions: missionActionsResponse.data
         })
       )
+
+      setIsLoading(false)
     })()
   }, [dispatch, isLoading, previousMissionId, sideWindow.selectedPath.id])
 
@@ -273,7 +289,7 @@ export function MissionForm() {
             {sideWindow.selectedPath.id && (
               <Button
                 accent={Accent.SECONDARY}
-                disabled={isLoading || mission.draft?.missionSource !== Mission.MissionSource.MONITORFISH}
+                disabled={isLoading || isSaving || mission.draft?.missionSource !== Mission.MissionSource.MONITORFISH}
                 Icon={Icon.Delete}
                 onClick={toggleDeletionConfirmationDialog}
               >
@@ -287,7 +303,7 @@ export function MissionForm() {
               <FooterMessage>Veuillez rouvrir la mission avant d’en modifier les informations.</FooterMessage>
             )}
 
-            <Button accent={Accent.TERTIARY} onClick={goToMissionList}>
+            <Button accent={Accent.TERTIARY} disabled={isSaving} onClick={goToMissionList}>
               Annuler
             </Button>
 
@@ -295,7 +311,7 @@ export function MissionForm() {
               <>
                 <Button
                   accent={Accent.SECONDARY}
-                  disabled={isLoading || !isMissionFormValid}
+                  disabled={isLoading || isSaving || !isMissionFormValid}
                   Icon={Icon.Save}
                   onClick={() => createOrUpdate()}
                 >
@@ -303,7 +319,7 @@ export function MissionForm() {
                 </Button>
                 <Button
                   accent={Accent.SECONDARY}
-                  disabled={isLoading || !isMissionFormValid}
+                  disabled={isLoading || isSaving || !isMissionFormValid}
                   Icon={Icon.Confirm}
                   onClick={() => createOrUpdate(true)}
                 >
@@ -312,7 +328,13 @@ export function MissionForm() {
               </>
             )}
             {mission.draft?.isClosed && (
-              <Button accent={Accent.PRIMARY} disabled={isLoading} Icon={Icon.Unlock} onClick={reopen} type="button">
+              <Button
+                accent={Accent.PRIMARY}
+                disabled={isLoading || isSaving}
+                Icon={Icon.Unlock}
+                onClick={reopen}
+                type="button"
+              >
                 Ré-ouvrir la mission
               </Button>
             )}

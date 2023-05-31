@@ -91,7 +91,9 @@ context('Side Window > Mission Form > Land Control', () => {
     // -------------------------------------------------------------------------
     // Request
 
-    cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      statusCode: 201
+    }).as('createMissionAction')
 
     cy.clickButton('Enregistrer')
 

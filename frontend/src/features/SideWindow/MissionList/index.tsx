@@ -184,6 +184,7 @@ const Wrapper = styled(NoRsuiteOverrideWrapper)`
   flex-direction: column;
   margin-bottom: 20px;
   width: 100%;
+  overflow-y: auto;
 `
 
 const Header = styled.div`

@@ -12,11 +12,11 @@ const actionDatetimeUtcValidator = string()
     test: (actionDatetimeUtc: string | undefined) => {
       const { mission } = mainStore.getState()
 
-      if (!actionDatetimeUtc || !mission.draft?.startDateTimeUtc) {
+      if (!actionDatetimeUtc || !mission.draft?.mainFormValues.startDateTimeUtc) {
         return true
       }
 
-      return customDayjs(actionDatetimeUtc).isSameOrAfter(mission.draft.startDateTimeUtc)
+      return customDayjs(actionDatetimeUtc).isSameOrAfter(mission.draft.mainFormValues.startDateTimeUtc)
     }
   })
   .test({
@@ -24,11 +24,11 @@ const actionDatetimeUtcValidator = string()
     test: (actionDatetimeUtc: string | undefined) => {
       const { mission } = mainStore.getState()
 
-      if (!actionDatetimeUtc || !mission.draft?.endDateTimeUtc) {
+      if (!actionDatetimeUtc || !mission.draft?.mainFormValues.endDateTimeUtc) {
         return true
       }
 
-      return customDayjs(actionDatetimeUtc).isSameOrBefore(mission.draft.endDateTimeUtc)
+      return customDayjs(actionDatetimeUtc).isSameOrBefore(mission.draft.mainFormValues.endDateTimeUtc)
     }
   })
 
@@ -38,17 +38,17 @@ export const InfractionFormSchema = object({
   natinf: number().required('Le NATINF est un champ obligatoire.')
 })
 
-export const AirControlFormSchema = object().shape({
+export const AirControlFormSchema = object({
   vesselId: number().integer().required('Veuillez indiquer le navire contrôlé.'),
   actionDatetimeUtc: actionDatetimeUtcValidator
 })
 
-export const LandControlFormSchema = object().shape({
+export const LandControlFormSchema = object({
   vesselId: number().integer().required('Veuillez indiquer le navire contrôlé.'),
   actionDatetimeUtc: actionDatetimeUtcValidator
 })
 
-export const SeaControlFormSchema = object().shape({
+export const SeaControlFormSchema = object({
   vesselId: number().integer().required('Veuillez indiquer le navire contrôlé.'),
   actionDatetimeUtc: actionDatetimeUtcValidator
 })

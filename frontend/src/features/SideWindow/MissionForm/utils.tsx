@@ -1,42 +1,46 @@
+import { customDayjs, type Undefine } from '@mtes-mct/monitor-ui'
 import { difference } from 'lodash'
 import { omit } from 'ramda'
 
 import { AirControlFormSchema, LandControlFormSchema, SeaControlFormSchema } from './ActionForm/schemas'
-import { MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
+import { INITIAL_MISSION_CONTROL_UNIT, MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
 import { MainFormSchema } from './MainForm/schemas'
 import { Mission } from '../../../domain/entities/mission/types'
 import { MissionAction } from '../../../domain/types/missionAction'
 import { FormError, FormErrorCode } from '../../../libs/FormError'
+import { FrontendError } from '../../../libs/FrontendError'
 import { validateRequiredFormValues } from '../../../utils/validateRequiredFormValues'
 
-import type { MissionActionFormValues, MissionFormValues } from './types'
+import type { MissionActionFormValues, MissionMainFormValues } from './types'
 import type { ControlUnit } from '../../../domain/types/controlUnit'
-import type { Undefine } from '@mtes-mct/monitor-ui'
 
 import MissionActionType = MissionAction.MissionActionType
 
-export function areMissionFormValuesValid(missionFormValues: MissionFormValues | undefined): boolean {
-  if (!missionFormValues) {
+export function areMissionFormValuesValid(
+  mainFormValues: MissionMainFormValues | undefined,
+  actionsFormValues: MissionActionFormValues[]
+): boolean {
+  if (!mainFormValues) {
     return false
   }
 
   // eslint-disable-next-line no-restricted-syntax
-  for (const missionActionFormValues of missionFormValues.actions) {
-    switch (missionActionFormValues.actionType) {
+  for (const actionFormValues of actionsFormValues) {
+    switch (actionFormValues.actionType) {
       case MissionAction.MissionActionType.AIR_CONTROL:
-        if (!AirControlFormSchema.isValidSync(missionActionFormValues)) {
+        if (!AirControlFormSchema.isValidSync(actionFormValues)) {
           return false
         }
         break
 
       case MissionAction.MissionActionType.LAND_CONTROL:
-        if (!LandControlFormSchema.isValidSync(missionActionFormValues)) {
+        if (!LandControlFormSchema.isValidSync(actionFormValues)) {
           return false
         }
         break
 
       case MissionAction.MissionActionType.SEA_CONTROL:
-        if (!SeaControlFormSchema.isValidSync(missionActionFormValues)) {
+        if (!SeaControlFormSchema.isValidSync(actionFormValues)) {
           return false
         }
         break
@@ -46,7 +50,7 @@ export function areMissionFormValuesValid(missionFormValues: MissionFormValues |
     }
   }
 
-  return MainFormSchema.isValidSync(missionFormValues)
+  return MainFormSchema.isValidSync(mainFormValues)
 }
 
 /**
@@ -94,18 +98,18 @@ export function getMissionActionsDataFromMissionActionsFormValues(
  * @param mustClose Should the mission be closed?
  */
 export function getMissionDataFromMissionFormValues(
-  missionFormValues: MissionFormValues,
+  mainFormValues: MissionMainFormValues,
   mustClose: boolean = false
 ): Mission.MissionData {
-  if (!missionFormValues.startDateTimeUtc) {
-    throw new FormError(missionFormValues, 'startDateTimeUtc', FormErrorCode.MISSING_OR_UNDEFINED)
+  if (!mainFormValues.startDateTimeUtc) {
+    throw new FormError(mainFormValues, 'startDateTimeUtc', FormErrorCode.MISSING_OR_UNDEFINED)
   }
 
-  const missionBaseValues = omit(['actions', 'controlUnits'], missionFormValues)
+  const missionBaseValues = omit(['controlUnits'], mainFormValues)
 
-  const validControlUnits = missionFormValues.controlUnits.map(getValidMissionDataControlUnit)
+  const validControlUnits = mainFormValues.controlUnits.map(getValidMissionDataControlUnit)
   const missionSource = Mission.MissionSource.MONITORFISH
-  const missionTypes = missionFormValues.missionTypes || []
+  const missionTypes = mainFormValues.missionTypes || []
 
   return {
     ...missionBaseValues,
@@ -116,41 +120,66 @@ export function getMissionDataFromMissionFormValues(
   }
 }
 
+export function getMissionFormInitialValues(
+  mission: Mission.Mission | undefined,
+  missionActions: MissionAction.MissionAction[]
+): {
+  initialActionsFormValues: MissionActionFormValues[]
+  initialMainFormValues: MissionMainFormValues
+} {
+  if (!mission) {
+    const startDateTimeUtc = customDayjs().startOf('minute').toISOString()
+
+    return {
+      initialActionsFormValues: [],
+      initialMainFormValues: {
+        controlUnits: [INITIAL_MISSION_CONTROL_UNIT],
+        missionTypes: [Mission.MissionType.SEA],
+        startDateTimeUtc
+      }
+    }
+  }
+
+  const missionType = mission.missionTypes[0]
+  if (!missionType) {
+    throw new FrontendError('`missionType` is undefined.')
+  }
+
+  return {
+    initialActionsFormValues: missionActions,
+    initialMainFormValues: mission
+  }
+}
+
+export function getTitleFromMissionMainFormValues(
+  mainFormValues: MissionMainFormValues | undefined,
+  missionId: number | undefined
+): string {
+  if (!mainFormValues) {
+    return 'Mission en cours de chargement...'
+  }
+
+  return missionId
+    ? `Mission ${
+        mainFormValues.missionTypes &&
+        mainFormValues.missionTypes.map(missionType => Mission.MissionTypeLabel[missionType]).join(' / ')
+      } – ${mainFormValues.controlUnits.map(controlUnit => controlUnit.name?.replace('(historique)', '')).join(', ')}`
+    : `Nouvelle mission`
+}
+
 /**
  * @param mustClose Should the mission be closed?
  */
-export function getUpdatedMissionFromMissionFormValues(
+export function getUpdatedMissionFromMissionMainFormValues(
   missionId: Mission.Mission['id'],
-  missionFormValues: MissionFormValues,
+  mainFormValues: MissionMainFormValues,
   mustClose: boolean
 ): Mission.Mission {
-  const missionData = getMissionDataFromMissionFormValues(missionFormValues, mustClose)
+  const missionData = getMissionDataFromMissionFormValues(mainFormValues, mustClose)
 
   return {
     id: missionId,
     ...missionData
-  }
-}
-
-/**
- * Are `<missionFormValues>` complete enough to be transformed into a `MissionData` type and sent to the API?
- */
-// TODO Remove that once it's fully validated via Yup.
-export function isMissionFormValuesComplete(missionFormValues: MissionFormValues | undefined): boolean {
-  try {
-    if (!missionFormValues) {
-      return false
-    }
-
-    getMissionDataFromMissionFormValues(missionFormValues)
-
-    if (missionFormValues.actions?.length) {
-      missionFormValues.actions.forEach(action => getValidMissionActionData(action))
-    }
-
-    return true
-  } catch (_) {
-    return false
   }
 }
 

@@ -1,4 +1,4 @@
-import { THEME, type NewWindowContextValue, NewWindowContext } from '@mtes-mct/monitor-ui'
+import { THEME, type NewWindowContextValue, NewWindowContext, usePrevious } from '@mtes-mct/monitor-ui'
 import { propEq } from 'ramda'
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
@@ -27,7 +27,6 @@ import { getAllCurrentReportings } from '../../domain/use_cases/reporting/getAll
 import { sideWindowDispatchers } from '../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
-import { usePrevious } from '../../hooks/usePrevious'
 
 import type { MenuItem } from '../../types'
 import type { MutableRefObject, CSSProperties, ForwardedRef, HTMLAttributes } from 'react'

@@ -1,5 +1,4 @@
-import { useKey, usePrevious } from '@mtes-mct/monitor-ui'
-import { useEffect, useState } from 'react'
+import { memo } from 'react'
 import styled from 'styled-components'
 
 import { AirControlForm } from './AirControlForm'
@@ -7,68 +6,51 @@ import { AirSurveillanceForm } from './AirSurveillanceForm'
 import { LandControlForm } from './LandControlForm'
 import { ObservationForm } from './ObservationForm'
 import { SeaControlForm } from './SeaControlForm'
-import { getInitialMissionActionFormValues } from './utils'
 import { MissionAction } from '../../../../domain/types/missionAction'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FrontendErrorBoundary } from '../../../../ui/FrontendErrorBoundary'
 
 import type { MissionActionFormValues } from '../types'
+import type { Promisable } from 'type-fest'
 
-export function ActionForm() {
-  const { mission } = useMainAppSelector(store => store)
-
-  const previousEditedDraftActionLength = usePrevious(mission.draft?.actions.length || 0)
-  const previousEditedDraftActionIndex = usePrevious(mission.editedDraftActionIndex)
-
-  const [initialMissionActionFormValues, setInitialMissionActionFormValues] = useState<
-    MissionActionFormValues | undefined
-  >(undefined)
-
-  const key = useKey([mission.draft?.actions.length, mission.editedDraftActionIndex])
-
-  useEffect(() => {
-    if (
-      !mission.draft ||
-      (mission.editedDraftActionIndex === previousEditedDraftActionIndex &&
-        mission.draft.actions.length === previousEditedDraftActionLength)
-    ) {
-      return
-    }
-
-    const nextInitialMissionActionFormValues = getInitialMissionActionFormValues(
-      mission.draft.actions,
-      mission.editedDraftActionIndex
-    )
-
-    setInitialMissionActionFormValues(nextInitialMissionActionFormValues)
-  }, [mission.draft, mission.editedDraftActionIndex, previousEditedDraftActionIndex, previousEditedDraftActionLength])
-
-  if (mission.editedDraftActionIndex === undefined || !initialMissionActionFormValues) {
+type ActionFormProps = {
+  actionFormValues: MissionActionFormValues | undefined
+  onChange: (nextActionFormValues: MissionActionFormValues) => Promisable<void>
+}
+function UnmemoizedActionForm({ actionFormValues, onChange }: ActionFormProps) {
+  if (!actionFormValues) {
     return <Wrapper />
   }
 
   return (
-    <Wrapper key={key}>
+    <Wrapper>
       <FrontendErrorBoundary>
-        {initialMissionActionFormValues.actionType === MissionAction.MissionActionType.AIR_CONTROL && (
-          <AirControlForm index={mission.editedDraftActionIndex} initialValues={initialMissionActionFormValues} />
+        {actionFormValues.actionType === MissionAction.MissionActionType.AIR_CONTROL && (
+          <AirControlForm initialValues={actionFormValues} onChange={onChange} />
         )}
-        {initialMissionActionFormValues.actionType === MissionAction.MissionActionType.AIR_SURVEILLANCE && (
-          <AirSurveillanceForm index={mission.editedDraftActionIndex} initialValues={initialMissionActionFormValues} />
+        {actionFormValues.actionType === MissionAction.MissionActionType.AIR_SURVEILLANCE && (
+          <AirSurveillanceForm initialValues={actionFormValues} onChange={onChange} />
         )}
-        {initialMissionActionFormValues.actionType === MissionAction.MissionActionType.LAND_CONTROL && (
-          <LandControlForm index={mission.editedDraftActionIndex} initialValues={initialMissionActionFormValues} />
+        {actionFormValues.actionType === MissionAction.MissionActionType.LAND_CONTROL && (
+          <LandControlForm initialValues={actionFormValues} onChange={onChange} />
         )}
-        {initialMissionActionFormValues.actionType === MissionAction.MissionActionType.OBSERVATION && (
-          <ObservationForm index={mission.editedDraftActionIndex} initialValues={initialMissionActionFormValues} />
+        {actionFormValues.actionType === MissionAction.MissionActionType.OBSERVATION && (
+          <ObservationForm initialValues={actionFormValues} onChange={onChange} />
         )}
-        {initialMissionActionFormValues.actionType === MissionAction.MissionActionType.SEA_CONTROL && (
-          <SeaControlForm index={mission.editedDraftActionIndex} initialValues={initialMissionActionFormValues} />
+        {actionFormValues.actionType === MissionAction.MissionActionType.SEA_CONTROL && (
+          <SeaControlForm initialValues={actionFormValues} onChange={onChange} />
         )}
       </FrontendErrorBoundary>
     </Wrapper>
   )
 }
+
+/**
+ * @description
+ * This component is fully memoized because we want its parent (`<MissionForm />`) to fully control
+ * when to re-create this component using a `key` prop,
+ * which should only happens when the user switches from one mission action to another.
+ */
+export const ActionForm = memo(UnmemoizedActionForm)
 
 const Wrapper = styled.div`
   background-color: ${p => p.theme.color.gainsboro};

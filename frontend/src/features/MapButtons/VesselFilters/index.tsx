@@ -1,3 +1,4 @@
+import { usePrevious } from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
@@ -8,7 +9,6 @@ import { setMapToolOpened } from '../../../domain/shared_slices/Global'
 import { useClickOutsideWhenOpenedAndExecute } from '../../../hooks/useClickOutsideWhenOpenedAndExecute'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { usePrevious } from '../../../hooks/usePrevious'
 import { ReactComponent as FilterSVG } from '../../icons/standardized/Filter.svg'
 import { MapToolButton } from '../shared/MapToolButton'
 

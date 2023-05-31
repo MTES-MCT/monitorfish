@@ -10,13 +10,13 @@ import { getControlUnitsOptionsFromControlUnits } from '../../../../../domain/co
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 
 import type { ControlUnit } from '../../../../../domain/types/controlUnit'
-import type { MissionFormValues } from '../../types'
+import type { MissionMainFormValues } from '../../types'
 
 export type FormikMultiControlUnitPickerProps = {
   name: string
 }
 export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPickerProps) {
-  const [input, , helpers] = useField<MissionFormValues['controlUnits']>(name)
+  const [input, , helpers] = useField<MissionMainFormValues['controlUnits']>(name)
 
   const controlUnitsQuery = useGetControlUnitsQuery(undefined)
 

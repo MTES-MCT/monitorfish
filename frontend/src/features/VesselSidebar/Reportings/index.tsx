@@ -1,3 +1,4 @@
+import { usePrevious } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
@@ -9,7 +10,6 @@ import { vesselsAreEquals } from '../../../domain/entities/vessel/vessel'
 import getVesselReportings from '../../../domain/use_cases/vessel/getVesselReportings'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { usePrevious } from '../../../hooks/usePrevious'
 
 const ReportingTab = {
   CURRENT_REPORTING: 'CURRENT_REPORTING',

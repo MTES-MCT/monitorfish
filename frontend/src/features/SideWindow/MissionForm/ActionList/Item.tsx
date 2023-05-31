@@ -13,11 +13,11 @@ import type { Promisable } from 'type-fest'
 export type ItemProps = {
   initialValues: MissionActionFormValues
   isSelected: boolean
-  onDelete: () => Promisable<void>
   onDuplicate: () => Promisable<void>
-  onEdit: () => Promisable<void>
+  onRemove: () => Promisable<void>
+  onSelect: () => Promisable<void>
 }
-export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit }: ItemProps) {
+export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelect }: ItemProps) {
   const [actionLabel, ActionIcon] = useMemo(() => {
     const vesselName = initialValues.vesselName === UNKNOWN_VESSEL.vesselName ? 'INCONNU' : initialValues.vesselName
 
@@ -98,7 +98,12 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
         </DateLabel>
       )}
 
-      <InnerWrapper data-cy="action-list-item" isSelected={isSelected} onClick={onEdit} type={initialValues.actionType}>
+      <InnerWrapper
+        data-cy="action-list-item"
+        isSelected={isSelected}
+        onClick={onSelect}
+        type={initialValues.actionType}
+      >
         <Head>
           <ActionLabel>
             <ActionIcon color={THEME.color.charcoal} size={20} />
@@ -120,7 +125,7 @@ export function Item({ initialValues, isSelected, onDelete, onDuplicate, onEdit 
             color={THEME.color.maximumRed}
             Icon={Icon.Delete}
             iconSize={20}
-            onClick={onDelete}
+            onClick={onRemove}
             withUnpropagatedClick
           />
         </Head>
@@ -139,12 +144,13 @@ const Wrapper = styled.div`
   font-size: 13px;
   /* This padding allows the top 2px outline to be visible in InnerWrapper */
   padding-top: 2px;
+  user-select: none;
 `
 
 const DateLabel = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: 80px;
+  min-width: 120px;
   padding: 4px 24px 4px 0;
   text-align: center;
 `
@@ -171,14 +177,13 @@ const ActionLabel = styled.div`
   display: flex;
   flex-grow: 1;
 
-  /* The SVG icon is wrapper in a div */
-  > div {
+  > .Element-IconBox {
     margin-right: 8px;
   }
 
   > p {
     color: ${p => p.theme.color.gunMetal};
-    padding-top: 1px;
+    padding: 1px 8px 0 0;
   }
 `
 

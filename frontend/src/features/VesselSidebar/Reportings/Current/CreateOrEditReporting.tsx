@@ -1,3 +1,4 @@
+import { usePrevious } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -7,7 +8,6 @@ import { vesselsAreEquals } from '../../../../domain/entities/vessel/vessel'
 import { setEditedReporting } from '../../../../domain/shared_slices/Reporting'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { usePrevious } from '../../../../hooks/usePrevious'
 import { PrimaryButton } from '../../../commonStyles/Buttons.style'
 import { ReactComponent as CloseIconSVG } from '../../../icons/Croix_grise.svg'
 

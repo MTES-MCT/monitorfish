@@ -26,6 +26,5 @@ class JpaForeignFMCRepositoryITests : AbstractDBTests() {
         assertThat(foreignFMCs.last().countryCodeIso3).isEqualTo("DEF")
         assertThat(foreignFMCs.last().countryName).isEqualTo("Dumbledoreland")
         assertThat(foreignFMCs.last().emailAddresses).isEqualTo(null)
-
     }
 }

@@ -69,7 +69,7 @@ data class BeaconMalfunctionEntity(
         endOfBeaconMalfunctionReason = endOfBeaconMalfunctionReason,
         vesselId = vesselId,
         notificationRequested = notificationRequested,
-        requestedNotificationForeignFmcCode= requestedNotificationForeignFmcCode,
+        requestedNotificationForeignFmcCode = requestedNotificationForeignFmcCode,
         beaconNumber = beaconNumber,
         beaconStatusAtMalfunctionCreation = beaconStatusAtMalfunctionCreation,
     )

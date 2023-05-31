@@ -21,27 +21,31 @@ class RequestNotificationUTests {
         // When
         val throwable = catchThrowable {
             RequestNotification(
-                beaconMalfunctionsRepository
+                beaconMalfunctionsRepository,
             )
                 .execute(1, BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC, null)
         }
 
         // Then
         assertThat(throwable).isInstanceOf(IllegalArgumentException::class.java)
-        assertThat(throwable.message).contains("requestedNotificationForeignFmcCode cannot be null when requesting a notification to a foreign FMC")
+        assertThat(throwable.message).contains(
+            "requestedNotificationForeignFmcCode cannot be null when requesting a notification to a foreign FMC",
+        )
     }
 
     @Test
     fun `execute Should call requestNotification with the right parameters When called with type MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC`() {
         // When
         RequestNotification(
-            beaconMalfunctionsRepository
+            beaconMalfunctionsRepository,
         )
             .execute(1, BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC, "ABC")
 
         // Then
         Mockito.verify(beaconMalfunctionsRepository).requestNotification(
-            1, BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC, "ABC"
+            1,
+            BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC,
+            "ABC",
         )
     }
 
@@ -49,14 +53,19 @@ class RequestNotificationUTests {
     fun `execute Should call requestNotification with the right parameters When called`() {
         // When
         RequestNotification(
-            beaconMalfunctionsRepository
+            beaconMalfunctionsRepository,
         )
-            .execute(2, BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION, "Should not be passed to repository")
+            .execute(
+                2,
+                BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION,
+                "Should not be passed to repository",
+            )
 
         // Then
         Mockito.verify(beaconMalfunctionsRepository).requestNotification(
-            2, BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION, null
+            2,
+            BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION,
+            null,
         )
     }
 }
-

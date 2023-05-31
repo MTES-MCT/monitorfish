@@ -144,10 +144,8 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         // then
         val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 2 }
         assertThat(updatedBeaconMalfunction?.notificationRequested).isEqualTo(
-            BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC
+            BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC,
         )
         assertThat(updatedBeaconMalfunction?.requestedNotificationForeignFmcCode).isEqualTo("ABC")
-
     }
-
 }

@@ -63,7 +63,11 @@ interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntit
                 requested_notification_foreign_fmc_code = :requestedNotificationForeignFmcCode
             WHERE id = :beaconMalfunctionId
         """,
-        nativeQuery = true
+        nativeQuery = true,
     )
-    fun updateRequestNotification(beaconMalfunctionId: Int, notificationType: String, requestedNotificationForeignFmcCode: String?)
+    fun updateRequestNotification(
+        beaconMalfunctionId: Int,
+        notificationType: String,
+        requestedNotificationForeignFmcCode: String?,
+    )
 }

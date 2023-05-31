@@ -16,5 +16,9 @@ interface BeaconMalfunctionsRepository {
         endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason?,
         updateDateTime: ZonedDateTime,
     )
-    fun requestNotification(id: Int, notificationType: BeaconMalfunctionNotificationType, requestedNotificationForeignFmcCode: String? = null)
+    fun requestNotification(
+        id: Int,
+        notificationType: BeaconMalfunctionNotificationType,
+        requestedNotificationForeignFmcCode: String? = null,
+    )
 }

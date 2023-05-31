@@ -32,7 +32,7 @@ class ForeignFMCsControllerITests {
             listOf(
                 ForeignFMC("ABC", "Alabama", listOf("email1@some.domaina", "email2@other.domain")),
                 ForeignFMC("DEF", "Dumbo", null),
-            )
+            ),
         )
 
         // When

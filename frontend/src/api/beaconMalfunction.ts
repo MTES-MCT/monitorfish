@@ -109,9 +109,15 @@ async function getVesselBeaconsMalfunctionsFromAPI(
  *
  * @throws {@link ApiError}
  */
-async function sendNotificationFromAPI(id: number, notificationType: keyof typeof NOTIFICATION_TYPE): Promise<void> {
+async function sendNotificationFromAPI(
+  id: number,
+  notificationType: keyof typeof NOTIFICATION_TYPE,
+  foreignFmcCode?: string
+): Promise<void> {
   try {
-    await ky.put(`/bff/v1/beacon_malfunctions/${id}/${notificationType}`)
+    await ky.put(
+      `/bff/v1/beacon_malfunctions/${id}/${notificationType}?requestedNotificationForeignFmcCode=${foreignFmcCode}`
+    )
   } catch (err) {
     throw new ApiError(SEND_NOTIFICATION_ERROR_MESSAGE, err)
   }

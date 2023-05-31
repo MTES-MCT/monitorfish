@@ -51,7 +51,7 @@ const missionSlice = createSlice({
         mainFormValues: MissionMainFormValues
       }>
     ) {
-      if (!state.isDraftDirty && ((state.draft && !isEqual(current(state.draft), action.payload)) || !state.draft)) {
+      if (!state.isDraftDirty && state.draft && !isEqual(current(state.draft), action.payload)) {
         state.isDraftDirty = true
       }
 

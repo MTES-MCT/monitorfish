@@ -18,12 +18,12 @@ class JpaBeaconMalfunctionNotificationsRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllByBeaconMalfunctionId Should return all actions for a given beacon malfunction`() {
+    fun `findAllByBeaconMalfunctionId Should return all notifications for a given beacon malfunction`() {
         // When
         val notifications = jpaBeaconMalfunctionNotificationsRepository.findAllByBeaconMalfunctionId(2)
 
-        assertThat(notifications).hasSize(9)
-        assertThat(notifications.last().id).isEqualTo(9)
+        assertThat(notifications).hasSize(10)
+        assertThat(notifications.last().id).isEqualTo(10)
         assertThat(notifications.last().beaconMalfunctionId).isEqualTo(2)
         assertThat(notifications.last().dateTimeUtc).isNotNull
         assertThat(notifications.last().recipientFunction).isEqualTo(
@@ -35,7 +35,7 @@ class JpaBeaconMalfunctionNotificationsRepositoryITests : AbstractDBTests() {
         )
         assertThat(notifications.last().recipientName).isNull()
         assertThat(notifications.last().recipientAddressOrNumber).isEqualTo("0600000000")
-        assertThat(notifications[7].success).isFalse
-        assertThat(notifications[7].errorMessage).isEqualTo("The server didn't reply properly to the helo greeting.")
+        assertThat(notifications[8].success).isFalse
+        assertThat(notifications[8].errorMessage).isEqualTo("The server didn't reply properly to the helo greeting.")
     }
 }

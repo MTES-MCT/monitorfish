@@ -1,25 +1,15 @@
-import {
-  Accent,
-  Button,
-  FormikCheckbox,
-  FormikMultiRadio,
-  FormikSelect,
-  FormikTextarea,
-  Icon,
-  useNewWindow
-} from '@mtes-mct/monitor-ui'
-import { Form, Formik, useField } from 'formik'
-import { remove as ramdaRemove, update } from 'ramda'
+import { Accent, Button, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
+import { useField } from 'formik'
+import { remove as ramdaRemove, update as ramdaUpdate } from 'ramda'
 import { Fragment, useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { Infraction } from './Infraction'
+import { InfractionForm } from './InfractionForm'
 import { useGetInfractionsQuery } from '../../../../../../api/infraction'
 import { FrontendError } from '../../../../../../libs/FrontendError'
 import { FieldsetGroup, FieldsetGroupSpinner } from '../../../shared/FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../../shared/FieldsetGroupSeparator'
-import { InfractionFormSchema } from '../../schemas'
-import { INFRACTION_TYPES_AS_OPTIONS } from '../constants'
 
 import type { MissionAction } from '../../../../../../domain/types/missionAction'
 import type { MissionActionFormValues } from '../../../types'
@@ -50,10 +40,8 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
 }: FormikMultiInfractionPickerProps<AnyInfraction>) {
   const [input, , helper] = useField<AnyInfraction[] | undefined>(name)
 
-  const { newWindowContainerRef } = useNewWindow()
-
-  const [isEditedIndexNew, setIsEditedIndexNew] = useState(false)
   const [editedIndex, setEditedIndex] = useState<number | undefined>(undefined)
+  const [isNewInfractionFormOpen, setIsNewInfractionFormOpen] = useState(false)
 
   const getInfractionsApiQuery = useGetInfractionsQuery()
 
@@ -68,24 +56,22 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
     }))
   }, [getInfractionsApiQuery.data])
 
-  const add = useCallback(
-    () => {
-      const nextInfractions = [...(input.value || []), {}] as AnyInfraction[]
+  const closeForm = useCallback(() => {
+    setEditedIndex(undefined)
+  }, [])
+
+  const create = useCallback(
+    (newInfractionFormValues: AnyInfraction) => {
+      const nextInfractions = [...(input.value || []), newInfractionFormValues]
 
       helper.setValue(nextInfractions)
 
-      setIsEditedIndexNew(true)
-      setEditedIndex(nextInfractions.length - 1)
+      setIsNewInfractionFormOpen(false)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [input.value]
   )
-
-  const closeForm = useCallback(() => {
-    setEditedIndex(undefined)
-    setIsEditedIndexNew(false)
-  }, [])
 
   const remove = useCallback(
     (index: number) => {
@@ -103,32 +89,31 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
     [input.value]
   )
 
-  const cancel = useCallback(() => {
-    if (editedIndex === undefined) {
-      throw new FrontendError('`editedIndex` is undefined')
-    }
+  const cancelCreation = useCallback(() => {
+    setIsNewInfractionFormOpen(false)
+  }, [])
 
-    // If we clicked the cancellation button and the edition form was for a new item, we delete it
-    if (isEditedIndexNew) {
-      remove(editedIndex)
-    }
+  const cancelEdition = useCallback(() => {
+    setEditedIndex(undefined)
+  }, [])
 
-    closeForm()
-  }, [closeForm, editedIndex, isEditedIndexNew, remove])
+  const openNewInfractionForm = useCallback(() => {
+    setIsNewInfractionFormOpen(true)
+  }, [])
 
-  const submit = useCallback(
-    (updatedInfraction: AnyInfraction) => {
+  const update = useCallback(
+    (nextInfractionFormValues: AnyInfraction) => {
       if (!input.value || editedIndex === undefined) {
         throw new FrontendError('`input.value` or `editedIndex` is undefined')
       }
 
       // TODO For some unknown reason, `Yup.string().default('')` doesn't fill `comments`.
       const updatedInfractionWithComments: AnyInfraction = {
-        ...updatedInfraction,
-        comments: updatedInfraction.comments || ''
+        ...nextInfractionFormValues,
+        comments: nextInfractionFormValues.comments || ''
       }
 
-      const nextInfractions = update(editedIndex, updatedInfractionWithComments, input.value)
+      const nextInfractions = ramdaUpdate(editedIndex, updatedInfractionWithComments, input.value)
 
       helper.setValue(nextInfractions)
 
@@ -147,7 +132,13 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
     <Wrapper isLight legend={label}>
       {children}
 
-      <Button accent={Accent.SECONDARY} disabled={isEditedIndexNew} Icon={Icon.Plus} isFullWidth onClick={add}>
+      <Button
+        accent={Accent.SECONDARY}
+        disabled={isNewInfractionFormOpen}
+        Icon={Icon.Plus}
+        isFullWidth
+        onClick={openNewInfractionForm}
+      >
         {addButtonLabel}
       </Button>
 
@@ -170,44 +161,28 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
               )}
 
               {index === editedIndex && (
-                <Formik initialValues={infraction} onSubmit={submit} validationSchema={InfractionFormSchema}>
-                  {({ isValid }) => (
-                    <StyledForm>
-                      <FormikMultiRadio
-                        isErrorMessageHidden
-                        isInline
-                        label="Type d’infraction"
-                        name="infractionType"
-                        options={INFRACTION_TYPES_AS_OPTIONS}
-                      />
-                      <HackedFormikSelect
-                        baseContainer={newWindowContainerRef.current}
-                        isErrorMessageHidden
-                        label="NATINF"
-                        name="natinf"
-                        options={natinfsAsOptions}
-                        searchable
-                      />
-                      {infractionCheckboxProps && (
-                        // eslint-disable-next-line react/jsx-props-no-spreading
-                        <FormikCheckbox isErrorMessageHidden {...infractionCheckboxProps} />
-                      )}
-                      <FormikTextarea isErrorMessageHidden label="Observations sur l’infraction" name="comments" />
-
-                      <FormButtonGroup>
-                        <Button accent={Accent.TERTIARY} onClick={cancel}>
-                          Annuler
-                        </Button>
-                        <Button accent={Accent.PRIMARY} disabled={!isValid} type="submit">
-                          Valider l’infraction
-                        </Button>
-                      </FormButtonGroup>
-                    </StyledForm>
-                  )}
-                </Formik>
+                <InfractionForm
+                  infractionCheckboxProps={infractionCheckboxProps}
+                  initialValues={infraction}
+                  natinfsAsOptions={natinfsAsOptions}
+                  onCancel={cancelEdition}
+                  onSubmit={update}
+                />
               )}
             </Fragment>
           ))}
+        </Row>
+      )}
+
+      {isNewInfractionFormOpen && (
+        <Row>
+          <InfractionForm
+            infractionCheckboxProps={infractionCheckboxProps}
+            initialValues={{} as AnyInfraction}
+            natinfsAsOptions={natinfsAsOptions}
+            onCancel={cancelCreation}
+            onSubmit={create}
+          />
         </Row>
       )}
 
@@ -239,33 +214,5 @@ const Wrapper = styled(FieldsetGroup)`
 const Row = styled.div`
   > legend {
     margin: 12px 0 8px;
-  }
-`
-
-const StyledForm = styled(Form)`
-  background-color: transparent;
-  border: 0;
-  padding: 0;
-
-  > .Element-Field,
-  > .Element-Fieldset {
-    margin-top: 16px;
-  }
-`
-
-const FormButtonGroup = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 16px;
-
-  > button:last-child {
-    margin-left: 16px;
-  }
-`
-
-const HackedFormikSelect = styled(FormikSelect)`
-  > .rs-picker-toggle {
-    /* TODO Investigate both these props which are a hack to fix long NATINFs breaking the layout. */
-    max-width: 312px;
   }
 `

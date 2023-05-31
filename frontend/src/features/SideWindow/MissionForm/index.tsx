@@ -1,5 +1,5 @@
-import { Accent, Button, Icon, useForceUpdate, usePrevious } from '@mtes-mct/monitor-ui'
-import { isEqual, omit, pick } from 'lodash/fp'
+import { Accent, Button, Icon, usePrevious } from '@mtes-mct/monitor-ui'
+import { omit } from 'lodash/fp'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
@@ -50,17 +50,17 @@ import type { MissionAction } from '../../../domain/types/missionAction'
 export function MissionForm() {
   const { sideWindow } = useMainAppSelector(store => store)
 
-  const actionsFormValuesRef = useRef<MissionActionFormValues[]>([])
   const headerDivRef = useRef<HTMLDivElement | null>(null)
-  const mainFormValuesRef = useRef<MissionMainFormValues | undefined>(undefined)
   const originalMissionRef = useRef<MissionWithActions | undefined>(undefined)
 
   const [actionFormKey, setActionFormKey] = useState(0)
+  const [actionsFormValues, setActionsFormValues] = useState<MissionActionFormValues[]>([])
   const [editedActionIndex, setEditedActionIndex] = useState<number | undefined>(undefined)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [isDeletionConfirmationDialogOpen, setIsDeletionConfirmationDialogOpen] = useState(false)
   const [mainFormKey, setMainFormKey] = useState(0)
+  const [mainFormValues, setMainFormValues] = useState<MissionMainFormValues | undefined>(undefined)
   const [title, setTitle] = useState(getTitleFromMissionMainFormValues(undefined, undefined))
   const previousMissionId = usePrevious(sideWindow.selectedPath.id)
 
@@ -71,30 +71,23 @@ export function MissionForm() {
   const [deleteMissionAction] = useDeleteMissionActionMutation()
   const [updateMission] = useUpdateMissionMutation()
   const [updateMissionAction] = useUpdateMissionActionMutation()
-  const { forceUpdate } = useForceUpdate()
 
   const editedActionFormValues = useMemo(
-    () => (editedActionIndex !== undefined ? actionsFormValuesRef.current[editedActionIndex] : undefined),
-    [editedActionIndex]
+    () => (editedActionIndex !== undefined ? actionsFormValues[editedActionIndex] : undefined),
+    [actionsFormValues, editedActionIndex]
   )
-  const isMissionFormValid = areMissionFormValuesValid(mainFormValuesRef.current, actionsFormValuesRef.current)
+  const isMissionFormValid = areMissionFormValuesValid(mainFormValues, actionsFormValues)
 
   const addAction = useCallback(
     (actionType: MissionAction.MissionActionType) => {
-      if (!mainFormValuesRef.current) {
-        logSoftError('`mainFormValuesRef.current` is undefined.')
-
-        return
-      }
-
       const newActionFormValues = getMissionActionFormInitialValues(actionType)
+      const nextActionsFormValues = [...actionsFormValues, newActionFormValues]
 
-      actionsFormValuesRef.current = [...actionsFormValuesRef.current, newActionFormValues]
-
+      setActionsFormValues(nextActionsFormValues)
       setActionFormKey(actionFormKey + 1)
-      setEditedActionIndex(actionsFormValuesRef.current.length - 1)
+      setEditedActionIndex(nextActionsFormValues.length - 1)
     },
-    [actionFormKey]
+    [actionFormKey, actionsFormValues]
   )
 
   /**
@@ -102,8 +95,8 @@ export function MissionForm() {
    */
   const createOrUpdate = useCallback(
     async (mustClose: boolean = false) => {
-      if (!mainFormValuesRef.current) {
-        logSoftError('`mainFormValuesRef.current` is undefined.')
+      if (!mainFormValues) {
+        logSoftError('`mainFormValues` is undefined.')
 
         return
       }
@@ -114,7 +107,7 @@ export function MissionForm() {
         let missionId: number
 
         if (!sideWindow.selectedPath.id) {
-          const newMission = getMissionDataFromMissionFormValues(mainFormValuesRef.current, mustClose)
+          const newMission = getMissionDataFromMissionFormValues(mainFormValues, mustClose)
           // TODO Override Redux RTK typings globally.
           // Redux RTK typing is wrong, this should be a tuple-like to help TS discriminate `data` from `error`.
           const { data, error } = (await createMission(newMission)) as any
@@ -126,7 +119,7 @@ export function MissionForm() {
         } else {
           const updatedMission = getUpdatedMissionFromMissionMainFormValues(
             sideWindow.selectedPath.id,
-            mainFormValuesRef.current,
+            mainFormValues,
             mustClose
           )
           await updateMission(updatedMission)
@@ -137,7 +130,7 @@ export function MissionForm() {
         const { deletedMissionActionIds, updatedMissionActionDatas } =
           getMissionActionsDataFromMissionActionsFormValues(
             missionId,
-            actionsFormValuesRef.current,
+            actionsFormValues,
             originalMissionRef.current?.actions
           )
 
@@ -165,10 +158,12 @@ export function MissionForm() {
       }
     },
     [
+      actionsFormValues,
       createMission,
       createMissionAction,
       deleteMissionAction,
       dispatch,
+      mainFormValues,
       updateMission,
       updateMissionAction,
       sideWindow.selectedPath.id
@@ -177,14 +172,14 @@ export function MissionForm() {
 
   const duplicateAction = useCallback(
     (actionIndex: number) => {
-      const sourceAction = omit(['id'], actionsFormValuesRef.current[actionIndex]) as MissionActionFormValues
+      const sourceAction = omit(['id'], actionsFormValues[actionIndex]) as MissionActionFormValues
 
-      actionsFormValuesRef.current = [...actionsFormValuesRef.current, sourceAction]
+      setActionsFormValues([...actionsFormValues, sourceAction])
 
       setActionFormKey(actionFormKey + 1)
-      setEditedActionIndex(actionsFormValuesRef.current.length - 1)
+      setEditedActionIndex(actionsFormValues.length - 1)
     },
-    [actionFormKey]
+    [actionFormKey, actionsFormValues]
   )
 
   const goToMissionList = useCallback(async () => {
@@ -204,50 +199,47 @@ export function MissionForm() {
 
   const removeAction = useCallback(
     (actionIndex: number) => {
-      actionsFormValuesRef.current = actionsFormValuesRef.current.reduce(
+      const nextActionsFormValues = actionsFormValues.reduce(
         (nextActions, action, index) => (index === actionIndex ? nextActions : [...nextActions, action]),
         [] as MissionActionFormValues[]
       )
 
+      setActionsFormValues(nextActionsFormValues)
       if (editedActionIndex === actionIndex) {
         setEditedActionIndex(undefined)
-      } else {
-        forceUpdate()
       }
     },
-    [editedActionIndex, forceUpdate]
+    [actionsFormValues, editedActionIndex]
   )
 
   const reopen = useCallback(() => {
-    if (!mainFormValuesRef.current) {
-      throw new FrontendError('`mainFormValuesRef.current` is undefined.')
+    if (!mainFormValues) {
+      throw new FrontendError('`mainFormValues` is undefined.')
     }
 
-    mainFormValuesRef.current = {
-      ...mainFormValuesRef.current,
+    setMainFormValues({
+      ...mainFormValues,
       isClosed: false
-    }
-
-    forceUpdate()
-  }, [forceUpdate])
+    })
+  }, [mainFormValues])
 
   const updateDraft = useDebouncedCallback(
     // We need to use a callback within to memoize it
     // https://codesandbox.io/s/4wvmp1xlw4?file=/src/InputWithCallback.js:357-386
     useCallback(() => {
-      if (!mainFormValuesRef.current) {
-        logSoftError('`mainFormValuesRef.current` is undefined.')
+      if (!mainFormValues) {
+        logSoftError('`mainFormValues` is undefined.')
 
         return
       }
 
       dispatch(
         missionActions.setDraft({
-          actionsFormValues: actionsFormValuesRef.current,
-          mainFormValues: mainFormValuesRef.current
+          actionsFormValues,
+          mainFormValues
         })
       )
-    }, [dispatch]),
+    }, [actionsFormValues, dispatch, mainFormValues]),
     250
   )
 
@@ -259,25 +251,16 @@ export function MissionForm() {
         return
       }
 
-      // We must re-render if these props change since the action list dropdown menu depends on it
-      const currentActionFormValues = { ...actionsFormValuesRef.current[editedActionIndex] }
-      const shouldUpdate = !isEqual(
-        pick(['numberOfVesselsFlownOver', 'otherComments', 'vesselName'], currentActionFormValues),
-        pick(['numberOfVesselsFlownOver', 'otherComments', 'vesselName'], nextActionFormValues)
+      setActionsFormValues(
+        actionsFormValues.reduce(
+          (nextActions, action, index) => [...nextActions, index === editedActionIndex ? nextActionFormValues : action],
+          [] as MissionActionFormValues[]
+        )
       )
-
-      actionsFormValuesRef.current = actionsFormValuesRef.current.reduce(
-        (nextActions, action, index) => [...nextActions, index === editedActionIndex ? nextActionFormValues : action],
-        [] as MissionActionFormValues[]
-      )
-
-      if (shouldUpdate) {
-        forceUpdate()
-      }
 
       updateDraft()
     },
-    [editedActionIndex, forceUpdate, updateDraft]
+    [actionsFormValues, editedActionIndex, updateDraft]
   )
 
   const updateEditedActionIndex = useCallback(
@@ -290,24 +273,11 @@ export function MissionForm() {
 
   const updateMainFormValues = useCallback(
     (nextMissionMainFormValues: MissionMainFormValues) => {
-      if (!mainFormValuesRef.current) {
-        logSoftError('`mainFormValuesRef.current` is undefined.')
-
-        return
-      }
-
-      // We must re-render if mission types change since the action list dropdown menu depends on it
-      const shouldUpdate = !isEqual(mainFormValuesRef.current.missionTypes, nextMissionMainFormValues.missionTypes)
-
-      mainFormValuesRef.current = { ...nextMissionMainFormValues }
-
-      if (shouldUpdate) {
-        forceUpdate()
-      }
+      setMainFormValues(nextMissionMainFormValues)
 
       updateDraft()
     },
-    [forceUpdate, updateDraft]
+    [updateDraft]
   )
 
   const toggleDeletionConfirmationDialog = useCallback(async () => {
@@ -333,12 +303,12 @@ export function MissionForm() {
 
       if (!sideWindow.selectedPath.id) {
         const { initialActionsFormValues, initialMainFormValues } = getMissionFormInitialValues(undefined, [])
-        mainFormValuesRef.current = initialMainFormValues
-        actionsFormValuesRef.current = initialActionsFormValues
 
         setActionFormKey(actionFormKey + 1)
+        setActionsFormValues(initialActionsFormValues)
         setIsLoading(false)
         setMainFormKey(mainFormKey + 1)
+        setMainFormValues(initialMainFormValues)
         setTitle(getTitleFromMissionMainFormValues(initialMainFormValues, undefined))
 
         updateDraft()
@@ -369,12 +339,12 @@ export function MissionForm() {
         missionResponse.data,
         missionActionsResponse.data
       )
-      mainFormValuesRef.current = initialMainFormValues
-      actionsFormValuesRef.current = initialActionsFormValues
 
       setActionFormKey(actionFormKey + 1)
+      setActionsFormValues(initialActionsFormValues)
       setIsLoading(false)
       setMainFormKey(mainFormKey + 1)
+      setMainFormValues(initialMainFormValues)
       setTitle(getTitleFromMissionMainFormValues(initialMainFormValues, sideWindow.selectedPath.id))
 
       updateDraft()
@@ -397,27 +367,24 @@ export function MissionForm() {
           <BackToListIcon onClick={goToMissionList} />
 
           <HeaderTitle>{title}</HeaderTitle>
-          <TitleSourceTag
-            missionId={sideWindow.selectedPath.id}
-            missionSource={mainFormValuesRef.current?.missionSource}
-          />
+          <TitleSourceTag missionId={sideWindow.selectedPath.id} missionSource={mainFormValues?.missionSource} />
         </Header>
 
         <Body>
           <FrontendErrorBoundary>
-            {(isLoading || !mainFormValuesRef.current) && <LoadingSpinnerWall />}
+            {(isLoading || !mainFormValues) && <LoadingSpinnerWall />}
 
-            {!isLoading && mainFormValuesRef.current && (
+            {!isLoading && mainFormValues && (
               <>
                 <MainForm
                   key={`main-form-${mainFormKey}`}
-                  initialValues={mainFormValuesRef.current}
+                  initialValues={mainFormValues}
                   onChange={updateMainFormValues}
                 />
                 <ActionList
-                  actionsFormValues={actionsFormValuesRef.current}
+                  actionsFormValues={actionsFormValues}
                   currentIndex={editedActionIndex}
-                  missionTypes={mainFormValuesRef.current.missionTypes}
+                  missionTypes={mainFormValues.missionTypes}
                   onAdd={addAction}
                   onDuplicate={duplicateAction}
                   onRemove={removeAction}
@@ -438,11 +405,7 @@ export function MissionForm() {
             {sideWindow.selectedPath.id && (
               <Button
                 accent={Accent.SECONDARY}
-                disabled={
-                  isLoading ||
-                  isSaving ||
-                  mainFormValuesRef.current?.missionSource !== Mission.MissionSource.MONITORFISH
-                }
+                disabled={isLoading || isSaving || mainFormValues?.missionSource !== Mission.MissionSource.MONITORFISH}
                 Icon={Icon.Delete}
                 onClick={toggleDeletionConfirmationDialog}
               >
@@ -452,7 +415,7 @@ export function MissionForm() {
           </div>
 
           <div>
-            {mainFormValuesRef.current?.isClosed && (
+            {mainFormValues?.isClosed && (
               <FooterMessage>Veuillez rouvrir la mission avant d’en modifier les informations.</FooterMessage>
             )}
 
@@ -460,7 +423,7 @@ export function MissionForm() {
               Annuler
             </Button>
 
-            {!mainFormValuesRef.current?.isClosed && (
+            {!mainFormValues?.isClosed && (
               <>
                 <Button
                   accent={Accent.SECONDARY}
@@ -480,7 +443,7 @@ export function MissionForm() {
                 </Button>
               </>
             )}
-            {mainFormValuesRef.current?.isClosed && (
+            {mainFormValues?.isClosed && (
               <Button
                 accent={Accent.PRIMARY}
                 disabled={isLoading || isSaving}

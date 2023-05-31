@@ -250,10 +250,7 @@ export function MissionForm() {
       )
     }, [dispatch]),
     500,
-    {
-      // Maximum time this function is allowed to be delayed before it's invoked
-      maxWait: 500
-    }
+    { maxWait: 500 }
   )
 
   const updateEditedActionFormValues = useCallback(

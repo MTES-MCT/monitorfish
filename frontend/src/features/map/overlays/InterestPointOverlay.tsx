@@ -1,3 +1,4 @@
+import { usePrevious } from '@mtes-mct/monitor-ui'
 import { noop } from 'lodash'
 import LineString from 'ol/geom/LineString'
 import Overlay from 'ol/Overlay'
@@ -10,7 +11,6 @@ import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map/constants'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { useMoveOverlayWhenDragging } from '../../../hooks/useMoveOverlayWhenDragging'
 import { useMoveOverlayWhenZooming } from '../../../hooks/useMoveOverlayWhenZooming'
-import { usePrevious } from '../../../hooks/usePrevious'
 import { ReactComponent as EditSVG } from '../../icons/Bouton_edition.svg'
 import { ReactComponent as DeleteSVG } from '../../icons/Suppression.svg'
 
@@ -198,7 +198,7 @@ const Footer = styled.div`
 const Header = styled.div`
   display: flex;
   height: 30px;
-  background ${p => p.theme.color.gainsboro};
+  background: ${p => p.theme.color.gainsboro};
   text-align: left;
   border: none;
   border-top-left-radius: 2px;

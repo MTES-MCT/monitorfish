@@ -394,32 +394,6 @@
         "isUnderJdp": false
       },
       {
-        "id": 4,
-        "missionTypes": ["SEA"],
-        "controlUnits": [
-          {
-            "id": 10003,
-            "administration": "DDTM",
-            "name": "DML 2A",
-            "resources": [],
-            "contact": null,
-            "isArchived": false
-          }
-        ],
-        "openBy": "Brian Gibbs",
-        "closedBy": "Mary Rogers",
-        "observationsCacem": "Magazine more morning we career born. Language notice site next history.",
-        "observationsCnsp": null,
-        "facade": "MEMN",
-        "geom": null,
-        "startDateTimeUtc": "2023-02-15T13:11:59.923703Z",
-        "endDateTimeUtc": null,
-        "envActions": [],
-        "missionSource": "MONITORFISH",
-        "isClosed": false,
-        "isUnderJdp": false
-      },
-      {
         "id": 43,
         "missionTypes": ["SEA"],
         "controlUnits": [

@@ -1,3 +1,4 @@
+import { usePrevious } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useState } from 'react'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
@@ -14,7 +15,6 @@ import {
 import { getVesselVoyage, NavigateTo } from '../../../domain/use_cases/vessel/getVesselVoyage'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { usePrevious } from '../../../hooks/usePrevious'
 
 export function VesselFishingActivities() {
   const dispatch = useMainAppDispatch()

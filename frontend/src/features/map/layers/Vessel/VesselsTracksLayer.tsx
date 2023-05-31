@@ -1,3 +1,4 @@
+import { usePrevious } from '@mtes-mct/monitor-ui'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
@@ -26,7 +27,6 @@ import {
 } from '../../../../domain/shared_slices/Vessel'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { usePrevious } from '../../../../hooks/usePrevious'
 import CloseVesselTrackOverlay from '../../overlays/CloseVesselTrackOverlay'
 import FishingActivityOverlay from '../../overlays/FishingActivityOverlay'
 

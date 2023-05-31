@@ -1,3 +1,4 @@
+import { usePrevious } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
@@ -11,7 +12,6 @@ import { setBeaconMalfunctionsTab } from '../../../domain/shared_slices/BeaconMa
 import getVesselBeaconMalfunctions from '../../../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { usePrevious } from '../../../hooks/usePrevious'
 
 export function VesselBeaconMalfunctions() {
   const dispatch = useMainAppDispatch()

@@ -7,47 +7,31 @@ import {
   FormikTextInput
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
-import { noop, omit } from 'lodash/fp'
-import { useMemo } from 'react'
+import { noop } from 'lodash/fp'
+import { memo } from 'react'
 import styled from 'styled-components'
-import { useDebouncedCallback } from 'use-debounce'
 
 import { MISSION_TYPES_AS_OPTIONS } from './constants'
 import { FormikDoubleDatePicker } from './FormikDoubleDatePicker'
-import { FormikIsClosedEffect } from './FormikIsClosedEffect'
 import { FormikLocationPicker } from './FormikLocationPicker'
 import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'
 import { MainFormSchema } from './schemas'
 import { BOOLEAN_AS_OPTIONS } from '../../../../constants'
-import { missionActions } from '../../../../domain/actions'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { FrontendError } from '../../../../libs/FrontendError'
 import { FormBody, FormBodyInnerWrapper } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
 
-import type { MissionFormValues } from '../types'
+import type { MissionMainFormValues } from '../types'
+import type { Promisable } from 'type-fest'
 
-export function MainForm() {
-  const { mission } = useMainAppSelector(store => store)
-  const dispatch = useMainAppDispatch()
-
-  const initialMissionFormValues = useMemo(() => {
-    if (!mission.draft) {
-      throw new FrontendError('`mission.draft` is undefined')
-    }
-
-    return omit(['actions'], mission.draft)
-  }, [mission.draft])
-
-  const handleChange = useDebouncedCallback((nextMissionFormValues: MissionFormValues) => {
-    dispatch(missionActions.setDraft(nextMissionFormValues))
-  }, 250)
-
+type MainFormProps = {
+  initialValues: MissionMainFormValues
+  onChange: (nextValues: MissionMainFormValues) => Promisable<void>
+}
+function UnmemoizedMainForm({ initialValues, onChange }: MainFormProps) {
   return (
-    <Formik initialValues={initialMissionFormValues} onSubmit={noop} validationSchema={MainFormSchema}>
+    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={MainFormSchema}>
       <Wrapper>
-        <FormikEffect onChange={handleChange as any} />
+        <FormikEffect onChange={onChange as any} />
 
         <FormHead>
           <h2>Informations générales</h2>
@@ -55,8 +39,6 @@ export function MainForm() {
 
         <FormBody>
           <CustomFormBodyInnerWrapper>
-            <FormikIsClosedEffect />
-
             <FormikDoubleDatePicker />
 
             <MultiCheckColumns>
@@ -93,6 +75,14 @@ export function MainForm() {
     </Formik>
   )
 }
+
+/**
+ * @description
+ * This component is fully memoized because we want its parent (`<MissionForm />`) to fully control
+ * when to re-create this component using a `key` prop,
+ * which should only happens when the edited mission `id` changes.
+ */
+export const MainForm = memo(UnmemoizedMainForm)
 
 const IsUnderJdpFormikCheckbox = styled(FormikCheckbox)`
   margin-left: 48px;

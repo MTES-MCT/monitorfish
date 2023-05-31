@@ -94,7 +94,7 @@ export function UnmemoizedSelectedMissionLayer({ map }) {
       return
     }
 
-    const missionFeature = getMissionFeatureZone({ ...mission.draft, id: missionId })
+    const missionFeature = getMissionFeatureZone({ ...mission.draft.mainFormValues, id: missionId })
     getVectorSource().addFeature(missionFeature)
   }, [getVectorSource, mission.draft, sideWindow.selectedPath.id])
 

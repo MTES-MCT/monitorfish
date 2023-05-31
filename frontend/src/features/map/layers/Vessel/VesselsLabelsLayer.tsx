@@ -1,3 +1,4 @@
+import { usePrevious } from '@mtes-mct/monitor-ui'
 import LineString from 'ol/geom/LineString'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
@@ -12,7 +13,6 @@ import {
 } from '../../../../domain/entities/vessel/vessel'
 import { VesselLabelLine } from '../../../../domain/entities/vesselLabelLine'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { usePrevious } from '../../../../hooks/usePrevious'
 import { VesselLabelOverlay } from '../../overlays/VesselLabelOverlay'
 import { getLabelLineStyle } from '../styles/vesselLabelLine.style'
 

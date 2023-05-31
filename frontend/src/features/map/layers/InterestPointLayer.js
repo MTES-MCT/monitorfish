@@ -1,3 +1,4 @@
+import { usePrevious } from '@mtes-mct/monitor-ui'
 import { useEffect, useRef, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -26,7 +27,6 @@ import saveInterestPointFeature from '../../../domain/use_cases/interestPoint/sa
 import GeoJSON from 'ol/format/GeoJSON'
 import LineString from 'ol/geom/LineString'
 import { InterestPointLine } from '../../../domain/entities/interestPointLine'
-import { usePrevious } from '../../../hooks/usePrevious'
 import { getLength } from 'ol/sphere'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { setMapToolOpened } from '../../../domain/shared_slices/Global'

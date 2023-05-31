@@ -79,6 +79,16 @@ context('Side Window > Mission Form > Action List', () => {
     })
 
     cy.get('h1').should('contain.text', 'Missions et contrôles')
+
+    // And we delete this action
+
+    editSideWindowMissionListMissionWithId(4, SeaFrontGroup.MEMN)
+
+    cy.clickButton('Supprimer l’action', { index: 1 })
+
+    cy.wait(250)
+
+    cy.clickButton('Enregistrer')
   })
 
   it('Should send the expected data to the API when deleting a mission action', () => {

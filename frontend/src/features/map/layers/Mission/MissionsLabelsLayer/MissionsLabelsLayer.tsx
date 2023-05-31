@@ -1,3 +1,4 @@
+import { usePrevious } from '@mtes-mct/monitor-ui'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -6,7 +7,6 @@ import { useDebouncedCallback } from 'use-debounce'
 import { clearPreviousLineFeatures, getLabelsOfFeaturesInExtent } from './utils'
 import { LayerProperties } from '../../../../../domain/entities/layers/constants'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import { usePrevious } from '../../../../../hooks/usePrevious'
 import { MissionLabelOverlay } from '../../../overlays/MissionUnitLabelOverlay'
 import { useGetLineFeatureIdToCoordinates } from '../../hooks/useGetLineFeatureIdToCoordinates'
 import { useIsZooming } from '../../hooks/useIsZooming'
@@ -95,7 +95,7 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
       clearPreviousLineFeatures(_previousFeaturesAndLabels, featuresAndLabels, getVectorSource())
     },
     250,
-    { leading: true }
+    { leading: true, maxWait: 250 }
   )
 
   useEffect(() => {

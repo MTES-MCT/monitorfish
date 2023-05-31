@@ -2,7 +2,7 @@ import { Field, Label, SingleTag, TagGroup } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useFormikContext } from 'formik'
 import { remove as ramdaRemove, uniq } from 'ramda'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -10,6 +10,7 @@ import { useGetFleetSegmentsQuery } from '../../../../../api/fleetSegment'
 import { useGetRiskFactorQuery } from '../../../../../api/vessel'
 import { getFaoZonesFromSpeciesOnboard } from '../../../../../domain/entities/vessel/riskFactor'
 import { getFleetSegments } from '../../../../../domain/use_cases/vessel/getFleetSegments'
+import { useDeepCompareEffect } from '../../../../../hooks/useDeepCompareEffect'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { FrontendError } from '../../../../../libs/FrontendError'
 import { sortByAscendingValue } from '../../../../../utils/sortByAscendingValue'
@@ -46,28 +47,33 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
 
   const isLoading = useMemo(() => !getFleetSegmentsApiQuery.data, [getFleetSegmentsApiQuery.data])
 
-  const updateSegments = useDebouncedCallback(async () => {
-    const declaredSpeciesOnboard = riskFactorApiQuery.data?.speciesOnboard
+  const updateSegments = useDebouncedCallback(
+    async () => {
+      const declaredSpeciesOnboard = riskFactorApiQuery.data?.speciesOnboard
 
-    const computedFleetSegments = await dispatch(
-      getFleetSegments(
-        declaredSpeciesOnboard,
-        values.gearOnboard,
-        values.speciesOnboard,
-        values.longitude,
-        values.latitude,
-        values.portLocode
+      const computedFleetSegments = await dispatch(
+        getFleetSegments(
+          declaredSpeciesOnboard,
+          values.gearOnboard,
+          values.speciesOnboard,
+          values.longitude,
+          values.latitude,
+          values.portLocode
+        )
       )
-    )
 
-    const nextFleetSegments = fleetSegmentsAsOptions
-      .filter(({ value }) => computedFleetSegments?.find(fleetSegment => fleetSegment.segment === value.segment))
-      .map(({ value }) => value)
+      const nextFleetSegments = fleetSegmentsAsOptions
+        .filter(({ value }) => computedFleetSegments?.find(fleetSegment => fleetSegment.segment === value.segment))
+        .map(({ value }) => value)
 
-    setFieldValue('segments', nextFleetSegments)
-  }, 500)
+      setFieldValue('segments', nextFleetSegments)
+    },
+    500,
+    // Maximum time this function is allowed to be delayed before it's invoked
+    { maxWait: 500 }
+  )
 
-  useEffect(
+  useDeepCompareEffect(
     () => {
       if (values.faoAreas?.length || !riskFactorApiQuery.data) {
         return
@@ -83,7 +89,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
     [riskFactorApiQuery.data]
   )
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     updateSegments()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [

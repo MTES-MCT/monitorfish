@@ -55,11 +55,12 @@ export function MissionForm() {
   const mainFormValuesRef = useRef<MissionMainFormValues | undefined>(undefined)
   const originalMissionRef = useRef<MissionWithActions | undefined>(undefined)
 
-  const [actionFormKey, setActionFormKey] = useState<number>(0)
+  const [actionFormKey, setActionFormKey] = useState(0)
   const [editedActionIndex, setEditedActionIndex] = useState<number | undefined>(undefined)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [isDeletionConfirmationDialogOpen, setIsDeletionConfirmationDialogOpen] = useState(false)
+  const [mainFormKey, setMainFormKey] = useState(0)
   const [title, setTitle] = useState(getTitleFromMissionMainFormValues(undefined, undefined))
   const previousMissionId = usePrevious(sideWindow.selectedPath.id)
 
@@ -324,6 +325,8 @@ export function MissionForm() {
 
     if (sideWindow.selectedPath.id !== previousMissionId) {
       setIsLoading(true)
+
+      dispatch(missionActions.unsetDraft())
     }
 
     ;(async () => {
@@ -334,7 +337,9 @@ export function MissionForm() {
         mainFormValuesRef.current = initialMainFormValues
         actionsFormValuesRef.current = initialActionsFormValues
 
+        setActionFormKey(actionFormKey + 1)
         setIsLoading(false)
+        setMainFormKey(mainFormKey + 1)
         setTitle(getTitleFromMissionMainFormValues(initialMainFormValues, undefined))
 
         updateDraft()
@@ -368,12 +373,14 @@ export function MissionForm() {
       mainFormValuesRef.current = initialMainFormValues
       actionsFormValuesRef.current = initialActionsFormValues
 
+      setActionFormKey(actionFormKey + 1)
       setIsLoading(false)
+      setMainFormKey(mainFormKey + 1)
       setTitle(getTitleFromMissionMainFormValues(initialMainFormValues, sideWindow.selectedPath.id))
 
       updateDraft()
     })()
-  }, [dispatch, isLoading, previousMissionId, sideWindow.selectedPath.id, updateDraft])
+  }, [actionFormKey, dispatch, isLoading, mainFormKey, previousMissionId, sideWindow.selectedPath.id, updateDraft])
 
   useEffect(
     () => () => {
@@ -403,7 +410,11 @@ export function MissionForm() {
 
             {!isLoading && mainFormValuesRef.current && (
               <>
-                <MainForm initialValues={mainFormValuesRef.current} onChange={updateMainFormValues} />
+                <MainForm
+                  key={`main-form-${mainFormKey}`}
+                  initialValues={mainFormValuesRef.current}
+                  onChange={updateMainFormValues}
+                />
                 <ActionList
                   actionsFormValues={actionsFormValuesRef.current}
                   currentIndex={editedActionIndex}
@@ -415,7 +426,7 @@ export function MissionForm() {
                 />
                 <ActionForm
                   key={`action-form-${actionFormKey}`}
-                  initialActionFormValues={editedActionFormValues}
+                  actionFormValues={editedActionFormValues}
                   onChange={updateEditedActionFormValues}
                 />
               </>

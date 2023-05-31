@@ -11,6 +11,17 @@ import type { GeoJSON } from '../types/GeoJSON'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface MissionState {
+  /**
+   * Current mission form values.
+   *
+   * @description
+   * We use `mission.draft` in 3 cases:
+   * - For some mission draft interactions on the map
+   * - To prevent side window closure when a draft is in progress
+   * - For cross-form validation (some actions validations depends on current main form values)
+   */
+  // TODO For side window closure prevention and cross-form validation we don't need the entire forms values.
+  // But we do for the map interactions.
   draft:
     | {
         actionsFormValues: MissionActionFormValues[]

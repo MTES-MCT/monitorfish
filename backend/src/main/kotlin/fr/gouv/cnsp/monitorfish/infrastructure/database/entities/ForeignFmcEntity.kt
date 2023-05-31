@@ -18,12 +18,12 @@ data class ForeignFmcEntity(
     var countryName: String,
     @Column(name = "email_addresses", columnDefinition = "varchar[]")
     @Type(ListArrayType::class)
-    var emailAddresses: List<String>? = null
+    var emailAddresses: List<String>? = null,
 ) {
 
     fun toForeignFMC() = ForeignFMC(
         countryCodeIso3 = countryCodeIso3,
         countryName = countryName,
-        emailAddresses = emailAddresses
+        emailAddresses = emailAddresses,
     )
 }

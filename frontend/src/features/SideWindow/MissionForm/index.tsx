@@ -187,6 +187,10 @@ export function MissionForm() {
     [actionFormKey]
   )
 
+  const goToMissionList = useCallback(async () => {
+    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_LIST }))
+  }, [dispatch])
+
   const handleDelete = useCallback(async () => {
     if (!sideWindow.selectedPath.id) {
       throw new FrontendError('`sideWindow.selectedPath.id` is undefined')
@@ -197,23 +201,6 @@ export function MissionForm() {
     await deleteMission(sideWindow.selectedPath.id)
     dispatch(sideWindowActions.openOrFocusAndGoTo({ menu: SideWindowMenuKey.MISSION_LIST }))
   }, [deleteMission, dispatch, sideWindow.selectedPath.id])
-
-  const reopen = useCallback(() => {
-    if (!mainFormValuesRef.current) {
-      throw new FrontendError('`mainFormValuesRef.current` is undefined.')
-    }
-
-    mainFormValuesRef.current = {
-      ...mainFormValuesRef.current,
-      isClosed: false
-    }
-
-    forceUpdate()
-  }, [forceUpdate])
-
-  const goToMissionList = useCallback(async () => {
-    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_LIST }))
-  }, [dispatch])
 
   const removeAction = useCallback(
     (actionIndex: number) => {
@@ -230,6 +217,19 @@ export function MissionForm() {
     },
     [editedActionIndex, forceUpdate]
   )
+
+  const reopen = useCallback(() => {
+    if (!mainFormValuesRef.current) {
+      throw new FrontendError('`mainFormValuesRef.current` is undefined.')
+    }
+
+    mainFormValuesRef.current = {
+      ...mainFormValuesRef.current,
+      isClosed: false
+    }
+
+    forceUpdate()
+  }, [forceUpdate])
 
   const updateDraft = useDebouncedCallback(
     // We need to use a callback within to memoize it

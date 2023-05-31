@@ -13,31 +13,31 @@ import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
 type ActionFormProps = {
-  initialActionFormValues: MissionActionFormValues | undefined
+  actionFormValues: MissionActionFormValues | undefined
   onChange: (nextActionFormValues: MissionActionFormValues) => Promisable<void>
 }
-function UnmemoizedActionForm({ initialActionFormValues, onChange }: ActionFormProps) {
-  if (!initialActionFormValues) {
+function UnmemoizedActionForm({ actionFormValues, onChange }: ActionFormProps) {
+  if (!actionFormValues) {
     return <Wrapper />
   }
 
   return (
     <Wrapper>
       <FrontendErrorBoundary>
-        {initialActionFormValues.actionType === MissionAction.MissionActionType.AIR_CONTROL && (
-          <AirControlForm initialValues={initialActionFormValues} onChange={onChange} />
+        {actionFormValues.actionType === MissionAction.MissionActionType.AIR_CONTROL && (
+          <AirControlForm initialValues={actionFormValues} onChange={onChange} />
         )}
-        {initialActionFormValues.actionType === MissionAction.MissionActionType.AIR_SURVEILLANCE && (
-          <AirSurveillanceForm initialValues={initialActionFormValues} onChange={onChange} />
+        {actionFormValues.actionType === MissionAction.MissionActionType.AIR_SURVEILLANCE && (
+          <AirSurveillanceForm initialValues={actionFormValues} onChange={onChange} />
         )}
-        {initialActionFormValues.actionType === MissionAction.MissionActionType.LAND_CONTROL && (
-          <LandControlForm initialValues={initialActionFormValues} onChange={onChange} />
+        {actionFormValues.actionType === MissionAction.MissionActionType.LAND_CONTROL && (
+          <LandControlForm initialValues={actionFormValues} onChange={onChange} />
         )}
-        {initialActionFormValues.actionType === MissionAction.MissionActionType.OBSERVATION && (
-          <ObservationForm initialValues={initialActionFormValues} onChange={onChange} />
+        {actionFormValues.actionType === MissionAction.MissionActionType.OBSERVATION && (
+          <ObservationForm initialValues={actionFormValues} onChange={onChange} />
         )}
-        {initialActionFormValues.actionType === MissionAction.MissionActionType.SEA_CONTROL && (
-          <SeaControlForm initialValues={initialActionFormValues} onChange={onChange} />
+        {actionFormValues.actionType === MissionAction.MissionActionType.SEA_CONTROL && (
+          <SeaControlForm initialValues={actionFormValues} onChange={onChange} />
         )}
       </FrontendErrorBoundary>
     </Wrapper>

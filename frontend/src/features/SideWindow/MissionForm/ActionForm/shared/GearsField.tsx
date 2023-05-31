@@ -216,6 +216,7 @@ export function GearsField() {
         name="newGear"
         onChange={add}
         options={gearsAsOptions}
+        optionValueKey="code"
         searchable
       />
     </TypedFormikMultiInfractionPicker>

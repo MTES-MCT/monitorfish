@@ -1,20 +1,15 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
-import com.vladmihalcea.hibernate.type.array.ListArrayType
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.ForeignFMC
+import io.hypersistence.utils.hibernate.type.array.ListArrayType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import org.hibernate.annotations.Type
-import org.hibernate.annotations.TypeDef
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
 
 @Entity
 @Table(name = "foreign_fmcs")
-@TypeDef(
-    name = "list-array",
-    typeClass = ListArrayType::class
-)
 data class ForeignFmcEntity(
     @Id
     @Column(name = "country_code_iso3")
@@ -22,7 +17,7 @@ data class ForeignFmcEntity(
     @Column(name = "country_name")
     var countryName: String,
     @Column(name = "email_addresses", columnDefinition = "varchar[]")
-    @Type(type = "list-array")
+    @Type(ListArrayType::class)
     var emailAddresses: List<String>? = null
 ) {
 

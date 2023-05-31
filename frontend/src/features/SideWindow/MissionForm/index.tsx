@@ -202,15 +202,13 @@ export function MissionForm() {
       throw new FrontendError('`mainFormValuesRef.current` is undefined.')
     }
 
-    setIsSaving(true)
-
     mainFormValuesRef.current = {
       ...mainFormValuesRef.current,
       isClosed: false
     }
 
-    setIsSaving(false)
-  }, [])
+    forceUpdate()
+  }, [forceUpdate])
 
   const goToMissionList = useCallback(async () => {
     dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_LIST }))

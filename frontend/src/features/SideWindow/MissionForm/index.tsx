@@ -248,8 +248,7 @@ export function MissionForm() {
         })
       )
     }, [dispatch]),
-    500,
-    { maxWait: 500 }
+    250
   )
 
   const updateEditedActionFormValues = useCallback(

@@ -47,6 +47,17 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
 
   const isLoading = useMemo(() => !getFleetSegmentsApiQuery.data, [getFleetSegmentsApiQuery.data])
 
+  const updateFaoAreas = useDebouncedCallback(async () => {
+    if (values.faoAreas?.length || !riskFactorApiQuery.data) {
+      return
+    }
+
+    const declaredSpeciesOnboard = riskFactorApiQuery.data.speciesOnboard
+    const faoAreas = getFaoZonesFromSpeciesOnboard(declaredSpeciesOnboard || [])
+
+    setFieldValue('faoAreas', faoAreas)
+  }, 250)
+
   const updateSegments = useDebouncedCallback(async () => {
     const declaredSpeciesOnboard = riskFactorApiQuery.data?.speciesOnboard
 
@@ -66,18 +77,11 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
       .map(({ value }) => value)
 
     setFieldValue('segments', nextFleetSegments)
-  }, 500)
+  }, 250)
 
   useDeepCompareEffect(
     () => {
-      if (values.faoAreas?.length || !riskFactorApiQuery.data) {
-        return
-      }
-
-      const declaredSpeciesOnboard = riskFactorApiQuery.data.speciesOnboard
-      const faoAreas = getFaoZonesFromSpeciesOnboard(declaredSpeciesOnboard || [])
-
-      setFieldValue('faoAreas', faoAreas)
+      updateFaoAreas()
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -86,6 +90,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
 
   useDeepCompareEffect(() => {
     updateSegments()
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     fleetSegmentsAsOptions,

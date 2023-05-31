@@ -64,7 +64,7 @@ export function ActionList({
         </Dropdown>
       </FormHead>
 
-      <FormBody>
+      <FormBody data-cy="mission-form-action-list">
         <FrontendErrorBoundary>
           {!actionsFormValues.length && <Placeholder>Aucune action n’est ajoutée pour le moment.</Placeholder>}
 

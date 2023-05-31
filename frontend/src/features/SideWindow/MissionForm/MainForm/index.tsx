@@ -13,7 +13,6 @@ import styled from 'styled-components'
 
 import { MISSION_TYPES_AS_OPTIONS } from './constants'
 import { FormikDoubleDatePicker } from './FormikDoubleDatePicker'
-import { FormikIsClosedEffect } from './FormikIsClosedEffect'
 import { FormikLocationPicker } from './FormikLocationPicker'
 import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'
 import { MainFormSchema } from './schemas'
@@ -40,8 +39,6 @@ function UnmemoizedMainForm({ initialValues, onChange }: MainFormProps) {
 
         <FormBody>
           <CustomFormBodyInnerWrapper>
-            <FormikIsClosedEffect />
-
             <FormikDoubleDatePicker />
 
             <MultiCheckColumns>

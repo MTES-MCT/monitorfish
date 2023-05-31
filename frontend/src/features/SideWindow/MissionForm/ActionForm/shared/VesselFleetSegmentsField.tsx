@@ -47,31 +47,26 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
 
   const isLoading = useMemo(() => !getFleetSegmentsApiQuery.data, [getFleetSegmentsApiQuery.data])
 
-  const updateSegments = useDebouncedCallback(
-    async () => {
-      const declaredSpeciesOnboard = riskFactorApiQuery.data?.speciesOnboard
+  const updateSegments = useDebouncedCallback(async () => {
+    const declaredSpeciesOnboard = riskFactorApiQuery.data?.speciesOnboard
 
-      const computedFleetSegments = await dispatch(
-        getFleetSegments(
-          declaredSpeciesOnboard,
-          values.gearOnboard,
-          values.speciesOnboard,
-          values.longitude,
-          values.latitude,
-          values.portLocode
-        )
+    const computedFleetSegments = await dispatch(
+      getFleetSegments(
+        declaredSpeciesOnboard,
+        values.gearOnboard,
+        values.speciesOnboard,
+        values.longitude,
+        values.latitude,
+        values.portLocode
       )
+    )
 
-      const nextFleetSegments = fleetSegmentsAsOptions
-        .filter(({ value }) => computedFleetSegments?.find(fleetSegment => fleetSegment.segment === value.segment))
-        .map(({ value }) => value)
+    const nextFleetSegments = fleetSegmentsAsOptions
+      .filter(({ value }) => computedFleetSegments?.find(fleetSegment => fleetSegment.segment === value.segment))
+      .map(({ value }) => value)
 
-      setFieldValue('segments', nextFleetSegments)
-    },
-    500,
-    // Maximum time this function is allowed to be delayed before it's invoked
-    { maxWait: 500 }
-  )
+    setFieldValue('segments', nextFleetSegments)
+  }, 500)
 
   useDeepCompareEffect(
     () => {
@@ -93,14 +88,13 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
     updateSegments()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    dispatch,
     fleetSegmentsAsOptions,
     values.gearOnboard,
     values.speciesOnboard,
     values.longitude,
     values.latitude,
     values.portLocode,
-    riskFactorApiQuery
+    riskFactorApiQuery.data
   ])
 
   const removeFaoArea = useCallback(

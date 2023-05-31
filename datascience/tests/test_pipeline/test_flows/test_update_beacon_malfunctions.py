@@ -63,13 +63,15 @@ def test_extract_known_malfunctions(reset_test_data):
 
     expected_malfunctions = pd.DataFrame(
         {
-            "id": [2, 3],
-            "beacon_number": ["A56CZ2", "BEA951357"],
+            "id": [2, 3, 4, 5],
+            "beacon_number": ["A56CZ2", "BEA951357", "BEACON_NOT_EMITTING", "987654"],
             "vessel_status": [
                 BeaconMalfunctionVesselStatus.NO_NEWS.value,
                 BeaconMalfunctionVesselStatus.NO_NEWS.value,
+                BeaconMalfunctionVesselStatus.NO_NEWS.value,
+                BeaconMalfunctionVesselStatus.NO_NEWS.value,
             ],
-            "satellite_operator_id": [2, 2],
+            "satellite_operator_id": [2, 2, 2, 1],
         }
     )
     pd.testing.assert_frame_equal(
@@ -574,7 +576,7 @@ def test_load_new_beacon_malfunctions(reset_test_data):
     pd.testing.assert_series_equal(
         loaded_beacon_malfunctions.external_reference_number,
         pd.Series(
-            ["RO237719", "SB125334", "ZZTOPACDC", "BB", "DD"],
+            ["RO237719", "SB125334", "ZZTOPACDC", "AB123456", "LLUK", "BB", "DD"],
             name="external_reference_number",
         ),
     )

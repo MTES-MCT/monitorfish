@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 
-import { getDate } from '../../../src/utils'
-import { getUtcizedDayjs } from '../utils/getUtcizedDayjs'
+import { getDate } from '../../../../src/utils'
+import { getUtcizedDayjs } from '../../utils/getUtcizedDayjs'
 
 context('Side Window > Beacon Malfunction Board', () => {
   beforeEach(() => {
@@ -349,19 +349,29 @@ context('Side Window > Beacon Malfunction Board', () => {
 
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-notification-content"]')
       .eq(1)
-      .contains('Une Relance pour avarie en mer a été envoyée')
-      .contains('email non reçu à lepeletier@gmail.com')
+      .contains('Une Notification à un FMC étranger a été envoyée')
 
     cy.get('*[data-cy="side-window-beacon-malfunctions-notification-show-details"]').eq(1).click()
 
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-notification-content"]')
       .eq(1)
+      .and('contain', 'foreign@fmc.com')
+
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-notification-content"]')
+      .eq(2)
+      .contains('Une Relance pour avarie en mer a été envoyée')
+      .contains('email non reçu à lepeletier@gmail.com')
+
+    cy.get('*[data-cy="side-window-beacon-malfunctions-notification-show-details"]').eq(2).click()
+
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-notification-content"]')
+      .eq(2)
       .and('contain', '0600000000 (SMS)')
       .and('contain', 'lepeletier@gmail.com')
       .and('contain', '0123456789 (fax)')
 
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-notification-content"]')
-      .eq(2)
+      .eq(3)
       .scrollIntoView()
       .contains("Une Notification de fin d'avarie a été envoyée")
       .contains('email non reçu à lepeletier@gmail.com')
@@ -386,6 +396,29 @@ context('Side Window > Beacon Malfunction Board', () => {
     // Then
     cy.get('*[data-cy="side-window-beacon-malfunctions-sending-notification"]').contains(
       "En attente d’envoi d'une Relance pour avarie en mer"
+    )
+  })
+
+  it('Temporary sent message Should be seen When clicking on sent notification to foreign FMC select menu', () => {
+    // In the board
+    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]')
+      .children()
+      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
+      .eq(0)
+      .scrollIntoView()
+      .find('*[data-cy="side-window-beacon-malfunctions-card-vessel-name"]')
+      .click()
+
+    // When
+    // Click on send notification select menu
+    cy.get('[aria-placeholder="Envoyer un message"]').click()
+    cy.get('[data-key="MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC"] > .rs-picker-select-menu-item').click()
+    cy.fill('Choisir la nationalité du FMC', 'ABC')
+
+    // Then
+    cy.get('*[data-cy="side-window-beacon-malfunctions-sending-notification"]').contains(
+      'En attente d’envoi de la Notification à un FMC étranger'
     )
   })
 

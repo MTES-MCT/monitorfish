@@ -84,20 +84,23 @@ def get_templates() -> dict:
     )
 
     templates = {
-        BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION: env.get_template(
-            "malfunction_at_sea_initial_notification.html"
+        BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION: (
+            env.get_template("malfunction_at_sea_initial_notification.jinja")
         ),
-        BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION: env.get_template(
-            "malfunction_at_port_initial_notification.html"
+        BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION: (
+            env.get_template("malfunction_at_port_initial_notification.jinja")
         ),
-        BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER: env.get_template(
-            "malfunction_at_sea_reminder.html"
+        BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER: (
+            env.get_template("malfunction_at_sea_reminder.jinja")
         ),
-        BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_REMINDER: env.get_template(
-            "malfunction_at_port_reminder.html"
+        BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_REMINDER: (
+            env.get_template("malfunction_at_port_reminder.jinja")
         ),
-        BeaconMalfunctionNotificationType.END_OF_MALFUNCTION: env.get_template(
-            "end_of_malfunction.html"
+        BeaconMalfunctionNotificationType.END_OF_MALFUNCTION: (
+            env.get_template("end_of_malfunction.jinja")
+        ),
+        BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC: (
+            env.get_template("malfunction_notification_to_foreign_fmc.jinja")
         ),
     }
 
@@ -112,20 +115,20 @@ def get_sms_templates() -> dict:
     )
 
     templates = {
-        BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION: env.get_template(
-            "malfunction_at_sea_initial_notification.txt"
+        BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION: (
+            env.get_template("malfunction_at_sea_initial_notification.jinja")
         ),
-        BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION: env.get_template(
-            "malfunction_at_port_initial_notification.txt"
+        BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION: (
+            env.get_template("malfunction_at_port_initial_notification.jinja")
         ),
-        BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER: env.get_template(
-            "malfunction_at_sea_reminder.txt"
+        BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER: (
+            env.get_template("malfunction_at_sea_reminder.jinja")
         ),
-        BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_REMINDER: env.get_template(
-            "malfunction_at_port_reminder.txt"
+        BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_REMINDER: (
+            env.get_template("malfunction_at_port_reminder.jinja")
         ),
-        BeaconMalfunctionNotificationType.END_OF_MALFUNCTION: env.get_template(
-            "end_of_malfunction.txt"
+        BeaconMalfunctionNotificationType.END_OF_MALFUNCTION: (
+            env.get_template("end_of_malfunction.jinja")
         ),
     }
 
@@ -190,11 +193,10 @@ def render(
         cfr=m.vessel_cfr_or_immat_or_ircs,
         beacon_number=m.beacon_number,
         beacon_operator=m.satellite_operator,
-        last_position_datetime_utc=m.malfunction_start_date_utc.strftime(
-            "%d/%m/%Y à %Hh%M UTC"
-        ),
+        last_position_datetime_utc=m.get_formatted_malfunction_start_datetime_utc(),
         last_position_latitude=latitude,
         last_position_longitude=longitude,
+        foreign_fmc_name=m.foreign_fmc_name,
     )
 
     if output_format == "pdf":
@@ -209,6 +211,12 @@ def render(
 
 @task(checkpoint=False)
 def render_sms(m: BeaconMalfunctionToNotify, templates: dict) -> str:
+
+    if (
+        m.notification_type
+        is BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC
+    ):
+        return None
 
     template = templates[m.notification_type]
 
@@ -485,7 +493,9 @@ def make_reset_requested_notifications_statement(
     statement = (
         update(beacon_malfunctions_table)
         .where(beacon_malfunctions_table.c.id.in_(beacon_malfunction_ids_to_reset))
-        .values(notification_requested=None)
+        .values(
+            notification_requested=None, requested_notification_foreign_fmc_code=None
+        )
     )
 
     return statement
@@ -518,6 +528,7 @@ with Flow("Notify malfunctions", executor=LocalDaskExecutor()) as flow:
         sms_text = render_sms.map(
             malfunctions_to_notify, templates=unmapped(sms_templates)
         )
+        sms_text = filter_results(sms_text)
 
         html = render.map(
             malfunctions_to_notify,

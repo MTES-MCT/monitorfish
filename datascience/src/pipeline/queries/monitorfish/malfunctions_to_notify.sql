@@ -16,7 +16,9 @@ WITH requested_notifications AS (
         v.operator_mobile_phone, 
         v.operator_fax, 
         so.name AS satellite_operator,
-        so.emails AS satellite_operator_emails
+        so.emails AS satellite_operator_emails,
+        fmc.country_name AS foreign_fmc_name,
+        fmc.email_addresses AS foreign_fmc_emails
     FROM beacon_malfunctions bm
     LEFT JOIN beacons b
     ON b.beacon_number = bm.beacon_number
@@ -24,6 +26,8 @@ WITH requested_notifications AS (
     ON b.vessel_id = v.id
     LEFT JOIN satellite_operators so
     ON so.id = b.satellite_operator_id
+    LEFT JOIN foreign_fmcs fmc
+    ON fmc.country_code_iso3 = bm.requested_notification_foreign_fmc_code
     WHERE notification_requested IS NOT NULL
 ),
 

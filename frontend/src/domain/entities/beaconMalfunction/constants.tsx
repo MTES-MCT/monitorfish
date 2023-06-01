@@ -233,6 +233,10 @@ const NOTIFICATION_TYPE = {
   MALFUNCTION_AT_SEA_REMINDER: {
     followUpMessage: 'Relance pour avarie en mer',
     preposition: "d'une"
+  },
+  MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC: {
+    followUpMessage: 'Notification à un FMC étranger',
+    preposition: 'de la'
   }
 }
 
@@ -258,6 +262,10 @@ const NOTIFICATION_RECIPIENT_FUNCTION = {
   FMC: {
     addressee: 'CNSP',
     value: 'FMC'
+  },
+  FOREIGN_FMC: {
+    addressee: 'FMC étranger',
+    value: 'FOREIGN_FMC'
   },
   SATELLITE_OPERATOR: {
     addressee: 'Opérateur sat.',

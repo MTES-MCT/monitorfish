@@ -121,12 +121,31 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
 
         // When
         jpaBeaconMalfunctionsRepository
-            .requestNotification(2, BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION)
+            .requestNotification(2, BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION, null)
 
         // then
         val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 2 }
         assertThat(updatedBeaconMalfunction?.notificationRequested).isEqualTo(
             BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
         )
+    }
+
+    @Test
+    @Transactional
+    fun `requestNotification Should update the requestNotification and foreignFmcCode fields`() {
+        // Given
+        val initialBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 2 }
+        assertThat(initialBeaconMalfunction?.notificationRequested).isNull()
+
+        // When
+        jpaBeaconMalfunctionsRepository
+            .requestNotification(2, BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC, "ABC")
+
+        // then
+        val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 2 }
+        assertThat(updatedBeaconMalfunction?.notificationRequested).isEqualTo(
+            BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC,
+        )
+        assertThat(updatedBeaconMalfunction?.requestedNotificationForeignFmcCode).isEqualTo("ABC")
     }
 }

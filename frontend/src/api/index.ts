@@ -32,6 +32,7 @@ export const monitorenvApi = createApi({
 
 // We'll need that later on if we use any kind of authentication.
 const monitorfishBaseQuery = fetchBaseQuery({
+  // TODO Remove the /v1 from the baseUrl as it make harder to update APIs (vX are designed for that)
   baseUrl: `/bff/v1`
 })
 export const monitorfishApi = createApi({
@@ -47,6 +48,7 @@ export const monitorfishApi = createApi({
     'MissionActions',
     'Ports',
     'Species',
-    'RiskFactor'
+    'RiskFactor',
+    'ForeignFmcs'
   ]
 })

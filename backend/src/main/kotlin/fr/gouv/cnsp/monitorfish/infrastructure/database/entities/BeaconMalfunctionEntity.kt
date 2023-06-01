@@ -45,6 +45,8 @@ data class BeaconMalfunctionEntity(
     @Column(name = "notification_requested")
     @Enumerated(EnumType.STRING)
     val notificationRequested: BeaconMalfunctionNotificationType?,
+    @Column(name = "requested_notification_foreign_fmc_code")
+    val requestedNotificationForeignFmcCode: String?,
     @Column(name = "beacon_number")
     val beaconNumber: String,
     @Enumerated(EnumType.STRING)
@@ -67,6 +69,7 @@ data class BeaconMalfunctionEntity(
         endOfBeaconMalfunctionReason = endOfBeaconMalfunctionReason,
         vesselId = vesselId,
         notificationRequested = notificationRequested,
+        requestedNotificationForeignFmcCode = requestedNotificationForeignFmcCode,
         beaconNumber = beaconNumber,
         beaconStatusAtMalfunctionCreation = beaconStatusAtMalfunctionCreation,
     )

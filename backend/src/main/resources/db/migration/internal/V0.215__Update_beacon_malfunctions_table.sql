@@ -1,0 +1,3 @@
+ALTER TYPE public.beacon_malfunction_notification_type
+ADD VALUE 'MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC'
+AFTER 'END_OF_MALFUNCTION';

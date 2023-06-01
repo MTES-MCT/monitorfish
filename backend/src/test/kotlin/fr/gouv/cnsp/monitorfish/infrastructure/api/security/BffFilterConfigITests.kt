@@ -1,9 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 
-import fr.gouv.cnsp.monitorfish.config.ApiClient
-import fr.gouv.cnsp.monitorfish.config.OIDCProperties
-import fr.gouv.cnsp.monitorfish.config.SuperUserAPIProperties
-import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
+import fr.gouv.cnsp.monitorfish.config.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.VersionController
 import org.junit.jupiter.api.Test
@@ -20,6 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
     WebSecurityConfig::class,
     OIDCProperties::class,
     SuperUserAPIProperties::class,
+    ProtectedPathsAPIProperties::class,
     BffFilterConfig::class,
     ApiClient::class,
 )
@@ -52,12 +50,12 @@ class BffFilterConfigITests {
          * When this test is failing, a 404 http code will be returned (as the controllers are not mounted in this test)
          */
         listOf(
+            "/bff/v1/vessels",
             "/bff/v1/beacon_malfunctions",
             "/bff/v1/missions",
             "/bff/v1/operational_alerts",
             "/bff/v1/reportings",
             "/bff/v1/vessels/risk_factors",
-            "/bff/v1/authorization/is_super_user",
         ).forEach {
             mockMvc.perform(
                 get(it)

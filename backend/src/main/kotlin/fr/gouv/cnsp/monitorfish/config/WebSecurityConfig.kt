@@ -27,7 +27,6 @@ class WebSecurityConfig(val oidcProperties: OIDCProperties) {
                         AntPathRequestMatcher("/"),
                         AntPathRequestMatcher("/api/**"),
                         AntPathRequestMatcher("/version"),
-                        AntPathRequestMatcher("/bff/v1/healthcheck"),
                     ).permitAll()
                         .anyRequest().authenticated()
                         .and()

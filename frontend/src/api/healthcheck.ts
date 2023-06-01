@@ -12,7 +12,7 @@ export const HEALTH_CHECK_ERROR_MESSAGE = "Nous n'avons pas pu vérifier si l'ap
  */
 export async function getHealthcheckFromAPI(): Promise<Healthcheck> {
   try {
-    return await monitorfishApiKy.get(`/bff/v1/healthcheck`).json<Healthcheck>()
+    return await monitorfishApiKy.get(`/api/v1/healthcheck`).json<Healthcheck>()
   } catch (err) {
     throw new ApiError(HEALTH_CHECK_ERROR_MESSAGE, err)
   }

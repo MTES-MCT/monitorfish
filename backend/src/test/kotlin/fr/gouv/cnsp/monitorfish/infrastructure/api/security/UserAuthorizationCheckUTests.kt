@@ -2,7 +2,9 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.verify
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
+import fr.gouv.cnsp.monitorfish.config.SuperUserAPIProperties
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.security.TestUtils.Companion.getMockApiClient
 import io.ktor.client.engine.mock.*
@@ -12,6 +14,7 @@ import io.ktor.utils.io.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.ArgumentMatchers.eq
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.mock.web.MockFilterChain
 import org.springframework.mock.web.MockHttpServletRequest
@@ -32,13 +35,18 @@ class UserAuthorizationCheckUTests {
             enabled = false,
             userinfoEndpoint = null,
         )
+        val superUserAPIProperties = SuperUserAPIProperties(paths = listOf("/bff/**"))
         val mockApi = getMockApiClient()
-        val request = MockHttpServletRequest()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
 
         // When
-        UserAuthorizationCheckFilter(oidcProperties, mockApi, getIsAuthorizedUser).doFilter(request, response, chain)
+        val request = MockHttpServletRequest()
+        UserAuthorizationCheckFilter(oidcProperties, superUserAPIProperties, mockApi, getIsAuthorizedUser).doFilter(
+            request,
+            response,
+            chain,
+        )
 
         // Then
         assertThat(response.status).isEqualTo(200)
@@ -51,13 +59,18 @@ class UserAuthorizationCheckUTests {
             enabled = true,
             userinfoEndpoint = null,
         )
+        val superUserAPIProperties = SuperUserAPIProperties(paths = listOf("/bff/**"))
         val mockApi = getMockApiClient()
-        val request = MockHttpServletRequest()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
 
         // When
-        UserAuthorizationCheckFilter(oidcProperties, mockApi, getIsAuthorizedUser).doFilter(request, response, chain)
+        val request = MockHttpServletRequest()
+        UserAuthorizationCheckFilter(oidcProperties, superUserAPIProperties, mockApi, getIsAuthorizedUser).doFilter(
+            request,
+            response,
+            chain,
+        )
 
         // Then
         assertThat(response.status).isEqualTo(401)
@@ -71,14 +84,19 @@ class UserAuthorizationCheckUTests {
             enabled = true,
             userinfoEndpoint = null,
         )
+        val superUserAPIProperties = SuperUserAPIProperties(paths = listOf("/bff/**"))
         val mockApi = getMockApiClient()
-        val request = MockHttpServletRequest()
-        request.addHeader(Authorization, "Bearer $VALID_JWT")
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
 
         // When
-        UserAuthorizationCheckFilter(oidcProperties, mockApi, getIsAuthorizedUser).doFilter(request, response, chain)
+        val request = MockHttpServletRequest()
+        request.addHeader(Authorization, "Bearer $VALID_JWT")
+        UserAuthorizationCheckFilter(oidcProperties, superUserAPIProperties, mockApi, getIsAuthorizedUser).doFilter(
+            request,
+            response,
+            chain,
+        )
 
         // Then
         assertThat(response.status).isEqualTo(401)
@@ -92,15 +110,20 @@ class UserAuthorizationCheckUTests {
             enabled = true,
             userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user",
         )
+        val superUserAPIProperties = SuperUserAPIProperties(paths = listOf("/bff/**"))
         val mockApi = getMockApiClient()
-        val request = MockHttpServletRequest()
-        request.addHeader(Authorization, "Bearer $VALID_JWT")
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
-        given(getIsAuthorizedUser.execute(any())).willReturn(true)
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
 
         // When
-        UserAuthorizationCheckFilter(oidcProperties, mockApi, getIsAuthorizedUser).doFilter(request, response, chain)
+        val request = MockHttpServletRequest()
+        request.addHeader(Authorization, "Bearer $VALID_JWT")
+        UserAuthorizationCheckFilter(oidcProperties, superUserAPIProperties, mockApi, getIsAuthorizedUser).doFilter(
+            request,
+            response,
+            chain,
+        )
 
         // Then
         assertThat(response.status).isEqualTo(200)
@@ -113,18 +136,80 @@ class UserAuthorizationCheckUTests {
             enabled = true,
             userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user",
         )
+        val superUserAPIProperties = SuperUserAPIProperties(paths = listOf("/bff/**"))
         val mockApi = getMockApiClient()
-        val request = MockHttpServletRequest()
-        request.addHeader(Authorization, "Bearer $VALID_JWT")
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
-        given(getIsAuthorizedUser.execute(any())).willReturn(false)
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(false)
 
         // When
-        UserAuthorizationCheckFilter(oidcProperties, mockApi, getIsAuthorizedUser).doFilter(request, response, chain)
+        val request = MockHttpServletRequest()
+        request.requestURI = "/bff/v1/vessels/risk_factors"
+        request.addHeader(Authorization, "Bearer $VALID_JWT")
+        UserAuthorizationCheckFilter(oidcProperties, superUserAPIProperties, mockApi, getIsAuthorizedUser).doFilter(
+            request,
+            response,
+            chain,
+        )
 
         // Then
+        verify(getIsAuthorizedUser.execute(any(), eq(true)))
         assertThat(response.status).isEqualTo(401)
         assertThat(response.errorMessage).isEqualTo("Insufficient authorization")
+        verify(getIsAuthorizedUser.execute(any(), eq(true)))
+    }
+
+    @Test
+    fun `Should compute the right parameter to getIsAuthorizedUser when requesting a super-user protected path`() {
+        // Given
+        val oidcProperties = OIDCProperties(
+            enabled = true,
+            userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user",
+        )
+        val superUserAPIProperties = SuperUserAPIProperties(paths = listOf("/bff/v1/vessels/risk_factors"))
+        val mockApi = getMockApiClient()
+        val response = MockHttpServletResponse()
+        val chain = MockFilterChain()
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(false)
+
+        // When
+        val request = MockHttpServletRequest()
+        request.requestURI = "/bff/v1/vessels/risk_factors"
+        request.addHeader(Authorization, "Bearer $VALID_JWT")
+        UserAuthorizationCheckFilter(oidcProperties, superUserAPIProperties, mockApi, getIsAuthorizedUser).doFilter(
+            request,
+            response,
+            chain,
+        )
+
+        // Then
+        verify(getIsAuthorizedUser).execute(any(), eq(true))
+    }
+
+    @Test
+    fun `Should compute the right parameter to getIsAuthorizedUser when requesting a super-user protected path with a param`() {
+        // Given
+        val oidcProperties = OIDCProperties(
+            enabled = true,
+            userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user",
+        )
+        val superUserAPIProperties = SuperUserAPIProperties(paths = listOf("/bff/v1/vessels/risk_factors"))
+        val mockApi = getMockApiClient()
+        val response = MockHttpServletResponse()
+        val chain = MockFilterChain()
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(false)
+
+        // When
+        val request = MockHttpServletRequest()
+        request.requestURI = "/bff/v1/vessels/risk_factors?param=true"
+        request.addHeader(Authorization, "Bearer $VALID_JWT")
+        UserAuthorizationCheckFilter(oidcProperties, superUserAPIProperties, mockApi, getIsAuthorizedUser).doFilter(
+            request,
+            response,
+            chain,
+        )
+
+        // Then
+        verify(getIsAuthorizedUser).execute(any(), eq(true))
     }
 }

@@ -11,13 +11,22 @@ class GetIsAuthorizedUser(
 ) {
     private val logger = LoggerFactory.getLogger(GetIsAuthorizedUser::class.java)
 
-    fun execute(email: String): Boolean {
-        return try {
-            val hashedEmail = hash(email)
+    fun execute(email: String, isContainingSuperUserPath: Boolean): Boolean {
+        val hashedEmail = hash(email)
 
-            return userAuthorizationRepository.findByHashedEmail(hashedEmail).isSuperUser
+        val userAuthorization = try {
+            userAuthorizationRepository.findByHashedEmail(hashedEmail)
         } catch (e: Throwable) {
-            false
+            return false
+        }
+
+        return when (isContainingSuperUserPath) {
+            true -> userAuthorization.isSuperUser
+            /**
+             * For not super-user paths, if the user is not found the method `findByHashedEmail`
+             * should already have thrown an exception.
+             */
+            false -> return true
         }
     }
 }

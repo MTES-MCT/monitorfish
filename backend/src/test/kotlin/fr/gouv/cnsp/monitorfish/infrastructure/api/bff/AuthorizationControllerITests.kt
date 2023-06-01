@@ -52,7 +52,7 @@ class AuthorizationControllerITests {
     @Test
     fun `Should return 200 if the user is a super user`() {
         // Given
-        given(getIsAuthorizedUser.execute(any())).willReturn(true)
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
 
         // When
         api.perform(
@@ -66,7 +66,7 @@ class AuthorizationControllerITests {
     @Test
     fun `Should return 401 if the user is not a super user`() {
         // Given
-        given(getIsAuthorizedUser.execute(any())).willReturn(false)
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(false)
 
         // When
         api.perform(

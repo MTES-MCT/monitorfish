@@ -10,7 +10,8 @@ WITH controls_natinfs_codes AS (
     FROM mission_actions
     WHERE
         action_datetime_utc > CURRENT_TIMESTAMP - INTERVAL ':years years' AND
-        action_type IN ('SEA_CONTROL', 'LAND_CONTROL', 'AIR_CONTROL')
+        action_type IN ('SEA_CONTROL', 'LAND_CONTROL', 'AIR_CONTROL') AND
+        NOT is_deleted
 ),
 
 controls_natinf_codes_list AS (
@@ -29,7 +30,9 @@ controls_species_seized AS (
     WHERE
         action_datetime_utc > CURRENT_TIMESTAMP - INTERVAL ':years years' AND
         action_type IN ('SEA_CONTROL', 'LAND_CONTROL', 'AIR_CONTROL') AND
-        species_infractions IS NOT NULL AND species_infractions != '[]'
+        species_infractions IS NOT NULL AND
+        species_infractions != '[]' AND
+        NOT is_deleted
 ),
 
 controls_species_seized_count AS (
@@ -49,7 +52,9 @@ controls_gear_seized AS (
     WHERE
         action_datetime_utc > CURRENT_TIMESTAMP - INTERVAL ':years years' AND
         action_type IN ('SEA_CONTROL', 'LAND_CONTROL', 'AIR_CONTROL') AND
-        gear_infractions IS NOT NULL AND gear_infractions != '[]'
+        gear_infractions IS NOT NULL AND
+        gear_infractions != '[]' AND
+        NOT is_deleted
 ),
 
 controls_gear_seized_count AS (
@@ -78,4 +83,5 @@ LEFT JOIN controls_gear_seized_count g_seiz
 ON a.id = g_seiz.id
 WHERE
     action_type IN ('SEA_CONTROL', 'LAND_CONTROL', 'AIR_CONTROL') AND
-    action_datetime_utc > CURRENT_TIMESTAMP - INTERVAL ':years years'
+    action_datetime_utc > CURRENT_TIMESTAMP - INTERVAL ':years years' AND
+    NOT is_deleted

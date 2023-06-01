@@ -63,13 +63,15 @@ def test_extract_known_malfunctions(reset_test_data):
 
     expected_malfunctions = pd.DataFrame(
         {
-            "id": [2, 3],
-            "beacon_number": ["A56CZ2", "BEA951357"],
+            "id": [2, 3, 4, 5],
+            "beacon_number": ["A56CZ2", "BEA951357", "BEACON_NOT_EMITTING", "987654"],
             "vessel_status": [
                 BeaconMalfunctionVesselStatus.NO_NEWS.value,
                 BeaconMalfunctionVesselStatus.NO_NEWS.value,
+                BeaconMalfunctionVesselStatus.NO_NEWS.value,
+                BeaconMalfunctionVesselStatus.NO_NEWS.value,
             ],
-            "satellite_operator_id": [2, 2],
+            "satellite_operator_id": [2, 2, 2, 1],
         }
     )
     pd.testing.assert_frame_equal(
@@ -574,7 +576,7 @@ def test_load_new_beacon_malfunctions(reset_test_data):
     pd.testing.assert_series_equal(
         loaded_beacon_malfunctions.external_reference_number,
         pd.Series(
-            ["RO237719", "SB125334", "ZZTOPACDC", "BB", "DD"],
+            ["RO237719", "SB125334", "ZZTOPACDC", "AB123456", "LLUK", "BB", "DD"],
             name="external_reference_number",
         ),
     )
@@ -724,9 +726,10 @@ def test_update_beacon_malfunctions_flow_doesnt_create_malfunctions_if_never_emi
         "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
     )
     flow.schedule = None
-    state = flow.run(
-        max_hours_without_emission_at_sea=6, max_hours_without_emission_at_port=24
-    )
+    with patch("src.pipeline.flows.update_beacon_malfunctions.requests"):
+        state = flow.run(
+            max_hours_without_emission_at_sea=6, max_hours_without_emission_at_port=24
+        )
 
     assert state.is_successful()
 
@@ -761,6 +764,11 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
         "SELECT id FROM beacon_malfunctions WHERE ircs = 'OLY7853'",
     ).iloc[0, 0]
 
+    beacon_malfunction_id_to_archive = read_query(
+        "monitorfish_remote",
+        "SELECT id FROM beacon_malfunctions WHERE ircs = 'RV348407'",
+    ).iloc[0, 0]
+
     flow.schedule = None
     with patch(
         "src.pipeline.flows.update_beacon_malfunctions.requests"
@@ -772,7 +780,7 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
 
     assert state.is_successful()
     assert (
-        len(state.result[flow.get_tasks("extract_known_malfunctions")[0]].result) == 2
+        len(state.result[flow.get_tasks("extract_known_malfunctions")[0]].result) == 4
     )
     assert len(state.result[flow.get_tasks("get_new_malfunctions")[0]].result) == 0
 
@@ -788,14 +796,32 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
         ids_at_port_restarted_emitting,
         ids_not_required_to_emit,
         ids_unsupervised_restarted_emitting,
-    ) == ([beacon_malfunction_id_to_move_to_end_of_malfunction], [], [], [])
+    ) == (
+        [beacon_malfunction_id_to_move_to_end_of_malfunction],
+        [],
+        [beacon_malfunction_id_to_archive],
+        [],
+    )
+    assert mock_requests.put.call_count == 2
 
-    mock_requests.put.assert_called_once_with(
+    mock_requests.put.assert_any_call(
         url=BEACON_MALFUNCTIONS_ENDPOINT
         + f"{beacon_malfunction_id_to_move_to_end_of_malfunction}",
         json={
             "stage": "END_OF_MALFUNCTION",
             "endOfBeaconMalfunctionReason": "RESUMED_TRANSMISSION",
+        },
+        headers={
+            "Accept": "application/json, text/plain",
+            "Content-Type": "application/json;charset=UTF-8",
+        },
+    )
+
+    mock_requests.put.assert_any_call(
+        url=BEACON_MALFUNCTIONS_ENDPOINT + f"{beacon_malfunction_id_to_archive}",
+        json={
+            "stage": "ARCHIVED",
+            "endOfBeaconMalfunctionReason": "BEACON_DEACTIVATED_OR_UNEQUIPPED",
         },
         headers={
             "Accept": "application/json, text/plain",
@@ -813,9 +839,11 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
         ),
     )
     flow.schedule = None
-    state = flow.run(
-        max_hours_without_emission_at_sea=6, max_hours_without_emission_at_port=1
-    )
+
+    with patch("src.pipeline.flows.update_beacon_malfunctions.requests"):
+        state = flow.run(
+            max_hours_without_emission_at_sea=6, max_hours_without_emission_at_port=1
+        )
     loaded_beacon_malfunctions = read_query(
         "monitorfish_remote",
         (
@@ -826,13 +854,13 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
 
     assert state.is_successful()
     assert (
-        len(state.result[flow.get_tasks("extract_known_malfunctions")[0]].result) == 2
+        len(state.result[flow.get_tasks("extract_known_malfunctions")[0]].result) == 4
     )
 
     new_malfunctions = state.result[flow.get_tasks("get_new_malfunctions")[0]].result
     assert len(new_malfunctions) == 1
-    assert len(initial_beacon_malfunctions) == 2
-    assert len(loaded_beacon_malfunctions) == 3
+    assert len(initial_beacon_malfunctions) == 4
+    assert len(loaded_beacon_malfunctions) == 5
     assert "FQ7058" not in initial_beacon_malfunctions.ircs.values
     assert "FQ7058" in loaded_beacon_malfunctions.ircs.values
 
@@ -888,9 +916,11 @@ def test_flow_does_not_create_malfunctions_for_operators_that_are_not_up(
         "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
     )
     flow.schedule = None
-    state = flow.run(
-        max_hours_without_emission_at_sea=6, max_hours_without_emission_at_port=24
-    )
+
+    with patch("src.pipeline.flows.update_beacon_malfunctions.requests"):
+        state = flow.run(
+            max_hours_without_emission_at_sea=6, max_hours_without_emission_at_port=24
+        )
 
     assert state.is_successful()
 

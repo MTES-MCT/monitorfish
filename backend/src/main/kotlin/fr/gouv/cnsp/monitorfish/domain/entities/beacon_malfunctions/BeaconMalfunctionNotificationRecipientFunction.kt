@@ -5,4 +5,5 @@ enum class BeaconMalfunctionNotificationRecipientFunction {
     VESSEL_OPERATOR,
     SATELLITE_OPERATOR,
     FMC,
+    FOREIGN_FMC,
 }

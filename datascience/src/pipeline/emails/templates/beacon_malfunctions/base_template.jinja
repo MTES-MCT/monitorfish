@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html {% block language %}lang="fr"{% endblock %}>
     <head>
         <title>{{ object }}</title>
         <meta charset="UTF-8">
@@ -25,33 +25,33 @@
         </header>
         <main>
             <section class="no-vertical-margin">
-                <h3>Expéditeur</h3>
+                <h3>{% block sender %}Expéditeur{% endblock %}</h3>
                 <p>CNSP / Service Système d’information Pêche (SIP)
                 <p>40, avenue Louis Bougo BP 48, 56410 Étel</p>
                 <p>cnsp-vms-ers@developpement-durable.gouv.fr</p>
                 <p>Tél : +33 2 97 29 34 27 / Fax : +33 2 97 55 23 75</p>
             </section>
             <section class="no-vertical-margin right-align">
-                <h3>Destinataires</h3>
+                {% block addressees %}<h3>Destinataires</h3>
                 <p>Capitaine et armateur du navire</p>
                 {% if vessel_name %}<p>{{ vessel_name }}</p>{% endif %}
                 {% if cfr %}<p>{{ cfr }}</p>{% endif %}
                 {% if beacon_number %}<p>Balise n°{{ beacon_number }}</p>{% endif %}
                 <p>Copies à l’opérateur satellitaire {{ beacon_operator if beacon_operator }}</p>
-                <p>et au service SIP du CNSP.</p>
+                <p>et au service SIP du CNSP.</p>{% endblock %}
             </section>
             <section class="no-vertical-margin">
-                <h3>Objet</h3>
+                <h3>{% block subject %}Objet{% endblock %}</h3>
                 <p>{{ object }}</p>
             </section>
             <section id="date" class="right-align">
-                <p>Étel, le {{ notification_date }}</p>
+                <p>Étel, {% block le %}le {% endblock %}{{ notification_date }}</p>
             </section>
             <section id="message">
-                <p>Bonjour,</p>
+                <p>{% block bonjour %}Bonjour,{% endblock %}</p>
                 {% block message %}{% endblock %}
-                <p>Salutations,</p>
-                <p class="right-align">Le service SIP du CNSP (FMC français)</p>
+                {% block salutations %}<p>Salutations,</p>
+                <p class="right-align">Le service SIP du CNSP (FMC français)</p>{% endblock %}
             </section>
         </main>
         {% block footer %}

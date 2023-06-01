@@ -6,7 +6,23 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionsRepository
 
 @UseCase
 class RequestNotification(private val beaconMalfunctionsRepository: BeaconMalfunctionsRepository) {
-    fun execute(id: Int, notificationRequested: BeaconMalfunctionNotificationType) {
-        beaconMalfunctionsRepository.requestNotification(id, notificationRequested)
+    fun execute(
+        id: Int,
+        notificationRequested: BeaconMalfunctionNotificationType,
+        requestedNotificationForeignFmcCode: String? = null,
+    ) {
+        when (notificationRequested) {
+            BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC -> {
+                requireNotNull(requestedNotificationForeignFmcCode) {
+                    "requestedNotificationForeignFmcCode cannot be null when requesting a notification to a foreign FMC"
+                }
+                beaconMalfunctionsRepository.requestNotification(
+                    id,
+                    notificationRequested,
+                    requestedNotificationForeignFmcCode,
+                )
+            }
+            else -> beaconMalfunctionsRepository.requestNotification(id, notificationRequested)
+        }
     }
 }

@@ -56,8 +56,18 @@ interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntit
 
     @Modifying(clearAutomatically = true)
     @Query(
-        value = "UPDATE beacon_malfunctions SET notification_requested = CAST(:notificationType AS beacon_malfunction_notification_type) WHERE id = :beaconMalfunctionId",
+        value = """
+            UPDATE beacon_malfunctions
+            SET
+                notification_requested = CAST(:notificationType AS beacon_malfunction_notification_type),
+                requested_notification_foreign_fmc_code = :requestedNotificationForeignFmcCode
+            WHERE id = :beaconMalfunctionId
+        """,
         nativeQuery = true,
     )
-    fun updateRequestNotification(beaconMalfunctionId: Int, notificationType: String)
+    fun updateRequestNotification(
+        beaconMalfunctionId: Int,
+        notificationType: String,
+        requestedNotificationForeignFmcCode: String?,
+    )
 }

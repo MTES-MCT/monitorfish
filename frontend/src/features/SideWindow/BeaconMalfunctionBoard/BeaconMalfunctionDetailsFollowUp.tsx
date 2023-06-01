@@ -205,7 +205,7 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
           )
         })}
       </CommentsAndActions>
-      {!smallSize ? (
+      {!smallSize && (
         <AddCommentRow style={addCommentRow}>
           <AddComment
             ref={textareaRef}
@@ -232,7 +232,7 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
             </SubmitComment>
           </SubmitCommentRow>
         </AddCommentRow>
-      ) : null}
+      )}
     </Body>
   )
 }

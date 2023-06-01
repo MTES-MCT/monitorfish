@@ -64,6 +64,7 @@ class BeaconMalfunctionNotificationType(Enum):
     )
     MALFUNCTION_AT_PORT_REMINDER = "MALFUNCTION_AT_PORT_REMINDER"
     END_OF_MALFUNCTION = "END_OF_MALFUNCTION"
+    MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC = "MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC"
 
     def to_notification_subject_template(self):
         type_subject_mapping = {
@@ -72,6 +73,7 @@ class BeaconMalfunctionNotificationType(Enum):
             "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION": "{vessel_name} ({immat}) : interruption à quai des émissions VMS",
             "MALFUNCTION_AT_PORT_REMINDER": "{vessel_name} ({immat}) : RAPPEL : interruption à quai des émissions VMS",
             "END_OF_MALFUNCTION": "{vessel_name} ({immat}) : reprise des émissions VMS",
+            "MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC": "Interruption of VMS transmissions from fishing vessel {vessel_name} ({immat})",
         }
         return type_subject_mapping[self.name]
 
@@ -81,6 +83,7 @@ class BeaconMalfunctionNotificationRecipientFunction(Enum):
     VESSEL_OPERATOR = "VESSEL_OPERATOR"
     SATELLITE_OPERATOR = "SATELLITE_OPERATOR"
     FMC = "FMC"
+    FOREIGN_FMC = "FOREIGN_FMC"
 
 
 class CommunicationMeans(Enum):
@@ -115,6 +118,8 @@ class BeaconMalfunctionToNotify:
     operator_fax: str
     satellite_operator: str
     satellite_operator_emails: List[str]
+    foreign_fmc_name: str
+    foreign_fmc_emails: List[str]
     previous_notification_datetime_utc: datetime
     test_mode: bool
 
@@ -208,10 +213,15 @@ class BeaconMalfunctionToNotify:
                 self.satellite_operator_emails if self.satellite_operator_emails else []
             )
             operator_emails = [self.operator_email] if self.operator_email else []
+            foreign_fmcs_emails = (
+                self.foreign_fmc_emails if self.foreign_fmc_emails else []
+            )
 
             vessel_addressees = [
                 BeaconMalfunctionNotificationAddressee(
-                    function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
+                    function=(
+                        BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN
+                    ),
                     name=None,
                     address_or_number=vessel_email,
                 )
@@ -220,7 +230,9 @@ class BeaconMalfunctionToNotify:
 
             satellite_operator_addressees = [
                 BeaconMalfunctionNotificationAddressee(
-                    function=BeaconMalfunctionNotificationRecipientFunction.SATELLITE_OPERATOR,
+                    function=(
+                        BeaconMalfunctionNotificationRecipientFunction.SATELLITE_OPERATOR
+                    ),
                     name=self.satellite_operator,
                     address_or_number=satellite_operator_email,
                 )
@@ -229,16 +241,34 @@ class BeaconMalfunctionToNotify:
 
             operator_addressees = [
                 BeaconMalfunctionNotificationAddressee(
-                    function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
+                    function=(
+                        BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR
+                    ),
                     name=self.operator_name,
                     address_or_number=operator_email,
                 )
                 for operator_email in operator_emails
             ]
 
-            addressees = (
-                vessel_addressees + operator_addressees + satellite_operator_addressees
-            )
+            foreign_fmc_addressees = [
+                BeaconMalfunctionNotificationAddressee(
+                    function=BeaconMalfunctionNotificationRecipientFunction.FOREIGN_FMC,
+                    name=self.foreign_fmc_name,
+                    address_or_number=foreign_fmcs_email,
+                )
+                for foreign_fmcs_email in foreign_fmcs_emails
+            ]
+
+            if self.notification_type is (
+                BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC
+            ):
+                addressees = foreign_fmc_addressees
+            else:
+                addressees = (
+                    vessel_addressees
+                    + operator_addressees
+                    + satellite_operator_addressees
+                )
 
         else:
             addressees = (
@@ -259,6 +289,15 @@ class BeaconMalfunctionToNotify:
         return template.format(
             vessel_name=self.vessel_name, immat=self.vessel_cfr_or_immat_or_ircs
         )
+
+    def get_formatted_malfunction_start_datetime_utc(self):
+        if self.notification_type is (
+            BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC
+        ):
+            date_format = "%d/%m/%Y at %H:%M UTC"
+        else:
+            date_format = "%d/%m/%Y à %Hh%M UTC"
+        return self.malfunction_start_date_utc.strftime(date_format)
 
 
 @dataclass

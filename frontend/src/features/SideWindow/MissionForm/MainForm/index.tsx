@@ -82,7 +82,7 @@ function UnmemoizedMainForm({ initialValues, onChange }: MainFormProps) {
  * when to re-create this component using a `key` prop,
  * which should only happens when the edited mission `id` changes.
  */
-export const MainForm = memo(UnmemoizedMainForm)
+export const MainForm = memo(UnmemoizedMainForm, () => true)
 
 const IsUnderJdpFormikCheckbox = styled(FormikCheckbox)`
   margin-left: 48px;

@@ -122,6 +122,7 @@ export function SendNotification({ beaconMalfunction }) {
           onChange={foreignFmcCode => onSelectForeignFmc(foreignFmcCode as string | undefined)}
           options={foreignFmcsAsOptions}
           searchable
+          style={{ marginLeft: 0 }}
           value={undefined}
         />
       )}

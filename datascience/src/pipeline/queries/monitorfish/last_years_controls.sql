@@ -6,7 +6,7 @@ WITH controls_natinfs_codes AS (
             CASE WHEN jsonb_typeof(gear_infractions) = 'array' THEN gear_infractions ELSE '[]' END ||
             CASE WHEN jsonb_typeof(species_infractions) = 'array' THEN species_infractions ELSE '[]' END ||
             CASE WHEN jsonb_typeof(other_infractions) = 'array' THEN other_infractions ELSE '[]' END
-        )->'natinf')::INTEGER AS infraction_natinf_code
+        )->>'natinf')::INTEGER AS infraction_natinf_code
     FROM mission_actions
     WHERE
         action_datetime_utc > CURRENT_TIMESTAMP - INTERVAL ':years years' AND
@@ -19,6 +19,7 @@ controls_natinf_codes_list AS (
         id,
         ARRAY_AGG(infraction_natinf_code) AS infractions_natinf_codes
     FROM controls_natinfs_codes
+    WHERE infraction_natinf_code IS NOT NULL
     GROUP BY id
 ),
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Table } from 'rsuite'
 import styled from 'styled-components'
 
@@ -13,9 +13,9 @@ import {
 } from './tableCells'
 import { sortVesselsByProperty } from './tableSort'
 import { COLORS } from '../../constants/constants'
-import { AuthorizationContext } from '../../context/AuthorizationContext'
 import { getCoordinates } from '../../coordinates'
 import { OPENLAYERS_PROJECTION } from '../../domain/entities/map/constants'
+import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { ReactComponent as FlagSVG } from '../icons/flag.svg'
 
@@ -33,7 +33,7 @@ function UnmemoizedVesselListTable({
   vesselsCountShowed,
   vesselsCountTotal
 }) {
-  const isSuperUser = useContext(AuthorizationContext)
+  const isSuperUser = useIsSuperUser()
   const { coordinatesFormat } = useMainAppSelector(state => state.map)
   const [sortColumn, setSortColumn] = React.useState<string | undefined>(undefined)
   const [sortType, setSortType] = React.useState<SortType | undefined>(undefined)

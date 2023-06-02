@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.infrastructure.api
+package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
 import org.springframework.boot.info.BuildProperties
 import org.springframework.web.bind.annotation.GetMapping

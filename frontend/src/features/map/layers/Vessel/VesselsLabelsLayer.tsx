@@ -2,9 +2,8 @@ import { usePrevious } from '@mtes-mct/monitor-ui'
 import LineString from 'ol/geom/LineString'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { AuthorizationContext } from '../../../../context/AuthorizationContext'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { drawMovedLabelLineIfFoundAndReturnOffset } from '../../../../domain/entities/vessel/label'
 import {
@@ -13,6 +12,7 @@ import {
   Vessel
 } from '../../../../domain/entities/vessel/vessel'
 import { VesselLabelLine } from '../../../../domain/entities/vesselLabelLine'
+import { useIsSuperUser } from '../../../../hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { VesselLabelOverlay } from '../../overlays/VesselLabelOverlay'
 import { getLabelLineStyle } from '../styles/vesselLabelLine.style'
@@ -28,7 +28,7 @@ const NOT_FOUND = -1
 export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
   const throttleDuration = 250 // ms
 
-  const isSuperUser = useContext(AuthorizationContext)
+  const isSuperUser = useIsSuperUser()
 
   const { hideNonSelectedVessels, selectedVessel, vessels, vesselsTracksShowed } = useMainAppSelector(
     state => state.vessel

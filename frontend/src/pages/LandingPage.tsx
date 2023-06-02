@@ -9,7 +9,15 @@ export type LandingPageProps = {
 export function LandingPage({ hasInsufficientRights }: LandingPageProps) {
   return (
     <Wrapper>
-      {hasInsufficientRights ? <>Merci de vous connecter avec Cerbère.</> : <LoadingSpinnerWall isVesselShowed />}
+      {hasInsufficientRights ? (
+        <>
+          Merci de contacter{' '}
+          <a href="mailto:monitor@beta.gouv.fr?subject=Création de compte MonitorFish">monitor@beta.gouv.fr</a> pour
+          accéder à MonitorFish avec Cerbère.
+        </>
+      ) : (
+        <LoadingSpinnerWall isVesselShowed />
+      )}
       <ToastContainer />
     </Wrapper>
   )

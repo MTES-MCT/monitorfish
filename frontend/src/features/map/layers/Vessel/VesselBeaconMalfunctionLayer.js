@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
@@ -8,10 +8,10 @@ import { LayerProperties } from '../../../../domain/entities/layers/constants'
 
 import { getVesselBeaconMalfunctionStyle } from './style'
 import { getVesselCompositeIdentifier, vesselIsShowed } from '../../../../domain/entities/vessel/vessel'
-import { AuthorizationContext } from '../../../../context/AuthorizationContext'
+import { useIsSuperUser } from '../../../../hooks/authorization/useIsSuperUser'
 
 const VesselBeaconMalfunctionLayer = ({ map }) => {
-  const isSuperUser = useContext(AuthorizationContext)
+  const isSuperUser = useIsSuperUser()
 
   const {
     vessels,

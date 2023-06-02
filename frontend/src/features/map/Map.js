@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 
 import { BaseMap } from './BaseMap'
 import { LayerDetailsBox } from './controls/LayerDetailsBox'
@@ -37,10 +37,10 @@ import { SelectedMissionActionsLayer } from './layers/Mission/SelectedMissionAct
 import { ControlOverlay } from './overlays/ControlOverlay'
 import { SelectedControlOverlay } from './overlays/SelectedControlOverlay'
 import { useSelector } from 'react-redux'
-import { AuthorizationContext } from '../../context/AuthorizationContext'
+import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 
 const Map = () => {
-  const isSuperUser = useContext(AuthorizationContext)
+  const isSuperUser = useIsSuperUser()
   const { areVesselsDisplayed, isMissionsLayerDisplayed } = useSelector(state => state.displayedComponent)
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})

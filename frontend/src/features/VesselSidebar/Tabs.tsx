@@ -1,11 +1,11 @@
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
-import { AuthorizationContext } from '../../context/AuthorizationContext'
 import { forbiddenVesselSidebarPaths } from '../../domain/entities/authorization/constants'
 import { VesselSidebarTab } from '../../domain/entities/vessel/vessel'
 import { showVesselSidebarTab } from '../../domain/shared_slices/Vessel'
+import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { ReactComponent as ReportingSVG } from '../icons/Icone_onglet_signalement.svg'
@@ -18,7 +18,7 @@ import { ReactComponent as SummarySVG } from '../icons/Picto_resume.svg'
 // TODO Move the icons in Monitor UI : https://github.com/MTES-MCT/monitorfish/issues/1736
 export function Tabs() {
   const dispatch = useMainAppDispatch()
-  const isSuperUser = useContext(AuthorizationContext)
+  const isSuperUser = useIsSuperUser()
   const { selectedVessel, vesselSidebarTab } = useMainAppSelector(state => state.vessel)
 
   useEffect(() => {

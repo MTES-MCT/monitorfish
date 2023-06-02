@@ -1,12 +1,12 @@
 import { usePrevious } from '@mtes-mct/monitor-ui'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { clearPreviousLineFeatures, getLabelsOfFeaturesInExtent } from './utils'
-import { AuthorizationContext } from '../../../../../context/AuthorizationContext'
 import { LayerProperties } from '../../../../../domain/entities/layers/constants'
+import { useIsSuperUser } from '../../../../../hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { MissionLabelOverlay } from '../../../overlays/MissionUnitLabelOverlay'
 import { useGetLineFeatureIdToCoordinates } from '../../hooks/useGetLineFeatureIdToCoordinates'
@@ -16,7 +16,7 @@ import { getLabelLineStyle } from '../../styles/vesselLabelLine.style'
 import type { VectorLayerWithName } from '../../../../../domain/types/layer'
 
 export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
-  const isSuperUser = useContext(AuthorizationContext)
+  const isSuperUser = useIsSuperUser()
   const { isMissionsLayerDisplayed } = useMainAppSelector(state => state.displayedComponent)
 
   const [featuresAndLabels, setFeaturesAndLabels] = useState<

@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
+import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.ForeignFMC
 import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.GetAllForeignFMCs
@@ -15,12 +16,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@Import(WebSecurityConfig::class)
+@Import(WebSecurityConfig::class, OIDCProperties::class)
 @WebMvcTest(value = [(ForeignFMCsController::class)])
 class ForeignFMCsControllerITests {
 
     @Autowired
-    private lateinit var mockMvc: MockMvc
+    private lateinit var api: MockMvc
 
     @MockBean
     private lateinit var getAllForeignFMCs: GetAllForeignFMCs
@@ -36,7 +37,7 @@ class ForeignFMCsControllerITests {
         )
 
         // When
-        mockMvc.perform(get("/bff/v1/foreign_fmcs"))
+        api.perform(get("/bff/v1/foreign_fmcs"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))

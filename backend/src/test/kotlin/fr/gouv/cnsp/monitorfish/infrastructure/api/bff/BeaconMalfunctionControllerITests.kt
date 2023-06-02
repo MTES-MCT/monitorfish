@@ -337,7 +337,7 @@ class BeaconMalfunctionControllerITests {
     @Test
     fun `Should request a notification to a foreign fmc`() {
         // When
-        mockMvc.perform(
+        api.perform(
             put(
                 "/bff/v1/beacon_malfunctions/123/MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC?requestedNotificationForeignFmcCode=ABC",
             ),

@@ -1,5 +1,3 @@
-import { useContext } from 'react'
-
 import { AlertsMapButton } from './AlertsMapButton'
 import { BeaconMalfunctionsMapButton } from './BeaconMalfunctionsMapButton'
 import { FavoriteVessels } from './FavoriteVessels'
@@ -9,11 +7,11 @@ import { MissionsMenu } from './Missions'
 import { VesselFiltersMapButton } from './VesselFilters'
 import { VesselLabelsMapButton } from './VesselLabels'
 import { VesselVisibilityMapButton } from './VesselVisibility'
-import { AuthorizationContext } from '../../context/AuthorizationContext'
+import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 export function MapButtons() {
-  const isSuperUser = useContext(AuthorizationContext)
+  const isSuperUser = useIsSuperUser()
   const {
     isAlertsMapButtonDisplayed,
     isBeaconMalfunctionsMapButtonDisplayed,

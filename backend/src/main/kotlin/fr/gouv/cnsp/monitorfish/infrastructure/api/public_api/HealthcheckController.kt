@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.infrastructure.api
+package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
 import fr.gouv.cnsp.monitorfish.domain.use_cases.healthcheck.GetHealthcheck
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.HealthDataOutput
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/bff/v1/healthcheck")
+@RequestMapping("/api/v1/healthcheck")
 @Tag(name = "API for Healthcheck")
 class HealthcheckController(
     private val getHealthcheck: GetHealthcheck,

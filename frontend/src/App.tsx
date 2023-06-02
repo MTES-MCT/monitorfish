@@ -10,7 +10,7 @@ import rsuiteFrFr from 'rsuite/locales/fr_FR'
 
 import { AuthorizationContext } from './context/AuthorizationContext'
 import { NamespaceContext } from './context/NamespaceContext'
-import { useIsSuperUser } from './hooks/useIsSuperUser'
+import { useGetUserAuthorization } from './hooks/authorization/useGetUserAuthorization'
 import { BackofficePage } from './pages/BackofficePage'
 import { HomePage } from './pages/HomePage'
 import { LandingPage } from './pages/LandingPage'
@@ -27,7 +27,7 @@ type AppProps = {
   auth?: AuthContextProps | undefined
 }
 export function App({ auth }: AppProps) {
-  const isSuperUser = useIsSuperUser()
+  const userAuthorization = useGetUserAuthorization()
 
   useEffect(() => {
     if (!auth) {
@@ -40,7 +40,7 @@ export function App({ auth }: AppProps) {
     }
   }, [auth, auth?.isAuthenticated, auth?.activeNavigator, auth?.isLoading, auth?.signinRedirect])
 
-  if (auth && !auth.isAuthenticated) {
+  if (auth && (!auth.isAuthenticated || !userAuthorization?.isLogged)) {
     return <LandingPage hasInsufficientRights />
   }
 
@@ -48,7 +48,7 @@ export function App({ auth }: AppProps) {
     return <UnsupportedBrowserPage />
   }
 
-  if (isSuperUser === undefined) {
+  if (userAuthorization === undefined) {
     return <LandingPage />
   }
 
@@ -57,13 +57,13 @@ export function App({ auth }: AppProps) {
       <OnlyFontGlobalStyle />
 
       <FrontendErrorBoundary>
-        <AuthorizationContext.Provider value={isSuperUser}>
+        <AuthorizationContext.Provider value={userAuthorization.isSuperUser}>
           <RsuiteCustomProvider locale={rsuiteFrFr}>
             <Router>
               <Switch>
                 <Route path="/backoffice">
-                  {!isSuperUser && <LandingPage />}
-                  {isSuperUser && (
+                  {!userAuthorization.isSuperUser && <LandingPage />}
+                  {userAuthorization.isSuperUser && (
                     <Provider store={backofficeStore}>
                       {/* eslint-disable-next-line no-null/no-null */}
                       <PersistGate loading={null} persistor={backofficeStorePersistor}>
@@ -77,9 +77,9 @@ export function App({ auth }: AppProps) {
                 <Route exact path="/ext">
                   {
                     /**
-                     * Redirect to /ext when the user is not logged as a super user
+                     * Redirect to / for backward compatibility
                      */
-                    !isSuperUser && <Redirect to="/" />
+                    <Redirect to="/" />
                   }
                 </Route>
                 <Route path="/">

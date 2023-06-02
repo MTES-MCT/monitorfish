@@ -12,7 +12,6 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUs
 import fr.gouv.cnsp.monitorfish.infrastructure.api.security.TestUtils.Companion.getMockApiClient
 import fr.gouv.cnsp.monitorfish.infrastructure.api.security.UserAuthorizationCheckFilter
 import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -27,7 +26,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@Import(WebSecurityConfig::class, OIDCProperties::class, SuperUserAPIProperties::class, UserAuthorizationCheckFilter::class)
+@Import(
+    WebSecurityConfig::class,
+    OIDCProperties::class,
+    SuperUserAPIProperties::class,
+    UserAuthorizationCheckFilter::class,
+)
 @WebMvcTest(
     value = [(AuthorizationController::class)],
     properties = [

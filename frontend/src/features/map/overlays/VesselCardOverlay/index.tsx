@@ -1,18 +1,18 @@
 import Overlay from 'ol/Overlay'
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { marginsWithOneWarning, marginsWithoutAlert, marginsWithTwoWarning } from './constants'
 import { VesselCard } from './VesselCard'
 import { COLORS } from '../../../../constants/constants'
-import { AuthorizationContext } from '../../../../context/AuthorizationContext'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import { useIsSuperUser } from '../../../../hooks/authorization/useIsSuperUser'
 import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../Overlay'
 
 const overlayHeight = 260
 
 export function VesselCardOverlay({ feature, map }) {
-  const isSuperUser = useContext(AuthorizationContext)
+  const isSuperUser = useIsSuperUser()
   const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
   const overlayRef = useRef<HTMLDivElement>()
   const overlayObjectRef = useRef<Overlay | undefined>()

@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/bff/v1/authorization")
 @Tag(name = "APIs for authorization")
-class AuthorizationController (
-    private val getAuthorizedUser: GetAuthorizedUser
+class AuthorizationController(
+    private val getAuthorizedUser: GetAuthorizedUser,
 ) {
 
     /**
@@ -29,7 +29,12 @@ class AuthorizationController (
     @GetMapping("current")
     @Operation(summary = "Get current logged user authorization")
     fun getCurrentUserAuthorization(request: HttpServletRequest, response: HttpServletResponse): UserAuthorizationDataOutput? {
-        val email = response.getHeader(UserAuthorizationCheckFilter.EMAIL_HEADER)
+        val email: String? = response.getHeader(UserAuthorizationCheckFilter.EMAIL_HEADER)
+        if (email == null) {
+            response.status = HttpServletResponse.SC_UNAUTHORIZED
+            return null
+        }
+
         val authorizedUser = getAuthorizedUser.execute(email)
 
         // The email is hashed as we don't want to have a clear email in the header

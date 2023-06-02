@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.health.Health
 import fr.gouv.cnsp.monitorfish.domain.use_cases.healthcheck.GetHealthcheck
+import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.HealthcheckController
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -39,7 +40,7 @@ class HealthcheckControllerITests {
         )
 
         // When
-        api.perform(get("/bff/v1/healthcheck"))
+        api.perform(get("/api/v1/healthcheck"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.dateLastPositionUpdatedByPrefect", equalTo("2020-12-21T15:01:00Z")))

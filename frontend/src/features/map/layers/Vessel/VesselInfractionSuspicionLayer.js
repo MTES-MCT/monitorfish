@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
@@ -7,11 +7,16 @@ import { Vector } from 'ol/layer'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 
 import { getVesselInfractionSuspicionStyle } from './style'
-import { getVesselCompositeIdentifier, getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../../../../domain/entities/vessel/vessel'
-import { AuthorizationContext } from '../../../../context/AuthorizationContext'
+import {
+  getVesselCompositeIdentifier,
+  getVesselLastPositionVisibilityDates,
+  Vessel,
+  vesselIsShowed
+} from '../../../../domain/entities/vessel/vessel'
+import { useIsSuperUser } from '../../../../hooks/authorization/useIsSuperUser'
 
 const VesselInfractionSuspicionLayer = ({ map }) => {
-  const isSuperUser = useContext(AuthorizationContext)
+  const isSuperUser = useIsSuperUser()
 
   const {
     vessels,

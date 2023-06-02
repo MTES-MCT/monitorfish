@@ -1,14 +1,13 @@
 /* eslint-disable no-nested-ternary */
 
-import { useContext } from 'react'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
 import { marginsWithOneWarning, marginsWithoutAlert, marginsWithTwoWarning } from './constants'
 import { COLORS } from '../../../../constants/constants'
-import { AuthorizationContext } from '../../../../context/AuthorizationContext'
 import { getCoordinates } from '../../../../coordinates'
 import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
+import { useIsSuperUser } from '../../../../hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { timeagoFrenchLocale } from '../../../../utils'
 import { ReactComponent as AlertSVG } from '../../../icons/Icone_alertes.svg'
@@ -20,7 +19,7 @@ import { OverlayPosition } from '../Overlay'
 timeago.register('fr', timeagoFrenchLocale)
 
 export function VesselCard({ feature, numberOfWarnings, overlayPosition }) {
-  const isSuperUser = useContext(AuthorizationContext)
+  const isSuperUser = useIsSuperUser()
   const { coordinatesFormat } = useMainAppSelector(state => state.map)
   const { vesselProperties } = feature
   const featureCoordinates = feature.getGeometry().getCoordinates()

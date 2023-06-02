@@ -1,7 +1,6 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { fleetSegmentApi } from './fleetSegment'
-import { AuthorizationContext } from '../context/AuthorizationContext'
 import { SideWindowStatus } from '../domain/entities/sideWindow/constants'
 import { VesselSidebarTab } from '../domain/entities/vessel/vessel'
 import { setIsUpdatingVessels } from '../domain/shared_slices/Global'
@@ -21,6 +20,7 @@ import getVesselReportings from '../domain/use_cases/vessel/getVesselReportings'
 import { getVesselVoyage } from '../domain/use_cases/vessel/getVesselVoyage'
 import { showVesselsLastPosition } from '../domain/use_cases/vessel/showVesselsLastPosition'
 import { updateVesselTracks } from '../domain/use_cases/vessel/updateVesselTracks'
+import { useIsSuperUser } from '../hooks/authorization/useIsSuperUser'
 import { useMainAppDispatch } from '../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../hooks/useMainAppSelector'
 
@@ -30,7 +30,7 @@ export const THIRTY_SECONDS = 30 * 1000
 // TODO Move these `useEffect`s to dispatchers, in order to remove logic from this component
 export function APIWorker() {
   const dispatch = useMainAppDispatch()
-  const isSuperUser = useContext(AuthorizationContext)
+  const isSuperUser = useIsSuperUser()
   const { selectedVesselIdentity, vesselSidebarTab } = useMainAppSelector(state => state.vessel)
   const { sideWindow } = useMainAppSelector(state => state)
   const { openedBeaconMalfunctionInKanban, vesselBeaconMalfunctionsResumeAndHistory } = useMainAppSelector(

@@ -1,4 +1,3 @@
-import { useContext } from 'react'
 import styled from 'styled-components'
 
 import { VesselBeaconMalfunctions } from './beacon_malfunctions/VesselBeaconMalfunctions'
@@ -10,12 +9,12 @@ import { VesselSummary } from './Summary'
 import { AlertWarning } from './warnings/AlertWarning'
 import { BeaconMalfunctionWarning } from './warnings/BeaconMalfunctionWarning'
 import { COLORS } from '../../constants/constants'
-import { AuthorizationContext } from '../../context/AuthorizationContext'
 import { VesselSidebarTab } from '../../domain/entities/vessel/vessel'
+import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 export function Body() {
-  const isSuperUser = useContext(AuthorizationContext)
+  const isSuperUser = useIsSuperUser()
   const { healthcheckTextWarning } = useMainAppSelector(state => state.global)
   const { selectedVessel, vesselSidebarTab } = useMainAppSelector(state => state.vessel)
 

@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 
 import fr.gouv.cnsp.monitorfish.config.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
-import fr.gouv.cnsp.monitorfish.infrastructure.api.VersionController
+import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.VersionController
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.info.BuildProperties

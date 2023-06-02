@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -10,11 +10,11 @@ import { VesselLabelSelection } from './VesselLabelSelection'
 import { MapPropertyTrigger } from '../../commonComponents/MapPropertyTrigger'
 import { MapToolType } from '../../../domain/entities/map/constants'
 import { MapToolBox } from '../shared/MapToolBox'
-import { AuthorizationContext } from '../../../context/AuthorizationContext'
+import { useIsSuperUser } from '../../../hooks/authorization/useIsSuperUser'
 
 const EditVesselLabels = () => {
   const dispatch = useDispatch()
-  const isSuperUser = useContext(AuthorizationContext)
+  const isSuperUser = useIsSuperUser()
   const vesselLabel = useSelector(state => state.map.vesselLabel)
   const {
     vesselLabelsShowedOnMap,

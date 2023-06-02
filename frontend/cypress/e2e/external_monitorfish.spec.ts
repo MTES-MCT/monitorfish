@@ -2,7 +2,7 @@ context('External MonitorFish', () => {
   it('Should redirect to /', () => {
     // Given
     cy.intercept('/env.js', { fixture: 'env' })
-    cy.intercept('/bff/v1/authorization/is_super_user', { statusCode: 401 }).as('getIsSuperUser')
+    cy.intercept('/bff/v1/authorization/current', { statusCode: 401 }).as('getIsSuperUser')
     cy.visit('/ext#@-824534.42,6082993.21,8.70')
     cy.wait('@getIsSuperUser')
 
@@ -12,7 +12,7 @@ context('External MonitorFish', () => {
   it('Should have some features removed When not logged as super user', () => {
     // Given
     cy.intercept('/env.js', { fixture: 'env' })
-    cy.intercept('/bff/v1/authorization/is_super_user', { statusCode: 401 }).as('getIsSuperUser')
+    cy.intercept('/bff/v1/authorization/current', { statusCode: 401 }).as('getIsSuperUser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
     cy.wait('@getIsSuperUser')
 

@@ -8,6 +8,7 @@ import { Infraction } from './Infraction'
 import { InfractionForm } from './InfractionForm'
 import { useGetInfractionsQuery } from '../../../../../../api/infraction'
 import { FrontendError } from '../../../../../../libs/FrontendError'
+import { FrontendErrorBoundary } from '../../../../../../ui/FrontendErrorBoundary'
 import { FieldsetGroup, FieldsetGroupSpinner } from '../../../shared/FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../../shared/FieldsetGroupSeparator'
 
@@ -56,13 +57,23 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
     }))
   }, [getInfractionsApiQuery.data])
 
-  const closeForm = useCallback(() => {
+  const closeInfractionForm = useCallback(() => {
     setEditedIndex(undefined)
+  }, [])
+
+  const closeNewInfractionForm = useCallback(() => {
+    setIsNewInfractionFormOpen(false)
   }, [])
 
   const create = useCallback(
     (newInfractionFormValues: AnyInfraction) => {
-      const nextInfractions = [...(input.value || []), newInfractionFormValues]
+      // TODO For some unknown reason, `Yup.string().default('')` doesn't fill `comments`.
+      const newInfractionWithComments: AnyInfraction = {
+        ...newInfractionFormValues,
+        comments: newInfractionFormValues.comments || ''
+      }
+
+      const nextInfractions = [...(input.value || []), newInfractionWithComments]
 
       helper.setValue(nextInfractions)
 
@@ -89,14 +100,6 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
     [input.value]
   )
 
-  const cancelCreation = useCallback(() => {
-    setIsNewInfractionFormOpen(false)
-  }, [])
-
-  const cancelEdition = useCallback(() => {
-    setEditedIndex(undefined)
-  }, [])
-
   const openNewInfractionForm = useCallback(() => {
     setIsNewInfractionFormOpen(true)
   }, [])
@@ -117,11 +120,11 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
 
       helper.setValue(nextInfractions)
 
-      closeForm()
+      closeInfractionForm()
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [closeForm, editedIndex, input.value]
+    [closeInfractionForm, editedIndex, input.value]
   )
 
   if (!natinfsAsOptions.length) {
@@ -130,70 +133,72 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
 
   return (
     <Wrapper isLight legend={label}>
-      {children}
+      <FrontendErrorBoundary>
+        {children}
 
-      <Button
-        accent={Accent.SECONDARY}
-        disabled={isNewInfractionFormOpen}
-        Icon={Icon.Plus}
-        isFullWidth
-        onClick={openNewInfractionForm}
-      >
-        {addButtonLabel}
-      </Button>
+        <Button
+          accent={Accent.SECONDARY}
+          disabled={isNewInfractionFormOpen}
+          Icon={Icon.Plus}
+          isFullWidth
+          onClick={openNewInfractionForm}
+        >
+          {addButtonLabel}
+        </Button>
 
-      {input.value && input.value.length > 0 && (
-        <Row>
-          {input.value.map((infraction, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <Fragment key={`${name}-infraction-${index}`}>
-              <FieldsetGroupSeparator />
+        {input.value && input.value.length > 0 && (
+          <Row>
+            {input.value.map((infraction, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <Fragment key={`${name}-infraction-${index}`}>
+                <FieldsetGroupSeparator />
 
-              {index !== editedIndex && (
-                <Infraction
-                  data={infraction}
-                  index={index}
-                  onDelete={remove}
-                  onEdit={setEditedIndex}
-                  seizurePropName={seizurePropName}
-                  seizureTagLabel={seizureTagLabel}
-                />
-              )}
+                {index !== editedIndex && (
+                  <Infraction
+                    data={infraction}
+                    index={index}
+                    onDelete={remove}
+                    onEdit={setEditedIndex}
+                    seizurePropName={seizurePropName}
+                    seizureTagLabel={seizureTagLabel}
+                  />
+                )}
 
-              {index === editedIndex && (
-                <InfractionForm
-                  infractionCheckboxProps={infractionCheckboxProps}
-                  initialValues={infraction}
-                  natinfsAsOptions={natinfsAsOptions}
-                  onCancel={cancelEdition}
-                  onSubmit={update}
-                />
-              )}
-            </Fragment>
-          ))}
-        </Row>
-      )}
+                {index === editedIndex && (
+                  <InfractionForm
+                    infractionCheckboxProps={infractionCheckboxProps}
+                    initialValues={infraction}
+                    natinfsAsOptions={natinfsAsOptions}
+                    onCancel={closeInfractionForm}
+                    onSubmit={update}
+                  />
+                )}
+              </Fragment>
+            ))}
+          </Row>
+        )}
 
-      {isNewInfractionFormOpen && (
-        <Row>
-          <InfractionForm
-            infractionCheckboxProps={infractionCheckboxProps}
-            initialValues={{} as AnyInfraction}
-            natinfsAsOptions={natinfsAsOptions}
-            onCancel={cancelCreation}
-            onSubmit={create}
-          />
-        </Row>
-      )}
+        {isNewInfractionFormOpen && (
+          <Row>
+            <InfractionForm
+              infractionCheckboxProps={infractionCheckboxProps}
+              initialValues={{} as AnyInfraction}
+              natinfsAsOptions={natinfsAsOptions}
+              onCancel={closeNewInfractionForm}
+              onSubmit={create}
+            />
+          </Row>
+        )}
 
-      {generalObservationTextareaProps && (
-        <>
-          <FieldsetGroupSeparator />
+        {generalObservationTextareaProps && (
+          <>
+            <FieldsetGroupSeparator />
 
-          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-          <FormikTextarea {...generalObservationTextareaProps} />
-        </>
-      )}
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <FormikTextarea {...generalObservationTextareaProps} />
+          </>
+        )}
+      </FrontendErrorBoundary>
     </Wrapper>
   )
 }

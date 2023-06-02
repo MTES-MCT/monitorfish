@@ -53,16 +53,19 @@ export function MissionForm() {
   const headerDivRef = useRef<HTMLDivElement | null>(null)
   const originalMissionRef = useRef<MissionWithActions | undefined>(undefined)
 
-  const [actionFormKey, setActionFormKey] = useState(0)
   const [actionsFormValues, setActionsFormValues] = useState<MissionActionFormValues[]>([])
   const [editedActionIndex, setEditedActionIndex] = useState<number | undefined>(undefined)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [isDeletionConfirmationDialogOpen, setIsDeletionConfirmationDialogOpen] = useState(false)
-  const [mainFormKey, setMainFormKey] = useState(0)
   const [mainFormValues, setMainFormValues] = useState<MissionMainFormValues | undefined>(undefined)
   const [title, setTitle] = useState(getTitleFromMissionMainFormValues(undefined, undefined))
   const previousMissionId = usePrevious(sideWindow.selectedPath.id)
+
+  // We use these keys to fully control when to re-render `<MainForm />` & `<ActionForm />`
+  // since they are fully memoized in order to optimize their (heavy) re-rendering
+  const [actionFormKey, setActionFormKey] = useState(0)
+  const [mainFormKey, setMainFormKey] = useState(0)
 
   const dispatch = useMainAppDispatch()
   const [createMission] = useCreateMissionMutation()

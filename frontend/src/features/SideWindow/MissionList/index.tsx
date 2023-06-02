@@ -134,10 +134,10 @@ export function MissionList() {
                       <TableBodyCell $fixedWidth={80}>
                         <span>{augmentedMission.$labelled.missionSource}</span>
                       </TableBodyCell>
-                      <TableBodyCell $fixedWidth={400} title={augmentedMission.$labelled.controlUnits}>
+                      <TableBodyCell $fixedWidth={320} title={augmentedMission.$labelled.controlUnits}>
                         <span>{augmentedMission.$labelled.controlUnits}</span>
                       </TableBodyCell>
-                      <TableBodyCell $fixedWidth={360} title={augmentedMission.$labelled.inspectedVessels}>
+                      <TableBodyCell $fixedWidth={320} title={augmentedMission.$labelled.inspectedVessels}>
                         <span>{augmentedMission.$labelled.inspectedVessels}</span>
                       </TableBodyCell>
                       <TableBodyCell $fixedWidth={128}>

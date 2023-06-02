@@ -152,7 +152,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
               items.length > 0 ? <OptionValue>Administration ({items.length}) </OptionValue> : <></>
             }
             searchable
-            style={{ minWidth: 320 }}
+            style={{ minWidth: 280 }}
           />
           <FormikMultiSelect
             key={unitMultiSelectKey}
@@ -166,7 +166,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             placeholder="Unité"
             renderValue={(_, items) => (items.length > 0 ? <OptionValue>Unité ({items.length}) </OptionValue> : <></>)}
             searchable
-            style={{ minWidth: 320 }}
+            style={{ minWidth: 280 }}
           />
           <FormikMultiSelect
             baseContainer={newWindowContainerRef.current}

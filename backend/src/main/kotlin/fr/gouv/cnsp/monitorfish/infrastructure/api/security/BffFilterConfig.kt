@@ -1,9 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 
-import fr.gouv.cnsp.monitorfish.config.ApiClient
-import fr.gouv.cnsp.monitorfish.config.OIDCProperties
-import fr.gouv.cnsp.monitorfish.config.ProtectedPathsAPIProperties
-import fr.gouv.cnsp.monitorfish.config.SuperUserAPIProperties
+import fr.gouv.cnsp.monitorfish.config.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -13,6 +10,7 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class BffFilterConfig(
+    private val userManagementProperties: UserManagementProperties,
     private val superUserAPIProperties: SuperUserAPIProperties,
     private val protectedPathsAPIProperties: ProtectedPathsAPIProperties,
     private val oidcProperties: OIDCProperties,
@@ -42,6 +40,18 @@ class BffFilterConfig(
 
         logger.info("Adding user authentication for paths: ${protectedPathsAPIProperties.paths}")
         logger.info("Super-user protected paths : ${superUserAPIProperties.paths}")
+
+        return registrationBean
+    }
+
+    @Bean(name = ["userManagementCheckFilter"])
+    fun userManagementCheckFilter(): FilterRegistrationBean<UserManagementCheckFilter> {
+        val registrationBean = FilterRegistrationBean<UserManagementCheckFilter>()
+
+        registrationBean.filter = UserManagementCheckFilter(
+            userManagementProperties,
+        )
+        registrationBean.urlPatterns = listOf("/api/v1/authorization/management")
 
         return registrationBean
     }

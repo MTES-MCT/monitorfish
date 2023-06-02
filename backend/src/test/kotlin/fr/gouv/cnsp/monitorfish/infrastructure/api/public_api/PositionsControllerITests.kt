@@ -1,10 +1,9 @@
-package fr.gouv.cnsp.monitorfish.infrastructure.api
+package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NAFMessageParsingException
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.ParseAndSavePosition
-import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.PositionsController
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.anyString

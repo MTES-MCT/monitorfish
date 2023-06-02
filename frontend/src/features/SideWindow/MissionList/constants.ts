@@ -72,7 +72,7 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
       labelTransform: mission => MISSION_SOURCE_LABEL[mission.missionSource]
     },
     {
-      fixedWidth: 400,
+      fixedWidth: 320,
       isSortable: true,
       key: 'controlUnits',
       label: 'Unité (Administration)',
@@ -80,7 +80,7 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
         mission.controlUnits.map(controlUnit => `${controlUnit.name} (${controlUnit.administration})`).join(', ')
     },
     {
-      fixedWidth: 360,
+      fixedWidth: 320,
       isSortable: false,
       key: 'inspectedVessels',
       label: 'Navires contrôlés',

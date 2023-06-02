@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
     WebSecurityConfig::class,
     OIDCProperties::class,
     SuperUserAPIProperties::class,
+    UserManagementProperties::class,
     ProtectedPathsAPIProperties::class,
     BffFilterConfig::class,
     ApiClient::class,
@@ -42,7 +43,7 @@ class BffFilterConfigITests {
     private lateinit var buildProperties: BuildProperties
 
     @Test
-    fun `Should return 401 for all protected paths`() {
+    fun `Should return 401 for all user authorization protected paths`() {
         // When
         /**
          * This test return a 401 http code as the issuer uri could not be fetched (404 not found because of the dummy url).
@@ -60,6 +61,20 @@ class BffFilterConfigITests {
             mockMvc.perform(
                 get(it)
                     .header("Authorization", "Bearer $VALID_JWT"),
+            )
+                // Then
+                .andExpect(status().isUnauthorized)
+        }
+    }
+
+    @Test
+    fun `Should return 401 for all user management protected paths`() {
+        // When
+        listOf(
+            "/api/v1/authorization/management",
+        ).forEach {
+            mockMvc.perform(
+                get(it),
             )
                 // Then
                 .andExpect(status().isUnauthorized)

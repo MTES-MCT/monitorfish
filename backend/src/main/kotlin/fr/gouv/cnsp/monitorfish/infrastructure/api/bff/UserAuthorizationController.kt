@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/bff/v1/authorization")
 @Tag(name = "APIs for authorization")
-class AuthorizationController(
+class UserAuthorizationController(
     private val getAuthorizedUser: GetAuthorizedUser,
 ) {
 

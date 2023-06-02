@@ -27,6 +27,11 @@ class UserAuthorizationCheckFilter(
     private val apiClient: ApiClient,
     private val getIsAuthorizedUser: GetIsAuthorizedUser,
 ) : OncePerRequestFilter() {
+    companion object {
+        val EMAIL_HEADER = "EMAIL"
+    }
+    private val CURRENT_USER_AUTHORIZATION_CONTROLLER_PATH = "/bff/v1/authorization/current"
+
     private val BEARER_HEADER_TYPE = "Bearer"
     private val MALFORMED_BEARER_MESSAGE = "Malformed authorization header, header type should be 'Bearer'"
     private val MISSING_OIDC_ENDPOINT_MESSAGE = "Missing OIDC user info endpoint"
@@ -81,6 +86,12 @@ class UserAuthorizationCheckFilter(
             logger.debug(
                 LoggedMessage("HTTP request: access granted.", hash(userInfoResponse.email), request.requestURI!!).toString(),
             )
+
+            if (request.requestURI == CURRENT_USER_AUTHORIZATION_CONTROLLER_PATH) {
+                // The email is added as a header so the email will be known by the controller
+                response.addHeader(EMAIL_HEADER, userInfoResponse.email)
+            }
+
             filterChain.doFilter(request, response)
         } catch (e: Exception) {
             logger.error(COULD_NOT_FETCH_USER_INFO_MESSAGE, e)

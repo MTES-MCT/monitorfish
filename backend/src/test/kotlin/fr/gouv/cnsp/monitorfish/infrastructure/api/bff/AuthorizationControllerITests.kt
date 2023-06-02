@@ -4,10 +4,15 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
+import fr.gouv.cnsp.monitorfish.config.SuperUserAPIProperties
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
+import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.security.TestUtils.Companion.getMockApiClient
 import fr.gouv.cnsp.monitorfish.infrastructure.api.security.UserAuthorizationCheckFilter
+import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -18,9 +23,11 @@ import org.springframework.context.annotation.Import
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@Import(WebSecurityConfig::class, OIDCProperties::class, UserAuthorizationCheckFilter::class)
+@Import(WebSecurityConfig::class, OIDCProperties::class, SuperUserAPIProperties::class, UserAuthorizationCheckFilter::class)
 @WebMvcTest(
     value = [(AuthorizationController::class)],
     properties = [
@@ -38,6 +45,9 @@ class AuthorizationControllerITests {
     @Autowired
     private lateinit var jwtDecoder: JwtDecoder
 
+    @MockBean
+    private lateinit var getAuthorizedUser: GetAuthorizedUser
+
     @TestConfiguration
     class TestApiClient {
         @Bean
@@ -50,27 +60,31 @@ class AuthorizationControllerITests {
     private lateinit var getIsAuthorizedUser: GetIsAuthorizedUser
 
     @Test
-    fun `Should return 200 if the user is a super user`() {
+    fun `Should return 200 if the user is found`() {
         // Given
         given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
+        given(getAuthorizedUser.execute(any())).willReturn(UserAuthorization("email", true))
 
         // When
         api.perform(
-            get("/bff/v1/authorization/is_super_user")
+            get("/bff/v1/authorization/current")
                 .header("Authorization", "Bearer $VALID_JWT"),
         )
             // Then
             .andExpect(status().isOk)
+            .andExpect(header().string("EMAIL", "d44b8b1163276cb22a02d462de5883ceb60b461e20c4e27e905b72ec8b649807"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.isSuperUser", equalTo(true)))
     }
 
     @Test
-    fun `Should return 401 if the user is not a super user`() {
+    fun `Should return 401 if the user is not found`() {
         // Given
         given(getIsAuthorizedUser.execute(any(), any())).willReturn(false)
+        given(getAuthorizedUser.execute(any())).willReturn(UserAuthorization("email", true))
 
         // When
         api.perform(
-            get("/bff/v1/authorization/is_super_user")
+            get("/bff/v1/authorization/current")
                 .header("Authorization", "Bearer $VALID_JWT"),
         )
             // Then

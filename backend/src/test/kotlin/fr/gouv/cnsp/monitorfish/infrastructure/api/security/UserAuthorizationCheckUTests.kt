@@ -153,10 +153,8 @@ class UserAuthorizationCheckUTests {
         )
 
         // Then
-        verify(getIsAuthorizedUser.execute(any(), eq(true)))
         assertThat(response.status).isEqualTo(401)
         assertThat(response.errorMessage).isEqualTo("Insufficient authorization")
-        verify(getIsAuthorizedUser.execute(any(), eq(true)))
     }
 
     @Test
@@ -211,5 +209,32 @@ class UserAuthorizationCheckUTests {
 
         // Then
         verify(getIsAuthorizedUser).execute(any(), eq(true))
+    }
+
+    @Test
+    fun `Should compute the right parameter to getIsAuthorizedUser when not requesting a super-user protected path`() {
+        // Given
+        val oidcProperties = OIDCProperties(
+            enabled = true,
+            userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user",
+        )
+        val superUserAPIProperties = SuperUserAPIProperties(paths = listOf("/bff/v1/vessels/risk_factors"))
+        val mockApi = getMockApiClient()
+        val response = MockHttpServletResponse()
+        val chain = MockFilterChain()
+        given(getIsAuthorizedUser.execute(any(), any())).willReturn(false)
+
+        // When
+        val request = MockHttpServletRequest()
+        request.requestURI = "/bff/v1/unprotected"
+        request.addHeader(Authorization, "Bearer $VALID_JWT")
+        UserAuthorizationCheckFilter(oidcProperties, superUserAPIProperties, mockApi, getIsAuthorizedUser).doFilter(
+            request,
+            response,
+            chain,
+        )
+
+        // Then
+        verify(getIsAuthorizedUser).execute(any(), eq(false))
     }
 }

@@ -33,7 +33,7 @@ const actionDatetimeUtcValidator = string()
   })
 
 export const InfractionFormSchema = object({
-  comments: string().default(''),
+  comments: string(),
   infractionType: string().required('Le type d’infraction est un champ obligatoire.'),
   natinf: number().required('Le NATINF est un champ obligatoire.')
 })

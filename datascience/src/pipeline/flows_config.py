@@ -32,6 +32,7 @@ from src.pipeline.flows import (
     facade_areas,
     fao_areas,
     fishing_gear_codes,
+    foreign_fmcs,
     infractions,
     init_species_groups,
     last_positions,
@@ -95,6 +96,7 @@ enrich_positions.flow.schedule = Schedule(
         ),
     ]
 )
+foreign_fmcs.flow.schedule = CronSchedule("37 10 * * *")
 infractions.flow.schedule = CronSchedule("1 8 * * *")
 last_positions.flow.schedule = Schedule(
     clocks=[
@@ -257,6 +259,7 @@ flows_to_register = [
     facade_areas.flow,
     fao_areas.flow,
     fishing_gear_codes.flow,
+    foreign_fmcs.flow,
     infractions.flow,
     init_species_groups.flow,
     last_positions.flow,

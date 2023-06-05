@@ -1,5 +1,4 @@
-import ky from 'ky'
-
+import { monitorfishApiKy } from './index'
 import { ApiError } from '../libs/ApiError'
 
 import type {
@@ -25,7 +24,7 @@ export const GET_REPORTINGS_ERROR_MESSAGE = "Nous n'avons pas pu créer les sign
  */
 async function archiveReportingFromAPI(id: number) {
   try {
-    await ky.put(`/bff/v1/reportings/${id}/archive`)
+    await monitorfishApiKy.put(`/bff/v1/reportings/${id}/archive`)
   } catch (err) {
     throw new ApiError(ARCHIVE_REPORTING_ERROR_MESSAGE, err)
   }
@@ -38,7 +37,7 @@ async function archiveReportingFromAPI(id: number) {
  */
 async function archiveReportingsFromAPI(ids: number[]) {
   try {
-    await ky.put(`/bff/v1/reportings/archive`, {
+    await monitorfishApiKy.put(`/bff/v1/reportings/archive`, {
       json: ids
     })
   } catch (err) {
@@ -53,7 +52,7 @@ async function archiveReportingsFromAPI(ids: number[]) {
  */
 async function deleteReportingFromAPI(id: number) {
   try {
-    await ky.put(`/bff/v1/reportings/${id}/delete`)
+    await monitorfishApiKy.put(`/bff/v1/reportings/${id}/delete`)
   } catch (err) {
     throw new ApiError(DELETE_REPORTING_ERROR_MESSAGE, err)
   }
@@ -66,7 +65,7 @@ async function deleteReportingFromAPI(id: number) {
  */
 async function deleteReportingsFromAPI(ids: number[]) {
   try {
-    await ky.put(`/bff/v1/reportings/delete`, {
+    await monitorfishApiKy.put(`/bff/v1/reportings/delete`, {
       json: ids
     })
   } catch (err) {
@@ -81,7 +80,7 @@ async function deleteReportingsFromAPI(ids: number[]) {
  */
 async function addReportingFromAPI(newReporting: ReportingCreation): Promise<Reporting> {
   try {
-    return await ky
+    return await monitorfishApiKy
       .post(`/bff/v1/reportings`, {
         json: newReporting
       })
@@ -98,7 +97,7 @@ async function addReportingFromAPI(newReporting: ReportingCreation): Promise<Rep
  */
 async function updateReportingFromAPI(id: number, nextReporting: ReportingUpdate): Promise<Reporting> {
   try {
-    return await ky
+    return await monitorfishApiKy
       .put(`/bff/v1/reportings/${id}/update`, {
         json: nextReporting
       })
@@ -115,7 +114,9 @@ async function updateReportingFromAPI(id: number, nextReporting: ReportingUpdate
  */
 async function getAllCurrentReportingsFromAPI(): Promise<Array<InfractionSuspicionReporting | PendingAlertReporting>> {
   try {
-    return await ky.get(`/bff/v1/reportings`).json<Array<InfractionSuspicionReporting | PendingAlertReporting>>()
+    return await monitorfishApiKy
+      .get(`/bff/v1/reportings`)
+      .json<Array<InfractionSuspicionReporting | PendingAlertReporting>>()
   } catch (err) {
     throw new ApiError(GET_REPORTINGS_ERROR_MESSAGE, err)
   }

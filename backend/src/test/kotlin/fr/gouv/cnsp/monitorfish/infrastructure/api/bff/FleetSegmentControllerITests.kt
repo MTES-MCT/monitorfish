@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
+import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.CreateOrUpdateFleetSegmentFields
@@ -23,12 +24,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@Import(WebSecurityConfig::class)
+@Import(WebSecurityConfig::class, OIDCProperties::class)
 @WebMvcTest(value = [(FleetSegmentController::class)])
 class FleetSegmentControllerITests {
 
     @Autowired
-    private lateinit var mockMvc: MockMvc
+    private lateinit var api: MockMvc
 
     @MockBean
     private lateinit var getAllFleetSegmentsByYear: GetAllFleetSegmentsByYear
@@ -62,7 +63,7 @@ class FleetSegmentControllerITests {
         )
 
         // When
-        mockMvc.perform(get("/bff/v1/fleet_segments/2021"))
+        api.perform(get("/bff/v1/fleet_segments/2021"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
@@ -90,7 +91,7 @@ class FleetSegmentControllerITests {
             )
 
         // When
-        mockMvc.perform(
+        api.perform(
             put("/bff/v1/fleet_segments?year=2021&segment=A_SEGMENT/WITH/SLASH")
                 .content(
                     objectMapper.writeValueAsString(CreateOrUpdateFleetSegmentDataInput(gears = listOf("OTB", "OTC"))),
@@ -112,7 +113,7 @@ class FleetSegmentControllerITests {
     @Test
     fun `Should return Ok When a delete of a fleet segment is done`() {
         // When
-        mockMvc.perform(delete("/bff/v1/fleet_segments?year=2021&segment=A_SEGMENT/WITH/SLASH"))
+        api.perform(delete("/bff/v1/fleet_segments?year=2021&segment=A_SEGMENT/WITH/SLASH"))
             // Then
             .andExpect(status().isOk)
     }
@@ -120,7 +121,7 @@ class FleetSegmentControllerITests {
     @Test
     fun `Should return Ok When a new year is created`() {
         // When
-        mockMvc.perform(post("/bff/v1/fleet_segments/2023"))
+        api.perform(post("/bff/v1/fleet_segments/2023"))
             // Then
             .andExpect(status().isCreated)
     }
@@ -134,7 +135,7 @@ class FleetSegmentControllerITests {
             )
 
         // When
-        mockMvc.perform(
+        api.perform(
             post("/bff/v1/fleet_segments")
                 .content(
                     objectMapper.writeValueAsString(
@@ -162,7 +163,7 @@ class FleetSegmentControllerITests {
             .willThrow(IllegalArgumentException("Year must be provided"))
 
         // When
-        mockMvc.perform(
+        api.perform(
             post("/bff/v1/fleet_segments")
                 .content(
                     objectMapper.writeValueAsString(
@@ -187,7 +188,7 @@ class FleetSegmentControllerITests {
         )
 
         // When
-        mockMvc.perform(
+        api.perform(
             get(
                 "/bff/v1/fleet_segments/compute?faoAreas=27.1.c,27.1.b&gears=OTB&species=HKE,BFT&latitude=47.585&longitude=0.4355678&portLocode=LOCODE",
             ),

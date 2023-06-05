@@ -10,23 +10,24 @@ import { AlertWarning } from './warnings/AlertWarning'
 import { BeaconMalfunctionWarning } from './warnings/BeaconMalfunctionWarning'
 import { COLORS } from '../../constants/constants'
 import { VesselSidebarTab } from '../../domain/entities/vessel/vessel'
+import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 export function Body() {
+  const isSuperUser = useIsSuperUser()
   const { healthcheckTextWarning } = useMainAppSelector(state => state.global)
   const { selectedVessel, vesselSidebarTab } = useMainAppSelector(state => state.vessel)
-  const isAdmin = useMainAppSelector(state => state.global.isAdmin)
 
   return (
     <Wrapper healthcheckTextWarning={healthcheckTextWarning}>
-      {isAdmin && <AlertWarning selectedVessel={selectedVessel} />}
-      {isAdmin && <BeaconMalfunctionWarning selectedVessel={selectedVessel} />}
-      {vesselSidebarTab === VesselSidebarTab.SUMMARY && <VesselSummary />}
+      {isSuperUser && <AlertWarning selectedVessel={selectedVessel} />}
+      {isSuperUser && <BeaconMalfunctionWarning selectedVessel={selectedVessel} />}
+      {isSuperUser && vesselSidebarTab === VesselSidebarTab.SUMMARY && <VesselSummary />}
       {vesselSidebarTab === VesselSidebarTab.IDENTITY && <VesselIdentity />}
       {vesselSidebarTab === VesselSidebarTab.VOYAGES && <VesselFishingActivities />}
       {vesselSidebarTab === VesselSidebarTab.CONTROLS && <Controls />}
-      {vesselSidebarTab === VesselSidebarTab.REPORTING && <Reportings />}
-      {vesselSidebarTab === VesselSidebarTab.ERSVMS && <VesselBeaconMalfunctions />}
+      {isSuperUser && vesselSidebarTab === VesselSidebarTab.REPORTING && <Reportings />}
+      {isSuperUser && vesselSidebarTab === VesselSidebarTab.ERSVMS && <VesselBeaconMalfunctions />}
     </Wrapper>
   )
 }

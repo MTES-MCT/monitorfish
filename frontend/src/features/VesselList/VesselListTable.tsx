@@ -15,6 +15,7 @@ import { sortVesselsByProperty } from './tableSort'
 import { COLORS } from '../../constants/constants'
 import { getCoordinates } from '../../coordinates'
 import { OPENLAYERS_PROJECTION } from '../../domain/entities/map/constants'
+import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { ReactComponent as FlagSVG } from '../icons/flag.svg'
 
@@ -32,7 +33,7 @@ function UnmemoizedVesselListTable({
   vesselsCountShowed,
   vesselsCountTotal
 }) {
-  const isAdmin = useMainAppSelector(state => state.global.isAdmin)
+  const isSuperUser = useIsSuperUser()
   const { coordinatesFormat } = useMainAppSelector(state => state.map)
   const [sortColumn, setSortColumn] = React.useState<string | undefined>(undefined)
   const [sortType, setSortType] = React.useState<SortType | undefined>(undefined)
@@ -79,7 +80,7 @@ function UnmemoizedVesselListTable({
           </HeaderCell>
           <CheckedCell dataKey="checked" onChange={toggleSelectRow} />
         </Column>
-        {isAdmin ? (
+        {isSuperUser ? (
           <Column fixed resizable sortable width={95}>
             <HeaderCell>N. de risque</HeaderCell>
             <Cell dataKey="riskFactor">{rowData => parseFloat(rowData?.vesselProperties?.riskFactor).toFixed(1)}</Cell>

@@ -15,6 +15,7 @@ class GetAllBeaconMalfunctions(
     private val beaconRepository: BeaconRepository,
 ) {
     private val logger = LoggerFactory.getLogger(GetAllBeaconMalfunctions::class.java)
+
     fun execute(): List<BeaconMalfunction> {
         val lastPositions = lastPositionRepository.findAll()
 

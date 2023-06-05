@@ -1,5 +1,5 @@
-import { monitorfishApi } from '.'
-import { HttpStatusCode } from './constants'
+import { monitorfishApi, monitorfishApiKy } from '.'
+import { ApiError } from '../libs/ApiError'
 
 import type { MissionAction } from '../domain/types/missionAction'
 
@@ -18,27 +18,15 @@ export const INFRACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les NA
 
 /**
  * Get fishing infractions
- * @memberOf API
- * @returns {Promise<Infraction[]>} The infractions
- * @throws {Error}
+ *
+ * @throws {ApiError}
  */
-function getFishingInfractionsFromAPI() {
-  return fetch('/bff/v1/infractions')
-    .then(response => {
-      if (response.status === HttpStatusCode.OK) {
-        return response.json()
-      }
-      response.text().then(text => {
-        // eslint-disable-next-line no-console
-        console.error(text)
-      })
-      throw Error(INFRACTIONS_ERROR_MESSAGE)
-    })
-    .catch(error => {
-      // eslint-disable-next-line no-console
-      console.error(error)
-      throw Error(INFRACTIONS_ERROR_MESSAGE)
-    })
+async function getFishingInfractionsFromAPI() {
+  try {
+    return await monitorfishApiKy.get(`/bff/v1/infractions`).json<Array<MissionAction.Infraction>>()
+  } catch (err) {
+    throw new ApiError(INFRACTIONS_ERROR_MESSAGE, err)
+  }
 }
 
 export { getFishingInfractionsFromAPI }

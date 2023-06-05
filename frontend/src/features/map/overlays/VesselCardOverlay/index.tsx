@@ -6,13 +6,13 @@ import { marginsWithOneWarning, marginsWithoutAlert, marginsWithTwoWarning } fro
 import { VesselCard } from './VesselCard'
 import { COLORS } from '../../../../constants/constants'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { useIsSuperUser } from '../../../../hooks/authorization/useIsSuperUser'
 import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../Overlay'
 
 const overlayHeight = 260
 
 export function VesselCardOverlay({ feature, map }) {
-  const { isAdmin } = useMainAppSelector(state => state.global)
+  const isSuperUser = useIsSuperUser()
   const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
   const overlayRef = useRef<HTMLDivElement>()
   const overlayObjectRef = useRef<Overlay | undefined>()
@@ -73,7 +73,7 @@ export function VesselCardOverlay({ feature, map }) {
     }
 
     setVesselFeatureToShowOnCard(feature)
-    numberOfWarningsRef.current = isAdmin
+    numberOfWarningsRef.current = isSuperUser
       ? Number(feature?.vesselProperties?.hasAlert) +
         Number(!!feature?.vesselProperties?.beaconMalfunctionId) +
         Number(feature?.vesselProperties?.hasInfractionSuspicion)
@@ -97,7 +97,7 @@ export function VesselCardOverlay({ feature, map }) {
     }
 
     setOverlayTopLeftMargin(getTopLeftMargin(nextOverlayPosition, margins))
-  }, [feature, setVesselFeatureToShowOnCard, overlayRef, overlayObjectRef, isAdmin, getNextOverlayPosition])
+  }, [feature, setVesselFeatureToShowOnCard, overlayRef, overlayObjectRef, isSuperUser, getNextOverlayPosition])
 
   return (
     <VesselCardOverlayComponent ref={overlayCallback} overlayTopLeftMargin={overlayTopLeftMargin}>

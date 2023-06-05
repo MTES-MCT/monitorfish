@@ -5,6 +5,7 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
+import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
@@ -46,12 +47,12 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-@Import(WebSecurityConfig::class)
+@Import(WebSecurityConfig::class, OIDCProperties::class)
 @WebMvcTest(value = [(VesselController::class)])
 class VesselControllerITests {
 
     @Autowired
-    private lateinit var mockMvc: MockMvc
+    private lateinit var api: MockMvc
 
     @MockBean
     private lateinit var getLastPositions: GetLastPositions
@@ -89,7 +90,7 @@ class VesselControllerITests {
         given(this.getLastPositions.execute()).willReturn(listOf(position))
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels"))
+        api.perform(get("/bff/v1/vessels"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$[0].vesselName", equalTo(position.vesselName)))
@@ -158,7 +159,7 @@ class VesselControllerITests {
         }
 
         // When
-        mockMvc.perform(
+        api.perform(
             get(
                 "/bff/v1/vessels/find?vesselId=123&internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER",
             ),
@@ -206,7 +207,7 @@ class VesselControllerITests {
         }
 
         // When
-        mockMvc.perform(
+        api.perform(
             get(
                 "/bff/v1/vessels/find?vesselId=&internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER",
             ),
@@ -230,7 +231,7 @@ class VesselControllerITests {
         }
 
         // When
-        mockMvc.perform(
+        api.perform(
             get(
                 "/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123" +
                     "&IRCS=IEF4&trackDepth=CUSTOM&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&afterDateTime=2021-03-24T22:07:00.000Z&beforeDateTime=2021-04-24T22:07:00.000Z",
@@ -282,7 +283,7 @@ class VesselControllerITests {
         }
 
         // When
-        mockMvc.perform(
+        api.perform(
             get(
                 "/bff/v1/vessels/positions?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER",
             ),
@@ -329,7 +330,7 @@ class VesselControllerITests {
         )
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/search?searched=VESSEL"))
+        api.perform(get("/bff/v1/vessels/search?searched=VESSEL"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))
@@ -357,7 +358,7 @@ class VesselControllerITests {
         given(this.getVesselVoyage.execute(any(), any(), anyOrNull())).willReturn(voyage)
 
         // When
-        mockMvc.perform(
+        api.perform(
             get("/bff/v1/vessels/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=LAST&beforeDateTime="),
         )
             // Then
@@ -395,7 +396,7 @@ class VesselControllerITests {
         given(this.getVesselVoyage.execute(any(), any(), any())).willReturn(voyage)
 
         // When
-        mockMvc.perform(
+        api.perform(
             get(
                 "/bff/v1/vessels/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=PREVIOUS&tripNumber=12345",
             ),
@@ -477,7 +478,7 @@ class VesselControllerITests {
             )
 
         // When
-        mockMvc.perform(
+        api.perform(
             get(
                 "/bff/v1/vessels/beacon_malfunctions?vesselId=123&afterDateTime=2021-03-24T22:07:00.000Z",
             ),
@@ -564,7 +565,7 @@ class VesselControllerITests {
             )
 
         // When
-        mockMvc.perform(
+        api.perform(
             get(
                 "/bff/v1/vessels/reporting?internalReferenceNumber=FR224226850" +
                     "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z",
@@ -599,7 +600,7 @@ class VesselControllerITests {
         )
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/risk_factor?internalReferenceNumber=FR224226850"))
+        api.perform(get("/bff/v1/vessels/risk_factor?internalReferenceNumber=FR224226850"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.impactRiskFactor", equalTo(1.0)))
@@ -614,7 +615,7 @@ class VesselControllerITests {
         given(this.getVesselRiskFactor.execute(any())).willThrow(IllegalArgumentException("Not found"))
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/risk_factor?internalReferenceNumber=FR224226850"))
+        api.perform(get("/bff/v1/vessels/risk_factor?internalReferenceNumber=FR224226850"))
             // Then
             .andExpect(status().isBadRequest)
     }

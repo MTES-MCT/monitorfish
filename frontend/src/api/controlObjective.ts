@@ -1,7 +1,7 @@
 import ky from 'ky'
 import { ascend, identity } from 'ramda'
 
-import { monitorfishApi } from '.'
+import { monitorfishApi, monitorfishApiKy } from '.'
 import { ApiError } from '../libs/ApiError'
 
 import type { ControlObjective, UpdateControlObjective } from '../domain/types/controlObjective'
@@ -32,7 +32,7 @@ export const { useGetControlObjectivesQuery, useGetControlObjectiveYearsQuery } 
  */
 export async function updateControlObjectiveFromAPI(id: string, updatedFields: UpdateControlObjective) {
   try {
-    return await ky.put(`/bff/v1/control_objectives/${id}`, {
+    return await monitorfishApiKy.put(`/bff/v1/control_objectives/${id}`, {
       json: updatedFields
     })
   } catch (err) {
@@ -45,7 +45,7 @@ export async function updateControlObjectiveFromAPI(id: string, updatedFields: U
  */
 export async function deleteControlObjectiveFromAPI(id: string): Promise<void> {
   try {
-    await ky.delete(`/bff/v1/control_objectives/${id}`)
+    await monitorfishApiKy.delete(`/bff/v1/control_objectives/${id}`)
   } catch (err) {
     throw new ApiError(DELETE_CONTROL_OBJECTIVES_ERROR_MESSAGE, err)
   }
@@ -81,7 +81,7 @@ export async function addControlObjectiveFromAPI(
  */
 export async function addControlObjectiveYearFromAPI(): Promise<void> {
   try {
-    await ky.post('/bff/v1/control_objectives/years')
+    await monitorfishApiKy.post('/bff/v1/control_objectives/years')
   } catch (err) {
     throw new ApiError(ADD_CONTROL_OBJECTIVES_YEAR_ERROR_MESSAGE, err)
   }

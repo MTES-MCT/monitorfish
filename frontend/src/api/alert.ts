@@ -2,6 +2,7 @@
 
 import ky from 'ky'
 
+import { monitorfishApiKy } from './index'
 import { ApiError } from '../libs/ApiError'
 
 import type {
@@ -34,7 +35,7 @@ function normalizePendingAlert(alert: PendingAlert): LEGACY_PendingAlert {
  */
 async function getOperationalAlertsFromAPI(): Promise<LEGACY_PendingAlert[]> {
   try {
-    const data = await ky.get('/bff/v1/operational_alerts').json<PendingAlert[]>()
+    const data = await monitorfishApiKy.get('/bff/v1/operational_alerts').json<PendingAlert[]>()
 
     return data.map(normalizePendingAlert)
   } catch (err) {
@@ -49,7 +50,7 @@ async function getOperationalAlertsFromAPI(): Promise<LEGACY_PendingAlert[]> {
  */
 async function validateAlertFromAPI(id: string): Promise<void> {
   try {
-    await ky.put(`/bff/v1/operational_alerts/${id}/validate`)
+    await monitorfishApiKy.put(`/bff/v1/operational_alerts/${id}/validate`)
   } catch (err) {
     throw new ApiError(VALIDATE_ALERT_ERROR_MESSAGE, err)
   }
@@ -89,7 +90,7 @@ async function silenceAlertFromAPI(
  */
 async function getSilencedAlertsFromAPI(): Promise<LEGACY_SilencedAlert[]> {
   try {
-    return await ky.get('/bff/v1/operational_alerts/silenced').json<SilencedAlert[]>()
+    return await monitorfishApiKy.get('/bff/v1/operational_alerts/silenced').json<SilencedAlert[]>()
   } catch (err) {
     throw new ApiError(ALERTS_ERROR_MESSAGE, err)
   }
@@ -102,7 +103,7 @@ async function getSilencedAlertsFromAPI(): Promise<LEGACY_SilencedAlert[]> {
  */
 async function deleteSilencedAlertFromAPI(id: string): Promise<void> {
   try {
-    await ky.delete(`/bff/v1/operational_alerts/silenced/${id}`)
+    await monitorfishApiKy.delete(`/bff/v1/operational_alerts/silenced/${id}`)
   } catch (err) {
     throw new ApiError(DELETE_SILENCED_ALERT_ERROR_MESSAGE, err)
   }

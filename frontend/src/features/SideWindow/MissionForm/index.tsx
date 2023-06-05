@@ -217,10 +217,11 @@ export function MissionForm() {
 
       setActionsFormValues(nextActionsFormValues)
       if (editedActionIndex === actionIndex) {
+        setActionFormKey(actionFormKey + 1)
         setEditedActionIndex(undefined)
       }
     },
-    [actionsFormValues, editedActionIndex]
+    [actionFormKey, actionsFormValues, editedActionIndex]
   )
 
   const reopen = useCallback(() => {

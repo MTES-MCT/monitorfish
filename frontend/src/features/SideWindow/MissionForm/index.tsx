@@ -1,4 +1,4 @@
-import { Accent, Button, Icon, usePrevious } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Icon, logSoftError, usePrevious } from '@mtes-mct/monitor-ui'
 import { omit } from 'lodash/fp'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -39,7 +39,6 @@ import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { FrontendError } from '../../../libs/FrontendError'
-import { logSoftError } from '../../../libs/logSoftError'
 import { FrontendErrorBoundary } from '../../../ui/FrontendErrorBoundary'
 import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
@@ -99,7 +98,11 @@ export function MissionForm() {
   const createOrUpdate = useCallback(
     async (mustClose: boolean = false) => {
       if (!mainFormValues) {
-        logSoftError('`mainFormValues` is undefined.')
+        logSoftError({
+          isSideWindowError: true,
+          message: '`mainFormValues` is undefined.',
+          userMessage: "Une erreur est survenue pendant l'enregistrement de la mission."
+        })
 
         return
       }
@@ -155,7 +158,12 @@ export function MissionForm() {
 
         dispatch(sideWindowActions.openOrFocusAndGoTo({ menu: SideWindowMenuKey.MISSION_LIST }))
       } catch (err) {
-        logSoftError('`createOrUpdate()` failed.', { err })
+        logSoftError({
+          isSideWindowError: true,
+          message: '`createOrUpdate()` failed.',
+          originalError: err,
+          userMessage: "Une erreur est survenue pendant l'enregistrement de la mission."
+        })
 
         setIsSaving(false)
       }
@@ -231,7 +239,11 @@ export function MissionForm() {
     // https://codesandbox.io/s/4wvmp1xlw4?file=/src/InputWithCallback.js:357-386
     useCallback(() => {
       if (!mainFormValues) {
-        logSoftError('`mainFormValues` is undefined.')
+        logSoftError({
+          isSideWindowError: true,
+          message: '`mainFormValues` is undefined.',
+          userMessage: "Une erreur est survenue pendant l'édition de la mission."
+        })
 
         return
       }
@@ -249,7 +261,11 @@ export function MissionForm() {
   const updateEditedActionFormValues = useCallback(
     (nextActionFormValues: MissionActionFormValues) => {
       if (editedActionIndex === undefined) {
-        logSoftError('`editedActionIndex` is undefined.')
+        logSoftError({
+          isSideWindowError: true,
+          message: '`editedActionIndex` is undefined.',
+          userMessage: "Une erreur est survenue pendant l'édition de la mission."
+        })
 
         return
       }

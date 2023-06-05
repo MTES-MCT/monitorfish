@@ -1,4 +1,4 @@
-import { logSoftError } from '../../../../libs/logSoftError'
+import { logSoftError } from '@mtes-mct/monitor-ui'
 
 import type { MissionActionFormValues } from '../types'
 
@@ -12,9 +12,14 @@ export function getInitialMissionActionFormValues(
 
   const missionActionFormValues = actions[editedDraftActionIndex]
   if (!missionActionFormValues) {
-    logSoftError('`missionActionFormValues` is undefined.', {
-      actions,
-      editedDraftActionIndex
+    logSoftError({
+      context: {
+        actions,
+        editedDraftActionIndex
+      },
+      isSideWindowError: true,
+      message: '`missionActionFormValues` is undefined.',
+      userMessage: "Une erreur est survenue pendant l'initialisation de la mission."
     })
 
     return undefined

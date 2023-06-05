@@ -5,18 +5,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as LabelSVG } from '../../icons/Menu_etiquettes_navires.svg'
 import { ReactComponent as RiskFactorSVG } from '../../icons/Bouton_afficher_note_de_risque.svg'
 import { COLORS } from '../../../constants/constants'
-import {
-  setRiskFactorShowedOnMap,
-  setVesselLabel,
-  setVesselLabelsShowedOnMap
-} from '../../../domain/shared_slices/Map'
+import { setRiskFactorShowedOnMap, setVesselLabel, setVesselLabelsShowedOnMap } from '../../../domain/shared_slices/Map'
 import { VesselLabelSelection } from './VesselLabelSelection'
 import { MapPropertyTrigger } from '../../commonComponents/MapPropertyTrigger'
 import { MapToolType } from '../../../domain/entities/map/constants'
 import { MapToolBox } from '../shared/MapToolBox'
+import { useIsSuperUser } from '../../../hooks/authorization/useIsSuperUser'
 
 const EditVesselLabels = () => {
   const dispatch = useDispatch()
+  const isSuperUser = useIsSuperUser()
   const vesselLabel = useSelector(state => state.map.vesselLabel)
   const {
     vesselLabelsShowedOnMap,
@@ -24,7 +22,6 @@ const EditVesselLabels = () => {
   } = useSelector(state => state.map)
   const {
     healthcheckTextWarning,
-    isAdmin,
     mapToolOpened
   } = useSelector(state => state.global)
 
@@ -35,7 +32,7 @@ const EditVesselLabels = () => {
       healthcheckTextWarning={healthcheckTextWarning}
       isOpen={isOpen}>
       <Header isFirst={false}>
-        Affichage des étiquettes { isAdmin ? 'et notes des navires' : ''}
+        Affichage des étiquettes { isSuperUser ? 'et notes des navires' : ''}
       </Header>
       <VesselLabel>
         Choisir le libellé des étiquettes des navires
@@ -43,7 +40,7 @@ const EditVesselLabels = () => {
       <VesselLabelSelection
         updateVesselLabel={label => dispatch(setVesselLabel(label))}
         vesselLabel={vesselLabel}
-        isAdmin={isAdmin}
+        isSuperUser={isSuperUser}
       />
       <MapPropertyTrigger
         booleanProperty={vesselLabelsShowedOnMap}
@@ -52,7 +49,7 @@ const EditVesselLabels = () => {
         Icon={LabelSVG}
       />
       {
-        isAdmin && <MapPropertyTrigger
+        isSuperUser && <MapPropertyTrigger
           booleanProperty={riskFactorShowedOnMap}
           updateBooleanProperty={isShowed => dispatch(setRiskFactorShowedOnMap(isShowed))}
           text={'la note de risque des navires'}

@@ -12,6 +12,7 @@ import {
   Vessel
 } from '../../../../domain/entities/vessel/vessel'
 import { VesselLabelLine } from '../../../../domain/entities/vesselLabelLine'
+import { useIsSuperUser } from '../../../../hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { VesselLabelOverlay } from '../../overlays/VesselLabelOverlay'
 import { getLabelLineStyle } from '../styles/vesselLabelLine.style'
@@ -27,11 +28,13 @@ const NOT_FOUND = -1
 export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
   const throttleDuration = 250 // ms
 
+  const isSuperUser = useIsSuperUser()
+
   const { hideNonSelectedVessels, selectedVessel, vessels, vesselsTracksShowed } = useMainAppSelector(
     state => state.vessel
   )
   const { areVesselsDisplayed } = useMainAppSelector(state => state.displayedComponent)
-  const { isAdmin, previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
+  const { previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
 
   const {
     hideVesselsAtPort,
@@ -228,8 +231,7 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
         const { vesselProperties } = feature
         const label = Vessel.getVesselFeatureLabel(vesselProperties, {
           hideVesselsAtPort,
-          isAdmin,
-          riskFactorShowedOnMap,
+          isRiskFactorShowed: isSuperUser && riskFactorShowedOnMap,
           vesselLabel,
           vesselLabelsShowedOnMap,
           vesselsLastPositionVisibility
@@ -274,8 +276,8 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
 
     function addVesselLabelToAllFeaturesInExtent() {
       const doNotShowLabels =
-        (isAdmin && !vesselLabelsShowedOnMap && !riskFactorShowedOnMap) ||
-        (!isAdmin && !vesselLabelsShowedOnMap) ||
+        (isSuperUser && !vesselLabelsShowedOnMap && !riskFactorShowedOnMap) ||
+        (!isSuperUser && !vesselLabelsShowedOnMap) ||
         !areVesselsDisplayed
 
       if (doNotShowLabels) {
@@ -333,7 +335,7 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
       isThrottled.current = false
     }, throttleDuration)
   }, [
-    isAdmin,
+    isSuperUser,
     map,
     vessels,
     selectedVessel,

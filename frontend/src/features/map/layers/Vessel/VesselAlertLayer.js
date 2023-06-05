@@ -7,9 +7,17 @@ import { Vector } from 'ol/layer'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 
 import { getVesselAlertStyle } from './style'
-import { getVesselCompositeIdentifier, getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../../../../domain/entities/vessel/vessel'
+import {
+  getVesselCompositeIdentifier,
+  getVesselLastPositionVisibilityDates,
+  Vessel,
+  vesselIsShowed
+} from '../../../../domain/entities/vessel/vessel'
+import { useIsSuperUser } from '../../../../hooks/authorization/useIsSuperUser'
 
 const VesselAlertLayer = ({ map }) => {
+  const isSuperUser = useIsSuperUser()
+
   const {
     vessels,
     hideNonSelectedVessels,
@@ -22,8 +30,7 @@ const VesselAlertLayer = ({ map }) => {
   } = useSelector(state => state.filter)
 
   const {
-    previewFilteredVesselsMode,
-    isAdmin
+    previewFilteredVesselsMode
   } = useSelector(state => state.global)
 
   const {
@@ -58,7 +65,7 @@ const VesselAlertLayer = ({ map }) => {
   }
 
   useEffect(() => {
-    if (isAdmin && map) {
+    if (isSuperUser && map) {
       getLayer().name = LayerProperties.VESSEL_ALERT.code
       map.getLayers().push(getLayer())
     }
@@ -68,10 +75,10 @@ const VesselAlertLayer = ({ map }) => {
         map.removeLayer(getLayer())
       }
     }
-  }, [isAdmin, map])
+  }, [isSuperUser, map])
 
   useEffect(() => {
-    if (isAdmin && vessels?.length) {
+    if (isSuperUser && vessels?.length) {
       const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
 
       const features = vessels.reduce((features, vessel) => {
@@ -96,7 +103,7 @@ const VesselAlertLayer = ({ map }) => {
       getVectorSource()?.addFeatures(features)
     }
   }, [
-    isAdmin,
+    isSuperUser,
     vessels,
     selectedVesselIdentity,
     vesselsTracksShowed,

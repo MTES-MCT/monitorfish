@@ -2,10 +2,10 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.given
+import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.*
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
-import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.missions.GetAllMissions
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.equalTo
@@ -22,12 +22,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
-@Import(WebSecurityConfig::class)
+@Import(WebSecurityConfig::class, OIDCProperties::class)
 @WebMvcTest(value = [(MissionController::class)])
 class MissionsControllerITests {
 
     @Autowired
-    private lateinit var mockMvc: MockMvc
+    private lateinit var api: MockMvc
 
     @MockBean
     private lateinit var getAllMission: GetAllMissions
@@ -73,7 +73,7 @@ class MissionsControllerITests {
         )
 
         // When
-        mockMvc.perform(
+        api.perform(
             get(
                 """
                     /bff/v1/missions?

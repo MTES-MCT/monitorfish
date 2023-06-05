@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { VesselLabel } from '../../../domain/entities/vessel/label/types'
 
-export function VesselLabelSelection({ isAdmin, updateVesselLabel, vesselLabel }) {
+export function VesselLabelSelection({ isSuperUser, updateVesselLabel, vesselLabel }) {
   return (
     <>
       {vesselLabel && (
@@ -12,7 +12,7 @@ export function VesselLabelSelection({ isAdmin, updateVesselLabel, vesselLabel }
             <Radio value={VesselLabel.VESSEL_NATIONALITY}>Nationalité (nom)</Radio>
             <Radio value={VesselLabel.VESSEL_NAME}>Nom du navire</Radio>
             <Radio value={VesselLabel.VESSEL_INTERNAL_REFERENCE_NUMBER}>CFR</Radio>
-            {isAdmin && <Radio value={VesselLabel.VESSEL_FLEET_SEGMENT}>Segment de flotte</Radio>}
+            {isSuperUser && <Radio value={VesselLabel.VESSEL_FLEET_SEGMENT}>Segment de flotte</Radio>}
           </RadioGroup>
         </RadioWrapper>
       )}

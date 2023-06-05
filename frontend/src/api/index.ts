@@ -3,8 +3,10 @@
 // https://redux-toolkit.js.org/rtk-query/usage/automated-refetching#cache-tags
 
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import ky from 'ky'
 
 import { getEnvironmentVariable } from './utils'
+import { getOIDCUser } from '../auth/getOIDCUser'
 import { normalizeRtkBaseQuery } from '../utils/normalizeRtkBaseQuery'
 
 // Using local MonitorEnv stubs:
@@ -30,10 +32,20 @@ export const monitorenvApi = createApi({
 // =============================================================================
 // Monitorfish API
 
-// We'll need that later on if we use any kind of authentication.
 const monitorfishBaseQuery = fetchBaseQuery({
   // TODO Remove the /v1 from the baseUrl as it make harder to update APIs (vX are designed for that)
-  baseUrl: `/bff/v1`
+  baseUrl: `/bff/v1`,
+  prepareHeaders: headers => {
+    const user = getOIDCUser()
+    const token = user?.access_token
+
+    // If we have a token set in state, we pass it.
+    if (token) {
+      headers.set('authorization', `Bearer ${token}`)
+    }
+
+    return headers
+  }
 })
 export const monitorfishApi = createApi({
   baseQuery: normalizeRtkBaseQuery(monitorfishBaseQuery),
@@ -51,4 +63,20 @@ export const monitorfishApi = createApi({
     'RiskFactor',
     'ForeignFmcs'
   ]
+})
+
+export const monitorfishApiKy = ky.extend({
+  hooks: {
+    beforeRequest: [
+      request => {
+        const user = getOIDCUser()
+        const token = user?.access_token
+
+        // If we have a token set in state, we pass it.
+        if (token) {
+          request.headers.set('authorization', `Bearer ${token}`)
+        }
+      }
+    ]
+  }
 })

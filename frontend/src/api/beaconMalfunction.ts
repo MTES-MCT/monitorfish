@@ -1,5 +1,6 @@
 import ky from 'ky'
 
+import { monitorfishApiKy } from '.'
 import { ApiError } from '../libs/ApiError'
 
 import type { NOTIFICATION_TYPE, UserType } from '../domain/entities/beaconMalfunction/constants'
@@ -27,7 +28,7 @@ export const SEND_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu envoyer la n
  */
 async function getAllBeaconMalfunctionsFromAPI(): Promise<BeaconMalfunction[]> {
   try {
-    return await ky.get('/bff/v1/beacon_malfunctions').json<BeaconMalfunction[]>()
+    return await monitorfishApiKy.get('/bff/v1/beacon_malfunctions').json<BeaconMalfunction[]>()
   } catch (err) {
     throw new ApiError(GET_BEACON_MALFUNCTIONS_ERROR_MESSAGE, err)
   }
@@ -60,7 +61,7 @@ async function updateBeaconMalfunctionFromAPI(
  */
 async function getBeaconMalfunctionFromAPI(id: number): Promise<BeaconMalfunctionResumeAndDetails> {
   try {
-    return await ky.get(`/bff/v1/beacon_malfunctions/${id}`).json<BeaconMalfunctionResumeAndDetails>()
+    return await monitorfishApiKy.get(`/bff/v1/beacon_malfunctions/${id}`).json<BeaconMalfunctionResumeAndDetails>()
   } catch (err) {
     throw new ApiError(GET_BEACON_MALFUNCTION_ERROR_MESSAGE, err)
   }
@@ -115,7 +116,7 @@ async function sendNotificationFromAPI(
   foreignFmcCode?: string
 ): Promise<void> {
   try {
-    await ky.put(
+    await monitorfishApiKy.put(
       `/bff/v1/beacon_malfunctions/${id}/${notificationType}?requestedNotificationForeignFmcCode=${foreignFmcCode}`
     )
   } catch (err) {

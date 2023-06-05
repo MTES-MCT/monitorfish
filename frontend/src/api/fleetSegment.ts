@@ -1,7 +1,6 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
-import ky from 'ky'
 
-import { monitorfishApi } from '.'
+import { monitorfishApi, monitorfishApiKy } from '.'
 import { ApiError } from '../libs/ApiError'
 
 import type { FleetSegment, UpdateFleetSegment } from '../domain/types/fleetSegment'
@@ -40,7 +39,6 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
 
 export const { useGetFleetSegmentsQuery } = fleetSegmentApi
 
-export const FLEET_SEGMENT_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les segments de flotte"
 export const UPDATE_FLEET_SEGMENT_ERROR_MESSAGE = "Nous n'avons pas pu modifier le segment de flotte"
 export const CREATE_FLEET_SEGMENT_ERROR_MESSAGE = "Nous n'avons pas pu créer le segment de flotte"
 export const DELETE_FLEET_SEGMENT_ERROR_MESSAGE = "Nous n'avons pas pu supprimer le segment de flotte"
@@ -60,7 +58,7 @@ async function updateFleetSegmentFromAPI(
   updatedFields: UpdateFleetSegment
 ): Promise<FleetSegment> {
   try {
-    return await ky
+    return await monitorfishApiKy
       .put(`/bff/v1/fleet_segments?year=${year}&segment=${segment}`, {
         json: updatedFields
       })
@@ -77,7 +75,9 @@ async function updateFleetSegmentFromAPI(
  */
 async function deleteFleetSegmentFromAPI(segment: string, year: number): Promise<FleetSegment[]> {
   try {
-    return await ky.delete(`/bff/v1/fleet_segments?year=${year}&segment=${segment}`).json<FleetSegment[]>()
+    return await monitorfishApiKy
+      .delete(`/bff/v1/fleet_segments?year=${year}&segment=${segment}`)
+      .json<FleetSegment[]>()
   } catch (err) {
     throw new ApiError(DELETE_FLEET_SEGMENT_ERROR_MESSAGE, err)
   }
@@ -90,7 +90,7 @@ async function deleteFleetSegmentFromAPI(segment: string, year: number): Promise
  */
 async function createFleetSegmentFromAPI(segmentFields: UpdateFleetSegment): Promise<FleetSegment> {
   try {
-    return await ky
+    return await monitorfishApiKy
       .post('/bff/v1/fleet_segments', {
         json: segmentFields
       })
@@ -107,7 +107,7 @@ async function createFleetSegmentFromAPI(segmentFields: UpdateFleetSegment): Pro
  */
 async function addFleetSegmentYearFromAPI(nextYear: number) {
   try {
-    return await ky.post(`/bff/v1/fleet_segments/${nextYear}`)
+    return await monitorfishApiKy.post(`/bff/v1/fleet_segments/${nextYear}`)
   } catch (err) {
     throw new ApiError(ADD_FLEET_SEGMENT_YEAR_ERROR_MESSAGE, err)
   }
@@ -120,7 +120,7 @@ async function addFleetSegmentYearFromAPI(nextYear: number) {
  */
 async function getFleetSegmentYearEntriesFromAPI(): Promise<number[]> {
   try {
-    return await ky.get('/bff/v1/fleet_segments/years').json<number[]>()
+    return await monitorfishApiKy.get('/bff/v1/fleet_segments/years').json<number[]>()
   } catch (err) {
     throw new ApiError(GET_FLEET_SEGMENT_YEAR_ENTRIES_ERROR_MESSAGE, err)
   }

@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
+import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
@@ -30,12 +31,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.ZonedDateTime
 
-@Import(MapperConfiguration::class, WebSecurityConfig::class)
+@Import(MapperConfiguration::class, WebSecurityConfig::class, OIDCProperties::class)
 @WebMvcTest(value = [ReportingController::class])
 class ReportingControllerITests {
 
     @Autowired
-    private lateinit var mockMvc: MockMvc
+    private lateinit var api: MockMvc
 
     @MockBean
     private lateinit var archiveReporting: ArchiveReporting
@@ -64,7 +65,7 @@ class ReportingControllerITests {
     @Test
     fun `Should archive a reporting`() {
         // When
-        mockMvc.perform(put("/bff/v1/reportings/123/archive"))
+        api.perform(put("/bff/v1/reportings/123/archive"))
             // Then
             .andExpect(status().isOk)
 
@@ -74,7 +75,7 @@ class ReportingControllerITests {
     @Test
     fun `Should archive multiple reportings`() {
         // When
-        mockMvc.perform(
+        api.perform(
             put("/bff/v1/reportings/archive")
                 .content(objectMapper.writeValueAsString(listOf(1, 2, 3)))
                 .contentType(MediaType.APPLICATION_JSON),
@@ -88,7 +89,7 @@ class ReportingControllerITests {
     @Test
     fun `Should delete a reporting`() {
         // When
-        mockMvc.perform(put("/bff/v1/reportings/123/delete"))
+        api.perform(put("/bff/v1/reportings/123/delete"))
             // Then
             .andExpect(status().isOk)
 
@@ -98,7 +99,7 @@ class ReportingControllerITests {
     @Test
     fun `Should delete multiple reportings`() {
         // When
-        mockMvc.perform(
+        api.perform(
             put("/bff/v1/reportings/delete")
                 .content(objectMapper.writeValueAsString(listOf(1, 2, 3)))
                 .contentType(MediaType.APPLICATION_JSON),
@@ -132,7 +133,7 @@ class ReportingControllerITests {
         given(addReporting.execute(any())).willReturn(Pair(reporting, null))
 
         // When
-        mockMvc.perform(
+        api.perform(
             post("/bff/v1/reportings")
                 .content(
                     objectMapper.writeValueAsString(
@@ -191,7 +192,7 @@ class ReportingControllerITests {
         )
 
         // When
-        mockMvc.perform(
+        api.perform(
             post("/bff/v1/reportings")
                 .content(
                     objectMapper.writeValueAsString(
@@ -253,7 +254,7 @@ class ReportingControllerITests {
         )
 
         // When
-        mockMvc.perform(get("/bff/v1/reportings"))
+        api.perform(get("/bff/v1/reportings"))
             // Then
             .andExpect(status().isOk)
             .andExpect(MockMvcResultMatchers.jsonPath("$.length()", equalTo(1)))
@@ -287,7 +288,7 @@ class ReportingControllerITests {
         given(updateReporting.execute(any(), any())).willReturn(Pair(reporting, null))
 
         // When
-        mockMvc.perform(
+        api.perform(
             put("/bff/v1/reportings/123/update")
                 .content(
                     objectMapper.writeValueAsString(
@@ -330,7 +331,7 @@ class ReportingControllerITests {
         given(addReporting.execute(any())).willReturn(Pair(reporting, null))
 
         // When
-        mockMvc.perform(
+        api.perform(
             post("/bff/v1/reportings")
                 .content(
                     objectMapper.writeValueAsString(

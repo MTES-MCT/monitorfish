@@ -2,9 +2,9 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.*
+import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
-import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
@@ -25,12 +25,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.ZonedDateTime
 
-@Import(WebSecurityConfig::class)
+@Import(WebSecurityConfig::class, OIDCProperties::class)
 @WebMvcTest(value = [(MissionActionsController::class)])
 class MissionActionsControllerITests {
 
     @Autowired
-    private lateinit var mockMvc: MockMvc
+    private lateinit var api: MockMvc
 
     @MockBean
     private lateinit var getVesselControls: GetVesselControls
@@ -75,7 +75,7 @@ class MissionActionsControllerITests {
         )
 
         // When
-        mockMvc.perform(get("/bff/v1/mission_actions/controls?vesselId=123&afterDateTime=2020-05-04T03:04:05.000Z"))
+        api.perform(get("/bff/v1/mission_actions/controls?vesselId=123&afterDateTime=2020-05-04T03:04:05.000Z"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.numberOfDiversions", equalTo(3)))
@@ -105,7 +105,7 @@ class MissionActionsControllerITests {
         )
 
         // When
-        mockMvc.perform(get("/bff/v1/mission_actions?missionId=123"))
+        api.perform(get("/bff/v1/mission_actions?missionId=123"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
@@ -124,7 +124,7 @@ class MissionActionsControllerITests {
         given(addMissionAction.execute(any())).willReturn(newMission)
 
         // When
-        mockMvc.perform(
+        api.perform(
             post("/bff/v1/mission_actions")
                 .content(
                     objectMapper.writeValueAsString(
@@ -187,7 +187,7 @@ class MissionActionsControllerITests {
         gearControl.gearCode = "OTB"
         gearControl.gearWasControlled = false
         // When
-        mockMvc.perform(
+        api.perform(
             put("/bff/v1/mission_actions/123")
                 .content(
                     objectMapper.writeValueAsString(
@@ -245,7 +245,7 @@ class MissionActionsControllerITests {
     @Test
     fun `Should delete a mission action`() {
         // When
-        mockMvc.perform(delete("/bff/v1/mission_actions/2"))
+        api.perform(delete("/bff/v1/mission_actions/2"))
             // Then
             .andExpect(status().isNoContent())
 

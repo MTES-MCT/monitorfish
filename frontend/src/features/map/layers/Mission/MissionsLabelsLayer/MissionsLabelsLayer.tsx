@@ -6,6 +6,7 @@ import { useDebouncedCallback } from 'use-debounce'
 
 import { clearPreviousLineFeatures, getLabelsOfFeaturesInExtent } from './utils'
 import { LayerProperties } from '../../../../../domain/entities/layers/constants'
+import { useIsSuperUser } from '../../../../../hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { MissionLabelOverlay } from '../../../overlays/MissionUnitLabelOverlay'
 import { useGetLineFeatureIdToCoordinates } from '../../hooks/useGetLineFeatureIdToCoordinates'
@@ -15,7 +16,7 @@ import { getLabelLineStyle } from '../../styles/vesselLabelLine.style'
 import type { VectorLayerWithName } from '../../../../../domain/types/layer'
 
 export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
-  const { isAdmin } = useMainAppSelector(state => state.global)
+  const isSuperUser = useIsSuperUser()
   const { isMissionsLayerDisplayed } = useMainAppSelector(state => state.displayedComponent)
 
   const [featuresAndLabels, setFeaturesAndLabels] = useState<
@@ -109,7 +110,7 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
       ?.find(olLayer => olLayer.name === LayerProperties.MISSION_PIN_POINT.code)
     const missionsLayerSource = missionsLayer?.getSource()
 
-    const isHidden = !isAdmin || !isMissionsLayerDisplayed || !missionsLayerSource
+    const isHidden = !isSuperUser || !isMissionsLayerDisplayed || !missionsLayerSource
     addLabelsToAllFeaturesInExtent(
       isHidden,
       getVectorSource(),
@@ -119,7 +120,7 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
       previousFeaturesAndLabels
     )
   }, [
-    isAdmin,
+    isSuperUser,
     isMissionsLayerDisplayed,
     map,
     isZooming,

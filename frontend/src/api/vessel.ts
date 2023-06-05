@@ -1,7 +1,7 @@
-import ky, { HTTPError } from 'ky'
+import { HTTPError } from 'ky'
 
 import { HttpStatusCode } from './constants'
-import { monitorfishApi } from './index'
+import { monitorfishApi, monitorfishApiKy } from './index'
 import { ApiError } from '../libs/ApiError'
 
 import type { RiskFactor } from '../domain/entities/vessel/riskFactor/types'
@@ -40,7 +40,7 @@ export const { useGetRiskFactorQuery } = vesselApi
  */
 async function getVesselsLastPositionsFromAPI() {
   try {
-    return await ky.get('/bff/v1/vessels').json<VesselLastPosition[]>()
+    return await monitorfishApiKy.get('/bff/v1/vessels').json<VesselLastPosition[]>()
   } catch (err) {
     throw new ApiError(LAST_POSITIONS_ERROR_MESSAGE, err)
   }
@@ -69,7 +69,7 @@ async function getVesselFromAPI(identity: VesselIdentity, trackRequest: TrackReq
   const beforeDateTime = trackRequest.beforeDateTime?.toISOString() || ''
 
   try {
-    return await ky
+    return await monitorfishApiKy
       .get(
         `/bff/v1/vessels/find?vesselId=${vesselId}&internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&trackDepth=${trackDepth}&afterDateTime=${afterDateTime}&beforeDateTime=${beforeDateTime}`
       )
@@ -97,7 +97,7 @@ async function getVesselPositionsFromAPI(identity: VesselIdentity, trackRequest:
   const beforeDateTime = trackRequest.beforeDateTime?.toISOString() || ''
 
   try {
-    return await ky
+    return await monitorfishApiKy
       .get(
         `/bff/v1/vessels/positions?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&trackDepth=${trackDepth}&afterDateTime=${afterDateTime}&beforeDateTime=${beforeDateTime}`
       )
@@ -116,7 +116,7 @@ async function searchVesselsFromAPI(searched: string) {
   const encodedSearched = encodeURI(searched) || ''
 
   try {
-    return await ky.get(`/bff/v1/vessels/search?searched=${encodedSearched}`).json<VesselIdentity[]>()
+    return await monitorfishApiKy.get(`/bff/v1/vessels/search?searched=${encodedSearched}`).json<VesselIdentity[]>()
   } catch (err) {
     throw new ApiError(VESSEL_SEARCH_ERROR_MESSAGE, err)
   }
@@ -137,7 +137,7 @@ async function getVesselVoyageFromAPI(
   const nextVoyageRequest = voyageRequest || ''
 
   try {
-    return await ky
+    return await monitorfishApiKy
       .get(
         `/bff/v1/vessels/logbook/find?internalReferenceNumber=${internalReferenceNumber}&voyageRequest=${nextVoyageRequest}&tripNumber=${nextTripNumber}`
       )
@@ -161,7 +161,7 @@ async function getVesselReportingsFromAPI(identity: VesselIdentity, fromDate: Da
     getVesselIdentityAsEmptyStringWhenNull(identity)
 
   try {
-    return await ky
+    return await monitorfishApiKy
       .get(
         `/bff/v1/vessels/reporting?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&fromDate=${fromDate.toISOString()}`
       )

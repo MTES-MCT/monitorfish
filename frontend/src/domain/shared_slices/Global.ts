@@ -16,7 +16,6 @@ export type GlobalState = {
   error: any
   // TODO Rename this prop.
   healthcheckTextWarning: string | undefined
-  isAdmin: boolean | undefined
   isBackoffice: boolean
   isUpdatingVessels: boolean
   lastSearchedVessels: any[]
@@ -33,7 +32,6 @@ const INITIAL_STATE: GlobalState = {
   blockVesselsUpdate: false,
   error: null,
   healthcheckTextWarning: undefined,
-  isAdmin: undefined,
   isBackoffice: false,
   isUpdatingVessels: false,
   lastSearchedVessels: getLocalStorageState([], lastSearchedVesselsLocalStorageKey),
@@ -128,13 +126,6 @@ export const globalSlice = createSlice({
     },
 
     /**
-     * Set the user role as admin or normal user
-     */
-    setIsAdmin(state, action: PayloadAction<boolean>) {
-      state.isAdmin = action.payload
-    },
-
-    /**
      * Set if in backoffice or not - If true, the local geoserver is used
      */
     setIsBackoffice(state, action: PayloadAction<boolean>) {
@@ -193,7 +184,6 @@ export const {
   setBlockVesselsUpdate,
   setError,
   setHealthcheckTextWarning,
-  setIsAdmin,
   setIsBackoffice,
   setIsUpdatingVessels,
   setLeftBoxOpened,

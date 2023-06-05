@@ -27,6 +27,9 @@ export const GEOSERVER_BACKOFFICE_URL = self?.env?.REACT_APP_GEOSERVER_LOCAL_URL
   ? self.env.REACT_APP_GEOSERVER_LOCAL_URL
   : process.env.REACT_APP_GEOSERVER_LOCAL_URL
 
+/**
+ * @description This API isn't authenticated
+ */
 function getAllRegulatoryLayersFromAPI (fromBackoffice) {
   const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
@@ -56,6 +59,7 @@ function getAllRegulatoryLayersFromAPI (fromBackoffice) {
 
 /**
  * Get geometry object of regulatory area without regulation reference
+ * @description This API isn't authenticated
  * @memberOf API
  * @param {boolean} fromBackoffice - From backoffice
  * @returns {Promise<GeoJSON>} The geometry as GeoJSON feature
@@ -86,6 +90,7 @@ function getAllGeometryWithoutProperty (fromBackoffice) {
 
 /**
  * Get the administrative zone GeoJSON feature
+ * @description This API isn't authenticated
  * @memberOf API
  * @param {string} administrativeZone
  * @param {import("ol/extent.js").Extent|null} extent
@@ -117,6 +122,7 @@ function getAdministrativeZoneFromAPI (administrativeZone, extent, subZone, from
 
 /**
  * Get the administrative zone Geoserver URL
+ * @description This API isn't authenticated
  * @memberOf API
  * @param {string} type
  * @param {string[]|null} extent
@@ -146,6 +152,9 @@ function getAdministrativeZoneURL (type, extent, subZone, geoserverURL) {
   )
 }
 
+/**
+ * @description This API isn't authenticated
+ */
 function getRegulatoryZoneFromAPI (type, regulatoryZone, fromBackoffice) {
   try {
     const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
@@ -171,6 +180,9 @@ function getRegulatoryZoneFromAPI (type, regulatoryZone, fromBackoffice) {
   }
 }
 
+/**
+ * @description This API isn't authenticated
+ */
 function getRegulatoryZoneURL (type, regulatoryZone, geoserverURL) {
   if (!regulatoryZone.topic) {
     throw new Error('Le nom de la couche n\'est pas renseigné')
@@ -188,6 +200,7 @@ function getRegulatoryZoneURL (type, regulatoryZone, geoserverURL) {
 
 /**
  * Get the regulatory zones GeoJSON feature filtered with the OpenLayers extent (the BBOX)
+ * @description This API isn't authenticated
  * @memberOf API
  * @param {number[]|null} extent
  * @param {boolean} fromBackoffice
@@ -242,6 +255,9 @@ function getFirstFeature (response) {
   }
 }
 
+/**
+ * @description This API isn't authenticated
+ */
 function getRegulatoryFeatureMetadataFromAPI (regulatorySubZone, fromBackoffice) {
   let url
   try {
@@ -270,6 +286,9 @@ function getRegulatoryFeatureMetadataFromAPI (regulatorySubZone, fromBackoffice)
     })
 }
 
+/**
+ * @description This API isn't authenticated
+ */
 function getAdministrativeSubZonesFromAPI (type, fromBackoffice) {
   const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
@@ -311,6 +330,9 @@ function getAdministrativeSubZonesFromAPI (type, fromBackoffice) {
     })
 }
 
+/**
+ * @description This API isn't authenticated
+ */
 function sendRegulationTransaction (feature, actionType) {
   const formatWFS = new WFS()
   const formatGML = new GML({

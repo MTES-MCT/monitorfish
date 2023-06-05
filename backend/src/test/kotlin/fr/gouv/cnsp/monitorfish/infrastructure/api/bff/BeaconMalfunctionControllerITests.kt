@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
+import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.CommunicationMeans
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
@@ -28,12 +29,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.ZonedDateTime
 
-@Import(WebSecurityConfig::class)
+@Import(WebSecurityConfig::class, OIDCProperties::class)
 @WebMvcTest(value = [(BeaconMalfunctionController::class)])
 class BeaconMalfunctionControllerITests {
 
     @Autowired
-    private lateinit var mockMvc: MockMvc
+    private lateinit var api: MockMvc
 
     @MockBean
     private lateinit var getAllBeaconMalfunctions: GetAllBeaconMalfunctions
@@ -74,7 +75,7 @@ class BeaconMalfunctionControllerITests {
         )
 
         // When
-        mockMvc.perform(get("/bff/v1/beacon_malfunctions"))
+        api.perform(get("/bff/v1/beacon_malfunctions"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
@@ -118,7 +119,7 @@ class BeaconMalfunctionControllerITests {
             )
 
         // When
-        mockMvc.perform(
+        api.perform(
             put("/bff/v1/beacon_malfunctions/123")
                 .content(
                     objectMapper.writeValueAsString(
@@ -142,7 +143,7 @@ class BeaconMalfunctionControllerITests {
             .willThrow(CouldNotUpdateBeaconMalfunctionException("FAIL"))
 
         // When
-        mockMvc.perform(
+        api.perform(
             put("/bff/v1/beacon_malfunctions/123", objectMapper.writeValueAsString(UpdateControlObjectiveDataInput()))
                 .contentType(MediaType.APPLICATION_JSON),
         )
@@ -203,7 +204,7 @@ class BeaconMalfunctionControllerITests {
             )
 
         // When
-        mockMvc.perform(get("/bff/v1/beacon_malfunctions/123"))
+        api.perform(get("/bff/v1/beacon_malfunctions/123"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.resume.numberOfBeaconsAtSea", equalTo(1)))
@@ -259,7 +260,7 @@ class BeaconMalfunctionControllerITests {
             )
 
         // When
-        mockMvc.perform(get("/bff/v1/beacon_malfunctions/123"))
+        api.perform(get("/bff/v1/beacon_malfunctions/123"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.resume", equalTo(null)))
@@ -303,7 +304,7 @@ class BeaconMalfunctionControllerITests {
         )
 
         // When
-        mockMvc.perform(
+        api.perform(
             post("/bff/v1/beacon_malfunctions/123/comments")
                 .content(
                     objectMapper.writeValueAsString(
@@ -322,7 +323,7 @@ class BeaconMalfunctionControllerITests {
     @Test
     fun `Should request a notification`() {
         // When
-        mockMvc.perform(put("/bff/v1/beacon_malfunctions/123/MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION"))
+        api.perform(put("/bff/v1/beacon_malfunctions/123/MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION"))
             // Then
             .andExpect(status().isOk)
 
@@ -336,7 +337,7 @@ class BeaconMalfunctionControllerITests {
     @Test
     fun `Should request a notification to a foreign fmc`() {
         // When
-        mockMvc.perform(
+        api.perform(
             put(
                 "/bff/v1/beacon_malfunctions/123/MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC?requestedNotificationForeignFmcCode=ABC",
             ),
@@ -414,7 +415,7 @@ class BeaconMalfunctionControllerITests {
             )
 
         // When
-        mockMvc.perform(
+        api.perform(
             put("/bff/v1/beacon_malfunctions/archive")
                 .content(
                     objectMapper.writeValueAsString(

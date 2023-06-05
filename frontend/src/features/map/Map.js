@@ -33,14 +33,14 @@ import { MissionsLabelsLayer } from './layers/Mission/MissionsLabelsLayer/Missio
 import { MissionOverlay } from './overlays/MissionOverlay'
 import { SelectedMissionOverlay } from './overlays/SelectedMissionOverlay'
 import { MissionHoveredLayer } from './layers/Mission/HoveredMissionLayer'
-import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { SelectedMissionActionsLayer } from './layers/Mission/SelectedMissionActionsLayer'
 import { ControlOverlay } from './overlays/ControlOverlay'
 import { SelectedControlOverlay } from './overlays/SelectedControlOverlay'
 import { useSelector } from 'react-redux'
+import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 
 const Map = () => {
-  const { isAdmin } = useMainAppSelector(state => state.global)
+  const isSuperUser = useIsSuperUser()
   const { areVesselsDisplayed, isMissionsLayerDisplayed } = useSelector(state => state.displayedComponent)
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
@@ -85,15 +85,15 @@ const Map = () => {
       <MeasurementLayer/>
       <FilterLayer/>
       {/** <></> can't be used to group condition as BaseMap needs the layers to be direct children **/}
-      {isAdmin && isMissionsLayerDisplayed && <MissionLayer/>}
-      {isAdmin && <MissionsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>}
-      {isAdmin && <SelectedMissionLayer feature={currentFeature}/>}
-      {isAdmin && <MissionHoveredLayer feature={currentFeature}/>}
-      {isAdmin && <MissionOverlay feature={currentFeature}/>}
-      {isAdmin && <SelectedMissionOverlay/>}
-      {isAdmin && <SelectedMissionActionsLayer/>}
-      {isAdmin && <ControlOverlay feature={currentFeature}/>}
-      {isAdmin && <SelectedControlOverlay/>}
+      {isSuperUser && isMissionsLayerDisplayed && <MissionLayer/>}
+      {isSuperUser && <MissionsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>}
+      {isSuperUser && <SelectedMissionLayer feature={currentFeature}/>}
+      {isSuperUser && <MissionHoveredLayer feature={currentFeature}/>}
+      {isSuperUser && <MissionOverlay feature={currentFeature}/>}
+      {isSuperUser && <SelectedMissionOverlay/>}
+      {isSuperUser && <SelectedMissionActionsLayer/>}
+      {isSuperUser && <ControlOverlay feature={currentFeature}/>}
+      {isSuperUser && <SelectedControlOverlay/>}
       <DrawLayer/>
       <RegulatoryLayerSearch/>
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>

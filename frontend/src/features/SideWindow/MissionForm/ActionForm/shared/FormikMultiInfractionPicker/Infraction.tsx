@@ -9,6 +9,7 @@ import type { Promisable } from 'type-fest'
 export type InfractionProps<AnyInfraction extends MissionAction.OtherInfraction> = {
   data: AnyInfraction
   index: number
+  label: string | undefined
   onDelete: (index: number) => Promisable<void>
   onEdit: (index: number) => Promisable<void>
   seizurePropName: keyof AnyInfraction | undefined
@@ -17,6 +18,7 @@ export type InfractionProps<AnyInfraction extends MissionAction.OtherInfraction>
 export function Infraction<AnyInfraction extends MissionAction.OtherInfraction>({
   data,
   index,
+  label = 'Infraction obligations déclaratives et autorisations',
   onDelete,
   onEdit,
   seizurePropName,
@@ -24,7 +26,9 @@ export function Infraction<AnyInfraction extends MissionAction.OtherInfraction>(
 }: InfractionProps<AnyInfraction>) {
   return (
     <>
-      <Legend>Infraction obligations déclaratives et autorisations {index + 1}</Legend>
+      <Legend>
+        {label} {index + 1}
+      </Legend>
 
       <InnerWrapper>
         <div>

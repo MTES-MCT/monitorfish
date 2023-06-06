@@ -82,6 +82,7 @@ export function LandControlForm({ initialValues, onChange, onError }: LandContro
 
           <FormikMultiInfractionPicker
             addButtonLabel="Ajouter une autre infraction"
+            infractionLabel="Autre infraction"
             label="Autres infractions"
             name="otherInfractions"
           />

@@ -4,6 +4,7 @@ import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { UNKNOWN_VESSEL } from '../../../../../domain/entities/vessel/vessel'
+import { useDeepCompareCallback } from '../../../../../hooks/useDeepCompareCallback'
 import { VesselSearch } from '../../../../VesselSearch'
 
 import type { VesselIdentity } from '../../../../../domain/entities/vessel/types'
@@ -11,7 +12,7 @@ import type { MissionActionFormValues } from '../../types'
 
 export function VesselField() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { errors, setFieldValue, values } = useFormikContext<MissionActionFormValues>()
+  const { errors, setValues, values } = useFormikContext<MissionActionFormValues>()
 
   const { newWindowContainerRef } = useNewWindow()
 
@@ -23,33 +24,38 @@ export function VesselField() {
     [values.flagState, values.vesselName]
   )
 
-  const handleVesselSearchChange = useCallback(
+  const handleVesselSearchChange = useDeepCompareCallback(
     (nextVessel: VesselIdentity | undefined) => {
       if (!nextVessel) {
-        setFieldValue('externalReferenceNumber', undefined)
-        setFieldValue('flagState', undefined)
-        setFieldValue('internalReferenceNumber', undefined)
-        setFieldValue('ircs', undefined)
-        setFieldValue('vesselId', undefined, true)
-        setFieldValue('vesselName', undefined)
+        setValues({
+          ...values,
+          externalReferenceNumber: undefined,
+          flagState: undefined,
+          internalReferenceNumber: undefined,
+          ircs: undefined,
+          vesselId: undefined,
+          vesselName: undefined
+        })
 
         return
       }
 
+      // TODO Show an error in this case?
       if (!nextVessel.vesselId || !nextVessel.vesselName) {
         return
       }
 
-      setFieldValue('externalReferenceNumber', nextVessel.externalReferenceNumber)
-      setFieldValue('flagState', nextVessel.flagState)
-      setFieldValue('internalReferenceNumber', nextVessel.internalReferenceNumber)
-      setFieldValue('ircs', nextVessel.ircs)
-      setFieldValue('vesselId', nextVessel.vesselId)
-      setFieldValue('vesselName', nextVessel.vesselName)
+      setValues({
+        ...values,
+        externalReferenceNumber: nextVessel.externalReferenceNumber || undefined,
+        flagState: nextVessel.flagState,
+        internalReferenceNumber: nextVessel.internalReferenceNumber || undefined,
+        ircs: nextVessel.ircs || undefined,
+        vesselId: nextVessel.vesselId,
+        vesselName: nextVessel.vesselName
+      })
     },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [values]
   )
 
   const handleIsVesselUnknownChange = useCallback(
@@ -67,31 +73,37 @@ export function VesselField() {
     [handleVesselSearchChange]
   )
 
+  // console.log(errors)
+
   return (
-    <Wrapper>
-      <StyledVesselSearch
-        baseRef={newWindowContainerRef}
-        defaultValue={defaultValue}
-        disabled={values.vesselId === UNKNOWN_VESSEL.vesselId}
-        extendedWidth={400}
-        hasError={!!errors.vesselId}
-        hasVesselIdInResults
-        isExtended
-        onChange={handleVesselSearchChange}
-      />
-      <Checkbox
-        checked={values.vesselId === UNKNOWN_VESSEL.vesselId}
-        label="Navire inconnu"
-        name="isVesselUnknown"
-        onChange={handleIsVesselUnknownChange}
-      />
+    <>
+      <Wrapper>
+        <StyledVesselSearch
+          baseRef={newWindowContainerRef}
+          defaultValue={defaultValue}
+          disabled={values.vesselId === UNKNOWN_VESSEL.vesselId}
+          extendedWidth={400}
+          hasError={!!errors.vesselId}
+          hasVesselIdInResults
+          isExtended
+          onChange={handleVesselSearchChange}
+        />
+        <Checkbox
+          checked={values.vesselId === UNKNOWN_VESSEL.vesselId}
+          label="Navire inconnu"
+          name="isVesselUnknown"
+          onChange={handleIsVesselUnknownChange}
+        />
+      </Wrapper>
+
       {errors.vesselId && <Error>{errors.vesselId}</Error>}
-    </Wrapper>
+    </>
   )
 }
 
 const Error = styled.span`
   color: ${p => p.theme.color.maximumRed};
+  font-weight: 700;
 `
 
 const Wrapper = styled.div`

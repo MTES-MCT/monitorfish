@@ -39,16 +39,16 @@ export const InfractionFormSchema = object({
 })
 
 export const AirControlFormSchema = object({
-  vesselId: number().integer().required('Veuillez indiquer le navire contrôlé.'),
+  vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
   actionDatetimeUtc: actionDatetimeUtcValidator
 })
 
 export const LandControlFormSchema = object({
-  vesselId: number().integer().required('Veuillez indiquer le navire contrôlé.'),
+  vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
   actionDatetimeUtc: actionDatetimeUtcValidator
 })
 
 export const SeaControlFormSchema = object({
-  vesselId: number().integer().required('Veuillez indiquer le navire contrôlé.'),
+  vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
   actionDatetimeUtc: actionDatetimeUtcValidator
 })

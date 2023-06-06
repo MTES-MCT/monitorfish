@@ -1,4 +1,5 @@
 import { Accent, getLocalizedDayjs, Icon, IconButton, Tag, TagGroup, THEME, TagBullet } from '@mtes-mct/monitor-ui'
+import { isEmpty } from 'lodash/fp'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -7,17 +8,19 @@ import { UNKNOWN_VESSEL } from '../../../../domain/entities/vessel/vessel'
 import { MissionAction } from '../../../../domain/types/missionAction'
 import { FrontendError } from '../../../../libs/FrontendError'
 
+import type { FormikFormError } from '../../../../types'
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
 export type ItemProps = {
+  error: FormikFormError
   initialValues: MissionActionFormValues
   isSelected: boolean
   onDuplicate: () => Promisable<void>
   onRemove: () => Promisable<void>
   onSelect: () => Promisable<void>
 }
-export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelect }: ItemProps) {
+export function Item({ error, initialValues, isSelected, onDuplicate, onRemove, onSelect }: ItemProps) {
   const [actionLabel, ActionIcon] = useMemo(() => {
     const vesselName = initialValues.vesselName === UNKNOWN_VESSEL.vesselName ? 'INCONNU' : initialValues.vesselName
 
@@ -91,49 +94,53 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
   )
 
   return (
-    <Wrapper>
-      {startDateAsDayjs && (
-        <DateLabel>
-          <b>{formatDateLabel(startDateAsDayjs.format('DD MMM'))}</b> à {startDateAsDayjs.format('HH:mm')} (UTC)
-        </DateLabel>
-      )}
+    <>
+      <Wrapper>
+        {startDateAsDayjs && (
+          <DateLabel>
+            <b>{formatDateLabel(startDateAsDayjs.format('DD MMM'))}</b> à {startDateAsDayjs.format('HH:mm')} (UTC)
+          </DateLabel>
+        )}
 
-      <InnerWrapper
-        data-cy="action-list-item"
-        isSelected={isSelected}
-        onClick={onSelect}
-        type={initialValues.actionType}
-      >
-        <Head>
-          <ActionLabel>
-            <ActionIcon color={THEME.color.charcoal} size={20} />
-            <p>{actionLabel}</p>
-          </ActionLabel>
+        <InnerWrapper
+          data-cy="action-list-item"
+          isSelected={isSelected}
+          onClick={onSelect}
+          type={initialValues.actionType}
+        >
+          <Head>
+            <ActionLabel>
+              <ActionIcon color={THEME.color.charcoal} size={20} />
+              <p>{actionLabel}</p>
+            </ActionLabel>
 
-          <IconButton
-            accent={Accent.TERTIARY}
-            aria-label="Dupliquer l’action"
-            color={THEME.color.slateGray}
-            Icon={Icon.Duplicate}
-            iconSize={20}
-            onClick={onDuplicate}
-            withUnpropagatedClick
-          />
-          <IconButton
-            accent={Accent.TERTIARY}
-            aria-label="Supprimer l’action"
-            color={THEME.color.maximumRed}
-            Icon={Icon.Delete}
-            iconSize={20}
-            onClick={onRemove}
-            withUnpropagatedClick
-          />
-        </Head>
+            <IconButton
+              accent={Accent.TERTIARY}
+              aria-label="Dupliquer l’action"
+              color={THEME.color.slateGray}
+              Icon={Icon.Duplicate}
+              iconSize={20}
+              onClick={onDuplicate}
+              withUnpropagatedClick
+            />
+            <IconButton
+              accent={Accent.TERTIARY}
+              aria-label="Supprimer l’action"
+              color={THEME.color.maximumRed}
+              Icon={Icon.Delete}
+              iconSize={20}
+              onClick={onRemove}
+              withUnpropagatedClick
+            />
+          </Head>
 
-        {redTags.length > 0 && <StyledTagGroup>{redTags}</StyledTagGroup>}
-        {infractionTags.length > 0 && <StyledTagGroup>{infractionTags}</StyledTagGroup>}
-      </InnerWrapper>
-    </Wrapper>
+          {redTags.length > 0 && <StyledTagGroup>{redTags}</StyledTagGroup>}
+          {infractionTags.length > 0 && <StyledTagGroup>{infractionTags}</StyledTagGroup>}
+        </InnerWrapper>
+      </Wrapper>
+
+      {!isEmpty(error) && <Error>Veuillez compléter les champs manquants dans cette action de contrôle.</Error>}
+    </>
   )
 }
 
@@ -200,4 +207,10 @@ const Head = styled.div`
 const StyledTagGroup = styled(TagGroup)`
   margin-top: 8px;
   padding-left: 32px;
+`
+
+const Error = styled.p`
+  color: ${p => p.theme.color.maximumRed};
+  font-style: italic;
+  margin: 8px 0 0 120px !important;
 `

@@ -11,6 +11,8 @@ export type DeepPartial<T> = T extends object
     }
   : T
 
+export type FormikFormError = Record<string, any> | undefined
+
 export type Native = boolean | null | number | string | undefined
 export type NativeAny = boolean | NativeArray | NativeObject | null | number | string | undefined
 export type NativeArray = Array<NativeAny>

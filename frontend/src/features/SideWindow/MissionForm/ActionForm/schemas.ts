@@ -33,22 +33,22 @@ const actionDatetimeUtcValidator = string()
   })
 
 export const InfractionFormSchema = object({
-  comments: string().default(''),
+  comments: string(),
   infractionType: string().required('Le type d’infraction est un champ obligatoire.'),
   natinf: number().required('Le NATINF est un champ obligatoire.')
 })
 
 export const AirControlFormSchema = object({
-  vesselId: number().integer().required('Veuillez indiquer le navire contrôlé.'),
+  vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
   actionDatetimeUtc: actionDatetimeUtcValidator
 })
 
 export const LandControlFormSchema = object({
-  vesselId: number().integer().required('Veuillez indiquer le navire contrôlé.'),
+  vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
   actionDatetimeUtc: actionDatetimeUtcValidator
 })
 
 export const SeaControlFormSchema = object({
-  vesselId: number().integer().required('Veuillez indiquer le navire contrôlé.'),
+  vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
   actionDatetimeUtc: actionDatetimeUtcValidator
 })

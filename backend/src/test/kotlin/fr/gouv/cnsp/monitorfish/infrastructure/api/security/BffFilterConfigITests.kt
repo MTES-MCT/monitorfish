@@ -1,6 +1,9 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 
-import fr.gouv.cnsp.monitorfish.config.*
+import fr.gouv.cnsp.monitorfish.config.ApiClient
+import fr.gouv.cnsp.monitorfish.config.OIDCProperties
+import fr.gouv.cnsp.monitorfish.config.ProtectedPathsAPIProperties
+import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.VersionController
 import org.junit.jupiter.api.Test
@@ -16,8 +19,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @Import(
     WebSecurityConfig::class,
     OIDCProperties::class,
-    SuperUserAPIProperties::class,
-    UserManagementProperties::class,
     ProtectedPathsAPIProperties::class,
     BffFilterConfig::class,
     ApiClient::class,
@@ -68,10 +69,11 @@ class BffFilterConfigITests {
     }
 
     @Test
-    fun `Should return 401 for all user management protected paths`() {
+    fun `Should return 401 for all public but protected paths`() {
         // When
         listOf(
             "/api/v1/authorization/management",
+            "/api/v1/beacon_malfunctions/123",
         ).forEach {
             mockMvc.perform(
                 get(it),

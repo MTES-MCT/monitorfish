@@ -25,6 +25,8 @@ class WebSecurityConfig(val oidcProperties: OIDCProperties) {
                 } else {
                     authorize.requestMatchers(
                         AntPathRequestMatcher("/"),
+                        // Used to redirect to the frontend SPA, see SpaController.kt
+                        AntPathRequestMatcher("/error"),
                         AntPathRequestMatcher("/api/**"),
                         AntPathRequestMatcher("/version"),
                     ).permitAll()

@@ -24,6 +24,7 @@ Table of contents
    flows
    containerization
    vessel_identification
+   authentication
    deployment
    contributing
    reference

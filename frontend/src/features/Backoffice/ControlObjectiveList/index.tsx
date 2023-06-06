@@ -7,6 +7,7 @@ import styled from 'styled-components'
 
 import { SeaFrontControlObjectives } from './SeaFrontControlObjectives'
 import { useGetControlObjectivesQuery, useGetControlObjectiveYearsQuery } from '../../../api/controlObjective'
+import { SeaFront } from '../../../constants'
 import { COLORS } from '../../../constants/constants'
 import addControlObjectiveYear from '../../../domain/use_cases/controlObjective/addControlObjectiveYear'
 import { useBackofficeAppDispatch } from '../../../hooks/useBackofficeAppDispatch'
@@ -98,27 +99,33 @@ export function ControlObjectiveList() {
       </Header>
       <ControlObjectivesContainer>
         <SeaFrontControlObjectives
-          data={getControlObjectivesQuery.data.filter(controlObjective => controlObjective.facade === 'NAMO')}
-          facade="NAMO"
+          data={getControlObjectivesQuery.data.filter(controlObjective => controlObjective.facade === SeaFront.NAMO)}
+          facade={SeaFront.NAMO}
           title="NORD ATLANTIQUE - MANCHE OUEST (NAMO)"
           year={selectedYear}
         />
         <SeaFrontControlObjectives
-          data={getControlObjectivesQuery.data.filter(controlObjective => controlObjective.facade === 'MEMN')}
-          facade="MEMN"
+          data={getControlObjectivesQuery.data.filter(controlObjective => controlObjective.facade === SeaFront.MEMN)}
+          facade={SeaFront.MEMN}
           title="MANCHE EST – MER DU NORD (MEMN)"
           year={selectedYear}
         />
         <SeaFrontControlObjectives
-          data={getControlObjectivesQuery.data.filter(controlObjective => controlObjective.facade === 'SA')}
-          facade="SA"
+          data={getControlObjectivesQuery.data.filter(controlObjective => controlObjective.facade === SeaFront.SA)}
+          facade={SeaFront.SA}
           title="SUD-ATLANTIQUE (SA)"
           year={selectedYear}
         />
         <SeaFrontControlObjectives
-          data={getControlObjectivesQuery.data.filter(controlObjective => controlObjective.facade === 'MED')}
-          facade="MED"
+          data={getControlObjectivesQuery.data.filter(controlObjective => controlObjective.facade === SeaFront.MED)}
+          facade={SeaFront.MED}
           title="Méditerranée (MED)"
+          year={selectedYear}
+        />
+        <SeaFrontControlObjectives
+          data={getControlObjectivesQuery.data.filter(controlObjective => controlObjective.facade === SeaFront.CORSE)}
+          facade={SeaFront.CORSE}
+          title="Corse (CORSE)"
           year={selectedYear}
         />
       </ControlObjectivesContainer>

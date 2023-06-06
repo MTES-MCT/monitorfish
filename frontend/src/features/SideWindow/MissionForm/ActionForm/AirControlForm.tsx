@@ -69,7 +69,7 @@ export function AirControlForm({ initialValues, onChange }: AirControlFormProps)
           />
 
           <FieldsetGroup isLight legend="Autres observations">
-            <FormikTextarea isLabelHidden label="Autres observations" name="otherComments" />
+            <FormikTextarea isLabelHidden label="Autres observations" name="otherComments" rows={2} />
           </FieldsetGroup>
 
           <FormikTextInput isLight label="Saisi par" name="userTrigram" />

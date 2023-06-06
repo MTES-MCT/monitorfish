@@ -61,8 +61,8 @@ function UnmemoizedMainForm({ initialValues, onChange }: MainFormProps) {
             <FormikLocationPicker />
 
             <RelatedFieldGroupWrapper>
-              <FormikTextarea label="CACEM : orientations, observations" name="observationsCacem" />
-              <FormikTextarea label="CNSP : orientations, observations" name="observationsCnsp" />
+              <FormikTextarea label="CACEM : orientations, observations" name="observationsCacem" rows={2} />
+              <FormikTextarea label="CNSP : orientations, observations" name="observationsCnsp" rows={2} />
             </RelatedFieldGroupWrapper>
 
             <InlineFieldGroupWrapper>

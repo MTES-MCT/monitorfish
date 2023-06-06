@@ -26,14 +26,16 @@ import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
 
+import type { FormikFormError } from '../../../../types'
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
 type SeaControlFormProps = {
   initialValues: MissionActionFormValues
   onChange: (nextValues: MissionActionFormValues) => Promisable<void>
+  onError: (nextFormError: FormikFormError) => Promisable<void>
 }
-export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps) {
+export function SeaControlForm({ initialValues, onChange, onError }: SeaControlFormProps) {
   const { newWindowContainerRef } = useNewWindow()
 
   const titleDate = useMemo(
@@ -45,7 +47,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
   return (
     <Formik initialValues={initialValues} onSubmit={noop} validationSchema={SeaControlFormSchema}>
       <>
-        <FormikEffect onChange={onChange as any} />
+        <FormikEffect onChange={onChange as any} onError={onError} />
         <FormikRevalidationEffect />
 
         <FormHead>

@@ -19,7 +19,7 @@
         <spring.version>${project.parent.version}</spring.version>
         <kotlin.version>1.8.21</kotlin.version>
         <testcontainers.version>1.18.1</testcontainers.version>
-        <ktor.version>2.3.0</ktor.version>
+        <ktor.version>2.3.1</ktor.version>
         <commit.hash>COMMIT_TO_CHANGE</commit.hash>
         <main.class>fr.gouv.cnsp.monitorfish.MonitorFishApplicationKt</main.class>
     </properties>

@@ -81,6 +81,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
 
           <FormikMultiInfractionPicker
             addButtonLabel="Ajouter une autre infraction"
+            infractionLabel="Autre infraction"
             label="Autres infractions"
             name="otherInfractions"
           />

@@ -24,6 +24,7 @@ export type FormikMultiInfractionPickerProps<AnyInfraction extends MissionAction
     name: keyof MissionActionFormValues
   }
   infractionCheckboxProps?: FormikCheckboxProps
+  infractionLabel?: string
   label: string
   name: keyof MissionActionFormValues
   seizurePropName?: keyof AnyInfraction
@@ -34,6 +35,7 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
   children,
   generalObservationTextareaProps,
   infractionCheckboxProps,
+  infractionLabel,
   label,
   name,
   seizurePropName,
@@ -157,6 +159,7 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
                   <Infraction
                     data={infraction}
                     index={index}
+                    label={infractionLabel}
                     onDelete={remove}
                     onEdit={setEditedIndex}
                     seizurePropName={seizurePropName}

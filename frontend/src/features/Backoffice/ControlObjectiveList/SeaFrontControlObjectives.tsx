@@ -207,7 +207,7 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
 
   return (
     <Wrapper>
-      <Title>{title}</Title>
+      <Title data-cy="control-objective-facade-title">{title}</Title>
       <br />
       <Table
         affixHorizontalScrollbar

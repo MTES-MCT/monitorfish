@@ -10,7 +10,14 @@ context('Control objectives', () => {
 
   it('Should render the objectives and navigate between years', () => {
     // Then
-    cy.get('.rs-table-row').should('have.length', 57)
+    cy.get('.rs-table-row').should('have.length', 67)
+    cy.get('[data-cy="control-objective-facade-title"]').should('have.length', 5)
+    cy.get('[data-cy="control-objective-facade-title"]').eq(0).contains('NORD ATLANTIQUE - MANCHE OUEST (NAMO)')
+    cy.get('[data-cy="control-objective-facade-title"]').eq(1).contains('MANCHE EST – MER DU NORD (MEMN)')
+    cy.get('[data-cy="control-objective-facade-title"]').eq(2).contains('SUD-ATLANTIQUE (SA)')
+    cy.get('[data-cy="control-objective-facade-title"]').eq(3).contains('Méditerranée (MED)')
+    cy.get('[data-cy="control-objective-facade-title"]').eq(4).contains('Corse (CORSE)')
+
     cy.get('.rs-table-cell-content').eq(9).contains('ATL01')
     // We check the next line as the ATL01 segment was deleted from the segment table and has no segment name associated
     cy.get('.rs-table-cell-content').eq(18).contains('Eel sea fisheries')
@@ -100,7 +107,7 @@ context('Control objectives', () => {
 
   it('Should delete an objective', () => {
     // Given
-    cy.get('.rs-table-row').should('have.length', 57)
+    cy.get('.rs-table-row').should('have.length', 67)
     cy.intercept('DELETE', '/bff/v1/control_objectives/78').as('deleteObjective')
 
     // When
@@ -132,7 +139,7 @@ context('Control objectives', () => {
 
     // Then
     cy.wait(50)
-    cy.get('.rs-table-row').should('have.length', 57)
+    cy.get('.rs-table-row').should('have.length', 67)
 
     // Update the row when the value is updated in local memory
     cy.intercept('PUT', '/bff/v1/control_objectives/107').as('updateObjective')
@@ -149,7 +156,7 @@ context('Control objectives', () => {
     cy.visit('/backoffice/control_objectives')
     cy.wait('@controlObjectives')
     cy.wait(50)
-    cy.get('.rs-table-row').should('have.length', 57)
+    cy.get('.rs-table-row').should('have.length', 67)
   })
 
   it('Should permit to add a control objective year When the current year is not yet added', () => {
@@ -159,7 +166,7 @@ context('Control objectives', () => {
     const now = new Date(nextYear, 3, 14).getTime()
 
     cy.clock(now)
-    cy.get('.rs-table-row').should('have.length', 57)
+    cy.get('.rs-table-row').should('have.length', 67)
     cy.get('*[data-cy^="control-objectives-year"]').contains(currentYear)
     cy.get('*[data-cy^="control-objectives-year"]').click()
     cy.get('.rs-picker-select-menu-item').should('have.length', 2)
@@ -170,7 +177,7 @@ context('Control objectives', () => {
 
   it('Should add the next control objective year', () => {
     // Given
-    cy.get('.rs-table-row').should('have.length', 57)
+    cy.get('.rs-table-row').should('have.length', 67)
     cy.get('*[data-cy^="control-objectives-year"]').click()
     cy.get('.rs-picker-select-menu-item').should('have.length', 2)
     cy.intercept('POST', '/bff/v1/control_objectives/years').as('addObjectiveYear')
@@ -185,7 +192,7 @@ context('Control objectives', () => {
     cy.get('*[data-cy^="control-objectives-year"]').contains(nextYear)
     cy.get('*[data-cy^="control-objectives-year"]').click()
     cy.get('.rs-picker-select-menu-item').should('have.length', 3)
-    cy.get('.rs-table-row').should('have.length', 57)
+    cy.get('.rs-table-row').should('have.length', 67)
     cy.get('*[data-cy="control-objectives-add-year"]').should('be.not.visible')
   })
 })

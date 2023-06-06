@@ -39,6 +39,10 @@ export function GearsField() {
 
   const { newWindowContainerRef } = useNewWindow()
 
+  /**
+   * This state save the "Maillage non mesuré" (UNSAVED_FIELD_meshWasNotControlled) field checkbox, as it it not saved in the database.
+   * The purpose of this checkbox is to disable and init the `controlledMesh` input.
+   */
   const [uncontrolledMeshGearCodes, setUncontrolledMeshGearCodes] = useState<string[]>([])
 
   const getGearsApiQuery = useGetGearsQuery()
@@ -79,22 +83,16 @@ export function GearsField() {
     [input.value]
   )
 
-  const handleMeshWasNotControlledChange = useCallback(
-    (gearCode: MissionAction.GearControl['gearCode'], isChecked: boolean | undefined) => {
-      if (!uncontrolledMeshGearCodes.length) {
-        return
-      }
+  const handleMeshWasNotControlledChange = (
+    gearCode: MissionAction.GearControl['gearCode'],
+    isChecked: boolean | undefined
+  ) => {
+    const nextUncontrolledMeshGearCodes = isChecked
+      ? [...uncontrolledMeshGearCodes, gearCode]
+      : uncontrolledMeshGearCodes.filter(uncontrolledGearCode => uncontrolledGearCode !== gearCode)
 
-      const nextUncontrolledMeshGearCodes = isChecked
-        ? [...uncontrolledMeshGearCodes, gearCode]
-        : uncontrolledMeshGearCodes.filter(uncontrolledGearCode => uncontrolledGearCode !== gearCode)
-
-      setUncontrolledMeshGearCodes(nextUncontrolledMeshGearCodes)
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [uncontrolledMeshGearCodes]
-  )
+    setUncontrolledMeshGearCodes(nextUncontrolledMeshGearCodes)
+  }
 
   const remove = useCallback(
     (index: number) => {
@@ -193,10 +191,11 @@ export function GearsField() {
                 />
 
                 <Checkbox
+                  checked={uncontrolledMeshGearCodes.includes(gearOnboard.gearCode)}
                   disabled={!gearOnboard.gearWasControlled}
                   isUndefinedWhenDisabled
                   label="Maillage non mesuré"
-                  name="gearWasNotControlled"
+                  name="UNSAVED_FIELD_meshWasNotControlled"
                   onChange={isChecked => handleMeshWasNotControlledChange(gearOnboard.gearCode, isChecked)}
                 />
               </StyledFieldGroup>

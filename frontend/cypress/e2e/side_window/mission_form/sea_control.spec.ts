@@ -92,20 +92,21 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Engins à bord
     cy.fill('Ajouter un engin', 'MIS')
     cy.fill('Engin contrôlé', 'Oui')
-    // TODO Fix these fields which makes the test and Cypress hangs
-    // TODO Theses three fields makes the test to be broken
-    // cy.fill('Maillage déclaré', '10')
-    // cy.fill('Maillage mesuré', '20')
-    // cy.fill('MIS : autres mesures et dispositifs', 'Autres mesures.')
+    cy.fill('Maillage déclaré', '10')
+    cy.fill('Maillage mesuré', '20')
+    cy.fill('MIS : autres mesures et dispositifs', 'Autres mesures.')
+    // This will modify the "Maillage mesuré" input as null
+    cy.fill('Maillage non mesuré', true)
+
+    cy.fill('Ajouter un engin', 'OTB')
 
     // Espèces à bord
     cy.fill('Poids des espèces vérifiés', 'Oui')
     cy.fill('Taille des espèces vérifiées', 'Non')
     cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
     cy.fill('Ajouter une espèce', 'COD')
-    // TODO Theses two fields makes the test to be broken
-    // cy.fill('Qté déclarée', 10)
-    // cy.fill('Qté estimée', 20)
+    cy.fill('Qté déclarée', 10)
+    cy.fill('Qté estimée', 20)
     cy.fill('Sous-taille', true)
     cy.clickButton('Ajouter une infraction espèces')
     cy.fill('Type d’infraction', 'Sans PV')
@@ -171,12 +172,19 @@ context('Side Window > Mission Form > Sea Control', () => {
         gearInfractions: [],
         gearOnboard: [
           {
-            comments: null,
-            controlledMesh: null,
-            declaredMesh: null,
+            comments: 'Autres mesures.',
+            declaredMesh: 10,
             gearCode: 'MIS',
             gearName: 'Engin divers',
             gearWasControlled: true
+          },
+          {
+            comments: null,
+            controlledMesh: null,
+            declaredMesh: null,
+            gearCode: 'OTB',
+            gearName: 'Chaluts de fond à panneaux',
+            gearWasControlled: null
           }
         ],
         id: null,
@@ -213,7 +221,7 @@ context('Side Window > Mission Form > Sea Control', () => {
         ],
         speciesObservations: 'Une observation hors infraction sur les espèces.',
         speciesOnboard: [
-          { controlledWeight: null, declaredWeight: null, nbFish: null, speciesCode: 'COD', underSized: true }
+          { controlledWeight: 20, declaredWeight: 10, nbFish: null, speciesCode: 'COD', underSized: true }
         ],
         speciesSizeControlled: false,
         speciesWeightControlled: true,

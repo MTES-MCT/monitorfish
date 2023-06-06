@@ -66,6 +66,7 @@ export function AirControlForm({ initialValues, onChange, onError }: AirControlF
 
           <FormikMultiInfractionPicker
             addButtonLabel="Ajouter une infraction"
+            infractionLabel="Autre infraction"
             label="Infractions"
             name="otherInfractions"
           />

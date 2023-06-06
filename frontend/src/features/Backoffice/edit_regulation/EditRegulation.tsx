@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { batch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 import {
@@ -67,7 +67,7 @@ import type { GeoJSONGeometry } from 'ol/format/GeoJSON'
 export function EditRegulation({ isEdition, title }) {
   const dispatch = useBackofficeAppDispatch()
 
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const layersTopicsByRegTerritory = useBackofficeAppSelector(state => state.regulatory.layersTopicsByRegTerritory)
 
@@ -148,8 +148,8 @@ export function EditRegulation({ isEdition, title }) {
 
   const goBackofficeHome = useCallback(() => {
     dispatch(resetState())
-    history.push('/backoffice/regulation')
-  }, [dispatch, history])
+    navigate('/backoffice/regulation')
+  }, [dispatch, navigate])
 
   useEffect(() => {
     if (regulationSaved || regulationDeleted) {

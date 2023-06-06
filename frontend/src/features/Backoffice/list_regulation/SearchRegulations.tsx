@@ -1,7 +1,7 @@
 // TODO Remove temporary `as any` and `@ts-ignore` (fresh migration to TS).
 
 import { useEffect, useRef, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
@@ -62,10 +62,10 @@ export function SearchRegulations(props) {
     }
   }, [])
 
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const onAddRegulationClick = () => {
-    history.push('/backoffice/regulation/new')
+    navigate('/backoffice/regulation/new')
   }
 
   return (

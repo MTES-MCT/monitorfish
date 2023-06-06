@@ -1,6 +1,6 @@
 // TODO Remove temporary `as any` and `@ts-ignore` (fresh migration to TS).
 
-import { Link, useRouteMatch } from 'react-router-dom'
+import { Link, useMatch } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
@@ -10,9 +10,9 @@ import { ReactComponent as FleetSVG } from '../../icons/Label_segment_de_flotte_
 import { ReactComponent as ControlObjectivesSVG } from '../../icons/objectifs_controle.svg'
 
 export function Menu() {
-  const onRegulationPage = useRouteMatch('/backoffice/regulation')
-  const onControlObjectivePage = useRouteMatch('/backoffice/control_objectives')
-  const onFleetSegmentsPage = useRouteMatch('/backoffice/fleet_segments')
+  const onRegulationPage = useMatch('/backoffice/regulation')
+  const onControlObjectivePage = useMatch('/backoffice/control_objectives')
+  const onFleetSegmentsPage = useMatch('/backoffice/fleet_segments')
 
   return (
     <Wrapper>

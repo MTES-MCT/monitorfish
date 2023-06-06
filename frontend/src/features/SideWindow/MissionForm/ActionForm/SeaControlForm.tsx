@@ -86,7 +86,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
           />
 
           <FieldsetGroup isLight legend="Autres observations">
-            <FormikTextarea isLabelHidden label="Autres observations" name="otherComments" />
+            <FormikTextarea isLabelHidden label="Autres observations" name="otherComments" rows={2} />
           </FieldsetGroup>
 
           <hr />

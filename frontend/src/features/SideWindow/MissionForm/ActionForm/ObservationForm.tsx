@@ -33,7 +33,7 @@ export function ObservationForm({ initialValues, onChange }: ObservationFormProp
         </FormHead>
 
         <FormBody>
-          <FormikTextarea isLight label="Observations, commentaires..." name="otherComments" />
+          <FormikTextarea isLight label="Observations, commentaires..." name="otherComments" rows={2} />
 
           <FormikTextInput isLight label="Saisi par" name="userTrigram" />
         </FormBody>

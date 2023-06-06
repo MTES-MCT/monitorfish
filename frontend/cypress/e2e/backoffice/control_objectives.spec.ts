@@ -116,7 +116,7 @@ context('Control objectives', () => {
 
     // Then
     cy.wait(50)
-    cy.get('.rs-table-row').should('have.length', 56)
+    cy.get('.rs-table-row').should('have.length', 66)
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/control_objectives').as('controlObjectives')
@@ -129,7 +129,7 @@ context('Control objectives', () => {
 
   it('Should add an objective', () => {
     // Given
-    cy.get('.rs-table-row').should('have.length', 56)
+    cy.get('.rs-table-row').should('have.length', 66)
     cy.intercept('POST', '/bff/v1/control_objectives').as('addObjective')
 
     // When
@@ -166,7 +166,7 @@ context('Control objectives', () => {
     const now = new Date(nextYear, 3, 14).getTime()
 
     cy.clock(now)
-    cy.get('.rs-table-row').should('have.length', 67)
+    cy.get('.rs-table-row').should('have.length', 66)
     cy.get('*[data-cy^="control-objectives-year"]').contains(currentYear)
     cy.get('*[data-cy^="control-objectives-year"]').click()
     cy.get('.rs-picker-select-menu-item').should('have.length', 2)
@@ -177,7 +177,7 @@ context('Control objectives', () => {
 
   it('Should add the next control objective year', () => {
     // Given
-    cy.get('.rs-table-row').should('have.length', 67)
+    cy.get('.rs-table-row').should('have.length', 66)
     cy.get('*[data-cy^="control-objectives-year"]').click()
     cy.get('.rs-picker-select-menu-item').should('have.length', 2)
     cy.intercept('POST', '/bff/v1/control_objectives/years').as('addObjectiveYear')
@@ -192,7 +192,7 @@ context('Control objectives', () => {
     cy.get('*[data-cy^="control-objectives-year"]').contains(nextYear)
     cy.get('*[data-cy^="control-objectives-year"]').click()
     cy.get('.rs-picker-select-menu-item').should('have.length', 3)
-    cy.get('.rs-table-row').should('have.length', 67)
+    cy.get('.rs-table-row').should('have.length', 66)
     cy.get('*[data-cy="control-objectives-add-year"]').should('be.not.visible')
   })
 })

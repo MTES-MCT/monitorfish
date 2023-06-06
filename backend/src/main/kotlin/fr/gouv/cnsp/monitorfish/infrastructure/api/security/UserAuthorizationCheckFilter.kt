@@ -76,9 +76,11 @@ class UserAuthorizationCheckFilter(
                 }
             }.body<UserInfo>()
 
-            val isContainingSuperUserPath = protectedPathsAPIProperties.superUserPaths?.any { request.requestURI.contains(
-                it,
-            ) }!!
+            val isContainingSuperUserPath = protectedPathsAPIProperties.superUserPaths?.any {
+                request.requestURI.contains(
+                    it,
+                )
+            }!!
             val isAuthorized = getIsAuthorizedUser.execute(userInfoResponse.email, isContainingSuperUserPath)
             if (!isAuthorized) {
                 logger.debug(INSUFFICIENT_AUTHORIZATION_MESSAGE)

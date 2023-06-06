@@ -1,6 +1,18 @@
 import { THEME, type NewWindowContextValue, NewWindowContext, usePrevious, Notifier } from '@mtes-mct/monitor-ui'
 import { propEq } from 'ramda'
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
+import {
+  type CSSProperties,
+  type ForwardedRef,
+  forwardRef,
+  type HTMLAttributes,
+  type MutableRefObject,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled, { createGlobalStyle } from 'styled-components'
 
@@ -29,7 +41,6 @@ import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 import type { MenuItem } from '../../types'
-import type { MutableRefObject, CSSProperties, ForwardedRef, HTMLAttributes } from 'react'
 
 export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
   isFromURL: boolean
@@ -37,6 +48,8 @@ export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
 function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTMLDivElement | null>) {
   // eslint-disable-next-line no-null/no-null
   const wrapperRef = useRef<HTMLDivElement | null>(null)
+
+  useImperativeHandle<HTMLDivElement | null, HTMLDivElement | null>(ref, () => wrapperRef.current)
 
   const { sideWindow } = useMainAppSelector(state => state)
 
@@ -88,8 +101,6 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [isFirstRender]
   )
-
-  useImperativeHandle<HTMLDivElement | null, HTMLDivElement | null>(ref, () => wrapperRef.current)
 
   const closeRightSidebar = useCallback(() => {
     dispatch(closeBeaconMalfunctionInKanban())
@@ -333,5 +344,7 @@ const Text = styled.span`
   margin-top: 10px;
   position: relative;
 `
+
+SideWindowWithRef.displayName = 'SideWindow'
 
 export const SideWindow = forwardRef(SideWindowWithRef)

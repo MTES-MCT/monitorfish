@@ -1,7 +1,7 @@
 // TODO Remove temporary `as any` and `@ts-ignore` (fresh migration to TS).
 
 import { memo, useEffect, useState } from 'react'
-import { useHistory, useRouteMatch } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
@@ -66,8 +66,7 @@ function UnmemoizedRegulatoryZone({
   regulatoryZone
 }: RegulatoryZoneProps) {
   const dispatch = useMainAppDispatch()
-  const match = useRouteMatch()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const { isReadyToShowRegulatoryLayers, regulatoryZoneMetadata } = useMainAppSelector(state => state.regulatory)
   const zoneIsShown = useMainAppSelector(state =>
@@ -114,10 +113,11 @@ function UnmemoizedRegulatoryZone({
 
   const onEditRegulationClick = () => {
     dispatch(showRegulationToEdit(regulatoryZone))
-    history.push(`${match.path}/edit`)
     dispatch(removeRegulatoryTopicOpened(regulatoryTopic))
     dispatch(addRegulatoryTopicOpened(regulatoryTopic))
     dispatch(closeRegulatoryZoneMetadataPanel())
+
+    navigate('/backoffice/regulation/edit')
   }
 
   const onMouseEnter = () => !isOver && setIsOver(true)

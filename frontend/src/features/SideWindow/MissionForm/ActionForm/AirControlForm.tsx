@@ -20,14 +20,16 @@ import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
 
+import type { FormikFormError } from '../../../../types'
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
 export type AirControlFormProps = {
   initialValues: MissionActionFormValues
   onChange: (nextValues: MissionActionFormValues) => Promisable<void>
+  onError: (nextFormError: FormikFormError) => Promisable<void>
 }
-export function AirControlForm({ initialValues, onChange }: AirControlFormProps) {
+export function AirControlForm({ initialValues, onChange, onError }: AirControlFormProps) {
   const { newWindowContainerRef } = useNewWindow()
 
   const titleDate = useMemo(
@@ -38,7 +40,7 @@ export function AirControlForm({ initialValues, onChange }: AirControlFormProps)
   return (
     <Formik initialValues={initialValues} onSubmit={noop} validationSchema={AirControlFormSchema}>
       <>
-        <FormikEffect onChange={onChange as any} />
+        <FormikEffect onChange={onChange as any} onError={onError} />
         <FormikRevalidationEffect />
 
         <FormHead>

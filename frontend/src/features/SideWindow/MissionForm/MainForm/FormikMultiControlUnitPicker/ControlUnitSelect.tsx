@@ -149,6 +149,7 @@ export function ControlUnitSelect({
           baseContainer={newWindowContainerRef.current}
           disabled={isLoading}
           error={error?.administration}
+          isErrorMessageHidden
           label={`Administration ${index + 1}`}
           name={`administration_${index}`}
           onChange={handleAdministrationChange}
@@ -160,6 +161,7 @@ export function ControlUnitSelect({
           baseContainer={newWindowContainerRef.current}
           disabled={isLoading}
           error={error?.name}
+          isErrorMessageHidden
           label={`Unité ${index + 1}`}
           name={`name_${index}`}
           onChange={handleNameChange}

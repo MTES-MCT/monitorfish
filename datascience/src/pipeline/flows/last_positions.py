@@ -19,8 +19,8 @@ from src.pipeline.processing import (
 )
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.healthcheck import (
-  assert_positions_received_by_api_health,
-  get_monitorfish_healthcheck,
+    assert_positions_received_by_api_health,
+    get_monitorfish_healthcheck,
 )
 from src.pipeline.shared_tasks.infrastructure import get_table
 from src.pipeline.shared_tasks.positions import (
@@ -437,7 +437,9 @@ with Flow("Last positions", executor=LocalDaskExecutor()) as flow:
     with case(flow_not_running, True):
 
         healthcheck = get_monitorfish_healthcheck()
-        positions_healthcheck = assert_positions_received_by_api_health(healthcheck=healthcheck)
+        positions_healthcheck = assert_positions_received_by_api_health(
+            healthcheck=healthcheck
+        )
 
         # Parameters
         current_position_estimation_max_hours = Parameter(
@@ -504,6 +506,8 @@ with Flow("Last positions", executor=LocalDaskExecutor()) as flow:
             reportings,
             beacon_malfunctions,
         )
+
+        last_positions = drop_duplicates(last_positions)
 
         # Load
         load_last_positions(last_positions)

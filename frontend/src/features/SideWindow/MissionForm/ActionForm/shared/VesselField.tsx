@@ -101,9 +101,10 @@ export function VesselField() {
   )
 }
 
-const Error = styled.span`
+const Error = styled.p`
   color: ${p => p.theme.color.maximumRed};
-  font-weight: 700;
+  font-style: italic;
+  margin: 4px 0 0 !important;
 `
 
 const Wrapper = styled.div`

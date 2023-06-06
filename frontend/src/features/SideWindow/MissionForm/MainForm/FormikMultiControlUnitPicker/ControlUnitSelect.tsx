@@ -20,6 +20,12 @@ export type ControlUnitSelectProps = {
   allAdministrationsAsOptions: Option[]
   allControlUnits: ControlUnit.ControlUnit[]
   allNamesAsOptions: Option[]
+  error:
+    | {
+        administration: string
+        name: string
+      }
+    | undefined
   index: number
   onChange: (index: number, nextControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft) => Promisable<void>
   onDelete: (index: number) => Promisable<void>
@@ -29,6 +35,7 @@ export function ControlUnitSelect({
   allAdministrationsAsOptions,
   allControlUnits,
   allNamesAsOptions,
+  error,
   index,
   onChange,
   onDelete,
@@ -141,6 +148,8 @@ export function ControlUnitSelect({
         <Select
           baseContainer={newWindowContainerRef.current}
           disabled={isLoading}
+          error={error?.administration}
+          isErrorMessageHidden
           label={`Administration ${index + 1}`}
           name={`administration_${index}`}
           onChange={handleAdministrationChange}
@@ -151,8 +160,10 @@ export function ControlUnitSelect({
         <Select
           baseContainer={newWindowContainerRef.current}
           disabled={isLoading}
+          error={error?.name}
+          isErrorMessageHidden
           label={`Unité ${index + 1}`}
-          name={`unit_${index}`}
+          name={`name_${index}`}
           onChange={handleNameChange}
           options={filteredNamesAsOptions}
           searchable

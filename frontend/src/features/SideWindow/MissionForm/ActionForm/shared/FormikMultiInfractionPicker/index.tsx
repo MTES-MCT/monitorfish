@@ -67,7 +67,6 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
 
   const create = useCallback(
     (newInfractionFormValues: AnyInfraction) => {
-      // TODO For some unknown reason, `Yup.string().default('')` doesn't fill `comments`.
       const newInfractionWithComments: AnyInfraction = {
         ...newInfractionFormValues,
         comments: newInfractionFormValues.comments || ''
@@ -110,7 +109,6 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
         throw new FrontendError('`input.value` or `editedIndex` is undefined')
       }
 
-      // TODO For some unknown reason, `Yup.string().default('')` doesn't fill `comments`.
       const updatedInfractionWithComments: AnyInfraction = {
         ...nextInfractionFormValues,
         comments: nextInfractionFormValues.comments || ''

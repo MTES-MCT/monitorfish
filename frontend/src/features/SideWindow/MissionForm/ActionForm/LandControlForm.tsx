@@ -26,14 +26,16 @@ import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
 
+import type { FormikFormError } from '../../../../types'
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
 type LandControlFormProps = {
   initialValues: MissionActionFormValues
   onChange: (nextValues: MissionActionFormValues) => Promisable<void>
+  onError: (nextFormError: FormikFormError) => Promisable<void>
 }
-export function LandControlForm({ initialValues, onChange }: LandControlFormProps) {
+export function LandControlForm({ initialValues, onChange, onError }: LandControlFormProps) {
   const { newWindowContainerRef } = useNewWindow()
 
   const titleDate = useMemo(
@@ -44,7 +46,7 @@ export function LandControlForm({ initialValues, onChange }: LandControlFormProp
   return (
     <Formik initialValues={initialValues} onSubmit={noop} validationSchema={LandControlFormSchema}>
       <>
-        <FormikEffect onChange={onChange as any} />
+        <FormikEffect onChange={onChange as any} onError={onError} />
         <FormikRevalidationEffect />
 
         <FormHead>

@@ -16,7 +16,7 @@ export type FormikMultiControlUnitPickerProps = {
   name: string
 }
 export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPickerProps) {
-  const [input, , helpers] = useField<MissionMainFormValues['controlUnits']>(name)
+  const [input, meta, helpers] = useField<MissionMainFormValues['controlUnits']>(name)
 
   const controlUnitsQuery = useGetControlUnitsQuery(undefined)
 
@@ -25,6 +25,10 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
     administrationsAsOptions: allAdministrationsAsOptions,
     unitsAsOptions: allNamesAsOptions
   } = useMemo(() => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data), [controlUnitsQuery.data])
+  const errors = (meta.error || []) as Array<{
+    administration: string
+    name: string
+  }>
 
   const addUnit = useCallback(
     () => {
@@ -69,6 +73,7 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
             allAdministrationsAsOptions={allAdministrationsAsOptions}
             allControlUnits={allActiveControlUnits}
             allNamesAsOptions={allNamesAsOptions}
+            error={errors[index]}
             index={index}
             onChange={handleChange}
             onDelete={removeUnit}

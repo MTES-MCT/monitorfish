@@ -1,4 +1,4 @@
-import { THEME, type NewWindowContextValue, NewWindowContext, usePrevious } from '@mtes-mct/monitor-ui'
+import { THEME, type NewWindowContextValue, NewWindowContext, usePrevious, Notifier } from '@mtes-mct/monitor-ui'
 import { propEq } from 'ramda'
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
@@ -233,6 +233,8 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
               {sideWindow.selectedPath.menu === SideWindowMenuKey.MISSION_FORM && <MissionForm />}
             </Content>
           )}
+
+          <Notifier isSideWindow />
         </NewWindowContext.Provider>
       )}
     </Wrapper>

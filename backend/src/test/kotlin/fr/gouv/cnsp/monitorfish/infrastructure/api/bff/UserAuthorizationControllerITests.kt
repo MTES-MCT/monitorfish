@@ -2,10 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
-import fr.gouv.cnsp.monitorfish.config.ApiClient
-import fr.gouv.cnsp.monitorfish.config.OIDCProperties
-import fr.gouv.cnsp.monitorfish.config.SuperUserAPIProperties
-import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
+import fr.gouv.cnsp.monitorfish.config.*
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
@@ -29,7 +26,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @Import(
     WebSecurityConfig::class,
     OIDCProperties::class,
-    SuperUserAPIProperties::class,
+    ProtectedPathsAPIProperties::class,
     UserAuthorizationCheckFilter::class,
 )
 @WebMvcTest(

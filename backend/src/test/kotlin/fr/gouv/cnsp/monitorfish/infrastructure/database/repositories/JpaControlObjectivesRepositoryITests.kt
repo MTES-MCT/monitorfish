@@ -30,7 +30,7 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
         val controlObjectives = jpaControlObjectivesRepository.findAllByYear(lastYear)
 
         // Then
-        assertThat(controlObjectives).hasSize(53)
+        assertThat(controlObjectives).hasSize(62)
     }
 
     @Test
@@ -120,7 +120,7 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
     fun `add Should add a new control objective to a facade`() {
         // Given
         val controlObjectives = jpaControlObjectivesRepository.findAllByYear(lastYear)
-        assertThat(controlObjectives).hasSize(53)
+        assertThat(controlObjectives).hasSize(62)
 
         // When
         jpaControlObjectivesRepository.add(
@@ -136,7 +136,7 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
 
         // Then
         val updatedControlObjectives = jpaControlObjectivesRepository.findAllByYear(lastYear)
-        assertThat(updatedControlObjectives).hasSize(54)
+        assertThat(updatedControlObjectives).hasSize(63)
         assertThat(updatedControlObjectives.find { it.segment == "SEGMENT" }?.targetNumberOfControlsAtSea).isEqualTo(25)
     }
 
@@ -144,17 +144,17 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `addYear Should add a new year copied from the specified year`() {
         // Given
-        assertThat(jpaControlObjectivesRepository.findAllByYear(lastYear)).hasSize(53)
+        assertThat(jpaControlObjectivesRepository.findAllByYear(lastYear)).hasSize(62)
         assertThat(jpaControlObjectivesRepository.findAllByYear(nextYear)).hasSize(0)
 
         // When
         jpaControlObjectivesRepository.addYear(lastYear, nextYear)
 
         // Then
-        assertThat(jpaControlObjectivesRepository.findAllByYear(lastYear)).hasSize(53)
+        assertThat(jpaControlObjectivesRepository.findAllByYear(lastYear)).hasSize(62)
         val updatedControlObjectives = jpaControlObjectivesRepository.findAllByYear(nextYear)
-        assertThat(updatedControlObjectives).hasSize(53)
-        assertThat(updatedControlObjectives.first().id).isEqualTo(107)
+        assertThat(updatedControlObjectives).hasSize(62)
+        assertThat(updatedControlObjectives.first().id).isEqualTo(125)
         assertThat(updatedControlObjectives.first().year).isEqualTo(nextYear)
     }
 }

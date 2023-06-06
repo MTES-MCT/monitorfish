@@ -56,7 +56,7 @@ export function InfractionForm<AnyInfraction extends MissionAction.OtherInfracti
             // eslint-disable-next-line react/jsx-props-no-spreading
             <FormikCheckbox isErrorMessageHidden {...infractionCheckboxProps} />
           )}
-          <FormikTextarea isErrorMessageHidden label="Observations sur l’infraction" name="comments" />
+          <FormikTextarea isErrorMessageHidden label="Observations sur l’infraction" name="comments" rows={2} />
 
           <FormButtonGroup>
             <Button accent={Accent.TERTIARY} onClick={onCancel}>

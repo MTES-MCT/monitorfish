@@ -195,7 +195,7 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
             <FieldsetGroupSeparator />
 
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <FormikTextarea {...generalObservationTextareaProps} />
+            <FormikTextarea rows={2} {...generalObservationTextareaProps} />
           </>
         )}
       </FrontendErrorBoundary>

@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.use_cases.port.GetActivePorts
 import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.PortController
+import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.SpaController
 import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.VersionController
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -71,7 +72,7 @@ class WebSecurityConfigITests {
     @Nested
     @Import(WebSecurityConfig::class, OIDCProperties::class)
     @WebMvcTest(
-        value = [PortController::class, VersionController::class],
+        value = [PortController::class, VersionController::class, SpaController::class],
         properties = [
             "monitorfish.oidc.enabled=true",
             "spring.security.oauth2.resourceserver.jwt.public-key-location=classpath:oidc-issuer.pub",
@@ -111,6 +112,14 @@ class WebSecurityConfigITests {
 
             // When
             mockMvc.perform(get("/version"))
+                // Then
+                .andExpect(status().isOk)
+        }
+
+        @Test
+        fun `Should return 200 When the root path is not protected (and redirected to error)`() {
+            // When
+            mockMvc.perform(get("/"))
                 // Then
                 .andExpect(status().isOk)
         }

@@ -1,12 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { batch, useDispatch, useSelector } from 'react-redux'
+// TODO Remove temporary `as any` and `@ts-ignore` (fresh migration to TS).
+
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { batch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
-import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
-import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/layer/regulation/getAllRegulatoryLayersByRegTerritory'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
-import showRegulatoryZone from '../../../domain/use_cases/layer/regulation/showRegulatoryZone'
 
 import {
   FishingPeriodSection,
@@ -20,10 +17,16 @@ import {
   RemoveRegulationModal
 } from '.'
 import ConfirmRegulationModal from './ConfirmRegulationModal'
-import { BaseMap } from '../../map/BaseMap'
-import { BaseLayer } from '../../map/layers/BaseLayer'
-
-import { RegulatoryPreviewLayer } from '../../map/layers/RegulatoryPreviewLayer'
+import SpeciesRegulation from './species_regulation/SpeciesRegulation'
+import { COLORS } from '../../../constants/constants'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
+import {
+  DEFAULT_REGULATION,
+  FRANCE,
+  LAWTYPES_TO_TERRITORY,
+  REGULATORY_REFERENCE_KEYS
+} from '../../../domain/entities/regulation'
+import { setError } from '../../../domain/shared_slices/Global'
 import {
   closeRegulatoryZoneMetadataPanel,
   resetRegulatoryGeometriesToPreview,
@@ -31,12 +34,22 @@ import {
   setRegulatoryTopics,
   setRegulatoryZoneMetadata
 } from '../../../domain/shared_slices/Regulatory'
-import getGeometryWithoutRegulationReference from '../../../domain/use_cases/layer/regulation/getGeometryWithoutRegulationReference'
 import createOrUpdateRegulation from '../../../domain/use_cases/layer/regulation/createOrUpdateRegulation'
-
+import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/layer/regulation/getAllRegulatoryLayersByRegTerritory'
+import getGeometryWithoutRegulationReference from '../../../domain/use_cases/layer/regulation/getGeometryWithoutRegulationReference'
+import showRegulatoryZone from '../../../domain/use_cases/layer/regulation/showRegulatoryZone'
+import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
+import { useBackofficeAppDispatch } from '../../../hooks/useBackofficeAppDispatch'
+import { useBackofficeAppSelector } from '../../../hooks/useBackofficeAppSelector'
 import { formatDataForSelectPicker } from '../../../utils'
-import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
 import { Footer, FooterButton, OtherRemark, Section, Title } from '../../commonStyles/Backoffice.style'
+import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
+import { CustomInput, Label } from '../../commonStyles/Input.style'
+import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
+import { BaseMap } from '../../map/BaseMap'
+import { BaseLayer } from '../../map/layers/BaseLayer'
+import { RegulatoryPreviewLayer } from '../../map/layers/RegulatoryPreviewLayer'
+import { STATUS } from '../constants'
 import {
   resetState,
   setAtLeastOneValueIsMissing,
@@ -48,24 +61,15 @@ import {
   setStatus,
   updateProcessingRegulationByKey
 } from '../slice'
-import { setError } from '../../../domain/shared_slices/Global'
-import {
-  DEFAULT_REGULATION,
-  FRANCE,
-  LAWTYPES_TO_TERRITORY,
-  REGULATORY_REFERENCE_KEYS
-} from '../../../domain/entities/regulation'
-import SpeciesRegulation from './species_regulation/SpeciesRegulation'
-import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
-import { STATUS } from '../constants'
-import { CustomInput, Label } from '../../commonStyles/Input.style'
 
-const EditRegulation = ({ title, isEdition }) => {
-  const dispatch = useDispatch()
+import type { GeoJSONGeometry } from 'ol/format/GeoJSON'
+
+export function EditRegulation({ isEdition, title }) {
+  const dispatch = useBackofficeAppDispatch()
 
   const history = useHistory()
 
-  const layersTopicsByRegTerritory = useSelector(state => state.regulatory.layersTopicsByRegTerritory)
+  const layersTopicsByRegTerritory = useBackofficeAppSelector(state => state.regulatory.layersTopicsByRegTerritory)
 
   /** @type {boolean} */
   const [lawTypeIsMissing, setLawTypeIsMissing] = useState(false)
@@ -75,8 +79,7 @@ const EditRegulation = ({ title, isEdition }) => {
   const [nameZoneIsMissing, setNameZoneIsMissing] = useState()
   /** @type {boolean} */
   const [regionIsMissing, setRegionIsMissing] = useState(false)
-  /** @type {[GeoJSONGeometry]} geometryObjectList */
-  const [geometryObjectList, setGeometryObjectList] = useState([])
+  const [geometryObjectList, setGeometryObjectList] = useState<GeoJSONGeometry[]>([])
   const [geometryIsMissing, setGeometryIsMissing] = useState(false)
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   /** @type {Number[]} geometryIdList */
@@ -88,19 +91,27 @@ const EditRegulation = ({ title, isEdition }) => {
   const [saveIsForbidden, setSaveIsForbidden] = useState(false)
 
   const {
-    regulationSaved,
+    hasOneOrMoreValuesMission,
+    isConfirmModalOpen,
+    isRemoveModalOpen,
+    processingRegulation,
+    regulationDeleted,
     regulationModified,
+    regulationSaved,
     regulatoryTextCheckedMap,
     saveOrUpdateRegulation,
-    atLeastOneValueIsMissing,
-    isRemoveModalOpen,
-    isConfirmModalOpen,
-    regulationDeleted,
-    processingRegulation,
     selectedRegulatoryZoneId
-  } = useSelector(state => state.regulation)
+  } = useBackofficeAppSelector(state => state.regulation)
 
-  const { lawType, topic, zone, region, id, regulatoryReferences, otherInfo } = processingRegulation
+  const { id, lawType, otherInfo, region, regulatoryReferences, topic, zone } = processingRegulation as any
+
+  const getGeometryObjectList = useCallback(() => {
+    dispatch(getGeometryWithoutRegulationReference()).then(geometryListAsObject => {
+      if (geometryListAsObject !== undefined) {
+        setGeometryObjectList(geometryListAsObject)
+      }
+    })
+  }, [dispatch])
 
   useEffect(() => {
     getGeometryObjectList()
@@ -118,21 +129,22 @@ const EditRegulation = ({ title, isEdition }) => {
       dispatch(setRegulatoryZoneMetadata(undefined))
       dispatch(resetRegulatoryGeometriesToPreview())
     }
-  }, [])
+  }, [dispatch, getGeometryObjectList, layersTopicsByRegTerritory])
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       if (isEdition && processingRegulation?.geometry) {
         dispatch(
           showRegulatoryZone({
             type: LayerProperties.REGULATORY.code,
             ...processingRegulation,
             namespace: 'backoffice'
-          })
+          } as any)
         )
       }
-    }
-  }, [isEdition, processingRegulation, dispatch])
+    },
+    [isEdition, processingRegulation, dispatch]
+  )
 
   const goBackofficeHome = useCallback(() => {
     dispatch(resetState())
@@ -156,7 +168,7 @@ const EditRegulation = ({ title, isEdition }) => {
   useEffect(() => {
     if (lawType) {
       const territory = layersTopicsByRegTerritory[LAWTYPES_TO_TERRITORY[lawType]]
-      let regulatoryTopicList = []
+      let regulatoryTopicList = [] as any
       if (territory) {
         const lawTypeObject = territory[lawType]
         regulatoryTopicList = lawTypeObject ? Object.keys(lawTypeObject) : []
@@ -166,35 +178,35 @@ const EditRegulation = ({ title, isEdition }) => {
   }, [lawType, layersTopicsByRegTerritory, dispatch])
 
   const checkRequiredValues = useCallback(() => {
-    let _atLeastOneValueIsMissing = false
+    let willHaveOneOrMoreValuesMissing = false
     let valueIsMissing = !(lawType && lawType !== '')
-    _atLeastOneValueIsMissing = _atLeastOneValueIsMissing || valueIsMissing
+    willHaveOneOrMoreValuesMissing = willHaveOneOrMoreValuesMissing || valueIsMissing
     setLawTypeIsMissing(valueIsMissing)
 
     valueIsMissing = !(topic && topic !== '')
-    _atLeastOneValueIsMissing = _atLeastOneValueIsMissing || valueIsMissing
+    willHaveOneOrMoreValuesMissing = willHaveOneOrMoreValuesMissing || valueIsMissing
     setProcessingRegulationTopicIsMissing(valueIsMissing)
 
     valueIsMissing = !(zone && zone !== '')
-    _atLeastOneValueIsMissing = _atLeastOneValueIsMissing || valueIsMissing
-    setNameZoneIsMissing(valueIsMissing)
+    willHaveOneOrMoreValuesMissing = willHaveOneOrMoreValuesMissing || valueIsMissing
+    setNameZoneIsMissing(valueIsMissing as any)
 
     valueIsMissing =
       lawType && lawType !== '' && LAWTYPES_TO_TERRITORY[lawType] === FRANCE && !(region && region.length !== 0)
-    _atLeastOneValueIsMissing = _atLeastOneValueIsMissing || valueIsMissing
+    willHaveOneOrMoreValuesMissing = willHaveOneOrMoreValuesMissing || valueIsMissing
     setRegionIsMissing(valueIsMissing)
 
     valueIsMissing = !(id && id !== '')
     setGeometryIsMissing(valueIsMissing)
-    _atLeastOneValueIsMissing = _atLeastOneValueIsMissing || valueIsMissing
-    dispatch(setAtLeastOneValueIsMissing(_atLeastOneValueIsMissing))
+    willHaveOneOrMoreValuesMissing = willHaveOneOrMoreValuesMissing || valueIsMissing
+    dispatch(setAtLeastOneValueIsMissing(willHaveOneOrMoreValuesMissing))
   }, [lawType, topic, zone, region, id, dispatch])
 
   useEffect(() => {
-    if (saveOrUpdateRegulation && atLeastOneValueIsMissing === undefined) {
+    if (saveOrUpdateRegulation && hasOneOrMoreValuesMission === undefined) {
       checkRequiredValues()
     }
-  }, [saveOrUpdateRegulation, atLeastOneValueIsMissing, checkRequiredValues])
+  }, [saveOrUpdateRegulation, hasOneOrMoreValuesMission, checkRequiredValues])
 
   useEffect(() => {
     if (regulatoryTextCheckedMap && saveOrUpdateRegulation) {
@@ -203,7 +215,7 @@ const EditRegulation = ({ title, isEdition }) => {
         regulatoryTextCheckList?.length > 0 && regulatoryTextCheckList.length === regulatoryReferences.length
 
       if (allTextsHaveBeenChecked) {
-        const allRequiredValuesHaveBeenFilled = !regulatoryTextCheckList.includes(false) && !atLeastOneValueIsMissing
+        const allRequiredValuesHaveBeenFilled = !regulatoryTextCheckList.includes(false) && !hasOneOrMoreValuesMission
 
         if (allRequiredValuesHaveBeenFilled) {
           dispatch(createOrUpdateRegulation(processingRegulation, id, selectedRegulatoryZoneId))
@@ -219,12 +231,15 @@ const EditRegulation = ({ title, isEdition }) => {
       }
     }
   }, [
-    atLeastOneValueIsMissing,
-    saveOrUpdateRegulation,
-    regulatoryTextCheckedMap,
-    setSaveIsForbidden,
+    hasOneOrMoreValuesMission,
+    dispatch,
     id,
-    selectedRegulatoryZoneId
+    processingRegulation,
+    regulatoryReferences.length,
+    regulatoryTextCheckedMap,
+    saveOrUpdateRegulation,
+    selectedRegulatoryZoneId,
+    setSaveIsForbidden
   ])
 
   useEffect(() => {
@@ -232,28 +247,20 @@ const EditRegulation = ({ title, isEdition }) => {
       if (geometryObjectList && geometryObjectList[id]) {
         dispatch(setRegulatoryGeometriesToPreview([geometryObjectList[id]]))
       } else if (isEdition && processingRegulation?.geometry) {
-        dispatch(setRegulatoryGeometriesToPreview([processingRegulation?.geometry]))
+        dispatch(setRegulatoryGeometriesToPreview([processingRegulation?.geometry] as any))
       } else {
         dispatch(setError(new Error("Aucune géométrie n'a été trouvée pour cette identifiant.")))
       }
     }
   }, [
+    dispatch,
+    geometryObjectList,
+    id,
     isEdition,
     processingRegulation,
-    id,
-    geometryObjectList,
-    showRegulatoryPreview,
     selectedRegulatoryZoneId,
-    dispatch
+    showRegulatoryPreview
   ])
-
-  const getGeometryObjectList = () => {
-    dispatch(getGeometryWithoutRegulationReference()).then(geometryListAsObject => {
-      if (geometryListAsObject !== undefined) {
-        setGeometryObjectList(geometryListAsObject)
-      }
-    })
-  }
 
   const setOtherInfo = value => {
     dispatch(
@@ -280,11 +287,12 @@ const EditRegulation = ({ title, isEdition }) => {
               <Span />
             </Header>
             <ContentWrapper>
+              {/* @ts-ignore */}
               <Section show>
                 <Title>identification de la zone réglementaire</Title>
                 <RegulationLawTypeLine
-                  selectData={formatDataForSelectPicker(Object.keys(LAWTYPES_TO_TERRITORY))}
                   lawTypeIsMissing={lawTypeIsMissing}
+                  selectData={formatDataForSelectPicker(Object.keys(LAWTYPES_TO_TERRITORY))}
                 />
                 <RegulationTopicLine disabled={!lawType} regulationTopicIsMissing={regulationTopicIsMissing} />
                 <RegulationLayerZoneLine nameZoneIsMissing={nameZoneIsMissing} />
@@ -294,26 +302,28 @@ const EditRegulation = ({ title, isEdition }) => {
                 />
                 <RegulationGeometryLine
                   geometryIdList={geometryIdList}
+                  geometryIsMissing={geometryIsMissing}
                   setShowRegulatoryPreview={setShowRegulatoryPreview}
                   showRegulatoryPreview={showRegulatoryPreview}
-                  geometryIsMissing={geometryIsMissing}
                 />
               </Section>
               <RegulatoryTextSection regulatoryTextList={regulatoryReferences} saveForm={saveOrUpdateRegulation} />
               <FishingPeriodSection />
               <SpeciesRegulation />
               <GearRegulation />
+              {/* @ts-ignore */}
               <OtherRemark show>
                 <Label>Remarques générales</Label>
+                {/* @ts-ignore */}
                 <CustomInput
-                  data-cy={'regulatory-general-other-info'}
-                  as="textarea"
-                  rows={2}
-                  placeholder=""
-                  value={otherInfo || ''}
-                  onChange={event => setOtherInfo(event.target.value)}
-                  width={'500px'}
                   $isGray={otherInfo && otherInfo !== ''}
+                  as="textarea"
+                  data-cy="regulatory-general-other-info"
+                  onChange={event => setOtherInfo(event.target.value)}
+                  placeholder=""
+                  rows={2}
+                  value={otherInfo || ''}
+                  width="500px"
                 />
               </OtherRemark>
             </ContentWrapper>
@@ -329,6 +339,7 @@ const EditRegulation = ({ title, isEdition }) => {
                 <ValidateButton
                   data-cy="validate-button"
                   disabled={false}
+                  // @ts-ignore
                   isLast={false}
                   onClick={() => {
                     checkRequiredValues()
@@ -339,7 +350,12 @@ const EditRegulation = ({ title, isEdition }) => {
                 </ValidateButton>
               </Validate>
               {isEdition && (
-                <CancelButton disabled={false} isLast={false} onClick={() => dispatch(setIsRemoveModalOpen(true))}>
+                <CancelButton
+                  disabled={false}
+                  // @ts-ignore
+                  isLast={false}
+                  onClick={() => dispatch(setIsRemoveModalOpen(true))}
+                >
                   Supprimer la réglementation
                 </CancelButton>
               )}
@@ -435,5 +451,3 @@ const ChevronIcon = styled(ChevronIconSVG)`
 const ContentWrapper = styled.div`
   padding: 40px;
 `
-
-export default EditRegulation

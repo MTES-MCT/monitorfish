@@ -30,7 +30,7 @@ let timeoutForMove
  * BaseMap forwards map as props to children
  */
 type BaseMapProps = {
-  handleMovingAndZoom: (map) => void
+  handleMovingAndZoom?: (map) => void
   handlePointerMove?: (feature) => void
   isMainApp?: boolean
   setCurrentFeature?: (feature) => void

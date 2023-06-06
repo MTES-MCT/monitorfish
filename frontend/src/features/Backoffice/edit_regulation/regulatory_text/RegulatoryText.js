@@ -101,10 +101,10 @@ const RegulatoryText = props => {
   useEffect(() => {
     if (saveForm) {
       const nameOrUrlIsMissing = checkNameAndUrl()
-      const atLeastOneValueIsMissing = checkOtherRequiredValues() || nameOrUrlIsMissing
+      const hasOneOrMoreValuesMission = checkOtherRequiredValues() || nameOrUrlIsMissing
       const payload = {
         id: id,
-        complete: !atLeastOneValueIsMissing
+        complete: !hasOneOrMoreValuesMission
       }
       dispatch(addObjectToRegulatoryTextCheckedMap(payload))
     }

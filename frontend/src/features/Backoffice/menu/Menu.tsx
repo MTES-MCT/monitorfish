@@ -1,59 +1,62 @@
-import React from 'react'
-import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
+// TODO Remove temporary `as any` and `@ts-ignore` (fresh migration to TS).
+
 import { Link, useRouteMatch } from 'react-router-dom'
+import styled from 'styled-components'
+
+import { COLORS } from '../../../constants/constants'
+import { theme } from '../../../ui/theme'
 import { ReactComponent as LayersSVG } from '../../icons/Couches.svg'
 import { ReactComponent as FleetSVG } from '../../icons/Label_segment_de_flotte_white.svg'
 import { ReactComponent as ControlObjectivesSVG } from '../../icons/objectifs_controle.svg'
-import { theme } from '../../../ui/theme'
 
-const Menu = () => {
+export function Menu() {
   const onRegulationPage = useRouteMatch('/backoffice/regulation')
   const onControlObjectivePage = useRouteMatch('/backoffice/control_objectives')
   const onFleetSegmentsPage = useRouteMatch('/backoffice/fleet_segments')
 
   return (
     <Wrapper>
-      <Title>
-        Backoffice
-      </Title>
+      <Title>Backoffice</Title>
       <MenuLink
         style={{
           background: onRegulationPage ? theme.color.blueGray[100] : 'none'
         }}
-        to={'/backoffice/regulation'}
-        title={'Zones réglementaires'}
+        title="Zones réglementaires"
+        to="/backoffice/regulation"
       >
-        <Layers/>
+        <Layers />
         <LinkText>
-          Zones <br/>réglementaires
+          Zones <br />
+          réglementaires
         </LinkText>
       </MenuLink>
       <MenuLink
         style={{
           background: onControlObjectivePage ? theme.color.blueGray[100] : 'none'
         }}
-        to={'/backoffice/control_objectives'}
-        title={'Objectifs de contrôle'}
+        title="Objectifs de contrôle"
+        to="/backoffice/control_objectives"
       >
-        <ControlObjectives/>
+        <ControlObjectives />
         <LinkText>
-          Objectifs <br/>de contrôle
+          Objectifs <br />
+          de contrôle
         </LinkText>
       </MenuLink>
       <MenuLink
         style={{
           background: onFleetSegmentsPage ? theme.color.blueGray[100] : 'none'
         }}
-        to={'/backoffice/fleet_segments'}
-        title={'Segments de flotte'}
+        title="Segments de flotte"
+        to="/backoffice/fleet_segments"
       >
-        <Fleet/>
+        <Fleet />
         <LinkText>
-          Segments <br/>de flotte
+          Segments <br />
+          de flotte
         </LinkText>
       </MenuLink>
-  </Wrapper>
+    </Wrapper>
   )
 }
 
@@ -113,5 +116,3 @@ const ControlObjectives = styled(ControlObjectivesSVG)`
   height: 23px;
   padding-top: 10px;
 `
-
-export default Menu

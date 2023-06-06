@@ -10,7 +10,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import type { ValueOf } from 'type-fest'
 
 export type RegulationState = {
-  atLeastOneValueIsMissing: boolean | undefined
+  hasOneOrMoreValuesMission: boolean | undefined
   isConfirmModalOpen: boolean
   isRemoveModalOpen: boolean
   // TODO Convert that to a real type.
@@ -25,7 +25,7 @@ export type RegulationState = {
   status: ValueOf<typeof STATUS>
 }
 const INITIAL_STATE: RegulationState = {
-  atLeastOneValueIsMissing: undefined,
+  hasOneOrMoreValuesMission: undefined,
   isConfirmModalOpen: false,
   isRemoveModalOpen: false,
   processingRegulation: DEFAULT_REGULATION,
@@ -60,7 +60,7 @@ const regulationSlice = createSlice({
     resetState: () => INITIAL_STATE,
 
     setAtLeastOneValueIsMissing(state, action) {
-      state.atLeastOneValueIsMissing = action.payload
+      state.hasOneOrMoreValuesMission = action.payload
     },
 
     setFishingPeriod(state, { payload: { key, value } }) {

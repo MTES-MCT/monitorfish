@@ -204,6 +204,7 @@ export function GearsField() {
               <FormikTextarea
                 label={`${gearOnboard.gearCode} : autres mesures et dispositifs`}
                 name={`gearOnboard[${index}].comments`}
+                rows={2}
               />
             </RowInnerWrapper>
           </Row>

@@ -53,7 +53,7 @@ export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillance
 
           <FormikNumberInput isLight label="Nb de navires survolés" name="numberOfVesselsFlownOver" />
 
-          <FormikTextarea isLight label="Observations générales sur le vol" name="otherComments" />
+          <FormikTextarea isLight label="Observations générales sur le vol" name="otherComments" rows={2} />
 
           <hr />
 
@@ -62,6 +62,7 @@ export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillance
               label="Observations sur le déroulé de la surveillance"
               name="controlQualityComments"
               placeholder="Éléments marquants dans vos échanges avec l’unité, problèmes rencontrés..."
+              rows={2}
             />
             <StyledFormikCheckBox label="Fiche RETEX nécessaire" name="feedbackSheetRequired" />
           </FieldsetGroup>

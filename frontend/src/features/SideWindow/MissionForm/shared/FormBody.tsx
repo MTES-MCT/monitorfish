@@ -19,10 +19,10 @@ export const FormBody = styled.div`
     min-height: 1px;
   }
 
-  /* TODO Normalize that in monitor-ui (check with Adeline). Maybe Size.NORMAL vs Size.LARGE? */
+  /* TODO Normalize that in monitor-ui (check with Adeline). Maybe Size.NORMAL vs Size.LARGE? + Auto-Resize. */
   .Field-Textarea {
     textarea {
-      height: 48px !important;
+      resize: vertical;
     }
   }
 

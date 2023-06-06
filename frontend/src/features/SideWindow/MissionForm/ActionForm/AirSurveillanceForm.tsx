@@ -10,6 +10,7 @@ import {
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash/fp'
+import styled from 'styled-components'
 
 import { FLIGHT_GOALS_AS_OPTIONS } from './shared/constants'
 import { FleetSegmentsField } from './shared/FleetSegmentsField'
@@ -62,7 +63,7 @@ export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillance
               name="controlQualityComments"
               placeholder="Éléments marquants dans vos échanges avec l’unité, problèmes rencontrés..."
             />
-            <FormikCheckbox label="Fiche RETEX nécessaire" name="feedbackSheetRequired" />
+            <StyledFormikCheckBox label="Fiche RETEX nécessaire" name="feedbackSheetRequired" />
           </FieldsetGroup>
 
           <FormikTextInput isLight label="Saisi par" name="userTrigram" />
@@ -71,3 +72,7 @@ export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillance
     </Formik>
   )
 }
+
+const StyledFormikCheckBox = styled(FormikCheckbox)`
+  margin-top: 8px;
+`

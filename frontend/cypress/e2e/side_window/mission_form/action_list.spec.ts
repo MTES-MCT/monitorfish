@@ -1,7 +1,7 @@
 // TODO We should find a way to either reset data after each test to make them independant and easily re-runnable or reset them via the UI (with e2e commands).
 // https://glebbahmutov.com/blog/dependent-test/
 
-import { SeaFrontGroup } from '../../../../src'
+import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Action List', () => {

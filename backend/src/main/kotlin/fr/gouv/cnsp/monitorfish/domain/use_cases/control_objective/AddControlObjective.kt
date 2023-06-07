@@ -6,8 +6,8 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.ControlObjectivesRepository
 
 @UseCase
 class AddControlObjective(private val controlObjectivesRepository: ControlObjectivesRepository) {
-    fun execute(segment: String, facade: String, year: Int) {
-        controlObjectivesRepository.add(
+    fun execute(segment: String, facade: String, year: Int): Int {
+        return controlObjectivesRepository.add(
             ControlObjective(
                 segment = segment,
                 facade = facade,

@@ -79,8 +79,8 @@ class ControlObjectiveController(
     fun addControlObjective(
         @RequestBody
         addControlObjectiveData: AddControlObjectiveDataInput,
-    ) {
-        addControlObjective.execute(
+    ): Int {
+        return addControlObjective.execute(
             segment = addControlObjectiveData.segment,
             facade = addControlObjectiveData.facade,
             year = addControlObjectiveData.year,

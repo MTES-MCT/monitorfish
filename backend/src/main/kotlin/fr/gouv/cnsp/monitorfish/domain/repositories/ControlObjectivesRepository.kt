@@ -13,6 +13,6 @@ interface ControlObjectivesRepository {
     )
 
     fun delete(id: Int)
-    fun add(controlObjective: ControlObjective)
+    fun add(controlObjective: ControlObjective): Int
     fun addYear(currentYear: Int, nextYear: Int)
 }

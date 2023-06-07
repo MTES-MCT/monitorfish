@@ -1,9 +1,9 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import { MissionDateRangeFilterLabel, MissionFilterType } from './types'
-import { SeaFrontGroup, SeaFrontGroupLabel } from '../../../constants'
 import { Mission } from '../../../domain/entities/mission/types'
 import { getMissionStatus } from '../../../domain/entities/mission/utils'
+import { SeaFrontGroup, SeaFrontGroupLabel } from '../../../domain/entities/seaFront/constants'
 import { UNKNOWN_VESSEL } from '../../../domain/entities/vessel/vessel'
 import { MissionAction } from '../../../domain/types/missionAction'
 import { getOptionsFromLabelledEnum } from '../../../utils/getOptionsFromLabelledEnum'

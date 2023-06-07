@@ -1,7 +1,7 @@
-import { SeaFrontLabel } from '../../../../constants'
+import { SeaFront } from '../../seaFront/constants'
 import { Mission } from '../types'
 
-export function seaFrontFilterFunction(mission: Mission.Mission, filter: SeaFrontLabel[]) {
+export function seaFrontFilterFunction(mission: Mission.Mission, filter: SeaFront[]) {
   if (filter.length === 0) {
     return true
   }

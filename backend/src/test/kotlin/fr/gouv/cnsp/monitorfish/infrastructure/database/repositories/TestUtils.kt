@@ -36,7 +36,7 @@ object TestUtils {
         controlQualityComments = "Ciblage CNSP respecté",
         feedbackSheetRequired = true,
         userTrigram = "DEF",
-        facade = "Manche ouest - Atlantique",
+        facade = "NAMO",
         longitude = -6.56,
         latitude = 45.12,
         isDeleted = false,

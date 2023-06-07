@@ -12,7 +12,7 @@ data class ControlObjectivesEntity(
     @Column(name = "id", unique = true, nullable = false)
     val id: Int? = null,
     @Column(name = "facade")
-    val facade: String? = null,
+    val facade: String,
     @Column(name = "segment")
     val segment: String? = null,
     @Column(name = "year")

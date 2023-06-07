@@ -1,5 +1,5 @@
 import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
-import { SeaFrontGroup } from '../../../../src/constants'
+import { SeaFrontGroup } from '../../../../src'
 import { Mission } from '../../../../src/domain/entities/mission/types'
 import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 import { customDayjs } from '../../utils/customDayjs'

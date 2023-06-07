@@ -126,7 +126,7 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
         jpaControlObjectivesRepository.add(
             ControlObjective(
                 segment = "SEGMENT",
-                facade = "FACADE",
+                facade = "NAMO",
                 year = lastYear,
                 targetNumberOfControlsAtSea = 25,
                 targetNumberOfControlsAtPort = 64,

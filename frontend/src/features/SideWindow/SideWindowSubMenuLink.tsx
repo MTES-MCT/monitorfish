@@ -2,8 +2,8 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
+import { SeaFrontGroup } from '../../domain/entities/seaFront/constants'
 
-import type { SeaFrontGroup } from '../../constants'
 import type { MenuItem } from '../../types'
 import type { CSSProperties } from 'react'
 import type { Promisable } from 'type-fest'

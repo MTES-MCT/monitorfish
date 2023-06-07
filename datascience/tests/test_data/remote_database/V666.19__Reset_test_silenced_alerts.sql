@@ -7,10 +7,10 @@ INSERT INTO silenced_alerts (
 (
     'MYNAMEIS', 'ABC000658985', 'OHMYGOSH', 'OGMJ', 'INTERNAL_REFERENCE_NUMBER',
     NOW() + ('15 DAYS')::interval, 'FR',
-    '{"type": "THREE_MILES_TRAWLING_ALERT", "seaFront": "Facade B"}'
+    '{"type": "THREE_MILES_TRAWLING_ALERT", "seaFront": "SA"}'
 ),
 (
     'DEVINER FIGURE CONSCIENCE', 'ABC000542519', 'RO237719', 'FQ7058', 'INTERNAL_REFERENCE_NUMBER',
     NOW() + ('15 DAYS')::interval, 'FR',
-    '{"type": "MISSING_FAR_ALERT", "seaFront": "Facade A"}'
+    '{"type": "MISSING_FAR_ALERT", "seaFront": "NAMO"}'
 );

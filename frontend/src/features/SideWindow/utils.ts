@@ -1,8 +1,8 @@
 import { BeaconMalfunctionsSubMenu } from './BeaconMalfunctionBoard/beaconMalfunctions'
 import { ALERTS_SUBMENU } from '../../domain/entities/alerts/constants'
+import { SeaFrontGroup } from '../../domain/entities/seaFront/constants'
 import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
 
-import type { SeaFrontGroup } from '../../constants'
 import type { MenuItem } from '../../types'
 
 export function getSelectedSubMenu(

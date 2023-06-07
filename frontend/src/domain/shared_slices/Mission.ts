@@ -1,14 +1,14 @@
-import { createSlice, current } from '@reduxjs/toolkit'
-import { isEqual } from 'lodash/fp'
+import type {PayloadAction} from '@reduxjs/toolkit'
+import {createSlice, current} from '@reduxjs/toolkit'
+import {isEqual} from 'lodash/fp'
 
-import { SeaFrontGroup } from '../../constants'
-import { MissionDateRangeFilter, MissionFilterType } from '../../features/SideWindow/MissionList/types'
-import { Mission } from '../entities/mission/types'
+import type {FilterValues} from '../../features/SideWindow/MissionList/types'
+import {MissionDateRangeFilter, MissionFilterType} from '../../features/SideWindow/MissionList/types'
+import {Mission} from '../entities/mission/types'
+import {SeaFrontGroup} from '../entities/seaFront/constants'
 
-import type { MissionActionFormValues, MissionMainFormValues } from '../../features/SideWindow/MissionForm/types'
-import type { FilterValues } from '../../features/SideWindow/MissionList/types'
-import type { GeoJSON } from '../types/GeoJSON'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import type {MissionActionFormValues, MissionMainFormValues} from '../../features/SideWindow/MissionForm/types'
+import type {GeoJSON} from '../types/GeoJSON'
 
 export interface MissionState {
   /**

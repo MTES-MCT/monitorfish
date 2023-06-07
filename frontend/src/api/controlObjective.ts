@@ -54,11 +54,7 @@ export async function deleteControlObjectiveFromAPI(id: string): Promise<void> {
 /**
  * Add a control Objective
  */
-export async function addControlObjectiveFromAPI(
-  segment: string,
-  facade: string,
-  year: number
-): Promise<ControlObjective[]> {
+export async function addControlObjectiveFromAPI(segment: string, facade: string, year: number) {
   const createFields = {
     facade,
     segment,
@@ -66,11 +62,9 @@ export async function addControlObjectiveFromAPI(
   }
 
   try {
-    return await ky
-      .post('/bff/v1/control_objectives', {
-        json: createFields
-      })
-      .json<ControlObjective[]>()
+    return await ky.post('/bff/v1/control_objectives', {
+      json: createFields
+    })
   } catch (err) {
     throw new ApiError(ADD_CONTROL_OBJECTIVES_ERROR_MESSAGE, err)
   }

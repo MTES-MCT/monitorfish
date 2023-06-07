@@ -44,4 +44,29 @@ interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity
         nativeQuery = true,
     )
     fun duplicateCurrentYearAsNextYear(currentYear: Int, nextYear: Int)
+
+    @Modifying(clearAutomatically = true)
+    @Query(
+        """
+        INSERT INTO
+            control_objectives
+        VALUES (
+            cast(:facade as facade),
+            :segment,
+            :year,
+            :targetNumberOfControlsAtSea,
+            :targetNumberOfControlsAtPort,
+            :controlPriorityLevel
+        )
+    """,
+        nativeQuery = true,
+    )
+    fun save(
+        facade: String,
+        segment: String?,
+        year: Int?,
+        targetNumberOfControlsAtSea: Int,
+        targetNumberOfControlsAtPort: Int,
+        controlPriorityLevel: Double,
+    )
 }

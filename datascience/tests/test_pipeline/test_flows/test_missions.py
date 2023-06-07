@@ -168,7 +168,7 @@ def test_flow(reset_test_data, loading_mode):
 
         # Check data is updated for missions already present initially
         assert (
-            initial_missions.loc[initial_missions.id == 1, "facade"] == "Facade A"
+            initial_missions.loc[initial_missions.id == 1, "facade"] == "NAMO"
         ).all()
         assert (
             extracted_missions.loc[extracted_missions.id == 1, "facade"] == "Facade 1"

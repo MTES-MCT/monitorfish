@@ -70,7 +70,8 @@ interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity
         controlPriorityLevel: Double,
     )
 
-    @Query("""
+    @Query(
+        """
         SELECT
             id
         FROM
@@ -82,7 +83,9 @@ interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity
     """,
         nativeQuery = true,
     )
-    fun findByFacadeAndSegmentAndYearEquals(facade: String,
-                                            segment: String?,
-                                            year: Int?): Int
+    fun findByFacadeAndSegmentAndYearEquals(
+        facade: String,
+        segment: String?,
+        year: Int?,
+    ): Int
 }

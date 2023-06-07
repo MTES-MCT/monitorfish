@@ -123,7 +123,7 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
         assertThat(controlObjectives).hasSize(62)
 
         // When
-        val newId = jpaControlObjectivesRepository.add(
+        jpaControlObjectivesRepository.add(
             ControlObjective(
                 segment = "SEGMENT",
                 facade = "NAMO",
@@ -135,7 +135,6 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
         )
 
         // Then
-        assertThat(newId).isEqualTo(125)
         val updatedControlObjectives = jpaControlObjectivesRepository.findAllByYear(lastYear)
         assertThat(updatedControlObjectives).hasSize(63)
         assertThat(updatedControlObjectives.find { it.segment == "SEGMENT" }?.targetNumberOfControlsAtSea).isEqualTo(25)

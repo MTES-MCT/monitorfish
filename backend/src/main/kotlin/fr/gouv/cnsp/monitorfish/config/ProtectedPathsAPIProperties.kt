@@ -7,4 +7,7 @@ import org.springframework.stereotype.Component
 @ConfigurationProperties(prefix = "monitorfish.api.protected")
 data class ProtectedPathsAPIProperties(
     var paths: List<String>? = listOf(),
+    var superUserPaths: List<String>? = listOf(),
+    var publicPaths: List<String>? = listOf(),
+    var apiKey: String = "",
 )

@@ -630,6 +630,7 @@ def test_update_beacon_malfunction_updates_status(mock_requests):
         headers={
             "Accept": "application/json, text/plain",
             "Content-Type": "application/json;charset=UTF-8",
+            "X-API-KEY": "backend_api_key"
         },
     )
 
@@ -651,6 +652,7 @@ def test_update_beacon_malfunction_updates_stage(mock_requests):
         headers={
             "Accept": "application/json, text/plain",
             "Content-Type": "application/json;charset=UTF-8",
+            "X-API-KEY": "backend_api_key"
         },
     )
 
@@ -699,6 +701,7 @@ def test_update_beacon_malfunction_updates_stage_and_reason(
         headers={
             "Accept": "application/json, text/plain",
             "Content-Type": "application/json;charset=UTF-8",
+            "X-API-KEY": "backend_api_key"
         },
     )
 
@@ -814,6 +817,7 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
         headers={
             "Accept": "application/json, text/plain",
             "Content-Type": "application/json;charset=UTF-8",
+            "X-API-KEY": "backend_api_key"
         },
     )
 
@@ -826,6 +830,7 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
         headers={
             "Accept": "application/json, text/plain",
             "Content-Type": "application/json;charset=UTF-8",
+            "X-API-KEY": "backend_api_key"
         },
     )
 

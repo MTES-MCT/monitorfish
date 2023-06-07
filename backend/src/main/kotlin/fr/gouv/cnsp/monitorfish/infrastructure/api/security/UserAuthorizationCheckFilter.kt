@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 
 import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
-import fr.gouv.cnsp.monitorfish.config.SuperUserAPIProperties
+import fr.gouv.cnsp.monitorfish.config.ProtectedPathsAPIProperties
 import fr.gouv.cnsp.monitorfish.domain.hash
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.security.input.UserInfo
@@ -23,7 +23,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 @Order(1)
 class UserAuthorizationCheckFilter(
     private val oidcProperties: OIDCProperties,
-    private val superUserAPIProperties: SuperUserAPIProperties,
+    private val protectedPathsAPIProperties: ProtectedPathsAPIProperties,
     private val apiClient: ApiClient,
     private val getIsAuthorizedUser: GetIsAuthorizedUser,
 ) : OncePerRequestFilter() {
@@ -76,7 +76,11 @@ class UserAuthorizationCheckFilter(
                 }
             }.body<UserInfo>()
 
-            val isContainingSuperUserPath = superUserAPIProperties.paths?.any { request.requestURI.contains(it) }!!
+            val isContainingSuperUserPath = protectedPathsAPIProperties.superUserPaths?.any {
+                request.requestURI.contains(
+                    it,
+                )
+            }!!
             val isAuthorized = getIsAuthorizedUser.execute(userInfoResponse.email, isContainingSuperUserPath)
             if (!isAuthorized) {
                 logger.debug(INSUFFICIENT_AUTHORIZATION_MESSAGE)

@@ -4,7 +4,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.verify
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
-import fr.gouv.cnsp.monitorfish.config.SuperUserAPIProperties
+import fr.gouv.cnsp.monitorfish.config.ProtectedPathsAPIProperties
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.security.TestUtils.Companion.getMockApiClient
 import io.ktor.client.engine.mock.*
@@ -35,7 +35,7 @@ class UserAuthorizationCheckFilterUTests {
             enabled = false,
             userinfoEndpoint = null,
         )
-        val superUserAPIProperties = SuperUserAPIProperties(paths = listOf("/bff/**"))
+        val superUserAPIProperties = ProtectedPathsAPIProperties(superUserPaths = listOf("/bff/**"))
         val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
@@ -59,7 +59,7 @@ class UserAuthorizationCheckFilterUTests {
             enabled = true,
             userinfoEndpoint = null,
         )
-        val superUserAPIProperties = SuperUserAPIProperties(paths = listOf("/bff/**"))
+        val superUserAPIProperties = ProtectedPathsAPIProperties(superUserPaths = listOf("/bff/**"))
         val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
@@ -84,7 +84,7 @@ class UserAuthorizationCheckFilterUTests {
             enabled = true,
             userinfoEndpoint = null,
         )
-        val superUserAPIProperties = SuperUserAPIProperties(paths = listOf("/bff/**"))
+        val superUserAPIProperties = ProtectedPathsAPIProperties(superUserPaths = listOf("/bff/**"))
         val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
@@ -110,7 +110,7 @@ class UserAuthorizationCheckFilterUTests {
             enabled = true,
             userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user",
         )
-        val superUserAPIProperties = SuperUserAPIProperties(paths = listOf("/bff/**"))
+        val superUserAPIProperties = ProtectedPathsAPIProperties(superUserPaths = listOf("/bff/**"))
         val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
@@ -136,7 +136,7 @@ class UserAuthorizationCheckFilterUTests {
             enabled = true,
             userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user",
         )
-        val superUserAPIProperties = SuperUserAPIProperties(paths = listOf("/bff/**"))
+        val superUserAPIProperties = ProtectedPathsAPIProperties(superUserPaths = listOf("/bff/**"))
         val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
@@ -164,7 +164,8 @@ class UserAuthorizationCheckFilterUTests {
             enabled = true,
             userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user",
         )
-        val superUserAPIProperties = SuperUserAPIProperties(paths = listOf("/bff/v1/vessels/risk_factors"))
+        val superUserAPIProperties =
+            ProtectedPathsAPIProperties(superUserPaths = listOf("/bff/v1/vessels/risk_factors"))
         val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
@@ -191,7 +192,8 @@ class UserAuthorizationCheckFilterUTests {
             enabled = true,
             userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user",
         )
-        val superUserAPIProperties = SuperUserAPIProperties(paths = listOf("/bff/v1/vessels/risk_factors"))
+        val superUserAPIProperties =
+            ProtectedPathsAPIProperties(superUserPaths = listOf("/bff/v1/vessels/risk_factors"))
         val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
@@ -218,7 +220,8 @@ class UserAuthorizationCheckFilterUTests {
             enabled = true,
             userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user",
         )
-        val superUserAPIProperties = SuperUserAPIProperties(paths = listOf("/bff/v1/vessels/risk_factors"))
+        val superUserAPIProperties =
+            ProtectedPathsAPIProperties(superUserPaths = listOf("/bff/v1/vessels/risk_factors"))
         val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()

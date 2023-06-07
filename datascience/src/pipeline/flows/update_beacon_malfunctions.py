@@ -10,6 +10,7 @@ from prefect import Flow, Parameter, case, task, unmapped
 from prefect.executors import LocalDaskExecutor
 
 from config import (
+    BACKEND_API_KEY,
     BEACON_MALFUNCTIONS_ENDPOINT,
     BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_PORT,
     BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_SEA,
@@ -426,6 +427,7 @@ def update_beacon_malfunction(
         headers = {
             "Accept": "application/json, text/plain",
             "Content-Type": "application/json;charset=UTF-8",
+            "X-API-KEY": BACKEND_API_KEY
         }
         r = requests.put(url=url, json=json, headers=headers)
         r.raise_for_status()
@@ -452,7 +454,10 @@ def request_notification(
         BEACON_MALFUNCTIONS_ENDPOINT
         + f"{str(beacon_malfunction_id)}/{requested_notification.value}"
     )
-    r = requests.put(url)
+    headers = {
+      "X-API-KEY": BACKEND_API_KEY
+    }
+    r = requests.put(url=url, headers=headers)
     r.raise_for_status()
 
 

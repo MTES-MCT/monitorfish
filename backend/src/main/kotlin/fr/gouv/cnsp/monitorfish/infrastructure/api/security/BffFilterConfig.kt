@@ -10,8 +10,6 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class BffFilterConfig(
-    private val userManagementProperties: UserManagementProperties,
-    private val superUserAPIProperties: SuperUserAPIProperties,
     private val protectedPathsAPIProperties: ProtectedPathsAPIProperties,
     private val oidcProperties: OIDCProperties,
     private val apiClient: ApiClient,
@@ -25,7 +23,7 @@ class BffFilterConfig(
 
         registrationBean.filter = UserAuthorizationCheckFilter(
             oidcProperties,
-            superUserAPIProperties,
+            protectedPathsAPIProperties,
             apiClient,
             getIsAuthorizedUser,
         )
@@ -34,24 +32,32 @@ class BffFilterConfig(
         if (registrationBean.urlPatterns == null) {
             logger.warn(
                 "WARNING: No user authentication path given." +
-                    "See `monitorfish.api.protected.path` application property.",
+                    "See `monitorfish.api.protected.paths` application property.",
             )
         }
 
         logger.info("Adding user authentication for paths: ${protectedPathsAPIProperties.paths}")
-        logger.info("Super-user protected paths : ${superUserAPIProperties.paths}")
+        logger.info("Super-user protected paths : ${protectedPathsAPIProperties.superUserPaths}")
 
         return registrationBean
     }
 
-    @Bean(name = ["userManagementCheckFilter"])
-    fun userManagementCheckFilter(): FilterRegistrationBean<UserManagementCheckFilter> {
-        val registrationBean = FilterRegistrationBean<UserManagementCheckFilter>()
+    @Bean(name = ["publicPathsApiKeyCheckFilter"])
+    fun publicPathsApiKeyCheckFilter(): FilterRegistrationBean<ApiKeyCheckFilter> {
+        val registrationBean = FilterRegistrationBean<ApiKeyCheckFilter>()
 
-        registrationBean.filter = UserManagementCheckFilter(
-            userManagementProperties,
+        registrationBean.filter = ApiKeyCheckFilter(
+            protectedPathsAPIProperties,
         )
-        registrationBean.urlPatterns = listOf("/api/v1/authorization/management")
+        registrationBean.urlPatterns = protectedPathsAPIProperties.publicPaths
+        if (registrationBean.urlPatterns == null) {
+            logger.warn(
+                "WARNING: Public paths are not protected." +
+                    "See `monitorfish.api.protected.public-paths` application property.",
+            )
+        }
+
+        logger.info("Adding api key authentication for public paths: ${protectedPathsAPIProperties.publicPaths}")
 
         return registrationBean
     }

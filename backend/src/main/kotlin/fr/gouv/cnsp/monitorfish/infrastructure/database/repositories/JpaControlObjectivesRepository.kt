@@ -68,7 +68,8 @@ class JpaControlObjectivesRepository(private val dbControlObjectivesRepository: 
         return dbControlObjectivesRepository.findByFacadeAndSegmentAndYearEquals(
             controlObjective.facade,
             controlObjective.segment,
-            controlObjective.year)
+            controlObjective.year,
+        )
     }
 
     @Transactional

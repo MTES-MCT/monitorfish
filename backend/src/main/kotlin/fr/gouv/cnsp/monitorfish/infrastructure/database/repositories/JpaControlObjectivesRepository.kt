@@ -55,7 +55,7 @@ class JpaControlObjectivesRepository(private val dbControlObjectivesRepository: 
     }
 
     @Transactional
-    override fun add(controlObjective: ControlObjective) {
+    override fun add(controlObjective: ControlObjective): Int {
         dbControlObjectivesRepository.save(
             controlObjective.facade,
             controlObjective.segment,
@@ -64,6 +64,11 @@ class JpaControlObjectivesRepository(private val dbControlObjectivesRepository: 
             controlObjective.targetNumberOfControlsAtPort,
             controlObjective.controlPriorityLevel,
         )
+
+        return dbControlObjectivesRepository.findByFacadeAndSegmentAndYearEquals(
+            controlObjective.facade,
+            controlObjective.segment,
+            controlObjective.year)
     }
 
     @Transactional

@@ -69,4 +69,20 @@ interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity
         targetNumberOfControlsAtPort: Int,
         controlPriorityLevel: Double,
     )
+
+    @Query("""
+        SELECT
+            id
+        FROM
+            control_objectives co
+        WHERE
+            co.facade = cast(:facade as facade) AND
+            co.segment = :segment AND
+            co.year = :year
+    """,
+        nativeQuery = true,
+    )
+    fun findByFacadeAndSegmentAndYearEquals(facade: String,
+                                            segment: String?,
+                                            year: Int?): Int
 }

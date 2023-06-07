@@ -1,4 +1,4 @@
-import { SeaFrontGroup } from '../../../../src'
+import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
 import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 
 export const openSideWindowMissionList = () => {

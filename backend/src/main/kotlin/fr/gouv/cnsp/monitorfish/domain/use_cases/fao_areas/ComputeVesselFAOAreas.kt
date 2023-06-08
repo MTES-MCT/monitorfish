@@ -14,7 +14,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.removeRedundantFa
 @UseCase
 class ComputeVesselFAOAreas(
     private val riskFactorsRepository: RiskFactorsRepository,
-    private val computeFAOAreasFromCoordinates: ComputeFAOAreasFromCoordinates
+    private val computeFAOAreasFromCoordinates: ComputeFAOAreasFromCoordinates,
 ) {
     fun execute(internalReferenceNumber: String?, latitude: Double?, longitude: Double?): List<String> {
         if (internalReferenceNumber == null && (latitude == null || longitude == null)) {

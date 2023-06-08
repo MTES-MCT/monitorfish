@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @Tag(name = "APIs for Data referential")
 class FaoAreaController(
     private val getFAOAreas: GetFAOAreas,
-    private val computeVesselFAOAreas: ComputeVesselFAOAreas
+    private val computeVesselFAOAreas: ComputeVesselFAOAreas,
 ) {
 
     @GetMapping("/v1/fao_areas")
@@ -26,16 +26,17 @@ class FaoAreaController(
 
     @GetMapping("/v1/fao_areas/compute")
     @Operation(summary = "Get FAO areas")
-    fun getFAOAreas(@Parameter(description = "Internal reference number")
-                    @RequestParam(name = "internalReferenceNumber")
-                    internalReferenceNumber: String?,
-                    @Parameter(description = "Latitude")
-                    @RequestParam(name = "latitude")
-                    latitude: Double?,
-                    @Parameter(description = "Longitude")
-                    @RequestParam(name = "longitude")
-                    longitude: Double?,
-                    ): List<String> {
+    fun getFAOAreas(
+        @Parameter(description = "Internal reference number")
+        @RequestParam(name = "internalReferenceNumber")
+        internalReferenceNumber: String?,
+        @Parameter(description = "Latitude")
+        @RequestParam(name = "latitude")
+        latitude: Double?,
+        @Parameter(description = "Longitude")
+        @RequestParam(name = "longitude")
+        longitude: Double?,
+    ): List<String> {
         return computeVesselFAOAreas.execute(internalReferenceNumber, latitude, longitude)
     }
 }

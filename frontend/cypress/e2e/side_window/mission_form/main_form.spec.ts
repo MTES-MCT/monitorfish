@@ -229,7 +229,7 @@ context('Side Window > Mission Form > Main Form', () => {
         emitsAis: 'NOT_APPLICABLE',
         emitsVms: 'YES',
         externalReferenceNumber: null,
-        facade: 'Manche ouest - Atlantique',
+        facade: 'NAMO',
         feedbackSheetRequired: true,
         flagState: 'GB',
         flightGoals: [],

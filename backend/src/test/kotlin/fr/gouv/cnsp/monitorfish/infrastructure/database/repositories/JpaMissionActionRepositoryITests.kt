@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDummyMissionAction
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
@@ -140,6 +141,23 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(missionAction.id).isEqualTo(11)
         assertThat(missionAction.actionDatetimeUtc).isEqualTo(dateTime)
         assertThat(missionAction.userTrigram).isEqualTo("DEF")
+    }
+
+    @Test
+    @Transactional
+    fun `save Should throw an exception When save a new mission action with bad facade`() {
+        // Given
+        val dateTime = ZonedDateTime.now(ZoneId.of("UTC"))
+        val newMission = getDummyMissionAction(dateTime)
+
+        // When
+        val throwable = catchThrowable {
+            jpaMissionActionsRepository.save(newMission.copy(facade = "BAD_FACADE"))
+        }
+
+        // Then
+        assertThat(throwable).isNotNull()
+        assertThat(throwable.message).contains("Facade BAD_FACADE not found.")
     }
 
     @Test

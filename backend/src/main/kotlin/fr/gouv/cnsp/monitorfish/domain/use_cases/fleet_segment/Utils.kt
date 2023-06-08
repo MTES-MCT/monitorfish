@@ -19,20 +19,18 @@ fun removeRedundantFaoArea(faoAreas: List<FAOArea>): List<FAOArea> {
     return distinctFAOAreas
         .filter { currentFaoArea ->
             // If there is no faoCode, we do not keep this faoArea
-            currentFaoArea.faoCode?.let { faoCode ->
-                val anotherFaoAreaContainingCurrent = distinctFAOAreas
-                    // We remove the currentFaoArea from the list
-                    .filter { it !== currentFaoArea }
-                    // We check if another faoArea starts with the currentFaoArea
-                    .any { it.faoCode?.startsWith(faoCode) ?: false }
+            val anotherFaoAreaContainingCurrent = distinctFAOAreas
+                // We remove the currentFaoArea from the list
+                .filter { it !== currentFaoArea }
+                // We check if another faoArea starts with the currentFaoArea
+                .any { it.faoCode.startsWith(currentFaoArea.faoCode) }
 
-                // If another faoArea contains the currentFaoArea, then we remove the currentFaoArea
-                if (anotherFaoAreaContainingCurrent) {
-                    return@let false
-                }
+            // If another faoArea contains the currentFaoArea, then we remove the currentFaoArea
+            if (anotherFaoAreaContainingCurrent) {
+                return@filter false
+            }
 
-                return@let true
-            } ?: false
+            return@filter true
         }
 }
 
@@ -46,10 +44,6 @@ fun removeRedundantFaoArea(faoAreas: List<FAOArea>): List<FAOArea> {
 fun FAOArea.hasFaoCodeIncludedIn(faoCode: String?): Boolean {
     if (faoCode.isNullOrEmpty()) {
         return true
-    }
-
-    if (this.faoCode.isNullOrEmpty()) {
-        return false
     }
 
     return this.faoCode.startsWith(faoCode)

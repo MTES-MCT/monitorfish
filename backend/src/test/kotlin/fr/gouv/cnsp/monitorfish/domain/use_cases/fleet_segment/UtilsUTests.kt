@@ -18,7 +18,6 @@ class UtilsUTests {
             FAOArea(faoCode = "27.1", null, null),
             FAOArea(faoCode = "18", null, null),
             FAOArea(faoCode = "27.1.B.a", null, null),
-            FAOArea(faoCode = null, null, null),
         )
 
         // When

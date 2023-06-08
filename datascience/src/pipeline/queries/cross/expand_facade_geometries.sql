@@ -56,7 +56,8 @@ other_expanded_facades AS (
 
 expanded_facades_without_overlap AS (
     SELECT
-        ef.facade,
+        ef.facade AS facade_cnsp,
+        CASE WHEN ef.facade = 'Corse' THEN 'MED' ELSE ef.facade END AS facade_cacem,
         ST_Difference(
             ef.expanded_geometry,
             other_expanded_facades_geom

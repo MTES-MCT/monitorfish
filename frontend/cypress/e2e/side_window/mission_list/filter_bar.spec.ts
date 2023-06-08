@@ -1,5 +1,6 @@
 import { openSideWindowMissionList } from './utils'
 import { customDayjs } from '../../utils/customDayjs'
+import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
 // TODO Add search query, custom period and filter reset E2E tests.
 context('Side Window > Mission List > Filter Bar', () => {
@@ -15,6 +16,19 @@ context('Side Window > Mission List > Filter Bar', () => {
     cy.wait('@getMissions')
 
     cy.get('.TableBodyRow').should('have.length.to.be.greaterThan', 0)
+  })
+
+  it('Should filter missions for the custom date', () => {
+    const expectedStartDate = getUtcDateInMultipleFormats('2023-05-01T00:00:00.000Z')
+    const expectedEndDate = getUtcDateInMultipleFormats('2023-05-31T23:59:59.000Z')
+    cy.intercept(
+      'GET',
+      `/bff/v1/missions?&startedAfterDateTime=${expectedStartDate.utcDateAsEncodedString}&startedBeforeDateTime=${expectedEndDate.utcDateAsEncodedString}*`
+    ).as('getMissions')
+
+    cy.fill('Période', 'Période spécifique')
+    cy.fill('Période spécifique', [expectedStartDate.utcDateTuple, expectedEndDate.utcDateTuple])
+    cy.wait('@getMissions')
   })
 
   it('Should filter missions by source', () => {

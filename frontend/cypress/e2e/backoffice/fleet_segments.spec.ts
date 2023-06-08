@@ -11,6 +11,7 @@ context('Fleet segments', () => {
     cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
     cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
+    cy.wait(1000)
   })
 
   it('Should render the fleet segments', () => {
@@ -67,33 +68,42 @@ context('Fleet segments', () => {
     cy.wait('@fleetSegments')
     cy.wait(50)
     cy.get('[data-cy="row-ATL036-segment"]').should('have.value', 'ATL036')
+
+    // Reset
+    cy.request('PUT', `/bff/v1/fleet_segments?year=${currentYear}&segment=ATL036`, {
+      segment: 'ATL01'
+    })
   })
 
   it('Should update the segment name field', () => {
     // When
-    cy.intercept('PUT', `/bff/v1/fleet_segments?year=${currentYear}&segment=ATL036`).as('updateFleetSegment')
-    cy.get('[data-cy="row-ATL036-segmentName"]').type('{backspace}')
+    cy.intercept('PUT', `/bff/v1/fleet_segments?year=${currentYear}&segment=ATL01`).as('updateFleetSegment')
+    cy.get('[data-cy="row-ATL01-segmentName"]').type('{backspace}').wait(500)
+    cy.get('[data-cy="row-ATL01-segmentName"]').type('4')
     cy.wait(200)
-    cy.get('[data-cy="row-ATL036-segmentName"]').type('4')
-    cy.wait(200)
-    cy.get('[data-cy="row-ATL036-segmentName"]').type('5')
+    cy.get('[data-cy="row-ATL01-segmentName"]').type('5')
     cy.wait('@updateFleetSegment')
 
     // Then
     cy.wait(50)
-    cy.get('[data-cy="row-ATL036-segmentName"]').should('have.value', 'All Trawls 45')
+    cy.get('[data-cy="row-ATL01-segmentName"]').should('have.value', 'All Trawls 45')
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
     cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
     cy.wait(50)
-    cy.get('[data-cy="row-ATL036-segmentName"]').should('have.value', 'All Trawls 45')
+    cy.get('[data-cy="row-ATL01-segmentName"]').should('have.value', 'All Trawls 45')
+
+    // Reset
+    cy.request('PUT', `/bff/v1/fleet_segments?year=${currentYear}&segment=ATL01`, {
+      segmentName: 'All Trawls 3'
+    })
   })
 
   it('Should update the gears field', () => {
     // Given
-    cy.intercept('PUT', `/bff/v1/fleet_segments?year=${currentYear}&segment=ATL036`).as('updateFleetSegment')
+    cy.intercept('PUT', `/bff/v1/fleet_segments?year=${currentYear}&segment=ATL01`).as('updateFleetSegment')
     cy.get('.rs-table-cell-content').eq(11).click()
     cy.wait(200)
     cy.get('.rs-table-cell-content')
@@ -154,10 +164,10 @@ context('Fleet segments', () => {
   it('Should delete a fleet segment', () => {
     // Given
     cy.get('.rs-table-row').should('have.length', 44)
-    cy.intercept('DELETE', `/bff/v1/fleet_segments?year=${currentYear}&segment=ATL036`).as('deleteFleetSegment')
+    cy.intercept('DELETE', `/bff/v1/fleet_segments?year=${currentYear}&segment=FR_DRB`).as('deleteFleetSegment')
 
     // When
-    cy.get('*[data-cy="delete-row-ATL036"]').click({ force: true })
+    cy.get('*[data-cy="delete-row-FR_DRB"]').click({ force: true })
     cy.wait('@deleteFleetSegment')
 
     // Then
@@ -170,7 +180,7 @@ context('Fleet segments', () => {
     cy.wait('@fleetSegments')
     cy.wait(50)
     cy.get('.rs-table-row').should('have.length', 43)
-    cy.get('*[data-cy="delete-row-ATL036"]').should('not.exist')
+    cy.get('*[data-cy="delete-row-FR_DRB"]').should('not.exist')
   })
 
   it('Should create a fleet segment', () => {

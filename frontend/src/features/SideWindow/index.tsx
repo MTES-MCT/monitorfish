@@ -1,6 +1,18 @@
 import { THEME, type NewWindowContextValue, NewWindowContext, usePrevious, Notifier } from '@mtes-mct/monitor-ui'
 import { propEq } from 'ramda'
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
+import {
+  type CSSProperties,
+  type ForwardedRef,
+  forwardRef,
+  type HTMLAttributes,
+  type MutableRefObject,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled, { createGlobalStyle } from 'styled-components'
 
@@ -29,7 +41,6 @@ import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 import type { MenuItem } from '../../types'
-import type { MutableRefObject, CSSProperties, ForwardedRef, HTMLAttributes } from 'react'
 
 export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
   isFromURL: boolean
@@ -38,24 +49,20 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
   // eslint-disable-next-line no-null/no-null
   const wrapperRef = useRef<HTMLDivElement | null>(null)
 
-  const { sideWindow } = useMainAppSelector(state => state)
+  useImperativeHandle<HTMLDivElement | null, HTMLDivElement | null>(ref, () => wrapperRef.current)
+
+  const { alert, beaconMalfunction, reporting, sideWindow } = useMainAppSelector(state => state)
+  const dispatch = useMainAppDispatch()
 
   const [isFirstRender, setIsFirstRender] = useState(true)
   const [isOverlayed, setIsOverlayed] = useState(false)
   const [isPreloading, setIsPreloading] = useState(true)
   const [isSubmenuFixed, setIsSubmenuFixed] = useState(false)
+  const previousOpenedSideWindowTab = usePrevious(sideWindow.selectedPath.menu)
   const [selectedSubMenu, setSelectedSubMenu] = useState<MenuItem<SeaFrontGroup | string>>(
     getSelectedSubMenu(sideWindow.selectedPath.menu)
   )
   const [selectedTab, setSelectedTab] = useState(AlertAndReportingTab.ALERT)
-
-  const openedBeaconMalfunctionInKanban = useMainAppSelector(
-    state => state.beaconMalfunction.openedBeaconMalfunctionInKanban
-  )
-  const { editedReportingInSideWindow } = useMainAppSelector(state => state.reporting)
-  const { focusedPendingAlertId, pendingAlerts } = useMainAppSelector(state => state.alert)
-  const dispatch = useMainAppDispatch()
-  const previousOpenedSideWindowTab = usePrevious(sideWindow.selectedPath.menu)
 
   const beaconMalfunctionBoardGrayOverlayStyle: CSSProperties = useMemo(
     () => ({
@@ -89,8 +96,6 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
     [isFirstRender]
   )
 
-  useImperativeHandle<HTMLDivElement | null, HTMLDivElement | null>(ref, () => wrapperRef.current)
-
   const closeRightSidebar = useCallback(() => {
     dispatch(closeBeaconMalfunctionInKanban())
     dispatch(setEditedReportingInSideWindow())
@@ -103,14 +108,18 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
   }, [])
 
   useEffect(() => {
-    if (editedReportingInSideWindow || openedBeaconMalfunctionInKanban) {
+    if (reporting.editedReportingInSideWindow || beaconMalfunction.openedBeaconMalfunctionInKanban) {
       setIsOverlayed(true)
 
       return
     }
 
     setIsOverlayed(false)
-  }, [openedBeaconMalfunctionInKanban, editedReportingInSideWindow, sideWindow.selectedPath.menu])
+  }, [
+    beaconMalfunction.openedBeaconMalfunctionInKanban,
+    reporting.editedReportingInSideWindow,
+    sideWindow.selectedPath.menu
+  ])
 
   useEffect(() => {
     if (isFromURL) {
@@ -141,13 +150,13 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
 
         case SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST:
           {
-            if (!focusedPendingAlertId) {
+            if (!alert.focusedPendingAlertId) {
               setSelectedSubMenu(ALERTS_SUBMENU.MEMN)
 
               return
             }
 
-            const focusedPendingAlert = pendingAlerts.find(propEq(focusedPendingAlertId, 'id'))
+            const focusedPendingAlert = alert.pendingAlerts.find(propEq(alert.focusedPendingAlertId, 'id'))
             if (!focusedPendingAlert) {
               setSelectedSubMenu(ALERTS_SUBMENU.MEMN)
 
@@ -164,8 +173,8 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
       }
     }
   }, [
-    focusedPendingAlertId,
-    pendingAlerts,
+    alert.focusedPendingAlertId,
+    alert.pendingAlerts,
     previousOpenedSideWindowTab,
     selectedSubMenu,
     setSelectedSubMenu,
@@ -333,5 +342,7 @@ const Text = styled.span`
   margin-top: 10px;
   position: relative;
 `
+
+SideWindowWithRef.displayName = 'SideWindow'
 
 export const SideWindow = forwardRef(SideWindowWithRef)

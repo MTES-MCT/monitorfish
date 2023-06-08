@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
 
-context('Edit Regulation', () => {
+context('New Regulation', () => {
   beforeEach(() => {
     cy.visit('/backoffice/regulation/new')
-    cy.wait(100)
+    cy.wait(1000)
   })
 
   it('Law type list contains 18 elements', () => {

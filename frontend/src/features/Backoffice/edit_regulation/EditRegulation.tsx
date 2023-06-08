@@ -52,7 +52,7 @@ import { RegulatoryPreviewLayer } from '../../map/layers/RegulatoryPreviewLayer'
 import { STATUS } from '../constants'
 import {
   resetState,
-  setAtLeastOneValueIsMissing,
+  setHasOneOrMoreValuesMissing,
   setIsConfirmModalOpen,
   setIsRemoveModalOpen,
   setProcessingRegulation,
@@ -91,7 +91,7 @@ export function EditRegulation({ isEdition, title }) {
   const [saveIsForbidden, setSaveIsForbidden] = useState(false)
 
   const {
-    hasOneOrMoreValuesMission,
+    hasOneOrMoreValuesMissing,
     isConfirmModalOpen,
     isRemoveModalOpen,
     processingRegulation,
@@ -199,14 +199,14 @@ export function EditRegulation({ isEdition, title }) {
     valueIsMissing = !(id && id !== '')
     setGeometryIsMissing(valueIsMissing)
     willHaveOneOrMoreValuesMissing = willHaveOneOrMoreValuesMissing || valueIsMissing
-    dispatch(setAtLeastOneValueIsMissing(willHaveOneOrMoreValuesMissing))
+    dispatch(setHasOneOrMoreValuesMissing(willHaveOneOrMoreValuesMissing))
   }, [lawType, topic, zone, region, id, dispatch])
 
   useEffect(() => {
-    if (saveOrUpdateRegulation && hasOneOrMoreValuesMission === undefined) {
+    if (saveOrUpdateRegulation && hasOneOrMoreValuesMissing === undefined) {
       checkRequiredValues()
     }
-  }, [saveOrUpdateRegulation, hasOneOrMoreValuesMission, checkRequiredValues])
+  }, [saveOrUpdateRegulation, hasOneOrMoreValuesMissing, checkRequiredValues])
 
   useEffect(() => {
     if (regulatoryTextCheckedMap && saveOrUpdateRegulation) {
@@ -215,7 +215,7 @@ export function EditRegulation({ isEdition, title }) {
         regulatoryTextCheckList?.length > 0 && regulatoryTextCheckList.length === regulatoryReferences.length
 
       if (allTextsHaveBeenChecked) {
-        const allRequiredValuesHaveBeenFilled = !regulatoryTextCheckList.includes(false) && !hasOneOrMoreValuesMission
+        const allRequiredValuesHaveBeenFilled = !regulatoryTextCheckList.includes(false) && !hasOneOrMoreValuesMissing
 
         if (allRequiredValuesHaveBeenFilled) {
           dispatch(createOrUpdateRegulation(processingRegulation, id, selectedRegulatoryZoneId))
@@ -224,14 +224,14 @@ export function EditRegulation({ isEdition, title }) {
           batch(() => {
             dispatch(setRegulatoryTextCheckedMap({}))
             dispatch(setSaveOrUpdateRegulation(false))
-            dispatch(setAtLeastOneValueIsMissing(undefined))
+            dispatch(setHasOneOrMoreValuesMissing(undefined))
           })
           setSaveIsForbidden(true)
         }
       }
     }
   }, [
-    hasOneOrMoreValuesMission,
+    hasOneOrMoreValuesMissing,
     dispatch,
     id,
     processingRegulation,

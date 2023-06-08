@@ -10,7 +10,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import type { ValueOf } from 'type-fest'
 
 export type RegulationState = {
-  hasOneOrMoreValuesMission: boolean | undefined
+  hasOneOrMoreValuesMissing: boolean | undefined
   isConfirmModalOpen: boolean
   isRemoveModalOpen: boolean
   // TODO Convert that to a real type.
@@ -25,7 +25,7 @@ export type RegulationState = {
   status: ValueOf<typeof STATUS>
 }
 const INITIAL_STATE: RegulationState = {
-  hasOneOrMoreValuesMission: undefined,
+  hasOneOrMoreValuesMissing: undefined,
   isConfirmModalOpen: false,
   isRemoveModalOpen: false,
   processingRegulation: DEFAULT_REGULATION,
@@ -59,10 +59,6 @@ const regulationSlice = createSlice({
 
     resetState: () => INITIAL_STATE,
 
-    setAtLeastOneValueIsMissing(state, action) {
-      state.hasOneOrMoreValuesMission = action.payload
-    },
-
     setFishingPeriod(state, { payload: { key, value } }) {
       const nextFishingPeriod = {
         ...state.processingRegulation.fishingPeriod,
@@ -79,6 +75,10 @@ const regulationSlice = createSlice({
     setFishingPeriodOtherInfo(state, action) {
       // TODO Clean this type.
       ;(state as any).processingRegulation[REGULATORY_REFERENCE_KEYS.FISHING_PERIOD].otherInfo = action.payload
+    },
+
+    setHasOneOrMoreValuesMissing(state, action) {
+      state.hasOneOrMoreValuesMissing = action.payload
     },
 
     setIsConfirmModalOpen(state, action) {
@@ -164,9 +164,9 @@ const regulationSlice = createSlice({
 export const {
   addObjectToRegulatoryTextCheckedMap,
   resetState,
-  setAtLeastOneValueIsMissing,
   setFishingPeriod,
   setFishingPeriodOtherInfo,
+  setHasOneOrMoreValuesMissing,
   setIsConfirmModalOpen,
   setIsRemoveModalOpen,
   setProcessingRegulation,

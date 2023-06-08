@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+import { useBeforeUnload } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { ErrorToastNotification } from './commonComponents/ErrorToastNotification'
@@ -22,7 +24,22 @@ export function MainWindow() {
     state => state.displayedComponent
   )
   const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
-  const { sideWindow } = useMainAppSelector(state => state)
+  const { mission, sideWindow } = useMainAppSelector(state => state)
+
+  const warnOnUnload = useCallback(
+    event => {
+      if (sideWindow.status !== SideWindowStatus.CLOSED && mission.isDraftDirty) {
+        event.preventDefault()
+
+        // https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event#examples
+        // eslint-disable-next-line no-param-reassign
+        event.returnValue = ''
+      }
+    },
+    [mission.isDraftDirty, sideWindow.status]
+  )
+
+  useBeforeUnload(warnOnUnload)
 
   return (
     <>

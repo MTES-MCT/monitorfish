@@ -29,6 +29,7 @@ export function VesselField() {
       if (!nextVessel) {
         setValues({
           ...values,
+          districtCode: undefined,
           externalReferenceNumber: undefined,
           flagState: undefined,
           internalReferenceNumber: undefined,
@@ -47,6 +48,7 @@ export function VesselField() {
 
       setValues({
         ...values,
+        districtCode: nextVessel.districtCode || undefined,
         externalReferenceNumber: nextVessel.externalReferenceNumber || undefined,
         flagState: nextVessel.flagState,
         internalReferenceNumber: nextVessel.internalReferenceNumber || undefined,

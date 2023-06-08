@@ -6,7 +6,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionTyp
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 
 @UseCase
-class AddMissionAction(private val missionActionsRepository: MissionActionsRepository) {
+class AddMissionAction(
+    private val missionActionsRepository: MissionActionsRepository,
+) {
     fun execute(action: MissionAction): MissionAction {
         require(action.id == null) {
             "An action creation must have no id: the `id` must be null."

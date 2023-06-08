@@ -108,6 +108,7 @@ context('Side Window > Mission Form > Land Control', () => {
         actionType: 'LAND_CONTROL',
         controlQualityComments: 'Une observation sur le déroulé du contrôle.',
         controlUnits: [],
+        districtCode: 'AY',
         diversion: null,
         emitsAis: 'NO',
         emitsVms: 'YES',

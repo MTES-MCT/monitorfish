@@ -48,6 +48,7 @@ export enum VesselIdentifier {
 
 export type VesselIdentity = {
   beaconNumber?: number | null
+  districtCode?: string | null
   externalReferenceNumber: string | null
   flagState: string
   internalReferenceNumber: string | null

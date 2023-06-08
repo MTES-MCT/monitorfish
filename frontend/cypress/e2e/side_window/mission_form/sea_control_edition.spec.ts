@@ -46,6 +46,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
         actionType: 'SEA_CONTROL',
         controlQualityComments: null,
         controlUnits: [],
+        districtCode: 'AY',
         diversion: null,
         emitsAis: null,
         emitsVms: 'NOT_APPLICABLE',

@@ -51,24 +51,18 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
 
   useImperativeHandle<HTMLDivElement | null, HTMLDivElement | null>(ref, () => wrapperRef.current)
 
-  const { sideWindow } = useMainAppSelector(state => state)
+  const { alert, beaconMalfunction, reporting, sideWindow } = useMainAppSelector(state => state)
+  const dispatch = useMainAppDispatch()
 
   const [isFirstRender, setIsFirstRender] = useState(true)
   const [isOverlayed, setIsOverlayed] = useState(false)
   const [isPreloading, setIsPreloading] = useState(true)
   const [isSubmenuFixed, setIsSubmenuFixed] = useState(false)
+  const previousOpenedSideWindowTab = usePrevious(sideWindow.selectedPath.menu)
   const [selectedSubMenu, setSelectedSubMenu] = useState<MenuItem<SeaFrontGroup | string>>(
     getSelectedSubMenu(sideWindow.selectedPath.menu)
   )
   const [selectedTab, setSelectedTab] = useState(AlertAndReportingTab.ALERT)
-
-  const openedBeaconMalfunctionInKanban = useMainAppSelector(
-    state => state.beaconMalfunction.openedBeaconMalfunctionInKanban
-  )
-  const { editedReportingInSideWindow } = useMainAppSelector(state => state.reporting)
-  const { focusedPendingAlertId, pendingAlerts } = useMainAppSelector(state => state.alert)
-  const dispatch = useMainAppDispatch()
-  const previousOpenedSideWindowTab = usePrevious(sideWindow.selectedPath.menu)
 
   const beaconMalfunctionBoardGrayOverlayStyle: CSSProperties = useMemo(
     () => ({
@@ -114,14 +108,18 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
   }, [])
 
   useEffect(() => {
-    if (editedReportingInSideWindow || openedBeaconMalfunctionInKanban) {
+    if (reporting.editedReportingInSideWindow || beaconMalfunction.openedBeaconMalfunctionInKanban) {
       setIsOverlayed(true)
 
       return
     }
 
     setIsOverlayed(false)
-  }, [openedBeaconMalfunctionInKanban, editedReportingInSideWindow, sideWindow.selectedPath.menu])
+  }, [
+    beaconMalfunction.openedBeaconMalfunctionInKanban,
+    reporting.editedReportingInSideWindow,
+    sideWindow.selectedPath.menu
+  ])
 
   useEffect(() => {
     if (isFromURL) {
@@ -152,13 +150,13 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
 
         case SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST:
           {
-            if (!focusedPendingAlertId) {
+            if (!alert.focusedPendingAlertId) {
               setSelectedSubMenu(ALERTS_SUBMENU.MEMN)
 
               return
             }
 
-            const focusedPendingAlert = pendingAlerts.find(propEq(focusedPendingAlertId, 'id'))
+            const focusedPendingAlert = alert.pendingAlerts.find(propEq(alert.focusedPendingAlertId, 'id'))
             if (!focusedPendingAlert) {
               setSelectedSubMenu(ALERTS_SUBMENU.MEMN)
 
@@ -175,8 +173,8 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
       }
     }
   }, [
-    focusedPendingAlertId,
-    pendingAlerts,
+    alert.focusedPendingAlertId,
+    alert.pendingAlerts,
     previousOpenedSideWindowTab,
     selectedSubMenu,
     setSelectedSubMenu,

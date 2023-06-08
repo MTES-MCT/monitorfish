@@ -17,7 +17,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     // Espèces à bord
     cy.intercept(
       'GET',
-      'bff/v1/fleet_segments/compute?faoAreas=&gears=PTM&species=SPR&latitude=53.35&longitude=-10.85&portLocode='
+      'bff/v1/fleet_segments/compute?faoAreas=27.8.a&gears=PTM&species=SPR&latitude=53.35&longitude=-10.85&portLocode='
     ).as('computeSegment')
     cy.fill('Ajouter une espèce', 'SPR')
     cy.wait('@computeSegment')

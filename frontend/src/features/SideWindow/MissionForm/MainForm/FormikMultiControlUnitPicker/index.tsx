@@ -6,7 +6,7 @@ import styled from 'styled-components'
 
 import { ControlUnitSelect } from './ControlUnitSelect'
 import { useGetControlUnitsQuery } from '../../../../../api/controlUnit'
-import { getControlUnitsOptionsFromControlUnits } from '../../../../../domain/controlUnits/utils'
+import { getControlUnitsOptionsFromControlUnits } from '../../../../../domain/entities/controlUnits/utils'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 
 import type { ControlUnit } from '../../../../../domain/types/controlUnit'

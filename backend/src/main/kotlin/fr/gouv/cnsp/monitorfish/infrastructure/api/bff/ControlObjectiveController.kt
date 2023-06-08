@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.*
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddControlObjectiveDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ControlObjectiveDataOutput
 import io.swagger.v3.oas.annotations.Operation
@@ -8,7 +9,6 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.websocket.server.PathParam
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddControlObjectiveDataInput as AddControlObjectiveDataInput1
 
 @RestController
 @RequestMapping("/bff/v1/control_objectives")
@@ -78,7 +78,7 @@ class ControlObjectiveController(
     @Operation(summary = "Add a control objective")
     fun addControlObjective(
         @RequestBody
-        addControlObjectiveData: AddControlObjectiveDataInput1,
+        addControlObjectiveData: AddControlObjectiveDataInput,
     ): Int {
         return addControlObjective.execute(
             segment = addControlObjectiveData.segment,

@@ -14,7 +14,7 @@ class DeleteMissionAction(private val missionActionsRepository: MissionActionsRe
 
             missionActionsRepository.save(sofDeletedAction)
         } catch (e: Throwable) {
-            throw CouldNotDeleteException("Could not find mission action with id: ${e.message}")
+            throw CouldNotDeleteException("Could not find mission action with id: ${e.message}", e)
         }
     }
 }

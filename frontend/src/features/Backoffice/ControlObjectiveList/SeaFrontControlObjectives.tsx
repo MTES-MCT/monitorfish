@@ -5,7 +5,7 @@ import { useDebouncedCallback } from 'use-debounce'
 
 import { useGetFleetSegmentsQuery } from '../../../api/fleetSegment'
 import { COLORS } from '../../../constants/constants'
-import addControlObjective from '../../../domain/use_cases/controlObjective/addControlObjective'
+import { addControlObjective } from '../../../domain/use_cases/controlObjective/addControlObjective'
 import deleteControlObjective from '../../../domain/use_cases/controlObjective/deleteControlObjective'
 import updateControlObjective from '../../../domain/use_cases/controlObjective/updateControlObjective'
 import { useBackofficeAppDispatch } from '../../../hooks/useBackofficeAppDispatch'
@@ -55,7 +55,10 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
         return
       }
 
-      const newId = await dispatch(addControlObjective(newSegment, facade, year))
+      const newId: number | void = await dispatch(addControlObjective(newSegment, facade, year))
+      if (!newId) {
+        return
+      }
 
       const foundFleetSegment = (getFleetSegmentsQuery.data || []).find(
         fleetSegment => fleetSegment.segment === newSegment
@@ -207,7 +210,7 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
 
   return (
     <Wrapper>
-      <Title>{title}</Title>
+      <Title data-cy="control-objective-facade-title">{title}</Title>
       <br />
       <Table
         affixHorizontalScrollbar

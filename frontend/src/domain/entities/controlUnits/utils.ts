@@ -1,8 +1,8 @@
 import { uniq } from 'lodash'
 
-import { getOptionsFromStrings } from '../../utils/getOptionsFromStrings'
+import { getOptionsFromStrings } from '../../../utils/getOptionsFromStrings'
 
-import type { ControlUnit } from '../types/controlUnit'
+import type { ControlUnit } from '../../types/controlUnit'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 export function getControlUnitsOptionsFromControlUnits(

@@ -20,7 +20,7 @@ def test_extract_silenced_alerts():
             "internal_reference_number": ["ABC000658985", "ABC000542519"],
             "external_reference_number": ["OHMYGOSH", "RO237719"],
             "ircs": ["OGMJ", "FQ7058"],
-            "facade": ["Facade B", "Facade A"],
+            "facade": ["SA", "NAMO"],
             "type": ["THREE_MILES_TRAWLING_ALERT", "MISSING_FAR_ALERT"],
         }
     )

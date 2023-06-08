@@ -1,7 +1,7 @@
 import { expect } from '@jest/globals'
 import { getUtcizedDayjs } from '@mtes-mct/monitor-ui'
 
-import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFrontLabel } from '../../../../../constants'
+import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFront } from '../../../seaFront/constants'
 import { Mission } from '../../types'
 import { seaFrontFilterFunction } from '../seaFrontFilterFunction'
 
@@ -12,7 +12,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
   it('should return true when the facade is included in the mission facade', () => {
     const mission = {
       controlUnits: [],
-      facade: SeaFrontLabel.MED,
+      facade: SeaFront.MED,
       id: 123,
       isClosed: false,
       missionSource: MissionSource.MONITORFISH,
@@ -20,7 +20,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
       startDateTimeUtc: getUtcizedDayjs().toISOString()
     }
 
-    const result = seaFrontFilterFunction(mission, [SeaFrontLabel.MED])
+    const result = seaFrontFilterFunction(mission, [SeaFront.MED])
 
     expect(result).toBeTruthy()
   })
@@ -28,7 +28,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
   it('should return false when the facade is not included in the mission facade', () => {
     const mission = {
       controlUnits: [],
-      facade: SeaFrontLabel.SA,
+      facade: SeaFront.SA,
       id: 123,
       isClosed: false,
       missionSource: MissionSource.MONITORFISH,
@@ -36,7 +36,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
       startDateTimeUtc: getUtcizedDayjs().toISOString()
     }
 
-    const result = seaFrontFilterFunction(mission, [SeaFrontLabel.MED])
+    const result = seaFrontFilterFunction(mission, [SeaFront.MED])
 
     expect(result).toBeFalsy()
   })
@@ -44,7 +44,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
   it('should return true when the facade is not filtered', () => {
     const mission = {
       controlUnits: [],
-      facade: SeaFrontLabel.SA,
+      facade: SeaFront.SA,
       id: 123,
       isClosed: false,
       missionSource: MissionSource.MONITORFISH,
@@ -60,7 +60,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
   it('should return true when a group of facade is filtered', () => {
     const mission = {
       controlUnits: [],
-      facade: SeaFrontLabel.GUADELOUPE,
+      facade: SeaFront.GUADELOUPE,
       id: 123,
       isClosed: false,
       missionSource: MissionSource.MONITORFISH,
@@ -68,7 +68,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
       startDateTimeUtc: getUtcizedDayjs().toISOString()
     }
 
-    const filteredGroup = SEA_FRONT_GROUP_SEA_FRONTS.OUTREMEROA.map(seaFront => SeaFrontLabel[seaFront])
+    const filteredGroup = SEA_FRONT_GROUP_SEA_FRONTS.OUTREMEROA
     const result = seaFrontFilterFunction(mission, filteredGroup)
 
     expect(result).toBeTruthy()

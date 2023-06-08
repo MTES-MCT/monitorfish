@@ -50,7 +50,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
         emitsAis: null,
         emitsVms: 'NOT_APPLICABLE',
         externalReferenceNumber: null,
-        facade: 'Manche ouest - Mer du Nord',
+        facade: 'MEMN',
         faoAreas: ['27.8.a'],
         feedbackSheetRequired: false,
         flagState: 'FR',

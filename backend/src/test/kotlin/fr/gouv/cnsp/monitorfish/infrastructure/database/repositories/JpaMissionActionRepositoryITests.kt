@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDummyMissionAction
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
@@ -90,7 +91,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.segments).hasSize(2)
         assertThat(firstControl.segments.first().segment).isEqualTo("SWW04")
         assertThat(firstControl.segments.first().segmentName).isEqualTo("Midwater trawls")
-        assertThat(firstControl.facade).isEqualTo("Manche ouest - Atlantique")
+        assertThat(firstControl.facade).isEqualTo("NAMO")
         assertThat(firstControl.longitude).isEqualTo(-0.52)
         assertThat(firstControl.latitude).isEqualTo(47.44)
         assertThat(firstControl.portLocode).isNull()
@@ -128,7 +129,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `saveMissionActions Should save a new mission action`() {
+    fun `save Should save a new mission action`() {
         // Given
         val dateTime = ZonedDateTime.now(ZoneId.of("UTC"))
         val newMission = getDummyMissionAction(dateTime)
@@ -144,24 +145,39 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `saveMissionActions Should update an existing mission action`() {
+    fun `save Should throw an exception When save a new mission action with bad facade`() {
         // Given
-        val dateTime = ZonedDateTime.now()
-        val expectedId = 2
-        val updatedMission = getDummyMissionAction(dateTime, expectedId)
+        val dateTime = ZonedDateTime.now(ZoneId.of("UTC"))
+        val newMission = getDummyMissionAction(dateTime)
 
-        val existingAction = jpaMissionActionsRepository.findByMissionId(2)
-        assertThat(existingAction.first().latitude).isEqualTo(47.44)
-        assertThat(existingAction.first().longitude).isEqualTo(-0.52)
+        // When
+        val throwable = catchThrowable {
+            jpaMissionActionsRepository.save(newMission.copy(facade = "BAD_FACADE"))
+        }
+
+        // Then
+        assertThat(throwable).isNotNull()
+        assertThat(throwable.message).contains("Facade BAD_FACADE not found.")
+    }
+
+    @Test
+    @Transactional
+    fun `save Should update an existing mission action`() {
+        // Given
+        val expectedId = 2
+        val existingAction = jpaMissionActionsRepository.findById(expectedId)
+        assertThat(existingAction.latitude).isEqualTo(47.44)
+        assertThat(existingAction.longitude).isEqualTo(-0.52)
+        val updatedMission = existingAction.copy(isDeleted = true)
 
         // When
         val updatedMissionAction = jpaMissionActionsRepository.save(updatedMission)
 
         // Then
         assertThat(updatedMissionAction.id).isEqualTo(expectedId)
-        assertThat(updatedMissionAction.actionDatetimeUtc).isEqualTo(dateTime)
-        assertThat(updatedMissionAction.latitude).isEqualTo(45.12)
-        assertThat(updatedMissionAction.longitude).isEqualTo(-6.56)
+        assertThat(updatedMissionAction.isDeleted).isTrue()
+        assertThat(updatedMissionAction.latitude).isEqualTo(47.44)
+        assertThat(updatedMissionAction.longitude).isEqualTo(-0.52)
     }
 
     @Test

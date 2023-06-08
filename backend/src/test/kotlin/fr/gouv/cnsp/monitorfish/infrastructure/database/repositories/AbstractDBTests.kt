@@ -42,7 +42,6 @@ abstract class AbstractDBTests {
         private fun getJdbcUrl(): String {
             val toStringConsumer = ToStringConsumer()
             container.followOutput(toStringConsumer, OutputFrame.OutputType.STDOUT)
-            println(toStringConsumer.toUtf8String())
 
             return "jdbc:postgresql://" + container.containerIpAddress + ":" + container.getMappedPort(
                 PostgreSQLContainer.POSTGRESQL_PORT,

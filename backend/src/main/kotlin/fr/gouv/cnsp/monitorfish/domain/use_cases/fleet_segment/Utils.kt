@@ -14,19 +14,24 @@ import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FAOArea
  *      https://github.com/MTES-MCT/monitorfish/blob/master/datascience/src/pipeline/helpers/fao_areas.py#L4
  */
 fun removeRedundantFaoArea(faoAreas: List<FAOArea>): List<FAOArea> {
-    return faoAreas.filter { currentFaoArea ->
-        // If there is no faoCode, we do not keep this faoArea
-        currentFaoArea.faoCode?.let { faoCode ->
-            val anotherFaoAreaContainingCurrent = faoAreas
+    val distinctFAOAreas = faoAreas.distinctBy { it.faoCode }
+
+    return distinctFAOAreas
+        .filter { currentFaoArea ->
+            // If there is no faoCode, we do not keep this faoArea
+            val anotherFaoAreaContainingCurrent = distinctFAOAreas
                 // We remove the currentFaoArea from the list
                 .filter { it !== currentFaoArea }
                 // We check if another faoArea starts with the currentFaoArea
-                .any { it.faoCode?.startsWith(faoCode) ?: false }
+                .any { it.faoCode.startsWith(currentFaoArea.faoCode) }
 
-            // If another faoArea contains the currentFaoArea, then we filter the currentFaoArea
-            !anotherFaoAreaContainingCurrent
-        } ?: false
-    }
+            // If another faoArea contains the currentFaoArea, then we remove the currentFaoArea
+            if (anotherFaoAreaContainingCurrent) {
+                return@filter false
+            }
+
+            return@filter true
+        }
 }
 
 /**
@@ -39,10 +44,6 @@ fun removeRedundantFaoArea(faoAreas: List<FAOArea>): List<FAOArea> {
 fun FAOArea.hasFaoCodeIncludedIn(faoCode: String?): Boolean {
     if (faoCode.isNullOrEmpty()) {
         return true
-    }
-
-    if (this.faoCode.isNullOrEmpty()) {
-        return false
     }
 
     return this.faoCode.startsWith(faoCode)

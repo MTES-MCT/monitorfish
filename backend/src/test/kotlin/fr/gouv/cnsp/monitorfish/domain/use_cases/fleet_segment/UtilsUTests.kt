@@ -15,9 +15,9 @@ class UtilsUTests {
         val faoAreas = listOf(
             FAOArea(faoCode = "27.1.B", null, null),
             FAOArea(faoCode = "27.1", null, null),
+            FAOArea(faoCode = "27.1", null, null),
             FAOArea(faoCode = "18", null, null),
             FAOArea(faoCode = "27.1.B.a", null, null),
-            FAOArea(faoCode = null, null, null),
         )
 
         // When
@@ -27,6 +27,25 @@ class UtilsUTests {
         assertThat(filteredFaoAreas).hasSize(2)
         assertThat(filteredFaoAreas.first().faoCode).isEqualTo("18")
         assertThat(filteredFaoAreas.last().faoCode).isEqualTo("27.1.B.a")
+    }
+
+    @Test
+    fun `removeRedundantFaoArea Should keep different fao codes`() {
+        // Given
+        val faoAreas = listOf(
+            FAOArea(faoCode = "27.1.B", null, null),
+            FAOArea(faoCode = "27.1.B", null, null),
+            FAOArea(faoCode = "27.1.B", null, null),
+            FAOArea(faoCode = "27.1.C", null, null),
+        )
+
+        // When
+        val filteredFaoAreas = removeRedundantFaoArea(faoAreas)
+
+        // Then
+        assertThat(filteredFaoAreas).hasSize(2)
+        assertThat(filteredFaoAreas.first().faoCode).isEqualTo("27.1.B")
+        assertThat(filteredFaoAreas.last().faoCode).isEqualTo("27.1.C")
     }
 
     @Test

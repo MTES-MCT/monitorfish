@@ -7,7 +7,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.species.SpeciesAndSpeciesGroups
 import fr.gouv.cnsp.monitorfish.domain.entities.species.SpeciesGroup
-import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.GetFAOAreas
 import fr.gouv.cnsp.monitorfish.domain.use_cases.gear.GetAllGears
 import fr.gouv.cnsp.monitorfish.domain.use_cases.species.GetAllSpeciesAndSpeciesGroups
 import org.hamcrest.Matchers.equalTo
@@ -34,9 +33,6 @@ class DataReferentialControllerITests {
 
     @MockBean
     private lateinit var getAllSpeciesAndSpeciesGroups: GetAllSpeciesAndSpeciesGroups
-
-    @MockBean
-    private lateinit var getFAOAreas: GetFAOAreas
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -72,17 +68,5 @@ class DataReferentialControllerITests {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.species.length()", equalTo(1)))
             .andExpect(jsonPath("$.groups.length()", equalTo(1)))
-    }
-
-    @Test
-    fun `Should get FAO areas`() {
-        // Given
-        given(this.getFAOAreas.execute()).willReturn(listOf("27.1", "27.1.0", "28.1", "28.1.0", "28.1.1"))
-
-        // When
-        api.perform(get("/bff/v1/fao_areas"))
-            // Then
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.length()", equalTo(5)))
     }
 }

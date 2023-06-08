@@ -1,6 +1,5 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.GetFAOAreas
 import fr.gouv.cnsp.monitorfish.domain.use_cases.gear.GetAllGears
 import fr.gouv.cnsp.monitorfish.domain.use_cases.species.GetAllSpeciesAndSpeciesGroups
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.GearDataOutput
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController
 class DataReferentialController(
     private val getAllGears: GetAllGears,
     private val getAllSpeciesAndSpeciesGroups: GetAllSpeciesAndSpeciesGroups,
-    private val getFAOAreas: GetFAOAreas,
 ) {
 
     @GetMapping("/v1/gears")
@@ -32,11 +30,5 @@ class DataReferentialController(
     @Operation(summary = "Get FAO species codes and groups")
     fun getSpecies(): SpeciesAndSpeciesGroupsDataOutput {
         return SpeciesAndSpeciesGroupsDataOutput.fromSpeciesAndSpeciesGroups(getAllSpeciesAndSpeciesGroups.execute())
-    }
-
-    @GetMapping("/v1/fao_areas")
-    @Operation(summary = "Get FAO areas")
-    fun getFAOAreas(): List<String> {
-        return getFAOAreas.execute()
     }
 }

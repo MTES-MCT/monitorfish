@@ -1,13 +1,11 @@
 import { fleetSegmentApi } from '../../../api/fleetSegment'
-import { getFaoZonesFromSpeciesOnboard } from '../../entities/vessel/riskFactor'
 
 import type { MissionActionFormValues } from '../../../features/SideWindow/MissionForm/types'
-import type { DeclaredLogbookSpecies } from '../../entities/vessel/types'
 import type { FleetSegment } from '../../types/fleetSegment'
 
 export const getFleetSegments =
   (
-    declaredSpeciesOnboard: DeclaredLogbookSpecies[] | undefined,
+    faoAreas: string[] | undefined,
     gearOnBoard: MissionActionFormValues['gearOnboard'],
     speciesOnboard: MissionActionFormValues['speciesOnboard'],
     longitude: number | undefined,
@@ -19,13 +17,12 @@ export const getFleetSegments =
       return []
     }
 
-    const faoAreas = getFaoZonesFromSpeciesOnboard(declaredSpeciesOnboard || [])
     const gears = gearOnBoard?.map(gear => gear.gearCode)
     const species = speciesOnboard?.map(specy => specy.speciesCode)
 
     const { data: fleetSegments } = await dispatch(
       fleetSegmentApi.endpoints.computeFleetSegments.initiate({
-        faoAreas,
+        faoAreas: faoAreas || [],
         gears: gears || [],
         latitude,
         longitude,

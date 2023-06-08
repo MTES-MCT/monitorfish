@@ -8,12 +8,12 @@ import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.repositories.FAOAreasRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.FleetSegmentRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.ComputeFAOAreasFromCoordinates
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.TestUtils.getDummyFleetSegments
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.BDDMockito
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.*
@@ -25,10 +25,10 @@ class ComputeFleetSegmentsUTests {
     private lateinit var fleetSegmentRepository: FleetSegmentRepository
 
     @MockBean
-    private lateinit var faoAreasRepository: FAOAreasRepository
+    private lateinit var portRepository: PortRepository
 
     @MockBean
-    private lateinit var portRepository: PortRepository
+    private lateinit var computeFAOAreasFromCoordinates: ComputeFAOAreasFromCoordinates
 
     companion object {
         val fixedClock: Clock = Clock.systemUTC()
@@ -39,7 +39,7 @@ class ComputeFleetSegmentsUTests {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
 
         // When
-        val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
+        val segment = ComputeFleetSegments(fleetSegmentRepository, computeFAOAreasFromCoordinates, portRepository, fixedClock)
             .execute(listOf("27.1", "27.8.c"), listOf(), listOf("HKE", "SOL"))
 
         // Then
@@ -51,7 +51,7 @@ class ComputeFleetSegmentsUTests {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
 
         // When
-        val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
+        val segment = ComputeFleetSegments(fleetSegmentRepository, computeFAOAreasFromCoordinates, portRepository, fixedClock)
             .execute(listOf("27.1", "27.8.c"), listOf("OTB", "OTT"), listOf())
 
         // Then
@@ -63,7 +63,7 @@ class ComputeFleetSegmentsUTests {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
 
         // When
-        val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
+        val segment = ComputeFleetSegments(fleetSegmentRepository, computeFAOAreasFromCoordinates, portRepository, fixedClock)
             .execute(listOf("27.1", "27.8.c"), listOf("OTB", "OTT"), listOf("HKE", "SOL"))
 
         // Then
@@ -76,7 +76,7 @@ class ComputeFleetSegmentsUTests {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
 
         // When
-        val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
+        val segment = ComputeFleetSegments(fleetSegmentRepository, computeFAOAreasFromCoordinates, portRepository, fixedClock)
             .execute(listOf("27.5.b"), listOf("TB"), listOf("ANF"))
 
         // Then
@@ -89,7 +89,7 @@ class ComputeFleetSegmentsUTests {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
 
         // When
-        val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
+        val segment = ComputeFleetSegments(fleetSegmentRepository, computeFAOAreasFromCoordinates, portRepository, fixedClock)
             .execute(listOf("27.1", "27.8.c"), listOf("OTB", "OTT", "OTM"), listOf("HKE", "SOL"))
 
         // Then
@@ -101,12 +101,12 @@ class ComputeFleetSegmentsUTests {
     @Test
     fun `execute Should return the segments associated to the AEFAT port`() {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
-        BDDMockito.given(portRepository.find(eq("AEFAT"))).willReturn(
+        given(portRepository.find(eq("AEFAT"))).willReturn(
             Port("AEFAT", "Al Jazeera Port", faoAreas = listOf("27.7.d", "27.7")),
         )
 
         // When
-        val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
+        val segment = ComputeFleetSegments(fleetSegmentRepository, computeFAOAreasFromCoordinates, portRepository, fixedClock)
             .execute(listOf(), listOf("OTB", "OTT", "OTM"), listOf("HKE", "SOL"), portLocode = "AEFAT")
 
         // Then
@@ -117,12 +117,12 @@ class ComputeFleetSegmentsUTests {
     @Test
     fun `execute Should return the segments associated to the AEFAT port When there is both port and fao areas given`() {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
-        BDDMockito.given(portRepository.find(eq("AEFAT"))).willReturn(
+        given(portRepository.find(eq("AEFAT"))).willReturn(
             Port("AEFAT", "Al Jazeera Port", faoAreas = listOf("27.7.d", "27.7")),
         )
 
         // When
-        val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
+        val segment = ComputeFleetSegments(fleetSegmentRepository, computeFAOAreasFromCoordinates, portRepository, fixedClock)
             .execute(listOf("27.8.c"), listOf("OTB", "OTT", "OTM"), listOf("HKE", "SOL"), portLocode = "AEFAT")
 
         // Then
@@ -133,15 +133,13 @@ class ComputeFleetSegmentsUTests {
     @Test
     fun `execute Should return the segments associated to the given longitude and latitude`() {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
-        given(faoAreasRepository.findByIncluding(any())).willReturn(
-            listOf(
-                FAOArea("27.8.c"),
-                FAOArea("27.8"),
-            ),
-        )
+        given(computeFAOAreasFromCoordinates.execute(any(), any())).willReturn(listOf(
+            FAOArea("27.8.c"),
+            FAOArea("27.8"),
+        ))
 
         // When
-        val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
+        val segment = ComputeFleetSegments(fleetSegmentRepository, computeFAOAreasFromCoordinates, portRepository, fixedClock)
             .execute(listOf(), listOf("OTB", "OTT", "OTM"), listOf("HKE", "SOL"), 53.3543093, -10.8558547)
 
         // Then
@@ -155,7 +153,7 @@ class ComputeFleetSegmentsUTests {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
 
         // When
-        val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
+        val segment = ComputeFleetSegments(fleetSegmentRepository, computeFAOAreasFromCoordinates, portRepository, fixedClock)
             .execute(listOf("27.9"), listOf(), listOf("HKE", "SOL"))
 
         // Then
@@ -168,7 +166,7 @@ class ComputeFleetSegmentsUTests {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
 
         // When
-        val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
+        val segment = ComputeFleetSegments(fleetSegmentRepository, computeFAOAreasFromCoordinates, portRepository, fixedClock)
             .execute(listOf("27.9"), listOf("SDN"), listOf())
 
         // Then
@@ -181,7 +179,7 @@ class ComputeFleetSegmentsUTests {
         given(fleetSegmentRepository.findAllByYear(ZonedDateTime.now().year)).willReturn(getDummyFleetSegments())
 
         // When
-        val segment = ComputeFleetSegments(fleetSegmentRepository, faoAreasRepository, portRepository, fixedClock)
+        val segment = ComputeFleetSegments(fleetSegmentRepository, computeFAOAreasFromCoordinates, portRepository, fixedClock)
             .execute(listOf(), listOf("SDN"), listOf("HKE"))
 
         // Then

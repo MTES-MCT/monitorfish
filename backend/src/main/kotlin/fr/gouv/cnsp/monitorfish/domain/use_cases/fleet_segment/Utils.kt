@@ -14,17 +14,24 @@ import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FAOArea
  *      https://github.com/MTES-MCT/monitorfish/blob/master/datascience/src/pipeline/helpers/fao_areas.py#L4
  */
 fun removeRedundantFaoArea(faoAreas: List<FAOArea>): List<FAOArea> {
-    return faoAreas.filter { currentFaoArea ->
+    val distinctFAOAreas = faoAreas.distinctBy { it.faoCode }
+
+    return distinctFAOAreas
+        .filter { currentFaoArea ->
         // If there is no faoCode, we do not keep this faoArea
         currentFaoArea.faoCode?.let { faoCode ->
-            val anotherFaoAreaContainingCurrent = faoAreas
+            val anotherFaoAreaContainingCurrent = distinctFAOAreas
                 // We remove the currentFaoArea from the list
                 .filter { it !== currentFaoArea }
                 // We check if another faoArea starts with the currentFaoArea
                 .any { it.faoCode?.startsWith(faoCode) ?: false }
 
-            // If another faoArea contains the currentFaoArea, then we filter the currentFaoArea
-            !anotherFaoAreaContainingCurrent
+            // If another faoArea contains the currentFaoArea, then we remove the currentFaoArea
+            if (anotherFaoAreaContainingCurrent) {
+                return@let false
+            }
+
+            return@let true
         } ?: false
     }
 }

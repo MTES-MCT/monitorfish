@@ -59,7 +59,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
       // If there is a custom date range filter and the date range filter is not set to "custom",
       if (
         nextFilterValues.CUSTOM_DATE_RANGE &&
-        normalizedNextFilterValues.CUSTOM_DATE_RANGE !== MissionDateRangeFilter.CUSTOM
+        normalizedNextFilterValues.DATE_RANGE !== MissionDateRangeFilter.CUSTOM
       ) {
         // we need to undefined custom date range filter
         normalizedNextFilterValues.CUSTOM_DATE_RANGE = undefined

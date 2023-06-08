@@ -4,7 +4,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.control_objective.ControlObjecti
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotDeleteException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateControlObjectiveException
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlObjectivesRepository
-import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ControlObjectivesEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBControlObjectivesRepository
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -57,7 +56,20 @@ class JpaControlObjectivesRepository(private val dbControlObjectivesRepository: 
 
     @Transactional
     override fun add(controlObjective: ControlObjective): Int {
-        return dbControlObjectivesRepository.save(ControlObjectivesEntity.fromControlObjective(controlObjective)).id!!
+        dbControlObjectivesRepository.save(
+            controlObjective.facade,
+            controlObjective.segment,
+            controlObjective.year,
+            controlObjective.targetNumberOfControlsAtSea,
+            controlObjective.targetNumberOfControlsAtPort,
+            controlObjective.controlPriorityLevel,
+        )
+
+        return dbControlObjectivesRepository.findByFacadeAndSegmentAndYearEquals(
+            controlObjective.facade,
+            controlObjective.segment,
+            controlObjective.year,
+        )
     }
 
     @Transactional

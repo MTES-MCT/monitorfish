@@ -37,6 +37,7 @@ services:
       - REACT_APP_CYPRESS_TEST=true
       - REACT_APP_IS_DEV_ENV=true
       - MONITORENV_URL=http://geoserver-monitorenv-stubs:8080
+      - MONITORFISH_API_PROTECTED_API_KEY=APIKEY
     ports:
       - 8880:8880
       - 8000:8000

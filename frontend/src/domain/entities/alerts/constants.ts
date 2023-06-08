@@ -1,7 +1,7 @@
 // TODO This is a bit shady to mix up pending/silenced alerts with PNO ones here.
 
 import { PendingAlertValueType } from './types'
-import { SeaFrontGroup } from '../../../constants'
+import { SeaFrontGroup } from '../seaFront/constants'
 
 import type { MenuItem } from '../../../types'
 

@@ -6,9 +6,9 @@ import styled from 'styled-components'
 import { MISSION_LIST_SUB_MENU_OPTIONS, MISSION_LIST_TABLE_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
 import { renderStatus } from './utils'
-import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFrontGroup, SeaFrontLabel } from '../../../constants'
 import { missionActions } from '../../../domain/actions'
 import { useGetFilteredMissionsQuery } from '../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
+import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFrontGroup } from '../../../domain/entities/seaFront/constants'
 import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
 import { fitToExtent } from '../../../domain/shared_slices/Map'
 import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
@@ -46,7 +46,7 @@ export function MissionList() {
         }
 
         return facade && SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup]
-          ? SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup].map(seaFront => SeaFrontLabel[seaFront]).includes(facade as any)
+          ? SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup].includes(facade as any)
           : false
       }).length,
     [missions]

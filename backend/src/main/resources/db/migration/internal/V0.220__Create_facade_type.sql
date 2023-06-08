@@ -1,0 +1,221 @@
+CREATE TYPE public.facade AS ENUM (
+    'Martinique',
+    'Sud Océan Indien',
+    'Guadeloupe',
+    'MED',
+    'SA',
+    'MEMN',
+    'Guyane',
+    'NAMO',
+    'Corse',
+    'Hors façade'
+);
+
+CREATE CAST (varchar AS facade) WITH INOUT AS IMPLICIT;
+
+-- We need to drop the views `analytics_controls_full_data`, `analytics_controls` and `analytics_facade_names`
+-- as the `facade` column is used
+DROP MATERIALIZED VIEW analytics_controls_full_data;
+DROP VIEW analytics_controls;
+DROP VIEW analytics_facade_names;
+
+ALTER TABLE public.control_objectives
+ALTER COLUMN facade TYPE facade USING facade::facade;
+ALTER TABLE public.control_objectives
+ALTER COLUMN facade SET NOT NULL;
+
+ALTER TABLE public.mission_actions
+ALTER COLUMN facade TYPE facade USING facade::facade;
+
+ALTER TABLE public.facade_areas_subdivided
+ALTER COLUMN facade TYPE facade USING facade::facade;
+ALTER TABLE public.facade_areas_subdivided
+ALTER COLUMN facade SET NOT NULL;
+
+-- We recreate the view `analytics_facade_names`
+-- This view shows the list of unique facade names, plus the added "Hors facade" label.
+-- It is meant to be used to populate field filters in Metabase dashboards.
+CREATE VIEW analytics_facade_names AS
+SELECT DISTINCT facade FROM facade_areas_subdivided
+UNION ALL
+SELECT 'Hors façade' AS facade;
+
+-- We recreate the view `analytics_controls_full_data`
+CREATE MATERIALIZED VIEW public.analytics_controls_full_data AS
+
+WITH controls_gears AS (
+    SELECT
+        id,
+        array_agg(COALESCE(gear->>'gearCode', 'Aucun engin')) AS gears
+    FROM mission_actions
+    LEFT JOIN LATERAL jsonb_array_elements(
+        CASE WHEN jsonb_typeof(gear_onboard) = 'array'
+        THEN gear_onboard ELSE '[]'
+        END
+    ) AS gear
+    ON true
+    WHERE action_type IN ('SEA_CONTROL', 'LAND_CONTROL', 'AIR_CONTROL') GROUP BY id
+),
+
+controls_species AS (
+    SELECT
+        id,
+        array_agg(COALESCE(species->>'speciesCode', 'Aucune capture')) AS species
+    FROM mission_actions
+    LEFT JOIN LATERAL jsonb_array_elements(
+        CASE WHEN jsonb_typeof(species_onboard) = 'array'
+        THEN species_onboard ELSE '[]'
+        END
+    ) AS species
+    ON true
+    WHERE action_type IN ('SEA_CONTROL', 'LAND_CONTROL', 'AIR_CONTROL') GROUP BY id
+),
+
+controls_infraction_natinf AS (
+    SELECT
+        id,
+        jsonb_array_elements(
+            CASE WHEN jsonb_typeof(logbook_infractions) = 'array' THEN logbook_infractions ELSE '[]' END ||
+            CASE WHEN jsonb_typeof(gear_infractions) = 'array' THEN gear_infractions ELSE '[]' END ||
+            CASE WHEN jsonb_typeof(species_infractions) = 'array' THEN species_infractions ELSE '[]' END ||
+            CASE WHEN jsonb_typeof(other_infractions) = 'array' THEN other_infractions ELSE '[]' END
+        )->>'natinf' AS infraction_natinf
+    FROM mission_actions
+    WHERE
+        action_type IN ('SEA_CONTROL', 'LAND_CONTROL', 'AIR_CONTROL') AND
+        jsonb_array_length(
+            CASE WHEN jsonb_typeof(logbook_infractions) = 'array' THEN logbook_infractions ELSE '[]' END ||
+            CASE WHEN jsonb_typeof(gear_infractions) = 'array' THEN gear_infractions ELSE '[]' END ||
+            CASE WHEN jsonb_typeof(species_infractions) = 'array' THEN species_infractions ELSE '[]' END ||
+            CASE WHEN jsonb_typeof(other_infractions) = 'array' THEN other_infractions ELSE '[]' END
+        ) > 0
+),
+
+controls_infraction_natinfs_array AS (
+    SELECT
+        id,
+        true AS infraction,
+        ARRAY_AGG(infraction_natinf) AS infraction_natinfs
+    FROM controls_infraction_natinf
+    GROUP BY id
+)
+
+SELECT
+    a.id,
+    a.vessel_id,
+    a.mission_id,
+    action_type AS control_type,
+    action_datetime_utc AS control_datetime_utc,
+    EXTRACT(year FROM action_datetime_utc) AS control_year,
+    cu.name AS control_unit,
+    adm.name AS administration,
+    a.cfr,
+    a.ircs,
+    a.external_immatriculation,
+    a.vessel_name,
+    a.flag_state,
+    a.district_code,
+    COALESCE(a.facade, 'Hors façade') AS facade,
+    COALESCE(a.longitude, ports.longitude) AS longitude,
+    COALESCE(a.latitude, ports.latitude) AS latitude,
+    port_locode,
+    ports.region AS port_department,
+    vessel_targeted,
+    COALESCE(inf.infraction, false) AS infraction,
+    inf.infraction_natinfs,
+    seizure_and_diversion,
+    species,
+    gears,
+    a.fao_areas,
+    COALESCE(segment->>'segment', 'Hors segment') AS segment
+FROM mission_actions a
+LEFT JOIN LATERAL jsonb_array_elements(CASE WHEN jsonb_typeof(segments) = 'array' THEN segments ELSE '[]' END) AS segment on true
+LEFT JOIN controls_infraction_natinfs_array inf ON inf.id = a.id
+LEFT JOIN controls_gears ON controls_gears.id=a.id
+LEFT JOIN controls_species ON controls_species.id=a.id
+LEFT JOIN ports ON ports.locode = a.port_locode
+LEFT JOIN vessels v ON a.vessel_id = v.id
+LEFT JOIN analytics_missions m ON a.mission_id = m.id
+LEFT JOIN analytics_missions_control_units mcu ON m.id = mcu.mission_id
+LEFT JOIN analytics_control_units cu ON mcu.control_unit_id = cu.id
+LEFT JOIN analytics_administrations adm ON cu.administration_id = adm.id
+WHERE action_type IN ('SEA_CONTROL', 'LAND_CONTROL', 'AIR_CONTROL')
+ORDER BY action_datetime_utc;
+
+CREATE INDEX ON analytics_controls_full_data USING BRIN(control_datetime_utc);
+
+
+-- We recreate the view `analytics_controls`
+CREATE VIEW public.analytics_controls AS
+
+WITH controls_infraction_natinf AS (
+    SELECT
+        id,
+        jsonb_array_elements(
+            CASE WHEN jsonb_typeof(logbook_infractions) = 'array' THEN logbook_infractions ELSE '[]' END ||
+            CASE WHEN jsonb_typeof(gear_infractions) = 'array' THEN gear_infractions ELSE '[]' END ||
+            CASE WHEN jsonb_typeof(species_infractions) = 'array' THEN species_infractions ELSE '[]' END ||
+            CASE WHEN jsonb_typeof(other_infractions) = 'array' THEN other_infractions ELSE '[]' END
+        )->>'natinf' AS infraction_natinf
+    FROM mission_actions
+    WHERE
+        action_type IN ('SEA_CONTROL', 'LAND_CONTROL', 'AIR_CONTROL') AND
+        jsonb_array_length(
+            CASE WHEN jsonb_typeof(logbook_infractions) = 'array' THEN logbook_infractions ELSE '[]' END ||
+            CASE WHEN jsonb_typeof(gear_infractions) = 'array' THEN gear_infractions ELSE '[]' END ||
+            CASE WHEN jsonb_typeof(species_infractions) = 'array' THEN species_infractions ELSE '[]' END ||
+            CASE WHEN jsonb_typeof(other_infractions) = 'array' THEN other_infractions ELSE '[]' END
+        ) > 0
+),
+
+controls_infraction_natinfs_array AS (
+    SELECT
+        id,
+        true AS infraction,
+        ARRAY_AGG(infraction_natinf) AS infraction_natinfs
+    FROM controls_infraction_natinf
+    GROUP BY id
+)
+
+ SELECT
+    a.id,
+    vessel_id,
+    mission_id,
+    action_type AS control_type, -- changement 'Contrôle à la mer' en 'SEA_CONTROL'
+    action_datetime_utc AS control_datetime_utc,
+    CASE
+        WHEN (facade IS NULL) THEN 'Hors façade'
+        ELSE facade
+    END AS facade,
+    longitude,
+    latitude,
+    port_locode,
+    vessel_targeted,
+    inf.infraction,
+    inf.infraction_natinfs,
+    seizure_and_diversion,
+    seizure_and_diversion_comments,
+    other_comments,
+    gear_onboard,
+    species_onboard,
+        CASE
+            WHEN (
+                segments = '[]' OR
+                segments IS NULL OR
+                segments = 'null'
+            ) THEN '[{"segment": "Hors segment", "segmentName": "Hors segment"}]'
+            ELSE segments
+        END AS segments,
+    fao_areas
+    FROM mission_actions a
+    LEFT JOIN controls_infraction_natinfs_array inf
+    ON inf.id = a.id
+    WHERE action_type IN ('SEA_CONTROL', 'LAND_CONTROL', 'AIR_CONTROL');
+
+
+INSERT INTO control_objectives (facade, segment, year, target_number_of_controls_at_sea,
+                                target_number_of_controls_at_port, control_priority_level)
+SELECT 'Corse' as facade, segment, year, target_number_of_controls_at_sea,
+        target_number_of_controls_at_port, control_priority_level FROM control_objectives
+WHERE facade = 'MED';
+

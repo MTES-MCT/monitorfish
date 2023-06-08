@@ -1,6 +1,5 @@
+import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
 import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
-
-import type { SeaFrontGroup } from '../../../../src/constants'
 
 export const openSideWindowMissionList = () => {
   cy.visit('/side_window')

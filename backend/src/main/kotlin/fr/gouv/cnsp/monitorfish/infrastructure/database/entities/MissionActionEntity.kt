@@ -95,7 +95,7 @@ class MissionActionEntity(
     @Type(JsonBinaryType::class)
     @Column(name = "segments", columnDefinition = "jsonb")
     var segments: String? = null,
-    @Column(name = "facade")
+    @Column(name = "facade", columnDefinition = "facade")
     var facade: String? = null,
     @Column(name = "longitude")
     var longitude: Double? = null,

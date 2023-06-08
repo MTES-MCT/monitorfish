@@ -11,7 +11,7 @@ data class ControlObjectivesEntity(
     @Basic(optional = false)
     @Column(name = "id", unique = true, nullable = false)
     val id: Int? = null,
-    @Column(name = "facade")
+    @Column(name = "facade", columnDefinition = "facade")
     val facade: String,
     @Column(name = "segment")
     val segment: String? = null,

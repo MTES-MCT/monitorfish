@@ -15,7 +15,7 @@ class AddMissionAction(private val missionActionsRepository: MissionActionsRepos
         val controlRequiringVesselId = listOf(
             MissionActionType.AIR_CONTROL,
             MissionActionType.LAND_CONTROL,
-            MissionActionType.LAND_CONTROL,
+            MissionActionType.SEA_CONTROL,
         )
         if (controlRequiringVesselId.any { it == action.actionType }) {
             require(action.vesselId != null) {

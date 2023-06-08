@@ -128,7 +128,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `saveMissionActions Should save a new mission action`() {
+    fun `save Should save a new mission action`() {
         // Given
         val dateTime = ZonedDateTime.now(ZoneId.of("UTC"))
         val newMission = getDummyMissionAction(dateTime)
@@ -144,24 +144,22 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `saveMissionActions Should update an existing mission action`() {
+    fun `save Should update an existing mission action`() {
         // Given
-        val dateTime = ZonedDateTime.now()
         val expectedId = 2
-        val updatedMission = getDummyMissionAction(dateTime, expectedId)
-
-        val existingAction = jpaMissionActionsRepository.findByMissionId(2)
-        assertThat(existingAction.first().latitude).isEqualTo(47.44)
-        assertThat(existingAction.first().longitude).isEqualTo(-0.52)
+        val existingAction = jpaMissionActionsRepository.findById(expectedId)
+        assertThat(existingAction.latitude).isEqualTo(47.44)
+        assertThat(existingAction.longitude).isEqualTo(-0.52)
+        val updatedMission = existingAction.copy(isDeleted = true)
 
         // When
         val updatedMissionAction = jpaMissionActionsRepository.save(updatedMission)
 
         // Then
         assertThat(updatedMissionAction.id).isEqualTo(expectedId)
-        assertThat(updatedMissionAction.actionDatetimeUtc).isEqualTo(dateTime)
-        assertThat(updatedMissionAction.latitude).isEqualTo(45.12)
-        assertThat(updatedMissionAction.longitude).isEqualTo(-6.56)
+        assertThat(updatedMissionAction.isDeleted).isTrue()
+        assertThat(updatedMissionAction.latitude).isEqualTo(47.44)
+        assertThat(updatedMissionAction.longitude).isEqualTo(-0.52)
     }
 
     @Test

@@ -11,6 +11,8 @@ CREATE TYPE public.facade AS ENUM (
     'Hors façade'
 );
 
+CREATE CAST (varchar AS facade) WITH INOUT AS IMPLICIT;
+
 -- We need to drop the views `analytics_controls_full_data`, `analytics_controls` and `analytics_facade_names`
 -- as the `facade` column is used
 DROP MATERIALIZED VIEW analytics_controls_full_data;

@@ -11,6 +11,7 @@ data class AddMissionActionDataInput(
     var externalReferenceNumber: String? = null,
     var ircs: String? = null,
     var flagState: String? = null,
+    var districtCode: String? = null,
     var faoAreas: List<String> = listOf(),
     var flightGoals: List<FlightGoal> = listOf(),
     var actionType: MissionActionType,

@@ -62,6 +62,7 @@ context('Side Window > Mission Form > Air Control', () => {
         actionType: 'AIR_CONTROL',
         controlQualityComments: null,
         controlUnits: [],
+        districtCode: 'AY',
         diversion: null,
         emitsAis: null,
         emitsVms: null,

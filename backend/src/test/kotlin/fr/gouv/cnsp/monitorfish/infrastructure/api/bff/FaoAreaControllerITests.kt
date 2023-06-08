@@ -47,7 +47,9 @@ class FaoAreaControllerITests {
     @Test
     fun `Should compute FAO areas for a given vessel`() {
         // Given
-        given(this.computeVesselFAOAreas.execute(anyOrNull(), anyOrNull(), anyOrNull())).willReturn(listOf("27.1", "27.1.0", "28.1", "28.1.0", "28.1.1"))
+        given(this.computeVesselFAOAreas.execute(anyOrNull(), anyOrNull(), anyOrNull())).willReturn(
+            listOf("27.1", "27.1.0", "28.1", "28.1.0", "28.1.1"),
+        )
 
         // When
         api.perform(get("/bff/v1/fao_areas/compute?internalReferenceNumber=DUMMY_CFR&latitude=12.65&longitude="))

@@ -18,22 +18,22 @@ fun removeRedundantFaoArea(faoAreas: List<FAOArea>): List<FAOArea> {
 
     return distinctFAOAreas
         .filter { currentFaoArea ->
-        // If there is no faoCode, we do not keep this faoArea
-        currentFaoArea.faoCode?.let { faoCode ->
-            val anotherFaoAreaContainingCurrent = distinctFAOAreas
-                // We remove the currentFaoArea from the list
-                .filter { it !== currentFaoArea }
-                // We check if another faoArea starts with the currentFaoArea
-                .any { it.faoCode?.startsWith(faoCode) ?: false }
+            // If there is no faoCode, we do not keep this faoArea
+            currentFaoArea.faoCode?.let { faoCode ->
+                val anotherFaoAreaContainingCurrent = distinctFAOAreas
+                    // We remove the currentFaoArea from the list
+                    .filter { it !== currentFaoArea }
+                    // We check if another faoArea starts with the currentFaoArea
+                    .any { it.faoCode?.startsWith(faoCode) ?: false }
 
-            // If another faoArea contains the currentFaoArea, then we remove the currentFaoArea
-            if (anotherFaoAreaContainingCurrent) {
-                return@let false
-            }
+                // If another faoArea contains the currentFaoArea, then we remove the currentFaoArea
+                if (anotherFaoAreaContainingCurrent) {
+                    return@let false
+                }
 
-            return@let true
-        } ?: false
-    }
+                return@let true
+            } ?: false
+        }
 }
 
 /**

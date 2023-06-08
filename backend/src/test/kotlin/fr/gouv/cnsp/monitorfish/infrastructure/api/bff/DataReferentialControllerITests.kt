@@ -69,5 +69,4 @@ class DataReferentialControllerITests {
             .andExpect(jsonPath("$.species.length()", equalTo(1)))
             .andExpect(jsonPath("$.groups.length()", equalTo(1)))
     }
-
 }

@@ -26,11 +26,13 @@ class ComputeVesselFAOAreasUTests {
 
     @Test
     fun `execute Should return the computed fao areas When no internal reference number is given`() {
-        given(computeFAOAreasFromCoordinates.execute(any(), any())).willReturn(listOf(
-            FAOArea("27.8.c"),
-            FAOArea("27.8"),
-            FAOArea(null),
-        ))
+        given(computeFAOAreasFromCoordinates.execute(any(), any())).willReturn(
+            listOf(
+                FAOArea("27.8.c"),
+                FAOArea("27.8"),
+                FAOArea(null),
+            ),
+        )
 
         // When
         val faoAreas = ComputeVesselFAOAreas(riskFactorsRepository, computeFAOAreasFromCoordinates)
@@ -54,11 +56,13 @@ class ComputeVesselFAOAreasUTests {
     fun `execute Should return the computed fao areas When no fao areas are found in the risk factors table`() {
         given(riskFactorsRepository.findVesselRiskFactors(any()))
             .willReturn(VesselRiskFactor(speciesOnboard = listOf(Species(faoZone = null))))
-        given(computeFAOAreasFromCoordinates.execute(any(), any())).willReturn(listOf(
-            FAOArea("27.8.c"),
-            FAOArea("27.8"),
-            FAOArea(null),
-        ))
+        given(computeFAOAreasFromCoordinates.execute(any(), any())).willReturn(
+            listOf(
+                FAOArea("27.8.c"),
+                FAOArea("27.8"),
+                FAOArea(null),
+            ),
+        )
 
         // When
         val faoAreas = ComputeVesselFAOAreas(riskFactorsRepository, computeFAOAreasFromCoordinates)

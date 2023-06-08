@@ -3,11 +3,9 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FAOArea
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
-import fr.gouv.cnsp.monitorfish.domain.repositories.FAOAreasRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.FleetSegmentRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
-import org.locationtech.jts.geom.Coordinate
-import org.locationtech.jts.geom.GeometryFactory
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.ComputeFAOAreasFromCoordinates
 import org.slf4j.LoggerFactory
 import java.time.Clock
 import java.time.ZonedDateTime
@@ -23,7 +21,7 @@ import java.time.ZonedDateTime
 @UseCase
 class ComputeFleetSegments(
     private val fleetSegmentRepository: FleetSegmentRepository,
-    private val faoAreasRepository: FAOAreasRepository,
+    private val computeFAOAreasFromCoordinates: ComputeFAOAreasFromCoordinates,
     private val portRepository: PortRepository,
     private val clock: Clock,
 ) {
@@ -50,10 +48,7 @@ class ComputeFleetSegments(
             faoAreas.map { FAOArea(it) }.ifEmpty {
                 // Else, we take the longitude and latitude given
                 if (longitude != null && latitude != null) {
-                    val point = GeometryFactory().createPoint(Coordinate(longitude, latitude))
-                    val allFaoAreas = faoAreasRepository.findByIncluding(point)
-
-                    return@ifEmpty removeRedundantFaoArea(allFaoAreas)
+                    return@ifEmpty computeFAOAreasFromCoordinates.execute(longitude, latitude)
                 }
 
                 return@ifEmpty listOf()

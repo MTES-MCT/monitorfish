@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController
 class DataReferentialController(
     private val getAllGears: GetAllGears,
     private val getAllSpeciesAndSpeciesGroups: GetAllSpeciesAndSpeciesGroups,
-    private val getFAOAreas: GetFAOAreas,
 ) {
 
     @GetMapping("/v1/gears")
@@ -32,11 +31,5 @@ class DataReferentialController(
     @Operation(summary = "Get FAO species codes and groups")
     fun getSpecies(): SpeciesAndSpeciesGroupsDataOutput {
         return SpeciesAndSpeciesGroupsDataOutput.fromSpeciesAndSpeciesGroups(getAllSpeciesAndSpeciesGroups.execute())
-    }
-
-    @GetMapping("/v1/fao_areas")
-    @Operation(summary = "Get FAO areas")
-    fun getFAOAreas(): List<String> {
-        return getFAOAreas.execute()
     }
 }

@@ -1,14 +1,12 @@
 import { Field, Label, SingleTag, TagGroup } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/query'
 import { useFormikContext } from 'formik'
 import { remove as ramdaRemove, uniq } from 'ramda'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
+import { useComputeVesselFaoAreasQuery } from '../../../../../api/faoAreas'
 import { useGetFleetSegmentsQuery } from '../../../../../api/fleetSegment'
-import { useGetRiskFactorQuery } from '../../../../../api/vessel'
-import { getFaoZonesFromSpeciesOnboard } from '../../../../../domain/entities/vessel/riskFactor'
 import { getFleetSegments } from '../../../../../domain/use_cases/vessel/getFleetSegments'
 import { useDeepCompareEffect } from '../../../../../hooks/useDeepCompareEffect'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
@@ -27,9 +25,14 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
   const dispatch = useMainAppDispatch()
 
   const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
-  const riskFactorApiQuery = useGetRiskFactorQuery(values.internalReferenceNumber || skipToken)
 
   const getFleetSegmentsApiQuery = useGetFleetSegmentsQuery()
+
+  const computeVesselFaoAreasApiQuery = useComputeVesselFaoAreasQuery({
+    internalReferenceNumber: values.internalReferenceNumber,
+    latitude: values.latitude,
+    longitude: values.longitude
+  })
 
   const fleetSegmentsAsOptions: Option<MissionAction.FleetSegment>[] = useMemo(() => {
     if (!getFleetSegmentsApiQuery.data) {
@@ -47,23 +50,10 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
 
   const isLoading = useMemo(() => !getFleetSegmentsApiQuery.data, [getFleetSegmentsApiQuery.data])
 
-  const updateFaoAreas = useDebouncedCallback(async () => {
-    if (values.faoAreas?.length || !riskFactorApiQuery.data) {
-      return
-    }
-
-    const declaredSpeciesOnboard = riskFactorApiQuery.data.speciesOnboard
-    const faoAreas = getFaoZonesFromSpeciesOnboard(declaredSpeciesOnboard || [])
-
-    setFieldValue('faoAreas', faoAreas)
-  }, 250)
-
   const updateSegments = useDebouncedCallback(async () => {
-    const declaredSpeciesOnboard = riskFactorApiQuery.data?.speciesOnboard
-
     const computedFleetSegments = await dispatch(
       getFleetSegments(
-        declaredSpeciesOnboard,
+        values.faoAreas,
         values.gearOnboard,
         values.speciesOnboard,
         values.longitude,
@@ -79,28 +69,38 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
     setFieldValue('segments', nextFleetSegments)
   }, 250)
 
-  useDeepCompareEffect(
-    () => {
-      updateFaoAreas()
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [riskFactorApiQuery.data]
-  )
-
   useDeepCompareEffect(() => {
     updateSegments()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     fleetSegmentsAsOptions,
+    values.faoAreas,
     values.gearOnboard,
     values.speciesOnboard,
     values.longitude,
     values.latitude,
-    values.portLocode,
-    riskFactorApiQuery.data
+    values.portLocode
   ])
+
+  const updateFaoAreas = useDebouncedCallback(async () => {
+    if (values.faoAreas?.length || !computeVesselFaoAreasApiQuery.data) {
+      return
+    }
+
+    const faoAreas = computeVesselFaoAreasApiQuery.data
+
+    setFieldValue('faoAreas', faoAreas)
+  }, 250)
+
+  useDeepCompareEffect(
+    () => {
+      updateFaoAreas()
+    },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [computeVesselFaoAreasApiQuery.data]
+  )
 
   const removeFaoArea = useCallback(
     (faoAreaToDelete: string) => {

@@ -1,3 +1,6 @@
+-- This test data is inserted before the V0.219__Create_facade_type.sql migration
+-- in order to test adding of 'Corse' facade
+
 INSERT INTO control_objectives (facade, segment, year, target_number_of_controls_at_sea,
                                 target_number_of_controls_at_port, control_priority_level)
 VALUES ('MEMN', 'NWW01/02', 2022, 78, 82, 3),

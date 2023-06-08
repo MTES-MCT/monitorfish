@@ -1,62 +1,71 @@
-import React, { useEffect, useRef, useState } from 'react'
+// TODO Remove temporary `as any` and `@ts-ignore` (fresh migration to TS).
+
+import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
-import { ReactComponent as SearchIconSVG } from '../../icons/Loupe.svg'
+
 import { COLORS } from '../../../constants/constants'
-import { AddRegulationButton } from '../../commonStyles/Buttons.style'
+import { BACKOFFICE_SEARCH_PROPERTIES } from '../../../domain/entities/backoffice'
 import { searchByLawType, searchResultIncludeZone } from '../../../domain/entities/regulation'
 import { closeRegulatoryZoneMetadataPanel } from '../../../domain/shared_slices/Regulatory'
-import { BACKOFFICE_SEARCH_PROPERTIES } from '../../../domain/entities/backoffice'
+import { useBackofficeAppDispatch } from '../../../hooks/useBackofficeAppDispatch'
+import { useBackofficeAppSelector } from '../../../hooks/useBackofficeAppSelector'
+import { AddRegulationButton } from '../../commonStyles/Buttons.style'
+import { ReactComponent as SearchIconSVG } from '../../icons/Loupe.svg'
 
-const SearchRegulations = props => {
-  const dispatch = useDispatch()
-  const {
-    setFoundRegulatoryZonesByRegTerritory,
-    regulatoryZoneListByRegTerritory
-  } = props
+export function SearchRegulations(props) {
+  const dispatch = useBackofficeAppDispatch()
+  const { regulatoryZoneListByRegTerritory, setFoundRegulatoryZonesByRegTerritory } = props
 
-  const searchInput = useRef(null)
+  const searchInput = useRef<HTMLInputElement | null>(null)
   const [searchText, setSearchText] = useState('')
 
-  const {
-    regulatoryZoneMetadata
-  } = useSelector(state => state.regulatory)
+  const { regulatoryZoneMetadata } = useBackofficeAppSelector(state => state.regulatory)
 
   useEffect(() => {
     searchRegulatoryZone()
 
-    function searchRegulatoryZone () {
+    function searchRegulatoryZone() {
       const searchResult = {}
       if (searchText === '') {
         setFoundRegulatoryZonesByRegTerritory(regulatoryZoneListByRegTerritory)
       } else {
         Object.keys(regulatoryZoneListByRegTerritory).forEach(territory => {
-          const searchResultByLawType = searchByLawType(regulatoryZoneListByRegTerritory[territory], BACKOFFICE_SEARCH_PROPERTIES, searchText)
+          const searchResultByLawType = (searchByLawType as any)(
+            regulatoryZoneListByRegTerritory[territory],
+            BACKOFFICE_SEARCH_PROPERTIES,
+            searchText
+          )
           if (searchResultByLawType && Object.keys(searchResultByLawType).length !== 0) {
             searchResult[territory] = searchResultByLawType
           }
         })
         if (regulatoryZoneMetadata !== null) {
-          if (!searchResultIncludeZone(searchResult, regulatoryZoneMetadata)) {
+          if (!searchResultIncludeZone(searchResult, regulatoryZoneMetadata as any)) {
             dispatch(closeRegulatoryZoneMetadataPanel())
           }
         }
         setFoundRegulatoryZonesByRegTerritory(searchResult)
       }
     }
-  }, [searchText, setFoundRegulatoryZonesByRegTerritory, regulatoryZoneListByRegTerritory, regulatoryZoneMetadata, dispatch])
+  }, [
+    searchText,
+    setFoundRegulatoryZonesByRegTerritory,
+    regulatoryZoneListByRegTerritory,
+    regulatoryZoneMetadata,
+    dispatch
+  ])
 
   useEffect(() => {
-    if (searchInput) {
+    if (searchInput.current) {
       searchInput.current.focus()
     }
   }, [])
 
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const onAddRegulationClick = () => {
-    history.push('/backoffice/regulation/new')
+    navigate('/backoffice/regulation/new')
   }
 
   return (
@@ -64,18 +73,20 @@ const SearchRegulations = props => {
       <SearchBox>
         <SearchBoxInput
           ref={searchInput}
+          onChange={e => setSearchText(e.target.value)}
+          placeholder="Rechercher une zone par son nom ou sa référence réglementaire"
           type="text"
           value={searchText}
-          placeholder={'Rechercher une zone par son nom ou sa référence réglementaire'}
-          onChange={e => setSearchText(e.target.value)} />
-        <SearchIcon />
-        </SearchBox>
-        <AddRegulationButton
-          onClick={onAddRegulationClick}
-          disabled={false}
-          isLast={false}
-          title={'Saisir une nouvelle réglementation'}
         />
+        <SearchIcon />
+      </SearchBox>
+      <AddRegulationButton
+        // @ts-ignore
+        disabled={false}
+        isLast={false}
+        onClick={onAddRegulationClick}
+        title="Saisir une nouvelle réglementation"
+      />
     </SearchContainer>
   )
 }
@@ -118,5 +129,3 @@ const SearchIcon = styled(SearchIconSVG)`
   float: right;
   color: ${COLORS.lightGray};
 `
-
-export default SearchRegulations

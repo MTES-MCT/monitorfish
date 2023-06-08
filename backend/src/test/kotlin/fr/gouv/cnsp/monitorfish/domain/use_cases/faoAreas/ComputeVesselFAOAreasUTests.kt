@@ -30,7 +30,6 @@ class ComputeVesselFAOAreasUTests {
             listOf(
                 FAOArea("27.8.c"),
                 FAOArea("27.8"),
-                FAOArea(null),
             ),
         )
 
@@ -60,7 +59,6 @@ class ComputeVesselFAOAreasUTests {
             listOf(
                 FAOArea("27.8.c"),
                 FAOArea("27.8"),
-                FAOArea(null),
             ),
         )
 

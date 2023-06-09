@@ -29,7 +29,7 @@
     "verbatimModuleSyntax": true
   },
   "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "src/ui/styled.d.ts"],
-  "exclude": ["node_modules/*"],
+  "exclude": ["build/*", "cypress/*", "node_modules/*"],
   "ts-node": {
     "swc": true,
     "compilerOptions": {

@@ -31,6 +31,7 @@ RUN mvn clean package -DskipTests=true
 FROM node:18-alpine as buildFront
 
 ARG ENV_PROFILE
+ARG REACT_APP_SENTRY_RELEASE
 ENV CI=true
 ENV REACT_APP_ENV=$ENV_PROFILE
 

@@ -3,5 +3,5 @@
   "compilerOptions": {
     "checkJs": false
   },
-  "exclude": ["cypress/*", "node_modules/*"]
+  "exclude": ["build/*", "cypress/*", "node_modules/*"]
 }

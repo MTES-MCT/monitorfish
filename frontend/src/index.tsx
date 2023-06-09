@@ -21,6 +21,7 @@ if (!(process.env.NODE_ENV === 'development')) {
   init({
     dsn: 'https://a5f3272efa794bb9ada2ffea90f2fec5@sentry.incubateur.net/8',
     integrations: [new BrowserTracing(), new Replay()],
+    release: String(process.env.REACT_APP_SENTRY_RELEASE),
     replaysOnErrorSampleRate: 1.0,
     replaysSessionSampleRate: 1.0,
     tracesSampleRate: 1.0

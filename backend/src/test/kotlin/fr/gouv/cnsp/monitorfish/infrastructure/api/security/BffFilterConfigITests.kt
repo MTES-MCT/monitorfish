@@ -49,7 +49,7 @@ class BffFilterConfigITests {
         /**
          * This test return a 401 http code as the issuer uri could not be fetched (404 not found because of the dummy url).
          * Hence, the bearer is valid but the request is invalid
-         * When this test is failing, a 404 http code will be returned (as the controllers are not mounted in this V0.222.0__Insert_dummy_facade_areas.sql)
+         * When this test is failing, a 404 http code will be returned (as the controllers are not mounted in this test)
          */
         listOf(
             "/bff/v1/vessels",

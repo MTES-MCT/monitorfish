@@ -13,7 +13,7 @@ import org.locationtech.jts.geom.Geometry
 data class FacadeAreaEntity(
     @Id
     @Column(name = "id")
-    val id: String,
+    val id: Int,
     @Column(name = "facade", columnDefinition = "facade")
     val facade: String,
     @Column(name = "geometry", columnDefinition = "Geometry")

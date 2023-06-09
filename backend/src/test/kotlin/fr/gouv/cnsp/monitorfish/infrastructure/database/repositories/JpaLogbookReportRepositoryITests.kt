@@ -39,7 +39,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     }
 
     /**
-     *                               Trips overlap in V0.222.0__Insert_dummy_facade_areas.sql data (see V666.5__Insert_logbook.sql)
+     *                               Trips overlap in test data (see V666.5__Insert_logbook.sql)
      *
      *        <- 2019-01-18T11:45Z
      *        +----------------------------------+

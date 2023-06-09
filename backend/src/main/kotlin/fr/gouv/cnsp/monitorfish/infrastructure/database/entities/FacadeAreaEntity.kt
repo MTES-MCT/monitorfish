@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Facade
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.FacadeArea
-import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id

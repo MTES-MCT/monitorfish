@@ -4,5 +4,5 @@ import org.locationtech.jts.geom.Geometry
 
 data class FacadeArea(
     val facade: String,
-    val geometry: Geometry
+    val geometry: Geometry,
 )

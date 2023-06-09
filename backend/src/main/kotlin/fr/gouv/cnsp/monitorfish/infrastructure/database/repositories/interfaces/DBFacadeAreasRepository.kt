@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository
 
 interface DBFacadeAreasRepository : CrudRepository<FacadeAreaEntity, Long> {
     @Query(
-    """
+        """
     SELECT *
     FROM facade_areas_subdivided
     WHERE ST_Contains(

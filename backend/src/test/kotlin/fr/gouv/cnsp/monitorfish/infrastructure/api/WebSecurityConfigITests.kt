@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 class WebSecurityConfigITests {
     /**
      * The public-key-location is set to an inner class in order to override the application.properties
-     * only for this V0.222.0__Insert_dummy_facade_areas.sql case using the public key `bad-oidc-issuer.pub`
+     * only for this test case using the public key `bad-oidc-issuer.pub`
      */
     @Nested
     @Import(WebSecurityConfig::class, OIDCProperties::class)
@@ -67,7 +67,7 @@ class WebSecurityConfigITests {
 
     /**
      * The public-key-location is set to an inner class in order to override the application.properties
-     * only for this V0.222.0__Insert_dummy_facade_areas.sql case using the public key `oidc-issuer.pub`
+     * only for this test case using the public key `oidc-issuer.pub`
      */
     @Nested
     @Import(WebSecurityConfig::class, OIDCProperties::class)

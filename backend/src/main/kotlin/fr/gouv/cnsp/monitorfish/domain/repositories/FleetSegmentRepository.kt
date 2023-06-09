@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.CreateOrUpdateFleetSegmentFields
 
 interface FleetSegmentRepository {
-    // For V0.222.0__Insert_dummy_facade_areas.sql purpose
+    // For test purpose
     fun findAll(): List<FleetSegment>
     fun findAllByYear(year: Int): List<FleetSegment>
 

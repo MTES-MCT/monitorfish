@@ -9,7 +9,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 @UseCase
 class AddMissionAction(
     private val missionActionsRepository: MissionActionsRepository,
-    private val portsRepository: PortRepository
+    private val portsRepository: PortRepository,
 ) {
     fun execute(action: MissionAction): MissionAction {
         require(action.id == null) {

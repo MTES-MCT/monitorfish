@@ -22,7 +22,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findVesselMissionActionsAfterDateTime Should filter vessel's controls around the date time`() {
         // Given
-        // This V0.222.0__Insert_dummy_facade_areas.sql is written to prevent time zone error
+        // This test is written to prevent time zone error
         val dateTime = ZonedDateTime.of(2019, 1, 18, 7, 19, 45, 45, ZoneOffset.UTC)
 
         // When

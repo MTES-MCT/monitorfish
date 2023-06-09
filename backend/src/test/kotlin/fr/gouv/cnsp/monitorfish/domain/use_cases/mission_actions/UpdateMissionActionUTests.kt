@@ -18,6 +18,9 @@ class UpdateMissionActionUTests {
     @MockBean
     private lateinit var missionActionsRepository: MissionActionsRepository
 
+    @MockBean
+    private lateinit var getMissionActionFacade: GetMissionActionFacade
+
     @Test
     fun `execute Should throw an exception When the vesselId is missing in a control`() {
         // Given
@@ -35,7 +38,7 @@ class UpdateMissionActionUTests {
 
         // When
         val throwable = catchThrowable {
-            UpdateMissionAction(missionActionsRepository).execute(123, action)
+            UpdateMissionAction(missionActionsRepository, getMissionActionFacade).execute(123, action)
         }
 
         // Then

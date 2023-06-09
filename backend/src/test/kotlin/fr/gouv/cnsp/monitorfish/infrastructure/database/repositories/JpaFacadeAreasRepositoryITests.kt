@@ -17,11 +17,12 @@ class JpaFacadeAreasRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findByIncluding Should return all facade areas including the specified point geometry`() {
         // When
-        val point = GeometryFactory().createPoint(Coordinate(-10.8558547, 53.3543093))
+        val point = GeometryFactory().createPoint(Coordinate(-4.156, 47.325))
         val faoAreas = facadeAreasRepository.findByIncluding(point)
 
+        // Then
         assertThat(faoAreas).hasSize(1)
-        assertThat(faoAreas.first().facade).isEqualTo("27.7")
+        assertThat(faoAreas.first().facade).isEqualTo("NAMO")
         assertThat(faoAreas.last().geometry).isNotNull()
     }
 }

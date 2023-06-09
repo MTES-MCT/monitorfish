@@ -53,6 +53,7 @@ data class AddMissionActionDataInput(
         externalReferenceNumber = externalReferenceNumber,
         ircs = ircs,
         flagState = flagState,
+        districtCode = districtCode,
         faoAreas = faoAreas,
         flightGoals = flightGoals,
         missionId = missionId,

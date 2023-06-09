@@ -1,5 +1,5 @@
 import { BrowserTracing } from '@sentry/browser'
-import { init } from '@sentry/react'
+import { Replay, init } from '@sentry/react'
 import { createRoot } from 'react-dom/client'
 import { AuthProvider, withAuth } from 'react-oidc-context'
 
@@ -20,7 +20,9 @@ if (!(process.env.NODE_ENV === 'development')) {
   // https://docs.sentry.io/platforms/javascript/performance/#configure-the-sample-rate
   init({
     dsn: 'https://a5f3272efa794bb9ada2ffea90f2fec5@sentry.incubateur.net/8',
-    integrations: [new BrowserTracing()],
+    integrations: [new BrowserTracing(), new Replay()],
+    replaysOnErrorSampleRate: 1.0,
+    replaysSessionSampleRate: 1.0,
     tracesSampleRate: 1.0
   })
 }

@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
@@ -19,6 +20,9 @@ class AddMissionActionUTests {
 
     @MockBean
     private lateinit var missionActionsRepository: MissionActionsRepository
+
+    @MockBean
+    private lateinit var portRepository: PortRepository
 
     @Test
     fun `execute Should throw an exception When the vesselId is missing in a control`() {
@@ -37,7 +41,7 @@ class AddMissionActionUTests {
 
         // When
         val throwable = catchThrowable {
-            AddMissionAction(missionActionsRepository).execute(action)
+            AddMissionAction(missionActionsRepository, portRepository).execute(action)
         }
 
         // Then
@@ -62,7 +66,7 @@ class AddMissionActionUTests {
 
         // When
         val throwable = catchThrowable {
-            AddMissionAction(missionActionsRepository).execute(action)
+            AddMissionAction(missionActionsRepository, portRepository).execute(action)
         }
 
         // Then
@@ -87,7 +91,7 @@ class AddMissionActionUTests {
         given(missionActionsRepository.save(anyOrNull())).willReturn(action)
 
         // When
-        val returnedAction = AddMissionAction(missionActionsRepository).execute(action)
+        val returnedAction = AddMissionAction(missionActionsRepository, portRepository).execute(action)
 
         // Then
         assertThat(returnedAction).isNotNull

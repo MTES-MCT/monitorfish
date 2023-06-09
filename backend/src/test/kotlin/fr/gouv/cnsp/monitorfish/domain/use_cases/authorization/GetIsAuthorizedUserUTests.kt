@@ -26,7 +26,7 @@ class GetIsAuthorizedUserUTests {
         )
 
         // When
-        val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute("test", true)
+        val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute("V0.222.0__Insert_dummy_facade_areas.sql", true)
 
         // Then
         assertThat(isAuthorized).isTrue()
@@ -39,7 +39,7 @@ class GetIsAuthorizedUserUTests {
         )
 
         // When
-        val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute("test", true)
+        val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute("V0.222.0__Insert_dummy_facade_areas.sql", true)
 
         // Then
         assertThat(isAuthorized).isFalse()
@@ -52,7 +52,7 @@ class GetIsAuthorizedUserUTests {
         )
 
         // When
-        val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute("test", false)
+        val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute("V0.222.0__Insert_dummy_facade_areas.sql", false)
 
         // Then
         assertThat(isAuthorized).isTrue()
@@ -65,7 +65,7 @@ class GetIsAuthorizedUserUTests {
         )
 
         // When
-        val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute("test", false)
+        val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute("V0.222.0__Insert_dummy_facade_areas.sql", false)
 
         // Then
         assertThat(isAuthorized).isFalse()
@@ -78,7 +78,7 @@ class GetIsAuthorizedUserUTests {
         )
 
         // When
-        val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute("test", true)
+        val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute("V0.222.0__Insert_dummy_facade_areas.sql", true)
 
         // Then
         assertThat(isAuthorized).isFalse()

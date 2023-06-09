@@ -38,6 +38,6 @@ interface LogbookReportRepository {
     fun findById(id: Long): LogbookMessage
     fun findLastMessageDate(): ZonedDateTime
 
-    // For test purpose
+    // For V0.222.0__Insert_dummy_facade_areas.sql purpose
     fun deleteAll()
 }

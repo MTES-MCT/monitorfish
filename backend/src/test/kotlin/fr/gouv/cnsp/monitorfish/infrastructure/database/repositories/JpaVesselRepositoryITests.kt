@@ -58,6 +58,7 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
 
         assertThat(vessels).hasSize(1)
         assertThat(vessels.first().internalReferenceNumber).isEqualTo("FAK000999999")
+        assertThat(vessels.first().districtCode).isEqualTo("AY")
     }
 
     @Test

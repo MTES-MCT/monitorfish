@@ -58,7 +58,6 @@ context('Vessel sidebar controls tab', () => {
       .and('contain', 'Sous taille de 8cm')
       .and('contain', 'Sans PV')
       .and('contain', 'NATINF 28346')
-      .and('contain', 'Appréhension espèce')
 
       .and('contain', '4. Infraction JPE')
       .and('contain', 'Poids à bord MNZ supérieur de 50% au poids déclaré')

@@ -31,6 +31,8 @@ class DeleteMissionActionUTests {
             gearOnboard = listOf(),
             seizureAndDiversion = true,
             isDeleted = false,
+            hasSomeGearsSeized = false,
+            hasSomeSpeciesSeized = false,
         )
         given(missionActionsRepository.findById(any())).willReturn(action)
 

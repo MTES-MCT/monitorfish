@@ -26,6 +26,8 @@ class MissionActionUTests {
             seizureAndDiversion = true,
             isDeleted = false,
             userTrigram = "LTH",
+            hasSomeGearsSeized = false,
+            hasSomeSpeciesSeized = false,
         )
 
         // When
@@ -51,6 +53,8 @@ class MissionActionUTests {
             seizureAndDiversion = true,
             isDeleted = false,
             userTrigram = null,
+            hasSomeGearsSeized = false,
+            hasSomeSpeciesSeized = false,
         )
 
         // When
@@ -80,6 +84,8 @@ class MissionActionUTests {
             seizureAndDiversion = true,
             isDeleted = false,
             userTrigram = "LTH",
+            hasSomeGearsSeized = false,
+            hasSomeSpeciesSeized = false,
         )
 
         // When
@@ -106,6 +112,8 @@ class MissionActionUTests {
             seizureAndDiversion = true,
             isDeleted = false,
             userTrigram = "LTH",
+            hasSomeGearsSeized = false,
+            hasSomeSpeciesSeized = false,
         )
 
         // When
@@ -132,6 +140,8 @@ class MissionActionUTests {
             seizureAndDiversion = true,
             isDeleted = false,
             userTrigram = "LTH",
+            hasSomeGearsSeized = false,
+            hasSomeSpeciesSeized = false,
         )
 
         // When

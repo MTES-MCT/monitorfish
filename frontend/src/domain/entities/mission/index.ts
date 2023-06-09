@@ -123,8 +123,6 @@ export const getMissionActionFeature = (
   const coordinates = transform([action.longitude, action.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
   const numberOfInfractions = getNumberOfInfractions(action)
   const numberOfInfractionsWithRecords = getNumberOfInfractionsWithRecord(action)
-  const hasSpeciesSeized = action.speciesInfractions?.find(infraction => infraction.speciesSeized)
-  const hasGearSeized = action.gearInfractions?.find(infraction => infraction.gearSeized)
   const infractions = getMissionActionInfractionsFromMissionActionFormValues(action)
   const infractionsNatinfs = infractions.map(({ natinf }) => natinf)
 
@@ -134,8 +132,8 @@ export const getMissionActionFeature = (
     dateTime: getDateTime(action.actionDatetimeUtc, true),
     flagState: action.flagState,
     geometry: new Point(coordinates),
-    hasGearSeized,
-    hasSpeciesSeized,
+    hasSomeGearsSeized: action.hasSomeGearsSeized,
+    hasSomeSpeciesSeized: action.hasSomeSpeciesSeized,
     infractionsNatinfs,
     missionId: action.missionId,
     numberOfInfractions,

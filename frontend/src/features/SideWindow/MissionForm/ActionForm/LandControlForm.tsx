@@ -86,7 +86,9 @@ export function LandControlForm({ initialValues, onChange }: LandControlFormProp
 
           <SpeciesField controlledWeightLabel="Qté pesée" />
 
-          <FieldsetGroup isLight legend="Appréhension du navire">
+          <FieldsetGroup isLight legend="Appréhensions">
+            <FormikCheckbox label="Appréhension d’engin(s)" name="hasSomeGearsSeized" />
+            <FormikCheckbox label="Appréhension d’espèce(s)" name="hasSomeSpeciesSeized" />
             <FormikCheckbox label="Appréhension du navire" name="seizureAndDiversion" />
           </FieldsetGroup>
 

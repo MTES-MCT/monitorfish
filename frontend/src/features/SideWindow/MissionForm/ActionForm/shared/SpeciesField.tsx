@@ -27,8 +27,6 @@ import type { Specy } from '../../../../../domain/types/specy'
 import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
-const TypedFormikMultiInfractionPicker = FormikMultiInfractionPicker<MissionAction.SpeciesInfraction>
-
 export type SpeciesFieldProps = {
   controlledWeightLabel: string
 }
@@ -169,21 +167,14 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   }
 
   return (
-    <TypedFormikMultiInfractionPicker
+    <FormikMultiInfractionPicker
       addButtonLabel="Ajouter une infraction espèces"
       generalObservationTextareaProps={{
         label: 'Observations (hors infraction) sur les espèces',
         name: 'speciesObservations'
       }}
-      // TODO Check that prop (it's a radio in the XD which doesn't make sense to me).
-      infractionCheckboxProps={{
-        label: 'Appréhension espèces',
-        name: 'speciesSeized'
-      }}
       label="Espèces à bord"
       name="speciesInfractions"
-      seizurePropName="speciesSeized"
-      seizureTagLabel="Appréhension espèce"
     >
       {/* TODO Add a BooleanRadio field in monitor-ui. */}
       <FormikMultiRadio
@@ -244,7 +235,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
         searchable
         virtualized
       />
-    </TypedFormikMultiInfractionPicker>
+    </FormikMultiInfractionPicker>
   )
 }
 

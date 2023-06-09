@@ -50,6 +50,8 @@ data class MissionAction(
     val speciesOnboard: List<SpeciesControl> = listOf(),
     var controlUnits: List<ControlUnit> = listOf(),
     var isDeleted: Boolean,
+    var hasSomeGearsSeized: Boolean,
+    var hasSomeSpeciesSeized: Boolean,
 ) {
     fun verify() {
         val controlTypes = listOf(

@@ -18,7 +18,8 @@ type ControlsResumeZoneProps = {
   summary: MissionAction.MissionControlsSummary
 }
 export function ControlsSummary({ controlsFromDate, lastControls, summary }: ControlsResumeZoneProps) {
-  const { controls, numberOfDiversions, numberOfGearSeized, numberOfSpeciesSeized } = summary
+  const { controls, numberOfControlsWithSomeGearsSeized, numberOfControlsWithSomeSpeciesSeized, numberOfDiversions } =
+    summary
 
   return (
     <Zone data-cy="vessel-controls-summary">
@@ -28,9 +29,9 @@ export function ControlsSummary({ controlsFromDate, lastControls, summary }: Con
       </Header>
       <Body>
         <InfractionsSummary
+          numberOfControlsWithSomeGearsSeized={numberOfControlsWithSomeGearsSeized}
+          numberOfControlsWithSomeSpeciesSeized={numberOfControlsWithSomeSpeciesSeized}
           numberOfDiversions={numberOfDiversions}
-          numberOfGearSeized={numberOfGearSeized}
-          numberOfSpeciesSeized={numberOfSpeciesSeized}
         />
         <Columns isFirst>
           <IconColumn>

@@ -49,6 +49,9 @@ data class MissionActionDataOutput(
     val controlUnits: List<ControlUnit> = listOf(),
     val userTrigram: String? = null,
     val vesselTargeted: ControlCheck? = null,
+    var isDeleted: Boolean,
+    val hasSomeGearsSeized: Boolean,
+    val hasSomeSpeciesSeized: Boolean,
 ) {
     companion object {
         fun fromMissionAction(missionAction: MissionAction) = MissionActionDataOutput(
@@ -96,6 +99,9 @@ data class MissionActionDataOutput(
             controlUnits = missionAction.controlUnits,
             userTrigram = missionAction.userTrigram,
             vesselTargeted = missionAction.vesselTargeted,
+            isDeleted = missionAction.isDeleted,
+            hasSomeGearsSeized = missionAction.hasSomeGearsSeized,
+            hasSomeSpeciesSeized = missionAction.hasSomeSpeciesSeized,
         )
     }
 }

@@ -68,22 +68,19 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
     ))
   }, [initialValues])
 
-  const redTags = useMemo(() => {
-    const gearInfractionsWithGearSeized = (initialValues.gearInfractions || []).filter(({ gearSeized }) => gearSeized)
-    const speciesInfractionsWithSpeciesSeized = (initialValues.speciesInfractions || []).filter(
-      ({ speciesSeized }) => speciesSeized
-    )
-
-    return [
-      ...(gearInfractionsWithGearSeized.length > 0 ? ['Appréhension engin'] : []),
-      ...(speciesInfractionsWithSpeciesSeized.length > 0 ? ['Appréhension espèce'] : []),
-      ...(initialValues.seizureAndDiversion ? ['Appréhension navire'] : [])
-    ].map(label => (
-      <Tag key={label} accent={Accent.PRIMARY} bullet={TagBullet.DISK} bulletColor={THEME.color.maximumRed}>
-        {label}
-      </Tag>
-    ))
-  }, [initialValues])
+  const redTags = useMemo(
+    () =>
+      [
+        ...(initialValues.hasSomeGearsSeized ? ['Appréhension engin'] : []),
+        ...(initialValues.hasSomeSpeciesSeized ? ['Appréhension espèce'] : []),
+        ...(initialValues.seizureAndDiversion ? ['Appréhension navire'] : [])
+      ].map(label => (
+        <Tag key={label} accent={Accent.PRIMARY} bullet={TagBullet.DISK} bulletColor={THEME.color.maximumRed}>
+          {label}
+        </Tag>
+      )),
+    [initialValues]
+  )
 
   const startDateAsDayjs = useMemo(
     () => initialValues.actionDatetimeUtc && getLocalizedDayjs(initialValues.actionDatetimeUtc),

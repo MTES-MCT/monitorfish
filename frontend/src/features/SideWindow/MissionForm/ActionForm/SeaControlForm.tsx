@@ -86,7 +86,9 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
 
           <SpeciesField controlledWeightLabel="Qté estimée" />
 
-          <FieldsetGroup isLight legend="Appréhension et déroutement du navire">
+          <FieldsetGroup isLight legend="Appréhension et déroutement">
+            <FormikCheckbox label="Appréhension d’engin(s)" name="hasSomeGearsSeized" />
+            <FormikCheckbox label="Appréhension d’espèce(s)" name="hasSomeSpeciesSeized" />
             <FormikCheckbox label="Appréhension et déroutement du navire" name="seizureAndDiversion" />
           </FieldsetGroup>
 

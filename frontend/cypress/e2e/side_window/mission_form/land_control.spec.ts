@@ -21,7 +21,7 @@ context('Side Window > Mission Form > Land Control', () => {
     // Navire
     // TODO Handle Automplete in custom `cy.fill()` command once it's used via monitor-ui.
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    cy.get('input[placeholder="Rechercher un navire..."]').type('pheno')
+    cy.get('input[placeholder="Rechercher un navire..."]').type('pheno').wait(250)
     cy.contains('mark', 'PHENO').click()
 
     // Date et heure du contrôle
@@ -60,12 +60,13 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.clickButton('Ajouter une infraction espèces')
     cy.fill('Type d’infraction', 'Sans PV')
     cy.fill('NATINF', '23588')
-    cy.fill('Appréhension espèces', true)
     cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction espèce.')
     cy.clickButton('Valider l’infraction')
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
-    // Appréhension du navire
+    // Appréhensions
+    cy.fill('Appréhension d’engin(s)', true)
+    cy.fill('Appréhension d’espèce(s)', true)
     cy.fill('Appréhension du navire', true)
 
     // Autres infractions
@@ -136,6 +137,8 @@ context('Side Window > Mission Form > Land Control', () => {
             gearWasControlled: null
           }
         ],
+        hasSomeGearsSeized: true,
+        hasSomeSpeciesSeized: true,
         id: null,
         internalReferenceNumber: 'FAK000999999',
         ircs: 'CALLME',
@@ -162,8 +165,7 @@ context('Side Window > Mission Form > Land Control', () => {
           {
             comments: 'Une observation sur l’infraction espèce.',
             infractionType: 'WITHOUT_RECORD',
-            natinf: 23588,
-            speciesSeized: true
+            natinf: 23588
           }
         ],
         speciesObservations: 'Une observation hors infraction sur les espèces.',

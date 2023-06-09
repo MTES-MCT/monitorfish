@@ -80,7 +80,9 @@
           "actionNumberOfControls": 0,
           "actionTargetType": "VEHICLE",
           "vehicleType": "VESSEL",
-          "infractions": []
+          "infractions": [],
+          "hasSomeGearsSeized": false,
+          "hasSomeSpeciesSeized": false
         }
       ],
       "missionSource": "MONITORENV",

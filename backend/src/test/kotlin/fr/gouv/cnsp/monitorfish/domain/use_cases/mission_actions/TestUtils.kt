@@ -18,6 +18,8 @@ object TestUtils {
                     actionType = MissionActionType.LAND_CONTROL,
                     seizureAndDiversion = true,
                     isDeleted = false,
+                    hasSomeGearsSeized = false,
+                    hasSomeSpeciesSeized = false,
                 )
             }
         }.flatten()

@@ -52,18 +52,6 @@ export function Infraction({ index, infraction, infractionDomain }: InfractionPr
       <InfractionTag>
         <InfractionTagText>NATINF {infraction.natinf}</InfractionTagText>
       </InfractionTag>
-      {MissionAction.isGearInfraction(infraction) && infraction.gearSeized && (
-        <InfractionTag>
-          <RedCircle />
-          <InfractionTagText>Appréhension engin</InfractionTagText>
-        </InfractionTag>
-      )}
-      {MissionAction.isSpeciesInfraction(infraction) && infraction.speciesSeized && (
-        <InfractionTag>
-          <RedCircle />
-          <InfractionTagText>Appréhension espèce</InfractionTagText>
-        </InfractionTag>
-      )}
     </Wrapper>
   )
 }
@@ -86,16 +74,6 @@ const InfractionTagText = styled.span`
   color: ${COLORS.gunMetal};
   margin: 0 7px 0 7px;
   font-weight: 500;
-`
-
-const RedCircle = styled.span`
-  background: ${p => p.theme.color.maximumRed};
-  color: ${p => p.theme.color.gainsboro};
-  border-radius: 11px;
-  height: 16px;
-  width: 16px;
-  display: inline-block;
-  margin: 3px 0 0 4px;
 `
 
 const InfractionTag = styled.span`

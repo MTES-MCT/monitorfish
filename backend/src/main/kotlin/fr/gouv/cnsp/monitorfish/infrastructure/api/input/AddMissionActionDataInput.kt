@@ -45,6 +45,8 @@ data class AddMissionActionDataInput(
     var userTrigram: String? = null,
     var speciesOnboard: List<SpeciesControl> = listOf(),
     var vesselTargeted: ControlCheck? = null,
+    var hasSomeGearsSeized: Boolean = false,
+    var hasSomeSpeciesSeized: Boolean = false,
 ) {
     fun toMissionAction() = MissionAction(
         vesselId = vesselId,
@@ -89,5 +91,7 @@ data class AddMissionActionDataInput(
         userTrigram = userTrigram,
         vesselTargeted = vesselTargeted,
         isDeleted = false,
+        hasSomeGearsSeized = hasSomeGearsSeized,
+        hasSomeSpeciesSeized = hasSomeSpeciesSeized,
     )
 }

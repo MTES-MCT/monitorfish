@@ -66,6 +66,8 @@ class MissionsControllerITests {
                             seizureAndDiversion = false,
                             speciesInfractions = listOf(),
                             isDeleted = false,
+                            hasSomeGearsSeized = false,
+                            hasSomeSpeciesSeized = false,
                         ),
                     ),
                 ),

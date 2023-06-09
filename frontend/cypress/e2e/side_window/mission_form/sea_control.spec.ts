@@ -69,7 +69,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     getSaveButton().should('be.disabled')
 
     // Rechercher un navire...
-    cy.get('input[placeholder="Rechercher un navire..."]').type('malot')
+    cy.get('input[placeholder="Rechercher un navire..."]').type('malot').wait(250)
     cy.contains('mark', 'MALOT').click()
 
     cy.wait(500)
@@ -116,12 +116,13 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter une infraction espèces')
     cy.fill('Type d’infraction', 'Sans PV')
     cy.fill('NATINF', '23588')
-    cy.fill('Appréhension espèces', true)
     cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction espèce.')
     cy.clickButton('Valider l’infraction')
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
-    // Appréhension et déroutement du navire
+    // Appréhension et déroutement
+    cy.fill('Appréhension d’engin(s)', true)
+    cy.fill('Appréhension d’espèce(s)', true)
     cy.fill('Appréhension et déroutement du navire', true)
 
     // Autres infractions
@@ -192,6 +193,8 @@ context('Side Window > Mission Form > Sea Control', () => {
             gearWasControlled: null
           }
         ],
+        hasSomeGearsSeized: true,
+        hasSomeSpeciesSeized: true,
         id: null,
         internalReferenceNumber: 'U_W0NTFINDME',
         ircs: 'QGDF',
@@ -218,8 +221,7 @@ context('Side Window > Mission Form > Sea Control', () => {
           {
             comments: 'Une observation sur l’infraction espèce.',
             infractionType: 'WITHOUT_RECORD',
-            natinf: 23588,
-            speciesSeized: true
+            natinf: 23588
           }
         ],
         speciesObservations: 'Une observation hors infraction sur les espèces.',
@@ -294,6 +296,8 @@ context('Side Window > Mission Form > Sea Control', () => {
             gearWasControlled: null
           }
         ],
+        hasSomeGearsSeized: false,
+        hasSomeSpeciesSeized: false,
         id: null,
         internalReferenceNumber: 'FAK000999999',
         ircs: 'CALLME',

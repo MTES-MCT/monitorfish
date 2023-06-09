@@ -14,34 +14,28 @@ import { FieldsetGroupSeparator } from '../../../shared/FieldsetGroupSeparator'
 
 import type { MissionAction } from '../../../../../../domain/types/missionAction'
 import type { MissionActionFormValues } from '../../../types'
-import type { Option, FormikCheckboxProps, FormikTextareaProps } from '@mtes-mct/monitor-ui'
+import type { Option, FormikTextareaProps } from '@mtes-mct/monitor-ui'
 import type { ReactNode } from 'react'
 
-export type FormikMultiInfractionPickerProps<AnyInfraction extends MissionAction.OtherInfraction> = {
+export type FormikMultiInfractionPickerProps = {
   addButtonLabel: string
   children?: ReactNode
   generalObservationTextareaProps?: Omit<FormikTextareaProps, 'name'> & {
     name: keyof MissionActionFormValues
   }
-  infractionCheckboxProps?: FormikCheckboxProps
   infractionLabel?: string
   label: string
   name: keyof MissionActionFormValues
-  seizurePropName?: keyof AnyInfraction
-  seizureTagLabel?: string
 }
-export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.OtherInfraction>({
+export function FormikMultiInfractionPicker({
   addButtonLabel,
   children,
   generalObservationTextareaProps,
-  infractionCheckboxProps,
   infractionLabel,
   label,
-  name,
-  seizurePropName,
-  seizureTagLabel
-}: FormikMultiInfractionPickerProps<AnyInfraction>) {
-  const [input, , helper] = useField<AnyInfraction[] | undefined>(name)
+  name
+}: FormikMultiInfractionPickerProps) {
+  const [input, , helper] = useField<MissionAction.OtherInfraction[] | undefined>(name)
 
   const [editedIndex, setEditedIndex] = useState<number | undefined>(undefined)
   const [isNewInfractionFormOpen, setIsNewInfractionFormOpen] = useState(false)
@@ -68,8 +62,8 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
   }, [])
 
   const create = useCallback(
-    (newInfractionFormValues: AnyInfraction) => {
-      const newInfractionWithComments: AnyInfraction = {
+    (newInfractionFormValues: MissionAction.OtherInfraction) => {
+      const newInfractionWithComments: MissionAction.OtherInfraction = {
         ...newInfractionFormValues,
         comments: newInfractionFormValues.comments || ''
       }
@@ -106,12 +100,12 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
   }, [])
 
   const update = useCallback(
-    (nextInfractionFormValues: AnyInfraction) => {
+    (nextInfractionFormValues: MissionAction.OtherInfraction) => {
       if (!input.value || editedIndex === undefined) {
         throw new FrontendError('`input.value` or `editedIndex` is undefined')
       }
 
-      const updatedInfractionWithComments: AnyInfraction = {
+      const updatedInfractionWithComments: MissionAction.OtherInfraction = {
         ...nextInfractionFormValues,
         comments: nextInfractionFormValues.comments || ''
       }
@@ -160,14 +154,11 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
                     label={infractionLabel}
                     onDelete={remove}
                     onEdit={setEditedIndex}
-                    seizurePropName={seizurePropName}
-                    seizureTagLabel={seizureTagLabel}
                   />
                 )}
 
                 {index === editedIndex && (
                   <InfractionForm
-                    infractionCheckboxProps={infractionCheckboxProps}
                     initialValues={infraction}
                     natinfsAsOptions={natinfsAsOptions}
                     onCancel={closeInfractionForm}
@@ -182,8 +173,7 @@ export function FormikMultiInfractionPicker<AnyInfraction extends MissionAction.
         {isNewInfractionFormOpen && (
           <Row>
             <InfractionForm
-              infractionCheckboxProps={infractionCheckboxProps}
-              initialValues={{} as AnyInfraction}
+              initialValues={{} as MissionAction.OtherInfraction}
               natinfsAsOptions={natinfsAsOptions}
               onCancel={closeNewInfractionForm}
               onSubmit={create}

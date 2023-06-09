@@ -58,6 +58,8 @@ context('Side Window > Mission Form > Action List', () => {
             gearWasControlled: null
           }
         ],
+        hasSomeGearsSeized: false,
+        hasSomeSpeciesSeized: false,
         id: null,
         internalReferenceNumber: 'U_W0NTFINDME',
         ircs: null,

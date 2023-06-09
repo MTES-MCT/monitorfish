@@ -87,7 +87,9 @@ class APIMissionRepositoryITest {
                           "protectedSpecies": [],
                           "duration": 1,
                           "observations": "Surveillance ok",
-                          "coverMissionZone": true
+                          "coverMissionZone": true,
+                          "hasSomeGearsSeized": false,
+                          "hasSomeSpeciesSeized": false
                         },
                         {
                           "actionType": "CONTROL",
@@ -118,7 +120,9 @@ class APIMissionRepositoryITest {
                               "vesselType": "COMMERCIAL",
                               "vesselSize": "FROM_24_TO_46m"
                             }
-                          ]
+                          ],
+                          "hasSomeGearsSeized": false,
+                          "hasSomeSpeciesSeized": false
                         }
                       ],
                       "missionSource": "MONITORENV",

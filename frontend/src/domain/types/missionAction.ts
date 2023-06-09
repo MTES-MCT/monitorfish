@@ -17,6 +17,8 @@ export namespace MissionAction {
     flagState: string | undefined
     gearInfractions: GearInfraction[]
     gearOnboard: GearControl[]
+    hasSomeGearsSeized: number
+    hasSomeSpeciesSeized: number
     id: number
     internalReferenceNumber: string | undefined
     ircs: string | undefined
@@ -102,12 +104,6 @@ export namespace MissionAction {
   /* eslint-enable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
 
   // ---------------------------------------------------------------------------
-  // Helpers
-
-  export const isGearInfraction = (p: any): p is GearInfraction => p.gearSeized !== undefined
-  export const isSpeciesInfraction = (p: any): p is SpeciesInfraction => p.speciesSeized !== undefined
-
-  // ---------------------------------------------------------------------------
   // Types
 
   export type ControlAndText = {
@@ -131,7 +127,6 @@ export namespace MissionAction {
 
   export type GearInfraction = {
     comments: string
-    gearSeized: boolean
     infractionType: InfractionType
     natinf: number
   }
@@ -161,9 +156,9 @@ export namespace MissionAction {
 
   export type MissionControlsSummary = {
     controls: MissionAction[]
+    numberOfControlsWithSomeGearsSeized: number
+    numberOfControlsWithSomeSpeciesSeized: number
     numberOfDiversions: number
-    numberOfGearSeized: number
-    numberOfSpeciesSeized: number
     vesselId: number
   }
 
@@ -185,6 +180,5 @@ export namespace MissionAction {
     comments: string
     infractionType: InfractionType
     natinf: number
-    speciesSeized: boolean
   }
 }

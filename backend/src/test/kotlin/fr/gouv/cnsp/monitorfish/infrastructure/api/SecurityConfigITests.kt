@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
-import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
+import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.use_cases.port.GetActivePorts
 import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.PortController
@@ -20,13 +20,13 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-class WebSecurityConfigITests {
+class SecurityConfigITests {
     /**
      * The public-key-location is set to an inner class in order to override the application.properties
      * only for this test case using the public key `bad-oidc-issuer.pub`
      */
     @Nested
-    @Import(WebSecurityConfig::class, OIDCProperties::class)
+    @Import(SecurityConfig::class, OIDCProperties::class)
     @WebMvcTest(
         value = [PortController::class, VersionController::class],
         properties = [
@@ -34,7 +34,7 @@ class WebSecurityConfigITests {
             "spring.security.oauth2.resourceserver.jwt.public-key-location=classpath:bad-oidc-issuer.pub",
         ],
     )
-    inner class WebSecurityConfigWithBadPublicKey {
+    inner class SecurityConfigWithBadPublicKey {
         @Autowired
         private lateinit var mockMvc: MockMvc
 
@@ -70,7 +70,7 @@ class WebSecurityConfigITests {
      * only for this test case using the public key `oidc-issuer.pub`
      */
     @Nested
-    @Import(WebSecurityConfig::class, OIDCProperties::class)
+    @Import(SecurityConfig::class, OIDCProperties::class)
     @WebMvcTest(
         value = [PortController::class, VersionController::class, SpaController::class],
         properties = [
@@ -78,7 +78,7 @@ class WebSecurityConfigITests {
             "spring.security.oauth2.resourceserver.jwt.public-key-location=classpath:oidc-issuer.pub",
         ],
     )
-    inner class WebSecurityConfigWithGoodPublicKey {
+    inner class SecurityConfigWithGoodPublicKey {
         @Autowired
         private lateinit var mockMvc: MockMvc
 

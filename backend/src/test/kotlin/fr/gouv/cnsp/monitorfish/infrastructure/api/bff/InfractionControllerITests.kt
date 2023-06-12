@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
-import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
+import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.use_cases.infraction.GetFishingAndSecurityInfractions
@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@Import(WebSecurityConfig::class, OIDCProperties::class)
+@Import(SecurityConfig::class, OIDCProperties::class)
 @WebMvcTest(value = [(InfractionController::class)])
 class InfractionControllerITests {
 

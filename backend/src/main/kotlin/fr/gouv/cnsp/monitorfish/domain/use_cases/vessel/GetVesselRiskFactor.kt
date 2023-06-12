@@ -13,9 +13,9 @@ class GetVesselRiskFactor(private val riskFactorsRepository: RiskFactorsReposito
     fun execute(internalReferenceNumber: String): VesselRiskFactor {
         val riskFactor = riskFactorsRepository.findVesselRiskFactors(internalReferenceNumber)
 
-        requireNotNull(riskFactor, {
+        requireNotNull(riskFactor) {
             "No risk factor found for vessel $internalReferenceNumber"
-        })
+        }
 
         return riskFactor
     }

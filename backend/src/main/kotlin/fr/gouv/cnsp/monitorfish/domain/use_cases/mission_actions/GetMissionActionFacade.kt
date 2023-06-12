@@ -30,7 +30,7 @@ class GetMissionActionFacade(
         }
 
         val point = GeometryFactory().createPoint(Coordinate(action.longitude, action.latitude))
-        val facade = facadeAreasRepository.findByIncluding(point).first().facade
+        val facade = facadeAreasRepository.findByIncluding(point).firstOrNull()?.facade ?: return null
 
         return Facade.from(facade)
     }

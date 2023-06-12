@@ -26,9 +26,10 @@ class AddMissionAction(
             }
         }
 
-        val facade = getMissionActionFacade.execute(action)
+        // We store the `storedValue` of the enum and not the enum uppercase value
+        val facade = getMissionActionFacade.execute(action)?.toString()
 
-        val actionWithFacade = action.copy(facade = facade.toString())
+        val actionWithFacade = action.copy(facade = facade)
 
         return missionActionsRepository.save(actionWithFacade)
     }

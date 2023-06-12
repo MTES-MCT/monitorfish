@@ -5,7 +5,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
-import fr.gouv.cnsp.monitorfish.config.WebSecurityConfig
+import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.CreateOrUpdateFleetSegmentFields
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.*
@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@Import(WebSecurityConfig::class, OIDCProperties::class)
+@Import(SecurityConfig::class, OIDCProperties::class)
 @WebMvcTest(value = [(FleetSegmentController::class)])
 class FleetSegmentControllerITests {
 

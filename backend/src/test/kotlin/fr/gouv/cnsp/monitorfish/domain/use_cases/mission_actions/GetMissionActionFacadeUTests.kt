@@ -127,4 +127,28 @@ class GetMissionActionFacadeUTests {
         // Then
         assertThat(facade).isNull()
     }
+
+    @Test
+    fun `execute Should return null for a sea control with no facade found`() {
+        // Given
+        val action = MissionAction(
+            id = null,
+            vesselId = null,
+            missionId = 1,
+            actionDatetimeUtc = ZonedDateTime.now(),
+            latitude = 47.3,
+            longitude = -2.6,
+            actionType = MissionActionType.SEA_CONTROL,
+            gearOnboard = listOf(),
+            seizureAndDiversion = true,
+            isDeleted = false,
+        )
+        given(facadeAreasRepository.findByIncluding(any())).willReturn(listOf())
+
+        // When
+        val facade = GetMissionActionFacade(portRepository, facadeAreasRepository).execute(action)
+
+        // Then
+        assertThat(facade).isNull()
+    }
 }

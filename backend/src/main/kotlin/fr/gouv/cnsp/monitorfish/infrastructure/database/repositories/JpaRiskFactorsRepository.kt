@@ -22,7 +22,7 @@ class JpaRiskFactorsRepository(
         try {
             return dbRiskFactorsRepository.findByCfrEquals(internalReferenceNumber).toVesselRiskFactor(mapper)
         } catch (e: EmptyResultDataAccessException) {
-            logger.warn("No current segment found for CFR $internalReferenceNumber", e)
+            logger.warn("No current risk factor found for CFR $internalReferenceNumber", e.message)
         }
 
         return null

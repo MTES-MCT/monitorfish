@@ -71,6 +71,25 @@ class ComputeVesselFAOAreasUTests {
     }
 
     @Test
+    fun `execute Should return the computed fao areas When no risk factor is found in the table`() {
+        given(riskFactorsRepository.findVesselRiskFactors(any()))
+            .willReturn(null)
+        given(computeFAOAreasFromCoordinates.execute(any(), any())).willReturn(
+            listOf(
+                FAOArea("27.8.c"),
+                FAOArea("27.8"),
+            ),
+        )
+
+        // When
+        val faoAreas = ComputeVesselFAOAreas(riskFactorsRepository, computeFAOAreasFromCoordinates)
+            .execute("DUMMY_CFR", 12.5, 45.1)
+
+        // Then
+        assertThat(faoAreas).isEqualTo(listOf("27.8.c", "27.8"))
+    }
+
+    @Test
     fun `execute Should return the fao areas found in the risk factors table`() {
         given(riskFactorsRepository.findVesselRiskFactors(any()))
             .willReturn(VesselRiskFactor(speciesOnboard = listOf(Species(faoZone = "27.8.c"))))

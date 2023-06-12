@@ -18,19 +18,21 @@ class MissionActionEntity(
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mission_actions_id_seq")
     @Basic(optional = false)
     @Column(name = "id", unique = true, nullable = false)
-    var id: Int? = null,
+    val id: Int? = null,
     @Column(name = "vessel_id")
-    var vesselId: Int? = null,
+    val vesselId: Int? = null,
     @Column(name = "vessel_name")
-    var vesselName: String? = null,
+    val vesselName: String? = null,
     @Column(name = "cfr")
-    var internalReferenceNumber: String? = null,
+    val internalReferenceNumber: String? = null,
     @Column(name = "external_immatriculation")
-    var externalReferenceNumber: String? = null,
+    val externalReferenceNumber: String? = null,
     @Column(name = "ircs")
-    var ircs: String? = null,
+    val ircs: String? = null,
     @Column(name = "flag_state")
-    var flagState: String? = null,
+    val flagState: String? = null,
+    @Column(name = "district_code")
+    val districtCode: String? = null,
     @Type(ListArrayType::class)
     @Column(name = "flight_goals", columnDefinition = "varchar(100)[]")
     val flightGoals: List<String>? = listOf(),
@@ -38,87 +40,87 @@ class MissionActionEntity(
     @Column(name = "fao_areas", columnDefinition = "varchar(100)[]")
     val faoAreas: List<String>? = listOf(),
     @Column(name = "mission_id")
-    var missionId: Int,
+    val missionId: Int,
     @Column(name = "action_type")
     @Enumerated(EnumType.STRING)
-    var actionType: MissionActionType,
+    val actionType: MissionActionType,
     @Column(name = "action_datetime_utc")
-    var actionDatetimeUtc: Instant,
+    val actionDatetimeUtc: Instant,
     @Column(name = "emits_vms")
     @Enumerated(EnumType.STRING)
-    var emitsVms: ControlCheck? = null,
+    val emitsVms: ControlCheck? = null,
     @Column(name = "emits_ais")
     @Enumerated(EnumType.STRING)
-    var emitsAis: ControlCheck? = null,
+    val emitsAis: ControlCheck? = null,
     @Column(name = "logbook_matches_activity")
     @Enumerated(EnumType.STRING)
-    var logbookMatchesActivity: ControlCheck? = null,
+    val logbookMatchesActivity: ControlCheck? = null,
     @Column(name = "licences_match_activity")
     @Enumerated(EnumType.STRING)
-    var licencesMatchActivity: ControlCheck? = null,
+    val licencesMatchActivity: ControlCheck? = null,
     @Column(name = "species_weight_controlled")
-    var speciesWeightControlled: Boolean? = null,
+    val speciesWeightControlled: Boolean? = null,
     @Column(name = "species_size_controlled")
-    var speciesSizeControlled: Boolean? = null,
+    val speciesSizeControlled: Boolean? = null,
     @Column(name = "separate_stowage_of_preserved_species")
     @Enumerated(EnumType.STRING)
-    var separateStowageOfPreservedSpecies: ControlCheck? = null,
+    val separateStowageOfPreservedSpecies: ControlCheck? = null,
     @Type(JsonBinaryType::class)
     @Column(name = "logbook_infractions", columnDefinition = "jsonb")
-    var logbookInfractions: String? = null,
+    val logbookInfractions: String? = null,
     @Column(name = "licences_and_logbook_observations")
-    var licencesAndLogbookObservations: String? = null,
+    val licencesAndLogbookObservations: String? = null,
     @Type(JsonBinaryType::class)
     @Column(name = "gear_infractions", columnDefinition = "jsonb")
-    var gearInfractions: String? = null,
+    val gearInfractions: String? = null,
     @Type(JsonBinaryType::class)
     @Column(name = "species_infractions", columnDefinition = "jsonb")
-    var speciesInfractions: String? = null,
+    val speciesInfractions: String? = null,
     @Column(name = "species_observations")
-    var speciesObservations: String? = null,
+    val speciesObservations: String? = null,
     @Column(name = "seizure_and_diversion")
-    var seizureAndDiversion: Boolean? = null,
+    val seizureAndDiversion: Boolean? = null,
     @Type(JsonBinaryType::class)
     @Column(name = "other_infractions", columnDefinition = "jsonb")
-    var otherInfractions: String? = null,
+    val otherInfractions: String? = null,
     @Column(name = "number_of_vessels_flown_over")
-    var numberOfVesselsFlownOver: Int? = null,
+    val numberOfVesselsFlownOver: Int? = null,
     @Column(name = "unit_without_omega_gauge")
-    var unitWithoutOmegaGauge: Boolean? = null,
+    val unitWithoutOmegaGauge: Boolean? = null,
     @Column(name = "control_quality_comments")
-    var controlQualityComments: String? = null,
+    val controlQualityComments: String? = null,
     @Column(name = "feedback_sheet_required")
-    var feedbackSheetRequired: Boolean? = null,
+    val feedbackSheetRequired: Boolean? = null,
     @Column(name = "is_from_poseidon")
-    var isFromPoseidon: Boolean,
+    val isFromPoseidon: Boolean,
     @Column(name = "user_trigram")
-    var userTrigram: String? = null,
+    val userTrigram: String? = null,
     @Type(JsonBinaryType::class)
     @Column(name = "segments", columnDefinition = "jsonb")
-    var segments: String? = null,
+    val segments: String? = null,
     @Column(name = "facade", columnDefinition = "facade")
-    var facade: String? = null,
+    val facade: String? = null,
     @Column(name = "longitude")
-    var longitude: Double? = null,
+    val longitude: Double? = null,
     @Column(name = "latitude")
-    var latitude: Double? = null,
+    val latitude: Double? = null,
     @Column(name = "port_locode")
-    var portLocode: String? = null,
+    val portLocode: String? = null,
     @Column(name = "vessel_targeted")
     @Enumerated(EnumType.STRING)
-    var vesselTargeted: ControlCheck? = null,
+    val vesselTargeted: ControlCheck? = null,
     @Column(name = "seizure_and_diversion_comments")
-    var seizureAndDiversionComments: String? = null,
+    val seizureAndDiversionComments: String? = null,
     @Column(name = "other_comments")
-    var otherComments: String? = null,
+    val otherComments: String? = null,
     @Type(JsonBinaryType::class)
     @Column(name = "gear_onboard", columnDefinition = "jsonb")
-    var gearOnboard: String? = null,
+    val gearOnboard: String? = null,
     @Type(JsonBinaryType::class)
     @Column(name = "species_onboard", columnDefinition = "jsonb")
-    var speciesOnboard: String? = null,
+    val speciesOnboard: String? = null,
     @Column(name = "is_deleted")
-    var isDeleted: Boolean,
+    val isDeleted: Boolean,
 ) {
 
     companion object {
@@ -132,6 +134,7 @@ class MissionActionEntity(
                 externalReferenceNumber = missionAction.externalReferenceNumber,
                 ircs = missionAction.ircs,
                 flagState = missionAction.flagState,
+                districtCode = missionAction.districtCode,
                 faoAreas = missionAction.faoAreas,
                 flightGoals = missionAction.flightGoals.map { it.value },
                 actionType = missionAction.actionType,
@@ -179,6 +182,7 @@ class MissionActionEntity(
         externalReferenceNumber = externalReferenceNumber,
         ircs = ircs,
         flagState = flagState,
+        districtCode = districtCode,
         faoAreas = faoAreas ?: listOf(),
         flightGoals = flightGoals?.map { FlightGoal.valueOf(it) } ?: listOf(),
         actionType = actionType,

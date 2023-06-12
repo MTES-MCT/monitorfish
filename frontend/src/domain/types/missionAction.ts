@@ -9,6 +9,7 @@ export namespace MissionAction {
     actionType: MissionActionType
     controlQualityComments: string | undefined
     controlUnits: ControlUnit.ControlUnit[]
+    districtCode: string | undefined
     diversion: Boolean | undefined
     emitsAis: ControlCheck | undefined
     emitsVms: ControlCheck | undefined

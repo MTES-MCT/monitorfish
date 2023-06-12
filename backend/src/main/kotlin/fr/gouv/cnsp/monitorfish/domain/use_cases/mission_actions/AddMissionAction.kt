@@ -6,7 +6,10 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionTyp
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 
 @UseCase
-class AddMissionAction(private val missionActionsRepository: MissionActionsRepository) {
+class AddMissionAction(
+    private val missionActionsRepository: MissionActionsRepository,
+    private val getMissionActionFacade: GetMissionActionFacade,
+) {
     fun execute(action: MissionAction): MissionAction {
         require(action.id == null) {
             "An action creation must have no id: the `id` must be null."
@@ -23,6 +26,11 @@ class AddMissionAction(private val missionActionsRepository: MissionActionsRepos
             }
         }
 
-        return missionActionsRepository.save(action)
+        // We store the `storedValue` of the enum and not the enum uppercase value
+        val facade = getMissionActionFacade.execute(action)?.toString()
+
+        val actionWithFacade = action.copy(facade = facade)
+
+        return missionActionsRepository.save(actionWithFacade)
     }
 }

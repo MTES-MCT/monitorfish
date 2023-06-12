@@ -6,7 +6,10 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionTyp
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 
 @UseCase
-class UpdateMissionAction(private val missionActionsRepository: MissionActionsRepository) {
+class UpdateMissionAction(
+    private val missionActionsRepository: MissionActionsRepository,
+    private val getMissionActionFacade: GetMissionActionFacade,
+) {
     fun execute(actionId: Int, action: MissionAction): MissionAction {
         val controlRequiringVesselId = listOf(
             MissionActionType.AIR_CONTROL,
@@ -19,8 +22,14 @@ class UpdateMissionAction(private val missionActionsRepository: MissionActionsRe
             }
         }
 
-        val actionWithId = action.copy(id = actionId)
+        // We store the `storedValue` of the enum and not the enum uppercase value
+        val facade = getMissionActionFacade.execute(action)?.toString()
 
-        return missionActionsRepository.save(actionWithId)
+        val augmentedAction = action.copy(
+            id = actionId,
+            facade = facade,
+        )
+
+        return missionActionsRepository.save(augmentedAction)
     }
 }

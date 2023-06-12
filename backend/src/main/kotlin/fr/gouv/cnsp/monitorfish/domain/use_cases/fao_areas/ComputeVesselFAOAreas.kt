@@ -27,7 +27,7 @@ class ComputeVesselFAOAreas(
                     return listOf()
                 }
 
-                return computeFAOAreasFromCoordinates.execute(longitude, latitude).mapNotNull { it.faoCode }
+                return computeFAOAreasFromCoordinates.execute(longitude, latitude).map { it.faoCode }
             }
             false -> {
                 // Get faoZones from speciesOnboard in risk factors table (updated by the pipeline)
@@ -41,14 +41,14 @@ class ComputeVesselFAOAreas(
                 if (faoAreas.isNotEmpty()) {
                     val faoAreasObjects = faoAreas.map { FAOArea(faoCode = it) }
 
-                    return removeRedundantFaoArea(faoAreasObjects).mapNotNull { it.faoCode }
+                    return removeRedundantFaoArea(faoAreasObjects).map { it.faoCode }
                 }
 
                 if (latitude == null || longitude == null) {
                     return listOf()
                 }
 
-                return computeFAOAreasFromCoordinates.execute(longitude, latitude).mapNotNull { it.faoCode }
+                return computeFAOAreasFromCoordinates.execute(longitude, latitude).map { it.faoCode }
             }
         }
     }

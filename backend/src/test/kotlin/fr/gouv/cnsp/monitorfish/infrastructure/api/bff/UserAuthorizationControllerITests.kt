@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @Import(
-    WebSecurityConfig::class,
+    SecurityConfig::class,
     OIDCProperties::class,
     ProtectedPathsAPIProperties::class,
     UserAuthorizationCheckFilter::class,

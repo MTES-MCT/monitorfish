@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Facade
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -18,6 +19,8 @@ data class PortEntity(
     val locode: String,
     @Column(name = "port_name")
     val portName: String,
+    @Column(name = "facade", columnDefinition = "facade")
+    val facade: String? = null,
     @Column(name = "latitude")
     val latitude: Double? = null,
     @Column(name = "longitude")
@@ -31,6 +34,7 @@ data class PortEntity(
     fun toPort() = Port(
         locode = locode,
         name = portName,
+        facade = facade?.let { Facade.from(it).toString() },
         faoAreas = faoAreas ?: listOf(),
     )
 }

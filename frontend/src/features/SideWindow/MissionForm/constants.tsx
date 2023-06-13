@@ -35,7 +35,6 @@ export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValu
   otherComments: undefined,
   otherInfractions: [],
   portLocode: undefined,
-  portName: undefined,
   segments: [],
   seizureAndDiversion: undefined,
   seizureAndDiversionComments: undefined,

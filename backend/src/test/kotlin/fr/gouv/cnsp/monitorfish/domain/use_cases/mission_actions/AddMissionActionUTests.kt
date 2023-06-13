@@ -64,6 +64,7 @@ class AddMissionActionUTests {
             latitude = 13.5,
             actionDatetimeUtc = ZonedDateTime.now(),
             portLocode = "AEFAT",
+            portName = "Port name",
             actionType = MissionActionType.LAND_CONTROL,
             gearOnboard = listOf(),
             seizureAndDiversion = true,

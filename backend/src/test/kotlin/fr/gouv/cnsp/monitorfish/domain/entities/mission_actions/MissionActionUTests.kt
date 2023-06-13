@@ -136,5 +136,4 @@ class MissionActionUTests {
         assertThat(throwable).isNotNull()
         assertThat(throwable.message).isEqualTo("A control must specify a position: the `latitude` must be given.")
     }
-
 }

@@ -1,5 +1,3 @@
-[Description]
-
 ## Linked issues
 
 - Resolve #666

@@ -38,6 +38,7 @@ class SecurityConfig(val oidcProperties: OIDCProperties) {
 
                     authorize.requestMatchers(
                         "/",
+                        "/index.html",
                         "/swagger-ui/**",
                         // Used to redirect to the frontend SPA, see SpaController.kt
                         "/error",

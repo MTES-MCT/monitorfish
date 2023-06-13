@@ -250,24 +250,27 @@ export function MissionForm() {
   const updateDraft = useDebouncedCallback(
     // We need to use a callback within to memoize it
     // https://codesandbox.io/s/4wvmp1xlw4?file=/src/InputWithCallback.js:357-386
-    useCallback(() => {
-      if (!mainFormValues) {
-        logSoftError({
-          isSideWindowError: true,
-          message: '`mainFormValues` is undefined.',
-          userMessage: "Une erreur est survenue pendant l'édition de la mission."
-        })
+    useCallback(
+      (nextMainFormValues, nextActionsFormValues) => {
+        if (!nextMainFormValues) {
+          logSoftError({
+            isSideWindowError: true,
+            message: '`mainFormValues` is undefined.',
+            userMessage: "Une erreur est survenue pendant l'édition de la mission."
+          })
 
-        return
-      }
+          return
+        }
 
-      dispatch(
-        missionActions.setDraft({
-          actionsFormValues,
-          mainFormValues
-        })
-      )
-    }, [actionsFormValues, dispatch, mainFormValues]),
+        dispatch(
+          missionActions.setDraft({
+            actionsFormValues: nextActionsFormValues,
+            mainFormValues: nextMainFormValues
+          })
+        )
+      },
+      [dispatch]
+    ),
     250
   )
 
@@ -304,13 +307,14 @@ export function MissionForm() {
         return
       }
 
-      setActionsFormValues(
-        actionsFormValues.map((action, index) => (index === editedActionIndex ? nextActionFormValues : action))
+      const nextActionFormValuesOrActions = actionsFormValues.map((action, index) =>
+        index === editedActionIndex ? nextActionFormValues : action
       )
+      setActionsFormValues(nextActionFormValuesOrActions)
 
-      updateDraft()
+      updateDraft(mainFormValues, nextActionFormValuesOrActions)
     },
-    [actionsFormValues, editedActionIndex, updateDraft]
+    [actionsFormValues, mainFormValues, editedActionIndex, updateDraft]
   )
 
   const updateEditedActionIndex = useCallback(
@@ -325,9 +329,9 @@ export function MissionForm() {
     (nextMissionMainFormValues: MissionMainFormValues) => {
       setMainFormValues(nextMissionMainFormValues)
 
-      updateDraft()
+      updateDraft(nextMissionMainFormValues, actionsFormValues)
     },
-    [updateDraft]
+    [updateDraft, actionsFormValues]
   )
 
   const toggleDeletionConfirmationDialog = useCallback(async () => {
@@ -361,7 +365,7 @@ export function MissionForm() {
         setMainFormValues(initialMainFormValues)
         setTitle(getTitleFromMissionMainFormValues(initialMainFormValues, undefined))
 
-        updateDraft()
+        updateDraft(initialMainFormValues, initialActionsFormValues)
 
         return
       }
@@ -397,7 +401,7 @@ export function MissionForm() {
       setMainFormValues(initialMainFormValues)
       setTitle(getTitleFromMissionMainFormValues(initialMainFormValues, sideWindow.selectedPath.id))
 
-      updateDraft()
+      updateDraft(initialMainFormValues, initialActionsFormValues)
     })()
   }, [actionFormKey, dispatch, isLoading, mainFormKey, previousMissionId, sideWindow.selectedPath.id, updateDraft])
 

@@ -43,6 +43,7 @@ function UnmemoizedMainForm({ initialValues, onChange }: MainFormProps) {
 
             <MultiCheckColumns>
               <FormikMultiCheckbox
+                isErrorMessageHidden
                 isInline
                 label="Types de mission"
                 name="missionTypes"

@@ -49,4 +49,43 @@ data class MissionAction(
     val speciesOnboard: List<SpeciesControl> = listOf(),
     var controlUnits: List<ControlUnit> = listOf(),
     var isDeleted: Boolean,
-)
+) {
+    fun verify() {
+        val controlTypes = listOf(
+            MissionActionType.AIR_CONTROL,
+            MissionActionType.LAND_CONTROL,
+            MissionActionType.SEA_CONTROL,
+        )
+
+        if (controlTypes.any { it == this.actionType }) {
+            require(this.vesselId != null) {
+                "A control must specify a vessel: the `vesselId` must be given."
+            }
+
+            when (this.actionType) {
+                MissionActionType.AIR_CONTROL -> checkControlPosition()
+                MissionActionType.SEA_CONTROL -> checkControlPosition()
+                MissionActionType.LAND_CONTROL -> checkControlPort()
+                else -> {}
+            }
+        }
+    }
+
+    private fun checkControlPosition() {
+        require(this.longitude != null) {
+            "A control must specify a position: the `longitude` must be given."
+        }
+        require(this.latitude != null) {
+            "A control must specify a position: the `latitude` must be given."
+        }
+    }
+
+    private fun checkControlPort() {
+        require(this.portLocode != null) {
+            "A land control must specify a port: the `portLocode` must be given."
+        }
+        require(this.portName != null) {
+            "A land control must specify a port: the `portName` must be given."
+        }
+    }
+}

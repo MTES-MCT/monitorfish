@@ -19,6 +19,8 @@ context('Side Window > Mission Form > Sea Control', () => {
     getSaveButton().should('be.disabled')
 
     cy.fill('Navire inconnu', true)
+    cy.fill('Ajouter un engin', 'MIS')
+    // The "Lieu du contrôle" field is stubbed in FormikCoordinatesPicker
 
     cy.wait(500)
 
@@ -73,6 +75,8 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     // Date et heure du contrôle
     cy.fill('Date et heure du contrôle', now.utcDateTupleWithTime)
+
+    // The "Lieu du contrôle" field is stubbed in FormikCoordinatesPicker
 
     // Obligations déclaratives et autorisations de pêche
     cy.fill('Bonne émission VMS', 'Oui')
@@ -192,14 +196,14 @@ context('Side Window > Mission Form > Sea Control', () => {
         internalReferenceNumber: 'U_W0NTFINDME',
         ircs: 'QGDF',
         isFromPoseidon: null,
-        latitude: null,
+        latitude: 47.084,
         licencesAndLogbookObservations: 'Une observation hors infraction sur les obligations déclaaratives.',
         licencesMatchActivity: 'NO',
         logbookInfractions: [
           { comments: 'Une observation sur l’infraction déclarative.', infractionType: 'WITH_RECORD', natinf: 23581 }
         ],
         logbookMatchesActivity: 'NOT_APPLICABLE',
-        longitude: null,
+        longitude: -3.872,
         missionId: 1,
         numberOfVesselsFlownOver: null,
         otherComments: 'Une autre observation.',
@@ -296,12 +300,12 @@ context('Side Window > Mission Form > Sea Control', () => {
         internalReferenceNumber: 'FAK000999999',
         ircs: 'CALLME',
         isFromPoseidon: null,
-        latitude: null,
+        latitude: 47.084,
         licencesAndLogbookObservations: null,
         licencesMatchActivity: null,
         logbookInfractions: [],
         logbookMatchesActivity: null,
-        longitude: null,
+        longitude: -3.872,
         missionId: 1,
         numberOfVesselsFlownOver: null,
         otherComments: null,

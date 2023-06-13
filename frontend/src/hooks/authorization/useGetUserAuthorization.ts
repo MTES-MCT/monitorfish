@@ -14,9 +14,15 @@ export function useGetUserAuthorization(): UserAuthorization | undefined {
 
   useEffect(() => {
     if (!IS_OIDC_ENABLED) {
+      /**
+       * This is used to have backward compatibility with the Apache .htacess authentication (on `/` and `/ext`) while the authentication
+       * is not yet activated, as the app is only protected by the entrypoint path.
+       */
+      const isExtPage = window.location.href.includes('/ext')
+
       setUserAuthorization({
         isLogged: true,
-        isSuperUser: true
+        isSuperUser: !isExtPage
       })
 
       return

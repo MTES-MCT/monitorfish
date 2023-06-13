@@ -36,32 +36,6 @@ class MissionActionUTests {
     }
 
     @Test
-    fun `verify Should throw an exception When the portName is missing in a control`() {
-        // Given
-        val action = MissionAction(
-            id = null,
-            vesselId = 1,
-            missionId = 1,
-            longitude = 45.7,
-            latitude = 13.5,
-            actionDatetimeUtc = ZonedDateTime.now(),
-            portLocode = "AEFAT",
-            portName = null,
-            actionType = MissionActionType.LAND_CONTROL,
-            gearOnboard = listOf(),
-            seizureAndDiversion = true,
-            isDeleted = false,
-        )
-
-        // When
-        val throwable = catchThrowable { action.verify() }
-
-        // Then
-        assertThat(throwable).isNotNull()
-        assertThat(throwable.message).isEqualTo("A land control must specify a port: the `portName` must be given.")
-    }
-
-    @Test
     fun `verify Should throw an exception When the porLocode is missing in a control`() {
         // Given
         val action = MissionAction(

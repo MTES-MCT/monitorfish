@@ -88,7 +88,6 @@ context('Side Window > Mission Form > Air Control', () => {
           { comments: 'Une observation sur l’infraction.', infractionType: 'WITH_RECORD', natinf: 23581 }
         ],
         portLocode: null,
-        portName: null,
         segments: [],
         seizureAndDiversion: null,
         seizureAndDiversionComments: null,

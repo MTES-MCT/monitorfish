@@ -48,7 +48,6 @@ export const AirControlFormSchema = object({
 export const LandControlFormSchema = object({
   gearOnboard: array().required('Veuillez indiquer les engins à bord.').min(1, 'Veuillez indiquer les engins à bord.'),
   portLocode: string().required('Veuillez indiquer le port de contrôle.'),
-  portName: string().required('Veuillez indiquer le port de contrôle.'),
   vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
   actionDatetimeUtc: actionDatetimeUtcValidator
 })

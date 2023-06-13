@@ -60,7 +60,6 @@ context('Side Window > Mission Form > Observation', () => {
         otherComments: 'Une observation.',
         otherInfractions: [],
         portLocode: null,
-        portName: null,
         segments: [],
         seizureAndDiversion: null,
         seizureAndDiversionComments: null,

@@ -35,6 +35,7 @@ export namespace MissionAction {
     otherComments: string | undefined
     otherInfractions: OtherInfraction[]
     portLocode: string | undefined
+    // This field is added by the API
     portName: string | undefined
     segments: FleetSegment[]
     seizureAndDiversion: Boolean | undefined
@@ -156,7 +157,7 @@ export namespace MissionAction {
     natinf: number
   }
 
-  export type MissionActionData = Omit<MissionAction, 'id'> & {
+  export type MissionActionData = Omit<MissionAction, 'id' | 'portName'> & {
     id: MissionAction['id'] | undefined
   }
 

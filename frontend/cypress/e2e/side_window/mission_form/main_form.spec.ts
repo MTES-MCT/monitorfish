@@ -283,7 +283,6 @@ context('Side Window > Mission Form > Main Form', () => {
           { comments: "Absence d'équipement AIS à bord", infractionType: 'PENDING', natinf: 23584 }
         ],
         portLocode: null,
-        portName: null,
         segments: [
           { segment: 'SWW04', segmentName: 'Midwater trawls' },
           { segment: 'PEL03', segmentName: 'Polyvalent - Bottom trawl' }

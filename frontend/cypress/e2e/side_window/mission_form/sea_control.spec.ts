@@ -211,7 +211,6 @@ context('Side Window > Mission Form > Sea Control', () => {
           { comments: 'Une observation sur l’infraction autre.', infractionType: 'WITHOUT_RECORD', natinf: 27689 }
         ],
         portLocode: null,
-        portName: null,
         segments: [],
         seizureAndDiversion: true,
         seizureAndDiversionComments: null,
@@ -311,7 +310,6 @@ context('Side Window > Mission Form > Sea Control', () => {
         otherComments: null,
         otherInfractions: [],
         portLocode: null,
-        portName: null,
         segments: [{ segment: 'SWW01/02/03', segmentName: 'Bottom trawls' }],
         seizureAndDiversion: false,
         seizureAndDiversionComments: null,

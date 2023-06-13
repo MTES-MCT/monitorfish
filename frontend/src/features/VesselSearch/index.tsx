@@ -21,12 +21,7 @@ import type { Promisable } from 'type-fest'
 
 type VesselSearchProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultValue' | 'onChange'> & {
   baseRef?: MutableRefObject<HTMLDivElement | undefined> | undefined
-  defaultValue?:
-    | {
-        flagState?: string | null | undefined
-        vesselName?: string | undefined
-      }
-    | undefined
+  defaultValue?: VesselIdentity | undefined
   extendedWidth: number
   hasError?: boolean | undefined
   hasVesselIdInResults?: boolean
@@ -65,15 +60,19 @@ export function VesselSearch({
   const escapeFromKeyboard = useEscapeFromKeyboard()
   const clickedOutsideComponent = useClickOutsideWhenOpenedWithinRef(wrapperRef, isExtended, baseRef)
 
-  const controlledDefaultValue = useMemo(
-    () => (selectedVessel ? undefinedize(selectedVessel.vesselName) : defaultValue?.vesselName),
+  useEffect(() => {
+    setSelectedVessel(defaultValue)
+  }, [defaultValue, selectedVessel])
+
+  const vesselName = useMemo(
+    () => (selectedVessel ? undefinedize(selectedVessel.vesselName) : undefinedize(defaultValue?.vesselName)),
     [defaultValue, selectedVessel]
   )
   const flagState = useMemo(
     () => (selectedVessel ? selectedVessel.flagState : undefinedize(defaultValue?.flagState)),
     [defaultValue, selectedVessel]
   )
-  const controlledKey = useMemo(() => JSON.stringify(controlledDefaultValue), [controlledDefaultValue])
+  const controlledKey = useMemo(() => vesselName, [vesselName])
 
   const clean = useCallback(async () => {
     searchQueryRef.current = ''
@@ -178,7 +177,7 @@ export function VesselSearch({
           autoFocus={!baseRef && !!selectedVesselIdentity}
           baseUrl={baseUrl}
           data-cy="vessel-search-input"
-          defaultValue={controlledDefaultValue}
+          defaultValue={vesselName}
           extendedWidth={extendedWidth}
           flagState={flagState}
           hasError={hasError}
@@ -190,9 +189,7 @@ export function VesselSearch({
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...inputNativeProps}
         />
-        {controlledDefaultValue && (
-          <IconButton accent={Accent.TERTIARY} Icon={Icon.Close} iconSize={14} onClick={clean} />
-        )}
+        {vesselName && <IconButton accent={Accent.TERTIARY} Icon={Icon.Close} iconSize={14} onClick={clean} />}
       </InputWrapper>
       <VesselSearchResult
         foundVessels={foundVessels}

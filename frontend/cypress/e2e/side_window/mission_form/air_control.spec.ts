@@ -26,8 +26,7 @@ context('Side Window > Mission Form > Air Control', () => {
     // Date et heure du contrôle
     cy.fill('Date et heure du contrôle', now.utcDateTupleWithTime)
 
-    // Lieu du contrôle
-    // TODO Add this test.
+    // The "Lieu du contrôle" field is stubbed in FormikCoordinatesPicker
 
     // Infractions
     cy.clickButton('Ajouter une infraction')
@@ -76,12 +75,12 @@ context('Side Window > Mission Form > Air Control', () => {
         internalReferenceNumber: 'FAK000999999',
         ircs: 'CALLME',
         isFromPoseidon: null,
-        latitude: null,
+        latitude: 47.084,
         licencesAndLogbookObservations: null,
         licencesMatchActivity: null,
         logbookInfractions: [],
         logbookMatchesActivity: null,
-        longitude: null,
+        longitude: -3.872,
         missionId: 1,
         numberOfVesselsFlownOver: null,
         otherComments: 'Une autre observation.',

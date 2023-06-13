@@ -1,5 +1,6 @@
 import {
   Checkbox,
+  FieldError,
   FormikMultiRadio,
   FormikNumberInput,
   FormikTextarea,
@@ -8,7 +9,7 @@ import {
   useNewWindow
 } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
-import { useField } from 'formik'
+import { useField, useFormikContext } from 'formik'
 import { remove as ramdaRemove } from 'ramda'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
@@ -30,6 +31,7 @@ const TypedFormikMultiInfractionPicker = FormikMultiInfractionPicker<MissionActi
 
 export function GearsField() {
   const gearsByCode = useMainAppSelector(state => state.gear.gearsByCode)
+  const { errors } = useFormikContext<MissionActionFormValues>()
   const [input, , helper] = useField<MissionActionFormValues['gearOnboard']>('gearOnboard')
 
   // Other field controlling this field
@@ -140,7 +142,7 @@ export function GearsField() {
   )
 
   if (!gearsAsOptions.length) {
-    return <FieldsetGroupSpinner isLight legend="Espèces à bord" />
+    return <FieldsetGroupSpinner isLight legend="Engins à bord" />
   }
 
   return (
@@ -219,6 +221,7 @@ export function GearsField() {
         optionValueKey="code"
         searchable
       />
+      {errors.gearOnboard && <FieldError>{errors.gearOnboard}</FieldError>}
     </TypedFormikMultiInfractionPicker>
   )
 }

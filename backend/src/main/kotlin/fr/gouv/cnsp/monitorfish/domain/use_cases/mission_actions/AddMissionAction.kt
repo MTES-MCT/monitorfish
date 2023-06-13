@@ -23,5 +23,4 @@ class AddMissionAction(
 
         return missionActionsRepository.save(actionWithFacade)
     }
-
 }

@@ -10,11 +10,14 @@ const ControlUnitSchema = object({
 })
 
 export const MainFormSchema = object({
+  missionTypes: array().required().min(1, 'Au moins un type de mission doit être choisi.'),
   startDateTimeUtc: string().required('La date de début de mission est obligatoire.'),
   endDateTimeUtc: string().test({
     message: 'La date de fin de mission doit être postérieure à la date de début.',
     test: (endDateTimeUtc, context) =>
       context.parent.startDateTimeUtc ? customDayjs(endDateTimeUtc).isAfter(context.parent.startDateTimeUtc) : true
   }),
-  controlUnits: array(ControlUnitSchema).min(1, 'Au moins une unité de contrôle doit être attachée à la mission.')
+  controlUnits: array(ControlUnitSchema)
+    .required()
+    .min(1, 'Au moins une unité de contrôle doit être attachée à la mission.')
 })

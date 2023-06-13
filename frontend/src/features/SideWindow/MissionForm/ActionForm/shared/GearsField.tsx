@@ -1,5 +1,6 @@
 import {
   Checkbox,
+  FieldError,
   FormikMultiRadio,
   FormikNumberInput,
   FormikTextarea,
@@ -30,7 +31,7 @@ const TypedFormikMultiInfractionPicker = FormikMultiInfractionPicker<MissionActi
 
 export function GearsField() {
   const gearsByCode = useMainAppSelector(state => state.gear.gearsByCode)
-  const [input, , helper] = useField<MissionActionFormValues['gearOnboard']>('gearOnboard')
+  const [input, meta, helper] = useField<MissionActionFormValues['gearOnboard']>('gearOnboard')
 
   // Other field controlling this field
   const [{ value: internalReferenceNumber }] =
@@ -140,7 +141,7 @@ export function GearsField() {
   )
 
   if (!gearsAsOptions.length) {
-    return <FieldsetGroupSpinner isLight legend="Espèces à bord" />
+    return <FieldsetGroupSpinner isLight legend="Engins à bord" />
   }
 
   return (
@@ -219,6 +220,7 @@ export function GearsField() {
         optionValueKey="code"
         searchable
       />
+      {meta.error && <FieldError>{meta.error}</FieldError>}
     </TypedFormikMultiInfractionPicker>
   )
 }

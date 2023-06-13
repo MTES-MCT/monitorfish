@@ -15,6 +15,11 @@ context('Side Window > Mission Form > Action List', () => {
       statusCode: 201
     }).as('updateMission4')
     cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
+    cy.get('*[data-cy="action-list-item"]').click()
+
+    cy.wait(250)
+
+    cy.fill('Ajouter un engin', 'OTB')
 
     cy.wait(250)
 
@@ -44,7 +49,16 @@ context('Side Window > Mission Form > Action List', () => {
         flagState: 'FR',
         flightGoals: [],
         gearInfractions: [],
-        gearOnboard: [],
+        gearOnboard: [
+          {
+            comments: null,
+            controlledMesh: null,
+            declaredMesh: null,
+            gearCode: 'OTB',
+            gearName: 'Chaluts de fond à panneaux',
+            gearWasControlled: null
+          }
+        ],
         id: null,
         internalReferenceNumber: 'U_W0NTFINDME',
         ircs: null,

@@ -9,7 +9,7 @@ import {
   useNewWindow
 } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
-import { useField, useFormikContext } from 'formik'
+import { useField } from 'formik'
 import { remove as ramdaRemove } from 'ramda'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
@@ -31,8 +31,7 @@ const TypedFormikMultiInfractionPicker = FormikMultiInfractionPicker<MissionActi
 
 export function GearsField() {
   const gearsByCode = useMainAppSelector(state => state.gear.gearsByCode)
-  const { errors } = useFormikContext<MissionActionFormValues>()
-  const [input, , helper] = useField<MissionActionFormValues['gearOnboard']>('gearOnboard')
+  const [input, meta, helper] = useField<MissionActionFormValues['gearOnboard']>('gearOnboard')
 
   // Other field controlling this field
   const [{ value: internalReferenceNumber }] =
@@ -221,7 +220,7 @@ export function GearsField() {
         optionValueKey="code"
         searchable
       />
-      {errors.gearOnboard && <FieldError>{errors.gearOnboard}</FieldError>}
+      {meta.error && <FieldError>{meta.error}</FieldError>}
     </TypedFormikMultiInfractionPicker>
   )
 }

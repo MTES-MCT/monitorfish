@@ -154,7 +154,12 @@ export function MissionForm() {
             } else {
               await updateMissionAction({
                 ...missionActionData,
-                id: missionActionData.id
+                id: missionActionData.id,
+                /**
+                 * This field is not used in the backend use-case, we add this property to
+                 * respected the MissionAction type (using `portName` when fetching missions actions).
+                 */
+                portName: undefined
               })
             }
           })

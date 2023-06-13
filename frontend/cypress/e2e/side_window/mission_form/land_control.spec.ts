@@ -155,7 +155,6 @@ context('Side Window > Mission Form > Land Control', () => {
           { comments: 'Une observation sur l’infraction autre.', infractionType: 'WITHOUT_RECORD', natinf: 27689 }
         ],
         portLocode: 'FRZEG',
-        portName: 'Auray',
         segments: [{ segment: 'NWW01/02', segmentName: 'Trawl' }],
         seizureAndDiversion: true,
         seizureAndDiversionComments: null,

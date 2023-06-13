@@ -76,7 +76,6 @@ context('Side Window > Mission Form > Air Surveillance', () => {
         otherComments: 'Une observation générale sur le vol.',
         otherInfractions: [],
         portLocode: null,
-        portName: null,
         segments: [
           {
             faoAreas: ['37.1', '37.2', '37.3'],

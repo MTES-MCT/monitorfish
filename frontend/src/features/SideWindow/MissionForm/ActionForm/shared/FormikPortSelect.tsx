@@ -14,8 +14,6 @@ export function FormikPortSelect() {
 
   const { newWindowContainerRef } = useNewWindow()
 
-  const error = errors.portLocode || errors.portName
-
   const getPortsApiQuery = useGetPortsQuery()
 
   const portsAsOptions: Option[] = useMemo(() => {
@@ -37,7 +35,6 @@ export function FormikPortSelect() {
 
       if (!nextPortLocode) {
         setFieldValue('portLocode', undefined)
-        setFieldValue('portName', undefined)
 
         return
       }
@@ -48,7 +45,6 @@ export function FormikPortSelect() {
       }
 
       setFieldValue('portLocode', port.locode)
-      setFieldValue('portName', port.name)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,7 +67,7 @@ export function FormikPortSelect() {
         searchable
         value={values.portLocode}
       />
-      {error && <FieldError>{error}</FieldError>}
+      {errors.portLocode && <FieldError>{errors.portLocode}</FieldError>}
     </>
   )
 }

@@ -74,7 +74,6 @@ context('Side Window > Mission Form > Action List', () => {
         otherComments: 'Commentaires post contrôle',
         otherInfractions: [],
         portLocode: null,
-        portName: null,
         segments: [],
         seizureAndDiversion: false,
         seizureAndDiversionComments: null,

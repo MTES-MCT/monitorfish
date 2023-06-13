@@ -41,6 +41,7 @@ data class MissionAction(
     val longitude: Double? = null,
     val latitude: Double? = null,
     val portLocode: String? = null,
+    // This field is only used when fetching missions
     var portName: String? = null,
     val vesselTargeted: ControlCheck? = null,
     val seizureAndDiversionComments: String? = null,
@@ -83,9 +84,6 @@ data class MissionAction(
     private fun checkControlPort() {
         require(this.portLocode != null) {
             "A land control must specify a port: the `portLocode` must be given."
-        }
-        require(this.portName != null) {
-            "A land control must specify a port: the `portName` must be given."
         }
     }
 }

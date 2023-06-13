@@ -16,13 +16,33 @@ export function VesselField() {
 
   const { newWindowContainerRef } = useNewWindow()
 
-  const defaultValue = useMemo(
-    () => ({
-      flagState: values.flagState,
-      vesselName: values.vesselName === UNKNOWN_VESSEL.vesselName ? 'INCONNU' : values.vesselName
-    }),
-    [values.flagState, values.vesselName]
-  )
+  const defaultValue = useMemo(() => {
+    if (!values.vesselId || !values.flagState) {
+      return undefined
+    }
+
+    if (values.vesselId === UNKNOWN_VESSEL.vesselId) {
+      return undefined
+    }
+
+    return {
+      districtCode: values.districtCode || null,
+      externalReferenceNumber: values.externalReferenceNumber || null,
+      flagState: values.flagState || '',
+      internalReferenceNumber: values.internalReferenceNumber || null,
+      ircs: values.ircs || null,
+      vesselId: values.vesselId,
+      vesselName: values.vesselName || null
+    }
+  }, [
+    values.flagState,
+    values.vesselName,
+    values.districtCode,
+    values.externalReferenceNumber,
+    values.internalReferenceNumber,
+    values.vesselId,
+    values.ircs
+  ])
 
   const handleVesselSearchChange = useDeepCompareCallback(
     (nextVessel: VesselIdentity | undefined) => {
@@ -74,8 +94,6 @@ export function VesselField() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [handleVesselSearchChange]
   )
-
-  // console.log(errors)
 
   return (
     <>

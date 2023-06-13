@@ -34,11 +34,13 @@ export function FormikCoordinatesPicker() {
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const listener = useMainAppSelector(state => state.draw.listener)
 
-  const { errors, values } = useFormikContext<MissionActionFormValues>()
-  const [{ value: longitudeValue }, , longitudeHelpers] = useField<MissionActionFormValues['longitude']>('longitude')
-  const [{ value: latitudeValue }, , latitudeHelpers] = useField<MissionActionFormValues['latitude']>('latitude')
+  const { values } = useFormikContext<MissionActionFormValues>()
+  const [{ value: longitudeValue }, longitudeMeta, longitudeHelpers] =
+    useField<MissionActionFormValues['longitude']>('longitude')
+  const [{ value: latitudeValue }, latitudeMeta, latitudeHelpers] =
+    useField<MissionActionFormValues['latitude']>('latitude')
 
-  const error = errors.latitude || errors.longitude
+  const error = longitudeMeta.error || latitudeMeta.error
 
   const dispatch = useMainAppDispatch()
   const { geometry } = useListenForDrawedGeometry(InteractionListener.CONTROL_POINT)

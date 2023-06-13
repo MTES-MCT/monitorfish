@@ -1,4 +1,4 @@
-import { Select, useNewWindow } from '@mtes-mct/monitor-ui'
+import { FieldError, Select, useNewWindow } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { useCallback, useMemo } from 'react'
 
@@ -10,9 +10,11 @@ import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 export function FormikPortSelect() {
-  const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
+  const { errors, setFieldValue, values } = useFormikContext<MissionActionFormValues>()
 
   const { newWindowContainerRef } = useNewWindow()
+
+  const error = errors.portLocode || errors.portName
 
   const getPortsApiQuery = useGetPortsQuery()
 
@@ -58,15 +60,18 @@ export function FormikPortSelect() {
   }
 
   return (
-    <Select
-      baseContainer={newWindowContainerRef.current}
-      isLight
-      label="Port de contrôle"
-      name="port"
-      onChange={handleChange}
-      options={portsAsOptions}
-      searchable
-      value={values.portLocode}
-    />
+    <>
+      <Select
+        baseContainer={newWindowContainerRef.current}
+        isLight
+        label="Port de contrôle"
+        name="port"
+        onChange={handleChange}
+        options={portsAsOptions}
+        searchable
+        value={values.portLocode}
+      />
+      {error && <FieldError>{error}</FieldError>}
+    </>
   )
 }

@@ -1,7 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
 import { customDayjs } from '@mtes-mct/monitor-ui'
-import { number, object, string } from 'yup'
+import { array, number, object, string } from 'yup'
 
 import { mainStore } from '../../../../store'
 
@@ -39,16 +39,24 @@ export const InfractionFormSchema = object({
 })
 
 export const AirControlFormSchema = object({
+  longitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
+  latitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
   vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
   actionDatetimeUtc: actionDatetimeUtcValidator
 })
 
 export const LandControlFormSchema = object({
+  gearOnboard: array().required('Veuillez indiquer les engins à bord.').min(1, 'Veuillez indiquer les engins à bord.'),
+  portLocode: string().required('Veuillez indiquer le port de contrôle.'),
+  portName: string().required('Veuillez indiquer le port de contrôle.'),
   vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
   actionDatetimeUtc: actionDatetimeUtcValidator
 })
 
 export const SeaControlFormSchema = object({
+  gearOnboard: array().required('Veuillez indiquer les engins à bord.').min(1, 'Veuillez indiquer les engins à bord.'),
+  longitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
+  latitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
   vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
   actionDatetimeUtc: actionDatetimeUtcValidator
 })

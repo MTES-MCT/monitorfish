@@ -27,37 +27,14 @@ class AddMissionActionUTests {
     private lateinit var getMissionActionFacade: GetMissionActionFacade
 
     @Test
-    fun `execute Should throw an exception When the vesselId is missing in a control`() {
-        // Given
-        val action = MissionAction(
-            id = null,
-            vesselId = null,
-            missionId = 1,
-            actionDatetimeUtc = ZonedDateTime.now(),
-            portLocode = "AEFAT",
-            actionType = MissionActionType.LAND_CONTROL,
-            gearOnboard = listOf(),
-            seizureAndDiversion = true,
-            isDeleted = false,
-        )
-
-        // When
-        val throwable = catchThrowable {
-            AddMissionAction(missionActionsRepository, getMissionActionFacade).execute(action)
-        }
-
-        // Then
-        assertThat(throwable).isNotNull()
-        assertThat(throwable.message).isEqualTo("A control must specify a vessel: the `vesselId` must be given.")
-    }
-
-    @Test
     fun `execute Should throw an exception When the id is not null`() {
         // Given
         val action = MissionAction(
             id = 1,
             vesselId = null,
             missionId = 1,
+            longitude = 45.7,
+            latitude = 13.5,
             actionDatetimeUtc = ZonedDateTime.now(),
             portLocode = "AEFAT",
             actionType = MissionActionType.LAND_CONTROL,
@@ -83,6 +60,8 @@ class AddMissionActionUTests {
             id = null,
             vesselId = 1,
             missionId = 1,
+            longitude = 45.7,
+            latitude = 13.5,
             actionDatetimeUtc = ZonedDateTime.now(),
             portLocode = "AEFAT",
             actionType = MissionActionType.LAND_CONTROL,

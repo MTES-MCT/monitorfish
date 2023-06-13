@@ -75,8 +75,6 @@ export function VesselField() {
     [handleVesselSearchChange]
   )
 
-  // console.log(errors)
-
   return (
     <>
       <Wrapper>

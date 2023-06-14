@@ -78,11 +78,13 @@ const Wrapper = styled.div<{
   margin-top: ${p => (p.isFirstInfraction ? 5 : 16)}px;
   width: 390px;
   white-space: initial;
+  padding-right: 24px;
+  box-sizing: border-box;
 `
 
 const InfractionTagText = styled.span`
   color: ${COLORS.gunMetal};
-  margin: 0 8px 0 8px;
+  margin: 0 7px 0 7px;
   font-weight: 500;
 `
 

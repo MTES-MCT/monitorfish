@@ -39,6 +39,15 @@ class SecurityConfig(val oidcProperties: OIDCProperties) {
                     authorize.requestMatchers(
                         "/",
                         "/index.html",
+                        "/*.js",
+                        "/*.png",
+                        "/*.svg",
+                        "/static/**",
+                        "/map-icons/**",
+                        "/flags/**",
+                        "/robots.txt",
+                        "/favicon-32.ico",
+                        "/asset-manifest.json",
                         "/swagger-ui/**",
                         // Used to redirect to the frontend SPA, see SpaController.kt
                         "/error",

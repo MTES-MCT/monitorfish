@@ -25,6 +25,7 @@ class MissionActionUTests {
             gearOnboard = listOf(),
             seizureAndDiversion = true,
             isDeleted = false,
+            userTrigram = "LTH",
         )
 
         // When
@@ -33,6 +34,33 @@ class MissionActionUTests {
         // Then
         assertThat(throwable).isNotNull()
         assertThat(throwable.message).isEqualTo("A control must specify a vessel: the `vesselId` must be given.")
+    }
+
+    @Test
+    fun `verify Should throw an exception When the userTrigram is missing in a control`() {
+        // Given
+        val action = MissionAction(
+            id = null,
+            vesselId = 1,
+            missionId = 1,
+            longitude = 45.7,
+            latitude = 13.5,
+            actionDatetimeUtc = ZonedDateTime.now(),
+            actionType = MissionActionType.SEA_CONTROL,
+            gearOnboard = listOf(),
+            seizureAndDiversion = true,
+            isDeleted = false,
+            userTrigram = null,
+        )
+
+        // When
+        val throwable = catchThrowable { action.verify() }
+
+        // Then
+        assertThat(throwable).isNotNull()
+        assertThat(throwable.message).isEqualTo(
+            "A control must specify a user trigram: the `userTrigram` must be given.",
+        )
     }
 
     @Test
@@ -51,6 +79,7 @@ class MissionActionUTests {
             gearOnboard = listOf(),
             seizureAndDiversion = true,
             isDeleted = false,
+            userTrigram = "LTH",
         )
 
         // When
@@ -76,6 +105,7 @@ class MissionActionUTests {
             gearOnboard = listOf(),
             seizureAndDiversion = true,
             isDeleted = false,
+            userTrigram = "LTH",
         )
 
         // When
@@ -101,6 +131,7 @@ class MissionActionUTests {
             gearOnboard = listOf(),
             seizureAndDiversion = true,
             isDeleted = false,
+            userTrigram = "LTH",
         )
 
         // When

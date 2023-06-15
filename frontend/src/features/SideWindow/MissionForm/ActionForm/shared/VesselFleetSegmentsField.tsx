@@ -84,7 +84,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
   ])
 
   const updateFaoAreas = useDebouncedCallback(async () => {
-    if (values.faoAreas?.length || !computeVesselFaoAreasApiQuery.data) {
+    if (!computeVesselFaoAreasApiQuery.data) {
       return
     }
 
@@ -99,7 +99,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [computeVesselFaoAreasApiQuery.data]
+    [computeVesselFaoAreasApiQuery.data, values.internalReferenceNumber]
   )
 
   const removeFaoArea = useCallback(

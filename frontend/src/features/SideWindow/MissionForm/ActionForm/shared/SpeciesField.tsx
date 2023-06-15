@@ -133,12 +133,12 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   )
   useEffect(
     () => {
-      if (input.value?.length || !riskFactorApiQuery.data) {
+      if (!riskFactorApiQuery.data) {
         return
       }
 
       const speciesOnBoard = riskFactorApiQuery.data.speciesOnboard
-      if (!speciesOnBoard) {
+      if (!speciesOnBoard?.length) {
         return
       }
 

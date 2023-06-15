@@ -79,11 +79,17 @@ data class MissionAction(
         require(this.latitude != null) {
             "A control must specify a position: the `latitude` must be given."
         }
+        require(this.userTrigram != null) {
+            "A control must specify a user trigram: the `userTrigram` must be given."
+        }
     }
 
     private fun checkControlPort() {
         require(this.portLocode != null) {
             "A land control must specify a port: the `portLocode` must be given."
+        }
+        require(this.userTrigram != null) {
+            "A control must specify a user trigram: the `userTrigram` must be given."
         }
     }
 }

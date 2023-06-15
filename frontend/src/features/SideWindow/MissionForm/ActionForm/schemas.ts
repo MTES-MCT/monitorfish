@@ -42,6 +42,7 @@ export const AirControlFormSchema = object({
   longitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
   latitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
   vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
+  userTrigram: string().required('Veuillez indiquer votre trigramme.'),
   actionDatetimeUtc: actionDatetimeUtcValidator
 })
 
@@ -49,6 +50,7 @@ export const LandControlFormSchema = object({
   gearOnboard: array().required('Veuillez indiquer les engins à bord.').min(1, 'Veuillez indiquer les engins à bord.'),
   portLocode: string().required('Veuillez indiquer le port de contrôle.'),
   vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
+  userTrigram: string().required('Veuillez indiquer votre trigramme.'),
   actionDatetimeUtc: actionDatetimeUtcValidator
 })
 
@@ -57,5 +59,6 @@ export const SeaControlFormSchema = object({
   longitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
   latitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
   vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
+  userTrigram: string().required('Veuillez indiquer votre trigramme.'),
   actionDatetimeUtc: actionDatetimeUtcValidator
 })

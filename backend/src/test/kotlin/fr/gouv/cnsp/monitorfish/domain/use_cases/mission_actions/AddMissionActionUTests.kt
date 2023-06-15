@@ -41,6 +41,7 @@ class AddMissionActionUTests {
             gearOnboard = listOf(),
             seizureAndDiversion = true,
             isDeleted = false,
+            userTrigram = "LTH",
         )
 
         // When
@@ -69,6 +70,7 @@ class AddMissionActionUTests {
             gearOnboard = listOf(),
             seizureAndDiversion = true,
             isDeleted = false,
+            userTrigram = "LTH",
         )
         given(missionActionsRepository.save(anyOrNull())).willReturn(action)
         given(getMissionActionFacade.execute(anyOrNull())).willReturn(Facade.NAMO)

@@ -27,4 +27,7 @@ const Title = styled.div`
 
 const Wrapper = styled.div`
   margin-top: 16px;
+  white-space: initial;
+  padding-right: 24px;
+  box-sizing: border-box;
 `

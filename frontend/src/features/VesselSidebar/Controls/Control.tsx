@@ -127,6 +127,8 @@ const OtherComments = styled.div`
   margin-top: 16px;
   white-space: normal;
   width: 100%;
+  padding-right: 24px;
+  box-sizing: border-box;
 `
 
 const NoInfraction = styled.div`
@@ -145,8 +147,9 @@ const Title = styled.div`
   margin-bottom: 12px;
   text-overflow: ellipsis;
   overflow: hidden !important;
-  white-space: nowrap;
+  white-space: inherit;
   max-width: 400px;
+  padding-right: 24px;
 `
 
 const Wrapper = styled.div<{
@@ -159,10 +162,14 @@ const Wrapper = styled.div<{
   padding: 12px 24px 16px 12px;
   color: ${COLORS.gunMetal};
   display: flex;
+  white-space: initial;
 `
 
 const GyroColumn = styled.div``
-const ContentColumn = styled.div``
+const ContentColumn = styled.div`
+  width: 100%;
+  box-sizing: border-box;
+`
 
 const GyroGreen = styled(GyroGreenSVG)`
   width: 16px;

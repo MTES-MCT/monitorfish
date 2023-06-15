@@ -113,12 +113,12 @@ export function GearsField() {
 
   useEffect(
     () => {
-      if (input.value?.length || !gearsByCode || !riskFactorApiQuery.data) {
+      if (!gearsByCode || !riskFactorApiQuery.data) {
         return
       }
 
       const { gearOnboard } = riskFactorApiQuery.data
-      if (!gearOnboard) {
+      if (!gearOnboard?.length) {
         return
       }
 

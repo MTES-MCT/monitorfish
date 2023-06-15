@@ -1,4 +1,4 @@
-import {editSideWindowMission} from './utils'
+import { editSideWindowMission } from './utils'
 
 context('Side Window > Mission Form > Sea Control Edition', () => {
   beforeEach(() => {
@@ -110,10 +110,13 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     cy.get('*[data-cy="action-list-item"]').click()
     cy.wait(500)
 
-    cy.intercept('GET',
-      'bff/v1/fleet_segments/compute?faoAreas=27.8.b,27.8.c&gears=OTB&species=HKE,BLI&latitude=53.35&longitude=-10.85&portLocode=')
-      .as('computeFleetSegments')
-    cy.get('input[placeholder="Rechercher un navire..."]').type('{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}pheno')
+    cy.intercept(
+      'GET',
+      'bff/v1/fleet_segments/compute?faoAreas=27.8.b,27.8.c&gears=OTB&species=HKE,BLI&latitude=53.35&longitude=-10.85&portLocode='
+    ).as('computeFleetSegments')
+    cy.get('input[placeholder="Rechercher un navire..."]').type(
+      '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}pheno'
+    )
     cy.contains('mark', 'PHENO').click()
 
     cy.wait('@computeFleetSegments')
@@ -159,9 +162,9 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
             comments: null,
             controlledMesh: null,
             declaredMesh: 70,
-            gearCode: "OTB",
-            gearName: "Chaluts de fond à panneaux",
-            gearWasControlled: null,
+            gearCode: 'OTB',
+            gearName: 'Chaluts de fond à panneaux',
+            gearWasControlled: null
           }
         ],
         id: 4,
@@ -179,10 +182,12 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
         otherComments: 'Commentaires post contrôle',
         otherInfractions: [],
         portLocode: null,
-        segments: [{
-          segment: "SWW01/02/03",
-          segmentName: "Bottom trawls"
-        }],
+        segments: [
+          {
+            segment: 'SWW01/02/03',
+            segmentName: 'Bottom trawls'
+          }
+        ],
         seizureAndDiversion: false,
         seizureAndDiversionComments: null,
         separateStowageOfPreservedSpecies: 'NO',
@@ -193,14 +198,14 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
             controlledWeight: null,
             declaredWeight: 471.2,
             nbFish: null,
-            speciesCode: "HKE",
+            speciesCode: 'HKE',
             underSized: false
           },
           {
             controlledWeight: null,
             declaredWeight: 13.46,
             nbFish: null,
-            speciesCode: "BLI",
+            speciesCode: 'BLI',
             underSized: false
           }
         ],

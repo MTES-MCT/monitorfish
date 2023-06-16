@@ -2,13 +2,25 @@ import TileLayer from 'ol/layer/Tile'
 import { OSM } from 'ol/source'
 import TileWMS from 'ol/source/TileWMS'
 import XYZ from 'ol/source/XYZ'
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
-import type { ImageTile } from 'ol'
-import type Tile from 'ol/Tile'
+export const CARTOCDN_BASEMAP = 'basemaps.'
+export const MAPBOX_BASEMAP = 'mapbox.'
+
+export const getImageCacheKey = (src: string) => {
+  if (src.includes(CARTOCDN_BASEMAP)) {
+    return src.split(CARTOCDN_BASEMAP)[1] || ''
+  }
+
+  if (src.includes(MAPBOX_BASEMAP)) {
+    return src.split(MAPBOX_BASEMAP)[1] || ''
+  }
+
+  return ''
+}
 
 export type BaseLayerProps = {
   map?: any
@@ -16,32 +28,9 @@ export type BaseLayerProps = {
 function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
 
-  const tileCacheMapRef = useRef(new Map<string, string>())
-
-  const loadTileFromCacheOrFetch = useCallback((imageTile: Tile, src: string) => {
-    const imgElement = (imageTile as ImageTile).getImage()
-
-    if (tileCacheMapRef.current.has(src)) {
-      // @ts-ignore
-      imgElement.src = tileCacheMapRef.current.get(src)
-
-      return
-    }
-
-    fetch(src).then(response => {
-      if (!response.ok) {
-        return
-      }
-
-      response.blob().then(blob => {
-        const objUrl = URL.createObjectURL(blob)
-        tileCacheMapRef.current.set(src, objUrl)
-        // @ts-ignore
-        imgElement.src = objUrl
-      })
-    })
-  }, [])
-
+  /**
+   * A caching of the maps is done in the Service Worker Fetch service, see `/public/sw.js`
+   */
   const baseLayersObjects = useMemo(
     () => ({
       DARK: () =>
@@ -49,7 +38,6 @@ function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
           className: LayerProperties.BASE_LAYER.code,
           source: new XYZ({
             maxZoom: 19,
-            tileLoadFunction: loadTileFromCacheOrFetch,
             urls: ['a', 'b', 'c', 'd'].map(
               subdomain => `https://${subdomain}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png`
             )
@@ -61,7 +49,6 @@ function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
           className: LayerProperties.BASE_LAYER.code,
           source: new XYZ({
             maxZoom: 19,
-            tileLoadFunction: loadTileFromCacheOrFetch,
             urls: ['a', 'b', 'c', 'd'].map(
               subdomain => `https://${subdomain}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png`
             )
@@ -100,7 +87,7 @@ function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
           zIndex: 0
         })
     }),
-    [loadTileFromCacheOrFetch]
+    []
   )
 
   useEffect(() => {

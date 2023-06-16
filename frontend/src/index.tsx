@@ -13,6 +13,7 @@ import './ui/assets/App.css'
 import './ui/shared/ol-override.css'
 import './ui/shared/rsuite-override.css'
 import { getOIDCConfig } from './auth/getOIDCConfig'
+import { registerServiceWorker } from './workers/registerServiceWorker'
 // eslint-disable-next-line import/no-relative-packages
 // import '@mtes-mct/monitor-ui/assets/stylesheets/rsuite-override.css'
 
@@ -24,6 +25,8 @@ if (!(process.env.NODE_ENV === 'development')) {
     tracesSampleRate: 1.0
   })
 }
+
+registerServiceWorker()
 
 const container = document.getElementById('root')
 if (!container) {

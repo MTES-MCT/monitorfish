@@ -30,6 +30,7 @@ export enum LayerType {
   BASE_LAYER = 'BASE_LAYER',
   DRAW = 'DRAW',
   FREE_DRAW = 'FREE_DRAW',
+  GEOLOCATION = 'GEOLOCATION',
   INFRACTION_SUSPICION = 'INFRACTION_SUSPICION',
   INTEREST_POINT = 'INTEREST_POINT',
   MEASUREMENT = 'MEASUREMENT',
@@ -69,6 +70,11 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
     code: MonitorFishLayer.MISSION_HOVER,
     type: LayerType.MISSION,
     zIndex: 80
+  },
+  [MonitorFishLayer.GEOLOCATION]: {
+    code: MonitorFishLayer.GEOLOCATION,
+    type: LayerType.GEOLOCATION,
+    zIndex: 50
   },
   [MonitorFishLayer.MISSION_SELECTED]: {
     code: MonitorFishLayer.MISSION_SELECTED,

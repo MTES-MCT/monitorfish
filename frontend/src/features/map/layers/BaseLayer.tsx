@@ -7,21 +7,6 @@ import React, { useEffect, useMemo } from 'react'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
-export const CARTOCDN_BASEMAP = 'basemaps.'
-export const MAPBOX_BASEMAP = 'mapbox.'
-
-export const getImageCacheKey = (src: string) => {
-  if (src.includes(CARTOCDN_BASEMAP)) {
-    return src.split(CARTOCDN_BASEMAP)[1] || ''
-  }
-
-  if (src.includes(MAPBOX_BASEMAP)) {
-    return src.split(MAPBOX_BASEMAP)[1] || ''
-  }
-
-  return ''
-}
-
 export type BaseLayerProps = {
   map?: any
 }

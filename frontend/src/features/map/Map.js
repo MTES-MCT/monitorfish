@@ -38,6 +38,7 @@ import { ControlOverlay } from './overlays/ControlOverlay'
 import { SelectedControlOverlay } from './overlays/SelectedControlOverlay'
 import { useSelector } from 'react-redux'
 import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
+import { GeoLocationLayer, Index } from './layers/GeoLocationLayer'
 
 const Map = () => {
   const isSuperUser = useIsSuperUser()
@@ -94,6 +95,7 @@ const Map = () => {
       {isSuperUser && <SelectedMissionActionsLayer/>}
       {isSuperUser && <ControlOverlay feature={currentFeature}/>}
       {isSuperUser && <SelectedControlOverlay/>}
+      <GeoLocationLayer/>
       <DrawLayer/>
       <RegulatoryLayerSearch/>
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>

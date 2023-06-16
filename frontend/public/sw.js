@@ -1,8 +1,14 @@
 const CARTOCDN_BASEMAP = "basemaps."
 const MAPBOX_BASEMAP = "mapbox."
 const OPENSTREETMAP_BASEMAP = "tile."
-const SHOM_BASEMAP = "tile."
-const WFS = "wfs"
+const SHOM_BASEMAP = "data.shom."
+
+const whitelistedBaseMaps = [
+  CARTOCDN_BASEMAP,
+  MAPBOX_BASEMAP,
+  OPENSTREETMAP_BASEMAP,
+  SHOM_BASEMAP
+]
 
 const staticAssets = [
   "/landing_background.png"
@@ -15,10 +21,6 @@ const getImageCacheKey = (src) => {
 
   if (src.includes(MAPBOX_BASEMAP)) {
     return src.split(MAPBOX_BASEMAP)[1] || ''
-  }
-
-  if (src.includes(WFS)) {
-    return src.split(WFS)[1] || ''
   }
 
   if (src.includes(OPENSTREETMAP_BASEMAP)) {
@@ -63,6 +65,9 @@ self.addEventListener("activate", (event) => {
 
   event.waitUntil(
     caches.keys().then((cacheNames) => {
+      // Use fetch event handling right away
+      self.clients.claim()
+
       return Promise.all(
         // @ts-ignore
         cacheNames.map((storedCacheName) => {
@@ -78,7 +83,6 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", event => {
   event.respondWith((async function() {
     const url = event.request.url.toString()
-    console.log("Fetch event for", url)
 
     const cacheKey = getImageCacheKey(event.request.url.toString())
     const cacheKeyRequest = new Request(cacheKey)
@@ -88,15 +92,13 @@ self.addEventListener("fetch", event => {
 })
 
 async function getResponse (cacheRequest, url) {
-  if (!url.includes(CARTOCDN_BASEMAP) && !url.includes(MAPBOX_BASEMAP)) {
-    console.log("Fetch event bypassed", url)
+  if (!whitelistedBaseMaps.find(baseMap => url.includes(baseMap))) {
 
     return fetch(url)
   }
 
   const responseFromCache = await caches.match(cacheRequest)
   if (responseFromCache) {
-    console.log("Served response from cache", url)
     return responseFromCache
   }
 
@@ -106,7 +108,6 @@ async function getResponse (cacheRequest, url) {
 
     return
   }
-  console.log("Served response from URL", url)
 
   // Caching and returning the response if it doesn't exist in the cache
   const cache = await caches.open(cacheName)

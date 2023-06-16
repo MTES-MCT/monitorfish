@@ -8,10 +8,11 @@ import React, { useCallback, useEffect, useRef } from 'react'
 
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
-import type { VesselLastPositionFeature } from '../../../../domain/entities/vessel/types'
-import type { VectorLayerWithName } from '../../../../domain/types/layer'
 import { useGeoLocation } from '../hooks/useGeoLocation'
 import { pointLayerStyle } from '../styles/dottedLayer.style'
+
+import type { VesselLastPositionFeature } from '../../../../domain/entities/vessel/types'
+import type { VectorLayerWithName } from '../../../../domain/types/layer'
 
 export type GeoLocationLayerProps = {
   map?: any

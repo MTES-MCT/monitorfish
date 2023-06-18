@@ -205,7 +205,7 @@ def render(
         return pdf
 
     else:
-        html = css_inline.inline(html, remove_style_tags=True)
+        html = css_inline.inline(html)
         return html
 
 

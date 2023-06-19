@@ -249,7 +249,7 @@
         <dependency>
             <groupId>io.sentry</groupId>
             <artifactId>sentry</artifactId>
-            <version>6.22.0</version>
+            <version>6.23.0</version>
         </dependency>
     </dependencies>
 

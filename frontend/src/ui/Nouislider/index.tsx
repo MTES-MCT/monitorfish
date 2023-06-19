@@ -1,12 +1,12 @@
 /* eslint-disable */
 
-import nouislider from 'nouislider'
-import React, { useEffect } from 'react'
+import nouislider, { type Options as NouisliderOptions } from 'nouislider'
+import React, { useEffect, type CSSProperties } from 'react'
 import type { Promisable } from 'type-fest'
 
 import { isEqual } from './utils'
 
-const areEqual = (prevProps, nextProps) => {
+const areEqual = (prevProps: NouisliderProps, nextProps: NouisliderProps) => {
   const { disabled, range, start, step } = prevProps
 
   return (
@@ -17,77 +17,41 @@ const areEqual = (prevProps, nextProps) => {
   )
 }
 
-export type NouisliderProps = {
-  animate?: boolean
-  behaviour?: string
+export type NouisliderProps = NouisliderOptions & {
   className?: string
   clickablePips?: boolean
-  connect?: boolean | boolean[]
-  direction?: string
   disabled?: boolean
-  format?: any
   id?: any
   instanceRef?: any
-  keyboardSupport?: boolean
-  limit?: any
-  margin?: any
   onChange?: () => Promisable<void>
   onEnd?: () => Promisable<void>
   onSet?: () => Promisable<void>
   onSlide?: (a: any, b: any, nextValue: any) => Promisable<void>
   onStart?: () => Promisable<void>
   onUpdate?: () => Promisable<void>
-  orientation?: 'horizontal'
-  padding?: number
-  pips?: any
-  range: {
-    max: number[]
-    min: number[]
-  }
-  snap?: boolean
-  start: [number, number]
-  step?: any
-  style?: any
-  tooltips?: boolean
+  style?: CSSProperties
 }
-function Nouislider(_props: NouisliderProps) {
-  const props = {
-    animate: true,
-    behaviour: 'tap',
-    className: null,
-    clickablePips: false,
-    connect: false,
-    direction: 'ltr',
-    disabled: false,
-    format: null,
-    id: null,
-    instanceRef: null,
-    keyboardSupport: true,
-    limit: null,
-    margin: null,
-    onChange: () => {},
-    onEnd: () => {},
-    onSet: () => {},
-    onSlide: () => {},
-    onStart: () => {},
-    onUpdate: () => {},
-    orientation: 'horizontal',
-    padding: 0,
-    pips: null,
-    snap: false,
-    step: null,
-    style: null,
-    tooltips: false,
-    ..._props
-  }
-
+function Nouislider({
+  className,
+  clickablePips = false,
+  disabled = false,
+  id = null,
+  instanceRef = null,
+  onChange = () => {},
+  onEnd = () => {},
+  onSet = () => {},
+  onSlide = () => {},
+  onStart = () => {},
+  onUpdate = () => {},
+  style,
+  ...originalProps
+}: NouisliderProps) {
   const sliderContainer = React.createRef<any | undefined>()
 
   // https://github.com/mmarkelov/react-nouislider/pull/52/files
   const getSlider = () => (sliderContainer.current || {}).noUiSlider
 
   useEffect(() => {
-    const { instanceRef } = props
     const isCreatedRef = instanceRef && Object.prototype.hasOwnProperty.call(instanceRef, 'current')
     if (instanceRef && instanceRef instanceof Function) {
       instanceRef(sliderContainer.current)
@@ -126,8 +90,6 @@ function Nouislider(_props: NouisliderProps) {
     }
   }
 
-  const { onChange, onEnd, onSet, onSlide, onStart, onUpdate } = props
-
   const updateEvents = sliderComponent => {
     if (onStart) {
       sliderComponent.off('start')
@@ -160,13 +122,13 @@ function Nouislider(_props: NouisliderProps) {
     }
   }
 
-  const updateOptions = options => {
+  const updateOptions = (options: NouisliderOptions) => {
     const sliderHTML = sliderContainer.current
     sliderHTML.noUiSlider.updateOptions(options)
   }
 
   const setClickableListeners = () => {
-    if (props.clickablePips) {
+    if (clickablePips) {
       const sliderHTML = sliderContainer.current
       ;[...sliderHTML.querySelectorAll('.noUi-value')].forEach(pip => {
         pip.style.cursor = 'pointer'
@@ -176,9 +138,7 @@ function Nouislider(_props: NouisliderProps) {
   }
 
   const createSlider = () => {
-    const sliderComponent = nouislider.create(sliderContainer.current, {
-      ...props
-    })
+    const sliderComponent = nouislider.create(sliderContainer.current, originalProps)
 
     updateEvents(sliderComponent)
 
@@ -186,7 +146,6 @@ function Nouislider(_props: NouisliderProps) {
   }
 
   useEffect(() => {
-    const { disabled } = props
     const sliderHTML = sliderContainer.current
     if (sliderHTML) {
       toggleDisable(disabled)
@@ -216,18 +175,16 @@ function Nouislider(_props: NouisliderProps) {
     }
   }, [])
 
-  const { animate, disabled, limit, margin, padding, pips, range, snap, start, step } = props
-
   useEffect(() => {
     const slider = getSlider()
 
     if (slider) {
-      updateOptions({ animate, limit, margin, padding, pips, range, snap, step })
-      slider.set(start)
+      updateOptions(originalProps)
+      slider.set(originalProps.start)
       setClickableListeners()
     }
     toggleDisable(disabled)
-  }, [start, disabled, range, step, margin, padding, limit, pips, snap, animate])
+  }, [disabled, originalProps])
 
   useEffect(() => {
     const slider = getSlider()
@@ -237,7 +194,6 @@ function Nouislider(_props: NouisliderProps) {
     }
   }, [onUpdate, onChange, onSlide, onStart, onEnd, onSet])
 
-  const { className, id, style } = props
   const options: any = {}
   if (id) {
     options.id = id

@@ -11,7 +11,7 @@ import { Formik } from 'formik'
 import { noop } from 'lodash/fp'
 import { useMemo } from 'react'
 
-import { LandControlFormSchema } from './schemas'
+import { getLandControlFormSchema } from './schemas'
 import { ControlQualityField } from './shared/ControlQualityField'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
 import { FormikPortSelect } from './shared/FormikPortSelect'
@@ -22,6 +22,7 @@ import { SpeciesField } from './shared/SpeciesField'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
 import { VesselFleetSegmentsField } from './shared/VesselFleetSegmentsField'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
@@ -38,13 +39,19 @@ type LandControlFormProps = {
 export function LandControlForm({ initialValues, onChange, onError }: LandControlFormProps) {
   const { newWindowContainerRef } = useNewWindow()
 
+  const { draft } = useMainAppSelector(store => store.mission)
+
   const titleDate = useMemo(
     () => initialValues.actionDatetimeUtc && getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),
     [initialValues.actionDatetimeUtc]
   )
 
   return (
-    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={LandControlFormSchema}>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={noop}
+      validationSchema={getLandControlFormSchema(draft?.mainFormValues?.isClosed)}
+    >
       <>
         <FormikEffect onChange={onChange as any} onError={onError} />
         <FormikRevalidationEffect />

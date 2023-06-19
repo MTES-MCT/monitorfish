@@ -46,19 +46,45 @@ export const AirControlFormSchema = object({
   actionDatetimeUtc: actionDatetimeUtcValidator
 })
 
-export const LandControlFormSchema = object({
-  gearOnboard: array().required('Veuillez indiquer les engins à bord.').min(1, 'Veuillez indiquer les engins à bord.'),
+const OpenedLandControlFormSchema = object({
   portLocode: string().required('Veuillez indiquer le port de contrôle.'),
   vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
   userTrigram: string().required('Veuillez indiquer votre trigramme.'),
   actionDatetimeUtc: actionDatetimeUtcValidator
 })
 
-export const SeaControlFormSchema = object({
-  gearOnboard: array().required('Veuillez indiquer les engins à bord.').min(1, 'Veuillez indiquer les engins à bord.'),
+const ClosedLandControlFormSchema = OpenedLandControlFormSchema.concat(
+  object({
+    gearOnboard: array().required('Veuillez indiquer les engins à bord.').min(1, 'Veuillez indiquer les engins à bord.')
+  })
+)
+
+export const getLandControlFormSchema = (isMissionClosed: boolean | undefined) => {
+  if (isMissionClosed) {
+    return ClosedLandControlFormSchema
+  }
+
+  return OpenedLandControlFormSchema
+}
+
+const OpenedSeaControlFormSchema = object({
   longitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
   latitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
   vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
   userTrigram: string().required('Veuillez indiquer votre trigramme.'),
   actionDatetimeUtc: actionDatetimeUtcValidator
 })
+
+const ClosedSeaControlFormSchema = OpenedSeaControlFormSchema.concat(
+  object({
+    gearOnboard: array().required('Veuillez indiquer les engins à bord.').min(1, 'Veuillez indiquer les engins à bord.')
+  })
+)
+
+export const getSeaControlFormSchema = (isMissionClosed: boolean | undefined) => {
+  if (isMissionClosed) {
+    return ClosedSeaControlFormSchema
+  }
+
+  return OpenedSeaControlFormSchema
+}

@@ -2,7 +2,7 @@ import { customDayjs, type Undefine } from '@mtes-mct/monitor-ui'
 import { difference } from 'lodash'
 import { omit } from 'ramda'
 
-import { AirControlFormSchema, LandControlFormSchema, SeaControlFormSchema } from './ActionForm/schemas'
+import { AirControlFormSchema, getLandControlFormSchema, getSeaControlFormSchema } from './ActionForm/schemas'
 import { INITIAL_MISSION_CONTROL_UNIT, MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
 import { MainFormSchema } from './MainForm/schemas'
 import { Mission } from '../../../domain/entities/mission/types'
@@ -33,17 +33,25 @@ export function areMissionFormValuesValid(
         }
         break
 
-      case MissionAction.MissionActionType.LAND_CONTROL:
-        if (!LandControlFormSchema.isValidSync(actionFormValues)) {
-          return false
-        }
-        break
+      case MissionAction.MissionActionType.LAND_CONTROL: {
+        const landControlFormSchema = getLandControlFormSchema(mainFormValues?.isClosed)
 
-      case MissionAction.MissionActionType.SEA_CONTROL:
-        if (!SeaControlFormSchema.isValidSync(actionFormValues)) {
+        if (!landControlFormSchema.isValidSync(actionFormValues)) {
           return false
         }
+
         break
+      }
+
+      case MissionAction.MissionActionType.SEA_CONTROL: {
+        const seaControlFormSchema = getSeaControlFormSchema(mainFormValues?.isClosed)
+
+        if (!seaControlFormSchema.isValidSync(actionFormValues)) {
+          return false
+        }
+
+        break
+      }
 
       default:
         break

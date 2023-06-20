@@ -11,7 +11,7 @@ import { Formik } from 'formik'
 import { noop } from 'lodash/fp'
 import { useMemo } from 'react'
 
-import { SeaControlFormSchema } from './schemas'
+import { getSeaControlFormSchema } from './schemas'
 import { ControlQualityField } from './shared/ControlQualityField'
 import { FormikCoordinatesPicker } from './shared/FormikCoordinatesPicker'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
@@ -22,6 +22,7 @@ import { SpeciesField } from './shared/SpeciesField'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
 import { VesselFleetSegmentsField } from './shared/VesselFleetSegmentsField'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
@@ -38,6 +39,8 @@ type SeaControlFormProps = {
 export function SeaControlForm({ initialValues, onChange, onError }: SeaControlFormProps) {
   const { newWindowContainerRef } = useNewWindow()
 
+  const { draft } = useMainAppSelector(store => store.mission)
+
   const titleDate = useMemo(
     () => initialValues.actionDatetimeUtc && getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),
     [initialValues.actionDatetimeUtc]
@@ -45,7 +48,11 @@ export function SeaControlForm({ initialValues, onChange, onError }: SeaControlF
 
   // TODO Fix the validation: it can't be used as the formik state is inconsistent (due to FormikEffect ?)
   return (
-    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={SeaControlFormSchema}>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={noop}
+      validationSchema={getSeaControlFormSchema(draft?.mainFormValues?.isClosed)}
+    >
       <>
         <FormikEffect onChange={onChange as any} onError={onError} />
         <FormikRevalidationEffect />

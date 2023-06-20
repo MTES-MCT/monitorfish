@@ -74,11 +74,19 @@ export function YearReportings({ year, yearReportings }: YearReportingsProps) {
           </YearResume>
         </YearListTitleText>
       </YearListTitle>
-      <YearListContentWithPadding isOpen={isOpen} name={year.toString()}>
-        {sortedReportings.map(reporting => (
-          <ReportingCard key={reporting.id} isArchive openConfirmDeletionModalForId={() => {}} reporting={reporting} />
-        ))}
-      </YearListContentWithPadding>
+      {isOpen && (
+        // TODO Why do we need to pass a name prop here?
+        <YearListContentWithPadding name={year.toString()}>
+          {sortedReportings.map(reporting => (
+            <ReportingCard
+              key={reporting.id}
+              isArchive
+              openConfirmDeletionModalForId={() => {}}
+              reporting={reporting}
+            />
+          ))}
+        </YearListContentWithPadding>
+      )}
     </Row>
   )
 }
@@ -127,5 +135,5 @@ const Row = styled.div`
 `
 
 const YearListContentWithPadding = styled(YearListContent)`
-  padding: ${p => (p.isOpen ? '16px 16px 0px 16px' : '0px')};
+  padding: 16px 16px 0px 16px;
 `

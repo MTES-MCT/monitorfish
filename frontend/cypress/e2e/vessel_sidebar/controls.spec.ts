@@ -44,7 +44,9 @@ context('Vessel sidebar controls tab', () => {
     cy.get('*[data-cy="vessel-control-title"]').first().contains(`CONTRÔLE EN MER DU ${date}`)
     cy.get('*[data-cy="vessel-control"]')
       .first()
-      .should('contain', '1. Infraction engin')
+      .should('contain', 'Appréhension espèce')
+
+      .and('contain', '1. Infraction engin')
       .and('contain', 'Avec PV')
       .and('contain', 'NATINF 23581')
       .and('contain', 'Maille trop petite')

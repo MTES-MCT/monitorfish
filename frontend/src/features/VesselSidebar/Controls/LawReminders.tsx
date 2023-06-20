@@ -21,7 +21,7 @@ export function LawReminders({ controls }: LawRemindersProps) {
   const natinfs: number[] = controls.map(control => getNatinfForInfractionsWithoutRecord(control)).flat()
 
   const natinfTags = natinfs.map(natinf => (
-    <InfractionTag>
+    <InfractionTag key={natinf}>
       <InfractionTagText>NATINF {natinf}</InfractionTagText>
     </InfractionTag>
   ))

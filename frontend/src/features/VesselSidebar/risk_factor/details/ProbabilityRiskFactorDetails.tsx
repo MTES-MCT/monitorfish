@@ -8,7 +8,6 @@ export function ProbabilityRiskFactorDetails({ isOpen }) {
   const { selectedVessel } = useMainAppSelector(state => state.vessel)
   const currentYear = new Date().getUTCFullYear()
 
-  // TODO Is it supposed to happen? If not, maybe add a soft error log.
   if (!selectedVessel) {
     return <></>
   }

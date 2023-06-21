@@ -6,14 +6,25 @@
 
 CREATE TABLE prod.facade_areas AS 
 
-WITH facades_polygons_without_holes AS (
+WITH other_unexpanded_facades AS (
+    SELECT
+        f1.facade,
+        ST_UNION(CASE WHEN f2.facade = f1.facade THEN NULL ELSE f2.geom END) as other_facades_geom
+    FROM prod.facade_areas_unextended f1
+    CROSS JOIN prod.facade_areas_unextended f2
+    GROUP BY f1.facade
+),
+
+facades_polygons_without_holes AS (
     -- Split les Multipolygon en Polygons avec ST_Dump puis
     -- bouche les trous (îles) dans les polygones avec ST_ExteriorRing.
     SELECT
         id,
-        facade,
-        ST_MakePolygon(ST_ExteriorRing((ST_Dump(geom)).geom)) AS geom
+        prod.facade_areas_unextended.facade,
+        ST_Difference(ST_MakePolygon(ST_ExteriorRing((ST_Dump(geom)).geom)), other_facades_geom) AS geom
     FROM prod.facade_areas_unextended
+    JOIN other_unexpanded_facades
+    ON prod.facade_areas_unextended.facade = other_unexpanded_facades.facade
 ),
 
 facades_multipolygons AS (

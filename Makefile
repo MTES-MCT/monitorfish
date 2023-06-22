@@ -6,7 +6,7 @@ INFRA_FOLDER="$(shell pwd)/infra/configurations/"
 install:
 	cd ./frontend && npm i
 run-front:
-	cd ./frontend && npm start
+	cd ./frontend && npm run dev
 run-back: run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db
 	cd backend && ./mvnw spring-boot:run -Dspring-boot.run.arguments="--spring.config.additional-location=$(INFRA_FOLDER)" -Dspring-boot.run.profiles="local" -Dmaven.test.skip=true

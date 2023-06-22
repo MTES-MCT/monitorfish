@@ -24,6 +24,7 @@ class MissionActionsController(
     private val addMissionAction: AddMissionAction,
     private val updateMissionAction: UpdateMissionAction,
     private val deleteMissionAction: DeleteMissionAction,
+    private val getMissionAction: GetMissionAction,
 ) {
 
     @GetMapping("/controls")
@@ -76,6 +77,18 @@ class MissionActionsController(
     ): MissionActionDataOutput {
         val updatedMissionAction = updateMissionAction.execute(actionId, actionInput.toMissionAction())
         return MissionActionDataOutput.fromMissionAction(updatedMissionAction)
+    }
+
+    @GetMapping(value = ["/{actionId}"])
+    @Operation(summary = "Get a mission action")
+    fun getMissionAction(
+        @PathParam("Action id")
+        @PathVariable(name = "actionId")
+        actionId: Int,
+    ): MissionActionDataOutput {
+        val fetchedMissionAction = getMissionAction.execute(actionId)
+
+        return MissionActionDataOutput.fromMissionAction(fetchedMissionAction)
     }
 
     @DeleteMapping(value = ["/{actionId}"])

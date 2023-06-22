@@ -252,7 +252,7 @@ context('Side Window > Mission Form > Main Form', () => {
           }
         ],
         hasSomeGearsSeized: false,
-        hasSomeSpeciesSeized: false,
+        hasSomeSpeciesSeized: true,
         id: 2,
         internalReferenceNumber: 'FAK000999999',
         ircs: null,

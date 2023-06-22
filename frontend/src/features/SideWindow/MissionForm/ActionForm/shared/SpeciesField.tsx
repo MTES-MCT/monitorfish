@@ -133,6 +133,10 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   )
   useEffect(
     () => {
+      if (input.value?.length) {
+        return
+      }
+
       if (!riskFactorApiQuery.data) {
         return
       }
@@ -153,8 +157,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
           underSized: false
         }))
 
-      const nextSpeciesOnboard = (input.value || []).concat(speciesOnboardToAdd)
-      helper.setValue(nextSpeciesOnboard)
+      helper.setValue(speciesOnboardToAdd)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

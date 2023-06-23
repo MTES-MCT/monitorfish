@@ -113,6 +113,10 @@ export function GearsField() {
 
   useEffect(
     () => {
+      if (input.value?.length) {
+        return
+      }
+
       if (!gearsByCode || !riskFactorApiQuery.data) {
         return
       }

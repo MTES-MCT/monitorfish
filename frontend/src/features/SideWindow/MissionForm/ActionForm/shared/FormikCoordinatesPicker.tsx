@@ -64,15 +64,13 @@ export function FormikCoordinatesPicker() {
 
     const printedCoordinates = getCoordinates([longitudeValue, latitudeValue], WSG84_PROJECTION, coordinatesFormat)
 
-    return (
-      [
-        {
-          latitude: latitudeValue,
-          longitude: longitudeValue,
-          name: `${printedCoordinates[0]}, ${printedCoordinates[1]}`
-        }
-      ] || []
-    )
+    return [
+      {
+        latitude: latitudeValue,
+        longitude: longitudeValue,
+        name: `${printedCoordinates[0]}, ${printedCoordinates[1]}`
+      }
+    ]
   }, [longitudeValue, latitudeValue, coordinatesFormat])
 
   useEffect(

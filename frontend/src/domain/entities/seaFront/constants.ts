@@ -1,3 +1,5 @@
+/* eslint-disable typescript-sort-keys/string-enum */
+
 export enum SeaFrontGroup {
   ALL = 'ALL',
   MED = 'MED',
@@ -13,9 +15,9 @@ export enum SeaFrontGroupLabel {
   MED = 'MED',
   MEMN = 'MEMN',
   NAMO = 'NAMO',
+  SA = 'SA',
   OUTREMEROA = 'OUTRE-MER OA',
-  OUTREMEROI = 'OUTRE-MER OI',
-  SA = 'SA'
+  OUTREMEROI = 'OUTRE-MER OI'
 }
 
 export enum SeaFront {

@@ -10,7 +10,6 @@ export namespace MissionAction {
     controlQualityComments: string | undefined
     controlUnits: ControlUnit.ControlUnit[]
     districtCode: string | undefined
-    diversion: Boolean | undefined
     emitsAis: ControlCheck | undefined
     emitsVms: ControlCheck | undefined
     externalReferenceNumber: string | undefined
@@ -23,7 +22,6 @@ export namespace MissionAction {
     id: number
     internalReferenceNumber: string | undefined
     ircs: string | undefined
-    isFromPoseidon: boolean | undefined
     latitude: number | undefined
     licencesAndLogbookObservations: string | undefined
     licencesMatchActivity: ControlCheck | undefined

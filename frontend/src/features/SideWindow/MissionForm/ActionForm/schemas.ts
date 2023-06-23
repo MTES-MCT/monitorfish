@@ -1,7 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
 import { customDayjs } from '@mtes-mct/monitor-ui'
-import { array, number, object, string } from 'yup'
+import { number, object, string } from 'yup'
 
 import { mainStore } from '../../../../store'
 
@@ -55,7 +55,11 @@ const OpenedLandControlFormSchema = object({
 
 const ClosedLandControlFormSchema = OpenedLandControlFormSchema.concat(
   object({
-    gearOnboard: array().required('Veuillez indiquer les engins à bord.').min(1, 'Veuillez indiquer les engins à bord.')
+    /**
+     * TODO: The `gearOnboard` field is not checked for the moment as we need to validate this field on closing
+     * The `isClosed` property won't be true at the time of the check, so we need to synchronously check the gearOnboard field
+     */
+    // gearOnboard: array().required('Veuillez indiquer les engins à bord.').min(1, 'Veuillez indiquer les engins à bord.')
   })
 )
 
@@ -77,7 +81,11 @@ const OpenedSeaControlFormSchema = object({
 
 const ClosedSeaControlFormSchema = OpenedSeaControlFormSchema.concat(
   object({
-    gearOnboard: array().required('Veuillez indiquer les engins à bord.').min(1, 'Veuillez indiquer les engins à bord.')
+    /**
+     * TODO: The `gearOnboard` field is not checked for the moment as we need to validate this field on closing
+     * The `isClosed` property won't be true at the time of the check, so we need to synchronously check the gearOnboard field
+     */
+    // gearOnboard: array().required('Veuillez indiquer les engins à bord.').min(1, 'Veuillez indiquer les engins à bord.')
   })
 )
 

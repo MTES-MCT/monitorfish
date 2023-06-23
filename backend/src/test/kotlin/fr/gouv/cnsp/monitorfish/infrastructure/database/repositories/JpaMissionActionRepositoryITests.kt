@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.ControlCheck
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDummyMissionAction
 import org.assertj.core.api.Assertions.assertThat
@@ -178,6 +179,73 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(updatedMissionAction.isDeleted).isTrue()
         assertThat(updatedMissionAction.latitude).isEqualTo(47.44)
         assertThat(updatedMissionAction.longitude).isEqualTo(-0.52)
+    }
+
+    @Test
+    @Transactional
+    fun `save Should update another mission action When findById is not used to find the existing entity`() {
+        // Given
+        val expectedId = 9
+        val existingAction = jpaMissionActionsRepository.findById(expectedId)
+        assertThat(existingAction.internalReferenceNumber).isNull()
+
+        val actionToUpdate = MissionAction(
+            actionDatetimeUtc = ZonedDateTime.now(),
+            actionType = MissionActionType.SEA_CONTROL,
+            controlQualityComments = null,
+            controlUnits = listOf(),
+            districtCode = null,
+            emitsAis = null,
+            emitsVms = ControlCheck.NOT_APPLICABLE,
+            externalReferenceNumber = "DONTSINK",
+            facade = "Sud Océan Indien",
+            faoAreas = listOf(),
+            feedbackSheetRequired = false,
+            flagState = "FR",
+            flightGoals = listOf(),
+            gearInfractions = listOf(),
+            gearOnboard = listOf(),
+            id = expectedId,
+            internalReferenceNumber = "FAK000999999",
+            ircs = "CALLME",
+            latitude = 49.44,
+            licencesAndLogbookObservations = null,
+            licencesMatchActivity = ControlCheck.NOT_APPLICABLE,
+            logbookInfractions = listOf(),
+            logbookMatchesActivity = ControlCheck.NOT_APPLICABLE,
+            longitude = -0.56,
+            missionId = 34,
+            numberOfVesselsFlownOver = null,
+            otherComments = "Commentaires post contrôle",
+            otherInfractions = listOf(),
+            portLocode = null,
+            portName = null,
+            segments = listOf(),
+            seizureAndDiversion = false,
+            seizureAndDiversionComments = null,
+            separateStowageOfPreservedSpecies = ControlCheck.NO,
+            speciesInfractions = listOf(),
+            speciesObservations = null,
+            speciesOnboard = listOf(),
+            speciesSizeControlled = null,
+            speciesWeightControlled = null,
+            unitWithoutOmegaGauge = false,
+            userTrigram = "JKL",
+            vesselId = 1,
+            vesselName = "PHENOMENE",
+            vesselTargeted = ControlCheck.YES,
+            isDeleted = false,
+        )
+
+        // When
+        val updatedMissionAction = jpaMissionActionsRepository.save(actionToUpdate)
+
+        // Then
+        assertThat(updatedMissionAction.id).isEqualTo(expectedId)
+        assertThat(updatedMissionAction.internalReferenceNumber).isEqualTo("FAK000999999")
+
+        val updatedActionWithFindById = jpaMissionActionsRepository.findById(expectedId)
+        assertThat(updatedActionWithFindById.internalReferenceNumber).isEqualTo("FAK000999999")
     }
 
     @Test

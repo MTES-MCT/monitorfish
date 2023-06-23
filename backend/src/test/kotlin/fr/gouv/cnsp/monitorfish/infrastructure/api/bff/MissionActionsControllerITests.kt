@@ -47,6 +47,9 @@ class MissionActionsControllerITests {
     @MockBean
     private lateinit var deleteMissionAction: DeleteMissionAction
 
+    @MockBean
+    private lateinit var getMissionAction: GetMissionAction
+
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 

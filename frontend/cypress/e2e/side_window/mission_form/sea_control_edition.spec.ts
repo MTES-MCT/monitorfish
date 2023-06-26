@@ -36,7 +36,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
       statusCode: 201
     }).as('updateMissionAction')
 
-    cy.clickButton('Enregistrer')
+    cy.clickButton('Enregistrer et quitter')
 
     cy.wait('@updateMissionAction').then(interception => {
       if (!interception.response) {
@@ -132,7 +132,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
       statusCode: 201
     }).as('updateMissionAction')
 
-    cy.clickButton('Enregistrer')
+    cy.clickButton('Enregistrer et quitter')
 
     /**
      * The gears, species, faoAreas and segments fields should be linked to PHENOMENE, and no more MALOTRU

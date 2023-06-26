@@ -338,7 +338,7 @@ export function MissionForm() {
     (nextMissionMainFormValues: MissionMainFormValues) => {
       const mainFormValuesWithUpdatedIsClosedProperty = {
         ...nextMissionMainFormValues,
-        isClosed: mainFormValues?.isClosed
+        isClosed: mainFormValues?.isClosed || false
       }
       setMainFormValues(mainFormValuesWithUpdatedIsClosedProperty)
 

@@ -40,7 +40,7 @@ export function TitleStatusTag({ status }: TitleStatusTagProps) {
       )
 
     default:
-      return ''
+      return null
   }
 }
 

@@ -12,7 +12,7 @@ context('Side Window > Mission Form > Sea Control', () => {
   })
 
   it('Should fill the form with an unknown vessel and send the expected data to the API', () => {
-    const getSaveButton = () => cy.get('button').contains('Enregistrer').parent()
+    const getSaveButton = () => cy.get('button').contains('Enregistrer et quitter').parent()
     // -------------------------------------------------------------------------
     // Form
 
@@ -38,7 +38,7 @@ context('Side Window > Mission Form > Sea Control', () => {
       statusCode: 201
     }).as('createMissionAction')
 
-    cy.clickButton('Enregistrer')
+    cy.clickButton('Enregistrer et quitter')
 
     cy.wait('@createMissionAction').then(interception => {
       if (!interception.response) {
@@ -59,7 +59,7 @@ context('Side Window > Mission Form > Sea Control', () => {
   })
 
   it('Should fill the form and send the expected data to the API', () => {
-    const getSaveButton = () => cy.get('button').contains('Enregistrer').parent()
+    const getSaveButton = () => cy.get('button').contains('Enregistrer et quitter').parent()
     const now = getUtcDateInMultipleFormats()
 
     // -------------------------------------------------------------------------
@@ -154,7 +154,7 @@ context('Side Window > Mission Form > Sea Control', () => {
       statusCode: 201
     }).as('createMissionAction')
 
-    cy.clickButton('Enregistrer')
+    cy.clickButton('Enregistrer et quitter')
 
     cy.wait('@createMissionAction').then(interception => {
       if (!interception.response) {
@@ -239,7 +239,7 @@ context('Side Window > Mission Form > Sea Control', () => {
   })
 
   it('Should fill the form for a vessel with logbook and prefill the gears, species, fao areas and segments fields', () => {
-    const getSaveButton = () => cy.get('button').contains('Enregistrer').parent()
+    const getSaveButton = () => cy.get('button').contains('Enregistrer et quitter').parent()
     // -------------------------------------------------------------------------
     // Form
 
@@ -263,7 +263,7 @@ context('Side Window > Mission Form > Sea Control', () => {
       statusCode: 201
     }).as('createMissionAction')
 
-    cy.clickButton('Enregistrer')
+    cy.clickButton('Enregistrer et quitter')
 
     cy.wait('@createMissionAction').then(interception => {
       if (!interception.response) {

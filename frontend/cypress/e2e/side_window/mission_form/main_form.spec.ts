@@ -21,8 +21,7 @@ context('Side Window > Mission Form > Main Form', () => {
   it('Should send the expected data to the API when creating a new mission (required fields only)', () => {
     openSideWindowNewMission()
 
-    const getSaveButton = () => cy.get('button').contains('Enregistrer').parent()
-    const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer').parent()
+    const getSaveButton = () => cy.get('button').contains('Enregistrer et quitter').parent()
     const expectedStartDateTimeUtc = new RegExp(`${customDayjs().utc().format('YYYY-MM-DDTHH')}:\\d{2}:00\\.000Z`)
 
     cy.intercept('POST', '/api/v1/missions', {
@@ -33,7 +32,6 @@ context('Side Window > Mission Form > Main Form', () => {
     }).as('createMission')
 
     getSaveButton().should('be.disabled')
-    getSaveAndCloseButton().should('be.disabled')
 
     cy.fill('Types de mission', ['Mer'])
 
@@ -43,9 +41,8 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.wait(500)
 
     getSaveButton().should('be.enabled')
-    getSaveAndCloseButton().should('be.enabled')
 
-    cy.clickButton('Enregistrer')
+    cy.clickButton('Enregistrer et quitter')
 
     cy.wait('@createMission').then(interception => {
       if (!interception.response) {
@@ -113,7 +110,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.wait(500)
 
-    cy.clickButton('Enregistrer')
+    cy.clickButton('Enregistrer et quitter')
 
     cy.wait('@createMission').then(interception => {
       if (!interception.response) {
@@ -181,7 +178,7 @@ context('Side Window > Mission Form > Main Form', () => {
     }).as('updateMission')
     cy.intercept('PUT', '/bff/v1/mission_actions/2').as('updateMissionAction2')
 
-    cy.clickButton('Enregistrer')
+    cy.clickButton('Enregistrer et quitter')
 
     cy.wait('@updateMission').then(interception => {
       if (!interception.response) {
@@ -403,17 +400,14 @@ context('Side Window > Mission Form > Main Form', () => {
       statusCode: 204
     }).as('updateMission')
 
-    cy.contains('Veuillez rouvrir la mission avant d’en modifier les informations.').should('be.visible')
-
     cy.wait(1000)
 
     cy.clickButton('Ré-ouvrir la mission')
 
     cy.wait(1000)
+    cy.fill('Contact de l’unité 1', 'Bob')
 
-    cy.contains('Veuillez rouvrir la mission avant d’en modifier les informations.').should('not.exist')
-
-    cy.clickButton('Enregistrer')
+    cy.clickButton('Enregistrer et quitter')
 
     cy.wait('@updateMission').then(interception => {
       if (!interception.response) {
@@ -427,7 +421,7 @@ context('Side Window > Mission Form > Main Form', () => {
         controlUnits: [
           {
             administration: 'DDTM',
-            contact: null,
+            contact: 'Bob',
             id: 10003,
             isArchived: false,
             name: 'DML 2A (historique)',

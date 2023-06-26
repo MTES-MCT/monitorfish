@@ -162,19 +162,6 @@ expecting a callback. React native uplifter props follow this convention themsel
   "eslint.format.enable": true,
   "eslint.packageManager": "npm",
   "eslint.workingDirectories": ["./frontend"],
-  "stylelint.configBasedir": "./frontend",
-  "stylelint.validate": [
-    "css",
-    "html",
-    "less",
-    "postcss",
-    "sass",
-    "scss",
-    "typescriptreact"
-  ],
-  "[css]": {
-    "editor.defaultFormatter": "stylelint.vscode-stylelint"
-  },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   }

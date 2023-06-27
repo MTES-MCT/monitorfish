@@ -21,50 +21,6 @@ controls_natinf_codes_list AS (
     FROM controls_natinfs_codes
     WHERE infraction_natinf_code IS NOT NULL
     GROUP BY id
-),
-
-controls_species_seized AS (
-    SELECT
-        id,
-        (jsonb_array_elements(species_infractions)->'speciesSeized')::BOOLEAN AS species_seized
-    FROM mission_actions
-    WHERE
-        action_datetime_utc > CURRENT_TIMESTAMP - INTERVAL ':years years' AND
-        action_type IN ('SEA_CONTROL', 'LAND_CONTROL', 'AIR_CONTROL') AND
-        species_infractions IS NOT NULL AND
-        species_infractions != '[]' AND
-        NOT is_deleted
-),
-
-controls_species_seized_count AS (
-    SELECT
-        id,
-        COUNT(*) AS number_infractions_species_seized
-    FROM controls_species_seized
-    WHERE species_seized
-    GROUP BY id
-),
-
-controls_gear_seized AS (
-    SELECT
-        id,
-        (jsonb_array_elements(gear_infractions)->'gearSeized')::BOOLEAN AS gear_seized
-    FROM mission_actions
-    WHERE
-        action_datetime_utc > CURRENT_TIMESTAMP - INTERVAL ':years years' AND
-        action_type IN ('SEA_CONTROL', 'LAND_CONTROL', 'AIR_CONTROL') AND
-        gear_infractions IS NOT NULL AND
-        gear_infractions != '[]' AND
-        NOT is_deleted
-),
-
-controls_gear_seized_count AS (
-    SELECT
-        id,
-        COUNT(*) AS number_infractions_gear_seized
-    FROM controls_gear_seized
-    WHERE gear_seized
-    GROUP BY id
 )
 
 SELECT 
@@ -73,15 +29,11 @@ SELECT
     action_datetime_utc AS control_datetime_utc,
     COALESCE(infractions_natinf_codes, '{}') AS infractions_natinf_codes,
     seizure_and_diversion,
-    COALESCE(s_seiz.number_infractions_species_seized, 0) AS number_infractions_species_seized,
-    COALESCE(g_seiz.number_infractions_gear_seized, 0) AS number_infractions_gear_seized
+    has_some_species_seized,
+    has_some_gears_seized
 FROM mission_actions a
 LEFT JOIN controls_natinf_codes_list inf
 ON a.id = inf.id
-LEFT JOIN controls_species_seized_count s_seiz
-ON a.id = s_seiz.id
-LEFT JOIN controls_gear_seized_count g_seiz
-ON a.id = g_seiz.id
 WHERE
     action_type IN ('SEA_CONTROL', 'LAND_CONTROL', 'AIR_CONTROL') AND
     action_datetime_utc > CURRENT_TIMESTAMP - INTERVAL ':years years' AND

@@ -409,8 +409,8 @@ def compute_control_statistics(controls: pd.DataFrame) -> pd.DataFrame:
                 "id",
                 "number_infractions_last_5_years",
                 "seizure_and_diversion",
-                "number_infractions_species_seized",
-                "number_infractions_gear_seized",
+                "has_some_species_seized",
+                "has_some_gears_seized",
             ]
         ]
         .agg(
@@ -418,18 +418,16 @@ def compute_control_statistics(controls: pd.DataFrame) -> pd.DataFrame:
                 "id": "count",
                 "number_infractions_last_5_years": "sum",
                 "seizure_and_diversion": "sum",
-                "number_infractions_gear_seized": "sum",
-                "number_infractions_species_seized": "sum",
+                "has_some_gears_seized": "sum",
+                "has_some_species_seized": "sum",
             }
         )
         .rename(
             columns={
                 "id": "number_controls_last_5_years",
                 "seizure_and_diversion": "number_vessel_seizures_last_5_years",
-                "number_infractions_gear_seized": "number_gear_seizures_last_5_years",
-                "number_infractions_species_seized": (
-                    "number_species_seizures_last_5_years"
-                ),
+                "has_some_gears_seized": "number_gear_seizures_last_5_years",
+                "has_some_species_seized": ("number_species_seizures_last_5_years"),
             }
         )
         .reset_index()

@@ -1,4 +1,4 @@
-import { Accent, Button, Icon, logSoftError, usePrevious } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Icon, logSoftError, NotificationEvent, usePrevious } from '@mtes-mct/monitor-ui'
 import { omit } from 'lodash/fp'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -11,6 +11,7 @@ import { MainForm } from './MainForm'
 import { DeletionConfirmationDialog } from './shared/DeletionConfirmationDialog'
 import { DraftCancellationConfirmationDialog } from './shared/DraftCancellationConfirmationDialog'
 import { TitleSourceTag } from './shared/TitleSourceTag'
+import { TitleStatusTag } from './shared/TitleStatusTag'
 import {
   areMissionFormValuesValid,
   getMissionActionsDataFromMissionActionsFormValues,
@@ -33,6 +34,7 @@ import {
 } from '../../../api/missionAction'
 import { missionActions } from '../../../domain/actions'
 import { Mission, type MissionWithActions } from '../../../domain/entities/mission/types'
+import { getMissionStatus } from '../../../domain/entities/mission/utils'
 import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
 import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
 import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
@@ -250,6 +252,8 @@ export function MissionForm() {
       ...mainFormValues,
       isClosed: false
     })
+
+    window.document.dispatchEvent(new NotificationEvent('La mission a bien été réouverte', 'success', true))
   }, [mainFormValues])
 
   const updateDraft = useDebouncedCallback(
@@ -332,11 +336,15 @@ export function MissionForm() {
 
   const updateMainFormValues = useCallback(
     (nextMissionMainFormValues: MissionMainFormValues) => {
-      setMainFormValues(nextMissionMainFormValues)
+      const mainFormValuesWithUpdatedIsClosedProperty = {
+        ...nextMissionMainFormValues,
+        isClosed: mainFormValues?.isClosed || false
+      }
+      setMainFormValues(mainFormValuesWithUpdatedIsClosedProperty)
 
-      updateDraft(nextMissionMainFormValues, actionsFormValues)
+      updateDraft(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues)
     },
-    [updateDraft, actionsFormValues]
+    [updateDraft, actionsFormValues, mainFormValues?.isClosed]
   )
 
   const toggleDeletionConfirmationDialog = useCallback(async () => {
@@ -427,6 +435,7 @@ export function MissionForm() {
 
           <HeaderTitle>{title}</HeaderTitle>
           <TitleSourceTag missionId={sideWindow.selectedPath.id} missionSource={mainFormValues?.missionSource} />
+          {mainFormValues && <TitleStatusTag status={getMissionStatus(mainFormValues)} />}
         </Header>
 
         <Body>
@@ -476,37 +485,32 @@ export function MissionForm() {
           </div>
 
           <div>
-            {mainFormValues?.isClosed && (
-              <FooterMessage>Veuillez rouvrir la mission avant d’en modifier les informations.</FooterMessage>
-            )}
-
             <Button accent={Accent.TERTIARY} disabled={isSaving} onClick={goToMissionList}>
               Annuler
             </Button>
 
+            <Button
+              accent={Accent.PRIMARY}
+              disabled={isLoading || isSaving || !isMissionFormValid}
+              Icon={Icon.Save}
+              onClick={() => createOrUpdate()}
+            >
+              Enregistrer et quitter
+            </Button>
+
             {!mainFormValues?.isClosed && (
-              <>
-                <Button
-                  accent={Accent.SECONDARY}
-                  disabled={isLoading || isSaving || !isMissionFormValid}
-                  Icon={Icon.Save}
-                  onClick={() => createOrUpdate()}
-                >
-                  Enregistrer
-                </Button>
-                <Button
-                  accent={Accent.SECONDARY}
-                  disabled={isLoading || isSaving || !isMissionFormValid}
-                  Icon={Icon.Confirm}
-                  onClick={() => createOrUpdate(true)}
-                >
-                  Enregistrer et clôturer
-                </Button>
-              </>
+              <Button
+                accent={Accent.SECONDARY}
+                disabled={isLoading || isSaving || !isMissionFormValid}
+                Icon={Icon.Confirm}
+                onClick={() => createOrUpdate(true)}
+              >
+                Enregistrer et clôturer
+              </Button>
             )}
             {mainFormValues?.isClosed && (
               <Button
-                accent={Accent.PRIMARY}
+                accent={Accent.SECONDARY}
                 disabled={isLoading || isSaving}
                 Icon={Icon.Unlock}
                 onClick={reopen}
@@ -593,8 +597,4 @@ const Footer = styled.div`
       }
     }
   }
-`
-
-const FooterMessage = styled.p`
-  font-style: italic;
 `

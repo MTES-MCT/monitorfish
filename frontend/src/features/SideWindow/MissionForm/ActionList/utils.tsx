@@ -53,6 +53,7 @@ export function getMissionActionFormInitialValues(type: MissionAction.MissionAct
   return {
     actionDatetimeUtc,
     actionType: type,
+    isValid: false,
     vesselTargeted: ControlCheck.NO
   }
 }

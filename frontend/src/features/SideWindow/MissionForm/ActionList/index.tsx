@@ -8,12 +8,10 @@ import { FrontendErrorBoundary } from '../../../../ui/FrontendErrorBoundary'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
 
-import type { FormikFormError } from '../../../../types'
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
 export type ActionListProps = {
-  actionsFormError: FormikFormError[]
   actionsFormValues: MissionActionFormValues[]
   currentIndex: number | undefined
   missionTypes: Mission.MissionType[] | undefined
@@ -23,7 +21,6 @@ export type ActionListProps = {
   onSelect: (actionIndex: number) => Promisable<void>
 }
 export function ActionList({
-  actionsFormError,
   actionsFormValues,
   currentIndex,
   missionTypes = [],
@@ -76,7 +73,6 @@ export function ActionList({
               <Item
                 // eslint-disable-next-line react/no-array-index-key
                 key={index}
-                error={actionsFormError[index]}
                 initialValues={actionInitialValues}
                 isSelected={index === currentIndex}
                 onDuplicate={() => onDuplicate(index)}

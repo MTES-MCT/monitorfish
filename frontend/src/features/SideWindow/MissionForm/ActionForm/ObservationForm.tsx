@@ -6,26 +6,26 @@ import { useMemo } from 'react'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
+import { FormikIsValid } from '../shared/FormikIsValid'
 
-import type { FormikFormError } from '../../../../types'
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
 export type ObservationFormProps = {
   initialValues: MissionActionFormValues
   onChange: (nextValues: MissionActionFormValues) => Promisable<void>
-  onError: (nextFormError: FormikFormError) => Promisable<void>
 }
-export function ObservationForm({ initialValues, onChange, onError }: ObservationFormProps) {
+export function ObservationForm({ initialValues, onChange }: ObservationFormProps) {
   const titleDate = useMemo(
     () => initialValues.actionDatetimeUtc && getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),
     [initialValues.actionDatetimeUtc]
   )
 
   return (
-    <Formik initialValues={initialValues} onError={onError} onSubmit={noop}>
+    <Formik initialValues={initialValues} onSubmit={noop}>
       <>
         <FormikEffect onChange={onChange as any} />
+        <FormikIsValid />
 
         <FormHead>
           <h2>

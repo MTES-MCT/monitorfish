@@ -9,7 +9,7 @@ const ControlUnitSchema = object({
   name: string().required('L’unité est obligatoire.')
 })
 
-export const MainFormSchema = object({
+export const MainFormLiveSchema = object({
   missionTypes: array().required().min(1, 'Au moins un type de mission doit être choisi.'),
   startDateTimeUtc: string().required('La date de début de mission est obligatoire.'),
   endDateTimeUtc: string().test({

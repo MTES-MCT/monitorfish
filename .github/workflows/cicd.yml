@@ -267,3 +267,9 @@ jobs:
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
           make docker-tag
           make docker-push
+
+      - name: Push docker image to Nexus
+        run: |
+          echo "${{ secrets.NEXUS_PASSWORD }}" | docker login http://depot-sml.din.developpement-durable.gouv.fr:5010/repository/docker-monitor/ -u monitorfish --password-stdin
+          docker tag monitorfish-app:$(VERSION) depot-sml.din.developpement-durable.gouv.fr/repository/docker-monitor/monitorfish-app:$(VERSION)
+          docker push depot-sml.din.developpement-durable.gouv.fr:5010/repository/docker-monitor/monitorfish-app:$(VERSION)

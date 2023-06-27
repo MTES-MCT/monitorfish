@@ -17,8 +17,8 @@ export namespace MissionAction {
     flagState: string | undefined
     gearInfractions: GearInfraction[]
     gearOnboard: GearControl[]
-    hasSomeGearsSeized: number
-    hasSomeSpeciesSeized: number
+    hasSomeGearsSeized: boolean
+    hasSomeSpeciesSeized: boolean
     id: number
     internalReferenceNumber: string | undefined
     ircs: string | undefined

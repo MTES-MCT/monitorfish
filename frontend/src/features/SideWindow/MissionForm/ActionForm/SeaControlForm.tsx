@@ -5,13 +5,14 @@ import {
   FormikTextarea,
   FormikTextInput,
   Icon,
+  useKey,
   useNewWindow
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash/fp'
 import { useMemo } from 'react'
 
-import { getSeaControlFormSchema } from './schemas'
+import { SeaControlFormClosureSchema, SeaControlFormLiveSchema } from './schemas'
 import { ControlQualityField } from './shared/ControlQualityField'
 import { FormikCoordinatesPicker } from './shared/FormikCoordinatesPicker'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
@@ -26,36 +27,37 @@ import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
+import { FormikIsValid } from '../shared/FormikIsValid'
 
-import type { FormikFormError } from '../../../../types'
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
 type SeaControlFormProps = {
   initialValues: MissionActionFormValues
   onChange: (nextValues: MissionActionFormValues) => Promisable<void>
-  onError: (nextFormError: FormikFormError) => Promisable<void>
 }
-export function SeaControlForm({ initialValues, onChange, onError }: SeaControlFormProps) {
+export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps) {
   const { newWindowContainerRef } = useNewWindow()
 
-  const { draft } = useMainAppSelector(store => store.mission)
+  const mission = useMainAppSelector(store => store.mission)
 
+  // We have to re-create the Formik component when `validationSchema` changes to apply it
+  const key = useKey([mission.isClosing])
   const titleDate = useMemo(
     () => initialValues.actionDatetimeUtc && getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),
     [initialValues.actionDatetimeUtc]
   )
+  const validationSchema = useMemo(
+    () => (mission.isClosing ? SeaControlFormClosureSchema : SeaControlFormLiveSchema),
+    [mission.isClosing]
+  )
 
-  // TODO Fix the validation: it can't be used as the formik state is inconsistent (due to FormikEffect ?)
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={noop}
-      validationSchema={getSeaControlFormSchema(draft?.mainFormValues?.isClosed)}
-    >
+    <Formik key={key} initialValues={initialValues} onSubmit={noop} validationSchema={validationSchema}>
       <>
-        <FormikEffect onChange={onChange as any} onError={onError} />
+        <FormikEffect onChange={onChange as any} />
         <FormikRevalidationEffect />
+        <FormikIsValid />
 
         <FormHead>
           <h2>

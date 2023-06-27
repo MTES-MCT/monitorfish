@@ -1,9 +1,12 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
 import { customDayjs } from '@mtes-mct/monitor-ui'
-import { number, object, string } from 'yup'
+import { array, number, object, string } from 'yup'
 
 import { mainStore } from '../../../../store'
+
+// -----------------------------------------------------------------------------
+// Form Schema Validators
 
 const actionDatetimeUtcValidator = string()
   .required('La date du contrôle est un champ obligatoire.')
@@ -32,67 +35,55 @@ const actionDatetimeUtcValidator = string()
     }
   })
 
-export const InfractionFormSchema = object({
+// -----------------------------------------------------------------------------
+// Air Control Action Form
+
+export const AirControlFormLiveSchema = object({
+  actionDatetimeUtc: actionDatetimeUtcValidator,
+  latitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
+  longitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
+  vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
+  userTrigram: string().required('Veuillez indiquer votre trigramme.')
+})
+
+// -----------------------------------------------------------------------------
+// Land Control Action Form
+
+export const LandControlFormLiveSchema = object({
+  actionDatetimeUtc: actionDatetimeUtcValidator,
+  portLocode: string().required('Veuillez indiquer le port de contrôle.'),
+  vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
+  userTrigram: string().required('Veuillez indiquer votre trigramme.')
+})
+
+export const LandControlFormClosureSchema = LandControlFormLiveSchema.concat(
+  object({
+    gearOnboard: array().required('Veuillez indiquer les engins à bord.').min(1, 'Veuillez indiquer les engins à bord.')
+  })
+)
+
+// -----------------------------------------------------------------------------
+// Sea Control Action Form
+
+export const SeaControlFormLiveSchema = object({
+  longitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
+  latitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
+  vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
+  userTrigram: string().required('Veuillez indiquer votre trigramme.'),
+  actionDatetimeUtc: actionDatetimeUtcValidator
+})
+
+export const SeaControlFormClosureSchema = SeaControlFormLiveSchema.concat(
+  object({
+    gearOnboard: array().required('Veuillez indiquer les engins à bord.').min(1, 'Veuillez indiquer les engins à bord.')
+  })
+)
+
+// -----------------------------------------------------------------------------
+// Infraction SubForm
+
+export const InfractionFormLiveSchema = object({
   comments: string(),
   infractionType: string().required('Le type d’infraction est un champ obligatoire.'),
   natinf: number().required('Le NATINF est un champ obligatoire.')
 })
-
-export const AirControlFormSchema = object({
-  longitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
-  latitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
-  vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
-  userTrigram: string().required('Veuillez indiquer votre trigramme.'),
-  actionDatetimeUtc: actionDatetimeUtcValidator
-})
-
-const OpenedLandControlFormSchema = object({
-  portLocode: string().required('Veuillez indiquer le port de contrôle.'),
-  vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
-  userTrigram: string().required('Veuillez indiquer votre trigramme.'),
-  actionDatetimeUtc: actionDatetimeUtcValidator
-})
-
-const ClosedLandControlFormSchema = OpenedLandControlFormSchema.concat(
-  object({
-    /**
-     * TODO: The `gearOnboard` field is not checked for the moment as we need to validate this field on closing
-     * The `isClosed` property won't be true at the time of the check, so we need to synchronously check the gearOnboard field
-     */
-    // gearOnboard: array().required('Veuillez indiquer les engins à bord.').min(1, 'Veuillez indiquer les engins à bord.')
-  })
-)
-
-export const getLandControlFormSchema = (isMissionClosed: boolean | undefined) => {
-  if (isMissionClosed) {
-    return ClosedLandControlFormSchema
-  }
-
-  return OpenedLandControlFormSchema
-}
-
-const OpenedSeaControlFormSchema = object({
-  longitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
-  latitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
-  vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
-  userTrigram: string().required('Veuillez indiquer votre trigramme.'),
-  actionDatetimeUtc: actionDatetimeUtcValidator
-})
-
-const ClosedSeaControlFormSchema = OpenedSeaControlFormSchema.concat(
-  object({
-    /**
-     * TODO: The `gearOnboard` field is not checked for the moment as we need to validate this field on closing
-     * The `isClosed` property won't be true at the time of the check, so we need to synchronously check the gearOnboard field
-     */
-    // gearOnboard: array().required('Veuillez indiquer les engins à bord.').min(1, 'Veuillez indiquer les engins à bord.')
-  })
-)
-
-export const getSeaControlFormSchema = (isMissionClosed: boolean | undefined) => {
-  if (isMissionClosed) {
-    return ClosedSeaControlFormSchema
-  }
-
-  return OpenedSeaControlFormSchema
-}

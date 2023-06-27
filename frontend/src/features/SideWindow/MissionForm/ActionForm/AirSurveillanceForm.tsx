@@ -17,23 +17,23 @@ import { FleetSegmentsField } from './shared/FleetSegmentsField'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
+import { FormikIsValid } from '../shared/FormikIsValid'
 
-import type { FormikFormError } from '../../../../types'
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
 export type AirSurveillanceFormProps = {
   initialValues: MissionActionFormValues
   onChange: (nextValues: MissionActionFormValues) => Promisable<void>
-  onError: (nextFormError: FormikFormError) => Promisable<void>
 }
-export function AirSurveillanceForm({ initialValues, onChange, onError }: AirSurveillanceFormProps) {
+export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillanceFormProps) {
   const { newWindowContainerRef } = useNewWindow()
 
   return (
     <Formik initialValues={initialValues} onSubmit={noop}>
       <>
-        <FormikEffect onChange={onChange as any} onError={onError} />
+        <FormikEffect onChange={onChange as any} />
+        <FormikIsValid />
 
         <FormHead>
           <h2>

@@ -16,6 +16,7 @@ export namespace Mission {
     id: number
     isClosed: boolean
     isUnderJdp?: boolean | undefined
+    isValid: boolean
     missionSource: MissionSource
     missionTypes: MissionType[]
     observationsCacem?: string

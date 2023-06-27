@@ -1,8 +1,8 @@
 import {
   FormikDatePicker,
   FormikEffect,
-  FormikTextInput,
   FormikTextarea,
+  FormikTextInput,
   Icon,
   useNewWindow
 } from '@mtes-mct/monitor-ui'
@@ -10,7 +10,7 @@ import { Formik } from 'formik'
 import { noop } from 'lodash/fp'
 import { useMemo } from 'react'
 
-import { AirControlFormSchema } from './schemas'
+import { AirControlFormLiveSchema } from './schemas'
 import { FormikCoordinatesPicker } from './shared/FormikCoordinatesPicker'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
 import { FormikRevalidationEffect } from './shared/FormikRevalidationEffect'
@@ -19,17 +19,16 @@ import { VesselField } from './shared/VesselField'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
+import { FormikIsValid } from '../shared/FormikIsValid'
 
-import type { FormikFormError } from '../../../../types'
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
 export type AirControlFormProps = {
   initialValues: MissionActionFormValues
   onChange: (nextValues: MissionActionFormValues) => Promisable<void>
-  onError: (nextFormError: FormikFormError) => Promisable<void>
 }
-export function AirControlForm({ initialValues, onChange, onError }: AirControlFormProps) {
+export function AirControlForm({ initialValues, onChange }: AirControlFormProps) {
   const { newWindowContainerRef } = useNewWindow()
 
   const titleDate = useMemo(
@@ -38,10 +37,11 @@ export function AirControlForm({ initialValues, onChange, onError }: AirControlF
   )
 
   return (
-    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={AirControlFormSchema}>
+    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={AirControlFormLiveSchema}>
       <>
-        <FormikEffect onChange={onChange as any} onError={onError} />
+        <FormikEffect onChange={onChange as any} />
         <FormikRevalidationEffect />
+        <FormikIsValid />
 
         <FormHead>
           <h2>

@@ -224,6 +224,7 @@ export function GearsField() {
         optionValueKey="code"
         searchable
       />
+
       {meta.error && <FieldError>{meta.error}</FieldError>}
     </TypedFormikMultiInfractionPicker>
   )

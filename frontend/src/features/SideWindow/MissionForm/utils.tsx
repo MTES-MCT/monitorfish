@@ -1,10 +1,9 @@
-import { customDayjs, type Undefine } from '@mtes-mct/monitor-ui'
+import { customDayjs, logSoftError, type Undefine } from '@mtes-mct/monitor-ui'
 import { difference } from 'lodash'
 import { omit } from 'ramda'
 
-import { AirControlFormSchema, getLandControlFormSchema, getSeaControlFormSchema } from './ActionForm/schemas'
+import { LandControlFormClosureSchema, SeaControlFormClosureSchema } from './ActionForm/schemas'
 import { INITIAL_MISSION_CONTROL_UNIT, MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
-import { MainFormSchema } from './MainForm/schemas'
 import { Mission } from '../../../domain/entities/mission/types'
 import { MissionAction } from '../../../domain/types/missionAction'
 import { FormError, FormErrorCode } from '../../../libs/FormError'
@@ -16,66 +15,90 @@ import type { ControlUnit } from '../../../domain/types/controlUnit'
 
 import MissionActionType = MissionAction.MissionActionType
 
-export function areMissionFormValuesValid(
+export function areMissionFormsValuesValid(
   mainFormValues: MissionMainFormValues | undefined,
-  actionsFormValues: MissionActionFormValues[]
+  actionsFormValues: MissionActionFormValues[] = []
 ): boolean {
-  if (!mainFormValues) {
-    return false
+  return !!mainFormValues && mainFormValues.isValid && !actionsFormValues.map(({ isValid }) => isValid).includes(false)
+}
+
+export function areMissionFormsClosureValuesValid(
+  mainFormValues: MissionMainFormValues,
+  actionsFormValues: MissionActionFormValues[]
+): [
+  boolean,
+  {
+    nextActionsFormValues: MissionActionFormValues[]
+    nextMainFormValues: MissionMainFormValues
+  }
+] {
+  const nextMainFormValues = {
+    ...mainFormValues
+    // There is no closure schema for the main form as of now
+    // isValid: MainFormClosureSchema.validateSync(mainFormValues)
   }
 
   // eslint-disable-next-line no-restricted-syntax
-  for (const actionFormValues of actionsFormValues) {
+  const nextActionsFormValues = actionsFormValues.map(actionFormValues => {
     switch (actionFormValues.actionType) {
+      case MissionAction.MissionActionType.LAND_CONTROL:
+        return {
+          ...actionFormValues,
+          isValid: LandControlFormClosureSchema.isValidSync(actionFormValues)
+        }
+
+      case MissionAction.MissionActionType.SEA_CONTROL:
+        return {
+          ...actionFormValues,
+          isValid: SeaControlFormClosureSchema.isValidSync(actionFormValues)
+        }
+
+      // There is no closure schema for these action forms as of now
       case MissionAction.MissionActionType.AIR_CONTROL:
-        if (!AirControlFormSchema.isValidSync(actionFormValues)) {
-          return false
-        }
-        break
-
-      case MissionAction.MissionActionType.LAND_CONTROL: {
-        const landControlFormSchema = getLandControlFormSchema(mainFormValues?.isClosed)
-
-        if (!landControlFormSchema.isValidSync(actionFormValues)) {
-          return false
-        }
-
-        break
-      }
-
-      case MissionAction.MissionActionType.SEA_CONTROL: {
-        const seaControlFormSchema = getSeaControlFormSchema(mainFormValues?.isClosed)
-
-        if (!seaControlFormSchema.isValidSync(actionFormValues)) {
-          return false
-        }
-
-        break
-      }
+      case MissionAction.MissionActionType.AIR_SURVEILLANCE:
+      case MissionAction.MissionActionType.OBSERVATION:
+        return actionFormValues
 
       default:
-        break
-    }
-  }
+        logSoftError({
+          isSideWindowError: true,
+          message: 'Unknown `actionFormValues.actionType` value.',
+          userMessage: "Une erreur est survenue pendant l'enregistrement de la mission."
+        })
 
-  return MainFormSchema.isValidSync(mainFormValues)
+        return {
+          ...actionFormValues,
+          isValid: false
+        }
+    }
+  })
+
+  const areFormsValid = areMissionFormsValuesValid(nextMainFormValues, nextActionsFormValues)
+
+  return [
+    areFormsValid,
+    {
+      nextActionsFormValues,
+      nextMainFormValues
+    }
+  ]
 }
 
 /**
  *
  * @param missionId
- * @param missionActionsFormValues
+ * @param ationsFormValues
  * @param originalMissionActions Mission actions as they were previous to the mission edition
  */
 export function getMissionActionsDataFromMissionActionsFormValues(
   missionId: MissionAction.MissionAction['missionId'],
-  missionActionsFormValues: MissionActionFormValues[],
+  ationsFormValues: MissionActionFormValues[],
   originalMissionActions: MissionAction.MissionAction[] = []
 ): {
   deletedMissionActionIds: number[]
   updatedMissionActionDatas: MissionAction.MissionActionData[]
 } {
-  const updatedMissionActionDatas = missionActionsFormValues.map(missionActionFormValues => {
+  const updatedMissionActionDatas = ationsFormValues.map(missionActionFormValues => {
     const missionActionFormValuesWithAllProps = {
       ...MISSION_ACTION_FORM_VALUES_SKELETON,
       ...missionActionFormValues
@@ -142,6 +165,7 @@ export function getMissionFormInitialValues(
       initialActionsFormValues: [],
       initialMainFormValues: {
         controlUnits: [INITIAL_MISSION_CONTROL_UNIT],
+        isValid: false,
         missionTypes: [Mission.MissionType.SEA],
         startDateTimeUtc
       }

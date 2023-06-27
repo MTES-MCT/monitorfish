@@ -29,6 +29,13 @@ export interface MissionState {
       }
     | undefined
   editedDraftActionIndex: number | undefined
+  /**
+   * Is the mission being closed?
+   *
+   * @description
+   * Used to switch validation schemas from `Live` ones to 'Closure' ones when closing a mission.
+   */
+  isClosing: boolean
   isDraftDirty: boolean
   listFilterValues: FilterValues
   listSeaFront: SeaFrontGroup
@@ -38,6 +45,7 @@ export interface MissionState {
 const INITIAL_STATE: MissionState = {
   draft: undefined,
   editedDraftActionIndex: undefined,
+  isClosing: false,
   isDraftDirty: false,
   listFilterValues: {
     [MissionFilterType.DATE_RANGE]: MissionDateRangeFilter.WEEK,
@@ -67,6 +75,13 @@ const missionSlice = createSlice({
       }
 
       state.draft = action.payload
+    },
+
+    /**
+     * Set mission closure state
+     */
+    setIsClosing(state, action: PayloadAction<boolean>) {
+      state.isClosing = action.payload
     },
 
     /**
@@ -102,6 +117,7 @@ const missionSlice = createSlice({
      */
     unsetDraft(state) {
       state.draft = undefined
+      state.isClosing = false
       state.isDraftDirty = false
     },
 

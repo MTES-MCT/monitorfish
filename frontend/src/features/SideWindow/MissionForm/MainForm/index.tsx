@@ -80,10 +80,11 @@ function UnmemoizedMainForm({ initialValues, onChange }: MainFormProps) {
 /**
  * @description
  * This component is fully memoized because we want its parent (`<MissionForm />`) to fully control
- * when to re-create this component using a `key` prop,
- * which should only happens when the edited mission `id` changes.
+ * when to re-create this component, the component would be re-render when :
+ * - The `key` prop is modified (the edited mission `id` changes).
+ * - the `onChange` callback is modified (the mission `isClosed` property has been changed).
  */
-export const MainForm = memo(UnmemoizedMainForm, () => true)
+export const MainForm = memo(UnmemoizedMainForm, (prevProps, nextProps) => prevProps.onChange === nextProps.onChange)
 
 const IsUnderJdpFormikCheckbox = styled(FormikCheckbox)`
   margin-left: 48px;

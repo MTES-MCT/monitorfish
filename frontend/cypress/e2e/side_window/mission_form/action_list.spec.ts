@@ -27,7 +27,7 @@ context('Side Window > Mission Form > Action List', () => {
 
     cy.wait(250)
 
-    cy.clickButton('Enregistrer')
+    cy.clickButton('Enregistrer et quitter')
 
     cy.wait('@createMissionAction').then(interception => {
       if (!interception.response) {
@@ -99,7 +99,7 @@ context('Side Window > Mission Form > Action List', () => {
 
     cy.wait(250)
 
-    cy.clickButton('Enregistrer')
+    cy.clickButton('Enregistrer et quitter')
   })
 
   it('Should send the expected data to the API when deleting a mission action', () => {
@@ -119,7 +119,7 @@ context('Side Window > Mission Form > Action List', () => {
 
     cy.wait(250)
 
-    cy.clickButton('Enregistrer')
+    cy.clickButton('Enregistrer et quitter')
 
     cy.wait('@deleteMissionAction9').then(interception => {
       if (!interception.response) {

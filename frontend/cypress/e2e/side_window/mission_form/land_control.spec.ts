@@ -95,7 +95,7 @@ context('Side Window > Mission Form > Land Control', () => {
       statusCode: 201
     }).as('createMissionAction')
 
-    cy.clickButton('Enregistrer')
+    cy.clickButton('Enregistrer et quitter')
 
     cy.wait('@createMissionAction').then(interception => {
       if (!interception.response) {

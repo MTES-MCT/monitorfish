@@ -58,6 +58,7 @@ export const closeDrawLayerModal = dispatch => {
       isMissionsMapButtonDisplayed: true,
       isVesselFiltersMapButtonDisplayed: true,
       isVesselLabelsMapButtonDisplayed: true,
+      isVesselListDisplayed: true,
       isVesselSearchDisplayed: true,
       isVesselVisibilityMapButtonDisplayed: true
     })

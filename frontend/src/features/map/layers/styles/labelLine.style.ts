@@ -1,13 +1,18 @@
-import { Style } from 'ol/style'
+import {Style} from 'ol/style'
 import Stroke from 'ol/style/Stroke'
-import { COLORS } from '../../../../constants/constants'
-import { getColorWithAlpha } from './utils'
+import {COLORS} from '../../../../constants/constants'
+import {getColorWithAlpha} from './utils'
 
 const labelLineStyleCache = new Map()
 
 export const getLabelLineStyle = feature => {
   const opacity = feature.get('opacity')
+  const isHiddenByZoom = feature.get('isHiddenByZoom')
   const key = JSON.stringify(opacity)
+
+  if (isHiddenByZoom) {
+    return []
+  }
 
   if (!labelLineStyleCache.has(key)) {
     const colorWithAlpha = getColorWithAlpha(COLORS.slateGray, opacity)

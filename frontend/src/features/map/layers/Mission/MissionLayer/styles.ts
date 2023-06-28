@@ -20,18 +20,21 @@ export const missionZoneStyle = new Style({
 export const getMissionColor = (missionStatus: Mission.MissionStatus | undefined) => {
   switch (missionStatus) {
     case Mission.MissionStatus.UPCOMING:
-      return '#52B0FF'
+      return THEME.color.yellowGreen
     case Mission.MissionStatus.IN_PROGRESS:
-      return '#3660FA'
+      return THEME.color.mediumSeaGreen
     case Mission.MissionStatus.DONE:
-      return '#1400AD'
+      return THEME.color.charcoal
     case Mission.MissionStatus.CLOSED:
-      return '#463939'
+      return THEME.color.white
     default:
-      return '#52B0FF'
+      return THEME.color.yellowGreen
   }
 }
 
+/**
+ * The coordinates of the `textureCoord` sprite property are : [x1, y1, x2, y2]
+ */
 export const getMissionPointWebGLStyle = () => ({
   symbol: {
     offset: [0, 19.5],
@@ -45,47 +48,55 @@ export const getMissionPointWebGLStyle = () => ({
       [
         'case',
         featureHas('isSeaMission'),
-        [0, 0, 0.25, 0.333],
+        [0, 0, 0.25, 0.25],
         featureHas('isLandMission'),
-        [0, 0.333, 0.25, 0.666],
+        [0, 0.25, 0.25, 0.5],
         featureHas('isAirMission'),
-        [0, 0.666, 0.25, 1],
-        [0, 0, 0.25, 0.333]
+        [0, 0.5, 0.25, 0.75],
+        featureHas('isMultiMission'),
+        [0, 0.75, 0.25, 1],
+        [0, 0.75, 0.25, 1]
       ],
       featureHas('isDone'),
       [
         'case',
         featureHas('isSeaMission'),
-        [0.25, 0, 0.5, 0.333],
+        [0.25, 0, 0.5, 0.25],
         featureHas('isLandMission'),
-        [0.25, 0.333, 0.5, 0.666],
+        [0.25, 0.25, 0.5, 0.5],
         featureHas('isAirMission'),
-        [0.25, 0.666, 0.5, 1],
-        [0.25, 0, 0.5, 0.333]
+        [0.25, 0.5, 0.5, 0.75],
+        featureHas('isMultiMission'),
+        [0.25, 0.75, 0.5, 1],
+        [0.25, 0.75, 0.5, 1]
       ],
       featureHas('isInProgress'),
       [
         'case',
         featureHas('isSeaMission'),
-        [0.5, 0, 0.75, 0.333],
+        [0.5, 0, 0.75, 0.25],
         featureHas('isLandMission'),
-        [0.5, 0.333, 0.75, 0.666],
+        [0.5, 0.25, 0.75, 0.5],
         featureHas('isAirMission'),
-        [0.5, 0.666, 0.75, 1],
-        [0.5, 0, 0.75, 0.333]
+        [0.5, 0.5, 0.75, 0.75],
+        featureHas('isMultiMission'),
+        [0.5, 0.75, 0.75, 1],
+        [0.5, 0.75, 0.75, 1]
       ],
       featureHas('isUpcoming'),
       [
         'case',
         featureHas('isSeaMission'),
-        [0.75, 0, 1, 0.333],
+        [0.75, 0, 1, 0.25],
         featureHas('isLandMission'),
-        [0.75, 0.333, 1, 0.666],
+        [0.75, 0.25, 1, 0.5],
         featureHas('isAirMission'),
-        [0.75, 0.666, 1, 1],
-        [0.75, 0, 1, 0.333]
+        [0.75, 0.5, 1, 0.75],
+        featureHas('isMultiMission'),
+        [0.75, 0.75, 1, 1],
+        [0.75, 0.75, 1, 1]
       ],
-      [0.75, 0, 1, 0.333]
+      [0.75, 0.75, 1, 1]
     ]
   }
 })

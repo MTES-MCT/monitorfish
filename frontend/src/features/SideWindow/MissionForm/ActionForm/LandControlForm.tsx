@@ -27,7 +27,7 @@ import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
-import { FormikIsValid } from '../shared/FormikIsValid'
+import { FormikIsValidEffect } from '../shared/FormikIsValidEffect'
 
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
@@ -57,7 +57,7 @@ export function LandControlForm({ initialValues, onChange }: LandControlFormProp
       <>
         <FormikEffect onChange={onChange as any} />
         <FormikRevalidationEffect />
-        <FormikIsValid />
+        <FormikIsValidEffect />
 
         <FormHead>
           <h2>

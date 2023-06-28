@@ -8,7 +8,7 @@ import { useEffect } from 'react'
  * @description
  * We use this "hook" in `<ActionForm />` in order to retrigger main form-related validation rules.
  */
-export function FormikIsValid() {
+export function FormikIsValidEffect() {
   const { errors, setFieldValue } = useFormikContext()
 
   useEffect(

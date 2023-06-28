@@ -6,7 +6,7 @@ import { useMemo } from 'react'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
-import { FormikIsValid } from '../shared/FormikIsValid'
+import { FormikIsValidEffect } from '../shared/FormikIsValidEffect'
 
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
@@ -25,7 +25,7 @@ export function ObservationForm({ initialValues, onChange }: ObservationFormProp
     <Formik initialValues={initialValues} onSubmit={noop}>
       <>
         <FormikEffect onChange={onChange as any} />
-        <FormikIsValid />
+        <FormikIsValidEffect />
 
         <FormHead>
           <h2>

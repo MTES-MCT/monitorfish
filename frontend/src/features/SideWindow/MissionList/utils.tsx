@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { Mission } from '../../../domain/entities/mission/types'
 import { FrontendError } from '../../../libs/FrontendError'
+import { getMissionColor } from '../../map/layers/Mission/MissionLayer/styles'
 
 import type { ControlUnit } from '../../../domain/types/controlUnit'
 
@@ -22,34 +23,46 @@ export function getControlUnitsNamesFromAdministrations(
 
 export const renderStatus = (missionStatus: Mission.MissionStatus): JSX.Element => {
   switch (missionStatus) {
-    case Mission.MissionStatus.UPCOMING:
+    case Mission.MissionStatus.UPCOMING: {
+      const color = getMissionColor(Mission.MissionStatus.UPCOMING, true)
+
       return (
-        <StyledTag bullet={TagBullet.DISK} bulletColor="#52B0FF" style={{ color: '#52B0FF' }}>
+        <StyledTag bullet={TagBullet.DISK} bulletColor={color} style={{ color }}>
           {Mission.MissionStatusLabel.UPCOMING}
         </StyledTag>
       )
+    }
 
-    case Mission.MissionStatus.IN_PROGRESS:
+    case Mission.MissionStatus.IN_PROGRESS: {
+      const color = getMissionColor(Mission.MissionStatus.IN_PROGRESS, true)
+
       return (
-        <StyledTag bullet={TagBullet.DISK} bulletColor="#3660FA" style={{ color: '#3660FA' }}>
+        <StyledTag bullet={TagBullet.DISK} bulletColor={color} style={{ color }}>
           {Mission.MissionStatusLabel.IN_PROGRESS}
         </StyledTag>
       )
+    }
 
-    case Mission.MissionStatus.DONE:
+    case Mission.MissionStatus.DONE: {
+      const color = getMissionColor(Mission.MissionStatus.DONE, true)
+
       return (
-        <StyledTag bullet={TagBullet.DISK} bulletColor="#1400AD" style={{ color: '#1400AD' }}>
+        <StyledTag bullet={TagBullet.DISK} bulletColor={color} style={{ color }}>
           {Mission.MissionStatusLabel.DONE}
         </StyledTag>
       )
+    }
 
-    case Mission.MissionStatus.CLOSED:
+    case Mission.MissionStatus.CLOSED: {
+      const color = getMissionColor(Mission.MissionStatus.CLOSED, true)
+
       return (
-        <StyledTagWithCheck bulletColor="#463939" style={{ color: '#463939' }}>
+        <StyledTagWithCheck bulletColor={color} style={{ color }}>
           <span>✓</span>
           {Mission.MissionStatusLabel.CLOSED}
         </StyledTagWithCheck>
       )
+    }
 
     default:
       throw new FrontendError("`missionStatus` doesn't match `MissionStatus` enum.")

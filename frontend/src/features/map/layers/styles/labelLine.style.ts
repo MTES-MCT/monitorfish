@@ -1,7 +1,8 @@
-import {Style} from 'ol/style'
+import { Style } from 'ol/style'
 import Stroke from 'ol/style/Stroke'
-import {COLORS} from '../../../../constants/constants'
-import {getColorWithAlpha} from './utils'
+
+import { getColorWithAlpha } from './utils'
+import { COLORS } from '../../../../constants/constants'
 
 const labelLineStyleCache = new Map()
 

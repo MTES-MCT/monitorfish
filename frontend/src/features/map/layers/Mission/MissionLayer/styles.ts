@@ -17,7 +17,7 @@ export const missionZoneStyle = new Style({
   })
 })
 
-export const getMissionColor = (missionStatus: Mission.MissionStatus | undefined) => {
+export const getMissionColor = (missionStatus: Mission.MissionStatus | undefined, isText?: boolean | undefined) => {
   switch (missionStatus) {
     case Mission.MissionStatus.UPCOMING:
       return THEME.color.yellowGreen
@@ -26,7 +26,7 @@ export const getMissionColor = (missionStatus: Mission.MissionStatus | undefined
     case Mission.MissionStatus.DONE:
       return THEME.color.charcoal
     case Mission.MissionStatus.CLOSED:
-      return THEME.color.white
+      return isText ? THEME.color.slateGray : THEME.color.white
     default:
       return THEME.color.yellowGreen
   }

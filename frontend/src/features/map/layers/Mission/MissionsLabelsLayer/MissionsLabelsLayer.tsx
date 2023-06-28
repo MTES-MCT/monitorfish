@@ -1,19 +1,19 @@
-import {usePrevious} from '@mtes-mct/monitor-ui'
-import {Vector} from 'ol/layer'
+import { usePrevious } from '@mtes-mct/monitor-ui'
+import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
-import {useCallback, useEffect, useRef, useState} from 'react'
-import {useDebouncedCallback} from 'use-debounce'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useDebouncedCallback } from 'use-debounce'
 
-import {clearPreviousLineFeatures, getLabelsOfFeaturesInExtent} from './utils'
-import {LayerProperties} from '../../../../../domain/entities/layers/constants'
-import {useIsSuperUser} from '../../../../../hooks/authorization/useIsSuperUser'
-import {useMainAppSelector} from '../../../../../hooks/useMainAppSelector'
-import {MissionLabelOverlay} from '../../../overlays/MissionUnitLabelOverlay'
-import {useGetLineFeatureIdToCoordinates} from '../../hooks/useGetLineFeatureIdToCoordinates'
-import {useIsZooming} from '../../hooks/useIsZooming'
-import {getLabelLineStyle} from '../../styles/labelLine.style'
+import { clearPreviousLineFeatures, getLabelsOfFeaturesInExtent } from './utils'
+import { LayerProperties } from '../../../../../domain/entities/layers/constants'
+import { useIsSuperUser } from '../../../../../hooks/authorization/useIsSuperUser'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { MissionLabelOverlay } from '../../../overlays/MissionUnitLabelOverlay'
+import { useGetLineFeatureIdToCoordinates } from '../../hooks/useGetLineFeatureIdToCoordinates'
+import { useIsZooming } from '../../hooks/useIsZooming'
+import { getLabelLineStyle } from '../../styles/labelLine.style'
 
-import type {VectorLayerWithName} from '../../../../../domain/types/layer'
+import type { VectorLayerWithName } from '../../../../../domain/types/layer'
 
 const MIN_ZOOM = 7
 
@@ -124,7 +124,7 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
       ?.find(olLayer => olLayer.name === LayerProperties.MISSION_PIN_POINT.code)
     const missionsLayerSource = missionsLayer?.getSource()
 
-    const isHidden = !isSuperUser || !isMissionsLayerDisplayed || !missionsLayerSource || (currentZoom < MIN_ZOOM)
+    const isHidden = !isSuperUser || !isMissionsLayerDisplayed || !missionsLayerSource || currentZoom < MIN_ZOOM
     addLabelsToAllFeaturesInExtent(
       isHidden,
       getVectorSource(),

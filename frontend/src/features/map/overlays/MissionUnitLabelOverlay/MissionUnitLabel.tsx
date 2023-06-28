@@ -1,5 +1,5 @@
+import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
-import {THEME} from "@mtes-mct/monitor-ui";
 
 export function MissionUnitLabel({ color, showed, text }) {
   if (!showed || !text) {
@@ -8,7 +8,9 @@ export function MissionUnitLabel({ color, showed, text }) {
 
   return (
     <Wrapper color={color}>
-      <ZoneText isWhiteBackground={color === THEME.color.white} data-cy="mission-label-text">{text.toUpperCase()}</ZoneText>
+      <ZoneText data-cy="mission-label-text" isWhiteBackground={color === THEME.color.white}>
+        {text.toUpperCase()}
+      </ZoneText>
     </Wrapper>
   )
 }
@@ -33,7 +35,7 @@ const ZoneText = styled.span<{
   font-size: 11px;
   font-weight: 500;
   user-select: none;
-  color: ${p => p.isWhiteBackground ? p.theme.color.slateGray : p.theme.color.white};
+  color: ${p => (p.isWhiteBackground ? p.theme.color.slateGray : p.theme.color.white)};
   line-height: 17px;
   max-width: 250px;
   text-overflow: ellipsis;

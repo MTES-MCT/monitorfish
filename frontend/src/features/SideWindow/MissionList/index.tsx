@@ -122,31 +122,40 @@ export function MissionList() {
                 <TableBody>
                   {tableData.map(augmentedMission => (
                     <TableBodyRow key={augmentedMission.id} data-id={augmentedMission.id}>
-                      <TableBodyCell $fixedWidth={136}>
+                      <TableBodyCell $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[0]?.fixedWidth}>
                         <span>{augmentedMission.$labelled.startDateTimeUtc}</span>
                       </TableBodyCell>
-                      <TableBodyCell $fixedWidth={136}>
+                      <TableBodyCell $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[1]?.fixedWidth}>
                         <span>{augmentedMission.$labelled.endDateTimeUtc}</span>
                       </TableBodyCell>
-                      <TableBodyCell $fixedWidth={90}>
+                      <TableBodyCell $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[2]?.fixedWidth}>
                         <span>{augmentedMission.$labelled.missionTypes}</span>
                       </TableBodyCell>
-                      <TableBodyCell $fixedWidth={80}>
+                      <TableBodyCell $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[3]?.fixedWidth}>
                         <span>{augmentedMission.$labelled.missionSource}</span>
                       </TableBodyCell>
-                      <TableBodyCell $fixedWidth={320} title={augmentedMission.$labelled.controlUnits}>
+                      <TableBodyCell
+                        $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[4]?.fixedWidth}
+                        title={augmentedMission.$labelled.controlUnits}
+                      >
                         <span>{augmentedMission.$labelled.controlUnits}</span>
                       </TableBodyCell>
-                      <TableBodyCell $fixedWidth={320} title={augmentedMission.$labelled.inspectedVessels}>
+                      <TableBodyCell
+                        $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[5]?.fixedWidth}
+                        title={augmentedMission.$labelled.inspectedVessels}
+                      >
                         <span>{augmentedMission.$labelled.inspectedVessels}</span>
                       </TableBodyCell>
-                      <TableBodyCell $fixedWidth={128}>
+                      <TableBodyCell $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[6]?.fixedWidth}>
                         <span>{augmentedMission.$labelled.inspectionsCount}</span>
                       </TableBodyCell>
-                      <TableBodyCell $fixedWidth={128}>
+                      <TableBodyCell $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[7]?.fixedWidth}>
                         <span>{renderStatus(augmentedMission.$labelled.status as Mission.MissionStatus)}</span>
                       </TableBodyCell>
-                      <TableBodyCell $fixedWidth={51} style={{ padding: '4px 7px 4px 9px' }}>
+                      <TableBodyCell
+                        $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[8]?.fixedWidth}
+                        style={{ padding: '4px 7px 4px 9px' }}
+                      >
                         <IconButton
                           accent={Accent.TERTIARY}
                           disabled={!augmentedMission.geom}
@@ -156,7 +165,10 @@ export function MissionList() {
                           title="Voir sur la carte"
                         />
                       </TableBodyCell>
-                      <TableBodyCell $fixedWidth={51} style={{ padding: '4px 7px 4px 9px' }}>
+                      <TableBodyCell
+                        $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[9]?.fixedWidth}
+                        style={{ padding: '4px 7px 4px 9px' }}
+                      >
                         <IconButton
                           accent={Accent.TERTIARY}
                           Icon={Icon.Edit}

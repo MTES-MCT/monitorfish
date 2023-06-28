@@ -15,7 +15,7 @@ import { VesselLabelLine } from '../../../../domain/entities/vesselLabelLine'
 import { useIsSuperUser } from '../../../../hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { VesselLabelOverlay } from '../../overlays/VesselLabelOverlay'
-import { getLabelLineStyle } from '../styles/vesselLabelLine.style'
+import { getLabelLineStyle } from '../styles/labelLine.style'
 
 import type { VesselLastPositionFeature } from '../../../../domain/entities/vessel/types'
 import type { VectorLayerWithName } from '../../../../domain/types/layer'

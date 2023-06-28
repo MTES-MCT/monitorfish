@@ -50,6 +50,8 @@ export function drawMovedLabelLine(vectorSource, featureIdToCoordinates, labelLi
       )
       labelLineFeature.setId(labelLineFeatureId)
       vectorSource.addFeature(labelLineFeature)
+
+      return
     }
 
     existingLabelLineFeature.getGeometry().setCoordinates([featureCoordinates, coordinatesAndOffset.coordinates])

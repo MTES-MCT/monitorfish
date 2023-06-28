@@ -19,7 +19,7 @@ import { MainFormLiveSchema } from './schemas'
 import { BOOLEAN_AS_OPTIONS } from '../../../../constants'
 import { FormBody, FormBodyInnerWrapper } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
-import { FormikIsValid } from '../shared/FormikIsValid'
+import { FormikIsValidEffect } from '../shared/FormikIsValidEffect'
 
 import type { MissionMainFormValues } from '../types'
 import type { Promisable } from 'type-fest'
@@ -33,7 +33,7 @@ function UnmemoizedMainForm({ initialValues, onChange }: MainFormProps) {
     <Formik initialValues={initialValues} onSubmit={noop} validationSchema={MainFormLiveSchema}>
       <Wrapper>
         <FormikEffect onChange={onChange as any} />
-        <FormikIsValid />
+        <FormikIsValidEffect />
 
         <FormHead>
           <h2>Informations générales</h2>

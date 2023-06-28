@@ -19,7 +19,7 @@ import { VesselField } from './shared/VesselField'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
-import { FormikIsValid } from '../shared/FormikIsValid'
+import { FormikIsValidEffect } from '../shared/FormikIsValidEffect'
 
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
@@ -41,7 +41,7 @@ export function AirControlForm({ initialValues, onChange }: AirControlFormProps)
       <>
         <FormikEffect onChange={onChange as any} />
         <FormikRevalidationEffect />
-        <FormikIsValid />
+        <FormikIsValidEffect />
 
         <FormHead>
           <h2>

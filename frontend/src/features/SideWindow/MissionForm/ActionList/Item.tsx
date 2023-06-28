@@ -121,6 +121,7 @@ export function Item({ error, initialValues, isSelected, onDuplicate, onRemove, 
               Icon={Icon.Duplicate}
               iconSize={20}
               onClick={onDuplicate}
+              title="Dupliquer l’action"
               withUnpropagatedClick
             />
             <IconButton
@@ -130,6 +131,7 @@ export function Item({ error, initialValues, isSelected, onDuplicate, onRemove, 
               Icon={Icon.Delete}
               iconSize={20}
               onClick={onRemove}
+              title="Supprimer l’action"
               withUnpropagatedClick
             />
           </Head>

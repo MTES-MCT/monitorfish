@@ -278,7 +278,7 @@ const TableBodyRow = styled.div.attrs(() => ({
 const TableBodyCell = styled.div.attrs(() => ({
   className: 'TableBodyCell'
 }))<{
-  $fixedWidth?: number
+  $fixedWidth?: number | undefined
 }>`
   align-items: center;
   border-bottom: solid 1px ${p => p.theme.color.lightGray};

@@ -233,6 +233,8 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
             vesselName = "PHENOMENE",
             vesselTargeted = ControlCheck.YES,
             isDeleted = false,
+            hasSomeGearsSeized = false,
+            hasSomeSpeciesSeized = false,
         )
 
         // When

@@ -11,14 +11,15 @@ import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { MissionLabelOverlay } from '../../../overlays/MissionUnitLabelOverlay'
 import { useGetLineFeatureIdToCoordinates } from '../../hooks/useGetLineFeatureIdToCoordinates'
 import { useIsZooming } from '../../hooks/useIsZooming'
-import { getLabelLineStyle } from '../../styles/vesselLabelLine.style'
+import { getLabelLineStyle } from '../../styles/labelLine.style'
 
 import type { VectorLayerWithName } from '../../../../../domain/types/layer'
+
+const MIN_ZOOM = 7
 
 export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
   const isSuperUser = useIsSuperUser()
   const { isMissionsLayerDisplayed } = useMainAppSelector(state => state.displayedComponent)
-
   const [featuresAndLabels, setFeaturesAndLabels] = useState<
     {
       color: string
@@ -30,6 +31,7 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
   >([])
   const isZooming = useIsZooming(map, mapMovingAndZoomEvent)
   const previousFeaturesAndLabels = usePrevious(featuresAndLabels)
+  const currentZoom = map?.getView()?.getZoom()?.toFixed(2)
 
   const vectorSourceRef = useRef<VectorSource>()
   const layerRef = useRef<VectorLayerWithName>()
@@ -75,6 +77,18 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
     }
   }, [map, getLayer])
 
+  useEffect(() => {
+    if (currentZoom < MIN_ZOOM) {
+      getVectorSource().forEachFeature(feature => {
+        feature.set('isHiddenByZoom', true)
+      })
+    } else {
+      getVectorSource().forEachFeature(feature => {
+        feature.set('isHiddenByZoom', false)
+      })
+    }
+  }, [isZooming, currentZoom, getVectorSource])
+
   const addLabelsToAllFeaturesInExtent = useDebouncedCallback(
     (isHidden, vectorSource, missionsLayerSource, extent, _lineFeatureIdToCoordinates, _previousFeaturesAndLabels) => {
       const nextFeaturesAndLabels = getLabelsOfFeaturesInExtent(
@@ -110,7 +124,7 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
       ?.find(olLayer => olLayer.name === LayerProperties.MISSION_PIN_POINT.code)
     const missionsLayerSource = missionsLayer?.getSource()
 
-    const isHidden = !isSuperUser || !isMissionsLayerDisplayed || !missionsLayerSource
+    const isHidden = !isSuperUser || !isMissionsLayerDisplayed || !missionsLayerSource || currentZoom < MIN_ZOOM
     addLabelsToAllFeaturesInExtent(
       isHidden,
       getVectorSource(),
@@ -124,6 +138,7 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
     isMissionsLayerDisplayed,
     map,
     isZooming,
+    currentZoom,
     lineFeatureIdToCoordinates,
     getVectorSource,
     previousFeaturesAndLabels,

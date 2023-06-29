@@ -113,20 +113,20 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
 
             <IconButton
               accent={Accent.TERTIARY}
-              aria-label="Dupliquer l’action"
               color={THEME.color.slateGray}
               Icon={Icon.Duplicate}
               iconSize={20}
               onClick={onDuplicate}
+              title="Dupliquer l’action"
               withUnpropagatedClick
             />
             <IconButton
               accent={Accent.TERTIARY}
-              aria-label="Supprimer l’action"
               color={THEME.color.maximumRed}
               Icon={Icon.Delete}
               iconSize={20}
               onClick={onRemove}
+              title="Supprimer l’action"
               withUnpropagatedClick
             />
           </Head>

@@ -92,6 +92,8 @@ export namespace Mission {
     // A 0 ou 1 number is required for WebGL to understand boolean
     isLandMission: number
     // A 0 ou 1 number is required for WebGL to understand boolean
+    isMultiMission: number
+    // A 0 ou 1 number is required for WebGL to understand boolean
     isSeaMission: number
     // A 0 ou 1 number is required for WebGL to understand boolean
     isUpcoming: number

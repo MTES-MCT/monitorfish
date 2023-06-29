@@ -2,6 +2,7 @@ import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { Mission } from '../../../../domain/entities/mission/types'
+import { getMissionColor } from '../../layers/Mission/MissionLayer/styles'
 
 type MissionStatusLabelType = {
   missionStatus?: Mission.MissionStatus | undefined
@@ -10,28 +11,28 @@ export function MissionStatusLabel({ missionStatus }: MissionStatusLabelType) {
   switch (missionStatus) {
     case Mission.MissionStatus.UPCOMING:
       return (
-        <StatusWrapper color={THEME.color.blueGray['100']}>
+        <StatusWrapper color={getMissionColor(Mission.MissionStatus.UPCOMING, true)}>
           <InProgressIcon />
           {Mission.MissionStatusLabel.UPCOMING}
         </StatusWrapper>
       )
     case Mission.MissionStatus.IN_PROGRESS:
       return (
-        <StatusWrapper color={THEME.color.mediumSeaGreen}>
+        <StatusWrapper color={getMissionColor(Mission.MissionStatus.IN_PROGRESS, true)}>
           <InProgressIcon />
           {Mission.MissionStatusLabel.IN_PROGRESS}
         </StatusWrapper>
       )
     case Mission.MissionStatus.CLOSED:
       return (
-        <StatusWrapper color={THEME.color.opal}>
+        <StatusWrapper color={getMissionColor(Mission.MissionStatus.CLOSED, true)}>
           <Icon.Check />
           {Mission.MissionStatusLabel.CLOSED}
         </StatusWrapper>
       )
     case Mission.MissionStatus.DONE:
       return (
-        <StatusWrapper color={THEME.color.charcoal}>
+        <StatusWrapper color={getMissionColor(Mission.MissionStatus.DONE, true)}>
           <Icon.Check />
           {Mission.MissionStatusLabel.DONE}
         </StatusWrapper>

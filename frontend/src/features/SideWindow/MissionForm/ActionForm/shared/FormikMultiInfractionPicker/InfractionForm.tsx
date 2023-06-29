@@ -12,7 +12,7 @@ import {
 import { Form, Formik } from 'formik'
 import styled from 'styled-components'
 
-import { InfractionFormSchema } from '../../schemas'
+import { InfractionFormLiveSchema } from '../../schemas'
 import { INFRACTION_TYPES_AS_OPTIONS } from '../constants'
 
 import type { MissionAction } from '../../../../../../domain/types/missionAction'
@@ -34,7 +34,7 @@ export function InfractionForm<AnyInfraction extends MissionAction.OtherInfracti
   const { newWindowContainerRef } = useNewWindow()
 
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={InfractionFormSchema}>
+    <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={InfractionFormLiveSchema}>
       {({ isValid }) => (
         <StyledForm>
           <FormikMultiRadio

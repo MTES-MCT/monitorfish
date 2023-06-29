@@ -1,5 +1,4 @@
 import { Accent, getLocalizedDayjs, Icon, IconButton, Tag, TagGroup, THEME, TagBullet } from '@mtes-mct/monitor-ui'
-import { isEmpty } from 'lodash/fp'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -8,19 +7,17 @@ import { UNKNOWN_VESSEL } from '../../../../domain/entities/vessel/vessel'
 import { MissionAction } from '../../../../domain/types/missionAction'
 import { FrontendError } from '../../../../libs/FrontendError'
 
-import type { FormikFormError } from '../../../../types'
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
 export type ItemProps = {
-  error: FormikFormError
   initialValues: MissionActionFormValues
   isSelected: boolean
   onDuplicate: () => Promisable<void>
   onRemove: () => Promisable<void>
   onSelect: () => Promisable<void>
 }
-export function Item({ error, initialValues, isSelected, onDuplicate, onRemove, onSelect }: ItemProps) {
+export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelect }: ItemProps) {
   const [actionLabel, ActionIcon] = useMemo(() => {
     const vesselName = initialValues.vesselName === UNKNOWN_VESSEL.vesselName ? 'INCONNU' : initialValues.vesselName
 
@@ -139,7 +136,7 @@ export function Item({ error, initialValues, isSelected, onDuplicate, onRemove, 
         </InnerWrapper>
       </Wrapper>
 
-      {!isEmpty(error) && <Error>Veuillez compléter les champs manquants dans cette action de contrôle.</Error>}
+      {!initialValues.isValid && <Error>Veuillez compléter les champs manquants dans cette action de contrôle.</Error>}
     </>
   )
 }

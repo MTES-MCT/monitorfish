@@ -13,7 +13,8 @@ import { DraftCancellationConfirmationDialog } from './shared/DraftCancellationC
 import { TitleSourceTag } from './shared/TitleSourceTag'
 import { TitleStatusTag } from './shared/TitleStatusTag'
 import {
-  areMissionFormValuesValid,
+  areMissionFormsClosureValuesValid,
+  areMissionFormsValuesValid,
   getMissionActionsDataFromMissionActionsFormValues,
   getMissionDataFromMissionFormValues,
   getMissionFormInitialValues,
@@ -47,15 +48,13 @@ import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
 
 import type { MissionActionFormValues, MissionMainFormValues } from './types'
 import type { MissionAction } from '../../../domain/types/missionAction'
-import type { FormikFormError } from '../../../types'
 
 export function MissionForm() {
-  const { sideWindow } = useMainAppSelector(store => store)
+  const sideWindow = useMainAppSelector(store => store.sideWindow)
 
   const headerDivRef = useRef<HTMLDivElement | null>(null)
   const originalMissionRef = useRef<MissionWithActions | undefined>(undefined)
 
-  const [actionsFormError, setActionsFormError] = useState<FormikFormError[]>([])
   const [actionsFormValues, setActionsFormValues] = useState<MissionActionFormValues[]>([])
   const [editedActionIndex, setEditedActionIndex] = useState<number | undefined>(undefined)
   const [isLoading, setIsLoading] = useState(true)
@@ -82,20 +81,18 @@ export function MissionForm() {
     () => (editedActionIndex !== undefined ? actionsFormValues[editedActionIndex] : undefined),
     [actionsFormValues, editedActionIndex]
   )
-  const isMissionFormValid = areMissionFormValuesValid(mainFormValues, actionsFormValues)
+  const isMissionFormValid = areMissionFormsValuesValid(mainFormValues, actionsFormValues)
 
   const addAction = useCallback(
     (actionType: MissionAction.MissionActionType) => {
-      const nextActionsFormError = [...actionsFormError, undefined]
       const newActionFormValues = getMissionActionFormInitialValues(actionType)
       const nextActionsFormValues = [...actionsFormValues, newActionFormValues]
 
-      setActionsFormError(nextActionsFormError)
       setActionsFormValues(nextActionsFormValues)
       setActionFormKey(actionFormKey + 1)
       setEditedActionIndex(nextActionsFormValues.length - 1)
     },
-    [actionFormKey, actionsFormError, actionsFormValues]
+    [actionFormKey, actionsFormValues]
   )
 
   /**
@@ -114,6 +111,30 @@ export function MissionForm() {
       }
 
       setIsSaving(true)
+
+      // Stop right there if there are live validation error
+      if (!areMissionFormsValuesValid(mainFormValues, actionsFormValues)) {
+        setIsSaving(false)
+
+        return
+      }
+
+      if (mustClose) {
+        const [canClose, { nextActionsFormValues, nextMainFormValues }] = areMissionFormsClosureValuesValid(
+          mainFormValues,
+          actionsFormValues
+        )
+        // Stop creation or update there in case there are closure validation error
+        if (!canClose) {
+          setMainFormValues(nextMainFormValues)
+          setActionsFormValues(nextActionsFormValues)
+          setIsSaving(false)
+
+          dispatch(missionActions.setIsClosing(true))
+
+          return
+        }
+      }
 
       try {
         let missionId: number
@@ -196,13 +217,12 @@ export function MissionForm() {
     (actionIndex: number) => {
       const sourceAction = omit(['id'], actionsFormValues[actionIndex]) as MissionActionFormValues
 
-      setActionsFormError([...actionsFormError, undefined])
       setActionsFormValues([...actionsFormValues, sourceAction])
 
       setActionFormKey(actionFormKey + 1)
       setEditedActionIndex(actionsFormValues.length - 1)
     },
-    [actionFormKey, actionsFormError, actionsFormValues]
+    [actionFormKey, actionsFormValues]
   )
 
   const goToMissionList = useCallback(async () => {
@@ -222,25 +242,18 @@ export function MissionForm() {
 
   const removeAction = useCallback(
     (actionIndex: number) => {
-      const nextActionsFormError = actionsFormError.reduce(
-        // `nextFormErrors` is not type-guessed as `FormikFormError[]` but as `FormikFormError` so we retype it here
-        (nextFormErrors: FormikFormError[], formError, index) =>
-          index === actionIndex ? nextFormErrors : [...nextFormErrors, formError],
-        [] as FormikFormError[]
-      )
       const nextActionsFormValues = actionsFormValues.reduce(
         (nextActions, action, index) => (index === actionIndex ? nextActions : [...nextActions, action]),
         [] as MissionActionFormValues[]
       )
 
-      setActionsFormError(nextActionsFormError)
       setActionsFormValues(nextActionsFormValues)
       if (editedActionIndex === actionIndex) {
         setActionFormKey(actionFormKey + 1)
         setEditedActionIndex(undefined)
       }
     },
-    [actionFormKey, actionsFormError, actionsFormValues, editedActionIndex]
+    [actionFormKey, actionsFormValues, editedActionIndex]
   )
 
   const reopen = useCallback(() => {
@@ -256,75 +269,33 @@ export function MissionForm() {
     window.document.dispatchEvent(new NotificationEvent('La mission a bien été réouverte', 'success', true))
   }, [mainFormValues])
 
-  const updateDraft = useDebouncedCallback(
-    // We need to use a callback within to memoize it
-    // https://codesandbox.io/s/4wvmp1xlw4?file=/src/InputWithCallback.js:357-386
-    useCallback(
-      (nextMainFormValues, nextActionsFormValues) => {
-        if (!nextMainFormValues) {
-          logSoftError({
-            isSideWindowError: true,
-            message: '`mainFormValues` is undefined.',
-            userMessage: "Une erreur est survenue pendant l'édition de la mission."
-          })
+  const updateEditedActionFormValues = (nextActionFormValues: MissionActionFormValues) => {
+    if (editedActionIndex === undefined) {
+      logSoftError({
+        isSideWindowError: true,
+        message: '`editedActionIndex` is undefined.',
+        userMessage: "Une erreur est survenue pendant l'édition de la mission."
+      })
 
-          return
-        }
+      return
+    }
+    if (mainFormValues === undefined) {
+      logSoftError({
+        isSideWindowError: true,
+        message: '`mainFormValues` is undefined.',
+        userMessage: "Une erreur est survenue pendant l'édition de la mission."
+      })
 
-        dispatch(
-          missionActions.setDraft({
-            actionsFormValues: nextActionsFormValues,
-            mainFormValues: nextMainFormValues
-          })
-        )
-      },
-      [dispatch]
-    ),
-    250
-  )
+      return
+    }
 
-  const updateEditedActionFormError = useCallback(
-    (nextFormError: FormikFormError) => {
-      if (editedActionIndex === undefined) {
-        logSoftError({
-          isSideWindowError: true,
-          message: '`editedActionIndex` is undefined.',
-          userMessage: "Une erreur est survenue pendant l'édition de la mission."
-        })
+    const nextActionFormValuesOrActions = actionsFormValues.map((action, index) =>
+      index === editedActionIndex ? nextActionFormValues : action
+    )
+    setActionsFormValues(nextActionFormValuesOrActions)
 
-        return
-      }
-
-      setActionsFormError(
-        actionsFormError.map((actionFormError, index) =>
-          index === editedActionIndex ? nextFormError : actionFormError
-        )
-      )
-    },
-    [actionsFormError, editedActionIndex]
-  )
-
-  const updateEditedActionFormValues = useCallback(
-    (nextActionFormValues: MissionActionFormValues) => {
-      if (editedActionIndex === undefined) {
-        logSoftError({
-          isSideWindowError: true,
-          message: '`editedActionIndex` is undefined.',
-          userMessage: "Une erreur est survenue pendant l'édition de la mission."
-        })
-
-        return
-      }
-
-      const nextActionFormValuesOrActions = actionsFormValues.map((action, index) =>
-        index === editedActionIndex ? nextActionFormValues : action
-      )
-      setActionsFormValues(nextActionFormValuesOrActions)
-
-      updateDraft(mainFormValues, nextActionFormValuesOrActions)
-    },
-    [actionsFormValues, mainFormValues, editedActionIndex, updateDraft]
-  )
+    updateReduxSliceDraft()
+  }
 
   const updateEditedActionIndex = useCallback(
     (nextActionIndex: number | undefined) => {
@@ -334,18 +305,34 @@ export function MissionForm() {
     [actionFormKey]
   )
 
-  const updateMainFormValues = useCallback(
-    (nextMissionMainFormValues: MissionMainFormValues) => {
-      const mainFormValuesWithUpdatedIsClosedProperty = {
-        ...nextMissionMainFormValues,
-        isClosed: mainFormValues?.isClosed || false
-      }
-      setMainFormValues(mainFormValuesWithUpdatedIsClosedProperty)
+  const updateMainFormValues = (nextMissionMainFormValues: MissionMainFormValues) => {
+    const mainFormValuesWithUpdatedIsClosedProperty = {
+      ...nextMissionMainFormValues,
+      isClosed: mainFormValues?.isClosed || false
+    }
+    setMainFormValues(mainFormValuesWithUpdatedIsClosedProperty)
 
-      updateDraft(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues)
-    },
-    [updateDraft, actionsFormValues, mainFormValues?.isClosed]
-  )
+    updateReduxSliceDraft()
+  }
+
+  const updateReduxSliceDraft = useDebouncedCallback(() => {
+    if (!mainFormValues) {
+      logSoftError({
+        isSideWindowError: true,
+        message: '`mainFormValues` is undefined.',
+        userMessage: "Une erreur est survenue pendant l'édition de la mission."
+      })
+
+      return
+    }
+
+    dispatch(
+      missionActions.setDraft({
+        actionsFormValues: [...actionsFormValues],
+        mainFormValues: { ...mainFormValues }
+      })
+    )
+  }, 250)
 
   const toggleDeletionConfirmationDialog = useCallback(async () => {
     setIsDeletionConfirmationDialogOpen(!isDeletionConfirmationDialogOpen)
@@ -378,7 +365,7 @@ export function MissionForm() {
         setMainFormValues(initialMainFormValues)
         setTitle(getTitleFromMissionMainFormValues(initialMainFormValues, undefined))
 
-        updateDraft(initialMainFormValues, initialActionsFormValues)
+        updateReduxSliceDraft()
 
         return
       }
@@ -411,12 +398,20 @@ export function MissionForm() {
       setActionsFormValues(initialActionsFormValues)
       setIsLoading(false)
       setMainFormKey(mainFormKey + 1)
-      setMainFormValues(initialMainFormValues)
+      setMainFormValues({ ...initialMainFormValues })
       setTitle(getTitleFromMissionMainFormValues(initialMainFormValues, sideWindow.selectedPath.id))
 
-      updateDraft(initialMainFormValues, initialActionsFormValues)
+      updateReduxSliceDraft()
     })()
-  }, [actionFormKey, dispatch, isLoading, mainFormKey, previousMissionId, sideWindow.selectedPath.id, updateDraft])
+  }, [
+    actionFormKey,
+    dispatch,
+    isLoading,
+    mainFormKey,
+    previousMissionId,
+    sideWindow.selectedPath.id,
+    updateReduxSliceDraft
+  ])
 
   useEffect(
     () => () => {
@@ -450,7 +445,6 @@ export function MissionForm() {
                   onChange={updateMainFormValues}
                 />
                 <ActionList
-                  actionsFormError={actionsFormError}
                   actionsFormValues={actionsFormValues}
                   currentIndex={editedActionIndex}
                   missionTypes={mainFormValues.missionTypes}
@@ -463,7 +457,6 @@ export function MissionForm() {
                   key={`action-form-${actionFormKey}`}
                   actionFormValues={editedActionFormValues}
                   onChange={updateEditedActionFormValues}
-                  onError={updateEditedActionFormError}
                 />
               </>
             )}

@@ -23,7 +23,7 @@ import type { Mission, MissionWithActions } from '../../../domain/entities/missi
 import type { GeoJSON as GeoJSONType } from '../../../domain/types/GeoJSON'
 
 export function MissionList() {
-  const { mission } = useMainAppSelector(store => store)
+  const mission = useMainAppSelector(store => store.mission)
 
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
 

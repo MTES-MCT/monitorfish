@@ -16,7 +16,8 @@ import type { MutableRefObject } from 'react'
 export function SideWindowLauncher() {
   const newWindowRef = useRef() as MutableRefObject<HTMLDivElement>
 
-  const { mission, sideWindow } = useMainAppSelector(store => store)
+  const mission = useMainAppSelector(store => store.mission)
+  const sideWindow = useMainAppSelector(store => store.sideWindow)
   const dispatch = useMainAppDispatch()
   const { forceUpdate } = useForceUpdate()
 

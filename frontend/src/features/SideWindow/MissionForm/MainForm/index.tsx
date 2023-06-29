@@ -15,10 +15,11 @@ import { MISSION_TYPES_AS_OPTIONS } from './constants'
 import { FormikDoubleDatePicker } from './FormikDoubleDatePicker'
 import { FormikLocationPicker } from './FormikLocationPicker'
 import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'
-import { MainFormSchema } from './schemas'
+import { MainFormLiveSchema } from './schemas'
 import { BOOLEAN_AS_OPTIONS } from '../../../../constants'
 import { FormBody, FormBodyInnerWrapper } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
+import { FormikIsValidEffect } from '../shared/FormikIsValidEffect'
 
 import type { MissionMainFormValues } from '../types'
 import type { Promisable } from 'type-fest'
@@ -29,9 +30,10 @@ type MainFormProps = {
 }
 function UnmemoizedMainForm({ initialValues, onChange }: MainFormProps) {
   return (
-    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={MainFormSchema}>
+    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={MainFormLiveSchema}>
       <Wrapper>
         <FormikEffect onChange={onChange as any} />
+        <FormikIsValidEffect />
 
         <FormHead>
           <h2>Informations générales</h2>

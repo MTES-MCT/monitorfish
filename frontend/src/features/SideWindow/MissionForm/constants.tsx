@@ -23,6 +23,7 @@ export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValu
   gearInfractions: [],
   gearOnboard: [],
   id: undefined,
+  isValid: false,
   latitude: undefined,
   licencesAndLogbookObservations: undefined,
   licencesMatchActivity: undefined,

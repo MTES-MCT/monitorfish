@@ -17,7 +17,8 @@ import type { MutableRefObject } from 'react'
 
 export function UnmemoizedSelectedMissionActionsLayer({ map }) {
   const { missions } = useGetFilteredMissionsQuery()
-  const { mission, sideWindow } = useMainAppSelector(store => store)
+  const mission = useMainAppSelector(store => store.mission)
+  const sideWindow = useMainAppSelector(store => store.sideWindow)
 
   const selectedMissionActions = useMemo(() => {
     if (!mission.selectedMissionGeoJSON) {

@@ -13,6 +13,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
   it('Should fill the form with an unknown vessel and send the expected data to the API', () => {
     const getSaveButton = () => cy.get('button').contains('Enregistrer et quitter').parent()
+
     // -------------------------------------------------------------------------
     // Form
 
@@ -240,6 +241,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
   it('Should fill the form for a vessel with logbook and prefill the gears, species, fao areas and segments fields', () => {
     const getSaveButton = () => cy.get('button').contains('Enregistrer et quitter').parent()
+
     // -------------------------------------------------------------------------
     // Form
 
@@ -328,5 +330,51 @@ context('Side Window > Mission Form > Sea Control', () => {
 
       cy.get('h1').should('contain.text', 'Missions et contrôles')
     })
+  })
+
+  it('Should only close mission once the form closure validation has passed', () => {
+    const getSaveButton = () => cy.get('button').contains('Enregistrer et quitter').parent()
+    const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer et clôturer').parent()
+
+    // -------------------------------------------------------------------------
+    // Form
+
+    getSaveButton().should('be.disabled')
+    getSaveAndCloseButton().should('be.disabled')
+
+    // Navire
+    cy.get('input[placeholder="Rechercher un navire..."]').type('mal')
+    cy.contains('mark', 'MAL').click().wait(500)
+
+    // Saisi par
+    cy.fill('Saisi par', 'Gaumont').wait(500)
+
+    getSaveButton().should('be.enabled')
+    getSaveAndCloseButton().should('be.enabled')
+
+    cy.clickButton('Enregistrer et clôturer').wait(500)
+
+    getSaveButton().should('be.disabled')
+    getSaveAndCloseButton().should('be.disabled')
+
+    // Engins à bord
+    cy.fill('Ajouter un engin', 'MIS')
+
+    getSaveButton().should('be.enabled')
+    getSaveAndCloseButton().should('be.enabled')
+
+    cy.clickButton('Enregistrer et clôturer')
+
+    // -------------------------------------------------------------------------
+    // Request
+
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('createMissionAction')
+
+    cy.get('h1').should('contain.text', 'Missions et contrôles')
   })
 })

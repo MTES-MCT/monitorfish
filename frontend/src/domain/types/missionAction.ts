@@ -1,6 +1,3 @@
-// TODO Maybe avoid using `Boolean` instead of `boolean`?
-// Because of https://stackoverflow.com/a/64443353/2736233
-
 import type { ControlUnit } from './controlUnit'
 
 export namespace MissionAction {
@@ -10,18 +7,21 @@ export namespace MissionAction {
     controlQualityComments: string | undefined
     controlUnits: ControlUnit.ControlUnit[]
     districtCode: string | undefined
+    diversion: boolean | undefined
     emitsAis: ControlCheck | undefined
     emitsVms: ControlCheck | undefined
     externalReferenceNumber: string | undefined
     facade: string | undefined
     faoAreas: string[]
-    feedbackSheetRequired: Boolean | undefined
+    feedbackSheetRequired: boolean | undefined
     flagState: string | undefined
     gearInfractions: GearInfraction[]
     gearOnboard: GearControl[]
     id: number
     internalReferenceNumber: string | undefined
     ircs: string | undefined
+    isFromPoseidon: boolean | undefined
+    isValid: boolean
     latitude: number | undefined
     licencesAndLogbookObservations: string | undefined
     licencesMatchActivity: ControlCheck | undefined
@@ -36,15 +36,15 @@ export namespace MissionAction {
     // This field is added by the API
     portName: string | undefined
     segments: FleetSegment[]
-    seizureAndDiversion: Boolean | undefined
+    seizureAndDiversion: boolean | undefined
     seizureAndDiversionComments: string | undefined
     separateStowageOfPreservedSpecies: ControlCheck | undefined
     speciesInfractions: SpeciesInfraction[]
     speciesObservations: string | undefined
     speciesOnboard: SpeciesControl[]
-    speciesSizeControlled: Boolean | undefined
-    speciesWeightControlled: Boolean | undefined
-    unitWithoutOmegaGauge: Boolean | undefined
+    speciesSizeControlled: boolean | undefined
+    speciesWeightControlled: boolean | undefined
+    unitWithoutOmegaGauge: boolean | undefined
     userTrigram: string | undefined
     vesselId: number | undefined
     vesselName: string | undefined

@@ -6,12 +6,15 @@ import type { PartialExcept } from '../../../types'
 export type MissionActionFormValues = PartialExcept<
   Omit<MissionAction.MissionActionData, 'missionId'>,
   'actionType' | 'actionDatetimeUtc'
->
+> & {
+  isValid: boolean
+}
 
 export type MissionMainFormValues = Partial<
   Omit<Mission.MissionData, 'actions' | 'controlUnits' | 'startDateTimeUtc' | 'missionTypes'>
 > & {
   controlUnits: Array<ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft>
+  isValid: boolean
   missionTypes?: Mission.MissionType[]
   startDateTimeUtc: string
 }

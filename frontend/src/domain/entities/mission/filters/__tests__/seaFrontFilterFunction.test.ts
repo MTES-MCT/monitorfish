@@ -15,6 +15,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
       facade: SeaFront.MED,
       id: 123,
       isClosed: false,
+      isValid: false,
       missionSource: MissionSource.MONITORFISH,
       missionTypes: [MissionType.AIR],
       startDateTimeUtc: getUtcizedDayjs().toISOString()
@@ -31,6 +32,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
       facade: SeaFront.SA,
       id: 123,
       isClosed: false,
+      isValid: false,
       missionSource: MissionSource.MONITORFISH,
       missionTypes: [MissionType.AIR],
       startDateTimeUtc: getUtcizedDayjs().toISOString()
@@ -47,6 +49,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
       facade: SeaFront.SA,
       id: 123,
       isClosed: false,
+      isValid: false,
       missionSource: MissionSource.MONITORFISH,
       missionTypes: [MissionType.AIR],
       startDateTimeUtc: getUtcizedDayjs().toISOString()
@@ -63,6 +66,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
       facade: SeaFront.GUADELOUPE,
       id: 123,
       isClosed: false,
+      isValid: false,
       missionSource: MissionSource.MONITORFISH,
       missionTypes: [MissionType.AIR],
       startDateTimeUtc: getUtcizedDayjs().toISOString()

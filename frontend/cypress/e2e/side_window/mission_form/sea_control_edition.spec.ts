@@ -65,6 +65,8 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
             gearWasControlled: null
           }
         ],
+        hasSomeGearsSeized: false,
+        hasSomeSpeciesSeized: false,
         id: 4,
         internalReferenceNumber: 'U_W0NTFINDME',
         ircs: null,

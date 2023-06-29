@@ -64,27 +64,18 @@ class GetVesselControls(
         val numberOfDiversions = controlsWithCodeValues
             .filter { it.seizureAndDiversion == true }
             .size
-
-        val numberOfGearSeized = controlsWithCodeValues
-            .filter {
-                it.gearInfractions.any {
-                        gearInfraction ->
-                    gearInfraction.gearSeized == true
-                }
-            }.size
-        val numberOfSpeciesSeized = controlsWithCodeValues
-            .filter {
-                it.speciesInfractions.any {
-                        speciesInfraction ->
-                    speciesInfraction.speciesSeized == true
-                }
-            }.size
+        val numberOfControlsWithSomeGearsSeized = controlsWithCodeValues
+            .filter { it.hasSomeGearsSeized == true }
+            .size
+        val numberOfControlsWithSomeSpeciesSeized = controlsWithCodeValues
+            .filter { it.hasSomeSpeciesSeized == true }
+            .size
 
         ControlsSummary(
             vesselId = vesselId,
             numberOfDiversions = numberOfDiversions,
-            numberOfGearSeized = numberOfGearSeized,
-            numberOfSpeciesSeized = numberOfSpeciesSeized,
+            numberOfControlsWithSomeGearsSeized = numberOfControlsWithSomeGearsSeized,
+            numberOfControlsWithSomeSpeciesSeized = numberOfControlsWithSomeSpeciesSeized,
             controls = controlsWithCodeValues,
         )
     }

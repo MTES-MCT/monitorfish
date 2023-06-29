@@ -34,6 +34,8 @@ class UpdateMissionActionUTests {
             gearOnboard = listOf(),
             seizureAndDiversion = true,
             isDeleted = false,
+            hasSomeGearsSeized = false,
+            hasSomeSpeciesSeized = false,
         )
 
         // When

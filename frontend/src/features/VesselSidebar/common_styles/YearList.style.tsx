@@ -29,14 +29,8 @@ export const YearListTitleText = styled.div<
   ${p => (p.isEmpty ? null : 'cursor: pointer;')}
 `
 
-export const YearListContent = styled.div<
-  {
-    isOpen: boolean
-  } & HTMLProps<HTMLDivElement>
->`
-  height: ${p => (p.isOpen ? 'inherit' : '0')};
+export const YearListContent = styled.div<HTMLProps<HTMLDivElement>>`
   overflow: hidden;
-  opacity: ${p => (p.isOpen ? '1' : '0')};
 `
 
 export const YearListChevronIcon = styled(ChevronIconSVG)<{

@@ -1,11 +1,9 @@
 import {
   Accent,
   Button,
-  FormikCheckbox,
   FormikMultiRadio,
   FormikSelect,
   FormikTextarea,
-  type FormikCheckboxProps,
   type Option,
   useNewWindow
 } from '@mtes-mct/monitor-ui'
@@ -18,14 +16,12 @@ import { INFRACTION_TYPES_AS_OPTIONS } from '../constants'
 import type { MissionAction } from '../../../../../../domain/types/missionAction'
 
 export type InfractionFormProps<AnyInfraction extends MissionAction.OtherInfraction> = {
-  infractionCheckboxProps: FormikCheckboxProps | undefined
   initialValues: AnyInfraction
   natinfsAsOptions: Option<number>[]
   onCancel: () => void
   onSubmit: (nextInfractionFormValues: AnyInfraction) => void
 }
 export function InfractionForm<AnyInfraction extends MissionAction.OtherInfraction>({
-  infractionCheckboxProps,
   initialValues,
   natinfsAsOptions,
   onCancel,
@@ -52,10 +48,6 @@ export function InfractionForm<AnyInfraction extends MissionAction.OtherInfracti
             options={natinfsAsOptions}
             searchable
           />
-          {infractionCheckboxProps && (
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            <FormikCheckbox isErrorMessageHidden {...infractionCheckboxProps} />
-          )}
           <FormikTextarea isErrorMessageHidden label="Observations sur l’infraction" name="comments" rows={2} />
 
           <FormButtonGroup>

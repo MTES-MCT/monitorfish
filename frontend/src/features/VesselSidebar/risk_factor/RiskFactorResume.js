@@ -15,7 +15,7 @@ import RiskFactorExplanationModal from './RiskFactorExplanationModal'
 import { useSelector } from 'react-redux'
 import ImpactRiskFactorDetails from './details/ImpactRiskFactorDetails'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
-import ProbabilityRiskFactorDetails from './details/ProbabilityRiskFactorDetails'
+import { ProbabilityRiskFactorDetails } from './details/ProbabilityRiskFactorDetails'
 import DetectabilityRiskFactorDetails from './details/DetectabilityRiskFactorDetails'
 
 const RiskFactorResume = () => {

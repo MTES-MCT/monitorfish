@@ -42,6 +42,8 @@ class AddMissionActionUTests {
             seizureAndDiversion = true,
             isDeleted = false,
             userTrigram = "LTH",
+            hasSomeGearsSeized = false,
+            hasSomeSpeciesSeized = false,
         )
 
         // When
@@ -71,6 +73,8 @@ class AddMissionActionUTests {
             seizureAndDiversion = true,
             isDeleted = false,
             userTrigram = "LTH",
+            hasSomeGearsSeized = false,
+            hasSomeSpeciesSeized = false,
         )
         given(missionActionsRepository.save(anyOrNull())).willReturn(action)
         given(getMissionActionFacade.execute(anyOrNull())).willReturn(Facade.NAMO)

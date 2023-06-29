@@ -40,5 +40,7 @@ object TestUtils {
         longitude = -6.56,
         latitude = 45.12,
         isDeleted = false,
+        hasSomeGearsSeized = false,
+        hasSomeSpeciesSeized = false,
     )
 }

@@ -121,6 +121,10 @@ class MissionActionEntity(
     val speciesOnboard: String? = null,
     @Column(name = "is_deleted")
     val isDeleted: Boolean,
+    @Column(name = "has_some_gears_seized")
+    var hasSomeGearsSeized: Boolean,
+    @Column(name = "has_some_species_seized")
+    var hasSomeSpeciesSeized: Boolean,
 ) {
 
     companion object {
@@ -170,6 +174,8 @@ class MissionActionEntity(
                 speciesOnboard = mapper.writeValueAsString(missionAction.speciesOnboard),
                 isFromPoseidon = false,
                 isDeleted = missionAction.isDeleted,
+                hasSomeGearsSeized = missionAction.hasSomeGearsSeized,
+                hasSomeSpeciesSeized = missionAction.hasSomeSpeciesSeized,
             )
     }
 
@@ -217,6 +223,8 @@ class MissionActionEntity(
         gearOnboard = deserializeJSONList(mapper, gearOnboard, GearControl::class.java),
         speciesOnboard = deserializeJSONList(mapper, speciesOnboard, SpeciesControl::class.java),
         isDeleted = isDeleted,
+        hasSomeGearsSeized = hasSomeGearsSeized,
+        hasSomeSpeciesSeized = hasSomeSpeciesSeized,
     )
 
     private fun <T> deserializeJSONList(mapper: ObjectMapper, json: String?, clazz: Class<T>): List<T> = json?.let {

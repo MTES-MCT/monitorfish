@@ -231,7 +231,7 @@ jobs:
           firefox -v
           which firefox
 
-      - uses: cypress-io/github-action@v4
+      - uses: cypress-io/github-action@v5
         with:
           browser: firefox
           config-file: config/cypress.config.ts

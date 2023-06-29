@@ -4,25 +4,29 @@ import { COLORS } from '../../../constants/constants'
 import { NoValue } from '../common_styles/common.style'
 
 type InfractionsSummaryProps = {
+  numberOfControlsWithSomeGearsSeized: number
+  numberOfControlsWithSomeSpeciesSeized: number
   numberOfDiversions: number
-  numberOfGearSeized: number
-  numberOfSpeciesSeized: number
 }
 export function InfractionsSummary({
-  numberOfDiversions,
-  numberOfGearSeized,
-  numberOfSpeciesSeized
+  numberOfControlsWithSomeGearsSeized,
+  numberOfControlsWithSomeSpeciesSeized,
+  numberOfDiversions
 }: InfractionsSummaryProps) {
   const getText = value => (!Number.isNaN(value) ? value : <NoValue>-</NoValue>)
 
   return (
     <Wrapper>
       <Tag>
-        <InfractionNumber isRed={!!numberOfGearSeized}>{getText(numberOfGearSeized)}</InfractionNumber>
+        <InfractionNumber isRed={!!numberOfControlsWithSomeGearsSeized}>
+          {getText(numberOfControlsWithSomeGearsSeized)}
+        </InfractionNumber>
         <Text>Appréhension engin</Text>
       </Tag>
       <Tag>
-        <InfractionNumber isRed={!!numberOfSpeciesSeized}>{getText(numberOfSpeciesSeized)}</InfractionNumber>
+        <InfractionNumber isRed={!!numberOfControlsWithSomeSpeciesSeized}>
+          {getText(numberOfControlsWithSomeSpeciesSeized)}
+        </InfractionNumber>
         <Text>Appréhension espèce</Text>
       </Tag>
       <Tag>

@@ -60,16 +60,19 @@ export function YearBeaconMalfunctions({
             </YearResume>
           </YearListTitleText>
         </YearListTitle>
-        <YearListContent isOpen={isOpen} name={year.toString()}>
-          {sortedMalfunctions.map((beaconMalfunctionWithDetails, index) => (
-            <BeaconMalfunctionCard
-              key={beaconMalfunctionWithDetails.beaconMalfunction.id}
-              beaconMalfunctionWithDetails={beaconMalfunctionWithDetails}
-              isLastItem={yearBeaconMalfunctions.length === index + 1}
-              setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails}
-            />
-          ))}
-        </YearListContent>
+        {isOpen && (
+          // TODO Why do we need to pass a name prop here?
+          <YearListContent name={year.toString()}>
+            {sortedMalfunctions.map((beaconMalfunctionWithDetails, index) => (
+              <BeaconMalfunctionCard
+                key={beaconMalfunctionWithDetails.beaconMalfunction.id}
+                beaconMalfunctionWithDetails={beaconMalfunctionWithDetails}
+                isLastItem={yearBeaconMalfunctions.length === index + 1}
+                setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails}
+              />
+            ))}
+          </YearListContent>
+        )}
       </Row>
     )
   )

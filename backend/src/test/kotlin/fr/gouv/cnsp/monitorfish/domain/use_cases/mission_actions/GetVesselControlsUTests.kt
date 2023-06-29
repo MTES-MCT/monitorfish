@@ -51,7 +51,6 @@ class GetVesselControlsUTests {
 
         val speciesInfraction = SpeciesInfraction()
         speciesInfraction.natinf = 12345
-        speciesInfraction.speciesSeized = true
 
         val expectedControls = listOf(
             MissionAction(
@@ -64,6 +63,8 @@ class GetVesselControlsUTests {
                 gearOnboard = gearControls,
                 seizureAndDiversion = true,
                 isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
             ),
             MissionAction(
                 id = 2,
@@ -74,6 +75,8 @@ class GetVesselControlsUTests {
                 seizureAndDiversion = false,
                 speciesInfractions = listOf(speciesInfraction),
                 isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
             ),
             MissionAction(
                 id = 3,
@@ -84,6 +87,8 @@ class GetVesselControlsUTests {
                 seizureAndDiversion = false,
                 speciesInfractions = listOf(speciesInfraction),
                 isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
             ),
         )
         given(missionActionsRepository.findVesselMissionActionsAfterDateTime(any(), any())).willReturn(
@@ -102,8 +107,8 @@ class GetVesselControlsUTests {
 
         // Then
         assertThat(controlResumeAndControls.numberOfDiversions).isEqualTo(1)
-        assertThat(controlResumeAndControls.numberOfSpeciesSeized).isEqualTo(2)
-        assertThat(controlResumeAndControls.numberOfGearSeized).isEqualTo(0)
+        assertThat(controlResumeAndControls.numberOfControlsWithSomeGearsSeized).isEqualTo(0)
+        assertThat(controlResumeAndControls.numberOfControlsWithSomeSpeciesSeized).isEqualTo(2)
 
         assertThat(controlResumeAndControls.controls.first().portName).isEqualTo("Al Jazeera Port")
         assertThat(controlResumeAndControls.controls.first().gearOnboard.first().gearName).isEqualTo(

@@ -91,12 +91,16 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
             </YearResume>
           </YearListTitleText>
         </YearListTitle>
-        <YearListContent isOpen={isOpen} name={year.toString()}>
-          {sortedControls.map(
-            (control, index) =>
-              control && <Control key={control.id} control={control} isLastItem={yearControls.length === index + 1} />
-          )}
-        </YearListContent>
+
+        {isOpen && (
+          // TODO Why do we need to pass a name prop here?
+          <YearListContent name={year.toString()}>
+            {sortedControls.map(
+              (control, index) =>
+                control && <Control key={control.id} control={control} isLastItem={yearControls.length === index + 1} />
+            )}
+          </YearListContent>
+        )}
       </Row>
     )
   )

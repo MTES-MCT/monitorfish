@@ -1,3 +1,4 @@
+import { THEME, Tag, TagBullet, TagGroup } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -72,10 +73,24 @@ export function Control({ control, isLastItem }: ControlProps) {
               .join(', ')}
           </Unit>
         </Title>
-        <NoInfraction>{!numberOfInfractions && "Pas d'infraction"}</NoInfraction>
+        {!numberOfInfractions && <NoInfraction>Pas d’infraction</NoInfraction>}
+        {(control.hasSomeGearsSeized || control.hasSomeSpeciesSeized) && (
+          <StyledTagGroup>
+            {control.hasSomeGearsSeized && (
+              <Tag bullet={TagBullet.DISK} bulletColor={THEME.color.maximumRed} isLight>
+                Appréhension engin
+              </Tag>
+            )}
+            {control.hasSomeSpeciesSeized && (
+              <Tag bullet={TagBullet.DISK} bulletColor={THEME.color.maximumRed} isLight>
+                Appréhension espèce
+              </Tag>
+            )}
+          </StyledTagGroup>
+        )}
         {control.gearInfractions.map((infraction, index) => (
           <Infraction
-            key={infraction.infractionType + infraction.natinf}
+            key={`${infraction.infractionType}${infraction.natinf}`}
             index={index + 1}
             infraction={infraction}
             infractionDomain={MissionAction.InfractionDomain.GEAR}
@@ -83,7 +98,7 @@ export function Control({ control, isLastItem }: ControlProps) {
         ))}
         {control.speciesInfractions.map((infraction, index) => (
           <Infraction
-            key={infraction.infractionType + infraction.natinf}
+            key={`${infraction.infractionType}${infraction.natinf}`}
             index={control.gearInfractions.length + index + 1}
             infraction={infraction}
             infractionDomain={MissionAction.InfractionDomain.SPECIES}
@@ -91,7 +106,7 @@ export function Control({ control, isLastItem }: ControlProps) {
         ))}
         {control.logbookInfractions.map((infraction, index) => (
           <Infraction
-            key={infraction.infractionType + infraction.natinf}
+            key={`${infraction.infractionType}${infraction.natinf}`}
             index={gearAndSpeciesInfractionsLength + index + 1}
             infraction={infraction}
             infractionDomain={MissionAction.InfractionDomain.LOGBOOK}
@@ -99,7 +114,7 @@ export function Control({ control, isLastItem }: ControlProps) {
         ))}
         {control.otherInfractions.map((infraction, index) => (
           <Infraction
-            key={infraction.infractionType + infraction.natinf}
+            key={`${infraction.infractionType}${infraction.natinf}`}
             index={gearSpeciesAndLogbookInfractionsLength + index + 1}
             infraction={infraction}
             infractionDomain={MissionAction.InfractionDomain.OTHER}
@@ -144,7 +159,7 @@ const Unit = styled.span`
 const Title = styled.div`
   font-size: 13px;
   font-weight: bold;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   text-overflow: ellipsis;
   overflow: hidden !important;
   white-space: inherit;
@@ -181,4 +196,8 @@ const GyroRed = styled(GyroRedSVG)`
   width: 16px;
   margin: 0px 12px 0 2px;
   vertical-align: sub;
+`
+
+const StyledTagGroup = styled(TagGroup)`
+  margin: 0 0 8px;
 `

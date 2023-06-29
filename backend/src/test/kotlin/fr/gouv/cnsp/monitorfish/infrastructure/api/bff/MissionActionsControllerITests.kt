@@ -72,6 +72,8 @@ class MissionActionsControllerITests {
                         actionType = MissionActionType.SEA_CONTROL,
                         actionDatetimeUtc = ZonedDateTime.now(),
                         isDeleted = false,
+                        hasSomeGearsSeized = false,
+                        hasSomeSpeciesSeized = false,
                     ),
                 ),
             ),
@@ -82,8 +84,8 @@ class MissionActionsControllerITests {
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.numberOfDiversions", equalTo(3)))
-            .andExpect(jsonPath("$.numberOfGearSeized", equalTo(4)))
-            .andExpect(jsonPath("$.numberOfSpeciesSeized", equalTo(5)))
+            .andExpect(jsonPath("$.numberOfControlsWithSomeGearsSeized", equalTo(4)))
+            .andExpect(jsonPath("$.numberOfControlsWithSomeSpeciesSeized", equalTo(5)))
             .andExpect(jsonPath("$.controls.length()", equalTo(1)))
 
         runBlocking {
@@ -103,6 +105,8 @@ class MissionActionsControllerITests {
                     actionType = MissionActionType.SEA_CONTROL,
                     actionDatetimeUtc = ZonedDateTime.parse("2020-10-06T16:25Z"),
                     isDeleted = false,
+                    hasSomeGearsSeized = false,
+                    hasSomeSpeciesSeized = false,
                 ),
             ),
         )
@@ -153,6 +157,8 @@ class MissionActionsControllerITests {
                             gearInfractions = listOf(
                                 GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite"),
                             ),
+                            hasSomeGearsSeized = false,
+                            hasSomeSpeciesSeized = false,
                         ),
                     ),
                 )
@@ -217,6 +223,8 @@ class MissionActionsControllerITests {
                                 GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite"),
                             ),
                             gearOnboard = listOf(gearControl),
+                            hasSomeGearsSeized = false,
+                            hasSomeSpeciesSeized = false,
                         ),
                     ),
                 )

@@ -230,8 +230,8 @@ context('Side Window > Mission Form > Main Form', () => {
         flagState: 'GB',
         flightGoals: [],
         gearInfractions: [
-          { comments: 'Maille trop petite', gearSeized: null, infractionType: 'WITH_RECORD', natinf: 23581 },
-          { comments: 'Engin non conforme', gearSeized: null, infractionType: 'PENDING', natinf: 27724 }
+          { comments: 'Maille trop petite', infractionType: 'WITH_RECORD', natinf: 23581 },
+          { comments: 'Engin non conforme', infractionType: 'PENDING', natinf: 27724 }
         ],
         gearOnboard: [
           {
@@ -251,6 +251,8 @@ context('Side Window > Mission Form > Main Form', () => {
             gearWasControlled: true
           }
         ],
+        hasSomeGearsSeized: false,
+        hasSomeSpeciesSeized: true,
         id: 2,
         internalReferenceNumber: 'FAK000999999',
         ircs: null,
@@ -285,9 +287,7 @@ context('Side Window > Mission Form > Main Form', () => {
         seizureAndDiversion: true,
         seizureAndDiversionComments: 'Saisie de la pêche',
         separateStowageOfPreservedSpecies: 'YES',
-        speciesInfractions: [
-          { comments: 'Sous taille de 8cm', infractionType: 'WITHOUT_RECORD', natinf: 28346, speciesSeized: true }
-        ],
+        speciesInfractions: [{ comments: 'Sous taille de 8cm', infractionType: 'WITHOUT_RECORD', natinf: 28346 }],
         speciesObservations: "Saisie de l'ensemble des captures à bord",
         speciesOnboard: [
           { controlledWeight: 450, declaredWeight: 302.5, nbFish: null, speciesCode: 'MNZ', underSized: true },

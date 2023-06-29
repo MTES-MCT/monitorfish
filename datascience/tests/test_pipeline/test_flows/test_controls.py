@@ -755,6 +755,8 @@ expected_loaded_mission_actions_df = pd.merge(
                 [{"segment": "SWW04 - 2022", "segmentName": "Midwater trawls"}],
             ],
             "flight_goals": [None] * 10,
+            "has_some_gears_seized": [False] * 10,
+            "has_some_species_seized": [False] * 10,
         }
     ),
     on="id",

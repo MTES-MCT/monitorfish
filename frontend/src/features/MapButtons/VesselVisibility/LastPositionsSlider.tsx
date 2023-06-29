@@ -45,7 +45,9 @@ export function LastPositionsSlider({
         <Nouislider
           behaviour="tap"
           connect={[true, true, true]}
+          keyboardSupport
           onSlide={(_a, _b, nextValue) => updateValue(nextValue)}
+          orientation="horizontal"
           range={{
             max: [6],
             min: [0, 1]

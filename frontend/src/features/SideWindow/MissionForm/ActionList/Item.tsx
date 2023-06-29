@@ -116,7 +116,6 @@ export function Item({ error, initialValues, isSelected, onDuplicate, onRemove, 
 
             <IconButton
               accent={Accent.TERTIARY}
-              aria-label="Dupliquer l’action"
               color={THEME.color.slateGray}
               Icon={Icon.Duplicate}
               iconSize={20}
@@ -126,7 +125,6 @@ export function Item({ error, initialValues, isSelected, onDuplicate, onRemove, 
             />
             <IconButton
               accent={Accent.TERTIARY}
-              aria-label="Supprimer l’action"
               color={THEME.color.maximumRed}
               Icon={Icon.Delete}
               iconSize={20}

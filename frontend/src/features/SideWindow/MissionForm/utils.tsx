@@ -217,7 +217,7 @@ export function getValidMissionDataControlUnit(
   return validMissionDataControlUnit
 }
 
-export function valideMissionForms(
+export function validateMissionForms(
   mainFormValues: MissionMainFormValues,
   actionsFormValues: MissionActionFormValues[],
   isClosureValidation: boolean

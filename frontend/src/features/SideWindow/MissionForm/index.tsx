@@ -13,7 +13,7 @@ import { DraftCancellationConfirmationDialog } from './shared/DraftCancellationC
 import { TitleSourceTag } from './shared/TitleSourceTag'
 import { TitleStatusTag } from './shared/TitleStatusTag'
 import {
-  valideMissionForms,
+  validateMissionForms,
   areMissionFormsValuesValid,
   getMissionActionsDataFromMissionActionsFormValues,
   getMissionDataFromMissionFormValues,
@@ -120,7 +120,7 @@ export function MissionForm() {
       }
 
       if (mustClose) {
-        const [canClose, { nextActionsFormValues, nextMainFormValues }] = valideMissionForms(
+        const [canClose, { nextActionsFormValues, nextMainFormValues }] = validateMissionForms(
           mainFormValues,
           actionsFormValues,
           true
@@ -216,9 +216,9 @@ export function MissionForm() {
 
   const duplicateAction = useCallback(
     (actionIndex: number) => {
-      const sourceAction = omit(['id'], actionsFormValues[actionIndex]) as MissionActionFormValues
+      const actionCopy: MissionActionFormValues = omit(['id'], actionsFormValues[actionIndex])
 
-      setActionsFormValues([...actionsFormValues, sourceAction])
+      setActionsFormValues([...actionsFormValues, actionCopy])
 
       setActionFormKey(actionFormKey + 1)
       setEditedActionIndex(actionsFormValues.length - 1)
@@ -350,7 +350,7 @@ export function MissionForm() {
       return
     }
 
-    const [, { nextActionsFormValues, nextMainFormValues }] = valideMissionForms(
+    const [, { nextActionsFormValues, nextMainFormValues }] = validateMissionForms(
       mainFormValues,
       actionsFormValues,
       false

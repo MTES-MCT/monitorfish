@@ -62,7 +62,8 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
             declaredMesh: null,
             gearCode: 'PTM',
             gearName: 'Chaluts-bœufs pélagiques',
-            gearWasControlled: null
+            gearWasControlled: null,
+            hasUncontrolledMesh: true
           }
         ],
         hasSomeGearsSeized: false,
@@ -163,7 +164,8 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
             declaredMesh: 70,
             gearCode: 'OTB',
             gearName: 'Chaluts de fond à panneaux',
-            gearWasControlled: null
+            gearWasControlled: null,
+            hasUncontrolledMesh: true
           }
         ],
         id: 4,

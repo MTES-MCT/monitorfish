@@ -427,12 +427,17 @@ export function MissionForm() {
         missionResponse.data,
         missionActionsResponse.data
       )
+      const [, { nextActionsFormValues, nextMainFormValues }] = validateMissionForms(
+        initialMainFormValues,
+        initialActionsFormValues,
+        false
+      )
 
       setActionFormKey(actionFormKey + 1)
-      setActionsFormValues(initialActionsFormValues)
+      setActionsFormValues(nextActionsFormValues)
       setIsLoading(false)
       setMainFormKey(mainFormKey + 1)
-      setMainFormValues({ ...initialMainFormValues })
+      setMainFormValues(nextMainFormValues)
       setTitle(getTitleFromMissionMainFormValues(initialMainFormValues, sideWindow.selectedPath.id))
 
       updateReduxSliceDraft()

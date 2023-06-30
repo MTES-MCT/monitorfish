@@ -13,7 +13,7 @@ import { DraftCancellationConfirmationDialog } from './shared/DraftCancellationC
 import { TitleSourceTag } from './shared/TitleSourceTag'
 import { TitleStatusTag } from './shared/TitleStatusTag'
 import {
-  areMissionFormsClosureValuesValid,
+  valideMissionForms,
   areMissionFormsValuesValid,
   getMissionActionsDataFromMissionActionsFormValues,
   getMissionDataFromMissionFormValues,
@@ -120,9 +120,10 @@ export function MissionForm() {
       }
 
       if (mustClose) {
-        const [canClose, { nextActionsFormValues, nextMainFormValues }] = areMissionFormsClosureValuesValid(
+        const [canClose, { nextActionsFormValues, nextMainFormValues }] = valideMissionForms(
           mainFormValues,
-          actionsFormValues
+          actionsFormValues,
+          true
         )
         // Stop creation or update there in case there are closure validation error
         if (!canClose) {
@@ -337,6 +338,39 @@ export function MissionForm() {
   const toggleDeletionConfirmationDialog = useCallback(async () => {
     setIsDeletionConfirmationDialogOpen(!isDeletionConfirmationDialogOpen)
   }, [isDeletionConfirmationDialogOpen])
+
+  const validateMissionFormsLiveValues = useDebouncedCallback(() => {
+    if (!mainFormValues) {
+      logSoftError({
+        isSideWindowError: true,
+        message: '`mainFormValues` is undefined.',
+        userMessage: "Une erreur est survenue pendant l'édition de la mission."
+      })
+
+      return
+    }
+
+    const [, { nextActionsFormValues, nextMainFormValues }] = valideMissionForms(
+      mainFormValues,
+      actionsFormValues,
+      false
+    )
+
+    setMainFormValues(nextMainFormValues)
+    setActionsFormValues(nextActionsFormValues)
+  }, 250)
+
+  // Triggers forms validation when the mission start/end date changes
+  // in order to update actions list validation messages
+  useEffect(
+    () => {
+      validateMissionFormsLiveValues()
+    },
+
+    // We want to control what triggers this hook to minimize its calls
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [mainFormValues?.endDateTimeUtc, mainFormValues?.startDateTimeUtc]
+  )
 
   // ---------------------------------------------------------------------------
   // DATA

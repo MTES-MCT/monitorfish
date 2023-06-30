@@ -216,7 +216,7 @@ export function GearsField() {
         searchable
       />
 
-      {meta.error && <StyledFieldError>{meta.error}</StyledFieldError>}
+      {typeof meta.error === 'string' && <StyledFieldError>{meta.error}</StyledFieldError>}
     </FormikMultiInfractionPicker>
   )
 }

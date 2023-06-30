@@ -1,4 +1,4 @@
-import { RegulatoryZone } from '../../../../../types/regulation'
+import type { RegulatoryZone } from '../../../../../types/regulation'
 
 export const regulatoryZones: RegulatoryZone[] = [
   {

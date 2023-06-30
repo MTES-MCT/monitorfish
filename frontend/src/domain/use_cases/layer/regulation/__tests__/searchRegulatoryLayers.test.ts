@@ -3,7 +3,8 @@ import Fuse from 'fuse.js'
 
 import { regulatoryZones } from './__mocks__'
 import { REGULATION_SEARCH_OPTIONS } from '../../../../../features/MapButtons/LayersSidebar/RegulatoryZones/search/constants'
-import { RegulatoryZone } from '../../../../types/regulation'
+
+import type { RegulatoryZone } from '../../../../types/regulation'
 
 describe('searchRegulatoryLayers()', () => {
   it('should search with the year included in the regulatory reference', () => {

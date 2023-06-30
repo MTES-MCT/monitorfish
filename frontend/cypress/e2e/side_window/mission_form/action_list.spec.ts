@@ -55,7 +55,8 @@ context('Side Window > Mission Form > Action List', () => {
             declaredMesh: null,
             gearCode: 'OTB',
             gearName: 'Chaluts de fond à panneaux',
-            gearWasControlled: null
+            gearWasControlled: null,
+            hasUncontrolledMesh: true
           }
         ],
         hasSomeGearsSeized: false,

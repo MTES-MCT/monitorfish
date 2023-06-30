@@ -126,7 +126,8 @@ context('Side Window > Mission Form > Land Control', () => {
             declaredMesh: 70,
             gearCode: 'OTB',
             gearName: 'Chaluts de fond à panneaux',
-            gearWasControlled: null
+            gearWasControlled: null,
+            hasUncontrolledMesh: true
           },
           {
             comments: null,
@@ -134,7 +135,8 @@ context('Side Window > Mission Form > Land Control', () => {
             declaredMesh: null,
             gearCode: 'MIS',
             gearName: 'Engin divers',
-            gearWasControlled: null
+            gearWasControlled: null,
+            hasUncontrolledMesh: true
           }
         ],
         hasSomeGearsSeized: true,

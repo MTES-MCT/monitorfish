@@ -179,10 +179,12 @@ context('Side Window > Mission Form > Sea Control', () => {
         gearOnboard: [
           {
             comments: 'Autres mesures.',
+            controlledMesh: null,
             declaredMesh: 10,
             gearCode: 'MIS',
             gearName: 'Engin divers',
-            gearWasControlled: true
+            gearWasControlled: true,
+            hasUncontrolledMesh: true
           },
           {
             comments: null,
@@ -190,7 +192,8 @@ context('Side Window > Mission Form > Sea Control', () => {
             declaredMesh: null,
             gearCode: 'OTB',
             gearName: 'Chaluts de fond à panneaux',
-            gearWasControlled: null
+            gearWasControlled: null,
+            hasUncontrolledMesh: true
           }
         ],
         hasSomeGearsSeized: true,
@@ -293,7 +296,8 @@ context('Side Window > Mission Form > Sea Control', () => {
             declaredMesh: 70,
             gearCode: 'OTB',
             gearName: 'Chaluts de fond à panneaux',
-            gearWasControlled: null
+            gearWasControlled: null,
+            hasUncontrolledMesh: true
           }
         ],
         hasSomeGearsSeized: false,

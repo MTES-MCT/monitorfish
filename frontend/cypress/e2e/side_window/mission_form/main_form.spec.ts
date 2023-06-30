@@ -240,7 +240,8 @@ context('Side Window > Mission Form > Main Form', () => {
             declaredMesh: 60,
             gearCode: 'OTB',
             gearName: 'Chaluts de fond à panneaux',
-            gearWasControlled: false
+            gearWasControlled: false,
+            hasUncontrolledMesh: true
           },
           {
             comments: null,
@@ -248,7 +249,8 @@ context('Side Window > Mission Form > Main Form', () => {
             declaredMesh: 60,
             gearCode: 'OTM',
             gearName: 'Chaluts pélagiques à panneaux',
-            gearWasControlled: true
+            gearWasControlled: true,
+            hasUncontrolledMesh: false
           }
         ],
         hasSomeGearsSeized: false,

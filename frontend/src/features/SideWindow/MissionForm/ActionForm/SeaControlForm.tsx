@@ -11,6 +11,7 @@ import {
 import { Formik } from 'formik'
 import { noop } from 'lodash/fp'
 import { useMemo } from 'react'
+import styled from 'styled-components'
 
 import { SeaControlFormClosureSchema, SeaControlFormLiveSchema } from './schemas'
 import { ControlQualityField } from './shared/ControlQualityField'
@@ -86,11 +87,11 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
 
           <SpeciesField controlledWeightLabel="Qté estimée" />
 
-          <FieldsetGroup isLight legend="Appréhension et déroutement">
+          <SeizureFieldsetGroup isLight legend="Appréhension et déroutement">
             <FormikCheckbox label="Appréhension d’engin(s)" name="hasSomeGearsSeized" />
             <FormikCheckbox label="Appréhension d’espèce(s)" name="hasSomeSpeciesSeized" />
             <FormikCheckbox label="Appréhension et déroutement du navire" name="seizureAndDiversion" />
-          </FieldsetGroup>
+          </SeizureFieldsetGroup>
 
           <FormikMultiInfractionPicker
             addButtonLabel="Ajouter une autre infraction"
@@ -115,3 +116,11 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
     </Formik>
   )
 }
+
+const SeizureFieldsetGroup = styled(FieldsetGroup)`
+  > div {
+    > .Field-Checkbox:not(:first-child) {
+      margin-top: 16px;
+    }
+  }
+`

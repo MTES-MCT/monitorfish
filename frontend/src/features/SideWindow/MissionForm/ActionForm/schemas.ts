@@ -36,7 +36,13 @@ const actionDatetimeUtcValidator = string()
   })
 
 export const GearOnboardSchema = object({
-  gearWasControlled: boolean().required("Veuillez indiquer si l' engins a été contrôlé.")
+  declaredMesh: number().required('Veuillez indiquer le maillage déclaré.'),
+  controlledMesh: number().when('hasUncontrolledMesh', {
+    is: false,
+    then: number().required('Veuillez indiquer le maillage mesuré.'),
+    otherwise: number()
+  }),
+  gearWasControlled: boolean().required("Veuillez indiquer si l'engin a été contrôlé.")
 })
 
 // -----------------------------------------------------------------------------
@@ -64,7 +70,7 @@ export const LandControlFormClosureSchema = LandControlFormLiveSchema.concat(
   object({
     // Obligations déclaratives et autorisations de pêche
     emitsVms: string().required('Veuillez indiquer si le navire émet un signal VMS.'),
-    emitAis: string().required('Veuillez indiquer si le navire émet un signal AIS.'),
+    emitsAis: string().required('Veuillez indiquer si le navire émet un signal AIS.'),
     logbookMatchesActivity: string().required(
       'Veuillez indiquer si le journal de bord correspond à l’activité du navire.'
     ),
@@ -73,7 +79,7 @@ export const LandControlFormClosureSchema = LandControlFormLiveSchema.concat(
     // Espèces à bord
     speciesWeightControlled: boolean().required('Veuillez indiquer si le poids des espèces a été contrôlé.'),
     speciesSizeControlled: boolean().required('Veuillez indiquer si la taille des espèces a été contrôlée.'),
-    separateStowageOfPreservedSpecies: boolean().required(
+    separateStowageOfPreservedSpecies: string().required(
       'Veuillez indiquer si les espèces soumises à plan sont séparées.'
     ),
 
@@ -103,7 +109,7 @@ export const SeaControlFormClosureSchema = SeaControlFormLiveSchema.concat(
   object({
     // Obligations déclaratives et autorisations de pêche
     emitsVms: string().required('Veuillez indiquer si le navire émet un signal VMS.'),
-    emitAis: string().required('Veuillez indiquer si le navire émet un signal AIS.'),
+    emitsAis: string().required('Veuillez indiquer si le navire émet un signal AIS.'),
     logbookMatchesActivity: string().required(
       'Veuillez indiquer si le journal de bord correspond à l’activité du navire.'
     ),
@@ -112,7 +118,7 @@ export const SeaControlFormClosureSchema = SeaControlFormLiveSchema.concat(
     // Espèces à bord
     speciesWeightControlled: boolean().required('Veuillez indiquer si le poids des espèces a été contrôlé.'),
     speciesSizeControlled: boolean().required('Veuillez indiquer si la taille des espèces a été contrôlée.'),
-    separateStowageOfPreservedSpecies: boolean().required(
+    separateStowageOfPreservedSpecies: string().required(
       'Veuillez indiquer si les espèces soumises à plan sont séparées.'
     ),
 

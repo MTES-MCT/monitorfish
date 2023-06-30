@@ -98,7 +98,7 @@ context('Side Window > Mission Form > Air Surveillance', () => {
         userTrigram: 'Marlin',
         vesselId: null,
         vesselName: null,
-        vesselTargeted: 'NO'
+        vesselTargeted: null
       })
       assert.isString(interception.request.body.actionDatetimeUtc)
 

@@ -53,9 +53,7 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Poids des espèces vérifiés', 'Oui')
     cy.fill('Taille des espèces vérifiées', 'Non')
     cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
-    // TODO Theses two fields makes the test to be broken
-    // cy.fill('Qté déclarée', 10)
-    // cy.fill('Qté pesée', 20)
+    cy.fill('Qté pesée', 500)
     cy.fill('Sous-taille', true)
     cy.clickButton('Ajouter une infraction espèces')
     cy.fill('Type d’infraction', 'Sans PV')
@@ -127,7 +125,7 @@ context('Side Window > Mission Form > Land Control', () => {
             gearCode: 'OTB',
             gearName: 'Chaluts de fond à panneaux',
             gearWasControlled: null,
-            hasUncontrolledMesh: true
+            hasUncontrolledMesh: false
           },
           {
             comments: null,
@@ -136,7 +134,7 @@ context('Side Window > Mission Form > Land Control', () => {
             gearCode: 'MIS',
             gearName: 'Engin divers',
             gearWasControlled: null,
-            hasUncontrolledMesh: true
+            hasUncontrolledMesh: false
           }
         ],
         hasSomeGearsSeized: true,
@@ -172,7 +170,7 @@ context('Side Window > Mission Form > Land Control', () => {
         ],
         speciesObservations: 'Une observation hors infraction sur les espèces.',
         speciesOnboard: [
-          { controlledWeight: null, declaredWeight: 471.2, nbFish: null, speciesCode: 'HKE', underSized: true },
+          { controlledWeight: 500, declaredWeight: 471.2, nbFish: null, speciesCode: 'HKE', underSized: true },
           { controlledWeight: null, declaredWeight: 13.46, nbFish: null, speciesCode: 'BLI', underSized: false },
           { controlledWeight: null, declaredWeight: null, nbFish: null, speciesCode: 'COD', underSized: false }
         ],
@@ -199,27 +197,87 @@ context('Side Window > Mission Form > Land Control', () => {
     getSaveButton().should('be.disabled')
     getSaveAndCloseButton().should('be.disabled')
 
+    cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('exist')
+    cy.contains('Veuillez indiquer le navire contrôlé.').should('exist')
+    cy.contains('Veuillez indiquer le port de contrôle.').should('exist')
+    cy.contains('Veuillez indiquer votre trigramme.').should('exist')
+
     // Navire
     cy.get('input[placeholder="Rechercher un navire..."]').type('mal')
     cy.contains('mark', 'MAL').click().wait(500)
+    cy.contains('Veuillez indiquer le navire contrôlé.').should('not.exist')
 
     // Port de contrôle
     cy.fill('Port de contrôle', 'Auray')
+    cy.contains('Veuillez indiquer le port de contrôle.').should('not.exist')
 
     // Saisi par
     cy.fill('Saisi par', 'Gaumont').wait(500)
+    cy.contains('Veuillez indiquer votre trigramme.').should('not.exist')
 
+    // Mission is now valid for saving (but not for closure)
+    cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
     getSaveButton().should('be.enabled')
     getSaveAndCloseButton().should('be.enabled')
 
     cy.clickButton('Enregistrer et clôturer').wait(500)
 
+    cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('exist')
+    cy.contains('Veuillez indiquer si le navire émet un signal VMS.').should('exist')
+    cy.contains('Veuillez indiquer si le navire émet un signal AIS.').should('exist')
+    cy.contains('Veuillez indiquer si le journal de bord correspond à l’activité du navire.').should('exist')
+    cy.contains('Veuillez indiquer si les licences correspondent à l’activité du navire.').should('exist')
+    cy.contains('Veuillez indiquer les engins à bord.').should('exist')
+    cy.contains('Veuillez indiquer si le poids des espèces a été contrôlé.').should('exist')
+    cy.contains('Veuillez indiquer si la taille des espèces a été contrôlée.').should('exist')
+    cy.contains('Veuillez indiquer si les espèces soumises à plan sont séparées.').should('exist')
+    cy.contains('Veuillez indiquer si le navire est ciblé par le CNSP.').should('exist')
     getSaveButton().should('be.disabled')
     getSaveAndCloseButton().should('be.disabled')
+
+    // Obligations déclaratives et autorisations de pêche
+    cy.fill('Bonne émission VMS', 'Oui')
+    cy.fill('Bonne émission AIS', 'Non')
+    cy.fill('Déclarations journal de pêche conformes à l’activité du navire', 'Non concerné')
+    cy.fill('Autorisations de pêche conformes à l’activité du navire (zone, engins, espèces)', 'Non')
+
+    cy.contains('Veuillez indiquer si le navire émet un signal VMS.').should('not.exist')
+    cy.contains('Veuillez indiquer si le navire émet un signal AIS.').should('not.exist')
+    cy.contains('Veuillez indiquer si le journal de bord correspond à l’activité du navire.').should('not.exist')
+    cy.contains('Veuillez indiquer si les licences correspondent à l’activité du navire.').should('not.exist')
 
     // Engins à bord
     cy.fill('Ajouter un engin', 'MIS')
 
+    cy.contains('Veuillez indiquer les engins à bord.').should('not.exist')
+    cy.contains("Veuillez indiquer si l'engin a été contrôlé.").should('exist')
+    cy.contains('Veuillez indiquer le maillage déclaré.').should('exist')
+    cy.contains('Veuillez indiquer le maillage mesuré.').should('exist')
+
+    cy.fill('Engin contrôlé', 'Oui')
+    cy.fill('Maillage déclaré', 50)
+    cy.fill('Maillage mesuré', 30)
+
+    cy.contains("Veuillez indiquer si l'engin a été contrôlé.").should('not.exist')
+    cy.contains('Veuillez indiquer le maillage déclaré.').should('not.exist')
+    cy.contains('Veuillez indiquer le maillage mesuré.').should('not.exist')
+
+    // Espèces à bord
+    cy.fill('Poids des espèces vérifiés', 'Oui')
+    cy.fill('Taille des espèces vérifiées', 'Non')
+    cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
+
+    cy.contains('Veuillez indiquer si le poids des espèces a été contrôlé.').should('not.exist')
+    cy.contains('Veuillez indiquer si la taille des espèces a été contrôlée.').should('not.exist')
+    cy.contains('Veuillez indiquer si les espèces soumises à plan sont séparées.').should('not.exist')
+
+    // Qualité du contrôle
+    cy.fill('Navire ciblé par le CNSP', 'Non')
+
+    cy.contains('Veuillez indiquer si le navire est ciblé par le CNSP.').should('not.exist')
+
+    // Mission is now valid for closure
+    cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
     getSaveButton().should('be.enabled')
     getSaveAndCloseButton().should('be.enabled')
 

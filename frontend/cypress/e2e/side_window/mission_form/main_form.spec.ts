@@ -343,6 +343,7 @@ context('Side Window > Mission Form > Main Form', () => {
       statusCode: 201
     }).as('updateMission')
 
+    // Main Form
     cy.fill('Clôturé par', 'Doris')
 
     cy.wait(500)

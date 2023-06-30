@@ -99,10 +99,53 @@ context('Side Window > Mission Form > Air Control', () => {
         userTrigram: 'Marlin',
         vesselId: 1,
         vesselName: 'PHENOMENE',
-        vesselTargeted: 'NO'
+        vesselTargeted: null
       })
 
       cy.get('h1').should('contain.text', 'Missions et contrôles')
     })
+  })
+
+  it('Should only close mission once the form closure validation has passed', () => {
+    const getSaveButton = () => cy.get('button').contains('Enregistrer et quitter').parent()
+    const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer et clôturer').parent()
+
+    // -------------------------------------------------------------------------
+    // Form
+
+    getSaveButton().should('be.disabled')
+    getSaveAndCloseButton().should('be.disabled')
+
+    cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('exist')
+    cy.contains('Veuillez indiquer le navire contrôlé.').should('exist')
+    cy.contains('Veuillez indiquer votre trigramme.').should('exist')
+
+    // Navire
+    cy.get('input[placeholder="Rechercher un navire..."]').type('mal')
+    cy.contains('mark', 'MAL').click().wait(500)
+    cy.contains('Veuillez indiquer le navire contrôlé.').should('not.exist')
+
+    // Saisi par
+    cy.fill('Saisi par', 'Gaumont').wait(500)
+    cy.contains('Veuillez indiquer votre trigramme.').should('not.exist')
+
+    // Mission is now valid for saving (but not for closure)
+    cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
+    getSaveButton().should('be.enabled')
+    getSaveAndCloseButton().should('be.enabled')
+
+    cy.clickButton('Enregistrer et clôturer')
+
+    // -------------------------------------------------------------------------
+    // Request
+
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('createMissionAction')
+
+    cy.get('h1').should('contain.text', 'Missions et contrôles')
   })
 })

@@ -106,10 +106,6 @@ export const NoRsuiteOverrideWrapper = styled.div`
     font-weight: 400;
   }
 
-  p {
-    margin: 0;
-  }
-
   .rs-checkbox {
     > .rs-checkbox-checker {
       > label {

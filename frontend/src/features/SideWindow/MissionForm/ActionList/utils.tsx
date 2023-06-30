@@ -6,8 +6,6 @@ import { MissionAction } from '../../../../domain/types/missionAction'
 import type { MissionActionFormValues } from '../types'
 import type { ReactNode } from 'react'
 
-import ControlCheck = MissionAction.ControlCheck
-
 export function formatDateLabel(dateLabel: string) {
   return dateLabel.replace(
     /([a-z])([a-zéû]+)\.?$/,
@@ -53,8 +51,7 @@ export function getMissionActionFormInitialValues(type: MissionAction.MissionAct
   return {
     actionDatetimeUtc,
     actionType: type,
-    isValid: false,
-    vesselTargeted: ControlCheck.NO
+    isValid: false
   }
 }
 

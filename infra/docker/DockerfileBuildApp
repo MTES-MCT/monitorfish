@@ -43,7 +43,6 @@ WORKDIR /tmp/frontend
 # Files are expected to be in /tmp/frontend/dist/monitorfish-frontend
 # TODO Remove `--legacy-peer-deps` option as soon as we replace `react-scripts` by something else.
 RUN npm ci --legacy-peer-deps
-RUN sed -i 's/minimize: isEnvProduction/minimize: false/g' node_modules/react-scripts/config/webpack.config.js
 RUN npm run build
 
 ######################

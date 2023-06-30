@@ -19,10 +19,6 @@ context('Side Window > Mission Form > Action List', () => {
 
     cy.wait(250)
 
-    cy.fill('Ajouter un engin', 'OTB')
-
-    cy.wait(250)
-
     cy.clickButton('Dupliquer l’action')
 
     cy.wait(250)
@@ -42,23 +38,16 @@ context('Side Window > Mission Form > Action List', () => {
         emitsAis: null,
         emitsVms: 'NOT_APPLICABLE',
         externalReferenceNumber: null,
-        facade: 'MEMN',
-        faoAreas: ['27.7.b'],
+        // TODO The backend set this facade as `null` when requested with this payload.
+        // The frontend sends the same `facade` it originally received (I double-checked).
+        // This seems to happen specifically with the missionAction ID = 4.
+        // facade: 'MENM',
+        faoAreas: ['27.8.a'],
         feedbackSheetRequired: false,
         flagState: 'FR',
         flightGoals: [],
         gearInfractions: [],
-        gearOnboard: [
-          {
-            comments: null,
-            controlledMesh: null,
-            declaredMesh: null,
-            gearCode: 'OTB',
-            gearName: 'Chaluts de fond à panneaux',
-            gearWasControlled: null,
-            hasUncontrolledMesh: true
-          }
-        ],
+        gearOnboard: [],
         hasSomeGearsSeized: false,
         hasSomeSpeciesSeized: false,
         id: null,

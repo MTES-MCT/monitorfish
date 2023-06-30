@@ -216,7 +216,7 @@ export function GearsField() {
         searchable
       />
 
-      {meta.error && <FieldError>{meta.error}</FieldError>}
+      {meta.error && <StyledFieldError>{meta.error}</StyledFieldError>}
     </FormikMultiInfractionPicker>
   )
 }
@@ -253,4 +253,12 @@ const StyledFieldGroup = styled(FieldGroup)`
   > .Field-NumberInput {
     margin-right: 16px;
   }
+`
+
+const StyledFieldError = styled(FieldError)`
+  /*
+    For some unknown reason, there is a shadow "spacing" between the <Select /> and this <p />.
+    The expected margin-top is 4px.
+  */
+  margin: 0;
 `

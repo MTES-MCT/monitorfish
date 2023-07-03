@@ -9,10 +9,10 @@ export const REGULATION_SEARCH_OPTIONS: Fuse.IFuseOptions<RegulatoryZone[]> = {
     ['topic'],
     ['zone'],
     ['lawType'],
-    ['regulatoryReference', 'reference'],
+    ['regulatoryReferences', 'reference'],
     ['gearRegulation', 'authorized', 'selectedCategoriesAndGears'],
     ['gearRegulation', 'unauthorized', 'selectedCategoriesAndGears'],
     ['region']
   ],
-  threshold: 0.4
+  threshold: 0.7
 }

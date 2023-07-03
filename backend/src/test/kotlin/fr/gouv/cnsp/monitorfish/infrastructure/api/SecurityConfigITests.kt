@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api
 
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
+import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.use_cases.port.GetActivePorts
 import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.PortController
@@ -26,7 +27,7 @@ class SecurityConfigITests {
      * only for this test case using the public key `bad-oidc-issuer.pub`
      */
     @Nested
-    @Import(SecurityConfig::class, OIDCProperties::class)
+    @Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class)
     @WebMvcTest(
         value = [PortController::class, VersionController::class],
         properties = [
@@ -70,7 +71,7 @@ class SecurityConfigITests {
      * only for this test case using the public key `oidc-issuer.pub`
      */
     @Nested
-    @Import(SecurityConfig::class, OIDCProperties::class)
+    @Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class)
     @WebMvcTest(
         value = [PortController::class, VersionController::class, SpaController::class],
         properties = [

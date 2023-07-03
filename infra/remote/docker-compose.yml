@@ -40,6 +40,11 @@ services:
     depends_on:
       - db
     restart: always
+    healthcheck:
+      test: "wget --no-verbose --tries=1 --spider http://localhost:8880/api/v1/healthcheck || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 3
     logging:
       driver: "json-file"
       options:

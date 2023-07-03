@@ -11,6 +11,7 @@ enum class Facade(private val storedValue: String) {
     SA("SA"),
     MEMN("MEMN"),
     GUYANE("Guyane"),
+    MAYOTTE("Mayotte"),
     NAMO("NAMO"),
     CORSE("Corse"),
     HORS_FACADE("Hors façade"),

@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
+import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.ComputeVesselFAOAreas
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.GetFAOAreas
 import org.hamcrest.Matchers.equalTo
@@ -19,7 +20,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@Import(SecurityConfig::class, OIDCProperties::class)
+@Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class)
 @WebMvcTest(value = [(FaoAreaController::class)])
 class FaoAreaControllerITests {
 

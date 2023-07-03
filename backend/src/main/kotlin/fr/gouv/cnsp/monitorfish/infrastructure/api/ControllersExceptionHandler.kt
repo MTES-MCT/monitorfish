@@ -1,11 +1,13 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
+import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateControlObjectiveException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateFleetSegmentException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NAFMessageParsingException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ApiError
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissingParameterApiError
+import io.sentry.Sentry
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.core.Ordered.HIGHEST_PRECEDENCE
@@ -18,20 +20,25 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
 @Order(HIGHEST_PRECEDENCE)
-class ControllersExceptionHandler {
+class ControllersExceptionHandler(val sentryConfig: SentryConfig) {
     private val logger: Logger = LoggerFactory.getLogger(ControllersExceptionHandler::class.java)
 
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(NAFMessageParsingException::class)
     fun handleNAFMessageParsingException(e: Exception): ApiError {
         logger.error(e.message, e.cause)
+
+        if (sentryConfig.enabled == true) {
+            Sentry.captureException(e)
+        }
+
         return ApiError(e)
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoLogbookFishingTripFound::class)
     fun handleNoLogbookLastDepartureDateFound(e: Exception): ApiError {
-        logger.error(e.message, e.cause)
+        logger.warn(e.message, e.cause)
         return ApiError(e)
     }
 
@@ -39,6 +46,11 @@ class ControllersExceptionHandler {
     @ExceptionHandler(CouldNotUpdateControlObjectiveException::class)
     fun handleCouldNotUpdateControlObjectiveException(e: Exception): ApiError {
         logger.error(e.message, e.cause)
+
+        if (sentryConfig.enabled == true) {
+            Sentry.captureException(e)
+        }
+
         return ApiError(CouldNotUpdateControlObjectiveException(e.message.toString(), e))
     }
 
@@ -46,6 +58,11 @@ class ControllersExceptionHandler {
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleIllegalArgumentException(e: Exception): ApiError {
         logger.error(e.message, e.cause)
+
+        if (sentryConfig.enabled == true) {
+            Sentry.captureException(e)
+        }
+
         return ApiError(IllegalArgumentException(e.message.toString(), e))
     }
 
@@ -53,6 +70,11 @@ class ControllersExceptionHandler {
     @ExceptionHandler(CouldNotUpdateFleetSegmentException::class)
     fun handleCouldNotUpdateFleetSegmentException(e: Exception): ApiError {
         logger.error(e.message, e.cause)
+
+        if (sentryConfig.enabled == true) {
+            Sentry.captureException(e)
+        }
+
         return ApiError(e)
     }
 
@@ -60,6 +82,11 @@ class ControllersExceptionHandler {
     @ExceptionHandler(MissingServletRequestParameterException::class)
     fun handleNoParameter(e: MissingServletRequestParameterException): MissingParameterApiError {
         logger.error(e.message, e.cause)
+
+        if (sentryConfig.enabled == true) {
+            Sentry.captureException(e)
+        }
+
         return MissingParameterApiError("Parameter \"${e.parameterName}\" is missing.")
     }
 }

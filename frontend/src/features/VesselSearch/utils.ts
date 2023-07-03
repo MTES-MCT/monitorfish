@@ -2,6 +2,11 @@ import { VesselIdentifier } from '../../domain/entities/vessel/types'
 
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
 
+/**
+ * Remove duplicated vessels : keep vessels from APIs when a duplicate is found on either
+ * - internalReferenceNumber (CFR) or
+ * - vesselId (Vessel internal identifier)
+ */
 export function removeDuplicatedFoundVessels(
   foundVesselsFromAPI: VesselIdentity[],
   foundVesselsOnMap: VesselIdentity[]
@@ -12,7 +17,9 @@ export function removeDuplicatedFoundVessels(
     }
 
     return !foundVesselsFromAPI.some(
-      vesselFromApi => vesselFromApi.internalReferenceNumber === vesselFromMap.internalReferenceNumber
+      vesselFromApi =>
+        vesselFromApi.internalReferenceNumber === vesselFromMap.internalReferenceNumber ||
+        (vesselFromApi.vesselId && vesselFromApi.vesselId === vesselFromMap.vesselId)
     )
   })
 

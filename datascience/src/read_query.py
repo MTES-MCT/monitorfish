@@ -4,6 +4,7 @@ from typing import Union
 import geopandas as gpd
 import pandas as pd
 from sqlalchemy import text
+from sqlalchemy.engine import Connection, Engine
 
 from config import QUERIES_LOCATION
 
@@ -86,12 +87,13 @@ def read_saved_query(
 def read_query(
     query,
     *,
-    db: str,
+    db: str = None,
     chunksize: Union[None, str] = None,
     params: Union[dict, None] = None,
     backend: str = "pandas",
     geom_col: str = "geom",
     crs: Union[int, None] = None,
+    con: Union[Connection, Engine] = None,
     **kwargs,
 ) -> Union[pd.DataFrame, gpd.GeoDataFrame]:
     """Run SQLquery on a database. Supported databases :
@@ -105,9 +107,10 @@ def read_query(
     Database credentials must be present in the environement.
 
     Args:
-        db (str): Database name. Possible values :
-          'ocan', 'fmc', 'monitorfish_remote', 'monitorfish_local'
         query (str): Query string or SQLAlchemy Selectable
+        db (str, optional): Database name. Possible values :
+          'ocan', 'fmc', 'monitorfish_remote', 'monitorfish_local'. If `db` is None,
+          `con` must be passed.
         chunksize (Union[None, str], optional): If specified, return an iterator where
           `chunksize` is the number of rows to include in each chunk. Defaults to
           None.
@@ -123,20 +126,28 @@ def read_query(
           if not set, tries to determine CRS from the SRID associated with the first
           geometry in the database, and assigns that to all geometries. Ignored when
           `backend` is 'pandas'. Defaults to None.
+        con (Union[Connection, Engine], optional) : `sqlalchemy.engine.Connection` or
+          `sqlalchemy.engine.Engine` object. Mandatory if no `db` is given. Ignored if
+          `db` is given.
         kwargs : passed to pd.read_sql or gpd.read_postgis
 
     Returns:
         Union[pd.DataFrame, gpd.DataFrame]: Query results
     """
 
-    engine = create_engine(db=db, execution_options=dict(stream_results=True))
+    if db:
+        con = create_engine(db=db, execution_options=dict(stream_results=True))
+    elif con:
+        assert isinstance(con, (Engine, Connection))
+    else:
+        raise ValueError("At least one of `db` or `con` must be passed.")
 
     if backend == "pandas":
-        return pd.read_sql(query, engine, chunksize=chunksize, params=params, **kwargs)
+        return pd.read_sql(query, con, chunksize=chunksize, params=params, **kwargs)
     elif backend == "geopandas":
         return gpd.read_postgis(
             query,
-            engine,
+            con,
             geom_col=geom_col,
             crs=crs,
             chunksize=chunksize,

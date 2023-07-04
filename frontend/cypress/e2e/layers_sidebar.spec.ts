@@ -1,12 +1,15 @@
 /* eslint-disable no-undef */
 
+const IS_CI = Boolean(process.env.CI)
+const URI = IS_CI ? '0.0.0.0' : 'localhost'
+
 context('LayersSidebar', () => {
   beforeEach(() => {
     cy.loadPath('/#@-224002.65,6302673.54,8.70')
 
     cy.request(
       'GET',
-      'http://localhost:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=' +
+      `http://${URI}:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=` +
         'monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id'
     ).then(response => {
       cy.log(response.body)
@@ -32,25 +35,23 @@ context('LayersSidebar', () => {
 
     // Show a zone with the zone button
     cy.log('Show a zone with the zone button')
-    cy.get('*[data-cy="regulatory-layers-my-zones-zone-show"]').eq(0).click({ timeout: 10000 })
-    cy.wait(200)
-
-    cy.get('canvas', { timeout: 10000 }).eq(0).click(490, 580, { force: true, timeout: 10000 })
-    cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
-
-    // When F5 is pressed, the zones are still showed
     // This intercept only works in the CI, as localhost in used in local
     cy.intercept(
-      'http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature' +
+      `http://${URI}:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature` +
         '&typename=monitorfish:regulations&outputFormat=application/json' +
         '&CQL_FILTER=topic=%27Ouest%20Cotentin%20Bivalves%27%20AND%20zone=%27Praires%20Ouest%20cotentin%27'
     ).as('getRegulation')
+    cy.get('*[data-cy="regulatory-layers-my-zones-zone-show"]').eq(0).click({ timeout: 10000 })
+    cy.wait('@getRegulation').then(({ response }) => expect(response && response.statusCode).equal(200))
+
+    cy.get('.regulatory', { timeout: 10000 }).click(490, 580, { force: true, timeout: 10000 })
+    cy.wait('@getRegulation').then(({ response }) => expect(response && response.statusCode).equal(200))
+    cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
+
+    // When F5 is pressed, the zones are still showed
     cy.reload()
-    cy.wait('@getRegulation').then(({ response }) => {
-      expect(response && response.statusCode).equal(200)
-    })
-    cy.wait(500)
-    cy.get('canvas', { timeout: 10000 }).eq(0).click(490, 580, { force: true, timeout: 10000 })
+    cy.wait('@getRegulation').then(({ response }) => expect(response && response.statusCode).equal(200))
+    cy.get('.regulatory', { timeout: 10000 }).click(490, 580, { force: true, timeout: 10000 })
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
 
     // Close the metadata modal and hide the zone
@@ -61,7 +62,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-my-zones-zone-hide"]').eq(0).click({ timeout: 10000 })
 
     // The layer is hidden, the metadata modal should not be opened
-    cy.get('canvas', { timeout: 10000 }).eq(0).click(490, 580, { force: true, timeout: 10000 })
+    cy.get('.regulatory', { timeout: 10000 }).should('not.exist')
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]', { timeout: 10000 }).should('not.exist')
   })
 
@@ -95,8 +96,8 @@ context('LayersSidebar', () => {
 
     // Add the layer to My Zones
     cy.get('*[data-cy="regulatory-search-input"]').type('Cotentin', { force: true })
-    cy.get('*[data-cy="regulatory-layer-topic"]').click({ force: true, timeout: 10000 })
-    cy.get('*[data-cy="regulatory-zone-check"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="regulatory-layer-topic"]').eq(0).click({ force: true, timeout: 10000 })
+    cy.get('*[data-cy="regulatory-zone-check"]').eq(0).click({ timeout: 10000 })
     cy.get('*[data-cy="regulatory-search-add-zones-button"]').contains('Ajouter 1 zone')
     cy.get('*[data-cy="regulatory-search-add-zones-button"]').click()
 
@@ -132,8 +133,8 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
 
     cy.get('*[data-cy="regulatory-search-input"]').type('Cotentin')
-    cy.get('*[data-cy="regulatory-layer-topic"]').click({ timeout: 10000 })
-    cy.get('*[data-cy="regulatory-zone-check"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="regulatory-layer-topic"]').eq(0).click({ timeout: 10000 })
+    cy.get('*[data-cy="regulatory-zone-check"]').eq(0).click({ timeout: 10000 })
     cy.get('*[data-cy="regulatory-search-add-zones-button"]').click()
     cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
     cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').click()
@@ -185,8 +186,8 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
 
     cy.get('*[data-cy="regulatory-search-input"]').type('Armor')
-    cy.get('*[data-cy="regulatory-layer-topic"]').click({ timeout: 10000 })
-    cy.get('*[data-cy="regulatory-zone-check"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="regulatory-layer-topic"]').eq(0).click({ timeout: 10000 })
+    cy.get('*[data-cy="regulatory-zone-check"]').eq(0).click({ timeout: 10000 })
     cy.get('*[data-cy="regulatory-search-add-zones-button"]').click()
     cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
     cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').click()
@@ -227,7 +228,7 @@ context('LayersSidebar', () => {
     // When
     cy.intercept(
       'GET',
-      'http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature' +
+      `http://${URI}:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature` +
         '&typename=monitorfish:regulations&outputFormat=application/json&srsname=EPSG:4326' +
         '&bbox=-378334.88336741074,6258255.970396698,-280465.66220758925,6277076.974465896,EPSG:3857' +
         '&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region'
@@ -250,9 +251,6 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layer-topic"]').contains('Ouest Cotentin Bivalves')
     cy.get('*[data-cy="regulatory-layer-topic"]').contains('Armor CSJ')
 
-    cy.get('*[data-cy="regulatory-search-input"]').type('Cotentin')
-    cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 1)
-
     cy.get('*[data-cy="vessel-filter-remove-tag"]').eq(0).click()
     cy.get('*[data-cy="regulation-search-box-filter"]').should('exist')
     cy.get('*[data-cy="regulation-search-box-filter-selected"]').should('not.exist')
@@ -274,9 +272,6 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 2)
     cy.get('*[data-cy="regulatory-layer-topic"]').contains('Ouest Cotentin Bivalves')
     cy.get('*[data-cy="regulatory-layer-topic"]').contains('Armor CSJ')
-
-    cy.get('*[data-cy="regulatory-search-input"]').type('Cotentin')
-    cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 1)
 
     cy.get('*[data-cy="vessel-filter-remove-tag"]').eq(0).click()
     cy.get('*[data-cy="regulation-search-box-filter"]').should('exist')

@@ -150,7 +150,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
         emitsAis: null,
         emitsVms: 'NOT_APPLICABLE',
         externalReferenceNumber: 'DONTSINK',
-        facade: 'MENM',
+        facade: 'MEMN',
         faoAreas: ['27.8.b', '27.8.c'],
         feedbackSheetRequired: false,
         flagState: 'FR',

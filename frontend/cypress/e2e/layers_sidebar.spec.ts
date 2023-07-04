@@ -1,15 +1,12 @@
 /* eslint-disable no-undef */
 
-const IS_CI = Boolean(process.env.CI)
-const URI = IS_CI ? '0.0.0.0' : 'localhost'
-
 context('LayersSidebar', () => {
   beforeEach(() => {
     cy.loadPath('/#@-224002.65,6302673.54,8.70')
 
     cy.request(
       'GET',
-      `http://${URI}:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
+      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
     ).then(response => {
       cy.log(response.body)
     })
@@ -36,7 +33,7 @@ context('LayersSidebar', () => {
     cy.log('Show a zone with the zone button')
     // This intercept only works in the CI, as localhost in used in local
     cy.intercept(
-      `http://${URI}:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&CQL_FILTER=topic=%27Ouest%20Cotentin%20Bivalves%27%20AND%20zone=%27Praires%20Ouest%20cotentin%27`
+      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&CQL_FILTER=topic=%27Ouest%20Cotentin%20Bivalves%27%20AND%20zone=%27Praires%20Ouest%20cotentin%27`
     ).as('getRegulation')
     cy.get('*[data-cy="regulatory-layers-my-zones-zone-show"]').eq(0).click({ timeout: 10000 })
     cy.wait('@getRegulation').then(({ response }) => expect(response && response.statusCode).equal(200))
@@ -225,7 +222,7 @@ context('LayersSidebar', () => {
     // When
     cy.intercept(
       'GET',
-      `http://${URI}:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&srsname=EPSG:4326&bbox=-378334.88336741074,6258255.970396698,-280465.66220758925,6277076.974465896,EPSG:3857&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region`
+      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&srsname=EPSG:4326&bbox=-378334.88336741074,6258255.970396698,-280465.66220758925,6277076.974465896,EPSG:3857&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region`
     ).as('getFeature')
     cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
 

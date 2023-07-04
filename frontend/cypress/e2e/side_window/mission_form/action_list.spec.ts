@@ -38,7 +38,7 @@ context('Side Window > Mission Form > Action List', () => {
         emitsAis: null,
         emitsVms: 'NOT_APPLICABLE',
         externalReferenceNumber: null,
-        facade: 'MENM',
+        facade: 'MEMN',
         faoAreas: ['27.8.a'],
         feedbackSheetRequired: false,
         flagState: 'FR',

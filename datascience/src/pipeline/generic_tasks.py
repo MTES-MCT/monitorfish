@@ -328,4 +328,4 @@ def read_query_task(database: str, query: Select) -> pd.DataFrame:
     Prefect `task` decorated version of `read_query`.
     """
 
-    return read_query(database, query)
+    return read_query(query, db=database)

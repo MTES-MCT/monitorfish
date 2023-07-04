@@ -1053,7 +1053,7 @@ def test_flow(
     mission_actions_query = "SELECT * FROM mission_actions ORDER BY id"
 
     initial_mission_actions = read_query(
-        "monitorfish_remote", mission_actions_query
+        mission_actions_query, db="monitorfish_remote"
     ).drop(columns=["is_deleted"])
 
     flow.schedule = None
@@ -1079,7 +1079,7 @@ def test_flow(
     )
 
     final_mission_actions = read_query(
-        "monitorfish_remote", mission_actions_query
+        mission_actions_query, db="monitorfish_remote"
     ).drop(columns=["is_deleted"])
 
     # mission_actions not from Poseidon should not be altered by the flow

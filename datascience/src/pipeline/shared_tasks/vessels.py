@@ -41,7 +41,7 @@ def add_vessel_id(vessels: pd.DataFrame, vessels_table: Table) -> pd.DataFrame:
         return vessels
 
     query = make_find_vessels_query(vessels, vessels_table)
-    found_vessels = read_query("monitorfish_remote", query)
+    found_vessels = read_query(query, db="monitorfish_remote")
 
     vessels_with_id = merge_vessel_id(vessels, found_vessels, logger)
 
@@ -83,7 +83,7 @@ def add_vessels_columns(
         districts_columns_to_add=districts_columns_to_add,
     )
 
-    vessels_added_columns = read_query("monitorfish_remote", query)
+    vessels_added_columns = read_query(query, db="monitorfish_remote")
 
     vessels = pd.merge(vessels, vessels_added_columns, on="vessel_id", how="left")
 

@@ -17,18 +17,18 @@ def test_refresh_analytics_controls_full_data(reset_test_data):
     ORDER BY id, control_unit, segment
     """
 
-    initial_controls = read_query("monitorfish_remote", query)
+    initial_controls = read_query(query, db="monitorfish_remote")
 
     e.execute("DELETE FROM mission_actions WHERE id = 7")
 
-    controls_before_refresh = read_query("monitorfish_remote", query)
+    controls_before_refresh = read_query(query, db="monitorfish_remote")
 
     flow.schedule = None
     state = flow.run(view_name="analytics_controls_full_data", schema="public")
 
     assert state.is_successful()
 
-    controls_after_refresh = read_query("monitorfish_remote", query)
+    controls_after_refresh = read_query(query, db="monitorfish_remote")
 
     assert len(initial_controls) == 30
     assert len(controls_before_refresh) == 30

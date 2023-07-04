@@ -581,7 +581,7 @@ def test_last_positions_flow_resets_last_positions_when_action_is_replace(
     reset_test_data,
 ):
     initial_last_positions = read_query(
-        "monitorfish_remote", "SELECT * FROM last_positions;"
+        "SELECT * FROM last_positions;", db="monitorfish_remote"
     )
 
     flow.schedule = None
@@ -589,7 +589,7 @@ def test_last_positions_flow_resets_last_positions_when_action_is_replace(
     assert state.is_successful()
 
     final_last_positions = read_query(
-        "monitorfish_remote", "SELECT * FROM last_positions;"
+        "SELECT * FROM last_positions;", db="monitorfish_remote"
     )
 
     assert len(initial_last_positions) == 4
@@ -612,7 +612,7 @@ def test_last_positions_flow_updates_last_positions_when_action_is_update(
     reset_test_data,
 ):
     initial_last_positions = read_query(
-        "monitorfish_remote", "SELECT * FROM last_positions;"
+        "SELECT * FROM last_positions;", db="monitorfish_remote"
     )
 
     flow.schedule = None
@@ -620,7 +620,7 @@ def test_last_positions_flow_updates_last_positions_when_action_is_update(
     assert state.is_successful()
 
     final_last_positions = read_query(
-        "monitorfish_remote", "SELECT * FROM last_positions;"
+        "SELECT * FROM last_positions;", db="monitorfish_remote"
     )
 
     assert len(initial_last_positions) == 4

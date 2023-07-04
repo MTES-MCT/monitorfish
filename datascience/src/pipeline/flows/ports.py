@@ -770,7 +770,6 @@ def compute_ports_facade():
 @task(checkpoint=False)
 def extract_processed_ports_tmp():
     return read_query(
-        "monitorfish_remote",
         """SELECT
             country_code_iso2,
             locode,
@@ -785,6 +784,7 @@ def extract_processed_ports_tmp():
             buffer_location_0_2_degrees,
             buffer_location_0_5_degrees
         FROM processed.ports""",
+        db="monitorfish_remote",
     )
 
 

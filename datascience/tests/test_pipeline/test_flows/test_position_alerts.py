@@ -288,7 +288,7 @@ def test_make_fishing_gears_query():
 def test_extract_current_gears(reset_test_data):
     current_gears = extract_current_gears.run()
     nb_last_positions_vessels = read_query(
-        "monitorfish_remote", "SELECT COUNT(*) FROM last_positions"
+        "SELECT COUNT(*) FROM last_positions", db="monitorfish_remote"
     ).iloc[0, 0]
 
     # extract_current_gears should yield gears of all vessels in the
@@ -452,7 +452,7 @@ def test_flow_deletes_existing_pending_alerts_of_matching_config_name(reset_test
     assert state.is_successful()
 
     pending_alerts = read_query(
-        "monitorfish_remote", "SELECT COUNT(*) FROM pending_alerts"
+        "SELECT COUNT(*) FROM pending_alerts", db="monitorfish_remote"
     )
 
     # The alert in the table should still be there
@@ -473,7 +473,8 @@ def test_flow_deletes_existing_pending_alerts_of_matching_config_name(reset_test
     assert state.is_successful()
 
     pending_alerts = read_query(
-        "monitorfish_remote", "SELECT COUNT(*) FROM pending_alerts"
+        "SELECT COUNT(*) FROM pending_alerts",
+        db="monitorfish_remote",
     )
 
     # The alert in the table should be removed
@@ -513,7 +514,7 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
 
     assert state.is_successful()
 
-    pending_alerts = read_query("monitorfish_remote", "SELECT * FROM pending_alerts")
+    pending_alerts = read_query("SELECT * FROM pending_alerts", db="monitorfish_remote")
 
     expected_pending_alerts = pd.DataFrame(
         {
@@ -597,11 +598,11 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
             "latitude": [53.435, 49.610, 43.324, 49.606, 43.324],
             "longitude": [5.553, -0.740, 5.359, -0.736, 5.359],
             "flag_state": [
-              "NL",
-              "FR",
-              "FR",
-              "FR",
-              "FR",
+                "NL",
+                "FR",
+                "FR",
+                "FR",
+                "FR",
             ],
         }
     )
@@ -662,7 +663,7 @@ def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data
 
     assert state.is_successful()
 
-    pending_alerts = read_query("monitorfish_remote", "SELECT * FROM pending_alerts")
+    pending_alerts = read_query("SELECT * FROM pending_alerts", db="monitorfish_remote")
 
     expected_pending_alerts = pd.DataFrame(
         {
@@ -794,7 +795,7 @@ def test_flow_filters_on_gears(reset_test_data):
 
     assert state.is_successful()
 
-    pending_alerts = read_query("monitorfish_remote", "SELECT * FROM pending_alerts")
+    pending_alerts = read_query("SELECT * FROM pending_alerts", db="monitorfish_remote")
 
     expected_pending_alerts = pd.DataFrame(
         {
@@ -841,7 +842,7 @@ def test_flow_filters_on_gears(reset_test_data):
             "vessel_id": [3, 2],
             "latitude": [53.435, 43.324],
             "longitude": [5.553, 5.359],
-          "flag_state": ["NL", "FR"],
+            "flag_state": ["NL", "FR"],
         }
     )
 
@@ -902,7 +903,7 @@ def test_flow_filters_on_time(reset_test_data):
 
     assert state.is_successful()
 
-    pending_alerts = read_query("monitorfish_remote", "SELECT * FROM pending_alerts")
+    pending_alerts = read_query("SELECT * FROM pending_alerts", db="monitorfish_remote")
 
     expected_pending_alerts = pd.DataFrame(
         {
@@ -1022,7 +1023,7 @@ def test_flow_filters_on_flag_states(reset_test_data):
 
     assert state.is_successful()
 
-    pending_alerts = read_query("monitorfish_remote", "SELECT * FROM pending_alerts")
+    pending_alerts = read_query("SELECT * FROM pending_alerts", db="monitorfish_remote")
 
     expected_pending_alerts = pd.DataFrame(
         {
@@ -1117,7 +1118,7 @@ def test_flow_french_eez_fishing_alert(reset_test_data):
 
     assert state.is_successful()
 
-    pending_alerts = read_query("monitorfish_remote", "SELECT * FROM pending_alerts")
+    pending_alerts = read_query("SELECT * FROM pending_alerts", db="monitorfish_remote")
 
     expected_pending_alerts = pd.DataFrame(
         {

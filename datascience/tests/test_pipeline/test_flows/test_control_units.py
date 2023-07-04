@@ -86,15 +86,15 @@ def test_flow(reset_test_data, administrations, control_units):
     administrations_query = "SELECT * FROM analytics_administrations ORDER BY id"
     control_units_query = "SELECT * FROM analytics_control_units ORDER BY id"
 
-    initial_administrations = read_query("monitorfish_remote", administrations_query)
-    initial_control_units = read_query("monitorfish_remote", control_units_query)
+    initial_administrations = read_query(administrations_query, db="monitorfish_remote")
+    initial_control_units = read_query(control_units_query, db="monitorfish_remote")
 
     flow.schedule = None
     state = flow.run()
     assert state.is_successful()
 
-    final_administrations = read_query("monitorfish_remote", administrations_query)
-    final_control_units = read_query("monitorfish_remote", control_units_query)
+    final_administrations = read_query(administrations_query, db="monitorfish_remote")
+    final_control_units = read_query(control_units_query, db="monitorfish_remote")
 
     assert len(final_administrations) == len(initial_administrations) + 1 == 4
     assert len(final_control_units) == len(initial_control_units) + 1 == 9

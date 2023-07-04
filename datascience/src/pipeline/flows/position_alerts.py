@@ -323,8 +323,8 @@ def extract_gear_codes(query: Select) -> set:
     """
 
     fishing_gear_codes = read_query(
-        "monitorfish_remote",
         query,
+        db="monitorfish_remote",
     )
 
     return set(fishing_gear_codes.fishing_gear_code)

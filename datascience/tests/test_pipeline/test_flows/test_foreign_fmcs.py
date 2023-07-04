@@ -107,6 +107,6 @@ def test_foreign_fmcs_flow(reset_test_data, loaded_foreign_fmcs):
     assert state.is_successful()
 
     res = read_query(
-        "monitorfish_remote", "SELECT * FROM foreign_fmcs ORDER BY country_code_iso3"
+        "SELECT * FROM foreign_fmcs ORDER BY country_code_iso3", db="monitorfish_remote"
     )
     pd.testing.assert_frame_equal(res, loaded_foreign_fmcs)

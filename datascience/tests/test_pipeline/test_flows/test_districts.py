@@ -11,7 +11,7 @@ def test_districts_flow(reset_test_data):
 
     assert state.is_successful()
 
-    districts = read_query("monitorfish_remote", "SELECT * FROM districts")
+    districts = read_query("SELECT * FROM districts", db="monitorfish_remote")
 
     expected_districts = pd.read_csv(
         LIBRARY_LOCATION / "pipeline/data/districts.csv",

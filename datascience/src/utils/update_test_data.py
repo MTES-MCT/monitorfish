@@ -15,7 +15,7 @@ da = DataAnonymizer()
 def extract_last_positions():
     query = text("SELECT * " "FROM last_positions")
 
-    last_positions = read_query("monitorfish_remote", query)
+    last_positions = read_query(query, db="monitorfish_remote")
     last_positions = last_positions.astype({"emission_period": str})
     last_positions.loc[:, "trip_number"] = last_positions.trip_number.map(
         lambda x: str(int(x)), na_action="ignore"
@@ -50,7 +50,7 @@ def extract_positions():
         "WHERE date_time > CURRENT_TIMESTAMP - INTERVAL '3 days' "
         "AND date_time < CURRENT_TIMESTAMP"
     )
-    return read_query("monitorfish_remote", query)
+    return read_query(query, db="monitorfish_remote")
 
 
 @task(checkpoint=False)

@@ -443,7 +443,7 @@ def test_test_current_segments_flow(reset_test_data, current_segments):
     assert state.is_successful()
 
     computed_current_segments = read_query(
-        "monitorfish_remote", "SELECT * FROM current_segments ORDER BY cfr"
+        "SELECT * FROM current_segments ORDER BY cfr", db="monitorfish_remote"
     )
     datetime_columns = [
         "last_logbook_message_datetime_utc",

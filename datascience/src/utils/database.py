@@ -22,7 +22,7 @@ def get_tables_sizes(db: str, table_names: List[str]) -> pd.DataFrame:
     WHERE segment_name IN {tuple(table_names)}
     """
 
-    table_sizes = read_query(db=db, query=query)
+    table_sizes = read_query(query, db=db)
     return table_sizes
 
 
@@ -39,7 +39,7 @@ def print_view_query_string(db: str, view_name: str):
     FROM SYS.ALL_VIEWS
     WHERE view_name = '{view_name}'"""
 
-    view_query = read_query(db=db, query=query)
+    view_query = read_query(query, db=db)
 
     print(view_query.text.values[0])
 

@@ -84,8 +84,9 @@ def read_saved_query(
 
 
 def read_query(
-    db: str,
     query,
+    *,
+    db: str,
     chunksize: Union[None, str] = None,
     params: Union[dict, None] = None,
     backend: str = "pandas",

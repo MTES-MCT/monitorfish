@@ -109,9 +109,9 @@ def test_flow(reset_test_data, loading_mode):
         "SELECT * FROM analytics_missions_control_units ORDER BY id"
     )
 
-    initial_missions = read_query("monitorfish_remote", missions_query)
+    initial_missions = read_query(missions_query, db="monitorfish_remote")
     initial_missions_control_units = read_query(
-        "monitorfish_remote", missions_control_units_query
+        missions_control_units_query, db="monitorfish_remote"
     )
 
     flow.schedule = None
@@ -127,9 +127,9 @@ def test_flow(reset_test_data, loading_mode):
         flow.get_tasks("filter_missions_control_units")[0]
     ].result
 
-    loaded_missions = read_query("monitorfish_remote", missions_query)
+    loaded_missions = read_query(missions_query, db="monitorfish_remote")
     loaded_missions_control_units = read_query(
-        "monitorfish_remote", missions_control_units_query
+        missions_control_units_query, db="monitorfish_remote"
     )
 
     assert len(initial_missions) == 9

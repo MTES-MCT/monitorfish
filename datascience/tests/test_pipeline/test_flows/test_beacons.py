@@ -127,7 +127,7 @@ def test_load_beacons(reset_test_data, transformed_beacons):
     load_beacons.run(transformed_beacons)
 
     loaded_beacons = read_query(
-        "monitorfish_remote", "SELECT * FROM beacons ORDER BY beacon_number"
+        "SELECT * FROM beacons ORDER BY beacon_number", db="monitorfish_remote"
     )
 
     pd.testing.assert_frame_equal(loaded_beacons, transformed_beacons)

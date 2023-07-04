@@ -12,10 +12,10 @@ def test_fishing_gear_codes_flow(reset_test_data):
     assert state.is_successful()
 
     fishing_gear_codes = read_query(
-        "monitorfish_remote", "SELECT * FROM fishing_gear_codes"
+        "SELECT * FROM fishing_gear_codes", db="monitorfish_remote"
     )
     fishing_gear_codes_groups = read_query(
-        "monitorfish_remote", "SELECT * FROM fishing_gear_codes_groups"
+        "SELECT * FROM fishing_gear_codes_groups", db="monitorfish_remote"
     )
 
     expected_fishing_gear_codes = pd.read_csv(

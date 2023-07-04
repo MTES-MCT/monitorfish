@@ -523,7 +523,7 @@ def test_prepare_new_beacon_malfunctions():
 
 def test_load_new_beacon_malfunctions(reset_test_data):
     initial_beacon_malfunctions = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
+        "SELECT * FROM beacon_malfunctions", db="monitorfish_remote"
     )
 
     new_beacon_malfunctions = pd.DataFrame(
@@ -569,7 +569,7 @@ def test_load_new_beacon_malfunctions(reset_test_data):
     load_new_beacon_malfunctions.run(new_beacon_malfunctions)
 
     loaded_beacon_malfunctions = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunctions ORDER BY id"
+        "SELECT * FROM beacon_malfunctions ORDER BY id", db="monitorfish_remote"
     )
 
     assert len(loaded_beacon_malfunctions) == len(initial_beacon_malfunctions) + 2
@@ -630,7 +630,7 @@ def test_update_beacon_malfunction_updates_status(mock_requests):
         headers={
             "Accept": "application/json, text/plain",
             "Content-Type": "application/json;charset=UTF-8",
-            "X-API-KEY": "backend_api_key"
+            "X-API-KEY": "backend_api_key",
         },
     )
 
@@ -652,7 +652,7 @@ def test_update_beacon_malfunction_updates_stage(mock_requests):
         headers={
             "Accept": "application/json, text/plain",
             "Content-Type": "application/json;charset=UTF-8",
-            "X-API-KEY": "backend_api_key"
+            "X-API-KEY": "backend_api_key",
         },
     )
 
@@ -701,7 +701,7 @@ def test_update_beacon_malfunction_updates_stage_and_reason(
         headers={
             "Accept": "application/json, text/plain",
             "Content-Type": "application/json;charset=UTF-8",
-            "X-API-KEY": "backend_api_key"
+            "X-API-KEY": "backend_api_key",
         },
     )
 
@@ -726,7 +726,7 @@ def test_update_beacon_malfunctions_flow_doesnt_create_malfunctions_if_never_emi
 ):
 
     initial_beacons_malfunctions = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
+        "SELECT * FROM beacon_malfunctions", db="monitorfish_remote"
     )
     flow.schedule = None
     with patch("src.pipeline.flows.update_beacon_malfunctions.requests"):
@@ -737,7 +737,7 @@ def test_update_beacon_malfunctions_flow_doesnt_create_malfunctions_if_never_emi
     assert state.is_successful()
 
     beacons_malfunctions = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
+        "SELECT * FROM beacon_malfunctions", db="monitorfish_remote"
     )
 
     last_positions = state.result[flow.get_tasks("extract_last_positions")[0]].result
@@ -763,13 +763,13 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
     reset_test_data,
 ):
     beacon_malfunction_id_to_move_to_end_of_malfunction = read_query(
-        "monitorfish_remote",
         "SELECT id FROM beacon_malfunctions WHERE ircs = 'OLY7853'",
+        db="monitorfish_remote",
     ).iloc[0, 0]
 
     beacon_malfunction_id_to_archive = read_query(
-        "monitorfish_remote",
         "SELECT id FROM beacon_malfunctions WHERE ircs = 'RV348407'",
+        db="monitorfish_remote",
     ).iloc[0, 0]
 
     flow.schedule = None
@@ -817,7 +817,7 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
         headers={
             "Accept": "application/json, text/plain",
             "Content-Type": "application/json;charset=UTF-8",
-            "X-API-KEY": "backend_api_key"
+            "X-API-KEY": "backend_api_key",
         },
     )
 
@@ -830,18 +830,18 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
         headers={
             "Accept": "application/json, text/plain",
             "Content-Type": "application/json;charset=UTF-8",
-            "X-API-KEY": "backend_api_key"
+            "X-API-KEY": "backend_api_key",
         },
     )
 
 
 def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_data):
     initial_beacon_malfunctions = read_query(
-        "monitorfish_remote",
         (
             "SELECT * FROM beacon_malfunctions "
             "WHERE stage NOT IN ('END_OF_MALFUNCTION', 'ARCHIVED')"
         ),
+        db="monitorfish_remote",
     )
     flow.schedule = None
 
@@ -850,11 +850,11 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
             max_hours_without_emission_at_sea=6, max_hours_without_emission_at_port=1
         )
     loaded_beacon_malfunctions = read_query(
-        "monitorfish_remote",
         (
             "SELECT * FROM beacon_malfunctions "
             "WHERE stage NOT IN ('END_OF_MALFUNCTION', 'ARCHIVED')"
         ),
+        db="monitorfish_remote",
     )
 
     assert state.is_successful()
@@ -893,7 +893,7 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
 
     # Running the flow again should not add any more malfunctions
     initial_beacon_malfunctions = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
+        "SELECT * FROM beacon_malfunctions", db="monitorfish_remote"
     )
 
     state = flow.run(
@@ -901,7 +901,8 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
     )
 
     loaded_beacon_malfunctions = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
+        "SELECT * FROM beacon_malfunctions",
+        db="monitorfish_remote",
     )
 
     pd.testing.assert_frame_equal(
@@ -918,7 +919,8 @@ def test_flow_does_not_create_malfunctions_for_operators_that_are_not_up(
     )
 
     initial_beacons_malfunctions = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
+        "SELECT * FROM beacon_malfunctions",
+        db="monitorfish_remote",
     )
     flow.schedule = None
 
@@ -930,7 +932,8 @@ def test_flow_does_not_create_malfunctions_for_operators_that_are_not_up(
     assert state.is_successful()
 
     beacons_malfunctions = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
+        "SELECT * FROM beacon_malfunctions",
+        db="monitorfish_remote",
     )
 
     new_malfunctions = state.result[flow.get_tasks("get_new_malfunctions")[0]].result

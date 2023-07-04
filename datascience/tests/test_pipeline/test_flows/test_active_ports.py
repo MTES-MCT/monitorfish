@@ -9,13 +9,13 @@ def test_flow(reset_test_data):
 
     ports_query = "SELECT * FROM ports ORDER BY locode"
 
-    initial_ports = read_query("monitorfish_remote", ports_query)
+    initial_ports = read_query(ports_query, db="monitorfish_remote")
 
     flow.schedule = None
     state = flow.run()
     assert state.is_successful()
 
-    final_ports = read_query("monitorfish_remote", ports_query)
+    final_ports = read_query(ports_query, db="monitorfish_remote")
 
     assert (initial_ports.is_active == [True] + [False] * 8).all()
     assert (final_ports.is_active == [False] + [True] * 8).all()

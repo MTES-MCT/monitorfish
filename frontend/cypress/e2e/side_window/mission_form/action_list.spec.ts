@@ -38,10 +38,7 @@ context('Side Window > Mission Form > Action List', () => {
         emitsAis: null,
         emitsVms: 'NOT_APPLICABLE',
         externalReferenceNumber: null,
-        // TODO The backend set this facade as `null` when requested with this payload.
-        // The frontend sends the same `facade` it originally received (I double-checked).
-        // This seems to happen specifically with the missionAction ID = 4.
-        // facade: 'MENM',
+        facade: 'MENM',
         faoAreas: ['27.8.a'],
         feedbackSheetRequired: false,
         flagState: 'FR',

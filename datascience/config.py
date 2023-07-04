@@ -166,6 +166,7 @@ CNSP_FRANCE_EMAIL_ADDRESS = os.environ.get("CNSP_FRANCE_EMAIL_ADDRESS")
 
 # Tokens
 LOCATIONIQ_TOKEN = os.getenv("LOCATIONIQ_TOKEN")
+GOOGLE_API_TOKEN = os.getenv("GOOGLE_API_TOKEN")
 
 # data.gouv.fr configuration
 DATAGOUV_API_ENDPOINT = "https://www.data.gouv.fr/api/1"

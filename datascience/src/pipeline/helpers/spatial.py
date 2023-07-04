@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import timedelta
 from typing import Iterable, Set, Tuple, Union
+from urllib.parse import quote
 
 import h3
 import numpy as np
@@ -9,7 +10,7 @@ import requests
 from pyproj import Geod
 from shapely.geometry import MultiPolygon, Polygon
 
-from config import LOCATIONIQ_TOKEN
+from config import GOOGLE_API_TOKEN, LOCATIONIQ_TOKEN
 from src.pipeline.helpers.dates import get_datetime_intervals
 from src.pipeline.processing import rows_belong_to_sequence, zeros_ones_to_bools
 
@@ -622,7 +623,9 @@ def enrich_positions(
     return positions
 
 
-def geocode(query_string=None, country_code_iso2=None, **kwargs):
+def geocode(
+    query_string=None, country_code_iso2=None, backend: str = "Nominatim", **kwargs
+):
     """
     Return latitude, longitude for input location from a query string or from one or
     more of the following keyword arguments:
@@ -635,9 +638,18 @@ def geocode(query_string=None, country_code_iso2=None, **kwargs):
       - postalcode
 
     """
-    assert LOCATIONIQ_TOKEN
-    base_url = "https://eu1.locationiq.com/v1/search.php"
-    params = {"key": LOCATIONIQ_TOKEN, "format": "json"}
+
+    if backend == "Nominatim":
+        base_url = "https://nominatim.openstreetmap.org/search"
+        params = {"format": "json"}
+    elif backend == "LocationIQ":
+        assert LOCATIONIQ_TOKEN
+        base_url = "https://eu1.locationiq.com/v1/search.php"
+        params = {"key": LOCATIONIQ_TOKEN, "format": "json"}
+    else:
+        raise ValueError(
+            f"backend param expects 'Nominatim' or 'LocatinIQ', received '{backend}'."
+        )
 
     if query_string is not None and not pd.isna(query_string):
         if kwargs:
@@ -662,6 +674,73 @@ def geocode(query_string=None, country_code_iso2=None, **kwargs):
         params["countrycodes"] = str(country_code_iso2)
 
     response = requests.get(base_url, params=params)
-    response.raise_for_status()
+
+    try:
+        response.raise_for_status()
+
+        # When the location cannot be geocoded, LocationIQ returns a 404, whereas
+        # Nominatim returns a 200 with an empty responsen, so an additionnal check
+        # is required to cover this case
+        data = response.json()
+        assert len(data) > 0
+    except (requests.HTTPError, AssertionError):
+        raise ValueError(f"Could not geocode {params}")
     data = response.json()[0]
     return float(data["lat"]), float(data["lon"])
+
+
+def geocode_google(address=None, **kwargs):
+    """
+    Return latitude, longitude for input location from a query string, with optionnal
+    filtering on one or more of the following keyword arguments:
+
+      - postal_code
+      - country (country name or country code ISO2)
+      - route
+      - locality
+      - administrative_area
+
+    If address is not given, at least one kwarg must be given.
+
+    """
+
+    assert GOOGLE_API_TOKEN
+
+    base_url = "https://maps.googleapis.com/maps/api/geocode/json?"
+
+    try:
+        assert address or kwargs
+    except AssertionError:
+        raise ValueError("No arguments given.")
+
+    params = dict()
+
+    if address:
+        # params += f"address={quote(address)}"
+        params["address"] = address
+
+    if kwargs:
+        components = "|".join([f"{k}:{quote(v)}" for k, v in kwargs.items()])
+        params["components"] = components
+        # params += f"components={components}"
+
+    # params += f"key={GOOGLE_API_TOKEN}"
+    params["key"] = GOOGLE_API_TOKEN
+
+    response = requests.get(base_url, params=params)
+
+    try:
+        response.raise_for_status()
+        data = response.json()
+        status = data["status"]
+        assert status == "OK"
+    except AssertionError:
+        print(f"Could not geocode {address} {components}. Status {status}.")
+        if "error_message" in data:
+            print(data["error_message"])
+        raise
+    except requests.HTTPError:
+        print(f"HTTPError with {address} {components}")
+        raise
+    location = data["results"][0]["geometry"]["location"]
+    return float(location["lat"]), float(location["lng"])

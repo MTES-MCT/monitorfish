@@ -150,10 +150,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
         emitsAis: null,
         emitsVms: 'NOT_APPLICABLE',
         externalReferenceNumber: 'DONTSINK',
-        // TODO The backend set this facade as `null` when requested with this payload.
-        // The frontend sends the same `facade` it originally received (I double-checked).
-        // This seems to happen specifically with the missionAction ID = 4.
-        // facade: 'MENM',
+        facade: 'MENM',
         faoAreas: ['27.8.b', '27.8.c'],
         feedbackSheetRequired: false,
         flagState: 'FR',

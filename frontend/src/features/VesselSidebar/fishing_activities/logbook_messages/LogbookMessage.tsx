@@ -193,7 +193,9 @@ export function LogbookMessage({ isFirst, message }: LogbookMessageComponentType
             <br />
             {!message.acknowledge || (message.acknowledge.isSuccess === null && <Gray>-</Gray>)}
             {message.acknowledge?.isSuccess === true && <AckOk />}
-            {message.acknowledge?.isSuccess === false && <AckNOk title={message.acknowledge.rejectionCause} />}
+            {message.acknowledge?.isSuccess === false && (
+              <AckNOk title={message.acknowledge?.rejectionCause || undefined} />
+            )}
           </Acknowledge>
         </LogbookMessageMetadata>
         {logbookMessageComponent}

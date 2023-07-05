@@ -6,33 +6,33 @@ import { ReactComponent as ArrowTripSVG } from '../../icons/Fleche_navigation_ma
 import { ReactComponent as ArrowLastTripSVG } from '../../icons/Double_fleche_navigation_marees.svg'
 import DEPMessageResume from './logbook_messages_resumes/DEPMessageResume'
 import DISMessageResume from './logbook_messages_resumes/DISMessageResume'
-import FARMessageResume from './logbook_messages_resumes/FARMessageResume'
+import { FARMessageResume } from './logbook_messages_resumes/FARMessageResume'
 import PNOMessageResume from './logbook_messages_resumes/PNOMessageResume'
 import LANMessageResume from './logbook_messages_resumes/LANMessageResume'
 import FleetSegments from '../../fleet_segments/FleetSegments'
 import { useSelector } from 'react-redux'
 import {
-  getDEPMessageFromMessages,
-  getDISMessagesFromMessages,
+  getDEPMessage,
+  getDISMessages,
   getFAOZonesFromFARMessages,
-  getFARMessagesFromMessages,
+  getFARMessages,
   getDISSpeciesToWeightObject,
   getFARSpeciesToWeightObject,
-  getLANMessageFromMessages,
-  getPNOMessageFromMessages,
+  getLANMessage,
+  getPNOMessage,
   getSpeciesAndPresentationToWeightFARObject,
   getSpeciesToWeightLANObject,
   getSpeciesToWeightPNOObject,
-  getTotalDEPWeightFromMessage,
-  getTotalDISWeightFromMessages,
-  getTotalFARWeightFromMessages,
-  getTotalLANWeightFromMessage,
-  getTotalPNOWeightFromMessage,
-  LogbookOperationType,
-  getAllFAROrDISMessagesAreNotAcknowledged
+  getTotalDEPWeight,
+  getTotalDISWeight,
+  getTotalFARWeight,
+  getTotalLANWeight,
+  getTotalPNOWeight,
+  areAllMessagesNotAcknowledged
 } from '../../../domain/entities/logbook'
 import CustomDatesShowedInfo from './CustomDatesShowedInfo'
 import { COMMON_ALERT_TYPE_OPTION } from '../../../domain/entities/alerts/constants'
+import { LogbookOperationType } from '../../../domain/entities/logbook/constants'
 
 const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessingMessagesResume }) => {
   const { selectedVessel } = useSelector(state => state.vessel)
@@ -68,28 +68,28 @@ const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessi
     if (fishingActivities?.logbookMessages?.length) {
       setProcessingMessagesResume(true)
       const logbookMessages = fishingActivities.logbookMessages
-      const depMessage = getDEPMessageFromMessages(logbookMessages)
+      const depMessage = getDEPMessage(logbookMessages)
       setDEPMessage(depMessage)
 
-      const lanMessage = getLANMessageFromMessages(logbookMessages)
+      const lanMessage = getLANMessage(logbookMessages)
       setLANMessage(lanMessage)
 
-      const disMessages = getDISMessagesFromMessages(logbookMessages)
+      const disMessages = getDISMessages(logbookMessages)
       setDISMessages(disMessages)
 
-      const pnoMessage = getPNOMessageFromMessages(logbookMessages)
+      const pnoMessage = getPNOMessage(logbookMessages)
       setPNOMessage(pnoMessage)
 
-      const farMessages = getFARMessagesFromMessages(logbookMessages)
+      const farMessages = getFARMessages(logbookMessages)
       setFARMessages(farMessages)
 
       let totalFARAndDEPWeight = 0
       if (farMessages?.length) {
-        const totalFARWeight = getTotalFARWeightFromMessages(farMessages)
+        const totalFARWeight = getTotalFARWeight(farMessages)
         setTotalFARWeight(totalFARWeight)
         totalFARAndDEPWeight = totalFARWeight
 
-        setAllFARMessagesAreNotAcknowledged(getAllFAROrDISMessagesAreNotAcknowledged(farMessages))
+        setAllFARMessagesAreNotAcknowledged(areAllMessagesNotAcknowledged(farMessages))
         const speciesToWeightFARObject = getFARSpeciesToWeightObject(farMessages, totalFARWeight)
         const speciesAndPresentationToWeightFARObject = getSpeciesAndPresentationToWeightFARObject(farMessages)
         setSpeciesToWeightOfFAR(speciesToWeightFARObject)
@@ -97,21 +97,21 @@ const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessi
       }
 
       if (depMessage) {
-        const totalDEPWeight = getTotalDEPWeightFromMessage(depMessage)
+        const totalDEPWeight = getTotalDEPWeight(depMessage)
         totalFARAndDEPWeight += parseFloat(totalDEPWeight)
       }
 
       if (disMessages?.length) {
-        const totalDISWeight = getTotalDISWeightFromMessages(disMessages)
+        const totalDISWeight = getTotalDISWeight(disMessages)
         setTotalDISWeight(totalDISWeight)
 
-        setAllDISMessagesAreNotAcknowledged(getAllFAROrDISMessagesAreNotAcknowledged(disMessages))
+        setAllDISMessagesAreNotAcknowledged(areAllMessagesNotAcknowledged(disMessages))
         const speciesToWeightDISObject = getDISSpeciesToWeightObject(disMessages, totalDISWeight)
         setSpeciesToWeightOfDIS(speciesToWeightDISObject)
       }
 
       if (lanMessage) {
-        const totalLANWeight = getTotalLANWeightFromMessage(lanMessage)
+        const totalLANWeight = getTotalLANWeight(lanMessage)
         setTotalLANWeight(totalLANWeight)
 
         const speciesToWeightLANObject = getSpeciesToWeightLANObject(lanMessage)
@@ -119,7 +119,7 @@ const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessi
       }
 
       if (pnoMessage) {
-        const totalPNOWeight = getTotalPNOWeightFromMessage(pnoMessage)
+        const totalPNOWeight = getTotalPNOWeight(pnoMessage)
         setTotalPNOWeight(totalPNOWeight)
 
         const speciesToWeightPNOObject = getSpeciesToWeightPNOObject(pnoMessage, totalPNOWeight)

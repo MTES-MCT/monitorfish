@@ -1,7 +1,11 @@
 import { describe, expect, it } from '@jest/globals'
 import { includes } from 'lodash'
 
-import { DUMMY_VESSEL_TRACK, VESSEL_TRACK_ALL_SAME_COORDINATES, VESSEL_TRACK_FEW_SAME_COORDINATES } from './__mocks__'
+import {
+  DUMMY_VESSEL_TRACK,
+  VESSEL_TRACK_ALL_SAME_COORDINATES,
+  VESSEL_TRACK_FEW_SAME_COORDINATES
+} from './__mocks__/vesselTrack'
 import { getFeaturesFromPositions, getTrackType } from '../index'
 
 import type { VesselLineFeature, VesselPointFeature, VesselPosition } from '../../types'

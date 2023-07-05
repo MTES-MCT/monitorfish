@@ -5,9 +5,9 @@ import { getDate, getDateTime } from '../../../../utils'
 import { LogbookMessageSpecy, WeightType } from './LogbookMessageSpecy'
 import {
   buildCatchArray,
-  getTotalPNOWeightFromMessage,
-  LogbookMessagePNOPurposeType
+  getTotalPNOWeight
 } from '../../../../domain/entities/logbook'
+import { LogbookMessagePNOPurposeType } from '../../../../domain/entities/logbook/constants'
 
 const PNOMessage = props => {
   const [catches, setCatches] = useState([])
@@ -18,7 +18,7 @@ const PNOMessage = props => {
       const catches = buildCatchArray(props.message.catchOnboard)
       setCatches(catches)
 
-      const totalPNOWeight = getTotalPNOWeightFromMessage({ message: props.message })
+      const totalPNOWeight = getTotalPNOWeight({ message: props.message })
       setTotalPNOWeight(totalPNOWeight)
     } else {
       setCatches([])

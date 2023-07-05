@@ -1,7 +1,5 @@
-import io
 import os
 import re
-from ast import literal_eval
 from datetime import date
 from itertools import product
 from pathlib import Path
@@ -12,15 +10,79 @@ import prefect
 import requests
 from prefect import Flow, Parameter, task
 from prefect.executors import LocalDaskExecutor
+from sqlalchemy import text
 
-from config import LIBRARY_LOCATION, PORTS_URL, PROXIES
+from config import (
+    IS_INTEGRATION,
+    PORTS_CSV_RESOURCE_ID,
+    PORTS_CSV_RESOURCE_TITLE,
+    PORTS_DATASET_ID,
+)
 from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.fao_areas import remove_redundant_fao_area_codes
 from src.pipeline.helpers.spatial import geocode, geocode_google
-from src.pipeline.processing import coalesce
+from src.pipeline.processing import coalesce, prepare_df_for_loading
+from src.pipeline.shared_tasks.datagouv import get_csv_file_object, update_resource
 from src.pipeline.utils import psql_insert_copy
 from src.read_query import read_query, read_table
+
+"""
+This file contains several flows related to ports :
+
+- `flow_make_unece_ports` reads csv files of LOCODE locations (to download from UNECE
+  website) from disk and inserts the data into `external.unece_port_codes`
+
+- `flow_make_circabc_ports` reads csv file of official ports of the fisheries logbook
+  system (to download from CIRCABC Master Data Register) from disk and inserts the data
+  into `external.circabc_port_codes`
+
+- `flow_combine_circabc_unece_ports` :
+  - starts from `external.circabc_port_codes`
+  - adds some features (region, latitude, longitude) by performing a left join with
+    `external.unece_port_codes`
+  - does some renaming and corrects some country codes
+  - loads the result into `interim.port_codes`
+
+- `flow_geocode_ports` :
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!!!! This flow requires Google credentials and may incur geocoding API costs. !!!!!
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  - starts from `interim.port_codes`
+  - reads the lists of active ports locodes from disk (to export from production
+    environment, see query bewow)
+  - geocodes a subset of ports (active ports + ports of selected countries) to improve
+    and / or complete the latitude / longitude coordinates of ports.
+  - Loads the results into `interim.geocoded_ports_google`
+
+- `flow_export_geocoded_to_local_db`: exports `interim.geocoded_ports_google` to local
+  database table `prod.ports`
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!!   This will overwrite the local `prod.ports` which is now the golden source  !!!
+  !!!   of ports. This flow is not meant to be run, unless it is desired that the  !!!
+  !!!   data is erased and replaced be a fresh new dataset.                        !!!
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+- `flow`:
+  - reads from local `prod.ports` table
+  - computes ports areas : FAO areas, façade areas, department areas
+  - loads to remote `public.ports` table
+  - updates data.gouv.fr public ports dataset
+
+Except for `flow`, the last one in the list, flows listed here were used to build the
+ports referential and record the steps that were used in doing so - for documentation
+purposes and in case it would be required to re-build the referential - but are not
+meant to be run on a regular basis.
+
+In normal every day use, the management of ports is as follows:
+
+- ports are edited in local database `prod.ports` table, which is the golden source,
+  using QGIS
+- remote `public.ports` and public dataset on data.gouv.fr are updated from local
+ `prod.ports` table by `flow`
+
+"""
 
 
 # ******************************** Helper functions **********************************
@@ -286,10 +348,9 @@ def clean_ports(ports: pd.DataFrame) -> pd.DataFrame:
         "FRPPN": "GP",
         "FRFDE": "MQ",
         "GPMSB": "MF",
-        "FRRN4": "RE",
     }
 
-    # Ports with an ambiguous name  to humans and / or to the Google geocoding API
+    # Ports with an ambiguous name to humans and / or to the Google geocoding API
     ports_to_rename = {
         "FRDUU": "Le Douhet (Saint-Georges-d'Oléron)",
         "FRBEC": "Bec d'Ambès (Bayon-sur-Gironde)",
@@ -336,6 +397,7 @@ def clean_ports(ports: pd.DataFrame) -> pd.DataFrame:
         "FRTOO": "Toull Broc'h (Ploubazlanec)",
         "FRMR4": "La Martinière (Le Pellerin)",
         "FRCR2": "Carro (Martigues)",
+        "PMFSP": "Saint-Pierre (Saint-Pierre-et-Miquelon)",
     }
 
     for locode, country_code in country_codes_to_change.items():
@@ -396,8 +458,12 @@ with Flow(
     load_port_codes(ports)
 
 
-# ************* Geocoding to improve the precision of latitude longitude **************
+# ************* Geocoding to improve the precision of latitude longitude *************
 """
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!! This flow requires Google credentials and may incur geocoding API costs. !!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 In this flow, we geocode a subset of the full ports lists :
 - Ports of selected countries
 - Ports flagged as 'active'
@@ -552,6 +618,9 @@ def geocode_ports(ports):
         "BE",
         "FO",
         "GF",
+        "MF",
+        "SX",
+        "BL",
     ]
 
     ports_to_geocode = ports.loc[
@@ -575,297 +644,228 @@ def load_geocoded_ports(geocoded_ports):
     )
 
 
-@task(checkpoint=False)
-def compute_distance_between_geocoded_and_initial_positions():
-    e = create_engine("monitorfish_remote")
-    with e.begin() as conn:
-
-        conn.execute(
-            """
-            ALTER TABLE interim.geocoded_ports_google
-            ADD COLUMN distance_km DOUBLE PRECISION
-        """
-        )
-
-        conn.execute(
-            """
-            UPDATE interim.geocoded_ports_google
-            SET distance_km = ST_Distance(
-                    ST_SetSRID(ST_Point(longitude, latitude), 4326)::geography,
-                    ST_SetSRID(
-                        ST_Point(geocoded_longitude, geocoded_latitude),
-                        4326
-                    )::geography
-                ) / 1000
-        """
-        )
-
-
 with Flow("Geocode ports") as flow_geocode_ports:
     ports = extract_port_codes()
     active_ports_locodes = extract_active_ports_locodes()
     ports = flag_active_ports(ports, active_ports_locodes)
     geocoded_ports = geocode_ports(ports)
-    loaded = load_geocoded_ports(geocoded_ports)
-    compute_distance_between_geocoded_and_initial_positions(upstream_tasks=[loaded])
+    load_geocoded_ports(geocoded_ports)
 
 
-# **************** Flow : combine all data together & add manual fixes ****************
-# Locations : take geocoded position if available, fall back to CIRCABC/UNECE position
-# Manual fixes : add a few missing ports
-# The result of this flow can be uploaded to data.gouv.fr on the CNSP profile
-# https://www.data.gouv.fr/fr/users/centre-national-de-surveillance-des-peches-cnsp/
+# Flow to export geocoded_ports to local CROSS database
+# Exported on 2023/07/04
+# /!\/!\ BE EXTRA CAREFUL WHEN USING THIS FLOW, AS IT MIGHT ERASE LOCAL CHANGES /!\/!\
+
+# @task(checkpoint=False)
+# def extract_geocoded_ports() -> gpd.GeoDataFrame:
+#     return extract("monitorfish_remote", "monitorfish/geocoded_ports.sql")
+#
+#
+# @task(checkpoint=False)
+# def load_ports_to_local_db(ports: gpd.GeoDataFrame) :
+#     load(
+#         ports,
+#         db_name="monitorfish_local",
+#         schema="prod",
+#         table_name="ports",
+#         how="replace",
+#         logger=prefect.context.get("logger")
+#     )
+#
+#
+# with Flow("Export geocoded ports to local DB") as flow_export_geocoded_to_local_db:
+#     ports = extract_geocoded_ports()
+#     load_ports_to_local_db(ports)
 
 
-@task(checkpoint=False)
-def extract_geocoded_ports():
-    geocoded_ports = read_table("monitorfish_remote", "interim", "geocoded_ports")
-    return geocoded_ports
-
-
-@task(checkpoint=False)
-def merge_lat_lon(geocoded_ports):
-    combine_cols = {
-        "latitude": ["geocoded_latitude", "latitude"],
-        "longitude": ["geocoded_longitude", "longitude"],
-    }
-
-    res = geocoded_ports.copy(deep=True)
-    for col_name, cols_list in combine_cols.items():
-        res.loc[:, col_name] = coalesce(res[cols_list])
-    res = res.drop(columns=["geocoded_latitude", "geocoded_longitude"])
-    return res
-
-
-@task(checkpoint=False)
-def add_manual_fixes(ports):
-    fixes = pd.read_csv(LIBRARY_LOCATION / "pipeline/data/manually_added_ports.csv")
-    ports = ports[~ports.locode.isin(fixes.locode)]
-    return pd.concat([fixes, ports])
+# *** Flow : updates public.ports table from golden source local prod.ports table ***
+# Also update public dataset :
+# https://www.data.gouv.fr/fr/datasets/
+#                  liste-des-ports-du-systeme-ers-avec-donnees-de-position/
 
 
 @task(checkpoint=False)
-def load_processed_ports_1(ports):
-    engine = create_engine("monitorfish_remote")
-    ports.to_sql(
-        "ports",
-        engine,
-        schema="processed",
-        index=False,
-        method=psql_insert_copy,
-        if_exists="replace",
-    )
+def extract_local_ports() -> pd.DataFrame:
+    return extract("monitorfish_local", "cross/ports.sql")
 
 
 @task(checkpoint=False)
-def add_buffer_and_index():
-    query = """
-    ALTER TABLE processed.ports
-        ADD COLUMN location geometry(Point, 4326),
-        ADD COLUMN buffer_location_0_2_degrees geometry(Polygon, 4326),
-        ADD COLUMN buffer_location_0_5_degrees geometry(Polygon, 4326);
-
-    CREATE INDEX idx_processed_ports_location
-        ON processed.ports
-        USING gist (location);
-
-    CREATE INDEX idx_processed_ports_buffer_location_0_2_degrees
-        ON processed.ports
-        USING gist (buffer_location_0_2_degrees);
-
-    CREATE INDEX idx_processed_ports_buffer_location_0_5_degrees
-        ON processed.ports
-        USING gist (buffer_location_0_5_degrees);
-
-    UPDATE processed.ports
-        SET location = St_SetSRId(St_MakePoint(longitude, latitude), 4326)
-        WHERE longitude IS NOT NULL AND latitude IS NOT NULL;
-
-    UPDATE processed.ports
-        SET buffer_location_0_5_degrees = St_Buffer(location, 0.5)
-        WHERE location IS NOT NULL;
-
-    UPDATE processed.ports
-        SET buffer_location_0_2_degrees = St_Buffer(location, 0.2)
-        WHERE location IS NOT NULL;
+def compute_ports_zones(ports: pd.DataFrame) -> pd.DataFrame:
     """
-    e = create_engine("monitorfish_remote")
-    e.execute(query)
+    Compute ports FAO areas, façades and departments.
+    """
+    logger = prefect.context.get("logger")
+    engine = create_engine("monitorfish_remote")
 
-
-@task(checkpoint=False)
-def compute_ports_fao_areas():
-    ports_fao_areas = extract(
-        db_name="monitorfish_remote",
-        query_filepath="monitorfish/compute_ports_fao_areas.sql",
-    )
-
-    ports_fao_areas["fao_areas"] = ports_fao_areas.fao_areas.map(
-        remove_redundant_fao_area_codes
-    )
-
-    return ports_fao_areas
-
-
-@task(checkpoint=False)
-def compute_ports_facade():
-    ports_facade = extract(
-        db_name="monitorfish_remote",
-        query_filepath="monitorfish/compute_ports_facade.sql",
-    )
-
-    manual_corrections = pd.DataFrame(
-        [
-            ["FRAER", "SA"],
-            ["FRS2R", "SA"],
-            ["FRLFK", "SA"],
-            ["FRIDX", "SA"],
-            ["FRFUA", "SA"],
-            ["FRHTP", "SA"],
-            ["FRAJJ", "SA"],
-            ["FRLRH", "SA"],
-            ["FRPT4", "SA"],
-            ["FRLPE", "SA"],
-            ["FRPR2", "SA"],
-            ["FRMRN", "SA"],
-            ["FRCJH", "SA"],
-            ["FRJLR", "SA"],
-            ["FRAS3", "NAMO"],
-            ["FRLT3", "NAMO"],
-            ["FRLSO", "NAMO"],
-            ["FRSML", "NAMO"],
-            ["FRV35", "NAMO"],
-            ["FRASM", "NAMO"],
-            ["FRVM6", "NAMO"],
-            ["FRGTN", "MEMN"],
-            ["FRGFR", "MEMN"],
-            ["FRDBI", "MEMN"],
-            ["FRC2H", "MEMN"],
-        ],
-        columns=pd.Index(["locode", "facade"]),
-    )
-
-    # Drop rows that are either incorrect or duplicated first
-    ports_facade = ports_facade[~ports_facade.locode.isin(manual_corrections.locode)]
-
-    # Then add the correct façade for each port
-    ports_facade = pd.concat([ports_facade, manual_corrections])
-
-    try:
-        assert not ports_facade.locode.duplicated().any()
-    except AssertionError:
-        print(ports_facade[ports_facade.locode.duplicated(keep=False)])
-        print(len(ports_facade.locode.duplicated(keep=False)))
-        print(ports_facade.locode.duplicated(keep=False))
-        raise AssertionError(
-            (
-                "Some ports belong to several facades. Check facade "
-                "area definitions and consider adding manual corrections."
+    with engine.begin() as connection:
+        logger.info("Creating temporary table")
+        connection.execute(
+            text(
+                "CREATE TEMP TABLE tmp_ports("
+                "    country_code_iso2 VARCHAR, "
+                "    region VARCHAR, "
+                "    locode VARCHAR PRIMARY KEY, "
+                "    port_name VARCHAR, "
+                "    latitude DOUBLE PRECISION, "
+                "    longitude DOUBLE PRECISION, "
+                "    facade public.facade, "
+                "    fao_areas VARCHAR(100)[], "
+                "    is_active BOOLEAN NOT NULL,"
+                "    geometry geometry(Point, 4326), "
+                "    buffer geometry(Polygon, 4326)"
+                ")"
+                "ON COMMIT DROP;"
             )
         )
 
-    return ports_facade
+        logger.info("Creating indices on temporary table")
+        connection.execute(
+            text(
+                "CREATE INDEX tmp_ports_geometry_idx "
+                "ON tmp_ports "
+                "USING gist (geometry);"
+            )
+        )
 
+        connection.execute(
+            text(
+                "CREATE INDEX tmp_ports_buffer_idx "
+                "ON tmp_ports "
+                "USING gist (buffer);"
+            )
+        )
 
-@task(checkpoint=False)
-def extract_processed_ports_tmp():
-    return read_query(
-        """SELECT
-            country_code_iso2,
-            locode,
-            port_name,
-            is_fiching_port,
-            is_landing_place,
-            is_commercial_port,
-            region,
-            latitude,
-            longitude,
-            location,
-            buffer_location_0_2_degrees,
-            buffer_location_0_5_degrees
-        FROM processed.ports""",
-        db="monitorfish_remote",
-    )
+        logger.info("Loading ports to temporary table")
+        ports.to_sql(
+            "tmp_ports",
+            connection,
+            index=False,
+            method=psql_insert_copy,
+            if_exists="append",
+        )
 
+        logger.info("Computing ports facade")
+        connection.execute(
+            text(
+                "WITH ports_facade AS ( "
+                "    SELECT  "
+                "        p.locode, "
+                "        f.facade "
+                "    FROM tmp_ports p "
+                "    JOIN public.facade_areas_subdivided f "
+                "    ON ST_Intersects(p.geometry, f.geometry) "
+                "    WHERE p.country_code_iso2 IN ( "
+                "        'FR', 'GP', 'MQ', 'GF', 'RE', 'YT', 'MF', 'SX', 'BL'"
+                "    ) "
+                ") "
+                "UPDATE tmp_ports "
+                "SET facade = f.facade "
+                "FROM ports_facade f "
+                "WHERE tmp_ports.locode = f.locode"
+            )
+        )
 
-@task(checkpoint=False)
-def merge_ports_facade_fao_areas(ports, ports_facade, ports_fao_areas):
-    return pd.merge(
-        pd.merge(ports, ports_facade, on="locode", how="left"),
-        ports_fao_areas,
-        on="locode",
-        how="left",
-    )
+        logger.info("Computing ports department")
+        connection.execute(
+            text(
+                "WITH ports_region AS ( "
+                "    SELECT  "
+                "        p.locode, "
+                "        d.insee_dep "
+                "    FROM tmp_ports p "
+                "    JOIN public.departments_areas d "
+                "    ON ST_Intersects(p.geometry, d.geometry) "
+                "    WHERE p.country_code_iso2 IN ( "
+                "        'FR', 'GP', 'MQ', 'GF', 'RE', 'YT', 'MF', 'SX', 'BL'"
+                "    ) "
+                ") "
+                "UPDATE tmp_ports "
+                "SET region = r.insee_dep "
+                "FROM ports_region r "
+                "WHERE tmp_ports.locode = r.locode"
+            )
+        )
 
+        logger.info("Add 0.5 degrees buffer around ports")
+        connection.execute(
+            text(
+                "UPDATE tmp_ports "
+                "SET buffer = St_Buffer(geometry, 0.5) "
+                "WHERE geometry IS NOT NULL; "
+            )
+        )
 
-@task(checkpoint=False)
-def load_processed_ports_2(ports):
-    query = """
-    ALTER TABLE processed.ports
-        ADD COLUMN facade VARCHAR(100),
-        ADD COLUMN fao_areas VARCHAR(100)[];
+        logger.info("Computing ports FAO areas")
+        connection.execute(
+            text(
+                "WITH ports_fao_areas AS ( "
+                "    SELECT "
+                "        locode, "
+                "        ARRAY_AGG(f_code) AS fao_areas "
+                "    FROM ( "
+                "        SELECT  "
+                "            p.locode, "
+                "            a.f_code "
+                "        FROM tmp_ports p "
+                "        JOIN public.fao_areas a "
+                "        ON ST_Intersects(p.buffer, a.wkb_geometry) "
+                "    ) t1 "
+                "    GROUP BY  "
+                "        locode "
+                ") "
+                "UPDATE tmp_ports "
+                "SET fao_areas = f.fao_areas "
+                "FROM ports_fao_areas f "
+                "WHERE tmp_ports.locode = f.locode"
+            )
+        )
 
-    """
-    e = create_engine("monitorfish_remote")
-    e.execute(query)
-
-    load(
-        ports,
-        table_name="ports",
-        schema="processed",
-        db_name="monitorfish_remote",
-        logger=prefect.context.get("logger"),
-        how="replace",
-        pg_array_columns=["fao_areas"],
-    )
-
-
-with Flow(
-    "Load ports from interim.geocoded_ports to processed.ports"
-) as flow_load_ports:
-
-    geocoded_ports = extract_geocoded_ports()
-    ports = merge_lat_lon(geocoded_ports)
-    ports = add_manual_fixes(ports)
-
-    processed_ports_1 = load_processed_ports_1(ports)
-    buffer_and_index_1 = add_buffer_and_index(upstream_tasks=[processed_ports_1])
-
-    ports_fao_areas = compute_ports_fao_areas(upstream_tasks=[buffer_and_index_1])
-    ports_facade = compute_ports_facade(upstream_tasks=[buffer_and_index_1])
-    ports = extract_processed_ports_tmp(upstream_tasks=[buffer_and_index_1])
-
-    ports = merge_ports_facade_fao_areas(ports, ports_facade, ports_fao_areas)
-    processed_ports_2 = load_processed_ports_2(ports)
-
-
-# **** Flow to extract ports from data.gouv.fr and upload to Monitorfish database ****
-
-
-@task(checkpoint=False)
-def extract_datagouv_ports(ports_url: str = PORTS_URL, proxies: dict = None):
-    r = requests.get(ports_url, proxies=proxies)
-    r.encoding = "utf8"
-    f = io.StringIO(r.text)
-
-    dtype = {
-        "country_code_iso2": str,
-        "locode": str,
-        "port_name": str,
-        "region": str,
-        "latitude": float,
-        "longitude": float,
-        "facade": str,
-    }
-
-    ports = pd.read_csv(f, dtype=dtype, converters={"fao_areas": literal_eval})
+        logger.info("Reading ports")
+        ports = read_query(
+            text(
+                "SELECT "
+                "country_code_iso2, "
+                "region, "
+                "locode, "
+                "port_name, "
+                "latitude, "
+                "longitude, "
+                "facade, "
+                "fao_areas, "
+                "is_active "
+                "FROM tmp_ports"
+            ),
+            con=connection,
+        )
 
     return ports
 
 
 @task(checkpoint=False)
-def load_ports_to_monitorfish(ports):
+def clean_fao_areas(ports: pd.DataFrame) -> pd.DataFrame:
+    """
+    Keep only the smallest FAO area(s) of each port.
+    """
+    ports = ports.copy(deep=True)
+    ports["fao_areas"] = ports.fao_areas.map(
+        remove_redundant_fao_area_codes, na_action="ignore"
+    )
+    return ports
 
+
+@task(checkpoint=False)
+def transform_ports_open_data(ports: pd.DataFrame) -> pd.DataFrame:
+    logger = prefect.context.get("logger")
+    ports_open_data = prepare_df_for_loading(
+        ports,
+        logger=logger,
+        pg_array_columns=["fao_areas"],
+    )
+    return ports_open_data
+
+
+@task(checkpoint=False)
+def load_ports(ports):
     load(
         ports,
         table_name="ports",
@@ -878,7 +878,34 @@ def load_ports_to_monitorfish(ports):
 
 
 with Flow("Ports", executor=LocalDaskExecutor()) as flow:
-    ports = extract_datagouv_ports(ports_url=PORTS_URL, proxies=PROXIES)
-    load_ports_to_monitorfish(ports)
+    # Parameters
+    dataset_id = Parameter("dataset_id", default=PORTS_DATASET_ID)
+    ports_resource_id = Parameter("ports_resource_id", default=PORTS_CSV_RESOURCE_ID)
+    ports_resource_title = Parameter(
+        "ports_resource_title", default=PORTS_CSV_RESOURCE_TITLE
+    )
+
+    is_integration = Parameter("is_integration", default=IS_INTEGRATION)
+
+    # Extract
+    ports = extract_local_ports()
+
+    # Transform
+    ports = compute_ports_zones(ports)
+    ports = clean_fao_areas(ports)
+    ports_open_data = transform_ports_open_data(ports)
+
+    # Load
+    load_ports(ports)
+
+    ports_open_data_csv_file = get_csv_file_object(ports_open_data)
+    update_resource(
+        dataset_id=dataset_id,
+        resource_id=ports_resource_id,
+        resource_title=ports_resource_title,
+        resource=ports_open_data_csv_file,
+        mock_update=is_integration,
+    )
+
 
 flow.file_name = Path(__file__).name

@@ -28,6 +28,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
     OIDCProperties::class,
     ProtectedPathsAPIProperties::class,
     UserAuthorizationCheckFilter::class,
+    SentryConfig::class,
 )
 @WebMvcTest(
     value = [(UserAuthorizationController::class)],

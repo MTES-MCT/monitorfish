@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.*
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
+import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
@@ -25,7 +26,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.ZonedDateTime
 
-@Import(SecurityConfig::class, OIDCProperties::class)
+@Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class)
 @WebMvcTest(value = [(MissionActionsController::class)])
 class MissionActionsControllerITests {
 
@@ -124,7 +125,7 @@ class MissionActionsControllerITests {
     }
 
     @Test
-    fun `Should create a mission action`() {
+    fun `Should create a mission action with a bad facade`() {
         // Given
         val dateTime = ZonedDateTime.parse("2023-04-27T16:05:00Z")
         val newMission = TestUtils.getDummyMissionAction(dateTime)

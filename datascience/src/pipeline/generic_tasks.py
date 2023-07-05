@@ -66,8 +66,8 @@ def extract(
     """
 
     res = read_saved_query(
-        db_name,
         query_filepath,
+        db=db_name,
         parse_dates=parse_dates,
         params=params,
         backend=backend,

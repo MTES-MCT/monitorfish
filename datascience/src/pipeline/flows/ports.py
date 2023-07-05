@@ -8,7 +8,7 @@ from time import sleep
 import pandas as pd
 import prefect
 import requests
-from prefect import Flow, Parameter, task
+from prefect import Flow, Parameter, case, task
 from prefect.executors import LocalDaskExecutor
 from sqlalchemy import text
 
@@ -23,6 +23,7 @@ from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.fao_areas import remove_redundant_fao_area_codes
 from src.pipeline.helpers.spatial import geocode, geocode_google
 from src.pipeline.processing import coalesce, prepare_df_for_loading
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.datagouv import get_csv_file_object, update_resource
 from src.pipeline.utils import psql_insert_copy
 from src.read_query import read_query, read_table
@@ -878,34 +879,40 @@ def load_ports(ports):
 
 
 with Flow("Ports", executor=LocalDaskExecutor()) as flow:
-    # Parameters
-    dataset_id = Parameter("dataset_id", default=PORTS_DATASET_ID)
-    ports_resource_id = Parameter("ports_resource_id", default=PORTS_CSV_RESOURCE_ID)
-    ports_resource_title = Parameter(
-        "ports_resource_title", default=PORTS_CSV_RESOURCE_TITLE
-    )
 
-    is_integration = Parameter("is_integration", default=IS_INTEGRATION)
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
 
-    # Extract
-    ports = extract_local_ports()
+        # Parameters
+        dataset_id = Parameter("dataset_id", default=PORTS_DATASET_ID)
+        ports_resource_id = Parameter(
+            "ports_resource_id", default=PORTS_CSV_RESOURCE_ID
+        )
+        ports_resource_title = Parameter(
+            "ports_resource_title", default=PORTS_CSV_RESOURCE_TITLE
+        )
 
-    # Transform
-    ports = compute_ports_zones(ports)
-    ports = clean_fao_areas(ports)
-    ports_open_data = transform_ports_open_data(ports)
+        is_integration = Parameter("is_integration", default=IS_INTEGRATION)
 
-    # Load
-    load_ports(ports)
+        # Extract
+        ports = extract_local_ports()
 
-    ports_open_data_csv_file = get_csv_file_object(ports_open_data)
-    update_resource(
-        dataset_id=dataset_id,
-        resource_id=ports_resource_id,
-        resource_title=ports_resource_title,
-        resource=ports_open_data_csv_file,
-        mock_update=is_integration,
-    )
+        # Transform
+        ports = compute_ports_zones(ports)
+        ports = clean_fao_areas(ports)
+        ports_open_data = transform_ports_open_data(ports)
+
+        # Load
+        load_ports(ports)
+
+        ports_open_data_csv_file = get_csv_file_object(ports_open_data)
+        update_resource(
+            dataset_id=dataset_id,
+            resource_id=ports_resource_id,
+            resource_title=ports_resource_title,
+            resource=ports_open_data_csv_file,
+            mock_update=is_integration,
+        )
 
 
 flow.file_name = Path(__file__).name

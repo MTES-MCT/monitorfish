@@ -1,6 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+import { getLocalStorageState } from '../../utils'
+import { getLocalstorageProperty } from '../../utils/getLocalstorageProperty'
+
 import type { PayloadAction } from '@reduxjs/toolkit'
+
+const displayedComponentsLocalstorageKey = 'displayedComponents'
 
 export type OptionalDisplayedComponentAction = {
   areVesselsDisplayed?: boolean
@@ -45,7 +50,11 @@ const INITIAL_STATE: DisplayedComponentState = {
   isFavoriteVesselsMapButtonDisplayed: true,
   isInterestPointMapButtonDisplayed: true,
   isMeasurementMapButtonDisplayed: true,
-  isMissionsLayerDisplayed: true,
+  isMissionsLayerDisplayed: getLocalstorageProperty(
+    true,
+    displayedComponentsLocalstorageKey,
+    'isMissionsLayerDisplayed'
+  ),
   isMissionsMapButtonDisplayed: true,
   isVesselFiltersMapButtonDisplayed: true,
   isVesselLabelsMapButtonDisplayed: true,
@@ -55,13 +64,28 @@ const INITIAL_STATE: DisplayedComponentState = {
   isVesselVisibilityMapButtonDisplayed: true
 }
 
+/**
+ * Components saved in local storage
+ */
+const savedComponents = ['isMissionsLayerDisplayed']
+
 const displayedComponentSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'displayedComponent',
   reducers: {
     setDisplayedComponents(state, action: PayloadAction<OptionalDisplayedComponentAction>) {
-      Object.keys(INITIAL_STATE).forEach(key => {
-        state[key] = getValueOrDefault(action.payload[key], state[key])
+      Object.keys(INITIAL_STATE).forEach(propertyKey => {
+        const value = getValueOrDefault(action.payload[propertyKey], state[propertyKey])
+
+        state[propertyKey] = value
+
+        // If the displayed component has to be saved in local storage
+        if (savedComponents.includes(propertyKey)) {
+          const localstorageState = getLocalStorageState({}, displayedComponentsLocalstorageKey)
+          localstorageState[propertyKey] = value
+
+          window.localStorage.setItem(displayedComponentsLocalstorageKey, JSON.stringify(localstorageState))
+        }
       })
     }
   }

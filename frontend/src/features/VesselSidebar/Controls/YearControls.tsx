@@ -2,7 +2,11 @@ import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { Control } from './Control'
-import { getNumberOfInfractions, getNumberOfInfractionsWithoutRecord } from '../../../domain/entities/controls'
+import {
+  getNumberOfInfractions,
+  getNumberOfInfractionsWithoutRecord,
+  getNumberOfInfractionsWithRecord
+} from '../../../domain/entities/controls'
 import { pluralize } from '../../../utils/pluralize'
 import { YearListChevronIcon, YearListContent, YearListTitle, YearListTitleText } from '../common_styles/YearList.style'
 
@@ -22,6 +26,11 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
       0
     )
 
+    const numberOfInfractionsWithRecord = yearControls.reduce(
+      (accumulator, control) => accumulator + getNumberOfInfractionsWithRecord(control),
+      0
+    )
+
     const numberOfInfractionsWithoutRecord = yearControls.reduce(
       (accumulator, control) => accumulator + getNumberOfInfractionsWithoutRecord(control),
       0
@@ -31,7 +40,7 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
       return null
     }
 
-    if (!numberOfInfractions && !numberOfInfractionsWithoutRecord) {
+    if (!numberOfInfractions) {
       return (
         <>
           , pas d&apos;infraction <Green />
@@ -39,7 +48,7 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
       )
     }
 
-    if (!numberOfInfractions && numberOfInfractionsWithoutRecord) {
+    if (!numberOfInfractionsWithRecord && numberOfInfractionsWithoutRecord) {
       return (
         <>
           , {numberOfInfractionsWithoutRecord} {pluralize('infraction', numberOfInfractionsWithoutRecord)} sans PV{' '}
@@ -48,7 +57,7 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
       )
     }
 
-    if (numberOfInfractions && numberOfInfractionsWithoutRecord) {
+    if (numberOfInfractionsWithRecord && numberOfInfractionsWithoutRecord) {
       return (
         <>
           , {numberOfInfractions} {pluralize('infraction', numberOfInfractions)} dont {numberOfInfractionsWithoutRecord}{' '}
@@ -67,7 +76,7 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
   const sortedControls = useMemo(
     () =>
       yearControls.sort((a, b) =>
-        a.actionDatetimeUtc && b.actionDatetimeUtc && a.actionDatetimeUtc > b.actionDatetimeUtc ? 1 : -1
+        a.actionDatetimeUtc && b.actionDatetimeUtc && a.actionDatetimeUtc > b.actionDatetimeUtc ? -1 : 1
       ),
     [yearControls]
   )

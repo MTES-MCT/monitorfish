@@ -76,7 +76,7 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
   const sortedControls = useMemo(
     () =>
       yearControls.sort((a, b) =>
-        a.actionDatetimeUtc && b.actionDatetimeUtc && a.actionDatetimeUtc > b.actionDatetimeUtc ? 1 : -1
+        a.actionDatetimeUtc && b.actionDatetimeUtc && a.actionDatetimeUtc > b.actionDatetimeUtc ? -1 : 1
       ),
     [yearControls]
   )

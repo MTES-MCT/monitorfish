@@ -12,15 +12,18 @@ from .db_config import create_engine
 
 
 def read_saved_query(
-    db: str,
     sql_filepath: Union[str, Path],
-    parse_dates: Union[list, dict, None] = None,
-    params: Union[None, dict] = None,
+    *,
+    db: str = None,
+    con: Union[Connection, Engine] = None,
+    chunksize: Union[None, str] = None,
+    params: Union[dict, None] = None,
     backend: str = "pandas",
     geom_col: str = "geom",
     crs: Union[int, None] = None,
+    parse_dates: Union[list, dict, None] = None,
     **kwargs,
-) -> pd.DataFrame:
+) -> Union[pd.DataFrame, gpd.GeoDataFrame]:
     """Run saved SQLquery on a database. Supported databases :
 
       - 'ocan' : OCAN database
@@ -32,10 +35,29 @@ def read_saved_query(
     Database credentials must be present in the environement.
 
     Args:
-        db (str): Database name. Possible values : 'ocan', 'fmc', 'monitorfish_remote',
-          'monitorfish_local'
         sql_filepath (str): path to .sql file, starting from the saved queries folder.
           example : 'ocan/nav_fr_peche.sql'
+        db (str, optional): Database name. Possible values :
+          'ocan', 'fmc', 'monitorfish_remote', 'monitorfish_local'. If `db` is None,
+          `con` must be passed.
+        con (Union[Connection, Engine], optional) : `sqlalchemy.engine.Connection` or
+          `sqlalchemy.engine.Engine` object. Mandatory if no `db` is given. Ignored if
+          `db` is given.
+        chunksize (Union[None, str], optional): If specified, return an iterator where
+          `chunksize` is the number of rows to include in each chunk. Defaults to
+          None.
+        params (Union[dict, None], optional): Parameters to pass to execute method.
+          Defaults to None.
+        backend (str, optional) : 'pandas' to run a SQL query and return a
+          `pandas.DataFrame` or 'geopandas' to run a PostGIS query and return a
+          `geopandas.GeoDataFrame`. Defaults to 'pandas'.
+        geom_col (str, optional): column name to convert to shapely geometries when
+          `backend` is 'geopandas'. Ignored when `backend` is 'pandas'. Defaults to
+          'geom'.
+        crs (Union[None, str], optional) : CRS to use for the returned GeoDataFrame;
+          if not set, tries to determine CRS from the SRID associated with the first
+          geometry in the database, and assigns that to all geometries. Ignored when
+          `backend` is 'pandas'. Defaults to None.
         parse_dates (Union[list, dict, None], optional):
 
           - List of column names to parse as dates.
@@ -44,56 +66,40 @@ def read_saved_query(
             (D, s, ns, ms, us) in case of parsing integer timestamps.
           - Dict of ``{column_name: arg dict}``, where the arg dict corresponds
             to the keyword arguments of :func:`pandas.to_datetime`
-
-        params (Union[dict, None], optional): Parameters to pass to execute method.
-          Defaults to None.
-        backend (str, optional) :
-
-          - 'pandas' to run a SQL query and return a `pandas.DataFrame`
-          - 'geopandas' to run a PostGIS query and return a `geopandas.GeoDataFrame`.
-
-          Defaults to 'pandas'.
-        geom_col (str, optional): column name to convert to shapely geometries when
-          `backend` is 'geopandas'. Ignored when `backend` is 'pandas'. Defaults to
-          'geom'.
-        crs (Union[None, str], optional) : CRS to use for the returned GeoDataFrame;
-          if not set, tries to determine CRS from the SRID associated with the first
-          geometry in the database, and assigns that to all geometries. Ignored when
-          `backend` is 'pandas'. Defaults to None.
         kwargs : passed to pd.read_sql or gpd.read_postgis
 
     Returns:
         Union[pd.DataFrame, gpd.DataFrame]: Query results
     """
-    engine = create_engine(db=db)
     sql_filepath = QUERIES_LOCATION / sql_filepath
     with open(sql_filepath, "r") as sql_file:
         query = text(sql_file.read())
 
-    if backend == "pandas":
-        return pd.read_sql(
-            query, engine, parse_dates=parse_dates, params=params, **kwargs
-        )
-
-    elif backend == "geopandas":
-        return gpd.read_postgis(
-            query, engine, geom_col=geom_col, crs=crs, params=params, **kwargs
-        )
-
-    else:
-        raise ValueError(f"backend must be 'pandas' or 'geopandas', got {backend}")
+    return read_query(
+        query,
+        db=db,
+        con=con,
+        chunksize=chunksize,
+        params=params,
+        backend=backend,
+        geom_col=geom_col,
+        crs=crs,
+        parse_dates=parse_dates,
+        **kwargs,
+    )
 
 
 def read_query(
     query,
     *,
     db: str = None,
+    con: Union[Connection, Engine] = None,
     chunksize: Union[None, str] = None,
     params: Union[dict, None] = None,
     backend: str = "pandas",
     geom_col: str = "geom",
     crs: Union[int, None] = None,
-    con: Union[Connection, Engine] = None,
+    parse_dates: Union[list, dict, None] = None,
     **kwargs,
 ) -> Union[pd.DataFrame, gpd.GeoDataFrame]:
     """Run SQLquery on a database. Supported databases :
@@ -111,6 +117,9 @@ def read_query(
         db (str, optional): Database name. Possible values :
           'ocan', 'fmc', 'monitorfish_remote', 'monitorfish_local'. If `db` is None,
           `con` must be passed.
+        con (Union[Connection, Engine], optional) : `sqlalchemy.engine.Connection` or
+          `sqlalchemy.engine.Engine` object. Mandatory if no `db` is given. Ignored if
+          `db` is given.
         chunksize (Union[None, str], optional): If specified, return an iterator where
           `chunksize` is the number of rows to include in each chunk. Defaults to
           None.
@@ -126,9 +135,14 @@ def read_query(
           if not set, tries to determine CRS from the SRID associated with the first
           geometry in the database, and assigns that to all geometries. Ignored when
           `backend` is 'pandas'. Defaults to None.
-        con (Union[Connection, Engine], optional) : `sqlalchemy.engine.Connection` or
-          `sqlalchemy.engine.Engine` object. Mandatory if no `db` is given. Ignored if
-          `db` is given.
+        parse_dates (Union[list, dict, None], optional):
+
+          - List of column names to parse as dates.
+          - Dict of ``{column_name: format string}`` where format string is
+            strftime compatible in case of parsing string times or is one of
+            (D, s, ns, ms, us) in case of parsing integer timestamps.
+          - Dict of ``{column_name: arg dict}``, where the arg dict corresponds
+            to the keyword arguments of :func:`pandas.to_datetime`
         kwargs : passed to pd.read_sql or gpd.read_postgis
 
     Returns:
@@ -143,7 +157,14 @@ def read_query(
         raise ValueError("At least one of `db` or `con` must be passed.")
 
     if backend == "pandas":
-        return pd.read_sql(query, con, chunksize=chunksize, params=params, **kwargs)
+        return pd.read_sql(
+            query,
+            con,
+            chunksize=chunksize,
+            parse_dates=parse_dates,
+            params=params,
+            **kwargs,
+        )
     elif backend == "geopandas":
         return gpd.read_postgis(
             query,
@@ -151,6 +172,7 @@ def read_query(
             geom_col=geom_col,
             crs=crs,
             chunksize=chunksize,
+            parse_dates=parse_dates,
             params=params,
             **kwargs,
         )

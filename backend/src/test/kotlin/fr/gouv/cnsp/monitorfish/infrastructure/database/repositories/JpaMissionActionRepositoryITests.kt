@@ -45,7 +45,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         val controls = jpaMissionActionsRepository.findVesselMissionActionsAfterDateTime(1, dateTime)
 
         // Then
-        assertThat(controls).hasSize(3)
+        assertThat(controls).hasSize(2)
         val firstControl = controls.first()
 
         assertThat(firstControl.emitsVms).isEqualTo(ControlCheck.YES)

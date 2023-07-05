@@ -1,4 +1,4 @@
-import { LogbookMessage } from '../../../../types/fishingActivities'
+import type { LogbookMessage } from '../../../../types/fishingActivities'
 
 export const correctedLANMessage = {
   acknowledge: {

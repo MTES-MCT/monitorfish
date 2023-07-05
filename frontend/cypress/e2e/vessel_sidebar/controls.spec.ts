@@ -1,5 +1,7 @@
 /* eslint-disable no-undef */
 
+import dayjs from 'dayjs'
+
 import { getDate } from '../../../src/utils'
 
 context('Vessel sidebar controls tab', () => {
@@ -42,7 +44,7 @@ context('Vessel sidebar controls tab', () => {
     // When
     cy.get('*[data-cy="vessel-controls-year"]').first().click({ timeout: 10000 })
 
-    // Then
+    // Check the control content displayed
     cy.get('*[data-cy="vessel-control-title"]').first().contains(`CONTRÔLE EN MER DU ${date}`)
     cy.get('*[data-cy="vessel-control"]')
       .first()
@@ -86,5 +88,19 @@ context('Vessel sidebar controls tab', () => {
 
       .and('contain', 'Observations')
       .and('contain', 'Commentaires post contrôle')
+
+    // Close the opened year
+    cy.get('*[data-cy="vessel-controls-year"]').eq(0).click({ timeout: 10000 })
+
+    // Check the order of controls (in descending order)
+    cy.get('*[data-cy="vessel-controls-year"]').eq(1).click({ timeout: 10000 })
+    const yearBefore = dayjs().subtract(1, 'year')
+    cy.get('*[data-cy="vessel-control-title"]')
+      .eq(0)
+      .contains(`CONTRÔLE EN MER DU ${getDate(yearBefore.toISOString())}`)
+    const yearBeforeMinusOneMonth = dayjs(yearBefore).subtract(1, 'month')
+    cy.get('*[data-cy="vessel-control-title"]')
+      .eq(1)
+      .contains(`CONTRÔLE EN MER DU ${getDate(yearBeforeMinusOneMonth.toISOString())}`)
   })
 })

@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
+import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.DeleteUser
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.SaveUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.input.AddUserDataInput
@@ -17,7 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delet
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@Import(SecurityConfig::class, OIDCProperties::class)
+@Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class)
 @WebMvcTest(value = [(UserManagementController::class)])
 class UserManagementControllerITests {
 

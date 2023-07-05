@@ -15,10 +15,8 @@ import {
   RTPMessage
 } from './index'
 import { COLORS } from '../../../../constants/constants'
-import {
-  getLogbookMessageType,
-  LogbookMessageType as LogbookMessageTypeEnum
-} from '../../../../domain/entities/logbook'
+import { getLogbookMessageType } from '../../../../domain/entities/logbook'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook/constants'
 import {
   removeFishingActivityFromMap,
   showFishingActivityOnMap

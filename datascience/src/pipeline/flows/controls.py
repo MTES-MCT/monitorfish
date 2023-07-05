@@ -362,6 +362,8 @@ def transform_controls(controls: pd.DataFrame):
         "FRNBR": "FRCQ2",
         "FRPLJ": "FRPU4",
         "FRJPL": "FRPB2",
+        "FRXSP": "PMFSP",
+        "FRASM": "FRVM6",
     }
 
     controls["port_locode"] = controls.port_locode.where(

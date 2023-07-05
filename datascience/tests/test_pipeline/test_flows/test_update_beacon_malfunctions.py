@@ -896,9 +896,12 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
         "SELECT * FROM beacon_malfunctions", db="monitorfish_remote"
     )
 
-    state = flow.run(
-        max_hours_without_emission_at_sea=6, max_hours_without_emission_at_port=1
-    )
+    with patch("src.pipeline.flows.update_beacon_malfunctions.requests"):
+        state = flow.run(
+            max_hours_without_emission_at_sea=6, max_hours_without_emission_at_port=1
+        )
+
+    assert state.is_successful()
 
     loaded_beacon_malfunctions = read_query(
         "SELECT * FROM beacon_malfunctions",

@@ -16,8 +16,8 @@ import getAllRegulatoryLayers from '../domain/use_cases/layer/regulation/getAllR
 import { getVesselControls } from '../domain/use_cases/mission/getVesselControls'
 import { getAllCurrentReportings } from '../domain/use_cases/reporting/getAllCurrentReportings'
 import getAllSpecies from '../domain/use_cases/species/getAllSpecies'
+import { getVesselLogbook } from '../domain/use_cases/vessel/getVesselLogbook'
 import getVesselReportings from '../domain/use_cases/vessel/getVesselReportings'
-import { getVesselVoyage } from '../domain/use_cases/vessel/getVesselVoyage'
 import { showVesselsLastPosition } from '../domain/use_cases/vessel/showVesselsLastPosition'
 import { updateVesselTracks } from '../domain/use_cases/vessel/updateVesselTracks'
 import { useIsSuperUser } from '../hooks/authorization/useIsSuperUser'
@@ -134,7 +134,7 @@ export function APIWorker() {
     }
 
     if (vesselSidebarTab === VesselSidebarTab.VOYAGES && selectedVesselIdentity) {
-      dispatch(getVesselVoyage(selectedVesselIdentity, undefined, true))
+      dispatch(getVesselLogbook(selectedVesselIdentity, undefined, true))
     } else if (vesselSidebarTab === VesselSidebarTab.CONTROLS) {
       dispatch(getVesselControls(false))
     } else if (vesselSidebarTab === VesselSidebarTab.REPORTING) {

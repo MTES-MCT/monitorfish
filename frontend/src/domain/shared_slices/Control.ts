@@ -27,6 +27,13 @@ const controlSlice = createSlice({
       state.loadingControls = true
     },
 
+    /**
+     * Reset the loading of controls
+     */
+    resetLoadControls(state) {
+      state.loadingControls = false
+    },
+
     resetNextControlSummary(state) {
       state.nextControlSummary = null
     },
@@ -39,7 +46,7 @@ const controlSlice = createSlice({
     },
 
     /**
-     * Set selected vessel control resume and control
+     * Set selected vessel control resume and controls
      */
     setControlSummary(state, action: PayloadAction<MissionAction.MissionControlsSummary>) {
       state.currentControlSummary = action.payload
@@ -48,11 +55,26 @@ const controlSlice = createSlice({
 
     setNextControlSummary(state, action: PayloadAction<MissionAction.MissionControlsSummary>) {
       state.nextControlSummary = action.payload
+    },
+
+    /**
+     * Unset the control resume and controls
+     */
+    unsetControlSummary(state) {
+      state.currentControlSummary = null
+      state.loadingControls = false
     }
   }
 })
 
-export const { loadControls, resetNextControlSummary, setControlFromDate, setControlSummary, setNextControlSummary } =
-  controlSlice.actions
+export const {
+  loadControls,
+  resetLoadControls,
+  resetNextControlSummary,
+  setControlFromDate,
+  setControlSummary,
+  setNextControlSummary,
+  unsetControlSummary
+} = controlSlice.actions
 
 export const controlReducer = controlSlice.reducer

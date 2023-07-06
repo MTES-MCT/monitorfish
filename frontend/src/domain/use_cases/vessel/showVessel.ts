@@ -6,6 +6,7 @@ import { removeFishingActivitiesFromMap } from '../../shared_slices/FishingActiv
 import { addSearchedVessel, removeError, setError } from '../../shared_slices/Global'
 import { doNotAnimate } from '../../shared_slices/Map'
 import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../../shared_slices/Vessel'
+import { displayOrLogVesselSidebarError } from '../error/displayOrLogVesselSidebarError'
 
 import type { VesselIdentity } from '../../entities/vessel/types'
 
@@ -54,17 +55,24 @@ export const showVessel =
         vesselIdentifier: addVesselIdentifierToVesselIdentity(vesselIdentity).vesselIdentifier
       }
 
-      return dispatch(
+      dispatch(
         setSelectedVessel({
           positions: vesselAndPositions.positions,
           vessel: selectedVessel
         })
       )
     } catch (error) {
-      dispatch(setError(error))
+      dispatch(
+        displayOrLogVesselSidebarError(
+          error,
+          {
+            func: showVessel,
+            parameters: [vesselIdentity, isFromSearch, isCalledFromCron]
+          },
+          isCalledFromCron
+        )
+      )
       dispatch(resetLoadingVessel())
-
-      return undefined
     }
   }
 

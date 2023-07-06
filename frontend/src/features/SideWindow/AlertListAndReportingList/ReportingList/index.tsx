@@ -14,7 +14,6 @@ import { setEditedReportingInSideWindow } from '../../../../domain/shared_slices
 import { ReportingType } from '../../../../domain/types/reporting'
 import archiveReportings from '../../../../domain/use_cases/reporting/archiveReportings'
 import deleteReportings from '../../../../domain/use_cases/reporting/deleteReportings'
-import { getVesselVoyage } from '../../../../domain/use_cases/vessel/getVesselVoyage'
 import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
 import { useForceUpdate } from '../../../../hooks/useForceUpdate'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
@@ -112,7 +111,6 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
   const focusOnMap = useCallback(
     (reporting: InfractionSuspicionReporting | PendingAlertReporting) => {
       dispatch(showVessel(reporting, false, false))
-      dispatch(getVesselVoyage(reporting, undefined, false))
     },
     [dispatch]
   )

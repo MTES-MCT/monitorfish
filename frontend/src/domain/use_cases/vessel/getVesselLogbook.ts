@@ -1,21 +1,23 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
-import { batch } from 'react-redux'
 
 import { updateSelectedVesselTrackRequest } from './updateSelectedVesselTrackRequest'
-import { getVesselVoyageFromAPI } from '../../../api/vessel'
+import { getVesselLogbookFromAPI } from '../../../api/vessel'
 import NoLogbookMessagesFoundError from '../../../errors/NoLogbookMessagesFoundError'
 import { vesselsAreEquals } from '../../entities/vessel/vessel'
 import { getTrackRequestFromDates } from '../../entities/vesselTrackDepth'
+import { setDisplayedErrors } from '../../shared_slices/DisplayedError'
 import {
   hideFishingActivitiesOnMap,
   loadFishingActivities,
   removeFishingActivitiesFromMap,
+  resetLoadFishingActivities,
   setLastVoyage,
   setNextFishingActivities,
   setVoyage,
   showFishingActivitiesOnMap
 } from '../../shared_slices/FishingActivities'
 import { removeError, setError } from '../../shared_slices/Global'
+import { displayOrLogVesselSidebarError } from '../error/displayOrLogVesselSidebarError'
 
 import type { VesselIdentity } from '../../entities/vessel/types'
 
@@ -28,7 +30,7 @@ export enum NavigateTo {
 /**
  * Get the vessel fishing voyage and update the vessel positions track when navigating in the trips
  */
-export const getVesselVoyage =
+export const getVesselLogbook =
   (vesselIdentity: VesselIdentity | null, navigateTo: NavigateTo | undefined, fromCron: boolean) =>
   async (dispatch, getState) => {
     if (!vesselIdentity) {
@@ -48,17 +50,16 @@ export const getVesselVoyage =
     }
 
     if (!fromCron) {
+      dispatch(setDisplayedErrors({ vesselSidebarError: null }))
       dispatch(loadFishingActivities())
     }
 
     try {
-      const voyage = await getVesselVoyageFromAPI(vesselIdentity, nextNavigateTo, tripNumber)
+      const voyage = await getVesselLogbookFromAPI(vesselIdentity, nextNavigateTo, tripNumber)
       if (!voyage) {
-        batch(() => {
-          dispatch(setVoyage(emptyVoyage))
-          dispatch(hideFishingActivitiesOnMap())
-          dispatch(setError(new NoLogbookMessagesFoundError("Ce navire n'a pas envoyé de message JPE.")))
-        })
+        dispatch(setVoyage(emptyVoyage))
+        dispatch(hideFishingActivitiesOnMap())
+        dispatch(setError(new NoLogbookMessagesFoundError("Ce navire n'a pas envoyé de message JPE.")))
 
         return
       }
@@ -88,8 +89,17 @@ export const getVesselVoyage =
 
       dispatch(removeError())
     } catch (error) {
-      dispatch(setVoyage(emptyVoyage))
-      dispatch(setError(error))
+      dispatch(
+        displayOrLogVesselSidebarError(
+          error,
+          {
+            func: getVesselLogbook,
+            parameters: [vesselIdentity, navigateTo, fromCron]
+          },
+          fromCron
+        )
+      )
+      dispatch(resetLoadFishingActivities())
     }
   }
 

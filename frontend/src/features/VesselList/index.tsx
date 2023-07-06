@@ -22,7 +22,7 @@ import { setPreviewFilteredVesselsFeatures } from '../../domain/shared_slices/Ve
 import getAdministrativeZoneGeometry from '../../domain/use_cases/layer/administrative/getAdministrativeZoneGeometry'
 import { addVesselListFilterZone } from '../../domain/use_cases/vessel/addVesselListFilterZone'
 import { getFilteredVessels } from '../../domain/use_cases/vessel/getFilteredVessels'
-import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
+import { unselectVessel } from '../../domain/use_cases/vessel/unselectVessel'
 import { useListenForDrawedGeometry } from '../../hooks/useListenForDrawing'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'

@@ -14,13 +14,13 @@ import type {
 } from '../domain/entities/vessel/types'
 import type { VesselVoyage } from '../domain/types/fishingActivities'
 import type { CurrentAndArchivedReportingsOfSelectedVessel } from '../domain/types/reporting'
-import type { NavigateTo } from '../domain/use_cases/vessel/getVesselVoyage'
+import type { NavigateTo } from '../domain/use_cases/vessel/getVesselLogbook'
 
 const LAST_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les dernières positions"
 const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"
-const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu chercher les navires dans notre base"
-const LOGBOOK_ERROR_MESSAGE = "Nous n'avons pas pu chercher les messages JPE de ce navire"
-const REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu récuperer les signalements de ce navire"
+const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les navires dans notre base"
+const LOGBOOK_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les messages JPE de ce navire"
+const REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les signalements de ce navire"
 
 export const vesselApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
@@ -123,11 +123,12 @@ async function searchVesselsFromAPI(searched: string) {
 }
 
 /**
- * Get vessel voyage
+ * Get vessel logbook.
+ * If the vessel has no logbook, an NOT_FOUND (404) API http code is returned from the API.
  *
  * @throws {@link ApiError}
  */
-async function getVesselVoyageFromAPI(
+async function getVesselLogbookFromAPI(
   vesselIdentity: VesselIdentity,
   voyageRequest: NavigateTo | undefined,
   tripNumber: number | undefined
@@ -176,6 +177,6 @@ export {
   getVesselPositionsFromAPI,
   getVesselFromAPI,
   getVesselsLastPositionsFromAPI,
-  getVesselVoyageFromAPI,
+  getVesselLogbookFromAPI,
   getVesselReportingsFromAPI
 }

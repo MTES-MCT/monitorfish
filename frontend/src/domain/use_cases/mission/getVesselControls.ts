@@ -1,11 +1,17 @@
-import { batch } from 'react-redux'
-
 import { getVesselControlsFromAPI } from '../../../api/missionAction'
 import NoControlsFoundError from '../../../errors/NoControlsFoundError'
-import { loadControls, setControlSummary, setNextControlSummary } from '../../shared_slices/Control'
+import {
+  loadControls,
+  resetLoadControls,
+  setControlSummary,
+  setNextControlSummary,
+  unsetControlSummary
+} from '../../shared_slices/Control'
+import { setDisplayedErrors } from '../../shared_slices/DisplayedError'
 import { removeError, setError } from '../../shared_slices/Global'
+import { displayOrLogVesselSidebarError } from '../error/displayOrLogVesselSidebarError'
 
-export const getVesselControls = userRequest => (dispatch, getState) => {
+export const getVesselControls = userRequest => async (dispatch, getState) => {
   const { selectedVessel } = getState().vessel
   const { controlsFromDate, currentControlSummary } = getState().controls
 
@@ -14,41 +20,41 @@ export const getVesselControls = userRequest => (dispatch, getState) => {
   }
 
   if (!selectedVessel.vesselId) {
-    batch(() => {
-      dispatch(setError(new NoControlsFoundError('Aucun contrôle connu')))
-      dispatch(
-        // TODO Why this is an empty controllSummary and not a simple `unsetControlSummary()` setting it to undefined?
-        // This forces to add a wrong any.
-        setControlSummary({
-          controls: []
-        } as any)
-      )
-    })
+    dispatch(setError(new NoControlsFoundError('Aucun contrôle connu')))
+    dispatch(unsetControlSummary())
 
     return
   }
 
   const isSameVesselAsCurrentlyShowed = getIsSameVesselAsCurrentlyShowed(selectedVessel.vesselId, currentControlSummary)
   if (!isSameVesselAsCurrentlyShowed) {
+    dispatch(setDisplayedErrors({ vesselSidebarError: null }))
     dispatch(loadControls())
   }
 
-  getVesselControlsFromAPI(selectedVessel.vesselId, controlsFromDate)
-    .then(controlSummary => {
-      if (isSameVesselAsCurrentlyShowed && !userRequest) {
-        if (controlSummary.controls?.length > currentControlSummary.missionActions?.length) {
-          dispatch(setNextControlSummary(controlSummary))
-        }
-      } else {
-        dispatch(setControlSummary(controlSummary))
+  try {
+    const controlSummary = await getVesselControlsFromAPI(selectedVessel.vesselId, controlsFromDate)
+    if (isSameVesselAsCurrentlyShowed && !userRequest) {
+      if (controlSummary.controls?.length > currentControlSummary.missionActions?.length) {
+        dispatch(setNextControlSummary(controlSummary))
       }
-      dispatch(removeError())
-    })
-    .catch(error => {
-      batch(() => {
-        dispatch(setError(error))
-      })
-    })
+    } else {
+      dispatch(setControlSummary(controlSummary))
+    }
+    dispatch(removeError())
+  } catch (error) {
+    dispatch(
+      displayOrLogVesselSidebarError(
+        error,
+        {
+          func: getVesselControls,
+          parameters: [userRequest]
+        },
+        !userRequest
+      )
+    )
+    dispatch(resetLoadControls())
+  }
 }
 
 const getIsSameVesselAsCurrentlyShowed = (vesselId, currentControlSummary) => {

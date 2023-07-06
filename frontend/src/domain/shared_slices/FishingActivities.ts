@@ -9,7 +9,7 @@ import type { FishingActivities } from '../types/fishingActivities'
 // TODO Properly type this redux state.
 export type FishingActivitiesState = {
   areFishingActivitiesShowedOnMap: boolean
-  fishingActivities: FishingActivities
+  fishingActivities: FishingActivities | undefined
   fishingActivitiesShowedOnMap: FishingActivityShowedOnMap[]
   fishingActivitiesTab: FishingActivitiesTab
   isFirstVoyage: any | null
@@ -22,10 +22,7 @@ export type FishingActivitiesState = {
 }
 const INITIAL_STATE: FishingActivitiesState = {
   areFishingActivitiesShowedOnMap: false,
-  fishingActivities: {
-    alerts: [],
-    logbookMessages: []
-  },
+  fishingActivities: undefined,
   fishingActivitiesShowedOnMap: [],
   fishingActivitiesTab: FishingActivitiesTab.SUMMARY,
   isFirstVoyage: null,
@@ -44,6 +41,17 @@ const fishingActivitiesSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'fishingActivities',
   reducers: {
+    /**
+     * Close vessel fishing activities
+     * @param {Object=} state
+     */
+    closeFishingActivities(state) {
+      state.areFishingActivitiesShowedOnMap = false
+      state.fishingActivitiesShowedOnMap = []
+      state.fishingActivities = undefined
+      state.loadingFishingActivities = false
+    },
+
     /**
      * End redraw fishing activities on map
      * @param {Object=} state
@@ -86,6 +94,14 @@ const fishingActivitiesSlice = createSlice({
       state.fishingActivitiesShowedOnMap = state.fishingActivitiesShowedOnMap.filter(
         showed => showed.id !== action.payload
       )
+    },
+
+    /**
+     * Reset the loading of fishing activities
+     * @param {Object=} state
+     */
+    resetLoadFishingActivities(state) {
+      state.loadingFishingActivities = false
     },
 
     resetNextFishingActivities(state) {
@@ -146,6 +162,11 @@ const fishingActivitiesSlice = createSlice({
     showFishingActivitiesOnMap(state) {
       state.areFishingActivitiesShowedOnMap = true
       // TODO There is a typing issue that may reveal a code issue here.
+
+      if (!state.fishingActivities) {
+        return
+      }
+
       state.fishingActivitiesShowedOnMap = state.fishingActivities.logbookMessages
         .filter(fishingActivity => !fishingActivity.isCorrected)
         .map(fishingActivity => ({
@@ -163,6 +184,10 @@ const fishingActivitiesSlice = createSlice({
      * Show a single fishing activity on the vessel track, on the map
      */
     showFishingActivityOnMap(state, action) {
+      if (!state.fishingActivities) {
+        return
+      }
+
       const fishingActivityToShow = state.fishingActivities.logbookMessages.find(
         fishingActivity => fishingActivity.operationNumber === action.payload
       )
@@ -205,11 +230,13 @@ const fishingActivitiesSlice = createSlice({
 })
 
 export const {
+  closeFishingActivities,
   endRedrawFishingActivitiesOnMap,
   hideFishingActivitiesOnMap,
   loadFishingActivities,
   removeFishingActivitiesFromMap,
   removeFishingActivityFromMap,
+  resetLoadFishingActivities,
   resetNextFishingActivities,
   setFishingActivitiesTab,
   setLastVoyage,

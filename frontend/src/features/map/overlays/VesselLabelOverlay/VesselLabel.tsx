@@ -8,7 +8,6 @@ import {
   getProbabilityRiskFactorText,
   getRiskFactorColor
 } from '../../../../domain/entities/vessel/riskFactor'
-import { getVesselVoyage } from '../../../../domain/use_cases/vessel/getVesselVoyage'
 import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 
@@ -70,7 +69,6 @@ export function VesselLabel({
                 onClick={() => {
                   if (!overlayIsPanning.current) {
                     dispatch(showVessel(identity, false, false))
-                    dispatch(getVesselVoyage(identity, undefined, false))
                   }
                 }}
               >

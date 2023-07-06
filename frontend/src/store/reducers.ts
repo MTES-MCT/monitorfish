@@ -7,6 +7,7 @@ import { alertReducer } from '../domain/shared_slices/Alert'
 import { beaconMalfunctionReducer } from '../domain/shared_slices/BeaconMalfunction'
 import { controlReducer } from '../domain/shared_slices/Control'
 import { displayedComponentReducer } from '../domain/shared_slices/DisplayedComponent'
+import { displayedErrorReducer } from '../domain/shared_slices/DisplayedError'
 import { drawReducer } from '../domain/shared_slices/Draw'
 import { favoriteVesselReducer } from '../domain/shared_slices/FavoriteVessel'
 import { filterReducer } from '../domain/shared_slices/Filter'
@@ -61,6 +62,7 @@ export const mainReducer = {
   //  TODO Pass that to singular.
   controls: controlReducer,
   displayedComponent: displayedComponentReducer,
+  displayedError: displayedErrorReducer,
   draw: drawReducer,
   favoriteVessel: favoriteVesselReducer,
   filter: filterReducer,

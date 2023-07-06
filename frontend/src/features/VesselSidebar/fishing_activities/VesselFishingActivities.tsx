@@ -12,7 +12,7 @@ import {
   setFishingActivitiesTab,
   setVoyage
 } from '../../../domain/shared_slices/FishingActivities'
-import { getVesselVoyage, NavigateTo } from '../../../domain/use_cases/vessel/getVesselVoyage'
+import { getVesselLogbook, NavigateTo } from '../../../domain/use_cases/vessel/getVesselLogbook'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
@@ -39,17 +39,21 @@ export function VesselFishingActivities() {
   }
 
   useEffect(() => {
+    if (loadingFishingActivities) {
+      return
+    }
+
     if (!fishingActivities) {
       dispatch(resetNextFishingActivities())
-      dispatch(getVesselVoyage(selectedVesselIdentity, undefined, false))
+      dispatch(getVesselLogbook(selectedVesselIdentity, undefined, false))
 
       return
     }
 
     if (previousSelectedVessel && !vesselsAreEquals(previousSelectedVessel, selectedVesselIdentity)) {
-      dispatch(getVesselVoyage(selectedVesselIdentity, undefined, false))
+      dispatch(getVesselLogbook(selectedVesselIdentity, undefined, false))
     }
-  }, [dispatch, fishingActivities, selectedVesselIdentity, previousSelectedVessel])
+  }, [dispatch, fishingActivities, loadingFishingActivities, selectedVesselIdentity, previousSelectedVessel])
 
   const updateFishingActivities = useCallback(
     _nextFishingActivities => {
@@ -64,15 +68,15 @@ export function VesselFishingActivities() {
   )
 
   const goToPreviousTrip = useCallback(() => {
-    dispatch(getVesselVoyage(selectedVesselIdentity, NavigateTo.PREVIOUS, false))
+    dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.PREVIOUS, false))
   }, [dispatch, selectedVesselIdentity])
 
   const goToNextTrip = useCallback(() => {
-    dispatch(getVesselVoyage(selectedVesselIdentity, NavigateTo.NEXT, false))
+    dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.NEXT, false))
   }, [dispatch, selectedVesselIdentity])
 
   const goToLastTrip = useCallback(() => {
-    dispatch(getVesselVoyage(selectedVesselIdentity, NavigateTo.LAST, false))
+    dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.LAST, false))
   }, [dispatch, selectedVesselIdentity])
 
   return (

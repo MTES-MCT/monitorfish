@@ -3,11 +3,10 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import { removeVesselFromFavorites } from '../../../domain/shared_slices/FavoriteVessel'
-import { getVesselVoyage } from '../../../domain/use_cases/vessel/getVesselVoyage'
 import { hideVesselTrack } from '../../../domain/use_cases/vessel/hideVesselTrack'
 import { showVessel } from '../../../domain/use_cases/vessel/showVessel'
 import { showVesselTrack } from '../../../domain/use_cases/vessel/showVesselTrack'
-import unselectVessel from '../../../domain/use_cases/vessel/unselectVessel'
+import { unselectVessel } from '../../../domain/use_cases/vessel/unselectVessel'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
@@ -38,7 +37,6 @@ export function FavoriteVessel({
       dispatch(hideVesselTrack(vesselCompositeIdentifier))
     }
     dispatch(showVessel(favorite, false, false))
-    dispatch(getVesselVoyage(favorite, undefined, false))
   }, [dispatch, isTrackShowed, vesselCompositeIdentifier, favorite])
 
   return (

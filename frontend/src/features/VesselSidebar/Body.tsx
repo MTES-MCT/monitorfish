@@ -23,7 +23,7 @@ export function Body() {
 
   if (vesselSidebarError) {
     return (
-      <Error>
+      <ErrorFallback>
         🔌 {vesselSidebarError.message}
         <br />
         <RetryButton
@@ -39,7 +39,7 @@ export function Body() {
         >
           Réessayer
         </RetryButton>
-      </Error>
+      </ErrorFallback>
     )
   }
 
@@ -65,7 +65,7 @@ const Wrapper = styled.div<{
   max-height: ${p => (p.healthcheckTextWarning ? 80 : 82)}vh;
 `
 
-const Error = styled.div`
+const ErrorFallback = styled.div`
   border: ${p => p.theme.color.gainsboro} 10px solid;
   padding-top: 30px;
   height: 90px;

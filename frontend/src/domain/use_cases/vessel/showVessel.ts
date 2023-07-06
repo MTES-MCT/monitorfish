@@ -64,7 +64,7 @@ export const showVessel =
     } catch (error) {
       dispatch(
         displayOrLogVesselSidebarError(
-          error,
+          error as Error,
           {
             func: showVessel,
             parameters: [vesselIdentity, isFromSearch, isCalledFromCron]

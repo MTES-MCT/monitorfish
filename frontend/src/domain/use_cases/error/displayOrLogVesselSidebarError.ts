@@ -1,6 +1,8 @@
-import { DisplayedError, RetryableUseCase } from '../../../libs/DisplayedError'
+import { DisplayedError } from '../../../libs/DisplayedError'
 import { setDisplayedErrors } from '../../shared_slices/DisplayedError'
 import { setError } from '../../shared_slices/Global'
+
+import type { RetryableUseCase } from '../../../libs/DisplayedError'
 
 /**
  * Dispatch:

@@ -45,7 +45,7 @@ export const getVesselControls = userRequest => async (dispatch, getState) => {
   } catch (error) {
     dispatch(
       displayOrLogVesselSidebarError(
-        error,
+        error as Error,
         {
           func: getVesselControls,
           parameters: [userRequest]

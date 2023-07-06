@@ -91,7 +91,7 @@ export const getVesselLogbook =
     } catch (error) {
       dispatch(
         displayOrLogVesselSidebarError(
-          error,
+          error as Error,
           {
             func: getVesselLogbook,
             parameters: [vesselIdentity, navigateTo, fromCron]

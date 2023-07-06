@@ -20,6 +20,8 @@ export function Controls() {
     state => state.controls
   )
 
+  const hasNoControl = !selectedVessel?.vesselId
+
   const yearsToActions = useMemo(() => {
     if (!currentControlSummary?.controls) {
       return {}
@@ -41,8 +43,8 @@ export function Controls() {
       return
     }
 
-    dispatch(getVesselControls(true) as any)
-  }, [dispatch, selectedVessel, controlsFromDate])
+    dispatch(getVesselControls(false))
+  }, [dispatch, controlsFromDate])
 
   const updateControlSummary = nextControlSummary_ => {
     if (nextControlSummary_) {
@@ -70,6 +72,7 @@ export function Controls() {
       )}
       {!loadingControls ? (
         <Body data-cy="vessel-controls">
+          {hasNoControl && <NoControl>Nous n’avons trouvé aucun contrôle pour ce navire.</NoControl>}
           {currentControlSummary && (
             <ControlsSummary
               controlsFromDate={controlsFromDate}
@@ -77,10 +80,14 @@ export function Controls() {
               summary={currentControlSummary}
             />
           )}
-          <YearsToControlList controlsFromDate={controlsFromDate} yearsToControls={yearsToActions} />
-          <SeeMoreBackground>
-            <SeeMore onClick={seeMore}>Afficher plus de contrôles</SeeMore>
-          </SeeMoreBackground>
+          {!hasNoControl && (
+            <>
+              <YearsToControlList controlsFromDate={controlsFromDate} yearsToControls={yearsToActions} />
+              <SeeMoreBackground>
+                <SeeMore onClick={seeMore}>Afficher plus de contrôles</SeeMore>
+              </SeeMoreBackground>
+            </>
+          )}
         </Body>
       ) : (
         <FingerprintSpinner className="radar" color={COLORS.charcoal} size={100} />
@@ -88,6 +95,15 @@ export function Controls() {
     </>
   )
 }
+
+const NoControl = styled.div`
+  margin: 10px 5px;
+  padding-top: 50px;
+  height: 70px;
+  background: ${p => p.theme.color.white};
+  color: ${p => p.theme.color.slateGray};
+  text-align: center;
+`
 
 const SeeMoreBackground = styled.div`
   background: ${COLORS.white};

@@ -11,15 +11,11 @@ import { setDisplayedErrors } from '../../shared_slices/DisplayedError'
 import { removeError, setError } from '../../shared_slices/Global'
 import { displayOrLogVesselSidebarError } from '../error/displayOrLogVesselSidebarError'
 
-export const getVesselControls = userRequest => async (dispatch, getState) => {
+export const getVesselControls = isFromCron => async (dispatch, getState) => {
   const { selectedVessel } = getState().vessel
   const { controlsFromDate, currentControlSummary } = getState().controls
 
-  if (!selectedVessel) {
-    return
-  }
-
-  if (!selectedVessel.vesselId) {
+  if (!selectedVessel?.vesselId) {
     dispatch(setError(new NoControlsFoundError('Aucun contrôle connu')))
     dispatch(unsetControlSummary())
 
@@ -27,14 +23,14 @@ export const getVesselControls = userRequest => async (dispatch, getState) => {
   }
 
   const isSameVesselAsCurrentlyShowed = getIsSameVesselAsCurrentlyShowed(selectedVessel.vesselId, currentControlSummary)
-  if (!isSameVesselAsCurrentlyShowed) {
+  if (!isFromCron) {
     dispatch(setDisplayedErrors({ vesselSidebarError: null }))
     dispatch(loadControls())
   }
 
   try {
     const controlSummary = await getVesselControlsFromAPI(selectedVessel.vesselId, controlsFromDate)
-    if (isSameVesselAsCurrentlyShowed && !userRequest) {
+    if (isSameVesselAsCurrentlyShowed && isFromCron) {
       if (controlSummary.controls?.length > currentControlSummary.missionActions?.length) {
         dispatch(setNextControlSummary(controlSummary))
       }
@@ -48,9 +44,9 @@ export const getVesselControls = userRequest => async (dispatch, getState) => {
         error as Error,
         {
           func: getVesselControls,
-          parameters: [userRequest]
+          parameters: [isFromCron]
         },
-        !userRequest
+        isFromCron
       )
     )
     dispatch(resetLoadControls())

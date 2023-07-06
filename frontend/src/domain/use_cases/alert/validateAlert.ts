@@ -5,7 +5,7 @@ import { Vessel } from '../../entities/vessel/vessel'
 import { setPendingAlerts } from '../../shared_slices/Alert'
 import { setError } from '../../shared_slices/Global'
 import { removeVesselAlertAndUpdateReporting } from '../../shared_slices/Vessel'
-import getVesselReportings from '../vessel/getVesselReportings'
+import { getVesselReportings } from '../vessel/getVesselReportings'
 
 import type { MainAppThunk } from '../../../store'
 import type { LEGACY_PendingAlert } from '../../entities/alerts/types'
@@ -26,7 +26,7 @@ export const validateAlert =
       .then(() => {
         // We dispatch this action to update the reportings list
         // since it depends on the the alerts list that we just updated
-        dispatch(getVesselReportings())
+        dispatch(getVesselReportings(false))
 
         const validatedAlert = previousAlertsWithValidatedFlag.find(alert => alert.id === id)
         if (!validatedAlert) {

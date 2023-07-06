@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook'
 import { ReactComponent as ChevronIconSVG } from '../../../icons/Chevron_simple_gris.svg'
 import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
 import { ReactComponent as NotAcknowledgedSVG } from '../../../icons/Message_non_acquitte.svg'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook/constants'
 
 const LogbookMessageResumeHeader = props => {
   const firstUpdate = useRef(true)

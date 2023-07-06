@@ -18,14 +18,15 @@ export type FishingActivities = {
 
 export type LogbookMessage = {
   acknowledge: {
+    dateTime: string | null
     isSuccess: boolean
-    rejectionCause: string
-    returnStatus: string
-  }
+    rejectionCause: string | null
+    returnStatus: string | null
+  } | null
   deleted: boolean
   externalReferenceNumber: string
   flagState: string
-  imo: string
+  imo: string | null
   integrationDateTime: string
   internalReferenceNumber: string
   ircs: string
@@ -37,10 +38,10 @@ export type LogbookMessage = {
   operationNumber: string
   operationType: string
   rawMessage: string
-  referencedReportId: string
+  referencedReportId: string | null
   reportDateTime: string
   reportId: string
-  tripNumber: number
+  tripNumber: string
   vesselName: string
 }
 

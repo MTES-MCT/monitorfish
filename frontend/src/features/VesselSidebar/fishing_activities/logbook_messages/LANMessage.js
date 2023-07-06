@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { getDateTime } from '../../../../utils'
 import { LogbookMessageSpecy, WeightType } from './LogbookMessageSpecy'
-import { buildCatchArray, LogbookMessageSender } from '../../../../domain/entities/logbook'
+import { buildCatchArray} from '../../../../domain/entities/logbook'
+import { LogbookMessageSender } from '../../../../domain/entities/logbook/constants'
 
 const LANMessage = props => {
   const [catches, setCatches] = useState([])

@@ -1,7 +1,7 @@
 import { expect } from '@jest/globals'
 import Fuse from 'fuse.js'
 
-import { regulatoryZones } from './__mocks__'
+import { regulatoryZones } from './__mocks__/regulatoryZones'
 import { REGULATION_SEARCH_OPTIONS } from '../../../../../features/MapButtons/LayersSidebar/RegulatoryZones/search/constants'
 
 import type { RegulatoryZone } from '../../../../types/regulation'

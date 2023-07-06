@@ -15,10 +15,8 @@ import {
   RTPMessage
 } from './index'
 import { COLORS } from '../../../../constants/constants'
-import {
-  getLogbookMessageType,
-  LogbookMessageType as LogbookMessageTypeEnum
-} from '../../../../domain/entities/logbook'
+import { getLogbookMessageType } from '../../../../domain/entities/logbook'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook/constants'
 import {
   removeFishingActivityFromMap,
   showFishingActivityOnMap
@@ -195,7 +193,7 @@ export function LogbookMessage({ isFirst, message }: LogbookMessageComponentType
             <br />
             {!message.acknowledge || (message.acknowledge.isSuccess === null && <Gray>-</Gray>)}
             {message.acknowledge?.isSuccess === true && <AckOk />}
-            {message.acknowledge?.isSuccess === false && <AckNOk title={message.acknowledge.rejectionCause} />}
+            {message.acknowledge?.isSuccess === false && <AckNOk title={message.acknowledge?.rejectionCause || ''} />}
           </Acknowledge>
         </LogbookMessageMetadata>
         {logbookMessageComponent}

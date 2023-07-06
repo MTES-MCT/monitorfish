@@ -7,7 +7,7 @@ import { setIsUpdatingVessels } from '../domain/shared_slices/Global'
 import { getOperationalAlerts } from '../domain/use_cases/alert/getOperationalAlerts'
 import { getSilencedAlerts } from '../domain/use_cases/alert/getSilencedAlerts'
 import getAllBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
-import getVesselBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
+import { getVesselBeaconMalfunctions } from '../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
 import { openBeaconMalfunctionInKanban } from '../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
 import getAllGearCodes from '../domain/use_cases/gearCode/getAllGearCodes'
 import getHealthcheck from '../domain/use_cases/healthcheck/getHealthcheck'
@@ -17,7 +17,7 @@ import { getVesselControls } from '../domain/use_cases/mission/getVesselControls
 import { getAllCurrentReportings } from '../domain/use_cases/reporting/getAllCurrentReportings'
 import getAllSpecies from '../domain/use_cases/species/getAllSpecies'
 import { getVesselLogbook } from '../domain/use_cases/vessel/getVesselLogbook'
-import getVesselReportings from '../domain/use_cases/vessel/getVesselReportings'
+import { getVesselReportings } from '../domain/use_cases/vessel/getVesselReportings'
 import { showVesselsLastPosition } from '../domain/use_cases/vessel/showVesselsLastPosition'
 import { updateVesselTracks } from '../domain/use_cases/vessel/updateVesselTracks'
 import { useIsSuperUser } from '../hooks/authorization/useIsSuperUser'
@@ -136,9 +136,9 @@ export function APIWorker() {
     if (vesselSidebarTab === VesselSidebarTab.VOYAGES && selectedVesselIdentity) {
       dispatch(getVesselLogbook(selectedVesselIdentity, undefined, true))
     } else if (vesselSidebarTab === VesselSidebarTab.CONTROLS) {
-      dispatch(getVesselControls(false))
+      dispatch(getVesselControls(true))
     } else if (vesselSidebarTab === VesselSidebarTab.REPORTING) {
-      dispatch(getVesselReportings())
+      dispatch(getVesselReportings(true))
     } else if (isSuperUser && vesselSidebarTab === VesselSidebarTab.ERSVMS) {
       dispatch(getVesselBeaconMalfunctions(true))
     }

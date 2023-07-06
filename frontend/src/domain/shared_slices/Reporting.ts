@@ -19,10 +19,7 @@ export type ReportingState = {
 }
 const INITIAL_STATE: ReportingState = {
   archivedReportingsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
-  currentAndArchivedReportingsOfSelectedVessel: {
-    archived: [],
-    current: []
-  },
+  currentAndArchivedReportingsOfSelectedVessel: undefined,
   currentReportings: [],
   editedReporting: undefined,
   editedReportingInSideWindow: undefined,

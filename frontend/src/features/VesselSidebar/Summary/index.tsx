@@ -73,10 +73,10 @@ export function VesselSummary() {
   }, [selectedVessel, selectedVesselPositions])
 
   useEffect(() => {
-    if (!lastPosition && !loadingVessel && selectedVesselIdentity) {
+    if (!selectedVessel && !loadingVessel && selectedVesselIdentity) {
       dispatch(showVessel(selectedVesselIdentity, false, false))
     }
-  }, [dispatch, lastPosition, loadingVessel, selectedVesselIdentity])
+  }, [dispatch, selectedVessel, loadingVessel, selectedVesselIdentity])
 
   return !loadingVessel ? (
     <Body>

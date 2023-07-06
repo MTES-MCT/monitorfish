@@ -45,7 +45,7 @@ export const {
   useUpdateMissionActionMutation
 } = missionActionApi
 
-const MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les contrôles de ce navire"
+export const MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les contrôles de ce navire"
 
 /**
  * Get vessel controls

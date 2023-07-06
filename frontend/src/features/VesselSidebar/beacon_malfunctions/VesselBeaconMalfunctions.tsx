@@ -9,45 +9,63 @@ import { COLORS } from '../../../constants/constants'
 import { BeaconMalfunctionsTab } from '../../../domain/entities/beaconMalfunction/constants'
 import { vesselsAreEquals } from '../../../domain/entities/vessel/vessel'
 import { setBeaconMalfunctionsTab } from '../../../domain/shared_slices/BeaconMalfunction'
-import getVesselBeaconMalfunctions from '../../../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
+import { getVesselBeaconMalfunctions } from '../../../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
 export function VesselBeaconMalfunctions() {
   const dispatch = useMainAppDispatch()
-  const { beaconMalfunctionsTab, loadingVesselBeaconMalfunctions, vesselBeaconMalfunctionsFromDate } =
-    useMainAppSelector(state => state.beaconMalfunction)
-  const { selectedVesselIdentity } = useMainAppSelector(state => state.vessel)
+  const {
+    beaconMalfunctionsTab,
+    loadingVesselBeaconMalfunctions,
+    vesselBeaconMalfunctionsFromDate,
+    vesselBeaconMalfunctionsResumeAndHistory
+  } = useMainAppSelector(state => state.beaconMalfunction)
+  const { selectedVessel, selectedVesselIdentity } = useMainAppSelector(state => state.vessel)
   const previousSelectedVesselIdentity = usePrevious(selectedVesselIdentity)
   const [isCurrentBeaconMalfunctionDetails, setIsCurrentBeaconMalfunctionDetails] = useState<boolean>(false)
+  const hasNoBeacon = !selectedVessel?.vesselId
 
   useEffect(() => {
-    dispatch(getVesselBeaconMalfunctions(true))
+    dispatch(getVesselBeaconMalfunctions(false))
+  }, [dispatch])
 
+  useEffect(() => {
     if (!vesselsAreEquals(previousSelectedVesselIdentity, selectedVesselIdentity)) {
       dispatch(setBeaconMalfunctionsTab(BeaconMalfunctionsTab.RESUME))
     }
   }, [dispatch, selectedVesselIdentity, vesselBeaconMalfunctionsFromDate, previousSelectedVesselIdentity])
 
+  if (hasNoBeacon) {
+    return <NoBeacon>Nous n’avons trouvé aucune balise VMS pour ce navire.</NoBeacon>
+  }
+
+  if (loadingVesselBeaconMalfunctions || !vesselBeaconMalfunctionsResumeAndHistory) {
+    return <FingerprintSpinner className="radar" color={COLORS.charcoal} size={100} />
+  }
+
   return (
-    <>
-      {!loadingVesselBeaconMalfunctions && beaconMalfunctionsTab ? (
-        <Wrapper data-cy="vessel-beacon-malfunctions">
-          {beaconMalfunctionsTab === BeaconMalfunctionsTab.RESUME && (
-            <BeaconMalfunctionsResumeAndHistory
-              setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails}
-            />
-          )}
-          {beaconMalfunctionsTab === BeaconMalfunctionsTab.DETAIL && (
-            <BeaconMalfunctionDetails isCurrentBeaconMalfunctionDetails={isCurrentBeaconMalfunctionDetails} />
-          )}
-        </Wrapper>
-      ) : (
-        <FingerprintSpinner className="radar" color={COLORS.charcoal} size={100} />
+    <Wrapper data-cy="vessel-beacon-malfunctions">
+      {beaconMalfunctionsTab === BeaconMalfunctionsTab.RESUME && (
+        <BeaconMalfunctionsResumeAndHistory
+          setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails}
+        />
       )}
-    </>
+      {beaconMalfunctionsTab === BeaconMalfunctionsTab.DETAIL && (
+        <BeaconMalfunctionDetails isCurrentBeaconMalfunctionDetails={isCurrentBeaconMalfunctionDetails} />
+      )}
+    </Wrapper>
   )
 }
+
+const NoBeacon = styled.div`
+  border: ${p => p.theme.color.gainsboro} 10px solid;
+  padding-top: 50px;
+  height: 70px;
+  background: ${p => p.theme.color.white};
+  color: ${p => p.theme.color.slateGray};
+  text-align: center;
+`
 
 const Wrapper = styled.div`
   overflow: hidden;

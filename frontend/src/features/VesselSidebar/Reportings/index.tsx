@@ -7,7 +7,7 @@ import { Archived } from './Archived'
 import { Current } from './Current'
 import { COLORS } from '../../../constants/constants'
 import { vesselsAreEquals } from '../../../domain/entities/vessel/vessel'
-import getVesselReportings from '../../../domain/use_cases/vessel/getVesselReportings'
+import { getVesselReportings } from '../../../domain/use_cases/vessel/getVesselReportings'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
@@ -20,22 +20,22 @@ export function Reportings() {
   const dispatch = useMainAppDispatch()
   const { selectedVesselIdentity } = useMainAppSelector(state => state.vessel)
 
-  const { archivedReportingsFromDate, currentAndArchivedReportingsOfSelectedVessel, isLoadingReporting } =
-    useMainAppSelector(state => state.reporting)
+  const { currentAndArchivedReportingsOfSelectedVessel, isLoadingReporting } = useMainAppSelector(
+    state => state.reporting
+  )
 
   const [reportingTab, setReportingTab] = useState(ReportingTab.CURRENT_REPORTING)
   const previousSelectedVesselIdentity = usePrevious(selectedVesselIdentity)
 
   useEffect(() => {
-    if (!archivedReportingsFromDate) {
-      return
-    }
+    dispatch(getVesselReportings(false))
+  }, [dispatch])
 
-    dispatch(getVesselReportings())
+  useEffect(() => {
     if (!vesselsAreEquals(previousSelectedVesselIdentity, selectedVesselIdentity)) {
       setReportingTab(ReportingTab.CURRENT_REPORTING)
     }
-  }, [dispatch, previousSelectedVesselIdentity, selectedVesselIdentity, archivedReportingsFromDate])
+  }, [previousSelectedVesselIdentity, selectedVesselIdentity])
 
   return (
     <>

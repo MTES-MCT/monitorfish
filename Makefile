@@ -37,7 +37,14 @@ lint-back:
 
 # CI commands - app
 docker-build:
-	docker build --no-cache -f infra/docker/DockerfileBuildApp . -t monitorfish-app:$(VERSION) --build-arg VERSION=$(VERSION) --build-arg ENV_PROFILE=$(ENV_PROFILE) --build-arg GITHUB_SHA=$(GITHUB_SHA)
+	docker build --no-cache -f infra/docker/DockerfileBuildApp . -t monitorfish-app:$(VERSION) \
+		--build-arg VERSION=$(VERSION) \
+		--build-arg ENV_PROFILE=$(ENV_PROFILE) \
+		--build-arg GITHUB_SHA=$(GITHUB_SHA) \
+		--build-arg SENTRY_URL=$(SENTRY_URL) \
+		--build-arg SENTRY_AUTH_TOKEN=$(SENTRY_AUTH_TOKEN) \
+		--build-arg SENTRY_ORG=$(SENTRY_ORG) \
+		--build-arg SENTRY_PROJECT=$(SENTRY_PROJECT) 
 docker-tag:
 	docker tag monitorfish-app:$(VERSION) docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-app:$(VERSION)
 docker-push:

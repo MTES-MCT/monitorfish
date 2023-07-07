@@ -23,7 +23,7 @@ export function Body() {
 
   if (vesselSidebarError) {
     return (
-      <ErrorFallback>
+      <ErrorFallback data-cy="vessel-sidebar-error">
         🔌 {vesselSidebarError.message}
         <br />
         <RetryButton

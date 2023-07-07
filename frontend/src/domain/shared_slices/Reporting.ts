@@ -74,6 +74,7 @@ const reportingSlice = createSlice({
     resetCurrentAndArchivedReportingsOfSelectedVessel(state) {
       state.currentAndArchivedReportingsOfSelectedVessel = undefined
       state.vesselIdentity = undefined
+      state.isLoadingReporting = false
     },
 
     /**

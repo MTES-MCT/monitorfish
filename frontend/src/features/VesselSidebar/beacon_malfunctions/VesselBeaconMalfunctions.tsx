@@ -37,7 +37,9 @@ export function VesselBeaconMalfunctions() {
   }, [dispatch, selectedVesselIdentity, vesselBeaconMalfunctionsFromDate, previousSelectedVesselIdentity])
 
   if (hasNoBeacon) {
-    return <NoBeacon>Nous n’avons trouvé aucune balise VMS pour ce navire.</NoBeacon>
+    return (
+      <NoBeacon data-cy="vessel-beacon-malfunctions">Nous n’avons trouvé aucune balise VMS pour ce navire.</NoBeacon>
+    )
   }
 
   if (loadingVesselBeaconMalfunctions || !vesselBeaconMalfunctionsResumeAndHistory) {

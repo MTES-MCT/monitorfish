@@ -60,6 +60,14 @@ export function Controls() {
     dispatch(setControlFromDate(nextDate))
   }, [dispatch, controlsFromDate])
 
+  if (hasNoControl) {
+    return <NoControl data-cy="vessel-controls">Nous n’avons trouvé aucun contrôle pour ce navire.</NoControl>
+  }
+
+  if (loadingControls) {
+    return <FingerprintSpinner className="radar" color={COLORS.charcoal} size={100} />
+  }
+
   return (
     <>
       {nextControlSummary && (
@@ -70,35 +78,28 @@ export function Controls() {
           </UpdateControlsButton>
         </>
       )}
-      {!loadingControls ? (
-        <Body data-cy="vessel-controls">
-          {hasNoControl && <NoControl>Nous n’avons trouvé aucun contrôle pour ce navire.</NoControl>}
-          {currentControlSummary && (
-            <ControlsSummary
-              controlsFromDate={controlsFromDate}
-              lastControls={lastControls}
-              summary={currentControlSummary}
-            />
-          )}
-          {!hasNoControl && (
-            <>
-              <YearsToControlList controlsFromDate={controlsFromDate} yearsToControls={yearsToActions} />
-              <SeeMoreBackground>
-                <SeeMore onClick={seeMore}>Afficher plus de contrôles</SeeMore>
-              </SeeMoreBackground>
-            </>
-          )}
-        </Body>
-      ) : (
-        <FingerprintSpinner className="radar" color={COLORS.charcoal} size={100} />
-      )}
+      <Body data-cy="vessel-controls">
+        {currentControlSummary && (
+          <ControlsSummary
+            controlsFromDate={controlsFromDate}
+            lastControls={lastControls}
+            summary={currentControlSummary}
+          />
+        )}
+        <>
+          <YearsToControlList controlsFromDate={controlsFromDate} yearsToControls={yearsToActions} />
+          <SeeMoreBackground>
+            <SeeMore onClick={seeMore}>Afficher plus de contrôles</SeeMore>
+          </SeeMoreBackground>
+        </>
+      </Body>
     </>
   )
 }
 
 const NoControl = styled.div`
+  padding: 50px 5px 0px 5px;
   margin: 10px 5px;
-  padding-top: 50px;
   height: 70px;
   background: ${p => p.theme.color.white};
   color: ${p => p.theme.color.slateGray};

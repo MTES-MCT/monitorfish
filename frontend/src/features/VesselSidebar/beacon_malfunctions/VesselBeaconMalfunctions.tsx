@@ -28,7 +28,7 @@ export function VesselBeaconMalfunctions() {
 
   useEffect(() => {
     dispatch(getVesselBeaconMalfunctions(false))
-  }, [dispatch])
+  }, [dispatch, selectedVesselIdentity])
 
   useEffect(() => {
     if (!vesselsAreEquals(previousSelectedVesselIdentity, selectedVesselIdentity)) {

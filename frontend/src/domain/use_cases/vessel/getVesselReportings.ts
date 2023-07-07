@@ -10,9 +10,9 @@ import { displayOrLogVesselSidebarError } from '../error/displayOrLogVesselSideb
 
 export const getVesselReportings = (isFromCron: boolean) => async (dispatch, getState) => {
   const { selectedVesselIdentity } = getState().vessel
-  const { archivedReportingsFromDate } = getState().reporting
+  const { archivedReportingsFromDate, isLoadingReporting } = getState().reporting
 
-  if (!selectedVesselIdentity || !archivedReportingsFromDate) {
+  if (!selectedVesselIdentity || !archivedReportingsFromDate || isLoadingReporting) {
     return
   }
 

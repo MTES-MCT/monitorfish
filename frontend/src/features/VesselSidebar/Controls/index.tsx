@@ -44,7 +44,7 @@ export function Controls() {
     }
 
     dispatch(getVesselControls(false))
-  }, [dispatch, controlsFromDate])
+  }, [dispatch, controlsFromDate, selectedVessel])
 
   const updateControlSummary = nextControlSummary_ => {
     if (nextControlSummary_) {

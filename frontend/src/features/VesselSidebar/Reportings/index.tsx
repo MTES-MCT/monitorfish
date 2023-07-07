@@ -29,7 +29,7 @@ export function Reportings() {
 
   useEffect(() => {
     dispatch(getVesselReportings(false))
-  }, [dispatch])
+  }, [dispatch, selectedVesselIdentity])
 
   useEffect(() => {
     if (!vesselsAreEquals(previousSelectedVesselIdentity, selectedVesselIdentity)) {

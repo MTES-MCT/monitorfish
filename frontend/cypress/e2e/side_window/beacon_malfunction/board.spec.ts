@@ -249,13 +249,8 @@ context('Side Window > Beacon Malfunction Board', () => {
           `&beforeDateTime=${oneWeeksBeforePlusOneDayDate.format('YYYY-MM-DD')}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z`
       )
     ).as('showVesselPositionsOnMap')
-    cy.intercept(
-      'GET',
-      'bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999&voyageRequest=LAST&tripNumber='
-    ).as('showVesselVoyageOnMap')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-show-vessel"]').click()
     cy.wait('@showVesselPositionsOnMap').then(({ response }) => expect(response && response.statusCode).equal(200))
-    cy.wait('@showVesselVoyageOnMap').then(({ response }) => expect(response && response.statusCode).equal(200))
   })
 
   it('Beacon malfunction Should be opened and vessel status changed', () => {

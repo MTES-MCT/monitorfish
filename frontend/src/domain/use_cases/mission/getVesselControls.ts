@@ -13,7 +13,11 @@ import { displayOrLogVesselSidebarError } from '../error/displayOrLogVesselSideb
 
 export const getVesselControls = isFromCron => async (dispatch, getState) => {
   const { selectedVessel } = getState().vessel
-  const { controlsFromDate, currentControlSummary } = getState().controls
+  const { controlsFromDate, currentControlSummary, loadingControls } = getState().controls
+
+  if (loadingControls) {
+    return
+  }
 
   if (!selectedVessel?.vesselId) {
     dispatch(setError(new NoControlsFoundError('Aucun contrôle connu')))

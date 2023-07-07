@@ -40,13 +40,8 @@ context('Side Window > Alert List', () => {
       'bff/v1/vessels/find?vesselId=&internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK' +
         '&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime='
     ).as('showVesselPositionsOnMap')
-    cy.intercept(
-      'GET',
-      'bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999&voyageRequest=LAST&tripNumber='
-    ).as('showVesselVoyageOnMap')
     cy.get('*[data-cy="side-window-alerts-show-vessel"]').first().forceClick()
     cy.wait('@showVesselPositionsOnMap').then(({ response }) => expect(response && response.statusCode).equal(200))
-    cy.wait('@showVesselVoyageOnMap').then(({ response }) => expect(response && response.statusCode).equal(200))
 
     cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().contains('3 milles - Chaluts')
   })

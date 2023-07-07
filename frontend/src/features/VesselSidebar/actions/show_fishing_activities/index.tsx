@@ -31,16 +31,18 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
   }, [dispatch, isSidebarOpen])
 
   const showOrHideFishingActivities = useCallback(() => {
-    if (areFishingActivitiesReallyShowedOnMap) {
-      dispatch(hideFishingActivitiesOnMap())
+    ;(async () => {
+      if (areFishingActivitiesReallyShowedOnMap) {
+        dispatch(hideFishingActivitiesOnMap())
 
-      return
-    }
+        return
+      }
 
-    if (!fishingActivities) {
-      dispatch(getVesselLogbook(selectedVesselIdentity, undefined, true))
-    }
-    dispatch(showFishingActivitiesOnMap())
+      if (!fishingActivities) {
+        await dispatch(getVesselLogbook(selectedVesselIdentity, undefined, false))
+      }
+      dispatch(showFishingActivitiesOnMap())
+    })()
   }, [fishingActivities, selectedVesselIdentity, areFishingActivitiesReallyShowedOnMap, dispatch])
 
   return (

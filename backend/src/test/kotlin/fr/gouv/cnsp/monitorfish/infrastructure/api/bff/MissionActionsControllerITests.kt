@@ -194,6 +194,7 @@ class MissionActionsControllerITests {
 
         val gearControl = GearControl()
         gearControl.declaredMesh = 60.0
+        gearControl.hasUncontrolledMesh = true
         gearControl.gearCode = "OTB"
         gearControl.gearWasControlled = false
         // When

@@ -62,7 +62,8 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
             declaredMesh: null,
             gearCode: 'PTM',
             gearName: 'Chaluts-bœufs pélagiques',
-            gearWasControlled: null
+            gearWasControlled: null,
+            hasUncontrolledMesh: false
           }
         ],
         hasSomeGearsSeized: false,
@@ -114,10 +115,8 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
       'GET',
       'bff/v1/fleet_segments/compute?faoAreas=27.8.b,27.8.c&gears=OTB&species=HKE,BLI&latitude=53.35&longitude=-10.85&portLocode='
     ).as('computeFleetSegments')
-    cy.get('input[placeholder="Rechercher un navire..."]').type(
-      '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}pheno'
-    )
-    cy.contains('mark', 'PHENO').click()
+    cy.get('input[placeholder="Rechercher un navire..."]').clear().type('phe')
+    cy.contains('mark', 'PHE').click()
 
     cy.wait('@computeFleetSegments')
 
@@ -163,7 +162,8 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
             declaredMesh: 70,
             gearCode: 'OTB',
             gearName: 'Chaluts de fond à panneaux',
-            gearWasControlled: null
+            gearWasControlled: null,
+            hasUncontrolledMesh: false
           }
         ],
         id: 4,

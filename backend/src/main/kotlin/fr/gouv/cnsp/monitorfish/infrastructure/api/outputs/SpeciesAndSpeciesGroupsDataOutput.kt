@@ -7,7 +7,9 @@ data class SpeciesAndSpeciesGroupsDataOutput(
     val groups: List<SpeciesGroupDataOutput>,
 ) {
     companion object {
-        fun fromSpeciesAndSpeciesGroups(speciesAndSpeciesGroups: SpeciesAndSpeciesGroups): SpeciesAndSpeciesGroupsDataOutput {
+        fun fromSpeciesAndSpeciesGroups(
+            speciesAndSpeciesGroups: SpeciesAndSpeciesGroups,
+        ): SpeciesAndSpeciesGroupsDataOutput {
             return SpeciesAndSpeciesGroupsDataOutput(
                 speciesAndSpeciesGroups.species.map { SpeciesDataOutput.fromSpecies(it) },
                 speciesAndSpeciesGroups.groups.map { SpeciesGroupDataOutput.fromSpeciesGroup(it) },

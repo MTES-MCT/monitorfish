@@ -497,7 +497,10 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.history[0].beaconMalfunction.flagState", equalTo("fr")))
             .andExpect(jsonPath("$.history[0].beaconMalfunction.externalReferenceNumber", equalTo("1236514")))
             .andExpect(
-                jsonPath("$.history[0].beaconMalfunction.endOfBeaconMalfunctionReason", equalTo("RESUMED_TRANSMISSION")),
+                jsonPath(
+                    "$.history[0].beaconMalfunction.endOfBeaconMalfunctionReason",
+                    equalTo("RESUMED_TRANSMISSION"),
+                ),
             )
             .andExpect(jsonPath("$.history[0].actions[0].beaconMalfunctionId", equalTo(1)))
             .andExpect(jsonPath("$.history[0].actions[0].propertyName", equalTo("VESSEL_STATUS")))

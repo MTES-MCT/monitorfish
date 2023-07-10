@@ -102,6 +102,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.gearOnboard.first().gearCode).isEqualTo("OTB")
         assertThat(firstControl.gearOnboard.first().declaredMesh).isEqualTo(60.0)
         assertThat(firstControl.gearOnboard.first().controlledMesh).isNull()
+        assertThat(firstControl.gearOnboard.first().hasUncontrolledMesh).isTrue
         assertThat(firstControl.gearOnboard.first().gearWasControlled).isFalse
         assertThat(firstControl.speciesOnboard).hasSize(2)
         assertThat(firstControl.speciesOnboard.first().speciesCode).isEqualTo("MNZ")

@@ -81,7 +81,11 @@ data class ReportingEntity(
     }
 
     companion object {
-        fun fromPendingAlert(alert: PendingAlert, validationDate: ZonedDateTime?, mapper: ObjectMapper) = ReportingEntity(
+        fun fromPendingAlert(
+            alert: PendingAlert,
+            validationDate: ZonedDateTime?,
+            mapper: ObjectMapper,
+        ) = ReportingEntity(
             vesselName = alert.vesselName,
             type = ReportingType.ALERT,
             vesselId = alert.vesselId,

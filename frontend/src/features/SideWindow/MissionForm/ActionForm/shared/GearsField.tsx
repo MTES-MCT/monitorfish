@@ -1,6 +1,6 @@
 import {
-  Checkbox,
   FieldError,
+  FormikCheckbox,
   FormikMultiRadio,
   FormikNumberInput,
   FormikTextarea,
@@ -11,7 +11,7 @@ import {
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useField } from 'formik'
 import { remove as ramdaRemove } from 'ramda'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { FormikMultiInfractionPicker } from './FormikMultiInfractionPicker'
@@ -24,6 +24,7 @@ import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 
 import type { Gear } from '../../../../../domain/types/Gear'
 import type { MissionAction } from '../../../../../domain/types/missionAction'
+import type { DeepPartial } from '../../../../../types'
 import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
@@ -38,12 +39,6 @@ export function GearsField() {
 
   const { newWindowContainerRef } = useNewWindow()
 
-  /**
-   * This state save the "Maillage non mesuré" (UNSAVED_FIELD_meshWasNotControlled) field checkbox, as it it not saved in the database.
-   * The purpose of this checkbox is to disable and init the `controlledMesh` input.
-   */
-  const [uncontrolledMeshGearCodes, setUncontrolledMeshGearCodes] = useState<string[]>([])
-
   const getGearsApiQuery = useGetGearsQuery()
 
   const gearsAsOptions: Array<Option<Gear>> = useMemo(() => {
@@ -56,6 +51,8 @@ export function GearsField() {
       value: gear
     }))
   }, [getGearsApiQuery.data])
+
+  const typedError = meta.error as unknown as DeepPartial<MissionAction.GearControl>[] | undefined
 
   const add = useCallback(
     (newGear: Gear | undefined) => {
@@ -71,7 +68,8 @@ export function GearsField() {
           declaredMesh: undefined,
           gearCode: newGear.code,
           gearName: newGear.name,
-          gearWasControlled: undefined
+          gearWasControlled: undefined,
+          hasUncontrolledMesh: false
         }
       ]
 
@@ -81,17 +79,6 @@ export function GearsField() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [input.value]
   )
-
-  const handleMeshWasNotControlledChange = (
-    gearCode: MissionAction.GearControl['gearCode'],
-    isChecked: boolean | undefined
-  ) => {
-    const nextUncontrolledMeshGearCodes = isChecked
-      ? [...uncontrolledMeshGearCodes, gearCode]
-      : uncontrolledMeshGearCodes.filter(uncontrolledGearCode => uncontrolledGearCode !== gearCode)
-
-    setUncontrolledMeshGearCodes(nextUncontrolledMeshGearCodes)
-  }
 
   const remove = useCallback(
     (index: number) => {
@@ -132,7 +119,8 @@ export function GearsField() {
           declaredMesh: gear.declaredMesh,
           gearCode: gear.code,
           gearName: gear.name,
-          gearWasControlled: undefined
+          gearWasControlled: undefined,
+          hasUncontrolledMesh: false
         }))
 
       helper.setValue(nextGears)
@@ -175,26 +163,32 @@ export function GearsField() {
 
               <StyledFieldGroup isInline>
                 <FormikNumberInput
+                  isErrorMessageHidden
                   isUndefinedWhenDisabled
                   label="Maillage déclaré"
                   name={`gearOnboard[${index}].declaredMesh`}
                 />
                 <FormikNumberInput
-                  disabled={!gearOnboard.gearWasControlled || uncontrolledMeshGearCodes.includes(gearOnboard.gearCode)}
+                  disabled={!gearOnboard.gearWasControlled || gearOnboard.hasUncontrolledMesh}
+                  isErrorMessageHidden
                   isUndefinedWhenDisabled
                   label="Maillage mesuré"
                   name={`gearOnboard[${index}].controlledMesh`}
                 />
 
-                <Checkbox
-                  checked={uncontrolledMeshGearCodes.includes(gearOnboard.gearCode)}
+                <FormikCheckbox
                   disabled={!gearOnboard.gearWasControlled}
                   isUndefinedWhenDisabled
                   label="Maillage non mesuré"
-                  name="UNSAVED_FIELD_meshWasNotControlled"
-                  onChange={isChecked => handleMeshWasNotControlledChange(gearOnboard.gearCode, isChecked)}
+                  name={`gearOnboard[${index}].hasUncontrolledMesh`}
                 />
               </StyledFieldGroup>
+              {typedError && typedError[index]?.declaredMesh && (
+                <FieldError>{typedError[index]?.declaredMesh}</FieldError>
+              )}
+              {typedError && typedError[index]?.controlledMesh && (
+                <FieldError>{typedError[index]?.controlledMesh}</FieldError>
+              )}
 
               <FormikTextarea
                 label={`${gearOnboard.gearCode} : autres mesures et dispositifs`}
@@ -216,7 +210,7 @@ export function GearsField() {
         searchable
       />
 
-      {meta.error && <FieldError>{meta.error}</FieldError>}
+      {typeof meta.error === 'string' && <StyledFieldError>{meta.error}</StyledFieldError>}
     </FormikMultiInfractionPicker>
   )
 }
@@ -253,4 +247,12 @@ const StyledFieldGroup = styled(FieldGroup)`
   > .Field-NumberInput {
     margin-right: 16px;
   }
+`
+
+const StyledFieldError = styled(FieldError)`
+  /*
+    For some unknown reason, there is a shadow "spacing" between the <Select /> and this <p />.
+    The expected margin-top is 4px.
+  */
+  margin: 0;
 `

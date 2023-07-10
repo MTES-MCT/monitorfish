@@ -7,7 +7,9 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaSpeciesGroupRepository(private val dbSpeciesGroupRepository: DBSpeciesGroupRepository) : SpeciesGroupRepository {
+class JpaSpeciesGroupRepository(
+    private val dbSpeciesGroupRepository: DBSpeciesGroupRepository,
+) : SpeciesGroupRepository {
 
     @Cacheable(value = ["all_species_groups"])
     override fun findAll(): List<SpeciesGroup> {

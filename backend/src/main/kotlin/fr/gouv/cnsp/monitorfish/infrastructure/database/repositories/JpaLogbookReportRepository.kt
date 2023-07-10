@@ -52,7 +52,10 @@ class JpaLogbookReportRepository(
     }
 
     @Cacheable(value = ["previous_logbook"])
-    override fun findTripBeforeTripNumber(internalReferenceNumber: String, tripNumber: String): VoyageDatesAndTripNumber {
+    override fun findTripBeforeTripNumber(
+        internalReferenceNumber: String,
+        tripNumber: String,
+    ): VoyageDatesAndTripNumber {
         try {
             if (internalReferenceNumber.isNotEmpty()) {
                 val previousTripNumber = dbERSRepository.findPreviousTripNumber(
@@ -83,7 +86,10 @@ class JpaLogbookReportRepository(
     }
 
     @Cacheable(value = ["next_logbook"])
-    override fun findTripAfterTripNumber(internalReferenceNumber: String, tripNumber: String): VoyageDatesAndTripNumber {
+    override fun findTripAfterTripNumber(
+        internalReferenceNumber: String,
+        tripNumber: String,
+    ): VoyageDatesAndTripNumber {
         try {
             if (internalReferenceNumber.isNotEmpty()) {
                 val nextTripNumber = dbERSRepository.findNextTripNumber(
@@ -198,7 +204,10 @@ class JpaLogbookReportRepository(
                     PageRequest.of(0, 1),
                 ).first()
 
-                return dbERSRepository.findFirstAcknowledgedDateOfTrip(internalReferenceNumber, lastTrip.tripNumber).atZone(
+                return dbERSRepository.findFirstAcknowledgedDateOfTrip(
+                    internalReferenceNumber,
+                    lastTrip.tripNumber,
+                ).atZone(
                     UTC,
                 )
             }

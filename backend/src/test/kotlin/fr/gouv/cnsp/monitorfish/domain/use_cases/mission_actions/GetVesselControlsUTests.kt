@@ -47,6 +47,7 @@ class GetVesselControlsUTests {
         gearControl.gearCode = "OTB"
         gearControl.declaredMesh = 60.0
         gearControl.controlledMesh = 58.6
+        gearControl.hasUncontrolledMesh = false
         val gearControls = listOf(gearControl)
 
         val speciesInfraction = SpeciesInfraction()

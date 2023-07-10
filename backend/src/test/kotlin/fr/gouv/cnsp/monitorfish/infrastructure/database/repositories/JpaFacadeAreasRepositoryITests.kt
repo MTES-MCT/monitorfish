@@ -15,7 +15,7 @@ class JpaFacadeAreasRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findByIncluding Should return all facade areas including the specified point geometry`() {
+    fun `findByIncluding Should return the facade NAMO including the specified point geometry`() {
         // When
         val point = GeometryFactory().createPoint(Coordinate(-4.156, 47.325))
         val faoAreas = facadeAreasRepository.findByIncluding(point)
@@ -23,6 +23,19 @@ class JpaFacadeAreasRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(faoAreas).hasSize(1)
         assertThat(faoAreas.first().facade).isEqualTo("NAMO")
+        assertThat(faoAreas.last().geometry).isNotNull()
+    }
+
+    @Test
+    @Transactional
+    fun `findByIncluding Should return the facade MEMN including the specified point geometry`() {
+        // When
+        val point = GeometryFactory().createPoint(Coordinate(-10.85, 53.35))
+        val faoAreas = facadeAreasRepository.findByIncluding(point)
+
+        // Then
+        assertThat(faoAreas).hasSize(1)
+        assertThat(faoAreas.first().facade).isEqualTo("MEMN")
         assertThat(faoAreas.last().geometry).isNotNull()
     }
 }

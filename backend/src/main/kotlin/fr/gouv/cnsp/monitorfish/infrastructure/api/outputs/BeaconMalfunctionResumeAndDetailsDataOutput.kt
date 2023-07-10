@@ -10,7 +10,9 @@ data class BeaconMalfunctionResumeAndDetailsDataOutput(
     val notifications: List<BeaconMalfunctionNotificationsDataOutput>,
 ) {
     companion object {
-        fun fromBeaconMalfunctionResumeAndDetails(beaconMalfunctionResumeAndDetails: BeaconMalfunctionResumeAndDetails): BeaconMalfunctionResumeAndDetailsDataOutput {
+        fun fromBeaconMalfunctionResumeAndDetails(
+            beaconMalfunctionResumeAndDetails: BeaconMalfunctionResumeAndDetails,
+        ): BeaconMalfunctionResumeAndDetailsDataOutput {
             return BeaconMalfunctionResumeAndDetailsDataOutput(
                 beaconMalfunction = BeaconMalfunctionDataOutput.fromBeaconMalfunction(
                     beaconMalfunctionResumeAndDetails.beaconMalfunction,

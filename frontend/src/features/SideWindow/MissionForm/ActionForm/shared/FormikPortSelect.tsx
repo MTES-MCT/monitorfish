@@ -1,6 +1,7 @@
 import { FieldError, Select, useNewWindow } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { useCallback, useMemo } from 'react'
+import styled from 'styled-components'
 
 import { useGetPortsQuery } from '../../../../../api/port'
 import { FrontendError } from '../../../../../libs/FrontendError'
@@ -67,7 +68,16 @@ export function FormikPortSelect() {
         searchable
         value={values.portLocode}
       />
-      {errors.portLocode && <FieldError>{errors.portLocode}</FieldError>}
+
+      {errors.portLocode && <StyledFieldError>{errors.portLocode}</StyledFieldError>}
     </>
   )
 }
+
+const StyledFieldError = styled(FieldError)`
+  /*
+    For some unknown reason, there is a shadow "spacing" between the <Select /> and this <p />.
+    The expected margin-top is 4px.
+  */
+  margin: 0;
+`

@@ -200,10 +200,6 @@ const Wrapper = styled(FieldsetGroup)`
     > .Element-Fieldset:not(:first-child) {
       margin-top: 16px;
     }
-
-    > .Field-Select {
-      margin-bottom: 8px;
-    }
   }
 `
 

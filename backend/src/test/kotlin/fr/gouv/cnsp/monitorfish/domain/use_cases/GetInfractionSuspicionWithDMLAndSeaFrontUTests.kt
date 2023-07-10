@@ -45,7 +45,10 @@ class GetInfractionSuspicionWithDMLAndSeaFrontUTests {
             .willReturn(District("LO", "Lorient", "56", "Morbihan", "DML 56", "NAMO"))
 
         // When
-        val infractionSuspicion = GetInfractionSuspicionWithDMLAndSeaFront(vesselRepository, districtRepository).execute(
+        val infractionSuspicion = GetInfractionSuspicionWithDMLAndSeaFront(
+            vesselRepository,
+            districtRepository,
+        ).execute(
             expectedInfractionSuspicion,
             123,
         )

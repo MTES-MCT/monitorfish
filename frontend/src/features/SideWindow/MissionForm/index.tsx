@@ -364,6 +364,10 @@ export function MissionForm() {
   // in order to update actions list validation messages
   useEffect(
     () => {
+      if (!mainFormValues) {
+        return
+      }
+
       validateMissionFormsLiveValues()
     },
 

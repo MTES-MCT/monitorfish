@@ -9,7 +9,7 @@ import {
 } from '../../shared_slices/Control'
 import { setDisplayedErrors } from '../../shared_slices/DisplayedError'
 import { removeError, setError } from '../../shared_slices/Global'
-import { displayOrLogVesselSidebarError } from '../error/displayOrLogVesselSidebarError'
+import { displayOrLogError } from '../error/displayOrLogError'
 
 export const getVesselControls = isFromCron => async (dispatch, getState) => {
   const { selectedVessel } = getState().vessel
@@ -44,13 +44,14 @@ export const getVesselControls = isFromCron => async (dispatch, getState) => {
     dispatch(removeError())
   } catch (error) {
     dispatch(
-      displayOrLogVesselSidebarError(
+      displayOrLogError(
         error as Error,
         {
           func: getVesselControls,
           parameters: [isFromCron]
         },
-        isFromCron
+        isFromCron,
+        'vesselSidebarError'
       )
     )
     dispatch(resetLoadControls())

@@ -30,6 +30,7 @@ RUN mvn clean package -DskipTests=true
 ###########################
 FROM node:18-alpine as buildFront
 
+ARG VERSION
 ARG ENV_PROFILE
 ENV CI=true
 ENV REACT_APP_ENV=$ENV_PROFILE
@@ -44,6 +45,30 @@ WORKDIR /tmp/frontend
 # TODO Remove `--legacy-peer-deps` option as soon as we replace `react-scripts` by something else.
 RUN npm ci --legacy-peer-deps
 RUN npm run build
+
+######################
+# Upload sourcemaps  #
+######################
+FROM getsentry/sentry-cli:2.19.4 as buildSourcemaps
+
+ARG VERSION
+ARG SENTRY_URL
+ARG SENTRY_AUTH_TOKEN
+ARG SENTRY_ORG
+ARG SENTRY_PROJECT
+
+RUN mkdir -p /tmp/frontend/build
+COPY --from=buildFront /tmp/frontend/build /tmp/frontend/build
+
+# Upload sourcemaps to sentry
+RUN sentry-cli sourcemaps inject /tmp/frontend
+RUN sentry-cli \
+  --url ${SENTRY_URL} \
+  --auth-token ${SENTRY_AUTH_TOKEN} \
+  sourcemaps upload /tmp/frontend \
+  --release ${VERSION} \
+  --org ${SENTRY_ORG} \
+  --project ${SENTRY_PROJECT}
 
 ######################
 # Create final image #
@@ -85,7 +110,7 @@ COPY infra/configurations /home/monitorfish/configurations/
 USER monitorfish
 # Copy files for the front
 RUN mkdir /home/monitorfish/public
-COPY --from=buildFront /tmp/frontend/build /home/monitorfish/public/
+COPY --from=buildSourcemaps /tmp/frontend/build /home/monitorfish/public/
 COPY --from=buildFront /tmp/infra/docker/env.sh /home/monitorfish/
 
 # Add logs folder to be mounted as volume

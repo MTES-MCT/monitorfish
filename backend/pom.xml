@@ -20,6 +20,7 @@
         <kotlin.version>1.8.22</kotlin.version>
         <testcontainers.version>1.18.3</testcontainers.version>
         <ktor.version>2.3.2</ktor.version>
+        <sentry.version>6.24.0</sentry.version>
         <commit.hash>COMMIT_TO_CHANGE</commit.hash>
         <main.class>fr.gouv.cnsp.monitorfish.MonitorFishApplicationKt</main.class>
     </properties>
@@ -249,7 +250,12 @@
         <dependency>
             <groupId>io.sentry</groupId>
             <artifactId>sentry</artifactId>
-            <version>6.24.0</version>
+            <version>${sentry.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.sentry</groupId>
+            <artifactId>sentry-log4j2</artifactId>
+            <version>${sentry.version}</version>
         </dependency>
     </dependencies>
 

@@ -17,7 +17,7 @@ import {
   showFishingActivitiesOnMap
 } from '../../shared_slices/FishingActivities'
 import { removeError, setError } from '../../shared_slices/Global'
-import { displayOrLogVesselSidebarError } from '../error/displayOrLogVesselSidebarError'
+import { displayOrLogError } from '../error/displayOrLogError'
 
 import type { VesselIdentity } from '../../entities/vessel/types'
 
@@ -90,13 +90,14 @@ export const getVesselLogbook =
       dispatch(removeError())
     } catch (error) {
       dispatch(
-        displayOrLogVesselSidebarError(
+        displayOrLogError(
           error as Error,
           {
             func: getVesselLogbook,
             parameters: [vesselIdentity, navigateTo, fromCron]
           },
-          fromCron
+          fromCron,
+          'vesselSidebarError'
         )
       )
       dispatch(resetLoadFishingActivities())

@@ -7,7 +7,7 @@ import { removeFishingActivitiesFromMap } from '../../shared_slices/FishingActiv
 import { addSearchedVessel, removeError, setError } from '../../shared_slices/Global'
 import { doNotAnimate } from '../../shared_slices/Map'
 import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../../shared_slices/Vessel'
-import { displayOrLogVesselSidebarError } from '../error/displayOrLogVesselSidebarError'
+import { displayOrLogError } from '../error/displayOrLogError'
 
 import type { VesselIdentity } from '../../entities/vessel/types'
 
@@ -65,13 +65,14 @@ export const showVessel =
       )
     } catch (error) {
       dispatch(
-        displayOrLogVesselSidebarError(
+        displayOrLogError(
           error as Error,
           {
             func: showVessel,
             parameters: [vesselIdentity, isFromSearch, isCalledFromCron]
           },
-          isCalledFromCron
+          isCalledFromCron,
+          'vesselSidebarError'
         )
       )
       dispatch(resetLoadingVessel())

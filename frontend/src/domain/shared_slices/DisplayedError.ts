@@ -8,13 +8,16 @@ import type { PayloadAction } from '@reduxjs/toolkit'
  * A `null` value means the error is no longer displayed
  */
 export type OptionalDisplayedErrorAction = {
+  missionFormError?: DisplayedError | null
   vesselSidebarError?: DisplayedError | null
 }
 
 export type DisplayedErrorState = {
+  missionFormError: DisplayedError | undefined | null
   vesselSidebarError: DisplayedError | undefined | null
 }
-const INITIAL_STATE: DisplayedErrorState = {
+export const INITIAL_STATE: DisplayedErrorState = {
+  missionFormError: undefined,
   vesselSidebarError: undefined
 }
 

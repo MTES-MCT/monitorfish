@@ -1,3 +1,4 @@
+import { uniq } from 'lodash/fp'
 import styled from 'styled-components'
 
 import {
@@ -20,7 +21,7 @@ export function LawReminders({ controls }: LawRemindersProps) {
 
   const natinfs: number[] = controls.map(control => getNatinfForInfractionsWithoutRecord(control)).flat()
 
-  const natinfTags = natinfs.map(natinf => (
+  const natinfTags = uniq(natinfs).map(natinf => (
     <InfractionTag key={natinf}>
       <InfractionTagText>NATINF {natinf}</InfractionTagText>
     </InfractionTag>

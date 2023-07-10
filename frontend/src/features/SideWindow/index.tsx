@@ -39,6 +39,7 @@ import { getAllCurrentReportings } from '../../domain/use_cases/reporting/getAll
 import { sideWindowDispatchers } from '../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
+import { FrontendErrorBoundary } from '../../ui/FrontendErrorBoundary'
 
 import type { MenuItem } from '../../types'
 
@@ -209,40 +210,43 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
               style={beaconMalfunctionBoardGrayOverlayStyle}
             />
           )}
-          {isPreloading && (
-            <Loading>
-              <FulfillingBouncingCircleSpinner className="update-vessels" color={THEME.color.lightGray} size={100} />
-              <Text data-cy="first-loader">Chargement...</Text>
-            </Loading>
-          )}
-          {!isPreloading && (
-            <Content
-              noMargin={
-                sideWindow.selectedPath.menu &&
-                [SideWindowMenuKey.MISSION_FORM, SideWindowMenuKey.MISSION_LIST].includes(sideWindow.selectedPath.menu)
-              }
-            >
-              {sideWindow.selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST && (
-                <AlertListAndReportingList
-                  baseRef={wrapperRef as MutableRefObject<HTMLDivElement>}
-                  selectedSubMenu={
-                    Object.values<string>(SeaFrontGroup).includes(selectedSubMenu.code)
-                      ? (selectedSubMenu as MenuItem<SeaFrontGroup>)
-                      : ALERTS_SUBMENU.MEMN
-                  }
-                  selectedTab={selectedTab}
-                  setSelectedSeaFront={setSelectedSubMenu as any}
-                  setSelectedTab={setSelectedTab}
-                />
-              )}
-              {sideWindow.selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && (
-                <BeaconMalfunctionBoard />
-              )}
-              {sideWindow.selectedPath.menu === SideWindowMenuKey.MISSION_LIST && <MissionList />}
-              {sideWindow.selectedPath.menu === SideWindowMenuKey.MISSION_FORM && <MissionForm />}
-            </Content>
-          )}
-
+          <FrontendErrorBoundary>
+            {isPreloading && (
+              <Loading>
+                <FulfillingBouncingCircleSpinner className="update-vessels" color={THEME.color.lightGray} size={100} />
+                <Text data-cy="first-loader">Chargement...</Text>
+              </Loading>
+            )}
+            {!isPreloading && (
+              <Content
+                noMargin={
+                  sideWindow.selectedPath.menu &&
+                  [SideWindowMenuKey.MISSION_FORM, SideWindowMenuKey.MISSION_LIST].includes(
+                    sideWindow.selectedPath.menu
+                  )
+                }
+              >
+                {sideWindow.selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST && (
+                  <AlertListAndReportingList
+                    baseRef={wrapperRef as MutableRefObject<HTMLDivElement>}
+                    selectedSubMenu={
+                      Object.values<string>(SeaFrontGroup).includes(selectedSubMenu.code)
+                        ? (selectedSubMenu as MenuItem<SeaFrontGroup>)
+                        : ALERTS_SUBMENU.MEMN
+                    }
+                    selectedTab={selectedTab}
+                    setSelectedSeaFront={setSelectedSubMenu as any}
+                    setSelectedTab={setSelectedTab}
+                  />
+                )}
+                {sideWindow.selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && (
+                  <BeaconMalfunctionBoard />
+                )}
+                {sideWindow.selectedPath.menu === SideWindowMenuKey.MISSION_LIST && <MissionList />}
+                {sideWindow.selectedPath.menu === SideWindowMenuKey.MISSION_FORM && <MissionForm />}
+              </Content>
+            )}
+          </FrontendErrorBoundary>
           <Notifier isSideWindow />
         </NewWindowContext.Provider>
       )}

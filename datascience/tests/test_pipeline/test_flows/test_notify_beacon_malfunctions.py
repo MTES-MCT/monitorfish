@@ -867,13 +867,13 @@ def test_send_beacon_malfunction_message(
 def test_load_notifications(reset_test_data, expected_notifications):
 
     initial_notifications = read_query(
-        "monitorfish_remote",
         "SELECT * FROM beacon_malfunction_notifications ORDER BY id",
+        db="monitorfish_remote",
     )
     load_notifications.run(expected_notifications)
     final_notifications = read_query(
-        "monitorfish_remote",
         "SELECT * FROM beacon_malfunction_notifications ORDER BY id",
+        db="monitorfish_remote",
     )
     assert len(initial_notifications) == 2
     assert len(final_notifications) == 11
@@ -894,13 +894,13 @@ def test_load_notifications(reset_test_data, expected_notifications):
 def test_load_notifications_empty_input(reset_test_data):
 
     initial_notifications = read_query(
-        "monitorfish_remote",
         "SELECT * FROM beacon_malfunction_notifications ORDER BY id",
+        db="monitorfish_remote",
     )
     load_notifications.run([])
     final_notifications = read_query(
-        "monitorfish_remote",
         "SELECT * FROM beacon_malfunction_notifications ORDER BY id",
+        db="monitorfish_remote",
     )
     pd.testing.assert_frame_equal(initial_notifications, final_notifications)
 
@@ -909,11 +909,11 @@ def test_flow(reset_test_data):
 
     # Setup
     initial_notifications = read_query(
-        "monitorfish_remote",
         "SELECT * FROM beacon_malfunction_notifications ORDER BY id",
+        db="monitorfish_remote",
     )
     initial_malfunctions = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunctions ORDER BY id"
+        "SELECT * FROM beacon_malfunctions ORDER BY id", db="monitorfish_remote"
     )
 
     @task(checkpoint=False)
@@ -957,11 +957,11 @@ def test_flow(reset_test_data):
     state = flow.run(test_mode=False, is_integration=False)
 
     final_notifications = read_query(
-        "monitorfish_remote",
         "SELECT * FROM beacon_malfunction_notifications ORDER BY id",
+        db="monitorfish_remote",
     )
     final_malfunctions = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunctions ORDER BY id"
+        "SELECT * FROM beacon_malfunctions ORDER BY id", db="monitorfish_remote"
     )
 
     assert state.is_successful()

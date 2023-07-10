@@ -54,7 +54,6 @@ def extract_controls(number_of_months: int) -> pd.DataFrame:
     dtypes = {
         "control_unit_id": "category",
         "control_type": "category",
-        "port_locode": "category",
         "mission_order": "category",
         "vessel_targeted": "category",
         "diversion": "category",
@@ -173,7 +172,9 @@ def transform_controls(controls: pd.DataFrame):
     ]
 
     controls[bool_cols] = zeros_ones_to_bools(controls[bool_cols])
-    controls["vessel_targeted"] = controls["vessel_targeted"].map({True: "YES", False: "NO"})
+    controls["vessel_targeted"] = controls["vessel_targeted"].map(
+        {True: "YES", False: "NO"}
+    )
 
     # ---------------------------------------------------------------------------------
     # Transform gear control data
@@ -342,6 +343,33 @@ def transform_controls(controls: pd.DataFrame):
 
     controls["seizure_and_diversion"] = controls[["seizure", "diversion"]].any(axis=1)
     controls = controls.drop(columns=["seizure", "diversion"])
+
+    # Mapping controls on outdated ports to new ports
+
+    old_to_new_ports_mapping = {
+        "FRGN2": "FRGN3",
+        "FRSNF": "FRS22",
+        "FRBFS": "FRBH4",
+        "FRBPV": "FRALM",
+        "FRJMN": "FR2GO",
+        "FRFBX": "FRSC9",
+        "FRJLR": "FRCJH",
+        "FRGDC": "FRGCP",
+        "FRDCC": "FRLZF",
+        "FRFAY": "FRHOT",
+        "FRMCC": "FRHCN",
+        "FRERQ": "FRQUY",
+        "FRNBR": "FRCQ2",
+        "FRPLJ": "FRPU4",
+        "FRJPL": "FRPB2",
+        "FRXSP": "PMFSP",
+        "FRASM": "FRVM6",
+    }
+
+    controls["port_locode"] = controls.port_locode.where(
+        ~controls.port_locode.isin(old_to_new_ports_mapping),
+        controls.port_locode.map(old_to_new_ports_mapping),
+    )
 
     return controls
 

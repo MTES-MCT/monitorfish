@@ -132,7 +132,7 @@ controls_df = pd.DataFrame(
             None,
             "FRGVC",
             None,
-            "FRRYN",
+            "FRFAY",
         ],
         "mission_order": ["0", "0", "0", "0", "1", "0", "1", "0", "0", "1"],
         "vessel_targeted": ["0", "0", "0", "0", "1", None, None, None, "0", "0"],
@@ -309,7 +309,6 @@ unchanged_columns = [
     "action_datetime_utc",
     "longitude",
     "latitude",
-    "port_locode",
     "seizure_and_diversion_comments",
     "other_comments",
 ]
@@ -754,6 +753,18 @@ expected_loaded_mission_actions_df = pd.merge(
                 [],
                 [{"segment": "SWW04 - 2022", "segmentName": "Midwater trawls"}],
             ],
+            "port_locode": [
+                None,
+                None,
+                None,
+                "FRCAM",
+                "FRHOT",
+                None,
+                "FRGVC",
+                None,
+                None,
+                None,
+            ],
             "flight_goals": [None] * 10,
             "has_some_gears_seized": [False] * 10,
             "has_some_species_seized": [False] * 10,
@@ -1042,7 +1053,7 @@ def test_flow(
     mission_actions_query = "SELECT * FROM mission_actions ORDER BY id"
 
     initial_mission_actions = read_query(
-        "monitorfish_remote", mission_actions_query
+        mission_actions_query, db="monitorfish_remote"
     ).drop(columns=["is_deleted"])
 
     flow.schedule = None
@@ -1068,7 +1079,7 @@ def test_flow(
     )
 
     final_mission_actions = read_query(
-        "monitorfish_remote", mission_actions_query
+        mission_actions_query, db="monitorfish_remote"
     ).drop(columns=["is_deleted"])
 
     # mission_actions not from Poseidon should not be altered by the flow

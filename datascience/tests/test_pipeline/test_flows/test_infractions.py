@@ -76,7 +76,7 @@ def test_clean_infractions(infractions, cleaned_infractions):
 def test_load_infractions(reset_test_data, cleaned_infractions):
     load_infractions.run(cleaned_infractions)
     loaded_infractions = read_query(
-        "monitorfish_remote", "SELECT * FROM infractions ORDER BY natinf_code"
+        "SELECT * FROM infractions ORDER BY natinf_code", db="monitorfish_remote"
     )
 
     pd.testing.assert_frame_equal(loaded_infractions, cleaned_infractions)

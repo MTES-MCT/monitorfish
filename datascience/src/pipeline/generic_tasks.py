@@ -66,8 +66,8 @@ def extract(
     """
 
     res = read_saved_query(
-        db_name,
         query_filepath,
+        db=db_name,
         parse_dates=parse_dates,
         params=params,
         backend=backend,
@@ -328,4 +328,4 @@ def read_query_task(database: str, query: Select) -> pd.DataFrame:
     Prefect `task` decorated version of `read_query`.
     """
 
-    return read_query(database, query)
+    return read_query(query, db=database)

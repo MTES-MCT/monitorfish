@@ -20,4 +20,4 @@ def remove_redundant_fao_area_codes(s: Sequence[str]) -> List[str]:
         ['27.8.a', '37.1']
     """
     s = set(s)
-    return [a for a in s if True not in {a in t for t in (s - {a})}]
+    return [a for a in s if True not in {a == t[: len(a)] for t in (s - {a})}]

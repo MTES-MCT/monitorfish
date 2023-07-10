@@ -14,7 +14,6 @@ def test_missing_trip_numbers_flow(reset_test_data):
     e.execute("UPDATE logbook_reports SET trip_number = NULL WHERE cfr = 'SOCR4T3';")
 
     initial_missing_trip_numbers = read_query(
-        "monitorfish_remote",
         """
         SELECT
             report_id,
@@ -23,10 +22,10 @@ def test_missing_trip_numbers_flow(reset_test_data):
         WHERE trip_number IS NULL
         ORDER BY report_id;
         """,
+        db="monitorfish_remote",
     )
 
     initial_vessel_trip_numbers = read_query(
-        "monitorfish_remote",
         """
         SELECT
             report_id,
@@ -35,6 +34,7 @@ def test_missing_trip_numbers_flow(reset_test_data):
         WHERE cfr = 'SOCR4T3'
         ORDER BY report_id;
         """,
+        db="monitorfish_remote",
     )
 
     # Check that the only missing trip_numbers are those of the designated vessel
@@ -49,7 +49,6 @@ def test_missing_trip_numbers_flow(reset_test_data):
 
     # Check that the vessel whose trip numbers were set to NULL were correctly computed
     final_missing_trip_numbers = read_query(
-        "monitorfish_remote",
         """
         SELECT
             report_id,
@@ -58,10 +57,10 @@ def test_missing_trip_numbers_flow(reset_test_data):
         WHERE trip_number IS NULL
         ORDER BY report_id;
         """,
+        db="monitorfish_remote",
     )
 
     final_vessel_trip_numbers = read_query(
-        "monitorfish_remote",
         """
         SELECT
             report_id,
@@ -70,6 +69,7 @@ def test_missing_trip_numbers_flow(reset_test_data):
         WHERE cfr = 'SOCR4T3'
         ORDER BY report_id;
         """,
+        db="monitorfish_remote",
     )
 
     assert len(final_missing_trip_numbers) == 0
@@ -132,7 +132,6 @@ def test_missing_trip_numbers_flow_overwrites_only_computed_trip_numbers(
     )
 
     initial_missing_trip_numbers = read_query(
-        "monitorfish_remote",
         """
         SELECT
             report_id,
@@ -141,10 +140,10 @@ def test_missing_trip_numbers_flow_overwrites_only_computed_trip_numbers(
         WHERE trip_number IS NULL
         ORDER BY report_id;
         """,
+        db="monitorfish_remote",
     )
 
     initial_vessel_trip_numbers = read_query(
-        "monitorfish_remote",
         """
         SELECT
             report_id,
@@ -154,6 +153,7 @@ def test_missing_trip_numbers_flow_overwrites_only_computed_trip_numbers(
         AND report_id != '1e1bff95-dfff-4cc3-82d3-d72b46fda745'
         ORDER BY report_id;
         """,
+        db="monitorfish_remote",
     )
 
     # Check that the only missing trip_numbers are those of the designated vessel
@@ -168,7 +168,6 @@ def test_missing_trip_numbers_flow_overwrites_only_computed_trip_numbers(
 
     # Check that the vessel whose trip numbers were set to NULL were correctly computed
     final_missing_trip_numbers = read_query(
-        "monitorfish_remote",
         """
         SELECT
             report_id,
@@ -177,10 +176,10 @@ def test_missing_trip_numbers_flow_overwrites_only_computed_trip_numbers(
         WHERE trip_number IS NULL
         ORDER BY report_id;
         """,
+        db="monitorfish_remote",
     )
 
     final_vessel_trip_numbers = read_query(
-        "monitorfish_remote",
         """
         SELECT
             report_id,
@@ -189,6 +188,7 @@ def test_missing_trip_numbers_flow_overwrites_only_computed_trip_numbers(
         WHERE cfr = 'SOCR4T3'
         ORDER BY report_id;
         """,
+        db="monitorfish_remote",
     )
 
     assert len(final_missing_trip_numbers) == 0

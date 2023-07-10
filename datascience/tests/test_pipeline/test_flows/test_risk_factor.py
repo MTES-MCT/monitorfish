@@ -49,7 +49,7 @@ def test_risk_factor_flow(reset_test_data, risk_factors):
     ############################# Reset risk_factors table ############################
     e = create_engine("monitorfish_remote")
     e.execute("DELETE FROM risk_factors;")
-    assert len(read_query("monitorfish_remote", query)) == 0
+    assert len(read_query(query, db="monitorfish_remote")) == 0
 
     ############################## Run risk factors flow ##############################
     flow.schedule = None
@@ -63,7 +63,7 @@ def test_risk_factor_flow(reset_test_data, risk_factors):
     control_anteriority = state.result[
         flow.get_tasks("extract_control_anteriority")[0]
     ].result
-    loaded_risk_factors = read_query("monitorfish_remote", query)
+    loaded_risk_factors = read_query(query, db="monitorfish_remote")
 
     # Risk factors should be an outer join of vessels in current_segments and
     # control_anteriority, so if we have two vessels in current_segments, two vessels

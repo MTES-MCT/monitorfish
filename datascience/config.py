@@ -61,11 +61,6 @@ PROXIES = {
 ANCHORAGES_URL = (
     "https://www.data.gouv.fr/fr/datasets/r/e21a667e-bb25-4719-83f5-4b9ba441e93d"
 )
-
-PORTS_URL = (
-    "https://www.data.gouv.fr/fr/datasets/r/60fe965d-5888-493b-9321-24bc3b1f84db"
-)
-
 FLEET_SEGMENTS_URL = (
     "https://www.data.gouv.fr/fr/datasets/r/41873d54-278f-4d2a-bdb2-77746c581fac"
 )
@@ -166,6 +161,7 @@ CNSP_FRANCE_EMAIL_ADDRESS = os.environ.get("CNSP_FRANCE_EMAIL_ADDRESS")
 
 # Tokens
 LOCATIONIQ_TOKEN = os.getenv("LOCATIONIQ_TOKEN")
+GOOGLE_API_TOKEN = os.getenv("GOOGLE_API_TOKEN")
 
 # data.gouv.fr configuration
 DATAGOUV_API_ENDPOINT = "https://www.data.gouv.fr/api/1"
@@ -183,3 +179,7 @@ CONTROLS_STATISTICS_CSV_RESOURCE_ID = "e370fae2-9397-4fbd-bdc9-4f574b49d503"
 CONTROLS_STATISTICS_CSV_RESOURCE_TITLE = "statistiques-de-controle-des-peches.csv"
 FLEET_SEGMENTS_CSV_RESOURCE_ID = "d6d6376b-2412-4910-95a5-0f615c1c23aa"
 FLEET_SEGMENTS_CSV_RESOURCE_TITLE = "segments-de-flotte.csv"
+
+PORTS_DATASET_ID = "6059e5d28e0833ba3e385aa3"
+PORTS_CSV_RESOURCE_ID = "60fe965d-5888-493b-9321-24bc3b1f84db"
+PORTS_CSV_RESOURCE_TITLE = "ports.csv"

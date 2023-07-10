@@ -372,7 +372,6 @@ def test_load_then_reset_fishing_activity(reset_test_data):
     load_fishing_activity(positions_2, period, logger)
 
     loaded_positions = read_query(
-        "monitorfish_remote",
         """SELECT id,
             is_at_port,
             meters_from_previous_position,
@@ -383,6 +382,7 @@ def test_load_then_reset_fishing_activity(reset_test_data):
         FROM positions
         WHERE id IN (13632807, 13635518, 13638407, 13640935)
         ORDER BY id""",
+        db="monitorfish_remote",
     )
 
     expected_loaded_positions = pd.concat([positions_1, positions_2]).drop_duplicates(
@@ -404,8 +404,8 @@ def test_load_then_reset_fishing_activity(reset_test_data):
     reset_positions.run(period)
 
     not_enriched_ids = read_query(
-        "monitorfish_remote",
         "SELECT id FROM positions WHERE is_at_port IS NULL ORDER BY id",
+        db="monitorfish_remote",
     )["id"].tolist()
 
     assert not_enriched_ids == [
@@ -417,7 +417,6 @@ def test_load_then_reset_fishing_activity(reset_test_data):
     ]
 
     positions_reset = read_query(
-        "monitorfish_remote",
         """SELECT
             is_at_port,
             meters_from_previous_position,
@@ -427,6 +426,7 @@ def test_load_then_reset_fishing_activity(reset_test_data):
             time_emitting_at_sea
         FROM positions
         WHERE id IN (13632807, 13634205, 13635518, 13639642)""",
+        db="monitorfish_remote",
     )
 
     assert positions_reset.isna().all().all()
@@ -435,7 +435,6 @@ def test_load_then_reset_fishing_activity(reset_test_data):
 def test_extract_enrich_load(reset_test_data):
 
     positions_before = read_query(
-        "monitorfish_remote",
         """SELECT
             external_reference_number,
             id,
@@ -447,6 +446,7 @@ def test_extract_enrich_load(reset_test_data):
             time_emitting_at_sea
         FROM positions
         ORDER BY internal_reference_number, date_time""",
+        db="monitorfish_remote",
     )
 
     now = datetime.utcnow()
@@ -460,7 +460,6 @@ def test_extract_enrich_load(reset_test_data):
     )
 
     positions_after = read_query(
-        "monitorfish_remote",
         """SELECT
             external_reference_number,
             id,
@@ -472,6 +471,7 @@ def test_extract_enrich_load(reset_test_data):
             time_emitting_at_sea
         FROM positions
         ORDER BY internal_reference_number, date_time""",
+        db="monitorfish_remote",
     )
 
     # The number of positions in the positions table should not change
@@ -593,7 +593,6 @@ def test_flow_does_not_recompute_all_when_not_asked_to(reset_test_data):
 
     # Vessel 'ABC000055481' has all its positions already enriched in the test_data
     positions_before = read_query(
-        "monitorfish_remote",
         """SELECT
             id,
             is_at_port,
@@ -604,6 +603,7 @@ def test_flow_does_not_recompute_all_when_not_asked_to(reset_test_data):
         FROM positions
         WHERE internal_reference_number = 'ABC000055481'
         ORDER BY date_time""",
+        db="monitorfish_remote",
     )
 
     flow.schedule = None
@@ -622,7 +622,6 @@ def test_flow_does_not_recompute_all_when_not_asked_to(reset_test_data):
     assert state.is_successful()
 
     positions_after = read_query(
-        "monitorfish_remote",
         """SELECT
             id,
             is_at_port,
@@ -633,6 +632,7 @@ def test_flow_does_not_recompute_all_when_not_asked_to(reset_test_data):
         FROM positions
         WHERE internal_reference_number = 'ABC000055481'
         ORDER BY date_time""",
+        db="monitorfish_remote",
     )
 
     pd.testing.assert_frame_equal(positions_before, positions_after)
@@ -642,7 +642,6 @@ def test_flow_recomputes_all_when_asked_to(reset_test_data):
 
     # Vessel 'ABC000055481' has all its positions already enriched in the test_data
     positions_before = read_query(
-        "monitorfish_remote",
         """SELECT
             id,
             is_at_port,
@@ -654,6 +653,7 @@ def test_flow_recomputes_all_when_asked_to(reset_test_data):
         FROM positions
         WHERE internal_reference_number = 'ABC000055481'
         ORDER BY date_time""",
+        db="monitorfish_remote",
     )
 
     flow.schedule = None
@@ -672,7 +672,6 @@ def test_flow_recomputes_all_when_asked_to(reset_test_data):
     assert state.is_successful()
 
     positions_after = read_query(
-        "monitorfish_remote",
         """SELECT
             id,
             is_at_port,
@@ -684,6 +683,7 @@ def test_flow_recomputes_all_when_asked_to(reset_test_data):
         FROM positions
         WHERE internal_reference_number = 'ABC000055481'
         ORDER BY date_time""",
+        db="monitorfish_remote",
     )
 
     with pytest.raises(AssertionError):
@@ -727,7 +727,7 @@ def test_flow_can_compute_in_chunks(reset_test_data):
         ORDER BY id
     """
 
-    positions_before = read_query("monitorfish_remote", query)
+    positions_before = read_query(query, db="monitorfish_remote")
 
     flow.schedule = None
     state = flow.run(
@@ -744,7 +744,7 @@ def test_flow_can_compute_in_chunks(reset_test_data):
 
     assert state.is_successful()
 
-    positions_enriched_in_2_chunks = read_query("monitorfish_remote", query)
+    positions_enriched_in_2_chunks = read_query(query, db="monitorfish_remote")
 
     flow.schedule = None
     state = flow.run(
@@ -761,7 +761,7 @@ def test_flow_can_compute_in_chunks(reset_test_data):
 
     assert state.is_successful()
 
-    positions_enriched_in_1_chunk = read_query("monitorfish_remote", query)
+    positions_enriched_in_1_chunk = read_query(query, db="monitorfish_remote")
 
     with pytest.raises(AssertionError):
         pd.testing.assert_frame_equal(positions_before, positions_enriched_in_2_chunks)

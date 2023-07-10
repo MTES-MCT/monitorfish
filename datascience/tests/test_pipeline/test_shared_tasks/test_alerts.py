@@ -294,7 +294,7 @@ def test_filter_silenced_alerts_when_multiple_silenced_alerts_facade():
 
 
 def test_load_alerts(reset_test_data):
-    initial_alerts = read_query("monitorfish_remote", "SELECT * FROM pending_alerts")
+    initial_alerts = read_query("SELECT * FROM pending_alerts", db="monitorfish_remote")
 
     now = datetime(2020, 1, 1, 0, 0, 0)
     td = timedelta(hours=1)
@@ -327,5 +327,5 @@ def test_load_alerts(reset_test_data):
     )
 
     load_alerts.run(alerts_to_load, alert_config_name=alert_config_name)
-    final_alerts = read_query("monitorfish_remote", "SELECT * FROM pending_alerts")
+    final_alerts = read_query("SELECT * FROM pending_alerts", db="monitorfish_remote")
     assert len(final_alerts) == len(initial_alerts) + 1

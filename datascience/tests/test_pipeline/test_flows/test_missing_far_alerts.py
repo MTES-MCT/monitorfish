@@ -285,7 +285,7 @@ def test_get_vessels_with_missing_fars_raises_if_share_is_exceeded():
 def test_flow_when_an_alert_is_silenced(reset_test_data):
 
     initial_pending_alerts = read_query(
-        "monitorfish_remote", "SELECT * FROM pending_alerts"
+        "SELECT * FROM pending_alerts", db="monitorfish_remote"
     )
 
     flow.schedule = None
@@ -302,7 +302,7 @@ def test_flow_when_an_alert_is_silenced(reset_test_data):
     assert state.is_successful()
 
     final_pending_alerts = read_query(
-        "monitorfish_remote", "SELECT * FROM pending_alerts"
+        "SELECT * FROM pending_alerts", db="monitorfish_remote"
     )
 
     assert len(initial_pending_alerts) == 1

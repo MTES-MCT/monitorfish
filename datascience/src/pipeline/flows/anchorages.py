@@ -107,7 +107,7 @@ def extract_ports() -> pd.DataFrame:
     AND fao_areas != '{}'
     """
 
-    return read_query("monitorfish_remote", query)
+    return read_query(query, db="monitorfish_remote")
 
 
 @task(checkpoint=False)
@@ -129,7 +129,7 @@ def extract_control_ports_locodes():
     AND control_datetime_utc >= CURRENT_TIMESTAMP - INTERVAL '2 years'
     """
 
-    control_ports_locodes = read_query("monitorfish_remote", query)
+    control_ports_locodes = read_query(query, db="monitorfish_remote")
     control_ports_locodes = set(control_ports_locodes.locode)
 
     return control_ports_locodes
@@ -156,7 +156,7 @@ def extract_ers_ports_locodes() -> Set[str]:
     AND log_type IN ('DEP', 'PNO', 'LAN')
     """
 
-    ers_ports_locodes = read_query("monitorfish_remote", query)
+    ers_ports_locodes = read_query(query, db="monitorfish_remote")
     ers_ports_locodes = set(ers_ports_locodes.locode)
 
     return ers_ports_locodes
@@ -170,12 +170,12 @@ def extract_ais_anchorage_coordinates() -> pd.DataFrame:
 
     """
     return read_query(
-        "monitorfish_remote",
         (
             "SELECT lat AS latitude, lon AS longitude "
             "FROM external.gfw_anchorages "
             "WHERE at_dock = true"
         ),
+        db="monitorfish_remote",
     )
 
 

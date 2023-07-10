@@ -477,7 +477,7 @@ def test_control_anteriority_flow(reset_test_data, loaded_control_anteriority):
     # Check that control anteriority data was correctly computed and loaded to
     # control_anteriority table
 
-    control_anteriority = read_query("monitorfish_remote", query)
+    control_anteriority = read_query(query, db="monitorfish_remote")
 
     max_seconds_of_difference_allowed = 10.0
 

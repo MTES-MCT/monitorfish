@@ -20,13 +20,13 @@ import { getOIDCConfig } from './auth/getOIDCConfig'
 if (!(process.env.NODE_ENV === 'development')) {
   // https://docs.sentry.io/platforms/javascript/performance/#configure-the-sample-rate
   init({
-    dsn: 'https://a5f3272efa794bb9ada2ffea90f2fec5@sentry.incubateur.net/8',
-    environment: getEnvironmentVariable('REACT_APP_SENTRY_ENV')?.toString(),
+    dsn: getEnvironmentVariable('REACT_APP_SENTRY_DSN')?.toString() || '',
+    environment: getEnvironmentVariable('REACT_APP_SENTRY_ENV')?.toString() || '',
     integrations: [
       new BrowserTracing({
         tracingOrigins: getEnvironmentVariable('REACT_APP_SENTRY_TRACING_ORIGINS')
           ? [getEnvironmentVariable('REACT_APP_SENTRY_TRACING_ORIGINS')?.toString() || '']
-          : undefined
+          : []
       })
     ],
     release: getEnvironmentVariable('REACT_APP_MONITORFISH_VERSION')?.toString(),

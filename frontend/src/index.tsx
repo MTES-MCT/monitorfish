@@ -29,7 +29,7 @@ if (!(process.env.NODE_ENV === 'development')) {
           : []
       })
     ],
-    release: getEnvironmentVariable('REACT_APP_MONITORFISH_VERSION')?.toString(),
+    release: getEnvironmentVariable('REACT_APP_MONITORFISH_VERSION')?.toString() || '',
     tracesSampleRate: 1.0
   })
 }

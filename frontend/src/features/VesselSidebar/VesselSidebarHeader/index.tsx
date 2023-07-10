@@ -5,7 +5,6 @@ import { VesselName } from './VesselName'
 import { vesselsAreEquals } from '../../../domain/entities/vessel/vessel'
 import { expandRightMenu } from '../../../domain/shared_slices/Global'
 import { setIsFocusedOnVesselSearch } from '../../../domain/shared_slices/Vessel'
-import { getVesselVoyage } from '../../../domain/use_cases/vessel/getVesselVoyage'
 import { showVessel } from '../../../domain/use_cases/vessel/showVessel'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
@@ -38,7 +37,6 @@ export function VesselSidebarHeader() {
 
       if (!vesselsAreEquals(vesselIdentity, selectedVesselIdentity)) {
         dispatch(showVessel(vesselIdentity, true, false))
-        dispatch(getVesselVoyage(vesselIdentity, undefined, false))
       }
       dispatch(setIsFocusedOnVesselSearch(false))
     },

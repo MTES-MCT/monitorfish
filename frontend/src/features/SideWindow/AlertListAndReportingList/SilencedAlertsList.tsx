@@ -9,7 +9,6 @@ import { PENDING_ALERTS_SEARCH_OPTIONS } from './constants'
 import { getAlertNameFromType } from './utils'
 import { COLORS } from '../../../constants/constants'
 import { reactivateSilencedAlert } from '../../../domain/use_cases/alert/reactivateSilencedAlert'
-import { getVesselVoyage } from '../../../domain/use_cases/vessel/getVesselVoyage'
 import { showVessel } from '../../../domain/use_cases/vessel/showVessel'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
@@ -132,7 +131,6 @@ export function SilencedAlertsList({ silencedAlerts }: SilencedAlertsListProps) 
                       data-cy="side-window-silenced-alerts-show-vessel"
                       onClick={() => {
                         dispatch(showVessel(alert, false, false))
-                        dispatch(getVesselVoyage(alert, undefined, false))
                       }}
                       src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
                       style={showIconStyle}

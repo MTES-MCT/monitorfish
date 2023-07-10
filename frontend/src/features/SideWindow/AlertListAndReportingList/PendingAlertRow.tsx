@@ -9,7 +9,6 @@ import { getAlertNameFromType } from './utils'
 import { COLORS } from '../../../constants/constants'
 import { getSilencedAlertPeriodText } from '../../../domain/entities/alerts'
 import { validateAlert } from '../../../domain/use_cases/alert/validateAlert'
-import { getVesselVoyage } from '../../../domain/use_cases/vessel/getVesselVoyage'
 import { showVessel } from '../../../domain/use_cases/vessel/showVessel'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
@@ -96,7 +95,6 @@ export function PendingAlertRow({
               data-cy="side-window-alerts-show-vessel"
               onClick={() => {
                 dispatch(showVessel(alert, false, false))
-                dispatch(getVesselVoyage(alert, undefined, false))
               }}
               src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
               style={showIconStyle}

@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { forbiddenVesselSidebarPaths } from '../../domain/entities/authorization/constants'
 import { VesselSidebarTab } from '../../domain/entities/vessel/vessel'
+import { setDisplayedErrors } from '../../domain/shared_slices/DisplayedError'
 import { showVesselSidebarTab } from '../../domain/shared_slices/Vessel'
 import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
@@ -27,13 +28,18 @@ export function Tabs() {
     }
   }, [dispatch, isSuperUser, vesselSidebarTab])
 
+  function showTab(tab: VesselSidebarTab) {
+    dispatch(setDisplayedErrors({ vesselSidebarError: null }))
+    dispatch(showVesselSidebarTab(tab))
+  }
+
   return (
     <TabList>
       {isSuperUser && (
         <Tab
           data-cy="vessel-menu-resume"
           isActive={vesselSidebarTab === VesselSidebarTab.SUMMARY}
-          onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.SUMMARY))}
+          onClick={() => showTab(VesselSidebarTab.SUMMARY)}
         >
           <SummaryIcon /> <br /> Résumé
         </Tab>
@@ -41,14 +47,14 @@ export function Tabs() {
       <Tab
         data-cy="vessel-menu-identity"
         isActive={vesselSidebarTab === VesselSidebarTab.IDENTITY}
-        onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.IDENTITY))}
+        onClick={() => showTab(VesselSidebarTab.IDENTITY)}
       >
         <VesselIDIcon /> <br /> Identité
       </Tab>
       <Tab
         data-cy="vessel-menu-fishing"
         isActive={vesselSidebarTab === VesselSidebarTab.VOYAGES}
-        onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.VOYAGES))}
+        onClick={() => showTab(VesselSidebarTab.VOYAGES)}
       >
         <FisheriesIcon /> <br /> Pêche
       </Tab>
@@ -56,7 +62,7 @@ export function Tabs() {
         <Tab
           data-cy="vessel-menu-reporting"
           isActive={vesselSidebarTab === VesselSidebarTab.REPORTING}
-          onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.REPORTING))}
+          onClick={() => showTab(VesselSidebarTab.REPORTING)}
         >
           <ReportingIcon /> <br /> Signalements
           {!!selectedVessel?.reportings?.length && (
@@ -69,7 +75,7 @@ export function Tabs() {
       <Tab
         data-cy="vessel-menu-controls"
         isActive={vesselSidebarTab === VesselSidebarTab.CONTROLS}
-        onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.CONTROLS))}
+        onClick={() => showTab(VesselSidebarTab.CONTROLS)}
       >
         <ControlsIcon /> <br /> Contrôles
       </Tab>
@@ -78,7 +84,7 @@ export function Tabs() {
           data-cy="vessel-menu-ers-vms"
           isActive={vesselSidebarTab === VesselSidebarTab.ERSVMS}
           isLast
-          onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.ERSVMS))}
+          onClick={() => showTab(VesselSidebarTab.ERSVMS)}
         >
           <VMSIcon /> <br /> VMS
         </Tab>

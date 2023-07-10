@@ -255,12 +255,12 @@ export enum VesselLocation {
 export const TEMPORARY_VESSEL_TRACK = 'temp'
 
 export enum VesselSidebarTab {
-  SUMMARY = 1,
-  IDENTITY = 2,
-  VOYAGES = 3,
-  REPORTING = 4,
-  CONTROLS = 5,
-  ERSVMS = 6
+  CONTROLS = 'CONTROLS',
+  ERSVMS = 'ERSVMS',
+  IDENTITY = 'IDENTITY',
+  REPORTING = 'REPORTING',
+  SUMMARY = 'SUMMARY',
+  VOYAGES = 'VOYAGES'
 }
 
 export enum FishingActivitiesTab {

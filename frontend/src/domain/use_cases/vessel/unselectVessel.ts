@@ -1,19 +1,18 @@
 import { batch } from 'react-redux'
-import { resetSelectedVessel, closeVesselSidebar } from '../../shared_slices/Vessel'
-import { hideFishingActivitiesOnMap } from '../../shared_slices/FishingActivities'
-import { resetVesselBeaconMalfunctionsResumeAndHistory } from '../../shared_slices/BeaconMalfunction'
-import { resetCurrentAndArchivedReportingsOfSelectedVessel } from '../../shared_slices/Reporting'
-import { expandRightMenu } from '../../shared_slices/Global'
 
-const unselectVessel = () => dispatch => {
+import { resetVesselBeaconMalfunctionsResumeAndHistory } from '../../shared_slices/BeaconMalfunction'
+import { closeFishingActivities } from '../../shared_slices/FishingActivities'
+import { expandRightMenu } from '../../shared_slices/Global'
+import { resetCurrentAndArchivedReportingsOfSelectedVessel } from '../../shared_slices/Reporting'
+import { closeVesselSidebar, resetSelectedVessel } from '../../shared_slices/Vessel'
+
+export const unselectVessel = () => dispatch => {
   batch(() => {
     dispatch(resetSelectedVessel())
-    dispatch(hideFishingActivitiesOnMap())
+    dispatch(closeFishingActivities())
     dispatch(closeVesselSidebar())
     dispatch(resetCurrentAndArchivedReportingsOfSelectedVessel())
     dispatch(resetVesselBeaconMalfunctionsResumeAndHistory())
     dispatch(expandRightMenu())
   })
 }
-
-export default unselectVessel

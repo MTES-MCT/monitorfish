@@ -77,6 +77,21 @@ export const monitorfishApiKy = ky.extend({
           request.headers.set('authorization', `Bearer ${token}`)
         }
       }
+    ],
+    beforeRetry: [
+      async ({ request, retryCount }) => {
+        if (retryCount > 1) {
+          throw new Error('Connexion avec le serveur impossible.')
+        }
+
+        const user = getOIDCUser()
+        const token = user?.access_token
+
+        // If we have a token set in state, we pass it.
+        if (token) {
+          request.headers.set('authorization', `Bearer ${token}`)
+        }
+      }
     ]
   }
 })

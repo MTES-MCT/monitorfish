@@ -1,6 +1,5 @@
 import { setSelectedVesselCustomTrackRequest, showVesselSidebarTab } from '../../shared_slices/Vessel'
 import { showVessel } from './showVessel'
-import { getVesselVoyage } from './getVesselVoyage'
 import { VesselSidebarTab } from '../../entities/vessel/vessel'
 import { END_OF_MALFUNCTION_REASON_RECORD } from '../../entities/beaconMalfunction/constants'
 import { VesselTrackDepth } from '../../entities/vesselTrackDepth'
@@ -26,7 +25,6 @@ export const showVesselFromBeaconMalfunctionsKanban = (beaconMalfunction, openVM
   }
 
   await dispatch(showVessel(beaconMalfunction, false, false))
-  dispatch(getVesselVoyage(beaconMalfunction, null, false))
 
   if (openVMRERSTab) {
     dispatch(showVesselSidebarTab(VesselSidebarTab.ERSVMS))

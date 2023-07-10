@@ -6,7 +6,6 @@ import { LayerProperties } from '../../entities/layers/constants'
 import { MonitorFishLayer } from '../../entities/layers/types'
 import { OPENLAYERS_PROJECTION } from '../../entities/map/constants'
 import { showRegulatoryZoneMetadata } from '../layer/regulation/showRegulatoryZoneMetadata'
-import { getVesselVoyage } from '../vessel/getVesselVoyage'
 import { showVessel } from '../vessel/showVessel'
 import { showVesselTrack } from '../vessel/showVesselTrack'
 
@@ -70,7 +69,6 @@ export const clickOnMapFeature = (mapClick: MapClick) => (dispatch, getState) =>
       dispatch(showVesselTrack(clickedVessel, false, null))
     } else {
       dispatch(showVessel(clickedVessel, false, false))
-      dispatch(getVesselVoyage(clickedVessel, undefined, false))
     }
   }
 }

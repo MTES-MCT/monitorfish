@@ -2,10 +2,12 @@ import { getVesselFromAPI } from '../../../api/vessel'
 import { addVesselIdentifierToVesselIdentity } from '../../../features/VesselSearch/utils'
 import { Vessel } from '../../entities/vessel/vessel'
 import { getCustomOrDefaultTrackRequest, throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
+import { setDisplayedErrors } from '../../shared_slices/DisplayedError'
 import { removeFishingActivitiesFromMap } from '../../shared_slices/FishingActivities'
 import { addSearchedVessel, removeError, setError } from '../../shared_slices/Global'
 import { doNotAnimate } from '../../shared_slices/Map'
 import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../../shared_slices/Vessel'
+import { displayOrLogVesselSidebarError } from '../error/displayOrLogVesselSidebarError'
 
 import type { VesselIdentity } from '../../entities/vessel/types'
 
@@ -54,17 +56,25 @@ export const showVessel =
         vesselIdentifier: addVesselIdentifierToVesselIdentity(vesselIdentity).vesselIdentifier
       }
 
-      return dispatch(
+      dispatch(setDisplayedErrors({ vesselSidebarError: null }))
+      dispatch(
         setSelectedVessel({
           positions: vesselAndPositions.positions,
           vessel: selectedVessel
         })
       )
     } catch (error) {
-      dispatch(setError(error))
+      dispatch(
+        displayOrLogVesselSidebarError(
+          error as Error,
+          {
+            func: showVessel,
+            parameters: [vesselIdentity, isFromSearch, isCalledFromCron]
+          },
+          isCalledFromCron
+        )
+      )
       dispatch(resetLoadingVessel())
-
-      return undefined
     }
   }
 

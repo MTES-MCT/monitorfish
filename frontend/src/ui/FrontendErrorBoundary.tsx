@@ -61,7 +61,7 @@ export class FrontendErrorBoundary extends Component<FrontendErrorBoundaryProps,
 
   override render() {
     const { children } = this.props
-    const { hasError } = this.state
+    const { hasError, message } = this.state
 
     if (hasError) {
       return (
@@ -75,7 +75,7 @@ export class FrontendErrorBoundary extends Component<FrontendErrorBoundaryProps,
             width: '100%'
           }}
         >
-          Une erreur est survenue.
+          Une erreur est survenue{message ? `: ${message}.` : '.'}
         </div>
       )
     }

@@ -52,7 +52,13 @@ context('Vessel sidebar ers/vms tab', () => {
 
   it('ERS/VMS tab Should contain current and history of beacon malfunctions', () => {
     // Go to the detail of a beacon malfunction and go back to resume
+    cy.intercept(
+      'GET',
+      'bff/v1/vessels/find?vesselId=1&internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK' +
+        '&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime='
+    ).as('openVessel')
     cy.get('.VESSELS_POINTS').click(460, 480, { force: true, timeout: 10000 })
+    cy.wait('@openVessel')
     cy.get('*[data-cy="vessel-menu-ers-vms"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-beacon-malfunctions-history"]', { timeout: 10000 }).children().eq(0).click()
     cy.get('*[data-cy="vessel-beacon-malfunction-single-history"]', { timeout: 10000 }).click({ force: true })
@@ -65,14 +71,20 @@ context('Vessel sidebar ers/vms tab', () => {
     cy.get('*[data-cy="beacon-malfunction-current-details"]', { timeout: 10000 }).contains('Activité détectée')
 
     // Search for another vessel
+    cy.intercept(
+      'GET',
+      'bff/v1/vessels/find?vesselId=2&internalReferenceNumber=U_W0NTFINDME&externalReferenceNumber=TALK2ME' +
+        '&IRCS=QGDF&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime='
+    ).as('openVesselTwo')
     cy.intercept('GET', '/bff/v1/vessels/beacon_malfunctions*').as('vesselTwoBeaconMalfunctions')
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()
     cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).click()
     cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('U_W0')
     cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
+    cy.wait('@openVesselTwo')
+    cy.wait('@vesselTwoBeaconMalfunctions').then(({ response }) => expect(response && response.statusCode).equal(200))
 
     // Then
-    cy.wait('@vesselTwoBeaconMalfunctions').then(({ response }) => expect(response && response.statusCode).equal(200))
     cy.get('*[data-cy="vessel-malfunctions-resume"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy="vessel-beacon-malfunctions"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy="vessel-beacon-malfunctions-resume-number"]', { timeout: 10000 }).contains('à quai 0')

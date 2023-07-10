@@ -29,12 +29,18 @@ export function Body() {
         <RetryButton
           accent={Accent.PRIMARY}
           onClick={() => {
-            const parameters = vesselSidebarError.useCase?.parameters
-            if (!parameters) {
-              return dispatch(vesselSidebarError.useCase?.func())
+            if (!vesselSidebarError.useCase) {
+              return
             }
 
-            return dispatch(vesselSidebarError.useCase?.func(...parameters))
+            const parameters = vesselSidebarError.useCase?.parameters
+            if (!parameters) {
+              dispatch(vesselSidebarError.useCase?.func())
+
+              return
+            }
+
+            dispatch(vesselSidebarError.useCase?.func(...parameters))
           }}
         >
           Réessayer

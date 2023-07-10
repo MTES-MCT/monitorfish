@@ -56,7 +56,11 @@ class GetAllMissionsUTests {
             .willReturn(getDummyMissionActions(fourthChunk))
 
         // When
-        val missionsAndActions = GetAllMissions(missionRepository, missionActionsRepository, databaseProperties).execute(
+        val missionsAndActions = GetAllMissions(
+            missionRepository,
+            missionActionsRepository,
+            databaseProperties,
+        ).execute(
             null,
             null,
             null,

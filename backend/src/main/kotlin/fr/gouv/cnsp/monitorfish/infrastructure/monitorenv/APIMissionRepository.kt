@@ -53,7 +53,13 @@ class APIMissionRepository(
         seaFronts: List<String>?,
     ): List<Mission> {
         // For these parameters, if the list is null or empty, we don't send the param to the server to avoid filtering results
-        val missionTypesParameter = if (!missionTypes.isNullOrEmpty()) "missionTypes=${missionTypes.joinToString(",")}&" else ""
+        val missionTypesParameter = if (!missionTypes.isNullOrEmpty()) {
+            "missionTypes=${missionTypes.joinToString(
+                ",",
+            )}&"
+        } else {
+            ""
+        }
         val missionStatusesParameter = if (!missionStatuses.isNullOrEmpty()) {
             "missionStatus=${missionStatuses.joinToString(
                 ",",

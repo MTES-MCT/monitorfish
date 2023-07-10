@@ -26,7 +26,11 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         """,
         nativeQuery = true,
     )
-    fun findCurrentAndArchivedByVesselIdentifier(vesselIdentifier: String, value: String, fromDate: Instant): List<ReportingEntity>
+    fun findCurrentAndArchivedByVesselIdentifier(
+        vesselIdentifier: String,
+        value: String,
+        fromDate: Instant,
+    ): List<ReportingEntity>
 
     @Query(
         value = """

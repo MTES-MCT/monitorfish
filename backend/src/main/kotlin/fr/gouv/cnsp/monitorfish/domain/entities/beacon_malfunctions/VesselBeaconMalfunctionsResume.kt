@@ -9,7 +9,9 @@ data class VesselBeaconMalfunctionsResume(
     val lastBeaconMalfunctionVesselStatus: VesselStatus?,
 ) {
     companion object {
-        fun fromBeaconMalfunctions(beaconMalfunctionsWithDetails: List<BeaconMalfunctionWithDetails>): VesselBeaconMalfunctionsResume {
+        fun fromBeaconMalfunctions(
+            beaconMalfunctionsWithDetails: List<BeaconMalfunctionWithDetails>,
+        ): VesselBeaconMalfunctionsResume {
             val oneYearBefore = ZonedDateTime.now().minusYears(1)
 
             val lastBeaconMalfunction = beaconMalfunctionsWithDetails

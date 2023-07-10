@@ -39,7 +39,9 @@ data class BeaconMalfunctionActionEntity(
     )
 
     companion object {
-        fun fromBeaconMalfunctionAction(beaconMalfunctionAction: BeaconMalfunctionAction): BeaconMalfunctionActionEntity {
+        fun fromBeaconMalfunctionAction(
+            beaconMalfunctionAction: BeaconMalfunctionAction,
+        ): BeaconMalfunctionActionEntity {
             if (beaconMalfunctionAction.propertyName === BeaconMalfunctionActionPropertyName.VESSEL_STATUS) {
                 try {
                     VesselStatus.valueOf(beaconMalfunctionAction.previousValue)

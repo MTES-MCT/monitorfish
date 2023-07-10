@@ -36,7 +36,11 @@ interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
             "order by p.date_time DESC ",
         nativeQuery = true,
     )
-    fun findLastByInternalReferenceNumber(internalReferenceNumber: String, from: ZonedDateTime, to: ZonedDateTime): List<PositionEntity>
+    fun findLastByInternalReferenceNumber(
+        internalReferenceNumber: String,
+        from: ZonedDateTime,
+        to: ZonedDateTime,
+    ): List<PositionEntity>
 
     @Query(
         value = "select distinct " +
@@ -65,7 +69,11 @@ interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
             "order by p.date_time DESC ",
         nativeQuery = true,
     )
-    fun findLastByExternalReferenceNumber(externalReferenceNumber: String, from: ZonedDateTime, to: ZonedDateTime): List<PositionEntity>
+    fun findLastByExternalReferenceNumber(
+        externalReferenceNumber: String,
+        from: ZonedDateTime,
+        to: ZonedDateTime,
+    ): List<PositionEntity>
 
     @Query(
         value = "select distinct " +

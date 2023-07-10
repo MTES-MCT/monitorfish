@@ -28,7 +28,10 @@ class UserAuthorizationController(
      */
     @GetMapping("current")
     @Operation(summary = "Get current logged user authorization")
-    fun getCurrentUserAuthorization(request: HttpServletRequest, response: HttpServletResponse): UserAuthorizationDataOutput? {
+    fun getCurrentUserAuthorization(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+    ): UserAuthorizationDataOutput? {
         val email: String? = response.getHeader(UserAuthorizationCheckFilter.EMAIL_HEADER)
         if (email == null) {
             response.status = HttpServletResponse.SC_UNAUTHORIZED

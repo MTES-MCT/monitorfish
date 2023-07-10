@@ -9,7 +9,9 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
 @Repository
-class JpaControlObjectivesRepository(private val dbControlObjectivesRepository: DBControlObjectivesRepository) : ControlObjectivesRepository {
+class JpaControlObjectivesRepository(
+    private val dbControlObjectivesRepository: DBControlObjectivesRepository,
+) : ControlObjectivesRepository {
 
     override fun findAllByYear(year: Int): List<ControlObjective> {
         return dbControlObjectivesRepository.findAllByYearEquals(year).map {

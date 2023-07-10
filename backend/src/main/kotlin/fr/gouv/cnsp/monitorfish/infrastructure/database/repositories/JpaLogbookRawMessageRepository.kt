@@ -8,7 +8,9 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaLogbookRawMessageRepository(private val DBLogbookRawMessageRepository: DBLogbookRawMessageRepository) : LogbookRawMessageRepository {
+class JpaLogbookRawMessageRepository(
+    private val DBLogbookRawMessageRepository: DBLogbookRawMessageRepository,
+) : LogbookRawMessageRepository {
 
     @Cacheable(value = ["logbook_raw_message"])
     override fun findRawMessage(operationNumber: String): String? {

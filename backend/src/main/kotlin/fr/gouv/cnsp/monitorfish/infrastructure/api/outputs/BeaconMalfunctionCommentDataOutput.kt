@@ -11,7 +11,9 @@ data class BeaconMalfunctionCommentDataOutput(
     val dateTime: ZonedDateTime,
 ) {
     companion object {
-        fun fromBeaconMalfunctionComment(beaconMalfunctionComment: BeaconMalfunctionComment): BeaconMalfunctionCommentDataOutput {
+        fun fromBeaconMalfunctionComment(
+            beaconMalfunctionComment: BeaconMalfunctionComment,
+        ): BeaconMalfunctionCommentDataOutput {
             return BeaconMalfunctionCommentDataOutput(
                 beaconMalfunctionId = beaconMalfunctionComment.beaconMalfunctionId,
                 comment = beaconMalfunctionComment.comment,

@@ -1,7 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
 import { customDayjs } from '@mtes-mct/monitor-ui'
-import { array, number, object, string } from 'yup'
+import { array, boolean, number, object, string } from 'yup'
 
 import { mainStore } from '../../../../store'
 
@@ -35,6 +35,16 @@ const actionDatetimeUtcValidator = string()
     }
   })
 
+export const GearOnboardSchema = object({
+  declaredMesh: number().required('Veuillez indiquer le maillage déclaré.'),
+  controlledMesh: number().when('hasUncontrolledMesh', {
+    is: false,
+    then: number().required('Veuillez indiquer le maillage mesuré.'),
+    otherwise: number()
+  }),
+  gearWasControlled: boolean().required("Veuillez indiquer si l'engin a été contrôlé.")
+})
+
 // -----------------------------------------------------------------------------
 // Air Control Action Form
 
@@ -58,7 +68,29 @@ export const LandControlFormLiveSchema = object({
 
 export const LandControlFormClosureSchema = LandControlFormLiveSchema.concat(
   object({
-    gearOnboard: array().required('Veuillez indiquer les engins à bord.').min(1, 'Veuillez indiquer les engins à bord.')
+    // Obligations déclaratives et autorisations de pêche
+    emitsVms: string().required('Veuillez indiquer si le navire émet un signal VMS.'),
+    emitsAis: string().required('Veuillez indiquer si le navire émet un signal AIS.'),
+    logbookMatchesActivity: string().required(
+      'Veuillez indiquer si le journal de bord correspond à l’activité du navire.'
+    ),
+    licencesMatchActivity: string().required('Veuillez indiquer si les licences correspondent à l’activité du navire.'),
+
+    // Espèces à bord
+    speciesWeightControlled: boolean().required('Veuillez indiquer si le poids des espèces a été contrôlé.'),
+    speciesSizeControlled: boolean().required('Veuillez indiquer si la taille des espèces a été contrôlée.'),
+    separateStowageOfPreservedSpecies: string().required(
+      'Veuillez indiquer si les espèces soumises à plan sont séparées.'
+    ),
+
+    // Engins à bord
+    gearOnboard: array()
+      .of(GearOnboardSchema)
+      .required('Veuillez indiquer les engins à bord.')
+      .min(1, 'Veuillez indiquer les engins à bord.'),
+
+    // Qualité du contrôle
+    vesselTargeted: string().required('Veuillez indiquer si le navire est ciblé par le CNSP.')
   })
 )
 
@@ -75,7 +107,29 @@ export const SeaControlFormLiveSchema = object({
 
 export const SeaControlFormClosureSchema = SeaControlFormLiveSchema.concat(
   object({
-    gearOnboard: array().required('Veuillez indiquer les engins à bord.').min(1, 'Veuillez indiquer les engins à bord.')
+    // Obligations déclaratives et autorisations de pêche
+    emitsVms: string().required('Veuillez indiquer si le navire émet un signal VMS.'),
+    emitsAis: string().required('Veuillez indiquer si le navire émet un signal AIS.'),
+    logbookMatchesActivity: string().required(
+      'Veuillez indiquer si le journal de bord correspond à l’activité du navire.'
+    ),
+    licencesMatchActivity: string().required('Veuillez indiquer si les licences correspondent à l’activité du navire.'),
+
+    // Espèces à bord
+    speciesWeightControlled: boolean().required('Veuillez indiquer si le poids des espèces a été contrôlé.'),
+    speciesSizeControlled: boolean().required('Veuillez indiquer si la taille des espèces a été contrôlée.'),
+    separateStowageOfPreservedSpecies: string().required(
+      'Veuillez indiquer si les espèces soumises à plan sont séparées.'
+    ),
+
+    // Engins à bord
+    gearOnboard: array()
+      .of(GearOnboardSchema)
+      .required('Veuillez indiquer les engins à bord.')
+      .min(1, 'Veuillez indiquer les engins à bord.'),
+
+    // Qualité du contrôle
+    vesselTargeted: string().required('Veuillez indiquer si le navire est ciblé par le CNSP.')
   })
 )
 

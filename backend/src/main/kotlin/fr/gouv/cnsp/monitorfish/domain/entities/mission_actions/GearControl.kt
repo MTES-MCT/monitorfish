@@ -5,6 +5,7 @@ class GearControl {
     var gearName: String? = null
     var declaredMesh: Double? = null
     var controlledMesh: Double? = null
+    var hasUncontrolledMesh: Boolean = false
     var gearWasControlled: Boolean? = null
     var comments: String? = null
 }

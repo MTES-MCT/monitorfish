@@ -88,7 +88,11 @@ class UserAuthorizationCheckFilter(
             }
 
             logger.debug(
-                LoggedMessage("HTTP request: access granted.", hash(userInfoResponse.email), request.requestURI!!).toString(),
+                LoggedMessage(
+                    "HTTP request: access granted.",
+                    hash(userInfoResponse.email),
+                    request.requestURI!!,
+                ).toString(),
             )
 
             if (request.requestURI == CURRENT_USER_AUTHORIZATION_CONTROLLER_PATH) {

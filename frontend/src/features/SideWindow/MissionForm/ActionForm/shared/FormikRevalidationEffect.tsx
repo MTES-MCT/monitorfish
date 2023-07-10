@@ -1,11 +1,11 @@
 import { useFormikContext } from 'formik'
+import { useEffect } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { useDeepCompareEffect } from '../../../../../hooks/useDeepCompareEffect'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 
 /**
- * Triggers Formik validation when main form values are updated.
+ * Triggers Formik validation when mission form start/end date is updated.
  *
  * @description
  * We use this "hook" in `<ActionForm />` in order to retrigger main form-related validation rules.
@@ -16,14 +16,14 @@ export function FormikRevalidationEffect() {
 
   const debouncedValidateForm = useDebouncedCallback(validateForm, 250)
 
-  useDeepCompareEffect(
+  useEffect(
     () => {
       debouncedValidateForm()
     },
 
     // We don't want to trigger infinite re-renders since `validateForm` changes after each rendering
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mission.draft?.mainFormValues]
+    [mission.draft?.mainFormValues?.endDateTimeUtc, mission.draft?.mainFormValues?.startDateTimeUtc]
   )
 
   return <></>

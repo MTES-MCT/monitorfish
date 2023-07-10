@@ -1,4 +1,14 @@
-import { Accent, getLocalizedDayjs, Icon, IconButton, Tag, TagGroup, THEME, TagBullet } from '@mtes-mct/monitor-ui'
+import {
+  Accent,
+  getLocalizedDayjs,
+  Icon,
+  IconButton,
+  Tag,
+  TagGroup,
+  THEME,
+  TagBullet,
+  FieldError
+} from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -133,7 +143,9 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
         </InnerWrapper>
       </Wrapper>
 
-      {!initialValues.isValid && <Error>Veuillez compléter les champs manquants dans cette action de contrôle.</Error>}
+      {!initialValues.isValid && (
+        <StyledFieldError>Veuillez compléter les champs manquants dans cette action de contrôle.</StyledFieldError>
+      )}
     </>
   )
 }
@@ -203,8 +215,6 @@ const StyledTagGroup = styled(TagGroup)`
   padding-left: 32px;
 `
 
-const Error = styled.p`
-  color: ${p => p.theme.color.maximumRed};
-  font-style: italic;
-  margin: 8px 0 0 120px !important;
+const StyledFieldError = styled(FieldError)`
+  padding-left: 120px;
 `

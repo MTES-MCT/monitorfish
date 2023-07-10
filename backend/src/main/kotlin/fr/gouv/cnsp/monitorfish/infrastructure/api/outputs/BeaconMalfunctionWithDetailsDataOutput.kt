@@ -8,7 +8,9 @@ data class BeaconMalfunctionWithDetailsDataOutput(
     val actions: List<BeaconMalfunctionActionDataOutput>,
 ) {
     companion object {
-        fun fromBeaconMalfunctionWithDetails(beaconMalfunctionWithDetails: BeaconMalfunctionWithDetails): BeaconMalfunctionWithDetailsDataOutput {
+        fun fromBeaconMalfunctionWithDetails(
+            beaconMalfunctionWithDetails: BeaconMalfunctionWithDetails,
+        ): BeaconMalfunctionWithDetailsDataOutput {
             return BeaconMalfunctionWithDetailsDataOutput(
                 beaconMalfunction = BeaconMalfunctionDataOutput.fromBeaconMalfunction(
                     beaconMalfunctionWithDetails.beaconMalfunction,

@@ -34,7 +34,9 @@ data class BeaconMalfunctionCommentEntity(
     )
 
     companion object {
-        fun fromBeaconMalfunctionComment(beaconMalfunctionComment: BeaconMalfunctionComment) = BeaconMalfunctionCommentEntity(
+        fun fromBeaconMalfunctionComment(
+            beaconMalfunctionComment: BeaconMalfunctionComment,
+        ) = BeaconMalfunctionCommentEntity(
             id = beaconMalfunctionComment.id,
             beaconMalfunctionId = beaconMalfunctionComment.beaconMalfunctionId,
             comment = beaconMalfunctionComment.comment,

@@ -19,10 +19,6 @@ context('Side Window > Mission Form > Action List', () => {
 
     cy.wait(250)
 
-    cy.fill('Ajouter un engin', 'OTB')
-
-    cy.wait(250)
-
     cy.clickButton('Dupliquer l’action')
 
     cy.wait(250)
@@ -43,21 +39,12 @@ context('Side Window > Mission Form > Action List', () => {
         emitsVms: 'NOT_APPLICABLE',
         externalReferenceNumber: null,
         facade: 'MEMN',
-        faoAreas: ['27.7.b'],
+        faoAreas: ['27.8.a'],
         feedbackSheetRequired: false,
         flagState: 'FR',
         flightGoals: [],
         gearInfractions: [],
-        gearOnboard: [
-          {
-            comments: null,
-            controlledMesh: null,
-            declaredMesh: null,
-            gearCode: 'OTB',
-            gearName: 'Chaluts de fond à panneaux',
-            gearWasControlled: null
-          }
-        ],
+        gearOnboard: [],
         hasSomeGearsSeized: false,
         hasSomeSpeciesSeized: false,
         id: null,

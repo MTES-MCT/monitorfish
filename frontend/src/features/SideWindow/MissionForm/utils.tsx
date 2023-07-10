@@ -2,8 +2,15 @@ import { customDayjs, logSoftError, type Undefine } from '@mtes-mct/monitor-ui'
 import { difference } from 'lodash'
 import { omit } from 'ramda'
 
-import { LandControlFormClosureSchema, SeaControlFormClosureSchema } from './ActionForm/schemas'
+import {
+  AirControlFormLiveSchema,
+  LandControlFormClosureSchema,
+  LandControlFormLiveSchema,
+  SeaControlFormClosureSchema,
+  SeaControlFormLiveSchema
+} from './ActionForm/schemas'
 import { INITIAL_MISSION_CONTROL_UNIT, MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
+import { MainFormLiveSchema } from './MainForm/schemas'
 import { Mission } from '../../../domain/entities/mission/types'
 import { MissionAction } from '../../../domain/types/missionAction'
 import { FormError, FormErrorCode } from '../../../libs/FormError'
@@ -20,68 +27,6 @@ export function areMissionFormsValuesValid(
   actionsFormValues: MissionActionFormValues[] = []
 ): boolean {
   return !!mainFormValues && mainFormValues.isValid && !actionsFormValues.map(({ isValid }) => isValid).includes(false)
-}
-
-export function areMissionFormsClosureValuesValid(
-  mainFormValues: MissionMainFormValues,
-  actionsFormValues: MissionActionFormValues[]
-): [
-  boolean,
-  {
-    nextActionsFormValues: MissionActionFormValues[]
-    nextMainFormValues: MissionMainFormValues
-  }
-] {
-  const nextMainFormValues = {
-    ...mainFormValues
-    // There is no closure schema for the main form as of now
-    // isValid: MainFormClosureSchema.validateSync(mainFormValues)
-  }
-
-  // eslint-disable-next-line no-restricted-syntax
-  const nextActionsFormValues = actionsFormValues.map(actionFormValues => {
-    switch (actionFormValues.actionType) {
-      case MissionAction.MissionActionType.LAND_CONTROL:
-        return {
-          ...actionFormValues,
-          isValid: LandControlFormClosureSchema.isValidSync(actionFormValues)
-        }
-
-      case MissionAction.MissionActionType.SEA_CONTROL:
-        return {
-          ...actionFormValues,
-          isValid: SeaControlFormClosureSchema.isValidSync(actionFormValues)
-        }
-
-      // There is no closure schema for these action forms as of now
-      case MissionAction.MissionActionType.AIR_CONTROL:
-      case MissionAction.MissionActionType.AIR_SURVEILLANCE:
-      case MissionAction.MissionActionType.OBSERVATION:
-        return actionFormValues
-
-      default:
-        logSoftError({
-          isSideWindowError: true,
-          message: 'Unknown `actionFormValues.actionType` value.',
-          userMessage: "Une erreur est survenue pendant l'enregistrement de la mission."
-        })
-
-        return {
-          ...actionFormValues,
-          isValid: false
-        }
-    }
-  })
-
-  const areFormsValid = areMissionFormsValuesValid(nextMainFormValues, nextActionsFormValues)
-
-  return [
-    areFormsValid,
-    {
-      nextActionsFormValues,
-      nextMainFormValues
-    }
-  ]
 }
 
 /**
@@ -270,4 +215,77 @@ export function getValidMissionDataControlUnit(
   }
 
   return validMissionDataControlUnit
+}
+
+export function validateMissionForms(
+  mainFormValues: MissionMainFormValues,
+  actionsFormValues: MissionActionFormValues[],
+  isClosureValidation: boolean
+): [
+  boolean,
+  {
+    nextActionsFormValues: MissionActionFormValues[]
+    nextMainFormValues: MissionMainFormValues
+  }
+] {
+  const nextMainFormValues = {
+    ...mainFormValues,
+    // There is no closure validation schema for the main form
+    isValid: MainFormLiveSchema.isValidSync(mainFormValues)
+  }
+
+  // eslint-disable-next-line no-restricted-syntax
+  const nextActionsFormValues = actionsFormValues.map(actionFormValues => {
+    switch (actionFormValues.actionType) {
+      case MissionAction.MissionActionType.AIR_CONTROL:
+        return {
+          ...actionFormValues,
+          // There is no closure validation schema for the air control action form
+          isValid: AirControlFormLiveSchema.isValidSync(actionFormValues)
+        }
+
+      case MissionAction.MissionActionType.LAND_CONTROL:
+        return {
+          ...actionFormValues,
+          isValid: isClosureValidation
+            ? LandControlFormClosureSchema.isValidSync(actionFormValues)
+            : LandControlFormLiveSchema.isValidSync(actionFormValues)
+        }
+
+      case MissionAction.MissionActionType.SEA_CONTROL:
+        return {
+          ...actionFormValues,
+          isValid: isClosureValidation
+            ? SeaControlFormClosureSchema.isValidSync(actionFormValues)
+            : SeaControlFormLiveSchema.isValidSync(actionFormValues)
+        }
+
+      // There is no validation schema for these action forms
+      case MissionAction.MissionActionType.AIR_SURVEILLANCE:
+      case MissionAction.MissionActionType.OBSERVATION:
+        return actionFormValues
+
+      default:
+        logSoftError({
+          isSideWindowError: true,
+          message: 'Unknown `actionFormValues.actionType` value.',
+          userMessage: "Une erreur est survenue pendant l'enregistrement de la mission."
+        })
+
+        return {
+          ...actionFormValues,
+          isValid: false
+        }
+    }
+  })
+
+  const areFormsValid = areMissionFormsValuesValid(nextMainFormValues, nextActionsFormValues)
+
+  return [
+    areFormsValid,
+    {
+      nextActionsFormValues,
+      nextMainFormValues
+    }
+  ]
 }

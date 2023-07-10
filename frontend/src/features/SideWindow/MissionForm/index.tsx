@@ -13,7 +13,7 @@ import { DraftCancellationConfirmationDialog } from './shared/DraftCancellationC
 import { TitleSourceTag } from './shared/TitleSourceTag'
 import { TitleStatusTag } from './shared/TitleStatusTag'
 import {
-  areMissionFormsClosureValuesValid,
+  validateMissionForms,
   areMissionFormsValuesValid,
   getMissionActionsDataFromMissionActionsFormValues,
   getMissionDataFromMissionFormValues,
@@ -120,9 +120,10 @@ export function MissionForm() {
       }
 
       if (mustClose) {
-        const [canClose, { nextActionsFormValues, nextMainFormValues }] = areMissionFormsClosureValuesValid(
+        const [canClose, { nextActionsFormValues, nextMainFormValues }] = validateMissionForms(
           mainFormValues,
-          actionsFormValues
+          actionsFormValues,
+          true
         )
         // Stop creation or update there in case there are closure validation error
         if (!canClose) {
@@ -215,9 +216,9 @@ export function MissionForm() {
 
   const duplicateAction = useCallback(
     (actionIndex: number) => {
-      const sourceAction = omit(['id'], actionsFormValues[actionIndex]) as MissionActionFormValues
+      const actionCopy: MissionActionFormValues = omit(['id'], actionsFormValues[actionIndex])
 
-      setActionsFormValues([...actionsFormValues, sourceAction])
+      setActionsFormValues([...actionsFormValues, actionCopy])
 
       setActionFormKey(actionFormKey + 1)
       setEditedActionIndex(actionsFormValues.length - 1)
@@ -338,6 +339,43 @@ export function MissionForm() {
     setIsDeletionConfirmationDialogOpen(!isDeletionConfirmationDialogOpen)
   }, [isDeletionConfirmationDialogOpen])
 
+  const validateMissionFormsLiveValues = useDebouncedCallback(() => {
+    if (!mainFormValues) {
+      logSoftError({
+        isSideWindowError: true,
+        message: '`mainFormValues` is undefined.',
+        userMessage: "Une erreur est survenue pendant l'édition de la mission."
+      })
+
+      return
+    }
+
+    const [, { nextActionsFormValues, nextMainFormValues }] = validateMissionForms(
+      mainFormValues,
+      actionsFormValues,
+      false
+    )
+
+    setMainFormValues(nextMainFormValues)
+    setActionsFormValues(nextActionsFormValues)
+  }, 250)
+
+  // Triggers forms validation when the mission start/end date changes
+  // in order to update actions list validation messages
+  useEffect(
+    () => {
+      if (!mainFormValues) {
+        return
+      }
+
+      validateMissionFormsLiveValues()
+    },
+
+    // We want to control what triggers this hook to minimize its calls
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [mainFormValues?.endDateTimeUtc, mainFormValues?.startDateTimeUtc]
+  )
+
   // ---------------------------------------------------------------------------
   // DATA
 
@@ -393,12 +431,17 @@ export function MissionForm() {
         missionResponse.data,
         missionActionsResponse.data
       )
+      const [, { nextActionsFormValues, nextMainFormValues }] = validateMissionForms(
+        initialMainFormValues,
+        initialActionsFormValues,
+        false
+      )
 
       setActionFormKey(actionFormKey + 1)
-      setActionsFormValues(initialActionsFormValues)
+      setActionsFormValues(nextActionsFormValues)
       setIsLoading(false)
       setMainFormKey(mainFormKey + 1)
-      setMainFormValues({ ...initialMainFormValues })
+      setMainFormValues(nextMainFormValues)
       setTitle(getTitleFromMissionMainFormValues(initialMainFormValues, sideWindow.selectedPath.id))
 
       updateReduxSliceDraft()

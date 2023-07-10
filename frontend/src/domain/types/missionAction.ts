@@ -123,6 +123,7 @@ export namespace MissionAction {
     gearCode: string
     gearName: string
     gearWasControlled: boolean | undefined
+    hasUncontrolledMesh: boolean
   }
 
   export type GearInfraction = {

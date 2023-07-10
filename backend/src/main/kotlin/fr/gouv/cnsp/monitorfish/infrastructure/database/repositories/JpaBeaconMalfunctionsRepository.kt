@@ -9,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.ZonedDateTime
 
 @Repository
-class JpaBeaconMalfunctionsRepository(private val dbBeaconMalfunctionsRepository: DBBeaconMalfunctionsRepository) : BeaconMalfunctionsRepository {
+class JpaBeaconMalfunctionsRepository(
+    private val dbBeaconMalfunctionsRepository: DBBeaconMalfunctionsRepository,
+) : BeaconMalfunctionsRepository {
 
     override fun findAll(): List<BeaconMalfunction> {
         return dbBeaconMalfunctionsRepository.findAll().map { it.toBeaconMalfunction() }

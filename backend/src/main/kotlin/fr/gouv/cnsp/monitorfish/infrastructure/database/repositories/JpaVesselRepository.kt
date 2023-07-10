@@ -34,7 +34,9 @@ class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : 
 
         if (externalReferenceNumber.isNotEmpty()) {
             try {
-                return dbVesselRepository.findByExternalReferenceNumberIgnoreCaseContaining(externalReferenceNumber).toVessel()
+                return dbVesselRepository.findByExternalReferenceNumberIgnoreCaseContaining(
+                    externalReferenceNumber,
+                ).toVessel()
             } catch (e: EmptyResultDataAccessException) {
                 logger.warn("No vessel found for external marking $externalReferenceNumber", e)
             }

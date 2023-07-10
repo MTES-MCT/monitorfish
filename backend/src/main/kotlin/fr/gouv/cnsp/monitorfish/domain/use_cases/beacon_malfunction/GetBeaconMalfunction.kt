@@ -29,7 +29,9 @@ class GetBeaconMalfunction(
             beaconMalfunctionId,
         )
 
-        val riskFactor = lastPositions.find(BeaconMalfunction.getVesselFromBeaconMalfunction(beaconMalfunction))?.riskFactor
+        val riskFactor = lastPositions.find(
+            BeaconMalfunction.getVesselFromBeaconMalfunction(beaconMalfunction),
+        )?.riskFactor
         beaconMalfunction.riskFactor = riskFactor
 
         if (riskFactor == null) {

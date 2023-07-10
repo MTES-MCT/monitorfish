@@ -19,7 +19,9 @@ data class BeaconMalfunctionNotificationDataOutput(
 ) {
 
     companion object {
-        fun fromBeaconMalfunctionNotification(beaconMalfunctionNotification: BeaconMalfunctionNotification): BeaconMalfunctionNotificationDataOutput {
+        fun fromBeaconMalfunctionNotification(
+            beaconMalfunctionNotification: BeaconMalfunctionNotification,
+        ): BeaconMalfunctionNotificationDataOutput {
             return BeaconMalfunctionNotificationDataOutput(
                 beaconMalfunctionId = beaconMalfunctionNotification.beaconMalfunctionId,
                 dateTime = beaconMalfunctionNotification.dateTimeUtc,

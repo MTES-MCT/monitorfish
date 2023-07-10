@@ -12,7 +12,9 @@ data class BeaconMalfunctionActionDataOutput(
     val dateTime: ZonedDateTime,
 ) {
     companion object {
-        fun fromBeaconMalfunctionAction(beaconMalfunctionAction: BeaconMalfunctionAction): BeaconMalfunctionActionDataOutput {
+        fun fromBeaconMalfunctionAction(
+            beaconMalfunctionAction: BeaconMalfunctionAction,
+        ): BeaconMalfunctionActionDataOutput {
             return BeaconMalfunctionActionDataOutput(
                 beaconMalfunctionId = beaconMalfunctionAction.beaconMalfunctionId,
                 propertyName = beaconMalfunctionAction.propertyName,

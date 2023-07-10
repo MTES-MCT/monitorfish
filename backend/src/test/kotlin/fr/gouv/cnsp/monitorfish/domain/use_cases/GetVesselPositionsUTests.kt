@@ -282,7 +282,9 @@ class GetVesselPositionsUTests {
                 1,
             ),
         )
-        given(positionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(any(), any(), any(), any(), any())).willReturn(
+        given(
+            positionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(any(), any(), any(), any(), any()),
+        ).willReturn(
             listOf(firstPosition, fourthPosition, secondPosition, thirdPosition),
         )
 

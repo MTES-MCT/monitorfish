@@ -92,7 +92,11 @@ class JpaReportingRepository(
 
         if (ircs.isNotEmpty()) {
             return dbReportingRepository
-                .findCurrentAndArchivedByVesselIdentifier(VesselIdentifier.IRCS.toString(), ircs, fromDate.toInstant()).map {
+                .findCurrentAndArchivedByVesselIdentifier(
+                    VesselIdentifier.IRCS.toString(),
+                    ircs,
+                    fromDate.toInstant(),
+                ).map {
                     it.toReporting(mapper)
                 }
         }

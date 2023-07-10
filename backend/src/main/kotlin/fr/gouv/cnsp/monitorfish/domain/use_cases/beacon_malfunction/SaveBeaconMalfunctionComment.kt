@@ -13,7 +13,11 @@ class SaveBeaconMalfunctionComment(
     private val getBeaconMalfunction: GetBeaconMalfunction,
 ) {
     @Throws(IllegalArgumentException::class)
-    fun execute(beaconMalfunctionId: Int, comment: String, userType: BeaconMalfunctionCommentUserType): BeaconMalfunctionResumeAndDetails {
+    fun execute(
+        beaconMalfunctionId: Int,
+        comment: String,
+        userType: BeaconMalfunctionCommentUserType,
+    ): BeaconMalfunctionResumeAndDetails {
         val beaconMalfunctionComment = BeaconMalfunctionComment(
             beaconMalfunctionId = beaconMalfunctionId,
             comment = comment,

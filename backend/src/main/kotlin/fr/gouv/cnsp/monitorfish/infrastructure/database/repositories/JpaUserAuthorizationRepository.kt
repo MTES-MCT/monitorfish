@@ -9,7 +9,9 @@ import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaUserAuthorizationRepository(private val dbUserAuthorizationRepository: DBUserAuthorizationRepository) : UserAuthorizationRepository {
+class JpaUserAuthorizationRepository(
+    private val dbUserAuthorizationRepository: DBUserAuthorizationRepository,
+) : UserAuthorizationRepository {
     @Cacheable(value = ["user_authorization"])
     override fun findByHashedEmail(hashedEmail: String): UserAuthorization {
         return dbUserAuthorizationRepository.findByHashedEmail(hashedEmail).toUserAuthorization()

@@ -11,7 +11,9 @@ data class VesselBeaconMalfunctionResumeDataOutput(
     val lastBeaconMalfunctionVesselStatus: VesselStatus?,
 ) {
     companion object {
-        fun fromVesselBeaconMalfunctionResume(vesselBeaconMalfunctionsResume: VesselBeaconMalfunctionsResume): VesselBeaconMalfunctionResumeDataOutput {
+        fun fromVesselBeaconMalfunctionResume(
+            vesselBeaconMalfunctionsResume: VesselBeaconMalfunctionsResume,
+        ): VesselBeaconMalfunctionResumeDataOutput {
             return VesselBeaconMalfunctionResumeDataOutput(
                 numberOfBeaconsAtSea = vesselBeaconMalfunctionsResume.numberOfBeaconsAtSea,
                 numberOfBeaconsAtPort = vesselBeaconMalfunctionsResume.numberOfBeaconsAtPort,

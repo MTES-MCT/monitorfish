@@ -15,7 +15,11 @@ interface DBPNOAndLANAlertRepository : CrudRepository<PnoAndLanAlertEntity, UUID
             "and trip_number = :tripNumber and value->>'type' in (:types)",
         nativeQuery = true,
     )
-    fun findAlertsOfRules(types: List<String>, internalReferenceNumber: String, tripNumber: String?): List<PnoAndLanAlertEntity>
+    fun findAlertsOfRules(
+        types: List<String>,
+        internalReferenceNumber: String,
+        tripNumber: String?,
+    ): List<PnoAndLanAlertEntity>
 
     @Modifying
     @Query(

@@ -17,7 +17,10 @@ data class InfractionSuspicionDataOutput(
     val dml: String? = null,
 ) : ReportingValueDataOutput() {
     companion object {
-        fun fromInfractionSuspicion(infractionSuspicion: InfractionSuspicion, controlUnit: ControlUnit? = null): InfractionSuspicionDataOutput {
+        fun fromInfractionSuspicion(
+            infractionSuspicion: InfractionSuspicion,
+            controlUnit: ControlUnit? = null,
+        ): InfractionSuspicionDataOutput {
             return InfractionSuspicionDataOutput(
                 reportingActor = infractionSuspicion.reportingActor,
                 controlUnitId = infractionSuspicion.controlUnitId,

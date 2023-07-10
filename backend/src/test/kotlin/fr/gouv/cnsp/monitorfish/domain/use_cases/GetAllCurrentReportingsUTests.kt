@@ -62,7 +62,11 @@ class GetAllCurrentReportingsUTests {
             .willReturn(true)
 
         // When
-        val reportings = GetAllCurrentReportings(reportingRepository, lastPositionRepository, getAllControlUnits).execute()
+        val reportings = GetAllCurrentReportings(
+            reportingRepository,
+            lastPositionRepository,
+            getAllControlUnits,
+        ).execute()
 
         // Then
         assertThat(reportings).hasSize(1)

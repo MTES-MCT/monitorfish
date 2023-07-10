@@ -11,7 +11,9 @@ import jakarta.transaction.Transactional
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaFleetSegmentRepository(private val dbFleetSegmentRepository: DBFleetSegmentRepository) : FleetSegmentRepository {
+class JpaFleetSegmentRepository(
+    private val dbFleetSegmentRepository: DBFleetSegmentRepository,
+) : FleetSegmentRepository {
 
     override fun findAll(): List<FleetSegment> {
         return dbFleetSegmentRepository.findAll().map {

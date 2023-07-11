@@ -57,7 +57,7 @@ services:
   geoserver:
     container_name: monitorfish_geoserver
     image: kartoza/geoserver:2.18.0
-    restart: always:5
+    restart: on-failure:5
     ports:
       - 8001:8080
     volumes:

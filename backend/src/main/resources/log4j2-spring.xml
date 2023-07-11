@@ -1,7 +1,9 @@
 <Configuration packages="org.apache.logging.log4j.core,io.sentry.log4j2">
     <Properties>
-        <!-- This property is user to select the right <Console> -->
+        <!-- This property is used to select the right <Console> -->
         <Property name="ENV">${env:SPRING_PROFILES_ACTIVE:-local}</Property>
+        <!-- This property is used to activate Sentry only in prod env> -->
+        <Property name="SENTRY_DSN">${env:MONITORFISH_SENTRY_DSN:-none}</Property>
     </Properties>
     <Appenders>
         <Console name="dev" target="SYSTEM_OUT">
@@ -23,8 +25,7 @@
             <PatternLayout
                 pattern="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} %highlight{${LOG_LEVEL_PATTERN:-%5p}}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=blue} %style{${sys:PID}}{magenta} [%15.15t] %style{%-40.40C{1.}}{cyan} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
         </Console>
-        <Sentry name="Sentry"
-                dsn="https://a5f3272efa794bb9ada2ffea90f2fec5@sentry.incubateur.net/8" />
+        <Sentry name="Sentry" dsn="${SENTRY_DSN}" />
         <!-- This path is the path within the docker image -->
         <RollingFile name="Kibana" fileName="/home/monitorfish/logs/kibana.log"
                      filePattern="/home/monitorfish/logs/${date:yyyy-MM}/kibana-%d{yyyy-MM-dd}-%i.log.gz">

@@ -215,6 +215,7 @@ def transform_controls(controls: pd.DataFrame):
 
         gear_data_df = controls[col_map["column_names_to_json_keys"].keys()]
         gear_data_df = gear_data_df.rename(columns=col_map["column_names_to_json_keys"])
+        gear_data_df["hasUncontrolledMesh"] = gear_data_df.controlledMesh.isna()
 
         gear_data_series = df_to_dict_series(
             df=gear_data_df.dropna(subset=["gearCode"]),

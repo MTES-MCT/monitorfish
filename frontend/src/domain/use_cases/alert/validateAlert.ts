@@ -24,9 +24,9 @@ export const validateAlert =
 
     validateAlertFromAPI(id)
       .then(() => {
-        // We dispatch this action to update the reportings list
+        // We dispatch this action to update the reporting list
         // since it depends on the the alerts list that we just updated
-        dispatch(getVesselReportings(false))
+        dispatch(getVesselReportings(true))
 
         const validatedAlert = previousAlertsWithValidatedFlag.find(alert => alert.id === id)
         if (!validatedAlert) {

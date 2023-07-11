@@ -28,7 +28,7 @@ export function Reportings() {
   const previousSelectedVesselIdentity = usePrevious(selectedVesselIdentity)
 
   useEffect(() => {
-    dispatch(getVesselReportings(false))
+    dispatch(getVesselReportings(true))
   }, [dispatch, selectedVesselIdentity])
 
   useEffect(() => {

@@ -6,8 +6,8 @@ import type { RetryableUseCase } from '../../../libs/DisplayedError'
 
 /**
  * Dispatch:
- * - A displayedError to be shown in the vessel sidebar if the use-case was triggered by the user
  * - A toast error if the use-case was triggered by the cron
+ * - A displayedError to be shown in the vessel sidebar if the use-case was triggered by the user
  */
 export const displayOrLogError =
   (

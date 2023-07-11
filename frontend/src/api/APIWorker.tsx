@@ -138,7 +138,7 @@ export function APIWorker() {
     } else if (vesselSidebarTab === VesselSidebarTab.CONTROLS) {
       dispatch(getVesselControls(false))
     } else if (vesselSidebarTab === VesselSidebarTab.REPORTING) {
-      dispatch(getVesselReportings(true))
+      dispatch(getVesselReportings(false))
     } else if (isSuperUser && vesselSidebarTab === VesselSidebarTab.ERSVMS) {
       dispatch(getVesselBeaconMalfunctions(false))
     }

@@ -70,8 +70,7 @@ export type RegulatoryState = {
   regulatoryLayerLawTypes: RegulatoryLawTypes | undefined
   // TODO Type this prop.
   regulatoryTopics: Record<string, any>[]
-  // TODO Type this prop.
-  regulatoryTopicsOpened: Record<string, any>[]
+  regulatoryTopicsOpened: string[]
   // TODO Type this prop.
   regulatoryZoneMetadata: Record<string, any> | null
   regulatoryZoneMetadataPanelIsOpen: boolean
@@ -102,8 +101,7 @@ const regulatorySlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'regulatory',
   reducers: {
-    // TODO Type these params.
-    addRegulatoryTopicOpened(state, action: PayloadAction<Record<string, any>>) {
+    addRegulatoryTopicOpened(state, action: PayloadAction<string>) {
       state.regulatoryTopicsOpened = [...state.regulatoryTopicsOpened, action.payload]
     },
 
@@ -140,9 +138,12 @@ const regulatorySlice = createSlice({
       state.regulatoryZoneMetadata = null
     },
 
-    removeRegulatoryTopicOpened(state, action) {
-      state.regulatoryTopicsOpened = state.regulatoryTopicsOpened.filter(e => e !== action.payload)
+    removeRegulatoryTopicOpened(state, action: PayloadAction<string>) {
+      state.regulatoryTopicsOpened = state.regulatoryTopicsOpened.filter(
+        regulatoryTopicOpened => regulatoryTopicOpened !== action.payload
+      )
     },
+
     /**
      * Remove regulatory zone(s) from "My Zones" regulatory selection, by providing a topic name to remove multiple zones
      * or simply the zone name to remove a specified zone
@@ -183,28 +184,35 @@ const regulatorySlice = createSlice({
         JSON.stringify(nextSelectedRegulatoryLayerIds)
       )
     },
+
     resetLoadingRegulatoryZoneMetadata(state) {
       state.loadingRegulatoryZoneMetadata = false
     },
+
     resetRegulatoryGeometriesToPreview(state) {
       state.regulatoryZonesToPreview = []
     },
+
     setIsReadyToShowRegulatoryZones(state) {
       state.isReadyToShowRegulatoryLayers = true
     },
+
     setLawTypeOpened(state, action) {
       state.lawTypeOpened = action.payload
     },
+
     setLayersTopicsByRegTerritory(state, action) {
       if (action.payload) {
         state.layersTopicsByRegTerritory = action.payload
       }
     },
+
     setLoadingRegulatoryZoneMetadata(state) {
       state.loadingRegulatoryZoneMetadata = true
       state.regulatoryZoneMetadata = null
       state.regulatoryZoneMetadataPanelIsOpen = true
     },
+
     /**
      * Set the regulation searched zone extent - used to fit the extent into the OpenLayers view
      * @function setProcessingRegulationSearchedZoneExtent

@@ -1,9 +1,16 @@
-import React from 'react'
+// TODO Remove temporary `any`, `as any` and `@ts-ignore` (fresh migration to TS).
+
 import { Label } from './RegulatoryMetadata.style'
 import { COLORS } from '../../../../../constants/constants'
-import InfoPoint from '../../../../Backoffice/edit_regulation/InfoPoint'
+import { InfoPoint } from '../../../../Backoffice/edit_regulation/InfoPoint'
 
-const CodeAndName = ({ code, name, isCategory, categoriesToGears }) => {
+export type CodeAndNameProps = {
+  code: string
+  name: string
+  isCategory?: boolean
+  categoriesToGears?: any
+}
+export function CodeAndName({ code, name, isCategory = false, categoriesToGears }: CodeAndNameProps) {
   return (
     <Label>
       {`${code ? `${code} ${name ? `(${name})` : ''}` : `${name ? `${name}` : ''}`}`}
@@ -21,5 +28,3 @@ const CodeAndName = ({ code, name, isCategory, categoriesToGears }) => {
     </Label>
   )
 }
-
-export default CodeAndName

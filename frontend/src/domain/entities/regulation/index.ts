@@ -337,6 +337,7 @@ export const DEFAULT_AUTHORIZED_REGULATED_GEARS: RegulatedGears = {
   allPassiveGears: undefined,
   allTowedGears: undefined,
   derogation: undefined,
+  otherInfo: undefined,
   regulatedGearCategories: {},
   regulatedGears: [],
   selectedCategoriesAndGears: []
@@ -347,6 +348,7 @@ export const DEFAULT_UNAUTHORIZED_REGULATED_GEARS: RegulatedGears = {
   allPassiveGears: undefined,
   allTowedGears: undefined,
   derogation: undefined,
+  otherInfo: undefined,
   regulatedGearCategories: {},
   regulatedGears: [],
   selectedCategoriesAndGears: []

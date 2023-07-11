@@ -1,10 +1,9 @@
-// TODO Remove temporary `as any` and `@ts-ignore` (fresh migration to TS).
+// TODO Remove temporary `any`, `as any` and `@ts-ignore` (fresh migration to TS).
 
 import { memo, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../constants/constants'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import {
   addRegulatoryTopicOpened,
@@ -133,8 +132,7 @@ function UnmemoizedRegulatoryZone({
     >
       <Rectangle
         onClick={() => dispatch(zoomInLayer({ topicAndZone: regulatoryZone }))}
-        // @ts-ignore
-        vectorLayerStyle={vectorLayerStyle}
+        $vectorLayerStyle={vectorLayerStyle}
       />
       <ZoneText
         data-cy="regulatory-layers-my-zones-zone"
@@ -192,19 +190,21 @@ function UnmemoizedRegulatoryZone({
   )
 }
 
-// TODO Remove this `any`.
-const Rectangle = styled.div<any>`
+const Rectangle = styled.div<{
+  // TODO I don't understand this `ol/Style` type.
+  $vectorLayerStyle: any
+}>`
   width: 14px;
   height: 14px;
-  background: ${props =>
-    props.vectorLayerStyle && props.vectorLayerStyle.getFill()
-      ? props.vectorLayerStyle.getFill().getColor()
-      : props.theme.color.lightGray};
+  background: ${p =>
+    p.$vectorLayerStyle && p.$vectorLayerStyle.getFill()
+      ? p.$vectorLayerStyle.getFill().getColor()
+      : p.theme.color.lightGray};
   border: 1px solid
-    ${props =>
-      props.vectorLayerStyle && props.vectorLayerStyle.getStroke()
-        ? props.vectorLayerStyle.getStroke().getColor()
-        : props.theme.color.slateGray};
+    ${p =>
+      p.$vectorLayerStyle && p.$vectorLayerStyle.getStroke()
+        ? p.$vectorLayerStyle.getStroke().getColor()
+        : p.theme.color.slateGray};
   display: inline-block;
   margin-right: 10px;
   margin-left: 2px;
@@ -231,7 +231,7 @@ const Zone = styled.span<{
   user-select: none;
   font-size: 13px;
   font-weight: 300;
-  ${props => (props.isLast ? `border-bottom: 1px solid ${COLORS.lightGray}; height: 27px;` : 'height: 28px;')}
+  ${p => (p.isLast ? `border-bottom: 1px solid ${p.theme.color.lightGray}; height: 27px;` : 'height: 28px;')}
 
   :hover {
     background: ${theme.color.blueGray['25']};

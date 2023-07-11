@@ -1,18 +1,28 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 import { GreenCircle, RedCircle } from '../../../../../commonStyles/Circle.style'
-import { useSelector } from 'react-redux'
 import { Label, List, SectionTitle } from '../RegulatoryMetadata.style'
-import GearsOrGearCategories from './GearsOrGearCategories'
+import { GearsOrGearCategories } from './GearsOrGearCategories'
 import { COLORS } from '../../../../../../constants/constants'
-import InfoPoint from '../../../../../Backoffice/edit_regulation/InfoPoint'
+import { InfoPoint } from '../../../../../Backoffice/edit_regulation/InfoPoint'
 import { getGroupCategories, REGULATED_GEARS_KEYS } from '../../../../../../domain/entities/backoffice'
 import { INFO_TEXT } from '../../../../../Backoffice/constants'
 import { theme } from '../../../../../../ui/theme'
+import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
+import type { RegulatedGears } from '../../../../../../domain/types/regulation'
 
-const RegulatedGears = ({ authorized, regulatedGearsObject, hasPreviousRegulatedGearsBloc }) => {
-  const { groupsToCategories, categoriesToGears } = useSelector(state => state.gear)
+export type RegulatedGearsProps = {
+  authorized: boolean
+  regulatedGearsObject: RegulatedGears
+  hasPreviousRegulatedGearsBloc?: boolean
+}
+export function RegulatedGears({
+  authorized,
+  regulatedGearsObject,
+  hasPreviousRegulatedGearsBloc = false
+}: RegulatedGearsProps) {
+  const { groupsToCategories, categoriesToGears } = useMainAppSelector(state => state.gear)
 
   const { regulatedGears, regulatedGearCategories, derogation, otherInfo, allGears, allTowedGears, allPassiveGears } =
     regulatedGearsObject
@@ -42,7 +52,7 @@ const RegulatedGears = ({ authorized, regulatedGearsObject, hasPreviousRegulated
 
   return (
     <div data-cy={`${dataCyTarget}-regulatory-layers-metadata-gears`}>
-      <SectionTitle hasPreviousRegulatedGearsBloc={hasPreviousRegulatedGearsBloc}>
+      <SectionTitle $hasPreviousRegulatedGearsBloc={hasPreviousRegulatedGearsBloc}>
         {authorized ? <GreenCircle margin={'0 5px 0 0'} /> : <RedCircle margin={'0 5px 0 0'} />}
         Engins {authorized ? 'réglementés' : 'interdits'}
       </SectionTitle>
@@ -97,5 +107,3 @@ const DerogationMessage = styled.span`
   color: ${COLORS.slateGray};
   margin-left: 4px;
 `
-
-export default RegulatedGears

@@ -1,3 +1,4 @@
+import type { GEAR_MESH_SIZE } from '../entities/backoffice'
 import type { GeoJSON } from './GeoJSON'
 
 export type BaseRegulatoryZone = {
@@ -34,7 +35,8 @@ export type RegulatoryText = {
 // TODO Check that.
 /** key is a topic */
 // TODO Is it a matrix? The name doesn't reflect that.
-export type RegulatoryTopics = Map<string, RegulatoryZone[]>
+// export type RegulatoryTopics = Map<string, RegulatoryZone[]>
+export type RegulatoryTopics = RegulatoryZone[]
 
 // TODO Check that.
 /** key is the law type name */
@@ -85,13 +87,15 @@ export type Gear = {
   code: string
   groupId: string
   mesh: string[]
-  /** (One of greaterThan, greaterThanOrEqualTo, lowerThan, lowerThanOrEqualTo, equal, between) */
-  meshType: string
+  meshType: GEAR_MESH_SIZE
   name: string
+  // TODO Check this prop.
+  remarks: string
 }
 
 export type GearCategory = {
   mesh: string[]
+  // TODO Is it also a `GEAR_MESH_SIZE`?
   meshType: string
   name: string
 }
@@ -107,6 +111,8 @@ export type RegulatedGears = {
   allPassiveGears: boolean | undefined
   allTowedGears: boolean | undefined
   derogation: boolean | undefined
+  // TODO Check this prop.
+  otherInfo: string | undefined
   regulatedGearCategories: Record<string, GearCategory>
   regulatedGears: Gear[]
   /**  a list of categories name and gears code */

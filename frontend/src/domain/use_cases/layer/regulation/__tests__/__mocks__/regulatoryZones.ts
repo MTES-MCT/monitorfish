@@ -21,6 +21,7 @@ export const regulatoryZones: RegulatoryZone[] = [
         allPassiveGears: undefined,
         allTowedGears: undefined,
         derogation: undefined,
+        otherInfo: undefined,
         regulatedGearCategories: {},
         regulatedGears: [],
         selectedCategoriesAndGears: ['Chalut']
@@ -31,6 +32,7 @@ export const regulatoryZones: RegulatoryZone[] = [
         allPassiveGears: undefined,
         allTowedGears: undefined,
         derogation: undefined,
+        otherInfo: undefined,
         regulatedGearCategories: {},
         regulatedGears: [],
         selectedCategoriesAndGears: []
@@ -110,6 +112,7 @@ export const regulatoryZones: RegulatoryZone[] = [
         allPassiveGears: undefined,
         allTowedGears: undefined,
         derogation: undefined,
+        otherInfo: undefined,
         regulatedGearCategories: {},
         regulatedGears: [],
         selectedCategoriesAndGears: []
@@ -120,6 +123,7 @@ export const regulatoryZones: RegulatoryZone[] = [
         allPassiveGears: undefined,
         allTowedGears: undefined,
         derogation: undefined,
+        otherInfo: undefined,
         regulatedGearCategories: {},
         regulatedGears: [],
         selectedCategoriesAndGears: []

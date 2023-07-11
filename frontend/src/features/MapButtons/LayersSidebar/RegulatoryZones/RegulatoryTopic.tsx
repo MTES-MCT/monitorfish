@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { batch, useDispatch, useSelector } from 'react-redux'
+// TODO Remove temporary `any`/`as any` and `@ts-ignore` (fresh migration to TS).
+
+import { memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { RegulatoryZone } from './RegulatoryZone'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
@@ -17,30 +18,46 @@ import {
 } from '../../../../domain/shared_slices/Regulatory'
 import { showRegulatoryTopic } from '../../../../domain/use_cases/layer/regulation/showRegulatoryTopic'
 import hideLayer from '../../../../domain/use_cases/layer/hideLayer'
-import { theme } from '../../../../ui/theme'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import type { Promisable } from 'type-fest'
 
-const RegulatoryTopic = props => {
-  const {
-    callRemoveRegulatoryZoneFromMySelection,
-    regulatoryTopic,
-    allowRemoveZone,
-    increaseNumberOfZonesOpened,
-    decreaseNumberOfZonesOpened,
-    regulatoryZones,
-    isLastItem,
-    isEditable,
-    updateLayerName
-  } = props
-
-  const dispatch = useDispatch()
-  const ref = useRef()
-  const showedLayers = useSelector(state => state.layer.showedLayers)
-  const { regulatoryZoneMetadata, regulatoryTopicsOpened } = useSelector(state => state.regulatory)
+export type RegulatoryTopicProps = {
+  callRemoveRegulatoryZoneFromMySelection: any
+  regulatoryTopic: string
+  allowRemoveZone: any
+  increaseNumberOfZonesOpened: any
+  decreaseNumberOfZonesOpened: any
+  regulatoryZones: any
+  isLastItem: any
+  isEditable: any
+  updateLayerName?: (topic: string, value: string) => Promisable<void>
+}
+function UnmemoizedRegulatoryTopic({
+  callRemoveRegulatoryZoneFromMySelection,
+  regulatoryTopic,
+  allowRemoveZone,
+  increaseNumberOfZonesOpened,
+  decreaseNumberOfZonesOpened,
+  regulatoryZones,
+  isLastItem,
+  isEditable,
+  updateLayerName
+}: RegulatoryTopicProps) {
+  const dispatch = useMainAppDispatch()
+  const ref = useRef<HTMLLIElement | null>(null)
+  const showedLayers = useMainAppSelector(state => state.layer.showedLayers)
+  const { regulatoryZoneMetadata, regulatoryTopicsOpened } = useMainAppSelector(state => state.regulatory)
   const lawType = regulatoryZones[0]?.lawType
-  const numberOfTotalZones = useSelector(state => {
+  const numberOfTotalZones = useMainAppSelector(state => {
     const regulatoryLayerLawTypes = state.regulatory.regulatoryLayerLawTypes
-    if (regulatoryLayerLawTypes && lawType && regulatoryTopic) {
-      return regulatoryLayerLawTypes[lawType][regulatoryTopic]?.length
+    if (regulatoryLayerLawTypes && lawType && regulatoryTopic && regulatoryLayerLawTypes[lawType]) {
+      const regulatoryLayerLawType = regulatoryLayerLawTypes[lawType]
+      if (!regulatoryLayerLawType) {
+        return 0
+      }
+
+      return regulatoryLayerLawType[regulatoryTopic]?.length
     }
   })
 
@@ -52,7 +69,7 @@ const RegulatoryTopic = props => {
   const onMouseLeave = () => isOver && setIsOver(false)
 
   useLayoutEffect(() => {
-    if (regulatoryTopicsOpened[regulatoryTopicsOpened.length - 1] === regulatoryTopic) {
+    if (ref.current && regulatoryTopicsOpened[regulatoryTopicsOpened.length - 1] === regulatoryTopic) {
       ref.current.scrollIntoView({ block: 'start', inline: 'nearest' })
     }
   }, [])
@@ -114,10 +131,8 @@ const RegulatoryTopic = props => {
 
   const onRegulatoryTopicClick = useCallback(() => {
     if (isOpen) {
-      batch(() => {
-        dispatch(removeRegulatoryTopicOpened(regulatoryTopic))
-        dispatch(closeRegulatoryZoneMetadataPanel())
-      })
+      dispatch(removeRegulatoryTopicOpened(regulatoryTopic))
+      dispatch(closeRegulatoryZoneMetadataPanel())
     } else {
       dispatch(addRegulatoryTopicOpened(regulatoryTopic))
     }
@@ -126,8 +141,8 @@ const RegulatoryTopic = props => {
   return (
     <NamespaceContext.Consumer>
       {namespace => (
-        <Row ref={ref} data-cy="regulatory-layer-topic-row" isOpen={isOpen}>
-          <Zone isLastItem={isLastItem} isOpen={isOpen} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+        <Row ref={ref} data-cy="regulatory-layer-topic-row">
+          <Zone $isLastItem={isLastItem} $isOpen={isOpen} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
             <Name data-cy={'regulatory-layers-my-zones-topic'} title={regulatoryTopic} onClick={onRegulatoryTopicClick}>
               {isTopicInEdition ? (
                 <RegulatoryTopicInput
@@ -149,10 +164,17 @@ const RegulatoryTopic = props => {
               />
             ) : null}
             {atLeastOneTopicIsShowed ? (
-              <ShowIcon title="Cacher la couche" onClick={() => hideTopic(namespace)} />
+              <ShowIcon
+                // TODO Use an `<IconButton />`.
+                // @ts-ignore
+                title="Cacher la couche"
+                onClick={() => hideTopic(namespace)}
+              />
             ) : (
               <HideIcon
                 data-cy={'regulatory-layers-my-zones-topic-show'}
+                // TODO Use an `<IconButton />`.
+                // @ts-ignore
                 title="Afficher la couche"
                 onClick={() => showTopic(namespace)}
               />
@@ -170,7 +192,7 @@ const RegulatoryTopic = props => {
               />
             ) : null}
           </Zone>
-          <List isOpen={isOpen} name={regulatoryTopic.replace(/\s/g, '-')} zonesLength={regulatoryZones.length}>
+          <List $isOpen={isOpen} $zonesLength={regulatoryZones.length}>
             {regulatoryZones && showedLayers
               ? regulatoryZones.map((regulatoryZone, index) => {
                   return (
@@ -178,7 +200,7 @@ const RegulatoryTopic = props => {
                       isLast={regulatoryZones.length === index + 1}
                       regulatoryZone={regulatoryZone}
                       key={`${regulatoryZone.topic}:${regulatoryZone.zone}`}
-                      callRemoveRegulatoryZoneFromMySelection={props.callRemoveRegulatoryZoneFromMySelection}
+                      callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
                       namespace={namespace}
                       allowRemoveZone={allowRemoveZone}
                       isEditable={isEditable}
@@ -220,25 +242,31 @@ const ZonesNumber = styled.span`
   margin-right: 10px;
 `
 
-const Zone = styled.span`
+const Zone = styled.span<{
+  $isLastItem: boolean
+  $isOpen: boolean
+}>`
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   user-select: none;
   font-weight: 500;
-  ${props => (!props.isOpen && props.isLastItem ? null : `border-bottom: 1px solid ${COLORS.lightGray};`)}
+  ${p => (!p.$isOpen && p.$isLastItem ? null : `border-bottom: 1px solid ${p.theme.color.lightGray};`)}
 
   :hover {
-    background: ${theme.color.blueGray['25']};
+    background: ${p => p.theme.color.blueGray['25']};
   }
 `
 
-const List = styled.div`
+const List = styled.div<{
+  $isOpen: boolean
+  $zonesLength: number
+}>`
   height: inherit;
   overflow: hidden;
   transition: all 0.5s;
-  height: ${props => (props.isOpen ? props.zonesLength * 36 : 0)}px;
+  height: ${p => (p.$isOpen ? p.$zonesLength * 36 : 0)}px;
 `
 
 const Row = styled.li`
@@ -258,4 +286,4 @@ const Row = styled.li`
   display: block;
 `
 
-export default React.memo(RegulatoryTopic)
+export const RegulatoryTopic = memo(UnmemoizedRegulatoryTopic)

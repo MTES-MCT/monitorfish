@@ -1,23 +1,29 @@
-import React from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../../constants/constants'
-import RegulatoryLayerSearchResultTopic from './RegulatoryLayerSearchResultTopic'
+import { RegulatoryLayerSearchResultTopic } from './RegulatoryLayerSearchResultTopic'
 
-const RegulatoryLayerSearchResultLawType = ({ regulatoryLayerLawType, topic }) => {
+export type RegulatoryLayerSearchResultLawTypeProps = {
+  regulatoryLayerLawType: any
+  topic: any
+}
+export function RegulatoryLayerSearchResultLawType({
+  regulatoryLayerLawType,
+  topic
+}: RegulatoryLayerSearchResultLawTypeProps) {
   return (
     <Wrapper>
-      <LayerLawType >
-        {regulatoryLayerLawType}
-      </LayerLawType>
-      {Object.keys(topic).length > 0 && Object.entries(topic).map(([regulatoryLayerTopic, topicDetails]) => {
-        return <RegulatoryLayerSearchResultTopic
-          key={regulatoryLayerTopic}
-          regulatoryLayerLawType={regulatoryLayerLawType}
-          regulatoryLayerTopic={regulatoryLayerTopic}
-          topicDetails={topicDetails}
-        />
-      })}
+      <LayerLawType>{regulatoryLayerLawType}</LayerLawType>
+      {Object.keys(topic).length > 0 &&
+        Object.entries(topic).map(([regulatoryLayerTopic, topicDetails]) => {
+          return (
+            <RegulatoryLayerSearchResultTopic
+              key={regulatoryLayerTopic}
+              regulatoryLayerLawType={regulatoryLayerLawType}
+              regulatoryLayerTopic={regulatoryLayerTopic}
+              topicDetails={topicDetails}
+            />
+          )
+        })}
     </Wrapper>
   )
 }
@@ -46,7 +52,7 @@ const LayerLawType = styled.span`
   font-size: 16px;
   font-weight: 700;
   padding-left: 18px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
 `
 
 export default RegulatoryLayerSearchResultLawType

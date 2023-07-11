@@ -103,4 +103,21 @@ context('Vessel sidebar controls tab', () => {
       .eq(1)
       .contains(`CONTRÔLE EN MER DU ${getDate(yearBeforeMinusOneMonth.toISOString())}`)
   })
+
+  it('A control mission Should be opened', () => {
+    // Given
+    cy.get('.VESSELS_POINTS').click(460, 480, { force: true, timeout: 10000 })
+    cy.wait(200)
+    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+
+    // When
+    cy.get('*[data-cy="vessel-menu-controls"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="vessel-controls"]', { timeout: 10000 }).should('be.visible')
+    cy.get('*[data-cy="vessel-controls-year"]').first().click({ timeout: 10000 })
+
+    // Click on Modify mission button
+    cy.intercept('http://localhost:8081/api/v1/missions/2').as('openMission')
+    cy.clickButton('Modifier le CR du contrôle')
+    cy.wait('@openMission')
+  })
 })

@@ -19,7 +19,7 @@ export function Body() {
   const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
   const { healthcheckTextWarning } = useMainAppSelector(state => state.global)
-  const { vesselSidebarError } = useMainAppSelector(state => state.displayedError)
+  const vesselSidebarError = useMainAppSelector(state => state.displayedError.vesselSidebarError)
   const { selectedVessel, vesselSidebarTab } = useMainAppSelector(state => state.vessel)
 
   if (vesselSidebarError) {
@@ -27,9 +27,11 @@ export function Body() {
       <ErrorFallback data-cy="vessel-sidebar-error">
         🔌 {vesselSidebarError.message}
         <br />
-        <RetryButton accent={Accent.PRIMARY} onClick={() => dispatch(retry(vesselSidebarError.useCase))}>
-          Réessayer
-        </RetryButton>
+        {vesselSidebarError.useCase && (
+          <RetryButton accent={Accent.PRIMARY} onClick={() => dispatch(retry(vesselSidebarError.useCase))}>
+            Réessayer
+          </RetryButton>
+        )}
       </ErrorFallback>
     )
   }

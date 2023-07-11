@@ -47,7 +47,7 @@ import type { MissionAction } from '../../../domain/types/missionAction'
 
 export function MissionForm() {
   const sideWindow = useMainAppSelector(store => store.sideWindow)
-  const { missionFormError } = useMainAppSelector(state => state.displayedError)
+  const missionFormError = useMainAppSelector(state => state.displayedError.missionFormError)
 
   const headerDivRef = useRef<HTMLDivElement | null>(null)
   const originalMissionRef = useRef<MissionWithActions | undefined>(undefined)
@@ -412,12 +412,14 @@ export function MissionForm() {
 
   if (missionFormError) {
     return (
-      <ErrorFallback data-cy="vessel-sidebar-error">
+      <ErrorFallback data-cy="mission-form-error">
         🔌 {missionFormError.message}
         <br />
-        <RetryButton accent={Accent.PRIMARY} onClick={() => dispatch(retry(missionFormError.useCase))}>
-          Réessayer
-        </RetryButton>
+        {missionFormError.useCase && (
+          <RetryButton accent={Accent.PRIMARY} onClick={() => dispatch(retry(missionFormError.useCase))}>
+            Réessayer
+          </RetryButton>
+        )}
       </ErrorFallback>
     )
   }

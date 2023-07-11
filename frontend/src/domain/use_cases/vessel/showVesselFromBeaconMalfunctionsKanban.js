@@ -24,7 +24,7 @@ export const showVesselFromBeaconMalfunctionsKanban = (beaconMalfunction, openVM
     await dispatch(setSelectedVesselCustomTrackRequest(trackRequest))
   }
 
-  await dispatch(showVessel(beaconMalfunction, false, false))
+  await dispatch(showVessel(beaconMalfunction, false, true))
 
   if (openVMRERSTab) {
     dispatch(showVesselSidebarTab(VesselSidebarTab.ERSVMS))

@@ -119,7 +119,7 @@ export function APIWorker() {
       }
 
       vesselBeaconMalfunctionInterval.current = setInterval(() => {
-        dispatch(getVesselBeaconMalfunctions(true))
+        dispatch(getVesselBeaconMalfunctions(false))
       }, THIRTY_SECONDS)
     }
 
@@ -134,13 +134,13 @@ export function APIWorker() {
     }
 
     if (vesselSidebarTab === VesselSidebarTab.VOYAGES && selectedVesselIdentity) {
-      dispatch(getVesselLogbook(selectedVesselIdentity, undefined, true))
+      dispatch(getVesselLogbook(selectedVesselIdentity, undefined, false))
     } else if (vesselSidebarTab === VesselSidebarTab.CONTROLS) {
-      dispatch(getVesselControls(true))
+      dispatch(getVesselControls(false))
     } else if (vesselSidebarTab === VesselSidebarTab.REPORTING) {
       dispatch(getVesselReportings(true))
     } else if (isSuperUser && vesselSidebarTab === VesselSidebarTab.ERSVMS) {
-      dispatch(getVesselBeaconMalfunctions(true))
+      dispatch(getVesselBeaconMalfunctions(false))
     }
 
     setUpdateVesselSidebarTab(false)

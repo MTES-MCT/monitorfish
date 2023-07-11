@@ -28,7 +28,7 @@ export const getMission =
       }
     } catch (error) {
       // For this error, we do not permit the user to retry the use-case
-      dispatch(displayOrLogError(error as Error, undefined, false, 'missionFormError'))
+      dispatch(displayOrLogError(error as Error, undefined, true, 'missionFormError'))
     }
 
     return undefined

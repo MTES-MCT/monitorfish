@@ -475,4 +475,18 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.get('h1').should('contain.text', 'Missions et contrôles')
   })
+
+  it('Should display an error message When a mission could not be fetched', () => {
+    cy.intercept(
+      {
+        method: 'GET',
+        path: '/api/v1/missions/6',
+        times: 1
+      },
+      { statusCode: 400 }
+    ).as('getMissionStubbed')
+    editSideWindowMissionListMissionWithId(6, SeaFrontGroup.MED)
+    cy.wait('@getMissionStubbed')
+    cy.get('*[data-cy="mission-form-error"]').contains("Nous n'avons pas pu récupérer la mission")
+  })
 })

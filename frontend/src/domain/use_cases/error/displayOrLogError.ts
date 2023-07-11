@@ -10,7 +10,7 @@ import type { RetryableUseCase } from '../../../libs/DisplayedError'
  * - A toast error if the use-case was triggered by the cron
  */
 export const displayOrLogError =
-  (error: Error, retryableUseCase: RetryableUseCase, isFromCron: boolean, displayedErrorBoundary: string) =>
+  (error: Error, retryableUseCase: RetryableUseCase | undefined, isFromCron: boolean, displayedErrorBoundary: string) =>
   async dispatch => {
     if (!Object.keys(INITIAL_STATE).includes(displayedErrorBoundary)) {
       return

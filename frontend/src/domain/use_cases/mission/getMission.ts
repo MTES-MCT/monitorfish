@@ -27,17 +27,8 @@ export const getMission =
         actions: missionActions
       }
     } catch (error) {
-      dispatch(
-        displayOrLogError(
-          error as Error,
-          {
-            func: getMission,
-            parameters: [missionId]
-          },
-          false,
-          'missionFormError'
-        )
-      )
+      // For this error, we do not permit the user to retry the use-case
+      dispatch(displayOrLogError(error as Error, undefined, false, 'missionFormError'))
     }
 
     return undefined

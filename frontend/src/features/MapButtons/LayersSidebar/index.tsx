@@ -3,9 +3,9 @@ import styled from 'styled-components'
 
 import { AdministrativeZones } from './AdministrativeZones'
 import { BaseMaps } from './BaseMaps'
-import RegulatoryZones from './RegulatoryZones'
-import RegulatoryZoneMetadata from './RegulatoryZones/RegulatoryZoneMetadata'
-import RegulatoryLayerSearch from './RegulatoryZones/search/RegulatoryLayerSearch'
+import { RegulatoryZones } from './RegulatoryZones'
+import { RegulatoryZoneMetadata } from './RegulatoryZones/RegulatoryZoneMetadata'
+import { RegulatoryLayerSearch } from './RegulatoryZones/search/RegulatoryLayerSearch'
 import { COLORS } from '../../../constants/constants'
 import { NamespaceContext } from '../../../context/NamespaceContext'
 import { LeftBoxOpened } from '../../../domain/entities/global'
@@ -25,7 +25,6 @@ export function LayersSidebar() {
   )
 
   const [numberOfRegulatoryLayersSaved, setNumberOfRegulatoryLayersSaved] = useState(0)
-  const [hideLayersListWhenSearching, setHideLayersListWhenSearching] = useState(false)
 
   useEffect(() => {
     if (leftBoxOpened !== LeftBoxOpened.REGULATIONS) {
@@ -56,19 +55,16 @@ export function LayersSidebar() {
             isVisible={leftBoxOpened === LeftBoxOpened.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
           >
             <RegulatoryLayerSearch
-              layersSidebarIsOpen={leftBoxOpened === LeftBoxOpened.REGULATIONS}
               namespace={namespace}
               numberOfRegulatoryLayersSaved={numberOfRegulatoryLayersSaved}
-              setHideLayersListWhenSearching={setHideLayersListWhenSearching}
               setNumberOfRegulatoryLayersSaved={setNumberOfRegulatoryLayersSaved}
             />
             <Layers healthcheckTextWarning={!!healthcheckTextWarning}>
               <RegulatoryZones
-                hideLayersListWhenSearching={hideLayersListWhenSearching}
                 namespace={namespace}
                 regulatoryLayersAddedToMySelection={numberOfRegulatoryLayersSaved}
               />
-              <AdministrativeZones hideLayersListWhenSearching={hideLayersListWhenSearching} namespace={namespace} />
+              <AdministrativeZones namespace={namespace} />
               <BaseMaps namespace={namespace} />
             </Layers>
             <RegulatoryZoneMetadataShifter isLeftBoxOpened={!!leftBoxOpened} isOpen={regulatoryZoneMetadataPanelIsOpen}>

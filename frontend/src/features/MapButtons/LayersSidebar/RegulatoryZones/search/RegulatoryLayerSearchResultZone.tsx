@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { Checkbox, CheckboxGroup } from 'rsuite'
 import { showRegulatoryZoneMetadata } from '../../../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
@@ -8,21 +7,36 @@ import { closeRegulatoryZoneMetadata } from '../../../../../domain/use_cases/lay
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './slice'
 import { showOrHideMetadataIcon } from '../RegulatoryZone'
 import { PaperDarkIcon, PaperIcon } from '../../../../commonStyles/icons/REGPaperIcon.style'
-import { COLORS } from '../../../../../constants/constants'
 import { theme } from '../../../../../ui/theme'
 import { getRegulatoryLayerStyle } from '../../../../map/layers/styles/regulatoryLayer.style'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
+import type { RegulatoryZone } from '../../../../../domain/types/regulation'
 
-const RegulatoryLayerSearchResultZone = props => {
-  const { regulatoryZone, isOpen } = props
-  const dispatch = useDispatch()
+export type RegulatoryLayerSearchResultZoneProps = {
+  regulatoryZone: RegulatoryZone
+  isOpen: boolean
+}
+export function RegulatoryLayerSearchResultZone({ regulatoryZone, isOpen }: RegulatoryLayerSearchResultZoneProps) {
+  const dispatch = useMainAppDispatch()
 
-  const { regulatoryZoneMetadata } = useSelector(state => state.regulatory)
-  const zoneIsChecked = useSelector(
+  const { regulatoryZoneMetadata } = useMainAppSelector(state => state.regulatory)
+  const zoneIsChecked = useMainAppSelector(
     state => !!state.regulatoryLayerSearch.regulatoryZonesChecked?.find(zone => zone.id === regulatoryZone.id)
   )
-  const zoneIsAlreadySelected = useSelector(state =>
-    state.regulatory.selectedRegulatoryLayers[regulatoryZone.topic]?.find(zone => zone.id === regulatoryZone.id)
-  )
+  const zoneIsAlreadySelected = useMainAppSelector(state => {
+    const { selectedRegulatoryLayers } = state.regulatory
+    if (!selectedRegulatoryLayers) {
+      return false
+    }
+
+    const selectedRegulatoryLayersZone = selectedRegulatoryLayers[regulatoryZone.topic]
+    if (!selectedRegulatoryLayersZone) {
+      return false
+    }
+
+    return selectedRegulatoryLayersZone.find(zone => zone.id === regulatoryZone.id)
+  })
 
   const zoneStyle = getRegulatoryLayerStyle(undefined, regulatoryZone)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
@@ -98,31 +112,35 @@ const Name = styled.span`
   margin-top: 8px;
 `
 
-const Rectangle = styled.div`
+const Rectangle = styled.div<{
+  vectorLayerStyle: any
+}>`
   width: 14px;
   height: 14px;
-  background: ${props =>
-    props.vectorLayerStyle && props.vectorLayerStyle.getFill()
-      ? props.vectorLayerStyle.getFill().getColor()
-      : props.theme.color.lightGray};
+  background: ${p =>
+    p.vectorLayerStyle && p.vectorLayerStyle.getFill()
+      ? p.vectorLayerStyle.getFill().getColor()
+      : p.theme.color.lightGray};
   border: 1px solid
-    ${props =>
-      props.vectorLayerStyle && props.vectorLayerStyle.getStroke()
-        ? props.vectorLayerStyle.getStroke().getColor()
-        : props.theme.color.lightGray};
+    ${p =>
+      p.vectorLayerStyle && p.vectorLayerStyle.getStroke()
+        ? p.vectorLayerStyle.getStroke().getColor()
+        : p.theme.color.lightGray};
   display: inline-block;
   margin-right: 10px;
   margin-top: 9px;
   flex-shrink: 0;
 `
 
-const Zone = styled.span`
+const Zone = styled.span<{
+  $selected?: boolean
+}>`
   user-select: none;
   display: flex;
   font-size: 13px;
   padding-left: 20px;
-  background: ${props => (props.selected ? props.theme.color.lightGray : props.theme.color.white)};
-  color: ${COLORS.gunMetal};
+  background: ${p => (p.$selected ? p.theme.color.lightGray : p.theme.color.white)};
+  color: ${p => p.theme.color.gunMetal};
   padding-top: 1px;
   padding-bottom: 5px;
 
@@ -154,5 +172,3 @@ const CustomREGPaperIcon = styled(PaperIcon)`
 const CustomREGPaperDarkIcon = styled(PaperDarkIcon)`
   ${CustomPaperStyle}
 `
-
-export default RegulatoryLayerSearchResultZone

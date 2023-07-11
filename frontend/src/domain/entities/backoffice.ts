@@ -7,52 +7,62 @@ export const BACKOFFICE_SEARCH_PROPERTIES = [
   RegulatorySearchProperty.REGULATORY_REFERENCES
 ]
 
-export const GEAR_MESH_SIZE = {
-  greaterThan: 'greaterThan',
-  greaterThanOrEqualTo: 'greaterThanOrEqualTo',
-  lowerThan: 'lowerThan',
-  lowerThanOrEqualTo: 'lowerThanOrEqualTo',
-  equal: 'equal',
-  between: 'between'
+export enum GEAR_MESH_SIZE {
+  greaterThan = 'greaterThan',
+  greaterThanOrEqualTo = 'greaterThanOrEqualTo',
+  lowerThan = 'lowerThan',
+  lowerThanOrEqualTo = 'lowerThanOrEqualTo',
+  equal = 'equal',
+  between = 'between'
 }
 
-export const REGULATED_GEARS_KEYS = {
-  AUTHORIZED: 'authorized',
-  ALL_GEARS: 'allGears',
-  ALL_TOWED_GEARS: 'allTowedGears',
-  ALL_PASSIVE_GEARS: 'allPassiveGears',
-  REGULATED_GEARS: 'regulatedGears',
-  REGULATED_GEAR_CATEGORIES: 'regulatedGearCategories',
-  SELECTED_GEARS_AND_CATEGORIES: 'selectedCategoriesAndGears',
-  DEROGATION: 'derogation'
+export enum REGULATED_GEARS_KEYS {
+  AUTHORIZED = 'authorized',
+  ALL_GEARS = 'allGears',
+  ALL_TOWED_GEARS = 'allTowedGears',
+  ALL_PASSIVE_GEARS = 'allPassiveGears',
+  REGULATED_GEARS = 'regulatedGears',
+  REGULATED_GEAR_CATEGORIES = 'regulatedGearCategories',
+  SELECTED_GEARS_AND_CATEGORIES = 'selectedCategoriesAndGears',
+  DEROGATION = 'derogation'
 }
 
-export const GEAR_REGULATION_KEYS = {
-  AUTHORIZED: 'authorized',
-  UNAUTHORIZED: 'unauthorized',
-  OTHER_INFO: 'otherInfo'
+export enum GEAR_REGULATION_KEYS {
+  AUTHORIZED = 'authorized',
+  UNAUTHORIZED = 'unauthorized',
+  OTHER_INFO = 'otherInfo'
 }
 
-export const SPECIES_REGULATION_KEYS = {
-  AUTHORIZED: 'authorized',
-  UNAUTHORIZED: 'unauthorized',
-  OTHER_INFO: 'otherInfo'
+export enum SPECIES_REGULATION_KEYS {
+  AUTHORIZED = 'authorized',
+  UNAUTHORIZED = 'unauthorized',
+  OTHER_INFO = 'otherInfo'
 }
 
 export const SORTED_CATEGORY_LIST = [
-  'Chaluts', 'Sennes traînantes', 'Dragues', 'Sennes tournantes coulissantes',
-  'Filets tournants', 'Filets maillants et filets emmêlants', 'Filets soulevés',
-  'Lignes et hameçons', 'Pièges et casiers', 'Palangres', 'Gangui', 'Engins de récolte', 'Engins divers'
+  'Chaluts',
+  'Sennes traînantes',
+  'Dragues',
+  'Sennes tournantes coulissantes',
+  'Filets tournants',
+  'Filets maillants et filets emmêlants',
+  'Filets soulevés',
+  'Lignes et hameçons',
+  'Pièges et casiers',
+  'Palangres',
+  'Gangui',
+  'Engins de récolte',
+  'Engins divers'
 ]
 
-const CATEGORIES_TO_HIDE = ['engins inconnus', 'pas d\'engin', 'engins de pêche récréative']
+const CATEGORIES_TO_HIDE = ['engins inconnus', "pas d'engin", 'engins de pêche récréative']
 
 /**
  *
  * @param {Object.<string, Gear[]>} categoriesToGears
  * @returns
  */
-export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
+export const prepareCategoriesAndGearsToDisplay = categoriesToGears => {
   return SORTED_CATEGORY_LIST.map(category => {
     if (!CATEGORIES_TO_HIDE.includes(category) && categoriesToGears[category]) {
       const categoryGearList = [...categoriesToGears[category]]
@@ -66,7 +76,7 @@ export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
           }
           return 0
         })
-        .map((gear) => {
+        .map(gear => {
           return {
             label: `${gear.code} - ${gear.name}`,
             value: gear.code

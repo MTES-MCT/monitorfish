@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
-import InfoPoint from './InfoPoint'
+import { InfoPoint } from './InfoPoint'
 
 const InfoBox = props => {
   const {

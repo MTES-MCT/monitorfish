@@ -65,7 +65,7 @@ const regulatoryLayerSearchSlice = createSlice({
      *   Topic: Zone[]
      * }
      */
-    setRegulatoryLayersSearchResult(state, action: PayloadAction<RegulatoryLawTypes>) {
+    setRegulatoryLayersSearchResult(state, action: PayloadAction<RegulatoryLawTypes | undefined>) {
       state.regulatoryLayersSearchResult = action.payload
     },
 

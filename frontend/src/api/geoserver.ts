@@ -5,36 +5,47 @@ import GML from 'ol/format/GML'
 import { REGULATION_ACTION_TYPE } from '../domain/entities/regulation'
 import { HttpStatusCode } from './constants'
 import { ApiError } from '../libs/ApiError'
+import { logSoftError } from '@mtes-mct/monitor-ui'
+import type { GeoJSON } from 'ol/format'
+import type { RegulatoryZone } from '../domain/types/regulation'
+import type { Extent } from 'ol/extent'
 
-export const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la couche réglementaire'
-const REGULATORY_ZONES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les zones réglementaires'
-const REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE = 'Nous n\'avons pas pu filtrer les zones réglementaires par zone'
-const GEOMETRY_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la liste des tracés'
-const UPDATE_REGULATION_MESSAGE = 'Une erreur est survenue lors de la mise à jour de la zone réglementaire dans GeoServer'
+export const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la couche réglementaire"
+const REGULATORY_ZONES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les zones réglementaires"
+const REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE = "Nous n'avons pas pu filtrer les zones réglementaires par zone"
+const GEOMETRY_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des tracés"
+const UPDATE_REGULATION_MESSAGE =
+  'Une erreur est survenue lors de la mise à jour de la zone réglementaire dans GeoServer'
 
-function throwIrretrievableAdministrativeZoneError (e, type) {
-  throw new ApiError(`Nous n'avons pas pu récupérer la zone ${type}`, e)
+function throwIrretrievableAdministrativeZoneError(err: unknown, type: string): never {
+  throw new ApiError(`Nous n'avons pas pu récupérer la zone ${type}`, err)
 }
 
-function getIrretrievableRegulatoryZoneError (e, regulatoryZone) {
-  return Error(`Nous n'avons pas pu récupérer la zone réglementaire ${regulatoryZone.topic}/${regulatoryZone.zone} : ${e}`)
+function getIrretrievableRegulatoryZoneError(err: unknown, regulatoryZone: RegulatoryZone): Error {
+  return Error(
+    `Nous n'avons pas pu récupérer la zone réglementaire ${regulatoryZone.topic}/${regulatoryZone.zone} : ${err}`
+  )
 }
 
-export const GEOSERVER_URL = self?.env?.REACT_APP_GEOSERVER_REMOTE_URL !== '__REACT_APP_GEOSERVER_REMOTE_URL__'
-  ? self.env.REACT_APP_GEOSERVER_REMOTE_URL
-  : process.env.REACT_APP_GEOSERVER_REMOTE_URL
-export const GEOSERVER_BACKOFFICE_URL = self?.env?.REACT_APP_GEOSERVER_LOCAL_URL !== '__REACT_APP_GEOSERVER_LOCAL_URL__'
-  ? self.env.REACT_APP_GEOSERVER_LOCAL_URL
-  : process.env.REACT_APP_GEOSERVER_LOCAL_URL
+export const GEOSERVER_URL =
+  (self as any)?.env?.REACT_APP_GEOSERVER_REMOTE_URL !== '__REACT_APP_GEOSERVER_REMOTE_URL__'
+    ? (self as any).env.REACT_APP_GEOSERVER_REMOTE_URL
+    : process.env.REACT_APP_GEOSERVER_REMOTE_URL
+export const GEOSERVER_BACKOFFICE_URL =
+  (self as any)?.env?.REACT_APP_GEOSERVER_LOCAL_URL !== '__REACT_APP_GEOSERVER_LOCAL_URL__'
+    ? (self as any).env.REACT_APP_GEOSERVER_LOCAL_URL
+    : process.env.REACT_APP_GEOSERVER_LOCAL_URL
 
 /**
- * @description This API isn't authenticated
+ * @unauthenticated
  */
-function getAllRegulatoryLayersFromAPI (fromBackoffice) {
+function getAllRegulatoryLayersFromAPI(fromBackoffice) {
   const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
-  return fetch(`${geoserverURL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
-    `${LayerProperties.REGULATORY.code}&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`)
+  return fetch(
+    `${geoserverURL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
+      `${LayerProperties.REGULATORY.code}&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
+  )
     .then(response => {
       if (response.status === HttpStatusCode.OK) {
         return response.json()
@@ -59,18 +70,20 @@ function getAllRegulatoryLayersFromAPI (fromBackoffice) {
 
 /**
  * Get geometry object of regulatory area without regulation reference
- * @description This API isn't authenticated
- * @memberOf API
- * @param {boolean} fromBackoffice - From backoffice
- * @returns {Promise<GeoJSON>} The geometry as GeoJSON feature
- * @throws {Error}
+ *
+ * @returns The geometry as GeoJSON feature
+ *
+ * @unauthenticated
  */
-function getAllGeometryWithoutProperty (fromBackoffice) {
-  const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
+function getAllGeometryWithoutProperty(isFromBackoffice: boolean): Promise<GeoJSON> {
+  const geoserverURL = isFromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
-  const filter = 'regulatory_references IS NULL AND zone IS NULL AND region IS NULL AND law_type IS NULL AND topic IS NULL'
-  const REQUEST = `${geoserverURL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
-    `${LayerProperties.REGULATORY.code}&outputFormat=application/json&propertyName=geometry,id&CQL_FILTER=` + filter.replace(/'/g, '%27').replace(/ /g, '%20')
+  const filter =
+    'regulatory_references IS NULL AND zone IS NULL AND region IS NULL AND law_type IS NULL AND topic IS NULL'
+  const REQUEST =
+    `${geoserverURL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
+    `${LayerProperties.REGULATORY.code}&outputFormat=application/json&propertyName=geometry,id&CQL_FILTER=` +
+    filter.replace(/'/g, '%27').replace(/ /g, '%20')
   return fetch(REQUEST)
     .then(response => {
       if (response.status === HttpStatusCode.OK) {
@@ -90,47 +103,42 @@ function getAllGeometryWithoutProperty (fromBackoffice) {
 
 /**
  * Get the administrative zone GeoJSON feature
- * @description This API isn't authenticated
- * @memberOf API
- * @param {string} administrativeZone
- * @param {import("ol/extent.js").Extent|null} extent
- * @param {string|null} subZone
- * @param {boolean} fromBackoffice - From backoffice
- * @returns {Promise<GeoJSON>} The feature GeoJSON
- * @throws {Error}
+ *
+ * @returns The feature GeoJSON
+ *
+ * @unauthenticated
  */
-function getAdministrativeZoneFromAPI (administrativeZone, extent, subZone, fromBackoffice) {
-  const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
+async function getAdministrativeZoneFromAPI(
+  administrativeZone: string,
+  extent: Extent | null,
+  subZone: string | null,
+  isFromBackoffice: boolean
+): Promise<GeoJSON> {
+  try {
+    const geoserverURL = isFromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
+    const url = getAdministrativeZoneURL(administrativeZone, extent, subZone, geoserverURL)
 
-  return fetch(getAdministrativeZoneURL(administrativeZone, extent, subZone, geoserverURL))
-    .then(response => {
-      if (response.status === HttpStatusCode.OK) {
-        return response.json().then(response => {
-          return response
-        }).catch(e => {
-          throwIrretrievableAdministrativeZoneError(e, administrativeZone)
-        })
-      } else {
-        response.text().then(response => {
-          throwIrretrievableAdministrativeZoneError(response, administrativeZone)
-        })
-      }
-    }).catch(e => {
-      throwIrretrievableAdministrativeZoneError(e, administrativeZone)
-    })
+    const response = await fetch(url)
+    if (response.status !== HttpStatusCode.OK) {
+      throw await response.text()
+    }
+
+    const administrativeZoneGeoJson = await response.json()
+
+    return administrativeZoneGeoJson
+  } catch (err) {
+    throwIrretrievableAdministrativeZoneError(err, administrativeZone)
+  }
 }
 
 /**
  * Get the administrative zone Geoserver URL
- * @description This API isn't authenticated
- * @memberOf API
- * @param {string} type
- * @param {string[]|null} extent
- * @param {string|null} subZone
- * @param {string} geoserverURL
- * @returns {string} - the zone URL WFS request
+ *
+ * @returns The zone URL WFS request
+ *
+ * @unauthenticated
  */
-function getAdministrativeZoneURL (type, extent, subZone, geoserverURL) {
+function getAdministrativeZoneURL(type: string, extent: Extent | null, subZone: string | null, geoserverURL: string) {
   let extentFilter = ''
   if (extent) {
     extentFilter = `&bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}`
@@ -138,103 +146,108 @@ function getAdministrativeZoneURL (type, extent, subZone, geoserverURL) {
 
   let subZoneFilter = ''
   if (subZone) {
-    const filter = `${subZone.replace(/'/g, '\'\'')}`
+    const filter = `${subZone.replace(/'/g, "''")}`
 
-    subZoneFilter = '&featureID=' + filter
-      .replace(/'/g, '%27')
-      .replace(/ /g, '%20')
+    subZoneFilter = '&featureID=' + filter.replace(/'/g, '%27').replace(/ /g, '%20')
   }
 
   return (
     `${geoserverURL}/geoserver/wfs?service=WFS&` +
     `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
-    `outputFormat=application/json&srsname=${WSG84_PROJECTION}` + extentFilter + subZoneFilter
+    `outputFormat=application/json&srsname=${WSG84_PROJECTION}` +
+    extentFilter +
+    subZoneFilter
   )
 }
 
 /**
- * @description This API isn't authenticated
+ * @unauthenticated
  */
-function getRegulatoryZoneFromAPI (type, regulatoryZone, fromBackoffice) {
+async function getRegulatoryZoneFromAPI(
+  type: string,
+  regulatoryZone: RegulatoryZone,
+  isFromBackoffice: boolean
+): Promise<GeoJSON> {
   try {
-    const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
+    const geoserverURL = isFromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
+    const url = getRegulatoryZoneURL(type, regulatoryZone, geoserverURL)
 
-    return fetch(getRegulatoryZoneURL(type, regulatoryZone, geoserverURL))
-      .then(response => {
-        if (response.status === HttpStatusCode.OK) {
-          return response.json().then(response => {
-            return getFirstFeature(response)
-          }).catch(e => {
-            throw getIrretrievableRegulatoryZoneError(e, regulatoryZone)
-          })
-        } else {
-          response.text().then(response => {
-            throw getIrretrievableRegulatoryZoneError(response, regulatoryZone)
-          })
-        }
-      }).catch(e => {
-        throw getIrretrievableRegulatoryZoneError(e, regulatoryZone)
-      })
-  } catch (e) {
-    return Promise.reject(getIrretrievableRegulatoryZoneError(e, regulatoryZone))
+    const response = await fetch(url)
+    if (response.status !== HttpStatusCode.OK) {
+      throw await response.text()
+    }
+
+    const features = await response.json()
+    const regulatoryZoneGeoJson = getFirstFeature(features)
+
+    return regulatoryZoneGeoJson
+  } catch (err) {
+    throw getIrretrievableRegulatoryZoneError(err, regulatoryZone)
   }
 }
 
 /**
- * @description This API isn't authenticated
+ * @unauthenticated
  */
-function getRegulatoryZoneURL (type, regulatoryZone, geoserverURL) {
+function getRegulatoryZoneURL(type, regulatoryZone, geoserverURL) {
   if (!regulatoryZone.topic) {
-    throw new Error('Le nom de la couche n\'est pas renseigné')
+    throw new Error("Le nom de la couche n'est pas renseigné")
   }
   if (!regulatoryZone.zone) {
-    throw new Error('Le nom de la zone n\'est pas renseigné')
+    throw new Error("Le nom de la zone n'est pas renseigné")
   }
 
-  const filter = `topic='${encodeURIComponent(regulatoryZone.topic).replace(/'/g, '\'\'')}' AND zone='${encodeURIComponent(regulatoryZone.zone).replace(/'/g, '\'\'')}'`
-  return `${geoserverURL}/geoserver/wfs?service=WFS` +
-  `&version=1.1.0&request=GetFeature&typename=monitorfish:${type}` +
-  '&outputFormat=application/json&CQL_FILTER=' +
-  filter.replace(/'/g, '%27').replace(/ /g, '%20')
+  const filter = `topic='${encodeURIComponent(regulatoryZone.topic).replace(
+    /'/g,
+    "''"
+  )}' AND zone='${encodeURIComponent(regulatoryZone.zone).replace(/'/g, "''")}'`
+  return (
+    `${geoserverURL}/geoserver/wfs?service=WFS` +
+    `&version=1.1.0&request=GetFeature&typename=monitorfish:${type}` +
+    '&outputFormat=application/json&CQL_FILTER=' +
+    filter.replace(/'/g, '%27').replace(/ /g, '%20')
+  )
 }
 
 /**
  * Get the regulatory zones GeoJSON feature filtered with the OpenLayers extent (the BBOX)
- * @description This API isn't authenticated
- * @memberOf API
- * @param {number[]|null} extent
- * @param {boolean} fromBackoffice
- * @returns {Promise<GeoJSON>} The feature GeoJSON
- * @throws {Error}
+ *
+ * @unauthenticated
  */
-export function getRegulatoryZonesInExtentFromAPI (extent, fromBackoffice) {
+export function getRegulatoryZonesInExtentFromAPI(extent: Extent, fromBackoffice: boolean): Promise<GeoJSON> {
   try {
     const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
-    return fetch(`${geoserverURL}/geoserver/wfs?service=WFS` +
-      `&version=1.1.0&request=GetFeature&typename=monitorfish:${LayerProperties.REGULATORY.code}` +
-      `&outputFormat=application/json&srsname=${WSG84_PROJECTION}` +
-      `&bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}` +
-      '&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region'
-        .replace(/'/g, '%27')
-        .replace(/\(/g, '%28')
-        .replace(/\)/g, '%29')
-        .replace(/ /g, '%20'))
+    return fetch(
+      `${geoserverURL}/geoserver/wfs?service=WFS` +
+        `&version=1.1.0&request=GetFeature&typename=monitorfish:${LayerProperties.REGULATORY.code}` +
+        `&outputFormat=application/json&srsname=${WSG84_PROJECTION}` +
+        `&bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}` +
+        '&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region'
+          .replace(/'/g, '%27')
+          .replace(/\(/g, '%28')
+          .replace(/\)/g, '%29')
+          .replace(/ /g, '%20')
+    )
       .then(response => {
         if (response.status === HttpStatusCode.OK) {
-          return response.json().then(response => {
-            return response
-          }).catch(error => {
-            console.error(error)
-            throw REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE
-          })
+          return response
+            .json()
+            .then(response => {
+              return response
+            })
+            .catch(error => {
+              console.error(error)
+              throw REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE
+            })
         } else {
           response.text().then(response => {
             console.error(response)
           })
           throw REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE
         }
-      }).catch(error => {
+      })
+      .catch(error => {
         console.error(error)
         throw REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE
       })
@@ -244,7 +257,7 @@ export function getRegulatoryZonesInExtentFromAPI (extent, fromBackoffice) {
   }
 }
 
-function getFirstFeature (response) {
+function getFirstFeature(response) {
   // There must be only one feature per regulation
   const FIRST_FEATURE = 0
 
@@ -256,84 +269,78 @@ function getFirstFeature (response) {
 }
 
 /**
- * @description This API isn't authenticated
+ * @unauthenticated
  */
-function getRegulatoryFeatureMetadataFromAPI (regulatorySubZone, fromBackoffice) {
-  let url
+async function getRegulatoryFeatureMetadataFromAPI(regulatorySubZone, isFromBackoffice: boolean) {
   try {
-    const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
+    const geoserverURL = isFromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
+    const url = getRegulatoryZoneURL(LayerProperties.REGULATORY.code, regulatorySubZone, geoserverURL)
 
-    url = getRegulatoryZoneURL(LayerProperties.REGULATORY.code, regulatorySubZone, geoserverURL)
-  } catch (e) {
-    return Promise.reject(e)
-  }
-
-  return fetch(url)
-    .then(response => {
-      if (response.status === HttpStatusCode.OK) {
-        return response.json().then(response => {
-          return getFirstFeature(response)
-        })
-      } else {
-        response.text().then(text => {
-          console.error(text)
-        })
-        throw Error(REGULATORY_ZONE_METADATA_ERROR_MESSAGE)
-      }
-    }).catch(error => {
-      console.error(error)
+    const response = await fetch(url)
+    if (response.status === HttpStatusCode.OK) {
+      console.error(await response.text())
       throw Error(REGULATORY_ZONE_METADATA_ERROR_MESSAGE)
-    })
-}
+    }
 
-/**
- * @description This API isn't authenticated
- */
-function getAdministrativeSubZonesFromAPI (type, fromBackoffice) {
-  const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
+    const regulatoryFeatureMetadataFeatures = await response.json()
+    const regulatoryFeatureMetadata = getFirstFeature(regulatoryFeatureMetadataFeatures)
 
-  let query
-  if (type === LayerProperties.FAO.code) {
-    const filter = 'f_level=\'DIVISION\''
-
-    query = `${geoserverURL}/geoserver/wfs?service=WFS&` +
-      `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
-      `outputFormat=application/json&srsname=${WSG84_PROJECTION}&CQL_FILTER=` +
-      filter.replace(/'/g, '%27').replace(/ /g, '%20')
-  } else {
-    query = `${geoserverURL}/geoserver/wfs?service=WFS&` +
-      `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
-      `outputFormat=application/json&srsname=${WSG84_PROJECTION}`
+    return regulatoryFeatureMetadata
+  } catch (err) {
+    console.error(err)
+    throw Error(REGULATORY_ZONE_METADATA_ERROR_MESSAGE)
   }
-
-  return fetch(query)
-    .then(response => {
-      if (response.status === HttpStatusCode.OK) {
-        return response.json().then(response => {
-          return response
-        }).catch(e => {
-          throwIrretrievableAdministrativeZoneError(e, type)
-        })
-      } else {
-        response.text().then(response => {
-          throwIrretrievableAdministrativeZoneError(response, type)
-        })
-      }
-    }).catch(e => {
-      if (process.env.NODE_ENV === 'development') {
-        return {
-          features: []
-        }
-      }
-
-      throwIrretrievableAdministrativeZoneError(e, type)
-    })
 }
 
 /**
- * @description This API isn't authenticated
+ * @unauthenticated
  */
-function sendRegulationTransaction (feature, actionType) {
+async function getAdministrativeSubZonesFromAPI(type: string, isFromBackoffice: boolean) {
+  try {
+    const geoserverURL = isFromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
+
+    let query
+    if (type === LayerProperties.FAO.code) {
+      const filter = "f_level='DIVISION'"
+
+      query =
+        `${geoserverURL}/geoserver/wfs?service=WFS&` +
+        `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
+        `outputFormat=application/json&srsname=${WSG84_PROJECTION}&CQL_FILTER=` +
+        filter.replace(/'/g, '%27').replace(/ /g, '%20')
+    } else {
+      query =
+        `${geoserverURL}/geoserver/wfs?service=WFS&` +
+        `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
+        `outputFormat=application/json&srsname=${WSG84_PROJECTION}`
+    }
+
+    const response = await fetch(query)
+
+    if (response.status === HttpStatusCode.OK) {
+      const responseBody = await response.text()
+
+      throwIrretrievableAdministrativeZoneError(responseBody, type)
+    }
+
+    const administrativeSubZones = await response.json()
+
+    return administrativeSubZones
+  } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      return {
+        features: []
+      }
+    }
+
+    throwIrretrievableAdministrativeZoneError(err, type)
+  }
+}
+
+/**
+ * @unauthenticated
+ */
+function sendRegulationTransaction(feature, actionType) {
   const formatWFS = new WFS()
   const formatGML = new GML({
     featureNS: 'monitorfish',
@@ -342,22 +349,31 @@ function sendRegulationTransaction (feature, actionType) {
   })
 
   const xs = new XMLSerializer()
-  let transaction
+  let transaction: Node
+  // TODO Are `ol` types wrong?
   if (actionType === REGULATION_ACTION_TYPE.UPDATE) {
-    transaction = formatWFS.writeTransaction(null, [feature], null, formatGML)
+    transaction = formatWFS.writeTransaction([], [feature], [], formatGML as any)
   } else if (actionType === REGULATION_ACTION_TYPE.INSERT) {
-    transaction = formatWFS.writeTransaction([feature], null, null, formatGML)
+    transaction = formatWFS.writeTransaction([feature], [], [], formatGML as any)
   } else if (actionType === REGULATION_ACTION_TYPE.DELETE) {
-    transaction = formatWFS.writeTransaction(null, null, [feature], formatGML)
+    transaction = formatWFS.writeTransaction([], [], [feature], formatGML as any)
+  } else {
+    logSoftError({
+      context: { actionType },
+      message: 'Unbale to handle this `actionType` value.',
+      userMessage: 'GeoServer a rencontré un problème.'
+    })
+
+    return
   }
   const payload = xs.serializeToString(transaction)
 
   return fetch(`${GEOSERVER_BACKOFFICE_URL}/geoserver/wfs`, {
     method: 'POST',
     mode: 'no-cors',
-    dataType: 'xml',
-    processData: false,
-    contentType: 'text/xml',
+    headers: {
+      'Content-Type': 'text/xml'
+    },
     body: payload.replace('feature:', '')
   })
     .then(r => {

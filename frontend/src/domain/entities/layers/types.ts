@@ -76,6 +76,8 @@ export type ShowableLayer = {
 
 export type ShowedLayer = {
   namespace: string
+  // TODO Check this prop.
+  topic?: string
   type: string
   zone: string | null
 }

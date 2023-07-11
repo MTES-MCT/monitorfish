@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 
 export const useEscapeFromKeyboard = () => {
-  const [escape, setEscape] = useState(null)
+  const [escape, setEscape] = useState<{
+    dummyTrigger: true
+  } | null>(null)
 
   useEffect(() => {
     document.addEventListener('keydown', escapeFromKeyboard, false)

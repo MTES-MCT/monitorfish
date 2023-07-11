@@ -1,26 +1,21 @@
-import { useSelector } from 'react-redux'
 import { Section } from '../RegulatoryMetadata.style'
 import ReactMarkdown from 'react-markdown'
-import styled from 'styled-components'
+import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
 
-const OtherInfoDisplayed = () => {
-  const { otherInfo } = useSelector(state => state.regulatory.regulatoryZoneMetadata)
+export function OtherInfoDisplayed() {
+  const regulatory = useMainAppSelector(state => state.regulatory)
 
-  return <>
-    {
-      otherInfo && <Section>
-        <MarkdownWithMargin
-          data-cy={'regulatory-layers-metadata-other-info'}
-        >
-          <ReactMarkdown>
-            {otherInfo}
-          </ReactMarkdown>
-        </MarkdownWithMargin>
-      </Section>
-    }
-  </>
+  const { otherInfo } = regulatory.regulatoryZoneMetadata || {}
+
+  return (
+    <>
+      {otherInfo && (
+        <Section>
+          <div data-cy={'regulatory-layers-metadata-other-info'}>
+            <ReactMarkdown>{otherInfo}</ReactMarkdown>
+          </div>
+        </Section>
+      )}
+    </>
+  )
 }
-
-const MarkdownWithMargin = styled.div``
-
-export default OtherInfoDisplayed

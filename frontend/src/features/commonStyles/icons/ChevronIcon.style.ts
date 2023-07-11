@@ -5,6 +5,6 @@ export const ChevronIcon = styled(Icon.Chevron)<{
   $isOpen: boolean
 }>`
   margin-right: 16px;
-  transform: ${props => (!props.$isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
+  transform: ${p => (!p.$isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
   transition: all 0.5s;
 `

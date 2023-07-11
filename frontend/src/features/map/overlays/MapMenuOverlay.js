@@ -63,7 +63,7 @@ const MapMenuOverlay = ({
       beforeDateTime: endDate
     }
 
-    dispatch(showVesselTrack(vessel.vesselProperties, false, trackRequest))
+    dispatch(showVesselTrack(vessel.vesselProperties, true, trackRequest))
 
     map.removeOverlay(getOverlay())
     setIsOpen(false)
@@ -84,7 +84,7 @@ const MapMenuOverlay = ({
 
     const trackRequest = getTrackRequestFromTrackDepth(selectedTrackDepth)
 
-    dispatch(showVesselTrack(vessel.vesselProperties, false, trackRequest))
+    dispatch(showVesselTrack(vessel.vesselProperties, true, trackRequest))
 
     map.removeOverlay(getOverlay())
     setIsOpen(false)

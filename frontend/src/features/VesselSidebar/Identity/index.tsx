@@ -43,7 +43,7 @@ export function Identity() {
 
   useEffect(() => {
     if (!lastPosition && !selectedVessel && !loadingVessel && selectedVesselIdentity) {
-      dispatch(showVessel(selectedVesselIdentity, false, false))
+      dispatch(showVessel(selectedVesselIdentity, false, true))
     }
   }, [dispatch, lastPosition, selectedVessel, loadingVessel, selectedVesselIdentity])
 

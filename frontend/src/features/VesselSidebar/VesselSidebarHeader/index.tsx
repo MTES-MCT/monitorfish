@@ -36,7 +36,7 @@ export function VesselSidebarHeader() {
       }
 
       if (!vesselsAreEquals(vesselIdentity, selectedVesselIdentity)) {
-        dispatch(showVessel(vesselIdentity, true, false))
+        dispatch(showVessel(vesselIdentity, true, true))
       }
       dispatch(setIsFocusedOnVesselSearch(false))
     },

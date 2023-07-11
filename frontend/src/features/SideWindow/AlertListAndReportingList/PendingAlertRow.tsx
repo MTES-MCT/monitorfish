@@ -94,7 +94,7 @@ export function PendingAlertRow({
               alt="Voir sur la carte"
               data-cy="side-window-alerts-show-vessel"
               onClick={() => {
-                dispatch(showVessel(alert, false, false))
+                dispatch(showVessel(alert, false, true))
               }}
               src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
               style={showIconStyle}

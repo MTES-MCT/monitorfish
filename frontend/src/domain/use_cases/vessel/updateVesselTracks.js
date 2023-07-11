@@ -8,7 +8,7 @@ export const updateVesselTracks = () => (dispatch, getState) => {
   } = getState().vessel
 
   if (selectedVesselIdentity) {
-    dispatch(showVessel(selectedVesselIdentity, false, true))
+    dispatch(showVessel(selectedVesselIdentity, false, false))
   }
 
   Object.keys(vesselsTracksShowed)
@@ -22,6 +22,6 @@ const updateVesselTracksWithDefaultTrackDepth = dispatch => vesselTrack => {
 
   dispatch(showVesselTrack(
     vesselTrack.vesselIdentity,
-    true,
+    false,
     null))
 }

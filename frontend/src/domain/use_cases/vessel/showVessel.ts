@@ -15,7 +15,7 @@ import type { VesselIdentity } from '../../entities/vessel/types'
  * Show a specified vessel track on map and on the vessel right sidebar
  */
 export const showVessel =
-  (vesselIdentity: VesselIdentity, isFromSearch: boolean, isCalledFromCron: boolean) => async (dispatch, getState) => {
+  (vesselIdentity: VesselIdentity, isFromSearch: boolean, isFromUserAction: boolean) => async (dispatch, getState) => {
     try {
       const { fishingActivities, map, vessel } = getState()
       const { selectedVesselTrackRequest, vessels } = vessel
@@ -27,13 +27,13 @@ export const showVessel =
         lastPosition => lastPosition.vesselFeatureId === vesselFeatureId
       )?.vesselProperties
 
-      dispatchLoadingVessel(dispatch, isCalledFromCron, vesselIdentity)
+      dispatchLoadingVessel(dispatch, isFromUserAction, vesselIdentity)
       const nextTrackRequest = getCustomOrDefaultTrackRequest(
         selectedVesselTrackRequest,
         defaultVesselTrackDepth,
         false
       )
-      if (areFishingActivitiesShowedOnMap && !isCalledFromCron) {
+      if (areFishingActivitiesShowedOnMap && isFromUserAction) {
         dispatch(removeFishingActivitiesFromMap())
       }
 
@@ -43,7 +43,7 @@ export const showVessel =
 
       const { isTrackDepthModified, vesselAndPositions } = await getVesselFromAPI(vesselIdentity, nextTrackRequest)
       try {
-        throwCustomErrorFromAPIFeedback(vesselAndPositions.positions, isTrackDepthModified, isCalledFromCron)
+        throwCustomErrorFromAPIFeedback(vesselAndPositions.positions, isTrackDepthModified, isFromUserAction)
       } catch (error) {
         dispatch(setError(error))
       }
@@ -69,9 +69,9 @@ export const showVessel =
           error as Error,
           {
             func: showVessel,
-            parameters: [vesselIdentity, isFromSearch, isCalledFromCron]
+            parameters: [vesselIdentity, isFromSearch, isFromUserAction]
           },
-          isCalledFromCron,
+          isFromUserAction,
           'vesselSidebarError'
         )
       )
@@ -79,12 +79,12 @@ export const showVessel =
     }
   }
 
-function dispatchLoadingVessel(dispatch, calledFromCron, vesselIdentity) {
-  dispatch(doNotAnimate(calledFromCron))
+function dispatchLoadingVessel(dispatch, isFromUserAction: boolean, vesselIdentity) {
+  dispatch(doNotAnimate(!isFromUserAction))
   dispatch(removeError())
   dispatch(
     loadingVessel({
-      calledFromCron,
+      calledFromCron: !isFromUserAction,
       vesselIdentity
     })
   )

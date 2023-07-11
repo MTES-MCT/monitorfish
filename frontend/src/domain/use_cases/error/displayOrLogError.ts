@@ -10,24 +10,30 @@ import type { RetryableUseCase } from '../../../libs/DisplayedError'
  * - A toast error if the use-case was triggered by the cron
  */
 export const displayOrLogError =
-  (error: Error, retryableUseCase: RetryableUseCase | undefined, isFromCron: boolean, displayedErrorBoundary: string) =>
+  (
+    error: Error,
+    retryableUseCase: RetryableUseCase | undefined,
+    isFromUserAction: boolean,
+    displayedErrorBoundary: string
+  ) =>
   async dispatch => {
+    /**
+     * If the use-case was triggered by the cron, we only log an error with a Toast
+     */
+    if (!isFromUserAction) {
+      dispatch(setError(error))
+
+      return
+    }
+
+    /**
+     * Else, the use-case was an user action, we show a fallback error UI to the user.
+     * We first check if the `displayedErrorBoundary` is correct (included in the DisplayedErrorState type)
+     */
     if (!Object.keys(INITIAL_STATE).includes(displayedErrorBoundary)) {
       return
     }
 
-    /**
-     * If the use-case was an user action, we show a fallback error UI to the user
-     */
-    if (!isFromCron) {
-      const displayedError = new DisplayedError(error.message, retryableUseCase)
-      dispatch(setDisplayedErrors({ [displayedErrorBoundary]: displayedError }))
-
-      return
-    }
-
-    /**
-     * Else if the use-case was triggered by the cron, we only log an error with a Toast
-     */
-    dispatch(setError(error))
+    const displayedError = new DisplayedError(error.message, retryableUseCase)
+    dispatch(setDisplayedErrors({ [displayedErrorBoundary]: displayedError }))
   }

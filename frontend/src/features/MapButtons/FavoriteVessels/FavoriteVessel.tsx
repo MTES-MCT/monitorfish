@@ -36,7 +36,7 @@ export function FavoriteVessel({
     if (isTrackShowed) {
       dispatch(hideVesselTrack(vesselCompositeIdentifier))
     }
-    dispatch(showVessel(favorite, false, false))
+    dispatch(showVessel(favorite, false, true))
   }, [dispatch, isTrackShowed, vesselCompositeIdentifier, favorite])
 
   return (
@@ -74,7 +74,7 @@ export function FavoriteVessel({
         ) : (
           <HideIcon
             data-cy="favorite-vessel-show-vessel-track"
-            onClick={() => dispatch(showVesselTrack(favorite, false, null, true))}
+            onClick={() => dispatch(showVesselTrack(favorite, true, null, true))}
             style={buttonStyle}
           />
         )}

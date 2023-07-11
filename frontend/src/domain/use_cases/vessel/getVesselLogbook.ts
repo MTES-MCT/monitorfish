@@ -31,7 +31,7 @@ export enum NavigateTo {
  * Get the vessel fishing voyage and update the vessel positions track when navigating in the trips
  */
 export const getVesselLogbook =
-  (vesselIdentity: VesselIdentity | null, navigateTo: NavigateTo | undefined, fromCron: boolean) =>
+  (vesselIdentity: VesselIdentity | null, navigateTo: NavigateTo | undefined, isFromUserAction: boolean) =>
   async (dispatch, getState) => {
     if (!vesselIdentity) {
       return
@@ -41,7 +41,7 @@ export const getVesselLogbook =
     const { areFishingActivitiesShowedOnMap, isLastVoyage, lastFishingActivities, tripNumber } =
       getState().fishingActivities
 
-    const updateVesselTrack = navigateTo && !fromCron
+    const updateVesselTrack = navigateTo && isFromUserAction
     const isSameVesselAsCurrentlyShowed = vesselsAreEquals(vesselIdentity, currentSelectedVesselIdentity)
     const nextNavigateTo = navigateTo || NavigateTo.LAST
 
@@ -49,7 +49,7 @@ export const getVesselLogbook =
       return
     }
 
-    if (!fromCron) {
+    if (isFromUserAction) {
       dispatch(setDisplayedErrors({ vesselSidebarError: null }))
       dispatch(loadFishingActivities())
     }
@@ -64,7 +64,7 @@ export const getVesselLogbook =
         return
       }
 
-      if (isSameVesselAsCurrentlyShowed && fromCron) {
+      if (isSameVesselAsCurrentlyShowed && !isFromUserAction) {
         if (gotNewFishingActivitiesWithMoreMessagesOrAlerts(lastFishingActivities, voyage)) {
           dispatch(setNextFishingActivities(voyage.logbookMessagesAndAlerts))
           dispatch(removeError())
@@ -94,9 +94,9 @@ export const getVesselLogbook =
           error as Error,
           {
             func: getVesselLogbook,
-            parameters: [vesselIdentity, navigateTo, fromCron]
+            parameters: [vesselIdentity, navigateTo, isFromUserAction]
           },
-          fromCron,
+          isFromUserAction,
           'vesselSidebarError'
         )
       )

@@ -61,18 +61,6 @@ from src.pipeline.helpers.country_codes import (
 beacons.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")
 control_anteriority.flow.schedule = CronSchedule("5 * * * *")
 control_units.flow.schedule = CronSchedule("12 8 * * *")
-controls.flow.schedule = Schedule(
-    clocks=[
-        clocks.CronClock(
-            "1 * * * *",
-            parameter_defaults={"number_of_months": 1, "loading_mode": "upsert"},
-        ),
-        clocks.CronClock(
-            "10 8 * * *",
-            parameter_defaults={"number_of_months": 200, "loading_mode": "replace"},
-        ),
-    ]
-)
 controls_open_data.flow.schedule = CronSchedule("15 3 * * 5")
 current_segments.flow.schedule = CronSchedule("2,12,22,32,42,52 * * * *")
 logbook.flow.schedule = CronSchedule("* * * * *")

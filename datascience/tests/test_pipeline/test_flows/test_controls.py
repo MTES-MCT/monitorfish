@@ -386,6 +386,7 @@ expected_loaded_mission_actions_df = pd.merge(
                         "declaredMesh": None,
                         "controlledMesh": None,
                         "gearWasControlled": False,
+                        "hasUncontrolledMesh": True,
                     }
                 ],
                 [
@@ -394,6 +395,7 @@ expected_loaded_mission_actions_df = pd.merge(
                         "declaredMesh": 96.0,
                         "controlledMesh": 96.0,
                         "gearWasControlled": None,
+                        "hasUncontrolledMesh": False,
                     }
                 ],
                 [
@@ -402,6 +404,7 @@ expected_loaded_mission_actions_df = pd.merge(
                         "declaredMesh": None,
                         "controlledMesh": None,
                         "gearWasControlled": False,
+                        "hasUncontrolledMesh": True,
                     }
                 ],
                 [
@@ -410,6 +413,7 @@ expected_loaded_mission_actions_df = pd.merge(
                         "declaredMesh": None,
                         "controlledMesh": None,
                         "gearWasControlled": False,
+                        "hasUncontrolledMesh": True,
                     }
                 ],
                 [
@@ -418,18 +422,21 @@ expected_loaded_mission_actions_df = pd.merge(
                         "declaredMesh": 100.0,
                         "controlledMesh": 105.0,
                         "gearWasControlled": True,
+                        "hasUncontrolledMesh": False,
                     },
                     {
                         "gearCode": "GNS",
                         "declaredMesh": 100.0,
                         "controlledMesh": 104.0,
                         "gearWasControlled": True,
+                        "hasUncontrolledMesh": False,
                     },
                     {
                         "gearCode": "GNS",
                         "declaredMesh": 90.0,
                         "controlledMesh": 93.0,
                         "gearWasControlled": True,
+                        "hasUncontrolledMesh": False,
                     },
                 ],
                 [
@@ -438,12 +445,14 @@ expected_loaded_mission_actions_df = pd.merge(
                         "declaredMesh": 40.0,
                         "controlledMesh": 38.5,
                         "gearWasControlled": True,
+                        "hasUncontrolledMesh": False,
                     },
                     {
                         "gearCode": "OTT",
                         "declaredMesh": None,
                         "controlledMesh": None,
                         "gearWasControlled": False,
+                        "hasUncontrolledMesh": True,
                     },
                 ],
                 [
@@ -452,12 +461,14 @@ expected_loaded_mission_actions_df = pd.merge(
                         "declaredMesh": 80.0,
                         "controlledMesh": 85.2,
                         "gearWasControlled": True,
+                        "hasUncontrolledMesh": False,
                     },
                     {
                         "gearCode": "OTT",
                         "declaredMesh": 80.0,
                         "controlledMesh": 85.2,
                         "gearWasControlled": True,
+                        "hasUncontrolledMesh": False,
                     },
                 ],
                 [
@@ -466,12 +477,14 @@ expected_loaded_mission_actions_df = pd.merge(
                         "declaredMesh": 90.0,
                         "controlledMesh": None,
                         "gearWasControlled": False,
+                        "hasUncontrolledMesh": True,
                     },
                     {
                         "gearCode": "TBN",
                         "declaredMesh": None,
                         "controlledMesh": None,
                         "gearWasControlled": False,
+                        "hasUncontrolledMesh": True,
                     },
                 ],
                 [],
@@ -481,6 +494,7 @@ expected_loaded_mission_actions_df = pd.merge(
                         "declaredMesh": None,
                         "controlledMesh": None,
                         "gearWasControlled": False,
+                        "hasUncontrolledMesh": True,
                     }
                 ],
             ],

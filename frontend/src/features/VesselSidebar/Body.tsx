@@ -10,6 +10,7 @@ import { VesselSummary } from './Summary'
 import { AlertWarning } from './warnings/AlertWarning'
 import { BeaconMalfunctionWarning } from './warnings/BeaconMalfunctionWarning'
 import { VesselSidebarTab } from '../../domain/entities/vessel/vessel'
+import { retry } from '../../domain/use_cases/error/retry'
 import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
@@ -18,7 +19,7 @@ export function Body() {
   const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
   const { healthcheckTextWarning } = useMainAppSelector(state => state.global)
-  const { vesselSidebarError } = useMainAppSelector(state => state.displayedError)
+  const vesselSidebarError = useMainAppSelector(state => state.displayedError.vesselSidebarError)
   const { selectedVessel, vesselSidebarTab } = useMainAppSelector(state => state.vessel)
 
   if (vesselSidebarError) {
@@ -26,25 +27,11 @@ export function Body() {
       <ErrorFallback data-cy="vessel-sidebar-error">
         🔌 {vesselSidebarError.message}
         <br />
-        <RetryButton
-          accent={Accent.PRIMARY}
-          onClick={() => {
-            if (!vesselSidebarError.useCase) {
-              return
-            }
-
-            const parameters = vesselSidebarError.useCase?.parameters
-            if (!parameters) {
-              dispatch(vesselSidebarError.useCase?.func())
-
-              return
-            }
-
-            dispatch(vesselSidebarError.useCase?.func(...parameters))
-          }}
-        >
-          Réessayer
-        </RetryButton>
+        {vesselSidebarError.useCase && (
+          <RetryButton accent={Accent.PRIMARY} onClick={() => dispatch(retry(vesselSidebarError.useCase))}>
+            Réessayer
+          </RetryButton>
+        )}
       </ErrorFallback>
     )
   }

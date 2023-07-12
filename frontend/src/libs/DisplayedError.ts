@@ -11,7 +11,7 @@ export class DisplayedError extends Error {
   originalError: any | undefined
   useCase: RetryableUseCase | undefined
 
-  constructor(message: string, useCase: RetryableUseCase, originalError?: any) {
+  constructor(message: string, useCase: RetryableUseCase | undefined, originalError?: any) {
     super(message)
 
     captureMessage(message)

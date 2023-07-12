@@ -27,7 +27,7 @@ export function VesselBeaconMalfunctions() {
   const hasNoBeacon = !selectedVessel?.vesselId
 
   useEffect(() => {
-    dispatch(getVesselBeaconMalfunctions(false))
+    dispatch(getVesselBeaconMalfunctions(true))
   }, [dispatch, selectedVesselIdentity])
 
   useEffect(() => {

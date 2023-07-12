@@ -21,14 +21,8 @@ import {
   getTitleFromMissionMainFormValues,
   getUpdatedMissionFromMissionMainFormValues
 } from './utils'
+import { useCreateMissionMutation, useDeleteMissionMutation, useUpdateMissionMutation } from '../../../api/mission'
 import {
-  monitorenvMissionApi,
-  useCreateMissionMutation,
-  useDeleteMissionMutation,
-  useUpdateMissionMutation
-} from '../../../api/mission'
-import {
-  missionActionApi,
   useCreateMissionActionMutation,
   useDeleteMissionActionMutation,
   useUpdateMissionActionMutation
@@ -38,6 +32,8 @@ import { Mission, type MissionWithActions } from '../../../domain/entities/missi
 import { getMissionStatus } from '../../../domain/entities/mission/utils'
 import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
 import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
+import { retry } from '../../../domain/use_cases/error/retry'
+import { getMission } from '../../../domain/use_cases/mission/getMission'
 import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
@@ -51,6 +47,7 @@ import type { MissionAction } from '../../../domain/types/missionAction'
 
 export function MissionForm() {
   const sideWindow = useMainAppSelector(store => store.sideWindow)
+  const missionFormError = useMainAppSelector(state => state.displayedError.missionFormError)
 
   const headerDivRef = useRef<HTMLDivElement | null>(null)
   const originalMissionRef = useRef<MissionWithActions | undefined>(undefined)
@@ -409,27 +406,18 @@ export function MissionForm() {
       }
 
       // When we edit an existing mission
-
-      const missionResponse = await dispatch(
-        monitorenvMissionApi.endpoints.getMission.initiate(sideWindow.selectedPath.id)
-      )
-      const missionActionsResponse = await dispatch(
-        missionActionApi.endpoints.getMissionActions.initiate(sideWindow.selectedPath.id)
-      )
-      if (!missionResponse.data) {
-        throw new FrontendError('`missionResponse.data` is undefined.')
-      }
-      if (!missionActionsResponse.data) {
-        throw new FrontendError('`missionActionsResponse.data` is undefined.')
+      const missionWithActions = await dispatch(getMission(sideWindow.selectedPath.id))
+      if (!missionWithActions) {
+        return
       }
 
-      originalMissionRef.current = {
-        ...missionResponse.data,
-        actions: missionActionsResponse.data
-      }
+      // @ts-ignore
+      const mission = { actions: _, ...missionWithActions }
+
+      originalMissionRef.current = missionWithActions
       const { initialActionsFormValues, initialMainFormValues } = getMissionFormInitialValues(
-        missionResponse.data,
-        missionActionsResponse.data
+        mission,
+        missionWithActions.actions
       )
       const [, { nextActionsFormValues, nextMainFormValues }] = validateMissionForms(
         initialMainFormValues,
@@ -464,6 +452,20 @@ export function MissionForm() {
   )
 
   // ---------------------------------------------------------------------------
+
+  if (missionFormError) {
+    return (
+      <ErrorFallback data-cy="mission-form-error">
+        🔌 {missionFormError.message}
+        <br />
+        {missionFormError.useCase && (
+          <RetryButton accent={Accent.PRIMARY} onClick={() => dispatch(retry(missionFormError.useCase))}>
+            Réessayer
+          </RetryButton>
+        )}
+      </ErrorFallback>
+    )
+  }
 
   return (
     <>
@@ -566,6 +568,23 @@ export function MissionForm() {
     </>
   )
 }
+
+const ErrorFallback = styled.div`
+  width: 250px;
+  height: 90px;
+  color: ${p => p.theme.color.slateGray};
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  transform: translateY(-50%);
+  text-align: center;
+`
+
+const RetryButton = styled(Button)`
+  margin-top: 10px;
+`
 
 const BackToListIcon = styled(Icon.Chevron)`
   margin-right: 12px;

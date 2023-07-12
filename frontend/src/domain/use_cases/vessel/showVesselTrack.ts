@@ -14,18 +14,18 @@ import type { TrackRequest, VesselIdentity } from '../../entities/vessel/types'
  * Show a specified vessel track on map
  */
 export const showVesselTrack =
-  (vesselIdentity: VesselIdentity, isCalledFromCron: boolean, trackRequest: TrackRequest | null, hasZoom?: boolean) =>
+  (vesselIdentity: VesselIdentity, isFromUserAction: boolean, trackRequest: TrackRequest | null, hasZoom?: boolean) =>
   async (dispatch, getState) => {
     try {
       const { defaultVesselTrackDepth } = getState().map
       const nextTrackRequest = getCustomOrDefaultTrackRequest(trackRequest, defaultVesselTrackDepth, true)
 
-      dispatch(doNotAnimate(isCalledFromCron))
+      dispatch(doNotAnimate(!isFromUserAction))
       dispatch(removeError())
 
       const { isTrackDepthModified, positions } = await getVesselPositionsFromAPI(vesselIdentity, nextTrackRequest)
       try {
-        throwCustomErrorFromAPIFeedback(positions, isTrackDepthModified, isCalledFromCron)
+        throwCustomErrorFromAPIFeedback(positions, isTrackDepthModified, isFromUserAction)
         dispatch(removeError())
       } catch (error) {
         dispatch(setError(error))

@@ -8,9 +8,9 @@ import {
 } from '../../shared_slices/BeaconMalfunction'
 import { setDisplayedErrors } from '../../shared_slices/DisplayedError'
 import { removeError } from '../../shared_slices/Global'
-import { displayOrLogVesselSidebarError } from '../error/displayOrLogVesselSidebarError'
+import { displayOrLogError } from '../error/displayOrLogError'
 
-export const getVesselBeaconMalfunctions = isFromCron => async (dispatch, getState) => {
+export const getVesselBeaconMalfunctions = (isFromUserAction: boolean) => async (dispatch, getState) => {
   const { selectedVessel } = getState().vessel
 
   const { loadingVesselBeaconMalfunctions, openedBeaconMalfunction, vesselBeaconMalfunctionsFromDate } =
@@ -22,7 +22,7 @@ export const getVesselBeaconMalfunctions = isFromCron => async (dispatch, getSta
     return
   }
 
-  if (!isFromCron) {
+  if (isFromUserAction) {
     dispatch(loadVesselBeaconMalfunctions())
     dispatch(setDisplayedErrors({ vesselSidebarError: null }))
   }
@@ -40,19 +40,20 @@ export const getVesselBeaconMalfunctions = isFromCron => async (dispatch, getSta
     )
 
     if (openedBeaconMalfunction) {
-      dispatch(openBeaconMalfunction(openedBeaconMalfunction, isFromCron))
+      dispatch(openBeaconMalfunction(openedBeaconMalfunction, isFromUserAction))
     }
 
     dispatch(removeError())
   } catch (error) {
     dispatch(
-      displayOrLogVesselSidebarError(
+      displayOrLogError(
         error as Error,
         {
           func: getVesselBeaconMalfunctions,
-          parameters: [isFromCron]
+          parameters: [isFromUserAction]
         },
-        isFromCron
+        isFromUserAction,
+        'vesselSidebarError'
       )
     )
     dispatch(resetVesselBeaconMalfunctionsResumeAndHistory())

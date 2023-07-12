@@ -74,7 +74,7 @@ export function VesselSummary() {
 
   useEffect(() => {
     if (!selectedVessel && !loadingVessel && selectedVesselIdentity) {
-      dispatch(showVessel(selectedVesselIdentity, false, false))
+      dispatch(showVessel(selectedVesselIdentity, false, true))
     }
   }, [dispatch, selectedVessel, loadingVessel, selectedVesselIdentity])
 

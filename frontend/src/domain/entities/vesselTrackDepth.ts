@@ -73,15 +73,15 @@ export const getTrackRequestFromDates = (afterDateTime: Date, beforeDateTime: Da
 export function throwCustomErrorFromAPIFeedback(
   positions: VesselPosition[],
   isTrackDepthModified: boolean,
-  isCalledFromCron: boolean
+  isFromUserAction: boolean
 ) {
-  if (trackDepthHasBeenModifiedFromAPI(positions, isTrackDepthModified, isCalledFromCron)) {
+  if (trackDepthHasBeenModifiedFromAPI(positions, isTrackDepthModified, isFromUserAction)) {
     throw new NoDEPFoundError(
       "Nous n'avons pas trouvé de dernier DEP pour ce navire, nous affichons " +
         'les positions des dernières 24 heures.'
     )
   }
-  if (noPositionsFoundForVessel(positions, isCalledFromCron)) {
+  if (noPositionsFoundForVessel(positions, isFromUserAction)) {
     throw new NoPositionsFoundError("Nous n'avons trouvé aucune position.")
   }
   if (noPositionsFoundForEnteredDateTime(positions)) {
@@ -89,14 +89,14 @@ export function throwCustomErrorFromAPIFeedback(
   }
 }
 
-function noPositionsFoundForVessel(positions, updateShowedVessel) {
-  return !positions?.length && !updateShowedVessel
+function noPositionsFoundForVessel(positions, isFromUserAction) {
+  return !positions?.length && isFromUserAction
 }
 
 function noPositionsFoundForEnteredDateTime(positions) {
   return !positions?.length
 }
 
-function trackDepthHasBeenModifiedFromAPI(positions, isTrackDepthModified, updateShowedVessel) {
-  return positions?.length && isTrackDepthModified && !updateShowedVessel
+function trackDepthHasBeenModifiedFromAPI(positions, isTrackDepthModified, isFromUserAction) {
+  return positions?.length && isTrackDepthModified && isFromUserAction
 }

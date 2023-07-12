@@ -6,9 +6,9 @@ import {
   resetCurrentAndArchivedReportingsOfSelectedVessel,
   setCurrentAndArchivedReportingsOfSelectedVessel
 } from '../../shared_slices/Reporting'
-import { displayOrLogVesselSidebarError } from '../error/displayOrLogVesselSidebarError'
+import { displayOrLogError } from '../error/displayOrLogError'
 
-export const getVesselReportings = (isFromCron: boolean) => async (dispatch, getState) => {
+export const getVesselReportings = (isFromUserAction: boolean) => async (dispatch, getState) => {
   const { selectedVesselIdentity } = getState().vessel
   const { archivedReportingsFromDate, isLoadingReporting } = getState().reporting
 
@@ -16,7 +16,7 @@ export const getVesselReportings = (isFromCron: boolean) => async (dispatch, get
     return
   }
 
-  if (!isFromCron) {
+  if (isFromUserAction) {
     dispatch(setDisplayedErrors({ vesselSidebarError: null }))
     dispatch(loadReporting())
   }
@@ -36,13 +36,14 @@ export const getVesselReportings = (isFromCron: boolean) => async (dispatch, get
     dispatch(removeError())
   } catch (error) {
     dispatch(
-      displayOrLogVesselSidebarError(
+      displayOrLogError(
         error as Error,
         {
           func: getVesselReportings,
-          parameters: [isFromCron]
+          parameters: [isFromUserAction]
         },
-        isFromCron
+        isFromUserAction,
+        'vesselSidebarError'
       )
     )
     dispatch(resetCurrentAndArchivedReportingsOfSelectedVessel())

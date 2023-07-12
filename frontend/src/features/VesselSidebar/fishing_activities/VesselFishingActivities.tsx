@@ -45,13 +45,13 @@ export function VesselFishingActivities() {
 
     if (!fishingActivities) {
       dispatch(resetNextFishingActivities())
-      dispatch(getVesselLogbook(selectedVesselIdentity, undefined, false))
+      dispatch(getVesselLogbook(selectedVesselIdentity, undefined, true))
 
       return
     }
 
     if (previousSelectedVessel && !vesselsAreEquals(previousSelectedVessel, selectedVesselIdentity)) {
-      dispatch(getVesselLogbook(selectedVesselIdentity, undefined, false))
+      dispatch(getVesselLogbook(selectedVesselIdentity, undefined, true))
     }
   }, [dispatch, fishingActivities, loadingFishingActivities, selectedVesselIdentity, previousSelectedVessel])
 
@@ -68,15 +68,15 @@ export function VesselFishingActivities() {
   )
 
   const goToPreviousTrip = useCallback(() => {
-    dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.PREVIOUS, false))
+    dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.PREVIOUS, true))
   }, [dispatch, selectedVesselIdentity])
 
   const goToNextTrip = useCallback(() => {
-    dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.NEXT, false))
+    dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.NEXT, true))
   }, [dispatch, selectedVesselIdentity])
 
   const goToLastTrip = useCallback(() => {
-    dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.LAST, false))
+    dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.LAST, true))
   }, [dispatch, selectedVesselIdentity])
 
   return (

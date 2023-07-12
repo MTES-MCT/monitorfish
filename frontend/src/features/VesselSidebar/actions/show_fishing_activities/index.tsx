@@ -39,7 +39,7 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
       }
 
       if (!fishingActivities) {
-        await dispatch(getVesselLogbook(selectedVesselIdentity, undefined, false))
+        await dispatch(getVesselLogbook(selectedVesselIdentity, undefined, true))
       }
       dispatch(showFishingActivitiesOnMap())
     })()

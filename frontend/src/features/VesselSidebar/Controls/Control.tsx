@@ -1,12 +1,16 @@
-import { THEME, Tag, TagBullet, TagGroup } from '@mtes-mct/monitor-ui'
-import { useMemo } from 'react'
+import { Accent, Button, Tag, TagBullet, TagGroup, THEME } from '@mtes-mct/monitor-ui'
+import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { GearOnboard } from './GearOnboard'
 import { Infraction } from './Infraction'
 import { COLORS } from '../../../constants/constants'
 import { getNumberOfInfractions } from '../../../domain/entities/controls'
+import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
 import { MissionAction } from '../../../domain/types/missionAction'
+import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
+import { useIsSuperUser } from '../../../hooks/authorization/useIsSuperUser'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { getDate } from '../../../utils'
 import { ReactComponent as GyroRedSVG } from '../../icons/Gyrophare_controles_rouge.svg'
 import { ReactComponent as GyroGreenSVG } from '../../icons/Gyrophare_controles_vert.svg'
@@ -17,6 +21,8 @@ type ControlProps = {
 }
 
 export function Control({ control, isLastItem }: ControlProps) {
+  const isSuperUser = useIsSuperUser()
+  const dispatch = useMainAppDispatch()
   const numberOfInfractions = useMemo(() => getNumberOfInfractions(control), [control])
   const gearAndSpeciesInfractionsLength = useMemo(
     () => control.gearInfractions.length + control.speciesInfractions.length,
@@ -26,6 +32,10 @@ export function Control({ control, isLastItem }: ControlProps) {
     () => control.gearInfractions.length + control.speciesInfractions.length + control.logbookInfractions.length,
     [control]
   )
+
+  const openMission = useCallback(async () => {
+    dispatch(sideWindowDispatchers.openPath({ id: control.missionId, menu: SideWindowMenuKey.MISSION_FORM }))
+  }, [dispatch, control.missionId])
 
   const controlType = useMemo(() => {
     switch (control.actionType) {
@@ -129,10 +139,19 @@ export function Control({ control, isLastItem }: ControlProps) {
             {control.otherComments}
           </OtherComments>
         )}
+        {isSuperUser && (
+          <ModifyButton accent={Accent.SECONDARY} onClick={openMission}>
+            Modifier le CR du contrôle
+          </ModifyButton>
+        )}
       </ContentColumn>
     </Wrapper>
   )
 }
+
+const ModifyButton = styled(Button)`
+  margin-top: 10px;
+`
 
 const OtherCommentsTitle = styled.div`
   font-weight: bold;

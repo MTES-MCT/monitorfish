@@ -66,9 +66,9 @@ export const clickOnMapFeature = (mapClick: MapClick) => (dispatch, getState) =>
     const clickedVessel = (mapClick.feature as VesselLastPositionFeature).vesselProperties
 
     if (mapClick.ctrlKeyPressed) {
-      dispatch(showVesselTrack(clickedVessel, false, null))
+      dispatch(showVesselTrack(clickedVessel, true, null))
     } else {
-      dispatch(showVessel(clickedVessel, false, false))
+      dispatch(showVessel(clickedVessel, false, true))
     }
   }
 }

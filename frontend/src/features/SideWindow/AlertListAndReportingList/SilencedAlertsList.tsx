@@ -130,7 +130,7 @@ export function SilencedAlertsList({ silencedAlerts }: SilencedAlertsListProps) 
                       alt="Voir sur la carte"
                       data-cy="side-window-silenced-alerts-show-vessel"
                       onClick={() => {
-                        dispatch(showVessel(alert, false, false))
+                        dispatch(showVessel(alert, false, true))
                       }}
                       src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
                       style={showIconStyle}

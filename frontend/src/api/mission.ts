@@ -1,6 +1,9 @@
 import { monitorenvApi, monitorfishApi } from '.'
+import { ApiError } from '../libs/ApiError'
 
 import type { Mission, MissionWithActions } from '../domain/entities/mission/types'
+
+const GET_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la mission"
 
 export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
   endpoints: builder => ({
@@ -31,7 +34,8 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
 
     getMission: builder.query<Mission.Mission, Mission.Mission['id']>({
       providesTags: [{ type: 'Missions' }],
-      query: id => `missions/${id}`
+      query: id => `missions/${id}`,
+      transformErrorResponse: response => new ApiError(GET_MISSION_ERROR_MESSAGE, response)
     }),
 
     updateMission: builder.mutation<void, Mission.Mission>({

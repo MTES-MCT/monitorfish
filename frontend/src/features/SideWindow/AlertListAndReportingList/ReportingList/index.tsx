@@ -110,7 +110,7 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
 
   const focusOnMap = useCallback(
     (reporting: InfractionSuspicionReporting | PendingAlertReporting) => {
-      dispatch(showVessel(reporting, false, false))
+      dispatch(showVessel(reporting, false, true))
     },
     [dispatch]
   )

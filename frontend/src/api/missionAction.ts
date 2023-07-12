@@ -3,6 +3,8 @@ import { ApiError } from '../libs/ApiError'
 
 import type { MissionAction } from '../domain/types/missionAction'
 
+const GET_MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les actions de la mission"
+
 export const missionActionApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
     createMissionAction: builder.mutation<void, MissionAction.MissionActionData>({
@@ -24,7 +26,8 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
 
     getMissionActions: builder.query<MissionAction.MissionAction[], number>({
       providesTags: () => [{ type: 'MissionActions' }],
-      query: missionId => `/mission_actions?missionId=${missionId}`
+      query: missionId => `/mission_actions?missionId=${missionId}`,
+      transformErrorResponse: response => new ApiError(GET_MISSION_ACTIONS_ERROR_MESSAGE, response)
     }),
 
     updateMissionAction: builder.mutation<void, MissionAction.MissionAction>({

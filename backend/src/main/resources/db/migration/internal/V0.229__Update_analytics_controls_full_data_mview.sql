@@ -1,3 +1,5 @@
+DROP MATERIALIZED VIEW analytics_controls_full_data;
+
 CREATE MATERIALIZED VIEW public.analytics_controls_full_data AS
 
 WITH controls_gears AS (
@@ -6,10 +8,10 @@ WITH controls_gears AS (
         array_agg(COALESCE(gear->>'gearCode', 'Aucun engin')) AS gears
     FROM mission_actions
     LEFT JOIN LATERAL jsonb_array_elements(
-        CASE WHEN jsonb_typeof(gear_onboard) = 'array' 
-        THEN gear_onboard ELSE '[]' 
+        CASE WHEN jsonb_typeof(gear_onboard) = 'array'
+        THEN gear_onboard ELSE '[]'
         END
-    ) AS gear 
+    ) AS gear
     ON true
     WHERE action_type IN ('SEA_CONTROL', 'LAND_CONTROL', 'AIR_CONTROL') GROUP BY id
 ),
@@ -20,10 +22,10 @@ controls_species AS (
         array_agg(COALESCE(species->>'speciesCode', 'Aucune capture')) AS species
     FROM mission_actions
     LEFT JOIN LATERAL jsonb_array_elements(
-        CASE WHEN jsonb_typeof(species_onboard) = 'array' 
-        THEN species_onboard ELSE '[]' 
+        CASE WHEN jsonb_typeof(species_onboard) = 'array'
+        THEN species_onboard ELSE '[]'
         END
-    ) AS species 
+    ) AS species
     ON true
     WHERE action_type IN ('SEA_CONTROL', 'LAND_CONTROL', 'AIR_CONTROL') GROUP BY id
 ),
@@ -48,23 +50,12 @@ controls_infraction_natinf AS (
         ) > 0
 ),
 
-controls_infraction_natinf_category AS (
-    SELECT
-        controls_infraction_natinf.*,
-        infractions.infraction_category
-    FROM controls_infraction_natinf
-    LEFT JOIN infractions
-    ON infractions.natinf_code::VARCHAR = controls_infraction_natinf.infraction_natinf
-),
-
 controls_infraction_natinfs_array AS (
     SELECT
         id,
         true AS infraction,
-        'Pêche' = ANY(ARRAY_AGG(infraction_category)) AS fishing_infraction,
-        ARRAY_AGG(infraction_category) AS infraction_categories,
         ARRAY_AGG(infraction_natinf) AS infraction_natinfs
-    FROM controls_infraction_natinf_category
+    FROM controls_infraction_natinf
     GROUP BY id
 )
 
@@ -87,11 +78,10 @@ SELECT
     COALESCE(a.longitude, ports.longitude) AS longitude,
     COALESCE(a.latitude, ports.latitude) AS latitude,
     port_locode,
+    ports.port_name,
     ports.region AS port_department,
     vessel_targeted,
     COALESCE(inf.infraction, false) AS infraction,
-    COALESCE(inf.fishing_infraction, false) AS fishing_infraction,
-    inf.infraction_categories,
     inf.infraction_natinfs,
     seizure_and_diversion,
     species,

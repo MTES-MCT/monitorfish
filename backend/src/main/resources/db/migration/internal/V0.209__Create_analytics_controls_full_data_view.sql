@@ -48,12 +48,23 @@ controls_infraction_natinf AS (
         ) > 0
 ),
 
+controls_infraction_natinf_category AS (
+    SELECT
+        controls_infraction_natinf.*,
+        infractions.infraction_category
+    FROM controls_infraction_natinf
+    LEFT JOIN infractions
+    ON infractions.natinf_code::VARCHAR = controls_infraction_natinf.infraction_natinf
+),
+
 controls_infraction_natinfs_array AS (
     SELECT
         id,
         true AS infraction,
+        'Pêche' = ANY(ARRAY_AGG(infraction_category)) AS fishing_infraction,
+        ARRAY_AGG(infraction_category) AS infraction_categories,
         ARRAY_AGG(infraction_natinf) AS infraction_natinfs
-    FROM controls_infraction_natinf
+    FROM controls_infraction_natinf_category
     GROUP BY id
 )
 
@@ -79,6 +90,8 @@ SELECT
     ports.region AS port_department,
     vessel_targeted,
     COALESCE(inf.infraction, false) AS infraction,
+    COALESCE(inf.fishing_infraction, false) AS fishing_infraction,
+    inf.infraction_categories,
     inf.infraction_natinfs,
     seizure_and_diversion,
     species,

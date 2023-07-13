@@ -36,12 +36,6 @@ const actionDatetimeUtcValidator = string()
   })
 
 export const GearOnboardSchema = object({
-  declaredMesh: number().required('Veuillez indiquer le maillage déclaré.'),
-  controlledMesh: number().when('hasUncontrolledMesh', {
-    is: false,
-    then: number().required('Veuillez indiquer le maillage mesuré.'),
-    otherwise: number()
-  }),
   gearWasControlled: boolean().required("Veuillez indiquer si l'engin a été contrôlé.")
 })
 

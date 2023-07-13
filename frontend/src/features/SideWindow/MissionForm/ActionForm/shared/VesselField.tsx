@@ -98,22 +98,44 @@ export function VesselField() {
   return (
     <>
       <Wrapper>
-        <StyledVesselSearch
-          baseRef={newWindowContainerRef}
-          defaultValue={defaultValue}
-          disabled={values.vesselId === UNKNOWN_VESSEL.vesselId}
-          extendedWidth={400}
-          hasError={!!errors.vesselId}
-          hasVesselIdInResults
-          isExtended
-          onChange={handleVesselSearchChange}
-        />
-        <Checkbox
-          checked={values.vesselId === UNKNOWN_VESSEL.vesselId}
-          label="Navire inconnu"
-          name="isVesselUnknown"
-          onChange={handleIsVesselUnknownChange}
-        />
+        <Field>
+          <StyledVesselSearch
+            baseRef={newWindowContainerRef}
+            defaultValue={defaultValue}
+            disabled={values.vesselId === UNKNOWN_VESSEL.vesselId}
+            extendedWidth={400}
+            hasError={!!errors.vesselId}
+            hasVesselIdInResults
+            isExtended
+            onChange={handleVesselSearchChange}
+          />
+          <Checkbox
+            checked={values.vesselId === UNKNOWN_VESSEL.vesselId}
+            label="Navire inconnu"
+            name="isVesselUnknown"
+            onChange={handleIsVesselUnknownChange}
+          />
+        </Field>
+        {values.vesselId && values.vesselId !== UNKNOWN_VESSEL.vesselId && (
+          <VesselIdentityBar>
+            {values.internalReferenceNumber && (
+              <>
+                <span>{values.internalReferenceNumber}</span> (CFR)
+              </>
+            )}
+            {values.internalReferenceNumber && (
+              <>
+                <span>{values.externalReferenceNumber}</span> (Marq. ext)
+              </>
+            )}
+            {/* {values.internalReferenceNumber && <><span>{values.mmsi}</span> (MMSI)</>} */}
+            {values.internalReferenceNumber && (
+              <>
+                <span>{values.ircs}</span> (Call Sign)
+              </>
+            )}
+          </VesselIdentityBar>
+        )}
       </Wrapper>
 
       {errors.vesselId && <Error>{errors.vesselId}</Error>}
@@ -128,6 +150,11 @@ const Error = styled.p`
 `
 
 const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+const Field = styled.div`
   align-items: center;
   display: flex;
 
@@ -146,4 +173,18 @@ const Wrapper = styled.div`
 
 const StyledVesselSearch = styled(VesselSearch)`
   width: auto;
+`
+
+const VesselIdentityBar = styled.div`
+  color: ${p => p.theme.color.slateGray};
+  font-weight: 300;
+  margin-top: 4px;
+
+  > span {
+    font-weight: normal;
+
+    :not(:first-child) {
+      margin-left: 16px;
+    }
+  }
 `

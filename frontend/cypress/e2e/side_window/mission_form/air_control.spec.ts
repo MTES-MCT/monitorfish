@@ -113,12 +113,13 @@ context('Side Window > Mission Form > Air Control', () => {
     // -------------------------------------------------------------------------
     // Form
 
-    getSaveButton().should('be.disabled')
-    getSaveAndCloseButton().should('be.disabled')
-
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('exist')
     cy.contains('Veuillez indiquer le navire contrôlé.').should('exist')
     cy.contains('Veuillez indiquer votre trigramme.').should('exist')
+
+    cy.contains('Veuillez corriger les éléments en rouge').should('exist')
+    getSaveButton().should('be.disabled')
+    getSaveAndCloseButton().should('be.disabled')
 
     // Navire
     cy.get('input[placeholder="Rechercher un navire..."]').type('mal')
@@ -131,6 +132,8 @@ context('Side Window > Mission Form > Air Control', () => {
 
     // Mission is now valid for saving (but not for closure)
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
+
+    cy.contains('Veuillez corriger les éléments en rouge').should('not.exist')
     getSaveButton().should('be.enabled')
     getSaveAndCloseButton().should('be.enabled')
 

@@ -523,6 +523,8 @@ export function MissionForm() {
           </div>
 
           <div>
+            {!isMissionFormValid && <FooterError>Veuillez corriger les éléments en rouge</FooterError>}
+
             <Button accent={Accent.TERTIARY} disabled={isSaving} onClick={goToMissionList}>
               Annuler
             </Button>
@@ -652,4 +654,10 @@ const Footer = styled.div`
       }
     }
   }
+`
+
+const FooterError = styled.p`
+  color: ${p => p.theme.color.maximumRed};
+  font-style: italic;
+  margin: 0 0 4px 0;
 `

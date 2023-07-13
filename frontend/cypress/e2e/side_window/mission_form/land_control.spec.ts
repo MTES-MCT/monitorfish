@@ -194,13 +194,14 @@ context('Side Window > Mission Form > Land Control', () => {
     // -------------------------------------------------------------------------
     // Form
 
-    getSaveButton().should('be.disabled')
-    getSaveAndCloseButton().should('be.disabled')
-
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('exist')
     cy.contains('Veuillez indiquer le navire contrôlé.').should('exist')
     cy.contains('Veuillez indiquer le port de contrôle.').should('exist')
     cy.contains('Veuillez indiquer votre trigramme.').should('exist')
+
+    cy.contains('Veuillez corriger les éléments en rouge').should('exist')
+    getSaveButton().should('be.disabled')
+    getSaveAndCloseButton().should('be.disabled')
 
     // Navire
     cy.get('input[placeholder="Rechercher un navire..."]').type('mal')
@@ -217,6 +218,8 @@ context('Side Window > Mission Form > Land Control', () => {
 
     // Mission is now valid for saving (but not for closure)
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
+
+    cy.contains('Veuillez corriger les éléments en rouge').should('not.exist')
     getSaveButton().should('be.enabled')
     getSaveAndCloseButton().should('be.enabled')
 
@@ -232,6 +235,8 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.contains('Veuillez indiquer si la taille des espèces a été contrôlée.').should('exist')
     cy.contains('Veuillez indiquer si les espèces soumises à plan sont séparées.').should('exist')
     cy.contains('Veuillez indiquer si le navire est ciblé par le CNSP.').should('exist')
+
+    cy.contains('Veuillez corriger les éléments en rouge').should('exist')
     getSaveButton().should('be.disabled')
     getSaveAndCloseButton().should('be.disabled')
 
@@ -278,6 +283,8 @@ context('Side Window > Mission Form > Land Control', () => {
 
     // Mission is now valid for closure
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
+
+    cy.contains('Veuillez corriger les éléments en rouge').should('not.exist')
     getSaveButton().should('be.enabled')
     getSaveAndCloseButton().should('be.enabled')
 

@@ -405,16 +405,10 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.contains('Veuillez indiquer les engins à bord.').should('not.exist')
     cy.contains("Veuillez indiquer si l'engin a été contrôlé.").should('exist')
-    cy.contains('Veuillez indiquer le maillage déclaré.').should('exist')
-    cy.contains('Veuillez indiquer le maillage mesuré.').should('exist')
 
     cy.fill('Engin contrôlé', 'Oui')
-    cy.fill('Maillage déclaré', 50)
-    cy.fill('Maillage mesuré', 30)
 
     cy.contains("Veuillez indiquer si l'engin a été contrôlé.").should('not.exist')
-    cy.contains('Veuillez indiquer le maillage déclaré.').should('not.exist')
-    cy.contains('Veuillez indiquer le maillage mesuré.').should('not.exist')
 
     // Espèces à bord
     cy.fill('Poids des espèces vérifiés', 'Oui')

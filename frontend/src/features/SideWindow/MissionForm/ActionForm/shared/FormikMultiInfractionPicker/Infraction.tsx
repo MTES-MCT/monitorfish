@@ -39,12 +39,14 @@ export function Infraction<AnyInfraction extends MissionAction.OtherInfraction>(
               Icon={Icon.Edit}
               onClick={() => onEdit(index)}
               style={{ marginRight: '8px' }}
+              title="Éditer l'infraction"
             />
             <IconButton
               accent={Accent.SECONDARY}
               color={THEME.color.chineseRed}
               Icon={Icon.Delete}
               onClick={() => onDelete(index)}
+              title="Supprimer l'infraction"
             />
           </div>
         </div>

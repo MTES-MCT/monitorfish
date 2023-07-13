@@ -348,12 +348,13 @@ context('Side Window > Mission Form > Sea Control', () => {
     // -------------------------------------------------------------------------
     // Form
 
-    getSaveButton().should('be.disabled')
-    getSaveAndCloseButton().should('be.disabled')
-
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('exist')
     cy.contains('Veuillez indiquer le navire contrôlé.').should('exist')
     cy.contains('Veuillez indiquer votre trigramme.').should('exist')
+
+    cy.contains('Veuillez corriger les éléments en rouge').should('exist')
+    getSaveButton().should('be.disabled')
+    getSaveAndCloseButton().should('be.disabled')
 
     // Navire
     cy.get('input[placeholder="Rechercher un navire..."]').type('mal')
@@ -366,6 +367,8 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     // Mission is now valid for saving (but not for closure)
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
+
+    cy.contains('Veuillez corriger les éléments en rouge').should('not.exist')
     getSaveButton().should('be.enabled')
     getSaveAndCloseButton().should('be.enabled')
 
@@ -381,6 +384,8 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.contains('Veuillez indiquer si la taille des espèces a été contrôlée.').should('exist')
     cy.contains('Veuillez indiquer si les espèces soumises à plan sont séparées.').should('exist')
     cy.contains('Veuillez indiquer si le navire est ciblé par le CNSP.').should('exist')
+
+    cy.contains('Veuillez corriger les éléments en rouge').should('exist')
     getSaveButton().should('be.disabled')
     getSaveAndCloseButton().should('be.disabled')
 
@@ -400,16 +405,10 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.contains('Veuillez indiquer les engins à bord.').should('not.exist')
     cy.contains("Veuillez indiquer si l'engin a été contrôlé.").should('exist')
-    cy.contains('Veuillez indiquer le maillage déclaré.').should('exist')
-    cy.contains('Veuillez indiquer le maillage mesuré.').should('exist')
 
     cy.fill('Engin contrôlé', 'Oui')
-    cy.fill('Maillage déclaré', 50)
-    cy.fill('Maillage mesuré', 30)
 
     cy.contains("Veuillez indiquer si l'engin a été contrôlé.").should('not.exist')
-    cy.contains('Veuillez indiquer le maillage déclaré.').should('not.exist')
-    cy.contains('Veuillez indiquer le maillage mesuré.').should('not.exist')
 
     // Espèces à bord
     cy.fill('Poids des espèces vérifiés', 'Oui')
@@ -427,6 +426,8 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     // Mission is now valid for closure
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
+
+    cy.contains('Veuillez corriger les éléments en rouge').should('not.exist')
     getSaveButton().should('be.enabled')
     getSaveAndCloseButton().should('be.enabled')
 
@@ -443,5 +444,69 @@ context('Side Window > Mission Form > Sea Control', () => {
     }).as('createMissionAction')
 
     cy.get('h1').should('contain.text', 'Missions et contrôles')
+  })
+
+  it('Should add, edit, remove and validate gears infractions as expected', () => {
+    const getSubmitButton = () => cy.get('button').contains('Valider l’infraction').parent()
+
+    // -------------------------------------------------------------------------
+    // Form Validation
+
+    cy.clickButton('Ajouter une infraction engins').wait(500)
+    // This validation only run after the first submission attempt
+    cy.clickButton('Valider l’infraction')
+    getSubmitButton().should('be.disabled')
+
+    cy.fill('Type d’infraction', 'En attente')
+    getSubmitButton().should('be.enabled')
+
+    cy.fill('Type d’infraction', 'Sans PV')
+    getSubmitButton().should('be.disabled')
+
+    cy.fill('Type d’infraction', 'Avec PV')
+    getSubmitButton().should('be.disabled')
+
+    cy.fill('NATINF', '23581')
+    getSubmitButton().should('be.enabled')
+
+    // -------------------------------------------------------------------------
+    // Add
+
+    cy.fill('Observations sur l’infraction', "Une observation sur l'infraction")
+
+    cy.clickButton('Valider l’infraction')
+
+    cy.contains('Infraction obligations déclaratives et autorisations 1').should('exist')
+    cy.contains('Avec PV').should('exist')
+    cy.contains('NATINF : 23581').should('exist')
+    cy.contains("Une observation sur l'infraction").should('exist')
+
+    // -------------------------------------------------------------------------
+    // Edit
+
+    cy.clickButton("Éditer l'infraction")
+
+    cy.fill('Type d’infraction', 'Sans PV')
+    // Click the "X" button in the NATINF tag
+    cy.contains('23581 - Taille de maille non réglementaire')
+      .parentsUntil('.rs-picker-toggle')
+      .find('.rs-picker-toggle-clean')
+      .forceClick()
+    cy.fill('NATINF', '23588')
+    cy.fill('Observations sur l’infraction', "Une autre observation sur l'infraction")
+
+    cy.clickButton('Valider l’infraction')
+
+    cy.contains('Infraction obligations déclaratives et autorisations 1').should('exist')
+    cy.contains('Sans PV').should('exist')
+    cy.contains('NATINF : 23588').should('exist')
+    cy.contains("Une autre observation sur l'infraction").should('exist')
+
+    // -------------------------------------------------------------------------
+    // Remove
+
+    cy.clickButton("Supprimer l'infraction")
+
+    cy.contains('Infraction obligations déclaratives et autorisations 1').should('not.exist')
   })
 })

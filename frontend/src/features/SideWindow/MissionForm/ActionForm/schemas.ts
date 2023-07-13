@@ -3,6 +3,7 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { array, boolean, number, object, string } from 'yup'
 
+import { MissionAction } from '../../../../domain/types/missionAction'
 import { mainStore } from '../../../../store'
 
 // -----------------------------------------------------------------------------
@@ -132,6 +133,11 @@ export const SeaControlFormClosureSchema = SeaControlFormLiveSchema.concat(
 
 export const InfractionFormLiveSchema = object({
   comments: string(),
-  infractionType: string().required('Le type d’infraction est un champ obligatoire.'),
-  natinf: number().required('Le NATINF est un champ obligatoire.')
+  infractionType: string()
+    .oneOf(Object.values(MissionAction.InfractionType))
+    .required('Le type d’infraction est un champ obligatoire.'),
+  natinf: number().when('infractionType', {
+    is: (infractionType?: MissionAction.InfractionType) => infractionType !== MissionAction.InfractionType.PENDING,
+    then: number().required('Le NATINF est un champ obligatoire.')
+  })
 })

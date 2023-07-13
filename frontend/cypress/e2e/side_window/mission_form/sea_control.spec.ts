@@ -445,4 +445,68 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.get('h1').should('contain.text', 'Missions et contrôles')
   })
+
+  it('Should add, edit, remove and validate gears infractions as expected', () => {
+    const getSubmitButton = () => cy.get('button').contains('Valider l’infraction').parent()
+
+    // -------------------------------------------------------------------------
+    // Form Validation
+
+    cy.clickButton('Ajouter une infraction engins').wait(500)
+    // This validation only run after the first submission attempt
+    cy.clickButton('Valider l’infraction')
+    getSubmitButton().should('be.disabled')
+
+    cy.fill('Type d’infraction', 'En attente')
+    getSubmitButton().should('be.enabled')
+
+    cy.fill('Type d’infraction', 'Sans PV')
+    getSubmitButton().should('be.disabled')
+
+    cy.fill('Type d’infraction', 'Avec PV')
+    getSubmitButton().should('be.disabled')
+
+    cy.fill('NATINF', '23581')
+    getSubmitButton().should('be.enabled')
+
+    // -------------------------------------------------------------------------
+    // Add
+
+    cy.fill('Observations sur l’infraction', "Une observation sur l'infraction")
+
+    cy.clickButton('Valider l’infraction')
+
+    cy.contains('Infraction obligations déclaratives et autorisations 1').should('exist')
+    cy.contains('Avec PV').should('exist')
+    cy.contains('NATINF : 23581').should('exist')
+    cy.contains("Une observation sur l'infraction").should('exist')
+
+    // -------------------------------------------------------------------------
+    // Edit
+
+    cy.clickButton("Éditer l'infraction")
+
+    cy.fill('Type d’infraction', 'Sans PV')
+    // Click the "X" button in the NATINF tag
+    cy.contains('23581 - Taille de maille non réglementaire')
+      .parentsUntil('.rs-picker-toggle')
+      .find('.rs-picker-toggle-clean')
+      .forceClick()
+    cy.fill('NATINF', '23588')
+    cy.fill('Observations sur l’infraction', "Une autre observation sur l'infraction")
+
+    cy.clickButton('Valider l’infraction')
+
+    cy.contains('Infraction obligations déclaratives et autorisations 1').should('exist')
+    cy.contains('Sans PV').should('exist')
+    cy.contains('NATINF : 23588').should('exist')
+    cy.contains("Une autre observation sur l'infraction").should('exist')
+
+    // -------------------------------------------------------------------------
+    // Remove
+
+    cy.clickButton("Supprimer l'infraction")
+
+    cy.contains('Infraction obligations déclaratives et autorisations 1').should('not.exist')
+  })
 })

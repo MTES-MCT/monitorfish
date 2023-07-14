@@ -296,4 +296,179 @@ context('Side Window > Mission Form > Land Control', () => {
 
     cy.get('h1').should('contain.text', 'Missions et contrôles')
   })
+
+  it('Should fill the mission zone from the last land control added', () => {
+    const now = getUtcDateInMultipleFormats()
+
+    // -------------------------------------------------------------------------
+    // Form
+
+    cy.get('*[data-cy="mission-main-form-location"]').should('not.contain', 'Polygone dessiné 1')
+    cy.fill('Zone de la mission calculée à partir des contrôles', true)
+
+    // Navire
+    // TODO Handle Automplete in custom `cy.fill()` command once it's used via monitor-ui.
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    cy.get('input[placeholder="Rechercher un navire..."]').type('pheno').wait(250)
+    cy.contains('mark', 'PHENO').click()
+
+    // Date et heure du contrôle
+    cy.fill('Date et heure du contrôle', now.utcDateTupleWithTime)
+
+    // Port de contrôle
+    cy.fill('Port de contrôle', 'Auray')
+
+    // A mission zone should be automatically added
+    cy.get('.Toastify__toast--success').contains(
+      'Une zone de mission a été ajoutée à partir des contrôles de la mission'
+    )
+    cy.get('*[data-cy="mission-main-form-location"]').should('contain', 'Polygone dessiné 1')
+
+    // Saisi par
+    cy.fill('Saisi par', 'Marlin')
+
+    // Add another land control
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle à la débarque')
+
+    // Navire
+    // TODO Handle Automplete in custom `cy.fill()` command once it's used via monitor-ui.
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    cy.get('input[placeholder="Rechercher un navire..."]').type('FR263418260').wait(250)
+    cy.contains('mark', 'FR263418260').click()
+
+    // Date et heure du contrôle
+    cy.fill('Date et heure du contrôle', now.utcDateTupleWithTime)
+
+    // Port de contrôle
+    cy.fill('Port de contrôle', 'Abu Musa')
+
+    // The mission zone should be automatically updated
+    cy.get('.Toastify__toast--success').contains(
+      'Une zone de mission a été ajoutée à partir des contrôles de la mission'
+    )
+    cy.get('*[data-cy="mission-main-form-location"]').should('contain', 'Polygone dessiné 1')
+
+    // Saisi par
+    cy.fill('Saisi par', 'Marlin')
+
+    // -------------------------------------------------------------------------
+    // Request
+
+    cy.intercept('POST', '/api/v1/mission', {
+      statusCode: 201
+    }).as('createMission')
+
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      statusCode: 201
+    }).as('createMissionAction')
+
+    cy.clickButton('Enregistrer et quitter')
+
+    cy.wait('@createMission').then(interception => {
+      if (!interception.response) {
+        assert.fail('`interception.response` is undefined.')
+      }
+
+      assert.deepInclude(interception.request.body, {
+        controlUnits: [
+          {
+            administration: 'DDTM',
+            contact: null,
+            id: 10001,
+            isArchived: false,
+            name: 'Cultures marines – DDTM 40',
+            resources: [
+              {
+                id: 2,
+                name: 'Semi-rigide 2'
+              }
+            ]
+          }
+        ],
+        geom: {
+          coordinates: [
+            [
+              [
+                [55.08333333333329, 25.88015647212255],
+                [55.08480295451979, 25.880091507622822],
+                [55.08625841764026, 25.87989723998035],
+                [55.08768570116363, 25.879575540730272],
+                [55.08907105530665, 25.879129509037483],
+                [55.09040113461571, 25.87856344181091],
+                [55.09166312663458, 25.877882792268636],
+                [55.092844875413114, 25.87709411735581],
+                [55.09393499866325, 25.87620501452396],
+                [55.09492299743044, 25.87522404848336],
+                [55.095799357222425, 25.874160668636918],
+                [55.0965556396205, 25.87302511799406],
+                [55.09718456349203, 25.871828334445155],
+                [55.097680075023916, 25.870581845349776],
+                [55.09803740590617, 25.86929765645756],
+                [55.098253119109536, 25.867988136233166],
+                [55.09832514182208, 25.866665896702088],
+                [55.09825278523382, 25.86534367196566],
+                [55.098036750985415, 25.864034195556684],
+                [55.097679124226346, 25.86275007781684],
+                [55.09718335335625, 25.861503684476418],
+                [55.09655421665136, 25.860307017605308],
+                [55.095797776103815, 25.859171600079137],
+                [55.09492131892386, 25.858108364672745],
+                [55.093933287272755, 25.857127548844787],
+                [55.0928431969065, 25.856238596225623],
+                [55.09166154551591, 25.855450065752848],
+                [55.090399711646505, 25.8547695493273],
+                [55.0890698451708, 25.854203598778497],
+                [55.08768475036598, 25.85375766284072],
+                [55.086257762719455, 25.853436034743012],
+                [55.08480262064406, 25.853241810915932],
+                [55.08333333333329, 25.853176861210827],
+                [55.08186404602255, 25.853241810915932],
+                [55.08040890394716, 25.853436034743012],
+                [55.07898191630062, 25.85375766284072],
+                [55.07759682149581, 25.854203598778497],
+                [55.0762669550201, 25.8547695493273],
+                [55.07500512115069, 25.855450065752848],
+                [55.0738234697601, 25.856238596225623],
+                [55.07273337939383, 25.857127548844787],
+                [55.07174534774273, 25.858108364672745],
+                [55.070868890562785, 25.859171600079137],
+                [55.07011245001525, 25.860307017605308],
+                [55.06948331331036, 25.861503684476418],
+                [55.06898754244026, 25.86275007781684],
+                [55.0686299156812, 25.864034195556684],
+                [55.06841388143279, 25.86534367196566],
+                [55.06834152484452, 25.866665896702088],
+                [55.06841354755708, 25.867988136233166],
+                [55.06862926076043, 25.86929765645756],
+                [55.068986591642684, 25.870581845349776],
+                [55.06948210317457, 25.871828334445155],
+                [55.07011102704609, 25.87302511799406],
+                [55.07086730944416, 25.874160668636918],
+                [55.07174366923615, 25.87522404848336],
+                [55.072731668003364, 25.87620501452396],
+                [55.073821791253486, 25.87709411735581],
+                [55.075003540032036, 25.877882792268636],
+                [55.0762655320509, 25.87856344181091],
+                [55.07759561135997, 25.879129509037483],
+                [55.07898096550298, 25.879575540730272],
+                [55.08040824902635, 25.87989723998035],
+                [55.08186371214683, 25.880091507622822],
+                [55.08333333333329, 25.88015647212255]
+              ]
+            ]
+          ],
+          type: 'MultiPolygon'
+        },
+        isClosed: false,
+        isGeometryComputedFromControls: true,
+        isUnderJdp: true,
+        isValid: true,
+        missionSource: 'MONITORFISH',
+        missionTypes: ['LAND']
+      })
+
+      cy.get('h1').should('contain.text', 'Missions et contrôles')
+    })
+  })
 })

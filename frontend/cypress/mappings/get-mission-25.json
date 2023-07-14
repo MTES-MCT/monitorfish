@@ -38,7 +38,8 @@
       "endDateTimeUtc": "2023-02-14T17:45:28.923703Z",
       "envActions": [],
       "missionSource": "POSEIDON_CNSP",
-      "isClosed": true
+      "isClosed": true,
+      "isGeometryComputedFromControls": false
     }
   }
 }

@@ -36,7 +36,8 @@
       "endDateTimeUtc": "2023-03-20T11:14:02.923703Z",
       "envActions": [],
       "missionSource": "MONITORENV",
-      "isClosed": true
+      "isClosed": true,
+      "isGeometryComputedFromControls": false
     }
   }
 }

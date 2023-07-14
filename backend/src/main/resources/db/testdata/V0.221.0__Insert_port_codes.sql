@@ -1,6 +1,6 @@
 insert into ports (country_code_iso2, facade, region, locode, port_name, latitude, longitude, fao_areas, is_active)
 values ('AD',         null, null, 'ADALV', 'Andorra la Vella', 42.5, 1.01666666666667,  ARRAY ['27.8'], true),
-       ('FR', 'Guadeloupe', null, 'FRZEG', 'Auray', 53.3543093, -10.8558547, ARRAY ['27.7', '27.7.b'], true),
+       ('FR', 'Guadeloupe', null, 'FRZEG', 'Auray', 47.666491, -2.983767, ARRAY ['27.7', '27.7.b'], true),
        ('AE', 'Guadeloupe', null, 'AEABU', 'Abu al Bukhoosh', 25.4833333333333, 53.05, null, true),
        ('AE', 'Guadeloupe', 'AZ', 'AEAUH', 'Abu Dhabi', 24.4666666666667, 54.0666666666667, null, false),
        ('AE', 'Guadeloupe', null, 'AEAMU', 'Abu Musa', 25.8666666666667, 55.0833333333333, null, true),

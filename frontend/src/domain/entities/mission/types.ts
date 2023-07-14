@@ -15,6 +15,7 @@ export namespace Mission {
     hasMissionOrder?: boolean | undefined
     id: number
     isClosed: boolean
+    isGeometryComputedFromControls: boolean
     isUnderJdp?: boolean | undefined
     isValid: boolean
     missionSource: MissionSource

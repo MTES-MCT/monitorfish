@@ -64,6 +64,7 @@ context('Side Window > Mission Form > Main Form', () => {
           }
         ],
         isClosed: false,
+        isGeometryComputedFromControls: false,
         isUnderJdp: false,
         missionSource: 'MONITORFISH',
         missionTypes: ['SEA']
@@ -94,6 +95,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.fill('Administration 1', 'DDTM')
     cy.fill('Unité 1', 'Cultures marines – DDTM 40')
     cy.fill('Moyen 1', ['Semi-rigide 1'])
+    cy.fill('Contact de l’unité 1', 'Bob')
     cy.fill('Contact de l’unité 1', 'Bob')
 
     cy.clickButton('Ajouter une autre unité')
@@ -154,6 +156,7 @@ context('Side Window > Mission Form > Main Form', () => {
         endDateTimeUtc: '2023-02-01T13:45:00.000Z',
         hasMissionOrder: true,
         isClosed: false,
+        isGeometryComputedFromControls: false,
         isUnderJdp: true,
         missionSource: 'MONITORFISH',
         missionTypes: ['AIR'],
@@ -203,6 +206,7 @@ context('Side Window > Mission Form > Main Form', () => {
         geom: null,
         id: 2,
         isClosed: false,
+        isGeometryComputedFromControls: false,
         missionSource: 'MONITORFISH',
         missionTypes: ['SEA'],
         observationsCacem:
@@ -326,7 +330,9 @@ context('Side Window > Mission Form > Main Form', () => {
       assert.deepInclude(interception.request.body, {
         // We check this prop to be sure all the data is there (this is the last field to be filled)
         closedBy: 'Doris',
-        isClosed: true
+
+        isClosed: true,
+        isGeometryComputedFromControls: false
       })
     })
 
@@ -436,6 +442,7 @@ context('Side Window > Mission Form > Main Form', () => {
         geom: null,
         id: 6,
         isClosed: false,
+        isGeometryComputedFromControls: false,
         missionSource: 'MONITORFISH',
         missionTypes: ['AIR'],
         observationsCacem: 'Toward agency blue now hand. Meet answer someone stand.',

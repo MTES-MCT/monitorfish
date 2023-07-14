@@ -566,6 +566,10 @@ context('Side Window > Mission Form > Sea Control', () => {
       statusCode: 201
     }).as('createMission')
 
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      statusCode: 201
+    }).as('createMissionAction')
+
     cy.clickButton('Enregistrer et quitter')
 
     cy.wait('@createMission').then(interception => {

@@ -668,7 +668,7 @@ context('Side Window > Mission Form > Sea Control', () => {
         isUnderJdp: true,
         isValid: true,
         missionSource: 'MONITORFISH',
-        missionTypes: ['LAND']
+        missionTypes: ['SEA']
       })
 
       cy.get('h1').should('contain.text', 'Missions et contrôles')

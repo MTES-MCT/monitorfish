@@ -3,12 +3,12 @@ import Feature from 'ol/Feature'
 import { MultiPolygon } from 'ol/geom'
 import { circular } from 'ol/geom/Polygon'
 
-import { MissionActionFormValues } from '../../../features/SideWindow/MissionForm/types'
 import { convertToGeoJSONGeometryObject } from '../../entities/layers'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../entities/map/constants'
-import { GeoJSON as GeoJSONType } from '../../types/GeoJSON'
 import { MissionAction } from '../../types/missionAction'
 
+import type { MissionActionFormValues } from '../../../features/SideWindow/MissionForm/types'
+import type { GeoJSON as GeoJSONType } from '../../types/GeoJSON'
 import type { Port } from '../../types/port'
 
 export const getPortGeometry =

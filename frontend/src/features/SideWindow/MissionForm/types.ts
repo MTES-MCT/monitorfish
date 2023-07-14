@@ -14,6 +14,7 @@ export type MissionMainFormValues = Partial<
   Omit<Mission.MissionData, 'actions' | 'controlUnits' | 'startDateTimeUtc' | 'missionTypes'>
 > & {
   controlUnits: Array<ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft>
+  isGeometryComputedFromControls: boolean
   isValid: boolean
   missionTypes?: Mission.MissionType[]
   startDateTimeUtc: string

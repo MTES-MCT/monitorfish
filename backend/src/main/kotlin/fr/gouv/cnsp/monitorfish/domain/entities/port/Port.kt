@@ -5,4 +5,6 @@ data class Port(
     val name: String,
     val facade: String? = null,
     val faoAreas: List<String> = listOf(),
+    val latitude: Double? = null,
+    val longitude: Double? = null,
 )

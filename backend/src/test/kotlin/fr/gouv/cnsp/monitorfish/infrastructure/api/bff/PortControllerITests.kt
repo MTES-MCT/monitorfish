@@ -32,7 +32,7 @@ class PortControllerITests {
         // Given
         given(this.getActivePorts.execute()).willReturn(
             listOf(
-                Port("ET", "Etel"),
+                Port("ET", "Etel", latitude = 47.123, longitude = 0.123),
                 Port("AY", "Auray"),
             ),
         )
@@ -44,5 +44,7 @@ class PortControllerITests {
             .andExpect(jsonPath("$.length()", equalTo(2)))
             .andExpect(jsonPath("$[0].locode", equalTo("ET")))
             .andExpect(jsonPath("$[0].name", equalTo("Etel")))
+            .andExpect(jsonPath("$[0].latitude", equalTo(47.123)))
+            .andExpect(jsonPath("$[0].longitude", equalTo(0.123)))
     }
 }

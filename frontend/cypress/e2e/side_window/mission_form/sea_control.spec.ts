@@ -525,14 +525,14 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.get('input[placeholder="Rechercher un navire..."]').type('pheno').wait(250)
     cy.contains('mark', 'PHENO').click()
 
-    // Date et heure du contrôle
-    cy.fill('Date et heure du contrôle', now.utcDateTupleWithTime)
-
-    // A mission zone should be automatically added
+    // A mission zone should be automatically added (because of the stubbed coordinates update when IS_CYPRESS_TEST is set)
     cy.get('.Toastify__toast--success').contains(
       'Une zone de mission a été ajoutée à partir des contrôles de la mission'
     )
     cy.get('*[data-cy="mission-main-form-location"]').should('contain', 'Polygone dessiné 1')
+
+    // Date et heure du contrôle
+    cy.fill('Date et heure du contrôle', now.utcDateTupleWithTime)
 
     // Saisi par
     cy.fill('Saisi par', 'Marlin')
@@ -547,14 +547,14 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.get('input[placeholder="Rechercher un navire..."]').type('FR263418260').wait(250)
     cy.contains('mark', 'FR263418260').click()
 
-    // Date et heure du contrôle
-    cy.fill('Date et heure du contrôle', now.utcDateTupleWithTime)
-
-    // The mission zone should be automatically updated
+    // The mission zone should be automatically updated (because of the stubbed coordinates update when IS_CYPRESS_TEST is set)
     cy.get('.Toastify__toast--success').contains(
       'Une zone de mission a été ajoutée à partir des contrôles de la mission'
     )
     cy.get('*[data-cy="mission-main-form-location"]').should('contain', 'Polygone dessiné 1')
+
+    // Date et heure du contrôle
+    cy.fill('Date et heure du contrôle', now.utcDateTupleWithTime)
 
     // Saisi par
     cy.fill('Saisi par', 'Marlin')

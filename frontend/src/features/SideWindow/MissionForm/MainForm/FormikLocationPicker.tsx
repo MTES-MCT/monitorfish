@@ -24,11 +24,10 @@ import {
   OpenLayersGeometryType,
   WSG84_PROJECTION
 } from '../../../../domain/entities/map/constants'
-import { Mission } from '../../../../domain/entities/mission/types'
 import { fitToExtent } from '../../../../domain/shared_slices/Map'
 import { MissionAction } from '../../../../domain/types/missionAction'
 import { addMissionZone } from '../../../../domain/use_cases/mission/addMissionZone'
-import { getPortGeometry } from '../../../../domain/use_cases/mission/getPortGeometry'
+import { getLastControlCircleGeometry } from '../../../../domain/use_cases/mission/getLastControlCircleGeometry'
 import { useDeepCompareEffect } from '../../../../hooks/useDeepCompareEffect'
 import { useListenForDrawedGeometry } from '../../../../hooks/useListenForDrawing'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
@@ -53,21 +52,37 @@ export function FormikLocationPicker() {
     return values.geom.coordinates || []
   }, [values.geom])
 
-  const controlsPorts =
+  const landControlsPorts = useMemo(
+    () =>
+      draft?.actionsFormValues
+        ?.filter(action => action.actionType === MissionAction.MissionActionType.LAND_CONTROL && action.portLocode)
+        ?.map(action => action.portLocode)
+        ?.toString() || '',
+    [draft?.actionsFormValues]
+  )
+  const previousControlPorts = usePrevious(landControlsPorts)
+
+  const airOrSeaControlsCoordinates =
     useMemo(
       () =>
         draft?.actionsFormValues
-          ?.filter(action => action.actionType === MissionAction.MissionActionType.LAND_CONTROL && action.portLocode)
-          ?.map(action => action.portLocode),
+          ?.filter(
+            action =>
+              (action.actionType === MissionAction.MissionActionType.AIR_CONTROL ||
+                action.actionType === MissionAction.MissionActionType.SEA_CONTROL) &&
+              action.latitude &&
+              action.longitude
+          )
+          ?.map(action => `${action.latitude}/${action.longitude}`)
+          ?.toString() || '',
       [draft?.actionsFormValues]
     ) || []
-  const previousControlPorts = usePrevious(controlsPorts.toString())
+  const previousAirOrSeaControlsCoordinates = usePrevious(airOrSeaControlsCoordinates)
+
   const previousIsGeometryComputedFromControls = usePrevious(values.isGeometryComputedFromControls)
 
   /**
-   * Set a new mission geometry when:
-   * - a land mission has no current geometry
-   * - a control port has been declared in the action form
+   * Update of the mission zone from air, sea or land controls
    */
   useDeepCompareEffect(() => {
     /**
@@ -82,33 +97,44 @@ export function FormikLocationPicker() {
 
     /**
      * If the isGeometryComputedFromControls was already selected,
-     * we must update mission location only if the controls port changed
+     * we must update mission location if the land controls port changed
      */
     if (
       previousIsGeometryComputedFromControls &&
       values.isGeometryComputedFromControls &&
-      previousControlPorts !== controlsPorts.toString()
+      previousControlPorts !== landControlsPorts
+    ) {
+      updateMissionLocation()
+
+      return
+    }
+
+    /**
+     * If the isGeometryComputedFromControls was already selected,
+     * we must update mission location if the air or sea controls coordinates changed
+     */
+    if (
+      previousIsGeometryComputedFromControls &&
+      values.isGeometryComputedFromControls &&
+      previousAirOrSeaControlsCoordinates !== airOrSeaControlsCoordinates
     ) {
       updateMissionLocation()
     }
-  }, [values.isGeometryComputedFromControls, controlsPorts])
+  }, [values.isGeometryComputedFromControls, landControlsPorts, airOrSeaControlsCoordinates])
 
   const updateMissionLocation = useDebouncedCallback(async () => {
-    if (
-      !values.missionTypes?.includes(Mission.MissionType.LAND) ||
-      !draft?.actionsFormValues ||
-      !getPortsApiQuery.data ||
-      !values.isGeometryComputedFromControls
-    ) {
+    if (!draft?.actionsFormValues || !getPortsApiQuery.data) {
       return
     }
 
-    const nextPortGeometry = await dispatch(getPortGeometry(getPortsApiQuery.data, draft.actionsFormValues))
-    if (!nextPortGeometry) {
+    const nextMissionGeometry = await dispatch(
+      getLastControlCircleGeometry(getPortsApiQuery.data, draft.actionsFormValues)
+    )
+    if (!nextMissionGeometry) {
       return
     }
 
-    setFieldValue('geom', nextPortGeometry)
+    setFieldValue('geom', nextMissionGeometry)
 
     window.document.dispatchEvent(
       new NotificationEvent('Une zone de mission a été ajoutée à partir des contrôles de la mission', 'success', true)

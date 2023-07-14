@@ -138,6 +138,6 @@ export const InfractionFormLiveSchema = object({
     .required('Le type d’infraction est un champ obligatoire.'),
   natinf: number().when('infractionType', {
     is: (infractionType?: MissionAction.InfractionType) => infractionType !== MissionAction.InfractionType.PENDING,
-    then: number().required('Le NATINF est un champ obligatoire.')
+    then: schema => schema.required('Le NATINF est un champ obligatoire.')
   })
 })

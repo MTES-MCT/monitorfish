@@ -1,27 +1,46 @@
-import { Accent, Button, Fieldset, Icon, IconButton, Label } from '@mtes-mct/monitor-ui'
+import {
+  Accent,
+  Button,
+  Fieldset,
+  FormikCheckbox,
+  Icon,
+  IconButton,
+  Label,
+  NotificationEvent,
+  usePrevious
+} from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { boundingExtent } from 'ol/extent'
 import { transformExtent } from 'ol/proj'
 import { remove } from 'ramda'
 import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
 
+import { useGetPortsQuery } from '../../../../api/port'
 import {
   InteractionListener,
   OPENLAYERS_PROJECTION,
   OpenLayersGeometryType,
   WSG84_PROJECTION
 } from '../../../../domain/entities/map/constants'
+import { Mission } from '../../../../domain/entities/mission/types'
 import { fitToExtent } from '../../../../domain/shared_slices/Map'
+import { MissionAction } from '../../../../domain/types/missionAction'
 import { addMissionZone } from '../../../../domain/use_cases/mission/addMissionZone'
+import { getPortGeometry } from '../../../../domain/use_cases/mission/getPortGeometry'
+import { useDeepCompareEffect } from '../../../../hooks/useDeepCompareEffect'
 import { useListenForDrawedGeometry } from '../../../../hooks/useListenForDrawing'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 
 import type { MissionMainFormValues } from '../types'
 import type { Coordinate } from 'ol/coordinate'
 
 export function FormikLocationPicker() {
   const { setFieldValue, values } = useFormikContext<MissionMainFormValues>()
+  const draft = useMainAppSelector(store => store.mission.draft)
+  const getPortsApiQuery = useGetPortsQuery()
 
   const { geometry } = useListenForDrawedGeometry(InteractionListener.MISSION_ZONE)
   const dispatch = useMainAppDispatch()
@@ -33,6 +52,68 @@ export function FormikLocationPicker() {
 
     return values.geom.coordinates || []
   }, [values.geom])
+
+  const controlsPorts =
+    useMemo(
+      () =>
+        draft?.actionsFormValues
+          ?.filter(action => action.actionType === MissionAction.MissionActionType.LAND_CONTROL && action.portLocode)
+          ?.map(action => action.portLocode),
+      [draft?.actionsFormValues]
+    ) || []
+  const previousControlPorts = usePrevious(controlsPorts.toString())
+  const previousIsGeometryComputedFromControls = usePrevious(values.isGeometryComputedFromControls)
+
+  /**
+   * Set a new mission geometry when:
+   * - a land mission has no current geometry
+   * - a control port has been declared in the action form
+   */
+  useDeepCompareEffect(() => {
+    /**
+     * If we newly select the isGeometryComputedFromControls button (it was disabled before),
+     * we must update mission location
+     */
+    if (!previousIsGeometryComputedFromControls && values.isGeometryComputedFromControls) {
+      updateMissionLocation()
+
+      return
+    }
+
+    /**
+     * If the isGeometryComputedFromControls was already selected,
+     * we must update mission location only if the controls port changed
+     */
+    if (
+      previousIsGeometryComputedFromControls &&
+      values.isGeometryComputedFromControls &&
+      previousControlPorts !== controlsPorts.toString()
+    ) {
+      updateMissionLocation()
+    }
+  }, [values.isGeometryComputedFromControls, controlsPorts])
+
+  const updateMissionLocation = useDebouncedCallback(async () => {
+    if (
+      !values.missionTypes?.includes(Mission.MissionType.LAND) ||
+      !draft?.actionsFormValues ||
+      !getPortsApiQuery.data ||
+      !values.isGeometryComputedFromControls
+    ) {
+      return
+    }
+
+    const nextPortGeometry = await dispatch(getPortGeometry(getPortsApiQuery.data, draft.actionsFormValues))
+    if (!nextPortGeometry) {
+      return
+    }
+
+    setFieldValue('geom', nextPortGeometry)
+
+    window.document.dispatchEvent(
+      new NotificationEvent('Une zone de mission a été ajoutée à partir des contrôles de la mission', 'success', true)
+    )
+  }, 250)
 
   const addZone = useCallback(async () => {
     dispatch(addMissionZone(values.geom))
@@ -82,11 +163,17 @@ export function FormikLocationPicker() {
   )
 
   return (
-    <Fieldset>
+    <StyledFieldSet data-cy="mission-main-form-location">
       <Label>Localisations</Label>
 
       <div>
-        <Button accent={Accent.SECONDARY} Icon={Icon.Plus} isFullWidth onClick={addZone}>
+        <Button
+          accent={Accent.SECONDARY}
+          disabled={values.isGeometryComputedFromControls}
+          Icon={Icon.Plus}
+          isFullWidth
+          onClick={addZone}
+        >
           Ajouter une zone de mission
         </Button>
 
@@ -104,20 +191,36 @@ export function FormikLocationPicker() {
                 </Link>
               </ZoneWrapper>
 
-              <IconButton accent={Accent.SECONDARY} Icon={Icon.Edit} onClick={addZone} />
+              <IconButton
+                accent={Accent.SECONDARY}
+                disabled={values.isGeometryComputedFromControls}
+                Icon={Icon.Edit}
+                onClick={addZone}
+              />
               <IconButton
                 accent={Accent.SECONDARY}
                 aria-label="Supprimer cette zone"
+                disabled={values.isGeometryComputedFromControls}
                 Icon={Icon.Delete}
                 onClick={() => deleteZone(index)}
               />
             </Row>
           ))}
         </>
+        <FormikCheckbox
+          label="Zone de la mission calculée à partir des contrôles"
+          name="isGeometryComputedFromControls"
+        />
       </div>
-    </Fieldset>
+    </StyledFieldSet>
   )
 }
+
+const StyledFieldSet = styled(Fieldset)`
+  .Field-Checkbox {
+    margin-top: 8px;
+  }
+`
 
 const Row = styled.div`
   align-items: center;

@@ -34,7 +34,8 @@
       "envActions": [],
       "missionSource": "POSEIDON_CNSP",
       "isClosed": false,
-      "isUnderJdp": false
+      "isUnderJdp": false,
+      "isGeometryComputedFromControls": false
     }
   }
 }

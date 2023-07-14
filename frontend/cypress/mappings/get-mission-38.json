@@ -86,7 +86,8 @@
         }
       ],
       "missionSource": "MONITORENV",
-      "isClosed": true
+      "isClosed": true,
+      "isGeometryComputedFromControls": false
     }
   }
 }

@@ -36,5 +36,7 @@ data class PortEntity(
         name = portName,
         facade = facade?.let { Facade.from(it).toString() },
         faoAreas = faoAreas ?: listOf(),
+        latitude = latitude,
+        longitude = longitude,
     )
 }

@@ -36,7 +36,8 @@
       "isClosed": false,
       "isUnderJdp": false,
       "hasSomeGearsSeized": false,
-      "hasSomeSpeciesSeized": false
+      "hasSomeSpeciesSeized": false,
+      "isGeometryComputedFromControls": false
     }
   }
 }

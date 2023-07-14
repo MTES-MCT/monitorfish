@@ -110,6 +110,7 @@ export function getMissionFormInitialValues(
       initialActionsFormValues: [],
       initialMainFormValues: {
         controlUnits: [INITIAL_MISSION_CONTROL_UNIT],
+        isGeometryComputedFromControls: false,
         isValid: false,
         missionTypes: [Mission.MissionType.SEA],
         startDateTimeUtc

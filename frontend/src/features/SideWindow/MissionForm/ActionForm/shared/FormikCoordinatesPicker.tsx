@@ -86,6 +86,10 @@ export function FormikCoordinatesPicker() {
   )
 
   const handleCenterOnMap = (centeredCoordinates: Coordinate) => {
+    if (centeredCoordinates.length !== 2 || !centeredCoordinates[0] || !centeredCoordinates[1]) {
+      return
+    }
+
     const bufferedExtent = getCoordinatesExtent(centeredCoordinates)
     dispatch(fitToExtent(bufferedExtent))
   }

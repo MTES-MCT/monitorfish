@@ -13,13 +13,13 @@ import { DraftCancellationConfirmationDialog } from './shared/DraftCancellationC
 import { TitleSourceTag } from './shared/TitleSourceTag'
 import { TitleStatusTag } from './shared/TitleStatusTag'
 import {
-  validateMissionForms,
   areMissionFormsValuesValid,
   getMissionActionsDataFromMissionActionsFormValues,
   getMissionDataFromMissionFormValues,
   getMissionFormInitialValues,
   getTitleFromMissionMainFormValues,
-  getUpdatedMissionFromMissionMainFormValues
+  getUpdatedMissionFromMissionMainFormValues,
+  validateMissionForms
 } from './utils'
 import { useCreateMissionMutation, useDeleteMissionMutation, useUpdateMissionMutation } from '../../../api/mission'
 import {
@@ -377,6 +377,9 @@ export function MissionForm() {
   // DATA
 
   useEffect(() => {
+    // We hide selected missions geometries and overlays on map
+    dispatch(missionActions.unsetSelectedMissionGeoJSON())
+
     if (!isLoading && sideWindow.selectedPath.id === previousMissionId) {
       return
     }

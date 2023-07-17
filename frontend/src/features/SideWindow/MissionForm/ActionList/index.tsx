@@ -34,7 +34,7 @@ export function ActionList({
       <FormHead>
         <h2>Actions réalisées en mission</h2>
 
-        <Dropdown Icon={Icon.Plus} title="Ajouter">
+        <Dropdown Icon={Icon.Plus} placement={'bottomEnd'} title="Ajouter">
           {missionTypes.includes(Mission.MissionType.AIR) && (
             <>
               <Dropdown.Item Icon={Icon.Plane} onClick={() => onAdd(MissionAction.MissionActionType.AIR_CONTROL)}>

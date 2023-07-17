@@ -99,7 +99,7 @@ export function Controls() {
 
 const NoControl = styled.div`
   padding: 50px 5px 0px 5px;
-  margin: 10px 5px;
+  margin: 10px 10px;
   height: 70px;
   background: ${p => p.theme.color.white};
   color: ${p => p.theme.color.slateGray};

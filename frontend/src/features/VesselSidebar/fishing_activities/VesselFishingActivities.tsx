@@ -90,7 +90,7 @@ export function VesselFishingActivities() {
   }
 
   if (!fishingActivities) {
-    return <NoFishingActivities data-cy="vessel-fishing">Ce navire n'a pas envoyé de message JPE.</NoFishingActivities>
+    return <NoFishingActivities data-cy="vessel-fishing">Ce navire n’a pas envoyé de message JPE.</NoFishingActivities>
   }
 
   return (

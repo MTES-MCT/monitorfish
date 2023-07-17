@@ -1,10 +1,11 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 import { getEffectiveDateTimeFromMessage, getLogbookMessageType } from '../entities/logbook'
 import { FishingActivitiesTab } from '../entities/vessel/vessel'
 
 import type { FishingActivityShowedOnMap, VesselIdentity } from '../entities/vessel/types'
 import type { FishingActivities, VesselVoyage } from '../types/fishingActivities'
+import type { PayloadAction } from '@reduxjs/toolkit'
 
 // TODO Properly type this redux state.
 export type FishingActivitiesState = {

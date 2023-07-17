@@ -102,7 +102,9 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
       <Wrapper>
         {startDateAsDayjs && (
           <DateLabel>
-            <b>{formatDateLabel(startDateAsDayjs.format('DD MMM'))}</b> à {startDateAsDayjs.format('HH:mm')} (UTC)
+            <b>{formatDateLabel(startDateAsDayjs.format('DD MMM'))}</b> à {startDateAsDayjs.format('HH:mm')}
+            <br />
+            (UTC)
           </DateLabel>
         )}
 
@@ -163,9 +165,8 @@ const Wrapper = styled.div`
 const DateLabel = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: 120px;
+  min-width: 70px;
   padding: 4px 24px 4px 0;
-  text-align: center;
 `
 
 const InnerWrapper = styled.div<{
@@ -195,8 +196,10 @@ const ActionLabel = styled.div`
   }
 
   > p {
+    margin-top: 0px;
     color: ${p => p.theme.color.gunMetal};
     padding: 1px 8px 0 0;
+    height: 22px;
   }
 `
 
@@ -216,5 +219,5 @@ const StyledTagGroup = styled(TagGroup)`
 `
 
 const StyledFieldError = styled(FieldError)`
-  padding-left: 120px;
+  padding-left: 70px;
 `

@@ -1,9 +1,9 @@
-import { addMissionZone } from './addMissionZone'
+import { addOrEditMissionZone } from './addOrEditMissionZone'
 import { closeDraw } from './closeDraw'
 import { validateMissionZone } from './validateMissionZone'
 
 export const missionDispatchers = {
-  addMissionZone,
+  addMissionZone: addOrEditMissionZone,
   closeAddMissionZone: closeDraw,
   validateMissionZone
 }

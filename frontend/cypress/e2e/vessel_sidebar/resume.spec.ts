@@ -7,7 +7,7 @@ context('Vessel sidebar resume tab', () => {
 
   it('Resume Should be opened When clicking on a vessel', () => {
     // When
-    cy.get('.VESSELS_POINTS').click(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 

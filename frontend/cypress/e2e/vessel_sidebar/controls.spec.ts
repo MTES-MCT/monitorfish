@@ -11,7 +11,7 @@ context('Vessel sidebar controls tab', () => {
 
   it('Controls Should contain the controls summary and history', () => {
     // Given
-    cy.get('.VESSELS_POINTS').click(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
     cy.wait(200)
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
@@ -106,7 +106,7 @@ context('Vessel sidebar controls tab', () => {
 
   it('A control mission Should be opened in the side window', () => {
     // Given
-    cy.get('.VESSELS_POINTS').click(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
     cy.wait(200)
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 

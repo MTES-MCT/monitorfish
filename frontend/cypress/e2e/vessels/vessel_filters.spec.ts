@@ -29,7 +29,7 @@ context('Vessel filters', () => {
     cy.get('*[data-cy="vessel-filter-tag"]').eq(2).contains('NWW01/02', { timeout: 10000 })
 
     // Then
-    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 19)
+    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 18)
     cy.get('*[data-cy^="map-property-trigger"]').filter(':contains("les autres navires")').click({ timeout: 10000 })
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 3)
 
@@ -39,6 +39,7 @@ context('Vessel filters', () => {
     cy.get('*[data-cy="vessel-filter-remove-tag"]').eq(0).click({ timeout: 10000 })
 
     // We should have ~ the same number of labels than in init
+    cy.get('*[data-cy^="map-property-trigger"]').filter(':contains("les autres navires")').click({ timeout: 10000 })
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length.to.be.greaterThan', 5)
   })
 })

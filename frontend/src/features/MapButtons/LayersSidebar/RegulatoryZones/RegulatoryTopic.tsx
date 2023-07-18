@@ -2,63 +2,67 @@
 
 import { memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
+
 import { RegulatoryZone } from './RegulatoryZone'
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { COLORS } from '../../../../constants/constants'
 import { NamespaceContext } from '../../../../context/NamespaceContext'
-import { CloseIcon } from '../../../commonStyles/icons/CloseIcon.style'
-import { ShowIcon } from '../../../commonStyles/icons/ShowIcon.style'
-import { HideIcon } from '../../../commonStyles/icons/HideIcon.style'
-import { EditIcon } from '../../../commonStyles/icons/EditIcon.style'
-import RegulatoryTopicInput from '../../../Backoffice/list_regulation/RegulatoryTopicInput'
+import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import {
   addRegulatoryTopicOpened,
   closeRegulatoryZoneMetadataPanel,
   removeRegulatoryTopicOpened
 } from '../../../../domain/shared_slices/Regulatory'
-import { showRegulatoryTopic } from '../../../../domain/use_cases/layer/regulation/showRegulatoryTopic'
 import hideLayer from '../../../../domain/use_cases/layer/hideLayer'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { showRegulatoryTopic } from '../../../../domain/use_cases/layer/regulation/showRegulatoryTopic'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import RegulatoryTopicInput from '../../../Backoffice/list_regulation/RegulatoryTopicInput'
+import { CloseIcon } from '../../../commonStyles/icons/CloseIcon.style'
+import { EditIcon } from '../../../commonStyles/icons/EditIcon.style'
+import { HideIcon } from '../../../commonStyles/icons/HideIcon.style'
+import { ShowIcon } from '../../../commonStyles/icons/ShowIcon.style'
+
 import type { Promisable } from 'type-fest'
 
 export type RegulatoryTopicProps = {
-  callRemoveRegulatoryZoneFromMySelection: any
-  regulatoryTopic: string
   allowRemoveZone: any
-  increaseNumberOfZonesOpened: any
+  callRemoveRegulatoryZoneFromMySelection: any
   decreaseNumberOfZonesOpened: any
-  regulatoryZones: any
-  isLastItem: any
+  increaseNumberOfZonesOpened: any
   isEditable: any
+  isLastItem: any
+  regulatoryTopic: string
+  regulatoryZones: any
   updateLayerName?: (topic: string, value: string) => Promisable<void>
 }
 function UnmemoizedRegulatoryTopic({
-  callRemoveRegulatoryZoneFromMySelection,
-  regulatoryTopic,
   allowRemoveZone,
-  increaseNumberOfZonesOpened,
+  callRemoveRegulatoryZoneFromMySelection,
   decreaseNumberOfZonesOpened,
-  regulatoryZones,
-  isLastItem,
+  increaseNumberOfZonesOpened,
   isEditable,
+  isLastItem,
+  regulatoryTopic,
+  regulatoryZones,
   updateLayerName
 }: RegulatoryTopicProps) {
   const dispatch = useMainAppDispatch()
   const ref = useRef<HTMLLIElement | null>(null)
   const showedLayers = useMainAppSelector(state => state.layer.showedLayers)
-  const { regulatoryZoneMetadata, regulatoryTopicsOpened } = useMainAppSelector(state => state.regulatory)
+  const { regulatoryTopicsOpened, regulatoryZoneMetadata } = useMainAppSelector(state => state.regulatory)
   const lawType = regulatoryZones[0]?.lawType
   const numberOfTotalZones = useMainAppSelector(state => {
-    const regulatoryLayerLawTypes = state.regulatory.regulatoryLayerLawTypes
+    const { regulatoryLayerLawTypes } = state.regulatory
     if (regulatoryLayerLawTypes && lawType && regulatoryTopic && regulatoryLayerLawTypes[lawType]) {
       const regulatoryLayerLawType = regulatoryLayerLawTypes[lawType]
       if (!regulatoryLayerLawType) {
         return 0
       }
 
-      return regulatoryLayerLawType[regulatoryTopic]?.length
+      return regulatoryLayerLawType[regulatoryTopic]?.length || 0
     }
+
+    return 0
   })
 
   const [isOpen, setIsOpen] = useState(false)
@@ -72,7 +76,7 @@ function UnmemoizedRegulatoryTopic({
     if (ref.current && regulatoryTopicsOpened[regulatoryTopicsOpened.length - 1] === regulatoryTopic) {
       ref.current.scrollIntoView({ block: 'start', inline: 'nearest' })
     }
-  }, [])
+  }, [regulatoryTopic, regulatoryTopicsOpened])
 
   useEffect(() => {
     if (showedLayers && regulatoryTopic) {
@@ -86,9 +90,9 @@ function UnmemoizedRegulatoryTopic({
   const showTopic = namespace => {
     dispatch(
       showRegulatoryTopic({
-        type: LayerProperties.REGULATORY.code,
+        namespace,
         regulatoryZones,
-        namespace
+        type: LayerProperties.REGULATORY.code
       })
     )
   }
@@ -96,9 +100,9 @@ function UnmemoizedRegulatoryTopic({
   const hideTopic = namespace => {
     dispatch(
       hideLayer({
-        type: LayerProperties.REGULATORY.code,
+        namespace,
         topic: regulatoryTopic,
-        namespace
+        type: LayerProperties.REGULATORY.code
       })
     )
   }
@@ -111,7 +115,7 @@ function UnmemoizedRegulatoryTopic({
         decreaseNumberOfZonesOpened(regulatoryZones.length)
       }
     }
-  }, [isOpen])
+  }, [decreaseNumberOfZonesOpened, increaseNumberOfZonesOpened, isOpen, regulatoryZones])
 
   useEffect(() => {
     if (
@@ -136,19 +140,19 @@ function UnmemoizedRegulatoryTopic({
     } else {
       dispatch(addRegulatoryTopicOpened(regulatoryTopic))
     }
-  }, [isOpen, regulatoryTopic])
+  }, [dispatch, isOpen, regulatoryTopic])
 
   return (
     <NamespaceContext.Consumer>
       {namespace => (
         <Row ref={ref} data-cy="regulatory-layer-topic-row">
           <Zone $isLastItem={isLastItem} $isOpen={isOpen} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-            <Name data-cy={'regulatory-layers-my-zones-topic'} title={regulatoryTopic} onClick={onRegulatoryTopicClick}>
+            <Name data-cy="regulatory-layers-my-zones-topic" onClick={onRegulatoryTopicClick} title={regulatoryTopic}>
               {isTopicInEdition ? (
                 <RegulatoryTopicInput
+                  setIsTopicEditable={setIsTopicInEdition}
                   topic={regulatoryTopic}
                   updateTopic={updateLayerName}
-                  setIsTopicEditable={setIsTopicInEdition}
                 />
               ) : (
                 <Text>{regulatoryTopic}</Text>
@@ -157,31 +161,30 @@ function UnmemoizedRegulatoryTopic({
             <ZonesNumber>{`${regulatoryZones?.length}/${numberOfTotalZones}`}</ZonesNumber>
             {isEditable ? (
               <EditIcon
-                data-cy="regulatory-topic-edit"
                 $isOver={isOver}
-                title="Modifier le nom de la thématique"
+                data-cy="regulatory-topic-edit"
                 onClick={onEditTopicClick}
+                title="Modifier le nom de la thématique"
               />
             ) : null}
             {atLeastOneTopicIsShowed ? (
               <ShowIcon
                 // TODO Use an `<IconButton />`.
                 // @ts-ignore
-                title="Cacher la couche"
                 onClick={() => hideTopic(namespace)}
+                title="Cacher la couche"
               />
             ) : (
               <HideIcon
-                data-cy={'regulatory-layers-my-zones-topic-show'}
+                data-cy="regulatory-layers-my-zones-topic-show"
                 // TODO Use an `<IconButton />`.
                 // @ts-ignore
-                title="Afficher la couche"
                 onClick={() => showTopic(namespace)}
+                title="Afficher la couche"
               />
             )}
             {allowRemoveZone ? (
               <CloseIcon
-                title="Supprimer la couche de ma sélection"
                 onClick={() =>
                   callRemoveRegulatoryZoneFromMySelection(
                     getRegulatoryLayerName(regulatoryZones),
@@ -189,25 +192,24 @@ function UnmemoizedRegulatoryTopic({
                     namespace
                   )
                 }
+                title="Supprimer la couche de ma sélection"
               />
             ) : null}
           </Zone>
           <List $isOpen={isOpen} $zonesLength={regulatoryZones.length}>
             {regulatoryZones && showedLayers
-              ? regulatoryZones.map((regulatoryZone, index) => {
-                  return (
-                    <RegulatoryZone
-                      isLast={regulatoryZones.length === index + 1}
-                      regulatoryZone={regulatoryZone}
-                      key={`${regulatoryZone.topic}:${regulatoryZone.zone}`}
-                      callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
-                      namespace={namespace}
-                      allowRemoveZone={allowRemoveZone}
-                      isEditable={isEditable}
-                      regulatoryTopic={regulatoryTopic}
-                    />
-                  )
-                })
+              ? regulatoryZones.map((regulatoryZone, index) => (
+                  <RegulatoryZone
+                    key={`${regulatoryZone.topic}:${regulatoryZone.zone}`}
+                    allowRemoveZone={allowRemoveZone}
+                    callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
+                    isEditable={isEditable}
+                    isLast={regulatoryZones.length === index + 1}
+                    namespace={namespace}
+                    regulatoryTopic={regulatoryTopic}
+                    regulatoryZone={regulatoryZone}
+                  />
+                ))
               : null}
           </List>
         </Row>
@@ -216,11 +218,9 @@ function UnmemoizedRegulatoryTopic({
   )
 }
 
-const getRegulatoryLayerName = regulatoryZones => {
-  return {
-    topic: regulatoryZones[0].topic
-  }
-}
+const getRegulatoryLayerName = regulatoryZones => ({
+  topic: regulatoryZones[0].topic
+})
 
 const Text = styled.span`
   margin-left: 5px;

@@ -1,20 +1,21 @@
 import { useCallback } from 'react'
-import styled from 'styled-components'
-import { COLORS } from '../../../../constants/constants'
-import { ReactComponent as REGPaperSVG } from '../../../icons/reg_paper_dark.svg'
 import { FingerprintSpinner } from 'react-epic-spinners'
-import { closeRegulatoryZoneMetadata } from '../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
-import { CloseIcon } from '../../../commonStyles/icons/CloseIcon.style'
-import { getTitle } from '../../../../domain/entities/regulation'
-import { IdentificationDisplayed } from './metadata/identification/IdentificationDisplayed'
+import styled from 'styled-components'
+
 import { FishingPeriodDisplayed } from './metadata/fishingPeriod'
 import { GearRegulationDisplayed } from './metadata/gearRegulation/GearRegulationDisplayed'
-import { RegulatoryReferencesDisplayed } from './metadata/regulatoryReferences/RegulatoryReferencesDisplayed'
-import { OutdatedRegulatoryReferences } from './metadata/OutdatedRegulatoryReferences'
-import { SpeciesRegulationDisplayed } from './metadata/speciesRegulation/SpeciesRegulationDisplayed'
+import { IdentificationDisplayed } from './metadata/identification/IdentificationDisplayed'
 import { OtherInfoDisplayed } from './metadata/otherInfo/OtherInfoDisplayed'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { OutdatedRegulatoryReferences } from './metadata/OutdatedRegulatoryReferences'
+import { RegulatoryReferencesDisplayed } from './metadata/regulatoryReferences/RegulatoryReferencesDisplayed'
+import { SpeciesRegulationDisplayed } from './metadata/speciesRegulation/SpeciesRegulationDisplayed'
+import { COLORS } from '../../../../constants/constants'
+import { getTitle } from '../../../../domain/entities/regulation'
+import { closeRegulatoryZoneMetadata } from '../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { CloseIcon } from '../../../commonStyles/icons/CloseIcon.style'
+import { ReactComponent as REGPaperSVG } from '../../../icons/reg_paper_dark.svg'
 
 export function RegulatoryZoneMetadata() {
   const dispatch = useMainAppDispatch()
@@ -34,7 +35,7 @@ export function RegulatoryZoneMetadata() {
             <RegulatoryZoneName title={getTitle(regulatoryZoneMetadata)}>
               {getTitle(regulatoryZoneMetadata)}
             </RegulatoryZoneName>
-            <CloseIcon data-cy={'regulatory-layers-metadata-close'} onClick={onCloseIconClicked} />
+            <CloseIcon data-cy="regulatory-layers-metadata-close" onClick={onCloseIconClicked} />
           </Header>
           <OutdatedRegulatoryReferences />
           <Content>
@@ -48,7 +49,7 @@ export function RegulatoryZoneMetadata() {
         </>
       ) : (
         // eslint-disable-next-line react/forbid-component-props
-        <FingerprintSpinner color={COLORS.white} className={'radar'} size={100} />
+        <FingerprintSpinner className="radar" color={COLORS.white} size={100} />
       )}
     </Wrapper>
   )

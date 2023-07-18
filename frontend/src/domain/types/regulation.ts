@@ -1,5 +1,5 @@
-import type { GEAR_MESH_SIZE } from '../entities/backoffice'
 import type { GeoJSON } from './GeoJSON'
+import type { GEAR_MESH_SIZE } from '../entities/backoffice'
 
 export type BaseRegulatoryZone = {
   topic: string

@@ -14,16 +14,14 @@ export function RegulatoryLayerSearchResultLawType({
     <Wrapper>
       <LayerLawType>{regulatoryLayerLawType}</LayerLawType>
       {Object.keys(topic).length > 0 &&
-        Object.entries(topic).map(([regulatoryLayerTopic, topicDetails]) => {
-          return (
-            <RegulatoryLayerSearchResultTopic
-              key={regulatoryLayerTopic}
-              regulatoryLayerLawType={regulatoryLayerLawType}
-              regulatoryLayerTopic={regulatoryLayerTopic}
-              topicDetails={topicDetails}
-            />
-          )
-        })}
+        Object.entries(topic).map(([regulatoryLayerTopic, topicDetails]) => (
+          <RegulatoryLayerSearchResultTopic
+            key={regulatoryLayerTopic}
+            regulatoryLayerLawType={regulatoryLayerLawType}
+            regulatoryLayerTopic={regulatoryLayerTopic}
+            topicDetails={topicDetails}
+          />
+        ))}
     </Wrapper>
   )
 }
@@ -54,5 +52,3 @@ const LayerLawType = styled.span`
   padding-left: 18px;
   color: ${p => p.theme.color.gunMetal};
 `
-
-export default RegulatoryLayerSearchResultLawType

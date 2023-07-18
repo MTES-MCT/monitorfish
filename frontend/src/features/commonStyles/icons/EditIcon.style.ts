@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+
 import { ReactComponent as EditSVG } from '../../icons/Bouton_edition.svg'
 
 export const EditIcon = styled(EditSVG)<{

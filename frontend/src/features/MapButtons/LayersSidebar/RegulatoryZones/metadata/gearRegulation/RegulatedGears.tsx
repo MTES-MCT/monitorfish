@@ -1,30 +1,32 @@
 import { useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
-import { GreenCircle, RedCircle } from '../../../../../commonStyles/Circle.style'
-import { Label, List, SectionTitle } from '../RegulatoryMetadata.style'
+
 import { GearsOrGearCategories } from './GearsOrGearCategories'
 import { COLORS } from '../../../../../../constants/constants'
-import { InfoPoint } from '../../../../../Backoffice/edit_regulation/InfoPoint'
 import { getGroupCategories, REGULATED_GEARS_KEYS } from '../../../../../../domain/entities/backoffice'
-import { INFO_TEXT } from '../../../../../Backoffice/constants'
-import { theme } from '../../../../../../ui/theme'
 import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
-import type { RegulatedGears } from '../../../../../../domain/types/regulation'
+import { theme } from '../../../../../../ui/theme'
+import { INFO_TEXT } from '../../../../../Backoffice/constants'
+import { InfoPoint } from '../../../../../Backoffice/edit_regulation/InfoPoint'
+import { GreenCircle, RedCircle } from '../../../../../commonStyles/Circle.style'
+import { Label, List, SectionTitle } from '../RegulatoryMetadata.style'
+
+import type { RegulatedGears as RegulatedGearsType } from '../../../../../../domain/types/regulation'
 
 export type RegulatedGearsProps = {
   authorized: boolean
-  regulatedGearsObject: RegulatedGears
   hasPreviousRegulatedGearsBloc?: boolean
+  regulatedGearsObject: RegulatedGearsType
 }
 export function RegulatedGears({
   authorized,
-  regulatedGearsObject,
-  hasPreviousRegulatedGearsBloc = false
+  hasPreviousRegulatedGearsBloc = false,
+  regulatedGearsObject
 }: RegulatedGearsProps) {
-  const { groupsToCategories, categoriesToGears } = useMainAppSelector(state => state.gear)
+  const { categoriesToGears, groupsToCategories } = useMainAppSelector(state => state.gear)
 
-  const { regulatedGears, regulatedGearCategories, derogation, otherInfo, allGears, allTowedGears, allPassiveGears } =
+  const { allGears, allPassiveGears, allTowedGears, derogation, otherInfo, regulatedGearCategories, regulatedGears } =
     regulatedGearsObject
 
   const [filteredRegulatedGearCategories, setFilteredRegulatedGearCategories] = useState(regulatedGearCategories)
@@ -46,50 +48,57 @@ export function RegulatedGears({
     }
 
     setFilteredRegulatedGearCategories(nextFilteredRegulatedGearCategories)
-  }, [groupsToCategories, allTowedGears, allPassiveGears, regulatedGearCategories])
+  }, [
+    allPassiveGears,
+    allTowedGears,
+    groupsToCategories,
+    passiveGearsCategories,
+    regulatedGearCategories,
+    towedGearsCategories
+  ])
 
   const dataCyTarget = authorized ? 'authorized' : 'unauthorized'
 
   return (
     <div data-cy={`${dataCyTarget}-regulatory-layers-metadata-gears`}>
       <SectionTitle $hasPreviousRegulatedGearsBloc={hasPreviousRegulatedGearsBloc}>
-        {authorized ? <GreenCircle margin={'0 5px 0 0'} /> : <RedCircle margin={'0 5px 0 0'} />}
+        {authorized ? <GreenCircle margin="0 5px 0 0" /> : <RedCircle margin="0 5px 0 0" />}
         Engins {authorized ? 'réglementés' : 'interdits'}
       </SectionTitle>
       {allGears ? (
-        <Label>{'Tous les engins'}</Label>
+        <Label>Tous les engins</Label>
       ) : (
         <List>
           {allTowedGears && (
             <Label
-              title={INFO_TEXT.TOWED_GEAR}
               data-cy={`${dataCyTarget}-regulatory-layers-metadata-gears-towed-gears`}
+              title={INFO_TEXT.TOWED_GEAR}
             >
               Tous les engins trainants
-              <InfoPoint title={INFO_TEXT.TOWED_GEAR} margin={'3px'} />
+              <InfoPoint margin="3px" title={INFO_TEXT.TOWED_GEAR} />
             </Label>
           )}
           {allPassiveGears && (
             <Label
-              title={INFO_TEXT.PASSIVE_GEAR}
               data-cy={`${dataCyTarget}-regulatory-layers-metadata-gears-passive-gears`}
+              title={INFO_TEXT.PASSIVE_GEAR}
             >
               Tous les engins dormants
-              <InfoPoint title={INFO_TEXT.PASSIVE_GEAR} margin={'3px'} />
+              <InfoPoint margin="3px" title={INFO_TEXT.PASSIVE_GEAR} />
             </Label>
           )}
           <GearsOrGearCategories list={regulatedGears} />
           <GearsOrGearCategories
-            isCategory
             categoriesToGears={categoriesToGears}
+            isCategory
             list={filteredRegulatedGearCategories}
           />
         </List>
       )}
       {!authorized && derogation && (
         <Derogation>
-          <InfoPoint margin={'3px 0 0 0'} backgroundColor={theme.color.goldenPoppy} color={COLORS.charcoal} />
-          <DerogationMessage>{'Mesures dérogatoire: consulter les références réglementaires'}</DerogationMessage>
+          <InfoPoint backgroundColor={theme.color.goldenPoppy} color={COLORS.charcoal} margin="3px 0 0 0" />
+          <DerogationMessage>Mesures dérogatoire: consulter les références réglementaires</DerogationMessage>
         </Derogation>
       )}
       {otherInfo && <ReactMarkdown>{otherInfo}</ReactMarkdown>}

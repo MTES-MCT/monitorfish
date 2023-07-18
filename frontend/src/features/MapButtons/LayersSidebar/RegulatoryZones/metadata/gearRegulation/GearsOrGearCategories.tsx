@@ -1,17 +1,19 @@
-import { Elem, Field, Fields, Key, Value } from '../RegulatoryMetadata.style'
-import { CodeAndName } from '../CodeAndName'
-import { GEAR_MESH_SIZE } from '../../../../../../domain/entities/backoffice'
 import ReactMarkdown from 'react-markdown'
-import type { GearCategory, Gear as RegulatedGear } from '../../../../../../domain/types/regulation'
+
+import { GEAR_MESH_SIZE } from '../../../../../../domain/entities/backoffice'
+import { CodeAndName } from '../CodeAndName'
+import { Elem, Field, Fields, Key, Value } from '../RegulatoryMetadata.style'
+
 import type { Gear } from '../../../../../../domain/types/Gear'
+import type { GearCategory, Gear as RegulatedGear } from '../../../../../../domain/types/regulation'
 
 export type GearOrGearCategoriesProps = {
+  categoriesToGears?: Map<string, Gear[]> | undefined
+  isCategory?: boolean
   // TODO Check this type.
   list: Record<string, RegulatedGear> | RegulatedGear[] | Record<string, GearCategory>
-  isCategory?: boolean
-  categoriesToGears?: Map<string, Gear[]> | undefined
 }
-export function GearsOrGearCategories({ list, isCategory = false, categoriesToGears }: GearOrGearCategoriesProps) {
+export function GearsOrGearCategories({ categoriesToGears, isCategory = false, list }: GearOrGearCategoriesProps) {
   return (
     <>
       {Object.keys(list).length > 0
@@ -21,11 +23,11 @@ export function GearsOrGearCategories({ list, isCategory = false, categoriesToGe
               return <></>
             }
 
-            const { code, name, meshType, mesh, remarks } = gear
+            const { code, mesh, meshType, name, remarks } = gear
 
             return (
               <Elem key={elem}>
-                <CodeAndName code={code} name={name} isCategory={isCategory} categoriesToGears={categoriesToGears} />
+                <CodeAndName categoriesToGears={categoriesToGears} code={code} isCategory={isCategory} name={name} />
                 <Fields>
                   {mesh && (
                     <Field>

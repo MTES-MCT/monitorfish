@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import styled from 'styled-components'
+
 import { RegulatoryLayerSearchResultLawType } from './RegulatoryLayerSearchResultLawType'
 import layer from '../../../../../domain/shared_slices/Layer'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
@@ -11,7 +12,7 @@ export type RegulatoryLayerSearchResultListProps = {
 export function RegulatoryLayerSearchResultList({ namespace }: RegulatoryLayerSearchResultListProps) {
   const dispatch = useMainAppDispatch()
   const { setLayersSideBarOpenedLayerType } = layer[namespace].actions
-  const { regulatoryLayersSearchResult, advancedSearchIsOpen } = useMainAppSelector(
+  const { advancedSearchIsOpen, regulatoryLayersSearchResult } = useMainAppSelector(
     state => state.regulatoryLayerSearch
   )
   const layersSidebarOpenedLayerType = useMainAppSelector(state => state.layer.layersSidebarOpenedLayerType)
@@ -25,7 +26,7 @@ export function RegulatoryLayerSearchResultList({ namespace }: RegulatoryLayerSe
     <>
       {hasOneLayerTypeOpen && hasSearchResults && (
         <ShowResultList
-          data-cy={'regulatory-search-show-results'}
+          data-cy="regulatory-search-show-results"
           onClick={() => dispatch(setLayersSideBarOpenedLayerType(undefined))}
         >
           Afficher les résultats
@@ -34,11 +35,9 @@ export function RegulatoryLayerSearchResultList({ namespace }: RegulatoryLayerSe
       {!hasOneLayerTypeOpen && (
         <List $advancedSearchIsOpen={advancedSearchIsOpen}>
           {hasSearchResults && regulatoryLayersSearchResult
-            ? Object.entries(regulatoryLayersSearchResult)?.map(([lawType, topic]) => {
-                return (
-                  <RegulatoryLayerSearchResultLawType key={lawType} regulatoryLayerLawType={lawType} topic={topic} />
-                )
-              })
+            ? Object.entries(regulatoryLayersSearchResult)?.map(([lawType, topic]) => (
+                <RegulatoryLayerSearchResultLawType key={lawType} regulatoryLayerLawType={lawType} topic={topic} />
+              ))
             : null}
         </List>
       )}

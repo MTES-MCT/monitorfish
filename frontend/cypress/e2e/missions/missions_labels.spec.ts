@@ -7,7 +7,7 @@ context('Missions labels', () => {
     cy.get('*[data-cy="mission-label-text"]').should('have.length', 3)
 
     cy.getComputedStyle('*[data-cy="mission-label-draggable-MISSIONS_LABEL:43"]', 1).then(styleBefore => {
-      expect(styleBefore.transform).contains('matrix(1, 0, 0, 1, 32, 466)')
+      expect(styleBefore.transform).contains('matrix(1, 0, 0, 1, 32, 441)')
     })
 
     cy.get('*[data-cy="mission-label-draggable-MISSIONS_LABEL:43"]')

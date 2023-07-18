@@ -4,7 +4,7 @@ context('Missions overlay', () => {
   })
 
   it('An overlay Should be showed and closed', () => {
-    cy.get('#root').click(337, 839)
+    cy.get('#root').click(337, 819)
 
     cy.get('*[data-cy="mission-overlay"]').contains('DML 2A')
     cy.get('*[data-cy="mission-overlay"]').contains('Mission Air / Terre')
@@ -19,10 +19,10 @@ context('Missions overlay', () => {
 
   it('A mission overlay Should be movable', () => {
     // Given
-    cy.get('#root').click(337, 839)
+    cy.get('#root').click(337, 819)
 
     cy.getComputedStyle('*[data-cy="mission-overlay"]', 2).then(styleBefore => {
-      expect(styleBefore.transform).contains('matrix(1, 0, 0, 1, 333, 807)')
+      expect(styleBefore.transform).contains('matrix(1, 0, 0, 1, 333, 782)')
     })
 
     // When

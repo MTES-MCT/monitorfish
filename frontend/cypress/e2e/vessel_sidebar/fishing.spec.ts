@@ -121,7 +121,7 @@ context('Vessel sidebar fishing tab', () => {
 
   it('Fishing Should contain the vessel FLUX logbook messages', () => {
     // Given
-    cy.get('.VESSELS_POINTS').click(460, 40, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').click(460, 15, { force: true, timeout: 10000 })
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 

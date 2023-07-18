@@ -1,14 +1,18 @@
+/* eslint-disable no-console, no-restricted-globals */
+
+import { logSoftError } from '@mtes-mct/monitor-ui'
+import GML from 'ol/format/GML'
+import WFS from 'ol/format/WFS'
+
+import { HttpStatusCode } from './constants'
 import { LayerProperties } from '../domain/entities/layers/constants'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map/constants'
-import WFS from 'ol/format/WFS'
-import GML from 'ol/format/GML'
 import { REGULATION_ACTION_TYPE } from '../domain/entities/regulation'
-import { HttpStatusCode } from './constants'
 import { ApiError } from '../libs/ApiError'
-import { logSoftError } from '@mtes-mct/monitor-ui'
-import type { GeoJSON } from 'ol/format'
+
 import type { RegulatoryZone } from '../domain/types/regulation'
 import type { Extent } from 'ol/extent'
+import type { GeoJSON } from 'ol/format'
 
 export const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la couche réglementaire"
 const REGULATORY_ZONES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les zones réglementaires"
@@ -49,12 +53,11 @@ function getAllRegulatoryLayersFromAPI(fromBackoffice) {
     .then(response => {
       if (response.status === HttpStatusCode.OK) {
         return response.json()
-      } else {
-        response.text().then(text => {
-          console.error(text)
-        })
-        throw Error(REGULATORY_ZONES_ERROR_MESSAGE)
       }
+      response.text().then(text => {
+        console.error(text)
+      })
+      throw Error(REGULATORY_ZONES_ERROR_MESSAGE)
     })
     .catch(error => {
       if (process.env.NODE_ENV === 'development') {
@@ -82,18 +85,19 @@ function getAllGeometryWithoutProperty(isFromBackoffice: boolean): Promise<GeoJS
     'regulatory_references IS NULL AND zone IS NULL AND region IS NULL AND law_type IS NULL AND topic IS NULL'
   const REQUEST =
     `${geoserverURL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
-    `${LayerProperties.REGULATORY.code}&outputFormat=application/json&propertyName=geometry,id&CQL_FILTER=` +
-    filter.replace(/'/g, '%27').replace(/ /g, '%20')
+    `${LayerProperties.REGULATORY.code}&outputFormat=application/json&propertyName=geometry,id&CQL_FILTER=${filter
+      .replace(/'/g, '%27')
+      .replace(/ /g, '%20')}`
+
   return fetch(REQUEST)
     .then(response => {
       if (response.status === HttpStatusCode.OK) {
         return response.json()
-      } else {
-        response.text().then(text => {
-          console.error(text)
-        })
-        throw Error(GEOMETRY_ERROR_MESSAGE)
       }
+      response.text().then(text => {
+        console.error(text)
+      })
+      throw Error(GEOMETRY_ERROR_MESSAGE)
     })
     .catch(error => {
       console.error(error)
@@ -108,6 +112,7 @@ function getAllGeometryWithoutProperty(isFromBackoffice: boolean): Promise<GeoJS
  *
  * @unauthenticated
  */
+// eslint-disable-next-line consistent-return
 async function getAdministrativeZoneFromAPI(
   administrativeZone: string,
   extent: Extent | null,
@@ -148,15 +153,13 @@ function getAdministrativeZoneURL(type: string, extent: Extent | null, subZone: 
   if (subZone) {
     const filter = `${subZone.replace(/'/g, "''")}`
 
-    subZoneFilter = '&featureID=' + filter.replace(/'/g, '%27').replace(/ /g, '%20')
+    subZoneFilter = `&featureID=${filter.replace(/'/g, '%27').replace(/ /g, '%20')}`
   }
 
   return (
     `${geoserverURL}/geoserver/wfs?service=WFS&` +
     `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
-    `outputFormat=application/json&srsname=${WSG84_PROJECTION}` +
-    extentFilter +
-    subZoneFilter
+    `outputFormat=application/json&srsname=${WSG84_PROJECTION}${extentFilter}${subZoneFilter}`
   )
 }
 
@@ -201,11 +204,11 @@ function getRegulatoryZoneURL(type, regulatoryZone, geoserverURL) {
     /'/g,
     "''"
   )}' AND zone='${encodeURIComponent(regulatoryZone.zone).replace(/'/g, "''")}'`
+
   return (
     `${geoserverURL}/geoserver/wfs?service=WFS` +
     `&version=1.1.0&request=GetFeature&typename=monitorfish:${type}` +
-    '&outputFormat=application/json&CQL_FILTER=' +
-    filter.replace(/'/g, '%27').replace(/ /g, '%20')
+    `&outputFormat=application/json&CQL_FILTER=${filter.replace(/'/g, '%27').replace(/ /g, '%20')}`
   )
 }
 
@@ -222,37 +225,39 @@ export function getRegulatoryZonesInExtentFromAPI(extent: Extent, fromBackoffice
       `${geoserverURL}/geoserver/wfs?service=WFS` +
         `&version=1.1.0&request=GetFeature&typename=monitorfish:${LayerProperties.REGULATORY.code}` +
         `&outputFormat=application/json&srsname=${WSG84_PROJECTION}` +
-        `&bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}` +
-        '&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region'
+        `&bbox=${extent.join(
+          ','
+        )},${OPENLAYERS_PROJECTION}${'&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region'
           .replace(/'/g, '%27')
           .replace(/\(/g, '%28')
           .replace(/\)/g, '%29')
-          .replace(/ /g, '%20')
+          .replace(/ /g, '%20')}`
     )
       .then(response => {
         if (response.status === HttpStatusCode.OK) {
           return response
             .json()
-            .then(response => {
-              return response
-            })
+            .then(_response => _response)
             .catch(error => {
               console.error(error)
+              // eslint-disable-next-line @typescript-eslint/no-throw-literal
               throw REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE
             })
-        } else {
-          response.text().then(response => {
-            console.error(response)
-          })
-          throw REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE
         }
+        response.text().then(_response => {
+          console.error(_response)
+        })
+        // eslint-disable-next-line @typescript-eslint/no-throw-literal
+        throw REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE
       })
       .catch(error => {
         console.error(error)
+        // eslint-disable-next-line @typescript-eslint/no-throw-literal
         throw REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE
       })
   } catch (error) {
     console.error(error)
+
     return Promise.reject(REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE)
   }
 }
@@ -263,9 +268,8 @@ function getFirstFeature(response) {
 
   if (response.features.length === 1 && response.features[FIRST_FEATURE]) {
     return response.features[FIRST_FEATURE]
-  } else {
-    throw Error('We found multiple features for this zone')
   }
+  throw Error('We found multiple features for this zone')
 }
 
 /**
@@ -295,6 +299,7 @@ async function getRegulatoryFeatureMetadataFromAPI(regulatorySubZone, isFromBack
 /**
  * @unauthenticated
  */
+// eslint-disable-next-line consistent-return
 async function getAdministrativeSubZonesFromAPI(type: string, isFromBackoffice: boolean) {
   try {
     const geoserverURL = isFromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
@@ -306,8 +311,9 @@ async function getAdministrativeSubZonesFromAPI(type: string, isFromBackoffice: 
       query =
         `${geoserverURL}/geoserver/wfs?service=WFS&` +
         `version=1.1.0&request=GetFeature&typename=monitorfish:${type}&` +
-        `outputFormat=application/json&srsname=${WSG84_PROJECTION}&CQL_FILTER=` +
-        filter.replace(/'/g, '%27').replace(/ /g, '%20')
+        `outputFormat=application/json&srsname=${WSG84_PROJECTION}&CQL_FILTER=${filter
+          .replace(/'/g, '%27')
+          .replace(/ /g, '%20')}`
     } else {
       query =
         `${geoserverURL}/geoserver/wfs?service=WFS&` +
@@ -364,21 +370,19 @@ function sendRegulationTransaction(feature, actionType) {
       userMessage: 'GeoServer a rencontré un problème.'
     })
 
-    return
+    return undefined
   }
   const payload = xs.serializeToString(transaction)
 
   return fetch(`${GEOSERVER_BACKOFFICE_URL}/geoserver/wfs`, {
-    method: 'POST',
-    mode: 'no-cors',
+    body: payload.replace('feature:', ''),
     headers: {
       'Content-Type': 'text/xml'
     },
-    body: payload.replace('feature:', '')
+    method: 'POST',
+    mode: 'no-cors'
   })
-    .then(r => {
-      return r
-    })
+    .then(r => r)
     .catch(error => {
       console.error(error)
       throw Error(UPDATE_REGULATION_MESSAGE)

@@ -131,8 +131,8 @@ function UnmemoizedRegulatoryZone({
       onMouseLeave={onMouseLeave}
     >
       <Rectangle
-        onClick={() => dispatch(zoomInLayer({ topicAndZone: regulatoryZone }))}
         $vectorLayerStyle={vectorLayerStyle}
+        onClick={() => dispatch(zoomInLayer({ topicAndZone: regulatoryZone }))}
       />
       <ZoneText
         data-cy="regulatory-layers-my-zones-zone"

@@ -1,11 +1,12 @@
 import styled from 'styled-components'
-import { Key, Value, Fields, Field } from '../RegulatoryMetadata.style'
+
 import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
+import { Key, Value, Fields, Field } from '../RegulatoryMetadata.style'
 
 export function IdentificationDisplayed() {
   const regulatory = useMainAppSelector(state => state.regulatory)
 
-  const { lawType, topic, zone, region } = regulatory.regulatoryZoneMetadata || {}
+  const { lawType, region, topic, zone } = regulatory.regulatoryZoneMetadata || {}
 
   return (
     <Zone>
@@ -13,19 +14,19 @@ export function IdentificationDisplayed() {
         <Body>
           <Field>
             <Key>Ensemble reg.</Key>
-            <Value data-cy={'regulatory-layers-metadata-lawtype'}>{lawType || <NoValue>-</NoValue>}</Value>
+            <Value data-cy="regulatory-layers-metadata-lawtype">{lawType || <NoValue>-</NoValue>}</Value>
           </Field>
           <Field>
             <Key>Thématique</Key>
-            <Value data-cy={'regulatory-layers-metadata-topic'}>{`${topic}` || <NoValue>-</NoValue>}</Value>
+            <Value data-cy="regulatory-layers-metadata-topic">{`${topic}` || <NoValue>-</NoValue>}</Value>
           </Field>
           <Field>
             <Key>Zone</Key>
-            <Value data-cy={'regulatory-layers-metadata-zone'}>{`${zone}` || <NoValue>-</NoValue>}</Value>
+            <Value data-cy="regulatory-layers-metadata-zone">{`${zone}` || <NoValue>-</NoValue>}</Value>
           </Field>
           <Field>
             <Key>Région</Key>
-            <Value data-cy={'regulatory-layers-metadata-region'}>{region || <NoValue>-</NoValue>}</Value>
+            <Value data-cy="regulatory-layers-metadata-region">{region || <NoValue>-</NoValue>}</Value>
           </Field>
         </Body>
       </Fields>

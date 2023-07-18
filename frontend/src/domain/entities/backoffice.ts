@@ -7,36 +7,40 @@ export const BACKOFFICE_SEARCH_PROPERTIES = [
   RegulatorySearchProperty.REGULATORY_REFERENCES
 ]
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export enum GEAR_MESH_SIZE {
+  between = 'between',
+  equal = 'equal',
   greaterThan = 'greaterThan',
   greaterThanOrEqualTo = 'greaterThanOrEqualTo',
   lowerThan = 'lowerThan',
-  lowerThanOrEqualTo = 'lowerThanOrEqualTo',
-  equal = 'equal',
-  between = 'between'
+  lowerThanOrEqualTo = 'lowerThanOrEqualTo'
 }
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export enum REGULATED_GEARS_KEYS {
-  AUTHORIZED = 'authorized',
   ALL_GEARS = 'allGears',
-  ALL_TOWED_GEARS = 'allTowedGears',
   ALL_PASSIVE_GEARS = 'allPassiveGears',
+  ALL_TOWED_GEARS = 'allTowedGears',
+  AUTHORIZED = 'authorized',
+  DEROGATION = 'derogation',
   REGULATED_GEARS = 'regulatedGears',
   REGULATED_GEAR_CATEGORIES = 'regulatedGearCategories',
-  SELECTED_GEARS_AND_CATEGORIES = 'selectedCategoriesAndGears',
-  DEROGATION = 'derogation'
+  SELECTED_GEARS_AND_CATEGORIES = 'selectedCategoriesAndGears'
 }
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export enum GEAR_REGULATION_KEYS {
   AUTHORIZED = 'authorized',
-  UNAUTHORIZED = 'unauthorized',
-  OTHER_INFO = 'otherInfo'
+  OTHER_INFO = 'otherInfo',
+  UNAUTHORIZED = 'unauthorized'
 }
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export enum SPECIES_REGULATION_KEYS {
   AUTHORIZED = 'authorized',
-  UNAUTHORIZED = 'unauthorized',
-  OTHER_INFO = 'otherInfo'
+  OTHER_INFO = 'otherInfo',
+  UNAUTHORIZED = 'unauthorized'
 }
 
 export const SORTED_CATEGORY_LIST = [
@@ -62,8 +66,8 @@ const CATEGORIES_TO_HIDE = ['engins inconnus', "pas d'engin", 'engins de pêche 
  * @param {Object.<string, Gear[]>} categoriesToGears
  * @returns
  */
-export const prepareCategoriesAndGearsToDisplay = categoriesToGears => {
-  return SORTED_CATEGORY_LIST.map(category => {
+export const prepareCategoriesAndGearsToDisplay = categoriesToGears =>
+  SORTED_CATEGORY_LIST.map(category => {
     if (!CATEGORIES_TO_HIDE.includes(category) && categoriesToGears[category]) {
       const categoryGearList = [...categoriesToGears[category]]
       const gears = categoryGearList
@@ -74,35 +78,36 @@ export const prepareCategoriesAndGearsToDisplay = categoriesToGears => {
           if (gearA.code > gearB.code) {
             return 1
           }
+
           return 0
         })
-        .map(gear => {
-          return {
-            label: `${gear.code} - ${gear.name}`,
-            value: gear.code
-          }
-        })
+        .map(gear => ({
+          label: `${gear.code} - ${gear.name}`,
+          value: gear.code
+        }))
 
       return {
+        children: gears,
         label: category,
-        value: category,
-        children: gears
+        value: category
       }
     }
+
     return null
   }).filter(gears => gears)
-}
 
 export const getGroupCategories = (option, groupsToCategories) => {
   switch (option) {
-    case REGULATED_GEARS_KEYS.ALL_TOWED_GEARS: {
+    case REGULATED_GEARS_KEYS.ALL_TOWED_GEARS:
       return groupsToCategories[REGULATED_GEARS_KEYS.ALL_TOWED_GEARS]
-    }
-    case REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS: {
+
+    case REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS:
       return groupsToCategories[REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS]
-    }
-    case REGULATED_GEARS_KEYS.ALL_GEARS: {
+
+    case REGULATED_GEARS_KEYS.ALL_GEARS:
       return SORTED_CATEGORY_LIST
-    }
+
+    default:
+      return []
   }
 }

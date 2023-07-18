@@ -5,24 +5,24 @@ import { COLORS } from '../../../../../constants/constants'
 import { InfoPoint } from '../../../../Backoffice/edit_regulation/InfoPoint'
 
 export type CodeAndNameProps = {
-  code: string
-  name: string
-  isCategory?: boolean
   categoriesToGears?: any
+  code: string
+  isCategory?: boolean
+  name: string
 }
-export function CodeAndName({ code, name, isCategory = false, categoriesToGears }: CodeAndNameProps) {
+export function CodeAndName({ categoriesToGears, code, isCategory = false, name }: CodeAndNameProps) {
   return (
     <Label>
       {`${code ? `${code} ${name ? `(${name})` : ''}` : `${name ? `${name}` : ''}`}`}
       {isCategory && categoriesToGears && categoriesToGears[name] && (
         <InfoPoint
-          dataCy={'regulatory-layers-metadata-gears-category-with-infobox'}
+          backgroundColor={COLORS.charcoal}
+          dataCy="regulatory-layers-metadata-gears-category-with-infobox"
+          margin="3px"
           title={categoriesToGears[name]
             .map(gear => `${gear.code} - ${gear.name} \n`)
             .toString()
             .replace(/,/g, '')}
-          margin={'3px'}
-          backgroundColor={COLORS.charcoal}
         />
       )}
     </Label>

@@ -1,24 +1,24 @@
 import styled from 'styled-components'
 
 export type InfoPointProps = {
-  title?: string
+  backgroundColor?: string
+  color?: string
   dataCy?: string
   margin?: string
-  color?: string
-  backgroundColor?: string
   onMouseEnter?: () => void
   onMouseOut?: () => void
+  title?: string
 }
-export function InfoPoint({ title, dataCy, margin, color, backgroundColor, onMouseEnter, onMouseOut }: InfoPointProps) {
+export function InfoPoint({ backgroundColor, color, dataCy, margin, onMouseEnter, onMouseOut, title }: InfoPointProps) {
   return (
     <Wrapper
-      data-cy={dataCy}
-      title={title}
-      $margin={margin}
-      $color={color}
       $backgroundColor={backgroundColor}
+      $color={color}
+      $margin={margin}
+      data-cy={dataCy}
       onMouseEnter={onMouseEnter}
       onMouseOut={onMouseOut}
+      title={title}
     >
       !
     </Wrapper>
@@ -26,8 +26,8 @@ export function InfoPoint({ title, dataCy, margin, color, backgroundColor, onMou
 }
 
 const Wrapper = styled.a<{
-  $color: string | undefined
   $backgroundColor: string | undefined
+  $color: string | undefined
   $margin: string | undefined
 }>`
   display: inline-block;

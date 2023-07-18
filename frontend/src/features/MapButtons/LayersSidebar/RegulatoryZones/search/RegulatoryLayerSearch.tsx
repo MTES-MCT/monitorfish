@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
+import { RegulatoryLayerSearchInput } from './RegulatoryLayerSearchInput'
+import { RegulatoryLayerSearchResultList } from './RegulatoryLayerSearchResultList'
 import { resetRegulatoryZonesChecked, setRegulatoryLayersSearchResult } from './slice'
-
 import layer from '../../../../../domain/shared_slices/Layer'
 import {
   addRegulatoryZonesToMyLayers,
@@ -10,11 +11,9 @@ import {
   resetRegulatoryGeometriesToPreview
 } from '../../../../../domain/shared_slices/Regulatory'
 import { useEscapeFromKeyboard } from '../../../../../hooks/useEscapeFromKeyboard'
-
-import { RegulatoryLayerSearchResultList } from './RegulatoryLayerSearchResultList'
-import { RegulatoryLayerSearchInput } from './RegulatoryLayerSearchInput'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+
 import type { Promisable } from 'type-fest'
 
 export type RegulatoryLayerSearchProps = {
@@ -45,7 +44,7 @@ export function RegulatoryLayerSearch({
     dispatch(resetRegulatoryGeometriesToPreview())
     dispatch(resetRegulatoryZonesChecked())
     // dispatch(setRegulatoryLayersSearchResult(null))
-  }, [layersSidebarOpenedLayerType])
+  }, [dispatch, layersSidebarOpenedLayerType])
 
   useEffect(() => {
     if (!escape) {
@@ -56,13 +55,13 @@ export function RegulatoryLayerSearch({
     dispatch(setRegulatoryLayersSearchResult(undefined))
     dispatch(resetRegulatoryZonesChecked())
     dispatch(closeRegulatoryZoneMetadataPanel())
-  }, [escape])
+  }, [dispatch, escape])
 
   useEffect(() => {
     if (regulatoryLayersSearchResult && Object.keys(regulatoryLayersSearchResult).length > 0) {
       dispatch(setLayersSideBarOpenedLayerType(undefined))
     }
-  }, [regulatoryLayersSearchResult])
+  }, [dispatch, setLayersSideBarOpenedLayerType, regulatoryLayersSearchResult])
 
   function saveRegulatoryLayers(_regulatoryZonesChecked) {
     setNumberOfRegulatoryLayersSaved(_regulatoryZonesChecked.length)
@@ -79,9 +78,9 @@ export function RegulatoryLayerSearch({
       <RegulatoryLayerSearchInput />
       <RegulatoryLayerSearchResultList namespace={namespace} />
       <AddRegulatoryLayer
-        data-cy={'regulatory-search-add-zones-button'}
-        onClick={() => saveRegulatoryLayers(regulatoryZonesChecked)}
         $isShown={!!regulatoryZonesChecked?.length}
+        data-cy="regulatory-search-add-zones-button"
+        onClick={() => saveRegulatoryLayers(regulatoryZonesChecked)}
       >
         {numberOfRegulatoryLayersSaved
           ? `${numberOfRegulatoryLayersSaved} zones ajoutées`

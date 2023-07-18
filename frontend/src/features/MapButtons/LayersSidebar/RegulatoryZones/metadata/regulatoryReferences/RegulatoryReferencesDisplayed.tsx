@@ -1,7 +1,8 @@
 import styled from 'styled-components'
-import { SectionTitle, Section, List, Label, Elem } from '../RegulatoryMetadata.style'
+
 import { getRegulatoryZoneTextTypeAsText } from '../../../../../../domain/entities/regulation'
 import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
+import { SectionTitle, Section, List, Label, Elem } from '../RegulatoryMetadata.style'
 
 export function RegulatoryReferencesDisplayed() {
   const regulatory = useMainAppSelector(state => state.regulatory)
@@ -14,25 +15,23 @@ export function RegulatoryReferencesDisplayed() {
         <Section>
           <SectionTitle>Références réglementaires</SectionTitle>
           <List>
-            {regulatoryReferences.map(regulatoryReference => {
-              return (
-                <Reference
-                  key={regulatoryReference?.url + regulatoryReference?.reference}
-                  data-cy="regulatory-layers-metadata-references"
-                >
-                  {regulatoryReference.textType && (
-                    <Elem>
-                      <Label>{getRegulatoryZoneTextTypeAsText(regulatoryReference.textType)}</Label>
-                    </Elem>
-                  )}
+            {regulatoryReferences.map(regulatoryReference => (
+              <Reference
+                key={`${regulatoryReference?.url}${regulatoryReference?.reference}`}
+                data-cy="regulatory-layers-metadata-references"
+              >
+                {regulatoryReference.textType && (
                   <Elem>
-                    <Link href={regulatoryReference.url} target="_blank">
-                      {regulatoryReference.reference}
-                    </Link>
+                    <Label>{getRegulatoryZoneTextTypeAsText(regulatoryReference.textType)}</Label>
                   </Elem>
-                </Reference>
-              )
-            })}
+                )}
+                <Elem>
+                  <Link href={regulatoryReference.url} target="_blank">
+                    {regulatoryReference.reference}
+                  </Link>
+                </Elem>
+              </Reference>
+            ))}
           </List>
         </Section>
       )}

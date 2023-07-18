@@ -1,23 +1,24 @@
 import { useEffect, useState } from 'react'
-import styled, { css } from 'styled-components'
 import { Checkbox, CheckboxGroup } from 'rsuite'
-import { showRegulatoryZoneMetadata } from '../../../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
-import { closeRegulatoryZoneMetadata } from '../../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
+import styled, { css } from 'styled-components'
 
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './slice'
-import { showOrHideMetadataIcon } from '../RegulatoryZone'
-import { PaperDarkIcon, PaperIcon } from '../../../../commonStyles/icons/REGPaperIcon.style'
-import { theme } from '../../../../../ui/theme'
-import { getRegulatoryLayerStyle } from '../../../../map/layers/styles/regulatoryLayer.style'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { closeRegulatoryZoneMetadata } from '../../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
+import { showRegulatoryZoneMetadata } from '../../../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { theme } from '../../../../../ui/theme'
+import { PaperDarkIcon, PaperIcon } from '../../../../commonStyles/icons/REGPaperIcon.style'
+import { getRegulatoryLayerStyle } from '../../../../map/layers/styles/regulatoryLayer.style'
+import { showOrHideMetadataIcon } from '../RegulatoryZone'
+
 import type { RegulatoryZone } from '../../../../../domain/types/regulation'
 
 export type RegulatoryLayerSearchResultZoneProps = {
-  regulatoryZone: RegulatoryZone
   isOpen: boolean
+  regulatoryZone: RegulatoryZone
 }
-export function RegulatoryLayerSearchResultZone({ regulatoryZone, isOpen }: RegulatoryLayerSearchResultZoneProps) {
+export function RegulatoryLayerSearchResultZone({ isOpen, regulatoryZone }: RegulatoryLayerSearchResultZoneProps) {
   const dispatch = useMainAppDispatch()
 
   const { regulatoryZoneMetadata } = useMainAppSelector(state => state.regulatory)
@@ -71,30 +72,30 @@ export function RegulatoryLayerSearchResultZone({ regulatoryZone, isOpen }: Regu
         <>
           {metadataIsShown ? (
             <CustomREGPaperDarkIcon
-              title="Fermer la réglementation"
               onClick={() => showOrHideRegulatoryZoneMetadata(regulatoryZone)}
+              title="Fermer la réglementation"
             />
           ) : (
             <CustomREGPaperIcon
-              title="Afficher la réglementation"
               onClick={() => showOrHideRegulatoryZoneMetadata(regulatoryZone)}
+              title="Afficher la réglementation"
             />
           )}
           <CheckboxGroup
             inline
             name="checkboxList"
-            value={zoneIsChecked || zoneIsAlreadySelected ? [regulatoryZone.id] : []}
-            onChange={_ =>
+            onChange={() =>
               zoneIsChecked
                 ? dispatch(uncheckRegulatoryZones([regulatoryZone]))
                 : dispatch(checkRegulatoryZones([regulatoryZone]))
             }
-            style={{ marginLeft: 'auto', height: 20 }}
+            style={{ height: 20, marginLeft: 'auto' }}
+            value={zoneIsChecked || zoneIsAlreadySelected ? [regulatoryZone.id] : []}
           >
             <Checkbox
-              title={zoneIsAlreadySelected ? 'zone déjà ajoutée à mes zones réglementaires' : ''}
+              data-cy="regulatory-zone-check"
               disabled={!!zoneIsAlreadySelected}
-              data-cy={'regulatory-zone-check'}
+              title={zoneIsAlreadySelected ? 'zone déjà ajoutée à mes zones réglementaires' : ''}
               value={regulatoryZone?.id}
             />
           </CheckboxGroup>

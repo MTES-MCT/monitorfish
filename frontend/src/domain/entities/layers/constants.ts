@@ -259,6 +259,13 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
     type: LayerType.ADMINISTRATIVE,
     isIntersectable: true
   },
+  [MonitorFishLayer.mer_celtique]: {
+    code: '1241_mer_celtique_areas',
+    name: 'Mer Celtique',
+    group: layersGroups.TWELVE_FORTY_ONE,
+    type: LayerType.ADMINISTRATIVE,
+    isIntersectable: true
+  },
   [MonitorFishLayer.cormoran]: {
     code: 'cormoran_areas',
     name: 'Zones Cormoran (NAMO-SA)',

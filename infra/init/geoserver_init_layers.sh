@@ -1,11 +1,11 @@
 #!/bin/sh
 set -eu
 
-DB_HOST="${DB_HOST:-db}" 
-DB_NAME="${DB_NAME:-monitorfishdb}" 
-DB_SCHEMA="${DB_SCHEMA:-public}" 
-DB_USER="${DB_USER:-postgres}" 
-DB_PASSWORD="${DB_PASSWORD:-postgres}" 
+DB_HOST="${DB_HOST:-db}"
+DB_NAME="${DB_NAME:-monitorfishdb}"
+DB_SCHEMA="${DB_SCHEMA:-public}"
+DB_USER="${DB_USER:-postgres}"
+DB_PASSWORD="${DB_PASSWORD:-postgres}"
 GEOSERVER_PORT="${GEOSERVER_PORT:-8081}"
 
 curl -u admin:geoserver -X POST http://0.0.0.0:$GEOSERVER_PORT/geoserver/rest/workspaces -H  "accept: text/html" -H  "content-type: application/json" \
@@ -205,6 +205,19 @@ curl -v -u admin:geoserver -X POST http://0.0.0.0:$GEOSERVER_PORT/geoserver/rest
     "name": "1241_mer_noire_areas",
     "nativeName": "1241_mer_noire_areas",
     "title": "1241 mer noire areas",
+    "nativeCRS": "EPSG:4326",
+    "srs": "EPSG:4326",
+    "enabled": true,
+  }
+}
+EOF
+
+curl -v -u admin:geoserver -X POST http://0.0.0.0:$GEOSERVER_PORT/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+{
+  "featureType": {
+    "name": "1241_mer_celtique_areas",
+    "nativeName": "1241_mer_celtique_areas",
+    "title": "1241 mer celtique areas",
     "nativeCRS": "EPSG:4326",
     "srs": "EPSG:4326",
     "enabled": true,

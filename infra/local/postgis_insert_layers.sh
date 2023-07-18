@@ -24,6 +24,7 @@ PGCLIENTENCODING=UTF-8 psql -d cnsp -U adl -f sig/layersdata/1241_mer_baltique.s
 PGCLIENTENCODING=UTF-8 psql -d cnsp -U adl -f sig/layersdata/1241_mer_du_nord.sql
 PGCLIENTENCODING=UTF-8 psql -d cnsp -U adl -f sig/layersdata/1241_mer_mediterranee.sql
 PGCLIENTENCODING=UTF-8 psql -d cnsp -U adl -f sig/layersdata/1241_mer_noire.sql
+PGCLIENTENCODING=UTF-8 psql -d cnsp -U adl -f sig/layersdata/1241_mer_celtique_areas.sql
 
 PGCLIENTENCODING=UTF-8 psql -d cnsp -U adl -f sig/layersdata/cormoran_areas.sql
 PGCLIENTENCODING=UTF-8 psql -d cnsp -U adl -f sig/layersdata/aem_areas.sql

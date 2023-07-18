@@ -46,6 +46,7 @@ export enum MonitorFishLayer {
   mer_du_nord = 'mer_du_nord',
   mer_mediterranee = 'mer_mediterranee',
   mer_noire = 'mer_noire',
+  mer_celtique = 'mer_celtique',
   navigation_category_five = 'navigation_category_five',
   navigation_category_four = 'navigation_category_four',
   navigation_category_three = 'navigation_category_three',

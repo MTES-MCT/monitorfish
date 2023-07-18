@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from typing import List
 
+import pytz
 from prefect import task
 
 from src.pipeline.helpers import dates
@@ -10,6 +11,11 @@ from src.pipeline.helpers import dates
 def get_utcnow():
     """Task version of `datetime.utcnow`"""
     return datetime.utcnow()
+
+
+@task(checkpoint=False)
+def get_timezone_aware_utcnow():
+    return pytz.UTC.localize(datetime.utcnow())
 
 
 @task(checkpoint=False)

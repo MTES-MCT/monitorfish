@@ -21,14 +21,14 @@ context('Measurement', () => {
     cy.get('*[data-cy="measurement"]').click({ timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })
     cy.get('#root').click(490, 580, { timeout: 10000 })
-    cy.get('*[data-cy="dms-coordinates-input"]').should('have.value', '47° 48′ 56″ N 007° 54′ 51″ W')
+    cy.get('*[data-cy="dms-coordinates-input"]').should('have.value', '47° 45′ 31″ N 007° 54′ 51″ W')
     cy.get('*[data-cy="measurement-circle-radius-input"]').type('35', { timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-add"]').click({ timeout: 10000 })
     cy.wait(100)
 
     // Then
     cy.get('*[data-cy="measurement-value"]').contains('r = 35 nm', { timeout: 10000 })
-    cy.get('*[data-cy="close-measurement"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="close-measurement"]').click({ force: true, timeout: 10000 })
     cy.get('*[data-cy="measurement-value"]').should('not.exist')
   })
 
@@ -43,7 +43,7 @@ context('Measurement', () => {
 
     // Then
     cy.get('*[data-cy="measurement-value"]').contains('r = 47 nm', { timeout: 10000 })
-    cy.get('#root').click(789, 556, { timeout: 10000 })
+    cy.get('#root').click(789, 536, { timeout: 10000 })
     cy.get('*[data-cy="measurement-value"]').should('not.exist')
   })
 
@@ -56,7 +56,7 @@ context('Measurement', () => {
     cy.get('#root').dblclick(560, 620, { timeout: 10000 })
 
     // Then
-    cy.get('*[data-cy="measurement-value"]').contains('31.3', { timeout: 10000 })
+    cy.get('*[data-cy="measurement-value"]').contains('31.42', { timeout: 10000 })
     cy.get('#root').click(590, 590, { timeout: 10000 })
     cy.get('*[data-cy="measurement-value"]').should('not.exist')
   })

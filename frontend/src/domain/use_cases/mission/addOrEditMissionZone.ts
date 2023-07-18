@@ -2,13 +2,16 @@ import { InteractionListener, InteractionType } from '../../entities/map/constan
 import { setDisplayedComponents } from '../../shared_slices/DisplayedComponent'
 import { setGeometry, setInteractionTypeAndListener } from '../../shared_slices/Draw'
 import { fitMultiPolygonToExtent } from '../map/fitMultiPolygonToExtent'
+import { unselectVessel } from '../vessel/unselectVessel'
 
 import type { MainAppThunk } from '../../../store'
 import type { GeoJSON as GeoJSONNamespace } from '../../types/GeoJSON'
 
-export const addMissionZone =
-  (geometry: GeoJSONNamespace.Geometry | undefined): MainAppThunk<void> =>
+export const addOrEditMissionZone =
+  (geometry: GeoJSONNamespace.Geometry | undefined): MainAppThunk =>
   dispatch => {
+    dispatch(unselectVessel())
+
     if (geometry) {
       dispatch(setGeometry(geometry))
       dispatch(fitMultiPolygonToExtent(geometry))
@@ -23,7 +26,7 @@ export const addMissionZone =
     )
   }
 
-const openDrawLayerModal = dispatch => {
+export const openDrawLayerModal = dispatch => {
   dispatch(
     setDisplayedComponents({
       areVesselsDisplayed: false,

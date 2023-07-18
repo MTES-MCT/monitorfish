@@ -26,7 +26,7 @@ import {
 } from '../../../../domain/entities/map/constants'
 import { fitToExtent } from '../../../../domain/shared_slices/Map'
 import { MissionAction } from '../../../../domain/types/missionAction'
-import { addMissionZone } from '../../../../domain/use_cases/mission/addMissionZone'
+import { addOrEditMissionZone } from '../../../../domain/use_cases/mission/addOrEditMissionZone'
 import { getLastControlCircleGeometry } from '../../../../domain/use_cases/mission/getLastControlCircleGeometry'
 import { useDeepCompareEffect } from '../../../../hooks/useDeepCompareEffect'
 import { useListenForDrawedGeometry } from '../../../../hooks/useListenForDrawing'
@@ -141,8 +141,8 @@ export function FormikLocationPicker() {
     )
   }, 250)
 
-  const addZone = useCallback(async () => {
-    dispatch(addMissionZone(values.geom))
+  const addOrEditZone = useCallback(async () => {
+    dispatch(addOrEditMissionZone(values.geom))
   }, [dispatch, values.geom])
 
   const deleteZone = useCallback(
@@ -198,7 +198,7 @@ export function FormikLocationPicker() {
           disabled={values.isGeometryComputedFromControls}
           Icon={Icon.Plus}
           isFullWidth
-          onClick={addZone}
+          onClick={addOrEditZone}
         >
           Ajouter une zone de mission
         </Button>
@@ -221,7 +221,7 @@ export function FormikLocationPicker() {
                 accent={Accent.SECONDARY}
                 disabled={values.isGeometryComputedFromControls}
                 Icon={Icon.Edit}
-                onClick={addZone}
+                onClick={addOrEditZone}
               />
               <IconButton
                 accent={Accent.SECONDARY}

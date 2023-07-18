@@ -10,6 +10,7 @@ import {
   hideFishingActivitiesOnMap,
   loadFishingActivities,
   removeFishingActivitiesFromMap,
+  resetFishingActivities,
   resetLoadFishingActivities,
   setLastVoyage,
   setNextFishingActivities,
@@ -57,8 +58,7 @@ export const getVesselLogbook =
     try {
       const voyage = await getVesselLogbookFromAPI(vesselIdentity, nextNavigateTo, tripNumber)
       if (!voyage) {
-        dispatch(setVoyage(emptyVoyage))
-        dispatch(hideFishingActivitiesOnMap())
+        dispatch(resetFishingActivities(vesselIdentity))
         dispatch(setError(new NoLogbookMessagesFoundError("Ce navire n'a pas envoyé de message JPE.")))
 
         return
@@ -73,14 +73,18 @@ export const getVesselLogbook =
         return
       }
 
+      const voyageWithVesselIdentity = {
+        ...voyage,
+        vesselIdentity
+      }
       if (updateVesselTrack) {
-        modifyVesselTrackAndVoyage(voyage, dispatch, vesselIdentity, areFishingActivitiesShowedOnMap)
+        modifyVesselTrackAndVoyage(voyageWithVesselIdentity, dispatch, vesselIdentity, areFishingActivitiesShowedOnMap)
 
         return
       }
 
-      dispatch(setLastVoyage(voyage))
-      dispatch(setVoyage(voyage))
+      dispatch(setLastVoyage(voyageWithVesselIdentity))
+      dispatch(setVoyage(voyageWithVesselIdentity))
       if (areFishingActivitiesShowedOnMap) {
         dispatch(showFishingActivitiesOnMap())
       } else {
@@ -142,11 +146,4 @@ function gotNewFishingActivitiesWithMoreMessagesOrAlerts(lastFishingActivities, 
       voyage.logbookMessagesAndAlerts.logbookMessages &&
       voyage.logbookMessagesAndAlerts.logbookMessages.length > lastFishingActivities.logbookMessages.length)
   )
-}
-
-const emptyVoyage = {
-  logbookMessagesAndAlerts: {
-    alerts: [],
-    logbookMessages: []
-  }
 }

@@ -1,4 +1,3 @@
-import { usePrevious } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useState } from 'react'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
@@ -18,11 +17,11 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
 export function VesselFishingActivities() {
   const dispatch = useMainAppDispatch()
-  const { selectedVessel, selectedVesselIdentity } = useMainAppSelector(state => state.vessel)
-  const { fishingActivities, fishingActivitiesTab, loadingFishingActivities, nextFishingActivities } =
+  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
+  const { fishingActivities, fishingActivitiesTab, loadingFishingActivities, nextFishingActivities, vesselIdentity } =
     useMainAppSelector(state => state.fishingActivities)
 
-  const previousSelectedVessel = usePrevious(selectedVessel)
+  const showedLogbookIsOutdated = vesselIdentity && !vesselsAreEquals(vesselIdentity, selectedVesselIdentity)
   const [messageTypeFilter, setMessageTypeFilter] = useState(null)
   const [processingMessagesResume, setProcessingMessagesResume] = useState(false)
 
@@ -43,17 +42,24 @@ export function VesselFishingActivities() {
       return
     }
 
-    if (!fishingActivities) {
+    if (!fishingActivities && !vesselIdentity) {
       dispatch(resetNextFishingActivities())
       dispatch(getVesselLogbook(selectedVesselIdentity, undefined, true))
 
       return
     }
 
-    if (previousSelectedVessel && !vesselsAreEquals(previousSelectedVessel, selectedVesselIdentity)) {
+    if (showedLogbookIsOutdated) {
       dispatch(getVesselLogbook(selectedVesselIdentity, undefined, true))
     }
-  }, [dispatch, fishingActivities, loadingFishingActivities, selectedVesselIdentity, previousSelectedVessel])
+  }, [
+    dispatch,
+    fishingActivities,
+    vesselIdentity,
+    loadingFishingActivities,
+    selectedVesselIdentity,
+    showedLogbookIsOutdated
+  ])
 
   const updateFishingActivities = useCallback(
     _nextFishingActivities => {
@@ -79,47 +85,58 @@ export function VesselFishingActivities() {
     dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.LAST, true))
   }, [dispatch, selectedVesselIdentity])
 
+  if (loadingFishingActivities || processingMessagesResume) {
+    return <FingerprintSpinner className="radar" color={COLORS.charcoal} size={100} />
+  }
+
+  if (!fishingActivities) {
+    return <NoFishingActivities data-cy="vessel-fishing">Ce navire n’a pas envoyé de message JPE.</NoFishingActivities>
+  }
+
   return (
-    <>
-      {!loadingFishingActivities && !processingMessagesResume ? (
-        <Wrapper className="smooth-scroll" data-cy="vessel-fishing">
-          {nextFishingActivities && (
-            <>
-              <UpdateFishingActivities />
-              <UpdateFishingActivitiesButton onClick={() => updateFishingActivities(nextFishingActivities)}>
-                Nouveaux messages JPE
-              </UpdateFishingActivitiesButton>
-            </>
-          )}
-          {fishingActivitiesTab === FishingActivitiesTab.SUMMARY && (
-            <FishingActivitiesSummary
-              navigation={{
-                goToLastTrip,
-                goToNextTrip,
-                goToPreviousTrip
-              }}
-              setProcessingMessagesResume={setProcessingMessagesResume}
-              showLogbookMessages={showMessages}
-            />
-          )}
-          {fishingActivitiesTab === FishingActivitiesTab.MESSAGES && (
-            <LogbookMessages
-              messageTypeFilter={messageTypeFilter}
-              navigation={{
-                goToLastTrip,
-                goToNextTrip,
-                goToPreviousTrip
-              }}
-              showFishingActivitiesSummary={showSummary}
-            />
-          )}
-        </Wrapper>
-      ) : (
-        <FingerprintSpinner className="radar" color={COLORS.charcoal} size={100} />
+    <Wrapper className="smooth-scroll" data-cy="vessel-fishing">
+      {nextFishingActivities && (
+        <>
+          <UpdateFishingActivities />
+          <UpdateFishingActivitiesButton onClick={() => updateFishingActivities(nextFishingActivities)}>
+            Nouveaux messages JPE
+          </UpdateFishingActivitiesButton>
+        </>
       )}
-    </>
+      {fishingActivitiesTab === FishingActivitiesTab.SUMMARY && (
+        <FishingActivitiesSummary
+          navigation={{
+            goToLastTrip,
+            goToNextTrip,
+            goToPreviousTrip
+          }}
+          setProcessingMessagesResume={setProcessingMessagesResume}
+          showLogbookMessages={showMessages}
+        />
+      )}
+      {fishingActivitiesTab === FishingActivitiesTab.MESSAGES && (
+        <LogbookMessages
+          messageTypeFilter={messageTypeFilter}
+          navigation={{
+            goToLastTrip,
+            goToNextTrip,
+            goToPreviousTrip
+          }}
+          showFishingActivitiesSummary={showSummary}
+        />
+      )}
+    </Wrapper>
   )
 }
+
+const NoFishingActivities = styled.div`
+  padding: 50px 5px 0px 5px;
+  margin: 10px 10px;
+  height: 70px;
+  background: ${p => p.theme.color.white};
+  color: ${p => p.theme.color.slateGray};
+  text-align: center;
+`
 
 const Wrapper = styled.div`
   overflow-x: hidden;

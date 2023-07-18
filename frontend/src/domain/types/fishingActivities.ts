@@ -1,3 +1,4 @@
+import type { VesselIdentity } from '../entities/vessel/types'
 import type { Feature } from 'ol'
 import type { Coordinate } from 'ol/coordinate'
 import type Point from 'ol/geom/Point'
@@ -9,6 +10,7 @@ export type VesselVoyage = {
   logbookMessagesAndAlerts: FishingActivities
   startDate: string | null
   tripNumber: number
+  vesselIdentity: VesselIdentity
 }
 
 export type FishingActivities = {

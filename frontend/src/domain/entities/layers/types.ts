@@ -43,6 +43,7 @@ export enum MonitorFishLayer {
   eaux_union_dans_oi_et_atl_ouest = 'eaux_union_dans_oi_et_atl_ouest',
   effort_zones_areas = 'effort_zones_areas',
   mer_baltique = 'mer_baltique',
+  mer_celtique = 'mer_celtique',
   mer_du_nord = 'mer_du_nord',
   mer_mediterranee = 'mer_mediterranee',
   mer_noire = 'mer_noire',

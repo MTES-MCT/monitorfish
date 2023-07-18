@@ -273,6 +273,23 @@ def load_1241_mer_noire_areas(mer_noire_areas: pd.DataFrame):
 
 
 @task(checkpoint=False)
+def extract_1241_mer_celtique_areas() -> pd.DataFrame:
+  return extract("monitorfish_local", "cross/1241_mer_celtique_areas.sql")
+
+
+@task(checkpoint=False)
+def load_1241_mer_celtique_areas(mer_celtique_areas: pd.DataFrame):
+  load(
+    mer_celtique_areas,
+    table_name="1241_mer_celtique_areas",
+    schema="public",
+    db_name="monitorfish_remote",
+    logger=prefect.context.get("logger"),
+    how="replace",
+  )
+
+
+@task(checkpoint=False)
 def extract_aem_areas() -> pd.DataFrame:
     return extract("monitorfish_local", "cross/aem_areas.sql")
 
@@ -714,6 +731,9 @@ with Flow("Administrative areas", executor=LocalDaskExecutor()) as flow:
 
     mer_noire_areas = extract_1241_mer_noire_areas()
     load_1241_mer_noire_areas(mer_noire_areas)
+
+    mer_celtique_areas = extract_1241_mer_celtique_areas()
+    load_1241_mer_celtique_areas(mer_celtique_areas)
 
     aem_areas = extract_aem_areas()
     load_aem_areas(aem_areas)

@@ -46,6 +46,9 @@ TEST_MODE = os.getenv("TEST_MODE", "False").lower() in (
 DOCKER_IMAGE = "docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline"
 MONITORFISH_VERSION = os.getenv("MONITORFISH_VERSION")
 FLOWS_LOCATION = Path("src/pipeline/flows")  # relative to the WORKDIR in the image
+FLOWS_LABEL = "monitorfish"
+MAX_FLOW_RUN_MINUTES = 30
+FLOW_STATES_TO_CLEAN = ["Running"]
 LOGBOOK_FILES_GID = os.getenv("LOGBOOK_FILES_GID")
 
 # Location where ERS xml files can be fetched

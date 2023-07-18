@@ -13,7 +13,7 @@ context('Offline management', () => {
         '&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime=',
       { statusCode: 400 }
     ).as('openVessel')
-    cy.get('.VESSELS_POINTS').click(460, 480, { force: true })
+    cy.get('.VESSELS_POINTS').click(460, 460, { force: true })
     cy.wait('@openVessel')
     cy.get('*[data-cy="vessel-sidebar"]').should('be.visible')
 
@@ -86,7 +86,7 @@ context('Offline management', () => {
       },
       { statusCode: 400 }
     ).as('openVesselStubbed')
-    cy.get('.VESSELS_POINTS').click(460, 480, { force: true })
+    cy.get('.VESSELS_POINTS').click(460, 460, { force: true })
     cy.wait('@openVesselStubbed')
     cy.get('*[data-cy="vessel-sidebar"]').should('be.visible')
 

@@ -1,3 +1,5 @@
+DROP MATERIALIZED VIEW analytics_controls_full_data;
+
 CREATE MATERIALIZED VIEW public.analytics_controls_full_data AS
 
 WITH controls_gears AS (
@@ -88,6 +90,7 @@ SELECT
     COALESCE(a.latitude, ports.latitude) AS latitude,
     port_locode,
     ports.region AS port_department,
+    ports.port_name,
     vessel_targeted,
     COALESCE(inf.infraction, false) AS infraction,
     COALESCE(inf.fishing_infraction, false) AS fishing_infraction,

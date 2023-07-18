@@ -7,7 +7,7 @@ context('Vessel sidebar ers/vms tab', () => {
 
   it('ERS/VMS tab Should contain history of beacon malfunctions and show a malfunction detail in history', () => {
     // Given
-    cy.get('.VESSELS_POINTS').click(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
     cy.wait(50)
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.intercept('GET', '/bff/v1/vessels/beacon_malfunctions*').as('vesselBeaconMalfunctions')
@@ -57,7 +57,7 @@ context('Vessel sidebar ers/vms tab', () => {
       'bff/v1/vessels/find?vesselId=1&internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK' +
         '&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime='
     ).as('openVessel')
-    cy.get('.VESSELS_POINTS').click(460, 480, { force: true, timeout: 10000 })
+    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
     cy.wait('@openVessel')
     cy.get('*[data-cy="vessel-menu-ers-vms"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-beacon-malfunctions-history"]', { timeout: 10000 }).children().eq(0).click()

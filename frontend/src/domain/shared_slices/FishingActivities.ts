@@ -3,8 +3,9 @@ import { createSlice } from '@reduxjs/toolkit'
 import { getEffectiveDateTimeFromMessage, getLogbookMessageType } from '../entities/logbook'
 import { FishingActivitiesTab } from '../entities/vessel/vessel'
 
-import type { FishingActivityShowedOnMap } from '../entities/vessel/types'
-import type { FishingActivities } from '../types/fishingActivities'
+import type { FishingActivityShowedOnMap, VesselIdentity } from '../entities/vessel/types'
+import type { FishingActivities, VesselVoyage } from '../types/fishingActivities'
+import type { PayloadAction } from '@reduxjs/toolkit'
 
 // TODO Properly type this redux state.
 export type FishingActivitiesState = {
@@ -18,7 +19,8 @@ export type FishingActivitiesState = {
   loadingFishingActivities: boolean
   nextFishingActivities: FishingActivities | null
   redrawFishingActivitiesOnMap: boolean
-  tripNumber: null
+  tripNumber: number | null
+  vesselIdentity: VesselIdentity | undefined
 }
 const INITIAL_STATE: FishingActivitiesState = {
   areFishingActivitiesShowedOnMap: false,
@@ -34,7 +36,8 @@ const INITIAL_STATE: FishingActivitiesState = {
   loadingFishingActivities: false,
   nextFishingActivities: null,
   redrawFishingActivitiesOnMap: false,
-  tripNumber: null
+  tripNumber: null,
+  vesselIdentity: undefined
 }
 
 const fishingActivitiesSlice = createSlice({
@@ -43,13 +46,13 @@ const fishingActivitiesSlice = createSlice({
   reducers: {
     /**
      * Close vessel fishing activities
-     * @param {Object=} state
      */
     closeFishingActivities(state) {
       state.areFishingActivitiesShowedOnMap = false
       state.fishingActivitiesShowedOnMap = []
       state.fishingActivities = undefined
       state.loadingFishingActivities = false
+      state.vesselIdentity = undefined
     },
 
     /**
@@ -97,6 +100,18 @@ const fishingActivitiesSlice = createSlice({
     },
 
     /**
+     * Reset vessel fishing activities
+     */
+    resetFishingActivities(state, action: PayloadAction<VesselIdentity>) {
+      state.areFishingActivitiesShowedOnMap = false
+      state.fishingActivitiesShowedOnMap = []
+      state.fishingActivities = undefined
+      state.loadingFishingActivities = false
+      state.vesselIdentity = action.payload
+      state.nextFishingActivities = null
+    },
+
+    /**
      * Reset the loading of fishing activities
      * @param {Object=} state
      */
@@ -120,15 +135,14 @@ const fishingActivitiesSlice = createSlice({
     /**
      * Set selected vessel last voyage - This voyage is saved to be able to compare it
      * with new last voyages we will receive from the CRON
-     * @param {Object=} state
-     * @param {{payload: VesselVoyage}} action - the vessel last voyage
      */
-    setLastVoyage(state, action) {
+    setLastVoyage(state, action: PayloadAction<VesselVoyage>) {
       state.lastFishingActivities = action.payload.logbookMessagesAndAlerts
       state.fishingActivities = action.payload.logbookMessagesAndAlerts
       state.isLastVoyage = action.payload.isLastVoyage
       state.isFirstVoyage = action.payload.isFirstVoyage
       state.tripNumber = action.payload.tripNumber
+      state.vesselIdentity = action.payload.vesselIdentity
     },
 
     /**
@@ -142,17 +156,16 @@ const fishingActivitiesSlice = createSlice({
 
     /**
      * Set selected vessel voyage
-     * @param {Object=} state
-     * @param {{payload: VesselVoyage}} action - the vessel voyage
      */
-    setVoyage(state, action) {
-      const { isFirstVoyage, isLastVoyage, logbookMessagesAndAlerts, tripNumber } = action.payload
+    setVoyage(state, action: PayloadAction<VesselVoyage>) {
+      const { isFirstVoyage, isLastVoyage, logbookMessagesAndAlerts, tripNumber, vesselIdentity } = action.payload
 
       state.fishingActivities = logbookMessagesAndAlerts
       state.isLastVoyage = isLastVoyage
       state.isFirstVoyage = isFirstVoyage
       state.tripNumber = tripNumber
       state.loadingFishingActivities = false
+      state.vesselIdentity = vesselIdentity
     },
 
     /**
@@ -236,6 +249,7 @@ export const {
   loadFishingActivities,
   removeFishingActivitiesFromMap,
   removeFishingActivityFromMap,
+  resetFishingActivities,
   resetLoadFishingActivities,
   resetNextFishingActivities,
   setFishingActivitiesTab,

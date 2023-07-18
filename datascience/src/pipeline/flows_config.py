@@ -6,6 +6,7 @@ from prefect.storage.local import Local
 
 from config import (
     DOCKER_IMAGE,
+    FLOWS_LABEL,
     FLOWS_LOCATION,
     IS_INTEGRATION,
     LOGBOOK_FILES_GID,
@@ -21,6 +22,7 @@ from src.pipeline.flows import (
     admin_areas,
     anchorages,
     beacons,
+    clean_flow_runs,
     control_anteriority,
     control_units,
     controls,
@@ -59,6 +61,7 @@ from src.pipeline.helpers.country_codes import (
 
 ################################ Define flow schedules ################################
 beacons.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")
+clean_flow_runs.flow.schedule = CronSchedule("8,18,28,38,48,58 * * * *")
 control_anteriority.flow.schedule = CronSchedule("5 * * * *")
 control_units.flow.schedule = CronSchedule("12 8 * * *")
 controls_open_data.flow.schedule = CronSchedule("15 3 * * 5")
@@ -229,6 +232,7 @@ flows_to_register = [
     admin_areas.flow,
     anchorages.flow,
     beacons.flow,
+    clean_flow_runs.flow,
     control_anteriority.flow,
     control_units.flow,
     controls.flow,
@@ -292,5 +296,5 @@ for flow in flows_to_register:
         image=f"{DOCKER_IMAGE}:{MONITORFISH_VERSION}",
         host_config=host_config,
         env=dotenv_values(ROOT_DIRECTORY / ".env"),
-        labels=["monitorfish"],
+        labels=[FLOWS_LABEL],
     )

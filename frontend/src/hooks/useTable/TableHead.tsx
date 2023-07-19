@@ -25,6 +25,14 @@ export function TableHead({
   onSort,
   sortingKey
 }: TableHeadProps) {
+  const sortByKey = (column: TableColumn) => {
+    if (!column.isSortable) {
+      return
+    }
+
+    onSort(column.key, column.key === sortingKey && !isSortingDesc)
+  }
+
   return (
     <CardTableHeader noPadding>
       <FlexboxGrid>
@@ -34,16 +42,16 @@ export function TableHead({
           </CellWrapper>
         )}
 
-        {columns.map(({ fixedWidth, isSortable, key, label = '' }) => (
-          <CellWrapper key={key} $fixedWidth={fixedWidth}>
+        {columns.map(column => (
+          <CellWrapper key={column.key} $fixedWidth={column.fixedWidth}>
             <CardTableColumnTitle
-              dataCy={`table-order-by-${key}`}
+              dataCy={`table-order-by-${column.key}`}
               isAscending={!isSortingDesc}
-              isSortable={isSortable}
-              isSortColumn={key === sortingKey}
-              onClick={() => onSort(key, key === sortingKey && !isSortingDesc)}
+              isSortable={column.isSortable}
+              isSortedColumn={column.key === sortingKey}
+              onClick={() => sortByKey(column)}
             >
-              {label}
+              {column.label || ''}
             </CardTableColumnTitle>
           </CellWrapper>
         ))}

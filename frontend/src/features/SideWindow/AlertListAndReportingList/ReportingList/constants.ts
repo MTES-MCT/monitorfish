@@ -14,14 +14,14 @@ export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<InfractionSuspicionRepor
     {
       fixedWidth: 176,
       isSortable: true,
-      key: 'value.source',
+      key: 'source',
       label: 'Origine',
       transform: getReportingOrigin
     },
     {
       fixedWidth: 288,
       isSortable: true,
-      key: 'value.type',
+      key: 'type',
       label: 'Titre',
       transform: getReportingTitle
     },

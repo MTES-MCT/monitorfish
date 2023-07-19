@@ -8,21 +8,21 @@ type CardTableColumnTitleProps = HTMLAttributes<HTMLDivElement> & {
   children: string
   dataCy?: string | undefined
   isAscending?: boolean | undefined
-  isSortColumn?: boolean | undefined
   isSortable?: boolean | undefined
+  isSortedColumn?: boolean | undefined
 }
 export function CardTableColumnTitle({
   children,
   dataCy = '',
   isAscending = false,
   isSortable = false,
-  isSortColumn = false,
+  isSortedColumn = false,
   onClick
 }: CardTableColumnTitleProps) {
   return (
     <StyledCardTableColumnTitle $isSortable={isSortable} data-cy={dataCy} onClick={onClick} title={String(children)}>
       <span>{children}</span>
-      {isSortable && isSortColumn && (
+      {isSortable && isSortedColumn && (
         <Sort $isAscending={isAscending} title={isAscending ? 'Croissant' : 'Décroissant'} />
       )}
     </StyledCardTableColumnTitle>

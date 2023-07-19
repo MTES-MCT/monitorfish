@@ -168,7 +168,7 @@ MMSI: ${reporting.mmsi || ''}`
 
       <CardTable
         $hasScroll={tableData.length > 9}
-        $width={1513}
+        $width={1353}
         data-cy="side-window-reporting-list"
         style={{ marginTop: 10 }}
       >
@@ -299,11 +299,11 @@ const columnStyles: CSSProperties[] = [
   },
   {
     ...styleCenter,
-    width: 144
+    width: 112
   },
   {
     ...styleCenter,
-    width: 176
+    width: 112
   },
   {
     ...styleCenter,
@@ -331,7 +331,7 @@ const columnStyles: CSSProperties[] = [
   },
   {
     ...styleCenter,
-    width: 176
+    width: 112
   },
   {
     ...styleCenter,

@@ -6,13 +6,13 @@ import type { TableOptions } from '../../../../hooks/useTable/types'
 export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<InfractionSuspicionReporting | PendingAlertReporting> = {
   columns: [
     {
-      fixedWidth: 144,
+      fixedWidth: 112,
       isSortable: true,
       key: 'validationDate',
       label: 'Ouvert il y a...'
     },
     {
-      fixedWidth: 176,
+      fixedWidth: 112,
       isSortable: true,
       key: 'value.source',
       label: 'Origine',
@@ -38,7 +38,7 @@ export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<InfractionSuspicionRepor
       label: 'Navire'
     },
     {
-      fixedWidth: 176,
+      fixedWidth: 112,
       isSortable: true,
       key: 'value.dml',
       label: 'DML concernées'

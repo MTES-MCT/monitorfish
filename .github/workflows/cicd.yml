@@ -31,6 +31,8 @@ jobs:
       ENV_PROFILE: ${{ steps.env_profile.outputs.ENV_PROFILE }}
       VERSION: ${{ steps.version.outputs.VERSION }}
     steps:
+      - name: Is a dependabot PR
+        run: echo ${{ contains(github.ref, 'dependabot') }}
       - name: Get last release version
         id: lastrelease
         uses: pozetroninc/github-action-get-latest-release@master
@@ -255,7 +257,7 @@ jobs:
     name: Push to registry
     needs: [version, e2e_test]
     runs-on: ubuntu-22.04
-    if: ${{ needs.version.outputs.IS_RELEASE }}
+    if: needs.version.outputs.IS_RELEASE && !contains(github.ref, 'dependabot')
     env:
       IS_RELEASE: ${{ needs.version.outputs.IS_RELEASE }}
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true

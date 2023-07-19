@@ -21,7 +21,7 @@ export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<InfractionSuspicionRepor
     {
       fixedWidth: 288,
       isSortable: true,
-      key: 'type',
+      key: 'title',
       label: 'Titre',
       transform: getReportingTitle
     },

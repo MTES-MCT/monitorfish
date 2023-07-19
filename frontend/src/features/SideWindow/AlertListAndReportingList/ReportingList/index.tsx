@@ -181,31 +181,23 @@ MMSI: ${reporting.mmsi || ''}`
             return (
               <CardTableRow key={reporting.id} data-cy="side-window-current-reportings" index={index + 1} style={{}}>
                 <FlexboxGrid>
-                  <FlexboxGrid.Item style={columnStyles[0] as CSSProperties}>
+                  <Cell style={columnStyles[0]}>
                     <StyledCheckbox
                       checked={reporting.$isChecked}
                       onChange={() => toggleTableCheckForId(reporting.id)}
                     />
-                  </FlexboxGrid.Item>
-                  <FlexboxGrid.Item
-                    style={columnStyles[1] as CSSProperties}
-                    title={reporting.validationDate || reporting.creationDate}
-                  >
+                  </Cell>
+                  <Cell style={columnStyles[1]} title={reporting.validationDate || reporting.creationDate}>
                     {timeago.format(reporting.validationDate || reporting.creationDate, 'fr')}
-                  </FlexboxGrid.Item>
-                  <FlexboxGrid.Item
-                    style={columnStyles[2] as CSSProperties}
-                    title={getReportingOrigin(reporting, true)}
-                  >
+                  </Cell>
+                  <Cell style={columnStyles[2]} title={getReportingOrigin(reporting, true)}>
                     {getReportingOrigin(reporting)}
-                  </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[3] as CSSProperties} title={getReportingTitle(reporting, true)}>
+                  </Cell>
+                  <Cell style={columnStyles[3]} title={getReportingTitle(reporting, true)}>
                     {getReportingTitle(reporting)}
-                  </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[4] as CSSProperties}>
-                    {reporting.value.natinfCode}
-                  </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[5] as CSSProperties} title={getVesselNameTitle(reporting)}>
+                  </Cell>
+                  <Cell style={columnStyles[4]}>{reporting.value.natinfCode}</Cell>
+                  <Cell style={columnStyles[5]} title={getVesselNameTitle(reporting)}>
                     <Flag
                       rel="preload"
                       src={`${baseUrl ? `${baseUrl}/` : ''}flags/${reporting.flagState.toLowerCase()}.svg`}
@@ -213,13 +205,13 @@ MMSI: ${reporting.mmsi || ''}`
                       title={countries.getName(reporting.flagState.toLowerCase(), 'fr')}
                     />
                     {reporting.vesselName}
-                  </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[6] as CSSProperties}>{reporting.value.dml}</FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[7] as CSSProperties}>
+                  </Cell>
+                  <Cell style={columnStyles[6]}>{reporting.value.dml}</Cell>
+                  <Cell style={columnStyles[7]}>
                     {reporting.underCharter && <UnderCharter>Navire sous charte</UnderCharter>}
-                  </FlexboxGrid.Item>
+                  </Cell>
                   <Separator />
-                  <FlexboxGrid.Item style={columnStyles[8] as CSSProperties}>
+                  <Cell style={columnStyles[8]}>
                     <IconButton
                       accent={Accent.TERTIARY}
                       data-cy="side-window-silenced-alerts-show-vessel"
@@ -228,8 +220,8 @@ MMSI: ${reporting.mmsi || ''}`
                       style={showIconStyle}
                       title="Voir sur la carte"
                     />
-                  </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[9] as CSSProperties}>
+                  </Cell>
+                  <Cell style={columnStyles[9]}>
                     <IconButton
                       accent={Accent.TERTIARY}
                       data-cy="side-window-edit-reporting"
@@ -238,7 +230,7 @@ MMSI: ${reporting.mmsi || ''}`
                       onClick={() => edit(editingIsDisabled, reporting)}
                       title="Editer le signalement"
                     />
-                  </FlexboxGrid.Item>
+                  </Cell>
                 </FlexboxGrid>
               </CardTableRow>
             )
@@ -250,6 +242,10 @@ MMSI: ${reporting.mmsi || ''}`
     </Content>
   )
 }
+
+const Cell = styled(FlexboxGrid.Item).attrs(() => ({
+  role: 'row'
+}))``
 
 const UnderCharter = styled.div`
   background: ${p => p.theme.color.mediumSeaGreen} 0% 0% no-repeat padding-box;

@@ -82,6 +82,7 @@ export function SideWindowSubMenuLink({
 
 const Text = styled.div``
 
+// TODO This should be a `<a />` or a `<button />`.
 const MenuButton = styled.div``
 
 const CircleWithKeyMetric = styled.span``

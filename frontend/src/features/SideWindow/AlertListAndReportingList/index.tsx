@@ -99,6 +99,7 @@ const Wrapper = styled.div`
   overflow: auto;
 `
 
+// TODO This should be a `<a />` or a `<button />`.
 const Title = styled.h2<{
   isSelected: boolean
 }>`

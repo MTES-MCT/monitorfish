@@ -5,7 +5,9 @@ import { COLORS } from '../../constants/constants'
 
 // The width of the scrolling bar is 16 px. When we have more than
 // 9 items, the scrolling bar is showed
-export const CardTable = styled(List)<{
+export const CardTable = styled(List).attrs(() => ({
+  role: 'table'
+}))<{
   $hasScroll: boolean
   $width: number
 }>`

@@ -76,8 +76,8 @@ export const regulatoryZones: RegulatoryZone[] = [
         allSpecies: false,
         otherInfo: undefined,
         species: [
-          { code: 'URC', remarks: '500 kg' },
-          { code: 'URX', remarks: '500 kg' }
+          { code: 'URC', name: 'OURSINS NCA', remarks: '500 kg' },
+          { code: 'URX', name: 'OURSINS,ETC. NCA', remarks: '500 kg' }
         ],
         speciesGroups: []
       },
@@ -160,8 +160,8 @@ export const regulatoryZones: RegulatoryZone[] = [
         allSpecies: false,
         otherInfo: undefined,
         species: [
-          { code: 'URC', remarks: '500 kg' },
-          { code: 'URX', remarks: '500 kg' }
+          { code: 'URC', name: 'OURSINS NCA', remarks: '500 kg' },
+          { code: 'URX', name: 'OURSINS,ETC. NCA', remarks: '500 kg' }
         ],
         speciesGroups: []
       },

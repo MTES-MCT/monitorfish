@@ -47,6 +47,23 @@
         },
         {
           "type": "Feature",
+          "id": "regulations.2",
+          "geometry": null,
+          "properties": {
+            "engins": "DRB",
+            "engins_interdits": null,
+            "especes": "SCE",
+            "especes_interdites": null,
+            "topic": "Armor CSJ Dragues Bis",
+            "references_reglementaires": "[{\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-r53-2020-04-24-002-delib-2020-a9873.html?id_rub=1637\", \"reference\": \"ArrÃªtÃ© PrÃ©fectoral R53-2020-04-24-002 - dÃ©lib 2020-004 / NAMO\"}, {\"url\": \"\", \"reference\": \"126-2020\"}]",
+            "zone": "Secteur 3",
+            "region": "Bretagne",
+            "law_type": "Reg. NAMO"
+          },
+          "bbox": [48.5536, -2.7833, 49.0387, -2.1888]
+        },
+        {
+          "type": "Feature",
           "id": "regulations.3145",
           "geometry": null,
           "properties": {

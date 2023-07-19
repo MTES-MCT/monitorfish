@@ -42,9 +42,9 @@ export function RegulatoryLayerSearchResultZone({ isOpen, regulatoryZone }: Regu
   const zoneStyle = getRegulatoryLayerStyle(undefined, regulatoryZone)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
 
-  const showOrHideRegulatoryZoneMetadata = _regulatoryZone => {
+  const showOrHideRegulatoryZoneMetadata = (partialRegulatoryZone: Pick<RegulatoryZone, 'topic' | 'zone'>) => {
     if (!metadataIsShown) {
-      dispatch(showRegulatoryZoneMetadata(_regulatoryZone, true))
+      dispatch(showRegulatoryZoneMetadata(partialRegulatoryZone, true))
       setMetadataIsShown(true)
     } else {
       dispatch(closeRegulatoryZoneMetadata())
@@ -92,12 +92,15 @@ export function RegulatoryLayerSearchResultZone({ isOpen, regulatoryZone }: Regu
             style={{ height: 20, marginLeft: 'auto' }}
             value={zoneIsChecked || zoneIsAlreadySelected ? [regulatoryZone.id] : []}
           >
-            <Checkbox
-              data-cy="regulatory-zone-check"
-              disabled={!!zoneIsAlreadySelected}
-              title={zoneIsAlreadySelected ? 'zone déjà ajoutée à mes zones réglementaires' : ''}
-              value={regulatoryZone?.id}
-            />
+            {[
+              <Checkbox
+                key={regulatoryZone.id}
+                data-cy="regulatory-zone-check"
+                disabled={!!zoneIsAlreadySelected}
+                title={zoneIsAlreadySelected ? 'zone déjà ajoutée à mes zones réglementaires' : ''}
+                value={regulatoryZone.id}
+              />
+            ]}
           </CheckboxGroup>
         </>
       ) : null}

@@ -2,9 +2,11 @@ import styled from 'styled-components'
 
 import { RegulatoryLayerSearchResultTopic } from './RegulatoryLayerSearchResultTopic'
 
+import type { RegulatoryZone } from '../../../../../domain/types/regulation'
+
 export type RegulatoryLayerSearchResultLawTypeProps = {
-  regulatoryLayerLawType: any
-  topic: any
+  regulatoryLayerLawType: string
+  topic: Record<string, RegulatoryZone[]>
 }
 export function RegulatoryLayerSearchResultLawType({
   regulatoryLayerLawType,

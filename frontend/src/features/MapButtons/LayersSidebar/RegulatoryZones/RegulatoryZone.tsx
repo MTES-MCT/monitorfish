@@ -10,7 +10,7 @@ import {
   closeRegulatoryZoneMetadataPanel,
   removeRegulatoryTopicOpened
 } from '../../../../domain/shared_slices/Regulatory'
-import hideLayer from '../../../../domain/use_cases/layer/hideLayer'
+import { hideLayer } from '../../../../domain/use_cases/layer/hideLayer'
 import { closeRegulatoryZoneMetadata } from '../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 import showRegulationToEdit from '../../../../domain/use_cases/layer/regulation/showRegulationToEdit'
 import showRegulatoryZone from '../../../../domain/use_cases/layer/regulation/showRegulatoryZone'
@@ -51,7 +51,7 @@ export type RegulatoryZoneProps = {
   callRemoveRegulatoryZoneFromMySelection: any
   isEditable: any
   isLast: any
-  namespace: any
+  namespace: 'backoffice' | 'homepage'
   regulatoryTopic: any
   regulatoryZone: any
 }

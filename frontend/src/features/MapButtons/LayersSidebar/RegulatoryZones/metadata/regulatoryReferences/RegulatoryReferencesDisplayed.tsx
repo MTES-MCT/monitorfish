@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import { getRegulatoryZoneTextTypeAsText } from '../../../../../../domain/entities/regulation'
 import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
-import { SectionTitle, Section, List, Label, Elem } from '../RegulatoryMetadata.style'
+import { SectionTitle, Section, List, Label } from '../RegulatoryMetadata.style'
 
 export function RegulatoryReferencesDisplayed() {
   const regulatory = useMainAppSelector(state => state.regulatory)
@@ -21,15 +21,11 @@ export function RegulatoryReferencesDisplayed() {
                 data-cy="regulatory-layers-metadata-references"
               >
                 {regulatoryReference.textType && (
-                  <Elem>
-                    <Label>{getRegulatoryZoneTextTypeAsText(regulatoryReference.textType)}</Label>
-                  </Elem>
+                  <Label>{getRegulatoryZoneTextTypeAsText(regulatoryReference.textType)}</Label>
                 )}
-                <Elem>
-                  <Link href={regulatoryReference.url} target="_blank">
-                    {regulatoryReference.reference}
-                  </Link>
-                </Elem>
+                <Link href={regulatoryReference.url} target="_blank">
+                  {regulatoryReference.reference}
+                </Link>
               </Reference>
             ))}
           </List>

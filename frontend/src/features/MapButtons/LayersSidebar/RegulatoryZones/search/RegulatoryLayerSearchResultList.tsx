@@ -1,3 +1,4 @@
+import { logSoftError } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -7,7 +8,7 @@ import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 
 export type RegulatoryLayerSearchResultListProps = {
-  namespace: string
+  namespace: 'backoffice' | 'homepage'
 }
 export function RegulatoryLayerSearchResultList({ namespace }: RegulatoryLayerSearchResultListProps) {
   const dispatch = useMainAppDispatch()
@@ -27,7 +28,17 @@ export function RegulatoryLayerSearchResultList({ namespace }: RegulatoryLayerSe
       {hasOneLayerTypeOpen && hasSearchResults && (
         <ShowResultList
           data-cy="regulatory-search-show-results"
-          onClick={() => dispatch(setLayersSideBarOpenedLayerType(undefined))}
+          onClick={() => {
+            if (!setLayersSideBarOpenedLayerType) {
+              logSoftError({
+                message: '`setLayersSideBarOpenedLayerType` is undefined.'
+              })
+
+              return
+            }
+
+            dispatch(setLayersSideBarOpenedLayerType(undefined))
+          }}
         >
           Afficher les résultats
         </ShowResultList>

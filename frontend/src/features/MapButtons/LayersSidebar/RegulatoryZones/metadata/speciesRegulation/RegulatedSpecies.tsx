@@ -31,23 +31,23 @@ export function RegulatedSpecies({
       ) : (
         <List $isLast>
           {species.length > 0
-            ? species.map(_species => {
-                // TODO Check that, there is no `name` here (or the typings are wrong).
-                // const { code, name, remarks } = _species
-                const { code, remarks } = _species
+            ? species.map(specy => {
+                const { code, name, remarks } = specy
 
                 return (
                   <Elem key={code}>
-                    <CodeAndName code={code} name={code} />
+                    <CodeAndName code={code} name={name} />
                     <Fields>
-                      {remarks && (
-                        <Field>
-                          <Key>Remarques</Key>
-                          <Value>
-                            <ReactMarkdown>{remarks}</ReactMarkdown>
-                          </Value>
-                        </Field>
-                      )}
+                      <tbody>
+                        {remarks && (
+                          <Field>
+                            <Key>Remarques</Key>
+                            <Value>
+                              <ReactMarkdown>{remarks}</ReactMarkdown>
+                            </Value>
+                          </Field>
+                        )}
+                      </tbody>
                     </Fields>
                   </Elem>
                 )

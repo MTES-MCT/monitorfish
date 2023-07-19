@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { RegulatoryTopic } from './RegulatoryTopic'
 import { LayerProperties, LayerType } from '../../../../domain/entities/layers/constants'
 import layer from '../../../../domain/shared_slices/Layer'
-import hideLayer from '../../../../domain/use_cases/layer/hideLayer'
+import { hideLayer } from '../../../../domain/use_cases/layer/hideLayer'
 import { closeRegulatoryZoneMetadata } from '../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 import removeRegulatoryZoneFromMySelection from '../../../../domain/use_cases/layer/regulation/removeRegulatoryZoneFromMySelection'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
@@ -54,13 +54,19 @@ export function RegulatoryZones({
   }, [numberOfZonesOpened])
 
   const callRemoveRegulatoryLayerFromMySelection = useCallback(
-    (regulatoryZone, numberOfZones, _namespace) => {
+    (
+      regulatoryZone: {
+        topic: string
+      },
+      numberOfZones: number,
+      _namespace: 'backoffice' | 'homepage'
+    ) => {
       decreaseNumberOfZonesOpened(numberOfZones)
       dispatch(
         hideLayer({
           type: LayerProperties.REGULATORY.code,
           ...regulatoryZone,
-          _namespace
+          namespace: _namespace
         })
       )
       dispatch(removeRegulatoryZoneFromMySelection(regulatoryZone))

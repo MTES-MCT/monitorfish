@@ -32,17 +32,8 @@ export type RegulatoryText = {
   url: string
 }
 
-// TODO Check that.
-/** key is a topic */
-// TODO Is it a matrix? The name doesn't reflect that.
-// export type RegulatoryTopics = Map<string, RegulatoryZone[]>
-export type RegulatoryTopics = RegulatoryZone[]
-
-// TODO Check that.
-/** key is the law type name */
-// TODO Is it a matrix? The name doesn't reflect that.
-// export type RegulatoryLawTypes = Map<string, RegulatoryTopics[]>
-export type RegulatoryLawTypes = Record<string, RegulatoryTopics[]>
+// TODO Remove this type and declare it inline in corresponding variables.
+export type RegulatoryLawTypes = Record<string, Record<string, RegulatoryZone[]>>
 
 export type DateInterval = {
   endDate: string | Date
@@ -122,5 +113,6 @@ export type RegulatedGears = {
 export type RegulatedSpeciesDetail = {
   /** FAO code */
   code: string
+  name: string
   remarks: string
 }

@@ -7,7 +7,7 @@ export type InfoPointProps = {
   margin?: string
   onMouseEnter?: () => void
   onMouseOut?: () => void
-  title?: string
+  title?: string | undefined
 }
 export function InfoPoint({ backgroundColor, color, dataCy, margin, onMouseEnter, onMouseOut, title }: InfoPointProps) {
   return (

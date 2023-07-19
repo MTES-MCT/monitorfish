@@ -12,27 +12,35 @@ import {
   closeRegulatoryZoneMetadataPanel,
   removeRegulatoryTopicOpened
 } from '../../../../domain/shared_slices/Regulatory'
-import hideLayer from '../../../../domain/use_cases/layer/hideLayer'
+import { hideLayer } from '../../../../domain/use_cases/layer/hideLayer'
 import { showRegulatoryTopic } from '../../../../domain/use_cases/layer/regulation/showRegulatoryTopic'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { FrontendError } from '../../../../libs/FrontendError'
 import RegulatoryTopicInput from '../../../Backoffice/list_regulation/RegulatoryTopicInput'
 import { CloseIcon } from '../../../commonStyles/icons/CloseIcon.style'
 import { EditIcon } from '../../../commonStyles/icons/EditIcon.style'
 import { HideIcon } from '../../../commonStyles/icons/HideIcon.style'
 import { ShowIcon } from '../../../commonStyles/icons/ShowIcon.style'
 
+import type { RegulatoryZone as RegulatoryZoneType } from '../../../../domain/types/regulation'
 import type { Promisable } from 'type-fest'
 
 export type RegulatoryTopicProps = {
-  allowRemoveZone: any
-  callRemoveRegulatoryZoneFromMySelection: any
-  decreaseNumberOfZonesOpened: any
-  increaseNumberOfZonesOpened: any
-  isEditable: any
-  isLastItem: any
+  allowRemoveZone: boolean
+  callRemoveRegulatoryZoneFromMySelection: (
+    a: {
+      topic: string
+    },
+    b: number,
+    c: 'backoffice' | 'homepage'
+  ) => Promisable<void>
+  decreaseNumberOfZonesOpened: (toNumber: number) => Promisable<void>
+  increaseNumberOfZonesOpened: (toNumber: number) => Promisable<void>
+  isEditable: boolean
+  isLastItem: boolean
   regulatoryTopic: string
-  regulatoryZones: any
+  regulatoryZones: RegulatoryZoneType[] | undefined
   updateLayerName?: (topic: string, value: string) => Promisable<void>
 }
 function UnmemoizedRegulatoryTopic({
@@ -46,6 +54,10 @@ function UnmemoizedRegulatoryTopic({
   regulatoryZones,
   updateLayerName
 }: RegulatoryTopicProps) {
+  if (!regulatoryZones) {
+    throw new FrontendError('`regulatoryZones` is undefined.')
+  }
+
   const dispatch = useMainAppDispatch()
   const ref = useRef<HTMLLIElement | null>(null)
   const showedLayers = useMainAppSelector(state => state.layer.showedLayers)
@@ -87,7 +99,7 @@ function UnmemoizedRegulatoryTopic({
     }
   }, [showedLayers, regulatoryZones, regulatoryTopic])
 
-  const showTopic = namespace => {
+  const showTopic = (namespace: 'backoffice' | 'homepage') => {
     dispatch(
       showRegulatoryTopic({
         namespace,
@@ -97,7 +109,7 @@ function UnmemoizedRegulatoryTopic({
     )
   }
 
-  const hideTopic = namespace => {
+  const hideTopic = (namespace: 'backoffice' | 'homepage') => {
     dispatch(
       hideLayer({
         namespace,
@@ -218,9 +230,16 @@ function UnmemoizedRegulatoryTopic({
   )
 }
 
-const getRegulatoryLayerName = regulatoryZones => ({
-  topic: regulatoryZones[0].topic
-})
+const getRegulatoryLayerName = (regulatoryZones: RegulatoryZoneType[]) => {
+  const firstRefulatoryZone = regulatoryZones[0]
+  if (!firstRefulatoryZone) {
+    throw new FrontendError('`firstRefulatoryZone` is undefined.')
+  }
+
+  return {
+    topic: firstRefulatoryZone.topic
+  }
+}
 
 const Text = styled.span`
   margin-left: 5px;

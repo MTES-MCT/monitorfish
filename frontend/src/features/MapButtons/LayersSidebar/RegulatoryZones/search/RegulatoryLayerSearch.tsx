@@ -1,3 +1,4 @@
+import { logSoftError } from '@mtes-mct/monitor-ui'
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
@@ -17,7 +18,7 @@ import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import type { Promisable } from 'type-fest'
 
 export type RegulatoryLayerSearchProps = {
-  namespace: string
+  namespace: 'backoffice' | 'homepage'
   numberOfRegulatoryLayersSaved: number
   setNumberOfRegulatoryLayersSaved: (length: number) => Promisable<void>
 }
@@ -58,6 +59,14 @@ export function RegulatoryLayerSearch({
   }, [dispatch, escape])
 
   useEffect(() => {
+    if (!setLayersSideBarOpenedLayerType) {
+      logSoftError({
+        message: '`setLayersSideBarOpenedLayerType` is undefined.'
+      })
+
+      return
+    }
+
     if (regulatoryLayersSearchResult && Object.keys(regulatoryLayersSearchResult).length > 0) {
       dispatch(setLayersSideBarOpenedLayerType(undefined))
     }

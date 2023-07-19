@@ -1,3 +1,4 @@
+import { logSoftError } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -8,7 +9,7 @@ import { LayerType } from '../../../../domain/entities/layers/constants'
 import LayerSlice from '../../../../domain/shared_slices/Layer'
 import { getAdministrativeZones } from '../../../../domain/use_cases/layer/administrative/getAdministrativeZones'
 import { showAdministrativeZone } from '../../../../domain/use_cases/layer/administrative/showAdministrativeZone'
-import hideLayer from '../../../../domain/use_cases/layer/hideLayer'
+import { hideLayer } from '../../../../domain/use_cases/layer/hideLayer'
 import { closeRegulatoryZoneMetadata } from '../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
@@ -19,7 +20,7 @@ import type { GroupedZonesAndZones } from '../../../../domain/use_cases/layer/ad
 
 export type AdministrativeZonesProps = {
   hideLayersListWhenSearching?: boolean
-  namespace: string
+  namespace: 'backoffice' | 'homepage'
 }
 export function AdministrativeZones({ hideLayersListWhenSearching = false, namespace }: AdministrativeZonesProps) {
   const { setLayersSideBarOpenedLayerType } = LayerSlice[namespace].actions
@@ -77,6 +78,14 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false, names
   )
 
   const onSectionTitleClicked = () => {
+    if (!setLayersSideBarOpenedLayerType) {
+      logSoftError({
+        message: '`setLayersSideBarOpenedLayerType` is undefined.'
+      })
+
+      return
+    }
+
     if (isOpened) {
       dispatch(setLayersSideBarOpenedLayerType(undefined))
     } else {

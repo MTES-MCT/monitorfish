@@ -1,4 +1,4 @@
-import { stopMouseEventPropagation } from '@mtes-mct/monitor-ui'
+import { logSoftError, stopMouseEventPropagation } from '@mtes-mct/monitor-ui'
 import { memo, useEffect, useMemo, useState } from 'react'
 import { Checkbox, CheckboxGroup } from 'rsuite'
 import styled from 'styled-components'
@@ -10,10 +10,12 @@ import { closeRegulatoryZoneMetadata } from '../../../../../domain/use_cases/lay
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 
+import type { RegulatoryZone } from '../../../../../domain/types/regulation'
+
 export type RegulatoryLayerSearchResultTopicProps = {
   regulatoryLayerLawType?: string
   regulatoryLayerTopic?: string
-  topicDetails: any
+  topicDetails: RegulatoryZone[]
 }
 function UnmemoizedRegulatoryLayerSearchResultTopic({
   regulatoryLayerLawType,
@@ -46,6 +48,13 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
 
     // eslint-disable-next-line no-underscore-dangle
     const _searchResultZones = regulatoryLayer[regulatoryLayerTopic]
+    if (!_searchResultZones) {
+      logSoftError({
+        message: '`_searchResultZones` is undefined.'
+      })
+
+      return defaultValue
+    }
 
     return {
       regulatoryZonesChecked: regulatoryLayerSearch.regulatoryZonesChecked,
@@ -102,6 +111,12 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
     }
   }
 
+  // console.group('RegulatoryLayerSearchResultTopic')
+  // console.log('regulatoryLayerLawType', regulatoryLayerLawType)
+  // console.log('regulatoryLayerTopic', regulatoryLayerTopic)
+  // console.log('topicDetails', topicDetails)
+  // console.groupEnd()
+
   return (
     <>
       <LayerTopic onClick={() => setZonesAreOpen(!zonesAreOpen)}>
@@ -121,16 +136,20 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
               : []
           }
         >
-          <Checkbox
-            disabled={
-              (regulatory.selectedRegulatoryLayers &&
-                regulatoryLayerTopic &&
-                regulatory.selectedRegulatoryLayers[regulatoryLayerTopic]?.length === searchResultZonesLength) ||
-              false
-            }
-            title={allZonesAreAlreadySelected ? 'zones déjà ajoutées à mes zones réglementaires' : ''}
-            value={String(regulatoryLayerTopic)}
-          />
+          {/* TODO This is strange: a single checkbox in a group? */}
+          {[
+            <Checkbox
+              key={regulatoryLayerTopic}
+              disabled={
+                (regulatory.selectedRegulatoryLayers &&
+                  regulatoryLayerTopic &&
+                  regulatory.selectedRegulatoryLayers[regulatoryLayerTopic]?.length === searchResultZonesLength) ||
+                false
+              }
+              title={allZonesAreAlreadySelected ? 'zones déjà ajoutées à mes zones réglementaires' : ''}
+              value={String(regulatoryLayerTopic)}
+            />
+          ]}
         </CheckboxGroup>
       </LayerTopic>
       <RegulatoryLayerSearchResultZones

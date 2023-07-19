@@ -3,7 +3,9 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
 
-export const CardTableRow = styled(List.Item)<{
+export const CardTableRow = styled(List.Item).attrs(() => ({
+  role: 'row'
+}))<{
   index: number
   isFocused?: boolean
   toClose?: boolean

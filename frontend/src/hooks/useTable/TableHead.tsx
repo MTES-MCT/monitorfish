@@ -35,7 +35,7 @@ export function TableHead({
 
   return (
     <CardTableHeader noPadding>
-      <FlexboxGrid>
+      <FlexboxGrid role="row">
         {isCheckable && (
           <CellWrapper $fixedWidth={36} style={{ padding: 0 }}>
             <StyledCheckbox checked={isAllChecked} onChange={onAllCheckChange} />
@@ -43,7 +43,7 @@ export function TableHead({
         )}
 
         {columns.map(column => (
-          <CellWrapper key={column.key} $fixedWidth={column.fixedWidth}>
+          <CellWrapper key={column.key} $fixedWidth={column.fixedWidth} role="columnheader">
             <CardTableColumnTitle
               dataCy={`table-order-by-${column.key}`}
               isAscending={!isSortingDesc}

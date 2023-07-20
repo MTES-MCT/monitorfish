@@ -18,9 +18,9 @@ class ApiKeyCheckFilterUTests {
     @Test
     fun `Should return Ok When the token is right`() {
         // Given
-        val protectedPaths = ProtectedPathsAPIProperties(
-            apiKey = "DUMMY_API_KEY",
-        )
+        val protectedPaths = ProtectedPathsAPIProperties()
+        protectedPaths.apiKey = "DUMMY_API_KEY"
+
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
 
@@ -40,9 +40,8 @@ class ApiKeyCheckFilterUTests {
     @Test
     fun `Should return unauthorized When the token is missing`() {
         // Given
-        val protectedPaths = ProtectedPathsAPIProperties(
-            apiKey = "DUMMY_API_KEY",
-        )
+        val protectedPaths = ProtectedPathsAPIProperties()
+        protectedPaths.apiKey = "DUMMY_API_KEY"
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
 
@@ -61,9 +60,8 @@ class ApiKeyCheckFilterUTests {
     @Test
     fun `Should return unauthorized When the token is wrong`() {
         // Given
-        val protectedPaths = ProtectedPathsAPIProperties(
-            apiKey = "DUMMY_API_KEY",
-        )
+        val protectedPaths = ProtectedPathsAPIProperties()
+        protectedPaths.apiKey = "DUMMY_API_KEY"
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
 

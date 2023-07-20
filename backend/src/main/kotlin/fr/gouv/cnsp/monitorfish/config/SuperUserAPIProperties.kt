@@ -5,6 +5,6 @@ import org.springframework.stereotype.Component
 
 @Component
 @ConfigurationProperties(prefix = "monitorfish.api.super-user")
-data class SuperUserAPIProperties(
-    var paths: List<String>? = listOf(),
-)
+class SuperUserAPIProperties {
+    var paths: List<String>? = listOf()
+}

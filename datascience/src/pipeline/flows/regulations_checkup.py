@@ -515,7 +515,14 @@ def get_dead_links(
                 logger.info(f"{unknown_link} is a dead link.")
                 dead_links_urls.append(unknown_link)
 
-        except requests.HTTPError:
+        except (
+            requests.HTTPError,
+            requests.ConnectionError,
+            requests.exceptions.MissingSchema,
+            requests.exceptions.InvalidSchema,
+            requests.exceptions.InvalidURL,
+        ) as e:
+            logger.info(f"{unknown_link} is a dead link (error {type(e)}: {e}).")
             logger.info(f"{unknown_link} is a dead link.")
             dead_links_urls.append(unknown_link)
 

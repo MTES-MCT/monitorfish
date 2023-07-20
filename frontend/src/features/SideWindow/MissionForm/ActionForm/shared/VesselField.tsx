@@ -123,13 +123,13 @@ export function VesselField() {
                 <span>{values.internalReferenceNumber}</span> (CFR)
               </>
             )}
-            {values.internalReferenceNumber && (
+            {values.externalReferenceNumber && (
               <>
                 <span>{values.externalReferenceNumber}</span> (Marq. ext)
               </>
             )}
-            {/* {values.internalReferenceNumber && <><span>{values.mmsi}</span> (MMSI)</>} */}
-            {values.internalReferenceNumber && (
+            {/* {values.mmsi && <><span>{values.mmsi}</span> (MMSI)</>} */}
+            {values.ircs && (
               <>
                 <span>{values.ircs}</span> (Call Sign)
               </>

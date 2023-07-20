@@ -104,7 +104,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   flex-grow: 1;
   max-width: 465px;
-  width: 35.34%;
+  width: 36.34%;
   overflow-y: auto;
 
   /* TODO Handle that in @mtes-mct/monitor-ui. */

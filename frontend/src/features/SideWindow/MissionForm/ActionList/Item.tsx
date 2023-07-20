@@ -165,8 +165,8 @@ const Wrapper = styled.div`
 const DateLabel = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: 70px;
-  padding: 4px 24px 4px 0;
+  min-width: 65px;
+  padding: 4px 16px 4px 0;
 `
 
 const InnerWrapper = styled.div<{

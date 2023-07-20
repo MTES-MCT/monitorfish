@@ -91,7 +91,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 465px;
-  width: 29.34%;
+  width: 32.34%;
   overflow-y: auto;
 `
 

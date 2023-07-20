@@ -59,6 +59,6 @@ const Wrapper = styled.div`
   background-color: ${p => p.theme.color.gainsboro};
   display: flex;
   flex-direction: column;
-  min-width: 41.33%;
+  width: 50.33%;
   overflow-y: auto;
 `

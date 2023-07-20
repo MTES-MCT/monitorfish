@@ -31,11 +31,12 @@ class UserAuthorizationCheckFilterUTests {
     @Test
     fun `Should return Ok When OIDC is disabled`() {
         // Given
-        val oidcProperties = OIDCProperties(
-            enabled = false,
-            userinfoEndpoint = null,
-        )
-        val superUserAPIProperties = ProtectedPathsAPIProperties(superUserPaths = listOf("/bff/**"))
+        val oidcProperties = OIDCProperties()
+        oidcProperties.enabled = false
+        oidcProperties.userinfoEndpoint = null
+        val superUserAPIProperties = ProtectedPathsAPIProperties()
+        superUserAPIProperties.superUserPaths = listOf("/bff/**")
+
         val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
@@ -55,11 +56,12 @@ class UserAuthorizationCheckFilterUTests {
     @Test
     fun `Should return Unauthorized When Bearer header is missing`() {
         // Given
-        val oidcProperties = OIDCProperties(
-            enabled = true,
-            userinfoEndpoint = null,
-        )
-        val superUserAPIProperties = ProtectedPathsAPIProperties(superUserPaths = listOf("/bff/**"))
+        val oidcProperties = OIDCProperties()
+        oidcProperties.enabled = true
+        oidcProperties.userinfoEndpoint = null
+        val superUserAPIProperties = ProtectedPathsAPIProperties()
+        superUserAPIProperties.superUserPaths = listOf("/bff/**")
+
         val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
@@ -80,11 +82,12 @@ class UserAuthorizationCheckFilterUTests {
     @Test
     fun `Should return Unauthorized When OIDC user info endpoint is missing`() {
         // Given
-        val oidcProperties = OIDCProperties(
-            enabled = true,
-            userinfoEndpoint = null,
-        )
-        val superUserAPIProperties = ProtectedPathsAPIProperties(superUserPaths = listOf("/bff/**"))
+        val oidcProperties = OIDCProperties()
+        oidcProperties.enabled = true
+        oidcProperties.userinfoEndpoint = null
+        val superUserAPIProperties = ProtectedPathsAPIProperties()
+        superUserAPIProperties.superUserPaths = listOf("/bff/**")
+
         val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
@@ -106,11 +109,12 @@ class UserAuthorizationCheckFilterUTests {
     @Test
     fun `Should return Ok When user has right authorization`() {
         // Given
-        val oidcProperties = OIDCProperties(
-            enabled = true,
-            userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user",
-        )
-        val superUserAPIProperties = ProtectedPathsAPIProperties(superUserPaths = listOf("/bff/**"))
+        val oidcProperties = OIDCProperties()
+        oidcProperties.enabled = true
+        oidcProperties.userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user"
+        val superUserAPIProperties = ProtectedPathsAPIProperties()
+        superUserAPIProperties.superUserPaths = listOf("/bff/**")
+
         val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
@@ -132,11 +136,12 @@ class UserAuthorizationCheckFilterUTests {
     @Test
     fun `Should return Unauthorized When user is missing right authorization`() {
         // Given
-        val oidcProperties = OIDCProperties(
-            enabled = true,
-            userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user",
-        )
-        val superUserAPIProperties = ProtectedPathsAPIProperties(superUserPaths = listOf("/bff/**"))
+        val oidcProperties = OIDCProperties()
+        oidcProperties.enabled = true
+        oidcProperties.userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user"
+        val superUserAPIProperties = ProtectedPathsAPIProperties()
+        superUserAPIProperties.superUserPaths = listOf("/bff/**")
+
         val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
@@ -160,12 +165,12 @@ class UserAuthorizationCheckFilterUTests {
     @Test
     fun `Should compute the right parameter to getIsAuthorizedUser when requesting a super-user protected path`() {
         // Given
-        val oidcProperties = OIDCProperties(
-            enabled = true,
-            userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user",
-        )
-        val superUserAPIProperties =
-            ProtectedPathsAPIProperties(superUserPaths = listOf("/bff/v1/vessels/risk_factors"))
+        val oidcProperties = OIDCProperties()
+        oidcProperties.enabled = true
+        oidcProperties.userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user"
+        val superUserAPIProperties = ProtectedPathsAPIProperties()
+        superUserAPIProperties.superUserPaths = listOf("/bff/v1/vessels/risk_factors")
+
         val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
@@ -188,12 +193,12 @@ class UserAuthorizationCheckFilterUTests {
     @Test
     fun `Should compute the right parameter to getIsAuthorizedUser when requesting a super-user protected path with a param`() {
         // Given
-        val oidcProperties = OIDCProperties(
-            enabled = true,
-            userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user",
-        )
-        val superUserAPIProperties =
-            ProtectedPathsAPIProperties(superUserPaths = listOf("/bff/v1/vessels/risk_factors"))
+        val oidcProperties = OIDCProperties()
+        oidcProperties.enabled = true
+        oidcProperties.userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user"
+        val superUserAPIProperties = ProtectedPathsAPIProperties()
+        superUserAPIProperties.superUserPaths = listOf("/bff/v1/vessels/risk_factors")
+
         val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()
@@ -216,12 +221,12 @@ class UserAuthorizationCheckFilterUTests {
     @Test
     fun `Should compute the right parameter to getIsAuthorizedUser when not requesting a super-user protected path`() {
         // Given
-        val oidcProperties = OIDCProperties(
-            enabled = true,
-            userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user",
-        )
-        val superUserAPIProperties =
-            ProtectedPathsAPIProperties(superUserPaths = listOf("/bff/v1/vessels/risk_factors"))
+        val oidcProperties = OIDCProperties()
+        oidcProperties.enabled = true
+        oidcProperties.userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user"
+        val superUserAPIProperties = ProtectedPathsAPIProperties()
+        superUserAPIProperties.superUserPaths = listOf("/bff/v1/vessels/risk_factors")
+
         val mockApi = getMockApiClient()
         val response = MockHttpServletResponse()
         val chain = MockFilterChain()

@@ -3,6 +3,7 @@ import { useFormikContext } from 'formik'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
+import { useGetFormikUsecases } from './hooks/useGetFormikUsecases'
 import { UNKNOWN_VESSEL } from '../../../../../domain/entities/vessel/vessel'
 import { useDeepCompareCallback } from '../../../../../hooks/useDeepCompareCallback'
 import { VesselSearch } from '../../../../VesselSearch'
@@ -13,6 +14,7 @@ import type { MissionActionFormValues } from '../../types'
 export function VesselField() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { errors, setValues, values } = useFormikContext<MissionActionFormValues>()
+  const { updateFAOAreasAndSegments } = useGetFormikUsecases()
 
   const { newWindowContainerRef } = useNewWindow()
 
@@ -76,6 +78,7 @@ export function VesselField() {
         vesselId: nextVessel.vesselId,
         vesselName: nextVessel.vesselName
       })
+      updateFAOAreasAndSegments()
     },
     [values]
   )

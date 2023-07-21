@@ -5,6 +5,7 @@ import Point from 'ol/geom/Point'
 import { transform } from 'ol/proj'
 import { useCallback, useEffect, useMemo } from 'react'
 
+import { useGetFormikUsecases } from './hooks/useGetFormikUsecases'
 import { getEnvironmentVariable } from '../../../../../api/utils'
 import { getCoordinates } from '../../../../../coordinates'
 import { convertToGeoJSONGeometryObject } from '../../../../../domain/entities/layers'
@@ -34,6 +35,7 @@ export function FormikCoordinatesPicker() {
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const listener = useMainAppSelector(state => state.draw.listener)
 
+  const { updateFAOAreasAndSegments } = useGetFormikUsecases()
   const { values } = useFormikContext<MissionActionFormValues>()
   const [{ value: longitudeValue }, longitudeMeta, longitudeHelpers] =
     useField<MissionActionFormValues['longitude']>('longitude')
@@ -73,11 +75,15 @@ export function FormikCoordinatesPicker() {
     ]
   }, [longitudeValue, latitudeValue, coordinatesFormat])
 
+  /**
+   * Update formik fields after geometry modification
+   */
   useEffect(
     () => {
       if (geometry?.type === OpenLayersGeometryType.POINT) {
         longitudeHelpers.setValue(geometry.coordinates[0])
         latitudeHelpers.setValue(geometry.coordinates[1])
+        updateFAOAreasAndSegments()
       }
     },
 

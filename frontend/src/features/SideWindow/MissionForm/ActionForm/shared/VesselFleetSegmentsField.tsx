@@ -5,6 +5,7 @@ import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
+import { getFleetSegmentsAsOption } from './utils'
 import { useComputeVesselFaoAreasQuery } from '../../../../../api/faoAreas'
 import { useGetFleetSegmentsQuery } from '../../../../../api/fleetSegment'
 import { getFleetSegments } from '../../../../../domain/use_cases/vessel/getFleetSegments'
@@ -28,25 +29,16 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
 
   const getFleetSegmentsApiQuery = useGetFleetSegmentsQuery()
 
+  const fleetSegmentsAsOptions: Option<MissionAction.FleetSegment>[] = useMemo(
+    () => getFleetSegmentsAsOption(getFleetSegmentsApiQuery.data),
+    [getFleetSegmentsApiQuery.data]
+  )
+
   const computeVesselFaoAreasApiQuery = useComputeVesselFaoAreasQuery({
     internalReferenceNumber: values.internalReferenceNumber,
     latitude: values.latitude,
     longitude: values.longitude
   })
-
-  const fleetSegmentsAsOptions: Option<MissionAction.FleetSegment>[] = useMemo(() => {
-    if (!getFleetSegmentsApiQuery.data) {
-      return []
-    }
-
-    return getFleetSegmentsApiQuery.data.map(({ segment, segmentName }) => ({
-      label: `${segment} - ${segmentName}`,
-      value: {
-        segment,
-        segmentName: segmentName || undefined
-      }
-    }))
-  }, [getFleetSegmentsApiQuery.data])
 
   const isLoading = useMemo(() => !getFleetSegmentsApiQuery.data, [getFleetSegmentsApiQuery.data])
 
@@ -73,15 +65,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
     updateSegments()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    fleetSegmentsAsOptions,
-    values.faoAreas,
-    values.gearOnboard,
-    values.speciesOnboard,
-    values.longitude,
-    values.latitude,
-    values.portLocode
-  ])
+  }, [fleetSegmentsAsOptions, values.faoAreas])
 
   const updateFaoAreas = useDebouncedCallback(async () => {
     if (!computeVesselFaoAreasApiQuery.data) {

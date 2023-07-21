@@ -78,4 +78,44 @@ context('Side Window > Mission Form > Observation', () => {
       cy.get('h1').should('contain.text', 'Missions et contrôles')
     })
   })
+
+  it('Should only close mission once the form closure validation has passed', () => {
+    const getSaveButton = () => cy.get('button').contains('Enregistrer et quitter').parent()
+    const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer et clôturer').parent()
+
+    // -------------------------------------------------------------------------
+    // Form Live Validation
+
+    cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('exist')
+    cy.contains('Veuillez indiquer votre trigramme dans "Saisi par".').should('exist')
+
+    cy.contains('Veuillez corriger les éléments en rouge').should('exist')
+    getSaveButton().should('be.disabled')
+    getSaveAndCloseButton().should('be.disabled')
+
+    // Saisi par
+    cy.fill('Saisi par', 'Gaumont').wait(500)
+    cy.contains('Veuillez indiquer votre trigramme dans "Saisi par".').should('not.exist')
+
+    // Mission is now valid for saving (but not for closure)
+    cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
+
+    cy.contains('Veuillez corriger les éléments en rouge').should('not.exist')
+    getSaveButton().should('be.enabled')
+    getSaveAndCloseButton().should('be.enabled')
+
+    cy.clickButton('Enregistrer et clôturer')
+
+    // -------------------------------------------------------------------------
+    // Request
+
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('createMissionAction')
+
+    cy.get('h1').should('contain.text', 'Missions et contrôles')
+  })
 })

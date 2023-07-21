@@ -15,6 +15,7 @@ import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { FormikMultiInfractionPicker } from './FormikMultiInfractionPicker'
+import { useGetFormikUsecases } from './hooks/useGetFormikUsecases'
 import { useGetGearsQuery } from '../../../../../api/gear'
 import { useGetRiskFactorQuery } from '../../../../../api/vessel'
 import { BOOLEAN_AS_OPTIONS } from '../../../../../constants'
@@ -31,6 +32,7 @@ import type { Option } from '@mtes-mct/monitor-ui'
 export function GearsField() {
   const gearsByCode = useMainAppSelector(state => state.gear.gearsByCode)
   const [input, meta, helper] = useField<MissionActionFormValues['gearOnboard']>('gearOnboard')
+  const { updateSegments } = useGetFormikUsecases()
 
   // Other field controlling this field
   const [{ value: internalReferenceNumber }] =
@@ -74,6 +76,7 @@ export function GearsField() {
       ]
 
       helper.setValue(nextGears)
+      updateSegments()
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -90,6 +93,7 @@ export function GearsField() {
       const normalizedNextGearOnboard = nextGearOnboard.length > 0 ? nextGearOnboard : undefined
 
       helper.setValue(normalizedNextGearOnboard)
+      updateSegments()
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

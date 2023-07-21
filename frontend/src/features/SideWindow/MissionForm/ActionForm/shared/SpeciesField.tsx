@@ -14,6 +14,7 @@ import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { FormikMultiInfractionPicker } from './FormikMultiInfractionPicker'
+import { useGetFormikUsecases } from './hooks/useGetFormikUsecases'
 import { useGetSpeciesQuery } from '../../../../../api/specy'
 import { useGetRiskFactorQuery } from '../../../../../api/vessel'
 import { BOOLEAN_AS_OPTIONS } from '../../../../../constants'
@@ -33,6 +34,7 @@ export type SpeciesFieldProps = {
 export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
   const { newWindowContainerRef } = useNewWindow()
+  const { updateSegments } = useGetFormikUsecases()
 
   // Other field controlling this field
   const [{ value: internalReferenceNumber }] =
@@ -93,6 +95,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
       )
 
       helper.setValue(nextSpeciesOnboard)
+      updateSegments()
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -124,6 +127,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
       const nextSpeciesOnboard = ramdaRemove(index, 1, input.value)
 
       helper.setValue(nextSpeciesOnboard)
+      updateSegments()
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

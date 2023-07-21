@@ -52,6 +52,7 @@ data class MissionAction(
     var isDeleted: Boolean,
     var hasSomeGearsSeized: Boolean,
     var hasSomeSpeciesSeized: Boolean,
+    var closedBy: String? = null,
 ) {
     fun verify() {
         val controlTypes = listOf(

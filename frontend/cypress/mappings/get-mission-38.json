@@ -82,7 +82,8 @@
           "vehicleType": "VESSEL",
           "infractions": [],
           "hasSomeGearsSeized": false,
-          "hasSomeSpeciesSeized": false
+          "hasSomeSpeciesSeized": false,
+          "closedBy": null
         }
       ],
       "missionSource": "MONITORENV",

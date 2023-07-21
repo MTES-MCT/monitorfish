@@ -28,6 +28,7 @@ class MissionActionUTests {
             userTrigram = "LTH",
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
+            closedBy = "XYZ",
         )
 
         // When
@@ -55,6 +56,7 @@ class MissionActionUTests {
             userTrigram = null,
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
+            closedBy = "XYZ",
         )
 
         // When
@@ -86,6 +88,7 @@ class MissionActionUTests {
             userTrigram = "LTH",
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
+            closedBy = "XYZ",
         )
 
         // When
@@ -114,6 +117,7 @@ class MissionActionUTests {
             userTrigram = "LTH",
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
+            closedBy = "XYZ",
         )
 
         // When
@@ -142,6 +146,7 @@ class MissionActionUTests {
             userTrigram = "LTH",
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
+            closedBy = "XYZ",
         )
 
         // When

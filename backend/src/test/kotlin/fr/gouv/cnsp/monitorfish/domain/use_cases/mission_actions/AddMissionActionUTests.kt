@@ -44,6 +44,7 @@ class AddMissionActionUTests {
             userTrigram = "LTH",
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
+            closedBy = "XYZ",
         )
 
         // When
@@ -75,6 +76,7 @@ class AddMissionActionUTests {
             userTrigram = "LTH",
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
+            closedBy = "XYZ",
         )
         given(missionActionsRepository.save(anyOrNull())).willReturn(action)
         given(getMissionActionFacade.execute(anyOrNull())).willReturn(Facade.NAMO)

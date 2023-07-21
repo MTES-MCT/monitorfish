@@ -167,6 +167,7 @@ context('Side Window > Mission Form > Sea Control', () => {
       assert.isUndefined(interception.request.body.gearOnboard[0].controlledMesh)
       assert.deepInclude(interception.request.body, {
         actionType: 'SEA_CONTROL',
+        closedBy: null,
         controlQualityComments: 'Une observation sur le déroulé du contrôle.',
         controlUnits: [],
         districtCode: 'AY',
@@ -279,6 +280,7 @@ context('Side Window > Mission Form > Sea Control', () => {
       }
       assert.deepInclude(interception.request.body, {
         actionType: 'SEA_CONTROL',
+        closedBy: null,
         controlQualityComments: null,
         controlUnits: [],
         districtCode: 'AY',

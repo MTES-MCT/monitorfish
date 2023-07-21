@@ -3,9 +3,13 @@ import { difference } from 'lodash'
 import { omit } from 'ramda'
 
 import {
+  AirControlFormClosureSchema,
   AirControlFormLiveSchema,
+  AirSurveillanceFormClosureSchema,
+  AirSurveillanceFormLiveSchema,
   LandControlFormClosureSchema,
   LandControlFormLiveSchema,
+  ObservationFormLiveSchema,
   SeaControlFormClosureSchema,
   SeaControlFormLiveSchema
 } from './ActionForm/schemas'
@@ -242,7 +246,18 @@ export function validateMissionForms(
         return {
           ...actionFormValues,
           // There is no closure validation schema for the air control action form
-          isValid: AirControlFormLiveSchema.isValidSync(actionFormValues)
+          isValid: isClosureValidation
+            ? AirControlFormClosureSchema.isValidSync(actionFormValues)
+            : AirControlFormLiveSchema.isValidSync(actionFormValues)
+        }
+
+      case MissionAction.MissionActionType.AIR_SURVEILLANCE:
+        return {
+          ...actionFormValues,
+          // There is no closure validation schema for the air control action form
+          isValid: isClosureValidation
+            ? AirSurveillanceFormClosureSchema.isValidSync(actionFormValues)
+            : AirSurveillanceFormLiveSchema.isValidSync(actionFormValues)
         }
 
       case MissionAction.MissionActionType.LAND_CONTROL:
@@ -253,6 +268,13 @@ export function validateMissionForms(
             : LandControlFormLiveSchema.isValidSync(actionFormValues)
         }
 
+      case MissionAction.MissionActionType.OBSERVATION:
+        return {
+          ...actionFormValues,
+          // There is no closure validation schema for observation form
+          isValid: ObservationFormLiveSchema.isValidSync(actionFormValues)
+        }
+
       case MissionAction.MissionActionType.SEA_CONTROL:
         return {
           ...actionFormValues,
@@ -260,11 +282,6 @@ export function validateMissionForms(
             ? SeaControlFormClosureSchema.isValidSync(actionFormValues)
             : SeaControlFormLiveSchema.isValidSync(actionFormValues)
         }
-
-      // There is no validation schema for these action forms
-      case MissionAction.MissionActionType.AIR_SURVEILLANCE:
-      case MissionAction.MissionActionType.OBSERVATION:
-        return actionFormValues
 
       default:
         logSoftError({

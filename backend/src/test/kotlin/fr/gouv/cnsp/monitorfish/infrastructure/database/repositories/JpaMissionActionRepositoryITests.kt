@@ -236,6 +236,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
             isDeleted = false,
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
+            closedBy = "XYZ",
         )
 
         // When

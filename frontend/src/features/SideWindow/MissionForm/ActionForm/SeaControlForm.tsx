@@ -3,7 +3,6 @@ import {
   FormikDatePicker,
   FormikEffect,
   FormikTextarea,
-  FormikTextInput,
   Icon,
   useKey,
   useNewWindow
@@ -15,6 +14,7 @@ import styled from 'styled-components'
 
 import { SeaControlFormClosureSchema, SeaControlFormLiveSchema } from './schemas'
 import { ControlQualityField } from './shared/ControlQualityField'
+import { FormikAuthor } from './shared/FormikAuthor'
 import { FormikCoordinatesPicker } from './shared/FormikCoordinatesPicker'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
 import { FormikRevalidationEffect } from './shared/FormikRevalidationEffect'
@@ -110,7 +110,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
 
           <ControlQualityField />
 
-          <FormikTextInput isLight label="Saisi par" name="userTrigram" />
+          <FormikAuthor />
         </FormBody>
       </>
     </Formik>

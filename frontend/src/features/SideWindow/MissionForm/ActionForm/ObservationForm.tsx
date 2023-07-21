@@ -3,6 +3,7 @@ import { Formik } from 'formik'
 import { noop } from 'lodash'
 import { useMemo } from 'react'
 
+import { ObservationFormLiveSchema } from './schemas'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
@@ -22,7 +23,7 @@ export function ObservationForm({ initialValues, onChange }: ObservationFormProp
   )
 
   return (
-    <Formik initialValues={initialValues} onSubmit={noop}>
+    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={ObservationFormLiveSchema}>
       <>
         <FormikEffect onChange={onChange as any} />
         <FormikIsValidEffect />

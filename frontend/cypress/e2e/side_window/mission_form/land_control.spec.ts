@@ -106,6 +106,7 @@ context('Side Window > Mission Form > Land Control', () => {
       assert.deepInclude(interception.request.body, {
         // actionDatetimeUtc: '2023-02-18T12:09:45.874Z',
         actionType: 'LAND_CONTROL',
+        closedBy: null,
         controlQualityComments: 'Une observation sur le déroulé du contrôle.',
         controlUnits: [],
         districtCode: 'AY',

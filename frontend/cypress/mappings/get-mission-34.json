@@ -66,18 +66,19 @@
       "endDateTimeUtc": null,
       "envActions": [
         {
-          "actionType": "SURVEILLANCE",
-          "id": "88713755-3966-4ca4-ae18-10cab6249485",
           "actionStartDateTimeUtc": "2022-11-28T13:59:20.176Z",
-          "geom": null,
-          "actionTheme": "Police des activités de cultures marines",
           "actionSubTheme": "Contrôle du schéma des structures",
-          "protectedSpecies": [],
-          "duration": 1,
-          "observations": "Surveillance ok",
+          "actionTheme": "Police des activités de cultures marines",
+          "actionType": "SURVEILLANCE",
           "coverMissionZone": true,
+          "duration": 1,
+          "geom": null,
           "hasSomeGearsSeized": false,
-          "hasSomeSpeciesSeized": false
+          "hasSomeSpeciesSeized": false,
+          "closedBy": null,
+          "id": "88713755-3966-4ca4-ae18-10cab6249485",
+          "observations": "Surveillance ok",
+          "protectedSpecies": []
         },
         {
           "actionType": "CONTROL",
@@ -110,7 +111,8 @@
             }
           ],
           "hasSomeGearsSeized": false,
-          "hasSomeSpeciesSeized": false
+          "hasSomeSpeciesSeized": false,
+          "closedBy": null
         }
       ],
       "missionSource": "MONITORENV",

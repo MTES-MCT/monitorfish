@@ -33,6 +33,7 @@ class DeleteMissionActionUTests {
             isDeleted = false,
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
+            closedBy = "XYZ",
         )
         given(missionActionsRepository.findById(any())).willReturn(action)
 

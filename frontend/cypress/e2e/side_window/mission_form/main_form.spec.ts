@@ -224,6 +224,7 @@ context('Side Window > Mission Form > Main Form', () => {
       assert.isString(interception.request.body.actionDatetimeUtc)
       assert.deepInclude(interception.request.body, {
         actionType: 'SEA_CONTROL',
+        closedBy: null,
         controlQualityComments: 'Ciblage CNSP non respecté',
         controlUnits: [],
         emitsAis: 'NOT_APPLICABLE',

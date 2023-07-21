@@ -1,21 +1,16 @@
-import {
-  FormikDatePicker,
-  FormikEffect,
-  FormikTextarea,
-  FormikTextInput,
-  Icon,
-  useNewWindow
-} from '@mtes-mct/monitor-ui'
+import { FormikDatePicker, FormikEffect, FormikTextarea, Icon, useKey, useNewWindow } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash/fp'
 import { useMemo } from 'react'
 
-import { AirControlFormLiveSchema } from './schemas'
+import { AirControlFormClosureSchema, AirControlFormLiveSchema } from './schemas'
+import { FormikAuthor } from './shared/FormikAuthor'
 import { FormikCoordinatesPicker } from './shared/FormikCoordinatesPicker'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
 import { FormikRevalidationEffect } from './shared/FormikRevalidationEffect'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
@@ -31,13 +26,21 @@ export type AirControlFormProps = {
 export function AirControlForm({ initialValues, onChange }: AirControlFormProps) {
   const { newWindowContainerRef } = useNewWindow()
 
+  const mission = useMainAppSelector(store => store.mission)
+
+  // We have to re-create the Formik component when `validationSchema` changes to apply it
+  const key = useKey([mission.isClosing])
   const titleDate = useMemo(
     () => initialValues.actionDatetimeUtc && getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),
     [initialValues.actionDatetimeUtc]
   )
+  const validationSchema = useMemo(
+    () => (mission.isClosing ? AirControlFormClosureSchema : AirControlFormLiveSchema),
+    [mission.isClosing]
+  )
 
   return (
-    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={AirControlFormLiveSchema}>
+    <Formik key={key} initialValues={initialValues} onSubmit={noop} validationSchema={validationSchema}>
       <>
         <FormikEffect onChange={onChange as any} />
         <FormikRevalidationEffect />
@@ -75,7 +78,7 @@ export function AirControlForm({ initialValues, onChange }: AirControlFormProps)
             <FormikTextarea isLabelHidden label="Autres observations" name="otherComments" rows={2} />
           </FieldsetGroup>
 
-          <FormikTextInput isLight label="Saisi par" name="userTrigram" />
+          <FormikAuthor />
         </FormBody>
       </>
     </Formik>

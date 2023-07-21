@@ -42,5 +42,6 @@ object TestUtils {
         isDeleted = false,
         hasSomeGearsSeized = false,
         hasSomeSpeciesSeized = false,
+        closedBy = "XYZ",
     )
 }

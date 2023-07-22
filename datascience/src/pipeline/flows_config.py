@@ -53,6 +53,7 @@ from src.pipeline.flows import (
     scrape_legipeche,
     species,
     update_beacon_malfunctions,
+    validate_pending_alerts,
     vessels,
 )
 from src.pipeline.helpers.country_codes import (
@@ -239,6 +240,16 @@ regulations_checkup.flow.schedule = CronSchedule("58 5 * * 1,2,3,4,5")
 regulations_open_data.flow.schedule = CronSchedule("18 1 * * 5")
 risk_factor.flow.schedule = CronSchedule("3,13,23,33,43,53 * * * *")
 scrape_legipeche.flow.schedule = CronSchedule("15 5 * * 1,2,3,4,5")
+validate_pending_alerts.flow.schedule = Schedule(
+    clocks=[
+        clocks.CronClock(
+            "50 6 * * *",
+            parameter_defaults={
+                "alert_config_name": "MISSING_FAR_ALERT",
+            },
+        ),
+    ]
+)
 vessels.flow.schedule = CronSchedule("5 2,5,8,11,14,17,20,23 * * *")
 
 
@@ -278,6 +289,7 @@ flows_to_register = [
     risk_factor.flow,
     scrape_legipeche.flow,
     species.flow,
+    validate_pending_alerts.flow,
     vessels.flow,
 ]
 

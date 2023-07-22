@@ -63,6 +63,7 @@ class GetOperationalAlertsUTests {
                 AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT,
                 AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
                 AlertTypeMapping.MISSING_FAR_ALERT,
+                AlertTypeMapping.MISSING_FAR_48_HOURS_ALERT,
             ),
         )
         Mockito.verify(infractionRepository, Mockito.times(1)).findInfractionByNatinfCode(eq(7059))

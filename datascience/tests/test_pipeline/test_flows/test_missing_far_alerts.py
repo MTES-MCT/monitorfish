@@ -13,6 +13,7 @@ from src.pipeline.flows.missing_far_alerts import (
     extract_vessels_that_emitted_fars,
     flow,
     get_dates,
+    get_vessels_at_sea,
     get_vessels_with_missing_fars,
     make_positions_at_sea_query,
 )
@@ -22,19 +23,95 @@ from tests.mocks import mock_check_flow_not_running, mock_datetime_utcnow
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 
 
+@pytest.fixture
+def positions_at_sea():
+    d = datetime(2020, 2, 5, 12, 56, 0)
+    td = timedelta(hours=1)
+
+    return pd.DataFrame(
+        {
+            "cfr": ["A", "A", "A", "A", "A", "A", "A", "B"],
+            "external_immatriculation": [
+                "AA",
+                "AA",
+                "AA",
+                "AA",
+                "AA",
+                "AA",
+                "AA",
+                "BB",
+            ],
+            "ircs": ["AAA", "AAA", "AAA", "AAA", "AAA", "AAA", "AAA", "BBB"],
+            "vessel_name": [
+                "vessel_A",
+                "vessel_A",
+                "vessel_A",
+                "vessel_A",
+                "vessel_A",
+                "vessel_A",
+                "vessel_A",
+                "vessel_B",
+            ],
+            "flag_state": [
+                "state_A",
+                "state_A",
+                "state_A",
+                "state_A",
+                "state_A",
+                "state_A",
+                "state_A",
+                "state_B",
+            ],
+            "date_time": [
+                d,
+                d + td,
+                d + 2 * td,
+                d + 36 * td,
+                d + 24 * td,
+                d + 48 * td,
+                d + 46 * td,
+                d,
+            ],
+            "facade": [
+                "facade_A",
+                "facade_A",
+                "facade_A",
+                "facade_A",
+                "facade_A",
+                "facade_A",
+                "facade_A",
+                "facade_B",
+            ],
+            "latitude": [1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, -5.65],
+            "longitude": [10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, -8.96],
+        }
+    )
+
+
 @patch(
     "src.pipeline.flows.missing_far_alerts.datetime",
     mock_datetime_utcnow(datetime(2021, 1, 1, 16, 10, 0)),
 )
 def test_get_dates():
     (
-        yesterday_at_zero_hours,
-        yesterday_at_eight_hours,
+        period_start_at_zero_hours,
+        yesterday_at_eight_pm,
         today_at_zero_hours,
         utcnow,
-    ) = get_dates.run()
-    assert yesterday_at_zero_hours == datetime(2020, 12, 31, 0, 0, 0)
-    assert yesterday_at_eight_hours == datetime(2020, 12, 31, 20, 0, 0)
+    ) = get_dates.run(days_without_far=1)
+    assert period_start_at_zero_hours == datetime(2020, 12, 31, 0, 0, 0)
+    assert yesterday_at_eight_pm == datetime(2020, 12, 31, 20, 0, 0)
+    assert today_at_zero_hours == datetime(2021, 1, 1, 0, 0, 0)
+    assert utcnow == datetime(2021, 1, 1, 16, 10, 0)
+
+    (
+        period_start_at_zero_hours,
+        yesterday_at_eight_pm,
+        today_at_zero_hours,
+        utcnow,
+    ) = get_dates.run(days_without_far=2)
+    assert period_start_at_zero_hours == datetime(2020, 12, 30, 0, 0, 0)
+    assert yesterday_at_eight_pm == datetime(2020, 12, 31, 20, 0, 0)
     assert today_at_zero_hours == datetime(2021, 1, 1, 0, 0, 0)
     assert utcnow == datetime(2021, 1, 1, 16, 10, 0)
 
@@ -195,6 +272,47 @@ def test_extract_vessels_that_emitted_fars(reset_test_data):
     assert vessels_that_emitted_fars == {"ABC000306959", "ABC000542519"}
 
 
+def test_get_vessels_at_sea(positions_at_sea):
+    vessels_at_sea_1_day = get_vessels_at_sea.run(positions_at_sea, min_days=1)
+    expected_vessels_at_sea_1_day = pd.DataFrame(
+        {
+            "cfr": ["A", "B"],
+            "external_immatriculation": ["AA", "BB"],
+            "ircs": ["AAA", "BBB"],
+            "vessel_name": ["vessel_A", "vessel_B"],
+            "flag_state": ["state_A", "state_B"],
+            "facade": ["facade_A", "facade_B"],
+            "latitude": [1.5, -5.65],
+            "longitude": [10.6, -8.96],
+        }
+    )
+    pd.testing.assert_frame_equal(vessels_at_sea_1_day, expected_vessels_at_sea_1_day)
+
+    vessels_at_sea_2_days = get_vessels_at_sea.run(positions_at_sea, min_days=2)
+    vessels_at_sea_3_days = get_vessels_at_sea.run(positions_at_sea, min_days=3)
+    expected_vessels_at_sea_2_or_3_days = pd.DataFrame(
+        {
+            "cfr": ["A"],
+            "external_immatriculation": ["AA"],
+            "ircs": ["AAA"],
+            "vessel_name": ["vessel_A"],
+            "flag_state": ["state_A"],
+            "facade": ["facade_A"],
+            "latitude": [1.5],
+            "longitude": [10.6],
+        }
+    )
+    pd.testing.assert_frame_equal(
+        vessels_at_sea_2_days, expected_vessels_at_sea_2_or_3_days
+    )
+    pd.testing.assert_frame_equal(
+        vessels_at_sea_3_days, expected_vessels_at_sea_2_or_3_days
+    )
+
+    vessels_at_sea_4_days = get_vessels_at_sea.run(positions_at_sea, min_days=4)
+    assert len(vessels_at_sea_4_days) == 0
+
+
 def test_concat():
     df1 = pd.DataFrame(
         {
@@ -297,6 +415,7 @@ def test_flow_when_an_alert_is_silenced(reset_test_data):
         max_share_of_vessels_with_missing_fars=1.0,
         minimum_length=12.0,
         only_raise_if_route_shows_fishing=True,
+        days_without_far=1,
     )
 
     assert state.is_successful()
@@ -355,6 +474,7 @@ def test_flow_fails_if_share_of_vessels_with_missing_far_is_too_large(reset_test
         max_share_of_vessels_with_missing_fars=max_share_of_vessels_with_missing_fars,
         minimum_length=12.0,
         only_raise_if_route_shows_fishing=True,
+        days_without_far=1,
     )
 
     assert not state.is_successful()

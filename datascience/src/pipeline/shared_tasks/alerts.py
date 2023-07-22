@@ -1,9 +1,12 @@
 from datetime import datetime
+from typing import List
 
 import pandas as pd
 import prefect
+import requests
 from prefect import task
 
+from config import PENDING_ALERT_VALIDATION_ENDPOINT_TEMPLATE
 from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.processing import (
@@ -23,6 +26,31 @@ def extract_silenced_alerts() -> pd.DataFrame:
         db_name="monitorfish_remote",
         query_filepath="monitorfish/silenced_alerts.sql",
     )
+
+
+@task(checkpoint=False)
+def extract_pending_alerts_ids_of_config_name(alert_config_name: str) -> List[int]:
+    """
+    Return ids of pending alerts corresponding to `alert_config_name`
+    """
+    logger = prefect.context.get("logger")
+    pending_alerts = extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/pending_alerts_of_config_name.sql",
+        params={"alert_config_name": alert_config_name},
+    )
+    ids = pending_alerts.id.unique().tolist()
+    logger.info(f"Returning {len(ids)} pending alerts ids.")
+    return ids
+
+
+@task(checkpoint=False)
+def validate_pending_alert(id: int) -> pd.DataFrame:
+    logger = prefect.context.get("logger")
+    url = PENDING_ALERT_VALIDATION_ENDPOINT_TEMPLATE.format(pending_alert_id=id)
+    logger.info(f"Validating pending alert {id}.")
+    r = requests.put(url)
+    r.raise_for_status()
 
 
 @task(checkpoint=False)

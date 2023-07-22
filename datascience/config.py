@@ -135,8 +135,12 @@ PREFECT_SERVER_URL = os.getenv("PREFECT_SERVER_URL")
 
 # Backend endpoints
 API_ENDPOINT = MONITORFISH_URL + "api/v1/"
+BFF_ENDPOINT = MONITORFISH_URL + "bff/v1/"
 BEACON_MALFUNCTIONS_ENDPOINT = API_ENDPOINT + "beacon_malfunctions/"
 HEALTHCHECK_ENDPOINT = API_ENDPOINT + "healthcheck"
+PENDING_ALERT_VALIDATION_ENDPOINT_TEMPLATE = (
+    BFF_ENDPOINT + "operational_alerts/{pending_alert_id}/validate"
+)
 
 # Backend api key
 BACKEND_API_KEY = os.environ.get("MONITORFISH_BACKEND_API_KEY")

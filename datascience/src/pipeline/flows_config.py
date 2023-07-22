@@ -108,6 +108,20 @@ missing_far_alerts.flow.schedule = Schedule(
                 "max_share_of_vessels_with_missing_fars": 0.5,
                 "minimum_length": 12.0,
                 "only_raise_if_route_shows_fishing": True,
+                "days_without_far": 1,
+            },
+        ),
+        clocks.CronClock(
+            "55 6 * * *",
+            parameter_defaults={
+                "alert_type": "MISSING_FAR_48_HOURS_ALERT",
+                "alert_config_name": "MISSING_FAR_48_HOURS_ALERT",
+                "states_iso2_to_monitor_everywhere": ["FR"],
+                "states_iso2_to_monitor_in_french_eez": ["BE"],
+                "max_share_of_vessels_with_missing_fars": 0.5,
+                "minimum_length": 12.0,
+                "only_raise_if_route_shows_fishing": True,
+                "days_without_far": 2,
             },
         ),
     ]

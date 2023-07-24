@@ -2,7 +2,7 @@ import { Tag, TagBullet } from '@mtes-mct/monitor-ui'
 import { uniq } from 'lodash/fp'
 import styled from 'styled-components'
 
-import { Mission } from '../../../domain/entities/mission/types'
+import { Mission, type MissionWithActions } from '../../../domain/entities/mission/types'
 import { FrontendError } from '../../../libs/FrontendError'
 import { getMissionColor } from '../../map/layers/Mission/MissionLayer/styles'
 
@@ -19,6 +19,10 @@ export function getControlUnitsNamesFromAdministrations(
   const uniqueSortedNames = uniqueNames.sort()
 
   return uniqueSortedNames
+}
+
+export function hasSomeOngoingActions(mission: MissionWithActions): boolean {
+  return !mission.isClosed && mission.actions.filter(({ closedBy }) => !closedBy).length > 0
 }
 
 export const renderStatus = (missionStatus: Mission.MissionStatus): JSX.Element => {

@@ -35,8 +35,6 @@
       "missionSource": "POSEIDON_CNSP",
       "isClosed": false,
       "isUnderJdp": false,
-      "hasSomeGearsSeized": false,
-      "hasSomeSpeciesSeized": false,
       "isGeometryComputedFromControls": false
     }
   }

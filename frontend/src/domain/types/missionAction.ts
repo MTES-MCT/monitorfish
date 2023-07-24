@@ -4,6 +4,7 @@ export namespace MissionAction {
   export interface MissionAction {
     actionDatetimeUtc: string
     actionType: MissionActionType
+    closedBy: string | undefined
     controlQualityComments: string | undefined
     controlUnits: ControlUnit.ControlUnit[]
     districtCode: string | undefined

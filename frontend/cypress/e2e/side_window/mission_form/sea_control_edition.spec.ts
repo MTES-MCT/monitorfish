@@ -44,6 +44,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
       }
       assert.deepInclude(interception.request.body, {
         actionType: 'SEA_CONTROL',
+        closedBy: null,
         controlQualityComments: null,
         controlUnits: [],
         districtCode: null,

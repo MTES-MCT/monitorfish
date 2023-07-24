@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { MISSION_LIST_SUB_MENU_OPTIONS, MISSION_LIST_TABLE_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
-import { hasSomeActionsOpened, renderStatus } from './utils'
+import { hasSomeOngoingActions, renderStatus } from './utils'
 import { missionActions } from '../../../domain/actions'
 import { useGetFilteredMissionsQuery } from '../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFrontGroup } from '../../../domain/entities/seaFront/constants'
@@ -148,7 +148,7 @@ export function MissionList() {
                       </TableBodyCell>
                       <TableBodyCell
                         $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[6]?.fixedWidth}
-                        $hasSomeActionsOpened={hasSomeActionsOpened(augmentedMission)}
+                        $hasSomeOngoingActions={hasSomeOngoingActions(augmentedMission)}
                       >
                         <span>{augmentedMission.$labelled.inspectionsCount}</span>
                       </TableBodyCell>
@@ -282,17 +282,17 @@ const TableBodyCell = styled.div.attrs(() => ({
   className: 'TableBodyCell'
 }))<{
   $fixedWidth?: number | undefined
-  $hasSomeActionsOpened?: boolean | undefined
+  $hasSomeOngoingActions?: boolean | undefined
 }>`
   align-items: center;
   border-bottom: solid 1px ${p => p.theme.color.lightGray};
-  border-left: ${p => (p.$hasSomeActionsOpened ? `solid 4px ${p.theme.color.blueGray[100]}` : 'none')};
+  border-left: ${p => (p.$hasSomeOngoingActions ? `solid 4px ${p.theme.color.blueGray[100]}` : 'none')};
   border-right: solid 1px ${p => p.theme.color.lightGray};
   display: flex;
   flex-grow: ${p => (p.$fixedWidth ? 0 : 1)};
   max-width: ${p => (p.$fixedWidth ? `${p.$fixedWidth}px` : 'auto')};
   min-width: ${p => (p.$fixedWidth ? `${p.$fixedWidth}px` : 'auto')};
-  padding: ${p => (p.$hasSomeActionsOpened ? '9px 10px 9px 6px' : '9px 10px')};
+  padding: ${p => (p.$hasSomeOngoingActions ? '9px 10px 9px 6px' : '9px 10px')};
 
   > span {
     overflow: hidden;

@@ -21,7 +21,7 @@ export function getControlUnitsNamesFromAdministrations(
   return uniqueSortedNames
 }
 
-export function hasSomeActionsOpened(mission: MissionWithActions): boolean {
+export function hasSomeOngoingActions(mission: MissionWithActions): boolean {
   return !mission.isClosed && mission.actions.filter(({ closedBy }) => !closedBy).length > 0
 }
 

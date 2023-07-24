@@ -1,4 +1,3 @@
-import { Option } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { useMemo } from 'react'
 
@@ -8,6 +7,8 @@ import { useMainAppDispatch } from '../../../../../../hooks/useMainAppDispatch'
 import { MissionActionFormValues } from '../../../types'
 import { updateFAOAreas, updateSegments } from '../formikUsecases'
 import { getFleetSegmentsAsOption } from '../utils'
+
+import type { Option } from '@mtes-mct/monitor-ui'
 
 export function useGetFormikUsecases() {
   const dispatch = useMainAppDispatch()

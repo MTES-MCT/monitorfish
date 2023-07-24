@@ -1,9 +1,9 @@
-import { Option } from '@mtes-mct/monitor-ui'
-
 import { faoAreasApi } from '../../../../../api/faoAreas'
 import { MissionAction } from '../../../../../domain/types/missionAction'
 import { getFleetSegments } from '../../../../../domain/use_cases/vessel/getFleetSegments'
 import { MissionActionFormValues } from '../../types'
+
+import type { Option } from '@mtes-mct/monitor-ui'
 
 export const updateSegments =
   (

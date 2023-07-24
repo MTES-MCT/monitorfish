@@ -48,7 +48,33 @@ export const AirControlFormLiveSchema = object({
   latitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
   longitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
   vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
-  userTrigram: string().required('Veuillez indiquer votre trigramme.')
+  userTrigram: string().trim().required('Veuillez indiquer votre trigramme dans "Saisi par".')
+})
+
+export const AirControlFormClosureSchema = AirControlFormLiveSchema.concat(
+  object({
+    closedBy: string().trim().required('Veuillez indiquer votre trigramme dans "Clôturé par".')
+  })
+)
+
+// -----------------------------------------------------------------------------
+// Air Surveillance Action Form
+
+export const AirSurveillanceFormLiveSchema = object({
+  userTrigram: string().trim().required('Veuillez indiquer votre trigramme dans "Saisi par".')
+})
+
+export const AirSurveillanceFormClosureSchema = AirSurveillanceFormLiveSchema.concat(
+  object({
+    closedBy: string().trim().required('Veuillez indiquer votre trigramme dans "Clôturé par".')
+  })
+)
+
+// -----------------------------------------------------------------------------
+// Observation Action Form
+
+export const ObservationFormLiveSchema = object({
+  userTrigram: string().trim().required('Veuillez indiquer votre trigramme dans "Saisi par".')
 })
 
 // -----------------------------------------------------------------------------
@@ -58,7 +84,7 @@ export const LandControlFormLiveSchema = object({
   actionDatetimeUtc: actionDatetimeUtcValidator,
   portLocode: string().required('Veuillez indiquer le port de contrôle.'),
   vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
-  userTrigram: string().required('Veuillez indiquer votre trigramme.')
+  userTrigram: string().trim().required('Veuillez indiquer votre trigramme dans "Saisi par".')
 })
 
 export const LandControlFormClosureSchema = LandControlFormLiveSchema.concat(
@@ -85,7 +111,10 @@ export const LandControlFormClosureSchema = LandControlFormLiveSchema.concat(
       .min(1, 'Veuillez indiquer les engins à bord.'),
 
     // Qualité du contrôle
-    vesselTargeted: string().required('Veuillez indiquer si le navire est ciblé par le CNSP.')
+    vesselTargeted: string().required('Veuillez indiquer si le navire est ciblé par le CNSP.'),
+
+    // Saisi par / Clôturé par
+    closedBy: string().trim().required('Veuillez indiquer votre trigramme dans "Clôturé par".')
   })
 )
 
@@ -96,8 +125,8 @@ export const SeaControlFormLiveSchema = object({
   longitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
   latitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
   vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
-  userTrigram: string().required('Veuillez indiquer votre trigramme.'),
-  actionDatetimeUtc: actionDatetimeUtcValidator
+  actionDatetimeUtc: actionDatetimeUtcValidator,
+  userTrigram: string().required('Veuillez indiquer votre trigramme dans "Saisi par".')
 })
 
 export const SeaControlFormClosureSchema = SeaControlFormLiveSchema.concat(
@@ -124,7 +153,10 @@ export const SeaControlFormClosureSchema = SeaControlFormLiveSchema.concat(
       .min(1, 'Veuillez indiquer les engins à bord.'),
 
     // Qualité du contrôle
-    vesselTargeted: string().required('Veuillez indiquer si le navire est ciblé par le CNSP.')
+    vesselTargeted: string().required('Veuillez indiquer si le navire est ciblé par le CNSP.'),
+
+    // Saisi par / Clôturé par
+    closedBy: string().trim().required('Veuillez indiquer votre trigramme dans "Clôturé par".')
   })
 )
 

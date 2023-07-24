@@ -10,11 +10,12 @@ import {
   FieldError
 } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { formatDateLabel, getMissionActionInfractionsFromMissionActionFormValues, getTitle } from './utils'
 import { UNKNOWN_VESSEL } from '../../../../domain/entities/vessel/vessel'
 import { MissionAction } from '../../../../domain/types/missionAction'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FrontendError } from '../../../../libs/FrontendError'
 
 import type { MissionActionFormValues } from '../types'
@@ -28,6 +29,8 @@ export type ItemProps = {
   onSelect: () => Promisable<void>
 }
 export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelect }: ItemProps) {
+  const mission = useMainAppSelector(state => state.mission)
+
   const [actionLabel, ActionIcon] = useMemo(() => {
     const vesselName = initialValues.vesselName === UNKNOWN_VESSEL.vesselName ? 'INCONNU' : initialValues.vesselName
 
@@ -97,6 +100,8 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
     [initialValues]
   )
 
+  const isOpen = !mission.draft?.mainFormValues.isClosed && !initialValues.closedBy
+
   return (
     <>
       <Wrapper>
@@ -109,10 +114,11 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
         )}
 
         <InnerWrapper
+          $isOpen={isOpen}
+          $isSelected={isSelected}
+          $type={initialValues.actionType}
           data-cy="action-list-item"
-          isSelected={isSelected}
           onClick={onSelect}
-          type={initialValues.actionType}
         >
           <Head>
             <ActionLabel>
@@ -170,21 +176,29 @@ const DateLabel = styled.div`
 `
 
 const InnerWrapper = styled.div<{
-  isSelected: boolean
-  type: MissionAction.MissionActionType
+  $isOpen: boolean
+  $isSelected: boolean
+  $type: MissionAction.MissionActionType
 }>`
   background-color: ${p =>
     ({
       [MissionAction.MissionActionType.AIR_SURVEILLANCE]: p.theme.color.gainsboro,
       [MissionAction.MissionActionType.OBSERVATION]: p.theme.color.blueYonder[25]
-    }[p.type] || p.theme.color.white)};
-  border: solid 1px ${p => (p.isSelected ? p.theme.color.blueGray['100'] : p.theme.color.lightGray)};
-  outline: ${p => (p.isSelected ? `${p.theme.color.blueGray['100']} solid 2px` : 'none')};
+    }[p.$type] || p.theme.color.white)};
+  border: solid 1px ${p => (p.$isSelected ? p.theme.color.blueGray['100'] : p.theme.color.lightGray)};
+  outline: ${p => (p.$isSelected ? `${p.theme.color.blueGray['100']} solid 2px` : 'none')};
   cursor: pointer;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   padding: 16px;
+
+  ${p =>
+    p.$isOpen &&
+    css`
+      border-left: solid 5px ${p.theme.color.blueGray['100']};
+      padding-left: 12px;
+    `}
 `
 
 const ActionLabel = styled.div`

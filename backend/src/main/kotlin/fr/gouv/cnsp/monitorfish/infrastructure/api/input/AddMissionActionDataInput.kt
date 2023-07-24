@@ -47,6 +47,7 @@ data class AddMissionActionDataInput(
     var vesselTargeted: ControlCheck? = null,
     var hasSomeGearsSeized: Boolean = false,
     var hasSomeSpeciesSeized: Boolean = false,
+    var closedBy: String? = null,
 ) {
     fun toMissionAction() = MissionAction(
         vesselId = vesselId,
@@ -93,5 +94,6 @@ data class AddMissionActionDataInput(
         isDeleted = false,
         hasSomeGearsSeized = hasSomeGearsSeized,
         hasSomeSpeciesSeized = hasSomeSpeciesSeized,
+        closedBy = closedBy,
     )
 }

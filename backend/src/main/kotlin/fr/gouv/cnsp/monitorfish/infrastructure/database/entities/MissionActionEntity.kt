@@ -125,6 +125,8 @@ class MissionActionEntity(
     var hasSomeGearsSeized: Boolean,
     @Column(name = "has_some_species_seized")
     var hasSomeSpeciesSeized: Boolean,
+    @Column(name = "closed_by")
+    var closedBy: String? = null,
 ) {
 
     companion object {
@@ -176,6 +178,7 @@ class MissionActionEntity(
                 isDeleted = missionAction.isDeleted,
                 hasSomeGearsSeized = missionAction.hasSomeGearsSeized,
                 hasSomeSpeciesSeized = missionAction.hasSomeSpeciesSeized,
+                closedBy = missionAction.closedBy,
             )
     }
 
@@ -225,6 +228,7 @@ class MissionActionEntity(
         isDeleted = isDeleted,
         hasSomeGearsSeized = hasSomeGearsSeized,
         hasSomeSpeciesSeized = hasSomeSpeciesSeized,
+        closedBy = closedBy,
     )
 
     private fun <T> deserializeJSONList(mapper: ObjectMapper, json: String?, clazz: Class<T>): List<T> = json?.let {

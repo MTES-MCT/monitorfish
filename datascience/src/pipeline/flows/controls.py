@@ -653,6 +653,7 @@ def make_missions_actions_and_missions_control_units(
         "other_comments",
         "vessel_targeted",
         "open_by",
+        "closed_by",
     ]
 
     mission_actions = controls[mission_actions_columns].copy(deep=True)

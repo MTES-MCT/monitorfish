@@ -144,6 +144,10 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Saisi par
     cy.fill('Saisi par', 'Marlin')
 
+    // Clôturé par
+    // TODO Handle multiple inputs with same label via an `index` in monitor-ui.
+    cy.get('[name="closedBy"]').eq(1).type('Alice')
+
     cy.wait(500)
 
     // -------------------------------------------------------------------------
@@ -167,6 +171,7 @@ context('Side Window > Mission Form > Sea Control', () => {
       assert.isUndefined(interception.request.body.gearOnboard[0].controlledMesh)
       assert.deepInclude(interception.request.body, {
         actionType: 'SEA_CONTROL',
+        closedBy: 'Alice',
         controlQualityComments: 'Une observation sur le déroulé du contrôle.',
         controlUnits: [],
         districtCode: 'AY',
@@ -255,10 +260,16 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.get('input[placeholder="Rechercher un navire..."]').type('pheno')
     cy.contains('mark', 'PHENO').click()
 
-    cy.wait(500)
-
+    // Saisi par
     cy.fill('Saisi par', 'Gaumont')
     cy.wait(500)
+
+    // Clôturé par
+    // TODO Handle multiple inputs with same label via an `index` in monitor-ui.
+    cy.get('[name="closedBy"]').eq(1).type('Alice')
+
+    cy.wait(500)
+
     getSaveButton().should('not.be.disabled')
 
     // -------------------------------------------------------------------------
@@ -279,6 +290,7 @@ context('Side Window > Mission Form > Sea Control', () => {
       }
       assert.deepInclude(interception.request.body, {
         actionType: 'SEA_CONTROL',
+        closedBy: 'Alice',
         controlQualityComments: null,
         controlUnits: [],
         districtCode: 'AY',
@@ -346,11 +358,11 @@ context('Side Window > Mission Form > Sea Control', () => {
     const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer et clôturer').parent()
 
     // -------------------------------------------------------------------------
-    // Form
+    // Form Live Validation
 
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('exist')
     cy.contains('Veuillez indiquer le navire contrôlé.').should('exist')
-    cy.contains('Veuillez indiquer votre trigramme.').should('exist')
+    cy.contains('Veuillez indiquer votre trigramme dans "Saisi par".').should('exist')
 
     cy.contains('Veuillez corriger les éléments en rouge').should('exist')
     getSaveButton().should('be.disabled')
@@ -363,7 +375,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     // Saisi par
     cy.fill('Saisi par', 'Gaumont').wait(500)
-    cy.contains('Veuillez indiquer votre trigramme.').should('not.exist')
+    cy.contains('Veuillez indiquer votre trigramme dans "Saisi par".').should('not.exist')
 
     // Mission is now valid for saving (but not for closure)
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
@@ -373,6 +385,9 @@ context('Side Window > Mission Form > Sea Control', () => {
     getSaveAndCloseButton().should('be.enabled')
 
     cy.clickButton('Enregistrer et clôturer').wait(500)
+
+    // -------------------------------------------------------------------------
+    // Form Closure Validation
 
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('exist')
     cy.contains('Veuillez indiquer si le navire émet un signal VMS.').should('exist')
@@ -384,6 +399,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.contains('Veuillez indiquer si la taille des espèces a été contrôlée.').should('exist')
     cy.contains('Veuillez indiquer si les espèces soumises à plan sont séparées.').should('exist')
     cy.contains('Veuillez indiquer si le navire est ciblé par le CNSP.').should('exist')
+    cy.contains('Veuillez indiquer votre trigramme dans "Clôturé par".').should('exist')
 
     cy.contains('Veuillez corriger les éléments en rouge').should('exist')
     getSaveButton().should('be.disabled')
@@ -424,9 +440,13 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.contains('Veuillez indiquer si le navire est ciblé par le CNSP.').should('not.exist')
 
+    // Clôturé par
+    // TODO Handle multiple inputs with same label via an `index` in monitor-ui.
+    cy.get('[name="closedBy"]').eq(1).type('Alice')
+    cy.contains('Veuillez indiquer votre trigramme dans "Clôturé par".').should('not.exist')
+
     // Mission is now valid for closure
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
-
     cy.contains('Veuillez corriger les éléments en rouge').should('not.exist')
     getSaveButton().should('be.enabled')
     getSaveAndCloseButton().should('be.enabled')

@@ -1,6 +1,7 @@
 // TODO We should find a way to either reset data after each test to make them independant and easily re-runnable or reset them via the UI (with e2e commands).
 // https://glebbahmutov.com/blog/dependent-test/
 
+import { openSideWindowNewMission } from './utils'
 import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
@@ -120,5 +121,35 @@ context('Side Window > Mission Form > Action List', () => {
     })
 
     cy.get('h1').should('contain.text', 'Missions et contrôles')
+  })
+
+  it('Should show the expected infraction tags', () => {
+    openSideWindowNewMission()
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
+    cy.clickButton('Ajouter une infraction obligations déclaratives / autorisations')
+    cy.fill('Type d’infraction', 'Avec PV')
+    cy.fill('NATINF', '23581')
+    cy.clickButton('Valider l’infraction')
+
+    cy.clickButton('Ajouter une infraction obligations déclaratives / autorisations')
+    cy.fill('Type d’infraction', 'Avec PV')
+    cy.fill('NATINF', '23588')
+    cy.clickButton('Valider l’infraction')
+
+    cy.clickButton('Ajouter une infraction obligations déclaratives / autorisations')
+    cy.fill('Type d’infraction', 'Sans PV')
+    cy.fill('NATINF', '23584')
+    cy.clickButton('Valider l’infraction')
+
+    cy.clickButton('Ajouter une infraction obligations déclaratives / autorisations')
+    cy.fill('Type d’infraction', 'En attente')
+    cy.clickButton('Valider l’infraction')
+
+    cy.get('.Element-Tag').contains('2 INF AVEC PV').should('be.visible')
+    cy.get('.Element-Tag').contains('1 INF EN ATTENTE').should('be.visible')
+    cy.get('.Element-Tag').contains('3 NATINF: 23581, 23588, 23584').should('be.visible')
   })
 })

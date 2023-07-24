@@ -311,6 +311,8 @@ unchanged_columns = [
     "latitude",
     "seizure_and_diversion_comments",
     "other_comments",
+    "open_by",
+    "closed_by",
 ]
 
 expected_loaded_mission_actions_df = pd.merge(
@@ -740,18 +742,6 @@ expected_loaded_mission_actions_df = pd.merge(
                 True,
                 True,
             ],
-            "user_trigram": [
-                "ABC",
-                "ABC",
-                "ABC",
-                "ABC",
-                "ABC",
-                "ABC",
-                "ABC",
-                "ABC",
-                "ABC",
-                "ABC",
-            ],
             "segments": [
                 [],
                 [],
@@ -785,7 +775,7 @@ expected_loaded_mission_actions_df = pd.merge(
         }
     ),
     on="id",
-)
+).rename(columns={"open_by": "user_trigram"})
 
 
 expected_missions_df = pd.DataFrame(
@@ -1008,7 +998,6 @@ def test_extract_catch_controls_query_file_is_found(mock_extract):
 
 @patch("src.pipeline.flows.controls.extract")
 def test_extract_controls_raises_if_intput_is_not_valid(mock_extract):
-
     with pytest.raises(ValueError):
         extract_controls.run(number_of_months="12")
 
@@ -1026,7 +1015,6 @@ def test_extract_controls_raises_if_intput_is_not_valid(mock_extract):
 
 
 def test_extract_controls_applies_dtypes(controls):
-
     res = mock_extract_controls.run(number_of_months=12)
 
     with pytest.raises(AssertionError):
@@ -1063,7 +1051,6 @@ def test_flow(
     expected_missions_control_units,
     loading_mode,
 ):
-
     mission_actions_query = "SELECT * FROM mission_actions ORDER BY id"
 
     initial_mission_actions = read_query(

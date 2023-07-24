@@ -55,7 +55,7 @@ export function TableHeadNext({
               dataCy={`table-order-by-${key}`}
               isAscending={!isSortingDesc}
               isSortable={isSortable}
-              isSortColumn={key === sortingKey}
+              isSortedColumn={key === sortingKey}
               onClick={() => onSort(key, key === sortingKey && !isSortingDesc)}
               style={{
                 lineHeight: 1.125

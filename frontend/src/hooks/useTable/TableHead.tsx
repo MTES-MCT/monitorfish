@@ -25,25 +25,33 @@ export function TableHead({
   onSort,
   sortingKey
 }: TableHeadProps) {
+  const sortByKey = (column: TableColumn) => {
+    if (!column.isSortable) {
+      return
+    }
+
+    onSort(column.key, column.key === sortingKey && !isSortingDesc)
+  }
+
   return (
     <CardTableHeader noPadding>
-      <FlexboxGrid>
+      <FlexboxGrid role="row">
         {isCheckable && (
           <CellWrapper $fixedWidth={36} style={{ padding: 0 }}>
             <StyledCheckbox checked={isAllChecked} onChange={onAllCheckChange} />
           </CellWrapper>
         )}
 
-        {columns.map(({ fixedWidth, isSortable, key, label = '' }) => (
-          <CellWrapper key={key} $fixedWidth={fixedWidth}>
+        {columns.map(column => (
+          <CellWrapper key={column.key} $fixedWidth={column.fixedWidth} role="columnheader">
             <CardTableColumnTitle
-              dataCy={`table-order-by-${key}`}
+              dataCy={`table-order-by-${column.key}`}
               isAscending={!isSortingDesc}
-              isSortable={isSortable}
-              isSortColumn={key === sortingKey}
-              onClick={() => onSort(key, key === sortingKey && !isSortingDesc)}
+              isSortable={column.isSortable}
+              isSortedColumn={column.key === sortingKey}
+              onClick={() => sortByKey(column)}
             >
-              {label}
+              {column.label || ''}
             </CardTableColumnTitle>
           </CellWrapper>
         ))}

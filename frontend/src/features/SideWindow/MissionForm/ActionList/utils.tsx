@@ -29,8 +29,15 @@ export function getTitle(base: string, label: string | undefined, placeholder: s
   )
 }
 
+/**
+ * @description
+ * - ⚠️ Types are not exact here: `comments` can also be undefined.
+ * - ⚠️ When `withPendingInfractions` is true, returned infractions will include infractions without `natinf`.
+ */
+// TODO May need a retyping of all infractions at the `MissionActionFormValues` level.
 export function getMissionActionInfractionsFromMissionActionFormValues(
-  missionActionFormValues: MissionActionFormValues
+  missionActionFormValues: MissionActionFormValues,
+  withPendingInfractions: boolean = false
 ): Array<
   | MissionAction.GearInfraction
   | MissionAction.LogbookInfraction
@@ -42,7 +49,7 @@ export function getMissionActionInfractionsFromMissionActionFormValues(
     ...(missionActionFormValues.logbookInfractions ? missionActionFormValues.logbookInfractions : []),
     ...(missionActionFormValues.speciesInfractions ? missionActionFormValues.speciesInfractions : []),
     ...(missionActionFormValues.otherInfractions ? missionActionFormValues.otherInfractions : [])
-  ].filter(({ natinf }) => Boolean(natinf))
+  ].filter(({ natinf }) => withPendingInfractions || Boolean(natinf))
 }
 
 export function getMissionActionFormInitialValues(type: MissionAction.MissionActionType): MissionActionFormValues {

@@ -11,7 +11,7 @@ type CardTableHeaderProps = {
 }
 export function CardTableHeader({ children, noPadding = false }: CardTableHeaderProps) {
   return (
-    <StyledCardTableHeader key={0} $noPadding={noPadding} index={0}>
+    <StyledCardTableHeader key={0} $noPadding={noPadding} index={0} role="rowgroup">
       {children}
     </StyledCardTableHeader>
   )

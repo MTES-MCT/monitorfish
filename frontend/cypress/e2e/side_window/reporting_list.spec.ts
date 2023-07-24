@@ -42,7 +42,7 @@ context('Reportings', () => {
       cy.get('*[data-cy^="side-window-sub-menu-NAMO-number"]').contains(numberOfReportings)
 
       cy.wrap($reportingList).first().contains('MARIAGE ÎLE HASARD')
-      cy.wrap($reportingList).last().contains('RENCONTRER VEILLER APPARTEMENT"')
+      cy.wrap($reportingList).last().contains('RENCONTRER VEILLER')
 
       // When we re-order by date
       cy.get('[data-cy="table-order-by-validationDate"]').click()

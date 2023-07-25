@@ -30,7 +30,9 @@ export function Infraction<AnyInfraction extends MissionAction.OtherInfraction>(
         <div>
           <TagGroup>
             <Tag accent={Accent.PRIMARY}>{MissionAction.INFRACTION_TYPE_LABEL[data.infractionType]}</Tag>
-            <Tag accent={Accent.PRIMARY}>NATINF : {data.natinf}</Tag>
+            {data.infractionType !== MissionAction.InfractionType.PENDING && (
+              <Tag accent={Accent.PRIMARY}>NATINF : {data.natinf}</Tag>
+            )}
           </TagGroup>
 
           <div>

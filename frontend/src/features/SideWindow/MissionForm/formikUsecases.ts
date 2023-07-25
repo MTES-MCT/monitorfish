@@ -12,9 +12,6 @@ import type { Gear } from '../../../domain/types/Gear'
 import type { Port } from '../../../domain/types/port'
 import type { Option } from '@mtes-mct/monitor-ui'
 
-import SpeciesControl = MissionAction.SpeciesControl
-import GearControl = MissionAction.GearControl
-
 const updateSegments =
   (
     dispatch,
@@ -64,7 +61,7 @@ const updateFAOAreas =
 
 const updateGearsOnboard =
   (dispatch, setFieldValue: (field: string, value: any) => void, gearsByCode: Map<string, Gear> | undefined) =>
-  async (missionAction: MissionActionFormValues): Promise<GearControl[]> => {
+  async (missionAction: MissionActionFormValues): Promise<MissionAction.GearControl[]> => {
     if (!gearsByCode || !missionAction.internalReferenceNumber) {
       return []
     }
@@ -100,7 +97,7 @@ const updateGearsOnboard =
 
 const updateSpeciesOnboard =
   (dispatch, setFieldValue: (field: string, value: any) => void) =>
-  async (missionAction: MissionActionFormValues): Promise<SpeciesControl[]> => {
+  async (missionAction: MissionActionFormValues): Promise<MissionAction.SpeciesControl[]> => {
     if (!missionAction.internalReferenceNumber) {
       return []
     }

@@ -32,19 +32,17 @@ export function useGetMissionActionFormikUsecases() {
   /**
    * Update FAO Areas and segments from the control coordinates or port input
    */
-  const updateFAOAreasAndSegments = (missionActionValues: MissionActionFormValues) => {
-    ;(async () => {
-      const faoAreas = await formikUsecase.updateFAOAreas(dispatch, setMissionActionFieldValue)(missionActionValues)
+  async function updateFAOAreasAndSegments(missionActionValues: MissionActionFormValues) {
+    const faoAreas = await formikUsecase.updateFAOAreas(dispatch, setMissionActionFieldValue)(missionActionValues)
 
-      await formikUsecase.updateSegments(
-        dispatch,
-        setMissionActionFieldValue,
-        fleetSegmentsAsOptions
-      )({
-        ...missionActionValues,
-        faoAreas
-      })
-    })()
+    await formikUsecase.updateSegments(
+      dispatch,
+      setMissionActionFieldValue,
+      fleetSegmentsAsOptions
+    )({
+      ...missionActionValues,
+      faoAreas
+    })
   }
 
   /**
@@ -54,30 +52,30 @@ export function useGetMissionActionFormikUsecases() {
    * - species onboard
    * - gear onboard
    */
-  const updateFieldsControlledByVessel = (missionActionValues: MissionActionFormValues) => {
-    ;(async () => {
-      const gearOnboard = await formikUsecase.updateGearsOnboard(
-        dispatch,
-        setMissionActionFieldValue,
-        gearsByCode
-      )(missionActionValues)
-      const speciesOnboard = await formikUsecase.updateSpeciesOnboard(
-        dispatch,
-        setMissionActionFieldValue
-      )(missionActionValues)
-      const faoAreas = await formikUsecase.updateFAOAreas(dispatch, setMissionActionFieldValue)(missionActionValues)
+  async function updateFieldsControlledByVessel(missionActionValues: MissionActionFormValues) {
+    const gearOnboard = await formikUsecase.updateGearsOnboard(
+      dispatch,
+      setMissionActionFieldValue,
+      gearsByCode
+    )(missionActionValues)
 
-      await formikUsecase.updateSegments(
-        dispatch,
-        setMissionActionFieldValue,
-        fleetSegmentsAsOptions
-      )({
-        ...missionActionValues,
-        faoAreas,
-        gearOnboard,
-        speciesOnboard
-      })
-    })()
+    const speciesOnboard = await formikUsecase.updateSpeciesOnboard(
+      dispatch,
+      setMissionActionFieldValue
+    )(missionActionValues)
+
+    const faoAreas = await formikUsecase.updateFAOAreas(dispatch, setMissionActionFieldValue)(missionActionValues)
+
+    await formikUsecase.updateSegments(
+      dispatch,
+      setMissionActionFieldValue,
+      fleetSegmentsAsOptions
+    )({
+      ...missionActionValues,
+      faoAreas,
+      gearOnboard,
+      speciesOnboard
+    })
   }
 
   /**

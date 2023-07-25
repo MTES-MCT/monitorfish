@@ -8,17 +8,14 @@ import {
   SingleTag,
   useNewWindow
 } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/query'
 import { useField, useFormikContext } from 'formik'
 import { remove as ramdaRemove } from 'ramda'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { FormikMultiInfractionPicker } from './FormikMultiInfractionPicker'
 import { useGetGearsQuery } from '../../../../../api/gear'
-import { useGetRiskFactorQuery } from '../../../../../api/vessel'
 import { BOOLEAN_AS_OPTIONS } from '../../../../../constants'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 import { FieldGroup } from '../../shared/FieldGroup'
 import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
@@ -30,16 +27,9 @@ import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 export function GearsField() {
-  const gearsByCode = useMainAppSelector(state => state.gear.gearsByCode)
   const { values } = useFormikContext<MissionActionFormValues>()
   const [input, meta, helper] = useField<MissionActionFormValues['gearOnboard']>('gearOnboard')
   const { updateSegments } = useGetMissionActionFormikUsecases()
-
-  // Other field controlling this field
-  const [{ value: internalReferenceNumber }] =
-    useField<MissionActionFormValues['internalReferenceNumber']>('internalReferenceNumber')
-  const riskFactorApiQuery = useGetRiskFactorQuery(internalReferenceNumber || skipToken)
-
   const { newWindowContainerRef } = useNewWindow()
 
   const getGearsApiQuery = useGetGearsQuery()
@@ -57,89 +47,45 @@ export function GearsField() {
 
   const typedError = meta.error as unknown as DeepPartial<MissionAction.GearControl>[] | undefined
 
-  const add = useCallback(
-    (newGear: Gear | undefined) => {
-      if (!newGear) {
-        return
+  const add = (newGear: Gear | undefined) => {
+    if (!newGear) {
+      return
+    }
+
+    const nextGears: MissionAction.GearControl[] = [
+      ...(input.value || []),
+      {
+        comments: undefined,
+        controlledMesh: undefined,
+        declaredMesh: undefined,
+        gearCode: newGear.code,
+        gearName: newGear.name,
+        gearWasControlled: undefined,
+        hasUncontrolledMesh: false
       }
+    ]
 
-      const nextGears: MissionAction.GearControl[] = [
-        ...(input.value || []),
-        {
-          comments: undefined,
-          controlledMesh: undefined,
-          declaredMesh: undefined,
-          gearCode: newGear.code,
-          gearName: newGear.name,
-          gearWasControlled: undefined,
-          hasUncontrolledMesh: false
-        }
-      ]
+    helper.setValue(nextGears)
+    updateSegments({
+      ...values,
+      gearOnboard: nextGears
+    })
+  }
 
-      helper.setValue(nextGears)
-      updateSegments({
-        ...values,
-        gearOnboard: nextGears
-      })
-    },
+  const remove = (index: number) => {
+    if (!input.value) {
+      return
+    }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [input.value]
-  )
+    const nextGearOnboard = ramdaRemove(index, 1, input.value)
+    const normalizedNextGearOnboard = nextGearOnboard.length > 0 ? nextGearOnboard : []
 
-  const remove = useCallback(
-    (index: number) => {
-      if (!input.value) {
-        return
-      }
-
-      const nextGearOnboard = ramdaRemove(index, 1, input.value)
-      const normalizedNextGearOnboard = nextGearOnboard.length > 0 ? nextGearOnboard : []
-
-      helper.setValue(normalizedNextGearOnboard)
-      updateSegments({
-        ...values,
-        gearOnboard: normalizedNextGearOnboard
-      })
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [input.value]
-  )
-
-  useEffect(
-    () => {
-      if (input.value?.length) {
-        return
-      }
-
-      if (!gearsByCode || !riskFactorApiQuery.data) {
-        return
-      }
-
-      const { gearOnboard } = riskFactorApiQuery.data
-      if (!gearOnboard?.length) {
-        return
-      }
-
-      const nextGears = gearOnboard
-        .map(gear => ({ ...gearsByCode[gear.gear], declaredMesh: gear.mesh }))
-        .map(gear => ({
-          comments: undefined,
-          controlledMesh: undefined,
-          declaredMesh: gear.declaredMesh,
-          gearCode: gear.code,
-          gearName: gear.name,
-          gearWasControlled: undefined,
-          hasUncontrolledMesh: false
-        }))
-
-      helper.setValue(nextGears)
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [riskFactorApiQuery.data, gearsByCode]
-  )
+    helper.setValue(normalizedNextGearOnboard)
+    updateSegments({
+      ...values,
+      gearOnboard: normalizedNextGearOnboard
+    })
+  }
 
   if (!gearsAsOptions.length) {
     return <FieldsetGroupSpinner isLight legend="Engins à bord" />

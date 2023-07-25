@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import { useGetFleetSegmentsQuery } from '../../../../../api/fleetSegment'
 import { FrontendError } from '../../../../../libs/FrontendError'
 import { sortByAscendingValue } from '../../../../../utils/sortByAscendingValue'
+import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 import { FieldsetGroup, FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 
 import type { MissionActionFormValues } from '../../types'
@@ -16,21 +17,18 @@ export type VesselFleetSegmentsFieldProps = {
 }
 export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProps) {
   const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
+  const { updateSegments } = useGetMissionActionFormikUsecases()
 
   const getFleetSegmentsApiQuery = useGetFleetSegmentsQuery()
 
   const isLoading = useMemo(() => !getFleetSegmentsApiQuery.data, [getFleetSegmentsApiQuery.data])
 
-  const removeFaoArea = useCallback(
-    (faoAreaToDelete: string) => {
-      const nextFaoAreas = values.faoAreas?.filter(faoArea => faoArea !== faoAreaToDelete) || []
+  const removeFaoArea = (faoAreaToDelete: string) => {
+    const nextFaoAreas = values.faoAreas?.filter(faoArea => faoArea !== faoAreaToDelete) || []
 
-      setFieldValue('faoAreas', nextFaoAreas)
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [values.faoAreas]
-  )
+    setFieldValue('faoAreas', nextFaoAreas)
+    updateSegments({ ...values, faoAreas: nextFaoAreas })
+  }
 
   const removeFleetSegment = useCallback(
     (fleetSegmentIndex: number | undefined) => {
@@ -52,7 +50,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
     [values.segments]
   )
 
-  const faoAreaTags = useMemo(() => {
+  const faoAreaTags = () => {
     if (!values.faoAreas) {
       return []
     }
@@ -64,7 +62,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
         {faoArea}
       </SingleTag>
     ))
-  }, [values.faoAreas, removeFaoArea])
+  }
 
   const fleetSegmentTags = useMemo(
     () =>
@@ -97,7 +95,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
           {faoAreaTags.length > 0 && (
             <Field>
               <Label>Zones de pêche de la marée (issues des FAR)</Label>
-              <TagGroup>{faoAreaTags}</TagGroup>
+              <TagGroup>{faoAreaTags()}</TagGroup>
             </Field>
           )}
 

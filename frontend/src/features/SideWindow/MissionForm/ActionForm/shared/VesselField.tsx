@@ -1,10 +1,9 @@
 import { Checkbox, useNewWindow } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { UNKNOWN_VESSEL } from '../../../../../domain/entities/vessel/vessel'
-import { useDeepCompareCallback } from '../../../../../hooks/useDeepCompareCallback'
 import { VesselSearch } from '../../../../VesselSearch'
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 
@@ -12,9 +11,8 @@ import type { VesselIdentity } from '../../../../../domain/entities/vessel/types
 import type { MissionActionFormValues } from '../../types'
 
 export function VesselField() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { errors, setValues, values } = useFormikContext<MissionActionFormValues>()
-  const { updateFAOAreasAndSegments } = useGetMissionActionFormikUsecases()
+  const { updateFieldsControlledByVessel } = useGetMissionActionFormikUsecases()
 
   const { newWindowContainerRef } = useNewWindow()
 
@@ -46,57 +44,51 @@ export function VesselField() {
     values.ircs
   ])
 
-  const handleVesselSearchChange = useDeepCompareCallback(
-    (nextVessel: VesselIdentity | undefined) => {
-      if (!nextVessel) {
-        setValues({
-          ...values,
-          districtCode: undefined,
-          externalReferenceNumber: undefined,
-          flagState: undefined,
-          internalReferenceNumber: undefined,
-          ircs: undefined,
-          vesselId: undefined,
-          vesselName: undefined
-        })
-
-        return
-      }
-
-      // TODO Show an error in this case?
-      if (!nextVessel.vesselId || !nextVessel.vesselName) {
-        return
-      }
-
+  const handleVesselSearchChange = (nextVessel: VesselIdentity | undefined) => {
+    if (!nextVessel) {
       setValues({
         ...values,
-        districtCode: nextVessel.districtCode || undefined,
-        externalReferenceNumber: nextVessel.externalReferenceNumber || undefined,
-        flagState: nextVessel.flagState,
-        internalReferenceNumber: nextVessel.internalReferenceNumber || undefined,
-        ircs: nextVessel.ircs || undefined,
-        vesselId: nextVessel.vesselId,
-        vesselName: nextVessel.vesselName
+        districtCode: undefined,
+        externalReferenceNumber: undefined,
+        flagState: undefined,
+        internalReferenceNumber: undefined,
+        ircs: undefined,
+        vesselId: undefined,
+        vesselName: undefined
       })
-      updateFAOAreasAndSegments({ ...values, internalReferenceNumber: nextVessel.internalReferenceNumber || undefined })
-    },
-    [values]
-  )
 
-  const handleIsVesselUnknownChange = useCallback(
-    (isChecked: boolean) => {
-      if (isChecked) {
-        handleVesselSearchChange(UNKNOWN_VESSEL)
+      return
+    }
 
-        return
-      }
+    // TODO Show an error in this case?
+    if (!nextVessel.vesselId || !nextVessel.vesselName) {
+      return
+    }
 
-      handleVesselSearchChange(undefined)
-    },
+    setValues({
+      ...values,
+      districtCode: nextVessel.districtCode || undefined,
+      externalReferenceNumber: nextVessel.externalReferenceNumber || undefined,
+      flagState: nextVessel.flagState,
+      internalReferenceNumber: nextVessel.internalReferenceNumber || undefined,
+      ircs: nextVessel.ircs || undefined,
+      vesselId: nextVessel.vesselId,
+      vesselName: nextVessel.vesselName
+    })
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [handleVesselSearchChange]
-  )
+    const valuesWithVessel = { ...values, internalReferenceNumber: nextVessel.internalReferenceNumber || undefined }
+    updateFieldsControlledByVessel(valuesWithVessel)
+  }
+
+  const handleIsVesselUnknownChange = (isChecked: boolean) => {
+    if (isChecked) {
+      handleVesselSearchChange(UNKNOWN_VESSEL)
+
+      return
+    }
+
+    handleVesselSearchChange(undefined)
+  }
 
   return (
     <>

@@ -65,7 +65,7 @@ export function VesselList({ namespace }) {
   const dispatch = useMainAppDispatch()
   const { previewFilteredVesselsMode, rightMenuIsOpen } = useMainAppSelector(state => state.global)
   const { isVesselListModalDisplayed } = useMainAppSelector(state => state.displayedComponent)
-  const { geometry } = useListenForDrawedGeometry(InteractionListener.VESSELS_LIST)
+  const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.VESSELS_LIST)
   const {
     uniqueVesselsDistricts: districts,
     uniqueVesselsSpecies: species,
@@ -122,14 +122,14 @@ export function VesselList({ namespace }) {
     vesselsLocationFilter?.length === 2
 
   useEffect(() => {
-    if (!geometry) {
+    if (!drawedGeometry) {
       return
     }
 
     dispatch(
       addZoneSelected({
         code: LayersType.FREE_DRAW,
-        feature: geometry,
+        feature: drawedGeometry,
         name: 'Tracé libre'
       })
     )
@@ -139,7 +139,7 @@ export function VesselList({ namespace }) {
       })
     )
     dispatch(resetInteraction())
-  }, [dispatch, geometry])
+  }, [dispatch, drawedGeometry])
 
   useEffect(() => {
     if (isVesselListModalDisplayed) {

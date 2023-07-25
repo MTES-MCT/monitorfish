@@ -9,17 +9,17 @@ import {
   useNewWindow
 } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
-import { useField } from 'formik'
+import { useField, useFormikContext } from 'formik'
 import { remove as ramdaRemove } from 'ramda'
 import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { FormikMultiInfractionPicker } from './FormikMultiInfractionPicker'
-import { useGetFormikUsecases } from './hooks/useGetFormikUsecases'
 import { useGetGearsQuery } from '../../../../../api/gear'
 import { useGetRiskFactorQuery } from '../../../../../api/vessel'
 import { BOOLEAN_AS_OPTIONS } from '../../../../../constants'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 import { FieldGroup } from '../../shared/FieldGroup'
 import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 
@@ -31,8 +31,9 @@ import type { Option } from '@mtes-mct/monitor-ui'
 
 export function GearsField() {
   const gearsByCode = useMainAppSelector(state => state.gear.gearsByCode)
+  const { values } = useFormikContext<MissionActionFormValues>()
   const [input, meta, helper] = useField<MissionActionFormValues['gearOnboard']>('gearOnboard')
-  const { updateSegments } = useGetFormikUsecases()
+  const { updateSegments } = useGetMissionActionFormikUsecases()
 
   // Other field controlling this field
   const [{ value: internalReferenceNumber }] =
@@ -76,7 +77,10 @@ export function GearsField() {
       ]
 
       helper.setValue(nextGears)
-      updateSegments()
+      updateSegments({
+        ...values,
+        gearOnboard: nextGears
+      })
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -93,7 +97,10 @@ export function GearsField() {
       const normalizedNextGearOnboard = nextGearOnboard.length > 0 ? nextGearOnboard : undefined
 
       helper.setValue(normalizedNextGearOnboard)
-      updateSegments()
+      updateSegments({
+        ...values,
+        gearOnboard: normalizedNextGearOnboard
+      })
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

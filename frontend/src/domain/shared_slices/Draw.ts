@@ -6,12 +6,14 @@ import type { InteractionTypeAndListener } from '../types/map'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export type DrawState = {
-  geometry: GeoJSON.Geometry | undefined
+  drawedGeometry: GeoJSON.Geometry | undefined
+  initialGeometry: GeoJSON.Geometry | undefined
   interactionType: InteractionType | undefined
   listener: InteractionListener | undefined
 }
 const INITIAL_STATE: DrawState = {
-  geometry: undefined,
+  drawedGeometry: undefined,
+  initialGeometry: undefined,
   interactionType: undefined,
   listener: undefined
 }
@@ -21,7 +23,8 @@ const drawReducerSlice = createSlice({
   name: 'draw',
   reducers: {
     resetGeometry(state) {
-      state.geometry = undefined
+      state.drawedGeometry = undefined
+      state.initialGeometry = undefined
     },
 
     /**
@@ -30,11 +33,19 @@ const drawReducerSlice = createSlice({
     resetInteraction(state) {
       state.interactionType = undefined
       state.listener = undefined
-      state.geometry = undefined
+      state.drawedGeometry = undefined
+      state.initialGeometry = undefined
     },
 
-    setGeometry(state, action: PayloadAction<GeoJSONType.Geometry>) {
-      state.geometry = action.payload
+    setDrawedGeometry(state, action: PayloadAction<GeoJSONType.Geometry>) {
+      state.drawedGeometry = action.payload
+    },
+
+    /**
+     * Set the initial geometry to edit with <DrawLayer/>
+     */
+    setInitialGeometry(state, action: PayloadAction<GeoJSONType.Geometry>) {
+      state.initialGeometry = action.payload
     },
 
     /**
@@ -55,7 +66,13 @@ const drawReducerSlice = createSlice({
   }
 })
 
-export const { resetGeometry, resetInteraction, setGeometry, setInteractionType, setInteractionTypeAndListener } =
-  drawReducerSlice.actions
+export const {
+  resetGeometry,
+  resetInteraction,
+  setDrawedGeometry,
+  setInitialGeometry,
+  setInteractionType,
+  setInteractionTypeAndListener
+} = drawReducerSlice.actions
 
 export const drawReducer = drawReducerSlice.reducer

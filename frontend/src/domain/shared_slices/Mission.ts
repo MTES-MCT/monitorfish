@@ -29,6 +29,7 @@ export interface MissionState {
       }
     | undefined
   editedDraftActionIndex: number | undefined
+  geometryComputedFromControls: MissionMainFormValues['geom']
   /**
    * Is the mission being closed?
    *
@@ -45,6 +46,7 @@ export interface MissionState {
 const INITIAL_STATE: MissionState = {
   draft: undefined,
   editedDraftActionIndex: undefined,
+  geometryComputedFromControls: undefined,
   isClosing: false,
   isDraftDirty: false,
   listFilterValues: {
@@ -75,6 +77,17 @@ const missionSlice = createSlice({
       }
 
       state.draft = action.payload
+    },
+
+    /**
+     * Update mission geometry computed from controls
+     */
+    setGeometryComputedFromControls(state, action: PayloadAction<MissionMainFormValues['geom']>) {
+      if (state.geometryComputedFromControls && isEqual(current(state.geometryComputedFromControls), action.payload)) {
+        return
+      }
+
+      state.geometryComputedFromControls = action.payload
     },
 
     /**
@@ -119,6 +132,7 @@ const missionSlice = createSlice({
       state.draft = undefined
       state.isClosing = false
       state.isDraftDirty = false
+      state.geometryComputedFromControls = undefined
     },
 
     /**

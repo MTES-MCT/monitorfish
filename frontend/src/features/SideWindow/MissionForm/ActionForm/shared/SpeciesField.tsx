@@ -8,19 +8,19 @@ import {
   useNewWindow
 } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
-import { useField } from 'formik'
+import { useField, useFormikContext } from 'formik'
 import { append, remove as ramdaRemove } from 'ramda'
 import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { FormikMultiInfractionPicker } from './FormikMultiInfractionPicker'
-import { useGetFormikUsecases } from './hooks/useGetFormikUsecases'
 import { useGetSpeciesQuery } from '../../../../../api/specy'
 import { useGetRiskFactorQuery } from '../../../../../api/vessel'
 import { BOOLEAN_AS_OPTIONS } from '../../../../../constants'
 import { getSummedSpeciesOnBoard } from '../../../../../domain/entities/logbook/species'
 import { MissionAction } from '../../../../../domain/types/missionAction'
 import { FrontendError } from '../../../../../libs/FrontendError'
+import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 import { FieldGroup } from '../../shared/FieldGroup'
 import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 
@@ -32,9 +32,10 @@ export type SpeciesFieldProps = {
   controlledWeightLabel: string
 }
 export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
+  const { values } = useFormikContext<MissionActionFormValues>()
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
   const { newWindowContainerRef } = useNewWindow()
-  const { updateSegments } = useGetFormikUsecases()
+  const { updateSegments } = useGetMissionActionFormikUsecases()
 
   // Other field controlling this field
   const [{ value: internalReferenceNumber }] =
@@ -95,7 +96,10 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
       )
 
       helper.setValue(nextSpeciesOnboard)
-      updateSegments()
+      updateSegments({
+        ...values,
+        speciesOnboard: nextSpeciesOnboard
+      })
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -127,7 +131,10 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
       const nextSpeciesOnboard = ramdaRemove(index, 1, input.value)
 
       helper.setValue(nextSpeciesOnboard)
-      updateSegments()
+      updateSegments({
+        ...values,
+        speciesOnboard: nextSpeciesOnboard
+      })
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -160,6 +167,10 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
         }))
 
       helper.setValue(speciesOnboardToAdd)
+      updateSegments({
+        ...values,
+        speciesOnboard: speciesOnboardToAdd
+      })
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

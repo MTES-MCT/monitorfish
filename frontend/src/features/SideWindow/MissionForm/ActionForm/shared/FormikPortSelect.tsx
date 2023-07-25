@@ -1,6 +1,6 @@
 import { FieldError, Select, useNewWindow } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useGetPortsQuery } from '../../../../../api/port'
@@ -30,35 +30,30 @@ export function FormikPortSelect() {
     }))
   }, [getPortsApiQuery.data])
 
-  const handleChange = useCallback(
-    (nextPortLocode: string | undefined) => {
-      if (!getPortsApiQuery.data) {
-        return
-      }
+  const handleChange = (nextPortLocode: string | undefined) => {
+    if (!getPortsApiQuery.data) {
+      return
+    }
 
-      if (!nextPortLocode) {
-        setFieldValue('portLocode', undefined)
+    if (!nextPortLocode) {
+      setFieldValue('portLocode', undefined)
 
-        return
-      }
+      return
+    }
 
-      const port = getPortsApiQuery.data.find(({ locode }) => locode === nextPortLocode)
-      if (!port) {
-        throw new FrontendError('`port` is undefined')
-      }
+    const port = getPortsApiQuery.data.find(({ locode }) => locode === nextPortLocode)
+    if (!port) {
+      throw new FrontendError('`port` is undefined')
+    }
 
-      setFieldValue('portLocode', port.locode)
-      const valuesWithPort = {
-        ...values,
-        portLocode: port.locode
-      }
-      updateSegments(valuesWithPort)
-      updateMissionLocation(valuesWithPort)
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [getPortsApiQuery.data]
-  )
+    setFieldValue('portLocode', port.locode)
+    const valuesWithPort = {
+      ...values,
+      portLocode: port.locode
+    }
+    updateSegments(valuesWithPort)
+    updateMissionLocation(valuesWithPort)
+  }
 
   if (!portsAsOptions.length) {
     return <FieldsetGroupSpinner legend="Port de contrôle" />

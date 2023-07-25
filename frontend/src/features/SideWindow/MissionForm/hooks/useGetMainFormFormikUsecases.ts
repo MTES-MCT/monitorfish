@@ -4,7 +4,7 @@ import { useGetPortsQuery } from '../../../../api/port'
 import { isAirOrSeaControl, isLandControl } from '../../../../domain/use_cases/mission/getLastControlCircleGeometry'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { updateMissionLocation } from '../formikUsecases'
+import { formikUsecase } from '../formikUsecases'
 
 import type { MissionActionFormValues } from '../types'
 
@@ -35,7 +35,7 @@ export function useGetMainFormFormikUsecases() {
         return
       }
 
-      updateMissionLocation(dispatch, getPortsApiQuery.data)(isGeometryComputedFromControls, lastControl)
+      formikUsecase.updateMissionLocation(dispatch, getPortsApiQuery.data)(isGeometryComputedFromControls, lastControl)
     }
   }
 }

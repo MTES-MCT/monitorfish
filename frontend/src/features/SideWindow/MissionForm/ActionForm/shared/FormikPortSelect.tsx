@@ -3,9 +3,9 @@ import { useFormikContext } from 'formik'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { useGetFormikUsecases } from './hooks/useGetFormikUsecases'
 import { useGetPortsQuery } from '../../../../../api/port'
 import { FrontendError } from '../../../../../libs/FrontendError'
+import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 
 import type { MissionActionFormValues } from '../../types'
@@ -13,7 +13,7 @@ import type { Option } from '@mtes-mct/monitor-ui'
 
 export function FormikPortSelect() {
   const { errors, setFieldValue, values } = useFormikContext<MissionActionFormValues>()
-  const { updateSegments } = useGetFormikUsecases()
+  const { updateMissionLocation, updateSegments } = useGetMissionActionFormikUsecases()
 
   const { newWindowContainerRef } = useNewWindow()
 
@@ -48,7 +48,12 @@ export function FormikPortSelect() {
       }
 
       setFieldValue('portLocode', port.locode)
-      updateSegments()
+      const valuesWithPort = {
+        ...values,
+        portLocode: port.locode
+      }
+      updateSegments(valuesWithPort)
+      updateMissionLocation(valuesWithPort)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

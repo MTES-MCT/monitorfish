@@ -3,88 +3,23 @@ import { useFormikContext } from 'formik'
 import { remove as ramdaRemove, uniq } from 'ramda'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
-import { useDebouncedCallback } from 'use-debounce'
 
-import { getFleetSegmentsAsOption } from './utils'
-import { useComputeVesselFaoAreasQuery } from '../../../../../api/faoAreas'
 import { useGetFleetSegmentsQuery } from '../../../../../api/fleetSegment'
-import { getFleetSegments } from '../../../../../domain/use_cases/vessel/getFleetSegments'
-import { useDeepCompareEffect } from '../../../../../hooks/useDeepCompareEffect'
-import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { FrontendError } from '../../../../../libs/FrontendError'
 import { sortByAscendingValue } from '../../../../../utils/sortByAscendingValue'
 import { FieldsetGroup, FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 
-import type { MissionAction } from '../../../../../domain/types/missionAction'
 import type { MissionActionFormValues } from '../../types'
-import type { Option } from '@mtes-mct/monitor-ui'
 
 export type VesselFleetSegmentsFieldProps = {
   label: string
 }
 export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProps) {
-  const dispatch = useMainAppDispatch()
-
   const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
 
   const getFleetSegmentsApiQuery = useGetFleetSegmentsQuery()
 
-  const fleetSegmentsAsOptions: Option<MissionAction.FleetSegment>[] = useMemo(
-    () => getFleetSegmentsAsOption(getFleetSegmentsApiQuery.data),
-    [getFleetSegmentsApiQuery.data]
-  )
-
-  const computeVesselFaoAreasApiQuery = useComputeVesselFaoAreasQuery({
-    internalReferenceNumber: values.internalReferenceNumber,
-    latitude: values.latitude,
-    longitude: values.longitude
-  })
-
   const isLoading = useMemo(() => !getFleetSegmentsApiQuery.data, [getFleetSegmentsApiQuery.data])
-
-  const updateSegments = useDebouncedCallback(async () => {
-    const computedFleetSegments = await dispatch(
-      getFleetSegments(
-        values.faoAreas,
-        values.gearOnboard,
-        values.speciesOnboard,
-        values.longitude,
-        values.latitude,
-        values.portLocode
-      )
-    )
-
-    const nextFleetSegments = fleetSegmentsAsOptions
-      .filter(({ value }) => computedFleetSegments?.find(fleetSegment => fleetSegment.segment === value.segment))
-      .map(({ value }) => value)
-
-    setFieldValue('segments', nextFleetSegments)
-  }, 250)
-
-  useDeepCompareEffect(() => {
-    updateSegments()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fleetSegmentsAsOptions, values.faoAreas])
-
-  const updateFaoAreas = useDebouncedCallback(async () => {
-    if (!computeVesselFaoAreasApiQuery.data) {
-      return
-    }
-
-    const faoAreas = computeVesselFaoAreasApiQuery.data
-
-    setFieldValue('faoAreas', faoAreas)
-  }, 250)
-
-  useDeepCompareEffect(
-    () => {
-      updateFaoAreas()
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [computeVesselFaoAreasApiQuery.data, values.internalReferenceNumber]
-  )
 
   const removeFaoArea = useCallback(
     (faoAreaToDelete: string) => {

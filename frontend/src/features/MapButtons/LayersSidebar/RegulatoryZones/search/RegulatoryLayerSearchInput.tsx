@@ -36,7 +36,7 @@ export function RegulatoryLayerSearchInput() {
   const dispatch = useMainAppDispatch()
   const { advancedSearchIsOpen, zoneSelected } = useMainAppSelector(state => state.regulatoryLayerSearch)
 
-  const { geometry, interactionType } = useListenForDrawedGeometry(InteractionListener.REGULATION)
+  const { drawedGeometry, interactionType } = useListenForDrawedGeometry(InteractionListener.REGULATION)
   const [searchQuery, setSearchQuery] = useState('')
   const selectedOrSelectingZoneIsSquare = zoneSelected?.name === InteractionType.SQUARE
   const selectedOrSelectingZoneIsPolygon = zoneSelected?.name === InteractionType.POLYGON
@@ -67,19 +67,19 @@ export function RegulatoryLayerSearchInput() {
   }, [dispatch, searchQuery, zoneSelected])
 
   useEffect(() => {
-    if (!geometry) {
+    if (!drawedGeometry) {
       return
     }
 
     dispatch(
       setZoneSelected({
         code: LayersType.FREE_DRAW,
-        feature: geometry,
+        feature: drawedGeometry,
         name: interactionType?.toString() || ''
       })
     )
     dispatch(resetInteraction())
-  }, [dispatch, geometry, interactionType])
+  }, [dispatch, drawedGeometry, interactionType])
 
   const drawSquare = () => {
     if (!selectedOrSelectingZoneIsPolygon) {

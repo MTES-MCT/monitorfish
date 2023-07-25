@@ -6,22 +6,22 @@ import type { InteractionListener, InteractionType } from '../domain/entities/ma
 import type { GeoJSON } from '../domain/types/GeoJSON'
 
 type GeometryAndInteractionType = {
-  geometry: GeoJSON.Geometry | undefined
+  drawedGeometry: GeoJSON.Geometry | undefined
   interactionType: InteractionType | undefined
 }
 
 export function useListenForDrawedGeometry(componentListener: InteractionListener) {
-  const { geometry, interactionType, listener } = useMainAppSelector(state => state.draw)
+  const { drawedGeometry, interactionType, listener } = useMainAppSelector(state => state.draw)
 
   const [drawForListener, setDrawForListener] = useState<GeometryAndInteractionType>({
-    geometry: undefined,
+    drawedGeometry: undefined,
     interactionType: undefined
   })
 
   useEffect(() => {
     if (listener !== componentListener) {
       setDrawForListener({
-        geometry: undefined,
+        drawedGeometry: undefined,
         interactionType: undefined
       })
 
@@ -29,10 +29,10 @@ export function useListenForDrawedGeometry(componentListener: InteractionListene
     }
 
     setDrawForListener({
-      geometry,
+      drawedGeometry,
       interactionType
     })
-  }, [geometry, listener, componentListener, interactionType])
+  }, [drawedGeometry, listener, componentListener, interactionType])
 
   return drawForListener
 }

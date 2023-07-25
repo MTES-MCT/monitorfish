@@ -8,8 +8,8 @@ import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { getFleetSegmentsAsOption } from '../ActionForm/shared/utils'
 import { updateFAOAreas, updateMissionLocation, updateSegments } from '../formikUsecases'
-import { MissionActionFormValues } from '../types'
 
+import type { MissionActionFormValues } from '../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 export function useGetMissionActionFormikUsecases() {
@@ -36,7 +36,7 @@ export function useGetMissionActionFormikUsecases() {
       ;(async () => {
         const nextFaoAreas = await updateFAOAreas(dispatch, setMissionActionFieldValue)(missionActionValues)
 
-        updateSegments(
+        await updateSegments(
           dispatch,
           setMissionActionFieldValue,
           fleetSegmentsAsOptions

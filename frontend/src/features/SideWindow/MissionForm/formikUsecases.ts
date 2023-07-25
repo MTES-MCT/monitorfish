@@ -1,11 +1,11 @@
-import { MissionActionFormValues } from './types'
 import { faoAreasApi } from '../../../api/faoAreas'
 import { missionActions as missionSliceActions } from '../../../domain/actions'
 import { MissionAction } from '../../../domain/types/missionAction'
-import { Port } from '../../../domain/types/port'
 import { getLastControlCircleGeometry } from '../../../domain/use_cases/mission/getLastControlCircleGeometry'
 import { getFleetSegments } from '../../../domain/use_cases/vessel/getFleetSegments'
 
+import type { MissionActionFormValues } from './types'
+import type { Port } from '../../../domain/types/port'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 export const updateSegments =

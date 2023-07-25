@@ -94,7 +94,7 @@ export function GearsField() {
       }
 
       const nextGearOnboard = ramdaRemove(index, 1, input.value)
-      const normalizedNextGearOnboard = nextGearOnboard.length > 0 ? nextGearOnboard : undefined
+      const normalizedNextGearOnboard = nextGearOnboard.length > 0 ? nextGearOnboard : []
 
       helper.setValue(normalizedNextGearOnboard)
       updateSegments({

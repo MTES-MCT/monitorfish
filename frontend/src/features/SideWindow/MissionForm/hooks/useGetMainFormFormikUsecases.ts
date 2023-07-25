@@ -5,7 +5,8 @@ import { isAirOrSeaControl, isLandControl } from '../../../../domain/use_cases/m
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { updateMissionLocation } from '../formikUsecases'
-import { MissionActionFormValues } from '../types'
+
+import type { MissionActionFormValues } from '../types'
 
 export function useGetMainFormFormikUsecases() {
   const dispatch = useMainAppDispatch()

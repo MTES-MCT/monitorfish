@@ -1,7 +1,9 @@
-import { getLocalizedDayjs, Option } from '@mtes-mct/monitor-ui'
+import { getLocalizedDayjs } from '@mtes-mct/monitor-ui'
 
-import { FleetSegment } from '../../../../../domain/types/fleetSegment'
 import { MissionAction } from '../../../../../domain/types/missionAction'
+
+import type { FleetSegment } from '../../../../../domain/types/fleetSegment'
+import type { Option } from '@mtes-mct/monitor-ui'
 
 export function getTitleDateFromUtcStringDate(utcStringDate: string): string {
   return getLocalizedDayjs(utcStringDate).format('D MMM à HH:mm UTC')

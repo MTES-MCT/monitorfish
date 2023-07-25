@@ -65,15 +65,22 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
   }, [initialValues])
 
   const infractionTags = useMemo(() => {
-    const infractions = getMissionActionInfractionsFromMissionActionFormValues(initialValues)
-    const infractionsWithRecord = infractions.filter(
+    const allInfractions = getMissionActionInfractionsFromMissionActionFormValues(initialValues, true)
+    const nonPendingInfractions = getMissionActionInfractionsFromMissionActionFormValues(initialValues)
+    const pendingInfractions = allInfractions.filter(
+      ({ infractionType }) => infractionType === MissionAction.InfractionType.PENDING
+    )
+    const withRecordInfractions = nonPendingInfractions.filter(
       ({ infractionType }) => infractionType === MissionAction.InfractionType.WITH_RECORD
     )
-    const infractionsNatinfs = infractions.map(({ natinf }) => natinf)
+    const infractionsNatinfs = nonPendingInfractions.map(({ natinf }) => natinf)
 
     return [
-      ...(infractionsWithRecord.length > 0 ? [`${infractionsWithRecord.length} INF AVEC PV`] : []),
-      ...(infractions.length > 0 ? [`${infractions.length} NATINF: ${infractionsNatinfs.join(', ')}`] : [])
+      ...(withRecordInfractions.length > 0 ? [`${withRecordInfractions.length} INF AVEC PV`] : []),
+      ...(pendingInfractions.length > 0 ? [`${pendingInfractions.length} INF EN ATTENTE`] : []),
+      ...(infractionsNatinfs.length > 0
+        ? [`${infractionsNatinfs.length} NATINF: ${infractionsNatinfs.join(', ')}`]
+        : [])
     ].map(label => (
       <Tag key={label} accent={Accent.PRIMARY}>
         {label}

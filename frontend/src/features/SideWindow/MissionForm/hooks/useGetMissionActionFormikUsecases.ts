@@ -12,6 +12,8 @@ import { formikUsecase } from '../formikUsecases'
 import type { MissionActionFormValues } from '../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
+import MissionActionType = MissionAction.MissionActionType
+
 export function useGetMissionActionFormikUsecases() {
   const dispatch = useMainAppDispatch()
   const gearsByCode = useMainAppSelector(state => state.gear.gearsByCode)
@@ -53,6 +55,10 @@ export function useGetMissionActionFormikUsecases() {
    * - gear onboard
    */
   async function updateFieldsControlledByVessel(missionActionValues: MissionActionFormValues) {
+    if (missionActionValues.actionType === MissionActionType.AIR_CONTROL) {
+      return
+    }
+
     const gearOnboard = await formikUsecase.updateGearsOnboard(
       dispatch,
       setMissionActionFieldValue,

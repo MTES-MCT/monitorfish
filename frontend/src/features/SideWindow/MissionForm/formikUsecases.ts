@@ -19,6 +19,10 @@ const updateSegments =
     fleetSegmentsAsOptions: Option<MissionAction.FleetSegment>[]
   ) =>
   async (missionAction: MissionActionFormValues) => {
+    if (missionAction.actionType === MissionAction.MissionActionType.AIR_CONTROL) {
+      return
+    }
+
     const computedFleetSegments = await dispatch(
       getFleetSegments(
         missionAction.faoAreas,

@@ -55,6 +55,14 @@ export function FormikCoordinatesPicker() {
     if (IS_CYPRESS_TEST && !longitudeValue && !latitudeValue) {
       latitudeHelpers.setValue(STUBBED_LATITUDE)
       longitudeHelpers.setValue(STUBBED_LONGITUDE)
+
+      const valuesWithLocation = {
+        ...values,
+        latitude: STUBBED_LATITUDE,
+        longitude: STUBBED_LONGITUDE
+      }
+      updateFAOAreasAndSegments(valuesWithLocation)
+      updateMissionLocation(valuesWithLocation)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [IS_CYPRESS_TEST, longitudeValue, latitudeValue])

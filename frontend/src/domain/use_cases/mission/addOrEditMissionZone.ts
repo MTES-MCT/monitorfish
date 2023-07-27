@@ -1,6 +1,6 @@
 import { InteractionListener, InteractionType } from '../../entities/map/constants'
 import { setDisplayedComponents } from '../../shared_slices/DisplayedComponent'
-import { setGeometry, setInteractionTypeAndListener } from '../../shared_slices/Draw'
+import { setInitialGeometry, setInteractionTypeAndListener } from '../../shared_slices/Draw'
 import { fitMultiPolygonToExtent } from '../map/fitMultiPolygonToExtent'
 import { unselectVessel } from '../vessel/unselectVessel'
 
@@ -13,7 +13,7 @@ export const addOrEditMissionZone =
     dispatch(unselectVessel())
 
     if (geometry) {
-      dispatch(setGeometry(geometry))
+      dispatch(setInitialGeometry(geometry))
       dispatch(fitMultiPolygonToExtent(geometry))
     }
 

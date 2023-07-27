@@ -39,20 +39,21 @@ const INTERACTION_LISTENER_BUTTON_LABEL: Partial<Record<InteractionListener, str
 
 export function DrawLayerModal() {
   const dispatch = useMainAppDispatch()
-  const { geometry, interactionType, listener } = useMainAppSelector(state => state.draw)
+  const { drawedGeometry, initialGeometry, interactionType, listener } = useMainAppSelector(state => state.draw)
   const { sideWindow } = useMainAppSelector(state => state)
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const initialFeatureNumberRef = useRef<number | undefined>(undefined)
 
   const feature = useMemo(() => {
-    if (!geometry) {
+    const currentGeometry = drawedGeometry || initialGeometry
+    if (!currentGeometry) {
       return undefined
     }
 
     return new GeoJSON({
       featureProjection: OPENLAYERS_PROJECTION
-    }).readFeature(geometry)
-  }, [geometry])
+    }).readFeature(currentGeometry)
+  }, [initialGeometry, drawedGeometry])
 
   useEffect(() => {
     if (initialFeatureNumberRef.current !== undefined) {

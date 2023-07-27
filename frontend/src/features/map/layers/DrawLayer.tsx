@@ -16,7 +16,7 @@ import {
   WSG84_PROJECTION
 } from '../../../domain/entities/map/constants'
 import { addFeatureToDrawedFeature } from '../../../domain/use_cases/draw/addFeatureToDrawedFeature'
-import { setGeometry } from '../../../domain/use_cases/draw/setGeometry'
+import { setDrawedGeometry } from '../../../domain/use_cases/draw/setDrawedGeometry'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
@@ -27,17 +27,18 @@ import type { MutableRefObject } from 'react'
 
 function UnmemoizedDrawLayer({ map }) {
   const dispatch = useMainAppDispatch()
-  const { geometry, interactionType, listener } = useMainAppSelector(state => state.draw)
+  const { drawedGeometry, initialGeometry, interactionType, listener } = useMainAppSelector(state => state.draw)
 
   const feature = useMemo(() => {
-    if (!geometry) {
+    const currentGeometry = drawedGeometry || initialGeometry
+    if (!currentGeometry) {
       return undefined
     }
 
     return new GeoJSON({
       featureProjection: OPENLAYERS_PROJECTION
-    }).readFeature(geometry)
-  }, [geometry])
+    }).readFeature(currentGeometry)
+  }, [drawedGeometry, initialGeometry])
 
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource<Geometry>>
   const getVectorSource = useCallback(() => {
@@ -97,7 +98,7 @@ function UnmemoizedDrawLayer({ map }) {
     event => {
       const nextGeometry = event.features.item(0).getGeometry()
       if (nextGeometry) {
-        dispatch(setGeometry(nextGeometry as Geometry))
+        dispatch(setDrawedGeometry(nextGeometry as Geometry))
       }
     },
     [dispatch]

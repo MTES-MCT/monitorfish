@@ -1,4 +1,3 @@
-import { sortBy } from 'lodash'
 import Feature from 'ol/Feature'
 import { MultiPolygon } from 'ol/geom'
 import { circular } from 'ol/geom/Polygon'
@@ -12,26 +11,17 @@ import type { GeoJSON as GeoJSONType } from '../../types/GeoJSON'
 import type { Port } from '../../types/port'
 
 export const getLastControlCircleGeometry =
-  (ports: Port.Port[], actionsFormValues: MissionActionFormValues[]) => (): GeoJSONType.Geometry | undefined => {
-    const validControls = actionsFormValues.filter(action => isLandControl(action) || isAirOrSeaControl(action))
-
-    const sortedValidControlsByDateTimeDesc: MissionActionFormValues[] = sortBy(
-      validControls,
-      ({ actionDatetimeUtc }) => actionDatetimeUtc
-    ).reverse()
-
-    // Get most recent control, by `actionDatetimeUtc`
-    const lastControl = sortedValidControlsByDateTimeDesc.at(0)
-    if (!lastControl) {
+  (ports: Port.Port[], actionFormValues: MissionActionFormValues) => (): GeoJSONType.Geometry | undefined => {
+    if (!isLandControl(actionFormValues) && !isAirOrSeaControl(actionFormValues)) {
       return undefined
     }
 
-    const coordinates = getCoordinatesOfControl(ports, lastControl)
+    const coordinates = getCoordinatesOfControl(ports, actionFormValues)
     if (!coordinates) {
       return undefined
     }
 
-    const radius = isLandControl(lastControl) ? 1500 : 4000
+    const radius = isLandControl(actionFormValues) ? 1500 : 4000
     const circleGeometry = new Feature({
       geometry: circular(coordinates, radius, 64).transform(WSG84_PROJECTION, OPENLAYERS_PROJECTION)
     }).getGeometry()
@@ -42,7 +32,7 @@ export const getLastControlCircleGeometry =
 
 /**
  * Get latitude and longitude from controls
- * @return coordinates - the [longitude, latitude] coordinates array
+ * @return - the [longitude, latitude] coordinates array
  */
 function getCoordinatesOfControl(ports: Port.Port[], action: MissionActionFormValues): [number, number] | undefined {
   if (
@@ -61,11 +51,11 @@ function getCoordinatesOfControl(ports: Port.Port[], action: MissionActionFormVa
   return undefined
 }
 
-function isLandControl(action: MissionActionFormValues) {
+export function isLandControl(action: MissionActionFormValues) {
   return action.actionType === MissionAction.MissionActionType.LAND_CONTROL && action.portLocode
 }
 
-function isAirOrSeaControl(action: MissionActionFormValues) {
+export function isAirOrSeaControl(action: MissionActionFormValues) {
   return (
     (action.actionType === MissionAction.MissionActionType.AIR_CONTROL ||
       action.actionType === MissionAction.MissionActionType.SEA_CONTROL) &&

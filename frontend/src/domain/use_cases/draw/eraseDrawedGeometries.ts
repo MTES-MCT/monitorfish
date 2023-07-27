@@ -1,14 +1,14 @@
 import { keepOnlyInitialGeometriesOfMultiPolygon } from '../../entities/layers'
-import { setGeometry } from '../../shared_slices/Draw'
+import { setDrawedGeometry } from '../../shared_slices/Draw'
 
 export const eraseDrawedGeometries = initialFeatureNumber => (dispatch, getState) => {
-  const { geometry } = getState().draw
-  if (!geometry) {
+  const { drawedGeometry } = getState().draw
+  if (!drawedGeometry) {
     return
   }
 
-  const nextGeometry = keepOnlyInitialGeometriesOfMultiPolygon(geometry, initialFeatureNumber)
+  const nextGeometry = keepOnlyInitialGeometriesOfMultiPolygon(drawedGeometry, initialFeatureNumber)
   if (nextGeometry) {
-    dispatch(setGeometry(nextGeometry))
+    dispatch(setDrawedGeometry(nextGeometry))
   }
 }

@@ -6,16 +6,16 @@ import { setDrawedGeometry } from '../../shared_slices/Draw'
 
 import type Feature from 'ol/Feature'
 
-export const addFeatureToDrawedFeature = (featureToAdd: Feature<Geometry>) => (dispatch, getState) => {
+export const addFeatureToDrawedFeature = (feature: Feature<Geometry>) => (dispatch, getState) => {
   const { drawedGeometry, initialGeometry, listener } = getState().draw
   const currentGeometry = drawedGeometry || initialGeometry
-  const geometryToAdd = featureToAdd.getGeometry()
-  if (!geometryToAdd || !listener) {
+  const geometry = feature.getGeometry()
+  if (!geometry || !listener) {
     return
   }
 
-  if (geometryToAdd.getType() === OpenLayersGeometryType.POINT) {
-    const nextGeometry = convertToGeoJSONGeometryObject(geometryToAdd)
+  if (geometry.getType() === OpenLayersGeometryType.POINT) {
+    const nextGeometry = convertToGeoJSONGeometryObject(geometry)
     dispatch(setDrawedGeometry(nextGeometry))
 
     return
@@ -23,13 +23,13 @@ export const addFeatureToDrawedFeature = (featureToAdd: Feature<Geometry>) => (d
 
   if (!currentGeometry) {
     // @ts-ignore
-    const nextGeometry = convertToGeoJSONGeometryObject(new MultiPolygon([geometryToAdd]))
+    const nextGeometry = convertToGeoJSONGeometryObject(new MultiPolygon([geometry]))
     dispatch(setDrawedGeometry(nextGeometry))
 
     return
   }
 
-  const nextGeometry = addGeometryToMultiPolygonGeoJSON(currentGeometry, geometryToAdd)
+  const nextGeometry = addGeometryToMultiPolygonGeoJSON(currentGeometry, geometry)
   if (nextGeometry) {
     dispatch(setDrawedGeometry(nextGeometry))
   }

@@ -512,18 +512,14 @@ context('Side Window > Mission Form > Sea Control', () => {
 
   it('Should fill the mission zone from the last sea control added', () => {
     const now = getUtcDateInMultipleFormats()
+    cy.wait(250)
 
     // -------------------------------------------------------------------------
     // Form
 
     cy.get('*[data-cy="mission-main-form-location"]').should('not.contain', 'Polygone dessiné 1')
+    cy.wait(250)
     cy.fill('Zone de la mission calculée à partir des contrôles', true)
-
-    // Navire
-    // TODO Handle Automplete in custom `cy.fill()` command once it's used via monitor-ui.
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    cy.get('input[placeholder="Rechercher un navire..."]').type('pheno').wait(250)
-    cy.contains('mark', 'PHENO').click()
 
     // A mission zone should be automatically added (because of the stubbed coordinates update when IS_CYPRESS_TEST is set)
     cy.get('.Toastify__toast--success').contains(
@@ -531,27 +527,36 @@ context('Side Window > Mission Form > Sea Control', () => {
     )
     cy.get('*[data-cy="mission-main-form-location"]').should('contain', 'Polygone dessiné 1')
 
+    // Navire
+    // TODO Handle Automplete in custom `cy.fill()` command once it's used via monitor-ui.
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    cy.get('input[placeholder="Rechercher un navire..."]').type('pheno').wait(250)
+    cy.contains('mark', 'PHENO').click()
+
     // Date et heure du contrôle
     cy.fill('Date et heure du contrôle', now.utcDateTupleWithTime)
 
     // Saisi par
     cy.fill('Saisi par', 'Marlin')
 
-    // Add another land control
+    // We need to wait so the success toast will be hidden
+    cy.wait(250)
+
+    // Add another sea control
     cy.clickButton('Ajouter')
     cy.clickButton('Ajouter un contrôle en mer')
-
-    // Navire
-    // TODO Handle Automplete in custom `cy.fill()` command once it's used via monitor-ui.
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    cy.get('input[placeholder="Rechercher un navire..."]').type('FR263418260').wait(250)
-    cy.contains('mark', 'FR263418260').click()
 
     // The mission zone should be automatically updated (because of the stubbed coordinates update when IS_CYPRESS_TEST is set)
     cy.get('.Toastify__toast--success').contains(
       'Une zone de mission a été ajoutée à partir des contrôles de la mission'
     )
     cy.get('*[data-cy="mission-main-form-location"]').should('contain', 'Polygone dessiné 1')
+
+    // Navire
+    // TODO Handle Automplete in custom `cy.fill()` command once it's used via monitor-ui.
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    cy.get('input[placeholder="Rechercher un navire..."]').type('FR263418260').wait(250)
+    cy.contains('mark', 'FR263418260').click()
 
     // Date et heure du contrôle
     cy.fill('Date et heure du contrôle', now.utcDateTupleWithTime)

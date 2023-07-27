@@ -6,6 +6,7 @@ import { remove } from 'ramda'
 import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
+import { missionActions } from '../../../../domain/actions'
 import {
   InteractionListener,
   OPENLAYERS_PROJECTION,
@@ -99,9 +100,11 @@ export function FormikLocationPicker() {
       window.document.dispatchEvent(
         new NotificationEvent('Une zone de mission a été ajoutée à partir des contrôles de la mission', 'success', true)
       )
+
+      dispatch(missionActions.unsetGeometryComputedFromControls())
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [geometryComputedFromControls]
+    [dispatch, geometryComputedFromControls]
   )
 
   return (

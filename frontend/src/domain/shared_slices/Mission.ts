@@ -136,6 +136,14 @@ const missionSlice = createSlice({
     },
 
     /**
+     * Unset geometry computed from controls to permit another modification of the mission's geometry
+     * after adding another control to a mission.
+     */
+    unsetGeometryComputedFromControls(state) {
+      state.geometryComputedFromControls = undefined
+    },
+
+    /**
      * Unset selected mission action GeoJSON
      */
     unsetSelectedMissionActionGeoJSON(state) {

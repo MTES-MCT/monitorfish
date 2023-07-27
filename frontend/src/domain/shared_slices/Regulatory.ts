@@ -1,6 +1,7 @@
 // TODO Rethink Regulatory naming? Regulatory (an adjective rather than an object name), Regulation difference.
 
 import { createSlice } from '@reduxjs/toolkit'
+import { fromPairs } from 'lodash/fp'
 
 import { getLocalStorageState } from '../../utils'
 import {
@@ -136,6 +137,25 @@ const regulatorySlice = createSlice({
     closeRegulatoryZoneMetadataPanel(state) {
       state.regulatoryZoneMetadataPanelIsOpen = false
       state.regulatoryZoneMetadata = null
+    },
+
+    removeLayerById(state, action: PayloadAction<number>) {
+      if (!state.selectedRegulatoryLayers) {
+        throw new Error('`state.selectedRegulatoryLayers` is null.')
+      }
+
+      const selectedRegulatoryLayersAsPairs = Object.entries(state.selectedRegulatoryLayers)
+      const nextSelectedRegulatoryLayersAsPairs = selectedRegulatoryLayersAsPairs
+        // Remove layer from the group
+        .map(([zoneGroupName, regulatoryZones]): [string, RegulatoryZone[]] => [
+          zoneGroupName,
+          regulatoryZones.filter(regulatoryZone => regulatoryZone.id !== action.payload)
+        ])
+        // Remove layer group is it's empty
+        .filter(([, regulatoryZones]) => regulatoryZones.length > 0)
+      const nextSelectedRegulatoryLayers = fromPairs(nextSelectedRegulatoryLayersAsPairs)
+
+      state.selectedRegulatoryLayers = nextSelectedRegulatoryLayers
     },
 
     removeRegulatoryTopicOpened(state, action: PayloadAction<string>) {
@@ -359,6 +379,7 @@ export const {
   addRegulatoryTopicOpened,
   addRegulatoryZonesToMyLayers,
   closeRegulatoryZoneMetadataPanel,
+  removeLayerById,
   removeRegulatoryTopicOpened,
   removeRegulatoryZonesFromMyLayers,
   resetLoadingRegulatoryZoneMetadata,
@@ -378,5 +399,7 @@ export const {
   showSimplifiedGeometries,
   showWholeGeometries
 } = regulatorySlice.actions
+
+export const regulatoryActions = regulatorySlice.actions
 
 export const regulatoryReducer = regulatorySlice.reducer

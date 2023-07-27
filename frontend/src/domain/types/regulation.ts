@@ -11,7 +11,7 @@ export type RegulatoryZone = BaseRegulatoryZone & {
   fishingPeriod: FishingPeriod
   gearRegulation: GearRegulation
   geometry: GeoJSON.Geometry
-  id: string
+  id: number
   lawType: string
   nextId: string
   otherInfo: string

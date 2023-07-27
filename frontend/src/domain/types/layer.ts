@@ -11,7 +11,7 @@ export type TopicContainingMultipleZones = {
 }
 
 export type AdministrativeOrRegulatoryLayerIdentity = {
-  id: string
+  id: number
   namespace: string
   topic: string | null
   type: string

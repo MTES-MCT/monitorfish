@@ -18,7 +18,7 @@ context('LayersSidebar', () => {
 
     // Add the layer to My Zones
     cy.get('*[data-cy="regulatory-search-input"]').type('Cotentin biva')
-    cy.get('*[data-cy="regulatory-layer-topic"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="regulatory-layer-topic"]').first().click({ timeout: 10000 })
     cy.get('*[data-cy="regulatory-zone-check"]').click({ timeout: 10000 })
     cy.get('*[data-cy="regulatory-search-add-zones-button"]').contains('Ajouter 1 zone')
     cy.get('*[data-cy="regulatory-search-add-zones-button"]').click()

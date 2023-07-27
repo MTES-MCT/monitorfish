@@ -90,7 +90,7 @@ export function useGetMissionActionFormikUsecases() {
    */
   const updateMissionLocation = (missionActionValues: MissionActionFormValues) =>
     formikUsecase.updateMissionLocation(dispatch, getPortsApiQuery.data)(
-      draft?.mainFormValues?.isGeometryComputedFromControls,
+      draft?.mainFormValues.isGeometryComputedFromControls,
       missionActionValues
     )
 

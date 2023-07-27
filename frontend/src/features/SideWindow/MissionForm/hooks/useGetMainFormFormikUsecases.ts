@@ -20,9 +20,12 @@ export function useGetMainFormFormikUsecases() {
      * We select the last `missionAction` to update the mission location.
      */
     updateMissionLocation: (isGeometryComputedFromControls: boolean) => {
-      const validControls = draft?.actionsFormValues?.filter(
+      const validControls = draft?.actionsFormValues.filter(
         action => isLandControl(action) || isAirOrSeaControl(action)
       )
+      if (!validControls) {
+        return
+      }
 
       const sortedValidControlsByDateTimeDesc: MissionActionFormValues[] = sortBy(
         validControls,

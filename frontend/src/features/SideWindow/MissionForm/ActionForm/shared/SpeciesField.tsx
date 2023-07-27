@@ -7,19 +7,17 @@ import {
   SingleTag,
   useNewWindow
 } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/query'
-import { useField } from 'formik'
+import { useField, useFormikContext } from 'formik'
 import { append, remove as ramdaRemove } from 'ramda'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { FormikMultiInfractionPicker } from './FormikMultiInfractionPicker'
 import { useGetSpeciesQuery } from '../../../../../api/specy'
-import { useGetRiskFactorQuery } from '../../../../../api/vessel'
 import { BOOLEAN_AS_OPTIONS } from '../../../../../constants'
-import { getSummedSpeciesOnBoard } from '../../../../../domain/entities/logbook/species'
 import { MissionAction } from '../../../../../domain/types/missionAction'
 import { FrontendError } from '../../../../../libs/FrontendError'
+import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 import { FieldGroup } from '../../shared/FieldGroup'
 import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 
@@ -31,13 +29,10 @@ export type SpeciesFieldProps = {
   controlledWeightLabel: string
 }
 export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
+  const { values } = useFormikContext<MissionActionFormValues>()
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
   const { newWindowContainerRef } = useNewWindow()
-
-  // Other field controlling this field
-  const [{ value: internalReferenceNumber }] =
-    useField<MissionActionFormValues['internalReferenceNumber']>('internalReferenceNumber')
-  const riskFactorApiQuery = useGetRiskFactorQuery(internalReferenceNumber || skipToken)
+  const { updateSegments } = useGetMissionActionFormikUsecases()
 
   const getSpeciesApiQuery = useGetSpeciesQuery()
 
@@ -73,31 +68,30 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
     [getSpeciesApiQuery.data, speciesAsOptions]
   )
 
-  const add = useCallback(
-    (newSpecy: Specy | undefined) => {
-      if (!newSpecy) {
-        // TODO Add a form validation to avoid `undefined`.
+  const add = (newSpecy: Specy | undefined) => {
+    if (!newSpecy) {
+      // TODO Add a form validation to avoid `undefined`.
 
-        return
-      }
+      return
+    }
 
-      const nextSpeciesOnboard = append(
-        {
-          controlledWeight: undefined,
-          declaredWeight: undefined,
-          nbFish: undefined,
-          speciesCode: newSpecy.code,
-          underSized: false
-        },
-        input.value || []
-      )
+    const nextSpeciesOnboard = append(
+      {
+        controlledWeight: undefined,
+        declaredWeight: undefined,
+        nbFish: undefined,
+        speciesCode: newSpecy.code,
+        underSized: false
+      },
+      input.value || []
+    )
 
-      helper.setValue(nextSpeciesOnboard)
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [input.value]
-  )
+    helper.setValue(nextSpeciesOnboard)
+    updateSegments({
+      ...values,
+      speciesOnboard: nextSpeciesOnboard
+    })
+  }
 
   const getSpecyNameFromSpecyCode = useCallback(
     (specyCode: Specy['code']) => {
@@ -115,52 +109,19 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
     [getSpeciesApiQuery.data]
   )
 
-  const remove = useCallback(
-    (index: number) => {
-      if (!input.value) {
-        throw new FrontendError('`input.value` is undefined')
-      }
+  const remove = (index: number) => {
+    if (!input.value) {
+      throw new FrontendError('`input.value` is undefined')
+    }
 
-      const nextSpeciesOnboard = ramdaRemove(index, 1, input.value)
+    const nextSpeciesOnboard = ramdaRemove(index, 1, input.value)
 
-      helper.setValue(nextSpeciesOnboard)
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [input.value]
-  )
-  useEffect(
-    () => {
-      if (input.value?.length) {
-        return
-      }
-
-      if (!riskFactorApiQuery.data) {
-        return
-      }
-
-      const speciesOnBoard = riskFactorApiQuery.data.speciesOnboard
-      if (!speciesOnBoard?.length) {
-        return
-      }
-
-      const summedSpeciesOnBoard = getSummedSpeciesOnBoard(speciesOnBoard)
-      const speciesOnboardToAdd = summedSpeciesOnBoard
-        .sort((a, b) => b.weight - a.weight)
-        .map(specy => ({
-          controlledWeight: undefined,
-          declaredWeight: specy.weight,
-          nbFish: undefined,
-          speciesCode: specy.species,
-          underSized: false
-        }))
-
-      helper.setValue(speciesOnboardToAdd)
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [riskFactorApiQuery.data]
-  )
+    helper.setValue(nextSpeciesOnboard)
+    updateSegments({
+      ...values,
+      speciesOnboard: nextSpeciesOnboard
+    })
+  }
 
   if (!speciesAsOptions.length || !customSearch) {
     return <FieldsetGroupSpinner isLight legend="Espèces à bord" />

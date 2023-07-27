@@ -4,7 +4,7 @@ import { transformExtent } from 'ol/proj'
 
 import { openDrawLayerModal } from './addOrEditMissionZone'
 import { InteractionListener, InteractionType } from '../../entities/map/constants'
-import { setGeometry, setInteractionTypeAndListener } from '../../shared_slices/Draw'
+import { setInitialGeometry, setInteractionTypeAndListener } from '../../shared_slices/Draw'
 import { fitToExtent } from '../../shared_slices/Map'
 import { getCoordinatesExtent } from '../map/getCoordinatesExtent'
 import { unselectVessel } from '../vessel/unselectVessel'
@@ -13,14 +13,14 @@ import type { MainAppThunk } from '../../../store'
 import type { GeoJSON as GeoJSONNamespace, GeoJSON } from '../../types/GeoJSON'
 import type { Coordinate } from 'ol/coordinate'
 
-export const addControlCoordinates =
+export const addOrEditControlCoordinates =
   (geometry: GeoJSONNamespace.Geometry | undefined): MainAppThunk<void> =>
   (dispatch, getState) => {
     dispatch(unselectVessel())
     const missionGeometry = getPolygons(getState().mission.draft?.mainFormValues.geom)
 
     if (geometry) {
-      dispatch(setGeometry(geometry))
+      dispatch(setInitialGeometry(geometry))
 
       const featureCoordinates = (geometry as GeoJSONNamespace.Point).coordinates
       const bufferedExtent = getCoordinatesExtent(featureCoordinates as Coordinate)

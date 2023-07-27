@@ -26,6 +26,9 @@ import { PaperDarkIcon, PaperIcon } from '../../../commonStyles/icons/REGPaperIc
 import { ShowIcon } from '../../../commonStyles/icons/ShowIcon.style'
 import { getRegulatoryLayerStyle } from '../../../map/layers/styles/regulatoryLayer.style'
 
+import type { RegulatoryZone as RegulatoryZoneType } from '../../../../domain/types/regulation'
+import type { Promisable } from 'type-fest'
+
 export function showOrHideMetadataIcon(regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
   if (
     regulatoryZoneMetadata &&
@@ -47,20 +50,20 @@ export function showOrHideMetadataIcon(regulatoryZoneMetadata, regulatoryZone, s
 
 // TODO Properly type all these `any`.
 export type RegulatoryZoneProps = {
-  allowRemoveZone: any
-  callRemoveRegulatoryZoneFromMySelection: any
-  isEditable: any
-  isLast: any
+  allowRemoveZone: boolean
+  isEditable: boolean
+  isLast: boolean
   namespace: 'backoffice' | 'homepage'
-  regulatoryTopic: any
-  regulatoryZone: any
+  onRemove: (id: number) => Promisable<void>
+  regulatoryTopic: string
+  regulatoryZone: RegulatoryZoneType
 }
 function UnmemoizedRegulatoryZone({
   allowRemoveZone,
-  callRemoveRegulatoryZoneFromMySelection,
   isEditable,
   isLast,
   namespace,
+  onRemove,
   regulatoryTopic,
   regulatoryZone
 }: RegulatoryZoneProps) {
@@ -181,7 +184,9 @@ function UnmemoizedRegulatoryZone({
         {allowRemoveZone ? (
           <CloseIcon
             data-cy="regulatory-layers-my-zones-zone-delete"
-            onClick={() => callRemoveRegulatoryZoneFromMySelection(regulatoryZone, 1, namespace)}
+            onClick={() => {
+              onRemove(regulatoryZone.id)
+            }}
             title="Supprimer la zone de ma sélection"
           />
         ) : null}

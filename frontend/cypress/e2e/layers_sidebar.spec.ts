@@ -83,7 +83,8 @@ context('LayersSidebar', () => {
 
     // Add the layer to My Zones
     cy.get('*[data-cy="regulatory-search-input"]').type('Cotentin biva')
-    cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 1)
+    // TODO Regulation search should be entirely unit-tested using Geoserver stubs.
+    cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 1 + 7)
 
     // Then go to "My Zones"
     cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
@@ -91,7 +92,8 @@ context('LayersSidebar', () => {
 
     // Back to the search result
     cy.get('*[data-cy="regulatory-search-show-results"]').click()
-    cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 1)
+    // TODO Regulation search should be entirely unit-tested using Geoserver stubs.
+    cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 1 + 7)
 
     // Back to My Zones
     cy.get('*[data-cy="regulatory-layers-my-zones"]').click()

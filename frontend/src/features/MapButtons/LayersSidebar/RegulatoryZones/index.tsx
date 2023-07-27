@@ -6,16 +6,17 @@ import styled from 'styled-components'
 import { RegulatoryTopic } from './RegulatoryTopic'
 import { LayerProperties, LayerType } from '../../../../domain/entities/layers/constants'
 import layer from '../../../../domain/shared_slices/Layer'
+import { regulatoryActions } from '../../../../domain/shared_slices/Regulatory'
 import { hideLayer } from '../../../../domain/use_cases/layer/hideLayer'
 import { closeRegulatoryZoneMetadata } from '../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
-import removeRegulatoryZoneFromMySelection from '../../../../domain/use_cases/layer/regulation/removeRegulatoryZoneFromMySelection'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { FrontendError } from '../../../../libs/FrontendError'
 import { ChevronIcon } from '../../../commonStyles/icons/ChevronIcon.style'
 
 export type RegulatoryZonesProps = {
   hideLayersListWhenSearching?: boolean
-  namespace: any
+  namespace: 'backoffice' | 'homepage'
   regulatoryLayersAddedToMySelection: any
 }
 export function RegulatoryZones({
@@ -31,47 +32,33 @@ export function RegulatoryZones({
 
   const { layersSidebarOpenedLayerType } = useMainAppSelector(state => state.layer)
 
+  const [isOpen, setIsOpen] = useState(false)
   const [showRegulatoryLayers, setShowRegulatoryLayers] = useState(false)
-  const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
   const firstUpdate = useRef(true)
 
   useEffect(() => {
     setShowRegulatoryLayers(layersSidebarOpenedLayerType === LayerType.REGULATORY)
   }, [layersSidebarOpenedLayerType, setShowRegulatoryLayers])
 
-  const increaseNumberOfZonesOpened = useCallback(number => {
-    setNumberOfZonesOpened(_numberOfZonesOpened => _numberOfZonesOpened + number)
-  }, [])
+  const removeById = useCallback(
+    (id: number) => {
+      dispatch(regulatoryActions.removeLayerById(id))
+    },
+    [dispatch]
+  )
 
-  const decreaseNumberOfZonesOpened = useCallback(number => {
-    setNumberOfZonesOpened(_numberOfZonesOpened => _numberOfZonesOpened - number)
-  }, [])
-
-  useEffect(() => {
-    if (numberOfZonesOpened < 0) {
-      setNumberOfZonesOpened(0)
-    }
-  }, [numberOfZonesOpened])
-
-  const callRemoveRegulatoryLayerFromMySelection = useCallback(
-    (
-      regulatoryZone: {
-        topic: string
-      },
-      numberOfZones: number,
-      _namespace: 'backoffice' | 'homepage'
-    ) => {
-      decreaseNumberOfZonesOpened(numberOfZones)
+  const removeByTopic = useCallback(
+    (topic: string) => {
       dispatch(
         hideLayer({
-          type: LayerProperties.REGULATORY.code,
-          ...regulatoryZone,
-          namespace: _namespace
+          namespace,
+          topic,
+          type: LayerProperties.REGULATORY.code
         })
       )
-      dispatch(removeRegulatoryZoneFromMySelection(regulatoryZone))
+      dispatch(regulatoryActions.removeRegulatoryZonesFromMyLayers({ topic }))
     },
-    [decreaseNumberOfZonesOpened, dispatch]
+    [dispatch, namespace]
   )
 
   useEffect(() => {
@@ -85,6 +72,12 @@ export function RegulatoryZones({
   }, [hideLayersListWhenSearching])
 
   const onTitleClicked = () => {
+    if (!setLayersSideBarOpenedLayerType) {
+      throw new FrontendError('`setLayersSideBarOpenedLayerType` is undefined.')
+    }
+
+    setIsOpen(!isOpen)
+
     if (showRegulatoryLayers) {
       dispatch(setLayersSideBarOpenedLayerType(undefined))
     } else {
@@ -103,33 +96,30 @@ export function RegulatoryZones({
       >
         Mes zones réglementaires <ChevronIcon $isOpen={showRegulatoryLayers} />
       </RegulatoryLayersTitle>
-      {selectedRegulatoryLayers ? (
-        <RegulatoryLayersList
-          $advancedSearchIsOpen={advancedSearchIsOpen}
-          $showRegulatoryLayers={showRegulatoryLayers}
-          $topicLength={Object.keys(selectedRegulatoryLayers).length}
-          $zoneLength={numberOfZonesOpened}
-          className="smooth-scroll"
-        >
-          {selectedRegulatoryLayers && Object.keys(selectedRegulatoryLayers).length > 0 ? (
-            Object.keys(selectedRegulatoryLayers).map((regulatoryTopic, index) => (
-              <RegulatoryTopic
-                key={regulatoryTopic}
-                allowRemoveZone
-                callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryLayerFromMySelection}
-                decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
-                increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
-                isEditable={false}
-                isLastItem={Object.keys(selectedRegulatoryLayers).length === index + 1}
-                regulatoryTopic={regulatoryTopic}
-                regulatoryZones={selectedRegulatoryLayers[regulatoryTopic]}
-              />
-            ))
-          ) : (
-            <NoLayerSelected>Aucune zone sélectionnée</NoLayerSelected>
+      {selectedRegulatoryLayers && (
+        <RegulatoryLayersList $advancedSearchIsOpen={advancedSearchIsOpen} className="smooth-scroll">
+          {isOpen && (
+            <>
+              {Object.keys(selectedRegulatoryLayers).length > 0 ? (
+                Object.keys(selectedRegulatoryLayers).map((regulatoryTopic, index) => (
+                  <RegulatoryTopic
+                    key={regulatoryTopic}
+                    allowRemoveZone
+                    isEditable={false}
+                    isLastItem={Object.keys(selectedRegulatoryLayers).length === index + 1}
+                    onRemoveById={removeById}
+                    onRemoveByTopic={removeByTopic}
+                    regulatoryTopic={regulatoryTopic}
+                    regulatoryZones={selectedRegulatoryLayers[regulatoryTopic]}
+                  />
+                ))
+              ) : (
+                <NoLayerSelected>Aucune zone sélectionnée</NoLayerSelected>
+              )}
+            </>
           )}
         </RegulatoryLayersList>
-      ) : null}
+      )}
     </>
   )
 }
@@ -191,9 +181,6 @@ const RegulatoryLayersTitle = styled.div<{
 
 const RegulatoryLayersList = styled.ul<{
   $advancedSearchIsOpen: boolean
-  $showRegulatoryLayers: boolean
-  $topicLength: number
-  $zoneLength: number
 }>`
   margin: 0;
   background-color: ${p => p.theme.color.white};
@@ -204,8 +191,5 @@ const RegulatoryLayersList = styled.ul<{
   max-height: ${p => (p.$advancedSearchIsOpen ? 'calc(70vh - 235px)' : '70vh')};
   overflow-x: hidden;
   color: ${p => p.theme.color.gunMetal};
-  height: ${p =>
-    // eslint-disable-next-line no-nested-ternary
-    p.$showRegulatoryLayers ? (p.$topicLength || p.$zoneLength ? 40 * p.$topicLength + p.$zoneLength * 36 : 40) : 0}px;
   transition: 0.5s all;
 `

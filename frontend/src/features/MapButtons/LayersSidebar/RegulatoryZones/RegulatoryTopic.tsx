@@ -28,28 +28,22 @@ import type { Promisable } from 'type-fest'
 
 export type RegulatoryTopicProps = {
   allowRemoveZone: boolean
-  callRemoveRegulatoryZoneFromMySelection: (
-    a: {
-      topic: string
-    },
-    b: number,
-    c: 'backoffice' | 'homepage'
-  ) => Promisable<void>
-  decreaseNumberOfZonesOpened: (toNumber: number) => Promisable<void>
-  increaseNumberOfZonesOpened: (toNumber: number) => Promisable<void>
   isEditable: boolean
   isLastItem: boolean
+  /** Remove a single regulation zone layer. */
+  onRemoveById: (id: number) => Promisable<void>
+  /** Remove all the regulation zone layers for the given topic. */
+  onRemoveByTopic: (topic: string, numberOfZones: number) => Promisable<void>
   regulatoryTopic: string
   regulatoryZones: RegulatoryZoneType[] | undefined
   updateLayerName?: (topic: string, value: string) => Promisable<void>
 }
 function UnmemoizedRegulatoryTopic({
   allowRemoveZone,
-  callRemoveRegulatoryZoneFromMySelection,
-  decreaseNumberOfZonesOpened,
-  increaseNumberOfZonesOpened,
   isEditable,
   isLastItem,
+  onRemoveById,
+  onRemoveByTopic,
   regulatoryTopic,
   regulatoryZones,
   updateLayerName
@@ -120,16 +114,6 @@ function UnmemoizedRegulatoryTopic({
   }
 
   useEffect(() => {
-    if (increaseNumberOfZonesOpened && decreaseNumberOfZonesOpened) {
-      if (isOpen) {
-        increaseNumberOfZonesOpened(regulatoryZones.length)
-      } else {
-        decreaseNumberOfZonesOpened(regulatoryZones.length)
-      }
-    }
-  }, [decreaseNumberOfZonesOpened, increaseNumberOfZonesOpened, isOpen, regulatoryZones])
-
-  useEffect(() => {
     if (
       regulatoryTopic &&
       ((regulatoryZoneMetadata && regulatoryZoneMetadata.topic === regulatoryTopic) ||
@@ -197,13 +181,7 @@ function UnmemoizedRegulatoryTopic({
             )}
             {allowRemoveZone ? (
               <CloseIcon
-                onClick={() =>
-                  callRemoveRegulatoryZoneFromMySelection(
-                    getRegulatoryLayerName(regulatoryZones),
-                    regulatoryZones.length,
-                    namespace
-                  )
-                }
+                onClick={() => onRemoveByTopic(getFirstRegulotaryZoneTopic(regulatoryZones), regulatoryZones.length)}
                 title="Supprimer la couche de ma sélection"
               />
             ) : null}
@@ -214,10 +192,10 @@ function UnmemoizedRegulatoryTopic({
                   <RegulatoryZone
                     key={`${regulatoryZone.topic}:${regulatoryZone.zone}`}
                     allowRemoveZone={allowRemoveZone}
-                    callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryZoneFromMySelection}
                     isEditable={isEditable}
                     isLast={regulatoryZones.length === index + 1}
                     namespace={namespace}
+                    onRemove={onRemoveById}
                     regulatoryTopic={regulatoryTopic}
                     regulatoryZone={regulatoryZone}
                   />
@@ -230,15 +208,13 @@ function UnmemoizedRegulatoryTopic({
   )
 }
 
-const getRegulatoryLayerName = (regulatoryZones: RegulatoryZoneType[]) => {
+const getFirstRegulotaryZoneTopic = (regulatoryZones: RegulatoryZoneType[]): string => {
   const firstRefulatoryZone = regulatoryZones[0]
   if (!firstRefulatoryZone) {
     throw new FrontendError('`firstRefulatoryZone` is undefined.')
   }
 
-  return {
-    topic: firstRefulatoryZone.topic
-  }
+  return firstRefulatoryZone.topic
 }
 
 const Text = styled.span`

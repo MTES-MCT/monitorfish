@@ -158,11 +158,11 @@ export type VesselPosition = {
   course: number
   dateTime: string
   destination: string | null
-  externalReferenceNumber: string
+  externalReferenceNumber: string | null
   flagState: string
   from: string
-  internalReferenceNumber: string
-  ircs: string
+  internalReferenceNumber: string | null
+  ircs: string | null
   isFishing: boolean | null
   isManual: boolean | null
   latitude: number

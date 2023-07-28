@@ -1,59 +1,91 @@
+import dayjs from 'dayjs'
 import countries from 'i18n-iso-countries'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { CSV_ORDER } from './constants'
-import { exportToCsv } from './utils'
 import { getCoordinates } from '../../../../coordinates'
 import { WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { formatToCSVColumnsForExport, getDate } from '../../../../utils'
+import { getDate } from '../../../../utils'
+import { downloadAsCsv } from '../../../../utils/downloadAsCsv'
 import { PrimaryButton } from '../../../commonStyles/Buttons.style'
 import { ReactComponent as ExportSVG } from '../../../icons/Bouton_exporter_piste_navire.svg'
+
+import type { VesselPosition } from '../../../../domain/entities/vessel/types'
+import type { DownloadAsCsvMap } from '../../../../utils/downloadAsCsv'
+
+type VesselPositionWithId = VesselPosition & {
+  id: string
+  latitude: string
+  longitude: string
+}
 
 export function ExportTrack() {
   const { coordinatesFormat } = useMainAppSelector(state => state.map)
   const { selectedVesselPositions } = useMainAppSelector(state => state.vessel)
 
-  const showedPosition = useMemo(
+  const exportedPositions: VesselPositionWithId[] = useMemo(
     () =>
-      selectedVesselPositions?.map(position => {
-        const coordinates = getCoordinates([position.longitude, position.latitude], WSG84_PROJECTION, coordinatesFormat)
+      selectedVesselPositions
+        ?.map(position => {
+          const coordinates = getCoordinates(
+            [position.longitude, position.latitude],
+            WSG84_PROJECTION,
+            coordinatesFormat
+          )
+          if (!coordinates[0] || !coordinates[1]) {
+            return undefined
+          }
 
-        return {
-          course: position.course || '',
-          dateTime: position.dateTime || '',
-          externalReferenceNumber: position.externalReferenceNumber || '',
-          flagState: position.flagState ? countries.getName(position.flagState.toLowerCase(), 'fr').toString() : '',
-          internalReferenceNumber: position.internalReferenceNumber || '',
-          ircs: position.ircs || '',
-          latitude: coordinates[0] || '',
-          longitude: coordinates[1] || '',
-          mmsi: position.mmsi || '',
-          speed: position.speed || '',
-          vesselName: position.vesselName || ''
-        }
-      }) || [],
+          return {
+            ...position,
+            id: position.dateTime,
+            latitude: coordinates[0],
+            longitude: coordinates[1]
+          }
+        })
+        ?.filter((position): position is VesselPositionWithId => position !== undefined) || [],
     [selectedVesselPositions, coordinatesFormat]
   )
 
   const downloadCSV = useCallback(positions => {
-    if (positions?.length) {
-      const objectsToExports = positions.map(position => formatToCSVColumnsForExport(position, CSV_ORDER))
-
-      const identifier = positions[0].internalReferenceNumber ? positions[0].internalReferenceNumber : positions[0].ircs
-      const date = new Date()
-      exportToCsv.options.filename = `export_${identifier}_vms_${getDate(date.toISOString())}_${
-        Math.floor(Math.random() * 100) + 1
-      }`
-      exportToCsv.generateCsv(objectsToExports)
+    if (!positions?.length) {
+      return
     }
+
+    const vesselIdentifier = positions[0].internalReferenceNumber
+      ? positions[0].internalReferenceNumber
+      : positions[0].ircs
+    const date = getDate(dayjs().toISOString())
+    const randomNumber = Math.floor(Math.random() * 100) + 1
+    const fileName = `export_${vesselIdentifier}_vms_${date}_${randomNumber}`
+
+    /* eslint-disable sort-keys-fix/sort-keys-fix */
+    const csvMap: DownloadAsCsvMap<VesselPositionWithId> = {
+      vesselName: 'Nom',
+      externalReferenceNumber: 'Marq. Ext.',
+      ircs: 'C/S',
+      mmsi: 'MMSI',
+      internalReferenceNumber: 'CFR',
+      flagState: {
+        label: 'Pavillon',
+        transform: position => countries.getName(position.flagState.toLowerCase(), 'fr').toString()
+      },
+      dateTime: 'GDH (UTC)',
+      latitude: 'Latitude',
+      longitude: 'Longitude',
+      course: 'Cap',
+      speed: 'Vitesse'
+    }
+    /* eslint-enable sort-keys-fix/sort-keys-fix */
+
+    downloadAsCsv(fileName, positions, csvMap)
   }, [])
 
   return (
     <ExportTrackButton
-      isClickable={Boolean(showedPosition?.length)}
-      onClick={() => downloadCSV(showedPosition)}
+      isClickable={Boolean(exportedPositions?.length)}
+      onClick={() => downloadCSV(exportedPositions)}
       title="Exporter la piste"
     >
       <ExportIcon />

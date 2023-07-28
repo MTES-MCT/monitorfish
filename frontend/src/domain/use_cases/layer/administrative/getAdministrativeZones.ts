@@ -2,8 +2,7 @@ import { getAdministrativeSubZonesFromAPI } from '../../../../api/geoserver'
 import { administrativeLayers } from '../../../entities/layers'
 import { LayerProperties as LayersEnum, LayerType } from '../../../entities/layers/constants'
 
-import type { ShowableLayer } from '../../../entities/layers/types'
-import type { CodeAndName } from '../../../entities/types'
+import type { CodeAndName, ShowableLayer } from '../../../entities/layers/types'
 import type { GeoJSON } from '../../../types/GeoJSON'
 
 export type GroupAndZones = {

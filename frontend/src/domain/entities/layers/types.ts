@@ -1,5 +1,4 @@
 import type { LayerType } from './constants'
-import type { CodeAndName } from '../types'
 
 export enum MonitorFishLayer {
   AEM = 'AEM',
@@ -56,6 +55,11 @@ export enum MonitorFishLayer {
   saltwater_limit = 'saltwater_limit',
   situations = 'situations',
   transversal_sea_limit = 'transversal_sea_limit'
+}
+
+export type CodeAndName = {
+  code: string
+  name: string
 }
 
 export type ShowableLayer = {

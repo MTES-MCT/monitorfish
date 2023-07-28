@@ -144,46 +144,8 @@ const regulatorySlice = createSlice({
     },
 
     /**
-     * Remove regulatory zone(s) from "My Zones" regulatory selection, by providing a topic name to remove multiple zones
-     * or simply the zone name to remove a specified zone
-     * @memberOf RegulatoryReducer
-     * @param {Object=} state
-     * @param {{
-     *          topic: string=,
-     *          zone: string=
-     *          }} action - The regulatory zone(s) to remove
+     * Remove a selected regulatory zone by its ID.
      */
-    // TODO Refactor entirely this reducer with functional immutable logic.
-    removeRegulatoryZonesFromMyLayers(state, action) {
-      const { id, topic } = action.payload
-      let nextSelectedRegulatoryLayerIds = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
-
-      if (topic && !id) {
-        ;(state.selectedRegulatoryLayers as any)[topic].forEach(selectedRegulatoryLayer => {
-          nextSelectedRegulatoryLayerIds = nextSelectedRegulatoryLayerIds.filter(
-            selectedRegulatoryLayerId => selectedRegulatoryLayerId !== selectedRegulatoryLayer.id
-          )
-        })
-        delete (state.selectedRegulatoryLayers as any)[topic]
-      } else if (id) {
-        ;(state.selectedRegulatoryLayers as any)[topic] = (state.selectedRegulatoryLayers as any)[topic].filter(
-          subZone => !subZone.id === id
-        )
-        nextSelectedRegulatoryLayerIds = nextSelectedRegulatoryLayerIds.filter(
-          selectedRegulatoryLayerId => !selectedRegulatoryLayerId === id
-        )
-      }
-
-      if (!(state.selectedRegulatoryLayers as any)[topic]?.length) {
-        delete (state.selectedRegulatoryLayers as any)[topic]
-      }
-
-      window.localStorage.setItem(
-        SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY,
-        JSON.stringify(nextSelectedRegulatoryLayerIds)
-      )
-    },
-
     removeSelectedZoneById(state, action: PayloadAction<number | string>) {
       if (!state.selectedRegulatoryLayers) {
         throw new Error('`state.selectedRegulatoryLayers` is null.')
@@ -199,8 +161,43 @@ const regulatorySlice = createSlice({
         // Remove layer group if it's empty
         .filter(([, regulatoryZones]) => regulatoryZones.length > 0)
       const nextSelectedRegulatoryLayers = fromPairs(nextSelectedRegulatoryLayersAsPairs)
+      const nextSelectedRegulatoryLayerIds = nextSelectedRegulatoryLayersAsPairs.reduce(
+        (ids, [, regulatoryZones]) => [...ids, ...regulatoryZones.map(({ id }) => id)],
+        [] as Array<number | string>
+      )
 
       state.selectedRegulatoryLayers = nextSelectedRegulatoryLayers
+
+      window.localStorage.setItem(
+        SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY,
+        JSON.stringify(nextSelectedRegulatoryLayerIds)
+      )
+    },
+
+    /**
+     * Remove a group of selected regulatory zones by their common topic.
+     */
+    removeSelectedZonesByTopic(state, action: PayloadAction<string>) {
+      if (!state.selectedRegulatoryLayers) {
+        throw new Error('`state.selectedRegulatoryLayers` is null.')
+      }
+
+      const selectedRegulatoryLayersAsPairs = Object.entries(state.selectedRegulatoryLayers)
+      const nextSelectedRegulatoryLayersAsPairs = selectedRegulatoryLayersAsPairs.filter(
+        ([topic]) => topic !== action.payload
+      )
+      const nextSelectedRegulatoryLayers = fromPairs(nextSelectedRegulatoryLayersAsPairs)
+      const nextSelectedRegulatoryLayerIds = nextSelectedRegulatoryLayersAsPairs.reduce(
+        (ids, [, regulatoryZones]) => [...ids, ...regulatoryZones.map(({ id }) => id)],
+        [] as Array<number | string>
+      )
+
+      state.selectedRegulatoryLayers = nextSelectedRegulatoryLayers
+
+      window.localStorage.setItem(
+        SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY,
+        JSON.stringify(nextSelectedRegulatoryLayerIds)
+      )
     },
 
     resetLoadingRegulatoryZoneMetadata(state) {
@@ -378,8 +375,8 @@ export const {
   addRegulatoryZonesToMyLayers,
   closeRegulatoryZoneMetadataPanel,
   removeRegulatoryTopicOpened,
-  removeRegulatoryZonesFromMyLayers,
   removeSelectedZoneById,
+  removeSelectedZonesByTopic,
   resetLoadingRegulatoryZoneMetadata,
   resetRegulatoryGeometriesToPreview,
   setIsReadyToShowRegulatoryZones,

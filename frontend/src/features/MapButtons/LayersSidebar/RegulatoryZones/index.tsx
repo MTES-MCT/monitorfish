@@ -60,7 +60,7 @@ export function RegulatoryZones({
           type: LayerProperties.REGULATORY.code
         })
       )
-      dispatch(regulatoryActions.removeRegulatoryZonesFromMyLayers({ topic }))
+      dispatch(regulatoryActions.removeSelectedZonesByTopic(topic))
     },
     [dispatch, namespace]
   )

@@ -15,10 +15,11 @@ import { useEscapeFromKeyboard } from '../../../../../hooks/useEscapeFromKeyboar
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 
+import type { LayerSliceNamespace } from '../../../../../domain/entities/layers/types'
 import type { Promisable } from 'type-fest'
 
 export type RegulatoryLayerSearchProps = {
-  namespace: 'backoffice' | 'homepage'
+  namespace: LayerSliceNamespace
   numberOfRegulatoryLayersSaved: number
   setNumberOfRegulatoryLayersSaved: (length: number) => Promisable<void>
 }

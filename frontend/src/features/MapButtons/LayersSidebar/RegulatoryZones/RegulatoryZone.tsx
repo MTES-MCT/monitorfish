@@ -26,6 +26,7 @@ import { PaperDarkIcon, PaperIcon } from '../../../commonStyles/icons/REGPaperIc
 import { ShowIcon } from '../../../commonStyles/icons/ShowIcon.style'
 import { getRegulatoryLayerStyle } from '../../../map/layers/styles/regulatoryLayer.style'
 
+import type { LayerSliceNamespace } from '../../../../domain/entities/layers/types'
 import type { RegulatoryZone as RegulatoryZoneType } from '../../../../domain/types/regulation'
 import type { Promisable } from 'type-fest'
 
@@ -53,8 +54,8 @@ export type RegulatoryZoneProps = {
   allowRemoveZone: boolean
   isEditable: boolean
   isLast: boolean
-  namespace: 'backoffice' | 'homepage'
-  onRemove: (id: number) => Promisable<void>
+  namespace: LayerSliceNamespace
+  onRemove: (id: number | string) => Promisable<void>
   regulatoryTopic: string
   regulatoryZone: RegulatoryZoneType
 }

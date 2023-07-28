@@ -2,6 +2,7 @@ import { getLayerNameNormalized } from '../../entities/layers'
 import layer from '../../shared_slices/Layer'
 
 import type { MainAppThunk } from '../../../store'
+import type { LayerSliceNamespace } from '../../entities/layers/types'
 
 /**
  * hide a Regulatory or Administrative layer
@@ -9,7 +10,7 @@ import type { MainAppThunk } from '../../../store'
  */
 export const hideLayer =
   (layerToHide: {
-    namespace: 'backoffice' | 'homepage'
+    namespace: LayerSliceNamespace
     topic?: string
     type: string
     zone?: string | null
@@ -20,22 +21,20 @@ export const hideLayer =
     const { removeLayerToFeatures, removeShowedLayer } = layer[namespace].actions
 
     const { showedLayers } = getState().layer
-    if (type && showedLayers) {
-      const layerName = getLayerNameNormalized({ topic, type, zone })
+    const layerName = getLayerNameNormalized({ topic, type, zone })
 
-      const layersToRemove = showedLayers.filter(layer_ => {
-        if (zone) {
-          return getLayerNameNormalized(layer_) === layerName
-        }
-
-        return getLayerNameNormalized(layer_).includes(layerName)
-      })
-
-      if (layersToRemove && removeLayerToFeatures && removeShowedLayer) {
-        dispatch(removeShowedLayer(layerToHide))
-        layersToRemove.forEach(layerToRemove => {
-          dispatch(removeLayerToFeatures(getLayerNameNormalized(layerToRemove)))
-        })
+    const layersToRemove = showedLayers.filter(layerToRemove => {
+      if (zone) {
+        return getLayerNameNormalized(layerToRemove) === layerName
       }
+
+      return getLayerNameNormalized(layerToRemove).includes(layerName)
+    })
+
+    if (removeLayerToFeatures && removeShowedLayer) {
+      dispatch(removeShowedLayer(layerToHide))
+      layersToRemove.forEach(layerToRemove => {
+        dispatch(removeLayerToFeatures(getLayerNameNormalized(layerToRemove)))
+      })
     }
   }

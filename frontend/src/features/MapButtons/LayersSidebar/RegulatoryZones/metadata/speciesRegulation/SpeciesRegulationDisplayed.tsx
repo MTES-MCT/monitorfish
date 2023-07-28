@@ -9,6 +9,8 @@ import {
 import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
 import { Section } from '../RegulatoryMetadata.style'
 
+import type { RegulatedSpecies as RegulatedSpeciesType } from '../../../../../../domain/types/regulation'
+
 export function SpeciesRegulationDisplayed() {
   const regulatory = useMainAppSelector(state => state.regulatory)
 
@@ -16,38 +18,40 @@ export function SpeciesRegulationDisplayed() {
   const { authorized, otherInfo, unauthorized } = speciesRegulation || {}
   const hasAuthorizedContent = regulatedSpeciesIsNotEmpty(authorized)
   const hasUnauthorizedContent = regulatedSpeciesIsNotEmpty(unauthorized)
-  const speciesRegulationIsNotEmpty = hasAuthorizedContent || hasUnauthorizedContent || otherInfo
+  const speciesRegulationIsEmpty = !hasAuthorizedContent && !hasUnauthorizedContent && !otherInfo
+
+  if (!speciesRegulationIsEmpty) {
+    return <></>
+  }
 
   return (
     <>
-      {speciesRegulationIsNotEmpty ? (
-        <Section>
-          {hasAuthorizedContent ? (
-            <RegulatedSpecies authorized regulatedSpecies={authorized || DEFAULT_AUTHORIZED_REGULATED_SPECIES} />
-          ) : null}
-          {hasUnauthorizedContent ? (
-            <RegulatedSpecies
-              authorized={false}
-              hasPreviousRegulatedSpeciesBloc={hasAuthorizedContent}
-              regulatedSpecies={unauthorized || DEFAULT_UNAUTHORIZED_REGULATED_SPECIES}
-            />
-          ) : null}
-          {otherInfo && (
-            <MarkdownWithMargin
-              $hasMargin={hasAuthorizedContent || hasUnauthorizedContent}
-              data-cy="regulatory-layers-metadata-species-other-info"
-            >
-              <ReactMarkdown>{otherInfo}</ReactMarkdown>
-            </MarkdownWithMargin>
-          )}
-        </Section>
-      ) : null}
+      <Section>
+        {hasAuthorizedContent && (
+          <RegulatedSpecies authorized regulatedSpecies={authorized || DEFAULT_AUTHORIZED_REGULATED_SPECIES} />
+        )}
+        {hasUnauthorizedContent && (
+          <RegulatedSpecies
+            authorized={false}
+            hasPreviousRegulatedSpeciesBloc={hasAuthorizedContent}
+            regulatedSpecies={unauthorized || DEFAULT_UNAUTHORIZED_REGULATED_SPECIES}
+          />
+        )}
+        {otherInfo && (
+          <MarkdownWithMargin
+            $hasMargin={hasAuthorizedContent || hasUnauthorizedContent}
+            data-cy="regulatory-layers-metadata-species-other-info"
+          >
+            <ReactMarkdown>{otherInfo}</ReactMarkdown>
+          </MarkdownWithMargin>
+        )}
+      </Section>
     </>
   )
 }
 
-const regulatedSpeciesIsNotEmpty = regulatedSpecies =>
-  regulatedSpecies?.speciesGroups?.length > 0 || regulatedSpecies?.species?.length > 0 || regulatedSpecies?.allSpecies
+const regulatedSpeciesIsNotEmpty = (regulatedSpecies: RegulatedSpeciesType): boolean =>
+  regulatedSpecies?.speciesGroups?.length > 0 || regulatedSpecies?.species?.length > 0 || !!regulatedSpecies?.allSpecies
 
 const MarkdownWithMargin = styled.div<{
   $hasMargin: boolean

@@ -1,5 +1,5 @@
 import type { GeoJSON } from './GeoJSON'
-import type { GEAR_MESH_SIZE } from '../entities/backoffice'
+import type { GearMeshSizeEqualityComparator } from '../entities/backoffice'
 
 export type BaseRegulatoryZone = {
   topic: string
@@ -11,7 +11,7 @@ export type RegulatoryZone = BaseRegulatoryZone & {
   fishingPeriod: FishingPeriod
   gearRegulation: GearRegulation
   geometry: GeoJSON.Geometry
-  id: number
+  id: number | string
   lawType: string
   nextId: string
   otherInfo: string
@@ -78,16 +78,14 @@ export type Gear = {
   code: string
   groupId: string
   mesh: string[]
-  meshType: GEAR_MESH_SIZE
+  meshType: GearMeshSizeEqualityComparator
   name: string
-  // TODO Check this prop.
-  remarks: string
+  remarks: string | undefined
 }
 
 export type GearCategory = {
-  mesh: string[]
-  // TODO Is it also a `GEAR_MESH_SIZE`?
-  meshType: string
+  mesh: string[] | undefined
+  meshType: GearMeshSizeEqualityComparator | undefined
   name: string
 }
 
@@ -102,10 +100,9 @@ export type RegulatedGears = {
   allPassiveGears: boolean | undefined
   allTowedGears: boolean | undefined
   derogation: boolean | undefined
-  // TODO Check this prop.
   otherInfo: string | undefined
   regulatedGearCategories: Record<string, GearCategory>
-  regulatedGears: Gear[]
+  regulatedGears: Record<string, Gear>
   /**  a list of categories name and gears code */
   selectedCategoriesAndGears: string[]
 }

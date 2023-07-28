@@ -5,7 +5,7 @@ import { ContentLine } from '../../../commonStyles/Backoffice.style'
 import CustomSelectComponent from '../custom_form/CustomSelectComponent'
 import Tag from '../Tag'
 import MenuItem from '../custom_form/MenuItem'
-import { GEAR_MESH_SIZE } from '../../../../domain/entities/backoffice'
+import { GearMeshSizeEqualityComparator } from '../../../../domain/entities/backoffice'
 
 const RegulatedGear = props => {
   const {
@@ -31,31 +31,31 @@ const RegulatedGear = props => {
       {allowMesh && <ContentLine>
         <Label data-cy='mesh-label'>Maillage</Label>
         <CustomSelectComponent
-          value={meshType || GEAR_MESH_SIZE.greaterThan}
+          value={meshType || GearMeshSizeEqualityComparator.greaterThan}
           onChange={value => onChange('meshType', value)}
           data={[
             {
-              value: GEAR_MESH_SIZE.greaterThan,
+              value: GearMeshSizeEqualityComparator.greaterThan,
               label: 'supérieur à'
             },
             {
-              value: GEAR_MESH_SIZE.greaterThanOrEqualTo,
+              value: GearMeshSizeEqualityComparator.greaterThanOrEqualTo,
               label: 'supérieur ou égal à'
             },
             {
-              value: GEAR_MESH_SIZE.lowerThan,
+              value: GearMeshSizeEqualityComparator.lowerThan,
               label: 'inférieur à'
             },
             {
-              value: GEAR_MESH_SIZE.lowerThanOrEqualTo,
+              value: GearMeshSizeEqualityComparator.lowerThanOrEqualTo,
               label: 'inférieur ou égal à'
             },
             {
-              value: GEAR_MESH_SIZE.equal,
+              value: GearMeshSizeEqualityComparator.equal,
               label: 'égal à'
             },
             {
-              value: GEAR_MESH_SIZE.between,
+              value: GearMeshSizeEqualityComparator.between,
               label: 'entre'
             }
           ]}

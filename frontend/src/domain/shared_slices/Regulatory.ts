@@ -139,25 +139,6 @@ const regulatorySlice = createSlice({
       state.regulatoryZoneMetadata = null
     },
 
-    removeLayerById(state, action: PayloadAction<number>) {
-      if (!state.selectedRegulatoryLayers) {
-        throw new Error('`state.selectedRegulatoryLayers` is null.')
-      }
-
-      const selectedRegulatoryLayersAsPairs = Object.entries(state.selectedRegulatoryLayers)
-      const nextSelectedRegulatoryLayersAsPairs = selectedRegulatoryLayersAsPairs
-        // Remove layer from the group
-        .map(([zoneGroupName, regulatoryZones]): [string, RegulatoryZone[]] => [
-          zoneGroupName,
-          regulatoryZones.filter(regulatoryZone => regulatoryZone.id !== action.payload)
-        ])
-        // Remove layer group is it's empty
-        .filter(([, regulatoryZones]) => regulatoryZones.length > 0)
-      const nextSelectedRegulatoryLayers = fromPairs(nextSelectedRegulatoryLayersAsPairs)
-
-      state.selectedRegulatoryLayers = nextSelectedRegulatoryLayers
-    },
-
     removeRegulatoryTopicOpened(state, action: PayloadAction<string>) {
       state.regulatoryTopicsOpened = state.regulatoryTopicsOpened.filter(
         regulatoryTopicOpened => regulatoryTopicOpened !== action.payload
@@ -203,6 +184,25 @@ const regulatorySlice = createSlice({
         SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY,
         JSON.stringify(nextSelectedRegulatoryLayerIds)
       )
+    },
+
+    removeSelectedZoneById(state, action: PayloadAction<number | string>) {
+      if (!state.selectedRegulatoryLayers) {
+        throw new Error('`state.selectedRegulatoryLayers` is null.')
+      }
+
+      const selectedRegulatoryLayersAsPairs = Object.entries(state.selectedRegulatoryLayers)
+      const nextSelectedRegulatoryLayersAsPairs = selectedRegulatoryLayersAsPairs
+        // Remove layer from the group
+        .map(([topic, regulatoryZones]): [string, RegulatoryZone[]] => [
+          topic,
+          regulatoryZones.filter(regulatoryZone => regulatoryZone.id !== action.payload)
+        ])
+        // Remove layer group if it's empty
+        .filter(([, regulatoryZones]) => regulatoryZones.length > 0)
+      const nextSelectedRegulatoryLayers = fromPairs(nextSelectedRegulatoryLayersAsPairs)
+
+      state.selectedRegulatoryLayers = nextSelectedRegulatoryLayers
     },
 
     resetLoadingRegulatoryZoneMetadata(state) {
@@ -379,9 +379,9 @@ export const {
   addRegulatoryTopicOpened,
   addRegulatoryZonesToMyLayers,
   closeRegulatoryZoneMetadataPanel,
-  removeLayerById,
   removeRegulatoryTopicOpened,
   removeRegulatoryZonesFromMyLayers,
+  removeSelectedZoneById: removeLayerById,
   resetLoadingRegulatoryZoneMetadata,
   resetRegulatoryGeometriesToPreview,
   setIsReadyToShowRegulatoryZones,

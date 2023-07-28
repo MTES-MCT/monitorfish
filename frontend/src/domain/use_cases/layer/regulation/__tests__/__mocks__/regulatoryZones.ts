@@ -23,7 +23,7 @@ export const regulatoryZones: RegulatoryZone[] = [
         derogation: undefined,
         otherInfo: undefined,
         regulatedGearCategories: {},
-        regulatedGears: [],
+        regulatedGears: {},
         selectedCategoriesAndGears: ['Chalut']
       },
       otherInfo: undefined,
@@ -34,7 +34,7 @@ export const regulatoryZones: RegulatoryZone[] = [
         derogation: undefined,
         otherInfo: undefined,
         regulatedGearCategories: {},
-        regulatedGears: [],
+        regulatedGears: {},
         selectedCategoriesAndGears: []
       }
     },
@@ -114,7 +114,7 @@ export const regulatoryZones: RegulatoryZone[] = [
         derogation: undefined,
         otherInfo: undefined,
         regulatedGearCategories: {},
-        regulatedGears: [],
+        regulatedGears: {},
         selectedCategoriesAndGears: []
       },
       otherInfo: undefined,
@@ -125,7 +125,7 @@ export const regulatoryZones: RegulatoryZone[] = [
         derogation: undefined,
         otherInfo: undefined,
         regulatedGearCategories: {},
-        regulatedGears: [],
+        regulatedGears: {},
         selectedCategoriesAndGears: []
       }
     },

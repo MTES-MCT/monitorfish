@@ -14,9 +14,11 @@ import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FrontendError } from '../../../../libs/FrontendError'
 import { ChevronIcon } from '../../../commonStyles/icons/ChevronIcon.style'
 
+import type { LayerSliceNamespace } from '../../../../domain/entities/layers/types'
+
 export type RegulatoryZonesProps = {
   hideLayersListWhenSearching?: boolean
-  namespace: 'backoffice' | 'homepage'
+  namespace: LayerSliceNamespace
   regulatoryLayersAddedToMySelection: any
 }
 export function RegulatoryZones({
@@ -41,8 +43,8 @@ export function RegulatoryZones({
   }, [layersSidebarOpenedLayerType, setShowRegulatoryLayers])
 
   const removeById = useCallback(
-    (id: number) => {
-      dispatch(regulatoryActions.removeLayerById(id))
+    (id: number | string) => {
+      dispatch(regulatoryActions.removeSelectedZoneById(id))
     },
     [dispatch]
   )

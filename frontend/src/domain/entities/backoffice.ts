@@ -8,7 +8,7 @@ export const BACKOFFICE_SEARCH_PROPERTIES = [
 ]
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export enum GEAR_MESH_SIZE {
+export enum GearMeshSizeEqualityComparator {
   between = 'between',
   equal = 'equal',
   greaterThan = 'greaterThan',

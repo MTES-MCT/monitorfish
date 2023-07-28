@@ -1,5 +1,3 @@
-import { batch } from 'react-redux'
-
 import { getRegulatoryFeatureMetadataFromAPI } from '../../../../api/geoserver'
 import { mapToRegulatoryZone } from '../../../entities/regulation'
 import { setError } from '../../../shared_slices/Global'
@@ -31,11 +29,9 @@ export const showRegulatoryZoneMetadata =
         }
       })
       .catch(error => {
-        batch(() => {
-          dispatch(closeRegulatoryZoneMetadataPanel())
-          dispatch(setError(error))
-          dispatch(resetLoadingRegulatoryZoneMetadata())
-          dispatch(resetRegulatoryGeometriesToPreview())
-        })
+        dispatch(closeRegulatoryZoneMetadataPanel())
+        dispatch(setError(error))
+        dispatch(resetLoadingRegulatoryZoneMetadata())
+        dispatch(resetRegulatoryGeometriesToPreview())
       })
   }

@@ -1,12 +1,11 @@
 import { logSoftError, stopMouseEventPropagation } from '@mtes-mct/monitor-ui'
-import { memo, useEffect, useMemo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { Checkbox, CheckboxGroup } from 'rsuite'
 import styled from 'styled-components'
 
 import { RegulatoryLayerSearchResultZones } from './RegulatoryLayerSearchResultZones'
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './slice'
 import { COLORS } from '../../../../../constants/constants'
-import { closeRegulatoryZoneMetadata } from '../../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 
@@ -82,12 +81,6 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
       : false
 
   const [zonesAreOpen, setZonesAreOpen] = useState(false)
-
-  useEffect(() => {
-    if (!zonesAreOpen && regulatory.regulatoryZoneMetadata?.topic === regulatoryLayerTopic) {
-      dispatch(closeRegulatoryZoneMetadata())
-    }
-  }, [dispatch, regulatory.regulatoryZoneMetadata?.topic, regulatoryLayerTopic, zonesAreOpen])
 
   const allTopicZonesAreChecked = useMemo(() => {
     if (!regulatoryZonesChecked || !regulatoryLayerTopic) {

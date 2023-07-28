@@ -1,6 +1,6 @@
 // TODO Remove temporary `any`, `as any` and `@ts-ignore` (fresh migration to TS).
 
-import { memo, useEffect, useState } from 'react'
+import { memo, useEffect, useState, type Dispatch, type SetStateAction } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -30,23 +30,31 @@ import type { LayerSliceNamespace } from '../../../../domain/entities/layers/typ
 import type { RegulatoryZone as RegulatoryZoneType } from '../../../../domain/types/regulation'
 import type { Promisable } from 'type-fest'
 
-export function showOrHideMetadataIcon(regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
+export function showOrHideMetadataIcon(
+  regulatoryZoneMetadata: RegulatoryZoneType | undefined,
+  regulatoryZone: RegulatoryZoneType,
+  setMetadataIsShown: Dispatch<SetStateAction<boolean>>
+) {
   if (
     regulatoryZoneMetadata &&
-    regulatoryZone &&
     (regulatoryZone.topic !== regulatoryZoneMetadata.topic || regulatoryZone.zone !== regulatoryZoneMetadata.zone)
   ) {
     setMetadataIsShown(false)
-  } else if (
+
+    return
+  }
+
+  if (
     regulatoryZoneMetadata &&
-    regulatoryZone &&
     regulatoryZone.topic === regulatoryZoneMetadata.topic &&
     regulatoryZone.zone === regulatoryZoneMetadata.zone
   ) {
     setMetadataIsShown(true)
-  } else if (!regulatoryZoneMetadata && regulatoryZone) {
-    setMetadataIsShown(false)
+
+    return
   }
+
+  setMetadataIsShown(false)
 }
 
 // TODO Properly type all these `any`.

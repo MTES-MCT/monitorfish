@@ -72,12 +72,10 @@ export type RegulatoryState = {
   // TODO Type this prop.
   regulatoryTopics: Record<string, any>[]
   regulatoryTopicsOpened: string[]
-  // TODO Type this prop.
-  regulatoryZoneMetadata: Record<string, any> | null
+  regulatoryZoneMetadata: RegulatoryZone | null
   regulatoryZoneMetadataPanelIsOpen: boolean
   regulatoryZones: RegulatoryZone[]
   regulatoryZonesToPreview: Partial<RegulatoryZone>[]
-  // TODO Type this prop.
   selectedRegulatoryLayers: Record<string, RegulatoryZone[]> | null
   simplifiedGeometries: boolean
 }
@@ -381,7 +379,7 @@ export const {
   closeRegulatoryZoneMetadataPanel,
   removeRegulatoryTopicOpened,
   removeRegulatoryZonesFromMyLayers,
-  removeSelectedZoneById: removeLayerById,
+  removeSelectedZoneById,
   resetLoadingRegulatoryZoneMetadata,
   resetRegulatoryGeometriesToPreview,
   setIsReadyToShowRegulatoryZones,

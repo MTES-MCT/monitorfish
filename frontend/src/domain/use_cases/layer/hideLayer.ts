@@ -1,3 +1,4 @@
+import { FrontendError } from '../../../libs/FrontendError'
 import { getLayerNameNormalized } from '../../entities/layers'
 import layer from '../../shared_slices/Layer'
 
@@ -19,6 +20,9 @@ export const hideLayer =
     const { namespace, topic, type, zone } = layerToHide
 
     const { removeLayerToFeatures, removeShowedLayer } = layer[namespace].actions
+    if (!removeLayerToFeatures || !removeShowedLayer) {
+      throw new FrontendError('`removeLayerToFeatures` or `removeShowedLayer` is undefined.')
+    }
 
     const { showedLayers } = getState().layer
     const layerName = getLayerNameNormalized({ topic, type, zone })
@@ -31,10 +35,8 @@ export const hideLayer =
       return getLayerNameNormalized(layerToRemove).includes(layerName)
     })
 
-    if (removeLayerToFeatures && removeShowedLayer) {
-      dispatch(removeShowedLayer(layerToHide))
-      layersToRemove.forEach(layerToRemove => {
-        dispatch(removeLayerToFeatures(getLayerNameNormalized(layerToRemove)))
-      })
-    }
+    dispatch(removeShowedLayer(layerToHide))
+    layersToRemove.forEach(layerToRemove => {
+      dispatch(removeLayerToFeatures(getLayerNameNormalized(layerToRemove)))
+    })
   }

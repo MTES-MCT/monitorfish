@@ -73,16 +73,16 @@ function UnmemoizedRegulatoryZone({
 
   const { isReadyToShowRegulatoryLayers, regulatoryZoneMetadata } = useMainAppSelector(state => state.regulatory)
   const zoneIsShown = useMainAppSelector(state =>
-    state.layer.showedLayers.some(layer => (layer as any).id === regulatoryZone?.id)
+    state.layer.showedLayers.some(layer => layer.id === regulatoryZone.id)
   )
 
   const [metadataIsShown, setMetadataIsShown] = useState(false)
   const [isOver, setIsOver] = useState(false)
   const vectorLayerStyle = getRegulatoryLayerStyle(undefined, regulatoryZone)
 
-  const callShowRegulatoryZoneMetadata = zone => {
+  const callShowRegulatoryZoneMetadata = (zone: RegulatoryZoneType) => {
     if (!metadataIsShown) {
-      dispatch((showRegulatoryZoneMetadata as any)(zone))
+      dispatch(showRegulatoryZoneMetadata(zone))
       setMetadataIsShown(true)
     } else {
       dispatch(closeRegulatoryZoneMetadata())

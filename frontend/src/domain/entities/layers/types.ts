@@ -80,6 +80,7 @@ export type ShowableLayer = {
 }
 
 export type ShowedLayer = {
+  id: number | string
   namespace: LayerSliceNamespace
   topic: string
   type: string

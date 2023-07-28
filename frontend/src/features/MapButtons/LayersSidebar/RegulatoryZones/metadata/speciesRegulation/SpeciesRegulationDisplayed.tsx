@@ -16,11 +16,11 @@ export function SpeciesRegulationDisplayed() {
 
   const { speciesRegulation } = regulatory.regulatoryZoneMetadata || {}
   const { authorized, otherInfo, unauthorized } = speciesRegulation || {}
-  const hasAuthorizedContent = regulatedSpeciesIsNotEmpty(authorized)
-  const hasUnauthorizedContent = regulatedSpeciesIsNotEmpty(unauthorized)
-  const speciesRegulationIsEmpty = !hasAuthorizedContent && !hasUnauthorizedContent && !otherInfo
+  const hasAuthorizedContent = !isRegulatedSpeciesEmpty(authorized)
+  const hasUnauthorizedContent = !isRegulatedSpeciesEmpty(unauthorized)
+  const areSpeciesRegulationEmpty = !hasAuthorizedContent && !hasUnauthorizedContent && !otherInfo
 
-  if (!speciesRegulationIsEmpty) {
+  if (areSpeciesRegulationEmpty) {
     return <></>
   }
 
@@ -50,8 +50,9 @@ export function SpeciesRegulationDisplayed() {
   )
 }
 
-const regulatedSpeciesIsNotEmpty = (regulatedSpecies: RegulatedSpeciesType): boolean =>
-  regulatedSpecies?.speciesGroups?.length > 0 || regulatedSpecies?.species?.length > 0 || !!regulatedSpecies?.allSpecies
+const isRegulatedSpeciesEmpty = (regulatedSpecies: RegulatedSpeciesType | undefined): boolean =>
+  !regulatedSpecies ||
+  (!regulatedSpecies.speciesGroups?.length && !regulatedSpecies.species?.length && !regulatedSpecies.allSpecies)
 
 const MarkdownWithMargin = styled.div<{
   $hasMargin: boolean

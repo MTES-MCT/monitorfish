@@ -10,10 +10,11 @@ import { ReactComponent as DownloadMessagesSVG } from '../../../icons/Bouton_exp
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
 import { useSelector } from 'react-redux'
-import { formatToCSVColumnsForExport, getDate } from '../../../../utils'
+import { getDate } from '../../../../utils'
 import { ExportToCsv } from 'export-to-csv'
 import CustomDatesShowedInfo from '../CustomDatesShowedInfo'
 import { theme } from '../../../../ui/theme'
+import { formatAsCSVColumns } from '../../../../utils/formatAsCSVColumns'
 
 const animatedComponents = makeAnimated()
 
@@ -107,7 +108,7 @@ const LogbookMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navi
     const objectsToExports = logbookMessages
       .filter(logbookMessages => filterBySelectedType(logbookMessages))
       .map(position => {
-        return formatToCSVColumnsForExport(position, downloadMessagesOptions)
+        return formatAsCSVColumns(position, downloadMessagesOptions)
       })
 
     const date = new Date()

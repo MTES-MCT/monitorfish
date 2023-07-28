@@ -1,4 +1,4 @@
-import { CodeAndName } from '../domain/entities/types'
+import type { CodeAndName } from '../domain/entities/types'
 
 /**
  * Example:

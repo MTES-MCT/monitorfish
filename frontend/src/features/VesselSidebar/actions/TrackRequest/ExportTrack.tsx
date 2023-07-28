@@ -5,12 +5,14 @@ import styled from 'styled-components'
 
 import { getCoordinates } from '../../../../coordinates'
 import { WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
-import { VesselPosition } from '../../../../domain/entities/vessel/types'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { getDate } from '../../../../utils'
-import { downloadAsCsv, DownloadAsCsvMap } from '../../../../utils/downloadAsCsv'
+import { downloadAsCsv } from '../../../../utils/downloadAsCsv'
 import { PrimaryButton } from '../../../commonStyles/Buttons.style'
 import { ReactComponent as ExportSVG } from '../../../icons/Bouton_exporter_piste_navire.svg'
+
+import type { VesselPosition } from '../../../../domain/entities/vessel/types'
+import type { DownloadAsCsvMap } from '../../../../utils/downloadAsCsv'
 
 type VesselPositionWithId = VesselPosition & {
   id: string

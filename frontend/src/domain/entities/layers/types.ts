@@ -1,6 +1,5 @@
-import { CodeAndName } from '../types'
-
 import type { LayerType } from './constants'
+import type { CodeAndName } from '../types'
 
 export enum MonitorFishLayer {
   AEM = 'AEM',

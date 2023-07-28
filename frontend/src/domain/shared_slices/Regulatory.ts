@@ -72,7 +72,7 @@ export type RegulatoryState = {
   // TODO Type this prop.
   regulatoryTopics: Record<string, any>[]
   regulatoryTopicsOpened: string[]
-  regulatoryZoneMetadata: RegulatoryZone | null
+  regulatoryZoneMetadata: RegulatoryZone | undefined
   regulatoryZoneMetadataPanelIsOpen: boolean
   regulatoryZones: RegulatoryZone[]
   regulatoryZonesToPreview: Partial<RegulatoryZone>[]
@@ -88,7 +88,7 @@ const INITIAL_STATE: RegulatoryState = {
   regulatoryLayerLawTypes: undefined,
   regulatoryTopics: [],
   regulatoryTopicsOpened: [],
-  regulatoryZoneMetadata: null,
+  regulatoryZoneMetadata: undefined,
   regulatoryZoneMetadataPanelIsOpen: false,
   regulatoryZones: [],
   regulatoryZonesToPreview: [],
@@ -134,7 +134,7 @@ const regulatorySlice = createSlice({
 
     closeRegulatoryZoneMetadataPanel(state) {
       state.regulatoryZoneMetadataPanelIsOpen = false
-      state.regulatoryZoneMetadata = null
+      state.regulatoryZoneMetadata = undefined
     },
 
     removeRegulatoryTopicOpened(state, action: PayloadAction<string>) {
@@ -224,7 +224,7 @@ const regulatorySlice = createSlice({
 
     setLoadingRegulatoryZoneMetadata(state) {
       state.loadingRegulatoryZoneMetadata = true
-      state.regulatoryZoneMetadata = null
+      state.regulatoryZoneMetadata = undefined
       state.regulatoryZoneMetadataPanelIsOpen = true
     },
 

@@ -5,12 +5,16 @@ import { getSummedSpeciesOnBoard } from '../../../domain/entities/logbook/specie
 import { MissionAction } from '../../../domain/types/missionAction'
 import { getLastControlCircleGeometry } from '../../../domain/use_cases/mission/getLastControlCircleGeometry'
 import { getFleetSegments } from '../../../domain/use_cases/vessel/getFleetSegments'
+import { FrontendError } from '../../../libs/FrontendError'
 
 import type { MissionActionFormValues } from './types'
 import type { RiskFactor } from '../../../domain/entities/vessel/riskFactor/types'
 import type { Gear } from '../../../domain/types/Gear'
 import type { Port } from '../../../domain/types/port'
+import type { MainRootState } from '../../../store'
 import type { Option } from '@mtes-mct/monitor-ui'
+import type { AnyAction } from 'redux'
+import type { ThunkDispatch } from 'redux-thunk'
 
 const updateSegments =
   (
@@ -64,7 +68,11 @@ const updateFAOAreas =
   }
 
 const updateGearsOnboard =
-  (dispatch, setFieldValue: (field: string, value: any) => void, gearsByCode: Map<string, Gear> | undefined) =>
+  (
+    dispatch: ThunkDispatch<MainRootState, undefined, AnyAction>,
+    setFieldValue: (field: string, value: any) => void,
+    gearsByCode: Record<string, Gear> | undefined
+  ) =>
   async (missionAction: MissionActionFormValues): Promise<MissionAction.GearControl[]> => {
     if (!gearsByCode || !missionAction.internalReferenceNumber) {
       return []
@@ -83,7 +91,14 @@ const updateGearsOnboard =
     }
 
     const nextGears = gearOnboard
-      .map(gear => ({ ...gearsByCode[gear.gear], declaredMesh: gear.mesh }))
+      .map(gear => {
+        const gearByCode = gearsByCode[gear.gear]
+        if (!gearByCode) {
+          throw new FrontendError('`gearByCode` is undefined.')
+        }
+
+        return { ...gearByCode, declaredMesh: gear.mesh }
+      })
       .map(gear => ({
         comments: undefined,
         controlledMesh: undefined,

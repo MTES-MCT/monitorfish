@@ -7,12 +7,17 @@ import {
   DEFAULT_UNAUTHORIZED_REGULATED_GEARS
 } from '../../../../../../domain/entities/regulation'
 import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
+import { FrontendError } from '../../../../../../libs/FrontendError'
 import { Section } from '../RegulatoryMetadata.style'
 
 export function GearRegulationDisplayed() {
   const regulatory = useMainAppSelector(state => state.regulatory)
 
   const { gearRegulation } = regulatory.regulatoryZoneMetadata || {}
+  if (!gearRegulation) {
+    throw new FrontendError('`gearRegulation` is undefined.')
+  }
+
   const { authorized, otherInfo, unauthorized } = gearRegulation
   const hasAuthorizedContent = regulatedGearsIsNotEmpty(authorized)
   const hasUnauthorizedContent = regulatedGearsIsNotEmpty(unauthorized)

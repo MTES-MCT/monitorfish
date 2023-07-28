@@ -18,7 +18,7 @@ import type Geometry from 'ol/geom/Geometry'
 const DEFAULT_NAMESPACE = 'homepage'
 
 export const showAdministrativeZone =
-  (zoneRequest: Omit<ShowedLayer, 'topic'>): MainAppThunk<void> =>
+  (zoneRequest: Omit<ShowedLayer, 'id' | 'topic'>): MainAppThunk<void> =>
   dispatch => {
     const currentNamespace = zoneRequest.namespace || DEFAULT_NAMESPACE
     const { addShowedLayer } = LayerSlice[currentNamespace].actions

@@ -16,7 +16,7 @@ import type { MainAppThunk } from '../../../../store'
 import type { RegulatoryZone } from '../../../types/regulation'
 
 export const showRegulatoryZoneMetadata =
-  (partialRegulatoryZone: Pick<RegulatoryZone, 'topic' | 'zone'>, isPreviewing: boolean): MainAppThunk =>
+  (partialRegulatoryZone: Pick<RegulatoryZone, 'topic' | 'zone'>, isPreviewing: boolean = false): MainAppThunk =>
   (dispatch, getState) => {
     dispatch(setLoadingRegulatoryZoneMetadata())
     const { speciesByCode } = getState().species

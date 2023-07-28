@@ -8,6 +8,7 @@ import { LayerProperties, LayerType } from '../../../../domain/entities/layers/c
 import layer from '../../../../domain/shared_slices/Layer'
 import { regulatoryActions } from '../../../../domain/shared_slices/Regulatory'
 import { hideLayer } from '../../../../domain/use_cases/layer/hideLayer'
+import { hideRegulatoryZoneLayerById } from '../../../../domain/use_cases/layer/hideRegulatoryZoneLayerById'
 import { closeRegulatoryZoneMetadata } from '../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
@@ -44,9 +45,10 @@ export function RegulatoryZones({
 
   const removeById = useCallback(
     (id: number | string) => {
+      dispatch(hideRegulatoryZoneLayerById(id, namespace))
       dispatch(regulatoryActions.removeSelectedZoneById(id))
     },
-    [dispatch]
+    [dispatch, namespace]
   )
 
   const removeByTopic = useCallback(

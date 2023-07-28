@@ -3,11 +3,12 @@ import styled from 'styled-components'
 
 import { AdministrativeZone } from './AdministrativeZone'
 import { COLORS } from '../../../../constants/constants'
+import { CodeAndName } from '../../../../domain/entities/types'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { theme } from '../../../../ui/theme'
 import { ChevronIcon } from '../../../commonStyles/icons/ChevronIcon.style'
 
-import type { CodeAndName, ShowableLayer } from '../../../../domain/entities/layers/types'
+import type { ShowableLayer } from '../../../../domain/entities/layers/types'
 
 type AdministrativeZonesGroupType = {
   group: CodeAndName

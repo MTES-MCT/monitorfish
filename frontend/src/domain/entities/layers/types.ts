@@ -1,3 +1,5 @@
+import { CodeAndName } from '../types'
+
 import type { LayerType } from './constants'
 
 export enum MonitorFishLayer {
@@ -78,9 +80,4 @@ export type ShowedLayer = {
   namespace: string
   type: string
   zone: string | null
-}
-
-export type CodeAndName = {
-  code: string
-  name: string
 }

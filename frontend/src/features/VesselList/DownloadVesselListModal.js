@@ -4,12 +4,13 @@ import { Checkbox, CheckboxGroup, Modal } from 'rsuite'
 import { COLORS } from '../../constants/constants'
 import { ExportToCsv } from 'export-to-csv'
 import countries from 'i18n-iso-countries'
-import { formatToCSVColumnsForExport, getDate } from '../../utils'
+import { getDate } from '../../utils'
 import { CSVOptions } from './dataFormatting'
 import { OPENLAYERS_PROJECTION } from '../../domain/entities/map/constants'
 import { getCoordinates } from '../../coordinates'
 import { useSelector } from 'react-redux'
 import StyledModalHeader from '../commonComponents/StyledModalHeader'
+import { formatAsCSVColumns } from '../../utils/formatAsCSVColumns'
 
 const optionsCSV = {
   fieldSeparator: ',',
@@ -94,7 +95,7 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
           }
         })
 
-        return formatToCSVColumnsForExport(filteredVesselObject, CSVOptions, checkboxState.valuesChecked)
+        return formatAsCSVColumns(filteredVesselObject, CSVOptions, checkboxState.valuesChecked)
       })
 
     if (objectsToExports) {

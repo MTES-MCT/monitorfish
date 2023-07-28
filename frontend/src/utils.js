@@ -286,31 +286,6 @@ export const formatDataForSelectPicker = (list, groupName) => {
 }
 
 /**
- * Format object's data as specified in the CSV column
- * @param {Object} initialObject - The value object
- * @param {Object} csvColumns - The columns to be exported in the CSV
- * @param {string[]=} filters - Filters of the exported columns contained in the csvColumns object
- * @returns a new array
- */
-export function formatToCSVColumnsForExport (initialObject, csvColumns, filters) {
-  let csvColumnsAsArray = Object.entries(csvColumns)
-
-  if (filters?.length) {
-    csvColumnsAsArray = csvColumnsAsArray.filter(([columnKey, column]) => {
-      return filters.some(filter => column.code === filter)
-    })
-  }
-  return csvColumnsAsArray
-    .reduce(
-      (collector, [columnKey, column]) => {
-        collector[column.name] = initialObject[column.code]
-        return collector
-      },
-      {}
-    )
-}
-
-/**
  * Get the extent of the first feature found in the GeoJSON object
  * @param {GeoJSON} features - GEoJSON object
  * @returns {number[]} The extent

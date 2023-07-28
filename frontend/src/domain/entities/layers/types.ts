@@ -57,6 +57,11 @@ export enum MonitorFishLayer {
   transversal_sea_limit = 'transversal_sea_limit'
 }
 
+export type CodeAndName = {
+  code: string
+  name: string
+}
+
 export type ShowableLayer = {
   code: MonitorFishLayer | string
   getZoneName?: (feature: any) => string
@@ -78,9 +83,4 @@ export type ShowedLayer = {
   namespace: string
   type: string
   zone: string | null
-}
-
-export type CodeAndName = {
-  code: string
-  name: string
 }

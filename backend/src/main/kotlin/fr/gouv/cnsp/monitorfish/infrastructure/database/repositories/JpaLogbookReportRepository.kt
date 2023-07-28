@@ -213,6 +213,8 @@ class JpaLogbookReportRepository(
             }
 
             throw IllegalArgumentException("No CFR given to find the vessel.")
+        } catch (e: EmptyResultDataAccessException) {
+            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
         } catch (e: NoSuchElementException) {
             throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
         } catch (e: IllegalArgumentException) {

@@ -485,4 +485,20 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(lastTrip.toString()).isEqualTo("2020-05-06T18:39:33Z")
     }
+
+    @Test
+    @Transactional
+    fun `findFirstAcknowledgedDateOfTripBeforeDateTime Should throw a custom exception When the findFirstAcknowledgedDateOfTrip request is empty`() {
+        // When
+        val throwable = catchThrowable {
+            jpaLogbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(
+                "UNKNOWN_VESS",
+                ZonedDateTime.parse("2018-02-17T01:06:00Z"),
+            )
+        }
+
+        // Then
+        assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
+        assertThat(throwable.message).contains("No trip found found for the vessel.")
+    }
 }

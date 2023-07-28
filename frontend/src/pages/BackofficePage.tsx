@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import { LandingPage } from './LandingPage'
 import { BackofficeMode } from '../api/BackofficeMode'
 import { NamespaceContext } from '../context/NamespaceContext'
+import { LayerSliceNamespace } from '../domain/entities/layers/types'
 import { Menu } from '../features/Backoffice/menu/Menu'
 import { ErrorToastNotification } from '../features/commonComponents/ErrorToastNotification'
 import { useGetUserAuthorization } from '../hooks/authorization/useGetUserAuthorization'
@@ -25,7 +26,7 @@ export function BackofficePage() {
     <Provider store={backofficeStore}>
       {/* eslint-disable-next-line no-null/no-null */}
       <PersistGate loading={null} persistor={backofficeStorePersistor}>
-        <NamespaceContext.Provider value="backoffice">
+        <NamespaceContext.Provider value={LayerSliceNamespace.backoffice}>
           <BackofficeMode isBackoffice />
 
           <BackofficeWrapper>

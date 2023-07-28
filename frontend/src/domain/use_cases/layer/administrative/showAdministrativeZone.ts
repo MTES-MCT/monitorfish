@@ -6,21 +6,28 @@ import VectorSource from 'ol/source/Vector'
 import { getLayerNameFromTypeAndZone } from './utils'
 import { getAdministrativeZoneFromAPI } from '../../../../api/geoserver'
 import { getAdministrativeLayerStyle } from '../../../../features/map/layers/styles/administrativeLayer.style'
+import { FrontendError } from '../../../../libs/FrontendError'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../entities/map/constants'
 import LayerSlice from '../../../shared_slices/Layer'
 
+import type { MainAppThunk } from '../../../../store'
 import type { ShowedLayer } from '../../../entities/layers/types'
 import type Feature from 'ol/Feature'
 import type Geometry from 'ol/geom/Geometry'
 
 const DEFAULT_NAMESPACE = 'homepage'
 
-export const showAdministrativeZone = (zoneRequest: ShowedLayer) => dispatch => {
-  const currentNamespace = zoneRequest.namespace || DEFAULT_NAMESPACE
-  const { addShowedLayer } = LayerSlice[currentNamespace].actions
+export const showAdministrativeZone =
+  (zoneRequest: Omit<ShowedLayer, 'topic'>): MainAppThunk<void> =>
+  dispatch => {
+    const currentNamespace = zoneRequest.namespace || DEFAULT_NAMESPACE
+    const { addShowedLayer } = LayerSlice[currentNamespace].actions
+    if (!addShowedLayer) {
+      throw new FrontendError('`addShowedLayer` is undefined.')
+    }
 
-  dispatch(addShowedLayer(zoneRequest))
-}
+    dispatch(addShowedLayer(zoneRequest))
+  }
 
 export const getVectorOLLayer = (
   type: string,

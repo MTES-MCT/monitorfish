@@ -23,6 +23,7 @@ import { EditIcon } from '../../../commonStyles/icons/EditIcon.style'
 import { HideIcon } from '../../../commonStyles/icons/HideIcon.style'
 import { ShowIcon } from '../../../commonStyles/icons/ShowIcon.style'
 
+import type { LayerSliceNamespace } from '../../../../domain/entities/layers/types'
 import type { RegulatoryZone as RegulatoryZoneType } from '../../../../domain/types/regulation'
 import type { Promisable } from 'type-fest'
 
@@ -31,7 +32,7 @@ export type RegulatoryTopicProps = {
   isEditable: boolean
   isLastItem: boolean
   /** Remove a single regulation zone layer. */
-  onRemoveById: (id: number) => Promisable<void>
+  onRemoveById: (id: number | string) => Promisable<void>
   /** Remove all the regulation zone layers for the given topic. */
   onRemoveByTopic: (topic: string, numberOfZones: number) => Promisable<void>
   regulatoryTopic: string
@@ -93,7 +94,7 @@ function UnmemoizedRegulatoryTopic({
     }
   }, [showedLayers, regulatoryZones, regulatoryTopic])
 
-  const showTopic = (namespace: 'backoffice' | 'homepage') => {
+  const showTopic = (namespace: LayerSliceNamespace) => {
     dispatch(
       showRegulatoryTopic({
         namespace,
@@ -103,7 +104,7 @@ function UnmemoizedRegulatoryTopic({
     )
   }
 
-  const hideTopic = (namespace: 'backoffice' | 'homepage') => {
+  const hideTopic = (namespace: LayerSliceNamespace) => {
     dispatch(
       hideLayer({
         namespace,
@@ -181,7 +182,7 @@ function UnmemoizedRegulatoryTopic({
             )}
             {allowRemoveZone ? (
               <CloseIcon
-                onClick={() => onRemoveByTopic(getFirstRegulotaryZoneTopic(regulatoryZones), regulatoryZones.length)}
+                onClick={() => onRemoveByTopic(getFirstRegulatoryZoneTopic(regulatoryZones), regulatoryZones.length)}
                 title="Supprimer la couche de ma sélection"
               />
             ) : null}
@@ -208,7 +209,7 @@ function UnmemoizedRegulatoryTopic({
   )
 }
 
-const getFirstRegulotaryZoneTopic = (regulatoryZones: RegulatoryZoneType[]): string => {
+const getFirstRegulatoryZoneTopic = (regulatoryZones: RegulatoryZoneType[]): string => {
   const firstRefulatoryZone = regulatoryZones[0]
   if (!firstRefulatoryZone) {
     throw new FrontendError('`firstRefulatoryZone` is undefined.')

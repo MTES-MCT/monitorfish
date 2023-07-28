@@ -15,12 +15,12 @@ import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ChevronIcon } from '../../../commonStyles/icons/ChevronIcon.style'
 
-import type { ShowableLayer } from '../../../../domain/entities/layers/types'
+import type { LayerSliceNamespace, ShowableLayer } from '../../../../domain/entities/layers/types'
 import type { GroupedZonesAndZones } from '../../../../domain/use_cases/layer/administrative/getAdministrativeZones'
 
 export type AdministrativeZonesProps = {
   hideLayersListWhenSearching?: boolean
-  namespace: 'backoffice' | 'homepage'
+  namespace: LayerSliceNamespace
 }
 export function AdministrativeZones({ hideLayersListWhenSearching = false, namespace }: AdministrativeZonesProps) {
   const { setLayersSideBarOpenedLayerType } = LayerSlice[namespace].actions

@@ -7,8 +7,10 @@ import layer from '../../../../../domain/shared_slices/Layer'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 
+import type { LayerSliceNamespace } from '../../../../../domain/entities/layers/types'
+
 export type RegulatoryLayerSearchResultListProps = {
-  namespace: 'backoffice' | 'homepage'
+  namespace: LayerSliceNamespace
 }
 export function RegulatoryLayerSearchResultList({ namespace }: RegulatoryLayerSearchResultListProps) {
   const dispatch = useMainAppDispatch()

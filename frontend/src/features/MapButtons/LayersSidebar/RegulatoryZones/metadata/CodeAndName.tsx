@@ -8,7 +8,7 @@ import type { Gear } from '../../../../../domain/types/Gear'
 
 export type CodeAndNameProps = {
   categoriesToGears?: Record<string, Gear[]> | undefined
-  code: string
+  code: string | undefined
   isCategory?: boolean
   name: string
 }

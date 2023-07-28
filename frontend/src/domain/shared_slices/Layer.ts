@@ -4,7 +4,7 @@ import { createGenericSlice, getLocalStorageState } from '../../utils'
 import { getLayerNameNormalized } from '../entities/layers'
 import { LayerProperties } from '../entities/layers/constants'
 
-import type { ShowedLayer } from '../entities/layers/types'
+import type { LayerSliceNamespace, ShowedLayer } from '../entities/layers/types'
 import type { AdministrativeOrRegulatoryLayerIdentity } from '../types/layer'
 import type { PayloadAction, Slice } from '@reduxjs/toolkit'
 
@@ -200,9 +200,11 @@ const reducers = {
   }
 }
 
-// TODO Remove default export once cleaned.
-// eslint-disable-next-line import/no-default-export
-export default {
+const layerSlice: Record<LayerSliceNamespace, Slice<LayerState>> = {
   backoffice: createGenericSlice(BACKOFFICE_INITIAL_STATE, reducers, 'BackofficeLayerSlice') as Slice<LayerState>,
   homepage: createGenericSlice(HOMEPAGE_INITIAL_STATE, reducers, 'HomePageLayerSlice') as Slice<LayerState>
 }
+
+// TODO Remove default export once cleaned.
+// eslint-disable-next-line import/no-default-export
+export default layerSlice

@@ -1,7 +1,4 @@
-import { MonitorFishLayer } from './types'
-
-import type { ShowableLayer } from './types'
-import type { CodeAndName } from '../types'
+import type { CodeAndName, MonitorFishLayer, ShowableLayer } from './types'
 
 export const layersGroups: Record<string, CodeAndName> = {
   NAVIGATION_CATEGORY: {

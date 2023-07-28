@@ -1,4 +1,4 @@
-import type { CodeAndName } from '../domain/entities/types'
+import type { CodeAndName } from '../domain/entities/layers/types'
 
 /**
  * Example:

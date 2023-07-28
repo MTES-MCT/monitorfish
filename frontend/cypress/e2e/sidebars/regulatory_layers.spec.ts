@@ -1,6 +1,6 @@
 // import { encodeUriObject } from '../../src/utils/encodeUriObject'
 
-context('LayersSidebar', () => {
+context('Sidebars > Regulatory Layers', () => {
   beforeEach(() => {
     cy.loadPath('/#@-224002.65,6302673.54,8.70')
 
@@ -327,5 +327,89 @@ context('LayersSidebar', () => {
         expect(showedLayers).length(1)
         expect(showedLayers[0].type).equal('eez_areas')
       })
+  })
+
+  it('Should unselect one of the selected topic zone layers', () => {
+    // Focus the map on Corsica
+    cy.loadPath('/#@997505.75,5180266.24,8.70')
+
+    // Select all the "Corse - Chaluts" regulation zones
+    cy.getDataCy('layers-sidebar').click()
+    cy.getDataCy('regulatory-search-input').type('Corse')
+    cy.contains('Corse - Chaluts').parent().find('input[type="checkbox"]').forceClick()
+    // TODO Add `role="button"` support in monitor-ui `cy.clickButton()`.
+    cy.contains('Ajouter 4 zones').click()
+    cy.contains('Mes zones réglementaires').click()
+
+    // Show all the "Corse - Chaluts" regulation zone layers
+    cy.contains('Corse - Chaluts').parent().parent().find('svg').first().click()
+
+    // Unselect one of the "Corse - Chaluts" regulation zones
+    cy.contains('Corse - Chaluts').click()
+    cy.contains('Interdiction temporaire').parent().find('span').last().find('svg').last().click()
+
+    cy.get('.regulatory').toMatchImageSnapshot({
+      screenshotConfig: {
+        clip: { height: 960, width: 480, x: 440, y: 25 }
+      }
+    })
+
+    // Select the removed zone again
+    cy.contains('Afficher les résultats').click()
+    cy.contains('Corse - Chaluts').first().click()
+    cy.contains('Interdiction temporaire').first().parent().find('input[type="checkbox"]').forceClick()
+    cy.contains('Ajouter 1 zone').click()
+
+    cy.contains('Mes zones réglementaires').parent().contains('Interdiction temporaire').should('be.visible')
+    cy.contains('Mes zones réglementaires').parent().contains('6 MN').should('be.visible')
+    cy.contains('Mes zones réglementaires').parent().contains('1,5 - 3 MN').should('be.visible')
+    cy.contains('Mes zones réglementaires').parent().contains('3 - 12 MN').should('be.visible')
+  })
+
+  it('Should toggle the selected topic zone layers', () => {
+    // Focus the map on Corsica
+    cy.loadPath('/#@997505.75,5180266.24,8.70')
+
+    // Select all the "Corse - Chaluts" regulation zones
+    cy.getDataCy('layers-sidebar').click()
+    cy.getDataCy('regulatory-search-input').type('Corse')
+    cy.contains('Corse - Chaluts').parent().find('input[type="checkbox"]').forceClick()
+    cy.contains('Ajouter 4 zones').click()
+    cy.contains('Mes zones réglementaires').click()
+
+    // Show metadata for one of the "Corse - Chaluts" regulation zones
+    cy.contains('Corse - Chaluts').click()
+    cy.contains('6 MN').parent().find('span').last().find('svg').first().click()
+
+    // Check a few of its metadata values
+    cy.contains('Reg. MED').should('be.visible')
+    cy.contains('Pêche interdite tous les ans').should('be.visible')
+    cy.contains('création et réglementation de zone').should('be.visible')
+
+    // Unselect one of the "Corse - Chaluts" regulation zones
+    cy.contains('Interdiction temporaire').parent().find('span').last().find('svg').last().click()
+
+    // Select all the "Armor CSJ Dragues" regulation zones (there is only 1)
+    cy.getDataCy('regulatory-search-clean-input').click()
+    cy.getDataCy('regulatory-search-input').type('Armor')
+    cy.contains('Armor CSJ Dragues').parent().find('input[type="checkbox"]').forceClick()
+    cy.contains('Ajouter 1 zone').click()
+
+    // Show metadata the only "Armor CSJ Dragues" regulation zone
+    cy.contains('Mes zones réglementaires').parent().contains('Armor CSJ Dragues').click()
+    cy.contains('Mes zones réglementaires')
+      .parent()
+      .contains('Secteur 3')
+      .parent()
+      .find('span')
+      .last()
+      .find('svg')
+      .first()
+      .click()
+
+    // Check a few of its metadata values
+    cy.contains('Reg. MEMN').should('be.visible')
+    cy.contains('Tous les engins trainants').should('be.visible')
+    cy.contains('création de zone').should('be.visible')
   })
 })

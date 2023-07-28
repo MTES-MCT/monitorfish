@@ -87,6 +87,7 @@ export function RegulatoryLayerSearch({
     <Search ref={wrapperRef}>
       <RegulatoryLayerSearchInput />
       <RegulatoryLayerSearchResultList namespace={namespace} />
+      {/* TODO Use monitor-ui `<Button />` here. */}
       <AddRegulatoryLayer
         $isShown={!!regulatoryZonesChecked?.length}
         data-cy="regulatory-search-add-zones-button"

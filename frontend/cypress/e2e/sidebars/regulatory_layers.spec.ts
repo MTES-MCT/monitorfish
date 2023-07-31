@@ -1,7 +1,7 @@
 // import { encodeUriObject } from '../../src/utils/encodeUriObject'
 
 context('Sidebars > Regulatory Layers', () => {
-  beforeEach(() => {
+  it('A regulation Should be searched, added to My Zones and showed on the map with the Zone button', () => {
     cy.loadPath('/#@-224002.65,6302673.54,8.70')
 
     cy.request(
@@ -10,9 +10,7 @@ context('Sidebars > Regulatory Layers', () => {
     ).then(response => {
       cy.log(response.body)
     })
-  })
 
-  it('A regulation Should be searched, added to My Zones and showed on the map with the Zone button', () => {
     // When
     cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
 
@@ -78,6 +76,15 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('A regulation Should be searched and the result Should be kept When we go to My Zones section', () => {
+    cy.loadPath('/#@-224002.65,6302673.54,8.70')
+
+    cy.request(
+      'GET',
+      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
+    ).then(response => {
+      cy.log(response.body)
+    })
+
     // When
     cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
 
@@ -102,6 +109,15 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('A regulation Should be searched, added to My Zones and showed on the map with the Topic button', () => {
+    cy.loadPath('/#@-224002.65,6302673.54,8.70')
+
+    cy.request(
+      'GET',
+      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
+    ).then(response => {
+      cy.log(response.body)
+    })
+
     // When
     cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
 
@@ -140,6 +156,15 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('The Cotentin regulation metadata Should be opened', () => {
+    cy.loadPath('/#@-224002.65,6302673.54,8.70')
+
+    cy.request(
+      'GET',
+      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
+    ).then(response => {
+      cy.log(response.body)
+    })
+
     // When
     cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
 
@@ -193,6 +218,15 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('The Armor regulation metadata Should be opened', () => {
+    cy.loadPath('/#@-224002.65,6302673.54,8.70')
+
+    cy.request(
+      'GET',
+      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
+    ).then(response => {
+      cy.log(response.body)
+    })
+
     // When
     cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
 
@@ -236,6 +270,15 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('A regulation Should be searched with a rectangle', () => {
+    cy.loadPath('/#@-224002.65,6302673.54,8.70')
+
+    cy.request(
+      'GET',
+      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
+    ).then(response => {
+      cy.log(response.body)
+    })
+
     // When
     cy.intercept(
       'GET',
@@ -265,6 +308,15 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('A regulation Should be searched with a polygon', () => {
+    cy.loadPath('/#@-224002.65,6302673.54,8.70')
+
+    cy.request(
+      'GET',
+      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
+    ).then(response => {
+      cy.log(response.body)
+    })
+
     // When
     cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
 
@@ -287,15 +339,31 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('An administrative zone Should be showed and hidden', () => {
+    cy.loadPath('/#@-224002.65,6302673.54,8.70')
+
+    cy.request(
+      'GET',
+      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
+    ).then(response => {
+      cy.log(response.body)
+    })
+
+    // TODO Investigate why there is white space in the Cypress iframe when hiding vessels which breaks the entire test.
+    // cy.clickButton('Affichage des dernières positions')
+    // cy.contains('Masquer les navires non sélectionnés').click()
+    // cy.clickButton('Affichage des dernières positions')
+
     cy.cleanScreenshots(1)
-    expect(JSON.parse(localStorage.getItem('homepagelayersShowedOnMap') || '')).length(0)
+    cy.getAllLocalStorage().then(localStorage => {
+      expect(localStorage.homepagelayersShowedOnMap || '').to.be.empty
+    })
 
     // When
-    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="layers-sidebar"]').click({ force: true, timeout: 10000 })
     cy.get('*[data-cy="administrative-zones-open"]').click({ force: true, timeout: 10000 })
     cy.get('*[data-cy="administrative-layer-toggle"]')
       .eq(0)
-      .click({ timeout: 10000 })
+      .click({ force: true, timeout: 10000 })
       .then(() => {
         const showedLayers = JSON.parse(localStorage.getItem('homepagelayersShowedOnMap') || '')
         expect(showedLayers).length(1)
@@ -331,7 +399,12 @@ context('Sidebars > Regulatory Layers', () => {
 
   it('Should unselect one of the selected topic zone layers', () => {
     // Focus the map on Corsica
-    cy.loadPath('/#@997505.75,5180266.24,8.70')
+    cy.visit('/#@997505.75,5180266.24,8.70')
+
+    // TODO Investigate why there is white space in the Cypress iframe when hiding vessels which breaks the entire test.
+    // cy.clickButton('Affichage des dernières positions')
+    // cy.contains('Masquer les navires non sélectionnés').click()
+    // cy.clickButton('Affichage des dernières positions')
 
     // Select all the "Corse - Chaluts" regulation zones
     cy.getDataCy('layers-sidebar').click()

@@ -4,9 +4,10 @@ import { createGenericSlice, getLocalStorageState } from '../../utils'
 import { getLayerNameNormalized } from '../entities/layers'
 import { LayerProperties } from '../entities/layers/constants'
 
-import type { ShowedLayer } from '../entities/layers/types'
+import type { LayerSliceNamespace, ShowedLayer } from '../entities/layers/types'
 import type { AdministrativeOrRegulatoryLayerIdentity } from '../types/layer'
 import type { PayloadAction, Slice } from '@reduxjs/toolkit'
+import type { WritableDraft } from 'immer/dist/internal'
 
 const layersShowedOnMapLocalStorageKey = 'layersShowedOnMap'
 
@@ -57,7 +58,7 @@ const reducers = {
   /**
    * Show a Regulatory or Administrative layer
    */
-  addShowedLayer(state, action: PayloadAction<AdministrativeOrRegulatoryLayerIdentity>) {
+  addShowedLayer(state: WritableDraft<LayerState>, action: PayloadAction<ShowedLayer>) {
     const { id, namespace, topic, type, zone } = action.payload
 
     if (type !== LayerProperties.VESSELS_POINTS.code) {
@@ -65,13 +66,16 @@ const reducers = {
       const found = !!state.showedLayers.find(layer => getLayerNameNormalized(layer) === searchedLayerName)
 
       if (!found) {
-        state.showedLayers = state.showedLayers.concat({
-          id,
-          namespace,
-          topic,
-          type,
-          zone
-        })
+        state.showedLayers = [
+          ...state.showedLayers,
+          {
+            id,
+            namespace,
+            topic,
+            type,
+            zone
+          }
+        ]
 
         if (namespace !== 'backoffice') {
           window.localStorage.setItem(
@@ -88,24 +92,22 @@ const reducers = {
    * @param {Object=} state
    * @param {{payload: LayerToFeatures | null}} action - The layer and features
    */
-  pushLayerToFeatures(state, action) {
+  pushLayerToFeatures(state: WritableDraft<LayerState>, action) {
     state.layersToFeatures = state.layersToFeatures.filter(layer => layer.name !== action.payload.name)
     state.layersToFeatures = state.layersToFeatures.concat(action.payload)
   },
 
   /**
    * Remove a layer and the features
-   * @param {Object=} state
-   * @param {{payload: string | null}} action - The layer name
    */
-  removeLayerToFeatures(state, action) {
+  removeLayerToFeatures(state: WritableDraft<LayerState>, action: PayloadAction<string>) {
     state.layersToFeatures = state.layersToFeatures.filter(layer => layer.name !== action.payload)
   },
 
   /**
    * Remove a Regulatory or Administrative layer
    */
-  removeShowedLayer(state, action: PayloadAction<AdministrativeOrRegulatoryLayerIdentity>) {
+  removeShowedLayer(state: WritableDraft<LayerState>, action: PayloadAction<AdministrativeOrRegulatoryLayerIdentity>) {
     const { namespace, topic, type, zone } = action.payload
 
     if (type === LayerProperties.VESSELS_POINTS.code) {
@@ -117,12 +119,12 @@ const reducers = {
         state.showedLayers = state.showedLayers
           .filter(layer => !(layer.topic === topic && layer.zone === zone))
           // LayerName is not used anymore, but may be still stored in LocalStorage (see l. 17)
-          .filter(layer => !(layer.layerName === topic && layer.zone === zone))
+          .filter(layer => !((layer as any).layerName === topic && layer.zone === zone))
       } else if (topic) {
         state.showedLayers = state.showedLayers
           .filter(layer => !(layer.topic === topic))
           // LayerName is not used anymore, but may be still stored in LocalStorage (see l. 17)
-          .filter(layer => !(layer.layerName === topic))
+          .filter(layer => !((layer as any).layerName === topic))
       }
     } else {
       state.showedLayers = state.showedLayers.filter(layer => !(layer.type === type && layer.zone === zone))
@@ -132,7 +134,7 @@ const reducers = {
     }
   },
 
-  resetShowedLayer(state, action) {
+  resetShowedLayer(state: WritableDraft<LayerState>, action) {
     state.showedLayers = []
     if (action.payload !== 'backoffice') {
       window.localStorage.setItem(
@@ -144,13 +146,15 @@ const reducers = {
     }
   },
 
-  setLastShowedFeatures(state, action) {
+  setLastShowedFeatures(state: WritableDraft<LayerState>, action) {
     state.lastShowedFeatures = action.payload
   },
-  setLayersSideBarOpenedLayerType(state, action) {
+
+  setLayersSideBarOpenedLayerType(state: WritableDraft<LayerState>, action) {
     state.layersSidebarOpenedLayerType = action.payload
   },
-  setShowedLayersWithLocalStorageValues(state, action) {
+
+  setShowedLayersWithLocalStorageValues(state: WritableDraft<LayerState>, action) {
     const { regulatoryZones } = action.payload
     let nextShowedLayers = []
     if (action.payload.namespace === 'homepage') {
@@ -200,9 +204,11 @@ const reducers = {
   }
 }
 
-// TODO Remove default export once cleaned.
-// eslint-disable-next-line import/no-default-export
-export default {
+const layerSlice: Record<LayerSliceNamespace, Slice<LayerState>> = {
   backoffice: createGenericSlice(BACKOFFICE_INITIAL_STATE, reducers, 'BackofficeLayerSlice') as Slice<LayerState>,
   homepage: createGenericSlice(HOMEPAGE_INITIAL_STATE, reducers, 'HomePageLayerSlice') as Slice<LayerState>
 }
+
+// TODO Remove default export once cleaned.
+// eslint-disable-next-line import/no-default-export
+export default layerSlice

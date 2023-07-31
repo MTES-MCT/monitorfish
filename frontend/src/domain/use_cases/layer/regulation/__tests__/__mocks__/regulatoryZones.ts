@@ -21,8 +21,9 @@ export const regulatoryZones: RegulatoryZone[] = [
         allPassiveGears: undefined,
         allTowedGears: undefined,
         derogation: undefined,
+        otherInfo: undefined,
         regulatedGearCategories: {},
-        regulatedGears: [],
+        regulatedGears: {},
         selectedCategoriesAndGears: ['Chalut']
       },
       otherInfo: undefined,
@@ -31,8 +32,9 @@ export const regulatoryZones: RegulatoryZone[] = [
         allPassiveGears: undefined,
         allTowedGears: undefined,
         derogation: undefined,
+        otherInfo: undefined,
         regulatedGearCategories: {},
-        regulatedGears: [],
+        regulatedGears: {},
         selectedCategoriesAndGears: []
       }
     },
@@ -40,7 +42,7 @@ export const regulatoryZones: RegulatoryZone[] = [
       coordinates: [1, 2],
       type: 'Point'
     },
-    id: '123',
+    id: 123,
     lawType: 'Reg. MEMN',
     nextId: '123',
     otherInfo: 'blabla',
@@ -74,8 +76,8 @@ export const regulatoryZones: RegulatoryZone[] = [
         allSpecies: false,
         otherInfo: undefined,
         species: [
-          { code: 'URC', remarks: '500 kg' },
-          { code: 'URX', remarks: '500 kg' }
+          { code: 'URC', name: 'OURSINS NCA', remarks: '500 kg' },
+          { code: 'URX', name: 'OURSINS,ETC. NCA', remarks: '500 kg' }
         ],
         speciesGroups: []
       },
@@ -110,8 +112,9 @@ export const regulatoryZones: RegulatoryZone[] = [
         allPassiveGears: undefined,
         allTowedGears: undefined,
         derogation: undefined,
+        otherInfo: undefined,
         regulatedGearCategories: {},
-        regulatedGears: [],
+        regulatedGears: {},
         selectedCategoriesAndGears: []
       },
       otherInfo: undefined,
@@ -120,8 +123,9 @@ export const regulatoryZones: RegulatoryZone[] = [
         allPassiveGears: undefined,
         allTowedGears: undefined,
         derogation: undefined,
+        otherInfo: undefined,
         regulatedGearCategories: {},
-        regulatedGears: [],
+        regulatedGears: {},
         selectedCategoriesAndGears: []
       }
     },
@@ -129,7 +133,7 @@ export const regulatoryZones: RegulatoryZone[] = [
       coordinates: [1, 2],
       type: 'Point'
     },
-    id: '1234',
+    id: 1234,
     lawType: 'Reg. MEMN  TWO',
     nextId: '123',
     otherInfo: 'blabla',
@@ -156,8 +160,8 @@ export const regulatoryZones: RegulatoryZone[] = [
         allSpecies: false,
         otherInfo: undefined,
         species: [
-          { code: 'URC', remarks: '500 kg' },
-          { code: 'URX', remarks: '500 kg' }
+          { code: 'URC', name: 'OURSINS NCA', remarks: '500 kg' },
+          { code: 'URX', name: 'OURSINS,ETC. NCA', remarks: '500 kg' }
         ],
         speciesGroups: []
       },

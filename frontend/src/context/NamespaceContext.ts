@@ -1,3 +1,5 @@
 import React from 'react'
 
-export const NamespaceContext = React.createContext('')
+import { LayerSliceNamespace } from '../domain/entities/layers/types'
+
+export const NamespaceContext = React.createContext<LayerSliceNamespace>(LayerSliceNamespace.homepage)

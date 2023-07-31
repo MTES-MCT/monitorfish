@@ -1,5 +1,10 @@
 import type { LayerType } from './constants'
 
+export enum LayerSliceNamespace {
+  backoffice = 'backoffice',
+  homepage = 'homepage'
+}
+
 export enum MonitorFishLayer {
   AEM = 'AEM',
   BASE_LAYER = 'BASE_LAYER',
@@ -80,7 +85,9 @@ export type ShowableLayer = {
 }
 
 export type ShowedLayer = {
-  namespace: string
+  id: number | string
+  namespace: LayerSliceNamespace
+  topic: string
   type: string
   zone: string | null
 }

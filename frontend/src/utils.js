@@ -288,7 +288,7 @@ export const formatDataForSelectPicker = (list, groupName) => {
 /**
  * Get the extent of the first feature found in the GeoJSON object
  * @param {GeoJSON} features - GEoJSON object
- * @returns {number[]} The extent
+ * @returns {import('ol/extent').Extent} The extent
  */
 export const getExtentFromGeoJSON = features => {
   const vectorSource = new VectorSource({

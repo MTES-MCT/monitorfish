@@ -1,4 +1,5 @@
 import type { GeoJSON } from './GeoJSON'
+import type { GearMeshSizeEqualityComparator } from '../entities/backoffice'
 
 export type BaseRegulatoryZone = {
   topic: string
@@ -10,7 +11,7 @@ export type RegulatoryZone = BaseRegulatoryZone & {
   fishingPeriod: FishingPeriod
   gearRegulation: GearRegulation
   geometry: GeoJSON.Geometry
-  id: string
+  id: number | string
   lawType: string
   nextId: string
   otherInfo: string
@@ -31,16 +32,8 @@ export type RegulatoryText = {
   url: string
 }
 
-// TODO Check that.
-/** key is a topic */
-// TODO Is it a matrix? The name doesn't reflect that.
-export type RegulatoryTopics = Map<string, RegulatoryZone[]>
-
-// TODO Check that.
-/** key is the law type name */
-// TODO Is it a matrix? The name doesn't reflect that.
-// export type RegulatoryLawTypes = Map<string, RegulatoryTopics[]>
-export type RegulatoryLawTypes = Record<string, RegulatoryTopics[]>
+// TODO Remove this type and declare it inline in corresponding variables.
+export type RegulatoryLawTypes = Record<string, Record<string, RegulatoryZone[]>>
 
 export type DateInterval = {
   endDate: string | Date
@@ -85,14 +78,14 @@ export type Gear = {
   code: string
   groupId: string
   mesh: string[]
-  /** (One of greaterThan, greaterThanOrEqualTo, lowerThan, lowerThanOrEqualTo, equal, between) */
-  meshType: string
+  meshType: GearMeshSizeEqualityComparator
   name: string
+  remarks: string | undefined
 }
 
 export type GearCategory = {
-  mesh: string[]
-  meshType: string
+  mesh: string[] | undefined
+  meshType: GearMeshSizeEqualityComparator | undefined
   name: string
 }
 
@@ -107,8 +100,9 @@ export type RegulatedGears = {
   allPassiveGears: boolean | undefined
   allTowedGears: boolean | undefined
   derogation: boolean | undefined
+  otherInfo: string | undefined
   regulatedGearCategories: Record<string, GearCategory>
-  regulatedGears: Gear[]
+  regulatedGears: Record<string, Gear>
   /**  a list of categories name and gears code */
   selectedCategoriesAndGears: string[]
 }
@@ -116,5 +110,6 @@ export type RegulatedGears = {
 export type RegulatedSpeciesDetail = {
   /** FAO code */
   code: string
+  name: string
   remarks: string
 }

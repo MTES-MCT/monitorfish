@@ -20,7 +20,7 @@ import { AdministrativeLayers } from '../map/layers/AdministrativeLayers'
 import { BaseLayer } from '../map/layers/BaseLayer'
 import { RegulatoryLayers } from '../map/layers/RegulatoryLayers'
 import { RegulatoryPreviewLayer } from '../map/layers/RegulatoryPreviewLayer'
-import RegulatoryZoneMetadata from '../MapButtons/LayersSidebar/RegulatoryZones/RegulatoryZoneMetadata'
+import { RegulatoryZoneMetadata } from '../MapButtons/LayersSidebar/RegulatoryZones/RegulatoryZoneMetadata'
 
 export function Backoffice() {
   const [foundRegulatoryZonesByRegTerritory, setFoundRegulatoryZonesByRegTerritory] = useState({})

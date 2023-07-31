@@ -1,12 +1,12 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
 import type { Gear } from '../types/Gear'
 
 export type GearState = {
-  categoriesToGears: Map<string, Gear[]> | undefined
+  categoriesToGears: Record<string, Gear[]> | undefined
   gears: Gear[]
-  gearsByCode: Map<string, Gear> | undefined
-  groupsToCategories: Map<string, string> | undefined
+  gearsByCode: Record<string, Gear> | undefined
+  groupsToCategories: Record<string, string> | undefined
 }
 const INITIAL_STATE: GearState = {
   categoriesToGears: undefined,
@@ -19,16 +19,19 @@ const gearSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'gear',
   reducers: {
-    setCategoriesToGears(state, action) {
+    setCategoriesToGears(state, action: PayloadAction<Record<string, Gear[]>>) {
       state.categoriesToGears = action.payload
     },
-    setGears(state, action) {
+
+    setGears(state, action: PayloadAction<Gear[]>) {
       state.gears = action.payload
     },
-    setGearsByCode(state, action) {
+
+    setGearsByCode(state, action: PayloadAction<Record<string, Gear>>) {
       state.gearsByCode = action.payload
     },
-    setGroupsToCategories(state, action) {
+
+    setGroupsToCategories(state, action: PayloadAction<Record<string, string>>) {
       state.groupsToCategories = action.payload
     }
   }

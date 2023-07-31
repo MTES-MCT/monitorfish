@@ -157,6 +157,7 @@ module.exports = {
         // 'max-len': ['warn', { code: 120 }],
 
         '@typescript-eslint/naming-convention': 'off',
+        '@typescript-eslint/no-unused-expressions': 'off',
 
         'cypress/assertion-before-screenshot': 'error',
         'cypress/no-assigning-return-values': 'error',

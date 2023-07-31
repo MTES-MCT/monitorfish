@@ -1,5 +1,3 @@
-import { batch } from 'react-redux'
-
 import { getRegulatoryFeatureMetadataFromAPI } from '../../../../api/geoserver'
 import { mapToRegulatoryZone } from '../../../entities/regulation'
 import { setError } from '../../../shared_slices/Global'
@@ -13,19 +11,15 @@ import {
 } from '../../../shared_slices/Regulatory'
 
 import type { MainAppThunk } from '../../../../store'
-import type { BaseRegulatoryZone } from '../../../types/regulation'
+import type { RegulatoryZone } from '../../../types/regulation'
 
 export const showRegulatoryZoneMetadata =
-  (regulatoryZoneRequest: BaseRegulatoryZone, isPreviewing: boolean): MainAppThunk =>
+  (partialRegulatoryZone: Pick<RegulatoryZone, 'topic' | 'zone'>, isPreviewing: boolean = false): MainAppThunk =>
   (dispatch, getState) => {
-    if (!regulatoryZoneRequest) {
-      return
-    }
-
     dispatch(setLoadingRegulatoryZoneMetadata())
     const { speciesByCode } = getState().species
 
-    getRegulatoryFeatureMetadataFromAPI(regulatoryZoneRequest, getState().global.isBackoffice)
+    getRegulatoryFeatureMetadataFromAPI(partialRegulatoryZone, getState().global.isBackoffice)
       .then(feature => {
         const parsedRegulatoryZone = mapToRegulatoryZone(feature, speciesByCode)
         dispatch(setRegulatoryZoneMetadata(parsedRegulatoryZone))
@@ -35,11 +29,9 @@ export const showRegulatoryZoneMetadata =
         }
       })
       .catch(error => {
-        batch(() => {
-          dispatch(closeRegulatoryZoneMetadataPanel())
-          dispatch(setError(error))
-          dispatch(resetLoadingRegulatoryZoneMetadata())
-          dispatch(resetRegulatoryGeometriesToPreview())
-        })
+        dispatch(closeRegulatoryZoneMetadataPanel())
+        dispatch(setError(error))
+        dispatch(resetLoadingRegulatoryZoneMetadata())
+        dispatch(resetRegulatoryGeometriesToPreview())
       })
   }

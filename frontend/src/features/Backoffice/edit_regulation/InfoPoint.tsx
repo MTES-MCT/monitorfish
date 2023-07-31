@@ -31,11 +31,12 @@ const Wrapper = styled.a<{
   $margin: string | undefined
 }>`
   display: inline-block;
-  align-self: start;
+  align-self: center;
   min-height: 14px;
   min-width: 14px;
   height: 14px;
   width: 14px;
+  margin-left: 4px;
   border-radius: 50%;
   ${p => (p.$margin ? `$margin: ${p.$margin};` : '')}
   background: ${p => (p.$backgroundColor ? p.$backgroundColor : p.theme.color.slateGray)} 0% 0% no-repeat padding-box;

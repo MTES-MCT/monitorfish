@@ -32,10 +32,11 @@ import type {
   BeaconMalfunctionStageColumnValue,
   BeaconMalfunctionStatusValue
 } from '../../../domain/entities/beaconMalfunction/types'
+import type { MainRootState } from '../../../store'
 import type { CSSProperties, MutableRefObject } from 'react'
 
 const getMemoizedBeaconMalfunctionsByStage = createSelector(
-  state => state.beaconMalfunction.beaconMalfunctions,
+  (state: MainRootState) => state.beaconMalfunction.beaconMalfunctions,
   beaconMalfunctions => getBeaconMalfunctionsByStage(beaconMalfunctions)
 )
 

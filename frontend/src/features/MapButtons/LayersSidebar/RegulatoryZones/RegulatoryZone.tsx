@@ -1,17 +1,16 @@
-// TODO Remove temporary `as any` and `@ts-ignore` (fresh migration to TS).
+// TODO Remove temporary `any`, `as any` and `@ts-ignore` (fresh migration to TS).
 
-import { memo, useEffect, useState } from 'react'
+import { memo, useEffect, useState, type Dispatch, type SetStateAction } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../constants/constants'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import {
   addRegulatoryTopicOpened,
   closeRegulatoryZoneMetadataPanel,
   removeRegulatoryTopicOpened
 } from '../../../../domain/shared_slices/Regulatory'
-import hideLayer from '../../../../domain/use_cases/layer/hideLayer'
+import { hideLayer } from '../../../../domain/use_cases/layer/hideLayer'
 import { closeRegulatoryZoneMetadata } from '../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 import showRegulationToEdit from '../../../../domain/use_cases/layer/regulation/showRegulationToEdit'
 import showRegulatoryZone from '../../../../domain/use_cases/layer/regulation/showRegulatoryZone'
@@ -27,41 +26,53 @@ import { PaperDarkIcon, PaperIcon } from '../../../commonStyles/icons/REGPaperIc
 import { ShowIcon } from '../../../commonStyles/icons/ShowIcon.style'
 import { getRegulatoryLayerStyle } from '../../../map/layers/styles/regulatoryLayer.style'
 
-export function showOrHideMetadataIcon(regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
+import type { LayerSliceNamespace } from '../../../../domain/entities/layers/types'
+import type { RegulatoryZone as RegulatoryZoneType } from '../../../../domain/types/regulation'
+import type { Promisable } from 'type-fest'
+
+export function showOrHideMetadataIcon(
+  regulatoryZoneMetadata: RegulatoryZoneType | undefined,
+  regulatoryZone: RegulatoryZoneType,
+  setMetadataIsShown: Dispatch<SetStateAction<boolean>>
+) {
   if (
     regulatoryZoneMetadata &&
-    regulatoryZone &&
     (regulatoryZone.topic !== regulatoryZoneMetadata.topic || regulatoryZone.zone !== regulatoryZoneMetadata.zone)
   ) {
     setMetadataIsShown(false)
-  } else if (
+
+    return
+  }
+
+  if (
     regulatoryZoneMetadata &&
-    regulatoryZone &&
     regulatoryZone.topic === regulatoryZoneMetadata.topic &&
     regulatoryZone.zone === regulatoryZoneMetadata.zone
   ) {
     setMetadataIsShown(true)
-  } else if (!regulatoryZoneMetadata && regulatoryZone) {
-    setMetadataIsShown(false)
+
+    return
   }
+
+  setMetadataIsShown(false)
 }
 
 // TODO Properly type all these `any`.
 export type RegulatoryZoneProps = {
-  allowRemoveZone: any
-  callRemoveRegulatoryZoneFromMySelection: any
-  isEditable: any
-  isLast: any
-  namespace: any
-  regulatoryTopic: any
-  regulatoryZone: any
+  allowRemoveZone: boolean
+  isEditable: boolean
+  isLast: boolean
+  namespace: LayerSliceNamespace
+  onRemove: (id: number | string) => Promisable<void>
+  regulatoryTopic: string
+  regulatoryZone: RegulatoryZoneType
 }
 function UnmemoizedRegulatoryZone({
   allowRemoveZone,
-  callRemoveRegulatoryZoneFromMySelection,
   isEditable,
   isLast,
   namespace,
+  onRemove,
   regulatoryTopic,
   regulatoryZone
 }: RegulatoryZoneProps) {
@@ -70,16 +81,16 @@ function UnmemoizedRegulatoryZone({
 
   const { isReadyToShowRegulatoryLayers, regulatoryZoneMetadata } = useMainAppSelector(state => state.regulatory)
   const zoneIsShown = useMainAppSelector(state =>
-    state.layer.showedLayers.some(layer => (layer as any).id === regulatoryZone?.id)
+    state.layer.showedLayers.some(layer => layer.id === regulatoryZone.id)
   )
 
   const [metadataIsShown, setMetadataIsShown] = useState(false)
   const [isOver, setIsOver] = useState(false)
   const vectorLayerStyle = getRegulatoryLayerStyle(undefined, regulatoryZone)
 
-  const callShowRegulatoryZoneMetadata = zone => {
+  const callShowRegulatoryZoneMetadata = (zone: RegulatoryZoneType) => {
     if (!metadataIsShown) {
-      dispatch((showRegulatoryZoneMetadata as any)(zone))
+      dispatch(showRegulatoryZoneMetadata(zone))
       setMetadataIsShown(true)
     } else {
       dispatch(closeRegulatoryZoneMetadata())
@@ -132,9 +143,8 @@ function UnmemoizedRegulatoryZone({
       onMouseLeave={onMouseLeave}
     >
       <Rectangle
+        $vectorLayerStyle={vectorLayerStyle}
         onClick={() => dispatch(zoomInLayer({ topicAndZone: regulatoryZone }))}
-        // @ts-ignore
-        vectorLayerStyle={vectorLayerStyle}
       />
       <ZoneText
         data-cy="regulatory-layers-my-zones-zone"
@@ -183,7 +193,9 @@ function UnmemoizedRegulatoryZone({
         {allowRemoveZone ? (
           <CloseIcon
             data-cy="regulatory-layers-my-zones-zone-delete"
-            onClick={() => callRemoveRegulatoryZoneFromMySelection(regulatoryZone, 1, namespace)}
+            onClick={() => {
+              onRemove(regulatoryZone.id)
+            }}
             title="Supprimer la zone de ma sélection"
           />
         ) : null}
@@ -192,19 +204,21 @@ function UnmemoizedRegulatoryZone({
   )
 }
 
-// TODO Remove this `any`.
-const Rectangle = styled.div<any>`
+const Rectangle = styled.div<{
+  // TODO I don't understand this `ol/Style` type.
+  $vectorLayerStyle: any
+}>`
   width: 14px;
   height: 14px;
-  background: ${props =>
-    props.vectorLayerStyle && props.vectorLayerStyle.getFill()
-      ? props.vectorLayerStyle.getFill().getColor()
-      : props.theme.color.lightGray};
+  background: ${p =>
+    p.$vectorLayerStyle && p.$vectorLayerStyle.getFill()
+      ? p.$vectorLayerStyle.getFill().getColor()
+      : p.theme.color.lightGray};
   border: 1px solid
-    ${props =>
-      props.vectorLayerStyle && props.vectorLayerStyle.getStroke()
-        ? props.vectorLayerStyle.getStroke().getColor()
-        : props.theme.color.slateGray};
+    ${p =>
+      p.$vectorLayerStyle && p.$vectorLayerStyle.getStroke()
+        ? p.$vectorLayerStyle.getStroke().getColor()
+        : p.theme.color.slateGray};
   display: inline-block;
   margin-right: 10px;
   margin-left: 2px;
@@ -231,7 +245,7 @@ const Zone = styled.span<{
   user-select: none;
   font-size: 13px;
   font-weight: 300;
-  ${props => (props.isLast ? `border-bottom: 1px solid ${COLORS.lightGray}; height: 27px;` : 'height: 28px;')}
+  ${p => (p.isLast ? `border-bottom: 1px solid ${p.theme.color.lightGray}; height: 27px;` : 'height: 28px;')}
 
   :hover {
     background: ${theme.color.blueGray['25']};

@@ -1,8 +1,11 @@
+/* eslint-disable no-console */
+
 export class ApiError extends Error {
-  constructor(message: string, err: any) {
+  constructor(message: string, error: any) {
     super(message)
 
-    // eslint-disable-next-line no-console
-    console.error(err)
+    console.error('message', message)
+    console.error('error', error)
+    console.groupEnd()
   }
 }

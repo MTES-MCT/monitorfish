@@ -67,8 +67,81 @@
             "law_type": "Reg. Outre-mer"
           },
           "bbox": [-12.9624, 45.0773, -12.9249, 45.1043]
+        },
+        {
+          "type": "Feature",
+          "id": "regulations.fid--382d2c7c_1898d4ae77c_6688",
+          "geometry": null,
+          "properties": {
+            "id": 10729,
+            "law_type": "Reg. MED",
+            "topic": "Corse - Chaluts",
+            "zone": "Interdiction temporaire - Chalut à panneaux",
+            "region": "Corse",
+            "species": "{\"authorized\": {\"species\": [], \"speciesGroups\": []}, \"unauthorized\": {\"species\": [], \"speciesGroups\": []}}",
+            "gears": "{\"authorized\": {\"allGears\": false, \"allTowedGears\": false, \"regulatedGears\": {}, \"allPassiveGears\": false, \"regulatedGearCategories\": {}, \"selectedCategoriesAndGears\": []}, \"unauthorized\": {\"allGears\": false, \"allTowedGears\": false, \"regulatedGears\": {\"OT\": {\"code\": \"OT\", \"name\": \"Chaluts à panneaux (non spécifiés)\", \"groupId\": 1, \"category\": \"Chaluts\"}}, \"allPassiveGears\": false, \"regulatedGearCategories\": {}, \"selectedCategoriesAndGears\": [\"OT\"]}}",
+            "regulatory_references": "[{\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-2013070-0001-med-a632.html\", \"endDate\": \"infinite\", \"textType\": [\"creation\", \"regulation\"], \"reference\": \"Arrêté Préfectoral 2013070-0001 / MED\", \"startDate\": 1658827915145}]",
+            "next_id": null
+          },
+          "bbox": [42.8611, 9.4054, 43.0777, 9.5525]
+        },
+        {
+          "type": "Feature",
+          "id": "regulations.fid--382d2c7c_1898d4ae77c_674a",
+          "geometry": null,
+          "properties": {
+            "id": 431,
+            "law_type": "Reg. MED",
+            "topic": "Corse - Chaluts",
+            "zone": "6 MN : Interdiction du chalut de fond",
+            "region": "Corse",
+            "species": "{\"otherInfo\": null, \"authorized\": null, \"unauthorized\": null}",
+            "gears": "{\"otherInfo\": null, \"authorized\": null, \"unauthorized\": {\"allGears\": false, \"derogation\": null, \"allTowedGears\": false, \"regulatedGears\": {\"TB\": {\"code\": \"TB\", \"name\": \"Chaluts de fond (non spécifiés)\", \"groupId\": 1, \"category\": \"Chaluts\"}, \"OTB\": {\"code\": \"OTB\", \"name\": \"Chaluts de fond à panneaux\", \"groupId\": 1, \"category\": \"Chaluts\"}, \"OTT\": {\"code\": \"OTT\", \"name\": \"Chaluts jumeaux à panneaux\", \"groupId\": 1, \"category\": \"Chaluts\"}, \"PTB\": {\"code\": \"PTB\", \"name\": \"Chaluts-bœufs de fond\", \"groupId\": 1, \"category\": \"Chaluts\"}, \"TBS\": {\"code\": \"TBS\", \"name\": \"Chaluts de fond à crevettes\", \"groupId\": 1, \"category\": \"Chaluts\"}}, \"allPassiveGears\": false, \"regulatedGearCategories\": {}, \"selectedCategoriesAndGears\": [\"TB\", \"TBS\", \"OTB\", \"PTB\", \"OTT\"]}}",
+            "regulatory_references": "[{\"url\": \"http://legipeche.metier.i2/arrete-ministeriel-du-28-02-2013-modifie-a888.html?id_rub=211\", \"endDate\": \"infinite\", \"textType\": [\"creation\", \"regulation\"], \"reference\": \"Arrêté Ministériel du 28/02/2013 modifié\", \"startDate\": 1650975402037}]",
+            "next_id": null
+          },
+          "bbox": [41.292, 8.4003, 43.1335, 9.6941]
+        },
+        {
+          "type": "Feature",
+          "id": "regulations.fid--382d2c7c_1898d4ae77c_674b",
+          "geometry": null,
+          "properties": {
+            "id": 10727,
+            "law_type": "Reg. MED",
+            "topic": "Corse - Chaluts",
+            "zone": "1,5 - 3 MN : Autorisation chalut à panneaux",
+            "region": "Corse",
+            "species": "{\"authorized\": {\"species\": [], \"speciesGroups\": []}, \"unauthorized\": {\"species\": [], \"speciesGroups\": []}}",
+            "gears": "{\"otherInfo\": \"Lorsque profondeur > 50 m\", \"authorized\": {\"allGears\": false, \"allTowedGears\": false, \"regulatedGears\": {\"OTB\": {\"code\": \"OTB\", \"name\": \"Chaluts de fond à panneaux\", \"groupId\": 1, \"remarks\": \"Puissance motrice inférieure ou égale à 147 kW\", \"category\": \"Chaluts\"}}, \"allPassiveGears\": false, \"regulatedGearCategories\": {}, \"selectedCategoriesAndGears\": [\"OTB\"]}, \"unauthorized\": {\"allGears\": false, \"allTowedGears\": false, \"regulatedGears\": {}, \"allPassiveGears\": false, \"regulatedGearCategories\": {}, \"selectedCategoriesAndGears\": []}}",
+            "regulatory_references": "[{\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-2013070-0001-med-a632.html\", \"endDate\": \"infinite\", \"textType\": [\"creation\", \"regulation\"], \"reference\": \"Arrêté Préfectoral 2013070-0001 / MED\", \"startDate\": 1658823005569}]",
+            "next_id": null
+          },
+          "bbox": [41.3517, 9.2976, 43.0777, 9.6275]
+        },
+        {
+          "type": "Feature",
+          "id": "regulations.fid--382d2c7c_1898d4ae77c_674c",
+          "geometry": null,
+          "properties": {
+            "id": 10728,
+            "law_type": "Reg. MED",
+            "topic": "Corse - Chaluts",
+            "zone": "3 - 12 MN : Autorisation chalut à panneaux",
+            "region": "Corse",
+            "species": "{\"authorized\": {\"species\": [], \"speciesGroups\": []}, \"unauthorized\": {\"species\": [], \"speciesGroups\": []}}",
+            "gears": "{\"authorized\": {\"allGears\": false, \"allTowedGears\": false, \"regulatedGears\": {\"OT\": {\"code\": \"OT\", \"name\": \"Chaluts à panneaux (non spécifiés)\", \"groupId\": 1, \"category\": \"Chaluts\"}, \"OTB\": {\"code\": \"OTB\", \"name\": \"Chaluts de fond à panneaux\", \"groupId\": 1, \"category\": \"Chaluts\"}}, \"allPassiveGears\": false, \"regulatedGearCategories\": {}, \"selectedCategoriesAndGears\": [\"OT\", \"OTB\"]}, \"unauthorized\": {\"allGears\": false, \"allTowedGears\": false, \"regulatedGears\": {}, \"allPassiveGears\": false, \"regulatedGearCategories\": {}, \"selectedCategoriesAndGears\": []}}",
+            "regulatory_references": "[{\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-2013070-0001-med-a632.html\", \"endDate\": \"infinite\", \"textType\": [\"creation\", \"regulation\"], \"reference\": \"Arrêté Préfectoral 2013070-0001 / MED\", \"startDate\": 1658827915145}]",
+            "next_id": null
+          },
+          "bbox": [41.3664, 9.3307, 43.2277, 9.8282]
         }
-      ]
+      ],
+      "totalFeatures": 918,
+      "numberMatched": 918,
+      "numberReturned": 918,
+      "timeStamp": "2023-07-26T09:26:02.984Z",
+      "crs": null
     }
   }
 }

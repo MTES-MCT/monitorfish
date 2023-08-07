@@ -125,7 +125,7 @@
     "eslint-plugin-typescript-sort-keys": "2.3.0",
     "husky": "8.0.3",
     "jest": "29.4.1",
-    "jest-environment-jsdom": "29.5.0",
+    "jest-environment-jsdom": "29.6.2",
     "lint-staged": "13.2.2",
     "postcss": "8.4.27",
     "postcss-syntax": "0.36.2",

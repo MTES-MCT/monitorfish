@@ -23,9 +23,8 @@ export const showVessel =
       const { areFishingActivitiesShowedOnMap } = fishingActivities
 
       const vesselFeatureId = Vessel.getVesselFeatureId(vesselIdentity)
-      const selectedVesselLastPosition = vessels.find(
-        lastPosition => lastPosition.vesselFeatureId === vesselFeatureId
-      )?.vesselProperties
+      const selectedVesselLastPosition = vessels.find(lastPosition => lastPosition.vesselFeatureId === vesselFeatureId)
+        ?.vesselProperties
 
       dispatchLoadingVessel(dispatch, isFromUserAction, vesselIdentity)
       const nextTrackRequest = getCustomOrDefaultTrackRequest(

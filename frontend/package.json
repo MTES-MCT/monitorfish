@@ -75,7 +75,7 @@
     "redux-persist": "6.0.0",
     "redux-thunk": "2.4.2",
     "rsuite": "5.37.0",
-    "rsuite-table": "5.10.6",
+    "rsuite-table": "5.11.0",
     "simplify-geojson": "1.0.5",
     "styled-components": "5.3.11",
     "timeago.js": "4.0.2",

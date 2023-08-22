@@ -35,6 +35,7 @@ class UserAuthorizationCheckFilter(
     private val BEARER_HEADER_TYPE = "Bearer"
     private val MALFORMED_BEARER_MESSAGE = "Malformed authorization header, header type should be 'Bearer'"
     private val MISSING_OIDC_ENDPOINT_MESSAGE = "Missing OIDC user info endpoint"
+    private val MISSING_OIDC_ISSUER_ENDPOINT_MESSAGE = "Missing issuer URI endpoint"
     private val COULD_NOT_FETCH_USER_INFO_MESSAGE = "Could not fetch user info at ${oidcProperties.userinfoEndpoint}"
     private val INSUFFICIENT_AUTHORIZATION_MESSAGE = "Insufficient authorization"
 
@@ -69,8 +70,17 @@ class UserAuthorizationCheckFilter(
             return@runBlocking
         }
 
+        if (oidcProperties.issuerUri == null) {
+            logger.warn(MISSING_OIDC_ISSUER_ENDPOINT_MESSAGE)
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, MISSING_OIDC_ISSUER_ENDPOINT_MESSAGE)
+
+            return@runBlocking
+        }
+
         try {
-            val userInfoResponse = apiClient.httpClient.get(oidcProperties.userinfoEndpoint!!) {
+            val userInfoResponse = apiClient.httpClient.get(
+                oidcProperties.issuerUri!! + oidcProperties.userinfoEndpoint!!,
+            ) {
                 headers {
                     append(Authorization, authorizationHeaderContent!!)
                 }

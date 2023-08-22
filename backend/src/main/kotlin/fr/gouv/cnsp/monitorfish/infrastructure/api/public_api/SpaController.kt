@@ -14,8 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping
 class SpaController : ErrorController {
     @RequestMapping("/error")
     fun error(request: HttpServletRequest, response: HttpServletResponse): Any {
-        response.status = HttpStatus.OK.value()
-        return "forward:/index.html"
+        if (response.status != HttpStatus.UNAUTHORIZED.value()) {
+            response.status = HttpStatus.OK.value()
+            return "forward:/index.html"
+        }
+
+        return response
     }
 
     val errorPath: String

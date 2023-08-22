@@ -30,5 +30,4 @@ class OperationalAlertControllerITests {
             // Then
             .andExpect(MockMvcResultMatchers.status().isOk)
     }
-
 }

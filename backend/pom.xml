@@ -20,7 +20,7 @@
         <kotlin.version>1.9.0</kotlin.version>
         <testcontainers.version>1.18.3</testcontainers.version>
         <ktor.version>2.3.2</ktor.version>
-        <sentry.version>6.26.0</sentry.version>
+        <sentry.version>6.27.0</sentry.version>
         <commit.hash>COMMIT_TO_CHANGE</commit.hash>
         <main.class>fr.gouv.cnsp.monitorfish.MonitorFishApplicationKt</main.class>
     </properties>

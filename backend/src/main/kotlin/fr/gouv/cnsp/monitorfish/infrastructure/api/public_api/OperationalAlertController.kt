@@ -25,5 +25,4 @@ class OperationalAlertController(
     ) {
         return validateOperationalAlert.execute(id)
     }
-
 }

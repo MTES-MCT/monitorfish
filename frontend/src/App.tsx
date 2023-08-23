@@ -31,11 +31,23 @@ export function App({ auth }: AppProps) {
 
     // automatically sign-in
     if (!hasAuthParams() && !auth?.isAuthenticated && !auth?.activeNavigator && !auth?.isLoading) {
+      // eslint-disable-next-line no-console
+      console.log('Redirect after Cerbère sign-in.')
       auth?.signinRedirect()
+
+      return
+    }
+
+    if (auth?.isAuthenticated) {
+      // eslint-disable-next-line no-console
+      console.log('Authenticated.')
+      // eslint-disable-next-line no-console
+      console.log(JSON.stringify(auth))
+      // location.reload()
     }
   }, [auth, auth?.isAuthenticated, auth?.activeNavigator, auth?.isLoading, auth?.signinRedirect])
 
-  if (auth && (!auth.isAuthenticated || !userAuthorization?.isLogged)) {
+  if (auth && !auth.isLoading && (!auth.isAuthenticated || !userAuthorization?.isLogged)) {
     return <LandingPage hasInsufficientRights />
   }
 

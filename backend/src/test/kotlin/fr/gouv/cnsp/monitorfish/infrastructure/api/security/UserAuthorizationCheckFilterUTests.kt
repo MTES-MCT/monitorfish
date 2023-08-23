@@ -34,6 +34,7 @@ class UserAuthorizationCheckFilterUTests {
         val oidcProperties = OIDCProperties()
         oidcProperties.enabled = false
         oidcProperties.userinfoEndpoint = null
+        oidcProperties.issuerUri = null
         val superUserAPIProperties = ProtectedPathsAPIProperties()
         superUserAPIProperties.superUserPaths = listOf("/bff/**")
 
@@ -59,6 +60,7 @@ class UserAuthorizationCheckFilterUTests {
         val oidcProperties = OIDCProperties()
         oidcProperties.enabled = true
         oidcProperties.userinfoEndpoint = null
+        oidcProperties.issuerUri = null
         val superUserAPIProperties = ProtectedPathsAPIProperties()
         superUserAPIProperties.superUserPaths = listOf("/bff/**")
 
@@ -85,6 +87,7 @@ class UserAuthorizationCheckFilterUTests {
         val oidcProperties = OIDCProperties()
         oidcProperties.enabled = true
         oidcProperties.userinfoEndpoint = null
+        oidcProperties.issuerUri = null
         val superUserAPIProperties = ProtectedPathsAPIProperties()
         superUserAPIProperties.superUserPaths = listOf("/bff/**")
 
@@ -107,11 +110,40 @@ class UserAuthorizationCheckFilterUTests {
     }
 
     @Test
+    fun `Should return Unauthorized When issuerUri endpoint is missing`() {
+        // Given
+        val oidcProperties = OIDCProperties()
+        oidcProperties.enabled = true
+        oidcProperties.userinfoEndpoint = "/api/user"
+        oidcProperties.issuerUri = null
+        val superUserAPIProperties = ProtectedPathsAPIProperties()
+        superUserAPIProperties.superUserPaths = listOf("/bff/**")
+
+        val mockApi = getMockApiClient()
+        val response = MockHttpServletResponse()
+        val chain = MockFilterChain()
+
+        // When
+        val request = MockHttpServletRequest()
+        request.addHeader(Authorization, "Bearer $VALID_JWT")
+        UserAuthorizationCheckFilter(oidcProperties, superUserAPIProperties, mockApi, getIsAuthorizedUser).doFilter(
+            request,
+            response,
+            chain,
+        )
+
+        // Then
+        assertThat(response.status).isEqualTo(401)
+        assertThat(response.errorMessage).isEqualTo("Missing issuer URI endpoint")
+    }
+
+    @Test
     fun `Should return Ok When user has right authorization`() {
         // Given
         val oidcProperties = OIDCProperties()
         oidcProperties.enabled = true
-        oidcProperties.userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user"
+        oidcProperties.userinfoEndpoint = "/api/user"
+        oidcProperties.issuerUri = "http://issuer-uri.gouv.fr"
         val superUserAPIProperties = ProtectedPathsAPIProperties()
         superUserAPIProperties.superUserPaths = listOf("/bff/**")
 
@@ -138,7 +170,8 @@ class UserAuthorizationCheckFilterUTests {
         // Given
         val oidcProperties = OIDCProperties()
         oidcProperties.enabled = true
-        oidcProperties.userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user"
+        oidcProperties.userinfoEndpoint = "/api/user"
+        oidcProperties.issuerUri = "http://issuer-uri.gouv.fr"
         val superUserAPIProperties = ProtectedPathsAPIProperties()
         superUserAPIProperties.superUserPaths = listOf("/bff/**")
 
@@ -167,7 +200,8 @@ class UserAuthorizationCheckFilterUTests {
         // Given
         val oidcProperties = OIDCProperties()
         oidcProperties.enabled = true
-        oidcProperties.userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user"
+        oidcProperties.userinfoEndpoint = "/api/user"
+        oidcProperties.issuerUri = "http://issuer-uri.gouv.fr"
         val superUserAPIProperties = ProtectedPathsAPIProperties()
         superUserAPIProperties.superUserPaths = listOf("/bff/v1/vessels/risk_factors")
 
@@ -195,7 +229,8 @@ class UserAuthorizationCheckFilterUTests {
         // Given
         val oidcProperties = OIDCProperties()
         oidcProperties.enabled = true
-        oidcProperties.userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user"
+        oidcProperties.userinfoEndpoint = "/api/user"
+        oidcProperties.issuerUri = "http://issuer-uri.gouv.fr"
         val superUserAPIProperties = ProtectedPathsAPIProperties()
         superUserAPIProperties.superUserPaths = listOf("/bff/v1/vessels/risk_factors")
 
@@ -223,7 +258,8 @@ class UserAuthorizationCheckFilterUTests {
         // Given
         val oidcProperties = OIDCProperties()
         oidcProperties.enabled = true
-        oidcProperties.userinfoEndpoint = "http://issuer-uri.gouv.fr/api/user"
+        oidcProperties.userinfoEndpoint = "/api/user"
+        oidcProperties.issuerUri = "http://issuer-uri.gouv.fr"
         val superUserAPIProperties = ProtectedPathsAPIProperties()
         superUserAPIProperties.superUserPaths = listOf("/bff/v1/vessels/risk_factors")
 

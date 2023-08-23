@@ -36,6 +36,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
         "monitorfish.oidc.enabled=true",
         "spring.security.oauth2.resourceserver.jwt.public-key-location=classpath:oidc-issuer.pub",
         "monitorfish.oidc.userinfo-endpoint=/api/user",
+        "monitorfish.oidc.issuer-uri=http://issuer-uri.gouv.fr",
     ],
 )
 class UserAuthorizationControllerITests {

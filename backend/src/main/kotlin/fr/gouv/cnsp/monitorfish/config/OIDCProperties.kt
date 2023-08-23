@@ -8,4 +8,5 @@ import org.springframework.stereotype.Component
 class OIDCProperties {
     var enabled: Boolean? = false
     var userinfoEndpoint: String? = null
+    var issuerUri: String? = null
 }

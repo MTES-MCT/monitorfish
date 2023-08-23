@@ -38,7 +38,7 @@ export function App({ auth }: AppProps) {
       return
     }
 
-    if (!auth.isLoading && auth?.isAuthenticated && !userAuthorization?.isLogged) {
+    if (!auth.isLoading && auth?.isAuthenticated && userAuthorization?.isLogged === false) {
       // eslint-disable-next-line no-console
       console.log('Authenticated.')
       // eslint-disable-next-line no-restricted-globals
@@ -53,7 +53,7 @@ export function App({ auth }: AppProps) {
     userAuthorization?.isLogged
   ])
 
-  if (auth && !auth.isLoading && auth.isAuthenticated && !userAuthorization?.isLogged) {
+  if (auth && !auth.isLoading && auth.isAuthenticated && userAuthorization?.isLogged === false) {
     return <LandingPage />
   }
 

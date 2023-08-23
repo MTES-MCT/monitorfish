@@ -30,7 +30,7 @@ import java.time.ZonedDateTime
 
 @Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class)
 @WebMvcTest(value = [(OperationalAlertController::class)])
-class OperationalAlertControllerITests {
+class PublicOperationalAlertControllerITests {
 
     @Autowired
     private lateinit var api: MockMvc

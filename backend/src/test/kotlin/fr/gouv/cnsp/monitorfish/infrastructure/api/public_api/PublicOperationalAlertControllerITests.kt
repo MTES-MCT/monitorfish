@@ -14,8 +14,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class)
-@WebMvcTest(value = [(OperationalAlertController::class)])
-class OperationalAlertControllerITests {
+@WebMvcTest(value = [(PublicOperationalAlertController::class)])
+class PublicOperationalAlertControllerITests {
 
     @Autowired
     private lateinit var api: MockMvc

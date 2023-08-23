@@ -69,8 +69,8 @@ export function BaseMap({
       const feature = _map.forEachFeatureAtPixel<FeatureLike>(event.pixel, clickedFeature => clickedFeature, {
         hitTolerance: HIT_PIXEL_TO_TOLERANCE,
         layerFilter: layer =>
-          !!clickableLayerCodes.find(
-            clickableLayerName => (layer as VectorLayerWithName).name?.includes(clickableLayerName)
+          !!clickableLayerCodes.find(clickableLayerName =>
+            (layer as VectorLayerWithName).name?.includes(clickableLayerName)
           )
       })
       const isCtrl = platformModifierKeyOnly(event)
@@ -90,8 +90,8 @@ export function BaseMap({
       const feature = _map.forEachFeatureAtPixel<FeatureLike>(pixel, hoveredFeature => hoveredFeature, {
         hitTolerance: HIT_PIXEL_TO_TOLERANCE,
         layerFilter: layer =>
-          !!hoverableLayerCodes.find(
-            hoverableLayerName => (layer as VectorLayerWithName).name?.includes(hoverableLayerName)
+          !!hoverableLayerCodes.find(hoverableLayerName =>
+            (layer as VectorLayerWithName).name?.includes(hoverableLayerName)
           )
       })
 

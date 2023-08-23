@@ -36,7 +36,7 @@ class UserAuthorizationCheckFilter(
     private val MALFORMED_BEARER_MESSAGE = "Malformed authorization header, header type should be 'Bearer'"
     private val MISSING_OIDC_ENDPOINT_MESSAGE = "Missing OIDC user info endpoint"
     private val MISSING_OIDC_ISSUER_ENDPOINT_MESSAGE = "Missing issuer URI endpoint"
-    private val COULD_NOT_FETCH_USER_INFO_MESSAGE = "Could not fetch user info at ${oidcProperties.userinfoEndpoint}"
+    private val COULD_NOT_FETCH_USER_INFO_MESSAGE = "Could not fetch user info at ${oidcProperties.issuerUri + oidcProperties.userinfoEndpoint}"
     private val INSUFFICIENT_AUTHORIZATION_MESSAGE = "Insufficient authorization"
 
     override fun doFilterInternal(

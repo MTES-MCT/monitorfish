@@ -19,9 +19,7 @@ export const VesselSidebarActionButton = styled(MapButtonStyle)<{
   border-radius: 1px;
   z-index: 999;
   right: ${p => (p.isRightMenuOpen && p.isSidebarOpen ? 55 : 10)}px;
-  transition:
-    all 0.5s,
-    right 0.3s;
+  transition: all 0.5s, right 0.3s;
 
   :hover,
   :focus {

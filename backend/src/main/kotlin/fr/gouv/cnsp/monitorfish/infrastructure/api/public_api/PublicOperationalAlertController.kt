@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/operational_alerts")
 @Tag(name = "Public APIs for Operational alerts")
-class OperationalAlertController(
+class PublicOperationalAlertController(
     private val validateOperationalAlert: ValidateOperationalAlert,
 ) {
 

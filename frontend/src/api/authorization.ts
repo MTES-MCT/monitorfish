@@ -8,10 +8,12 @@ import type { UserAuthorization } from '../domain/entities/authorization/types'
 export async function getCurrentUserAuthorizationFromAPI(): Promise<UserAuthorization> {
   try {
     const userAuthorization = await monitorfishApiKy.get(`/bff/v1/authorization/current`).json<UserAuthorization>()
-    // An OK HTTP code mean the user is known
-    userAuthorization.isLogged = true
 
-    return userAuthorization
+    // An OK HTTP code mean the user is known
+    return {
+      isLogged: true,
+      isSuperUser: userAuthorization.isSuperUser
+    }
   } catch (err) {
     return {
       isLogged: false,

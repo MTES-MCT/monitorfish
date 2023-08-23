@@ -191,7 +191,7 @@ const InnerWrapper = styled.div<{
     ({
       [MissionAction.MissionActionType.AIR_SURVEILLANCE]: p.theme.color.gainsboro,
       [MissionAction.MissionActionType.OBSERVATION]: p.theme.color.blueYonder[25]
-    }[p.$type] || p.theme.color.white)};
+    })[p.$type] || p.theme.color.white};
   border: solid 1px ${p => (p.$isSelected ? p.theme.color.blueGray['100'] : p.theme.color.lightGray)};
   outline: ${p => (p.$isSelected ? `${p.theme.color.blueGray['100']} solid 2px` : 'none')};
   cursor: pointer;

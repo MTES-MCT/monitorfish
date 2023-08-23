@@ -38,16 +38,26 @@ export function App({ auth }: AppProps) {
       return
     }
 
-    if (auth?.isAuthenticated) {
+    if (!auth.isLoading && auth?.isAuthenticated && !userAuthorization?.isLogged) {
       // eslint-disable-next-line no-console
       console.log('Authenticated.')
-      // eslint-disable-next-line no-console
-      console.log(JSON.stringify(auth))
-      // location.reload()
+      // eslint-disable-next-line no-restricted-globals
+      location.reload()
     }
-  }, [auth, auth?.isAuthenticated, auth?.activeNavigator, auth?.isLoading, auth?.signinRedirect])
+  }, [
+    auth,
+    auth?.isAuthenticated,
+    auth?.activeNavigator,
+    auth?.isLoading,
+    auth?.signinRedirect,
+    userAuthorization?.isLogged
+  ])
 
-  if (auth && !auth.isLoading && (!auth.isAuthenticated || !userAuthorization?.isLogged)) {
+  if (auth && !auth.isLoading && auth.isAuthenticated && !userAuthorization?.isLogged) {
+    return <LandingPage />
+  }
+
+  if (auth && !auth.isLoading && !auth.isAuthenticated) {
     return <LandingPage hasInsufficientRights />
   }
 

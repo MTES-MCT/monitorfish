@@ -21,6 +21,7 @@ export function getOIDCConfig() {
     client_id: String(OIDC_CLIENT_ID),
     onSigninCallback,
     redirect_uri: String(OIDC_REDIRECT_URI),
+    scope: 'openid email',
     userStore: new WebStorageStateStore({ store: window.localStorage })
   }
 

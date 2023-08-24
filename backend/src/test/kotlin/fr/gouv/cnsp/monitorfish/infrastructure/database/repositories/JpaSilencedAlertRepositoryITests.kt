@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilencedAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -15,6 +16,36 @@ class JpaSilencedAlertRepositoryITests : AbstractDBTests() {
 
     @Autowired
     private lateinit var jpaSilencedAlertRepository: JpaSilencedAlertRepository
+
+    @Test
+    @Transactional
+    fun `save Should save a silenced alert created from scratch`() {
+        // Given
+        val now = ZonedDateTime.now()
+        val alertToSilence = SilencedAlert(
+            internalReferenceNumber = "FRFGRGR",
+            externalReferenceNumber = "RGD",
+            ircs = "6554fEE",
+            vesselId = 123,
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            flagState = CountryCode.FR,
+            value = ThreeMilesTrawlingAlert(),
+            silencedBeforeDate = now.plusDays(25),
+        )
+
+        // When
+        val silencedAlert = jpaSilencedAlertRepository.save(alertToSilence)
+
+        // Then
+        assertThat(silencedAlert.internalReferenceNumber).isEqualTo("FRFGRGR")
+        assertThat(silencedAlert.externalReferenceNumber).isEqualTo("RGD")
+        assertThat(silencedAlert.value.type).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
+        assertThat(silencedAlert.silencedBeforeDate).isEqualTo(now.plusDays(25))
+        assertThat(silencedAlert.wasValidated).isNull()
+
+        val alerts = jpaSilencedAlertRepository.findAllCurrentSilencedAlerts()
+        assertThat(alerts).hasSize(5)
+    }
 
     @Test
     @Transactional

@@ -9,11 +9,11 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
 import org.slf4j.LoggerFactory
 
 @UseCase
-class GetOperationalAlerts(
+class GetPendingAlerts(
     private val pendingAlertRepository: PendingAlertRepository,
     private val infractionRepository: InfractionRepository,
 ) {
-    private val logger = LoggerFactory.getLogger(GetOperationalAlerts::class.java)
+    private val logger = LoggerFactory.getLogger(GetPendingAlerts::class.java)
 
     fun execute(): List<PendingAlert> {
         return pendingAlertRepository.findAlertsOfTypes(

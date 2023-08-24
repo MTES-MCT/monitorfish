@@ -12,12 +12,12 @@ import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 @UseCase
-class SilenceOperationalAlert(
+class SilencePendingAlert(
     private val pendingAlertRepository: PendingAlertRepository,
     private val silencedAlertRepository: SilencedAlertRepository,
     private val lastPositionRepository: LastPositionRepository,
 ) {
-    private val logger = LoggerFactory.getLogger(SilenceOperationalAlert::class.java)
+    private val logger = LoggerFactory.getLogger(SilencePendingAlert::class.java)
 
     fun execute(
         alertId: Int,

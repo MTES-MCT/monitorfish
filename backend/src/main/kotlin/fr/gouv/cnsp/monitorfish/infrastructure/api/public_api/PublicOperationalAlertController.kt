@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
-import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.ValidateOperationalAlert
+import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.ValidatePendingAlert
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.websocket.server.PathParam
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1/operational_alerts")
 @Tag(name = "Public APIs for Operational alerts")
 class PublicOperationalAlertController(
-    private val validateOperationalAlert: ValidateOperationalAlert,
+    private val validatePendingAlert: ValidatePendingAlert,
 ) {
 
     @PutMapping(value = ["/{id}/validate"])
@@ -23,6 +23,6 @@ class PublicOperationalAlertController(
         @PathVariable(name = "id")
         id: Int,
     ) {
-        return validateOperationalAlert.execute(id)
+        return validatePendingAlert.execute(id)
     }
 }

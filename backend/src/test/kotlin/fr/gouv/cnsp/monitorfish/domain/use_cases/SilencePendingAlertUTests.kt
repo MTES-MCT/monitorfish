@@ -10,7 +10,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.SilencedAlertRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.SilenceOperationalAlert
+import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.SilencePendingAlert
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
@@ -21,7 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
-class SilenceOperationalAlertUTests {
+class SilencePendingAlertUTests {
 
     @MockBean
     private lateinit var pendingAlertRepository: PendingAlertRepository
@@ -49,7 +49,7 @@ class SilenceOperationalAlertUTests {
         given(pendingAlertRepository.find(any())).willReturn(pendingAlert)
 
         // When
-        SilenceOperationalAlert(
+        SilencePendingAlert(
             pendingAlertRepository,
             silencedAlertRepository,
             lastPositionRepository,
@@ -88,7 +88,7 @@ class SilenceOperationalAlertUTests {
         given(pendingAlertRepository.find(any())).willReturn(pendingAlert)
 
         // When
-        SilenceOperationalAlert(
+        SilencePendingAlert(
             pendingAlertRepository,
             silencedAlertRepository,
             lastPositionRepository,
@@ -126,7 +126,7 @@ class SilenceOperationalAlertUTests {
 
         // When
         val throwable = catchThrowable {
-            SilenceOperationalAlert(
+            SilencePendingAlert(
                 pendingAlertRepository,
                 silencedAlertRepository,
                 lastPositionRepository,

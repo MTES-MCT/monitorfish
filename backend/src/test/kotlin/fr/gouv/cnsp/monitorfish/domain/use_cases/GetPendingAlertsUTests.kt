@@ -11,7 +11,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionCatego
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.GetOperationalAlerts
+import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.GetPendingAlerts
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -22,7 +22,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
-class GetOperationalAlertsUTests {
+class GetPendingAlertsUTests {
 
     @MockBean
     private lateinit var pendingAlertRepository: PendingAlertRepository
@@ -50,7 +50,7 @@ class GetOperationalAlertsUTests {
         given(pendingAlertRepository.findAlertsOfTypes(any())).willReturn(listOf(pendingAlert))
 
         // When
-        val alerts = GetOperationalAlerts(pendingAlertRepository, infractionRepository).execute()
+        val alerts = GetPendingAlerts(pendingAlertRepository, infractionRepository).execute()
 
         // Then
         assertThat(alerts.first().value.natinfCode).isEqualTo(7059)

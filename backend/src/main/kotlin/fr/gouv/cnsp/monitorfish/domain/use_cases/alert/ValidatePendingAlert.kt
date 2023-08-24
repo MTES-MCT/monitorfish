@@ -11,13 +11,13 @@ import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 @UseCase
-class ValidateOperationalAlert(
+class ValidatePendingAlert(
     private val pendingAlertRepository: PendingAlertRepository,
     private val reportingRepository: ReportingRepository,
     private val silencedAlertRepository: SilencedAlertRepository,
     private val lastPositionRepository: LastPositionRepository,
 ) {
-    private val logger = LoggerFactory.getLogger(ValidateOperationalAlert::class.java)
+    private val logger = LoggerFactory.getLogger(ValidatePendingAlert::class.java)
 
     fun execute(alertId: Int) {
         val now = ZonedDateTime.now()

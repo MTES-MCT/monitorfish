@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.*
+import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
@@ -13,6 +14,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAl
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SilenceOperationalAlertDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SilencedAlertDataInput
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
@@ -28,35 +30,38 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
-@Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class)
-@WebMvcTest(value = [(OperationalAlertController::class)])
-class PublicOperationalAlertControllerITests {
+@Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class, MapperConfiguration::class)
+@WebMvcTest(value = [(PendingAlertController::class)])
+class PendingAlertControllerITests {
 
     @Autowired
     private lateinit var api: MockMvc
 
     @MockBean
-    private lateinit var getOperationalAlerts: GetOperationalAlerts
+    private lateinit var getPendingAlerts: GetPendingAlerts
 
     @MockBean
-    private lateinit var validateOperationalAlert: ValidateOperationalAlert
+    private lateinit var validatePendingAlert: ValidatePendingAlert
 
     @MockBean
-    private lateinit var silenceOperationalAlert: SilenceOperationalAlert
+    private lateinit var silencePendingAlert: SilencePendingAlert
 
     @MockBean
     private lateinit var getSilencedAlerts: GetSilencedAlerts
 
     @MockBean
-    private lateinit var deleteSilencedOperationalAlert: DeleteSilencedOperationalAlert
+    private lateinit var deleteSilencedAlert: DeleteSilencedAlert
+
+    @MockBean
+    private lateinit var silenceAlert: SilenceAlert
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
     @Test
-    fun `Should get all operational alerts`() {
+    fun `Should get all pending alerts`() {
         // Given
-        BDDMockito.given(this.getOperationalAlerts.execute()).willReturn(
+        BDDMockito.given(getPendingAlerts.execute()).willReturn(
             listOf(
                 PendingAlert(
                     internalReferenceNumber = "FRFGRGR",
@@ -82,7 +87,7 @@ class PublicOperationalAlertControllerITests {
     }
 
     @Test
-    fun `Should validate an operational alert`() {
+    fun `Should validate a pending alert`() {
         // When
         api.perform(MockMvcRequestBuilders.put("/bff/v1/operational_alerts/666/validate"))
             // Then
@@ -90,9 +95,9 @@ class PublicOperationalAlertControllerITests {
     }
 
     @Test
-    fun `Should silence an operational alert`() {
+    fun `Should silence a pending alert`() {
         // Given
-        given(this.silenceOperationalAlert.execute(any(), any(), any())).willReturn(
+        given(silencePendingAlert.execute(any(), any(), any())).willReturn(
             SilencedAlert(
                 id = 666,
                 internalReferenceNumber = "FRFGRGR",
@@ -127,7 +132,7 @@ class PublicOperationalAlertControllerITests {
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.type", Matchers.equalTo("THREE_MILES_TRAWLING_ALERT")))
 
         argumentCaptor<ZonedDateTime>().apply {
-            verify(silenceOperationalAlert).execute(eq(666), eq(SilenceAlertPeriod.CUSTOM), capture())
+            verify(silencePendingAlert).execute(eq(666), eq(SilenceAlertPeriod.CUSTOM), capture())
 
             assertThat(allValues.first().withZoneSameInstant(UTC).toString()).isEqualTo(
                 before.withZoneSameInstant(UTC).toString(),
@@ -138,7 +143,7 @@ class PublicOperationalAlertControllerITests {
     @Test
     fun `Should get all silenced alerts`() {
         // Given
-        BDDMockito.given(this.getSilencedAlerts.execute()).willReturn(
+        BDDMockito.given(getSilencedAlerts.execute()).willReturn(
             listOf(
                 SilencedAlert(
                     internalReferenceNumber = "FRFGRGR",
@@ -170,5 +175,46 @@ class PublicOperationalAlertControllerITests {
         api.perform(MockMvcRequestBuilders.delete("/bff/v1/operational_alerts/silenced/666"))
             // Then
             .andExpect(MockMvcResultMatchers.status().isOk)
+    }
+
+    @Test
+    fun `Should silence an alert`() {
+        // Given
+        given(silenceAlert.execute(any())).willReturn(
+            SilencedAlert(
+                id = 666,
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                silencedBeforeDate = ZonedDateTime.now(),
+                value = ThreeMilesTrawlingAlert(),
+            ),
+        )
+
+        // When
+        api.perform(
+            MockMvcRequestBuilders.post("/bff/v1/operational_alerts/silenced")
+                .content(
+                    objectMapper.writeValueAsString(
+                        SilencedAlertDataInput(
+                            internalReferenceNumber = "FRFGRGR",
+                            externalReferenceNumber = "RGD",
+                            ircs = "6554fEE",
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            flagState = CountryCode.FR,
+                            silencedBeforeDate = ZonedDateTime.now(),
+                            value = "{\"type\": \"THREE_MILES_TRAWLING_ALERT\"}",
+                        ),
+                    ),
+                )
+                .contentType(MediaType.APPLICATION_JSON),
+        )
+            // Then
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", Matchers.equalTo("FRFGRGR")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.flagState", Matchers.equalTo("FR")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.type", Matchers.equalTo("THREE_MILES_TRAWLING_ALERT")))
     }
 }

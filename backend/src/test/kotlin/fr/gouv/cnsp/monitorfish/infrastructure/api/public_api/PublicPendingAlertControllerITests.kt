@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
-import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.ValidateOperationalAlert
+import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.ValidatePendingAlert
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -15,13 +15,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class)
 @WebMvcTest(value = [(PublicOperationalAlertController::class)])
-class PublicOperationalAlertControllerITests {
+class PublicPendingAlertControllerITests {
 
     @Autowired
     private lateinit var api: MockMvc
 
     @MockBean
-    private lateinit var validateOperationalAlert: ValidateOperationalAlert
+    private lateinit var validatePendingAlert: ValidatePendingAlert
 
     @Test
     fun `Should validate an operational alert`() {

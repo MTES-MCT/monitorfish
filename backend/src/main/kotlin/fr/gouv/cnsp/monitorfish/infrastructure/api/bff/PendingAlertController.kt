@@ -1,7 +1,9 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SilenceOperationalAlertDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SilencedAlertDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PendingAlertDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.SilencedAlertDataOutput
 import io.swagger.v3.oas.annotations.Operation
@@ -11,35 +13,37 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/bff/v1/operational_alerts")
-@Tag(name = "APIs for Operational alerts")
-class OperationalAlertController(
-    private val getOperationalAlerts: GetOperationalAlerts,
-    private val validateOperationalAlert: ValidateOperationalAlert,
-    private val silenceOperationalAlert: SilenceOperationalAlert,
+@Tag(name = "APIs for pending Operational alerts")
+class PendingAlertController(
+    private val getPendingAlerts: GetPendingAlerts,
+    private val validatePendingAlert: ValidatePendingAlert,
+    private val silencePendingAlert: SilencePendingAlert,
     private val getSilencedAlerts: GetSilencedAlerts,
-    private val deleteSilencedOperationalAlert: DeleteSilencedOperationalAlert,
+    private val deleteSilencedAlert: DeleteSilencedAlert,
+    private val silenceAlert: SilenceAlert,
+    private val objectMapper: ObjectMapper,
 ) {
 
     @GetMapping("")
-    @Operation(summary = "Get operational alerts")
+    @Operation(summary = "Get pending operational alerts")
     fun getOperationalAlerts(): List<PendingAlertDataOutput> {
-        return getOperationalAlerts.execute().map {
+        return getPendingAlerts.execute().map {
             PendingAlertDataOutput.fromPendingAlert(it)
         }
     }
 
     @PutMapping(value = ["/{id}/validate"])
-    @Operation(summary = "Validate an operational alert")
+    @Operation(summary = "Validate a pending operational alert")
     fun validateAlert(
         @PathParam("Alert id")
         @PathVariable(name = "id")
         id: Int,
     ) {
-        return validateOperationalAlert.execute(id)
+        return validatePendingAlert.execute(id)
     }
 
     @PutMapping(value = ["/{id}/silence"], consumes = ["application/json"])
-    @Operation(summary = "Silence an operational alert")
+    @Operation(summary = "Silence a pending operational alert")
     fun silenceAlert(
         @PathParam("Alert id")
         @PathVariable(name = "id")
@@ -47,7 +51,7 @@ class OperationalAlertController(
         @RequestBody
         silenceOperationalAlertData: SilenceOperationalAlertDataInput,
     ): SilencedAlertDataOutput {
-        val silencedAlert = silenceOperationalAlert.execute(
+        val silencedAlert = silencePendingAlert.execute(
             id,
             silenceOperationalAlertData.silencedAlertPeriod,
             silenceOperationalAlertData.beforeDateTime,
@@ -71,6 +75,17 @@ class OperationalAlertController(
         @PathVariable(name = "id")
         id: Int,
     ) {
-        return deleteSilencedOperationalAlert.execute(id)
+        return deleteSilencedAlert.execute(id)
+    }
+
+    @PostMapping(value = ["/silenced"], consumes = ["application/json"])
+    @Operation(summary = "Silence an operational alert")
+    fun silenceAlert(
+        @RequestBody
+        silenceAlertData: SilencedAlertDataInput,
+    ): SilencedAlertDataOutput {
+        val silencedAlert = silenceAlert.execute(silenceAlertData.toSilencedAlert(objectMapper))
+
+        return SilencedAlertDataOutput.fromSilencedAlert(silencedAlert)
     }
 }

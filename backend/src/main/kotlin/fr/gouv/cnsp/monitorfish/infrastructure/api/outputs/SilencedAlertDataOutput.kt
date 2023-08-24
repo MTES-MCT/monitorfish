@@ -8,6 +8,7 @@ import java.time.ZonedDateTime
 
 class SilencedAlertDataOutput(
     val id: Int? = null,
+    val vesselId: Int? = null,
     val vesselName: String? = null,
     val internalReferenceNumber: String? = null,
     val externalReferenceNumber: String? = null,
@@ -20,6 +21,7 @@ class SilencedAlertDataOutput(
     companion object {
         fun fromSilencedAlert(silencedAlert: SilencedAlert) = SilencedAlertDataOutput(
             id = silencedAlert.id,
+            vesselId = silencedAlert.vesselId,
             vesselName = silencedAlert.vesselName,
             internalReferenceNumber = silencedAlert.internalReferenceNumber,
             externalReferenceNumber = silencedAlert.externalReferenceNumber,

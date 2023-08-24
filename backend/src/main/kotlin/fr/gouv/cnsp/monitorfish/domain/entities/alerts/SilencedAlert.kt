@@ -5,8 +5,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
 
-class SilencedAlert(
+data class SilencedAlert(
     val id: Int? = null,
+    val vesselId: Int? = null,
     val vesselName: String? = null,
     val internalReferenceNumber: String? = null,
     val externalReferenceNumber: String? = null,

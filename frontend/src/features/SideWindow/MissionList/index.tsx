@@ -305,7 +305,7 @@ const TableBodyCell = styled.div.attrs(() => ({
 }>`
   align-items: center;
   border-bottom: solid 1px ${p => p.theme.color.lightGray};
-  border-spacing: ${p => (p.$hasSomeOngoingControls ? 4 : 6)}px 0px;
+  border-spacing: 6px 0px;
   border-left: none;
   border-right: solid 1px ${p => p.theme.color.lightGray};
   display: flex;

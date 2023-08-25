@@ -106,7 +106,7 @@ export function MissionList() {
           <FilterBar onQueryChange={setSearchQuery} searchQuery={searchQuery} />
 
           {isLoading && <p>Chargement en cours...</p>}
-          {isError && <pre>{JSON.stringify(isError)}</pre>}
+          {isError && <pre>La liste des missions n’a pas pu être récupérée.</pre>}
           {!isLoading && !isError && (
             <>
               <div>
@@ -120,68 +120,75 @@ export function MissionList() {
                 {renderTableHead()}
 
                 <TableBody>
-                  {tableData.map(augmentedMission => (
-                    <TableBodyRow key={augmentedMission.id} data-id={augmentedMission.id}>
-                      <TableBodyCell $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[0]?.fixedWidth}>
-                        <span>{augmentedMission.$labelled.startDateTimeUtc}</span>
-                      </TableBodyCell>
-                      <TableBodyCell $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[1]?.fixedWidth}>
-                        <span>{augmentedMission.$labelled.endDateTimeUtc}</span>
-                      </TableBodyCell>
-                      <TableBodyCell $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[2]?.fixedWidth}>
-                        <span>{augmentedMission.$labelled.missionTypes}</span>
-                      </TableBodyCell>
-                      <TableBodyCell $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[3]?.fixedWidth}>
-                        <span>{augmentedMission.$labelled.missionSource}</span>
-                      </TableBodyCell>
-                      <TableBodyCell
-                        $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[4]?.fixedWidth}
-                        title={augmentedMission.$labelled.controlUnits}
-                      >
-                        <span>{augmentedMission.$labelled.controlUnits}</span>
-                      </TableBodyCell>
-                      <TableBodyCell
-                        $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[5]?.fixedWidth}
-                        title={augmentedMission.$labelled.inspectedVessels}
-                      >
-                        <span>{augmentedMission.$labelled.inspectedVessels}</span>
-                      </TableBodyCell>
-                      <TableBodyCell
-                        $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[6]?.fixedWidth}
-                        $hasSomeOngoingActions={hasSomeOngoingActions(augmentedMission)}
-                      >
-                        <span>{augmentedMission.$labelled.inspectionsCount}</span>
-                      </TableBodyCell>
-                      <TableBodyCell $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[7]?.fixedWidth}>
-                        <span>{renderStatus(augmentedMission.$labelled.status as Mission.MissionStatus)}</span>
-                      </TableBodyCell>
-                      <TableBodyCell
-                        $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[8]?.fixedWidth}
-                        style={{ padding: '4px 7px 4px 9px' }}
-                      >
-                        <IconButton
-                          accent={Accent.TERTIARY}
-                          disabled={!augmentedMission.geom}
-                          Icon={Icon.ViewOnMap}
-                          iconSize={20}
-                          onClick={() => handleZoomToMission(augmentedMission.geom)}
-                          title="Voir sur la carte"
-                        />
-                      </TableBodyCell>
-                      <TableBodyCell
-                        $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[9]?.fixedWidth}
-                        style={{ padding: '4px 7px 4px 9px' }}
-                      >
-                        <IconButton
-                          accent={Accent.TERTIARY}
-                          Icon={Icon.Edit}
-                          iconSize={20}
-                          onClick={() => goToMissionForm(augmentedMission.id)}
-                          title="Éditer la mission"
-                        />
-                      </TableBodyCell>
-                    </TableBodyRow>
-                  ))}
+                  {tableData.map(augmentedMission => {
+                    const hasSomeOngoingControls = hasSomeOngoingActions(augmentedMission)
+
+                    return (
+                      <TableBodyRow key={augmentedMission.id} data-id={augmentedMission.id}>
+                        <TableBodyCell $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[0]?.fixedWidth}>
+                          <span>{augmentedMission.$labelled.startDateTimeUtc}</span>
+                        </TableBodyCell>
+                        <TableBodyCell $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[1]?.fixedWidth}>
+                          <span>{augmentedMission.$labelled.endDateTimeUtc}</span>
+                        </TableBodyCell>
+                        <TableBodyCell $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[2]?.fixedWidth}>
+                          <span>{augmentedMission.$labelled.missionTypes}</span>
+                        </TableBodyCell>
+                        <TableBodyCell $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[3]?.fixedWidth}>
+                          <span>{augmentedMission.$labelled.missionSource}</span>
+                        </TableBodyCell>
+                        <TableBodyCell
+                          $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[4]?.fixedWidth}
+                          title={augmentedMission.$labelled.controlUnits}
+                        >
+                          <span>{augmentedMission.$labelled.controlUnits}</span>
+                        </TableBodyCell>
+                        <TableBodyCell
+                          $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[5]?.fixedWidth}
+                          title={augmentedMission.$labelled.inspectedVessels}
+                        >
+                          <span>{augmentedMission.$labelled.inspectedVessels}</span>
+                        </TableBodyCell>
+                        <TableBodyCell
+                          $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[6]?.fixedWidth}
+                          $isControlNumberCell
+                          title={hasSomeOngoingControls ? `Contrôle(s) en cours` : undefined}
+                        >
+                          <OngoingControlsVerticalBar $hasSomeOngoingControls={hasSomeOngoingControls}>
+                            {augmentedMission.$labelled.inspectionsCount}
+                          </OngoingControlsVerticalBar>
+                        </TableBodyCell>
+                        <TableBodyCell $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[7]?.fixedWidth}>
+                          <span>{renderStatus(augmentedMission.$labelled.status as Mission.MissionStatus)}</span>
+                        </TableBodyCell>
+                        <TableBodyCell
+                          $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[8]?.fixedWidth}
+                          style={{ padding: '4px 7px 4px 9px' }}
+                        >
+                          <IconButton
+                            accent={Accent.TERTIARY}
+                            disabled={!augmentedMission.geom}
+                            Icon={Icon.ViewOnMap}
+                            iconSize={20}
+                            onClick={() => handleZoomToMission(augmentedMission.geom)}
+                            title="Voir sur la carte"
+                          />
+                        </TableBodyCell>
+                        <TableBodyCell
+                          $fixedWidth={MISSION_LIST_TABLE_OPTIONS.columns[9]?.fixedWidth}
+                          style={{ padding: '4px 7px 4px 9px' }}
+                        >
+                          <IconButton
+                            accent={Accent.TERTIARY}
+                            Icon={Icon.Edit}
+                            iconSize={20}
+                            onClick={() => goToMissionForm(augmentedMission.id)}
+                            title="Éditer la mission"
+                          />
+                        </TableBodyCell>
+                      </TableBodyRow>
+                    )
+                  })}
                 </TableBody>
 
                 {!tableData.length && <EmptyCardTable>Aucune mission</EmptyCardTable>}
@@ -200,6 +207,18 @@ const Wrapper = styled(NoRsuiteOverrideWrapper)`
   margin-bottom: 20px;
   width: 100%;
   overflow-y: auto;
+`
+
+const OngoingControlsVerticalBar = styled.span<{
+  $hasSomeOngoingControls: boolean | undefined
+}>`
+  display: inline-block;
+  height: 32px;
+  width: 100%;
+  padding-left: 8px;
+  padding-top: 6px;
+  border-left: ${p =>
+    p.$hasSomeOngoingControls ? `solid 4px ${p.theme.color.blueGray[100]}` : 'solid 4px transparent'};
 `
 
 const Header = styled.div`
@@ -282,17 +301,18 @@ const TableBodyCell = styled.div.attrs(() => ({
   className: 'TableBodyCell'
 }))<{
   $fixedWidth?: number | undefined
-  $hasSomeOngoingActions?: boolean | undefined
+  $isControlNumberCell?: boolean | undefined
 }>`
   align-items: center;
   border-bottom: solid 1px ${p => p.theme.color.lightGray};
-  border-left: ${p => (p.$hasSomeOngoingActions ? `solid 4px ${p.theme.color.blueGray[100]}` : 'none')};
+  border-spacing: ${p => (p.$hasSomeOngoingControls ? 4 : 6)}px 0px;
+  border-left: none;
   border-right: solid 1px ${p => p.theme.color.lightGray};
   display: flex;
   flex-grow: ${p => (p.$fixedWidth ? 0 : 1)};
   max-width: ${p => (p.$fixedWidth ? `${p.$fixedWidth}px` : 'auto')};
   min-width: ${p => (p.$fixedWidth ? `${p.$fixedWidth}px` : 'auto')};
-  padding: ${p => (p.$hasSomeOngoingActions ? '9px 10px 9px 6px' : '9px 10px')};
+  padding: ${p => (p.$isControlNumberCell ? '4px 10px 4px 4px' : '9px 10px')};
 
   > span {
     overflow: hidden;

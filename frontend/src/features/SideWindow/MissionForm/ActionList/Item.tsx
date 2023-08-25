@@ -126,6 +126,7 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
           $type={initialValues.actionType}
           data-cy="action-list-item"
           onClick={onSelect}
+          title={isOpen ? 'Contrôle en cours' : undefined}
         >
           <Head>
             <ActionLabel>

@@ -1,4 +1,3 @@
-import { Option } from '@mtes-mct/monitor-ui'
 import Fuse from 'fuse.js'
 import { isEqual } from 'lodash'
 
@@ -7,6 +6,7 @@ import { SeaFrontGroup, SeaFrontGroupLabel } from '../../../../domain/entities/s
 import { getOptionsFromLabelledEnum } from '../../../../utils/getOptionsFromLabelledEnum'
 
 import type { LEGACY_PendingAlert, LEGACY_SilencedAlert } from '../../../../domain/entities/alerts/types'
+import type { Option } from '@mtes-mct/monitor-ui'
 
 const PENDING_ALERT_TYPE_KEY_PATH = ['value', 'type']
 

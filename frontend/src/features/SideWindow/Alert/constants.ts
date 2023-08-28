@@ -1,7 +1,7 @@
-import { Option } from '@mtes-mct/monitor-ui'
-
 import { SeaFrontGroup } from '../../../domain/entities/seaFront/constants'
 import { getOptionsFromLabelledEnum } from '../../../utils/getOptionsFromLabelledEnum'
+
+import type { Option } from '@mtes-mct/monitor-ui'
 
 export enum AdditionalSubMenu {
   SUSPENDED_ALERTS = 'SUSPENDED_ALERTS'

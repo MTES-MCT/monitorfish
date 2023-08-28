@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { propEq } from 'ramda'
 
-import { AlertSubMenu } from './constants'
 import { SeaFrontGroup } from '../../../domain/entities/seaFront/constants'
 import { deleteListItems } from '../../../utils/deleteListItems'
 
+import type { AlertSubMenu } from './constants'
 import type {
   AlertNameAndVesselIdentity,
   LEGACY_PendingAlert,

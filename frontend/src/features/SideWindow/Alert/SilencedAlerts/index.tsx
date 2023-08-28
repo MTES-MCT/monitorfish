@@ -5,30 +5,26 @@ import { FlexboxGrid, List } from 'rsuite'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
-import { PENDING_ALERTS_SEARCH_OPTIONS } from './constants'
-import { getAlertNameFromType } from './utils'
-import { COLORS } from '../../../constants/constants'
-import { reactivateSilencedAlert } from '../../../domain/use_cases/alert/reactivateSilencedAlert'
-import { showVessel } from '../../../domain/use_cases/vessel/showVessel'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { getDateTime } from '../../../utils'
-import SearchIconSVG from '../../icons/Loupe_dark.svg'
-import { Flag } from '../../VesselList/tableCells'
-import { sortArrayByColumn, SortType } from '../../VesselList/tableSort'
+import { COLORS } from '../../../../constants/constants'
+import { reactivateSilencedAlert } from '../../../../domain/use_cases/alert/reactivateSilencedAlert'
+import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { getDateTime } from '../../../../utils'
+import SearchIconSVG from '../../../icons/Loupe_dark.svg'
+import { Flag } from '../../../VesselList/tableCells'
+import { sortArrayByColumn, SortType } from '../../../VesselList/tableSort'
+import { PENDING_ALERTS_SEARCH_OPTIONS } from '../AlertListAndReportingList/constants'
+import { getAlertNameFromType } from '../AlertListAndReportingList/utils'
 
-import type { LEGACY_SilencedAlert } from '../../../domain/entities/alerts/types'
 import type { CSSProperties } from 'react'
 
-export type SilencedAlertsListProps = {
-  silencedAlerts: LEGACY_SilencedAlert[]
-}
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
  */
-export function SilencedAlertsList({ silencedAlerts }: SilencedAlertsListProps) {
+export function SilencedAlerts() {
   const dispatch = useMainAppDispatch()
-  const { focusedPendingAlertId } = useMainAppSelector(state => state.alert)
+  const { focusedPendingAlertId, silencedAlerts } = useMainAppSelector(state => state.alert)
   const baseUrl = window.location.origin
   const [sortColumn] = useState('silencedBeforeDate')
   const [sortType] = useState(SortType.ASC)
@@ -57,8 +53,8 @@ export function SilencedAlertsList({ silencedAlerts }: SilencedAlertsListProps) 
   )
 
   return (
-    <Content style={contentStyle}>
-      <Title style={titleStyle}>SUSPENSION D’ALERTES</Title>
+    <Wrapper>
+      <Title>Suspension d’alertes</Title>
       <SearchVesselInput
         data-cy="side-window-silenced-alerts-search-vessel"
         onChange={e => setSearchQuery(e.target.value)}
@@ -71,6 +67,7 @@ export function SilencedAlertsList({ silencedAlerts }: SilencedAlertsListProps) 
         data-cy="side-window-silenced-alerts-list"
         style={{
           ...rowStyle(sortedAlerts?.length),
+          marginBottom: 10,
           marginTop: 10,
           overflow: 'visible'
         }}
@@ -154,9 +151,24 @@ export function SilencedAlertsList({ silencedAlerts }: SilencedAlertsListProps) 
         </ScrollableContainer>
         {!sortedAlerts?.length ? <NoAlerts style={noAlertsStyle}>Aucune alerte suspendue</NoAlerts> : null}
       </List>
-    </Content>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+  margin-left: 40px;
+`
+
+const Title = styled.h2`
+  color: ${COLORS.gunMetal};
+  font-size: 22px;
+  font-weight: 700;
+  margin: 30px 0px;
+  padding-bottom: 5px;
+  text-align: left;
+  transition: all 0.2s;
+  width: fit-content;
+`
 
 const AlertTransition = styled.div``
 
@@ -168,14 +180,6 @@ const alertValidatedTransition: CSSProperties = {
   lineHeight: '41px',
   marginTop: -13,
   textAlign: 'center'
-}
-
-const Title = styled.div``
-const titleStyle = {
-  color: COLORS.gunMetal,
-  fontSize: 16,
-  fontWeight: 700,
-  marginBottom: 20
 }
 
 const searchVesselInputStyle = baseUrl => ({
@@ -298,12 +302,4 @@ const rowBorderStyle = {
   marginRight: 5,
   marginTop: -14,
   width: 2
-}
-
-const Content = styled.div``
-const contentStyle = {
-  marginBottom: 20,
-  marginTop: 20,
-  padding: '30px 40px 40px 10px',
-  width: 'fit-content'
 }

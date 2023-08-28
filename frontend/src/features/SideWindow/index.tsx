@@ -1,5 +1,4 @@
-import { THEME, type NewWindowContextValue, NewWindowContext, usePrevious, Notifier } from '@mtes-mct/monitor-ui'
-import { propEq } from 'ramda'
+import { THEME, type NewWindowContextValue, NewWindowContext, Notifier } from '@mtes-mct/monitor-ui'
 import {
   type CSSProperties,
   type ForwardedRef,
@@ -16,17 +15,11 @@ import {
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled, { createGlobalStyle } from 'styled-components'
 
-import { AlertListAndReportingList } from './AlertListAndReportingList'
+import { Alert } from './Alert'
 import { BeaconMalfunctionBoard } from './BeaconMalfunctionBoard'
-import { BeaconMalfunctionsSubMenu } from './BeaconMalfunctionBoard/beaconMalfunctions'
-import { AlertAndReportingTab } from './constants'
 import { Menu } from './Menu'
 import { MissionForm } from './MissionForm'
 import { MissionList } from './MissionList'
-import { SideWindowSubMenu } from './SideWindowSubMenu'
-import { getSelectedSubMenu } from './utils'
-import { ALERTS_SUBMENU } from '../../domain/entities/alerts/constants'
-import { SeaFrontGroup } from '../../domain/entities/seaFront/constants'
 import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
 import { setEditedReportingInSideWindow } from '../../domain/shared_slices/Reporting'
@@ -41,8 +34,6 @@ import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { FrontendErrorBoundary } from '../../ui/FrontendErrorBoundary'
 
-import type { MenuItem } from '../../types'
-
 export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
   isFromURL: boolean
 }
@@ -52,18 +43,14 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
 
   useImperativeHandle<HTMLDivElement | null, HTMLDivElement | null>(ref, () => wrapperRef.current)
 
-  const { alert, beaconMalfunction, reporting, sideWindow } = useMainAppSelector(state => state)
+  const { openedBeaconMalfunctionInKanban } = useMainAppSelector(state => state.beaconMalfunction)
+  const { editedReportingInSideWindow } = useMainAppSelector(state => state.reporting)
+  const { selectedPath } = useMainAppSelector(state => state.sideWindow)
   const dispatch = useMainAppDispatch()
 
   const [isFirstRender, setIsFirstRender] = useState(true)
   const [isOverlayed, setIsOverlayed] = useState(false)
   const [isPreloading, setIsPreloading] = useState(true)
-  const [isSubmenuFixed, setIsSubmenuFixed] = useState(false)
-  const previousOpenedSideWindowTab = usePrevious(sideWindow.selectedPath.menu)
-  const [selectedSubMenu, setSelectedSubMenu] = useState<MenuItem<SeaFrontGroup | string>>(
-    getSelectedSubMenu(sideWindow.selectedPath.menu)
-  )
-  const [selectedTab, setSelectedTab] = useState(AlertAndReportingTab.ALERT)
 
   const beaconMalfunctionBoardGrayOverlayStyle: CSSProperties = useMemo(
     () => ({
@@ -75,14 +62,6 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
       zIndex: isOverlayed ? 11 : -9999
     }),
     [isOverlayed]
-  )
-
-  const hasSubmenu = useMemo(
-    () =>
-      [SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST, SideWindowMenuKey.BEACON_MALFUNCTION_BOARD].includes(
-        sideWindow.selectedPath.menu
-      ),
-    [sideWindow.selectedPath.menu]
   )
 
   const newWindowContextProviderValue: NewWindowContextValue = useMemo(
@@ -109,18 +88,14 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
   }, [])
 
   useEffect(() => {
-    if (reporting.editedReportingInSideWindow || beaconMalfunction.openedBeaconMalfunctionInKanban) {
+    if (editedReportingInSideWindow || openedBeaconMalfunctionInKanban) {
       setIsOverlayed(true)
 
       return
     }
 
     setIsOverlayed(false)
-  }, [
-    beaconMalfunction.openedBeaconMalfunctionInKanban,
-    reporting.editedReportingInSideWindow,
-    sideWindow.selectedPath.menu
-  ])
+  }, [openedBeaconMalfunctionInKanban, editedReportingInSideWindow, selectedPath.menu])
 
   useEffect(() => {
     if (isFromURL) {
@@ -136,53 +111,6 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
   }, [dispatch, isFromURL])
 
   useEffect(() => {
-    if (
-      sideWindow.selectedPath.menu === previousOpenedSideWindowTab ||
-      sideWindow.selectedPath.menu === SideWindowMenuKey.MISSION_LIST
-    ) {
-      return
-    }
-
-    if (selectedSubMenu) {
-      switch (sideWindow.selectedPath.menu) {
-        case SideWindowMenuKey.BEACON_MALFUNCTION_BOARD:
-          setSelectedSubMenu(BeaconMalfunctionsSubMenu.MALFUNCTIONING as unknown as MenuItem<SeaFrontGroup>)
-          break
-
-        case SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST:
-          {
-            if (!alert.focusedPendingAlertId) {
-              setSelectedSubMenu(ALERTS_SUBMENU.MEMN)
-
-              return
-            }
-
-            const focusedPendingAlert = alert.pendingAlerts.find(propEq(alert.focusedPendingAlertId, 'id'))
-            if (!focusedPendingAlert) {
-              setSelectedSubMenu(ALERTS_SUBMENU.MEMN)
-
-              return
-            }
-
-            setSelectedSubMenu(ALERTS_SUBMENU[focusedPendingAlert.value.seaFront] || ALERTS_SUBMENU.MEMN)
-          }
-          break
-        default:
-          // throw new Error('This should never happen.')
-          // eslint-disable-next-line no-useless-return
-          return
-      }
-    }
-  }, [
-    alert.focusedPendingAlertId,
-    alert.pendingAlerts,
-    previousOpenedSideWindowTab,
-    selectedSubMenu,
-    setSelectedSubMenu,
-    sideWindow.selectedPath.menu
-  ])
-
-  useEffect(() => {
     setIsFirstRender(false)
   }, [])
 
@@ -192,19 +120,9 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
         <NewWindowContext.Provider value={newWindowContextProviderValue}>
           <GlobalStyle />
 
-          <Menu selectedMenu={sideWindow.selectedPath.menu} />
-          {hasSubmenu && (
-            <SideWindowSubMenu
-              isFixed={isSubmenuFixed}
-              selectedMenu={sideWindow.selectedPath.menu}
-              selectedSubMenu={selectedSubMenu}
-              selectedTab={selectedTab}
-              setIsFixed={setIsSubmenuFixed}
-              setSelectedSubMenu={setSelectedSubMenu}
-            />
-          )}
+          <Menu selectedMenu={selectedPath.menu} />
           {/* TODO Move that within BeaconMalfunctionBoard. */}
-          {sideWindow.selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && (
+          {selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && (
             <BeaconMalfunctionsBoardGrayOverlay
               onClick={closeRightSidebar}
               style={beaconMalfunctionBoardGrayOverlayStyle}
@@ -218,32 +136,13 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
               </Loading>
             )}
             {!isPreloading && (
-              <Content
-                noMargin={
-                  sideWindow.selectedPath.menu &&
-                  [SideWindowMenuKey.MISSION_FORM, SideWindowMenuKey.MISSION_LIST].includes(
-                    sideWindow.selectedPath.menu
-                  )
-                }
-              >
-                {sideWindow.selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST && (
-                  <AlertListAndReportingList
-                    baseRef={wrapperRef as MutableRefObject<HTMLDivElement>}
-                    selectedSubMenu={
-                      Object.values<string>(SeaFrontGroup).includes(selectedSubMenu.code)
-                        ? (selectedSubMenu as MenuItem<SeaFrontGroup>)
-                        : ALERTS_SUBMENU.MEMN
-                    }
-                    selectedTab={selectedTab}
-                    setSelectedSeaFront={setSelectedSubMenu as any}
-                    setSelectedTab={setSelectedTab}
-                  />
+              <Content>
+                {selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST && (
+                  <Alert baseRef={wrapperRef as MutableRefObject<HTMLDivElement>} />
                 )}
-                {sideWindow.selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && (
-                  <BeaconMalfunctionBoard />
-                )}
-                {sideWindow.selectedPath.menu === SideWindowMenuKey.MISSION_LIST && <MissionList />}
-                {sideWindow.selectedPath.menu === SideWindowMenuKey.MISSION_FORM && <MissionForm />}
+                {selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && <BeaconMalfunctionBoard />}
+                {selectedPath.menu === SideWindowMenuKey.MISSION_LIST && <MissionList />}
+                {selectedPath.menu === SideWindowMenuKey.MISSION_FORM && <MissionForm />}
               </Content>
             )}
           </FrontendErrorBoundary>
@@ -322,14 +221,11 @@ const Wrapper = styled.div`
   }
 `
 
-const Content = styled.div<{
-  noMargin: boolean | undefined
-}>`
+const Content = styled.div`
   display: flex;
   flex-grow: 1;
   min-height: 0;
   min-width: 0;
-  padding-left: ${p => (p.noMargin ? 0 : '30px')};
 `
 
 const BeaconMalfunctionsBoardGrayOverlay = styled.div``

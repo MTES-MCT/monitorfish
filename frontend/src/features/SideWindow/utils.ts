@@ -1,14 +1,13 @@
-import { BeaconMalfunctionsSubMenu } from './BeaconMalfunctionBoard/beaconMalfunctions'
+import { SideWindowSubMenu } from './constants'
 import { ALERTS_SUBMENU } from '../../domain/entities/alerts/constants'
-import { SeaFrontGroup } from '../../domain/entities/seaFront/constants'
 import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
 
 import type { MenuItem } from '../../types'
 
 export function getSelectedSubMenu(
   openedSideWindowTab: SideWindowMenuKey | undefined
-): MenuItem<SeaFrontGroup | string> {
+): MenuItem<SideWindowSubMenu> | undefined {
   return !openedSideWindowTab || openedSideWindowTab === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST
     ? ALERTS_SUBMENU.MEMN
-    : BeaconMalfunctionsSubMenu.MALFUNCTIONING
+    : undefined
 }

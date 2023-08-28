@@ -80,6 +80,7 @@ const StyledTag = styled(Tag)`
   line-height: 1;
 
   > span {
+    flex-shrink: 0;
     height: 10px;
     margin-right: 6px;
     width: 10px;

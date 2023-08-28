@@ -104,7 +104,7 @@ export function ControlDetails({ control, isSelected, overlayPosition }: Control
               </>
             )}
             {!!control.infractionsNatinfs.length && (
-              <Tag accent={Accent.PRIMARY}>
+              <Tag accent={Accent.PRIMARY} title={control.infractionsNatinfs.join(', ')}>
                 {`${control.infractionsNatinfs.length} NATINF: ${control.infractionsNatinfs.join(', ')}`}
               </Tag>
             )}

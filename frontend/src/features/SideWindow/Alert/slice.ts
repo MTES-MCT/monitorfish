@@ -1,13 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { propEq } from 'ramda'
 
-import { deleteListItems } from '../../utils/deleteListItems'
+import { AlertSubMenu } from './constants'
+import { SeaFrontGroup } from '../../../domain/entities/seaFront/constants'
+import { deleteListItems } from '../../../utils/deleteListItems'
 
 import type {
   AlertNameAndVesselIdentity,
   LEGACY_PendingAlert,
   LEGACY_SilencedAlert,
   SilenceAlertQueueItem
-} from '../entities/alerts/types'
+} from '../../../domain/entities/alerts/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export type AlertState = {
@@ -15,15 +18,17 @@ export type AlertState = {
   pendingAlerts: LEGACY_PendingAlert[]
   silencedAlerts: LEGACY_SilencedAlert[]
   silencedAlertsQueue: SilenceAlertQueueItem[]
+  subMenu: AlertSubMenu
 }
 const INITIAL_STATE: AlertState = {
   focusedPendingAlertId: undefined,
   pendingAlerts: [],
   silencedAlerts: [],
-  silencedAlertsQueue: []
+  silencedAlertsQueue: [],
+  subMenu: SeaFrontGroup.MEMN
 }
 
-const alertSlice = createSlice({
+const slice = createSlice({
   initialState: INITIAL_STATE,
   name: 'alert',
   reducers: {
@@ -48,6 +53,13 @@ const alertSlice = createSlice({
       }
 
       state.focusedPendingAlertId = foundPendingAlert.id
+
+      const focusedPendingAlert = state.pendingAlerts.find(propEq(state.focusedPendingAlertId, 'id'))
+      if (!focusedPendingAlert) {
+        return
+      }
+
+      state.subMenu = (focusedPendingAlert.value.seaFront as SeaFrontGroup) || SeaFrontGroup.MEMN
     },
 
     /**
@@ -76,6 +88,13 @@ const alertSlice = createSlice({
      */
     setSilencedAlerts(state, action: PayloadAction<LEGACY_SilencedAlert[]>) {
       state.silencedAlerts = action.payload
+    },
+
+    /**
+     * Set sub menu
+     */
+    setSubMenu(state, action: PayloadAction<AlertSubMenu>) {
+      state.subMenu = action.payload
     }
   }
 })
@@ -86,7 +105,8 @@ export const {
   removeFromSilencedAlertsQueue,
   resetFocusOnPendingAlert,
   setPendingAlerts,
-  setSilencedAlerts
-} = alertSlice.actions
+  setSilencedAlerts,
+  setSubMenu
+} = slice.actions
 
-export const alertReducer = alertSlice.reducer
+export const alertReducer = slice.reducer

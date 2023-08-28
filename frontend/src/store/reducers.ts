@@ -3,7 +3,6 @@ import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
 import storage from 'redux-persist/es/storage' // LocalStorage
 
 import { monitorenvApi, monitorfishApi } from '../api'
-import { alertReducer } from '../domain/shared_slices/Alert'
 import { beaconMalfunctionReducer } from '../domain/shared_slices/BeaconMalfunction'
 import { controlReducer } from '../domain/shared_slices/Control'
 import { displayedComponentReducer } from '../domain/shared_slices/DisplayedComponent'
@@ -28,6 +27,7 @@ import { speciesReducer } from '../domain/shared_slices/Species'
 import { vesselSliceReducer } from '../domain/shared_slices/Vessel'
 import { regulationReducer } from '../features/Backoffice/slice'
 import { regulatoryLayerSearchReducer } from '../features/MapButtons/LayersSidebar/RegulatoryZones/search/slice'
+import { alertReducer } from '../features/SideWindow/Alert/slice'
 import { vesselListReducer } from '../features/VesselList/slice'
 
 import type { Reducer } from 'redux'

@@ -8,33 +8,32 @@ import * as timeago from 'timeago.js'
 
 import { REPORTING_LIST_TABLE_OPTIONS } from './constants'
 import { getReportingOrigin, getReportingTitle } from './utils'
-import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS } from '../../../../domain/entities/alerts/constants'
-import { SeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
-import { setEditedReportingInSideWindow } from '../../../../domain/shared_slices/Reporting'
-import { ReportingType } from '../../../../domain/types/reporting'
-import archiveReportings from '../../../../domain/use_cases/reporting/archiveReportings'
-import deleteReportings from '../../../../domain/use_cases/reporting/deleteReportings'
-import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
-import { useForceUpdate } from '../../../../hooks/useForceUpdate'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { useTable } from '../../../../hooks/useTable'
-import { CardTable } from '../../../../ui/card-table/CardTable'
-import { CardTableBody } from '../../../../ui/card-table/CardTableBody'
-import { CardTableFilters } from '../../../../ui/card-table/CardTableFilters'
-import { CardTableRow } from '../../../../ui/card-table/CardTableRow'
-import { EmptyCardTable } from '../../../../ui/card-table/EmptyCardTable'
-import { FilterTableInput } from '../../../../ui/card-table/FilterTableInput'
-import { downloadAsCsv } from '../../../../utils/downloadAsCsv'
-import { Flag } from '../../../VesselList/tableCells'
+import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS } from '../../../../../domain/entities/alerts/constants'
+import { SeaFrontGroup } from '../../../../../domain/entities/seaFront/constants'
+import { setEditedReportingInSideWindow } from '../../../../../domain/shared_slices/Reporting'
+import { ReportingType } from '../../../../../domain/types/reporting'
+import archiveReportings from '../../../../../domain/use_cases/reporting/archiveReportings'
+import deleteReportings from '../../../../../domain/use_cases/reporting/deleteReportings'
+import { showVessel } from '../../../../../domain/use_cases/vessel/showVessel'
+import { useForceUpdate } from '../../../../../hooks/useForceUpdate'
+import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { useTable } from '../../../../../hooks/useTable'
+import { CardTable } from '../../../../../ui/card-table/CardTable'
+import { CardTableBody } from '../../../../../ui/card-table/CardTableBody'
+import { CardTableFilters } from '../../../../../ui/card-table/CardTableFilters'
+import { CardTableRow } from '../../../../../ui/card-table/CardTableRow'
+import { EmptyCardTable } from '../../../../../ui/card-table/EmptyCardTable'
+import { FilterTableInput } from '../../../../../ui/card-table/FilterTableInput'
+import { downloadAsCsv } from '../../../../../utils/downloadAsCsv'
+import { Flag } from '../../../../VesselList/tableCells'
 import { EditReporting } from '../EditReporting'
 
-import type { InfractionSuspicionReporting, PendingAlertReporting } from '../../../../domain/types/reporting'
-import type { MenuItem } from '../../../../types'
+import type { InfractionSuspicionReporting, PendingAlertReporting } from '../../../../../domain/types/reporting'
 import type { CSSProperties, MutableRefObject } from 'react'
 
 type ReportingListProps = {
-  selectedSeaFront: MenuItem<SeaFrontGroup>
+  selectedSeaFront: SeaFrontGroup
 }
 export function ReportingList({ selectedSeaFront }: ReportingListProps) {
   const dispatch = useMainAppDispatch()
@@ -48,8 +47,8 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
     () =>
       currentReportings.filter(
         reporting =>
-          ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code] &&
-          ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code].seaFronts.includes(reporting.value.seaFront)
+          ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront] &&
+          ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront].seaFronts.includes(reporting.value.seaFront)
       ),
     [currentReportings, selectedSeaFront]
   )

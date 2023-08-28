@@ -4,13 +4,13 @@ import DatePicker from 'rsuite/DatePicker'
 import { beforeToday } from 'rsuite/esm/DateRangePicker/disabledDateUtils'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../constants/constants'
-import { SilencedAlertPeriod } from '../../../domain/entities/alerts/constants'
-import { useClickOutsideWhenOpenedWithinRef } from '../../../hooks/useClickOutsideWhenOpenedWithinRef'
-import { useForceUpdate } from '../../../hooks/useForceUpdate'
-import { DATE_RANGE_PICKER_LOCALE } from '../../VesselSidebar/actions/TrackRequest/DateRange'
+import { COLORS } from '../../../../constants/constants'
+import { SilencedAlertPeriod } from '../../../../domain/entities/alerts/constants'
+import { useClickOutsideWhenOpenedWithinRef } from '../../../../hooks/useClickOutsideWhenOpenedWithinRef'
+import { useForceUpdate } from '../../../../hooks/useForceUpdate'
+import { DATE_RANGE_PICKER_LOCALE } from '../../../VesselSidebar/actions/TrackRequest/DateRange'
 
-import type { SilencedAlertPeriodRequest } from '../../../domain/entities/alerts/types'
+import type { SilencedAlertPeriodRequest } from '../../../../domain/entities/alerts/types'
 import type { CSSProperties, MutableRefObject } from 'react'
 import type { Promisable } from 'type-fest'
 
@@ -20,7 +20,7 @@ export type SilenceAlertMenuProps = {
   scrollableContainer: MutableRefObject<HTMLDivElement>
   setShowSilencedAlertForIndex: (index?: number) => Promisable<void>
   showSilencedAlertForIndex: number
-  silenceAlert: (silencerAlerPeriodtRequest: SilencedAlertPeriodRequest, id: string) => Promisable<void>
+  silenceAlert: (silencerAlertPeriodRequest: SilencedAlertPeriodRequest, id: string) => Promisable<void>
 }
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way

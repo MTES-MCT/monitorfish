@@ -20,21 +20,6 @@ import type {
   BeaconMalfunctionStatusValue
 } from '../../../domain/entities/beaconMalfunction/types'
 
-export const BeaconMalfunctionsSubMenu = {
-  HISTORIC: {
-    code: 'MED',
-    name: 'Historique des avaries'
-  },
-  MALFUNCTIONING: {
-    code: 'MALFUNCTIONING',
-    name: 'Avaries VMS en cours'
-  },
-  PAIRING: {
-    code: 'PAIRING',
-    name: 'Apparaige des balises'
-  }
-}
-
 const BEACON_CREATION_AT_SEA_OFFSET = 6
 const BEACON_CREATION_AT_PORT_OFFSET = 24
 

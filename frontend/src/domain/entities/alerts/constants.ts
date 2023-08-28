@@ -46,37 +46,6 @@ export const COMMON_ALERT_TYPE_OPTION: Record<
   }
 }
 
-export const ALERTS_SUBMENU: Record<SeaFrontGroup, MenuItem<SeaFrontGroup>> = {
-  ALL: {
-    code: SeaFrontGroup.ALL,
-    name: 'ALL'
-  },
-  MED: {
-    code: SeaFrontGroup.MED,
-    name: 'MED'
-  },
-  MEMN: {
-    code: SeaFrontGroup.MEMN,
-    name: 'MEMN'
-  },
-  NAMO: {
-    code: SeaFrontGroup.NAMO,
-    name: 'NAMO'
-  },
-  OUTREMEROA: {
-    code: SeaFrontGroup.OUTREMEROA,
-    name: 'OUTRE-MER OA'
-  },
-  OUTREMEROI: {
-    code: SeaFrontGroup.OUTREMEROI,
-    name: 'OUTRE-MER OI'
-  },
-  SA: {
-    code: SeaFrontGroup.SA,
-    name: 'SA'
-  }
-}
-
 // TODO Rename the `seaFronts` prop to clarify the difference. They don't look like seas fronts.
 export const ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS: Record<
   SeaFrontGroup,

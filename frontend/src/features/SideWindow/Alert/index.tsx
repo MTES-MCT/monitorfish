@@ -1,14 +1,17 @@
-import { MutableRefObject, RefObject, useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { AlertListAndReportingList } from './AlertListAndReportingList'
 import { AlertAndReportingTab } from './AlertListAndReportingList/constants'
-import { AdditionalSubMenu, ALERT_SUB_MENU_OPTIONS, AlertSubMenu } from './constants'
+import { AdditionalSubMenu, ALERT_SUB_MENU_OPTIONS } from './constants'
 import { SilencedAlerts } from './SilencedAlerts'
 import { setSubMenu } from './slice'
 import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFrontGroup } from '../../../domain/entities/seaFront/constants'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { SubMenu } from '../SubMenu'
+
+import type { AlertSubMenu } from './constants'
+import type { MutableRefObject, RefObject } from 'react'
 
 type AlertProps = {
   baseRef: RefObject<HTMLDivElement>

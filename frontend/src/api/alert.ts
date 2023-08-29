@@ -3,10 +3,10 @@
 import ky from 'ky'
 
 import { monitorfishApi, monitorfishApiKy } from './index'
-import type { SilencedAlertData } from '../domain/entities/alerts/types'
 import { ApiError } from '../libs/ApiError'
 
 import type {
+  SilencedAlertData,
   LEGACY_PendingAlert,
   LEGACY_SilencedAlert,
   PendingAlert,

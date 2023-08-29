@@ -87,8 +87,8 @@ export function SilencedAlerts() {
             <VesselName>Navire</VesselName>
             <AlertType colspan={7}>Titre</AlertType>
             <Natinf>NATINF</Natinf>
-            <Date>Ignorée pour...</Date>
-            <Date>Reprise le...</Date>
+            <DateColumn>Ignorée pour...</DateColumn>
+            <DateColumn>Reprise le...</DateColumn>
           </FlexboxGrid>
         </Row>
         <ScrollableContainer>
@@ -113,8 +113,8 @@ export function SilencedAlerts() {
                   </VesselName>
                   <AlertType>{getAlertNameFromType(alert.value.type)}</AlertType>
                   <Natinf>{alert.value.natinfCode}</Natinf>
-                  <Date>{timeago.format(alert.silencedBeforeDate, 'fr')}</Date>
-                  <Date>{getDateTime(alert.silencedBeforeDate, true)}</Date>
+                  <DateColumn>{timeago.format(alert.silencedBeforeDate, 'fr')}</DateColumn>
+                  <DateColumn>{getDateTime(alert.silencedBeforeDate, true)}</DateColumn>
                   <EmptyColumn />
                   <IconColumn>
                     <ShowIcon
@@ -309,7 +309,7 @@ const Natinf = styled(FlexboxGrid.Item)`
   width: 150px;
 `
 
-const Date = styled(FlexboxGrid.Item)`
+const DateColumn = styled(FlexboxGrid.Item)`
   ${styleCenter}
   width: 150px;
 `

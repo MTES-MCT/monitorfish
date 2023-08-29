@@ -13,14 +13,13 @@ from src.read_query import read_query
 from tests.mocks import mock_datetime_utcnow
 
 
-def test_extract_silenced_alerts():
+def test_extract_silenced_alerts(reset_test_data):
     silenced_alerts = extract_silenced_alerts.run()
     expected_silenced_alerts = pd.DataFrame(
         {
             "internal_reference_number": ["ABC000658985", "ABC000542519"],
             "external_reference_number": ["OHMYGOSH", "RO237719"],
             "ircs": ["OGMJ", "FQ7058"],
-            "facade": ["SA", "NAMO"],
             "type": ["THREE_MILES_TRAWLING_ALERT", "MISSING_FAR_ALERT"],
         }
     )
@@ -78,7 +77,6 @@ def test_make_alerts():
             "latitude": [9.8, -1.963],
             "longitude": [65.59, -81.71],
             "type": ["MISSING_FAR_ALERT", "MISSING_FAR_ALERT"],
-            "facade": ["NAMO", "MEMN"],
             "value": [
                 {
                     "seaFront": "NAMO",
@@ -129,21 +127,21 @@ def test_filter_silenced_alerts():
 
     alerts = pd.DataFrame(
         {
-            "vessel_name": ["v_A", "v_B"],
-            "internal_reference_number": ["A", "B"],
-            "external_reference_number": ["AA", "BB"],
-            "ircs": ["AAA", "BBB"],
-            "flag_state": ["FR", "FR"],
-            "vessel_id": [1, 12],
+            "vessel_name": ["v_A", "v_B", "v_C"],
+            "internal_reference_number": ["A", "B", "C"],
+            "external_reference_number": ["AA", "BB", "CC"],
+            "ircs": ["AAA", "BBB", "CCC"],
+            "flag_state": ["FR", "FR", "FR"],
+            "vessel_id": [1, 12, 15],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
+                "INTERNAL_REFERENCE_NUMBER",
             ],
-            "creation_date": [now, now - 0.5 * td],
-            "latitude": [9.8, -1.963],
-            "longitude": [65.59, -81.71],
-            "type": ["USER_DEFINED_ALERT_TYPE", "USER_DEFINED_ALERT_TYPE"],
-            "facade": ["NAMO", "MEMN"],
+            "creation_date": [now, now - 0.5 * td, now - td],
+            "latitude": [9.8, -1.963, -2.365],
+            "longitude": [65.59, -81.71, 46.894],
+            "type": [alert_type, alert_type, alert_type],
             "value": [
                 {
                     "seaFront": "NAMO",
@@ -157,18 +155,27 @@ def test_filter_silenced_alerts():
                     "riskFactor": None,
                     "dml": "dml B",
                 },
+                {
+                    "seaFront": "MEMN",
+                    "type": alert_type,
+                    "riskFactor": 2.56,
+                    "dml": "dml C",
+                },
             ],
-            "alert_config_name": [alert_config_name, alert_config_name],
+            "alert_config_name": [
+                alert_config_name,
+                alert_config_name,
+                alert_config_name,
+            ],
         }
     )
 
     silenced_alerts = pd.DataFrame(
         {
-            "internal_reference_number": ["A", "B_ANOTHER_VESSEL"],
-            "external_reference_number": ["AA", "BB_ANOTHER_VESSEL"],
-            "ircs": ["AAA", "BBB"],
-            "type": ["USER_DEFINED_ALERT_TYPE", "USER_DEFINED_ALERT_TYPE"],
-            "facade": ["NAMO", "MEMN"],
+            "internal_reference_number": ["A", "B_ANOTHER_VESSEL", "C"],
+            "external_reference_number": ["AA", "BB_ANOTHER_VESSEL", "CC"],
+            "ircs": ["AAA", "BBB", "CCC"],
+            "type": [alert_type, alert_type, "ANOTHER_ALERT_TYPE"],
         }
     )
 
@@ -176,115 +183,34 @@ def test_filter_silenced_alerts():
 
     expected_active_alerts = pd.DataFrame(
         {
-            "vessel_name": ["v_B"],
-            "internal_reference_number": ["B"],
-            "external_reference_number": ["BB"],
-            "ircs": ["BBB"],
-            "flag_state": ["FR"],
-            "vessel_id": [12],
-            "vessel_identifier": [
-                "INTERNAL_REFERENCE_NUMBER",
-            ],
-            "creation_date": [now - 0.5 * td],
-            "latitude": [-1.963],
-            "longitude": [-81.71],
-            "value": [
-                {
-                    "seaFront": "MEMN",
-                    "type": alert_type,
-                    "riskFactor": None,
-                    "dml": "dml B",
-                },
-            ],
-            "alert_config_name": [alert_config_name],
-        }
-    ).reset_index(drop=True)
-
-    pd.testing.assert_frame_equal(
-        active_alerts.reset_index(drop=True), expected_active_alerts
-    )
-
-
-def test_filter_silenced_alerts_when_multiple_silenced_alerts_facade():
-    now = datetime(2020, 1, 1, 0, 0, 0)
-    td = timedelta(hours=1)
-    alert_type = "FRENCH_EEZ_FISHING_ALERT"
-    alert_config_name = "ALERTE_CHALUTAGE_CONFIG_1"
-
-    alerts = pd.DataFrame(
-        {
-            "vessel_name": ["v_A", "v_B"],
-            "internal_reference_number": ["A", "B"],
-            "external_reference_number": ["AA", "BB"],
-            "ircs": ["AAA", "BBB"],
+            "vessel_name": ["v_B", "v_C"],
+            "internal_reference_number": ["B", "C"],
+            "external_reference_number": ["BB", "CC"],
+            "ircs": ["BBB", "CCC"],
             "flag_state": ["FR", "FR"],
-            "vessel_id": [1, 12],
+            "vessel_id": [12, 15],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
             ],
-            "creation_date": [now, now - 0.5 * td],
-            "latitude": [9.8, -1.963],
-            "longitude": [65.59, -81.71],
-            "type": ["USER_DEFINED_ALERT_TYPE", "USER_DEFINED_ALERT_TYPE"],
-            "facade": ["NAMO", "MEMN"],
+            "creation_date": [now - 0.5 * td, now - td],
+            "latitude": [-1.963, -2.365],
+            "longitude": [-81.71, 46.894],
             "value": [
-                {
-                    "seaFront": "NAMO",
-                    "type": alert_type,
-                    "riskFactor": 1.23,
-                    "dml": "dml A",
-                },
                 {
                     "seaFront": "MEMN",
                     "type": alert_type,
                     "riskFactor": None,
                     "dml": "dml B",
+                },
+                {
+                    "seaFront": "MEMN",
+                    "type": alert_type,
+                    "riskFactor": 2.56,
+                    "dml": "dml C",
                 },
             ],
             "alert_config_name": [alert_config_name, alert_config_name],
-        }
-    )
-
-    silenced_alerts = pd.DataFrame(
-        {
-            "internal_reference_number": ["A", "A", "B_ANOTHER_VESSEL"],
-            "external_reference_number": ["AA", "AA", "BB_ANOTHER_VESSEL"],
-            "ircs": ["AAA", "AAA", "BBB"],
-            "type": [
-                "USER_DEFINED_ALERT_TYPE",
-                "USER_DEFINED_ALERT_TYPE",
-                "USER_DEFINED_ALERT_TYPE",
-            ],
-            "facade": ["NAMO", "SA", "MEMN"],
-        }
-    )
-
-    active_alerts = filter_silenced_alerts.run(alerts, silenced_alerts)
-
-    expected_active_alerts = pd.DataFrame(
-        {
-            "vessel_name": ["v_B"],
-            "internal_reference_number": ["B"],
-            "external_reference_number": ["BB"],
-            "ircs": ["BBB"],
-            "flag_state": ["FR"],
-            "vessel_id": [12],
-            "vessel_identifier": [
-                "INTERNAL_REFERENCE_NUMBER",
-            ],
-            "creation_date": [now - 0.5 * td],
-            "latitude": [-1.963],
-            "longitude": [-81.71],
-            "value": [
-                {
-                    "seaFront": "MEMN",
-                    "type": alert_type,
-                    "riskFactor": None,
-                    "dml": "dml B",
-                },
-            ],
-            "alert_config_name": [alert_config_name],
         }
     ).reset_index(drop=True)
 

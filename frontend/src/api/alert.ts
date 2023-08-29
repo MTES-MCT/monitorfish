@@ -40,7 +40,8 @@ export const alertApi = monitorfishApi.injectEndpoints({
         },
         method: 'POST',
         url: `/operational_alerts/silenced`
-      })
+      }),
+      transformErrorResponse: response => new ApiError(CREATE_SILENCED_ALERT_ERROR_MESSAGE, response)
     })
   })
 })

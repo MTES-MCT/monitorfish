@@ -1,4 +1,4 @@
-import { SilencedAlertData } from '../../../../domain/entities/alerts/types'
+import type { SilencedAlertData } from '../../../../domain/entities/alerts/types'
 
 export type SilencedAlertFormValues = Partial<SilencedAlertData>
 
@@ -7,7 +7,6 @@ export const emptySilencedAlert: SilencedAlertFormValues = {
   flagState: undefined,
   internalReferenceNumber: null,
   ircs: null,
-  isReactivated: null,
   silencedBeforeDate: undefined,
   value: undefined,
   vesselId: null,

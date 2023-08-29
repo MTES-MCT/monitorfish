@@ -1,5 +1,6 @@
 import type { MissionAction } from '../../types/missionAction'
 import type { VesselIdentifier, VesselIdentity } from '../vessel/types'
+import type { Except } from 'type-fest'
 
 export enum PendingAlertValueType {
   FRENCH_EEZ_FISHING_ALERT = 'FRENCH_EEZ_FISHING_ALERT',
@@ -24,11 +25,11 @@ export type PendingAlert = {
 }
 
 export type PendingAlertValue = {
-  dml: string
-  natinfCode: string | null
-  riskFactor: number
-  seaFront: string
-  speed: number
+  dml?: string
+  natinfCode?: string | null
+  riskFactor?: number
+  seaFront?: string
+  speed?: number
   type: PendingAlertValueType
 }
 
@@ -38,17 +39,20 @@ export type LEGACY_PendingAlert = PendingAlert & {
 }
 
 export type SilencedAlert = {
-  externalReferenceNumber: string
+  externalReferenceNumber: string | null
   flagState: string
   id: string
-  internalReferenceNumber: string
-  ircs: string
+  internalReferenceNumber: string | null
+  ircs: string | null
   isReactivated: boolean | null
   silencedBeforeDate: Date
   value: PendingAlertValue
+  vesselId: number | null
   vesselIdentifier: VesselIdentifier
   vesselName: string
 }
+
+export type SilencedAlertData = Except<SilencedAlert, 'id' | 'isReactivated'>
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export type LEGACY_SilencedAlert = SilencedAlert & {

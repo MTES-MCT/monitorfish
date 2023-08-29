@@ -8,6 +8,7 @@ import { VesselSearch } from '../../../../VesselSearch'
 
 import type { VesselIdentity } from '../../../../../domain/entities/vessel/types'
 import type { SilencedAlertFormValues } from '../types'
+import {FormError, FormErrorCode} from "../../../../../libs/FormError";
 
 export function VesselField() {
   const { errors, setValues, values } = useFormikContext<SilencedAlertFormValues>()
@@ -20,8 +21,8 @@ export function VesselField() {
       internalReferenceNumber: values.internalReferenceNumber || null,
       ircs: values.ircs || null,
       vesselId: values.vesselId || null,
-      vesselIdentifier: values.vesselIdentifier || undefined,
-      vesselName: values.vesselName || undefined
+      vesselIdentifier: values.vesselIdentifier || null,
+      vesselName: values.vesselName || null
     }),
     [
       values.flagState,
@@ -39,15 +40,20 @@ export function VesselField() {
       setValues({
         ...values,
         externalReferenceNumber: null,
-        flagState: undefined,
         internalReferenceNumber: null,
         ircs: null,
         vesselId: null,
-        vesselIdentifier: undefined,
-        vesselName: undefined
       })
 
       return
+    }
+
+    if (!nextVessel.vesselIdentifier) {
+      throw new FormError(nextVessel, 'vesselIdentifier', FormErrorCode.MISSING_OR_UNDEFINED)
+    }
+
+    if (!nextVessel.vesselName) {
+      throw new FormError(nextVessel, 'vesselName', FormErrorCode.MISSING_OR_UNDEFINED)
     }
 
     setValues({
@@ -56,9 +62,9 @@ export function VesselField() {
       flagState: nextVessel.flagState,
       internalReferenceNumber: nextVessel.internalReferenceNumber || null,
       ircs: nextVessel.ircs || null,
-      vesselId: nextVessel.vesselId,
-      vesselIdentifier: nextVessel.vesselIdentifier || undefined,
-      vesselName: nextVessel.vesselName || undefined
+      vesselId: nextVessel.vesselId || null,
+      vesselIdentifier: nextVessel.vesselIdentifier,
+      vesselName: nextVessel.vesselName
     })
   }
 

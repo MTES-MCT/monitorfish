@@ -3,7 +3,7 @@
 import ky from 'ky'
 
 import { monitorfishApi, monitorfishApiKy } from './index'
-import { SilencedAlertData } from '../domain/entities/alerts/types'
+import type { SilencedAlertData } from '../domain/entities/alerts/types'
 import { ApiError } from '../libs/ApiError'
 
 import type {

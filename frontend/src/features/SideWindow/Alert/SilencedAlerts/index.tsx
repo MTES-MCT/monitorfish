@@ -8,7 +8,6 @@ import * as timeago from 'timeago.js'
 
 import { AddSilencedAlertDialog } from './AddSilencedAlertDialog'
 import { COLORS } from '../../../../constants/constants'
-import { SilencedAlertData } from '../../../../domain/entities/alerts/types'
 import { addSilencedAlert } from '../../../../domain/use_cases/alert/addSilencedAlert'
 import { reactivateSilencedAlert } from '../../../../domain/use_cases/alert/reactivateSilencedAlert'
 import { showVessel } from '../../../../domain/use_cases/vessel/showVessel'
@@ -20,6 +19,8 @@ import { Flag } from '../../../VesselList/tableCells'
 import { sortArrayByColumn, SortType } from '../../../VesselList/tableSort'
 import { PENDING_ALERTS_SEARCH_OPTIONS } from '../AlertListAndReportingList/constants'
 import { getAlertNameFromType } from '../AlertListAndReportingList/utils'
+
+import type { SilencedAlertData } from '../../../../domain/entities/alerts/types'
 
 export function SilencedAlerts() {
   const dispatch = useMainAppDispatch()
@@ -81,7 +82,7 @@ export function SilencedAlerts() {
         </AddSilencedAlert>
       </Filters>
       <StyledList count={sortedAlerts?.length} data-cy="side-window-silenced-alerts-list">
-        <Row key={0} index={0} isHeader>
+        <Row key={0} $isHeader index={0}>
           <FlexboxGrid>
             <VesselName>Navire</VesselName>
             <AlertType colspan={7}>Titre</AlertType>
@@ -94,9 +95,9 @@ export function SilencedAlerts() {
           {sortedAlerts.map((alert, index) => (
             <Row
               key={alert.id}
+              $isFocused={alert.id === focusedPendingAlertId}
+              $toClose={alert.isReactivated || false}
               index={index + 1}
-              isFocused={alert.id === focusedPendingAlertId}
-              toClose={alert.isReactivated || undefined}
             >
               {alert.isReactivated && <AlertTransition>L’alerte est réactivée</AlertTransition>}
               {!alert.isReactivated && (
@@ -266,17 +267,17 @@ const StyledList = styled(List)<{
 `
 
 const Row = styled(List.Item)<{
-  isFocused?: boolean
-  isHeader?: boolean
-  toClose?: boolean
+  $isFocused?: boolean
+  $isHeader?: boolean
+  $toClose?: boolean
 }>`
-  animation: ${p => (p.toClose ? 'close-alert-transition-item 3s ease forwards' : 'unset')};
+  animation: ${p => (p.$toClose ? 'close-alert-transition-item 3s ease forwards' : 'unset')};
   background: ${p => {
-    if (p.isHeader) {
+    if (p.$isHeader) {
       return p.theme.color.white
     }
 
-    if (p.isFocused) {
+    if (p.$isFocused) {
       return p.theme.color.gainsboro
     }
 
@@ -288,7 +289,7 @@ const Row = styled(List.Item)<{
   margin-top: 6px;
   overflow: hidden;
   transition: background 3s;
-  color: ${p => (p.isHeader ? p.theme.color.slateGray : p.theme.color.gunMetal)};
+  color: ${p => (p.$isHeader ? p.theme.color.slateGray : p.theme.color.gunMetal)};
 `
 
 const VesselName = styled(FlexboxGrid.Item)`

@@ -13,15 +13,15 @@ export function VesselField() {
   const { errors, setValues, values } = useFormikContext<SilencedAlertFormValues>()
   const { newWindowContainerRef } = useNewWindow()
 
-  const defaultValue = useMemo(
+  const defaultValue: VesselIdentity = useMemo(
     () => ({
       externalReferenceNumber: values.externalReferenceNumber || null,
       flagState: values.flagState || '',
       internalReferenceNumber: values.internalReferenceNumber || null,
       ircs: values.ircs || null,
-      vesselId: values.vesselId,
-      vesselIdentifier: values.vesselIdentifier || null,
-      vesselName: values.vesselName || null
+      vesselId: values.vesselId || null,
+      vesselIdentifier: values.vesselIdentifier || undefined,
+      vesselName: values.vesselName || undefined
     }),
     [
       values.flagState,
@@ -38,11 +38,11 @@ export function VesselField() {
     if (!nextVessel) {
       setValues({
         ...values,
-        externalReferenceNumber: undefined,
+        externalReferenceNumber: null,
         flagState: undefined,
-        internalReferenceNumber: undefined,
-        ircs: undefined,
-        vesselId: undefined,
+        internalReferenceNumber: null,
+        ircs: null,
+        vesselId: null,
         vesselIdentifier: undefined,
         vesselName: undefined
       })
@@ -52,10 +52,10 @@ export function VesselField() {
 
     setValues({
       ...values,
-      externalReferenceNumber: nextVessel.externalReferenceNumber || undefined,
+      externalReferenceNumber: nextVessel.externalReferenceNumber || null,
       flagState: nextVessel.flagState,
-      internalReferenceNumber: nextVessel.internalReferenceNumber || undefined,
-      ircs: nextVessel.ircs || undefined,
+      internalReferenceNumber: nextVessel.internalReferenceNumber || null,
+      ircs: nextVessel.ircs || null,
       vesselId: nextVessel.vesselId,
       vesselIdentifier: nextVessel.vesselIdentifier || undefined,
       vesselName: nextVessel.vesselName || undefined

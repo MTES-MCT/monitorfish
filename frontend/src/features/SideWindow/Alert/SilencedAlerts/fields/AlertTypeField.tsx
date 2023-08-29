@@ -1,4 +1,4 @@
-import { FieldError, Option, Select, useNewWindow } from '@mtes-mct/monitor-ui'
+import { FieldError, Select, useNewWindow } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
 import styled from 'styled-components'
 
@@ -6,6 +6,7 @@ import { operationalAlertTypes } from '../../../../../domain/entities/alerts/con
 import { PendingAlertValueType } from '../../../../../domain/entities/alerts/types'
 
 import type { SilencedAlertFormValues } from '../types'
+import type { Option } from '@mtes-mct/monitor-ui'
 
 export function AlertTypeField() {
   const [input, meta, helper] = useField<SilencedAlertFormValues['value']>('value')

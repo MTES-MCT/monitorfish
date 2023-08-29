@@ -31,12 +31,13 @@ export function AlertListAndReportingList({
 
   const filteredSilencedAlerts = useMemo(
     () =>
-      silencedAlerts.filter(silencedAlert =>
-        (ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSubMenu]
+      silencedAlerts.filter(silencedAlert => {
+        const seaFronts = ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSubMenu]
           ? ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSubMenu].seaFronts
           : []
-        ).includes(silencedAlert.value.seaFront)
-      ),
+
+        return silencedAlert.value.seaFront && seaFronts.includes(silencedAlert.value.seaFront)
+      }),
     [silencedAlerts, selectedSubMenu]
   )
 

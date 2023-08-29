@@ -8,8 +8,8 @@ import { VesselField } from './fields/VesselField'
 import { SilencedAlertSchema } from './schemas'
 import { emptySilencedAlert } from './types'
 import { getSilencedAlertFromSilencedAlertFormValues } from './utils'
-import { SilencedAlertData } from '../../../../domain/entities/alerts/types'
 
+import type { SilencedAlertData } from '../../../../domain/entities/alerts/types'
 import type { Promisable } from 'type-fest'
 
 type DeletionConfirmationDialogProps = {

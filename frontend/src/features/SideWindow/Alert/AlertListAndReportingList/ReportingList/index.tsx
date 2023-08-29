@@ -48,6 +48,7 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
       currentReportings.filter(
         reporting =>
           ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront] &&
+          reporting.value.seaFront &&
           ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront].seaFronts.includes(reporting.value.seaFront)
       ),
     [currentReportings, selectedSeaFront]

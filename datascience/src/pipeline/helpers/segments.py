@@ -73,7 +73,7 @@ def attribute_segments_to_catches(
     # Match catches to all segments that have no criterion on species nor on gears
     segments_no_gear_no_species = segments[
         segments[["gear", "species"]].isna().all(axis=1)
-    ][["segment", "fao_area_of_segment"]]
+    ].drop(columns=["gear", "species"])
 
     segments_no_gear_no_species = pd.merge(
         segments_no_gear_no_species,

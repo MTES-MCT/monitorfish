@@ -42,8 +42,10 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
 
   const currentSeaFrontAlerts = useMemo(
     () =>
-      pendingAlerts.filter(pendingAlert =>
-        pendingAlert.value.seaFront && (ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront].seaFronts || []).includes(pendingAlert.value.seaFront)
+      pendingAlerts.filter(
+        pendingAlert =>
+          pendingAlert.value.seaFront &&
+          (ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront].seaFronts || []).includes(pendingAlert.value.seaFront)
       ),
     [pendingAlerts, selectedSeaFront]
   )

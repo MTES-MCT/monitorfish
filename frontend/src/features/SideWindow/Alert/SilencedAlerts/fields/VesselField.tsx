@@ -4,11 +4,11 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { UNKNOWN_VESSEL } from '../../../../../domain/entities/vessel/vessel'
+import { FormError, FormErrorCode } from '../../../../../libs/FormError'
 import { VesselSearch } from '../../../../VesselSearch'
 
 import type { VesselIdentity } from '../../../../../domain/entities/vessel/types'
 import type { SilencedAlertFormValues } from '../types'
-import {FormError, FormErrorCode} from "../../../../../libs/FormError";
 
 export function VesselField() {
   const { errors, setValues, values } = useFormikContext<SilencedAlertFormValues>()
@@ -42,7 +42,7 @@ export function VesselField() {
         externalReferenceNumber: null,
         internalReferenceNumber: null,
         ircs: null,
-        vesselId: null,
+        vesselId: null
       })
 
       return
@@ -105,7 +105,7 @@ export function VesselField() {
         )}
       </Wrapper>
 
-      {errors.vesselId && <Error>{errors.vesselId}</Error>}
+      {errors.vesselId && <ErrorMessage>{errors.vesselId}</ErrorMessage>}
     </>
   )
 }
@@ -114,7 +114,7 @@ const StyledLegend = styled(Legend)`
   font-weight: 400;
 `
 
-const Error = styled.p`
+const ErrorMessage = styled.p`
   color: ${p => p.theme.color.maximumRed} !important;
   font-style: italic;
   margin: 4px 0 0 !important;

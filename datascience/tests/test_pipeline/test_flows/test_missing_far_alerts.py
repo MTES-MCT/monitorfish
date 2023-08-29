@@ -425,7 +425,7 @@ def test_flow_when_an_alert_is_silenced(reset_test_data):
     )
 
     assert len(initial_pending_alerts) == 1
-    # Only one alert alert (out of the two) is kept, as one alert is filtered by the
+    # Only one alert (out of the two) is kept, as one alert is filtered by the
     # filter_silenced_alerts task
     assert len(state.result[flow.get_tasks("make_alerts")[0]].result) == 2
     filtered_alerts = state.result[flow.get_tasks("filter_silenced_alerts")[0]].result

@@ -20,7 +20,7 @@ d = datetime(2020, 5, 6, 12, 56, 2)
 day = timedelta(days=1)
 missions_df = pd.DataFrame(
     {
-        "id": [1, 2, 12, 13],
+        "id": [1, 2, 112, 113],
         "mission_types": [["SEA"], ["LAND"], ["AIR", "SEA"], []],
         "facade": ["Facade 1", "Facade 1", "Facade 3", "Facade 4"],
         "start_datetime_utc": [
@@ -63,8 +63,8 @@ missions_df = pd.DataFrame(
 
 missions_control_units_df = pd.DataFrame(
     {
-        "id": [20, 21, 22, 23, 24],
-        "mission_id": [1, 1, 2, 12, 999],
+        "id": [100, 101, 102, 112, 999],
+        "mission_id": [1, 1, 2, 112, 999],
         "control_unit_id": [8, 7, 6, 2, 2],
     }
 )
@@ -132,39 +132,41 @@ def test_flow(reset_test_data, loading_mode):
         missions_control_units_query, db="monitorfish_remote"
     )
 
-    assert len(initial_missions) == 9
-    assert len(initial_missions_control_units) == 11
+    assert len(initial_missions) == 25
+    assert len(initial_missions_control_units) == 27
+
+    initial_mission_ids = set(range(1, 24)).union({-199999, -144762})
+    extracted_mission_ids = {1, 2, 112, 113}
+    extracted_missions_control_unit_ids = {1, 2, 112, 999}
 
     assert (
         set(initial_missions.id)
         == set(initial_missions_control_units.mission_id)
-        == {1, 2, 3, 4, 5, 6, 7, 8, 9}
+        == initial_mission_ids
     )
 
     assert len(extracted_missions) == 4
-    assert set(extracted_missions.id) == {1, 2, 12, 13}
+    assert set(extracted_missions.id) == extracted_mission_ids
 
     assert len(extracted_missions_control_units) == 5
-    assert set(extracted_missions_control_units.mission_id) == {1, 2, 12, 999}
+    assert (
+        set(extracted_missions_control_units.mission_id)
+        == extracted_missions_control_unit_ids
+    )
 
     assert len(filtered_missions_control_units) == 4
-    assert set(filtered_missions_control_units.mission_id) == {1, 2, 12}
+    assert set(
+        filtered_missions_control_units.mission_id
+    ) == extracted_missions_control_unit_ids.intersection(extracted_mission_ids)
 
     if loading_mode == "upsert":
-        assert len(loaded_missions) == 11
-        assert set(loaded_missions.id) == {1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13}
-        assert set(loaded_missions_control_units.mission_id) == {
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9,
-            12,
-        }
+        assert len(loaded_missions) == 27
+        assert set(loaded_missions.id) == extracted_mission_ids.union(
+            initial_mission_ids
+        )
+        assert set(
+            loaded_missions_control_units.mission_id
+        ) == initial_mission_ids.union({112})
 
         # Check data is updated for missions already present initially
         assert (

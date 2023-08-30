@@ -20,9 +20,7 @@ context('Side Window > Reporting List > Table', () => {
     getTitleColumnHeader().click()
 
     getTitleColumnHeader().parent().find('svg').should('be.visible')
-    cy.get('[role="table"] [role="rowgroup"]:last-child() [role="row"]')
-      .first()
-      .contains('Suspicion de chalutage dans les 3 milles')
+    cy.get('[role="table"] [role="rowgroup"]:last-child() [role="row"]:last-child()').contains('3 milles - Chaluts')
   })
 
   it('Should sort reportings by NATINF', () => {

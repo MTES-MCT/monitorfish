@@ -7,16 +7,6 @@ updates:
     schedule:
       interval: "weekly"
 
-  - package-ecosystem: "pip"
-    directory: "/datascience"
-    assignees:
-      - "VincentAntoine"
-    schedule:
-      interval: "weekly"
-    # Disable all dependencies update
-    # https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#open-pull-requests-limit
-    open-pull-requests-limit: 0
-
   - package-ecosystem: "npm"
     directory: "/frontend"
     assignees:

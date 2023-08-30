@@ -42,6 +42,7 @@ class GetMissionActionFacadeUTests {
             isDeleted = false,
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
+            isFromPoseidon = false,
         )
         given(portRepository.find(any())).willReturn(Port("AEFAT", name = "Dummy name", facade = "NAMO"))
 
@@ -67,6 +68,7 @@ class GetMissionActionFacadeUTests {
             isDeleted = false,
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
+            isFromPoseidon = false,
         )
 
         // When
@@ -92,6 +94,7 @@ class GetMissionActionFacadeUTests {
             isDeleted = false,
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
+            isFromPoseidon = false,
         )
         given(facadeAreasRepository.findByIncluding(any())).willReturn(
             listOf(
@@ -127,6 +130,7 @@ class GetMissionActionFacadeUTests {
             isDeleted = false,
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
+            isFromPoseidon = false,
         )
 
         // When
@@ -152,6 +156,7 @@ class GetMissionActionFacadeUTests {
             isDeleted = false,
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
+            isFromPoseidon = false,
         )
         given(facadeAreasRepository.findByIncluding(any())).willReturn(listOf())
 

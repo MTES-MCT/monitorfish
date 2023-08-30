@@ -52,6 +52,7 @@ data class MissionActionDataOutput(
     val hasSomeGearsSeized: Boolean,
     val hasSomeSpeciesSeized: Boolean,
     val closedBy: String? = null,
+    val isFromPoseidon: Boolean,
 ) {
     companion object {
         fun fromMissionAction(missionAction: MissionAction) = MissionActionDataOutput(
@@ -102,6 +103,7 @@ data class MissionActionDataOutput(
             hasSomeGearsSeized = missionAction.hasSomeGearsSeized,
             hasSomeSpeciesSeized = missionAction.hasSomeSpeciesSeized,
             closedBy = missionAction.closedBy,
+            isFromPoseidon = missionAction.isFromPoseidon,
         )
     }
 }

@@ -88,14 +88,13 @@ export function getMissionDataFromMissionFormValues(
   const missionBaseValues = omit(['controlUnits'], mainFormValues)
 
   const validControlUnits = mainFormValues.controlUnits.map(getValidMissionDataControlUnit)
-  const missionSource = Mission.MissionSource.MONITORFISH
   const missionTypes = mainFormValues.missionTypes || []
 
   return {
     ...missionBaseValues,
     controlUnits: validControlUnits,
     isClosed: mustClose || !!missionBaseValues.isClosed,
-    missionSource,
+    missionSource: mainFormValues.missionSource || Mission.MissionSource.MONITORFISH,
     missionTypes
   }
 }

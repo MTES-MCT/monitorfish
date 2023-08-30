@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@dnd-kit/core": "6.0.8",
-    "@dnd-kit/modifiers": "6.0.0",
+    "@dnd-kit/modifiers": "6.0.1",
     "@mtes-mct/monitor-ui": "9.1.0",
     "@reduxjs/toolkit": "1.9.3",
     "@sentry/browser": "7.55.2",

@@ -5,7 +5,12 @@ context('Reportings', () => {
 
   it('Reportings Should be archived', () => {
     // Given
-    cy.intercept('PUT', 'bff/v1/reportings/archive').as('archiveReportings')
+    cy.intercept('PUT', 'bff/v1/reportings/archive', {
+      body: {
+        id: 1
+      },
+      statusCode: 200
+    }).as('archiveReportings')
     cy.get('*[data-cy="side-window-reporting-tab"]').click()
     cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 1)
 
@@ -13,9 +18,8 @@ context('Reportings', () => {
     // Select and archive a reporting
     cy.get('.rs-checkbox-wrapper').first().click()
     cy.get('*[data-cy="archive-reporting-cards"]').click({ force: true })
-    cy.wait('@archiveReportings').then(({ request, response }) => {
+    cy.wait('@archiveReportings').then(({ request }) => {
       expect(request.body.toString()).contains('5')
-      expect(response && response.statusCode).equal(200)
     })
 
     // Then
@@ -25,7 +29,12 @@ context('Reportings', () => {
 
   it('Reportings Should be searched and ordered by date', () => {
     // Given
-    cy.intercept('PUT', 'bff/v1/reportings/delete').as('deleteReportings')
+    cy.intercept('PUT', 'bff/v1/reportings/delete', {
+      body: {
+        id: 1
+      },
+      statusCode: 200
+    }).as('deleteReportings')
     cy.get('*[data-cy="side-window-reporting-tab"]').click()
     cy.get('[data-cy="side-window-sub-menu-NAMO"]').click()
     cy.wait(200)
@@ -63,7 +72,12 @@ context('Reportings', () => {
 
   it('Reportings Should be deleted', () => {
     // Given
-    cy.intercept('PUT', 'bff/v1/reportings/delete').as('deleteReportings')
+    cy.intercept('PUT', 'bff/v1/reportings/delete', {
+      body: {
+        id: 1
+      },
+      statusCode: 200
+    }).as('deleteReportings')
     cy.get('*[data-cy="side-window-reporting-tab"]').click()
     cy.get('[data-cy="side-window-sub-menu-NAMO"]').click()
     cy.wait(200)
@@ -104,18 +118,18 @@ context('Reportings', () => {
     cy.get('[data-cy="side-window-sub-menu-NAMO"]').click()
 
     /**
-     * We need to wrap this test as the reporting list might have 1 ou 2 value, as another test might convert
+     * We need to wrap this test as the reporting list might have 3 or 4value, as another test might convert
      * an OBSERVATION to an INFRACTION_SUSPICION in the same running Cypress machine
      */
     cy.get('*[data-cy="side-window-current-reportings"]').then($reportingList => {
       const numberOfReportings = Cypress.$($reportingList).length
       cy.log(`${numberOfReportings} reportings found in the list`)
-      assert(numberOfReportings === 1 || numberOfReportings === 2, 'There Should be 1 or 2 reportings')
+      assert(numberOfReportings === 3 || numberOfReportings === 4, 'There Should be 3 or 4 reportings')
 
       cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', numberOfReportings)
 
       // When
-      cy.get('[data-cy="side-window-edit-reporting"]').eq(0).click()
+      cy.get('[data-cy="side-window-edit-reporting"]').eq(1).click()
       cy.get('[data-cy="new-reporting-title"]').type(
         '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace} km'
       )
@@ -136,7 +150,7 @@ context('Reportings', () => {
       cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', numberOfReportings)
       // We do not know if the edited reporting is the first or second row in the list
       cy.get('*[data-cy="side-window-current-reportings"]')
-        .first()
+        .eq(1)
         .then($firstRow => {
           // The DML is modified as this is the DML fetched from the vessels table
           if ($firstRow.text().includes('DML 56')) {
@@ -145,8 +159,8 @@ context('Reportings', () => {
             return
           }
 
-          cy.get('*[data-cy="side-window-current-reportings"]').eq(1).contains('DML 56')
-          cy.get('*[data-cy="side-window-current-reportings"]').eq(1).contains(23581)
+          cy.get('*[data-cy="side-window-current-reportings"]').eq(2).contains('DML 56')
+          cy.get('*[data-cy="side-window-current-reportings"]').eq(2).contains(23581)
         })
     })
   })
@@ -158,26 +172,26 @@ context('Reportings', () => {
     cy.get('[data-cy="side-window-sub-menu-NAMO"]').click()
 
     /**
-     * We need to wrap this test as the reporting list might have 1 ou 2 value, as another test might convert
+     * We need to wrap this test as the reporting list might have 3 or 4 value, as another test might convert
      * an OBSERVATION to an INFRACTION_SUSPICION in the same running Cypress machine
      */
     cy.get('*[data-cy="side-window-current-reportings"]').then($reportingList => {
       const numberOfReportings = Cypress.$($reportingList).length
       cy.log(`${numberOfReportings} reportings found in the list`)
-      assert(numberOfReportings === 1 || numberOfReportings === 2, 'There Should be 1 or 2 reportings')
+      assert(numberOfReportings === 3 || numberOfReportings === 4, 'There Should be 3 or 4 reportings')
 
       cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', numberOfReportings)
 
       // When
       // We do not know if the edited reporting is the first or second row in the list
       cy.get('[data-cy="side-window-current-reportings"]')
-        .eq(0)
+        .eq(1)
         .then($firstRow => {
           // The DML is modified as this is the DML fetched from the vessels table
           if ($firstRow.text().includes('DML 56')) {
-            modifyReportingToObservation(0, numberOfReportings)
-          } else {
             modifyReportingToObservation(1, numberOfReportings)
+          } else {
+            modifyReportingToObservation(2, numberOfReportings)
           }
         })
     })

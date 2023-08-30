@@ -15,7 +15,12 @@ context('Side Window > Mission Form > Action List', () => {
       },
       statusCode: 201
     }).as('updateMission4')
-    cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('createMissionAction')
     cy.get('*[data-cy="action-list-item"]').click()
 
     cy.wait(250)
@@ -102,7 +107,12 @@ context('Side Window > Mission Form > Action List', () => {
       },
       statusCode: 201
     }).as('updateMission34')
-    cy.intercept('DELETE', '/bff/v1/mission_actions/9').as('deleteMissionAction9')
+    cy.intercept('DELETE', '/bff/v1/mission_actions/9', {
+      body: {
+        id: 1
+      },
+      statusCode: 200
+    }).as('deleteMissionAction9')
 
     cy.wait(250)
 

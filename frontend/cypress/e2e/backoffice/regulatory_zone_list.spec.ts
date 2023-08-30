@@ -7,6 +7,9 @@ context('Backoffice', () => {
   })
 
   it('regulatory zones are displayed by layer name and law types', () => {
+    cy.get('[data-cy="backoffice-search-regulation"]').type('dra')
+    cy.get('[data-cy="Reg. NAMO"]').eq(0).click()
+    cy.get('[data-cy="backoffice-search-regulation"]').type('{backspace}{backspace}{backspace}')
     cy.get('[data-cy="law-type"]').should('have.length', 4)
     // test Reg. MEMN values
     cy.get('[data-cy="Reg. MEMN"]').should('have.length', 1)

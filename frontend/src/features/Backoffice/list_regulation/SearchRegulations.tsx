@@ -40,7 +40,7 @@ export function SearchRegulations(props) {
             searchResult[territory] = searchResultByLawType
           }
         })
-        if (regulatoryZoneMetadata !== null) {
+        if (regulatoryZoneMetadata) {
           if (!searchResultIncludeZone(searchResult, regulatoryZoneMetadata as any)) {
             dispatch(closeRegulatoryZoneMetadataPanel())
           }
@@ -73,6 +73,7 @@ export function SearchRegulations(props) {
       <SearchBox>
         <SearchBoxInput
           ref={searchInput}
+          data-cy="backoffice-search-regulation"
           onChange={e => setSearchText(e.target.value)}
           placeholder="Rechercher une zone par son nom ou sa référence réglementaire"
           type="text"

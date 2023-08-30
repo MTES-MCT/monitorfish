@@ -207,7 +207,7 @@ context('Side Window > Mission Form > Main Form', () => {
         id: 2,
         isClosed: false,
         isGeometryComputedFromControls: false,
-        missionSource: 'MONITORFISH',
+        missionSource: 'POSEIDON_CNSP',
         missionTypes: ['SEA'],
         observationsCacem:
           'Maybe own each college away likely major. Former space technology million cell. Outside body my drop require.',
@@ -444,7 +444,7 @@ context('Side Window > Mission Form > Main Form', () => {
         id: 6,
         isClosed: false,
         isGeometryComputedFromControls: false,
-        missionSource: 'MONITORFISH',
+        missionSource: 'POSEIDON_CNSP',
         missionTypes: ['AIR'],
         observationsCacem: 'Toward agency blue now hand. Meet answer someone stand.',
         observationsCnsp: null,

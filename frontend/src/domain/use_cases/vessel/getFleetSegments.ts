@@ -7,10 +7,7 @@ export const getFleetSegments =
   (
     faoAreas: string[] | undefined,
     gearOnBoard: MissionActionFormValues['gearOnboard'],
-    speciesOnboard: MissionActionFormValues['speciesOnboard'],
-    longitude: number | undefined,
-    latitude: number | undefined,
-    portLocode: string | undefined
+    speciesOnboard: MissionActionFormValues['speciesOnboard']
   ) =>
   async (dispatch): Promise<FleetSegment[]> => {
     if (!gearOnBoard?.length && !speciesOnboard?.length) {
@@ -24,9 +21,6 @@ export const getFleetSegments =
       fleetSegmentApi.endpoints.computeFleetSegments.initiate({
         faoAreas: faoAreas || [],
         gears: gears || [],
-        latitude,
-        longitude,
-        portLocode,
         species: species || []
       })
     )

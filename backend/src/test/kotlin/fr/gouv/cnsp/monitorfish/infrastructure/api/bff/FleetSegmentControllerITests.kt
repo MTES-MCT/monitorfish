@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
@@ -184,14 +183,14 @@ class FleetSegmentControllerITests {
     @Test
     fun `Should compute fleet segments`() {
         // Given
-        given(this.computeFleetSegments.execute(any(), any(), any(), anyOrNull(), anyOrNull(), anyOrNull())).willReturn(
+        given(this.computeFleetSegments.execute(any(), any(), any())).willReturn(
             listOf(FleetSegment("SWW01", "", listOf("NAMO", "SA"), listOf(), listOf(), listOf(), listOf(), 1.2, 2021)),
         )
 
         // When
         api.perform(
             get(
-                "/bff/v1/fleet_segments/compute?faoAreas=27.1.c,27.1.b&gears=OTB&species=HKE,BFT&latitude=47.585&longitude=0.4355678&portLocode=LOCODE",
+                "/bff/v1/fleet_segments/compute?faoAreas=27.1.c,27.1.b&gears=OTB&species=HKE,BFT",
             ),
         )
             // Then
@@ -203,9 +202,6 @@ class FleetSegmentControllerITests {
             listOf("27.1.c", "27.1.b"),
             listOf("OTB"),
             listOf("HKE", "BFT"),
-            47.585,
-            0.4355678,
-            "LOCODE",
         )
     }
 }

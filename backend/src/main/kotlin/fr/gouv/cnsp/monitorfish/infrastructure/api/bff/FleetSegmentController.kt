@@ -112,17 +112,8 @@ class FleetSegmentController(
         @Parameter(description = "Species")
         @RequestParam(name = "species")
         species: List<String>,
-        @Parameter(description = "Control latitude")
-        @RequestParam(name = "latitude", required = false)
-        latitude: Double?,
-        @Parameter(description = "Control longitude")
-        @RequestParam(name = "longitude", required = false)
-        longitude: Double?,
-        @Parameter(description = "Port Locode")
-        @RequestParam(name = "portLocode", required = false)
-        portLocode: String?,
     ): List<FleetSegmentDataOutput> {
-        val fleetSegments = computeFleetSegments.execute(faoAreas, gears, species, latitude, longitude, portLocode)
+        val fleetSegments = computeFleetSegments.execute(faoAreas, gears, species)
 
         return fleetSegments.map {
             FleetSegmentDataOutput.fromFleetSegment(it)

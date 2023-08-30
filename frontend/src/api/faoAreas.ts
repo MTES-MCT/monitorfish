@@ -7,6 +7,7 @@ export type ComputeVesselFaoAreasParams = {
   internalReferenceNumber: string | undefined
   latitude: number | undefined
   longitude: number | undefined
+  portLocode: string | undefined
 }
 
 export const faoAreasApi = monitorfishApi.injectEndpoints({
@@ -15,7 +16,7 @@ export const faoAreasApi = monitorfishApi.injectEndpoints({
       query: params =>
         `/fao_areas/compute?internalReferenceNumber=${params.internalReferenceNumber}&latitude=${
           params.latitude || ''
-        }&longitude=${params.longitude || ''}`
+        }&longitude=${params.longitude || ''}&portLocode=${params.portLocode || ''}`
     })
   })
 })

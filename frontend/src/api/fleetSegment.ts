@@ -8,9 +8,6 @@ import type { FleetSegment, UpdateFleetSegment } from '../domain/types/fleetSegm
 export type ComputeFleetSegmentsParams = {
   faoAreas: string[]
   gears: string[]
-  latitude: number | undefined
-  longitude: number | undefined
-  portLocode: string | undefined
   species: string[]
 }
 
@@ -18,9 +15,7 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
     computeFleetSegments: builder.query<FleetSegment[], ComputeFleetSegmentsParams>({
       query: params =>
-        `fleet_segments/compute?faoAreas=${params.faoAreas}&gears=${params.gears}&species=${params.species}&latitude=${
-          params.latitude || ''
-        }&longitude=${params.longitude || ''}&portLocode=${params.portLocode || ''}`,
+        `fleet_segments/compute?faoAreas=${params.faoAreas}&gears=${params.gears}&species=${params.species}`,
       transformResponse: (baseQueryReturnValue: FleetSegment[]) =>
         baseQueryReturnValue.sort((a, b) => a.segment.localeCompare(b.segment))
     }),

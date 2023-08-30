@@ -29,6 +29,7 @@ class MissionActionUTests {
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             closedBy = "XYZ",
+            isFromPoseidon = false,
         )
 
         // When
@@ -57,6 +58,7 @@ class MissionActionUTests {
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             closedBy = "XYZ",
+            isFromPoseidon = false,
         )
 
         // When
@@ -89,6 +91,7 @@ class MissionActionUTests {
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             closedBy = "XYZ",
+            isFromPoseidon = false,
         )
 
         // When
@@ -118,6 +121,7 @@ class MissionActionUTests {
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             closedBy = "XYZ",
+            isFromPoseidon = false,
         )
 
         // When
@@ -147,6 +151,7 @@ class MissionActionUTests {
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             closedBy = "XYZ",
+            isFromPoseidon = false,
         )
 
         // When

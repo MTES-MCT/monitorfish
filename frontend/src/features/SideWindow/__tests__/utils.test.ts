@@ -24,8 +24,7 @@ describe('utils/getMissionDataFromMissionFormValues()', () => {
           ]
         }
       ],
-      endDateTimeUtc: undefined,
-      geom: undefined,
+      endDateTimeUtc: '2023-12-31T23:30:00.000000Z',
       isClosed: false,
       isGeometryComputedFromControls: true,
       isUnderJdp: true,
@@ -48,8 +47,7 @@ describe('utils/getMissionDataFromMissionFormValues()', () => {
           resources: [{ id: 2, name: 'Semi-rigide 2' }]
         }
       ],
-      endDateTimeUtc: undefined,
-      geom: undefined,
+      endDateTimeUtc: '2023-12-31T23:30:00.000000Z',
       isClosed: false,
       isGeometryComputedFromControls: true,
       isUnderJdp: true,

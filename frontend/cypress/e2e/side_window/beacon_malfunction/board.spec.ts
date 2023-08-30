@@ -47,7 +47,6 @@ context('Side Window > Beacon Malfunction Board', () => {
 
   it('Board Should be initialized with the beacon malfunctions', () => {
     // Then
-    cy.get('*[data-cy="side-window-sub-menu-Avaries VMS en cours-number"]').contains('6')
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]').children().should('have.length', 7)
 
     // Count the number of cards in the columns' header

@@ -28,7 +28,7 @@ context('Side Window > Beacon Malfunction Board', () => {
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .first()
-      .dragTo('*[data-cy="side-window-beacon-malfunctions-columns-AT_QUAY"]')
+      .dragTo('*[data-cy="side-window-beacon-malfunctions-columns-AT_QUAY"]', { isSmooth: true })
 
     // Then
     cy.wait('@moveBeaconMalfunctionCardInColumn').then(({ request, response }) => {

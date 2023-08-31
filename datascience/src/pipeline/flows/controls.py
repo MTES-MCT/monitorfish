@@ -713,8 +713,29 @@ def load_missions_and_missions_control_units(
                     "REFERENCES public.missions (id) "
                     "ON DELETE CASCADE;"
                 ),
+                DDL(
+                    "ALTER TABLE public.missions_control_resources "
+                    "DROP CONSTRAINT missions_control_resources_mission_id_fkey;"
+                ),
+                DDL(
+                    "ALTER TABLE public.missions_control_resources "
+                    "ADD CONSTRAINT missions_control_resources_mission_id_cascade_fkey "
+                    "FOREIGN KEY (mission_id) "
+                    "REFERENCES public.missions (id) "
+                    "ON DELETE CASCADE;"
+                ),
             ],
             end_ddls=[
+                DDL(
+                    "ALTER TABLE public.missions_control_resources "
+                    "DROP CONSTRAINT missions_control_resources_mission_id_cascade_fkey;"
+                ),
+                DDL(
+                    "ALTER TABLE public.missions_control_resources "
+                    "ADD CONSTRAINT missions_control_resources_mission_id_fkey "
+                    "FOREIGN KEY (mission_id) "
+                    "REFERENCES public.missions (id);"
+                ),
                 DDL(
                     "ALTER TABLE public.missions_control_units "
                     "DROP CONSTRAINT missions_control_units_mission_id_cascade_fkey;"

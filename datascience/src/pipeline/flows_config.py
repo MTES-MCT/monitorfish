@@ -115,7 +115,7 @@ missing_trip_numbers.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")
 missions.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
-            "16 8 * * *",
+            "6 4 * * *",
             parameter_defaults={"number_of_months": 200, "loading_mode": "replace"},
         ),
     ]
@@ -212,7 +212,7 @@ position_alerts.flow.schedule = Schedule(
 refresh_materialized_view.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
-            "20 8 * * *",
+            "20 4 * * *",
             parameter_defaults={
                 "view_name": "analytics_controls_full_data",
             },

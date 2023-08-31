@@ -15,12 +15,7 @@ context('Side Window > Mission Form > Action List', () => {
       },
       statusCode: 201
     }).as('updateMission4')
-    cy.intercept('POST', '/bff/v1/mission_actions', {
-      body: {
-        id: 1
-      },
-      statusCode: 201
-    }).as('createMissionAction')
+    cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
     cy.get('*[data-cy="action-list-item"]').click()
 
     cy.wait(250)

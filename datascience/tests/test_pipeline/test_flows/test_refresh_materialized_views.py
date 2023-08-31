@@ -19,7 +19,7 @@ def test_refresh_analytics_controls_full_data(reset_test_data):
 
     initial_controls = read_query(query, db="monitorfish_remote")
 
-    e.execute("DELETE FROM mission_actions WHERE id = 7")
+    e.execute("DELETE FROM mission_actions WHERE id = 6")
 
     controls_before_refresh = read_query(query, db="monitorfish_remote")
 
@@ -30,11 +30,11 @@ def test_refresh_analytics_controls_full_data(reset_test_data):
 
     controls_after_refresh = read_query(query, db="monitorfish_remote")
 
-    assert len(initial_controls) == 30
-    assert len(controls_before_refresh) == 30
-    assert len(controls_after_refresh) == 28
+    assert len(initial_controls) == 26
+    assert len(controls_before_refresh) == 26
+    assert len(controls_after_refresh) == 22
 
     pd.testing.assert_frame_equal(initial_controls, controls_before_refresh)
     pd.testing.assert_frame_equal(
-        initial_controls.query("id != 7").reset_index(drop=True), controls_after_refresh
+        initial_controls.query("id != 6").reset_index(drop=True), controls_after_refresh
     )

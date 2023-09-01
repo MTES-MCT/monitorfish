@@ -7,17 +7,20 @@ import type { Self } from '../domain/types/env'
  */
 export function getEnvironmentVariable(name: string) {
   // eslint-disable-next-line no-restricted-globals
-  const injectedValue = (self as Self).env[name]
-  if (injectedValue !== `__${name}__`) {
-    if (injectedValue === 'true') {
-      return true
-    }
+  if ((self as Self).env) {
+    // eslint-disable-next-line no-restricted-globals
+    const injectedValue = (self as Self).env[name]
+    if (injectedValue !== `__${name}__`) {
+      if (injectedValue === 'true') {
+        return true
+      }
 
-    if (injectedValue === 'false') {
-      return false
-    }
+      if (injectedValue === 'false') {
+        return false
+      }
 
-    return injectedValue
+      return injectedValue
+    }
   }
 
   const valueFromProcess = process.env[name]

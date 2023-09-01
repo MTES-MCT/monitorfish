@@ -4,17 +4,19 @@ import pandas as pd
 
 from src.pipeline.shared_tasks.segments import (
     extract_all_segments,
-    extract_segments_of_current_year,
+    extract_segments_of_year,
     unnest_segments,
 )
 
 
-def test_extract_segments_of_current_year(reset_test_data):
-    segments = extract_segments_of_current_year.run()
+def test_extract_segments_of_year(reset_test_data):
+    current_year = datetime.utcnow().year
+    segments = extract_segments_of_year.run(current_year)
 
     expected_segments = pd.DataFrame(
         {
             "segment": ["SWW01/02/03", "SWW04"],
+            "segment_name": ["Bottom trawls", "Midwater trawls"],
             "gears": [
                 ["OTB", "OTT", "PTB", "OT", "PT", "TBN", "TBS", "TX", "TB"],
                 ["OTM", "PTM"],

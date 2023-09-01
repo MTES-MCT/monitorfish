@@ -15,10 +15,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     cy.fill('Ajouter un engin', 'PTM')
 
     // Espèces à bord
-    cy.intercept(
-      'GET',
-      'bff/v1/fleet_segments/compute?faoAreas=27.8.a&gears=PTM&species=SPR&latitude=53.35&longitude=-10.85&portLocode='
-    ).as('computeSegment')
+    cy.intercept('GET', 'bff/v1/fleet_segments/compute?faoAreas=27.8.a&gears=PTM&species=SPR').as('computeSegment')
     cy.fill('Ajouter une espèce', 'SPR')
     cy.wait('@computeSegment')
 
@@ -112,10 +109,9 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     cy.get('*[data-cy="action-list-item"]').click()
     cy.wait(500)
 
-    cy.intercept(
-      'GET',
-      'bff/v1/fleet_segments/compute?faoAreas=27.8.b,27.8.c&gears=OTB&species=HKE,BLI&latitude=53.35&longitude=-10.85&portLocode='
-    ).as('computeFleetSegments')
+    cy.intercept('GET', 'bff/v1/fleet_segments/compute?faoAreas=27.8.b,27.8.c&gears=OTB&species=HKE,BLI').as(
+      'computeFleetSegments'
+    )
     cy.get('input[placeholder="Rechercher un navire..."]').clear().type('phe')
     cy.contains('mark', 'PHE').click()
 

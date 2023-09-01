@@ -36,7 +36,10 @@ class FaoAreaController(
         @Parameter(description = "Longitude")
         @RequestParam(name = "longitude")
         longitude: Double?,
+        @Parameter(description = "Port Locode")
+        @RequestParam(name = "portLocode")
+        portLocode: String?,
     ): List<String> {
-        return computeVesselFAOAreas.execute(internalReferenceNumber, latitude, longitude)
+        return computeVesselFAOAreas.execute(internalReferenceNumber, latitude, longitude, portLocode)
     }
 }

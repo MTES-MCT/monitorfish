@@ -5,6 +5,10 @@
   object-position: 0 -234px;
 }
 
+body > iframe {
+  display: none;
+}
+
 html {
   overflow-y: hidden;
   overflow-x: hidden;

@@ -1,5 +1,6 @@
 SELECT 
     segment,
+    segment_name,
     gears,
     fao_areas,
     target_species || bycatch_species as species,

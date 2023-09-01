@@ -14,6 +14,12 @@ def get_utcnow():
 
 
 @task(checkpoint=False)
+def get_current_year() -> int:
+    """Returns current year"""
+    return datetime.utcnow().year
+
+
+@task(checkpoint=False)
 def get_timezone_aware_utcnow():
     return pytz.UTC.localize(datetime.utcnow())
 

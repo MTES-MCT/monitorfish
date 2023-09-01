@@ -28,14 +28,7 @@ const updateSegments =
     }
 
     const computedFleetSegments = await dispatch(
-      getFleetSegments(
-        missionAction.faoAreas,
-        missionAction.gearOnboard,
-        missionAction.speciesOnboard,
-        missionAction.longitude,
-        missionAction.latitude,
-        missionAction.portLocode
-      )
+      getFleetSegments(missionAction.faoAreas, missionAction.gearOnboard, missionAction.speciesOnboard)
     )
 
     const nextFleetSegments = fleetSegmentsAsOptions
@@ -48,17 +41,12 @@ const updateSegments =
 const updateFAOAreas =
   (dispatch, setFieldValue: (field: string, value: any) => void) =>
   async (missionAction: MissionActionFormValues): Promise<string[]> => {
-    if (!missionAction.internalReferenceNumber) {
-      setFieldValue('faoAreas', [])
-
-      return []
-    }
-
     const { data: computedVesselFaoAreas } = await dispatch(
       faoAreasApi.endpoints.computeVesselFaoAreas.initiate({
         internalReferenceNumber: missionAction.internalReferenceNumber,
         latitude: missionAction.latitude,
-        longitude: missionAction.longitude
+        longitude: missionAction.longitude,
+        portLocode: missionAction.portLocode
       })
     )
 

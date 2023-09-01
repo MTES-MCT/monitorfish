@@ -75,6 +75,7 @@ class MissionActionsControllerITests {
                         isDeleted = false,
                         hasSomeGearsSeized = false,
                         hasSomeSpeciesSeized = false,
+                        isFromPoseidon = true,
                     ),
                 ),
             ),
@@ -108,6 +109,7 @@ class MissionActionsControllerITests {
                     isDeleted = false,
                     hasSomeGearsSeized = false,
                     hasSomeSpeciesSeized = false,
+                    isFromPoseidon = true,
                 ),
             ),
         )
@@ -227,6 +229,7 @@ class MissionActionsControllerITests {
                             gearOnboard = listOf(gearControl),
                             hasSomeGearsSeized = false,
                             hasSomeSpeciesSeized = false,
+                            isFromPoseidon = true,
                         ),
                     ),
                 )
@@ -236,6 +239,7 @@ class MissionActionsControllerITests {
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.missionId", equalTo(2)))
             .andExpect(jsonPath("$.vesselId", equalTo(2)))
+            .andExpect(jsonPath("$.isFromPoseidon", equalTo(true)))
             .andExpect(jsonPath("$.actionDatetimeUtc", equalTo("2022-05-05T03:04:05Z")))
             .andExpect(jsonPath("$.faoAreas[0]", equalTo("25.6.9")))
             .andExpect(jsonPath("$.faoAreas[1]", equalTo("25.7.9")))

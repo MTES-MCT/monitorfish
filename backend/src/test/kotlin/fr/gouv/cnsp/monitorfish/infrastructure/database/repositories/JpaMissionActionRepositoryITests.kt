@@ -168,7 +168,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         val existingAction = jpaMissionActionsRepository.findById(expectedId)
         assertThat(existingAction.latitude).isEqualTo(47.44)
         assertThat(existingAction.longitude).isEqualTo(-0.52)
-        val updatedMission = existingAction.copy(isDeleted = true)
+        val updatedMission = existingAction.copy(isDeleted = true, isFromPoseidon = true)
 
         // When
         val updatedMissionAction = jpaMissionActionsRepository.save(updatedMission)
@@ -176,6 +176,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(updatedMissionAction.id).isEqualTo(expectedId)
         assertThat(updatedMissionAction.isDeleted).isTrue()
+        assertThat(updatedMissionAction.isFromPoseidon).isTrue()
         assertThat(updatedMissionAction.latitude).isEqualTo(47.44)
         assertThat(updatedMissionAction.longitude).isEqualTo(-0.52)
     }
@@ -237,6 +238,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             closedBy = "XYZ",
+            isFromPoseidon = false,
         )
 
         // When

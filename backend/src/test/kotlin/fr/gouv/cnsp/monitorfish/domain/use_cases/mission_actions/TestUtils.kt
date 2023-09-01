@@ -20,6 +20,7 @@ object TestUtils {
                     isDeleted = false,
                     hasSomeGearsSeized = false,
                     hasSomeSpeciesSeized = false,
+                    isFromPoseidon = false,
                 )
             }
         }.flatten()

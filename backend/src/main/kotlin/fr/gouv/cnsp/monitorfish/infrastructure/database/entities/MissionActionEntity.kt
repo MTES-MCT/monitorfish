@@ -174,7 +174,7 @@ class MissionActionEntity(
                 otherComments = missionAction.otherComments,
                 gearOnboard = mapper.writeValueAsString(missionAction.gearOnboard),
                 speciesOnboard = mapper.writeValueAsString(missionAction.speciesOnboard),
-                isFromPoseidon = false,
+                isFromPoseidon = missionAction.isFromPoseidon,
                 isDeleted = missionAction.isDeleted,
                 hasSomeGearsSeized = missionAction.hasSomeGearsSeized,
                 hasSomeSpeciesSeized = missionAction.hasSomeSpeciesSeized,
@@ -229,6 +229,7 @@ class MissionActionEntity(
         hasSomeGearsSeized = hasSomeGearsSeized,
         hasSomeSpeciesSeized = hasSomeSpeciesSeized,
         closedBy = closedBy,
+        isFromPoseidon = isFromPoseidon,
     )
 
     private fun <T> deserializeJSONList(mapper: ObjectMapper, json: String?, clazz: Class<T>): List<T> = json?.let {

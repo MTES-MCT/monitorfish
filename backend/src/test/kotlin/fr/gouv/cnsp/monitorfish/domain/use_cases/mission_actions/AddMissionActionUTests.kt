@@ -45,6 +45,7 @@ class AddMissionActionUTests {
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             closedBy = "XYZ",
+            isFromPoseidon = false,
         )
 
         // When
@@ -77,6 +78,7 @@ class AddMissionActionUTests {
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             closedBy = "XYZ",
+            isFromPoseidon = false,
         )
         given(missionActionsRepository.save(anyOrNull())).willReturn(action)
         given(getMissionActionFacade.execute(anyOrNull())).willReturn(Facade.NAMO)

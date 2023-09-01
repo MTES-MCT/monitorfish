@@ -5,8 +5,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Infraction
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
 
 @UseCase
-class GetFishingAndSecurityInfractions(private val infractionRepository: InfractionRepository) {
+class GetAllInfractions(private val infractionRepository: InfractionRepository) {
     fun execute(): List<Infraction> {
-        return infractionRepository.findFishingAndSecurityInfractions()
+        return infractionRepository.findAll()
     }
 }

@@ -41,7 +41,7 @@ class JpaInfractionRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findFishingInfractions Should return all fishing and security infractions`() {
         // When
-        val infractions = jpaInfractionRepository.findFishingAndSecurityInfractions()
+        val infractions = jpaInfractionRepository.findAll()
 
         // Then
         assertThat(infractions).hasSize(8)

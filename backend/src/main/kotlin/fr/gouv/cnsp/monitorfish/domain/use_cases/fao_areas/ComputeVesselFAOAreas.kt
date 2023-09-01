@@ -49,12 +49,6 @@ class ComputeVesselFAOAreas(
 
                 return removeRedundantFaoArea(faoAreasObjects).map { it.faoCode }
             }
-
-            if (latitude == null || longitude == null) {
-                return listOf()
-            }
-
-            return computeFAOAreasFromCoordinates.execute(longitude, latitude).map { it.faoCode }
         }
 
         // Otherwise, fetch the fao zones from the latitude/longitude if given

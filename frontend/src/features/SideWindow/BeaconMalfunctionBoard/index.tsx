@@ -1,5 +1,5 @@
 import {
-  closestCenter,
+  pointerWithin,
   DndContext,
   DragOverlay,
   MouseSensor,
@@ -245,7 +245,7 @@ export function BeaconMalfunctionBoard() {
       </Header>
       <DndContext
         autoScroll
-        collisionDetection={closestCenter}
+        collisionDetection={pointerWithin}
         onDragEnd={onDragEnd}
         onDragStart={onDragStart}
         sensors={sensors}

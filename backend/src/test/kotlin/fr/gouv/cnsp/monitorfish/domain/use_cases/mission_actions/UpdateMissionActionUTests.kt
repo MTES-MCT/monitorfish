@@ -36,6 +36,7 @@ class UpdateMissionActionUTests {
             isDeleted = false,
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
+            isFromPoseidon = false,
         )
 
         // When

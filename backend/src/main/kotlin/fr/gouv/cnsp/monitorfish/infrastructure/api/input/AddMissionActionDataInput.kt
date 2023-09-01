@@ -48,6 +48,7 @@ data class AddMissionActionDataInput(
     var hasSomeGearsSeized: Boolean = false,
     var hasSomeSpeciesSeized: Boolean = false,
     var closedBy: String? = null,
+    val isFromPoseidon: Boolean? = null,
 ) {
     fun toMissionAction() = MissionAction(
         vesselId = vesselId,
@@ -95,5 +96,6 @@ data class AddMissionActionDataInput(
         hasSomeGearsSeized = hasSomeGearsSeized,
         hasSomeSpeciesSeized = hasSomeSpeciesSeized,
         closedBy = closedBy,
+        isFromPoseidon = isFromPoseidon ?: false,
     )
 }

@@ -43,5 +43,6 @@ object TestUtils {
         hasSomeGearsSeized = false,
         hasSomeSpeciesSeized = false,
         closedBy = "XYZ",
+        isFromPoseidon = true,
     )
 }

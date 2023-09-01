@@ -69,6 +69,7 @@ class MissionsControllerITests {
                             isDeleted = false,
                             hasSomeGearsSeized = false,
                             hasSomeSpeciesSeized = false,
+                            isFromPoseidon = false,
                         ),
                     ),
                 ),

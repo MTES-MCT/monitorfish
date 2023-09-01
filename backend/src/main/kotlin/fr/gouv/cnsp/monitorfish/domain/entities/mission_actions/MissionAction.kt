@@ -48,6 +48,7 @@ data class MissionAction(
     val otherComments: String? = null,
     val gearOnboard: List<GearControl> = listOf(),
     val speciesOnboard: List<SpeciesControl> = listOf(),
+    val isFromPoseidon: Boolean,
     var controlUnits: List<ControlUnit> = listOf(),
     var isDeleted: Boolean,
     var hasSomeGearsSeized: Boolean,

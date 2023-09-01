@@ -34,6 +34,7 @@ class DeleteMissionActionUTests {
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             closedBy = "XYZ",
+            isFromPoseidon = false,
         )
         given(missionActionsRepository.findById(any())).willReturn(action)
 

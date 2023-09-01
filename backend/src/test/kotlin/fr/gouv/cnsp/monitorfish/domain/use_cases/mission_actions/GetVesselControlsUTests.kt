@@ -66,6 +66,7 @@ class GetVesselControlsUTests {
                 isDeleted = false,
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
             ),
             MissionAction(
                 id = 2,
@@ -78,6 +79,7 @@ class GetVesselControlsUTests {
                 isDeleted = false,
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
             ),
             MissionAction(
                 id = 3,
@@ -90,6 +92,7 @@ class GetVesselControlsUTests {
                 isDeleted = false,
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
             ),
         )
         given(missionActionsRepository.findVesselMissionActionsAfterDateTime(any(), any())).willReturn(

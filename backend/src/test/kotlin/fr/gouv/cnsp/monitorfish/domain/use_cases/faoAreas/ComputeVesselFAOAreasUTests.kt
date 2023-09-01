@@ -119,4 +119,18 @@ class ComputeVesselFAOAreasUTests {
         // Then
         assertThat(faoAreas).isEqualTo(listOf("27.8.c", "27.8"))
     }
+
+    @Test
+    fun `execute Should return the computed fao areas When the CFR and the port Locode are given`() {
+        given(portRepository.find(any())).willReturn(
+            Port("AEFAT", "Al Jazeera Port", faoAreas = listOf("27.8.c", "27.8")),
+        )
+
+        // When
+        val faoAreas = ComputeVesselFAOAreas(riskFactorsRepository, portRepository, computeFAOAreasFromCoordinates)
+            .execute("DUMMY_CFR", null, null, "AEFAT")
+
+        // Then
+        assertThat(faoAreas).isEqualTo(listOf("27.8.c", "27.8"))
+    }
 }

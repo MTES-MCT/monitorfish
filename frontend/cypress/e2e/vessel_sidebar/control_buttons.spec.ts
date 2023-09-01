@@ -5,6 +5,19 @@ context('Vessel sidebar controls buttons', () => {
     cy.loadPath('/#@-824534.42,6082993.21,8.70')
   })
 
+  it('Control buttons should be disabled When vessel has no positions', () => {
+    // Given
+    cy.get('*[data-cy^="vessel-search-input"]').type('MALOTRU')
+    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
+    cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
+
+    // When
+    cy.get('*[data-cy="vessel-track-depth-selection"]').should('have.attr', 'disabled')
+    cy.get('*[data-cy="show-all-fishing-activities-on-map"]').should('have.attr', 'disabled')
+    cy.get('*[data-cy="trigger-hide-other-vessels-from-sidebar"]').should('have.attr', 'disabled')
+    cy.get('*[data-cy="animate-to-track"]').should('have.attr', 'disabled')
+  })
+
   it('Vessel track depth Should be changed', () => {
     // Given
     cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })

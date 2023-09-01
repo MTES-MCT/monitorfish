@@ -13,7 +13,7 @@ import type { Option } from '@mtes-mct/monitor-ui'
 
 export function FormikPortSelect() {
   const { errors, setFieldValue, values } = useFormikContext<MissionActionFormValues>()
-  const { updateMissionLocation, updateSegments } = useGetMissionActionFormikUsecases()
+  const { updateFAOAreasAndSegments, updateMissionLocation } = useGetMissionActionFormikUsecases()
 
   const { newWindowContainerRef } = useNewWindow()
 
@@ -51,7 +51,7 @@ export function FormikPortSelect() {
       ...values,
       portLocode: port.locode
     }
-    updateSegments(valuesWithPort)
+    updateFAOAreasAndSegments(valuesWithPort)
     updateMissionLocation(valuesWithPort)
   }
 

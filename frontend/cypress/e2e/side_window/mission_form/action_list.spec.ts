@@ -102,7 +102,12 @@ context('Side Window > Mission Form > Action List', () => {
       },
       statusCode: 201
     }).as('updateMission34')
-    cy.intercept('DELETE', '/bff/v1/mission_actions/9').as('deleteMissionAction9')
+    cy.intercept('DELETE', '/bff/v1/mission_actions/9', {
+      body: {
+        id: 1
+      },
+      statusCode: 200
+    }).as('deleteMissionAction9')
 
     cy.wait(250)
 

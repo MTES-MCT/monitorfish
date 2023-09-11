@@ -17,8 +17,7 @@ export type BeaconMalfunction = {
   ircs: string
   malfunctionEndDateTime: string | null
   malfunctionStartDateTime: string
-  notificationRequested: string
-  priority: boolean
+  notificationRequested: string | null
   stage: string
   vesselIdentifier: string
   vesselName: string

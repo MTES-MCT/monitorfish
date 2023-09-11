@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class JpaInfractionRepository(private val dbInfractionRepository: DBInfractionRepository) : InfractionRepository {
-    @Cacheable(value = ["fishing_security_infractions"])
-    override fun findFishingAndSecurityInfractions(): List<Infraction> {
-        return dbInfractionRepository.findAllByInfractionCategoryEqualsSecurityOrFishing().map {
+    @Cacheable(value = ["infractions"])
+    override fun findAll(): List<Infraction> {
+        return dbInfractionRepository.findAll().map {
             it.toInfraction()
         }
     }

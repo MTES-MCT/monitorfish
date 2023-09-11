@@ -24,7 +24,9 @@ export function getAdministrativeLayerStyle(type: string) {
             fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.9)', width: 2 }),
-            text: `${(LayerProperties.EEZ.subZoneFieldKey && feature?.get(LayerProperties.EEZ.subZoneFieldKey)) || ''}`
+            text: `${
+              (LayerProperties.EEZ.zoneNamePropertyKey && feature?.get(LayerProperties.EEZ.zoneNamePropertyKey)) || ''
+            }`
           })
         })
     case LayerProperties.FAO.code:
@@ -39,7 +41,9 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             overflow: true,
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: LayerProperties.FAO.getZoneName && LayerProperties.FAO.getZoneName(feature)
+            text: `${
+              (LayerProperties.FAO.zoneNamePropertyKey && feature?.get(LayerProperties.FAO.zoneNamePropertyKey)) || ''
+            }`
           })
         })
     case LayerProperties.AEM.code:
@@ -53,7 +57,9 @@ export function getAdministrativeLayerStyle(type: string) {
             fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${(LayerProperties.AEM.subZoneFieldKey && feature?.get(LayerProperties.AEM.subZoneFieldKey)) || ''}`
+            text: `${
+              (LayerProperties.AEM.zoneNamePropertyKey && feature?.get(LayerProperties.AEM.zoneNamePropertyKey)) || ''
+            }`
           })
         })
     case LayerProperties.effort_zones_areas.code:
@@ -68,8 +74,8 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${
-              (LayerProperties.effort_zones_areas.subZoneFieldKey &&
-                feature?.get(LayerProperties.effort_zones_areas.subZoneFieldKey)) ||
+              (LayerProperties.effort_zones_areas.zoneNamePropertyKey &&
+                feature?.get(LayerProperties.effort_zones_areas.zoneNamePropertyKey)) ||
               ''
             }`
           })
@@ -86,7 +92,9 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${
-              (LayerProperties.cormoran.subZoneFieldKey && feature?.get(LayerProperties.cormoran.subZoneFieldKey)) || ''
+              (LayerProperties.cormoran.zoneNamePropertyKey &&
+                feature?.get(LayerProperties.cormoran.zoneNamePropertyKey)) ||
+              ''
             }`
           })
         })
@@ -102,8 +110,8 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${
-              (LayerProperties.situations.subZoneFieldKey &&
-                feature?.get(LayerProperties.situations.subZoneFieldKey)) ||
+              (LayerProperties.situations.zoneNamePropertyKey &&
+                feature?.get(LayerProperties.situations.zoneNamePropertyKey)) ||
               ''
             }`
           })
@@ -120,7 +128,9 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${
-              (LayerProperties.brexit.subZoneFieldKey && feature?.get(LayerProperties.brexit.subZoneFieldKey)) || ''
+              (LayerProperties.brexit.zoneNamePropertyKey &&
+                feature?.get(LayerProperties.brexit.zoneNamePropertyKey)) ||
+              ''
             }`
           })
         })
@@ -136,8 +146,8 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${
-              (LayerProperties.rectangles_stat.subZoneFieldKey &&
-                feature?.get(LayerProperties.rectangles_stat.subZoneFieldKey)) ||
+              (LayerProperties.rectangles_stat.zoneNamePropertyKey &&
+                feature?.get(LayerProperties.rectangles_stat.zoneNamePropertyKey)) ||
               ''
             }`
           })
@@ -178,8 +188,8 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${
-              (LayerProperties.cgpm_areas.subZoneFieldKey &&
-                feature?.get(LayerProperties.cgpm_areas.subZoneFieldKey)) ||
+              (LayerProperties.cgpm_areas.zoneNamePropertyKey &&
+                feature?.get(LayerProperties.cgpm_areas.zoneNamePropertyKey)) ||
               ''
             }`
           })
@@ -196,8 +206,8 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${
-              (LayerProperties.cgpm_statistical_rectangles_areas.subZoneFieldKey &&
-                feature?.get(LayerProperties.cgpm_statistical_rectangles_areas.subZoneFieldKey)) ||
+              (LayerProperties.cgpm_statistical_rectangles_areas.zoneNamePropertyKey &&
+                feature?.get(LayerProperties.cgpm_statistical_rectangles_areas.zoneNamePropertyKey)) ||
               ''
             }`
           })
@@ -214,8 +224,8 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${
-              (LayerProperties.saltwater_limit.subZoneFieldKey &&
-                feature?.get(LayerProperties.saltwater_limit.subZoneFieldKey)) ||
+              (LayerProperties.saltwater_limit.zoneNamePropertyKey &&
+                feature?.get(LayerProperties.saltwater_limit.zoneNamePropertyKey)) ||
               ''
             }`
           })
@@ -232,8 +242,8 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${
-              (LayerProperties.transversal_sea_limit.subZoneFieldKey &&
-                feature?.get(LayerProperties.transversal_sea_limit.subZoneFieldKey)) ||
+              (LayerProperties.transversal_sea_limit.zoneNamePropertyKey &&
+                feature?.get(LayerProperties.transversal_sea_limit.zoneNamePropertyKey)) ||
               ''
             }`
           })

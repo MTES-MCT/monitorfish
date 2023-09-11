@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { getFirstVesselStatus } from '../../../../domain/entities/beaconMalfunction'
+import { getFirstVesselStatus, getMalfunctionStartDateText } from '../../../../domain/entities/beaconMalfunction'
 import {
   BeaconMalfunctionPropertyName,
   BeaconMalfunctionVesselStatus,
@@ -82,10 +82,7 @@ export function BeaconMalfunctionCard({
       </Title>
       <Body>
         <LastPositionInfo>Dernière position {lastPositionPlace}</LastPositionInfo>
-        <Resume>
-          Reprise des émissions le{' '}
-          {getDateTime(beaconMalfunctionWithDetails.beaconMalfunction.malfunctionEndDateTime, true)}
-        </Resume>
+        <Resume>{getMalfunctionStartDateText(beaconMalfunctionWithDetails.beaconMalfunction)}</Resume>
         <Length>Durée : {lengthInDays}</Length>
         <DetectedActivity>Activité détectée</DetectedActivity>
         {beaconMalfunctionWithDetails.actions.find(

@@ -38,9 +38,8 @@ export type BeaconMalfunctionComment = {
 }
 
 export type BeaconMalfunctionAction = {
-  beaconMalfunctionId: Integer<number>
+  beaconMalfunctionId: number
   dateTime: string
-  id: number
   nextValue: BeaconMalfunctionsStage | BeaconMalfunctionVesselStatus
   previousValue: BeaconMalfunctionsStage | BeaconMalfunctionVesselStatus
   propertyName: BeaconMalfunctionPropertyName

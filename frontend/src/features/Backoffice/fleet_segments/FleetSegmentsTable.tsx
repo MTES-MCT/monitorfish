@@ -72,7 +72,7 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
     <Table
       affixHorizontalScrollbar
       data={fleetSegments}
-      height={height < 900 ? height - 120 : 830}
+      height={height < 900 ? height - 120 : 800}
       locale={{
         emptyMessage: 'Aucun résultat',
         loading: 'Chargement...'

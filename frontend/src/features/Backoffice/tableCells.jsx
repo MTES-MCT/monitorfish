@@ -57,7 +57,7 @@ const ModifiableCellWrapper = styled.div`
   }
 `
 
-const impactRange = _.range(1, 4, 0.1).map(num => {
+const impactRange = _.range(1, 4.1, 0.1).map(num => {
   const rounded = Number(num.toFixed(1))
   return { label: rounded, value: rounded }
 })

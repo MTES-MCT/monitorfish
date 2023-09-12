@@ -163,4 +163,17 @@ interface DBLogbookReportRepository :
         nativeQuery = true,
     )
     fun updateERSMessagesAsProcessedByRule(ids: List<Long>, ruleType: String)
+
+    @Query(
+        """SELECT distinct e.trip_number
+        FROM logbook_reports e
+        WHERE e.cfr = ?1
+        AND e.trip_number IS NOT NULL
+        AND e.operation_type IN ('DAT', 'COR')
+        AND e.operation_datetime_utc > now() - interval '2 year'
+        ORDER BY e.trip_number DESC
+    """,
+        nativeQuery = true,
+    )
+    fun findLastTwoYearsTripNumbers(internalReferenceNumber: String): List<String>
 }

@@ -245,6 +245,8 @@ class GetLogbookMessagesUTests {
                         12,
                     ),
                     transmissionFormat = LogbookTransmissionFormat.ERS,
+                    integrationDateTime = ZonedDateTime.now(),
+                    operationDateTime = ZonedDateTime.now(),
                 ),
             )
         given(speciesRepository.find(any())).willThrow(CodeNotFoundException("not found"))

@@ -13,7 +13,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagesAndAlerts
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.CurrentAndArchivedReportings
@@ -78,6 +79,9 @@ class VesselControllerITests {
 
     @MockBean
     private lateinit var getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions
+
+    @MockBean
+    private lateinit var getVesselLastTripNumbers: GetVesselLastTripNumbers
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -622,5 +626,20 @@ class VesselControllerITests {
         api.perform(get("/bff/v1/vessels/risk_factor?internalReferenceNumber=FR224226850"))
             // Then
             .andExpect(status().isBadRequest)
+    }
+
+    @Test
+    fun `Should find the last logbook trip numbers of a given vessels`() {
+        // Given
+        given(this.getVesselLastTripNumbers.execute(any())).willReturn(listOf("2020000125", "2020000126", "2020000127"))
+
+        // When
+        api.perform(
+            get("/bff/v1/vessels/logbook/last?internalReferenceNumber=FR224226850"),
+        )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(3)))
+            .andExpect(jsonPath("$[0]", equalTo("2020000125")))
     }
 }

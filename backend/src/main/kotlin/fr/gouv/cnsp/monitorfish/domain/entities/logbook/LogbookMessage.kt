@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledge
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LogbookMessageValue
 import java.time.ZonedDateTime
 
-class LogbookMessage(
+data class LogbookMessage(
     val id: Long,
     val reportId: String? = null,
     val operationNumber: String,
@@ -12,7 +12,7 @@ class LogbookMessage(
     val referencedReportId: String? = null,
     var isCorrected: Boolean? = false,
     val operationType: LogbookOperationType,
-    val operationDateTime: ZonedDateTime? = null,
+    val operationDateTime: ZonedDateTime,
     val internalReferenceNumber: String? = null,
     val externalReferenceNumber: String? = null,
     val ircs: String? = null,
@@ -21,7 +21,7 @@ class LogbookMessage(
     val imo: String? = null,
     val messageType: String? = null,
     val reportDateTime: ZonedDateTime? = null,
-    val integrationDateTime: ZonedDateTime? = null,
+    val integrationDateTime: ZonedDateTime,
     var acknowledge: Acknowledge? = null,
     var deleted: Boolean? = false,
     val message: LogbookMessageValue? = null,

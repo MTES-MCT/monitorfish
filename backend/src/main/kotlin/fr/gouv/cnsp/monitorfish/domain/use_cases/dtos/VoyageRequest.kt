@@ -4,4 +4,5 @@ enum class VoyageRequest {
     LAST,
     PREVIOUS,
     NEXT,
+    EQUALS,
 }

@@ -3,8 +3,10 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookRawMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
+import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.AfterEach
@@ -24,6 +26,9 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Autowired
     private lateinit var jpaLogbookReportRepository: JpaLogbookReportRepository
+
+    @Autowired
+    private lateinit var jpaLogbookRawMessageRepository: JpaLogbookRawMessageRepository
 
     @Autowired
     lateinit var cacheManager: CacheManager
@@ -500,5 +505,59 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
         assertThat(throwable.message).contains("No trip found found for the vessel.")
+    }
+
+    @Test
+    @Transactional
+    fun `findLastTwoYearsTripNumbers Should return an empty list When no trip is found`() {
+        // When
+        val trips = jpaLogbookReportRepository.findLastTwoYearsTripNumbers(
+            "UNKNOWN_VESS",
+        )
+
+        // Then
+        assertThat(trips).isEmpty()
+    }
+
+    @Test
+    @Transactional
+    fun `findLastTwoYearsTripNumbers Should return the last trips`() {
+        // Given
+        val rawMessages = listOf(
+            LogbookRawMessage("FPXE1546546114565"),
+            LogbookRawMessage("FPXE1546545654481"),
+        )
+        jpaLogbookRawMessageRepository.save(rawMessages.first())
+        jpaLogbookRawMessageRepository.save(rawMessages.last())
+
+        val messages = TestUtils.getDummyLogbookMessages()
+        jpaLogbookReportRepository.save(
+            messages.first()
+                .copy(
+                    internalReferenceNumber = "FAK000999999",
+                    operationNumber = "FPXE1546546114565",
+                    reportDateTime = ZonedDateTime.now(),
+                    operationDateTime = ZonedDateTime.now(),
+                    tripNumber = "123",
+                ),
+        )
+        jpaLogbookReportRepository.save(
+            messages.last()
+                .copy(
+                    internalReferenceNumber = "FAK000999999",
+                    operationNumber = "FPXE1546545654481",
+                    reportDateTime = ZonedDateTime.now().plusMinutes(3),
+                    operationDateTime = ZonedDateTime.now().plusMinutes(3),
+                    tripNumber = "456",
+                ),
+        )
+
+        // When
+        val trips = jpaLogbookReportRepository.findLastTwoYearsTripNumbers(
+            "FAK000999999",
+        )
+
+        // Then
+        assertThat(trips).isEqualTo(listOf("456", "123"))
     }
 }

@@ -128,4 +128,27 @@ class GetVesselVoyageUTests {
         assertThat(voyage.endDate).isEqualTo(expectedEndDate)
         assertThat(alerts).hasSize(0)
     }
+
+    @Test
+    fun `execute Should return a voyage When a specific trip is requested`() {
+        // Given
+        val expectedEndDate = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00")
+        val expectedStartDate = ZonedDateTime.parse("2021-05-21T10:24:46.021615+02:00")
+        given(logbookReportRepository.findFirstAndLastOperationsDatesOfTrip("FR224226850", "123456788")).willReturn(
+            VoyageDatesAndTripNumber("123456788", expectedStartDate, expectedEndDate),
+        )
+
+        // When
+        val voyage = GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
+            .execute("FR224226850", VoyageRequest.EQUALS, "123456788")
+
+        val (_, alerts) = voyage.logbookMessagesAndAlerts
+
+        // Then
+        assertThat(voyage.isLastVoyage).isFalse
+        assertThat(voyage.isFirstVoyage).isFalse
+        assertThat(voyage.startDate).isEqualTo(expectedStartDate)
+        assertThat(voyage.endDate).isEqualTo(expectedEndDate)
+        assertThat(alerts).hasSize(0)
+    }
 }

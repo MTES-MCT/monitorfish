@@ -90,7 +90,7 @@ context('Sidebars > Regulatory Layers', () => {
 
     // Add the layer to My Zones
     cy.get('*[data-cy="regulatory-search-input"]').type('Cotentin biva')
-    cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 1 + 1)
+    cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 1)
 
     // Then go to "My Zones"
     cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
@@ -98,7 +98,7 @@ context('Sidebars > Regulatory Layers', () => {
 
     // Back to the search result
     cy.get('*[data-cy="regulatory-search-show-results"]').click()
-    cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 1 + 1)
+    cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 1)
 
     // Back to My Zones
     cy.get('*[data-cy="regulatory-layers-my-zones"]').click()

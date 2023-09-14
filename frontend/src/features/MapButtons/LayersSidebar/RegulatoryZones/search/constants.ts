@@ -2,9 +2,8 @@ import type { RegulatoryZone } from '../../../../../domain/types/regulation'
 import type Fuse from 'fuse.js'
 
 export const REGULATION_SEARCH_OPTIONS: Fuse.IFuseOptions<RegulatoryZone[]> = {
-  distance: 50,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  includeScore: true,
+  ignoreLocation: true,
+  includeScore: false,
   keys: [
     ['topic'],
     ['zone'],
@@ -14,5 +13,6 @@ export const REGULATION_SEARCH_OPTIONS: Fuse.IFuseOptions<RegulatoryZone[]> = {
     ['gearRegulation', 'unauthorized', 'selectedCategoriesAndGears'],
     ['region']
   ],
-  threshold: 0.7
+  minMatchCharLength: 2,
+  threshold: 0.2
 }

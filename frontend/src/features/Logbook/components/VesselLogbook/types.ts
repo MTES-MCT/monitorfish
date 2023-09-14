@@ -1,4 +1,4 @@
-import { LogbookMessage, SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from '../../types'
+import type { LogbookMessage, SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from '../../types'
 
 export type LogbookTripSummary = {
   dep: {

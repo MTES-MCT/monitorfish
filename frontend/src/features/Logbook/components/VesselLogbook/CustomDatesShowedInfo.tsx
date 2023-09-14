@@ -9,7 +9,7 @@ import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { getDate } from '../../../../utils'
 
 type CustomDatesShowedInfoProps = {
-  width?: number
+  width?: number | undefined
 }
 export function CustomDatesShowedInfo({ width }: CustomDatesShowedInfoProps) {
   const dispatch = useMainAppDispatch()
@@ -59,7 +59,7 @@ const TrackDepthInfo = styled.span`
 `
 
 const Wrapper = styled.div<{
-  width?: number
+  width?: number | undefined
 }>`
   width: ${p => (p.width ? p.width : 480)}px;
   margin: 0;

@@ -22,10 +22,10 @@ import { ReactComponent as XMLSVG } from '../../../../icons/Picto_XML.svg'
 import { ReactComponent as ShowActivitySVG } from '../../../../icons/Position_message_JPE_Pin_gris_clair.svg'
 import { ReactComponent as HideActivitySVG } from '../../../../icons/Position_message_JPE_Pin_masquer.svg'
 import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../constants'
-import { removeFishingActivityFromMap, showFishingActivityOnMap } from '../../../slice'
+import { LogbookMessage as LogbookMessageType } from '../../../logbook.types'
+import { logbookActions } from '../../../slice'
 import { getLogbookMessageType } from '../../../utils'
 
-import type { LogbookMessage as LogbookMessageType } from '../../../types'
 import type { HTMLProps } from 'react'
 
 type LogbookMessageComponentType = {
@@ -149,13 +149,13 @@ export function LogbookMessage({ isFirst, message }: LogbookMessageComponentType
           (fishingActivitiesShowedOnMap.find(showed => showed.id === message.operationNumber) ? (
             <HideActivity
               data-cy="hide-fishing-activity"
-              onClick={() => dispatch(removeFishingActivityFromMap(message.operationNumber))}
+              onClick={() => dispatch(logbookActions.removeFromMap(message.operationNumber))}
               title="Cacher le message sur la piste"
             />
           ) : (
             <ShowActivity
               data-cy="show-fishing-activity"
-              onClick={() => dispatch(showFishingActivityOnMap(message.operationNumber))}
+              onClick={() => dispatch(logbookActions.showOnMap(message.operationNumber))}
               title="Afficher le message sur la piste"
             />
           ))}

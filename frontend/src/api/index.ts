@@ -61,7 +61,8 @@ export const monitorfishApi = createApi({
     'Ports',
     'Species',
     'RiskFactor',
-    'ForeignFmcs'
+    'ForeignFmcs',
+    'TripNumbers'
   ]
 })
 

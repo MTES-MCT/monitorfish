@@ -9,17 +9,7 @@ import { updateSelectedVesselTrackRequest } from '../../../domain/use_cases/vess
 import NoLogbookMessagesFoundError from '../../../errors/NoLogbookMessagesFoundError'
 import { getVesselLogbookFromAPI } from '../api'
 import { NavigateTo } from '../constants'
-import {
-  hideFishingActivitiesOnMap,
-  loadFishingActivities,
-  removeFishingActivitiesFromMap,
-  resetFishingActivities,
-  resetLoadFishingActivities,
-  setLastVoyage,
-  setNextFishingActivities,
-  setVoyage,
-  showFishingActivitiesOnMap
-} from '../slice'
+import { logbookActions } from '../slice'
 
 import type { VesselIdentity } from '../../../domain/entities/vessel/types'
 
@@ -27,7 +17,12 @@ import type { VesselIdentity } from '../../../domain/entities/vessel/types'
  * Get the vessel fishing voyage and update the vessel positions track when navigating in the trips
  */
 export const getVesselLogbook =
-  (vesselIdentity: VesselIdentity | null, navigateTo: NavigateTo | undefined, isFromUserAction: boolean) =>
+  (
+    vesselIdentity: VesselIdentity | null,
+    navigateTo: NavigateTo | undefined,
+    isFromUserAction: boolean,
+    nextTripNumber?: string
+  ) =>
   async (dispatch, getState) => {
     if (!vesselIdentity) {
       return
@@ -47,13 +42,13 @@ export const getVesselLogbook =
 
     if (isFromUserAction) {
       dispatch(setDisplayedErrors({ vesselSidebarError: null }))
-      dispatch(loadFishingActivities())
+      dispatch(logbookActions.setIsLoading())
     }
 
     try {
-      const voyage = await getVesselLogbookFromAPI(vesselIdentity, nextNavigateTo, tripNumber)
+      const voyage = await getVesselLogbookFromAPI(vesselIdentity, nextNavigateTo, nextTripNumber || tripNumber)
       if (!voyage) {
-        dispatch(resetFishingActivities(vesselIdentity))
+        dispatch(logbookActions.init(vesselIdentity))
         dispatch(setError(new NoLogbookMessagesFoundError("Ce navire n'a pas envoyé de message JPE.")))
 
         return
@@ -61,7 +56,7 @@ export const getVesselLogbook =
 
       if (isSameVesselAsCurrentlyShowed && !isFromUserAction) {
         if (gotNewFishingActivitiesWithMoreMessagesOrAlerts(lastFishingActivities, voyage)) {
-          dispatch(setNextFishingActivities(voyage.logbookMessagesAndAlerts))
+          dispatch(logbookActions.setNextUpdate(voyage.logbookMessagesAndAlerts))
           dispatch(removeError())
         }
 
@@ -78,12 +73,12 @@ export const getVesselLogbook =
         return
       }
 
-      dispatch(setLastVoyage(voyageWithVesselIdentity))
-      dispatch(setVoyage(voyageWithVesselIdentity))
+      dispatch(logbookActions.setLastVoyage(voyageWithVesselIdentity))
+      dispatch(logbookActions.setVoyage(voyageWithVesselIdentity))
       if (areFishingActivitiesShowedOnMap) {
-        dispatch(showFishingActivitiesOnMap())
+        dispatch(logbookActions.showAllOnMap())
       } else {
-        dispatch(hideFishingActivitiesOnMap())
+        dispatch(logbookActions.showAllOnMap())
       }
 
       dispatch(removeError())
@@ -99,7 +94,7 @@ export const getVesselLogbook =
           'vesselSidebarError'
         )
       )
-      dispatch(resetLoadFishingActivities())
+      dispatch(logbookActions.resetIsLoading())
     }
   }
 
@@ -112,11 +107,11 @@ function modifyVesselTrackAndVoyage(voyage, dispatch, vesselIdentity, areFishing
 
   const trackRequest = getTrackRequestFromDates(afterDateTime, beforeDateTime)
   dispatch(updateSelectedVesselTrackRequest(vesselIdentity, trackRequest, true)).then(() => {
-    dispatch(setVoyage(voyage))
+    dispatch(logbookActions.setVoyage(voyage))
     if (areFishingActivitiesShowedOnMap) {
-      dispatch(showFishingActivitiesOnMap())
+      dispatch(logbookActions.showAllOnMap())
     } else {
-      dispatch(removeFishingActivitiesFromMap())
+      dispatch(logbookActions.removeAllFromMap())
     }
   })
 }

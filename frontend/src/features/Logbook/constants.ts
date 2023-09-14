@@ -206,6 +206,7 @@ export const LogbookSpeciesPresentation = {
 }
 
 export enum NavigateTo {
+  EQUALS = 'EQUALS',
   LAST = 'LAST',
   NEXT = 'NEXT',
   PREVIOUS = 'PREVIOUS'

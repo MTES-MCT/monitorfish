@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+import { FishingActivities, VesselVoyage } from './logbook.types'
 import { getEffectiveDateTimeFromMessage, getLogbookMessageType } from './utils'
 import { FishingActivitiesTab } from '../../domain/entities/vessel/vessel'
 
-import type { FishingActivities, VesselVoyage } from './types'
 import type { FishingActivityShowedOnMap, VesselIdentity } from '../../domain/entities/vessel/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
@@ -19,7 +19,7 @@ export type LogbookState = {
   loadingFishingActivities: boolean
   nextFishingActivities: FishingActivities | null
   redrawFishingActivitiesOnMap: boolean
-  tripNumber: number | null
+  tripNumber: string | null
   vesselIdentity: VesselIdentity | undefined
 }
 const INITIAL_STATE: LogbookState = {
@@ -45,21 +45,10 @@ const logbookSlice = createSlice({
   name: 'fishingActivities',
   reducers: {
     /**
-     * Close vessel fishing activities
-     */
-    closeFishingActivities(state) {
-      state.areFishingActivitiesShowedOnMap = false
-      state.fishingActivitiesShowedOnMap = []
-      state.fishingActivities = undefined
-      state.loadingFishingActivities = false
-      state.vesselIdentity = undefined
-    },
-
-    /**
      * End redraw fishing activities on map
      * @param {Object=} state
      */
-    endRedrawFishingActivitiesOnMap(state) {
+    endRedrawOnMap(state) {
       state.redrawFishingActivitiesOnMap = false
     },
 
@@ -67,42 +56,15 @@ const logbookSlice = createSlice({
      * Hide fishing activities of the vessel track
      * @param {Object=} state
      */
-    hideFishingActivitiesOnMap(state) {
+    hideAllOnMap(state) {
       state.areFishingActivitiesShowedOnMap = false
       state.fishingActivitiesShowedOnMap = []
     },
 
     /**
-     * Set the loading of fishing activities to true, and shows a loader in the fishing activities tab
-     * @param {Object=} state
+     * Init vessel fishing activities
      */
-    loadFishingActivities(state) {
-      state.loadingFishingActivities = true
-    },
-
-    /**
-     * Remove fishing activities from the map
-     * @param {Object=} state
-     */
-    removeFishingActivitiesFromMap(state) {
-      state.fishingActivitiesShowedOnMap = []
-    },
-
-    /**
-     * Hide a single fishing activity showed on the vessel track
-     * @param {Object=} state
-     * @param {{payload: string}} action - The fishing activity id to hide
-     */
-    removeFishingActivityFromMap(state, action) {
-      state.fishingActivitiesShowedOnMap = state.fishingActivitiesShowedOnMap.filter(
-        showed => showed.id !== action.payload
-      )
-    },
-
-    /**
-     * Reset vessel fishing activities
-     */
-    resetFishingActivities(state, action: PayloadAction<VesselIdentity>) {
+    init(state, action: PayloadAction<VesselIdentity>) {
       state.areFishingActivitiesShowedOnMap = false
       state.fishingActivitiesShowedOnMap = []
       state.fishingActivities = undefined
@@ -112,24 +74,53 @@ const logbookSlice = createSlice({
     },
 
     /**
+     * Remove fishing activities from the map
+     * @param {Object=} state
+     */
+    removeAllFromMap(state) {
+      state.fishingActivitiesShowedOnMap = []
+    },
+
+    /**
+     * Hide a single fishing activity showed on the vessel track
+     * @param {Object=} state
+     * @param {{payload: string}} action - The fishing activity id to hide
+     */
+    removeFromMap(state, action) {
+      state.fishingActivitiesShowedOnMap = state.fishingActivitiesShowedOnMap.filter(
+        showed => showed.id !== action.payload
+      )
+    },
+
+    /**
+     * Reset vessel fishing activities
+     */
+    reset(state) {
+      state.areFishingActivitiesShowedOnMap = false
+      state.fishingActivitiesShowedOnMap = []
+      state.fishingActivities = undefined
+      state.loadingFishingActivities = false
+      state.vesselIdentity = undefined
+    },
+
+    /**
      * Reset the loading of fishing activities
      * @param {Object=} state
      */
-    resetLoadFishingActivities(state) {
+    resetIsLoading(state) {
       state.loadingFishingActivities = false
     },
 
-    resetNextFishingActivities(state) {
+    resetNextUpdate(state) {
       state.nextFishingActivities = null
     },
 
     /**
-     * Show the specified fishing activities tab (Resume or All messages)
+     * Set the loading of fishing activities to true, and shows a loader in the fishing activities tab
      * @param {Object=} state
-     * @param {{payload: number}} action - The tab
      */
-    setFishingActivitiesTab(state, action) {
-      state.fishingActivitiesTab = action.payload
+    setIsLoading(state) {
+      state.loadingFishingActivities = true
     },
 
     /**
@@ -150,8 +141,17 @@ const logbookSlice = createSlice({
      * @param {Object=} state
      * @param {{payload: FishingActivities}} action - the fishing activities with new messages
      */
-    setNextFishingActivities(state, action) {
+    setNextUpdate(state, action) {
       state.nextFishingActivities = action.payload
+    },
+
+    /**
+     * Show the specified fishing activities tab (Resume or All messages)
+     * @param {Object=} state
+     * @param {{payload: number}} action - The tab
+     */
+    setTab(state, action) {
+      state.fishingActivitiesTab = action.payload
     },
 
     /**
@@ -172,7 +172,7 @@ const logbookSlice = createSlice({
      * Show fishing activities on the vessel track, on the map
      * Without the corrected messages
      */
-    showFishingActivitiesOnMap(state) {
+    showAllOnMap(state) {
       state.areFishingActivitiesShowedOnMap = true
       // TODO There is a typing issue that may reveal a code issue here.
 
@@ -196,7 +196,7 @@ const logbookSlice = createSlice({
     /**
      * Show a single fishing activity on the vessel track, on the map
      */
-    showFishingActivityOnMap(state, action) {
+    showOnMap(state, action) {
       if (!state.fishingActivities) {
         return
       }
@@ -226,7 +226,7 @@ const logbookSlice = createSlice({
      *   coordinates: string[]
      * }[]}} action - The fishing activities to update
      */
-    updateFishingActivitiesOnMapCoordinates(state, action) {
+    updateShowedOnMapCoordinates(state, action) {
       state.fishingActivitiesShowedOnMap = state.fishingActivitiesShowedOnMap.map(fishingActivity => {
         const fishingActivityWithCoordinates = action.payload.find(
           fishingActivityToUpdate => fishingActivityToUpdate.id === fishingActivity.id
@@ -243,22 +243,24 @@ const logbookSlice = createSlice({
 })
 
 export const {
-  closeFishingActivities,
-  endRedrawFishingActivitiesOnMap,
-  hideFishingActivitiesOnMap,
-  loadFishingActivities,
-  removeFishingActivitiesFromMap,
-  removeFishingActivityFromMap,
-  resetFishingActivities,
-  resetLoadFishingActivities,
-  resetNextFishingActivities,
-  setFishingActivitiesTab,
+  endRedrawOnMap,
+  hideAllOnMap,
+  init,
+  removeAllFromMap,
+  removeFromMap,
+  reset,
+  resetIsLoading,
+  resetNextUpdate,
+  setIsLoading,
   setLastVoyage,
-  setNextFishingActivities,
+  setNextUpdate,
+  setTab,
   setVoyage,
-  showFishingActivitiesOnMap,
-  showFishingActivityOnMap,
-  updateFishingActivitiesOnMapCoordinates
+  showAllOnMap,
+  showOnMap,
+  updateShowedOnMapCoordinates
 } = logbookSlice.actions
 
 export const logbookReducer = logbookSlice.reducer
+
+export const logbookActions = logbookSlice.actions

@@ -1,5 +1,5 @@
 import { getVesselFromAPI } from '../../../api/vessel'
-import { removeFishingActivitiesFromMap } from '../../../features/Logbook/slice'
+import { logbookActions } from '../../../features/Logbook/slice'
 import { addVesselIdentifierToVesselIdentity } from '../../../features/VesselSearch/utils'
 import { Vessel } from '../../entities/vessel/vessel'
 import { getCustomOrDefaultTrackRequest, throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
@@ -33,7 +33,7 @@ export const showVessel =
         false
       )
       if (areFishingActivitiesShowedOnMap && isFromUserAction) {
-        dispatch(removeFishingActivitiesFromMap())
+        dispatch(logbookActions.removeAllFromMap())
       }
 
       if (isFromSearch) {

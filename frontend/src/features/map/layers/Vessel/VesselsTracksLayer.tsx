@@ -22,7 +22,7 @@ import {
 } from '../../../../domain/shared_slices/Vessel'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { endRedrawFishingActivitiesOnMap, updateFishingActivitiesOnMapCoordinates } from '../../../Logbook/slice'
+import { logbookActions } from '../../../Logbook/slice'
 import { getFishingActivityFeatureOnTrackLine } from '../../../Logbook/utils'
 import CloseVesselTrackOverlay from '../../overlays/CloseVesselTrackOverlay'
 import FishingActivityOverlay from '../../overlays/FishingActivityOverlay'
@@ -219,7 +219,7 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
       if (noAddedOrRemovedFishingActivities && !redrawFishingActivitiesOnMap) {
         return
       }
-      dispatch(endRedrawFishingActivitiesOnMap())
+      dispatch(logbookActions.endRedrawOnMap())
 
       if (!selectedVesselPositions?.length) {
         return
@@ -254,7 +254,7 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
         coordinatesFeaturesAndIds.map(coordinatesFeatureAndId => coordinatesFeatureAndId.feature)
       )
       getVectorSource().changed()
-      dispatch(updateFishingActivitiesOnMapCoordinates(coordinatesFeaturesAndIds))
+      dispatch(logbookActions.updateShowedOnMapCoordinates(coordinatesFeaturesAndIds))
     }
 
     showFishingActivities()

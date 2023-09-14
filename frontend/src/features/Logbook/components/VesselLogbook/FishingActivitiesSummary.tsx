@@ -1,4 +1,6 @@
-import { useMemo } from 'react'
+import { Select } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
+import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { CustomDatesShowedInfo } from './CustomDatesShowedInfo'
@@ -11,12 +13,15 @@ import PNOMessageResume from './PNOMessageResume'
 import { getLogbookTripSummary, getUniqueGears } from './utils'
 import { COLORS } from '../../../../constants/constants'
 import { COMMON_ALERT_TYPE_OPTION } from '../../../../domain/entities/alerts/constants'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import FleetSegments from '../../../fleet_segments/FleetSegments'
 import { ReactComponent as ArrowLastTripSVG } from '../../../icons/Double_fleche_navigation_marees.svg'
 import { ReactComponent as ArrowTripSVG } from '../../../icons/Fleche_navigation_marees.svg'
 import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
-import { LogbookMessageType as LogbookMessageTypeEnum, LogbookOperationType } from '../../constants'
+import { useGetLastLogbookTripsQuery } from '../../api'
+import { LogbookMessageType as LogbookMessageTypeEnum, LogbookOperationType, NavigateTo } from '../../constants'
+import { getVesselLogbook } from '../../useCases/getVesselLogbook'
 import { getFAOZonesFromFARMessages } from '../../utils'
 
 import type { LogbookTripSummary } from './types'
@@ -31,13 +36,30 @@ type FishingActivitiesSummaryProps = {
   showLogbookMessages: (messageType?: string) => Promisable<void>
 }
 export function FishingActivitiesSummary({ navigation, showLogbookMessages }: FishingActivitiesSummaryProps) {
+  const dispatch = useMainAppDispatch()
   const { selectedVessel } = useMainAppSelector(state => state.vessel)
-
   const { fishingActivities, isFirstVoyage, isLastVoyage, tripNumber } = useMainAppSelector(
     state => state.fishingActivities
   )
-
   const fleetSegments = useMainAppSelector(state => state.fleetSegment.fleetSegments)
+
+  const { data: lastLogbookTrips } = useGetLastLogbookTripsQuery(selectedVessel?.internalReferenceNumber || skipToken)
+
+  const getLogbookTrip = useCallback(
+    (nextTripNumber: string | undefined) => {
+      dispatch(getVesselLogbook(selectedVessel, NavigateTo.EQUALS, true, nextTripNumber))
+    },
+    [dispatch, selectedVessel]
+  )
+
+  const lastLogbookTripsOptions = useMemo(
+    () =>
+      lastLogbookTrips?.map(trip => ({
+        label: `Marée n°${trip}`,
+        value: trip
+      })) || [],
+    [lastLogbookTrips]
+  )
 
   const logbookTrip: LogbookTripSummary = useMemo(() => getLogbookTripSummary(fishingActivities), [fishingActivities])
 
@@ -60,18 +82,22 @@ export function FishingActivitiesSummary({ navigation, showLogbookMessages }: Fi
 
     const uniqueGears = getUniqueGears(logbookTrip.dep.log.message.gearOnboard)
 
-    return uniqueGears.map(gear =>
-      gear.gearName ? (
+    return uniqueGears.map(gear => {
+      if (!gear.gearName) {
+        return (
+          <span key={gear.gear}>
+            {gear.gear}
+            <br />
+          </span>
+        )
+      }
+
+      return (
         <span key={gear.gear}>
           {gear.gearName} ({gear.gear})<br />
         </span>
-      ) : (
-        <span key={gear.gear}>
-          {gear.gear}
-          <br />
-        </span>
       )
-    )
+    })
   }, [logbookTrip.dep?.log])
 
   return (
@@ -112,7 +138,7 @@ export function FishingActivitiesSummary({ navigation, showLogbookMessages }: Fi
           </Zone>
           <Zone>
             <Title hasTwoLines={false}>
-              <Text hasTwoLines={false}>Résumé de la marée</Text>
+              <Text hasTwoLines>Résumé du JPE</Text>
               <TextValue data-cy="vessel-fishing-trip-number" hasTwoLines={false}>
                 <PreviousTrip
                   data-cy="vessel-fishing-previous-trip"
@@ -120,7 +146,16 @@ export function FishingActivitiesSummary({ navigation, showLogbookMessages }: Fi
                   onClick={!isFirstVoyage ? navigation.goToPreviousTrip : undefined}
                   title="Marée précédente"
                 />
-                {tripNumber ? `Marée n°${tripNumber}` : <NoValue>-</NoValue>}
+                <Select
+                  isCleanable={false}
+                  isLabelHidden
+                  label="Numéro de marée"
+                  name="tripNumber"
+                  onChange={getLogbookTrip}
+                  options={lastLogbookTripsOptions}
+                  searchable
+                  value={tripNumber || undefined}
+                />
                 <NextTrip
                   disabled={isLastVoyage}
                   onClick={!isLastVoyage ? navigation.goToNextTrip : undefined}
@@ -235,7 +270,7 @@ const PreviousTrip = styled(ArrowTripSVG)<{
   disabled: boolean
 }>`
   cursor: ${p => (p.disabled ? 'not-allowed' : 'pointer')};
-  vertical-align: sub;
+  vertical-align: middle;
   width: 14px;
   margin-right: 10px;
   transform: rotate(180deg);
@@ -245,7 +280,7 @@ const NextTrip = styled(ArrowTripSVG)<{
   disabled: boolean
 }>`
   cursor: ${p => (p.disabled ? 'not-allowed' : 'pointer')};
-  vertical-align: sub;
+  vertical-align: middle;
   width: 14px;
   margin-left: 10px;
 `
@@ -254,7 +289,7 @@ const LastTrip = styled(ArrowLastTripSVG)<{
   disabled: boolean
 }>`
   cursor: ${p => (p.disabled ? 'not-allowed' : 'pointer')};
-  vertical-align: sub;
+  vertical-align: middle;
   width: 14px;
   margin-left: 5px;
 `
@@ -273,6 +308,7 @@ const Arrow = styled(ArrowSVG)`
   order: 4;
   margin-top: 4px;
   cursor: pointer;
+  padding-top: 4px;
 `
 
 const SeeAll = styled.a`
@@ -285,6 +321,7 @@ const SeeAll = styled.a`
   order: 3;
   cursor: pointer;
   width: 70px;
+  padding-top: 4px;
 `
 
 const LogbookMessages = styled.ul`
@@ -300,7 +337,7 @@ const Text = styled.div<{
   color: ${COLORS.slateGray};
   font-size: 13px;
   font-weight: 500;
-  padding-top: ${p => (p.hasTwoLines ? '6px' : '0')};
+  padding-top: ${p => (p.hasTwoLines ? '5px' : '0')};
 `
 
 const TextValue = styled.div<{
@@ -310,8 +347,26 @@ const TextValue = styled.div<{
   color: ${COLORS.gunMetal};
   font-weight: 500;
   margin: 0;
-  padding-left: 10px;
+  padding-left: 20px;
   padding-top: ${p => (p.hasTwoLines ? '6px' : '0')};
+
+  .Field-Select {
+    display: inline-block;
+    margin-right: 35px;
+    width: 125px;
+  }
+
+  .rs-picker-select > .rs-picker-toggle {
+    padding: 4px 25px 6px 8px;
+  }
+
+  .rs-picker-select-menu {
+    min-width: 160px !important;
+  }
+
+  .rs-picker-search-bar-input {
+    min-width: 135px !important;
+  }
 `
 
 const Body = styled.div`

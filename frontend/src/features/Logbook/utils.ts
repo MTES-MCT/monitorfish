@@ -2,12 +2,11 @@ import { Feature } from 'ol'
 import Point from 'ol/geom/Point'
 
 import { LogbookMessageType, LogbookOperationType } from './constants'
-import { LogbookCatch } from './types'
 import { LayerProperties } from '../../domain/entities/layers/constants'
-import { DeclaredLogbookSpecies } from '../../domain/entities/vessel/types'
 import { getFishingActivityCircleStyle } from '../map/layers/styles/vesselTrack.style'
 
 import type {
+  LogbookCatch,
   CatchProperty,
   CatchWithProperties,
   LogbookMessage,
@@ -15,7 +14,7 @@ import type {
   SpeciesToSpeciesInsight,
   SpeciesToSpeciesInsightList
 } from './types'
-import type { FishingActivityShowedOnMap } from '../../domain/entities/vessel/types'
+import type { DeclaredLogbookSpecies, FishingActivityShowedOnMap } from '../../domain/entities/vessel/types'
 
 function getPropertiesObject(logbookCatch): CatchProperty {
   return {

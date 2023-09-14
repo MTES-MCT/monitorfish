@@ -8,7 +8,6 @@ import { EmptyResume } from './EmptyResume'
 import { FARMessageResume } from './FARMessageResume'
 import LANMessageResume from './LANMessageResume'
 import PNOMessageResume from './PNOMessageResume'
-import { LogbookTripSummary } from './types'
 import { getLogbookTripSummary, getUniqueGears } from './utils'
 import { COLORS } from '../../../../constants/constants'
 import { COMMON_ALERT_TYPE_OPTION } from '../../../../domain/entities/alerts/constants'
@@ -20,6 +19,7 @@ import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-d
 import { LogbookMessageType as LogbookMessageTypeEnum, LogbookOperationType } from '../../constants'
 import { getFAOZonesFromFARMessages } from '../../utils'
 
+import type { LogbookTripSummary } from './types'
 import type { Promisable } from 'type-fest'
 
 type FishingActivitiesSummaryProps = {

@@ -1,5 +1,3 @@
-import { LogbookTripSummary } from './types'
-import { FishingActivities, Gear } from '../../types'
 import {
   areAllMessagesNotAcknowledged,
   getDEPMessage,
@@ -18,6 +16,9 @@ import {
   getTotalLANWeight,
   getTotalPNOWeight
 } from '../../utils'
+
+import type { LogbookTripSummary } from './types'
+import type { FishingActivities, Gear } from '../../types'
 
 export const emptyLogbookTripSummary = {
   dep: {

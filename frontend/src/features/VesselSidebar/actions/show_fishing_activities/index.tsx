@@ -2,14 +2,11 @@ import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
-import {
-  hideFishingActivitiesOnMap,
-  showFishingActivitiesOnMap
-} from '../../../../domain/shared_slices/FishingActivities'
-import { getVesselLogbook } from '../../../../domain/use_cases/vessel/getVesselLogbook'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ReactComponent as ShowFishingActivitiesSVG } from '../../../icons/Bouton_afficher_messages_JPE_sur_piste.svg'
+import { hideFishingActivitiesOnMap, showFishingActivitiesOnMap } from '../../../Logbook/slice'
+import { getVesselLogbook } from '../../../Logbook/use_cases/getVesselLogbook'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {

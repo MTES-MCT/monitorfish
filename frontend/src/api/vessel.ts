@@ -2,6 +2,7 @@ import { HTTPError } from 'ky'
 
 import { HttpStatusCode } from './constants'
 import { monitorfishApi, monitorfishApiKy } from './index'
+import { NavigateTo } from '../features/Logbook/constants'
 import { ApiError } from '../libs/ApiError'
 
 import type { RiskFactor } from '../domain/entities/vessel/riskFactor/types'
@@ -12,9 +13,8 @@ import type {
   VesselLastPosition,
   VesselPosition
 } from '../domain/entities/vessel/types'
-import type { VesselVoyage } from '../domain/types/fishingActivities'
 import type { CurrentAndArchivedReportingsOfSelectedVessel } from '../domain/types/reporting'
-import type { NavigateTo } from '../domain/use_cases/vessel/getVesselLogbook'
+import type { VesselVoyage } from '../features/Logbook/types'
 
 const LAST_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les dernières positions"
 const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"

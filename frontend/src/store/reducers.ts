@@ -10,7 +10,6 @@ import { displayedErrorReducer } from '../domain/shared_slices/DisplayedError'
 import { drawReducer } from '../domain/shared_slices/Draw'
 import { favoriteVesselReducer } from '../domain/shared_slices/FavoriteVessel'
 import { filterReducer } from '../domain/shared_slices/Filter'
-import { fishingActivitiesReducer } from '../domain/shared_slices/FishingActivities'
 import { fleetSegmentReducer } from '../domain/shared_slices/FleetSegment'
 import { gearReducer } from '../domain/shared_slices/Gear'
 import { globalSliceReducer } from '../domain/shared_slices/Global'
@@ -26,6 +25,7 @@ import { sideWindowReducer } from '../domain/shared_slices/SideWindow'
 import { speciesReducer } from '../domain/shared_slices/Species'
 import { vesselSliceReducer } from '../domain/shared_slices/Vessel'
 import { regulationReducer } from '../features/Backoffice/slice'
+import { logbookReducer } from '../features/Logbook/slice'
 import { regulatoryLayerSearchReducer } from '../features/MapButtons/LayersSidebar/RegulatoryZones/search/slice'
 import { alertReducer } from '../features/SideWindow/Alert/slice'
 import { vesselListReducer } from '../features/VesselList/slice'
@@ -66,7 +66,7 @@ export const mainReducer = {
   draw: drawReducer,
   favoriteVessel: favoriteVesselReducer,
   filter: filterReducer,
-  fishingActivities: fishingActivitiesReducer,
+  fishingActivities: logbookReducer,
   fleetSegment: fleetSegmentReducer,
   infraction: infractionReducer,
   interestPoint: interestPointReducer,

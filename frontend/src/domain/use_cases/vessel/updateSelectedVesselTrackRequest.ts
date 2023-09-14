@@ -1,6 +1,6 @@
 import { getVesselPositionsFromAPI } from '../../../api/vessel'
+import { showFishingActivitiesOnMap } from '../../../features/Logbook/slice'
 import { throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
-import { showFishingActivitiesOnMap } from '../../shared_slices/FishingActivities'
 import { removeError, setError } from '../../shared_slices/Global'
 import { animateToExtent, doNotAnimate } from '../../shared_slices/Map'
 import {

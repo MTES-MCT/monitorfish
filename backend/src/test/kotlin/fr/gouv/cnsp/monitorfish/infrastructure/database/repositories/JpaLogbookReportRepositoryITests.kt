@@ -462,7 +462,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val dateTime = jpaLogbookReportRepository.findLastMessageDate()
 
         // Then
-        assertThat(dateTime).isEqualTo(ZonedDateTime.parse("2021-01-31T12:29:02Z"))
+        // Because `CURRENT_DATE - INTERVAL '2 days'` is used in the test data
+        assertThat(dateTime).isAfter(ZonedDateTime.now().minusDays(3))
     }
 
     @Test

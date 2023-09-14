@@ -216,4 +216,24 @@ context('Vessel sidebar fishing tab', () => {
     cy.get('*[data-cy^="hide-fishing-activity"]').eq(0).click({ timeout: 10000 })
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
   })
+
+  it('Fishing trips Should be selected from the trips list', () => {
+    // Given
+    cy.get('*[data-cy^="vessel-search-input"]').click()
+    cy.get('*[data-cy^="vessel-search-input"]').type('FR263454484')
+    cy.wait(50)
+    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
+    cy.wait(200)
+    cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
+    cy.get('*[data-cy^="vessel-menu-fishing"]').click()
+    cy.get('*[data-cy^="vessel-fishing"]').should('be.visible')
+    cy.get('#tripNumber').next().contains('Marée n°SRC-TRP-TTT20200506194051795')
+
+    // When
+    cy.fill('Numéro de marée', 'Marée n°20230087')
+
+    // Then
+    cy.get('#tripNumber').next().contains('Marée n°20230087')
+    cy.get('*[data-cy^="vessel-fishing-see-all"]').click()
+  })
 })

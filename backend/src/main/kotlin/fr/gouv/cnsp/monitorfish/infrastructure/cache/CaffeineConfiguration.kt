@@ -30,6 +30,7 @@ class CaffeineConfiguration {
     val nextLogbook = "next_logbook"
     val previousLogbook = "previous_logbook"
     val logbookRawMessage = "logbook_raw_message"
+    val firstAndLastTripDates = "first_and_last_trip_dates"
     val vesselTrack = "vessel_track"
     val vesselsPositions = "vessels_positions"
     val vesselsAllPositions = "vessels_all_position"
@@ -54,6 +55,7 @@ class CaffeineConfiguration {
         val logbookCache = buildMinutesCache(logbook, ticker, 10)
         val nextLogbookCache = buildMinutesCache(nextLogbook, ticker, 10)
         val previousLogbookCache = buildMinutesCache(previousLogbook, ticker, 10)
+        val firstAndLastTripDates = buildMinutesCache(firstAndLastTripDates, ticker, 10)
         val logbookRawMessageCache = buildMinutesCache(logbookRawMessage, ticker, oneWeek)
         val vesselCache = buildMinutesCache(vessels, ticker, 60)
 
@@ -134,6 +136,7 @@ class CaffeineConfiguration {
                 missionControlUnitsCache,
                 controlUnitsCache,
                 userAuthorizationCache,
+                firstAndLastTripDates
             ),
         )
 

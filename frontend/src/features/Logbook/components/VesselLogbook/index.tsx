@@ -9,8 +9,8 @@ import { FishingActivitiesTab, vesselsAreEquals } from '../../../../domain/entit
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { NavigateTo } from '../../constants'
-import { resetNextFishingActivities, setFishingActivitiesTab, setVoyage } from '../../slice'
-import { getVesselLogbook } from '../../use_cases/getVesselLogbook'
+import { logbookActions } from '../../slice'
+import { getVesselLogbook } from '../../useCases/getVesselLogbook'
 
 export function VesselLogbook() {
   const dispatch = useMainAppDispatch()
@@ -24,13 +24,13 @@ export function VesselLogbook() {
   const showMessages = useCallback(
     messageType => {
       setMessageTypeFilter(messageType)
-      dispatch(setFishingActivitiesTab(FishingActivitiesTab.MESSAGES))
+      dispatch(logbookActions.setTab(FishingActivitiesTab.MESSAGES))
     },
     [dispatch]
   )
 
   const showSummary = () => {
-    dispatch(setFishingActivitiesTab(FishingActivitiesTab.SUMMARY))
+    dispatch(logbookActions.setTab(FishingActivitiesTab.SUMMARY))
   }
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export function VesselLogbook() {
     }
 
     if (!fishingActivities && !vesselIdentity) {
-      dispatch(resetNextFishingActivities())
+      dispatch(logbookActions.resetNextUpdate())
       dispatch(getVesselLogbook(selectedVesselIdentity, undefined, true))
 
       return
@@ -63,8 +63,8 @@ export function VesselLogbook() {
         return
       }
 
-      dispatch(setVoyage(_nextFishingActivities))
-      dispatch(resetNextFishingActivities())
+      dispatch(logbookActions.setVoyage(_nextFishingActivities))
+      dispatch(logbookActions.resetNextUpdate())
     },
     [dispatch]
   )

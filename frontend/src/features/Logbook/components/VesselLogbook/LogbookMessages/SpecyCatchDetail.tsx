@@ -4,9 +4,9 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../../../constants/constants'
 import { LogbookSpeciesPresentation, LogbookSpeciesPreservationState } from '../../../constants'
+import { LogbookCatch } from '../../../logbook.types'
 
 import type { WeightType } from './LogbookMessageSpecy'
-import type { LogbookCatch } from '../../../types'
 import type { HTMLProps } from 'react'
 
 type SpecyCatchDetailType = {

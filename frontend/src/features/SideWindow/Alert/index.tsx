@@ -63,7 +63,7 @@ export function Alert({ baseRef }: AlertProps) {
       {isSeaFrontGroupMenu && (
         <AlertListAndReportingList
           baseRef={baseRef as MutableRefObject<HTMLDivElement>}
-          selectedSubMenu={isSeaFrontGroupMenu ? (subMenu as SeaFrontGroup) : SeaFrontGroup.MEMN}
+          selectedSeaFrontGroup={isSeaFrontGroupMenu ? (subMenu as SeaFrontGroup) : SeaFrontGroup.MEMN}
           selectedTab={selectedTab}
           setSelectedTab={setSelectedTab}
         />

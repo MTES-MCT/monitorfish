@@ -1,5 +1,5 @@
 import {
-  closestCenter,
+  pointerWithin,
   DndContext,
   DragOverlay,
   MouseSensor,
@@ -245,7 +245,7 @@ export function BeaconMalfunctionBoard() {
       </Header>
       <DndContext
         autoScroll
-        collisionDetection={closestCenter}
+        collisionDetection={pointerWithin}
         onDragEnd={onDragEnd}
         onDragStart={onDragStart}
         sensors={sensors}
@@ -387,7 +387,7 @@ const wrapperStyle: CSSProperties = {
   overflowX: 'scroll',
   overflowY: 'hidden',
   padding: '20px 0 0 10px',
-  width: 'calc(100vw - 110px)'
+  width: 'calc(100vw - 90px)'
 }
 
 const VesselStatusSelectWrapper = styled.div``

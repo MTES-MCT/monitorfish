@@ -1,9 +1,12 @@
 from datetime import datetime
+from typing import List
 
 import pandas as pd
 import prefect
+import requests
 from prefect import task
 
+from config import PENDING_ALERT_VALIDATION_ENDPOINT_TEMPLATE
 from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.processing import (
@@ -23,6 +26,31 @@ def extract_silenced_alerts() -> pd.DataFrame:
         db_name="monitorfish_remote",
         query_filepath="monitorfish/silenced_alerts.sql",
     )
+
+
+@task(checkpoint=False)
+def extract_pending_alerts_ids_of_config_name(alert_config_name: str) -> List[int]:
+    """
+    Return ids of pending alerts corresponding to `alert_config_name`
+    """
+    logger = prefect.context.get("logger")
+    pending_alerts = extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/pending_alerts_of_config_name.sql",
+        params={"alert_config_name": alert_config_name},
+    )
+    ids = pending_alerts.id.unique().tolist()
+    logger.info(f"Returning {len(ids)} pending alerts ids.")
+    return ids
+
+
+@task(checkpoint=False)
+def validate_pending_alert(id: int) -> pd.DataFrame:
+    logger = prefect.context.get("logger")
+    url = PENDING_ALERT_VALIDATION_ENDPOINT_TEMPLATE.format(pending_alert_id=id)
+    logger.info(f"Validating pending alert {id}.")
+    r = requests.put(url)
+    r.raise_for_status()
 
 
 @task(checkpoint=False)
@@ -105,7 +133,6 @@ def make_alerts(
             "latitude",
             "longitude",
             "type",
-            "facade",
             "value",
             "alert_config_name",
         ]
@@ -123,7 +150,6 @@ def filter_silenced_alerts(
       - internal_reference_number
       - external_reference_number
       - ircs
-      - facade
       - type
 
     In addition, the `alerts` DataFrame must have columns :
@@ -132,6 +158,7 @@ def filter_silenced_alerts(
       - vessel_name
       - vessel_identifier
       - flag_state
+      - facade
       - creation_date
       - latitude
       - longitude
@@ -146,7 +173,7 @@ def filter_silenced_alerts(
         pd.DataFrame: same as input with some rows removed.
     """
     vessel_id_cols = ["internal_reference_number", "external_reference_number", "ircs"]
-    alert_id_cols = ["facade", "type"]
+    alert_id_cols = ["type"]
 
     id_col_name = get_unused_col_name("id", alerts)
     alerts[id_col_name] = range(len(alerts))

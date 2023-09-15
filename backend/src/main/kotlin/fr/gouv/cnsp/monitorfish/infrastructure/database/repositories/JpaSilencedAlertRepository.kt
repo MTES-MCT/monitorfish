@@ -25,6 +25,14 @@ class JpaSilencedAlertRepository(
         ).toSilencedAlert(mapper)
     }
 
+    override fun save(
+        silencedAlert: SilencedAlert,
+    ): SilencedAlert {
+        return dbSilencedAlertRepository.save(
+            SilencedAlertEntity.fromSilencedAlert(mapper, silencedAlert),
+        ).toSilencedAlert(mapper)
+    }
+
     override fun findAllCurrentSilencedAlerts(): List<SilencedAlert> {
         val now = ZonedDateTime.now()
         return dbSilencedAlertRepository.findAllBySilencedBeforeDateAfter(now).map { it.toSilencedAlert(mapper) }

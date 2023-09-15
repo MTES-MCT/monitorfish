@@ -10,6 +10,7 @@ interface SilencedAlertRepository {
         silencedBeforeDate: ZonedDateTime,
         isValidated: Boolean,
     ): SilencedAlert
+    fun save(silencedAlert: SilencedAlert): SilencedAlert
 
     fun findAllCurrentSilencedAlerts(): List<SilencedAlert>
     fun delete(id: Int)

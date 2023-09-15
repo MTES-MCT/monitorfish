@@ -11,7 +11,6 @@ context('Side Window > Beacon Malfunction Board', () => {
 
   it('A beacon malfunction card Should be moved in the Board', () => {
     // Given
-    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
       .children()
       .eq(0)
@@ -29,7 +28,7 @@ context('Side Window > Beacon Malfunction Board', () => {
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .first()
-      .dragTo('*[data-cy="side-window-beacon-malfunctions-columns-AT_QUAY"]')
+      .dragTo('*[data-cy="side-window-beacon-malfunctions-columns-AT_QUAY"]', { isSmooth: true })
 
     // Then
     cy.wait('@moveBeaconMalfunctionCardInColumn').then(({ request, response }) => {
@@ -48,8 +47,6 @@ context('Side Window > Beacon Malfunction Board', () => {
 
   it('Board Should be initialized with the beacon malfunctions', () => {
     // Then
-    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click({ force: true })
-    cy.get('*[data-cy="side-window-sub-menu-Avaries VMS en cours-number"]').contains('6')
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]').children().should('have.length', 7)
 
     // Count the number of cards in the columns' header
@@ -112,7 +109,6 @@ context('Side Window > Beacon Malfunction Board', () => {
 
   it('A beacon malfunction card vessel status Should be changed in the Board', () => {
     // Given
-    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
@@ -152,7 +148,6 @@ context('Side Window > Beacon Malfunction Board', () => {
 
   it('Beacon malfunction Should be opened', () => {
     // Given
-    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
     cy.intercept('GET', 'bff/v1/beacon_malfunctions/1').as('showBeaconMalfunction')
 
     // When
@@ -255,7 +250,6 @@ context('Side Window > Beacon Malfunction Board', () => {
 
   it('Beacon malfunction Should be opened and vessel status changed', () => {
     // Given
-    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
       .children()
       .eq(0)
@@ -288,7 +282,6 @@ context('Side Window > Beacon Malfunction Board', () => {
 
   it('Beacon malfunction Should be opened and a comment added', () => {
     // Given
-    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
       .children()
       .eq(0)
@@ -318,7 +311,6 @@ context('Side Window > Beacon Malfunction Board', () => {
 
   it('Beacon malfunction end of malfunction reason Should be showed', () => {
     // In the board
-    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
@@ -329,7 +321,6 @@ context('Side Window > Beacon Malfunction Board', () => {
 
   it('Notification messages feedback should be showed in beacon follow up', () => {
     // In the board
-    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
@@ -374,7 +365,6 @@ context('Side Window > Beacon Malfunction Board', () => {
 
   it('Temporary sent message Should be seen When clicking on sent notification select menu', () => {
     // In the board
-    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
@@ -396,7 +386,6 @@ context('Side Window > Beacon Malfunction Board', () => {
 
   it('Temporary sent message Should be seen When clicking on sent notification to foreign FMC select menu', () => {
     // In the board
-    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
@@ -419,7 +408,6 @@ context('Side Window > Beacon Malfunction Board', () => {
 
   it('Archive all Should archive all cards the END OF MALFUNCTION column', () => {
     // Given
-    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
@@ -446,7 +434,6 @@ context('Side Window > Beacon Malfunction Board', () => {
 
   it('Beacon malfunctions Should be filtered by status', () => {
     // Given
-    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
@@ -472,7 +459,6 @@ context('Side Window > Beacon Malfunction Board', () => {
 
     // Clean filter
     cy.get('[aria-label="Clear"]').click()
-    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')

@@ -11,26 +11,25 @@ import type { Promisable } from 'type-fest'
 
 type ItemProps<T extends string = string> = {
   counter: ((subMenu: T) => number) | undefined
-  isOpen: boolean
   isSelected: boolean
   onClick: (nextSubMenuItem: T) => Promisable<void>
   option: Option<T>
 }
-export function Item<T extends string = string>({ counter, isOpen, isSelected, onClick, option }: ItemProps<T>) {
+export function Item<T extends string = string>({ counter, isSelected, onClick, option }: ItemProps<T>) {
   const linkStyle: CSSProperties = useMemo(
     () => ({
       alignItems: 'center',
-      background: isOpen && isSelected ? COLORS.lightGray : 'unset',
-      borderBottom: isOpen ? `0.5px solid ${COLORS.lightGray}` : 'unset',
+      background: isSelected ? COLORS.lightGray : 'unset',
+      borderBottom: `0.5px solid ${COLORS.lightGray}`,
       cursor: 'pointer',
       display: 'flex',
       height: 47,
-      opacity: isOpen ? 1 : 0,
+      opacity: 1,
       padding: '0px 16px',
       transition: 'all 0.5s ease',
-      width: isOpen ? 190 : 0
+      width: 190
     }),
-    [isOpen, isSelected]
+    [isSelected]
   )
 
   const textStyle: CSSProperties = useMemo(
@@ -39,16 +38,16 @@ export function Item<T extends string = string>({ counter, isOpen, isSelected, o
       fontSize: 16,
       fontWeight: 500,
       height: 22,
-      maxWidth: isOpen ? 170 : 0,
-      opacity: isOpen ? 1 : 0,
+      maxWidth: 170,
+      opacity: 1,
       overflowX: 'hidden',
       overflowY: 'hidden',
       textOverflow: 'clip',
       transition: 'max-width 0.5s ease, opacity 0.5s ease',
       whiteSpace: 'nowrap',
-      width: isOpen ? 190 : 0
+      width: 190
     }),
-    [isOpen, isSelected]
+    [isSelected]
   )
 
   const count = counter ? counter(option.value) : 0
@@ -61,9 +60,7 @@ export function Item<T extends string = string>({ counter, isOpen, isSelected, o
     >
       <Text style={textStyle}>{option.label}</Text>
       {count > 0 && (
-        <CircleWithKeyMetric data-cy={`side-window-sub-menu-${option.value}-number`} style={circleMetricStyle(isOpen)}>
-          {count}
-        </CircleWithKeyMetric>
+        <CircleWithKeyMetric data-cy={`side-window-sub-menu-${option.value}-number`}>{count}</CircleWithKeyMetric>
       )}
     </MenuButton>
   )
@@ -73,19 +70,17 @@ const Text = styled.div``
 
 const MenuButton = styled.div``
 
-const CircleWithKeyMetric = styled.span``
-const circleMetricStyle = (isOpen: boolean): CSSProperties => ({
-  background: COLORS.charcoal,
-  borderRadius: 2,
-  color: 'white',
-  display: 'inline-block',
-  flexShrink: 0,
-  fontSize: 13,
-  height: 7,
-  lineHeight: '17px',
-  marginLeft: 'auto',
-  minWidth: 7,
-  opacity: isOpen ? 1 : 0,
-  padding: '0px 6px 12px 5px',
-  transition: 'opacity 0.5s ease'
-})
+const CircleWithKeyMetric = styled.span`
+  background: ${p => p.theme.color.charcoal};
+  border-radius: 2;
+  color: ${p => p.theme.color.white};
+  display: inline-block;
+  flex-shrink: 0;
+  font-size: 13;
+  height: 7;
+  line-height: 17px;
+  margin-left: auto;
+  min-width: 7;
+  padding: 0px 6px 12px 5px;
+  transition: opacity 0.5s ease;
+`

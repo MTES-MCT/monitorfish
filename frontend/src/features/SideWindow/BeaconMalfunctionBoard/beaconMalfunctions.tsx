@@ -121,10 +121,12 @@ export function getActionText(
       )
     }
     case BeaconMalfunctionPropertyName.STAGE: {
+      const isEndColumn =
+        action.nextValue === STAGE_RECORD.END_OF_MALFUNCTION.code || action.nextValue === STAGE_RECORD.ARCHIVED.code
       const previousValue = STAGE_RECORD[action.previousValue].title
       const nextValue = STAGE_RECORD[action.nextValue].title
       const additionalText = endOfBeaconMalfunctionReason
-        ? END_OF_MALFUNCTION_REASON_RECORD[endOfBeaconMalfunctionReason].label
+        ? isEndColumn && END_OF_MALFUNCTION_REASON_RECORD[endOfBeaconMalfunctionReason].label
         : ''
 
       return (

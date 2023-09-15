@@ -13,8 +13,8 @@ export const getZonesAndSubZonesPromises = () => (dispatch, getState) => {
             return {
               group: zone.name,
               groupCode: zone.code,
-              label: subZone.properties[zone.subZoneFieldKey] ? subZone.properties[zone.subZoneFieldKey].toString() : 'Aucun nom',
-              name: subZone.properties[zone.subZoneFieldKey] ? subZone.properties[zone.subZoneFieldKey] : 'Aucun nom',
+              label: subZone.properties[zone.zoneNamePropertyKey] ? subZone.properties[zone.zoneNamePropertyKey].toString() : 'Aucun nom',
+              name: subZone.properties[zone.zoneNamePropertyKey] ? subZone.properties[zone.zoneNamePropertyKey] : 'Aucun nom',
               code: subZone.id,
               value: subZone.id,
               isSubZone: true

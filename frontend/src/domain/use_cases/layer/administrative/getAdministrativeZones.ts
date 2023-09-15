@@ -42,7 +42,8 @@ export const getAdministrativeZones =
               code: feature.id!.toString(),
               group: zone.group,
               hasFetchableZones: zone.hasFetchableZones!,
-              name: (zone.subZoneFieldKey && feature.properties?.[zone.subZoneFieldKey]?.toString()) || 'Aucun nom',
+              name:
+                (zone.zoneNamePropertyKey && feature.properties?.[zone.zoneNamePropertyKey]?.toString()) || 'Aucun nom',
               type: LayerType.ADMINISTRATIVE
             }))
 

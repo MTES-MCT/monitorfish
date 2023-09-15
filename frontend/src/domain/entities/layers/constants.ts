@@ -165,7 +165,7 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
     name: 'Zones ZEE',
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
-    subZoneFieldKey: 'union',
+    zoneNamePropertyKey: 'union',
     isIntersectable: true
   },
   [MonitorFishLayer.FAO]: {
@@ -173,27 +173,8 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
     name: 'Zones FAO / CIEM',
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
-    zoneFieldKey: 'f_subarea',
-    subZoneFieldKey: 'f_division',
-    subSubZoneFieldKey: 'f_subdivis',
-    isIntersectable: true,
-    getZoneName: feature => {
-      if (!LayerProperties.FAO) {
-        return ''
-      }
-
-      if (feature.get(LayerProperties.FAO.subSubZoneFieldKey)) {
-        return feature.get(LayerProperties.FAO.subSubZoneFieldKey)
-      }
-      if (feature.get(LayerProperties.FAO.subZoneFieldKey)) {
-        return feature.get(LayerProperties.FAO.subZoneFieldKey)
-      }
-      if (feature.get(LayerProperties.FAO.zoneFieldKey)) {
-        return feature.get(LayerProperties.FAO.zoneFieldKey)
-      }
-
-      return ''
-    }
+    zoneNamePropertyKey: 'f_code',
+    isIntersectable: true
   },
   [MonitorFishLayer.THREE_MILES]: {
     code: '3_miles_areas',
@@ -271,14 +252,14 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
     name: 'Zones Cormoran (NAMO-SA)',
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
-    subZoneFieldKey: 'zonex',
+    zoneNamePropertyKey: 'zonex',
     isIntersectable: true
   },
   [MonitorFishLayer.AEM]: {
     code: 'aem_areas',
     name: 'Zones AEM (MED)',
     type: LayerType.ADMINISTRATIVE,
-    subZoneFieldKey: 'name'
+    zoneNamePropertyKey: 'name'
   },
   [MonitorFishLayer.CCAMLR]: {
     code: 'fao_ccamlr_areas',
@@ -327,7 +308,7 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
     name: 'Rectangles statistiques',
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
-    subZoneFieldKey: 'icesname',
+    zoneNamePropertyKey: 'icesname',
     isIntersectable: true
   },
   [MonitorFishLayer.cgpm_areas]: {
@@ -336,7 +317,7 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
     group: layersGroups.ORGP,
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
-    subZoneFieldKey: 'SMU_CODE',
+    zoneNamePropertyKey: 'SMU_CODE',
     isIntersectable: true
   },
   [MonitorFishLayer.cgpm_statistical_rectangles_areas]: {
@@ -345,7 +326,7 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
     group: layersGroups.ORGP,
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
-    subZoneFieldKey: 'sect_cod',
+    zoneNamePropertyKey: 'sect_cod',
     isIntersectable: true
   },
   [MonitorFishLayer.effort_zones_areas]: {
@@ -353,7 +334,7 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
     name: "Zones d'effort",
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
-    subZoneFieldKey: 'zone',
+    zoneNamePropertyKey: 'zone',
     isIntersectable: true
   },
   [MonitorFishLayer.situations]: {
@@ -363,7 +344,7 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
     hasFetchableZones: true,
-    subZoneFieldKey: 'libelle',
+    zoneNamePropertyKey: 'libelle',
     isIntersectable: true
   },
   [MonitorFishLayer.brexit]: {
@@ -373,7 +354,7 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
     type: LayerType.ADMINISTRATIVE,
     hasSearchableZones: true,
     hasFetchableZones: true,
-    subZoneFieldKey: 'nom',
+    zoneNamePropertyKey: 'nom',
     isIntersectable: true
   },
   [MonitorFishLayer.REGULATORY_PREVIEW]: {
@@ -408,13 +389,13 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
     code: 'saltwater_limit_areas',
     name: 'Limites de salure des eaux',
     type: LayerType.ADMINISTRATIVE,
-    subZoneFieldKey: 'objnam'
+    zoneNamePropertyKey: 'objnam'
   },
   [MonitorFishLayer.transversal_sea_limit]: {
     code: 'transversal_sea_limit_areas',
     name: 'Limites transversales de mer',
     type: LayerType.ADMINISTRATIVE,
-    subZoneFieldKey: 'objnam'
+    zoneNamePropertyKey: 'objnam'
   }
 }
 /* eslint-enable sort-keys-fix/sort-keys-fix */

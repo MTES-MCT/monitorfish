@@ -5,7 +5,7 @@ import { LogbookMessageType, LogbookOperationType } from './constants'
 import { LayerProperties } from '../../domain/entities/layers/constants'
 import { getFishingActivityCircleStyle } from '../map/layers/styles/vesselTrack.style'
 
-import type { LogbookCatch, LogbookMessage } from './logbook.types'
+import type { LogbookCatch, LogbookMessage } from './Logbook.types'
 import type {
   CatchProperty,
   CatchWithProperties,

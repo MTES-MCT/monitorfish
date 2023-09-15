@@ -1,4 +1,4 @@
-import type { LogbookMessage } from '../../logbook.types'
+import type { LogbookMessage } from '../../Logbook.types'
 
 export const correctedLANMessage = {
   acknowledge: {

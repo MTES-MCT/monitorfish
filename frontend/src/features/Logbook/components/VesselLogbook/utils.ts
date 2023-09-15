@@ -18,7 +18,7 @@ import {
 } from '../../utils'
 
 import type { LogbookTripSummary } from './types'
-import type { FishingActivities, Gear } from '../../logbook.types'
+import type { FishingActivities, Gear } from '../../Logbook.types'
 
 export const emptyLogbookTripSummary = {
   dep: {

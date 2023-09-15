@@ -6,7 +6,7 @@ import { COLORS } from '../../../../../constants/constants'
 import { LogbookSpeciesPresentation, LogbookSpeciesPreservationState } from '../../../constants'
 
 import type { WeightType } from './LogbookMessageSpecy'
-import type { LogbookCatch } from '../../../logbook.types'
+import type { LogbookCatch } from '../../../Logbook.types'
 import type { HTMLProps } from 'react'
 
 type SpecyCatchDetailType = {

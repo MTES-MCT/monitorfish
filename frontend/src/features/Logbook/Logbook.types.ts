@@ -1,4 +1,4 @@
-import { VesselIdentity } from '../../domain/entities/vessel/types'
+import type { VesselIdentity } from '../../domain/entities/vessel/types'
 
 export type VesselVoyage = {
   endDate: string | null

@@ -23,14 +23,14 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
 
   useEffect(() => {
     if (!isSidebarOpen) {
-      dispatch(logbookActions.showAllOnMap())
+      dispatch(logbookActions.hideAllOnMap())
     }
   }, [dispatch, isSidebarOpen])
 
   const showOrHideFishingActivities = useCallback(() => {
     ;(async () => {
       if (areFishingActivitiesReallyShowedOnMap) {
-        dispatch(logbookActions.showAllOnMap())
+        dispatch(logbookActions.hideAllOnMap())
 
         return
       }

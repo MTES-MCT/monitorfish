@@ -48,31 +48,6 @@ context('Vessel sidebar fishing tab', () => {
     })
   })
 
-  it('Fishing trips Should be walkable', () => {
-    // Given
-    cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
-    cy.wait(200)
-    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
-
-    cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
-    cy.get('*[data-cy^="vessel-fishing"]', { timeout: 10000 }).should('be.visible')
-
-    // Then
-    cy.get('*[data-cy^="vessel-fishing-trip-number"]').contains('Marée n°9463715', { timeout: 10000 })
-
-    cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 10000 })
-    cy.wait(50)
-    cy.get('*[data-cy^="vessel-fishing-trip-number"]').contains('Marée n°9463714', { timeout: 10000 })
-
-    cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 10000 })
-    cy.wait(50)
-    cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains('1 message - aucune capture', { timeout: 10000 })
-
-    cy.get('*[data-cy^="vessel-fishing-next-trip"]').click({ timeout: 10000 })
-    cy.wait(50)
-    cy.get('*[data-cy^="vessel-fishing-trip-number"]').contains('Marée n°9463715', { timeout: 10000 })
-  })
-
   it('Fishing Should contain the vessel ERS logbook messages', () => {
     // Given
     cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
@@ -215,5 +190,54 @@ context('Vessel sidebar fishing tab', () => {
     // Then hide the fishing activity
     cy.get('*[data-cy^="hide-fishing-activity"]').eq(0).click({ timeout: 10000 })
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
+  })
+
+  it('Fishing trips Should be walkable', () => {
+    // Given
+    cy.get('*[data-cy^="vessel-search-input"]').click()
+    cy.get('*[data-cy^="vessel-search-input"]').type('FR263454484')
+    cy.wait(50)
+    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
+    cy.wait(200)
+    cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
+    cy.get('*[data-cy^="vessel-menu-fishing"]').click()
+    cy.get('*[data-cy^="vessel-fishing"]').should('be.visible')
+    cy.get('#tripNumber').next().contains('Marée n°SRC-TRP-TTT20200506194051795')
+
+    // Then
+    cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 10000 })
+    cy.get('#tripNumber').next().contains('Marée n°20230087')
+
+    cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 10000 })
+    cy.get('#tripNumber').next().contains('Marée n°20230086')
+
+    cy.get('*[data-cy^="vessel-fishing-next-trip"]').click({ timeout: 10000 })
+    cy.get('#tripNumber').next().contains('Marée n°20230087')
+
+    cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 10000 })
+    cy.get('#tripNumber').next().contains('Marée n°20230086')
+
+    cy.get('*[data-cy^="vessel-fishing-last-trip"]').click({ timeout: 10000 })
+    cy.get('#tripNumber').next().contains('Marée n°SRC-TRP-TTT20200506194051795')
+  })
+
+  it('Fishing trips Should be selected from the trips list', () => {
+    // Given
+    cy.get('*[data-cy^="vessel-search-input"]').click()
+    cy.get('*[data-cy^="vessel-search-input"]').type('FR263454484')
+    cy.wait(50)
+    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
+    cy.wait(200)
+    cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
+    cy.get('*[data-cy^="vessel-menu-fishing"]').click()
+    cy.get('*[data-cy^="vessel-fishing"]').should('be.visible')
+    cy.get('#tripNumber').next().contains('Marée n°SRC-TRP-TTT20200506194051795')
+
+    // When
+    cy.fill('Numéro de marée', 'Marée n°20230087')
+
+    // Then
+    cy.get('#tripNumber').next().contains('Marée n°20230087')
+    cy.get('*[data-cy^="vessel-fishing-see-all"]').click()
   })
 })

@@ -37,7 +37,13 @@ interface LogbookReportRepository {
     fun updateLogbookMessagesAsProcessedByRule(ids: List<Long>, ruleType: String)
     fun findById(id: Long): LogbookMessage
     fun findLastMessageDate(): ZonedDateTime
+    fun findLastTwoYearsTripNumbers(internalReferenceNumber: String): List<String>
+    fun findFirstAndLastOperationsDatesOfTrip(
+        internalReferenceNumber: String,
+        tripNumber: String,
+    ): VoyageDatesAndTripNumber
 
     // For test purpose
     fun deleteAll()
+    fun save(message: LogbookMessage)
 }

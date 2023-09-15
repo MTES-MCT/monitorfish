@@ -19,7 +19,7 @@ class GetVesselVoyage(
 ) {
     private val logger = LoggerFactory.getLogger(GetVesselVoyage::class.java)
 
-    fun execute(internalReferenceNumber: String, voyageRequest: VoyageRequest, currentTripNumber: String?): Voyage {
+    fun execute(internalReferenceNumber: String, voyageRequest: VoyageRequest, tripNumber: String?): Voyage {
         val trip = try {
             when (voyageRequest) {
                 VoyageRequest.LAST -> logbookReportRepository.findLastTripBeforeDateTime(
@@ -27,25 +27,33 @@ class GetVesselVoyage(
                     ZonedDateTime.now(),
                 )
                 VoyageRequest.PREVIOUS -> {
-                    require(currentTripNumber != null) {
+                    require(tripNumber != null) {
                         "Current trip number parameter must be not null"
                     }
 
-                    logbookReportRepository.findTripBeforeTripNumber(internalReferenceNumber, currentTripNumber)
+                    logbookReportRepository.findTripBeforeTripNumber(internalReferenceNumber, tripNumber)
                 }
                 VoyageRequest.NEXT -> {
-                    require(currentTripNumber != null) {
+                    require(tripNumber != null) {
                         "Current trip number parameter must be not null"
                     }
 
-                    logbookReportRepository.findTripAfterTripNumber(internalReferenceNumber, currentTripNumber)
+                    logbookReportRepository.findTripAfterTripNumber(internalReferenceNumber, tripNumber)
+                }
+
+                VoyageRequest.EQUALS -> {
+                    require(tripNumber != null) {
+                        "trip number parameter must be not null"
+                    }
+
+                    logbookReportRepository.findFirstAndLastOperationsDatesOfTrip(internalReferenceNumber, tripNumber)
                 }
             }
         } catch (e: IllegalArgumentException) {
             throw NoLogbookFishingTripFound("Could not fetch voyage for request \"${voyageRequest}\": ${e.message}", e)
         }
 
-        val isLastVoyage = getIsLastVoyage(currentTripNumber, voyageRequest, internalReferenceNumber, trip.tripNumber)
+        val isLastVoyage = getIsLastVoyage(tripNumber, voyageRequest, internalReferenceNumber, trip.tripNumber)
         val isFirstVoyage = getIsFirstVoyage(internalReferenceNumber, trip.tripNumber)
 
         val alerts = PNOAndLANAlertRepository.findAlertsOfTypes(

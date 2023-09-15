@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 import { VesselBeaconMalfunctions } from './beacon_malfunctions/VesselBeaconMalfunctions'
 import { Controls } from './Controls'
-import { VesselFishingActivities } from './fishing_activities/VesselFishingActivities'
 import { Identity } from './Identity'
 import { Reportings } from './Reportings'
 import { VesselSummary } from './Summary'
@@ -14,6 +13,7 @@ import { retry } from '../../domain/use_cases/error/retry'
 import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
+import { VesselLogbook } from '../Logbook/components/VesselLogbook'
 
 export function Body() {
   const isSuperUser = useIsSuperUser()
@@ -42,7 +42,7 @@ export function Body() {
       {isSuperUser && <BeaconMalfunctionWarning selectedVessel={selectedVessel} />}
       {isSuperUser && vesselSidebarTab === VesselSidebarTab.SUMMARY && <VesselSummary />}
       {vesselSidebarTab === VesselSidebarTab.IDENTITY && <Identity />}
-      {vesselSidebarTab === VesselSidebarTab.VOYAGES && <VesselFishingActivities />}
+      {vesselSidebarTab === VesselSidebarTab.VOYAGES && <VesselLogbook />}
       {vesselSidebarTab === VesselSidebarTab.CONTROLS && <Controls />}
       {isSuperUser && vesselSidebarTab === VesselSidebarTab.REPORTING && <Reportings />}
       {isSuperUser && vesselSidebarTab === VesselSidebarTab.ERSVMS && <VesselBeaconMalfunctions />}

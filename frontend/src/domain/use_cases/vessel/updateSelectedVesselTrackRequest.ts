@@ -1,6 +1,6 @@
 import { getVesselPositionsFromAPI } from '../../../api/vessel'
+import { logbookActions } from '../../../features/Logbook/slice'
 import { throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
-import { showFishingActivitiesOnMap } from '../../shared_slices/FishingActivities'
 import { removeError, setError } from '../../shared_slices/Global'
 import { animateToExtent, doNotAnimate } from '../../shared_slices/Map'
 import {
@@ -35,7 +35,7 @@ export const updateSelectedVesselTrackRequest =
       dispatch(setSelectedVesselCustomTrackRequest(trackRequest))
       dispatch(updateSelectedVesselPositions(positions))
       if (areFishingActivitiesShowedOnMap && !withoutFishingMessagesRerendering) {
-        dispatch(showFishingActivitiesOnMap())
+        dispatch(logbookActions.showAllOnMap())
       }
       dispatch(animateToExtent())
     } catch (error) {

@@ -85,6 +85,35 @@ class JpaLogbookReportRepository(
         }
     }
 
+    @Cacheable(value = ["first_and_last_trip_dates"])
+    override fun findFirstAndLastOperationsDatesOfTrip(
+        internalReferenceNumber: String,
+        tripNumber: String,
+    ): VoyageDatesAndTripNumber {
+        try {
+            if (internalReferenceNumber.isNotEmpty()) {
+                val nextTrip = dbERSRepository.findFirstAndLastOperationsDatesOfTrip(
+                    internalReferenceNumber,
+                    tripNumber,
+                )
+
+                return VoyageDatesAndTripNumber(
+                    tripNumber,
+                    nextTrip.startDate.atZone(UTC),
+                    nextTrip.endDate.atZone(UTC),
+                )
+            }
+
+            throw IllegalArgumentException("No CFR given to find the vessel.")
+        } catch (e: NoSuchElementException) {
+            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
+        } catch (e: IllegalArgumentException) {
+            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
+        } catch (e: EmptyResultDataAccessException) {
+            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
+        }
+    }
+
     @Cacheable(value = ["next_logbook"])
     override fun findTripAfterTripNumber(
         internalReferenceNumber: String,
@@ -182,12 +211,6 @@ class JpaLogbookReportRepository(
             .get().toLogbookMessage(mapper)
     }
 
-    @Modifying
-    @Transactional
-    override fun deleteAll() {
-        dbERSRepository.deleteAll()
-    }
-
     override fun findLastMessageDate(): ZonedDateTime {
         return dbERSRepository.findLastOperationDateTime().atZone(UTC)
     }
@@ -220,6 +243,23 @@ class JpaLogbookReportRepository(
         } catch (e: IllegalArgumentException) {
             throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
         }
+    }
+
+    override fun findLastTwoYearsTripNumbers(internalReferenceNumber: String): List<String> {
+        return dbERSRepository.findLastTwoYearsTripNumbers(internalReferenceNumber)
+    }
+
+    // For test purpose
+    @Modifying
+    @Transactional
+    override fun deleteAll() {
+        dbERSRepository.deleteAll()
+    }
+
+    @Modifying
+    @Transactional
+    override fun save(message: LogbookMessage) {
+        dbERSRepository.save(LogbookReportEntity.fromLogbookMessage(mapper, message))
     }
 
     private fun getCorrectedMessageIfAvailable(pnoMessage: LogbookReportEntity, messages: List<LogbookReportEntity>): Boolean {

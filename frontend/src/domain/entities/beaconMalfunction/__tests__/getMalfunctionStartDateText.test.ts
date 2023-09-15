@@ -27,6 +27,6 @@ describe('domain/entities/beaconMalfunction/index.getMalfunctionStartDateText()'
 
     const result = getMalfunctionStartDateText(beaconMalfunction)
 
-    expect(result).toEqual('Balise désactivée ')
+    expect(result).toEqual('Balise désactivée')
   })
 })

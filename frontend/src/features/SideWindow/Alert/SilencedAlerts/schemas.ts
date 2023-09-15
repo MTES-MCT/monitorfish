@@ -5,7 +5,9 @@ import { addMethod, number, object, ObjectSchema, string } from 'yup'
 import type { SilencedAlertData } from '../../../../domain/entities/alerts/types'
 
 /**
- * Require at least one of the specified fields to be present
+ * Require at least one of the specified fields to be present.
+ * TODO Rewrite and clarify this function
+ * TODO Move this function to monitor-ui
  * @param requiredFields - The list of fields names
  * @param message - The error message
  */

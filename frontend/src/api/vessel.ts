@@ -14,7 +14,7 @@ import type {
   VesselPosition
 } from '../domain/entities/vessel/types'
 import type { CurrentAndArchivedReportingsOfSelectedVessel } from '../domain/types/reporting'
-import type { VesselVoyage } from '../features/Logbook/logbook.types'
+import type { VesselVoyage } from '../features/Logbook/Logbook.types'
 
 const LAST_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les dernières positions"
 const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"

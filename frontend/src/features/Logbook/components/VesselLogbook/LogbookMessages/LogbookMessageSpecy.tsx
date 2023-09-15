@@ -6,7 +6,7 @@ import { COLORS } from '../../../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../../../icons/Chevron_simple_gris.svg'
 import { ReactComponent as WarningSVG } from '../../../../icons/Point_exclamation_info.svg'
 
-import type { LogbookCatchesBySpecy } from '../../../logbook.types'
+import type { LogbookCatchesBySpecy } from '../../../Logbook.types'
 import type { HTMLProps } from 'react'
 
 export enum WeightType {

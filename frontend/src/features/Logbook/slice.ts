@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { getEffectiveDateTimeFromMessage, getLogbookMessageType } from './utils'
 import { FishingActivitiesTab } from '../../domain/entities/vessel/vessel'
 
-import type { FishingActivities, VesselVoyage } from './logbook.types'
+import type { FishingActivities, VesselVoyage } from './Logbook.types'
 import type { FishingActivityShowedOnMap, VesselIdentity } from '../../domain/entities/vessel/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 

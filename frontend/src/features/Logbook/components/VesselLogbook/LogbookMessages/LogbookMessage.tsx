@@ -25,7 +25,7 @@ import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../constants
 import { logbookActions } from '../../../slice'
 import { getLogbookMessageType } from '../../../utils'
 
-import type { LogbookMessage as LogbookMessageType } from '../../../logbook.types'
+import type { LogbookMessage as LogbookMessageType } from '../../../Logbook.types'
 import type { HTMLProps } from 'react'
 
 type LogbookMessageComponentType = {

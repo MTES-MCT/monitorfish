@@ -12,7 +12,10 @@ import kotlinx.coroutines.runBlocking
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 import java.time.ZonedDateTime
 
 @RestController
@@ -27,6 +30,7 @@ class VesselController(
     private val getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions,
     private val getVesselReportings: GetVesselReportings,
     private val getVesselRiskFactor: GetVesselRiskFactor,
+    private val getVesselLastTripNumbers: GetVesselLastTripNumbers,
 ) {
 
     @GetMapping("")
@@ -228,6 +232,16 @@ class VesselController(
     ): VoyageDataOutput {
         val voyage = getVesselVoyage.execute(internalReferenceNumber, voyageRequest, tripNumber)
         return VoyageDataOutput.fromVoyage(voyage)
+    }
+
+    @GetMapping("/logbook/last")
+    @Operation(summary = "Get vessel's last Logbook trip numbers")
+    fun getVesselLogbookVoyages(
+        @Parameter(description = "Vessel internal reference number (CFR)", required = true)
+        @RequestParam(name = "internalReferenceNumber")
+        internalReferenceNumber: String,
+    ): List<String> {
+        return getVesselLastTripNumbers.execute(internalReferenceNumber)
     }
 
     @GetMapping("/risk_factor")

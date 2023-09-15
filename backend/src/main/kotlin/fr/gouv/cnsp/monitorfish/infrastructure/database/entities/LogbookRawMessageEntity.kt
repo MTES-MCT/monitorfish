@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookRawMessage
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
@@ -13,4 +14,11 @@ data class LogbookRawMessageEntity(
     val operationNumber: String,
     @Column(name = "xml_message")
     val rawMessage: String? = null,
-)
+) {
+    companion object {
+        fun fromLogbookRawMessage(logbookRawMessage: LogbookRawMessage) = LogbookRawMessageEntity(
+            operationNumber = logbookRawMessage.operationNumber,
+            rawMessage = logbookRawMessage.rawMessage,
+        )
+    }
+}

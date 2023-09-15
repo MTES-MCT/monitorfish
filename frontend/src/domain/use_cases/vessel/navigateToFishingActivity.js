@@ -1,5 +1,5 @@
 import { FishingActivitiesTab, VesselSidebarTab } from '../../entities/vessel/vessel'
-import { setFishingActivitiesTab } from '../../shared_slices/FishingActivities'
+import { logbookActions } from '../../../features/Logbook/slice'
 import { showVesselSidebarTab } from '../../shared_slices/Vessel'
 
 const navigateToFishingActivity = id => (dispatch, getState) => {
@@ -23,7 +23,7 @@ const navigateToFishingActivity = id => (dispatch, getState) => {
     dispatch(showVesselSidebarTab(VesselSidebarTab.VOYAGES))
   }
   if (fishingActivitiesTab !== FishingActivitiesTab.MESSAGES) {
-    dispatch(setFishingActivitiesTab(FishingActivitiesTab.MESSAGES))
+    dispatch(logbookActions.setTab(FishingActivitiesTab.MESSAGES))
   }
 
   const interval = setInterval(() => {

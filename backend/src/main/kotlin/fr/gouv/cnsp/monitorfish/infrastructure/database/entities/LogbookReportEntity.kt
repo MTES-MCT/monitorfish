@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
 import fr.gouv.cnsp.monitorfish.domain.mappers.ERSMapper.getERSMessageValueFromJSON
 import io.hypersistence.utils.hibernate.type.array.ListArrayType
+import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
 import org.hibernate.annotations.Type
@@ -19,7 +20,7 @@ data class LogbookReportEntity(
     @SequenceGenerator(name = "logbook_report_id_seq", sequenceName = "logbook_report_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "logbook_report_id_seq")
     @Column(name = "id")
-    val id: Long,
+    val id: Long? = null,
 
     @Column(name = "operation_number")
     val operationNumber: String,
@@ -59,23 +60,48 @@ data class LogbookReportEntity(
     @Column(name = "value", nullable = true, columnDefinition = "jsonb")
     val message: String? = null,
     @Column(name = "integration_datetime_utc")
-    val integrationDateTime: Instant? = null,
-    @Column(name = "transmission_format")
+    val integrationDateTime: Instant,
+    @Type(PostgreSQLEnumType::class)
+    @Column(name = "transmission_format", columnDefinition = "logbook_message_transmission_format")
     @Enumerated(EnumType.STRING)
     val transmissionFormat: LogbookTransmissionFormat,
     @Column(name = "software")
     val software: String? = null,
 ) {
 
+    companion object {
+        fun fromLogbookMessage(mapper: ObjectMapper, logbookMessage: LogbookMessage) = LogbookReportEntity(
+            internalReferenceNumber = logbookMessage.internalReferenceNumber,
+            referencedReportId = logbookMessage.referencedReportId,
+            externalReferenceNumber = logbookMessage.externalReferenceNumber,
+            ircs = logbookMessage.ircs,
+            operationDateTime = logbookMessage.operationDateTime.toInstant(),
+            reportDateTime = logbookMessage.reportDateTime?.toInstant(),
+            integrationDateTime = logbookMessage.integrationDateTime.toInstant(),
+            vesselName = logbookMessage.vesselName,
+            operationType = logbookMessage.operationType,
+            reportId = logbookMessage.reportId,
+            operationNumber = logbookMessage.operationNumber,
+            tripNumber = logbookMessage.tripNumber,
+            flagState = logbookMessage.flagState,
+            imo = logbookMessage.imo,
+            messageType = logbookMessage.messageType,
+            analyzedByRules = logbookMessage.analyzedByRules,
+            message = mapper.writeValueAsString(logbookMessage.message),
+            software = logbookMessage.software,
+            transmissionFormat = logbookMessage.transmissionFormat,
+        )
+    }
+
     fun toLogbookMessage(mapper: ObjectMapper) = LogbookMessage(
-        id = id,
+        id = id!!,
         internalReferenceNumber = internalReferenceNumber,
         referencedReportId = referencedReportId,
         externalReferenceNumber = externalReferenceNumber,
         ircs = ircs,
         operationDateTime = operationDateTime.atZone(UTC),
         reportDateTime = reportDateTime?.atZone(UTC),
-        integrationDateTime = integrationDateTime?.atZone(UTC),
+        integrationDateTime = integrationDateTime.atZone(UTC),
         vesselName = vesselName,
         operationType = operationType,
         reportId = reportId,

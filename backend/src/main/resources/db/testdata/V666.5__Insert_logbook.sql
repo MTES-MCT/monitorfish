@@ -237,7 +237,11 @@ VALUES ('OOF20190126059903', '<ers:OPS AD="FRA" FR="OOE" ON="OOF20190126059903" 
        ('0e1ea2b6-f4f5-4958-bc48-cfb016a22f58', '<Flux>Message FLUX xml</Flux>'),
        ('3cffa378-0f8c-4540-b849-747621cfcb4a', '<Flux>Message FLUX xml</Flux>'),
        ('7bf7401d-cbb1-4e6f-bad8-7e309ee004cf', '<Flux>Message FLUX xml</Flux>'),
-       ('9376ccbd-be2f-4d3d-b4ac-3c559ac9586a', '<Flux>Message FLUX xml</Flux>');
+       ('9376ccbd-be2f-4d3d-b4ac-3c559ac9586a', '<Flux>Message FLUX xml</Flux>'),
+       ('OOF20190015146541', ''),
+       ('OOF20190158541231', ''),
+       ('OOF20190439686456', ''),
+       ('d5c3b039-aaee-4cca-bcae-637f5fe574f5', '<Flux>Message FLUX xml</Flux>');
 
 INSERT INTO logbook_reports (operation_number, analyzed_by_rules, trip_number, operation_country,
                              operation_datetime_utc,
@@ -480,7 +484,6 @@ INSERT INTO logbook_reports (operation_number, operation_country, operation_date
 VALUES ('cc7ee632-e515-460f-a1c1-f82222a6d419', null, '2020-05-06 18:40:51', 'DAT',
         'f006a2e5-0fdd-48a0-9a9a-ccae00d052d8', null, '2020-05-06 15:40:51', 'SOCR4T3', 'IRCS6', 'XR006', 'GOLF', 'CYP',
         '1234567', 'NOT_COX',
-
         '{"faoZoneExited": null, "latitudeExited": 57.7258, "longitudeExited": 0.5983, "effortZoneExited": null, "economicZoneExited": null, "targetSpeciesOnExit": null, "effortZoneExitDatetimeUtc": "2020-05-06T11:40:51.795Z", "statisticalRectangleExited": null}',
         '2022-03-31 09:21:19.378408', 'SRC-TRP-TTT20200506194051795', 'FLUX'),
        ('a3c52754-97e1-4a21-ba2e-d8f16f4544e9', null, '2020-05-06 18:40:57', 'DAT',
@@ -617,3 +620,31 @@ SET value               = jsonb_set("value", array ['hauls', '0', 'farDatetimeUt
                                                                                             '"')::jsonb),
     report_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '19 hours 45 minutes'
 WHERE operation_number = 'OOF20191030059903';
+
+-- Insert new logbook reports in order to find last trips
+INSERT INTO logbook_reports (operation_number, trip_number, operation_country,
+                             operation_datetime_utc,
+                             operation_type, report_id,
+                             referenced_report_id, report_datetime_utc,
+                             cfr, ircs, external_identification, vessel_name, flag_state, imo, log_type, value,
+                             integration_datetime_utc, transmission_format, software)
+VALUES ('OOF20190439686456', 20230086, 'OOF', CURRENT_DATE - INTERVAL '5 days', 'DAT',
+        'OOF20190439686456', null, CURRENT_DATE - INTERVAL '5 days',
+        'FR263454484', 'FE4864', '8FR6541', 'NO NAME', 'FRA', null, 'LAN',
+        '{"port": "AEJAZ", "catchLanded": [{"weight": 40.0, "nbFish": null, "species": "SCR", "faoZone": "27.8.a", "freshness": null, "packaging": "CNT", "effortZone": "C", "presentation": "WHL", "economicZone": "FRA", "preservationState": "ALI", "statisticalRectangle": "23E6"}, {"weight": 2.0, "nbFish": null, "species": "LBE", "faoZone": "27.8.a", "freshness": null, "packaging": "CNT", "effortZone": "C", "presentation": "WHL", "economicZone": "FRA", "preservationState": "ALI", "statisticalRectangle": "23E6"}], "landingDatetimeUtc": "2018-09-03T12:18Z"}',
+        CURRENT_DATE - INTERVAL '5 days', 'ERS', 'TurboCatch (3.7-1)'),
+       ('OOF20190158541231', 20230087, 'OOF', CURRENT_DATE - INTERVAL '4 days', 'DAT', 'OOF20190158541231', null,
+        CURRENT_DATE - INTERVAL '4 days',
+        'FR263454484', 'FE4864', '8FR6541', 'NO NAME', 'FRA', null, 'DEP',
+        '{"gearOnboard": [{"gear": "GTR", "mesh": 100.0}], "departurePort": "AEJAZ", "anticipatedActivity": "FSH", "tripStartDate": "2018-02-17T00:00Z", "departureDatetimeUtc": "2018-02-17T01:05Z"}',
+        CURRENT_DATE - INTERVAL '4 days', 'ERS', 'TurboCatch (3.7-1)'),
+       ('OOF20190439686456', 20230087, 'OOF', CURRENT_DATE - INTERVAL '3 days', 'DAT', 'OOF20190439686456', null,
+        CURRENT_DATE - INTERVAL '3 days',
+        'FR263454484', 'FE4864', '8FR6541', 'NO NAME', 'FRA', null, 'PNO',
+        '{"port": "AEJAZ", "purpose": "LAN", "catchOnboard": [{"weight": 25.0, "nbFish": null, "species": "SOL", "faoZone": "27.8.a", "effortZone": "C", "economicZone": "FRA", "statisticalRectangle": "23E6"}], "tripStartDate": "2018-02-20T00:00Z", "predictedArrivalDatetimeUtc": "2018-02-20T13:38Z"}',
+        CURRENT_DATE - INTERVAL '3 days', 'ERS', 'TurboCatch (3.7-1)'),
+       ('d5c3b039-aaee-4cca-bcae-637f5fe574f5', 'SRC-TRP-TTT20200506194051795', null, CURRENT_DATE - INTERVAL '2 days', 'DAT',
+        'd5c3b039-aaee-4cca-bcae-637f5fe574f5', null, CURRENT_DATE - INTERVAL '2 days', 'FR263454484', 'FE4864', '8FR6541', 'NO NAME', 'FRA', null,
+        'PNO',
+        '{"port": "GBPHD", "purpose": "LAN", "catchOnboard": [{"nbFish": null, "weight": 1500.0, "species": "GHL"}], "tripStartDate": "2020-05-04T19:41:03.340Z", "predictedArrivalDatetimeUtc": "2020-05-06T11:41:03.340Z"}',
+        CURRENT_DATE - INTERVAL '2 days', 'FLUX', null);

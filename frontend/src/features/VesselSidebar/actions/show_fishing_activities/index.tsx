@@ -2,14 +2,11 @@ import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
-import {
-  hideFishingActivitiesOnMap,
-  showFishingActivitiesOnMap
-} from '../../../../domain/shared_slices/FishingActivities'
-import { getVesselLogbook } from '../../../../domain/use_cases/vessel/getVesselLogbook'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ReactComponent as ShowFishingActivitiesSVG } from '../../../icons/Bouton_afficher_messages_JPE_sur_piste.svg'
+import { logbookActions } from '../../../Logbook/slice'
+import { getVesselLogbook } from '../../../Logbook/useCases/getVesselLogbook'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
@@ -26,14 +23,14 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
 
   useEffect(() => {
     if (!isSidebarOpen) {
-      dispatch(hideFishingActivitiesOnMap())
+      dispatch(logbookActions.hideAllOnMap())
     }
   }, [dispatch, isSidebarOpen])
 
   const showOrHideFishingActivities = useCallback(() => {
     ;(async () => {
       if (areFishingActivitiesReallyShowedOnMap) {
-        dispatch(hideFishingActivitiesOnMap())
+        dispatch(logbookActions.hideAllOnMap())
 
         return
       }
@@ -41,7 +38,7 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
       if (!fishingActivities) {
         await dispatch(getVesselLogbook(selectedVesselIdentity, undefined, true))
       }
-      dispatch(showFishingActivitiesOnMap())
+      dispatch(logbookActions.showAllOnMap())
     })()
   }, [fishingActivities, selectedVesselIdentity, areFishingActivitiesReallyShowedOnMap, dispatch])
 

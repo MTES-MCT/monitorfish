@@ -72,7 +72,7 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
             name: ['value', 'type']
           }
         ],
-        { shouldIgnoreLocation: true, threshold: 0.4 }
+        { threshold: 0.4 }
       ),
     [currentSeaFrontAlerts]
   )

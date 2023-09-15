@@ -1,5 +1,4 @@
-import { LogbookMessage } from '../../logbook.types'
-
+import type { LogbookMessage } from '../../logbook.types'
 import type { SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from '../../types'
 
 export type LogbookTripSummary = {

@@ -1,4 +1,3 @@
-import { FishingActivities, Gear } from '../../logbook.types'
 import {
   areAllMessagesNotAcknowledged,
   getDEPMessage,
@@ -19,6 +18,7 @@ import {
 } from '../../utils'
 
 import type { LogbookTripSummary } from './types'
+import type { FishingActivities, Gear } from '../../logbook.types'
 
 export const emptyLogbookTripSummary = {
   dep: {

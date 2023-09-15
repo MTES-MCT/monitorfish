@@ -1,5 +1,4 @@
-import { Button, Icon } from '@mtes-mct/monitor-ui'
-import Fuse from 'fuse.js'
+import { Button, CustomSearch, Icon } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
 import { useCallback, useMemo, useState } from 'react'
 import { FlexboxGrid, List } from 'rsuite'
@@ -17,7 +16,6 @@ import { getDateTime } from '../../../../utils'
 import SearchIconSVG from '../../../icons/Loupe_dark.svg'
 import { Flag } from '../../../VesselList/tableCells'
 import { sortArrayByColumn, SortType } from '../../../VesselList/tableSort'
-import { PENDING_ALERTS_SEARCH_OPTIONS } from '../AlertListAndReportingList/constants'
 import { getAlertNameFromType } from '../AlertListAndReportingList/utils'
 
 import type { SilencedAlertData } from '../../../../domain/entities/alerts/types'
@@ -31,14 +29,31 @@ export function SilencedAlerts() {
   const [searchQuery, setSearchQuery] = useState<string>()
   const [isAddSilencedAlertDialogOpen, setIsAddSilencedAlertDialogOpen] = useState(false)
 
-  const fuse = useMemo(() => new Fuse(silencedAlerts, PENDING_ALERTS_SEARCH_OPTIONS), [silencedAlerts])
+  const fuse = useMemo(
+    () =>
+      new CustomSearch(
+        silencedAlerts,
+        [
+          'vesselName',
+          'internalReferenceNumber',
+          'externalReferenceNumber',
+          'ircs',
+          {
+            getFn: alert => getAlertNameFromType(alert.value.type),
+            name: ['value', 'type']
+          }
+        ],
+        { shouldIgnoreLocation: true, threshold: 0.4 }
+      ),
+    [silencedAlerts]
+  )
 
   const filteredAlerts = useMemo(() => {
     if (!searchQuery || searchQuery.length <= 1) {
       return silencedAlerts
     }
 
-    return fuse.search(searchQuery).map(result => result.item)
+    return fuse.find(searchQuery)
   }, [silencedAlerts, searchQuery, fuse])
 
   const sortedAlerts = useMemo(

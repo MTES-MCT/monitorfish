@@ -16,13 +16,13 @@ import type { RefObject } from 'react'
 
 type AlertsAndReportingsProps = {
   baseRef: RefObject<HTMLDivElement>
-  selectedSubMenu: SeaFrontGroup
+  selectedSeaFrontGroup: SeaFrontGroup
   selectedTab: any
   setSelectedTab: any
 }
 export function AlertListAndReportingList({
   baseRef,
-  selectedSubMenu,
+  selectedSeaFrontGroup,
   selectedTab,
   setSelectedTab
 }: AlertsAndReportingsProps) {
@@ -32,13 +32,13 @@ export function AlertListAndReportingList({
   const filteredSilencedAlerts = useMemo(
     () =>
       silencedAlerts.filter(silencedAlert => {
-        const seaFronts = ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSubMenu]
-          ? ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSubMenu].seaFronts
+        const seaFronts = ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFrontGroup]
+          ? ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFrontGroup].seaFronts
           : []
 
         return silencedAlert.value.seaFront && seaFronts.includes(silencedAlert.value.seaFront)
       }),
-    [silencedAlerts, selectedSubMenu]
+    [silencedAlerts, selectedSeaFrontGroup]
   )
 
   useEffect(() => {
@@ -82,11 +82,13 @@ export function AlertListAndReportingList({
           <PendingAlertsList
             baseRef={baseRef}
             numberOfSilencedAlerts={filteredSilencedAlerts.length}
-            selectedSeaFront={selectedSubMenu}
+            selectedSeaFrontGroup={selectedSeaFrontGroup}
           />
         </>
       )}
-      {selectedTab === AlertAndReportingTab.REPORTING && <ReportingList selectedSeaFront={selectedSubMenu} />}
+      {selectedTab === AlertAndReportingTab.REPORTING && (
+        <ReportingList selectedSeaFrontGroup={selectedSeaFrontGroup} />
+      )}
     </Wrapper>
   )
 }

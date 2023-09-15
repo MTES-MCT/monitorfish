@@ -33,9 +33,9 @@ import type { InfractionSuspicionReporting, PendingAlertReporting } from '../../
 import type { CSSProperties, MutableRefObject } from 'react'
 
 type ReportingListProps = {
-  selectedSeaFront: SeaFrontGroup
+  selectedSeaFrontGroup: SeaFrontGroup
 }
-export function ReportingList({ selectedSeaFront }: ReportingListProps) {
+export function ReportingList({ selectedSeaFrontGroup }: ReportingListProps) {
   const dispatch = useMainAppDispatch()
   const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
   const { currentReportings } = useMainAppSelector(state => state.reporting)
@@ -47,11 +47,11 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
     () =>
       currentReportings.filter(
         reporting =>
-          ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront] &&
+          ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFrontGroup] &&
           reporting.value.seaFront &&
-          ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront].seaFronts.includes(reporting.value.seaFront)
+          ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFrontGroup].seaFronts.includes(reporting.value.seaFront)
       ),
-    [currentReportings, selectedSeaFront]
+    [currentReportings, selectedSeaFrontGroup]
   )
 
   const { getTableCheckedData, renderTableHead, tableCheckedIds, tableData, toggleTableCheckForId } = useTable<

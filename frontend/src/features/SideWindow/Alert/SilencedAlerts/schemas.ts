@@ -1,17 +1,20 @@
 import { logSoftError } from '@mtes-mct/monitor-ui'
 import { without } from 'lodash'
-import { addMethod, number, object, string } from 'yup'
+import { addMethod, number, object, ObjectSchema, string } from 'yup'
 
 import type { SilencedAlertData } from '../../../../domain/entities/alerts/types'
 
 /**
- * Require at least one of the specified fields to be required
- * @param list - The list of fields names
+ * Require at least one of the specified fields to be present
+ * @param requiredFields - The list of fields names
  * @param message - The error message
  */
-export function atLeastOneRequired(list: string[], message: string) {
-  // @ts-ignore
-  if (!list.every(field => this.fields[field])) {
+export function atLeastOneRequired(
+  this: ObjectSchema<{ [key: string]: any }>,
+  requiredFields: string[],
+  message: string
+) {
+  if (!requiredFields.every(field => this.fields[field])) {
     logSoftError({
       isSideWindowError: true,
       message: 'All required fields should be defined before calling atLeastOneRequired',
@@ -19,13 +22,12 @@ export function atLeastOneRequired(list: string[], message: string) {
     })
   }
 
-  // @ts-ignore
   return this.shape(
-    list.reduce(
+    requiredFields.reduce(
       (acc, field) => ({
         ...acc,
         // @ts-ignore
-        [field]: this.fields[field].when(without(list, field), {
+        [field]: this.fields[field].when(without(requiredFields, field), {
           is: (...values) => !values.some(item => item),
           // @ts-ignore
           then: () => this.fields[field].required(message)
@@ -34,7 +36,7 @@ export function atLeastOneRequired(list: string[], message: string) {
       {}
     ),
     // @ts-ignore
-    list.reduce((acc, item, idx, all) => [...acc, ...all.slice(idx + 1).map(i => [item, i])], [])
+    requiredFields.reduce((acc, item, idx, all) => [...acc, ...all.slice(idx + 1).map(i => [item, i])], [])
   )
 }
 

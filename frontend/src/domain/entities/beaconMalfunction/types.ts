@@ -17,8 +17,7 @@ export type BeaconMalfunction = {
   ircs: string
   malfunctionEndDateTime: string | null
   malfunctionStartDateTime: string
-  notificationRequested: string
-  priority: boolean
+  notificationRequested: string | null
   stage: string
   vesselIdentifier: string
   vesselName: string
@@ -39,9 +38,8 @@ export type BeaconMalfunctionComment = {
 }
 
 export type BeaconMalfunctionAction = {
-  beaconMalfunctionId: Integer<number>
+  beaconMalfunctionId: number
   dateTime: string
-  id: number
   nextValue: BeaconMalfunctionsStage | BeaconMalfunctionVesselStatus
   previousValue: BeaconMalfunctionsStage | BeaconMalfunctionVesselStatus
   propertyName: BeaconMalfunctionPropertyName

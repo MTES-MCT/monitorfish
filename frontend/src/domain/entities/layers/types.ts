@@ -69,7 +69,6 @@ export type CodeAndName = {
 
 export type ShowableLayer = {
   code: MonitorFishLayer | string
-  getZoneName?: (feature: any) => string
   group?: CodeAndName | undefined
   hasFetchableZones?: boolean
   hasSearchableZones?: boolean
@@ -77,11 +76,9 @@ export type ShowableLayer = {
   isHoverable?: boolean
   isIntersectable?: boolean
   name?: string
-  subSubZoneFieldKey?: string
-  subZoneFieldKey?: string
   type: LayerType
   zIndex?: number
-  zoneFieldKey?: string
+  zoneNamePropertyKey?: string
 }
 
 export type ShowedLayer = {

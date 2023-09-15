@@ -157,12 +157,13 @@ export function FishingActivitiesSummary({ navigation, showLogbookMessages }: Fi
                   value={tripNumber || undefined}
                 />
                 <NextTrip
+                  data-cy="vessel-fishing-next-trip"
                   disabled={isLastVoyage}
                   onClick={!isLastVoyage ? navigation.goToNextTrip : undefined}
                   title="Marée suivante"
                 />
                 <LastTrip
-                  data-cy="vessel-fishing-next-trip"
+                  data-cy="vessel-fishing-last-trip"
                   disabled={isLastVoyage}
                   onClick={!isLastVoyage ? navigation.goToLastTrip : undefined}
                   title="Dernière marée"

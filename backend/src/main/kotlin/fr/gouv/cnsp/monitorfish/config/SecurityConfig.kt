@@ -38,6 +38,7 @@ class SecurityConfig(val oidcProperties: OIDCProperties) {
 
                     authorize.requestMatchers(
                         "/",
+                        "/backoffice",
                         "/index.html",
                         "/*.js",
                         "/*.png",

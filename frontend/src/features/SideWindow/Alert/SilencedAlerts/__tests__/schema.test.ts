@@ -35,7 +35,7 @@ describe('SideWindow/SilencedAlerts/schema.ts', () => {
       })
 
       expect(data).toBeFalsy()
-    } catch (err) {
+    } catch (err: any) {
       expect(err.message).toContain('Veuillez indiquer le navire')
     }
   })

@@ -132,4 +132,10 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME','FR',  NOW(), '9463715
                                                                                                                   '"seaFront": "NAMO",' ||
                                                                                                                   '"riskFactor": 3.4,' ||
                                                                                                                   '"type": "MISSING_FAR_ALERT"' ||
-                                                                                                                  '}')::jsonb, -12.569, 8.851);
+                                                                                                                  '}')::jsonb, -12.569, 8.851),
+       ('MAINTENANT RÉPONSE ANNÉE', 'ABC000823773', 'HG384751', 'NK2932',
+        'FR', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - interval '2 hours 17 minutes', null, 'INTERNAL_REFERENCE_NUMBER', ('{' ||
+                                                                                                                  '"seaFront": "NAMO",' ||
+                                                                                                                  '"riskFactor": 1.5,' ||
+                                                                                                                  '"type": "MISSING_FAR_48_HOURS_ALERT"' ||
+                                                                                                                  '}')::jsonb, -10.569, 48.851);

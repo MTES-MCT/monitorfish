@@ -20,6 +20,8 @@ data class SilencedAlertEntity(
     @Basic(optional = false)
     @Column(name = "id", unique = true)
     val id: Int? = null,
+    @Column(name = "vessel_id")
+    val vesselId: Int? = null,
     @Column(name = "vessel_name")
     val vesselName: String? = null,
     @Column(name = "internal_reference_number")
@@ -55,6 +57,7 @@ data class SilencedAlertEntity(
             flagState = flagState,
             silencedBeforeDate = silencedBeforeDate,
             value = mapper.readValue(value, AlertType::class.java),
+            vesselId = vesselId,
             wasValidated = wasValidated,
         )
     }
@@ -74,7 +77,24 @@ data class SilencedAlertEntity(
             flagState = alert.flagState,
             silencedBeforeDate = silencedBeforeDate,
             value = mapper.writeValueAsString(alert.value),
+            vesselId = alert.vesselId,
             wasValidated = isValidated,
+        )
+
+        fun fromSilencedAlert(
+            mapper: ObjectMapper,
+            silencedAlert: SilencedAlert,
+        ) = SilencedAlertEntity(
+            vesselName = silencedAlert.vesselName,
+            internalReferenceNumber = silencedAlert.internalReferenceNumber,
+            externalReferenceNumber = silencedAlert.externalReferenceNumber,
+            ircs = silencedAlert.ircs,
+            vesselIdentifier = silencedAlert.vesselIdentifier,
+            flagState = silencedAlert.flagState,
+            silencedBeforeDate = silencedAlert.silencedBeforeDate,
+            value = mapper.writeValueAsString(silencedAlert.value),
+            vesselId = silencedAlert.vesselId,
+            wasValidated = silencedAlert.wasValidated,
         )
     }
 }

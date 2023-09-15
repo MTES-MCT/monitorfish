@@ -488,7 +488,7 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
 
     now = pytz.utc.localize(datetime.utcnow())
 
-    # With these parameters, all 4 vessels should be in alert.
+    # With these parameters, all 5 vessels should be in alert.
     alert_type = "THREE_MILES_TRAWLING_ALERT"
     alert_config_name = "ALERTE_1"
     zones = ["0-3", "3-6"]
@@ -637,7 +637,7 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
 def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data):
     now = pytz.utc.localize(datetime.utcnow())
 
-    # With these parameters, all 4 vessels should be in alert.
+    # With these parameters, all 5 vessels should be in alert.
     alert_type = "THREE_MILES_TRAWLING_ALERT"
     alert_config_name = "ALERTE_1"
     zones = ["0-3", "3-6"]

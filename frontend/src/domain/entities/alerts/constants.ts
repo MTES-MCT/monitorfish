@@ -17,6 +17,11 @@ export const COMMON_ALERT_TYPE_OPTION: Record<
     isOperationalAlert: true,
     name: 'Pêche en ZEE française par un navire tiers'
   },
+  MISSING_FAR_48_HOURS_ALERT: {
+    code: PendingAlertValueType.MISSING_FAR_48_HOURS_ALERT,
+    isOperationalAlert: true,
+    name: 'Non-emission de message "FAR" en 48h'
+  },
   MISSING_FAR_ALERT: {
     code: PendingAlertValueType.MISSING_FAR_ALERT,
     isOperationalAlert: true,
@@ -38,37 +43,6 @@ export const COMMON_ALERT_TYPE_OPTION: Record<
     code: PendingAlertValueType.TWELVE_MILES_FISHING_ALERT,
     isOperationalAlert: true,
     name: '12 milles - Pêche sans droits historiques'
-  }
-}
-
-export const ALERTS_SUBMENU: Record<SeaFrontGroup, MenuItem<SeaFrontGroup>> = {
-  ALL: {
-    code: SeaFrontGroup.ALL,
-    name: 'ALL'
-  },
-  MED: {
-    code: SeaFrontGroup.MED,
-    name: 'MED'
-  },
-  MEMN: {
-    code: SeaFrontGroup.MEMN,
-    name: 'MEMN'
-  },
-  NAMO: {
-    code: SeaFrontGroup.NAMO,
-    name: 'NAMO'
-  },
-  OUTREMEROA: {
-    code: SeaFrontGroup.OUTREMEROA,
-    name: 'OUTRE-MER OA'
-  },
-  OUTREMEROI: {
-    code: SeaFrontGroup.OUTREMEROI,
-    name: 'OUTRE-MER OI'
-  },
-  SA: {
-    code: SeaFrontGroup.SA,
-    name: 'SA'
   }
 }
 

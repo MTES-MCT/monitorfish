@@ -1,5 +1,5 @@
 import { getOperationalAlertsFromAPI } from '../../../api/alert'
-import { setPendingAlerts } from '../../shared_slices/Alert'
+import { setPendingAlerts } from '../../../features/SideWindow/Alert/slice'
 import { setError } from '../../shared_slices/Global'
 
 import type { MainAppThunk } from '../../../store'

@@ -1,7 +1,7 @@
 import { deleteSilencedAlertFromAPI } from '../../../api/alert'
+import { setSilencedAlerts } from '../../../features/SideWindow/Alert/slice'
 import { deleteListItems } from '../../../utils/deleteListItems'
 import { updateListItemsProp } from '../../../utils/updateListItemsProp'
-import { setSilencedAlerts } from '../../shared_slices/Alert'
 import { setError } from '../../shared_slices/Global'
 
 import type { MainAppThunk } from '../../../store'

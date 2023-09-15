@@ -2,10 +2,11 @@
 
 import ky from 'ky'
 
-import { monitorfishApiKy } from './index'
+import { monitorfishApi, monitorfishApiKy } from './index'
 import { ApiError } from '../libs/ApiError'
 
 import type {
+  SilencedAlertData,
   LEGACY_PendingAlert,
   LEGACY_SilencedAlert,
   PendingAlert,
@@ -17,6 +18,7 @@ export const ALERTS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les alertes
 export const VALIDATE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu valider l'alerte opérationelle"
 export const SILENCE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu ignorer l'alerte opérationelle"
 export const DELETE_SILENCED_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu réactiver l'alerte opérationelle"
+export const CREATE_SILENCED_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu suspendre l'alerte opérationelle"
 
 /**
  * Type-discriminate active alerts
@@ -27,6 +29,24 @@ function normalizePendingAlert(alert: PendingAlert): LEGACY_PendingAlert {
     isValidated: false
   }
 }
+
+export const alertApi = monitorfishApi.injectEndpoints({
+  endpoints: builder => ({
+    createSilencedAlert: builder.mutation<SilencedAlert, SilencedAlertData>({
+      query: silencedAlert => ({
+        body: {
+          ...silencedAlert,
+          value: JSON.stringify(silencedAlert.value)
+        },
+        method: 'POST',
+        url: `/operational_alerts/silenced`
+      }),
+      transformErrorResponse: response => new ApiError(CREATE_SILENCED_ALERT_ERROR_MESSAGE, response)
+    })
+  })
+})
+
+export const { useCreateSilencedAlertMutation } = alertApi
 
 /**
  * Get operational alerts

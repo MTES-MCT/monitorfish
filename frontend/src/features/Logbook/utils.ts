@@ -2,10 +2,10 @@ import { Feature } from 'ol'
 import Point from 'ol/geom/Point'
 
 import { LogbookMessageType, LogbookOperationType } from './constants'
-import { LogbookCatch, LogbookMessage } from './logbook.types'
 import { LayerProperties } from '../../domain/entities/layers/constants'
 import { getFishingActivityCircleStyle } from '../map/layers/styles/vesselTrack.style'
 
+import type { LogbookCatch, LogbookMessage } from './logbook.types'
 import type {
   CatchProperty,
   CatchWithProperties,

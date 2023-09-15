@@ -22,10 +22,10 @@ import { ReactComponent as XMLSVG } from '../../../../icons/Picto_XML.svg'
 import { ReactComponent as ShowActivitySVG } from '../../../../icons/Position_message_JPE_Pin_gris_clair.svg'
 import { ReactComponent as HideActivitySVG } from '../../../../icons/Position_message_JPE_Pin_masquer.svg'
 import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../constants'
-import { LogbookMessage as LogbookMessageType } from '../../../logbook.types'
 import { logbookActions } from '../../../slice'
 import { getLogbookMessageType } from '../../../utils'
 
+import type { LogbookMessage as LogbookMessageType } from '../../../logbook.types'
 import type { HTMLProps } from 'react'
 
 type LogbookMessageComponentType = {

@@ -1,11 +1,11 @@
 import { HTTPError } from 'ky'
 
 import { NavigateTo } from './constants'
-import { VesselVoyage } from './logbook.types'
 import { monitorfishApi, monitorfishApiKy } from '../../api'
 import { HttpStatusCode } from '../../api/constants'
 import { ApiError } from '../../libs/ApiError'
 
+import type { VesselVoyage } from './logbook.types'
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
 
 const LOGBOOK_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les messages JPE de ce navire"

@@ -78,7 +78,7 @@ export const getVesselLogbook =
       if (areFishingActivitiesShowedOnMap) {
         dispatch(logbookActions.showAllOnMap())
       } else {
-        dispatch(logbookActions.showAllOnMap())
+        dispatch(logbookActions.hideAllOnMap())
       }
 
       dispatch(removeError())

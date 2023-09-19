@@ -12,13 +12,13 @@ import Text from 'ol/style/Text'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../domain/entities/layers/types'
 import { OpenLayersGeometryType } from '../../../domain/entities/map/constants'
-import { VectorLayerWithName } from '../../../domain/types/layer'
 import { getColorWithAlpha, getHashDigitsFromString } from '../../map/layers/styles/utils'
 import { monitorfishMap } from '../../map/monitorfishMap'
 import { DIGIT_TO_LAYER_COLOR_MAP } from '../constants'
-import { CustomZone } from '../types'
 
+import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { MainAppThunk } from '../../../store'
+import type { CustomZone } from '../types'
 
 /**
  * initialise Custom Zone layer

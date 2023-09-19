@@ -1,4 +1,4 @@
-import { CustomZone } from '../../types'
+import type { CustomZone } from '../../types'
 
 export const dummyCustomZone: Record<string, CustomZone> = {
   'b2f8aea3-7814-4247-98fa-ddc58c922d09': {

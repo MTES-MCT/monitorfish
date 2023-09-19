@@ -1,4 +1,4 @@
-import { GeoJSON } from '../../domain/types/GeoJSON'
+import type { GeoJSON } from '../../domain/types/GeoJSON'
 
 export type CustomZone = {
   feature: GeoJSON.GeoJson

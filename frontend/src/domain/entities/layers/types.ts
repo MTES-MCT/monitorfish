@@ -9,6 +9,7 @@ export enum MonitorFishLayer {
   AEM = 'AEM',
   BASE_LAYER = 'BASE_LAYER',
   CCAMLR = 'CCAMLR',
+  CUSTOM = 'CUSTOM',
   DRAW = 'DRAW',
   EEZ = 'EEZ',
   FAO = 'FAO',

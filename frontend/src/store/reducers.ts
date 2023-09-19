@@ -25,6 +25,7 @@ import { sideWindowReducer } from '../domain/shared_slices/SideWindow'
 import { speciesReducer } from '../domain/shared_slices/Species'
 import { vesselSliceReducer } from '../domain/shared_slices/Vessel'
 import { regulationReducer } from '../features/Backoffice/slice'
+import { customZoneReducer, CustomZoneState } from '../features/CustomZone/slice'
 import { logbookReducer } from '../features/Logbook/slice'
 import { regulatoryLayerSearchReducer } from '../features/MapButtons/LayersSidebar/RegulatoryZones/search/slice'
 import { alertReducer } from '../features/SideWindow/Alert/slice'
@@ -61,6 +62,10 @@ export const mainReducer = {
   beaconMalfunction: beaconMalfunctionReducer,
   //  TODO Pass that to singular.
   controls: controlReducer,
+  customZone: persistReducerTyped(
+    { ...getCommonPersistReducerConfig<CustomZoneState>('mainPersistorCustomZone', ['zones']) },
+    customZoneReducer
+  ),
   displayedComponent: displayedComponentReducer,
   displayedError: displayedErrorReducer,
   draw: drawReducer,

@@ -1,10 +1,8 @@
-// TODO Remove legacy colors.
-
 import { describe, expect, it } from '@jest/globals'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import dayjs from 'dayjs'
 
-import { getColorWithAlpha, getHashDigitsFromRegulation, getStartAndEndDatesSetWithCurrentYear } from './utils'
+import { getColorWithAlpha, getHashDigitsFromString, getStartAndEndDatesSetWithCurrentYear } from './utils'
 import { theme } from '../../../../ui/theme'
 
 describe('utils', () => {
@@ -13,7 +11,7 @@ describe('utils', () => {
     const regulation = null
 
     // When
-    expect(getHashDigitsFromRegulation(regulation)).toBeUndefined()
+    expect(getHashDigitsFromString(regulation)).toBeUndefined()
   })
 
   it('getHashDigitsFromRegulation Should return a constant number for a given regulatory zone', async () => {
@@ -24,9 +22,9 @@ describe('utils', () => {
     }
 
     // Then
-    expect(getHashDigitsFromRegulation(regulation)).toEqual(11)
+    expect(getHashDigitsFromString(`${regulation.topic}:${regulation.zone}`)).toEqual(11)
     // Retry to ensure the returned digit is constant
-    expect(getHashDigitsFromRegulation(regulation)).toEqual(11)
+    expect(getHashDigitsFromString(`${regulation.topic}:${regulation.zone}`)).toEqual(11)
   })
 
   it('getHashDigitsFromRegulation Should return a constant number for another regulatory zone', async () => {
@@ -37,7 +35,7 @@ describe('utils', () => {
     }
 
     // When
-    expect(getHashDigitsFromRegulation(regulation)).toEqual(9)
+    expect(getHashDigitsFromString(`${regulation.topic}:${regulation.zone}`)).toEqual(9)
   })
 
   it('getColorWithAlpha Should add the alpha field on a color', async () => {

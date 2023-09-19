@@ -15,6 +15,7 @@ import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { MapButtonStyle } from '../../commonStyles/MapButton.style'
 import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
+import { CustomZones } from '../../CustomZone/components/CustomZones'
 import { ReactComponent as LayersSVG } from '../../icons/Couches.svg'
 
 export function LayersSidebar() {
@@ -64,6 +65,7 @@ export function LayersSidebar() {
                 namespace={namespace}
                 regulatoryLayersAddedToMySelection={numberOfRegulatoryLayersSaved}
               />
+              <CustomZones namespace={namespace} />
               <AdministrativeZones namespace={namespace} />
               <BaseMaps namespace={namespace} />
             </Layers>

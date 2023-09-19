@@ -28,6 +28,7 @@ export const layersGroups: Record<string, CodeAndName> = {
 export enum LayerType {
   ADMINISTRATIVE = 'ADMINISTRATIVE',
   BASE_LAYER = 'BASE_LAYER',
+  CUSTOM = 'CUSTOM',
   DRAW = 'DRAW',
   FREE_DRAW = 'FREE_DRAW',
   INFRACTION_SUSPICION = 'INFRACTION_SUSPICION',
@@ -159,6 +160,13 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
     type: LayerType.REGULATORY,
     isClickable: true,
     isHoverable: true
+  },
+  [MonitorFishLayer.CUSTOM]: {
+    code: 'custom',
+    type: LayerType.CUSTOM,
+    isClickable: false,
+    isHoverable: false,
+    zIndex: 1009
   },
   [MonitorFishLayer.EEZ]: {
     code: 'eez_areas',

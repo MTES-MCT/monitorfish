@@ -1,5 +1,8 @@
 import { THEME } from '@mtes-mct/monitor-ui'
 
+export const DEFAULT_ZONE_COLOR = THEME.color.earthYellow
+export const DEFAULT_ZONE_BORDER = THEME.color.darkGoldenrod
+
 export const DIGIT_TO_LAYER_COLOR_MAP = new Map<number, string>([
   [0, THEME.color.pear],
   [1, THEME.color.pear],

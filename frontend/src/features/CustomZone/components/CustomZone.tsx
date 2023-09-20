@@ -2,13 +2,13 @@ import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../constants/constants'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { editName } from '../../useCases/editName'
-import { fitToView } from '../../useCases/fitToView'
-import { computeCustomZoneStyle } from '../../utils/computeCustomZoneStyle'
-import { getColorAndStrokeFromStyles } from '../../utils/getColorAndStrokeFromStyles'
-import { EditDialog } from '../EditDialog'
+import { EditDialog } from './EditDialog'
+import { COLORS } from '../../../constants/constants'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { editName } from '../useCases/editName'
+import { fitToView } from '../useCases/fitToView'
+import { computeCustomZoneStyle } from '../utils/computeCustomZoneStyle'
+import { getColorAndStrokeFromStyles } from '../utils/getColorAndStrokeFromStyles'
 
 type CustomZoneType = {
   isShown: boolean
@@ -29,27 +29,29 @@ export function CustomZone({ isShown, name, onRemove, onToggleShowZone, uuid }: 
 
   return (
     <>
-      <Wrapper data-cy="custom-zone-show-toggle">
-        <ZonePreview color={color} onClick={() => fitToView(uuid)} stroke={stroke} />
-        <ZoneName title={name}>{name}</ZoneName>
+      <Wrapper>
+        <ZonePreview color={color} data-cy="custom-zone-zoom-button" onClick={() => fitToView(uuid)} stroke={stroke} />
+        <ZoneName data-cy="custom-zone-name" title={name}>
+          {name}
+        </ZoneName>
         <Icons>
           <EditIcon
             color={THEME.color.slateGray}
-            data-cy="regulatory-layers-my-zones-zone-delete"
+            data-cy="custom-zone-edit-button"
             onClick={() => setIsEditDialogOpen(true)}
             size={20}
             title="Afficher la zone"
           />
           <DisplayIcon
             color={isShown ? THEME.color.slateGray : THEME.color.lightGray}
-            data-cy="regulatory-layers-my-zones-zone-delete"
+            data-cy="custom-zone-display-button"
             onClick={() => onToggleShowZone(uuid)}
             size={20}
             title="Afficher la zone"
           />
-          <CloseIcon
+          <RemoveIcon
             color={THEME.color.slateGray}
-            data-cy="regulatory-layers-my-zones-zone-delete"
+            data-cy="custom-zone-remove-button"
             onClick={() => onRemove(uuid)}
             size={15}
             title="Supprimer la zone importée"
@@ -70,7 +72,7 @@ export function CustomZone({ isShown, name, onRemove, onToggleShowZone, uuid }: 
   )
 }
 
-const CloseIcon = styled(Icon.Close)<{
+const RemoveIcon = styled(Icon.Close)<{
   title: string
 }>`
   margin: 8px 10px 0 0;
@@ -84,7 +86,7 @@ const DisplayIcon = styled(Icon.Display)<{
   cursor: pointer;
 `
 
-const EditIcon = styled(Icon.Edit)<{
+const EditIcon = styled(Icon.EditUnbordered)<{
   title: string
 }>`
   margin: 5px 10px 0 0;

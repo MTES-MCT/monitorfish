@@ -19,7 +19,6 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "skipLibCheck": true,
-    "importsNotUsedAsValues": "error",
     "strict": true,
     "strictBindCallApply": true,
     "strictFunctionTypes": true,

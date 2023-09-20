@@ -9,13 +9,10 @@ context('Sidebars > Custom Zones', () => {
 
     cy.cleanScreenshots(1)
 
-    // When
-    cy.get('*[data-cy="layers-sidebar"]').click({ force: true, timeout: 10000 })
-    cy.get('*[data-cy="custom-zones-toggle"]').click({ force: true, timeout: 10000 })
+    cy.get('*[data-cy="layers-sidebar"]').click()
+    cy.get('*[data-cy="custom-zones-toggle"]').click()
 
-    // TODO Fix custom zone not showed on startup
-
-    // Then
+    // When it displays the zone at init
     cy.get('.CUSTOM').toMatchImageSnapshot({
       imageConfig: {
         threshold: 0.05,
@@ -26,8 +23,8 @@ context('Sidebars > Custom Zones', () => {
       }
     })
 
-    cy.get('*[data-cy="custom-zone-show-toggle"]')
-      .eq(0)
+    // Display the zone from the button
+    cy.get('*[data-cy="custom-zone-display-button"]')
       .click()
       .then(() => {
         const customZonesItem = JSON.parse(localStorage.getItem(CUSTOM_ZONES_LOCALSTORAGE_KEY) || '')
@@ -35,5 +32,38 @@ context('Sidebars > Custom Zones', () => {
         expect(zones['b2f8aea3-7814-4247-98fa-ddc58c922d09'].isShown).equal(false)
       })
     cy.cleanScreenshots(1)
+
+    cy.get('*[data-cy="custom-zone-display-button"]').click()
+    cy.get('.CUSTOM').toMatchImageSnapshot({
+      imageConfig: {
+        threshold: 0.05,
+        thresholdType: 'percent'
+      },
+      screenshotConfig: {
+        clip: { height: 1000, width: 600, x: 410, y: 0 }
+      }
+    })
+
+    cy.get('*[data-cy="custom-zone-zoom-button"]').click()
+
+    // Remove the zone
+    cy.get('*[data-cy="custom-zone-name"]').should('have.length', 1)
+    cy.get('*[data-cy="custom-zone-remove-button"]').click()
+    cy.get('*[data-cy="custom-zone-name"]').should('have.length', 0)
+  })
+
+  it('A custom zone Should be edited', () => {
+    cy.loadPath('/#@-9649561.29,3849836.62,7.84')
+    cy.get('*[data-cy="layers-sidebar"]').click()
+    cy.get('*[data-cy="custom-zones-toggle"]').click()
+
+    // When
+    cy.get('*[data-cy="custom-zone-edit-button"]').click()
+    cy.fill('Nom de la zone', 'Une zone REG')
+    cy.clickButton('Enregistrer')
+
+    // Then
+    cy.get('*[data-cy="custom-zone-name"]').scrollIntoView()
+    cy.get('*[data-cy="custom-zone-name"]').contains('Une zone REG')
   })
 })

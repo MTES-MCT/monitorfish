@@ -7,7 +7,7 @@ import type { CustomZone } from './types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 // TODO Remove test condition from slice
-const IS_CYPRESS_TEST = 'yes' || getEnvironmentVariable('REACT_APP_CYPRESS_TEST')
+const IS_CYPRESS_TEST = getEnvironmentVariable('REACT_APP_CYPRESS_TEST')
 
 export type CustomZoneState = {
   zones: Record<string, CustomZone>

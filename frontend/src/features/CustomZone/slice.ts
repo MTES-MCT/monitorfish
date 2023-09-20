@@ -6,6 +6,7 @@ import { getEnvironmentVariable } from '../../api/utils'
 import type { CustomZone } from './types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
+// TODO Remove test condition from slice
 const IS_CYPRESS_TEST = getEnvironmentVariable('REACT_APP_CYPRESS_TEST')
 
 export type CustomZoneState = {
@@ -26,6 +27,21 @@ const customZoneSlice = createSlice({
      */
     add(state, action: PayloadAction<CustomZone>) {
       state.zones = { ...state.zones, [action.payload.uuid]: action.payload }
+    },
+
+    /**
+     * Edit a layer name with the UUID
+     * @param {Object=} state
+     * @param action - the uuid and name
+     */
+    editName(
+      state,
+      action: PayloadAction<{
+        name: string
+        uuid: string
+      }>
+    ) {
+      state.zones[action.payload.uuid]!.name = action.payload.name
     },
 
     /**
@@ -57,7 +73,7 @@ const customZoneSlice = createSlice({
   }
 })
 
-export const { add, hide, remove, show } = customZoneSlice.actions
+export const { add, editName, hide, remove, show } = customZoneSlice.actions
 
 export const customZoneReducer = customZoneSlice.reducer
 

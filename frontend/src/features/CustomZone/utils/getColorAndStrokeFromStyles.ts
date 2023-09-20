@@ -1,6 +1,6 @@
-import type { Style } from 'ol/style'
-
 import { DEFAULT_ZONE_BORDER, DEFAULT_ZONE_COLOR } from '../constants'
+
+import type { Style } from 'ol/style'
 
 export function getColorAndStrokeFromStyles(styles: Style[]): { color: string; stroke: string } {
   if (!styles.length) {

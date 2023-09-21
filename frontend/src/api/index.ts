@@ -47,6 +47,7 @@ const monitorfishBaseQuery = fetchBaseQuery({
     return headers
   }
 })
+
 export const monitorfishApi = createApi({
   baseQuery: normalizeRtkBaseQuery(monitorfishBaseQuery),
   endpoints: () => ({}),
@@ -64,6 +65,17 @@ export const monitorfishApi = createApi({
     'ForeignFmcs',
     'TripNumbers'
   ]
+})
+
+const monitorfishPublicBaseQuery = fetchBaseQuery({
+  baseUrl: `/api`
+})
+
+export const monitorfishPublicApi = createApi({
+  baseQuery: normalizeRtkBaseQuery(monitorfishPublicBaseQuery),
+  endpoints: () => ({}),
+  reducerPath: 'monitorfishPublicApi',
+  tagTypes: []
 })
 
 export const monitorfishApiKy = ky.extend({

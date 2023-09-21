@@ -3,7 +3,7 @@ import { useBeforeUnload } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { ErrorToastNotification } from './commonComponents/ErrorToastNotification'
-import { Healthcheck } from './Healthcheck'
+import { HealthcheckHeadband } from './Healthcheck/components/HealthcheckHeadband'
 import { DrawLayerModal } from './map/draw/DrawModal'
 import Map from './map/Map'
 import { MapButtons } from './MapButtons'
@@ -43,7 +43,7 @@ export function MainWindow() {
 
   return (
     <>
-      <Healthcheck />
+      <HealthcheckHeadband />
 
       <PreviewFilteredVessels />
 

@@ -27,7 +27,7 @@ import { getOperationalAlerts } from '../../domain/use_cases/alert/getOperationa
 import { getSilencedAlerts } from '../../domain/use_cases/alert/getSilencedAlerts'
 import getAllBeaconMalfunctions from '../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
 import getAllGearCodes from '../../domain/use_cases/gearCode/getAllGearCodes'
-import { getFishingInfractions } from '../../domain/use_cases/infraction/getFishingInfractions'
+import { getInfractions } from '../../domain/use_cases/infraction/getInfractions'
 import { getAllCurrentReportings } from '../../domain/use_cases/reporting/getAllCurrentReportings'
 import { sideWindowDispatchers } from '../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
@@ -103,7 +103,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
       dispatch(getAllBeaconMalfunctions())
       dispatch(getSilencedAlerts())
       dispatch(getAllCurrentReportings())
-      dispatch(getFishingInfractions())
+      dispatch(getInfractions())
       dispatch(getAllGearCodes())
 
       dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))

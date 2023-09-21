@@ -8,7 +8,9 @@ WITH t1 AS (
     FROM FMC2.FMC_CODE_NATINF inf
     LEFT JOIN FMC2.FMC_CODE_TYPE_INFRACTION typinf
     ON inf.idc_fmc_type_infraction = typinf.idc_fmc_type_infraction
-    WHERE REGEXP_LIKE(TRIM(BOTH ' ' FROM inf.code), '^[0-9]+$') -- exclude natinfs that are not castable to integers
+    WHERE
+        inf.bloque = 0 AND
+        REGEXP_LIKE(TRIM(BOTH ' ' FROM inf.code), '^[0-9]+$') -- exclude natinfs that are not castable to integers
 )
 
 SELECT

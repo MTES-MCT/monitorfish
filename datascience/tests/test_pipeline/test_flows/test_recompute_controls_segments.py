@@ -86,20 +86,31 @@ def test_extract_controls_catches(reset_test_data):
             )
         )
     controls_catches = extract_controls_catches.run(
-        year=2022, control_types=("LAND_CONTROL", "SEA_CONTROL")
+        year=2022, control_types=["LAND_CONTROL", "SEA_CONTROL"]
     )
     assert len(controls_catches) == 73
     assert controls_catches.id.nunique() == 25
     controls_catches = extract_controls_catches.run(
-        year=2022, control_types=("SEA_CONTROL",)
+        year=2022, control_types=["SEA_CONTROL"]
     )
     assert len(controls_catches) == 18
     assert controls_catches.id.nunique() == 12
     controls_catches = extract_controls_catches.run(
-        year=2022, control_types=("LAND_CONTROL",)
+        year=2022, control_types=["LAND_CONTROL"]
     )
     assert len(controls_catches) == 55
     assert controls_catches.id.nunique() == 13
+
+    with pytest.raises(ValueError):
+        extract_controls_catches.run(
+            year=2022, control_types=["UNKNWOWN_CONTROL_TYPEZZZ"]
+        )
+
+    with pytest.raises(ValueError):
+        extract_controls_catches.run(year="2022", control_types=["LAND_CONTROL"])
+
+    with pytest.raises(ValueError):
+        extract_controls_catches.run(year=2022, control_types="THIS_SHOULD_BE_A_LIST")
 
 
 def test_compute_controls_segments():
@@ -179,13 +190,13 @@ def test_recompute_controls_segments_flow(reset_test_data, updated_controls_segm
     initial_controls_segments = read_query(query, db="monitorfish_remote")
 
     # Running the flow on a year without data should not update any row
-    state = flow.run(year=1950, control_types=("LAND_CONTROL", "SEA_CONTROL"))
+    state = flow.run(year=1950, control_types=["LAND_CONTROL", "SEA_CONTROL"])
     assert state.is_successful()
     controls_segments = read_query(query, db="monitorfish_remote")
     pd.testing.assert_frame_equal(controls_segments, initial_controls_segments)
 
     # Running the flow on land controls should update only land controls
-    state = flow.run(year=2022, control_types=("LAND_CONTROL",))
+    state = flow.run(year=2022, control_types=["LAND_CONTROL"])
     assert state.is_successful()
     controls_segments = read_query(query, db="monitorfish_remote")
     pd.testing.assert_frame_equal(
@@ -203,7 +214,7 @@ def test_recompute_controls_segments_flow(reset_test_data, updated_controls_segm
     )
 
     # Running the flow on land and sea controls should update land and sea controls
-    state = flow.run(year=2022, control_types=("LAND_CONTROL", "SEA_CONTROL"))
+    state = flow.run(year=2022, control_types=["LAND_CONTROL", "SEA_CONTROL"])
     assert state.is_successful()
     controls_segments = read_query(query, db="monitorfish_remote")
     pd.testing.assert_frame_equal(controls_segments, updated_controls_segments)

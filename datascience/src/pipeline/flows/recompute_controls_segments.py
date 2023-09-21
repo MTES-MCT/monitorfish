@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Tuple
+from typing import List
 
 import pandas as pd
 import prefect
@@ -18,7 +18,7 @@ from src.pipeline.utils import psql_insert_copy
 
 
 @task(checkpoint=False)
-def extract_controls_catches(year: int, control_types: Tuple[str]) -> pd.DataFrame:
+def extract_controls_catches(year: int, control_types: List[str]) -> pd.DataFrame:
     """
     Extracts controls data from the specified year.
 
@@ -37,10 +37,10 @@ def extract_controls_catches(year: int, control_types: Tuple[str]) -> pd.DataFra
         raise ValueError(f"year must be of type int, got {type(year)}")
 
     try:
-        assert isinstance(control_types, tuple)
+        assert isinstance(control_types, List)
     except AssertionError:
         raise ValueError(
-            f"control_types must be of type tuple, got {type(control_types)}"
+            f"control_types must be of type list, got {type(control_types)}"
         )
 
     for control_type in control_types:
@@ -54,7 +54,7 @@ def extract_controls_catches(year: int, control_types: Tuple[str]) -> pd.DataFra
         query_filepath="monitorfish/controls_catches.sql",
         parse_dates=parse_dates,
         dtypes=dtypes,
-        params={"year": year, "control_types": control_types},
+        params={"year": year, "control_types": tuple(control_types)},
     )
 
 

@@ -21,7 +21,7 @@ export const INFRACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les NA
  *
  * @throws {ApiError}
  */
-async function getFishingInfractionsFromAPI() {
+async function getInfractionsFromAPI() {
   try {
     return await monitorfishApiKy.get(`/bff/v1/infractions`).json<Array<MissionAction.Infraction>>()
   } catch (err) {
@@ -29,4 +29,4 @@ async function getFishingInfractionsFromAPI() {
   }
 }
 
-export { getFishingInfractionsFromAPI }
+export { getInfractionsFromAPI }

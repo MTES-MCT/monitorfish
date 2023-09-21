@@ -10,8 +10,7 @@ import getAllBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getA
 import { getVesselBeaconMalfunctions } from '../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
 import { openBeaconMalfunctionInKanban } from '../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
 import getAllGearCodes from '../domain/use_cases/gearCode/getAllGearCodes'
-import getHealthcheck from '../domain/use_cases/healthcheck/getHealthcheck'
-import { getFishingInfractions } from '../domain/use_cases/infraction/getFishingInfractions'
+import { getInfractions } from '../domain/use_cases/infraction/getInfractions'
 import getAllRegulatoryLayers from '../domain/use_cases/layer/regulation/getAllRegulatoryLayers'
 import { getVesselControls } from '../domain/use_cases/mission/getVesselControls'
 import { getAllCurrentReportings } from '../domain/use_cases/reporting/getAllCurrentReportings'
@@ -48,7 +47,6 @@ export function APIWorker() {
     }
 
     dispatch(setIsUpdatingVessels())
-    dispatch(getHealthcheck())
     dispatch(getAllSpecies()).then(() => dispatch(getAllRegulatoryLayers()))
     dispatch(getAllGearCodes())
 
@@ -61,11 +59,10 @@ export function APIWorker() {
     }
 
     dispatch(showVesselsLastPosition())
-    dispatch(getFishingInfractions())
+    dispatch(getInfractions())
 
     const interval = setInterval(() => {
       dispatch(setIsUpdatingVessels())
-      dispatch(getHealthcheck())
       dispatch(showVesselsLastPosition())
       dispatch(updateVesselTracks())
 

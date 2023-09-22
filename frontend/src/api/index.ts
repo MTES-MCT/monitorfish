@@ -67,6 +67,23 @@ export const monitorfishApi = createApi({
   ]
 })
 
+// =============================================================================
+// Monitorfish Navigation API
+
+const monitorfishNavBaseQuery = fetchBaseQuery({
+  baseUrl: `/nav`
+})
+
+export const monitorfishNavApi = createApi({
+  baseQuery: normalizeRtkBaseQuery(monitorfishNavBaseQuery),
+  endpoints: () => ({}),
+  reducerPath: 'monitorfishNavApi',
+  tagTypes: []
+})
+
+// =============================================================================
+// Monitorfish Public API
+
 const monitorfishPublicBaseQuery = fetchBaseQuery({
   baseUrl: `/api`
 })

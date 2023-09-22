@@ -1,11 +1,11 @@
 import { faoAreasApi } from '../../../api/faoAreas'
-import { vesselApi } from '../../../api/vessel'
 import { missionActions as missionSliceActions } from '../../../domain/actions'
 import { MissionAction } from '../../../domain/types/missionAction'
 import { getLastControlCircleGeometry } from '../../../domain/use_cases/mission/getLastControlCircleGeometry'
 import { getFleetSegments } from '../../../domain/use_cases/vessel/getFleetSegments'
 import { FrontendError } from '../../../libs/FrontendError'
 import { getSummedSpeciesOnBoard } from '../../Logbook/utils'
+import { vesselApi } from '../../Vessel/apis'
 
 import type { MissionActionFormValues } from './types'
 import type { RiskFactor } from '../../../domain/entities/vessel/riskFactor/types'

@@ -1,6 +1,7 @@
 import { monitorfishApi, monitorfishNavApi } from '../../api'
-import { RiskFactor } from '../../domain/entities/vessel/riskFactor/types'
-import { VesselLastPosition } from '../../domain/entities/vessel/types'
+
+import type { RiskFactor } from '../../domain/entities/vessel/riskFactor/types'
+import type { VesselLastPosition } from '../../domain/entities/vessel/types'
 
 export const vesselApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({

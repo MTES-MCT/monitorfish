@@ -1,50 +1,18 @@
 import { HTTPError } from 'ky'
 
 import { HttpStatusCode } from './constants'
-import { monitorfishApi, monitorfishApiKy } from './index'
+import { monitorfishApiKy } from './index'
 import { NavigateTo } from '../features/Logbook/constants'
 import { ApiError } from '../libs/ApiError'
 
-import type { RiskFactor } from '../domain/entities/vessel/riskFactor/types'
-import type {
-  TrackRequest,
-  VesselAndPositions,
-  VesselIdentity,
-  VesselLastPosition,
-  VesselPosition
-} from '../domain/entities/vessel/types'
+import type { TrackRequest, VesselAndPositions, VesselIdentity, VesselPosition } from '../domain/entities/vessel/types'
 import type { CurrentAndArchivedReportingsOfSelectedVessel } from '../domain/types/reporting'
 import type { VesselVoyage } from '../features/Logbook/Logbook.types'
 
-const LAST_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les dernières positions"
 const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"
 const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les navires dans notre base"
 const LOGBOOK_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les messages JPE de ce navire"
 const REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les signalements de ce navire"
-
-export const vesselApi = monitorfishApi.injectEndpoints({
-  endpoints: builder => ({
-    getRiskFactor: builder.query<RiskFactor, string>({
-      providesTags: () => [{ type: 'RiskFactor' }],
-      query: internalReferenceNumber => `/vessels/risk_factor?internalReferenceNumber=${internalReferenceNumber}`
-    })
-  })
-})
-
-export const { useGetRiskFactorQuery } = vesselApi
-
-/**
- * Get all vessels last positions
- *
- * @throws {@link ApiError}
- */
-async function getVesselsLastPositionsFromAPI() {
-  try {
-    return await monitorfishApiKy.get('/bff/v1/vessels').json<VesselLastPosition[]>()
-  } catch (err) {
-    throw new ApiError(LAST_POSITIONS_ERROR_MESSAGE, err)
-  }
-}
 
 function getVesselIdentityAsEmptyStringWhenNull(identity: VesselIdentity) {
   const vesselId = identity.vesselId || ''
@@ -176,7 +144,6 @@ export {
   searchVesselsFromAPI,
   getVesselPositionsFromAPI,
   getVesselFromAPI,
-  getVesselsLastPositionsFromAPI,
   getVesselLogbookFromAPI,
   getVesselReportingsFromAPI
 }

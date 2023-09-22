@@ -16,7 +16,6 @@ import { getVesselControls } from '../domain/use_cases/mission/getVesselControls
 import { getAllCurrentReportings } from '../domain/use_cases/reporting/getAllCurrentReportings'
 import getAllSpecies from '../domain/use_cases/species/getAllSpecies'
 import { getVesselReportings } from '../domain/use_cases/vessel/getVesselReportings'
-import { showVesselsLastPosition } from '../domain/use_cases/vessel/showVesselsLastPosition'
 import { updateVesselTracks } from '../domain/use_cases/vessel/updateVesselTracks'
 import { getVesselLogbook } from '../features/Logbook/useCases/getVesselLogbook'
 import { useIsSuperUser } from '../hooks/authorization/useIsSuperUser'
@@ -58,12 +57,10 @@ export function APIWorker() {
       dispatch(getAllBeaconMalfunctions())
     }
 
-    dispatch(showVesselsLastPosition())
     dispatch(getInfractions())
 
     const interval = setInterval(() => {
       dispatch(setIsUpdatingVessels())
-      dispatch(showVesselsLastPosition())
       dispatch(updateVesselTracks())
 
       setUpdateVesselSidebarTab(true)

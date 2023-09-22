@@ -1,5 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 
+import { NavigationContext } from './context/NavigationContext'
 import { Backoffice } from './features/Backoffice'
 import { ControlObjectiveList } from './features/Backoffice/ControlObjectiveList'
 import { EditRegulation } from './features/Backoffice/edit_regulation/EditRegulation'
@@ -9,11 +10,29 @@ import { SideWindow } from './features/SideWindow'
 import { BackofficePage } from './pages/BackofficePage'
 import { HomePage } from './pages/HomePage'
 
+/*
+
+ */
+
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <HomePage />,
+    children: [
+      {
+        index: true,
+        element: <MainWindow />
+      }
+    ]
+  },
+  {
+    path: '/nav',
+    element: (
+      <NavigationContext.Provider value>
+        <HomePage />
+      </NavigationContext.Provider>
+    ),
     children: [
       {
         index: true,

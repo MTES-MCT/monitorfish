@@ -71,11 +71,11 @@ const StyledMapToolButton = styled(MapButtonStyle)<{
 
     return `right: ${p.$isRightMenuShrinked ? 0 : 10}px;`
   }}
-  background: ${p => (p.$isActive ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
+  background: ${p => (p.$isActive ? p.theme.color.blueGray : p.theme.color.charcoal)};
   transition: all 0.3s;
 
   :hover,
   :focus {
-    background: ${p => (p.$isActive ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
+    background: ${p => (p.$isActive ? p.theme.color.blueGray : p.theme.color.charcoal)};
   }
 `

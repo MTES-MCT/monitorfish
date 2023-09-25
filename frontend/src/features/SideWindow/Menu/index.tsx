@@ -65,7 +65,7 @@ const MenuButton = styled(IconButton)<{
   selected?: boolean
 }>`
   animation: none;
-  background: ${p => (p.selected ? p.theme.color.blueGray[100] : 'none')};
+  background: ${p => (p.selected ? p.theme.color.blueGray : 'none')};
   border: 0;
   border-bottom: solid 1px ${p => p.theme.color.slateGray};
   color: ${p => (p.selected ? p.theme.color.white : p.theme.color.gainsboro)};
@@ -73,7 +73,7 @@ const MenuButton = styled(IconButton)<{
 
   :hover,
   :focus {
-    background: ${p => (p.selected ? p.theme.color.blueGray[100] : 'rgba(255, 255, 255, 0.125)')};
+    background: ${p => (p.selected ? p.theme.color.blueGray : 'rgba(255, 255, 255, 0.125)')};
     border: 0;
     border-bottom: solid 1px ${p => p.theme.color.slateGray};
     color: ${p => p.theme.color.white};

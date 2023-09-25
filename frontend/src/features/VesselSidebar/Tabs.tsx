@@ -122,14 +122,14 @@ const Tab = styled.button<{
   font: normal normal 300 10px/14px Marianne;
   letter-spacing: 0.45px;
   ${props => (!props.isLast ? `border-right: 1px solid ${COLORS.lightGray};` : null)}
-  background: ${props => (props.isActive ? props.theme.color.blueGray[100] : props.theme.color.charcoal)};
+  background: ${props => (props.isActive ? props.theme.color.blueGray : props.theme.color.charcoal)};
   color: ${props => (props.isActive ? props.theme.color.white : props.theme.color.lightGray)};
 
   :hover,
   :focus,
   :active {
     color: ${p => p.theme.color.white};
-    background: ${p => p.theme.color.blueGray[100]};
+    background: ${p => p.theme.color.blueGray};
     ${props => (!props.isLast ? `border-right: 1px solid ${COLORS.lightGray};` : null)}
   }
 `

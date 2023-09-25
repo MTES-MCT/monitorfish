@@ -32,6 +32,6 @@ const Row = styled.li`
   user-select: none;
 
   :hover {
-    background: ${p => p.theme.color.blueGray['25']};
+    background: ${p => p.theme.color.blueGray25};
   }
 `

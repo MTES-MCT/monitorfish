@@ -191,10 +191,10 @@ const InnerWrapper = styled.div<{
   background-color: ${p =>
     ({
       [MissionAction.MissionActionType.AIR_SURVEILLANCE]: p.theme.color.gainsboro,
-      [MissionAction.MissionActionType.OBSERVATION]: p.theme.color.blueYonder[25]
+      [MissionAction.MissionActionType.OBSERVATION]: p.theme.color.blueYonder25
     })[p.$type] || p.theme.color.white};
-  border: solid 1px ${p => (p.$isSelected ? p.theme.color.blueGray['100'] : p.theme.color.lightGray)};
-  outline: ${p => (p.$isSelected ? `${p.theme.color.blueGray['100']} solid 2px` : 'none')};
+  border: solid 1px ${p => (p.$isSelected ? p.theme.color.blueGray : p.theme.color.lightGray)};
+  outline: ${p => (p.$isSelected ? `${p.theme.color.blueGray} solid 2px` : 'none')};
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -204,7 +204,7 @@ const InnerWrapper = styled.div<{
   ${p =>
     p.$isOpen &&
     css`
-      border-left: solid 5px ${p.theme.color.blueGray['100']};
+      border-left: solid 5px ${p.theme.color.blueGray};
       padding-left: 12px;
     `}
 `

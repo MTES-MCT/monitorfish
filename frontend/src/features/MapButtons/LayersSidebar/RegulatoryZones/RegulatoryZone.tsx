@@ -18,7 +18,6 @@ import { showRegulatoryZoneMetadata } from '../../../../domain/use_cases/layer/r
 import zoomInLayer from '../../../../domain/use_cases/layer/zoomInLayer'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { theme } from '../../../../ui/theme'
 import { CloseIcon } from '../../../commonStyles/icons/CloseIcon.style'
 import { EditIcon } from '../../../commonStyles/icons/EditIcon.style'
 import { HideIcon } from '../../../commonStyles/icons/HideIcon.style'
@@ -248,7 +247,7 @@ const Zone = styled.span<{
   ${p => (p.isLast ? `border-bottom: 1px solid ${p.theme.color.lightGray}; height: 27px;` : 'height: 28px;')}
 
   :hover {
-    background: ${theme.color.blueGray['25']};
+    background: ${p => p.theme.color.blueGray25};
   }
 `
 

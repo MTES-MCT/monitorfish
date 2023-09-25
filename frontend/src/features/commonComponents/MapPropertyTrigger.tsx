@@ -40,7 +40,7 @@ export function MapPropertyTrigger({
     <Wrapper disabled={disabled} onClick={update}>
       <Icon
         style={{
-          background: booleanProperty ? THEME.color.blueGray[100] : COLORS.charcoal,
+          background: booleanProperty ? THEME.color.blueGray : THEME.color.charcoal,
           cursor: disabled ? 'not-allowed' : 'pointer',
           height: 36,
           transition: 'all 0.2s',

@@ -12,10 +12,10 @@ import MissionActionType = MissionAction.MissionActionType
 export const selectedMissionActionsStyles = [
   new Style({
     fill: new Fill({
-      color: getColorWithAlpha(THEME.color.blueGray['100'], 0.35)
+      color: getColorWithAlpha(THEME.color.blueGray, 0.35)
     }),
     stroke: new Stroke({
-      color: THEME.color.blueGray['100'],
+      color: THEME.color.blueGray,
       width: 2
     })
   }),

@@ -7,7 +7,6 @@ import { closeRegulatoryZoneMetadata } from '../../../../../domain/use_cases/lay
 import { showRegulatoryZoneMetadata } from '../../../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import { theme } from '../../../../../ui/theme'
 import { PaperDarkIcon, PaperIcon } from '../../../../commonStyles/icons/REGPaperIcon.style'
 import { getRegulatoryLayerStyle } from '../../../../map/layers/styles/regulatoryLayer.style'
 import { showOrHideMetadataIcon } from '../RegulatoryZone'
@@ -159,7 +158,7 @@ const Zone = styled.span<{
   }
 
   :hover {
-    background: ${theme.color.blueGray['25']};
+    background: ${p => p.theme.color.blueGray25};
   }
 `
 

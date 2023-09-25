@@ -128,7 +128,7 @@ const Button = styled(MapButtonStyle)<{
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};
-  background: ${p => (p.isVisible ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
+  background: ${p => (p.isVisible ? p.theme.color.blueGray : p.theme.color.charcoal)};
   padding: 2px 2px 2px 2px;
   top: 10px;
   left: 10px;
@@ -138,7 +138,7 @@ const Button = styled(MapButtonStyle)<{
 
   :hover,
   :focus {
-    background: ${p => (p.isVisible ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
+    background: ${p => (p.isVisible ? p.theme.color.blueGray : p.theme.color.charcoal)};
   }
 `
 

@@ -2,7 +2,6 @@ import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../constants/constants'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { editName } from '../../useCases/editName'
 import { fitToView } from '../../useCases/fitToView'
@@ -114,8 +113,8 @@ const Wrapper = styled.li`
   line-height: 18px;
   text-align: left;
   list-style-type: none;
-  color: ${COLORS.gunMetal};
-  border-bottom: 1px solid ${COLORS.lightGray};
+  color: ${THEME.color.gunMetal};
+  border-bottom: 1px solid ${THEME.color.lightGray};
   padding: 4px 0 4px 16px;
   display: block;
   user-select: none;
@@ -125,7 +124,7 @@ const Wrapper = styled.li`
   width: stretch;
 
   :hover {
-    background: ${THEME.color.blueGray['25']};
+    background: ${THEME.color.blueGray25};
   }
 `
 

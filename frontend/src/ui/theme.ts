@@ -20,14 +20,12 @@ export const theme = {
     white: '#FFFFFF',
 
     // Accentuation Colors
-    blueYonder: {
-      25: '#D4DDE7',
-      100: '#567A9E'
-    },
-    blueGray: {
-      100: '#5697D2',
-      25: '#D4E5F4'
-    },
+    blueYonder: '#567A9E',
+    blueYonder25: '#D4DDE7',
+
+    blueGray: '#5697D2',
+    blueGray25: '#D4E5F4',
+
     babyBlueEyes: '#99C9FF',
 
     // Notification Colors

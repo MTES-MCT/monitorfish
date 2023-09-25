@@ -217,8 +217,7 @@ const OngoingControlsVerticalBar = styled.span<{
   width: 100%;
   padding-left: 8px;
   padding-top: 6px;
-  border-left: ${p =>
-    p.$hasSomeOngoingControls ? `solid 4px ${p.theme.color.blueGray[100]}` : 'solid 4px transparent'};
+  border-left: ${p => (p.$hasSomeOngoingControls ? `solid 4px ${p.theme.color.blueGray}` : 'solid 4px transparent')};
 `
 
 const Header = styled.div`

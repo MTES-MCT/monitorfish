@@ -1,17 +1,13 @@
-import ScaleLine from 'ol/control/ScaleLine'
-import Zoom from 'ol/control/Zoom'
 import { platformModifierKeyOnly } from 'ol/events/condition'
 import OpenLayerMap from 'ol/Map'
-import { transform } from 'ol/proj'
-import View from 'ol/View'
 import { Children, cloneElement, useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import MapAttributionsBox from './controls/MapAttributionsBox'
 import MapCoordinatesBox from './controls/MapCoordinatesBox'
+import { monitorfishMap } from './monitorfishMap'
 import { HIT_PIXEL_TO_TOLERANCE } from '../../constants/constants'
 import { clickableLayerCodes, hoverableLayerCodes } from '../../domain/entities/layers'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../domain/entities/map/constants'
 import { resetAnimateToRegulatoryLayer } from '../../domain/shared_slices/Map'
 import { clickOnMapFeature } from '../../domain/use_cases/map/clickOnMapFeature'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
@@ -51,14 +47,11 @@ export function BaseMap({
   const { healthcheckTextWarning, previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
   const dispatch = useMainAppDispatch()
 
-  const [map, setMap] = useState<OpenLayerMap>()
   const isAnimating = useRef(false)
   const isInitRenderDone = useRef(false)
   const [cursorCoordinates, setCursorCoordinates] = useState<number[]>()
 
   const mapElement = useRef()
-  const mapRef = useRef<OpenLayerMap>()
-  mapRef.current = map
 
   const handleMapClick = useCallback(
     (event, _map: OpenLayerMap) => {
@@ -157,35 +150,12 @@ export function BaseMap({
   )
 
   useEffect(() => {
-    if (map) {
-      return
-    }
+    monitorfishMap.setTarget(mapElement.current)
 
-    const centeredOnFrance = [2.99049, 46.82801]
-    const initialMap = new OpenLayerMap({
-      controls: [
-        new ScaleLine({ units: 'nautical' }),
-        new Zoom({
-          className: 'zoom'
-        })
-      ],
-      keyboardEventTarget: document,
-      layers: [],
-      target: mapElement.current,
-      view: new View({
-        center: transform(centeredOnFrance, WSG84_PROJECTION, OPENLAYERS_PROJECTION),
-        minZoom: 3,
-        projection: OPENLAYERS_PROJECTION,
-        zoom: 6
-      })
-    })
-
-    initialMap.on('click', event => handleMapClick(event, initialMap))
-    initialMap.on('pointermove', event => throttleAndHandlePointerMove(event, initialMap))
-    initialMap.on('movestart', () => throttleAndHandleMovingAndZoom(initialMap))
-    initialMap.on('moveend', () => throttleAndHandleMovingAndZoom(initialMap))
-
-    setMap(initialMap)
+    monitorfishMap.on('click', event => handleMapClick(event, monitorfishMap))
+    monitorfishMap.on('pointermove', event => throttleAndHandlePointerMove(event, monitorfishMap))
+    monitorfishMap.on('movestart', () => throttleAndHandleMovingAndZoom(monitorfishMap))
+    monitorfishMap.on('moveend', () => throttleAndHandleMovingAndZoom(monitorfishMap))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -204,9 +174,9 @@ export function BaseMap({
 
   const animateToLayer = useCallback(
     _animateToRegulatoryLayer => {
-      if (map && _animateToRegulatoryLayer && !isAnimating.current && isInitRenderDone.current) {
+      if (_animateToRegulatoryLayer && !isAnimating.current && isInitRenderDone.current) {
         if (_animateToRegulatoryLayer.extent) {
-          map.getView().fit(_animateToRegulatoryLayer.extent, {
+          monitorfishMap.getView().fit(_animateToRegulatoryLayer.extent, {
             callback: () => dispatch(resetAnimateToRegulatoryLayer()),
             duration: 1000
           })
@@ -220,19 +190,19 @@ export function BaseMap({
             duration: 1000
           }
 
-          const zoom = map.getView().getZoom()
+          const zoom = monitorfishMap.getView().getZoom()
           if (zoom && zoom < 8) {
             animateObject.zoom = 8
           }
           isAnimating.current = true
-          map.getView().animate(animateObject, () => {
+          monitorfishMap.getView().animate(animateObject, () => {
             isAnimating.current = false
             dispatch(resetAnimateToRegulatoryLayer())
           })
         }
       }
     },
-    [map, dispatch]
+    [dispatch]
   )
 
   useEffect(() => {
@@ -241,7 +211,7 @@ export function BaseMap({
 
   function saveCoordinates(event) {
     if (event) {
-      const clickedCoordinates = mapRef.current?.getCoordinateFromPixel(event.pixel)
+      const clickedCoordinates = monitorfishMap.getCoordinateFromPixel(event.pixel)
       if (!clickedCoordinates) {
         return
       }
@@ -260,17 +230,16 @@ export function BaseMap({
       />
       {showCoordinates && <MapCoordinatesBox coordinates={cursorCoordinates} />}
       {showAttributions && <MapAttributionsBox />}
-      {map &&
-        Children.map(children, child => {
-          if (!child) {
-            return null
-          }
+      {Children.map(children, child => {
+        if (!child) {
+          return null
+        }
 
-          const props = { map }
+        const props = { map: monitorfishMap }
 
-          // @ts-ignore
-          return cloneElement(child, props)
-        })}
+        // @ts-ignore
+        return cloneElement(child, props)
+      })}
     </MapWrapper>
   )
 }

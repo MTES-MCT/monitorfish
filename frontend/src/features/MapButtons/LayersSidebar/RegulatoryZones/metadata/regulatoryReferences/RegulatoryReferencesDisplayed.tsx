@@ -47,7 +47,7 @@ export const Link = styled.a`
   :visited,
   :hover,
   :active {
-    color: ${p => p.theme.color.blueGray[100]};
+    color: ${p => p.theme.color.blueGray};
     font-size: 13px;
     cursor: pointer;
     font-weight: 500;

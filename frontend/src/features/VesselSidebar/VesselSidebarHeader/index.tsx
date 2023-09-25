@@ -124,12 +124,12 @@ const SearchButton = styled(MapButtonStyle)<{
   width: ${p => (p.isShrinked ? 5 : 40)}px;
   border-radius: ${p => (p.isShrinked ? 1 : 2)}px;
   right: ${p => (p.isShrinked ? 0 : 10)}px;
-  background: ${p => (p.isOpen ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
+  background: ${p => (p.isOpen ? p.theme.color.blueGray : p.theme.color.charcoal)};
   transition: all 0.3s;
 
   :hover,
   :focus {
-    background: ${p => (p.isOpen ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
+    background: ${p => (p.isOpen ? p.theme.color.blueGray : p.theme.color.charcoal)};
   }
 `
 

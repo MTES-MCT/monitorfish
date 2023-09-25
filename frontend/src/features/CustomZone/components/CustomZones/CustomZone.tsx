@@ -2,13 +2,13 @@ import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { EditDialog } from './EditDialog'
-import { COLORS } from '../../../constants/constants'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { editName } from '../useCases/editName'
-import { fitToView } from '../useCases/fitToView'
-import { computeCustomZoneStyle } from '../utils/computeCustomZoneStyle'
-import { getColorAndStrokeFromStyles } from '../utils/getColorAndStrokeFromStyles'
+import { COLORS } from '../../../../constants/constants'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { editName } from '../../useCases/editName'
+import { fitToView } from '../../useCases/fitToView'
+import { computeCustomZoneStyle } from '../../utils/computeCustomZoneStyle'
+import { getColorAndStrokeFromStyles } from '../../utils/getColorAndStrokeFromStyles'
+import { EditDialog } from '../EditDialog'
 
 type CustomZoneType = {
   isShown: boolean

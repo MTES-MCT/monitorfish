@@ -7,7 +7,7 @@ import type { Promisable } from 'type-fest'
 type EditDialogProps = {
   initialName: string
   onCancel: () => Promisable<void>
-  onConfirm: (nextName: string) => Promisable<void>
+  onConfirm: (nextName: string | undefined) => Promisable<void>
 }
 export function EditDialog({ initialName, onCancel, onConfirm }: EditDialogProps) {
   const [name, setName] = useState<string | undefined>(initialName)
@@ -23,7 +23,7 @@ export function EditDialog({ initialName, onCancel, onConfirm }: EditDialogProps
         <Button accent={Accent.TERTIARY} onClick={onCancel}>
           Annuler
         </Button>
-        <Button accent={Accent.PRIMARY} disabled={!name} Icon={Icon.Save} onClick={() => name && onConfirm(name)}>
+        <Button accent={Accent.PRIMARY} disabled={!name} Icon={Icon.Save} onClick={() => onConfirm(name)}>
           Enregistrer
         </Button>
       </Dialog.Action>

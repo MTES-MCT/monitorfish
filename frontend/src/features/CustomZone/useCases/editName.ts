@@ -10,8 +10,12 @@ import type { MainAppThunk } from '../../../store'
  * Edit a Custom Zone name
  */
 export const editName =
-  (uuid: string, nextName: string): MainAppThunk =>
+  (uuid: string, nextName: string | undefined): MainAppThunk =>
   dispatch => {
+    if (!nextName) {
+      return
+    }
+
     const layer = getLayer(MonitorFishLayer.CUSTOM)
     if (!layer) {
       logSoftError({

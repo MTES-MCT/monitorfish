@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ReactComponent as ShowFishingActivitiesSVG } from '../../../icons/Bouton_afficher_messages_JPE_sur_piste.svg'
+import { useGetLogbookUseCase } from '../../../Logbook/hooks/useGetLogbookUseCase'
 import { logbookActions } from '../../../Logbook/slice'
-import { getVesselLogbook } from '../../../Logbook/useCases/getVesselLogbook'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
@@ -16,6 +16,7 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
   const { areFishingActivitiesShowedOnMap, fishingActivities, fishingActivitiesShowedOnMap } = useMainAppSelector(
     state => state.fishingActivities
   )
+  const getVesselLogbook = useGetLogbookUseCase()
   const areFishingActivitiesReallyShowedOnMap = useMemo(
     () => areFishingActivitiesShowedOnMap || fishingActivitiesShowedOnMap?.length,
     [areFishingActivitiesShowedOnMap, fishingActivitiesShowedOnMap]
@@ -40,7 +41,7 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
       }
       dispatch(logbookActions.showAllOnMap())
     })()
-  }, [fishingActivities, selectedVesselIdentity, areFishingActivitiesReallyShowedOnMap, dispatch])
+  }, [fishingActivities, getVesselLogbook, selectedVesselIdentity, areFishingActivitiesReallyShowedOnMap, dispatch])
 
   return (
     <VesselSidebarActionButton

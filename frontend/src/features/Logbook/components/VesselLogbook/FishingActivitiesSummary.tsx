@@ -21,7 +21,7 @@ import { ReactComponent as ArrowTripSVG } from '../../../icons/Fleche_navigation
 import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
 import { useGetLastLogbookTripsQuery } from '../../api'
 import { LogbookMessageType as LogbookMessageTypeEnum, LogbookOperationType, NavigateTo } from '../../constants'
-import { getVesselLogbook } from '../../useCases/getVesselLogbook'
+import { useGetLogbookUseCase } from '../../hooks/useGetLogbookUseCase'
 import { getFAOZonesFromFARMessages } from '../../utils'
 
 import type { LogbookTripSummary } from './types'
@@ -45,11 +45,13 @@ export function FishingActivitiesSummary({ navigation, showLogbookMessages }: Fi
 
   const { data: lastLogbookTrips } = useGetLastLogbookTripsQuery(selectedVessel?.internalReferenceNumber || skipToken)
 
+  const getVesselLogbook = useGetLogbookUseCase()
+
   const getLogbookTrip = useCallback(
     (nextTripNumber: string | undefined) => {
       dispatch(getVesselLogbook(selectedVessel, NavigateTo.EQUALS, true, nextTripNumber))
     },
-    [dispatch, selectedVessel]
+    [dispatch, getVesselLogbook, selectedVessel]
   )
 
   const lastLogbookTripsOptions = useMemo(

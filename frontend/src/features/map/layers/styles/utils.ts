@@ -1,22 +1,21 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { asArray, asString } from 'ol/color'
-import { Style } from 'ol/style'
+import { Style, Circle } from 'ol/style'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 
-import type { DateInterval, BaseRegulatoryZone } from '../../../../domain/types/regulation'
+import type { DateInterval } from '../../../../domain/types/regulation'
 import type { Dayjs } from 'dayjs'
 
 /**
- * Get hash number between [0, 11] for a given regulation - Uses the DJB2 hash function
+ * Get hash number between [0, 11] for a given string - Uses the DJB2 hash function
  */
-export function getHashDigitsFromRegulation(regulation: BaseRegulatoryZone | null): number | undefined {
-  if (!regulation) {
+export function getHashDigitsFromString(stringToHash: string | null): number | undefined {
+  if (!stringToHash) {
     return undefined
   }
 
   const MAX_INT = 11
-  const stringToHash = `${regulation.topic}:${regulation.zone}`
 
   // We make sure the string will have enough length
   const biggerString = stringToHash.repeat(3)
@@ -57,15 +56,24 @@ export function getHashDigitsFromRegulation(regulation: BaseRegulatoryZone | nul
   return Math.floor((randomThreeDigits * (MAX_INT + 2)) / 999) - 1
 }
 
-export function getStyle(color: string | undefined, isSelected: boolean) {
+export function getStyle(color: string | undefined, isSelected: boolean, strokeColor?: string) {
+  const fill = new Fill({
+    color
+  })
+
+  const stroke = new Stroke({
+    color: strokeColor || 'rgba(5, 5, 94, 0.7)',
+    width: isSelected ? 3 : 1
+  })
+
   return new Style({
-    fill: new Fill({
-      color
+    fill,
+    image: new Circle({
+      fill,
+      radius: 5,
+      stroke
     }),
-    stroke: new Stroke({
-      color: 'rgba(5, 5, 94, 0.7)',
-      width: isSelected ? 3 : 1
-    })
+    stroke
   })
 }
 

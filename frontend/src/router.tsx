@@ -1,6 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 
-import { NavigationContext } from './context/NavigationContext'
 import { Backoffice } from './features/Backoffice'
 import { ControlObjectiveList } from './features/Backoffice/ControlObjectiveList'
 import { EditRegulation } from './features/Backoffice/edit_regulation/EditRegulation'
@@ -9,6 +8,7 @@ import { MainWindow } from './features/MainWindow'
 import { SideWindow } from './features/SideWindow'
 import { BackofficePage } from './pages/BackofficePage'
 import { HomePage } from './pages/HomePage'
+import { NavHomePage } from './pages/NavHomePage'
 
 /*
 
@@ -28,11 +28,7 @@ export const router = createBrowserRouter([
   },
   {
     path: '/nav',
-    element: (
-      <NavigationContext.Provider value>
-        <HomePage />
-      </NavigationContext.Provider>
-    ),
+    element: <NavHomePage />,
     children: [
       {
         index: true,

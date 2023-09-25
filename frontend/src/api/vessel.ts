@@ -1,13 +1,12 @@
-import {HttpStatusCode} from './constants'
-import {monitorfishApiKy} from './index'
-import {ApiError} from '../libs/ApiError'
+import { HttpStatusCode } from './constants'
+import { monitorfishApiKy } from './index'
+import { ApiError } from '../libs/ApiError'
 
-import type {TrackRequest, VesselAndPositions, VesselIdentity, VesselPosition} from '../domain/entities/vessel/types'
-import type {CurrentAndArchivedReportingsOfSelectedVessel} from '../domain/types/reporting'
+import type { TrackRequest, VesselAndPositions, VesselIdentity, VesselPosition } from '../domain/entities/vessel/types'
+import type { CurrentAndArchivedReportingsOfSelectedVessel } from '../domain/types/reporting'
 
 const VESSEL_POSITIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations du navire"
 const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les navires dans notre base"
-const LOGBOOK_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les messages JPE de ce navire"
 const REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les signalements de ce navire"
 
 function getVesselIdentityAsEmptyStringWhenNull(identity: VesselIdentity) {
@@ -106,9 +105,4 @@ async function getVesselReportingsFromAPI(identity: VesselIdentity, fromDate: Da
   }
 }
 
-export {
-  searchVesselsFromAPI,
-  getVesselPositionsFromAPI,
-  getVesselFromAPI,
-  getVesselReportingsFromAPI
-}
+export { searchVesselsFromAPI, getVesselPositionsFromAPI, getVesselFromAPI, getVesselReportingsFromAPI }

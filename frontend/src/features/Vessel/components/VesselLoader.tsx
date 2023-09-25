@@ -3,18 +3,18 @@ import { useEffect, useState } from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
-import { useGetNavigationOrStandardApis } from './hooks/useGetNavigationOrStandardApis'
-import { showVesselsLastPosition } from './useCases/showVesselsLastPosition'
-import { FIVE_MINUTES } from '../../api/APIWorker'
-import { COLORS } from '../../constants/constants'
-import { setError } from '../../domain/shared_slices/Global'
-import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../hooks/useMainAppSelector'
-import { MapComponentStyle } from '../commonStyles/MapComponent.style'
-import { ReactComponent as VesselSVG } from '../icons/Icone_navire.svg'
+import { FIVE_MINUTES } from '../../../api/APIWorker'
+import { COLORS } from '../../../constants/constants'
+import { setError } from '../../../domain/shared_slices/Global'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
+import { ReactComponent as VesselSVG } from '../../icons/Icone_navire.svg'
+import { useGetVesselsLastPositionsApi } from '../hooks/useGetVesselsLastPositionsApi'
+import { showVesselsLastPosition } from '../useCases/showVesselsLastPosition'
 
 export function VesselLoader() {
-  const { useGetVesselsLastPositionsQuery } = useGetNavigationOrStandardApis()
+  const useGetVesselsLastPositionsQuery = useGetVesselsLastPositionsApi()
   const dispatch = useMainAppDispatch()
 
   const { blockVesselsUpdate, healthcheckTextWarning } = useMainAppSelector(state => state.global)

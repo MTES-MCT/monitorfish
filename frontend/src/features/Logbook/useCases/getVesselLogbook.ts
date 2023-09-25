@@ -17,6 +17,7 @@ import type { VesselIdentity } from '../../../domain/entities/vessel/types'
  * Get the vessel fishing voyage and update the vessel positions track when navigating in the trips
  */
 export const getVesselLogbook =
+  (isInNavigationMode: boolean) =>
   (
     vesselIdentity: VesselIdentity | null,
     navigateTo: NavigateTo | undefined,
@@ -46,7 +47,12 @@ export const getVesselLogbook =
     }
 
     try {
-      const voyage = await getVesselLogbookFromAPI(vesselIdentity, nextNavigateTo, nextTripNumber || tripNumber)
+      const voyage = await getVesselLogbookFromAPI(
+        isInNavigationMode,
+        vesselIdentity,
+        nextNavigateTo,
+        nextTripNumber || tripNumber
+      )
       if (!voyage) {
         dispatch(logbookActions.init(vesselIdentity))
         dispatch(setError(new NoLogbookMessagesFoundError("Ce navire n'a pas envoyé de message JPE.")))

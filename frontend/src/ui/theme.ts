@@ -19,13 +19,6 @@ export const theme = {
     cultured: '#F7F7FA',
     white: '#FFFFFF',
 
-    // Accentuation Colors
-    blueYonder: '#567A9E',
-    blueYonder25: '#D4DDE7',
-
-    blueGray: '#5697D2',
-    blueGray25: '#D4E5F4',
-
     babyBlueEyes: '#99C9FF',
 
     // Notification Colors

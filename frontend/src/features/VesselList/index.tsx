@@ -1,3 +1,4 @@
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { batch } from 'react-redux'
 import { Modal } from 'rsuite'
@@ -26,7 +27,6 @@ import { unselectVessel } from '../../domain/use_cases/vessel/unselectVessel'
 import { useListenForDrawedGeometry } from '../../hooks/useListenForDrawing'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
-import { theme } from '../../ui/theme'
 import { getExtentFromGeoJSON } from '../../utils'
 import { isNumeric } from '../../utils/isNumeric'
 import StyledModalHeader from '../commonComponents/StyledModalHeader'
@@ -362,7 +362,7 @@ export function VesselList({ namespace }) {
           title="Liste des navires avec VMS"
         >
           <VesselIcon
-            $background={isVesselListModalDisplayed ? theme.color.blueGray[100] : COLORS.charcoal}
+            $background={isVesselListModalDisplayed ? THEME.color.blueGray : THEME.color.charcoal}
             $isRightMenuShrinked={isRightMenuShrinked}
             $isTitle={false}
           />

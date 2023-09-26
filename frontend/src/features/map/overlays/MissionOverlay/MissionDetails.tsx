@@ -118,7 +118,7 @@ const TextWithEllipsis = styled.div`
 const MissionSourceTag = styled(Tag)<{
   isFromCacem: boolean
 }>`
-  background: ${p => (p.isFromCacem ? p.theme.color.mediumSeaGreen : p.theme.color.blueGray[100])};
+  background: ${p => (p.isFromCacem ? p.theme.color.mediumSeaGreen : p.theme.color.blueGray)};
   color: ${p => p.theme.color.white};
   margin-bottom: 8px;
   margin-top: 4px;

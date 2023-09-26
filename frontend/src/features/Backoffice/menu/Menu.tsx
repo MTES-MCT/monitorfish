@@ -1,10 +1,10 @@
 // TODO Remove temporary `as any` and `@ts-ignore` (fresh migration to TS).
 
+import { THEME } from '@mtes-mct/monitor-ui'
 import { Link, useMatch } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { theme } from '../../../ui/theme'
 import { ReactComponent as LayersSVG } from '../../icons/Couches.svg'
 import { ReactComponent as FleetSVG } from '../../icons/Label_segment_de_flotte_white.svg'
 import { ReactComponent as ControlObjectivesSVG } from '../../icons/objectifs_controle.svg'
@@ -19,7 +19,7 @@ export function Menu() {
       <Title>Backoffice</Title>
       <MenuLink
         style={{
-          background: onRegulationPage ? theme.color.blueGray[100] : 'none'
+          background: onRegulationPage ? THEME.color.blueGray : 'none'
         }}
         title="Zones réglementaires"
         to="/backoffice/regulation"
@@ -32,7 +32,7 @@ export function Menu() {
       </MenuLink>
       <MenuLink
         style={{
-          background: onControlObjectivePage ? theme.color.blueGray[100] : 'none'
+          background: onControlObjectivePage ? THEME.color.blueGray : 'none'
         }}
         title="Objectifs de contrôle"
         to="/backoffice/control_objectives"
@@ -45,7 +45,7 @@ export function Menu() {
       </MenuLink>
       <MenuLink
         style={{
-          background: onFleetSegmentsPage ? theme.color.blueGray[100] : 'none'
+          background: onFleetSegmentsPage ? THEME.color.blueGray : 'none'
         }}
         title="Segments de flotte"
         to="/backoffice/fleet_segments"

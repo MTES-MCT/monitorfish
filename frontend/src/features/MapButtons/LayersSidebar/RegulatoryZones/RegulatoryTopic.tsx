@@ -251,7 +251,7 @@ const Zone = styled.span<{
   ${p => (!p.$isOpen && p.$isLastItem ? null : `border-bottom: 1px solid ${p.theme.color.lightGray};`)}
 
   :hover {
-    background: ${p => p.theme.color.blueGray['25']};
+    background: ${p => p.theme.color.blueGray25};
   }
 `
 

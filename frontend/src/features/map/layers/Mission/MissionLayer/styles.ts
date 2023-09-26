@@ -7,7 +7,7 @@ import { featureHas } from '../../styles/utils/webgl'
 
 export const missionZoneStyle = new Style({
   fill: new Fill({
-    color: getColorWithAlpha(THEME.color.blueGray[100], 0.25)
+    color: getColorWithAlpha(THEME.color.blueGray, 0.25)
   }),
   stroke: new Stroke({
     color: THEME.color.charcoal,

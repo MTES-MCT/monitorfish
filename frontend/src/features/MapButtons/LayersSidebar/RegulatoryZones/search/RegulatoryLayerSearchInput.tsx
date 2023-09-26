@@ -269,7 +269,7 @@ const AdvancedSearch = styled(IconButton)<
     advancedSearchIsOpen?: boolean
   }
 >`
-  background: ${p => (p.advancedSearchIsOpen ? p.theme.color.blueYonder['100'] : p.theme.color.charcoal)};
+  background: ${p => (p.advancedSearchIsOpen ? p.theme.color.blueYonder : p.theme.color.charcoal)};
   border: unset;
   display: inline-block;
   height: 40px;
@@ -283,6 +283,6 @@ const AdvancedSearch = styled(IconButton)<
   :hover,
   :focus,
   :active {
-    background: ${p => (p.advancedSearchIsOpen ? p.theme.color.blueYonder['100'] : p.theme.color.charcoal)};
+    background: ${p => (p.advancedSearchIsOpen ? p.theme.color.blueYonder : p.theme.color.charcoal)};
   }
 `

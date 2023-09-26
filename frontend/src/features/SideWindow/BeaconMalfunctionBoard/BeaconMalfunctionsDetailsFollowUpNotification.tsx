@@ -7,8 +7,8 @@ import {
   NOTIFICATION_TYPE,
   COMMUNICATION_MEAN
 } from '../../../domain/entities/beaconMalfunction/constants'
-import { ReactComponent as NotOkSVG } from '../../icons/Icon_not_OK.svg'
-import { ReactComponent as OkSVG } from '../../icons/Icon_OK.svg'
+import NotOkSVG from '../../icons/Icon_not_OK.svg?react'
+import OkSVG from '../../icons/Icon_OK.svg?react'
 
 import type { CSSProperties } from 'react'
 

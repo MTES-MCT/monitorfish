@@ -136,7 +136,7 @@ class CaffeineConfiguration {
                 missionControlUnitsCache,
                 controlUnitsCache,
                 userAuthorizationCache,
-                firstAndLastTripDates
+                firstAndLastTripDates,
             ),
         )
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
-import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
+import CloseIconSVG from '../../icons/Croix_grise.svg?react'
 
 const FilterTag = ({ text, value, uuid, type, iconElement, removeTagFromFilter }) => {
   const callRemoveTagFromFilter = () => {

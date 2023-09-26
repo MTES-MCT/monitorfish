@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
+import ChevronIconSVG from '../icons/Chevron_simple_gris.svg?react'
 import { Title } from '../commonStyles/Backoffice.style'
 
 const SectionTitle = ({ title, isOpen, setIsOpen, dataCy }) => {

@@ -2,7 +2,7 @@ import { createRef, useCallback, useEffect, useRef, useState } from 'react'
 import Overlay from 'ol/Overlay'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
-import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
+import ChevronIconSVG from '../../icons/Chevron_simple_gris.svg?react'
 import {
   getTrackRequestFromTrackDepth,
   VesselTrackDepth

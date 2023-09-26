@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../constants/constants'
-import { ReactComponent as BackToVesselsListSVG } from '../icons/Fleche_navigation_marees_gainsboro.svg'
+import BackToVesselsListSVG from '../icons/Fleche_navigation_marees_gainsboro.svg?react'
 import { setPreviewFilteredVesselsMode } from '../../domain/shared_slices/Global'
 
 const PreviewFilteredVessels = () => {

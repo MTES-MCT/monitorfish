@@ -1,7 +1,7 @@
 import { COLORS } from '../../constants/constants'
 import { RiskFactorBox } from '../VesselSidebar/risk_factor/RiskFactorBox'
 import { getRiskFactorColor } from '../../domain/entities/vessel/riskFactor'
-import { ReactComponent as DeleteIconSVG } from '../icons/Icone_suppression.svg'
+import DeleteIconSVG from '../icons/Icone_suppression.svg?react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { InputPicker, Table, Tag, TagPicker } from 'rsuite'

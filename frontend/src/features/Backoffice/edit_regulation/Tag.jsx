@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
+import CloseIconSVG from '../../icons/Croix_grise.svg?react'
 import { COLORS } from '../../../constants/constants'
 import { Link } from '../../commonStyles/Backoffice.style'
 

@@ -5,7 +5,6 @@ import Point from 'ol/geom/Point'
 import { transform } from 'ol/proj'
 import { useCallback, useEffect, useMemo } from 'react'
 
-import { getEnvironmentVariable } from '../../../../../api/utils'
 import { getCoordinates } from '../../../../../coordinates'
 import { convertToGeoJSONGeometryObject } from '../../../../../domain/entities/layers'
 import { InteractionListener, OpenLayersGeometryType } from '../../../../../domain/entities/map/constants'
@@ -16,6 +15,7 @@ import { addOrEditControlCoordinates } from '../../../../../domain/use_cases/mis
 import { useListenForDrawedGeometry } from '../../../../../hooks/useListenForDrawing'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { getEnvironmentVariable } from '../../../../../utils/getEnvironmentVariable'
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 
 import type { MissionActionFormValues } from '../../types'
@@ -27,7 +27,7 @@ import MissionActionType = MissionAction.MissionActionType
  * This is used to mock the user adding coordinates in Cypress tests
  * as we can't test two windows : the side window and the map window.
  */
-const IS_CYPRESS_TEST = getEnvironmentVariable('REACT_APP_CYPRESS_TEST')
+const IS_CYPRESS_TEST = getEnvironmentVariable('VITE_CYPRESS_TEST')
 export const STUBBED_LATITUDE = 47.084
 export const STUBBED_LONGITUDE = -3.872
 

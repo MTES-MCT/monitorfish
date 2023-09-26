@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { COLORS } from '../../constants/constants'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
-import { ReactComponent as VesselSVG } from '../icons/Icone_navire.svg'
+import VesselSVG from '../icons/Icone_navire.svg?react'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 
 const UpdatingVesselLoader = () => {

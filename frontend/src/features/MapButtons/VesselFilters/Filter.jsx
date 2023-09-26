@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
-import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
-import { ReactComponent as ShowIconSVG } from '../../icons/oeil_affiche.svg'
-import { ReactComponent as HideIconSVG } from '../../icons/oeil_masque.svg'
-import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
-import { ReactComponent as FilterSVG } from '../../icons/Icone_filtres_dark.svg'
+import CloseIconSVG from '../../icons/Croix_grise.svg?react'
+import ShowIconSVG from '../../icons/oeil_affiche.svg?react'
+import HideIconSVG from '../../icons/oeil_masque.svg?react'
+import ChevronIconSVG from '../../icons/Chevron_simple_gris.svg?react'
+import FilterSVG from '../../icons/Icone_filtres_dark.svg?react'
 import TagList from './TagList'
 
 const Filter = ({ filter, index, isLastItem, removeFilter, showFilter, hideFilters, removeTagFromFilter }) => {

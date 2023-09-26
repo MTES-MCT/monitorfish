@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
-import { ReactComponent as WarningSVG } from '../icons/Picto_alerte.svg'
+import WarningSVG from '../icons/Picto_alerte.svg?react'
 
 export function Healthcheck() {
   const { healthcheckTextWarning, previewFilteredVesselsMode } = useMainAppSelector(state => state.global)

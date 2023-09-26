@@ -183,10 +183,9 @@ export function getValidMissionActionData(
     maybeValidMissionActionData?.actionType === MissionActionType.LAND_CONTROL ||
     maybeValidMissionActionData?.actionType === MissionActionType.SEA_CONTROL
   ) {
-    const [validMissionActionData, formError] = validateRequiredFormValues(
-      ['actionDatetimeUtc', 'actionType', 'vesselId', 'vesselName'],
-      maybeValidMissionActionData
-    )
+    const [validMissionActionData, formError] = validateRequiredFormValues<
+      Omit<MissionAction.MissionActionData, 'missionId'>
+    >(['actionDatetimeUtc', 'actionType', 'vesselId', 'vesselName'], maybeValidMissionActionData)
 
     if (formError) {
       throw formError
@@ -195,10 +194,9 @@ export function getValidMissionActionData(
     return validMissionActionData
   }
 
-  const [validMissionActionData, formError] = validateRequiredFormValues(
-    ['actionDatetimeUtc', 'actionType'],
-    maybeValidMissionActionData
-  )
+  const [validMissionActionData, formError] = validateRequiredFormValues<
+    Omit<MissionAction.MissionActionData, 'missionId'>
+  >(['actionDatetimeUtc', 'actionType'], maybeValidMissionActionData)
 
   if (formError) {
     throw formError
@@ -210,7 +208,7 @@ export function getValidMissionActionData(
 export function getValidMissionDataControlUnit(
   maybeValidMissionDataControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft
 ): Mission.MissionData['controlUnits'][0] {
-  const [validMissionDataControlUnit, formError] = validateRequiredFormValues(
+  const [validMissionDataControlUnit, formError] = validateRequiredFormValues<ControlUnit.ControlUnit>(
     ['administration', 'id', 'isArchived', 'name', 'resources'],
     maybeValidMissionDataControlUnit as ControlUnit.ControlUnit
   )

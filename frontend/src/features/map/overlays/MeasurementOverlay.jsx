@@ -2,7 +2,7 @@ import React, { createRef, useEffect, useState } from 'react'
 import Overlay from 'ol/Overlay'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
-import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
+import CloseIconSVG from '../../icons/Croix_grise.svg?react'
 
 const MeasurementOverlay = ({ map, measurement, coordinates, deleteFeature, id }) => {
   const ref = createRef()

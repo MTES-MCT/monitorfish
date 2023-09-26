@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { Header, Zone } from '../../common_styles/common.style'
-import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
+import ArrowSVG from '../../../icons/Picto_fleche-pleine-droite.svg?react'
 import { setOpenedBeaconMalfunction } from '../../../../domain/shared_slices/BeaconMalfunction'
 import CurrentBeaconMalfunctionBody from './CurrentBeaconMalfunctionBody'
 import { useDispatch } from 'react-redux'

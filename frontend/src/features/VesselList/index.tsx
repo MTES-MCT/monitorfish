@@ -1,3 +1,4 @@
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { batch } from 'react-redux'
 import { Modal } from 'rsuite'
@@ -26,14 +27,13 @@ import { unselectVessel } from '../../domain/use_cases/vessel/unselectVessel'
 import { useListenForDrawedGeometry } from '../../hooks/useListenForDrawing'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
-import { theme } from '../../ui/theme'
 import { getExtentFromGeoJSON } from '../../utils'
 import { isNumeric } from '../../utils/isNumeric'
 import StyledModalHeader from '../commonComponents/StyledModalHeader'
 import { PrimaryButton, SecondaryButton } from '../commonStyles/Buttons.style'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
-import { ReactComponent as VesselListSVG } from '../icons/Icone_liste_navires.svg'
-import { ReactComponent as PreviewSVG } from '../icons/Oeil_apercu_carte.svg'
+import VesselListSVG from '../icons/Icone_liste_navires.svg?react'
+import PreviewSVG from '../icons/Oeil_apercu_carte.svg?react'
 import { MapToolButton } from '../MapButtons/shared/MapToolButton'
 import SaveVesselFiltersModal from '../MapButtons/VesselFilters/SaveVesselFiltersModal'
 
@@ -362,7 +362,7 @@ export function VesselList({ namespace }) {
           title="Liste des navires avec VMS"
         >
           <VesselIcon
-            $background={isVesselListModalDisplayed ? theme.color.blueGray[100] : COLORS.charcoal}
+            $background={isVesselListModalDisplayed ? THEME.color.blueGray : THEME.color.charcoal}
             $isRightMenuShrinked={isRightMenuShrinked}
             $isTitle={false}
           />

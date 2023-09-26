@@ -1,6 +1,6 @@
+import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { theme } from '../../../../ui/theme'
 import { HideIcon } from '../../../commonStyles/icons/HideIcon.style'
 import { ShowIcon } from '../../../commonStyles/icons/ShowIcon.style'
 
@@ -54,6 +54,6 @@ const Row = styled.span<{
   width: stretch;
 
   :hover {
-    background: ${theme.color.blueGray['25']};
+    background: ${THEME.color.blueGray25};
   }
 `

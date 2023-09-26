@@ -15,7 +15,8 @@ export const undefinableTestInterface: UndefinableTestInterface = {
   secondProp: undefined
 }
 
-// @ts-expect-error
+// TODO Check why there is a `Unused '@ts-expect-error' directive.` error here.
+// @ts-ignore @ts-expect-error
 export const undefinableTestInterfaceWithMissingProp: UndefinableTestInterface = {
   firstProp: undefined
 }

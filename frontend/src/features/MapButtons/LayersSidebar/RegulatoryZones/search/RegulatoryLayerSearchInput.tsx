@@ -22,12 +22,12 @@ import { useListenForDrawedGeometry } from '../../../../../hooks/useListenForDra
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { theme } from '../../../../../ui/theme'
-import { ReactComponent as CloseIconSVG } from '../../../../icons/Croix_grise.svg'
-import { ReactComponent as PolygonFilterSVG } from '../../../../icons/Filtre_zone_polygone.svg'
-import { ReactComponent as PolygonFilterSelectedSVG } from '../../../../icons/Filtre_zone_polygone_selected.svg'
-import { ReactComponent as BoxFilterSVG } from '../../../../icons/Filtre_zone_rectangle.svg'
-import { ReactComponent as BoxFilterSelectedSVG } from '../../../../icons/Filtre_zone_rectangle_selected.svg'
-import { ReactComponent as SearchIconSVG } from '../../../../icons/Loupe_dark.svg'
+import CloseIconSVG from '../../../../icons/Croix_grise.svg?react'
+import PolygonFilterSVG from '../../../../icons/Filtre_zone_polygone.svg?react'
+import PolygonFilterSelectedSVG from '../../../../icons/Filtre_zone_polygone_selected.svg?react'
+import BoxFilterSVG from '../../../../icons/Filtre_zone_rectangle.svg?react'
+import BoxFilterSelectedSVG from '../../../../icons/Filtre_zone_rectangle_selected.svg?react'
+import SearchIconSVG from '../../../../icons/Loupe_dark.svg?react'
 import FilterTag from '../../../VesselFilters/FilterTag'
 
 import type { IconButtonProps } from '@mtes-mct/monitor-ui'
@@ -269,7 +269,7 @@ const AdvancedSearch = styled(IconButton)<
     advancedSearchIsOpen?: boolean
   }
 >`
-  background: ${p => (p.advancedSearchIsOpen ? p.theme.color.blueYonder['100'] : p.theme.color.charcoal)};
+  background: ${p => (p.advancedSearchIsOpen ? p.theme.color.blueYonder : p.theme.color.charcoal)};
   border: unset;
   display: inline-block;
   height: 40px;
@@ -283,6 +283,6 @@ const AdvancedSearch = styled(IconButton)<
   :hover,
   :focus,
   :active {
-    background: ${p => (p.advancedSearchIsOpen ? p.theme.color.blueYonder['100'] : p.theme.color.charcoal)};
+    background: ${p => (p.advancedSearchIsOpen ? p.theme.color.blueYonder : p.theme.color.charcoal)};
   }
 `

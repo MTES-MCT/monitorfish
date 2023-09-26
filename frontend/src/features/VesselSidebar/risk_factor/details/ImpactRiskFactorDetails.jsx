@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { ReactComponent as InfoSVG } from '../../../icons/Information.svg'
+import InfoSVG from '../../../icons/Information.svg?react'
 import { COLORS } from '../../../../constants/constants'
 import { useSelector } from 'react-redux'
 

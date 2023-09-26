@@ -12,7 +12,7 @@ import {
 import { useEscapeFromKeyboardAndExecute } from '../../../hooks/useEscapeFromKeyboardAndExecute'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { ReactComponent as InterestPointSVG } from '../../icons/standardized/Landmark.svg'
+import InterestPointSVG from '../../icons/standardized/Landmark.svg?react'
 import { MapToolButton } from '../shared/MapToolButton'
 
 export function InterestPointMapButton() {

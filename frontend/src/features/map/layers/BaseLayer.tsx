@@ -82,7 +82,9 @@ function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
           className: LayerProperties.BASE_LAYER.code,
           source: new XYZ({
             maxZoom: 19,
-            url: `https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg90?access_token=${process.env.REACT_APP_MAPBOX_KEY}`
+            url: `https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg90?access_token=${
+              import.meta.env.VITE_MAPBOX_KEY
+            }`
           }),
           zIndex: 0
         }),
@@ -95,7 +97,7 @@ function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
             // Countries have transparency, so do not fade tiles:
             transition: 0,
 
-            url: `https://services.data.shom.fr/${process.env.REACT_APP_SHOM_KEY}/wms/r`
+            url: `https://services.data.shom.fr/${import.meta.env.VITE_SHOM_KEY}/wms/r`
           }),
           zIndex: 0
         })

@@ -27,7 +27,7 @@ export function TitleSourceTag({ missionId, missionSource }: TitleSourceTagProps
 export const MissionSourceTag = styled(Tag)<{
   isFromCacem: boolean
 }>`
-  background: ${p => (p.isFromCacem ? p.theme.color.mediumSeaGreen : p.theme.color.blueGray[100])};
+  background: ${p => (p.isFromCacem ? p.theme.color.mediumSeaGreen : p.theme.color.blueGray)};
   color: ${p => p.theme.color.white};
   margin-left: 24px;
   vertical-align: middle;

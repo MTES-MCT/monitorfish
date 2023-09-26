@@ -16,7 +16,7 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { MapButtonStyle } from '../../commonStyles/MapButton.style'
 import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
 import { CustomZones } from '../../CustomZone/components/CustomZones'
-import { ReactComponent as LayersSVG } from '../../icons/Couches.svg'
+import LayersSVG from '../../icons/Couches.svg?react'
 
 export function LayersSidebar() {
   const dispatch = useMainAppDispatch()
@@ -128,7 +128,7 @@ const Button = styled(MapButtonStyle)<{
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};
-  background: ${p => (p.isVisible ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
+  background: ${p => (p.isVisible ? p.theme.color.blueGray : p.theme.color.charcoal)};
   padding: 2px 2px 2px 2px;
   top: 10px;
   left: 10px;
@@ -138,7 +138,7 @@ const Button = styled(MapButtonStyle)<{
 
   :hover,
   :focus {
-    background: ${p => (p.isVisible ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
+    background: ${p => (p.isVisible ? p.theme.color.blueGray : p.theme.color.charcoal)};
   }
 `
 

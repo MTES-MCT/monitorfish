@@ -2,7 +2,7 @@ import React, { createRef, useCallback, useEffect, useState } from 'react'
 import Overlay from 'ol/Overlay'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
-import { ReactComponent as CloseVesselTrackSVG } from '../../icons/Croix_piste_VMS.svg'
+import CloseVesselTrackSVG from '../../icons/Croix_piste_VMS.svg?react'
 import { hideVesselTrack } from '../../../domain/use_cases/vessel/hideVesselTrack'
 
 const CloseVesselTrackOverlay = props => {

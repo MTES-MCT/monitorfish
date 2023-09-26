@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { ReactComponent as ChevronIconSVG } from '../../../icons/Chevron_simple_gris.svg'
-import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
-import { ReactComponent as NotAcknowledgedSVG } from '../../../icons/Message_non_acquitte.svg'
+import ChevronIconSVG from '../../../icons/Chevron_simple_gris.svg?react'
+import ArrowSVG from '../../../icons/Picto_fleche-pleine-droite.svg?react'
+import NotAcknowledgedSVG from '../../../icons/Message_non_acquitte.svg?react'
 import { LogbookMessageType as LogbookMessageTypeEnum } from '../../constants'
 
 const LogbookMessageResumeHeader = props => {

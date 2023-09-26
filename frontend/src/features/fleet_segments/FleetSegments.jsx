@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
-import { ReactComponent as InfoSVG } from '../icons/Information.svg'
+import InfoSVG from '../icons/Information.svg?react'
 
 const FleetSegments = ({ selectedVessel, fleetSegmentsReferential }) => {
   const [fleetSegments, setFleetSegments] = useState([])

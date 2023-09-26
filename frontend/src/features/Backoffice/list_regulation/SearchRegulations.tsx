@@ -11,7 +11,7 @@ import { closeRegulatoryZoneMetadataPanel } from '../../../domain/shared_slices/
 import { useBackofficeAppDispatch } from '../../../hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '../../../hooks/useBackofficeAppSelector'
 import { AddRegulationButton } from '../../commonStyles/Buttons.style'
-import { ReactComponent as SearchIconSVG } from '../../icons/Loupe.svg'
+import SearchIconSVG from '../../icons/Loupe.svg?react'
 
 export function SearchRegulations(props) {
   const dispatch = useBackofficeAppDispatch()

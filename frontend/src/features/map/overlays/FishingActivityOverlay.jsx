@@ -3,8 +3,8 @@ import Overlay from 'ol/Overlay'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { useDispatch } from 'react-redux'
-import { ReactComponent as AckNOkSVG } from '../../icons/Message_JPE_non_acquitte_clair.svg'
-import { ReactComponent as DeletedSVG } from '../../icons/Suppression_clair.svg'
+import AckNOkSVG from '../../icons/Message_JPE_non_acquitte_clair.svg?react'
+import DeletedSVG from '../../icons/Suppression_clair.svg?react'
 import navigateToFishingActivity from '../../../domain/use_cases/vessel/navigateToFishingActivity'
 
 const FishingActivityOverlay = ({ map, id, name, coordinates, isDeleted, isNotAcknowledged }) => {

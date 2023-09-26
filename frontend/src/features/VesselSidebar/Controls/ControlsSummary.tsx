@@ -6,8 +6,8 @@ import { LastControl } from './LastControl'
 import { LawReminders } from './LawReminders'
 import { theme } from '../../../ui/theme'
 // TODO Add the icon to https://github.com/MTES-MCT/monitor-ui
-import { ReactComponent as CautionSVG } from '../../icons/Attention_controles.svg'
-import { ReactComponent as SeaSVG } from '../../icons/Avarie_statut_navire_en_mer.svg'
+import CautionSVG from '../../icons/Attention_controles.svg?react'
+import SeaSVG from '../../icons/Avarie_statut_navire_en_mer.svg?react'
 import { Header, Zone } from '../common_styles/common.style'
 
 import type { MissionAction } from '../../../domain/types/missionAction'

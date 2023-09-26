@@ -10,7 +10,7 @@ import { updateSelectedVesselTrackRequest } from '../../../../domain/use_cases/v
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
-import { ReactComponent as VesselSVG } from '../../../icons/Icone_navire.svg'
+import VesselSVG from '../../../icons/Icone_navire.svg?react'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 import type { TrackRequestCustom, TrackRequestPredefined } from '../../../../domain/entities/vessel/types'
@@ -83,7 +83,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
   return (
     <>
       <VesselSidebarActionButton
-        backgroundColor={isOpen ? THEME.color.blueGray[100] : THEME.color.charcoal}
+        backgroundColor={isOpen ? THEME.color.blueGray : THEME.color.charcoal}
         data-cy="vessel-track-depth-selection"
         disabled={!selectedVesselPositions?.length}
         healthcheckTextWarning={!!healthcheckTextWarning}

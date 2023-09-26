@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 
-import { ReactComponent as VesselStatusActivityDetectedSVG } from '../../../features/icons/Avarie_statut_activite_detectee.svg'
-import { ReactComponent as VesselStatusTechnicalStopSVG } from '../../../features/icons/Avarie_statut_arret_tech.svg'
-import { ReactComponent as VesselStatusAtPortSVG } from '../../../features/icons/Avarie_statut_navire_a_quai.svg'
-import { ReactComponent as VesselStatusAtSeaSVG } from '../../../features/icons/Avarie_statut_navire_en_mer.svg'
-import { ReactComponent as VesselStatusNoNewsSVG } from '../../../features/icons/Avarie_statut_sans_nouvelles.svg'
+import VesselStatusActivityDetectedSVG from '../../../features/icons/Avarie_statut_activite_detectee.svg'
+import VesselStatusTechnicalStopSVG from '../../../features/icons/Avarie_statut_arret_tech.svg'
+import VesselStatusAtPortSVG from '../../../features/icons/Avarie_statut_navire_a_quai.svg'
+import VesselStatusAtSeaSVG from '../../../features/icons/Avarie_statut_navire_en_mer.svg'
+import VesselStatusNoNewsSVG from '../../../features/icons/Avarie_statut_sans_nouvelles.svg'
 import { theme } from '../../../ui/theme'
 
 import type {

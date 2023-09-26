@@ -9,7 +9,7 @@ import { setMapToolOpened } from '../../../domain/shared_slices/Global'
 import { useClickOutsideWhenOpenedAndExecute } from '../../../hooks/useClickOutsideWhenOpenedAndExecute'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { ReactComponent as FilterSVG } from '../../icons/standardized/Filter.svg'
+import FilterSVG from '../../icons/standardized/Filter.svg?react'
 import { MapToolButton } from '../shared/MapToolButton'
 
 export function VesselFiltersMapButton() {

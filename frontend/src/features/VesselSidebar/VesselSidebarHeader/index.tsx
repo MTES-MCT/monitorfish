@@ -10,7 +10,7 @@ import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { MapButtonStyle } from '../../commonStyles/MapButton.style'
 import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
-import { ReactComponent as SearchIconSVG } from '../../icons/Loupe.svg'
+import SearchIconSVG from '../../icons/Loupe.svg?react'
 import { VesselSearch } from '../../VesselSearch'
 
 import type { VesselIdentity } from '../../../domain/entities/vessel/types'
@@ -124,12 +124,12 @@ const SearchButton = styled(MapButtonStyle)<{
   width: ${p => (p.isShrinked ? 5 : 40)}px;
   border-radius: ${p => (p.isShrinked ? 1 : 2)}px;
   right: ${p => (p.isShrinked ? 0 : 10)}px;
-  background: ${p => (p.isOpen ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
+  background: ${p => (p.isOpen ? p.theme.color.blueGray : p.theme.color.charcoal)};
   transition: all 0.3s;
 
   :hover,
   :focus {
-    background: ${p => (p.isOpen ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
+    background: ${p => (p.isOpen ? p.theme.color.blueGray : p.theme.color.charcoal)};
   }
 `
 

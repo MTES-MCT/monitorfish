@@ -11,7 +11,7 @@ import { useClickOutsideWhenOpened } from '../../../../hooks/useClickOutsideWhen
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { isNumeric } from '../../../../utils/isNumeric'
-import { ReactComponent as ManualPositionSVG } from '../../../icons/Pastille_position_manuelle.svg'
+import ManualPositionSVG from '../../../icons/Pastille_position_manuelle.svg?react'
 import { CSVOptions } from '../../../VesselList/dataFormatting'
 import { sortArrayByColumn, SortType } from '../../../VesselList/tableSort'
 

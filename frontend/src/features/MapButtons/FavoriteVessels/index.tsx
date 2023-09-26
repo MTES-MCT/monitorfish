@@ -12,9 +12,9 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { MapPropertyTrigger } from '../../commonComponents/MapPropertyTrigger'
 import { MapButtonStyle } from '../../commonStyles/MapButton.style'
 import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
-import { ReactComponent as HidingOtherTracksSVG } from '../../icons/Bouton_masquer_pistes_actif.svg'
-import { ReactComponent as ShowingOtherTracksSVG } from '../../icons/Bouton_masquer_pistes_inactif.svg'
-import { ReactComponent as FavoriteSVG } from '../../icons/favorite.svg'
+import HidingOtherTracksSVG from '../../icons/Bouton_masquer_pistes_actif.svg?react'
+import ShowingOtherTracksSVG from '../../icons/Bouton_masquer_pistes_inactif.svg?react'
+import FavoriteSVG from '../../icons/favorite.svg?react'
 
 export function FavoriteVessels() {
   const dispatch = useMainAppDispatch()
@@ -180,12 +180,12 @@ const FavoriteVesselsIcon = styled(MapButtonStyle)<{
   width: 40px;
   border-radius: 2px;
   left: 10px;
-  background: ${p => (p.isOpen ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
+  background: ${p => (p.isOpen ? p.theme.color.blueGray : p.theme.color.charcoal)};
   transition: all 0.3s;
 
   :hover,
   :focus {
-    background: ${p => (p.isOpen ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
+    background: ${p => (p.isOpen ? p.theme.color.blueGray : p.theme.color.charcoal)};
   }
 `
 

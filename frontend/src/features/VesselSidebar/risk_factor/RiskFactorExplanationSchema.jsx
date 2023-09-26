@@ -1,9 +1,9 @@
 import { COLORS } from '../../../constants/constants'
 import React from 'react'
 import styled from 'styled-components'
-import { ReactComponent as RiskFactorImpactSVG } from '../../icons/Note_impact_poisson.svg'
-import { ReactComponent as RiskFactorControlSVG } from '../../icons/Note_de_controle_gyrophare.svg'
-import { ReactComponent as RiskFactorInfractionsSVG } from '../../icons/Note_infraction_stop.svg'
+import RiskFactorImpactSVG from '../../icons/Note_impact_poisson.svg?react'
+import RiskFactorControlSVG from '../../icons/Note_de_controle_gyrophare.svg?react'
+import RiskFactorInfractionsSVG from '../../icons/Note_infraction_stop.svg?react'
 import { RiskFactorBox } from './RiskFactorBox'
 
 const RiskFactorExplanationSchema = () => {

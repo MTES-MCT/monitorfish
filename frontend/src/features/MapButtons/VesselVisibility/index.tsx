@@ -7,7 +7,7 @@ import { setMapToolOpened } from '../../../domain/shared_slices/Global'
 import { useClickOutsideWhenOpenedAndExecute } from '../../../hooks/useClickOutsideWhenOpenedAndExecute'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { ReactComponent as VesselSVG } from '../../icons/standardized/Vessel.svg'
+import VesselSVG from '../../icons/standardized/Vessel.svg?react'
 import { MapToolButton as VesselVisibilityButton } from '../shared/MapToolButton'
 
 export function VesselVisibilityMapButton() {

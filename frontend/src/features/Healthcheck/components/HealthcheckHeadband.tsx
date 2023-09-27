@@ -2,16 +2,18 @@ import { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { FIVE_MINUTES } from '../../../api/APIWorker'
-import { setError } from '../../../domain/shared_slices/Global'
+import { setError, setHealthcheckTextWarning } from '../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { ReactComponent as WarningSVG } from '../../icons/Picto_alerte.svg'
 import { useGetHealthcheckQuery } from '../apis'
+import { useIsOnline } from '../hooks/useIsOnline'
 import { setHealthcheckWarning } from '../useCases/setHealthcheckWarning'
 
 export function HealthcheckHeadband() {
   const dispatch = useMainAppDispatch()
   const { healthcheckTextWarning, previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
+  const isOnline = useIsOnline()
   const {
     data: healthcheck,
     error,
@@ -29,6 +31,16 @@ export function HealthcheckHeadband() {
 
     dispatch(setHealthcheckWarning(healthcheck))
   }, [dispatch, healthcheck, isError, error])
+
+  useEffect(() => {
+    if (isOnline) {
+      dispatch(setHealthcheckTextWarning(undefined))
+
+      return
+    }
+
+    dispatch(setHealthcheckTextWarning('Vous êtes hors-ligne.'))
+  }, [dispatch, isOnline])
 
   return (
     <>

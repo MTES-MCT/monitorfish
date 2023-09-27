@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 
-import { staticAssets, whitelistedBaseMaps } from '../src/workers/constants'
-import { getImageCacheKey } from '../src/workers/utils'
+import { APPLICATION_ROUTES, CACHED_REQUEST_SIZE, STATIC_ASSETS, WHITELISTED_BASE_MAPS } from './constants'
+import { getImageCacheKey } from './utils'
 
 declare let self: ServiceWorkerGlobalScope
 
@@ -28,7 +28,7 @@ self.addEventListener('install', event => {
         /**
          * Add all static files to the cache
          */
-        cache.addAll(staticAssets)
+        cache.addAll(STATIC_ASSETS)
       )
       // eslint-disable-next-line no-console
       .catch(err => console.log(err))
@@ -68,6 +68,22 @@ self.addEventListener('activate', event => {
 })
 
 /**
+ * Custom message
+ */
+self.addEventListener('message', async event => {
+  if (event.data === CACHED_REQUEST_SIZE) {
+    const cache = await caches.open(CACHE_NAME)
+    const requests = await cache.keys()
+
+    // @ts-ignore
+    event.source?.postMessage({
+      data: requests.length,
+      type: CACHED_REQUEST_SIZE
+    })
+  }
+})
+
+/**
  * Entrypoint - when fetching an asset or an API
  */
 self.addEventListener('fetch', event => {
@@ -87,7 +103,14 @@ async function getResponse(cacheRequest, url) {
   /**
    * If the request is not a base map whitelisted request, it will fetch the content and NOT cache it.
    */
-  if (!whitelistedBaseMaps.find(baseMap => url.includes(baseMap))) {
+  if (!WHITELISTED_BASE_MAPS.find(baseMap => url.includes(baseMap))) {
+    /**
+     * If the route is part of React's router, redirect to index.html as it is a SPA
+     */
+    if (APPLICATION_ROUTES.find(route => url.includes(route))) {
+      return fetch('/')
+    }
+
     return fetch(url)
   }
 

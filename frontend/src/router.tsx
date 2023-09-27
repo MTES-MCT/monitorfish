@@ -8,14 +8,11 @@ import { MainWindow } from './features/MainWindow'
 import { SideWindow } from './features/SideWindow'
 import { BackofficePage } from './pages/BackofficePage'
 import { HomePage } from './pages/HomePage'
+import { LoadOffline } from './pages/LoadOffline'
 import { NavHomePage } from './pages/NavHomePage'
 
-/*
-
- */
-
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-export const router = createBrowserRouter([
+export const routes = [
   {
     path: '/',
     element: <HomePage />,
@@ -35,6 +32,10 @@ export const router = createBrowserRouter([
         element: <MainWindow />
       }
     ]
+  },
+  {
+    path: '/load_offline',
+    element: <LoadOffline />
   },
   {
     path: '/backoffice',
@@ -80,5 +81,9 @@ export const router = createBrowserRouter([
       }
     ]
   }
-])
+]
 /* eslint-enable sort-keys-fix/sort-keys-fix */
+
+export const routesPaths = routes.map(route => route.path)
+
+export const router = createBrowserRouter(routes)

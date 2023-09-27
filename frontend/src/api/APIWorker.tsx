@@ -22,6 +22,7 @@ import { useMainAppDispatch } from '../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../hooks/useMainAppSelector'
 
 export const FIVE_MINUTES = 5 * 60 * 1000
+export const TVENTY_MINUTES = 20 * 60 * 1000
 export const THIRTY_SECONDS = 30 * 1000
 
 // TODO Move these `useEffect`s to dispatchers, in order to remove logic from this component

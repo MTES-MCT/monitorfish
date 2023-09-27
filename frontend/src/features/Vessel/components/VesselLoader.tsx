@@ -3,9 +3,10 @@ import { useEffect, useState } from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
-import { FIVE_MINUTES } from '../../../api/APIWorker'
+import { FIVE_MINUTES, TVENTY_MINUTES } from '../../../api/APIWorker'
 import { COLORS } from '../../../constants/constants'
 import { setError } from '../../../domain/shared_slices/Global'
+import { useIsInNavigationMode } from '../../../hooks/authorization/useIsInNavigationMode'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
@@ -15,6 +16,7 @@ import { showVesselsLastPosition } from '../useCases/showVesselsLastPosition'
 
 export function VesselLoader() {
   const useGetVesselsLastPositionsQuery = useGetVesselsLastPositionsApi()
+  const isInNavigationMode = useIsInNavigationMode()
   const dispatch = useMainAppDispatch()
 
   const { blockVesselsUpdate, healthcheckTextWarning } = useMainAppSelector(state => state.global)
@@ -26,7 +28,7 @@ export function VesselLoader() {
     isError,
     isFetching
   } = useGetVesselsLastPositionsQuery(blockVesselsUpdate ? skipToken : undefined, {
-    pollingInterval: FIVE_MINUTES
+    pollingInterval: isInNavigationMode ? TVENTY_MINUTES : FIVE_MINUTES
   })
 
   const [isAppLoaded, setIsAppLoaded] = useState(false)

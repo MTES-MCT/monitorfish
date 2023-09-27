@@ -9,7 +9,7 @@
     "npm": "9"
   },
   "scripts": {
-    "build": "sh -ac '. ../infra/configurations/frontend/.env.${REACT_APP_ENV}; react-scripts build'",
+    "build": "sh -ac '. ../infra/configurations/frontend/.env.${REACT_APP_ENV}; npm run bundle-sw && react-scripts build'",
     "build:dev": "REACT_APP_ENV=dev npm run build",
     "build:prod": "REACT_APP_ENV=prod npm run build",
     "build:local": "REACT_APP_ENV=local npm run build",
@@ -17,8 +17,9 @@
     "cypress:run": "cypress run --browser firefox --config-file ./config/cypress.config.ts --e2e",
     "dev": "BROWSER=none DISABLE_ESLINT_PLUGIN=true sh -ac '. ../infra/configurations/frontend/.env.local; react-scripts start'",
     "eject": "react-scripts eject",
+    "bundle-sw": "esbuild src/workers/serviceWorker.ts --bundle --outfile=public/service.js",
     "prepare": "cd .. && ./frontend/node_modules/.bin/husky install ./frontend/config/husky",
-    "start": "sh -ac '. ../infra/configurations/frontend/.env.local; react-scripts start'",
+    "start": "sh -ac '. ../infra/configurations/frontend/.env.local; npm run bundle-sw && react-scripts start'",
     "test:e2e": "cypress run --browser firefox --config-file ./config/cypress.config.ts --e2e",
     "test:lint": "eslint ./src",
     "test:lint:partial": "eslint --config=./.eslintrc.partial.js ./src ./cypress",
@@ -105,6 +106,7 @@
     "cypress": "12.17.2",
     "cypress-mouse-position": "1.0.0",
     "cypress-plugin-snapshots": "github:ivangabriele/cypress-plugin-snapshots",
+    "esbuild": "0.19.3",
     "eslint": "8.47.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-typescript": "17.1.0",

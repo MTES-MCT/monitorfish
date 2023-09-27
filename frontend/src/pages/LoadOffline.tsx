@@ -1,9 +1,11 @@
 import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
+import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import { ToastContainer } from 'react-toastify'
 import { Progress } from 'rsuite'
 import styled from 'styled-components'
 
+import { COLORS } from '../constants/constants'
 import { CACHED_REQUEST_SIZE } from '../workers/constants'
 import { useGetServiceWorker } from '../workers/hooks/useGetServiceWorker'
 import { registerServiceWorker } from '../workers/registerServiceWorker'
@@ -98,7 +100,7 @@ export function LoadOffline() {
             Télécharger
           </StyledButton>
         )}
-        {isDownloading && <p>Téléchargement en cours</p>}
+        {isDownloading && <FulfillingBouncingCircleSpinner className="loader" color={COLORS.white} size={30} />}
         {parseInt(percent, 10) > 95 && <p>Toutes les données ont été chargées.</p>}
       </LoadBox>
       {cachedRequestsLength} tuiles sauvegardées (utilisation de {usage} MB)
@@ -128,6 +130,13 @@ const LoadBox = styled.div`
   margin-bottom: 24px;
   padding: 24px;
   background-color: rgba(0, 0, 0, 0.7);
+
+  .loader {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 18px;
+    margin-bottom: 6px;
+  }
 `
 
 const StyledProgress = styled(Progress.Line)`

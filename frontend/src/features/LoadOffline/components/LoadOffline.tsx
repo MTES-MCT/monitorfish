@@ -8,7 +8,6 @@ import { getAllRegulatoryLayersFromAPI } from '../../../api/geoserver'
 import { getInfractionsFromAPI } from '../../../api/infraction'
 import { CACHED_REQUEST_SIZE, UPDATE_CACHE } from '../../../workers/constants'
 import { useGetServiceWorker } from '../../../workers/hooks/useGetServiceWorker'
-import { registerServiceWorker } from '../../../workers/registerServiceWorker'
 import { fetchAllFromServiceWorkerByChunk, getZoomToRequestPaths } from '../utils'
 
 const BYTE_TO_MEGA_BYTE_FACTOR = 0.000001
@@ -26,8 +25,6 @@ export function LoadOffline() {
   const percent = ((cachedRequestsLength * 100) / TOTAL_DOWNLOAD_REQUESTS).toFixed(1)
 
   useEffect(() => {
-    registerServiceWorker()
-
     getStorage()
     const intervalId = setInterval(() => {
       getStorage()

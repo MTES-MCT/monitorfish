@@ -1,9 +1,15 @@
+import { useEffect } from 'react'
 import { ToastContainer } from 'react-toastify'
 import styled from 'styled-components'
 
 import { LoadOffline } from '../features/LoadOffline/components/LoadOffline'
+import { registerServiceWorker } from '../workers/registerServiceWorker'
 
 export function NavBackoffice() {
+  useEffect(() => {
+    registerServiceWorker()
+  }, [])
+
   return (
     <Wrapper>
       <LoadOffline />

@@ -30,7 +30,7 @@ export function LoadOffline() {
       getStorage()
     }, INTERVAL_REFRESH_MS)
 
-    navigator.serviceWorker.addEventListener('message', async event => {
+    navigator.serviceWorker.addEventListener('message', event => {
       if (event.data.type === CACHED_REQUEST_SIZE) {
         setCachedRequestsLength(event.data.data)
       }

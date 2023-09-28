@@ -80,6 +80,8 @@ self.addEventListener('message', async event => {
       data: requests.length,
       type: CACHED_REQUEST_SIZE
     })
+
+    return
   }
 })
 

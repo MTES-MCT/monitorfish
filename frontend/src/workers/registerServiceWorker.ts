@@ -10,8 +10,23 @@ import { SERVICE_WORKER_PATH } from './settings'
 export const registerServiceWorker = async () => {
   if ('serviceWorker' in navigator) {
     try {
+      let refreshing = false
+
+      // detect controller change and refresh the page
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!refreshing) {
+          window.location.reload()
+          refreshing = true
+        }
+      })
+
       const registration = await navigator.serviceWorker.register(SERVICE_WORKER_PATH, {
         scope: '/'
+      })
+
+      registration.addEventListener('updatefound', () => {
+        // eslint-disable-next-line no-console
+        console.log('Service Worker update detected!')
       })
 
       if (registration.installing) {

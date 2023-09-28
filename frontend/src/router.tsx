@@ -8,7 +8,7 @@ import { MainWindow } from './features/MainWindow'
 import { SideWindow } from './features/SideWindow'
 import { BackofficePage } from './pages/BackofficePage'
 import { HomePage } from './pages/HomePage'
-import { LoadOffline } from './pages/LoadOffline'
+import { NavBackoffice } from './pages/NavBackoffice'
 import { NavHomePage } from './pages/NavHomePage'
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
@@ -35,7 +35,7 @@ export const routes = [
   },
   {
     path: '/load_offline',
-    element: <LoadOffline />
+    element: <NavBackoffice />
   },
   {
     path: '/backoffice',

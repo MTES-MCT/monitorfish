@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
-import { FIVE_MINUTES, TVENTY_MINUTES } from '../../../api/APIWorker'
+import { FIVE_MINUTES, TWENTY_MINUTES } from '../../../api/APIWorker'
 import { COLORS } from '../../../constants/constants'
 import { setError } from '../../../domain/shared_slices/Global'
 import { useIsInNavigationMode } from '../../../hooks/authorization/useIsInNavigationMode'
@@ -28,7 +28,7 @@ export function VesselLoader() {
     isError,
     isFetching
   } = useGetVesselsLastPositionsQuery(blockVesselsUpdate ? skipToken : undefined, {
-    pollingInterval: isInNavigationMode ? TVENTY_MINUTES : FIVE_MINUTES
+    pollingInterval: isInNavigationMode ? TWENTY_MINUTES : FIVE_MINUTES
   })
 
   const [isAppLoaded, setIsAppLoaded] = useState(false)

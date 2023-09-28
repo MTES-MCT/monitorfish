@@ -1,19 +1,18 @@
-import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
-import { useEffect, useState } from 'react'
+import { Accent, Button, Icon, THEME } from '@mtes-mct/monitor-ui'
+import { useEffect, useMemo, useState } from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
-import { ToastContainer } from 'react-toastify'
 import { Progress } from 'rsuite'
 import styled from 'styled-components'
 
-import { COLORS } from '../constants/constants'
-import { CACHED_REQUEST_SIZE } from '../workers/constants'
-import { useGetServiceWorker } from '../workers/hooks/useGetServiceWorker'
-import { registerServiceWorker } from '../workers/registerServiceWorker'
-import { fetchAllByChunk, getListOfPath } from '../workers/utils'
+import { CACHED_REQUEST_SIZE } from '../../../workers/constants'
+import { useGetServiceWorker } from '../../../workers/hooks/useGetServiceWorker'
+import { registerServiceWorker } from '../../../workers/registerServiceWorker'
+import { fetchAllByChunk, getZoomToRequestPaths } from '../utils'
 
 const BYTE_TO_MEGA_BYTE_FACTOR = 0.000001
-const MAX_LOADED_REQUESTS = 14724
+const TOTAL_DOWNLOAD_REQUESTS = 55728 // Calculated using `getListOfPath()`
 const INTERVAL_REFRESH_MS = 5000
+const DOWNLOAD_CHUNK_SIZE = 10
 
 export function LoadOffline() {
   const { serviceWorker } = useGetServiceWorker()
@@ -21,7 +20,7 @@ export function LoadOffline() {
   const [usage, setUsage] = useState<string>('')
   const [isDownloading, setIsDownloading] = useState<boolean>(false)
 
-  const percent = ((cachedRequestsLength * 100) / MAX_LOADED_REQUESTS).toFixed(1)
+  const percent = ((cachedRequestsLength * 100) / TOTAL_DOWNLOAD_REQUESTS).toFixed(1)
 
   useEffect(() => {
     registerServiceWorker()
@@ -53,11 +52,10 @@ export function LoadOffline() {
   }
 
   const downloadAll = async () => {
-    const zoomToPaths = getListOfPath()
-    const chunkSize = 10
+    const zoomToPaths = getZoomToRequestPaths()
 
     setIsDownloading(true)
-    await fetchAllByChunk(zoomToPaths, chunkSize)
+    await fetchAllByChunk(zoomToPaths, DOWNLOAD_CHUNK_SIZE, cachedRequestsLength)
     setIsDownloading(false)
   }
 
@@ -66,7 +64,7 @@ export function LoadOffline() {
       return undefined
     }
 
-    serviceWorker?.postMessage(CACHED_REQUEST_SIZE)
+    serviceWorker?.postMessage({ type: CACHED_REQUEST_SIZE })
     const intervalId = setInterval(() => {
       serviceWorker?.postMessage(CACHED_REQUEST_SIZE)
     }, INTERVAL_REFRESH_MS)
@@ -84,29 +82,39 @@ export function LoadOffline() {
     return 'active'
   }
 
+  const remainingMinutes = useMemo(() => {
+    const remainingRequests = (TOTAL_DOWNLOAD_REQUESTS - cachedRequestsLength) / DOWNLOAD_CHUNK_SIZE
+
+    return (remainingRequests / 60).toFixed(1)
+  }, [cachedRequestsLength])
+
   return (
-    <Wrapper>
+    <>
       <LoadBox>
-        <Title>Préchargement (mode navigation)</Title>
+        <Title>Préchargement</Title>
         <p>
           Cette page permet de télécharger les fonds de cartes et les données lourdes de MonitorFish, avant de passer
           sur une connexion Internet satellitaire.
         </p>
-        {(isDownloading || parseInt(percent, 10) > 1) && (
+        {(isDownloading || parseInt(percent, 10) > 0) && (
           <StyledProgress percent={parseFloat(percent)} status={getStatus()} strokeWidth={10} />
         )}
-        {!isDownloading && (
+        {}
+        {!isDownloading && parseInt(percent, 10) < 100 && (
           <StyledButton accent={Accent.PRIMARY} Icon={Icon.Download} onClick={downloadAll}>
             Télécharger
           </StyledButton>
         )}
-        {isDownloading && <FulfillingBouncingCircleSpinner className="loader" color={COLORS.white} size={30} />}
-        {parseInt(percent, 10) > 95 && <p>Toutes les données ont été chargées.</p>}
+        {isDownloading && (
+          <>
+            <FulfillingBouncingCircleSpinner className="loader" color={THEME.color.white} size={30} />
+            <p>{remainingMinutes} minutes restantes</p>
+          </>
+        )}
+        {parseInt(percent, 10) >= 100 && <p>Toutes les données ont été chargées.</p>}
       </LoadBox>
-      {cachedRequestsLength} tuiles sauvegardées (utilisation de {usage} MB)
-      <br />
-      <ToastContainer />
-    </Wrapper>
+      {cachedRequestsLength} tuiles sauvegardées ({usage} MB)
+    </>
   )
 }
 
@@ -141,20 +149,4 @@ const LoadBox = styled.div`
 
 const StyledProgress = styled(Progress.Line)`
   margin-top: 24px;
-`
-
-const Wrapper = styled.div`
-  color: white;
-  font-size: 13px;
-  text-align: center;
-  width: 100vw;
-  padding-top: 35vh;
-  height: 100vh;
-  overflow: hidden;
-
-  background: url('landing_background.png') no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
 `

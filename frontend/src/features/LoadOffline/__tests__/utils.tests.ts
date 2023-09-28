@@ -1,19 +1,22 @@
 import { expect } from '@jest/globals'
 
-import { getListOfPath, getMaxXYRange } from '../utils'
+import { getMaxXYRange, getZoomToRequestPaths } from '../utils'
 
-describe('workers/utils.ts', () => {
+describe('features/LoadOffline/utils.ts', () => {
+  /**
+   * This getNumberOfTiles is only used to understand the number of tiles per zoom level.
+   */
   it('getNumberOfTiles should return the max XY of tiles for a range of zoom', () => {
-    const result = getMaxXYRange(10)
+    const result = getMaxXYRange(11)
 
-    expect(result).toStrictEqual([2, 4, 8, 16, 32, 64, 128, 256, 512, 1024])
+    expect(result).toStrictEqual([2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048])
   })
 
-  it('getListOfPath should return the max XY of tiles for a range of zoom', () => {
-    const result = getListOfPath()
+  it('getListOfPath should return an array of paths corresponding to the specified tiles indices', () => {
+    const result = getZoomToRequestPaths()
 
     // There is 11 zoom levels: from 0 to 10
-    expect(result).toHaveLength(11)
+    expect(result).toHaveLength(12)
 
     // Zoom 0
     expect(result[0]).toHaveLength(1)
@@ -35,5 +38,6 @@ describe('workers/utils.ts', () => {
     expect(result[8]).toHaveLength(728)
     expect(result[9]).toHaveLength(2805)
     expect(result[10]).toHaveLength(10908)
+    expect(result[11]).toHaveLength(41004)
   })
 })

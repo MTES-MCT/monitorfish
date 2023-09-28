@@ -93,7 +93,7 @@ export const getVesselLogbook =
         displayOrLogError(
           error as Error,
           {
-            func: getVesselLogbook,
+            func: getVesselLogbook(isInNavigationMode),
             parameters: [vesselIdentity, navigateTo, isFromUserAction]
           },
           isFromUserAction,

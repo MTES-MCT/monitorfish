@@ -496,8 +496,25 @@ context('Side Window > Mission Form > Main Form', () => {
       },
       { statusCode: 400 }
     ).as('getMissionStubbed')
+    cy.intercept(
+      {
+        method: 'GET',
+        path: '/api/v1/missions/6',
+        times: 1
+      },
+      { statusCode: 400 }
+    ).as('getMissionStubbed')
+    cy.intercept(
+      {
+        method: 'GET',
+        path: '/api/v1/missions/6',
+        times: 1
+      },
+      { statusCode: 400 }
+    ).as('getMissionStubbed')
     editSideWindowMissionListMissionWithId(6, SeaFrontGroup.MED)
-    cy.wait('@getMissionStubbed')
+    cy.wait(200)
+    cy.get('@getMissionStubbed.all').should('have.length', 3)
     cy.get('*[data-cy="mission-form-error"]').contains("Nous n'avons pas pu récupérer la mission")
   })
 })

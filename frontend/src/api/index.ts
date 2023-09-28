@@ -2,12 +2,14 @@
 // https://redux-toolkit.js.org/rtk-query/usage/cache-behavior
 // https://redux-toolkit.js.org/rtk-query/usage/automated-refetching#cache-tags
 
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
 import ky from 'ky'
 
 import { getEnvironmentVariable } from './utils'
 import { getOIDCUser } from '../auth/getOIDCUser'
 import { normalizeRtkBaseQuery } from '../utils/normalizeRtkBaseQuery'
+
+const MAX_RETRIES = 2
 
 // Using local MonitorEnv stubs:
 const MONITORENV_API_URL = getEnvironmentVariable('REACT_APP_MONITORENV_URL')
@@ -19,9 +21,13 @@ const MONITORENV_API_URL = getEnvironmentVariable('REACT_APP_MONITORENV_URL')
 // Monitorenv API
 
 // We'll need that later on if we use any kind of authentication.
-const monitorenvBaseQuery = fetchBaseQuery({
-  baseUrl: `${MONITORENV_API_URL}/api/v1`
-})
+const monitorenvBaseQuery = retry(
+  fetchBaseQuery({
+    baseUrl: `${MONITORENV_API_URL}/api/v1`
+  }),
+  { maxRetries: MAX_RETRIES }
+)
+
 export const monitorenvApi = createApi({
   baseQuery: normalizeRtkBaseQuery(monitorenvBaseQuery),
   endpoints: () => ({}),
@@ -32,21 +38,24 @@ export const monitorenvApi = createApi({
 // =============================================================================
 // Monitorfish API
 
-const monitorfishBaseQuery = fetchBaseQuery({
-  // TODO Remove the /v1 from the baseUrl as it make harder to update APIs (vX are designed for that)
-  baseUrl: `/bff/v1`,
-  prepareHeaders: headers => {
-    const user = getOIDCUser()
-    const token = user?.access_token
+const monitorfishBaseQuery = retry(
+  fetchBaseQuery({
+    // TODO Remove the /v1 from the baseUrl as it make harder to update APIs (vX are designed for that)
+    baseUrl: `/bff/v1`,
+    prepareHeaders: headers => {
+      const user = getOIDCUser()
+      const token = user?.access_token
 
-    // If we have a token set in state, we pass it.
-    if (token) {
-      headers.set('authorization', `Bearer ${token}`)
+      // If we have a token set in state, we pass it.
+      if (token) {
+        headers.set('authorization', `Bearer ${token}`)
+      }
+
+      return headers
     }
-
-    return headers
-  }
-})
+  }),
+  { maxRetries: MAX_RETRIES }
+)
 
 export const monitorfishApi = createApi({
   baseQuery: normalizeRtkBaseQuery(monitorfishBaseQuery),
@@ -70,9 +79,12 @@ export const monitorfishApi = createApi({
 // =============================================================================
 // Monitorfish Navigation API
 
-const monitorfishNavBaseQuery = fetchBaseQuery({
-  baseUrl: `/nav`
-})
+const monitorfishNavBaseQuery = retry(
+  fetchBaseQuery({
+    baseUrl: `/nav`
+  }),
+  { maxRetries: MAX_RETRIES }
+)
 
 export const monitorfishNavApi = createApi({
   baseQuery: normalizeRtkBaseQuery(monitorfishNavBaseQuery),
@@ -84,9 +96,12 @@ export const monitorfishNavApi = createApi({
 // =============================================================================
 // Monitorfish Public API
 
-const monitorfishPublicBaseQuery = fetchBaseQuery({
-  baseUrl: `/api`
-})
+const monitorfishPublicBaseQuery = retry(
+  fetchBaseQuery({
+    baseUrl: `/api`
+  }),
+  { maxRetries: MAX_RETRIES }
+)
 
 export const monitorfishPublicApi = createApi({
   baseQuery: normalizeRtkBaseQuery(monitorfishPublicBaseQuery),
@@ -109,11 +124,7 @@ export const monitorfishApiKy = ky.extend({
       }
     ],
     beforeRetry: [
-      async ({ request, retryCount }) => {
-        if (retryCount > 1) {
-          throw new Error('Connexion avec le serveur impossible.')
-        }
-
+      async ({ request }) => {
         const user = getOIDCUser()
         const token = user?.access_token
 
@@ -123,5 +134,6 @@ export const monitorfishApiKy = ky.extend({
         }
       }
     ]
-  }
+  },
+  retry: MAX_RETRIES + 1
 })

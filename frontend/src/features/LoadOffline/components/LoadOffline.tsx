@@ -4,10 +4,12 @@ import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import { Progress } from 'rsuite'
 import styled from 'styled-components'
 
-import { CACHED_REQUEST_SIZE } from '../../../workers/constants'
+import { getAllRegulatoryLayersFromAPI } from '../../../api/geoserver'
+import { getInfractionsFromAPI } from '../../../api/infraction'
+import { CACHED_REQUEST_SIZE, UPDATE_CACHE } from '../../../workers/constants'
 import { useGetServiceWorker } from '../../../workers/hooks/useGetServiceWorker'
 import { registerServiceWorker } from '../../../workers/registerServiceWorker'
-import { fetchAllByChunk, getZoomToRequestPaths } from '../utils'
+import { fetchAllFromServiceWorkerByChunk, getZoomToRequestPaths } from '../utils'
 
 const BYTE_TO_MEGA_BYTE_FACTOR = 0.000001
 const TOTAL_DOWNLOAD_REQUESTS = 55728 // Calculated using `getListOfPath()`
@@ -19,6 +21,7 @@ export function LoadOffline() {
   const [cachedRequestsLength, setCachedRequestsLength] = useState(0)
   const [usage, setUsage] = useState<string>('')
   const [isDownloading, setIsDownloading] = useState<boolean>(false)
+  const [isRegulationsUpdated, setIsRegulationsUpdated] = useState<boolean>(false)
 
   const percent = ((cachedRequestsLength * 100) / TOTAL_DOWNLOAD_REQUESTS).toFixed(1)
 
@@ -30,9 +33,15 @@ export function LoadOffline() {
       getStorage()
     }, INTERVAL_REFRESH_MS)
 
-    navigator.serviceWorker.addEventListener('message', event => {
+    navigator.serviceWorker.addEventListener('message', async event => {
       if (event.data.type === CACHED_REQUEST_SIZE) {
         setCachedRequestsLength(event.data.data)
+      }
+
+      if (event.data.type === UPDATE_CACHE) {
+        await getAllRegulatoryLayersFromAPI(false)
+        setIsRegulationsUpdated(true)
+        getInfractionsFromAPI()
       }
     })
 
@@ -51,11 +60,15 @@ export function LoadOffline() {
     }
   }
 
+  const updateRegulations = () => {
+    serviceWorker?.postMessage(UPDATE_CACHE)
+  }
+
   const downloadAll = async () => {
     const zoomToPaths = getZoomToRequestPaths()
 
     setIsDownloading(true)
-    await fetchAllByChunk(zoomToPaths, DOWNLOAD_CHUNK_SIZE, cachedRequestsLength)
+    await fetchAllFromServiceWorkerByChunk(zoomToPaths, DOWNLOAD_CHUNK_SIZE, cachedRequestsLength)
     setIsDownloading(false)
   }
 
@@ -64,7 +77,7 @@ export function LoadOffline() {
       return undefined
     }
 
-    serviceWorker?.postMessage({ type: CACHED_REQUEST_SIZE })
+    serviceWorker?.postMessage(CACHED_REQUEST_SIZE)
     const intervalId = setInterval(() => {
       serviceWorker?.postMessage(CACHED_REQUEST_SIZE)
     }, INTERVAL_REFRESH_MS)
@@ -112,11 +125,23 @@ export function LoadOffline() {
           </>
         )}
         {parseInt(percent, 10) >= 100 && <p>Toutes les données ont été chargées.</p>}
+        <Line />
+        <StyledButton
+          accent={Accent.PRIMARY}
+          Icon={isRegulationsUpdated ? Icon.Check : Icon.Reset}
+          onClick={updateRegulations}
+        >
+          {isRegulationsUpdated ? 'Données réglementaires à jour' : 'Mettre à jour les données réglementaires'}
+        </StyledButton>
       </LoadBox>
       {cachedRequestsLength} tuiles sauvegardées ({usage} MB)
     </>
   )
 }
+
+const Line = styled.hr`
+  margin-top: 24px;
+`
 
 const StyledButton = styled(Button)`
   margin-top: 12px;
@@ -135,7 +160,7 @@ const LoadBox = styled.div`
   width: 500px;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
   padding: 24px;
   background-color: rgba(0, 0, 0, 0.7);
 

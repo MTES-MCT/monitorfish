@@ -1,14 +1,30 @@
 /// <reference lib="webworker" />
 
-import { APPLICATION_ROUTES, CACHED_REQUEST_SIZE, STATIC_ASSETS, WHITELISTED_BASE_MAPS } from './constants'
-import { getImageCacheKey } from './utils'
+import {
+  APPLICATION_ROUTES,
+  CACHED_REQUEST_SIZE,
+  INFRACTIONS,
+  REGULATIONS,
+  STATIC_ASSETS,
+  UPDATE_CACHE,
+  WHITELISTED_API_PATHS,
+  WHITELISTED_BASE_MAPS_PATHS
+} from './constants'
+import { getCacheKey } from './utils'
 
 declare let self: ServiceWorkerGlobalScope
 
 /**
- * /!\ NOTICE :
+ * /!\ NOTICE
  *
- * When upgrading this Service Worker, increment `CACHE_VERSION` so the browser will re-install the new version
+ * UPGRADE:
+ * 1. Do not modify the service worker filename (stored in public/ as `service-worker.js`)
+ * 2. When the service worker code is modified, the upgrade will be installed under the hood,
+ *    but all tabs/windows of MonitorFish must be closed for the new SW to be "active".
+ *
+ * ERASE CACHE:
+ * To delete existing cache, increment `CACHE_VERSION`, the old cache will be deleted.
+ *
  */
 const CACHE_VERSION = 0
 const CACHE_NAME = `cache-v${CACHE_VERSION}`
@@ -52,7 +68,7 @@ self.addEventListener('activate', event => {
       self.clients.claim()
 
       /**
-       * If a new service worker in activated, it will delete the old cache entries
+       * If a new service worker is activated, it will delete the old cache entries
        */
       return Promise.all(
         cacheNames.map(storedCacheName => {
@@ -80,8 +96,17 @@ self.addEventListener('message', async event => {
       data: requests.length,
       type: CACHED_REQUEST_SIZE
     })
+  }
 
-    return
+  if (event.data === UPDATE_CACHE) {
+    const cache = await caches.open(CACHE_NAME)
+    await cache.delete(new Request(REGULATIONS))
+    await cache.delete(new Request(INFRACTIONS))
+
+    // @ts-ignore
+    event.source?.postMessage({
+      type: UPDATE_CACHE
+    })
   }
 })
 
@@ -93,19 +118,23 @@ self.addEventListener('fetch', event => {
     (async () => {
       const url = event.request.url.toString()
 
-      const cacheKey = getImageCacheKey(event.request.url.toString())
+      const cacheKey = getCacheKey(url)
       const cacheKeyRequest = new Request(cacheKey)
 
-      return getResponse(cacheKeyRequest, url)
+      return getResponse(cacheKeyRequest, event.request)
     })()
   )
 })
 
-async function getResponse(cacheRequest, url) {
+async function getResponse(cacheRequest, request) {
+  const url = request.url.toString()
   /**
    * If the request is not a base map whitelisted request, it will fetch the content and NOT cache it.
    */
-  if (!WHITELISTED_BASE_MAPS.find(baseMap => url.includes(baseMap))) {
+  if (
+    !WHITELISTED_BASE_MAPS_PATHS.find(path => url.includes(path)) &&
+    !WHITELISTED_API_PATHS.find(path => url.includes(path))
+  ) {
     /**
      * If the route is part of React's router, redirect to index.html as it is a SPA
      */
@@ -113,7 +142,7 @@ async function getResponse(cacheRequest, url) {
       return fetch('/')
     }
 
-    return fetch(url)
+    return fetch(request)
   }
 
   /**
@@ -127,7 +156,7 @@ async function getResponse(cacheRequest, url) {
   /**
    * If not, we fetch the assert
    */
-  const responseFromFetch = await fetch(url)
+  const responseFromFetch = await fetch(request)
   if (responseFromFetch.status !== 200) {
     // eslint-disable-next-line no-console
     console.log(

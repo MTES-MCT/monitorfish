@@ -11,7 +11,11 @@ import { ZOOM_TO_START_END_TILE_INDICES } from './constants'
  *
  * @see `fetch` event of serviceWorker.ts
  */
-export async function fetchAllByChunk(zoomToPaths: string[][], chunkSize: number, startFromIndex: number) {
+export async function fetchAllFromServiceWorkerByChunk(
+  zoomToPaths: string[][],
+  chunkSize: number,
+  startFromIndex: number
+) {
   const subDomains = ['a', 'b', 'c', 'd']
   const waitTime = 1000
   let currentIndex = 0
@@ -32,6 +36,7 @@ export async function fetchAllByChunk(zoomToPaths: string[][], chunkSize: number
 
       const subDomain = subDomains[Math.floor(Math.random() * subDomains.length)]
 
+      // The service worker is processing the fetch event
       chunkOfPaths.forEach(path => ky.get(`https://${subDomain}.basemaps.cartocdn.com/light_all/${path}.png`))
 
       // An await is used to reduce the number of HTTP requests send per second

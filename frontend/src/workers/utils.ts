@@ -1,6 +1,6 @@
-import { CARTOCDN_BASEMAP, MAPBOX_BASEMAP, OPENSTREETMAP_BASEMAP, SHOM_BASEMAP } from './constants'
+import { CARTOCDN_BASEMAP, MAPBOX_BASEMAP, OPENSTREETMAP_BASEMAP, REGULATIONS, SHOM_BASEMAP } from './constants'
 
-export const getImageCacheKey = src => {
+export const getCacheKey = src => {
   if (src.includes(CARTOCDN_BASEMAP)) {
     return src.split(CARTOCDN_BASEMAP)[1] || ''
   }
@@ -17,5 +17,9 @@ export const getImageCacheKey = src => {
     return src.split(SHOM_BASEMAP)[1] || ''
   }
 
-  return ''
+  if (src.includes(REGULATIONS)) {
+    return REGULATIONS
+  }
+
+  return src
 }

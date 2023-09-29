@@ -7,7 +7,7 @@ import {
   REGULATIONS,
   STATIC_ASSETS,
   UPDATE_CACHE,
-  WHITELISTED_API_PATHS,
+  WHITELISTED_AND_READ_ONLY_PATHS,
   WHITELISTED_BASE_MAPS_PATHS
 } from './constants'
 import { getCacheKey } from './utils'
@@ -84,7 +84,14 @@ self.addEventListener('activate', event => {
 })
 
 /**
- * Custom message
+ * Custom message used by the application.
+ *
+ * Types are:
+ * - CACHED_REQUEST_SIZE:
+ *      Get the size of all cached requests
+ * - UPDATE_CACHE:
+ *      This message us used to write and update the WHITELISTED_AND_READ_ONLY_PATHS.
+ *      These paths caches can't be updated by the `fetch()` method.
  */
 self.addEventListener('message', async event => {
   if (event.data === CACHED_REQUEST_SIZE) {
@@ -100,8 +107,32 @@ self.addEventListener('message', async event => {
 
   if (event.data === UPDATE_CACHE) {
     const cache = await caches.open(CACHE_NAME)
-    await cache.delete(new Request(REGULATIONS))
-    await cache.delete(new Request(INFRACTIONS))
+
+    try {
+      await cache.delete(new Request(INFRACTIONS))
+      await cache.add(INFRACTIONS)
+    } catch (e) {
+      // @ts-ignore
+      event.source?.postMessage({
+        data: e,
+        type: UPDATE_CACHE
+      })
+
+      return
+    }
+
+    try {
+      await cache.delete(new Request(REGULATIONS))
+      await cache.add(REGULATIONS)
+    } catch (e) {
+      // @ts-ignore
+      event.source?.postMessage({
+        data: e,
+        type: UPDATE_CACHE
+      })
+
+      return
+    }
 
     // @ts-ignore
     event.source?.postMessage({
@@ -126,19 +157,18 @@ self.addEventListener('fetch', event => {
   )
 })
 
-async function getResponse(cacheRequest, request) {
+async function getResponse(cacheRequest: Request, request: Request) {
   const url = request.url.toString()
+  const isReadOnlyWhitelisted = WHITELISTED_AND_READ_ONLY_PATHS.find(path => url.endsWith(path))
+
   /**
-   * If the request is not a base map whitelisted request, it will fetch the content and NOT cache it.
+   * If the request is not a whitelisted request, it will fetch the content and NOT cache it.
    */
-  if (
-    !WHITELISTED_BASE_MAPS_PATHS.find(path => url.includes(path)) &&
-    !WHITELISTED_API_PATHS.find(path => url.includes(path))
-  ) {
+  if (!WHITELISTED_BASE_MAPS_PATHS.find(path => url.includes(path)) && !isReadOnlyWhitelisted) {
     /**
      * If the route is part of React's router, redirect to index.html as it is a SPA
      */
-    if (APPLICATION_ROUTES.find(route => url.includes(route))) {
+    if (APPLICATION_ROUTES.find(route => url.endsWith(route))) {
       return fetch('/')
     }
 
@@ -146,7 +176,7 @@ async function getResponse(cacheRequest, request) {
   }
 
   /**
-   * Else, we check if a cached version of the map is stored
+   * We check if a cached version of the request is stored
    */
   const responseFromCache = await caches.match(cacheRequest)
   if (responseFromCache) {
@@ -154,7 +184,7 @@ async function getResponse(cacheRequest, request) {
   }
 
   /**
-   * If not, we fetch the assert
+   * If not, we fetch the request
    */
   const responseFromFetch = await fetch(request)
   if (responseFromFetch.status !== 200) {
@@ -168,9 +198,11 @@ async function getResponse(cacheRequest, request) {
 
   const cache = await caches.open(CACHE_NAME)
   /**
-   * We store the new cache entry
+   * We store the new cache entry if not included in the read-only paths
    */
-  await cache.put(cacheRequest, responseFromFetch.clone())
+  if (!isReadOnlyWhitelisted) {
+    await cache.put(cacheRequest, responseFromFetch.clone())
+  }
 
   return responseFromFetch
 }

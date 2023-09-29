@@ -107,7 +107,7 @@ export const monitorfishPublicApi = createApi({
   baseQuery: normalizeRtkBaseQuery(monitorfishPublicBaseQuery),
   endpoints: () => ({}),
   reducerPath: 'monitorfishPublicApi',
-  tagTypes: []
+  tagTypes: ['Infractions']
 })
 
 export const monitorfishApiKy = ky.extend({

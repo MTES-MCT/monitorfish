@@ -4,8 +4,6 @@ import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import { Progress } from 'rsuite'
 import styled from 'styled-components'
 
-import { getAllRegulatoryLayersFromAPI } from '../../../api/geoserver'
-import { getInfractionsFromAPI } from '../../../api/infraction'
 import { CACHED_REQUEST_SIZE, UPDATE_CACHE } from '../../../workers/constants'
 import { useGetServiceWorker } from '../../../workers/hooks/useGetServiceWorker'
 import { fetchAllFromServiceWorkerByChunk, getZoomToRequestPaths } from '../utils'
@@ -36,9 +34,13 @@ export function LoadOffline() {
       }
 
       if (event.data.type === UPDATE_CACHE) {
-        await getAllRegulatoryLayersFromAPI(false)
+        if (event.data.data) {
+          // eslint-disable-next-line no-console
+          console.error(event.data.data)
+
+          return
+        }
         setIsRegulationsUpdated(true)
-        getInfractionsFromAPI()
       }
     })
 
@@ -102,10 +104,7 @@ export function LoadOffline() {
     <>
       <LoadBox>
         <Title>Préchargement</Title>
-        <p>
-          Cette page permet de télécharger les fonds de cartes et les données lourdes de MonitorFish, avant de passer
-          sur une connexion Internet satellitaire.
-        </p>
+        <p>Cette page permet de télécharger les fonds de cartes de MonitorFish.</p>
         {(isDownloading || parseInt(percent, 10) > 0) && (
           <StyledProgress percent={parseFloat(percent)} status={getStatus()} strokeWidth={10} />
         )}

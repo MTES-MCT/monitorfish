@@ -5,6 +5,7 @@ import GML from 'ol/format/GML'
 import { REGULATION_ACTION_TYPE } from '../domain/entities/regulation'
 import { HttpStatusCode } from './constants'
 import { ApiError } from '../libs/ApiError'
+import { getEnvironmentVariable } from './utils'
 
 export const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la couche réglementaire'
 const REGULATORY_ZONES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les zones réglementaires'
@@ -20,12 +21,8 @@ function getIrretrievableRegulatoryZoneError (e, regulatoryZone) {
   return Error(`Nous n'avons pas pu récupérer la zone réglementaire ${regulatoryZone.topic}/${regulatoryZone.zone} : ${e}`)
 }
 
-export const GEOSERVER_URL = self?.env?.REACT_APP_GEOSERVER_REMOTE_URL !== '__REACT_APP_GEOSERVER_REMOTE_URL__'
-  ? self.env.REACT_APP_GEOSERVER_REMOTE_URL
-  : process.env.REACT_APP_GEOSERVER_REMOTE_URL
-export const GEOSERVER_BACKOFFICE_URL = self?.env?.REACT_APP_GEOSERVER_LOCAL_URL !== '__REACT_APP_GEOSERVER_LOCAL_URL__'
-  ? self.env.REACT_APP_GEOSERVER_LOCAL_URL
-  : process.env.REACT_APP_GEOSERVER_LOCAL_URL
+export const GEOSERVER_URL = getEnvironmentVariable('REACT_APP_GEOSERVER_REMOTE_URL')
+export const GEOSERVER_BACKOFFICE_URL = getEnvironmentVariable('REACT_APP_GEOSERVER_LOCAL_URL')
 
 /**
  * @description This API isn't authenticated

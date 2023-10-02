@@ -1,5 +1,9 @@
 context('Load offline', () => {
-  it('Should download tiles in the Cache API with the Service Worker', () => {
+  /**
+   * This test can't be runned as `navigator.serviceWorker` is not available in Cypress
+   */
+  // eslint-disable-next-line mocha/no-skipped-tests
+  it.skip('Should download tiles in the Cache API with the Service Worker', () => {
     // Given
     cy.visit('/load_offline')
     cy.get('*[data-cy="load-offline-downloaded-tiles"]').eq(0).contains('0 tuiles sauvegardées')

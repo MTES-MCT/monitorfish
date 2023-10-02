@@ -18,7 +18,7 @@
         <java.version>17</java.version>
         <spring.version>${project.parent.version}</spring.version>
         <kotlin.version>1.9.10</kotlin.version>
-        <testcontainers.version>1.19.0</testcontainers.version>
+        <testcontainers.version>1.19.1</testcontainers.version>
         <ktor.version>2.3.3</ktor.version>
         <sentry.version>6.29.0</sentry.version>
         <commit.hash>COMMIT_TO_CHANGE</commit.hash>

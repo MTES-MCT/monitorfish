@@ -253,7 +253,7 @@ context('Fleet segments', () => {
 
     // When
     cy.get('[data-cy="fleet-segments-select-year"]').click()
-    cy.get('[aria-selected="false"] > .rs-picker-select-menu-item').first().click()
+    cy.get('[aria-disabled="false"] > .rs-picker-select-menu-item').first().click()
 
     // Then
     cy.get('[data-cy="fleet-segments-select-year"]').contains(currentYear - 1)

@@ -4,12 +4,19 @@ import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import { Progress } from 'rsuite'
 import styled from 'styled-components'
 
+import { getEnvironmentVariable } from '../../../api/utils'
 import { CACHED_REQUEST_SIZE, UPDATE_CACHE } from '../../../workers/constants'
 import { useGetServiceWorker } from '../../../workers/hooks/useGetServiceWorker'
 import { fetchAllFromServiceWorkerByChunk, getZoomToRequestPaths } from '../utils'
 
+/**
+ * This is used to reduce the number of tiles added in cache during the e2e test
+ */
+const IS_CYPRESS_TEST = getEnvironmentVariable('REACT_APP_CYPRESS_TEST')
+const CYPRESS_TEST_TOTAL_DOWNLOAD_REQUESTS = 31 // Calculated using `getListOfPath()`
+
 const BYTE_TO_MEGA_BYTE_FACTOR = 0.000001
-const TOTAL_DOWNLOAD_REQUESTS = 55728 // Calculated using `getListOfPath()`
+const TOTAL_DOWNLOAD_REQUESTS = IS_CYPRESS_TEST ? CYPRESS_TEST_TOTAL_DOWNLOAD_REQUESTS : 55728 // Calculated using `getListOfPath()`
 const INTERVAL_REFRESH_MS = 5000
 const DOWNLOAD_CHUNK_SIZE = 10
 
@@ -64,10 +71,11 @@ export function LoadOffline() {
   }
 
   const downloadAll = async () => {
-    const zoomToPaths = getZoomToRequestPaths()
+    const zoomToRequestPaths = getZoomToRequestPaths()
+    const zoomToRequestPathsToDownload = IS_CYPRESS_TEST ? zoomToRequestPaths.slice(0, 6) : zoomToRequestPaths
 
     setIsDownloading(true)
-    await fetchAllFromServiceWorkerByChunk(zoomToPaths, DOWNLOAD_CHUNK_SIZE, cachedRequestsLength)
+    await fetchAllFromServiceWorkerByChunk(zoomToRequestPathsToDownload, DOWNLOAD_CHUNK_SIZE, cachedRequestsLength)
     setIsDownloading(false)
   }
 
@@ -108,7 +116,6 @@ export function LoadOffline() {
         {(isDownloading || parseInt(percent, 10) > 0) && (
           <StyledProgress percent={parseFloat(percent)} status={getStatus()} strokeWidth={10} />
         )}
-        {}
         {!isDownloading && parseInt(percent, 10) < 100 && (
           <StyledButton accent={Accent.PRIMARY} Icon={Icon.Download} onClick={downloadAll}>
             Télécharger
@@ -130,7 +137,9 @@ export function LoadOffline() {
           {isRegulationsUpdated ? 'Données réglementaires à jour' : 'Mettre à jour les données réglementaires'}
         </StyledButton>
       </LoadBox>
-      {cachedRequestsLength} tuiles sauvegardées ({usage} MB)
+      <span data-cy="load-offline-downloaded-tiles">
+        {cachedRequestsLength} tuiles sauvegardées ({usage} MB)
+      </span>
     </>
   )
 }

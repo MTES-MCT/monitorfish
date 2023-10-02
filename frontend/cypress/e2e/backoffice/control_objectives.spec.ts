@@ -1,10 +1,8 @@
 /* eslint-disable no-undef */
 
-import dayjs from 'dayjs'
-
 context('Control objectives', () => {
   beforeEach(() => {
-    const currentYear = dayjs().utc().year()
+    const currentYear = new Date().getFullYear()
     cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
     cy.intercept('GET', `/bff/v1/control_objectives/${currentYear}`).as('controlObjectives')
     cy.visit('/backoffice/control_objectives')

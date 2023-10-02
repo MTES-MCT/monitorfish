@@ -11,7 +11,7 @@ data class VesselAndPositionsDataOutput(
         fun fromVesselWithData(vesselInformation: VesselInformation): VesselAndPositionsDataOutput {
             return VesselAndPositionsDataOutput(
                 vessel = VesselDataOutput.fromVessel(
-                    vesselInformation.vessel
+                    vesselInformation.vessel,
                 ),
                 positions = vesselInformation.positions.map {
                     PositionDataOutput.fromPosition(it)

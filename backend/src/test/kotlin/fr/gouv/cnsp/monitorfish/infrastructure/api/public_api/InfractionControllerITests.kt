@@ -6,7 +6,6 @@ import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.use_cases.infraction.GetAllInfractions
-import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.InfractionController
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given

@@ -2,7 +2,7 @@ import persistReducer from 'redux-persist/es/persistReducer'
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
 import storage from 'redux-persist/es/storage' // LocalStorage
 
-import { monitorenvApi, monitorfishApi, monitorfishNavApi, monitorfishPublicApi } from '../api'
+import { monitorenvApi, monitorfishApi, monitorfishLightApi, monitorfishPublicApi } from '../api'
 import { beaconMalfunctionReducer } from '../domain/shared_slices/BeaconMalfunction'
 import { controlReducer } from '../domain/shared_slices/Control'
 import { displayedComponentReducer } from '../domain/shared_slices/DisplayedComponent'
@@ -47,7 +47,7 @@ const getCommonPersistReducerConfig = <S>(key: string, whitelist?: Array<keyof S
 const commonReducerList = {
   [monitorfishApi.reducerPath]: monitorfishApi.reducer,
   [monitorfishPublicApi.reducerPath]: monitorfishPublicApi.reducer,
-  [monitorfishNavApi.reducerPath]: monitorfishNavApi.reducer,
+  [monitorfishLightApi.reducerPath]: monitorfishLightApi.reducer,
 
   gear: gearReducer,
   global: globalSliceReducer,

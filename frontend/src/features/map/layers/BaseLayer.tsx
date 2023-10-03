@@ -5,7 +5,7 @@ import XYZ from 'ol/source/XYZ'
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { useIsInNavigationMode } from '../../../hooks/authorization/useIsInNavigationMode'
+import { useIsInLightMode } from '../../../hooks/authorization/useIsInLightMode'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
 import type { ImageTile } from 'ol'
@@ -15,7 +15,7 @@ export type BaseLayerProps = {
   map?: any
 }
 function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
-  const isInNavigationMode = useIsInNavigationMode()
+  const isInLightMode = useIsInLightMode()
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
 
   const tileCacheMapRef = useRef(new Map<string, string>())
@@ -65,8 +65,8 @@ function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
         new TileLayer({
           className: LayerProperties.BASE_LAYER.code,
           source: new XYZ({
-            maxZoom: isInNavigationMode ? 11 : 19,
-            tileLoadFunction: isInNavigationMode ? undefined : loadTileFromCacheOrFetch,
+            maxZoom: isInLightMode ? 11 : 19,
+            tileLoadFunction: isInLightMode ? undefined : loadTileFromCacheOrFetch,
             urls: ['a', 'b', 'c', 'd'].map(
               subdomain => `https://${subdomain}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png`
             )
@@ -105,7 +105,7 @@ function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
           zIndex: 0
         })
     }),
-    [loadTileFromCacheOrFetch, isInNavigationMode]
+    [loadTileFromCacheOrFetch, isInLightMode]
   )
 
   useEffect(() => {

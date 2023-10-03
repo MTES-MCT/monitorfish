@@ -1,4 +1,4 @@
-import { monitorfishApi, monitorfishNavApi } from '../../api'
+import { monitorfishApi, monitorfishLightApi } from '../../api'
 
 import type { RiskFactor } from '../../domain/entities/vessel/riskFactor/types'
 import type { VesselLastPosition } from '../../domain/entities/vessel/types'
@@ -15,7 +15,7 @@ export const vesselApi = monitorfishApi.injectEndpoints({
   })
 })
 
-export const vesselNavApi = monitorfishNavApi.injectEndpoints({
+export const vesselNavApi = monitorfishLightApi.injectEndpoints({
   endpoints: builder => ({
     getVesselsLastPositions: builder.query<VesselLastPosition[], void>({
       query: () => `/v1/vessels`

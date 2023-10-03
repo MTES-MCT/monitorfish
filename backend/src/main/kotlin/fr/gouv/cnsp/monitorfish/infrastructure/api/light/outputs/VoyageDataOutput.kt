@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.infrastructure.api.navigation.outputs
+package fr.gouv.cnsp.monitorfish.infrastructure.api.light.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
 import java.time.ZonedDateTime

@@ -12,8 +12,8 @@ export const WHITELISTED_AND_READ_ONLY_PATHS = [REGULATIONS, INFRACTIONS]
 export const STATIC_ASSETS = ['/landing_background.png']
 
 export const APPLICATION_ROUTES = [
-  '/nav',
-  '/load_offline',
+  '/light',
+  '/load_light',
   '/backoffice',
   '/regulation',
   '/regulation/new',

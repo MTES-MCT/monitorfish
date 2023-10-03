@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.infrastructure.api.navigation.outputs
+package fr.gouv.cnsp.monitorfish.infrastructure.api.light.outputs
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition

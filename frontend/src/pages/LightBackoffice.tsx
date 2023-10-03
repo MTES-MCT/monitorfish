@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { LoadOffline } from '../features/LoadOffline/components/LoadOffline'
 import { registerServiceWorker } from '../workers/registerServiceWorker'
 
-export function NavBackoffice() {
+export function LightBackoffice() {
   useEffect(() => {
     registerServiceWorker()
   }, [])

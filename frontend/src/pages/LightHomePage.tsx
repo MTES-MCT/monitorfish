@@ -1,17 +1,17 @@
 import { useEffect } from 'react'
 
 import { HomePage } from './HomePage'
-import { NavigationContext } from '../context/NavigationContext'
+import { LightContext } from '../context/LightContext'
 import { registerServiceWorker } from '../workers/registerServiceWorker'
 
-export function NavHomePage() {
+export function LightHomePage() {
   useEffect(() => {
     registerServiceWorker()
   }, [])
 
   return (
-    <NavigationContext.Provider value>
+    <LightContext.Provider value>
       <HomePage />
-    </NavigationContext.Provider>
+    </LightContext.Provider>
   )
 }

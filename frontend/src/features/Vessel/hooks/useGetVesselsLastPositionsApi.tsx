@@ -1,16 +1,16 @@
 import { useMemo } from 'react'
 
-import { useIsInNavigationMode } from '../../../hooks/authorization/useIsInNavigationMode'
+import { useIsInLightMode } from '../../../hooks/authorization/useIsInLightMode'
 import { useGetVesselsLastPositionsNavQuery, useGetVesselsLastPositionsQuery } from '../apis'
 
 export function useGetVesselsLastPositionsApi() {
-  const isInNavigationMode = useIsInNavigationMode()
+  const isInLightMode = useIsInLightMode()
 
   return useMemo(() => {
-    if (isInNavigationMode) {
+    if (isInLightMode) {
       return useGetVesselsLastPositionsNavQuery
     }
 
     return useGetVesselsLastPositionsQuery
-  }, [isInNavigationMode])
+  }, [isInLightMode])
 }

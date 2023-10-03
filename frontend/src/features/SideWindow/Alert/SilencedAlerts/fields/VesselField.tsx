@@ -59,7 +59,7 @@ export function VesselField() {
     setValues({
       ...values,
       externalReferenceNumber: nextVessel.externalReferenceNumber || null,
-      flagState: nextVessel.flagState,
+      flagState: nextVessel.flagState?.toUpperCase(),
       internalReferenceNumber: nextVessel.internalReferenceNumber || null,
       ircs: nextVessel.ircs || null,
       vesselId: nextVessel.vesselId || null,

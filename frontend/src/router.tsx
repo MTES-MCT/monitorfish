@@ -8,8 +8,8 @@ import { MainWindow } from './features/MainWindow'
 import { SideWindow } from './features/SideWindow'
 import { BackofficePage } from './pages/BackofficePage'
 import { HomePage } from './pages/HomePage'
-import { NavBackoffice } from './pages/NavBackoffice'
-import { NavHomePage } from './pages/NavHomePage'
+import { LightBackoffice } from './pages/LightBackoffice'
+import { LightHomePage } from './pages/LightHomePage'
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 export const routes = [
@@ -24,8 +24,8 @@ export const routes = [
     ]
   },
   {
-    path: '/nav',
-    element: <NavHomePage />,
+    path: '/light',
+    element: <LightHomePage />,
     children: [
       {
         index: true,
@@ -34,8 +34,8 @@ export const routes = [
     ]
   },
   {
-    path: '/load_offline',
-    element: <NavBackoffice />
+    path: '/load_light',
+    element: <LightBackoffice />
   },
   {
     path: '/backoffice',

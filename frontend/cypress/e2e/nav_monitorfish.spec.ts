@@ -1,9 +1,9 @@
-context('Navigation MonitorFish', () => {
+context('Light MonitorFish', () => {
   it('Should have some features removed When not logged as super user', () => {
     // Given
     cy.intercept('/env.js', { fixture: 'env' })
     cy.intercept('/bff/v1/authorization/current', { statusCode: 401 }).as('getIsSuperUser')
-    cy.visit('/nav#@-824534.42,6082993.21,8.70')
+    cy.visit('/light#@-824534.42,6082993.21,8.70')
     cy.wait('@getIsSuperUser')
 
     // Then

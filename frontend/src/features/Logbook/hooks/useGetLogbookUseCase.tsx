@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 
-import { useIsInNavigationMode } from '../../../hooks/authorization/useIsInNavigationMode'
+import { useIsInLightMode } from '../../../hooks/authorization/useIsInLightMode'
 import { getVesselLogbook } from '../useCases/getVesselLogbook'
 
 export function useGetLogbookUseCase() {
-  const isInNavigationMode = useIsInNavigationMode()
+  const isInLightMode = useIsInLightMode()
 
-  return useMemo(() => getVesselLogbook(isInNavigationMode), [isInNavigationMode])
+  return useMemo(() => getVesselLogbook(isInLightMode), [isInLightMode])
 }

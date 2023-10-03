@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { FIVE_MINUTES, TWENTY_MINUTES } from '../../../api/APIWorker'
 import { COLORS } from '../../../constants/constants'
 import { setError } from '../../../domain/shared_slices/Global'
-import { useIsInNavigationMode } from '../../../hooks/authorization/useIsInNavigationMode'
+import { useIsInLightMode } from '../../../hooks/authorization/useIsInLightMode'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
@@ -16,7 +16,7 @@ import { showVesselsLastPosition } from '../useCases/showVesselsLastPosition'
 
 export function VesselLoader() {
   const useGetVesselsLastPositionsQuery = useGetVesselsLastPositionsApi()
-  const isInNavigationMode = useIsInNavigationMode()
+  const isInLightMode = useIsInLightMode()
   const dispatch = useMainAppDispatch()
 
   const { blockVesselsUpdate, healthcheckTextWarning } = useMainAppSelector(state => state.global)
@@ -28,7 +28,7 @@ export function VesselLoader() {
     isError,
     isFetching
   } = useGetVesselsLastPositionsQuery(blockVesselsUpdate ? skipToken : undefined, {
-    pollingInterval: isInNavigationMode ? TWENTY_MINUTES : FIVE_MINUTES
+    pollingInterval: isInLightMode ? TWENTY_MINUTES : FIVE_MINUTES
   })
 
   const [isAppLoaded, setIsAppLoaded] = useState(false)

@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.infrastructure.api.navigation
+package fr.gouv.cnsp.monitorfish.infrastructure.api.light
 
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
@@ -6,9 +6,9 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetLastPositions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVessel
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselVoyage
-import fr.gouv.cnsp.monitorfish.infrastructure.api.navigation.outputs.LastPositionDataOutput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.navigation.outputs.VesselAndPositionsDataOutput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.navigation.outputs.VoyageDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.light.outputs.LastPositionDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.light.outputs.VesselAndPositionsDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.light.outputs.VoyageDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RestController
 import java.time.ZonedDateTime
 
 @RestController
-@RequestMapping("/nav/v1/vessels")
-@Tag(name = "APIs for Vessels in navigation")
-class VesselNavController(
+@RequestMapping("/light/v1/vessels")
+@Tag(name = "APIs for Vessels in light mode")
+class VesselLightController(
     private val getLastPositions: GetLastPositions,
     private val getVessel: GetVessel,
     private val getVesselVoyage: GetVesselVoyage,

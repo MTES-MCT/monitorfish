@@ -77,19 +77,19 @@ export const monitorfishApi = createApi({
 })
 
 // =============================================================================
-// Monitorfish Navigation API
+// Monitorfish Light API
 
-const monitorfishNavBaseQuery = retry(
+const monitorfishLightBaseQuery = retry(
   fetchBaseQuery({
-    baseUrl: `/nav`
+    baseUrl: `/light`
   }),
   { maxRetries: MAX_RETRIES }
 )
 
-export const monitorfishNavApi = createApi({
-  baseQuery: normalizeRtkBaseQuery(monitorfishNavBaseQuery),
+export const monitorfishLightApi = createApi({
+  baseQuery: normalizeRtkBaseQuery(monitorfishLightBaseQuery),
   endpoints: () => ({}),
-  reducerPath: 'monitorfishNavApi',
+  reducerPath: 'monitorfishLightApi',
   tagTypes: []
 })
 

@@ -17,7 +17,7 @@ import type { VesselIdentity } from '../../../domain/entities/vessel/types'
  * Get the vessel fishing voyage and update the vessel positions track when navigating in the trips
  */
 export const getVesselLogbook =
-  (isInNavigationMode: boolean) =>
+  (isInLightMode: boolean) =>
   (
     vesselIdentity: VesselIdentity | null,
     navigateTo: NavigateTo | undefined,
@@ -48,7 +48,7 @@ export const getVesselLogbook =
 
     try {
       const voyage = await getVesselLogbookFromAPI(
-        isInNavigationMode,
+        isInLightMode,
         vesselIdentity,
         nextNavigateTo,
         nextTripNumber || tripNumber
@@ -93,7 +93,7 @@ export const getVesselLogbook =
         displayOrLogError(
           error as Error,
           {
-            func: getVesselLogbook(isInNavigationMode),
+            func: getVesselLogbook(isInLightMode),
             parameters: [vesselIdentity, navigateTo, isFromUserAction]
           },
           isFromUserAction,

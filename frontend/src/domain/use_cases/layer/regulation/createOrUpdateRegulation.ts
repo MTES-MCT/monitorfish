@@ -22,6 +22,19 @@ export const createOrUpdateRegulation = (processingRegulation, id, previousId) =
      * /!\ This constraint is only applied to the local (CROSS) regulations table.
      */
     await dispatch(resetPreviousRegulation(previousId, id))
+
+    /**
+     * We must wait for the reset to be done.
+     * TODO Add the two UPDATE into the same transaction to remove this `setTimeout`
+     */
+    setTimeout(() => {
+      /**
+       * Then, we update the new regulation with the values of the previous one
+       */
+      dispatch(updateRegulation(feature, REGULATION_ACTION_TYPE.UPDATE))
+    }, 1000)
+
+    return
   }
 
   /**

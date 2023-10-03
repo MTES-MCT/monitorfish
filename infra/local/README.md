@@ -28,18 +28,11 @@ COPY public.reglementation_peche (id, law_type,
 ## Reset a regulation from the local PostGIS regulation referential
 
 ```
-update prod.reglementation_peche set regulatory_references = null, topic = null, zones = null, facade = null, region = null, law_type = null where id = 10014;
+insert into prod.regulations (id, topic, zone, region, law_type) VALUES (11053, 'Un topic de test', 'Zone de test', 'Bretagne', 'Reg. NAMO');
 ```
 
 ## Create a test regulatory entry
 
 ```
-insert into prod.reglementation_peche (law_type, facade, topic, zones, region, date_fermeture,date_ouverture, fishing_period, periodes, engins, engins_interdits,mesures_techniques, especes, species, quantites, taille,especes_interdites, autre_reglementation_especes,documents_obligatoires, autre_reglementation, regulatory_references, row_hash) select law_type,
-                                                           facade, 'Topic de test', 'Zone de test', region, date_fermeture,
-                                                           date_ouverture, fishing_period, periodes, engins, engins_interdits,
-                                                           mesures_techniques, especes, species, quantites, taille,
-                                                           especes_interdites, autre_reglementation_especes,
-                                                           documents_obligatoires, autre_reglementation,
-                                                           regulatory_references, row_hash from prod.reglementation_peche where id = 10294;
-
+insert into prod.regulations (geometry) select geometry from prod.regulations where id = 654;
 ```

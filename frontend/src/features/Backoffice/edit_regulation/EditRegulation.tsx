@@ -34,7 +34,7 @@ import {
   setRegulatoryTopics,
   setRegulatoryZoneMetadata
 } from '../../../domain/shared_slices/Regulatory'
-import createOrUpdateRegulation from '../../../domain/use_cases/layer/regulation/createOrUpdateRegulation'
+import { createOrUpdateRegulation } from '../../../domain/use_cases/layer/regulation/createOrUpdateRegulation'
 import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/layer/regulation/getAllRegulatoryLayersByRegTerritory'
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/layer/regulation/getGeometryWithoutRegulationReference'
 import showRegulatoryZone from '../../../domain/use_cases/layer/regulation/showRegulatoryZone'

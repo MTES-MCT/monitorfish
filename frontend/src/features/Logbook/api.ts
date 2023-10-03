@@ -28,7 +28,7 @@ export const { useGetLastLogbookTripsQuery } = logbookApi
  * @throws {@link ApiError}
  */
 export async function getVesselLogbookFromAPI(
-  isInNavigationMode: boolean,
+  isInLightMode: boolean,
   vesselIdentity: VesselIdentity,
   voyageRequest: NavigateTo | undefined,
   tripNumber: number | undefined
@@ -41,7 +41,7 @@ export async function getVesselLogbookFromAPI(
     return await monitorfishApiKy
       .get(
         `/${
-          isInNavigationMode ? 'nav' : 'bff'
+          isInLightMode ? 'light' : 'bff'
         }/v1/vessels/logbook/find?internalReferenceNumber=${internalReferenceNumber}&voyageRequest=${nextVoyageRequest}&tripNumber=${nextTripNumber}`
       )
       .json<VesselVoyage>()

@@ -30,9 +30,9 @@ class JpaLastPositionRepository(
     }
 
     @Cacheable(value = ["vessels_positions"])
-    override fun findAllInLast48Hours(): List<LastPosition> {
-        val nowMinus48Hours = ZonedDateTime.now().minusHours(48)
-        return dbLastPositionRepository.findAllByDateTimeGreaterThanEqual(nowMinus48Hours)
+    override fun findAllInLastMonth(): List<LastPosition> {
+        val nowMinusOneMonth = ZonedDateTime.now().minusMonths(1)
+        return dbLastPositionRepository.findAllByDateTimeGreaterThanEqual(nowMinusOneMonth)
             // We NEED this non filterNotNull (even if the IDE say not so, as the SQL request may return null internalReferenceNumber)
             .filterNotNull()
             .map {

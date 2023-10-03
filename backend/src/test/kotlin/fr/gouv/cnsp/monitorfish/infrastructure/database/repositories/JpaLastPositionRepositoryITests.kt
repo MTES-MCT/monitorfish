@@ -56,11 +56,11 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllInLast48Hours Should returns the last positions in the last 48 hours`() {
+    fun `findAllInLastMonth Should returns the last positions in the last month`() {
         // Then
-        val positions = jpaLastPositionRepository.findAllInLast48Hours()
+        val positions = jpaLastPositionRepository.findAllInLastMonth()
 
-        assertThat(positions).hasSize(999)
+        assertThat(positions).hasSize(1003)
     }
 
     @Test

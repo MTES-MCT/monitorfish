@@ -498,7 +498,8 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.contains('Infraction obligations déclaratives et autorisations 1').should('exist')
     cy.contains('Avec PV').should('exist')
-    cy.contains('NATINF : 23581').should('exist')
+    cy.contains('NATINF : 23581 - Taille de maille non réglementaire').should('exist')
+
     cy.contains("Une observation sur l'infraction").should('exist')
 
     // -------------------------------------------------------------------------
@@ -519,7 +520,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.contains('Infraction obligations déclaratives et autorisations 1').should('exist')
     cy.contains('Sans PV').should('exist')
-    cy.contains('NATINF : 23588').should('exist')
+    cy.contains('NATINF : 23588 - Chalutage dans la zone des 3 milles').should('exist')
     cy.contains("Une autre observation sur l'infraction").should('exist')
 
     // -------------------------------------------------------------------------

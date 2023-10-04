@@ -51,7 +51,7 @@ export function FormikMultiInfractionPicker({
     return input.value.map(infraction => {
       const nextInfractionLabel = find(natinfsAsOptions, { value: infraction.natinf })?.label
 
-      return { ...infraction, infractionLabel: nextInfractionLabel }
+      return { ...infraction, label: nextInfractionLabel }
     })
   }, [input.value, natinfsAsOptions])
 

@@ -49,10 +49,10 @@ export function getFeaturesFromPositions(
   }
 
   let features: (VesselPointFeature | VesselArrowFeature | VesselLineFeature)[] = []
-  const positionsPointFeatures = buildPointFeatures(uniquePositions, vesselCompositeIdentifier)
+  const positionsPointFeatures = buildPointFeatures(positions, vesselCompositeIdentifier)
   features = features.concat(positionsPointFeatures)
 
-  const vesselTrackLineFeatures = buildLineStringFeatures(uniquePositions, vesselCompositeIdentifier)
+  const vesselTrackLineFeatures = buildLineStringFeatures(positions, vesselCompositeIdentifier)
   features = features.concat(vesselTrackLineFeatures)
 
   const arrowPointFeatures = buildArrowPointFeatures(vesselTrackLineFeatures, vesselCompositeIdentifier)
@@ -178,6 +178,11 @@ function buildLineStringFeatures(
         WSG84_PROJECTION,
         OPENLAYERS_PROJECTION
       )
+
+      if (isEqual(firstPoint, secondPoint)) {
+        return null
+      }
+
       const rotation = calculateCourse(secondPoint, firstPoint)
       const firstPositionDate = new Date(firstPosition.dateTime)
       const secondPositionDate = new Date(secondPosition.dateTime)

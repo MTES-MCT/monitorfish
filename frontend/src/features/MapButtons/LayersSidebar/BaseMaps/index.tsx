@@ -8,17 +8,26 @@ import { BaseLayers, LayerType } from '../../../../domain/entities/layers/consta
 import LayerSlice from '../../../../domain/shared_slices/Layer'
 import { selectBaseLayer } from '../../../../domain/shared_slices/Map'
 import { closeRegulatoryZoneMetadata } from '../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
+import { useIsInLightMode } from '../../../../hooks/authorization/useIsInLightMode'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ChevronIcon } from '../../../commonStyles/icons/ChevronIcon.style'
 
 export function BaseMaps({ namespace }) {
   const dispatch = useMainAppDispatch()
+  const isInLightMode = useIsInLightMode()
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
   const layersSidebarOpenedLayerType = useMainAppSelector(state => state.layer.layersSidebarOpenedLayerType)
   const { setLayersSideBarOpenedLayerType } = LayerSlice[namespace].actions
 
-  const baseLayers = useMemo(() => Object.keys(BaseLayers), [])
+  const baseLayers = useMemo(() => {
+    if (isInLightMode) {
+      return [BaseLayers.LIGHT.code]
+    }
+
+    return Object.keys(BaseLayers)
+  }, [isInLightMode])
+
   const isBaseLayersShowed = useMemo(
     () => layersSidebarOpenedLayerType === LayerType.BASE_LAYER,
     [layersSidebarOpenedLayerType]

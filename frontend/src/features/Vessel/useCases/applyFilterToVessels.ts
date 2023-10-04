@@ -1,14 +1,7 @@
-import { getFilteredVessels } from './getFilteredVessels'
+import { setError } from '../../../domain/shared_slices/Global'
+import { setAllVesselsAsUnfiltered, setFilteredVesselsFeatures } from '../../../domain/shared_slices/Vessel'
+import { getFilteredVessels } from '../../../domain/use_cases/vessel/getFilteredVessels'
 import NoVesselsInFilterError from '../../../errors/NoVesselsInFilterError'
-import { setError } from '../../shared_slices/Global'
-import { setAllVesselsAsUnfiltered, setFilteredVesselsFeatures, setVesselsFromAPI } from '../../shared_slices/Vessel'
-
-import type { VesselLastPosition } from '../../entities/vessel/types'
-
-export const loadVesselsFromAPIAndApplyFilter = (lastPositions: VesselLastPosition[]) => dispatch => {
-  dispatch(setVesselsFromAPI(lastPositions))
-  dispatch(applyFilterToVessels())
-}
 
 export const applyFilterToVessels = () => (dispatch, getState) => {
   const showedFilter = getState().filter?.filters?.find(filter => filter.showed)

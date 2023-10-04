@@ -14,7 +14,7 @@ import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
 import storage from 'redux-persist/es/storage' // LocalStorage
 
 import { backofficeReducer, mainReducer } from './reducers'
-import { monitorenvApi, monitorfishApi } from '../api'
+import { monitorenvApi, monitorfishApi, monitorfishLightApi, monitorfishPublicApi } from '../api'
 import { mapToProcessingRegulation } from '../domain/entities/regulation'
 
 import type { RegulationState } from '../features/Backoffice/slice'
@@ -42,7 +42,12 @@ export const mainStore = configureStore({
       immutableCheck: false,
       // TODO Replace all Redux state Dates by strings & Error by a strict-typed POJO.
       serializableCheck: false
-    }).concat(monitorenvApi.middleware, monitorfishApi.middleware),
+    }).concat(
+      monitorenvApi.middleware,
+      monitorfishApi.middleware,
+      monitorfishPublicApi.middleware,
+      monitorfishLightApi.middleware
+    ),
   reducer: persistedMainReducer
 })
 setupListeners(mainStore.dispatch)

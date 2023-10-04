@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
+package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
@@ -39,7 +39,7 @@ class InfractionControllerITests {
         )
 
         // When
-        api.perform(get("/bff/v1/infractions"))
+        api.perform(get("/api/v1/infractions"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))

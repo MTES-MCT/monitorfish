@@ -4,13 +4,14 @@ import styled from 'styled-components'
 
 import { FishingActivitiesSummary } from './FishingActivitiesSummary'
 import LogbookMessages from './LogbookMessages'
+import { FIVE_MINUTES } from '../../../../api/APIWorker'
 import { COLORS } from '../../../../constants/constants'
 import { FishingActivitiesTab, vesselsAreEquals } from '../../../../domain/entities/vessel/vessel'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { NavigateTo } from '../../constants'
+import { useGetLogbookUseCase } from '../../hooks/useGetLogbookUseCase'
 import { logbookActions } from '../../slice'
-import { getVesselLogbook } from '../../useCases/getVesselLogbook'
 
 export function VesselLogbook() {
   const dispatch = useMainAppDispatch()
@@ -18,8 +19,21 @@ export function VesselLogbook() {
   const { fishingActivities, fishingActivitiesTab, loadingFishingActivities, nextFishingActivities, vesselIdentity } =
     useMainAppSelector(state => state.fishingActivities)
 
+  const getVesselLogbook = useGetLogbookUseCase()
+
   const showedLogbookIsOutdated = vesselIdentity && !vesselsAreEquals(vesselIdentity, selectedVesselIdentity)
   const [messageTypeFilter, setMessageTypeFilter] = useState(null)
+
+  // TODO This need to be moved to a RTK-Query's `pollingInterval`
+  useEffect(() => {
+    const interval = setInterval(() => {
+      dispatch(getVesselLogbook(selectedVesselIdentity, undefined, false))
+    }, FIVE_MINUTES)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [dispatch, getVesselLogbook, selectedVesselIdentity])
 
   const showMessages = useCallback(
     messageType => {
@@ -52,6 +66,7 @@ export function VesselLogbook() {
     dispatch,
     fishingActivities,
     vesselIdentity,
+    getVesselLogbook,
     loadingFishingActivities,
     selectedVesselIdentity,
     showedLogbookIsOutdated
@@ -71,15 +86,15 @@ export function VesselLogbook() {
 
   const goToPreviousTrip = useCallback(() => {
     dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.PREVIOUS, true))
-  }, [dispatch, selectedVesselIdentity])
+  }, [dispatch, getVesselLogbook, selectedVesselIdentity])
 
   const goToNextTrip = useCallback(() => {
     dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.NEXT, true))
-  }, [dispatch, selectedVesselIdentity])
+  }, [dispatch, getVesselLogbook, selectedVesselIdentity])
 
   const goToLastTrip = useCallback(() => {
     dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.LAST, true))
-  }, [dispatch, selectedVesselIdentity])
+  }, [dispatch, getVesselLogbook, selectedVesselIdentity])
 
   if (loadingFishingActivities) {
     return <FingerprintSpinner className="radar" color={COLORS.charcoal} size={100} />

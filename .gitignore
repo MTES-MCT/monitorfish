@@ -178,3 +178,8 @@ datascience/docs/build
 
 # Secrets (used by act)
 .secrets
+
+# service worker transpiled
+frontend/public/service-worker.js
+
+

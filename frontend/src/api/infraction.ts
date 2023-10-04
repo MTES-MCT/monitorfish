@@ -1,13 +1,13 @@
-import { monitorfishApi, monitorfishApiKy } from '.'
+import { monitorfishApiKy, monitorfishPublicApi } from '.'
 import { ApiError } from '../libs/ApiError'
 
 import type { MissionAction } from '../domain/types/missionAction'
 
-export const infractionApi = monitorfishApi.injectEndpoints({
+export const infractionApi = monitorfishPublicApi.injectEndpoints({
   endpoints: builder => ({
     getInfractions: builder.query<MissionAction.Infraction[], void>({
       providesTags: () => [{ type: 'Infractions' }],
-      query: () => `infractions`
+      query: () => `/v1/infractions`
     })
   })
 })
@@ -21,12 +21,12 @@ export const INFRACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les NA
  *
  * @throws {ApiError}
  */
-async function getFishingInfractionsFromAPI() {
+async function getInfractionsFromAPI() {
   try {
-    return await monitorfishApiKy.get(`/bff/v1/infractions`).json<Array<MissionAction.Infraction>>()
+    return await monitorfishApiKy.get(`/api/v1/infractions`).json<Array<MissionAction.Infraction>>()
   } catch (err) {
     throw new ApiError(INFRACTIONS_ERROR_MESSAGE, err)
   }
 }
 
-export { getFishingInfractionsFromAPI }
+export { getInfractionsFromAPI }

@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
+package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
 import fr.gouv.cnsp.monitorfish.domain.use_cases.infraction.GetAllInfractions
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.InfractionDataOutput
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/bff/v1/infractions")
+@RequestMapping("/api/v1/infractions")
 @Tag(name = "APIs for Infractions")
 class InfractionController(private val getAllInfractions: GetAllInfractions) {
 

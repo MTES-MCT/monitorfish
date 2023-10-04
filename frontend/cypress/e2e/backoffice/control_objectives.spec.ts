@@ -3,8 +3,10 @@
 context('Control objectives', () => {
   beforeEach(() => {
     const currentYear = new Date().getFullYear()
+    cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
     cy.intercept('GET', `/bff/v1/control_objectives/${currentYear}`).as('controlObjectives')
     cy.visit('/backoffice/control_objectives')
+    cy.wait('@fleetSegments')
     cy.wait('@controlObjectives')
   })
 
@@ -131,6 +133,7 @@ context('Control objectives', () => {
     // Given
     cy.get('.rs-table-row').should('have.length', 66)
     cy.intercept('POST', '/bff/v1/control_objectives').as('addObjective')
+    cy.wait(200)
 
     // When
     cy.get('*[data-cy="add-control-objective"]').eq(0).click()

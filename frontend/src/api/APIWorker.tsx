@@ -10,21 +10,19 @@ import getAllBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getA
 import { getVesselBeaconMalfunctions } from '../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
 import { openBeaconMalfunctionInKanban } from '../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
 import getAllGearCodes from '../domain/use_cases/gearCode/getAllGearCodes'
-import getHealthcheck from '../domain/use_cases/healthcheck/getHealthcheck'
-import { getFishingInfractions } from '../domain/use_cases/infraction/getFishingInfractions'
+import { getInfractions } from '../domain/use_cases/infraction/getInfractions'
 import getAllRegulatoryLayers from '../domain/use_cases/layer/regulation/getAllRegulatoryLayers'
 import { getVesselControls } from '../domain/use_cases/mission/getVesselControls'
 import { getAllCurrentReportings } from '../domain/use_cases/reporting/getAllCurrentReportings'
 import getAllSpecies from '../domain/use_cases/species/getAllSpecies'
 import { getVesselReportings } from '../domain/use_cases/vessel/getVesselReportings'
-import { showVesselsLastPosition } from '../domain/use_cases/vessel/showVesselsLastPosition'
 import { updateVesselTracks } from '../domain/use_cases/vessel/updateVesselTracks'
-import { getVesselLogbook } from '../features/Logbook/useCases/getVesselLogbook'
 import { useIsSuperUser } from '../hooks/authorization/useIsSuperUser'
 import { useMainAppDispatch } from '../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../hooks/useMainAppSelector'
 
 export const FIVE_MINUTES = 5 * 60 * 1000
+export const TWENTY_MINUTES = 20 * 60 * 1000
 export const THIRTY_SECONDS = 30 * 1000
 
 // TODO Move these `useEffect`s to dispatchers, in order to remove logic from this component
@@ -48,7 +46,6 @@ export function APIWorker() {
     }
 
     dispatch(setIsUpdatingVessels())
-    dispatch(getHealthcheck())
     dispatch(getAllSpecies()).then(() => dispatch(getAllRegulatoryLayers()))
     dispatch(getAllGearCodes())
 
@@ -60,13 +57,10 @@ export function APIWorker() {
       dispatch(getAllBeaconMalfunctions())
     }
 
-    dispatch(showVesselsLastPosition())
-    dispatch(getFishingInfractions())
+    dispatch(getInfractions())
 
     const interval = setInterval(() => {
       dispatch(setIsUpdatingVessels())
-      dispatch(getHealthcheck())
-      dispatch(showVesselsLastPosition())
       dispatch(updateVesselTracks())
 
       setUpdateVesselSidebarTab(true)
@@ -133,9 +127,7 @@ export function APIWorker() {
       return
     }
 
-    if (vesselSidebarTab === VesselSidebarTab.VOYAGES && selectedVesselIdentity) {
-      dispatch(getVesselLogbook(selectedVesselIdentity, undefined, false))
-    } else if (vesselSidebarTab === VesselSidebarTab.CONTROLS) {
+    if (vesselSidebarTab === VesselSidebarTab.CONTROLS) {
       dispatch(getVesselControls(false))
     } else if (vesselSidebarTab === VesselSidebarTab.REPORTING) {
       dispatch(getVesselReportings(false))

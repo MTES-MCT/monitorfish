@@ -3,7 +3,7 @@ import { useBeforeUnload } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { ErrorToastNotification } from './commonComponents/ErrorToastNotification'
-import { Healthcheck } from './Healthcheck'
+import { HealthcheckHeadband } from './Healthcheck/components/HealthcheckHeadband'
 import { DrawLayerModal } from './map/draw/DrawModal'
 import Map from './map/Map'
 import { MapButtons } from './MapButtons'
@@ -11,9 +11,9 @@ import { LayersSidebar } from './MapButtons/LayersSidebar'
 import { RightMenuOnHoverArea } from './MapButtons/shared/RightMenuOnHoverArea'
 import PreviewFilteredVessels from './preview_filtered_vessels/PreviewFilteredVessels'
 import { SideWindowLauncher } from './SideWindow/SideWindowLauncher'
+import { VesselLoader } from './Vessel/components/VesselLoader'
 import { VesselList } from './VesselList'
 import { VesselSidebar } from './VesselSidebar'
-import UpdatingVesselLoader from './VesselSidebar/UpdatingVesselLoader'
 import { VesselSidebarHeader } from './VesselSidebar/VesselSidebarHeader'
 import { APIWorker } from '../api/APIWorker'
 import { SideWindowStatus } from '../domain/entities/sideWindow/constants'
@@ -43,7 +43,7 @@ export function MainWindow() {
 
   return (
     <>
-      <Healthcheck />
+      <HealthcheckHeadband />
 
       <PreviewFilteredVessels />
 
@@ -55,7 +55,7 @@ export function MainWindow() {
         <RightMenuOnHoverArea />
         {isVesselListDisplayed && <VesselList namespace="homepage" />}
         {isVesselSidebarOpen && <VesselSidebar />}
-        <UpdatingVesselLoader />
+        <VesselLoader />
         <APIWorker />
         <ErrorToastNotification />
         {sideWindow.status !== SideWindowStatus.CLOSED && <SideWindowLauncher />}

@@ -542,9 +542,8 @@ const vesselSlice = createSlice({
           fleetSegmentsArray: vessel.segments ? vessel.segments.map(segment => segment.replace(' ', '')) : [],
           gearsArray: vessel.gearOnboard ? [...new Set(vessel.gearOnboard.map(gear => gear.gear))] : [],
           hasAlert: !!vessel.alerts?.length,
-          hasInfractionSuspicion: vessel.reportings.some(reportingType =>
-            reportingIsAnInfractionSuspicion(reportingType)
-          ),
+          hasInfractionSuspicion:
+            vessel.reportings?.some(reportingType => reportingIsAnInfractionSuspicion(reportingType)) || false,
           lastControlDateTimeTimestamp: vessel.lastControlDateTime
             ? new Date(vessel.lastControlDateTime).getTime()
             : '',

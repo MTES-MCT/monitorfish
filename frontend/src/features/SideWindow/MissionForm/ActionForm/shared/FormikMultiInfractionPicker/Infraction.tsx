@@ -7,7 +7,7 @@ import { MissionAction } from '../../../../../../domain/types/missionAction'
 import type { Promisable } from 'type-fest'
 
 export type InfractionProps<AnyInfraction extends MissionAction.OtherInfraction> = {
-  data: AnyInfraction
+  data: AnyInfraction & { infractionLabel: string | undefined }
   index: number
   label: string | undefined
   onDelete: (index: number) => Promisable<void>
@@ -31,7 +31,7 @@ export function Infraction<AnyInfraction extends MissionAction.OtherInfraction>(
           <TagGroup>
             <Tag accent={Accent.PRIMARY}>{MissionAction.INFRACTION_TYPE_LABEL[data.infractionType]}</Tag>
             {data.infractionType !== MissionAction.InfractionType.PENDING && (
-              <Tag accent={Accent.PRIMARY}>NATINF : {data.natinf}</Tag>
+              <Tag accent={Accent.PRIMARY}>NATINF : {data.infractionLabel || data.natinf}</Tag>
             )}
           </TagGroup>
 

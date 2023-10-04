@@ -1,14 +1,15 @@
 import {
   Accent,
+  FieldError,
   getLocalizedDayjs,
   Icon,
   IconButton,
   Tag,
-  TagGroup,
-  THEME,
   TagBullet,
-  FieldError
+  TagGroup,
+  THEME
 } from '@mtes-mct/monitor-ui'
+import { find } from 'lodash'
 import { useMemo } from 'react'
 import styled, { css } from 'styled-components'
 
@@ -17,6 +18,7 @@ import { UNKNOWN_VESSEL } from '../../../../domain/entities/vessel/vessel'
 import { MissionAction } from '../../../../domain/types/missionAction'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FrontendError } from '../../../../libs/FrontendError'
+import { useGetNatinfsAsOptions } from '../hooks/useGetNatinfsAsOptions'
 
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
@@ -30,6 +32,8 @@ export type ItemProps = {
 }
 export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelect }: ItemProps) {
   const mission = useMainAppSelector(state => state.mission)
+
+  const natinfsAsOptions = useGetNatinfsAsOptions()
 
   const [actionLabel, ActionIcon] = useMemo(() => {
     const vesselName = initialValues.vesselName === UNKNOWN_VESSEL.vesselName ? 'INCONNU' : initialValues.vesselName
@@ -75,18 +79,29 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
     )
     const infractionsNatinfs = nonPendingInfractions.map(({ natinf }) => natinf)
 
-    return [
+    const infractionsRecapTags = [
       ...(withRecordInfractions.length > 0 ? [`${withRecordInfractions.length} INF AVEC PV`] : []),
-      ...(pendingInfractions.length > 0 ? [`${pendingInfractions.length} INF EN ATTENTE`] : []),
-      ...(infractionsNatinfs.length > 0
-        ? [`${infractionsNatinfs.length} NATINF: ${infractionsNatinfs.join(', ')}`]
-        : [])
+      ...(pendingInfractions.length > 0 ? [`${pendingInfractions.length} INF EN ATTENTE`] : [])
     ].map(label => (
       <Tag key={label} accent={Accent.PRIMARY}>
         {label}
       </Tag>
     ))
-  }, [initialValues])
+
+    const infractionsTitle = infractionsNatinfs.map(natinf => {
+      const infractionLabel = find(natinfsAsOptions, { value: natinf })?.label
+
+      return infractionLabel || natinf.toString()
+    })
+    const infractionsLabel = `${infractionsNatinfs.length} NATINF: ${infractionsNatinfs.join(', ')}`
+    const infractionsTag = (
+      <Tag key={infractionsLabel} accent={Accent.PRIMARY} title={infractionsTitle.join(', ')}>
+        {infractionsLabel}
+      </Tag>
+    )
+
+    return [...infractionsRecapTags, infractionsTag]
+  }, [initialValues, natinfsAsOptions])
 
   const redTags = useMemo(
     () =>

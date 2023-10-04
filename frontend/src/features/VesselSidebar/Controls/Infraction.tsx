@@ -1,8 +1,10 @@
+import { find } from 'lodash'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import { MissionAction } from '../../../domain/types/missionAction'
+import { useGetNatinfsAsOptions } from '../../SideWindow/MissionForm/hooks/useGetNatinfsAsOptions'
 
 type InfractionProps = {
   index: number
@@ -14,6 +16,14 @@ type InfractionProps = {
   infractionDomain: MissionAction.InfractionDomain
 }
 export function Infraction({ index, infraction, infractionDomain }: InfractionProps) {
+  const natinfsAsOptions = useGetNatinfsAsOptions()
+
+  const infractionWithLabel = useMemo(() => {
+    const infractionLabel = find(natinfsAsOptions, { value: infraction.natinf })?.label
+
+    return { ...infraction, infractionLabel }
+  }, [natinfsAsOptions, infraction])
+
   const infractionDomainText = useMemo(() => {
     switch (infractionDomain) {
       case MissionAction.InfractionDomain.GEAR:
@@ -50,7 +60,9 @@ export function Infraction({ index, infraction, infractionDomain }: InfractionPr
         </InfractionTagText>
       </InfractionTag>
       <InfractionTag>
-        <InfractionTagText>NATINF {infraction.natinf}</InfractionTagText>
+        <InfractionTagText title={infractionWithLabel.infractionLabel}>
+          NATINF {infractionWithLabel.natinf}
+        </InfractionTagText>
       </InfractionTag>
     </Wrapper>
   )

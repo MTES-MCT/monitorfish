@@ -46,6 +46,10 @@ context('Vessel sidebar controls tab', () => {
 
     // Check the control content displayed
     cy.get('*[data-cy="vessel-control-title"]').first().contains(`CONTRÔLE EN MER DU ${date}`)
+
+    // The infractions label from natinfs should be rendered
+    cy.get('[title="23584 - Défaut AIS"]').should('exist')
+
     cy.get('*[data-cy="vessel-control"]')
       .first()
       .should('contain', 'Appréhension espèce')

@@ -1,20 +1,21 @@
 import { Accent, Button, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
+import { find } from 'lodash'
 import { remove as ramdaRemove, update as ramdaUpdate } from 'ramda'
 import { Fragment, useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { Infraction } from './Infraction'
 import { InfractionForm } from './InfractionForm'
-import { useGetInfractionsQuery } from '../../../../../../api/infraction'
 import { FrontendError } from '../../../../../../libs/FrontendError'
 import { FrontendErrorBoundary } from '../../../../../../ui/FrontendErrorBoundary'
+import { useGetNatinfsAsOptions } from '../../../hooks/useGetNatinfsAsOptions'
 import { FieldsetGroup, FieldsetGroupSpinner } from '../../../shared/FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../../shared/FieldsetGroupSeparator'
 
 import type { MissionAction } from '../../../../../../domain/types/missionAction'
 import type { MissionActionFormValues } from '../../../types'
-import type { Option, FormikTextareaProps } from '@mtes-mct/monitor-ui'
+import type { FormikTextareaProps } from '@mtes-mct/monitor-ui'
 import type { ReactNode } from 'react'
 
 export type FormikMultiInfractionPickerProps = {
@@ -40,18 +41,19 @@ export function FormikMultiInfractionPicker({
   const [editedIndex, setEditedIndex] = useState<number | undefined>(undefined)
   const [isNewInfractionFormOpen, setIsNewInfractionFormOpen] = useState(false)
 
-  const getInfractionsApiQuery = useGetInfractionsQuery()
+  const natinfsAsOptions = useGetNatinfsAsOptions()
 
-  const natinfsAsOptions: Option<number>[] = useMemo(() => {
-    if (!getInfractionsApiQuery.data) {
+  const infractionsWithLabel = useMemo(() => {
+    if (!input.value) {
       return []
     }
 
-    return getInfractionsApiQuery.data.map(({ infraction, natinfCode }) => ({
-      label: `${natinfCode} - ${infraction}`,
-      value: Number(natinfCode)
-    }))
-  }, [getInfractionsApiQuery.data])
+    return input.value.map(infraction => {
+      const nextInfractionLabel = find(natinfsAsOptions, { value: infraction.natinf })?.label
+
+      return { ...infraction, label: nextInfractionLabel }
+    })
+  }, [input.value, natinfsAsOptions])
 
   const closeInfractionForm = useCallback(() => {
     setEditedIndex(undefined)
@@ -140,9 +142,9 @@ export function FormikMultiInfractionPicker({
           {addButtonLabel}
         </Button>
 
-        {input.value && input.value.length > 0 && (
+        {infractionsWithLabel.length > 0 && (
           <Row>
-            {input.value.map((infraction, index) => (
+            {infractionsWithLabel.map((infraction, index) => (
               // eslint-disable-next-line react/no-array-index-key
               <Fragment key={`${name}-infraction-${index}`}>
                 <FieldsetGroupSeparator />

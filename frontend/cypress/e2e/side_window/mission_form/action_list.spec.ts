@@ -156,5 +156,9 @@ context('Side Window > Mission Form > Action List', () => {
     cy.get('.Element-Tag').contains('2 INF AVEC PV').should('be.visible')
     cy.get('.Element-Tag').contains('1 INF EN ATTENTE').should('be.visible')
     cy.get('.Element-Tag').contains('3 NATINF: 23581, 23588, 23584').should('be.visible')
+    // The infractions label from natinfs should be rendered
+    cy.get(
+      '[title="23581 - Taille de maille non réglementaire, 23588 - Chalutage dans la zone des 3 milles, 23584 - Défaut AIS"]'
+    ).should('exist')
   })
 })

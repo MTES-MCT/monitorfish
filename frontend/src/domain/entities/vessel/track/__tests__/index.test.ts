@@ -6,11 +6,32 @@ import {
   VESSEL_TRACK_ALL_SAME_COORDINATES,
   VESSEL_TRACK_FEW_SAME_COORDINATES
 } from './__mocks__/vesselTrack'
+import { DUMMY_VESSEL_TRACK_WITH_DUPLICATE_POSITIONS } from './__mocks__/vesselTrackWithDuplicatePositions'
 import { getFeaturesFromPositions, getTrackType } from '../index'
 
 import type { VesselLineFeature, VesselPointFeature, VesselPosition } from '../../types'
 
 describe('vessel/track', () => {
+  it('getFeaturesFromPositions Should draw multiple points with the same coordinates', async () => {
+    // Given
+    const positions = DUMMY_VESSEL_TRACK_WITH_DUPLICATE_POSITIONS
+    const vesselCompositeIdentifier = 'VESSEL_ID'
+
+    // When
+    const features = getFeaturesFromPositions(positions, vesselCompositeIdentifier)
+
+    // Then
+    const positionFeatures = features.filter(feature => feature.getId()?.toString().includes('position'))
+    const lineFeatures = features.filter(feature => feature.getId()?.toString().includes('line'))
+    const arrowFeatures = features.filter(feature => feature.getId()?.toString().includes('arrow'))
+
+    expect(features).toHaveLength(32)
+    expect(positionFeatures).toHaveLength(14)
+    // Only 9 lines as lines of same positions are skipped
+    expect(lineFeatures).toHaveLength(9)
+    expect(arrowFeatures).toHaveLength(9)
+  })
+
   it('getFeaturesFromPositions Should return one feature point When one position is given', async () => {
     // Given
     const positions = [
@@ -146,10 +167,9 @@ describe('vessel/track', () => {
     const lineFeatures = features.filter(feature => feature.getId()?.toString().includes('line'))
     const arrowFeatures = features.filter(feature => feature.getId()?.toString().includes('arrow'))
 
-    // Then, there is only 1 position, as all positions have the same coordinates
-    expect(features).toHaveLength(7)
+    expect(features).toHaveLength(9)
     expect(lineFeatures).toHaveLength(2)
-    expect(positionFeatures).toHaveLength(3)
+    expect(positionFeatures).toHaveLength(5)
     expect(arrowFeatures).toHaveLength(2)
 
     features.forEach(feature => {

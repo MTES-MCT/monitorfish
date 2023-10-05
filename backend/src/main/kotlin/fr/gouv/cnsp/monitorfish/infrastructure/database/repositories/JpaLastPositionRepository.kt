@@ -30,9 +30,9 @@ class JpaLastPositionRepository(
     }
 
     @Cacheable(value = ["vessels_positions"])
-    override fun findAllInLastMonth(): List<LastPosition> {
+    override fun findAllInLastMonthOrWithBeaconMalfunction(): List<LastPosition> {
         val nowMinusOneMonth = ZonedDateTime.now().minusMonths(1)
-        return dbLastPositionRepository.findAllByDateTimeGreaterThanEqual(nowMinusOneMonth)
+        return dbLastPositionRepository.findAllByDateTimeGreaterThanEqualOrBeaconMalfunctionIdNotNull(nowMinusOneMonth)
             // We NEED this non filterNotNull (even if the IDE say not so, as the SQL request may return null internalReferenceNumber)
             .filterNotNull()
             .map {

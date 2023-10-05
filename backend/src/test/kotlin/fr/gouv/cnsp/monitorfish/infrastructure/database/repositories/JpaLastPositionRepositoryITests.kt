@@ -58,9 +58,11 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAllInLastMonth Should returns the last positions in the last month`() {
         // Then
-        val positions = jpaLastPositionRepository.findAllInLastMonth()
+        val positions = jpaLastPositionRepository.findAllInLastMonthOrWithBeaconMalfunction()
 
         assertThat(positions).hasSize(1003)
+        val assertedVessel = positions.find { it.internalReferenceNumber == "ABC000339263" }
+        assertThat(assertedVessel?.dateTime).isBefore(ZonedDateTime.now().minusMonths(1))
     }
 
     @Test

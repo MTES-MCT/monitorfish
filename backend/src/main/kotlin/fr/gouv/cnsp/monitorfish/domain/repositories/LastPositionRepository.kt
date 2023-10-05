@@ -7,7 +7,7 @@ import java.time.ZonedDateTime
 
 interface LastPositionRepository {
     fun findAll(): List<LastPosition>
-    fun findAllInLastMonth(): List<LastPosition>
+    fun findAllInLastMonthOrWithBeaconMalfunction(): List<LastPosition>
     fun findAllWithBeaconMalfunctionBeforeLast48Hours(): List<LastPosition>
     fun findLastPositionDate(): ZonedDateTime
     fun removeAlertToLastPositionByVesselIdentifierEquals(

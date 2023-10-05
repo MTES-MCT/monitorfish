@@ -7,6 +7,6 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 @UseCase
 class GetLastPositions(private val lastPositionRepository: LastPositionRepository) {
     fun execute(): List<LastPosition> {
-        return lastPositionRepository.findAllInLastMonth()
+        return lastPositionRepository.findAllInLastMonthOrWithBeaconMalfunction()
     }
 }

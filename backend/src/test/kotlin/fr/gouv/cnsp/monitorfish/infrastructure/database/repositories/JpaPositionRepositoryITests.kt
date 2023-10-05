@@ -44,7 +44,7 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
             it.mmsi == "224136470"
         }
         assertThat(sameMMSIPositions).hasSize(1)
-        assertThat(positions).hasSize(69235)
+        assertThat(positions).hasSize(69240)
         assertThat(positions.last().dateTime.toString()).isEqualTo("1970-01-01T00:00:00.999999999Z[UTC]")
     }
 

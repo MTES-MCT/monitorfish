@@ -156,6 +156,8 @@ export function getMissionSourceTagText(missionSource: MissionSource | undefined
       return 'Ouverte par le CNSP (POSEIDON)'
     case Mission.MissionSource.MONITORENV:
       return 'Ouverte par le CACEM'
+    case Mission.MissionSource.RAPPORTNAV:
+      return 'Ouverte par l\'unité'
     default:
       return 'Origine inconnue'
   }

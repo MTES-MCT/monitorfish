@@ -68,12 +68,7 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
             )}
           </Title>
           <Details>
-            <MissionSourceTag
-              isFromCacem={
-                mission.missionSource === Mission.MissionSource.POSEIDON_CACEM ||
-                mission.missionSource === Mission.MissionSource.MONITORENV
-              }
-            >
+            <MissionSourceTag missionSource={mission.missionSource}>
               {getMissionSourceTagText(mission.missionSource)}
             </MissionSourceTag>
             <div>

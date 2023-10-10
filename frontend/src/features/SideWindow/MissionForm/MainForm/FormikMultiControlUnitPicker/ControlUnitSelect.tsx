@@ -1,4 +1,4 @@
-import { Accent, Icon, IconButton, MultiSelect, Select, TextInput, useNewWindow } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, MultiSelect, Select, TextInput, THEME, useNewWindow } from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -7,6 +7,7 @@ import {
   mapControlUnitsToUniqueSortedNamesAsOptions,
   mapControlUnitToSortedResourcesAsOptions
 } from './utils'
+import { ExclamationPoint } from '../../../../../ui/shared/ExclamationPoint'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 import { isValidControlUnit } from '../../utils'
 
@@ -27,6 +28,7 @@ export type ControlUnitSelectProps = {
       }
     | undefined
   index: number
+  isEngaged: boolean
   onChange: (index: number, nextControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft) => Promisable<void>
   onDelete: (index: number) => Promisable<void>
   value: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft
@@ -37,6 +39,7 @@ export function ControlUnitSelect({
   allNamesAsOptions,
   error,
   index,
+  isEngaged,
   onChange,
   onDelete,
   value
@@ -169,6 +172,14 @@ export function ControlUnitSelect({
           searchable
           value={controlledValue.name}
         />
+        {isEngaged && (
+          <ControlUnitAlreadyUsedWarning data-cy="engaged-control-unit-warning">
+            <StyledExclamationPoint color={THEME.color.white} />
+            <ControlUnitAlreadyUsedText>
+              Cette unité est actuellement sélectionnée dans une autre mission en cours.
+            </ControlUnitAlreadyUsedText>
+          </ControlUnitAlreadyUsedWarning>
+        )}
         <MultiSelect
           baseContainer={newWindowContainerRef.current}
           disabled={isLoading || !controlledValue.administration || !controlledValue.name}
@@ -200,6 +211,22 @@ export function ControlUnitSelect({
     </Wrapper>
   )
 }
+
+const ControlUnitAlreadyUsedText = styled.div`
+  margin-left: 8px;
+`
+
+const ControlUnitAlreadyUsedWarning = styled.span`
+  background: ${THEME.color.goldenPoppy25};
+  color: ${THEME.color.slateGray};
+  margin-top: 4px;
+  padding: 8px 16px 16px 8px;
+  display: flex;
+`
+
+const StyledExclamationPoint = styled(ExclamationPoint)`
+  flex-shrink: 0;
+`
 
 const Wrapper = styled.div`
   align-items: flex-start;

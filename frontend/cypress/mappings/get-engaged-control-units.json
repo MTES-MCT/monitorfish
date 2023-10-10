@@ -1,0 +1,77 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/v1/missions/engaged-control-units"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": [
+      {
+        "id": 10015,
+        "administration": "Douane",
+        "name": "BGC Bastia",
+        "resources": [],
+        "contact": null,
+        "isArchived": false
+      },
+      {
+        "id": 10003,
+        "administration": "DDTM",
+        "name": "DML 2A",
+        "resources": [],
+        "contact": null,
+        "isArchived": false
+      },
+      {
+        "id": 10001,
+        "administration": "DDTM",
+        "name": "Cultures marines – DDTM 40",
+        "resources": [
+          {
+            "id": 1,
+            "name": "Semi-rigide 1"
+          }
+        ],
+        "contact": null,
+        "isArchived": false
+      },
+      {
+        "id": 10016,
+        "administration": "Douane",
+        "name": "BSN Ste Maxime",
+        "resources": [],
+        "contact": null,
+        "isArchived": false
+      },
+      {
+        "id": 10017,
+        "administration": "Douane",
+        "name": "DF 25 Libecciu",
+        "resources": [],
+        "contact": null,
+        "isArchived": false
+      },
+      {
+        "id": 10018,
+        "administration": "Douane",
+        "name": "DF 61 Port-de-Bouc",
+        "resources": [],
+        "contact": null,
+        "isArchived": false
+      },
+      {
+        "id": 10012,
+        "administration": "DIRM DM",
+        "name": "Cross Etel",
+        "resources": [],
+        "contact": null,
+        "isArchived": false
+      }
+    ]
+  }
+}

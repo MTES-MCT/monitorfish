@@ -517,4 +517,14 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.get('@getMissionStubbed.all').should('have.length', 3)
     cy.get('*[data-cy="mission-form-error"]').contains("Nous n'avons pas pu récupérer la mission")
   })
+
+  it('Should show a warning indicating that a control unit is already engaged in a mission', () => {
+    editSideWindowMissionListMissionWithId(43, SeaFrontGroup.MED)
+
+    cy.get('*[data-cy="engaged-control-unit-warning"]').should('not.exist')
+
+    editSideWindowMissionListMissionWithId(4, SeaFrontGroup.MEMN)
+
+    cy.get('*[data-cy="engaged-control-unit-warning"]').should('be.visible')
+  })
 })

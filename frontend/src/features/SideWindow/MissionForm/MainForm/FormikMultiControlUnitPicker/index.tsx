@@ -6,6 +6,7 @@ import styled from 'styled-components'
 
 import { ControlUnitSelect } from './ControlUnitSelect'
 import { useGetControlUnitsQuery } from '../../../../../api/controlUnit'
+import { useGetControlUnitsInvolvedInMissionQuery } from '../../../../../api/mission'
 import { getControlUnitsOptionsFromControlUnits } from '../../../../../domain/entities/controlUnits/utils'
 import { INITIAL_MISSION_CONTROL_UNIT, PAMControlUnitIds } from '../../constants'
 import { useGetMainFormFormikUsecases } from '../../hooks/useGetMainFormFormikUsecases'
@@ -25,12 +26,28 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
     ) || false
 
   const controlUnitsQuery = useGetControlUnitsQuery(undefined)
+  const { data: controlUnitsInvolvedInMission } = useGetControlUnitsInvolvedInMissionQuery(undefined)
 
   const {
     activeControlUnits: allActiveControlUnits,
     administrationsAsOptions: allAdministrationsAsOptions,
     unitsAsOptions: allNamesAsOptions
   } = useMemo(() => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data), [controlUnitsQuery.data])
+
+  const controlUnitsWithEngagement = useMemo(() => {
+    const controlUnits = values.controlUnits || []
+
+    if (!controlUnitsInvolvedInMission) {
+      return controlUnits.map(controlUnit => ({ ...controlUnit, isEngaged: false }))
+    }
+
+    return controlUnits.map(controlUnit => {
+      const isEngaged = !!controlUnitsInvolvedInMission.find(involved => involved.id === controlUnit.id)
+
+      return { ...controlUnit, isEngaged }
+    })
+  }, [values.controlUnits, controlUnitsInvolvedInMission])
+
   const errors = (allErrors[name] || []) as Array<{
     administration: string
     name: string
@@ -74,7 +91,7 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
   return (
     <Wrapper>
       <>
-        {(values[name] || []).map((value, index) => (
+        {controlUnitsWithEngagement.map((value, index) => (
           <ControlUnitSelect
             // eslint-disable-next-line react/no-array-index-key
             key={`unit${index}`}
@@ -83,6 +100,7 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
             allNamesAsOptions={allNamesAsOptions}
             error={errors[index]}
             index={index}
+            isEngaged={value.isEngaged}
             onChange={handleChange}
             onDelete={removeUnit}
             value={value}

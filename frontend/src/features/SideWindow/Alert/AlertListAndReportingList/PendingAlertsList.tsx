@@ -1,4 +1,4 @@
-import { CustomSearch, THEME } from '@mtes-mct/monitor-ui'
+import { CustomSearch } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FlexboxGrid, List } from 'rsuite'
 import styled from 'styled-components'
@@ -12,6 +12,7 @@ import { SeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
 import { silenceAlert } from '../../../../domain/use_cases/alert/silenceAlert'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { ExclamationPoint } from '../../../../ui/shared/ExclamationPoint'
 import SearchIconSVG from '../../../icons/Loupe_dark.svg'
 import { sortArrayByColumn, SortType } from '../../../VesselList/tableSort'
 import { AlertSubMenuLabel } from '../constants'
@@ -129,7 +130,7 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
           data-cy="side-window-alerts-number-silenced-vessels"
           style={numberOfSilencedAlertsStyle}
         >
-          <Warning style={warningStyle}>!</Warning>
+          <StyledExclamationPoint />
           {numberOfAlertsMessage}
         </NumberOfSilencedAlerts>
       )}
@@ -196,19 +197,9 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
   )
 }
 
-const Warning = styled.span``
-const warningStyle = {
-  background: THEME.color.goldenPoppy,
-  borderRadius: 15,
-  color: COLORS.charcoal,
-  display: 'inline-block',
-  font: 'normal normal bold 10px/11px Arial',
-  height: 5,
-  lineHeight: '7px',
-  marginRight: 5,
-  padding: '5px 4px 5px 6px',
-  width: 5
-}
+const StyledExclamationPoint = styled(ExclamationPoint)`
+  margin-right: 5px;
+`
 
 const NumberOfSilencedAlerts = styled.div``
 const numberOfSilencedAlertsStyle = {

@@ -24,7 +24,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
   const { healthcheckTextWarning } = useMainAppSelector(state => state.global)
   const { rightMenuIsOpen } = useMainAppSelector(state => state.global)
   const { defaultVesselTrackDepth } = useMainAppSelector(state => state.map)
-  const { selectedVesselPositions, selectedVesselTrackRequest } = useMainAppSelector(state => state.vessel)
+  const { selectedVesselTrackRequest } = useMainAppSelector(state => state.vessel)
   const { selectedVesselIdentity } = useMainAppSelector(state => state.vessel)
   const [isOpenedFromClick, setIsOpenedFromClick] = useState(false)
 
@@ -85,7 +85,6 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
       <VesselSidebarActionButton
         backgroundColor={isOpen ? THEME.color.blueGray : THEME.color.charcoal}
         data-cy="vessel-track-depth-selection"
-        disabled={!selectedVesselPositions?.length}
         healthcheckTextWarning={!!healthcheckTextWarning}
         isHidden={false}
         isRightMenuOpen={rightMenuIsOpen}

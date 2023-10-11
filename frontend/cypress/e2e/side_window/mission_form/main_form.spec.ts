@@ -521,10 +521,10 @@ context('Side Window > Mission Form > Main Form', () => {
   it('Should show a warning indicating that a control unit is already engaged in a mission', () => {
     editSideWindowMissionListMissionWithId(43, SeaFrontGroup.MED)
 
-    cy.get('*[data-cy="engaged-control-unit-warning"]').should('not.exist')
+    cy.get('body').should('not.contain', 'Cette unité est actuellement sélectionnée dans une autre mission en cours.')
 
     editSideWindowMissionListMissionWithId(4, SeaFrontGroup.MEMN)
 
-    cy.get('*[data-cy="engaged-control-unit-warning"]').should('be.visible')
+    cy.get('body').contains('Cette unité est actuellement sélectionnée dans une autre mission en cours.')
   })
 })

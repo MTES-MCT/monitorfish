@@ -1,4 +1,14 @@
-import { Accent, Icon, IconButton, Message, MultiSelect, Select, TextInput, useNewWindow } from '@mtes-mct/monitor-ui'
+import {
+  Accent,
+  Icon,
+  IconButton,
+  Level,
+  Message,
+  MultiSelect,
+  Select,
+  TextInput,
+  useNewWindow
+} from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -171,7 +181,11 @@ export function ControlUnitSelect({
           searchable
           value={controlledValue.name}
         />
-        {isEngaged && <Message>Cette unité est actuellement sélectionnée dans une autre mission en cours.</Message>}
+        {isEngaged && (
+          <Message level={Level.WARNING}>
+            Cette unité est actuellement sélectionnée dans une autre mission en cours.
+          </Message>
+        )}
         <MultiSelect
           baseContainer={newWindowContainerRef.current}
           disabled={isLoading || !controlledValue.administration || !controlledValue.name}

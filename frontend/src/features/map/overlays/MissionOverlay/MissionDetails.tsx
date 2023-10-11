@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { margins } from './constants'
 import { MissionStatusLabel } from './MissionStatusLabel'
 import { missionActions } from '../../../../domain/actions'
-import { getMissionSourceTagText } from '../../../../domain/entities/mission'
+import { getMissionSourceTagBackgroundColor, getMissionSourceTagText } from '../../../../domain/entities/mission'
 import { Mission } from '../../../../domain/entities/mission/types'
 import { SideWindowMenuKey } from '../../../../domain/entities/sideWindow/constants'
 import { sideWindowDispatchers } from '../../../../domain/use_cases/sideWindow'
@@ -110,11 +110,11 @@ const TextWithEllipsis = styled.div`
   overflow: hidden;
 `
 
-const MissionSourceTag = styled(Tag)<{
-  isFromCacem: boolean
+export const MissionSourceTag = styled(Tag)<{
+  missionSource: Mission.MissionSource | undefined
 }>`
-  background: ${p => (p.isFromCacem ? p.theme.color.mediumSeaGreen : p.theme.color.blueGray)};
-  color: ${p => p.theme.color.white};
+  background: ${p => getMissionSourceTagBackgroundColor(p.missionSource)};
+  color: ${p => (p.missionSource === Mission.MissionSource.RAPPORTNAV ? p.theme.color.charcoal : p.theme.color.white)};
   margin-bottom: 8px;
   margin-top: 4px;
 `

@@ -1,4 +1,4 @@
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
+import { OPENLAYERS_PROJECTION, THEME, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
 import { random } from 'lodash'
 import { Feature } from 'ol'
 import { GeoJSON } from 'ol/format'
@@ -157,8 +157,24 @@ export function getMissionSourceTagText(missionSource: MissionSource | undefined
     case Mission.MissionSource.MONITORENV:
       return 'Ouverte par le CACEM'
     case Mission.MissionSource.RAPPORTNAV:
-      return 'Ouverte par l\'unité'
+      return "Ouverte par l'unité"
     default:
       return 'Origine inconnue'
   }
+}
+
+export function getMissionSourceTagBackgroundColor(missionSource: MissionSource | undefined) {
+  if (missionSource === Mission.MissionSource.POSEIDON_CACEM || missionSource === Mission.MissionSource.MONITORENV) {
+    return THEME.color.mediumSeaGreen
+  }
+
+  if (missionSource === Mission.MissionSource.POSEIDON_CNSP || missionSource === Mission.MissionSource.MONITORFISH) {
+    return THEME.color.blueGray
+  }
+
+  if (missionSource === Mission.MissionSource.RAPPORTNAV) {
+    return THEME.color.gainsboro
+  }
+
+  return THEME.color.gainsboro
 }

@@ -12,10 +12,11 @@ context('Vessel sidebar controls buttons', () => {
     cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
 
     // When
-    cy.get('*[data-cy="vessel-track-depth-selection"]').should('have.attr', 'disabled')
     cy.get('*[data-cy="show-all-fishing-activities-on-map"]').should('have.attr', 'disabled')
     cy.get('*[data-cy="trigger-hide-other-vessels-from-sidebar"]').should('have.attr', 'disabled')
     cy.get('*[data-cy="animate-to-track"]').should('have.attr', 'disabled')
+    // The positions button is not disabled
+    cy.get('*[data-cy="vessel-track-depth-selection"]').should('not.have.attr', 'disabled')
   })
 
   it('Vessel track depth Should be changed', () => {

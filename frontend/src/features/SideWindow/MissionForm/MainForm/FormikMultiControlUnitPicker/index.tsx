@@ -6,7 +6,7 @@ import styled from 'styled-components'
 
 import { ControlUnitSelect } from './ControlUnitSelect'
 import { useGetControlUnitsQuery } from '../../../../../api/controlUnit'
-import { useGetControlUnitsInvolvedInMissionQuery } from '../../../../../api/mission'
+import { useGetEngagedControlUnitsQuery } from '../../../../../api/mission'
 import { getControlUnitsOptionsFromControlUnits } from '../../../../../domain/entities/controlUnits/utils'
 import { INITIAL_MISSION_CONTROL_UNIT, PAMControlUnitIds } from '../../constants'
 import { useGetMainFormFormikUsecases } from '../../hooks/useGetMainFormFormikUsecases'
@@ -26,7 +26,7 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
     ) || false
 
   const controlUnitsQuery = useGetControlUnitsQuery(undefined)
-  const { data: controlUnitsInvolvedInMission } = useGetControlUnitsInvolvedInMissionQuery(undefined)
+  const { data: engagedControlUnitsData } = useGetEngagedControlUnitsQuery(undefined)
 
   const {
     activeControlUnits: allActiveControlUnits,
@@ -34,19 +34,13 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
     unitsAsOptions: allNamesAsOptions
   } = useMemo(() => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data), [controlUnitsQuery.data])
 
-  const controlUnitsWithEngagement = useMemo(() => {
-    const controlUnits = values.controlUnits || []
-
-    if (!controlUnitsInvolvedInMission) {
-      return controlUnits.map(controlUnit => ({ ...controlUnit, isEngaged: false }))
+  const engagedControlUnits = useMemo(() => {
+    if (!engagedControlUnitsData) {
+      return []
     }
 
-    return controlUnits.map(controlUnit => {
-      const isEngaged = !!controlUnitsInvolvedInMission.find(involved => involved.id === controlUnit.id)
-
-      return { ...controlUnit, isEngaged }
-    })
-  }, [values.controlUnits, controlUnitsInvolvedInMission])
+    return engagedControlUnitsData
+  }, [engagedControlUnitsData])
 
   const errors = (allErrors[name] || []) as Array<{
     administration: string
@@ -91,7 +85,7 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
   return (
     <Wrapper>
       <>
-        {controlUnitsWithEngagement.map((value, index) => (
+        {(values.controlUnits || []).map((value, index) => (
           <ControlUnitSelect
             // eslint-disable-next-line react/no-array-index-key
             key={`unit${index}`}
@@ -100,7 +94,7 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
             allNamesAsOptions={allNamesAsOptions}
             error={errors[index]}
             index={index}
-            isEngaged={value.isEngaged}
+            isEngaged={!!engagedControlUnits.find(engaged => engaged.id === value.id)}
             onChange={handleChange}
             onDelete={removeUnit}
             value={value}

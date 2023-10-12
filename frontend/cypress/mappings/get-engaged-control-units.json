@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "urlPath": "/api/v1/missions/engaged-control-units"
+    "urlPath": "/api/v1/missions/engaged_control_units"
   },
   "response": {
     "status": 200,

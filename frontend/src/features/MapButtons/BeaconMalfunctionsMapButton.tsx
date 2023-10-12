@@ -7,7 +7,7 @@ import { sideWindowDispatchers } from '../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { MapButton } from '../commonStyles/MapButton'
-import { ReactComponent as BeaconMalfunctionsSVG } from '../icons/Icone_VMS.svg'
+import BeaconMalfunctionsSVG from '../icons/Icone_VMS.svg?react'
 
 export function BeaconMalfunctionsMapButton() {
   const dispatch = useMainAppDispatch()

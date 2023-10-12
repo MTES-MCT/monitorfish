@@ -3,7 +3,7 @@ import type { Self } from '../domain/types/env'
 /**
  * Get the environment variable:
  * - injected by the `env.sh` script at runtime in `window`
- * - or from `process.env` when running locally
+ * - or from `import.meta.env` when running locally
  */
 export function getEnvironmentVariable(name: string) {
   // eslint-disable-next-line no-restricted-globals
@@ -23,7 +23,7 @@ export function getEnvironmentVariable(name: string) {
     }
   }
 
-  const valueFromProcess = process.env[name]
+  const valueFromProcess = import.meta.env[name]
   if (valueFromProcess) {
     if (valueFromProcess === 'true') {
       return true
@@ -33,7 +33,7 @@ export function getEnvironmentVariable(name: string) {
       return false
     }
 
-    return process.env[name]
+    return import.meta.env[name]
   }
 
   return undefined

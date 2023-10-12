@@ -9,12 +9,12 @@ import { showVesselSidebarTab } from '../../domain/shared_slices/Vessel'
 import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
-import { ReactComponent as ReportingSVG } from '../icons/Icone_onglet_signalement.svg'
-import { ReactComponent as VMSSVG } from '../icons/Icone_VMS_fiche_navire.svg'
-import { ReactComponent as ControlsSVG } from '../icons/Picto_controles.svg'
-import { ReactComponent as VesselIDSVG } from '../icons/Picto_identite.svg'
-import { ReactComponent as FisheriesSVG } from '../icons/Picto_peche.svg'
-import { ReactComponent as SummarySVG } from '../icons/Picto_resume.svg'
+import ReportingSVG from '../icons/Icone_onglet_signalement.svg?react'
+import VMSSVG from '../icons/Icone_VMS_fiche_navire.svg?react'
+import ControlsSVG from '../icons/Picto_controles.svg?react'
+import VesselIDSVG from '../icons/Picto_identite.svg?react'
+import FisheriesSVG from '../icons/Picto_peche.svg?react'
+import SummarySVG from '../icons/Picto_resume.svg?react'
 
 // TODO Move the icons in Monitor UI : https://github.com/MTES-MCT/monitorfish/issues/1736
 export function Tabs() {

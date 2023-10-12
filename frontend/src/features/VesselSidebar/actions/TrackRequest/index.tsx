@@ -10,7 +10,7 @@ import { updateSelectedVesselTrackRequest } from '../../../../domain/use_cases/v
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { MapComponent } from '../../../commonStyles/MapComponent'
-import { ReactComponent as VesselSVG } from '../../../icons/Icone_navire.svg'
+import VesselSVG from '../../../icons/Icone_navire.svg?react'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 import type { TrackRequestCustom, TrackRequestPredefined } from '../../../../domain/entities/vessel/types'

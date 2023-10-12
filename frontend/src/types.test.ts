@@ -24,7 +24,7 @@ describe('types', () => {
   /**
    * This test is required by jest to pass the error : "Your test suite must contain at least one test."
    *
-   * The actual tests are running when checkin TS types (by `npm run test:type:partial`):
+   * The actual tests are running when checkin TS types (by `npm run test:type`):
    * - undefinableTestInterface
    * - undefinableTestInterfaceWithMissingProp
    */

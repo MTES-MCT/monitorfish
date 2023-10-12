@@ -6,7 +6,7 @@ import { COLORS } from '../../../constants/constants'
 import { setIsConfirmModalOpen, setRegulationModified, setSaveOrUpdateRegulation } from '../slice'
 import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
 import { FooterButton } from '../../commonStyles/Backoffice.style'
-import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise_clair.svg'
+import CloseIconSVG from '../../icons/Croix_grise_clair.svg?react'
 
 const ConfirmRegulationModal = ({ goBackofficeHome }) => {
   const dispatch = useDispatch()

@@ -13,7 +13,7 @@ export const drawStyle = new Style({
   image: new Icon({
     opacity: 1,
     scale: 1.5,
-    src: 'Pointeur_selection_zone.svg'
+    src: 'Pointeur_selection_zone.svg?react'
   }),
   stroke: new Stroke({
     color: THEME.color.slateGray,

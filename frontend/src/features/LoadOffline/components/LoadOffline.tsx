@@ -12,7 +12,7 @@ import { fetchAllFromServiceWorkerByChunk, getZoomToRequestPaths } from '../util
 /**
  * This is used to reduce the number of tiles added in cache during the e2e test
  */
-const IS_CYPRESS_TEST = getEnvironmentVariable('REACT_APP_CYPRESS_TEST')
+const IS_CYPRESS_TEST = getEnvironmentVariable('VITE_CYPRESS_TEST')
 const CYPRESS_TEST_TOTAL_DOWNLOAD_REQUESTS = 31 // Calculated using `getListOfPath()`
 
 const BYTE_TO_MEGA_BYTE_FACTOR = 0.000001

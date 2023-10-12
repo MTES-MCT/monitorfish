@@ -16,9 +16,9 @@ import { COMMON_ALERT_TYPE_OPTION } from '../../../../domain/entities/alerts/con
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import FleetSegments from '../../../fleet_segments/FleetSegments'
-import { ReactComponent as ArrowLastTripSVG } from '../../../icons/Double_fleche_navigation_marees.svg'
-import { ReactComponent as ArrowTripSVG } from '../../../icons/Fleche_navigation_marees.svg'
-import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
+import ArrowLastTripSVG from '../../../icons/Double_fleche_navigation_marees.svg?react'
+import ArrowTripSVG from '../../../icons/Fleche_navigation_marees.svg?react'
+import ArrowSVG from '../../../icons/Picto_fleche-pleine-droite.svg?react'
 import { useGetLastLogbookTripsQuery } from '../../api'
 import { LogbookMessageType as LogbookMessageTypeEnum, LogbookOperationType, NavigateTo } from '../../constants'
 import { useGetLogbookUseCase } from '../../hooks/useGetLogbookUseCase'
@@ -383,7 +383,7 @@ const Title = styled.div<{
 }>`
   color: ${COLORS.slateGray};
   background: ${COLORS.lightGray};
-  padding: ${p => (p.hasTwoLines ? '7px 10px 7px 20px;' : '8.5px 10px 8px 20px;')}
+  padding: ${p => (p.hasTwoLines ? '7px 10px 7px 20px;' : '8.5px 10px 8px 20px;')};
   font-size: 13px;
   flex-shrink: 0;
   flex-grow: 2;

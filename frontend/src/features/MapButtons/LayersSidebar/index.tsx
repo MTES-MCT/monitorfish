@@ -16,7 +16,7 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { MapButton } from '../../commonStyles/MapButton'
 import { MapComponent } from '../../commonStyles/MapComponent'
 import { CustomZones } from '../../CustomZone/components/CustomZones'
-import { ReactComponent as LayersSVG } from '../../icons/Couches.svg'
+import LayersSVG from '../../icons/Couches.svg?react'
 
 export function LayersSidebar() {
   const dispatch = useMainAppDispatch()

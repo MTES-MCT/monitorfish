@@ -10,9 +10,9 @@ import { useEscapeFromKeyboardAndExecute } from '../../../hooks/useEscapeFromKey
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { MapComponent } from '../../commonStyles/MapComponent'
-import { ReactComponent as MultiLineSVG } from '../../icons/standardized/Measure_broken_line.svg'
-import { ReactComponent as CircleRangeSVG } from '../../icons/standardized/Measure_circle.svg'
-import { ReactComponent as MeasurementSVG } from '../../icons/standardized/Measure_line.svg'
+import MultiLineSVG from '../../icons/standardized/Measure_broken_line.svg?react'
+import CircleRangeSVG from '../../icons/standardized/Measure_circle.svg?react'
+import MeasurementSVG from '../../icons/standardized/Measure_line.svg?react'
 import { MapToolButton } from '../shared/MapToolButton'
 
 export function MeasurementMapButton() {
@@ -98,6 +98,7 @@ export function MeasurementMapButton() {
   )
 }
 
+// TODO `display: inline-block;` is ignored here because of the `float: right;`.
 const MeasurementItem = styled.div`
   background: ${p => p.theme.color.blueGray};
   border-radius: 2px;

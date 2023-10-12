@@ -2,33 +2,31 @@ import React from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../constants/constants'
-import { ReactComponent as BackToVesselsListSVG } from '../icons/Fleche_navigation_marees_gainsboro.svg'
+import BackToVesselsListSVG from '../icons/Fleche_navigation_marees_gainsboro.svg?react'
 import { setPreviewFilteredVesselsMode } from '../../domain/shared_slices/Global'
 
 const PreviewFilteredVessels = () => {
   const dispatch = useDispatch()
 
-  const {
-    previewFilteredVesselsMode
-  } = useSelector(state => state.global)
+  const { previewFilteredVesselsMode } = useSelector(state => state.global)
 
-  return (<>
-    {
-      previewFilteredVesselsMode
-        ? <Preview
+  return (
+    <>
+      {previewFilteredVesselsMode ? (
+        <Preview
           onClick={() => {
             dispatch(setPreviewFilteredVesselsMode(false))
           }}
           data-cy={'back-to-vessels-list'}
         >
           <Text>
-            <BackToVesselsList/>
+            <BackToVesselsList />
             Revenir à la liste des navires
           </Text>
         </Preview>
-        : null
-    }
-  </>)
+      ) : null}
+    </>
+  )
 }
 
 const BackToVesselsList = styled(BackToVesselsListSVG)`

@@ -8,8 +8,8 @@ import { addVesselToFavorites, removeVesselFromFavorites } from '../../../domain
 import { unselectVessel } from '../../../domain/use_cases/vessel/unselectVessel'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
-import { ReactComponent as FavoriteSVG } from '../../icons/Etoile_navire_suivi.svg'
+import CloseIconSVG from '../../icons/Croix_grise.svg?react'
+import FavoriteSVG from '../../icons/Etoile_navire_suivi.svg?react'
 
 export function VesselName({ focusOnVesselSearchInput }) {
   const dispatch = useMainAppDispatch()

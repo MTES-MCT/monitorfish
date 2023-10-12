@@ -9,7 +9,7 @@ import type { UserAuthorization } from '../../domain/entities/authorization/type
  * Get user authorization
  */
 export function useGetUserAuthorization(): UserAuthorization | undefined {
-  const IS_OIDC_ENABLED = getEnvironmentVariable('REACT_APP_OIDC_ENABLED')
+  const IS_OIDC_ENABLED = getEnvironmentVariable('VITE_OIDC_ENABLED')
   const [userAuthorization, setUserAuthorization] = useState<UserAuthorization | undefined>(undefined)
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { Header, Zone } from '../../common_styles/common.style'
-import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
+import ArrowSVG from '../../../icons/Picto_fleche-pleine-droite.svg?react'
 import { setOpenedBeaconMalfunction } from '../../../../domain/shared_slices/BeaconMalfunction'
 import CurrentBeaconMalfunctionBody from './CurrentBeaconMalfunctionBody'
 import { useDispatch } from 'react-redux'
@@ -14,29 +14,29 @@ const CurrentBeaconMalfunction = props => {
   } = props
   const dispatch = useDispatch()
 
-  return currentBeaconMalfunctionWithDetails
-    ? <Zone>
+  return currentBeaconMalfunctionWithDetails ? (
+    <Zone>
       <Header>
         Avarie en cours
         <ShowBeaconMalfunction
           data-cy={'beacon-malfunction-current-see-details'}
           onClick={() => {
             setIsCurrentBeaconMalfunctionDetails(true)
-            dispatch(setOpenedBeaconMalfunction({
-              beaconMalfunction: currentBeaconMalfunctionWithDetails,
-              showTab: true
-            }))
+            dispatch(
+              setOpenedBeaconMalfunction({
+                beaconMalfunction: currentBeaconMalfunctionWithDetails,
+                showTab: true
+              })
+            )
           }}
         >
           voir les détails de l&apos;avarie
-          <Arrow/>
+          <Arrow />
         </ShowBeaconMalfunction>
       </Header>
-      <CurrentBeaconMalfunctionBody
-        currentBeaconMalfunctionWithDetails={currentBeaconMalfunctionWithDetails}
-      />
+      <CurrentBeaconMalfunctionBody currentBeaconMalfunctionWithDetails={currentBeaconMalfunctionWithDetails} />
     </Zone>
-    : null
+  ) : null
 }
 
 const Arrow = styled(ArrowSVG)`

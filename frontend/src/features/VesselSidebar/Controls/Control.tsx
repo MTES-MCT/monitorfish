@@ -12,8 +12,8 @@ import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { useIsSuperUser } from '../../../hooks/authorization/useIsSuperUser'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { getDate } from '../../../utils'
-import { ReactComponent as GyroRedSVG } from '../../icons/Gyrophare_controles_rouge.svg'
-import { ReactComponent as GyroGreenSVG } from '../../icons/Gyrophare_controles_vert.svg'
+import GyroRedSVG from '../../icons/Gyrophare_controles_rouge.svg?react'
+import GyroGreenSVG from '../../icons/Gyrophare_controles_vert.svg?react'
 
 type ControlProps = {
   control: MissionAction.MissionAction

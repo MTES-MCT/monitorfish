@@ -29,22 +29,21 @@ RUN gradle assemble
 ###########################
 # Build frontend with npm #
 ###########################
-FROM node:18-alpine as buildFront
+FROM node:20-alpine as buildFront
 
 ARG VERSION
 ARG ENV_PROFILE
 ENV CI=true
-ENV REACT_APP_ENV=$ENV_PROFILE
+ENV VITE_ENV=$ENV_PROFILE
 
-RUN echo ${REACT_APP_ENV}
+RUN echo ${VITE_ENV}
 
 COPY frontend/ /tmp/frontend/
 COPY infra/ /tmp/infra/
 WORKDIR /tmp/frontend
 
 # Files are expected to be in /tmp/frontend/dist/monitorfish-frontend
-# TODO Remove `--legacy-peer-deps` option as soon as we replace `react-scripts` by something else.
-RUN npm ci --legacy-peer-deps
+RUN npm ci
 RUN npm run build
 
 ######################
@@ -84,7 +83,7 @@ ENV VERSION=$VERSION
 ARG ENV_PROFILE
 ENV ENV_PROFILE=$ENV_PROFILE
 
-ENV REACT_APP_ENV=$ENV_PROFILE
+ENV VITE_ENV=$ENV_PROFILE
 ENV ENV_DB_URL=""
 
 # Add bash
@@ -133,7 +132,7 @@ RUN chown monitorfish /home/monitorfish/env.sh
 RUN chmod +x /home/monitorfish/env.sh
 USER monitorfish
 
-ENV REACT_APP_GEOSERVER_LOCAL_URL=""
+ENV VITE_GEOSERVER_LOCAL_URL=""
 
 ENTRYPOINT ["/home/monitorfish/env.sh"]
 

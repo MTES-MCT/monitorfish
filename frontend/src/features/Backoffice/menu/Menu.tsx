@@ -5,9 +5,9 @@ import { Link, useMatch } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { ReactComponent as LayersSVG } from '../../icons/Couches.svg'
-import { ReactComponent as FleetSVG } from '../../icons/Label_segment_de_flotte_white.svg'
-import { ReactComponent as ControlObjectivesSVG } from '../../icons/objectifs_controle.svg'
+import LayersSVG from '../../icons/Couches.svg?react'
+import FleetSVG from '../../icons/Label_segment_de_flotte_white.svg?react'
+import ControlObjectivesSVG from '../../icons/objectifs_controle.svg?react'
 
 export function Menu() {
   const onRegulationPage = useMatch('/backoffice/regulation')

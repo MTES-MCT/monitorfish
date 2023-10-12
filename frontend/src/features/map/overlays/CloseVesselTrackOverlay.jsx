@@ -1,22 +1,25 @@
-import React, { createRef, useCallback, useEffect, useState } from 'react'
 import Overlay from 'ol/Overlay'
-import styled from 'styled-components'
+import React, { createRef, useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { ReactComponent as CloseVesselTrackSVG } from '../../icons/Croix_piste_VMS.svg'
+import styled from 'styled-components'
+
 import { hideVesselTrack } from '../../../domain/use_cases/vessel/hideVesselTrack'
+import CloseVesselTrackSVG from '../../icons/Croix_piste_VMS.svg?react'
 import { monitorfishMap } from '../monitorfishMap'
 
-const CloseVesselTrackOverlay = ({ coordinates, vesselCompositeIdentifier }) => {
+function CloseVesselTrackOverlay({ coordinates, vesselCompositeIdentifier }) {
   const dispatch = useDispatch()
 
   const ref = createRef()
-  const [overlay] = useState(new Overlay({
-    element: ref.current,
-    position: coordinates,
-    positioning: 'top-left',
-    zIndex: 9999,
-    offset: [10, -25]
-  }))
+  const [overlay] = useState(
+    new Overlay({
+      element: ref.current,
+      offset: [10, -25],
+      position: coordinates,
+      positioning: 'top-left',
+      zIndex: 9999
+    })
+  )
 
   const close = useCallback(() => {
     monitorfishMap.removeOverlay(overlay)
@@ -39,10 +42,7 @@ const CloseVesselTrackOverlay = ({ coordinates, vesselCompositeIdentifier }) => 
   return (
     <WrapperToBeKeptForDOMManagement>
       <div ref={ref}>
-        <CloseVesselTrack
-          data-cy={'close-vessel-track'}
-          onClick={close}
-        />
+        <CloseVesselTrack data-cy="close-vessel-track" onClick={close} />
       </div>
     </WrapperToBeKeptForDOMManagement>
   )

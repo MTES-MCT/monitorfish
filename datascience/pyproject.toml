@@ -63,6 +63,8 @@ prefect = {version = "^1.3", extras = ["viz"]}
 
 [tool.poetry.group.dev.dependencies]
 pygeos = "^0.14"
+odfpy = "^1.4.1"
+fuzzywuzzy = "^0.18.0"
 
 [build-system]
 requires = [

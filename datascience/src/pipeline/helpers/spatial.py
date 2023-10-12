@@ -714,6 +714,7 @@ def geocode_google(address=None, **kwargs):
         raise ValueError("No arguments given.")
 
     params = dict()
+    components = None
 
     if address:
         # params += f"address={quote(address)}"

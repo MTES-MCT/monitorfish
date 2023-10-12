@@ -3,20 +3,22 @@ import Overlay from 'ol/Overlay'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { useDispatch } from 'react-redux'
-import { ReactComponent as AckNOkSVG } from '../../icons/Message_JPE_non_acquitte_clair.svg'
-import { ReactComponent as DeletedSVG } from '../../icons/Suppression_clair.svg'
+import AckNOkSVG from '../../icons/Message_JPE_non_acquitte_clair.svg?react'
+import DeletedSVG from '../../icons/Suppression_clair.svg?react'
 import navigateToFishingActivity from '../../../domain/use_cases/vessel/navigateToFishingActivity'
 import { monitorfishMap } from '../monitorfishMap'
 
 const FishingActivityOverlay = ({ id, name, coordinates, isDeleted, isNotAcknowledged }) => {
   const ref = createRef()
   const dispatch = useDispatch()
-  const [overlay] = useState(new Overlay({
-    element: ref.current,
-    position: coordinates,
-    offset: [0, -4],
-    positioning: 'bottom-center'
-  }))
+  const [overlay] = useState(
+    new Overlay({
+      element: ref.current,
+      position: coordinates,
+      offset: [0, -4],
+      positioning: 'bottom-center'
+    })
+  )
 
   useEffect(() => {
     if (overlay) {
@@ -38,20 +40,12 @@ const FishingActivityOverlay = ({ id, name, coordinates, isDeleted, isNotAcknowl
           title={`Voir le message ${isDeleted ? 'supprimé ' : ''}${isNotAcknowledged ? 'non acquitté' : ''}`}
           onClick={() => dispatch(navigateToFishingActivity(id))}
         >
-          {
-            isNotAcknowledged
-              ? <AckNOk/>
-              : null
-          }
-          {
-            isDeleted
-              ? <Deleted/>
-              : null
-          }
+          {isNotAcknowledged ? <AckNOk /> : null}
+          {isDeleted ? <Deleted /> : null}
           <ZoneText data-cy={'fishing-activity-name'}>{name}</ZoneText>
         </ZoneSelected>
         <TrianglePointer>
-          <TriangleShadow/>
+          <TriangleShadow />
         </TrianglePointer>
       </FishingActivityOverlayElement>
     </div>

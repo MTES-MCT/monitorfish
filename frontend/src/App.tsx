@@ -1,5 +1,6 @@
 import { OnlyFontGlobalStyle, THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
+import COUNTRIES_FR from 'i18n-iso-countries/langs/fr.json'
 import { useEffect } from 'react'
 import { hasAuthParams } from 'react-oidc-context'
 import { RouterProvider } from 'react-router-dom'
@@ -16,7 +17,7 @@ import { isBrowserSupported } from './utils/isBrowserSupported'
 
 import type { AuthContextProps } from 'react-oidc-context'
 
-countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
+countries.registerLocale(COUNTRIES_FR)
 
 type AppProps = {
   auth?: AuthContextProps | undefined

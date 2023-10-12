@@ -9,7 +9,7 @@ import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { getDate } from '../../../../utils'
 import { downloadAsCsv } from '../../../../utils/downloadAsCsv'
 import { PrimaryButton } from '../../../commonStyles/Buttons.style'
-import { ReactComponent as ExportSVG } from '../../../icons/Bouton_exporter_piste_navire.svg'
+import ExportSVG from '../../../icons/Bouton_exporter_piste_navire.svg?react'
 
 import type { VesselPosition } from '../../../../domain/entities/vessel/types'
 import type { DownloadAsCsvMap } from '../../../../utils/downloadAsCsv'

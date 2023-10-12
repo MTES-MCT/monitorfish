@@ -5,7 +5,7 @@ import { AuthProvider, withAuth } from 'react-oidc-context'
 
 import { getEnvironmentVariable } from './api/utils'
 import { App } from './App'
-import 'rsuite/dist/rsuite.css'
+import 'rsuite/dist/rsuite.min.css'
 import 'mini.css'
 import 'nouislider/dist/nouislider.css'
 import './ui/assets/index.css'
@@ -17,19 +17,19 @@ import { getOIDCConfig } from './auth/getOIDCConfig'
 // eslint-disable-next-line import/no-relative-packages
 // import '@mtes-mct/monitor-ui/assets/stylesheets/rsuite-override.css'
 
-if (!(process.env.NODE_ENV === 'development')) {
+if (import.meta.env.PROD) {
   // https://docs.sentry.io/platforms/javascript/performance/#configure-the-sample-rate
   init({
-    dsn: getEnvironmentVariable('REACT_APP_SENTRY_DSN')?.toString() || '',
-    environment: getEnvironmentVariable('REACT_APP_SENTRY_ENV')?.toString() || '',
+    dsn: getEnvironmentVariable('VITE_SENTRY_DSN')?.toString() || '',
+    environment: getEnvironmentVariable('VITE_SENTRY_ENV')?.toString() || '',
     integrations: [
       new BrowserTracing({
-        tracingOrigins: getEnvironmentVariable('REACT_APP_SENTRY_TRACING_ORIGINS')
-          ? [getEnvironmentVariable('REACT_APP_SENTRY_TRACING_ORIGINS')?.toString() || '']
+        tracingOrigins: getEnvironmentVariable('VITE_SENTRY_TRACING_ORIGINS')
+          ? [getEnvironmentVariable('VITE_SENTRY_TRACING_ORIGINS')?.toString() || '']
           : []
       })
     ],
-    release: getEnvironmentVariable('REACT_APP_MONITORFISH_VERSION')?.toString() || '',
+    release: getEnvironmentVariable('VITE_MONITORFISH_VERSION')?.toString() || '',
     tracesSampleRate: 1.0
   })
 }

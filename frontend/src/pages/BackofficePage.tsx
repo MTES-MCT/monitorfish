@@ -1,4 +1,5 @@
 import countries from 'i18n-iso-countries'
+import COUNTRIES_FR from 'i18n-iso-countries/langs/fr.json'
 import { Provider } from 'react-redux'
 import { Outlet } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
@@ -13,7 +14,7 @@ import { ErrorToastNotification } from '../features/commonComponents/ErrorToastN
 import { useGetUserAuthorization } from '../hooks/authorization/useGetUserAuthorization'
 import { backofficeStore, backofficeStorePersistor } from '../store'
 
-countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
+countries.registerLocale(COUNTRIES_FR)
 
 export function BackofficePage() {
   const userAuthorization = useGetUserAuthorization()

@@ -11,8 +11,8 @@ import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map/constants'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { useMoveOverlayWhenDragging } from '../../../hooks/useMoveOverlayWhenDragging'
 import { useMoveOverlayWhenZooming } from '../../../hooks/useMoveOverlayWhenZooming'
-import { ReactComponent as EditSVG } from '../../icons/Bouton_edition.svg'
-import { ReactComponent as DeleteSVG } from '../../icons/Suppression.svg'
+import EditSVG from '../../icons/Bouton_edition.svg?react'
+import DeleteSVG from '../../icons/Suppression.svg?react'
 import { monitorfishMap } from '../monitorfishMap'
 
 const X = 0

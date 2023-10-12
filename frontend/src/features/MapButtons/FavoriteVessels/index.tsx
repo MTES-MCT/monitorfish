@@ -12,9 +12,9 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { MapPropertyTrigger } from '../../commonComponents/MapPropertyTrigger'
 import { MapButton } from '../../commonStyles/MapButton'
 import { MapComponent } from '../../commonStyles/MapComponent'
-import { ReactComponent as HidingOtherTracksSVG } from '../../icons/Bouton_masquer_pistes_actif.svg'
-import { ReactComponent as ShowingOtherTracksSVG } from '../../icons/Bouton_masquer_pistes_inactif.svg'
-import { ReactComponent as FavoriteSVG } from '../../icons/favorite.svg'
+import HidingOtherTracksSVG from '../../icons/Bouton_masquer_pistes_actif.svg?react'
+import ShowingOtherTracksSVG from '../../icons/Bouton_masquer_pistes_inactif.svg?react'
+import FavoriteSVG from '../../icons/favorite.svg?react'
 
 export function FavoriteVessels() {
   const dispatch = useMainAppDispatch()

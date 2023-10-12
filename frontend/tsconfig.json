@@ -1,14 +1,19 @@
 {
-  "extends": "@tsconfig/create-react-app/tsconfig.json",
+  "extends": "@tsconfig/vite-react/tsconfig.json",
   "compilerOptions": {
+    "allowJs": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "alwaysStrict": true,
-    "checkJs": true,
+    "checkJs": false,
+    // Override inherited value for CommonJS > ESM compatibility purpose
+    "esModuleInterop": true,
     "exactOptionalPropertyTypes": true,
     "incremental": true,
-    "isolatedModules": false,
-    "lib": ["WebWorker", "DOM", "DOM.Iterable", "ES2022"],
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    // https://github.com/cypress-io/cypress/issues/26308#issuecomment-1666236726
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": false,
@@ -25,15 +30,10 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "target": "ES2022",
+    "types": ["vite/client", "vite-plugin-svgr/client"],
     "useUnknownInCatchVariables": true,
     "verbatimModuleSyntax": true
   },
-  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "src/ui/styled.d.ts"],
-  "exclude": ["node_modules/*"],
-  "ts-node": {
-    "swc": true,
-    "compilerOptions": {
-      "module": "CommonJS"
-    }
-  }
+  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "src/vite-env-override.d.ts", "src/ui/styled.d.ts"],
+  "exclude": ["node_modules/*"]
 }

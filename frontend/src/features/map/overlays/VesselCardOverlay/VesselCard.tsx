@@ -10,8 +10,8 @@ import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants
 import { useIsSuperUser } from '../../../../hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { timeagoFrenchLocale } from '../../../../utils'
-import { ReactComponent as AlertSVG } from '../../../icons/Icone_alertes.svg'
-import { ReactComponent as BeaconMalfunctionSVG } from '../../../icons/Icone_VMS_dark.svg'
+import AlertSVG from '../../../icons/Icone_alertes.svg?react'
+import BeaconMalfunctionSVG from '../../../icons/Icone_VMS_dark.svg?react'
 import { getAlertNameFromType } from '../../../SideWindow/Alert/AlertListAndReportingList/utils'
 import { OverlayPosition } from '../Overlay'
 

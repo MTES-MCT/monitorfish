@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
-import SearchIconSVG from '../../features/icons/Loupe_dark.svg'
+import SearchIconSVG from '../../features/icons/Loupe_dark.svg?react'
 
 export const FilterTableInput = styled.input<{
   baseUrl: string

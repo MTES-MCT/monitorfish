@@ -1,23 +1,18 @@
-import { createRef, useCallback, useEffect, useRef, useState } from 'react'
 import Overlay from 'ol/Overlay'
-import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
-import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
-import {
-  getTrackRequestFromTrackDepth,
-  VesselTrackDepth
-} from '../../../domain/entities/vesselTrackDepth'
-import { TrackRangeModal } from './map_menu/TrackRangeModal'
+import { createRef, useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { showVesselTrack } from '../../../domain/use_cases/vessel/showVesselTrack'
+import styled from 'styled-components'
+
+import { TrackRangeModal } from './map_menu/TrackRangeModal'
+import { COLORS } from '../../../constants/constants'
+import { getTrackRequestFromTrackDepth, VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
 import { addVesselToFavorites } from '../../../domain/shared_slices/FavoriteVessel'
+import { showVesselTrack } from '../../../domain/use_cases/vessel/showVesselTrack'
 import { useClickOutsideWhenOpened } from '../../../hooks/useClickOutsideWhenOpened'
+import ChevronIconSVG from '../../icons/Chevron_simple_gris.svg?react'
 import { monitorfishMap } from '../monitorfishMap'
 
-const MapMenuOverlay = ({
-  coordinates,
-  vessel
-}) => {
+function MapMenuOverlay({ coordinates, vessel }) {
   const dispatch = useDispatch()
 
   const ref = createRef()
@@ -49,27 +44,30 @@ const MapMenuOverlay = ({
   /**
    * @param {[Date, Date]=} dateRange
    */
-  const updateDateRange = useCallback((dateRange) => {
-    if (!dateRange) {
-      setSelectedDateRange(undefined)
+  const updateDateRange = useCallback(
+    dateRange => {
+      if (!dateRange) {
+        setSelectedDateRange(undefined)
 
-      return
-    }
+        return
+      }
 
-    const [startDate, endDate] = dateRange
-    const trackRequest = {
-      trackDepth: VesselTrackDepth.CUSTOM,
-      afterDateTime: startDate,
-      beforeDateTime: endDate
-    }
+      const [startDate, endDate] = dateRange
+      const trackRequest = {
+        afterDateTime: startDate,
+        beforeDateTime: endDate,
+        trackDepth: VesselTrackDepth.CUSTOM
+      }
 
-    dispatch(showVesselTrack(vessel.vesselProperties, true, trackRequest))
+      dispatch(showVesselTrack(vessel.vesselProperties, true, trackRequest))
 
-    monitorfishMap.removeOverlay(getOverlay())
-    setIsOpen(false)
-    setSelectedDateRange(dateRange)
-    setSelectedTrackDepth(undefined)
-  }, [vessel])
+      monitorfishMap.removeOverlay(getOverlay())
+      setIsOpen(false)
+      setSelectedDateRange(dateRange)
+      setSelectedTrackDepth(undefined)
+    },
+    [vessel]
+  )
 
   useEffect(() => {
     if (clickedOutsideComponent) {
@@ -116,74 +114,86 @@ const MapMenuOverlay = ({
   return (
     <WrapperToBeKeptForDOMManagement ref={ref}>
       <div ref={ref}>
-        {
-          isOpen
-            ? <>
-              <Wrapper>
-                <div>
-                  {
-                    vessel
-                      ? <>
-                        <FirstColumnMenu>
-                          <Menu
-                            data-cy={'show-vessel-tracks-menu-options'}
-                            onMouseEnter={() => setShowTrackDepthSubMenu(true)}
-                          >
-                            Afficher la piste VMS depuis…
-                            <ChevronIcon/>
-                          </Menu>
-                        </FirstColumnMenu>
-                        <FirstColumnMenu>
-                          <Menu
-                            data-cy={'add-vessel-to-favorites'}
-                            onMouseEnter={() => setShowTrackDepthSubMenu(false)}
-                            onClick={() => dispatch(addVesselToFavorites(vessel.vesselProperties)) && setIsOpen(false)}
-                          >
-                            Ajouter le navire aux navires suivis
-                          </Menu>
-                        </FirstColumnMenu>
-                      </>
-                      : null
-                  }
-                </div>
-                {
-                  showTrackDepthSubMenu
-                    ? <SecondColumnMenu>
-                      {
-                        vessel
-                          ? <>
-                            <Menu second onClick={() => setSelectedTrackDepth(VesselTrackDepth.LAST_DEPARTURE)}>dernier DEP</Menu>
-                            <Menu second onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWELVE_HOURS)}>12 heures</Menu>
-                            <Menu second onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_DAY)}>24 heures</Menu>
-                            <Menu second onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWO_DAYS)}>2 jours</Menu>
-                            <Menu second data-cy={'show-vessel-tracks-three-days'} onClick={() => setSelectedTrackDepth(VesselTrackDepth.THREE_DAYS)}>3 jours</Menu>
-                            <Menu second onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_WEEK)}>1 semaine</Menu>
-                            <Menu second onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWO_WEEK)}>2 semaines</Menu>
-                            <Menu second onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_MONTH)}>1 moiss</Menu>
-                            <Menu
-                              withTopLine
-                              second
-                              onClick={() => setIsTrackRangeModalOpen(true)}
-                              data-cy={'show-vessel-tracks-custom-period'}
-                            >
-                              Choisir une période précise
-                            </Menu>
-                          </>
-                          : null
-                      }
-                    </SecondColumnMenu>
-                    : null
-                }
-              </Wrapper>
-              <TrackRangeModal
-                isOpen={isTrackRangeModalOpen}
-                onClose={() => setIsTrackRangeModalOpen(false)}
-                selectedDates={selectedDateRange}
-                onChange={updateDateRange}
-              />
-            </>
-            : null
-        }
+        {isOpen ? (
+          <>
+            <Wrapper>
+              <div>
+                {vessel ? (
+                  <>
+                    <FirstColumnMenu>
+                      <Menu
+                        data-cy="show-vessel-tracks-menu-options"
+                        onMouseEnter={() => setShowTrackDepthSubMenu(true)}
+                      >
+                        Afficher la piste VMS depuis…
+                        <ChevronIcon />
+                      </Menu>
+                    </FirstColumnMenu>
+                    <FirstColumnMenu>
+                      <Menu
+                        data-cy="add-vessel-to-favorites"
+                        onClick={() => dispatch(addVesselToFavorites(vessel.vesselProperties)) && setIsOpen(false)}
+                        onMouseEnter={() => setShowTrackDepthSubMenu(false)}
+                      >
+                        Ajouter le navire aux navires suivis
+                      </Menu>
+                    </FirstColumnMenu>
+                  </>
+                ) : null}
+              </div>
+              {showTrackDepthSubMenu ? (
+                <SecondColumnMenu>
+                  {vessel ? (
+                    <>
+                      <Menu onClick={() => setSelectedTrackDepth(VesselTrackDepth.LAST_DEPARTURE)} second>
+                        dernier DEP
+                      </Menu>
+                      <Menu onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWELVE_HOURS)} second>
+                        12 heures
+                      </Menu>
+                      <Menu onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_DAY)} second>
+                        24 heures
+                      </Menu>
+                      <Menu onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWO_DAYS)} second>
+                        2 jours
+                      </Menu>
+                      <Menu
+                        data-cy="show-vessel-tracks-three-days"
+                        onClick={() => setSelectedTrackDepth(VesselTrackDepth.THREE_DAYS)}
+                        second
+                      >
+                        3 jours
+                      </Menu>
+                      <Menu onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_WEEK)} second>
+                        1 semaine
+                      </Menu>
+                      <Menu onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWO_WEEK)} second>
+                        2 semaines
+                      </Menu>
+                      <Menu onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_MONTH)} second>
+                        1 moiss
+                      </Menu>
+                      <Menu
+                        data-cy="show-vessel-tracks-custom-period"
+                        onClick={() => setIsTrackRangeModalOpen(true)}
+                        second
+                        withTopLine
+                      >
+                        Choisir une période précise
+                      </Menu>
+                    </>
+                  ) : null}
+                </SecondColumnMenu>
+              ) : null}
+            </Wrapper>
+            <TrackRangeModal
+              isOpen={isTrackRangeModalOpen}
+              onChange={updateDateRange}
+              onClose={() => setIsTrackRangeModalOpen(false)}
+              selectedDates={selectedDateRange}
+            />
+          </>
+        ) : null}
       </div>
     </WrapperToBeKeptForDOMManagement>
   )
@@ -222,12 +232,12 @@ const SecondColumnMenu = styled.div`
 
 const Menu = styled.span`
   background: ${COLORS.white};
-  padding: 5px ${props => props.second ? 15 : 0}px 0px 15px;
+  padding: 5px ${props => (props.second ? 15 : 0)}px 0px 15px;
   height: 25px;
   display: inline-block;
   display: flex;
   width: 100%;
-  border-top: ${props => props.withTopLine ? 1 : 0}px solid ${COLORS.lightGray};
+  border-top: ${props => (props.withTopLine ? 1 : 0)}px solid ${COLORS.lightGray};
 
   :hover {
     background: ${COLORS.gainsboro};

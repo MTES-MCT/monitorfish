@@ -7,7 +7,7 @@ import { sideWindowDispatchers } from '../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { MapButton } from '../commonStyles/MapButton'
-import { ReactComponent as AlertsSVG } from '../icons/Icone_alertes.svg'
+import AlertsSVG from '../icons/Icone_alertes.svg?react'
 
 export function AlertsMapButton() {
   const dispatch = useMainAppDispatch()

@@ -1,7 +1,7 @@
 import { ToastContainer } from 'react-toastify'
 import styled from 'styled-components'
 
-import { ReactComponent as AlertSVG } from '../features/icons/Picto_alerte.svg'
+import AlertSVG from '../features/icons/Picto_alerte.svg?react'
 
 export function UnsupportedBrowserPage() {
   return (

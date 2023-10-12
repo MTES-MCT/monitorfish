@@ -12,10 +12,10 @@ import saveInterestPointFeature from '../../../domain/use_cases/interestPoint/sa
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { SetCoordinates } from '../../coordinates/SetCoordinates'
-import { ReactComponent as ControlSVG } from '../../icons/Label_controle.svg'
-import { ReactComponent as GearSVG } from '../../icons/Label_engin_de_peche.svg'
-import { ReactComponent as VesselSVG } from '../../icons/Label_segment_de_flotte.svg'
-import { ReactComponent as OtherSVG } from '../../icons/Point_interet_autre.svg'
+import ControlSVG from '../../icons/Label_controle.svg?react'
+import GearSVG from '../../icons/Label_engin_de_peche.svg?react'
+import VesselSVG from '../../icons/Label_segment_de_flotte.svg?react'
+import OtherSVG from '../../icons/Point_interet_autre.svg?react'
 import { MapToolBox } from '../shared/MapToolBox'
 
 // TODO Refactor this component

@@ -34,7 +34,7 @@ export const selectedMissionActionsStyles = [
     image: new Icon({
       displacement: [-1, 12],
       scale: 0.8,
-      src: 'map-icons/Icone_controle_avec_infraction.svg'
+      src: 'map-icons/Icone_controle_avec_infraction.svg?react'
     })
   }),
   new Style({
@@ -52,7 +52,7 @@ export const selectedMissionActionsStyles = [
     image: new Icon({
       displacement: [-1, 12],
       scale: 0.8,
-      src: 'map-icons/Icone_controle_sans_infraction.svg'
+      src: 'map-icons/Icone_controle_sans_infraction.svg?react'
     })
   }),
   new Style({
@@ -73,7 +73,7 @@ export const selectedMissionActionsStyles = [
     },
     image: new Icon({
       scale: 1,
-      src: 'map-icons/Observation.svg'
+      src: 'map-icons/Observation.svg?react'
     })
   })
 ]

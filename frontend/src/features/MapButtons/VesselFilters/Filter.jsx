@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
-import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
-import { ReactComponent as ShowIconSVG } from '../../icons/oeil_affiche.svg'
-import { ReactComponent as HideIconSVG } from '../../icons/oeil_masque.svg'
-import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
-import { ReactComponent as FilterSVG } from '../../icons/Icone_filtres_dark.svg'
+import CloseIconSVG from '../../icons/Croix_grise.svg?react'
+import ShowIconSVG from '../../icons/oeil_affiche.svg?react'
+import HideIconSVG from '../../icons/oeil_masque.svg?react'
+import ChevronIconSVG from '../../icons/Chevron_simple_gris.svg?react'
+import FilterSVG from '../../icons/Icone_filtres_dark.svg?react'
 import TagList from './TagList'
 
 const Filter = ({ filter, index, isLastItem, removeFilter, showFilter, hideFilters, removeTagFromFilter }) => {
@@ -14,40 +14,30 @@ const Filter = ({ filter, index, isLastItem, removeFilter, showFilter, hideFilte
   return (
     <FilterWrapper>
       <FilterItem isLastItem={isLastItem} isOpen={isOpen}>
-        <Text
-          data-cy={'vessel-filter'}
-          title={filter.name.replace(/[_]/g, ' ')}
-          onClick={() => setIsOpen(!isOpen)}>
-          <ChevronIcon $isOpen={isOpen}/>
-          <FilterIcon fill={filter.color}/>
-          {filter.name
-            ? filter.name.replace(/[_]/g, ' ')
-            : `Filtre n°${index}`
-          }
+        <Text data-cy={'vessel-filter'} title={filter.name.replace(/[_]/g, ' ')} onClick={() => setIsOpen(!isOpen)}>
+          <ChevronIcon $isOpen={isOpen} />
+          <FilterIcon fill={filter.color} />
+          {filter.name ? filter.name.replace(/[_]/g, ' ') : `Filtre n°${index}`}
         </Text>
-        {
-          filter.showed
-            ? <ShowIcon title="Cacher le filtre" onClick={() => hideFilters()}/>
-            : <HideIcon title="Afficher le filtre" onClick={() => showFilter(filter.uuid)}/>
-        }
-        <CloseIcon title="Supprimer le filtre de ma sélection" onClick={() => removeFilter(filter.uuid)}/>
+        {filter.showed ? (
+          <ShowIcon title="Cacher le filtre" onClick={() => hideFilters()} />
+        ) : (
+          <HideIcon title="Afficher le filtre" onClick={() => showFilter(filter.uuid)} />
+        )}
+        <CloseIcon title="Supprimer le filtre de ma sélection" onClick={() => removeFilter(filter.uuid)} />
       </FilterItem>
       <FilterTags isOpen={isOpen} isLastItem={isLastItem}>
-        <TagList
-          uuid={filter.uuid}
-          filters={filter.filters}
-          removeTagFromFilter={removeTagFromFilter}
-        />
+        <TagList uuid={filter.uuid} filters={filter.filters} removeTagFromFilter={removeTagFromFilter} />
       </FilterTags>
     </FilterWrapper>
   )
 }
 
 const FilterTags = styled.div`
-  padding: ${props => props.isOpen ? '15px 15px 5px 15px' : '0'};
-  height: ${props => props.isOpen ? 'inherit' : '0'};
-  opacity: ${props => props.isOpen ? '1' : '0'};
-  ${props => props.isOpen && !props.isLastItem ? `border-bottom: 1px solid ${COLORS.lightGray};` : null}
+  padding: ${props => (props.isOpen ? '15px 15px 5px 15px' : '0')};
+  height: ${props => (props.isOpen ? 'inherit' : '0')};
+  opacity: ${props => (props.isOpen ? '1' : '0')};
+  ${props => (props.isOpen && !props.isLastItem ? `border-bottom: 1px solid ${COLORS.lightGray};` : null)}
   transition: all 0.3s;
 `
 
@@ -93,7 +83,7 @@ const FilterItem = styled.span`
   width: 100%;
   display: flex;
   user-select: none;
-  ${props => (!props.isOpen && props.isLastItem) ? null : `border-bottom: 1px solid ${COLORS.lightGray};`}
+  ${props => (!props.isOpen && props.isLastItem ? null : `border-bottom: 1px solid ${COLORS.lightGray};`)}
   cursor: pointer;
 `
 
@@ -118,16 +108,24 @@ const ChevronIcon = styled(ChevronIconSVG)`
   margin-right: 8px;
   margin-top: 5px;
 
-  animation: ${props => props.$isOpen ? 'chevron-layer-opening' : 'chevron-layer-closing'} 0.5s ease forwards;
+  animation: ${props => (props.$isOpen ? 'chevron-layer-opening' : 'chevron-layer-closing')} 0.5s ease forwards;
 
   @keyframes chevron-layer-opening {
-    0%   { transform: rotate(180deg); }
-    100% { transform: rotate(0deg); }
+    0% {
+      transform: rotate(180deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
   }
 
   @keyframes chevron-layer-closing {
-    0%   { transform: rotate(0deg); }
-    100% { transform: rotate(180deg);   }
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(180deg);
+    }
   }
 `
 

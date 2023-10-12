@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { ReactComponent as ChevronIconSVG } from '../../../icons/Chevron_simple_gris.svg'
-import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
-import { ReactComponent as NotAcknowledgedSVG } from '../../../icons/Message_non_acquitte.svg'
+import ChevronIconSVG from '../../../icons/Chevron_simple_gris.svg?react'
+import ArrowSVG from '../../../icons/Picto_fleche-pleine-droite.svg?react'
+import NotAcknowledgedSVG from '../../../icons/Message_non_acquitte.svg?react'
 import { LogbookMessageType as LogbookMessageTypeEnum } from '../../constants'
 
 const LogbookMessageResumeHeader = props => {
@@ -15,54 +15,57 @@ const LogbookMessageResumeHeader = props => {
     }
   }, [props.messageType])
 
-  return <>
-    {props.messageType
-      ? <Wrapper>
-        <LogbookMessageTitle
-          onClick={() => props.setIsOpen(!props.isOpen)}
-          hasNoMessage={props.hasNoMessage || props.noContent}
-          isLastItem={props.isLastItem}
-          isOpen={props.isOpen}
-        >
-          {
-            props.hasNoMessage || props.noContent ? null : <ChevronIcon $isOpen={props.isOpen} name={props.messageType}/>
-          }
-          <LogbookMessageName
-            isNotAcknowledged={props.isNotAcknowledged}
+  return (
+    <>
+      {props.messageType ? (
+        <Wrapper>
+          <LogbookMessageTitle
+            onClick={() => props.setIsOpen(!props.isOpen)}
             hasNoMessage={props.hasNoMessage || props.noContent}
-            title={
-              props.rejectionCause
-                ? props.rejectionCause
-                : props.isDeleted
-                  ? 'Message supprimé'
-                  : ''
-            }>
-            {
-              props.isNotAcknowledged || props.isDeleted
-                ? <NotAcknowledgedOrDeleted data-cy={'fishing-resume-not-acknowledged-icon'}/>
-                : null
-            }
-            {LogbookMessageTypeEnum[props.messageType].name}
-          </LogbookMessageName>
-          <LogbookMessageResumeText
-            data-cy={'vessel-fishing-resume-title'}
-            title={props.onHoverText ? props.onHoverText : ''}>
-            {props.hasNoMessage ? <Gray>Aucun message</Gray> : <>{props.title}{props.isAlert ? <Red/> : null}</>}
-          </LogbookMessageResumeText>
-          {
-            props.hasNoMessage ? null : <ShowThisMessage onClick={() => props.showLogbookMessages(props.messageType)}/>
-          }
-        </LogbookMessageTitle>
-      </Wrapper>
-      : null}
-  </>
+            isLastItem={props.isLastItem}
+            isOpen={props.isOpen}
+          >
+            {props.hasNoMessage || props.noContent ? null : (
+              <ChevronIcon $isOpen={props.isOpen} name={props.messageType} />
+            )}
+            <LogbookMessageName
+              isNotAcknowledged={props.isNotAcknowledged}
+              hasNoMessage={props.hasNoMessage || props.noContent}
+              title={props.rejectionCause ? props.rejectionCause : props.isDeleted ? 'Message supprimé' : ''}
+            >
+              {props.isNotAcknowledged || props.isDeleted ? (
+                <NotAcknowledgedOrDeleted data-cy={'fishing-resume-not-acknowledged-icon'} />
+              ) : null}
+              {LogbookMessageTypeEnum[props.messageType].name}
+            </LogbookMessageName>
+            <LogbookMessageResumeText
+              data-cy={'vessel-fishing-resume-title'}
+              title={props.onHoverText ? props.onHoverText : ''}
+            >
+              {props.hasNoMessage ? (
+                <Gray>Aucun message</Gray>
+              ) : (
+                <>
+                  {props.title}
+                  {props.isAlert ? <Red /> : null}
+                </>
+              )}
+            </LogbookMessageResumeText>
+            {props.hasNoMessage ? null : (
+              <ShowThisMessage onClick={() => props.showLogbookMessages(props.messageType)} />
+            )}
+          </LogbookMessageTitle>
+        </Wrapper>
+      ) : null}
+    </>
+  )
 }
 
 const Red = styled.span`
   height: 8px;
   width: 8px;
   margin-left: 5px;
-  background-color: #E1000F;
+  background-color: #e1000f;
   border-radius: 50%;
   display: inline-block;
 `
@@ -103,9 +106,9 @@ const LogbookMessageResumeText = styled.span`
 `
 
 const LogbookMessageName = styled.span`
-  color: ${props => props.isNotAcknowledged ? COLORS.maximumRed : COLORS.slateGray};
+  color: ${props => (props.isNotAcknowledged ? COLORS.maximumRed : COLORS.slateGray)};
   font-weight: 500;
-  margin: 5px 0 5px ${props => props.hasNoMessage ? '27px' : '0px'};
+  margin: 5px 0 5px ${props => (props.hasNoMessage ? '27px' : '0px')};
   padding: 2px 4px 2px 4px;
   font-size: 13px;
   vertical-align: -moz-middle-with-baseline;
@@ -128,8 +131,8 @@ const LogbookMessageTitle = styled.div`
   width: inherit;
   padding: 0 0 0 20px;
   user-select: none;
-  ${props => !props.hasNoMessage ? 'cursor: pointer;' : null}}
-  ${props => !props.isLastItem || props.isOpen ? `border-bottom: 1px solid ${props.theme.color.lightGray};` : null}
+  ${props => (!props.hasNoMessage ? 'cursor: pointer;' : null)}}
+  ${props => (!props.isLastItem || props.isOpen ? `border-bottom: 1px solid ${props.theme.color.lightGray};` : null)}
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`
@@ -139,7 +142,9 @@ const ChevronIcon = styled(ChevronIconSVG)`
   margin-right: 10px;
   margin-top: 12px;
 
-  animation: ${props => props.$isOpen ? `chevron-${props.name}-resume-opening` : `chevron-${props.name}-resume-closing`} 0.2s ease forwards;
+  animation: ${props =>
+      props.$isOpen ? `chevron-${props.name}-resume-opening` : `chevron-${props.name}-resume-closing`}
+    0.2s ease forwards;
 
   ${props => `
       @keyframes chevron-${props.name}-resume-opening {
@@ -151,8 +156,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
         0%   { transform: rotate(0deg); }
         100% { transform: rotate(180deg);   }
       }
-      `
-}
+      `}
 `
 
 export default LogbookMessageResumeHeader

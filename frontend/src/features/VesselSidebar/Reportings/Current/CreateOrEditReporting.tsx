@@ -9,7 +9,7 @@ import { setEditedReporting } from '../../../../domain/shared_slices/Reporting'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { PrimaryButton } from '../../../commonStyles/Buttons.style'
-import { ReactComponent as CloseIconSVG } from '../../../icons/Croix_grise.svg'
+import CloseIconSVG from '../../../icons/Croix_grise.svg?react'
 
 export function CreateOrEditReporting() {
   const dispatch = useMainAppDispatch()

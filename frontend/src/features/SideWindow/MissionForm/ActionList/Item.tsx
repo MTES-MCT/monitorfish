@@ -13,7 +13,7 @@ import { find } from 'lodash'
 import { useMemo } from 'react'
 import styled, { css } from 'styled-components'
 
-import { formatDateLabel, getMissionActionInfractionsFromMissionActionFormValues, getTitle } from './utils'
+import { formatDateLabel, getMissionActionInfractionsFromMissionActionFormValues, getActionTitle } from './utils'
 import { UNKNOWN_VESSEL } from '../../../../domain/entities/vessel/vessel'
 import { MissionAction } from '../../../../domain/types/missionAction'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
@@ -35,16 +35,21 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
 
   const natinfsAsOptions = useGetNatinfsAsOptions()
 
+  const isControlAction =
+    initialValues.actionType === MissionAction.MissionActionType.AIR_CONTROL ||
+    initialValues.actionType === MissionAction.MissionActionType.LAND_CONTROL ||
+    initialValues.actionType === MissionAction.MissionActionType.SEA_CONTROL
+
   const [actionLabel, ActionIcon] = useMemo(() => {
     const vesselName = initialValues.vesselName === UNKNOWN_VESSEL.vesselName ? 'INCONNU' : initialValues.vesselName
 
     switch (initialValues.actionType) {
       case MissionAction.MissionActionType.AIR_CONTROL:
-        return [getTitle('Contrôle aérien', vesselName, '- Navire inconnu'), Icon.Plane]
+        return [getActionTitle('Contrôle aérien', vesselName, '- Navire inconnu'), Icon.Plane]
 
       case MissionAction.MissionActionType.AIR_SURVEILLANCE:
         return [
-          getTitle(
+          getActionTitle(
             'Surveillance aérienne',
             initialValues.numberOfVesselsFlownOver
               ? `${initialValues.numberOfVesselsFlownOver} pistes survolées`
@@ -55,13 +60,13 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
         ]
 
       case MissionAction.MissionActionType.LAND_CONTROL:
-        return [getTitle('Contrôle à la débarque', vesselName, '- Navire inconnu'), Icon.Anchor]
+        return [getActionTitle('Contrôle à la débarque', vesselName, '- Navire inconnu'), Icon.Anchor]
 
       case MissionAction.MissionActionType.OBSERVATION:
-        return [getTitle('', initialValues.otherComments, 'Note libre à renseigner'), Icon.Note]
+        return [getActionTitle('', initialValues.otherComments, 'Note libre à renseigner'), Icon.Note]
 
       case MissionAction.MissionActionType.SEA_CONTROL:
-        return [getTitle('Contrôle en mer', vesselName, '- Navire inconnu'), Icon.FleetSegment]
+        return [getActionTitle('Contrôle en mer', vesselName, '- Navire inconnu'), Icon.FleetSegment]
 
       default:
         throw new FrontendError('`initialValues.actionType` does not match the enum')
@@ -122,7 +127,7 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
     [initialValues]
   )
 
-  const isOpen = !mission.draft?.mainFormValues.isClosed && !initialValues.closedBy
+  const isOpen = isControlAction && !mission.draft?.mainFormValues.isClosed && !initialValues.closedBy
 
   return (
     <>
@@ -149,7 +154,7 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
               <p>{actionLabel}</p>
             </ActionLabel>
 
-            <IconButton
+            <RightAlignedIconButton
               accent={Accent.TERTIARY}
               color={THEME.color.slateGray}
               Icon={Icon.Duplicate}
@@ -158,7 +163,7 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
               title="Dupliquer l’action"
               withUnpropagatedClick
             />
-            <IconButton
+            <RightAlignedIconButton
               accent={Accent.TERTIARY}
               color={THEME.color.maximumRed}
               Icon={Icon.Delete}
@@ -169,8 +174,8 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
             />
           </Head>
 
-          {redTags.length > 0 && <StyledTagGroup>{redTags}</StyledTagGroup>}
-          {infractionTags.length > 0 && <StyledTagGroup>{infractionTags}</StyledTagGroup>}
+          {isControlAction && redTags.length > 0 && <StyledTagGroup>{redTags}</StyledTagGroup>}
+          {isControlAction && infractionTags.length > 0 && <StyledTagGroup>{infractionTags}</StyledTagGroup>}
         </InnerWrapper>
       </Wrapper>
 
@@ -180,6 +185,10 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
     </>
   )
 }
+
+const RightAlignedIconButton = styled(IconButton)`
+  margin-left: auto;
+`
 
 const Wrapper = styled.div`
   align-items: center;

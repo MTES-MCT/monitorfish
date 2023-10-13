@@ -13,19 +13,23 @@ export function formatDateLabel(dateLabel: string) {
   )
 }
 
-export function getTitle(base: string, label: string | undefined, placeholder: string): ReactNode {
-  if (!label) {
+export function getActionTitle(itemTitle: string, details: string | undefined, placeholder: string): ReactNode {
+  if (!itemTitle) {
+    return <StyledSpan>{details}</StyledSpan>
+  }
+
+  if (!details) {
     return (
       <Placeholder>
-        {base} {placeholder}
+        {itemTitle} {placeholder}
       </Placeholder>
     )
   }
 
   return (
-    <span>
-      {base} - <strong>{label}</strong>
-    </span>
+    <StyledSpan>
+      {itemTitle} - <strong>{details}</strong>
+    </StyledSpan>
   )
 }
 
@@ -64,4 +68,12 @@ export function getMissionActionFormInitialValues(type: MissionAction.MissionAct
 
 const Placeholder = styled.span`
   color: ${p => p.theme.color.slateGray};
+`
+
+const StyledSpan = styled.span`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+  display: inline-block;
 `

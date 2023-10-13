@@ -13,7 +13,7 @@ export type TableHeadProps = {
   isCheckable?: boolean | undefined
   isSortingDesc: boolean
   onAllCheckChange: () => Promisable<void>
-  onSort: (key: string, isDesc: boolean, fallbackKey?: string | undefined) => Promisable<void>
+  onSort: (key: string, isDesc: boolean) => Promisable<void>
   sortingKey?: string | undefined
 }
 export function TableHead({
@@ -30,7 +30,7 @@ export function TableHead({
       return
     }
 
-    onSort(column.key, column.key === sortingKey && !isSortingDesc, column.fallbackKey)
+    onSort(column.key, column.key === sortingKey && !isSortingDesc)
   }
 
   return (

@@ -1,12 +1,13 @@
 import diacritics from 'diacritics'
 import Fuse from 'fuse.js'
-import { ascend, assocPath, descend, equals, path, pipe, propEq, sortWith } from 'ramda'
+import { get, orderBy } from 'lodash'
+import { assocPath, equals, path, pipe, propEq } from 'ramda'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { TableHead } from './TableHead'
 import { getArrayPathFromStringPath, normalizeSearchQuery } from './utils'
 
-import type { TableItem, FilterFunction, TableOptions } from './types'
+import type { FilterFunction, TableItem, TableOptions } from './types'
 import type { CollectionItem } from '../../types'
 
 export function useTable<T extends CollectionItem = CollectionItem>(
@@ -25,6 +26,7 @@ export function useTable<T extends CollectionItem = CollectionItem>(
   const [checkedIds, setCheckedIds] = useState<(number | string)[]>([])
   const [isSortingDesc, setIsSortingDesc] = useState(Boolean(isDefaultSortingDesc))
   const [sortingKey, setSortingKey] = useState<string | undefined>(defaultSortedKey)
+  const [sortingFallbackKey, setSortingFallbackKey] = useState<string | undefined>(undefined)
 
   const rawData = useMemo(() => maybeRawData || [], [maybeRawData])
 
@@ -152,30 +154,23 @@ export function useTable<T extends CollectionItem = CollectionItem>(
       return filteredAndSearchedTableData
     }
 
-    const sortingKeyAsArrayPath = getArrayPathFromStringPath(sortingKey)
-    const sortingKeyPath = path(['$sortable', ...sortingKeyAsArrayPath]) as any
-    const bySortingKey = isSortingDesc ? descend(sortingKeyPath) : ascend(sortingKeyPath)
-
-    return sortWith(
-      [
-        bySortingKey,
-        // Sort undefined values (to the bottom when ascending and to the top when descending)
-        (firstDataItem, secondDataItem) => {
-          const firstDataItemProp = sortingKeyPath(firstDataItem)
-          const secondDataItemProp = sortingKeyPath(secondDataItem)
-
-          if (isSortingDesc) {
-            // eslint-disable-next-line no-nested-ternary
-            return firstDataItemProp === undefined ? (secondDataItemProp === undefined ? 0 : -1) : 1
-          }
-
-          // eslint-disable-next-line no-nested-ternary
-          return firstDataItemProp === undefined ? (secondDataItemProp === undefined ? 0 : 1) : -1
+    return orderBy(
+      filteredAndSearchedTableData,
+      item => {
+        const value = get(item, sortingKey)
+        if (value !== undefined) {
+          return value
         }
-      ],
-      filteredAndSearchedTableData
+
+        if (!sortingFallbackKey) {
+          return undefined
+        }
+
+        return get(item, sortingFallbackKey)
+      },
+      isSortingDesc ? ['desc'] : ['asc']
     )
-  }, [filteredAndSearchedTableData, isSortingDesc, sortingKey])
+  }, [filteredAndSearchedTableData, isSortingDesc, sortingKey, sortingFallbackKey])
 
   const getCheckedData = useCallback(
     () => filteredAndSearchedAndSortedTableData.filter(({ id }) => checkedIds.includes(id)),
@@ -186,8 +181,9 @@ export function useTable<T extends CollectionItem = CollectionItem>(
     setCheckedIds(isAllChecked ? [] : filteredAndSearchedAndSortedTableData.map(({ id }) => id).sort())
   }, [filteredAndSearchedAndSortedTableData, isAllChecked])
 
-  const sortColumn = useCallback((key: string, isDesc: boolean) => {
+  const sortColumn = useCallback((key: string, isDesc: boolean, fallbackKey: string | undefined) => {
     setSortingKey(key)
+    setSortingFallbackKey(fallbackKey)
     setIsSortingDesc(isDesc)
   }, [])
 

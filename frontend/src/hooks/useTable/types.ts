@@ -2,6 +2,7 @@ import type { CollectionItem, Native } from '../../types'
 import type Fuse from 'fuse.js'
 
 export type TableColumn<T extends Record<string, any> = Record<string, any>> = {
+  fallbackKey?: string | undefined
   /** Fixed width expressed in root ephemeral unit (rem) */
   fixedWidth?: number
   isSortable?: boolean

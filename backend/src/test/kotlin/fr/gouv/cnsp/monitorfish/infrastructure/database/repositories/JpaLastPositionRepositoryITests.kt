@@ -56,11 +56,13 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllInLast48Hours Should returns the last positions in the last 48 hours`() {
+    fun `findAllInLastMonth Should returns the last positions in the last month`() {
         // Then
-        val positions = jpaLastPositionRepository.findAllInLast48Hours()
+        val positions = jpaLastPositionRepository.findAllInLastMonthOrWithBeaconMalfunction()
 
-        assertThat(positions).hasSize(999)
+        assertThat(positions).hasSize(1003)
+        val assertedVessel = positions.find { it.internalReferenceNumber == "ABC000339263" }
+        assertThat(assertedVessel?.dateTime).isBefore(ZonedDateTime.now().minusMonths(1))
     }
 
     @Test
@@ -69,7 +71,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         // Then
         val positions = jpaLastPositionRepository.findAllWithBeaconMalfunctionBeforeLast48Hours()
 
-        assertThat(positions).hasSize(1)
+        assertThat(positions).hasSize(2)
         assertThat(positions.first().internalReferenceNumber).isEqualTo("ABC000939217")
         assertThat(positions.first().vesselName).isEqualTo("FRAIS AVIS MODE")
         assertThat(positions.first().beaconMalfunctionId).isEqualTo(7)

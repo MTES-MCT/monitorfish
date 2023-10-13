@@ -52,7 +52,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
   const [isOverlayed, setIsOverlayed] = useState(false)
   const [isPreloading, setIsPreloading] = useState(true)
 
-  const beaconMalfunctionBoardGrayOverlayStyle: CSSProperties = useMemo(
+  const grayOverlayStyle: CSSProperties = useMemo(
     () => ({
       background: THEME.color.charcoal,
       height: '100%',
@@ -121,12 +121,9 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
           <GlobalStyle />
 
           <Menu selectedMenu={selectedPath.menu} />
-          {/* TODO Move that within BeaconMalfunctionBoard. */}
-          {selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && (
-            <BeaconMalfunctionsBoardGrayOverlay
-              onClick={closeRightSidebar}
-              style={beaconMalfunctionBoardGrayOverlayStyle}
-            />
+          {(selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD ||
+            selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST) && (
+            <GrayOverlay onClick={closeRightSidebar} style={grayOverlayStyle} />
           )}
           <FrontendErrorBoundary>
             {isPreloading && (
@@ -228,7 +225,7 @@ const Content = styled.div`
   min-width: 0;
 `
 
-const BeaconMalfunctionsBoardGrayOverlay = styled.div``
+const GrayOverlay = styled.div``
 
 const Loading = styled.div`
   margin-left: 550px;

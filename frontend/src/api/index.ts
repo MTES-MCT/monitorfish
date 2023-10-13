@@ -38,21 +38,23 @@ export const monitorenvApi = createApi({
 // =============================================================================
 // Monitorfish API
 
+const setAuthorizationHeader = headers => {
+  const user = getOIDCUser()
+  const token = user?.access_token
+
+  // If we have a token set in state, we pass it.
+  if (token) {
+    headers.set('authorization', `Bearer ${token}`)
+  }
+
+  return headers
+}
+
 const monitorfishBaseQuery = retry(
   fetchBaseQuery({
     // TODO Remove the /v1 from the baseUrl as it make harder to update APIs (vX are designed for that)
     baseUrl: `/bff/v1`,
-    prepareHeaders: headers => {
-      const user = getOIDCUser()
-      const token = user?.access_token
-
-      // If we have a token set in state, we pass it.
-      if (token) {
-        headers.set('authorization', `Bearer ${token}`)
-      }
-
-      return headers
-    }
+    prepareHeaders: setAuthorizationHeader
   }),
   { maxRetries: MAX_RETRIES }
 )
@@ -81,7 +83,8 @@ export const monitorfishApi = createApi({
 
 const monitorfishLightBaseQuery = retry(
   fetchBaseQuery({
-    baseUrl: `/light`
+    baseUrl: `/light`,
+    prepareHeaders: setAuthorizationHeader
   }),
   { maxRetries: MAX_RETRIES }
 )

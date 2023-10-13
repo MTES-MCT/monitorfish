@@ -53,7 +53,7 @@ export function Infraction<AnyInfraction extends MissionAction.OtherInfraction>(
           </div>
         </div>
 
-        {data.comments.trim().length > 0 && (
+        {data.comments?.trim().length > 0 && (
           <article>
             <ReactMarkdown>{data.comments}</ReactMarkdown>
           </article>

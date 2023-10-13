@@ -17,6 +17,8 @@ import {
   mapControlUnitsToUniqueSortedNamesAsOptions,
   mapControlUnitToSortedResourcesAsOptions
 } from './utils'
+import { FIVE_MINUTES } from '../../../../../api/APIWorker'
+import { useGetEngagedControlUnitsQuery } from '../../../../../api/mission'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 import { isValidControlUnit } from '../../utils'
 
@@ -37,7 +39,6 @@ export type ControlUnitSelectProps = {
       }
     | undefined
   index: number
-  isEngaged: boolean
   onChange: (index: number, nextControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft) => Promisable<void>
   onDelete: (index: number) => Promisable<void>
   value: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft
@@ -48,18 +49,27 @@ export function ControlUnitSelect({
   allNamesAsOptions,
   error,
   index,
-  isEngaged,
   onChange,
   onDelete,
   value
 }: ControlUnitSelectProps) {
   const { newWindowContainerRef } = useNewWindow()
+  const { data: engagedControlUnitsData } = useGetEngagedControlUnitsQuery(undefined, { pollingInterval: FIVE_MINUTES })
+
+  const engagedControlUnits = useMemo(() => {
+    if (!engagedControlUnitsData) {
+      return []
+    }
+
+    return engagedControlUnitsData
+  }, [engagedControlUnitsData])
 
   const [controlledValue, setControlledValue] = useState(value)
   const [selectedControlUnit, setSelectedControlUnit] = useState<ControlUnit.ControlUnit | undefined>(
     isValidControlUnit(value) ? value : undefined
   )
 
+  const isEngaged = !!engagedControlUnits.find(engaged => engaged.id === value.id)
   const isLoading = !allControlUnits.length
 
   const filteredNamesAsOptions = useMemo((): Option[] => {

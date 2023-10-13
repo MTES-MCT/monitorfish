@@ -6,7 +6,6 @@ import styled from 'styled-components'
 
 import { ControlUnitSelect } from './ControlUnitSelect'
 import { useGetControlUnitsQuery } from '../../../../../api/controlUnit'
-import { useGetEngagedControlUnitsQuery } from '../../../../../api/mission'
 import { getControlUnitsOptionsFromControlUnits } from '../../../../../domain/entities/controlUnits/utils'
 import { INITIAL_MISSION_CONTROL_UNIT, PAMControlUnitIds } from '../../constants'
 import { useGetMainFormFormikUsecases } from '../../hooks/useGetMainFormFormikUsecases'
@@ -26,21 +25,12 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
     ) || false
 
   const controlUnitsQuery = useGetControlUnitsQuery(undefined)
-  const { data: engagedControlUnitsData } = useGetEngagedControlUnitsQuery(undefined)
 
   const {
     activeControlUnits: allActiveControlUnits,
     administrationsAsOptions: allAdministrationsAsOptions,
     unitsAsOptions: allNamesAsOptions
   } = useMemo(() => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data), [controlUnitsQuery.data])
-
-  const engagedControlUnits = useMemo(() => {
-    if (!engagedControlUnitsData) {
-      return []
-    }
-
-    return engagedControlUnitsData
-  }, [engagedControlUnitsData])
 
   const errors = (allErrors[name] || []) as Array<{
     administration: string
@@ -94,7 +84,6 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
             allNamesAsOptions={allNamesAsOptions}
             error={errors[index]}
             index={index}
-            isEngaged={!!engagedControlUnits.find(engaged => engaged.id === value.id)}
             onChange={handleChange}
             onDelete={removeUnit}
             value={value}

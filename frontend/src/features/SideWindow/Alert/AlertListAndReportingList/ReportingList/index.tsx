@@ -177,6 +177,7 @@ MMSI: ${reporting.mmsi || ''}`
         <CardTableBody>
           {tableData.map((reporting, index) => {
             const editingIsDisabled = reporting.type === ReportingType.ALERT
+            const reportingDate = reporting.validationDate || reporting.creationDate
 
             return (
               <CardTableRow key={reporting.id} data-cy="side-window-current-reportings" index={index + 1} style={{}}>
@@ -187,8 +188,8 @@ MMSI: ${reporting.mmsi || ''}`
                       onChange={() => toggleTableCheckForId(reporting.id)}
                     />
                   </Cell>
-                  <Cell style={columnStyles[1]} title={reporting.validationDate || reporting.creationDate}>
-                    {timeago.format(reporting.validationDate || reporting.creationDate, 'fr')}
+                  <Cell style={columnStyles[1]} title={reportingDate}>
+                    {timeago.format(reportingDate, 'fr')}
                   </Cell>
                   <Cell style={columnStyles[2]} title={getReportingOrigin(reporting, true)}>
                     {getReportingOrigin(reporting)}

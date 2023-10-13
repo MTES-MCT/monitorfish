@@ -6,6 +6,7 @@ import type { TableOptions } from '../../../../../hooks/useTable/types'
 export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<InfractionSuspicionReporting | PendingAlertReporting> = {
   columns: [
     {
+      fallbackKey: 'creationDate',
       fixedWidth: 112,
       isSortable: true,
       key: 'validationDate',
@@ -13,14 +14,14 @@ export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<InfractionSuspicionRepor
     },
     {
       fixedWidth: 112,
-      isSortable: true,
+      isSortable: false,
       key: 'source',
       label: 'Origine',
       transform: getReportingOrigin
     },
     {
       fixedWidth: 288,
-      isSortable: true,
+      isSortable: false,
       key: 'title',
       label: 'Titre',
       transform: getReportingTitle
@@ -59,5 +60,14 @@ export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<InfractionSuspicionRepor
     }
   ],
   isCheckable: true,
-  searchableKeys: ['dml', 'externalReferenceNumber', 'internalReferenceNumber', 'ircs', 'reportingTitle', 'vesselName']
+  searchableKeys: [
+    'value.dml',
+    'externalReferenceNumber',
+    'internalReferenceNumber',
+    'ircs',
+    'title',
+    'source',
+    'value.natinfCode',
+    'vesselName'
+  ]
 }

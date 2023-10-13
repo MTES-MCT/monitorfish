@@ -26,7 +26,6 @@ export function useTable<T extends CollectionItem = CollectionItem>(
   const [checkedIds, setCheckedIds] = useState<(number | string)[]>([])
   const [isSortingDesc, setIsSortingDesc] = useState(Boolean(isDefaultSortingDesc))
   const [sortingKey, setSortingKey] = useState<string | undefined>(defaultSortedKey)
-  const [sortingFallbackKey, setSortingFallbackKey] = useState<string | undefined>(undefined)
 
   const rawData = useMemo(() => maybeRawData || [], [maybeRawData])
 
@@ -156,21 +155,10 @@ export function useTable<T extends CollectionItem = CollectionItem>(
 
     return orderBy(
       filteredAndSearchedTableData,
-      item => {
-        const value = get(item, sortingKey)
-        if (value !== undefined) {
-          return value
-        }
-
-        if (!sortingFallbackKey) {
-          return undefined
-        }
-
-        return get(item, sortingFallbackKey)
-      },
+      item => get(item, `$sortable.${sortingKey}`),
       isSortingDesc ? ['desc'] : ['asc']
     )
-  }, [filteredAndSearchedTableData, isSortingDesc, sortingKey, sortingFallbackKey])
+  }, [filteredAndSearchedTableData, isSortingDesc, sortingKey])
 
   const getCheckedData = useCallback(
     () => filteredAndSearchedAndSortedTableData.filter(({ id }) => checkedIds.includes(id)),
@@ -181,9 +169,8 @@ export function useTable<T extends CollectionItem = CollectionItem>(
     setCheckedIds(isAllChecked ? [] : filteredAndSearchedAndSortedTableData.map(({ id }) => id).sort())
   }, [filteredAndSearchedAndSortedTableData, isAllChecked])
 
-  const sortColumn = useCallback((key: string, isDesc: boolean, fallbackKey: string | undefined) => {
+  const sortColumn = useCallback((key: string, isDesc: boolean) => {
     setSortingKey(key)
-    setSortingFallbackKey(fallbackKey)
     setIsSortingDesc(isDesc)
   }, [])
 

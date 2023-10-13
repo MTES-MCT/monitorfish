@@ -6,11 +6,11 @@ import type { TableOptions } from '../../../../../hooks/useTable/types'
 export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<InfractionSuspicionReporting | PendingAlertReporting> = {
   columns: [
     {
-      fallbackKey: 'creationDate',
       fixedWidth: 112,
       isSortable: true,
       key: 'validationDate',
-      label: 'Ouvert il y a...'
+      label: 'Ouvert il y a...',
+      sortingTransform: item => item.validationDate || item.creationDate
     },
     {
       fixedWidth: 112,

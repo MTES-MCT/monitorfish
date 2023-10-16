@@ -4,10 +4,14 @@ from unittest.mock import patch
 import pandas as pd
 
 from src.pipeline.shared_tasks.alerts import (
+    archive_reporting,
+    extract_non_archived_reportings_ids_of_type,
+    extract_pending_alerts_ids_of_type,
     extract_silenced_alerts,
     filter_silenced_alerts,
     load_alerts,
     make_alerts,
+    validate_pending_alert,
 )
 from src.read_query import read_query
 from tests.mocks import mock_datetime_utcnow
@@ -24,6 +28,43 @@ def test_extract_silenced_alerts(reset_test_data):
         }
     )
     pd.testing.assert_frame_equal(silenced_alerts, expected_silenced_alerts)
+
+
+def test_extract_pending_alerts_ids_of_type(reset_test_data):
+    assert extract_pending_alerts_ids_of_type.run(
+        alert_type="THREE_MILES_TRAWLING_ALERT"
+    ) == [12]
+
+    assert extract_pending_alerts_ids_of_type.run(alert_type="NON_EXISTING_ALERT") == []
+
+
+def test_extract_non_archived_reportings_ids_of_type(reset_test_data):
+    assert extract_non_archived_reportings_ids_of_type.run(
+        reporting_type="THREE_MILES_TRAWLING_ALERT"
+    ) == [56]
+
+    assert (
+        extract_non_archived_reportings_ids_of_type.run(
+            reporting_type="NON_EXISTING_ALERT"
+        )
+        == []
+    )
+
+
+@patch("src.pipeline.shared_tasks.alerts.requests")
+def test_validate_pending_alert(requests_mock):
+    validate_pending_alert.run(12)
+    requests_mock.put.assert_called_once_with(
+        "https://monitor.fish/api/v1/operational_alerts/12/validate"
+    )
+
+
+@patch("src.pipeline.shared_tasks.alerts.requests")
+def test_archive_reporting(requests_mock):
+    archive_reporting.run(12)
+    requests_mock.put.assert_called_once_with(
+        "https://monitor.fish/api/v1/reportings/12/archive"
+    )
 
 
 @patch(

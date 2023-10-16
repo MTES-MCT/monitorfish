@@ -140,6 +140,9 @@ HEALTHCHECK_ENDPOINT = API_ENDPOINT + "healthcheck"
 PENDING_ALERT_VALIDATION_ENDPOINT_TEMPLATE = (
     API_ENDPOINT + "operational_alerts/{pending_alert_id}/validate"
 )
+REPORTING_ARCHIVING_ENDPOINT_TEMPLATE = (
+    API_ENDPOINT + "reportings/{reporting_id}/archive"
+)
 
 # Backend api key
 BACKEND_API_KEY = os.environ.get("MONITORFISH_BACKEND_API_KEY")

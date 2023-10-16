@@ -52,6 +52,7 @@ context('Sidebars > Regulatory Layers', () => {
     // ).as('getRegulation')
     cy.get('*[data-cy="regulatory-layers-my-zones-zone-show"]').eq(0).click({ timeout: 10000 })
     cy.wait('@getRegulation').then(({ response }) => expect(response && response.statusCode).equal(200))
+    cy.wait(200)
 
     cy.get('.regulatory', { timeout: 10000 }).click(490, 580, { force: true, timeout: 10000 })
     cy.wait('@getRegulation').then(({ response }) => expect(response && response.statusCode).equal(200))

@@ -9,7 +9,8 @@ export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<InfractionSuspicionRepor
       fixedWidth: 112,
       isSortable: true,
       key: 'validationDate',
-      label: 'Ouvert il y a...'
+      label: 'Ouvert il y a...',
+      sortingTransform: item => item.validationDate || item.creationDate
     },
     {
       fixedWidth: 112,
@@ -59,5 +60,14 @@ export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<InfractionSuspicionRepor
     }
   ],
   isCheckable: true,
-  searchableKeys: ['dml', 'externalReferenceNumber', 'internalReferenceNumber', 'ircs', 'reportingTitle', 'vesselName']
+  searchableKeys: [
+    'value.dml',
+    'externalReferenceNumber',
+    'internalReferenceNumber',
+    'ircs',
+    'title',
+    'source',
+    'value.natinfCode',
+    'vesselName'
+  ]
 }

@@ -51,7 +51,7 @@ VALUES ('ALERT', 'MARIAGE ÎLE HASARD', 'ABC000180832', 'VP374069', 'CG1312', 'I
                                                                                                               '"seaFront": "NAMO"' ||
                                                                                                               '}')::jsonb, null, null, 10),
        ('INFRACTION_SUSPICION', 'RENCONTRER VEILLER APPARTEMENT"', 'ABC000597493', 'JL026591', 'CMQ7994',
-        'INTERNAL_REFERENCE_NUMBER', 'FR', NOW() - ('1 DAY 1 HOUR')::interval, NOW() - ('1 DAY 1 HOUR')::interval, false,
+        'INTERNAL_REFERENCE_NUMBER', 'FR', NOW() - ('1 DAY 1 HOUR')::interval, null, false,
         false, ('{' ||
                 '"reportingActor": "UNIT",' ||
                 '"controlUnitId": 10012,' ||

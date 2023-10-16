@@ -83,7 +83,7 @@
     "use-debounce": "9.0.4",
     "uuid": "^9.0.1",
     "worker-loader": "3.0.8",
-    "yup": "^1.2.0"
+    "yup": "^1.3.2"
   },
   "devDependencies": {
     "@jest/globals": "29.6.4",

@@ -6,7 +6,10 @@ import prefect
 import requests
 from prefect import task
 
-from config import PENDING_ALERT_VALIDATION_ENDPOINT_TEMPLATE
+from config import (
+    PENDING_ALERT_VALIDATION_ENDPOINT_TEMPLATE,
+    REPORTING_ARCHIVING_ENDPOINT_TEMPLATE,
+)
 from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.processing import (
@@ -29,19 +32,44 @@ def extract_silenced_alerts() -> pd.DataFrame:
 
 
 @task(checkpoint=False)
-def extract_pending_alerts_ids_of_config_name(alert_config_name: str) -> List[int]:
+def extract_pending_alerts_ids_of_type(alert_type: str) -> List[int]:
     """
-    Return ids of pending alerts corresponding to `alert_config_name`
+    Return ids of pending alerts corresponding to `alert_type`
     """
     logger = prefect.context.get("logger")
     pending_alerts = extract(
         db_name="monitorfish_remote",
-        query_filepath="monitorfish/pending_alerts_of_config_name.sql",
-        params={"alert_config_name": alert_config_name},
+        query_filepath="monitorfish/pending_alerts_of_type.sql",
+        params={"alert_type": alert_type},
     )
     ids = pending_alerts.id.unique().tolist()
     logger.info(f"Returning {len(ids)} pending alerts ids.")
     return ids
+
+
+@task(checkpoint=False)
+def extract_non_archived_reportings_ids_of_type(reporting_type: str) -> List[int]:
+    """
+    Return ids of pending alerts corresponding to `alert_type`
+    """
+    logger = prefect.context.get("logger")
+    reportings = extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/non_archived_reportings_of_type.sql",
+        params={"reporting_type": reporting_type},
+    )
+    ids = reportings.id.unique().tolist()
+    logger.info(f"Returning {len(ids)} reportings ids.")
+    return ids
+
+
+@task(checkpoint=False)
+def archive_reporting(id: int) -> pd.DataFrame:
+    logger = prefect.context.get("logger")
+    url = REPORTING_ARCHIVING_ENDPOINT_TEMPLATE.format(reporting_id=id)
+    logger.info(f"Archiving reporting {id}.")
+    r = requests.put(url)
+    r.raise_for_status()
 
 
 @task(checkpoint=False)

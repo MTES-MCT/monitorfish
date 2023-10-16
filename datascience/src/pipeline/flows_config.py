@@ -245,7 +245,7 @@ validate_pending_alerts.flow.schedule = Schedule(
         clocks.CronClock(
             "50 6 * * *",
             parameter_defaults={
-                "alert_config_name": "MISSING_FAR_ALERT",
+                "alert_type": "MISSING_FAR_ALERT",
             },
         ),
     ]

@@ -20,8 +20,8 @@ COPY --chown=gradle:gradle backend/build.gradle.kts /tmp/BUILD_GRADLE_WITH_ENV_V
 RUN chown -R gradle /tmp/*
 
 USER gradle
-RUN sed -e 's/COMMIT_TO_CHANGE/${GITHUB_SHA}/' \
-  -e 's/VERSION_TO_CHANGE/${VERSION}/' \
+RUN sed -e "s/COMMIT_TO_CHANGE/$GITHUB_SHA/g" \
+  -e "s/VERSION_TO_CHANGE/${VERSION}/g" \
   BUILD_GRADLE_WITH_ENV_VARS > build.gradle.kts
 
 RUN gradle assemble

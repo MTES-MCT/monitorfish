@@ -5,4 +5,5 @@ enum class MissionSource {
     MONITORFISH,
     POSEIDON_CACEM,
     POSEIDON_CNSP,
+    RAPPORTNAV,
 }

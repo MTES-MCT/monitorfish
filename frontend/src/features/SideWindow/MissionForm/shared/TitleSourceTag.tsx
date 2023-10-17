@@ -1,7 +1,7 @@
 import { Tag } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { getMissionSourceTagText } from '../../../../domain/entities/mission'
+import { getMissionSourceTagBackgroundColor, getMissionSourceTagText } from '../../../../domain/entities/mission'
 import { Mission } from '../../../../domain/entities/mission/types'
 
 type TitleSourceTagProps = {
@@ -13,22 +13,14 @@ export function TitleSourceTag({ missionId, missionSource }: TitleSourceTagProps
     return <></>
   }
 
-  return (
-    <MissionSourceTag
-      isFromCacem={
-        missionSource === Mission.MissionSource.POSEIDON_CACEM || missionSource === Mission.MissionSource.MONITORENV
-      }
-    >
-      {getMissionSourceTagText(missionSource)}
-    </MissionSourceTag>
-  )
+  return <MissionSourceTag missionSource={missionSource}>{getMissionSourceTagText(missionSource)}</MissionSourceTag>
 }
 
 export const MissionSourceTag = styled(Tag)<{
-  isFromCacem: boolean
+  missionSource: Mission.MissionSource | undefined
 }>`
-  background: ${p => (p.isFromCacem ? p.theme.color.mediumSeaGreen : p.theme.color.blueGray)};
-  color: ${p => p.theme.color.white};
+  background: ${p => getMissionSourceTagBackgroundColor(p.missionSource)};
+  color: ${p => (p.missionSource === Mission.MissionSource.RAPPORTNAV ? p.theme.color.charcoal : p.theme.color.white)};
   margin-left: 24px;
   vertical-align: middle;
 `

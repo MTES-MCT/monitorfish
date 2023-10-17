@@ -33,17 +33,20 @@ export namespace Mission {
     MONITORENV = 'MONITORENV',
     MONITORFISH = 'MONITORFISH',
     POSEIDON_CACEM = 'POSEIDON_CACEM',
-    POSEIDON_CNSP = 'POSEIDON_CNSP'
+    POSEIDON_CNSP = 'POSEIDON_CNSP',
+    RAPPORTNAV = 'RAPPORTNAV'
   }
   export enum MissionSourceLabel {
     MONITORENV = 'CACEM',
     MONITORFISH = 'CNSP',
     POSEIDON_CACEM = 'CACEM (Poseidon)',
-    POSEIDON_CNSP = 'CNSP (Poseidon)'
+    POSEIDON_CNSP = 'CNSP (Poseidon)',
+    RAPPORTNAV = 'RapportNav'
   }
   export enum MissionSourceLabelWithoutPoseidon {
     MONITORENV = 'CACEM',
-    MONITORFISH = 'CNSP'
+    MONITORFISH = 'CNSP',
+    RAPPORTNAV = 'RapportNav'
   }
 
   /* eslint-disable typescript-sort-keys/string-enum */

@@ -122,8 +122,6 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
 tasks.named<Test>("test") {
     useJUnitPlatform()
 
-    maxHeapSize = "1G"
-
     testLogging {
         events("passed")
     }

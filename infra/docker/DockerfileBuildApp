@@ -107,7 +107,7 @@ ENV JAVA_TOOL_OPTIONS="-Dcom.sun.management.jmxremote.ssl=false \
   -Djava.rmi.server.hostname=0.0.0.0"
 
 # Copy files for the back
-COPY --from=buildBack /tmp/build/libs/monitorfish-{VERSION}.jar /home/monitorfish
+COPY --from=buildBack /tmp/build/libs/monitorfish-${VERSION}.jar /home/monitorfish
 COPY infra/configurations /home/monitorfish/configurations/
 
 USER monitorfish

@@ -24,7 +24,6 @@ RUN sed -e 's/COMMIT_TO_CHANGE/${GITHUB_SHA}/' \
   -e 's/VERSION_TO_CHANGE/${VERSION}/' \
   BUILD_GRADLE_WITH_ENV_VARS > build.gradle.kts
 
-RUN gradle --offline build
 RUN gradle assemble
 
 ###########################

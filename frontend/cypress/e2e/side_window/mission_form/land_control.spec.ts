@@ -28,6 +28,13 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Date et heure du contrôle', now.utcDateTupleWithTime)
 
     // Port de contrôle
+    // Try to select a port with custom search (the "-" missing but the port should be found)
+    cy.get('#port').parent().click()
+    cy.get('.rs-picker-search-bar-input').type('saintmalo{enter}')
+    // Should select the right port
+    cy.get('.Field-Select').contains('Saint-Malo (FRSML)')
+
+    // Get the actual port for this test case
     cy.fill('Port de contrôle', 'Auray')
 
     // Obligations déclaratives et autorisations de pêche

@@ -14,16 +14,17 @@ ARG GITHUB_SHA
 ARG VERSION
 
 WORKDIR /tmp/
-COPY backend/build.gradle.kts /tmp/build.gradle.kts
-COPY backend/settings.gradle.kts /tmp/settings.gradle.kts
-RUN gradle --offline build
 
-COPY backend/ /tmp/
-COPY backend/build.gradle.kts /tmp/BUILD_GRADLE_WITH_ENV_VARS
+COPY --chown=gradle:gradle backend/ /tmp/
+
+COPY --chown=gradle:gradle backend/build.gradle.kts /tmp/BUILD_GRADLE_WITH_ENV_VARS
+
 RUN sed -e 's/COMMIT_TO_CHANGE/${GITHUB_SHA}/' \
   -e 's/VERSION_TO_CHANGE/${VERSION}/' \
   BUILD_GRADLE_WITH_ENV_VARS > build.gradle.kts
 
+RUN chown -R gradle /tmp/*
+RUN gradle --offline build
 RUN gradle assemble
 
 ###########################

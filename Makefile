@@ -1,4 +1,5 @@
 INFRA_FOLDER="$(shell pwd)/infra/configurations/"
+HOST_MIGRATIONS_FOLDER=$(shell pwd)/backend/src/main/resources/db/migration
 
 .PHONY: install init-sig run-front run-back docker-build docker-tag docker-push check-clean-archi test restart-app
 
@@ -62,7 +63,7 @@ docker-compose-up:
 docker-build-pipeline:
 	docker build -f "infra/docker/Dockerfile.DataPipeline" . -t monitorfish-pipeline:$(VERSION)
 docker-test-pipeline:
-	docker run --network host -v /var/run/docker.sock:/var/run/docker.sock -u monitorfish-pipeline:$(DOCKER_GROUP) --env-file datascience/.env.test monitorfish-pipeline:$(VERSION) coverage run -m pytest --pdb tests
+	docker run --network host -v /var/run/docker.sock:/var/run/docker.sock -u monitorfish-pipeline:$(DOCKER_GROUP) --env-file datascience/.env.test --env HOST_MIGRATIONS_FOLDER=$(HOST_MIGRATIONS_FOLDER) monitorfish-pipeline:$(VERSION) coverage run -m pytest --pdb tests
 docker-tag-pipeline:
 	docker tag monitorfish-pipeline:$(VERSION) docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(VERSION)
 docker-push-pipeline:

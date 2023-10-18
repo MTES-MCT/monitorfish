@@ -18,7 +18,7 @@ export function useGetUserAuthorization(): UserAuthorization | undefined {
        * This is used to have backward compatibility with the Apache .htacess authentication (on `/` and `/ext`) while the authentication
        * is not yet activated, as the app is only protected by the entrypoint path.
        */
-      const isExtPage = window.location.pathname === '/ext' || window.location.pathname === '/nav'
+      const isExtPage = window.location.pathname === '/ext' || window.location.pathname === '/light'
 
       setUserAuthorization({
         isLogged: true,

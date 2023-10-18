@@ -30,7 +30,7 @@ clean:
 dev: clean
 	make run-back
 lint-back:
-	cd ./backend && ./mvnw antrun:run@ktlint-format | grep -v \
+	cd ./backend && ./gradlew ktlintFormat | grep -v \
 		-e "Exceeded max line length" \
 		-e "Package name must not contain underscore" \
 		-e "Wildcard import"

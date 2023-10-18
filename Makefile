@@ -9,7 +9,7 @@ run-front:
 	cd ./frontend && npm run dev
 run-back: run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db
-	cd backend && ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=/home/lth/workspace/monitorfish/infra/configurations/'
+	cd backend && ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
 run-stubbed-apis:
 	docker compose stop geoserver-monitorenv-stubs
 	docker compose up -d --quiet-pull --wait geoserver-monitorenv-stubs

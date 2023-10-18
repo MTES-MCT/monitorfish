@@ -406,14 +406,13 @@ def join(
 
     last_positions = last_positions.fillna(
         {**default_risk_factors, "total_weight_onboard": 0.0}
-    )
+    ).astype({"vessel_id": float})
 
     return last_positions
 
 
 @task(checkpoint=False)
 def load_last_positions(last_positions):
-
     load(
         last_positions,
         table_name="last_positions",
@@ -431,11 +430,9 @@ def load_last_positions(last_positions):
 
 
 with Flow("Last positions", executor=LocalDaskExecutor()) as flow:
-
     # Only run if the previous run has finished running
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         healthcheck = get_monitorfish_healthcheck()
         positions_healthcheck = assert_positions_received_by_api_health(
             healthcheck=healthcheck

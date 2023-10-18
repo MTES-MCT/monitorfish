@@ -1,5 +1,6 @@
 import pandas as pd
 import pytest
+from sqlalchemy import text
 
 from src.db_config import create_engine
 from src.pipeline.flows.risk_factor import flow
@@ -34,7 +35,6 @@ def risk_factors() -> pd.DataFrame:
 
 
 def test_risk_factor_flow(reset_test_data, risk_factors):
-
     query = """SELECT
         vessel_id,
         cfr,
@@ -48,7 +48,8 @@ def test_risk_factor_flow(reset_test_data, risk_factors):
 
     ############################# Reset risk_factors table ############################
     e = create_engine("monitorfish_remote")
-    e.execute("DELETE FROM risk_factors;")
+    with e.begin() as connection:
+        connection.execute(text("DELETE FROM risk_factors;"))
     assert len(read_query(query, db="monitorfish_remote")) == 0
 
     ############################## Run risk factors flow ##############################

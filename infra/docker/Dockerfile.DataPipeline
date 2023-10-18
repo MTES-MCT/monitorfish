@@ -1,4 +1,4 @@
-FROM python:3.8.13-slim-bullseye
+FROM python:3.11.6-slim-bullseye
 
 ENV TINI_VERSION v0.19.0
 ENV USER="monitorfish-pipeline"
@@ -15,9 +15,12 @@ WORKDIR /home/${USER}
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
+    # Compilation of psycopg2 requires libpq-dev and a C compiler
     libpq-dev \
     build-essential \
+    # To convert the Oracle Instant Client .rpm file into a .deb file
     alien \
+    # libaio1 is required by Oracle Instant Client
     libaio1 \
     wget \
     && rm -rf /var/lib/apt/lists/*
@@ -31,31 +34,47 @@ https://download.oracle.com/otn_software/linux/instantclient/\
 && rm oracle-instantclient19.8-basic-19.8.0.0.0-1.x86_64.rpm \
 && rm oracle-instantclient19.8-basic_19.8.0.0.0-2_amd64.deb
 
-# Install pango
+# Install pango - required by weasyprint
 RUN apt-get update && apt-get install -y \
     pango1.0-tools \
     && rm -rf /var/lib/apt/lists/*
 
+    # poetry
+    # https://python-poetry.org/docs/configuration/#using-environment-variables
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=true \
+    POETRY_VIRTUALENVS_CREATE=1 \
+    POETRY_CACHE_DIR=/tmp/poetry_cache \
+    POETRY_VERSION=1.6.1 \
+    # make poetry install to this location
+    POETRY_HOME="/opt/poetry" \
+    # paths
+    # this is where our requirements + virtual environment will live
+    PYSETUP_PATH="/opt/pysetup" \
+    VENV_PATH="/opt/pysetup/.venv"
+
 # Create and "activate" venv by prepending it to PATH then install python dependencies
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+ENV PATH="$POETRY_HOME/bin:$PATH"
+
+# install poetry - respects $POETRY_VERSION & $POETRY_HOME
+RUN apt-get update && apt-get install -y curl
+RUN curl -sSL https://install.python-poetry.org | python3 -
 
 # Install python dependencies
-COPY datascience/requirements.txt /tmp/requirements.txt
-RUN python3 -m venv $VIRTUAL_ENV && \
-    pip install -U \
-        pip \
-        setuptools \
-        wheel && \
-    pip install -r /tmp/requirements.txt
+WORKDIR $PYSETUP_PATH
+COPY datascience/poetry.lock datascience/pyproject.toml ./
+RUN poetry install --without dev --no-root
+ENV PATH="$VENV_PATH/bin:$PATH"
 
 # Make library importable
-ENV PYTHONPATH=/home/${USER}
+ENV PYTHONPATH=/home/${USER}/datascience
 
 # Add source
+WORKDIR /home/${USER}/
 COPY datascience/ ./datascience
-RUN pip install -e ./datascience
+# Add migration files for tests
 COPY backend/src/main/resources/db/migration  ./backend/src/main/resources/db/migration
-RUN mkdir /home/${USER}/.prefect/
+# RUN mkdir /home/${USER}/.prefect/
 
 RUN chown -R ${USER} .
 USER ${USER}

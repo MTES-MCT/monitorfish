@@ -6,6 +6,7 @@ import pandas as pd
 import prefect
 from prefect import Flow, case, task
 from scrapy.crawler import CrawlerProcess
+from sqlalchemy import text
 
 from config import LIBRARY_LOCATION
 from src.db_config import create_engine
@@ -84,15 +85,16 @@ def load_legipeche(legipeche: pd.DataFrame):
     e = create_engine("monitorfish_remote")
 
     with e.begin() as connection:
-
         logger = prefect.context.get("logger")
         logger.info("Deleting 'previous' extraction.")
         connection.execute(
-            "DELETE FROM legipeche WHERE extraction_occurence = 'previous'"
+            text("DELETE FROM legipeche WHERE extraction_occurence = 'previous'")
         )
 
         logger.info("Tagging 'latest' extraction as 'previous'.")
-        connection.execute("UPDATE legipeche set extraction_occurence = 'previous'")
+        connection.execute(
+            text("UPDATE legipeche set extraction_occurence = 'previous'")
+        )
 
         logger.info("Loading freshly extracted data as 'latest'")
         legipeche.to_sql(
@@ -106,10 +108,8 @@ def load_legipeche(legipeche: pd.DataFrame):
 
 
 with Flow("Scrape legipeche") as flow:
-
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         deleted_csv = delete_csv()
         extraction_datetime_utc = scrape_legipeche_to_csv(upstream_tasks=[deleted_csv])
         legipeche = read_legipeche_csv(extraction_datetime_utc)

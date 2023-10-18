@@ -116,7 +116,6 @@ def test_extract_satellite_operators_statuses(reset_test_data):
 
 
 def test_get_last_emissions():
-
     d = datetime(2021, 10, 8, 2, 56, 0)
     td = timedelta(hours=1)
 
@@ -419,7 +418,6 @@ def test_get_ended_malfunction_ids():
     mock_datetime_utcnow(datetime(2021, 1, 1, 1, 1, 1)),
 )
 def test_prepare_new_beacon_malfunctions():
-
     new_malfunctions = pd.DataFrame(
         {
             "vessel_id": [2, 4, 5, 6],
@@ -516,7 +514,7 @@ def test_prepare_new_beacon_malfunctions():
                 BeaconStatus.UNSUPERVISED.value,
             ],
         }
-    )
+    ).astype({"vessel_status_last_modification_date_utc": "datetime64[us]"})
 
     pd.testing.assert_frame_equal(beacon_malfunctions, expected_beacon_malfunctions)
 
@@ -724,7 +722,6 @@ def test_update_beacon_malfunction_raises_if_no_stage_and_no_status(mock_request
 def test_update_beacon_malfunctions_flow_doesnt_create_malfunctions_if_never_emitted(
     reset_test_data,
 ):
-
     initial_beacons_malfunctions = read_query(
         "SELECT * FROM beacon_malfunctions", db="monitorfish_remote"
     )
@@ -946,7 +943,6 @@ def test_flow_does_not_create_malfunctions_for_operators_that_are_not_up(
 
 
 def test_flow_fails_if_last_positions_healthcheck_fails(reset_test_data):
-
     flow.replace(
         flow.get_tasks("get_monitorfish_healthcheck")[0],
         get_monitorfish_healthcheck_mock_factory(

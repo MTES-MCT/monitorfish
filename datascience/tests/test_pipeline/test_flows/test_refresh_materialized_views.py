@@ -1,4 +1,5 @@
 import pandas as pd
+from sqlalchemy import text
 
 from src.db_config import create_engine
 from src.pipeline.flows.refresh_materialized_view import flow
@@ -9,7 +10,6 @@ flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_ru
 
 
 def test_refresh_analytics_controls_full_data(reset_test_data):
-
     e = create_engine("monitorfish_remote")
     query = """
     SELECT *
@@ -19,7 +19,8 @@ def test_refresh_analytics_controls_full_data(reset_test_data):
 
     initial_controls = read_query(query, db="monitorfish_remote")
 
-    e.execute("DELETE FROM mission_actions WHERE id = 6")
+    with e.begin() as connection:
+        connection.execute(text("DELETE FROM mission_actions WHERE id = 6"))
 
     controls_before_refresh = read_query(query, db="monitorfish_remote")
 

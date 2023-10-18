@@ -445,7 +445,7 @@ def drop_rows_already_in_table(
     df_ids = tuple(df[df_column_name].unique())
     df_n_ids = len(df_ids)
 
-    statement = select([getattr(table.c, table_column_name)]).where(
+    statement = select(getattr(table.c, table_column_name)).where(
         getattr(table.c, table_column_name).in_(df_ids)
     )
 
@@ -483,7 +483,6 @@ def prepare_df_for_loading(
     timedelta_columns: list = None,
     enum_columns: list = None,
 ):
-
     df_ = df.copy(deep=True)
 
     # Serialize columns to be loaded into JSONB columns
@@ -603,7 +602,6 @@ def join_on_multiple_keys(
 
     # Attempt to perform the join successively on each key
     for or_join_key in or_join_keys:
-
         join_keys = and_join_keys + [or_join_key]
 
         right_with_keys = right.dropna(subset=join_keys)
@@ -620,7 +618,6 @@ def join_on_multiple_keys(
         columns_to_merge = common_columns - set(join_keys)
 
         for column_to_merge in columns_to_merge:
-
             [l, r] = [f"{column_to_merge}_left", f"{column_to_merge}_right"]
 
             if column_to_merge in keys_already_joined:
@@ -849,7 +846,6 @@ def array_equals_row_on_window(
         res = np.array([np.nan] * n_rows)
 
     else:
-
         strides = np.lib.stride_tricks.sliding_window_view(
             arr, (window_length, n_columns)
         )

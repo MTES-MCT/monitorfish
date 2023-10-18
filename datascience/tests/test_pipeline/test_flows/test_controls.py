@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 import pandas as pd
 import pytest
+import pytz
 import sqlalchemy
 from prefect import task
 
@@ -780,7 +781,9 @@ expected_loaded_mission_actions_df = pd.merge(
     ),
     on="id",
 ).rename(columns={"open_by": "user_trigram"})
-
+expected_loaded_mission_actions_df[
+    "action_datetime_utc"
+] = expected_loaded_mission_actions_df.action_datetime_utc.map(pytz.utc.localize)
 
 expected_missions_df = pd.DataFrame(
     {
@@ -1146,9 +1149,9 @@ def test_flow(
             .set_index("id")
             .sort_index()
         )
-        df_2["fao_areas"] = df_2["fao_areas"].map(lambda l: sorted(l))
+        df_2["fao_areas"] = df_2["fao_areas"].map(lambda li: sorted(li))
         df_2["segments"] = df_2.segments.map(
-            lambda l: sorted(l, key=lambda x: x["segment"])
+            lambda li: sorted(li, key=lambda x: x["segment"])
         )
 
         pd.testing.assert_frame_equal(df_1, df_2, check_like=True, check_dtype=False)

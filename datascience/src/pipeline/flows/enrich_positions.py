@@ -124,7 +124,6 @@ def enrich_positions_by_vessel(
             positions, minimum_time_of_emission_at_sea=minimum_time_of_emission_at_sea
         )
     else:
-
         res = positions.groupby(
             ["cfr", "ircs", "external_immatriculation"], dropna=False, group_keys=False
         ).apply(
@@ -165,7 +164,6 @@ def load_fishing_activity(positions: pd.DataFrame, period: Period, logger: Logge
     e = create_engine("monitorfish_remote")
 
     with e.begin() as connection:
-
         logger.info("Creating temporary table")
         connection.execute(
             text(
@@ -240,8 +238,10 @@ def load_fishing_activity(positions: pd.DataFrame, period: Period, logger: Logge
                 "AND p.date_time >= :start "
                 "AND p.date_time <= :end;"
             ),
-            start=period.start,
-            end=period.end,
+            {
+                "start": period.start,
+                "end": period.end,
+            },
         )
 
 
@@ -256,22 +256,25 @@ def reset_positions(period: Period):
 
     logger.info(f"Resetting positions for period {period.start} - {period.end}.")
 
-    e.execute(
-        text(
-            "UPDATE public.positions p "
-            "SET "
-            "    is_at_port = NULL, "
-            "    meters_from_previous_position = NULL, "
-            "    time_since_previous_position = NULL, "
-            "    average_speed = NULL, "
-            "    is_fishing = NULL, "
-            "    time_emitting_at_sea = NULL "
-            "WHERE p.date_time >= :start "
-            "AND p.date_time <= :end;"
-        ),
-        start=period.start,
-        end=period.end,
-    )
+    with e.begin() as connection:
+        connection.execute(
+            text(
+                "UPDATE public.positions p "
+                "SET "
+                "    is_at_port = NULL, "
+                "    meters_from_previous_position = NULL, "
+                "    time_since_previous_position = NULL, "
+                "    average_speed = NULL, "
+                "    is_fishing = NULL, "
+                "    time_emitting_at_sea = NULL "
+                "WHERE p.date_time >= :start "
+                "AND p.date_time <= :end;"
+            ),
+            {
+                "start": period.start,
+                "end": period.end,
+            },
+        )
 
 
 @task(checkpoint=False)
@@ -324,10 +327,8 @@ def extract_enrich_load(
 
 
 with Flow("Enrich positions") as flow:
-
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         start_hours_ago = Parameter("start_hours_ago")
         end_hours_ago = Parameter("end_hours_ago")
         minutes_per_chunk = Parameter("minutes_per_chunk")

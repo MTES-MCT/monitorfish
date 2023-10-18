@@ -29,5 +29,5 @@ def test_resize_pdf_to_A4(A3_pdf):
 
     assert A3_page.mediabox.width == Decimal("841.889764")
     assert A3_page.mediabox.height == Decimal("1190.551181")
-    assert resized_page.mediabox.width == Decimal("595.27559")
-    assert resized_page.mediabox.height == Decimal("841.88976")
+    assert resized_page.mediabox.width == Decimal("595.2755905511810397001681849")
+    assert resized_page.mediabox.height == Decimal("841.8897637795275841199327260")

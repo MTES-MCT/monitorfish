@@ -53,7 +53,7 @@ def make_add_vessels_columns_query(
         columns += [districts_table.c.get(col) for col in districts_columns_to_add]
 
     q = (
-        select(columns)
+        select(*columns)
         .select_from(from_table)
         .where(vessels_table.c.id.in_(vessel_ids))
     )
@@ -87,12 +87,10 @@ def make_find_vessels_query(
     assert "external_immatriculation" in vessels
 
     q = select(
-        [
-            vessels_table.c.id.label("vessel_id"),
-            vessels_table.c.cfr,
-            vessels_table.c.ircs,
-            vessels_table.c.external_immatriculation,
-        ]
+        vessels_table.c.id.label("vessel_id"),
+        vessels_table.c.cfr,
+        vessels_table.c.ircs,
+        vessels_table.c.external_immatriculation,
     ).where(
         vessels_table.c.cfr.in_(vessels.cfr.dropna().drop_duplicates().to_list())
         | vessels_table.c.external_immatriculation.in_(

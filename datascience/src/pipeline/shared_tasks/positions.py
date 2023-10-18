@@ -25,7 +25,6 @@ def tag_positions_at_port(positions: pd.DataFrame) -> pd.DataFrame:
         positions["is_at_port"] = False
 
     else:
-
         positions["h3"] = get_h3_indices(
             positions,
             lat="latitude",
@@ -49,19 +48,18 @@ def tag_positions_at_port(positions: pd.DataFrame) -> pd.DataFrame:
 
 
 @task(checkpoint=False)
-def add_vessel_identifier(last_positions: pd.DataFrame) -> pd.DataFrame:
-
+def add_vessel_identifier(positions: pd.DataFrame) -> pd.DataFrame:
     vessel_identifier_labels = {
         "cfr": "INTERNAL_REFERENCE_NUMBER",
         "ircs": "IRCS",
         "external_immatriculation": "EXTERNAL_REFERENCE_NUMBER",
     }
 
-    last_positions = last_positions.copy(deep=True)
+    positions = positions.copy(deep=True)
 
-    last_positions["vessel_identifier"] = get_first_non_null_column_name(
-        last_positions[["cfr", "ircs", "external_immatriculation"]],
+    positions["vessel_identifier"] = get_first_non_null_column_name(
+        positions[["cfr", "ircs", "external_immatriculation"]],
         vessel_identifier_labels,
     )
 
-    return last_positions
+    return positions

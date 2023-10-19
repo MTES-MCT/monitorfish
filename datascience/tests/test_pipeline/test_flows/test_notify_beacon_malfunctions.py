@@ -6,7 +6,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pandas as pd
-import PyPDF2
+import pypdf
 import pytest
 from dateutil.relativedelta import relativedelta
 from jinja2 import Template
@@ -106,7 +106,6 @@ malfunctions_to_notify_shared_data = {
 
 
 def test_extract_malfunctions_to_notify(reset_test_data):
-
     now = datetime.utcnow()
 
     malfunctions_to_notify = extract_malfunctions_to_notify.run()
@@ -159,7 +158,6 @@ def test_extract_malfunctions_to_notify(reset_test_data):
 
 
 def test_to_malfunctions_to_notify_list():
-
     malfunctions_to_notify = pd.DataFrame(
         {
             **malfunctions_to_notify_shared_data,
@@ -537,7 +535,6 @@ def expected_notifications(request) -> list:
 def test_render(
     malfunction_to_notify_data, templates, notification_type, output_format
 ):
-
     m = BeaconMalfunctionToNotify(
         **malfunction_to_notify_data,
         notification_type=notification_type,
@@ -557,12 +554,12 @@ def test_render(
         if output_format == "html":
             expected_res = f.read()
         else:
-            expected_res = PyPDF2.PdfReader(io.BytesIO(f.read()))
+            expected_res = pypdf.PdfReader(io.BytesIO(f.read()))
 
     if output_format == "html":
         assert pdf_or_html == expected_res
     else:
-        pdf = PyPDF2.PdfReader(io.BytesIO(pdf_or_html))
+        pdf = pypdf.PdfReader(io.BytesIO(pdf_or_html))
         # The `.extract_text` method yields weird results that do not correspond to the
         # actual textual content of the pdf, but we use it here as a kind of hash
         # function for the pdf's content to test that the result is as expected.
@@ -584,7 +581,6 @@ def test_render(
     mock_datetime_utcnow(datetime(2021, 1, 1, 1, 1, 1)),
 )
 def test_render_sms(malfunction_to_notify_data, sms_templates, notification_type):
-
     m = BeaconMalfunctionToNotify(
         **malfunction_to_notify_data,
         notification_type=notification_type,
@@ -610,7 +606,6 @@ def test_render_sms(malfunction_to_notify_data, sms_templates, notification_type
     mock_datetime_utcnow(datetime(2021, 1, 1, 1, 1, 1)),
 )
 def test_render_with_null_values(malfunction_to_notify_data_with_nulls, templates):
-
     m = BeaconMalfunctionToNotify(
         **malfunction_to_notify_data_with_nulls,
         notification_type="MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION",
@@ -812,7 +807,6 @@ def test_send_beacon_malfunction_message(
     communication_means,
     is_integration,
 ):
-
     m = BeaconMalfunctionToNotify(
         **malfunction_to_notify_data,
         notification_type="MALFUNCTION_AT_SEA_REMINDER",
@@ -865,7 +859,6 @@ def test_send_beacon_malfunction_message(
     indirect=["expected_notifications"],
 )
 def test_load_notifications(reset_test_data, expected_notifications):
-
     initial_notifications = read_query(
         "SELECT * FROM beacon_malfunction_notifications ORDER BY id",
         db="monitorfish_remote",
@@ -892,7 +885,6 @@ def test_load_notifications(reset_test_data, expected_notifications):
 
 
 def test_load_notifications_empty_input(reset_test_data):
-
     initial_notifications = read_query(
         "SELECT * FROM beacon_malfunction_notifications ORDER BY id",
         db="monitorfish_remote",
@@ -906,7 +898,6 @@ def test_load_notifications_empty_input(reset_test_data):
 
 
 def test_flow(reset_test_data):
-
     # Setup
     initial_notifications = read_query(
         "SELECT * FROM beacon_malfunction_notifications ORDER BY id",

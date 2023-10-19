@@ -17,6 +17,7 @@ import { ControlQualityField } from './shared/ControlQualityField'
 import { FormikAuthor } from './shared/FormikAuthor'
 import { FormikCoordinatesPicker } from './shared/FormikCoordinatesPicker'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
+import { FormikOtherControls } from './shared/FormikOtherControls'
 import { FormikRevalidationEffect } from './shared/FormikRevalidationEffect'
 import { GearsField } from './shared/GearsField'
 import { LicencesAndLogbookField } from './shared/LicencesAndLogbookField'
@@ -109,6 +110,8 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
           <VesselFleetSegmentsField label="Segment de flotte" />
 
           <ControlQualityField />
+
+          <FormikOtherControls />
 
           <FormikAuthor />
         </FormBody>

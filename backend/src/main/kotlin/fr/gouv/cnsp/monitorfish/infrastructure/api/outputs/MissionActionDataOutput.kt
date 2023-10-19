@@ -53,6 +53,10 @@ data class MissionActionDataOutput(
     val hasSomeSpeciesSeized: Boolean,
     val closedBy: String? = null,
     val isFromPoseidon: Boolean,
+    val isAdministrativeControl: Boolean? = null,
+    val isComplianceWithWaterRegulationsControl: Boolean? = null,
+    val isSafetyEquipmentAndStandardsComplianceControl: Boolean? = null,
+    val isSeafarersControl: Boolean? = null,
 ) {
     companion object {
         fun fromMissionAction(missionAction: MissionAction) = MissionActionDataOutput(
@@ -104,6 +108,10 @@ data class MissionActionDataOutput(
             hasSomeSpeciesSeized = missionAction.hasSomeSpeciesSeized,
             closedBy = missionAction.closedBy,
             isFromPoseidon = missionAction.isFromPoseidon,
+            isAdministrativeControl = missionAction.isAdministrativeControl,
+            isComplianceWithWaterRegulationsControl = missionAction.isComplianceWithWaterRegulationsControl,
+            isSafetyEquipmentAndStandardsComplianceControl = missionAction.isSafetyEquipmentAndStandardsComplianceControl,
+            isSeafarersControl = missionAction.isSeafarersControl,
         )
     }
 }

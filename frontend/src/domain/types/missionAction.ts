@@ -23,7 +23,11 @@ export namespace MissionAction {
     id: number
     internalReferenceNumber: string | undefined
     ircs: string | undefined
+    isAdministrativeControl?: boolean
+    isComplianceWithWaterRegulationsControl?: boolean
     isFromPoseidon: boolean | undefined
+    isSafetyEquipmentAndStandardsComplianceControl?: boolean
+    isSeafarersControl?: boolean
     isValid: boolean
     latitude: number | undefined
     licencesAndLogbookObservations: string | undefined

@@ -6,7 +6,7 @@ import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { formikUsecase } from '../formikUsecases'
 
-import type { MissionActionFormValues } from '../types'
+import type { MissionActionFormValues, MissionMainFormValues } from '../types'
 
 export function useGetMainFormFormikUsecases() {
   const dispatch = useMainAppDispatch()
@@ -15,6 +15,12 @@ export function useGetMainFormFormikUsecases() {
   const getPortsApiQuery = useGetPortsQuery()
 
   return {
+    /**
+     * When updating a control unit, we must reset the "Other controls" field checkboxes
+     */
+    updateMissionActionOtherControlsCheckboxes: (mission: MissionMainFormValues, previousIsControlUnitPAM: boolean) =>
+      formikUsecase.updateOtherControlsCheckboxes(dispatch)(mission, previousIsControlUnitPAM),
+
     /**
      * When updating the mission location from the mission, we use the `draft` object to access the `missionAction` form.
      * We select the last `missionAction` to update the mission location.

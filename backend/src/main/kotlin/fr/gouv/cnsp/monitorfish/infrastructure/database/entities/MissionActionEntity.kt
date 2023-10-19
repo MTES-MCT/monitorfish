@@ -127,6 +127,14 @@ class MissionActionEntity(
     var hasSomeSpeciesSeized: Boolean,
     @Column(name = "closed_by")
     var closedBy: String? = null,
+    @Column(name = "is_administrative_control")
+    val isAdministrativeControl: Boolean? = null,
+    @Column(name = "is_compliance_with_water_regulations_control")
+    val isComplianceWithWaterRegulationsControl: Boolean? = null,
+    @Column(name = "is_safety_equipment_and_standards_compliance_control")
+    val isSafetyEquipmentAndStandardsComplianceControl: Boolean? = null,
+    @Column(name = "is_seafarers_control")
+    val isSeafarersControl: Boolean? = null,
 ) {
 
     companion object {
@@ -179,6 +187,10 @@ class MissionActionEntity(
                 hasSomeGearsSeized = missionAction.hasSomeGearsSeized,
                 hasSomeSpeciesSeized = missionAction.hasSomeSpeciesSeized,
                 closedBy = missionAction.closedBy,
+                isAdministrativeControl = missionAction.isAdministrativeControl,
+                isComplianceWithWaterRegulationsControl = missionAction.isComplianceWithWaterRegulationsControl,
+                isSafetyEquipmentAndStandardsComplianceControl = missionAction.isSafetyEquipmentAndStandardsComplianceControl,
+                isSeafarersControl = missionAction.isSeafarersControl,
             )
     }
 
@@ -230,6 +242,10 @@ class MissionActionEntity(
         hasSomeSpeciesSeized = hasSomeSpeciesSeized,
         closedBy = closedBy,
         isFromPoseidon = isFromPoseidon,
+        isAdministrativeControl = isAdministrativeControl,
+        isComplianceWithWaterRegulationsControl = isComplianceWithWaterRegulationsControl,
+        isSafetyEquipmentAndStandardsComplianceControl = isSafetyEquipmentAndStandardsComplianceControl,
+        isSeafarersControl = isSeafarersControl,
     )
 
     private fun <T> deserializeJSONList(mapper: ObjectMapper, json: String?, clazz: Class<T>): List<T> = json?.let {

@@ -23,6 +23,10 @@ export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValu
   gearInfractions: [],
   gearOnboard: [],
   id: undefined,
+  isAdministrativeControl: undefined,
+  isComplianceWithWaterRegulationsControl: undefined,
+  isSafetyEquipmentAndStandardsComplianceControl: undefined,
+  isSeafarersControl: undefined,
   isValid: false,
   latitude: undefined,
   licencesAndLogbookObservations: undefined,
@@ -49,3 +53,13 @@ export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValu
   vesselName: undefined,
   vesselTargeted: undefined
 }
+
+/**
+ * List of PAM units identifiers:
+ *  10141 PAM Gyptis
+ *  10404 PAM Iris
+ *  10121 PAM Jeanne Barret
+ *  10345 PAM Osiris
+ *  10080 PAM Themis
+ */
+export const PAMControlUnitIds = [10141, 10404, 10121, 10345, 10080]

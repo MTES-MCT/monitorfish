@@ -162,6 +162,10 @@ class MissionActionsControllerITests {
                             ),
                             hasSomeGearsSeized = false,
                             hasSomeSpeciesSeized = false,
+                            isAdministrativeControl = true,
+                            isComplianceWithWaterRegulationsControl = true,
+                            isSafetyEquipmentAndStandardsComplianceControl = true,
+                            isSeafarersControl = true,
                         ),
                     ),
                 )
@@ -173,6 +177,10 @@ class MissionActionsControllerITests {
             .andExpect(jsonPath("$.vesselId", equalTo(2)))
             .andExpect(jsonPath("$.logbookInfractions[0].infractionType", equalTo("WITH_RECORD")))
             .andExpect(jsonPath("$.logbookInfractions[0].natinf", equalTo(27689)))
+            .andExpect(jsonPath("$.isAdministrativeControl", equalTo(true)))
+            .andExpect(jsonPath("$.isComplianceWithWaterRegulationsControl", equalTo(true)))
+            .andExpect(jsonPath("$.isSafetyEquipmentAndStandardsComplianceControl", equalTo(true)))
+            .andExpect(jsonPath("$.isSeafarersControl", equalTo(true)))
             .andExpect(
                 jsonPath(
                     "$.logbookInfractions[0].comments",

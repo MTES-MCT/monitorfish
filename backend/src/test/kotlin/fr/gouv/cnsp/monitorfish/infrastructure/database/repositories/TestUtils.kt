@@ -44,5 +44,9 @@ object TestUtils {
         hasSomeSpeciesSeized = false,
         closedBy = "XYZ",
         isFromPoseidon = true,
+        isAdministrativeControl = true,
+        isComplianceWithWaterRegulationsControl = true,
+        isSafetyEquipmentAndStandardsComplianceControl = true,
+        isSeafarersControl = true,
     )
 }

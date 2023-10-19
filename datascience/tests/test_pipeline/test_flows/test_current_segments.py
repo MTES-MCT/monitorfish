@@ -24,7 +24,6 @@ flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_ru
 
 @pytest.fixture
 def current_segments() -> pd.DataFrame:
-
     now = datetime.datetime.utcnow()
     return pd.DataFrame(
         {
@@ -254,6 +253,9 @@ def test_compute_current_segments():
             name="cfr",
         ),
     )
+
+    expected_res["segments"] = expected_res.segments.map(sorted, na_action="ignore")
+    res["segments"] = res.segments.map(sorted, na_action="ignore")
 
     pd.testing.assert_frame_equal(res, expected_res)
 

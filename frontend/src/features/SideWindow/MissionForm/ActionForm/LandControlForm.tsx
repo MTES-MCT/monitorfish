@@ -16,7 +16,7 @@ import { LandControlFormClosureSchema, LandControlFormLiveSchema } from './schem
 import { ControlQualityField } from './shared/ControlQualityField'
 import { FormikAuthor } from './shared/FormikAuthor'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
-import { FormikOtherControls } from './shared/FormikOtherControls'
+import { FormikOtherControlsCheckboxes } from './shared/FormikOtherControlsCheckboxes'
 import { FormikPortSelect } from './shared/FormikPortSelect'
 import { FormikRevalidationEffect } from './shared/FormikRevalidationEffect'
 import { GearsField } from './shared/GearsField'
@@ -111,7 +111,7 @@ export function LandControlForm({ initialValues, onChange }: LandControlFormProp
 
           <ControlQualityField />
 
-          <FormikOtherControls />
+          <FormikOtherControlsCheckboxes />
 
           <FormikAuthor />
         </FormBody>

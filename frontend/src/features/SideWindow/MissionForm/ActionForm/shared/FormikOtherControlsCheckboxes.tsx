@@ -11,21 +11,21 @@ import { FieldsetGroup } from '../../shared/FieldsetGroup'
 
 import type { MissionActionFormValues } from '../../types'
 
-export function FormikOtherControls() {
+export function FormikOtherControlsCheckboxes() {
   const dispatch = useMainAppDispatch()
   const { setFieldValue } = useFormikContext<MissionActionFormValues>()
-  const { draft, resetOtherControls } = useMainAppSelector(state => state.mission)
+  const { draft, mustResetOtherControlsCheckboxes } = useMainAppSelector(state => state.mission)
 
   useEffect(() => {
-    if (resetOtherControls) {
+    if (mustResetOtherControlsCheckboxes) {
       setFieldValue('isAdministrativeControl', undefined)
       setFieldValue('isComplianceWithWaterRegulationsControl', undefined)
       setFieldValue('isSafetyEquipmentAndStandardsComplianceControl', undefined)
       setFieldValue('isSeafarersControl', undefined)
 
-      dispatch(missionSliceActions.resetOtherControls(false))
+      dispatch(missionSliceActions.mustResetOtherControlsCheckboxes(false))
     }
-  }, [dispatch, setFieldValue, resetOtherControls])
+  }, [dispatch, setFieldValue, mustResetOtherControlsCheckboxes])
 
   const isCurrentControlUnitPAM = draft?.mainFormValues.controlUnits?.some(
     controlUnit => controlUnit.id && PAMControlUnitIds.includes(controlUnit.id)

@@ -40,7 +40,7 @@ export interface MissionState {
   isDraftDirty: boolean
   listFilterValues: FilterValues
   listSeaFront: SeaFrontGroup
-  resetOtherControls: boolean | undefined
+  mustResetOtherControlsCheckboxes: boolean | undefined
   selectedMissionActionGeoJSON: GeoJSON.GeoJson | undefined
   selectedMissionGeoJSON: GeoJSON.GeoJson | undefined
 }
@@ -55,7 +55,7 @@ const INITIAL_STATE: MissionState = {
     [MissionFilterType.STATUS]: [Mission.MissionStatus.IN_PROGRESS]
   },
   listSeaFront: SeaFrontGroup.MED,
-  resetOtherControls: undefined,
+  mustResetOtherControlsCheckboxes: undefined,
   selectedMissionActionGeoJSON: undefined,
   selectedMissionGeoJSON: undefined
 }
@@ -64,8 +64,8 @@ const missionSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'mission',
   reducers: {
-    resetOtherControls(state, action: PayloadAction<boolean>) {
-      state.resetOtherControls = action.payload
+    mustResetOtherControlsCheckboxes(state, action: PayloadAction<boolean>) {
+      state.mustResetOtherControlsCheckboxes = action.payload
     },
 
     /**

@@ -3,9 +3,7 @@ import { WebStorageStateStore } from 'oidc-client-ts'
 import { getEnvironmentVariable } from '../api/utils'
 
 export function getOIDCConfig() {
-  // TODO !!!RESTORE THAT!!!
-  // const IS_OIDC_ENABLED = getEnvironmentVariable('VITE_OIDC_ENABLED')
-  const IS_OIDC_ENABLED = false
+  const IS_OIDC_ENABLED = getEnvironmentVariable('VITE_OIDC_ENABLED')
   const OIDC_REDIRECT_URI = getEnvironmentVariable('VITE_OIDC_REDIRECT_URI')
   const OIDC_AUTHORITY = getEnvironmentVariable('VITE_OIDC_AUTHORITY')
   const OIDC_CLIENT_ID = getEnvironmentVariable('VITE_OIDC_CLIENT_ID')

@@ -1,5 +1,5 @@
-import { Accent, Button } from '@mtes-mct/monitor-ui'
-import { useField } from 'formik'
+import { Accent, Button, usePrevious } from '@mtes-mct/monitor-ui'
+import { useFormikContext } from 'formik'
 import { remove, update } from 'ramda'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
@@ -7,7 +7,8 @@ import styled from 'styled-components'
 import { ControlUnitSelect } from './ControlUnitSelect'
 import { useGetControlUnitsQuery } from '../../../../../api/controlUnit'
 import { getControlUnitsOptionsFromControlUnits } from '../../../../../domain/entities/controlUnits/utils'
-import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
+import { INITIAL_MISSION_CONTROL_UNIT, PAMControlUnitIds } from '../../constants'
+import { useGetMainFormFormikUsecases } from '../../hooks/useGetMainFormFormikUsecases'
 
 import type { ControlUnit } from '../../../../../domain/types/controlUnit'
 import type { MissionMainFormValues } from '../../types'
@@ -16,7 +17,12 @@ export type FormikMultiControlUnitPickerProps = {
   name: string
 }
 export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPickerProps) {
-  const [input, meta, helpers] = useField<MissionMainFormValues['controlUnits']>(name)
+  const { errors: allErrors, setFieldValue, values } = useFormikContext<MissionMainFormValues>()
+  const { updateMissionActionOtherControls } = useGetMainFormFormikUsecases()
+  const previousIsControlUnitPAM =
+    usePrevious(
+      values.controlUnits?.some(controlUnit => controlUnit.id && PAMControlUnitIds.includes(controlUnit.id))
+    ) || false
 
   const controlUnitsQuery = useGetControlUnitsQuery(undefined)
 
@@ -25,48 +31,50 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
     administrationsAsOptions: allAdministrationsAsOptions,
     unitsAsOptions: allNamesAsOptions
   } = useMemo(() => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data), [controlUnitsQuery.data])
-  const errors = (meta.error || []) as Array<{
+  const errors = (allErrors[name] || []) as Array<{
     administration: string
     name: string
   }>
 
   const addUnit = useCallback(
     () => {
-      const nextControlUnits = [...input.value, INITIAL_MISSION_CONTROL_UNIT]
+      const nextControlUnits = [...values[name], INITIAL_MISSION_CONTROL_UNIT]
 
-      helpers.setValue(nextControlUnits)
+      setFieldValue(name, nextControlUnits)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [input.value]
+    [values[name]]
   )
 
   const removeUnit = useCallback(
     (index: number) => {
-      const nextControlUnits = remove(index, 1, input.value)
+      const nextControlUnits = remove(index, 1, values[name])
 
-      helpers.setValue(nextControlUnits)
+      updateMissionActionOtherControls(values, previousIsControlUnitPAM)
+      setFieldValue(name, nextControlUnits)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [input.value]
+    [values[name], previousIsControlUnitPAM]
   )
 
   const handleChange = useCallback(
     (index: number, nextControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft) => {
-      const nextControlUnits = update(index, nextControlUnit, input.value)
+      const nextControlUnits = update(index, nextControlUnit, values[name])
 
-      helpers.setValue(nextControlUnits)
+      updateMissionActionOtherControls(values, previousIsControlUnitPAM)
+      setFieldValue(name, nextControlUnits)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [input.value]
+    [values[name], previousIsControlUnitPAM]
   )
 
   return (
     <Wrapper>
       <>
-        {(input.value || []).map((value, index) => (
+        {(values[name] || []).map((value, index) => (
           <ControlUnitSelect
             // eslint-disable-next-line react/no-array-index-key
             key={`unit${index}`}

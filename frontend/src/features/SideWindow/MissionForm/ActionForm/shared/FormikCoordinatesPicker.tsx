@@ -27,7 +27,7 @@ import MissionActionType = MissionAction.MissionActionType
  * This is used to mock the user adding coordinates in Cypress tests
  * as we can't test two windows : the side window and the map window.
  */
-const IS_CYPRESS_TEST = getEnvironmentVariable('REACT_APP_CYPRESS_TEST')
+const IS_CYPRESS_TEST = getEnvironmentVariable('REACT_APP_CYPRESS_TEST') || 'te'
 export const STUBBED_LATITUDE = 47.084
 export const STUBBED_LONGITUDE = -3.872
 

@@ -704,4 +704,125 @@ context('Side Window > Mission Form > Sea Control', () => {
       cy.get('h1').should('contain.text', 'Missions et contrôles')
     })
   })
+
+  it('Should remove the other control fields When the previous PAM control unit is modified', () => {
+    // -------------------------------------------------------------------------
+    // Main Form
+
+    // Add a PAM control unit
+    cy.get('span[role="button"][title="Clear"]').eq(0).click({ force: true })
+    cy.get('span[role="button"][title="Clear"]').eq(1).click({ force: true })
+    cy.fill('Unité 1', 'PAM Jeanne Barret')
+
+    // -------------------------------------------------------------------------
+    // Form
+
+    // Navire
+    cy.get('input[placeholder="Rechercher un navire..."]').type('mal')
+    cy.contains('mark', 'MAL').click().wait(500)
+    cy.fill('Contrôle administratif', true)
+    cy.fill('Respect du code de la navigation sur le plan d’eau', false)
+    cy.fill('Gens de mer', true)
+    cy.fill('Equipement de sécurité et respect des normes', false)
+
+    cy.wait(500)
+
+    cy.fill('Saisi par', 'Marlin')
+
+    // Remove the PAM control unit
+    cy.get('span[role="button"][title="Clear"]').eq(0).click({ force: true })
+    cy.get('span[role="button"][title="Clear"]').eq(1).click({ force: true })
+    cy.fill('Unité 1', 'Cultures marines – DDTM 40')
+
+    cy.get('legend')
+      .filter(':contains("Autre(s) contrôle(s) effectué(s) par l’unité sur le navire")')
+      .should('have.length', 0)
+
+    cy.wait(500)
+
+    // -------------------------------------------------------------------------
+    // Request
+
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('createMissionAction')
+
+    cy.clickButton('Enregistrer et quitter')
+
+    cy.wait('@createMissionAction').then(interception => {
+      if (!interception.response) {
+        assert.fail('`interception.response` is undefined.')
+      }
+
+      assert.deepInclude(interception.request.body, {
+        isAdministrativeControl: null,
+        isComplianceWithWaterRegulationsControl: null,
+        isSafetyEquipmentAndStandardsComplianceControl: null,
+        isSeafarersControl: null
+      })
+    })
+  })
+
+  it('Should add a PAM control unit and send the other control fields', () => {
+    // -------------------------------------------------------------------------
+    // Main Form
+
+    cy.get('legend')
+      .filter(':contains("Autre(s) contrôle(s) effectué(s) par l’unité sur le navire")')
+      .should('have.length', 0)
+
+    // Add a PAM control unit
+    cy.get('span[role="button"][title="Clear"]').eq(0).click({ force: true })
+    cy.get('span[role="button"][title="Clear"]').eq(1).click({ force: true })
+    cy.fill('Unité 1', 'PAM Jeanne Barret')
+
+    // -------------------------------------------------------------------------
+    // Form
+
+    // Navire
+    cy.get('input[placeholder="Rechercher un navire..."]').type('mal')
+    cy.contains('mark', 'MAL').click().wait(500)
+
+    cy.get('legend')
+      .filter(':contains("Autre(s) contrôle(s) effectué(s) par l’unité sur le navire")')
+      .should('have.length', 1)
+    cy.fill('Contrôle administratif', true)
+    cy.fill('Respect du code de la navigation sur le plan d’eau', false)
+    cy.fill('Gens de mer', true)
+    cy.fill('Equipement de sécurité et respect des normes', false)
+
+    cy.wait(500)
+
+    cy.fill('Saisi par', 'Marlin')
+
+    cy.wait(500)
+
+    // -------------------------------------------------------------------------
+    // Request
+
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('createMissionAction')
+
+    cy.clickButton('Enregistrer et quitter')
+
+    cy.wait('@createMissionAction').then(interception => {
+      if (!interception.response) {
+        assert.fail('`interception.response` is undefined.')
+      }
+
+      assert.deepInclude(interception.request.body, {
+        isAdministrativeControl: true,
+        isComplianceWithWaterRegulationsControl: false,
+        isSafetyEquipmentAndStandardsComplianceControl: false,
+        isSeafarersControl: true
+      })
+    })
+  })
 })

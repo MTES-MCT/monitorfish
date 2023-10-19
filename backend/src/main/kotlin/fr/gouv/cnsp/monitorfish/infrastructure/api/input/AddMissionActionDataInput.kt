@@ -49,6 +49,10 @@ data class AddMissionActionDataInput(
     var hasSomeSpeciesSeized: Boolean = false,
     var closedBy: String? = null,
     val isFromPoseidon: Boolean? = null,
+    var isAdministrativeControl: Boolean? = null,
+    var isComplianceWithWaterRegulationsControl: Boolean? = null,
+    var isSafetyEquipmentAndStandardsComplianceControl: Boolean? = null,
+    var isSeafarersControl: Boolean? = null,
 ) {
     fun toMissionAction() = MissionAction(
         vesselId = vesselId,
@@ -97,5 +101,9 @@ data class AddMissionActionDataInput(
         hasSomeSpeciesSeized = hasSomeSpeciesSeized,
         closedBy = closedBy,
         isFromPoseidon = isFromPoseidon ?: false,
+        isAdministrativeControl = isAdministrativeControl,
+        isComplianceWithWaterRegulationsControl = isComplianceWithWaterRegulationsControl,
+        isSafetyEquipmentAndStandardsComplianceControl = isSafetyEquipmentAndStandardsComplianceControl,
+        isSeafarersControl = isSeafarersControl,
     )
 }

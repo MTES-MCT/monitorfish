@@ -7,6 +7,7 @@ import { AirControlFormClosureSchema, AirControlFormLiveSchema } from './schemas
 import { FormikAuthor } from './shared/FormikAuthor'
 import { FormikCoordinatesPicker } from './shared/FormikCoordinatesPicker'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
+import { FormikOtherControls } from './shared/FormikOtherControls'
 import { FormikRevalidationEffect } from './shared/FormikRevalidationEffect'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
@@ -77,6 +78,8 @@ export function AirControlForm({ initialValues, onChange }: AirControlFormProps)
           <FieldsetGroup isLight legend="Autres observations">
             <FormikTextarea isLabelHidden label="Autres observations" name="otherComments" rows={2} />
           </FieldsetGroup>
+
+          <FormikOtherControls />
 
           <FormikAuthor />
         </FormBody>

@@ -17,7 +17,7 @@ export function updateListItemsProp<
   const predicate: (obj: Item) => boolean =
     typeof equalsOrSatisfies === 'function'
       ? propSatisfies(equalsOrSatisfies as any, whereProp)
-      : propEq<any>(equalsOrSatisfies, whereProp)
+      : propEq(equalsOrSatisfies, whereProp)
 
   return list.map(item => {
     if (predicate(item)) {

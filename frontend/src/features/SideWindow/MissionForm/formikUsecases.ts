@@ -153,20 +153,21 @@ const updateMissionLocation =
     dispatch(missionSliceActions.setGeometryComputedFromControls(nextMissionGeometry))
   }
 
-const updateOtherControlsCheckboxes = dispatch => async (mission: MissionMainFormValues, previousIsControlUnitPAM: boolean) => {
-  const isControlUnitPAM = mission.controlUnits?.some(
-    controlUnit => controlUnit.id && PAMControlUnitIds.includes(controlUnit.id)
-  )
+const updateOtherControlsCheckboxes =
+  dispatch => async (mission: MissionMainFormValues, previousIsControlUnitPAM: boolean) => {
+    const isControlUnitPAM = mission.controlUnits?.some(
+      controlUnit => controlUnit.id && PAMControlUnitIds.includes(controlUnit.id)
+    )
 
-  /**
-   * If a PAM was already in the control units, we do not reset the other controls
-   */
-  if (previousIsControlUnitPAM && isControlUnitPAM) {
-    return
+    /**
+     * If a PAM was already in the control units, we do not reset the other controls
+     */
+    if (previousIsControlUnitPAM && isControlUnitPAM) {
+      return
+    }
+
+    dispatch(missionSliceActions.mustResetOtherControlsCheckboxes(true))
   }
-
-  dispatch(missionSliceActions.mustResetOtherControlsCheckboxes(true))
-}
 
 export const formikUsecase = {
   updateFAOAreas,

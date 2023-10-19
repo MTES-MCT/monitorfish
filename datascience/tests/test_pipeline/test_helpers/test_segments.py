@@ -250,7 +250,6 @@ def expected_segmented_catches_by_year():
 
 
 def test_attribute_segments_to_catches(catches, segments, expected_segmented_catches):
-
     segmented_catches = attribute_segments_to_catches(
         catches=catches, segments=segments
     )
@@ -265,7 +264,6 @@ def test_attribute_segments_to_catches(catches, segments, expected_segmented_cat
 def test_attribute_segments_to_catches_with_empty_input(
     catches, segments, expected_segmented_catches
 ):
-
     empty_catches = catches.head(0)
     segmented_catches = attribute_segments_to_catches(
         catches=empty_catches, segments=segments
@@ -278,13 +276,18 @@ def test_attribute_segments_to_catches_with_empty_input(
 def test_attribute_segments_to_catches_with_unsassigned_catches(
     catches, segments, expected_segmented_catches
 ):
-
     segmented_catches = attribute_segments_to_catches(
         catches=catches,
         segments=segments,
         append_unassigned_catches=True,
         unassigned_catches_segment_label="Pas de segment",
     )
+    segmented_catches = segmented_catches.sort_values(
+        ["some_id", "segment", "species", "gear"]
+    ).reset_index(drop=True)
+    expected_segmented_catches = expected_segmented_catches.sort_values(
+        ["some_id", "segment", "species", "gear"]
+    ).reset_index(drop=True)
     pd.testing.assert_frame_equal(segmented_catches, expected_segmented_catches)
 
 
@@ -294,6 +297,14 @@ def test_attribute_segments_to_catches_by_year(
     segmented_catches = attribute_segments_to_catches_by_year(
         catches_by_year, segments_by_year
     )
+
+    segmented_catches = segmented_catches.sort_values(
+        ["some_id", "year", "segment", "species", "gear"]
+    ).reset_index(drop=True)
+    expected_segmented_catches_by_year = expected_segmented_catches_by_year.sort_values(
+        ["some_id", "year", "segment", "species", "gear"]
+    ).reset_index(drop=True)
+
     pd.testing.assert_frame_equal(
         segmented_catches,
         expected_segmented_catches_by_year[
@@ -312,6 +323,13 @@ def test_attribute_segments_to_catches_by_year_with_unsassigned_catches(
         append_unassigned_catches=True,
         unassigned_catches_segment_label="Pas de segment",
     )
+
+    segmented_catches = segmented_catches.sort_values(
+        ["some_id", "year", "segment", "species", "gear"]
+    ).reset_index(drop=True)
+    expected_segmented_catches_by_year = expected_segmented_catches_by_year.sort_values(
+        ["some_id", "year", "segment", "species", "gear"]
+    ).reset_index(drop=True)
 
     pd.testing.assert_frame_equal(
         segmented_catches, expected_segmented_catches_by_year, check_like=True

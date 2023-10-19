@@ -9,7 +9,7 @@ run-front:
 	cd ./frontend && npm run dev
 run-back: run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db
-	cd backend && ./mvnw spring-boot:run -Dspring-boot.run.arguments="--spring.config.additional-location=$(INFRA_FOLDER)" -Dspring-boot.run.profiles="local" -Dmaven.test.skip=true
+	cd backend && ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
 run-stubbed-apis:
 	docker compose stop geoserver-monitorenv-stubs
 	docker compose up -d --quiet-pull --wait geoserver-monitorenv-stubs
@@ -23,14 +23,14 @@ check-clean-archi:
 test: test-back
 	cd frontend && CI=true npm run test:unit -- --coverage
 test-back: check-clean-archi
-	cd backend && ./mvnw clean && ./mvnw test
+	cd backend && ./gradlew clean test
 clean:
 	make erase-db
 	rm -Rf ./backend/target
 dev: clean
 	make run-back
 lint-back:
-	cd ./backend && ./mvnw antrun:run@ktlint-format | grep -v \
+	cd ./backend && ./gradlew ktlintFormat | grep -v \
 		-e "Exceeded max line length" \
 		-e "Package name must not contain underscore" \
 		-e "Wildcard import"

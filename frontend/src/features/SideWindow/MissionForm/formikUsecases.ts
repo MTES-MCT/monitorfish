@@ -1,3 +1,4 @@
+import { PAMControlUnitIds } from './constants'
 import { faoAreasApi } from '../../../api/faoAreas'
 import { missionActions as missionSliceActions } from '../../../domain/actions'
 import { MissionAction } from '../../../domain/types/missionAction'
@@ -7,7 +8,7 @@ import { FrontendError } from '../../../libs/FrontendError'
 import { getSummedSpeciesOnBoard } from '../../Logbook/utils'
 import { vesselApi } from '../../Vessel/apis'
 
-import type { MissionActionFormValues } from './types'
+import type { MissionActionFormValues, MissionMainFormValues } from './types'
 import type { RiskFactor } from '../../../domain/entities/vessel/riskFactor/types'
 import type { Gear } from '../../../domain/types/Gear'
 import type { Port } from '../../../domain/types/port'
@@ -152,10 +153,27 @@ const updateMissionLocation =
     dispatch(missionSliceActions.setGeometryComputedFromControls(nextMissionGeometry))
   }
 
+const updateOtherControlsCheckboxes =
+  dispatch => async (mission: MissionMainFormValues, previousIsControlUnitPAM: boolean) => {
+    const isControlUnitPAM = mission.controlUnits?.some(
+      controlUnit => controlUnit.id && PAMControlUnitIds.includes(controlUnit.id)
+    )
+
+    /**
+     * If a PAM was already in the control units, we do not reset the other controls
+     */
+    if (previousIsControlUnitPAM && isControlUnitPAM) {
+      return
+    }
+
+    dispatch(missionSliceActions.mustResetOtherControlsCheckboxes(true))
+  }
+
 export const formikUsecase = {
   updateFAOAreas,
   updateGearsOnboard,
   updateMissionLocation,
+  updateOtherControlsCheckboxes,
   updateSegments,
   updateSpeciesOnboard
 }

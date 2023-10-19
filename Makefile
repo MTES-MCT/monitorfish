@@ -93,8 +93,6 @@ install-pipeline:
 	cd datascience && poetry install
 test-pipeline:
 	cd datascience && export TEST_LOCAL=True && poetry run coverage run -m pytest --pdb tests/ && poetry run coverage report && poetry run coverage html
-update-python-dependencies:
-	cd datascience && poetry export --without-hashes -o requirements.txt && poetry export --without-hashes --dev -o requirements-dev.txt
 
 # DOC commands
 push-docs-to-transifex:

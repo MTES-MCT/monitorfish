@@ -66,9 +66,6 @@ COPY datascience/poetry.lock datascience/pyproject.toml ./
 RUN poetry install --without dev --no-root
 ENV PATH="$VENV_PATH/bin:$PATH"
 
-# Make library importable
-ENV PYTHONPATH=/home/${USER}/datascience
-
 # Add source
 WORKDIR /home/${USER}/
 COPY datascience/ ./datascience

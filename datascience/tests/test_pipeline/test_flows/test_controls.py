@@ -772,6 +772,10 @@ expected_loaded_mission_actions_df = pd.merge(
             "flight_goals": [None] * 10,
             "has_some_gears_seized": [False] * 10,
             "has_some_species_seized": [False] * 10,
+            "is_administrative_control": [None] * 10,
+            "is_compliance_with_water_regulations_control": [None] * 10,
+            "is_safety_equipment_and_standards_compliance_control": [None] * 10,
+            "is_seafarers_control": [None] * 10,
         }
     ),
     on="id",

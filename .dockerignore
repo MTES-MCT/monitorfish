@@ -1,6 +1,9 @@
 # git repo
 .git
 
+# Frontend environment
+frontend/node_modules
+
 # Env variables
 datascience/.env
 

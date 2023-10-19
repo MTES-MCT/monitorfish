@@ -167,11 +167,15 @@ def test_compute_controls_segments():
         }
     )
 
+    expected_res["segments"] = expected_res.segments.apply(
+        sorted, key=lambda d: d["segment"]
+    )
+    res["segments"] = res.segments.apply(sorted, key=lambda d: d["segment"])
+
     pd.testing.assert_frame_equal(res, expected_res)
 
 
 def test_recompute_controls_segments_flow(reset_test_data, updated_controls_segments):
-
     e = create_engine("monitorfish_remote")
     with e.begin() as connection:
         connection.execute(

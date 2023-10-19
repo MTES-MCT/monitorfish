@@ -18,8 +18,8 @@ export function useGetMainFormFormikUsecases() {
     /**
      * When updating a control unit, we must reset the "Other controls" field checkboxes
      */
-    updateMissionActionOtherControls: (mission: MissionMainFormValues, previousIsControlUnitPAM: boolean) =>
-      formikUsecase.updateOtherControls(dispatch)(mission, previousIsControlUnitPAM),
+    updateMissionActionOtherControlsCheckboxes: (mission: MissionMainFormValues, previousIsControlUnitPAM: boolean) =>
+      formikUsecase.updateOtherControlsCheckboxes(dispatch)(mission, previousIsControlUnitPAM),
 
     /**
      * When updating the mission location from the mission, we use the `draft` object to access the `missionAction` form.

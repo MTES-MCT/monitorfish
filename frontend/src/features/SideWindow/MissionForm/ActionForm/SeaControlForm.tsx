@@ -17,7 +17,7 @@ import { ControlQualityField } from './shared/ControlQualityField'
 import { FormikAuthor } from './shared/FormikAuthor'
 import { FormikCoordinatesPicker } from './shared/FormikCoordinatesPicker'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
-import { FormikOtherControls } from './shared/FormikOtherControls'
+import { FormikOtherControlsCheckboxes } from './shared/FormikOtherControlsCheckboxes'
 import { FormikRevalidationEffect } from './shared/FormikRevalidationEffect'
 import { GearsField } from './shared/GearsField'
 import { LicencesAndLogbookField } from './shared/LicencesAndLogbookField'
@@ -111,7 +111,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
 
           <ControlQualityField />
 
-          <FormikOtherControls />
+          <FormikOtherControlsCheckboxes />
 
           <FormikAuthor />
         </FormBody>

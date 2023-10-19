@@ -18,7 +18,7 @@ export type FormikMultiControlUnitPickerProps = {
 }
 export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPickerProps) {
   const { errors: allErrors, setFieldValue, values } = useFormikContext<MissionMainFormValues>()
-  const { updateMissionActionOtherControls } = useGetMainFormFormikUsecases()
+  const { updateMissionActionOtherControlsCheckboxes } = useGetMainFormFormikUsecases()
   const previousIsControlUnitPAM =
     usePrevious(
       values.controlUnits?.some(controlUnit => controlUnit.id && PAMControlUnitIds.includes(controlUnit.id))
@@ -51,7 +51,7 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
     (index: number) => {
       const nextControlUnits = remove(index, 1, values[name])
 
-      updateMissionActionOtherControls(values, previousIsControlUnitPAM)
+      updateMissionActionOtherControlsCheckboxes(values, previousIsControlUnitPAM)
       setFieldValue(name, nextControlUnits)
     },
 
@@ -63,7 +63,7 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
     (index: number, nextControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft) => {
       const nextControlUnits = update(index, nextControlUnit, values[name])
 
-      updateMissionActionOtherControls(values, previousIsControlUnitPAM)
+      updateMissionActionOtherControlsCheckboxes(values, previousIsControlUnitPAM)
       setFieldValue(name, nextControlUnits)
     },
 

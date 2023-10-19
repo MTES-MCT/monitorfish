@@ -153,7 +153,7 @@ const updateMissionLocation =
     dispatch(missionSliceActions.setGeometryComputedFromControls(nextMissionGeometry))
   }
 
-const updateOtherControls = dispatch => async (mission: MissionMainFormValues, previousIsControlUnitPAM: boolean) => {
+const updateOtherControlsCheckboxes = dispatch => async (mission: MissionMainFormValues, previousIsControlUnitPAM: boolean) => {
   const isControlUnitPAM = mission.controlUnits?.some(
     controlUnit => controlUnit.id && PAMControlUnitIds.includes(controlUnit.id)
   )
@@ -165,14 +165,14 @@ const updateOtherControls = dispatch => async (mission: MissionMainFormValues, p
     return
   }
 
-  dispatch(missionSliceActions.resetOtherControls(true))
+  dispatch(missionSliceActions.mustResetOtherControlsCheckboxes(true))
 }
 
 export const formikUsecase = {
   updateFAOAreas,
   updateGearsOnboard,
   updateMissionLocation,
-  updateOtherControls,
+  updateOtherControlsCheckboxes,
   updateSegments,
   updateSpeciesOnboard
 }

@@ -4,6 +4,7 @@ from config import PREFECT_SERVER_URL
 from src.pipeline.flows_config import flows_to_register
 
 PROJECT_NAME = "Monitorfish"
+# Dummy
 
 
 def create_project_if_not_exists(client: prefect.Client, project_name: str) -> None:

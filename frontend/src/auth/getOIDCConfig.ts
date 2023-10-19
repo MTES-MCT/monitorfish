@@ -24,6 +24,7 @@ export function getOIDCConfig() {
   }
 
   return {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     IS_OIDC_ENABLED: import.meta.env.VITE_CYPRESS_TEST ? false : IS_OIDC_ENABLED,
     oidcConfig
   }

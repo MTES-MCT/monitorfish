@@ -1,8 +1,11 @@
 import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
 import { Mission } from '../../../../src/domain/entities/mission/types'
+import { interceptExternalCalls } from '../../utils/interceptExternalCalls'
 
 context('Side Window > Mission Form > Air Surveillance', () => {
   beforeEach(() => {
+    interceptExternalCalls()
+
     openSideWindowNewMission()
 
     fillSideWindowMissionFormBase(Mission.MissionTypeLabel.AIR)

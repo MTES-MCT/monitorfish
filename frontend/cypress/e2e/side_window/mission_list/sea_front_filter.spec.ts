@@ -1,7 +1,10 @@
 import { openSideWindowMissionList } from './utils'
+import { interceptExternalCalls } from '../../utils/interceptExternalCalls'
 
 context('Side Window > Mission List > Sea Front Filter (= submenu)', () => {
   beforeEach(() => {
+    interceptExternalCalls()
+
     openSideWindowMissionList()
   })
 

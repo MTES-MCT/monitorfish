@@ -3,9 +3,14 @@
 
 import { openSideWindowNewMission } from './utils'
 import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
+import { interceptExternalCalls } from '../../utils/interceptExternalCalls'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Action List', () => {
+  beforeEach(() => {
+    interceptExternalCalls()
+  })
+
   it('Should send the expected data to the API when duplicating a mission action', () => {
     editSideWindowMissionListMissionWithId(4, SeaFrontGroup.MEMN)
 

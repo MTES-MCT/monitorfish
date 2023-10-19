@@ -5,14 +5,13 @@
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
 import ky from 'ky'
 
-import { getEnvironmentVariable } from './utils'
 import { getOIDCUser } from '../auth/getOIDCUser'
 import { normalizeRtkBaseQuery } from '../utils/normalizeRtkBaseQuery'
 
 const MAX_RETRIES = 2
 
 // Using local MonitorEnv stubs:
-const MONITORENV_API_URL = getEnvironmentVariable('VITE_MONITORENV_URL')
+const MONITORENV_API_URL = import.meta.env.VITE_MONITORENV_URL
 
 // Using local MonitorEnv instance:
 // const MONITORENV_API_URL = 'http://0.0.0.0:9880'

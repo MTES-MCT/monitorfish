@@ -3,7 +3,6 @@ import { init } from '@sentry/react'
 import { createRoot } from 'react-dom/client'
 import { AuthProvider, withAuth } from 'react-oidc-context'
 
-import { getEnvironmentVariable } from './api/utils'
 import { App } from './App'
 import 'rsuite/dist/rsuite.min.css'
 import 'mini.css'
@@ -20,16 +19,16 @@ import { getOIDCConfig } from './auth/getOIDCConfig'
 if (import.meta.env.PROD) {
   // https://docs.sentry.io/platforms/javascript/performance/#configure-the-sample-rate
   init({
-    dsn: getEnvironmentVariable('VITE_SENTRY_DSN')?.toString() || '',
-    environment: getEnvironmentVariable('VITE_SENTRY_ENV')?.toString() || '',
+    dsn: import.meta.env.VITE_SENTRY_DSN || '',
+    environment: import.meta.env.VITE_SENTRY_ENV || '',
     integrations: [
       new BrowserTracing({
-        tracingOrigins: getEnvironmentVariable('VITE_SENTRY_TRACING_ORIGINS')
-          ? [getEnvironmentVariable('VITE_SENTRY_TRACING_ORIGINS')?.toString() || '']
+        tracingOrigins: import.meta.env.VITE_SENTRY_TRACING_ORIGINS
+          ? [import.meta.env.VITE_SENTRY_TRACING_ORIGINS || '']
           : []
       })
     ],
-    release: getEnvironmentVariable('VITE_MONITORFISH_VERSION')?.toString() || '',
+    release: import.meta.env.VITE_MONITORFISH_VERSION || '',
     tracesSampleRate: 1.0
   })
 }

@@ -4,7 +4,6 @@ import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import { Progress } from 'rsuite'
 import styled from 'styled-components'
 
-import { getEnvironmentVariable } from '../../../api/utils'
 import { CACHED_REQUEST_SIZE, UPDATE_CACHE } from '../../../workers/constants'
 import { useGetServiceWorker } from '../../../workers/hooks/useGetServiceWorker'
 import { fetchAllFromServiceWorkerByChunk, getZoomToRequestPaths } from '../utils'
@@ -12,7 +11,7 @@ import { fetchAllFromServiceWorkerByChunk, getZoomToRequestPaths } from '../util
 /**
  * This is used to reduce the number of tiles added in cache during the e2e test
  */
-const IS_CYPRESS_TEST = getEnvironmentVariable('VITE_CYPRESS_TEST')
+const IS_CYPRESS_TEST = import.meta.env.VITE_CYPRESS_TEST === 'true'
 const CYPRESS_TEST_TOTAL_DOWNLOAD_REQUESTS = 31 // Calculated using `getListOfPath()`
 
 const BYTE_TO_MEGA_BYTE_FACTOR = 0.000001

@@ -5,7 +5,6 @@ import GML from 'ol/format/GML'
 import { REGULATION_ACTION_TYPE } from '../domain/entities/regulation'
 import { HttpStatusCode } from './constants'
 import { ApiError } from '../libs/ApiError'
-import { getEnvironmentVariable } from './utils'
 
 export const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la couche réglementaire"
 const REGULATORY_ZONES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les zones réglementaires"
@@ -24,8 +23,8 @@ function getIrretrievableRegulatoryZoneError(e, regulatoryZone) {
   )
 }
 
-export const GEOSERVER_URL = getEnvironmentVariable('VITE_GEOSERVER_REMOTE_URL')
-export const GEOSERVER_BACKOFFICE_URL = getEnvironmentVariable('VITE_GEOSERVER_LOCAL_URL')
+export const GEOSERVER_URL = import.meta.env.VITE_GEOSERVER_REMOTE_URL
+export const GEOSERVER_BACKOFFICE_URL = import.meta.env.VITE_GEOSERVER_LOCAL_URL
 
 /**
  * @description This API isn't authenticated

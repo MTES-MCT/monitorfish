@@ -201,7 +201,9 @@ class VesselLightControllerITests {
 
         // When
         api.perform(
-            get("/light/v1/vessels/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=LAST&beforeDateTime="),
+            get(
+                "/light/v1/vessels/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=LAST&beforeDateTime=",
+            ),
         )
             // Then
             .andExpect(status().isOk)

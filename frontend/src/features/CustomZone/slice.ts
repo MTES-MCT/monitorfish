@@ -1,13 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import { dummyCustomZone } from './__tests__/__mocks__/dummyCustomZone'
-import { getEnvironmentVariable } from '../../api/utils'
 
 import type { CustomZone } from './types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 // TODO Remove test condition from slice
-const IS_CYPRESS_TEST = getEnvironmentVariable('VITE_CYPRESS_TEST')
+const IS_CYPRESS_TEST = import.meta.env.VITE_CYPRESS_TEST === 'true'
 
 export type CustomZoneState = {
   zones: Record<string, CustomZone>

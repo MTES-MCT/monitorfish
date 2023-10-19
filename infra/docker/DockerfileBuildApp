@@ -34,9 +34,9 @@ FROM node:20-alpine as buildFront
 ARG VERSION
 ARG ENV_PROFILE
 ENV CI=true
-ENV VITE_ENV=$ENV_PROFILE
+ENV ENV_PROFILE=$ENV_PROFILE
 
-RUN echo ${VITE_ENV}
+RUN echo ${ENV_PROFILE}
 
 COPY frontend/ /tmp/frontend/
 COPY infra/ /tmp/infra/
@@ -83,7 +83,6 @@ ENV VERSION=$VERSION
 ARG ENV_PROFILE
 ENV ENV_PROFILE=$ENV_PROFILE
 
-ENV VITE_ENV=$ENV_PROFILE
 ENV ENV_DB_URL=""
 
 # Add bash
@@ -113,7 +112,6 @@ USER monitorfish
 # Copy files for the front
 RUN mkdir /home/monitorfish/public
 COPY --from=buildSourcemaps /tmp/frontend/build /home/monitorfish/public/
-COPY --from=buildFront /tmp/infra/docker/env.sh /home/monitorfish/
 
 # Add logs folder to be mounted as volume
 RUN mkdir /home/monitorfish/logs
@@ -127,13 +125,8 @@ ENV SPRING_PROFILES_ACTIVE=$ENV_PROFILE
 
 RUN echo ${ENV_PROFILE}
 
-USER root
-RUN chown monitorfish /home/monitorfish/env.sh
-RUN chmod +x /home/monitorfish/env.sh
 USER monitorfish
 
 ENV VITE_GEOSERVER_LOCAL_URL=""
-
-ENTRYPOINT ["/home/monitorfish/env.sh"]
 
 CMD exec java -Dspring.config.additional-location="/home/monitorfish/configurations/" -jar "monitorfish-${VERSION}.jar"

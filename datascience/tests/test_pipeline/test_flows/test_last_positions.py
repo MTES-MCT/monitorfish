@@ -392,7 +392,6 @@ def test_compute_emission_period():
 
 
 def test_concatenate():
-
     unchanged_previous_last_positions = pd.DataFrame(
         {
             "vessel_id": ["A", "B", "C"],
@@ -435,7 +434,6 @@ def test_concatenate():
 
 @patch("src.pipeline.flows.last_positions.datetime")
 def test_estimate_current_positions(mock_datetime):
-
     mock_datetime.utcnow = lambda: datetime(2021, 10, 1, 10, 0, 0)
 
     last_positions = pd.DataFrame(
@@ -477,7 +475,6 @@ def test_estimate_current_positions(mock_datetime):
 
 
 def test_join():
-
     last_positions = pd.DataFrame(
         {
             "vessel_id": [1, 2, 3, None],
@@ -560,15 +557,15 @@ def test_join():
             "total_weight_onboard": [121.2, 0.0, 0.0, 0.0],
             "alerts": [
                 ["THREE_MILES_TRAWLING_ALERT", "SOME_OTHER_ALERT"],
-                None,
-                None,
-                None,
+                float("nan"),
+                float("nan"),
+                float("nan"),
             ],
             "reportings": [
                 ["OBSERVATION", "ALERT"],
-                None,
-                None,
-                None,
+                float("nan"),
+                float("nan"),
+                float("nan"),
             ],
             "beacon_malfunction_id": [2, 1, None, None],
         }

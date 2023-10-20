@@ -32,7 +32,7 @@ def add_vessel_id(vessels: pd.DataFrame, vessels_table: Table) -> pd.DataFrame:
     logger = prefect.context.get("logger")
 
     if "vessel_id" in vessels:
-        logger.warn(
+        logger.warning(
             (
                 "Column `vessel_id` already present in input DataFrame, "
                 "returning unmodified input."

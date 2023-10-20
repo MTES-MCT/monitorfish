@@ -1028,9 +1028,7 @@ def test_extract_controls_applies_dtypes(controls):
         # Expected to fail as dtypes are changed in extract_controls.
         pd.testing.assert_frame_equal(res, controls)
 
-    pd.testing.assert_frame_equal(
-        res, controls, check_dtype=False, check_categorical=False
-    )
+    pd.testing.assert_frame_equal(res, controls.astype(res.dtypes))
 
 
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
@@ -1074,8 +1072,8 @@ def test_flow(
 
     # Test missions output
     pd.testing.assert_frame_equal(
-        expected_missions.sort_values("id").reset_index(drop=True),
-        missions.sort_values("id").reset_index(drop=True),
+        expected_missions.sort_values("id").reset_index(drop=True).convert_dtypes(),
+        missions.sort_values("id").reset_index(drop=True).convert_dtypes(),
     )
 
     # Test missions_control_units output

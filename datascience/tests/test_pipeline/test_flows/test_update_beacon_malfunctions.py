@@ -166,7 +166,9 @@ def test_get_last_emissions():
         )
     )
 
-    pd.testing.assert_frame_equal(last_emissions, expected_last_emissions)
+    pd.testing.assert_frame_equal(
+        last_emissions.convert_dtypes(), expected_last_emissions.convert_dtypes()
+    )
 
 
 # The `LEFT JOIN` in known_beacon_malfunctions.sql can return rows with

@@ -8,6 +8,13 @@ ROOT_DIRECTORY = Path(__file__).parent
 LIBRARY_LOCATION = ROOT_DIRECTORY / Path("src")
 QUERIES_LOCATION = LIBRARY_LOCATION / Path("pipeline/queries")
 TEST_DATA_LOCATION = ROOT_DIRECTORY / Path("tests/test_data")
+LOCAL_MIGRATIONS_FOLDER = str(
+    (ROOT_DIRECTORY / Path("../backend/src/main/resources/db/migration")).resolve()
+)
+# HOST_MIGRATIONS_FOLDER envirionment variable is needed when running tests in CI to
+# mount migrations folder from the host to the database container
+HOST_MIGRATIONS_FOLDER = os.getenv("HOST_MIGRATIONS_FOLDER", LOCAL_MIGRATIONS_FOLDER)
+
 EMAIL_TEMPLATES_LOCATION = LIBRARY_LOCATION / Path("pipeline/emails/templates")
 EMAIL_IMAGES_LOCATION = LIBRARY_LOCATION / Path("pipeline/emails/images")
 EMAIL_FONTS_LOCATION = LIBRARY_LOCATION / Path("pipeline/emails/fonts")

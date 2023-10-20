@@ -2,6 +2,7 @@ import datetime
 import logging
 import re
 from functools import partial
+from io import StringIO
 from typing import Any, Hashable, List, Union
 
 import numpy as np
@@ -155,7 +156,7 @@ def get_first_non_null_column_name(
 
     res_values = np.choose(first_non_null_values_idx, list(df))
 
-    res = pd.Series(index=df.index, data=[None] * len(df), dtype=float)
+    res = pd.Series(index=df.index, data=[None] * len(df), dtype=object)
     res[non_null_rows.index] = res_values
 
     if result_labels is not None:
@@ -232,7 +233,7 @@ def df_to_dict_series(
     res = df.copy(deep=True)
     json_string = res.to_json(orient="index")
 
-    res = pd.read_json(json_string, orient="index", typ="Series")
+    res = pd.read_json(StringIO(json_string), orient="index", typ="Series")
     res.name = result_colname
 
     if remove_nulls:
@@ -350,7 +351,7 @@ def df_values_to_psql_arrays(
         to_pgarr, handle_errors=handle_errors, value_on_error=value_on_error
     )
 
-    return df.applymap(serialize, na_action="ignore").fillna("{}")
+    return df.map(serialize, na_action="ignore").fillna("{}")
 
 
 def json_converter(x):
@@ -395,7 +396,7 @@ def df_values_to_json(df: pd.DataFrame) -> pd.DataFrame:
         pd.DataFrame: pandas DataFrame with the same shape and index, all values
         serialized as json strings.
     """
-    return df.applymap(to_json, na_action="ignore").fillna("null")
+    return df.map(to_json, na_action="ignore").fillna("null")
 
 
 def serialize_nullable_integer_df(df: pd.DataFrame) -> pd.DataFrame:
@@ -410,9 +411,7 @@ def serialize_nullable_integer_df(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: same DataFrame converted to string dtype
     """
-    return df.applymap(lambda x: str(int(x)), na_action="ignore").where(
-        df.notnull(), None
-    )
+    return df.map(lambda x: str(int(x)), na_action="ignore").where(df.notnull(), None)
 
 
 def serialize_timedelta_df(df: pd.DataFrame) -> pd.DataFrame:
@@ -445,7 +444,7 @@ def drop_rows_already_in_table(
     df_ids = tuple(df[df_column_name].unique())
     df_n_ids = len(df_ids)
 
-    statement = select([getattr(table.c, table_column_name)]).where(
+    statement = select(getattr(table.c, table_column_name)).where(
         getattr(table.c, table_column_name).in_(df_ids)
     )
 
@@ -483,7 +482,6 @@ def prepare_df_for_loading(
     timedelta_columns: list = None,
     enum_columns: list = None,
 ):
-
     df_ = df.copy(deep=True)
 
     # Serialize columns to be loaded into JSONB columns
@@ -603,7 +601,6 @@ def join_on_multiple_keys(
 
     # Attempt to perform the join successively on each key
     for or_join_key in or_join_keys:
-
         join_keys = and_join_keys + [or_join_key]
 
         right_with_keys = right.dropna(subset=join_keys)
@@ -620,7 +617,6 @@ def join_on_multiple_keys(
         columns_to_merge = common_columns - set(join_keys)
 
         for column_to_merge in columns_to_merge:
-
             [l, r] = [f"{column_to_merge}_left", f"{column_to_merge}_right"]
 
             if column_to_merge in keys_already_joined:
@@ -849,7 +845,6 @@ def array_equals_row_on_window(
         res = np.array([np.nan] * n_rows)
 
     else:
-
         strides = np.lib.stride_tricks.sliding_window_view(
             arr, (window_length, n_columns)
         )

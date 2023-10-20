@@ -4,6 +4,7 @@ import pandas as pd
 from prefect import Flow, Parameter, case, task
 from prefect.executors import LocalDaskExecutor
 from prefect.tasks.control_flow import merge
+from sqlalchemy import text
 
 from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract
@@ -17,13 +18,15 @@ def reset_computed_trip_numbers():
 
     with e.begin() as connection:
         connection.execute(
-            """
+            text(
+                """
             UPDATE public.logbook_reports
             SET
                 trip_number = NULL,
                 trip_number_was_computed = false
             WHERE trip_number_was_computed;
             """
+            )
         )
 
 
@@ -61,13 +64,15 @@ def load_computed_trip_numbers(computed_trip_numbers: pd.DataFrame):
 
     with e.begin() as connection:
         connection.execute(
-            """
+            text(
+                """
             CREATE TEMP TABLE tmp_computed_trip_numbers(
                 id INTEGER PRIMARY KEY,
                 trip_number VARCHAR
             )
             ON COMMIT DROP;
             """
+            )
         )
 
         computed_trip_numbers.to_sql(
@@ -79,7 +84,8 @@ def load_computed_trip_numbers(computed_trip_numbers: pd.DataFrame):
         )
 
         connection.execute(
-            """
+            text(
+                """
             UPDATE public.logbook_reports r
             SET
                 trip_number = t.trip_number,
@@ -89,14 +95,13 @@ def load_computed_trip_numbers(computed_trip_numbers: pd.DataFrame):
             AND (r.trip_number_was_computed OR r.trip_number IS NULL)
             ;
         """
+            )
         )
 
 
 with Flow("Missing trip number", executor=LocalDaskExecutor()) as flow:
-
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         reset_trip_numbers = Parameter("reset_trip_numbers", default=False)
 
         with case(reset_trip_numbers, True):

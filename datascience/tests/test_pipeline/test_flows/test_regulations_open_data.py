@@ -170,7 +170,6 @@ def test_get_regulations_for_geopackage(
 
 
 def test_flow(reset_test_data, regulations_for_csv, regulations_for_geopackage):
-
     while flow.get_tasks("update_resource"):
         flow.replace(flow.get_tasks("update_resource")[0], mock_update_resource)
 
@@ -182,7 +181,9 @@ def test_flow(reset_test_data, regulations_for_csv, regulations_for_geopackage):
     csv_file_object = state.result[flow.get_tasks("get_csv_file_object")[0]].result
     assert isinstance(csv_file_object, BytesIO)
     df_from_csv_file_object = pd.read_csv(csv_file_object)
-    pd.testing.assert_frame_equal(df_from_csv_file_object, regulations_for_csv)
+    pd.testing.assert_frame_equal(
+        df_from_csv_file_object.convert_dtypes(), regulations_for_csv.convert_dtypes()
+    )
 
     # Check geopackage file object
     geopackage_file_object = state.result[

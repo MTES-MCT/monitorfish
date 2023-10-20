@@ -5,7 +5,7 @@ from mimetypes import guess_type
 from pathlib import Path
 from typing import List, Union
 
-import PyPDF2
+import pypdf
 
 from config import (
     MONITORFISH_EMAIL_ADDRESS,
@@ -93,7 +93,6 @@ def create_html_email(
 
     if images:
         for image in images:
-
             (mimetype, _) = guess_type(image)
             (maintype, subtype) = mimetype.split("/")
 
@@ -271,7 +270,6 @@ def send_fax(msg: EmailMessage) -> dict:
 
 
 def resize_pdf_to_A4(pdf: bytes) -> bytes:
-
     DPI = 72
     INCHES_IN_CM = 2.54
     A4_WIDTH_CM = 21
@@ -281,14 +279,16 @@ def resize_pdf_to_A4(pdf: bytes) -> bytes:
         "height": DPI * A4_HEIGHT_CM / INCHES_IN_CM,
     }
 
-    pdf = PyPDF2.PdfReader(io.BytesIO(pdf))
+    pdf = pypdf.PdfReader(io.BytesIO(pdf))
 
-    writer = PyPDF2.PdfWriter()
+    writer = pypdf.PdfWriter()
 
     for page in pdf.pages:
         page.scale_to(width=A4["width"], height=A4["height"])
-        page.compress_content_streams()
         writer.add_page(page)
+
+    for page in writer.pages:
+        page.compress_content_streams()
 
     buf = io.BytesIO()
     writer.write(buf)

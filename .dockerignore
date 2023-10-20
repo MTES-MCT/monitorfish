@@ -1,15 +1,20 @@
 # git repo
 .git
 
+# Frontend environment
+frontend/node_modules
+
 # Env variables
 datascience/.env
 
+#Docs
+/datascience/docs
+
 # Notebooks
 /datascience/notebooks
-/datascience/.local
-/datascience/.ipython
-/datascience/.cache
-.ipynb_checkpoints/
+datascience/dam-si-jupyter-config.py
+**/.ipython
+**/.ipynb_checkpoints/
 .jupyter/
 
 # Local data
@@ -17,11 +22,18 @@ datascience/.env
 
 # Python
 *.pyc
-__pycache__
+datascience/monitorfish.egg-info
+/datascience/.local
+/datascience/.cache
+/datascience/.pytest_cache
+**/__pycache__
 
 # Coverage reports
-htmlcov
-.coverage
+**/htmlcov
+**/.coverage
+
+# Tools
+**/.pre-commit-config.yaml
 
 # IDEs
 .vscode

@@ -1,7 +1,6 @@
 import io
-from decimal import Decimal
 
-from PyPDF2 import PdfReader
+from pypdf import PdfReader
 from pytest import fixture
 
 from config import TEST_DATA_LOCATION
@@ -27,7 +26,7 @@ def test_resize_pdf_to_A4(A3_pdf):
     A3_page = A3_pdf_object.pages[0]
     resized_page = resized_pdf_object.pages[0]
 
-    assert A3_page.mediabox.width == Decimal("841.889764")
-    assert A3_page.mediabox.height == Decimal("1190.551181")
-    assert resized_page.mediabox.width == Decimal("595.27559")
-    assert resized_page.mediabox.height == Decimal("841.88976")
+    assert A3_page.mediabox.width == 841.889764
+    assert A3_page.mediabox.height == 1190.551181
+    assert resized_page.mediabox.width == 595.275591
+    assert resized_page.mediabox.height == 841.889764

@@ -1,4 +1,5 @@
 import pandas as pd
+from sqlalchemy import text
 
 from src.db_config import create_engine
 from src.pipeline.flows.missing_trip_numbers import flow
@@ -11,7 +12,10 @@ flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_ru
 def test_missing_trip_numbers_flow(reset_test_data):
     # Setup : reset trip numbers of a vessel to NULL
     e = create_engine("monitorfish_remote")
-    e.execute("UPDATE logbook_reports SET trip_number = NULL WHERE cfr = 'SOCR4T3';")
+    with e.begin() as connection:
+        connection.execute(
+            text("UPDATE logbook_reports SET trip_number = NULL WHERE cfr = 'SOCR4T3';")
+        )
 
     initial_missing_trip_numbers = read_query(
         """
@@ -112,24 +116,30 @@ def test_missing_trip_numbers_flow_overwrites_only_computed_trip_numbers(
 ):
     # Setup : reset trip numbers of a vessel to NULL
     e = create_engine("monitorfish_remote")
-    e.execute(
-        """
-    UPDATE logbook_reports
-    SET trip_number = NULL
-    WHERE cfr = 'SOCR4T3'
-    AND report_id != '1e1bff95-dfff-4cc3-82d3-d72b46fda745';"""
-    )
+    with e.begin() as connection:
+        connection.execute(
+            text(
+                """
+            UPDATE logbook_reports
+            SET trip_number = NULL
+            WHERE cfr = 'SOCR4T3'
+            AND report_id != '1e1bff95-dfff-4cc3-82d3-d72b46fda745';"""
+            )
+        )
 
     # Since only DAT messages trigger the increment of trip_numbers, we must ensure
     # that COR reports before the very first DAT report do not receive a NULL
     # trip_number.
     # By default the value '0' should be assigned to such reports.
-    e.execute(
-        """
-    UPDATE logbook_reports
-    SET operation_type = 'COR'
-    WHERE report_id = '83952732-ef89-4168-b2a1-df49d0aa1aff';"""
-    )
+    with e.begin() as connection:
+        connection.execute(
+            text(
+                """
+        UPDATE logbook_reports
+        SET operation_type = 'COR'
+        WHERE report_id = '83952732-ef89-4168-b2a1-df49d0aa1aff';"""
+            )
+        )
 
     initial_missing_trip_numbers = read_query(
         """

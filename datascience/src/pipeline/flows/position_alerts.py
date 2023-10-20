@@ -47,7 +47,6 @@ class ZonesTable:
     """
 
     def __init__(self, table: Table, geometry_column: str, filter_column: str):
-
         assert filter_column in table.columns
         assert geometry_column in table.columns
         assert isinstance(table.columns[geometry_column].type, Geometry)
@@ -199,20 +198,18 @@ def make_positions_in_alert_query(
 
     q = (
         select(
-            [
-                positions_table.c.id,
-                positions_table.c.internal_reference_number.label("cfr"),
-                positions_table.c.external_reference_number.label(
-                    "external_immatriculation"
-                ),
-                positions_table.c.ircs,
-                positions_table.c.vessel_name,
-                positions_table.c.flag_state,
-                positions_table.c.date_time,
-                positions_table.c.latitude,
-                positions_table.c.longitude,
-                facades_table.c.facade,
-            ]
+            positions_table.c.id,
+            positions_table.c.internal_reference_number.label("cfr"),
+            positions_table.c.external_reference_number.label(
+                "external_immatriculation"
+            ),
+            positions_table.c.ircs,
+            positions_table.c.vessel_name,
+            positions_table.c.flag_state,
+            positions_table.c.date_time,
+            positions_table.c.latitude,
+            positions_table.c.longitude,
+            facades_table.c.facade,
         )
         .select_from(
             positions_table.join(
@@ -266,7 +263,7 @@ def make_fishing_gears_query(
     which to generate alerts.
     """
 
-    q = select([fishing_gears_table.c.fishing_gear_code])
+    q = select(fishing_gears_table.c.fishing_gear_code)
 
     filters = []
 
@@ -305,7 +302,7 @@ def extract_current_gears() -> pd.DataFrame:
     )
 
     current_gears["current_gears"] = current_gears["current_gears"].map(
-        lambda l: set(l) if l else None
+        lambda li: set(li) if li else None
     )
 
     current_gears = current_gears.drop(
@@ -405,7 +402,7 @@ def get_vessels_in_alert(positions_in_alert: pd.DataFrame) -> pd.DataFrame:
     """
     vessels_in_alerts = (
         positions_in_alert.sort_values("date_time", ascending=False)
-        .groupby(["cfr", "ircs", "external_immatriculation"])
+        .groupby(["cfr", "ircs", "external_immatriculation"], dropna=False)
         .head(1)[
             [
                 "cfr",
@@ -432,10 +429,8 @@ def get_vessels_in_alert(positions_in_alert: pd.DataFrame) -> pd.DataFrame:
 
 
 with Flow("Position alert", executor=LocalDaskExecutor()) as flow:
-
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         alert_type = Parameter("alert_type")
         alert_config_name = Parameter("alert_config_name")
         zones = Parameter("zones")

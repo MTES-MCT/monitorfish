@@ -63,7 +63,6 @@ flow.replace(flow.get_tasks("update_resource")[0], mock_update_resource)
 
 
 def test_flow(reset_test_data, expected_ports_open_data, expected_loaded_ports):
-
     flow.schedule = None
     state = flow.run()
     assert state.is_successful()
@@ -83,5 +82,7 @@ def test_flow(reset_test_data, expected_ports_open_data, expected_loaded_ports):
     )
 
     pd.testing.assert_frame_equal(
-        df_from_csv_file_object, expected_ports_open_data, check_like=True
+        df_from_csv_file_object.convert_dtypes(),
+        expected_ports_open_data.convert_dtypes(),
+        check_like=True,
     )

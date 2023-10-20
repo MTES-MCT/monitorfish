@@ -13,7 +13,6 @@ from src.pipeline.utils import get_table
 
 
 def test_make_add_vessels_columns_query(reset_test_data):
-
     e = create_engine("monitorfish_remote")
     logger = Logger("test_logger")
     vessels_table = get_table("vessels", "public", e, logger)
@@ -42,7 +41,6 @@ def test_make_add_vessels_columns_query(reset_test_data):
 
 
 def test_make_find_vessels_query(reset_test_data):
-
     vessels = pd.DataFrame(
         {
             "cfr": ["A", "B", "C", None],
@@ -109,4 +107,4 @@ def test_merge_vessel_id():
     pd.testing.assert_frame_equal(vessels_with_id, expected_vessels_with_id)
 
     assert len(logger.method_calls) == 2
-    assert logger.warn.call_count == 2
+    assert logger.warning.call_count == 2

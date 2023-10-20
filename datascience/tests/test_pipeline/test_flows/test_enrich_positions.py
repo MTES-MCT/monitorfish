@@ -69,7 +69,6 @@ def test_extract_positions(reset_test_data):
 
 
 def test_filter_already_enriched_vessels():
-
     td = pd.Timedelta("1hour").to_numpy()
 
     positions = pd.DataFrame(
@@ -108,7 +107,6 @@ def test_filter_already_enriched_vessels_empty_input():
 
 
 def test_enrich_positions_by_vessel():
-
     d = datetime(2021, 5, 1, 12, 0, 0)
     td = timedelta(hours=1)
 
@@ -154,8 +152,8 @@ def test_enrich_positions_by_vessel():
             ],
             "longitude": [-4, -4.05, 0.0, 0.1, 0.2, -4.1, -4.15, 0.2, 0.3, -4.2],
             "datetime_utc": [
+                d - td,
                 d,
-                d + td,
                 d,
                 d + td,
                 d + 2 * td,
@@ -200,28 +198,26 @@ def test_enrich_positions_by_vessel():
         minimum_minutes_of_emission_at_sea=-1,
     )
 
-    expected_enriched_positions = positions.loc[[0, 1, 5, 6, 9, 2, 3, 4, 7, 8], :].copy(
-        deep=True
-    )
+    expected_enriched_positions = positions.copy(deep=True)
     expected_enriched_positions["meters_from_previous_position"] = [
         None,
         6808.287716,
-        6808.287716,
-        6810.268455,
-        6812.248615,
         None,
         14998.491839,
         15004.017857,
+        6808.287716,
+        6810.268455,
         11119.505198,
         15015.015454,
+        6812.248615,
     ]
     expected_enriched_positions["time_since_previous_position"] = [
         None,
         td,
-        td,
-        td,
-        td,
         None,
+        td,
+        td,
+        2 * td,
         td,
         td,
         td,
@@ -230,42 +226,45 @@ def test_enrich_positions_by_vessel():
     expected_enriched_positions["average_speed"] = [
         None,
         3.676181,
-        3.676181,
-        3.677251,
-        3.678320,
         None,
         8.098538,
         8.101522,
+        1.838091,
+        3.677251,
         6.004052,
         8.107460,
+        3.678320,
     ]
     expected_enriched_positions["is_fishing"] = [
         False,
         False,
-        True,
-        True,
-        True,
         None,
         False,
         False,
+        True,
+        True,
         False,
         False,
+        True,
     ]
 
     expected_enriched_positions["time_emitting_at_sea"] = [
         0 * td,
         0 * td,
-        0 * td,
-        1 * td,
-        2 * td,
         13 * td,
         14 * td,
         15 * td,
+        0 * td,
+        1 * td,
         16 * td,
         17 * td,
+        2 * td,
     ]
 
-    pd.testing.assert_frame_equal(enriched_positions, expected_enriched_positions)
+    pd.testing.assert_frame_equal(
+        enriched_positions.convert_dtypes(),
+        expected_enriched_positions.convert_dtypes(),
+    )
 
     # Test with increased minimum_minutes_of_emission_at_sea
     enriched_positions = enrich_positions_by_vessel(
@@ -279,21 +278,23 @@ def test_enrich_positions_by_vessel():
     expected_enriched_positions["is_fishing"] = [
         False,
         False,
-        False,
-        False,
-        True,
         None,
         False,
         False,
         False,
         False,
+        False,
+        False,
+        True,
     ]
 
-    pd.testing.assert_frame_equal(enriched_positions, expected_enriched_positions)
+    pd.testing.assert_frame_equal(
+        enriched_positions.convert_dtypes(),
+        expected_enriched_positions.convert_dtypes(),
+    )
 
 
 def test_enrich_positions_by_vessel_handles_empty_input():
-
     positions = pd.DataFrame(
         columns=[
             "id",
@@ -341,7 +342,8 @@ def test_load_then_reset_fishing_activity(reset_test_data):
             "is_fishing": [True],
             "time_emitting_at_sea": [None],
         }
-    )
+    ).astype({"time_emitting_at_sea": "timedelta64[ns]"})
+
     positions_2 = pd.DataFrame(
         {
             "id": [13632807, 13635518, 13638407, 13640935],
@@ -433,7 +435,6 @@ def test_load_then_reset_fishing_activity(reset_test_data):
 
 
 def test_extract_enrich_load(reset_test_data):
-
     positions_before = read_query(
         """SELECT
             external_reference_number,
@@ -590,7 +591,6 @@ def test_extract_enrich_load(reset_test_data):
 
 
 def test_flow_does_not_recompute_all_when_not_asked_to(reset_test_data):
-
     # Vessel 'ABC000055481' has all its positions already enriched in the test_data
     positions_before = read_query(
         """SELECT
@@ -639,7 +639,6 @@ def test_flow_does_not_recompute_all_when_not_asked_to(reset_test_data):
 
 
 def test_flow_recomputes_all_when_asked_to(reset_test_data):
-
     # Vessel 'ABC000055481' has all its positions already enriched in the test_data
     positions_before = read_query(
         """SELECT
@@ -713,7 +712,6 @@ def test_flow_recomputes_all_when_asked_to(reset_test_data):
 
 
 def test_flow_can_compute_in_chunks(reset_test_data):
-
     query = """
         SELECT
             id,

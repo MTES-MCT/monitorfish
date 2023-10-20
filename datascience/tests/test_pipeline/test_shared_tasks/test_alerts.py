@@ -137,7 +137,7 @@ def test_make_alerts():
                 "MISSING_FAR_ALERT_CONFIG_1",
             ],
         }
-    )
+    ).astype({"creation_date": "datetime64[ns]"})
 
     pd.testing.assert_frame_equal(alerts, expected_alerts)
 
@@ -156,6 +156,7 @@ def test_make_alerts():
         datetime(2020, 5, 3, 8, 0, 0),
         datetime(2020, 5, 3, 8, 0, 0),
     ]
+    expected_alerts = expected_alerts.astype({"creation_date": "datetime64[us]"})
 
     pd.testing.assert_frame_equal(alerts, expected_alerts)
 

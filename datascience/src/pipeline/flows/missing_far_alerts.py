@@ -137,19 +137,17 @@ def make_positions_at_sea_query(
 
     q = (
         select(
-            [
-                positions_table.c.internal_reference_number.label("cfr"),
-                positions_table.c.external_reference_number.label(
-                    "external_immatriculation"
-                ),
-                positions_table.c.ircs,
-                positions_table.c.vessel_name,
-                positions_table.c.flag_state,
-                positions_table.c.date_time,
-                positions_table.c.latitude,
-                positions_table.c.longitude,
-                facade_areas_table.c.facade,
-            ]
+            positions_table.c.internal_reference_number.label("cfr"),
+            positions_table.c.external_reference_number.label(
+                "external_immatriculation"
+            ),
+            positions_table.c.ircs,
+            positions_table.c.vessel_name,
+            positions_table.c.flag_state,
+            positions_table.c.date_time,
+            positions_table.c.latitude,
+            positions_table.c.longitude,
+            facade_areas_table.c.facade,
         )
         .select_from(from_table)
         .where(
@@ -395,10 +393,8 @@ def merge_risk_factor(
 
 
 with Flow("Missing FAR alerts", executor=LocalDaskExecutor()) as flow:
-
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         # Parameters
         alert_type = Parameter("alert_type")
         alert_config_name = Parameter("alert_config_name")

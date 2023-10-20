@@ -46,9 +46,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache-pipeline
-          key: ${{ runner.os }}-single-buildx-${{ github.sha }}
+          key: ${{ runner.os }}-single-buildx-data-pipeline-${{ github.ref_name }}
           restore-keys: |
-            ${{ runner.os }}-single-buildx
+            ${{ runner.os }}-single-buildx-data-pipeline-
 
       - name: Build image
         uses: docker/build-push-action@v2

@@ -40,8 +40,8 @@ def get_table(
 
     try:
         logger.info(f"Searching for table {schema}.{table_name}...")
-        meta.reflect(only=[table_name], views=True)
-        table = Table(table_name, meta, mustexist=True)
+        meta.reflect(bind=conn, only=[table_name], views=True)
+        table = Table(table_name, meta, must_exist=True)
         logger.info(f"Table {schema}.{table_name} found.")
     except InvalidRequestError:
         logger.error(
@@ -60,13 +60,13 @@ def delete(
 ):
     """Deletes all rows from a table.
     Useful to wipe a table before re-inserting fresh data in ETL jobs."""
-    count_statement = select([func.count()]).select_from(table)
+    count_statement = select(func.count()).select_from(table)
     n = connection.execute(count_statement).fetchall()[0][0]
     if logger:
         logger.info(f"Found existing table {table.name} with {n} rows.")
         logger.info(f"Deleting table {table.name}...")
     connection.execute(table.delete())
-    count_statement = select([func.count()]).select_from(table)
+    count_statement = select(func.count()).select_from(table)
     n = connection.execute(count_statement).fetchall()[0][0]
     if logger:
         logger.info(f"Rows after deletion: {n}.")
@@ -89,7 +89,7 @@ def delete_rows(
         logger (logging.Logger): logger
 
     """
-    count_statement = select([func.count()]).select_from(table)
+    count_statement = select(func.count()).select_from(table)
     n = connection.execute(count_statement).fetchall()[0][0]
     if logger:
         logger.info(f"Found existing table {table.name} with {n} rows.")
@@ -100,7 +100,7 @@ def delete_rows(
 
     connection.execute(table.delete().where(table.c[id_column].in_(ids_to_delete)))
 
-    count_statement = select([func.count()]).select_from(table)
+    count_statement = select(func.count()).select_from(table)
     n = connection.execute(count_statement).fetchall()[0][0]
     if logger:
         logger.info(f"Rows after deletion: {n}.")

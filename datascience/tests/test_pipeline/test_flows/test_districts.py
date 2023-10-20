@@ -19,4 +19,6 @@ def test_districts_flow(reset_test_data):
         na_values=[""],
     )
 
-    pd.testing.assert_frame_equal(districts, expected_districts)
+    pd.testing.assert_frame_equal(
+        districts.convert_dtypes(), expected_districts.convert_dtypes()
+    )

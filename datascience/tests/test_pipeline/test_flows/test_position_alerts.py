@@ -14,6 +14,7 @@ from sqlalchemy import (
     Integer,
     MetaData,
     Table,
+    text,
 )
 
 from src.db_config import create_engine
@@ -100,7 +101,6 @@ def test_get_alert_type_zones_table(reset_test_data):
     mock_datetime_utcnow(datetime(2021, 1, 1, 16, 10, 0)),
 )
 def test_make_positions_in_alert_query():
-
     meta = MetaData()
     positions_table = Table(
         "positions",
@@ -180,7 +180,7 @@ def test_make_positions_in_alert_query():
         "AND positions.is_fishing "
         "AND zones.zone_name IN ('Zone A') "
         "AND positions.flag_state IN ('NL, DE') "
-        "AND positions.flag_state NOT IN ('VE')"
+        "AND (positions.flag_state NOT IN ('VE'))"
     )
 
     assert query == expected_query
@@ -371,7 +371,6 @@ def test_filter_on_gears():
 
 
 def test_get_vessels_in_alert():
-
     now = datetime(2020, 1, 1, 0, 0, 0)
     td = timedelta(hours=1)
 
@@ -423,16 +422,15 @@ def test_get_vessels_in_alert():
 
 
 def test_flow_deletes_existing_pending_alerts_of_matching_config_name(reset_test_data):
-
     # With these parameters, no alert should be raised.
     alert_type = "THREE_MILES_TRAWLING_ALERT"
     alert_config_name_in_table = "ALERTE_1"
     alert_config_name_not_in_table = "ALERTE_2"
-    zones = "0-3"
+    zones = ["0-3"]
     hours_from_now = 8
     only_fishing_positions = True
     flag_states = None
-    fishing_gears = ["OTM"]
+    fishing_gears = ["LLS"]
     fishing_gear_categories = None
     include_vessels_unknown_gear = False
 
@@ -484,7 +482,8 @@ def test_flow_deletes_existing_pending_alerts_of_matching_config_name(reset_test
 def test_flow_inserts_new_pending_alerts(reset_test_data):
     # We delete the silenced alerts first
     e = create_engine("monitorfish_remote")
-    e.execute("DELETE FROM silenced_alerts;")
+    with e.begin() as connection:
+        connection.execute(text("DELETE FROM silenced_alerts;"))
 
     now = pytz.utc.localize(datetime.utcnow())
 
@@ -766,7 +765,6 @@ def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data
 
 
 def test_flow_filters_on_gears(reset_test_data):
-
     now = pytz.utc.localize(datetime.utcnow())
 
     # With these parameters, all 3 vessels should be in alert.
@@ -874,7 +872,6 @@ def test_flow_filters_on_gears(reset_test_data):
 
 
 def test_flow_filters_on_time(reset_test_data):
-
     now = pytz.utc.localize(datetime.utcnow())
 
     # With these parameters, all 3 vessels should be in alert.
@@ -994,7 +991,6 @@ def test_flow_filters_on_time(reset_test_data):
 
 
 def test_flow_filters_on_flag_states(reset_test_data):
-
     now = pytz.utc.localize(datetime.utcnow())
 
     # With these parameters, all 3 vessels should be in alert.
@@ -1090,7 +1086,6 @@ def test_flow_filters_on_flag_states(reset_test_data):
 
 
 def test_flow_french_eez_fishing_alert(reset_test_data):
-
     # With these parameters, 2 french vessels should be in alert.
     alert_type = "FRENCH_EEZ_FISHING_ALERT"
     alert_config_name = "ALERTE_1"

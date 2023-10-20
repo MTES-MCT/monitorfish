@@ -261,7 +261,10 @@ def test_enrich_positions_by_vessel():
         2 * td,
     ]
 
-    pd.testing.assert_frame_equal(enriched_positions, expected_enriched_positions)
+    pd.testing.assert_frame_equal(
+        enriched_positions.convert_dtypes(),
+        expected_enriched_positions.convert_dtypes(),
+    )
 
     # Test with increased minimum_minutes_of_emission_at_sea
     enriched_positions = enrich_positions_by_vessel(
@@ -285,7 +288,10 @@ def test_enrich_positions_by_vessel():
         True,
     ]
 
-    pd.testing.assert_frame_equal(enriched_positions, expected_enriched_positions)
+    pd.testing.assert_frame_equal(
+        enriched_positions.convert_dtypes(),
+        expected_enriched_positions.convert_dtypes(),
+    )
 
 
 def test_enrich_positions_by_vessel_handles_empty_input():
@@ -336,7 +342,8 @@ def test_load_then_reset_fishing_activity(reset_test_data):
             "is_fishing": [True],
             "time_emitting_at_sea": [None],
         }
-    )
+    ).astype({"time_emitting_at_sea": "timedelta64[ns]"})
+
     positions_2 = pd.DataFrame(
         {
             "id": [13632807, 13635518, 13638407, 13640935],

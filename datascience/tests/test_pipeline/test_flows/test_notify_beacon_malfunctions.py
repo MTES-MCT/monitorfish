@@ -1041,9 +1041,10 @@ def test_flow(reset_test_data):
 
     expected_inserted_notifications["date_time_utc"] = datetime.utcnow()
     pd.testing.assert_frame_equal(
-        inserted_notifications.drop(columns=["date_time_utc"]),
-        expected_inserted_notifications.drop(columns=["date_time_utc"]),
-        check_dtype=False,
+        inserted_notifications.drop(columns=["date_time_utc"]).convert_dtypes(),
+        expected_inserted_notifications.drop(
+            columns=["date_time_utc"]
+        ).convert_dtypes(),
     )
 
     assert (

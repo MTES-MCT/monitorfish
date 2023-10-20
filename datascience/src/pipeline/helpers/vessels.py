@@ -175,7 +175,7 @@ def merge_vessel_id(
             "more than one vessel:\n" + str(ambiguous_vessels.to_markdown(index=False))
         )
 
-        logger.warn(warning_message)
+        logger.warning(warning_message)
 
     if vessels.is_in_conflict.any():
         vessels_in_conflict = vessels.loc[
@@ -189,7 +189,7 @@ def merge_vessel_id(
             + str(vessels_in_conflict.to_markdown(index=False))
         )
 
-        logger.warn(warning_message)
+        logger.warning(warning_message)
 
     vessels = vessels.drop_duplicates(subset=input_id)
 

@@ -2,6 +2,7 @@ import datetime
 import logging
 import re
 from functools import partial
+from io import StringIO
 from typing import Any, Hashable, List, Union
 
 import numpy as np
@@ -155,7 +156,7 @@ def get_first_non_null_column_name(
 
     res_values = np.choose(first_non_null_values_idx, list(df))
 
-    res = pd.Series(index=df.index, data=[None] * len(df), dtype=float)
+    res = pd.Series(index=df.index, data=[None] * len(df), dtype=object)
     res[non_null_rows.index] = res_values
 
     if result_labels is not None:
@@ -232,7 +233,7 @@ def df_to_dict_series(
     res = df.copy(deep=True)
     json_string = res.to_json(orient="index")
 
-    res = pd.read_json(json_string, orient="index", typ="Series")
+    res = pd.read_json(StringIO(json_string), orient="index", typ="Series")
     res.name = result_colname
 
     if remove_nulls:
@@ -350,7 +351,7 @@ def df_values_to_psql_arrays(
         to_pgarr, handle_errors=handle_errors, value_on_error=value_on_error
     )
 
-    return df.applymap(serialize, na_action="ignore").fillna("{}")
+    return df.map(serialize, na_action="ignore").fillna("{}")
 
 
 def json_converter(x):
@@ -395,7 +396,7 @@ def df_values_to_json(df: pd.DataFrame) -> pd.DataFrame:
         pd.DataFrame: pandas DataFrame with the same shape and index, all values
         serialized as json strings.
     """
-    return df.applymap(to_json, na_action="ignore").fillna("null")
+    return df.map(to_json, na_action="ignore").fillna("null")
 
 
 def serialize_nullable_integer_df(df: pd.DataFrame) -> pd.DataFrame:
@@ -410,9 +411,7 @@ def serialize_nullable_integer_df(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: same DataFrame converted to string dtype
     """
-    return df.applymap(lambda x: str(int(x)), na_action="ignore").where(
-        df.notnull(), None
-    )
+    return df.map(lambda x: str(int(x)), na_action="ignore").where(df.notnull(), None)
 
 
 def serialize_timedelta_df(df: pd.DataFrame) -> pd.DataFrame:

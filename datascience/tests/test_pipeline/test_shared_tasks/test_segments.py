@@ -146,4 +146,6 @@ def test_unnest_segments():
         }
     )
 
-    pd.testing.assert_frame_equal(segments, expected_segments)
+    pd.testing.assert_frame_equal(
+        segments.convert_dtypes(), expected_segments.convert_dtypes()
+    )

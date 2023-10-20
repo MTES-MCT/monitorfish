@@ -36,7 +36,6 @@ from src.pipeline.processing import (
 
 
 def test_get_unused_col_name():
-
     assert get_unused_col_name("id", pd.DataFrame({"id": [1, 2, 3]})) == "id_0"
     assert (
         get_unused_col_name("id", pd.DataFrame({"id": [1, 2, 3], "id_0": [1, 2, 3]}))
@@ -236,7 +235,6 @@ def test_to_pgarr():
 
 
 def test_to_json():
-
     # Test basic dicts and lists serialization
     a = [1, 2, 3]
     b = {"a": 1, "b": 2}
@@ -379,7 +377,6 @@ def test_df_values_to_psql_arrays():
 
 @patch("src.pipeline.processing.pd")
 def test_drop_rows_already_in_table(mock_pandas):
-
     df = pd.DataFrame(
         data=[
             [1, 2, 3, 4],
@@ -663,9 +660,8 @@ def test_join_on_multiple_keys():
     )
 
     pd.testing.assert_frame_equal(
-        res_no_coalesce_common_columns,
-        expected_res_no_coalesce_common_columns,
-        check_dtype=False,
+        res_no_coalesce_common_columns.convert_dtypes(),
+        expected_res_no_coalesce_common_columns.convert_dtypes(),
     )
 
 
@@ -744,7 +740,6 @@ def test_left_isin_right_by_decreasing_priority():
 
 
 def test_drop_duplicates_by_decreasing_priority():
-
     df = pd.DataFrame(
         {
             "A": [1, 2, 3, None, 1, 2, 3, 4, None, 22, None, None, None],
@@ -770,7 +765,6 @@ def test_drop_duplicates_by_decreasing_priority():
 
 
 def test_array_equals_row_on_window():
-
     arr = np.array(
         [
             [True, True, True],
@@ -802,7 +796,6 @@ def test_array_equals_row_on_window():
 
 
 def test_back_propagate_ones():
-
     arr = np.array([0.0, np.nan, 1.0, 0.0, np.nan, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0])
 
     # Test steps=0

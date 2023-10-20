@@ -104,9 +104,10 @@ def test_extract_control_priorities(reset_test_data):
 def test_extract_last_positions(reset_test_data):
     last_positions = extract_last_positions.run()
     assert last_positions.crs.to_string() == "EPSG:4326"
-    last_positions["geometry"] = last_positions["geometry"].map(str)
+    last_positions["wkt"] = last_positions["geometry"].map(str)
+    last_positions = last_positions.drop(columns=["geometry"])
     expected_last_positions = pd.DataFrame(
-        columns=["cfr", "latitude", "longitude", "geometry"],
+        columns=["cfr", "latitude", "longitude", "wkt"],
         data=[
             ["ABC000055481", 53.435, 5.553, "POINT (5.553 53.435)"],
             ["ABC000542519", 43.324, 5.359, "POINT (5.359 43.324)"],
@@ -116,7 +117,7 @@ def test_extract_last_positions(reset_test_data):
 
 
 def test_compute_last_positions_facade():
-    last_positions = gpd.GeoDataFrame(
+    last_positions = pd.DataFrame(
         {
             "cfr": ["A", "B", "C", "D"],
             "latitude": [45, 45, 45.1, 45],
@@ -124,8 +125,10 @@ def test_compute_last_positions_facade():
         }
     )
 
-    last_positions.geometry = gpd.points_from_xy(
-        last_positions.longitude, last_positions.latitude, crs=4326
+    last_positions = gpd.GeoDataFrame(
+        last_positions,
+        geometry=gpd.points_from_xy(last_positions.longitude, last_positions.latitude),
+        crs=4326,
     )
 
     facade_areas = gpd.GeoDataFrame(
@@ -188,11 +191,13 @@ def test_compute_last_positions_facade():
 
     try:
         pd.testing.assert_frame_equal(
-            last_positions_facade, expected_last_positions_facade_1
+            last_positions_facade.convert_dtypes(),
+            expected_last_positions_facade_1.convert_dtypes(),
         )
     except AssertionError:
         pd.testing.assert_frame_equal(
-            last_positions_facade, expected_last_positions_facade_2
+            last_positions_facade.convert_dtypes(),
+            expected_last_positions_facade_2.convert_dtypes(),
         )
 
 
@@ -234,7 +239,7 @@ def test_compute_current_segments():
         data=[
             [["A", "B"], 123.56, "A", 1.1],
             [["E", "F", "A"], 1231.4, "E", 3.0],
-            [None, 1203.4, None, None],
+            [float("nan"), 1203.4, None, None],
             [["B", "D"], 1247.4, "B", 1.0],
         ],
         columns=[
@@ -257,7 +262,7 @@ def test_compute_current_segments():
     expected_res["segments"] = expected_res.segments.map(sorted, na_action="ignore")
     res["segments"] = res.segments.map(sorted, na_action="ignore")
 
-    pd.testing.assert_frame_equal(res, expected_res)
+    pd.testing.assert_frame_equal(res.convert_dtypes(), expected_res.convert_dtypes())
 
 
 def test_compute_control_priorities():
@@ -426,12 +431,12 @@ def test_join():
                         "weight": 235.6,
                     },
                 ],
-                None,
+                float("nan"),
             ],
-            "segments": [["Segment 1", "Segment 2"], None],
+            "segments": [["Segment 1", "Segment 2"], float("nan")],
             "total_weight_onboard": [249.06, 0.0],
             "impact_risk_factor": [2.0, 1.0],
-            "segment_highest_priority": [None, "Segment 2"],
+            "segment_highest_priority": [float("nan"), "Segment 2"],
             "control_priority_level": [1.0, 2.0],
         }
     )

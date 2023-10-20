@@ -43,8 +43,8 @@ transformed_foreign_fmcs_df = pd.DataFrame(
         "email_addresses": [
             ["fmc@aaa.com", "fmc2@aaa.com"],
             ["fmc@bbb.io"],
-            None,
-            None,
+            float("nan"),
+            float("nan"),
         ],
     }
 )

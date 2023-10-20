@@ -41,7 +41,6 @@ def test_api_url():
 
 @patch("src.pipeline.shared_tasks.datagouv.requests")
 def test_update_resource(mock_requests):
-
     resource = BytesIO(b"some file object")
 
     update_resource.run(
@@ -67,7 +66,6 @@ def test_update_resource(mock_requests):
 
 @patch("src.pipeline.shared_tasks.datagouv.requests")
 def test_update_resource_hen_mock_update_is_true(mock_requests):
-
     resource = BytesIO(b"some file object")
 
     update_resource.run(
@@ -82,7 +80,6 @@ def test_update_resource_hen_mock_update_is_true(mock_requests):
 
 
 def test_get_csv_file_object():
-
     input_df = pd.DataFrame(
         {
             "ints": [1, 2, 3],
@@ -99,11 +96,12 @@ def test_get_csv_file_object():
     assert isinstance(file_object, BytesIO)
 
     df_from_file_object = pd.read_csv(file_object)
-    pd.testing.assert_frame_equal(df_from_file_object, input_df)
+    pd.testing.assert_frame_equal(
+        df_from_file_object.convert_dtypes(), input_df.convert_dtypes()
+    )
 
 
 def test_get_geopackage_file_object_with_layers():
-
     input_gdf = gpd.GeoDataFrame(
         {
             "ints": [1, 2, 3, 4, 5],

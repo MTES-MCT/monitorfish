@@ -144,9 +144,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache-app
-          key: ${{ runner.os }}-single-buildx-${{ github.sha }}
+          key: ${{ runner.os }}-single-buildx-app-${{ github.ref_name }}
           restore-keys: |
-            ${{ runner.os }}-single-buildx
+            ${{ runner.os }}-single-buildx-app-
 
       - name: Build image
         uses: docker/build-push-action@v2

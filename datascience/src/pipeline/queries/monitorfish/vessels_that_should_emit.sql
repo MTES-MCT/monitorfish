@@ -12,7 +12,4 @@ SELECT
 FROM beacons b
 JOIN vessels v
 ON v.id = b.vessel_id
-WHERE
-    b.beacon_status IN ('ACTIVATED', 'UNSUPERVISED') AND
-    -- Flag_states whose emissions are monitored
-    v.flag_state IN ('FR', 'VE')
+WHERE b.beacon_status IN ('ACTIVATED', 'UNSUPERVISED')

@@ -1,3 +1,6 @@
+ALTER TABLE regulations
+DROP COLUMN regulatory_details;
+
 WITH id_regulations AS (
     SELECT
         id,

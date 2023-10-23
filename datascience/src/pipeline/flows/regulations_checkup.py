@@ -427,8 +427,10 @@ def get_unknown_links(
     legipeche_regulations: pd.DataFrame,
 ) -> set:
     """
-    Returns the urls of `monitorfish_regulations` that contain an `article_id`
-    that is not present in `legipeche_regulations`.
+    Returns the urls of `monitorfish_regulations` whose `article_id`
+    is either not present in `legipeche_regulations` (i.e. referencing Legipeche
+    articles that might not exist) or null (which corresponds to urls that do not match
+    the legipeche url pattern and which usually point to external websites).
 
     Args:
         monitorfish_regulations (pd.DataFrame):

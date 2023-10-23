@@ -171,7 +171,7 @@ def add_article_id(regulations: pd.DataFrame, url_column: str) -> pd.DataFrame:
     legipeche_regex = re.compile(
         (
             r"^http://legipeche\.metier\."
-            r"(?:i2|intranets\.developpement-durable\.ader\.gouv\.fr)/"
+            r"e2\.rie\.gouv\.fr/"
             r"(?:[a-zA-Z0-9-]*)"
             r"-a(?P<article_id>\d+)"
             r"\.html"
@@ -427,8 +427,10 @@ def get_unknown_links(
     legipeche_regulations: pd.DataFrame,
 ) -> set:
     """
-    Returns the urls of `monitorfish_regulations` that do contain an `article_id`
-    known in `legipeche_regulations`.
+    Returns the urls of `monitorfish_regulations` whose `article_id`
+    is either not present in `legipeche_regulations` (i.e. referencing Legipeche
+    articles that might not exist) or null (which corresponds to urls that do not match
+    the legipeche url pattern and which usually point to external websites).
 
     Args:
         monitorfish_regulations (pd.DataFrame):
@@ -499,17 +501,13 @@ def get_dead_links(
     dead_links_urls = []
     for unknown_link in unknown_links:
         try:
-            unknown_link_alias = unknown_link.replace(
-                "intranets.developpement-durable.ader.gouv.fr",
-                "i2",
-            )
-            logger.info(f"Testing {unknown_link_alias}")
-            r = requests.get(unknown_link_alias, timeout=10)
+            logger.info(f"Testing {unknown_link}")
+            r = requests.get(unknown_link, timeout=10)
             r.raise_for_status()
         except requests.Timeout:
             try:
-                logger.info(f"{unknown_link_alias} timed out. Retrying with proxies...")
-                r = requests.get(unknown_link_alias, timeout=10, proxies=proxies)
+                logger.info(f"{unknown_link} timed out. Retrying with proxies...")
+                r = requests.get(unknown_link, timeout=10, proxies=proxies)
                 r.raise_for_status()
             except requests.HTTPError:
                 logger.info(f"{unknown_link} is a dead link.")
@@ -523,7 +521,6 @@ def get_dead_links(
             requests.exceptions.InvalidURL,
         ) as e:
             logger.info(f"{unknown_link} is a dead link (error {type(e)}: {e}).")
-            logger.info(f"{unknown_link} is a dead link.")
             dead_links_urls.append(unknown_link)
 
     # null references are missing_references, not dead_links
@@ -620,14 +617,12 @@ def format_outdated_references(outdated_references: pd.DataFrame) -> pd.DataFram
 
 @task(checkpoint=False)
 def get_main_template() -> jinja2.environment.Template:
-
     with open(EMAIL_TEMPLATES_LOCATION / "regulations_checkup/main.jinja", "r") as f:
         return jinja2.Template(f.read())
 
 
 @task(checkpoint=False)
 def get_body_template() -> jinja2.environment.Template:
-
     with open(EMAIL_TEMPLATES_LOCATION / "regulations_checkup/body.jinja", "r") as f:
         return jinja2.Template(f.read())
 
@@ -698,7 +693,6 @@ def render_main(
 
 @task(checkpoint=False)
 def get_recipients() -> List[str]:
-
     try:
         assert CNSP_FRANCE_EMAIL_ADDRESS is not None
     except AssertionError:
@@ -710,7 +704,6 @@ def get_recipients() -> List[str]:
 
 @task(checkpoint=False)
 def create_message(html: str, recipients: List[str]) -> EmailMessage:
-
     msg = create_html_email(
         to=recipients,
         subject="[Monitorfish] Suivi des modifications Legipêche dans Monitorfish",
@@ -726,10 +719,8 @@ def send_message(msg: EmailMessage):
 
 
 with Flow("Regulations checkup", executor=LocalDaskExecutor()) as flow:
-
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         # Parameters
         proxies = Parameter("proxies", default=PROXIES)
         backoffice_regulation_url = Parameter(

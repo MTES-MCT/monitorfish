@@ -94,18 +94,18 @@ def monitorfish_regulations() -> pd.DataFrame:
             "url": [
                 "http://external.site.regulation",
                 (
-                    "http://legipeche.metier.intranets.developpement-durable"
-                    ".ader.gouv.fr/some-regulation-a666.html?var=12"
+                    "http://legipeche.metier.e2"
+                    ".rie.gouv.fr/some-regulation-a666.html?var=12"
                 ),
                 (
-                    "http://legipeche.metier.intranets.developpement-durable"
-                    ".ader.gouv.fr/modified-regulation-a668.html"
+                    "http://legipeche.metier.e2"
+                    ".rie.gouv.fr/modified-regulation-a668.html"
                 ),
                 None,
-                "http://legipeche.metier.i2/regulation-a689.html",
+                "http://legipeche.metier.e2.rie.gouv.fr/regulation-a689.html",
                 (
-                    "http://legipeche.metier.intranets.developpement-durable"
-                    ".ader.gouv.fr/deleted-regulation-a671.html"
+                    "http://legipeche.metier.e2"
+                    ".rie.gouv.fr/deleted-regulation-a671.html"
                 ),
             ],
             "reference": [
@@ -131,7 +131,6 @@ def monitorfish_regulations() -> pd.DataFrame:
 
 @pytest.fixture
 def legipeche_regulations() -> pd.DataFrame:
-
     d1 = datetime.datetime(2021, 3, 2, 14, 25, 0)
     d2 = datetime.datetime(2021, 3, 3, 14, 25, 0)
 
@@ -167,18 +166,18 @@ def legipeche_regulations() -> pd.DataFrame:
                 "Unused regulation 2",
             ],
             "page_url": [
-                "http://legipeche.metier.i2/deleted-regulation-a671.html",
-                "http://legipeche.metier.i2/regulation-with-unstable-url-a689.html",
-                "http://legipeche.metier.i2/some-regulation-a666.html",
-                "http://legipeche.metier.i2/modified-regulation-a668.html",
-                "http://legipeche.metier.i2/modified-regulation-a668.html",
-                "http://legipeche.metier.i2/modified-regulation-a668.html",
-                "http://legipeche.metier.i2/modified-regulation-a668.html",
-                "http://legipeche.metier.i2/some-regulation-a666.html",
-                "http://legipeche.metier.i2/unused-regulation-a670.html",
-                "http://legipeche.metier.i2/regulation-with-unstable-url-a689.html",
-                "http://legipeche.metier.i2/unused-regulation-a670.html",
-                "http://legipeche.metier.i2/other-unused-regulation-a675.html",
+                "http://legipeche.metier.e2.rie.gouv.fr/deleted-regulation-a671.html",
+                "http://legipeche.metier.e2.rie.gouv.fr/regulation-with-unstable-url-a689.html",
+                "http://legipeche.metier.e2.rie.gouv.fr/some-regulation-a666.html",
+                "http://legipeche.metier.e2.rie.gouv.fr/modified-regulation-a668.html",
+                "http://legipeche.metier.e2.rie.gouv.fr/modified-regulation-a668.html",
+                "http://legipeche.metier.e2.rie.gouv.fr/modified-regulation-a668.html",
+                "http://legipeche.metier.e2.rie.gouv.fr/modified-regulation-a668.html",
+                "http://legipeche.metier.e2.rie.gouv.fr/some-regulation-a666.html",
+                "http://legipeche.metier.e2.rie.gouv.fr/unused-regulation-a670.html",
+                "http://legipeche.metier.e2.rie.gouv.fr/regulation-with-unstable-url-a689.html",
+                "http://legipeche.metier.e2.rie.gouv.fr/unused-regulation-a670.html",
+                "http://legipeche.metier.e2.rie.gouv.fr/other-unused-regulation-a675.html",
             ],
             "document_title": [
                 "Some old reg text",
@@ -257,13 +256,13 @@ def transformed_regulations() -> pd.DataFrame:
             "Zone": ["Secteur 2", "Secteur 2"],
             "Référence réglementaire": [
                 (
-                    '<a href="http://legipeche.metier.intranets.developpement-durable'
-                    '.ader.gouv.fr/modified-regulation-a668.html">some other regulation'
+                    '<a href="http://legipeche.metier.e2'
+                    '.rie.gouv.fr/modified-regulation-a668.html">some other regulation'
                     "</a>"
                 ),
                 (
-                    '<a href="http://legipeche.metier.intranets.developpement-durable'
-                    '.ader.gouv.fr/modified-regulation-a668.html">some other regulation'
+                    '<a href="http://legipeche.metier.e2'
+                    '.rie.gouv.fr/modified-regulation-a668.html">some other regulation'
                     "</a>"
                 ),
             ],
@@ -294,10 +293,7 @@ def missing_references() -> pd.DataFrame:
 def unknown_links() -> set:
     return {
         "http://external.site.regulation",
-        (
-            "http://legipeche.metier.intranets.developpement-durable.ader.gouv.fr/"
-            "deleted-regulation-a671.html"
-        ),
+        "http://legipeche.metier.e2.rie.gouv.fr/deleted-regulation-a671.html",
     }
 
 
@@ -316,8 +312,8 @@ def formatted_dead_links():
             "Référence réglementaire": [
                 '<a href="http://external.site.regulation">External regulation</a>',
                 (
-                    '<a href="http://legipeche.metier.intranets.developpement-durable'
-                    '.ader.gouv.fr/deleted-regulation-a671.html">'
+                    '<a href="http://legipeche.metier.e2'
+                    '.rie.gouv.fr/deleted-regulation-a671.html">'
                     "Dead link regulation</a>"
                 ),
             ],
@@ -341,7 +337,7 @@ def formatted_outdated_references():
             "Référence réglementaire": [
                 '<a href="http://external.site.regulation">External regulation</a>',
                 (
-                    '<a href="http://legipeche.metier.i2/regulation-a689.html">'
+                    '<a href="http://legipeche.metier.e2.rie.gouv.fr/regulation-a689.html">'
                     "Med regulation</a>"
                 ),
             ],
@@ -448,9 +444,6 @@ def test_get_dead_links_when_response_is_200(
 
     assert mock_get.call_count == 2
     for unknown_link in unknown_links:
-        unknown_link = unknown_link.replace(
-            "intranets.developpement-durable.ader.gouv.fr", "i2"
-        )
         mock_get.assert_any_call(unknown_link, timeout=10)
 
     pd.testing.assert_frame_equal(links, dead_links.head(0))
@@ -474,9 +467,6 @@ def test_get_dead_links_when_response_is_404(
 
     assert mock_get.call_count == 2
     for unknown_link in unknown_links:
-        unknown_link = unknown_link.replace(
-            "intranets.developpement-durable.ader.gouv.fr", "i2"
-        )
         mock_get.assert_any_call(unknown_link, timeout=10)
 
     pd.testing.assert_frame_equal(links, dead_links)
@@ -503,9 +493,6 @@ def test_get_dead_links_when_request_times_out(
 
     assert mock_get.call_count == 4
     for unknown_link in unknown_links:
-        unknown_link = unknown_link.replace(
-            "intranets.developpement-durable.ader.gouv.fr", "i2"
-        )
         mock_get.assert_any_call(unknown_link, timeout=10)
         mock_get.assert_any_call(unknown_link, timeout=10, proxies=PROXIES)
 

@@ -4,11 +4,10 @@ import scrapy
 class LegipecheSpider(scrapy.Spider):
     name = "legipeche"
     start_urls = [
-        "http://legipeche.metier.i2/bibliotheque-r3.html",
+        "http://legipeche.metier.e2.rie.gouv.fr/bibliotheque-r3.html",
     ]
 
     def parse(self, response):
-
         #####################################################
         # Extract data from the page, if it is an article page
         title = response.xpath('//main[@id="main"]/article/header/h1/text()').get()

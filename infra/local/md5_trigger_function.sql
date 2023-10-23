@@ -17,7 +17,6 @@ BEGIN
         COALESCE(NEW.fishing_period::text, '') ||
         COALESCE(NEW.species::text, '') ||
         COALESCE(NEW.gears::text, '') ||
-        COALESCE(NEW.regulatory_details::text, '') ||
         COALESCE(NEW.regulatory_references::text, '') ||
         COALESCE(NEW.geometry::text, '')  ||
         COALESCE(NEW.next_id::text, '')

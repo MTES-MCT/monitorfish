@@ -256,6 +256,53 @@ context('Update Regulation', () => {
     cy.url().should('include', '/backoffice')
   })
 
+  it('The geometry Should be displayed', () => {
+    // Given
+    cy.cleanScreenshots(1)
+
+    // When
+    cy.get('[data-cy="edit-regulation-show-geometry"]').click()
+    cy.wait(1500)
+
+    // Then, the last position should be positioned in the bottom of the window
+    cy.get('body')
+      .eq(0)
+      .toMatchImageSnapshot({
+        imageConfig: {
+          threshold: 0.05,
+          thresholdType: 'percent'
+        },
+        screenshotConfig: {
+          clip: { height: 640, width: 400, x: 1000, y: 200 }
+        }
+      })
+
+    // Delete the current geometry
+    cy.get('[data-cy="tag-598"] > svg').click()
+    cy.wait(200)
+
+    cy.get('.rs-picker-toggle-placeholder').filter(':contains("Choisir un tracé")').eq(0).click()
+    // We select the new geometry
+    cy.get('[data-key="598"]').eq(0).click({ force: true })
+
+    // When
+    cy.get('[data-cy="edit-regulation-show-geometry"]').click()
+    cy.wait(1500)
+
+    // Then, the last position should be positioned in the bottom of the window
+    cy.get('body')
+      .eq(0)
+      .toMatchImageSnapshot({
+        imageConfig: {
+          threshold: 0.05,
+          thresholdType: 'percent'
+        },
+        screenshotConfig: {
+          clip: { height: 640, width: 400, x: 1000, y: 200 }
+        }
+      })
+  })
+
   it('Form values should be kept when F5 is pressed', () => {
     cy.wait(200)
     // When F5 is pressed

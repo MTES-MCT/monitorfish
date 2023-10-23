@@ -141,7 +141,7 @@ export function Control({ control, isLastItem }: ControlProps) {
         )}
         {isSuperUser && (
           <ModifyButton accent={Accent.SECONDARY} onClick={openMission}>
-            Modifier le CR du contrôle
+            Ouvrir le contrôle
           </ModifyButton>
         )}
       </ContentColumn>

@@ -126,7 +126,7 @@ context('Vessel sidebar controls tab', () => {
         win.location.href = '/side_window'
       }).as('side_window')
     })
-    cy.clickButton('Modifier le CR du contrôle')
+    cy.clickButton('Ouvrir le contrôle')
     cy.get('@side_window').should('be.called')
   })
 })

@@ -19,4 +19,5 @@ values ('AD',         null, null, 'ADALV', 'Andorra la Vella', 42.5, 1.016666666
        ('AE',         'SA', 'DU', 'AEFRP', 'Free Port', 25.25, 55.0833333333333, null, true),
        ('AE',         null, 'DU', 'AEHZP', 'Hamriya Free Zone Port', 25.3, 55.0833333333333, null, true),
        ('AE',         null, 'DU', 'AEHSN', 'Hassyan', 24.9, 54.0666666666667, null, false),
-       ('AE',         null, null, 'AEHTL', 'Hulaylah Terminal', 25.9833333333333, 55.0833333333333, null, true);
+       ('AE',         null, null, 'AEHTL', 'Hulaylah Terminal', 25.9833333333333, 55.0833333333333, null, true),
+       ('FR',         null, null, 'FRSML', 'Saint-Malo', 48.3833333333333, 00.2033333333333, null, true);

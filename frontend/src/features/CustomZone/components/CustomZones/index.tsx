@@ -106,6 +106,7 @@ const HowTo = styled.li`
   color: ${p => p.theme.color.slateGray};
   padding: 24px 24px;
   font-style: italic;
+  list-style: none;
 `
 
 const Title = styled.div<{
@@ -140,7 +141,7 @@ const List = styled.ul<{
   padding: 0;
   overflow-x: hidden;
   max-height: 48vh;
-  height: ${p => (p.isOpened ? 36 * p.zonesLength + 107 : 0)}px;
+  height: ${p => (p.isOpened ? 36 * p.zonesLength + 110 : 0)}px;
   background: ${COLORS.white};
   transition: 0.5s all;
   border-bottom-left-radius: 2px;

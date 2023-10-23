@@ -1,4 +1,4 @@
-import { FieldError, Select, useNewWindow } from '@mtes-mct/monitor-ui'
+import { CustomSearch, FieldError, Select, useNewWindow } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { useMemo } from 'react'
 import styled from 'styled-components'
@@ -55,6 +55,27 @@ export function FormikPortSelect() {
     updateMissionLocation(valuesWithPort)
   }
 
+  const customSearch = useMemo(
+    () =>
+      portsAsOptions.length > 0
+        ? new CustomSearch(
+            portsAsOptions,
+            [
+              {
+                name: 'label',
+                weight: 0.9
+              },
+              {
+                name: 'value',
+                weight: 0.1
+              }
+            ],
+            { cacheKey: 'PORTS_AS_OPTIONS', threshold: 0.4 }
+          )
+        : undefined,
+    [portsAsOptions]
+  )
+
   if (!portsAsOptions.length) {
     return <FieldsetGroupSpinner legend="Port de contrôle" />
   }
@@ -63,6 +84,7 @@ export function FormikPortSelect() {
     <>
       <Select
         baseContainer={newWindowContainerRef.current}
+        customSearch={customSearch}
         isLight
         label="Port de contrôle"
         name="port"

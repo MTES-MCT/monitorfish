@@ -5,7 +5,7 @@ updates:
     assignees:
       - "louptheron"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
 
   - package-ecosystem: "npm"
     directory: "/frontend"
@@ -13,4 +13,4 @@ updates:
       - "ivangabriele"
       - "louptheron"
     schedule:
-      interval: "weekly"
+      interval: "monthly"

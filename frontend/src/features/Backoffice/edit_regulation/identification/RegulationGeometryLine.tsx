@@ -1,23 +1,27 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import styled, { css } from 'styled-components'
+
+import { COLORS } from '../../../../constants/constants'
+import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulation'
+import { useBackofficeAppDispatch } from '../../../../hooks/useBackofficeAppDispatch'
+import { useBackofficeAppSelector } from '../../../../hooks/useBackofficeAppSelector'
 import { ContentLine } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
+import { ReactComponent as ShowIconSVG } from '../../../icons/oeil_affiche.svg'
+import { ReactComponent as HideIconSVG } from '../../../icons/oeil_masque.svg'
+import { updateProcessingRegulationByKey } from '../../slice'
 import CustomSelectComponent from '../custom_form/CustomSelectComponent'
 import MenuItem from '../custom_form/MenuItem'
 import Tag from '../Tag'
-import { ReactComponent as ShowIconSVG } from '../../../icons/oeil_affiche.svg'
-import { ReactComponent as HideIconSVG } from '../../../icons/oeil_masque.svg'
-import { COLORS } from '../../../../constants/constants'
-import { updateProcessingRegulationByKey } from '../../slice'
-import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulation'
 
-const RegulationGeometryLine = props => {
-  const { geometryIdList, setShowRegulatoryPreview, showRegulatoryPreview, geometryIsMissing } = props
+export function RegulationGeometryLine({
+  geometryIdList,
+  geometryIsMissing,
+  setShowRegulatoryPreview,
+  showRegulatoryPreview
+}) {
+  const dispatch = useBackofficeAppDispatch()
 
-  const dispatch = useDispatch()
-
-  const { id } = useSelector(state => state.regulation.processingRegulation)
+  const { id } = useBackofficeAppSelector(state => state.regulation.processingRegulation)
 
   const onCloseIconClicked = () => {
     dispatch(updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ID, value: undefined }))
@@ -28,24 +32,24 @@ const RegulationGeometryLine = props => {
     <CustomContentLine>
       <Label>Géométrie</Label>
       <CustomSelectComponent
-        searchable={false}
-        placeholder="Choisir un tracé"
-        value={'Choisir un tracé'}
-        onChange={value => dispatch(updateProcessingRegulationByKey({ key: 'id', value }))}
         data={geometryIdList}
-        valueIsMissing={geometryIsMissing}
-        emptyMessage={'aucun tracé à associer'}
-        renderMenuItem={(_, item) => <MenuItem checked={item.value === id} item={item} tag={'Radio'} />}
+        emptyMessage="aucun tracé à associer"
         menuClassName={DEFAULT_MENU_CLASSNAME}
+        onChange={value => dispatch(updateProcessingRegulationByKey({ key: 'id', value }))}
+        placeholder="Choisir un tracé"
+        renderMenuItem={(_, item) => <MenuItem checked={item.value === id} item={item} tag="Radio" />}
+        searchable={false}
+        value="Choisir un tracé"
+        valueIsMissing={geometryIsMissing}
       />
       {id && (
         <>
-          <Tag tagValue={id} onCloseIconClicked={onCloseIconClicked} />
+          <Tag onCloseIconClicked={onCloseIconClicked} tagValue={id} />
           <EyeWrapper>
             {showRegulatoryPreview ? (
               <ShowIcon onClick={() => setShowRegulatoryPreview(false)} />
             ) : (
-              <HideIcon onClick={() => setShowRegulatoryPreview(true)} />
+              <HideIcon data-cy="edit-regulation-show-geometry" onClick={() => setShowRegulatoryPreview(true)} />
             )}
           </EyeWrapper>
         </>
@@ -86,5 +90,3 @@ const HideIcon = styled(HideIconSVG)`
   width: 20px;
   height: 15px;
 `
-
-export default RegulationGeometryLine

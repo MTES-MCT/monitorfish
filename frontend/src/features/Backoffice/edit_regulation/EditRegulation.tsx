@@ -243,14 +243,16 @@ export function EditRegulation({ isEdition, title }) {
   ])
 
   useEffect(() => {
-    if (showRegulatoryPreview) {
-      if (geometryObjectList && geometryObjectList[id]) {
-        dispatch(setRegulatoryGeometriesToPreview([geometryObjectList[id]]))
-      } else if (isEdition && processingRegulation?.geometry) {
-        dispatch(setRegulatoryGeometriesToPreview([processingRegulation?.geometry] as any))
-      } else {
-        dispatch(setError(new Error("Aucune géométrie n'a été trouvée pour cette identifiant.")))
-      }
+    if (!showRegulatoryPreview) {
+      return
+    }
+
+    if (geometryObjectList && geometryObjectList[id]) {
+      dispatch(setRegulatoryGeometriesToPreview([{ geometry: geometryObjectList[id] }]))
+    } else if (isEdition && processingRegulation?.geometry) {
+      dispatch(setRegulatoryGeometriesToPreview([{ geometry: processingRegulation?.geometry }] as any))
+    } else {
+      dispatch(setError(new Error("Aucune géométrie n'a été trouvée pour cette identifiant.")))
     }
   }, [
     dispatch,

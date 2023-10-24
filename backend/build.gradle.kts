@@ -1,7 +1,7 @@
 plugins {
     `java-library`
     `maven-publish`
-    id("org.springframework.boot") version "3.1.3"
+    id("org.springframework.boot") version "3.1.5"
     id("org.jetbrains.kotlin.plugin.spring") version "1.9.10"
     kotlin("jvm") version "1.9.10"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.9.10"

@@ -186,6 +186,7 @@ frontend/public/service-worker.js
 
 # Ignore Gradle project-specific cache directory
 backend/.gradle
+.gradle
 
 # Ignore Gradle build output directory
 backend/build

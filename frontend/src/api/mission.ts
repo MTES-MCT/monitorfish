@@ -2,8 +2,10 @@ import { monitorenvApi, monitorfishApi } from '.'
 import { ApiError } from '../libs/ApiError'
 
 import type { Mission, MissionWithActions } from '../domain/entities/mission/types'
+import type { ControlUnit } from '../domain/types/controlUnit'
 
 const GET_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la mission"
+const GET_ENGAGED_CONTROL_UNITS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les unités en mission"
 
 export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
   endpoints: builder => ({
@@ -30,6 +32,11 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
         method: 'DELETE',
         url: `/missions/${id}`
       })
+    }),
+
+    getEngagedControlUnits: builder.query<ControlUnit.ControlUnit[], void>({
+      query: () => `missions/engaged_control_units`,
+      transformErrorResponse: response => new ApiError(GET_ENGAGED_CONTROL_UNITS_ERROR_MESSAGE, response)
     }),
 
     getMission: builder.query<Mission.Mission, Mission.Mission['id']>({
@@ -96,7 +103,12 @@ export const monitorfishMissionApi = monitorfishApi.injectEndpoints({
   })
 })
 
-export const { useCreateMissionMutation, useDeleteMissionMutation, useGetMissionQuery, useUpdateMissionMutation } =
-  monitorenvMissionApi
+export const {
+  useCreateMissionMutation,
+  useDeleteMissionMutation,
+  useGetEngagedControlUnitsQuery,
+  useGetMissionQuery,
+  useUpdateMissionMutation
+} = monitorenvMissionApi
 
 export const { useGetMissionsQuery } = monitorfishMissionApi

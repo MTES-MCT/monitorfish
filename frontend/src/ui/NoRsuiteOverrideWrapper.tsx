@@ -201,9 +201,6 @@ export const NoRsuiteOverrideWrapper = styled.div`
         }
 
         > .rs-tag-icon-close {
-          bottom: 0;
-          padding: 0 6px;
-
           > svg {
             height: 10px;
             width: 10px;

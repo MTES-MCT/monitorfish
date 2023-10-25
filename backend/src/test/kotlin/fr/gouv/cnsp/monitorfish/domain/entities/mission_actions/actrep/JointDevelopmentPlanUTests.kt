@@ -1,0 +1,53 @@
+package fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep
+
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.test.context.junit.jupiter.SpringExtension
+
+@ExtendWith(SpringExtension::class)
+class JointDevelopmentPlanUTests {
+    @Test
+    fun `isLandControlConcerned Should return true When a targeted specy and fao code are contained in the control`() {
+        // Given
+        val jdp = JointDevelopmentPlan.NORTH_SEA
+        val faoCodes = listOf("27.4.b", "27.4.c")
+        val species = listOf("HKE", "ANN", "BOR")
+
+        // When
+        val isLandControlConcerned = jdp.isLandControlConcerned(species, faoCodes)
+
+        // Then
+        assertThat(isLandControlConcerned).isTrue()
+    }
+
+    @Test
+    fun `isLandControlConcerned Should return false When a targeted specy is not contained in the control`() {
+        // Given
+        val jdp = JointDevelopmentPlan.NORTH_SEA
+        val faoCodes = listOf("27.4.b", "27.4.c")
+        // The "HKE" specy is missing
+        val species = listOf("ANN", "BOR")
+
+        // When
+        val isLandControlConcerned = jdp.isLandControlConcerned(species, faoCodes)
+
+        // Then
+        assertThat(isLandControlConcerned).isFalse()
+    }
+
+    @Test
+    fun `isLandControlConcerned Should return false When a targeted fao code is not contained in the control`() {
+        // Given
+        val jdp = JointDevelopmentPlan.NORTH_SEA
+        // The "27.4" fao code is missing
+        val faoCodes = listOf("27.5.b", "27.5.c")
+        val species = listOf("HKE", "ANN", "BOR")
+
+        // When
+        val isLandControlConcerned = jdp.isLandControlConcerned(species, faoCodes)
+
+        // Then
+        assertThat(isLandControlConcerned).isFalse()
+    }
+}

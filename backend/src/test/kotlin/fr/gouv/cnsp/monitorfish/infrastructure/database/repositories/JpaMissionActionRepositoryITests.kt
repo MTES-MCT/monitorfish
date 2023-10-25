@@ -275,4 +275,21 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(actions.first().vesselName).isEqualTo("PHENOMENE")
         assertThat(actions.first().internalReferenceNumber).isEqualTo("FAK000999999")
     }
+
+    @Test
+    @Transactional
+    fun `findMissionActionsInDates Should return actions included in dates`() {
+        // Given
+        val afterDateTime = ZonedDateTime.now().minusWeeks(2)
+        val beforeDateTime = ZonedDateTime.now().plusWeeks(1)
+
+        // When
+        val controls = jpaMissionActionsRepository.findControlsInDates(beforeDateTime, afterDateTime)
+
+        // Then
+        assertThat(controls).hasSize(1)
+        assertThat(controls.first().id).isEqualTo(2)
+        assertThat(controls.first().internalReferenceNumber).isEqualTo("FAK000999999")
+        assertThat(controls.first().missionId).isEqualTo(2)
+    }
 }

@@ -1,8 +1,9 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep.JointDevelopmentPlan
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.*
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ActivityReportDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ControlsSummaryDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissionActionDataOutput
 import io.swagger.v3.oas.annotations.Operation
@@ -25,6 +26,7 @@ class MissionActionsController(
     private val updateMissionAction: UpdateMissionAction,
     private val deleteMissionAction: DeleteMissionAction,
     private val getMissionAction: GetMissionAction,
+    private val getActivityReports: GetActivityReports
 ) {
 
     @GetMapping("/controls")
@@ -42,6 +44,26 @@ class MissionActionsController(
             val actionsSummary = getVesselControls.execute(vesselId, afterDateTime)
 
             ControlsSummaryDataOutput.fromControlsSummary(actionsSummary)
+        }
+    }
+
+    @GetMapping("/controls/activity_reports")
+    @Operation(summary = "Get vessels activity reports (ACT-REP)")
+    fun getActivityReports(
+        @Parameter(description = "actions before date time")
+        @RequestParam(name = "beforeDateTime")
+        @DateTimeFormat(pattern = VesselController.zoneDateTimePattern)
+        beforeDateTime: ZonedDateTime,
+        @Parameter(description = "actions after date time")
+        @RequestParam(name = "afterDateTime")
+        @DateTimeFormat(pattern = VesselController.zoneDateTimePattern)
+        afterDateTime: ZonedDateTime,
+        @Parameter(description = "JDP")
+        @RequestParam(name = "jdp")
+        jdp: JointDevelopmentPlan,
+    ): List<ActivityReportDataOutput> {
+        return getActivityReports.execute(beforeDateTime, afterDateTime, jdp).map {
+            ActivityReportDataOutput.fromActivityReport(it)
         }
     }
 

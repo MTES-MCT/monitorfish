@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionAction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.MissionActionEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBMissionActionsRepository
@@ -47,5 +48,20 @@ class JpaMissionActionsRepository(
 
     override fun findById(id: Int): MissionAction {
         return dbMissionActionsRepository.findById(id).get().toMissionAction(mapper)
+    }
+
+    override fun findControlsInDates(beforeDateTime: ZonedDateTime, afterDateTime: ZonedDateTime): List<MissionAction> {
+        return dbMissionActionsRepository.findAllByActionDatetimeUtcBeforeAndActionDatetimeUtcAfterAndIsDeletedIsFalseAndActionTypeIn(
+            beforeDateTime.toInstant(),
+            afterDateTime.toInstant(),
+            listOf(
+                MissionActionType.SEA_CONTROL.value,
+                MissionActionType.LAND_CONTROL.value,
+            )
+        ).map { action ->
+            action.toMissionAction(
+                mapper,
+            )
+        }
     }
 }

@@ -9,6 +9,11 @@ interface DBMissionActionsRepository : CrudRepository<MissionActionEntity, Int> 
         vesselId: Int,
         afterDateTime: Instant,
     ): List<MissionActionEntity>
+    fun findAllByActionDatetimeUtcBeforeAndActionDatetimeUtcAfterAndIsDeletedIsFalseAndActionTypeIn(
+        beforeDateTime: Instant,
+        afterDateTime: Instant,
+        actionTypes: List<String>
+    ): List<MissionActionEntity>
     fun findAllByMissionIdAndIsDeletedIsFalse(missionId: Int): List<MissionActionEntity>
     fun findAllByMissionIdInAndIsDeletedIsFalse(missionIds: List<Int>): List<MissionActionEntity>
 }

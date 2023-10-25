@@ -1,4 +1,14 @@
-import { Accent, Icon, IconButton, MultiSelect, Select, TextInput, useNewWindow } from '@mtes-mct/monitor-ui'
+import {
+  Accent,
+  Icon,
+  IconButton,
+  Level,
+  Message,
+  MultiSelect,
+  Select,
+  TextInput,
+  useNewWindow
+} from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -7,6 +17,8 @@ import {
   mapControlUnitsToUniqueSortedNamesAsOptions,
   mapControlUnitToSortedResourcesAsOptions
 } from './utils'
+import { FIVE_MINUTES } from '../../../../../api/APIWorker'
+import { useGetEngagedControlUnitsQuery } from '../../../../../api/mission'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 import { isValidControlUnit } from '../../utils'
 
@@ -42,12 +54,22 @@ export function ControlUnitSelect({
   value
 }: ControlUnitSelectProps) {
   const { newWindowContainerRef } = useNewWindow()
+  const { data: engagedControlUnitsData } = useGetEngagedControlUnitsQuery(undefined, { pollingInterval: FIVE_MINUTES })
+
+  const engagedControlUnits = useMemo(() => {
+    if (!engagedControlUnitsData) {
+      return []
+    }
+
+    return engagedControlUnitsData
+  }, [engagedControlUnitsData])
 
   const [controlledValue, setControlledValue] = useState(value)
   const [selectedControlUnit, setSelectedControlUnit] = useState<ControlUnit.ControlUnit | undefined>(
     isValidControlUnit(value) ? value : undefined
   )
 
+  const isEngaged = !!engagedControlUnits.find(engaged => engaged.id === value.id)
   const isLoading = !allControlUnits.length
 
   const filteredNamesAsOptions = useMemo((): Option[] => {
@@ -169,6 +191,11 @@ export function ControlUnitSelect({
           searchable
           value={controlledValue.name}
         />
+        {isEngaged && (
+          <Message level={Level.WARNING}>
+            Cette unité est actuellement sélectionnée dans une autre mission en cours.
+          </Message>
+        )}
         <MultiSelect
           baseContainer={newWindowContainerRef.current}
           disabled={isLoading || !controlledValue.administration || !controlledValue.name}

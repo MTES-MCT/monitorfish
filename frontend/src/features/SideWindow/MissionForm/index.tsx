@@ -616,6 +616,10 @@ const Header = styled.div`
   > div {
     vertical-align: middle;
   }
+
+  .Element-Tag {
+    align-self: auto !important;
+  }
 `
 
 const HeaderTitle = styled.h1`

@@ -31,6 +31,7 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
     administrationsAsOptions: allAdministrationsAsOptions,
     unitsAsOptions: allNamesAsOptions
   } = useMemo(() => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data), [controlUnitsQuery.data])
+
   const errors = (allErrors[name] || []) as Array<{
     administration: string
     name: string
@@ -74,7 +75,7 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
   return (
     <Wrapper>
       <>
-        {(values[name] || []).map((value, index) => (
+        {(values.controlUnits || []).map((value, index) => (
           <ControlUnitSelect
             // eslint-disable-next-line react/no-array-index-key
             key={`unit${index}`}

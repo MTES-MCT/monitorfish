@@ -6,4 +6,5 @@ data class Health(
     val dateLastPositionUpdatedByPrefect: ZonedDateTime,
     val dateLastPositionReceivedByAPI: ZonedDateTime,
     val dateLogbookMessageReceived: ZonedDateTime,
+    val suddenDropOfPositionsReceived: Boolean,
 )

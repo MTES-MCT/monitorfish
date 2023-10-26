@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep.JointDevelopmentPlan
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep.JointDeploymentPlan
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ActivityReportDataOutput
@@ -60,7 +60,7 @@ class MissionActionsController(
         afterDateTime: ZonedDateTime,
         @Parameter(description = "JDP")
         @RequestParam(name = "jdp")
-        jdp: JointDevelopmentPlan,
+        jdp: JointDeploymentPlan,
     ): List<ActivityReportDataOutput> {
         return getActivityReports.execute(beforeDateTime, afterDateTime, jdp).map {
             ActivityReportDataOutput.fromActivityReport(it)

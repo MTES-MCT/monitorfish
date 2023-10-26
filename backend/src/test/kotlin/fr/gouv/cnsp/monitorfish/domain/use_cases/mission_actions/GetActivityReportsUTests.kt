@@ -11,18 +11,16 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.SpeciesControl
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep.ActivityCode
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep.JointDevelopmentPlan
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep.JointDeploymentPlan
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
-import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.BDDMockito
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZoneOffset
@@ -149,7 +147,7 @@ class GetActivityReportsUTests {
             val activityReports = GetActivityReports(missionActionsRepository, portRepository, vesselRepository, missionRepository).execute(
                 ZonedDateTime.now(),
                 ZonedDateTime.now().minusDays(1),
-                JointDevelopmentPlan.NORTH_SEA
+                JointDeploymentPlan.NORTH_SEA
             )
 
             // Then

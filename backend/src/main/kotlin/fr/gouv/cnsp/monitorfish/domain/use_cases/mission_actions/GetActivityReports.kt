@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep.ActivityCode
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep.JointDevelopmentPlan
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep.JointDeploymentPlan
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
@@ -22,13 +22,20 @@ class GetActivityReports(
 ) {
     private val logger = LoggerFactory.getLogger(GetActivityReports::class.java)
 
-    fun execute(beforeDateTime: ZonedDateTime, afterDateTime: ZonedDateTime, jdp: JointDevelopmentPlan): List<ActivityReport> {
+    fun execute(beforeDateTime: ZonedDateTime, afterDateTime: ZonedDateTime, jdp: JointDeploymentPlan): List<ActivityReport> {
         val controls = missionActionsRepository.findControlsInDates(beforeDateTime, afterDateTime)
+        logger.info("Found ${controls.size} controls between dates [${afterDateTime}, ${beforeDateTime}].")
+
+        if (controls.isEmpty()) {
+            return listOf()
+        }
+
         val controlledVesselsIds = controls.mapNotNull { it.vesselId }.distinct()
         val vessels = vesselRepository.findVesselsByIds(controlledVesselsIds)
 
         val missionIds = controls.map { it.missionId }.distinct()
         val missions = missionRepository.findByIds(missionIds)
+        logger.info("Found ${missions.size} missions.")
 
         val filteredControls = controls.filter { control ->
             when (control.actionType) {

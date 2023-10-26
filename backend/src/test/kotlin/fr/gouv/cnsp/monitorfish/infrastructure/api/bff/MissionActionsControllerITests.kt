@@ -9,7 +9,7 @@ import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep.ActivityCode
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep.JointDevelopmentPlan
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep.JointDeploymentPlan
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.dtos.ActivityReport
@@ -328,6 +328,6 @@ class MissionActionsControllerITests {
             .andExpect(jsonPath("$[0].controlUnits[0].id", equalTo(1234)))
             .andExpect(jsonPath("$[0].vessel.vesselId", equalTo(1)))
 
-        Mockito.verify(getActivityReports).execute(ZonedDateTime.parse("2020-05-04T03:04:05Z"), ZonedDateTime.parse("2020-03-04T03:04:05Z"), JointDevelopmentPlan.MEDITERRANEAN_AND_EASTERN_ATLANTIC)
+        Mockito.verify(getActivityReports).execute(ZonedDateTime.parse("2020-05-04T03:04:05Z"), ZonedDateTime.parse("2020-03-04T03:04:05Z"), JointDeploymentPlan.MEDITERRANEAN_AND_EASTERN_ATLANTIC)
     }
 }

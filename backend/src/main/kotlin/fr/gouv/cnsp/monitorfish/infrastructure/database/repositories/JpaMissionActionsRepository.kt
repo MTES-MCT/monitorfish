@@ -55,8 +55,8 @@ class JpaMissionActionsRepository(
             beforeDateTime.toInstant(),
             afterDateTime.toInstant(),
             listOf(
-                MissionActionType.SEA_CONTROL.value,
-                MissionActionType.LAND_CONTROL.value,
+                MissionActionType.SEA_CONTROL,
+                MissionActionType.LAND_CONTROL,
             )
         ).map { action ->
             action.toMissionAction(

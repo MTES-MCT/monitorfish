@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep
 
-enum class JointDevelopmentPlan(private val species: List<FaoCodesAndSpecy>) {
+enum class JointDeploymentPlan(private val species: List<FaoCodesAndSpecy>) {
     MEDITERRANEAN_AND_EASTERN_ATLANTIC(MEDITERRANEAN_AND_EASTERN_ATLANTIC_SPECIES),
     NORTH_SEA(NORTH_SEA_SPECIES),
     WESTERN_WATERS(WESTERN_WATERS_SPECIES),

@@ -4,6 +4,7 @@ import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_LIST_SUB_MENU_OPTIONS, MISSION_LIST_TABLE_OPTIONS } from './constants'
+import { ExportActivityReportsDialog } from './ExportActivityReportsDialog'
 import { FilterBar } from './FilterBar'
 import { hasSomeOngoingActions, renderStatus } from './utils'
 import { missionActions } from '../../../domain/actions'
@@ -26,6 +27,9 @@ export function MissionList() {
   const mission = useMainAppSelector(store => store.mission)
 
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
+  const [isExportActivityReportsModalOpen, setIsExportActivityReportsModalOpen] = useState<boolean | undefined>(
+    undefined
+  )
 
   const dispatch = useMainAppDispatch()
 
@@ -97,7 +101,14 @@ export function MissionList() {
           <HeaderTitle>Missions et contrôles</HeaderTitle>
           <HeaderButtonGroup>
             <Button Icon={Icon.Plus} onClick={() => goToMissionForm()}>
-              Ajouter une nouvelle mission
+              Ouvrir une nouvelle mission
+            </Button>
+            <Button
+              accent={Accent.TERTIARY}
+              Icon={Icon.Download}
+              onClick={() => setIsExportActivityReportsModalOpen(true)}
+            >
+              Exporter les ACT-REP
             </Button>
           </HeaderButtonGroup>
         </Header>
@@ -197,6 +208,9 @@ export function MissionList() {
           )}
         </Body>
       </Wrapper>
+      {isExportActivityReportsModalOpen && (
+        <ExportActivityReportsDialog onExit={() => setIsExportActivityReportsModalOpen(false)} />
+      )}
     </>
   )
 }

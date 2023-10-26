@@ -9,6 +9,8 @@ indent_style = space
 insert_final_newline = true
 max_line_length = 120
 trim_trailing_whitespace = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+ij_kotlin_allow_trailing_comma = true
 
 [COMMIT_EDITMSG]
 max_line_length = 0

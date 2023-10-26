@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LogbookMessageV
 
 enum class LogbookOperationTypeMapping(private val clazz: Class<out LogbookMessageValue>) : IHasImplementation {
     RET(Acknowledge::class.java),
+
     ;
 
     override fun getImplementation(): Class<out LogbookMessageValue> {

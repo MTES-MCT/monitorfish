@@ -15,7 +15,7 @@ class JointDeploymentPlanUTests {
         val species = listOf("HKE", "ANN", "BOR")
 
         // When
-        val isLandControlConcerned = jdp.isLandControlConcerned(species, faoCodes)
+        val isLandControlConcerned = jdp.isLandControlApplicable(species, faoCodes)
 
         // Then
         assertThat(isLandControlConcerned).isTrue()
@@ -30,7 +30,7 @@ class JointDeploymentPlanUTests {
         val species = listOf("ANN", "BOR")
 
         // When
-        val isLandControlConcerned = jdp.isLandControlConcerned(species, faoCodes)
+        val isLandControlConcerned = jdp.isLandControlApplicable(species, faoCodes)
 
         // Then
         assertThat(isLandControlConcerned).isFalse()
@@ -45,7 +45,7 @@ class JointDeploymentPlanUTests {
         val species = listOf("HKE", "ANN", "BOR")
 
         // When
-        val isLandControlConcerned = jdp.isLandControlConcerned(species, faoCodes)
+        val isLandControlConcerned = jdp.isLandControlApplicable(species, faoCodes)
 
         // Then
         assertThat(isLandControlConcerned).isFalse()

@@ -1,12 +1,13 @@
 import { openSideWindowMissionList } from './utils'
 
+import Chainable = Cypress.Chainable
+
 context('Side Window > Mission List > Export Activity Reports', () => {
   beforeEach(() => {
     openSideWindowMissionList()
   })
 
   it('Should download an activity report', () => {
-    cy.cleanFiles()
     cy.clickButton('Exporter les ACT-REP')
 
     cy.fill('Début', [2020, 1, 17])
@@ -22,12 +23,8 @@ context('Side Window > Mission List > Export Activity Reports', () => {
     cy.wait('@getActivityReports')
 
     // Then
-    cy.wait(1000)
-    cy.exec('cd cypress/downloads && ls').then(result => {
-      const downloadedCSVFilename = result.stdout
-
-      return cy
-        .readFile(`cypress/downloads/${downloadedCSVFilename}`)
+    assertDownloadedFile(content => {
+      content
         .should(
           'contains',
           'PATROL_CODE,PATROL_TYPE,MEAN_ID,JDP_CODE,EVENT_TYPE,EVENT_DATE,EVENT_TIME,LS,PS1,PS2,PS3,NATIONAL_REFERENCE,OBJECT_TYPE,OBJECT_STATE,OBJECT_NATIONAL_ID'
@@ -47,3 +44,22 @@ context('Side Window > Mission List > Export Activity Reports', () => {
     })
   })
 })
+
+function assertDownloadedFile(callback: (content: Chainable<any>) => void) {
+  cy.wait(400)
+  cy.exec('cd cypress/downloads && ls').then(result => {
+    const downloadedCSVFilename = result.stdout
+    cy.log(`Files: ${result.stdout}`)
+
+    if (!downloadedCSVFilename || downloadedCSVFilename === '') {
+      cy.log(`No file found. Testing another time.`)
+
+      return assertDownloadedFile(callback)
+    }
+
+    // eslint-disable-next-line cypress/no-assigning-return-values
+    const file = cy.readFile(`cypress/downloads/${downloadedCSVFilename}`)
+
+    return callback(file)
+  })
+}

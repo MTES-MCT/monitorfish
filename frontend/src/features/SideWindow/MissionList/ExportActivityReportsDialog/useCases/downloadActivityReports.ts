@@ -15,6 +15,8 @@ export const downloadActivityReports = (afterDateTime: string, beforeDateTime: s
     })
   )
 
+  // TODO If there is not activityReports, do not download the csv
+
   const activityReportsWithId = activityReports.map((activity, index) => ({ ...activity, id: index }))
   const fileName = getCsvFileName(jdp)
 

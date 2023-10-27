@@ -65,7 +65,7 @@ export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>,
     baseCsvMap[`infractionCode${count}`] = {
       label: jdp === JDP.WESTERN_WATERS ? `INFR${count}_CODE` : `INFR_CODE${count}`,
       transform: activity => {
-        const allNatinfs = getAllInfractionKeys(activity.action, 'natinf')
+        const allNatinfs = getInfractionsKeys(activity.action, 'natinf')
 
         return allNatinfs[count - 1] || ''
       }
@@ -75,7 +75,7 @@ export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>,
     baseCsvMap[`infractionDescription${count}`] = {
       label: jdp === JDP.WESTERN_WATERS ? `INFR${count}_DESCRIPTION` : `INFR_REMARK${count}`,
       transform: activity => {
-        const allComments = getAllInfractionKeys(activity.action, 'comments')
+        const allComments = getInfractionsKeys(activity.action, 'comments')
 
         return allComments[count - 1] || ''
       }
@@ -88,19 +88,19 @@ export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>,
   return baseCsvMap
 }
 
-function getAllInfractionKeys(action: MissionAction.MissionAction, key: string): string[] {
+function getInfractionsKeys(action: MissionAction.MissionAction, key: string): string[] {
   return ([] as string[]).concat.apply(
     [],
     [
-      getInfractionWithRecordAndReturn(action.gearInfractions, key),
-      getInfractionWithRecordAndReturn(action.speciesInfractions, key),
-      getInfractionWithRecordAndReturn(action.logbookInfractions, key),
-      getInfractionWithRecordAndReturn(action.otherInfractions, key)
+      getInfractionsWithRecordKey(action.gearInfractions, key),
+      getInfractionsWithRecordKey(action.speciesInfractions, key),
+      getInfractionsWithRecordKey(action.logbookInfractions, key),
+      getInfractionsWithRecordKey(action.otherInfractions, key)
     ]
   )
 }
 
-function getInfractionWithRecordAndReturn(
+function getInfractionsWithRecordKey(
   infractions:
     | MissionAction.GearInfraction[]
     | MissionAction.SpeciesInfraction[]

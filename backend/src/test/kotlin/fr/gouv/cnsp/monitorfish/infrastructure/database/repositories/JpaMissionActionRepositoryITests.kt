@@ -305,8 +305,8 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(controls).hasSize(1)
-        assertThat(controls.first().id).isEqualTo(2)
+        assertThat(controls.first().id).isEqualTo(5)
         assertThat(controls.first().internalReferenceNumber).isEqualTo("FAK000999999")
-        assertThat(controls.first().missionId).isEqualTo(2)
+        assertThat(controls.first().missionId).isEqualTo(5)
     }
 }

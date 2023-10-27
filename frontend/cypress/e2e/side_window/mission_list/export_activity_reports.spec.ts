@@ -22,7 +22,7 @@ context('Side Window > Mission List > Export Activity Reports', () => {
     cy.wait('@getActivityReports')
 
     // Then
-    cy.wait(400)
+    cy.wait(1000)
     cy.exec('cd cypress/downloads && ls').then(result => {
       const downloadedCSVFilename = result.stdout
 

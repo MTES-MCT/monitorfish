@@ -50,10 +50,12 @@ export function HealthcheckHeadband() {
           {healthcheckTextWarning.length === 1
             ? healthcheckTextWarning
             : `${healthcheckTextWarning.length} alertes concernant les données VMS et JPE.`}
-          <StyledChevronIcon
-            $isOpen={areAllWarningsOpened}
-            onClick={() => setAreAllWarningsOpened(!areAllWarningsOpened)}
-          />
+          {healthcheckTextWarning.length > 1 && (
+            <StyledChevronIcon
+              $isOpen={areAllWarningsOpened}
+              onClick={() => setAreAllWarningsOpened(!areAllWarningsOpened)}
+            />
+          )}
         </HealthcheckWarnings>
       )}
       {healthcheckTextWarning.length > 1 &&
@@ -103,7 +105,7 @@ const MultipleWarningsHeadband = styled.div<{
 }>`
   position: absolute;
   top: ${p => p.topOffset * 50}px;
-  background: #fdf3c3 0% 0% no-repeat padding-box;
+  background: ${p => p.theme.color.goldenPoppy25} 0% 0% no-repeat padding-box;
   width: calc(100vw - 26px);
   height: ${p => (p.isOpen ? 22 : 0)}px;
   text-align: center;

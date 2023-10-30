@@ -28,7 +28,7 @@ export function getActionTitle(itemTitle: string, details: string | undefined, p
 
   return (
     <StyledSpan>
-      {itemTitle} - <strong>{details}</strong>
+      {itemTitle} <br/><strong>{details}</strong>
     </StyledSpan>
   )
 }
@@ -74,6 +74,6 @@ const StyledSpan = styled.span`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 180px;
+  max-width: 188px;
   display: inline-block;
 `

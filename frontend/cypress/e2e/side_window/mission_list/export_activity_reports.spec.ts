@@ -32,7 +32,7 @@ context('Side Window > Mission List > Export Activity Reports', () => {
         )
         .should(
           'contains',
-          '"","L","Cross Etel","","INSPECTION","2020018","8:19","FRA","FRA","","","","Vessel","FRA","AYFAK000999999"'
+          '"","L","Cross Etel","","INSPECTION","2020018","7:19","FRA","FRA","","","","Vessel","FRA","AYFAK000999999"'
         )
         .should(
           'contains',

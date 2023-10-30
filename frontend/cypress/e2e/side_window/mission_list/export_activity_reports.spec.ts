@@ -8,6 +8,7 @@ context('Side Window > Mission List > Export Activity Reports', () => {
   })
 
   it('Should download an activity report', () => {
+    cy.cleanFiles()
     cy.clickButton('Exporter les ACT-REP')
 
     cy.fill('Début', [2020, 1, 17])
@@ -46,19 +47,20 @@ context('Side Window > Mission List > Export Activity Reports', () => {
 })
 
 function assertDownloadedFile(callback: (content: Chainable<any>) => void) {
-  cy.wait(400)
+  cy.wait(500)
+
   cy.exec('cd cypress/downloads && ls').then(result => {
-    const downloadedCSVFilename = result.stdout
+    const downloadedFilename = result.stdout
     cy.log(`Files: ${result.stdout}`)
 
-    if (!downloadedCSVFilename || downloadedCSVFilename === '') {
+    if (!downloadedFilename || downloadedFilename === '') {
       cy.log(`No file found. Testing another time.`)
 
       return assertDownloadedFile(callback)
     }
 
     // eslint-disable-next-line cypress/no-assigning-return-values
-    const file = cy.readFile(`cypress/downloads/${downloadedCSVFilename}`)
+    const file = cy.readFile(`cypress/downloads/${downloadedFilename}`)
 
     return callback(file)
   })

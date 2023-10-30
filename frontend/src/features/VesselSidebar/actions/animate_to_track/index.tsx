@@ -15,7 +15,7 @@ export function AnimateToTrack({ isSidebarOpen }) {
     <VesselSidebarActionButton
       data-cy="animate-to-track"
       disabled={!selectedVesselPositions?.length}
-      healthcheckTextWarning={!!healthcheckTextWarning}
+      healthcheckTextWarning={!!healthcheckTextWarning.length}
       isHidden={false}
       isRightMenuOpen={rightMenuIsOpen}
       isSidebarOpen={isSidebarOpen}

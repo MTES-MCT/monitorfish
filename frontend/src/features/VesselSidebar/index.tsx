@@ -36,7 +36,7 @@ export function VesselSidebar() {
       <ShowFishingActivitiesOnMap isSidebarOpen={isFirstLoad} />
       <Wrapper
         data-cy="vessel-sidebar"
-        healthcheckTextWarning={!!healthcheckTextWarning}
+        healthcheckTextWarning={!!healthcheckTextWarning.length}
         isRightMenuOpen={rightMenuIsOpen}
         isSidebarOpen={isFirstLoad}
       >

@@ -49,7 +49,7 @@ const Filters = () => {
 
   return (
     <VesselFilterBox
-      healthcheckTextWarning={healthcheckTextWarning}
+      healthcheckTextWarning={healthcheckTextWarning.length}
       isOpen={isOpen}>
       <Header isFirst={true}>
         Mes filtres

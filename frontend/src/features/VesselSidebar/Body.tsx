@@ -37,7 +37,7 @@ export function Body() {
   }
 
   return (
-    <Wrapper healthcheckTextWarning={healthcheckTextWarning}>
+    <Wrapper healthcheckTextWarning={!!healthcheckTextWarning.length}>
       {isSuperUser && <AlertWarning selectedVessel={selectedVessel} />}
       {isSuperUser && <BeaconMalfunctionWarning selectedVessel={selectedVessel} />}
       {isSuperUser && vesselSidebarTab === VesselSidebarTab.SUMMARY && <VesselSummary />}
@@ -51,7 +51,7 @@ export function Body() {
 }
 
 const Wrapper = styled.div<{
-  healthcheckTextWarning: string | undefined
+  healthcheckTextWarning: boolean
 }>`
   padding: 0;
   background: ${p => p.theme.color.gainsboro};

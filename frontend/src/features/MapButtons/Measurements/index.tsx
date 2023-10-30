@@ -75,7 +75,7 @@ export function MeasurementMapButton() {
       >
         {measurementIcon}
       </MeasurementButton>
-      <MeasurementOptions healthcheckTextWarning={!!healthcheckTextWarning} isOpen={isOpen}>
+      <MeasurementOptions healthcheckTextWarning={!!healthcheckTextWarning.length} isOpen={isOpen}>
         <MeasurementItem
           className=".map-menu"
           data-cy="measurement-multiline"

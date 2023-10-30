@@ -49,7 +49,7 @@ export function MissionsMenu() {
     <Wrapper>
       <MissionMenuBox
         data-cy="missions-menu-box"
-        healthcheckTextWarning={!!healthcheckTextWarning}
+        healthcheckTextWarning={!!healthcheckTextWarning.length}
         isLeftBox
         isOpen={leftBoxOpened === LeftBoxOpened.MISSIONS}
       >

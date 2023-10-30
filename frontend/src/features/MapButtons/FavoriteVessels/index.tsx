@@ -33,7 +33,7 @@ export function FavoriteVessels() {
       <Wrapper ref={wrapperRef}>
         <FavoriteVesselsNumber
           data-cy="favorite-vessels-number"
-          healthcheckTextWarning={!!healthcheckTextWarning}
+          healthcheckTextWarning={!!healthcheckTextWarning.length}
           isHidden={previewFilteredVesselsMode}
           isOpen={leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS}
         >
@@ -41,7 +41,7 @@ export function FavoriteVessels() {
         </FavoriteVesselsNumber>
         <FavoriteVesselsIcon
           data-cy="favorite-vessels"
-          healthcheckTextWarning={!!healthcheckTextWarning}
+          healthcheckTextWarning={!!healthcheckTextWarning.length}
           isHidden={!!previewFilteredVesselsMode}
           isOpen={leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS}
           onClick={() =>
@@ -55,7 +55,7 @@ export function FavoriteVessels() {
         </FavoriteVesselsIcon>
         <FavoriteVesselsBox
           data-cy="favorite-vessels-box"
-          healthcheckTextWarning={!!healthcheckTextWarning}
+          healthcheckTextWarning={!!healthcheckTextWarning.length}
           isHidden={previewFilteredVesselsMode}
           isOpen={leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS}
         >

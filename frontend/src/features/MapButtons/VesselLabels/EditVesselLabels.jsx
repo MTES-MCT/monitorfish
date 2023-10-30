@@ -29,7 +29,7 @@ const EditVesselLabels = () => {
 
   return (
     <Wrapper
-      healthcheckTextWarning={healthcheckTextWarning}
+      healthcheckTextWarning={healthcheckTextWarning.length}
       isOpen={isOpen}>
       <Header isFirst={false}>
         Affichage des étiquettes { isSuperUser ? 'et notes des navires' : ''}

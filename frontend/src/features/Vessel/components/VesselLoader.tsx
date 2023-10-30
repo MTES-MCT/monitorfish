@@ -52,13 +52,13 @@ export function VesselLoader() {
   return (
     <>
       {!isAppLoaded && (
-        <FirstLoadWrapper healthcheckTextWarning={!!healthcheckTextWarning}>
+        <FirstLoadWrapper healthcheckTextWarning={!!healthcheckTextWarning.length}>
           <FulfillingBouncingCircleSpinner className="update-vessels" color={COLORS.white} size={100} />
           <BigVessel />
           <Text data-cy="first-loader">Chargement...</Text>
         </FirstLoadWrapper>
       )}
-      <UpdateWrapper healthcheckTextWarning={!!healthcheckTextWarning} isVesselSidebarOpen={vesselSidebarIsOpen}>
+      <UpdateWrapper healthcheckTextWarning={!!healthcheckTextWarning.length} isVesselSidebarOpen={vesselSidebarIsOpen}>
         {(isFetching || loadingPositions) && isAppLoaded && (
           <>
             <FulfillingBouncingCircleSpinner className="update-vessels" color={COLORS.white} size={30} />

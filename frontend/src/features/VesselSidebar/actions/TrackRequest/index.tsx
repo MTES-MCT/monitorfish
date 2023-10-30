@@ -85,7 +85,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
       <VesselSidebarActionButton
         backgroundColor={isOpen ? THEME.color.blueGray : THEME.color.charcoal}
         data-cy="vessel-track-depth-selection"
-        healthcheckTextWarning={!!healthcheckTextWarning}
+        healthcheckTextWarning={!!healthcheckTextWarning.length}
         isHidden={false}
         isRightMenuOpen={rightMenuIsOpen}
         isSidebarOpen={isSidebarOpen}
@@ -96,7 +96,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
         <VesselIcon />
       </VesselSidebarActionButton>
       <TrackRequestBody
-        healthcheckTextWarning={!!healthcheckTextWarning}
+        healthcheckTextWarning={!!healthcheckTextWarning.length}
         isOpen={isOpen}
         isRightMenuOpen={rightMenuIsOpen}
         isSidebarOpen={isSidebarOpen}

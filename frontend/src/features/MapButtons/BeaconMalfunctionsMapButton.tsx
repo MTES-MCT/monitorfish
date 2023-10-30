@@ -32,7 +32,7 @@ export function BeaconMalfunctionsMapButton() {
     <BeaconMalfunctionsButton
       $isActive={isActive}
       data-cy="beacon-malfunction-button"
-      healthcheckTextWarning={!!healthcheckTextWarning}
+      healthcheckTextWarning={!!healthcheckTextWarning.length}
       isHidden={!!previewFilteredVesselsMode}
       onClick={toggleSideWindow}
       title="Avaries VMS"

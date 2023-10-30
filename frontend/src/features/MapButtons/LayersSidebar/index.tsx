@@ -39,7 +39,7 @@ export function LayersSidebar() {
         <>
           <Button
             data-cy="layers-sidebar"
-            healthcheckTextWarning={!!healthcheckTextWarning}
+            healthcheckTextWarning={!!healthcheckTextWarning.length}
             isHidden={!!previewFilteredVesselsMode}
             isVisible={leftBoxOpened === LeftBoxOpened.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
             onClick={() =>
@@ -51,7 +51,7 @@ export function LayersSidebar() {
           </Button>
           <Sidebar
             data-cy="layers-sidebar-box"
-            healthcheckTextWarning={!!healthcheckTextWarning}
+            healthcheckTextWarning={!!healthcheckTextWarning.length}
             isOpen={leftBoxOpened === LeftBoxOpened.REGULATIONS}
             isVisible={leftBoxOpened === LeftBoxOpened.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
           >
@@ -60,7 +60,7 @@ export function LayersSidebar() {
               numberOfRegulatoryLayersSaved={numberOfRegulatoryLayersSaved}
               setNumberOfRegulatoryLayersSaved={setNumberOfRegulatoryLayersSaved}
             />
-            <Layers healthcheckTextWarning={!!healthcheckTextWarning}>
+            <Layers healthcheckTextWarning={!!healthcheckTextWarning.length}>
               <RegulatoryZones
                 namespace={namespace}
                 regulatoryLayersAddedToMySelection={numberOfRegulatoryLayersSaved}

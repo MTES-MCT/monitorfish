@@ -28,7 +28,8 @@ export function getActionTitle(itemTitle: string, details: string | undefined, p
 
   return (
     <StyledSpan>
-      {itemTitle} <br/><strong>{details}</strong>
+      {itemTitle} <br />
+      <strong>{details}</strong>
     </StyledSpan>
   )
 }

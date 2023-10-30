@@ -23,7 +23,7 @@ import { MapToolBox } from '../shared/MapToolBox'
 // - Use formik (or at least uncontrolled form components)
 type EditInterestPointProps = {
   close: () => void
-  healthcheckTextWarning: string | undefined
+  healthcheckTextWarning: string[]
   isOpen: boolean
 }
 export function EditInterestPoint({ close, healthcheckTextWarning, isOpen }: EditInterestPointProps) {
@@ -129,7 +129,7 @@ export function EditInterestPoint({ close, healthcheckTextWarning, isOpen }: Edi
   }
 
   return (
-    <Wrapper data-cy="save-interest-point" healthcheckTextWarning={!!healthcheckTextWarning} isOpen={isOpen}>
+    <Wrapper data-cy="save-interest-point" healthcheckTextWarning={!!healthcheckTextWarning.length} isOpen={isOpen}>
       <Header>Créer un point d&apos;intérêt</Header>
       <Body>
         <p>Coordonnées</p>

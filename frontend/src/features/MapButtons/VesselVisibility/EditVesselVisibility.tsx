@@ -40,7 +40,7 @@ export function EditVesselVisibility() {
   }
 
   return (
-    <Wrapper healthcheckTextWarning={!!healthcheckTextWarning} isOpen={isOpen}>
+    <Wrapper healthcheckTextWarning={!!healthcheckTextWarning.length} isOpen={isOpen}>
       <Header isFirst>Gérer l&apos;affichage des dernières positions</Header>
       <LastPositionInfo>
         <VesselHidden /> navires masqués <VesselAlmostHidden /> navires estompés <VesselShowed /> navires normaux

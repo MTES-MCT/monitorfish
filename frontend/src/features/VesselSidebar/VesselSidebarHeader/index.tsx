@@ -47,7 +47,7 @@ export function VesselSidebarHeader() {
     <>
       <VesselNameOrInput
         data-cy="vessel-name"
-        healthcheckTextWarning={!!healthcheckTextWarning}
+        healthcheckTextWarning={!!healthcheckTextWarning.length}
         isHidden={previewFilteredVesselsMode}
         isRightMenuShrinked={isRightMenuShrinked}
       >
@@ -70,7 +70,7 @@ export function VesselSidebarHeader() {
         )}
       </VesselNameOrInput>
       <SearchButton
-        healthcheckTextWarning={!!healthcheckTextWarning}
+        healthcheckTextWarning={!!healthcheckTextWarning.length}
         isHidden={!!previewFilteredVesselsMode}
         isOpen={!!selectedVessel}
         isShrinked={isRightMenuShrinked}

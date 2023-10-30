@@ -32,7 +32,7 @@ export function AlertsMapButton() {
     <AlertsButton
       $isActive={isActive}
       data-cy="alerts-button"
-      healthcheckTextWarning={!!healthcheckTextWarning}
+      healthcheckTextWarning={!!healthcheckTextWarning.length}
       isHidden={Boolean(previewFilteredVesselsMode)}
       onClick={toggleSideWindow}
       title="Alertes"

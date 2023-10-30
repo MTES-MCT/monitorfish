@@ -34,7 +34,7 @@ export function MapToolButton({
       $isLeftButton={isLeftButton}
       $isRightMenuShrinked={isRightMenuShrinked}
       data-cy={dataCy}
-      healthcheckTextWarning={!!healthcheckTextWarning}
+      healthcheckTextWarning={!!healthcheckTextWarning.length}
       isHidden={!!previewFilteredVesselsMode}
       onClick={onClick}
       style={style}

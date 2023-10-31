@@ -75,6 +75,9 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
 
   const infractionTags = useMemo(() => {
     const allInfractions = getMissionActionInfractionsFromMissionActionFormValues(initialValues, true)
+    if (!allInfractions.length) {
+      return []
+    }
     const nonPendingInfractions = getMissionActionInfractionsFromMissionActionFormValues(initialValues)
     const pendingInfractions = allInfractions.filter(
       ({ infractionType }) => infractionType === MissionAction.InfractionType.PENDING
@@ -244,8 +247,8 @@ const ActionLabel = styled.div`
   > p {
     margin-top: 0px;
     color: ${p => p.theme.color.gunMetal};
-    padding: 1px 8px 0 0;
-    height: 22px;
+    padding: 1px 0px 0 0;
+    height: 30px;
   }
 `
 

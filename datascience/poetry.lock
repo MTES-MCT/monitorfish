@@ -3770,6 +3770,8 @@ files = [
     {file = "psycopg2-2.9.9-cp310-cp310-win_amd64.whl", hash = "sha256:426f9f29bde126913a20a96ff8ce7d73fd8a216cfb323b1f04da402d452853c3"},
     {file = "psycopg2-2.9.9-cp311-cp311-win32.whl", hash = "sha256:ade01303ccf7ae12c356a5e10911c9e1c51136003a9a1d92f7aa9d010fb98372"},
     {file = "psycopg2-2.9.9-cp311-cp311-win_amd64.whl", hash = "sha256:121081ea2e76729acfb0673ff33755e8703d45e926e416cb59bae3a86c6a4981"},
+    {file = "psycopg2-2.9.9-cp312-cp312-win32.whl", hash = "sha256:d735786acc7dd25815e89cc4ad529a43af779db2e25aa7c626de864127e5a024"},
+    {file = "psycopg2-2.9.9-cp312-cp312-win_amd64.whl", hash = "sha256:a7653d00b732afb6fc597e29c50ad28087dcb4fbfb28e86092277a559ae4e693"},
     {file = "psycopg2-2.9.9-cp37-cp37m-win32.whl", hash = "sha256:5e0d98cade4f0e0304d7d6f25bbfbc5bd186e07b38eac65379309c4ca3193efa"},
     {file = "psycopg2-2.9.9-cp37-cp37m-win_amd64.whl", hash = "sha256:7e2dacf8b009a1c1e843b5213a87f7c544b2b042476ed7755be813eaf4e8347a"},
     {file = "psycopg2-2.9.9-cp38-cp38-win32.whl", hash = "sha256:ff432630e510709564c01dafdbe996cb552e0b9f3f065eb89bdce5bd31fabf4c"},
@@ -4029,18 +4031,18 @@ diagrams = ["jinja2", "railroad-diagrams"]
 
 [[package]]
 name = "pypdf"
-version = "3.16.4"
+version = "3.17.0"
 description = "A pure-python PDF library capable of splitting, merging, cropping, and transforming PDF files"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "pypdf-3.16.4-py3-none-any.whl", hash = "sha256:a9b1eaf2db4c2edd93093470d33c3f353235c4a694f8a426a92a8ce77cea9eb7"},
-    {file = "pypdf-3.16.4.tar.gz", hash = "sha256:01927771b562d4ba84939ef95b393f0179166da786c5db710d07f807c52f480d"},
+    {file = "pypdf-3.17.0-py3-none-any.whl", hash = "sha256:67f6bb7acd8fdbcf7e7a7d5319d12b8de100f5f94538d6e5647aaec3eb7c7dde"},
+    {file = "pypdf-3.17.0.tar.gz", hash = "sha256:9fab275fea57c9e5b2416035d13d867a459ebe36294a4c39a3d0bb45a7404bad"},
 ]
 
 [package.extras]
 crypto = ["PyCryptodome", "cryptography"]
-dev = ["black", "flit", "pip-tools", "pre-commit (<2.18.0)", "pytest-cov", "pytest-socket", "pytest-timeout", "wheel"]
+dev = ["black", "flit", "pip-tools", "pre-commit (<2.18.0)", "pytest-cov", "pytest-socket", "pytest-timeout", "pytest-xdist", "wheel"]
 docs = ["myst_parser", "sphinx", "sphinx_rtd_theme"]
 full = ["Pillow (>=8.0.0)", "PyCryptodome", "cryptography"]
 image = ["Pillow (>=8.0.0)"]
@@ -6095,4 +6097,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.0"
 python-versions = "3.11.6"
-content-hash = "10c91afe88d787cdb60653fcbc14b852cf2379623dc83df25564adb462399d6c"
+content-hash = "360f85188317afdab538b2408a8cc080afc1ae09b7e330bc282aae7f9d95a9f9"

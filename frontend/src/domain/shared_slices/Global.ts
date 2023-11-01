@@ -15,7 +15,7 @@ export type GlobalState = {
   blockVesselsUpdate: boolean
   error: any
   // TODO Rename this prop.
-  healthcheckTextWarning: string | undefined
+  healthcheckTextWarning: string[]
   isBackoffice: boolean
   isUpdatingVessels: boolean
   lastSearchedVessels: any[]
@@ -31,7 +31,7 @@ export type GlobalState = {
 const INITIAL_STATE: GlobalState = {
   blockVesselsUpdate: false,
   error: null,
-  healthcheckTextWarning: undefined,
+  healthcheckTextWarning: [],
   isBackoffice: false,
   isUpdatingVessels: false,
   lastSearchedVessels: getLocalStorageState([], lastSearchedVesselsLocalStorageKey),
@@ -121,7 +121,7 @@ export const globalSlice = createSlice({
     /**
      * Set warning to show on application header
      */
-    setHealthcheckTextWarning(state, action: PayloadAction<string | undefined>) {
+    setHealthcheckTextWarning(state, action: PayloadAction<string[]>) {
       state.healthcheckTextWarning = action.payload
     },
 

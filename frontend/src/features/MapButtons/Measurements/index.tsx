@@ -9,7 +9,7 @@ import { useClickOutsideWhenOpenedAndExecute } from '../../../hooks/useClickOuts
 import { useEscapeFromKeyboardAndExecute } from '../../../hooks/useEscapeFromKeyboardAndExecute'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
+import { MapComponent } from '../../commonStyles/MapComponent'
 import { ReactComponent as MultiLineSVG } from '../../icons/standardized/Measure_broken_line.svg'
 import { ReactComponent as CircleRangeSVG } from '../../icons/standardized/Measure_circle.svg'
 import { ReactComponent as MeasurementSVG } from '../../icons/standardized/Measure_line.svg'
@@ -18,7 +18,7 @@ import { MapToolButton } from '../shared/MapToolButton'
 export function MeasurementMapButton() {
   const dispatch = useMainAppDispatch()
   const measurementTypeToAdd = useMainAppSelector(state => state.measurement.measurementTypeToAdd)
-  const { healthcheckTextWarning, mapToolOpened, rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const { mapToolOpened, rightMenuIsOpen } = useMainAppSelector(state => state.global)
 
   const isRightMenuShrinked = !rightMenuIsOpen
   const isOpen = useMemo(() => mapToolOpened === MapToolType.MEASUREMENT_MENU, [mapToolOpened])
@@ -67,7 +67,7 @@ export function MeasurementMapButton() {
   return (
     <Wrapper ref={wrapperRef}>
       <MeasurementButton
-        dataCy="measurement"
+        data-cy="measurement"
         isActive={isOpen || !!measurementTypeToAdd}
         onClick={openOrCloseMeasurementMenu}
         style={{ top: 249 }}
@@ -75,7 +75,7 @@ export function MeasurementMapButton() {
       >
         {measurementIcon}
       </MeasurementButton>
-      <MeasurementOptions healthcheckTextWarning={!!healthcheckTextWarning} isOpen={isOpen}>
+      <MeasurementOptions isOpen={isOpen}>
         <MeasurementItem
           className=".map-menu"
           data-cy="measurement-multiline"
@@ -137,8 +137,7 @@ const Wrapper = styled.div`
   z-index: 1000;
 `
 
-const MeasurementOptions = styled(MapComponentStyle)<{
-  healthcheckTextWarning: boolean
+const MeasurementOptions = styled(MapComponent)<{
   isHidden?: boolean
   isOpen: boolean
 }>`

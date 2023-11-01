@@ -37,7 +37,7 @@ export function Body() {
   }
 
   return (
-    <Wrapper healthcheckTextWarning={healthcheckTextWarning}>
+    <Wrapper hasHealthcheckTextWarning={!!healthcheckTextWarning.length}>
       {isSuperUser && <AlertWarning selectedVessel={selectedVessel} />}
       {isSuperUser && <BeaconMalfunctionWarning selectedVessel={selectedVessel} />}
       {isSuperUser && vesselSidebarTab === VesselSidebarTab.SUMMARY && <VesselSummary />}
@@ -51,11 +51,11 @@ export function Body() {
 }
 
 const Wrapper = styled.div<{
-  healthcheckTextWarning: string | undefined
+  hasHealthcheckTextWarning: boolean
 }>`
   padding: 0;
   background: ${p => p.theme.color.gainsboro};
-  max-height: ${p => (p.healthcheckTextWarning ? 80 : 82)}vh;
+  max-height: ${p => (p.hasHealthcheckTextWarning ? 80 : 82)}vh;
 `
 
 const ErrorFallback = styled.div`

@@ -6,12 +6,12 @@ import { sideWindowActions } from '../../domain/shared_slices/SideWindow'
 import { sideWindowDispatchers } from '../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
-import { MapButtonStyle } from '../commonStyles/MapButton.style'
+import { MapButton } from '../commonStyles/MapButton'
 import { ReactComponent as AlertsSVG } from '../icons/Icone_alertes.svg'
 
 export function AlertsMapButton() {
   const dispatch = useMainAppDispatch()
-  const { healthcheckTextWarning, previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
+  const { previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
   const { sideWindow } = useMainAppSelector(state => state)
 
   const isActive =
@@ -32,7 +32,6 @@ export function AlertsMapButton() {
     <AlertsButton
       $isActive={isActive}
       data-cy="alerts-button"
-      healthcheckTextWarning={!!healthcheckTextWarning}
       isHidden={Boolean(previewFilteredVesselsMode)}
       onClick={toggleSideWindow}
       title="Alertes"
@@ -42,7 +41,7 @@ export function AlertsMapButton() {
   )
 }
 
-const AlertsButton = styled(MapButtonStyle)<{
+const AlertsButton = styled(MapButton)<{
   $isActive: boolean
 }>`
   position: absolute;

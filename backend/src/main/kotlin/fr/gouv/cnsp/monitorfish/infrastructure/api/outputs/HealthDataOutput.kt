@@ -7,12 +7,14 @@ data class HealthDataOutput(
     val dateLastPositionReceivedByAPI: ZonedDateTime,
     val dateLastPositionUpdatedByPrefect: ZonedDateTime,
     val dateLogbookMessageReceived: ZonedDateTime,
+    val suddenDropOfPositionsReceived: Boolean,
 ) {
     companion object {
         fun fromHealth(health: Health) = HealthDataOutput(
             dateLastPositionUpdatedByPrefect = health.dateLastPositionUpdatedByPrefect,
             dateLastPositionReceivedByAPI = health.dateLastPositionReceivedByAPI,
             dateLogbookMessageReceived = health.dateLogbookMessageReceived,
+            suddenDropOfPositionsReceived = health.suddenDropOfPositionsReceived,
         )
     }
 }

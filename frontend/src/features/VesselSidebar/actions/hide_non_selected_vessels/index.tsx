@@ -10,7 +10,7 @@ import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 export function HideNonSelectedVessels({ isSidebarOpen }) {
   const dispatch = useMainAppDispatch()
-  const { healthcheckTextWarning, rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const { rightMenuIsOpen } = useMainAppSelector(state => state.global)
   const { hideNonSelectedVessels, selectedVesselPositions } = useMainAppSelector(state => state.vessel)
 
   return (
@@ -18,8 +18,6 @@ export function HideNonSelectedVessels({ isSidebarOpen }) {
       backgroundColor={hideNonSelectedVessels ? THEME.color.blueGray : THEME.color.charcoal}
       data-cy="trigger-hide-other-vessels-from-sidebar"
       disabled={!selectedVesselPositions?.length}
-      healthcheckTextWarning={!!healthcheckTextWarning}
-      isHidden={false}
       isRightMenuOpen={rightMenuIsOpen}
       isSidebarOpen={isSidebarOpen}
       onClick={() => dispatch(setHideNonSelectedVessels(!hideNonSelectedVessels))}

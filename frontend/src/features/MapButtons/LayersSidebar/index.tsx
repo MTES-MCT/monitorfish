@@ -13,8 +13,8 @@ import { setLeftBoxOpened } from '../../../domain/shared_slices/Global'
 import { closeRegulatoryZoneMetadata } from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { MapButtonStyle } from '../../commonStyles/MapButton.style'
-import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
+import { MapButton } from '../../commonStyles/MapButton'
+import { MapComponent } from '../../commonStyles/MapComponent'
 import { CustomZones } from '../../CustomZone/components/CustomZones'
 import { ReactComponent as LayersSVG } from '../../icons/Couches.svg'
 
@@ -39,7 +39,6 @@ export function LayersSidebar() {
         <>
           <Button
             data-cy="layers-sidebar"
-            healthcheckTextWarning={!!healthcheckTextWarning}
             isHidden={!!previewFilteredVesselsMode}
             isVisible={leftBoxOpened === LeftBoxOpened.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
             onClick={() =>
@@ -51,7 +50,6 @@ export function LayersSidebar() {
           </Button>
           <Sidebar
             data-cy="layers-sidebar-box"
-            healthcheckTextWarning={!!healthcheckTextWarning}
             isOpen={leftBoxOpened === LeftBoxOpened.REGULATIONS}
             isVisible={leftBoxOpened === LeftBoxOpened.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
           >
@@ -60,7 +58,7 @@ export function LayersSidebar() {
               numberOfRegulatoryLayersSaved={numberOfRegulatoryLayersSaved}
               setNumberOfRegulatoryLayersSaved={setNumberOfRegulatoryLayersSaved}
             />
-            <Layers healthcheckTextWarning={!!healthcheckTextWarning}>
+            <Layers hasHealthcheckTextWarning={!!healthcheckTextWarning.length}>
               <RegulatoryZones
                 namespace={namespace}
                 regulatoryLayersAddedToMySelection={numberOfRegulatoryLayersSaved}
@@ -99,7 +97,7 @@ const RegulatoryZoneMetadataShifter = styled.div<{
   transition: all 0.5s;
 `
 
-const Sidebar = styled(MapComponentStyle)<{
+const Sidebar = styled(MapComponent)<{
   isOpen: boolean
   isVisible: boolean
 }>`
@@ -115,14 +113,14 @@ const Sidebar = styled(MapComponentStyle)<{
 `
 
 const Layers = styled.div<{
-  healthcheckTextWarning: boolean
+  hasHealthcheckTextWarning: boolean
 }>`
   margin-top: 5px;
   width: 350px;
-  max-height: calc(100vh - ${p => (p.healthcheckTextWarning ? '210px' : '160px')});
+  max-height: calc(100vh - ${p => (p.hasHealthcheckTextWarning ? '210px' : '160px')});
 `
 
-const Button = styled(MapButtonStyle)<{
+const Button = styled(MapButton)<{
   isVisible: boolean
 }>`
   position: absolute;

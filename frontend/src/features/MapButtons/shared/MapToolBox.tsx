@@ -1,10 +1,9 @@
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
+import { MapComponent } from '../../commonStyles/MapComponent'
 
-export const MapToolBox = styled(MapComponentStyle)<{
-  healthcheckTextWarning: boolean
+export const MapToolBox = styled(MapComponent)<{
   isHidden?: boolean
   isLeftBox?: boolean
   isOpen: boolean

@@ -8,10 +8,10 @@ import { TrackRequest } from './actions/TrackRequest'
 import { Body } from './Body'
 import { Tabs } from './Tabs'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
-import { MapComponentStyle } from '../commonStyles/MapComponent.style'
+import { MapComponent } from '../commonStyles/MapComponent'
 
 export function VesselSidebar() {
-  const { healthcheckTextWarning, rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const { rightMenuIsOpen } = useMainAppSelector(state => state.global)
   const isFocusedOnVesselSearch = useMainAppSelector(state => state.vessel.isFocusedOnVesselSearch)
 
   const [isFirstLoad, setIsFirstLoad] = useState(false)
@@ -34,12 +34,7 @@ export function VesselSidebar() {
       <AnimateToTrack isSidebarOpen={isFirstLoad} />
       <HideNonSelectedVessels isSidebarOpen={isFirstLoad} />
       <ShowFishingActivitiesOnMap isSidebarOpen={isFirstLoad} />
-      <Wrapper
-        data-cy="vessel-sidebar"
-        healthcheckTextWarning={!!healthcheckTextWarning}
-        isRightMenuOpen={rightMenuIsOpen}
-        isSidebarOpen={isFirstLoad}
-      >
+      <Wrapper data-cy="vessel-sidebar" isRightMenuOpen={rightMenuIsOpen} isSidebarOpen={isFirstLoad}>
         <GrayOverlay isOverlayed={isFocusedOnVesselSearch && isFirstLoad} />
         <div>
           <Tabs />
@@ -81,9 +76,7 @@ const GrayOverlay = styled.div<{
   }
 `
 
-const Wrapper = styled(MapComponentStyle)<{
-  healthcheckTextWarning: boolean
-  isHidden?: boolean
+const Wrapper = styled(MapComponent)<{
   isRightMenuOpen: boolean
   isSidebarOpen: boolean
 }>`

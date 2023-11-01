@@ -21,7 +21,6 @@ const Filters = () => {
     nonFilteredVesselsAreHidden
   } = useSelector(state => state.filter)
   const {
-    healthcheckTextWarning,
     mapToolOpened
   } = useSelector(state => state.global)
 
@@ -49,7 +48,6 @@ const Filters = () => {
 
   return (
     <VesselFilterBox
-      healthcheckTextWarning={healthcheckTextWarning}
       isOpen={isOpen}>
       <Header isFirst={true}>
         Mes filtres

@@ -25,7 +25,6 @@ import { MapToolBox } from '../shared/MapToolBox'
 export function CustomCircleRange() {
   const dispatch = useMainAppDispatch()
   const { circleMeasurementInDrawing, measurementTypeToAdd } = useMainAppSelector(state => state.measurement)
-  const { healthcheckTextWarning } = useMainAppSelector(state => state.global)
 
   const circleCoordinates = useMemo(() => {
     if (measurementTypeToAdd !== MeasurementType.CIRCLE_RANGE || !circleMeasurementInDrawing?.coordinates?.length) {
@@ -101,10 +100,7 @@ export function CustomCircleRange() {
   }, [dispatch])
 
   return (
-    <Wrapper
-      healthcheckTextWarning={!!healthcheckTextWarning}
-      isOpen={measurementTypeToAdd === MeasurementType.CIRCLE_RANGE}
-    >
+    <Wrapper isOpen={measurementTypeToAdd === MeasurementType.CIRCLE_RANGE}>
       <Header>Définir une valeur</Header>
       <Body>
         <p>Coordonnées</p>

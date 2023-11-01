@@ -46,7 +46,7 @@ export function VesselFiltersMapButton() {
     <>
       <Wrapper ref={wrapperRef}>
         <VesselFiltersButton
-          dataCy="vessel-filters"
+          data-cy="vessel-filters"
           isActive={isOpen}
           onClick={openOrCloseVesselFilters}
           style={{ top: 110 }}

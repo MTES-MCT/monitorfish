@@ -76,7 +76,7 @@ export function MissionsMenu() {
         </MissionsMenuWrapper>
       </MissionMenuBox>
       <MissionMenuButton
-        dataCy="missions-map-button"
+        data-cy="missions-map-button"
         isActive={leftBoxOpened === LeftBoxOpened.MISSIONS}
         isLeftButton
         onClick={toggleMissionsMenu}

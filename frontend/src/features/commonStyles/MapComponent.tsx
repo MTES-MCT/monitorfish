@@ -9,11 +9,17 @@ type MapComponentStyleType = {
   className?: string
   isHidden?: boolean | undefined
 }
-export function MapComponent({ children, className, isHidden }: MapComponentStyleType) {
+export function MapComponent({ children, className, isHidden, ...props }: MapComponentStyleType) {
   const { healthcheckTextWarning } = useMainAppSelector(state => state.global)
 
   return (
-    <Wrapper className={className} hasHealthcheckTextWarning={!!healthcheckTextWarning.length} isHidden={isHidden}>
+    <Wrapper
+      className={className}
+      hasHealthcheckTextWarning={!!healthcheckTextWarning.length}
+      isHidden={isHidden}
+      /* eslint-disable-next-line react/jsx-props-no-spreading */
+      {...props}
+    >
       {children}
     </Wrapper>
   )

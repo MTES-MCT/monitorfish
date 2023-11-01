@@ -6,24 +6,23 @@ import type { ReactNode, HTMLProps } from 'react'
 
 type MapButtonType = {
   children: ReactNode
-  dataCy?: string | undefined
   isHidden?: boolean | undefined
 } & HTMLProps<HTMLButtonElement>
-export function MapButton({ children, dataCy, isHidden, ...props }: MapButtonType) {
+export function MapButton({ children, isHidden, ...props }: MapButtonType) {
   const { healthcheckTextWarning } = useMainAppSelector(state => state.global)
 
   return (
-    <Wrapper
-      className={props.className}
-      data-cy={dataCy}
-      hasHealthcheckTextWarning={!!healthcheckTextWarning.length}
-      isHidden={isHidden}
-      onClick={props.onClick}
-      style={props.style}
-      title={props.title}
-    >
+    /**
+     * TODO We have this error without the `ts-ignore` :
+     *  "TS2745: This JSX tag's 'children' prop expects type 'never' which requires multiple children,
+     *   but only a single child was provided"
+     */
+    /* eslint-disable react/jsx-props-no-spreading */
+    // @ts-ignore
+    <Wrapper hasHealthcheckTextWarning={!!healthcheckTextWarning.length} isHidden={isHidden} {...props}>
       {children}
     </Wrapper>
+    /* eslint-enable react/jsx-props-no-spreading */
   )
 }
 

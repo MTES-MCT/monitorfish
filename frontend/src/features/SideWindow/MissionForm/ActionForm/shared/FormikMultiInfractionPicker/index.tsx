@@ -84,7 +84,7 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [values]
+    [values.gearInfractions, values.logbookInfractions, values.otherInfractions, values.speciesInfractions]
   )
 
   const remove = useCallback(
@@ -100,7 +100,7 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [values]
+    [values.gearInfractions, values.logbookInfractions, values.otherInfractions, values.speciesInfractions]
   )
 
   const openNewInfractionForm = useCallback(() => {
@@ -126,7 +126,14 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [closeInfractionForm, editedIndex, values]
+    [
+      closeInfractionForm,
+      editedIndex,
+      values.gearInfractions,
+      values.logbookInfractions,
+      values.otherInfractions,
+      values.speciesInfractions
+    ]
   )
 
   if (!natinfsAsOptions.length) {

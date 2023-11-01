@@ -33,7 +33,7 @@ export function VesselLabelsMapButton() {
   return (
     <Wrapper ref={wrapperRef}>
       <VesselLabelsButton
-        dataCy="vessel-labels"
+        data-cy="vessel-labels"
         isActive={isOpen}
         onClick={openOrCloseVesselLabels}
         style={{ top: 194 }}

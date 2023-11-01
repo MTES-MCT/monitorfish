@@ -349,7 +349,7 @@ export function VesselList({ namespace }) {
     <>
       <Wrapper>
         <VesselListButton
-          dataCy="vessel-list"
+          data-cy="vessel-list"
           isActive={isVesselListModalDisplayed}
           onClick={() =>
             dispatch(

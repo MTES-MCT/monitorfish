@@ -67,7 +67,7 @@ export function MeasurementMapButton() {
   return (
     <Wrapper ref={wrapperRef}>
       <MeasurementButton
-        dataCy="measurement"
+        data-cy="measurement"
         isActive={isOpen || !!measurementTypeToAdd}
         onClick={openOrCloseMeasurementMenu}
         style={{ top: 249 }}

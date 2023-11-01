@@ -7,19 +7,18 @@ import { OpenLayersGeometryType } from '../../../../domain/entities/map/constant
 import { theme } from '../../../../ui/theme'
 
 import type { MultiPolygon } from 'ol/geom'
+import {THEME} from "@mtes-mct/monitor-ui";
 
 export const drawStyle = new Style({
-  fill: new Fill({
-    color: 'rgba(31, 120, 180, 0.28)'
-  }),
   image: new Icon({
     opacity: 1,
     scale: 1.5,
     src: 'Pointeur_selection_zone.svg'
   }),
   stroke: new Stroke({
-    color: theme.color.charcoal,
-    width: 3
+    color: THEME.color.slateGray,
+    lineDash: [4, 4],
+    width: 2
   })
 })
 

@@ -1,19 +1,12 @@
-import { FormikMultiRadio } from '@mtes-mct/monitor-ui'
+import { FormikMultiRadio, FormikTextarea } from '@mtes-mct/monitor-ui'
 
-import { FormikMultiInfractionPicker } from './FormikMultiInfractionPicker'
 import { MissionAction } from '../../../../../domain/types/missionAction'
+import { FieldsetGroup } from '../../shared/FieldsetGroup'
+import { FieldsetGroupSeparator } from '../../shared/FieldsetGroupSeparator'
 
 export function LicencesAndLogbookField() {
   return (
-    <FormikMultiInfractionPicker
-      addButtonLabel="Ajouter une infraction obligations déclaratives / autorisations"
-      generalObservationTextareaProps={{
-        label: 'Observations (hors infractions) sur les obligations déclaratives / autorisations',
-        name: 'licencesAndLogbookObservations'
-      }}
-      label="Obligations déclaratives et autorisations de pêche"
-      name="logbookInfractions"
-    >
+    <FieldsetGroup isLight legend="Obligations déclaratives et autorisations de pêche">
       <FormikMultiRadio
         isInline
         label="Bonne émission VMS"
@@ -54,6 +47,13 @@ export function LicencesAndLogbookField() {
           { label: 'Non concerné', value: MissionAction.ControlCheck.NOT_APPLICABLE }
         ]}
       />
-    </FormikMultiInfractionPicker>
+
+      <FieldsetGroupSeparator marginBottom={12} />
+      <FormikTextarea
+        label="Observations (hors infractions) sur les obligations déclaratives / autorisations"
+        name="licencesAndLogbookObservations"
+        rows={2}
+      />
+    </FieldsetGroup>
   )
 }

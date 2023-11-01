@@ -84,11 +84,6 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Bonne émission AIS', 'Non')
     cy.fill('Déclarations journal de pêche conformes à l’activité du navire', 'Non concerné')
     cy.fill('Autorisations de pêche conformes à l’activité du navire (zone, engins, espèces)', 'Non')
-    cy.clickButton('Ajouter une infraction obligations déclaratives / autorisations')
-    cy.fill('Type d’infraction', 'Avec PV')
-    cy.fill('NATINF', '23581')
-    cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction déclarative.')
-    cy.clickButton('Valider l’infraction')
     cy.fill(
       'Observations (hors infractions) sur les obligations déclaratives / autorisations',
       'Une observation hors infraction sur les obligations déclaaratives.'
@@ -113,11 +108,6 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Qté déclarée', 10)
     cy.fill('Qté estimée', 20)
     cy.fill('Sous-taille', true)
-    cy.clickButton('Ajouter une infraction espèces')
-    cy.fill('Type d’infraction', 'Sans PV')
-    cy.fill('NATINF', '23588')
-    cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction espèce.')
-    cy.clickButton('Valider l’infraction')
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
     // Appréhension et déroutement
@@ -125,9 +115,24 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Appréhension d’espèce(s)', true)
     cy.fill('Appréhension et déroutement du navire', true)
 
-    // Autres infractions
-    cy.clickButton('Ajouter une autre infraction')
+    // Infractions
+    cy.clickButton('Ajouter une infraction')
+    cy.fill('Type d’infraction', 'Avec PV')
+    cy.fill('Groupe', 'Infraction obligations déclaratives et autorisations de pêche')
+    cy.fill('NATINF', '23581')
+    cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction déclarative.')
+    cy.clickButton('Valider l’infraction')
+
+    cy.clickButton('Ajouter une infraction')
     cy.fill('Type d’infraction', 'Sans PV')
+    cy.fill('Groupe', 'Infraction espèces')
+    cy.fill('NATINF', '23588')
+    cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction espèce.')
+    cy.clickButton('Valider l’infraction')
+
+    cy.clickButton('Ajouter une infraction')
+    cy.fill('Type d’infraction', 'Sans PV')
+    cy.fill('Groupe', 'Autre infraction')
     cy.fill('NATINF', '27689')
     cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction autre.')
     cy.clickButton('Valider l’infraction')
@@ -472,7 +477,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // -------------------------------------------------------------------------
     // Form Validation
 
-    cy.clickButton('Ajouter une infraction engins').wait(500)
+    cy.clickButton('Ajouter une infraction').wait(500)
     // This validation only run after the first submission attempt
     cy.clickButton('Valider l’infraction')
     getSubmitButton().should('be.disabled')
@@ -486,6 +491,9 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Type d’infraction', 'Avec PV')
     getSubmitButton().should('be.disabled')
 
+    cy.fill('Groupe', 'Infraction engins')
+    getSubmitButton().should('be.disabled')
+
     cy.fill('NATINF', '23581')
     getSubmitButton().should('be.enabled')
 
@@ -496,7 +504,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.clickButton('Valider l’infraction')
 
-    cy.contains('Infraction obligations déclaratives et autorisations 1').should('exist')
+    cy.contains('Infraction engins 1').should('exist')
     cy.contains('Avec PV').should('exist')
     cy.contains('NATINF : 23581 - Taille de maille non réglementaire').should('exist')
 
@@ -518,7 +526,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.clickButton('Valider l’infraction')
 
-    cy.contains('Infraction obligations déclaratives et autorisations 1').should('exist')
+    cy.contains('Infraction engins 1').should('exist')
     cy.contains('Sans PV').should('exist')
     cy.contains('NATINF : 23588 - Chalutage dans la zone des 3 milles').should('exist')
     cy.contains("Une autre observation sur l'infraction").should('exist')
@@ -528,7 +536,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.clickButton("Supprimer l'infraction")
 
-    cy.contains('Infraction obligations déclaratives et autorisations 1').should('not.exist')
+    cy.contains('Infraction engins 1').should('not.exist')
   })
 
   it('Should fill the mission zone from the last sea control added', () => {

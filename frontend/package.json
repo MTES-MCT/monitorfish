@@ -107,7 +107,7 @@
     "cypress-mouse-position": "1.0.0",
     "cypress-plugin-snapshots": "github:ivangabriele/cypress-plugin-snapshots",
     "esbuild": "0.19.3",
-    "eslint": "8.47.0",
+    "eslint": "8.52.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-typescript": "17.1.0",
     "eslint-config-prettier": "9.0.0",

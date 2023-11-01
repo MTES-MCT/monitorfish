@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import type { MissionAction } from '../types/missionAction'
+import type { Infraction } from '../types/infraction'
 
 export type InfractionState = {
-  infractions: MissionAction.Infraction[]
+  infractions: Infraction[]
 }
 const INITIAL_STATE: InfractionState = {
   infractions: []

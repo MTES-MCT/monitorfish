@@ -114,13 +114,8 @@ export const isControl = actionType =>
   actionType === MissionAction.MissionActionType.LAND_CONTROL ||
   actionType === MissionAction.MissionActionType.AIR_CONTROL
 
-const infractionWithoutRecordFilter = (
-  infraction:
-    | MissionAction.GearInfraction
-    | MissionAction.LogbookInfraction
-    | MissionAction.SpeciesInfraction
-    | MissionAction.OtherInfraction
-) => infraction.infractionType === InfractionType.WITHOUT_RECORD || infraction.infractionType === InfractionType.PENDING
+const infractionWithoutRecordFilter = (infraction: MissionAction.Infraction) =>
+  infraction.infractionType === InfractionType.WITHOUT_RECORD || infraction.infractionType === InfractionType.PENDING
 
 /**
  * Get the number of infractions without records in a control

@@ -2,17 +2,23 @@
 
 import styled from 'styled-components'
 
-export function FieldsetGroupSeparator() {
+type FieldsetGroupSeparatorType = {
+  marginBottom?: number | undefined
+}
+export function FieldsetGroupSeparator({ marginBottom }: FieldsetGroupSeparatorType) {
   return (
-    <Wrapper>
+    <Wrapper marginBottom={marginBottom}>
       <HorizontalRule />
     </Wrapper>
   )
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{
+  marginBottom?: number | undefined
+}>`
   height: 4px;
   margin-top: 16px;
+  margin-bottom: ${p => p.marginBottom || 0}px;
   position: relative;
 `
 

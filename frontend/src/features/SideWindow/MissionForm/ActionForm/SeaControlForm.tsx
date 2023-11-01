@@ -94,12 +94,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
             <FormikCheckbox label="Appréhension et déroutement du navire" name="seizureAndDiversion" />
           </SeizureFieldsetGroup>
 
-          <FormikMultiInfractionPicker
-            addButtonLabel="Ajouter une autre infraction"
-            infractionLabel="Autre infraction"
-            label="Autres infractions"
-            name="otherInfractions"
-          />
+          <FormikMultiInfractionPicker addButtonLabel="Ajouter une infraction" label="Infractions" />
 
           <FieldsetGroup isLight legend="Autres observations">
             <FormikTextarea isLabelHidden label="Autres observations" name="otherComments" rows={2} />

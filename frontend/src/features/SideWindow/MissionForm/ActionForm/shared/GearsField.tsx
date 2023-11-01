@@ -13,12 +13,12 @@ import { remove as ramdaRemove } from 'ramda'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { FormikMultiInfractionPicker } from './FormikMultiInfractionPicker'
 import { useGetGearsQuery } from '../../../../../api/gear'
 import { BOOLEAN_AS_OPTIONS } from '../../../../../constants'
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 import { FieldGroup } from '../../shared/FieldGroup'
-import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
+import { FieldsetGroup, FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
+import { FieldsetGroupSeparator } from '../../shared/FieldsetGroupSeparator'
 
 import type { Gear } from '../../../../../domain/types/Gear'
 import type { MissionAction } from '../../../../../domain/types/missionAction'
@@ -92,70 +92,68 @@ export function GearsField() {
   }
 
   return (
-    <FormikMultiInfractionPicker
-      addButtonLabel="Ajouter une infraction engins"
-      label="Engins à bord"
-      name="gearInfractions"
-    >
-      {input.value &&
-        input.value.length > 0 &&
-        input.value.map((gearOnboard, index) => (
-          <Row
-            // eslint-disable-next-line react/no-array-index-key
-            key={`gearOnboard-${gearOnboard.gearCode}-${index}`}
-            $isFirst={index === 0}
-            style={{ marginTop: index > 0 ? '24px' : 0 }}
-          >
-            <RowInnerWrapper>
-              <SingleTag
-                onDelete={() => remove(index)}
-              >{`${gearOnboard.gearCode} - ${gearOnboard.gearName}`}</SingleTag>
+    <FieldsetGroup isLight legend="Engins à bord">
+      {input.value && input.value.length > 0 && (
+        <>
+          {input.value.map((gearOnboard, index) => (
+            <Row
+              // eslint-disable-next-line react/no-array-index-key
+              key={`gearOnboard-${gearOnboard.gearCode}-${index}`}
+              $isFirst={index === 0}
+              style={{ marginTop: index > 0 ? '24px' : 0 }}
+            >
+              <RowInnerWrapper>
+                <SingleTag
+                  onDelete={() => remove(index)}
+                >{`${gearOnboard.gearCode} - ${gearOnboard.gearName}`}</SingleTag>
 
-              <FormikMultiRadio
-                isInline
-                label="Engin contrôlé"
-                name={`gearOnboard[${index}].gearWasControlled`}
-                options={BOOLEAN_AS_OPTIONS}
-              />
-
-              <StyledFieldGroup isInline>
-                <FormikNumberInput
-                  isErrorMessageHidden
-                  isUndefinedWhenDisabled
-                  label="Maillage déclaré"
-                  name={`gearOnboard[${index}].declaredMesh`}
-                />
-                <FormikNumberInput
-                  disabled={!gearOnboard.gearWasControlled || gearOnboard.hasUncontrolledMesh}
-                  isErrorMessageHidden
-                  isUndefinedWhenDisabled
-                  label="Maillage mesuré"
-                  name={`gearOnboard[${index}].controlledMesh`}
+                <FormikMultiRadio
+                  isInline
+                  label="Engin contrôlé"
+                  name={`gearOnboard[${index}].gearWasControlled`}
+                  options={BOOLEAN_AS_OPTIONS}
                 />
 
-                <FormikCheckbox
-                  disabled={!gearOnboard.gearWasControlled}
-                  isUndefinedWhenDisabled
-                  label="Maillage non mesuré"
-                  name={`gearOnboard[${index}].hasUncontrolledMesh`}
+                <StyledFieldGroup isInline>
+                  <FormikNumberInput
+                    isErrorMessageHidden
+                    isUndefinedWhenDisabled
+                    label="Maillage déclaré"
+                    name={`gearOnboard[${index}].declaredMesh`}
+                  />
+                  <FormikNumberInput
+                    disabled={!gearOnboard.gearWasControlled || gearOnboard.hasUncontrolledMesh}
+                    isErrorMessageHidden
+                    isUndefinedWhenDisabled
+                    label="Maillage mesuré"
+                    name={`gearOnboard[${index}].controlledMesh`}
+                  />
+
+                  <FormikCheckbox
+                    disabled={!gearOnboard.gearWasControlled}
+                    isUndefinedWhenDisabled
+                    label="Maillage non mesuré"
+                    name={`gearOnboard[${index}].hasUncontrolledMesh`}
+                  />
+                </StyledFieldGroup>
+                {typedError && typedError[index]?.declaredMesh && (
+                  <FieldError>{typedError[index]?.declaredMesh}</FieldError>
+                )}
+                {typedError && typedError[index]?.controlledMesh && (
+                  <FieldError>{typedError[index]?.controlledMesh}</FieldError>
+                )}
+
+                <FormikTextarea
+                  label={`${gearOnboard.gearCode} : autres mesures et dispositifs`}
+                  name={`gearOnboard[${index}].comments`}
+                  rows={2}
                 />
-              </StyledFieldGroup>
-              {typedError && typedError[index]?.declaredMesh && (
-                <FieldError>{typedError[index]?.declaredMesh}</FieldError>
-              )}
-              {typedError && typedError[index]?.controlledMesh && (
-                <FieldError>{typedError[index]?.controlledMesh}</FieldError>
-              )}
-
-              <FormikTextarea
-                label={`${gearOnboard.gearCode} : autres mesures et dispositifs`}
-                name={`gearOnboard[${index}].comments`}
-                rows={2}
-              />
-            </RowInnerWrapper>
-          </Row>
-        ))}
-
+              </RowInnerWrapper>
+            </Row>
+          ))}
+          <FieldsetGroupSeparator marginBottom={12} />
+        </>
+      )}
       <Select
         key={String(input.value?.length)}
         baseContainer={newWindowContainerRef.current}
@@ -168,12 +166,12 @@ export function GearsField() {
       />
 
       {typeof meta.error === 'string' && <StyledFieldError>{meta.error}</StyledFieldError>}
-    </FormikMultiInfractionPicker>
+    </FieldsetGroup>
   )
 }
 
 const Row = styled.div<{
-  $isFirst?: boolean
+  $isFirst?: boolean | undefined
 }>`
   margin-top: ${p => (p.$isFirst ? 0 : 16)}px;
 

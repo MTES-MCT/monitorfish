@@ -60,7 +60,7 @@ dependencies {
     api("org.springframework.boot:spring-boot-configuration-processor:3.1.3")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     api("com.neovisionaries:nv-i18n:1.29")
-    api("org.springframework.boot:spring-boot-starter-cache:3.1.3")
+    api("org.springframework.boot:spring-boot-starter-cache:3.1.5")
     api("com.github.ben-manes.caffeine:caffeine:3.1.8")
     api("org.springframework.security:spring-security-test:6.1.5")
     api("org.testcontainers:testcontainers:1.19.1")

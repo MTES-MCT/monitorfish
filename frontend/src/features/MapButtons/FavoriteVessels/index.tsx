@@ -10,8 +10,8 @@ import { setHideNonSelectedVessels } from '../../../domain/shared_slices/Vessel'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { MapPropertyTrigger } from '../../commonComponents/MapPropertyTrigger'
-import { MapButtonStyle } from '../../commonStyles/MapButton.style'
-import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
+import { MapButton } from '../../commonStyles/MapButton'
+import { MapComponent } from '../../commonStyles/MapComponent'
 import { ReactComponent as HidingOtherTracksSVG } from '../../icons/Bouton_masquer_pistes_actif.svg'
 import { ReactComponent as ShowingOtherTracksSVG } from '../../icons/Bouton_masquer_pistes_inactif.svg'
 import { ReactComponent as FavoriteSVG } from '../../icons/favorite.svg'
@@ -22,9 +22,7 @@ export function FavoriteVessels() {
   const { hideNonSelectedVessels, selectedVesselIdentity, vesselsTracksShowed } = useMainAppSelector(
     state => state.vessel
   )
-  const { healthcheckTextWarning, leftBoxOpened, previewFilteredVesselsMode } = useMainAppSelector(
-    state => state.global
-  )
+  const { leftBoxOpened, previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
 
   const wrapperRef = useRef(null)
 
@@ -33,7 +31,6 @@ export function FavoriteVessels() {
       <Wrapper ref={wrapperRef}>
         <FavoriteVesselsNumber
           data-cy="favorite-vessels-number"
-          healthcheckTextWarning={!!healthcheckTextWarning.length}
           isHidden={previewFilteredVesselsMode}
           isOpen={leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS}
         >
@@ -41,7 +38,6 @@ export function FavoriteVessels() {
         </FavoriteVesselsNumber>
         <FavoriteVesselsIcon
           data-cy="favorite-vessels"
-          healthcheckTextWarning={!!healthcheckTextWarning.length}
           isHidden={!!previewFilteredVesselsMode}
           isOpen={leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS}
           onClick={() =>
@@ -55,7 +51,6 @@ export function FavoriteVessels() {
         </FavoriteVesselsIcon>
         <FavoriteVesselsBox
           data-cy="favorite-vessels-box"
-          healthcheckTextWarning={!!healthcheckTextWarning.length}
           isHidden={previewFilteredVesselsMode}
           isOpen={leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS}
         >
@@ -101,7 +96,7 @@ export function FavoriteVessels() {
   )
 }
 
-const FavoriteVesselsNumber = styled(MapComponentStyle)<{
+const FavoriteVesselsNumber = styled(MapComponent)<{
   isOpen: boolean
 }>`
   display: inline-block;
@@ -154,7 +149,7 @@ const Header = styled.div<{
   border-top-right-radius: ${p => (p.isFirst ? '2px' : '0')};
 `
 
-const FavoriteVesselsBox = styled(MapComponentStyle)<{
+const FavoriteVesselsBox = styled(MapComponent)<{
   isOpen: boolean
 }>`
   width: 305px;
@@ -169,7 +164,7 @@ const FavoriteVesselsBox = styled(MapComponentStyle)<{
   transition: all 0.5s;
 `
 
-const FavoriteVesselsIcon = styled(MapButtonStyle)<{
+const FavoriteVesselsIcon = styled(MapButton)<{
   isOpen: boolean
 }>`
   position: absolute;

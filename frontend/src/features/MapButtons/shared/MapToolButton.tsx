@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { MapButtonStyle } from '../../commonStyles/MapButton.style'
+import { MapButton } from '../../commonStyles/MapButton'
 
 import type { CSSProperties, ReactNode } from 'react'
 
@@ -23,9 +23,7 @@ export function MapToolButton({
   style,
   title
 }: MapToolButtonProps) {
-  const { healthcheckTextWarning, previewFilteredVesselsMode, rightMenuIsOpen } = useMainAppSelector(
-    state => state.global
-  )
+  const { previewFilteredVesselsMode, rightMenuIsOpen } = useMainAppSelector(state => state.global)
   const isRightMenuShrinked = !rightMenuIsOpen && !isLeftButton
 
   return (
@@ -33,8 +31,7 @@ export function MapToolButton({
       $isActive={isActive}
       $isLeftButton={isLeftButton}
       $isRightMenuShrinked={isRightMenuShrinked}
-      data-cy={dataCy}
-      healthcheckTextWarning={!!healthcheckTextWarning.length}
+      dataCy={dataCy}
       isHidden={!!previewFilteredVesselsMode}
       onClick={onClick}
       style={style}
@@ -45,7 +42,7 @@ export function MapToolButton({
   )
 }
 
-const StyledMapToolButton = styled(MapButtonStyle)<{
+const StyledMapToolButton = styled(MapButton)<{
   $isActive: boolean
   $isLeftButton: boolean
   $isRightMenuShrinked: boolean

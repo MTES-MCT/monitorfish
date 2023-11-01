@@ -7,7 +7,7 @@ import { ReactComponent as ShowTrackSVG } from '../../../icons/Bouton_afficher_t
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 export function AnimateToTrack({ isSidebarOpen }) {
-  const { healthcheckTextWarning, rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const { rightMenuIsOpen } = useMainAppSelector(state => state.global)
   const { selectedVesselPositions } = useMainAppSelector(state => state.vessel)
   const dispatch = useMainAppDispatch()
 
@@ -15,8 +15,6 @@ export function AnimateToTrack({ isSidebarOpen }) {
     <VesselSidebarActionButton
       data-cy="animate-to-track"
       disabled={!selectedVesselPositions?.length}
-      healthcheckTextWarning={!!healthcheckTextWarning.length}
-      isHidden={false}
       isRightMenuOpen={rightMenuIsOpen}
       isSidebarOpen={isSidebarOpen}
       onClick={() => dispatch(animateToExtent())}

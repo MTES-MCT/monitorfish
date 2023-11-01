@@ -1,5 +1,5 @@
-import { Accent, Button, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
-import { useField } from 'formik'
+import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
+import { useFormikContext } from 'formik'
 import { find } from 'lodash'
 import { remove as ramdaRemove, update as ramdaUpdate } from 'ramda'
 import { Fragment, useCallback, useMemo, useState } from 'react'
@@ -7,6 +7,7 @@ import styled from 'styled-components'
 
 import { Infraction } from './Infraction'
 import { InfractionForm } from './InfractionForm'
+import { InfractionGroup } from './types'
 import { FrontendError } from '../../../../../../libs/FrontendError'
 import { FrontendErrorBoundary } from '../../../../../../ui/FrontendErrorBoundary'
 import { useGetNatinfsAsOptions } from '../../../hooks/useGetNatinfsAsOptions'
@@ -15,45 +16,50 @@ import { FieldsetGroupSeparator } from '../../../shared/FieldsetGroupSeparator'
 
 import type { MissionAction } from '../../../../../../domain/types/missionAction'
 import type { MissionActionFormValues } from '../../../types'
-import type { FormikTextareaProps } from '@mtes-mct/monitor-ui'
-import type { ReactNode } from 'react'
 
 export type FormikMultiInfractionPickerProps = {
   addButtonLabel: string
-  children?: ReactNode
-  generalObservationTextareaProps?: Omit<FormikTextareaProps, 'name'> & {
-    name: keyof MissionActionFormValues
-  }
-  infractionLabel?: string
   label: string
-  name: keyof MissionActionFormValues
 }
-export function FormikMultiInfractionPicker({
-  addButtonLabel,
-  children,
-  generalObservationTextareaProps,
-  infractionLabel,
-  label,
-  name
-}: FormikMultiInfractionPickerProps) {
-  const [input, , helper] = useField<MissionAction.OtherInfraction[] | undefined>(name)
+export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMultiInfractionPickerProps) {
+  const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
 
   const [editedIndex, setEditedIndex] = useState<number | undefined>(undefined)
   const [isNewInfractionFormOpen, setIsNewInfractionFormOpen] = useState(false)
 
   const natinfsAsOptions = useGetNatinfsAsOptions()
 
-  const infractionsWithLabel = useMemo(() => {
-    if (!input.value) {
+  const infractionsWithLabelAndGroup = useMemo(() => {
+    const allInfractions = [
+      ...(values.gearInfractions?.map(infraction => ({ ...infraction, group: InfractionGroup.GEAR_INFRACTIONS })) ||
+        []),
+      ...(values.logbookInfractions?.map(infraction => ({
+        ...infraction,
+        group: InfractionGroup.LOGBOOK_INFRACTION
+      })) || []),
+      ...(values.otherInfractions?.map(infraction => ({ ...infraction, group: InfractionGroup.OTHER_INFRACTIONS })) ||
+        []),
+      ...(values.speciesInfractions?.map(infraction => ({
+        ...infraction,
+        group: InfractionGroup.SPECIES_INFRACTIONS
+      })) || [])
+    ]
+    if (!allInfractions.length) {
       return []
     }
 
-    return input.value.map(infraction => {
+    return allInfractions.map(infraction => {
       const nextInfractionLabel = find(natinfsAsOptions, { value: infraction.natinf })?.label
 
       return { ...infraction, label: nextInfractionLabel }
     })
-  }, [input.value, natinfsAsOptions])
+  }, [
+    values.gearInfractions,
+    values.logbookInfractions,
+    values.otherInfractions,
+    values.speciesInfractions,
+    natinfsAsOptions
+  ])
 
   const closeInfractionForm = useCallback(() => {
     setEditedIndex(undefined)
@@ -64,37 +70,37 @@ export function FormikMultiInfractionPicker({
   }, [])
 
   const create = useCallback(
-    (newInfractionFormValues: MissionAction.OtherInfraction) => {
-      const newInfractionWithComments: MissionAction.OtherInfraction = {
+    (newInfractionFormValues: MissionAction.Infraction, infractionGroup: string) => {
+      const newInfractionWithComments: MissionAction.Infraction = {
         ...newInfractionFormValues,
         comments: newInfractionFormValues.comments || ''
       }
 
-      const nextInfractions = [...(input.value || []), newInfractionWithComments]
+      const nextInfractions = [...(values[infractionGroup] || []), newInfractionWithComments]
 
-      helper.setValue(nextInfractions)
+      setFieldValue(infractionGroup, nextInfractions)
 
       setIsNewInfractionFormOpen(false)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [input.value]
+    [values.gearInfractions, values.logbookInfractions, values.otherInfractions, values.speciesInfractions]
   )
 
   const remove = useCallback(
-    (index: number) => {
-      if (!input.value) {
-        throw new FrontendError('`input.value` is undefined')
+    (index: number, infractionGroup: string) => {
+      if (!values[infractionGroup]) {
+        throw new FrontendError('`values[infractionGroup]` is undefined')
       }
 
-      const nextInfractions = ramdaRemove(index, 1, input.value)
-      const nornalizedNextInfractions = nextInfractions.length > 0 ? nextInfractions : undefined
+      const nextInfractions = ramdaRemove(index, 1, values[infractionGroup])
+      const normalizedNextInfractions = nextInfractions.length > 0 ? nextInfractions : undefined
 
-      helper.setValue(nornalizedNextInfractions)
+      setFieldValue(infractionGroup, normalizedNextInfractions)
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [input.value]
+    [values.gearInfractions, values.logbookInfractions, values.otherInfractions, values.speciesInfractions]
   )
 
   const openNewInfractionForm = useCallback(() => {
@@ -102,25 +108,32 @@ export function FormikMultiInfractionPicker({
   }, [])
 
   const update = useCallback(
-    (nextInfractionFormValues: MissionAction.OtherInfraction) => {
-      if (!input.value || editedIndex === undefined) {
-        throw new FrontendError('`input.value` or `editedIndex` is undefined')
+    (nextInfractionFormValues: MissionAction.Infraction, infractionGroup: string) => {
+      if (!values[infractionGroup] || editedIndex === undefined) {
+        throw new FrontendError('`values[infractionGroup]` or `editedIndex` is undefined')
       }
 
-      const updatedInfractionWithComments: MissionAction.OtherInfraction = {
+      const updatedInfractionWithComments: MissionAction.Infraction = {
         ...nextInfractionFormValues,
         comments: nextInfractionFormValues.comments || ''
       }
 
-      const nextInfractions = ramdaUpdate(editedIndex, updatedInfractionWithComments, input.value)
+      const nextInfractions = ramdaUpdate(editedIndex, updatedInfractionWithComments, values[infractionGroup])
 
-      helper.setValue(nextInfractions)
+      setFieldValue(infractionGroup, nextInfractions)
 
       closeInfractionForm()
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [closeInfractionForm, editedIndex, input.value]
+    [
+      closeInfractionForm,
+      editedIndex,
+      values.gearInfractions,
+      values.logbookInfractions,
+      values.otherInfractions,
+      values.speciesInfractions
+    ]
   )
 
   if (!natinfsAsOptions.length) {
@@ -130,65 +143,54 @@ export function FormikMultiInfractionPicker({
   return (
     <Wrapper isLight legend={label}>
       <FrontendErrorBoundary>
-        {children}
-
-        <Button
-          accent={Accent.SECONDARY}
-          disabled={isNewInfractionFormOpen}
-          Icon={Icon.Plus}
-          isFullWidth
-          onClick={openNewInfractionForm}
-        >
-          {addButtonLabel}
-        </Button>
-
-        {infractionsWithLabel.length > 0 && (
-          <Row>
-            {infractionsWithLabel.map((infraction, index) => (
+        {infractionsWithLabelAndGroup.length > 0 && (
+          <StyledRow>
+            {infractionsWithLabelAndGroup.map((infraction, index) => (
               // eslint-disable-next-line react/no-array-index-key
-              <Fragment key={`${name}-infraction-${index}`}>
-                <FieldsetGroupSeparator />
-
+              <Fragment key={`${infraction.group}-infraction-${index}`}>
                 {index !== editedIndex && (
-                  <Infraction
-                    data={infraction}
-                    index={index}
-                    label={infractionLabel}
-                    onDelete={remove}
-                    onEdit={setEditedIndex}
-                  />
+                  <>
+                    <Infraction data={infraction} index={index} onDelete={remove} onEdit={setEditedIndex} />
+                    {index + 1 < infractionsWithLabelAndGroup.length && <FieldsetGroupSeparator marginBottom={12} />}
+                  </>
                 )}
 
                 {index === editedIndex && (
-                  <InfractionForm
-                    initialValues={infraction}
-                    natinfsAsOptions={natinfsAsOptions}
-                    onCancel={closeInfractionForm}
-                    onSubmit={update}
-                  />
+                  <>
+                    <InfractionForm
+                      initialValues={infraction}
+                      isEdition
+                      natinfsAsOptions={natinfsAsOptions}
+                      onCancel={closeInfractionForm}
+                      onSubmit={update}
+                    />
+                    {infractionsWithLabelAndGroup.length > index + 1 && <FieldsetGroupSeparator marginBottom={12} />}
+                  </>
                 )}
               </Fragment>
             ))}
-          </Row>
+          </StyledRow>
+        )}
+        {!isNewInfractionFormOpen && (
+          <>
+            {infractionsWithLabelAndGroup.length > 0 && <FieldsetGroupSeparator />}
+            <Button accent={Accent.SECONDARY} Icon={Icon.Plus} isFullWidth onClick={openNewInfractionForm}>
+              {addButtonLabel}
+            </Button>
+          </>
         )}
 
         {isNewInfractionFormOpen && (
-          <Row>
-            <InfractionForm
-              initialValues={{} as MissionAction.OtherInfraction}
-              natinfsAsOptions={natinfsAsOptions}
-              onCancel={closeNewInfractionForm}
-              onSubmit={create}
-            />
-          </Row>
-        )}
-
-        {generalObservationTextareaProps && (
           <>
-            <FieldsetGroupSeparator />
-
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <FormikTextarea rows={2} {...generalObservationTextareaProps} />
+            {infractionsWithLabelAndGroup.length > 0 && <FieldsetGroupSeparator marginBottom={12} />}
+            <Row>
+              <InfractionForm
+                initialValues={{} as MissionAction.Infraction}
+                natinfsAsOptions={natinfsAsOptions}
+                onCancel={closeNewInfractionForm}
+                onSubmit={create}
+              />
+            </Row>
           </>
         )}
       </FrontendErrorBoundary>
@@ -208,5 +210,13 @@ const Wrapper = styled(FieldsetGroup)`
 const Row = styled.div`
   > legend {
     margin: 12px 0 8px;
+
+    :first-child {
+      margin: 0px 0 8px;
+    }
   }
+`
+
+const StyledRow = styled(Row)`
+  padding-top: 0px;
 `

@@ -16,7 +16,7 @@ export namespace MissionAction {
     faoAreas: string[]
     feedbackSheetRequired: boolean | undefined
     flagState: string | undefined
-    gearInfractions: GearInfraction[]
+    gearInfractions: Infraction[]
     gearOnboard: GearControl[]
     hasSomeGearsSeized: boolean
     hasSomeSpeciesSeized: boolean
@@ -32,13 +32,13 @@ export namespace MissionAction {
     latitude: number | undefined
     licencesAndLogbookObservations: string | undefined
     licencesMatchActivity: ControlCheck | undefined
-    logbookInfractions: LogbookInfraction[]
+    logbookInfractions: Infraction[]
     logbookMatchesActivity: ControlCheck | undefined
     longitude: number | undefined
     missionId: number
     numberOfVesselsFlownOver: number | undefined
     otherComments: string | undefined
-    otherInfractions: OtherInfraction[]
+    otherInfractions: Infraction[]
     portLocode: string | undefined
     // This field is added by the API
     portName: string | undefined
@@ -46,7 +46,7 @@ export namespace MissionAction {
     seizureAndDiversion: boolean | undefined
     seizureAndDiversionComments: string | undefined
     separateStowageOfPreservedSpecies: ControlCheck | undefined
-    speciesInfractions: SpeciesInfraction[]
+    speciesInfractions: Infraction[]
     speciesObservations: string | undefined
     speciesOnboard: SpeciesControl[]
     speciesSizeControlled: boolean | undefined
@@ -131,29 +131,15 @@ export namespace MissionAction {
     hasUncontrolledMesh: boolean
   }
 
-  export type GearInfraction = {
+  export type Infraction = {
     comments: string
     infractionType: InfractionType
     natinf: number
-  }
-
-  export type Infraction = {
-    infraction: string
-    infractionCategory: string
-    natinfCode: number
-    regulation: string
   }
 
   export type LastControls = {
     LAND: ControlAndText
     SEA: ControlAndText
-  }
-
-  export type LogbookInfraction = {
-    comments: string
-    infractionType: InfractionType
-    // TODO This should be a plural.
-    natinf: number
   }
 
   export type MissionActionData = Omit<MissionAction, 'id' | 'portName'> & {
@@ -168,23 +154,11 @@ export namespace MissionAction {
     vesselId: number
   }
 
-  export type OtherInfraction = {
-    comments: string
-    infractionType: InfractionType
-    natinf: number
-  }
-
   export type SpeciesControl = {
     controlledWeight: number | undefined
     declaredWeight: number | undefined
     nbFish: number | undefined
     speciesCode: string
     underSized: boolean | undefined
-  }
-
-  export type SpeciesInfraction = {
-    comments: string
-    infractionType: InfractionType
-    natinf: number
   }
 }

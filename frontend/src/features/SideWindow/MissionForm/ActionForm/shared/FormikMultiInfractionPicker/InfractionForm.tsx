@@ -5,41 +5,81 @@ import {
   FormikSelect,
   FormikTextarea,
   type Option,
-  useNewWindow
+  useNewWindow,
+  Select
 } from '@mtes-mct/monitor-ui'
 import { Form, Formik } from 'formik'
+import { useState } from 'react'
 import styled from 'styled-components'
 
+import { infractionGroupToLabel } from './constants'
+import { InfractionGroup } from './types'
 import { InfractionFormLiveSchema } from '../../schemas'
 import { INFRACTION_TYPES_AS_OPTIONS } from '../constants'
 
 import type { MissionAction } from '../../../../../../domain/types/missionAction'
 
-export type InfractionFormProps<AnyInfraction extends MissionAction.OtherInfraction> = {
-  initialValues: AnyInfraction
+export type InfractionFormProps = {
+  initialValues: MissionAction.Infraction & { group?: string | undefined }
+  isEdition?: boolean
   natinfsAsOptions: Option<number>[]
   onCancel: () => void
-  onSubmit: (nextInfractionFormValues: AnyInfraction) => void
+  onSubmit: (nextInfractionFormValues: MissionAction.Infraction, infractionGroup: string) => void
 }
-export function InfractionForm<AnyInfraction extends MissionAction.OtherInfraction>({
+export function InfractionForm({
   initialValues,
+  isEdition = false,
   natinfsAsOptions,
   onCancel,
   onSubmit
-}: InfractionFormProps<AnyInfraction>) {
+}: InfractionFormProps) {
   const { newWindowContainerRef } = useNewWindow()
+  const [infractionGroup, setInfractionGroup] = useState<string>(
+    initialValues.group || InfractionGroup.GEAR_INFRACTIONS
+  )
+
+  const infractionGroupOptions = Object.keys(InfractionGroup).map(group => {
+    const groupValue = InfractionGroup[group]
+
+    return {
+      label: infractionGroupToLabel[groupValue],
+      value: groupValue
+    }
+  })
 
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={InfractionFormLiveSchema}>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={values => onSubmit(values, infractionGroup)}
+      validationSchema={InfractionFormLiveSchema}
+    >
       {({ isValid }) => (
         <StyledForm>
-          <FormikMultiRadio
-            isErrorMessageHidden
-            isInline
-            label="Type d’infraction"
-            name="infractionType"
-            options={INFRACTION_TYPES_AS_OPTIONS}
-          />
+          <Columns>
+            <FormikMultiRadio
+              isErrorMessageHidden
+              isInline
+              label="Type d’infraction"
+              name="infractionType"
+              options={INFRACTION_TYPES_AS_OPTIONS}
+            />
+            <StyledGroupSelect
+              baseContainer={newWindowContainerRef.current}
+              cleanable={false}
+              disabled={isEdition}
+              label="Groupe"
+              name="infraction-group"
+              onChange={group => {
+                if (isEdition) {
+                  return
+                }
+
+                setInfractionGroup(group as string)
+              }}
+              options={infractionGroupOptions}
+              value={infractionGroup}
+            />
+          </Columns>
           <HackedFormikSelect
             baseContainer={newWindowContainerRef.current}
             isErrorMessageHidden
@@ -63,6 +103,15 @@ export function InfractionForm<AnyInfraction extends MissionAction.OtherInfracti
     </Formik>
   )
 }
+
+const StyledGroupSelect = styled(Select)`
+  margin-left: 16px;
+  max-width: 350px;
+`
+
+const Columns = styled.div`
+  display: flex;
+`
 
 const StyledForm = styled(Form)`
   background-color: transparent;

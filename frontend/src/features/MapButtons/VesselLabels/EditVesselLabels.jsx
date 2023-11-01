@@ -21,7 +21,6 @@ const EditVesselLabels = () => {
     riskFactorShowedOnMap
   } = useSelector(state => state.map)
   const {
-    healthcheckTextWarning,
     mapToolOpened
   } = useSelector(state => state.global)
 
@@ -29,7 +28,6 @@ const EditVesselLabels = () => {
 
   return (
     <Wrapper
-      healthcheckTextWarning={healthcheckTextWarning.length}
       isOpen={isOpen}>
       <Header isFirst={false}>
         Affichage des étiquettes { isSuperUser ? 'et notes des navires' : ''}

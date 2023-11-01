@@ -23,7 +23,7 @@ import { MapToolBox } from '../shared/MapToolBox'
 export function EditVesselVisibility() {
   const dispatch = useMainAppDispatch()
   const { hideNonSelectedVessels } = useMainAppSelector(state => state.vessel)
-  const { healthcheckTextWarning, mapToolOpened } = useMainAppSelector(state => state.global)
+  const { mapToolOpened } = useMainAppSelector(state => state.global)
   const { hideVesselsAtPort, showingVesselsEstimatedPositions, vesselsLastPositionVisibility } = useMainAppSelector(
     state => state.map
   )
@@ -40,7 +40,7 @@ export function EditVesselVisibility() {
   }
 
   return (
-    <Wrapper healthcheckTextWarning={!!healthcheckTextWarning.length} isOpen={isOpen}>
+    <Wrapper isOpen={isOpen}>
       <Header isFirst>Gérer l&apos;affichage des dernières positions</Header>
       <LastPositionInfo>
         <VesselHidden /> navires masqués <VesselAlmostHidden /> navires estompés <VesselShowed /> navires normaux
@@ -141,7 +141,6 @@ const Header = styled.div<{
 `
 
 const Wrapper = styled(MapToolBox)<{
-  healthcheckTextWarning: boolean
   isHidden?: boolean
   isOpen: boolean
 }>`

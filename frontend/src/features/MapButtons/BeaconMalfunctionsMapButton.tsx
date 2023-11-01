@@ -6,12 +6,12 @@ import { sideWindowActions } from '../../domain/shared_slices/SideWindow'
 import { sideWindowDispatchers } from '../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
-import { MapButtonStyle } from '../commonStyles/MapButton.style'
+import { MapButton } from '../commonStyles/MapButton'
 import { ReactComponent as BeaconMalfunctionsSVG } from '../icons/Icone_VMS.svg'
 
 export function BeaconMalfunctionsMapButton() {
   const dispatch = useMainAppDispatch()
-  const { healthcheckTextWarning, previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
+  const { previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
   const { sideWindow } = useMainAppSelector(state => state)
 
   const isActive =
@@ -32,7 +32,6 @@ export function BeaconMalfunctionsMapButton() {
     <BeaconMalfunctionsButton
       $isActive={isActive}
       data-cy="beacon-malfunction-button"
-      healthcheckTextWarning={!!healthcheckTextWarning.length}
       isHidden={!!previewFilteredVesselsMode}
       onClick={toggleSideWindow}
       title="Avaries VMS"
@@ -42,7 +41,7 @@ export function BeaconMalfunctionsMapButton() {
   )
 }
 
-const BeaconMalfunctionsButton = styled(MapButtonStyle)<{
+const BeaconMalfunctionsButton = styled(MapButton)<{
   $isActive: boolean
 }>`
   position: absolute;

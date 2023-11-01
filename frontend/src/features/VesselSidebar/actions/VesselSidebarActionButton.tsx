@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
-import { MapButtonStyle } from '../../commonStyles/MapButton.style'
+import { MapButton } from '../../commonStyles/MapButton'
 
-export const VesselSidebarActionButton = styled(MapButtonStyle)<{
+export const VesselSidebarActionButton = styled(MapButton)<{
   backgroundColor?: string
   isRightMenuOpen: boolean
   isSidebarOpen: boolean

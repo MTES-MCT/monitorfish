@@ -8,8 +8,8 @@ import { setIsFocusedOnVesselSearch } from '../../../domain/shared_slices/Vessel
 import { showVessel } from '../../../domain/use_cases/vessel/showVessel'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { MapButtonStyle } from '../../commonStyles/MapButton.style'
-import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
+import { MapButton } from '../../commonStyles/MapButton'
+import { MapComponent } from '../../commonStyles/MapComponent'
 import { ReactComponent as SearchIconSVG } from '../../icons/Loupe.svg'
 import { VesselSearch } from '../../VesselSearch'
 
@@ -22,9 +22,7 @@ export function VesselSidebarHeader() {
     state => state.vessel
   )
 
-  const { healthcheckTextWarning, previewFilteredVesselsMode, rightMenuIsOpen } = useMainAppSelector(
-    state => state.global
-  )
+  const { previewFilteredVesselsMode, rightMenuIsOpen } = useMainAppSelector(state => state.global)
 
   const isVesselNameShown = !isFocusedOnVesselSearch && selectedVesselIdentity
   const isRightMenuShrinked = vesselSidebarIsOpen && !rightMenuIsOpen
@@ -47,7 +45,6 @@ export function VesselSidebarHeader() {
     <>
       <VesselNameOrInput
         data-cy="vessel-name"
-        healthcheckTextWarning={!!healthcheckTextWarning.length}
         isHidden={previewFilteredVesselsMode}
         isRightMenuShrinked={isRightMenuShrinked}
       >
@@ -70,7 +67,6 @@ export function VesselSidebarHeader() {
         )}
       </VesselNameOrInput>
       <SearchButton
-        healthcheckTextWarning={!!healthcheckTextWarning.length}
         isHidden={!!previewFilteredVesselsMode}
         isOpen={!!selectedVessel}
         isShrinked={isRightMenuShrinked}
@@ -84,7 +80,7 @@ export function VesselSidebarHeader() {
   )
 }
 
-const VesselNameOrInput = styled(MapComponentStyle)<{
+const VesselNameOrInput = styled(MapComponent)<{
   isRightMenuShrinked: boolean
 }>`
   position: absolute;
@@ -109,7 +105,7 @@ const VesselNameOrInput = styled(MapComponentStyle)<{
   }
 `
 
-const SearchButton = styled(MapButtonStyle)<{
+const SearchButton = styled(MapButton)<{
   isOpen: boolean
   isShrinked: boolean
 }>`

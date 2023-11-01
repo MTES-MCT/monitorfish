@@ -31,7 +31,7 @@ import { getExtentFromGeoJSON } from '../../utils'
 import { isNumeric } from '../../utils/isNumeric'
 import StyledModalHeader from '../commonComponents/StyledModalHeader'
 import { PrimaryButton, SecondaryButton } from '../commonStyles/Buttons.style'
-import { MapComponentStyle } from '../commonStyles/MapComponent.style'
+import { MapComponent } from '../commonStyles/MapComponent'
 import { ReactComponent as VesselListSVG } from '../icons/Icone_liste_navires.svg'
 import { ReactComponent as PreviewSVG } from '../icons/Oeil_apercu_carte.svg'
 import { MapToolButton } from '../MapButtons/shared/MapToolButton'
@@ -347,7 +347,7 @@ export function VesselList({ namespace }) {
 
   return (
     <>
-      <Wrapper healthcheckTextWarning={false}>
+      <Wrapper>
         <VesselListButton
           dataCy="vessel-list"
           isActive={isVesselListModalDisplayed}
@@ -506,7 +506,7 @@ export function VesselList({ namespace }) {
   )
 }
 
-const Wrapper = styled(MapComponentStyle)`
+const Wrapper = styled(MapComponent)`
   transition: all 0.2s;
 `
 

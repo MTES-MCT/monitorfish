@@ -17,7 +17,7 @@ import { MapToolButton } from '../shared/MapToolButton'
 export function MissionsMenu() {
   const dispatch = useMainAppDispatch()
   const { sideWindow } = useMainAppSelector(state => state)
-  const { healthcheckTextWarning, leftBoxOpened } = useMainAppSelector(state => state.global)
+  const { leftBoxOpened } = useMainAppSelector(state => state.global)
   const { isMissionsLayerDisplayed } = useMainAppSelector(state => state.displayedComponent)
 
   const isActive =
@@ -47,12 +47,7 @@ export function MissionsMenu() {
 
   return (
     <Wrapper>
-      <MissionMenuBox
-        data-cy="missions-menu-box"
-        healthcheckTextWarning={!!healthcheckTextWarning.length}
-        isLeftBox
-        isOpen={leftBoxOpened === LeftBoxOpened.MISSIONS}
-      >
+      <MissionMenuBox data-cy="missions-menu-box" isLeftBox isOpen={leftBoxOpened === LeftBoxOpened.MISSIONS}>
         <MissionsMenuWrapper>
           <MissionsMenuHeader>
             <ToggleMissionMenuButton Icon={Icon.Close} onClick={toggleMissionsMenu} size={Size.NORMAL} />

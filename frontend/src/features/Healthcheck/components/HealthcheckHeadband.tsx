@@ -44,7 +44,7 @@ export function HealthcheckHeadband() {
 
   return (
     <>
-      {healthcheckTextWarning.length && !previewFilteredVesselsMode && (
+      {!!healthcheckTextWarning.length && !previewFilteredVesselsMode && (
         <HealthcheckWarnings>
           <WarningIcon />
           {healthcheckTextWarning.length === 1

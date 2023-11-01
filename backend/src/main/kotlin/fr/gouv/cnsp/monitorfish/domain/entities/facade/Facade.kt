@@ -15,6 +15,7 @@ enum class Facade(private val storedValue: String) {
     NAMO("NAMO"),
     CORSE("Corse"),
     HORS_FACADE("Hors façade"),
+
     ;
 
     companion object {

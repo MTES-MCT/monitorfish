@@ -225,7 +225,7 @@ export function BaseMap({
       <MapContainer
         // @ts-ignore
         ref={mapElement}
-        hasHealthcheckTextWarning={!!healthcheckTextWarning}
+        hasHealthcheckTextWarning={!!healthcheckTextWarning.length}
         isPreviewFilteredVesselsMode={!!previewFilteredVesselsMode}
       />
       {showCoordinates && <MapCoordinatesBox coordinates={cursorCoordinates} />}

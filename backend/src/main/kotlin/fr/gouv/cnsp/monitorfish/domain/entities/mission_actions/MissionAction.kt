@@ -57,7 +57,7 @@ data class MissionAction(
     val isAdministrativeControl: Boolean? = null,
     val isComplianceWithWaterRegulationsControl: Boolean? = null,
     val isSafetyEquipmentAndStandardsComplianceControl: Boolean? = null,
-    val isSeafarersControl: Boolean? = null
+    val isSeafarersControl: Boolean? = null,
 ) {
     fun verify() {
         val controlTypes = listOf(

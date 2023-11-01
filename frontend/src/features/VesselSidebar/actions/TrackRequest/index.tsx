@@ -9,7 +9,7 @@ import { VesselTrackDepth, getTrackRequestFromTrackDepth } from '../../../../dom
 import { updateSelectedVesselTrackRequest } from '../../../../domain/use_cases/vessel/updateSelectedVesselTrackRequest'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
+import { MapComponent } from '../../../commonStyles/MapComponent'
 import { ReactComponent as VesselSVG } from '../../../icons/Icone_navire.svg'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
@@ -21,7 +21,6 @@ type TrackRequestProps = {
 }
 export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
   const dispatch = useMainAppDispatch()
-  const { healthcheckTextWarning } = useMainAppSelector(state => state.global)
   const { rightMenuIsOpen } = useMainAppSelector(state => state.global)
   const { defaultVesselTrackDepth } = useMainAppSelector(state => state.map)
   const { selectedVesselTrackRequest } = useMainAppSelector(state => state.vessel)
@@ -85,8 +84,6 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
       <VesselSidebarActionButton
         backgroundColor={isOpen ? THEME.color.blueGray : THEME.color.charcoal}
         data-cy="vessel-track-depth-selection"
-        healthcheckTextWarning={!!healthcheckTextWarning}
-        isHidden={false}
         isRightMenuOpen={rightMenuIsOpen}
         isSidebarOpen={isSidebarOpen}
         onClick={() => setIsOpenedFromClick(!isOpenedFromClick)}
@@ -95,12 +92,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
       >
         <VesselIcon />
       </VesselSidebarActionButton>
-      <TrackRequestBody
-        healthcheckTextWarning={!!healthcheckTextWarning}
-        isOpen={isOpen}
-        isRightMenuOpen={rightMenuIsOpen}
-        isSidebarOpen={isSidebarOpen}
-      >
+      <TrackRequestBody isOpen={isOpen} isRightMenuOpen={rightMenuIsOpen} isSidebarOpen={isSidebarOpen}>
         <Header>Paramétrer l&apos;affichage de la piste VMS</Header>
         <Section>
           <p>Afficher la piste VMS du navire depuis :</p>
@@ -151,9 +143,7 @@ const Field = styled.div`
   margin-bottom: 1rem;
 `
 
-const TrackRequestBody = styled(MapComponentStyle)<{
-  healthcheckTextWarning: boolean
-  isHidden?: boolean
+const TrackRequestBody = styled(MapComponent)<{
   isOpen: boolean
   isRightMenuOpen: boolean
   isSidebarOpen: boolean

@@ -98,7 +98,7 @@ springBoot {
     buildInfo {
         properties {
             additional = mapOf(
-                "commit.hash" to "COMMIT_TO_CHANGE"
+                "commit.hash" to "COMMIT_TO_CHANGE",
             )
         }
     }

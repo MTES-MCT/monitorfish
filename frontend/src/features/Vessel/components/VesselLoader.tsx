@@ -9,7 +9,7 @@ import { setError } from '../../../domain/shared_slices/Global'
 import { useIsInLightMode } from '../../../hooks/authorization/useIsInLightMode'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
+import { MapComponent } from '../../commonStyles/MapComponent'
 import { ReactComponent as VesselSVG } from '../../icons/Icone_navire.svg'
 import { useGetVesselsLastPositionsApi } from '../hooks/useGetVesselsLastPositionsApi'
 import { showVesselsLastPosition } from '../useCases/showVesselsLastPosition'
@@ -19,7 +19,7 @@ export function VesselLoader() {
   const isInLightMode = useIsInLightMode()
   const dispatch = useMainAppDispatch()
 
-  const { blockVesselsUpdate, healthcheckTextWarning } = useMainAppSelector(state => state.global)
+  const { blockVesselsUpdate } = useMainAppSelector(state => state.global)
   const { loadingPositions, vesselSidebarIsOpen } = useMainAppSelector(state => state.vessel)
 
   const {
@@ -52,13 +52,13 @@ export function VesselLoader() {
   return (
     <>
       {!isAppLoaded && (
-        <FirstLoadWrapper healthcheckTextWarning={!!healthcheckTextWarning}>
+        <FirstLoadWrapper>
           <FulfillingBouncingCircleSpinner className="update-vessels" color={COLORS.white} size={100} />
           <BigVessel />
           <Text data-cy="first-loader">Chargement...</Text>
         </FirstLoadWrapper>
       )}
-      <UpdateWrapper healthcheckTextWarning={!!healthcheckTextWarning} isVesselSidebarOpen={vesselSidebarIsOpen}>
+      <UpdateWrapper isVesselSidebarOpen={vesselSidebarIsOpen}>
         {(isFetching || loadingPositions) && isAppLoaded && (
           <>
             <FulfillingBouncingCircleSpinner className="update-vessels" color={COLORS.white} size={30} />
@@ -93,7 +93,7 @@ const BigVessel = styled(VesselSVG)`
   transform: scale(2);
 `
 
-const UpdateWrapper = styled(MapComponentStyle)<{
+const UpdateWrapper = styled(MapComponent)<{
   isVesselSidebarOpen: boolean
 }>`
   position: absolute;
@@ -103,7 +103,7 @@ const UpdateWrapper = styled(MapComponentStyle)<{
   transform: translate(-50%, -50%);
 `
 
-const FirstLoadWrapper = styled(MapComponentStyle)`
+const FirstLoadWrapper = styled(MapComponent)`
   position: fixed;
   top: 15%;
   left: 50%;

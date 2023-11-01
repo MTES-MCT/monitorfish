@@ -17,7 +17,7 @@ import { MapToolButton } from '../shared/MapToolButton'
 
 export function InterestPointMapButton() {
   const dispatch = useMainAppDispatch()
-  const { healthcheckTextWarning, mapToolOpened, rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const { mapToolOpened, rightMenuIsOpen } = useMainAppSelector(state => state.global)
   const isRightMenuShrinked = !rightMenuIsOpen
   const isOpen = useMemo(() => mapToolOpened === MapToolType.INTEREST_POINT, [mapToolOpened])
   const wrapperRef = useRef(null)
@@ -47,7 +47,7 @@ export function InterestPointMapButton() {
   return (
     <Wrapper ref={wrapperRef}>
       <InterestPointButton
-        dataCy="interest-point"
+        data-cy="interest-point"
         isActive={isOpen}
         onClick={openOrCloseInterestPoint}
         style={{ top: 291 }}
@@ -55,7 +55,7 @@ export function InterestPointMapButton() {
       >
         <InterestPointIcon $isRightMenuShrinked={isRightMenuShrinked} />
       </InterestPointButton>
-      <EditInterestPoint close={close} healthcheckTextWarning={healthcheckTextWarning} isOpen={isOpen} />
+      <EditInterestPoint close={close} isOpen={isOpen} />
     </Wrapper>
   )
 }

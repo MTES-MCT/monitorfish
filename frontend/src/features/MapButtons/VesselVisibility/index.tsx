@@ -33,7 +33,7 @@ export function VesselVisibilityMapButton() {
   return (
     <Wrapper ref={wrapperRef}>
       <VesselVisibilityButton
-        dataCy="vessel-visibility"
+        data-cy="vessel-visibility"
         isActive={isOpen}
         onClick={openOrCloseVesselVisibility}
         style={{ top: 152 }}

@@ -8,11 +8,7 @@ import { useGetNatinfsAsOptions } from '../../SideWindow/MissionForm/hooks/useGe
 
 type InfractionProps = {
   index: number
-  infraction:
-    | MissionAction.GearInfraction
-    | MissionAction.SpeciesInfraction
-    | MissionAction.LogbookInfraction
-    | MissionAction.OtherInfraction
+  infraction: MissionAction.Infraction
   infractionDomain: MissionAction.InfractionDomain
 }
 export function Infraction({ index, infraction, infractionDomain }: InfractionProps) {

@@ -29,8 +29,8 @@ context('Side Window > Mission Form > Land Control', () => {
 
     // Port de contrôle
     // Try to select a port with custom search (the "-" missing but the port should be found)
-    cy.get('#port').parent().click()
-    cy.get('.rs-picker-search-bar-input').type('saintmalo{enter}')
+    cy.get('#port').parent().click({ force: true })
+    cy.get('.rs-picker-search-bar-input').type('saintmalo{enter}', { force: true })
     // Should select the right port
     cy.get('.Field-Select').contains('Saint-Malo (FRSML)')
 
@@ -42,11 +42,6 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Bonne émission AIS', 'Non')
     cy.fill('Déclarations journal de pêche conformes à l’activité du navire', 'Non concerné')
     cy.fill('Autorisations de pêche conformes à l’activité du navire (zone, engins, espèces)', 'Non')
-    cy.clickButton('Ajouter une infraction obligations déclaratives / autorisations')
-    cy.fill('Type d’infraction', 'Avec PV')
-    cy.fill('NATINF', '23581')
-    cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction déclarative.')
-    cy.clickButton('Valider l’infraction')
     cy.fill(
       'Observations (hors infractions) sur les obligations déclaratives / autorisations',
       'Une observation hors infraction sur les obligations déclaaratives.'
@@ -62,11 +57,6 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
     cy.fill('Qté pesée', 500)
     cy.fill('Sous-taille', true)
-    cy.clickButton('Ajouter une infraction espèces')
-    cy.fill('Type d’infraction', 'Sans PV')
-    cy.fill('NATINF', '23588')
-    cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction espèce.')
-    cy.clickButton('Valider l’infraction')
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
     // Appréhensions
@@ -74,9 +64,24 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Appréhension d’espèce(s)', true)
     cy.fill('Appréhension du navire', true)
 
-    // Autres infractions
-    cy.clickButton('Ajouter une autre infraction')
+    // Infractions
+    cy.clickButton('Ajouter une infraction')
+    cy.fill('Type d’infraction', 'Avec PV')
+    cy.fill('Groupe', 'Infraction obligations déclaratives et autorisations de pêche')
+    cy.fill('NATINF', '23581')
+    cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction déclarative.')
+    cy.clickButton('Valider l’infraction')
+
+    cy.clickButton('Ajouter une infraction')
     cy.fill('Type d’infraction', 'Sans PV')
+    cy.fill('Groupe', 'Infraction espèces')
+    cy.fill('NATINF', '23588')
+    cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction espèce.')
+    cy.clickButton('Valider l’infraction')
+
+    cy.clickButton('Ajouter une infraction')
+    cy.fill('Type d’infraction', 'Sans PV')
+    cy.fill('Groupe', 'Autre infraction')
     cy.fill('NATINF', '27689')
     cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction autre.')
     cy.clickButton('Valider l’infraction')

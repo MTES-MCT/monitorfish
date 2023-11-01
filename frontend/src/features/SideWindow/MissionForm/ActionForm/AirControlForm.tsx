@@ -68,12 +68,7 @@ export function AirControlForm({ initialValues, onChange }: AirControlFormProps)
 
           <FormikCoordinatesPicker />
 
-          <FormikMultiInfractionPicker
-            addButtonLabel="Ajouter une infraction"
-            infractionLabel="Autre infraction"
-            label="Infractions"
-            name="otherInfractions"
-          />
+          <FormikMultiInfractionPicker addButtonLabel="Ajouter une infraction" label="Infractions" />
 
           <FieldsetGroup isLight legend="Autres observations">
             <FormikTextarea isLabelHidden label="Autres observations" name="otherComments" rows={2} />

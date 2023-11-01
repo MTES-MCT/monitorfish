@@ -2,28 +2,22 @@ import { Accent, Icon, IconButton, Legend, Tag, TagGroup, THEME } from '@mtes-mc
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
+import { infractionGroupToLabel } from './constants'
 import { MissionAction } from '../../../../../../domain/types/missionAction'
 
 import type { Promisable } from 'type-fest'
 
-export type InfractionProps<AnyInfraction extends MissionAction.OtherInfraction> = {
-  data: AnyInfraction & { label: string | undefined }
+export type InfractionProps = {
+  data: MissionAction.Infraction & { group: string; label: string | undefined }
   index: number
-  label: string | undefined
-  onDelete: (index: number) => Promisable<void>
-  onEdit: (index: number) => Promisable<void>
+  onDelete: (index: number, infractionGroup: string) => Promisable<void>
+  onEdit: (index: number, infractionGroup: string) => Promisable<void>
 }
-export function Infraction<AnyInfraction extends MissionAction.OtherInfraction>({
-  data,
-  index,
-  label = 'Infraction obligations déclaratives et autorisations',
-  onDelete,
-  onEdit
-}: InfractionProps<AnyInfraction>) {
+export function Infraction({ data, index, onDelete, onEdit }: InfractionProps) {
   return (
     <>
       <Legend>
-        {label} {index + 1}
+        {infractionGroupToLabel[data.group]} {index + 1}
       </Legend>
 
       <InnerWrapper>
@@ -39,7 +33,7 @@ export function Infraction<AnyInfraction extends MissionAction.OtherInfraction>(
             <IconButton
               accent={Accent.SECONDARY}
               Icon={Icon.Edit}
-              onClick={() => onEdit(index)}
+              onClick={() => onEdit(index, data.group)}
               style={{ marginRight: '8px' }}
               title="Éditer l'infraction"
             />
@@ -47,7 +41,7 @@ export function Infraction<AnyInfraction extends MissionAction.OtherInfraction>(
               accent={Accent.SECONDARY}
               color={THEME.color.chineseRed}
               Icon={Icon.Delete}
-              onClick={() => onDelete(index)}
+              onClick={() => onDelete(index, data.group)}
               title="Supprimer l'infraction"
             />
           </div>

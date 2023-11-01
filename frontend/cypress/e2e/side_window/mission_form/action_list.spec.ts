@@ -134,23 +134,27 @@ context('Side Window > Mission Form > Action List', () => {
     cy.clickButton('Ajouter')
     cy.clickButton('Ajouter un contrôle en mer')
 
-    cy.clickButton('Ajouter une infraction obligations déclaratives / autorisations')
+    cy.clickButton('Ajouter une infraction')
     cy.fill('Type d’infraction', 'Avec PV')
+    cy.fill('Groupe', 'Infraction obligations déclaratives et autorisations de pêche')
     cy.fill('NATINF', '23581')
     cy.clickButton('Valider l’infraction')
 
-    cy.clickButton('Ajouter une infraction obligations déclaratives / autorisations')
+    cy.clickButton('Ajouter une infraction')
     cy.fill('Type d’infraction', 'Avec PV')
+    cy.fill('Groupe', 'Infraction obligations déclaratives et autorisations de pêche')
     cy.fill('NATINF', '23588')
     cy.clickButton('Valider l’infraction')
 
-    cy.clickButton('Ajouter une infraction obligations déclaratives / autorisations')
+    cy.clickButton('Ajouter une infraction')
     cy.fill('Type d’infraction', 'Sans PV')
+    cy.fill('Groupe', 'Infraction obligations déclaratives et autorisations de pêche')
     cy.fill('NATINF', '23584')
     cy.clickButton('Valider l’infraction')
 
-    cy.clickButton('Ajouter une infraction obligations déclaratives / autorisations')
+    cy.clickButton('Ajouter une infraction')
     cy.fill('Type d’infraction', 'En attente')
+    cy.fill('Groupe', 'Infraction obligations déclaratives et autorisations de pêche')
     cy.clickButton('Valider l’infraction')
 
     cy.get('.Element-Tag').contains('2 INF AVEC PV').should('be.visible')

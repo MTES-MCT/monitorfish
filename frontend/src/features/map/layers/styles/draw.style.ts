@@ -1,3 +1,4 @@
+import { THEME } from '@mtes-mct/monitor-ui'
 import MultiPoint from 'ol/geom/MultiPoint'
 import { Circle, Icon, Style } from 'ol/style'
 import Fill from 'ol/style/Fill'
@@ -7,7 +8,6 @@ import { OpenLayersGeometryType } from '../../../../domain/entities/map/constant
 import { theme } from '../../../../ui/theme'
 
 import type { MultiPolygon } from 'ol/geom'
-import {THEME} from "@mtes-mct/monitor-ui";
 
 export const drawStyle = new Style({
   image: new Icon({

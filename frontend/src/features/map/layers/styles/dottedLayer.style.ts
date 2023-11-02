@@ -1,9 +1,8 @@
-import {Circle} from 'ol/style'
+import { THEME } from '@mtes-mct/monitor-ui'
+import { Circle } from 'ol/style'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 import Style from 'ol/style/Style'
-
-import {THEME} from "@mtes-mct/monitor-ui";
 
 export const dottedLayerStyle = new Style({
   stroke: new Stroke({

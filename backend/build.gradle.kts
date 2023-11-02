@@ -42,7 +42,7 @@ dependencies {
     api("io.ktor:ktor-client-mock-jvm:2.3.3")
     api("io.ktor:ktor-client-content-negotiation-jvm:2.3.3")
     api("io.ktor:ktor-serialization-kotlinx-json-jvm:2.3.3")
-    api("org.springframework.boot:spring-boot-starter-web:3.1.3")
+    api("org.springframework.boot:spring-boot-starter-web:3.1.5")
     api("org.springframework.security:spring-security-oauth2-resource-server:6.1.5")
     api("org.springframework.security:spring-security-oauth2-jose:6.1.4")
     api("org.hibernate.validator:hibernate-validator:8.0.1.Final")

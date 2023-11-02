@@ -67,7 +67,7 @@ dependencies {
     api("io.hypersistence:hypersistence-utils-hibernate-62:3.5.3")
     api("org.assertj:assertj-core:3.24.2")
     api("org.testcontainers:postgresql:1.19.1")
-    api("org.springframework.boot:spring-boot-starter-log4j2:3.1.3")
+    api("org.springframework.boot:spring-boot-starter-log4j2:3.1.5")
     api("org.locationtech.jts:jts-core:1.19.0")
     api("org.hibernate:hibernate-spatial:6.1.7.Final")
     api("io.sentry:sentry:6.31.0")

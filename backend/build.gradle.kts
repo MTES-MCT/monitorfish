@@ -53,7 +53,7 @@ dependencies {
     api("org.springframework.boot:spring-boot-starter-data-jpa:3.1.3")
     api("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.3")
     api("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
-    api("org.flywaydb:flyway-core:10.0.0")
+    api("org.flywaydb:flyway-core:9.22.3")
     api("org.springdoc:springdoc-openapi-ui:1.7.0")
     api("org.jetbrains.kotlin:kotlin-reflect:1.9.10")
     api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10")

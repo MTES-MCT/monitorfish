@@ -17,15 +17,15 @@ export const controlObjectiveApi = monitorfishApi.injectEndpoints({
       query: createdFields => ({
         body: createdFields,
         method: 'POST',
-        url: '/bff/v1/control_objectives'
+        url: '/control_objectives'
       }),
       transformErrorResponse: response => new ApiError(ADD_CONTROL_OBJECTIVES_ERROR_MESSAGE, response)
     }),
     addControlObjectiveYear: builder.mutation<void, void>({
-      invalidatesTags: [{ type: 'ControlObjectives' }],
+      invalidatesTags: [{ type: 'ControlObjectivesYears' }],
       query: () => ({
         method: 'POST',
-        url: '/bff/v1/control_objectives/years'
+        url: '/control_objectives/years'
       }),
       transformErrorResponse: response => new ApiError(ADD_CONTROL_OBJECTIVES_YEAR_ERROR_MESSAGE, response)
     }),
@@ -33,17 +33,17 @@ export const controlObjectiveApi = monitorfishApi.injectEndpoints({
       invalidatesTags: [{ type: 'ControlObjectives' }],
       query: id => ({
         method: 'DELETE',
-        url: `/bff/v1/control_objectives/${id}`
+        url: `/control_objectives/${id}`
       }),
       transformErrorResponse: response => new ApiError(DELETE_CONTROL_OBJECTIVES_ERROR_MESSAGE, response)
     }),
     getControlObjectives: builder.query<ControlObjective[], number>({
       providesTags: () => [{ type: 'ControlObjectives' }],
-      query: year => `control_objectives/${year}`
+      query: year => `/control_objectives/${year}`
     }),
     getControlObjectiveYears: builder.query<number[], void>({
-      providesTags: () => [{ type: 'ControlObjectives' }],
-      query: () => 'control_objectives/years',
+      providesTags: () => [{ type: 'ControlObjectivesYears' }],
+      query: () => '/control_objectives/years',
       transformResponse: (baseQueryReturnValue: number[]) => baseQueryReturnValue.sort(ascend(identity))
     }),
     updateControlObjective: builder.mutation<void, UpdateControlObjective>({
@@ -51,7 +51,7 @@ export const controlObjectiveApi = monitorfishApi.injectEndpoints({
       query: ({ id, updatedFields }) => ({
         body: updatedFields,
         method: 'PUT',
-        url: `/bff/v1/control_objectives/${id}`
+        url: `/control_objectives/${id}`
       }),
       transformErrorResponse: response => new ApiError(UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE, response)
     })

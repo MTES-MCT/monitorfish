@@ -24,12 +24,12 @@ export function MainWindow() {
     state => state.displayedComponent
   )
   const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
-  const mission = useMainAppSelector(state => state.mission)
-  const sideWindow = useMainAppSelector(state => state.sideWindow)
+  const isDraftDirty = useMainAppSelector(state => state.mission.isDraftDirty)
+  const status = useMainAppSelector(state => state.sideWindow.status)
 
   const warnOnUnload = useCallback(
     event => {
-      if (sideWindow.status !== SideWindowStatus.CLOSED && mission.isDraftDirty) {
+      if (status !== SideWindowStatus.CLOSED && isDraftDirty) {
         event.preventDefault()
 
         // https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event#examples
@@ -37,7 +37,7 @@ export function MainWindow() {
         event.returnValue = ''
       }
     },
-    [mission.isDraftDirty, sideWindow.status]
+    [isDraftDirty, status]
   )
 
   useBeforeUnload(warnOnUnload)
@@ -59,7 +59,7 @@ export function MainWindow() {
         <VesselLoader />
         <APIWorker />
         <ErrorToastNotification />
-        {sideWindow.status !== SideWindowStatus.CLOSED && <SideWindowLauncher />}
+        {status !== SideWindowStatus.CLOSED && <SideWindowLauncher />}
         {isDrawLayerModalDisplayed && <DrawLayerModal />}
       </Wrapper>
     </>

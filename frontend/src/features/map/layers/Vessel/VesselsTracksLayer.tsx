@@ -24,6 +24,7 @@ import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { logbookActions } from '../../../Logbook/slice'
 import { getFishingActivityFeatureOnTrackLine } from '../../../Logbook/utils'
+import { monitorfishMap } from '../../monitorfishMap'
 import CloseVesselTrackOverlay from '../../overlays/CloseVesselTrackOverlay'
 import FishingActivityOverlay from '../../overlays/FishingActivityOverlay'
 
@@ -32,10 +33,7 @@ import type { VectorLayerWithName } from '../../../../domain/types/layer'
 import type { FishingActivityFeatureIdAndCoordinates } from '../../../Logbook/types'
 import type { Coordinate } from 'ol/coordinate'
 
-type VesselsTracksLayerProps = {
-  map?: any
-}
-function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
+function VesselsTracksLayer() {
   const dispatch = useMainAppDispatch()
   const { highlightedVesselTrackPosition, selectedVessel, selectedVesselPositions, vesselsTracksShowed } =
     useMainAppSelector(state => state.vessel)
@@ -91,21 +89,17 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
   }, [getVectorSource])
 
   useEffect(() => {
-    if (map) {
-      getLayer().name = LayerProperties.VESSEL_TRACK.code
-      map.getLayers().push(getLayer())
-    }
+    getLayer().name = LayerProperties.VESSEL_TRACK.code
+    monitorfishMap.getLayers().push(getLayer())
 
     return () => {
-      if (map) {
-        map.removeLayer(getLayer())
-      }
+      monitorfishMap.removeLayer(getLayer())
     }
-  }, [map, getLayer])
+  }, [getLayer])
 
   useEffect(() => {
     function showSelectedVesselTrack() {
-      if (map && selectedVessel && selectedVesselPositions?.length) {
+      if (selectedVessel && selectedVesselPositions?.length) {
         const features = getVectorSource().getFeatures()
         const vesselCompositeIdentifier = getVesselCompositeIdentifier(selectedVessel)
         removeVesselTrackFeatures(features, getVectorSource(), vesselCompositeIdentifier)
@@ -131,7 +125,7 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
     }
 
     showSelectedVesselTrack()
-  }, [dispatch, doNotAnimate, map, selectedVessel, selectedVesselPositions, getVectorSource])
+  }, [dispatch, doNotAnimate, selectedVessel, selectedVesselPositions, getVectorSource])
 
   useEffect(() => {
     function hidePreviouslySelectedVessel() {
@@ -273,7 +267,7 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
         <CloseVesselTrackOverlay
           key={vesselTrack?.vesselCompositeIdentifier}
           coordinates={vesselTrack?.coordinates}
-          map={map}
+          map={monitorfishMap}
           vesselCompositeIdentifier={vesselTrack?.vesselCompositeIdentifier}
         />
       ))}
@@ -284,7 +278,7 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
           id={fishingActivity.id}
           isDeleted={fishingActivity.isDeleted}
           isNotAcknowledged={fishingActivity.isNotAcknowledged}
-          map={map}
+          map={monitorfishMap}
           name={fishingActivity.name}
         />
       ))}

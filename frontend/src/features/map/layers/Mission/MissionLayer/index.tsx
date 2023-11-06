@@ -8,15 +8,13 @@ import { MonitorFishLayer } from '../../../../../domain/entities/layers/types'
 import { getMissionFeaturePoint } from '../../../../../domain/entities/mission'
 import { useGetFilteredMissionsQuery } from '../../../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
+import { monitorfishMap } from '../../../monitorfishMap'
 
 import type { WebGLPointsLayerWithName } from '../../../../../domain/types/layer'
 import type { Feature } from 'ol'
 import type { Point } from 'ol/geom'
 
-export type MissionLayerProps = {
-  map?: any
-}
-function UnmemoizedMissionLayer({ map }: MissionLayerProps) {
+function UnmemoizedMissionLayer() {
   const dispatch = useMainAppDispatch()
   const { missions } = useGetFilteredMissionsQuery()
 
@@ -45,9 +43,6 @@ function UnmemoizedMissionLayer({ map }: MissionLayerProps) {
   }, [])
 
   useEffect(() => {
-    if (!map) {
-      return
-    }
     getVectorSource().clear()
 
     const features = missions
@@ -58,21 +53,17 @@ function UnmemoizedMissionLayer({ map }: MissionLayerProps) {
     }
 
     getVectorSource().addFeatures(features)
-  }, [dispatch, map, missions])
+  }, [dispatch, missions])
 
   useEffect(() => {
-    if (!map) {
-      return undefined
-    }
-
     getLayer().name = LayerProperties.MISSION_PIN_POINT.code
-    map.getLayers().push(getLayer())
+    monitorfishMap.getLayers().push(getLayer())
 
     return () => {
-      map.removeLayer(getLayer())
+      monitorfishMap.removeLayer(getLayer())
       getLayer().dispose()
     }
-  }, [getLayer, map])
+  }, [getLayer])
 
   return <></>
 }

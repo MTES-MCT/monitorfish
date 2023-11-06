@@ -7,14 +7,12 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { useIsInLightMode } from '../../../hooks/authorization/useIsInLightMode'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { monitorfishMap } from '../monitorfishMap'
 
 import type { ImageTile } from 'ol'
 import type Tile from 'ol/Tile'
 
-export type BaseLayerProps = {
-  map?: any
-}
-function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
+function UnmemoizedBaseLayer() {
   const isInLightMode = useIsInLightMode()
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
 
@@ -109,14 +107,16 @@ function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
   )
 
   useEffect(() => {
-    if (!map || !selectedBaseLayer || !baseLayersObjects[selectedBaseLayer]) {
+    if (!selectedBaseLayer || !baseLayersObjects[selectedBaseLayer]) {
       return
     }
 
     function showAnotherBaseLayer() {
-      const olLayers = map.getLayers()
-      // eslint-disable-next-line no-underscore-dangle
+      const olLayers = monitorfishMap.getLayers()
+      /* eslint-disable no-underscore-dangle */
+      // @ts-ignore
       const layerToRemove = olLayers.getArray().find(layer => layer.className_ === LayerProperties.BASE_LAYER.code)
+      /* eslint-enable no-underscore-dangle */
 
       olLayers.insertAt(0, baseLayersObjects[selectedBaseLayer]())
 
@@ -130,7 +130,7 @@ function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
     }
 
     showAnotherBaseLayer()
-  }, [baseLayersObjects, map, selectedBaseLayer])
+  }, [baseLayersObjects, selectedBaseLayer])
 
   return <></>
 }

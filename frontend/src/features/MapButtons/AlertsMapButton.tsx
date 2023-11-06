@@ -12,7 +12,7 @@ import { ReactComponent as AlertsSVG } from '../icons/Icone_alertes.svg'
 export function AlertsMapButton() {
   const dispatch = useMainAppDispatch()
   const { previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
-  const { sideWindow } = useMainAppSelector(state => state)
+  const sideWindow = useMainAppSelector(state => state.sideWindow)
 
   const isActive =
     sideWindow.status !== SideWindowStatus.CLOSED &&

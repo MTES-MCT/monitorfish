@@ -30,7 +30,7 @@ export function APIWorker() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
   const { selectedVesselIdentity, vesselSidebarTab } = useMainAppSelector(state => state.vessel)
-  const { sideWindow } = useMainAppSelector(state => state)
+  const sideWindow = useMainAppSelector(state => state.sideWindow)
   const { openedBeaconMalfunctionInKanban, vesselBeaconMalfunctionsResumeAndHistory } = useMainAppSelector(
     state => state.beaconMalfunction
   )

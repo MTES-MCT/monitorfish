@@ -12,12 +12,13 @@ import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { theme } from '../../../../../ui/theme'
 import { booleanToInt, customHexToRGB } from '../../../../../utils'
 import { applyFilterToVessels } from '../../../../Vessel/useCases/applyFilterToVessels'
+import { monitorfishMap } from '../../../monitorfishMap'
 import { getWebGLVesselStyle } from '../style'
 
 import type { VesselLastPositionFeature } from '../../../../../domain/entities/vessel/types'
 import type { WebGLPointsLayerWithName } from '../../../../../domain/types/layer'
 
-function UnmemoizedVesselsLayer({ map }) {
+function UnmemoizedVesselsLayer() {
   const dispatch = useMainAppDispatch()
   const { areVesselsDisplayed } = useMainAppSelector(state => state.displayedComponent)
 
@@ -51,103 +52,94 @@ function UnmemoizedVesselsLayer({ map }) {
   }
 
   useEffect(() => {
-    if (map) {
-      if (vesselWebGLPointsLayerRef.current) {
-        map.removeLayer(vesselWebGLPointsLayerRef.current)
-        vesselWebGLPointsLayerRef.current?.dispose()
-      }
-
-      // styles derived from state
-      const isLight = Vessel.iconIsLight(selectedBaseLayer)
-      const { vesselIsHidden, vesselIsOpacityReduced } =
-        getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
-      const filterColorRGBArray = customHexToRGB(filterColor || isLight ? theme.color.lightGray : COLORS.charcoal)
-      const initStyles = {
-        filterColorBlue: filterColorRGBArray[2],
-        filterColorGreen: filterColorRGBArray[1],
-        filterColorRed: filterColorRGBArray[0],
-        hideNonSelectedVessels: false,
-        hideVesselsAtPort: false,
-        isLight,
-        nonFilteredVesselsAreHidden,
-        previewFilteredVesselsMode,
-        vesselIsHiddenTimeThreshold: vesselIsHidden.getTime(),
-        vesselIsOpacityReducedTimeThreshold: vesselIsOpacityReduced.getTime()
-      }
-      style.current = getWebGLVesselStyle(initStyles)
-
-      const vesselsVectorLayer = new WebGLPointsLayer({
-        className: LayerProperties.VESSELS_POINTS.code,
-        source: getVesselsVectorSource(),
-        style: style.current,
-        zIndex: LayerProperties.VESSELS_POINTS.zIndex
-      }) as WebGLPointsLayerWithName
-      vesselsVectorLayer.name = LayerProperties.VESSELS_POINTS.code
-
-      map.getLayers().push(vesselsVectorLayer)
-      vesselWebGLPointsLayerRef.current = vesselsVectorLayer
+    // styles derived from state
+    const isLight = Vessel.iconIsLight(selectedBaseLayer)
+    const { vesselIsHidden, vesselIsOpacityReduced } =
+      getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
+    const filterColorRGBArray = customHexToRGB(filterColor || isLight ? theme.color.lightGray : COLORS.charcoal)
+    const initStyles = {
+      filterColorBlue: filterColorRGBArray[2],
+      filterColorGreen: filterColorRGBArray[1],
+      filterColorRed: filterColorRGBArray[0],
+      hideNonSelectedVessels: false,
+      hideVesselsAtPort: false,
+      isLight,
+      nonFilteredVesselsAreHidden,
+      previewFilteredVesselsMode,
+      vesselIsHiddenTimeThreshold: vesselIsHidden.getTime(),
+      vesselIsOpacityReducedTimeThreshold: vesselIsOpacityReduced.getTime()
     }
+    style.current = getWebGLVesselStyle(initStyles)
+
+    const vesselsVectorLayer = new WebGLPointsLayer({
+      className: LayerProperties.VESSELS_POINTS.code,
+      source: getVesselsVectorSource(),
+      style: style.current,
+      zIndex: LayerProperties.VESSELS_POINTS.zIndex
+    }) as WebGLPointsLayerWithName
+    vesselsVectorLayer.name = LayerProperties.VESSELS_POINTS.code
+    vesselWebGLPointsLayerRef.current = vesselsVectorLayer
+
+    monitorfishMap.getLayers().push(vesselsVectorLayer)
 
     return () => {
-      if (map && vesselWebGLPointsLayerRef.current) {
-        map.removeLayer(vesselWebGLPointsLayerRef.current)
-        vesselWebGLPointsLayerRef.current?.dispose()
-      }
+      // @ts-ignore
+      monitorfishMap.removeLayer(vesselWebGLPointsLayerRef.current)
+      vesselWebGLPointsLayerRef.current?.dispose()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map])
+  }, [])
 
   useEffect(() => {
     if (!areVesselsDisplayed) {
-      vesselWebGLPointsLayerRef.current?.setVisible(false)
+      // We can't use BaseLayer.setVisible() as it makes the drawing to crash
+      vesselWebGLPointsLayerRef.current?.setOpacity(0)
 
       return
     }
 
-    vesselWebGLPointsLayerRef.current?.setVisible(true)
+    vesselWebGLPointsLayerRef.current?.setOpacity(1)
   }, [areVesselsDisplayed])
 
   useEffect(() => {
-    if (map) {
-      const features = vessels.map(vessel => {
-        const propertiesUsedForStyling = {
-          coordinates: vessel.coordinates,
-          course: vessel.course,
-          filterPreview: vessel.filterPreview,
-          hasBeaconMalfunction: vessel.hasBeaconMalfunction,
-          isAtPort: vessel.isAtPort,
-          isFiltered: vessel.isFiltered,
-          lastPositionSentAt: vessel.lastPositionSentAt,
-          speed: vessel.speed
-        }
+    const features = vessels.map(vessel => {
+      const propertiesUsedForStyling = {
+        coordinates: vessel.coordinates,
+        course: vessel.course,
+        filterPreview: vessel.filterPreview,
+        hasBeaconMalfunction: vessel.hasBeaconMalfunction,
+        isAtPort: vessel.isAtPort,
+        isFiltered: vessel.isFiltered,
+        lastPositionSentAt: vessel.lastPositionSentAt,
+        speed: vessel.speed
+      }
 
-        const feature = new Feature({
-          vesselFeatureId: vessel.vesselFeatureId,
-          ...propertiesUsedForStyling,
-          geometry: new Point(vessel.coordinates)
-        }) as VesselLastPositionFeature
-        feature.setId(vessel.vesselFeatureId)
-        feature.vesselProperties = vessel.vesselProperties
+      const feature = new Feature({
+        vesselFeatureId: vessel.vesselFeatureId,
+        ...propertiesUsedForStyling,
+        geometry: new Point(vessel.coordinates)
+      }) as VesselLastPositionFeature
+      feature.setId(vessel.vesselFeatureId)
+      feature.vesselProperties = vessel.vesselProperties
 
-        return feature
-      })
+      return feature
+    })
 
-      getVesselsVectorSource()?.clear(true)
-      getVesselsVectorSource()?.addFeatures(features)
+    getVesselsVectorSource()?.clear(true)
+    getVesselsVectorSource()?.addFeatures(features)
 
-      if (filterColor) {
-        const rgb = customHexToRGB(filterColor)
+    if (filterColor) {
+      const rgb = customHexToRGB(filterColor)
 
-        style.current.variables = {
-          ...style.current.variables,
-          filterColorBlue: rgb[2],
-          filterColorGreen: rgb[1],
-          filterColorRed: rgb[0]
-        }
+      style.current.variables = {
+        ...style.current.variables,
+        filterColorBlue: rgb[2],
+        filterColorGreen: rgb[1],
+        filterColorRed: rgb[0]
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map, vessels])
+  }, [vessels])
 
   // styles
   useEffect(() => {

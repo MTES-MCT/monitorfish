@@ -14,8 +14,9 @@ import {
   vesselIsShowed
 } from '../../../../domain/entities/vessel/vessel'
 import { useIsSuperUser } from '../../../../hooks/authorization/useIsSuperUser'
+import { monitorfishMap } from '../../monitorfishMap'
 
-const VesselAlertLayer = ({ map }) => {
+const VesselAlertLayer = () => {
   const isSuperUser = useIsSuperUser()
 
   const {
@@ -65,17 +66,15 @@ const VesselAlertLayer = ({ map }) => {
   }
 
   useEffect(() => {
-    if (isSuperUser && map) {
+    if (isSuperUser) {
       getLayer().name = LayerProperties.VESSEL_ALERT.code
-      map.getLayers().push(getLayer())
+      monitorfishMap.getLayers().push(getLayer())
     }
 
     return () => {
-      if (map) {
-        map.removeLayer(getLayer())
-      }
+      monitorfishMap.removeLayer(getLayer())
     }
-  }, [isSuperUser, map])
+  }, [isSuperUser])
 
   useEffect(() => {
     if (isSuperUser && vessels?.length) {

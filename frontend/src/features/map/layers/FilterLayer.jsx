@@ -8,8 +8,9 @@ import { Stroke, Style } from 'ol/style'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { COLORS } from '../../../constants/constants'
+import { monitorfishMap } from '../monitorfishMap'
 
-const FilterLayer = ({ map }) => {
+const FilterLayer = () => {
   const { showedFilter, filterColor } = useSelector((state) => {
     const _showedFilter = state.filter?.filters?.find(filter => filter.showed)
     return {
@@ -59,26 +60,20 @@ const FilterLayer = ({ map }) => {
   }
 
   useEffect(() => {
-    if (map) {
-      map.getLayers().push(getLayer())
-    }
+    monitorfishMap.getLayers().push(getLayer())
 
     return () => {
-      if (map) {
-        map.removeLayer(getLayer())
-      }
+      monitorfishMap.removeLayer(getLayer())
     }
-  }, [map])
+  }, [])
 
   useEffect(() => {
-    if (map) {
-      getVectorSource()?.clear(true)
-      const feature = filterFeature && getVectorSource()?.getFormat().readFeatures(filterFeature)
-      if (feature) {
-        getVectorSource()?.addFeatures(feature)
-      }
+    getVectorSource()?.clear(true)
+    const feature = filterFeature && getVectorSource()?.getFormat().readFeatures(filterFeature)
+    if (feature) {
+      getVectorSource()?.addFeatures(feature)
     }
-  }, [map, filterFeature])
+  }, [filterFeature])
 
   useEffect(() => {
     layerRef?.current.setStyle(new Style({

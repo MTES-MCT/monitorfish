@@ -104,12 +104,6 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
     }
   }
 
-  // console.group('RegulatoryLayerSearchResultTopic')
-  // console.log('regulatoryLayerLawType', regulatoryLayerLawType)
-  // console.log('regulatoryLayerTopic', regulatoryLayerTopic)
-  // console.log('topicDetails', topicDetails)
-  // console.groupEnd()
-
   return (
     <>
       <LayerTopic onClick={() => setZonesAreOpen(!zonesAreOpen)}>

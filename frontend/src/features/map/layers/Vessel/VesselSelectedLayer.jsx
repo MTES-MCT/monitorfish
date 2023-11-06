@@ -11,8 +11,9 @@ import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { Vessel } from '../../../../domain/entities/vessel/vessel'
 
 import { getSelectedVesselStyle } from './style'
+import { monitorfishMap } from '../../monitorfishMap'
 
-const VesselSelectedLayer = ({ map }) => {
+const VesselSelectedLayer = () => {
   const { selectedVessel, vesselsTracksShowed } = useSelector(state => state.vessel)
   const { selectedBaseLayer } = useSelector(state => state.map)
 
@@ -36,17 +37,13 @@ const VesselSelectedLayer = ({ map }) => {
   }, [isLight])
 
   useEffect(() => {
-    if (map) {
-      layerRef.current.name = LayerProperties.SELECTED_VESSEL.code
-      map.getLayers().push(layerRef.current)
-    }
+    layerRef.current.name = LayerProperties.SELECTED_VESSEL.code
+    monitorfishMap.getLayers().push(layerRef.current)
 
     return () => {
-      if (map) {
-        map.removeLayer(layerRef.current)
-      }
+      monitorfishMap.removeLayer(layerRef.current)
     }
-  }, [map])
+  }, [])
 
   useEffect(() => {
     vectorSourceRef.current?.clear(true)

@@ -9,8 +9,9 @@ import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { getVesselBeaconMalfunctionStyle } from './style'
 import { getVesselCompositeIdentifier, vesselIsShowed } from '../../../../domain/entities/vessel/vessel'
 import { useIsSuperUser } from '../../../../hooks/authorization/useIsSuperUser'
+import { monitorfishMap } from '../../monitorfishMap'
 
-const VesselBeaconMalfunctionLayer = ({ map }) => {
+const VesselBeaconMalfunctionLayer = () => {
   const isSuperUser = useIsSuperUser()
 
   const {
@@ -58,17 +59,15 @@ const VesselBeaconMalfunctionLayer = ({ map }) => {
   }
 
   useEffect(() => {
-    if (isSuperUser && map) {
+    if (isSuperUser) {
       getLayer().name = LayerProperties.VESSEL_BEACON_MALFUNCTION.code
-      map.getLayers().push(getLayer())
+      monitorfishMap.getLayers().push(getLayer())
     }
 
     return () => {
-      if (map) {
-        map.removeLayer(getLayer())
-      }
+      monitorfishMap.removeLayer(getLayer())
     }
-  }, [isSuperUser, map, getLayer])
+  }, [isSuperUser, getLayer])
 
   useEffect(() => {
     if (isSuperUser && vessels?.length) {

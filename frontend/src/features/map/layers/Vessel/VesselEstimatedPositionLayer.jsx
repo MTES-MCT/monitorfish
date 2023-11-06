@@ -6,8 +6,9 @@ import { EstimatedPosition } from '../../../../domain/entities/estimatedPosition
 import { getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../../../../domain/entities/vessel/vessel'
 import { Vector } from 'ol/layer'
 import { getEstimatedPositionStyle } from '../styles/vesselEstimatedPosition.style'
+import { monitorfishMap } from '../../monitorfishMap'
 
-const VesselEstimatedPositionLayer = ({ map }) => {
+const VesselEstimatedPositionLayer = () => {
   const {
     vessels,
     hideNonSelectedVessels,
@@ -59,20 +60,16 @@ const VesselEstimatedPositionLayer = ({ map }) => {
 
   useEffect(() => {
     function addLayerToMap () {
-      if (map) {
-        getLayer().name = LayerProperties.VESSEL_ESTIMATED_POSITION.code
-        map.getLayers().push(getLayer())
-      }
+      getLayer().name = LayerProperties.VESSEL_ESTIMATED_POSITION.code
+      monitorfishMap.getLayers().push(getLayer())
     }
 
     addLayerToMap()
 
     return () => {
-      if (map) {
-        map.removeLayer(getLayer())
-      }
+      monitorfishMap.removeLayer(getLayer())
     }
-  }, [map])
+  }, [])
 
   useEffect(() => {
     if (vessels && !showingVesselsEstimatedPositions) {

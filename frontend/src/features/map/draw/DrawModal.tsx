@@ -40,7 +40,7 @@ const INTERACTION_LISTENER_BUTTON_LABEL: Partial<Record<InteractionListener, str
 export function DrawLayerModal() {
   const dispatch = useMainAppDispatch()
   const { drawedGeometry, initialGeometry, interactionType, listener } = useMainAppSelector(state => state.draw)
-  const { sideWindow } = useMainAppSelector(state => state)
+  const sideWindowStatus = useMainAppSelector(state => state.sideWindow.status)
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const initialFeatureNumberRef = useRef<number | undefined>(undefined)
 
@@ -76,10 +76,10 @@ export function DrawLayerModal() {
   }, [feature])
 
   useEffect(() => {
-    if (sideWindow.status === SideWindowStatus.CLOSED) {
+    if (sideWindowStatus === SideWindowStatus.CLOSED) {
       dispatch(closeDraw())
     }
-  }, [dispatch, sideWindow.status])
+  }, [dispatch, sideWindowStatus])
 
   const handleQuit = () => {
     dispatch(closeDraw())

@@ -208,6 +208,7 @@ function resetModifyInteractions(map) {
 function resetDrawInteractions(map) {
   map.getInteractions().forEach(interaction => {
     if (interaction instanceof Draw) {
+      interaction.abortDrawing()
       interaction.setActive(false)
     }
   })

@@ -9,21 +9,19 @@ import {
 } from '../../../domain/entities/layers'
 import { getVectorOLLayer } from '../../../domain/use_cases/layer/administrative/showAdministrativeZone'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { monitorfishMap } from '../monitorfishMap'
 
-export type AdministrativeLayersProps = {
-  map?: any
-}
-function UnmemoizedAdministrativeLayers({ map }: AdministrativeLayersProps) {
+function UnmemoizedAdministrativeLayers() {
   const { showedLayers } = useMainAppSelector(state => state.layer)
   const isBackoffice = useMainAppSelector(state => state.global.isBackoffice)
 
   useEffect(() => {
-    if (!map && !showedLayers) {
+    if (!showedLayers) {
       return
     }
 
     function addAdministrativeLayersToMap() {
-      const olLayers = map.getLayers()
+      const olLayers = monitorfishMap.getLayers()
       const layersToInsert = showedLayers
         .filter(layer => layerOfTypeAdministrativeLayer(administrativeLayers, layer))
         .filter(layer => layersNotInCurrentOLMap(olLayers, layer))
@@ -38,7 +36,7 @@ function UnmemoizedAdministrativeLayers({ map }: AdministrativeLayersProps) {
     }
 
     function removeAdministrativeLayersToMap() {
-      const layers = map.getLayers()
+      const layers = monitorfishMap.getLayers()
       const layersToRemove = layers
         .getArray()
         .filter(olLayer => layerOfTypeAdministrativeLayerInCurrentMap(administrativeLayers, olLayer))
@@ -51,7 +49,7 @@ function UnmemoizedAdministrativeLayers({ map }: AdministrativeLayersProps) {
 
     addAdministrativeLayersToMap()
     removeAdministrativeLayersToMap()
-  }, [isBackoffice, map, showedLayers])
+  }, [isBackoffice, showedLayers])
 
   return <></>
 }

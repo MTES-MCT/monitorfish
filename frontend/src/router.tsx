@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 
 import { Backoffice } from './features/Backoffice'
-import { ControlObjectiveList } from './features/Backoffice/ControlObjectiveList'
+import { ControlObjectiveList } from './features/Backoffice/ControlObjectives/components'
 import { EditRegulation } from './features/Backoffice/edit_regulation/EditRegulation'
 import { FleetSegments } from './features/Backoffice/fleet_segments/FleetSegments'
 import { MainWindow } from './features/MainWindow'

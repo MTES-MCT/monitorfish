@@ -113,10 +113,10 @@ function UnmemoizedBaseLayer() {
 
     function showAnotherBaseLayer() {
       const olLayers = monitorfishMap.getLayers()
-      // eslint-disable no-underscore-dangle
+      /* eslint-disable no-underscore-dangle */
       // @ts-ignore
       const layerToRemove = olLayers.getArray().find(layer => layer.className_ === LayerProperties.BASE_LAYER.code)
-      // eslint-enable no-underscore-dangle
+      /* eslint-enable no-underscore-dangle */
 
       olLayers.insertAt(0, baseLayersObjects[selectedBaseLayer]())
 

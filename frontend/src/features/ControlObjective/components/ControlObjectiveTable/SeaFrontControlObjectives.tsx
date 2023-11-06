@@ -6,7 +6,6 @@ import { useDebouncedCallback } from 'use-debounce'
 import { useGetFleetSegmentsQuery } from '../../../../api/fleetSegment'
 import { COLORS } from '../../../../constants/constants'
 import { LoadingSpinnerWall } from '../../../../ui/LoadingSpinnerWall'
-import { sortArrayByColumn, SortType } from '../../../VesselList/tableSort'
 import {
   ControlPriorityCell,
   DeleteCell,
@@ -16,15 +15,16 @@ import {
   ModifiableCell,
   renderRowExpanded,
   SegmentCellWithTitle
-} from '../../tableCells'
+} from '../../../Backoffice/tableCells'
+import { sortArrayByColumn, SortType } from '../../../VesselList/tableSort'
 import {
   useAddControlObjectiveMutation,
   useDeleteControlObjectiveMutation,
   useUpdateControlObjectiveMutation
-} from '../apis'
+} from '../../apis'
 
 import type { FleetSegment } from '../../../../domain/types/fleetSegment'
-import type { ControlObjective } from '../types'
+import type { ControlObjective } from '../../types'
 
 type ControlObjectiveWithMaybeFleetSegment = ControlObjective &
   Partial<FleetSegment> & {

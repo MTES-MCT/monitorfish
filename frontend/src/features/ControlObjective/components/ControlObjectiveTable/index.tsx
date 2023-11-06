@@ -13,7 +13,7 @@ import {
   useAddControlObjectiveYearMutation,
   useGetControlObjectivesQuery,
   useGetControlObjectiveYearsQuery
-} from '../apis'
+} from '../../apis'
 
 import type { Option } from '@mtes-mct/monitor-ui'
 
@@ -21,7 +21,7 @@ const NOW_YEAR = customDayjs.utc().year()
 const LAST_YEAR_FROM_NOW = NOW_YEAR - 1
 const NEXT_YEAR_FROM_NOW = NOW_YEAR + 1
 
-export function ControlObjectiveList() {
+export function ControlObjectiveTable() {
   const [selectedYear, setSelectedYear] = useState<number | undefined>(undefined)
 
   const getControlObjectivesQuery = useGetControlObjectivesQuery(selectedYear || skipToken)

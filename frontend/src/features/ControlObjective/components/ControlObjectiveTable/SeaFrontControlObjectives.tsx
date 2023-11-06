@@ -73,7 +73,7 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
         fleetSegment => fleetSegment.segment === nextSegment
       )
 
-      const nextDataWithSegmentDetails = [
+      const nextControlObjectiveWithFleetSegment = [
         ...controlObjectivesWithMaybeFleetSegment,
         {
           controlPriorityLevel: 1,
@@ -88,7 +88,7 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
         } as unknown as ControlObjectiveWithMaybeFleetSegment
       ]
 
-      const sortedNextDataWithSegmentDetails = nextDataWithSegmentDetails.sort((a, b) =>
+      const sortedNextDataWithSegmentDetails = nextControlObjectiveWithFleetSegment.sort((a, b) =>
         sortArrayByColumn(a, b, sortColumn, sortType)
       )
 
@@ -108,7 +108,7 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
 
   const deleteControlObjectiveRow = useCallback(
     async (id: number) => {
-      await deleteControlObjective(id.toString())
+      await deleteControlObjective(id)
 
       const nextControlObjectivesWithMaybeFleetSegment = controlObjectivesWithMaybeFleetSegment.filter(
         controlObjectiveWithMaybeFleetSegment => controlObjectiveWithMaybeFleetSegment.id !== id

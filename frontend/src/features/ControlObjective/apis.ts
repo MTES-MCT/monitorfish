@@ -29,7 +29,7 @@ export const controlObjectiveApi = monitorfishApi.injectEndpoints({
       }),
       transformErrorResponse: response => new ApiError(ADD_CONTROL_OBJECTIVES_YEAR_ERROR_MESSAGE, response)
     }),
-    deleteControlObjective: builder.mutation<void, string>({
+    deleteControlObjective: builder.mutation<void, number>({
       invalidatesTags: [{ type: 'ControlObjectives' }],
       query: id => ({
         method: 'DELETE',

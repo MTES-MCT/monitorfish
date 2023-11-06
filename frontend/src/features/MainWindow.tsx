@@ -24,7 +24,8 @@ export function MainWindow() {
     state => state.displayedComponent
   )
   const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
-  const { mission, sideWindow } = useMainAppSelector(state => state)
+  const mission = useMainAppSelector(state => state.mission)
+  const sideWindow = useMainAppSelector(state => state.sideWindow)
 
   const warnOnUnload = useCallback(
     event => {

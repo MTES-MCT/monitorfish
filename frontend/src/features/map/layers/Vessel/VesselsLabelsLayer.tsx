@@ -14,6 +14,7 @@ import {
 import { VesselLabelLine } from '../../../../domain/entities/vesselLabelLine'
 import { useIsSuperUser } from '../../../../hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { monitorfishMap } from '../../monitorfishMap'
 import { VesselLabelOverlay } from '../../overlays/VesselLabelOverlay'
 import { getLabelLineStyle } from '../styles/labelLine.style'
 
@@ -25,7 +26,7 @@ const MAX_LABELS_DISPLAYED = 200
 const MAX_LABELS_DISPLAYED_IN_PREVIEW = 400
 const NOT_FOUND = -1
 
-export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
+export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
   const throttleDuration = 250 // ms
 
   const isSuperUser = useIsSuperUser()
@@ -93,17 +94,13 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
   }, [getVectorSource])
 
   useEffect(() => {
-    if (map) {
-      getLayer().name = LayerProperties.VESSELS_LABEL.code
-      map.getLayers().push(getLayer())
-    }
+    getLayer().name = LayerProperties.VESSELS_LABEL.code
+    monitorfishMap.getLayers().push(getLayer())
 
     return () => {
-      if (map) {
-        map.removeLayer(getLayer())
-      }
+      monitorfishMap.removeLayer(getLayer())
     }
-  }, [map, getLayer])
+  }, [getLayer])
 
   const moveVesselLabelLine = useCallback(
     (featureId, fromCoordinates, toCoordinates, offset, opacity) => {
@@ -160,7 +157,7 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
           featureId={featureId}
           flagState={identity.flagState}
           identity={identity}
-          map={map}
+          map={monitorfishMap}
           moveLine={moveVesselLabelLine}
           offset={offset}
           opacity={opacity}
@@ -177,7 +174,6 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
       setCurrentLabels(labels)
     }
   }, [
-    map,
     previewFilteredVesselsMode,
     featuresAndLabels,
     vesselToCoordinates,
@@ -197,12 +193,14 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
     const { vesselIsHidden, vesselIsOpacityReduced } =
       getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
 
-    const vesselsLayer = map
+    const vesselsLayer = monitorfishMap
       .getLayers()
       .getArray()
+      // @ts-ignore
       ?.find(olLayer => olLayer.name === LayerProperties.VESSELS_POINTS.code)
+      // @ts-ignore
       ?.getSource()
-    vesselsLayer?.current?.forEachFeatureInExtent(map.getView().calculateExtent(), vesselFeature => {
+    vesselsLayer?.current?.forEachFeatureInExtent(monitorfishMap.getView().calculateExtent(), vesselFeature => {
       const { vesselProperties } = vesselFeature as VesselLastPositionFeature
       const opacity = Vessel.getVesselOpacity(vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced)
       const labelLineFeatureId = VesselLabelLine.getFeatureId(vesselProperties)
@@ -211,7 +209,7 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
         feature.set(VesselLabelLine.opacityProperty, opacity)
       }
     })
-  }, [map, vesselsLastPositionVisibility])
+  }, [vesselsLastPositionVisibility])
 
   useEffect(() => {
     if (isThrottled.current || !vessels) {
@@ -294,12 +292,14 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
         return
       }
 
-      const vesselsLayer = map
+      const vesselsLayer = monitorfishMap
         .getLayers()
         .getArray()
+        // @ts-ignore
         ?.find(olLayer => olLayer.name === LayerProperties.VESSELS_POINTS.code)
+        // @ts-ignore
         ?.getSource()
-      const featuresInExtent = vesselsLayer?.getFeaturesInExtent(map.getView().calculateExtent()) || []
+      const featuresInExtent = vesselsLayer?.getFeaturesInExtent(monitorfishMap.getView().calculateExtent()) || []
 
       const filterShowed = filters.find(filter => filter.showed)
       const isFiltered = filterShowed && nonFilteredVesselsAreHidden // && filteredVesselsFeaturesUids?.length FIXME: if filterShowed, is it really necessary to check filteredVesselsFeaturesUids ?
@@ -336,7 +336,6 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
     }, throttleDuration)
   }, [
     isSuperUser,
-    map,
     vessels,
     selectedVessel,
     mapMovingAndZoomEvent,
@@ -362,11 +361,12 @@ export function VesselsLabelsLayer({ map, mapMovingAndZoomEvent }) {
   }, [riskFactorShowedOnMap])
 
   useEffect(() => {
-    const currentZoom = map.getView().getZoom().toFixed(2)
+    const currentZoom = monitorfishMap.getView().getZoom()?.toFixed(2)
     if (currentZoom !== previousMapZoom.current) {
+      // @ts-ignore
       previousMapZoom.current = currentZoom
     }
-  }, [map, mapMovingAndZoomEvent])
+  }, [mapMovingAndZoomEvent])
 
   return (
     <>

@@ -1,6 +1,5 @@
 import { NewWindow } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useRef } from 'react'
-import { batch } from 'react-redux'
 import { StyleSheetManager } from 'styled-components'
 
 import { SideWindow } from '.'
@@ -16,12 +15,10 @@ import type { MutableRefObject } from 'react'
 export function SideWindowLauncher() {
   const newWindowRef = useRef() as MutableRefObject<HTMLDivElement>
 
-  const mission = useMainAppSelector(store => store.mission)
-  const sideWindow = useMainAppSelector(store => store.sideWindow)
+  const isDraftDirty = useMainAppSelector(store => store.mission.isDraftDirty)
+  const status = useMainAppSelector(store => store.sideWindow.status)
   const dispatch = useMainAppDispatch()
   const { forceUpdate } = useForceUpdate()
-
-  const hasDraftInProgress = !!mission.draft
 
   const handleChangeFocus = useCallback(
     (isFocused: boolean) => {
@@ -33,10 +30,8 @@ export function SideWindowLauncher() {
   )
 
   const handleUnload = useCallback(() => {
-    batch(() => {
-      dispatch(sideWindowActions.close())
-      dispatch(resetFocusOnPendingAlert())
-    })
+    dispatch(sideWindowActions.close())
+    dispatch(resetFocusOnPendingAlert())
   }, [dispatch])
 
   useEffect(() => {
@@ -52,8 +47,8 @@ export function SideWindowLauncher() {
         name="MonitorFish"
         onChangeFocus={handleChangeFocus}
         onUnload={handleUnload}
-        shouldHaveFocus={sideWindow.status === SideWindowStatus.FOCUSED}
-        showPrompt={hasDraftInProgress}
+        shouldHaveFocus={status === SideWindowStatus.FOCUSED}
+        showPrompt={isDraftDirty}
         title="MonitorFish"
       >
         <SideWindow ref={newWindowRef} isFromURL={false} />

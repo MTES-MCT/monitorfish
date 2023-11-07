@@ -7,7 +7,7 @@ import styled from 'styled-components'
 
 import { Infraction } from './Infraction'
 import { InfractionForm } from './InfractionForm'
-import { InfractionGroup } from './types'
+import { InfractionCategory } from './types'
 import { FrontendError } from '../../../../../../libs/FrontendError'
 import { FrontendErrorBoundary } from '../../../../../../ui/FrontendErrorBoundary'
 import { useGetNatinfsAsOptions } from '../../../hooks/useGetNatinfsAsOptions'
@@ -31,17 +31,19 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
 
   const infractionsWithLabelAndGroup = useMemo(() => {
     const allInfractions = [
-      ...(values.gearInfractions?.map(infraction => ({ ...infraction, group: InfractionGroup.GEAR_INFRACTIONS })) ||
+      ...(values.gearInfractions?.map(infraction => ({ ...infraction, group: InfractionCategory.GEAR_INFRACTIONS })) ||
         []),
       ...(values.logbookInfractions?.map(infraction => ({
         ...infraction,
-        group: InfractionGroup.LOGBOOK_INFRACTION
+        group: InfractionCategory.LOGBOOK_INFRACTION
       })) || []),
-      ...(values.otherInfractions?.map(infraction => ({ ...infraction, group: InfractionGroup.OTHER_INFRACTIONS })) ||
-        []),
+      ...(values.otherInfractions?.map(infraction => ({
+        ...infraction,
+        group: InfractionCategory.OTHER_INFRACTIONS
+      })) || []),
       ...(values.speciesInfractions?.map(infraction => ({
         ...infraction,
-        group: InfractionGroup.SPECIES_INFRACTIONS
+        group: InfractionCategory.SPECIES_INFRACTIONS
       })) || [])
     ]
     if (!allInfractions.length) {

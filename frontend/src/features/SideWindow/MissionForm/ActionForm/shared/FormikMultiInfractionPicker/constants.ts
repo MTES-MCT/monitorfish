@@ -1,8 +1,8 @@
-import { InfractionGroup } from './types'
+import { InfractionCategory } from './types'
 
-export const infractionGroupToLabel: Record<InfractionGroup, string> = {
-  [InfractionGroup.GEAR_INFRACTIONS]: 'Infraction engins',
-  [InfractionGroup.LOGBOOK_INFRACTION]: 'Infraction obligations déclaratives et autorisations de pêche',
-  [InfractionGroup.OTHER_INFRACTIONS]: 'Autre infraction',
-  [InfractionGroup.SPECIES_INFRACTIONS]: 'Infraction espèces'
+export const infractionGroupToLabel: Record<InfractionCategory, string> = {
+  [InfractionCategory.GEAR_INFRACTIONS]: 'Infraction engins',
+  [InfractionCategory.LOGBOOK_INFRACTION]: 'Infraction obligations déclaratives et autorisations de pêche',
+  [InfractionCategory.OTHER_INFRACTIONS]: 'Autre infraction',
+  [InfractionCategory.SPECIES_INFRACTIONS]: 'Infraction espèces'
 }

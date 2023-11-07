@@ -3,14 +3,9 @@ import { SelectPicker, Table } from 'rsuite'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { useGetFleetSegmentsQuery } from '../../../api/fleetSegment'
-import { COLORS } from '../../../constants/constants'
-import { addControlObjective } from '../../../domain/use_cases/controlObjective/addControlObjective'
-import deleteControlObjective from '../../../domain/use_cases/controlObjective/deleteControlObjective'
-import updateControlObjective from '../../../domain/use_cases/controlObjective/updateControlObjective'
-import { useBackofficeAppDispatch } from '../../../hooks/useBackofficeAppDispatch'
-import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
-import { sortArrayByColumn, SortType } from '../../VesselList/tableSort'
+import { useGetFleetSegmentsQuery } from '../../../../api/fleetSegment'
+import { COLORS } from '../../../../constants/constants'
+import { LoadingSpinnerWall } from '../../../../ui/LoadingSpinnerWall'
 import {
   ControlPriorityCell,
   DeleteCell,
@@ -20,10 +15,16 @@ import {
   ModifiableCell,
   renderRowExpanded,
   SegmentCellWithTitle
-} from '../tableCells'
+} from '../../../Backoffice/tableCells'
+import { sortArrayByColumn, SortType } from '../../../VesselList/tableSort'
+import {
+  useAddControlObjectiveMutation,
+  useDeleteControlObjectiveMutation,
+  useUpdateControlObjectiveMutation
+} from '../../apis'
 
-import type { ControlObjective } from '../../../domain/types/controlObjective'
-import type { FleetSegment } from '../../../domain/types/fleetSegment'
+import type { FleetSegment } from '../../../../domain/types/fleetSegment'
+import type { ControlObjective } from '../../types'
 
 type ControlObjectiveWithMaybeFleetSegment = ControlObjective &
   Partial<FleetSegment> & {
@@ -37,8 +38,6 @@ export type SeaFrontControlObjectivesProps = {
   year: number
 }
 export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFrontControlObjectivesProps) {
-  const dispatch = useBackofficeAppDispatch()
-
   const [expandedRowKeys, setExpandedRowKeys] = useState<number[]>([])
   const [controlObjectivesWithMaybeFleetSegment, setControlObjectivesWithMaybeFleetSegment] = useState<
     ControlObjectiveWithMaybeFleetSegment[]
@@ -49,28 +48,38 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
 
   const getFleetSegmentsQuery = useGetFleetSegmentsQuery()
 
+  const [updateControlObjective] = useUpdateControlObjectiveMutation()
+
+  const [addControlObjective] = useAddControlObjectiveMutation()
+
+  const [deleteControlObjective] = useDeleteControlObjectiveMutation()
+
   const addSegmentToFacade = useCallback(
-    async (newSegment: string) => {
+    async (nextSegment: string) => {
       if (!getFleetSegmentsQuery.data) {
         return
       }
 
-      const newId: number | void = await dispatch(addControlObjective(newSegment, facade, year))
+      const newId = await addControlObjective({
+        facade,
+        segment: nextSegment,
+        year
+      })
       if (!newId) {
         return
       }
 
       const foundFleetSegment = (getFleetSegmentsQuery.data || []).find(
-        fleetSegment => fleetSegment.segment === newSegment
+        fleetSegment => fleetSegment.segment === nextSegment
       )
 
-      const nextDataWithSegmentDetails = [
+      const nextControlObjectiveWithFleetSegment = [
         ...controlObjectivesWithMaybeFleetSegment,
         {
           controlPriorityLevel: 1,
           facade,
           id: newId,
-          segment: newSegment,
+          segment: nextSegment,
           target: 1,
           targetNumberOfControlsAtPort: 0,
           targetNumberOfControlsAtSea: 0,
@@ -79,19 +88,27 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
         } as unknown as ControlObjectiveWithMaybeFleetSegment
       ]
 
-      const sortedNextDataWithSegmentDetails = nextDataWithSegmentDetails.sort((a, b) =>
+      const sortedNextDataWithSegmentDetails = nextControlObjectiveWithFleetSegment.sort((a, b) =>
         sortArrayByColumn(a, b, sortColumn, sortType)
       )
 
       setControlObjectivesWithMaybeFleetSegment(sortedNextDataWithSegmentDetails)
       setSegmentToAddToFacade(undefined)
     },
-    [controlObjectivesWithMaybeFleetSegment, dispatch, facade, getFleetSegmentsQuery, sortColumn, sortType, year]
+    [
+      controlObjectivesWithMaybeFleetSegment,
+      addControlObjective,
+      facade,
+      getFleetSegmentsQuery,
+      sortColumn,
+      sortType,
+      year
+    ]
   )
 
   const deleteControlObjectiveRow = useCallback(
     async (id: number) => {
-      await dispatch(deleteControlObjective(id))
+      await deleteControlObjective(id)
 
       const nextControlObjectivesWithMaybeFleetSegment = controlObjectivesWithMaybeFleetSegment.filter(
         controlObjectiveWithMaybeFleetSegment => controlObjectiveWithMaybeFleetSegment.id !== id
@@ -99,7 +116,7 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
 
       setControlObjectivesWithMaybeFleetSegment(nextControlObjectivesWithMaybeFleetSegment)
     },
-    [controlObjectivesWithMaybeFleetSegment, dispatch]
+    [controlObjectivesWithMaybeFleetSegment, deleteControlObjective]
   )
 
   const updateControlObjectiveDebounced = useDebouncedCallback(
@@ -109,7 +126,7 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
       value,
       previousControlObjectivesWithMaybeFleetSegment: ControlObjectiveWithMaybeFleetSegment[]
     ) => {
-      const updateData = {
+      const updatedFields = {
         controlPriorityLevel: null,
         targetNumberOfControlsAtPort: null,
         targetNumberOfControlsAtSea: null,
@@ -117,7 +134,10 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
         [key]: value
       }
 
-      dispatch(updateControlObjective(id, updateData)).catch(() => {
+      updateControlObjective({
+        id: id.toString(),
+        updatedFields
+      }).catch(() => {
         setControlObjectivesWithMaybeFleetSegment(previousControlObjectivesWithMaybeFleetSegment)
       })
     },

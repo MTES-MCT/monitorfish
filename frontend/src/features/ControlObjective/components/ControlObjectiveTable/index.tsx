@@ -6,12 +6,14 @@ import { InputPicker } from 'rsuite'
 import styled from 'styled-components'
 
 import { SeaFrontControlObjectives } from './SeaFrontControlObjectives'
-import { useGetControlObjectivesQuery, useGetControlObjectiveYearsQuery } from '../../../api/controlObjective'
-import { COLORS } from '../../../constants/constants'
-import { SeaFront } from '../../../domain/entities/seaFront/constants'
-import addControlObjectiveYear from '../../../domain/use_cases/controlObjective/addControlObjectiveYear'
-import { useBackofficeAppDispatch } from '../../../hooks/useBackofficeAppDispatch'
-import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
+import { COLORS } from '../../../../constants/constants'
+import { SeaFront } from '../../../../domain/entities/seaFront/constants'
+import { LoadingSpinnerWall } from '../../../../ui/LoadingSpinnerWall'
+import {
+  useAddControlObjectiveYearMutation,
+  useGetControlObjectivesQuery,
+  useGetControlObjectiveYearsQuery
+} from '../../apis'
 
 import type { Option } from '@mtes-mct/monitor-ui'
 
@@ -19,12 +21,13 @@ const NOW_YEAR = customDayjs.utc().year()
 const LAST_YEAR_FROM_NOW = NOW_YEAR - 1
 const NEXT_YEAR_FROM_NOW = NOW_YEAR + 1
 
-export function ControlObjectiveList() {
-  const dispatch = useBackofficeAppDispatch()
+export function ControlObjectiveTable() {
   const [selectedYear, setSelectedYear] = useState<number | undefined>(undefined)
 
   const getControlObjectivesQuery = useGetControlObjectivesQuery(selectedYear || skipToken)
   const getControlObjectiveYearsQuery = useGetControlObjectiveYearsQuery()
+
+  const [addControlObjectiveYear] = useAddControlObjectiveYearMutation()
 
   const nextYearToAddFromEntries = useMemo(
     () =>
@@ -54,13 +57,13 @@ export function ControlObjectiveList() {
       return
     }
 
-    await dispatch(addControlObjectiveYear())
+    await addControlObjectiveYear()
 
     // Since there is no query param, we need to explicitely ask for a refetch
     getControlObjectiveYearsQuery.refetch()
 
     setSelectedYear(nextYearToAddFromEntries)
-  }, [dispatch, getControlObjectiveYearsQuery, nextYearToAddFromEntries])
+  }, [addControlObjectiveYear, getControlObjectiveYearsQuery, nextYearToAddFromEntries])
 
   useEffect(() => {
     if (!getControlObjectiveYearsQuery.data) {

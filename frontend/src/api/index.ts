@@ -65,6 +65,7 @@ export const monitorfishApi = createApi({
   reducerPath: 'monitorfishApi',
   tagTypes: [
     'ControlObjectives',
+    'ControlObjectivesYears',
     'FleetSegments',
     'Gears',
     'Infractions',

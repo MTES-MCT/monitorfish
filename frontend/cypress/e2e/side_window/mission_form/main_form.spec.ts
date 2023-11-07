@@ -518,13 +518,31 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.get('*[data-cy="mission-form-error"]').contains("Nous n'avons pas pu récupérer la mission")
   })
 
-  it('Should show a warning indicating that a control unit is already engaged in a mission', () => {
+  it('Should not show a warning indicating that a control unit is already engaged in a mission When editing', () => {
     editSideWindowMissionListMissionWithId(43, SeaFrontGroup.MED)
 
-    cy.get('body').should('not.contain', 'Cette unité est actuellement sélectionnée dans une autre mission en cours.')
+    cy.get('body').should(
+      'not.contain',
+      'Cette unité est actuellement sélectionnée dans une autre mission en cours ouverte par le CNSP.'
+    )
 
     editSideWindowMissionListMissionWithId(4, SeaFrontGroup.MEMN)
 
-    cy.get('body').contains('Cette unité est actuellement sélectionnée dans une autre mission en cours.')
+    cy.get('body').should(
+      'not.contain',
+      'Cette unité est actuellement sélectionnée dans une autre mission en cours ouverte par le CNSP.'
+    )
+  })
+
+  it('Should show a warning indicating that a control unit is already engaged in a mission', () => {
+    openSideWindowNewMission()
+
+    cy.fill('Administration 1', 'DDTM')
+    cy.fill('Unité 1', 'DML 2A')
+
+    cy.get('body').should(
+      'contain',
+      'Cette unité est actuellement sélectionnée dans une autre mission en cours ouverte par le CNSP.'
+    )
   })
 })

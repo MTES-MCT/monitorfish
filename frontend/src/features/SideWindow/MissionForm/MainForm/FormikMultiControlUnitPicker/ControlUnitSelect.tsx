@@ -19,6 +19,8 @@ import {
 } from './utils'
 import { FIVE_MINUTES } from '../../../../../api/APIWorker'
 import { useGetEngagedControlUnitsQuery } from '../../../../../api/mission'
+import { Mission } from '../../../../../domain/entities/mission/types'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 import { isValidControlUnit } from '../../utils'
 
@@ -54,6 +56,7 @@ export function ControlUnitSelect({
   value
 }: ControlUnitSelectProps) {
   const { newWindowContainerRef } = useNewWindow()
+  const selectedPath = useMainAppSelector(state => state.sideWindow.selectedPath)
   const { data: engagedControlUnitsData } = useGetEngagedControlUnitsQuery(undefined, { pollingInterval: FIVE_MINUTES })
 
   const engagedControlUnits = useMemo(() => {
@@ -69,8 +72,9 @@ export function ControlUnitSelect({
     isValidControlUnit(value) ? value : undefined
   )
 
-  const isEngaged = !!engagedControlUnits.find(engaged => engaged.id === value.id)
+  const engagedControlUnit = engagedControlUnits.find(engaged => engaged.controlUnit.id === value.id)
   const isLoading = !allControlUnits.length
+  const isEdition = selectedPath.id
 
   const filteredNamesAsOptions = useMemo((): Option[] => {
     if (!allControlUnits || !controlledValue.administration) {
@@ -163,6 +167,26 @@ export function ControlUnitSelect({
     onDelete(index)
   }, [index, onDelete])
 
+  const controlUnitWarningMessage = useMemo(() => {
+    if (!engagedControlUnit) {
+      return ''
+    }
+
+    if (engagedControlUnit.missionSources.length === 1) {
+      return `Cette unité est actuellement sélectionnée dans une autre mission en cours ouverte par le ${
+        Mission.MissionSourceLabel[engagedControlUnit.missionSources[0]!]
+      }.`
+    }
+
+    if (engagedControlUnit.missionSources.length > 1) {
+      return `Cette unité est actuellement sélectionnée dans plusieurs autres missions en cours, ouvertes par le ${engagedControlUnit.missionSources
+        .map(source => Mission.MissionSourceLabel[source])
+        .join(' et le ')}.`
+    }
+
+    return ''
+  }, [engagedControlUnit])
+
   return (
     // eslint-disable-next-line react/no-array-index-key
     <Wrapper key={`unit${index}`}>
@@ -191,11 +215,7 @@ export function ControlUnitSelect({
           searchable
           value={controlledValue.name}
         />
-        {isEngaged && (
-          <Message level={Level.WARNING}>
-            Cette unité est actuellement sélectionnée dans une autre mission en cours.
-          </Message>
-        )}
+        {!isEdition && !!engagedControlUnit && <Message level={Level.WARNING}>{controlUnitWarningMessage}</Message>}
         <MultiSelect
           baseContainer={newWindowContainerRef.current}
           disabled={isLoading || !controlledValue.administration || !controlledValue.name}

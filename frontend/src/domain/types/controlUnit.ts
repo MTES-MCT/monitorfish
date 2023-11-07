@@ -1,3 +1,5 @@
+import { Mission } from '../entities/mission/types'
+
 import type { ControlResource } from './controlResource'
 import type { Undefine } from '@mtes-mct/monitor-ui'
 import type { Except } from 'type-fest'
@@ -15,4 +17,9 @@ export namespace ControlUnit {
   export type ControlUnitData = Except<ControlUnit, 'id'>
 
   export type ControlUnitDraft = Omit<Undefine<ControlUnit>, 'resources'> & Pick<ControlUnit, 'resources'>
+
+  export type EngagedControlUnits = {
+    controlUnit: ControlUnit
+    missionSources: Mission.MissionSource[]
+  }[]
 }

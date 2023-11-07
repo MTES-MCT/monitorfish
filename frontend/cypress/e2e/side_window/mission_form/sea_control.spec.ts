@@ -117,22 +117,22 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     // Infractions
     cy.clickButton('Ajouter une infraction')
-    cy.fill('Type d’infraction', 'Avec PV')
-    cy.fill('Groupe', 'Infraction obligations déclaratives et autorisations de pêche')
+    cy.fill('Résultat de l’infraction', 'Avec PV')
+    cy.fill('Catégorie d’infraction', 'Infraction obligations déclaratives et autorisations de pêche')
     cy.fill('NATINF', '23581')
     cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction déclarative.')
     cy.clickButton('Valider l’infraction')
 
     cy.clickButton('Ajouter une infraction')
-    cy.fill('Type d’infraction', 'Sans PV')
-    cy.fill('Groupe', 'Infraction espèces')
+    cy.fill('Résultat de l’infraction', 'Sans PV')
+    cy.fill('Catégorie d’infraction', 'Infraction espèces')
     cy.fill('NATINF', '23588')
     cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction espèce.')
     cy.clickButton('Valider l’infraction')
 
     cy.clickButton('Ajouter une infraction')
-    cy.fill('Type d’infraction', 'Sans PV')
-    cy.fill('Groupe', 'Autre infraction')
+    cy.fill('Résultat de l’infraction', 'Sans PV')
+    cy.fill('Catégorie d’infraction', 'Autre infraction')
     cy.fill('NATINF', '27689')
     cy.fill('Observations sur l’infraction', 'Une observation sur l’infraction autre.')
     cy.clickButton('Valider l’infraction')
@@ -482,16 +482,16 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Valider l’infraction')
     getSubmitButton().should('be.disabled')
 
-    cy.fill('Type d’infraction', 'En attente')
+    cy.fill('Résultat de l’infraction', 'En attente')
     getSubmitButton().should('be.enabled')
 
-    cy.fill('Type d’infraction', 'Sans PV')
+    cy.fill('Résultat de l’infraction', 'Sans PV')
     getSubmitButton().should('be.disabled')
 
-    cy.fill('Type d’infraction', 'Avec PV')
+    cy.fill('Résultat de l’infraction', 'Avec PV')
     getSubmitButton().should('be.disabled')
 
-    cy.fill('Groupe', 'Infraction engins')
+    cy.fill('Catégorie d’infraction', 'Infraction engins')
     getSubmitButton().should('be.disabled')
 
     cy.fill('NATINF', '23581')
@@ -515,7 +515,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.clickButton("Éditer l'infraction")
 
-    cy.fill('Type d’infraction', 'Sans PV')
+    cy.fill('Résultat de l’infraction', 'Sans PV')
     // Click the "X" button in the NATINF tag
     cy.contains('23581 - Taille de maille non réglementaire')
       .parentsUntil('.rs-picker-toggle')

@@ -1,4 +1,4 @@
-export enum InfractionGroup {
+export enum InfractionCategory {
   GEAR_INFRACTIONS = 'gearInfractions',
   LOGBOOK_INFRACTION = 'logbookInfractions',
   OTHER_INFRACTIONS = 'otherInfractions',

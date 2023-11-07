@@ -13,7 +13,7 @@ import { useState } from 'react'
 import styled from 'styled-components'
 
 import { infractionGroupToLabel } from './constants'
-import { InfractionGroup } from './types'
+import { InfractionCategory } from './types'
 import { InfractionFormLiveSchema } from '../../schemas'
 import { INFRACTION_TYPES_AS_OPTIONS } from '../constants'
 
@@ -34,16 +34,16 @@ export function InfractionForm({
   onSubmit
 }: InfractionFormProps) {
   const { newWindowContainerRef } = useNewWindow()
-  const [infractionGroup, setInfractionGroup] = useState<string>(
-    initialValues.group || InfractionGroup.GEAR_INFRACTIONS
+  const [infractionGroup, setInfractionCategory] = useState<string>(
+    initialValues.group || InfractionCategory.GEAR_INFRACTIONS
   )
 
-  const infractionGroupOptions = Object.keys(InfractionGroup).map(group => {
-    const groupValue = InfractionGroup[group]
+  const infractionCategoryOptions = Object.keys(InfractionCategory).map(category => {
+    const categoryValue = InfractionCategory[category]
 
     return {
-      label: infractionGroupToLabel[groupValue],
-      value: groupValue
+      label: infractionGroupToLabel[categoryValue],
+      value: categoryValue
     }
   })
 
@@ -55,31 +55,29 @@ export function InfractionForm({
     >
       {({ isValid }) => (
         <StyledForm>
-          <Columns>
-            <FormikMultiRadio
-              isErrorMessageHidden
-              isInline
-              label="Type d’infraction"
-              name="infractionType"
-              options={INFRACTION_TYPES_AS_OPTIONS}
-            />
-            <StyledGroupSelect
-              baseContainer={newWindowContainerRef.current}
-              cleanable={false}
-              disabled={isEdition}
-              label="Groupe"
-              name="infraction-group"
-              onChange={group => {
-                if (isEdition) {
-                  return
-                }
+          <FormikMultiRadio
+            isErrorMessageHidden
+            isInline
+            label="Résultat de l’infraction"
+            name="infractionType"
+            options={INFRACTION_TYPES_AS_OPTIONS}
+          />
+          <Select
+            baseContainer={newWindowContainerRef.current}
+            cleanable={false}
+            disabled={isEdition}
+            label="Catégorie d’infraction"
+            name="infraction-group"
+            onChange={category => {
+              if (isEdition) {
+                return
+              }
 
-                setInfractionGroup(group as string)
-              }}
-              options={infractionGroupOptions}
-              value={infractionGroup}
-            />
-          </Columns>
+              setInfractionCategory(category as string)
+            }}
+            options={infractionCategoryOptions}
+            value={infractionGroup}
+          />
           <HackedFormikSelect
             baseContainer={newWindowContainerRef.current}
             isErrorMessageHidden
@@ -104,15 +102,6 @@ export function InfractionForm({
   )
 }
 
-const StyledGroupSelect = styled(Select)`
-  margin-left: 16px;
-  max-width: 350px;
-`
-
-const Columns = styled.div`
-  display: flex;
-`
-
 const StyledForm = styled(Form)`
   background-color: transparent;
   border: 0;
@@ -121,6 +110,10 @@ const StyledForm = styled(Form)`
   > .Element-Field,
   > .Element-Fieldset {
     margin-top: 16px;
+
+    :first-child {
+      margin-top: 0px;
+    }
   }
 `
 

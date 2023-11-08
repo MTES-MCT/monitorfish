@@ -1,3 +1,5 @@
+import { Feature } from 'ol'
+import { Geometry } from 'ol/geom'
 import { useEffect, useRef } from 'react'
 import { useStore } from 'react-redux'
 
@@ -7,15 +9,17 @@ import { showSimplifiedGeometries, showWholeGeometries } from '../../../domain/s
 import { getRegulatoryLayersToAdd } from '../../../domain/use_cases/layer/regulation/getRegulatoryLayersToAdd'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { monitorfishMap } from '../monitorfishMap'
+
+import type { VectorLayerWithName } from '../../../domain/types/layer'
 
 export const METADATA_IS_SHOWED = 'metadataIsShowed'
 const SIMPLIFIED_FEATURE_ZOOM_LEVEL = 9.5
 
 export type RegulatoryLayersProps = {
-  map?: any
   mapMovingAndZoomEvent?: any
 }
-export function RegulatoryLayers({ map, mapMovingAndZoomEvent }: RegulatoryLayersProps) {
+export function RegulatoryLayers({ mapMovingAndZoomEvent }: RegulatoryLayersProps) {
   const throttleDuration = 500 // ms
   const dispatch = useMainAppDispatch()
   const { getState } = useStore()
@@ -28,36 +32,28 @@ export function RegulatoryLayers({ map, mapMovingAndZoomEvent }: RegulatoryLayer
   const isThrottled = useRef(false)
 
   useEffect(() => {
-    if (!map) {
-      return
-    }
-
-    sortRegulatoryLayersFromAreas(layersToFeatures, map.getLayers().getArray())
-  }, [layersToFeatures, map])
+    sortRegulatoryLayersFromAreas(layersToFeatures, monitorfishMap.getLayers().getArray())
+  }, [layersToFeatures])
 
   useEffect(() => {
-    if (!map || !showedLayers) {
+    if (!showedLayers) {
       return
     }
 
-    const olLayers = map.getLayers()
+    const olLayers = monitorfishMap.getLayers()
     const vectorLayersToAdd = dispatch(getRegulatoryLayersToAdd(olLayers.getArray(), showedLayers))
     vectorLayersToAdd.forEach(vectorLayer => {
       olLayers.push(vectorLayer)
     })
     removeRegulatoryLayersToMap(showedLayers, olLayers)
-  }, [dispatch, getState, map, showedLayers])
+  }, [dispatch, getState, showedLayers])
 
   useEffect(() => {
-    if (!map) {
-      return
-    }
-
     function addOrRemoveMetadataIsShowedPropertyToShowedRegulatoryLayers() {
-      const regulatoryLayers = map
+      const regulatoryLayers = monitorfishMap
         .getLayers()
         .getArray()
-        .filter(layer => layer?.name?.includes(LayerProperties.REGULATORY.code))
+        .filter(layer => (layer as VectorLayerWithName)?.name?.includes(LayerProperties.REGULATORY.code))
 
       if (!regulatoryZoneMetadata) {
         removeMetadataIsShowedProperty(regulatoryLayers)
@@ -67,7 +63,7 @@ export function RegulatoryLayers({ map, mapMovingAndZoomEvent }: RegulatoryLayer
 
       const layerToAddProperty = regulatoryLayers.find(
         layer =>
-          layer?.name ===
+          (layer as VectorLayerWithName)?.name ===
           `${LayerProperties.REGULATORY.code}:${regulatoryZoneMetadata.topic}:${regulatoryZoneMetadata.zone}`
       )
 
@@ -77,17 +73,17 @@ export function RegulatoryLayers({ map, mapMovingAndZoomEvent }: RegulatoryLayer
     }
 
     addOrRemoveMetadataIsShowedPropertyToShowedRegulatoryLayers()
-  }, [lastShowedFeatures, map, regulatoryZoneMetadata])
+  }, [lastShowedFeatures, regulatoryZoneMetadata])
 
   useEffect(() => {
-    if (isThrottled.current || !map || !layersToFeatures) {
+    if (isThrottled.current || !layersToFeatures) {
       return
     }
 
     function showSimplifiedOrWholeFeatures() {
-      const currentZoom = map.getView().getZoom().toFixed(2)
+      const currentZoom = monitorfishMap.getView().getZoom()?.toFixed(2)
 
-      if (currentZoom !== previousMapZoom.current) {
+      if (currentZoom && currentZoom !== previousMapZoom.current) {
         previousMapZoom.current = currentZoom
 
         const showSimplifiedFeatures = getShowSimplifiedFeatures(currentZoom)
@@ -95,22 +91,24 @@ export function RegulatoryLayers({ map, mapMovingAndZoomEvent }: RegulatoryLayer
           return
         }
 
-        const regulatoryLayers = map
+        const regulatoryLayers = monitorfishMap
           .getLayers()
           .getArray()
-          .filter(layer => layer?.name?.includes(LayerProperties.REGULATORY.code))
+          .filter(layer => (layer as VectorLayerWithName)?.name?.includes(LayerProperties.REGULATORY.code))
         regulatoryLayers.forEach(layer => {
-          const vectorSource = layer.getSource()
+          const vectorSource = (layer as VectorLayerWithName).getSource()
 
           if (vectorSource) {
-            const layerToFeatures = layersToFeatures?.find(layerToFeature => layerToFeature.name === layer?.name)
+            const layerToFeatures = layersToFeatures?.find(
+              layerToFeature => layerToFeature.name === (layer as VectorLayerWithName)?.name
+            )
             if (layerToFeatures) {
               const features = showSimplifiedFeatures
                 ? layerToFeatures.simplifiedFeatures || layerToFeatures.features
                 : layerToFeatures.features
 
               vectorSource.clear(true)
-              vectorSource.addFeatures(vectorSource.getFormat().readFeatures(features))
+              vectorSource.addFeatures(vectorSource.getFormat()?.readFeatures(features) as Feature<Geometry>[])
             }
           }
         })
@@ -129,7 +127,7 @@ export function RegulatoryLayers({ map, mapMovingAndZoomEvent }: RegulatoryLayer
       isThrottled.current = false
     }, throttleDuration)
     // The `mapMovingAndZoomEvent` prop is used to refresh this effect
-  }, [dispatch, layersToFeatures, map, mapMovingAndZoomEvent, simplifiedGeometries])
+  }, [dispatch, layersToFeatures, mapMovingAndZoomEvent, simplifiedGeometries])
 
   return <></>
 }

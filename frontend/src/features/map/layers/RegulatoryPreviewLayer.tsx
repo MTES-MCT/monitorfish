@@ -8,16 +8,14 @@ import { LayerProperties } from '../../../domain/entities/layers/constants'
 import zoomInLayer from '../../../domain/use_cases/layer/zoomInLayer'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { monitorfishMap } from '../monitorfishMap'
 
 import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { BaseRegulatoryZone } from '../../../domain/types/regulation'
 import type { Feature } from 'ol'
 import type { MutableRefObject } from 'react'
 
-export type RegulatoryPreviewLayerProps = {
-  map?: any
-}
-function UnmemoizedRegulatoryPreviewLayer({ map }: RegulatoryPreviewLayerProps) {
+function UnmemoizedRegulatoryPreviewLayer() {
   const dispatch = useMainAppDispatch()
   const { regulatoryZonesToPreview } = useMainAppSelector(state => state.regulatory)
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
@@ -48,10 +46,6 @@ function UnmemoizedRegulatoryPreviewLayer({ map }: RegulatoryPreviewLayerProps) 
   }, [])
 
   useEffect(() => {
-    if (!map) {
-      return
-    }
-
     getVectorSource().clear()
 
     const features = getFeaturesFromRegulatoryZones(regulatoryZonesToPreview)
@@ -61,20 +55,16 @@ function UnmemoizedRegulatoryPreviewLayer({ map }: RegulatoryPreviewLayerProps) 
 
     getVectorSource().addFeatures(features)
     dispatch(zoomInLayer({ feature: features[0] }))
-  }, [dispatch, map, regulatoryZonesToPreview])
+  }, [dispatch, regulatoryZonesToPreview])
 
   useEffect(() => {
-    if (!map) {
-      return undefined
-    }
-
     getLayer().name = LayerProperties.REGULATORY_PREVIEW.code
-    map.getLayers().push(getLayer())
+    monitorfishMap.getLayers().push(getLayer())
 
     return () => {
-      map.removeLayer(getLayer())
+      monitorfishMap.removeLayer(getLayer())
     }
-  }, [getLayer, map])
+  }, [getLayer])
 
   return <></>
 }

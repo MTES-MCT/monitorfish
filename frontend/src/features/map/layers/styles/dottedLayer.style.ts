@@ -1,17 +1,14 @@
+import { THEME } from '@mtes-mct/monitor-ui'
 import { Circle } from 'ol/style'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 import Style from 'ol/style/Style'
 
-import { COLORS } from '../../../../constants/constants'
-
 export const dottedLayerStyle = new Style({
-  fill: new Fill({
-    color: 'rgba(31, 120, 180, 0.28)'
-  }),
   stroke: new Stroke({
-    color: COLORS.charcoal,
-    width: 3
+    color: THEME.color.slateGray,
+    lineDash: [4, 4],
+    width: 2
   })
 })
 

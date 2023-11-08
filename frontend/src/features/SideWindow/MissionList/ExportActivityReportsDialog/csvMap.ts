@@ -1,32 +1,22 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { toAlpha3 } from 'i18n-iso-countries'
 
-import { formatDMDCoordinateForActivityReport } from './utils'
+import { formatDMDCoordinateForActivityReport, getPatrolType } from './utils'
 import { getCoordinates } from '../../../../coordinates'
 import { CoordinatesFormat, WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
-import { MissionAction } from '../../../../domain/types/missionAction'
 
 import type { ActivityReportWithId } from './types'
 import type { DownloadAsCsvMap } from '../../../../utils/downloadAsCsv'
 
-import MissionActionType = MissionAction.MissionActionType
-
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 export const JDP_CSV_MAP_BASE: DownloadAsCsvMap<ActivityReportWithId> = {
-  patrolCode: 'PATROL_CODE',
+  patrolCode: {
+    label: 'PATROL_CODE',
+    transform: activity => getPatrolType(activity) + (activity.controlUnits[0]?.name || '')
+  },
   patrolType: {
     label: 'PATROL_TYPE',
-    transform: activity => {
-      if (activity.action.actionType === MissionActionType.SEA_CONTROL) {
-        return 'S'
-      }
-
-      if (activity.action.actionType === MissionActionType.LAND_CONTROL) {
-        return 'L'
-      }
-
-      return ''
-    }
+    transform: activity => getPatrolType(activity)
   },
   controlUnit: {
     label: 'MEAN_ID',
@@ -128,6 +118,6 @@ export const JDP_CSV_MAP_BASE: DownloadAsCsvMap<ActivityReportWithId> = {
   'action.portName': 'PORT_NAME',
   // Not filled
   LOCATION: 'LOCATION'
-  // 'SPECIES', 'INFR' and 'COMMENT' are added in getJDPCsvColumns
+  // 'SPECIES', 'INFR' and 'COMMENT' are added in getJDPCsvMap()
 }
 /* eslint-enable sort-keys-fix/sort-keys-fix */

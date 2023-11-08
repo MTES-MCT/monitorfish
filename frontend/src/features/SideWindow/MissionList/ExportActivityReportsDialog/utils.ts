@@ -1,3 +1,4 @@
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import { range } from 'lodash'
 
 import { JDP } from './constants'
@@ -20,6 +21,19 @@ export function formatDMDCoordinateForActivityReport(coordinate: string | undefi
 export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>, jdp: JDP) {
   const numberOfSpeciesColumns = 35
   const numberOfInfractionColumns = 12
+
+  // See MED JDP Decision 2018/030 (3.6.1.1)
+  if (jdp === JDP.MEDITERRANEAN_AND_EASTERN_ATLANTIC) {
+    // eslint-disable-next-line no-param-reassign
+    baseCsvMap.eventHour = {
+      label: 'EVENT_HOUR',
+      transform: activity => {
+        const dateTime = customDayjs(activity.action.actionDatetimeUtc)
+
+        return `${dateTime.hour()}:${dateTime.minute()}`
+      }
+    }
+  }
 
   range(numberOfSpeciesColumns).forEach(index => {
     const count = index + 1
@@ -100,15 +114,24 @@ function getInfractionsKeys(action: MissionAction.MissionAction, key: string): s
   )
 }
 
-function getInfractionsWithRecordKey(
-  infractions:
-    | MissionAction.GearInfraction[]
-    | MissionAction.SpeciesInfraction[]
-    | MissionAction.LogbookInfraction[]
-    | MissionAction.OtherInfraction[],
-  key: string
-): string[] {
+function getInfractionsWithRecordKey(infractions: MissionAction.Infraction[], key: string): string[] {
   return infractions
     .filter(infraction => infraction.infractionType === MissionAction.InfractionType.WITH_RECORD)
     .map(infraction => infraction[key])
+}
+
+export function getPatrolType(activity: ActivityReportWithId): string {
+  if (activity.action.actionType === MissionAction.MissionActionType.SEA_CONTROL) {
+    return 'S'
+  }
+
+  if (activity.action.actionType === MissionAction.MissionActionType.LAND_CONTROL) {
+    return 'L'
+  }
+
+  if (activity.action.actionType === MissionAction.MissionActionType.AIR_CONTROL) {
+    return 'A'
+  }
+
+  return ''
 }

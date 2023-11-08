@@ -30,6 +30,7 @@ import { InterestPointLine } from '../../../domain/entities/interestPointLine'
 import { getLength } from 'ol/sphere'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { setMapToolOpened } from '../../../domain/shared_slices/Global'
+import { monitorfishMap } from '../monitorfishMap'
 
 const DRAW_START_EVENT = 'drawstart'
 const DRAW_ABORT_EVENT = 'drawabort'
@@ -37,7 +38,7 @@ const DRAW_END_EVENT = 'drawend'
 
 export const MIN_ZOOM = 7
 
-const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
+const InterestPointLayer = ({ mapMovingAndZoomEvent }) => {
   const dispatch = useDispatch()
 
   const {
@@ -84,23 +85,19 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   useEffect(() => {
     function addLayerToMap () {
-      if (map) {
-        map.getLayers().push(getLayer())
-      }
+      monitorfishMap.getLayers().push(getLayer())
 
       return () => {
-        if (map) {
-          map.removeLayer(getLayer())
-        }
+        monitorfishMap.removeLayer(getLayer())
       }
     }
 
     addLayerToMap()
-  }, [map])
+  }, [])
 
   useEffect(() => {
     function drawExistingFeaturesOnMap () {
-      if (interestPoints && map) {
+      if (interestPoints) {
         const features = interestPoints.map(interestPoint => {
           if (interestPoint.feature) {
             const nextFeature = new GeoJSON({
@@ -121,10 +118,10 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
     }
 
     drawExistingFeaturesOnMap()
-  }, [map, interestPoints])
+  }, [interestPoints])
 
   useEffect(() => {
-    if (map && isDrawing) {
+    if (isDrawing) {
       function addEmptyNextInterestPoint () {
         dispatch(updateInterestPointBeingDrawed({
           uuid: uuidv4(),
@@ -142,14 +139,14 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
           style: POIStyle
         })
 
-        map.addInteraction(draw)
+        monitorfishMap.addInteraction(draw)
         setDrawObject(draw)
       }
 
       addEmptyNextInterestPoint()
       drawNewFeatureOnMap()
     }
-  }, [map, isDrawing])
+  }, [isDrawing])
 
   useEffect(() => {
     function removeInteraction () {
@@ -158,7 +155,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
 
         function waitForUnwantedZoomAndQuitInteraction () {
           setTimeout(() => {
-            map.removeInteraction(drawObject)
+            monitorfishMap.removeInteraction(drawObject)
           }, 300)
         }
 
@@ -206,7 +203,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   useEffect(() => {
     function showOrHideInterestPointsOverlays () {
-      const currentZoom = map.getView().getZoom().toFixed(2)
+      const currentZoom = monitorfishMap.getView().getZoom().toFixed(2)
       if (currentZoom !== previousMapZoom.current) {
         previousMapZoom.current = currentZoom
         if (currentZoom < MIN_ZOOM) {
@@ -337,7 +334,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
           interestPoints && Array.isArray(interestPoints)
             ? interestPoints.map(interestPoint => {
               return <InterestPointOverlay
-                map={map}
+                map={monitorfishMap}
                 key={interestPoint.uuid}
                 uuid={interestPoint.uuid}
                 name={interestPoint.name}
@@ -355,7 +352,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
         {
           interestPointBeingDrawed && !isEditing
             ? <InterestPointOverlay
-              map={map}
+              map={monitorfishMap}
               uuid={interestPointBeingDrawed.uuid}
               name={interestPointBeingDrawed.name}
               observations={interestPointBeingDrawed.observations}

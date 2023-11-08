@@ -31,6 +31,7 @@ context('Controls overlay', () => {
   })
 
   it('A control overlay Should be movable', () => {
+    cy.wait(200)
     // First, open the mission overlay
     cy.get('#root').click(611, 595)
     cy.wait(100)

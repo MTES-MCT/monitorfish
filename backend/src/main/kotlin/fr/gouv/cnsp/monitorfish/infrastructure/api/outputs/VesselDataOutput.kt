@@ -80,5 +80,42 @@ data class VesselDataOutput(
                 underCharter = vessel.underCharter,
             )
         }
+
+        fun fromVessel(vessel: Vessel): VesselDataOutput {
+            return VesselDataOutput(
+                vesselId = vessel.id,
+                internalReferenceNumber = vessel.internalReferenceNumber,
+                IMO = vessel.imo,
+                ircs = vessel.ircs,
+                mmsi = vessel.mmsi,
+                externalReferenceNumber = vessel.externalReferenceNumber,
+                vesselName = vessel.vesselName,
+                flagState = vessel.flagState,
+                width = vessel.width,
+                length = vessel.length,
+                district = vessel.district,
+                districtCode = vessel.districtCode,
+                gauge = vessel.gauge,
+                registryPort = vessel.registryPort,
+                power = vessel.power,
+                vesselType = vessel.vesselType,
+                sailingCategory = vessel.sailingCategory,
+                sailingType = vessel.sailingType,
+                declaredFishingGears = vessel.declaredFishingGears,
+                pinger = vessel.pinger,
+                navigationLicenceExpirationDate = vessel.navigationLicenceExpirationDate,
+                operatorName = vessel.operatorName,
+                operatorPhones = vessel.operatorPhones,
+                operatorEmail = vessel.operatorEmail,
+                proprietorName = vessel.proprietorName,
+                proprietorPhones = vessel.proprietorPhones,
+                proprietorEmails = vessel.proprietorEmails,
+                vesselPhones = vessel.vesselPhones,
+                vesselEmails = vessel.vesselEmails,
+                beaconNumber = vessel.beaconNumber,
+                riskFactor = null,
+                underCharter = vessel.underCharter,
+            )
+        }
     }
 }

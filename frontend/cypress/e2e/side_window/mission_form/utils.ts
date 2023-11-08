@@ -14,7 +14,7 @@ export const openSideWindowNewMission = () => {
   if (document.querySelector('[data-cy="first-loader"]')) {
     cy.getDataCy('first-loader').should('not.be.visible')
   }
-  cy.clickButton('Ajouter une nouvelle mission')
+  cy.clickButton('Ouvrir une nouvelle mission')
 
   cy.wait(500)
 }

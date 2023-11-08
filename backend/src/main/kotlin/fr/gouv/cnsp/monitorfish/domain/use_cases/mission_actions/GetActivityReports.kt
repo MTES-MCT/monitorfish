@@ -67,8 +67,16 @@ class GetActivityReports(
                 else -> throw IllegalArgumentException("Bad control type: ${control.actionType}")
             }
 
-            val controlledVessel = vessels.first { vessel -> vessel.id == control.vesselId }
-            val controlMission = missions.first { mission -> mission.id == control.missionId }
+            val controlledVessel = try {
+                vessels.first { vessel -> vessel.id == control.vesselId }
+            } catch (e: NoSuchElementException) {
+                throw NoSuchElementException("The vessel id ${control.vesselId} could not be found.", e)
+            }
+            val controlMission = try {
+                missions.first { mission -> mission.id == control.missionId }
+            } catch (e: NoSuchElementException) {
+                throw NoSuchElementException("The mission id ${control.missionId} could not be found.", e)
+            }
 
             control.portLocode?.let { port ->
                 try {

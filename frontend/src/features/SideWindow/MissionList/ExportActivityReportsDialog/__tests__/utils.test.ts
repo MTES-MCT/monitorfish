@@ -34,7 +34,7 @@ describe('utils', () => {
     const csvMap = getJDPCsvMap(JDP_CSV_MAP_BASE, JDP.WESTERN_WATERS)
 
     // Then
-    expect(Object.keys(csvMap)).toHaveLength(171)
+    expect(Object.keys(csvMap)).toHaveLength(172)
 
     // @ts-ignore
     expect(csvMap.species1?.label).toEqual('SPECIES1')

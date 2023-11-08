@@ -43,6 +43,15 @@ export const JDP_CSV_MAP_BASE: DownloadAsCsvMap<ActivityReportWithId> = {
       return `${dateTime.hour()}:${dateTime.minute()}`
     }
   },
+  // See MED JDP Decision 2018/030 (3.6.1.1)
+  eventHour: {
+    label: 'EVENT_HOUR',
+    transform: activity => {
+      const dateTime = customDayjs(activity.action.actionDatetimeUtc)
+
+      return `${dateTime.hour()}:${dateTime.minute()}`
+    }
+  },
   leadingState: {
     label: 'LS',
     transform: () => 'FRA'

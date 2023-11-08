@@ -28,11 +28,11 @@ context('Side Window > Mission List > Export Activity Reports', () => {
       content
         .should(
           'contains',
-          'PATROL_CODE,PATROL_TYPE,MEAN_ID,JDP_CODE,EVENT_TYPE,EVENT_DATE,EVENT_TIME,LS,PS1,PS2,PS3,NATIONAL_REFERENCE,OBJECT_TYPE,OBJECT_STATE,OBJECT_NATIONAL_ID'
+          'PATROL_CODE,PATROL_TYPE,MEAN_ID,JDP_CODE,EVENT_TYPE,EVENT_DATE,EVENT_TIME,EVENT_HOUR,LS,PS1,PS2,PS3,NATIONAL_REFERENCE,OBJECT_TYPE,OBJECT_STATE,OBJECT_NATIONAL_ID'
         )
         .should(
           'contains',
-          '"","L","Cross Etel","","INSPECTION","2020018","7:19","FRA","FRA","","","","Vessel","FRA","AYFAK000999999"'
+          '"LCross Etel","L","Cross Etel","","INSPECTION","2020018","7:19","7:19","FRA","FRA","","","","Vessel","FRA","AYFAK000999999"'
         )
         .should(
           'contains',

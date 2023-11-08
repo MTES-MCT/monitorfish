@@ -157,7 +157,6 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
           featureId={featureId}
           flagState={identity.flagState}
           identity={identity}
-          map={monitorfishMap}
           moveLine={moveVesselLabelLine}
           offset={offset}
           opacity={opacity}

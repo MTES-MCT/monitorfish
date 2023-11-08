@@ -24,7 +24,7 @@ const hideVesselsAtPortLocalStorageKey = 'hideVesselsAtPort'
 
 export type MapState = {
   /** End of vessels map properties */
-  animateToCoordinates: null
+  animateToCoordinates: [number, number] | undefined
   animateToExtent: boolean
   animateToRegulatoryLayer: { center?: [number, number]; extent?: [number, number] } | undefined
   coordinatesFormat: CoordinatesFormat
@@ -46,7 +46,7 @@ export type MapState = {
   }
 }
 const INITIAL_STATE: MapState = {
-  animateToCoordinates: null,
+  animateToCoordinates: undefined,
   animateToExtent: false,
   animateToRegulatoryLayer: undefined,
   coordinatesFormat: getLocalStorageState(CoordinatesFormat.DEGREES_MINUTES_SECONDS, coordinatesFormatLocalStorageKey),
@@ -110,7 +110,7 @@ const mapSlice = createSlice({
       state.fitToExtent = action.payload
     },
     resetAnimateToCoordinates(state) {
-      state.animateToCoordinates = null
+      state.animateToCoordinates = undefined
     },
     resetAnimateToExtent(state) {
       state.animateToExtent = false

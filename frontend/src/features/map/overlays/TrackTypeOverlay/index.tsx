@@ -5,8 +5,9 @@ import styled from 'styled-components'
 import { TrackTypeCard } from './TrackTypeCard'
 import { COLORS } from '../../../../constants/constants'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import { monitorfishMap } from '../../monitorfishMap'
 
-export function TrackTypeOverlay({ feature, map, pointerMoveEventPixel }) {
+export function TrackTypeOverlay({ feature, pointerMoveEventPixel }) {
   const [trackTypeToShowOnCard, setTrackTypeToShowOnCard] = useState(null)
   const overlayRef = useRef<HTMLDivElement | null>(null)
   const overlayObjectRef = useRef<Overlay | null>(null)
@@ -31,10 +32,10 @@ export function TrackTypeOverlay({ feature, map, pointerMoveEventPixel }) {
   )
 
   useEffect(() => {
-    if (map) {
-      map.addOverlay(overlayObjectRef.current)
+    if (overlayObjectRef.current) {
+      monitorfishMap.addOverlay(overlayObjectRef.current)
     }
-  }, [map, overlayObjectRef])
+  }, [overlayObjectRef])
 
   useEffect(() => {
     if (!overlayRef.current || !overlayObjectRef.current) {
@@ -54,9 +55,9 @@ export function TrackTypeOverlay({ feature, map, pointerMoveEventPixel }) {
     setTrackTypeToShowOnCard(feature.trackType)
     overlayRef.current.style.display = 'block'
     if (pointerMoveEventPixel) {
-      overlayObjectRef.current.setPosition(map.getCoordinateFromPixel(pointerMoveEventPixel))
+      overlayObjectRef.current.setPosition(monitorfishMap.getCoordinateFromPixel(pointerMoveEventPixel))
     }
-  }, [map, setTrackTypeToShowOnCard, pointerMoveEventPixel, feature])
+  }, [setTrackTypeToShowOnCard, pointerMoveEventPixel, feature])
 
   return (
     <TrackTypeCardOverlayComponent ref={overlayCallback}>

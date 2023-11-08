@@ -267,7 +267,6 @@ function VesselsTracksLayer() {
         <CloseVesselTrackOverlay
           key={vesselTrack?.vesselCompositeIdentifier}
           coordinates={vesselTrack?.coordinates}
-          map={monitorfishMap}
           vesselCompositeIdentifier={vesselTrack?.vesselCompositeIdentifier}
         />
       ))}
@@ -278,7 +277,6 @@ function VesselsTracksLayer() {
           id={fishingActivity.id}
           isDeleted={fishingActivity.isDeleted}
           isNotAcknowledged={fishingActivity.isNotAcknowledged}
-          map={monitorfishMap}
           name={fishingActivity.name}
         />
       ))}

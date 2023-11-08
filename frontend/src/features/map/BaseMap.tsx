@@ -1,6 +1,6 @@
 import { platformModifierKeyOnly } from 'ol/events/condition'
 import OpenLayerMap from 'ol/Map'
-import { Children, cloneElement, useCallback, useEffect, useRef, useState } from 'react'
+import { Children, useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import MapAttributionsBox from './controls/MapAttributionsBox'
@@ -230,16 +230,7 @@ export function BaseMap({
       />
       {showCoordinates && <MapCoordinatesBox coordinates={cursorCoordinates} />}
       {showAttributions && <MapAttributionsBox />}
-      {Children.map(children, child => {
-        if (!child) {
-          return null
-        }
-
-        const props = { map: monitorfishMap }
-
-        // @ts-ignore
-        return cloneElement(child, props)
-      })}
+      {Children.map(children, child => child)}
     </MapWrapper>
   )
 }

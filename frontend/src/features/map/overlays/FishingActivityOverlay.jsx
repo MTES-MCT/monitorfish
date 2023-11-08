@@ -6,8 +6,9 @@ import { useDispatch } from 'react-redux'
 import { ReactComponent as AckNOkSVG } from '../../icons/Message_JPE_non_acquitte_clair.svg'
 import { ReactComponent as DeletedSVG } from '../../icons/Suppression_clair.svg'
 import navigateToFishingActivity from '../../../domain/use_cases/vessel/navigateToFishingActivity'
+import { monitorfishMap } from '../monitorfishMap'
 
-const FishingActivityOverlay = ({ map, id, name, coordinates, isDeleted, isNotAcknowledged }) => {
+const FishingActivityOverlay = ({ id, name, coordinates, isDeleted, isNotAcknowledged }) => {
   const ref = createRef()
   const dispatch = useDispatch()
   const [overlay] = useState(new Overlay({
@@ -18,17 +19,17 @@ const FishingActivityOverlay = ({ map, id, name, coordinates, isDeleted, isNotAc
   }))
 
   useEffect(() => {
-    if (map && overlay) {
+    if (overlay) {
       overlay.setElement(ref.current)
       overlay.setPosition(coordinates)
 
-      map.addOverlay(overlay)
+      monitorfishMap.addOverlay(overlay)
 
       return () => {
-        map.removeOverlay(overlay)
+        monitorfishMap.removeOverlay(overlay)
       }
     }
-  }, [name, map, overlay])
+  }, [name, overlay])
 
   return (
     <div>
@@ -60,7 +61,7 @@ const FishingActivityOverlay = ({ map, id, name, coordinates, isDeleted, isNotAc
 const TrianglePointer = styled.div`
   margin-left: auto;
   margin-right: auto;
-  height: auto; 
+  height: auto;
   width: auto;
 `
 

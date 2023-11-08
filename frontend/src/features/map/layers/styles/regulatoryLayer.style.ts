@@ -14,7 +14,7 @@ export function getRegulatoryLayerStyle(feature: Feature | undefined, regulation
   const metadataIsShowed = feature?.get('metadataIsShowed')
 
   if (isForbidden) {
-    return getStyle(getColorWithAlpha(THEME.color.lightCoral, 0.75), metadataIsShowed)
+    return getStyle(getColorWithAlpha(THEME.color.lightCoral, 0.4), metadataIsShowed)
   }
 
   return getLayerColor(randomDigits, metadataIsShowed)
@@ -38,8 +38,8 @@ const DIGIT_TO_LAYER_COLOR_MAP = new Map<number, string>([
 const getLayerColor = (randomDigits, metadataIsShowed) => {
   const color = DIGIT_TO_LAYER_COLOR_MAP.get(randomDigits)
   if (!color) {
-    return getStyle(getColorWithAlpha(THEME.color.yaleBlue, 0.75), metadataIsShowed)
+    return getStyle(getColorWithAlpha(THEME.color.yaleBlue, 0.4), metadataIsShowed)
   }
 
-  return getStyle(getColorWithAlpha(color, 0.75), metadataIsShowed)
+  return getStyle(getColorWithAlpha(color, 0.4), metadataIsShowed)
 }

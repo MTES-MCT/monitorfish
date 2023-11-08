@@ -19,13 +19,14 @@ import { addFeatureToDrawedFeature } from '../../../domain/use_cases/draw/addFea
 import { setDrawedGeometry } from '../../../domain/use_cases/draw/setDrawedGeometry'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { monitorfishMap } from '../monitorfishMap'
 
 import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type Geometry from 'ol/geom/Geometry'
 import type { GeometryFunction } from 'ol/interaction/Draw'
 import type { MutableRefObject } from 'react'
 
-function UnmemoizedDrawLayer({ map }) {
+function UnmemoizedDrawLayer() {
   const dispatch = useMainAppDispatch()
   const { drawedGeometry, initialGeometry, interactionType, listener } = useMainAppSelector(state => state.draw)
 
@@ -83,16 +84,12 @@ function UnmemoizedDrawLayer({ map }) {
       return vectorLayerRef.current
     }
 
-    if (map) {
-      map.getLayers().push(getVectorLayer())
-    }
+    monitorfishMap.getLayers().push(getVectorLayer())
 
     return () => {
-      if (map) {
-        map.removeLayer(getVectorLayer())
-      }
+      monitorfishMap.removeLayer(getVectorLayer())
     }
-  }, [map, getVectorSource])
+  }, [getVectorSource])
 
   const setGeometryOnModifyEnd = useCallback(
     event => {
@@ -109,31 +106,29 @@ function UnmemoizedDrawLayer({ map }) {
       return undefined
     }
 
-    resetModifyInteractions(map)
+    resetModifyInteractions(monitorfishMap)
     getVectorSource().clear(true)
     getDrawVectorSource().clear(true)
     getVectorSource().addFeature(feature)
     const modify = new Modify({
       source: getVectorSource()
     })
-    map.addInteraction(modify)
+    monitorfishMap.addInteraction(modify)
 
     modify.on('modifyend', setGeometryOnModifyEnd)
 
     return () => {
-      if (map) {
-        map.removeInteraction(modify)
-        modify.un('modifyend', setGeometryOnModifyEnd)
-      }
+      monitorfishMap.removeInteraction(modify)
+      modify.un('modifyend', setGeometryOnModifyEnd)
     }
-  }, [getVectorSource, getDrawVectorSource, map, feature, interactionType, setGeometryOnModifyEnd])
+  }, [getVectorSource, getDrawVectorSource, feature, interactionType, setGeometryOnModifyEnd])
 
   useEffect(() => {
-    if (!map || !interactionType) {
+    if (!interactionType) {
       return undefined
     }
 
-    resetDrawInteractions(map)
+    resetDrawInteractions(monitorfishMap)
     const { geometryFunction, geometryType } = getOLTypeAndGeometryFunctionFromInteractionType(interactionType)
 
     const draw = new Draw({
@@ -144,7 +139,7 @@ function UnmemoizedDrawLayer({ map }) {
       type: geometryType
     })
 
-    map.addInteraction(draw)
+    monitorfishMap.addInteraction(draw)
 
     draw.on('drawend', event => {
       dispatch(addFeatureToDrawedFeature(event.feature))
@@ -153,13 +148,11 @@ function UnmemoizedDrawLayer({ map }) {
     })
 
     return () => {
-      if (map) {
-        map.removeInteraction(draw)
-        getVectorSource().clear(true)
-        getDrawVectorSource().clear(true)
-      }
+      monitorfishMap.removeInteraction(draw)
+      getVectorSource().clear(true)
+      getDrawVectorSource().clear(true)
     }
-  }, [map, dispatch, getDrawVectorSource, listener, getVectorSource, interactionType])
+  }, [dispatch, getDrawVectorSource, listener, getVectorSource, interactionType])
 
   return null
 }

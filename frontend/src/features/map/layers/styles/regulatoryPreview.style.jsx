@@ -9,6 +9,6 @@ export const regulatoryPreviewStyle = new Style({
     color: getColorWithAlpha(COLORS.charcoal, 0.75)
   }),
   fill: new Fill({
-    color: getColorWithAlpha('#7B9FCC', 0.75)
+    color: getColorWithAlpha('#7B9FCC', 0.4)
   })
 })

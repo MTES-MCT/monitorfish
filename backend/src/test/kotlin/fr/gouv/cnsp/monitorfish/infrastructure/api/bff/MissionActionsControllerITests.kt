@@ -1,12 +1,18 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.*
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep.ActivityCode
+import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep.JointDeploymentPlan
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.dtos.ActivityReport
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
 import kotlinx.coroutines.runBlocking
@@ -50,6 +56,9 @@ class MissionActionsControllerITests {
 
     @MockBean
     private lateinit var getMissionAction: GetMissionAction
+
+    @MockBean
+    private lateinit var getActivityReports: GetActivityReports
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -275,5 +284,50 @@ class MissionActionsControllerITests {
             .andExpect(status().isNoContent())
 
         Mockito.verify(deleteMissionAction).execute(2)
+    }
+
+    @Test
+    fun `Should get all activity reports for a given date range and JDP`() {
+        // Given
+        given(getActivityReports.execute(any(), any(), any())).willReturn(listOf(
+            ActivityReport(
+                action = MissionAction(
+                    1,
+                    1,
+                    1,
+                    actionType = MissionActionType.SEA_CONTROL,
+                    actionDatetimeUtc = ZonedDateTime.now(),
+                    isDeleted = false,
+                    hasSomeGearsSeized = false,
+                    hasSomeSpeciesSeized = false,
+                    isFromPoseidon = true,
+                ),
+                activityCode = ActivityCode.FIS,
+                vesselNationalIdentifier = "AYFR000654",
+                controlUnits = listOf(ControlUnit(1234, "DIRM", false, "Cross Etel", listOf())),
+                vessel = Vessel(
+                    id = 1,
+                    internalReferenceNumber = "FR00022680",
+                    vesselName = "MY AWESOME VESSEL",
+                    flagState = CountryCode.FR,
+                    declaredFishingGears = listOf("Trémails"),
+                    vesselType = "Fishing",
+                    districtCode = "AY",
+                ),
+            )
+        ))
+
+        // When
+        api.perform(get("/bff/v1/mission_actions/controls/activity_reports?beforeDateTime=2020-05-04T03:04:05.000Z&afterDateTime=2020-03-04T03:04:05.000Z&jdp=MEDITERRANEAN_AND_EASTERN_ATLANTIC"))
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(1)))
+            .andExpect(jsonPath("$[0].action.id", equalTo(1)))
+            .andExpect(jsonPath("$[0].activityCode", equalTo("FIS")))
+            .andExpect(jsonPath("$[0].vesselNationalIdentifier", equalTo("AYFR000654")))
+            .andExpect(jsonPath("$[0].controlUnits[0].id", equalTo(1234)))
+            .andExpect(jsonPath("$[0].vessel.vesselId", equalTo(1)))
+
+        Mockito.verify(getActivityReports).execute(ZonedDateTime.parse("2020-05-04T03:04:05Z"), ZonedDateTime.parse("2020-03-04T03:04:05Z"), JointDeploymentPlan.MEDITERRANEAN_AND_EASTERN_ATLANTIC)
     }
 }

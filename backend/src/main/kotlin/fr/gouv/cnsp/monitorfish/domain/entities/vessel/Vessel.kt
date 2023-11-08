@@ -35,4 +35,10 @@ data class Vessel(
     val vesselEmails: List<String>? = null,
     val beaconNumber: String? = null,
     val underCharter: Boolean? = null,
-)
+) {
+    fun getNationalIdentifier(): String {
+        val identifier = internalReferenceNumber?.replace("FRA000", "") ?: ""
+
+        return "$districtCode$identifier"
+    }
+}

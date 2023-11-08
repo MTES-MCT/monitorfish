@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/v1/missions/find",
+    "queryParameters": {
+      "ids": {
+        "matches": "5"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": [
+      {
+        "id": 5,
+        "missionTypes": ["LAND"],
+        "controlUnits": [
+          {
+            "id": 10012,
+            "administration": "DIRM DM",
+            "name": "Cross Etel",
+            "resources": [],
+            "contact": null,
+            "isArchived": false
+          }
+        ],
+        "openBy": "Chase Hernandez",
+        "closedBy": "Matthew Buckley",
+        "observationsCacem": "Fly chance record lawyer those. Once position indicate war medical through. Interest read possible.",
+        "observationsCnsp": null,
+        "facade": "SA",
+        "isGeometryComputedFromControls": false,
+        "geom": null,
+        "startDateTimeUtc": "2023-02-09T23:57:14.923703Z",
+        "endDateTimeUtc": null,
+        "envActions": [],
+        "missionSource": "MONITORENV",
+        "isClosed": false,
+        "isUnderJdp": false
+      }
+    ]
+  }
+}

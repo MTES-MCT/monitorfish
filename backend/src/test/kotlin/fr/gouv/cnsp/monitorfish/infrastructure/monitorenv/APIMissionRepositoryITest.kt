@@ -257,4 +257,32 @@ class APIMissionRepositoryITest {
                 )
         }
     }
+
+    @Test
+    fun `findAllIncludedIn Should return the missions`() {
+        runBlocking {
+            // Given
+            val mockEngine = MockEngine { _ ->
+                respond(
+                    content = ByteReadChannel(getDummyMissions()),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            }
+            val apiClient = ApiClient(mockEngine)
+            val monitorenvProperties = MonitorenvProperties()
+            monitorenvProperties.url = "http://test"
+
+            // When
+            val missions = APIMissionRepository(monitorenvProperties, apiClient)
+                .findByIds(listOf(123, 456))
+
+            // Then
+            assertThat(missions).hasSize(12)
+            assertThat(mockEngine.requestHistory.first().url.toString())
+                .isEqualTo(
+                    "http://test/api/v1/missions/find?ids=123,456",
+                )
+        }
+    }
 }

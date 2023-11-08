@@ -102,4 +102,24 @@ class APIMissionRepository(
             }
         }
     }
+
+    override fun findByIds(ids: List<Int>): List<Mission> {
+        val idsParameter = ids.joinToString(",")
+
+        val missionsUrl = "${monitorenvProperties.url}/api/v1/missions/find?ids=$idsParameter"
+
+        logger.info("Fetching missions at URL: $missionsUrl")
+        return runBlocking {
+            try {
+                val missions = apiClient.httpClient.get(missionsUrl).body<List<MissionDataResponse>>()
+                logger.info("Fetched ${missions.size}.")
+
+                return@runBlocking missions.map { it.toMission() }
+            } catch (e: Exception) {
+                logger.error("Could not fetch missions at $missionsUrl", e)
+
+                return@runBlocking listOf()
+            }
+        }
+    }
 }

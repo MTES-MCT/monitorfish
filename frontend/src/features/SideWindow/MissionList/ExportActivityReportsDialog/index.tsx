@@ -1,9 +1,18 @@
-import { Accent, Button, DatePicker, Dialog, getUtcizedDayjs, Select, useNewWindow } from '@mtes-mct/monitor-ui'
+import {
+  Accent,
+  Button,
+  DatePicker,
+  Dialog,
+  FieldError,
+  getUtcizedDayjs,
+  Select,
+  useNewWindow
+} from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 import styled from 'styled-components'
 
 import { JDP } from './constants'
-import { downloadActivityReports } from './useCases/downloadActivityReports'
+import { downloadActivityReports, NO_ACTIVITY_REPORT } from './useCases/downloadActivityReports'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 
 import type { Promisable } from 'type-fest'
@@ -18,8 +27,9 @@ export function ExportActivityReportsDialog({ onExit }: ExportActivityReportsDia
   const [afterDateTimeUtc, setAfterDateTimeUtc] = useState<Date | undefined>()
   const [beforeDateTimeUtc, setBeforeDateTimeUtc] = useState<Date | undefined>()
   const [jdp, setJdp] = useState<JDP | undefined>()
+  const [error, setError] = useState<string | undefined>()
 
-  const handleOnConfirm = () => {
+  const handleOnConfirm = async () => {
     if (!afterDateTimeUtc || !beforeDateTimeUtc || !jdp) {
       return
     }
@@ -27,8 +37,18 @@ export function ExportActivityReportsDialog({ onExit }: ExportActivityReportsDia
     const afterDateTimeStartOfDayUtc = getUtcizedDayjs(afterDateTimeUtc).startOf('day').toISOString()
     const beforeDateTimeEndOfDayUtc = getUtcizedDayjs(beforeDateTimeUtc).endOf('day').millisecond(0).toISOString()
 
-    dispatch(downloadActivityReports(afterDateTimeStartOfDayUtc, beforeDateTimeEndOfDayUtc, jdp))
+    try {
+      await dispatch(downloadActivityReports(afterDateTimeStartOfDayUtc, beforeDateTimeEndOfDayUtc, jdp))
+    } catch (e) {
+      // @ts-ignore
+      if (e.message === NO_ACTIVITY_REPORT) {
+        setError(`Aucun contrôle trouvé dans le cadre du ${JDP[jdp]}.`)
 
+        return
+      }
+    }
+
+    setError(undefined)
     onExit()
   }
 
@@ -85,7 +105,11 @@ export function ExportActivityReportsDialog({ onExit }: ExportActivityReportsDia
           value={jdp || undefined}
         />
       </StyledDialogBody>
-
+      {!!error && (
+        <StyledDialogErrorAction>
+          <FieldError>{error}</FieldError>
+        </StyledDialogErrorAction>
+      )}
       <StyledDialogAction>
         <Button accent={Accent.TERTIARY} onClick={onExit}>
           Annuler
@@ -110,6 +134,10 @@ const StyledDialogTitle = styled(Dialog.Title)`
 
 const StyledDialogAction = styled(Dialog.Action)`
   padding: 24px 8px;
+`
+
+const StyledDialogErrorAction = styled(Dialog.Action)`
+  padding: 8px 0px 0px 0px;
 `
 
 const StyledDialogBody = styled(Dialog.Body)`

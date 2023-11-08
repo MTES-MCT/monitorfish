@@ -1,4 +1,3 @@
-import { customDayjs } from '@mtes-mct/monitor-ui'
 import { range } from 'lodash'
 
 import { JDP } from './constants'
@@ -21,19 +20,6 @@ export function formatDMDCoordinateForActivityReport(coordinate: string | undefi
 export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>, jdp: JDP) {
   const numberOfSpeciesColumns = 35
   const numberOfInfractionColumns = 12
-
-  // See MED JDP Decision 2018/030 (3.6.1.1)
-  if (jdp === JDP.MEDITERRANEAN_AND_EASTERN_ATLANTIC) {
-    // eslint-disable-next-line no-param-reassign
-    baseCsvMap.eventHour = {
-      label: 'EVENT_HOUR',
-      transform: activity => {
-        const dateTime = customDayjs(activity.action.actionDatetimeUtc)
-
-        return `${dateTime.hour()}:${dateTime.minute()}`
-      }
-    }
-  }
 
   range(numberOfSpeciesColumns).forEach(index => {
     const count = index + 1

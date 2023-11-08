@@ -6,6 +6,8 @@ import { JDP } from '../constants'
 import { JDP_CSV_MAP_BASE } from '../csvMap'
 import { getJDPCsvMap } from '../utils'
 
+export const NO_ACTIVITY_REPORT = 'NO_ACTIVITY_REPORT'
+
 export const downloadActivityReports = (afterDateTime: string, beforeDateTime: string, jdp: JDP) => async dispatch => {
   const { data: activityReports } = await dispatch(
     activityReportApi.endpoints.getActivityReports.initiate({
@@ -15,7 +17,9 @@ export const downloadActivityReports = (afterDateTime: string, beforeDateTime: s
     })
   )
 
-  // TODO If there is not activityReports, do not download the csv
+  if (!activityReports?.length) {
+    throw new Error(NO_ACTIVITY_REPORT)
+  }
 
   const activityReportsWithId = activityReports.map((activity, index) => ({ ...activity, id: index }))
   const fileName = getCsvFileName(jdp)

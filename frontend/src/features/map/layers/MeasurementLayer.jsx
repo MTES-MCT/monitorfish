@@ -25,6 +25,7 @@ import { measurementStyle, measurementStyleWithCenter } from './styles/measureme
 import { transform } from 'ol/proj'
 import { getCenter } from 'ol/extent'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
+import { monitorfishMap } from '../monitorfishMap'
 
 const DRAW_START_EVENT = 'drawstart'
 const DRAW_ABORT_EVENT = 'drawabort'
@@ -49,7 +50,7 @@ function getNauticalMilesRadiusOfCircularPolygon (polygon) {
   return `r = ${getNauticalMilesFromMeters(radius)} nm`
 }
 
-const MeasurementLayer = ({ map }) => {
+const MeasurementLayer = () => {
   const dispatch = useDispatch()
 
   const {
@@ -81,23 +82,21 @@ const MeasurementLayer = ({ map }) => {
 
   useEffect(() => {
     function addLayerToMap () {
-      if (map && vectorLayer) {
-        map.getLayers().push(vectorLayer)
+      if (vectorLayer) {
+        monitorfishMap.getLayers().push(vectorLayer)
       }
 
       return () => {
-        if (map) {
-          map.removeLayer(vectorLayer)
-        }
+        monitorfishMap.removeLayer(vectorLayer)
       }
     }
 
     addLayerToMap()
-  }, [map, vectorLayer])
+  }, [vectorLayer])
 
   useEffect(() => {
     function drawExistingFeaturesOnMap () {
-      if (measurementsDrawed && map) {
+      if (measurementsDrawed) {
         measurementsDrawed.forEach(measurement => {
           const feature = new GeoJSON({
             featureProjection: OPENLAYERS_PROJECTION
@@ -109,10 +108,10 @@ const MeasurementLayer = ({ map }) => {
     }
 
     drawExistingFeaturesOnMap()
-  }, [measurementsDrawed, map])
+  }, [measurementsDrawed])
 
   useEffect(() => {
-    if (map && measurementTypeToAdd) {
+    if (measurementTypeToAdd) {
       function addEmptyNextMeasurement () {
         setMeasurementInProgress({
           feature: null,
@@ -128,14 +127,14 @@ const MeasurementLayer = ({ map }) => {
           style: [measurementStyle, measurementStyleWithCenter]
         })
 
-        map.addInteraction(draw)
+        monitorfishMap.addInteraction(draw)
         setDrawObject(draw)
       }
 
       addEmptyNextMeasurement()
       drawNewFeatureOnMap()
     }
-  }, [map, measurementTypeToAdd])
+  }, [measurementTypeToAdd])
 
   useEffect(() => {
     function removeInteraction () {
@@ -149,7 +148,7 @@ const MeasurementLayer = ({ map }) => {
 
     function waitForUnwantedZoomAndQuitInteraction () {
       setTimeout(() => {
-        map.removeInteraction(drawObject)
+        monitorfishMap.removeInteraction(drawObject)
       }, 300)
     }
 
@@ -284,7 +283,7 @@ const MeasurementLayer = ({ map }) => {
           return <MeasurementOverlay
             id={measurement.feature.id}
             key={measurement.feature.id}
-            map={map}
+            map={monitorfishMap}
             measurement={measurement.measurement}
             coordinates={measurement.coordinates}
             deleteFeature={deleteFeature}
@@ -296,7 +295,7 @@ const MeasurementLayer = ({ map }) => {
         {
           measurementInProgress
             ? <MeasurementOverlay
-              map={map}
+              map={monitorfishMap}
               measurement={measurementInProgress?.measurement}
               coordinates={measurementInProgress?.coordinates}
             />

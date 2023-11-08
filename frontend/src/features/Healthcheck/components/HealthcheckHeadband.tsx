@@ -45,17 +45,15 @@ export function HealthcheckHeadband() {
   return (
     <>
       {!!healthcheckTextWarning.length && !previewFilteredVesselsMode && (
-        <HealthcheckWarnings>
+        <HealthcheckWarnings
+          hasMultipleWarnings={healthcheckTextWarning.length > 1}
+          onClick={() => setAreAllWarningsOpened(!areAllWarningsOpened)}
+        >
           <WarningIcon />
           {healthcheckTextWarning.length === 1
             ? healthcheckTextWarning
             : `${healthcheckTextWarning.length} alertes concernant les données VMS et JPE.`}
-          {healthcheckTextWarning.length > 1 && (
-            <StyledChevronIcon
-              $isOpen={areAllWarningsOpened}
-              onClick={() => setAreAllWarningsOpened(!areAllWarningsOpened)}
-            />
-          )}
+          {healthcheckTextWarning.length > 1 && <StyledChevronIcon $isOpen={areAllWarningsOpened} />}
         </HealthcheckWarnings>
       )}
       {healthcheckTextWarning.length > 1 &&
@@ -87,7 +85,9 @@ const WarningIcon = styled(WarningSVG)`
   height: 18px;
 `
 
-const HealthcheckWarnings = styled.div`
+const HealthcheckWarnings = styled.div<{
+  hasMultipleWarnings: boolean
+}>`
   font: normal normal bold 16px/22px Marianne;
   background: ${p => p.theme.color.goldenPoppy} 0% 0% no-repeat padding-box;
   width: calc(100vw - 26px);
@@ -96,6 +96,7 @@ const HealthcheckWarnings = styled.div`
   padding: 13px;
   border-bottom: 2px solid #e3be05;
   color: ${p => p.theme.color.gunMetal};
+  cursor: ${p => (p.hasMultipleWarnings ? 'pointer' : 'unset')};
 `
 
 const MultipleWarningsHeadband = styled.div<{
@@ -104,15 +105,15 @@ const MultipleWarningsHeadband = styled.div<{
   topOffset: number
 }>`
   position: absolute;
-  top: ${p => p.topOffset * 50}px;
+  top: ${p => (p.isOpen ? p.topOffset * 50 : 0)}px;
   background: ${p => p.theme.color.goldenPoppy25} 0% 0% no-repeat padding-box;
-  width: calc(100vw - 26px);
+  width: 100vw;
   height: ${p => (p.isOpen ? 22 : 0)}px;
   text-align: center;
-  padding: 13px;
+  padding: ${p => (p.isOpen ? '13px 0 13px 0' : '0 0 0 0')};
   border-bottom: 2px solid #e3be05;
   color: ${p => p.theme.color.gunMetal};
-  z-index: 99999;
+  z-index: 9999;
   font: normal normal bold 16px/22px Marianne;
   transition: all 0.5s;
   opacity: ${p => (p.isOpen ? 1 : 0)};

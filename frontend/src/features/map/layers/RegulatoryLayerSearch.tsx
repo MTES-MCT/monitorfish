@@ -7,13 +7,14 @@ import { dottedLayerStyle } from './styles/dottedLayer.style'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { monitorfishMap } from '../monitorfishMap'
 
 import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type { Feature } from 'ol'
 import type Geometry from 'ol/geom/Geometry'
 import type { MutableRefObject } from 'react'
 
-export function RegulatoryLayerSearch({ map }) {
+export function RegulatoryLayerSearch() {
   const { zoneSelected } = useMainAppSelector(state => state.regulatoryLayerSearch)
 
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource<Geometry>>
@@ -49,16 +50,12 @@ export function RegulatoryLayerSearch({ map }) {
       return vectorLayerRef.current
     }
 
-    if (map) {
-      map.getLayers().push(getVectorLayer())
-    }
+    monitorfishMap.getLayers().push(getVectorLayer())
 
     return () => {
-      if (map) {
-        map.removeLayer(getVectorLayer())
-      }
+      monitorfishMap.removeLayer(getVectorLayer())
     }
-  }, [map, getVectorSource])
+  }, [getVectorSource])
 
   useEffect(() => {
     if (!getVectorSource()) {

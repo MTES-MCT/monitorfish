@@ -1,3 +1,5 @@
+import { Feature } from 'ol'
+import { Geometry } from 'ol/geom'
 import { useEffect, useRef } from 'react'
 import { useStore } from 'react-redux'
 
@@ -94,8 +96,7 @@ export function RegulatoryLayers({ mapMovingAndZoomEvent }: RegulatoryLayersProp
           .getArray()
           .filter(layer => (layer as VectorLayerWithName)?.name?.includes(LayerProperties.REGULATORY.code))
         regulatoryLayers.forEach(layer => {
-          // @ts-ignore
-          const vectorSource = layer.getSource()
+          const vectorSource = (layer as VectorLayerWithName).getSource()
 
           if (vectorSource) {
             const layerToFeatures = layersToFeatures?.find(
@@ -107,7 +108,7 @@ export function RegulatoryLayers({ mapMovingAndZoomEvent }: RegulatoryLayersProp
                 : layerToFeatures.features
 
               vectorSource.clear(true)
-              vectorSource.addFeatures(vectorSource.getFormat().readFeatures(features))
+              vectorSource.addFeatures(vectorSource.getFormat()?.readFeatures(features) as Feature<Geometry>[])
             }
           }
         })

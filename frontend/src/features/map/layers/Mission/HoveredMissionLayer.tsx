@@ -7,10 +7,11 @@ import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { getMissionFeatureZone } from '../../../../domain/entities/mission'
 import { useGetFilteredMissionsQuery } from '../../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
+import { monitorfishMap } from '../../monitorfishMap'
 
 import type { VectorLayerWithName } from '../../../../domain/types/layer'
 
-export function UnmemoizedMissionHoveredLayer({ feature, map }) {
+export function UnmemoizedMissionHoveredLayer({ feature }) {
   const { missions } = useGetFilteredMissionsQuery()
 
   const vectorSourceRef = useRef<VectorSource>()
@@ -40,17 +41,13 @@ export function UnmemoizedMissionHoveredLayer({ feature, map }) {
   }, [getVectorSource])
 
   useEffect(() => {
-    if (map) {
-      getVectorLayer().name = MonitorFishLayer.MISSION_HOVER
-      map.getLayers().push(getVectorLayer())
-    }
+    getVectorLayer().name = MonitorFishLayer.MISSION_HOVER
+    monitorfishMap.getLayers().push(getVectorLayer())
 
     return () => {
-      if (map) {
-        map.removeLayer(getVectorLayer())
-      }
+      monitorfishMap.removeLayer(getVectorLayer())
     }
-  }, [map, getVectorLayer])
+  }, [getVectorLayer])
 
   useEffect(() => {
     getVectorSource().clear(true)

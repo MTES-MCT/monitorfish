@@ -5,6 +5,8 @@ import VesselTrackCard from './VesselTrackCard'
 import { COLORS } from '../../../../constants/constants'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../Overlay'
+import { getMapResolution } from '../../utils'
+import { monitorfishMap } from '../../monitorfishMap'
 
 const overlayBoxSize = 240
 const margins = {
@@ -16,7 +18,7 @@ const margins = {
   yBottom: -170
 }
 
-const VesselTrackOverlay = ({ map, feature }) => {
+const VesselTrackOverlay = ({ feature }) => {
   const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
   const overlayRef = useRef(null)
   const overlayObjectRef = useRef(null)
@@ -37,10 +39,8 @@ const VesselTrackOverlay = ({ map, feature }) => {
   }, [overlayRef, overlayObjectRef])
 
   useEffect(() => {
-    if (map) {
-      map.addOverlay(overlayObjectRef.current)
-    }
-  }, [map, overlayObjectRef])
+    monitorfishMap.addOverlay(overlayObjectRef.current)
+  }, [overlayObjectRef])
 
   useEffect(() => {
     if (overlayRef.current && overlayObjectRef.current) {
@@ -62,8 +62,8 @@ const VesselTrackOverlay = ({ map, feature }) => {
 
   function getNextOverlayPosition () {
     const [x, y] = feature.getGeometry().getCoordinates()
-    const extent = map.getView().calculateExtent()
-    const boxSize = map.getView().getResolution() * overlayBoxSize
+    const extent = monitorfishMap.getView().calculateExtent()
+    const boxSize = getMapResolution() * overlayBoxSize
 
     return getOverlayPosition(boxSize, x, y, extent)
   }

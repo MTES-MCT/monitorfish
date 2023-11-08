@@ -5,11 +5,11 @@ import { unByKey } from 'ol/Observable'
 const X = 0
 const Y = 1
 
-export const useMoveOverlayWhenDragging = (overlay, map, currentOffset, moveLineWithThrottle, showed, setIsPanning) => {
+export const useMoveOverlayWhenDragging = (overlay, currentOffset, moveLineWithThrottle, showed, setIsPanning) => {
   useEffect(() => {
     let eventKey
 
-    if (map && overlay) {
+    if (overlay) {
       eventKey = overlay.on('change:offset', ({ target }) => {
         moveLineWithThrottle(target, 50)
       })
@@ -20,7 +20,7 @@ export const useMoveOverlayWhenDragging = (overlay, map, currentOffset, moveLine
         unByKey(eventKey)
       }
     }
-  }, [overlay, map])
+  }, [overlay])
 
   useEffect(() => {
     let hammer

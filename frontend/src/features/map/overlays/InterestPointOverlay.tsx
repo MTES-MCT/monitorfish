@@ -13,6 +13,7 @@ import { useMoveOverlayWhenDragging } from '../../../hooks/useMoveOverlayWhenDra
 import { useMoveOverlayWhenZooming } from '../../../hooks/useMoveOverlayWhenZooming'
 import { ReactComponent as EditSVG } from '../../icons/Bouton_edition.svg'
 import { ReactComponent as DeleteSVG } from '../../icons/Suppression.svg'
+import { monitorfishMap } from '../monitorfishMap'
 
 const X = 0
 const Y = 1
@@ -24,7 +25,6 @@ export type InterestPointOverlayProps = {
   coordinates: any
   deleteInterestPoint: any
   featureIsShowed: any
-  map: any
   modifyInterestPoint: any
   moveLine: any
   name: any
@@ -36,7 +36,6 @@ export function InterestPointOverlay({
   coordinates,
   deleteInterestPoint,
   featureIsShowed,
-  map,
   modifyInterestPoint,
   moveLine,
   name,
@@ -47,7 +46,7 @@ export function InterestPointOverlay({
   const ref: any = createRef()
 
   const currentOffset = useRef(initialOffsetValue)
-  const currentCoordinates = useRef([])
+  const currentCoordinates = useRef<number[]>([])
   const interestPointCoordinates = useRef(coordinates)
   const isThrottled = useRef(false)
   const [showed, setShowed] = useState(false)
@@ -78,13 +77,13 @@ export function InterestPointOverlay({
       setTimeout(() => {
         if (interestPointCoordinates.current) {
           const offset = target.getOffset()
-          const pixel = map.getPixelFromCoordinate(interestPointCoordinates.current)
+          const pixel = monitorfishMap.getPixelFromCoordinate(interestPointCoordinates.current)
 
           const { width } = target.getElement().getBoundingClientRect()
           const nextXPixelCenter = pixel[X] + offset[X] + width / 2
           const nextYPixelCenter = pixel[Y] + offset[Y]
 
-          const nextCoordinates = map.getCoordinateFromPixel([nextXPixelCenter, nextYPixelCenter])
+          const nextCoordinates = monitorfishMap.getCoordinateFromPixel([nextXPixelCenter, nextYPixelCenter])
           currentCoordinates.current = nextCoordinates
           moveLine(uuid, interestPointCoordinates.current, nextCoordinates, offset)
 
@@ -92,10 +91,10 @@ export function InterestPointOverlay({
         }
       }, delay)
     },
-    [map, moveLine, uuid]
+    [moveLine, uuid]
   )
 
-  useMoveOverlayWhenDragging(overlay, map, currentOffset, moveInterestPointWithThrottle, showed, () => {})
+  useMoveOverlayWhenDragging(overlay, currentOffset, moveInterestPointWithThrottle, showed, () => {})
   useMoveOverlayWhenZooming(overlay, initialOffsetValue, zoomHasChanged, currentOffset, moveInterestPointWithThrottle)
   const previousCoordinates = usePrevious(coordinates)
 
@@ -125,26 +124,26 @@ export function InterestPointOverlay({
 
   useEffect(
     () => {
-      if (!map || !ref.current) {
+      if (!ref.current) {
         return noop
       }
 
       overlay.setPosition(coordinates)
       overlay.setElement(ref.current)
 
-      map.addOverlay(overlay)
+      monitorfishMap.addOverlay(overlay)
       if (featureIsShowed && !showed) {
         setShowed(true)
       }
 
       return () => {
-        map.removeOverlay(overlay)
+        monitorfishMap.removeOverlay(overlay)
       }
     },
 
     // We exclude `ref` on purpose here to avoid infinite re-renders
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [coordinates, featureIsShowed, map, overlay, showed]
+    [coordinates, featureIsShowed, overlay, showed]
   )
 
   useEffect(() => {

@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { MissionUnitLabel } from './MissionUnitLabel'
 import { useMoveOverlayWhenDragging } from '../../../../hooks/useMoveOverlayWhenDragging'
 import { useMoveOverlayWhenZooming } from '../../../../hooks/useMoveOverlayWhenZooming'
+import { monitorfishMap } from '../../monitorfishMap'
 
 import type { MutableRefObject } from 'react'
 
@@ -12,11 +13,11 @@ const X = 0
 const Y = 1
 const INITIAL_OFFSET_VALUE = [23, -34]
 
-export function MissionLabelOverlay({ color, coordinates, featureId, map, moveLine, offset, text, zoomHasChanged }) {
+export function MissionLabelOverlay({ color, coordinates, featureId, moveLine, offset, text, zoomHasChanged }) {
   const overlayElementRef = useRef<HTMLDivElement>() as MutableRefObject<HTMLDivElement>
 
   const currentOffsetRef = useRef(INITIAL_OFFSET_VALUE)
-  const currentCoordinates = useRef([])
+  const currentCoordinates = useRef<number[]>([])
   const overlayIsPanning = useRef(false)
   const isThrottled = useRef(false)
   const [showed, setShowed] = useState(false)
@@ -29,7 +30,7 @@ export function MissionLabelOverlay({ color, coordinates, featureId, map, moveLi
     []
   )
 
-  useMoveOverlayWhenDragging(overlay, map, currentOffsetRef, moveVesselLabelAndLineWithThrottle, showed, isPanning => {
+  useMoveOverlayWhenDragging(overlay, currentOffsetRef, moveVesselLabelAndLineWithThrottle, showed, isPanning => {
     overlayIsPanning.current = isPanning
   })
   useMoveOverlayWhenZooming(
@@ -41,15 +42,13 @@ export function MissionLabelOverlay({ color, coordinates, featureId, map, moveLi
   )
 
   useEffect(() => {
-    map?.addOverlay(overlay)
-    if (map) {
-      setShowed(true)
-    }
+    monitorfishMap.addOverlay(overlay)
+    setShowed(true)
 
     return () => {
-      map?.removeOverlay(overlay)
+      monitorfishMap.removeOverlay(overlay)
     }
-  }, [overlay, map])
+  }, [overlay])
 
   useEffect(() => {
     overlay.setPosition(coordinates)
@@ -73,13 +72,13 @@ export function MissionLabelOverlay({ color, coordinates, featureId, map, moveLi
     isThrottled.current = true
     setTimeout(() => {
       const nextOffset = target.getOffset()
-      const pixel = map.getPixelFromCoordinate(coordinates)
+      const pixel = monitorfishMap.getPixelFromCoordinate(coordinates)
 
       const { height, width } = target.getElement().getBoundingClientRect()
       const nextXPixelCenter = pixel[X] + nextOffset[X] + width / 2
       const nextYPixelCenter = pixel[Y] + nextOffset[Y] + height / 2
 
-      const nextCoordinates = map.getCoordinateFromPixel([nextXPixelCenter, nextYPixelCenter])
+      const nextCoordinates = monitorfishMap.getCoordinateFromPixel([nextXPixelCenter, nextYPixelCenter])
       currentCoordinates.current = nextCoordinates
       moveLine(featureId, coordinates, nextCoordinates, nextOffset, 1)
 

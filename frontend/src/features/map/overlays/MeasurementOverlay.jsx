@@ -3,8 +3,9 @@ import Overlay from 'ol/Overlay'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
+import { monitorfishMap } from '../monitorfishMap'
 
-const MeasurementOverlay = ({ map, measurement, coordinates, deleteFeature, id }) => {
+const MeasurementOverlay = ({ measurement, coordinates, deleteFeature, id }) => {
   const ref = createRef()
   const [overlay] = useState(new Overlay({
     element: ref.current,
@@ -14,17 +15,15 @@ const MeasurementOverlay = ({ map, measurement, coordinates, deleteFeature, id }
   }))
 
   useEffect(() => {
-    if (map) {
-      overlay.setElement(ref.current)
-      overlay.setPosition(coordinates)
+    overlay.setElement(ref.current)
+    overlay.setPosition(coordinates)
 
-      map.addOverlay(overlay)
+    monitorfishMap.addOverlay(overlay)
 
-      return () => {
-        map.removeOverlay(overlay)
-      }
+    return () => {
+      monitorfishMap.removeOverlay(overlay)
     }
-  }, [measurement, map])
+  }, [measurement])
 
   return (
     <div>
@@ -47,7 +46,7 @@ const MeasurementOverlay = ({ map, measurement, coordinates, deleteFeature, id }
 const TrianglePointer = styled.div`
   margin-left: auto;
   margin-right: auto;
-  height: auto; 
+  height: auto;
   width: auto;
 `
 

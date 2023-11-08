@@ -12,9 +12,9 @@ import { useDispatch } from 'react-redux'
 import { showVesselTrack } from '../../../domain/use_cases/vessel/showVesselTrack'
 import { addVesselToFavorites } from '../../../domain/shared_slices/FavoriteVessel'
 import { useClickOutsideWhenOpened } from '../../../hooks/useClickOutsideWhenOpened'
+import { monitorfishMap } from '../monitorfishMap'
 
 const MapMenuOverlay = ({
-  map,
   coordinates,
   vessel
 }) => {
@@ -65,7 +65,7 @@ const MapMenuOverlay = ({
 
     dispatch(showVesselTrack(vessel.vesselProperties, true, trackRequest))
 
-    map.removeOverlay(getOverlay())
+    monitorfishMap.removeOverlay(getOverlay())
     setIsOpen(false)
     setSelectedDateRange(dateRange)
     setSelectedTrackDepth(undefined)
@@ -73,7 +73,7 @@ const MapMenuOverlay = ({
 
   useEffect(() => {
     if (clickedOutsideComponent) {
-      map.removeOverlay(getOverlay())
+      monitorfishMap.removeOverlay(getOverlay())
     }
   }, [clickedOutsideComponent])
 
@@ -86,14 +86,14 @@ const MapMenuOverlay = ({
 
     dispatch(showVesselTrack(vessel.vesselProperties, true, trackRequest))
 
-    map.removeOverlay(getOverlay())
+    monitorfishMap.removeOverlay(getOverlay())
     setIsOpen(false)
     setSelectedTrackDepth(undefined)
     setSelectedDateRange(undefined)
   }, [selectedTrackDepth])
 
   useEffect(() => {
-    if (map && coordinates?.length) {
+    if (coordinates?.length) {
       const overlay = getOverlay()
 
       overlay.setPosition(coordinates)
@@ -102,16 +102,16 @@ const MapMenuOverlay = ({
       ref.current.parentNode.className = 'ol-overlay-container ol-selectable menu-overlay'
 
       setIsOpen(true)
-      map.addOverlay(overlay)
+      monitorfishMap.addOverlay(overlay)
     }
 
     return () => {
-      map.removeOverlay(getOverlay())
+      monitorfishMap.removeOverlay(getOverlay())
       setIsOpen(false)
       setSelectedTrackDepth(undefined)
       setSelectedDateRange(undefined)
     }
-  }, [coordinates, map])
+  }, [coordinates])
 
   return (
     <WrapperToBeKeptForDOMManagement ref={ref}>

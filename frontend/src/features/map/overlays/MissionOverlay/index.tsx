@@ -9,6 +9,8 @@ import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { useMoveOverlayWhenDragging } from '../../../../hooks/useMoveOverlayWhenDragging'
+import { monitorfishMap } from '../../monitorfishMap'
+import { getMapResolution } from '../../utils'
 import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../Overlay'
 
 import type { Mission } from '../../../../domain/entities/mission/types'
@@ -16,7 +18,7 @@ import type { Mission } from '../../../../domain/entities/mission/types'
 const overlayHeight = 200
 const INITIAL_OFFSET_VALUE = [0, 0]
 
-export function MissionOverlay({ feature, isSelected = false, map }) {
+export function MissionOverlay({ feature, isSelected = false }) {
   const selectedMissionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionGeoJSON)
   const currentOffsetRef = useRef(INITIAL_OFFSET_VALUE)
   const [missionProperties, setMissionProperties] = useState<Mission.MissionPointFeatureProperties | undefined>(
@@ -65,7 +67,6 @@ export function MissionOverlay({ feature, isSelected = false, map }) {
 
   useMoveOverlayWhenDragging(
     overlayObjectRef.current,
-    map,
     currentOffsetRef,
     () => {},
     true,
@@ -73,20 +74,19 @@ export function MissionOverlay({ feature, isSelected = false, map }) {
   )
 
   useEffect(() => {
-    if (!map) {
-      return
+    if (overlayObjectRef.current) {
+      monitorfishMap.addOverlay(overlayObjectRef.current)
     }
-
-    map.addOverlay(overlayObjectRef.current)
-  }, [map, overlayObjectRef])
+  }, [])
 
   const getNextOverlayPosition = useCallback(() => {
     const [x, y] = feature.getGeometry().getCoordinates()
-    const extent = map.getView().calculateExtent()
-    const boxSize = map.getView().getResolution() * overlayHeight
+    const extent = monitorfishMap.getView().calculateExtent()
+
+    const boxSize = getMapResolution() * overlayHeight
 
     return getOverlayPosition(boxSize, x, y, extent)
-  }, [feature, map])
+  }, [feature])
 
   useEffect(() => {
     if (!overlayRef.current || !overlayObjectRef.current) {

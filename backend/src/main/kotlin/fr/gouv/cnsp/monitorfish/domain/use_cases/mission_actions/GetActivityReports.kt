@@ -24,7 +24,7 @@ class GetActivityReports(
 
     fun execute(beforeDateTime: ZonedDateTime, afterDateTime: ZonedDateTime, jdp: JointDeploymentPlan): List<ActivityReport> {
         val controls = missionActionsRepository.findControlsInDates(beforeDateTime, afterDateTime)
-        logger.info("Found ${controls.size} controls between dates [${afterDateTime}, ${beforeDateTime}].")
+        logger.info("Found ${controls.size} controls between dates [$afterDateTime, $beforeDateTime].")
 
         if (controls.isEmpty()) {
             return listOf()
@@ -48,7 +48,9 @@ class GetActivityReports(
                 MissionActionType.SEA_CONTROL -> {
                     val controlMission = missions.firstOrNull { mission -> mission.id == control.missionId }
                     if (controlMission == null) {
-                        logger.error("Mission id '${control.missionId}' linked to control id '${control.id}' could not be found.")
+                        logger.error(
+                            "Mission id '${control.missionId}' linked to control id '${control.id}' could not be found.",
+                        )
                     }
 
                     // The mission must be under JDP
@@ -91,7 +93,7 @@ class GetActivityReports(
                 activityCode = activityCode,
                 controlUnits = controlMission.controlUnits,
                 vesselNationalIdentifier = controlledVessel.getNationalIdentifier(),
-                vessel = controlledVessel
+                vessel = controlledVessel,
             )
         }
     }

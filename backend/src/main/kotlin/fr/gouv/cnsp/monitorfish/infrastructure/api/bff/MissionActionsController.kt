@@ -26,7 +26,7 @@ class MissionActionsController(
     private val updateMissionAction: UpdateMissionAction,
     private val deleteMissionAction: DeleteMissionAction,
     private val getMissionAction: GetMissionAction,
-    private val getActivityReports: GetActivityReports
+    private val getActivityReports: GetActivityReports,
 ) {
 
     @GetMapping("/controls")

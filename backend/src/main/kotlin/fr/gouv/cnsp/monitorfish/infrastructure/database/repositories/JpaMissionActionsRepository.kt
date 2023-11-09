@@ -57,7 +57,7 @@ class JpaMissionActionsRepository(
             listOf(
                 MissionActionType.SEA_CONTROL,
                 MissionActionType.LAND_CONTROL,
-            )
+            ),
         ).map { action ->
             action.toMissionAction(
                 mapper,

@@ -7,7 +7,7 @@ import { getColorWithAlpha, getHashDigitsFromString } from '../../map/layers/sty
 import { DEFAULT_ZONE_BORDER, DEFAULT_ZONE_COLOR, DIGIT_TO_LAYER_COLOR_MAP } from '../constants'
 
 export function computeCustomZoneStyle(uuid: string, name: string): [Style] {
-  const defaultStyle = getCustomZoneStyle(getColorWithAlpha(DEFAULT_ZONE_COLOR, 0.75), name)
+  const defaultStyle = getCustomZoneStyle(getColorWithAlpha(DEFAULT_ZONE_COLOR, 0.4), name)
 
   const randomDigits = getHashDigitsFromString(uuid)
   if (!randomDigits) {
@@ -19,7 +19,7 @@ export function computeCustomZoneStyle(uuid: string, name: string): [Style] {
     return [defaultStyle]
   }
 
-  return [getCustomZoneStyle(getColorWithAlpha(color, 0.75), name)]
+  return [getCustomZoneStyle(getColorWithAlpha(color, 0.4), name)]
 }
 
 function getCustomZoneStyle(color: string | undefined, name: string | undefined) {

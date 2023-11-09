@@ -9,7 +9,8 @@ typealias FaoCodesAndSpecy = Pair<FaoCodes, String>
 
 val MED_FAO_CODES = listOf("37.1", "37.2", "37.3")
 val MEDITERRANEAN_AND_EASTERN_ATLANTIC_SPECIES: List<FaoCodesAndSpecy> = generateSpeciesWithFaoCode(
-    MED_FAO_CODES, listOf(
+    MED_FAO_CODES,
+    listOf(
         "ANE",
         "HOM",
         "JAX",
@@ -53,14 +54,15 @@ val MEDITERRANEAN_AND_EASTERN_ATLANTIC_SPECIES: List<FaoCodesAndSpecy> = generat
         "CTB",
         "SWA",
         "SOL",
-        "ANN"
-    )
+        "ANN",
+    ),
 ) +
     // Eastern Atlantic part
     listOf(Pair(listOf("27.7", "27.8", "27.9", "27.10"), "BFT"))
 val NS_01_FAO_CODES = listOf("27.4", "27.3.a")
 val NORTH_SEA_SPECIES = generateSpeciesWithFaoCode(
-    NS_01_FAO_CODES, listOf(
+    NS_01_FAO_CODES,
+    listOf(
         "HOM",
         "JAX",
         "ALB",
@@ -99,14 +101,15 @@ val NORTH_SEA_SPECIES = generateSpeciesWithFaoCode(
         "BLL",
         "SOL",
         "NOP",
-    )
+    ),
 )
 val WW_01_FAO_CODES = listOf("27.6", "27.7", "27.8", "27.9", "27.10")
 val WESTERN_WATERS_SPECIES = listOf(
     Pair(listOf("27.6", "27.7", "27.8", "27.9"), "PIL"),
     Pair(listOf("27.6", "27.7", "27.8", "27.9"), "ELE"),
 ) + generateSpeciesWithFaoCode(
-    WW_01_FAO_CODES, listOf(
+    WW_01_FAO_CODES,
+    listOf(
         "ANE",
         "HOM",
         "JAX",
@@ -139,8 +142,8 @@ val WESTERN_WATERS_SPECIES = listOf(
         "SRX",
         "BSF",
         "BOR",
-        "SOL"
-    )
+        "SOL",
+    ),
 )
 
 fun generateSpeciesWithFaoCode(faoCodes: FaoCodes, species: List<String>): List<FaoCodesAndSpecy> {

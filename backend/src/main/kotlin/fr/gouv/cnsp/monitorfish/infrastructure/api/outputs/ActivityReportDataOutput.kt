@@ -9,8 +9,8 @@ data class ActivityReportDataOutput(
     val activityCode: ActivityCode,
     val vesselNationalIdentifier: String, // The `districtCode` and `internalReferenceNumber` concatenation
     val controlUnits: List<ControlUnit>,
-    val vessel: VesselDataOutput
-){
+    val vessel: VesselDataOutput,
+) {
     companion object {
         fun fromActivityReport(activityReport: ActivityReport) = ActivityReportDataOutput(
             action = MissionActionDataOutput.fromMissionAction(activityReport.action),

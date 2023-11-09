@@ -1,12 +1,9 @@
 import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
 import { Mission } from '../../../../src/domain/entities/mission/types'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
-import { interceptExternalCalls } from '../../utils/interceptExternalCalls'
 
 context('Side Window > Mission Form > Sea Control', () => {
   beforeEach(() => {
-    interceptExternalCalls()
-
     openSideWindowNewMission()
     fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
 
@@ -553,7 +550,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.wait(250)
     cy.fill('Zone de la mission calculée à partir des contrôles', true)
 
-    // A mission zone should be automatically added (because of the stubbed coordinates update when IS_CYPRESS_TEST is set)
+    // A mission zone should be automatically added (because of the stubbed coordinates update when IS_CYPRESS LocalSorage key is "true")
     cy.get('.Toastify__toast--success').contains(
       'Une zone de mission a été ajoutée à partir des contrôles de la mission'
     )
@@ -578,7 +575,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter')
     cy.clickButton('Ajouter un contrôle en mer')
 
-    // The mission zone should be automatically updated (because of the stubbed coordinates update when IS_CYPRESS_TEST is set)
+    // The mission zone should be automatically updated (because of the stubbed coordinates update when IS_CYPRESS LocalSorage key is "true")
     cy.get('.Toastify__toast--success').contains(
       'Une zone de mission a été ajoutée à partir des contrôles de la mission'
     )

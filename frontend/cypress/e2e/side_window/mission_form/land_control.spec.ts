@@ -1,12 +1,9 @@
 import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
 import { Mission } from '../../../../src/domain/entities/mission/types'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
-import { interceptExternalCalls } from '../../utils/interceptExternalCalls'
 
 context('Side Window > Mission Form > Land Control', () => {
   beforeEach(() => {
-    interceptExternalCalls()
-
     openSideWindowNewMission()
 
     fillSideWindowMissionFormBase(Mission.MissionTypeLabel.LAND)

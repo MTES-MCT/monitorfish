@@ -1,18 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import { dummyCustomZone } from './__tests__/__mocks__/dummyCustomZone'
+import { isCypress } from '../../utils/isCypress'
 
 import type { CustomZone } from './types'
 import type { PayloadAction } from '@reduxjs/toolkit'
-
-// TODO Remove test condition from slice
-const IS_CYPRESS_TEST = import.meta.env.VITE_CYPRESS_TEST === 'true'
 
 export type CustomZoneState = {
   zones: Record<string, CustomZone>
 }
 const INITIAL_STATE: CustomZoneState = {
-  zones: IS_CYPRESS_TEST ? dummyCustomZone : {}
+  // TODO Remove test condition from slice
+  zones: isCypress() ? dummyCustomZone : {}
 }
 
 const customZoneSlice = createSlice({

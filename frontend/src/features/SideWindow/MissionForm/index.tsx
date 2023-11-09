@@ -414,8 +414,7 @@ export function MissionForm() {
         return
       }
 
-      // @ts-ignore
-      const mission = { actions: _, ...missionWithActions }
+      const mission = omit(['actions'], missionWithActions)
 
       originalMissionRef.current = missionWithActions
       const { initialActionsFormValues, initialMainFormValues } = getMissionFormInitialValues(

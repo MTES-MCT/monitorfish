@@ -1,13 +1,10 @@
 import { openSideWindowMissionList } from './utils'
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
-import { interceptExternalCalls } from '../../utils/interceptExternalCalls'
 
 // TODO Add search query, custom period and filter reset E2E tests.
 context('Side Window > Mission List > Filter Bar', () => {
   beforeEach(() => {
-    interceptExternalCalls()
-
     openSideWindowMissionList()
   })
 

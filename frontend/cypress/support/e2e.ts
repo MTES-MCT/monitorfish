@@ -1,3 +1,7 @@
+// Support file
+// This file runs before every single spec file.
+// https://docs.cypress.io/guides/core-concepts/writing-and-organizing-tests#Support-file
+
 import 'cypress-mouse-position/commands'
 import 'cypress-plugin-snapshots/commands'
 import './commands'
@@ -91,44 +95,86 @@ Cypress.on('uncaught:exception', err => {
   return undefined
 })
 
-before(() => {
+// Run before each spec
+beforeEach(() => {
+  // We use a Cypress session to inject inject a Local Storage key
+  // so that we can detect when the browser app is running in Cypress.
+  // https://docs.cypress.io/faq/questions/using-cypress-faq#How-do-I-preserve-cookies--localStorage-in-between-my-tests
+  cy.session('cypress', () => {
+    cy.window().then(window => {
+      window.localStorage.setItem('IS_CYPRESS', 'true')
+    })
+  })
+
+  // Fake Authorization
+  cy.intercept('/bff/v1/authorization/current', {
+    body: {
+      isSuperUser: true
+    },
+    statusCode: 200
+  })
+
   // DEV :: VITE_GEOSERVER_LOCAL_URL
   // PROD :: VITE_GEOSERVER_LOCAL_URL
-  // cy.intercept({ url: /^http:\/\/10\.56\.205\.25:8081\/.*/ }, req => {
-  //   req.redirect(req.url.replace('http://10.56.205.25:8081', 'http://0.0.0.0:8081'))
-  // })
+  cy.intercept({ url: /^https?:\/\/10\.56\.205\.25:808(1|2)\/.*/ }, req => {
+    req.redirect(
+      req.url
+        .replace('http://10.56.205.25:8081', 'http://0.0.0.0:8081')
+        .replace('http://10.56.205.25:8082', 'http://0.0.0.0:8081')
+        .replace('https://10.56.205.25:8081', 'http://0.0.0.0:8081')
+        .replace('https://10.56.205.25:8082', 'http://0.0.0.0:8081')
+    )
+  })
+
   // DEV :: VITE_GEOSERVER_REMOTE_URL
-  // cy.intercept({ url: /^http:\/\/monitorfish\-test\.csam\.e2\.rie\.gouv\.fr\/.*/ }, req => {
-  //   req.redirect(req.url.replace('http://monitorfish-test.csam.e2.rie.gouv.fr', 'http://0.0.0.0:8081'))
-  // })
+  cy.intercept({ url: /^https?:\/\/monitorfish-test\.csam\.e2\.rie\.gouv\.fr\/.*/ }, req => {
+    req.redirect(
+      req.url
+        .replace('http://monitorfish-test.csam.e2.rie.gouv.fr', 'http://0.0.0.0:8081')
+        .replace('https://monitorfish-test.csam.e2.rie.gouv.fr', 'http://0.0.0.0:8081')
+    )
+  })
   // PROD :: VITE_GEOSERVER_REMOTE_URL
-  // cy.intercept({ url: /^https:\/\/monitorfish\.din\.developpement\-durable\.gouv\.fr\/.*/ }, req => {
-  //   req.redirect(req.url.replace('https://monitorfish.din.developpement-durable.gouv.fr', 'http://0.0.0.0:8081'))
-  // })
-  // // DEV :: VITE_MONITORENV_URL
-  // cy.intercept({ url: /^http:\/\/monitorenv\.kadata\.fr\/.*/ }, req => {
-  //   req.followRedirect = true
-  //   req.redirect(req.url.replace('http://monitorenv.kadata.fr', 'http://0.0.0.0:8081'))
-  // })
-  // // PROD :: VITE_MONITORENV_URL
-  // cy.intercept({ url: /^http:\/\/monitorenv\.din\.developpement-durable\.gouv\.fr\/.*/ }, req => {
-  //   req.followRedirect = true
-  //   req.redirect(req.url.replace('https://monitorenv.din.developpement-durable.gouv.fr', 'http://0.0.0.0:8081'))
-  // })
+  cy.intercept({ url: /^https?:\/\/monitorfish\.din\.developpement-durable\.gouv\.fr\/.*/ }, req => {
+    req.redirect(
+      req.url
+        .replace('http://monitorfish.din.developpement-durable.gouv.fr', 'http://0.0.0.0:8081')
+        .replace('https://monitorfish.din.developpement-durable.gouv.fr', 'http://0.0.0.0:8081')
+    )
+  })
+
+  // DEV :: VITE_MONITORENV_URL
+  cy.intercept({ url: /^https?:\/\/monitorenv\.kadata\.fr\/.*/ }, req => {
+    req.redirect(
+      req.url
+        .replace('http://monitorenv.kadata.fr', 'http://0.0.0.0:8081')
+        .replace('http://monitorenv.kadata.fr', 'https://0.0.0.0:8081')
+    )
+  })
+  // PROD :: VITE_MONITORENV_URL
+  cy.intercept({ url: /^https?:\/\/monitorenv\.din\.developpement-durable\.gouv\.fr\/.*/ }, req => {
+    req.redirect(
+      req.url
+        .replace('http://monitorenv.din.developpement-durable.gouv.fr', 'http://0.0.0.0:8081')
+        .replace('https://monitorenv.din.developpement-durable.gouv.fr', 'http://0.0.0.0:8081')
+    )
+  })
+
   // DEV :: VITE_SENTRY_DSN
   // PROD :: VITE_SENTRY_DSN
-  // cy.intercept(
-  //   { url: /^https:\/\/a5f3272efa794bb9ada2ffea90f2fec5@sentry\.incubateur\.net\/.*/ },
-  //   {
-  //     statusCode: 200
-  //   }
-  // )
+  cy.intercept(
+    { url: /^https:\/\/a5f3272efa794bb9ada2ffea90f2fec5@sentry\.incubateur\.net\/.*/ },
+    {
+      statusCode: 200
+    }
+  )
+
   // PROD :: VITE_SMALL_CHAT_SNIPPET
-  // cy.intercept(
-  //   { url: /^https:\/\/embed\.small\.chat\/.*/ },
-  //   {
-  //     body: '',
-  //     statusCode: 200
-  //   }
-  // )
+  cy.intercept(
+    { url: /^https:\/\/embed\.small\.chat\/.*/ },
+    {
+      body: '',
+      statusCode: 200
+    }
+  )
 })

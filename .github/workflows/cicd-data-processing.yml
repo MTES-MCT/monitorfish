@@ -43,7 +43,7 @@ jobs:
         uses: docker/setup-buildx-action@master
 
       - name: Cache Docker layers
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /tmp/.buildx-cache-pipeline
           key: ${{ runner.os }}-single-buildx-data-pipeline-${{ github.ref_name }}
@@ -51,7 +51,7 @@ jobs:
             ${{ runner.os }}-single-buildx-data-pipeline-
 
       - name: Build image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5
         with:
           context: .
           load: true

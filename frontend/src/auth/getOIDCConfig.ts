@@ -1,5 +1,9 @@
 import { WebStorageStateStore } from 'oidc-client-ts'
 
+import { isCypress } from '../utils/isCypress'
+
+const IS_CYPRESS = isCypress()
+
 export function getOIDCConfig() {
   const IS_OIDC_ENABLED = import.meta.env.VITE_OIDC_ENABLED === 'true'
   const OIDC_REDIRECT_URI = import.meta.env.VITE_OIDC_REDIRECT_URI
@@ -25,7 +29,7 @@ export function getOIDCConfig() {
 
   return {
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    IS_OIDC_ENABLED: import.meta.env.VITE_CYPRESS_TEST ? false : IS_OIDC_ENABLED,
+    IS_OIDC_ENABLED: IS_CYPRESS ? false : IS_OIDC_ENABLED,
     oidcConfig
   }
 }

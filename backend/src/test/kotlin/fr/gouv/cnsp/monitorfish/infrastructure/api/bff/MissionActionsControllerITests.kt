@@ -289,36 +289,42 @@ class MissionActionsControllerITests {
     @Test
     fun `Should get all activity reports for a given date range and JDP`() {
         // Given
-        given(getActivityReports.execute(any(), any(), any())).willReturn(listOf(
-            ActivityReport(
-                action = MissionAction(
-                    1,
-                    1,
-                    1,
-                    actionType = MissionActionType.SEA_CONTROL,
-                    actionDatetimeUtc = ZonedDateTime.now(),
-                    isDeleted = false,
-                    hasSomeGearsSeized = false,
-                    hasSomeSpeciesSeized = false,
-                    isFromPoseidon = true,
+        given(getActivityReports.execute(any(), any(), any())).willReturn(
+            listOf(
+                ActivityReport(
+                    action = MissionAction(
+                        1,
+                        1,
+                        1,
+                        actionType = MissionActionType.SEA_CONTROL,
+                        actionDatetimeUtc = ZonedDateTime.now(),
+                        isDeleted = false,
+                        hasSomeGearsSeized = false,
+                        hasSomeSpeciesSeized = false,
+                        isFromPoseidon = true,
+                    ),
+                    activityCode = ActivityCode.FIS,
+                    vesselNationalIdentifier = "AYFR000654",
+                    controlUnits = listOf(ControlUnit(1234, "DIRM", false, "Cross Etel", listOf())),
+                    vessel = Vessel(
+                        id = 1,
+                        internalReferenceNumber = "FR00022680",
+                        vesselName = "MY AWESOME VESSEL",
+                        flagState = CountryCode.FR,
+                        declaredFishingGears = listOf("Trémails"),
+                        vesselType = "Fishing",
+                        districtCode = "AY",
+                    ),
                 ),
-                activityCode = ActivityCode.FIS,
-                vesselNationalIdentifier = "AYFR000654",
-                controlUnits = listOf(ControlUnit(1234, "DIRM", false, "Cross Etel", listOf())),
-                vessel = Vessel(
-                    id = 1,
-                    internalReferenceNumber = "FR00022680",
-                    vesselName = "MY AWESOME VESSEL",
-                    flagState = CountryCode.FR,
-                    declaredFishingGears = listOf("Trémails"),
-                    vesselType = "Fishing",
-                    districtCode = "AY",
-                ),
-            )
-        ))
+            ),
+        )
 
         // When
-        api.perform(get("/bff/v1/mission_actions/controls/activity_reports?beforeDateTime=2020-05-04T03:04:05.000Z&afterDateTime=2020-03-04T03:04:05.000Z&jdp=MEDITERRANEAN_AND_EASTERN_ATLANTIC"))
+        api.perform(
+            get(
+                "/bff/v1/mission_actions/controls/activity_reports?beforeDateTime=2020-05-04T03:04:05.000Z&afterDateTime=2020-03-04T03:04:05.000Z&jdp=MEDITERRANEAN_AND_EASTERN_ATLANTIC",
+            ),
+        )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
@@ -328,6 +334,10 @@ class MissionActionsControllerITests {
             .andExpect(jsonPath("$[0].controlUnits[0].id", equalTo(1234)))
             .andExpect(jsonPath("$[0].vessel.vesselId", equalTo(1)))
 
-        Mockito.verify(getActivityReports).execute(ZonedDateTime.parse("2020-05-04T03:04:05Z"), ZonedDateTime.parse("2020-03-04T03:04:05Z"), JointDeploymentPlan.MEDITERRANEAN_AND_EASTERN_ATLANTIC)
+        Mockito.verify(getActivityReports).execute(
+            ZonedDateTime.parse("2020-05-04T03:04:05Z"),
+            ZonedDateTime.parse("2020-03-04T03:04:05Z"),
+            JointDeploymentPlan.MEDITERRANEAN_AND_EASTERN_ATLANTIC,
+        )
     }
 }

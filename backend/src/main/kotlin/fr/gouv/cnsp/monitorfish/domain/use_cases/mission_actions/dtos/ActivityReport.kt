@@ -10,5 +10,5 @@ data class ActivityReport(
     val activityCode: ActivityCode,
     val vesselNationalIdentifier: String, // The `districtCode` and `internalReferenceNumber` concatenation
     val controlUnits: List<ControlUnit>,
-    val vessel: Vessel
+    val vessel: Vessel,
 )

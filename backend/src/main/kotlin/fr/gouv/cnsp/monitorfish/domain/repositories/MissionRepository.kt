@@ -19,6 +19,6 @@ interface MissionRepository {
         seaFronts: List<String>?,
     ): List<Mission>
     fun findByIds(
-        ids: List<Int>
+        ids: List<Int>,
     ): List<Mission>
 }

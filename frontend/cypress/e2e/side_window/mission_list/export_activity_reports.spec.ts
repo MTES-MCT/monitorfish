@@ -1,7 +1,5 @@
 import { openSideWindowMissionList } from './utils'
 
-import Chainable = Cypress.Chainable
-
 context('Side Window > Mission List > Export Activity Reports', () => {
   beforeEach(() => {
     openSideWindowMissionList()
@@ -46,7 +44,7 @@ context('Side Window > Mission List > Export Activity Reports', () => {
   })
 })
 
-function assertDownloadedFile(callback: (content: Chainable<any>) => void) {
+function assertDownloadedFile(callback: (content: Cypress.Chainable<any>) => void) {
   cy.wait(500)
 
   cy.exec('cd cypress/downloads && ls').then(result => {

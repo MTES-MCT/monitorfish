@@ -1,10 +1,7 @@
 import { editSideWindowMission } from './utils'
-import { interceptExternalCalls } from '../../utils/interceptExternalCalls'
 
 context('Side Window > Mission Form > Sea Control Edition', () => {
   beforeEach(() => {
-    interceptExternalCalls()
-
     editSideWindowMission('MALOTRU')
   })
 

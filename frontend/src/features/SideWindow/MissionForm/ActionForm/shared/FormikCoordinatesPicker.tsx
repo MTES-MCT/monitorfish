@@ -15,6 +15,7 @@ import { addOrEditControlCoordinates } from '../../../../../domain/use_cases/mis
 import { useListenForDrawedGeometry } from '../../../../../hooks/useListenForDrawing'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { isCypress } from '../../../../../utils/isCypress'
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 
 import type { MissionActionFormValues } from '../../types'
@@ -26,7 +27,7 @@ import MissionActionType = MissionAction.MissionActionType
  * This is used to mock the user adding coordinates in Cypress tests
  * as we can't test two windows : the side window and the map window.
  */
-const IS_CYPRESS_TEST = import.meta.env.VITE_CYPRESS_TEST === 'true'
+const IS_CYPRESS = isCypress()
 export const STUBBED_LATITUDE = 47.084
 export const STUBBED_LONGITUDE = -3.872
 
@@ -51,7 +52,7 @@ export function FormikCoordinatesPicker() {
       return
     }
 
-    if (IS_CYPRESS_TEST && !longitudeValue && !latitudeValue) {
+    if (IS_CYPRESS && !longitudeValue && !latitudeValue) {
       latitudeHelpers.setValue(STUBBED_LATITUDE)
       longitudeHelpers.setValue(STUBBED_LONGITUDE)
 
@@ -64,7 +65,7 @@ export function FormikCoordinatesPicker() {
       updateMissionLocation(valuesWithLocation)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [IS_CYPRESS_TEST, longitudeValue, latitudeValue])
+  }, [longitudeValue, latitudeValue])
 
   const coordinates = useMemo(() => {
     if (!longitudeValue || !latitudeValue) {

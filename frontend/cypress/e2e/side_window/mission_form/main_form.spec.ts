@@ -3,14 +3,9 @@ import { Mission } from '../../../../src/domain/entities/mission/types'
 import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
 import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 import { customDayjs } from '../../utils/customDayjs'
-import { interceptExternalCalls } from '../../utils/interceptExternalCalls'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Main Form', () => {
-  beforeEach(() => {
-    interceptExternalCalls()
-  })
-
   it('Should add and remove a control unit', () => {
     openSideWindowNewMission()
 

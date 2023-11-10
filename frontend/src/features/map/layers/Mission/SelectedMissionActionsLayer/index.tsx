@@ -8,6 +8,7 @@ import { MonitorFishLayer } from '../../../../../domain/entities/layers/types'
 import { getMissionActionFeature, getMissionActionFeatures } from '../../../../../domain/entities/mission'
 import { useGetFilteredMissionsQuery } from '../../../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { monitorfishMap } from '../../../monitorfishMap'
 import { NEW_MISSION_ID } from '../constants'
 
 import type { GeoJSON } from '../../../../../domain/types/GeoJSON'
@@ -15,7 +16,7 @@ import type { VectorLayerWithName } from '../../../../../domain/types/layer'
 import type { Feature } from 'ol'
 import type { MutableRefObject } from 'react'
 
-export function UnmemoizedSelectedMissionActionsLayer({ map }) {
+export function UnmemoizedSelectedMissionActionsLayer() {
   const { missions } = useGetFilteredMissionsQuery()
   const mission = useMainAppSelector(store => store.mission)
   const sideWindow = useMainAppSelector(store => store.sideWindow)
@@ -62,17 +63,13 @@ export function UnmemoizedSelectedMissionActionsLayer({ map }) {
   }, [getVectorSource])
 
   useEffect(() => {
-    if (map) {
-      getVectorLayer().name = MonitorFishLayer.MISSION_ACTION_SELECTED
-      map.getLayers().push(getVectorLayer())
-    }
+    getVectorLayer().name = MonitorFishLayer.MISSION_ACTION_SELECTED
+    monitorfishMap.getLayers().push(getVectorLayer())
 
     return () => {
-      if (map) {
-        map.removeLayer(getVectorLayer())
-      }
+      monitorfishMap.removeLayer(getVectorLayer())
     }
-  }, [map, getVectorLayer])
+  }, [getVectorLayer])
 
   useEffect(() => {
     getVectorSource().clear(true)

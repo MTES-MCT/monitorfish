@@ -7,8 +7,9 @@ import VesselEstimatedPositionCard from './VesselEstimatedPositionCard'
 import { getCoordinates } from '../../../../coordinates'
 import { WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
 import { useSelector } from 'react-redux'
+import { monitorfishMap } from '../../monitorfishMap'
 
-const VesselEstimatedPositionOverlay = ({ map, pointerMoveEventPixel, feature }) => {
+const VesselEstimatedPositionOverlay = ({ pointerMoveEventPixel, feature }) => {
   const { coordinatesFormat } = useSelector(state => state.map)
   const [coordinates, setCoordinates] = useState(null)
   const overlayRef = useRef(null)
@@ -31,10 +32,8 @@ const VesselEstimatedPositionOverlay = ({ map, pointerMoveEventPixel, feature })
   }, [overlayRef, overlayObjectRef])
 
   useEffect(() => {
-    if (map) {
-      map.addOverlay(overlayObjectRef.current)
-    }
-  }, [map, overlayObjectRef])
+    monitorfishMap.addOverlay(overlayObjectRef.current)
+  }, [overlayObjectRef])
 
   useEffect(() => {
     if (overlayRef.current && overlayObjectRef.current) {
@@ -46,7 +45,7 @@ const VesselEstimatedPositionOverlay = ({ map, pointerMoveEventPixel, feature })
         const coordinates = getCoordinates([longitude, latitude], WSG84_PROJECTION, coordinatesFormat)
         setCoordinates(coordinates)
         if (pointerMoveEventPixel) {
-          overlayObjectRef.current.setPosition(map.getCoordinateFromPixel(pointerMoveEventPixel))
+          overlayObjectRef.current.setPosition(monitorfishMap.getCoordinateFromPixel(pointerMoveEventPixel))
         }
       } else {
         overlayRef.current.style.display = 'none'

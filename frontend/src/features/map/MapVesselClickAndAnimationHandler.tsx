@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 
+import { monitorfishMap } from './monitorfishMap'
+import { getMapResolution, getMapZoom } from './utils'
 import { resetAnimateToCoordinates, resetAnimateToExtent, resetFitToExtent } from '../../domain/shared_slices/Map'
 import { updateVesselTrackAsZoomed } from '../../domain/shared_slices/Vessel'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
@@ -7,12 +9,12 @@ import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 /**
  * Handle map animations
- * @param {Object} map
  */
-export function MapVesselClickAndAnimationHandler({ map }) {
+export function MapVesselClickAndAnimationHandler() {
   const dispatch = useMainAppDispatch()
   const { animateToCoordinates, animateToExtent, fitToExtent } = useMainAppSelector(state => state.map)
   const { vesselSidebarIsOpen, vesselsTracksShowed, vesselTrackExtent } = useMainAppSelector(state => state.vessel)
+
   useEffect(() => {
     function createAnimateObject(_animateToCoordinates, resolution, duration, zoom) {
       return {
@@ -22,26 +24,28 @@ export function MapVesselClickAndAnimationHandler({ map }) {
       }
     }
     function animateViewToCoordinates() {
-      if (map && animateToCoordinates && animateToCoordinates[0] && animateToCoordinates[1] && vesselSidebarIsOpen) {
-        if (map.getView().getZoom() >= 8) {
-          const resolution = map.getView().getResolution()
-          map.getView().animate(createAnimateObject(animateToCoordinates, resolution * 200, 1000, undefined))
+      if (animateToCoordinates && animateToCoordinates[0] && animateToCoordinates[1] && vesselSidebarIsOpen) {
+        if (getMapZoom() >= 8) {
+          const resolution = getMapResolution()
+          monitorfishMap.getView().animate(createAnimateObject(animateToCoordinates, resolution * 200, 1000, undefined))
         } else {
-          map.getView().animate(createAnimateObject(animateToCoordinates, 0, 800, 8), () => {
-            const resolution = map.getView().getResolution()
-            map.getView().animate(createAnimateObject(animateToCoordinates, resolution * 200, 500, undefined))
+          monitorfishMap.getView().animate(createAnimateObject(animateToCoordinates, 0, 800, 8), () => {
+            const resolution = getMapResolution()
+            monitorfishMap
+              .getView()
+              .animate(createAnimateObject(animateToCoordinates, resolution * 200, 500, undefined))
           })
         }
         dispatch(resetAnimateToCoordinates())
       }
     }
     animateViewToCoordinates()
-  }, [dispatch, animateToCoordinates, map, vesselSidebarIsOpen])
+  }, [dispatch, animateToCoordinates, vesselSidebarIsOpen])
 
   useEffect(() => {
     function animateViewToExtent() {
-      if (map && vesselSidebarIsOpen && animateToExtent && vesselTrackExtent?.length) {
-        map.getView().fit(vesselTrackExtent, {
+      if (vesselSidebarIsOpen && animateToExtent && vesselTrackExtent?.length) {
+        monitorfishMap.getView().fit(vesselTrackExtent, {
           callback: () => {
             dispatch(resetAnimateToExtent())
           },
@@ -53,14 +57,14 @@ export function MapVesselClickAndAnimationHandler({ map }) {
     }
 
     animateViewToExtent()
-  }, [dispatch, animateToExtent, vesselTrackExtent, map, vesselSidebarIsOpen])
+  }, [dispatch, animateToExtent, vesselTrackExtent, vesselSidebarIsOpen])
 
   useEffect(() => {
-    if (!map || !fitToExtent) {
+    if (!fitToExtent) {
       return
     }
 
-    map.getView().fit(fitToExtent, {
+    monitorfishMap.getView().fit(fitToExtent, {
       callback: () => {
         dispatch(resetFitToExtent())
       },
@@ -68,13 +72,9 @@ export function MapVesselClickAndAnimationHandler({ map }) {
       maxZoom: 12,
       padding: [30, 30, 30, 30]
     })
-  }, [dispatch, fitToExtent, map])
+  }, [dispatch, fitToExtent])
 
   useEffect(() => {
-    if (!map) {
-      return
-    }
-
     Object.keys(vesselsTracksShowed)
       .filter(vesselCompositeIdentifier => {
         const track = vesselsTracksShowed[vesselCompositeIdentifier]
@@ -88,7 +88,7 @@ export function MapVesselClickAndAnimationHandler({ map }) {
 
         const { extent } = vesselsTracksShowed[vesselCompositeIdentifier]!
 
-        map.getView().fit(extent, {
+        monitorfishMap.getView().fit(extent, {
           callback: () => {
             dispatch(updateVesselTrackAsZoomed(vesselCompositeIdentifier))
           },
@@ -97,7 +97,7 @@ export function MapVesselClickAndAnimationHandler({ map }) {
           padding: [100, 550, 100, 50]
         })
       })
-  }, [dispatch, map, vesselsTracksShowed])
+  }, [dispatch, vesselsTracksShowed])
 
   return null
 }

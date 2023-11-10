@@ -5,7 +5,7 @@ import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ControlOverlay } from '../ControlOverlay'
 
-export function SelectedControlOverlay({ map }) {
+export function SelectedControlOverlay() {
   const selectedControlGeoJSON = useMainAppSelector(store => store.mission.selectedMissionActionGeoJSON)
   const selectedControl = useMemo(() => {
     if (!selectedControlGeoJSON) {
@@ -17,5 +17,5 @@ export function SelectedControlOverlay({ map }) {
     }).readFeature(selectedControlGeoJSON)
   }, [selectedControlGeoJSON])
 
-  return <ControlOverlay feature={selectedControl} isSelected map={map} />
+  return <ControlOverlay feature={selectedControl} isSelected />
 }

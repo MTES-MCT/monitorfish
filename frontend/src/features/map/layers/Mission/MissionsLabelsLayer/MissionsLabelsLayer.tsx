@@ -8,6 +8,7 @@ import { clearPreviousLineFeatures, getLabelsOfFeaturesInExtent } from './utils'
 import { LayerProperties } from '../../../../../domain/entities/layers/constants'
 import { useIsSuperUser } from '../../../../../hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { monitorfishMap } from '../../../monitorfishMap'
 import { MissionLabelOverlay } from '../../../overlays/MissionUnitLabelOverlay'
 import { useGetLineFeatureIdToCoordinates } from '../../hooks/useGetLineFeatureIdToCoordinates'
 import { useIsZooming } from '../../hooks/useIsZooming'
@@ -17,7 +18,7 @@ import type { VectorLayerWithName } from '../../../../../domain/types/layer'
 
 const MIN_ZOOM = 7
 
-export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
+export function MissionsLabelsLayer({ mapMovingAndZoomEvent }) {
   const isSuperUser = useIsSuperUser()
   const { isMissionsLayerDisplayed } = useMainAppSelector(state => state.displayedComponent)
   const [featuresAndLabels, setFeaturesAndLabels] = useState<
@@ -29,9 +30,9 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
       offset: number[] | null
     }[]
   >([])
-  const isZooming = useIsZooming(map, mapMovingAndZoomEvent)
+  const isZooming = useIsZooming(monitorfishMap, mapMovingAndZoomEvent)
   const previousFeaturesAndLabels = usePrevious(featuresAndLabels)
-  const currentZoom = map?.getView()?.getZoom()?.toFixed(2)
+  const currentZoom = Number(monitorfishMap.getView()?.getZoom()?.toFixed(2))
 
   const vectorSourceRef = useRef<VectorSource>()
   const layerRef = useRef<VectorLayerWithName>()
@@ -65,17 +66,13 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
   }, [getVectorSource])
 
   useEffect(() => {
-    if (map) {
-      getLayer().name = LayerProperties.MISSIONS_LABEL.code
-      map.getLayers().push(getLayer())
-    }
+    getLayer().name = LayerProperties.MISSIONS_LABEL.code
+    monitorfishMap.getLayers().push(getLayer())
 
     return () => {
-      if (map) {
-        map.removeLayer(getLayer())
-      }
+      monitorfishMap.removeLayer(getLayer())
     }
-  }, [map, getLayer])
+  }, [getLayer])
 
   useEffect(() => {
     if (currentZoom < MIN_ZOOM) {
@@ -114,29 +111,24 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
   )
 
   useEffect(() => {
-    if (!map) {
-      return
-    }
-
-    const missionsLayer = map
+    const missionsLayer = monitorfishMap
       .getLayers()
       .getArray()
-      ?.find(olLayer => olLayer.name === LayerProperties.MISSION_PIN_POINT.code)
-    const missionsLayerSource = missionsLayer?.getSource()
+      ?.find(olLayer => (olLayer as VectorLayerWithName).name === LayerProperties.MISSION_PIN_POINT.code)
+    const missionsLayerSource = (missionsLayer as VectorLayerWithName)?.getSource()
 
     const isHidden = !isSuperUser || !isMissionsLayerDisplayed || !missionsLayerSource || currentZoom < MIN_ZOOM
     addLabelsToAllFeaturesInExtent(
       isHidden,
       getVectorSource(),
       missionsLayerSource,
-      map.getView().calculateExtent(),
+      monitorfishMap.getView().calculateExtent(),
       lineFeatureIdToCoordinates,
       previousFeaturesAndLabels
     )
   }, [
     isSuperUser,
     isMissionsLayerDisplayed,
-    map,
     isZooming,
     currentZoom,
     lineFeatureIdToCoordinates,
@@ -153,7 +145,6 @@ export function MissionsLabelsLayer({ map, mapMovingAndZoomEvent }) {
           color={color}
           coordinates={coordinates}
           featureId={featureId}
-          map={map}
           moveLine={moveVesselLabelLine}
           offset={offset}
           text={label}

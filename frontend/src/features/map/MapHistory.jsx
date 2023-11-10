@@ -1,14 +1,14 @@
 import { useEffect } from 'react'
 import { getLocalStorageState } from '../../utils'
 import { isNumeric } from '../../utils/isNumeric'
+import { monitorfishMap } from './monitorfishMap'
 
 const savedMapExtentLocalStorageKey = 'mapExtent'
 const savedMapViewLocalStorageKey = 'mapView'
 /**
- * Handle browser and LocalStorage history on map URL - Note that the map parameter is given from
- * the BaseMap component, event if it's not seen in the props passed to MapHistory
+ * Handle browser and LocalStorage history on map URL
  */
-const MapHistory = ({ map, setShouldUpdateView, shouldUpdateView, historyMoveTrigger }) => {
+const MapHistory = ({ setShouldUpdateView, shouldUpdateView, historyMoveTrigger }) => {
   useEffect(() => {
     // restore view on browser history navigation
     window.addEventListener('popstate', event => {
@@ -16,13 +16,11 @@ const MapHistory = ({ map, setShouldUpdateView, shouldUpdateView, historyMoveTri
         return
       }
 
-      if (map) {
-        map.getView().setCenter(event.state.center)
-        map.getView().setZoom(event.state.zoom)
-        setShouldUpdateView(false)
-      }
+      monitorfishMap.getView().setCenter(event.state.center)
+      monitorfishMap.getView().setZoom(event.state.zoom)
+      setShouldUpdateView(false)
     })
-  }, [map, setShouldUpdateView])
+  }, [setShouldUpdateView])
 
   useEffect(() => {
     const mapState = {
@@ -33,29 +31,28 @@ const MapHistory = ({ map, setShouldUpdateView, shouldUpdateView, historyMoveTri
       extent: getLocalStorageState(null, savedMapExtentLocalStorageKey)
     }
     function initMapView () {
-      if (map) {
-        if (window.location.hash !== '') {
-          const hash = window.location.hash.replace('@', '').replace('#', '')
-          const viewParts = hash.split(',')
-          if (viewParts.length === 3 && isNumeric(viewParts[0]) && isNumeric(viewParts[1]) && isNumeric(viewParts[2])) {
-            map.getView().setCenter([parseFloat(viewParts[0]), parseFloat(viewParts[1])])
-            map.getView().setZoom(parseFloat(viewParts[2]))
-          }
-        } else if (mapState) {
-          if (mapState.view && mapState.view.center && mapState.view.center[0] && mapState.view.center[1] && mapState.view.zoom) {
-            map.getView().setCenter(mapState.view.center)
-            map.getView().setZoom(mapState.view.zoom)
-          }
+      if (window.location.hash !== '') {
+        const hash = window.location.hash.replace('@', '').replace('#', '')
+        const viewParts = hash.split(',')
+        if (viewParts.length === 3 && isNumeric(viewParts[0]) && isNumeric(viewParts[1]) && isNumeric(viewParts[2])) {
+          monitorfishMap.getView().setCenter([parseFloat(viewParts[0]), parseFloat(viewParts[1])])
+          monitorfishMap.getView().setZoom(parseFloat(viewParts[2]))
+        }
+      } else if (mapState) {
+        if (mapState.view && mapState.view.center && mapState.view.center[0] && mapState.view.center[1] && mapState.view.zoom) {
+          monitorfishMap.getView().setCenter(mapState.view.center)
+          monitorfishMap.getView().setZoom(mapState.view.zoom)
         }
       }
     }
+
     initMapView()
-  }, [map])
+  }, [])
 
   useEffect(() => {
     function saveMapView () {
-      if (map && shouldUpdateView) {
-        const currentView = map.getView()
+      if (shouldUpdateView) {
+        const currentView = monitorfishMap.getView()
         const center = currentView.getCenter()
         const view = {
           zoom: currentView.getZoom().toFixed(2),
@@ -70,7 +67,7 @@ const MapHistory = ({ map, setShouldUpdateView, shouldUpdateView, historyMoveTri
       }
     }
     saveMapView()
-  }, [map, shouldUpdateView, historyMoveTrigger])
+  }, [shouldUpdateView, historyMoveTrigger])
 
   return null
 }

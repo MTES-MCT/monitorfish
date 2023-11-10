@@ -4,14 +4,9 @@ import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
 import { ReactComponent as CloseVesselTrackSVG } from '../../icons/Croix_piste_VMS.svg'
 import { hideVesselTrack } from '../../../domain/use_cases/vessel/hideVesselTrack'
+import { monitorfishMap } from '../monitorfishMap'
 
-const CloseVesselTrackOverlay = props => {
-  const {
-    map,
-    coordinates,
-    vesselCompositeIdentifier
-  } = props
-
+const CloseVesselTrackOverlay = ({ coordinates, vesselCompositeIdentifier }) => {
   const dispatch = useDispatch()
 
   const ref = createRef()
@@ -24,22 +19,22 @@ const CloseVesselTrackOverlay = props => {
   }))
 
   const close = useCallback(() => {
-    map.removeOverlay(overlay)
+    monitorfishMap.removeOverlay(overlay)
     dispatch(hideVesselTrack(vesselCompositeIdentifier))
-  }, [map, overlay, vesselCompositeIdentifier])
+  }, [overlay, vesselCompositeIdentifier])
 
   useEffect(() => {
-    if (map && coordinates?.length) {
+    if (coordinates?.length) {
       overlay.setPosition(coordinates)
       overlay.setElement(ref.current)
 
-      map.addOverlay(overlay)
+      monitorfishMap.addOverlay(overlay)
 
       return () => {
-        map.removeOverlay(overlay)
+        monitorfishMap.removeOverlay(overlay)
       }
     }
-  }, [overlay, coordinates, map])
+  }, [overlay, coordinates])
 
   return (
     <WrapperToBeKeptForDOMManagement>

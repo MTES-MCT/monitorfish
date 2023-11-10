@@ -7,11 +7,13 @@ import { VesselCard } from './VesselCard'
 import { COLORS } from '../../../../constants/constants'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { useIsSuperUser } from '../../../../hooks/authorization/useIsSuperUser'
+import { monitorfishMap } from '../../monitorfishMap'
+import { getMapResolution } from '../../utils'
 import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../Overlay'
 
 const overlayHeight = 260
 
-export function VesselCardOverlay({ feature, map }) {
+export function VesselCardOverlay({ feature }) {
   const isSuperUser = useIsSuperUser()
   const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
   const overlayRef = useRef<HTMLDivElement>()
@@ -42,22 +44,20 @@ export function VesselCardOverlay({ feature, map }) {
   )
 
   useEffect(() => {
-    if (!map) {
-      return
+    if (overlayObjectRef.current) {
+      monitorfishMap.addOverlay(overlayObjectRef.current)
     }
-
-    map.addOverlay(overlayObjectRef.current)
-  }, [map, overlayObjectRef])
+  }, [overlayObjectRef])
 
   const getNextOverlayPosition = useCallback(
     numberOfWarnings => {
       const [x, y] = feature.getGeometry().getCoordinates()
-      const extent = map.getView().calculateExtent()
-      const boxSize = map.getView().getResolution() * overlayHeight + (numberOfWarnings ? 30 * numberOfWarnings : 0)
+      const extent = monitorfishMap.getView().calculateExtent()
+      const boxSize = getMapResolution() * overlayHeight + (numberOfWarnings ? 30 * numberOfWarnings : 0)
 
       return getOverlayPosition(boxSize, x, y, extent)
     },
-    [feature, map]
+    [feature]
   )
 
   useEffect(() => {

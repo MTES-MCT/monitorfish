@@ -5,7 +5,7 @@ import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { MissionOverlay } from '../MissionOverlay'
 
-export function SelectedMissionOverlay({ map }) {
+export function SelectedMissionOverlay() {
   const selectedMissionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionGeoJSON)
   const isMissionsLayerDisplayed = useMainAppSelector(store => store.displayedComponent.isMissionsLayerDisplayed)
 
@@ -19,5 +19,5 @@ export function SelectedMissionOverlay({ map }) {
     }).readFeature(selectedMissionGeoJSON)
   }, [selectedMissionGeoJSON, isMissionsLayerDisplayed])
 
-  return <MissionOverlay feature={selectedMission} isSelected map={map} />
+  return <MissionOverlay feature={selectedMission} isSelected />
 }

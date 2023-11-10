@@ -11,10 +11,11 @@ import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants
 import { getMissionFeatureZone } from '../../../../domain/entities/mission'
 import { useGetFilteredMissionsQuery } from '../../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { monitorfishMap } from '../../monitorfishMap'
 
 import type { VectorLayerWithName } from '../../../../domain/types/layer'
 
-export function UnmemoizedSelectedMissionLayer({ map }) {
+export function UnmemoizedSelectedMissionLayer() {
   const { missions } = useGetFilteredMissionsQuery()
   const mission = useMainAppSelector(store => store.mission)
   const sideWindow = useMainAppSelector(store => store.sideWindow)
@@ -56,17 +57,13 @@ export function UnmemoizedSelectedMissionLayer({ map }) {
   }, [getVectorSource])
 
   useEffect(() => {
-    if (map) {
-      getVectorLayer().name = MonitorFishLayer.MISSION_SELECTED
-      map.getLayers().push(getVectorLayer())
-    }
+    getVectorLayer().name = MonitorFishLayer.MISSION_SELECTED
+    monitorfishMap.getLayers().push(getVectorLayer())
 
     return () => {
-      if (map) {
-        map.removeLayer(getVectorLayer())
-      }
+      monitorfishMap.removeLayer(getVectorLayer())
     }
-  }, [map, getVectorLayer])
+  }, [getVectorLayer])
 
   useEffect(() => {
     getVectorSource().clear(true)

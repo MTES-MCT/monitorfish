@@ -6,6 +6,7 @@ import { VesselLabel } from './VesselLabel'
 import { getVesselCompositeIdentifier } from '../../../../domain/entities/vessel/vessel'
 import { useMoveOverlayWhenDragging } from '../../../../hooks/useMoveOverlayWhenDragging'
 import { useMoveOverlayWhenZooming } from '../../../../hooks/useMoveOverlayWhenZooming'
+import { monitorfishMap } from '../../monitorfishMap'
 
 import type { MutableRefObject } from 'react'
 
@@ -19,7 +20,6 @@ export function VesselLabelOverlay({
   featureId,
   flagState,
   identity,
-  map,
   moveLine,
   offset,
   opacity,
@@ -35,7 +35,7 @@ export function VesselLabelOverlay({
   const overlayElementRef = useRef<HTMLDivElement>() as MutableRefObject<HTMLDivElement>
 
   const currentOffset = useRef(trackIsShown ? INITIAL_OFFSET_VALUE_WHEN_SHOWN_TRACK : INITIAL_OFFSET_VALUE)
-  const currentCoordinates = useRef([])
+  const currentCoordinates = useRef<number[]>([])
   const overlayIsPanning = useRef(false)
   const isThrottled = useRef(false)
   const [showed, setShowed] = useState(false)
@@ -54,7 +54,7 @@ export function VesselLabelOverlay({
     []
   )
 
-  useMoveOverlayWhenDragging(overlay, map, currentOffset, moveVesselLabelWithThrottle, showed, isPanning => {
+  useMoveOverlayWhenDragging(overlay, currentOffset, moveVesselLabelWithThrottle, showed, isPanning => {
     overlayIsPanning.current = isPanning
   })
   useMoveOverlayWhenZooming(overlay, INITIAL_OFFSET_VALUE, zoomHasChanged, currentOffset, moveVesselLabelWithThrottle)
@@ -67,13 +67,13 @@ export function VesselLabelOverlay({
   }, [trackIsShown, overlay])
 
   useEffect(() => {
-    map?.addOverlay(overlay)
+    monitorfishMap.addOverlay(overlay)
     setShowed(true)
 
     return () => {
-      map?.removeOverlay(overlay)
+      monitorfishMap.removeOverlay(overlay)
     }
-  }, [overlay, map])
+  }, [overlay])
 
   useEffect(() => {
     overlay.setPosition(coordinates)
@@ -97,13 +97,13 @@ export function VesselLabelOverlay({
     isThrottled.current = true
     setTimeout(() => {
       const nextOffset = target.getOffset()
-      const pixel = map.getPixelFromCoordinate(coordinates)
+      const pixel = monitorfishMap.getPixelFromCoordinate(coordinates)
 
       const { height, width } = target.getElement().getBoundingClientRect()
       const nextXPixelCenter = pixel[X] + nextOffset[X] + width / 2
       const nextYPixelCenter = pixel[Y] + nextOffset[Y] + height / 2
 
-      const nextCoordinates = map.getCoordinateFromPixel([nextXPixelCenter, nextYPixelCenter])
+      const nextCoordinates = monitorfishMap.getCoordinateFromPixel([nextXPixelCenter, nextYPixelCenter])
       currentCoordinates.current = nextCoordinates
       moveLine(featureId, coordinates, nextCoordinates, nextOffset, opacity)
 

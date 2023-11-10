@@ -95,6 +95,7 @@ RUN chmod +x /tini
 RUN useradd -m -r ${USER} && \
     chown ${USER} /home/${USER}
 WORKDIR /home/${USER}
+RUN mkdir /home/${USER}/.prefect/
 
 RUN chown -R ${USER} .
 USER ${USER}

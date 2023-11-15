@@ -13,9 +13,9 @@ import { closeBeaconMalfunctionInKanban } from '../../../domain/shared_slices/Be
 import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/vessel/showVesselFromBeaconMalfunctionsKanban'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { getDateTime } from '../../../utils'
-import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
-import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes_gris.svg'
-import { ReactComponent as TimeAgoSVG } from '../../icons/Label_horaire_VMS.svg'
+import CloseIconSVG from '../../icons/Croix_grise.svg?react'
+import AlertsSVG from '../../icons/Icone_alertes_gris.svg?react'
+import TimeAgoSVG from '../../icons/Label_horaire_VMS.svg?react'
 
 import type {
   BeaconMalfunction,

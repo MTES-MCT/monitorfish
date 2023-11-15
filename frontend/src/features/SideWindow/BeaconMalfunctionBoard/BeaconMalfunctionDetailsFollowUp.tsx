@@ -15,7 +15,7 @@ import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { getDate, mergeObjects } from '../../../utils'
 import { pushToObjectAtIndex } from '../../../utils/pushToObjectAtIndex'
-import { ReactComponent as CommentsSVG } from '../../icons/Commentaires.svg'
+import CommentsSVG from '../../icons/Commentaires.svg?react'
 
 import type {
   BeaconMalfunctionFollowUpItem,

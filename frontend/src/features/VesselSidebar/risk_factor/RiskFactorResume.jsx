@@ -8,9 +8,9 @@ import {
   getProbabilityRiskFactorText,
   getRiskFactorColor
 } from '../../../domain/entities/vessel/riskFactor'
-import { ReactComponent as RiskFactorImpactSVG } from '../../icons/Note_impact_poisson.svg'
-import { ReactComponent as RiskFactorControlSVG } from '../../icons/Note_de_controle_gyrophare.svg'
-import { ReactComponent as RiskFactorInfractionsSVG } from '../../icons/Note_infraction_stop.svg'
+import RiskFactorImpactSVG from '../../icons/Note_impact_poisson.svg?react'
+import RiskFactorControlSVG from '../../icons/Note_de_controle_gyrophare.svg?react'
+import RiskFactorInfractionsSVG from '../../icons/Note_infraction_stop.svg?react'
 import RiskFactorExplanationModal from './RiskFactorExplanationModal'
 import { useSelector } from 'react-redux'
 import ImpactRiskFactorDetails from './details/ImpactRiskFactorDetails'
@@ -19,9 +19,7 @@ import { ProbabilityRiskFactorDetails } from './details/ProbabilityRiskFactorDet
 import DetectabilityRiskFactorDetails from './details/DetectabilityRiskFactorDetails'
 
 const RiskFactorResume = () => {
-  const {
-    selectedVessel
-  } = useSelector(state => state.vessel)
+  const { selectedVessel } = useSelector(state => state.vessel)
 
   const [riskFactorExplanationIsOpen, setRiskFactorExplanationIsOpen] = useState(false)
   const [impactRiskFactorIsOpen, setImpactRiskFactorIsOpen] = useState(false)
@@ -30,123 +28,126 @@ const RiskFactorResume = () => {
 
   return (
     <>
-      {
-        selectedVessel?.riskFactor?.riskFactor
-          ? <>
-            <RiskFactorZone>
-              <GlobalRiskFactor>Note de risque globale</GlobalRiskFactor>
-              <GlobalRisk data-cy={'global-risk-factor'}>
-                <RiskFactorCursor
-                  height={24}
-                  isBig={true}
-                  value={parseFloat(selectedVessel?.riskFactor?.riskFactor).toFixed(1)}
-                  color={getRiskFactorColor(selectedVessel?.riskFactor?.riskFactor)}
-                  progress={100 * selectedVessel?.riskFactor?.riskFactor / 4}
+      {selectedVessel?.riskFactor?.riskFactor ? (
+        <>
+          <RiskFactorZone>
+            <GlobalRiskFactor>Note de risque globale</GlobalRiskFactor>
+            <GlobalRisk data-cy={'global-risk-factor'}>
+              <RiskFactorCursor
+                height={24}
+                isBig={true}
+                value={parseFloat(selectedVessel?.riskFactor?.riskFactor).toFixed(1)}
+                color={getRiskFactorColor(selectedVessel?.riskFactor?.riskFactor)}
+                progress={(100 * selectedVessel?.riskFactor?.riskFactor) / 4}
+                underCharter={selectedVessel.underCharter}
+              />
+              <GlobalText underCharter={selectedVessel.underCharter}>
+                <SeeMore
                   underCharter={selectedVessel.underCharter}
-                />
-                <GlobalText underCharter={selectedVessel.underCharter}>
-                  <SeeMore
-                    underCharter={selectedVessel.underCharter}
-                    data-cy={'show-risk-factor-explanation-modal'}
-                    onClick={() => setRiskFactorExplanationIsOpen(true)}
-                  >
-                    En savoir plus
-                  </SeeMore>
-                  {
-                    selectedVessel.underCharter
-                      ? <UnderCharterText>navire sous charte</UnderCharterText>
-                      : null
-                  }
-                </GlobalText>
-              </GlobalRisk>
-              <Line/>
-              <SubRisk
-                data-cy={'impact-risk-factor'}
-                onClick={() => setImpactRiskFactorIsOpen(!impactRiskFactorIsOpen)}
+                  data-cy={'show-risk-factor-explanation-modal'}
+                  onClick={() => setRiskFactorExplanationIsOpen(true)}
+                >
+                  En savoir plus
+                </SeeMore>
+                {selectedVessel.underCharter ? <UnderCharterText>navire sous charte</UnderCharterText> : null}
+              </GlobalText>
+            </GlobalRisk>
+            <Line />
+            <SubRisk data-cy={'impact-risk-factor'} onClick={() => setImpactRiskFactorIsOpen(!impactRiskFactorIsOpen)}>
+              <SubRiskHeader>
+                <SubRiskTitle>Impact sur la ressource</SubRiskTitle>
+                <Chevron $isOpen={impactRiskFactorIsOpen} />
+              </SubRiskHeader>
+              <RiskFactorImpact />
+              <RiskFactorCursor
+                height={8}
+                value={parseFloat(selectedVessel?.riskFactor?.impactRiskFactor).toFixed(1)}
+                color={getRiskFactorColor(selectedVessel?.riskFactor?.impactRiskFactor)}
+                progress={(100 * selectedVessel?.riskFactor?.impactRiskFactor) / 4}
+              />
+              <SubRiskText
+                title={getImpactRiskFactorText(
+                  selectedVessel?.riskFactor?.impactRiskFactor,
+                  selectedVessel?.riskFactor?.segmentHighestImpact
+                )}
               >
-                <SubRiskHeader>
-                  <SubRiskTitle>
-                    Impact sur la ressource
-                  </SubRiskTitle>
-                  <Chevron $isOpen={impactRiskFactorIsOpen}/>
-                </SubRiskHeader>
-                <RiskFactorImpact/>
-                <RiskFactorCursor
-                  height={8}
-                  value={parseFloat(selectedVessel?.riskFactor?.impactRiskFactor).toFixed(1)}
-                  color={getRiskFactorColor(selectedVessel?.riskFactor?.impactRiskFactor)}
-                  progress={100 * selectedVessel?.riskFactor?.impactRiskFactor / 4}
-                />
-                <SubRiskText title={getImpactRiskFactorText(selectedVessel?.riskFactor?.impactRiskFactor, selectedVessel?.riskFactor?.segmentHighestImpact)}>
-                  {getImpactRiskFactorText(selectedVessel?.riskFactor?.impactRiskFactor, selectedVessel?.riskFactor?.segmentHighestImpact)}
-                </SubRiskText>
-              </SubRisk>
-              <ImpactRiskFactorDetails isOpen={impactRiskFactorIsOpen}/>
-              <Line/>
-              <SubRisk
-                data-cy={'probability-risk-factor'}
-                onClick={() => setProbabilityRiskFactorIsOpen(!probabilityRiskFactorIsOpen)}
+                {getImpactRiskFactorText(
+                  selectedVessel?.riskFactor?.impactRiskFactor,
+                  selectedVessel?.riskFactor?.segmentHighestImpact
+                )}
+              </SubRiskText>
+            </SubRisk>
+            <ImpactRiskFactorDetails isOpen={impactRiskFactorIsOpen} />
+            <Line />
+            <SubRisk
+              data-cy={'probability-risk-factor'}
+              onClick={() => setProbabilityRiskFactorIsOpen(!probabilityRiskFactorIsOpen)}
+            >
+              <SubRiskHeader>
+                <SubRiskTitle>Probabilité d&apos;infraction</SubRiskTitle>
+                <Chevron $isOpen={probabilityRiskFactorIsOpen} />
+              </SubRiskHeader>
+              <RiskFactorInfractions />
+              <RiskFactorCursor
+                height={8}
+                value={parseFloat(selectedVessel?.riskFactor?.probabilityRiskFactor).toFixed(1)}
+                color={getRiskFactorColor(selectedVessel?.riskFactor?.probabilityRiskFactor)}
+                progress={(100 * selectedVessel?.riskFactor?.probabilityRiskFactor) / 4}
+              />
+              <SubRiskText
+                title={getProbabilityRiskFactorText(
+                  selectedVessel?.riskFactor?.probabilityRiskFactor,
+                  selectedVessel?.riskFactor?.numberControlsLastFiveYears
+                )}
               >
-                <SubRiskHeader>
-                  <SubRiskTitle>
-                    Probabilité d&apos;infraction
-                  </SubRiskTitle>
-                  <Chevron $isOpen={probabilityRiskFactorIsOpen}/>
-                </SubRiskHeader>
-                <RiskFactorInfractions/>
-                <RiskFactorCursor
-                  height={8}
-                  value={parseFloat(selectedVessel?.riskFactor?.probabilityRiskFactor).toFixed(1)}
-                  color={getRiskFactorColor(selectedVessel?.riskFactor?.probabilityRiskFactor)}
-                  progress={100 * selectedVessel?.riskFactor?.probabilityRiskFactor / 4}
-                />
-                <SubRiskText title={getProbabilityRiskFactorText(selectedVessel?.riskFactor?.probabilityRiskFactor, selectedVessel?.riskFactor?.numberControlsLastFiveYears)}>
-                  {getProbabilityRiskFactorText(selectedVessel?.riskFactor?.probabilityRiskFactor, selectedVessel?.riskFactor?.numberControlsLastFiveYears)}
-                </SubRiskText>
-              </SubRisk>
-              <ProbabilityRiskFactorDetails isOpen={probabilityRiskFactorIsOpen}/>
-              <Line/>
-              <SubRisk
-                data-cy={'detectability-risk-factor'}
-                onClick={() => setDetectabilityRiskFactorIsOpen(!detectabilityRiskFactorIsOpen)}
+                {getProbabilityRiskFactorText(
+                  selectedVessel?.riskFactor?.probabilityRiskFactor,
+                  selectedVessel?.riskFactor?.numberControlsLastFiveYears
+                )}
+              </SubRiskText>
+            </SubRisk>
+            <ProbabilityRiskFactorDetails isOpen={probabilityRiskFactorIsOpen} />
+            <Line />
+            <SubRisk
+              data-cy={'detectability-risk-factor'}
+              onClick={() => setDetectabilityRiskFactorIsOpen(!detectabilityRiskFactorIsOpen)}
+            >
+              <SubRiskHeader>
+                <SubRiskTitle>Priorité de contrôle</SubRiskTitle>
+                <Chevron $isOpen={detectabilityRiskFactorIsOpen} />
+              </SubRiskHeader>
+              <RiskFactorControl />
+              <RiskFactorCursor
+                height={8}
+                value={parseFloat(selectedVessel?.riskFactor?.detectabilityRiskFactor).toFixed(1)}
+                color={getRiskFactorColor(selectedVessel?.riskFactor?.detectabilityRiskFactor)}
+                progress={(100 * selectedVessel?.riskFactor?.detectabilityRiskFactor) / 4}
+              />
+              <SubRiskText
+                title={getDetectabilityRiskFactorText(selectedVessel?.riskFactor?.detectabilityRiskFactor, true)}
               >
-                <SubRiskHeader>
-                  <SubRiskTitle>
-                    Priorité de contrôle
-                  </SubRiskTitle>
-                  <Chevron $isOpen={detectabilityRiskFactorIsOpen}/>
-                </SubRiskHeader>
-                <RiskFactorControl/>
-                <RiskFactorCursor
-                  height={8}
-                  value={parseFloat(selectedVessel?.riskFactor?.detectabilityRiskFactor).toFixed(1)}
-                  color={getRiskFactorColor(selectedVessel?.riskFactor?.detectabilityRiskFactor)}
-                  progress={100 * selectedVessel?.riskFactor?.detectabilityRiskFactor / 4}
-                />
-                <SubRiskText title={getDetectabilityRiskFactorText(selectedVessel?.riskFactor?.detectabilityRiskFactor, true)}>
-                  {getDetectabilityRiskFactorText(selectedVessel?.riskFactor?.detectabilityRiskFactor, true)}
-                </SubRiskText>
-              </SubRisk>
-              <DetectabilityRiskFactorDetails isOpen={detectabilityRiskFactorIsOpen}/>
-            </RiskFactorZone>
-            <RiskFactorExplanationModal
-              isOpen={riskFactorExplanationIsOpen}
-              setIsOpen={setRiskFactorExplanationIsOpen}
-            />
-          </>
-          : <NoRiskFactor>Ce navire n&apos;a pas de note de risque</NoRiskFactor>
-      }
+                {getDetectabilityRiskFactorText(selectedVessel?.riskFactor?.detectabilityRiskFactor, true)}
+              </SubRiskText>
+            </SubRisk>
+            <DetectabilityRiskFactorDetails isOpen={detectabilityRiskFactorIsOpen} />
+          </RiskFactorZone>
+          <RiskFactorExplanationModal isOpen={riskFactorExplanationIsOpen} setIsOpen={setRiskFactorExplanationIsOpen} />
+        </>
+      ) : (
+        <NoRiskFactor>Ce navire n&apos;a pas de note de risque</NoRiskFactor>
+      )}
     </>
   )
 }
 
 const GlobalText = styled.div`
-  ${props => props.underCharter
-  ? `
+  ${props =>
+    props.underCharter
+      ? `
   width: 100%;
   display: inline-block;
   `
-  : null}
+      : null}
 `
 
 const UnderCharterText = styled.span`
@@ -194,17 +195,18 @@ const SeeMore = styled.a`
   color: ${COLORS.slateGray};
   text-decoration: underline;
   cursor: pointer;
-  margin-top: ${props => props.underCharter ? -20 : 19}px;
-  margin-right: ${props => props.underCharter ? 25 : 12}px;
-  ${props => props.underCharter
-  ? `
+  margin-top: ${props => (props.underCharter ? -20 : 19)}px;
+  margin-right: ${props => (props.underCharter ? 25 : 12)}px;
+  ${props =>
+    props.underCharter
+      ? `
   margin-top: -20px;
   margin-right: 25px;
   position: relative;
   right: -100px;
   float: left;
   `
-  : `
+      : `
   margin-right: 12px;
   line-height: 43px;
   `}

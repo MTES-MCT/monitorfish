@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 
-import { ReactComponent as REGPaperSVG } from '../../icons/reg_paper.svg'
-import { ReactComponent as REGPaperDarkSVG } from '../../icons/reg_paper_dark.svg'
+import REGPaperSVG from '../../icons/reg_paper.svg?react'
+import REGPaperDarkSVG from '../../icons/reg_paper_dark.svg?react'
 
 const baseREGPaperIcon = css`
   width: 20px;

@@ -10,7 +10,7 @@ import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { MapButton } from '../../commonStyles/MapButton'
 import { MapComponent } from '../../commonStyles/MapComponent'
-import { ReactComponent as SearchIconSVG } from '../../icons/Loupe.svg'
+import SearchIconSVG from '../../icons/Loupe.svg?react'
 import { VesselSearch } from '../../VesselSearch'
 
 import type { VesselIdentity } from '../../../domain/entities/vessel/types'

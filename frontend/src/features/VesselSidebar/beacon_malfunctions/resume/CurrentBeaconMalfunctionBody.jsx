@@ -6,7 +6,7 @@ import { VesselStatusSelectValue } from '../../../SideWindow/BeaconMalfunctionBo
 import { SelectPicker } from 'rsuite'
 import updateBeaconMalfunctionFromKanban from '../../../../domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
 import { useDispatch } from 'react-redux'
-import { ReactComponent as TimeAgoSVG } from '../../../icons/Label_horaire_VMS.svg'
+import TimeAgoSVG from '../../../icons/Label_horaire_VMS.svg?react'
 import { getMalfunctionStartDateText } from '../../../../domain/entities/beaconMalfunction'
 
 const CurrentBeaconMalfunctionBody = props => {

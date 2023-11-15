@@ -3,8 +3,8 @@ import styled from 'styled-components'
 
 import { SpecyCatchDetail } from './SpecyCatchDetail'
 import { COLORS } from '../../../../../constants/constants'
-import { ReactComponent as ChevronIconSVG } from '../../../../icons/Chevron_simple_gris.svg'
-import { ReactComponent as WarningSVG } from '../../../../icons/Point_exclamation_info.svg'
+import ChevronIconSVG from '../../../../icons/Chevron_simple_gris.svg?react'
+import WarningSVG from '../../../../icons/Point_exclamation_info.svg?react'
 
 import type { LogbookCatchesBySpecy } from '../../../Logbook.types'
 import type { HTMLProps } from 'react'

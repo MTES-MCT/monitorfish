@@ -29,22 +29,21 @@ RUN gradle assemble
 ###########################
 # Build frontend with npm #
 ###########################
-FROM node:18-alpine as buildFront
+FROM node:20-alpine as buildFront
 
 ARG VERSION
 ARG ENV_PROFILE
 ENV CI=true
-ENV REACT_APP_ENV=$ENV_PROFILE
+ENV ENV_PROFILE=$ENV_PROFILE
 
-RUN echo ${REACT_APP_ENV}
+RUN echo ${ENV_PROFILE}
 
 COPY frontend/ /tmp/frontend/
 COPY infra/ /tmp/infra/
 WORKDIR /tmp/frontend
 
 # Files are expected to be in /tmp/frontend/dist/monitorfish-frontend
-# TODO Remove `--legacy-peer-deps` option as soon as we replace `react-scripts` by something else.
-RUN npm ci --legacy-peer-deps
+RUN npm ci
 RUN npm run build
 
 ######################
@@ -84,7 +83,6 @@ ENV VERSION=$VERSION
 ARG ENV_PROFILE
 ENV ENV_PROFILE=$ENV_PROFILE
 
-ENV REACT_APP_ENV=$ENV_PROFILE
 ENV ENV_DB_URL=""
 
 # Add bash
@@ -114,7 +112,6 @@ USER monitorfish
 # Copy files for the front
 RUN mkdir /home/monitorfish/public
 COPY --from=buildSourcemaps /tmp/frontend/build /home/monitorfish/public/
-COPY --from=buildFront /tmp/infra/docker/env.sh /home/monitorfish/
 
 # Add logs folder to be mounted as volume
 RUN mkdir /home/monitorfish/logs
@@ -128,13 +125,8 @@ ENV SPRING_PROFILES_ACTIVE=$ENV_PROFILE
 
 RUN echo ${ENV_PROFILE}
 
-USER root
-RUN chown monitorfish /home/monitorfish/env.sh
-RUN chmod +x /home/monitorfish/env.sh
 USER monitorfish
 
-ENV REACT_APP_GEOSERVER_LOCAL_URL=""
-
-ENTRYPOINT ["/home/monitorfish/env.sh"]
+ENV VITE_GEOSERVER_LOCAL_URL=""
 
 CMD exec java -Dspring.config.additional-location="/home/monitorfish/configurations/" -jar "monitorfish-${VERSION}.jar"

@@ -1,7 +1,0 @@
-{
-  "extends": ".",
-  "compilerOptions": {
-    "checkJs": false
-  },
-  "exclude": ["cypress/*", "node_modules/*"]
-}

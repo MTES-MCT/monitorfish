@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { ReactComponent as EditSVG } from '../../icons/Bouton_edition.svg'
+import EditSVG from '../../icons/Bouton_edition.svg?react'
 
 export const EditIcon = styled(EditSVG)<{
   $isOver: boolean

@@ -97,11 +97,10 @@ jobs:
         with:
           cache: npm
           cache-dependency-path: ./frontend/package-lock.json
-          node-version: 18
+          node-version: 20
 
       - name: Install Node.js dependencies
-        # TODO Remove `--legacy-peer-deps` option as soon as we replace `react-scripts` by something else.
-        run: npm ci --legacy-peer-deps
+        run: npm ci
         working-directory: ./frontend
 
       - name: Lint Frontend
@@ -109,7 +108,7 @@ jobs:
         working-directory: ./frontend
 
       - name: Check Frontend types
-        run: npm run test:type:partial
+        run: npm run test:type
         working-directory: ./frontend
 
       - name: Unit test
@@ -141,7 +140,7 @@ jobs:
         uses: docker/setup-buildx-action@master
 
       - name: Cache Docker layers
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /tmp/.buildx-cache-app
           key: ${{ runner.os }}-single-buildx-app-${{ github.ref_name }}
@@ -149,7 +148,7 @@ jobs:
             ${{ runner.os }}-single-buildx-app-
 
       - name: Build image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5
         with:
           context: .
           load: true
@@ -204,7 +203,7 @@ jobs:
       ENV_PROFILE: ${{ needs.version.outputs.ENV_PROFILE }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       MONITORFISH_VERSION: ${{ needs.version.outputs.VERSION }}
-      REACT_APP_CYPRESS_PORT: 8880
+      VITE_CYPRESS_PORT: 8880
       VERSION: ${{ needs.version.outputs.VERSION }}
     steps:
       - name: Checkout
@@ -223,7 +222,7 @@ jobs:
         with:
           cache: npm
           cache-dependency-path: ./frontend/package-lock.json
-          node-version: 18
+          node-version: 20
 
       - name: Setup Firefox
         uses: browser-actions/setup-firefox@latest
@@ -246,8 +245,7 @@ jobs:
           config-file: config/cypress.config.ts
           env: PORT=8880
           install: true
-          # TODO Remove `--legacy-peer-deps` option as soon as we replace `react-scripts` by something else.
-          install-command: npm ci --legacy-peer-deps
+          install-command: npm ci
           parallel: true
           record: true
           wait-on: "http://localhost:8880"

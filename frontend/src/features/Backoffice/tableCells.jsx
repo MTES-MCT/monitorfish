@@ -1,7 +1,7 @@
 import { COLORS } from '../../constants/constants'
 import { RiskFactorBox } from '../VesselSidebar/risk_factor/RiskFactorBox'
 import { getRiskFactorColor } from '../../domain/entities/vessel/riskFactor'
-import { ReactComponent as DeleteIconSVG } from '../icons/Icone_suppression.svg'
+import DeleteIconSVG from '../icons/Icone_suppression.svg?react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { InputPicker, Table, Tag, TagPicker } from 'rsuite'
@@ -27,12 +27,7 @@ export const ModifiableCell = ({ dataKey, id, inputType, maxLength, onChange, af
 
   return (
     <ModifiableCellWrapper>
-      <Cell
-        title={rowData[dataKey]}
-        key={rowData[id]}
-        className={'table-content-editing'}
-        {...props}
-      >
+      <Cell title={rowData[dataKey]} key={rowData[id]} className={'table-content-editing'} {...props}>
         <FleetSegmentInput
           isDisabled={isDisabled}
           afterChange={afterChange}
@@ -51,7 +46,7 @@ export const ModifiableCell = ({ dataKey, id, inputType, maxLength, onChange, af
 }
 
 const ModifiableCellWrapper = styled.div`
-  .rs-input:focus{
+  .rs-input:focus {
     background: ${COLORS.charcoal};
     color: ${COLORS.white};
   }
@@ -67,12 +62,7 @@ export const ImpactCell = ({ dataKey, id, onChange, ...props }) => {
   const dataCy = `row-${rowData[id]}-${dataKey}`
 
   return (
-    <Cell
-      title={rowData[dataKey]}
-      key={rowData[id]}
-      className={'table-content-editing'}
-      {...props}
-    >
+    <Cell title={rowData[dataKey]} key={rowData[id]} className={'table-content-editing'} {...props}>
       <ImpactSelectPicker
         data-cy={dataCy}
         cleanable={false}
@@ -97,12 +87,24 @@ const ImpactSelectPicker = styled(SelectPicker)`
   }
 `
 
-export const FleetSegmentInput = ({ maxLength, value, inputType, id, dataKey, withinCell, onChange, dataCy, isDisabled, afterChange }) => {
-  const onChangeCallback = useCallback(event => {
+export const FleetSegmentInput = ({
+  maxLength,
+  value,
+  inputType,
+  id,
+  dataKey,
+  withinCell,
+  onChange,
+  dataCy,
+  isDisabled,
+  afterChange
+}) => {
+  const onChangeCallback = useCallback(
+    event => {
       let value = null
       switch (inputType) {
         case INPUT_TYPE.INT: {
-          value = (event.target.value && !isNaN(parseInt(event.target.value))) ? parseInt(event.target.value) : 0
+          value = event.target.value && !isNaN(parseInt(event.target.value)) ? parseInt(event.target.value) : 0
           break
         }
         case INPUT_TYPE.DOUBLE: {
@@ -121,28 +123,32 @@ export const FleetSegmentInput = ({ maxLength, value, inputType, id, dataKey, wi
       } else {
         afterChange && afterChange(dataCy)
       }
-  }, [onChange, dataKey, id, afterChange, dataCy])
+    },
+    [onChange, dataKey, id, afterChange, dataCy]
+  )
 
-  return <input
-    data-cy={dataCy}
-    id={id}
-    disabled={isDisabled}
-    style={{
-      fontSize: 13,
-      marginTop: withinCell ? -8 : 5,
-      marginBottom: withinCell ? 0 : 20,
-      marginLeft: withinCell ? -7 : 0,
-      marginRight: 0,
-      paddingLeft: 5,
-      paddingRight: 10,
-      fontWeight: 500
-    }}
-    type="text"
-    maxLength={maxLength}
-    className="rs-input"
-    value={value}
-    onChange={event => onChangeCallback(event)}
-  />
+  return (
+    <input
+      data-cy={dataCy}
+      id={id}
+      disabled={isDisabled}
+      style={{
+        fontSize: 13,
+        marginTop: withinCell ? -8 : 5,
+        marginBottom: withinCell ? 0 : 20,
+        marginLeft: withinCell ? -7 : 0,
+        marginRight: 0,
+        paddingLeft: 5,
+        paddingRight: 10,
+        fontWeight: 500
+      }}
+      type="text"
+      maxLength={maxLength}
+      className="rs-input"
+      value={value}
+      onChange={event => onChangeCallback(event)}
+    />
+  )
 }
 
 /**
@@ -152,19 +158,20 @@ export const ControlPriorityCell = ({ rowData, dataKey, onChange, ...props }) =>
   const dataCy = `row-${rowData.id}-${dataKey}`
 
   return (
-    <Cell
-      key={rowData.id}
-      {...props}
-      className={'table-content-editing'}
-    >
+    <Cell key={rowData.id} {...props} className={'table-content-editing'}>
       <InputPicker
         data-cy={dataCy}
         value={rowData[dataKey]}
         onChange={value => {
-          const controlPriority = (value && !isNaN(parseInt(value))) ? parseInt(value) : ''
+          const controlPriority = value && !isNaN(parseInt(value)) ? parseInt(value) : ''
           onChange && onChange(rowData.id, dataKey, controlPriority)
         }}
-        data={[{ label: 1, value: 1 }, { label: 2, value: 2 }, { label: 3, value: 3 }, { label: 4, value: 4 }]}
+        data={[
+          { label: 1, value: 1 },
+          { label: 2, value: 2 },
+          { label: 3, value: 3 },
+          { label: 4, value: 4 }
+        ]}
         style={{ width: 20 }}
         creatable={false}
         cleanable={false}
@@ -176,7 +183,7 @@ export const ControlPriorityCell = ({ rowData, dataKey, onChange, ...props }) =>
 
 /**
  * @param {*} props
-*/
+ */
 export const SegmentCellWithTitle = ({ rowData, dataKey, ...props }) => (
   <Cell
     title={`Segment ${rowData[dataKey] || 'inconnu'}`}
@@ -204,25 +211,20 @@ export const ExpandCell = ({ rowData, dataKey, expandedRowKeys, onChange, ...pro
       background: COLORS.gainsboro
     }}
   >
-    {expandedRowKeys.some((key) => key === rowData[rowKey]) ? '-' : '+'}
+    {expandedRowKeys.some(key => key === rowData[rowKey]) ? '-' : '+'}
   </Cell>
 )
 
 /**
  * @param {*} props
  */
-export const ImpactRiskFactorCell = ({ rowData, expandedRowKeys, onChange, ...props }) =>
-  <Cell
-    {...props}
-    style={{ marginLeft: 13 }}
-  >
-    <RiskFactorBox
-      height={8}
-      color={getRiskFactorColor(rowData.impactRiskFactor)}
-    >
+export const ImpactRiskFactorCell = ({ rowData, expandedRowKeys, onChange, ...props }) => (
+  <Cell {...props} style={{ marginLeft: 13 }}>
+    <RiskFactorBox height={8} color={getRiskFactorColor(rowData.impactRiskFactor)}>
       {rowData.impactRiskFactor}
     </RiskFactorBox>
   </Cell>
+)
 
 /**
  * This component show a list of tag by default and only open the tagPicker if the user click, for performance reason
@@ -237,20 +239,20 @@ export const TagPickerCell = ({ dataKey, data, id, onChange, ...props }) => {
     setIsOpened(false)
   }, [clickedOutsideComponent])
 
-  return <TagPickerWrapper ref={wrapperRef}>
-    <Cell
-      {...props}
-      style={{
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
-        overflow: 'hidden'
-      }}
-      onClick={() => setIsOpened(true)}
-      title={rowData[dataKey]?.join(', ')}
-    >
-      {
-        isOpened
-          ? <TagPicker
+  return (
+    <TagPickerWrapper ref={wrapperRef}>
+      <Cell
+        {...props}
+        style={{
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+          overflow: 'hidden'
+        }}
+        onClick={() => setIsOpened(true)}
+        title={rowData[dataKey]?.join(', ')}
+      >
+        {isOpened ? (
+          <TagPicker
             virtualized
             searchable
             value={rowData[dataKey]}
@@ -262,17 +264,18 @@ export const TagPickerCell = ({ dataKey, data, id, onChange, ...props }) => {
             renderMenuItem={(_, item) => renderTagPickerMenuItem(onChange, item)}
             renderValue={(_, items) => renderTagPickerValue(items)}
           />
-          : <TagOnly className="rs-picker-tag-wrapper">
-            {
-              rowData[dataKey]?.map(tag =>
-                <div key={tag} className="rs-tag rs-tag-default">
-                  <span className="rs-tag-text">{tag}</span>
-                </div>)
-            }
+        ) : (
+          <TagOnly className="rs-picker-tag-wrapper">
+            {rowData[dataKey]?.map(tag => (
+              <div key={tag} className="rs-tag rs-tag-default">
+                <span className="rs-tag-text">{tag}</span>
+              </div>
+            ))}
           </TagOnly>
-      }
-    </Cell>
-  </TagPickerWrapper>
+        )}
+      </Cell>
+    </TagPickerWrapper>
+  )
 }
 
 const TagPickerWrapper = styled.div`
@@ -284,7 +287,7 @@ const TagPickerWrapper = styled.div`
   .rs-picker-input {
     border: none;
     margin-left: -5px !important;
-    margin-top: 0px  !important;
+    margin-top: 0px !important;
   }
 
   .rs-picker-default .rs-picker-toggle.rs-btn-xs {
@@ -292,7 +295,8 @@ const TagPickerWrapper = styled.div`
     width: 290px;
   }
 
-  .rs-picker-has-value .rs-btn .rs-picker-toggle-value, .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
+  .rs-picker-has-value .rs-btn .rs-picker-toggle-value,
+  .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
     color: ${COLORS.charcoal};
   }
 
@@ -332,22 +336,12 @@ const TagPickerWrapper = styled.div`
   }
 `
 
-export function renderTagPickerMenuItem (onChange, item) {
-  return (
-    <Label onClick={() => onChange(item.label)}>
-      {item.label}
-    </Label>
-  )
+export function renderTagPickerMenuItem(onChange, item) {
+  return <Label onClick={() => onChange(item.label)}>{item.label}</Label>
 }
 
-export function renderTagPickerValue (items) {
-  return items
-    .filter(tag => tag)
-    .map(tag => (
-      <Tag key={tag?.label}>
-        {tag?.label}
-      </Tag>
-    ))
+export function renderTagPickerValue(items) {
+  return items.filter(tag => tag).map(tag => <Tag key={tag?.label}>{tag?.label}</Tag>)
 }
 
 const TagOnly = styled.div`
@@ -407,7 +401,7 @@ export const DeleteCell = ({ dataKey, id, onClick, ...props }) => {
         data-cy={`delete-row-${rowData[id]}`}
         onClick={() => onClick && onClick(rowData[id], rowData[dataKey])}
       >
-        <DeleteIcon/>
+        <DeleteIcon />
       </Delete>
     </Cell>
   )

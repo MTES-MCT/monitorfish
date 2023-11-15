@@ -1,12 +1,14 @@
 import { WebStorageStateStore } from 'oidc-client-ts'
 
-import { getEnvironmentVariable } from '../api/utils'
+import { isCypress } from '../utils/isCypress'
+
+const IS_CYPRESS = isCypress()
 
 export function getOIDCConfig() {
-  const IS_OIDC_ENABLED = getEnvironmentVariable('REACT_APP_OIDC_ENABLED')
-  const OIDC_REDIRECT_URI = getEnvironmentVariable('REACT_APP_OIDC_REDIRECT_URI')
-  const OIDC_AUTHORITY = getEnvironmentVariable('REACT_APP_OIDC_AUTHORITY')
-  const OIDC_CLIENT_ID = getEnvironmentVariable('REACT_APP_OIDC_CLIENT_ID')
+  const IS_OIDC_ENABLED = import.meta.env.VITE_OIDC_ENABLED === 'true'
+  const OIDC_REDIRECT_URI = import.meta.env.VITE_OIDC_REDIRECT_URI
+  const OIDC_AUTHORITY = import.meta.env.VITE_OIDC_AUTHORITY
+  const OIDC_CLIENT_ID = import.meta.env.VITE_OIDC_CLIENT_ID
 
   if (IS_OIDC_ENABLED && (!OIDC_REDIRECT_URI || !OIDC_AUTHORITY || !OIDC_CLIENT_ID)) {
     throw new Error('Cannot setup Cerbère authentication.')
@@ -26,7 +28,8 @@ export function getOIDCConfig() {
   }
 
   return {
-    IS_OIDC_ENABLED: getEnvironmentVariable('REACT_APP_CYPRESS_TEST') ? false : IS_OIDC_ENABLED,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    IS_OIDC_ENABLED: IS_CYPRESS ? false : IS_OIDC_ENABLED,
     oidcConfig
   }
 }

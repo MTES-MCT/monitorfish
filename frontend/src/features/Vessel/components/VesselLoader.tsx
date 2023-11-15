@@ -10,7 +10,7 @@ import { useIsInLightMode } from '../../../hooks/authorization/useIsInLightMode'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { MapComponent } from '../../commonStyles/MapComponent'
-import { ReactComponent as VesselSVG } from '../../icons/Icone_navire.svg'
+import VesselSVG from '../../icons/Icone_navire.svg?react'
 import { useGetVesselsLastPositionsApi } from '../hooks/useGetVesselsLastPositionsApi'
 import { showVesselsLastPosition } from '../useCases/showVesselsLastPosition'
 

@@ -45,7 +45,7 @@ docker-build:
 		--build-arg SENTRY_URL=$(SENTRY_URL) \
 		--build-arg SENTRY_AUTH_TOKEN=$(SENTRY_AUTH_TOKEN) \
 		--build-arg SENTRY_ORG=$(SENTRY_ORG) \
-		--build-arg SENTRY_PROJECT=$(SENTRY_PROJECT) 
+		--build-arg SENTRY_PROJECT=$(SENTRY_PROJECT)
 docker-tag:
 	docker tag monitorfish-app:$(VERSION) docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-app:$(VERSION)
 docker-push:

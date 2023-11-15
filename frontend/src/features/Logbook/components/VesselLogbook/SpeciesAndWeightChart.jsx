@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { ReactComponent as ChevronIconSVG } from '../../../icons/Chevron_simple_gris.svg'
+import ChevronIconSVG from '../../../icons/Chevron_simple_gris.svg?react'
 import { LogbookSpeciesPresentation } from '../../constants'
 
-function getHeight (weight, percentOfTotalFARWeight) {
+function getHeight(weight, percentOfTotalFARWeight) {
   let height = weight ? Math.log10(percentOfTotalFARWeight) : 22
 
   height = height * 50
@@ -62,71 +62,89 @@ const SpeciesAndWeightChart = ({
     return parseFloat(((presentationWeight * 100) / speciesWeight).toFixed(1))
   }
 
-  return <>
-    {
-      speciesAndWeightArrayWithHeight && speciesAndWeightArrayWithHeight.length
+  return (
+    <>
+      {speciesAndWeightArrayWithHeight && speciesAndWeightArrayWithHeight.length
         ? speciesAndWeightArrayWithHeight.map((speciesAndWeight, index) => {
-          return <Wrapper key={speciesAndWeight.species}>
-            <SpeciesAndWeight>
-              <Weight
-                hasPresentation={speciesPresentationAndWeightArray}
-                height={speciesAndWeight.height}
-                isLast={index === speciesAndWeightArrayWithHeight.length - 1 && speciesAndWeight.species !== speciesPresentationOpened}
-                onClick={() => speciesPresentationAndWeightArray
-                  ? openPresentation(speciesAndWeight.species, speciesPresentationAndWeightArray[index])
-                  : undefined
-                }
-              >
-                <WeightText>
-                  {parseFloat(speciesAndWeight.weight.toFixed(1))} kg{' '}
-                  {
-                    compareWithTotalWeight
-                      ? <Gray>({getPercentOfTotalFARWeight(speciesAndWeight)} %)</Gray>
-                      : null
-                  }
-                </WeightText>
-                {
-                  speciesPresentationAndWeightArray
-                    ? <ChevronIcon $isOpen={speciesAndWeight.species === speciesPresentationOpened}/>
-                    : null
-                }
-              </Weight>
-              <Species
-                height={speciesAndWeight.height}
-                isLast={index === speciesAndWeightArrayWithHeight.length - 1 && speciesAndWeight.species !== speciesPresentationOpened}
-              >
-                {
-                  speciesAndWeight.speciesName
-                    ? <>{speciesAndWeight.speciesName} ({speciesAndWeight.species})</>
-                    : speciesAndWeight.species
-                }
-              </Species>
-            </SpeciesAndWeight>
-            <PresentationWrapper isOpen={speciesAndWeight.species === speciesPresentationOpened}>
-                { speciesPresentationAndWeightArray && speciesPresentationAndWeightArray[index]
-                  ? speciesPresentationAndWeightArray[index]
-                    .map((speciesAndPresentation, presentationIndex) => {
-                      return <SpeciesAndPresentation key={speciesAndPresentation.presentation}>
-                        <PresentationWeight isLast={presentationIndex === speciesPresentationAndWeightArray[index].length - 1}>
-                          {speciesAndPresentation.weight} kg
-                          <Percents>({getPercentOfPresentationToSpeciesWeight(speciesAndPresentation.weight, speciesAndWeight.weight)} %)</Percents>
-                        </PresentationWeight>
-                        <Presentation>
-                          {speciesAndPresentation.presentation
-                            ? <>{LogbookSpeciesPresentation[speciesAndPresentation.presentation]} ({speciesAndPresentation.presentation}) (poids vif)</>
-                            : 'Inconnu'
-                          }
-                        </Presentation>
-                      </SpeciesAndPresentation>
-                    })
-                  : null
-                }
-            </PresentationWrapper>
-          </Wrapper>
-        })
-        : null
-    }
-  </>
+            return (
+              <Wrapper key={speciesAndWeight.species}>
+                <SpeciesAndWeight>
+                  <Weight
+                    hasPresentation={speciesPresentationAndWeightArray}
+                    height={speciesAndWeight.height}
+                    isLast={
+                      index === speciesAndWeightArrayWithHeight.length - 1 &&
+                      speciesAndWeight.species !== speciesPresentationOpened
+                    }
+                    onClick={() =>
+                      speciesPresentationAndWeightArray
+                        ? openPresentation(speciesAndWeight.species, speciesPresentationAndWeightArray[index])
+                        : undefined
+                    }
+                  >
+                    <WeightText>
+                      {parseFloat(speciesAndWeight.weight.toFixed(1))} kg{' '}
+                      {compareWithTotalWeight ? <Gray>({getPercentOfTotalFARWeight(speciesAndWeight)} %)</Gray> : null}
+                    </WeightText>
+                    {speciesPresentationAndWeightArray ? (
+                      <ChevronIcon $isOpen={speciesAndWeight.species === speciesPresentationOpened} />
+                    ) : null}
+                  </Weight>
+                  <Species
+                    height={speciesAndWeight.height}
+                    isLast={
+                      index === speciesAndWeightArrayWithHeight.length - 1 &&
+                      speciesAndWeight.species !== speciesPresentationOpened
+                    }
+                  >
+                    {speciesAndWeight.speciesName ? (
+                      <>
+                        {speciesAndWeight.speciesName} ({speciesAndWeight.species})
+                      </>
+                    ) : (
+                      speciesAndWeight.species
+                    )}
+                  </Species>
+                </SpeciesAndWeight>
+                <PresentationWrapper isOpen={speciesAndWeight.species === speciesPresentationOpened}>
+                  {speciesPresentationAndWeightArray && speciesPresentationAndWeightArray[index]
+                    ? speciesPresentationAndWeightArray[index].map((speciesAndPresentation, presentationIndex) => {
+                        return (
+                          <SpeciesAndPresentation key={speciesAndPresentation.presentation}>
+                            <PresentationWeight
+                              isLast={presentationIndex === speciesPresentationAndWeightArray[index].length - 1}
+                            >
+                              {speciesAndPresentation.weight} kg
+                              <Percents>
+                                (
+                                {getPercentOfPresentationToSpeciesWeight(
+                                  speciesAndPresentation.weight,
+                                  speciesAndWeight.weight
+                                )}{' '}
+                                %)
+                              </Percents>
+                            </PresentationWeight>
+                            <Presentation>
+                              {speciesAndPresentation.presentation ? (
+                                <>
+                                  {LogbookSpeciesPresentation[speciesAndPresentation.presentation]} (
+                                  {speciesAndPresentation.presentation}) (poids vif)
+                                </>
+                              ) : (
+                                'Inconnu'
+                              )}
+                            </Presentation>
+                          </SpeciesAndPresentation>
+                        )
+                      })
+                    : null}
+                </PresentationWrapper>
+              </Wrapper>
+            )
+          })
+        : null}
+    </>
+  )
 }
 
 const Presentation = styled.div`
@@ -160,8 +178,8 @@ const SpeciesAndPresentation = styled.div`
 `
 
 const PresentationWrapper = styled.div`
-  visibility: ${props => props.isOpen ? 'visible' : 'hidden'};
-  height: ${props => props.isOpen ? 'inherit' : '0px'};
+  visibility: ${props => (props.isOpen ? 'visible' : 'hidden')};
+  height: ${props => (props.isOpen ? 'inherit' : '0px')};
 `
 
 const Species = styled.div`
@@ -173,7 +191,7 @@ const Species = styled.div`
   color: ${COLORS.gunMetal};
   font-size: 13px;
   margin: 2px 0 0 10px;
-  ${props => props.isLast ? 'margin-bottom: 2px ;' : ''}
+  ${props => (props.isLast ? 'margin-bottom: 2px ;' : '')}
   font-weight: 500;
   max-width: 260px;
   white-space: nowrap;
@@ -189,7 +207,7 @@ const Weight = styled.div`
   border-left: 2px solid ${COLORS.slateGray};
   border-right: 2px solid ${COLORS.slateGray};
   border-top: 2px solid ${COLORS.slateGray};
-  ${props => props.isLast ? `border-bottom: 2px solid ${COLORS.slateGray};` : ''}
+  ${props => (props.isLast ? `border-bottom: 2px solid ${COLORS.slateGray};` : '')}
   height: ${props => props.height}px;
   min-height: 20px;
   max-height: 90px;
@@ -199,7 +217,7 @@ const Weight = styled.div`
   align-items: center;
   text-align: left;
   padding-left: 10px;
-  ${props => props.hasPresentation ? 'cursor: pointer;' : null}
+  ${props => (props.hasPresentation ? 'cursor: pointer;' : null)}
 `
 
 const PresentationWeight = styled.div`
@@ -208,8 +226,8 @@ const PresentationWeight = styled.div`
   border-left: 2px solid ${COLORS.slateGray};
   border-right: 2px solid ${COLORS.slateGray};
   border-top: 2px solid ${COLORS.slateGray};
-  ${props => props.isLast ? `border-bottom: 2px solid ${COLORS.slateGray};` : ''}
-  ${props => props.isLast ? 'margin-bottom: 4px;' : ''}
+  ${props => (props.isLast ? `border-bottom: 2px solid ${COLORS.slateGray};` : '')}
+  ${props => (props.isLast ? 'margin-bottom: 4px;' : '')}
   height: 20px;
   font-size: 11px;
   display: flex;
@@ -229,7 +247,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
   float: right;
   margin-right: 10px;
   margin-top: 0;
-  transform: ${props => !props.$isOpen ? 'rotate(180deg)' : 'rotate(0deg)'};
+  transform: ${props => (!props.$isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
   transition: all 0.5;
   text-align: right;
   margin-left: auto;

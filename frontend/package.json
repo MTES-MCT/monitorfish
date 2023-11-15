@@ -130,6 +130,7 @@
     "eslint-plugin-sort-destructure-keys": "1.5.0",
     "eslint-plugin-sort-keys-fix": "1.1.2",
     "eslint-plugin-typescript-sort-keys": "3.0.0",
+    "eventsourcemock": "^2.0.0",
     "got": "13.0.0",
     "husky": "8.0.3",
     "identity-obj-proxy": "3.0.0",

@@ -545,4 +545,90 @@ context('Side Window > Mission Form > Main Form', () => {
       'Cette unité est actuellement sélectionnée dans une autre mission en cours ouverte par le CNSP.'
     )
   })
+
+  it('Should update the form When receiving a mission update', () => {
+    editSideWindowMissionListMissionWithId(43, SeaFrontGroup.MED)
+    cy.wait(200)
+    cy.intercept('POST', '/api/v1/missions/43', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('updateMission')
+    cy.intercept('DELETE', '/bff/v1/mission_actions/8', {
+      body: {
+        id: 8
+      },
+      statusCode: 200
+    }).as('updateMissionAction')
+
+    cy.window()
+      .its('mockEventSources' as any)
+      .then(mockEventSources => {
+        mockEventSources['//localhost:8081/api/v1/missions/43/sse'].emitOpen()
+        mockEventSources['//localhost:8081/api/v1/missions/43/sse'].emit(
+          'MISSION_UPDATE',
+          new MessageEvent('MISSION_UPDATE', {
+            data: JSON.stringify({
+              closedBy: 'Heidi Silva',
+              controlUnits: [
+                {
+                  administration: 'DREAL',
+                  contact: '06 68 70 34 37 (Commandant Regino)',
+                  id: 10019,
+                  isArchived: false,
+                  name: 'DREAL Pays-de-La-Loire',
+                  resources: []
+                }
+              ],
+              // MODIFIED FIELD
+              endDateTimeUtc: '2024-02-13T09:49:40.350661Z',
+              envActions: [],
+              facade: 'MED',
+              geom: {
+                coordinates: [
+                  [
+                    [
+                      [-4.14598393, 49.02650252],
+                      [-3.85722498, 48.52088004],
+                      [-3.54255983, 48.92233858],
+                      [-3.86251979, 49.15131242],
+                      [-4.09368042, 49.18079556],
+                      [-4.14598393, 49.02650252]
+                    ]
+                  ]
+                ],
+                type: 'MultiPolygon'
+              },
+              id: 43,
+              isClosed: false,
+              isGeometryComputedFromControls: false,
+              // MODIFIED FIELD
+              isUnderJdp: true,
+              missionSource: 'MONITORENV',
+              missionTypes: ['SEA'],
+              observationsCacem: 'Anything box film quality. Lot series agent out rule end young pressure.',
+              // MODIFIED FIELD
+              observationsCnsp: 'Une observation à la dernière minute.',
+              openBy: 'Darren Clark',
+              startDateTimeUtc: '2023-03-05T23:08:54.923703Z'
+            })
+          })
+        )
+      })
+    cy.wait(500)
+
+    cy.clickButton('Supprimer l’action')
+    cy.clickButton('Enregistrer et quitter')
+
+    cy.wait('@updateMission').then(interception => {
+      if (!interception.response) {
+        assert.fail('`interception.response` is undefined.')
+      }
+
+      assert.isTrue(interception.request.body.isUnderJdp)
+      assert.equal(interception.request.body.endDateTimeUtc, '2024-02-13T09:49:40.350661Z')
+      assert.equal(interception.request.body.observationsCnsp, 'Une observation à la dernière minute.')
+    })
+  })
 })

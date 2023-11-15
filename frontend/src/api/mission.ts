@@ -43,7 +43,9 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
       query: () => `/v1/missions/engaged_control_units`,
       transformErrorResponse: response => new FrontendApiError(GET_ENGAGED_CONTROL_UNITS_ERROR_MESSAGE, response)
     }),
+import { monitorfishApi } from '.'
 
+import type { MissionWithActions } from '../domain/entities/mission/types'
     getMission: builder.query<Mission.Mission, Mission.Mission['id']>({
       providesTags: [{ type: 'Missions' }],
       query: id => `/v1/missions/${id}`,
@@ -108,13 +110,5 @@ export const monitorfishMissionApi = monitorfishApi.injectEndpoints({
     })
   })
 })
-
-export const {
-  useCreateMissionMutation,
-  useDeleteMissionMutation,
-  useGetEngagedControlUnitsQuery,
-  useGetMissionQuery,
-  useUpdateMissionMutation
-} = monitorenvMissionApi
 
 export const { useGetMissionsQuery } = monitorfishMissionApi

@@ -18,7 +18,7 @@ import {
   mapControlUnitToSortedResourcesAsOptions
 } from './utils'
 import { FIVE_MINUTES } from '../../../../../api/APIWorker'
-import { useGetEngagedControlUnitsQuery } from '../../../../../api/mission'
+import { useGetEngagedControlUnitsQuery } from '../../apis'
 import { Mission } from '../../../../../domain/entities/mission/types'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'

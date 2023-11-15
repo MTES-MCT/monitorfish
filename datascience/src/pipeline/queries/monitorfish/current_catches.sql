@@ -18,7 +18,8 @@ ordered_deps AS (
         ROW_NUMBER() OVER(PARTITION BY cfr ORDER BY (value->>'departureDatetimeUtc')::timestamptz DESC) as rk
     FROM public.logbook_reports
     WHERE log_type = 'DEP'
-    AND operation_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '6 months'
+    AND operation_datetime_utc > CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL '6 months'
+    AND (value->>'departureDatetimeUtc')::timestamptz < CURRENT_TIMESTAMP AT TIME ZONE 'UTC' + INTERVAL '24 hours'
     AND report_id NOT IN (SELECT referenced_report_id FROM deleted_or_corrected_messages)
     AND (software IS NULL OR software NOT LIKE '%VISIOCaptures%')
 ),
@@ -41,7 +42,8 @@ last_logbook_reports AS (
         MAX(report_datetime_utc) AS last_logbook_message_datetime_utc
     FROM public.logbook_reports
     WHERE operation_type IN ('DAT', 'COR')
-    AND operation_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '6 months'
+    AND operation_datetime_utc > CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL '6 months'
+    AND report_datetime_utc < CURRENT_TIMESTAMP AT TIME ZONE 'UTC' + INTERVAL '24 hours'
     AND (software IS NULL OR software NOT LIKE '%VISIOCaptures%')
     GROUP BY cfr
 ),
@@ -60,7 +62,7 @@ catches AS (
     AND r.trip_number = d.trip_number
     WHERE log_type = 'FAR'
     AND operation_type IN ('DAT', 'COR')
-    AND operation_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '6 months'
+    AND operation_datetime_utc > CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL '6 months'
     AND operation_number NOT IN (SELECT referenced_report_id FROM deleted_or_corrected_messages)
     AND (software IS NULL OR software NOT LIKE '%VISIOCaptures%')
 ),

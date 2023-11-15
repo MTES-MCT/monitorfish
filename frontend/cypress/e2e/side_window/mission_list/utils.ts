@@ -1,8 +1,15 @@
+import EventSource, { sources } from 'eventsourcemock'
+
 import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
 import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 
 export const openSideWindowMissionList = () => {
-  cy.visit('/side_window')
+  cy.visit('/side_window', {
+    onBeforeLoad(window) {
+      Object.defineProperty(window, 'EventSource', { value: EventSource })
+      Object.defineProperty(window, 'mockEventSources', { value: sources })
+    }
+  })
 
   cy.wait(500)
 

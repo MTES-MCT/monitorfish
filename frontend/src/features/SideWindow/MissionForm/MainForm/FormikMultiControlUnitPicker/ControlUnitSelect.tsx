@@ -18,13 +18,15 @@ import {
   mapControlUnitToSortedResourcesAsOptions
 } from './utils'
 import { FIVE_MINUTES } from '../../../../../api/APIWorker'
-import { useGetEngagedControlUnitsQuery } from '../../../../../api/mission'
+import { useGetEngagedControlUnitsQuery } from '../../apis'
 import { Mission } from '../../../../../domain/entities/mission/types'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 import { isValidControlUnit } from '../../utils'
 
 import type { LegacyControlUnit } from '../../../../../domain/types/legacyControlUnit'
+import type { ControlResource } from '../../../../../domain/types/controlResource'
+import type { ControlUnit } from '../../../../../domain/types/ControlUnit'
 import type { MissionMainFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 import type { Promisable } from 'type-fest'

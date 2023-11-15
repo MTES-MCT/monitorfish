@@ -6,7 +6,7 @@ import { setError, setHealthcheckTextWarning } from '../../../domain/shared_slic
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
-import { ReactComponent as WarningSVG } from '../../icons/Picto_alerte.svg'
+import WarningSVG from '../../icons/Picto_alerte.svg?react'
 import { useGetHealthcheckQuery } from '../apis'
 import { useIsOnline } from '../hooks/useIsOnline'
 import { getHealthcheckWarnings } from '../utils'

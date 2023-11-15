@@ -1,4 +1,5 @@
 import Countries from 'i18n-iso-countries'
+import COUNTRIES_FR from 'i18n-iso-countries/langs/fr.json'
 import React, { useCallback, useMemo, useState } from 'react'
 import { Checkbox, CheckboxGroup, MultiCascader, SelectPicker, Tag, TagPicker } from 'rsuite'
 import styled from 'styled-components'
@@ -9,11 +10,11 @@ import { LayerType as LayersType } from '../../domain/entities/layers/constants'
 import { VesselLocation, vesselSize } from '../../domain/entities/vessel/vessel'
 import { getZonesAndSubZonesPromises } from '../../domain/use_cases/layer/administrative/getZonesAndSubZonesPromises'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
-import { ReactComponent as PolygonFilterSVG } from '../icons/Filtre_zone_polygone.svg'
-import { ReactComponent as BoxFilterSVG } from '../icons/Filtre_zone_rectangle.svg'
+import PolygonFilterSVG from '../icons/Filtre_zone_polygone.svg?react'
+import BoxFilterSVG from '../icons/Filtre_zone_rectangle.svg?react'
 import FilterTag from '../MapButtons/VesselFilters/FilterTag'
 
-Countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
+Countries.registerLocale(COUNTRIES_FR)
 
 const countriesField = Object.keys(Countries.getAlpha2Codes()).map(country => ({
   label: Countries.getName(country, 'fr'),

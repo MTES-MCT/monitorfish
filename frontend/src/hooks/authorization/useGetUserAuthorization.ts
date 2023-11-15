@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-import { getEnvironmentVariable } from '../../api/utils'
 import { getCurrentUserAuthorization } from '../../domain/use_cases/authorization/getCurrentUserAuthorization'
+import { isCypress } from '../../utils/isCypress'
 
 import type { UserAuthorization } from '../../domain/entities/authorization/types'
 
@@ -9,7 +9,7 @@ import type { UserAuthorization } from '../../domain/entities/authorization/type
  * Get user authorization
  */
 export function useGetUserAuthorization(): UserAuthorization | undefined {
-  const IS_OIDC_ENABLED = getEnvironmentVariable('REACT_APP_OIDC_ENABLED')
+  const IS_OIDC_ENABLED = isCypress() || import.meta.env.VITE_OIDC_ENABLED === 'true'
   const [userAuthorization, setUserAuthorization] = useState<UserAuthorization | undefined>(undefined)
 
   useEffect(() => {

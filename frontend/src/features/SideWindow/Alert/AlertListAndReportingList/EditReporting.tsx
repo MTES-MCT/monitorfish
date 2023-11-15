@@ -7,8 +7,8 @@ import { setEditedReportingInSideWindow } from '../../../../domain/shared_slices
 import { ReportingType } from '../../../../domain/types/reporting'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { ReactComponent as CloseIconSVG } from '../../../icons/Croix_grise.svg'
-import { ReactComponent as AlertsSVG } from '../../../icons/Icone_alertes_gris.svg'
+import CloseIconSVG from '../../../icons/Croix_grise.svg?react'
+import AlertsSVG from '../../../icons/Icone_alertes_gris.svg?react'
 import { ReportingForm } from '../../../VesselSidebar/Reportings/Current/ReportingForm'
 
 import type { CSSProperties } from 'react'

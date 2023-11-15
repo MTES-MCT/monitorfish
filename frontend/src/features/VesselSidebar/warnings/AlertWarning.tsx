@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
 import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { ReactComponent as AlertSVG } from '../../icons/Icone_alertes.svg'
+import AlertSVG from '../../icons/Icone_alertes.svg?react'
 import { getAlertNameFromType } from '../../SideWindow/Alert/AlertListAndReportingList/utils'
 import { focusOnAlert } from '../../SideWindow/Alert/slice'
 

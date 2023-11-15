@@ -15,7 +15,7 @@ import { closeRegulatoryZoneMetadata } from '../../../../domain/use_cases/layer/
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { CloseIcon } from '../../../commonStyles/icons/CloseIcon.style'
-import { ReactComponent as REGPaperSVG } from '../../../icons/reg_paper_dark.svg'
+import REGPaperSVG from '../../../icons/reg_paper_dark.svg?react'
 
 export function RegulatoryZoneMetadata() {
   const dispatch = useMainAppDispatch()

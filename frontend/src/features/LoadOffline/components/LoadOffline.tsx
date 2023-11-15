@@ -4,7 +4,7 @@ import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import { Progress } from 'rsuite'
 import styled from 'styled-components'
 
-import { getEnvironmentVariable } from '../../../api/utils'
+import { isCypress } from '../../../utils/isCypress'
 import { CACHED_REQUEST_SIZE, UPDATE_CACHE } from '../../../workers/constants'
 import { useGetServiceWorker } from '../../../workers/hooks/useGetServiceWorker'
 import { fetchAllFromServiceWorkerByChunk, getZoomToRequestPaths } from '../utils'
@@ -12,11 +12,11 @@ import { fetchAllFromServiceWorkerByChunk, getZoomToRequestPaths } from '../util
 /**
  * This is used to reduce the number of tiles added in cache during the e2e test
  */
-const IS_CYPRESS_TEST = getEnvironmentVariable('REACT_APP_CYPRESS_TEST')
+const IS_CYPRESS = isCypress()
 const CYPRESS_TEST_TOTAL_DOWNLOAD_REQUESTS = 31 // Calculated using `getListOfPath()`
 
 const BYTE_TO_MEGA_BYTE_FACTOR = 0.000001
-const TOTAL_DOWNLOAD_REQUESTS = IS_CYPRESS_TEST ? CYPRESS_TEST_TOTAL_DOWNLOAD_REQUESTS : 55728 // Calculated using `getListOfPath()`
+const TOTAL_DOWNLOAD_REQUESTS = IS_CYPRESS ? CYPRESS_TEST_TOTAL_DOWNLOAD_REQUESTS : 55728 // Calculated using `getListOfPath()`
 const INTERVAL_REFRESH_MS = 5000
 const DOWNLOAD_CHUNK_SIZE = 10
 
@@ -72,7 +72,7 @@ export function LoadOffline() {
 
   const downloadAll = async () => {
     const zoomToRequestPaths = getZoomToRequestPaths()
-    const zoomToRequestPathsToDownload = IS_CYPRESS_TEST ? zoomToRequestPaths.slice(0, 6) : zoomToRequestPaths
+    const zoomToRequestPathsToDownload = IS_CYPRESS ? zoomToRequestPaths.slice(0, 6) : zoomToRequestPaths
 
     setIsDownloading(true)
     await fetchAllFromServiceWorkerByChunk(zoomToRequestPathsToDownload, DOWNLOAD_CHUNK_SIZE, cachedRequestsLength)

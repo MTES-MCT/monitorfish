@@ -4,31 +4,30 @@ import styled from 'styled-components'
 import { EmptyResult } from '../../commonStyles/Text.style'
 import { RegulatoryTopic as RegulatoryLayerTopic } from '../../MapButtons/LayersSidebar/RegulatoryZones/RegulatoryTopic'
 import { COLORS } from '../../../constants/constants'
-import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
-import { setLawTypeOpened, setRegulatoryTopicsOpened, closeRegulatoryZoneMetadataPanel } from '../../../domain/shared_slices/Regulatory'
+import ChevronIconSVG from '../../icons/Chevron_simple_gris.svg?react'
+import {
+  setLawTypeOpened,
+  setRegulatoryTopicsOpened,
+  closeRegulatoryZoneMetadataPanel
+} from '../../../domain/shared_slices/Regulatory'
 import updateTopicForAllZones from '../../../domain/use_cases/layer/regulation/updateTopicForAllZones'
 
 const LawType = props => {
   const dispatch = useDispatch()
   const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
   const lawTypeOpened = useSelector(state => state.regulatory.lawTypeOpened)
-  const {
-    lawType,
-    regZoneByLawType,
-    isEditable,
-    territory
-  } = props
+  const { lawType, regZoneByLawType, isEditable, territory } = props
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     setIsOpen(lawTypeOpened === lawType)
   }, [lawType, lawTypeOpened, setIsOpen])
 
-  function increaseNumberOfZonesOpened (number) {
+  function increaseNumberOfZonesOpened(number) {
     setNumberOfZonesOpened(numberOfZonesOpened + number)
   }
 
-  function decreaseNumberOfZonesOpened (number) {
+  function decreaseNumberOfZonesOpened(number) {
     const value = numberOfZonesOpened - number
     if (value < 0) {
       setNumberOfZonesOpened(0)
@@ -37,17 +36,17 @@ const LawType = props => {
     }
   }
 
-  function updateLayerName (oldLayerName, newLayerName) {
+  function updateLayerName(oldLayerName, newLayerName) {
     dispatch(updateTopicForAllZones(territory, lawType, oldLayerName, newLayerName))
   }
 
-  const displayRegulatoryTopics = (regulatoryTopics) => {
-    return (
-      regulatoryTopics && Object.keys(regulatoryTopics).length > 0
-        ? Object.keys(regulatoryTopics)
-          .sort()
-          .map((regulatoryTopic, index) => {
-            return <RegulatoryLayerTopic
+  const displayRegulatoryTopics = regulatoryTopics => {
+    return regulatoryTopics && Object.keys(regulatoryTopics).length > 0 ? (
+      Object.keys(regulatoryTopics)
+        .sort()
+        .map((regulatoryTopic, index) => {
+          return (
+            <RegulatoryLayerTopic
               key={regulatoryTopic}
               increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
               decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
@@ -58,8 +57,10 @@ const LawType = props => {
               isEditable={isEditable}
               updateLayerName={updateLayerName}
             />
-          })
-        : <EmptyResult>Aucun résultat</EmptyResult>
+          )
+        })
+    ) : (
+      <EmptyResult>Aucun résultat</EmptyResult>
     )
   }
 
@@ -76,15 +77,19 @@ const LawType = props => {
     setIsOpen(!isOpen)
   }
 
-  return (<LawTypeContainer data-cy='law-type'>
-    <LawTypeName onClick={openLawTypeList} data-cy={lawType}>
-      <LawTypeText>{lawType}</LawTypeText>
-      <ChevronIcon $isOpen={isOpen}/>
-    </LawTypeName>
-    {isOpen && <RegulatoryZoneLayerList isOpen={isOpen}>
-      {displayRegulatoryTopics(regZoneByLawType[lawType])}
-    </RegulatoryZoneLayerList>}
-  </LawTypeContainer>)
+  return (
+    <LawTypeContainer data-cy="law-type">
+      <LawTypeName onClick={openLawTypeList} data-cy={lawType}>
+        <LawTypeText>{lawType}</LawTypeText>
+        <ChevronIcon $isOpen={isOpen} />
+      </LawTypeName>
+      {isOpen && (
+        <RegulatoryZoneLayerList isOpen={isOpen}>
+          {displayRegulatoryTopics(regZoneByLawType[lawType])}
+        </RegulatoryZoneLayerList>
+      )}
+    </LawTypeContainer>
+  )
 }
 
 const LawTypeContainer = styled.div`
@@ -125,15 +130,15 @@ const RegulatoryZoneLayerList = styled.ul`
   border-bottom-right-radius: 2px;
   padding: 0;
   color: ${COLORS.gunMetal};
-  height: ${props => props.isOpen ? 'unset' : '0'};
-  opacity: ${props => props.isOpen ? '1' : '0'};
-  transition:  all 0.5s;
+  height: ${props => (props.isOpen ? 'unset' : '0')};
+  opacity: ${props => (props.isOpen ? '1' : '0')};
+  transition: all 0.5s;
   overflow-x: hidden;
   max-width: 100%;
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`
-  transform: ${props => props.$isOpen ? 'rotate(0deg)' : 'rotate(180deg)'};
+  transform: ${props => (props.$isOpen ? 'rotate(0deg)' : 'rotate(180deg)')};
   width: 17px;
   float: right;
   margin-right: 10px;

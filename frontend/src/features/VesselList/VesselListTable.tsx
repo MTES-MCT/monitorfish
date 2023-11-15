@@ -17,7 +17,7 @@ import { getCoordinates } from '../../coordinates'
 import { OPENLAYERS_PROJECTION } from '../../domain/entities/map/constants'
 import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
-import { ReactComponent as FlagSVG } from '../icons/flag.svg'
+import FlagSVG from '../icons/flag.svg?react'
 
 import type { SortType } from 'rsuite-table'
 

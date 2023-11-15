@@ -1,4 +1,4 @@
-import { expect } from '@jest/globals'
+import { expect, jest } from '@jest/globals'
 import dayjs from 'dayjs'
 
 import { downloadAsCsv } from '../downloadAsCsv'

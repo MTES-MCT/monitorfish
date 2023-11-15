@@ -10,8 +10,8 @@ import { showVessel } from '../../../domain/use_cases/vessel/showVessel'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { getDateTime, timeagoFrenchLocale } from '../../../utils'
-import { ReactComponent as InfoSVG } from '../../icons/Information.svg'
-import { ReactComponent as NoVesselSVG } from '../../icons/Picto_photo_navire_manquante.svg'
+import InfoSVG from '../../icons/Information.svg?react'
+import NoVesselSVG from '../../icons/Picto_photo_navire_manquante.svg?react'
 import RiskFactorResume from '../risk_factor/RiskFactorResume'
 
 // @ts-ignore

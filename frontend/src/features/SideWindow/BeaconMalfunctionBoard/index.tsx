@@ -25,7 +25,7 @@ import getAllBeaconMalfunctions from '../../../domain/use_cases/beaconMalfunctio
 import updateBeaconMalfunctionFromKanban from '../../../domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import SearchIconSVG from '../../icons/Loupe_dark.svg'
+import SearchIconSVG from '../../icons/Loupe_dark.svg?react'
 
 import type {
   BeaconMalfunction,

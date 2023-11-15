@@ -2,7 +2,7 @@ import { THEME } from '@mtes-mct/monitor-ui'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
-import { ReactComponent as VesselSVG } from '../features/icons/Icone_navire.svg'
+import VesselSVG from '../features/icons/Icone_navire.svg?react'
 
 export type LoadingSpinnerWallProps = {
   isVesselShowed?: boolean

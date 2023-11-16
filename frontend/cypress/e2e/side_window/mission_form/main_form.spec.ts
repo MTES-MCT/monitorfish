@@ -546,7 +546,7 @@ context('Side Window > Mission Form > Main Form', () => {
     )
   })
 
-  it.only('Should update the form When receiving a mission update', () => {
+  it('Should update the form When receiving a mission update', () => {
     editSideWindowMissionListMissionWithId(43, SeaFrontGroup.MED)
     cy.wait(200)
     cy.intercept('POST', '/api/v1/missions/43', {

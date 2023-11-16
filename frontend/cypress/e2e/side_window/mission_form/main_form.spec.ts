@@ -562,8 +562,12 @@ context('Side Window > Mission Form > Main Form', () => {
       statusCode: 200
     }).as('updateMissionAction')
 
-    // @ts-ignore
-    cy.window().then(win => cy.log(win.mockEventSources))
+    cy.window().then(win => {
+      // @ts-ignore
+      cy.log(win.mockEventSources)
+      // @ts-ignore
+      cy.log(Object.keys(win.mockEventSources))
+    })
     cy.window()
       .its('mockEventSources' as any)
       .then(mockEventSources => {

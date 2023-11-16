@@ -566,7 +566,9 @@ context('Side Window > Mission Form > Main Form', () => {
       // @ts-ignore
       cy.log(win.mockEventSources)
       // @ts-ignore
-      cy.log(Object.keys(win.mockEventSources))
+      cy.log(Object.keys(win.mockEventSources).map(key => key))
+      // @ts-ignore
+      cy.log(Object.values(win.mockEventSources))
     })
     cy.window()
       .its('mockEventSources' as any)

@@ -565,8 +565,8 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.window()
       .its('mockEventSources' as any)
       .then(mockEventSources => {
-        mockEventSources['//localhost:8081/api/v1/missions/43/sse'].emitOpen()
-        mockEventSources['//localhost:8081/api/v1/missions/43/sse'].emit(
+        mockEventSources['http://0.0.0.0:8081/api/v1/missions/43/sse'].emitOpen()
+        mockEventSources['http://0.0.0.0:8081/api/v1/missions/43/sse'].emit(
           'MISSION_UPDATE',
           new MessageEvent('MISSION_UPDATE', {
             data: JSON.stringify({

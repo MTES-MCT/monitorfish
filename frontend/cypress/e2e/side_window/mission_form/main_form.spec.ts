@@ -562,20 +562,11 @@ context('Side Window > Mission Form > Main Form', () => {
       statusCode: 200
     }).as('updateMissionAction')
 
-    cy.window().then(win => {
-      // @ts-ignore
-      cy.log(win.mockEventSources)
-      // @ts-ignore
-      cy.log(Object.keys(win.mockEventSources).map(key => key))
-      // @ts-ignore
-      cy.log(Object.values(win.mockEventSources))
-    })
     cy.window()
       .its('mockEventSources' as any)
       .then(mockEventSources => {
-        cy.log(mockEventSources.toString())
-        mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emitOpen()
-        mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emit(
+        mockEventSources['http://monitorenv.kadata.fr/api/v1/missions/sse'].emitOpen()
+        mockEventSources['http://monitorenv.kadata.fr/api/v1/missions/sse'].emit(
           'MISSION_UPDATE',
           new MessageEvent('MISSION_UPDATE', {
             data: JSON.stringify({

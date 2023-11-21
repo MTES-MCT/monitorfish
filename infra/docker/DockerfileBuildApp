@@ -46,7 +46,7 @@ WORKDIR /tmp/frontend
 RUN npm ci
 RUN npm run build
 
-npx pkg ./node_modules/@import-meta-env/cli/bin/import-meta-env.js \
+RUN npx pkg ./node_modules/@import-meta-env/cli/bin/import-meta-env.js \
   --target node20-alpine-x64 \
   --output import-meta-env-alpine
 

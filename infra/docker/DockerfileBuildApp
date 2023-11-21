@@ -46,6 +46,10 @@ WORKDIR /tmp/frontend
 RUN npm ci
 RUN npm run build
 
+npx pkg ./node_modules/@import-meta-env/cli/bin/import-meta-env.js \
+  --target node20-alpine-x64 \
+  --output import-meta-env-alpine
+
 ######################
 # Upload sourcemaps  #
 ######################
@@ -113,6 +117,10 @@ USER monitorfish
 RUN mkdir /home/monitorfish/public
 COPY --from=buildSourcemaps /tmp/frontend/build /home/monitorfish/public/
 
+# Copy import-meta-env-alpine
+COPY --from=buildFront /tmp/frontend/import-meta-env-alpine /home/monitorfish/import-meta-env-alpine
+COPY --from=buildFront /tmp/frontend/.env.example /home/monitorfish/.env.example
+
 # Add logs folder to be mounted as volume
 RUN mkdir /home/monitorfish/logs
 
@@ -128,5 +136,7 @@ RUN echo ${ENV_PROFILE}
 USER monitorfish
 
 ENV VITE_GEOSERVER_LOCAL_URL=""
+
+ENTRYPOINT ["./home/monitorfish/import-meta-env-alpine -x /home/monitorfish/.env.example"]
 
 CMD exec java -Dspring.config.additional-location="/home/monitorfish/configurations/" -jar "monitorfish-${VERSION}.jar"

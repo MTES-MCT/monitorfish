@@ -48,6 +48,7 @@ class SecurityConfig(val oidcProperties: OIDCProperties) {
                         "/*.png",
                         "/*.svg",
                         "/static/**",
+                        "/assets/**",
                         "/map-icons/**",
                         "/flags/**",
                         "/robots.txt",

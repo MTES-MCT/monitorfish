@@ -139,9 +139,9 @@ USER root
 RUN chown monitorfish /home/monitorfish/import-meta-env
 RUN chmod +x /home/monitorfish/import-meta-env
 
-USER root
 RUN chown monitorfish /home/monitorfish/env.sh
 RUN chmod +x /home/monitorfish/env.sh
+RUN chown monitorfish public/index.html
 RUN chmod +rwx public/index.html
 
 USER monitorfish

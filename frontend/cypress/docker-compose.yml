@@ -38,7 +38,7 @@ services:
       - FRONTEND_GEOSERVER_REMOTE_URL=http://0.0.0.0:8081
       - FRONTEND_IS_DEV_ENV=true
       - FRONTEND_MAPBOX_KEY=pk.eyJ1IjoibW9uaXRvcmZpc2giLCJhIjoiY2tsdHJ6dHhhMGZ0eDJ2bjhtZmJlOHJmZiJ9.bdi1cO-cUcZKXdkEkqAoZQ
-      - FRONTEND_MONITORENV_URL=//localhost:8081
+      - FRONTEND_MONITORENV_URL=http://0.0.0.0:8081
       - FRONTEND_OIDC_AUTHORITY=https://authentification.recette.din.developpement-durable.gouv.fr/authSAML/oidc/monitorfish
       - FRONTEND_OIDC_CLIENT_ID=monitorfish
       - FRONTEND_OIDC_ENABLED=false

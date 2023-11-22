@@ -47,7 +47,7 @@ RUN npm ci
 RUN npm run build
 
 RUN npx pkg ./node_modules/@import-meta-env/cli/bin/import-meta-env.js \
-  --target node16-linux-x64 \
+  --target node16-alpine-x64 \
   --output import-meta-env
 
 ######################
@@ -147,9 +147,11 @@ USER monitorfish
 
 ENV VITE_GEOSERVER_LOCAL_URL=""
 
-RUN /home/monitorfish/env.sh
+RUN ./home/monitorfish/import-meta-env -x /home/monitorfish/.env.example -p /home/monitorfish/public/index.html
 
-ENTRYPOINT ["/home/monitorfish/env.sh"]
+RUN bash -c /home/monitorfish/env.sh
+
+ENTRYPOINT ["./home/monitorfish/env.sh"]
 
 CMD exec java -Dspring.config.additional-location="/home/monitorfish/configurations/" -jar "monitorfish-${VERSION}.jar"
 

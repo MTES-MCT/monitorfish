@@ -147,9 +147,7 @@ USER monitorfish
 
 ENV VITE_GEOSERVER_LOCAL_URL=""
 
-RUN ./import-meta-env -x .env.example -p public/index.html
-
-RUN bash -c /home/monitorfish/env.sh
+RUN ./import-meta-env -e .env.local -x .env.example -p public/index.html
 
 ENTRYPOINT ["./home/monitorfish/env.sh"]
 

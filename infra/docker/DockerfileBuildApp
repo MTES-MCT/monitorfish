@@ -66,8 +66,8 @@ ARG SENTRY_PROJECT
 
 RUN mkdir -p /tmp/frontend/build
 COPY --from=buildFront /tmp/frontend/build /tmp/frontend/build
-COPY --from=buildFront /tmp/frontend/.env.example /tmp/.env.example
-COPY --from=buildFront /tmp/frontend/import-meta-env /tmp/import-meta-env
+COPY --from=buildFront /tmp/frontend/.env.example /tmp/
+COPY --from=buildFront /tmp/frontend/import-meta-env /tmp/
 RUN cat /tmp/import-meta-env
 RUN cat /tmp/.env.example
 
@@ -125,8 +125,8 @@ RUN mkdir /home/monitorfish/public
 COPY --from=buildSourcemaps /tmp/frontend/build /home/monitorfish/public/
 
 # Copy import-meta-env
-COPY --from=buildSourcemaps /tmp/import-meta-env /home/monitorfish/import-meta-env
-COPY --from=buildSourcemaps /tmp/.env.example /home/monitorfish/.env.example
+COPY --from=buildSourcemaps /tmp/import-meta-env /home/monitorfish/
+COPY --from=buildSourcemaps /tmp/.env.example /home/monitorfish/
 RUN cat /home/monitorfish/import-meta-env
 RUN cat /home/monitorfish/.env.example
 
@@ -141,6 +141,10 @@ ENV STATIC_FILES_PATH="/home/monitorfish/public"
 ENV SPRING_PROFILES_ACTIVE=$ENV_PROFILE
 
 RUN echo ${ENV_PROFILE}
+
+USER root
+RUN chown monitorfish /home/monitorfish/import-meta-env
+RUN chmod +x /home/monitorfish/import-meta-env
 
 USER monitorfish
 

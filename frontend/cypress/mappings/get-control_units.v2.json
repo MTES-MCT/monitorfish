@@ -1,0 +1,1162 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v2/control_units"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": [
+      {
+        "id": 10484,
+        "areaNote": "Morbihan (56)",
+        "administration": {
+          "id": 2,
+          "isArchived": false,
+          "name": "Douane"
+        },
+        "administrationId": 2,
+        "controlUnitContactIds": [1076, 1073, 1074, 1075],
+        "controlUnitContacts": [
+          {
+            "id": 1076,
+            "controlUnitId": 10484,
+            "email": "bgc-lorient@douane.finances.gouv.fr",
+            "name": "UNKNOWN",
+            "phone": "09 70 27 46 12"
+          },
+          {
+            "id": 1073,
+            "controlUnitId": 10484,
+            "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
+            "name": "OPERATIONAL_CENTER",
+            "phone": "06 64 57 64 04"
+          },
+          {
+            "id": 1074,
+            "controlUnitId": 10484,
+            "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
+            "name": "OPERATIONAL_CENTER",
+            "phone": "09 70 27 51 94"
+          },
+          {
+            "id": 1075,
+            "controlUnitId": 10484,
+            "email": null,
+            "name": "PERMANENT_CONTACT_ONBOARD",
+            "phone": "06 64 57 64 58"
+          }
+        ],
+        "controlUnitResourceIds": [553],
+        "controlUnitResources": [
+          {
+            "id": 553,
+            "controlUnit": {
+              "id": 10484,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 2,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "BGC Lorient - DF 36 Kan An Avel",
+              "termsNote": "COD Manche Mer du Nord Atlantique"
+            },
+            "controlUnitId": 10484,
+            "isArchived": false,
+            "name": "DF 36 Kan An Avel",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 153,
+              "latitude": 47.7482524,
+              "longitude": -3.3702449,
+              "name": "Lorient"
+            },
+            "stationId": 153,
+            "type": "FAST_BOAT"
+          }
+        ],
+        "departmentArea": null,
+        "departmentAreaInseeCode": null,
+        "isArchived": false,
+        "name": "BGC Lorient - DF 36 Kan An Avel",
+        "termsNote": "COD Manche Mer du Nord Atlantique"
+      },
+      {
+        "id": 10336,
+        "areaNote": "Morbihan (56) – Loire-Atlantique (44)",
+        "administration": {
+          "id": 4,
+          "isArchived": false,
+          "name": "Gendarmerie Maritime"
+        },
+        "administrationId": 4,
+        "controlUnitContactIds": [727, 728, 729, 730, 726],
+        "controlUnitContacts": [
+          {
+            "id": 727,
+            "controlUnitId": 10336,
+            "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
+            "name": "UNKNOWN",
+            "phone": "02 97 12 40 67"
+          },
+          {
+            "id": 728,
+            "controlUnitId": 10336,
+            "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
+            "name": "UNKNOWN",
+            "phone": "02 97 12 40 67"
+          },
+          {
+            "id": 729,
+            "controlUnitId": 10336,
+            "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
+            "name": "UNKNOWN",
+            "phone": "06 72 95 29 02"
+          },
+          {
+            "id": 730,
+            "controlUnitId": 10336,
+            "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
+            "name": "UNKNOWN",
+            "phone": "06 72 95 29 03"
+          },
+          {
+            "id": 726,
+            "controlUnitId": 10336,
+            "email": "ggmaratlan@gendarmerie.defense.gouv.fr",
+            "name": "OPERATIONAL_CENTER",
+            "phone": "02 98 22 22 17"
+          }
+        ],
+        "controlUnitResourceIds": [353, 90, 1042],
+        "controlUnitResources": [
+          {
+            "id": 353,
+            "controlUnit": {
+              "id": 10336,
+              "areaNote": "Morbihan (56) – Loire-Atlantique (44)",
+              "administrationId": 4,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "BSL Lorient",
+              "termsNote": "CORGMAR Atlantique"
+            },
+            "controlUnitId": 10336,
+            "isArchived": false,
+            "name": "BSL Lorient",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 153,
+              "latitude": 47.7482524,
+              "longitude": -3.3702449,
+              "name": "Lorient"
+            },
+            "stationId": 153,
+            "type": "SEMI_RIGID"
+          },
+          {
+            "id": 90,
+            "controlUnit": {
+              "id": 10336,
+              "areaNote": "Morbihan (56) – Loire-Atlantique (44)",
+              "administrationId": 4,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "BSL Lorient",
+              "termsNote": "CORGMAR Atlantique"
+            },
+            "controlUnitId": 10336,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 153,
+              "latitude": 47.7482524,
+              "longitude": -3.3702449,
+              "name": "Lorient"
+            },
+            "stationId": 153,
+            "type": "CAR"
+          },
+          {
+            "id": 1042,
+            "controlUnit": {
+              "id": 10336,
+              "areaNote": "Morbihan (56) – Loire-Atlantique (44)",
+              "administrationId": 4,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "BSL Lorient",
+              "termsNote": "CORGMAR Atlantique"
+            },
+            "controlUnitId": 10336,
+            "isArchived": false,
+            "name": "Moto",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 153,
+              "latitude": 47.7482524,
+              "longitude": -3.3702449,
+              "name": "Lorient"
+            },
+            "stationId": 153,
+            "type": "MOTORCYCLE"
+          }
+        ],
+        "departmentArea": null,
+        "departmentAreaInseeCode": null,
+        "isArchived": false,
+        "name": "BSL Lorient",
+        "termsNote": "CORGMAR Atlantique"
+      },
+      {
+        "id": 10066,
+        "areaNote": "Morbihan (56)",
+        "administration": {
+          "id": 1005,
+          "isArchived": false,
+          "name": "DDTM"
+        },
+        "administrationId": 1005,
+        "controlUnitContactIds": [165],
+        "controlUnitContacts": [
+          {
+            "id": 165,
+            "controlUnitId": 10066,
+            "email": "ddtm-samel@morbihan.gouv.fr",
+            "name": "UNKNOWN",
+            "phone": "02 97 64 85 06"
+          }
+        ],
+        "controlUnitResourceIds": [181, 133, 300, 1212],
+        "controlUnitResources": [
+          {
+            "id": 181,
+            "controlUnit": {
+              "id": 10066,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1005,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "DPM 56",
+              "termsNote": null
+            },
+            "controlUnitId": 10066,
+            "isArchived": false,
+            "name": "Brezel - FAH 7185",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 245,
+              "latitude": 47.658236,
+              "longitude": -2.760847,
+              "name": "Vannes"
+            },
+            "stationId": 245,
+            "type": "RIGID_HULL"
+          },
+          {
+            "id": 133,
+            "controlUnit": {
+              "id": 10066,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1005,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "DPM 56",
+              "termsNote": null
+            },
+            "controlUnitId": 10066,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 245,
+              "latitude": 47.658236,
+              "longitude": -2.760847,
+              "name": "Vannes"
+            },
+            "stationId": 245,
+            "type": "CAR"
+          },
+          {
+            "id": 300,
+            "controlUnit": {
+              "id": 10066,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1005,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "DPM 56",
+              "termsNote": null
+            },
+            "controlUnitId": 10066,
+            "isArchived": false,
+            "name": "Sterenn - FAC 7421",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 153,
+              "latitude": 47.7482524,
+              "longitude": -3.3702449,
+              "name": "Lorient"
+            },
+            "stationId": 153,
+            "type": "SEMI_RIGID"
+          },
+          {
+            "id": 1212,
+            "controlUnit": {
+              "id": 10066,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1005,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "DPM 56",
+              "termsNote": null
+            },
+            "controlUnitId": 10066,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 153,
+              "latitude": 47.7482524,
+              "longitude": -3.3702449,
+              "name": "Lorient"
+            },
+            "stationId": 153,
+            "type": "CAR"
+          }
+        ],
+        "departmentArea": null,
+        "departmentAreaInseeCode": null,
+        "isArchived": false,
+        "name": "DPM 56",
+        "termsNote": null
+      },
+      {
+        "id": 10455,
+        "areaNote": "Golfe de Gascogne – Bretagne",
+        "administration": {
+          "id": 4,
+          "isArchived": false,
+          "name": "Gendarmerie Maritime"
+        },
+        "administrationId": 4,
+        "controlUnitContactIds": [1018, 1019, 1015, 1016, 1017],
+        "controlUnitContacts": [
+          {
+            "id": 1018,
+            "controlUnitId": 10455,
+            "email": "pgmarc720.lorient@gendarmerie.defense.gouv.fr",
+            "name": "UNKNOWN",
+            "phone": "06 84 76 97 62"
+          },
+          {
+            "id": 1019,
+            "controlUnitId": 10455,
+            "email": "pgmarc720.lorient@gendarmerie.defense.gouv.fr",
+            "name": "UNKNOWN",
+            "phone": "06 85 72 02 20"
+          },
+          {
+            "id": 1015,
+            "controlUnitId": 10455,
+            "email": "ggmaratlan@gendarmerie.defense.gouv.fr",
+            "name": "OPERATIONAL_CENTER",
+            "phone": "02 98 22 22 17"
+          },
+          {
+            "id": 1016,
+            "controlUnitId": 10455,
+            "email": null,
+            "name": "PERMANENT_CONTACT_ONBOARD",
+            "phone": "06 84 76 97 62"
+          },
+          {
+            "id": 1017,
+            "controlUnitId": 10455,
+            "email": null,
+            "name": "PERMANENT_CONTACT_ONBOARD",
+            "phone": "06 85 72 02 20"
+          }
+        ],
+        "controlUnitResourceIds": [189, 251],
+        "controlUnitResources": [
+          {
+            "id": 189,
+            "controlUnit": {
+              "id": 10455,
+              "areaNote": "Golfe de Gascogne – Bretagne",
+              "administrationId": 4,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "PGMAR Lorient - P720 Geranium",
+              "termsNote": "CORGMAR Atlantique"
+            },
+            "controlUnitId": 10455,
+            "isArchived": false,
+            "name": "P720 Geranium",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 153,
+              "latitude": 47.7482524,
+              "longitude": -3.3702449,
+              "name": "Lorient"
+            },
+            "stationId": 153,
+            "type": "PATROL_BOAT"
+          },
+          {
+            "id": 251,
+            "controlUnit": {
+              "id": 10455,
+              "areaNote": "Golfe de Gascogne – Bretagne",
+              "administrationId": 4,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "PGMAR Lorient - P720 Geranium",
+              "termsNote": "CORGMAR Atlantique"
+            },
+            "controlUnitId": 10455,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 153,
+              "latitude": 47.7482524,
+              "longitude": -3.3702449,
+              "name": "Lorient"
+            },
+            "stationId": 153,
+            "type": "CAR"
+          }
+        ],
+        "departmentArea": null,
+        "departmentAreaInseeCode": null,
+        "isArchived": false,
+        "name": "PGMAR Lorient - P720 Geranium",
+        "termsNote": "CORGMAR Atlantique"
+      },
+      {
+        "id": 1277,
+        "areaNote": null,
+        "administration": {
+          "id": 1005,
+          "isArchived": false,
+          "name": "DDTM"
+        },
+        "administrationId": 1005,
+        "controlUnitContactIds": [],
+        "controlUnitContacts": [],
+        "controlUnitResourceIds": [],
+        "controlUnitResources": [],
+        "departmentArea": null,
+        "departmentAreaInseeCode": null,
+        "isArchived": true,
+        "name": "Cultures Marines - Ddtm 56 (historique)",
+        "termsNote": null
+      },
+      {
+        "id": 10499,
+        "areaNote": "Morbihan (56)",
+        "administration": {
+          "id": 1005,
+          "isArchived": false,
+          "name": "DDTM"
+        },
+        "administrationId": 1005,
+        "controlUnitContactIds": [1121, 1122],
+        "controlUnitContacts": [
+          {
+            "id": 1121,
+            "controlUnitId": 10499,
+            "email": "ddtm-samel@morbihan.gouv.fr",
+            "name": "UNKNOWN",
+            "phone": "02 56 63 75 32"
+          },
+          {
+            "id": 1122,
+            "controlUnitId": 10499,
+            "email": "ddtm-samel@morbihan.gouv.fr",
+            "name": "UNKNOWN",
+            "phone": "02 97 64 85 06"
+          }
+        ],
+        "controlUnitResourceIds": [314, 323, 1208],
+        "controlUnitResources": [
+          {
+            "id": 314,
+            "controlUnit": {
+              "id": 10499,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1005,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "Cultures marines 56",
+              "termsNote": null
+            },
+            "controlUnitId": 10499,
+            "isArchived": false,
+            "name": "Brezel - FAH 7185",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 245,
+              "latitude": 47.658236,
+              "longitude": -2.760847,
+              "name": "Vannes"
+            },
+            "stationId": 245,
+            "type": "FAST_BOAT"
+          },
+          {
+            "id": 323,
+            "controlUnit": {
+              "id": 10499,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1005,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "Cultures marines 56",
+              "termsNote": null
+            },
+            "controlUnitId": 10499,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 245,
+              "latitude": 47.658236,
+              "longitude": -2.760847,
+              "name": "Vannes"
+            },
+            "stationId": 245,
+            "type": "CAR"
+          },
+          {
+            "id": 1208,
+            "controlUnit": {
+              "id": 10499,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1005,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "Cultures marines 56",
+              "termsNote": null
+            },
+            "controlUnitId": 10499,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 8,
+              "latitude": 47.66649100000001,
+              "longitude": -2.983767,
+              "name": "Auray"
+            },
+            "stationId": 8,
+            "type": "CAR"
+          }
+        ],
+        "departmentArea": null,
+        "departmentAreaInseeCode": null,
+        "isArchived": false,
+        "name": "Cultures marines 56",
+        "termsNote": null
+      },
+      {
+        "id": 10066,
+        "areaNote": "Morbihan (56)",
+        "administration": {
+          "id": 1005,
+          "isArchived": false,
+          "name": "DDTM"
+        },
+        "administrationId": 1005,
+        "controlUnitContactIds": [165],
+        "controlUnitContacts": [
+          {
+            "id": 165,
+            "controlUnitId": 10066,
+            "email": "ddtm-samel@morbihan.gouv.fr",
+            "name": "UNKNOWN",
+            "phone": "02 97 64 85 06"
+          }
+        ],
+        "controlUnitResourceIds": [181, 133, 300, 1212],
+        "controlUnitResources": [
+          {
+            "id": 181,
+            "controlUnit": {
+              "id": 10066,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1005,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "DPM 56",
+              "termsNote": null
+            },
+            "controlUnitId": 10066,
+            "isArchived": false,
+            "name": "Brezel - FAH 7185",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 245,
+              "latitude": 47.658236,
+              "longitude": -2.760847,
+              "name": "Vannes"
+            },
+            "stationId": 245,
+            "type": "RIGID_HULL"
+          },
+          {
+            "id": 133,
+            "controlUnit": {
+              "id": 10066,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1005,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "DPM 56",
+              "termsNote": null
+            },
+            "controlUnitId": 10066,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 245,
+              "latitude": 47.658236,
+              "longitude": -2.760847,
+              "name": "Vannes"
+            },
+            "stationId": 245,
+            "type": "CAR"
+          },
+          {
+            "id": 300,
+            "controlUnit": {
+              "id": 10066,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1005,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "DPM 56",
+              "termsNote": null
+            },
+            "controlUnitId": 10066,
+            "isArchived": false,
+            "name": "Sterenn - FAC 7421",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 153,
+              "latitude": 47.7482524,
+              "longitude": -3.3702449,
+              "name": "Lorient"
+            },
+            "stationId": 153,
+            "type": "SEMI_RIGID"
+          },
+          {
+            "id": 1212,
+            "controlUnit": {
+              "id": 10066,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1005,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "DPM 56",
+              "termsNote": null
+            },
+            "controlUnitId": 10066,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 153,
+              "latitude": 47.7482524,
+              "longitude": -3.3702449,
+              "name": "Lorient"
+            },
+            "stationId": 153,
+            "type": "CAR"
+          }
+        ],
+        "departmentArea": null,
+        "departmentAreaInseeCode": null,
+        "isArchived": false,
+        "name": "DPM 56",
+        "termsNote": null
+      },
+      {
+        "id": 10454,
+        "areaNote": "National",
+        "administration": {
+          "id": 1011,
+          "isArchived": false,
+          "name": "Office Français de la Biodiversité"
+        },
+        "administrationId": 1011,
+        "controlUnitContactIds": [1014, 1012, 1013],
+        "controlUnitContacts": [
+          {
+            "id": 1014,
+            "controlUnitId": 10454,
+            "email": "fabrice.bernard.bmibpl@ofb.gouv.fr",
+            "name": "UNKNOWN",
+            "phone": "06 27 02 56 25"
+          },
+          {
+            "id": 1012,
+            "controlUnitId": 10454,
+            "email": "sebastien.perusson@ofb.gouv.fr",
+            "name": "OPERATIONAL_CENTER",
+            "phone": "02 38 45 99 71"
+          },
+          {
+            "id": 1013,
+            "controlUnitId": 10454,
+            "email": "sebastien.perusson@ofb.gouv.fr",
+            "name": "OPERATIONAL_CENTER",
+            "phone": "06 25 03 23 81"
+          }
+        ],
+        "controlUnitResourceIds": [516],
+        "controlUnitResources": [
+          {
+            "id": 516,
+            "controlUnit": {
+              "id": 10454,
+              "areaNote": "National",
+              "administrationId": 1011,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "OFB Brigade Mobile d'Intervention – Bretagne",
+              "termsNote": "Direction de la police des BMI de l’OFB"
+            },
+            "controlUnitId": 10454,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 245,
+              "latitude": 47.658236,
+              "longitude": -2.760847,
+              "name": "Vannes"
+            },
+            "stationId": 245,
+            "type": "CAR"
+          }
+        ],
+        "departmentArea": null,
+        "departmentAreaInseeCode": null,
+        "isArchived": false,
+        "name": "OFB Brigade Mobile d'Intervention – Bretagne",
+        "termsNote": "Direction de la police des BMI de l’OFB"
+      },
+      {
+        "id": 10338,
+        "areaNote": "Morbihan (56)",
+        "administration": {
+          "id": 1011,
+          "isArchived": false,
+          "name": "Office Français de la Biodiversité"
+        },
+        "administrationId": 1011,
+        "controlUnitContactIds": [733],
+        "controlUnitContacts": [
+          {
+            "id": 733,
+            "controlUnitId": 10338,
+            "email": "sd56@ofb.gouv.fr",
+            "name": "UNKNOWN",
+            "phone": "02 97 47 02 83"
+          }
+        ],
+        "controlUnitResourceIds": [211, 580, 388, 320],
+        "controlUnitResources": [
+          {
+            "id": 211,
+            "controlUnit": {
+              "id": 10338,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1011,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "OFB SD 56",
+              "termsNote": null
+            },
+            "controlUnitId": 10338,
+            "isArchived": false,
+            "name": "Penn Blei – AY 938412 N",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 245,
+              "latitude": 47.658236,
+              "longitude": -2.760847,
+              "name": "Vannes"
+            },
+            "stationId": 245,
+            "type": "SEMI_RIGID"
+          },
+          {
+            "id": 580,
+            "controlUnit": {
+              "id": 10338,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1011,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "OFB SD 56",
+              "termsNote": null
+            },
+            "controlUnitId": 10338,
+            "isArchived": false,
+            "name": "Kereon II – AY 933119 K",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 245,
+              "latitude": 47.658236,
+              "longitude": -2.760847,
+              "name": "Vannes"
+            },
+            "stationId": 245,
+            "type": "SEMI_RIGID"
+          },
+          {
+            "id": 388,
+            "controlUnit": {
+              "id": 10338,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1011,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "OFB SD 56",
+              "termsNote": null
+            },
+            "controlUnitId": 10338,
+            "isArchived": false,
+            "name": "Jean Armel – AY 894009",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 245,
+              "latitude": 47.658236,
+              "longitude": -2.760847,
+              "name": "Vannes"
+            },
+            "stationId": 245,
+            "type": "FAST_BOAT"
+          },
+          {
+            "id": 320,
+            "controlUnit": {
+              "id": 10338,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1011,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "OFB SD 56",
+              "termsNote": null
+            },
+            "controlUnitId": 10338,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 245,
+              "latitude": 47.658236,
+              "longitude": -2.760847,
+              "name": "Vannes"
+            },
+            "stationId": 245,
+            "type": "CAR"
+          }
+        ],
+        "departmentArea": null,
+        "departmentAreaInseeCode": null,
+        "isArchived": false,
+        "name": "OFB SD 56",
+        "termsNote": null
+      },
+      {
+        "id": 10157,
+        "areaNote": "Morbihan (56)",
+        "administration": {
+          "id": 1005,
+          "isArchived": false,
+          "name": "DDTM"
+        },
+        "administrationId": 1005,
+        "controlUnitContactIds": [366],
+        "controlUnitContacts": [
+          {
+            "id": 366,
+            "controlUnitId": 10157,
+            "email": "ddtm-pre@morbihan.gouv.fr",
+            "name": "UNKNOWN",
+            "phone": "02 56 63 72 00"
+          }
+        ],
+        "controlUnitResourceIds": [579],
+        "controlUnitResources": [
+          {
+            "id": 579,
+            "controlUnit": {
+              "id": 10157,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1005,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "Police de l'eau 56",
+              "termsNote": null
+            },
+            "controlUnitId": 10157,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 245,
+              "latitude": 47.658236,
+              "longitude": -2.760847,
+              "name": "Vannes"
+            },
+            "stationId": 245,
+            "type": "CAR"
+          }
+        ],
+        "departmentArea": null,
+        "departmentAreaInseeCode": null,
+        "isArchived": false,
+        "name": "Police de l'eau 56",
+        "termsNote": null
+      },
+      {
+        "id": 10449,
+        "areaNote": "Morbihan (56)",
+        "administration": {
+          "id": 1005,
+          "isArchived": false,
+          "name": "DDTM"
+        },
+        "administrationId": 1005,
+        "controlUnitContactIds": [993, 994, 995, 996, 997, 998, 999, 1000],
+        "controlUnitContacts": [
+          {
+            "id": 993,
+            "controlUnitId": 10449,
+            "email": "ddtm-ulam@morbihan.gouv.fr",
+            "name": "Dml Auray",
+            "phone": "02 97 24 01 43"
+          },
+          {
+            "id": 994,
+            "controlUnitId": 10449,
+            "email": "ddtm-ulam@morbihan.gouv.fr",
+            "name": "Dml Lorient",
+            "phone": "02 97 37 16 22"
+          },
+          {
+            "id": 995,
+            "controlUnitId": 10449,
+            "email": "ddtm-ulam@morbihan.gouv.fr",
+            "name": "UNKNOWN",
+            "phone": "02 97 29 34 92"
+          },
+          {
+            "id": 996,
+            "controlUnitId": 10449,
+            "email": "ddtm-ulam@morbihan.gouv.fr",
+            "name": "UNKNOWN",
+            "phone": "02 97 29 34 92"
+          },
+          {
+            "id": 997,
+            "controlUnitId": 10449,
+            "email": "ddtm-ulam@morbihan.gouv.fr",
+            "name": "UNKNOWN",
+            "phone": "02 97 37 17 47"
+          },
+          {
+            "id": 998,
+            "controlUnitId": 10449,
+            "email": "ddtm-ulam@morbihan.gouv.fr",
+            "name": "UNKNOWN",
+            "phone": "02 97 37 17 47"
+          },
+          {
+            "id": 999,
+            "controlUnitId": 10449,
+            "email": "ddtm-ulam@morbihan.gouv.fr",
+            "name": "UNKNOWN",
+            "phone": "06 63 73 05 59"
+          },
+          {
+            "id": 1000,
+            "controlUnitId": 10449,
+            "email": "ddtm-ulam@morbihan.gouv.fr",
+            "name": "UNKNOWN",
+            "phone": "06 63 73 05 59"
+          }
+        ],
+        "controlUnitResourceIds": [361, 134, 259, 512, 1219],
+        "controlUnitResources": [
+          {
+            "id": 361,
+            "controlUnit": {
+              "id": 10449,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1005,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "ULAM 56 ",
+              "termsNote": null
+            },
+            "controlUnitId": 10449,
+            "isArchived": false,
+            "name": "Petrel – PM 438",
+            "note": "9 m",
+            "photo": null,
+            "station": {
+              "id": 153,
+              "latitude": 47.7482524,
+              "longitude": -3.3702449,
+              "name": "Lorient"
+            },
+            "stationId": 153,
+            "type": "SEMI_RIGID"
+          },
+          {
+            "id": 134,
+            "controlUnit": {
+              "id": 10449,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1005,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "ULAM 56 ",
+              "termsNote": null
+            },
+            "controlUnitId": 10449,
+            "isArchived": false,
+            "name": "Ilur - PM 470",
+            "note": "9 m",
+            "photo": null,
+            "station": {
+              "id": 222,
+              "latitude": 47.587901,
+              "longitude": -2.9994489,
+              "name": "Saint-Philibert"
+            },
+            "stationId": 222,
+            "type": "SEMI_RIGID"
+          },
+          {
+            "id": 259,
+            "controlUnit": {
+              "id": 10449,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1005,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "ULAM 56 ",
+              "termsNote": null
+            },
+            "controlUnitId": 10449,
+            "isArchived": false,
+            "name": "Atoup - PM 412",
+            "note": "6 m",
+            "photo": null,
+            "station": {
+              "id": 8,
+              "latitude": 47.66649100000001,
+              "longitude": -2.983767,
+              "name": "Auray"
+            },
+            "stationId": 8,
+            "type": "SEMI_RIGID"
+          },
+          {
+            "id": 512,
+            "controlUnit": {
+              "id": 10449,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1005,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "ULAM 56 ",
+              "termsNote": null
+            },
+            "controlUnitId": 10449,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 245,
+              "latitude": 47.658236,
+              "longitude": -2.760847,
+              "name": "Vannes"
+            },
+            "stationId": 245,
+            "type": "CAR"
+          },
+          {
+            "id": 1219,
+            "controlUnit": {
+              "id": 10449,
+              "areaNote": "Morbihan (56)",
+              "administrationId": 1005,
+              "departmentAreaInseeCode": null,
+              "isArchived": false,
+              "name": "ULAM 56 ",
+              "termsNote": null
+            },
+            "controlUnitId": 10449,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "station": {
+              "id": 153,
+              "latitude": 47.7482524,
+              "longitude": -3.3702449,
+              "name": "Lorient"
+            },
+            "stationId": 153,
+            "type": "CAR"
+          }
+        ],
+        "departmentArea": null,
+        "departmentAreaInseeCode": null,
+        "isArchived": false,
+        "name": "ULAM 56 ",
+        "termsNote": null
+      }
+    ]
+  }
+}

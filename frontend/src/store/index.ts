@@ -33,8 +33,8 @@ const persistedMainReducerConfig: PersistConfig<typeof backofficeReducer> = {
 }
 const persistedMainReducer = persistReducer(
   persistedMainReducerConfig,
-  combineReducers(mainReducer)
-) as typeof mainReducer
+  combineReducers(mainReducer) as any
+) as unknown as typeof mainReducer
 
 export const mainStore = configureStore({
   middleware: getDefaultMiddleware =>
@@ -85,8 +85,8 @@ const persistedBackofficeReducerConfig: PersistConfig<typeof backofficeReducer> 
 }
 const persistedBackofficeReducer = persistReducer(
   persistedBackofficeReducerConfig,
-  combineReducers(backofficeReducer)
-) as typeof backofficeReducer
+  combineReducers(backofficeReducer) as any
+) as unknown as typeof backofficeReducer
 
 export const backofficeStore = configureStore({
   middleware: getDefaultMiddleware =>

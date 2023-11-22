@@ -85,11 +85,6 @@ html {
   padding-bottom: 5px;
 }
 
-
-button:hover, button:focus {
-  background: inherit;
-}
-
 .hide {
   display: none;
 }

@@ -1,7 +1,7 @@
 import { SeaFrontGroup } from '../entities/seaFront/constants'
 
-import type { ControlUnit } from './controlUnit'
 import type { Infraction } from './infraction'
+import type { LegacyControlUnit } from './legacyControlUnit'
 import type { PendingAlertValue } from '../entities/alerts/types'
 import type { VesselIdentifier } from '../entities/vessel/types'
 
@@ -65,7 +65,7 @@ export type CurrentAndArchivedReportingsOfSelectedVessel = {
 export type InfractionSuspicion = {
   authorContact: string | null
   authorTrigram: string | null
-  controlUnit: ControlUnit.ControlUnit | null
+  controlUnit: LegacyControlUnit.LegacyControlUnit | null
   controlUnitId: number | null
   description: string
   dml: string
@@ -79,7 +79,7 @@ export type InfractionSuspicion = {
 export type Observation = {
   authorContact: string | null
   authorTrigram: string | null
-  controlUnit: ControlUnit.ControlUnit | null
+  controlUnit: LegacyControlUnit.LegacyControlUnit | null
   controlUnitId: number | null
   description: string
   reportingActor: string

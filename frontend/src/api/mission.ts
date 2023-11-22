@@ -2,7 +2,7 @@ import { monitorenvApi, monitorfishApi } from '.'
 import { ApiError } from '../libs/ApiError'
 
 import type { Mission, MissionWithActions } from '../domain/entities/mission/types'
-import type { ControlUnit } from '../domain/types/controlUnit'
+import type { ControlUnit } from '@mtes-mct/monitor-ui'
 
 const GET_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la mission"
 const GET_ENGAGED_CONTROL_UNITS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les unités en mission"
@@ -18,7 +18,7 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
       query: mission => ({
         body: mission,
         method: 'POST',
-        url: `/missions`
+        url: `/v1/missions`
       })
     }),
 
@@ -30,18 +30,18 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
       },
       query: id => ({
         method: 'DELETE',
-        url: `/missions/${id}`
+        url: `/v1/missions/${id}`
       })
     }),
 
     getEngagedControlUnits: builder.query<ControlUnit.EngagedControlUnits, void>({
-      query: () => `missions/engaged_control_units`,
+      query: () => `/v1/missions/engaged_control_units`,
       transformErrorResponse: response => new ApiError(GET_ENGAGED_CONTROL_UNITS_ERROR_MESSAGE, response)
     }),
 
     getMission: builder.query<Mission.Mission, Mission.Mission['id']>({
       providesTags: [{ type: 'Missions' }],
-      query: id => `missions/${id}`,
+      query: id => `/v1/missions/${id}`,
       transformErrorResponse: response => new ApiError(GET_MISSION_ERROR_MESSAGE, response)
     }),
 
@@ -50,7 +50,7 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
       query: mission => ({
         body: mission,
         method: 'POST',
-        url: `/missions/${mission.id}`
+        url: `/v1/missions/${mission.id}`
       })
     })
   })

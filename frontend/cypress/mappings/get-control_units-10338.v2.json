@@ -1,0 +1,142 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v2/control_units/10338"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": {
+      "id": 10338,
+      "areaNote": "Morbihan (56)",
+      "administration": {
+        "id": 1011,
+        "isArchived": false,
+        "name": "Office Français de la Biodiversité"
+      },
+      "administrationId": 1011,
+      "controlUnitContactIds": [733],
+      "controlUnitContacts": [
+        {
+          "id": 733,
+          "controlUnitId": 10338,
+          "email": "sd56@ofb.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "02 97 47 02 83"
+        }
+      ],
+      "controlUnitResourceIds": [211, 580, 388, 320],
+      "controlUnitResources": [
+        {
+          "id": 211,
+          "controlUnit": {
+            "id": 10338,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 56",
+            "termsNote": null
+          },
+          "controlUnitId": 10338,
+          "isArchived": false,
+          "name": "Penn Blei – AY 938412 N",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 245,
+            "latitude": 47.658236,
+            "longitude": -2.760847,
+            "name": "Vannes"
+          },
+          "stationId": 245,
+          "type": "SEMI_RIGID"
+        },
+        {
+          "id": 580,
+          "controlUnit": {
+            "id": 10338,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 56",
+            "termsNote": null
+          },
+          "controlUnitId": 10338,
+          "isArchived": false,
+          "name": "Kereon II – AY 933119 K",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 245,
+            "latitude": 47.658236,
+            "longitude": -2.760847,
+            "name": "Vannes"
+          },
+          "stationId": 245,
+          "type": "SEMI_RIGID"
+        },
+        {
+          "id": 388,
+          "controlUnit": {
+            "id": 10338,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 56",
+            "termsNote": null
+          },
+          "controlUnitId": 10338,
+          "isArchived": false,
+          "name": "Jean Armel – AY 894009",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 245,
+            "latitude": 47.658236,
+            "longitude": -2.760847,
+            "name": "Vannes"
+          },
+          "stationId": 245,
+          "type": "FAST_BOAT"
+        },
+        {
+          "id": 320,
+          "controlUnit": {
+            "id": 10338,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 56",
+            "termsNote": null
+          },
+          "controlUnitId": 10338,
+          "isArchived": false,
+          "name": "Voiture",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 245,
+            "latitude": 47.658236,
+            "longitude": -2.760847,
+            "name": "Vannes"
+          },
+          "stationId": 245,
+          "type": "CAR"
+        }
+      ],
+      "departmentArea": null,
+      "departmentAreaInseeCode": null,
+      "isArchived": false,
+      "name": "OFB SD 56",
+      "termsNote": null
+    }
+  }
+}

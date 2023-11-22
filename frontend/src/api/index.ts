@@ -8,6 +8,8 @@ import ky from 'ky'
 import { getOIDCUser } from '../auth/getOIDCUser'
 import { normalizeRtkBaseQuery } from '../utils/normalizeRtkBaseQuery'
 
+import type { BackendApiErrorResponse } from './types'
+
 const MAX_RETRIES = 2
 
 // Using local MonitorEnv stubs:
@@ -20,18 +22,30 @@ const MONITORENV_API_URL = import.meta.env.FRONTEND_MONITORENV_URL
 // Monitorenv API
 
 // We'll need that later on if we use any kind of authentication.
-const monitorenvBaseQuery = retry(
+const monitorenvApiBaseQuery = retry(
   fetchBaseQuery({
-    baseUrl: `${MONITORENV_API_URL}/api/v1`
+    baseUrl: `${MONITORENV_API_URL}/api`
   }),
   { maxRetries: MAX_RETRIES }
 )
 
 export const monitorenvApi = createApi({
-  baseQuery: normalizeRtkBaseQuery(monitorenvBaseQuery),
+  baseQuery: async (args, api, extraOptions) => {
+    const result = await normalizeRtkBaseQuery(monitorenvApiBaseQuery)(args, api, extraOptions)
+    if (result.error) {
+      return {
+        error: {
+          data: result.error.data as BackendApiErrorResponse,
+          status: result.error.status
+        }
+      }
+    }
+
+    return result
+  },
   endpoints: () => ({}),
   reducerPath: 'monitorenvApi',
-  tagTypes: ['ControlUnits', 'Missions']
+  tagTypes: ['Administrations', 'ControlUnits', 'Missions', 'Stations']
 })
 
 // =============================================================================

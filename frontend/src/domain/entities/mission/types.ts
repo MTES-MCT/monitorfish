@@ -1,14 +1,14 @@
 import { SeaFront } from '../seaFront/constants'
 
-import type { ControlUnit } from '../../types/controlUnit'
 import type { GeoJSON } from '../../types/GeoJSON'
+import type { LegacyControlUnit } from '../../types/legacyControlUnit'
 import type { MissionAction } from '../../types/missionAction'
 import type { Except } from 'type-fest'
 
 export namespace Mission {
   export interface Mission {
     closedBy?: string
-    controlUnits: ControlUnit.ControlUnit[]
+    controlUnits: LegacyControlUnit.LegacyControlUnit[]
     endDateTimeUtc?: string
     facade?: SeaFront
     geom?: GeoJSON.MultiPolygon
@@ -81,7 +81,7 @@ export namespace Mission {
 
   export type MissionPointFeatureProperties = {
     color: string
-    controlUnits: ControlUnit.ControlUnit[]
+    controlUnits: LegacyControlUnit.LegacyControlUnit[]
     endDateTimeUtc: string
     // A 0 ou 1 number is required for WebGL to understand boolean
     isAirMission: number

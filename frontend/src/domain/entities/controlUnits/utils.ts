@@ -2,14 +2,14 @@ import { uniq } from 'lodash'
 
 import { getOptionsFromStrings } from '../../../utils/getOptionsFromStrings'
 
-import type { ControlUnit } from '../../types/controlUnit'
+import type { LegacyControlUnit } from '../../types/legacyControlUnit'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 export function getControlUnitsOptionsFromControlUnits(
-  controlUnits: ControlUnit.ControlUnit[] | undefined = [],
+  controlUnits: LegacyControlUnit.LegacyControlUnit[] | undefined = [],
   selectedAdministrations?: string[]
 ): {
-  activeControlUnits: ControlUnit.ControlUnit[]
+  activeControlUnits: LegacyControlUnit.LegacyControlUnit[]
   administrationsAsOptions: Option[]
   unitsAsOptions: Option[]
 } {

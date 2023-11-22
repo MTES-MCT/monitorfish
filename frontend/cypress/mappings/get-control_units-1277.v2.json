@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v2/control_units/1277"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": {
+      "id": 1277,
+      "areaNote": null,
+      "administration": {
+        "id": 1005,
+        "isArchived": false,
+        "name": "DDTM"
+      },
+      "administrationId": 1005,
+      "controlUnitContactIds": [],
+      "controlUnitContacts": [],
+      "controlUnitResourceIds": [],
+      "controlUnitResources": [],
+      "departmentArea": null,
+      "departmentAreaInseeCode": null,
+      "isArchived": true,
+      "name": "Cultures Marines - Ddtm 56 (historique)",
+      "termsNote": null
+    }
+  }
+}

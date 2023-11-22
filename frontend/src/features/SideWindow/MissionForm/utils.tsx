@@ -22,7 +22,7 @@ import { FrontendError } from '../../../libs/FrontendError'
 import { validateRequiredFormValues } from '../../../utils/validateRequiredFormValues'
 
 import type { MissionActionFormValues, MissionMainFormValues } from './types'
-import type { ControlUnit } from '../../../domain/types/controlUnit'
+import type { LegacyControlUnit } from '../../../domain/types/legacyControlUnit'
 
 import MissionActionType = MissionAction.MissionActionType
 
@@ -165,11 +165,11 @@ export function getUpdatedMissionFromMissionMainFormValues(
 }
 
 export function isValidControlUnit(
-  controlUnitFormValues: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft
-): controlUnitFormValues is ControlUnit.ControlUnit {
+  controlUnitFormValues: LegacyControlUnit.LegacyControlUnit | LegacyControlUnit.LegacyControlUnitDraft
+): controlUnitFormValues is LegacyControlUnit.LegacyControlUnit {
   const [, error] = validateRequiredFormValues(
     ['administration', 'id', 'isArchived', 'name', 'resources'],
-    controlUnitFormValues as ControlUnit.ControlUnit
+    controlUnitFormValues as LegacyControlUnit.LegacyControlUnit
   )
 
   return !error
@@ -208,11 +208,11 @@ export function getValidMissionActionData(
 }
 
 export function getValidMissionDataControlUnit(
-  maybeValidMissionDataControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft
+  maybeValidMissionDataControlUnit: LegacyControlUnit.LegacyControlUnit | LegacyControlUnit.LegacyControlUnitDraft
 ): Mission.MissionData['controlUnits'][0] {
   const [validMissionDataControlUnit, formError] = validateRequiredFormValues(
     ['administration', 'id', 'isArchived', 'name', 'resources'],
-    maybeValidMissionDataControlUnit as ControlUnit.ControlUnit
+    maybeValidMissionDataControlUnit as LegacyControlUnit.LegacyControlUnit
   )
   if (formError) {
     throw formError

@@ -150,6 +150,7 @@ ENV VITE_GEOSERVER_LOCAL_URL=""
 
 RUN ./import-meta-env -e .env.local -x .env.example -p public/index.html
 
+
 ENTRYPOINT ["/home/monitorfish/env.sh"]
 
 CMD exec java -Dspring.config.additional-location="/home/monitorfish/configurations/" -jar "monitorfish-${VERSION}.jar"

@@ -47,11 +47,8 @@ RUN npm ci
 RUN npm run build
 
 RUN npx pkg ./node_modules/@import-meta-env/cli/bin/import-meta-env.js \
-  --target node18-alpine \
+  --target node16-alpine \
   --output import-meta-env
-
-RUN cat import-meta-env
-RUN cat .env.example
 
 ######################
 # Upload sourcemaps  #
@@ -124,8 +121,6 @@ COPY --from=buildSourcemaps /tmp/frontend/build /home/monitorfish/public/
 COPY --from=buildFront /tmp/frontend/import-meta-env /home/monitorfish/
 COPY --from=buildFront /tmp/infra/docker/env.sh /home/monitorfish/
 COPY --from=buildFront /tmp/frontend/.env.example /home/monitorfish/
-RUN cat /home/monitorfish/import-meta-env
-RUN cat /home/monitorfish/.env.example
 
 # Add logs folder to be mounted as volume
 RUN mkdir /home/monitorfish/logs

@@ -66,10 +66,6 @@ ARG SENTRY_PROJECT
 
 RUN mkdir -p /tmp/frontend/build
 COPY --from=buildFront /tmp/frontend/build /tmp/frontend/build
-COPY --from=buildFront /tmp/frontend/.env.example /tmp/
-COPY --from=buildFront /tmp/frontend/import-meta-env /tmp/
-RUN cat /tmp/import-meta-env
-RUN cat /tmp/.env.example
 
 # Upload sourcemaps to sentry
 RUN sentry-cli sourcemaps inject /tmp/frontend
@@ -125,8 +121,9 @@ RUN mkdir /home/monitorfish/public
 COPY --from=buildSourcemaps /tmp/frontend/build /home/monitorfish/public/
 
 # Copy import-meta-env
-COPY --from=buildSourcemaps /tmp/import-meta-env /home/monitorfish/
-COPY --from=buildSourcemaps /tmp/.env.example /home/monitorfish/
+COPY --from=buildFront /tmp/import-meta-env /home/monitorfish/
+COPY --from=buildFront /tmp/infra/docker/env.sh /home/monitorfish/
+COPY --from=buildFront /tmp/.env.example /home/monitorfish/
 RUN cat /home/monitorfish/import-meta-env
 RUN cat /home/monitorfish/.env.example
 
@@ -146,10 +143,14 @@ USER root
 RUN chown monitorfish /home/monitorfish/import-meta-env
 RUN chmod +x /home/monitorfish/import-meta-env
 
+USER root
+RUN chown monitorfish /home/monitorfish/env.sh
+RUN chmod +x /home/monitorfish/env.sh
+
 USER monitorfish
 
 ENV VITE_GEOSERVER_LOCAL_URL=""
 
-ENTRYPOINT ["./home/monitorfish/import-meta-env", "-x", "/home/monitorfish/.env.example"]
+ENTRYPOINT ["/home/monitorfish/env.sh"]
 
 CMD exec java -Dspring.config.additional-location="/home/monitorfish/configurations/" -jar "monitorfish-${VERSION}.jar"

@@ -50,8 +50,8 @@ RUN npx pkg ./node_modules/@import-meta-env/cli/bin/import-meta-env.js \
   --target node18-alpine-x64 \
   --output import-meta-env
 
-RUN file import-meta-env
-RUN file .env.example
+RUN echo import-meta-env
+RUN echo .env.example
 
 ######################
 # Upload sourcemaps  #

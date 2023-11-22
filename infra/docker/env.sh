@@ -2,6 +2,6 @@
 set -e
 
 ls -al /home/monitorfish/
-./home/monitorfish/import-meta-env -x /home/monitorfish/.env.example -p /home/monitorfish/public/index.html
+./import-meta-env -x .env.example -p public/index.html
 
 exec "$@"

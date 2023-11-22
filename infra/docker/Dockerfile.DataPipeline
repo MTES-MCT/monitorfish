@@ -84,6 +84,10 @@ COPY --from=builder $PYSETUP_PATH $PYSETUP_PATH
 # Add source
 WORKDIR /home/${USER}/
 COPY datascience/ ./datascience
+
+# Make library importable
+ENV PYTHONPATH=/home/${USER}/datascience
+
 # Add migration files for tests
 COPY backend/src/main/resources/db/migration  ./backend/src/main/resources/db/migration
 

@@ -1,6 +1,5 @@
 #!/bin/bash
-set -e
 
-cd /home/monitorfish/
-./import-meta-env -x .env.example -p public/**/*
+./home/monitorfish/import-meta-env -x /home/monitorfish/.env.example -p /home/monitorfish/public/index.html
 
+exec "$@"

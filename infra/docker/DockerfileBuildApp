@@ -150,6 +150,6 @@ USER monitorfish
 
 ENV VITE_GEOSERVER_LOCAL_URL=""
 
-ENTRYPOINT ["./home/monitorfish/import-meta-env -x /home/monitorfish/.env.example"]
+ENTRYPOINT ["./home/monitorfish/import-meta-env", "-x", "/home/monitorfish/.env.example"]
 
 CMD exec java -Dspring.config.additional-location="/home/monitorfish/configurations/" -jar "monitorfish-${VERSION}.jar"

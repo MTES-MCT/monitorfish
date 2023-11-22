@@ -50,6 +50,9 @@ RUN npx pkg ./node_modules/@import-meta-env/cli/bin/import-meta-env.js \
   --target node18-alpine-x64 \
   --output import-meta-env
 
+RUN file import-meta-env
+RUN file .env.example
+
 ######################
 # Upload sourcemaps  #
 ######################
@@ -65,6 +68,8 @@ RUN mkdir -p /tmp/frontend/build
 COPY --from=buildFront /tmp/frontend/build /tmp/frontend/build
 COPY --from=buildFront /tmp/frontend/.env.example /tmp/.env.example
 COPY --from=buildFront /tmp/frontend/import-meta-env /tmp/import-meta-env
+RUN file /tmp/import-meta-env
+RUN echo /tmp/.env.example
 
 # Upload sourcemaps to sentry
 RUN sentry-cli sourcemaps inject /tmp/frontend

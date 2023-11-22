@@ -50,8 +50,6 @@ RUN npx pkg ./node_modules/@import-meta-env/cli/bin/import-meta-env.js \
   --target node18-alpine-x64 \
   --output import-meta-env
 
-RUN ./import-meta-env
-
 ######################
 # Upload sourcemaps  #
 ######################
@@ -65,6 +63,8 @@ ARG SENTRY_PROJECT
 
 RUN mkdir -p /tmp/frontend/build
 COPY --from=buildFront /tmp/frontend/build /tmp/frontend/build
+COPY --from=buildFront /tmp/frontend/import-meta-env /tmp/frontend/import-meta-env
+COPY --from=buildFront /tmp/frontend/.env.example /tmp/frontend/.env.example
 
 # Upload sourcemaps to sentry
 RUN sentry-cli sourcemaps inject /tmp/frontend
@@ -120,10 +120,8 @@ RUN mkdir /home/monitorfish/public
 COPY --from=buildSourcemaps /tmp/frontend/build /home/monitorfish/public/
 
 # Copy import-meta-env
-COPY --from=buildFront /tmp/frontend/import-meta-env /home/monitorfish/import-meta-env
-COPY --from=buildFront /tmp/frontend/.env.example /home/monitorfish/.env.example
-RUN file /home/monitorfish/import-meta-env
-RUN echo /home/monitorfish/.env.example
+COPY --from=buildBack /tmp/frontend/import-meta-env /home/monitorfish/import-meta-env
+COPY --from=buildBack /tmp/frontend/.env.example /home/monitorfish/.env.example
 
 # Add logs folder to be mounted as volume
 RUN mkdir /home/monitorfish/logs

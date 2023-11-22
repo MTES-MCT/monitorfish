@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
-cd /home/monitorfish/
-./import-meta-env -x .env.example -p public/**/*
+envsubst < runtime-env.js.template > public/env.js
+
+exec "$@"
 

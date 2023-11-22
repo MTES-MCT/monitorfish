@@ -5,8 +5,10 @@ import XYZ from 'ol/source/XYZ'
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { LayerProperties } from '../../../domain/entities/layers/constants'
+import { Env } from '../../../domain/types/env'
 import { useIsInLightMode } from '../../../hooks/authorization/useIsInLightMode'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { env } from '../../../utils/env'
 import { monitorfishMap } from '../monitorfishMap'
 
 import type { ImageTile } from 'ol'
@@ -85,9 +87,7 @@ function UnmemoizedBaseLayer() {
           className: LayerProperties.BASE_LAYER.code,
           source: new XYZ({
             maxZoom: 19,
-            url: `https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg90?access_token=${
-              import.meta.env.FRONTEND_MAPBOX_KEY
-            }`
+            url: `https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg90?access_token=${env(Env.VITE_MAPBOX_KEY)}`
           }),
           zIndex: 0
         }),
@@ -100,7 +100,7 @@ function UnmemoizedBaseLayer() {
             // Countries have transparency, so do not fade tiles:
             transition: 0,
 
-            url: `https://services.data.shom.fr/${import.meta.env.FRONTEND_SHOM_KEY}/wms/r`
+            url: `https://services.data.shom.fr/${env(Env.VITE_SHOM_KEY)}/wms/r`
           }),
           zIndex: 0
         })

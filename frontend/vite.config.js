@@ -2,7 +2,6 @@
 
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
-import importMetaEnv from "@import-meta-env/unplugin"
 import svgr from 'vite-plugin-svgr'
 import viteTsconfigPaths from 'vite-tsconfig-paths'
 
@@ -13,10 +12,7 @@ export default defineConfig({
     outDir: './build'
   },
 
-  plugins: [react(), viteTsconfigPaths(), svgr(), importMetaEnv.vite({
-    env: "../infra/configurations/.env.local",
-    example: ".env.example"
-  })],
+  plugins: [react(), viteTsconfigPaths(), svgr()],
 
   server: {
     port: 3000,

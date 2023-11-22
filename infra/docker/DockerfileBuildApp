@@ -46,10 +46,6 @@ WORKDIR /tmp/frontend
 RUN npm ci
 RUN npm run build
 
-RUN npx pkg ./node_modules/@import-meta-env/cli/bin/import-meta-env.js \
-  --target node16-alpine \
-  --output import-meta-env
-
 ######################
 # Upload sourcemaps  #
 ######################
@@ -90,7 +86,7 @@ ENV ENV_PROFILE=$ENV_PROFILE
 ENV ENV_DB_URL=""
 
 # Add bash
-RUN apk add --no-cache bash
+RUN apk add --no-cache bash gettext
 
 RUN adduser -D monitorfish
 USER monitorfish
@@ -117,10 +113,9 @@ USER monitorfish
 RUN mkdir /home/monitorfish/public
 COPY --from=buildSourcemaps /tmp/frontend/build /home/monitorfish/public/
 
-# Copy import-meta-env
-COPY --from=buildFront /tmp/frontend/import-meta-env /home/monitorfish/
+# Copy env-related files
 COPY --from=buildFront /tmp/infra/docker/env.sh /home/monitorfish/
-COPY --from=buildFront /tmp/frontend/.env.example /home/monitorfish/
+COPY --from=buildFront /tmp/frontend/runtime-env.js.template /home/monitorfish/runtime-env.js.template
 
 # Add logs folder to be mounted as volume
 RUN mkdir /home/monitorfish/logs
@@ -135,8 +130,8 @@ ENV SPRING_PROFILES_ACTIVE=$ENV_PROFILE
 RUN echo ${ENV_PROFILE}
 
 USER root
-RUN chown monitorfish /home/monitorfish/import-meta-env
-RUN chmod +x /home/monitorfish/import-meta-env
+RUN chown monitorfish /home/monitorfish/runtime-env.js.template
+RUN chmod +r /home/monitorfish/runtime-env.js.template
 
 USER root
 RUN chown monitorfish /home/monitorfish/env.sh
@@ -149,4 +144,3 @@ ENV VITE_GEOSERVER_LOCAL_URL=""
 ENTRYPOINT ["/home/monitorfish/env.sh"]
 
 CMD exec java -Dspring.config.additional-location="/home/monitorfish/configurations/" -jar "monitorfish-${VERSION}.jar"
-

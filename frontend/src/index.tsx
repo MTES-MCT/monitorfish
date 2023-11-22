@@ -13,22 +13,22 @@ import './ui/assets/App.css'
 import './ui/shared/ol-override.css'
 import './ui/shared/rsuite-override.css'
 import { getOIDCConfig } from './auth/getOIDCConfig'
+import { Env } from './domain/types/env'
+import { env } from './utils/env'
 // eslint-disable-next-line import/no-relative-packages
 // import '@mtes-mct/monitor-ui/assets/stylesheets/rsuite-override.css'
 
-if (import.meta.env.PROD) {
+if (env(Env.PROD)) {
   // https://docs.sentry.io/platforms/javascript/performance/#configure-the-sample-rate
   init({
-    dsn: import.meta.env.FRONTEND_SENTRY_DSN || '',
-    environment: import.meta.env.FRONTEND_SENTRY_ENV || '',
+    dsn: env(Env.VITE_SENTRY_DSN) || '',
+    environment: env(Env.VITE_SENTRY_ENV) || '',
     integrations: [
       new BrowserTracing({
-        tracingOrigins: import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS
-          ? [import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS || '']
-          : []
+        tracingOrigins: env(Env.VITE_SENTRY_TRACING_ORIGINS) ? [env(Env.VITE_SENTRY_TRACING_ORIGINS) || ''] : []
       })
     ],
-    release: import.meta.env.FRONTEND_MONITORFISH_VERSION || '',
+    release: env(Env.VITE_MONITORFISH_VERSION) || '',
     tracesSampleRate: 1.0
   })
 }

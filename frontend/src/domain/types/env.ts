@@ -1,4 +1,21 @@
-export type Self = Window &
-  typeof globalThis & {
-    env: Record<string, string>
-  }
+/**
+ * Make sure to add the env variable to the `runtime-env.js.template`
+ */
+export enum Env {
+  PROD,
+  DEV,
+  VITE_GEOSERVER_LOCAL_URL,
+  VITE_GEOSERVER_REMOTE_URL,
+  VITE_MAPBOX_KEY,
+  VITE_MONITORENV_URL,
+  VITE_MONITORFISH_VERSION,
+  VITE_OIDC_AUTHORITY,
+  VITE_OIDC_CLIENT_ID,
+  VITE_OIDC_ENABLED,
+  VITE_OIDC_REDIRECT_URI,
+  VITE_SENTRY_DSN,
+  VITE_SENTRY_ENV,
+  VITE_SENTRY_TRACING_ORIGINS,
+  VITE_SHOM_KEY,
+  VITE_SMALL_CHAT_SNIPPET
+}

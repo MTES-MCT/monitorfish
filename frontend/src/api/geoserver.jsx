@@ -5,6 +5,8 @@ import GML from 'ol/format/GML'
 import { REGULATION_ACTION_TYPE } from '../domain/entities/regulation'
 import { HttpStatusCode } from './constants'
 import { ApiError } from '../libs/ApiError'
+import { env } from '../utils/env'
+import { Env } from '../domain/types/env'
 
 export const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la couche réglementaire"
 const REGULATORY_ZONES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les zones réglementaires"
@@ -23,8 +25,8 @@ function getIrretrievableRegulatoryZoneError(e, regulatoryZone) {
   )
 }
 
-export const GEOSERVER_URL = import.meta.env.FRONTEND_GEOSERVER_REMOTE_URL
-export const GEOSERVER_BACKOFFICE_URL = import.meta.env.FRONTEND_GEOSERVER_LOCAL_URL
+export const GEOSERVER_URL = env(Env.VITE_GEOSERVER_REMOTE_URL)
+export const GEOSERVER_BACKOFFICE_URL = env(Env.VITE_GEOSERVER_LOCAL_URL)
 
 /**
  * @description This API isn't authenticated
@@ -47,7 +49,7 @@ function getAllRegulatoryLayersFromAPI(fromBackoffice) {
       }
     })
     .catch(error => {
-      if (import.meta.env.DEV) {
+      if (env(Env.DEV)) {
         return {
           features: []
         }
@@ -350,7 +352,7 @@ function getAdministrativeSubZonesFromAPI(type, fromBackoffice) {
       }
     })
     .catch(e => {
-      if (import.meta.env.DEV) {
+      if (env(Env.DEV)) {
         return {
           features: []
         }

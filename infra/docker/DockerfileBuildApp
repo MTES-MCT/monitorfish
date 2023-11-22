@@ -63,8 +63,8 @@ ARG SENTRY_PROJECT
 
 RUN mkdir -p /tmp/frontend/build
 COPY --from=buildFront /tmp/frontend/build /tmp/frontend/build
-COPY --from=buildFront /tmp/frontend/import-meta-env /tmp/frontend/import-meta-env
-COPY --from=buildFront /tmp/frontend/.env.example /tmp/frontend/.env.example
+COPY --from=buildFront /tmp/frontend/.env.example /tmp/.env.example
+COPY --from=buildFront /tmp/frontend/import-meta-env /tmp/import-meta-env
 
 # Upload sourcemaps to sentry
 RUN sentry-cli sourcemaps inject /tmp/frontend
@@ -120,8 +120,8 @@ RUN mkdir /home/monitorfish/public
 COPY --from=buildSourcemaps /tmp/frontend/build /home/monitorfish/public/
 
 # Copy import-meta-env
-COPY --from=buildSourcemaps /tmp/frontend/import-meta-env /home/monitorfish/import-meta-env
-COPY --from=buildSourcemaps /tmp/frontend/.env.example /home/monitorfish/.env.example
+COPY --from=buildSourcemaps /tmp/import-meta-env /home/monitorfish/import-meta-env
+COPY --from=buildSourcemaps /tmp/.env.example /home/monitorfish/.env.example
 RUN file /home/monitorfish/import-meta-env
 RUN echo /home/monitorfish/.env.example
 

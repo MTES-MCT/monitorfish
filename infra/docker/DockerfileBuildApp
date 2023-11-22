@@ -149,3 +149,4 @@ ENV VITE_GEOSERVER_LOCAL_URL=""
 ENTRYPOINT ["/home/monitorfish/env.sh"]
 
 CMD exec java -Dspring.config.additional-location="/home/monitorfish/configurations/" -jar "monitorfish-${VERSION}.jar"
+

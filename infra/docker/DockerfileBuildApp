@@ -48,7 +48,9 @@ RUN npm run build
 
 RUN npx pkg ./node_modules/@import-meta-env/cli/bin/import-meta-env.js \
   --target node18-linux-x64 \
-  --output import-meta-env-linux
+  --output import-meta-env
+
+RUN ./import-meta-env
 
 ######################
 # Upload sourcemaps  #
@@ -117,9 +119,11 @@ USER monitorfish
 RUN mkdir /home/monitorfish/public
 COPY --from=buildSourcemaps /tmp/frontend/build /home/monitorfish/public/
 
-# Copy import-meta-env-alpine
-COPY --from=buildFront /tmp/frontend/import-meta-env-linux /home/monitorfish/import-meta-env-linux
+# Copy import-meta-env
+COPY --from=buildFront /tmp/frontend/import-meta-env /home/monitorfish/import-meta-env
 COPY --from=buildFront /tmp/frontend/.env.example /home/monitorfish/.env.example
+RUN file /home/monitorfish/import-meta-env
+RUN echo /home/monitorfish/.env.example
 
 # Add logs folder to be mounted as volume
 RUN mkdir /home/monitorfish/logs
@@ -137,6 +141,6 @@ USER monitorfish
 
 ENV VITE_GEOSERVER_LOCAL_URL=""
 
-ENTRYPOINT ["./home/monitorfish/import-meta-env-linux -x /home/monitorfish/.env.example"]
+ENTRYPOINT ["./home/monitorfish/import-meta-env -x /home/monitorfish/.env.example"]
 
 CMD exec java -Dspring.config.additional-location="/home/monitorfish/configurations/" -jar "monitorfish-${VERSION}.jar"

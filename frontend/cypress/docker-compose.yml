@@ -32,10 +32,10 @@ services:
       - SPRING_PROFILES_ACTIVE=local
       - HOST_IP=127.0.0.1
       - SENTRY_DSN=
-      - MONITORENV_URL=http://geoserver-monitorenv-stubs:8080
+      - MONITORENV_URL=http://0.0.0.0:8081
       - MONITORFISH_API_PROTECTED_API_KEY=APIKEY
-      - FRONTEND_GEOSERVER_LOCAL_URL=//localhost:8081
-      - FRONTEND_GEOSERVER_REMOTE_URL=//localhost:8081
+      - FRONTEND_GEOSERVER_LOCAL_URL=http://0.0.0.0:8081
+      - FRONTEND_GEOSERVER_REMOTE_URL=http://0.0.0.0:8081
       - FRONTEND_IS_DEV_ENV=true
       - FRONTEND_MAPBOX_KEY=pk.eyJ1IjoibW9uaXRvcmZpc2giLCJhIjoiY2tsdHJ6dHhhMGZ0eDJ2bjhtZmJlOHJmZiJ9.bdi1cO-cUcZKXdkEkqAoZQ
       - FRONTEND_MONITORENV_URL=//localhost:8081

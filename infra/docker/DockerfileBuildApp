@@ -138,12 +138,13 @@ RUN chown monitorfish /home/monitorfish/env.sh
 RUN chown -R monitorfish /home/monitorfish/public
 RUN chmod +x /home/monitorfish/env.sh
 
-RUN ls
-RUN envsubst < runtime-env.js.template > public/env.js
 
 USER monitorfish
 
 ENV VITE_GEOSERVER_LOCAL_URL=""
+
+RUN ls -al public
+RUN envsubst < runtime-env.js.template > public/env.js
 
 ENTRYPOINT ["/home/monitorfish/env.sh"]
 

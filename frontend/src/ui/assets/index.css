@@ -1,10 +1,25 @@
-body, html, * {
+body,
+html,
+* {
   margin: 0;
-  font-family: 'Marianne', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family:
+    'Marianne',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Roboto',
+    'Oxygen',
+    'Ubuntu',
+    'Cantarell',
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* TODO Attempt to progressively migrate to `box-sizing: border-box` everywhere. */
 * {
   -webkit-box-sizing: revert;
   box-sizing: revert;
@@ -68,29 +83,29 @@ code {
 }
 
 .noUi-connect:nth-child(1) {
-  background: #CCCFD6;
+  background: #cccfd6;
 }
 
 .noUi-connect:nth-child(2) {
-  background: #9095A2;
+  background: #9095a2;
 }
 
 .noUi-connect:nth-child(3) {
-  background: #3B4559;
+  background: #3b4559;
 }
 
 .rs-slider-graduator > ol > li::before {
   visibility: hidden;
 }
 
-
-.rs-slider-graduator > ol > li:last-child::after, .rs-slider-graduator > ul > li::before {
+.rs-slider-graduator > ol > li:last-child::after,
+.rs-slider-graduator > ul > li::before {
   top: -3px;
   border: none;
 }
 
 .rs-slider-handle::before {
-  background: #CCCFD6;
+  background: #cccfd6;
   border: unset;
   top: -6px;
   margin-left: -5px;
@@ -104,7 +119,7 @@ code {
 }
 
 .rs-slider-graduated > div:nth-child(2)::before {
-  background: #9095A2;
+  background: #9095a2;
   z-index: 99;
 }
 
@@ -113,11 +128,22 @@ code {
 }
 
 .rs-slider-graduated > div:nth-child(3)::before {
-  background: #3B4559;
+  background: #3b4559;
   z-index: 99;
 }
 
-button, [type="button"], [type="submit"], [type="reset"], a.button, label.button, .button, a[role="button"], label[role="button"], [role="button"], [role="button"]:hover, [role="button"]:focus {
+button,
+[type='button'],
+[type='submit'],
+[type='reset'],
+a.button,
+label.button,
+.button,
+a[role='button'],
+label[role='button'],
+[role='button'],
+[role='button']:hover,
+[role='button']:focus {
   background: unset;
   color: unset;
   border: unset;
@@ -127,18 +153,13 @@ button, [type="button"], [type="submit"], [type="reset"], a.button, label.button
   padding: unset;
 }
 
-button:hover, button:focus, [type="button"]:hover, [type="button"]:focus, [type="submit"]:hover, [type="submit"]:focus, [type="reset"]:hover, [type="reset"]:focus, a.button:hover, a.button:focus, label.button:hover, label.button:focus, .button:hover, .button:focus, a[role="button"]:hover, a[role="button"]:focus, label[role="button"]:hover, label[role="button"]:focus, [role="button"]:hover, [role="button"]:focus {
-  background: unset;
-  border-color: unset;
-}
-
 .rs-radio-wrapper::before {
-  background: #E5E5EB 0% 0% no-repeat padding-box;
-  border: 2px solid #CCCFD6;
+  background: #e5e5eb 0% 0% no-repeat padding-box;
+  border: 2px solid #cccfd6;
 }
 
 .rs-radio-checked .rs-radio-wrapper .rs-radio-inner::before {
-  background: #E5E5EB 0% 0% no-repeat padding-box;
+  background: #e5e5eb 0% 0% no-repeat padding-box;
   border: 2px solid #707785;
 }
 
@@ -151,18 +172,20 @@ button:hover, button:focus, [type="button"]:hover, [type="button"]:focus, [type=
 }
 
 .rs-radio-wrapper .rs-radio-inner::before {
-  background: #E5E5EB 0% 0% no-repeat padding-box;
-  border: 2px solid #CCCFD6;
+  background: #e5e5eb 0% 0% no-repeat padding-box;
+  border: 2px solid #cccfd6;
 }
 
-.rs-radio-wrapper::before, .rs-radio-wrapper .rs-radio-inner::before, .rs-radio-wrapper {
+.rs-radio-wrapper::before,
+.rs-radio-wrapper .rs-radio-inner::before,
+.rs-radio-wrapper {
   width: 10px;
   height: 10px;
 }
 
 .rs-radio-checker > label {
   font-size: 13px;
-  color: #3B4559;
+  color: #3b4559;
   padding: 0 0 0 2px;
   font-weight: 500;
   line-height: 17px;
@@ -191,7 +214,7 @@ button:hover, button:focus, [type="button"]:hover, [type="button"]:focus, [type=
   margin: 0;
 }
 
-.rs-radio-group[role="button"] {
+.rs-radio-group[role='button'] {
   padding: unset;
   margin-top: 0;
 }
@@ -208,11 +231,15 @@ label {
   z-index: 9999 !important;
 }
 
-.rs-picker-default:not(.rs-picker-disabled) .rs-btn:hover, .rs-picker-default:not(.rs-picker-disabled) .rs-picker-toggle:hover, .rs-picker-default:not(.rs-picker-disabled) .rs-btn.active, .rs-picker-default:not(.rs-picker-disabled) .rs-picker-toggle.active {
+.rs-picker-default:not(.rs-picker-disabled) .rs-btn:hover,
+.rs-picker-default:not(.rs-picker-disabled) .rs-picker-toggle:hover,
+.rs-picker-default:not(.rs-picker-disabled) .rs-btn.active,
+.rs-picker-default:not(.rs-picker-disabled) .rs-picker-toggle.active {
   border-color: #707785 !important;
 }
 
-.rs-table:not(.rs-table-column-resizing) .rs-table-cell-header .rs-table-cell:hover ~ .rs-table-column-resize-spanner, .rs-table:not(.rs-table-column-resizing) .rs-table-column-resize-spanner:hover {
+.rs-table:not(.rs-table-column-resizing) .rs-table-cell-header .rs-table-cell:hover ~ .rs-table-column-resize-spanner,
+.rs-table:not(.rs-table-column-resizing) .rs-table-column-resize-spanner:hover {
   background-color: #707785;
 }
 
@@ -228,7 +255,9 @@ label {
   border-radius: 2px !important;
 }
 
-.rs-calendar, .rs-calendar-header, .rs-calendar-table-cell-content {
+.rs-calendar,
+.rs-calendar-header,
+.rs-calendar-table-cell-content {
   box-sizing: border-box !important;
 }
 
@@ -237,13 +266,13 @@ label {
 }
 
 .rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
-  color: #F0F0F0;
-  border-color: #3B4559;
-  background-color: #3B4559;
+  color: #f0f0f0;
+  border-color: #3b4559;
+  background-color: #3b4559;
 }
 
 .rs-calendar-table-cell-in-range::before {
-  background-color: #E0E0E0;
+  background-color: #e0e0e0;
 }
 
 .rs-picker-toolbar-right-btn-ok {
@@ -252,15 +281,17 @@ label {
   line-height: 1.42857143;
   border-radius: 2px;
   color: #fff;
-  background-color: #3B4559;
+  background-color: #3b4559;
 }
 
-.rs-picker-toolbar-right-btn-ok.rs-picker-toolbar-btn-disabled, .rs-picker-toolbar-right-btn-ok.rs-picker-toolbar-btn-disabled:hover, .rs-picker-toolbar-right-btn-ok.rs-picker-toolbar-btn-disabled:hover:active {
-  background-color: #3B4559;
+.rs-picker-toolbar-right-btn-ok.rs-picker-toolbar-btn-disabled,
+.rs-picker-toolbar-right-btn-ok.rs-picker-toolbar-btn-disabled:hover,
+.rs-picker-toolbar-right-btn-ok.rs-picker-toolbar-btn-disabled:hover:active {
+  background-color: #3b4559;
 }
 
 .rs-picker-toolbar-right-btn-ok:not(.rs-btn-disabled):hover {
-  background-color: #3B4559;
+  background-color: #3b4559;
 }
 
 .rs-input-group.rs-input-group-inside .rs-input-group-addon {
@@ -278,26 +309,46 @@ label {
 
 @-webkit-keyframes pulse {
   0% {
-      -webkit-box-shadow: 0 0 0 0 rgba(81,81,81, 0.4);
+    -webkit-box-shadow: 0 0 0 0 rgba(81, 81, 81, 0.4);
   }
   70% {
-      -webkit-box-shadow: 0 0 0 10px rgba(81,81,81, 0);
+    -webkit-box-shadow: 0 0 0 10px rgba(81, 81, 81, 0);
   }
   100% {
-      -webkit-box-shadow: 0 0 0 0 rgba(81,81,81, 0);
+    -webkit-box-shadow: 0 0 0 0 rgba(81, 81, 81, 0);
   }
 }
 @keyframes pulse {
   0% {
-      -moz-box-shadow: 0 0 0 0 rgba(81,81,81, 0.4);
-      box-shadow: 0 0 0 0 rgba(81,81,81, 0.4);
+    -moz-box-shadow: 0 0 0 0 rgba(81, 81, 81, 0.4);
+    box-shadow: 0 0 0 0 rgba(81, 81, 81, 0.4);
   }
   70% {
-      -moz-box-shadow: 0 0 0 10px rgba(81,81,81, 0);
-      box-shadow: 0 0 0 10px rgba(81,81,81, 0);
+    -moz-box-shadow: 0 0 0 10px rgba(81, 81, 81, 0);
+    box-shadow: 0 0 0 10px rgba(81, 81, 81, 0);
   }
   100% {
-      -moz-box-shadow: 0 0 0 0 rgba(81,81,81, 0);
-      box-shadow: 0 0 0 0 rgba(81,81,81, 0);
+    -moz-box-shadow: 0 0 0 0 rgba(81, 81, 81, 0);
+    box-shadow: 0 0 0 0 rgba(81, 81, 81, 0);
   }
+}
+
+/*******************************************************************************
+  CSS & Components Normalization WIP
+
+  Temporary CSS hacks to fix some components while we progressively normalize the application CSS & components.
+
+  IMPORTANT: Try to scope CSS hacks to ease transition and make them easier to remove.
+*/
+
+/* Broken following minor Rsuite upgrade to v5.45.0 */
+body > .rs-modal-wrapper {
+  box-sizing: border-box;
+}
+body > .rs-modal-wrapper .rs-modal-full {
+  margin: 5%;
+  max-height: calc(100% - 10%);
+  max-width: calc(100% - 10%);
+  /* height: calc(100% - 10%); */
+  width: calc(100% - 10%);
 }

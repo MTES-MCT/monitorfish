@@ -6,10 +6,10 @@ import { Mission, type MissionWithActions } from '../../../domain/entities/missi
 import { FrontendError } from '../../../libs/FrontendError'
 import { getMissionColor } from '../../map/layers/Mission/MissionLayer/styles'
 
-import type { ControlUnit } from '../../../domain/types/controlUnit'
+import type { LegacyControlUnit } from '../../../domain/types/legacyControlUnit'
 
 export function getControlUnitsNamesFromAdministrations(
-  controlUnits: ControlUnit.ControlUnit[],
+  controlUnits: LegacyControlUnit.LegacyControlUnit[],
   administrations: string[]
 ): string[] {
   const names = controlUnits

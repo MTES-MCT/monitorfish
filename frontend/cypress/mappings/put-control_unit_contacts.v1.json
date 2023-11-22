@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "PUT",
+    "url": "/api/v1/control_unit_contacts/*"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": {}
+  }
+}

@@ -24,15 +24,14 @@ import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 import { isValidControlUnit } from '../../utils'
 
-import type { ControlResource } from '../../../../../domain/types/controlResource'
-import type { ControlUnit } from '../../../../../domain/types/controlUnit'
+import type { LegacyControlUnit } from '../../../../../domain/types/legacyControlUnit'
 import type { MissionMainFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 import type { Promisable } from 'type-fest'
 
 export type ControlUnitSelectProps = {
   allAdministrationsAsOptions: Option[]
-  allControlUnits: ControlUnit.ControlUnit[]
+  allControlUnits: LegacyControlUnit.LegacyControlUnit[]
   allNamesAsOptions: Option[]
   error:
     | {
@@ -41,9 +40,12 @@ export type ControlUnitSelectProps = {
       }
     | undefined
   index: number
-  onChange: (index: number, nextControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft) => Promisable<void>
+  onChange: (
+    index: number,
+    nextControlUnit: LegacyControlUnit.LegacyControlUnit | LegacyControlUnit.LegacyControlUnitDraft
+  ) => Promisable<void>
   onDelete: (index: number) => Promisable<void>
-  value: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft
+  value: LegacyControlUnit.LegacyControlUnit | LegacyControlUnit.LegacyControlUnitDraft
 }
 export function ControlUnitSelect({
   allAdministrationsAsOptions,
@@ -68,7 +70,7 @@ export function ControlUnitSelect({
   }, [engagedControlUnitsData])
 
   const [controlledValue, setControlledValue] = useState(value)
-  const [selectedControlUnit, setSelectedControlUnit] = useState<ControlUnit.ControlUnit | undefined>(
+  const [selectedControlUnit, setSelectedControlUnit] = useState<LegacyControlUnit.LegacyControlUnit | undefined>(
     isValidControlUnit(value) ? value : undefined
   )
 
@@ -89,7 +91,7 @@ export function ControlUnitSelect({
   }, [allControlUnits, allNamesAsOptions, controlledValue])
 
   const selectedControlUnitResourcesAsOptions = useMemo(
-    (): Option<ControlResource>[] =>
+    (): Option<LegacyControlUnit.LegacyControlUnitResource>[] =>
       selectedControlUnit ? mapControlUnitToSortedResourcesAsOptions(selectedControlUnit) : [],
     [selectedControlUnit]
   )
@@ -116,16 +118,17 @@ export function ControlUnitSelect({
       }
 
       const nextSelectedControlUnit = nextName ? findControlUnitByname(allControlUnits, nextName) : undefined
-      const nextControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft = nextSelectedControlUnit
-        ? {
-            ...nextSelectedControlUnit,
-            contact: controlledValue.contact,
-            resources: controlledValue.resources
-          }
-        : {
-            ...INITIAL_MISSION_CONTROL_UNIT,
-            administration: controlledValue.administration
-          }
+      const nextControlUnit: LegacyControlUnit.LegacyControlUnit | LegacyControlUnit.LegacyControlUnitDraft =
+        nextSelectedControlUnit
+          ? {
+              ...nextSelectedControlUnit,
+              contact: controlledValue.contact,
+              resources: controlledValue.resources
+            }
+          : {
+              ...INITIAL_MISSION_CONTROL_UNIT,
+              administration: controlledValue.administration
+            }
 
       setControlledValue(nextControlUnit)
       setSelectedControlUnit(nextSelectedControlUnit)
@@ -136,8 +139,8 @@ export function ControlUnitSelect({
   )
 
   const handleResourcesChange = useCallback(
-    (nextResources: ControlResource[] | undefined) => {
-      const nextControlUnit: ControlUnit.ControlUnitDraft = {
+    (nextResources: LegacyControlUnit.LegacyControlUnitResource[] | undefined) => {
+      const nextControlUnit: LegacyControlUnit.LegacyControlUnitDraft = {
         ...controlledValue,
         resources: nextResources || []
       }
@@ -151,7 +154,7 @@ export function ControlUnitSelect({
 
   const handleContactChange = useCallback(
     (nextValue: string | undefined) => {
-      const nextControlUnit: ControlUnit.ControlUnitDraft = {
+      const nextControlUnit: LegacyControlUnit.LegacyControlUnitDraft = {
         ...controlledValue,
         contact: nextValue
       }

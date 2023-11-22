@@ -1,0 +1,142 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v2/control_units/10066"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": {
+      "id": 10066,
+      "areaNote": "Morbihan (56)",
+      "administration": {
+        "id": 1005,
+        "isArchived": false,
+        "name": "DDTM"
+      },
+      "administrationId": 1005,
+      "controlUnitContactIds": [165],
+      "controlUnitContacts": [
+        {
+          "id": 165,
+          "controlUnitId": 10066,
+          "email": "ddtm-samel@morbihan.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "02 97 64 85 06"
+        }
+      ],
+      "controlUnitResourceIds": [181, 133, 300, 1212],
+      "controlUnitResources": [
+        {
+          "id": 181,
+          "controlUnit": {
+            "id": 10066,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 56",
+            "termsNote": null
+          },
+          "controlUnitId": 10066,
+          "isArchived": false,
+          "name": "Brezel - FAH 7185",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 245,
+            "latitude": 47.658236,
+            "longitude": -2.760847,
+            "name": "Vannes"
+          },
+          "stationId": 245,
+          "type": "RIGID_HULL"
+        },
+        {
+          "id": 133,
+          "controlUnit": {
+            "id": 10066,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 56",
+            "termsNote": null
+          },
+          "controlUnitId": 10066,
+          "isArchived": false,
+          "name": "Voiture",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 245,
+            "latitude": 47.658236,
+            "longitude": -2.760847,
+            "name": "Vannes"
+          },
+          "stationId": 245,
+          "type": "CAR"
+        },
+        {
+          "id": 300,
+          "controlUnit": {
+            "id": 10066,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 56",
+            "termsNote": null
+          },
+          "controlUnitId": 10066,
+          "isArchived": false,
+          "name": "Sterenn - FAC 7421",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 153,
+            "latitude": 47.7482524,
+            "longitude": -3.3702449,
+            "name": "Lorient"
+          },
+          "stationId": 153,
+          "type": "SEMI_RIGID"
+        },
+        {
+          "id": 1212,
+          "controlUnit": {
+            "id": 10066,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 56",
+            "termsNote": null
+          },
+          "controlUnitId": 10066,
+          "isArchived": false,
+          "name": "Voiture",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 153,
+            "latitude": 47.7482524,
+            "longitude": -3.3702449,
+            "name": "Lorient"
+          },
+          "stationId": 153,
+          "type": "CAR"
+        }
+      ],
+      "departmentArea": null,
+      "departmentAreaInseeCode": null,
+      "isArchived": false,
+      "name": "DPM 56",
+      "termsNote": null
+    }
+  }
+}

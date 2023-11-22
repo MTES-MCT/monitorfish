@@ -1,0 +1,145 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v2/control_units/10336"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": {
+      "id": 10336,
+      "areaNote": "Morbihan (56) – Loire-Atlantique (44)",
+      "administration": {
+        "id": 4,
+        "isArchived": false,
+        "name": "Gendarmerie Maritime"
+      },
+      "administrationId": 4,
+      "controlUnitContactIds": [727, 728, 729, 730, 726],
+      "controlUnitContacts": [
+        {
+          "id": 727,
+          "controlUnitId": 10336,
+          "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "02 97 12 40 67"
+        },
+        {
+          "id": 728,
+          "controlUnitId": 10336,
+          "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "02 97 12 40 67"
+        },
+        {
+          "id": 729,
+          "controlUnitId": 10336,
+          "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "06 72 95 29 02"
+        },
+        {
+          "id": 730,
+          "controlUnitId": 10336,
+          "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "06 72 95 29 03"
+        },
+        {
+          "id": 726,
+          "controlUnitId": 10336,
+          "email": "ggmaratlan@gendarmerie.defense.gouv.fr",
+          "name": "OPERATIONAL_CENTER",
+          "phone": "02 98 22 22 17"
+        }
+      ],
+      "controlUnitResourceIds": [353, 90, 1042],
+      "controlUnitResources": [
+        {
+          "id": 353,
+          "controlUnit": {
+            "id": 10336,
+            "areaNote": "Morbihan (56) – Loire-Atlantique (44)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSL Lorient",
+            "termsNote": "CORGMAR Atlantique"
+          },
+          "controlUnitId": 10336,
+          "isArchived": false,
+          "name": "BSL Lorient",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 153,
+            "latitude": 47.7482524,
+            "longitude": -3.3702449,
+            "name": "Lorient"
+          },
+          "stationId": 153,
+          "type": "SEMI_RIGID"
+        },
+        {
+          "id": 90,
+          "controlUnit": {
+            "id": 10336,
+            "areaNote": "Morbihan (56) – Loire-Atlantique (44)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSL Lorient",
+            "termsNote": "CORGMAR Atlantique"
+          },
+          "controlUnitId": 10336,
+          "isArchived": false,
+          "name": "Voiture",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 153,
+            "latitude": 47.7482524,
+            "longitude": -3.3702449,
+            "name": "Lorient"
+          },
+          "stationId": 153,
+          "type": "CAR"
+        },
+        {
+          "id": 1042,
+          "controlUnit": {
+            "id": 10336,
+            "areaNote": "Morbihan (56) – Loire-Atlantique (44)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSL Lorient",
+            "termsNote": "CORGMAR Atlantique"
+          },
+          "controlUnitId": 10336,
+          "isArchived": false,
+          "name": "Moto",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 153,
+            "latitude": 47.7482524,
+            "longitude": -3.3702449,
+            "name": "Lorient"
+          },
+          "stationId": 153,
+          "type": "MOTORCYCLE"
+        }
+      ],
+      "departmentArea": null,
+      "departmentAreaInseeCode": null,
+      "isArchived": false,
+      "name": "BSL Lorient",
+      "termsNote": "CORGMAR Atlantique"
+    }
+  }
+}

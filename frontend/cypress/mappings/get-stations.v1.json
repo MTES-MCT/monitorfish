@@ -1,0 +1,292 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v1/stations"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": [
+      {
+        "id": 8,
+        "controlUnitResourceIds": [1208, 259],
+        "controlUnitResources": [
+          {
+            "id": 1208,
+            "controlUnitId": 10499,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 8,
+            "type": "CAR"
+          },
+          {
+            "id": 259,
+            "controlUnitId": 10449,
+            "isArchived": false,
+            "name": "Atoup - PM 412",
+            "note": "6 m",
+            "photo": null,
+            "stationId": 8,
+            "type": "SEMI_RIGID"
+          }
+        ],
+        "latitude": 47.66649100000001,
+        "longitude": -2.983767,
+        "name": "Auray"
+      },
+      {
+        "id": 153,
+        "controlUnitResourceIds": [553, 353, 90, 1042, 300, 1212, 189, 251, 361, 1219],
+        "controlUnitResources": [
+          {
+            "id": 553,
+            "controlUnitId": 10484,
+            "isArchived": false,
+            "name": "DF 36 Kan An Avel",
+            "note": null,
+            "photo": null,
+            "stationId": 153,
+            "type": "FAST_BOAT"
+          },
+          {
+            "id": 353,
+            "controlUnitId": 10336,
+            "isArchived": false,
+            "name": "BSL Lorient",
+            "note": null,
+            "photo": null,
+            "stationId": 153,
+            "type": "SEMI_RIGID"
+          },
+          {
+            "id": 90,
+            "controlUnitId": 10336,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 153,
+            "type": "CAR"
+          },
+          {
+            "id": 1042,
+            "controlUnitId": 10336,
+            "isArchived": false,
+            "name": "Moto",
+            "note": null,
+            "photo": null,
+            "stationId": 153,
+            "type": "MOTORCYCLE"
+          },
+          {
+            "id": 300,
+            "controlUnitId": 10066,
+            "isArchived": false,
+            "name": "Sterenn - FAC 7421",
+            "note": null,
+            "photo": null,
+            "stationId": 153,
+            "type": "SEMI_RIGID"
+          },
+          {
+            "id": 1212,
+            "controlUnitId": 10066,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 153,
+            "type": "CAR"
+          },
+          {
+            "id": 189,
+            "controlUnitId": 10455,
+            "isArchived": false,
+            "name": "P720 Geranium",
+            "note": null,
+            "photo": null,
+            "stationId": 153,
+            "type": "PATROL_BOAT"
+          },
+          {
+            "id": 251,
+            "controlUnitId": 10455,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 153,
+            "type": "CAR"
+          },
+          {
+            "id": 361,
+            "controlUnitId": 10449,
+            "isArchived": false,
+            "name": "Petrel – PM 438",
+            "note": "9 m",
+            "photo": null,
+            "stationId": 153,
+            "type": "SEMI_RIGID"
+          },
+          {
+            "id": 1219,
+            "controlUnitId": 10449,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 153,
+            "type": "CAR"
+          }
+        ],
+        "latitude": 47.7482524,
+        "longitude": -3.3702449,
+        "name": "Lorient"
+      },
+      {
+        "id": 222,
+        "controlUnitResourceIds": [134],
+        "controlUnitResources": [
+          {
+            "id": 134,
+            "controlUnitId": 10449,
+            "isArchived": false,
+            "name": "Ilur - PM 470",
+            "note": "9 m",
+            "photo": null,
+            "stationId": 222,
+            "type": "SEMI_RIGID"
+          }
+        ],
+        "latitude": 47.587901,
+        "longitude": -2.9994489,
+        "name": "Saint-Philibert"
+      },
+      {
+        "id": 245,
+        "controlUnitResourceIds": [314, 323, 181, 133, 516, 211, 580, 388, 320, 579, 512],
+        "controlUnitResources": [
+          {
+            "id": 314,
+            "controlUnitId": 10499,
+            "isArchived": false,
+            "name": "Brezel - FAH 7185",
+            "note": null,
+            "photo": null,
+            "stationId": 245,
+            "type": "FAST_BOAT"
+          },
+          {
+            "id": 323,
+            "controlUnitId": 10499,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 245,
+            "type": "CAR"
+          },
+          {
+            "id": 181,
+            "controlUnitId": 10066,
+            "isArchived": false,
+            "name": "Brezel - FAH 7185",
+            "note": null,
+            "photo": null,
+            "stationId": 245,
+            "type": "RIGID_HULL"
+          },
+          {
+            "id": 133,
+            "controlUnitId": 10066,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 245,
+            "type": "CAR"
+          },
+          {
+            "id": 516,
+            "controlUnitId": 10454,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 245,
+            "type": "CAR"
+          },
+          {
+            "id": 211,
+            "controlUnitId": 10338,
+            "isArchived": false,
+            "name": "Penn Blei – AY 938412 N",
+            "note": null,
+            "photo": null,
+            "stationId": 245,
+            "type": "SEMI_RIGID"
+          },
+          {
+            "id": 580,
+            "controlUnitId": 10338,
+            "isArchived": false,
+            "name": "Kereon II – AY 933119 K",
+            "note": null,
+            "photo": null,
+            "stationId": 245,
+            "type": "SEMI_RIGID"
+          },
+          {
+            "id": 388,
+            "controlUnitId": 10338,
+            "isArchived": false,
+            "name": "Jean Armel – AY 894009",
+            "note": null,
+            "photo": null,
+            "stationId": 245,
+            "type": "FAST_BOAT"
+          },
+          {
+            "id": 320,
+            "controlUnitId": 10338,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 245,
+            "type": "CAR"
+          },
+          {
+            "id": 579,
+            "controlUnitId": 10157,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 245,
+            "type": "CAR"
+          },
+          {
+            "id": 512,
+            "controlUnitId": 10449,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 245,
+            "type": "CAR"
+          }
+        ],
+        "latitude": 47.658236,
+        "longitude": -2.760847,
+        "name": "Vannes"
+      }
+    ]
+  }
+}

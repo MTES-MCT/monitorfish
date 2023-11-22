@@ -3,8 +3,8 @@ import OpenLayerMap from 'ol/Map'
 import { Children, useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import MapAttributionsBox from './controls/MapAttributionsBox'
-import MapCoordinatesBox from './controls/MapCoordinatesBox'
+import { MapAttributionsBox } from './controls/MapAttributionsBox'
+import { MapCoordinatesBox } from './controls/MapCoordinatesBox'
 import { monitorfishMap } from './monitorfishMap'
 import { HIT_PIXEL_TO_TOLERANCE } from '../../constants/constants'
 import { clickableLayerCodes, hoverableLayerCodes } from '../../domain/entities/layers'
@@ -14,6 +14,7 @@ import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 import type { VectorLayerWithName } from '../../domain/types/layer'
+import type { Coordinates } from '@mtes-mct/monitor-ui'
 import type { FeatureLike } from 'ol/Feature'
 import type { AnimationOptions } from 'ol/View'
 import type { HTMLProps, PropsWithChildren } from 'react'
@@ -49,7 +50,7 @@ export function BaseMap({
 
   const isAnimating = useRef(false)
   const isInitRenderDone = useRef(false)
-  const [cursorCoordinates, setCursorCoordinates] = useState<number[]>()
+  const [cursorCoordinates, setCursorCoordinates] = useState<Coordinates | undefined>(undefined)
 
   const mapElement = useRef()
 
@@ -211,7 +212,7 @@ export function BaseMap({
 
   function saveCoordinates(event) {
     if (event) {
-      const clickedCoordinates = monitorfishMap.getCoordinateFromPixel(event.pixel)
+      const clickedCoordinates = monitorfishMap.getCoordinateFromPixel(event.pixel) as Coordinates
       if (!clickedCoordinates) {
         return
       }

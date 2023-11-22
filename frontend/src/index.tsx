@@ -5,7 +5,6 @@ import { AuthProvider, withAuth } from 'react-oidc-context'
 
 import { App } from './App'
 import 'rsuite/dist/rsuite.min.css'
-import 'mini.css'
 import 'nouislider/dist/nouislider.css'
 import './ui/assets/index.css'
 import 'ol/ol.css'

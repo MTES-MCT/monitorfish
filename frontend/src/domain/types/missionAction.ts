@@ -1,4 +1,4 @@
-import type { ControlUnit } from './controlUnit'
+import type { LegacyControlUnit } from './legacyControlUnit'
 
 export namespace MissionAction {
   export interface MissionAction {
@@ -6,7 +6,7 @@ export namespace MissionAction {
     actionType: MissionActionType
     closedBy: string | undefined
     controlQualityComments: string | undefined
-    controlUnits: ControlUnit.ControlUnit[]
+    controlUnits: LegacyControlUnit.LegacyControlUnit[]
     districtCode: string | undefined
     diversion: boolean | undefined
     emitsAis: ControlCheck | undefined

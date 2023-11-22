@@ -1,8 +1,8 @@
 import type { MissionActionFormValues } from './types'
-import type { ControlUnit } from '../../../domain/types/controlUnit'
+import type { LegacyControlUnit } from '../../../domain/types/legacyControlUnit'
 import type { Undefine } from '@mtes-mct/monitor-ui'
 
-export const INITIAL_MISSION_CONTROL_UNIT: ControlUnit.ControlUnitDraft = {
+export const INITIAL_MISSION_CONTROL_UNIT: LegacyControlUnit.LegacyControlUnitDraft = {
   administration: undefined,
   contact: undefined,
   id: undefined,

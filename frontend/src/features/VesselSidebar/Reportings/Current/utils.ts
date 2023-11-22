@@ -1,6 +1,6 @@
 import { ReportingOriginActor } from '../../../../domain/entities/reporting'
 
-import type { ControlUnit } from '../../../../domain/types/controlUnit'
+import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
 import type { ReportingUpdate } from '../../../../domain/types/reporting'
 import type { Option } from '@mtes-mct/monitor-ui'
 
@@ -54,7 +54,9 @@ export function getReportingValueErrors(reportingValue: ReportingUpdate) {
   return nextErrorsFields
 }
 
-export const mapControlUnitsToUniqueSortedIdsAsOptions = (controlUnits: ControlUnit.ControlUnit[]): Option<number>[] =>
+export const mapControlUnitsToUniqueSortedIdsAsOptions = (
+  controlUnits: LegacyControlUnit.LegacyControlUnit[]
+): Option<number>[] =>
   Array.from(controlUnits)
     .sort((a, b) => Number(b.name) - Number(a.name))
     .map(controlUnit => ({

@@ -1,0 +1,124 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v2/control_units/10499"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": {
+      "id": 10499,
+      "areaNote": "Morbihan (56)",
+      "administration": {
+        "id": 1005,
+        "isArchived": false,
+        "name": "DDTM"
+      },
+      "administrationId": 1005,
+      "controlUnitContactIds": [1121, 1122],
+      "controlUnitContacts": [
+        {
+          "id": 1121,
+          "controlUnitId": 10499,
+          "email": "ddtm-samel@morbihan.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "02 56 63 75 32"
+        },
+        {
+          "id": 1122,
+          "controlUnitId": 10499,
+          "email": "ddtm-samel@morbihan.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "02 97 64 85 06"
+        }
+      ],
+      "controlUnitResourceIds": [314, 323, 1208],
+      "controlUnitResources": [
+        {
+          "id": 314,
+          "controlUnit": {
+            "id": 10499,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines 56",
+            "termsNote": null
+          },
+          "controlUnitId": 10499,
+          "isArchived": false,
+          "name": "Brezel - FAH 7185",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 245,
+            "latitude": 47.658236,
+            "longitude": -2.760847,
+            "name": "Vannes"
+          },
+          "stationId": 245,
+          "type": "FAST_BOAT"
+        },
+        {
+          "id": 323,
+          "controlUnit": {
+            "id": 10499,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines 56",
+            "termsNote": null
+          },
+          "controlUnitId": 10499,
+          "isArchived": false,
+          "name": "Voiture",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 245,
+            "latitude": 47.658236,
+            "longitude": -2.760847,
+            "name": "Vannes"
+          },
+          "stationId": 245,
+          "type": "CAR"
+        },
+        {
+          "id": 1208,
+          "controlUnit": {
+            "id": 10499,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines 56",
+            "termsNote": null
+          },
+          "controlUnitId": 10499,
+          "isArchived": false,
+          "name": "Voiture",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 8,
+            "latitude": 47.66649100000001,
+            "longitude": -2.983767,
+            "name": "Auray"
+          },
+          "stationId": 8,
+          "type": "CAR"
+        }
+      ],
+      "departmentArea": null,
+      "departmentAreaInseeCode": null,
+      "isArchived": false,
+      "name": "Cultures marines 56",
+      "termsNote": null
+    }
+  }
+}

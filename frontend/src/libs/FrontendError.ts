@@ -1,18 +1,38 @@
 /* eslint-disable no-console */
 
-import { captureException, captureMessage } from '@sentry/react'
+import { captureException, captureMessage, Scope } from '@sentry/react'
 
 export class FrontendError extends Error {
-  originalError: any | undefined
-
-  constructor(message: string, originalError?: any) {
+  constructor(
+    /** Technical error message for logs and debugging purpose. */
+    public override message: string,
+    /** Originally thrown error. */
+    public originalError?: any,
+    /** Extra context info. */
+    public scope?: Scope
+  ) {
     super(message)
 
-    captureMessage(message)
-    if (originalError) {
-      captureException(originalError)
-    }
+    console.group('FrontendError')
+    console.error('message', message)
+    console.error('originalError', originalError)
+    console.groupEnd()
 
-    this.originalError = originalError
+    const controlledScope =
+      scope ||
+      (() => {
+        const newScope = new Scope()
+        newScope.setTags({
+          side: 'frontend',
+          type: 'api_error'
+        })
+
+        return newScope
+      })
+
+    captureMessage(message, controlledScope)
+    if (originalError) {
+      captureException(originalError, scope)
+    }
   }
 }

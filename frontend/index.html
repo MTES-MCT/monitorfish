@@ -16,9 +16,10 @@
     <!-- We need to use a VITE_ env var to replace the HTML index file -->
     <!-- see: https://vitejs.dev/guide/env-and-mode.html#html-env-replacement -->
     %VITE_SMALL_CHAT_SNIPPET%
-    
+
     <!-- This script will be used by the `import-meta-env` library to inject -->
     <!-- runtime environment variables when running in production -->
+    <!-- see: https://import-meta-env.org/guide/getting-started/introduction.html -->
     <script>
       globalThis.import_meta_env = JSON.parse('"import_meta_env_placeholder"')
     </script>

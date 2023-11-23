@@ -37,7 +37,7 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
       })
     }),
 
-    getEngagedControlUnits: builder.query<ControlUnit.ControlUnit[], void>({
+    getEngagedControlUnits: builder.query<ControlUnit.EngagedControlUnits, void>({
       query: () => `missions/engaged_control_units`,
       transformErrorResponse: response => new ApiError(GET_ENGAGED_CONTROL_UNITS_ERROR_MESSAGE, response)
     }),

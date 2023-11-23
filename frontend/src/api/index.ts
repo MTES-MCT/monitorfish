@@ -11,7 +11,7 @@ import { normalizeRtkBaseQuery } from '../utils/normalizeRtkBaseQuery'
 const MAX_RETRIES = 2
 
 // Using local MonitorEnv stubs:
-const MONITORENV_API_URL = import.meta.env.VITE_MONITORENV_URL
+const MONITORENV_API_URL = import.meta.env.FRONTEND_MONITORENV_URL
 
 // Using local MonitorEnv instance:
 // const MONITORENV_API_URL = 'http://0.0.0.0:9880'

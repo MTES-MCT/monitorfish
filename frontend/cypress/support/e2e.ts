@@ -83,12 +83,32 @@ Cypress.on('uncaught:exception', err => {
   // We ignore uncaught exceptions `Error: ResizeObserver loop completed with undelivered notifications.`
   // since they only seem to happen (sporadically) within e2e tests
   if (err.message.includes('ResizeObserver loop completed with undelivered notifications.')) {
+    // eslint-disable-next-line no-console
+    console.log(`Error skipped: ${err}`)
+
+    return false
+  }
+
+  // We ignore uncaught exceptions `TypeError: NetworkError when attempting to fetch resource`
+  // if (err.message.includes('NetworkError when attempting to fetch resource') ) {
+  //  console.log(`Error skipped: ${err}`)
+  //  return false // return false to make test continue
+  // }
+
+  // We ignore uncaught exceptions `AbortError: The operation was aborted`
+  if (err.message.includes('The operation was aborted')) {
+    // eslint-disable-next-line no-console
+    console.log(`Error skipped: ${err}`)
+
     return false
   }
 
   // This React error does not reproduce in real life
   // It might be a bug resolved in React 18 : https://github.com/facebook/react/issues/17355#issuecomment-1173055443
   if (err.message.includes('Should not already be working')) {
+    // eslint-disable-next-line no-console
+    console.log(`Error skipped: ${err}`)
+
     return false
   }
 

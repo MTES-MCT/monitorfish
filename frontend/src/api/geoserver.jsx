@@ -23,8 +23,8 @@ function getIrretrievableRegulatoryZoneError(e, regulatoryZone) {
   )
 }
 
-export const GEOSERVER_URL = import.meta.env.VITE_GEOSERVER_REMOTE_URL
-export const GEOSERVER_BACKOFFICE_URL = import.meta.env.VITE_GEOSERVER_LOCAL_URL
+export const GEOSERVER_URL = import.meta.env.FRONTEND_GEOSERVER_REMOTE_URL
+export const GEOSERVER_BACKOFFICE_URL = import.meta.env.FRONTEND_GEOSERVER_LOCAL_URL
 
 /**
  * @description This API isn't authenticated

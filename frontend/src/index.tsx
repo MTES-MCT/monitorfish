@@ -19,16 +19,16 @@ import { getOIDCConfig } from './auth/getOIDCConfig'
 if (import.meta.env.PROD) {
   // https://docs.sentry.io/platforms/javascript/performance/#configure-the-sample-rate
   init({
-    dsn: import.meta.env.VITE_SENTRY_DSN || '',
-    environment: import.meta.env.VITE_SENTRY_ENV || '',
+    dsn: import.meta.env.FRONTEND_SENTRY_DSN || '',
+    environment: import.meta.env.FRONTEND_SENTRY_ENV || '',
     integrations: [
       new BrowserTracing({
-        tracingOrigins: import.meta.env.VITE_SENTRY_TRACING_ORIGINS
-          ? [import.meta.env.VITE_SENTRY_TRACING_ORIGINS || '']
+        tracingOrigins: import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS
+          ? [import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS || '']
           : []
       })
     ],
-    release: import.meta.env.VITE_MONITORFISH_VERSION || '',
+    release: import.meta.env.FRONTEND_MONITORFISH_VERSION || '',
     tracesSampleRate: 1.0
   })
 }

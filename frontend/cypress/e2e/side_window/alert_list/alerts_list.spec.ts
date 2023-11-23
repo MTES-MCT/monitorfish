@@ -17,7 +17,7 @@ context('Side Window > Alert List', () => {
     cy.get('[data-cy="side-window-sub-menu-NAMO"]').should(
       'have.css',
       'background',
-      'rgb(204, 207, 214) none repeat scroll 0% 0%'
+      'rgb(204, 207, 214)'
     )
   })
 

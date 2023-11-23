@@ -114,52 +114,6 @@ beforeEach(() => {
     statusCode: 200
   })
 
-  // DEV :: FRONTEND_GEOSERVER_LOCAL_URL
-  // PROD :: FRONTEND_GEOSERVER_LOCAL_URL
-  cy.intercept({ url: /^https?:\/\/10\.56\.205\.25:808(1|2)\/.*/ }, req => {
-    req.redirect(
-      req.url
-        .replace('http://10.56.205.25:8081', 'http://0.0.0.0:8081')
-        .replace('http://10.56.205.25:8082', 'http://0.0.0.0:8081')
-        .replace('https://10.56.205.25:8081', 'http://0.0.0.0:8081')
-        .replace('https://10.56.205.25:8082', 'http://0.0.0.0:8081')
-    )
-  })
-
-  // DEV :: FRONTEND_GEOSERVER_REMOTE_URL
-  cy.intercept({ url: /^https?:\/\/monitorfish-test\.csam\.e2\.rie\.gouv\.fr\/.*/ }, req => {
-    req.redirect(
-      req.url
-        .replace('http://monitorfish-test.csam.e2.rie.gouv.fr', 'http://0.0.0.0:8081')
-        .replace('https://monitorfish-test.csam.e2.rie.gouv.fr', 'http://0.0.0.0:8081')
-    )
-  })
-  // PROD :: FRONTEND_GEOSERVER_REMOTE_URL
-  cy.intercept({ url: /^https?:\/\/monitorfish\.din\.developpement-durable\.gouv\.fr\/.*/ }, req => {
-    req.redirect(
-      req.url
-        .replace('http://monitorfish.din.developpement-durable.gouv.fr', 'http://0.0.0.0:8081')
-        .replace('https://monitorfish.din.developpement-durable.gouv.fr', 'http://0.0.0.0:8081')
-    )
-  })
-
-  // DEV :: FRONTEND_MONITORENV_URL
-  cy.intercept({ url: /^https?:\/\/monitorenv\.kadata\.fr\/.*/ }, req => {
-    req.redirect(
-      req.url
-        .replace('http://monitorenv.kadata.fr', 'http://0.0.0.0:8081')
-        .replace('http://monitorenv.kadata.fr', 'https://0.0.0.0:8081')
-    )
-  })
-  // PROD :: FRONTEND_MONITORENV_URL
-  cy.intercept({ url: /^https?:\/\/monitorenv\.din\.developpement-durable\.gouv\.fr\/.*/ }, req => {
-    req.redirect(
-      req.url
-        .replace('http://monitorenv.din.developpement-durable.gouv.fr', 'http://0.0.0.0:8081')
-        .replace('https://monitorenv.din.developpement-durable.gouv.fr', 'http://0.0.0.0:8081')
-    )
-  })
-
   // DEV :: FRONTEND_SENTRY_DSN
   // PROD :: FRONTEND_SENTRY_DSN
   cy.intercept(

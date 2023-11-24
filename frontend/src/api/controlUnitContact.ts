@@ -1,10 +1,13 @@
-import { monitorenvApi } from '.'
+import { monitorenvApi } from './api'
 import { FrontendApiError } from '../libs/FrontendApiError'
 
 import type { ControlUnit } from '@mtes-mct/monitor-ui'
 
-const GET_CONTROL_UNIT_CONTACT_ERROR_MESSAGE = "Nous n'avons pas pu récupérer cette contact."
+const CREATE_CONTROL_UNIT_CONTACT_ERROR_MESSAGE = "Nous n'avons pas pu créer ce contact."
+const DELETE_CONTROL_UNIT_CONTACT_ERROR_MESSAGE = "Nous n'avons pas pu supprimé ce contact."
+const GET_CONTROL_UNIT_CONTACT_ERROR_MESSAGE = "Nous n'avons pas pu récupérer ce contact."
 const GET_CONTROL_UNIT_CONTACTS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des contacts."
+const UPDATE_CONTROL_UNIT_CONTACT_ERROR_MESSAGE = "Nous n'avons pas pu mettre à jour ce contact."
 
 export const monitorenvControlUnitContactApi = monitorenvApi.injectEndpoints({
   endpoints: builder => ({
@@ -14,7 +17,8 @@ export const monitorenvControlUnitContactApi = monitorenvApi.injectEndpoints({
         body: newControlUnitContactData,
         method: 'POST',
         url: `/v1/control_unit_contacts`
-      })
+      }),
+      transformErrorResponse: response => new FrontendApiError(CREATE_CONTROL_UNIT_CONTACT_ERROR_MESSAGE, response)
     }),
 
     deleteControlUnitContact: builder.mutation<void, number>({
@@ -22,7 +26,8 @@ export const monitorenvControlUnitContactApi = monitorenvApi.injectEndpoints({
       query: controlUnitContactId => ({
         method: 'DELETE',
         url: `/v1/control_unit_contacts/${controlUnitContactId}`
-      })
+      }),
+      transformErrorResponse: response => new FrontendApiError(DELETE_CONTROL_UNIT_CONTACT_ERROR_MESSAGE, response)
     }),
 
     getControlUnitContact: builder.query<ControlUnit.ControlUnitContact, number>({
@@ -43,7 +48,8 @@ export const monitorenvControlUnitContactApi = monitorenvApi.injectEndpoints({
         body: nextControlUnitContactData,
         method: 'PUT',
         url: `/v1/control_unit_contacts/${nextControlUnitContactData.id}`
-      })
+      }),
+      transformErrorResponse: response => new FrontendApiError(UPDATE_CONTROL_UNIT_CONTACT_ERROR_MESSAGE, response)
     })
   })
 })

@@ -8,14 +8,13 @@ import { INITIAL_CONTROL_UNIT_RESOURCE_FORM_VALUES } from './constants'
 import { Form } from './Form'
 import { Item } from './Item'
 import {
-  DELETE_CONTROL_UNIT_RESOURCE_ERROR_MESSAGE,
-  monitorenvControlUnitResourceApi,
-  useCreateControlUnitResourceMutation,
-  useUpdateControlUnitResourceMutation
+  IMPOSSIBLE_CONTROL_UNIT_RESOURCE_DELETION_ERROR_MESSAGE,
+  monitorenvControlUnitResourceApi
 } from '../../../../../api/controlUnitResource'
 import { ConfirmationModal } from '../../../../../components/ConfirmationModal'
 import { Dialog } from '../../../../../components/Dialog'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
+import { FrontendApiError } from '../../../../../libs/FrontendApiError'
 import { FrontendError } from '../../../../../libs/FrontendError'
 import { isNotArchived } from '../../../../../utils/isNotArchived'
 import { Section } from '../shared/Section'
@@ -27,8 +26,6 @@ type ControlUnitResourceListProps = {
 }
 export function ControlUnitResourceList({ controlUnit }: ControlUnitResourceListProps) {
   const dispatch = useMainAppDispatch()
-  const [createControlUnitResource] = useCreateControlUnitResourceMutation()
-  const [updateControlUnitResource] = useUpdateControlUnitResourceMutation()
 
   const [editedControlUnitResourceId, setEditedControlUnitResourceId] = useState<number | undefined>(undefined)
   const [isArchivingConfirmationModalOpen, setIsArchivingConfirmationModalOpen] = useState(false)
@@ -51,18 +48,22 @@ export function ControlUnitResourceList({ controlUnit }: ControlUnitResourceList
       throw new FrontendError('`editedControlUnitResourceId` is undefined.')
     }
 
-    const { data: canDeleteControlUnit } = await dispatch(
-      monitorenvControlUnitResourceApi.endpoints.canDeleteControlUnitResource.initiate(editedControlUnitResourceId, {
-        forceRefetch: true
-      })
-    )
-    if (!canDeleteControlUnit) {
-      setIsImpossibleDeletionDialogOpen(true)
+    try {
+      const canDeleteControlUnit = await dispatch(
+        monitorenvControlUnitResourceApi.endpoints.canDeleteControlUnitResource.initiate(editedControlUnitResourceId, {
+          forceRefetch: true
+        })
+      ).unwrap()
+      if (!canDeleteControlUnit) {
+        setIsImpossibleDeletionDialogOpen(true)
 
-      return
+        return
+      }
+
+      setIsDeletionConfirmationModalOpen(true)
+    } catch (error) {
+      FrontendApiError.handleIfAny(error)
     }
-
-    setIsDeletionConfirmationModalOpen(true)
   }, [dispatch, editedControlUnitResourceId])
 
   const closeDialogsAndModals = useCallback(() => {
@@ -94,12 +95,16 @@ export function ControlUnitResourceList({ controlUnit }: ControlUnitResourceList
       throw new FrontendError('`editedControlUnitResourceId` is undefined.')
     }
 
-    await dispatch(
-      monitorenvControlUnitResourceApi.endpoints.deleteControlUnitResource.initiate(editedControlUnitResourceId)
-    )
+    try {
+      await dispatch(
+        monitorenvControlUnitResourceApi.endpoints.deleteControlUnitResource.initiate(editedControlUnitResourceId)
+      )
 
-    closeDialogsAndModals()
-    closeForm()
+      closeDialogsAndModals()
+      closeForm()
+    } catch (err) {
+      FrontendApiError.handleIfAny(err)
+    }
   }, [closeDialogsAndModals, closeForm, dispatch, editedControlUnitResourceId])
 
   const createOrUpdateControlUnitResource = useCallback(
@@ -112,17 +117,27 @@ export function ControlUnitResourceList({ controlUnit }: ControlUnitResourceList
           : controlUnitResourceFormValues.name
       }
 
-      if (isNewControlUnitResourceFormOpen) {
-        await createControlUnitResource(
-          controlledControlUnitResourceFormValues as ControlUnit.NewControlUnitResourceData
-        )
-      } else {
-        await updateControlUnitResource(controlledControlUnitResourceFormValues as ControlUnit.ControlUnitResourceData)
-      }
+      try {
+        if (isNewControlUnitResourceFormOpen) {
+          await dispatch(
+            monitorenvControlUnitResourceApi.endpoints.createControlUnitResource.initiate(
+              controlledControlUnitResourceFormValues as ControlUnit.NewControlUnitResourceData
+            )
+          ).unwrap()
+        } else {
+          await dispatch(
+            monitorenvControlUnitResourceApi.endpoints.updateControlUnitResource.initiate(
+              controlledControlUnitResourceFormValues as ControlUnit.ControlUnitResourceData
+            )
+          ).unwrap()
+        }
 
-      closeForm()
+        closeForm()
+      } catch (err) {
+        FrontendApiError.handleIfAny(err)
+      }
     },
-    [closeForm, createControlUnitResource, isNewControlUnitResourceFormOpen, updateControlUnitResource]
+    [closeForm, dispatch, isNewControlUnitResourceFormOpen]
   )
 
   const openCreationForm = useCallback(() => {
@@ -193,7 +208,7 @@ export function ControlUnitResourceList({ controlUnit }: ControlUnitResourceList
       {isImpossibleDeletionDialogOpen && (
         <Dialog
           color={THEME.color.maximumRed}
-          message={DELETE_CONTROL_UNIT_RESOURCE_ERROR_MESSAGE}
+          message={IMPOSSIBLE_CONTROL_UNIT_RESOURCE_DELETION_ERROR_MESSAGE}
           onClose={closeDialogsAndModals}
           title="Suppression impossible"
           titleBackgroundColor={THEME.color.maximumRed}

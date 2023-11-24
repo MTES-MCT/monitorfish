@@ -6,15 +6,15 @@ import { INITIAL_CONTROL_UNIT_CONTACT_FORM_VALUES } from './constants'
 import { Form } from './Form'
 import { Item } from './Item'
 import { sortControlUnitContactsByQualifiedName } from './utils'
-import {
-  monitorenvControlUnitContactApi,
-  useCreateControlUnitContactMutation,
-  useUpdateControlUnitContactMutation
-} from '../../../../../api/controlUnitContact'
 import { ConfirmationModal } from '../../../../../components/ConfirmationModal'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { FrontendApiError } from '../../../../../libs/FrontendApiError'
 import { FrontendError } from '../../../../../libs/FrontendError'
+import {
+  monitorenvControlUnitContactApi,
+  useCreateControlUnitContactMutation,
+  useUpdateControlUnitContactMutation
+} from '../../../controlUnitContactApi'
 import { Section } from '../shared/Section'
 import { TextareaForm } from '../shared/TextareaForm'
 

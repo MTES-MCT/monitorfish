@@ -1,6 +1,6 @@
 import { FIVE_MINUTES } from '../constants'
 
-export const RTK_DEFAULT_QUERY_OPTIONS = {
+export const RTK_COMMON_QUERY_OPTIONS = {
   pollingInterval: FIVE_MINUTES
 }
 

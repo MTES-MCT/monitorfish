@@ -24,7 +24,7 @@ export class FrontendError extends Error {
         const newScope = new Scope()
         newScope.setTags({
           side: 'frontend',
-          type: 'api_error'
+          type: 'error'
         })
 
         return newScope

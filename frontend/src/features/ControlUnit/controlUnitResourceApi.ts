@@ -1,7 +1,7 @@
-import { monitorenvApi } from './api'
-import { ApiErrorCode, type BackendApiBooleanResponse } from './types'
-import { FrontendApiError } from '../libs/FrontendApiError'
-import { UsageError } from '../libs/UsageError'
+import { monitorenvApi } from '../../api/api'
+import { ApiErrorCode, type BackendApiBooleanResponse } from '../../api/types'
+import { FrontendApiError } from '../../libs/FrontendApiError'
+import { UsageError } from '../../libs/UsageError'
 
 import type { ControlUnit } from '@mtes-mct/monitor-ui'
 

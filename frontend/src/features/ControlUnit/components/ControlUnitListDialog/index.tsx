@@ -5,18 +5,23 @@ import { useCallback, useMemo } from 'react'
 import { FilterBar } from './FilterBar'
 import { Item } from './Item'
 import { getFilters } from './utils'
-import { RTK_DEFAULT_QUERY_OPTIONS } from '../../../../api/constants'
-import { useGetControlUnitsQuery } from '../../../../api/controlUnit'
+import { RTK_COMMON_QUERY_OPTIONS } from '../../../../api/constants'
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { FrontendApiError } from '../../../../libs/FrontendApiError'
 import { NoRsuiteOverrideWrapper } from '../../../../ui/NoRsuiteOverrideWrapper'
 import { isNotArchived } from '../../../../utils/isNotArchived'
+import { useGetControlUnitsQuery } from '../../controlUnitApi'
 
 export function ControlUnitListDialog() {
   const dispatch = useMainAppDispatch()
   const filtersState = useMainAppSelector(store => store.controlUnitListDialog.filtersState)
-  const { data: controlUnits } = useGetControlUnitsQuery(undefined, RTK_DEFAULT_QUERY_OPTIONS)
+  const { data: controlUnits, error: getControlUnitsError } = useGetControlUnitsQuery(
+    undefined,
+    RTK_COMMON_QUERY_OPTIONS
+  )
+  FrontendApiError.handleIfAny(getControlUnitsError)
 
   const activeControlUnits = useMemo(() => controlUnits?.filter(isNotArchived), [controlUnits])
 

@@ -35,7 +35,7 @@ export function MapButtons() {
       {isVesselLabelsMapButtonDisplayed && <VesselLabelsMapButton />}
       {isFavoriteVesselsMapButtonDisplayed && <FavoriteVessels />}
       {isSuperUser && isFavoriteVesselsMapButtonDisplayed && <MissionsMenu />}
-      {true && <ControlUnitListDialogButton />}
+      {isSuperUser && <ControlUnitListDialogButton />}
     </>
   )
 }

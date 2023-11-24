@@ -7,16 +7,16 @@ import styled from 'styled-components'
 import { INITIAL_CONTROL_UNIT_RESOURCE_FORM_VALUES } from './constants'
 import { Form } from './Form'
 import { Item } from './Item'
-import {
-  IMPOSSIBLE_CONTROL_UNIT_RESOURCE_DELETION_ERROR_MESSAGE,
-  monitorenvControlUnitResourceApi
-} from '../../../../../api/controlUnitResource'
 import { ConfirmationModal } from '../../../../../components/ConfirmationModal'
 import { Dialog } from '../../../../../components/Dialog'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { FrontendApiError } from '../../../../../libs/FrontendApiError'
 import { FrontendError } from '../../../../../libs/FrontendError'
 import { isNotArchived } from '../../../../../utils/isNotArchived'
+import {
+  IMPOSSIBLE_CONTROL_UNIT_RESOURCE_DELETION_ERROR_MESSAGE,
+  monitorenvControlUnitResourceApi
+} from '../../../controlUnitResourceApi'
 import { Section } from '../shared/Section'
 
 import type { ControlUnitResourceFormValues } from './types'

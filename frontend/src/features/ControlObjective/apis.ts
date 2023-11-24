@@ -1,6 +1,6 @@
 import { ascend, identity } from 'ramda'
 
-import { monitorfishApi } from '../../api'
+import { monitorfishApi } from '../../api/api'
 import { ApiError } from '../../libs/ApiError'
 
 import type { ControlObjective, CreateControlObjectivePayload, UpdateControlObjective } from './types'

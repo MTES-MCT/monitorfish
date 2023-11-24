@@ -13,6 +13,7 @@ import {
 } from '../../../../../api/controlUnitContact'
 import { ConfirmationModal } from '../../../../../components/ConfirmationModal'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
+import { FrontendApiError } from '../../../../../libs/FrontendApiError'
 import { FrontendError } from '../../../../../libs/FrontendError'
 import { Section } from '../shared/Section'
 import { TextareaForm } from '../shared/TextareaForm'
@@ -64,23 +65,31 @@ export function ControlUnitContactList({ controlUnit, onSubmit }: ControlUnitCon
       throw new FrontendError('`editedControlUnitContactId` is undefined.')
     }
 
-    await dispatch(
-      monitorenvControlUnitContactApi.endpoints.deleteControlUnitContact.initiate(editedControlUnitContactId)
-    )
+    try {
+      await dispatch(
+        monitorenvControlUnitContactApi.endpoints.deleteControlUnitContact.initiate(editedControlUnitContactId)
+      ).unwrap()
 
-    closeDialogsAndModals()
-    closeForm()
+      closeDialogsAndModals()
+      closeForm()
+    } catch (err) {
+      FrontendApiError.handleIfAny(err)
+    }
   }, [closeDialogsAndModals, closeForm, dispatch, editedControlUnitContactId])
 
   const createOrUpdateControlUnitContact = useCallback(
     async (controlUnitContactFormValues: ControlUnitContactFormValues) => {
-      if (isNewControlUnitContactFormOpen) {
-        await createControlUnitContact(controlUnitContactFormValues as ControlUnit.NewControlUnitContactData)
-      } else {
-        await updateControlUnitContact(controlUnitContactFormValues as ControlUnit.ControlUnitContactData)
-      }
+      try {
+        if (isNewControlUnitContactFormOpen) {
+          await createControlUnitContact(controlUnitContactFormValues as ControlUnit.NewControlUnitContactData)
+        } else {
+          await updateControlUnitContact(controlUnitContactFormValues as ControlUnit.ControlUnitContactData)
+        }
 
-      closeForm()
+        closeForm()
+      } catch (err) {
+        FrontendApiError.handleIfAny(err)
+      }
     },
     [closeForm, createControlUnitContact, isNewControlUnitContactFormOpen, updateControlUnitContact]
   )

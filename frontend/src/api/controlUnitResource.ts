@@ -1,17 +1,20 @@
-import { monitorenvApi } from '.'
-import { ARCHIVE_GENERIC_ERROR_MESSAGE } from './constants'
+import { monitorenvApi } from './api'
 import { ApiErrorCode, type BackendApiBooleanResponse } from './types'
 import { FrontendApiError } from '../libs/FrontendApiError'
-import { newUsageError } from '../libs/UsageError'
+import { UsageError } from '../libs/UsageError'
 
 import type { ControlUnit } from '@mtes-mct/monitor-ui'
 
-export const ARCHIVE_CONTROL_UNITE_RESOURCE_ERROR_MESSAGE = "Nous n'avons pas pu archiver ce moyen."
+const ARCHIVE_CONTROL_UNIT_RESOURCE_ERROR_MESSAGE = "Nous n'avons pas pu archiver ce moyen."
+const CREATE_CONTROL_UNIT_RESOURCE_ERROR_MESSAGE = "Nous n'avons pas pu créer ce moyen."
 const CAN_DELETE_CONTROL_UNIT_RESOURCE_ERROR_MESSAGE = "Nous n'avons pas pu vérifier si ce moyen est supprimable."
-export const DELETE_CONTROL_UNIT_RESOURCE_ERROR_MESSAGE =
-  "Ce moyen est rattaché à des missions. Veuillez l'en détacher avant de le supprimer."
+const DELETE_CONTROL_UNIT_RESOURCE_ERROR_MESSAGE = "Nous n'avons pas pu supprimé ce moyen."
 const GET_CONTROL_UNIT_RESOURCE_ERROR_MESSAGE = "Nous n'avons pas pu récupérer ce moyen."
 const GET_CONTROL_UNIT_RESOURCES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des moyens."
+const UPDATE_CONTROL_UNIT_CONTACT_ERROR_MESSAGE = "Nous n'avons pas pu mettre à jour ce moyen."
+
+export const IMPOSSIBLE_CONTROL_UNIT_RESOURCE_DELETION_ERROR_MESSAGE =
+  "Ce moyen est rattaché à des missions. Veuillez l'en détacher avant de le supprimer."
 
 export const monitorenvControlUnitResourceApi = monitorenvApi.injectEndpoints({
   endpoints: builder => ({
@@ -21,13 +24,7 @@ export const monitorenvControlUnitResourceApi = monitorenvApi.injectEndpoints({
         method: 'PUT',
         url: `/v1/control_unit_resources/${controlUnitResourceId}/archive`
       }),
-      transformErrorResponse: response => {
-        if (response.data.type === ApiErrorCode.UNARCHIVED_CHILD) {
-          return newUsageError(ARCHIVE_CONTROL_UNITE_RESOURCE_ERROR_MESSAGE)
-        }
-
-        return new FrontendApiError(ARCHIVE_GENERIC_ERROR_MESSAGE, response)
-      }
+      transformErrorResponse: response => new FrontendApiError(ARCHIVE_CONTROL_UNIT_RESOURCE_ERROR_MESSAGE, response)
     }),
 
     canDeleteControlUnitResource: builder.query<boolean, number>({
@@ -37,13 +34,14 @@ export const monitorenvControlUnitResourceApi = monitorenvApi.injectEndpoints({
       transformResponse: (response: BackendApiBooleanResponse) => response.value
     }),
 
-    createControlUnitResource: builder.mutation<void, ControlUnit.NewControlUnitResourceData>({
+    createControlUnitResource: builder.mutation<undefined, ControlUnit.NewControlUnitResourceData>({
       invalidatesTags: () => [{ type: 'ControlUnits' }, { type: 'Stations' }],
       query: newControlUnitResourceData => ({
         body: newControlUnitResourceData,
         method: 'POST',
         url: `/v1/control_unit_resources`
-      })
+      }),
+      transformErrorResponse: response => new FrontendApiError(CREATE_CONTROL_UNIT_RESOURCE_ERROR_MESSAGE, response)
     }),
 
     deleteControlUnitResource: builder.mutation<void, number>({
@@ -53,8 +51,8 @@ export const monitorenvControlUnitResourceApi = monitorenvApi.injectEndpoints({
         url: `/v1/control_unit_resources/${controlUnitResourceId}`
       }),
       transformErrorResponse: response => {
-        if (response.data.type === ApiErrorCode.FOREIGN_KEY_CONSTRAINT) {
-          return newUsageError(DELETE_CONTROL_UNIT_RESOURCE_ERROR_MESSAGE)
+        if (response.responseData.type === ApiErrorCode.FOREIGN_KEY_CONSTRAINT) {
+          return new UsageError(IMPOSSIBLE_CONTROL_UNIT_RESOURCE_DELETION_ERROR_MESSAGE)
         }
 
         return new FrontendApiError(DELETE_CONTROL_UNIT_RESOURCE_ERROR_MESSAGE, response)
@@ -79,7 +77,8 @@ export const monitorenvControlUnitResourceApi = monitorenvApi.injectEndpoints({
         body: nextControlUnitResourceData,
         method: 'PUT',
         url: `/v1/control_unit_resources/${nextControlUnitResourceData.id}`
-      })
+      }),
+      transformErrorResponse: response => new FrontendApiError(UPDATE_CONTROL_UNIT_CONTACT_ERROR_MESSAGE, response)
     })
   })
 })

@@ -1,4 +1,4 @@
-import { Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
+import { ControlUnit, Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash/fp'
 import { useCallback } from 'react'
@@ -8,10 +8,11 @@ import { AreaNote } from './AreaNote'
 import { ControlUnitContactList } from './ControlUnitContactList'
 import { ControlUnitResourceList } from './ControlUnitResourceList'
 import { RTK_DEFAULT_QUERY_OPTIONS } from '../../../../api/constants'
-import { useGetControlUnitQuery, useUpdateControlUnitMutation } from '../../../../api/controlUnit'
+import { monitorenvControlUnitApi, useGetControlUnitQuery } from '../../../../api/controlUnit'
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { FrontendApiError } from '../../../../libs/FrontendApiError'
 import { FrontendError } from '../../../../libs/FrontendError'
 import { NoRsuiteOverrideWrapper } from '../../../../ui/NoRsuiteOverrideWrapper'
 
@@ -22,8 +23,11 @@ export function ControlUnitDialog() {
     throw new FrontendError('`mapControlUnitDialog.controlUnitId` is undefined.')
   }
 
-  const { data: controlUnit } = useGetControlUnitQuery(controlUnitId, RTK_DEFAULT_QUERY_OPTIONS)
-  const [updateControlUnit] = useUpdateControlUnitMutation()
+  const { data: controlUnit, error: getControlControlUnitError } = useGetControlUnitQuery(
+    controlUnitId,
+    RTK_DEFAULT_QUERY_OPTIONS
+  )
+  FrontendApiError.handleIfAny(getControlControlUnitError)
 
   const close = useCallback(() => {
     dispatch(
@@ -32,6 +36,17 @@ export function ControlUnitDialog() {
       })
     )
   }, [dispatch])
+
+  const updateControlUnit = useCallback(
+    async (nextControlUnitData: ControlUnit.ControlUnitData) => {
+      try {
+        await dispatch(monitorenvControlUnitApi.endpoints.updateControlUnit.initiate(nextControlUnitData)).unwrap()
+      } catch (err) {
+        FrontendApiError.handleIfAny(err)
+      }
+    },
+    [dispatch]
+  )
 
   if (!controlUnit) {
     return (

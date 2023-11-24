@@ -1,4 +1,4 @@
-import { monitorenvApi } from '.'
+import { monitorenvApi } from './api'
 import { FrontendApiError } from '../libs/FrontendApiError'
 
 import type { ControlUnit } from '@mtes-mct/monitor-ui'

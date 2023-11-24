@@ -1,10 +1,8 @@
-import { monitorenvApi } from '.'
+import { monitorenvApi } from './api'
 import { FrontendApiError } from '../libs/FrontendApiError'
 
 import type { Station } from '@mtes-mct/monitor-ui'
 
-export const DELETE_STATION_ERROR_MESSAGE =
-  "Cette base est rattachée à des moyens. Veuillez l'en détacher avant de la supprimer ou bien l'archiver."
 const GET_STATION_ERROR_MESSAGE = "Nous n'avons pas pu récupérer cette base."
 const GET_STATIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des bases."
 

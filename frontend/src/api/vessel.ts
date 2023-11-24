@@ -1,5 +1,5 @@
+import { monitorfishApiKy } from './api'
 import { HttpStatusCode } from './constants'
-import { monitorfishApiKy } from './index'
 import { ApiError } from '../libs/ApiError'
 
 import type { TrackRequest, VesselAndPositions, VesselIdentity, VesselPosition } from '../domain/entities/vessel/types'

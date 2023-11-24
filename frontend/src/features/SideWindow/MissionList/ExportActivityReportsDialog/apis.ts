@@ -1,4 +1,4 @@
-import { monitorfishApi } from '../../../../api'
+import { monitorfishApi } from '../../../../api/api'
 
 import type { ActivityReport } from './types'
 

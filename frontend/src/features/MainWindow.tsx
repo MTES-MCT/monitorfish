@@ -18,6 +18,7 @@ import { VesselList } from './VesselList'
 import { VesselSidebar } from './VesselSidebar'
 import { VesselSidebarHeader } from './VesselSidebar/VesselSidebarHeader'
 import { APIWorker } from '../api/APIWorker'
+import { Notifier } from '../components/Notifier'
 import { SideWindowStatus } from '../domain/entities/sideWindow/constants'
 import { useMainAppSelector } from '../hooks/useMainAppSelector'
 
@@ -67,6 +68,7 @@ export function MainWindow() {
         <VesselLoader />
         <APIWorker />
         <ErrorToastNotification />
+        <Notifier />
         {status !== SideWindowStatus.CLOSED && <SideWindowLauncher />}
         {isDrawLayerModalDisplayed && <DrawLayerModal />}
       </Wrapper>

@@ -14,7 +14,7 @@ import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
 import storage from 'redux-persist/es/storage' // LocalStorage
 
 import { backofficeReducer, mainReducer } from './reducers'
-import { monitorenvApi, monitorfishApi, monitorfishLightApi, monitorfishPublicApi } from '../api'
+import { monitorenvApi, monitorfishApi, monitorfishLightApi, monitorfishPublicApi } from '../api/api'
 import { mapToProcessingRegulation } from '../domain/entities/regulation'
 
 import type { RegulationState } from '../features/Backoffice/slice'

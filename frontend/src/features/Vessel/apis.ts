@@ -1,4 +1,4 @@
-import { monitorfishApi, monitorfishLightApi } from '../../api'
+import { monitorfishApi, monitorfishLightApi } from '../../api/api'
 
 import type { RiskFactor } from '../../domain/entities/vessel/riskFactor/types'
 import type { VesselLastPosition } from '../../domain/entities/vessel/types'

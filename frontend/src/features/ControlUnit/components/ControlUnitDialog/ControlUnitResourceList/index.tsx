@@ -142,6 +142,7 @@ export function ControlUnitResourceList({ controlUnit }: ControlUnitResourceList
         {activeControlUnitResources.map((controlUnitResource, index) =>
           controlUnitResource.id === editedControlUnitResourceId ? (
             <StyledEditionForm
+              key={controlUnitResource.id}
               $isFirst={index === 0}
               initialValues={editedControlUnitResource}
               onArchive={askForArchivingConfirmation}

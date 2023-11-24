@@ -1,5 +1,3 @@
-import { logSoftError } from '@mtes-mct/monitor-ui'
-
 import { isObject } from './isObject'
 import { nullify } from './nullify'
 import { undefinedize } from './undefinedize'
@@ -19,14 +17,8 @@ export const normalizeRtkBaseQuery: BaseQueryEnhancer<unknown, {}, {} | void> =
           : args
 
       const result = await baseQuery(argsWithNullifiedBody, api, {})
-
       if (result.error) {
-        logSoftError({
-          context: typeof args === 'object' && isObject(args.body) ? args : { url: args },
-          isSideWindowError: false,
-          message: `Erreur lors de l'appel API: ${args.toString()}`,
-          originalError: result.error
-        })
+        return result
       }
 
       const normalizedResult = result.data

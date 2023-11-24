@@ -1,4 +1,4 @@
-import { monitorfishPublicApi } from '../../api'
+import { monitorfishPublicApi } from '../../api/api'
 
 import type { Healthcheck } from './types'
 

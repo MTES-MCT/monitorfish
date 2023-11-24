@@ -1,4 +1,4 @@
-import { monitorfishApi, monitorfishApiKy } from '.'
+import { monitorfishApi, monitorfishApiKy } from './api'
 import { ApiError } from '../libs/ApiError'
 
 import type { MissionAction } from '../domain/types/missionAction'

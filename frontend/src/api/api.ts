@@ -1,4 +1,3 @@
-// TODO Define a few basic principles on how to handle RTK cache behavior.
 // https://redux-toolkit.js.org/rtk-query/usage/cache-behavior
 // https://redux-toolkit.js.org/rtk-query/usage/automated-refetching#cache-tags
 
@@ -8,7 +7,7 @@ import ky from 'ky'
 import { getOIDCUser } from '../auth/getOIDCUser'
 import { normalizeRtkBaseQuery } from '../utils/normalizeRtkBaseQuery'
 
-import type { BackendApiErrorResponse } from './types'
+import type { BackendApiErrorResponse, CustomRTKResponseError, RTKBaseQueryArgs } from './types'
 
 const MAX_RETRIES = 2
 
@@ -30,15 +29,17 @@ const monitorenvApiBaseQuery = retry(
 )
 
 export const monitorenvApi = createApi({
-  baseQuery: async (args, api, extraOptions) => {
+  baseQuery: async (args: RTKBaseQueryArgs, api, extraOptions) => {
     const result = await normalizeRtkBaseQuery(monitorenvApiBaseQuery)(args, api, extraOptions)
     if (result.error) {
-      return {
-        error: {
-          data: result.error.data as BackendApiErrorResponse,
-          status: result.error.status
-        }
+      const error: CustomRTKResponseError = {
+        path: typeof args === 'string' ? args : args.url,
+        requestData: typeof args === 'string' ? undefined : args.body,
+        responseData: result.error.data as BackendApiErrorResponse,
+        status: result.error.status
       }
+
+      return { error }
     }
 
     return result

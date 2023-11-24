@@ -1,4 +1,4 @@
-import { monitorfishApiKy } from './index'
+import { monitorfishApiKy } from './api'
 import { ApiError } from '../libs/ApiError'
 
 import type { SpeciesAndSpeciesGroupsAPIData } from '../domain/types/specy'

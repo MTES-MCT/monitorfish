@@ -1,4 +1,4 @@
-import { monitorfishApi, monitorfishApiKy } from './index'
+import { monitorfishApi, monitorfishApiKy } from './api'
 import { ApiError } from '../libs/ApiError'
 
 export const FAO_AREAS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les zones FAO"

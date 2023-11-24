@@ -19,7 +19,9 @@
         "name": "DDTM"
       },
       "administrationId": 1005,
-      "controlUnitContactIds": [366],
+      "controlUnitContactIds": [
+        366
+      ],
       "controlUnitContacts": [
         {
           "id": 366,
@@ -29,7 +31,9 @@
           "phone": "02 56 63 72 00"
         }
       ],
-      "controlUnitResourceIds": [579],
+      "controlUnitResourceIds": [
+        579
+      ],
       "controlUnitResources": [
         {
           "id": 579,

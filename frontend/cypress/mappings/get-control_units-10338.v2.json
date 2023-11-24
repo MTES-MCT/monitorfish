@@ -19,7 +19,9 @@
         "name": "Office Français de la Biodiversité"
       },
       "administrationId": 1011,
-      "controlUnitContactIds": [733],
+      "controlUnitContactIds": [
+        733
+      ],
       "controlUnitContacts": [
         {
           "id": 733,
@@ -29,7 +31,12 @@
           "phone": "02 97 47 02 83"
         }
       ],
-      "controlUnitResourceIds": [211, 580, 388, 320],
+      "controlUnitResourceIds": [
+        211,
+        580,
+        388,
+        320
+      ],
       "controlUnitResources": [
         {
           "id": 211,

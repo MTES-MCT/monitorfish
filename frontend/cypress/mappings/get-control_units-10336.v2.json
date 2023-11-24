@@ -19,7 +19,13 @@
         "name": "Gendarmerie Maritime"
       },
       "administrationId": 4,
-      "controlUnitContactIds": [727, 728, 729, 730, 726],
+      "controlUnitContactIds": [
+        727,
+        728,
+        729,
+        730,
+        726
+      ],
       "controlUnitContacts": [
         {
           "id": 727,
@@ -57,7 +63,11 @@
           "phone": "02 98 22 22 17"
         }
       ],
-      "controlUnitResourceIds": [353, 90, 1042],
+      "controlUnitResourceIds": [
+        353,
+        90,
+        1042
+      ],
       "controlUnitResources": [
         {
           "id": 353,

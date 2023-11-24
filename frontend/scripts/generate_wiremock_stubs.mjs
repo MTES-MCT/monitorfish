@@ -11,16 +11,15 @@ const SELECTED_CONTROL_UNIT_NAMES = [
   // Lorient
   `BGC Lorient - DF 36 Kan An Avel`,
   `BSL Lorient`,
-  `DPM 56`,
   `PGMAR Lorient - P720 Geranium`,
   // Vannes
   `Cultures Marines - Ddtm 56 (historique)`, // <- Archived
   `Cultures marines 56`,
-  `DPM 56`,
   `OFB Brigade Mobile d'Intervention – Bretagne`,
   `OFB SD 56`,
   `Police de l'eau 56`,
   // Lorient & Vannes
+  `DPM 56`,
   `ULAM 56 ` // <- Trailing space
 ]
 

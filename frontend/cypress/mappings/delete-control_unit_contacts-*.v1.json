@@ -1,10 +1,10 @@
 {
   "request": {
-    "method": "POST",
-    "url": "/api/v1/control_unit_resources"
+    "method": "DELETE",
+    "urlPattern": "/api/v1/control_unit_contacts/[0-9]+"
   },
   "response": {
-    "status": 201,
+    "status": 200,
     "headers": {
       "Access-Control-Allow-Headers": "*",
       "Access-Control-Allow-Methods": "*",

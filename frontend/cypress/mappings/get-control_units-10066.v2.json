@@ -19,7 +19,9 @@
         "name": "DDTM"
       },
       "administrationId": 1005,
-      "controlUnitContactIds": [165],
+      "controlUnitContactIds": [
+        165
+      ],
       "controlUnitContacts": [
         {
           "id": 165,
@@ -29,7 +31,12 @@
           "phone": "02 97 64 85 06"
         }
       ],
-      "controlUnitResourceIds": [181, 133, 300, 1212],
+      "controlUnitResourceIds": [
+        181,
+        133,
+        300,
+        1212
+      ],
       "controlUnitResources": [
         {
           "id": 181,

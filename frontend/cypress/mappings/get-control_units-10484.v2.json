@@ -19,7 +19,12 @@
         "name": "Douane"
       },
       "administrationId": 2,
-      "controlUnitContactIds": [1076, 1073, 1074, 1075],
+      "controlUnitContactIds": [
+        1076,
+        1073,
+        1074,
+        1075
+      ],
       "controlUnitContacts": [
         {
           "id": 1076,
@@ -50,7 +55,9 @@
           "phone": "06 64 57 64 58"
         }
       ],
-      "controlUnitResourceIds": [553],
+      "controlUnitResourceIds": [
+        553
+      ],
       "controlUnitResources": [
         {
           "id": 553,

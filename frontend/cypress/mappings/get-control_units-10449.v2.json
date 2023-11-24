@@ -19,7 +19,16 @@
         "name": "DDTM"
       },
       "administrationId": 1005,
-      "controlUnitContactIds": [993, 994, 995, 996, 997, 998, 999, 1000],
+      "controlUnitContactIds": [
+        993,
+        994,
+        995,
+        996,
+        997,
+        998,
+        999,
+        1000
+      ],
       "controlUnitContacts": [
         {
           "id": 993,
@@ -78,7 +87,13 @@
           "phone": "06 63 73 05 59"
         }
       ],
-      "controlUnitResourceIds": [361, 134, 259, 512, 1219],
+      "controlUnitResourceIds": [
+        361,
+        134,
+        259,
+        512,
+        1219
+      ],
       "controlUnitResources": [
         {
           "id": 361,

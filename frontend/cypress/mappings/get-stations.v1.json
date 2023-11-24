@@ -13,7 +13,10 @@
     "jsonBody": [
       {
         "id": 8,
-        "controlUnitResourceIds": [1208, 259],
+        "controlUnitResourceIds": [
+          1208,
+          259
+        ],
         "controlUnitResources": [
           {
             "id": 1208,
@@ -42,7 +45,18 @@
       },
       {
         "id": 153,
-        "controlUnitResourceIds": [553, 353, 90, 1042, 300, 1212, 189, 251, 361, 1219],
+        "controlUnitResourceIds": [
+          553,
+          353,
+          90,
+          1042,
+          300,
+          1212,
+          189,
+          251,
+          361,
+          1219
+        ],
         "controlUnitResources": [
           {
             "id": 553,
@@ -151,7 +165,9 @@
       },
       {
         "id": 222,
-        "controlUnitResourceIds": [134],
+        "controlUnitResourceIds": [
+          134
+        ],
         "controlUnitResources": [
           {
             "id": 134,
@@ -170,7 +186,19 @@
       },
       {
         "id": 245,
-        "controlUnitResourceIds": [314, 323, 181, 133, 516, 211, 580, 388, 320, 579, 512],
+        "controlUnitResourceIds": [
+          314,
+          323,
+          181,
+          133,
+          516,
+          211,
+          580,
+          388,
+          320,
+          579,
+          512
+        ],
         "controlUnitResources": [
           {
             "id": 314,

@@ -1,7 +1,7 @@
 {
   "request": {
-    "method": "PUT",
-    "url": "/api/v1/control_unit_contacts/*"
+    "method": "GET",
+    "urlPattern": "/api/v1/control_unit_resources/[0-9]+/can_delete"
   },
   "response": {
     "status": 200,
@@ -10,6 +10,8 @@
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "*"
     },
-    "jsonBody": {}
+    "jsonBody": {
+      "value": true
+    }
   }
 }

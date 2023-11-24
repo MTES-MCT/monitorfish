@@ -33,7 +33,9 @@ export function HealthcheckHeadband() {
     }
 
     if (isError || !healthcheck) {
-      dispatch(setError(error))
+      if (error) {
+        dispatch(setError(error))
+      }
 
       return
     }

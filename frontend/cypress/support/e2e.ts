@@ -96,6 +96,7 @@ Cypress.on('uncaught:exception', err => {
   // }
 
   // We ignore uncaught exceptions `AbortError: The operation was aborted`
+  // This error happens after using `reload()` in Cypress
   if (err.message.includes('The operation was aborted')) {
     // eslint-disable-next-line no-console
     console.log(`Error skipped: ${err}`)

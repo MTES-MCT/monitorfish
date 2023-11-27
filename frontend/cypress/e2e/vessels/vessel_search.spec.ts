@@ -8,14 +8,18 @@ context('VesselSearch', () => {
   it('Vessel from last positions and vessels table Should be searched from the search bar', () => {
     // When searching a vessel from the last positions table
     cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('Pheno')
+    cy.intercept('GET', `/bff/v1/vessels/find*`).as('firstVessel')
     cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
+    cy.wait('@firstVessel')
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // We should be able to search again when the vessel sidebar is already opened
     cy.get('*[data-cy^="vessel-search-selected-vessel-title"]', { timeout: 10000 }).click()
     cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('détacher')
+    cy.intercept('GET', `/bff/v1/vessels/find*`).as('secondVessel')
     cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
+    cy.wait('@secondVessel')
 
     // Close the sidebar
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()
@@ -29,11 +33,16 @@ context('VesselSearch', () => {
   it('Vessel history Should be shown When having previously searched vessels', () => {
     // Given
     cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('Pheno')
+    cy.intercept('GET', `/bff/v1/vessels/find*`).as('firstVessel')
     cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
+    cy.wait('@firstVessel')
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()
 
     cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('détacher')
+
+    cy.intercept('GET', `/bff/v1/vessels/find*`).as('secondVessel')
     cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
+    cy.wait('@secondVessel')
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()
 
     // When

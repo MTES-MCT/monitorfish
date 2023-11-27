@@ -1,4 +1,4 @@
-import { MONITORENV_API_URL } from '../../../api'
+import { MONITORENV_API_URL } from '../../../api/api'
 import { Mission } from '../../../domain/entities/mission/types'
 import { ReconnectingEventSource } from '../../../libs/ReconnectingEventSource'
 

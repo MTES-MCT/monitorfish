@@ -25,8 +25,6 @@ import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 import { isValidControlUnit } from '../../utils'
 
 import type { LegacyControlUnit } from '../../../../../domain/types/legacyControlUnit'
-import type { ControlResource } from '../../../../../domain/types/controlResource'
-import type { ControlUnit } from '../../../../../domain/types/ControlUnit'
 import type { MissionMainFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 import type { Promisable } from 'type-fest'

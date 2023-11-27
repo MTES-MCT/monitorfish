@@ -1,12 +1,11 @@
-import {logSoftError} from '@mtes-mct/monitor-ui'
+import { logSoftError } from '@mtes-mct/monitor-ui'
 
-import {Mission} from '../../../domain/entities/mission/types'
 import { addNewMissionListener, missionEventListener, removeMissionListener } from './sse'
-import { monitorenvApi, monitorfishApi } from '../../../api'
+import { monitorenvApi, monitorfishApi } from '../../../api/api'
 import { Mission } from '../../../domain/entities/mission/types'
+import { FrontendApiError } from '../../../libs/FrontendApiError'
 
-import type {ControlUnit} from '../../../domain/types/ControlUnit'
-import {FrontendApiError} from "../../../libs/FrontendApiError";
+import type { ControlUnit } from '@mtes-mct/monitor-ui'
 
 const CREATE_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu créer la mission."
 const DELETE_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu supprimé la mission."
@@ -50,9 +49,6 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
 
     getMission: builder.query<Mission.Mission, Mission.Mission['id']>({
       keepUnusedDataFor: 0,
-      providesTags: [{ type: 'Missions' }],
-      query: id => `/v1/missions/${id}`,
-      transformErrorResponse: response => new FrontendApiError(GET_MISSION_ERROR_MESSAGE, response),
       async onCacheEntryAdded(id, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
         try {
           await cacheDataLoaded
@@ -73,6 +69,9 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
           })
         }
       },
+      providesTags: [{ type: 'Missions' }],
+      query: id => `/v1/missions/${id}`,
+      transformErrorResponse: response => new FrontendApiError(GET_MISSION_ERROR_MESSAGE, response)
     }),
 
     updateMission: builder.mutation<void, Mission.Mission>({
@@ -86,7 +85,6 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
     })
   })
 })
-
 
 export const {
   useCreateMissionMutation,

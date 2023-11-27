@@ -19,6 +19,7 @@
     "prepare": "cd .. && ./frontend/node_modules/.bin/husky install ./frontend/config/husky",
     "start": "vite preview --port 3000",
     "test:e2e": "cypress run --browser firefox --config-file ./config/cypress.config.ts --e2e",
+    "test:e2e:flaky": "bash ./cypress/support/test_flaky_test.sh",
     "test:lint": "eslint ./src",
     "test:lint:partial": "eslint --config=./.eslintrc.partial.js ./src ./cypress",
     "test:lint:partial:fix": "npm run test:lint:partial -- --fix",

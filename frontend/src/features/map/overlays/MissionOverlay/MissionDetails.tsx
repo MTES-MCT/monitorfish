@@ -13,7 +13,7 @@ import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { pluralize } from '../../../../utils/pluralize'
 import { OverlayPosition } from '../Overlay'
 
-import type { ControlUnit } from '../../../../domain/types/controlUnit'
+import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
 
 type MissionDetailsProps = {
   isSelected: boolean
@@ -47,7 +47,7 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
         <ZoneText>
           <Title isSelected={isSelected}>
             {mission.controlUnits.length === 1 &&
-              mission.controlUnits.map((controlUnit: ControlUnit.ControlUnit) => (
+              mission.controlUnits.map((controlUnit: LegacyControlUnit.LegacyControlUnit) => (
                 <Fragment key={controlUnit.id}>
                   <TextWithEllipsis>{controlUnit.name.toUpperCase()}</TextWithEllipsis>
                   {controlUnit.contact ? (

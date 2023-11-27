@@ -1,0 +1,95 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v2/control_units/10484"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": {
+      "id": 10484,
+      "areaNote": "Morbihan (56)",
+      "administration": {
+        "id": 2,
+        "isArchived": false,
+        "name": "Douane"
+      },
+      "administrationId": 2,
+      "controlUnitContactIds": [
+        1076,
+        1073,
+        1074,
+        1075
+      ],
+      "controlUnitContacts": [
+        {
+          "id": 1076,
+          "controlUnitId": 10484,
+          "email": "bgc-lorient@douane.finances.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "09 70 27 46 12"
+        },
+        {
+          "id": 1073,
+          "controlUnitId": 10484,
+          "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
+          "name": "OPERATIONAL_CENTER",
+          "phone": "06 64 57 64 04"
+        },
+        {
+          "id": 1074,
+          "controlUnitId": 10484,
+          "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
+          "name": "OPERATIONAL_CENTER",
+          "phone": "09 70 27 51 94"
+        },
+        {
+          "id": 1075,
+          "controlUnitId": 10484,
+          "email": null,
+          "name": "PERMANENT_CONTACT_ONBOARD",
+          "phone": "06 64 57 64 58"
+        }
+      ],
+      "controlUnitResourceIds": [
+        553
+      ],
+      "controlUnitResources": [
+        {
+          "id": 553,
+          "controlUnit": {
+            "id": 10484,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGC Lorient - DF 36 Kan An Avel",
+            "termsNote": "COD Manche Mer du Nord Atlantique"
+          },
+          "controlUnitId": 10484,
+          "isArchived": false,
+          "name": "DF 36 Kan An Avel",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 153,
+            "latitude": 47.7482524,
+            "longitude": -3.3702449,
+            "name": "Lorient"
+          },
+          "stationId": 153,
+          "type": "FAST_BOAT"
+        }
+      ],
+      "departmentArea": null,
+      "departmentAreaInseeCode": null,
+      "isArchived": false,
+      "name": "BGC Lorient - DF 36 Kan An Avel",
+      "termsNote": "COD Manche Mer du Nord Atlantique"
+    }
+  }
+}

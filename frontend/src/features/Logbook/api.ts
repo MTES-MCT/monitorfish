@@ -1,7 +1,7 @@
 import { HTTPError } from 'ky'
 
 import { NavigateTo } from './constants'
-import { monitorfishApi, monitorfishApiKy } from '../../api'
+import { monitorfishApi, monitorfishApiKy } from '../../api/api'
 import { HttpStatusCode } from '../../api/constants'
 import { ApiError } from '../../libs/ApiError'
 

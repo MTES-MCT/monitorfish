@@ -1,11 +1,11 @@
 import type { Vessel } from '../../../../domain/entities/vessel/types'
-import type { ControlUnit } from '../../../../domain/types/controlUnit'
+import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
 import type { MissionAction } from '../../../../domain/types/missionAction'
 
 export type ActivityReport = {
   action: MissionAction.MissionAction
   activityCode: ActivityCode
-  controlUnits: ControlUnit.ControlUnit[]
+  controlUnits: LegacyControlUnit.LegacyControlUnit[]
   vessel: Vessel
   vesselNationalIdentifier: string
 }

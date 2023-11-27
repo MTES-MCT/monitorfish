@@ -6,3 +6,5 @@ export const BOOLEAN_AS_OPTIONS: Array<Option<boolean>> = [
   { label: 'Oui', value: true },
   { label: 'Non', value: false }
 ]
+
+export const FIVE_MINUTES = 5 * 60 * 1000

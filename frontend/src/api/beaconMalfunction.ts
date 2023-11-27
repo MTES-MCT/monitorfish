@@ -1,4 +1,4 @@
-import { monitorfishApiKy } from '.'
+import { monitorfishApiKy } from './api'
 import { ApiError } from '../libs/ApiError'
 
 import type { NOTIFICATION_TYPE, UserType } from '../domain/entities/beaconMalfunction/constants'

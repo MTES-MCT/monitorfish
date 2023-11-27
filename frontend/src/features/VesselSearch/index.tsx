@@ -205,8 +205,13 @@ const Wrapper = styled.div<{
   extendedWidth: number
   isExtended: boolean
 }>`
+  box-sizing: border-box;
   width: ${p => (p.isExtended ? p.extendedWidth : 320)}px;
   transition: all 0.7s;
+
+  * {
+    box-sizing: border-box;
+  }
 `
 
 const Input = styled.input<{

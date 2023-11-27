@@ -2,7 +2,7 @@
 
 import ky from 'ky'
 
-import { monitorfishApi, monitorfishApiKy } from './index'
+import { monitorfishApi, monitorfishApiKy } from './api'
 import { ApiError } from '../libs/ApiError'
 
 import type {

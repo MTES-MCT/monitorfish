@@ -1,5 +1,6 @@
 import { AlertsMapButton } from './AlertsMapButton'
 import { BeaconMalfunctionsMapButton } from './BeaconMalfunctionsMapButton'
+import { ControlUnitListDialogButton } from './ControlUnitListDialogButton'
 import { FavoriteVessels } from './FavoriteVessels'
 import { InterestPointMapButton } from './InterestPoints'
 import { MeasurementMapButton } from './Measurements'
@@ -34,6 +35,7 @@ export function MapButtons() {
       {isVesselLabelsMapButtonDisplayed && <VesselLabelsMapButton />}
       {isFavoriteVesselsMapButtonDisplayed && <FavoriteVessels />}
       {isSuperUser && isFavoriteVesselsMapButtonDisplayed && <MissionsMenu />}
+      {isSuperUser && <ControlUnitListDialogButton />}
     </>
   )
 }

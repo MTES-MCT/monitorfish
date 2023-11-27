@@ -19,7 +19,7 @@ import InfractionSuspicionIconSVG from '../../icons/Icone_alerte_signalement_rou
 import ObservationIconSVG from '../../icons/Icone_observations.svg?react'
 import { getAlertNameFromType } from '../../SideWindow/Alert/AlertListAndReportingList/utils'
 
-import type { ControlUnit } from '../../../domain/types/controlUnit'
+import type { LegacyControlUnit } from '../../../domain/types/legacyControlUnit'
 import type { Reporting } from '../../../domain/types/reporting'
 import type { Promisable } from 'type-fest'
 
@@ -113,7 +113,7 @@ export function ReportingCard({
   )
 }
 
-const getReportingActor = (reportingActor, unit: ControlUnit.ControlUnit | null) => {
+const getReportingActor = (reportingActor, unit: LegacyControlUnit.LegacyControlUnit | null) => {
   switch (reportingActor) {
     case ReportingOriginActor.UNIT.code:
       return unit?.name || 'Unité inconnue'

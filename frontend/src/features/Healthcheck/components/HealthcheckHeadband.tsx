@@ -33,7 +33,9 @@ export function HealthcheckHeadband() {
     }
 
     if (isError || !healthcheck) {
-      dispatch(setError(error))
+      if (error) {
+        dispatch(setError(error))
+      }
 
       return
     }
@@ -60,6 +62,8 @@ export function HealthcheckHeadband() {
         !previewFilteredVesselsMode &&
         healthcheckTextWarning.map((warning, index) => (
           <MultipleWarningsHeadband
+            // eslint-disable-next-line react/no-array-index-key
+            key={`${index}-${warning}`}
             isLast={healthcheckTextWarning.length === index + 1}
             isOpen={areAllWarningsOpened}
             topOffset={index + 1}

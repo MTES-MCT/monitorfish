@@ -34,6 +34,14 @@
     "useUnknownInCatchVariables": true,
     "verbatimModuleSyntax": true
   },
-  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "src/vite-env-override.d.ts", "src/ui/styled.d.ts"],
+  "include": [
+    "**/*.js",
+    "**/*.jsx",
+    "**/*.mjs",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/vite-env-override.d.ts",
+    "src/ui/styled.d.ts"
+  ],
   "exclude": ["node_modules/*"]
 }

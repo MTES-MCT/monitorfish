@@ -35,7 +35,9 @@ export function VesselLoader() {
 
   useEffect(() => {
     if (isError || !vessels) {
-      dispatch(setError(error))
+      if (error) {
+        dispatch(setError(error))
+      }
 
       return
     }

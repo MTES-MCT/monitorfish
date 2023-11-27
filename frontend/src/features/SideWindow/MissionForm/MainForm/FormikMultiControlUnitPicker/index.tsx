@@ -5,12 +5,12 @@ import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { ControlUnitSelect } from './ControlUnitSelect'
-import { useGetControlUnitsQuery } from '../../../../../api/controlUnit'
+import { useGetLegacyControlUnitsQuery } from '../../../../../api/legacyControlUnit'
 import { getControlUnitsOptionsFromControlUnits } from '../../../../../domain/entities/controlUnits/utils'
 import { INITIAL_MISSION_CONTROL_UNIT, PAMControlUnitIds } from '../../constants'
 import { useGetMainFormFormikUsecases } from '../../hooks/useGetMainFormFormikUsecases'
 
-import type { ControlUnit } from '../../../../../domain/types/controlUnit'
+import type { LegacyControlUnit } from '../../../../../domain/types/legacyControlUnit'
 import type { MissionMainFormValues } from '../../types'
 
 export type FormikMultiControlUnitPickerProps = {
@@ -24,7 +24,7 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
       values.controlUnits?.some(controlUnit => controlUnit.id && PAMControlUnitIds.includes(controlUnit.id))
     ) || false
 
-  const controlUnitsQuery = useGetControlUnitsQuery(undefined)
+  const controlUnitsQuery = useGetLegacyControlUnitsQuery(undefined)
 
   const {
     activeControlUnits: allActiveControlUnits,
@@ -61,7 +61,10 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
   )
 
   const handleChange = useCallback(
-    (index: number, nextControlUnit: ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft) => {
+    (
+      index: number,
+      nextControlUnit: LegacyControlUnit.LegacyControlUnit | LegacyControlUnit.LegacyControlUnitDraft
+    ) => {
       const nextControlUnits = update(index, nextControlUnit, values[name])
 
       updateMissionActionOtherControlsCheckboxes(values, previousIsControlUnitPAM)

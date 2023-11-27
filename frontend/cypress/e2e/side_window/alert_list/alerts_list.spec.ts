@@ -14,11 +14,7 @@ context('Side Window > Alert List', () => {
 
     // Then
     cy.get('[data-cy="side-window-menu-alerts"]').click()
-    cy.get('[data-cy="side-window-sub-menu-NAMO"]').should(
-      'have.css',
-      'background',
-      'rgb(204, 207, 214) none repeat scroll 0% 0%'
-    )
+    cy.get('[data-cy="side-window-sub-menu-NAMO"]').should('have.css', 'background', 'rgb(204, 207, 214)')
   })
 
   it('Nine alerts Should be shown When clicking on the NAMO menu', () => {

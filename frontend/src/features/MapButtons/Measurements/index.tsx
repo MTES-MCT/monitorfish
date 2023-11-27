@@ -70,7 +70,7 @@ export function MeasurementMapButton() {
         data-cy="measurement"
         isActive={isOpen || !!measurementTypeToAdd}
         onClick={openOrCloseMeasurementMenu}
-        style={{ top: 249 }}
+        style={{ top: 291 }}
         title="Mesurer une distance"
       >
         {measurementIcon}

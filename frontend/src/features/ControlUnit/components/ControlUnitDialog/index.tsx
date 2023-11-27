@@ -20,8 +20,9 @@ export function ControlUnitDialog() {
   const dispatch = useMainAppDispatch()
   const controlUnitId = useMainAppSelector(store => store.controlUnitDialog.controlUnitId)
   if (!controlUnitId) {
-    throw new FrontendError('`mapControlUnitDialog.controlUnitId` is undefined.')
+    throw new FrontendError('`store.controlUnitDialog.controlUnitId` is undefined.')
   }
+  const healthcheckTextWarning = useMainAppSelector(store => store.global.healthcheckTextWarning)
 
   const { data: controlUnit, error: getControlControlUnitError } = useGetControlUnitQuery(
     controlUnitId,
@@ -51,7 +52,7 @@ export function ControlUnitDialog() {
   if (!controlUnit) {
     return (
       <NoRsuiteOverrideWrapper>
-        <StyledMapMenuDialogContainer>
+        <StyledMapMenuDialogContainer $hasHealthcheckTextWarning={!!healthcheckTextWarning}>
           <MapMenuDialog.Header>
             <MapMenuDialog.Title>Chargement en cours...</MapMenuDialog.Title>
             <MapMenuDialog.CloseButton Icon={Icon.Close} onClick={close} />
@@ -63,7 +64,7 @@ export function ControlUnitDialog() {
 
   return (
     <NoRsuiteOverrideWrapper>
-      <StyledMapMenuDialogContainer>
+      <StyledMapMenuDialogContainer $hasHealthcheckTextWarning={!!healthcheckTextWarning}>
         <MapMenuDialog.Header>
           <MapMenuDialog.Title>
             <b>{controlUnit.name}</b> ({controlUnit.administration.name})
@@ -82,15 +83,17 @@ export function ControlUnitDialog() {
   )
 }
 
-const StyledMapMenuDialogContainer = styled(MapMenuDialog.Container)`
+const StyledMapMenuDialogContainer = styled(MapMenuDialog.Container)<{
+  $hasHealthcheckTextWarning: boolean
+}>`
   bottom: 10px;
   max-height: none;
   position: absolute;
   right: 50px;
-  top: 10px;
+  top: ${p => (p.$hasHealthcheckTextWarning ? '60px' : '10px')};
+  width: 500px;
   /* Above search bar */
   z-index: 1001;
-  width: 500px;
 `
 
 const StyledMapMenuDialogBody = styled(MapMenuDialog.Body)`

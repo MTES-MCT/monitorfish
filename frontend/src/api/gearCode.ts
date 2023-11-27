@@ -1,4 +1,4 @@
-import { monitorfishApiKy } from './index'
+import { monitorfishApiKy } from './api'
 import { ApiError } from '../libs/ApiError'
 
 import type { Gear } from '../domain/types/Gear'

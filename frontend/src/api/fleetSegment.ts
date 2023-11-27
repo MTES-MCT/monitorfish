@@ -1,6 +1,6 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
-import { monitorfishApi, monitorfishApiKy } from '.'
+import { monitorfishApi, monitorfishApiKy } from './api'
 import { ApiError } from '../libs/ApiError'
 
 import type { FleetSegment, UpdateFleetSegment } from '../domain/types/fleetSegment'

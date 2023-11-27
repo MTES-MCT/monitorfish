@@ -70,7 +70,7 @@ export function MeasurementMapButton() {
         data-cy="measurement"
         isActive={isOpen || !!measurementTypeToAdd}
         onClick={openOrCloseMeasurementMenu}
-        style={{ top: 249 }}
+        style={{ top: 291 }}
         title="Mesurer une distance"
       >
         {measurementIcon}
@@ -104,13 +104,13 @@ const MeasurementItem = styled.div`
   border-radius: 2px;
   cursor: pointer;
   display: inline-block;
-  float: right;
   height: 32px;
   margin-left: 5px;
   padding: 0;
   padding-top: 8px;
   position: relative;
   right: 0;
+  text-align: center;
   width: 40px;
   z-index: 99;
 `

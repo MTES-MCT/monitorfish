@@ -3,7 +3,7 @@ import { Input, Radio, RadioGroup, SelectPicker } from 'rsuite'
 import styled from 'styled-components'
 
 import { getReportingValueErrors, mapControlUnitsToUniqueSortedIdsAsOptions } from './utils'
-import { useGetControlUnitsQuery } from '../../../../api/controlUnit'
+import { useGetLegacyControlUnitsQuery } from '../../../../api/legacyControlUnit'
 import { COLORS } from '../../../../constants/constants'
 import { ReportingOriginActor, ReportingTypeCharacteristics } from '../../../../domain/entities/reporting'
 import { getOnlyVesselIdentityProperties } from '../../../../domain/entities/vessel/vessel'
@@ -37,7 +37,7 @@ export function ReportingForm({
   const unitSelectRef = useRef() as MutableRefObject<HTMLDivElement>
   const natinfSelectRef = useRef() as MutableRefObject<HTMLDivElement>
   const infractions = useMainAppSelector(state => state.infraction.infractions)
-  const controlUnitsQuery = useGetControlUnitsQuery(undefined)
+  const controlUnitsQuery = useGetLegacyControlUnitsQuery(undefined)
 
   const controlUnitsAsOptions = useMemo((): Option<number>[] => {
     if (!controlUnitsQuery.data) {

@@ -3,6 +3,8 @@ import { useBeforeUnload } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { ErrorToastNotification } from './commonComponents/ErrorToastNotification'
+import { ControlUnitDialog } from './ControlUnit/components/ControlUnitDialog'
+import { ControlUnitListDialog } from './ControlUnit/components/ControlUnitListDialog'
 import { HealthcheckHeadband } from './Healthcheck/components/HealthcheckHeadband'
 import { DrawLayerModal } from './map/draw/DrawModal'
 import { Map } from './map/Map'
@@ -16,13 +18,18 @@ import { VesselList } from './VesselList'
 import { VesselSidebar } from './VesselSidebar'
 import { VesselSidebarHeader } from './VesselSidebar/VesselSidebarHeader'
 import { APIWorker } from '../api/APIWorker'
+import { Notifier } from '../components/Notifier'
 import { SideWindowStatus } from '../domain/entities/sideWindow/constants'
 import { useMainAppSelector } from '../hooks/useMainAppSelector'
 
 export function MainWindow() {
-  const { isDrawLayerModalDisplayed, isVesselListDisplayed, isVesselSearchDisplayed } = useMainAppSelector(
-    state => state.displayedComponent
-  )
+  const {
+    isControlUnitDialogDisplayed,
+    isControlUnitListDialogDisplayed,
+    isDrawLayerModalDisplayed,
+    isVesselListDisplayed,
+    isVesselSearchDisplayed
+  } = useMainAppSelector(state => state.displayedComponent)
   const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
   const isDraftDirty = useMainAppSelector(state => state.mission.isDraftDirty)
   const status = useMainAppSelector(state => state.sideWindow.status)
@@ -56,9 +63,12 @@ export function MainWindow() {
         <RightMenuOnHoverArea />
         {isVesselListDisplayed && <VesselList namespace="homepage" />}
         {isVesselSidebarOpen && <VesselSidebar />}
+        {isControlUnitDialogDisplayed && <ControlUnitDialog />}
+        {isControlUnitListDialogDisplayed && <ControlUnitListDialog />}
         <VesselLoader />
         <APIWorker />
         <ErrorToastNotification />
+        <Notifier />
         {status !== SideWindowStatus.CLOSED && <SideWindowLauncher />}
         {isDrawLayerModalDisplayed && <DrawLayerModal />}
       </Wrapper>
@@ -69,6 +79,5 @@ export function MainWindow() {
 const Wrapper = styled.div`
   font-size: 13px;
   overflow: hidden;
-  text-align: center;
   width: 100vw;
 `

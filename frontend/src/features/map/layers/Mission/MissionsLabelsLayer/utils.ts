@@ -1,13 +1,13 @@
 import { MissionLabelLine } from '../../../../../domain/entities/missionLabelLine'
 import { drawMovedLabelLine } from '../../../../../domain/entities/vessel/label'
 
-import type { ControlUnit } from '../../../../../domain/types/controlUnit'
+import type { LegacyControlUnit } from '../../../../../domain/types/legacyControlUnit'
 
 const NOT_FOUND = -1
 const MAX_MISSIONS_LABELS_DISPLAYED = 13
 
 export function getFeaturesAndLabels(featureIdToCoordinates, feature, labelLineFeatureId) {
-  const controlUnits = feature.get('controlUnits') as ControlUnit.ControlUnit[]
+  const controlUnits = feature.get('controlUnits') as LegacyControlUnit.LegacyControlUnit[]
   const label = controlUnits.map(controlUnit => controlUnit.name).join(', ')
   const offset = featureIdToCoordinates.get(labelLineFeatureId)?.offset
 

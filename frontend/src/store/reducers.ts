@@ -2,7 +2,7 @@ import persistReducer from 'redux-persist/es/persistReducer'
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
 import storage from 'redux-persist/es/storage' // LocalStorage
 
-import { monitorenvApi, monitorfishApi, monitorfishLightApi, monitorfishPublicApi } from '../api'
+import { monitorenvApi, monitorfishApi, monitorfishLightApi, monitorfishPublicApi } from '../api/api'
 import { beaconMalfunctionReducer } from '../domain/shared_slices/BeaconMalfunction'
 import { controlReducer } from '../domain/shared_slices/Control'
 import { displayedComponentReducer } from '../domain/shared_slices/DisplayedComponent'
@@ -25,6 +25,8 @@ import { sideWindowReducer } from '../domain/shared_slices/SideWindow'
 import { speciesReducer } from '../domain/shared_slices/Species'
 import { vesselSliceReducer } from '../domain/shared_slices/Vessel'
 import { regulationReducer } from '../features/Backoffice/slice'
+import { controlUnitDialogReducer } from '../features/ControlUnit/components/ControlUnitDialog/slice'
+import { controlUnitListDialogPersistedReducer } from '../features/ControlUnit/components/ControlUnitListDialog/slice'
 import { customZoneReducer, type CustomZoneState } from '../features/CustomZone/slice'
 import { logbookReducer } from '../features/Logbook/slice'
 import { regulatoryLayerSearchReducer } from '../features/MapButtons/LayersSidebar/RegulatoryZones/search/slice'
@@ -64,6 +66,8 @@ export const mainReducer = {
   beaconMalfunction: beaconMalfunctionReducer,
   //  TODO Pass that to singular.
   controls: controlReducer,
+  controlUnitDialog: controlUnitDialogReducer,
+  controlUnitListDialog: controlUnitListDialogPersistedReducer,
   customZone: persistReducerTyped(
     { ...getCommonPersistReducerConfig<CustomZoneState>('mainPersistorCustomZone', ['zones']) },
     customZoneReducer

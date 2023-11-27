@@ -1,0 +1,71 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v2/control_units/10157"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": {
+      "id": 10157,
+      "areaNote": "Morbihan (56)",
+      "administration": {
+        "id": 1005,
+        "isArchived": false,
+        "name": "DDTM"
+      },
+      "administrationId": 1005,
+      "controlUnitContactIds": [
+        366
+      ],
+      "controlUnitContacts": [
+        {
+          "id": 366,
+          "controlUnitId": 10157,
+          "email": "ddtm-pre@morbihan.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "02 56 63 72 00"
+        }
+      ],
+      "controlUnitResourceIds": [
+        579
+      ],
+      "controlUnitResources": [
+        {
+          "id": 579,
+          "controlUnit": {
+            "id": 10157,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 56",
+            "termsNote": null
+          },
+          "controlUnitId": 10157,
+          "isArchived": false,
+          "name": "Voiture",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 245,
+            "latitude": 47.658236,
+            "longitude": -2.760847,
+            "name": "Vannes"
+          },
+          "stationId": 245,
+          "type": "CAR"
+        }
+      ],
+      "departmentArea": null,
+      "departmentAreaInseeCode": null,
+      "isArchived": false,
+      "name": "Police de l'eau 56",
+      "termsNote": null
+    }
+  }
+}

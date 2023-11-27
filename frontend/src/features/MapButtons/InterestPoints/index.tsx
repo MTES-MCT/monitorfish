@@ -50,7 +50,7 @@ export function InterestPointMapButton() {
         data-cy="interest-point"
         isActive={isOpen}
         onClick={openOrCloseInterestPoint}
-        style={{ top: 291 }}
+        style={{ top: 333 }}
         title={"Créer un point d'intérêt"}
       >
         <InterestPointIcon $isRightMenuShrinked={isRightMenuShrinked} />

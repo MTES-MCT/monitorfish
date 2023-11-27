@@ -1,5 +1,5 @@
 import type { Mission } from '../../../domain/entities/mission/types'
-import type { ControlUnit } from '../../../domain/types/controlUnit'
+import type { LegacyControlUnit } from '../../../domain/types/legacyControlUnit'
 import type { MissionAction } from '../../../domain/types/missionAction'
 import type { PartialExcept } from '../../../types'
 
@@ -13,7 +13,7 @@ export type MissionActionFormValues = PartialExcept<
 export type MissionMainFormValues = Partial<
   Omit<Mission.MissionData, 'actions' | 'controlUnits' | 'startDateTimeUtc' | 'missionTypes'>
 > & {
-  controlUnits: Array<ControlUnit.ControlUnit | ControlUnit.ControlUnitDraft>
+  controlUnits: Array<LegacyControlUnit.LegacyControlUnit | LegacyControlUnit.LegacyControlUnitDraft>
   isGeometryComputedFromControls: boolean
   isValid: boolean
   missionTypes?: Mission.MissionType[]

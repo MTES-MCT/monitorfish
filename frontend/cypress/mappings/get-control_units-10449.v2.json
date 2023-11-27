@@ -1,0 +1,231 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v2/control_units/10449"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": {
+      "id": 10449,
+      "areaNote": "Morbihan (56)",
+      "administration": {
+        "id": 1005,
+        "isArchived": false,
+        "name": "DDTM"
+      },
+      "administrationId": 1005,
+      "controlUnitContactIds": [
+        993,
+        994,
+        995,
+        996,
+        997,
+        998,
+        999,
+        1000
+      ],
+      "controlUnitContacts": [
+        {
+          "id": 993,
+          "controlUnitId": 10449,
+          "email": "ddtm-ulam@morbihan.gouv.fr",
+          "name": "Dml Auray",
+          "phone": "02 97 24 01 43"
+        },
+        {
+          "id": 994,
+          "controlUnitId": 10449,
+          "email": "ddtm-ulam@morbihan.gouv.fr",
+          "name": "Dml Lorient",
+          "phone": "02 97 37 16 22"
+        },
+        {
+          "id": 995,
+          "controlUnitId": 10449,
+          "email": "ddtm-ulam@morbihan.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "02 97 29 34 92"
+        },
+        {
+          "id": 996,
+          "controlUnitId": 10449,
+          "email": "ddtm-ulam@morbihan.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "02 97 29 34 92"
+        },
+        {
+          "id": 997,
+          "controlUnitId": 10449,
+          "email": "ddtm-ulam@morbihan.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "02 97 37 17 47"
+        },
+        {
+          "id": 998,
+          "controlUnitId": 10449,
+          "email": "ddtm-ulam@morbihan.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "02 97 37 17 47"
+        },
+        {
+          "id": 999,
+          "controlUnitId": 10449,
+          "email": "ddtm-ulam@morbihan.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "06 63 73 05 59"
+        },
+        {
+          "id": 1000,
+          "controlUnitId": 10449,
+          "email": "ddtm-ulam@morbihan.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "06 63 73 05 59"
+        }
+      ],
+      "controlUnitResourceIds": [
+        361,
+        134,
+        259,
+        512,
+        1219
+      ],
+      "controlUnitResources": [
+        {
+          "id": 361,
+          "controlUnit": {
+            "id": 10449,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 56 ",
+            "termsNote": null
+          },
+          "controlUnitId": 10449,
+          "isArchived": false,
+          "name": "Petrel – PM 438",
+          "note": "9 m",
+          "photo": null,
+          "station": {
+            "id": 153,
+            "latitude": 47.7482524,
+            "longitude": -3.3702449,
+            "name": "Lorient"
+          },
+          "stationId": 153,
+          "type": "SEMI_RIGID"
+        },
+        {
+          "id": 134,
+          "controlUnit": {
+            "id": 10449,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 56 ",
+            "termsNote": null
+          },
+          "controlUnitId": 10449,
+          "isArchived": false,
+          "name": "Ilur - PM 470",
+          "note": "9 m",
+          "photo": null,
+          "station": {
+            "id": 222,
+            "latitude": 47.587901,
+            "longitude": -2.9994489,
+            "name": "Saint-Philibert"
+          },
+          "stationId": 222,
+          "type": "SEMI_RIGID"
+        },
+        {
+          "id": 259,
+          "controlUnit": {
+            "id": 10449,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 56 ",
+            "termsNote": null
+          },
+          "controlUnitId": 10449,
+          "isArchived": false,
+          "name": "Atoup - PM 412",
+          "note": "6 m",
+          "photo": null,
+          "station": {
+            "id": 8,
+            "latitude": 47.66649100000001,
+            "longitude": -2.983767,
+            "name": "Auray"
+          },
+          "stationId": 8,
+          "type": "SEMI_RIGID"
+        },
+        {
+          "id": 512,
+          "controlUnit": {
+            "id": 10449,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 56 ",
+            "termsNote": null
+          },
+          "controlUnitId": 10449,
+          "isArchived": false,
+          "name": "Voiture",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 245,
+            "latitude": 47.658236,
+            "longitude": -2.760847,
+            "name": "Vannes"
+          },
+          "stationId": 245,
+          "type": "CAR"
+        },
+        {
+          "id": 1219,
+          "controlUnit": {
+            "id": 10449,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 56 ",
+            "termsNote": null
+          },
+          "controlUnitId": 10449,
+          "isArchived": false,
+          "name": "Voiture",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 153,
+            "latitude": 47.7482524,
+            "longitude": -3.3702449,
+            "name": "Lorient"
+          },
+          "stationId": 153,
+          "type": "CAR"
+        }
+      ],
+      "departmentArea": null,
+      "departmentAreaInseeCode": null,
+      "isArchived": false,
+      "name": "ULAM 56 ",
+      "termsNote": null
+    }
+  }
+}

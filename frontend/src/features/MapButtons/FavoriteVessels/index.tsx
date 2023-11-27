@@ -112,6 +112,7 @@ const FavoriteVesselsNumber = styled(MapComponent)<{
   color: ${p => (p.isOpen ? p.theme.color.white : p.theme.color.gunMetal)};
   z-index: 100;
   padding: 0 2px;
+  text-align: center;
 `
 
 const List = styled.ul`

@@ -1,4 +1,4 @@
-import { monitorfishApiKy } from '.'
+import { monitorfishApiKy } from './api'
 
 import type { UserAuthorization } from '../domain/entities/authorization/types'
 

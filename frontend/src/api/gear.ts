@@ -1,4 +1,4 @@
-import { monitorfishApi } from '.'
+import { monitorfishApi } from './api'
 
 import type { Gear } from '../domain/types/Gear'
 

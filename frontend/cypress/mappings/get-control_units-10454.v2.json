@@ -1,0 +1,87 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v2/control_units/10454"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": {
+      "id": 10454,
+      "areaNote": "National",
+      "administration": {
+        "id": 1011,
+        "isArchived": false,
+        "name": "Office Français de la Biodiversité"
+      },
+      "administrationId": 1011,
+      "controlUnitContactIds": [
+        1014,
+        1012,
+        1013
+      ],
+      "controlUnitContacts": [
+        {
+          "id": 1014,
+          "controlUnitId": 10454,
+          "email": "fabrice.bernard.bmibpl@ofb.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "06 27 02 56 25"
+        },
+        {
+          "id": 1012,
+          "controlUnitId": 10454,
+          "email": "sebastien.perusson@ofb.gouv.fr",
+          "name": "OPERATIONAL_CENTER",
+          "phone": "02 38 45 99 71"
+        },
+        {
+          "id": 1013,
+          "controlUnitId": 10454,
+          "email": "sebastien.perusson@ofb.gouv.fr",
+          "name": "OPERATIONAL_CENTER",
+          "phone": "06 25 03 23 81"
+        }
+      ],
+      "controlUnitResourceIds": [
+        516
+      ],
+      "controlUnitResources": [
+        {
+          "id": 516,
+          "controlUnit": {
+            "id": 10454,
+            "areaNote": "National",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB Brigade Mobile d'Intervention – Bretagne",
+            "termsNote": "Direction de la police des BMI de l’OFB"
+          },
+          "controlUnitId": 10454,
+          "isArchived": false,
+          "name": "Voiture",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 245,
+            "latitude": 47.658236,
+            "longitude": -2.760847,
+            "name": "Vannes"
+          },
+          "stationId": 245,
+          "type": "CAR"
+        }
+      ],
+      "departmentArea": null,
+      "departmentAreaInseeCode": null,
+      "isArchived": false,
+      "name": "OFB Brigade Mobile d'Intervention – Bretagne",
+      "termsNote": "Direction de la police des BMI de l’OFB"
+    }
+  }
+}

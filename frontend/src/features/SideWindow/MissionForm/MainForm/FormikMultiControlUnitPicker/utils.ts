@@ -2,18 +2,19 @@ import { sortBy, uniq } from 'lodash'
 
 import { getOptionsFromStrings } from '../../../../../utils/getOptionsFromStrings'
 
-import type { ControlResource } from '../../../../../domain/types/controlResource'
-import type { ControlUnit } from '../../../../../domain/types/controlUnit'
+import type { LegacyControlUnit } from '../../../../../domain/types/legacyControlUnit'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 export function findControlUnitByname(
-  controlUnits: ControlUnit.ControlUnit[],
-  name: ControlUnit.ControlUnit['name']
-): ControlUnit.ControlUnit | undefined {
+  controlUnits: LegacyControlUnit.LegacyControlUnit[],
+  name: LegacyControlUnit.LegacyControlUnit['name']
+): LegacyControlUnit.LegacyControlUnit | undefined {
   return controlUnits.find(controlUnit => controlUnit.name === name)
 }
 
-export function mapControlUnitsToUniqueSortedNamesAsOptions(controlUnits: ControlUnit.ControlUnit[]): Option[] {
+export function mapControlUnitsToUniqueSortedNamesAsOptions(
+  controlUnits: LegacyControlUnit.LegacyControlUnit[]
+): Option[] {
   const names = controlUnits.map(({ name }) => name)
   const uniqueNames = uniq(names)
   const uniqueSortedNames = uniqueNames.sort()
@@ -23,8 +24,8 @@ export function mapControlUnitsToUniqueSortedNamesAsOptions(controlUnits: Contro
 }
 
 export function mapControlUnitToSortedResourcesAsOptions(
-  controlUnit: ControlUnit.ControlUnit
-): Array<Option<ControlResource>> {
+  controlUnit: LegacyControlUnit.LegacyControlUnit
+): Array<Option<LegacyControlUnit.LegacyControlUnitResource>> {
   const sortedResources = sortBy(controlUnit.resources, ({ name }) => name)
   const sortedResourcesAsOptions = sortedResources.map(sortedResource => ({
     label: sortedResource.name,

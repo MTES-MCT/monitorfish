@@ -1,0 +1,5441 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v1/administrations"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": [
+      {
+        "id": 1002,
+        "controlUnitIds": [
+          1179,
+          1240,
+          1378,
+          1319,
+          1317,
+          1245,
+          1231,
+          1178,
+          1177,
+          1209,
+          1253
+        ],
+        "controlUnits": [
+          {
+            "id": 1179,
+            "areaNote": null,
+            "administrationId": 1002,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Afb Guyane (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1240,
+            "areaNote": null,
+            "administrationId": 1002,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Afb Sd 29 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1378,
+            "areaNote": null,
+            "administrationId": 1002,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Afb Sd 35 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1319,
+            "areaNote": null,
+            "administrationId": 1002,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Afb Sd 44 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1317,
+            "areaNote": null,
+            "administrationId": 1002,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Afb Sd 50 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1245,
+            "areaNote": null,
+            "administrationId": 1002,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Afb Sd 56 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1231,
+            "areaNote": null,
+            "administrationId": 1002,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb - 114 - Kereon Ii (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1178,
+            "areaNote": null,
+            "administrationId": 1002,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb - 134 Ideal (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1177,
+            "areaNote": null,
+            "administrationId": 1002,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb - 135 Clarissa (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1209,
+            "areaNote": null,
+            "administrationId": 1002,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb 128 - Sotalie  (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1253,
+            "areaNote": null,
+            "administrationId": 1002,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb La Desiradienne (historique)",
+            "termsNote": null
+          }
+        ],
+        "isArchived": true,
+        "name": "AFB"
+      },
+      {
+        "id": 1005,
+        "controlUnitIds": [
+          10388,
+          10392,
+          10469,
+          10470,
+          10477,
+          10499,
+          10503,
+          10000,
+          10002,
+          10003,
+          10005,
+          10011,
+          10039,
+          10050,
+          10056,
+          10062,
+          10066,
+          10081,
+          10090,
+          10092,
+          10097,
+          10115,
+          10119,
+          10124,
+          10138,
+          10139,
+          10157,
+          10162,
+          10166,
+          10171,
+          10176,
+          10194,
+          10195,
+          10204,
+          10205,
+          10210,
+          10211,
+          10225,
+          10231,
+          10244,
+          10251,
+          10253,
+          10255,
+          10272,
+          10279,
+          10284,
+          10287,
+          10290,
+          10300,
+          10301,
+          10303,
+          10310,
+          10318,
+          10323,
+          10324,
+          10326,
+          10337,
+          10344,
+          10346,
+          10349,
+          10351,
+          10288,
+          10357,
+          10364,
+          10394,
+          10396,
+          10417,
+          10420,
+          10423,
+          10424,
+          10428,
+          10438,
+          10448,
+          10449,
+          10452,
+          1051,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          1000,
+          1022,
+          10457,
+          10459,
+          1061,
+          115,
+          116,
+          117,
+          118,
+          1264,
+          1267,
+          1269,
+          1272,
+          1273,
+          1274,
+          1275,
+          1276,
+          1277,
+          1278,
+          1279,
+          1280,
+          1281,
+          1282,
+          1283,
+          1284,
+          1285,
+          1286,
+          1287,
+          1288,
+          1289,
+          1290,
+          1291,
+          1292,
+          1293,
+          1294,
+          1295,
+          1296,
+          1297,
+          1298,
+          1299,
+          1300,
+          1301,
+          1302,
+          1303,
+          1304,
+          1305,
+          1306,
+          1307,
+          1308,
+          1309,
+          1310,
+          1311,
+          1312,
+          1313,
+          1348,
+          1349,
+          1350,
+          1445,
+          1462,
+          1430,
+          1433,
+          1434,
+          1473,
+          1481,
+          1524,
+          1374,
+          1431,
+          1432,
+          1435,
+          1436,
+          1437,
+          1438,
+          1439,
+          1440,
+          1441,
+          1442,
+          1443,
+          1444,
+          1520,
+          1522,
+          1562,
+          1563,
+          1564,
+          1568,
+          1610,
+          1611,
+          1622,
+          1636,
+          1633,
+          1574,
+          1618,
+          10466
+        ],
+        "controlUnits": [
+          {
+            "id": 10388,
+            "areaNote": "Var (83)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines 83",
+            "termsNote": null
+          },
+          {
+            "id": 10392,
+            "areaNote": "Rance et baie du Mont-Saint-Michel",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines 35",
+            "termsNote": null
+          },
+          {
+            "id": 10469,
+            "areaNote": "Seine-Maritime (76)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 76",
+            "termsNote": null
+          },
+          {
+            "id": 10470,
+            "areaNote": "Manche (50)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 50",
+            "termsNote": null
+          },
+          {
+            "id": 10477,
+            "areaNote": "Alpes-Maritimes (06)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 06",
+            "termsNote": null
+          },
+          {
+            "id": 10499,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines 56",
+            "termsNote": null
+          },
+          {
+            "id": 10503,
+            "areaNote": "Var (83)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 83",
+            "termsNote": null
+          },
+          {
+            "id": 10000,
+            "areaNote": "Pyrénées-Atlantiques (64) – Landes (40)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines 64/40",
+            "termsNote": null
+          },
+          {
+            "id": 10002,
+            "areaNote": "Nord (59)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 59",
+            "termsNote": null
+          },
+          {
+            "id": 10003,
+            "areaNote": "Pas-de-Calais (62)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 62",
+            "termsNote": null
+          },
+          {
+            "id": 10005,
+            "areaNote": "Gironde (33)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 33",
+            "termsNote": null
+          },
+          {
+            "id": 10011,
+            "areaNote": "Charente-Maritime (17)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 17",
+            "termsNote": null
+          },
+          {
+            "id": 10039,
+            "areaNote": "Bouches-du-Rhône (13)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 13",
+            "termsNote": null
+          },
+          {
+            "id": 10050,
+            "areaNote": "Nord (59)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 59",
+            "termsNote": null
+          },
+          {
+            "id": 10056,
+            "areaNote": "Vendée (85)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines 85",
+            "termsNote": null
+          },
+          {
+            "id": 10062,
+            "areaNote": "Finistère (29)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines 29",
+            "termsNote": null
+          },
+          {
+            "id": 10066,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 56",
+            "termsNote": null
+          },
+          {
+            "id": 10081,
+            "areaNote": "Manche (50)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines 50",
+            "termsNote": null
+          },
+          {
+            "id": 10090,
+            "areaNote": "Var (83)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 83",
+            "termsNote": null
+          },
+          {
+            "id": 10092,
+            "areaNote": "Calvados (14)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 14",
+            "termsNote": null
+          },
+          {
+            "id": 10097,
+            "areaNote": "Côtes-d’Armor (22)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 22",
+            "termsNote": null
+          },
+          {
+            "id": 10115,
+            "areaNote": "Bouches-du-Rhône (13)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 13",
+            "termsNote": null
+          },
+          {
+            "id": 10119,
+            "areaNote": "Gironde (33) hors Grand Port Maritime  de Bordeaux",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 33",
+            "termsNote": null
+          },
+          {
+            "id": 10124,
+            "areaNote": "Charente-Maritime (17)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines 17",
+            "termsNote": null
+          },
+          {
+            "id": 10138,
+            "areaNote": "Vendée (85)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 85",
+            "termsNote": null
+          },
+          {
+            "id": 10139,
+            "areaNote": "Loire-Atlantique (44)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines 44",
+            "termsNote": null
+          },
+          {
+            "id": 10157,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 56",
+            "termsNote": null
+          },
+          {
+            "id": 10162,
+            "areaNote": "Hérault (34)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 34",
+            "termsNote": null
+          },
+          {
+            "id": 10166,
+            "areaNote": "Var (83)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 83",
+            "termsNote": null
+          },
+          {
+            "id": 10171,
+            "areaNote": "Vendée (85)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 85",
+            "termsNote": null
+          },
+          {
+            "id": 10176,
+            "areaNote": "Ile-et-Vilaine (35)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 35",
+            "termsNote": null
+          },
+          {
+            "id": 10194,
+            "areaNote": "Alpes-Maritimes (06)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 06",
+            "termsNote": null
+          },
+          {
+            "id": 10195,
+            "areaNote": "Hérault (Etang de Thau et filières en mer de Sète et de Frontignan)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines 34/30",
+            "termsNote": null
+          },
+          {
+            "id": 10204,
+            "areaNote": "Côtes-d’Armor (22)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 22",
+            "termsNote": null
+          },
+          {
+            "id": 10205,
+            "areaNote": "Aude (11)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 11",
+            "termsNote": null
+          },
+          {
+            "id": 10210,
+            "areaNote": "Manche (50)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 50",
+            "termsNote": null
+          },
+          {
+            "id": 10211,
+            "areaNote": "Nord (59)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 59",
+            "termsNote": null
+          },
+          {
+            "id": 10225,
+            "areaNote": "Gironde (33)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 33",
+            "termsNote": null
+          },
+          {
+            "id": 10231,
+            "areaNote": "Pyrénées-Atlantiques (64)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 64",
+            "termsNote": null
+          },
+          {
+            "id": 10244,
+            "areaNote": "Corse-du-Sud (2A)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 2A",
+            "termsNote": null
+          },
+          {
+            "id": 10251,
+            "areaNote": "Finistère (29)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 29",
+            "termsNote": null
+          },
+          {
+            "id": 10253,
+            "areaNote": "Ille-et-Vilaine (35)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 35",
+            "termsNote": null
+          },
+          {
+            "id": 10255,
+            "areaNote": "Charente-maritime (17), Nord Gironde et Sud Vendée",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 17",
+            "termsNote": null
+          },
+          {
+            "id": 10272,
+            "areaNote": "Calvados (14)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 14",
+            "termsNote": null
+          },
+          {
+            "id": 10279,
+            "areaNote": "Charente-Maritime (17)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 17",
+            "termsNote": null
+          },
+          {
+            "id": 10284,
+            "areaNote": "Somme (80)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 80",
+            "termsNote": null
+          },
+          {
+            "id": 10287,
+            "areaNote": "Gard (30)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 30",
+            "termsNote": null
+          },
+          {
+            "id": 10290,
+            "areaNote": "Vendée (85)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 85",
+            "termsNote": null
+          },
+          {
+            "id": 10300,
+            "areaNote": "Loire-Atlantique (44)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 44",
+            "termsNote": null
+          },
+          {
+            "id": 10301,
+            "areaNote": "Gironde (33)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines 33",
+            "termsNote": null
+          },
+          {
+            "id": 10303,
+            "areaNote": "Pyrénées-Orientales (66) et l'Aude (11)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 66/11",
+            "termsNote": null
+          },
+          {
+            "id": 10310,
+            "areaNote": "Calvados (14)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines 14",
+            "termsNote": null
+          },
+          {
+            "id": 10318,
+            "areaNote": "Pas-de-Calais (62) et Somme (80)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 62/80",
+            "termsNote": null
+          },
+          {
+            "id": 10323,
+            "areaNote": "Seine-Maritime (76)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 76",
+            "termsNote": null
+          },
+          {
+            "id": 10324,
+            "areaNote": "Manche (50)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 50",
+            "termsNote": null
+          },
+          {
+            "id": 10326,
+            "areaNote": "Pyrénées-Orientales (66)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 66",
+            "termsNote": null
+          },
+          {
+            "id": 10337,
+            "areaNote": "Finistère Nord (Locquirec à Argol)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM (Brest – Morlaix) 29",
+            "termsNote": null
+          },
+          {
+            "id": 10344,
+            "areaNote": "Finistère Sud",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM (Gulvinec – Concarneau – Douarnenez ) 29",
+            "termsNote": null
+          },
+          {
+            "id": 10346,
+            "areaNote": "Côtes-d’Armor (22)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 22",
+            "termsNote": null
+          },
+          {
+            "id": 10349,
+            "areaNote": "Loire-Atlantique (44)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 44",
+            "termsNote": null
+          },
+          {
+            "id": 10351,
+            "areaNote": "Seine-Maritime (76)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines 76",
+            "termsNote": null
+          },
+          {
+            "id": 10288,
+            "areaNote": "Finistère sud",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 29 Douarnenez",
+            "termsNote": null
+          },
+          {
+            "id": 10357,
+            "areaNote": "Ile-et-Vilaine (35) et Rance",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 35",
+            "termsNote": null
+          },
+          {
+            "id": 10364,
+            "areaNote": "Pyrénées-Atlantiques (64) et Landes (40)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 64/40",
+            "termsNote": null
+          },
+          {
+            "id": 10394,
+            "areaNote": "Pas-de-Calais (62)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 62",
+            "termsNote": null
+          },
+          {
+            "id": 10396,
+            "areaNote": "Pyrénées-Atlantiques (64) – Landes (40)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 64/40",
+            "termsNote": null
+          },
+          {
+            "id": 10417,
+            "areaNote": "Bouches-du-Rhône (13)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 13",
+            "termsNote": null
+          },
+          {
+            "id": 10420,
+            "areaNote": "Hérault (34) et Gard (30)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 34/30",
+            "termsNote": null
+          },
+          {
+            "id": 10423,
+            "areaNote": "Seine-Maritime (76)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 76",
+            "termsNote": null
+          },
+          {
+            "id": 10424,
+            "areaNote": "Alpes-Maritimes (06)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 06",
+            "termsNote": null
+          },
+          {
+            "id": 10428,
+            "areaNote": "Loire-Atlantique (44)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 44",
+            "termsNote": null
+          },
+          {
+            "id": 10438,
+            "areaNote": "Somme maritime (80)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 80",
+            "termsNote": null
+          },
+          {
+            "id": 10448,
+            "areaNote": "Nord Bretagne – Côtes d’Armor (22)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines 22",
+            "termsNote": null
+          },
+          {
+            "id": 10449,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 56 ",
+            "termsNote": null
+          },
+          {
+            "id": 10452,
+            "areaNote": "Calvados (14)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 14",
+            "termsNote": null
+          },
+          {
+            "id": 1051,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 76 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 8,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 14 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 9,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 17 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 10,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 22 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 11,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 29 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 12,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 33 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 13,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 35 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 14,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 44 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 15,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 50 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 16,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 56  (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 17,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 62/80 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 18,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 64/40 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 19,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 85 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1000,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 34/30  (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1022,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 2b (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 10457,
+            "areaNote": "Finistère nord",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 29 Brest",
+            "termsNote": null
+          },
+          {
+            "id": 10459,
+            "areaNote": "Haute-Corse (2B)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Police de l'eau 2B",
+            "termsNote": null
+          },
+          {
+            "id": 1061,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 06 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 115,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 13 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 116,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 2a (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 117,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 66/11 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 118,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 83 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1264,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 62 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1267,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 76 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1269,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 80 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1272,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 50 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1273,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 14 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1274,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 35 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1275,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 22 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1276,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 29 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1277,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 56 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1278,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 44 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1279,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 85 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1280,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 66 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1281,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 11 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1282,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 34 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1283,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 30 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1284,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 13 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1285,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 83 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1286,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 06 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1287,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 2b (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1288,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 2a (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1289,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 35 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1290,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dml - Ddtm 59 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1291,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 62 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1292,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 80 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1293,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 76 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1294,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 14 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1295,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 50 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1296,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 22 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1297,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 29 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1298,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 56 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1299,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 44 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1300,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 85 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1301,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 17 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1302,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 33 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1303,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 40 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1304,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 64 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1305,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 66 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1306,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 11 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1307,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 34 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1308,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 30 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1309,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 13 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1310,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 83 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1311,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 06 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1312,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 2a (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1313,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm - Ddtm 2b (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1348,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 17 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1349,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 33 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1350,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cultures Marines - Ddtm 40 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1445,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 35 [2] (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1462,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Police De L'Eau - Ddtm50 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1430,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Police De L'Eau - Ddtm56 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1433,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Police De L'Eau - Ddtm44 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1434,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Police De L'Eau - Ddtm22 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1473,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cellule Ops Bureau Environnement Marin Ddtm83 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1481,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Saiml Ddtm 59 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1524,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Gelm 44 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1374,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Plam Morlaix (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1431,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Police De L'Eau - Ddtm29 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1432,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Police De L'Eau - Ddtm35 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1435,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Police De L'Eau - Ddtm85 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1436,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Police De L'Eau - Ddtm66 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1437,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Police De L'Eau - Ddtm11 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1438,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Police De L'Eau - Ddtm34 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1439,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Police De L'Eau - Ddtm30 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1440,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Police De L'Eau - Ddtm13 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1441,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Police De L'Eau - Ddtm83 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1442,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Police De L'Eau - Ddtm06 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1443,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Police De L'Eau - Ddtm2b (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1444,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Police De L'Eau - Ddtm2a (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1520,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Service Mer Et Littoral 50 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1522,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Samel 56 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1562,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Service Mer Et Littoral 76 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1563,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Police De L'Eau 76 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1564,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Saml 62 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1568,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dml 85 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1610,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dml 2a (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1611,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Service Mer Et Littoral 33 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1622,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Plam Guilvinec - Concarneau (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1636,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dt Sud 50  (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1633,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dml Corse (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1574,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dml 35 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1618,
+            "areaNote": null,
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dml Haute-Corse (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 10466,
+            "areaNote": "Pas-de-Calais (62) et Somme (80)",
+            "administrationId": 1005,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines 62/80",
+            "termsNote": null
+          }
+        ],
+        "isArchived": false,
+        "name": "DDTM"
+      },
+      {
+        "id": 2,
+        "controlUnitIds": [
+          10084,
+          10484,
+          10489,
+          10496,
+          10497,
+          10500,
+          1066,
+          1092,
+          1112,
+          1127,
+          1139,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          10277,
+          41,
+          42,
+          1013,
+          1014,
+          1018,
+          1108,
+          1111,
+          1132,
+          1039,
+          1257,
+          1046,
+          1050,
+          1089,
+          1103,
+          1104,
+          1107,
+          112,
+          113,
+          114,
+          1055,
+          1076,
+          1077,
+          1093,
+          1161,
+          1162,
+          1183,
+          1249,
+          1254,
+          1255,
+          1256,
+          1258,
+          1259,
+          1361,
+          1381,
+          1491,
+          1157,
+          1163,
+          1169,
+          1170,
+          1189,
+          1226,
+          1248,
+          1496,
+          1504,
+          1534,
+          1535,
+          1537,
+          1538,
+          1539,
+          1168,
+          1212,
+          1227,
+          1235,
+          1239,
+          1262,
+          1360,
+          1362,
+          1383,
+          1519,
+          1526,
+          1536,
+          1540,
+          1541,
+          1543,
+          1544,
+          1545,
+          1546,
+          1547,
+          1565,
+          1566,
+          1570,
+          1571,
+          1650,
+          1617,
+          1582,
+          1638,
+          1575,
+          1631,
+          1639,
+          1651,
+          10510,
+          10017,
+          10028,
+          10033,
+          10040,
+          10057,
+          10072,
+          10088,
+          10109,
+          10126,
+          10174,
+          10020,
+          10196,
+          10214,
+          10217,
+          10218,
+          10283,
+          10299,
+          10317,
+          10350,
+          10362,
+          10371,
+          10374,
+          10382,
+          10398,
+          10405,
+          10414,
+          10415,
+          10429,
+          10431
+        ],
+        "controlUnits": [
+          {
+            "id": 10084,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "BSN Marin - DF 287 Lao",
+            "termsNote": null
+          },
+          {
+            "id": 10484,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGC Lorient - DF 36 Kan An Avel",
+            "termsNote": "COD Manche Mer du Nord Atlantique"
+          },
+          {
+            "id": 10489,
+            "areaNote": "66-11-34-30-13",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGC Sète - DF 26 Cers",
+            "termsNote": "COD Méditérannée"
+          },
+          {
+            "id": 10496,
+            "areaNote": "Nord de la Bretagne",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGC Saint-Malo - DF 46 Avel Sterenn",
+            "termsNote": "COD Manche Mer du Nord Atlantique"
+          },
+          {
+            "id": 10497,
+            "areaNote": "Martinique (972)",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSN Fort-de-France - DF 292 Macouba",
+            "termsNote": "COD Antilles-Guyane"
+          },
+          {
+            "id": 10500,
+            "areaNote": "Martinique (972)",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSN Marin – DF 287 Inoua Lao – DF 291 Tarpon",
+            "termsNote": "COD Antilles-Guyane"
+          },
+          {
+            "id": 1066,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 90 Maravenne (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1092,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bgc Fort De France (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1112,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Galaxy (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1127,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 83 Saint Louis (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1139,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 62 Pleville Le Pelley (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 22,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsam Lbh (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 23,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsam Lh (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 24,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsam Merignac (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 25,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 12 U.Marinu (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 26,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 36 Kan An Avel (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 27,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 37 Nordet (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 28,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 40 Vent D'Amont ( Ne Plus Utiliser ) (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 29,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 41 Avel Gwalarm (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 30,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 42 Suroit (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 31,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 43 Haize Hegoa (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 32,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 44 Rakawa (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 33,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 46 Avel Sterenn (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 34,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 49 Orsuro (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 35,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 77 Vire Ne Plus Utiliser (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 36,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 78 Charente (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 37,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 79 Gregau (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 38,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 89 Kervily (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 39,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 92 Saire (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 40,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df P2 Kermorvan (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 10277,
+            "areaNote": "DF 39 Alize : Guyane (973)\n- Axe Kourou : Kourou",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGC Kourou – DF 39 Alizé – Axe Kourou",
+            "termsNote": "COD Antilles-Guyane"
+          },
+          {
+            "id": 41,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df P1 Jacques Oudart Fourmentin (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 42,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Helo Douanes (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1013,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 47 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1014,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 16 Cers (Ne Plus Utilisier) (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1018,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Kermorvan Ne Plus Utiliser Voir Df P2 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1108,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsn Saint Martin (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1111,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Racam (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1132,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 30 Marinada [2] (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1039,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 80 Aude (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1257,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 66 Olbia [2] (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1046,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Avion Douanes Hyeres (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1050,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 47 Lisserot (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1089,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 30 Marinada (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1103,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bgc Pap (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1104,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsn Pap (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1107,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bgc Saint Martin (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 112,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 45 Sirocco (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 113,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 91 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 114,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 96 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1055,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Golf Hotel (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1076,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Patrouilleur Arafenua (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1077,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Brigade Douane Papeete (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1093,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsn Marin (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1161,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 44 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1162,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 291 Tarpon (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1183,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 21 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1249,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 294 Ptherois (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1254,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 61 Touloubre (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1255,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df63 Arenc (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1256,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dfp3 Jean Francois Deniau (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1258,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df33 Levante (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1259,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 25 Libecciu (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1361,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df47 Ajaccio Ne Plus Utiliser (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1381,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 26 Cers (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1491,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 28 Mistral (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1157,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Helicoptere Douanes Antilles (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1163,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 292 Macouba (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1169,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 291 Tarpon [2] (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1170,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 94 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1189,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 24 Sua Luiga (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1226,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 64 Preconil (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1248,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 293 Lapwent (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1496,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 65 La Courance (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1504,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsam Martinique (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1534,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsn Port De Bouc (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1535,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsn Hyeres (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1537,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bgc Port-Vendres (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1538,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bgc Sete (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1539,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bgc Ajaccio (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1168,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 31 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1212,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 66 Olbia (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1227,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 67 Gregau (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1235,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 32  Seudre (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1239,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 68 Errobi (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1262,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 45 Alize (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1360,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Vgc Kourou (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1362,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 49 Marseille Ne Plus Utiliser (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1383,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 27 Vent D'Amont (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1519,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Drone (Emsa) (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1526,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Helicoptere Douanes Cherbourg (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1536,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsn Ste Maxime (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1540,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bgc Ajaccio [2] (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1541,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bgc Bastia (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1543,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bgc Marseille (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1544,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsn Bandol (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1545,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bgc Nice (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1546,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Patrouilleur Toulon-La-Seyne (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1547,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsat Compiegne (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1565,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df39 Alize (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1566,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 34 - Kaladja (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1570,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Autre Moyen (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1571,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Helico Douanes Hyeres (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1650,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsn Basse Terre (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1617,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsn Fort-De-France (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1582,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsam Le Havre (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1638,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df 38 Sualouiga (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1575,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsam Le Lamentin (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1631,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsn Granville (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1639,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bgc Pap [2] (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1651,
+            "areaNote": null,
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Df35 Sokan (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 10510,
+            "areaNote": "France métropolitaine hors Corse",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSAT Margny-Compiegne",
+            "termsNote": "COD Manche Mer du Nord Atlantique"
+          },
+          {
+            "id": 10017,
+            "areaNote": "Saint-Martin et Saint-Barthélemy",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGC Saint-Martin – DF 38 Soualiouga",
+            "termsNote": "COD Antilles-Guyane"
+          },
+          {
+            "id": 10028,
+            "areaNote": "Bouches-du-Rhône (13)",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSN Port de Bouc - DF 61 Touloubre",
+            "termsNote": "COD Méditérannée"
+          },
+          {
+            "id": 10033,
+            "areaNote": "Guadeloupe (971)",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGC Pointe-à-Pitre - DF 34 Kaladja",
+            "termsNote": "COD Antilles-Guyane"
+          },
+          {
+            "id": 10040,
+            "areaNote": "34-30-13-83",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGC Marseille - DF 28 Mistral",
+            "termsNote": "COD Méditérannée"
+          },
+          {
+            "id": 10057,
+            "areaNote": "Manche (50) ouest",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSN Granville - DF 62 Pleville Le Pelley",
+            "termsNote": "COD Manche Mer du Nord Atlantique"
+          },
+          {
+            "id": 10072,
+            "areaNote": "Finistère Atlantique",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DF P2 Kermorvan",
+            "termsNote": "COD Manche Mer du Nord Atlantique"
+          },
+          {
+            "id": 10088,
+            "areaNote": "Guadeloupe (971)",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSN Pointe-à-Pitre - DF 293 Lapwent",
+            "termsNote": "COD Antilles-Guyane"
+          },
+          {
+            "id": 10109,
+            "areaNote": "Loire-Atlantique (44) / Vendée (85)",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSN Saint-Nazaire - DF 65 La Courance",
+            "termsNote": "COD Manche Mer du Nord Atlantique"
+          },
+          {
+            "id": 10126,
+            "areaNote": "Antilles françaises, Guyane et Saint-Pierre et Miquelon",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSAM Martinique – Le Lamentin",
+            "termsNote": "COD Antilles-Guyane"
+          },
+          {
+            "id": 10174,
+            "areaNote": "Kourou",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "BGC Kourou - Axe Kourou",
+            "termsNote": "COD Antilles-Guyane"
+          },
+          {
+            "id": 10020,
+            "areaNote": "Méditerranée",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSA Hyères",
+            "termsNote": "COD Méditérannée"
+          },
+          {
+            "id": 10196,
+            "areaNote": "Martinique (972) (éventuellement Guadeloupe et Ile du Nord)",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGC Fort-de-France – DF 35 Sokan",
+            "termsNote": "COD Antilles-Guyane"
+          },
+          {
+            "id": 10214,
+            "areaNote": "Manche Est Mer du Nord",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DF P1 Jacques Oudart Fourmentin",
+            "termsNote": "COD Manche Mer du Nord Atlantique"
+          },
+          {
+            "id": 10217,
+            "areaNote": "Bouches-du-Rhône (13) et Var (83)",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSN Bandol - DF 63 Arenc",
+            "termsNote": "COD Méditérannée"
+          },
+          {
+            "id": 10218,
+            "areaNote": "de Belle-île à Hendaye",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGC La Rochelle - DF 32 Seudre",
+            "termsNote": "COD Manche Mer du Nord Atlantique"
+          },
+          {
+            "id": 10283,
+            "areaNote": "Manche Est Mer du Nord",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGC Dunkerque - DF 37 Nordet",
+            "termsNote": "COD Manche Mer du Nord Atlantique"
+          },
+          {
+            "id": 10299,
+            "areaNote": "Corse",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGC Ajaccio - DF 47 Muntese",
+            "termsNote": "COD Méditérannée"
+          },
+          {
+            "id": 10317,
+            "areaNote": "Calais jusqu’à Mont Saint-Michel (jusqu’à Brest pour des cas particulier)",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSAM Le Havre",
+            "termsNote": "COD Manche Mer du Nord Atlantique"
+          },
+          {
+            "id": 10350,
+            "areaNote": "Cap Camarat à la Ciotat (parfois Boûches-du-Rhône et Côte d’Azur)",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSN Hyères - DF 66 Olbia",
+            "termsNote": "COD Méditérannée"
+          },
+          {
+            "id": 10362,
+            "areaNote": "Corse",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGC Bastia - DF 25 Libecciu",
+            "termsNote": "COD Méditérannée"
+          },
+          {
+            "id": 10371,
+            "areaNote": "Var (83) et Alpes-Maritimes (06)",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSN Sainte-Maxime - DF 64 Preconil",
+            "termsNote": "COD Méditérannée"
+          },
+          {
+            "id": 10374,
+            "areaNote": "Côte basque et Landes",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSN Hendaye - DF 68 Errobi",
+            "termsNote": "COD Manche Mer du Nord Atlantique"
+          },
+          {
+            "id": 10382,
+            "areaNote": "Hérault (34), Gard (30) et Boûches-du-Rhône (13)",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSN La Grande Motte - DF 67 Gregau",
+            "termsNote": "COD Méditérannée"
+          },
+          {
+            "id": 10398,
+            "areaNote": "Guadeloupe (971)",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSN Basse-Terre - DF 294 Ptherois",
+            "termsNote": "COD Antilles-Guyane"
+          },
+          {
+            "id": 10405,
+            "areaNote": "Méditerranée",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DF P3 Jean-François Deniau",
+            "termsNote": "COD Méditérannée"
+          },
+          {
+            "id": 10414,
+            "areaNote": "NAMO",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSAM Lann-Bihoué",
+            "termsNote": "COD Manche Mer du Nord Atlantique"
+          },
+          {
+            "id": 10415,
+            "areaNote": "Centre Manche (Iles Chausey à Fécamp)",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGC Cherbourg - DF 27 Vent D'Amont",
+            "termsNote": "COD Manche Mer du Nord Atlantique"
+          },
+          {
+            "id": 10429,
+            "areaNote": "Golfe du Lion jusqu’à Toulon",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGC Port-Vendres - DF 30 Marinada",
+            "termsNote": "COD Méditérannée"
+          },
+          {
+            "id": 10431,
+            "areaNote": "Var (83 ) et Alpes-Maritimes (06)",
+            "administrationId": 2,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGC Nice - DF 33 Levante",
+            "termsNote": "COD Méditérannée"
+          }
+        ],
+        "isArchived": false,
+        "name": "Douane"
+      },
+      {
+        "id": 4,
+        "controlUnitIds": [
+          10199,
+          10473,
+          10509,
+          10391,
+          10078,
+          10054,
+          1023,
+          1075,
+          1116,
+          1117,
+          1148,
+          20,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          70,
+          71,
+          72,
+          73,
+          74,
+          75,
+          76,
+          77,
+          78,
+          79,
+          80,
+          81,
+          82,
+          83,
+          84,
+          85,
+          86,
+          87,
+          1009,
+          1010,
+          1017,
+          1020,
+          1037,
+          1060,
+          1040,
+          1042,
+          1044,
+          1011,
+          1016,
+          1036,
+          1102,
+          1149,
+          111,
+          120,
+          121,
+          1001,
+          1002,
+          1043,
+          1128,
+          1184,
+          1458,
+          1484,
+          1485,
+          1166,
+          1207,
+          1221,
+          1358,
+          1185,
+          1243,
+          1250,
+          1475,
+          1598,
+          1623,
+          1643,
+          1584,
+          1609,
+          1607,
+          1624,
+          1646,
+          1615,
+          1627,
+          1634,
+          1621,
+          1642,
+          10519,
+          10356,
+          10004,
+          10016,
+          10049,
+          10093,
+          10099,
+          10108,
+          10112,
+          10122,
+          10128,
+          10148,
+          10155,
+          10164,
+          10182,
+          10191,
+          10202,
+          10213,
+          10219,
+          10142,
+          10264,
+          10286,
+          10293,
+          10296,
+          10302,
+          10313,
+          10325,
+          10336,
+          10378,
+          10380,
+          10412,
+          10416,
+          10434,
+          10442,
+          10447,
+          10455,
+          10152
+        ],
+        "controlUnits": [
+          {
+            "id": 10199,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "PSMP – Pelotons de sûreté maritime et portuaire",
+            "termsNote": null
+          },
+          {
+            "id": 10473,
+            "areaNote": "Nord (59) et Pas-de-Calais (62)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Boulogne-sur-Mer - P694 Aber Ildut",
+            "termsNote": "CORGMAR MEMN"
+          },
+          {
+            "id": 10509,
+            "areaNote": "littoral du Calvados (14)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSL Caen",
+            "termsNote": "CORGMAR MEMN"
+          },
+          {
+            "id": 10391,
+            "areaNote": "Guyane (973)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Kourou - P624 Organabo",
+            "termsNote": "Pas de hiérarchie"
+          },
+          {
+            "id": 10078,
+            "areaNote": "Saint-Pierre-et-Miquelon (975)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "EN Saint-Pierre-et-Miquelon – Sao",
+            "termsNote": null
+          },
+          {
+            "id": 10054,
+            "areaNote": "La Réunion (974)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSL Port des Galets",
+            "termsNote": "Pas de hiérarchie"
+          },
+          {
+            "id": 1023,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "G-Neplusutiliser  (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1075,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Patrouilleur Jasmin (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1116,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Organabo (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1117,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Mahury (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1148,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P608 Argens (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 20,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P719 Armoise (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 61,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P621 Aber Wrac'H (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 62,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P603 Adour (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 63,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsl Boulogne (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 64,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsl Brest (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 65,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsl Cherbourg (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 66,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsl Lege Cap Ferret (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 67,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsl Lorient (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 68,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsl La Rochelle (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 69,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsl St Malo Ne Plus Utiliser (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 70,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Capitaine Moulie (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 71,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P613 Charente (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 72,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P601 Elorn (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 73,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Epee (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 74,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Gendarmerie Pornichet - Ne Pas Utiliser (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 75,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P791 Hortensia (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 76,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P 410 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 77,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P604 Scarpe (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 78,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P607 Yser (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 79,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P618 Escaut (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 80,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P622 Esteron (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 81,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P671 Glaive (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 82,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P720 Geranium (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 83,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P615 Penfeld (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 84,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P778 Reseda (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 85,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P620 Sevre (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 86,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P616 Trieux (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 87,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P605 Vertonne (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1009,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsl Marseille (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1010,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsl Port La Nouvelle (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1017,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P619 Huevaune - Ne Pas Utiliser (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1020,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P610 Gravona (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1037,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Gendmar Sete - Ne Pas Utiliser (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1060,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P608 - Ne Plus Utiliser (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1040,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsl Pornichet (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1042,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsl Lezardrieux Ne Plus Utiliser Voir Bn (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1044,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P612 Maury (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1011,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsl Toulon (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1016,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsl Nice (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1036,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Athos (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1102,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P722 - Violette (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1149,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P717 Lavande (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 111,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsl Caen (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 120,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P609 Herault - Sete (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 121,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P614 Tech - Port Vendres (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1001,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P619 Huveaune (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1002,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P617 Vesubie (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1043,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P721 Jonquille (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1128,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsl Sete (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1184,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P624 Organabo (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1458,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Le Dumbea (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1484,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P 611 Odet (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1485,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P 602 Verdon (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1166,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P 722 Violette (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1207,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Aramis [2] (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1221,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Jasmin (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1358,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Gm Bastia (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1185,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P623 Mahury (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1243,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Pam Cayenne (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1250,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsl Les Galets (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1475,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Peloton De Sûreté Maritime Et Portuaire Le Havre (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1598,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Peloton Sûreté Maritime Portuaire Militaire Toulon (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1623,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dsi Cannes (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1643,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Barracuda (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1584,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Sable D'Olonne (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1609,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P693 Oyapock (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1607,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Vscm Maroni (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1624,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Peloton De Sûreté Maritime Et Portuaire De Dunkerq (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1646,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "P604 Scarpe [2] (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1615,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Psmp Port De Bouc (Suretéportuaiure) (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1627,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Peloton Sûreté Maritime Portuaire Calais (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1634,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Bsl Marseillais (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1621,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Peloton Sûreté Maritime Portuaire Militaire St Naz (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1642,
+            "areaNote": null,
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Gendarmerie Maritime Cayenne (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 10519,
+            "areaNote": "Guyane (973)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "PAM Cayenne",
+            "termsNote": "Pas de hiérarchie"
+          },
+          {
+            "id": 10356,
+            "areaNote": "Antilles française",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "PGMAR Pointe-à-Pitre - P722 Violette",
+            "termsNote": "Pas de hiérarchie"
+          },
+          {
+            "id": 10004,
+            "areaNote": "Pyrénées-Orientales (66)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Port-Vendres - P614 Tech",
+            "termsNote": "CORGMAR Méditérannée"
+          },
+          {
+            "id": 10016,
+            "areaNote": "Bouches-du-Rhône (13)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Marseille - P619 Huveaune",
+            "termsNote": "CORGMAR Méditérannée"
+          },
+          {
+            "id": 10049,
+            "areaNote": "Iroise et Nord Finistère",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Brest - P621 Aber Wrac'h",
+            "termsNote": "CORGMAR Atlantique"
+          },
+          {
+            "id": 10093,
+            "areaNote": "Vendée (85) et Charente-Maritime (17)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSL La Rochelle",
+            "termsNote": "CORGMAR Atlantique"
+          },
+          {
+            "id": 10099,
+            "areaNote": "Finistère (29) – Morbihan (56)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Concarneau - P601 Elorn",
+            "termsNote": "CORGMAR Atlantique"
+          },
+          {
+            "id": 10108,
+            "areaNote": "Gironde (33), Landes (40) et Pyrénées-Atlantiques (64)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSL Lège-Cap-Ferret",
+            "termsNote": "CORGMAR Atlantique"
+          },
+          {
+            "id": 10112,
+            "areaNote": "Nord Bretagne",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Saint-Malo - P616 Trieux",
+            "termsNote": "CORGMAR Atlantique"
+          },
+          {
+            "id": 10122,
+            "areaNote": "de Cherbourg à Calais",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Dieppe - P607 Yser",
+            "termsNote": "CORGMAR MEMN"
+          },
+          {
+            "id": 10128,
+            "areaNote": "Manche Est Mer du Nord",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Dunkerque - P693 Oyapock",
+            "termsNote": "CORGMAR MEMN"
+          },
+          {
+            "id": 10148,
+            "areaNote": "Atlantique Sud Bretagne",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Les-Sables-d’Olonne - P605 Vertonne",
+            "termsNote": "CORGMAR Atlantique"
+          },
+          {
+            "id": 10155,
+            "areaNote": "littoral de la Manche (50)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSL Cherbourg",
+            "termsNote": "CORGMAR MEMN"
+          },
+          {
+            "id": 10164,
+            "areaNote": "Manche est Mer du Nord",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Cherbourg – P692 Maroni",
+            "termsNote": "CORGMAR MEMN"
+          },
+          {
+            "id": 10182,
+            "areaNote": "Aude (11) – Pyrénées-Orientales (66) – hérault (34)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSL Port-la-Nouvelle",
+            "termsNote": "CORGMAR Méditérannée"
+          },
+          {
+            "id": 10191,
+            "areaNote": "Finistère Nord (entre Brest et Saint-Quay)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Roscoff - P618 Escaut",
+            "termsNote": "CORGMAR Atlantique"
+          },
+          {
+            "id": 10202,
+            "areaNote": "Mayotte (976)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Dzaoudzi - P611 Odet",
+            "termsNote": "Pas de hiérarchie"
+          },
+          {
+            "id": 10213,
+            "areaNote": "Loire-Atlantique (44) – Morbihan (56) – Vendée (85)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Pornichet - P620 Sevre",
+            "termsNote": "CORGMAR Atlantique"
+          },
+          {
+            "id": 10219,
+            "areaNote": "Méditerranée",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "PGMAR Toulon - P721 Jonquille",
+            "termsNote": "CORGMAR Méditérannée"
+          },
+          {
+            "id": 10142,
+            "areaNote": "Arcachon à Noirmoutier",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR La Rochelle – P604 Scarpe",
+            "termsNote": "CORGMAR Atlantique"
+          },
+          {
+            "id": 10264,
+            "areaNote": "Finistère (29) – Côtes-d’Armor (22) – Ille-et-Vilaine (35)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSL Brest",
+            "termsNote": "CORGMAR Atlantique"
+          },
+          {
+            "id": 10286,
+            "areaNote": "Pas-de-Calais (62)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSL Boulogne-sur-Mer",
+            "termsNote": "CORGMAR MEMN"
+          },
+          {
+            "id": 10293,
+            "areaNote": "Alpes-Maritimes (06) – Var (83)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Nice - P617 Vesubie",
+            "termsNote": "CORGMAR Méditérannée"
+          },
+          {
+            "id": 10296,
+            "areaNote": "Mayotte (976)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Dzaoudzi - P602 Verdon",
+            "termsNote": "Pas de hiérarchie"
+          },
+          {
+            "id": 10302,
+            "areaNote": "De la Ciotat à le Grau du Roi",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSL Marseille",
+            "termsNote": "CORGMAR Méditérannée"
+          },
+          {
+            "id": 10313,
+            "areaNote": "Var (83)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSL Toulon",
+            "termsNote": "CORGMAR Méditérannée"
+          },
+          {
+            "id": 10325,
+            "areaNote": "Manche Mer du Nord",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "PGMAR Cherbourg – P719 Armoise ",
+            "termsNote": "CORGMAR MEMN"
+          },
+          {
+            "id": 10336,
+            "areaNote": "Morbihan (56) – Loire-Atlantique (44)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BSL Lorient",
+            "termsNote": "CORGMAR Atlantique"
+          },
+          {
+            "id": 10378,
+            "areaNote": "Var (83) et Alpes-Maritimes (06)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Saint-Raphael - P608 Argens",
+            "termsNote": "CORGMAR Méditérannée"
+          },
+          {
+            "id": 10380,
+            "areaNote": "Pyrénées-Atlantiques (64), Landes (40) et Gironde (33)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Anglet - P603 Adour",
+            "termsNote": "CORGMAR Atlantique"
+          },
+          {
+            "id": 10412,
+            "areaNote": "Manche Est Mer du Nord",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Le Havre - P622 Esteron",
+            "termsNote": "CORGMAR MEMN"
+          },
+          {
+            "id": 10416,
+            "areaNote": "Aude (11)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Gruissan - P612 Maury",
+            "termsNote": "CORGMAR Méditérannée"
+          },
+          {
+            "id": 10434,
+            "areaNote": "Ouest Méditerranée",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Sète - P609 Herault",
+            "termsNote": "CORGMAR Méditérannée"
+          },
+          {
+            "id": 10442,
+            "areaNote": "Corse-du-Sud (2A)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Ajaccio - P610 Gravona",
+            "termsNote": "CORGMAR Méditérannée"
+          },
+          {
+            "id": 10447,
+            "areaNote": "Mer d’iroise",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Brest - P615 Penfeld",
+            "termsNote": "CORGMAR Atlantique"
+          },
+          {
+            "id": 10455,
+            "areaNote": "Golfe de Gascogne – Bretagne",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "PGMAR Lorient - P720 Geranium",
+            "termsNote": "CORGMAR Atlantique"
+          },
+          {
+            "id": 10152,
+            "areaNote": "Guyane (973)",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "BGMAR Cayenne – P613 Charente",
+            "termsNote": "Pas de hiérarchie"
+          }
+        ],
+        "isArchived": false,
+        "name": "Gendarmerie Maritime"
+      },
+      {
+        "id": 1011,
+        "controlUnitIds": [
+          10156,
+          10490,
+          10014,
+          10030,
+          10041,
+          10048,
+          10070,
+          10076,
+          10098,
+          10110,
+          10118,
+          10150,
+          10185,
+          10189,
+          10190,
+          10200,
+          10201,
+          10207,
+          10224,
+          10236,
+          10237,
+          10246,
+          10259,
+          10266,
+          10289,
+          10304,
+          10338,
+          10341,
+          10347,
+          10367,
+          10401,
+          10407,
+          10425,
+          10426,
+          10436,
+          10440,
+          10453,
+          1448,
+          1315,
+          1314,
+          1316,
+          1321,
+          1322,
+          1324,
+          1332,
+          1333,
+          1334,
+          1335,
+          1336,
+          1369,
+          1480,
+          1238,
+          1330,
+          1353,
+          1367,
+          1372,
+          1477,
+          1488,
+          1495,
+          1512,
+          1514,
+          1237,
+          1318,
+          1323,
+          1325,
+          1328,
+          1329,
+          1331,
+          1337,
+          1338,
+          1339,
+          1354,
+          1371,
+          1447,
+          1464,
+          1469,
+          1640,
+          1579,
+          1581,
+          1580,
+          1592,
+          10061,
+          10512,
+          10454
+        ],
+        "controlUnits": [
+          {
+            "id": 10156,
+            "areaNote": "Méditerranée",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB Brigade Mobile d'Intervention – Sud Est",
+            "termsNote": "Direction de la police des BMI de l’OFB"
+          },
+          {
+            "id": 10490,
+            "areaNote": "Bouches-du-Rhône (13)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 13",
+            "termsNote": null
+          },
+          {
+            "id": 10014,
+            "areaNote": "Pas-de-Calais (62)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 62",
+            "termsNote": null
+          },
+          {
+            "id": 10030,
+            "areaNote": "Gironde (33)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 33",
+            "termsNote": null
+          },
+          {
+            "id": 10041,
+            "areaNote": "Seine-Maritime (76)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 76",
+            "termsNote": null
+          },
+          {
+            "id": 10048,
+            "areaNote": "Sud Atlantique",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB Unité Spéciale Migrateurs 33",
+            "termsNote": null
+          },
+          {
+            "id": 10070,
+            "areaNote": "Martinique (972)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 972 Martinique",
+            "termsNote": null
+          },
+          {
+            "id": 10076,
+            "areaNote": "Vendée (85)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 85",
+            "termsNote": null
+          },
+          {
+            "id": 10098,
+            "areaNote": "Haute-Corse (2B)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 2B",
+            "termsNote": null
+          },
+          {
+            "id": 10110,
+            "areaNote": "Nord (59)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 59",
+            "termsNote": null
+          },
+          {
+            "id": 10118,
+            "areaNote": "Atlantique nord-est",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 975 Saint-Pierre et Miquelon",
+            "termsNote": null
+          },
+          {
+            "id": 10150,
+            "areaNote": "Hérault (34)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 34",
+            "termsNote": null
+          },
+          {
+            "id": 10185,
+            "areaNote": "Manche (50)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 50",
+            "termsNote": null
+          },
+          {
+            "id": 10189,
+            "areaNote": "Eure (27)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 27",
+            "termsNote": null
+          },
+          {
+            "id": 10190,
+            "areaNote": "Charente-Maritime (17)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 17",
+            "termsNote": null
+          },
+          {
+            "id": 10200,
+            "areaNote": "La Réunion (974)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 974 La Réunion – BNOI",
+            "termsNote": null
+          },
+          {
+            "id": 10201,
+            "areaNote": "Calvados (14)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 14",
+            "termsNote": null
+          },
+          {
+            "id": 10207,
+            "areaNote": "Var (83) / PACA",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 83",
+            "termsNote": null
+          },
+          {
+            "id": 10224,
+            "areaNote": "Aude (11)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 11",
+            "termsNote": null
+          },
+          {
+            "id": 10236,
+            "areaNote": "Nouvelle-Aquitaine",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB Unité Spéciale Migrateurs 64-40",
+            "termsNote": null
+          },
+          {
+            "id": 10237,
+            "areaNote": "Somme (80) (et PNMEPMO)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 80",
+            "termsNote": null
+          },
+          {
+            "id": 10246,
+            "areaNote": "Alpes-Maritimes (06)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 06",
+            "termsNote": null
+          },
+          {
+            "id": 10259,
+            "areaNote": "Mayotte (976)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 976 Mayotte",
+            "termsNote": null
+          },
+          {
+            "id": 10266,
+            "areaNote": "Pyrénées-Atlantiques (64)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 64",
+            "termsNote": null
+          },
+          {
+            "id": 10289,
+            "areaNote": "Pyrénées-Orientales (66)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 66",
+            "termsNote": null
+          },
+          {
+            "id": 10304,
+            "areaNote": "Pays de la Loire et Bretagne",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB Unité Spéciale Migrateurs 44",
+            "termsNote": null
+          },
+          {
+            "id": 10338,
+            "areaNote": "Morbihan (56)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 56",
+            "termsNote": null
+          },
+          {
+            "id": 10341,
+            "areaNote": "Corse-du-Sud (2A)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 2A",
+            "termsNote": null
+          },
+          {
+            "id": 10347,
+            "areaNote": "Loire-Atlantique (44)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 44",
+            "termsNote": null
+          },
+          {
+            "id": 10367,
+            "areaNote": "Côtes-d’Armor (22)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 22",
+            "termsNote": null
+          },
+          {
+            "id": 10401,
+            "areaNote": "Guyane (973)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 973 Guyane",
+            "termsNote": null
+          },
+          {
+            "id": 10407,
+            "areaNote": "Gard (30)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 30",
+            "termsNote": null
+          },
+          {
+            "id": 10425,
+            "areaNote": "Guadeloupe (971)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 971 Guadeloupe",
+            "termsNote": null
+          },
+          {
+            "id": 10426,
+            "areaNote": "Landes (40)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 40",
+            "termsNote": null
+          },
+          {
+            "id": 10436,
+            "areaNote": "Ille-et-Vilaine (35)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 35",
+            "termsNote": null
+          },
+          {
+            "id": 10440,
+            "areaNote": "Manche est Mer du Nord",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB Unité Spéciale Migrateurs – Normandie",
+            "termsNote": null
+          },
+          {
+            "id": 10453,
+            "areaNote": "Finistère (29)",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB SD 29",
+            "termsNote": null
+          },
+          {
+            "id": 1448,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Unité Spéciale Migrateurs Nouvelle-Aquitaine (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1315,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Guadeloupe (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1314,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Guyane (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1316,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Martinique (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1321,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 14 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1322,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 27 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1324,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 80 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1332,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 11 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1333,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 34 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1334,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 30 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1335,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 13 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1336,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofbsd 83 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1369,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 85 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1480,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Unité Spéciale Migrateurs, Normandie Hauts De  (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1238,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 22 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1330,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 64 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1353,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofbsd 56 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1367,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Unité Spéciale Migrateurs Bretagne (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1372,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 14 [2] (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1477,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 59 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1488,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofbsd 29 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1495,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofbsd 62 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1512,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Mayotte (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1514,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd974 Brigade Nature Soi (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1237,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 35 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1318,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 22 Aerien (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1323,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 76 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1325,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 62 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1328,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 33 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1329,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 40 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1331,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 66 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1337,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 06 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1338,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 2a (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1339,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 2b (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1354,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 44 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1371,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Brigade Mobile D'Intervention Ofb 80 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1447,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Unité Spéciale Migrateurs Loire-Estuaire (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1464,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 50 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1469,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Sd 17 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1640,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Brigade Terrestre Bras Panon (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1579,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Brigade Mobile Intervention Bretagne (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1581,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Direction Regionale Normandie (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1580,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Brigade Mobile Intervention Normandie (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1592,
+            "areaNote": null,
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ofb Brigade Mobile Intervention Med (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 10061,
+            "areaNote": "Normandie",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB Brigade Mobile d'Intervention – Normandie",
+            "termsNote": "Direction de la police des BMI de l’OFB"
+          },
+          {
+            "id": 10512,
+            "areaNote": "Nouvelle Aquitaine",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB Brigade Mobile d'Intervention - Nouvelle-Aquitaine",
+            "termsNote": "Direction de la police des BMI de l’OFB"
+          },
+          {
+            "id": 10454,
+            "areaNote": "National",
+            "administrationId": 1011,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "OFB Brigade Mobile d'Intervention – Bretagne",
+            "termsNote": "Direction de la police des BMI de l’OFB"
+          }
+        ],
+        "isArchived": false,
+        "name": "Office Français de la Biodiversité"
+      }
+    ]
+  }
+}

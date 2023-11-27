@@ -19,7 +19,7 @@ import styled from 'styled-components'
 import { MISSION_FILTER_LABEL_ENUMS, MISSION_FILTER_OPTIONS } from './constants'
 import { MissionDateRangeFilter, MissionFilterType } from './types'
 import { getControlUnitsNamesFromAdministrations } from './utils'
-import { useGetControlUnitsQuery } from '../../../api/controlUnit'
+import { useGetLegacyControlUnitsQuery } from '../../../api/legacyControlUnit'
 import { missionActions } from '../../../domain/actions'
 import { getControlUnitsOptionsFromControlUnits } from '../../../domain/entities/controlUnits/utils'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
@@ -40,7 +40,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
 
   const [isCustomDateRangeOpen, setIsCustomDateRangeOpen] = useState(false)
 
-  const controlUnitsQuery = useGetControlUnitsQuery(undefined)
+  const controlUnitsQuery = useGetLegacyControlUnitsQuery(undefined)
   const dispatch = useMainAppDispatch()
 
   const previousAdministrationFiterValue = usePrevious(listFilterValues.ADMINISTRATION)

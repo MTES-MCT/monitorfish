@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "DELETE",
+    "urlPattern": "/api/v1/control_unit_resources/[0-9]+"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Access-Control-Allow-Headers": "*",
+      "Access-Control-Allow-Methods": "*",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Request-Headers": "*",
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {}
+  }
+}

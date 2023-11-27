@@ -1,0 +1,129 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v2/control_units/10455"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": {
+      "id": 10455,
+      "areaNote": "Golfe de Gascogne – Bretagne",
+      "administration": {
+        "id": 4,
+        "isArchived": false,
+        "name": "Gendarmerie Maritime"
+      },
+      "administrationId": 4,
+      "controlUnitContactIds": [
+        1018,
+        1019,
+        1015,
+        1016,
+        1017
+      ],
+      "controlUnitContacts": [
+        {
+          "id": 1018,
+          "controlUnitId": 10455,
+          "email": "pgmarc720.lorient@gendarmerie.defense.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "06 84 76 97 62"
+        },
+        {
+          "id": 1019,
+          "controlUnitId": 10455,
+          "email": "pgmarc720.lorient@gendarmerie.defense.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "06 85 72 02 20"
+        },
+        {
+          "id": 1015,
+          "controlUnitId": 10455,
+          "email": "ggmaratlan@gendarmerie.defense.gouv.fr",
+          "name": "OPERATIONAL_CENTER",
+          "phone": "02 98 22 22 17"
+        },
+        {
+          "id": 1016,
+          "controlUnitId": 10455,
+          "email": null,
+          "name": "PERMANENT_CONTACT_ONBOARD",
+          "phone": "06 84 76 97 62"
+        },
+        {
+          "id": 1017,
+          "controlUnitId": 10455,
+          "email": null,
+          "name": "PERMANENT_CONTACT_ONBOARD",
+          "phone": "06 85 72 02 20"
+        }
+      ],
+      "controlUnitResourceIds": [
+        189,
+        251
+      ],
+      "controlUnitResources": [
+        {
+          "id": 189,
+          "controlUnit": {
+            "id": 10455,
+            "areaNote": "Golfe de Gascogne – Bretagne",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "PGMAR Lorient - P720 Geranium",
+            "termsNote": "CORGMAR Atlantique"
+          },
+          "controlUnitId": 10455,
+          "isArchived": false,
+          "name": "P720 Geranium",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 153,
+            "latitude": 47.7482524,
+            "longitude": -3.3702449,
+            "name": "Lorient"
+          },
+          "stationId": 153,
+          "type": "PATROL_BOAT"
+        },
+        {
+          "id": 251,
+          "controlUnit": {
+            "id": 10455,
+            "areaNote": "Golfe de Gascogne – Bretagne",
+            "administrationId": 4,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "PGMAR Lorient - P720 Geranium",
+            "termsNote": "CORGMAR Atlantique"
+          },
+          "controlUnitId": 10455,
+          "isArchived": false,
+          "name": "Voiture",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 153,
+            "latitude": 47.7482524,
+            "longitude": -3.3702449,
+            "name": "Lorient"
+          },
+          "stationId": 153,
+          "type": "CAR"
+        }
+      ],
+      "departmentArea": null,
+      "departmentAreaInseeCode": null,
+      "isArchived": false,
+      "name": "PGMAR Lorient - P720 Geranium",
+      "termsNote": "CORGMAR Atlantique"
+    }
+  }
+}

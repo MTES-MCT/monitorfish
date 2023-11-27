@@ -1,23 +1,23 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
+
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import InfoSVG from '../../../icons/Information.svg?react'
-import { COLORS } from '../../../../constants/constants'
-import { useSelector } from 'react-redux'
 
-const ImpactRiskFactorDetails = ({ isOpen }) => {
-  const { selectedVessel } = useSelector(state => state.vessel)
+export function ImpactRiskFactorDetails({ isOpen }) {
+  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
   const [faoZones, setFaoZones] = useState([])
-  const speciesElement = useRef()
+  const speciesElement = useRef<HTMLTableCellElement | null>(null)
 
+  // TODO  Fix `riskFactor` does not exist on type `AugmentedSelectedVessel`.
+  // @ts-ignore
   const { riskFactor } = selectedVessel
 
   useEffect(() => {
     if (riskFactor && riskFactor.speciesOnboard) {
-      const faoZones = riskFactor.speciesOnboard.map(species => {
-        return species.faoZone
-      })
+      const nextFaoZones = riskFactor.speciesOnboard.map(species => species.faoZone)
 
-      setFaoZones([...new Set(faoZones)])
+      setFaoZones([...new Set(nextFaoZones)] as any)
     } else {
       setFaoZones([])
     }
@@ -25,9 +25,9 @@ const ImpactRiskFactorDetails = ({ isOpen }) => {
 
   return (
     <SubRiskDetails
-      isOpen={isOpen}
-      hasSegment={riskFactor?.segmentHighestImpact}
-      speciesHeight={speciesElement?.current?.clientHeight}
+      $hasSegment={riskFactor?.segmentHighestImpact}
+      $isOpen={isOpen}
+      $speciesHeight={speciesElement?.current?.clientHeight}
     >
       <Line />
       <Zone>
@@ -36,7 +36,7 @@ const ImpactRiskFactorDetails = ({ isOpen }) => {
             <Fields>
               <TableBody>
                 <Field>
-                  <Key big>Segment de flotte actuel</Key>
+                  <Key $isBig>Segment de flotte actuel</Key>
                   <Value>
                     {riskFactor?.segmentHighestImpact ? (
                       <>
@@ -77,6 +77,7 @@ const ImpactRiskFactorDetails = ({ isOpen }) => {
                         : undefined
                     }
                   >
+                    {/* eslint-disable-next-line no-nested-ternary */}
                     {riskFactor?.speciesOnboard?.length ? (
                       riskFactor?.speciesOnboard?.length > 20 ? (
                         `${riskFactor?.speciesOnboard
@@ -110,34 +111,42 @@ const ImpactRiskFactorDetails = ({ isOpen }) => {
 }
 
 const NoValue = styled.span`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-weight: 300;
   line-height: normal;
 `
 
 const Line = styled.div`
   width: 100%;
-  border-bottom: 1px solid ${COLORS.lightGray};
+  border-bottom: 1px solid ${p => p.theme.color.lightGray};
 `
 
-const Info = styled(InfoSVG)`
+const Info = styled(InfoSVG)<{
+  $isInfoSegment?: boolean
+}>`
   width: 14px;
   vertical-align: text-bottom;
   margin-bottom: 2px;
   margin-left: ${props => (props.$isInfoSegment ? '5px' : '2px')};
 `
 
-const SubRiskDetails = styled.div`
+const SubRiskDetails = styled.div<{
+  $hasSegment: boolean
+  $isOpen: boolean
+  $speciesHeight: number | undefined
+}>`
   width: 100%;
-  z-index: ${props => props.speciesHeight};
+  z-index: ${props => props.$speciesHeight};
   height: ${props =>
-    props.isOpen
-      ? props.hasSegment
-        ? 120 + (props.speciesHeight ? (props.speciesHeight < 60 ? props.speciesHeight : 60) : 36)
+    // eslint-disable-next-line no-nested-ternary
+    props.$isOpen
+      ? props.$hasSegment
+        ? // eslint-disable-next-line no-nested-ternary
+          120 + (props.$speciesHeight ? (props.$speciesHeight < 60 ? props.$speciesHeight : 60) : 36)
         : 80
       : 0}px;
-  opacity: ${props => (props.isOpen ? '1' : '0')};
-  visibility: ${props => (props.isOpen ? 'visible' : 'hidden')};
+  opacity: ${props => (props.$isOpen ? '1' : '0')};
+  visibility: ${props => (props.$isOpen ? 'visible' : 'hidden')};
   overflow: hidden;
   transition: 0.2s all;
 `
@@ -149,7 +158,7 @@ const Zone = styled.div`
   text-align: left;
   display: flex;
   flex-wrap: wrap;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
 `
 
 const Fields = styled.table`
@@ -168,15 +177,17 @@ const Field = styled.tr`
   line-height: 0.5em;
 `
 
-const Key = styled.th`
-  color: ${COLORS.slateGray};
+const Key = styled.th<{
+  $isBig?: boolean
+}>`
+  color: ${p => p.theme.color.slateGray};
   flex: initial;
   display: inline-block;
   margin: 0;
   border: none;
   padding: 5px 5px 5px 0;
   background: none;
-  width: ${props => (props.big ? '160px' : '120px')};
+  width: ${props => (props.$isBig ? '160px' : '120px')};
   line-height: 0.5em;
   height: 0.5em;
   font-size: 13px;
@@ -185,7 +196,7 @@ const Key = styled.th`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;
@@ -197,7 +208,7 @@ const Value = styled.td`
 
 const Text = styled.div`
   font-size: 13px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;
@@ -208,5 +219,3 @@ const Text = styled.div`
   margin-left: -15px;
   margin-top: 5px;
 `
-
-export default ImpactRiskFactorDetails

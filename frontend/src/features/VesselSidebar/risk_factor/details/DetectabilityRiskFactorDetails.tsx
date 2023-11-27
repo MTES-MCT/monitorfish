@@ -1,69 +1,68 @@
-import React from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../../../../constants/constants'
+
 import {
   getControlPriorityLevel,
   getControlRateRiskFactorText,
   getRiskFactorColor
 } from '../../../../domain/entities/vessel/riskFactor'
-import RiskFactorCursor from '../RiskFactorCursor'
-import { useSelector } from 'react-redux'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { getDate } from '../../../../utils'
+import RiskFactorCursor from '../RiskFactorCursor'
 
-const DetectabilityRiskFactorDetails = ({ isOpen }) => {
-  const {
-    selectedVessel
-  } = useSelector(state => state.vessel)
+type DetectabilityRiskFactorDetailsProps = {
+  isOpen: boolean
+}
+export function DetectabilityRiskFactorDetails({ isOpen }: DetectabilityRiskFactorDetailsProps) {
+  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
 
-  const {
-    riskFactor
-  } = selectedVessel
+  // TODO  Fix `riskFactor` does not exist on type `AugmentedSelectedVessel`.
+  // @ts-ignore
+  const { riskFactor } = selectedVessel
 
   return (
-    <SubRiskDetails isOpen={isOpen}>
-      <Line/>
+    <SubRiskDetails $isOpen={isOpen}>
+      <Line />
       <Zone>
         <InlineKey>
-          Priorité du segment{' '}
-          {
-            riskFactor?.segmentHighestPriority
-              ? riskFactor?.segmentHighestPriority
-              : null
-          }
+          Priorité du segment {riskFactor?.segmentHighestPriority ? riskFactor?.segmentHighestPriority : null}
         </InlineKey>
-        <InlineValue
-          data-cy={'risk-factor-priority-level'}
-        >
-          {
-            riskFactor?.controlPriorityLevel
-              ? `${riskFactor?.controlPriorityLevel?.toFixed(1)} – ${getControlPriorityLevel(riskFactor?.controlPriorityLevel)}`
-              : <NoValue>-</NoValue>
-          }
+        <InlineValue data-cy="risk-factor-priority-level">
+          {riskFactor?.controlPriorityLevel ? (
+            `${riskFactor?.controlPriorityLevel?.toFixed(1)} – ${getControlPriorityLevel(
+              riskFactor?.controlPriorityLevel
+            )}`
+          ) : (
+            <NoValue>-</NoValue>
+          )}
         </InlineValue>
         <FullWidth>
           <RiskFactorCursor
-            height={5}
-            withoutBox
-            value={riskFactor?.controlPriorityLevel}
             color={getRiskFactorColor(riskFactor?.controlPriorityLevel)}
-            progress={100 * riskFactor?.controlPriorityLevel / 4}
+            height={5}
+            // eslint-disable-next-line no-unsafe-optional-chaining
+            progress={(100 * riskFactor?.controlPriorityLevel) / 4}
+            value={riskFactor?.controlPriorityLevel}
+            withoutBox
           />
         </FullWidth>
         <InlineKey>Priorité du navire</InlineKey>
         <InlineValue>
-          {
-            riskFactor?.controlRateRiskFactor
-              ? `${riskFactor?.controlRateRiskFactor?.toFixed(1)} – ${getControlRateRiskFactorText(riskFactor?.controlRateRiskFactor)}`
-              : <NoValue>-</NoValue>
-          }
+          {riskFactor?.controlRateRiskFactor ? (
+            `${riskFactor?.controlRateRiskFactor?.toFixed(1)} – ${getControlRateRiskFactorText(
+              riskFactor?.controlRateRiskFactor
+            )}`
+          ) : (
+            <NoValue>-</NoValue>
+          )}
         </InlineValue>
         <FullWidth>
           <RiskFactorCursor
-            height={5}
-            withoutBox
-            value={riskFactor?.controlRateRiskFactor}
             color={getRiskFactorColor(riskFactor?.controlRateRiskFactor)}
-            progress={100 * riskFactor?.controlRateRiskFactor / 4}
+            height={5}
+            // eslint-disable-next-line no-unsafe-optional-chaining
+            progress={(100 * riskFactor?.controlRateRiskFactor) / 4}
+            value={riskFactor?.controlRateRiskFactor}
+            withoutBox
           />
         </FullWidth>
         <Fields>
@@ -71,21 +70,23 @@ const DetectabilityRiskFactorDetails = ({ isOpen }) => {
             <Field>
               <Key>Temporalité</Key>
               <Value>
-                {
-                  riskFactor?.numberControlsLastThreeYears || riskFactor?.numberControlsLastThreeYears === 0
-                    ? `${riskFactor?.numberControlsLastThreeYears} contrôle${riskFactor?.numberControlsLastThreeYears > 1 ? 's' : ''} sur les 3 dernières années`
-                    : <NoValue>-</NoValue>
-                }
+                {riskFactor?.numberControlsLastThreeYears || riskFactor?.numberControlsLastThreeYears === 0 ? (
+                  `${riskFactor?.numberControlsLastThreeYears} contrôle${
+                    riskFactor?.numberControlsLastThreeYears > 1 ? 's' : ''
+                  } sur les 3 dernières années`
+                ) : (
+                  <NoValue>-</NoValue>
+                )}
               </Value>
             </Field>
             <Field>
               <Key>Dernier contrôle</Key>
               <Value>
-                {
-                  riskFactor?.lastControlDatetime
-                    ? `Le ${getDate(riskFactor?.lastControlDatetime)}`
-                    : <NoValue>-</NoValue>
-                }
+                {riskFactor?.lastControlDatetime ? (
+                  `Le ${getDate(riskFactor?.lastControlDatetime)}`
+                ) : (
+                  <NoValue>-</NoValue>
+                )}
               </Value>
             </Field>
           </TableBody>
@@ -96,7 +97,7 @@ const DetectabilityRiskFactorDetails = ({ isOpen }) => {
 }
 
 const NoValue = styled.span`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-weight: 300;
   line-height: normal;
 `
@@ -107,14 +108,16 @@ const FullWidth = styled.div`
 
 const Line = styled.div`
   width: 100%;
-  border-bottom: 1px solid ${COLORS.lightGray};
+  border-bottom: 1px solid ${p => p.theme.color.lightGray};
 `
 
-const SubRiskDetails = styled.div`
+const SubRiskDetails = styled.div<{
+  $isOpen: boolean
+}>`
   width: 100%;
-  height: ${props => props.isOpen ? '170' : '0'}px;
-  opacity: ${props => props.isOpen ? '1' : '0'};
-  visibility: ${props => props.isOpen ? 'visible' : 'hidden'};
+  height: ${props => (props.$isOpen ? '170' : '0')}px;
+  opacity: ${props => (props.$isOpen ? '1' : '0')};
+  visibility: ${props => (props.$isOpen ? 'visible' : 'hidden')};
   overflow: hidden;
   transition: 0.2s all;
 `
@@ -126,7 +129,7 @@ const Zone = styled.div`
   text-align: left;
   display: flex;
   flex-wrap: wrap;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
 `
 
 const Fields = styled.table`
@@ -146,14 +149,14 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   flex: initial;
   display: inline-block;
   margin: 0;
   border: none;
   padding: 5px 5px 5px 0;
   background: none;
-  width: ${props => props.big ? '160px' : '120px'};
+  width: 120px;
   line-height: 0.5em;
   height: 0.5em;
   font-size: 13px;
@@ -162,7 +165,7 @@ const Key = styled.th`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;
@@ -176,15 +179,13 @@ const InlineKey = styled.span`
   margin: 5px 5px;
   margin-left: 20px;
   font-size: 13px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
 `
 
 const InlineValue = styled.span`
   margin: 5px 5px;
   font-size: 13px;
   margin-left: 15px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   font-weight: 500;
 `
-
-export default DetectabilityRiskFactorDetails

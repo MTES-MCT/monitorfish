@@ -26,6 +26,11 @@ export type LayerToFeatures = {
   simplifiedFeatures: Object[]
 }
 
+export type VectorLayerWithCodeAndId = VectorLayer<VectorSource> & {
+  code: string
+  id: number
+}
+
 export type VectorLayerWithName = VectorLayer<VectorSource> & {
   name?: string
 }

@@ -12,11 +12,11 @@ import styled from 'styled-components'
 
 import { controlUnitListDialogActions } from './slice'
 import { RTK_COMMON_QUERY_OPTIONS } from '../../../../api/constants'
-import { useGetStationsQuery } from '../../../../api/station'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FrontendApiError } from '../../../../libs/FrontendApiError'
 import { isNotArchived } from '../../../../utils/isNotArchived'
+import { useGetStationsQuery } from '../../../Station/stationApi'
 import { useGetAdministrationsQuery } from '../../administrationApi'
 
 export function FilterBar() {

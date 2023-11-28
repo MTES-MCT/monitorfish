@@ -173,6 +173,9 @@ export const globalSlice = createSlice({
   }
 })
 
+export const globalActions = globalSlice.actions
+export const globalSliceReducer = globalSlice.reducer
+
 export const {
   addSearchedVessel,
   closeVesselListModal,
@@ -191,5 +194,3 @@ export const {
   setPreviewFilteredVesselsMode,
   setUserType
 } = globalSlice.actions
-
-export const globalSliceReducer = globalSlice.reducer

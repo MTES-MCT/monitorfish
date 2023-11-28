@@ -1,5 +1,5 @@
-import { monitorenvApi } from './api'
-import { FrontendApiError } from '../libs/FrontendApiError'
+import { monitorenvApi } from '../../api/api'
+import { FrontendApiError } from '../../libs/FrontendApiError'
 
 import type { Station } from '@mtes-mct/monitor-ui'
 

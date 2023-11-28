@@ -1,17 +1,66 @@
+import { IconButton, type ControlUnit, Accent, Icon } from '@mtes-mct/monitor-ui'
+import { property, uniqBy } from 'lodash/fp'
+import { createEmpty, extend } from 'ol/extent'
+import { fromLonLat } from 'ol/proj'
 import styled from 'styled-components'
 
-import { displayControlUnitResourcesFromControlUnit, displayBaseNamesFromControlUnit } from './utils'
+import { displayControlUnitResourcesFromControlUnit, displayBaseNamesFromControlUnit, addBufferToExtent } from './utils'
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
+import { mapActions } from '../../../../domain/shared_slices/Map'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { FrontendError } from '../../../../libs/FrontendError'
+import { monitorfishMap } from '../../../map/monitorfishMap'
+import { stationActions } from '../../../Station/slice'
 import { controlUnitDialogActions } from '../ControlUnitDialog/slice'
-
-import type { ControlUnit } from '@mtes-mct/monitor-ui'
 
 export type ItemProps = {
   controlUnit: ControlUnit.ControlUnit
 }
 export function Item({ controlUnit }: ItemProps) {
   const dispatch = useMainAppDispatch()
+  const isStationLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isStationLayerDisplayed)
+
+  const center = () => {
+    const highlightedStations = uniqBy(
+      property('id'),
+      controlUnit.controlUnitResources.map(({ station }) => station)
+    )
+
+    const highlightedStationIds = highlightedStations.map(station => station.id)
+
+    if (highlightedStations.length === 1) {
+      const station = highlightedStations[0]
+      if (!station) {
+        throw new FrontendError('`station` is undefined.')
+      }
+
+      const stationCoordinates = fromLonLat([station.longitude, station.latitude])
+
+      // Add this as a `monitorfishMap` method (vanilla).
+      monitorfishMap.getView().animate({ center: stationCoordinates })
+    } else {
+      const highlightedStationsExtent = createEmpty()
+      highlightedStations.forEach(station => {
+        const stationCoordinate = fromLonLat([station.longitude, station.latitude])
+        const stationExtent = [
+          stationCoordinate[0],
+          stationCoordinate[1],
+          stationCoordinate[0],
+          stationCoordinate[1]
+        ] as number[]
+
+        extend(highlightedStationsExtent, stationExtent)
+      })
+
+      const bufferedHighlightedStationsExtent = addBufferToExtent(highlightedStationsExtent, 0.5)
+
+      // Move this indirect method to `monitorfishMap` (vanilla).
+      dispatch(mapActions.fitToExtent(bufferedHighlightedStationsExtent))
+    }
+
+    dispatch(stationActions.hightlightStationIds(highlightedStationIds))
+  }
 
   const edit = () => {
     dispatch(controlUnitDialogActions.setControlUnitId(controlUnit.id))
@@ -27,6 +76,18 @@ export function Item({ controlUnit }: ItemProps) {
     <Wrapper data-cy="ControlUnitListDialog-control-unit" data-id={controlUnit.id} onClick={edit}>
       <Head>
         <NameText>{controlUnit.name}</NameText>
+
+        {isStationLayerDisplayed && (
+          <IconButton
+            accent={Accent.TERTIARY}
+            disabled={!controlUnit.controlUnitResources.length}
+            Icon={Icon.FocusZones}
+            iconSize={18}
+            isCompact
+            onClick={center}
+            withUnpropagatedClick
+          />
+        )}
       </Head>
       <AdministrationText>{controlUnit.administration.name}</AdministrationText>
       <ResourcesAndPortsText>{displayControlUnitResourcesFromControlUnit(controlUnit)}</ResourcesAndPortsText>

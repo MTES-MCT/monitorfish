@@ -31,6 +31,7 @@ import { logbookReducer } from '../features/Logbook/slice'
 import { regulatoryLayerSearchReducer } from '../features/Regulation/components/RegulatoryZones/search/slice'
 import { regulatoryReducer } from '../features/Regulation/slice'
 import { alertReducer } from '../features/SideWindow/Alert/slice'
+import { stationReducer } from '../features/Station/slice'
 import { vesselListReducer } from '../features/VesselList/slice'
 
 import type { Reducer } from 'redux'
@@ -90,6 +91,7 @@ export const mainReducer = {
   regulatoryLayerSearch: regulatoryLayerSearchReducer,
   reporting: reportingReducer,
   sideWindow: sideWindowReducer,
+  station: stationReducer,
   vessel: vesselSliceReducer,
   vesselList: vesselListReducer
 }

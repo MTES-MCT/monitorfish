@@ -1,6 +1,10 @@
 import GeoJSON from 'ol/format/GeoJSON'
 
 import { showRegulatoryZoneMetadata } from '../../../features/Regulation/useCases/showRegulatoryZoneMetadata'
+import { FEATURE_MARGINS } from '../../../features/Station/components/SelectedStationOverlay/constants'
+import { stationActions } from '../../../features/Station/slice'
+import { FeatureWithCodeAndEntityId } from '../../../libs/FeatureWithCodeAndEntityId'
+import { getDialogOverlayPositionFromFeature } from '../../../utils/getDialogOverlayPositionFromFeature'
 import { missionActions } from '../../actions'
 import { isControl } from '../../entities/controls'
 import { LayerProperties } from '../../entities/layers/constants'
@@ -58,6 +62,19 @@ export const clickOnMapFeature = (mapClick: MapClick) => (dispatch, getState) =>
       featureProjection: OPENLAYERS_PROJECTION
     })
     dispatch(missionActions.setSelectedMissionActionGeoJSON(featureGeoJSON))
+
+    return
+  }
+
+  if (mapClick.feature instanceof FeatureWithCodeAndEntityId && mapClick.feature.code === MonitorFishLayer.STATION) {
+    const overlayPosition = getDialogOverlayPositionFromFeature(mapClick.feature, 334, 320, FEATURE_MARGINS)
+
+    dispatch(
+      stationActions.selectStation({
+        overlayPosition,
+        stationId: mapClick.feature.entityId
+      })
+    )
 
     return
   }

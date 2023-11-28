@@ -187,6 +187,9 @@ const mapSlice = createSlice({
   }
 })
 
+export const mapActions = mapSlice.actions
+export const mapReducer = mapSlice.reducer
+
 export const {
   animateToCoordinates,
   animateToExtent,
@@ -206,6 +209,4 @@ export const {
   setVesselLabelsShowedOnMap,
   setVesselsLastPositionVisibility,
   showVesselsEstimatedPositions
-} = mapSlice.actions
-
-export const mapReducer = mapSlice.reducer
+} = mapActions

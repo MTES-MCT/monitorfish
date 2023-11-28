@@ -64,4 +64,24 @@ describe('searchRegulatoryLayers()', () => {
     expect(items).toHaveLength(1)
     expect(items[0]?.zone).toEqual('Interdiction')
   })
+
+  it('should search with the specy name', () => {
+    // @ts-ignore
+    const fuse = new Fuse(regulatoryZones, REGULATION_SEARCH_OPTIONS)
+
+    const items = fuse.search<RegulatoryZone>('oursin').map(result => result.item)
+
+    expect(items).toHaveLength(1)
+    expect(items[0]?.zone).toEqual('Praires Ouest cotentin')
+  })
+
+  it('should search with the specy code', () => {
+    // @ts-ignore
+    const fuse = new Fuse(regulatoryZones, REGULATION_SEARCH_OPTIONS)
+
+    const items = fuse.search<RegulatoryZone>('URC').map(result => result.item)
+
+    expect(items).toHaveLength(1)
+    expect(items[0]?.zone).toEqual('Praires Ouest cotentin')
+  })
 })

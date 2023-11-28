@@ -160,8 +160,8 @@ export const regulatoryZones: RegulatoryZone[] = [
         allSpecies: false,
         otherInfo: undefined,
         species: [
-          { code: 'URC', name: 'OURSINS NCA', remarks: '500 kg' },
-          { code: 'URX', name: 'OURSINS,ETC. NCA', remarks: '500 kg' }
+          { code: 'WPO', name: 'OURSH NCA', remarks: '500 kg' },
+          { code: 'WPI', name: 'AIIILE ,ETC. NCA', remarks: '500 kg' }
         ],
         speciesGroups: []
       },

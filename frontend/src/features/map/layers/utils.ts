@@ -3,7 +3,7 @@ import { omit } from 'ramda'
 
 import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map/constants'
 
-import type { RegulatoryZone } from '../../../domain/types/regulation'
+import type { RegulatoryZone } from '../../Regulation/types'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 

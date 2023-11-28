@@ -15,7 +15,7 @@ import storage from 'redux-persist/es/storage' // LocalStorage
 
 import { backofficeReducer, mainReducer } from './reducers'
 import { monitorenvApi, monitorfishApi, monitorfishLightApi, monitorfishPublicApi } from '../api/api'
-import { mapToProcessingRegulation } from '../domain/entities/regulation'
+import { mapToProcessingRegulation } from '../features/Regulation/utils'
 
 import type { RegulationState } from '../features/Backoffice/slice'
 import type { AnyAction } from '@reduxjs/toolkit'

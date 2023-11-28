@@ -10,7 +10,7 @@ import { INFINITE } from '../../constants'
 import { COLORS } from '../../../../constants/constants'
 import { addObjectToRegulatoryTextCheckedMap } from '../../slice'
 import Tag from '../Tag'
-import { checkURL, RegulatoryTextType } from '../../../../domain/entities/regulation'
+import { checkURL, RegulatoryTextType } from '../../../Regulation/utils'
 
 /**
  * @typedef {object} Props

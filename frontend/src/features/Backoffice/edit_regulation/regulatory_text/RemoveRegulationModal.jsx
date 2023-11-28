@@ -7,9 +7,9 @@ import { setIsRemoveModalOpen } from '../../slice'
 import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
 import { FooterButton } from '../../../commonStyles/Backoffice.style'
 import CloseIconSVG from '../../../icons/Croix_grise_clair.svg?react'
-import updateRegulation from '../../../../domain/use_cases/layer/regulation/updateRegulation'
+import updateRegulation from '../../../Regulation/useCases/updateRegulation'
 import Feature from 'ol/Feature'
-import { REGULATION_ACTION_TYPE, getRegulatoryFeatureId } from '../../../../domain/entities/regulation'
+import { REGULATION_ACTION_TYPE, getRegulatoryFeatureId } from '../../../Regulation/utils'
 
 const RemoveRegulationModal = () => {
   const dispatch = useDispatch()

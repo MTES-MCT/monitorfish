@@ -165,4 +165,210 @@ class GetActivityReportsUTests {
         assertThat(seaReport.activityCode).isEqualTo(ActivityCode.FIS)
         assertThat(landReport.vesselNationalIdentifier).isEqualTo("AYFR00022680")
     }
+
+    @Test
+    fun `execute Should not throw When a SEA mission is not found in the mission repository`() {
+        // Given
+        val species = SpeciesControl()
+        species.speciesCode = "HKE"
+
+        val controls = listOf(
+            MissionAction(
+                id = 1,
+                vesselId = 1,
+                missionId = 1,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                portLocode = "AEFAT",
+                faoAreas = listOf("27.4.b", "27.4.c"),
+                actionType = MissionActionType.LAND_CONTROL,
+                gearOnboard = listOf(),
+                speciesOnboard = listOf(species),
+                seizureAndDiversion = true,
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+            ),
+            MissionAction(
+                id = 2,
+                vesselId = 1,
+                missionId = 2,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                actionType = MissionActionType.SEA_CONTROL,
+                seizureAndDiversion = false,
+                speciesInfractions = listOf(),
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+            ),
+            MissionAction(
+                id = 3,
+                vesselId = 2,
+                missionId = 3,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                actionType = MissionActionType.SEA_CONTROL,
+                seizureAndDiversion = false,
+                speciesInfractions = listOf(),
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+            ),
+        )
+        given(missionActionsRepository.findControlsInDates(any(), any())).willReturn(controls)
+
+        val vessels = listOf(
+            Vessel(
+                id = 1,
+                internalReferenceNumber = "FR00022680",
+                vesselName = "MY AWESOME VESSEL",
+                flagState = CountryCode.FR,
+                declaredFishingGears = listOf("Trémails"),
+                vesselType = "Fishing",
+                districtCode = "AY",
+            ),
+            Vessel(
+                id = 2,
+                internalReferenceNumber = "FR00065455",
+                vesselName = "MY SECOND AWESOME VESSEL",
+                flagState = CountryCode.FR,
+                declaredFishingGears = listOf("Trémails"),
+                vesselType = "Fishing",
+                districtCode = "LO",
+            ),
+        )
+        given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(vessels)
+
+        val missions = listOf(
+            Mission(
+                1,
+                missionTypes = listOf(MissionType.LAND),
+                missionSource = MissionSource.MONITORFISH,
+                isClosed = false,
+                isUnderJdp = false,
+                startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+            ),
+            Mission(
+                3,
+                missionTypes = listOf(MissionType.SEA),
+                missionSource = MissionSource.MONITORFISH,
+                isClosed = false,
+                isUnderJdp = false,
+                startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+            ),
+        )
+        // The mission id 2 is not returned
+        given(missionRepository.findByIds(listOf(1, 2, 3))).willReturn(missions)
+        given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+
+        // When
+        val activityReports = GetActivityReports(
+            missionActionsRepository,
+            portRepository,
+            vesselRepository,
+            missionRepository,
+        ).execute(
+            ZonedDateTime.now(),
+            ZonedDateTime.now().minusDays(1),
+            JointDeploymentPlan.NORTH_SEA,
+        )
+
+        // Then
+        assertThat(activityReports).hasSize(1)
+        val landReport = activityReports.first()
+        assertThat(landReport.activityCode).isEqualTo(ActivityCode.LAN)
+        assertThat(landReport.action.portName).isEqualTo("Al Jazeera Port")
+    }
+
+    @Test
+    fun `execute Should not throw When a LAND mission is not found in the mission repository`() {
+        // Given
+        val species = SpeciesControl()
+        species.speciesCode = "HKE"
+
+        val controls = listOf(
+            MissionAction(
+                id = 1,
+                vesselId = 1,
+                missionId = 1,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                portLocode = "AEFAT",
+                faoAreas = listOf("27.4.b", "27.4.c"),
+                actionType = MissionActionType.LAND_CONTROL,
+                gearOnboard = listOf(),
+                speciesOnboard = listOf(species),
+                seizureAndDiversion = true,
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+            ),
+            MissionAction(
+                id = 3,
+                vesselId = 2,
+                missionId = 3,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                actionType = MissionActionType.SEA_CONTROL,
+                seizureAndDiversion = false,
+                speciesInfractions = listOf(),
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+            ),
+        )
+        given(missionActionsRepository.findControlsInDates(any(), any())).willReturn(controls)
+
+        val vessels = listOf(
+            Vessel(
+                id = 1,
+                internalReferenceNumber = "FR00022680",
+                vesselName = "MY AWESOME VESSEL",
+                flagState = CountryCode.FR,
+                declaredFishingGears = listOf("Trémails"),
+                vesselType = "Fishing",
+                districtCode = "AY",
+            ),
+            Vessel(
+                id = 2,
+                internalReferenceNumber = "FR00065455",
+                vesselName = "MY SECOND AWESOME VESSEL",
+                flagState = CountryCode.FR,
+                declaredFishingGears = listOf("Trémails"),
+                vesselType = "Fishing",
+                districtCode = "LO",
+            ),
+        )
+        given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(vessels)
+
+        val missions = listOf(
+            Mission(
+                3,
+                missionTypes = listOf(MissionType.SEA),
+                missionSource = MissionSource.MONITORFISH,
+                isClosed = false,
+                isUnderJdp = false,
+                startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+            ),
+        )
+        // The mission id 1 is not returned
+        given(missionRepository.findByIds(listOf(1, 3))).willReturn(missions)
+        given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+
+        // When
+        val activityReports = GetActivityReports(
+            missionActionsRepository,
+            portRepository,
+            vesselRepository,
+            missionRepository,
+        ).execute(
+            ZonedDateTime.now(),
+            ZonedDateTime.now().minusDays(1),
+            JointDeploymentPlan.NORTH_SEA,
+        )
+
+        // Then
+        assertThat(activityReports).hasSize(0)
+    }
 }

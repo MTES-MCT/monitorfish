@@ -1,4 +1,4 @@
-import { RegulatorySearchProperty } from './regulation'
+import { RegulatorySearchProperty } from '../../features/Regulation/utils'
 
 export const BACKOFFICE_SEARCH_PROPERTIES = [
   RegulatorySearchProperty.TOPIC,

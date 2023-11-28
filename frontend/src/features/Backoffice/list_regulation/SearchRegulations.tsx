@@ -6,12 +6,12 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import { BACKOFFICE_SEARCH_PROPERTIES } from '../../../domain/entities/backoffice'
-import { searchByLawType, searchResultIncludeZone } from '../../../domain/entities/regulation'
-import { closeRegulatoryZoneMetadataPanel } from '../../../domain/shared_slices/Regulatory'
 import { useBackofficeAppDispatch } from '../../../hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '../../../hooks/useBackofficeAppSelector'
 import { AddRegulationButton } from '../../commonStyles/Buttons.style'
 import SearchIconSVG from '../../icons/Loupe.svg?react'
+import { closeRegulatoryZoneMetadataPanel } from '../../Regulation/slice'
+import { searchByLawType, searchResultIncludeZone } from '../../Regulation/utils'
 
 export function SearchRegulations(props) {
   const dispatch = useBackofficeAppDispatch()

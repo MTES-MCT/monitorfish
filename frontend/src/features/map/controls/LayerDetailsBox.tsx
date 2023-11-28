@@ -3,9 +3,9 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { getRegulatoryLayerStyle } from '../layers/styles/regulatoryLayer.style'
+import { getRegulatoryLayerStyle } from '../../Regulation/layers/styles/regulatoryLayer.style'
 
-import type { BaseRegulatoryZone } from '../../../domain/types/regulation'
+import type { BaseRegulatoryZone } from '../../Regulation/types'
 import type Feature from 'ol/Feature'
 import type Style from 'ol/style/Style'
 

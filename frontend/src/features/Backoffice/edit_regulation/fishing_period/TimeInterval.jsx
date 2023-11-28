@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { convertTimeToString, TIMES_SELECT_PICKER_VALUES } from '../../../../domain/entities/regulation'
+import { convertTimeToString, TIMES_SELECT_PICKER_VALUES } from '../../../Regulation/utils'
 import { COLORS } from '../../../../constants/constants'
 import CustomSelectComponent from '../custom_form/CustomSelectComponent'
 

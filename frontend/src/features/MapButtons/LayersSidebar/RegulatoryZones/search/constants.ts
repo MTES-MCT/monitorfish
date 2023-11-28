@@ -11,6 +11,10 @@ export const REGULATION_SEARCH_OPTIONS: Fuse.IFuseOptions<RegulatoryZone[]> = {
     ['regulatoryReferences', 'reference'],
     ['gearRegulation', 'authorized', 'selectedCategoriesAndGears'],
     ['gearRegulation', 'unauthorized', 'selectedCategoriesAndGears'],
+    ['speciesRegulation', 'authorized', 'species', 'name'],
+    ['speciesRegulation', 'unauthorized', 'species', 'name'],
+    ['speciesRegulation', 'authorized', 'species', 'code'],
+    ['speciesRegulation', 'unauthorized', 'species', 'code'],
     ['region']
   ],
   minMatchCharLength: 2,

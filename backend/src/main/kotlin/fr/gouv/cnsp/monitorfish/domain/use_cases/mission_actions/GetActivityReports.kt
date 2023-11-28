@@ -49,7 +49,7 @@ class GetActivityReports(
                     val controlMission = missions.firstOrNull { mission -> mission.id == control.missionId }
                     if (controlMission == null) {
                         logger.error(
-                            "Mission id '${control.missionId}' linked to control id '${control.id}' could not be found.",
+                            "Mission id '${control.missionId}' linked to SEA control id '${control.id}' could not be found. Is this mission deleted ?",
                         )
                     }
 
@@ -72,12 +72,18 @@ class GetActivityReports(
             val controlledVessel = try {
                 vessels.first { vessel -> vessel.id == control.vesselId }
             } catch (e: NoSuchElementException) {
-                throw NoSuchElementException("The vessel id ${control.vesselId} could not be found.", e)
+                logger.error("The vessel id ${control.vesselId} could not be found.", e)
+
+                return@map null
             }
             val controlMission = try {
                 missions.first { mission -> mission.id == control.missionId }
             } catch (e: NoSuchElementException) {
-                throw NoSuchElementException("The mission id ${control.missionId} could not be found.", e)
+                logger.error(
+                    "Mission id '${control.missionId}' linked to ${control.actionType} control id '${control.id}' could not be found. Is this mission deleted ?", e
+                )
+
+                return@map null
             }
 
             control.portLocode?.let { port ->
@@ -95,6 +101,6 @@ class GetActivityReports(
                 vesselNationalIdentifier = controlledVessel.getNationalIdentifier(),
                 vessel = controlledVessel,
             )
-        }
+        }.filterNotNull()
     }
 }

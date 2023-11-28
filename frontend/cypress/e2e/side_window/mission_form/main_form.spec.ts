@@ -546,7 +546,7 @@ context('Side Window > Mission Form > Main Form', () => {
     )
   })
 
-  it.only('Should update the form When receiving a mission update', () => {
+  it('Should update the form When receiving a mission update', () => {
     editSideWindowMissionListMissionWithId(43, SeaFrontGroup.MED)
     cy.wait(200)
     cy.intercept('POST', '/api/v1/missions/43', {
@@ -565,7 +565,6 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.window()
       .its('mockEventSources' as any)
       .then(mockEventSources => {
-        console.log(mockEventSources)
         mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emitOpen()
         mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emit(
           'MISSION_UPDATE',

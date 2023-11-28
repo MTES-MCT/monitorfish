@@ -126,11 +126,11 @@ const Resume = styled.span`
 `
 
 const LastPositionInfo = styled.span`
-  margin-left: 37px;
   color: ${p => p.theme.color.gunMetal};
-  font-size: 11px;
-  margin-top: -5px;
   display: inherit;
+  font-size: 11px;
+  line-height: 1;
+  margin: -5px 0 0 37px;
 `
 
 const Title = styled.div`

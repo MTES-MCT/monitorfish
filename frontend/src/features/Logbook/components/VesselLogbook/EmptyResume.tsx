@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 
-import LogbookMessageResumeHeader from './LogbookMessageResumeHeader'
+import { LogbookMessageResumeHeader } from './LogbookMessageResumeHeader'
 import { COLORS } from '../../../../constants/constants'
 
 type EmptyResumeProps = {
@@ -16,7 +16,7 @@ export function EmptyResume({ messageType }: EmptyResumeProps) {
     <Wrapper>
       <LogbookMessageResumeHeader
         hasNoMessage
-        isNotAcknowledged={undefined}
+        isNotAcknowledged={false}
         isOpen={isOpen}
         messageType={messageType}
         noContent

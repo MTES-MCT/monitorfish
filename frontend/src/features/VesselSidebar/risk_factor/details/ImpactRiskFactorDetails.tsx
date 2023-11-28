@@ -162,12 +162,10 @@ const Zone = styled.div`
 `
 
 const Fields = styled.table`
-  padding: 10px 5px 5px 20px;
-  width: inherit;
   display: table;
-  margin: 0;
+  margin: 10px 5px 5px 20px;
   min-width: 40%;
-  line-height: 0.2em;
+  width: inherit;
 `
 
 const Field = styled.tr`

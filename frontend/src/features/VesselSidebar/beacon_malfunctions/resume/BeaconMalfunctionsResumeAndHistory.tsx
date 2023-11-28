@@ -1,26 +1,31 @@
 import { useMemo } from 'react'
 import { FingerprintSpinner } from 'react-epic-spinners'
-import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
-import BeaconMalfunctionsResume from './BeaconMalfunctionsResume'
-import CurrentBeaconMalfunction from './CurrentBeaconMalfunction'
+import { BeaconMalfunctionsResume } from './BeaconMalfunctionsResume'
+import { CurrentBeaconMalfunction } from './CurrentBeaconMalfunction'
 import { YearsToBeaconMalfunctionList } from './YearsToBeaconMalfunctionList'
 import { COLORS } from '../../../../constants/constants'
 import { getYearsToBeaconMalfunctions } from '../../../../domain/entities/beaconMalfunction'
 import { setVesselBeaconMalfunctionsFromDate } from '../../../../domain/shared_slices/BeaconMalfunction'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 
-function BeaconMalfunctionsResumeAndHistory(props) {
-  const dispatch = useDispatch()
-  const { setIsCurrentBeaconMalfunctionDetails } = props
+import type { Promisable } from 'type-fest'
+
+type BeaconMalfunctionsResumeAndHistoryProps = {
+  setIsCurrentBeaconMalfunctionDetails: (isCurrentBeaconMalfunctionDetails: boolean) => Promisable<void>
+}
+export function BeaconMalfunctionsResumeAndHistory({
+  setIsCurrentBeaconMalfunctionDetails
+}: BeaconMalfunctionsResumeAndHistoryProps) {
+  const dispatch = useMainAppDispatch()
 
   const {
-    /** @type {VesselBeaconMalfunctionsResumeAndHistory || null} */
     loadingVesselBeaconMalfunctions,
-    /** @type {Date} */
     vesselBeaconMalfunctionsFromDate,
     vesselBeaconMalfunctionsResumeAndHistory
-  } = useSelector(state => state.beaconMalfunction)
+  } = useMainAppSelector(state => state.beaconMalfunction)
 
   /** @type {Object.<string, BeaconMalfunctionResumeAndDetails[]>} yearsToBeaconMalfunctions */
   const yearsToBeaconMalfunctions = useMemo(() => {
@@ -34,7 +39,7 @@ function BeaconMalfunctionsResumeAndHistory(props) {
     )
   }, [vesselBeaconMalfunctionsResumeAndHistory?.history, vesselBeaconMalfunctionsFromDate])
 
-  function seeMore() {
+  const seeMore = () => {
     const nextDate = new Date(vesselBeaconMalfunctionsFromDate.getTime())
     nextDate.setMonth(nextDate.getMonth() - 12)
 
@@ -67,14 +72,14 @@ function BeaconMalfunctionsResumeAndHistory(props) {
 }
 
 const SeeMoreBackground = styled.div`
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
   margin: 0px 5px 10px 5px;
   padding: 5px 0 5px 0;
 `
 
 const SeeMore = styled.div`
-  border: 1px solid ${COLORS.charcoal};
-  color: ${COLORS.gunMetal};
+  border: 1px solid ${p => p.theme.color.charcoal};
+  color: ${p => p.theme.color.gunMetal};
   padding: 5px 10px 5px 10px;
   width: max-content;
   font-size: 13px;
@@ -82,7 +87,7 @@ const SeeMore = styled.div`
   margin-left: auto;
   margin-right: auto;
   user-select: none;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
 `
 
 const Body = styled.div`
@@ -90,5 +95,3 @@ const Body = styled.div`
   overflow-x: hidden;
   max-height: 700px;
 `
-
-export default BeaconMalfunctionsResumeAndHistory

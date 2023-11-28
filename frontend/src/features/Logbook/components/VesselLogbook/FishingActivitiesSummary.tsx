@@ -4,14 +4,13 @@ import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { CustomDatesShowedInfo } from './CustomDatesShowedInfo'
-import DEPMessageResume from './DEPMessageResume'
-import DISMessageResume from './DISMessageResume'
+import { DEPMessageResume } from './DEPMessageResume'
+import { DISMessageResume } from './DISMessageResume'
 import { EmptyResume } from './EmptyResume'
 import { FARMessageResume } from './FARMessageResume'
-import LANMessageResume from './LANMessageResume'
-import PNOMessageResume from './PNOMessageResume'
+import { LANMessageResume } from './LANMessageResume'
+import { PNOMessageResume } from './PNOMessageResume'
 import { getLogbookTripSummary, getUniqueGears } from './utils'
-import { COLORS } from '../../../../constants/constants'
 import { COMMON_ALERT_TYPE_OPTION } from '../../../../domain/entities/alerts/constants'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
@@ -182,12 +181,11 @@ export function FishingActivitiesSummary({ navigation, showLogbookMessages }: Fi
                 {logbookTrip.dep.log ? (
                   <DEPMessageResume
                     depMessage={logbookTrip.dep.log.message}
-                    id={logbookTrip.dep.log.reportId}
                     isDeleted={logbookTrip.dep.log.deleted}
                     isNotAcknowledged={
-                      logbookTrip.dep.log.acknowledge && logbookTrip.dep.log.acknowledge?.isSuccess === false
+                      !!logbookTrip.dep.log.acknowledge && logbookTrip.dep.log.acknowledge?.isSuccess === false
                     }
-                    rejectionCause={logbookTrip.dep.log.acknowledge?.rejectionCause}
+                    rejectionCause={logbookTrip.dep.log.acknowledge?.rejectionCause || undefined}
                     showLogbookMessages={showLogbookMessages}
                   />
                 ) : (
@@ -229,7 +227,7 @@ export function FishingActivitiesSummary({ navigation, showLogbookMessages }: Fi
                   <PNOMessageResume
                     id={logbookTrip.pno.log.reportId}
                     isDeleted={logbookTrip.pno.log.deleted}
-                    isNotAcknowledged={logbookTrip.pno.log.acknowledge && !logbookTrip.pno.log.acknowledge.isSuccess}
+                    isNotAcknowledged={!!logbookTrip.pno.log.acknowledge && !logbookTrip.pno.log.acknowledge.isSuccess}
                     pnoMessage={logbookTrip.pno.log}
                     showLogbookMessages={showLogbookMessages}
                     speciesToWeightOfFAR={logbookTrip.far.speciesToWeight}
@@ -244,9 +242,8 @@ export function FishingActivitiesSummary({ navigation, showLogbookMessages }: Fi
                 {logbookTrip.lan.log ? (
                   <LANMessageResume
                     catchesOverToleranceAlert={catchesOverToleranceAlert}
-                    id={logbookTrip.lan.log.reportId}
                     isDeleted={logbookTrip.lan.log.deleted}
-                    isNotAcknowledged={logbookTrip.lan.log.acknowledge && !logbookTrip.lan.log.acknowledge.isSuccess}
+                    isNotAcknowledged={!!logbookTrip.lan.log.acknowledge && !logbookTrip.lan.log.acknowledge.isSuccess}
                     lanMessage={logbookTrip.lan.log.message}
                     showLogbookMessages={showLogbookMessages}
                     speciesToWeightOfFAR={logbookTrip.far.speciesToWeight}
@@ -302,7 +299,7 @@ const NoMessage = styled.div`
   margin-top: 20px;
   padding-bottom: 20px;
   font-size: 13px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   width: 100%;
 `
 
@@ -319,7 +316,7 @@ const SeeAll = styled.a`
   text-decoration: none;
   font-size: 11px;
   line-height: 10px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   margin-left: auto;
   order: 3;
   cursor: pointer;
@@ -337,7 +334,7 @@ const LogbookMessages = styled.ul`
 const Text = styled.div<{
   hasTwoLines?: boolean
 }>`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-size: 13px;
   font-weight: 500;
   padding-top: ${p => (p.hasTwoLines ? '5px' : '0')};
@@ -347,7 +344,7 @@ const TextValue = styled.div<{
   hasTwoLines?: boolean
 }>`
   font-size: 13px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   font-weight: 500;
   margin: 0;
   padding-left: 20px;
@@ -381,8 +378,8 @@ const TableBody = styled.tbody``
 const Title = styled.div<{
   hasTwoLines?: boolean
 }>`
-  color: ${COLORS.slateGray};
-  background: ${COLORS.lightGray};
+  color: ${p => p.theme.color.slateGray};
+  background: ${p => p.theme.color.lightGray};
   padding: ${p => (p.hasTwoLines ? '7px 10px 7px 20px;' : '8.5px 10px 8px 20px;')};
   font-size: 13px;
   flex-shrink: 0;
@@ -394,22 +391,17 @@ const Title = styled.div<{
 const Zone = styled.div<{
   white?: boolean
 }>`
-  margin: 5px 5px 10px 5px;
-  text-align: left;
+  background: ${p => (p.white ? p.theme.color.white : 'unset')};
   display: flex;
   flex-wrap: wrap;
-  background: ${p => (p.white ? COLORS.white : 'unset')};
+  text-align: left;
 `
 
 const Fields = styled.table`
-  padding: 10px 5px 5px 35px;
-  width: inherit;
   display: table;
-  margin: 0;
+  margin: 15px 5px 10px 35px;
   min-width: 40%;
-  line-height: 0.2em;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  width: inherit;
 `
 
 const Field = styled.tr`
@@ -420,8 +412,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${COLORS.slateGray};
-  flex: initial;
+  color: ${p => p.theme.color.slateGray};
   display: inline-block;
   margin: 0;
   border: none;
@@ -436,7 +427,7 @@ const Key = styled.th`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   font-weight: 500;
   margin: 0;
   text-align: left;
@@ -447,7 +438,7 @@ const Value = styled.td`
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-weight: 300;
   line-height: normal;
 `

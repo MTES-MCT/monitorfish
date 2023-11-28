@@ -1,18 +1,17 @@
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import COEMessage from './COEMessage'
-import COXMessage from './COXMessage'
-import CROMessage from './CROMessage'
-import DEPMessage from './DEPMessage'
-import DISMessage from './DISMessage'
-import EOFMessage from './EOFMessage'
-import FARMessage from './FARMessage'
+import { COEMessage } from './COEMessage'
+import { COXMessage } from './COXMessage'
+import { CROMessage } from './CROMessage'
+import { DEPMessage } from './DEPMessage'
+import { DISMessage } from './DISMessage'
+import { EOFMessage } from './EOFMessage'
+import { FARMessage } from './FARMessage'
 import LANMessage from './LANMessage'
-import NotImplementedMessage from './NotImplementedMessage'
+import { NotImplementedMessage } from './NotImplementedMessage'
 import PNOMessage from './PNOMessage'
 import RTPMessage from './RTPMessage'
-import { COLORS } from '../../../../../constants/constants'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { getDateTime } from '../../../../../utils'
@@ -201,9 +200,9 @@ const SoftwareFailover = styled.div`
   padding: 9px 10px 9px 10px;
   margin-bottom: 10px;
   text-align: center;
-  color: ${COLORS.white};
+  color: ${p => p.theme.color.white};
   font-size: 13px;
-  background: ${COLORS.slateGray};
+  background: ${p => p.theme.color.slateGray};
 `
 
 const MessageSentByFailoverSoftwareIcon = styled.span`
@@ -226,6 +225,7 @@ const MessageCorrected = styled.span`
   height: 14px;
   margin-left: 3px;
   width: 14px;
+  /* TODO Replace with theme color. */
   background-color: #e1000f;
   border-radius: 50%;
   display: inline-block;
@@ -242,40 +242,40 @@ const MessageOK = styled.span`
 
 const CorrectedMessage = styled.span`
   border-radius: 11px;
-  background: ${COLORS.gainsboro};
+  background: ${p => p.theme.color.gainsboro};
   font-size: 11px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   margin: 7px 7px 7px 3px;
   height: 17px;
   padding: 3px 5px 0px 2px;
 `
 
 const Gray = styled.span`
-  color: ${COLORS.gainsboro};
+  color: ${p => p.theme.color.gainsboro};
   font-weight: 300;
 `
 
 const Key = styled.span`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
 `
 
 const Acknowledge = styled.div`
   text-align: center;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
   padding: 5px 9px 9px 9px;
   margin-left: 10px;
   font-size: 13px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   flex-grow: 4;
 `
 
 const VoyageNumber = styled.div<HTMLProps<HTMLDivElement>>`
   text-align: center;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
   padding: 5px 9px 9px 9px;
   margin-left: 10px;
   font-size: 13px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   flex-grow: 3;
   max-width: 80px;
   overflow: clip;
@@ -285,20 +285,20 @@ const VoyageNumber = styled.div<HTMLProps<HTMLDivElement>>`
 
 const ReceptionDateTime = styled.div`
   text-align: center;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
   padding: 5px 8px 9px 8px;
   margin-left: 10px;
   font-size: 13px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   flex-grow: 3;
 `
 
 const EmissionDateTime = styled.div`
   text-align: center;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
   padding: 5px 8px 9px 8px;
   font-size: 13px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   flex-grow: 3;
 `
 
@@ -308,7 +308,7 @@ const LogbookMessageMetadata = styled.div`
 
 const Body = styled.div`
   padding: 10px;
-  background: ${COLORS.gainsboro};
+  background: ${p => p.theme.color.gainsboro};
 `
 
 const Wrapper = styled.div<{
@@ -316,7 +316,7 @@ const Wrapper = styled.div<{
 }>`
   margin-top: ${p => (p.isFirst ? '5' : '10')}px;
   font-size: 13px;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
   text-align: left;
 `
 
@@ -324,14 +324,14 @@ const Header = styled.div`
   height: 35px;
   width: inherit;
   padding: 0 0 0 10px;
-  background: ${COLORS.charcoal};
+  background: ${p => p.theme.color.charcoal};
   display: flex;
 `
 
 const LogbookMessageHeaderText = styled.span<{
   isShortcut: boolean
 }>`
-  color: ${COLORS.white};
+  color: ${p => p.theme.color.white};
   font-weight: 500;
   margin: 5px 5px 5px 5px;
   padding: 3px 4px 2px 0;
@@ -345,15 +345,15 @@ const LogbookMessageHeaderText = styled.span<{
 `
 
 const LogbookMessageName = styled.span`
-  color: ${COLORS.gainsboro};
+  color: ${p => p.theme.color.gainsboro};
   margin: 5px 5px 5px 0;
   padding: 2px 4px 2px 0;
   font-size: 13px;
 `
 
 const LogbookMessageTypeText = styled.span`
-  border: 2px solid ${COLORS.gainsboro};
-  color: ${COLORS.gainsboro};
+  border: 2px solid ${p => p.theme.color.gainsboro};
+  color: ${p => p.theme.color.gainsboro};
   margin: 5px 5px 5px 0;
   padding: 0 2px 1px 2px;
   font-size: 14px;

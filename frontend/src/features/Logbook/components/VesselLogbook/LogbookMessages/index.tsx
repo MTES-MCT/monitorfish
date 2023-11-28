@@ -1,13 +1,13 @@
-import { THEME } from '@mtes-mct/monitor-ui'
+import { THEME, type Option } from '@mtes-mct/monitor-ui'
 import { ExportToCsv } from 'export-to-csv'
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
 import styled from 'styled-components'
 
 import { LogbookMessage } from './LogbookMessage'
 import { COLORS } from '../../../../../constants/constants'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { getDate } from '../../../../../utils'
 import { formatAsCSVColumns } from '../../../../../utils/formatAsCSVColumns'
 import SortSVG from '../../../../icons/ascendant-descendant.svg?react'
@@ -16,6 +16,9 @@ import ArrowLastTripSVG from '../../../../icons/Double_fleche_navigation_marees.
 import ArrowTripSVG from '../../../../icons/Fleche_navigation_marees.svg?react'
 import ArrowSVG from '../../../../icons/Picto_fleche-pleine-droite.svg?react'
 import { CustomDatesShowedInfo } from '../CustomDatesShowedInfo'
+
+import type { LogbookMessage as LogbookMessageType } from '../../../Logbook.types'
+import type { Promisable } from 'type-fest'
 
 const animatedComponents = makeAnimated()
 
@@ -66,13 +69,24 @@ const downloadMessagesOptions = {
   }
 }
 
-function LogbookMessages({ messageTypeFilter, navigation, showFishingActivitiesSummary }) {
-  const { fishingActivities, isFirstVoyage, isLastVoyage, tripNumber } = useSelector(state => state.fishingActivities)
+type LogbookMessagesProps = {
+  messageTypeFilter: string | undefined
+  navigation: {
+    goToLastTrip: () => Promisable<void>
+    goToNextTrip: () => Promisable<void>
+    goToPreviousTrip: () => Promisable<void>
+  }
+  showFishingActivitiesSummary: () => void
+}
+export function LogbookMessages({ messageTypeFilter, navigation, showFishingActivitiesSummary }: LogbookMessagesProps) {
+  const { fishingActivities, isFirstVoyage, isLastVoyage, tripNumber } = useMainAppSelector(
+    state => state.fishingActivities
+  )
 
   /** @type {LogbookMessage[]} logbookMessages */
-  const [logbookMessages, setLogbookMessages] = useState([])
+  const [logbookMessages, setLogbookMessages] = useState<LogbookMessageType[]>([])
   const [ascendingSort, setAscendingSort] = useState(true)
-  const [selectedOptions, setSelectedOptions] = useState(null)
+  const [selectedOptions, setSelectedOptions] = useState<Option[] | null>(null)
 
   useEffect(() => {
     if (fishingActivities?.logbookMessages) {
@@ -85,14 +99,17 @@ function LogbookMessages({ messageTypeFilter, navigation, showFishingActivitiesS
     setSelectedOptions(messageTypes)
   }, [messageTypeFilter])
 
-  function inverseSort() {
+  const inverseSort = () => {
     const inversedSort = !ascendingSort
 
+    // TODO Fix these ts-ignore.
     const sortedFishingActivities = [...logbookMessages].sort((a, b) => {
       if (inversedSort) {
+        // @ts-ignore
         return new Date(a.reportDateTime) - new Date(b.reportDateTime)
       }
 
+      // @ts-ignore
       return new Date(b.reportDateTime) - new Date(a.reportDateTime)
     })
 
@@ -100,9 +117,10 @@ function LogbookMessages({ messageTypeFilter, navigation, showFishingActivitiesS
     setLogbookMessages(sortedFishingActivities)
   }
 
-  function downloadMessages() {
+  // TODO Move this function to a utils file.
+  const downloadMessages = () => {
     const objectsToExports = logbookMessages
-      .filter(logbookMessages => filterBySelectedType(logbookMessages))
+      .filter(_logbookMessages => filterBySelectedType(_logbookMessages))
       .map(position => formatAsCSVColumns(position, downloadMessagesOptions))
 
     const date = new Date()
@@ -110,9 +128,10 @@ function LogbookMessages({ messageTypeFilter, navigation, showFishingActivitiesS
     csvExporter.generateCsv(objectsToExports)
   }
 
+  // TODO Move this function to a utils file.
   const selectStyles = {
     clearIndicator: base => ({ ...base, padding: 1, width: 18 }),
-    container: (provided, state) => ({
+    container: provided => ({
       ...provided,
       height: 'fit-content',
       padding: 0,
@@ -121,7 +140,7 @@ function LogbookMessages({ messageTypeFilter, navigation, showFishingActivitiesS
     }),
     control: base => ({ ...base, borderColor: COLORS.lightGray, borderRadius: 'unset', fontSize: 13, minHeight: 26 }),
     dropdownIndicator: base => ({ ...base, padding: 1, width: 18 }),
-    input: base => ({ margin: 0, padding: 0 }),
+    input: () => ({ margin: 0, padding: 0 }),
     menu: base => ({ ...base, margin: 0, maxHeight: 360, padding: 0 }),
     menuList: base => ({ ...base, maxHeight: 360 }),
     menuPortal: base => ({ ...base, zIndex: 9999 }),
@@ -150,7 +169,8 @@ function LogbookMessages({ messageTypeFilter, navigation, showFishingActivitiesS
     valueContainer: base => ({ ...base, fontSize: 13, minWidth: 130, padding: '0px 2px' })
   }
 
-  function filterBySelectedType(logbookMessage) {
+  // TODO Move this function to a utils file.
+  const filterBySelectedType = (logbookMessage: LogbookMessageType) => {
     if (selectedOptions?.length) {
       return selectedOptions.some(messageType => logbookMessage.messageType === messageType.value)
     }
@@ -171,13 +191,13 @@ function LogbookMessages({ messageTypeFilter, navigation, showFishingActivitiesS
           isMulti
           isSearchable={false}
           menuPortalTarget={document.body}
-          onChange={setSelectedOptions}
+          onChange={setSelectedOptions as any}
           options={messageTypeSelectOptions}
           placeholder="Filtrer les messages"
           styles={selectStyles}
           value={selectedOptions}
         />
-        <Navigation selectedOptionsSize={selectedOptions ? selectedOptions.length : 0}>
+        <Navigation>
           <PreviousTrip
             disabled={isFirstVoyage}
             onClick={!isFirstVoyage ? navigation.goToPreviousTrip : undefined}
@@ -216,8 +236,10 @@ const CustomDatesShowedInfoWithMargin = styled.div`
   margin-bottom: 8px;
 `
 
-const PreviousTrip = styled(ArrowTripSVG)`
-  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+const PreviousTrip = styled(ArrowTripSVG)<{
+  disabled: boolean
+}>`
+  cursor: ${p => (p.disabled ? 'not-allowed' : 'pointer')};
   vertical-align: sub;
   width: 14px;
   margin-right: 10px;
@@ -226,8 +248,10 @@ const PreviousTrip = styled(ArrowTripSVG)`
   margin: 2px 0 0 5px;
 `
 
-const NextTrip = styled(ArrowTripSVG)`
-  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+const NextTrip = styled(ArrowTripSVG)<{
+  disabled: boolean
+}>`
+  cursor: ${p => (p.disabled ? 'not-allowed' : 'pointer')};
   vertical-align: sub;
   width: 14px;
   margin-left: 10px;
@@ -235,8 +259,10 @@ const NextTrip = styled(ArrowTripSVG)`
   margin: 2px 5px 0 0;
 `
 
-const LastTrip = styled(ArrowLastTripSVG)`
-  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+const LastTrip = styled(ArrowLastTripSVG)<{
+  disabled: boolean
+}>`
+  cursor: ${p => (p.disabled ? 'not-allowed' : 'pointer')};
   vertical-align: sub;
   width: 14px;
   margin-left: 5px;
@@ -245,32 +271,33 @@ const LastTrip = styled(ArrowLastTripSVG)`
 `
 
 const Navigation = styled.div`
-  width: -moz-available;          /* For Mozilla */
-  width: -webkit-fill-available;  /* For Chrome */
+  width: -moz-available; /* For Mozilla */
+  width: -webkit-fill-available; /* For Chrome */
   width: stretch;
   padding: 0 0 0 10px;
   text-align: center;
   font-size: 13px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   padding: 3px 2px 2px 2px;
   max-width: 250px;
   margin: 0 10px 0 10px;
-  border: 1px solid ${COLORS.lightGray};
-}
+  border: 1px solid ${p => p.theme.color.lightGray};
 `
 
-const InverseDate = styled(SortSVG)`
-  border: 1px solid ${COLORS.lightGray};
+const InverseDate = styled(SortSVG)<{
+  ascendingSort: boolean
+}>`
+  border: 1px solid ${p => p.theme.color.lightGray};
   width: 37px;
   height: 14px;
   padding: 6px;
   margin-left: auto;
   cursor: pointer;
-  ${props => (props.ascendingSort ? 'transform: rotate(180deg);' : null)}
+  ${p => (p.ascendingSort ? 'transform: rotate(180deg);' : null)}
 `
 
 const DownloadMessages = styled(DownloadMessagesSVG)`
-  border: 1px solid ${COLORS.lightGray};
+  border: 1px solid ${p => p.theme.color.lightGray};
   width: 66px;
   height: 26px;
   margin-left: auto;
@@ -299,12 +326,12 @@ const NoMessage = styled.div`
   margin-top: 40px;
   padding-bottom: 30px;
   font-size: 13px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
 `
 
 const Wrapper = styled.div`
   text-align: left;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
   padding: 5px 10px 10px 10px;
 `
 
@@ -312,9 +339,7 @@ const Previous = styled.a`
   text-align: left;
   text-decoration: underline;
   font-size: 13px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   cursor: pointer;
   display: inline-block;
 `
-
-export default LogbookMessages

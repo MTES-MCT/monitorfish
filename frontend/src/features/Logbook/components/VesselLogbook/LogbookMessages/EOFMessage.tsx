@@ -1,33 +1,43 @@
-import React from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../../../../../constants/constants'
+
 import { getDateTime } from '../../../../../utils'
 
-const EOFMessage = props => {
-  return <>
-    {props.message
-      ? <>
-        <Zone>
-          <Fields>
-            <TableBody>
-              <Field>
-                <Key>Date de fin de pêche</Key>
-                <Value>{props.message.endOfFishingDatetimeUtc
-                  ? <>{getDateTime(props.message.endOfFishingDatetimeUtc, true)}{' '}
-                    <Gray>(UTC)</Gray></>
-                  : <NoValue>-</NoValue>}</Value>
-              </Field>
-
-            </TableBody>
-          </Fields>
-        </Zone>
-      </>
-      : null}
-  </>
+type EOFMessageProps = {
+  message: {
+    endOfFishingDatetimeUtc: string
+  }
+}
+export function EOFMessage({ message }: EOFMessageProps) {
+  return (
+    <>
+      {message ? (
+        <>
+          <Zone>
+            <Fields>
+              <TableBody>
+                <Field>
+                  <Key>Date de fin de pêche</Key>
+                  <Value>
+                    {message.endOfFishingDatetimeUtc ? (
+                      <>
+                        {getDateTime(message.endOfFishingDatetimeUtc, true)} <Gray>(UTC)</Gray>
+                      </>
+                    ) : (
+                      <NoValue>-</NoValue>
+                    )}
+                  </Value>
+                </Field>
+              </TableBody>
+            </Fields>
+          </Zone>
+        </>
+      ) : null}
+    </>
+  )
 }
 
 const Gray = styled.span`
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   font-weight: 300;
 `
 
@@ -39,7 +49,7 @@ const Zone = styled.div`
   text-align: left;
   display: flex;
   flex-wrap: wrap;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
 `
 
 const Fields = styled.table`
@@ -48,7 +58,6 @@ const Fields = styled.table`
   display: table;
   margin: 0;
   min-width: 40%;
-  line-height: 0.2em;
   margin-top: 5px;
   margin-bottom: 5px;
 `
@@ -61,7 +70,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   flex: initial;
   display: inline-block;
   margin: 0;
@@ -77,7 +86,7 @@ const Key = styled.th`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;
@@ -87,11 +96,9 @@ const Value = styled.td`
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-weight: 300;
   line-height: normal;
   width: 50px;
   display: inline-block;
 `
-
-export default EOFMessage

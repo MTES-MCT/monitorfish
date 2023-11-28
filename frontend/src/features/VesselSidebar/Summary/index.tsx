@@ -12,7 +12,7 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { getDateTime, timeagoFrenchLocale } from '../../../utils'
 import InfoSVG from '../../icons/Information.svg?react'
 import NoVesselSVG from '../../icons/Picto_photo_navire_manquante.svg?react'
-import RiskFactorResume from '../risk_factor/RiskFactorResume'
+import { RiskFactorResume } from '../risk_factor/RiskFactorResume'
 
 // @ts-ignore
 timeago.register('fr', timeagoFrenchLocale)
@@ -165,7 +165,6 @@ const NoVessel = styled(NoVesselSVG)`
   width: 60px;
   background: ${COLORS.gainsboro};
   padding: 92px 136px 92px 136px;
-  margin: 10px 0 5px 0;
 `
 
 const FieldName = styled.div`
@@ -183,8 +182,11 @@ const FieldValue = styled.div`
 `
 
 const PhotoZone = styled.div`
-  margin: 5px 5px 10px 5px;
   background: ${COLORS.white};
+  display: flex;
+  justify-content: center;
+  margin: 5px 5px 10px 5px;
+  padding: 10px;
 `
 
 const Body = styled.div`
@@ -196,7 +198,6 @@ const Body = styled.div`
 const Photo = styled.img<{
   referrerpolicy: string
 }>`
-  margin: 15px 0 10px 0;
   max-height: 190px;
   left: auto;
   right: auto;

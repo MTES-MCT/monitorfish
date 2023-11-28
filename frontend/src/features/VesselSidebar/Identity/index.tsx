@@ -306,7 +306,7 @@ export function Identity() {
 }
 
 const ValueWithLineBreak = styled.div`
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   padding: 2px 5px 5px 0;
   line-height: normal;
   font-size: 13px;
@@ -337,11 +337,16 @@ const LicenceExpired = styled.span`
 const TableBody = styled.tbody``
 
 const Zone = styled.div`
-  margin: 5px 5px 10px 5px;
-  text-align: left;
+  background: ${p => p.theme.color.white};
   display: flex;
   flex-wrap: wrap;
-  background: ${COLORS.white};
+  margin: 5px 5px 10px;
+  padding: 10px 20px;
+  text-align: left;
+
+  > table:not(:first-child) {
+    margin-left: 25px;
+  }
 `
 
 const Fields = styled.table`
@@ -350,7 +355,6 @@ const Fields = styled.table`
   display: table;
   margin: 0;
   min-width: 40%;
-  line-height: 0.2em;
 `
 
 const Field = styled.tr`
@@ -361,10 +365,9 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   flex: initial;
   display: inline-block;
-  margin: 0;
   border: none;
   padding: 5px 5px 5px 0;
   background: none;
@@ -377,8 +380,7 @@ const Key = styled.th`
 
 const TrimmedValue = styled.td`
   font-size: 13px;
-  color: ${COLORS.gunMetal};
-  margin: 0;
+  color: ${p => p.theme.color.gunMetal};
   text-align: left;
   padding: 1px 5px 5px 5px;
   background: none;
@@ -393,7 +395,7 @@ const TrimmedValue = styled.td`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;
@@ -404,13 +406,13 @@ const Value = styled.td`
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-weight: 300;
   line-height: normal;
 `
 
 const NoPersonalData = styled.div`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-weight: 300;
 `
 

@@ -1,25 +1,27 @@
-import React, { useState } from 'react'
+// TODO Fix the `no-unsafe-optional-chaining` statements.
+
+import { useState } from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
-import RiskFactorCursor from './RiskFactorCursor'
+
+import { DetectabilityRiskFactorDetails } from './details/DetectabilityRiskFactorDetails'
+import { ImpactRiskFactorDetails } from './details/ImpactRiskFactorDetails'
+import { ProbabilityRiskFactorDetails } from './details/ProbabilityRiskFactorDetails'
+import { RiskFactorCursor } from './RiskFactorCursor'
+import { RiskFactorExplanationModal } from './RiskFactorExplanationModal'
 import {
   getDetectabilityRiskFactorText,
   getImpactRiskFactorText,
   getProbabilityRiskFactorText,
   getRiskFactorColor
 } from '../../../domain/entities/vessel/riskFactor'
-import RiskFactorImpactSVG from '../../icons/Note_impact_poisson.svg?react'
-import RiskFactorControlSVG from '../../icons/Note_de_controle_gyrophare.svg?react'
-import RiskFactorInfractionsSVG from '../../icons/Note_infraction_stop.svg?react'
-import RiskFactorExplanationModal from './RiskFactorExplanationModal'
-import { useSelector } from 'react-redux'
-import ImpactRiskFactorDetails from './details/ImpactRiskFactorDetails'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
-import { ProbabilityRiskFactorDetails } from './details/ProbabilityRiskFactorDetails'
-import DetectabilityRiskFactorDetails from './details/DetectabilityRiskFactorDetails'
+import RiskFactorControlSVG from '../../icons/Note_de_controle_gyrophare.svg?react'
+import RiskFactorImpactSVG from '../../icons/Note_impact_poisson.svg?react'
+import RiskFactorInfractionsSVG from '../../icons/Note_infraction_stop.svg?react'
 
-const RiskFactorResume = () => {
-  const { selectedVessel } = useSelector(state => state.vessel)
+export function RiskFactorResume() {
+  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
 
   const [riskFactorExplanationIsOpen, setRiskFactorExplanationIsOpen] = useState(false)
   const [impactRiskFactorIsOpen, setImpactRiskFactorIsOpen] = useState(false)
@@ -32,19 +34,21 @@ const RiskFactorResume = () => {
         <>
           <RiskFactorZone>
             <GlobalRiskFactor>Note de risque globale</GlobalRiskFactor>
-            <GlobalRisk data-cy={'global-risk-factor'}>
+            <GlobalRisk data-cy="global-risk-factor">
               <RiskFactorCursor
-                height={24}
-                isBig={true}
-                value={parseFloat(selectedVessel?.riskFactor?.riskFactor).toFixed(1)}
                 color={getRiskFactorColor(selectedVessel?.riskFactor?.riskFactor)}
+                height={24}
+                isBig
+                // eslint-disable-next-line no-unsafe-optional-chaining
                 progress={(100 * selectedVessel?.riskFactor?.riskFactor) / 4}
                 underCharter={selectedVessel.underCharter}
+                // TODO `selectedVessel?.riskFactor?.riskFactor` is a `string | number`. Fix that.
+                value={parseFloat(selectedVessel?.riskFactor?.riskFactor as unknown as string).toFixed(1)}
               />
-              <GlobalText underCharter={selectedVessel.underCharter}>
+              <GlobalText $underCharter={selectedVessel.underCharter}>
                 <SeeMore
-                  underCharter={selectedVessel.underCharter}
-                  data-cy={'show-risk-factor-explanation-modal'}
+                  $underCharter={selectedVessel.underCharter}
+                  data-cy="show-risk-factor-explanation-modal"
                   onClick={() => setRiskFactorExplanationIsOpen(true)}
                 >
                   En savoir plus
@@ -53,34 +57,36 @@ const RiskFactorResume = () => {
               </GlobalText>
             </GlobalRisk>
             <Line />
-            <SubRisk data-cy={'impact-risk-factor'} onClick={() => setImpactRiskFactorIsOpen(!impactRiskFactorIsOpen)}>
+            <SubRisk data-cy="impact-risk-factor" onClick={() => setImpactRiskFactorIsOpen(!impactRiskFactorIsOpen)}>
               <SubRiskHeader>
                 <SubRiskTitle>Impact sur la ressource</SubRiskTitle>
                 <Chevron $isOpen={impactRiskFactorIsOpen} />
               </SubRiskHeader>
               <RiskFactorImpact />
               <RiskFactorCursor
-                height={8}
-                value={parseFloat(selectedVessel?.riskFactor?.impactRiskFactor).toFixed(1)}
                 color={getRiskFactorColor(selectedVessel?.riskFactor?.impactRiskFactor)}
+                height={8}
+                // eslint-disable-next-line no-unsafe-optional-chaining
                 progress={(100 * selectedVessel?.riskFactor?.impactRiskFactor) / 4}
+                // TODO `selectedVessel?.riskFactor?.riskFactor` is a `string | number`. Fix that.
+                value={parseFloat(selectedVessel?.riskFactor?.impactRiskFactor as unknown as string).toFixed(1)}
               />
               <SubRiskText
                 title={getImpactRiskFactorText(
                   selectedVessel?.riskFactor?.impactRiskFactor,
-                  selectedVessel?.riskFactor?.segmentHighestImpact
+                  !!selectedVessel?.riskFactor?.segmentHighestImpact
                 )}
               >
                 {getImpactRiskFactorText(
                   selectedVessel?.riskFactor?.impactRiskFactor,
-                  selectedVessel?.riskFactor?.segmentHighestImpact
+                  !!selectedVessel?.riskFactor?.segmentHighestImpact
                 )}
               </SubRiskText>
             </SubRisk>
             <ImpactRiskFactorDetails isOpen={impactRiskFactorIsOpen} />
             <Line />
             <SubRisk
-              data-cy={'probability-risk-factor'}
+              data-cy="probability-risk-factor"
               onClick={() => setProbabilityRiskFactorIsOpen(!probabilityRiskFactorIsOpen)}
             >
               <SubRiskHeader>
@@ -89,27 +95,29 @@ const RiskFactorResume = () => {
               </SubRiskHeader>
               <RiskFactorInfractions />
               <RiskFactorCursor
-                height={8}
-                value={parseFloat(selectedVessel?.riskFactor?.probabilityRiskFactor).toFixed(1)}
                 color={getRiskFactorColor(selectedVessel?.riskFactor?.probabilityRiskFactor)}
+                height={8}
+                // eslint-disable-next-line no-unsafe-optional-chaining
                 progress={(100 * selectedVessel?.riskFactor?.probabilityRiskFactor) / 4}
+                // TODO `selectedVessel?.riskFactor?.riskFactor` is a `string | number`. Fix that.
+                value={parseFloat(selectedVessel?.riskFactor?.probabilityRiskFactor as unknown as string).toFixed(1)}
               />
               <SubRiskText
                 title={getProbabilityRiskFactorText(
                   selectedVessel?.riskFactor?.probabilityRiskFactor,
-                  selectedVessel?.riskFactor?.numberControlsLastFiveYears
+                  !!selectedVessel?.riskFactor?.numberControlsLastFiveYears
                 )}
               >
                 {getProbabilityRiskFactorText(
                   selectedVessel?.riskFactor?.probabilityRiskFactor,
-                  selectedVessel?.riskFactor?.numberControlsLastFiveYears
+                  !!selectedVessel?.riskFactor?.numberControlsLastFiveYears
                 )}
               </SubRiskText>
             </SubRisk>
             <ProbabilityRiskFactorDetails isOpen={probabilityRiskFactorIsOpen} />
             <Line />
             <SubRisk
-              data-cy={'detectability-risk-factor'}
+              data-cy="detectability-risk-factor"
               onClick={() => setDetectabilityRiskFactorIsOpen(!detectabilityRiskFactorIsOpen)}
             >
               <SubRiskHeader>
@@ -118,10 +126,12 @@ const RiskFactorResume = () => {
               </SubRiskHeader>
               <RiskFactorControl />
               <RiskFactorCursor
-                height={8}
-                value={parseFloat(selectedVessel?.riskFactor?.detectabilityRiskFactor).toFixed(1)}
                 color={getRiskFactorColor(selectedVessel?.riskFactor?.detectabilityRiskFactor)}
+                height={8}
+                // eslint-disable-next-line no-unsafe-optional-chaining
                 progress={(100 * selectedVessel?.riskFactor?.detectabilityRiskFactor) / 4}
+                // TODO `selectedVessel?.riskFactor?.riskFactor` is a `string | number`. Fix that.
+                value={parseFloat(selectedVessel?.riskFactor?.detectabilityRiskFactor as unknown as string).toFixed(1)}
               />
               <SubRiskText
                 title={getDetectabilityRiskFactorText(selectedVessel?.riskFactor?.detectabilityRiskFactor, true)}
@@ -140,9 +150,11 @@ const RiskFactorResume = () => {
   )
 }
 
-const GlobalText = styled.div`
-  ${props =>
-    props.underCharter
+const GlobalText = styled.div<{
+  $underCharter: boolean
+}>`
+  ${p =>
+    p.$underCharter
       ? `
   width: 100%;
   display: inline-block;
@@ -151,7 +163,7 @@ const GlobalText = styled.div`
 `
 
 const UnderCharterText = styled.span`
-  color: ${COLORS.mediumSeaGreen};
+  color: ${p => p.theme.color.mediumSeaGreen};
   font-size: 13px;
   font-weight: 500;
   margin-left: 9px;
@@ -162,9 +174,9 @@ const NoRiskFactor = styled.div`
   margin: 5px 5px 10px 5px;
   padding: 10px 10px 10px 25px;
   text-align: left;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
   font-size: 15px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
 `
 
 const Chevron = styled(ChevronIcon)`
@@ -190,15 +202,17 @@ const GlobalRisk = styled.div`
   justify-content: space-between;
 `
 
-const SeeMore = styled.a`
+const SeeMore = styled.a<{
+  $underCharter: boolean
+}>`
   font-size: 11px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   text-decoration: underline;
   cursor: pointer;
-  margin-top: ${props => (props.underCharter ? -20 : 19)}px;
-  margin-right: ${props => (props.underCharter ? 25 : 12)}px;
-  ${props =>
-    props.underCharter
+  margin-top: ${p => (p.$underCharter ? -20 : 19)}px;
+  margin-right: ${p => (p.$underCharter ? 25 : 12)}px;
+  ${p =>
+    p.$underCharter
       ? `
   margin-top: -20px;
   margin-right: 25px;
@@ -218,7 +232,7 @@ const RiskFactorZone = styled.div`
   text-align: left;
   display: flex;
   flex-wrap: wrap;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
 `
 
 const RiskFactorImpact = styled(RiskFactorImpactSVG)`
@@ -244,19 +258,19 @@ const RiskFactorInfractions = styled(RiskFactorInfractionsSVG)`
 
 const Line = styled.div`
   width: 100%;
-  border-bottom: 1px solid ${COLORS.lightGray};
+  border-bottom: 1px solid ${p => p.theme.color.lightGray};
 `
 
 const GlobalRiskFactor = styled.span`
   padding-left: 35px;
   font-size: 15px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   width: 100%;
 `
 
 const SubRiskTitle = styled.div`
   font-size: 13px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   padding-left: 35px;
   margin-top: 10px;
   width: 100%;
@@ -271,5 +285,3 @@ const SubRiskText = styled.span`
   overflow: hidden !important;
   font-weight: 500;
 `
-
-export default RiskFactorResume

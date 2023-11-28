@@ -1,36 +1,34 @@
 import styled from 'styled-components'
 
-import { COLORS } from '../../../constants/constants'
-
 export const Zone = styled.div`
   margin: 10px 5px 0 5px;
   text-align: left;
   display: flex;
   flex-wrap: wrap;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
 `
 
 export const Header = styled.div`
-  color: ${COLORS.slateGray};
-  background: ${COLORS.lightGray};
-  padding: 8.5px 10px 8px 20px;
-  font-size: 0.8rem;
-  flex-shrink: 0;
-  flex-grow: 2;
+  background: ${p => p.theme.color.lightGray};
+  color: ${p => p.theme.color.slateGray};
   display: flex;
-  width: 400px;
+  flex-grow: 2;
+  flex-shrink: 0;
   font-size: 13px;
   font-weight: 500;
+  padding: 6px 10px 9px 20px;
+  width: 400px;
+  vertical-align: middle;
 `
 
 export const NoValue = styled.span`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-weight: 300;
   line-height: normal;
 `
 
 export const StrongText = styled.span`
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   margin-left: 5px;
   white-space: nowrap;
   text-overflow: ellipsis;

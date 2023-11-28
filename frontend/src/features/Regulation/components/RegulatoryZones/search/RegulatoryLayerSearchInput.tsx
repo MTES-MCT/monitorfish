@@ -9,7 +9,6 @@ import {
   setRegulatoryLayersSearchResult,
   setZoneSelected
 } from './slice'
-import { COLORS } from '../../../../../constants/constants'
 import { LayerType as LayersType } from '../../../../../domain/entities/layers/constants'
 import { InteractionListener, InteractionType } from '../../../../../domain/entities/map/constants'
 import { resetInteraction, setInteractionTypeAndListener } from '../../../../../domain/shared_slices/Draw'
@@ -165,7 +164,7 @@ const InlineTagWrapper = styled.div`
 `
 
 const SearchByGeometry = styled.div`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-size: 11px;
   font-weight: 300;
   margin: 2px 0 10px;
@@ -208,7 +207,7 @@ const AdvancedSearchBox = styled.div<{
   advancedSearchIsOpen: boolean
 }>`
   background-color: white;
-  border-bottom: ${p => (p.advancedSearchIsOpen ? 1 : 0)}px ${COLORS.lightGray} solid;
+  border-bottom: ${p => (p.advancedSearchIsOpen ? 1 : 0)}px ${p => p.theme.color.lightGray} solid;
   height: ${p => (p.advancedSearchIsOpen ? 50 : 0)}px;
   overflow: hidden;
   padding: ${p => (p.advancedSearchIsOpen ? 10 : 0)}px 15px;
@@ -218,6 +217,7 @@ const AdvancedSearchBox = styled.div<{
 `
 
 const PrincipalSearchInput = styled.div`
+  display: flex;
   height: 40px;
   width: 100%;
 `
@@ -225,9 +225,9 @@ const PrincipalSearchInput = styled.div`
 const SearchBoxInput = styled.input`
   background-color: white;
   border: none;
-  border-bottom: 1px ${COLORS.lightGray} solid;
+  border-bottom: 1px ${p => p.theme.color.lightGray} solid;
   border-radius: 0;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   font-size: 13px;
   height: 40px;
   margin: 0;
@@ -237,14 +237,14 @@ const SearchBoxInput = styled.input`
 
   :hover,
   :focus {
-    border-bottom: 1px ${COLORS.slateGray} solid;
+    border-bottom: 1px ${p => p.theme.color.slateGray} solid;
   }
 `
 
 const SearchIcon = styled(SearchIconSVG)`
   background: ${p => p.theme.color.white};
-  border-bottom: 1px ${COLORS.lightGray} solid;
-  height: 29px;
+  border-bottom: 1px ${p => p.theme.color.lightGray} solid;
+  height: 30px;
   padding-left: 10px;
   padding-top: 10px;
   vertical-align: top;
@@ -253,7 +253,7 @@ const SearchIcon = styled(SearchIconSVG)`
 
 const CloseIcon = styled(CloseIconSVG)`
   background: ${p => p.theme.color.white};
-  border-bottom: 1px ${COLORS.lightGray} solid;
+  border-bottom: 1px ${p => p.theme.color.lightGray} solid;
   cursor: pointer;
   height: 17px;
   padding: 13px 11px 9px 9px;
@@ -267,7 +267,6 @@ const AdvancedSearch = styled(IconButton)<
   }
 >`
   background: ${p => (p.advancedSearchIsOpen ? p.theme.color.blueYonder : p.theme.color.charcoal)};
-  border: unset;
   display: inline-block;
   height: 40px;
   width: 40px;

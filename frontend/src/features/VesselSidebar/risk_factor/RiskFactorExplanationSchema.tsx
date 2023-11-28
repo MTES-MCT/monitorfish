@@ -1,16 +1,16 @@
-import { COLORS } from '../../../constants/constants'
-import React from 'react'
 import styled from 'styled-components'
-import RiskFactorImpactSVG from '../../icons/Note_impact_poisson.svg?react'
-import RiskFactorControlSVG from '../../icons/Note_de_controle_gyrophare.svg?react'
-import RiskFactorInfractionsSVG from '../../icons/Note_infraction_stop.svg?react'
-import { RiskFactorBox } from './RiskFactorBox'
 
-const RiskFactorExplanationSchema = () => {
+import { RiskFactorBox } from './RiskFactorBox'
+import { COLORS } from '../../../constants/constants'
+import RiskFactorControlSVG from '../../icons/Note_de_controle_gyrophare.svg?react'
+import RiskFactorImpactSVG from '../../icons/Note_impact_poisson.svg?react'
+import RiskFactorInfractionsSVG from '../../icons/Note_infraction_stop.svg?react'
+
+export function RiskFactorExplanationSchema() {
   return (
     <Schema>
       <GlobalBox>
-        <RiskFactorBox isBig={true} color={COLORS.charcoal}>
+        <RiskFactorBox color={COLORS.charcoal} isBig>
           3.3
         </RiskFactorBox>
         Note de risque
@@ -48,12 +48,12 @@ const MoreTopPadding = styled.div`
 
 const RiskFactorExponent = styled.span`
   float: right;
-  border: 1px solid ${COLORS.slateGray};
+  border: 1px solid ${p => p.theme.color.slateGray};
   width: fit-content;
   padding: 1px 5px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-size: 11px;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
   margin-top: -20px;
   margin-right: -23px;
 `
@@ -84,17 +84,17 @@ const SchemaText = styled.span`
 `
 
 const Box = styled.div`
-  border: 1px solid ${COLORS.slateGray};
+  border: 1px solid ${p => p.theme.color.slateGray};
   width: fit-content;
   padding: 10px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
 `
 
 const GlobalBox = styled.div`
-  border: 1px solid ${COLORS.charcoal};
+  border: 1px solid ${p => p.theme.color.charcoal};
   width: fit-content;
   padding: 11px 10px 10px 10px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
 `
 
 const Schema = styled.span`
@@ -103,5 +103,3 @@ const Schema = styled.span`
   margin-bottom: 30px;
   display: flex;
 `
-
-export default RiskFactorExplanationSchema

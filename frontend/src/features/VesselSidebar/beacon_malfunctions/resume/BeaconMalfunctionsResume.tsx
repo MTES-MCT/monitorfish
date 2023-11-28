@@ -1,60 +1,64 @@
-import { getDateTime } from '../../../../utils'
 import styled from 'styled-components'
-import { COLORS } from '../../../../constants/constants'
-import { NoValue, Header, Zone } from '../../common_styles/common.style'
+
 import { VESSEL_STATUS } from '../../../../domain/entities/beaconMalfunction/constants'
+import { getDateTime } from '../../../../utils'
+import { NoValue, Header, Zone } from '../../common_styles/common.style'
 
-const BeaconMalfunctionsResume = props => {
-  const {
-    /** @type {VesselBeaconMalfunctionsResume} */
-    vesselBeaconMalfunctionsResume
-  } = props
+import type { VesselBeaconMalfunctionsResume } from '../../../../domain/entities/beaconMalfunction/types'
 
-  return vesselBeaconMalfunctionsResume
-    ? <Zone>
-      <Header>
-        Résumé des avaries VMS (sur 1 an)
-      </Header>
+type VesselBeaconMalfunctionsResumeProps = {
+  vesselBeaconMalfunctionsResume: VesselBeaconMalfunctionsResume | undefined
+}
+export function BeaconMalfunctionsResume({ vesselBeaconMalfunctionsResume }: VesselBeaconMalfunctionsResumeProps) {
+  return vesselBeaconMalfunctionsResume ? (
+    <Zone>
+      <Header>Résumé des avaries VMS (sur 1 an)</Header>
       <Table>
         <Fields>
           <TableBody>
             <Field>
               <Key>Nombre d&apos;avaries</Key>
-              <Value data-cy={'vessel-beacon-malfunctions-resume-number'}>
+              <Value data-cy="vessel-beacon-malfunctions-resume-number">
                 <AtSea>en mer</AtSea> {vesselBeaconMalfunctionsResume?.numberOfBeaconsAtSea}
                 <AtPort>à quai</AtPort> {vesselBeaconMalfunctionsResume?.numberOfBeaconsAtPort}
               </Value>
             </Field>
             <Field>
               <Key>Dernière avarie</Key>
-              <Value data-cy={'vessel-beacon-malfunctions-resume-last'}>
-                {
-                  vesselBeaconMalfunctionsResume?.lastBeaconMalfunctionDateTime
-                    ? <>Le {getDateTime(vesselBeaconMalfunctionsResume?.lastBeaconMalfunctionDateTime, true)}
-                      {' '}
-                    ({VESSEL_STATUS.find(status => status.value === vesselBeaconMalfunctionsResume?.lastBeaconMalfunctionVesselStatus)?.label})</>
-                    : <NoValue>-</NoValue>
-                }
+              <Value data-cy="vessel-beacon-malfunctions-resume-last">
+                {vesselBeaconMalfunctionsResume?.lastBeaconMalfunctionDateTime ? (
+                  <>
+                    Le {getDateTime(vesselBeaconMalfunctionsResume?.lastBeaconMalfunctionDateTime, true)} (
+                    {
+                      VESSEL_STATUS.find(
+                        status => status.value === vesselBeaconMalfunctionsResume?.lastBeaconMalfunctionVesselStatus
+                      )?.label
+                    }
+                    )
+                  </>
+                ) : (
+                  <NoValue>-</NoValue>
+                )}
               </Value>
             </Field>
           </TableBody>
         </Fields>
       </Table>
     </Zone>
-    : null
+  ) : null
 }
 
 const AtSea = styled.span`
   font-size: 13px;
   margin-right: 5px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
 `
 
 const AtPort = styled.span`
   margin-left: 15px;
   margin-right: 5px;
   font-size: 13px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
 `
 
 const TableBody = styled.tbody``
@@ -64,16 +68,14 @@ const Table = styled.div`
   text-align: left;
   display: flex;
   flex-wrap: wrap;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
 `
 
 const Fields = styled.table`
-  padding: 10px 5px 0 15px;
-  width: inherit;
   display: table;
-  margin: 0;
+  width: inherit;
+  margin: 10px 5px 0 15px;
   min-width: 40%;
-  line-height: 0.2em;
 `
 
 const Field = styled.tr`
@@ -84,7 +86,7 @@ const Field = styled.tr`
 `
 
 const Key = styled.th`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   flex: initial;
   display: inline-block;
   margin: 0;
@@ -100,7 +102,7 @@ const Key = styled.th`
 
 const Value = styled.td`
   font-size: 13px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   margin: 0;
   text-align: left;
   padding: 1px 5px 5px 5px;
@@ -109,5 +111,3 @@ const Value = styled.td`
   line-height: normal;
   font-weight: 500;
 `
-
-export default BeaconMalfunctionsResume

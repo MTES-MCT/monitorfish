@@ -1,25 +1,31 @@
 import styled from 'styled-components'
-import { COLORS } from '../../../../constants/constants'
-import { Header, Zone } from '../../common_styles/common.style'
-import ArrowSVG from '../../../icons/Picto_fleche-pleine-droite.svg?react'
-import { setOpenedBeaconMalfunction } from '../../../../domain/shared_slices/BeaconMalfunction'
-import CurrentBeaconMalfunctionBody from './CurrentBeaconMalfunctionBody'
-import { useDispatch } from 'react-redux'
 
-const CurrentBeaconMalfunction = props => {
-  const {
-    /** @type {BeaconMalfunctionResumeAndDetails} */
-    currentBeaconMalfunctionWithDetails,
-    setIsCurrentBeaconMalfunctionDetails
-  } = props
-  const dispatch = useDispatch()
+import { CurrentBeaconMalfunctionBody } from './CurrentBeaconMalfunctionBody'
+import { COLORS } from '../../../../constants/constants'
+import { setOpenedBeaconMalfunction } from '../../../../domain/shared_slices/BeaconMalfunction'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import ArrowSVG from '../../../icons/Picto_fleche-pleine-droite.svg?react'
+import { Header, Zone } from '../../common_styles/common.style'
+
+import type { BeaconMalfunctionResumeAndDetails } from '../../../../domain/entities/beaconMalfunction/types'
+import type { Promisable } from 'type-fest'
+
+type CurrentBeaconMalfunctionProps = {
+  currentBeaconMalfunctionWithDetails: BeaconMalfunctionResumeAndDetails | null | undefined
+  setIsCurrentBeaconMalfunctionDetails: (isCurrentBeaconMalfunctionDetails: boolean) => Promisable<void>
+}
+export function CurrentBeaconMalfunction({
+  currentBeaconMalfunctionWithDetails,
+  setIsCurrentBeaconMalfunctionDetails
+}: CurrentBeaconMalfunctionProps) {
+  const dispatch = useMainAppDispatch()
 
   return currentBeaconMalfunctionWithDetails ? (
     <Zone>
       <Header>
         Avarie en cours
         <ShowBeaconMalfunction
-          data-cy={'beacon-malfunction-current-see-details'}
+          data-cy="beacon-malfunction-current-see-details"
           onClick={() => {
             setIsCurrentBeaconMalfunctionDetails(true)
             dispatch(
@@ -55,5 +61,3 @@ const ShowBeaconMalfunction = styled.a`
   width: 150px;
   margin-top: 4px;
 `
-
-export default CurrentBeaconMalfunction

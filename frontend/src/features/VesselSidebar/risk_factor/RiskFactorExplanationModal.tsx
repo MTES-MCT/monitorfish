@@ -1,24 +1,29 @@
-import React from 'react'
-import styled from 'styled-components'
 import { Modal } from 'rsuite'
-import { COLORS } from '../../../constants/constants'
-import RiskFactorImpactSVG from '../../icons/Note_impact_poisson.svg?react'
-import RiskFactorControlSVG from '../../icons/Note_de_controle_gyrophare.svg?react'
-import RiskFactorInfractionsSVG from '../../icons/Note_infraction_stop.svg?react'
-import RiskFactorExplanationSchema from './RiskFactorExplanationSchema'
+import styled from 'styled-components'
+
 import { RiskFactorBox } from './RiskFactorBox'
+import { RiskFactorExplanationSchema } from './RiskFactorExplanationSchema'
 import {
   getDetectabilityRiskFactorText,
   getImpactRiskFactorText,
   getProbabilityRiskFactorText,
   getRiskFactorColor
 } from '../../../domain/entities/vessel/riskFactor'
-import { basePrimaryButton, SecondaryButton } from '../../commonStyles/Buttons.style'
 import StyledModalHeader from '../../commonComponents/StyledModalHeader'
+import { basePrimaryButton, SecondaryButton } from '../../commonStyles/Buttons.style'
+import RiskFactorControlSVG from '../../icons/Note_de_controle_gyrophare.svg?react'
+import RiskFactorImpactSVG from '../../icons/Note_impact_poisson.svg?react'
+import RiskFactorInfractionsSVG from '../../icons/Note_infraction_stop.svg?react'
 
-const RiskFactorExplanationModal = ({ isOpen, setIsOpen }) => {
+import type { Promisable } from 'type-fest'
+
+type RiskFactorExplanationModalProps = {
+  isOpen: boolean
+  setIsOpen: (isOpen: boolean) => Promisable<void>
+}
+export function RiskFactorExplanationModal({ isOpen, setIsOpen }: RiskFactorExplanationModalProps) {
   return (
-    <Modal size={'lg'} backdrop open={isOpen} style={{ marginTop: 50 }} onClose={() => setIsOpen(false)}>
+    <Modal backdrop onClose={() => setIsOpen(false)} open={isOpen} size="lg" style={{ marginTop: 50 }}>
       <StyledModalHeader>
         <Modal.Title>
           <ModalTitle>Explication de la note de risque des navires</ModalTitle>
@@ -149,8 +154,8 @@ const RiskFactorExplanationModal = ({ isOpen, setIsOpen }) => {
       </ModalBodyStyled>
       <Modal.Footer>
         <DocumentationLink
+          href="https://monitorfish.readthedocs.io/fr/latest/risk-factor.html#risk-factor"
           target="_blank"
-          href={'https://monitorfish.readthedocs.io/fr/latest/risk-factor.html#risk-factor'}
         >
           Consulter la documentation de MonitorFish
         </DocumentationLink>
@@ -162,7 +167,7 @@ const RiskFactorExplanationModal = ({ isOpen, setIsOpen }) => {
 
 const DocumentationLink = styled.a`
   ${basePrimaryButton}
-  color: ${COLORS.gainsboro} !important;
+  color: ${p => p.theme.color.gainsboro} !important;
   font-size: 13px;
   padding: 6px 12px;
   margin: 20px 0 20px 10px;
@@ -172,12 +177,15 @@ const CloseButton = styled(SecondaryButton)`
   margin-right: 20px;
 `
 
-const RiskFactorLegend = styled.div`
+const RiskFactorLegend = styled.div<{
+  isFirst?: boolean
+  isLast?: boolean
+}>`
   font-size: 13px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   margin: 7px 0;
-  margin-top: ${props => (props.isFirst ? 20 : 7)}px;
-  margin-bottom: ${props => (props.isLast ? 25 : 7)}px;
+  margin-top: ${p => (p.isFirst ? 20 : 7)}px;
+  margin-bottom: ${p => (p.isLast ? 25 : 7)}px;
 `
 
 const RiskFactorImpact = styled(RiskFactorImpactSVG)`
@@ -207,7 +215,7 @@ const ModalBodyStyled = styled(Modal.Body)`
 `
 
 const Text = styled.p`
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   margin: 10px 0;
   line-height: 22px;
 `
@@ -215,14 +223,14 @@ const Text = styled.p`
 const Line = styled.div`
   margin-top: 5px;
   width: 100%;
-  border-bottom: 2px solid ${COLORS.lightGray};
+  border-bottom: 2px solid ${p => p.theme.color.lightGray};
 `
 
 const SmallLine = styled.div`
   margin-top: 7px;
   margin-top: 5px;
   width: 300px;
-  border-bottom: 2px solid ${COLORS.lightGray};
+  border-bottom: 2px solid ${p => p.theme.color.lightGray};
 `
 
 const ModalTitle = styled.div`
@@ -232,16 +240,14 @@ const ModalTitle = styled.div`
 
 const Title = styled.div`
   font-size: 16px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-weight: 700;
   text-transform: uppercase;
 `
 
 const SubTitle = styled.div`
   font-size: 13px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-weight: 700;
   margin-top: 20px;
 `
-
-export default RiskFactorExplanationModal

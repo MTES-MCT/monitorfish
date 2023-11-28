@@ -6,17 +6,17 @@ import type { CSSProperties } from 'react'
 
 export type RiskFactorBoxProps = {
   children: any
-  color?: string
+  color?: string | undefined
   // TODO Rename this prop.
   hide?: boolean
-  isBig: boolean
-  marginRight: number
+  isBig?: boolean
+  marginRight?: number
 }
 export function RiskFactorBox({
   children,
   color = 'transparent',
   hide = false,
-  isBig,
+  isBig = false,
   marginRight
 }: RiskFactorBoxProps) {
   const riskFactorBoxStyle: CSSProperties = {

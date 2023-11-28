@@ -69,16 +69,17 @@ export function Reportings() {
 const CurrentOrHistoryButton = styled.div<{
   isActive: boolean
 }>`
-  padding: 7px 0 7px 0;
-  flex-grow: 1;
-  color: ${props => (props.isActive ? COLORS.gainsboro : COLORS.gunMetal)};
-  background: ${props => (props.isActive ? COLORS.charcoal : 'unset')};
+  background: ${p => (p.isActive ? p.theme.color.charcoal : 'unset')};
+  color: ${p => (p.isActive ? p.theme.color.gainsboro : p.theme.color.gunMetal)};
   cursor: pointer;
+  flex-grow: 1;
+  padding: 6px 0 8px 0;
+  text-align: center;
 `
 
 const Menu = styled.div`
   margin: 5px;
-  border: 1px solid ${COLORS.charcoal};
+  border: 1px solid ${p => p.theme.color.charcoal};
   display: flex;
   width: 480px;
 `

@@ -3,7 +3,7 @@ import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
 import { FishingActivitiesSummary } from './FishingActivitiesSummary'
-import LogbookMessages from './LogbookMessages'
+import { LogbookMessages } from './LogbookMessages'
 import { FIVE_MINUTES } from '../../../../api/APIWorker'
 import { COLORS } from '../../../../constants/constants'
 import { FishingActivitiesTab, vesselsAreEquals } from '../../../../domain/entities/vessel/vessel'
@@ -22,7 +22,7 @@ export function VesselLogbook() {
   const getVesselLogbook = useGetLogbookUseCase()
 
   const showedLogbookIsOutdated = vesselIdentity && !vesselsAreEquals(vesselIdentity, selectedVesselIdentity)
-  const [messageTypeFilter, setMessageTypeFilter] = useState(null)
+  const [messageTypeFilter, setMessageTypeFilter] = useState<string | undefined>(undefined)
 
   // TODO This need to be moved to a RTK-Query's `pollingInterval`
   useEffect(() => {
@@ -36,7 +36,7 @@ export function VesselLogbook() {
   }, [dispatch, getVesselLogbook, selectedVesselIdentity])
 
   const showMessages = useCallback(
-    messageType => {
+    (messageType: string | undefined) => {
       setMessageTypeFilter(messageType)
       dispatch(logbookActions.setTab(FishingActivitiesTab.MESSAGES))
     },

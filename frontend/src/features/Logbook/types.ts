@@ -19,6 +19,9 @@ export type SpeciesInsight = {
   totalWeight?: number | undefined
   weight: number
 }
+export type SpeciesInsightWithHeight = SpeciesInsight & {
+  height: number
+}
 
 // The key is the species FAO code
 export type SpeciesToSpeciesInsight = Record<string, SpeciesInsight>

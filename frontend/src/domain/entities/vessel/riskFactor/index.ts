@@ -1,5 +1,6 @@
 import type { DeclaredLogbookSpecies } from '../types'
 
+// TODO Replace with theme colors.
 export const getRiskFactorColor = (riskFactor: number) => {
   if (riskFactor >= 1 && riskFactor < 1.75) {
     return '#8E9A9F'
@@ -17,7 +18,7 @@ export const getRiskFactorColor = (riskFactor: number) => {
   return undefined
 }
 
-export const getImpactRiskFactorText = (riskFactor: number, hasSegment: boolean) => {
+export const getImpactRiskFactorText = (riskFactor: number, hasSegment: boolean = false) => {
   if (riskFactor >= 1 && riskFactor < 1.75) {
     if (!hasSegment) {
       return 'Pas de segment'
@@ -38,7 +39,7 @@ export const getImpactRiskFactorText = (riskFactor: number, hasSegment: boolean)
   return undefined
 }
 
-export const getProbabilityRiskFactorText = (riskFactor: number, hasBeenControlledLastFiveYears: boolean) => {
+export const getProbabilityRiskFactorText = (riskFactor: number, hasBeenControlledLastFiveYears: boolean = false) => {
   if (riskFactor >= 1 && riskFactor < 1.75) {
     return 'Navire en règle'
   }
@@ -59,7 +60,7 @@ export const getProbabilityRiskFactorText = (riskFactor: number, hasBeenControll
   return undefined
 }
 
-export const getDetectabilityRiskFactorText = (riskFactor: number, isTextReduced: boolean) => {
+export const getDetectabilityRiskFactorText = (riskFactor: number, isTextReduced: boolean = false) => {
   if (riskFactor >= 1 && riskFactor < 1.75) {
     return `Priorité ${isTextReduced ? '' : 'de contrôle '}faible`
   }

@@ -9,8 +9,8 @@ import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { getDateTime } from '../../../../utils'
 import ArrowSVG from '../../../icons/Picto_fleche-pleine-droite.svg?react'
 import { BeaconMalfunctionDetailsFollowUp } from '../../../SideWindow/BeaconMalfunctionBoard/BeaconMalfunctionDetailsFollowUp'
-import BeaconMalfunctionDetailBody from '../resume/BeaconMalfunctionBody'
-import CurrentBeaconMalfunctionBody from '../resume/CurrentBeaconMalfunctionBody'
+import { BeaconMalfunctionBody } from '../resume/BeaconMalfunctionBody'
+import { CurrentBeaconMalfunctionBody } from '../resume/CurrentBeaconMalfunctionBody'
 
 type BeaconMalfunctionDetailsProps = {
   isCurrentBeaconMalfunctionDetails: boolean
@@ -38,7 +38,7 @@ export function BeaconMalfunctionDetails({ isCurrentBeaconMalfunctionDetails }: 
             Résumé de l&apos;avarie du{' '}
             {getDateTime(openedBeaconMalfunction?.beaconMalfunction?.malfunctionStartDateTime, true)}
           </Title>
-          <BeaconMalfunctionDetailBody beaconMalfunctionWithDetails={openedBeaconMalfunction} />
+          <BeaconMalfunctionBody beaconMalfunctionWithDetails={openedBeaconMalfunction} />
         </Zone>
       )}
       <Zone data-cy="beacon-malfunction-details-follow-up">

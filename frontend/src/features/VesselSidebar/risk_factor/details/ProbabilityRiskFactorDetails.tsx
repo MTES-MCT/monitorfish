@@ -99,12 +99,11 @@ const Zone = styled.div`
 `
 
 const Fields = styled.table`
-  padding: 0 5px 5px 20px;
-  width: inherit;
   display: table;
   margin: 0;
   min-width: 40%;
-  line-height: 0.2em;
+  padding: 0 5px 5px 20px;
+  width: inherit;
 `
 
 const Field = styled.tr`
@@ -120,7 +119,7 @@ const Key = styled.th`
   display: inline-block;
   margin: 0;
   border: none;
-  padding: 5px 5px 5px 0;
+  padding: 5px 5px 5px 20px;
   background: none;
   width: 120px;
   line-height: 0.5em;

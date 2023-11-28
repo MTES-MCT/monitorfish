@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import LogbookMessageResumeHeader from './LogbookMessageResumeHeader'
-import SpeciesAndWeightChart from './SpeciesAndWeightChart'
+import { LogbookMessageResumeHeader } from './LogbookMessageResumeHeader'
+import { SpeciesAndWeightChart } from './SpeciesAndWeightChart'
 import { COLORS } from '../../../../constants/constants'
 import { LogbookMessageType as LogbookMessageTypeEnum } from '../../constants'
 

@@ -1,4 +1,4 @@
-// TODO This component is still use by 2 others, we need to replace it and delete this file.
+// TODO This component is still use by 1 other, we need to replace it and delete this file.
 
 import { getLocalizedDayjs, getUtcizedDayjs } from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo } from 'react'
@@ -6,6 +6,8 @@ import { DateRangePicker } from 'rsuite'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
+
+import type { DateRange as RsuiteDateRange } from 'rsuite/esm/DateRangePicker'
 
 /** @type {import('rsuite').DateRangePickerLocale} */
 export const DATE_RANGE_PICKER_LOCALE = {
@@ -19,43 +21,36 @@ export const DATE_RANGE_PICKER_LOCALE = {
   today: "Aujourd'hui",
   tuesday: 'Ma',
   wednesday: 'Me',
-  yesterday: 'Hier',
+  yesterday: 'Hier'
 }
 
-/**
- * @typedef {object} DateRangeProps
- * @property {HTMLElement | (() => HTMLElement)=} containerRef
- * @property {[Date, Date]=} defaultValue
- * @property {boolean=} isDisabledAfterToday
- * @property {boolean=} noMargin
- * @property {(dateRange?: [Date, Date]) => void} onChange
- * @property {string} placeholder
- * @property {number=} width
- */
-
-/**
- * @param {DateRangeProps} props
- */
-function DateRange({
+type DateRangeProps = {
+  containerRef: HTMLElement | (() => HTMLElement)
+  defaultValue?: [Date, Date]
+  isDisabledAfterToday?: boolean
+  noMargin?: boolean
+  onChange: (dateRange?: [Date, Date]) => void
+  placeholder: string
+  width?: number
+}
+export function DateRange({
   containerRef,
   defaultValue,
   isDisabledAfterToday = false,
   noMargin = false,
   onChange,
   placeholder,
-  width,
-}) {
+  width
+}: DateRangeProps) {
   /** @type {[Date, Date] | undefined} */
   const normalizedDefaultValue = useMemo(
     () =>
-      defaultValue
-        ? [getLocalizedDayjs(defaultValue[0]).toDate(), getLocalizedDayjs(defaultValue[1]).toDate()]
-        : undefined,
-    [defaultValue],
+      defaultValue ? [getLocalizedDayjs(defaultValue[0]).toDate(), getLocalizedDayjs(defaultValue[1]).toDate()] : null,
+    [defaultValue]
   )
   const disabledDate = useMemo(
-    () => (isDisabledAfterToday ? DateRangePicker.afterToday() : DateRangePicker.beforeToday()),
-    [isDisabledAfterToday],
+    () => (isDisabledAfterToday ? (DateRangePicker.afterToday as any)() : (DateRangePicker.beforeToday as any)()),
+    [isDisabledAfterToday]
   )
 
   /**
@@ -69,7 +64,7 @@ function DateRange({
 
       onChange([utcizedStartDate, utcizedEndDate])
     },
-    [onChange],
+    [onChange]
   )
 
   const handleClear = useCallback(() => {
@@ -77,11 +72,16 @@ function DateRange({
   }, [onChange])
 
   return (
-    <Wrapper key={normalizedDefaultValue} isEmpty={!normalizedDefaultValue} noMargin={noMargin} width={width}>
+    <Wrapper
+      key={JSON.stringify(normalizedDefaultValue)}
+      $isEmpty={!normalizedDefaultValue}
+      $noMargin={noMargin}
+      $width={width}
+    >
       <DateRangePicker
         cleanable
         container={containerRef}
-        defaultValue={normalizedDefaultValue}
+        defaultValue={normalizedDefaultValue as RsuiteDateRange | null}
         disabledDate={disabledDate}
         format="dd-MM-yyyy"
         locale={DATE_RANGE_PICKER_LOCALE}
@@ -97,12 +97,16 @@ function DateRange({
   )
 }
 
-const Wrapper = styled.div`
-  margin: ${p => (p.noMargin ? 0 : '12px 0 20px 20px')};
-  width: ${p => p.width || 197}px;
+const Wrapper = styled.div<{
+  $isEmpty: boolean
+  $noMargin: boolean
+  $width: number | undefined
+}>`
+  margin: ${p => (p.$noMargin ? 0 : '12px 0 20px 20px')};
+  width: ${p => p.$width || 197}px;
 
   .rs-picker-daterange {
-    background: ${p => (p.isEmpty ? COLORS.gainsboro : 'transparent')};
+    background: ${p => (p.$isEmpty ? COLORS.gainsboro : 'transparent')};
   }
 
   input {
@@ -112,5 +116,3 @@ const Wrapper = styled.div`
     font-size: 13px;
   }
 `
-
-export default DateRange

@@ -190,3 +190,7 @@ backend/.gradle
 
 # Ignore Gradle build output directory
 backend/build
+
+# Ignore downloaded external repositories
+data_warehouse/tests/test_data/external/*
+!data_warehouse/tests/test_data/external/README.md

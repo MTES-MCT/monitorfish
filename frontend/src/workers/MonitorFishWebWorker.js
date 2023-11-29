@@ -4,7 +4,7 @@ import {
   getRegulatoryLawTypesFromZones,
   LAWTYPES_TO_TERRITORY,
   mapToRegulatoryZone
-} from '../domain/entities/regulation'
+} from '../features/Regulation/utils'
 import { getDateMonthsBefore } from '../utils'
 import { VesselLocation, vesselSize } from '../domain/entities/vessel/vessel'
 

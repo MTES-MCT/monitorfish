@@ -9,7 +9,7 @@ import {
   DEFAULT_AUTHORIZED_REGULATED_SPECIES,
   DEFAULT_UNAUTHORIZED_REGULATED_SPECIES,
   REGULATORY_REFERENCE_KEYS
-} from '../../../../domain/entities/regulation'
+} from '../../../Regulation/utils'
 import { SPECIES_REGULATION_KEYS } from '../../../../domain/entities/backoffice'
 import styled from 'styled-components'
 

@@ -12,7 +12,7 @@ import {
 } from '../../../commonStyles/Backoffice.style'
 import Tag from '../Tag'
 import { CustomInput, Label } from '../../../commonStyles/Input.style'
-import { DEFAULT_MENU_CLASSNAME } from '../../../../domain/entities/regulation'
+import { DEFAULT_MENU_CLASSNAME } from '../../../Regulation/utils'
 import { GreenCircle, RedCircle } from '../../../commonStyles/Circle.style'
 
 const REGULATORY_SPECIES_KEYS = {

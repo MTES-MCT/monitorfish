@@ -1,5 +1,5 @@
 import { setCategoriesToGears, setGears, setGroupsToCategories, setGearsByCode } from '../../shared_slices/Gear'
-import { setIsReadyToShowRegulatoryZones } from '../../shared_slices/Regulatory'
+import { setIsReadyToShowRegulatoryZones } from '../../../features/Regulation/slice'
 import { setError } from '../../shared_slices/Global'
 import { batch } from 'react-redux'
 import { getAllGearsFromAPI } from '../../../api/gearCode'

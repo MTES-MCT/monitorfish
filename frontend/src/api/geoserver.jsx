@@ -2,7 +2,7 @@ import { LayerProperties } from '../domain/entities/layers/constants'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map/constants'
 import WFS from 'ol/format/WFS'
 import GML from 'ol/format/GML'
-import { REGULATION_ACTION_TYPE } from '../domain/entities/regulation'
+import { REGULATION_ACTION_TYPE } from '../features/Regulation/utils'
 import { HttpStatusCode } from './constants'
 import { ApiError } from '../libs/ApiError'
 

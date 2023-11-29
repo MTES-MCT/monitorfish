@@ -4,7 +4,7 @@ import { TimeRow, DateRanges, ContentWrapper } from '../../../commonStyles/Fishi
 import { SquareButton } from '../../../commonStyles/Buttons.style'
 import { SQUARE_BUTTON_TYPE } from '../../../../constants/constants'
 import TimeInterval from './TimeInterval'
-import { FISHING_PERIOD_KEYS } from '../../../../domain/entities/regulation'
+import { FISHING_PERIOD_KEYS } from '../../../Regulation/utils'
 import useUpdateArrayInFishingPeriod from '../../../../hooks/fishingPeriod/useUpdateArrayInFishingPeriod'
 import usePopArrayInFishingPeriod from '../../../../hooks/fishingPeriod/usePopArrayInFishingPeriod'
 import usePushArrayInFishingPeriod from '../../../../hooks/fishingPeriod/usePushArrayInFishingPeriod'

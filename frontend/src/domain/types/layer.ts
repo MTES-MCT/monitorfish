@@ -1,4 +1,4 @@
-import type { RegulatoryZone } from './regulation'
+import type { RegulatoryZone } from '../../features/Regulation/types'
 import type { Point } from 'ol/geom'
 import type VectorLayer from 'ol/layer/Vector'
 import type WebGLPointsLayer from 'ol/layer/WebGLPoints'

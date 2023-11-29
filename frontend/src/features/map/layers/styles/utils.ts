@@ -4,7 +4,7 @@ import { Style, Circle } from 'ol/style'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 
-import type { DateInterval } from '../../../../domain/types/regulation'
+import type { DateInterval } from '../../../Regulation/types'
 import type { Dayjs } from 'dayjs'
 
 /**

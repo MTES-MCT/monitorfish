@@ -1,11 +1,11 @@
 import GeoJSON from 'ol/format/GeoJSON'
 
+import { showRegulatoryZoneMetadata } from '../../../features/Regulation/useCases/showRegulatoryZoneMetadata'
 import { missionActions } from '../../actions'
 import { isControl } from '../../entities/controls'
 import { LayerProperties } from '../../entities/layers/constants'
 import { MonitorFishLayer } from '../../entities/layers/types'
 import { OPENLAYERS_PROJECTION } from '../../entities/map/constants'
-import { showRegulatoryZoneMetadata } from '../layer/regulation/showRegulatoryZoneMetadata'
 import { showVessel } from '../vessel/showVessel'
 import { showVesselTrack } from '../vessel/showVesselTrack'
 

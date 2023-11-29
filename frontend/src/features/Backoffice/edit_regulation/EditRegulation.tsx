@@ -20,35 +20,30 @@ import ConfirmRegulationModal from './ConfirmRegulationModal'
 import SpeciesRegulation from './species_regulation/SpeciesRegulation'
 import { COLORS } from '../../../constants/constants'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
-import {
-  DEFAULT_REGULATION,
-  FRANCE,
-  LAWTYPES_TO_TERRITORY,
-  REGULATORY_REFERENCE_KEYS
-} from '../../../domain/entities/regulation'
 import { setError } from '../../../domain/shared_slices/Global'
+import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
+import { useBackofficeAppDispatch } from '../../../hooks/useBackofficeAppDispatch'
+import { useBackofficeAppSelector } from '../../../hooks/useBackofficeAppSelector'
+import { formatDataForSelectPicker } from '../../../utils'
+import { BaseLayer } from '../../BaseMap/layers/BaseLayer'
+import { Footer, FooterButton, OtherRemark, Section, Title } from '../../commonStyles/Backoffice.style'
+import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
+import { CustomInput, Label } from '../../commonStyles/Input.style'
+import ChevronIconSVG from '../../icons/Chevron_simple_gris.svg?react'
+import { BaseMap } from '../../map/BaseMap'
+import { RegulatoryPreviewLayer } from '../../Regulation/layers/RegulatoryPreviewLayer'
 import {
   closeRegulatoryZoneMetadataPanel,
   resetRegulatoryGeometriesToPreview,
   setRegulatoryGeometriesToPreview,
   setRegulatoryTopics,
   setRegulatoryZoneMetadata
-} from '../../../domain/shared_slices/Regulatory'
-import { createOrUpdateRegulation } from '../../../domain/use_cases/layer/regulation/createOrUpdateRegulation'
-import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/layer/regulation/getAllRegulatoryLayersByRegTerritory'
-import getGeometryWithoutRegulationReference from '../../../domain/use_cases/layer/regulation/getGeometryWithoutRegulationReference'
-import showRegulatoryZone from '../../../domain/use_cases/layer/regulation/showRegulatoryZone'
-import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
-import { useBackofficeAppDispatch } from '../../../hooks/useBackofficeAppDispatch'
-import { useBackofficeAppSelector } from '../../../hooks/useBackofficeAppSelector'
-import { formatDataForSelectPicker } from '../../../utils'
-import { Footer, FooterButton, OtherRemark, Section, Title } from '../../commonStyles/Backoffice.style'
-import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
-import { CustomInput, Label } from '../../commonStyles/Input.style'
-import ChevronIconSVG from '../../icons/Chevron_simple_gris.svg?react'
-import { BaseMap } from '../../map/BaseMap'
-import { BaseLayer } from '../../map/layers/BaseLayer'
-import { RegulatoryPreviewLayer } from '../../map/layers/RegulatoryPreviewLayer'
+} from '../../Regulation/slice'
+import { createOrUpdateRegulation } from '../../Regulation/useCases/createOrUpdateRegulation'
+import getAllRegulatoryLayersByRegTerritory from '../../Regulation/useCases/getAllRegulatoryLayersByRegTerritory'
+import getGeometryWithoutRegulationReference from '../../Regulation/useCases/getGeometryWithoutRegulationReference'
+import showRegulatoryZone from '../../Regulation/useCases/showRegulatoryZone'
+import { DEFAULT_REGULATION, FRANCE, LAWTYPES_TO_TERRITORY, REGULATORY_REFERENCE_KEYS } from '../../Regulation/utils'
 import { STATUS } from '../constants'
 import {
   resetState,

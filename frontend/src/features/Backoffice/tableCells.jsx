@@ -79,7 +79,7 @@ export const ImpactCell = ({ dataKey, id, onChange, ...props }) => {
 
 const ImpactSelectPicker = styled(SelectPicker)`
   .rs-picker-toggle {
-    width: 20px;
+    width: 60px;
   }
 
   .rs-picker-toggle-wrapper {

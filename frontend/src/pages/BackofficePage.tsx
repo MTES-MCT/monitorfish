@@ -9,7 +9,7 @@ import { LandingPage } from './LandingPage'
 import { BackofficeMode } from '../api/BackofficeMode'
 import { NamespaceContext } from '../context/NamespaceContext'
 import { LayerSliceNamespace } from '../domain/entities/layers/types'
-import { Menu } from '../features/Backoffice/menu/Menu'
+import { BackOfficeMenu } from '../features/BackOffice/components/BackofficeMenu'
 import { ErrorToastNotification } from '../features/commonComponents/ErrorToastNotification'
 import { useGetUserAuthorization } from '../hooks/authorization/useGetUserAuthorization'
 import { backofficeStore, backofficeStorePersistor } from '../store'
@@ -31,7 +31,7 @@ export function BackofficePage() {
           <BackofficeMode isBackoffice />
 
           <BackofficeWrapper>
-            <Menu />
+            <BackOfficeMenu />
 
             <Outlet />
           </BackofficeWrapper>
@@ -44,10 +44,9 @@ export function BackofficePage() {
 }
 
 const BackofficeWrapper = styled.div`
-  font-size: 13px;
-  text-align: center;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
   display: flex;
+  font-size: 13px;
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
 `

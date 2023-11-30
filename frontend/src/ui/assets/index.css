@@ -19,6 +19,12 @@ html,
   -moz-osx-font-smoothing: grayscale;
 }
 
+html,
+body,
+#root {
+  height: 100%;
+}
+
 /* TODO Attempt to progressively migrate to `box-sizing: border-box` everywhere. */
 * {
   -webkit-box-sizing: revert;

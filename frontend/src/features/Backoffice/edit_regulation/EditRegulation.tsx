@@ -384,13 +384,14 @@ const ErrorMessage = styled.div`
 
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  overflow-y: auto;
   width: 100%;
 `
 
 const Body = styled.div`
-  height: calc(100vh - 75px);
-  overflow-y: scroll;
+  flex-grow: 1;
+  padding-bottom: 50px;
 `
 
 const Header = styled.div`

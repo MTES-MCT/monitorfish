@@ -1,10 +1,13 @@
 import { IconButton, type ControlUnit, Accent, Icon } from '@mtes-mct/monitor-ui'
 import { property, uniqBy } from 'lodash/fp'
-import { createEmpty, extend } from 'ol/extent'
 import { fromLonLat } from 'ol/proj'
 import styled from 'styled-components'
 
-import { displayControlUnitResourcesFromControlUnit, displayBaseNamesFromControlUnit, addBufferToExtent } from './utils'
+import {
+  displayControlUnitResourcesFromControlUnit,
+  displayBaseNamesFromControlUnit,
+  getBufferedExtentFromStations
+} from './utils'
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
 import { mapActions } from '../../../../domain/shared_slices/Map'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
@@ -40,20 +43,7 @@ export function Item({ controlUnit }: ItemProps) {
       // Add this as a `monitorfishMap` method (vanilla).
       monitorfishMap.getView().animate({ center: stationCoordinates })
     } else {
-      const highlightedStationsExtent = createEmpty()
-      highlightedStations.forEach(station => {
-        const stationCoordinate = fromLonLat([station.longitude, station.latitude])
-        const stationExtent = [
-          stationCoordinate[0],
-          stationCoordinate[1],
-          stationCoordinate[0],
-          stationCoordinate[1]
-        ] as number[]
-
-        extend(highlightedStationsExtent, stationExtent)
-      })
-
-      const bufferedHighlightedStationsExtent = addBufferToExtent(highlightedStationsExtent, 0.5)
+      const bufferedHighlightedStationsExtent = getBufferedExtentFromStations(highlightedStations, 0.5)
 
       // Move this indirect method to `monitorfishMap` (vanilla).
       dispatch(mapActions.fitToExtent(bufferedHighlightedStationsExtent))

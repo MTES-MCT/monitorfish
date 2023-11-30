@@ -1,27 +1,30 @@
-import { CustomSearch, type Filter, isDefined, pluralize, ControlUnit } from '@mtes-mct/monitor-ui'
+import { CustomSearch, type Filter, isDefined, pluralize, ControlUnit, type Station } from '@mtes-mct/monitor-ui'
 import { isEmpty, uniq } from 'lodash/fp'
+import { createEmpty, extend, type Extent } from 'ol/extent'
+import { fromLonLat } from 'ol/proj'
 
+import { addBufferToExtent } from '../../../../utils/addBufferToExtent'
 import { isNotArchived } from '../../../../utils/isNotArchived'
 
 import type { FiltersState } from './types'
-import type { Extent } from 'ol/extent'
 
-export function addBufferToExtent(extent: Extent, bufferRatio: number) {
-  const typedExtent = extent as [number, number, number, number]
+export function getBufferedExtentFromStations(highlightedStations: Station.StationData[], bufferRatio: number): Extent {
+  const stationsExtent = createEmpty()
+  highlightedStations.forEach(station => {
+    const stationCoordinates = fromLonLat([station.longitude, station.latitude])
+    const stationExtent = [
+      stationCoordinates[0],
+      stationCoordinates[1],
+      stationCoordinates[0],
+      stationCoordinates[1]
+    ] as Extent
 
-  const width = typedExtent[2] - typedExtent[0]
-  const height = typedExtent[3] - typedExtent[1]
-  const bufferWidth = width * bufferRatio
-  const bufferHeight = height * bufferRatio
+    extend(stationsExtent, stationExtent)
+  })
 
-  const bufferedExtent = [
-    typedExtent[0] - bufferWidth,
-    typedExtent[1] - bufferHeight,
-    typedExtent[2] + bufferWidth,
-    typedExtent[3] + bufferHeight
-  ]
+  const bufferedStationsExtent = addBufferToExtent(stationsExtent, bufferRatio)
 
-  return bufferedExtent
+  return bufferedStationsExtent
 }
 
 export function displayBaseNamesFromControlUnit(controlUnit: ControlUnit.ControlUnit): string {

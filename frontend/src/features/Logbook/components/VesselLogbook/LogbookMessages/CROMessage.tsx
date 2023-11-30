@@ -147,13 +147,10 @@ const Zone = styled.div`
 `
 
 const Fields = styled.table`
-  padding: 0px 5px 0 5px;
-  width: inherit;
   display: table;
-  margin: 0;
+  margin: 5px;
   min-width: 40%;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  width: inherit;
 `
 
 const Field = styled.tr`

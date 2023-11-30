@@ -80,7 +80,8 @@ class GetActivityReports(
                 missions.first { mission -> mission.id == control.missionId }
             } catch (e: NoSuchElementException) {
                 logger.error(
-                    "Mission id '${control.missionId}' linked to ${control.actionType} control id '${control.id}' could not be found. Is this mission deleted ?", e
+                    "Mission id '${control.missionId}' linked to ${control.actionType} control id '${control.id}' could not be found. Is this mission deleted ?",
+                    e,
                 )
 
                 return@map null

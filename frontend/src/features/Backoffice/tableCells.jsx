@@ -362,29 +362,28 @@ export const renderRowExpanded = rowData => {
   return (
     <div
       style={{
-        float: 'left',
         background: COLORS.white,
         padding: '0 20px 20px 40px'
       }}
     >
       <Fields>
         <TableBody>
-          <Field>
+          <tr>
             <Key>Engins</Key>
             <Value>{rowData.gears?.join(', ') || <NoValue>-</NoValue>}</Value>
-          </Field>
-          <Field>
+          </tr>
+          <tr>
             <Key>Zones FAO</Key>
             <Value>{rowData.faoAreas?.join(', ') || <NoValue>-</NoValue>}</Value>
-          </Field>
-          <Field>
+          </tr>
+          <tr>
             <Key>Espèces cibles</Key>
             <Value>{rowData.targetSpecies?.join(', ') || <NoValue>-</NoValue>}</Value>
-          </Field>
-          <Field>
+          </tr>
+          <tr>
             <Key>Prises accessoires</Key>
             <Value>{rowData.bycatchSpecies?.join(', ') || <NoValue>-</NoValue>}</Value>
-          </Field>
+          </tr>
         </TableBody>
       </Fields>
     </div>
@@ -415,53 +414,26 @@ const DeleteIcon = styled(DeleteIconSVG)`
 const TableBody = styled.tbody``
 
 const Fields = styled.table`
-  padding: 0;
-  width: inherit;
-  display: table;
-  margin: 0;
-  min-width: 40%;
-  line-height: 0.2em;
   text-align: left;
-`
-
-const Field = styled.tr`
-  margin: 5px 5px 5px 0;
-  border: none;
-  background: none;
-  line-height: 0.5em;
 `
 
 const Key = styled.th`
-  color: ${COLORS.slateGray};
-  flex: initial;
-  display: inline-block;
-  margin: 0;
-  border: none;
-  padding: 5px 5px 5px 0;
-  background: none;
-  width: max-content;
-  line-height: 0.5em;
-  height: 0.5em;
+  color: ${p => p.theme.color.slateGray};
   font-size: 13px;
   font-weight: normal;
+  line-height: 1.5;
+  width: 140px;
 `
 
 const Value = styled.td`
+  color: ${p => p.theme.color.gunMetal};
   font-size: 13px;
-  color: ${COLORS.gunMetal};
-  margin: 0;
-  text-align: left;
-  padding: 1px 5px 5px 5px;
-  background: none;
-  border: none;
-  line-height: normal;
   font-weight: 500;
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   font-weight: 300;
-  line-height: normal;
 `
 
 const Delete = styled.div`

@@ -5,6 +5,7 @@ import { FrontendError } from '../libs/FrontendError'
 
 import type { Coordinates } from '@mtes-mct/monitor-ui'
 
+// TODO Move this type to a shared location (either in Fish or in MUI).
 /** [Top, Right, Bottom, Left] */
 export type Margins = [number, number, number, number]
 

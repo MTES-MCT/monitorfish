@@ -30,7 +30,7 @@ export function RegulatoryZones({
   const dispatch = useMainAppDispatch()
   const { setLayersSideBarOpenedLayerType } = layer[namespace].actions
 
-  const { selectedRegulatoryLayers } = useMainAppSelector(state => state.regulatory)
+  const selectedRegulatoryLayers = useMainAppSelector(state => state.regulatory.selectedRegulatoryLayers)
   const advancedSearchIsOpen = useMainAppSelector(state => state.regulatoryLayerSearch.advancedSearchIsOpen)
 
   const { layersSidebarOpenedLayerType } = useMainAppSelector(state => state.layer)
@@ -100,27 +100,23 @@ export function RegulatoryZones({
       >
         Mes zones réglementaires <ChevronIcon $isOpen={showRegulatoryLayers} />
       </RegulatoryLayersTitle>
-      {selectedRegulatoryLayers && (
+      {selectedRegulatoryLayers && isOpen && (
         <RegulatoryLayersList $advancedSearchIsOpen={advancedSearchIsOpen} className="smooth-scroll">
-          {isOpen && (
-            <>
-              {Object.keys(selectedRegulatoryLayers).length > 0 ? (
-                Object.keys(selectedRegulatoryLayers).map((regulatoryTopic, index) => (
-                  <RegulatoryTopic
-                    key={regulatoryTopic}
-                    allowRemoveZone
-                    isEditable={false}
-                    isLastItem={Object.keys(selectedRegulatoryLayers).length === index + 1}
-                    onRemoveById={removeById}
-                    onRemoveByTopic={removeByTopic}
-                    regulatoryTopic={regulatoryTopic}
-                    regulatoryZones={selectedRegulatoryLayers[regulatoryTopic]}
-                  />
-                ))
-              ) : (
-                <NoLayerSelected>Aucune zone sélectionnée</NoLayerSelected>
-              )}
-            </>
+          {Object.keys(selectedRegulatoryLayers).length > 0 ? (
+            Object.keys(selectedRegulatoryLayers).map((regulatoryTopic, index) => (
+              <RegulatoryTopic
+                key={regulatoryTopic}
+                allowRemoveZone
+                isEditable={false}
+                isLastItem={Object.keys(selectedRegulatoryLayers).length === index + 1}
+                onRemoveById={removeById}
+                onRemoveByTopic={removeByTopic}
+                regulatoryTopic={regulatoryTopic}
+                regulatoryZones={selectedRegulatoryLayers[regulatoryTopic]}
+              />
+            ))
+          ) : (
+            <NoLayerSelected>Aucune zone sélectionnée</NoLayerSelected>
           )}
         </RegulatoryLayersList>
       )}
@@ -138,16 +134,21 @@ const RegulatoryLayersTitle = styled.div<{
   $regulatoryLayersAddedToMySelection: boolean
   $showRegulatoryLayers: boolean
 }>`
-  height: 30px;
-  padding-top: 5px;
+  animation: ${p => (p.$regulatoryLayersAddedToMySelection ? 'blink' : '')} 0.3s ease forwards;
+  background: ${p => p.theme.color.charcoal};
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
   border-bottom-left-radius: ${p => (p.$showRegulatoryLayers ? '0' : '2px')};
   border-bottom-right-radius: ${p => (p.$showRegulatoryLayers ? '0' : '2px')};
-  background: ${p => p.theme.color.charcoal};
-
-  animation: ${p => (p.$regulatoryLayersAddedToMySelection ? 'blink' : '')} 0.3s ease forwards;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  color: ${p => p.theme.color.gainsboro};
+  cursor: pointer;
+  font-size: 16px;
+  height: 30px;
+  padding-left: 20px;
+  padding-top: 5px;
+  text-align: left;
+  user-select: none;
 
   @keyframes blink {
     0% {
@@ -169,13 +170,6 @@ const RegulatoryLayersTitle = styled.div<{
       background: ${p => p.theme.color.charcoal};
     }
   }
-
-  color: ${p => p.theme.color.gainsboro};
-  font-size: 16px;
-  cursor: pointer;
-  text-align: left;
-  padding-left: 20px;
-  user-select: none;
 
   > div {
     float: right;

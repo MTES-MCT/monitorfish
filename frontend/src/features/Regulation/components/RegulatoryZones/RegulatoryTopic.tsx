@@ -1,5 +1,3 @@
-// TODO Remove temporary `any`/`as any` and `@ts-ignore` (fresh migration to TS).
-
 import { memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
@@ -163,7 +161,6 @@ function UnmemoizedRegulatoryTopic({
             {atLeastOneTopicIsShowed ? (
               <ShowIcon
                 // TODO Use an `<IconButton />`.
-                // @ts-ignore
                 onClick={() => hideTopic(namespace)}
                 style={{ paddingTop: 2 }}
                 title="Cacher la couche"
@@ -172,7 +169,6 @@ function UnmemoizedRegulatoryTopic({
               <HideIcon
                 data-cy="regulatory-layers-my-zones-topic-show"
                 // TODO Use an `<IconButton />`.
-                // @ts-ignore
                 onClick={() => showTopic(namespace)}
                 style={{ paddingTop: 2 }}
                 title="Afficher la couche"

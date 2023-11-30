@@ -1,5 +1,3 @@
-// TODO Remove temporary `any`, `as any` and `@ts-ignore` (fresh migration to TS).
-
 import { memo, useEffect, useState, type Dispatch, type SetStateAction } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
@@ -52,7 +50,6 @@ export function showOrHideMetadataIcon(
   setMetadataIsShown(false)
 }
 
-// TODO Properly type all these `any`.
 export type RegulatoryZoneProps = {
   allowRemoveZone: boolean
   isEditable: boolean
@@ -145,7 +142,6 @@ function UnmemoizedRegulatoryZone({
       <Icons>
         {isEditable && (
           <EditIcon
-            // @ts-ignore
             $isOver={isOver}
             data-cy="regulatory-layer-zone-edit"
             onClick={onEditRegulationClick}
@@ -169,7 +165,6 @@ function UnmemoizedRegulatoryZone({
             data-cy="regulatory-layers-my-zones-zone-hide"
             onClick={triggerShowRegulatoryZone}
             style={{ paddingTop: 5 }}
-            // @ts-ignore
             title="Cacher la zone"
           />
         ) : (
@@ -177,7 +172,6 @@ function UnmemoizedRegulatoryZone({
             data-cy="regulatory-layers-my-zones-zone-show"
             onClick={triggerShowRegulatoryZone}
             style={{ paddingTop: 5 }}
-            // @ts-ignore
             title="Afficher la zone"
           />
         )}
@@ -196,7 +190,7 @@ function UnmemoizedRegulatoryZone({
 }
 
 const Rectangle = styled.div<{
-  // TODO I don't understand this `ol/Style` type.
+  // TODO I don't understand this `ol/Style` type. Properly type that.
   $vectorLayerStyle: any
 }>`
   background: ${p =>

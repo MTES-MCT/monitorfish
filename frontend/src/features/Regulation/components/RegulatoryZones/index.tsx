@@ -1,4 +1,4 @@
-// TODO Remove temporary `any`/`as any` and `@ts-ignore` (fresh migration to TS).
+// TODO Remove temporary `any`/`as any` (fresh migration to TS).
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Checkbox, CheckboxGroup } from 'rsuite'
 import styled, { css } from 'styled-components'
 
@@ -24,8 +24,9 @@ export function RegulatoryLayerSearchResultZone({ isOpen, regulatoryZone }: Regu
   const zoneIsChecked = useMainAppSelector(
     state => !!state.regulatoryLayerSearch.regulatoryZonesChecked?.find(zone => zone.id === regulatoryZone.id)
   )
-  const zoneIsAlreadySelected = useMainAppSelector(state => {
-    const { selectedRegulatoryLayers } = state.regulatory
+  const selectedRegulatoryLayers = useMainAppSelector(state => state.regulatory.selectedRegulatoryLayers)
+
+  const zoneIsAlreadySelected = useMemo(() => {
     if (!selectedRegulatoryLayers) {
       return false
     }
@@ -36,7 +37,7 @@ export function RegulatoryLayerSearchResultZone({ isOpen, regulatoryZone }: Regu
     }
 
     return selectedRegulatoryLayersZone.find(zone => zone.id === regulatoryZone.id)
-  })
+  }, [regulatoryZone.id, regulatoryZone.topic, selectedRegulatoryLayers])
 
   const zoneStyle = getRegulatoryLayerStyle(undefined, regulatoryZone)
   const [metadataIsShown, setMetadataIsShown] = useState(false)

@@ -23,7 +23,7 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
 }: RegulatoryLayerSearchResultTopicProps) {
   const dispatch = useMainAppDispatch()
 
-  const regulatory = useMainAppSelector(state => state.regulatory)
+  const selectedRegulatoryLayers = useMainAppSelector(state => state.regulatory.selectedRegulatoryLayers)
   const regulatoryLayerSearch = useMainAppSelector(state => state.regulatoryLayerSearch)
 
   const { regulatoryZonesChecked, searchResultZones, searchResultZonesLength } = useMemo<{
@@ -63,21 +63,21 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
   }, [regulatoryLayerSearch, regulatoryLayerLawType, regulatoryLayerTopic])
 
   const numberOfTotalZones = useMemo(() => {
-    if (!regulatory.selectedRegulatoryLayers || !regulatoryLayerLawType || !regulatoryLayerTopic) {
+    if (!selectedRegulatoryLayers || !regulatoryLayerLawType || !regulatoryLayerTopic) {
       return 0
     }
 
-    const regulatoryLayer = regulatory.selectedRegulatoryLayers[regulatoryLayerLawType]
+    const regulatoryLayer = selectedRegulatoryLayers[regulatoryLayerLawType]
     if (!regulatoryLayer) {
       return 0
     }
 
     return regulatoryLayer[regulatoryLayerTopic]?.length || 0
-  }, [regulatory, regulatoryLayerLawType, regulatoryLayerTopic])
+  }, [regulatoryLayerLawType, regulatoryLayerTopic, selectedRegulatoryLayers])
 
   const allZonesAreAlreadySelected =
-    regulatory.selectedRegulatoryLayers && regulatoryLayerTopic
-      ? regulatory.selectedRegulatoryLayers[regulatoryLayerTopic]?.length === searchResultZonesLength
+    selectedRegulatoryLayers && regulatoryLayerTopic
+      ? selectedRegulatoryLayers[regulatoryLayerTopic]?.length === searchResultZonesLength
       : false
 
   const [zonesAreOpen, setZonesAreOpen] = useState(false)
@@ -128,9 +128,9 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
             <Checkbox
               key={regulatoryLayerTopic}
               disabled={
-                (regulatory.selectedRegulatoryLayers &&
+                (selectedRegulatoryLayers &&
                   regulatoryLayerTopic &&
-                  regulatory.selectedRegulatoryLayers[regulatoryLayerTopic]?.length === searchResultZonesLength) ||
+                  selectedRegulatoryLayers[regulatoryLayerTopic]?.length === searchResultZonesLength) ||
                 false
               }
               title={allZonesAreAlreadySelected ? 'zones déjà ajoutées à mes zones réglementaires' : ''}

@@ -112,16 +112,16 @@ const regulatorySlice = createSlice({
      */
     addRegulatoryZonesToMyLayers(state, action) {
       const myRegulatoryLayers = { ...state.selectedRegulatoryLayers }
+      // TODO Use Redux Persist.
       const myRegulatoryLayerIds = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
 
+      // TODO Make that functional.
       action.payload.forEach(regulatoryZone => {
         const myTopicRegulatoryLayer = myRegulatoryLayers[regulatoryZone.topic]
 
         if (!myTopicRegulatoryLayer || !myTopicRegulatoryLayer.length) {
-          // TODO Make that functional.
           myRegulatoryLayers[regulatoryZone.topic] = [regulatoryZone]
         } else if (myTopicRegulatoryLayer && !myTopicRegulatoryLayer.some(zone => zone.id === regulatoryZone.id)) {
-          // TODO Make that functional.
           myRegulatoryLayers[regulatoryZone.topic] = myTopicRegulatoryLayer.concat(regulatoryZone)
         }
 

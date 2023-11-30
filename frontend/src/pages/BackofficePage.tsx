@@ -44,9 +44,14 @@ export function BackofficePage() {
 }
 
 const BackofficeWrapper = styled.div`
+  box-sizing: border-box;
   display: flex;
   font-size: 13px;
   height: 100%;
   overflow: hidden;
   width: 100%;
+
+  * {
+    box-sizing: border-box;
+  }
 `

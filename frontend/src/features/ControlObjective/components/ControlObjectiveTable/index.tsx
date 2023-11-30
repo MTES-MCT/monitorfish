@@ -181,7 +181,7 @@ const Year = styled.div`
 
   .rs-picker-default .rs-picker-toggle.rs-btn-xs {
     padding-left: 5px;
-    width: 120px;
+    width: 144px;
   }
 
   .rs-picker-has-value .rs-btn .rs-picker-toggle-value,

@@ -110,11 +110,10 @@ const Property = styled.div`
 const TableBody = styled.tbody``
 
 const Fields = styled.table`
-  padding: 10px 5px 5px 20px;
-  width: inherit;
   display: table;
-  margin: 0;
+  margin: 10px 5px 5px 20px;
   min-width: 40%;
+  width: inherit;
 `
 
 const Field = styled.tr`

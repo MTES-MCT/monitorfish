@@ -186,14 +186,14 @@ const RegulatoryLayersTitle = styled.div<{
 const RegulatoryLayersList = styled.ul<{
   $advancedSearchIsOpen: boolean
 }>`
-  margin: 0;
   background-color: ${p => p.theme.color.white};
   border-radius: 0;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
-  padding: 0;
+  color: ${p => p.theme.color.gunMetal};
+  margin: 0;
   max-height: ${p => (p.$advancedSearchIsOpen ? 'calc(70vh - 235px)' : '70vh')};
   overflow-x: hidden;
-  color: ${p => p.theme.color.gunMetal};
+  padding: 0;
   transition: 0.5s all;
 `

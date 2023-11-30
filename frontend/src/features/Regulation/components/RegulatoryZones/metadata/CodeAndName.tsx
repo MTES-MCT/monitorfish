@@ -1,5 +1,3 @@
-// TODO Remove temporary `any`, `as any` and `@ts-ignore` (fresh migration to TS).
-
 import { Label } from './RegulatoryMetadata.style'
 import { COLORS } from '../../../../../constants/constants'
 import { InfoPoint } from '../../../../Backoffice/edit_regulation/InfoPoint'

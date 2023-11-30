@@ -45,7 +45,7 @@ const RegulatoryZones = styled.div<{
   $isOpen: boolean
   $length: number
 }>`
-  height: ${p => (p.$isOpen && p.$length ? p.$length * 36 : 0)}px;
+  height: ${p => (p.$isOpen && p.$length ? p.$length * 35 : 0)}px;
   overflow: hidden;
   transition: 0.5s all;
 `

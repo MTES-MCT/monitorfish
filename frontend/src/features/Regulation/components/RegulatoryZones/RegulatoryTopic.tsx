@@ -165,6 +165,7 @@ function UnmemoizedRegulatoryTopic({
                 // TODO Use an `<IconButton />`.
                 // @ts-ignore
                 onClick={() => hideTopic(namespace)}
+                style={{ paddingTop: 2 }}
                 title="Cacher la couche"
               />
             ) : (
@@ -173,6 +174,7 @@ function UnmemoizedRegulatoryTopic({
                 // TODO Use an `<IconButton />`.
                 // @ts-ignore
                 onClick={() => showTopic(namespace)}
+                style={{ paddingTop: 2 }}
                 title="Afficher la couche"
               />
             )}
@@ -255,10 +257,9 @@ const List = styled.div<{
   $isOpen: boolean
   $zonesLength: number
 }>`
-  height: inherit;
+  height: ${p => (p.$isOpen ? p.$zonesLength * 36 : 0)}px;
   overflow: hidden;
   transition: all 0.5s;
-  height: ${p => (p.$isOpen ? p.$zonesLength * 36 : 0)}px;
 `
 
 const Row = styled.li`

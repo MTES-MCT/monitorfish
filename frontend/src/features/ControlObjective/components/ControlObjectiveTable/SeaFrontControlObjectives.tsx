@@ -6,6 +6,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { useGetFleetSegmentsQuery } from '../../../../api/fleetSegment'
 import { COLORS } from '../../../../constants/constants'
 import { LoadingSpinnerWall } from '../../../../ui/LoadingSpinnerWall'
+import { BackOfficeTitle } from '../../../BackOffice/components/BackOfficeTitle'
 import {
   ControlPriorityCell,
   DeleteCell,
@@ -230,7 +231,7 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
 
   return (
     <Wrapper>
-      <Title data-cy="control-objective-facade-title">{title}</Title>
+      <BackOfficeTitle data-cy="control-objective-facade-title">{title}</BackOfficeTitle>
       <br />
       <Table
         affixHorizontalScrollbar
@@ -371,15 +372,4 @@ const Wrapper = styled.div`
     background: ${COLORS.charcoal};
     color: ${COLORS.white};
   }
-`
-
-const Title = styled.h2`
-  font-size: 16px;
-  color: #282f3e;
-  border-bottom: 2px solid ${p => p.theme.color.lightGray};
-  font-weight: 700;
-  text-align: left;
-  text-transform: uppercase;
-  padding-bottom: 5px;
-  width: fit-content;
 `

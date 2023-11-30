@@ -104,9 +104,10 @@ export function CustomZones({ hideLayersListWhenSearching = false, namespace }: 
 
 const HowTo = styled.li`
   color: ${p => p.theme.color.slateGray};
-  padding: 24px 24px;
   font-style: italic;
   list-style: none;
+  padding: 24px 24px;
+  text-align: center;
 `
 
 const Title = styled.div<{

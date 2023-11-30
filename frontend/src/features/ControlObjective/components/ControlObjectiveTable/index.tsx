@@ -138,6 +138,7 @@ export function ControlObjectiveTable() {
 
 const Wrapper = styled.div`
   background-color: ${COLORS.white};
+  flex-grow: 1;
 `
 
 const Header = styled.div`
@@ -176,8 +177,6 @@ const Year = styled.div`
 
   .rs-picker-input {
     border: none;
-    margin-left: -140px;
-    margin-top: -3px;
   }
 
   .rs-picker-default .rs-picker-toggle.rs-btn-xs {

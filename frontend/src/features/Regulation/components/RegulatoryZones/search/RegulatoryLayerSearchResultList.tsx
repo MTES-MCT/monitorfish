@@ -59,18 +59,19 @@ export function RegulatoryLayerSearchResultList({ namespace }: RegulatoryLayerSe
 }
 
 const ShowResultList = styled.div`
-  cursor: pointer;
   background: ${p => p.theme.color.charcoal};
   color: ${p => p.theme.color.gainsboro};
-  padding: 0;
+  cursor: pointer;
+  height: 0;
+  height: 36px;
   line-height: 2.5em;
   margin: 0;
-  height: 0;
-  width: 100%;
   overflow: hidden;
-  user-select: none;
-  height: 36px;
+  padding: 0;
+  text-align: center;
   transition: 0.5s all;
+  user-select: none;
+  width: 100%;
 `
 
 const List = styled.ul<{

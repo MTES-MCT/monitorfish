@@ -130,24 +130,18 @@ function UnmemoizedRegulatoryZone({
   const onMouseLeave = () => isOver && setIsOver(false)
 
   return (
-    <Zone
-      data-cy="regulatory-layer-zone"
-      // @ts-ignore
-      isLast={isLast}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    >
+    <Zone $isLast={isLast} data-cy="regulatory-layer-zone" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <Rectangle
         $vectorLayerStyle={vectorLayerStyle}
         onClick={() => dispatch(zoomInLayer({ topicAndZone: regulatoryZone }))}
       />
-      <ZoneText
+      <Name
         data-cy="regulatory-layers-my-zones-zone"
         onClick={triggerShowRegulatoryZone}
         title={regulatoryZone.zone ? regulatoryZone.zone : 'AUCUN NOM'}
       >
         {regulatoryZone.zone ? regulatoryZone.zone : 'AUCUN NOM'}
-      </ZoneText>
+      </Name>
       <Icons>
         {isEditable && (
           <EditIcon
@@ -174,6 +168,7 @@ function UnmemoizedRegulatoryZone({
           <ShowIcon
             data-cy="regulatory-layers-my-zones-zone-hide"
             onClick={triggerShowRegulatoryZone}
+            style={{ paddingTop: 5 }}
             // @ts-ignore
             title="Cacher la zone"
           />
@@ -181,6 +176,7 @@ function UnmemoizedRegulatoryZone({
           <HideIcon
             data-cy="regulatory-layers-my-zones-zone-show"
             onClick={triggerShowRegulatoryZone}
+            style={{ paddingTop: 5 }}
             // @ts-ignore
             title="Afficher la zone"
           />
@@ -203,8 +199,6 @@ const Rectangle = styled.div<{
   // TODO I don't understand this `ol/Style` type.
   $vectorLayerStyle: any
 }>`
-  width: 14px;
-  height: 14px;
   background: ${p =>
     p.$vectorLayerStyle && p.$vectorLayerStyle.getFill()
       ? p.$vectorLayerStyle.getFill().getColor()
@@ -214,11 +208,12 @@ const Rectangle = styled.div<{
       p.$vectorLayerStyle && p.$vectorLayerStyle.getStroke()
         ? p.$vectorLayerStyle.getStroke().getColor()
         : p.theme.color.slateGray};
+  cursor: zoom-in;
   display: inline-block;
   margin-right: 10px;
-  margin-left: 2px;
-  margin-top: 7px;
-  cursor: zoom-in;
+  height: 14px;
+  min-width: 14px;
+  width: 14px;
 `
 
 const Icons = styled.span`
@@ -229,33 +224,28 @@ const Icons = styled.span`
 `
 
 const Zone = styled.span<{
-  isLast: boolean
+  $isLast: boolean
 }>`
+  align-items: center;
+  border-bottom: 1px solid ${p => (p.$isLast ? p.theme.color.lightGray : p.theme.color.white)};
   display: flex;
-  justify-content: flex-start;
-  line-height: 1.9em;
-  padding-left: 31px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  user-select: none;
   font-size: 13px;
   font-weight: 300;
-  ${p => (p.isLast ? `border-bottom: 1px solid ${p.theme.color.lightGray}; height: 27px;` : 'height: 28px;')}
+  height: 23px;
+  padding: 6px 0 6px 20px;
+  user-select: none;
 
   :hover {
     background: ${p => p.theme.color.blueGray25};
   }
 `
 
-const ZoneText = styled.span`
-  width: 63%;
-  display: inline-block;
-  text-overflow: ellipsis;
+const Name = styled.span`
+  flex-grow: 1;
+  line-height: 1;
+  padding-right: 6px;
   overflow-x: hidden !important;
-  vertical-align: bottom;
-  padding-bottom: 3px;
-  padding-left: 0;
-  margin-top: 5px;
+  text-overflow: ellipsis;
 `
 
 export const RegulatoryZone = memo(UnmemoizedRegulatoryZone)

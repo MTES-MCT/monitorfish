@@ -134,7 +134,7 @@ module.exports = {
 
     // Jest
     {
-      files: ['**/*.test.ts', '**/*.test.tsx'],
+      files: ['__mocks__/**/*.[j|t]s', '**/*.test.ts', '**/*.test.tsx'],
       plugins: ['jest'],
       env: {
         jest: true

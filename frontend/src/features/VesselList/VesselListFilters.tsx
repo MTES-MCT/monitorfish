@@ -206,7 +206,7 @@ function UnmemoizedVesselListFilters({
         inline
         name="checkboxList"
         onChange={location.setVesselsLocationFilter}
-        style={{ color: COLORS.slateGray, display: 'inline-block', height: 40, marginLeft: -15 }}
+        style={{ color: COLORS.slateGray, display: 'inline-block', height: 40 }}
         value={location.vesselsLocationFilter}
       >
         <Checkbox value={VesselLocation.SEA}>

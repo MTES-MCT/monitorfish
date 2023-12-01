@@ -582,19 +582,6 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
   border-radius: 4px;
 }
 
-.rs-table-cell-content > .rs-checkbox {
-  margin-top: -10px;
-  margin-left: -10px;
-}
-
-.rs-modal-header-close {
-  background: unset;
-  right: 10px !important;
-  top: 6px !important;
-  font-size: 15px !important;
-  color: var(--gainsboro) !important;
-}
-
 /* .rs-picker-default .rs-btn,
 .rs-picker-input .rs-btn,
 .rs-picker-default .rs-picker-toggle,

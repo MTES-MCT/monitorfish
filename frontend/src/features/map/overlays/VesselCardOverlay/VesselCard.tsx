@@ -204,6 +204,7 @@ const BeaconMalfunctionIcon = styled(BeaconMalfunctionSVG)`
 `
 
 const VesselCardAlert = styled.div`
+  /* TODO Replace with theme color. */
   background: #e1000f;
   font-weight: 500;
   font-size: 13px;

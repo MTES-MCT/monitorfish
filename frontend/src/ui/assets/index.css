@@ -19,6 +19,12 @@ html,
   -moz-osx-font-smoothing: grayscale;
 }
 
+html,
+body,
+#root {
+  height: 100%;
+}
+
 /* TODO Attempt to progressively migrate to `box-sizing: border-box` everywhere. */
 * {
   -webkit-box-sizing: revert;
@@ -299,7 +305,6 @@ label {
 }
 
 .rs-input {
-  height: 36px;
   color: #707785;
 }
 
@@ -346,9 +351,9 @@ body > .rs-modal-wrapper {
   box-sizing: border-box;
 }
 body > .rs-modal-wrapper .rs-modal-full {
-  margin: 5%;
+  margin: 2%;
   max-height: calc(100% - 10%);
-  max-width: calc(100% - 10%);
+  max-width: calc(100% - 4%);
   /* height: calc(100% - 10%); */
-  width: calc(100% - 10%);
+  width: calc(100% - 4%);
 }

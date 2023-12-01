@@ -104,8 +104,7 @@ context('Update Regulation', () => {
     // complete missing values in form
     cy.get('[type="checkbox"]').first().check({ force: true })
     cy.get('[type="checkbox"]').eq(2).check({ force: true })
-    cy.get('*[data-cy^="open-regulated-species"]').click({ force: true })
-    cy.scrollTo(0, 500)
+    cy.get('*[data-cy^="open-regulated-species"]').click({ force: true }).scrollIntoView()
 
     cy.log('Select authorized species and groups')
     cy.get('.rs-picker-toggle-placeholder')
@@ -165,8 +164,7 @@ context('Update Regulation', () => {
     // complete missing values in form
     cy.get('[type="checkbox"]').first().check({ force: true })
     cy.get('[type="checkbox"]').eq(2).check({ force: true })
-    cy.get('*[data-cy^="open-regulated-species"]').click({ force: true })
-    cy.scrollTo(0, 500)
+    cy.get('*[data-cy^="open-regulated-species"]').click({ force: true }).scrollIntoView()
     cy.get('*[data-cy^="regulatory-gears-section"]').click({ force: true })
     cy.get('*[data-cy="authorized-gears-selector"]').scrollIntoView()
 

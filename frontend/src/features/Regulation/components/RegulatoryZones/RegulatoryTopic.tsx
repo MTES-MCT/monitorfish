@@ -1,5 +1,3 @@
-// TODO Remove temporary `any`/`as any` and `@ts-ignore` (fresh migration to TS).
-
 import { memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
@@ -77,7 +75,7 @@ function UnmemoizedRegulatoryTopic({
 
   useLayoutEffect(() => {
     if (ref.current && regulatoryTopicsOpened[regulatoryTopicsOpened.length - 1] === regulatoryTopic) {
-      ref.current.scrollIntoView({ block: 'start', inline: 'nearest' })
+      ref.current.scrollIntoView(false)
     }
   }, [regulatoryTopic, regulatoryTopicsOpened])
 
@@ -152,18 +150,18 @@ function UnmemoizedRegulatoryTopic({
               )}
             </Name>
             <ZonesNumber>{`${regulatoryZones?.length}/${numberOfTotalZones}`}</ZonesNumber>
-            {isEditable ? (
+            <Icons />
+            {isEditable && (
               <EditIcon
                 $isOver={isOver}
                 data-cy="regulatory-topic-edit"
                 onClick={onEditTopicClick}
                 title="Modifier le nom de la thématique"
               />
-            ) : null}
+            )}
             {atLeastOneTopicIsShowed ? (
               <ShowIcon
                 // TODO Use an `<IconButton />`.
-                // @ts-ignore
                 onClick={() => hideTopic(namespace)}
                 title="Cacher la couche"
               />
@@ -171,33 +169,32 @@ function UnmemoizedRegulatoryTopic({
               <HideIcon
                 data-cy="regulatory-layers-my-zones-topic-show"
                 // TODO Use an `<IconButton />`.
-                // @ts-ignore
                 onClick={() => showTopic(namespace)}
                 title="Afficher la couche"
               />
             )}
-            {allowRemoveZone ? (
+            {allowRemoveZone && (
               <CloseIcon
                 onClick={() => onRemoveByTopic(getFirstRegulatoryZoneTopic(regulatoryZones), regulatoryZones.length)}
                 title="Supprimer la couche de ma sélection"
               />
-            ) : null}
+            )}
           </Zone>
           <List $isOpen={isOpen} $zonesLength={regulatoryZones.length}>
-            {regulatoryZones && showedLayers
-              ? regulatoryZones.map((regulatoryZone, index) => (
-                  <RegulatoryZone
-                    key={`${regulatoryZone.topic}:${regulatoryZone.zone}`}
-                    allowRemoveZone={allowRemoveZone}
-                    isEditable={isEditable}
-                    isLast={regulatoryZones.length === index + 1}
-                    namespace={namespace}
-                    onRemove={onRemoveById}
-                    regulatoryTopic={regulatoryTopic}
-                    regulatoryZone={regulatoryZone}
-                  />
-                ))
-              : null}
+            {regulatoryZones &&
+              showedLayers &&
+              regulatoryZones.map((regulatoryZone, index) => (
+                <RegulatoryZone
+                  key={`${regulatoryZone.topic}:${regulatoryZone.zone}`}
+                  allowRemoveZone={allowRemoveZone}
+                  isEditable={isEditable}
+                  isLast={regulatoryZones.length === index + 1}
+                  namespace={namespace}
+                  onRemove={onRemoveById}
+                  regulatoryTopic={regulatoryTopic}
+                  regulatoryZone={regulatoryZone}
+                />
+              ))}
           </List>
         </Row>
       )}
@@ -214,23 +211,31 @@ const getFirstRegulatoryZoneTopic = (regulatoryZones: RegulatoryZoneType[]): str
   return firstRefulatoryZone.topic
 }
 
+const Icons = styled.span`
+  float: right;
+  display: flex;
+  justify-content: flex-end;
+  flex: 1;
+  height: 23px;
+`
+
 const Text = styled.span`
   margin-left: 5px;
 `
 
 const Name = styled.span`
-  line-height: 2.7em;
-  font-size: 13px;
-  padding: 2px 10px;
-  width: 79%;
   display: inline-block;
-  text-overflow: ellipsis;
+  font-size: 13px;
+  line-height: 2.7em;
   overflow: hidden;
+  padding: 2px 10px;
+  text-overflow: ellipsis;
+  width: 79%;
 `
 
 const ZonesNumber = styled.span`
-  font-size: 11px;
   color: ${COLORS.slateGray};
+  font-size: 11px;
   margin-right: 10px;
 `
 
@@ -238,13 +243,13 @@ const Zone = styled.span<{
   $isLastItem: boolean
   $isOpen: boolean
 }>`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  user-select: none;
+  border-bottom: 1px solid ${p => (!p.$isOpen && p.$isLastItem ? p.theme.color.white : p.theme.color.lightGray)};
+  display: flex;
   font-weight: 500;
-  ${p => (!p.$isOpen && p.$isLastItem ? null : `border-bottom: 1px solid ${p.theme.color.lightGray};`)}
+  justify-content: space-between;
+  user-select: none;
+  width: 100%;
 
   :hover {
     background: ${p => p.theme.color.blueGray25};
@@ -255,27 +260,24 @@ const List = styled.div<{
   $isOpen: boolean
   $zonesLength: number
 }>`
-  height: inherit;
+  height: ${p => (p.$isOpen ? p.$zonesLength * 36 : 0)}px;
   overflow: hidden;
   transition: all 0.5s;
-  height: ${p => (p.$isOpen ? p.$zonesLength * 36 : 0)}px;
 `
 
 const Row = styled.li`
-  padding: 0px 5px 0px 0px;
-  margin: 0;
-  font-size: 13px;
-  text-align: left;
-  list-style-type: none;
-  width: 100%;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden !important;
   cursor: pointer;
-
-  margin: 0;
-  line-height: 1.9em;
   display: block;
+  font-size: 13px;
+  line-height: 1.9em;
+  list-style-type: none;
+  margin: 0;
+  overflow: hidden !important;
+  padding: 0px 5px 0px 0px;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
 `
 
 export const RegulatoryTopic = memo(UnmemoizedRegulatoryTopic)

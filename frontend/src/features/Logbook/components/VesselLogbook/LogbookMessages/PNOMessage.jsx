@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+
+import { LogbookMessageSpecy, WeightType } from './LogbookMessageSpecy'
 import { COLORS } from '../../../../../constants/constants'
 import { getDate, getDateTime } from '../../../../../utils'
-import { LogbookMessageSpecy, WeightType } from './LogbookMessageSpecy'
-import {
-  buildCatchArray,
-  getTotalPNOWeight
-} from '../../../utils'
 import { LogbookMessagePNOPurposeType } from '../../../constants'
+import { buildCatchArray, getTotalPNOWeight } from '../../../utils'
 
-const PNOMessage = props => {
+function PNOMessage(props) {
   const [catches, setCatches] = useState([])
   const [totalPNOWeight, setTotalPNOWeight] = useState(null)
 
@@ -26,67 +24,76 @@ const PNOMessage = props => {
     }
   }, [props.message])
 
-  return <>
-    {props.message
-      ? <>
-        <Zone>
-          <Fields>
-            <TableBody>
-              <Field>
-                <Key>Date prévue d&apos;arrivée</Key>
-                <Value>{props.message.predictedArrivalDatetimeUtc
-                  ? <>{getDateTime(props.message.predictedArrivalDatetimeUtc, true)}{' '}
-                    <Gray>(UTC)</Gray></>
-                  : <NoValue>-</NoValue>}
-                </Value>
-              </Field>
-              <Field>
-                <Key>Date de début de la marée</Key>
-                <Value>{props.message.tripStartDate
-                  ? <>{getDate(props.message.tripStartDate)}</>
-                  : <NoValue>-</NoValue>}
-                </Value>
-              </Field>
-              <Field>
-                <Key>Port d&apos;arrivée</Key>
-                <Value>{props.message.port && props.message.portName
-                  ? <>{props.message.portName} ({props.message.port})</>
-                  : <NoValue>-</NoValue>}
-                </Value>
-              </Field>
-              <Field>
-                <Key>Raison du préavis</Key>
-                <Value>{props.message.purpose
-                  ? <>{LogbookMessagePNOPurposeType[props.message.purpose]} ({props.message.purpose})</>
-                  : <NoValue>-</NoValue>}
-                </Value>
-              </Field>
-              <Field>
-                <Key>Poids total</Key>
-                <Value>{totalPNOWeight
-                  ? <>{totalPNOWeight} kg</>
-                  : <NoValue>-</NoValue>}
-                </Value>
-              </Field>
-            </TableBody>
-          </Fields>
-        </Zone>
-        <SpeciesList>
-          {
-            catches
-              .map((speciesCatch, index) => {
-              return <LogbookMessageSpecy
+  return (
+    <>
+      {props.message ? (
+        <>
+          <Zone>
+            <Fields>
+              <TableBody>
+                <Field>
+                  <Key>Date prévue d&apos;arrivée</Key>
+                  <Value>
+                    {props.message.predictedArrivalDatetimeUtc ? (
+                      <>
+                        {getDateTime(props.message.predictedArrivalDatetimeUtc, true)} <Gray>(UTC)</Gray>
+                      </>
+                    ) : (
+                      <NoValue>-</NoValue>
+                    )}
+                  </Value>
+                </Field>
+                <Field>
+                  <Key>Date de début de la marée</Key>
+                  <Value>
+                    {props.message.tripStartDate ? <>{getDate(props.message.tripStartDate)}</> : <NoValue>-</NoValue>}
+                  </Value>
+                </Field>
+                <Field>
+                  <Key>Port d&apos;arrivée</Key>
+                  <Value>
+                    {props.message.port && props.message.portName ? (
+                      <>
+                        {props.message.portName} ({props.message.port})
+                      </>
+                    ) : (
+                      <NoValue>-</NoValue>
+                    )}
+                  </Value>
+                </Field>
+                <Field>
+                  <Key>Raison du préavis</Key>
+                  <Value>
+                    {props.message.purpose ? (
+                      <>
+                        {LogbookMessagePNOPurposeType[props.message.purpose]} ({props.message.purpose})
+                      </>
+                    ) : (
+                      <NoValue>-</NoValue>
+                    )}
+                  </Value>
+                </Field>
+                <Field>
+                  <Key>Poids total</Key>
+                  <Value>{totalPNOWeight ? <>{totalPNOWeight} kg</> : <NoValue>-</NoValue>}</Value>
+                </Field>
+              </TableBody>
+            </Fields>
+          </Zone>
+          <SpeciesList>
+            {catches.map((speciesCatch, index) => (
+              <LogbookMessageSpecy
+                key={`PNO${speciesCatch.species}`}
                 isLast={catches.length === index + 1}
                 specyCatches={speciesCatch}
-                key={'PNO' + speciesCatch.species}
                 weightType={WeightType.LIVE}
               />
-            })
-          }
-        </SpeciesList>
-      </>
-      : null}
-  </>
+            ))}
+          </SpeciesList>
+        </>
+      ) : null}
+    </>
+  )
 }
 
 const Gray = styled.span`
@@ -113,14 +120,10 @@ const Zone = styled.div`
 `
 
 const Fields = styled.table`
-  padding: 0px 5px 0 5px;
-  width: inherit;
   display: table;
-  margin: 0;
+  margin: 5px;
   min-width: 40%;
-  line-height: 0.2em;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  width: inherit;
 `
 
 const Field = styled.tr`

@@ -4,7 +4,7 @@ import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
 import { BeaconMalfunctionDetails } from './details/BeaconMalfunctionDetails'
-import BeaconMalfunctionsResumeAndHistory from './resume/BeaconMalfunctionsResumeAndHistory'
+import { BeaconMalfunctionsResumeAndHistory } from './resume/BeaconMalfunctionsResumeAndHistory'
 import { COLORS } from '../../../constants/constants'
 import { BeaconMalfunctionsTab } from '../../../domain/entities/beaconMalfunction/constants'
 import { vesselsAreEquals } from '../../../domain/entities/vessel/vessel'

@@ -44,9 +44,8 @@ export function LawReminders({ controls }: LawRemindersProps) {
 }
 
 const Fields = styled.div`
-  width: 100%;
   margin: 0;
-  line-height: 0.2em;
+  width: 100%;
 `
 
 const Row = styled.div<{

@@ -122,5 +122,6 @@ const AddRegulatoryLayer = styled.div<{
   user-select: none;
   height: ${p => (p.$isShown ? '36' : '0')}px;
   max-height: 600px;
+  text-align: center;
   transition: 0.5s all;
 `

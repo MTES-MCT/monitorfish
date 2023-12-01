@@ -89,7 +89,6 @@ export const Fields = styled.table`
   display: table;
   margin: 0;
   min-width: 40%;
-  line-height: 0.2em;
   padding: unset;
 `
 

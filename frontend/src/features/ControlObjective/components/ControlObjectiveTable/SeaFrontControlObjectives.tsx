@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { useGetFleetSegmentsQuery } from '../../../../api/fleetSegment'
-import { COLORS } from '../../../../constants/constants'
 import { LoadingSpinnerWall } from '../../../../ui/LoadingSpinnerWall'
+import { BackOfficeTitle } from '../../../BackOffice/components/BackOfficeTitle'
 import {
   ControlPriorityCell,
   DeleteCell,
@@ -230,7 +230,7 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
 
   return (
     <Wrapper>
-      <Title data-cy="control-objective-facade-title">{title}</Title>
+      <BackOfficeTitle data-cy="control-objective-facade-title">{title}</BackOfficeTitle>
       <br />
       <Table
         affixHorizontalScrollbar
@@ -243,12 +243,12 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
         }}
         onSortColumn={handleSortColumn as any}
         renderRowExpanded={renderRowExpanded}
-        rowExpandedHeight={125}
+        rowExpandedHeight={100}
         rowHeight={36}
         rowKey="id"
         sortColumn={sortColumn}
         sortType={sortType}
-        width={720}
+        width={769}
       >
         <Table.Column align="center" width={50}>
           <Table.HeaderCell> </Table.HeaderCell>
@@ -260,12 +260,12 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
           <SegmentCellWithTitle dataKey="segment" />
         </Table.Column>
 
-        <Table.Column sortable width={130}>
+        <Table.Column sortable width={140}>
           <Table.HeaderCell>Nom du segment</Table.HeaderCell>
           <SegmentCellWithTitle dataKey="segmentName" />
         </Table.Column>
 
-        <Table.Column sortable width={140}>
+        <Table.Column sortable width={160}>
           <Table.HeaderCell>Obj. contrôles Port</Table.HeaderCell>
           <ModifiableCell
             dataKey="targetNumberOfControlsAtPort"
@@ -278,7 +278,7 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
           />
         </Table.Column>
 
-        <Table.Column sortable width={140}>
+        <Table.Column sortable width={160}>
           <Table.HeaderCell>Obj. contrôles Mer</Table.HeaderCell>
           <ModifiableCell
             dataKey="targetNumberOfControlsAtSea"
@@ -306,7 +306,7 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
           />
         </Table.Column>
 
-        <Table.Column width={30}>
+        <Table.Column width={34}>
           <Table.HeaderCell> </Table.HeaderCell>
           <DeleteCell dataKey="id" id="id" onClick={deleteControlObjectiveRow} />
         </Table.Column>
@@ -335,12 +335,12 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
 }
 
 const AddSegment = styled.div`
-  text-align: left;
+  color: ${p => p.theme.color.gunMetal};
+  line-height: 10px;
   margin-left: 5px;
   margin-top: -10px;
-  line-height: 10px;
+  text-align: left;
   width: fit-content;
-  color: ${COLORS.gunMetal};
 `
 
 const Wrapper = styled.div`
@@ -354,13 +354,17 @@ const Wrapper = styled.div`
     margin-top: -3px;
   }
 
+  .rs-picker-toggle {
+    width: 120px;
+  }
+
   .rs-picker-default .rs-picker-toggle.rs-btn-xs {
     padding-left: 5px;
   }
 
   .rs-picker-has-value .rs-btn .rs-picker-toggle-value,
   .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
-    color: ${COLORS.charcoal};
+    color: ${p => p.theme.color.charcoal};
   }
 
   .rs-picker-toggle-wrapper .rs-picker-toggle.rs-btn-xs {
@@ -368,18 +372,7 @@ const Wrapper = styled.div`
   }
 
   .rs-input:focus {
-    background: ${COLORS.charcoal};
-    color: ${COLORS.white};
+    background: ${p => p.theme.color.charcoal};
+    color: ${p => p.theme.color.white};
   }
-`
-
-const Title = styled.h2`
-  font-size: 16px;
-  color: #282f3e;
-  border-bottom: 2px solid ${p => p.theme.color.lightGray};
-  font-weight: 700;
-  text-align: left;
-  text-transform: uppercase;
-  padding-bottom: 5px;
-  width: fit-content;
 `

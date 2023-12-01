@@ -21,13 +21,11 @@ export function BeaconMalfunctionsDetailsFollowUpNotification({ notification }) 
     .map(notificationMeans => {
       const means = COMMUNICATION_MEAN[notificationMeans.communicationMeans]?.denomination || ''
       const addresseePreposition = COMMUNICATION_MEAN[notificationMeans.communicationMeans]?.addresseePreposition || ''
+      const title = notificationMeans.errorMessage ? notificationMeans.errorMessage : 'Erreur inconnue'
 
       return (
         <>
-          <NotOk
-            style={notOkStyle}
-            title={notificationMeans.errorMessage ? notificationMeans.errorMessage : 'Erreur inconnue'}
-          />
+          <NotOk key={title} style={notOkStyle} title={title} />
           {means} non reçu {addresseePreposition} {notificationMeans.recipientAddressOrNumber}
           <br />
         </>

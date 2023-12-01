@@ -16,7 +16,7 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
   const dispatch = useMainAppDispatch()
   const gears = useMainAppSelector(state => state.gear.gears)
   const species = useMainAppSelector(state => state.species.species)
-  const { height, width } = useWindowResize()
+  const { height } = useWindowResize()
   const { blockUpdate, isUpdateBlocked, setInputDataCySelector } = useBlockUpdateAndFocusOnDataRefresh(fleetSegments)
 
   useEffect(() => {
@@ -80,7 +80,6 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
       rowHeight={36}
       rowKey="segment"
       shouldUpdateScroll={false}
-      width={width < 1800 ? width - 200 : 1600}
     >
       <Column width={70}>
         <HeaderCell>N. impact</HeaderCell>

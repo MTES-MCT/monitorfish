@@ -30,9 +30,7 @@ const Wrapper = styled.div`
 `
 
 const Button = styled.button`
-  float: left;
-  font-size: 16px;
-  padding-top: 2px;
+  line-height: 22px !important;
   width: 25px !important;
   height: 25px !important;
 

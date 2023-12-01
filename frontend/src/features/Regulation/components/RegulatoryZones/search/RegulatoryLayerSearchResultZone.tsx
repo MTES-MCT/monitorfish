@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Checkbox, CheckboxGroup } from 'rsuite'
 import styled, { css } from 'styled-components'
 
@@ -24,8 +24,9 @@ export function RegulatoryLayerSearchResultZone({ isOpen, regulatoryZone }: Regu
   const zoneIsChecked = useMainAppSelector(
     state => !!state.regulatoryLayerSearch.regulatoryZonesChecked?.find(zone => zone.id === regulatoryZone.id)
   )
-  const zoneIsAlreadySelected = useMainAppSelector(state => {
-    const { selectedRegulatoryLayers } = state.regulatory
+  const selectedRegulatoryLayers = useMainAppSelector(state => state.regulatory.selectedRegulatoryLayers)
+
+  const zoneIsAlreadySelected = useMemo(() => {
     if (!selectedRegulatoryLayers) {
       return false
     }
@@ -36,7 +37,7 @@ export function RegulatoryLayerSearchResultZone({ isOpen, regulatoryZone }: Regu
     }
 
     return selectedRegulatoryLayersZone.find(zone => zone.id === regulatoryZone.id)
-  })
+  }, [regulatoryZone.id, regulatoryZone.topic, selectedRegulatoryLayers])
 
   const zoneStyle = getRegulatoryLayerStyle(undefined, regulatoryZone)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
@@ -88,7 +89,6 @@ export function RegulatoryLayerSearchResultZone({ isOpen, regulatoryZone }: Regu
                 ? dispatch(uncheckRegulatoryZones([regulatoryZone]))
                 : dispatch(checkRegulatoryZones([regulatoryZone]))
             }
-            style={{ height: 20, marginLeft: 'auto' }}
             value={zoneIsChecked || zoneIsAlreadySelected ? [regulatoryZone.id] : []}
           >
             {[
@@ -108,11 +108,12 @@ export function RegulatoryLayerSearchResultZone({ isOpen, regulatoryZone }: Regu
 }
 
 const Name = styled.span`
-  width: 280px;
-  text-overflow: ellipsis;
-  overflow-x: hidden !important;
+  flex-grow: 1;
   font-size: inherit;
-  margin-top: 8px;
+  line-height: 1;
+  padding-right: 6px;
+  overflow-x: hidden !important;
+  text-overflow: ellipsis;
 `
 
 const Rectangle = styled.div<{
@@ -131,21 +132,24 @@ const Rectangle = styled.div<{
         : p.theme.color.lightGray};
   display: inline-block;
   margin-right: 10px;
-  margin-top: 9px;
   flex-shrink: 0;
 `
 
 const Zone = styled.span<{
   $selected?: boolean
 }>`
-  user-select: none;
-  display: flex;
-  font-size: 13px;
-  padding-left: 20px;
+  align-items: center;
   background: ${p => (p.$selected ? p.theme.color.lightGray : p.theme.color.white)};
   color: ${p => p.theme.color.gunMetal};
-  padding-top: 1px;
-  padding-bottom: 5px;
+  display: flex;
+  font-size: 13px;
+  height: 24px;
+  padding: 6px 0 6px 20px;
+  user-select: none;
+
+  .rs-checkbox-wrapper {
+    top: 2px !important;
+  }
 
   .rs-checkbox-checker {
     padding-top: 24px;
@@ -160,11 +164,13 @@ const Zone = styled.span<{
   :hover {
     background: ${p => p.theme.color.blueGray25};
   }
+
+  > svg {
+    margin: 0;
+  }
 `
 
 const CustomPaperStyle = css`
-  margin-right: -2px;
-  padding-top: 7px;
   width: 21px;
   height: 23px;
 `

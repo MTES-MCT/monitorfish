@@ -15,6 +15,7 @@ import { createFleetSegment } from '../../../domain/use_cases/fleetSegment/creat
 import { getFleetSegmentsYearEntries } from '../../../domain/use_cases/fleetSegment/getFleetSegmentsYearEntries'
 import { useBackofficeAppDispatch } from '../../../hooks/useBackofficeAppDispatch'
 import { theme } from '../../../ui/theme'
+import { BackOfficeTitle } from '../../BackOffice/components/BackOfficeTitle'
 
 import type { FleetSegment } from '../../../domain/types/fleetSegment'
 
@@ -98,28 +99,34 @@ export function FleetSegments() {
   return (
     <Wrapper>
       <Header>
-        <Title>Segments de flotte</Title>
-        <YearSelectPicker
-          cleanable={false}
-          data={yearEntries}
-          data-cy="fleet-segments-select-year"
-          onChange={_year => fetchFleetSegments(_year as number)}
-          searchable={false}
-          size="xs"
-          value={year}
-        />
-        <AddYear>Ajouter</AddYear>
-        <AddYearSelectPicker
-          cleanable={false}
-          data={yearsToAdd}
-          data-cy="fleet-segments-add-year"
-          onChange={_year => addYearEntry(_year as number)}
-          placeholder={"l'année"}
-          searchable={false}
-          size="xs"
-          value={year}
-        />
+        <TitleBox>
+          <BackOfficeTitle>Segments de flotte</BackOfficeTitle>
+          <YearSelectPicker
+            cleanable={false}
+            data={yearEntries}
+            data-cy="fleet-segments-select-year"
+            onChange={_year => fetchFleetSegments(_year as number)}
+            searchable={false}
+            size="xs"
+            value={year}
+          />
+        </TitleBox>
+
+        <AddYearBox>
+          <AddYear>Ajouter</AddYear>
+          <AddYearSelectPicker
+            cleanable={false}
+            data={yearsToAdd}
+            data-cy="fleet-segments-add-year"
+            onChange={_year => addYearEntry(_year as number)}
+            placeholder={"l'année"}
+            searchable={false}
+            size="xs"
+            value={year}
+          />
+        </AddYearBox>
       </Header>
+
       {fleetSegments.length ? (
         <>
           <FleetSegmentsTable
@@ -128,15 +135,19 @@ export function FleetSegments() {
             setFleetSegments={setFleetSegments}
             year={year}
           />
-          <AddSegment data-cy="open-create-fleet-segment-modal" onClick={openNewFleetSegmentModal}>
-            Ajouter un segment
-          </AddSegment>
+
+          <AddSegmentBox>
+            <AddSegment data-cy="open-create-fleet-segment-modal" onClick={openNewFleetSegmentModal}>
+              Ajouter un segment
+            </AddSegment>
+          </AddSegmentBox>
         </>
       ) : (
         <Loading>
           <FulfillingBouncingCircleSpinner className="update-vessels" color={theme.color.lightGray} size={100} />
         </Loading>
       )}
+
       {isNewFleetSegmentModalOpen && (
         <NewFleetSegmentModal
           faoAreasList={faoAreas}
@@ -149,66 +160,14 @@ export function FleetSegments() {
   )
 }
 
-const Header = styled.div`
-  display: flex;
-  margin-bottom: 10px;
-`
-
-const AddYear = styled.span`
-  color: ${COLORS.gunMetal};
-  margin-left: auto;
-  margin-right: 10px;
-  margin-top: 12px;
-`
-
-const AddSegment = styled.a`
-  color: ${COLORS.gunMetal};
-  cursor: pointer;
-  display: block;
-  height: fit-content;
-  margin-top: 10px;
-  text-decoration: underline;
-  width: fit-content;
-`
-
-const YearSelectPicker = styled(SelectPicker)`
-  height: fit-content;
-  margin-left: 5px;
-  margin-right: 20px;
-  margin-top: 14px;
-  width: fit-content;
-
-  .rs-picker-toggle {
-    width: 80px;
-  }
-`
-
-const AddYearSelectPicker = styled(SelectPicker)`
-  height: fit-content;
-  margin-right: 20px;
-  margin-top: 10px;
-  width: fit-content;
-
-  .rs-picker-toggle-placeholder {
-    color: ${COLORS.gunMetal} !important;
-    font-size: 13px;
-  }
-
-  .rs-picker-toggle {
-    width: 50px;
-  }
-`
-
-const Loading = styled.div`
-  margin-left: calc(50vw - 200px);
-  margin-top: 200px;
-`
-
 const Wrapper = styled.div`
-  height: calc(100vh - 50px);
-  margin-left: 40px;
-  margin-top: 20px;
-  width: calc(100vw - 200px);
+  flex-grow: 1;
+  margin: 20px 20px 20px 40px;
+  box-sizing: border-box;
+
+  * {
+    box-sizing: border-box;
+  }
 
   .rs-picker-input {
     border: none;
@@ -217,13 +176,54 @@ const Wrapper = styled.div`
   }
 `
 
-const Title = styled.h2`
-  border-bottom: 2px solid ${p => p.theme.color.lightGray};
-  color: #282f3e;
-  font-size: 16px;
-  font-weight: 700;
-  padding-bottom: 5px;
-  text-align: left;
-  text-transform: uppercase;
-  width: fit-content;
+const Header = styled.div`
+  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+`
+
+const AddYear = styled.span`
+  color: ${COLORS.gunMetal};
+  margin-right: 10px;
+`
+
+const AddSegmentBox = styled.div`
+  margin-top: 12px;
+`
+
+const AddSegment = styled.a`
+  color: ${COLORS.gunMetal};
+  cursor: pointer;
+  text-decoration: underline;
+`
+
+const YearSelectPicker = styled(SelectPicker)`
+  margin-left: 16px;
+
+  .rs-picker-toggle {
+    width: 120px;
+  }
+`
+
+const AddYearSelectPicker = styled(SelectPicker)`
+  .rs-picker-toggle-placeholder {
+    color: ${COLORS.gunMetal} !important;
+    font-size: 13px;
+  }
+`
+
+const Loading = styled.div`
+  margin-left: calc(50vw - 200px);
+  margin-top: 200px;
+`
+
+const TitleBox = styled.div`
+  align-items: flex-start;
+  display: flex;
+`
+
+const AddYearBox = styled.div`
+  align-items: center;
+  display: flex;
 `

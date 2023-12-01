@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { RegulatoryZone } from './RegulatoryZone'
@@ -73,6 +73,12 @@ function UnmemoizedRegulatoryTopic({
   const onMouseEnter = () => !isOver && setIsOver(true)
   const onMouseLeave = () => isOver && setIsOver(false)
 
+  useLayoutEffect(() => {
+    if (ref.current && regulatoryTopicsOpened[regulatoryTopicsOpened.length - 1] === regulatoryTopic) {
+      ref.current.scrollIntoView(false)
+    }
+  }, [regulatoryTopic, regulatoryTopicsOpened])
+
   useEffect(() => {
     if (showedLayers && regulatoryTopic) {
       const topicFoundInShowedLayers = showedLayers.some(layer => layer.topic === regulatoryTopic)
@@ -144,19 +150,19 @@ function UnmemoizedRegulatoryTopic({
               )}
             </Name>
             <ZonesNumber>{`${regulatoryZones?.length}/${numberOfTotalZones}`}</ZonesNumber>
-            {isEditable ? (
+            <Icons />
+            {isEditable && (
               <EditIcon
                 $isOver={isOver}
                 data-cy="regulatory-topic-edit"
                 onClick={onEditTopicClick}
                 title="Modifier le nom de la thématique"
               />
-            ) : null}
+            )}
             {atLeastOneTopicIsShowed ? (
               <ShowIcon
                 // TODO Use an `<IconButton />`.
                 onClick={() => hideTopic(namespace)}
-                style={{ paddingTop: 2 }}
                 title="Cacher la couche"
               />
             ) : (
@@ -164,32 +170,31 @@ function UnmemoizedRegulatoryTopic({
                 data-cy="regulatory-layers-my-zones-topic-show"
                 // TODO Use an `<IconButton />`.
                 onClick={() => showTopic(namespace)}
-                style={{ paddingTop: 2 }}
                 title="Afficher la couche"
               />
             )}
-            {allowRemoveZone ? (
+            {allowRemoveZone && (
               <CloseIcon
                 onClick={() => onRemoveByTopic(getFirstRegulatoryZoneTopic(regulatoryZones), regulatoryZones.length)}
                 title="Supprimer la couche de ma sélection"
               />
-            ) : null}
+            )}
           </Zone>
           <List $isOpen={isOpen} $zonesLength={regulatoryZones.length}>
-            {regulatoryZones && showedLayers
-              ? regulatoryZones.map((regulatoryZone, index) => (
-                  <RegulatoryZone
-                    key={`${regulatoryZone.topic}:${regulatoryZone.zone}`}
-                    allowRemoveZone={allowRemoveZone}
-                    isEditable={isEditable}
-                    isLast={regulatoryZones.length === index + 1}
-                    namespace={namespace}
-                    onRemove={onRemoveById}
-                    regulatoryTopic={regulatoryTopic}
-                    regulatoryZone={regulatoryZone}
-                  />
-                ))
-              : null}
+            {regulatoryZones &&
+              showedLayers &&
+              regulatoryZones.map((regulatoryZone, index) => (
+                <RegulatoryZone
+                  key={`${regulatoryZone.topic}:${regulatoryZone.zone}`}
+                  allowRemoveZone={allowRemoveZone}
+                  isEditable={isEditable}
+                  isLast={regulatoryZones.length === index + 1}
+                  namespace={namespace}
+                  onRemove={onRemoveById}
+                  regulatoryTopic={regulatoryTopic}
+                  regulatoryZone={regulatoryZone}
+                />
+              ))}
           </List>
         </Row>
       )}
@@ -205,6 +210,14 @@ const getFirstRegulatoryZoneTopic = (regulatoryZones: RegulatoryZoneType[]): str
 
   return firstRefulatoryZone.topic
 }
+
+const Icons = styled.span`
+  float: right;
+  display: flex;
+  justify-content: flex-end;
+  flex: 1;
+  height: 23px;
+`
 
 const Text = styled.span`
   margin-left: 5px;

@@ -582,11 +582,6 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
   border-radius: 4px;
 }
 
-.rs-table-cell-content > .rs-checkbox {
-  margin-top: -10px;
-  margin-left: -10px;
-}
-
 .rs-modal-header-close {
   background: unset;
   right: 10px !important;

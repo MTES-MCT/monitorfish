@@ -237,7 +237,7 @@ const MetadataWrapper = styled.div<{
   display: ${props => (props.regulatoryZoneMetadataPanelIsOpen ? 'flex' : 'none')};
   position: absolute;
   top: 0;
-  left: calc(50% + 72px);
+  left: calc(50% + 88px);
   z-index: 1;
   color: ${p => p.theme.color.gunMetal};
   margin: 6px 0 0 6px;

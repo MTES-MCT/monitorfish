@@ -164,26 +164,27 @@ function UnmemoizedRegulatoryZone({
           <ShowIcon
             data-cy="regulatory-layers-my-zones-zone-hide"
             onClick={triggerShowRegulatoryZone}
-            style={{ paddingTop: 5 }}
+            style={{ marginTop: 2 }}
             title="Cacher la zone"
           />
         ) : (
           <HideIcon
             data-cy="regulatory-layers-my-zones-zone-show"
             onClick={triggerShowRegulatoryZone}
-            style={{ paddingTop: 5 }}
+            style={{ marginTop: 2 }}
             title="Afficher la zone"
           />
         )}
-        {allowRemoveZone ? (
+        {allowRemoveZone && (
           <CloseIcon
             data-cy="regulatory-layers-my-zones-zone-delete"
             onClick={() => {
               onRemove(regulatoryZone.id)
             }}
+            style={{ marginTop: -2 }}
             title="Supprimer la zone de ma sélection"
           />
-        ) : null}
+        )}
       </Icons>
     </Zone>
   )
@@ -215,6 +216,7 @@ const Icons = styled.span`
   display: flex;
   justify-content: flex-end;
   flex: 1;
+  height: 23px;
 `
 
 const Zone = styled.span<{

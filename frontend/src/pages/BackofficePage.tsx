@@ -50,8 +50,4 @@ const BackofficeWrapper = styled.div`
   height: 100%;
   overflow: hidden;
   width: 100%;
-
-  * {
-    box-sizing: border-box;
-  }
 `

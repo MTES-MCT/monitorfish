@@ -40,7 +40,7 @@ export function CheckedCell({ dataKey, onChange, rowData, ...props }: CheckedCel
 }
 
 export const StyledCheckbox = styled(Checkbox)`
-  margin-top: -33px;
+  margin-top: -10px;
   margin-left: -10px;
   height: 36px;
 `

@@ -351,9 +351,9 @@ body > .rs-modal-wrapper {
   box-sizing: border-box;
 }
 body > .rs-modal-wrapper .rs-modal-full {
-  margin: 5%;
+  margin: 2%;
   max-height: calc(100% - 10%);
-  max-width: calc(100% - 10%);
+  max-width: calc(100% - 4%);
   /* height: calc(100% - 10%); */
-  width: calc(100% - 10%);
+  width: calc(100% - 4%);
 }

@@ -236,7 +236,7 @@ refresh_materialized_view.flow.schedule = Schedule(
     ]
 )
 regulations.flow.schedule = CronSchedule("6,16,26,36,46,56 * * * *")
-regulations_checkup.flow.schedule = CronSchedule("58 5 * * 1,2,3,4,5")
+regulations_checkup.flow.schedule = CronSchedule("5 6 * * 1,2,3,4,5")
 regulations_open_data.flow.schedule = CronSchedule("18 1 * * 5")
 risk_factor.flow.schedule = CronSchedule("3,13,23,33,43,53 * * * *")
 scrape_legipeche.flow.schedule = CronSchedule("15 5 * * 1,2,3,4,5")

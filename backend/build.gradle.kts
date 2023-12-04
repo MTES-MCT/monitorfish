@@ -37,7 +37,7 @@ tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilation
 
 dependencies {
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
-    api("io.ktor:ktor-client-core-jvm:2.3.3")
+    api("io.ktor:ktor-client-core-jvm:2.3.6")
     api("io.ktor:ktor-client-java-jvm:2.3.3")
     api("io.ktor:ktor-client-mock-jvm:2.3.3")
     api("io.ktor:ktor-client-content-negotiation-jvm:2.3.3")

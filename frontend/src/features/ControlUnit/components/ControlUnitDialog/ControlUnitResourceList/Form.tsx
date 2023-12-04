@@ -14,7 +14,7 @@ import { Formik } from 'formik'
 import styled from 'styled-components'
 
 import { CONTROL_UNIT_RESOURCE_FORM_SCHEMA, CONTROL_UNIT_RESOURCE_TYPES_AS_OPTIONS } from './constants'
-import { RTK_COMMON_QUERY_OPTIONS } from '../../../../../api/constants'
+import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '../../../../../api/constants'
 import { useGetStationsQuery } from '../../../../Station/stationApi'
 
 import type { ControlUnitResourceFormValues } from './types'
@@ -34,7 +34,7 @@ export function Form({ className, initialValues, onArchive, onCancel, onDelete, 
   const key = useKey([initialValues])
   const isNew = !initialValues.id
 
-  const { data: stations } = useGetStationsQuery(undefined, RTK_COMMON_QUERY_OPTIONS)
+  const { data: stations } = useGetStationsQuery(undefined, RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS)
 
   const stationsAsOptions = getOptionsFromIdAndName(stations)?.filter(stationAsOption => stationAsOption.value !== 0)
 

@@ -32,6 +32,7 @@ function UnmemoizedStationLayer({ hoveredFeatureId }: StationLayerProps) {
 
   const dispatch = useMainAppDispatch()
   const selectedStationId = useMainAppSelector(state => state.station.selectedStationId)
+  const highlightedStationIds = useMainAppSelector(state => state.station.highlightedStationIds)
 
   const { data: stations } = useGetStationsQuery()
 
@@ -43,11 +44,11 @@ function UnmemoizedStationLayer({ hoveredFeatureId }: StationLayerProps) {
   useEffect(() => {
     vectorSourceRef.current.forEachFeature(feature => {
       feature.setState({
-        isHighlighted: feature.id === hoveredFeatureId,
+        isHighlighted: feature.id === hoveredFeatureId || highlightedStationIds.includes(feature.entityId),
         isSelected: feature.code === MonitorFishLayer.STATION && feature.entityId === selectedStationId
       })
     })
-  }, [hoveredFeatureId, selectedStationId])
+  }, [hoveredFeatureId, selectedStationId, highlightedStationIds])
 
   useEffect(() => {
     vectorSourceRef.current.clear()
@@ -55,12 +56,11 @@ function UnmemoizedStationLayer({ hoveredFeatureId }: StationLayerProps) {
   }, [dispatch, stationsAsFeatures])
 
   useEffect(() => {
-    monitorfishMap.getLayers().push(vectorLayerRef.current)
+    const localVectorLayer = vectorLayerRef.current
+    monitorfishMap.getLayers().push(localVectorLayer)
 
     return () => {
-      monitorfishMap.removeLayer(vectorLayerRef.current)
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      vectorLayerRef.current.dispose()
+      monitorfishMap.removeLayer(localVectorLayer)
     }
   }, [])
 

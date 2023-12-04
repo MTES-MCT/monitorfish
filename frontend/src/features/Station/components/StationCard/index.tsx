@@ -21,7 +21,7 @@ function StationCardWithRef({ isSelected = false, station }: StationCardProps, r
   const dispatch = useMainAppDispatch()
 
   const close = () => {
-    dispatch(stationActions.hightlightStationIds([]))
+    dispatch(stationActions.highlightStationIds([]))
     dispatch(stationActions.selectStation(undefined))
   }
 

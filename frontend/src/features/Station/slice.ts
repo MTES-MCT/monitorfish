@@ -17,7 +17,7 @@ const stationSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'station',
   reducers: {
-    hightlightStationIds(state, action: PayloadAction<number[]>) {
+    highlightStationIds(state, action: PayloadAction<number[]>) {
       state.highlightedStationIds = action.payload
     },
 

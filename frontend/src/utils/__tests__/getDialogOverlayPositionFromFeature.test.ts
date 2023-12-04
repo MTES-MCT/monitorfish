@@ -40,14 +40,14 @@ describe('utils/getDialogOverlayPositionFromFeature()', () => {
     MockedMap.prototype.getPixelFromCoordinate.mockReturnValue([722.5017053675074, 613.1952867660966])
     MockedMap.prototype.getCoordinateFromPixel.mockReturnValue([-377435.1012661498, 6222803.486709494])
 
-    const firstRresult = getDialogOverlayPositionFromFeature(featureMock, dialogElementMock, TEST_FEATURE_MARGINS)
+    const firstResult = getDialogOverlayPositionFromFeature(featureMock, dialogElementMock, TEST_FEATURE_MARGINS)
     const secondResult = getDialogOverlayPositionFromFeature(
       featureMock,
       TEST_DIALOG_WIDTH_AND_HEIGHT,
       TEST_FEATURE_MARGINS
     )
 
-    expect(firstRresult).toEqual([-377435.1012661498, 6222803.486709494])
+    expect(firstResult).toEqual([-377435.1012661498, 6222803.486709494])
     expect(secondResult).toEqual([-377435.1012661498, 6222803.486709494])
   })
 })

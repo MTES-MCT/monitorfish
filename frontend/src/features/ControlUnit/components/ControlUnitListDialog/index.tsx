@@ -1,11 +1,10 @@
 import { Accent, Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
-import { noop } from 'lodash/fp'
 import { useCallback, useMemo } from 'react'
 
 import { FilterBar } from './FilterBar'
 import { Item } from './Item'
 import { getFilters } from './utils'
-import { RTK_COMMON_QUERY_OPTIONS } from '../../../../api/constants'
+import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '../../../../api/constants'
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
@@ -17,9 +16,10 @@ import { useGetControlUnitsQuery } from '../../controlUnitApi'
 export function ControlUnitListDialog() {
   const dispatch = useMainAppDispatch()
   const filtersState = useMainAppSelector(store => store.controlUnitListDialog.filtersState)
+  const isStationLayerDisplayed = useMainAppSelector(store => store.displayedComponent.isStationLayerDisplayed)
   const { data: controlUnits, error: getControlUnitsError } = useGetControlUnitsQuery(
     undefined,
-    RTK_COMMON_QUERY_OPTIONS
+    RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
   )
   FrontendApiError.handleIfAny(getControlUnitsError)
 
@@ -39,6 +39,14 @@ export function ControlUnitListDialog() {
     dispatch(displayedComponentActions.setDisplayedComponents({ isControlUnitListDialogDisplayed: false }))
   }, [dispatch])
 
+  const toggleStationLayer = useCallback(() => {
+    dispatch(
+      displayedComponentActions.setDisplayedComponents({
+        isStationLayerDisplayed: !isStationLayerDisplayed
+      })
+    )
+  }, [dispatch, isStationLayerDisplayed])
+
   return (
     <NoRsuiteOverrideWrapper>
       <MapMenuDialog.Container style={{ height: 480, position: 'absolute', right: 50, top: 118 }}>
@@ -47,9 +55,9 @@ export function ControlUnitListDialog() {
           <MapMenuDialog.Title>Unités de contrôle</MapMenuDialog.Title>
           <MapMenuDialog.VisibilityButton
             accent={Accent.SECONDARY}
-            Icon={Icon.Display}
-            onClick={noop}
-            style={{ visibility: 'hidden' }}
+            Icon={isStationLayerDisplayed ? Icon.Display : Icon.Hide}
+            onClick={toggleStationLayer}
+            title={isStationLayerDisplayed ? 'Masquer les bases' : 'Afficher les bases'}
           />
         </MapMenuDialog.Header>
         <MapMenuDialog.Body>

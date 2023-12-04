@@ -34,20 +34,30 @@ import VesselEstimatedPositionOverlay from './overlays/VesselEstimatedPositionOv
 import VesselTrackOverlay from './overlays/VesselTrackOverlay'
 import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
+import { FeatureWithCodeAndEntityId } from '../../libs/FeatureWithCodeAndEntityId'
+import { FrontendErrorBoundary } from '../../ui/FrontendErrorBoundary'
 import { AdministrativeLayers } from '../AdministrativeZone/layers/AdministrativeLayers'
 import { BaseLayer } from '../BaseMap/layers/BaseLayer'
 import { RegulatoryLayers } from '../Regulation/layers/RegulatoryLayers'
 import { RegulatoryLayerSearch } from '../Regulation/layers/RegulatoryLayerSearch'
 import { RegulatoryPreviewLayer } from '../Regulation/layers/RegulatoryPreviewLayer'
+import { HoveredStationOverlay } from '../Station/components/HoveredStationOverlay'
+import { SelectedStationOverlay } from '../Station/components/SelectedStationOverlay'
+import { StationLayer } from '../Station/components/StationLayer'
 
 export function Map() {
   const isSuperUser = useIsSuperUser()
-  const { areVesselsDisplayed, isMissionsLayerDisplayed } = useMainAppSelector(state => state.displayedComponent)
+  const { areVesselsDisplayed, isMissionsLayerDisplayed, isStationLayerDisplayed } = useMainAppSelector(
+    state => state.displayedComponent
+  )
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
-  const [currentFeature, setCurrentFeature] = useState<Feature>()
+  const [hoveredFeature, setHoveredFeature] = useState<Feature | FeatureWithCodeAndEntityId | undefined>(undefined)
   const [mapMovingAndZoomEvent, setMapMovingAndZoomEvent] = useState<Object>({})
   const [handlePointerMoveEventPixel, setHandlePointerMoveEventPixel] = useState(null)
+
+  const hoveredFeatureWithCodeAndEntityId =
+    hoveredFeature && hoveredFeature instanceof FeatureWithCodeAndEntityId ? hoveredFeature : undefined
 
   const handleMovingAndZoom = () => {
     if (!shouldUpdateView) {
@@ -69,7 +79,7 @@ export function Map() {
       handleMovingAndZoom={handleMovingAndZoom}
       handlePointerMove={handlePointerMove}
       isMainApp
-      setCurrentFeature={setCurrentFeature}
+      setCurrentFeature={setHoveredFeature}
       showAttributions
       showCoordinates
     >
@@ -85,18 +95,32 @@ export function Map() {
       <MapMenu />
       <MeasurementLayer />
       <FilterLayer />
+
+      <DrawLayer />
+
       {/** <></> can't be used to group condition as BaseMap needs the layers to be direct children * */}
       {isSuperUser && isMissionsLayerDisplayed && <MissionLayer />}
       {isSuperUser && <MissionsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />}
       {isSuperUser && <SelectedMissionLayer />}
-      {isSuperUser && <MissionHoveredLayer feature={currentFeature} />}
-      {isSuperUser && <MissionOverlay feature={currentFeature} />}
+      {isSuperUser && <MissionHoveredLayer feature={hoveredFeature} />}
+      {isSuperUser && <MissionOverlay feature={hoveredFeature} />}
       {isSuperUser && <SelectedMissionOverlay />}
       {isSuperUser && <SelectedMissionActionsLayer />}
-      {isSuperUser && <ControlOverlay feature={currentFeature} />}
+      {isSuperUser && <ControlOverlay feature={hoveredFeature} />}
       {isSuperUser && <SelectedControlOverlay />}
-      <DrawLayer />
+
       <RegulatoryLayerSearch />
+
+      <FrontendErrorBoundary>
+        {isSuperUser && isStationLayerDisplayed && (
+          <StationLayer hoveredFeatureId={hoveredFeatureWithCodeAndEntityId?.id} />
+        )}
+        {isSuperUser && isStationLayerDisplayed && (
+          <HoveredStationOverlay hoveredFeature={hoveredFeatureWithCodeAndEntityId} />
+        )}
+        {isSuperUser && <SelectedStationOverlay />}
+      </FrontendErrorBoundary>
+
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />
       {/** <></> can't be used to group condition as BaseMap needs the layers to be direct children * */}
       <VesselsLayer />
@@ -107,11 +131,11 @@ export function Map() {
       {areVesselsDisplayed && <VesselAlertAndBeaconMalfunctionLayer />}
       {areVesselsDisplayed && <VesselInfractionSuspicionLayer />}
       <VesselsTracksLayerMemoized />
-      <VesselCardOverlay feature={currentFeature} />
-      <TrackTypeOverlay feature={currentFeature} pointerMoveEventPixel={handlePointerMoveEventPixel} />
-      <VesselEstimatedPositionOverlay feature={currentFeature} pointerMoveEventPixel={handlePointerMoveEventPixel} />
-      <VesselTrackOverlay feature={currentFeature} />
-      {currentFeature && <LayerDetailsBox feature={currentFeature} />}
+      <VesselCardOverlay feature={hoveredFeature} />
+      <TrackTypeOverlay feature={hoveredFeature} pointerMoveEventPixel={handlePointerMoveEventPixel} />
+      <VesselEstimatedPositionOverlay feature={hoveredFeature} pointerMoveEventPixel={handlePointerMoveEventPixel} />
+      <VesselTrackOverlay feature={hoveredFeature} />
+      {hoveredFeature && <LayerDetailsBox feature={hoveredFeature} />}
       <InterestPointLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />
       <RegulatoryPreviewLayer />
     </BaseMap>

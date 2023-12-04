@@ -56,7 +56,8 @@ const Fields = styled.table`
   display: table;
   margin: 5px;
   min-width: 40%;
-  width: inherit;
+  margin-top: 5px;
+  margin-bottom: 5px;
 `
 
 const Field = styled.tr`

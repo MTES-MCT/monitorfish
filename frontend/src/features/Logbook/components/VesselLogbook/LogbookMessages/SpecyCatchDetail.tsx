@@ -113,7 +113,6 @@ const Fields = styled.table`
   display: table;
   margin: 10px 5px 5px 20px;
   min-width: 40%;
-  width: inherit;
 `
 
 const Field = styled.tr`

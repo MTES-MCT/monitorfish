@@ -2,10 +2,10 @@ import { Icon } from '@mtes-mct/monitor-ui'
 import { useCallback, useRef } from 'react'
 import styled from 'styled-components'
 
-import { MapToolButton } from './shared/MapToolButton'
-import { displayedComponentActions } from '../../domain/shared_slices/DisplayedComponent'
-import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../hooks/useMainAppSelector'
+import { displayedComponentActions } from '../../../domain/shared_slices/DisplayedComponent'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { MapToolButton } from '../../MapButtons/shared/MapToolButton'
 
 export function ControlUnitListDialogButton() {
   const wrapperRef = useRef(null)
@@ -33,9 +33,13 @@ export function ControlUnitListDialogButton() {
   }, [dispatch, isControlUnitDialogDisplayed, isControlUnitListDialogDisplayed])
 
   return (
-    <Wrapper ref={wrapperRef} $isActive={isControlUnitListDialogDisplayed} $isRightMenuShrinked={!rightMenuIsOpen}>
+    <Wrapper
+      ref={wrapperRef}
+      $isActive={isControlUnitListDialogDisplayed || isControlUnitDialogDisplayed}
+      $isRightMenuShrinked={!rightMenuIsOpen}
+    >
       <MapToolButton
-        isActive={isControlUnitListDialogDisplayed}
+        isActive={isControlUnitListDialogDisplayed || isControlUnitDialogDisplayed}
         onClick={toggle}
         style={{ top: 236 }}
         title="Liste des unités de contrôle"
@@ -55,6 +59,7 @@ const Wrapper = styled.div<{
   z-index: 1000;
 
   > button {
+    padding-top: 2px;
     color: ${p => p.theme.color.white};
     background-color: ${p => (p.$isActive ? p.theme.color.blueGray : p.theme.color.charcoal)};
   }

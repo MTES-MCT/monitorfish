@@ -9,7 +9,7 @@ type Options<T extends VectorSource<Geometry>> = VectorLayerOptions<T> & {
   code: MonitorFishLayer
 }
 
-export class VectorLayerWithCode<T extends VectorSource<Geometry>> extends VectorLayer<T> {
+export class VectorLayerWithCode<T extends VectorSource<Geometry> = VectorSource<Geometry>> extends VectorLayer<T> {
   public code: MonitorFishLayer
   /** @deprecated Replaced by `code`. */
   public name: MonitorFishLayer

@@ -47,9 +47,8 @@ export function SelectedStationOverlay() {
     }
 
     const nextOverlay = new Overlay({
-      className: 'ol-overlay-container',
-      element: selectionDialogElementRef.current,
-      stopEvent: false
+      className: 'ol-overlay-container overlay-active',
+      element: selectionDialogElementRef.current
     })
     nextOverlay.setPosition(selectedStationOverlayPosition)
 

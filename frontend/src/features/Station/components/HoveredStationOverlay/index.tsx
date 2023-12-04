@@ -32,7 +32,7 @@ export function HoveredStationOverlay({ hoveredFeature }: HoveredStationOverlayP
 
   const wrapperWindowPosition = useMemo(
     () => getDialogWindowPositionFromFeature(hoveredFeature, hoverDialogElementRef.current, FEATURE_MARGINS),
-    // Depency optimization
+    // Dependency optimization
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [hoverDialogElementRef.current, hoveredStationId]
   )

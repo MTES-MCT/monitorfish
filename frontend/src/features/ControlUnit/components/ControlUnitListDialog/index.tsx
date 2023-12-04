@@ -4,7 +4,7 @@ import { useCallback, useMemo } from 'react'
 import { FilterBar } from './FilterBar'
 import { Item } from './Item'
 import { getFilters } from './utils'
-import { RTK_COMMON_QUERY_OPTIONS } from '../../../../api/constants'
+import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '../../../../api/constants'
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
@@ -19,7 +19,7 @@ export function ControlUnitListDialog() {
   const isStationLayerDisplayed = useMainAppSelector(store => store.displayedComponent.isStationLayerDisplayed)
   const { data: controlUnits, error: getControlUnitsError } = useGetControlUnitsQuery(
     undefined,
-    RTK_COMMON_QUERY_OPTIONS
+    RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
   )
   FrontendApiError.handleIfAny(getControlUnitsError)
 

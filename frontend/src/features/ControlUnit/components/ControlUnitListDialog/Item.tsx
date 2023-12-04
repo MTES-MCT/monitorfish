@@ -17,6 +17,8 @@ import { monitorfishMap } from '../../../map/monitorfishMap'
 import { stationActions } from '../../../Station/slice'
 import { controlUnitDialogActions } from '../ControlUnitDialog/slice'
 
+const FIVE_SECONDS = 5000
+
 export type ItemProps = {
   controlUnit: ControlUnit.ControlUnit
 }
@@ -49,7 +51,10 @@ export function Item({ controlUnit }: ItemProps) {
       dispatch(mapActions.fitToExtent(bufferedHighlightedStationsExtent))
     }
 
-    dispatch(stationActions.hightlightStationIds(highlightedStationIds))
+    dispatch(stationActions.highlightStationIds(highlightedStationIds))
+    setTimeout(() => {
+      dispatch(stationActions.highlightStationIds([]))
+    }, FIVE_SECONDS)
   }
 
   const edit = () => {

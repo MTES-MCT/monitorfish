@@ -18,7 +18,7 @@ export const getFeatureStyle = ((feature: FeatureWithCodeAndEntityId) => {
   const iconStyle = new Style({
     image: new Icon({
       displacement: [0, 19],
-      src: `/map-icons/station-layer-icon${feature.isHighlighted ? '-highlighted' : ''}.svg`
+      src: `/map-icons/station-layer-icon${feature.isHighlighted || feature.isSelected ? '-highlighted' : ''}.svg`
     })
   })
 

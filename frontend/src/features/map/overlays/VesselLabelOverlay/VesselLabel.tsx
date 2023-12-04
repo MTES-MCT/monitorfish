@@ -245,9 +245,11 @@ const ZoneText = styled.span<{
 const RiskFactor = styled.span<{
   hasText: boolean
 }>`
-  width: 28px;
+  width: 24px;
   height: 19px;
   padding-top: 1px;
+  padding-left: 6px;
+  padding-right: 0px;
   font-size: 13px;
   font-weight: 500;
   display: inline-block;

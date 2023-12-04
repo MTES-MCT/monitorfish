@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { AreaNote } from './AreaNote'
 import { ControlUnitContactList } from './ControlUnitContactList'
 import { ControlUnitResourceList } from './ControlUnitResourceList'
-import { RTK_COMMON_QUERY_OPTIONS } from '../../../../api/constants'
+import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '../../../../api/constants'
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
@@ -26,7 +26,7 @@ export function ControlUnitDialog() {
 
   const { data: controlUnit, error: getControlControlUnitError } = useGetControlUnitQuery(
     controlUnitId,
-    RTK_COMMON_QUERY_OPTIONS
+    RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
   )
   FrontendApiError.handleIfAny(getControlControlUnitError)
 

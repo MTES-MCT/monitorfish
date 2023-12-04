@@ -1,6 +1,5 @@
 import { AlertsMapButton } from './AlertsMapButton'
 import { BeaconMalfunctionsMapButton } from './BeaconMalfunctionsMapButton'
-import { ControlUnitListDialogButton } from './ControlUnitListDialogButton'
 import { FavoriteVessels } from './FavoriteVessels'
 import { InterestPointMapButton } from './InterestPoints'
 import { MeasurementMapButton } from './Measurements'
@@ -10,6 +9,7 @@ import { VesselLabelsMapButton } from './VesselLabels'
 import { VesselVisibilityMapButton } from './VesselVisibility'
 import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
+import { ControlUnitListDialogButton } from '../ControlUnit/components/ControlUnitListDialogButton'
 
 export function MapButtons() {
   const isSuperUser = useIsSuperUser()

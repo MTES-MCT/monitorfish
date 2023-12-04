@@ -37,6 +37,7 @@ export enum LayerType {
   MISSION = 'MISSION',
   REGULATORY = 'REGULATORY',
   REGULATORY_PREVIEW = 'REGULATORY_PREVIEW',
+  STATION = 'STATION',
   VESSEL = 'VESSEL',
   VESSEL_ALERT = 'VESSEL_ALERT',
   VESSEL_ALERT_AND_BEACON_MALFUNCTION = 'VESSEL_ALERT_AND_BEACON_MALFUNCTION',
@@ -99,6 +100,13 @@ export const LayerProperties: Record<MonitorFishLayer, ShowableLayer> = {
     code: MonitorFishLayer.DRAW,
     type: LayerType.DRAW,
     zIndex: 999
+  },
+  [MonitorFishLayer.STATION]: {
+    code: MonitorFishLayer.STATION,
+    type: LayerType.STATION,
+    zIndex: 1001,
+    isClickable: true,
+    isHoverable: true
   },
   [MonitorFishLayer.FILTERED_VESSELS]: {
     code: MonitorFishLayer.FILTERED_VESSELS,

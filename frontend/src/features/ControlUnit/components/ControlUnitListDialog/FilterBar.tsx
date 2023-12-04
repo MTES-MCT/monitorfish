@@ -11,12 +11,12 @@ import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { controlUnitListDialogActions } from './slice'
-import { RTK_COMMON_QUERY_OPTIONS } from '../../../../api/constants'
-import { useGetStationsQuery } from '../../../../api/station'
+import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '../../../../api/constants'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FrontendApiError } from '../../../../libs/FrontendApiError'
 import { isNotArchived } from '../../../../utils/isNotArchived'
+import { useGetStationsQuery } from '../../../Station/stationApi'
 import { useGetAdministrationsQuery } from '../../administrationApi'
 
 export function FilterBar() {
@@ -24,10 +24,13 @@ export function FilterBar() {
   const filtersState = useMainAppSelector(store => store.controlUnitListDialog.filtersState)
   const { data: administrations, error: getAdministrationsError } = useGetAdministrationsQuery(
     undefined,
-    RTK_COMMON_QUERY_OPTIONS
+    RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
   )
   FrontendApiError.handleIfAny(getAdministrationsError)
-  const { data: bases, error: getStationsError } = useGetStationsQuery(undefined, RTK_COMMON_QUERY_OPTIONS)
+  const { data: bases, error: getStationsError } = useGetStationsQuery(
+    undefined,
+    RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
+  )
   FrontendApiError.handleIfAny(getStationsError)
 
   const administrationsAsOptions = useMemo(

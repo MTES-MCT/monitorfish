@@ -1,19 +1,16 @@
 import { THEME, type NewWindowContextValue, NewWindowContext, Notifier } from '@mtes-mct/monitor-ui'
 import {
   type CSSProperties,
-  type ForwardedRef,
-  forwardRef,
   type HTMLAttributes,
   type MutableRefObject,
   useCallback,
   useEffect,
-  useImperativeHandle,
   useMemo,
   useRef,
   useState
 } from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
-import styled, { createGlobalStyle } from 'styled-components'
+import styled, { createGlobalStyle, StyleSheetManager } from 'styled-components'
 
 import { Alert } from './Alert'
 import { BeaconMalfunctionBoard } from './BeaconMalfunctionBoard'
@@ -37,11 +34,9 @@ import { FrontendErrorBoundary } from '../../ui/FrontendErrorBoundary'
 export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
   isFromURL: boolean
 }
-function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTMLDivElement | null>) {
+export function SideWindow({ isFromURL }: SideWindowProps) {
   // eslint-disable-next-line no-null/no-null
   const wrapperRef = useRef<HTMLDivElement | null>(null)
-
-  useImperativeHandle<HTMLDivElement | null, HTMLDivElement | null>(ref, () => wrapperRef.current)
 
   const { openedBeaconMalfunctionInKanban } = useMainAppSelector(state => state.beaconMalfunction)
   const { editedReportingInSideWindow } = useMainAppSelector(state => state.reporting)
@@ -115,38 +110,44 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
   }, [])
 
   return (
-    <Wrapper ref={wrapperRef}>
-      {!isFirstRender && (
-        <NewWindowContext.Provider value={newWindowContextProviderValue}>
-          <GlobalStyle />
+    <StyleSheetManager target={wrapperRef.current || undefined}>
+      <Wrapper ref={wrapperRef}>
+        {!isFirstRender && (
+          <NewWindowContext.Provider value={newWindowContextProviderValue}>
+            <GlobalStyle />
 
-          <Menu selectedMenu={selectedPath.menu} />
-          {(selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD ||
-            selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST) && (
-            <GrayOverlay onClick={closeRightSidebar} style={grayOverlayStyle} />
-          )}
-          <FrontendErrorBoundary>
-            {isPreloading && (
-              <Loading>
-                <FulfillingBouncingCircleSpinner className="update-vessels" color={THEME.color.lightGray} size={100} />
-                <Text data-cy="first-loader">Chargement...</Text>
-              </Loading>
+            <Menu selectedMenu={selectedPath.menu} />
+            {(selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD ||
+              selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST) && (
+              <GrayOverlay onClick={closeRightSidebar} style={grayOverlayStyle} />
             )}
-            {!isPreloading && (
-              <Content>
-                {selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST && (
-                  <Alert baseRef={wrapperRef as MutableRefObject<HTMLDivElement>} />
-                )}
-                {selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && <BeaconMalfunctionBoard />}
-                {selectedPath.menu === SideWindowMenuKey.MISSION_LIST && <MissionList />}
-                {selectedPath.menu === SideWindowMenuKey.MISSION_FORM && <MissionForm />}
-              </Content>
-            )}
-          </FrontendErrorBoundary>
-          <Notifier isSideWindow />
-        </NewWindowContext.Provider>
-      )}
-    </Wrapper>
+            <FrontendErrorBoundary>
+              {isPreloading && (
+                <Loading>
+                  <FulfillingBouncingCircleSpinner
+                    className="update-vessels"
+                    color={THEME.color.lightGray}
+                    size={100}
+                  />
+                  <Text data-cy="first-loader">Chargement...</Text>
+                </Loading>
+              )}
+              {!isPreloading && (
+                <Content>
+                  {selectedPath.menu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST && (
+                    <Alert baseRef={wrapperRef as MutableRefObject<HTMLDivElement>} />
+                  )}
+                  {selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && <BeaconMalfunctionBoard />}
+                  {selectedPath.menu === SideWindowMenuKey.MISSION_LIST && <MissionList />}
+                  {selectedPath.menu === SideWindowMenuKey.MISSION_FORM && <MissionForm />}
+                </Content>
+              )}
+            </FrontendErrorBoundary>
+            <Notifier isSideWindow />
+          </NewWindowContext.Provider>
+        )}
+      </Wrapper>
+    </StyleSheetManager>
   )
 }
 
@@ -239,7 +240,3 @@ const Text = styled.span`
   margin-top: 10px;
   position: relative;
 `
-
-SideWindowWithRef.displayName = 'SideWindow'
-
-export const SideWindow = forwardRef(SideWindowWithRef)

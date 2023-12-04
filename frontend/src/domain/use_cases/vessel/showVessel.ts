@@ -3,6 +3,7 @@ import { logbookActions } from '../../../features/Logbook/slice'
 import { addVesselIdentifierToVesselIdentity } from '../../../features/VesselSearch/utils'
 import { Vessel } from '../../entities/vessel/vessel'
 import { getCustomOrDefaultTrackRequest, throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
+import { displayedComponentActions } from '../../shared_slices/DisplayedComponent'
 import { setDisplayedErrors } from '../../shared_slices/DisplayedError'
 import { addSearchedVessel, removeError, setError } from '../../shared_slices/Global'
 import { doNotAnimate } from '../../shared_slices/Map'
@@ -21,6 +22,13 @@ export const showVessel =
       const { selectedVesselTrackRequest, vessels } = vessel
       const { defaultVesselTrackDepth } = map
       const { areFishingActivitiesShowedOnMap } = fishingActivities
+      // TODO How to handle both the control unit dialog and the vessel sidebar ?
+      dispatch(
+        displayedComponentActions.setDisplayedComponents({
+          isControlUnitDialogDisplayed: false,
+          isControlUnitListDialogDisplayed: false
+        })
+      )
 
       const vesselFeatureId = Vessel.getVesselFeatureId(vesselIdentity)
       const selectedVesselLastPosition = vessels.find(lastPosition => lastPosition.vesselFeatureId === vesselFeatureId)

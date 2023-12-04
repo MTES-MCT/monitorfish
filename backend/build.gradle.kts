@@ -50,7 +50,7 @@ dependencies {
     api("org.springframework.boot:spring-boot-starter-actuator:3.1.3")
     api("org.springframework.boot:spring-boot-starter-json:3.1.3")
     api("org.springframework.boot:spring-boot-starter-security:3.1.3")
-    api("org.springframework.boot:spring-boot-starter-data-jpa:3.1.3")
+    api("org.springframework.boot:spring-boot-starter-data-jpa:3.2.0")
     api("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.3")
     api("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     api("org.flywaydb:flyway-core:9.22.3")

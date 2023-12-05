@@ -8,8 +8,7 @@ from sqlalchemy import text
 from sqlalchemy.engine import Connection, Engine
 
 from forklift.config import QUERIES_LOCATION
-
-from .db_config import create_datawarehouse_client, create_engine
+from forklift.db_engines import create_datawarehouse_client, create_engine
 
 
 def read_saved_query(

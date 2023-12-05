@@ -80,7 +80,9 @@ def make_connection_string(db: str) -> str:
         environment variables.
     """
 
-    import forklift.config  # To load env vars in "local test" and "local run" configurations
+    import forklift.config  # To load env vars in "local test" and "local run"
+
+    # configurations
 
     try:
         CLIENT = os.environ[db_env[db]["client"]]

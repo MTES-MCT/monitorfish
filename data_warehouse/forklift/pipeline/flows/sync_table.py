@@ -2,7 +2,7 @@ from pathlib import Path
 
 from prefect import Flow, Parameter, task
 
-from forklift.db_config import create_datawarehouse_client
+from forklift.db_engines import create_datawarehouse_client
 
 
 @task(checkpoint=False)

@@ -7,7 +7,7 @@ from prefect import task
 from prefect.engine.signals import SKIP
 from prefect.utilities.graphql import with_args
 
-from config import FLOWS_LABEL, PREFECT_SERVER_URL
+from forklift.config import FLOWS_LABEL, PREFECT_SERVER_URL
 from forklift.pipeline.entities.prefect import FlowRun
 
 

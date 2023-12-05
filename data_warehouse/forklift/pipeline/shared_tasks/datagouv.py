@@ -6,7 +6,12 @@ import prefect
 import requests
 from prefect import task
 
-from config import DATAGOUV_API_ENDPOINT, DATAGOUV_API_KEY, PROXIES, ROOT_DIRECTORY
+from forklift.config import (
+    DATAGOUV_API_ENDPOINT,
+    DATAGOUV_API_KEY,
+    PROXIES,
+    ROOT_DIRECTORY,
+)
 from forklift.pipeline.utils import remove_file
 
 HEADERS = {

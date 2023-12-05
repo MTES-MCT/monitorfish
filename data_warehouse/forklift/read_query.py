@@ -7,7 +7,7 @@ from clickhouse_connect.driver.httpclient import HttpClient
 from sqlalchemy import text
 from sqlalchemy.engine import Connection, Engine
 
-from config import QUERIES_LOCATION
+from forklift.config import QUERIES_LOCATION
 
 from .db_config import create_datawarehouse_client, create_engine
 

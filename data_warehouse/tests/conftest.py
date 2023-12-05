@@ -6,7 +6,7 @@ import pytest
 from dotenv import dotenv_values
 from pytest import MonkeyPatch
 
-from config import ROOT_DIRECTORY
+from forklift.config import ROOT_DIRECTORY
 
 
 ################################# Start test database #################################

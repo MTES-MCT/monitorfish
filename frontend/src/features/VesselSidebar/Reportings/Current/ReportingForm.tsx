@@ -1,3 +1,4 @@
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Input, Radio, RadioGroup, SelectPicker } from 'rsuite'
 import styled from 'styled-components'
@@ -377,13 +378,21 @@ export function ReportingForm({
         Annuler
       </CancelButton>
       {!!errorFields.length && <br />}
-      {errorFields.includes('title') && `Le champ “Titre” est obligatoire.`}
-      {errorFields.includes('authorTrigram') && `Le champ “Saisi par” est obligatoire.`}
-      {errorFields.includes('controlUnitId') && `Le champ “Nom de l&apos;unité” est obligatoire.`}
-      {errorFields.includes('authorContact') && `Le champ “Nom et contact de l&apos;émetteur” est obligatoire.`}
+      {errorFields.includes('title') && <ErrorMessage>Le champ “Titre” est obligatoire.</ErrorMessage>}
+      {errorFields.includes('authorTrigram') && <ErrorMessage>Le champ “Saisi par” est obligatoire.</ErrorMessage>}
+      {errorFields.includes('controlUnitId') && (
+        <ErrorMessage>Le champ “Nom de l&apos;unité” est obligatoire.</ErrorMessage>
+      )}
+      {errorFields.includes('authorContact') && (
+        <ErrorMessage>Le champ “Nom et contact de l&apos;émetteur” est obligatoire.</ErrorMessage>
+      )}
     </Form>
   )
 }
+
+const ErrorMessage = styled.div`
+  color: ${THEME.color.maximumRed};
+`
 
 const DescriptionTextarea = styled(Input)<{
   hasWhiteBackground: boolean

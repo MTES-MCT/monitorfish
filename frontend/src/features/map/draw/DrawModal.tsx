@@ -188,8 +188,9 @@ const StyledIconButton = styled(IconButton)`
 `
 
 const StyledCoordinatesInput = styled(CoordinatesInput)`
-  > div {
-    padding: 12px;
+  input {
+    height: 28px;
+    padding: 0px 11px;
   }
 `
 
@@ -233,17 +234,17 @@ const QuitButton = styled(Button)`
 const ResetButton = styled(Button)`
   margin-left: auto;
   height: 30px;
-  margin-top: 12px;
-  margin-bottom: 12px;
+  margin-top: 16px;
+  margin-bottom: 16px;
 `
 
 const ValidateButton = styled(Button)`
   background: ${theme.color.mediumSeaGreen};
   height: 30px;
   color: ${theme.color.white};
-  margin-top: 12px;
-  margin-bottom: 12px;
-  margin-right: 12px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  margin-right: 16px;
 
   &:hover {
     background: ${theme.color.mediumSeaGreen};
@@ -253,10 +254,6 @@ const ActionWrapper = styled.div`
   background-color: ${theme.color.white};
   display: flex;
   padding: 10px;
-
-  & > :first-child {
-    margin-left: 14px;
-  }
 
   & > :not(:last-child) {
     margin-right: 10px;

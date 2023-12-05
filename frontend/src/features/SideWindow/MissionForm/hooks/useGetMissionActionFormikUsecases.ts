@@ -13,12 +13,15 @@ import type { MissionActionFormValues } from '../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 import MissionActionType = MissionAction.MissionActionType
+import {useGetMissionQuery} from "../apis";
+import {skipToken} from "@reduxjs/toolkit/query";
 
 export function useGetMissionActionFormikUsecases() {
   const dispatch = useMainAppDispatch()
   const gearsByCode = useMainAppSelector(state => state.gear.gearsByCode)
+  const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
+  const { data: missionData } = useGetMissionQuery(missionId || skipToken)
   const { setFieldValue: setMissionActionFieldValue } = useFormikContext<MissionActionFormValues>()
-  const draft = useMainAppSelector(store => store.mission.draft)
 
   const getFleetSegmentsApiQuery = useGetFleetSegmentsQuery()
   const getPortsApiQuery = useGetPortsQuery()
@@ -85,12 +88,12 @@ export function useGetMissionActionFormikUsecases() {
   }
 
   /**
-   * When updating the mission location from an action, we use the `draft` object to access the `mission` form.
+   * When updating the mission location from an action, we use the `RTK-Query` cache object to access the `mission` form.
    * The mission location is equal to the current action geometry modified.
    */
   const updateMissionLocation = (missionActionValues: MissionActionFormValues) =>
     formikUsecase.updateMissionLocation(dispatch, getPortsApiQuery.data)(
-      draft?.mainFormValues.isGeometryComputedFromControls,
+      missionData?.isGeometryComputedFromControls,
       missionActionValues
     )
 

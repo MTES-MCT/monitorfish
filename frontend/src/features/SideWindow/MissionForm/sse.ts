@@ -1,8 +1,8 @@
-import { MONITORENV_API_URL } from '../../../api'
 import { Mission } from '../../../domain/entities/mission/types'
 import { ReconnectingEventSource } from '../../../libs/ReconnectingEventSource'
 
 import type { PatchCollection, Recipe } from '@reduxjs/toolkit/dist/query/core/buildThunks'
+import {MONITORENV_API_URL} from "../../../api/api";
 
 const MISSION_UPDATES_URL = `${MONITORENV_API_URL}/api/v1/missions/sse`
 export const MISSION_UPDATE_EVENT = `MISSION_UPDATE`

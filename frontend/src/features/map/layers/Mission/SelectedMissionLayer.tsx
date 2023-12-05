@@ -1,34 +1,35 @@
 import GeoJSON from 'ol/format/GeoJSON'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
-import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
+import {memo, useCallback, useEffect, useMemo, useRef} from 'react'
+import {missionZoneStyle} from './MissionLayer/styles'
+import {LayerProperties} from '../../../../domain/entities/layers/constants'
+import {MonitorFishLayer} from '../../../../domain/entities/layers/types'
+import {OPENLAYERS_PROJECTION} from '../../../../domain/entities/map/constants'
+import {getMissionFeatureZone} from '../../../../domain/entities/mission'
+import {useGetFilteredMissionsQuery} from '../../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
+import {useMainAppSelector} from '../../../../hooks/useMainAppSelector'
+import {monitorfishMap} from '../../monitorfishMap'
 
-import { NEW_MISSION_ID } from './constants'
-import { missionZoneStyle } from './MissionLayer/styles'
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
-import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
-import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
-import { getMissionFeatureZone } from '../../../../domain/entities/mission'
-import { useGetFilteredMissionsQuery } from '../../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { monitorfishMap } from '../../monitorfishMap'
-
-import type { VectorLayerWithName } from '../../../../domain/types/layer'
+import type {VectorLayerWithName} from '../../../../domain/types/layer'
+import {skipToken} from "@reduxjs/toolkit/query";
+import {useGetMissionQuery} from "../../../SideWindow/MissionForm/apis";
 
 export function UnmemoizedSelectedMissionLayer() {
   const { missions } = useGetFilteredMissionsQuery()
-  const mission = useMainAppSelector(store => store.mission)
-  const sideWindow = useMainAppSelector(store => store.sideWindow)
+  const selectedMissionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionGeoJSON)
+  const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
+  const { data: missionData } = useGetMissionQuery(missionId || skipToken)
 
   const selectedMission = useMemo(() => {
-    if (!mission.selectedMissionGeoJSON) {
+    if (!selectedMissionGeoJSON) {
       return undefined
     }
 
     return new GeoJSON({
       featureProjection: OPENLAYERS_PROJECTION
-    }).readFeature(mission.selectedMissionGeoJSON)
-  }, [mission.selectedMissionGeoJSON])
+    }).readFeature(selectedMissionGeoJSON)
+  }, [selectedMissionGeoJSON])
 
   const vectorSourceRef = useRef<VectorSource>()
   const getVectorSource = useCallback(() => {
@@ -87,14 +88,13 @@ export function UnmemoizedSelectedMissionLayer() {
     getVectorSource().clear(true)
 
     // When creating a new mission, dummy NEW_MISSION_ID is used
-    const missionId = sideWindow.selectedPath.id || NEW_MISSION_ID
-    if (!mission.draft) {
+    if (!missionData || !missionId) {
       return
     }
 
-    const missionFeature = getMissionFeatureZone({ ...mission.draft.mainFormValues, id: missionId })
+    const missionFeature = getMissionFeatureZone({ ...missionData, id: missionId })
     getVectorSource().addFeature(missionFeature)
-  }, [getVectorSource, mission.draft, sideWindow.selectedPath.id])
+  }, [getVectorSource, missionData, missionId])
 
   return null
 }

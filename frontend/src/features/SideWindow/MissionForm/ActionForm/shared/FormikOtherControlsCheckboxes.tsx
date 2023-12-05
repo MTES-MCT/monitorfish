@@ -1,20 +1,24 @@
-import { FormikCheckbox } from '@mtes-mct/monitor-ui'
-import { useFormikContext } from 'formik'
-import { useEffect } from 'react'
+import {FormikCheckbox} from '@mtes-mct/monitor-ui'
+import {useFormikContext} from 'formik'
+import {useEffect} from 'react'
 import styled from 'styled-components'
 
-import { missionActions as missionSliceActions } from '../../../../../domain/actions'
-import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import { PAMControlUnitIds } from '../../constants'
-import { FieldsetGroup } from '../../shared/FieldsetGroup'
+import {missionActions as missionSliceActions} from '../../../../../domain/actions'
+import {useMainAppDispatch} from '../../../../../hooks/useMainAppDispatch'
+import {useMainAppSelector} from '../../../../../hooks/useMainAppSelector'
+import {PAMControlUnitIds} from '../../constants'
+import {FieldsetGroup} from '../../shared/FieldsetGroup'
 
-import type { MissionActionFormValues } from '../../types'
+import type {MissionActionFormValues} from '../../types'
+import {useGetMissionQuery} from "../../apis";
+import {skipToken} from "@reduxjs/toolkit/query";
 
 export function FormikOtherControlsCheckboxes() {
   const dispatch = useMainAppDispatch()
   const { setFieldValue } = useFormikContext<MissionActionFormValues>()
-  const { draft, mustResetOtherControlsCheckboxes } = useMainAppSelector(state => state.mission)
+  const mustResetOtherControlsCheckboxes = useMainAppSelector(state => state.mission.mustResetOtherControlsCheckboxes)
+  const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
+  const { data: missionData } = useGetMissionQuery(missionId || skipToken)
 
   useEffect(() => {
     if (mustResetOtherControlsCheckboxes) {
@@ -27,7 +31,7 @@ export function FormikOtherControlsCheckboxes() {
     }
   }, [dispatch, setFieldValue, mustResetOtherControlsCheckboxes])
 
-  const isCurrentControlUnitPAM = draft?.mainFormValues.controlUnits?.some(
+  const isCurrentControlUnitPAM = missionData?.controlUnits?.some(
     controlUnit => controlUnit.id && PAMControlUnitIds.includes(controlUnit.id)
   )
 

@@ -26,13 +26,20 @@ import type { Promisable } from 'type-fest'
 
 type MainFormProps = {
   initialValues: MissionMainFormValues
-  onChange: (nextValues: MissionMainFormValues) => Promisable<void>
+  onChange: (nextValues: MissionMainFormValues, values: MissionMainFormValues) => Promisable<void>
 }
 function UnmemoizedMainForm({ initialValues, onChange }: MainFormProps) {
+  console.log('UnmemoizedMainForm RENDERED', initialValues, onChange)
   return (
     <Formik initialValues={initialValues} onSubmit={noop} validationSchema={MainFormLiveSchema}>
       <Wrapper>
-        <FormikEffect onChange={onChange as any} />
+        <FormikEffect onChange={nextValues => {
+          if (!nextValues.isValid) {
+            return
+          }
+          console.log('CALL ONCHANGE', nextValues)
+          onChange(nextValues as any, initialValues)
+        }} />
         <FormikIsValidEffect />
 
         <FormHead>
@@ -86,7 +93,7 @@ function UnmemoizedMainForm({ initialValues, onChange }: MainFormProps) {
  * - The `key` prop is modified (the edited mission `id` changes).
  * - the `onChange` callback is modified (the mission `isClosed` property has been changed).
  */
-export const MainForm = memo(UnmemoizedMainForm, (prevProps, nextProps) => prevProps.onChange === nextProps.onChange)
+export const MainForm = memo(UnmemoizedMainForm, () => true)
 
 const IsUnderJdpFormikCheckbox = styled(FormikCheckbox)`
   margin-left: 48px;

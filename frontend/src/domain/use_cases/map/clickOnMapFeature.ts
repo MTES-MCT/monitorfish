@@ -25,7 +25,7 @@ const geoJSONParser = new GeoJSON()
 
 export const clickOnMapFeature = (mapClick: MapClick) => (dispatch, getState) => {
   const { previewFilteredVesselsMode } = getState().global
-  const { draft } = getState().mission
+  const editedMissionId = getState().sideWindow.selectedPath.id
   if (!mapClick.feature) {
     return
   }
@@ -45,8 +45,8 @@ export const clickOnMapFeature = (mapClick: MapClick) => (dispatch, getState) =>
     return
   }
 
-  // If a mission is already edited in the side window (draft is not null), do not permit to select another mission
-  if (clickedFeatureId.includes(MonitorFishLayer.MISSION_PIN_POINT) && !draft) {
+  // If a mission is already edited in the side window (editedMissionId is not null), do not permit to select another mission
+  if (clickedFeatureId.includes(MonitorFishLayer.MISSION_PIN_POINT) && !editedMissionId) {
     const featureGeoJSON = geoJSONParser.writeFeatureObject(mapClick.feature as Feature<Geometry>, {
       featureProjection: OPENLAYERS_PROJECTION
     })
@@ -55,11 +55,11 @@ export const clickOnMapFeature = (mapClick: MapClick) => (dispatch, getState) =>
     return
   }
 
-  // If a mission is already edited in the side window (draft is not null), do not permit to select another mission action
+  // If a mission is already edited in the side window (editedMissionId is not null), do not permit to select another mission action
   if (
     clickedFeatureId.includes(MonitorFishLayer.MISSION_ACTION_SELECTED) &&
     isControl(mapClick.feature.get('actionType')) &&
-    !draft
+    !editedMissionId
   ) {
     const featureGeoJSON = geoJSONParser.writeFeatureObject(mapClick.feature as Feature<Geometry>, {
       featureProjection: OPENLAYERS_PROJECTION

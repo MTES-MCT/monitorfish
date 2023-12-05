@@ -1,16 +1,18 @@
-import { sortBy } from 'lodash'
+import {sortBy} from 'lodash'
 
-import { useGetPortsQuery } from '../../../../api/port'
-import { isAirOrSeaControl, isLandControl } from '../../../../domain/use_cases/mission/getLastControlCircleGeometry'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { formikUsecase } from '../formikUsecases'
+import {useGetPortsQuery} from '../../../../api/port'
+import {isAirOrSeaControl, isLandControl} from '../../../../domain/use_cases/mission/getLastControlCircleGeometry'
+import {useMainAppDispatch} from '../../../../hooks/useMainAppDispatch'
+import {useMainAppSelector} from '../../../../hooks/useMainAppSelector'
+import {formikUsecase} from '../formikUsecases'
 
-import type { MissionActionFormValues, MissionMainFormValues } from '../types'
+import type {MissionActionFormValues, MissionMainFormValues} from '../types'
+import {missionActionApi} from "../../../../api/missionAction";
+import {MissionAction} from "../../../../domain/types/missionAction";
 
 export function useGetMainFormFormikUsecases() {
   const dispatch = useMainAppDispatch()
-  const draft = useMainAppSelector(store => store.mission.draft)
+  const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
 
   const getPortsApiQuery = useGetPortsQuery()
 
@@ -22,11 +24,16 @@ export function useGetMainFormFormikUsecases() {
       formikUsecase.updateOtherControlsCheckboxes(dispatch)(mission, previousIsControlUnitPAM),
 
     /**
-     * When updating the mission location from the mission, we use the `draft` object to access the `missionAction` form.
+     * When updating the mission location from the mission, we use the `RTK-Query` cache object to access the `missionAction` form.
      * We select the last `missionAction` to update the mission location.
      */
     updateMissionLocation: (isGeometryComputedFromControls: boolean) => {
-      const validControls = draft?.actionsFormValues.filter(
+      if (!missionId) {
+        return
+      }
+
+      const missionActions = missionActionApi.endpoints.getMissionActions.select(missionId) as unknown as MissionAction.MissionAction[]
+      const validControls = missionActions.filter(
         action => isLandControl(action) || isAirOrSeaControl(action)
       )
       if (!validControls) {

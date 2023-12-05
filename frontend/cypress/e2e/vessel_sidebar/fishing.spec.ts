@@ -21,9 +21,13 @@ context('Vessel sidebar fishing tab', () => {
     // Then
     cy.get('*[data-cy^="vessel-fishing-gears"]', { timeout: 10000 }).should('be.visible')
     // FAR messages are not acknowledged
-    cy.get('*[data-cy="vessel-fishing-resume-title"]').eq(1).contains('aucune capture acquittée', { timeout: 10000 })
+    cy.get('*[data-cy="vessel-fishing-resume-title"]')
+      .eq(1)
+      .contains('message non acquittée - aucune capture', { timeout: 10000 })
     // DIS messages are not acknowledged
-    cy.get('*[data-cy="vessel-fishing-resume-title"]').eq(2).contains('aucun rejet acquitté', { timeout: 10000 })
+    cy.get('*[data-cy="vessel-fishing-resume-title"]')
+      .eq(2)
+      .contains('message non acquittée - aucun rejet', { timeout: 10000 })
 
     cy.get('*[data-cy="fishing-resume-not-acknowledged-icon"]').should('have.length', 2)
   })

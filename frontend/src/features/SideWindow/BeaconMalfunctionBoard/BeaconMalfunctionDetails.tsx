@@ -176,6 +176,7 @@ const ShowHistory = styled.span``
 const showHistoryStyle = {
   color: COLORS.slateGray,
   cursor: 'pointer',
+  display: 'block',
   textDecoration: 'underline',
   textDecorationColor: COLORS.slateGray
 }

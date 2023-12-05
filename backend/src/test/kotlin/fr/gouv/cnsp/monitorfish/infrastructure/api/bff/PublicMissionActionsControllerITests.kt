@@ -34,7 +34,7 @@ import java.time.ZonedDateTime
 
 @Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class)
 @WebMvcTest(value = [(MissionActionsController::class)])
-class MissionActionsControllerITests {
+class PublicMissionActionsControllerITests {
 
     @Autowired
     private lateinit var api: MockMvc

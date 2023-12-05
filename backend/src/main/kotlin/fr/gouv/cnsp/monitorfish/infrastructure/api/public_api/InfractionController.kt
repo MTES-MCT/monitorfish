@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController
 class InfractionController(private val getAllInfractions: GetAllInfractions) {
 
     @GetMapping("")
-    @Operation(summary = "Get fishing and security infractions")
-    fun getFishingAndSecurityInfractions(): List<InfractionDataOutput> {
+    @Operation(summary = "Get all infractions")
+    fun getAllInfractionsController(): List<InfractionDataOutput> {
         return getAllInfractions.execute().map { infraction ->
             InfractionDataOutput.fromInfraction(infraction)
         }

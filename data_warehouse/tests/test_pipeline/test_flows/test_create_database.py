@@ -1,5 +1,5 @@
-from src.db_config import create_datawarehouse_client
-from src.pipeline.flows.create_database import flow
+from forklift.db_config import create_datawarehouse_client
+from forklift.pipeline.flows.create_database import flow
 from tests.mocks import mock_check_flow_not_running
 
 flow.schedule = None

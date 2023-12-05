@@ -8,8 +8,8 @@ import pandas as pd
 import requests
 from prefect import task
 
-from src.pipeline.generic_tasks import extract
-from src.pipeline.shared_tasks.datagouv import update_resource
+from forklift.pipeline.generic_tasks import extract
+from forklift.pipeline.shared_tasks.datagouv import update_resource
 
 
 def mock_extract_side_effect(
@@ -22,8 +22,8 @@ def mock_extract_side_effect(
     geom_col: str = "geom",
     crs: Union[int, None] = None,
 ):
-    @patch("src.read_query.pd")
-    @patch("src.read_query.create_engine")
+    @patch("forklift.read_query.pd")
+    @patch("forklift.read_query.create_engine")
     def mock_extract_side_effect_(
         db_name,
         query_filepath,
@@ -84,7 +84,7 @@ def mock_update_resource(
         r.url = url
         return r
 
-    with patch("src.pipeline.shared_tasks.datagouv.requests.post", return_200):
+    with patch("forklift.pipeline.shared_tasks.datagouv.requests.post", return_200):
         return update_resource.run(
             dataset_id=dataset_id,
             resource_id=resource_id,

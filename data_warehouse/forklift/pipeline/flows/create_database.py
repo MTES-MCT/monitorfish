@@ -2,8 +2,8 @@ from pathlib import Path
 
 from prefect import Flow, Parameter, case, task
 
-from src.db_config import create_datawarehouse_client
-from src.pipeline.shared_tasks.control_flow import check_flow_not_running
+from forklift.db_config import create_datawarehouse_client
+from forklift.pipeline.shared_tasks.control_flow import check_flow_not_running
 
 
 @task(checkpoint=False)

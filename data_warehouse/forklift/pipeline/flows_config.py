@@ -10,7 +10,7 @@ from config import (
     FLOWS_LOCATION,
     ROOT_DIRECTORY,
 )
-from src.pipeline.flows import clean_flow_runs
+from forklift.pipeline.flows import clean_flow_runs
 
 ################################ Define flow schedules ################################
 clean_flow_runs.flow.schedule = CronSchedule("8,18,28,38,48,58 * * * *")

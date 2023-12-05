@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 # Package structure
 ROOT_DIRECTORY = Path(__file__).parent
-LIBRARY_LOCATION = ROOT_DIRECTORY / Path("src")
+LIBRARY_LOCATION = ROOT_DIRECTORY / Path("forklift")
 QUERIES_LOCATION = LIBRARY_LOCATION / Path("pipeline/queries")
 SQL_SCRIPTS_LOCATION = LIBRARY_LOCATION / Path("pipeline/sql_scripts")
 TEST_DATA_LOCATION = ROOT_DIRECTORY / Path("tests/test_data")
@@ -18,7 +18,7 @@ if TEST_LOCAL:
 # Flow execution configuration
 DOCKER_IMAGE = "ghcr.io/mtes-mct/monitorfish/data-warehouse"
 DATA_WAREHOUSE_VERSION = os.getenv("DATA_WAREHOUSE_VERSION")
-FLOWS_LOCATION = Path("src/pipeline/flows")  # relative to the WORKDIR in the image
+FLOWS_LOCATION = Path("forklift/pipeline/flows")  # relative to the WORKDIR in the image
 FLOWS_LABEL = "data-warehouse"
 MAX_FLOW_RUN_MINUTES = 30
 FLOW_STATES_TO_CLEAN = ["Running"]

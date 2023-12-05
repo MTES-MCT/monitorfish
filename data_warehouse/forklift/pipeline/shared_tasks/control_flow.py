@@ -8,7 +8,7 @@ from prefect.engine.signals import SKIP
 from prefect.utilities.graphql import with_args
 
 from config import FLOWS_LABEL, PREFECT_SERVER_URL
-from src.pipeline.entities.prefect import FlowRun
+from forklift.pipeline.entities.prefect import FlowRun
 
 
 @task(checkpoint=False)

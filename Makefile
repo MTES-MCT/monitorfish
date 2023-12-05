@@ -78,7 +78,7 @@ docker-run-data-warehouse:
 	export DATA_WAREHOUSE_USER=clickhouse_user && \
 	docker compose -f ./infra/data_warehouse/docker-compose.yml -f ./infra/data_warehouse/docker-compose-test-data.yml --profile run up -d --remove-orphans
 docker-test-forklift: docker-run-data-warehouse
-	docker run --network host -v /var/run/docker.sock:/var/run/docker.sock -u forklift --env-file data_warehouse/.env.test forklift:$(VERSION) coverage run -m pytest --pdb tests
+	docker run --network host -v /var/run/docker.sock:/var/run/docker.sock -u forklift:$(DOCKER_GROUP) --env-file data_warehouse/.env.test forklift:$(VERSION) coverage run -m pytest --pdb tests
 docker-tag-forklift:
 	docker tag forklift:$(VERSION) docker.pkg.github.com/mtes-mct/monitorfish/forklift:$(VERSION)
 docker-push-forklift:

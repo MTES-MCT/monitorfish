@@ -72,8 +72,8 @@ jobs:
           rm -rf /tmp/.buildx-cache-forklift
           mv /tmp/.buildx-cache-forklift-new /tmp/.buildx-cache-forklift
 
-      # - name: Set DOCKER_GROUP
-      #   run: echo "DOCKER_GROUP=$(getent group docker | cut --delimiter=":" -f3)" >> $GITHUB_ENV
+      - name: Set DOCKER_GROUP
+        run: echo "DOCKER_GROUP=$(getent group docker | cut --delimiter=":" -f3)" >> $GITHUB_ENV
 
       - name: Test docker image
         run: make docker-test-forklift

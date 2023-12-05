@@ -21,13 +21,13 @@ export function InfractionsSummary({
         <InfractionNumber isRed={!!numberOfControlsWithSomeGearsSeized}>
           {getText(numberOfControlsWithSomeGearsSeized)}
         </InfractionNumber>
-        <Text>Appréhension engin</Text>
+        <Text>Appréhens. engin</Text>
       </Tag>
       <Tag>
         <InfractionNumber isRed={!!numberOfControlsWithSomeSpeciesSeized}>
           {getText(numberOfControlsWithSomeSpeciesSeized)}
         </InfractionNumber>
-        <Text>Appréhension espèce</Text>
+        <Text>Appréhens. espèce</Text>
       </Tag>
       <Tag>
         <InfractionNumber isRed={!!numberOfDiversions}>{getText(numberOfDiversions)}</InfractionNumber>
@@ -70,5 +70,5 @@ const Tag = styled.span`
   font-size: 13px;
   height: 22px;
   display: inline-block;
-  margin: 8px 0px 10px 0;
+  margin: 8px 8px 10px 8px;
 `

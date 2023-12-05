@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { LogbookMessageResumeHeader } from './LogbookMessageResumeHeader'
 import { SpeciesAndWeightChart } from './SpeciesAndWeightChart'
 import { COLORS } from '../../../../constants/constants'
+import { pluralize } from '../../../../utils/pluralize'
 import { LogbookMessageType as LogbookMessageTypeEnum } from '../../constants'
 
 export function FARMessageResume({
@@ -56,9 +57,9 @@ export function FARMessageResume({
   const farMessageResumeTitleText =
     totalFARWeight > 0
       ? `${numberOfMessages} message${numberOfMessages > 1 ? 's' : ''} - ${totalFARWeight} kg pêchés au total`
-      : `${numberOfMessages} message${numberOfMessages > 1 ? 's' : ''} - aucune capture ${
-          allFARMessagesAreNotAcknowledged ? 'acquittée' : ''
-        }`
+      : `${numberOfMessages} ${pluralize('message', numberOfMessages)} ${
+          allFARMessagesAreNotAcknowledged && `non ${pluralize('acquitté', numberOfMessages)}`
+        } – aucune capture`
 
   useEffect(() => {
     if (chartHeight !== 0 && initialChartHeight === 0) {

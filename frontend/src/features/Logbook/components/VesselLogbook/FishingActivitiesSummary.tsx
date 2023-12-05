@@ -362,10 +362,12 @@ const TextValue = styled.div<{
 
   .rs-picker-select-menu {
     min-width: 160px !important;
+    width: 160px !important;
   }
 
   .rs-picker-search-bar-input {
-    min-width: 135px !important;
+    min-width: 120px !important;
+    width: 120px !important;
   }
 `
 

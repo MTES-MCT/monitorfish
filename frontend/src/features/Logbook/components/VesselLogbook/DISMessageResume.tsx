@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { LogbookMessageResumeHeader } from './LogbookMessageResumeHeader'
 import { SpeciesAndWeightChart } from './SpeciesAndWeightChart'
+import { pluralize } from '../../../../utils/pluralize'
 import { LogbookMessageType as LogbookMessageTypeEnum } from '../../constants'
 
 import type { SpeciesInsight, SpeciesToSpeciesInsight } from '../../types'
@@ -52,9 +53,9 @@ export function DISMessageResume({
   const getDISMessageResumeTitleText = () =>
     totalDISWeight > 0
       ? `${numberOfMessages} message${numberOfMessages > 1 ? 's' : ''} - ${totalDISWeight} kg rejetés au total`
-      : `${numberOfMessages} message${numberOfMessages > 1 ? 's' : ''} - aucun rejet ${
-          allDISMessagesAreNotAcknowledged ? 'acquitté' : ''
-        }`
+      : `${numberOfMessages} ${pluralize('message', numberOfMessages)} ${
+          allDISMessagesAreNotAcknowledged && `non ${pluralize('acquitté', numberOfMessages)}`
+        } – aucun rejet`
 
   return (
     <Wrapper>

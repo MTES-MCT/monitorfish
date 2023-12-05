@@ -8,7 +8,7 @@ ENV VIRTUAL_ENV="/opt/venv" \
 
 ENV PATH="$VENV_PATH/bin:$PATH"
 
-RUN apt-get update && apt-get install --no-install-recommends \
+RUN apt-get update && apt-get --no-install-recommends install -y \
     # libpq-dev is required both for compiling and for running psycopg2
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
@@ -31,7 +31,7 @@ ENV POETRY_NO_INTERACTION=1 \
 ENV PATH="$POETRY_HOME/bin:$PATH"
 
 # Install system dependencies
-RUN apt-get update && apt-get install --no-install-recommends \
+RUN apt-get update && apt-get --no-install-recommends install -y \
     # Compilation of psycopg2 requires a C compiler
     build-essential \
     curl \

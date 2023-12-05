@@ -128,6 +128,7 @@ const Gray = styled.span`
 
 const SubFields = styled.div`
   display: flex;
+  margin-top: 7px;
 `
 
 const SubField = styled.div`
@@ -173,13 +174,11 @@ const Zone = styled.div`
 `
 
 const Fields = styled.table`
-  padding: 0px 5px 0 5px;
+  padding: 0px 5px 0 10px;
   width: inherit;
   display: table;
-  margin: 0;
   min-width: 40%;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin: 5px;
 `
 
 const Field = styled.tr`

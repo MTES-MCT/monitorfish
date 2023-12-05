@@ -21,7 +21,7 @@ export const getReportingOrigin = (reporting: Reporting, isHovering: boolean = f
     case ReportingOriginActor.SIP.code:
       return `Pôle SIP (${reporting.value.authorTrigram})`
     case ReportingOriginActor.DIRM.code:
-      return `${reporting.value.dml}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
+      return `DIRM${isHovering ? `: ${reporting.value.authorContact}` : ''}`
     case ReportingOriginActor.DML.code:
       return `${reporting.value.dml}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
     case ReportingOriginActor.OTHER.code:

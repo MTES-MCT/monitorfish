@@ -167,7 +167,7 @@ def read_query(
         Union[pd.DataFrame, gpd.DataFrame]: Query results
     """
     if db == "data_warehouse":
-        client = create_datawarehouse_client(db=db)
+        client = create_datawarehouse_client()
         return client.query_df(query)
 
     if db:

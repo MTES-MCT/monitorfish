@@ -10,11 +10,11 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.sql import Select
 
 from config import SQL_SCRIPTS_LOCATION
-from src.db_config import create_datawarehouse_client, create_engine
-from src.pipeline import utils
-from src.pipeline.processing import prepare_df_for_loading
-from src.pipeline.utils import get_table, psql_insert_copy
-from src.read_query import read_query, read_saved_query
+from forklift.db_config import create_datawarehouse_client, create_engine
+from forklift.pipeline import utils
+from forklift.pipeline.processing import prepare_df_for_loading
+from forklift.pipeline.utils import get_table, psql_insert_copy
+from forklift.read_query import read_query, read_saved_query
 
 
 def extract(

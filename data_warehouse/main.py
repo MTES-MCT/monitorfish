@@ -1,7 +1,7 @@
 import prefect
 
 from config import PREFECT_SERVER_URL
-from src.pipeline.flows_config import flows_to_register
+from forklift.pipeline.flows_config import flows_to_register
 
 PROJECT_NAME = "Data Warehouse"
 

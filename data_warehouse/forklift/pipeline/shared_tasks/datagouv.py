@@ -7,7 +7,7 @@ import requests
 from prefect import task
 
 from config import DATAGOUV_API_ENDPOINT, DATAGOUV_API_KEY, PROXIES, ROOT_DIRECTORY
-from src.pipeline.utils import remove_file
+from forklift.pipeline.utils import remove_file
 
 HEADERS = {
     "X-API-KEY": DATAGOUV_API_KEY,
@@ -139,7 +139,7 @@ def get_geopackage_file_object(gdf: gpd.GeoDataFrame, layers: str = None) -> Byt
     if layers:
         # Tried using tempfile.TemporaryFile without success.
         # Try again at your own risk :)
-        temp_file_path = ROOT_DIRECTORY / "src/pipeline/data/tmp_geopackage.gpkg"
+        temp_file_path = ROOT_DIRECTORY / "forklift/pipeline/data/tmp_geopackage.gpkg"
         remove_file(temp_file_path, ignore_errors=True)
 
         try:

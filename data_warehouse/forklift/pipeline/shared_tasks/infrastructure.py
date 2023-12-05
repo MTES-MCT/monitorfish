@@ -2,8 +2,8 @@ import prefect
 from prefect import task
 from sqlalchemy import Table
 
-from src.db_config import create_engine
-from src.pipeline import utils
+from forklift.db_config import create_engine
+from forklift.pipeline import utils
 
 
 @task(checkpoint=False)

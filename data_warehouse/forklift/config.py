@@ -4,11 +4,10 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # Package structure
-ROOT_DIRECTORY = Path(__file__).parent
+ROOT_DIRECTORY = Path(__file__).parent.parent
 LIBRARY_LOCATION = ROOT_DIRECTORY / Path("forklift")
 QUERIES_LOCATION = LIBRARY_LOCATION / Path("pipeline/queries")
 SQL_SCRIPTS_LOCATION = LIBRARY_LOCATION / Path("pipeline/sql_scripts")
-TEST_DATA_LOCATION = ROOT_DIRECTORY / Path("tests/test_data")
 
 # Must be set to true when running tests locally
 TEST_LOCAL = os.getenv("TEST_LOCAL", "False").lower() in ("true", "t", "yes", "y")

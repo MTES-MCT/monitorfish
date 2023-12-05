@@ -9,7 +9,7 @@ from sqlalchemy import DDL, text
 from sqlalchemy.engine import Connection
 from sqlalchemy.sql import Select
 
-from config import SQL_SCRIPTS_LOCATION
+from forklift.config import SQL_SCRIPTS_LOCATION
 from forklift.db_config import create_datawarehouse_client, create_engine
 from forklift.pipeline import utils
 from forklift.pipeline.processing import prepare_df_for_loading

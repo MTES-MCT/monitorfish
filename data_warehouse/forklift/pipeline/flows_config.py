@@ -3,7 +3,7 @@ from prefect.run_configs.docker import DockerRun
 from prefect.schedules import CronSchedule
 from prefect.storage.local import Local
 
-from config import (
+from forklift.config import (
     DATA_WAREHOUSE_VERSION,
     DOCKER_IMAGE,
     FLOWS_LABEL,

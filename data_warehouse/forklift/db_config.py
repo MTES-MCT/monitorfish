@@ -80,7 +80,7 @@ def make_connection_string(db: str) -> str:
         environment variables.
     """
 
-    import config  # To load env vars in "local test" and "local run" configurations
+    import forklift.config  # To load env vars in "local test" and "local run" configurations
 
     try:
         CLIENT = os.environ[db_env[db]["client"]]
@@ -122,7 +122,7 @@ def create_datawarehouse_client() -> HttpClient:
         HttpClient]: clickhouse client for data_warehouse.
     """
 
-    import config  # To load env vars in "local test" configurations
+    import forklift.config  # To load env vars in "local test" configurations
 
     credentials = db_env["data_warehouse"]
     client = ch.get_client(

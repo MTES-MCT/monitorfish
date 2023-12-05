@@ -33,6 +33,8 @@ export function SideWindowLauncher() {
     forceUpdate()
   }, [forceUpdate])
 
+  console.log("LAUNCHER", status)
+
   return (
     <NewWindow
       closeOnUnmount

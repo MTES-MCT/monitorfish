@@ -81,6 +81,7 @@ export function getMissionDataFromMissionFormValues(
   mainFormValues: MissionMainFormValues,
   mustClose: boolean = false
 ): Mission.MissionData {
+  console.log('isUnderJdp', mainFormValues.isUnderJdp)
   if (!mainFormValues.startDateTimeUtc) {
     throw new FormError(mainFormValues, 'startDateTimeUtc', FormErrorCode.MISSING_OR_UNDEFINED)
   }

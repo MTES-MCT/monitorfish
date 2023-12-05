@@ -1,10 +1,12 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
-import { customDayjs } from '@mtes-mct/monitor-ui'
-import { array, boolean, number, object, string } from 'yup'
+import {customDayjs} from '@mtes-mct/monitor-ui'
+import {array, boolean, number, object, string} from 'yup'
 
-import { MissionAction } from '../../../../domain/types/missionAction'
-import { mainStore } from '../../../../store'
+import {MissionAction} from '../../../../domain/types/missionAction'
+import {mainStore} from '../../../../store'
+import {monitorenvMissionApi} from "../apis";
+import {Mission} from "../../../../domain/entities/mission/types";
 
 // -----------------------------------------------------------------------------
 // Form Schema Validators
@@ -14,25 +16,36 @@ const actionDatetimeUtcValidator = string()
   .test({
     message: 'La date du contrôle doit être postérieure à la date de début de la mission.',
     test: (actionDatetimeUtc: string | undefined) => {
-      const { mission } = mainStore.getState()
-
-      if (!actionDatetimeUtc || !mission.draft?.mainFormValues.startDateTimeUtc) {
+      const missionId = mainStore.getState().sideWindow.selectedPath.id
+      if (!missionId) {
         return true
       }
 
-      return customDayjs(actionDatetimeUtc).isSameOrAfter(mission.draft.mainFormValues.startDateTimeUtc)
+      const mission = monitorenvMissionApi.endpoints.getMission.select(missionId) as unknown as Mission.Mission
+
+      if (!actionDatetimeUtc || !mission.startDateTimeUtc) {
+        return true
+      }
+
+      return customDayjs(actionDatetimeUtc).isSameOrAfter(mission.startDateTimeUtc)
     }
   })
   .test({
     message: 'La date du contrôle doit être antérieure à la date de fin de la mission.',
     test: (actionDatetimeUtc: string | undefined) => {
-      const { mission } = mainStore.getState()
-
-      if (!actionDatetimeUtc || !mission.draft?.mainFormValues.endDateTimeUtc) {
+      const missionId = mainStore.getState().sideWindow.selectedPath.id
+      if (!missionId) {
         return true
       }
 
-      return customDayjs(actionDatetimeUtc).isSameOrBefore(mission.draft.mainFormValues.endDateTimeUtc)
+      const mission = monitorenvMissionApi.endpoints.getMission.select(missionId) as unknown as Mission.Mission
+
+
+      if (!actionDatetimeUtc || !mission.endDateTimeUtc) {
+        return true
+      }
+
+      return customDayjs(actionDatetimeUtc).isSameOrBefore(mission.endDateTimeUtc)
     }
   })
 

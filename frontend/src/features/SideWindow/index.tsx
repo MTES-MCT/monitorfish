@@ -30,13 +30,14 @@ import { sideWindowDispatchers } from '../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { FrontendErrorBoundary } from '../../ui/FrontendErrorBoundary'
+import {memo} from "react";
 
 export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
   isFromURL: boolean
 }
 export function SideWindow({ isFromURL }: SideWindowProps) {
   // eslint-disable-next-line no-null/no-null
-  const wrapperRef = useRef<HTMLDivElement | null>(null)
+  const wrapperRef = useRef<HTMLDivElement>(window.document.createElement('div'))
 
   const { openedBeaconMalfunctionInKanban } = useMainAppSelector(state => state.beaconMalfunction)
   const { editedReportingInSideWindow } = useMainAppSelector(state => state.reporting)
@@ -61,11 +62,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
 
   const newWindowContextProviderValue: NewWindowContextValue = useMemo(
     () => ({
-      newWindowContainerRef: wrapperRef.current
-        ? (wrapperRef as MutableRefObject<HTMLDivElement>)
-        : {
-            current: window.document.createElement('div')
-          }
+      newWindowContainerRef: wrapperRef
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [isFirstRender]
@@ -108,6 +105,8 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   useEffect(() => {
     setIsFirstRender(false)
   }, [])
+
+  console.log('RENDER SideWindow')
 
   return (
     <StyleSheetManager target={wrapperRef.current || undefined}>

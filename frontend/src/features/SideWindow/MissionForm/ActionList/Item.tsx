@@ -9,19 +9,21 @@ import {
   TagGroup,
   THEME
 } from '@mtes-mct/monitor-ui'
-import { find } from 'lodash'
-import { useMemo } from 'react'
-import styled, { css } from 'styled-components'
+import {find} from 'lodash'
+import {useMemo} from 'react'
+import styled, {css} from 'styled-components'
 
-import { formatDateLabel, getMissionActionInfractionsFromMissionActionFormValues, getActionTitle } from './utils'
-import { UNKNOWN_VESSEL } from '../../../../domain/entities/vessel/vessel'
-import { MissionAction } from '../../../../domain/types/missionAction'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { FrontendError } from '../../../../libs/FrontendError'
-import { useGetNatinfsAsOptions } from '../hooks/useGetNatinfsAsOptions'
+import {formatDateLabel, getActionTitle, getMissionActionInfractionsFromMissionActionFormValues} from './utils'
+import {UNKNOWN_VESSEL} from '../../../../domain/entities/vessel/vessel'
+import {MissionAction} from '../../../../domain/types/missionAction'
+import {useMainAppSelector} from '../../../../hooks/useMainAppSelector'
+import {FrontendError} from '../../../../libs/FrontendError'
+import {useGetNatinfsAsOptions} from '../hooks/useGetNatinfsAsOptions'
 
-import type { MissionActionFormValues } from '../types'
-import type { Promisable } from 'type-fest'
+import type {MissionActionFormValues} from '../types'
+import type {Promisable} from 'type-fest'
+import {useGetMissionQuery} from "../apis";
+import {skipToken} from "@reduxjs/toolkit/query";
 
 export type ItemProps = {
   initialValues: MissionActionFormValues
@@ -31,7 +33,8 @@ export type ItemProps = {
   onSelect: () => Promisable<void>
 }
 export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelect }: ItemProps) {
-  const mission = useMainAppSelector(state => state.mission)
+  const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
+  const { data: missionData } = useGetMissionQuery(missionId || skipToken)
 
   const natinfsAsOptions = useGetNatinfsAsOptions()
 
@@ -130,7 +133,7 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
     [initialValues]
   )
 
-  const isOpen = isControlAction && !mission.draft?.mainFormValues.isClosed && !initialValues.closedBy
+  const isOpen = isControlAction && missionData && !missionData.isClosed && !initialValues.closedBy
 
   return (
     <>

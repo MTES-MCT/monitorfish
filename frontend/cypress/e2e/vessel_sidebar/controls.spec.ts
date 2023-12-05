@@ -21,8 +21,8 @@ context('Vessel sidebar controls tab', () => {
 
     // Then
     const date = getDate(new Date().toISOString())
-    cy.get('*[data-cy="vessel-controls-summary"]').contains('0Appréhension engin')
-    cy.get('*[data-cy="vessel-controls-summary"]').contains('1Appréhension espèce')
+    cy.get('*[data-cy="vessel-controls-summary"]').contains('0Appréhens. engin')
+    cy.get('*[data-cy="vessel-controls-summary"]').contains('1Appréhens. espèce')
     cy.get('*[data-cy="vessel-controls-summary"]').contains('1Déroutement')
 
     cy.get('*[data-cy="vessel-controls-summary-last-control"]').first().contains('Dernier contrôle en mer')

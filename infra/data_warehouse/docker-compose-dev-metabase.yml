@@ -1,0 +1,40 @@
+version: '3'
+services:
+
+  metabase-db:
+    image: postgres
+    container_name: metabase-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=metabase-db
+    volumes:
+      - metabase-db:/var/lib/postgresql/data
+    restart: always
+    ports:
+      - 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 1s
+      timeout: 1s
+      retries: 30
+
+  metabase:
+    image: metabase/metabase
+    container_name: metabase
+    environment:
+      - MB_DB_TYPE=postgres
+      - MB_DB_DBNAME=metabase-db
+      - MB_DB_PORT=5432
+      - MB_DB_USER=postgres
+      - MB_DB_PASS=postgres
+      - MB_DB_HOST=metabase-db
+    ports:
+      - 3000:3000
+    depends_on:
+      metabase-db:
+        condition: service_healthy
+
+volumes:
+  metabase-db:
+    driver: local

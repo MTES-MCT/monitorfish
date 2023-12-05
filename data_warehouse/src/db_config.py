@@ -1,6 +1,8 @@
 import os
 
+import clickhouse_connect as ch
 import sqlalchemy as sa
+from clickhouse_connect.driver.httpclient import HttpClient
 
 db_env = {
     "ocan": {
@@ -67,7 +69,8 @@ def make_connection_string(db: str) -> str:
 
     Args:
         db (str): Database name. Possible values :
-        'ocan', 'fmc', 'monitorfish_remote', 'monistorfish_local'
+            'ocan', 'fmc', 'monitorfish_remote', 'monitorenv_remote',
+            'monitorfish_local', 'cacem_local', 'data_warehouse'
 
     Returns:
         str: connection string for selected database.
@@ -99,7 +102,8 @@ def create_engine(db: str, **kwargs) -> sa.engine.Engine:
 
     Args:
         db (str): Database name. Possible values :
-            'ocan', 'fmc', 'monitorfish_remote', 'monistorfish_local', 'cacem_local'
+            'ocan', 'fmc', 'monitorfish_remote', 'monitorenv_remote',
+            'monitorfish_local', 'cacem_local'
 
     Returns:
         sa.engine.Engine: sqlalchemy engine for selected database.
@@ -109,3 +113,23 @@ def create_engine(db: str, **kwargs) -> sa.engine.Engine:
     engine = sa.create_engine(connection_string, **kwargs)
 
     return engine
+
+
+def create_datawarehouse_client() -> HttpClient:
+    """Returns clickhouse client for data_warehouse database.
+
+    Returns:
+        HttpClient]: clickhouse client for data_warehouse.
+    """
+
+    import config  # To load env vars in "local test" configurations
+
+    credentials = db_env["data_warehouse"]
+    client = ch.get_client(
+        host=os.environ[credentials["host"]],
+        port=os.environ[credentials["port"]],
+        username=os.environ[credentials["usr"]],
+        password=os.environ[credentials["pwd"]],
+    )
+
+    return client

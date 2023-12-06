@@ -16,7 +16,6 @@ permissions:
   contents: read
 
 jobs:
-jobs:
   analyze:
     permissions:
       packages: write

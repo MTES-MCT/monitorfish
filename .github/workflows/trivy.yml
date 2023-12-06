@@ -30,7 +30,7 @@ jobs:
         name: Set VERSION env
         run: |
           export VERSION=${{ steps.lastrelease.outputs.release }}
-          echo "VERSION=$VERSION" >> $GITHUB_OUTPUTdégat
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
   analyze:
     permissions:
       packages: write

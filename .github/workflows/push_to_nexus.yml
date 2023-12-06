@@ -1,0 +1,59 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Push docker image to DAM-SI
+on:
+  workflow_dispatch:
+    version:
+      description: 'Version number'
+      required: true
+      default: 'v1.0.0'
+
+permissions:
+  contents: read
+
+jobs:
+  version:
+    name: Set application version and env profile
+    runs-on: ubuntu-22.04
+    outputs:
+      VERSION: ${{ steps.version.outputs.VERSION }}
+    steps:
+      - name: Get last release version
+        id: lastrelease
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+          repository: mtes-mct/monitorfish
+      - id: version
+        name: Set VERSION env
+        run: |
+          export VERSION=${{ steps.lastrelease.outputs.release }}
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+  push:
+    needs: [version]
+    env:
+      VERSION: ${{ needs.version.outputs.VERSION }}
+    permissions:
+      packages: write
+      contents: read # for actions/checkout to fetch code
+      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
+      actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
+    name: Push docker image
+    runs-on: "ubuntu-20.04"
+    steps:
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push docker image to Nexus
+        run: |
+          docker pull ghcr.io/mtes-mct/monitorfish/monitorfish-app:$(VERSION)
+          echo "${{ secrets.NEXUS_PASSWORD }}" | docker login http://depot-sml.din.developpement-durable.gouv.fr:5010/repository/docker-monitor/ -u monitorfish --password-stdin
+          docker tag ghcr.io/mtes-mct/monitorfish/monitorfish-app:$(VERSION) monitorfish/monitorfish-app:$(VERSION)
+          docker push depot-sml.din.developpement-durable.gouv.fr:5010/monitorfish/monitorfish-app:$(VERSION)
+

@@ -1,17 +1,17 @@
-import {FormikCheckbox} from '@mtes-mct/monitor-ui'
-import {useFormikContext} from 'formik'
-import {useEffect} from 'react'
+import { FormikCheckbox } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
+import { useFormikContext } from 'formik'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 
-import {missionActions as missionSliceActions} from '../../../../../domain/actions'
-import {useMainAppDispatch} from '../../../../../hooks/useMainAppDispatch'
-import {useMainAppSelector} from '../../../../../hooks/useMainAppSelector'
-import {PAMControlUnitIds} from '../../constants'
-import {FieldsetGroup} from '../../shared/FieldsetGroup'
+import { missionActions as missionSliceActions } from '../../../../../domain/actions'
+import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { useGetMissionQuery } from '../../apis'
+import { PAMControlUnitIds } from '../../constants'
+import { FieldsetGroup } from '../../shared/FieldsetGroup'
 
-import type {MissionActionFormValues} from '../../types'
-import {useGetMissionQuery} from "../../apis";
-import {skipToken} from "@reduxjs/toolkit/query";
+import type { MissionActionFormValues } from '../../types'
 
 export function FormikOtherControlsCheckboxes() {
   const dispatch = useMainAppDispatch()

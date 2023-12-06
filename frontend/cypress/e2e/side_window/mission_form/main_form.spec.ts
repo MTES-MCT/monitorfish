@@ -546,7 +546,7 @@ context('Side Window > Mission Form > Main Form', () => {
     )
   })
 
-  it('Should update the form When receiving a mission update', () => {
+  it.only('Should update the form When receiving a mission update', () => {
     editSideWindowMissionListMissionWithId(43, SeaFrontGroup.MED)
     cy.wait(200)
     cy.intercept('POST', '/api/v1/missions/43', {
@@ -565,8 +565,8 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.window()
       .its('mockEventSources' as any)
       .then(mockEventSources => {
-        mockEventSources['http://monitorenv.kadata.fr/api/v1/missions/sse'].emitOpen()
-        mockEventSources['http://monitorenv.kadata.fr/api/v1/missions/sse'].emit(
+        mockEventSources['//localhost:8081/api/v1/missions/sse'].emitOpen()
+        mockEventSources['//localhost:8081/api/v1/missions/sse'].emit(
           'MISSION_UPDATE',
           new MessageEvent('MISSION_UPDATE', {
             data: JSON.stringify({

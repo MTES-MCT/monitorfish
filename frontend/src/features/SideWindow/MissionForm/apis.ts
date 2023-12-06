@@ -1,10 +1,10 @@
 import { logSoftError, ControlUnit } from '@mtes-mct/monitor-ui'
 
-import { addNewMissionListener, missionEventListener, removeMissionListener } from './sse'
+import { addNewMissionListener, updateCacheMissionEventListener, removeMissionListener } from './sse'
+import { monitorenvApi, monitorfishApi } from '../../../api/api'
 import { Mission } from '../../../domain/entities/mission/types'
 import { ApiError } from '../../../libs/ApiError'
-import {monitorenvApi, monitorfishApi} from "../../../api/api";
-import {FrontendApiError} from "../../../libs/FrontendApiError";
+import { FrontendApiError } from '../../../libs/FrontendApiError'
 
 const CREATE_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu créer la mission."
 const DELETE_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu supprimé la mission."
@@ -52,7 +52,7 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
         try {
           await cacheDataLoaded
 
-          const listener = missionEventListener(id, updateCachedData)
+          const listener = updateCacheMissionEventListener(id, mission => updateCachedData(() => mission))
           addNewMissionListener(id, listener)
 
           // cacheEntryRemoved will resolve when the cache subscription is no longer active

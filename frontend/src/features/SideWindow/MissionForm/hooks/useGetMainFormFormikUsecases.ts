@@ -1,14 +1,14 @@
-import {sortBy} from 'lodash'
+import { sortBy } from 'lodash'
 
-import {useGetPortsQuery} from '../../../../api/port'
-import {isAirOrSeaControl, isLandControl} from '../../../../domain/use_cases/mission/getLastControlCircleGeometry'
-import {useMainAppDispatch} from '../../../../hooks/useMainAppDispatch'
-import {useMainAppSelector} from '../../../../hooks/useMainAppSelector'
-import {formikUsecase} from '../formikUsecases'
+import { missionActionApi } from '../../../../api/missionAction'
+import { useGetPortsQuery } from '../../../../api/port'
+import { MissionAction } from '../../../../domain/types/missionAction'
+import { isAirOrSeaControl, isLandControl } from '../../../../domain/use_cases/mission/getLastControlCircleGeometry'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { formikUsecase } from '../formikUsecases'
 
-import type {MissionActionFormValues, MissionMainFormValues} from '../types'
-import {missionActionApi} from "../../../../api/missionAction";
-import {MissionAction} from "../../../../domain/types/missionAction";
+import type { MissionActionFormValues, MissionMainFormValues } from '../types'
 
 export function useGetMainFormFormikUsecases() {
   const dispatch = useMainAppDispatch()
@@ -32,10 +32,10 @@ export function useGetMainFormFormikUsecases() {
         return
       }
 
-      const missionActions = missionActionApi.endpoints.getMissionActions.select(missionId) as unknown as MissionAction.MissionAction[]
-      const validControls = missionActions.filter(
-        action => isLandControl(action) || isAirOrSeaControl(action)
-      )
+      const missionActions = missionActionApi.endpoints.getMissionActions.select(
+        missionId
+      ) as unknown as MissionAction.MissionAction[]
+      const validControls = missionActions.filter(action => isLandControl(action) || isAirOrSeaControl(action))
       if (!validControls) {
         return
       }

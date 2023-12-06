@@ -15,6 +15,7 @@ import { MISSION_TYPES_AS_OPTIONS } from './constants'
 import { FormikDoubleDatePicker } from './FormikDoubleDatePicker'
 import { FormikLocationPicker } from './FormikLocationPicker'
 import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'
+import { FormikSyncMissionForm } from './FormikSyncMissionForm'
 import { MainFormLiveSchema } from './schemas'
 import { BOOLEAN_AS_OPTIONS } from '../../../../constants'
 import { FormBody, FormBodyInnerWrapper } from '../shared/FormBody'
@@ -26,21 +27,26 @@ import type { Promisable } from 'type-fest'
 
 type MainFormProps = {
   initialValues: MissionMainFormValues
+  missionId: number | undefined
   onChange: (nextValues: MissionMainFormValues, values: MissionMainFormValues) => Promisable<void>
 }
-function UnmemoizedMainForm({ initialValues, onChange }: MainFormProps) {
+function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProps) {
   console.log('UnmemoizedMainForm RENDERED', initialValues, onChange)
+
   return (
     <Formik initialValues={initialValues} onSubmit={noop} validationSchema={MainFormLiveSchema}>
       <Wrapper>
-        <FormikEffect onChange={nextValues => {
-          if (!nextValues.isValid) {
-            return
-          }
-          console.log('CALL ONCHANGE', nextValues)
-          onChange(nextValues as any, initialValues)
-        }} />
+        <FormikEffect
+          onChange={nextValues => {
+            if (!nextValues.isValid) {
+              return
+            }
+            console.log('CALL ONCHANGE', nextValues)
+            onChange(nextValues as any, initialValues)
+          }}
+        />
         <FormikIsValidEffect />
+        <FormikSyncMissionForm missionId={missionId} />
 
         <FormHead>
           <h2>Informations générales</h2>

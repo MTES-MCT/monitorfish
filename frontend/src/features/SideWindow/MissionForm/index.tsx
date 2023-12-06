@@ -1,18 +1,25 @@
-import {Accent, Button, Icon, logSoftError, NotificationEvent, usePrevious} from '@mtes-mct/monitor-ui'
-import {skipToken} from '@reduxjs/toolkit/dist/query'
-import {omit} from 'lodash/fp'
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react'
+import { Accent, Button, Icon, logSoftError, NotificationEvent, usePrevious } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
+import { isEqual } from 'lodash'
+import { omit } from 'lodash/fp'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
 
-import {ActionForm} from './ActionForm'
-import {ActionList} from './ActionList'
-import {getMissionActionFormInitialValues} from './ActionList/utils'
-import {useCreateMissionMutation, useDeleteMissionMutation, useGetMissionQuery, useUpdateMissionMutation} from './apis'
-import {MainForm} from './MainForm'
-import {DeletionConfirmationDialog} from './shared/DeletionConfirmationDialog'
-import {DraftCancellationConfirmationDialog} from './shared/DraftCancellationConfirmationDialog'
-import {TitleSourceTag} from './shared/TitleSourceTag'
-import {TitleStatusTag} from './shared/TitleStatusTag'
+import { ActionForm } from './ActionForm'
+import { ActionList } from './ActionList'
+import { getMissionActionFormInitialValues } from './ActionList/utils'
+import {
+  useCreateMissionMutation,
+  useDeleteMissionMutation,
+  useGetMissionQuery,
+  useUpdateMissionMutation
+} from './apis'
+import { MainForm } from './MainForm'
+import { DeletionConfirmationDialog } from './shared/DeletionConfirmationDialog'
+import { DraftCancellationConfirmationDialog } from './shared/DraftCancellationConfirmationDialog'
+import { TitleSourceTag } from './shared/TitleSourceTag'
+import { TitleStatusTag } from './shared/TitleStatusTag'
 import {
   areMissionFormsValuesValid,
   getMissionActionsDataFromMissionActionsFormValues,
@@ -28,25 +35,23 @@ import {
   useGetMissionActionsQuery,
   useUpdateMissionActionMutation
 } from '../../../api/missionAction'
-import {missionActions} from '../../../domain/actions'
-import {getMissionStatus} from '../../../domain/entities/mission/utils'
-import {SideWindowMenuKey} from '../../../domain/entities/sideWindow/constants'
-import {sideWindowActions} from '../../../domain/shared_slices/SideWindow'
-import {displayOrLogError} from '../../../domain/use_cases/error/displayOrLogError'
-import {retry} from '../../../domain/use_cases/error/retry'
-import {sideWindowDispatchers} from '../../../domain/use_cases/sideWindow'
-import {useMainAppDispatch} from '../../../hooks/useMainAppDispatch'
-import {useMainAppSelector} from '../../../hooks/useMainAppSelector'
-import {FrontendError} from '../../../libs/FrontendError'
-import {FrontendErrorBoundary} from '../../../ui/FrontendErrorBoundary'
-import {LoadingSpinnerWall} from '../../../ui/LoadingSpinnerWall'
-import {NoRsuiteOverrideWrapper} from '../../../ui/NoRsuiteOverrideWrapper'
-
-import type {MissionActionFormValues, MissionMainFormValues} from './types'
-import type {MissionAction} from '../../../domain/types/missionAction'
-import {useDebouncedCallback} from "use-debounce";
+import { missionActions } from '../../../domain/actions'
 import { Mission, type MissionWithActions } from '../../../domain/entities/mission/types'
-import { isEqual } from 'lodash'
+import { getMissionStatus } from '../../../domain/entities/mission/utils'
+import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
+import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
+import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
+import { retry } from '../../../domain/use_cases/error/retry'
+import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { FrontendError } from '../../../libs/FrontendError'
+import { FrontendErrorBoundary } from '../../../ui/FrontendErrorBoundary'
+import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
+import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
+
+import type { MissionActionFormValues, MissionMainFormValues } from './types'
+import type { MissionAction } from '../../../domain/types/missionAction'
 
 export function MissionForm() {
   const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
@@ -114,7 +119,7 @@ export function MissionForm() {
     isDeletingMissionAction ||
     isUpdatingMissionAction
 
-  const isLoading = isFetchingMission || isFetchingMissionActions
+  const isLoading = (isFetchingMission && !missionData) || (isFetchingMissionActions && !missionActionsData)
 
   useEffect(() => {
     if (missionError) {
@@ -162,7 +167,7 @@ export function MissionForm() {
    */
   const createOrUpdate = useCallback(
     async (createdOrUpdatedMainFormValues: MissionMainFormValues | undefined, mustClose: boolean = false) => {
-      console.log("pre validation", createdOrUpdatedMainFormValues)
+      console.log('pre validation', createdOrUpdatedMainFormValues)
       if (!createdOrUpdatedMainFormValues) {
         return
       }
@@ -203,12 +208,16 @@ export function MissionForm() {
 
           nextMissionId = data.id
         } else {
-          const updatedMission = getUpdatedMissionFromMissionMainFormValues(missionId, createdOrUpdatedMainFormValues, mustClose)
+          const updatedMission = getUpdatedMissionFromMissionMainFormValues(
+            missionId,
+            createdOrUpdatedMainFormValues,
+            mustClose
+          )
           await updateMission(updatedMission)
 
           nextMissionId = missionId
         }
-        console.log("update", createdOrUpdatedMainFormValues)
+        console.log('update', createdOrUpdatedMainFormValues)
         setMainFormValues(createdOrUpdatedMainFormValues)
 
         const { deletedMissionActionIds, updatedMissionActionDatas } =
@@ -350,22 +359,27 @@ export function MissionForm() {
     [actionFormKey]
   )
 
-  const updateMainFormValuesCallback = useCallback((nextMissionMainFormValues: MissionMainFormValues, values: MissionMainFormValues) => {
-    if (isEqual(nextMissionMainFormValues, mainFormValues)) {
-      return
-    }
+  const updateMainFormValuesCallback = useCallback(
+    (nextMissionMainFormValues: MissionMainFormValues, values: MissionMainFormValues) => {
+      if (isEqual(nextMissionMainFormValues, mainFormValues)) {
+        return
+      }
 
-    const mainFormValuesWithUpdatedIsClosedProperty = {
-      ...nextMissionMainFormValues,
-      isClosed: values?.isClosed || false
-    }
+      const mainFormValuesWithUpdatedIsClosedProperty = {
+        ...nextMissionMainFormValues,
+        isClosed: values?.isClosed || false
+      }
 
-    createOrUpdate(mainFormValuesWithUpdatedIsClosedProperty)
-  }, [createOrUpdate])
+      createOrUpdate(mainFormValuesWithUpdatedIsClosedProperty)
+    },
+    [createOrUpdate]
+  )
 
-  const updateMainFormValues = useDebouncedCallback((nextMissionMainFormValues: MissionMainFormValues, values: MissionMainFormValues) =>
-    updateMainFormValuesCallback(nextMissionMainFormValues, values), 500)
-
+  const updateMainFormValues = useDebouncedCallback(
+    (nextMissionMainFormValues: MissionMainFormValues, values: MissionMainFormValues) =>
+      updateMainFormValuesCallback(nextMissionMainFormValues, values),
+    500
+  )
 
   const toggleDeletionConfirmationDialog = useCallback(async () => {
     setIsDeletionConfirmationDialogOpen(!isDeletionConfirmationDialogOpen)
@@ -386,7 +400,7 @@ export function MissionForm() {
     if (!missionWithActions) {
       const { initialActionsFormValues, initialMainFormValues } = getMissionFormInitialValues(undefined, [])
 
-      console.log("mission creating", initialMainFormValues)
+      console.log('mission creating', initialMainFormValues)
       setMainFormValues(initialMainFormValues)
       setActionsFormValues(initialActionsFormValues)
       setTitle(getTitleFromMissionMainFormValues(initialMainFormValues, undefined))
@@ -426,14 +440,6 @@ export function MissionForm() {
     [dispatch]
   )
 
-  const mainForm = useMemo(() => {
-    return <MainForm
-      key={`main-form-${mainFormKey}`}
-      initialValues={initialMainFormValues!!}
-      onChange={updateMainFormValues}
-    />
-  }, [initialMainFormValues, mainFormKey])
-
   // ---------------------------------------------------------------------------
 
   if (missionFormError) {
@@ -467,7 +473,12 @@ export function MissionForm() {
 
             {!isLoading && initialMainFormValues && (
               <>
-                {mainForm}
+                <MainForm
+                  key={`main-form-${mainFormKey}`}
+                  initialValues={initialMainFormValues}
+                  missionId={missionId}
+                  onChange={updateMainFormValues}
+                />
                 <ActionList
                   actionsFormValues={actionsFormValues}
                   currentIndex={editedActionIndex}

@@ -52,6 +52,7 @@ jobs:
 
       - name: Push docker image to Nexus
         run: |
+          echo $VERSION
           docker pull ghcr.io/mtes-mct/monitorfish/monitorfish-app:$(VERSION)
           echo "${{ secrets.NEXUS_PASSWORD }}" | docker login http://depot-sml.din.developpement-durable.gouv.fr:5010/repository/docker-monitor/ -u monitorfish --password-stdin
           docker tag ghcr.io/mtes-mct/monitorfish/monitorfish-app:$(VERSION) monitorfish/monitorfish-app:$(VERSION)

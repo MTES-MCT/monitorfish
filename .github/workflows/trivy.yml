@@ -3,8 +3,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: trivy
-
+name: Trivy
 on:
   workflow_dispatch:
     version:
@@ -16,6 +15,17 @@ permissions:
   contents: read
 
 jobs:
+  version:
+    name: Set application version and env profile
+    runs-on: ubuntu-22.04
+    outputs:
+      VERSION: ${{ steps.version.outputs.VERSION }}
+    steps:
+      - id: version
+        name: Set VERSION env
+        run: |
+          export VERSION=${{ steps.lastrelease.outputs.release }}
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUTdégat
   analyze:
     permissions:
       packages: write
@@ -35,7 +45,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: "ghcr.io/mtes-mct/monitorfish/monitorfish-app:${{ github.event.inputs.version }}"
+          image-ref: "ghcr.io/mtes-mct/monitorfish/monitorfish-app:${{ env.VERSION }}"
           format: sarif
           output: "trivy-results.sarif"
           severity: "CRITICAL,HIGH"

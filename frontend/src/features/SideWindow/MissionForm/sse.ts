@@ -1,8 +1,6 @@
+import { MONITORENV_API_URL } from '../../../api/api'
 import { Mission } from '../../../domain/entities/mission/types'
 import { ReconnectingEventSource } from '../../../libs/ReconnectingEventSource'
-
-import type { PatchCollection, Recipe } from '@reduxjs/toolkit/dist/query/core/buildThunks'
-import {MONITORENV_API_URL} from "../../../api/api";
 
 const MISSION_UPDATES_URL = `${MONITORENV_API_URL}/api/v1/missions/sse`
 export const MISSION_UPDATE_EVENT = `MISSION_UPDATE`
@@ -14,14 +12,23 @@ console.log(`SSE: connected to missions endpoint.`)
 const missionIdToListenerMap = new Map<number, (event: MessageEvent) => void>()
 
 export function addNewMissionListener(missionId: number, listener: (event: MessageEvent) => void) {
-  removeMissionListener(missionId)
-
   // eslint-disable-next-line no-console
   console.log(`SSE: listening for updates of mission id ${missionId}...`)
 
   missionIdToListenerMap.set(missionId, listener)
 
   EVENT_SOURCE.addEventListener(MISSION_UPDATE_EVENT, listener)
+}
+
+export function enableMissionListener(missionId: number) {
+  const listener = missionIdToListenerMap.get(missionId)
+  if (!listener) {
+    return
+  }
+
+  EVENT_SOURCE.addEventListener(MISSION_UPDATE_EVENT, listener)
+  // eslint-disable-next-line no-console
+  console.log(`SSE: enabled listener of mission id ${missionId}.`)
 }
 
 export function removeMissionListener(missionId: number) {
@@ -36,8 +43,19 @@ export function removeMissionListener(missionId: number) {
   console.log(`SSE: removed listener of mission id ${missionId}.`)
 }
 
-export const missionEventListener =
-  (id: number, updateCachedData: (updateRecipe: Recipe<any>) => PatchCollection) => (event: MessageEvent) => {
+export function disableMissionListener(missionId: number) {
+  const listener = missionIdToListenerMap.get(missionId)
+  if (!listener) {
+    return
+  }
+
+  EVENT_SOURCE.removeEventListener(MISSION_UPDATE_EVENT, listener)
+  // eslint-disable-next-line no-console
+  console.log(`SSE: disabled listener of mission id ${missionId}.`)
+}
+
+export const updateCacheMissionEventListener =
+  (id: number, callback: (mission: Mission.Mission) => void) => (event: MessageEvent) => {
     const mission = JSON.parse(event.data) as Mission.Mission
     if (mission.id !== id) {
       // eslint-disable-next-line no-console
@@ -49,5 +67,5 @@ export const missionEventListener =
     // eslint-disable-next-line no-console
     console.log(`SSE: received an update for mission id ${id}.`)
 
-    updateCachedData(() => mission)
+    callback(mission)
   }

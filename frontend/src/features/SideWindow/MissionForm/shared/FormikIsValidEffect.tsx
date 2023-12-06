@@ -1,7 +1,7 @@
-import {useFormikContext} from 'formik'
-import {isEmpty} from 'lodash/fp'
+import { useFormikContext } from 'formik'
+import { isEmpty } from 'lodash/fp'
 
-import {useDeepCompareEffect} from '../../../../hooks/useDeepCompareEffect'
+import { useDeepCompareEffect } from '../../../../hooks/useDeepCompareEffect'
 
 /**
  * Triggers Formik validation when main form values are updated.
@@ -10,7 +10,7 @@ import {useDeepCompareEffect} from '../../../../hooks/useDeepCompareEffect'
  * We use this "hook" in `<ActionForm />` in order to retrigger main form-related validation rules.
  */
 export function FormikIsValidEffect() {
-  const { validateForm, setFieldValue, values } = useFormikContext()
+  const { setFieldValue, validateForm, values } = useFormikContext()
 
   useDeepCompareEffect(
     () => {

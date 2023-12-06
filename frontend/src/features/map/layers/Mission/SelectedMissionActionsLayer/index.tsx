@@ -1,21 +1,21 @@
+import { skipToken } from '@reduxjs/toolkit/query'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
-import type {MutableRefObject} from 'react'
-import {memo, useCallback, useEffect, useMemo, useRef} from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
-import {selectedMissionActionsStyles} from './styles'
-import {LayerProperties} from '../../../../../domain/entities/layers/constants'
-import {MonitorFishLayer} from '../../../../../domain/entities/layers/types'
-import {getMissionActionFeature} from '../../../../../domain/entities/mission'
-import {useGetFilteredMissionsQuery} from '../../../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
-import {useMainAppSelector} from '../../../../../hooks/useMainAppSelector'
-import {monitorfishMap} from '../../../monitorfishMap'
+import { selectedMissionActionsStyles } from './styles'
+import { useGetMissionActionsQuery } from '../../../../../api/missionAction'
+import { LayerProperties } from '../../../../../domain/entities/layers/constants'
+import { MonitorFishLayer } from '../../../../../domain/entities/layers/types'
+import { getMissionActionFeature } from '../../../../../domain/entities/mission'
+import { useGetFilteredMissionsQuery } from '../../../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { monitorfishMap } from '../../../monitorfishMap'
 
-import type {GeoJSON} from '../../../../../domain/types/GeoJSON'
-import type {VectorLayerWithName} from '../../../../../domain/types/layer'
-import type {Feature} from 'ol'
-import {useGetMissionActionsQuery} from "../../../../../api/missionAction";
-import {skipToken} from "@reduxjs/toolkit/query";
+import type { GeoJSON } from '../../../../../domain/types/GeoJSON'
+import type { VectorLayerWithName } from '../../../../../domain/types/layer'
+import type { Feature } from 'ol'
+import type { MutableRefObject } from 'react'
 
 export function UnmemoizedSelectedMissionActionsLayer() {
   const { missions } = useGetFilteredMissionsQuery()
@@ -86,7 +86,7 @@ export function UnmemoizedSelectedMissionActionsLayer() {
     }
 
     const actionFeatures = missionActionsData
-      .map(action => getMissionActionFeature({ ...action, missionId: missionId }))
+      .map(action => getMissionActionFeature({ ...action, missionId }))
       .filter((action): action is Feature => !!action)
 
     getVectorSource().addFeatures(actionFeatures)

@@ -1,12 +1,12 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
-import {customDayjs} from '@mtes-mct/monitor-ui'
-import {array, boolean, number, object, string} from 'yup'
+import { customDayjs } from '@mtes-mct/monitor-ui'
+import { array, boolean, number, object, string } from 'yup'
 
-import {MissionAction} from '../../../../domain/types/missionAction'
-import {mainStore} from '../../../../store'
-import {monitorenvMissionApi} from "../apis";
-import {Mission} from "../../../../domain/entities/mission/types";
+import { Mission } from '../../../../domain/entities/mission/types'
+import { MissionAction } from '../../../../domain/types/missionAction'
+import { mainStore } from '../../../../store'
+import { monitorenvMissionApi } from '../apis'
 
 // -----------------------------------------------------------------------------
 // Form Schema Validators
@@ -39,7 +39,6 @@ const actionDatetimeUtcValidator = string()
       }
 
       const mission = monitorenvMissionApi.endpoints.getMission.select(missionId) as unknown as Mission.Mission
-
 
       if (!actionDatetimeUtc || !mission.endDateTimeUtc) {
         return true

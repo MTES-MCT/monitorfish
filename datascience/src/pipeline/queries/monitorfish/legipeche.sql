@@ -6,3 +6,4 @@ SELECT
     document_title,
     document_url
 FROM legipeche
+ORDER BY extraction_occurence, page_url, document_url

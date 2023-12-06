@@ -51,23 +51,6 @@ def extract_controls(number_of_months: int) -> pd.DataFrame:
         "action_datetime_utc",
     ]
 
-    dtypes = {
-        "control_unit_id": "category",
-        "control_type": "category",
-        "mission_order": "category",
-        "vessel_targeted": "category",
-        "diversion": "category",
-        "seizure": "category",
-        "gear_1_code": "category",
-        "gear_2_code": "category",
-        "gear_3_code": "category",
-        "gear_1_was_controlled": "category",
-        "gear_2_was_controlled": "category",
-        "gear_3_was_controlled": "category",
-        "open_by": "category",
-        "closed_by": "category",
-    }
-
     try:
         assert isinstance(number_of_months, int)
     except AssertionError:
@@ -86,7 +69,6 @@ def extract_controls(number_of_months: int) -> pd.DataFrame:
         db_name="fmc",
         query_filepath="fmc/controls.sql",
         parse_dates=parse_dates,
-        dtypes=dtypes,
         params={"number_of_months": number_of_months},
     )
 
@@ -132,7 +114,6 @@ def extract_fao_areas() -> gpd.GeoDataFrame:
 
 @task(checkpoint=False)
 def transform_catch_controls(catch_controls: pd.DataFrame) -> pd.DataFrame:
-
     catch_controls = catch_controls.copy(deep=True)
     catch_controls_columns = {
         "species_code": "speciesCode",
@@ -154,7 +135,6 @@ def transform_catch_controls(catch_controls: pd.DataFrame) -> pd.DataFrame:
 
 @task(checkpoint=False)
 def transform_controls(controls: pd.DataFrame):
-
     controls = controls.copy(deep=True)
     logger = prefect.context.get("logger")
 
@@ -212,7 +192,6 @@ def transform_controls(controls: pd.DataFrame):
     ]
 
     for col_map in col_maps:
-
         gear_data_df = controls[col_map["column_names_to_json_keys"].keys()]
         gear_data_df = gear_data_df.rename(columns=col_map["column_names_to_json_keys"])
         gear_data_df["hasUncontrolledMesh"] = gear_data_df.controlledMesh.isna()
@@ -424,7 +403,7 @@ def compute_controls_fao_areas(
         )[["id", "f_code"]]
         .groupby("id")["f_code"]
         .agg(list)
-        .map(lambda l: remove_redundant_fao_area_codes(l))
+        .map(lambda li: remove_redundant_fao_area_codes(li))
         .rename("fao_areas")
         .reset_index()
     )
@@ -523,7 +502,6 @@ def compute_controls_segments(
     controls_facade: pd.DataFrame,
     segments: pd.DataFrame,
 ) -> pd.DataFrame:
-
     controls = pd.merge(
         pd.merge(controls, catch_controls, how="left", on="id"),
         controls_fao_areas,
@@ -581,15 +559,15 @@ def compute_controls_segments(
 
     # Fill null values in jsonb array volumns with []
     controls["species_onboard"] = controls.species_onboard.map(
-        lambda l: l if isinstance(l, list) else []
+        lambda li: li if isinstance(li, list) else []
     )
 
     controls["fao_areas"] = controls.fao_areas.map(
-        lambda l: l if isinstance(l, list) else []
+        lambda li: li if isinstance(li, list) else []
     )
 
     controls["segments"] = controls.segments.map(
-        lambda l: l if isinstance(l, list) else []
+        lambda li: li if isinstance(li, list) else []
     )
 
     return controls
@@ -677,7 +655,6 @@ def make_missions_actions_and_missions_control_units(
 def load_missions_and_missions_control_units(
     missions: pd.DataFrame, missions_control_units: pd.DataFrame, loading_mode: str
 ):
-
     # In "replace" loading mode, we want to replace all `missions` whose
     # `mission_souce` is `POSEIDON_CNSP`. So we use `mission_source` as the identifier.
 
@@ -689,7 +666,6 @@ def load_missions_and_missions_control_units(
 
     e = create_engine("monitorenv_remote")
     with e.begin() as connection:
-
         load(
             missions,
             table_name="missions",
@@ -761,7 +737,6 @@ def load_missions_and_missions_control_units(
 
 @task(checkpoint=False)
 def load_mission_actions(mission_actions: pd.DataFrame, loading_mode: str):
-
     # In "replace" loading mode, we want to replace all `mission_actions` for which
     # `is_from_poseidon` is True. So we use `is_from_poseidon` as the identifier.
 
@@ -795,10 +770,8 @@ def load_mission_actions(mission_actions: pd.DataFrame, loading_mode: str):
 
 
 with Flow("Controls", executor=LocalDaskExecutor()) as flow:
-
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         # Parameters
         loading_mode = Parameter("loading_mode")
         number_of_months = Parameter("number_of_months")

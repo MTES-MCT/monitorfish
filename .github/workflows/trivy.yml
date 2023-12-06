@@ -7,10 +7,10 @@ name: trivy
 
 on:
   workflow_dispatch:
-  version:
-    description: 'Version number'
-    required: true
-    default: 'v1.0.0'
+    version:
+      description: 'Version number'
+      required: true
+      default: 'v1.0.0'
 
 permissions:
   contents: read

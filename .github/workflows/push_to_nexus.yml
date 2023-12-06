@@ -54,7 +54,7 @@ jobs:
         run: |
           echo $VERSION
           docker pull ghcr.io/mtes-mct/monitorfish/monitorfish-app:$VERSION
-          echo "${{ secrets.NEXUS_PASSWORD }}" | docker login https://depot-sml.din.developpement-durable.gouv.fr:5010 -u monitorfish --password-stdin
+          echo "${{ secrets.NEXUS_PASSWORD }}" | docker login https://depot-sml.din.developpement-durable.gouv.fr:6010 -u monitorfish --password-stdin
           docker tag ghcr.io/mtes-mct/monitorfish/monitorfish-app:$VERSION monitorfish/monitorfish-app:$VERSION
-          docker push depot-sml.din.developpement-durable.gouv.fr:5010/monitorfish/monitorfish-app:$VERSION
+          docker push depot-sml.din.developpement-durable.gouv.fr:6010/monitorfish/monitorfish-app:$VERSION
 

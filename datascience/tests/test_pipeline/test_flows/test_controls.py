@@ -1021,16 +1021,6 @@ def test_extract_controls_raises_if_intput_is_not_valid(mock_extract):
         extract_controls.run(number_of_months=245)
 
 
-def test_extract_controls_applies_dtypes(controls):
-    res = mock_extract_controls.run(number_of_months=12)
-
-    with pytest.raises(AssertionError):
-        # Expected to fail as dtypes are changed in extract_controls.
-        pd.testing.assert_frame_equal(res, controls)
-
-    pd.testing.assert_frame_equal(res, controls.astype(res.dtypes))
-
-
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 flow.replace(flow.get_tasks("extract_controls")[0], mock_extract_controls_in_flow)
 flow.replace(

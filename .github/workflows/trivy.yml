@@ -21,6 +21,11 @@ jobs:
     outputs:
       VERSION: ${{ steps.version.outputs.VERSION }}
     steps:
+      - name: Get last release version
+        id: lastrelease
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+          repository: mtes-mct/monitorfish
       - id: version
         name: Set VERSION env
         run: |

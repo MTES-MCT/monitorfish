@@ -32,8 +32,9 @@ jobs:
           export VERSION=${{ steps.lastrelease.outputs.release }}
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
   analyze:
+    needs: [version]
     env:
-      VERSION: ${{needs.version.outputs.VERSION}}
+      VERSION: ${{ needs.version.outputs.VERSION }}
     permissions:
       packages: write
       contents: read # for actions/checkout to fetch code

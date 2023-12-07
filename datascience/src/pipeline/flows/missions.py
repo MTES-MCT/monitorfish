@@ -115,7 +115,6 @@ def load_missions_and_missions_control_units(
 
     e = create_engine("monitorfish_remote")
     with e.begin() as connection:
-
         load(
             missions,
             table_name="analytics_missions",
@@ -127,10 +126,6 @@ def load_missions_and_missions_control_units(
             table_id_column=missions_id_column,
             df_id_column=missions_id_column,
             init_ddls=[
-                DDL(
-                    "ALTER TABLE public.analytics_missions_control_units "
-                    "DROP CONSTRAINT analytics_missions_control_units_mission_id_fkey;"
-                ),
                 DDL(
                     "ALTER TABLE public.analytics_missions_control_units "
                     "ADD CONSTRAINT "
@@ -146,12 +141,6 @@ def load_missions_and_missions_control_units(
                     "DROP CONSTRAINT "
                     "analytics_missions_control_units_mission_id_cascade_fkey;"
                 ),
-                DDL(
-                    "ALTER TABLE public.analytics_missions_control_units "
-                    "ADD CONSTRAINT analytics_missions_control_units_mission_id_fkey "
-                    "FOREIGN KEY (mission_id) "
-                    "REFERENCES public.analytics_missions (id);"
-                ),
             ],
         )
 
@@ -166,10 +155,8 @@ def load_missions_and_missions_control_units(
 
 
 with Flow("missions", executor=LocalDaskExecutor()) as flow:
-
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         # Parameters
         loading_mode = Parameter("loading_mode")
         number_of_months = Parameter("number_of_months")

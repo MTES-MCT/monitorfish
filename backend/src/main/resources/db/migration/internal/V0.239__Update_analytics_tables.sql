@@ -1,0 +1,3 @@
+ALTER TABLE analytics_control_units DROP CONSTRAINT analytics_control_units_administration_id_fkey;
+ALTER TABLE analytics_missions_control_units DROP CONSTRAINT analytics_missions_control_units_control_unit_id_fkey;
+ALTER TABLE analytics_missions_control_units DROP CONSTRAINT analytics_missions_control_units_mission_id_fkey;

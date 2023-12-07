@@ -274,19 +274,19 @@ def load_1241_mer_noire_areas(mer_noire_areas: pd.DataFrame):
 
 @task(checkpoint=False)
 def extract_1241_mer_celtique_areas() -> pd.DataFrame:
-  return extract("monitorfish_local", "cross/1241_mer_celtique_areas.sql")
+    return extract("monitorfish_local", "cross/1241_mer_celtique_areas.sql")
 
 
 @task(checkpoint=False)
 def load_1241_mer_celtique_areas(mer_celtique_areas: pd.DataFrame):
-  load(
-    mer_celtique_areas,
-    table_name="1241_mer_celtique_areas",
-    schema="public",
-    db_name="monitorfish_remote",
-    logger=prefect.context.get("logger"),
-    how="replace",
-  )
+    load(
+        mer_celtique_areas,
+        table_name="1241_mer_celtique_areas",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+    )
 
 
 @task(checkpoint=False)
@@ -680,8 +680,24 @@ def load_departments_areas(departments_areas: pd.DataFrame):
     )
 
 
-with Flow("Administrative areas", executor=LocalDaskExecutor()) as flow:
+@task(checkpoint=False)
+def extract_land_areas() -> pd.DataFrame:
+    return extract("monitorfish_local", "cross/land_areas.sql")
 
+
+@task(checkpoint=False)
+def load_land_areas(land_areas: pd.DataFrame):
+    load(
+        land_areas,
+        table_name="land_areas_subdivided",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+    )
+
+
+with Flow("Administrative areas", executor=LocalDaskExecutor()) as flow:
     cgpm_areas = extract_cgpm_areas()
     load_cgpm_areas(cgpm_areas)
 
@@ -803,5 +819,8 @@ with Flow("Administrative areas", executor=LocalDaskExecutor()) as flow:
 
     departments_areas = extract_departments_areas()
     load_departments_areas(departments_areas)
+
+    land_areas = extract_land_areas()
+    load_land_areas(land_areas)
 
 flow.file_name = Path(__file__).name

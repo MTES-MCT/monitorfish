@@ -321,7 +321,14 @@ def transform_controls(controls: pd.DataFrame):
         MissionType.from_mission_action_type
     ).map(lambda mission_type: [mission_type.value])
 
-    controls["seizure_and_diversion"] = controls[["seizure", "diversion"]].any(axis=1)
+    controls["seizure_and_diversion"] = controls["diversion"].fillna(False)
+
+    # In historical data, there is only one field "seizure" which does not specify what
+    # was seized (gears and/or species). This information is not available and
+    # upon import is considered both species and gears are seized when "seized" was
+    # true in historical data.
+    controls["has_some_gears_seized"] = controls["seizure"].fillna(False)
+    controls["has_some_species_seized"] = controls["seizure"].fillna(False)
     controls = controls.drop(columns=["seizure", "diversion"])
 
     # Mapping controls on outdated ports to new ports
@@ -626,6 +633,8 @@ def make_missions_actions_and_missions_control_units(
         "species_infractions",
         "logbook_infractions",
         "other_infractions",
+        "has_some_gears_seized",
+        "has_some_species_seized",
         "seizure_and_diversion",
         "seizure_and_diversion_comments",
         "other_comments",

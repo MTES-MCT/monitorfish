@@ -12,8 +12,19 @@ def tag_positions_at_port(positions: pd.DataFrame) -> pd.DataFrame:
     """
     Adds an `is_at_port` boolean field to a DataFrame containing positions.
 
+    Mandatory fields `latitude` and `longitude` are converted to h3 indices and compared
+    to a referential of h3 indices of ports and anchor areas. If the h3 index of the
+    latitude-longitude position matches that of a port or anchor area, then `is_at_port`
+    will be `True`.
+
+    Additionnally, if a `is_on_land` boolean column is present in the input DataFrame,
+    positions with `is_on_land` = True will have `is_at_port` = True regardless of the
+    latitude-longitude position. The `is_on_land` column is dropped after being taken
+    into account for the computation of `is_at_port`.
+
     Args:
-        positions: DataFrame with at least 'latitude' and 'longitude' columns.
+        positions: DataFrame with at least 'latitude' and 'longitude' columns and
+          an optionnal `is_on_land` column.
 
     Returns:
         pd.DataFrame: same as input with an added 'is_at_port' boolean field.
@@ -43,6 +54,12 @@ def tag_positions_at_port(positions: pd.DataFrame) -> pd.DataFrame:
         positions["is_at_port"] = positions.h3.isin(h3_indices_at_port)
 
         positions = positions.drop(columns=["h3"])
+
+        if "is_on_land" in positions:
+            positions["is_at_port"] = positions[["is_at_port", "is_on_land"]].any(
+                axis=1
+            )
+            positions = positions.drop(columns=["is_on_land"])
 
     return positions
 

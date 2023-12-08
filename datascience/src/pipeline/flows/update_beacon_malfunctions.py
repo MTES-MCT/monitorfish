@@ -30,8 +30,8 @@ from src.pipeline.shared_tasks.control_flow import (
 )
 from src.pipeline.shared_tasks.dates import get_utcnow, make_timedelta
 from src.pipeline.shared_tasks.healthcheck import (
-  assert_last_positions_flow_health,
-  get_monitorfish_healthcheck,
+    assert_last_positions_flow_health,
+    get_monitorfish_healthcheck,
 )
 
 
@@ -132,7 +132,6 @@ def get_new_malfunctions(
     malfunction_datetime_utc_threshold_at_sea: datetime,
     malfunction_datetime_utc_threshold_at_port: datetime,
 ) -> pd.DataFrame:
-
     operators_up = set(
         satellite_operators_statuses.loc[
             satellite_operators_statuses.operator_is_up == True, "satellite_operator_id"
@@ -184,7 +183,6 @@ def get_ended_malfunction_ids(
     known_malfunctions: pd.DataFrame,
     malfunction_datetime_utc_threshold_at_sea: datetime,
 ) -> Tuple[list, list, list, list]:
-
     ids_not_required_to_emit = set(
         known_malfunctions.loc[
             ~known_malfunctions.beacon_number.isin(
@@ -280,12 +278,6 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
 
     new_malfunctions["notification_requested"] = new_malfunctions.vessel_status.map(
         lambda x: notification_to_send[x]
-    )
-
-    new_malfunctions[
-        "notification_requested"
-    ] = new_malfunctions.notification_requested.where(
-        new_malfunctions.beacon_status == BeaconStatus.ACTIVATED.value, None
     )
 
     new_malfunctions = new_malfunctions.rename(
@@ -427,7 +419,7 @@ def update_beacon_malfunction(
         headers = {
             "Accept": "application/json, text/plain",
             "Content-Type": "application/json;charset=UTF-8",
-            "X-API-KEY": BACKEND_API_KEY
+            "X-API-KEY": BACKEND_API_KEY,
         }
         r = requests.put(url=url, json=json, headers=headers)
         r.raise_for_status()
@@ -454,18 +446,14 @@ def request_notification(
         BEACON_MALFUNCTIONS_ENDPOINT
         + f"{str(beacon_malfunction_id)}/{requested_notification.value}"
     )
-    headers = {
-      "X-API-KEY": BACKEND_API_KEY
-    }
+    headers = {"X-API-KEY": BACKEND_API_KEY}
     r = requests.put(url=url, headers=headers)
     r.raise_for_status()
 
 
 with Flow("Beacons malfunctions", executor=LocalDaskExecutor()) as flow:
-
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         # Healthcheck
         healthcheck = get_monitorfish_healthcheck()
         now = get_utcnow()

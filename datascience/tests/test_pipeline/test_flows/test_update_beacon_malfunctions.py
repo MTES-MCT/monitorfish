@@ -495,16 +495,10 @@ def test_prepare_new_beacon_malfunctions():
             ],
             "vessel_id": [2, 4, 5, 6],
             "notification_requested": [
-                (
-                    BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value
-                ),
-                (
-                    BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION.value
-                ),
-                (
-                    BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION.value
-                ),
-                None,
+                BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value,
+                BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION.value,
+                BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION.value,
+                BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION.value,
             ],
             "latitude": [45.23, -12.256, -12.56, 12.8],
             "longitude": [12.8, -2.961, 8.52, -5.6],

@@ -86,7 +86,8 @@ SELECT
     pos.course,
     pos.date_time AS last_position_datetime_utc,
     pos.is_manual,
-    per.emission_period
+    per.emission_period,
+    land.id IS NOT NULL AS is_on_land
 FROM last_positions pos
 LEFT JOIN emission_periods per
 ON (
@@ -115,4 +116,9 @@ ON (
 )
 LEFT JOIN vessels
 ON pos.internal_reference_number = vessels.cfr
+LEFT JOIN land_areas_subdivided land
+ON ST_Intersects(
+    ST_SetSRID(ST_MakePoint(pos.longitude, pos.latitude), 4326),
+    land.geometry
+)
 WHERE pos.flag_state != 'GB' OR pos.latitude < 46.2294 OR pos.latitude > 46.2305 

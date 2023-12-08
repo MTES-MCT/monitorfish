@@ -54,7 +54,7 @@ export function disableMissionListener(missionId: number) {
   console.log(`SSE: disabled listener of mission id ${missionId}.`)
 }
 
-export const updateCacheMissionEventListener =
+export const missionEventListener =
   (id: number, callback: (mission: Mission.Mission) => void) => (event: MessageEvent) => {
     const mission = JSON.parse(event.data) as Mission.Mission
     if (mission.id !== id) {

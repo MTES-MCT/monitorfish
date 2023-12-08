@@ -8,7 +8,6 @@ export namespace MissionAction {
     controlQualityComments: string | undefined
     controlUnits: LegacyControlUnit.LegacyControlUnit[]
     districtCode: string | undefined
-    diversion: boolean | undefined
     emitsAis: ControlCheck | undefined
     emitsVms: ControlCheck | undefined
     externalReferenceNumber: string | undefined
@@ -28,7 +27,6 @@ export namespace MissionAction {
     isFromPoseidon: boolean | undefined
     isSafetyEquipmentAndStandardsComplianceControl?: boolean
     isSeafarersControl?: boolean
-    isValid: boolean
     latitude: number | undefined
     licencesAndLogbookObservations: string | undefined
     licencesMatchActivity: ControlCheck | undefined

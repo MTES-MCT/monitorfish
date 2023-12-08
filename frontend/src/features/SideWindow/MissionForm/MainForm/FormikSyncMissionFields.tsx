@@ -4,7 +4,7 @@ import { omit } from 'lodash'
 import { useEffect, useState } from 'react'
 
 import { useDeepCompareEffect } from '../../../../hooks/useDeepCompareEffect'
-import { EVENT_SOURCE, MISSION_UPDATE_EVENT, updateCacheMissionEventListener } from '../sse'
+import { EVENT_SOURCE, MISSION_UPDATE_EVENT, missionEventListener } from '../sse'
 
 import type { MissionMainFormValues } from '../types'
 
@@ -14,16 +14,16 @@ type FormikSyncMissionFormProps = {
 /**
  * Sync
  */
-export function FormikSyncMissionForm({ missionId }: FormikSyncMissionFormProps) {
+export function FormikSyncMissionFields({ missionId }: FormikSyncMissionFormProps) {
   const { setFieldValue, values } = useFormikContext<MissionMainFormValues>()
   const [receivedMission, setReceivedMission] = useState<MissionMainFormValues | undefined>()
 
   useEffect(() => {
     if (!missionId) {
-      return
+      return undefined
     }
 
-    const listener = updateCacheMissionEventListener(missionId, mission => setReceivedMission(mission))
+    const listener = missionEventListener(missionId, mission => setReceivedMission(mission))
 
     EVENT_SOURCE.addEventListener(MISSION_UPDATE_EVENT, listener)
 
@@ -42,9 +42,10 @@ export function FormikSyncMissionForm({ missionId }: FormikSyncMissionFormProps)
         const receivedDiff = diff(omit(values, ['isValid']), receivedMission)
 
         /**
-         * We iterate and use `setFieldValue` on each key to avoid a global re-render of the <MainForm/> component
+         * We iterate and use `setFieldValue` on each diff key to avoid a global re-render of the <MainForm/> component
          */
-        Object.keys(receivedDiff).map(key => {
+        Object.keys(receivedDiff).forEach(key => {
+          // eslint-disable-next-line no-console
           console.log(`SSE: setting form key "${key}" to "${receivedDiff[key]}"`)
           setFieldValue(key, receivedDiff[key])
         })

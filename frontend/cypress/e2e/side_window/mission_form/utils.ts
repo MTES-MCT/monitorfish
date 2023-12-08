@@ -44,10 +44,14 @@ export const editSideWindowMission = (vesselName: string) => {
   cy.wait(500)
 }
 
-export const fillSideWindowMissionFormBase = (missionTypeLabel: Mission.MissionTypeLabel) => {
+export const fillSideWindowMissionFormBase = (
+  missionTypeLabel: Mission.MissionTypeLabel,
+  isReturningClosed: boolean = false
+) => {
   cy.intercept('POST', '/api/v1/missions', {
     body: {
-      id: 1
+      id: 1,
+      isClosed: isReturningClosed
     },
     statusCode: 201
   }).as('createMission')

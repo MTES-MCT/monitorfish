@@ -90,7 +90,7 @@ export function UnmemoizedSelectedMissionActionsLayer() {
       .filter((action): action is Feature => !!action)
 
     getVectorSource().addFeatures(actionFeatures)
-  }, [getVectorSource, missionId])
+  }, [getVectorSource, missionId, missionActionsData])
 
   return null
 }

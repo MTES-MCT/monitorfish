@@ -1,9 +1,8 @@
-import { logSoftError, ControlUnit } from '@mtes-mct/monitor-ui'
+import { ControlUnit, logSoftError } from '@mtes-mct/monitor-ui'
 
-import { addNewMissionListener, updateCacheMissionEventListener, removeMissionListener } from './sse'
+import { addNewMissionListener, missionEventListener, removeMissionListener } from './sse'
 import { monitorenvApi, monitorfishApi } from '../../../api/api'
 import { Mission } from '../../../domain/entities/mission/types'
-import { ApiError } from '../../../libs/ApiError'
 import { FrontendApiError } from '../../../libs/FrontendApiError'
 
 const CREATE_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu créer la mission."
@@ -43,7 +42,7 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
 
     getEngagedControlUnits: builder.query<ControlUnit.EngagedControlUnits, void>({
       query: () => `/v1/missions/engaged_control_units`,
-      transformErrorResponse: response => new ApiError(GET_ENGAGED_CONTROL_UNITS_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new FrontendApiError(GET_ENGAGED_CONTROL_UNITS_ERROR_MESSAGE, response)
     }),
 
     getMission: builder.query<Mission.Mission, Mission.Mission['id']>({
@@ -52,7 +51,7 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
         try {
           await cacheDataLoaded
 
-          const listener = updateCacheMissionEventListener(id, mission => updateCachedData(() => mission))
+          const listener = missionEventListener(id, mission => updateCachedData(() => mission))
           addNewMissionListener(id, listener)
 
           // cacheEntryRemoved will resolve when the cache subscription is no longer active
@@ -70,7 +69,7 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
       },
       providesTags: [{ type: 'Missions' }],
       query: id => `/v1/missions/${id}`,
-      transformErrorResponse: response => new ApiError(GET_MISSION_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new FrontendApiError(GET_MISSION_ERROR_MESSAGE, response)
     }),
 
     updateMission: builder.mutation<void, Mission.Mission>({

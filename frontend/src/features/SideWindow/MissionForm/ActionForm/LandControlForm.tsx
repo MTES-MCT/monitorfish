@@ -25,11 +25,11 @@ import { SpeciesField } from './shared/SpeciesField'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
 import { VesselFleetSegmentsField } from './shared/VesselFleetSegmentsField'
+import { validateBeforeOnChange } from './utils'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
-import { FormikIsValidEffect } from '../shared/FormikIsValidEffect'
 
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
@@ -56,61 +56,62 @@ export function LandControlForm({ initialValues, onChange }: LandControlFormProp
 
   return (
     <Formik key={key} initialValues={initialValues} onSubmit={noop} validationSchema={validationSchema}>
-      <>
-        <FormikEffect onChange={onChange as any} />
-        <FormikRevalidationEffect />
-        <FormikIsValidEffect />
+      {({ validateForm }) => (
+        <>
+          <FormikEffect onChange={validateBeforeOnChange(initialValues, validateForm, onChange)} />
+          <FormikRevalidationEffect />
 
-        <FormHead>
-          <h2>
-            <Icon.Anchor />
-            Contrôle à la débarque ({titleDate})
-          </h2>
-        </FormHead>
+          <FormHead>
+            <h2>
+              <Icon.Anchor />
+              Contrôle à la débarque ({titleDate})
+            </h2>
+          </FormHead>
 
-        <FormBody>
-          <VesselField />
+          <FormBody>
+            <VesselField />
 
-          <FormikDatePicker
-            baseContainer={newWindowContainerRef.current}
-            isLight
-            isStringDate
-            label="Date et heure du contrôle"
-            name="actionDatetimeUtc"
-            withTime
-          />
+            <FormikDatePicker
+              baseContainer={newWindowContainerRef.current}
+              isLight
+              isStringDate
+              label="Date et heure du contrôle"
+              name="actionDatetimeUtc"
+              withTime
+            />
 
-          <FormikPortSelect />
+            <FormikPortSelect />
 
-          <LicencesAndLogbookField />
+            <LicencesAndLogbookField />
 
-          <GearsField />
+            <GearsField />
 
-          <SpeciesField controlledWeightLabel="Qté pesée" />
+            <SpeciesField controlledWeightLabel="Qté pesée" />
 
-          <SeizureFieldsetGroup isLight legend="Appréhensions">
-            <FormikCheckbox label="Appréhension d’engin(s)" name="hasSomeGearsSeized" />
-            <FormikCheckbox label="Appréhension d’espèce(s)" name="hasSomeSpeciesSeized" />
-            <FormikCheckbox label="Appréhension du navire" name="seizureAndDiversion" />
-          </SeizureFieldsetGroup>
+            <SeizureFieldsetGroup isLight legend="Appréhensions">
+              <FormikCheckbox label="Appréhension d’engin(s)" name="hasSomeGearsSeized" />
+              <FormikCheckbox label="Appréhension d’espèce(s)" name="hasSomeSpeciesSeized" />
+              <FormikCheckbox label="Appréhension du navire" name="seizureAndDiversion" />
+            </SeizureFieldsetGroup>
 
-          <FormikMultiInfractionPicker addButtonLabel="Ajouter une infraction" label="Infractions" />
+            <FormikMultiInfractionPicker addButtonLabel="Ajouter une infraction" label="Infractions" />
 
-          <FieldsetGroup isLight legend="Autres observations">
-            <FormikTextarea isLabelHidden label="Autres observations" name="otherComments" rows={2} />
-          </FieldsetGroup>
+            <FieldsetGroup isLight legend="Autres observations">
+              <FormikTextarea isLabelHidden label="Autres observations" name="otherComments" rows={2} />
+            </FieldsetGroup>
 
-          <hr />
+            <hr />
 
-          <VesselFleetSegmentsField label="Segment de flotte" />
+            <VesselFleetSegmentsField label="Segment de flotte" />
 
-          <ControlQualityField />
+            <ControlQualityField />
 
-          <FormikOtherControlsCheckboxes />
+            <FormikOtherControlsCheckboxes />
 
-          <FormikAuthor />
-        </FormBody>
-      </>
+            <FormikAuthor />
+          </FormBody>
+        </>
+      )}
     </Formik>
   )
 }

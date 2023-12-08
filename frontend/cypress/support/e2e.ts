@@ -72,6 +72,7 @@ declare global {
       ): Chainable<Element>
       forceClick(): Chainable<JQuery<HTMLElement>>
       getDataCy(dataCy: string): Chainable<JQuery<HTMLElement>>
+      waitForLastRequest(alias, partialRequest, maxRequests, level?)
     }
 
     type DateTuple = [number, number, number]

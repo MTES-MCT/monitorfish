@@ -1,3 +1,4 @@
+import { skipToken } from '@reduxjs/toolkit/query'
 import { useFormikContext } from 'formik'
 import { useMemo } from 'react'
 
@@ -14,8 +15,6 @@ import type { MissionActionFormValues } from '../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 import MissionActionType = MissionAction.MissionActionType
-
-import { skipToken } from '@reduxjs/toolkit/query'
 
 export function useGetMissionActionFormikUsecases() {
   const dispatch = useMainAppDispatch()

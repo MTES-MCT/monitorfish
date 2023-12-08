@@ -69,23 +69,6 @@ const missionSlice = createSlice({
     },
 
     /**
-     * Update mission draft
-     */
-    setDraft(
-      state,
-      action: PayloadAction<{
-        actionsFormValues: MissionActionFormValues[]
-        mainFormValues: MissionMainFormValues
-      }>
-    ) {
-      if (!state.isDraftDirty && state.draft && !isEqual(current(state.draft), action.payload)) {
-        state.isDraftDirty = true
-      }
-
-      state.draft = action.payload
-    },
-
-    /**
      * Update mission geometry computed from controls
      */
     setGeometryComputedFromControls(state, action: PayloadAction<MissionMainFormValues['geom']>) {
@@ -101,6 +84,13 @@ const missionSlice = createSlice({
      */
     setIsClosing(state, action: PayloadAction<boolean>) {
       state.isClosing = action.payload
+    },
+
+    /**
+     * Update isDraftDirty
+     */
+    setIsDraftDirty(state, action: PayloadAction<boolean>) {
+      state.isDraftDirty = action.payload
     },
 
     /**

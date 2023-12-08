@@ -11,11 +11,11 @@ import { FormikOtherControlsCheckboxes } from './shared/FormikOtherControlsCheck
 import { FormikRevalidationEffect } from './shared/FormikRevalidationEffect'
 import { getTitleDateFromUtcStringDate } from './shared/utils'
 import { VesselField } from './shared/VesselField'
+import { validateBeforeOnChange } from './utils'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
-import { FormikIsValidEffect } from '../shared/FormikIsValidEffect'
 
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
@@ -42,43 +42,44 @@ export function AirControlForm({ initialValues, onChange }: AirControlFormProps)
 
   return (
     <Formik key={key} initialValues={initialValues} onSubmit={noop} validationSchema={validationSchema}>
-      <>
-        <FormikEffect onChange={onChange as any} />
-        <FormikRevalidationEffect />
-        <FormikIsValidEffect />
+      {({ validateForm }) => (
+        <>
+          <FormikEffect onChange={validateBeforeOnChange(initialValues, validateForm, onChange)} />
+          <FormikRevalidationEffect />
 
-        <FormHead>
-          <h2>
-            <Icon.Plane />
-            Contrôle aérien ({titleDate})
-          </h2>
-        </FormHead>
+          <FormHead>
+            <h2>
+              <Icon.Plane />
+              Contrôle aérien ({titleDate})
+            </h2>
+          </FormHead>
 
-        <FormBody>
-          <VesselField />
+          <FormBody>
+            <VesselField />
 
-          <FormikDatePicker
-            baseContainer={newWindowContainerRef.current}
-            isLight
-            isStringDate
-            label="Date et heure du contrôle"
-            name="actionDatetimeUtc"
-            withTime
-          />
+            <FormikDatePicker
+              baseContainer={newWindowContainerRef.current}
+              isLight
+              isStringDate
+              label="Date et heure du contrôle"
+              name="actionDatetimeUtc"
+              withTime
+            />
 
-          <FormikCoordinatesPicker />
+            <FormikCoordinatesPicker />
 
-          <FormikMultiInfractionPicker addButtonLabel="Ajouter une infraction" label="Infractions" />
+            <FormikMultiInfractionPicker addButtonLabel="Ajouter une infraction" label="Infractions" />
 
-          <FieldsetGroup isLight legend="Autres observations">
-            <FormikTextarea isLabelHidden label="Autres observations" name="otherComments" rows={2} />
-          </FieldsetGroup>
+            <FieldsetGroup isLight legend="Autres observations">
+              <FormikTextarea isLabelHidden label="Autres observations" name="otherComments" rows={2} />
+            </FieldsetGroup>
 
-          <FormikOtherControlsCheckboxes />
+            <FormikOtherControlsCheckboxes />
 
-          <FormikAuthor />
-        </FormBody>
-      </>
+            <FormikAuthor />
+          </FormBody>
+        </>
+      )}
     </Formik>
   )
 }

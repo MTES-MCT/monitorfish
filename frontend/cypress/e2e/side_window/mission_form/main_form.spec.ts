@@ -21,28 +21,18 @@ context('Side Window > Mission Form > Main Form', () => {
   it('Should send the expected data to the API when creating a new mission (required fields only)', () => {
     openSideWindowNewMission()
 
-    const getSaveButton = () => cy.get('button').contains('Enregistrer et quitter').parent()
     const expectedStartDateTimeUtc = new RegExp(`${customDayjs().utc().format('YYYY-MM-DDTHH')}:\\d{2}:00\\.000Z`)
 
-    cy.intercept('POST', '/api/v1/missions', {
-      body: {
-        id: 1
-      },
-      statusCode: 201
-    }).as('createMission')
+    cy.intercept('POST', '/api/v1/missions', cy.spy().as('createMissionSpy')).as('createMission')
 
-    getSaveButton().should('be.disabled')
+    cy.get('@createMissionSpy').should('not.have.been.called')
 
     cy.fill('Types de mission', ['Mer'])
 
     cy.fill('Administration 1', 'DDTM')
     cy.fill('Unité 1', 'Cultures marines – DDTM 40')
 
-    cy.wait(500)
-
-    getSaveButton().should('be.enabled')
-
-    cy.clickButton('Enregistrer et quitter')
+    cy.get('@createMissionSpy').should('have.been.called')
 
     cy.wait('@createMission').then(interception => {
       if (!interception.response) {
@@ -71,7 +61,7 @@ context('Side Window > Mission Form > Main Form', () => {
       })
     })
 
-    cy.get('h1').should('contain.text', 'Missions et contrôles')
+    cy.get('h1').should('contain.text', 'Nouvelle mission')
   })
 
   it('Should send the expected data to the API when creating a new mission', () => {
@@ -112,62 +102,61 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.wait(500)
 
-    cy.clickButton('Enregistrer et quitter')
-
-    cy.wait('@createMission').then(interception => {
-      if (!interception.response) {
-        assert.fail('`interception.response` is undefined.')
-      }
-
-      assert.deepInclude(interception.request.body, {
-        closedBy: 'Doris',
-        controlUnits: [
-          {
-            administration: 'DDTM',
-            contact: 'Bob',
-            id: 10001,
-            isArchived: false,
-            name: 'Cultures marines – DDTM 40',
-            resources: [
-              {
-                id: 1,
-                name: 'Semi-rigide 1'
-              }
-            ]
-          },
-          {
-            administration: 'DREAL',
-            contact: 'Bob 2',
-            id: 10019,
-            isArchived: false,
-            name: 'DREAL Pays-de-La-Loire',
-            resources: [
-              {
-                id: 10,
-                name: 'ALTAIR'
-              },
-              {
-                id: 12,
-                name: 'ARIOLA'
-              }
-            ]
-          }
-        ],
-        endDateTimeUtc: '2023-02-01T13:45:00.000Z',
-        hasMissionOrder: true,
-        isClosed: false,
-        isGeometryComputedFromControls: false,
-        isUnderJdp: true,
-        missionSource: 'MONITORFISH',
-        missionTypes: ['AIR'],
-        observationsCacem: 'Une note.',
-        observationsCnsp: 'Une autre note.',
-        openBy: 'Nemo',
-        startDateTimeUtc: '2023-02-01T12:34:00.000Z'
-      })
-    })
-
-    cy.get('h1').should('contain.text', 'Missions et contrôles')
+    // Approx. 4 requests are sent to the server
+    cy.waitForLastRequest(
+      '@createMission',
+      {
+        body: {
+          closedBy: 'Doris',
+          controlUnits: [
+            {
+              administration: 'DDTM',
+              contact: 'Bob',
+              id: 10001,
+              isArchived: false,
+              name: 'Cultures marines – DDTM 40',
+              resources: [
+                {
+                  id: 1,
+                  name: 'Semi-rigide 1'
+                }
+              ]
+            },
+            {
+              administration: 'DREAL',
+              contact: 'Bob 2',
+              id: 10019,
+              isArchived: false,
+              name: 'DREAL Pays-de-La-Loire',
+              resources: [
+                {
+                  id: 10,
+                  name: 'ALTAIR'
+                },
+                {
+                  id: 12,
+                  name: 'ARIOLA'
+                }
+              ]
+            }
+          ],
+          endDateTimeUtc: '2023-02-01T13:45:00.000Z',
+          hasMissionOrder: true,
+          isClosed: false,
+          isGeometryComputedFromControls: false,
+          isUnderJdp: true,
+          missionSource: 'MONITORFISH',
+          missionTypes: ['AIR'],
+          observationsCacem: 'Une note.',
+          observationsCnsp: 'Une autre note.',
+          openBy: 'Nemo',
+          startDateTimeUtc: '2023-02-01T12:34:00.000Z'
+        }
+      },
+      5
+    )
+      .its('response.statusCode')
+      .should('eq', 201)
   })
 
   it('Should send the expected data to the API when editing an existing mission', () => {
@@ -175,13 +164,19 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.intercept('POST', '/api/v1/missions/2', {
       body: {
-        id: 1
+        id: 2
       },
       statusCode: 201
     }).as('updateMission')
-    cy.intercept('PUT', '/bff/v1/mission_actions/2').as('updateMissionAction2')
 
-    cy.clickButton('Enregistrer et quitter')
+    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
+      body: {
+        id: 2
+      },
+      statusCode: 200
+    }).as('updateMissionAction2')
+
+    cy.fill('Ouvert par', 'Nemo')
 
     cy.wait('@updateMission').then(interception => {
       if (!interception.response) {
@@ -212,7 +207,7 @@ context('Side Window > Mission Form > Main Form', () => {
         observationsCacem:
           'Maybe own each college away likely major. Former space technology million cell. Outside body my drop require.',
         observationsCnsp: null,
-        openBy: 'Brittany Graham'
+        openBy: 'Nemo'
       })
     })
 
@@ -310,34 +305,31 @@ context('Side Window > Mission Form > Main Form', () => {
       })
     })
 
-    cy.get('h1').should('contain.text', 'Missions et contrôles')
+    cy.get('h1').should('contain.text', 'Mission Mer – BGC Bastia')
   })
 
   it('Should close a new mission', () => {
     openSideWindowNewMission()
-    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA, true)
 
     cy.fill('Clôturé par', 'Doris')
 
-    cy.wait(500)
+    cy.clickButton('Clôturer')
 
-    cy.clickButton('Enregistrer et clôturer')
-
-    cy.wait('@createMission').then(interception => {
-      if (!interception.response) {
-        assert.fail('`interception.response` is undefined.')
-      }
-
-      assert.deepInclude(interception.request.body, {
-        // We check this prop to be sure all the data is there (this is the last field to be filled)
-        closedBy: 'Doris',
-
-        isClosed: true,
-        isGeometryComputedFromControls: false
-      })
-    })
-
-    cy.get('h1').should('contain.text', 'Missions et contrôles')
+    cy.waitForLastRequest(
+      '@createMission',
+      {
+        body: {
+          // We check this prop to be sure all the data is there (this is the last field to be filled)
+          closedBy: 'Doris',
+          isClosed: true,
+          isGeometryComputedFromControls: false
+        }
+      },
+      5
+    )
+      .its('response.statusCode')
+      .should('eq', 201)
   })
 
   it('Should close an existing mission', () => {
@@ -350,27 +342,24 @@ context('Side Window > Mission Form > Main Form', () => {
       statusCode: 201
     }).as('updateMission')
 
-    // Main Form
     cy.fill('Clôturé par', 'Doris')
 
-    cy.wait(500)
+    cy.clickButton('Clôturer')
 
-    cy.clickButton('Enregistrer et clôturer')
-
-    cy.wait('@updateMission').then(interception => {
-      if (!interception.response) {
-        assert.fail('`interception.response` is undefined.')
-      }
-
-      assert.deepInclude(interception.request.body, {
-        // We check this prop to be sure all the data is there (this is the last field to be filled)
-        closedBy: 'Doris',
-        id: 2,
-        isClosed: true
-      })
-    })
-
-    cy.get('h1').should('contain.text', 'Missions et contrôles')
+    cy.waitForLastRequest(
+      '@updateMission',
+      {
+        body: {
+          // We check this prop to be sure all the data is there (this is the last field to be filled)
+          closedBy: 'Doris',
+          id: 2,
+          isClosed: true
+        }
+      },
+      5
+    )
+      .its('response.statusCode')
+      .should('eq', 201)
   })
 
   it('Should show the cancellation confirmation dialog when switching to another menu while a draft is dirty', () => {
@@ -382,7 +371,8 @@ context('Side Window > Mission Form > Main Form', () => {
 
     editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
 
-    cy.fill('Clôturé par', 'Nemo')
+    // We remove a required field
+    cy.fill('Unité 1', '')
 
     cy.wait(500)
 
@@ -410,47 +400,43 @@ context('Side Window > Mission Form > Main Form', () => {
       statusCode: 204
     }).as('updateMission')
 
-    cy.wait(1000)
-
     cy.clickButton('Ré-ouvrir la mission')
+    cy.wait(200)
 
-    cy.wait(1000)
     cy.fill('Contact de l’unité 1', 'Bob')
 
-    cy.clickButton('Enregistrer et quitter')
-
-    cy.wait('@updateMission').then(interception => {
-      if (!interception.response) {
-        assert.fail('`interception.response` is undefined.')
-      }
-
-      assert.isString(interception.request.body.endDateTimeUtc)
-      assert.isString(interception.request.body.startDateTimeUtc)
-      assert.deepInclude(interception.request.body, {
-        closedBy: 'Cynthia Phillips',
-        controlUnits: [
-          {
-            administration: 'DDTM',
-            contact: 'Bob',
-            id: 10003,
-            isArchived: false,
-            name: 'DML 2A (historique)',
-            resources: [{ id: 3, name: 'Semi-rigide 1' }]
-          }
-        ],
-        envActions: [],
-        facade: 'MED',
-        geom: null,
-        id: 6,
-        isClosed: false,
-        isGeometryComputedFromControls: false,
-        missionSource: 'POSEIDON_CNSP',
-        missionTypes: ['AIR'],
-        observationsCacem: 'Toward agency blue now hand. Meet answer someone stand.',
-        observationsCnsp: null,
-        openBy: 'Kevin Torres'
-      })
-    })
+    cy.waitForLastRequest(
+      '@updateMission',
+      {
+        body: {
+          closedBy: 'Cynthia Phillips',
+          controlUnits: [
+            {
+              administration: 'DDTM',
+              contact: 'Bob',
+              id: 10003,
+              isArchived: false,
+              name: 'DML 2A (historique)',
+              resources: [{ id: 3, name: 'Semi-rigide 1' }]
+            }
+          ],
+          envActions: [],
+          facade: 'MED',
+          geom: null,
+          id: 6,
+          isClosed: false,
+          isGeometryComputedFromControls: false,
+          missionSource: 'POSEIDON_CNSP',
+          missionTypes: ['AIR'],
+          observationsCacem: 'Toward agency blue now hand. Meet answer someone stand.',
+          observationsCnsp: null,
+          openBy: 'Kevin Torres'
+        }
+      },
+      5
+    )
+      .its('response.statusCode')
+      .should('eq', 204)
   })
 
   it('Should delete a mission', () => {
@@ -546,7 +532,7 @@ context('Side Window > Mission Form > Main Form', () => {
     )
   })
 
-  it.only('Should update the form When receiving a mission update', () => {
+  it('Should update the form When receiving a mission update', () => {
     editSideWindowMissionListMissionWithId(43, SeaFrontGroup.MED)
     cy.wait(200)
     cy.intercept('POST', '/api/v1/missions/43', {
@@ -565,6 +551,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.window()
       .its('mockEventSources' as any)
       .then(mockEventSources => {
+        // URL sur la CI : http://0.0.0.0:8081/api/v1/missions/sse'
         mockEventSources['//localhost:8081/api/v1/missions/sse'].emitOpen()
         mockEventSources['//localhost:8081/api/v1/missions/sse'].emit(
           'MISSION_UPDATE',
@@ -618,8 +605,15 @@ context('Side Window > Mission Form > Main Form', () => {
       })
     cy.wait(500)
 
+    // We modify the comment
+    cy.fill('CNSP : orientations, observations', 'Une autre note.')
+
     cy.clickButton('Supprimer l’action')
-    cy.clickButton('Enregistrer et quitter')
+    // We stub the response as the DELETE request was mocked
+    cy.intercept('GET', '/bff/v1/mission_actions?missionId=43', {
+      body: [],
+      statusCode: 200
+    })
 
     cy.wait('@updateMission').then(interception => {
       if (!interception.response) {
@@ -628,7 +622,19 @@ context('Side Window > Mission Form > Main Form', () => {
 
       assert.isTrue(interception.request.body.isUnderJdp)
       assert.equal(interception.request.body.endDateTimeUtc, '2024-02-13T09:49:40.350661Z')
-      assert.equal(interception.request.body.observationsCnsp, 'Une observation à la dernière minute.')
+      assert.equal(interception.request.body.observationsCnsp, 'Une autre note.')
+    })
+
+    cy.fill('Contact de l’unité 1', 'Tel. 06 88 65 66 66')
+
+    cy.wait('@updateMission').then(interception => {
+      if (!interception.response) {
+        assert.fail('`interception.response` is undefined.')
+      }
+
+      assert.isTrue(interception.request.body.isUnderJdp)
+      assert.equal(interception.request.body.controlUnits[0].contact, 'Tel. 06 88 65 66 66')
+      assert.equal(interception.request.body.observationsCnsp, 'Une autre note.')
     })
   })
 })

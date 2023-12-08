@@ -109,8 +109,6 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
     setIsFirstRender(false)
   }, [])
 
-  console.log('RENDER SideWindow')
-
   return (
     <StyleSheetManager target={wrapperRef.current || undefined}>
       <Wrapper ref={wrapperRef}>

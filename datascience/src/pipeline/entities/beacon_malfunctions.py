@@ -58,9 +58,15 @@ class EndOfMalfunctionReason(Enum):
 
 class BeaconMalfunctionNotificationType(Enum):
     MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION = "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION"
+    MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON = (
+        "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON"
+    )
     MALFUNCTION_AT_SEA_REMINDER = "MALFUNCTION_AT_SEA_REMINDER"
     MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION = (
         "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION"
+    )
+    MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON = (
+        "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON"
     )
     MALFUNCTION_AT_PORT_REMINDER = "MALFUNCTION_AT_PORT_REMINDER"
     END_OF_MALFUNCTION = "END_OF_MALFUNCTION"
@@ -69,8 +75,10 @@ class BeaconMalfunctionNotificationType(Enum):
     def to_notification_subject_template(self):
         type_subject_mapping = {
             "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION": "{vessel_name} ({immat}) : interruption en mer des émissions VMS",
+            "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON": "{vessel_name} ({immat}) : interruption en mer des émissions VMS",
             "MALFUNCTION_AT_SEA_REMINDER": "{vessel_name} ({immat}) : RAPPEL : interruption en mer des émissions VMS",
             "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION": "{vessel_name} ({immat}) : interruption à quai des émissions VMS",
+            "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON": "{vessel_name} ({immat}) : interruption à quai des émissions VMS",
             "MALFUNCTION_AT_PORT_REMINDER": "{vessel_name} ({immat}) : RAPPEL : interruption à quai des émissions VMS",
             "END_OF_MALFUNCTION": "{vessel_name} ({immat}) : reprise des émissions VMS",
             "MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC": "Interruption of VMS transmissions from fishing vessel {vessel_name} ({immat})",
@@ -129,9 +137,7 @@ class BeaconMalfunctionToNotify:
         )
 
     def get_sms_addressees(self) -> List[BeaconMalfunctionNotificationAddressee]:
-
         if not self.test_mode:
-
             addressees = []
 
             if self.vessel_mobile_phone:
@@ -167,9 +173,7 @@ class BeaconMalfunctionToNotify:
         return addressees
 
     def get_fax_addressees(self) -> List[BeaconMalfunctionNotificationAddressee]:
-
         if not self.test_mode:
-
             addressees = []
 
             if self.vessel_fax:
@@ -205,9 +209,7 @@ class BeaconMalfunctionToNotify:
         return addressees
 
     def get_email_addressees(self) -> List[BeaconMalfunctionNotificationAddressee]:
-
         if not self.test_mode:
-
             vessel_emails = self.vessel_emails if self.vessel_emails else []
             satellite_operator_emails = (
                 self.satellite_operator_emails if self.satellite_operator_emails else []
@@ -307,7 +309,6 @@ class BeaconMalfunctionMessageToSend:
     communication_means: CommunicationMeans
 
     def get_addressees(self) -> List[BeaconMalfunctionNotificationAddressee]:
-
         if self.communication_means is CommunicationMeans.EMAIL:
             return self.beacon_malfunction_to_notify.get_email_addressees()
         elif self.communication_means is CommunicationMeans.SMS:

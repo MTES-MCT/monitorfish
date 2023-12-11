@@ -268,18 +268,28 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
     new_malfunctions["vessel_status_last_modification_date_utc"] = datetime.utcnow()
 
     notification_to_send = {
-        BeaconMalfunctionVesselStatus.AT_SEA.value: (
+        (BeaconMalfunctionVesselStatus.AT_SEA.value, BeaconStatus.ACTIVATED.value): (
             BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION.value
         ),
-        BeaconMalfunctionVesselStatus.AT_PORT.value: (
+        (BeaconMalfunctionVesselStatus.AT_PORT.value, BeaconStatus.ACTIVATED.value): (
             BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value
+        ),
+        (BeaconMalfunctionVesselStatus.AT_SEA.value, BeaconStatus.UNSUPERVISED.value): (
+            BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON.value
+        ),
+        (
+            BeaconMalfunctionVesselStatus.AT_PORT.value,
+            BeaconStatus.UNSUPERVISED.value,
+        ): (
+            BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON.value
         ),
     }
 
-    new_malfunctions["notification_requested"] = new_malfunctions.vessel_status.map(
-        lambda x: notification_to_send[x]
+    new_malfunctions["notification_requested"] = (
+        new_malfunctions[["vessel_status", "beacon_status"]]
+        .apply(lambda row: tuple(row), axis=1)
+        .map(notification_to_send)
     )
-
     new_malfunctions = new_malfunctions.rename(
         columns={
             "cfr": "internal_reference_number",
@@ -540,8 +550,9 @@ with Flow("Beacons malfunctions", executor=LocalDaskExecutor()) as flow:
             ),
         )
 
-        # Malfunctions "at port" (or supposed to be, according to the latest vessel_status
-        # of the malfunction) are moved to ARCHIVED and automatically notified.
+        # Malfunctions "at port" (or supposed to be, according to the latest
+        # vessel_status of the malfunction) and malfunctions of unsupervised beacons
+        # are moved to ARCHIVED and automatically notified.
         ids_at_port_restarted_emitting_updated = update_beacon_malfunction.map(
             ids_at_port_restarted_emitting,
             new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
@@ -559,8 +570,25 @@ with Flow("Beacons malfunctions", executor=LocalDaskExecutor()) as flow:
             unmapped(BeaconMalfunctionNotificationType.END_OF_MALFUNCTION),
         )
 
-        # Malfunctions for which the beacon is unsupervised, has been deactivated or
-        # completely unequipped are just archived.
+        ids_unsupervised_restarted_emitting_updated = update_beacon_malfunction.map(
+            ids_unsupervised_restarted_emitting,
+            new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
+            end_of_malfunction_reason=unmapped(
+                EndOfMalfunctionReason.RESUMED_TRANSMISSION
+            ),
+        )
+
+        ids_unsupervised_restarted_emitting_updated = filter_results(
+            ids_unsupervised_restarted_emitting_updated
+        )
+
+        request_notification.map(
+            ids_unsupervised_restarted_emitting_updated,
+            unmapped(BeaconMalfunctionNotificationType.END_OF_MALFUNCTION),
+        )
+
+        # Malfunctions for which the beacon has been deactivated or completely
+        # unequipped are just archived.
         update_beacon_malfunction.map(
             ids_not_required_to_emit,
             new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
@@ -569,12 +597,5 @@ with Flow("Beacons malfunctions", executor=LocalDaskExecutor()) as flow:
             ),
         )
 
-        update_beacon_malfunction.map(
-            ids_unsupervised_restarted_emitting,
-            new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
-            end_of_malfunction_reason=unmapped(
-                EndOfMalfunctionReason.RESUMED_TRANSMISSION
-            ),
-        )
 
 flow.file_name = Path(__file__).name

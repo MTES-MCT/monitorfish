@@ -1,0 +1,20 @@
+{% extends "base_template.jinja" %}
+{% block message %}
+{% block beginning %}
+<p>Nous vous informons que <strong>le CNSP ne reçoit pas les positions de votre navire par le
+système de surveillance satellitaire des navires (VMS).</strong>
+{% if last_position_latitude and last_position_longitude and last_position_datetime_utc %}
+ La dernière position reçue date du {{ last_position_datetime_utc }}, 
+latitude {{ last_position_latitude }}, longitude {{ last_position_longitude }}.
+{%endif%}
+</p>
+
+<p>Veuillez contacter votre installateur ou votre opérateur satellitaire pour régler le problème.</p> 
+{% endblock %}
+
+<p>Le CNSP vous informera de la reprise de réception des positions de votre navire.</p>
+
+<p>Pour rappel, au terme de votre marée, <strong>votre navire ne sera pas autorisé à reprendre la
+    mer tant que votre installation VMS ne sera pas en état de fonctionnement*.</strong></p>
+<p>Le non-respect de ces obligations peut être sanctionné par une amende de 22 500€**.</p>
+{% endblock %}

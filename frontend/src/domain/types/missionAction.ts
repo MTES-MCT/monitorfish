@@ -22,11 +22,11 @@ export namespace MissionAction {
     id: number
     internalReferenceNumber: string | undefined
     ircs: string | undefined
-    isAdministrativeControl?: boolean
-    isComplianceWithWaterRegulationsControl?: boolean
+    isAdministrativeControl: boolean | undefined
+    isComplianceWithWaterRegulationsControl: boolean | undefined
     isFromPoseidon: boolean | undefined
-    isSafetyEquipmentAndStandardsComplianceControl?: boolean
-    isSeafarersControl?: boolean
+    isSafetyEquipmentAndStandardsComplianceControl: boolean | undefined
+    isSeafarersControl: boolean | undefined
     latitude: number | undefined
     licencesAndLogbookObservations: string | undefined
     licencesMatchActivity: ControlCheck | undefined

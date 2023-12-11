@@ -40,7 +40,7 @@ export function getActionTitle(itemTitle: string, details: string | undefined, p
  * - ⚠️ When `withPendingInfractions` is true, returned infractions will include infractions without `natinf`.
  */
 export function getMissionActionInfractionsFromMissionActionFormValues(
-  missionActionFormValues: MissionActionFormValues,
+  missionActionFormValues: MissionAction.MissionAction | MissionActionFormValues,
   withPendingInfractions: boolean = false
 ): Array<MissionAction.Infraction> {
   return [

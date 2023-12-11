@@ -214,7 +214,7 @@ const DateLabel = styled.div`
 `
 
 const InnerWrapper = styled.div<{
-  $isOpen: boolean
+  $isOpen: boolean | undefined
   $isSelected: boolean
   $type: MissionAction.MissionActionType
 }>`

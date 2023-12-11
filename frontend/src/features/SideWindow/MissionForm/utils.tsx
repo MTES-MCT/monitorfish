@@ -13,6 +13,7 @@ import type { MissionActionFormValues, MissionMainFormValues } from './types'
 import type { LegacyControlUnit } from '../../../domain/types/legacyControlUnit'
 
 import MissionActionType = MissionAction.MissionActionType
+import {validateMissionForms} from "./utils/validateMissionForms";
 
 export function areMissionFormsValuesValid(
   mainFormValues: MissionMainFormValues | undefined,
@@ -118,9 +119,15 @@ export function getMissionFormInitialValues(
     throw new FrontendError('`missionType` is undefined.')
   }
 
+  const [, { nextActionsFormValues, nextMainFormValues }] = validateMissionForms(
+    mission,
+    missionActions,
+    false
+  )
+
   return {
-    initialActionsFormValues: missionActions,
-    initialMainFormValues: mission
+    initialActionsFormValues: nextActionsFormValues,
+    initialMainFormValues: nextMainFormValues
   }
 }
 

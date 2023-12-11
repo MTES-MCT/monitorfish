@@ -6,10 +6,11 @@ import { MainFormLiveSchema } from '../MainForm/schemas'
 import { areMissionFormsValuesValid } from '../utils'
 
 import type { MissionActionFormValues, MissionMainFormValues } from '../types'
+import {Mission} from "../../../../domain/entities/mission/types";
 
 export function validateMissionForms(
-  mainFormValues: MissionMainFormValues,
-  actionsFormValues: MissionActionFormValues[],
+  mainFormValues: MissionMainFormValues | Mission.Mission,
+  actionsFormValues: MissionActionFormValues[] | MissionAction.MissionAction[],
   isClosureValidation: boolean
 ): [
   boolean,

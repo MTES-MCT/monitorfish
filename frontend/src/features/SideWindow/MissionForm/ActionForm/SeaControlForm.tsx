@@ -4,7 +4,6 @@ import {
   FormikEffect,
   FormikTextarea,
   Icon,
-  useKey,
   useNewWindow
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
@@ -43,8 +42,6 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
 
   const mission = useMainAppSelector(store => store.mission)
 
-  // We have to re-create the Formik component when `validationSchema` changes to apply it
-  const key = useKey([mission.isClosing])
   const titleDate = useMemo(
     () => initialValues.actionDatetimeUtc && getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),
     [initialValues.actionDatetimeUtc]
@@ -55,7 +52,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
   )
 
   return (
-    <Formik key={key} initialValues={initialValues} onSubmit={noop} validationSchema={validationSchema}>
+    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={validationSchema}>
       {({ validateForm }) => (
         <>
           <FormikEffect onChange={validateBeforeOnChange(initialValues, validateForm, onChange)} />

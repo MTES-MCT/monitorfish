@@ -128,7 +128,6 @@ function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProp
  * This component is fully memoized because we want its parent (`<MissionForm />`) to fully control
  * when to re-create this component, the component would be re-render when :
  * - The `key` prop is modified (the edited mission `id` changes).
- * - the `onChange` callback is modified (the mission `isClosed` property has been changed).
  */
 export const MainForm = memo(UnmemoizedMainForm, () => true)
 

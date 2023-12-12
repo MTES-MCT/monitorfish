@@ -5,7 +5,6 @@ import {
   FormikNumberInput,
   FormikTextarea,
   Icon,
-  useKey,
   useNewWindow
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
@@ -17,6 +16,7 @@ import { AirSurveillanceFormClosureSchema, AirSurveillanceFormLiveSchema } from 
 import { FLIGHT_GOALS_AS_OPTIONS } from './shared/constants'
 import { FleetSegmentsField } from './shared/FleetSegmentsField'
 import { FormikAuthor } from './shared/FormikAuthor'
+import { FormikRevalidationEffect } from './shared/FormikRevalidationEffect'
 import { validateBeforeOnChange } from './utils'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FieldsetGroup } from '../shared/FieldsetGroup'
@@ -33,20 +33,19 @@ export type AirSurveillanceFormProps = {
 export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillanceFormProps) {
   const { newWindowContainerRef } = useNewWindow()
 
-  const mission = useMainAppSelector(store => store.mission)
+  const isClosing = useMainAppSelector(store => store.mission.isClosing)
 
-  // We have to re-create the Formik component when `validationSchema` changes to apply it
-  const key = useKey([mission.isClosing])
   const validationSchema = useMemo(
-    () => (mission.isClosing ? AirSurveillanceFormClosureSchema : AirSurveillanceFormLiveSchema),
-    [mission.isClosing]
+    () => (isClosing ? AirSurveillanceFormClosureSchema : AirSurveillanceFormLiveSchema),
+    [isClosing]
   )
 
   return (
-    <Formik key={key} initialValues={initialValues} onSubmit={noop} validationSchema={validationSchema}>
+    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={validationSchema}>
       {({ validateForm }) => (
         <>
           <FormikEffect onChange={validateBeforeOnChange(initialValues, validateForm, onChange)} />
+          <FormikRevalidationEffect />
 
           <FormHead>
             <h2>

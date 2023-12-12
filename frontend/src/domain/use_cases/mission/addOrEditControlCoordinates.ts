@@ -3,9 +3,7 @@ import { boundingExtent } from 'ol/extent'
 import { transformExtent } from 'ol/proj'
 
 import { openDrawLayerModal } from './addOrEditMissionZone'
-import { monitorenvMissionApi } from '../../../features/SideWindow/MissionForm/apis'
 import { InteractionListener, InteractionType } from '../../entities/map/constants'
-import { Mission } from '../../entities/mission/types'
 import { setInitialGeometry, setInteractionTypeAndListener } from '../../shared_slices/Draw'
 import { fitToExtent } from '../../shared_slices/Map'
 import { getCoordinatesExtent } from '../map/getCoordinatesExtent'
@@ -18,15 +16,13 @@ import type { Coordinate } from 'ol/coordinate'
 export const addOrEditControlCoordinates =
   (geometry: GeoJSONNamespace.Geometry | undefined): MainAppThunk<void> =>
   (dispatch, getState) => {
-    const missionId = getState().sideWindow.selectedPath.id
-    if (!missionId) {
+    const { draft } = getState().mission
+    if (!draft?.mainFormValues) {
       return
     }
 
-    const mission = monitorenvMissionApi.endpoints.getMission.select(missionId) as unknown as Mission.Mission
-
     dispatch(unselectVessel())
-    const missionGeometry = getPolygons(mission.geom)
+    const missionGeometry = getPolygons(draft?.mainFormValues.geom)
 
     if (geometry) {
       dispatch(setInitialGeometry(geometry))

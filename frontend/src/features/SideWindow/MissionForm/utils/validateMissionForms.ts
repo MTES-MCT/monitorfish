@@ -1,12 +1,12 @@
 import { logSoftError } from '@mtes-mct/monitor-ui'
 
+import { areMissionFormsValuesValid } from './areMissionFormsValuesValid'
+import { Mission } from '../../../../domain/entities/mission/types'
 import { MissionAction } from '../../../../domain/types/missionAction'
 import * as ActionSchemas from '../ActionForm/schemas'
 import { MainFormLiveSchema } from '../MainForm/schemas'
-import { areMissionFormsValuesValid } from '../utils'
 
 import type { MissionActionFormValues, MissionMainFormValues } from '../types'
-import {Mission} from "../../../../domain/entities/mission/types";
 
 export function validateMissionForms(
   mainFormValues: MissionMainFormValues | Mission.Mission,

@@ -1,26 +1,28 @@
-import {OPENLAYERS_PROJECTION, WSG84_PROJECTION} from '@mtes-mct/monitor-ui'
-import {random} from 'lodash'
-import {Feature} from 'ol'
-import {GeoJSON} from 'ol/format'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
+import { random } from 'lodash'
+import { Feature } from 'ol'
+import { GeoJSON } from 'ol/format'
 import Point from 'ol/geom/Point'
-import {transform} from 'ol/proj'
+import { transform } from 'ol/proj'
 
-import type {MissionWithActions} from './types'
-import {Mission} from './types'
-import {getMissionStatus} from './utils'
-import {getMissionColor} from '../../../features/map/layers/Mission/MissionLayer/styles'
-import {getMissionActionInfractionsFromMissionActionFormValues} from '../../../features/SideWindow/MissionForm/ActionList/utils'
-import {booleanToInt, getDate, getDateTime} from '../../../utils'
-import {MissionAction} from '../../types/missionAction'
-import {getNumberOfInfractions, getNumberOfInfractionsWithRecord} from '../controls'
-import {MonitorFishLayer} from '../layers/types'
-import {OpenLayersGeometryType} from '../map/constants'
-import type {MissionMainFormValues} from '../../../features/SideWindow/MissionForm/types'
-import type {MultiPolygon} from 'ol/geom'
-import MissionStatus = Mission.MissionStatus;
-import MissionActionType = MissionAction.MissionActionType;
-import MissionType = Mission.MissionType;
-import MissionSource = Mission.MissionSource;
+import { Mission } from './types'
+import { getMissionStatus } from './utils'
+import { getMissionColor } from '../../../features/map/layers/Mission/MissionLayer/styles'
+import { getMissionActionInfractionsFromMissionActionFormValues } from '../../../features/SideWindow/MissionForm/ActionList/utils'
+import { booleanToInt, getDate, getDateTime } from '../../../utils'
+import { MissionAction } from '../../types/missionAction'
+import { getNumberOfInfractions, getNumberOfInfractionsWithRecord } from '../controls'
+import { MonitorFishLayer } from '../layers/types'
+import { OpenLayersGeometryType } from '../map/constants'
+
+import type { MissionWithActions } from './types'
+import type { MissionMainFormValues } from '../../../features/SideWindow/MissionForm/types'
+import type { MultiPolygon } from 'ol/geom'
+
+import MissionStatus = Mission.MissionStatus
+import MissionActionType = MissionAction.MissionActionType
+import MissionType = Mission.MissionType
+import MissionSource = Mission.MissionSource
 
 export function getMissionFeaturePointId(id: number) {
   return `${MonitorFishLayer.MISSION_PIN_POINT}:${id}`
@@ -100,9 +102,7 @@ export const getMissionFeatureZone = (mission: Mission.Mission | MissionMainForm
   return feature
 }
 
-export const getMissionActionFeature = (
-  action: MissionAction.MissionAction
-): Feature | undefined => {
+export const getMissionActionFeature = (action: MissionAction.MissionAction): Feature | undefined => {
   if (!action.longitude || !action.latitude) {
     return undefined
   }

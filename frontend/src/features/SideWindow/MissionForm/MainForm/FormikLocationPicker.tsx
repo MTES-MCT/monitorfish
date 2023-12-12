@@ -1,4 +1,4 @@
-import { Accent, Button, Fieldset, Checkbox, Icon, IconButton, Label, NotificationEvent } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Checkbox, Fieldset, Icon, IconButton, Label, NotificationEvent } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { boundingExtent } from 'ol/extent'
 import { transformExtent } from 'ol/proj'
@@ -156,11 +156,20 @@ export function FormikLocationPicker() {
           checked={values.isGeometryComputedFromControls}
           label="Zone de la mission calculée à partir des contrôles"
           name="isGeometryComputedFromControls"
-          onChange={isChecked => {
+          onChange={async isChecked => {
             setFieldValue('isGeometryComputedFromControls', isChecked)
 
             if (isChecked) {
-              updateMissionLocation(isChecked)
+              const isSuccess = await updateMissionLocation(isChecked)
+              if (!isSuccess) {
+                window.document.dispatchEvent(
+                  new NotificationEvent(
+                    'Aucune zone ajoutée. La zone de mission est calculée à partir du dernier contrôle ajouté.',
+                    'warning',
+                    true
+                  )
+                )
+              }
             }
           }}
         />

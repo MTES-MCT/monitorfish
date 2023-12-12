@@ -1,26 +1,17 @@
-import { customDayjs, type Undefine } from '@mtes-mct/monitor-ui'
+import { type Undefine } from '@mtes-mct/monitor-ui'
 import { difference } from 'lodash'
 import { omit } from 'ramda'
 
-import { INITIAL_MISSION_CONTROL_UNIT, MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
+import { MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
 import { Mission } from '../../../domain/entities/mission/types'
 import { MissionAction } from '../../../domain/types/missionAction'
 import { FormError, FormErrorCode } from '../../../libs/FormError'
-import { FrontendError } from '../../../libs/FrontendError'
 import { validateRequiredFormValues } from '../../../utils/validateRequiredFormValues'
 
 import type { MissionActionFormValues, MissionMainFormValues } from './types'
 import type { LegacyControlUnit } from '../../../domain/types/legacyControlUnit'
 
 import MissionActionType = MissionAction.MissionActionType
-import {validateMissionForms} from "./utils/validateMissionForms";
-
-export function areMissionFormsValuesValid(
-  mainFormValues: MissionMainFormValues | undefined,
-  actionsFormValues: MissionActionFormValues[] = []
-): boolean {
-  return !!mainFormValues && mainFormValues.isValid && !actionsFormValues.map(({ isValid }) => isValid).includes(false)
-}
 
 /**
  *
@@ -67,13 +58,7 @@ export function getMissionActionsDataFromMissionActionsFormValues(
   }
 }
 
-/**
- * @param mustClose Should the mission be closed?
- */
-export function getMissionDataFromMissionFormValues(
-  mainFormValues: MissionMainFormValues,
-  mustClose: boolean = false
-): Mission.MissionData {
+export function getMissionDataFromMissionFormValues(mainFormValues: MissionMainFormValues): Mission.MissionData {
   if (!mainFormValues.startDateTimeUtc) {
     throw new FormError(mainFormValues, 'startDateTimeUtc', FormErrorCode.MISSING_OR_UNDEFINED)
   }
@@ -86,48 +71,9 @@ export function getMissionDataFromMissionFormValues(
   return {
     ...missionBaseValues,
     controlUnits: validControlUnits,
-    isClosed: mustClose || !!missionBaseValues.isClosed,
+    isClosed: !!missionBaseValues.isClosed,
     missionSource: mainFormValues.missionSource || Mission.MissionSource.MONITORFISH,
     missionTypes
-  }
-}
-
-export function getMissionFormInitialValues(
-  mission: Mission.Mission | undefined,
-  missionActions: MissionAction.MissionAction[]
-): {
-  initialActionsFormValues: MissionActionFormValues[]
-  initialMainFormValues: MissionMainFormValues
-} {
-  if (!mission) {
-    const startDateTimeUtc = customDayjs().startOf('minute').toISOString()
-
-    return {
-      initialActionsFormValues: [],
-      initialMainFormValues: {
-        controlUnits: [INITIAL_MISSION_CONTROL_UNIT],
-        isGeometryComputedFromControls: false,
-        isValid: false,
-        missionTypes: [Mission.MissionType.SEA],
-        startDateTimeUtc
-      }
-    }
-  }
-
-  const missionType = mission.missionTypes[0]
-  if (!missionType) {
-    throw new FrontendError('`missionType` is undefined.')
-  }
-
-  const [, { nextActionsFormValues, nextMainFormValues }] = validateMissionForms(
-    mission,
-    missionActions,
-    false
-  )
-
-  return {
-    initialActionsFormValues: nextActionsFormValues,
-    initialMainFormValues: nextMainFormValues
   }
 }
 
@@ -147,15 +93,11 @@ export function getTitleFromMissionMainFormValues(
     : `Nouvelle mission`
 }
 
-/**
- * @param mustClose Should the mission be closed?
- */
 export function getUpdatedMissionFromMissionMainFormValues(
   missionId: Mission.Mission['id'],
-  mainFormValues: MissionMainFormValues,
-  mustClose: boolean
+  mainFormValues: MissionMainFormValues
 ): Mission.Mission {
-  const missionData = getMissionDataFromMissionFormValues(mainFormValues, mustClose)
+  const missionData = getMissionDataFromMissionFormValues(mainFormValues)
 
   return {
     id: missionId,

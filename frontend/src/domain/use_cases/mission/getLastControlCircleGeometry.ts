@@ -11,7 +11,8 @@ import type { GeoJSON as GeoJSONType } from '../../types/GeoJSON'
 import type { Port } from '../../types/port'
 
 export const getLastControlCircleGeometry =
-  (ports: Port.Port[], actionFormValues: MissionActionFormValues | MissionAction.MissionAction) => (): GeoJSONType.Geometry | undefined => {
+  (ports: Port.Port[], actionFormValues: MissionActionFormValues | MissionAction.MissionAction) =>
+  (): GeoJSONType.Geometry | undefined => {
     if (!isLandControl(actionFormValues) && !isAirOrSeaControl(actionFormValues)) {
       return undefined
     }
@@ -34,7 +35,10 @@ export const getLastControlCircleGeometry =
  * Get latitude and longitude from controls
  * @return - the [longitude, latitude] coordinates array
  */
-function getCoordinatesOfControl(ports: Port.Port[], action: MissionActionFormValues | MissionAction.MissionAction): [number, number] | undefined {
+function getCoordinatesOfControl(
+  ports: Port.Port[],
+  action: MissionActionFormValues | MissionAction.MissionAction
+): [number, number] | undefined {
   if (
     action.actionType === MissionAction.MissionActionType.AIR_CONTROL ||
     action.actionType === MissionAction.MissionActionType.SEA_CONTROL

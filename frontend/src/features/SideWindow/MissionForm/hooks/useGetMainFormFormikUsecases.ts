@@ -1,17 +1,16 @@
-import {sortBy} from 'lodash'
+import { sortBy } from 'lodash'
 
-import {missionActionApi} from '../../../../api/missionAction'
-import {useGetPortsQuery} from '../../../../api/port'
-import {MissionAction} from '../../../../domain/types/missionAction'
-import {isAirOrSeaControl, isLandControl} from '../../../../domain/use_cases/mission/getLastControlCircleGeometry'
-import {useMainAppDispatch} from '../../../../hooks/useMainAppDispatch'
-import {useMainAppSelector} from '../../../../hooks/useMainAppSelector'
-import {formikUsecase} from '../formikUsecases'
+import { useGetPortsQuery } from '../../../../api/port'
+import { isAirOrSeaControl, isLandControl } from '../../../../domain/use_cases/mission/getLastControlCircleGeometry'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { formikUsecase } from '../formikUsecases'
 
-import type {MissionMainFormValues} from '../types'
+import type { MissionMainFormValues } from '../types'
 
 export function useGetMainFormFormikUsecases() {
   const dispatch = useMainAppDispatch()
+  const draft = useMainAppSelector(state => state.mission.draft)
   const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
 
   const getPortsApiQuery = useGetPortsQuery()
@@ -25,19 +24,24 @@ export function useGetMainFormFormikUsecases() {
 
     /**
      * When updating the mission location from the mission, we use the `RTK-Query` cache object to access the `missionAction` form.
-     * We select the last `missionAction` to update the mission location.
+     * Warning: the action MUST be VALID to be stored and available in the RTK cache
+     *
+     * We then select the last `missionAction` to update the mission location.
+     * @return isSuccess - `true` if there is no errors
      */
-    updateMissionLocation: (isGeometryComputedFromControls: boolean) => {
+    updateMissionLocation: async (isGeometryComputedFromControls: boolean): Promise<boolean> => {
       if (!missionId) {
-        return
+        return false
       }
 
-      const missionActions = missionActionApi.endpoints.getMissionActions.select(
-        missionId
-      ) as unknown as MissionAction.MissionAction[]
+      const missionActions = draft?.actionsFormValues
+      if (!missionActions) {
+        return false
+      }
+
       const validControls = missionActions.filter(action => isLandControl(action) || isAirOrSeaControl(action))
       if (!validControls) {
-        return
+        return false
       }
 
       const sortedValidControlsByDateTimeDesc = sortBy(
@@ -48,10 +52,15 @@ export function useGetMainFormFormikUsecases() {
       // Get most recent control, by `actionDatetimeUtc`
       const lastControl = sortedValidControlsByDateTimeDesc.at(0)
       if (!lastControl) {
-        return
+        return false
       }
 
-      formikUsecase.updateMissionLocation(dispatch, getPortsApiQuery.data)(isGeometryComputedFromControls, lastControl)
+      await formikUsecase.updateMissionLocation(dispatch, getPortsApiQuery.data)(
+        isGeometryComputedFromControls,
+        lastControl
+      )
+
+      return true
     }
   }
 }

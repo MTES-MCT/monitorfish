@@ -3,10 +3,8 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { array, boolean, number, object, string } from 'yup'
 
-import { Mission } from '../../../../domain/entities/mission/types'
 import { MissionAction } from '../../../../domain/types/missionAction'
 import { mainStore } from '../../../../store'
-import { monitorenvMissionApi } from '../apis'
 
 // -----------------------------------------------------------------------------
 // Form Schema Validators
@@ -16,12 +14,11 @@ const actionDatetimeUtcValidator = string()
   .test({
     message: 'La date du contrôle doit être postérieure à la date de début de la mission.',
     test: (actionDatetimeUtc: string | undefined) => {
-      const missionId = mainStore.getState().sideWindow.selectedPath.id
-      if (!missionId) {
+      const { draft } = mainStore.getState().mission
+      const mission = draft?.mainFormValues
+      if (!mission) {
         return true
       }
-
-      const mission = monitorenvMissionApi.endpoints.getMission.select(missionId) as unknown as Mission.Mission
 
       if (!actionDatetimeUtc || !mission.startDateTimeUtc) {
         return true
@@ -33,12 +30,11 @@ const actionDatetimeUtcValidator = string()
   .test({
     message: 'La date du contrôle doit être antérieure à la date de fin de la mission.',
     test: (actionDatetimeUtc: string | undefined) => {
-      const missionId = mainStore.getState().sideWindow.selectedPath.id
-      if (!missionId) {
+      const { draft } = mainStore.getState().mission
+      const mission = draft?.mainFormValues
+      if (!mission) {
         return true
       }
-
-      const mission = monitorenvMissionApi.endpoints.getMission.select(missionId) as unknown as Mission.Mission
 
       if (!actionDatetimeUtc || !mission.endDateTimeUtc) {
         return true

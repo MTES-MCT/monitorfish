@@ -15,6 +15,7 @@ import { useGetMissionQuery } from '../../apis'
 export function FormikRevalidationEffect() {
   const { validateForm } = useFormikContext()
   const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
+  const isClosing = useMainAppSelector(store => store.mission.isClosing)
   const { data: missionData } = useGetMissionQuery(missionId || skipToken)
 
   const debouncedValidateForm = useDebouncedCallback(validateForm, 250)
@@ -26,7 +27,7 @@ export function FormikRevalidationEffect() {
 
     // We don't want to trigger infinite re-renders since `validateForm` changes after each rendering
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [missionData?.endDateTimeUtc, missionData?.startDateTimeUtc]
+    [missionData?.endDateTimeUtc, missionData?.startDateTimeUtc, isClosing]
   )
 
   return <></>

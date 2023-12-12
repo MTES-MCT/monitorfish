@@ -359,8 +359,7 @@ context('Side Window > Mission Form > Sea Control', () => {
   })
 
   it('Should only close mission once the form closure validation has passed', () => {
-    const getSaveButton = () => cy.get('button').contains('Enregistrer et quitter').parent()
-    const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer et clôturer').parent()
+    const getCloseButton = () => cy.get('button').contains('Clôturer').parent()
 
     // -------------------------------------------------------------------------
     // Form Live Validation
@@ -370,8 +369,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.contains('Veuillez indiquer votre trigramme dans "Saisi par".').should('exist')
 
     cy.contains('Veuillez corriger les éléments en rouge').should('exist')
-    getSaveButton().should('be.disabled')
-    getSaveAndCloseButton().should('be.disabled')
+    getCloseButton().should('be.disabled')
 
     // Navire
     cy.get('input[placeholder="Rechercher un navire..."]').type('mal')
@@ -386,10 +384,9 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
 
     cy.contains('Veuillez corriger les éléments en rouge').should('not.exist')
-    getSaveButton().should('be.enabled')
-    getSaveAndCloseButton().should('be.enabled')
+    getCloseButton().should('be.enabled')
 
-    cy.clickButton('Enregistrer et clôturer').wait(500)
+    cy.clickButton('Clôturer').wait(500)
 
     // -------------------------------------------------------------------------
     // Form Closure Validation
@@ -407,8 +404,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.contains('Veuillez indiquer votre trigramme dans "Clôturé par".').should('exist')
 
     cy.contains('Veuillez corriger les éléments en rouge').should('exist')
-    getSaveButton().should('be.disabled')
-    getSaveAndCloseButton().should('be.disabled')
+    cy.contains('Ré-ouvrir la mission').should('not.exist')
 
     // Obligations déclaratives et autorisations de pêche
     cy.fill('Bonne émission VMS', 'Oui')
@@ -453,22 +449,10 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Mission is now valid for closure
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
     cy.contains('Veuillez corriger les éléments en rouge').should('not.exist')
-    getSaveButton().should('be.enabled')
-    getSaveAndCloseButton().should('be.enabled')
+    cy.wait(250)
+    cy.clickButton('Clôturer')
 
-    cy.clickButton('Enregistrer et clôturer')
-
-    // -------------------------------------------------------------------------
-    // Request
-
-    cy.intercept('POST', '/bff/v1/mission_actions', {
-      body: {
-        id: 1
-      },
-      statusCode: 201
-    }).as('createMissionAction')
-
-    cy.get('h1').should('contain.text', 'Missions et contrôles')
+    cy.contains('Ré-ouvrir la mission').should('exist')
   })
 
   it('Should add, edit, remove and validate gears infractions as expected', () => {

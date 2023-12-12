@@ -50,10 +50,7 @@ function UnmemoizedActionForm({ actionFormValues, onChange }: ActionFormProps) {
  * when to re-create this component using a `key` prop,
  * which should only happens when the user switches from one mission action to another.
  */
-export const ActionForm = memo(
-  UnmemoizedActionForm,
-  (prevProps, nextProps) => prevProps.actionFormValues?.isValid === nextProps.actionFormValues?.isValid
-)
+export const ActionForm = memo(UnmemoizedActionForm, () => true)
 
 const Wrapper = styled.div`
   background-color: ${p => p.theme.color.gainsboro};

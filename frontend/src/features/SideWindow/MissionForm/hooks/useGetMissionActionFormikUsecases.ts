@@ -1,4 +1,3 @@
-import { skipToken } from '@reduxjs/toolkit/query'
 import { useFormikContext } from 'formik'
 import { useMemo } from 'react'
 
@@ -8,7 +7,6 @@ import { MissionAction } from '../../../../domain/types/missionAction'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { getFleetSegmentsAsOption } from '../ActionForm/shared/utils'
-import { useGetMissionQuery } from '../apis'
 import { formikUsecase } from '../formikUsecases'
 
 import type { MissionActionFormValues } from '../types'
@@ -19,8 +17,7 @@ import MissionActionType = MissionAction.MissionActionType
 export function useGetMissionActionFormikUsecases() {
   const dispatch = useMainAppDispatch()
   const gearsByCode = useMainAppSelector(state => state.gear.gearsByCode)
-  const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
-  const { data: missionData } = useGetMissionQuery(missionId || skipToken)
+  const draft = useMainAppSelector(state => state.mission.draft)
   const { setFieldValue: setMissionActionFieldValue } = useFormikContext<MissionActionFormValues>()
 
   const getFleetSegmentsApiQuery = useGetFleetSegmentsQuery()
@@ -93,7 +90,7 @@ export function useGetMissionActionFormikUsecases() {
    */
   const updateMissionLocation = (missionActionValues: MissionActionFormValues) =>
     formikUsecase.updateMissionLocation(dispatch, getPortsApiQuery.data)(
-      missionData?.isGeometryComputedFromControls,
+      draft?.mainFormValues.isGeometryComputedFromControls,
       missionActionValues
     )
 

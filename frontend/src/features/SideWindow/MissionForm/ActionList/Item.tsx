@@ -9,7 +9,6 @@ import {
   TagGroup,
   THEME
 } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/query'
 import { find } from 'lodash'
 import { useMemo } from 'react'
 import styled, { css } from 'styled-components'
@@ -19,7 +18,6 @@ import { UNKNOWN_VESSEL } from '../../../../domain/entities/vessel/vessel'
 import { MissionAction } from '../../../../domain/types/missionAction'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FrontendError } from '../../../../libs/FrontendError'
-import { useGetMissionQuery } from '../apis'
 import { useGetNatinfsAsOptions } from '../hooks/useGetNatinfsAsOptions'
 
 import type { MissionActionFormValues } from '../types'
@@ -33,8 +31,7 @@ export type ItemProps = {
   onSelect: () => Promisable<void>
 }
 export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelect }: ItemProps) {
-  const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
-  const { data: missionData } = useGetMissionQuery(missionId || skipToken)
+  const draft = useMainAppSelector(state => state.mission.draft)
 
   const natinfsAsOptions = useGetNatinfsAsOptions()
 
@@ -133,7 +130,7 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
     [initialValues]
   )
 
-  const isOpen = isControlAction && missionData && !missionData.isClosed && !initialValues.closedBy
+  const isOpen = isControlAction && draft?.mainFormValues && !draft?.mainFormValues.isClosed && !initialValues.closedBy
 
   return (
     <>

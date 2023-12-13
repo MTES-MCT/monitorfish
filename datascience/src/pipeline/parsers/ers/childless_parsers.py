@@ -87,7 +87,7 @@ def parse_gea(gea):
     data = {
         "gear": gea.get("GE"),
         "mesh": try_float(gea.get("ME")),
-        "dimensions": try_float(gea.get("GC")),
+        "dimensions": gea.get("GC"),
     }
 
     return data

@@ -121,7 +121,7 @@ def parse_log(log):
     }
 
     elogs = [child for child in list(log) if remove_namespace(child.tag) == "ELOG"]
-    if len(elogs) == 1:
+    if len(elogs) >= 1:
         elog = elogs[0]
         metadata["trip_number"] = elog.get("TN")
 

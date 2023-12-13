@@ -30,4 +30,7 @@ VALUES (1, 'FAK000999999', 'CALLME', 'DONTSINK', 'GB', 'INTERNAL_REFERENCE_NUMBE
         null, 9, null, 'PO8U9U4', 'UNSUPERVISED'),
        (11, null, 'IJU5217', 'EJ600773', 'FR', 'INTERNAL_REFERENCE_NUMBER', 'VESSEL WITHOUT CFR',
         'AT_PORT', 'INITIAL_ENCOUNTER', NOW() - ('2 WEEKS 2 DAYS')::interval, null, NOW() - ('2 WEEK 2 DAYS')::interval,
+        null, 9, null, 'PO8U9U4', 'UNSUPERVISED'),
+       (12, null, 'IJU5217', 'EJ600773', 'FR', 'INTERNAL_REFERENCE_NUMBER', 'VESSEL WITHOUT CFR',
+        'AT_PORT', 'INITIAL_ENCOUNTER', NOW() - ('2 WEEKS 1 DAY')::interval, null, NOW() - ('2 WEEK 1 DAYS')::interval,
         null, 9, null, 'PO8U9U4', 'UNSUPERVISED');

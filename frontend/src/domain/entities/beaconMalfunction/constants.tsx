@@ -222,12 +222,20 @@ const NOTIFICATION_TYPE = {
     followUpMessage: "Notification initiale d'avarie à quai",
     preposition: 'de la'
   },
+  MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON: {
+    followUpMessage: "Notification d'avarie à quai",
+    preposition: 'de la'
+  },
   MALFUNCTION_AT_PORT_REMINDER: {
     followUpMessage: 'Relance pour avarie à quai',
     preposition: "d'une"
   },
   MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION: {
     followUpMessage: "Notification initiale d'avarie en mer",
+    preposition: 'de la'
+  },
+  MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON: {
+    followUpMessage: "Notification d'avarie en mer",
     preposition: 'de la'
   },
   MALFUNCTION_AT_SEA_REMINDER: {

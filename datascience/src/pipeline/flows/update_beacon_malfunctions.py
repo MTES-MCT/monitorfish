@@ -30,8 +30,8 @@ from src.pipeline.shared_tasks.control_flow import (
 )
 from src.pipeline.shared_tasks.dates import get_utcnow, make_timedelta
 from src.pipeline.shared_tasks.healthcheck import (
-  assert_last_positions_flow_health,
-  get_monitorfish_healthcheck,
+    assert_last_positions_flow_health,
+    get_monitorfish_healthcheck,
 )
 
 
@@ -132,7 +132,6 @@ def get_new_malfunctions(
     malfunction_datetime_utc_threshold_at_sea: datetime,
     malfunction_datetime_utc_threshold_at_port: datetime,
 ) -> pd.DataFrame:
-
     operators_up = set(
         satellite_operators_statuses.loc[
             satellite_operators_statuses.operator_is_up == True, "satellite_operator_id"
@@ -184,7 +183,6 @@ def get_ended_malfunction_ids(
     known_malfunctions: pd.DataFrame,
     malfunction_datetime_utc_threshold_at_sea: datetime,
 ) -> Tuple[list, list, list, list]:
-
     ids_not_required_to_emit = set(
         known_malfunctions.loc[
             ~known_malfunctions.beacon_number.isin(
@@ -270,24 +268,28 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
     new_malfunctions["vessel_status_last_modification_date_utc"] = datetime.utcnow()
 
     notification_to_send = {
-        BeaconMalfunctionVesselStatus.AT_SEA.value: (
+        (BeaconMalfunctionVesselStatus.AT_SEA.value, BeaconStatus.ACTIVATED.value): (
             BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION.value
         ),
-        BeaconMalfunctionVesselStatus.AT_PORT.value: (
+        (BeaconMalfunctionVesselStatus.AT_PORT.value, BeaconStatus.ACTIVATED.value): (
             BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value
+        ),
+        (BeaconMalfunctionVesselStatus.AT_SEA.value, BeaconStatus.UNSUPERVISED.value): (
+            BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON.value
+        ),
+        (
+            BeaconMalfunctionVesselStatus.AT_PORT.value,
+            BeaconStatus.UNSUPERVISED.value,
+        ): (
+            BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON.value
         ),
     }
 
-    new_malfunctions["notification_requested"] = new_malfunctions.vessel_status.map(
-        lambda x: notification_to_send[x]
+    new_malfunctions["notification_requested"] = (
+        new_malfunctions[["vessel_status", "beacon_status"]]
+        .apply(lambda row: tuple(row), axis=1)
+        .map(notification_to_send)
     )
-
-    new_malfunctions[
-        "notification_requested"
-    ] = new_malfunctions.notification_requested.where(
-        new_malfunctions.beacon_status == BeaconStatus.ACTIVATED.value, None
-    )
-
     new_malfunctions = new_malfunctions.rename(
         columns={
             "cfr": "internal_reference_number",
@@ -427,7 +429,7 @@ def update_beacon_malfunction(
         headers = {
             "Accept": "application/json, text/plain",
             "Content-Type": "application/json;charset=UTF-8",
-            "X-API-KEY": BACKEND_API_KEY
+            "X-API-KEY": BACKEND_API_KEY,
         }
         r = requests.put(url=url, json=json, headers=headers)
         r.raise_for_status()
@@ -454,18 +456,14 @@ def request_notification(
         BEACON_MALFUNCTIONS_ENDPOINT
         + f"{str(beacon_malfunction_id)}/{requested_notification.value}"
     )
-    headers = {
-      "X-API-KEY": BACKEND_API_KEY
-    }
+    headers = {"X-API-KEY": BACKEND_API_KEY}
     r = requests.put(url=url, headers=headers)
     r.raise_for_status()
 
 
 with Flow("Beacons malfunctions", executor=LocalDaskExecutor()) as flow:
-
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         # Healthcheck
         healthcheck = get_monitorfish_healthcheck()
         now = get_utcnow()
@@ -552,8 +550,9 @@ with Flow("Beacons malfunctions", executor=LocalDaskExecutor()) as flow:
             ),
         )
 
-        # Malfunctions "at port" (or supposed to be, according to the latest vessel_status
-        # of the malfunction) are moved to ARCHIVED and automatically notified.
+        # Malfunctions "at port" (or supposed to be, according to the latest
+        # vessel_status of the malfunction) and malfunctions of unsupervised beacons
+        # are moved to ARCHIVED and automatically notified.
         ids_at_port_restarted_emitting_updated = update_beacon_malfunction.map(
             ids_at_port_restarted_emitting,
             new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
@@ -571,8 +570,25 @@ with Flow("Beacons malfunctions", executor=LocalDaskExecutor()) as flow:
             unmapped(BeaconMalfunctionNotificationType.END_OF_MALFUNCTION),
         )
 
-        # Malfunctions for which the beacon is unsupervised, has been deactivated or
-        # completely unequipped are just archived.
+        ids_unsupervised_restarted_emitting_updated = update_beacon_malfunction.map(
+            ids_unsupervised_restarted_emitting,
+            new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
+            end_of_malfunction_reason=unmapped(
+                EndOfMalfunctionReason.RESUMED_TRANSMISSION
+            ),
+        )
+
+        ids_unsupervised_restarted_emitting_updated = filter_results(
+            ids_unsupervised_restarted_emitting_updated
+        )
+
+        request_notification.map(
+            ids_unsupervised_restarted_emitting_updated,
+            unmapped(BeaconMalfunctionNotificationType.END_OF_MALFUNCTION),
+        )
+
+        # Malfunctions for which the beacon has been deactivated or completely
+        # unequipped are just archived.
         update_beacon_malfunction.map(
             ids_not_required_to_emit,
             new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
@@ -581,12 +597,5 @@ with Flow("Beacons malfunctions", executor=LocalDaskExecutor()) as flow:
             ),
         )
 
-        update_beacon_malfunction.map(
-            ids_unsupervised_restarted_emitting,
-            new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
-            end_of_malfunction_reason=unmapped(
-                EndOfMalfunctionReason.RESUMED_TRANSMISSION
-            ),
-        )
 
 flow.file_name = Path(__file__).name

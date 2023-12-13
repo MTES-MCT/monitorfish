@@ -73,7 +73,6 @@ def to_malfunctions_to_notify_list(
 
 @task(checkpoint=False)
 def get_templates() -> dict:
-
     templates_locations = [
         EMAIL_TEMPLATES_LOCATION / "beacon_malfunctions",
         EMAIL_STYLESHEETS_LOCATION,
@@ -87,8 +86,18 @@ def get_templates() -> dict:
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION: (
             env.get_template("malfunction_at_sea_initial_notification.jinja")
         ),
+        BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON: (
+            env.get_template(
+                "malfunction_at_sea_initial_notification_unsupervised_beacon.jinja"
+            )
+        ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION: (
             env.get_template("malfunction_at_port_initial_notification.jinja")
+        ),
+        BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON: (
+            env.get_template(
+                "malfunction_at_port_initial_notification_unsupervised_beacon.jinja"
+            )
         ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER: (
             env.get_template("malfunction_at_sea_reminder.jinja")
@@ -109,7 +118,6 @@ def get_templates() -> dict:
 
 @task(checkpoint=False)
 def get_sms_templates() -> dict:
-
     env = Environment(
         loader=FileSystemLoader(SMS_TEMPLATES_LOCATION), autoescape=select_autoescape()
     )
@@ -118,8 +126,18 @@ def get_sms_templates() -> dict:
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION: (
             env.get_template("malfunction_at_sea_initial_notification.jinja")
         ),
+        BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON: (
+            env.get_template(
+                "malfunction_initial_notification_unsupervised_beacon.jinja"
+            )
+        ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION: (
             env.get_template("malfunction_at_port_initial_notification.jinja")
+        ),
+        BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON: (
+            env.get_template(
+                "malfunction_initial_notification_unsupervised_beacon.jinja"
+            )
         ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER: (
             env.get_template("malfunction_at_sea_reminder.jinja")
@@ -139,7 +157,6 @@ def get_sms_templates() -> dict:
 def render(
     m: BeaconMalfunctionToNotify, templates: dict, output_format: str = "html"
 ) -> Union[str, bytes]:
-
     try:
         assert output_format in ("html", "pdf")
     except AssertionError:
@@ -211,7 +228,6 @@ def render(
 
 @task(checkpoint=False)
 def render_sms(m: BeaconMalfunctionToNotify, templates: dict) -> str:
-
     if (
         m.notification_type
         is BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC
@@ -253,7 +269,6 @@ def render_sms(m: BeaconMalfunctionToNotify, templates: dict) -> str:
 def create_email(
     html: str, pdf: bytes, m: BeaconMalfunctionToNotify
 ) -> BeaconMalfunctionMessageToSend:
-
     to = [
         email_addressee.address_or_number
         for email_addressee in m.get_email_addressees()
@@ -285,7 +300,6 @@ def create_email(
 def create_sms(
     text: str, m: BeaconMalfunctionToNotify
 ) -> BeaconMalfunctionMessageToSend:
-
     to = [sms_addressee.address_or_number for sms_addressee in m.get_sms_addressees()]
 
     if to:
@@ -302,7 +316,6 @@ def create_sms(
 def create_fax(
     pdf: bytes, m: BeaconMalfunctionToNotify
 ) -> BeaconMalfunctionMessageToSend:
-
     to = [fax_addressee.address_or_number for fax_addressee in m.get_fax_addressees()]
 
     if to:
@@ -438,7 +451,6 @@ def send_beacon_malfunction_message(
     notifications = []
 
     for addressee in addressees:
-
         if addressee.address_or_number in send_errors:
             success = False
             error_message = send_errors[addressee.address_or_number][1]
@@ -485,7 +497,6 @@ def make_reset_requested_notifications_statement(
     beacon_malfunctions_table: Table,
     notified_malfunctions: List[BeaconMalfunctionToNotify],
 ) -> sqlalchemy.sql.dml.Update:
-
     beacon_malfunction_ids_to_reset = [
         n.beacon_malfunction_id for n in notified_malfunctions
     ]
@@ -509,10 +520,8 @@ def execute_statement(reset_requested_notifications_statement):
 
 
 with Flow("Notify malfunctions", executor=LocalDaskExecutor()) as flow:
-
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
-
         test_mode = Parameter("test_mode")
         is_integration = Parameter("is_integration")
 

@@ -72,7 +72,7 @@ function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProp
   }
 
   return (
-    <Formik initialValues={initialValues} onSubmit={noop} validationSchema={MainFormLiveSchema}>
+    <Formik key={0} initialValues={initialValues} onSubmit={noop} validationSchema={MainFormLiveSchema}>
       {({ validateForm }) => (
         <Wrapper>
           <FormikEffect onChange={validateBeforeOnChange(validateForm)} />

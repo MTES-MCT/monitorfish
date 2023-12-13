@@ -20,7 +20,7 @@ export function DraftCancellationConfirmationDialog() {
       <StyledDialogTitle>Enregistrer les modifications ?</StyledDialogTitle>
       <Dialog.Body>
         <p>Vous êtes en train d’abandonner l’édition d’une mission.</p>
-        <p>Voulez-vous enregistrer les modifications avant de quitter ?</p>
+        <p>Si vous souhaitez enregistrer les modifications, merci de corriger les champs en erreurs.</p>
       </Dialog.Body>
 
       <Dialog.Action>

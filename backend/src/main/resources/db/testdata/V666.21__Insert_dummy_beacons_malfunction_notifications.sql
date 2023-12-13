@@ -20,4 +20,6 @@ VALUES (1, 2, NOW() - INTERVAL '7 weeks 18 hours', 'MALFUNCTION_AT_SEA_INITIAL_N
        (9, 2, NOW() - INTERVAL '5 weeks 6 days 23 hours 55 minutes', 'END_OF_MALFUNCTION', 'EMAIL', 'VESSEL_OPERATOR',
         'LE PELETIER', 'lepeletier@gmail.com', false, 'The server didn''t reply properly to the helo greeting.'),
        (10, 2, NOW() - INTERVAL '5 weeks 6 days 23 hours 55 minutes', 'END_OF_MALFUNCTION', 'SMS', 'VESSEL_CAPTAIN',
-        NULL, '0600000000', null, null);
+        NULL, '0600000000', null, null),
+       (11, 12, NOW() - INTERVAL '1 weeks 6 days 23 hours 55 minutes', 'MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC', 'EMAIL', 'VESSEL_CAPTAIN',
+        NULL, 'unemail@hotmail.fr', null, null);

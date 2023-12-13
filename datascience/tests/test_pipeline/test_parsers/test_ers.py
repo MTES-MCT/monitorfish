@@ -212,6 +212,56 @@ def test_far_parser():
     assert haul_data["dimensions"] is None
 
 
+def test_cps_parser():
+    test_file = "OOF20230228013803.xml"
+    metadata, data_list = parse_file(test_file)
+    assert data_list == [
+        {
+            "log_type": "CPS",
+            "value": {
+                "cpsDatetimeUtc": "2023-02-28T17:44:00Z",
+                "gear": "GTR",
+                "mesh": 100.0,
+                "dimensions": None,
+                "catches": [
+                    {
+                        "sex": "M",
+                        "health_state": "DEA",
+                        "care_minutes": None,
+                        "ring": "1234567",
+                        "fate": "DIS",
+                        "comment": None,
+                        "species": "DCO",
+                        "weight": 60.0,
+                        "nbFish": 1.0,
+                        "faoZone": "27.8.a",
+                        "economicZone": "FRA",
+                        "statisticalRectangle": "22E7",
+                        "effortZone": "C",
+                    },
+                    {
+                        "sex": "M",
+                        "health_state": "DEA",
+                        "care_minutes": 40,
+                        "ring": "1234568",
+                        "fate": "DIS",
+                        "comment": "Pov' titi a eu bobo",
+                        "species": "DCO",
+                        "weight": 80.0,
+                        "nbFish": 1.0,
+                        "faoZone": "27.8.a",
+                        "economicZone": "FRA",
+                        "statisticalRectangle": "22E7",
+                        "effortZone": "C",
+                    },
+                ],
+                "latitude": 46.575,
+                "longitude": -2.741,
+            },
+        }
+    ]
+
+
 def test_ins_parser():
     test_file = "OOF20200306070900.xml"
     metadata, data_list = parse_file(test_file)

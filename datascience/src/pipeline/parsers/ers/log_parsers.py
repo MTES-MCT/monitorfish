@@ -1,6 +1,7 @@
 import xml
 
 from src.pipeline.parsers.ers.childless_parsers import (
+    parse_edci,
     parse_gea,
     parse_pos,
     parse_ras,
@@ -72,6 +73,37 @@ def parse_far(far):
         value["longitude"] = try_float(lon)
 
     data = {"log_type": "FAR", "value": {"hauls": [value]}}
+
+    return data
+
+
+def parse_ecps(ecps):
+    date = ecps.get("DA")
+    time = ecps.get("TI")
+    far_datetime_utc = make_datetime_json_serializable(date, time)
+
+    value = {"cpsDatetimeUtc": far_datetime_utc}
+
+    children = tagged_children(ecps)
+
+    if "GEA" in children:
+        assert len(children["GEA"]) == 1
+        gear_el = children["GEA"][0]
+        gear = parse_gea(gear_el)
+        value = {**value, **gear}
+
+    if "EDCI" in children:
+        catches = [parse_edci(edci) for edci in children["EDCI"]]
+        value["catches"] = catches
+
+    if "POS" in children:
+        assert len(children["POS"]) == 1
+        pos = children["POS"][0]
+        lat, lon = parse_pos(pos)
+        value["latitude"] = try_float(lat)
+        value["longitude"] = try_float(lon)
+
+    data = {"log_type": "CPS", "value": value}
 
     return data
 

@@ -27,6 +27,13 @@ def try_float(s: str):
         return None
 
 
+def try_int(s: str):
+    try:
+        return int(s)
+    except:
+        return None
+
+
 def get_first_child(xml_element, assert_child_single=True):
     children = list(xml_element)
 
@@ -51,15 +58,19 @@ def tagged_children(el):
 
 
 def make_datetime(date: str, time: Union[str, None] = None):
-    """Takes date a "2020-12-24" string and, optionnally, a time "16:49" string,
-    Returns a datetime object"""
+    """Takes date a "2020-12-24" string and, optionnally, a time "16:49" or "16:49:10"
+    string. Returns a datetime object"""
     datetime_string = date
     datetime_format = "%Y-%m-%d"
 
     if date:
         if time:
+            if len(time) == 8:
+                # Drop seconds
+                time = time[:5]
             datetime_string += f" {time}"
             datetime_format += " %H:%M"
+
         try:
             res = datetime.strptime(datetime_string, datetime_format)
         except ValueError:

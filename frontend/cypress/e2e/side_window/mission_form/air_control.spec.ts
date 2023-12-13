@@ -156,6 +156,6 @@ context('Side Window > Mission Form > Air Control', () => {
     cy.wait(500)
     cy.clickButton('Clôturer')
 
-    cy.contains('Ré-ouvrir la mission').should('exist')
+    cy.get('h1').should('contain.text', 'Missions et contrôles')
   })
 })

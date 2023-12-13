@@ -314,7 +314,11 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.fill('Clôturé par', 'Doris')
 
+    cy.wait(250)
+
     cy.clickButton('Clôturer')
+
+    cy.wait(250)
 
     cy.waitForLastRequest(
       '@createMission',
@@ -615,26 +619,38 @@ context('Side Window > Mission Form > Main Form', () => {
       statusCode: 200
     })
 
-    cy.wait('@updateMission').then(interception => {
-      if (!interception.response) {
-        assert.fail('`interception.response` is undefined.')
-      }
-
-      assert.isTrue(interception.request.body.isUnderJdp)
-      assert.equal(interception.request.body.endDateTimeUtc, '2024-02-13T09:49:40.350661Z')
-      assert.equal(interception.request.body.observationsCnsp, 'Une autre note.')
-    })
+    cy.waitForLastRequest(
+      '@updateMission',
+      {
+        body: {
+          endDateTimeUtc: '2024-02-13T09:49:40.350661Z',
+          isUnderJdp: true,
+          observationsCnsp: 'Une autre note.'
+        }
+      },
+      5
+    )
+      .its('response.statusCode')
+      .should('eq', 201)
 
     cy.fill('Contact de l’unité 1', 'Tel. 06 88 65 66 66')
 
-    cy.wait('@updateMission').then(interception => {
-      if (!interception.response) {
-        assert.fail('`interception.response` is undefined.')
-      }
-
-      assert.isTrue(interception.request.body.isUnderJdp)
-      assert.equal(interception.request.body.controlUnits[0].contact, 'Tel. 06 88 65 66 66')
-      assert.equal(interception.request.body.observationsCnsp, 'Une autre note.')
-    })
+    cy.waitForLastRequest(
+      '@updateMission',
+      {
+        body: {
+          controlUnits: [
+            {
+              contact: 'Tel. 06 88 65 66 66'
+            }
+          ],
+          isUnderJdp: true,
+          observationsCnsp: 'Une autre note.'
+        }
+      },
+      5
+    )
+      .its('response.statusCode')
+      .should('eq', 201)
   })
 })

@@ -792,4 +792,44 @@ context('Side Window > Mission Form > Sea Control', () => {
       .its('response.statusCode')
       .should('eq', 201)
   })
+
+  it('Should update (PUT) a control right after creating a new control (and not create a new one with POST)', () => {
+    cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
+
+    // -------------------------------------------------------------------------
+    // Form
+
+    // Navire
+    cy.get('input[placeholder="Rechercher un navire..."]').type('mal')
+    cy.contains('mark', 'MAL').click().wait(500)
+
+    cy.wait(500)
+
+    cy.fill('Saisi par', 'Marlin')
+
+    cy.wait(500)
+
+    // -------------------------------------------------------------------------
+    // Request
+
+    cy.wait('@createMissionAction').then(interception => {
+      if (!interception.response) {
+        assert.fail('`interception.response` is undefined.')
+      }
+
+      cy.wait(500)
+
+      const newActionId = interception.response.body.id
+      cy.intercept('PUT', `/bff/v1/mission_actions/${newActionId}`, {
+        body: {
+          id: 1
+        },
+        statusCode: 201
+      }).as('updateMissionAction')
+
+      cy.fill('Saisi par', 'Marlin')
+
+      cy.wait('@updateMissionAction')
+    })
+  })
 })

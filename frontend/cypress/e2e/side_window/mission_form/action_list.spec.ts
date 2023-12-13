@@ -24,63 +24,60 @@ context('Side Window > Mission Form > Action List', () => {
 
     cy.wait(250)
 
-    cy.clickButton('Enregistrer et quitter')
-
-    cy.wait('@createMissionAction').then(interception => {
-      if (!interception.response) {
-        assert.fail('`interception.response` is undefined.')
-      }
-
-      assert.isString(interception.request.body.actionDatetimeUtc)
-      assert.deepInclude(interception.request.body, {
-        actionType: 'SEA_CONTROL',
-        closedBy: null,
-        controlQualityComments: null,
-        controlUnits: [],
-        emitsAis: null,
-        emitsVms: 'NOT_APPLICABLE',
-        externalReferenceNumber: null,
-        facade: 'MEMN',
-        faoAreas: ['27.8.a'],
-        feedbackSheetRequired: false,
-        flagState: 'FR',
-        flightGoals: [],
-        gearInfractions: [],
-        gearOnboard: [],
-        hasSomeGearsSeized: false,
-        hasSomeSpeciesSeized: false,
-        id: null,
-        internalReferenceNumber: 'U_W0NTFINDME',
-        ircs: null,
-        latitude: 53.35,
-        licencesAndLogbookObservations: null,
-        licencesMatchActivity: 'NOT_APPLICABLE',
-        logbookInfractions: [],
-        logbookMatchesActivity: 'NOT_APPLICABLE',
-        longitude: -10.85,
-        missionId: 4,
-        numberOfVesselsFlownOver: null,
-        otherComments: 'Commentaires post contrôle',
-        otherInfractions: [],
-        portLocode: null,
-        segments: [],
-        seizureAndDiversion: false,
-        seizureAndDiversionComments: null,
-        separateStowageOfPreservedSpecies: 'NO',
-        speciesInfractions: [],
-        speciesObservations: null,
-        speciesOnboard: [],
-        speciesSizeControlled: null,
-        speciesWeightControlled: null,
-        unitWithoutOmegaGauge: false,
-        userTrigram: 'JKL',
-        vesselId: 2,
-        vesselName: 'MALOTRU',
-        vesselTargeted: 'YES'
-      })
-    })
-
-    cy.get('h1').should('contain.text', 'Missions et contrôles')
+    cy.waitForLastRequest(
+      '@createMissionAction',
+      {
+        body: {
+          actionType: 'SEA_CONTROL',
+          closedBy: null,
+          controlQualityComments: null,
+          controlUnits: [],
+          emitsAis: null,
+          emitsVms: 'NOT_APPLICABLE',
+          externalReferenceNumber: null,
+          facade: 'MEMN',
+          faoAreas: ['27.8.a'],
+          feedbackSheetRequired: false,
+          flagState: 'FR',
+          flightGoals: [],
+          gearInfractions: [],
+          gearOnboard: [],
+          hasSomeGearsSeized: false,
+          hasSomeSpeciesSeized: false,
+          id: null,
+          internalReferenceNumber: 'U_W0NTFINDME',
+          ircs: null,
+          latitude: 53.35,
+          licencesAndLogbookObservations: null,
+          licencesMatchActivity: 'NOT_APPLICABLE',
+          logbookInfractions: [],
+          logbookMatchesActivity: 'NOT_APPLICABLE',
+          longitude: -10.85,
+          missionId: 4,
+          numberOfVesselsFlownOver: null,
+          otherComments: 'Commentaires post contrôle',
+          otherInfractions: [],
+          portLocode: null,
+          segments: [],
+          seizureAndDiversion: false,
+          seizureAndDiversionComments: null,
+          separateStowageOfPreservedSpecies: 'NO',
+          speciesInfractions: [],
+          speciesObservations: null,
+          speciesOnboard: [],
+          speciesSizeControlled: null,
+          speciesWeightControlled: null,
+          unitWithoutOmegaGauge: false,
+          userTrigram: 'JKL',
+          vesselId: 2,
+          vesselName: 'MALOTRU',
+          vesselTargeted: 'YES'
+        }
+      },
+      5
+    )
+      .its('response.statusCode')
+      .should('eq', 201)
 
     // And we delete this action
 
@@ -89,8 +86,6 @@ context('Side Window > Mission Form > Action List', () => {
     cy.clickButton('Supprimer l’action', { index: 1 })
 
     cy.wait(250)
-
-    cy.clickButton('Enregistrer et quitter')
   })
 
   it('Should send the expected data to the API when deleting a mission action', () => {
@@ -115,8 +110,6 @@ context('Side Window > Mission Form > Action List', () => {
 
     cy.wait(250)
 
-    cy.clickButton('Enregistrer et quitter')
-
     cy.wait('@deleteMissionAction9').then(interception => {
       if (!interception.response) {
         assert.fail('`interception.response` is undefined.')
@@ -124,8 +117,6 @@ context('Side Window > Mission Form > Action List', () => {
 
       assert.isEmpty(interception.request.body)
     })
-
-    cy.get('h1').should('contain.text', 'Missions et contrôles')
   })
 
   it('Should show the expected infraction tags', () => {

@@ -1,10 +1,8 @@
-import { skipToken } from '@reduxjs/toolkit/query'
 import { useFormikContext } from 'formik'
 import { useEffect } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import { useGetMissionQuery } from '../../apis'
 
 /**
  * Triggers Formik validation when mission form start/end date is updated.
@@ -14,9 +12,8 @@ import { useGetMissionQuery } from '../../apis'
  */
 export function FormikRevalidationEffect() {
   const { validateForm } = useFormikContext()
-  const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
   const isClosing = useMainAppSelector(store => store.mission.isClosing)
-  const { data: missionData } = useGetMissionQuery(missionId || skipToken)
+  const draft = useMainAppSelector(state => state.mission.draft)
 
   const debouncedValidateForm = useDebouncedCallback(validateForm, 250)
 
@@ -27,7 +24,7 @@ export function FormikRevalidationEffect() {
 
     // We don't want to trigger infinite re-renders since `validateForm` changes after each rendering
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [missionData?.endDateTimeUtc, missionData?.startDateTimeUtc, isClosing]
+    [draft?.mainFormValues.endDateTimeUtc, draft?.mainFormValues.startDateTimeUtc, isClosing]
   )
 
   return <></>

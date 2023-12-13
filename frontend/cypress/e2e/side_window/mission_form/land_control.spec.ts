@@ -296,7 +296,7 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.wait(200)
     cy.clickButton('Clôturer')
 
-    cy.contains('Ré-ouvrir la mission').should('exist')
+    cy.get('h1').should('contain.text', 'Missions et contrôles')
   })
 
   it('Should fill the mission zone from the last land control added', () => {

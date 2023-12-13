@@ -5,7 +5,8 @@ import { Mission } from '../../../../domain/entities/mission/types'
 import { MissionAction } from '../../../../domain/types/missionAction'
 import { FrontendError } from '../../../../libs/FrontendError'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../constants'
-import { MissionActionFormValues, MissionMainFormValues } from '../types'
+
+import type { MissionActionFormValues, MissionMainFormValues } from '../types'
 
 export function getMissionFormInitialValues(
   mission: Mission.Mission | undefined,

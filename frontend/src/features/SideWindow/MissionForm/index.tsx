@@ -222,6 +222,8 @@ export function MissionForm() {
             }
           })
         ])
+
+        dispatch(missionActions.setIsDraftDirty(false))
       } catch (err) {
         logSoftError({
           isSideWindowError: true,
@@ -232,6 +234,7 @@ export function MissionForm() {
       }
     },
     [
+      dispatch,
       missionWithActions,
       createMission,
       createMissionAction,
@@ -252,11 +255,15 @@ export function MissionForm() {
       setActionFormKey(key => key + 1)
       setEditedActionIndex(0)
 
-      if (areMissionFormsValuesValid(mainFormValues, nextActionsFormValues)) {
-        createOrUpdate(mainFormValues, nextActionsFormValues)
+      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues)) {
+        dispatch(missionActions.setIsDraftDirty(true))
+
+        return
       }
+
+      createOrUpdate(mainFormValues, nextActionsFormValues)
     },
-    [updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues]
+    [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues]
   )
 
   const duplicateAction = useCallback(
@@ -281,7 +288,6 @@ export function MissionForm() {
     }
 
     await deleteMission(missionId)
-    dispatch(missionActions.setDraft(undefined))
     dispatch(sideWindowActions.openOrFocusAndGoTo({ menu: SideWindowMenuKey.MISSION_LIST }))
   }, [deleteMission, dispatch, missionId])
 
@@ -298,11 +304,15 @@ export function MissionForm() {
         setEditedActionIndex(undefined)
       }
 
-      if (areMissionFormsValuesValid(mainFormValues, nextActionsFormValues)) {
-        createOrUpdate(mainFormValues, nextActionsFormValues)
+      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues)) {
+        dispatch(missionActions.setIsDraftDirty(true))
+
+        return
       }
+
+      createOrUpdate(mainFormValues, nextActionsFormValues)
     },
-    [updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues, editedActionIndex]
+    [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues, editedActionIndex]
   )
 
   const reopen = useCallback(() => {
@@ -318,12 +328,16 @@ export function MissionForm() {
     updateReduxSliceDraft()
     window.document.dispatchEvent(new NotificationEvent('La mission a bien été réouverte', 'success', true))
 
-    if (areMissionFormsValuesValid(nextMainFormValues, actionsFormValues)) {
-      createOrUpdate(nextMainFormValues, actionsFormValues)
-    }
-  }, [updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues])
+    if (!areMissionFormsValuesValid(nextMainFormValues, actionsFormValues)) {
+      dispatch(missionActions.setIsDraftDirty(true))
 
-  const close = useCallback(() => {
+      return
+    }
+
+    createOrUpdate(nextMainFormValues, actionsFormValues)
+  }, [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues])
+
+  const close = useCallback(async () => {
     if (!mainFormValues) {
       throw new FrontendError('`mainFormValues` is undefined.')
     }
@@ -337,8 +351,8 @@ export function MissionForm() {
     if (!canClose) {
       setMainFormValues(nextMainFormValues)
       setActionsFormValues(nextActionsFormValues)
-      // setActionFormKey(key => key + 1)
 
+      dispatch(missionActions.setIsDraftDirty(true))
       dispatch(missionActions.setIsClosing(true))
 
       return
@@ -350,7 +364,8 @@ export function MissionForm() {
     }
     setMainFormValues(mainFormValuesWithIsClosed)
     updateReduxSliceDraft()
-    createOrUpdate(mainFormValuesWithIsClosed, actionsFormValues)
+    await createOrUpdate(mainFormValuesWithIsClosed, actionsFormValues)
+    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_LIST }))
   }, [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues])
 
   const updateEditedActionFormValuesCallback = useCallback(
@@ -371,11 +386,15 @@ export function MissionForm() {
       setActionsFormValues(nextActionFormValuesOrActions)
       updateReduxSliceDraft()
 
-      if (areMissionFormsValuesValid(mainFormValues, nextActionFormValuesOrActions)) {
-        createOrUpdate(mainFormValues, nextActionFormValuesOrActions)
+      if (!areMissionFormsValuesValid(mainFormValues, nextActionFormValuesOrActions)) {
+        dispatch(missionActions.setIsDraftDirty(true))
+
+        return
       }
+
+      createOrUpdate(mainFormValues, nextActionFormValuesOrActions)
     },
-    [updateReduxSliceDraft, createOrUpdate, editedActionIndex, mainFormValues, actionsFormValues]
+    [dispatch, updateReduxSliceDraft, createOrUpdate, editedActionIndex, mainFormValues, actionsFormValues]
   )
 
   const updateEditedActionFormValues = useDebouncedCallback(
@@ -390,12 +409,6 @@ export function MissionForm() {
 
   const updateMainFormValuesCallback = useCallback(
     (nextMissionMainFormValues: MissionMainFormValues) => {
-      if (!nextMissionMainFormValues.isValid) {
-        dispatch(missionActions.setIsDraftDirty(true))
-
-        return
-      }
-
       if (isEqual(nextMissionMainFormValues, mainFormValues)) {
         return
       }
@@ -407,11 +420,16 @@ export function MissionForm() {
 
       setMainFormValues(mainFormValuesWithUpdatedIsClosedProperty)
       updateReduxSliceDraft()
-      if (areMissionFormsValuesValid(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues)) {
-        createOrUpdate(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues)
+
+      if (!areMissionFormsValuesValid(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues)) {
+        dispatch(missionActions.setIsDraftDirty(true))
+
+        return
       }
+
+      createOrUpdate(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues)
     },
-    [updateReduxSliceDraft, dispatch, createOrUpdate, actionsFormValues, mainFormValues]
+    [dispatch, updateReduxSliceDraft, createOrUpdate, actionsFormValues, mainFormValues]
   )
 
   const updateMainFormValues = useDebouncedCallback(

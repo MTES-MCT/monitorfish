@@ -11,7 +11,6 @@ import type { MissionMainFormValues } from '../types'
 export function useGetMainFormFormikUsecases() {
   const dispatch = useMainAppDispatch()
   const draft = useMainAppSelector(state => state.mission.draft)
-  const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
 
   const getPortsApiQuery = useGetPortsQuery()
 
@@ -30,10 +29,6 @@ export function useGetMainFormFormikUsecases() {
      * @return isSuccess - `true` if there is no errors
      */
     updateMissionLocation: async (isGeometryComputedFromControls: boolean): Promise<boolean> => {
-      if (!missionId) {
-        return false
-      }
-
       const missionActions = draft?.actionsFormValues
       if (!missionActions) {
         return false

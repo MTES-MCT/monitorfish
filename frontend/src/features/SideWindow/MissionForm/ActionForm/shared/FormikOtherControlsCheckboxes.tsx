@@ -1,5 +1,4 @@
 import { FormikCheckbox } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/query'
 import { useFormikContext } from 'formik'
 import { useEffect } from 'react'
 import styled from 'styled-components'
@@ -7,7 +6,6 @@ import styled from 'styled-components'
 import { missionActions as missionSliceActions } from '../../../../../domain/actions'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import { useGetMissionQuery } from '../../apis'
 import { PAMControlUnitIds } from '../../constants'
 import { FieldsetGroup } from '../../shared/FieldsetGroup'
 
@@ -17,8 +15,7 @@ export function FormikOtherControlsCheckboxes() {
   const dispatch = useMainAppDispatch()
   const { setFieldValue } = useFormikContext<MissionActionFormValues>()
   const mustResetOtherControlsCheckboxes = useMainAppSelector(state => state.mission.mustResetOtherControlsCheckboxes)
-  const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
-  const { data: missionData } = useGetMissionQuery(missionId || skipToken)
+  const draft = useMainAppSelector(state => state.mission.draft)
 
   useEffect(() => {
     if (mustResetOtherControlsCheckboxes) {
@@ -31,7 +28,7 @@ export function FormikOtherControlsCheckboxes() {
     }
   }, [dispatch, setFieldValue, mustResetOtherControlsCheckboxes])
 
-  const isCurrentControlUnitPAM = missionData?.controlUnits?.some(
+  const isCurrentControlUnitPAM = draft?.mainFormValues.controlUnits.some(
     controlUnit => controlUnit.id && PAMControlUnitIds.includes(controlUnit.id)
   )
 

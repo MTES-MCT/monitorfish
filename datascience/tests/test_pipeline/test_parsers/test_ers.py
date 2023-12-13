@@ -132,8 +132,8 @@ def test_dep_parser():
         "departurePort": "GBPHD",
         "anticipatedActivity": "FSH",
         "gearOnboard": [
-            {"gear": "PTB", "mesh": 120.0, "dimensions": 120.0},
-            {"gear": "PTB", "mesh": 120.0, "dimensions": 120.0},
+            {"gear": "PTB", "mesh": 120.0, "dimensions": "120.0"},
+            {"gear": "PTB", "mesh": 120.0, "dimensions": "120.0"},
         ],
     }
     assert value == expected_value
@@ -205,11 +205,10 @@ def test_far_parser():
     assert len(hauls) == 1
     haul_data = hauls[0]
     assert set(haul_data) == {"dimensions", "farDatetimeUtc", "gear", "mesh", "catches"}
-    assert haul_data["dimensions"] is None
+    assert haul_data["dimensions"] == "16.0;16.0"
     assert haul_data["farDatetimeUtc"] == "2020-03-24T20:46:00Z"
     assert haul_data["gear"] == "OTT"
     assert haul_data["mesh"] == 80.0
-    assert haul_data["dimensions"] is None
 
 
 def test_cps_parser():
@@ -222,7 +221,7 @@ def test_cps_parser():
                 "cpsDatetimeUtc": "2023-02-28T17:44:00Z",
                 "gear": "GTR",
                 "mesh": 100.0,
-                "dimensions": None,
+                "dimensions": "50.0;2.0",
                 "catches": [
                     {
                         "sex": "M",
@@ -325,7 +324,7 @@ def test_rtp_parser():
         "returnDatetimeUtc": "2020-03-25T07:30:00Z",
         "port": "SCPOV",
         "reasonOfReturn": "LAN",
-        "gearOnboard": [{"gear": "PS", "mesh": 110.0, "dimensions": None}],
+        "gearOnboard": [{"gear": "PS", "mesh": 110.0, "dimensions": "1500;285"}],
     }
     assert value == expected_value
 
@@ -397,7 +396,7 @@ def test_multi_line_message():
                 "departureDatetimeUtc": "2021-09-19T18:00:00Z",
                 "departurePort": "FRRTB",
                 "anticipatedActivity": None,
-                "gearOnboard": [{"gear": "OTB", "mesh": 75.0, "dimensions": 12.0}],
+                "gearOnboard": [{"gear": "OTB", "mesh": 75.0, "dimensions": "12"}],
             },
         },
         {
@@ -408,7 +407,7 @@ def test_multi_line_message():
                         "farDatetimeUtc": "2021-09-19T00:00:00Z",
                         "gear": "OTB",
                         "mesh": 75.0,
-                        "dimensions": 12.0,
+                        "dimensions": "12",
                         "catches": [
                             {
                                 "species": "SQZ",

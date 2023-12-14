@@ -85,6 +85,7 @@ object TestUtils {
         haul.gear = "OTB"
         haul.catches = listOf(catchTwo, catchThree)
         haul.mesh = 120.0
+        haul.dimensions = "150;120"
         far.hauls = listOf(haul)
 
         val coe = COE()

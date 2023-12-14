@@ -267,6 +267,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val farMessageOneCorrectedHaul = farMessageOneCorrected.hauls.first()
         assertThat(farMessageOneCorrectedHaul.gear).isEqualTo("GTN")
         assertThat(farMessageOneCorrectedHaul.mesh).isEqualTo(150.0)
+        assertThat(farMessageOneCorrectedHaul.dimensions).isEqualTo("120.0")
+
         assertThat(farMessageOneCorrectedHaul.catches).hasSize(20)
         assertThat(farMessageOneCorrectedHaul.catches.first().weight).isEqualTo(1500.0)
         assertThat(farMessageOneCorrectedHaul.catches.first().numberFish).isEqualTo(null)
@@ -283,7 +285,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val farMessageOneHaul = farMessageOne.hauls.first()
         assertThat(farMessageOneHaul.gear).isEqualTo("GTN")
         assertThat(farMessageOneHaul.mesh).isEqualTo(100.0)
-        assertThat(farMessageOneHaul.mesh).isEqualTo(100.0)
+        assertThat(farMessageOneHaul.dimensions).isEqualTo("150.0;120.0")
+
         assertThat(farMessageOneHaul.catchDateTime.toString()).isEqualTo("2019-10-17T11:32Z")
         assertThat(farMessageOneHaul.catches).hasSize(4)
         assertThat(farMessageOneHaul.catches.first().weight).isEqualTo(1500.0)

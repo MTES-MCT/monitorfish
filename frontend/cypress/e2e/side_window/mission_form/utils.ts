@@ -55,6 +55,19 @@ export const fillSideWindowMissionFormBase = (
     },
     statusCode: 201
   }).as('createMission')
+  cy.intercept('GET', '/api/v1/missions/1', {
+    body: {
+      id: 1,
+      isClosed: isReturningClosed
+    },
+    statusCode: 201
+  }).as('getCreatedMission')
+  cy.intercept('GET', '/bff/v1/missions_actions?missionId=1', {
+    body: {
+      id: 2
+    },
+    statusCode: 201
+  }).as('getCreatedMissionActions')
 
   cy.fill('Types de mission', [missionTypeLabel])
 

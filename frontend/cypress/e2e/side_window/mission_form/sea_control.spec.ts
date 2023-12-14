@@ -61,6 +61,12 @@ context('Side Window > Mission Form > Sea Control', () => {
       },
       statusCode: 201
     }).as('createMissionAction')
+    cy.intercept('PUT', '/bff/v1/mission_actions/1', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('updateMissionAction')
 
     // -------------------------------------------------------------------------
     // Form
@@ -156,7 +162,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Request
 
     cy.waitForLastRequest(
-      '@createMissionAction',
+      '@updateMissionAction',
       {
         body: {
           actionType: 'SEA_CONTROL',
@@ -193,7 +199,7 @@ context('Side Window > Mission Form > Sea Control', () => {
           ],
           hasSomeGearsSeized: true,
           hasSomeSpeciesSeized: true,
-          id: null,
+          id: 1,
           internalReferenceNumber: 'U_W0NTFINDME',
           ircs: 'QGDF',
           latitude: 47.084,
@@ -254,6 +260,12 @@ context('Side Window > Mission Form > Sea Control', () => {
       },
       statusCode: 201
     }).as('createMissionAction')
+    cy.intercept('PUT', '/bff/v1/mission_actions/1', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('updateMissionAction')
 
     // -------------------------------------------------------------------------
     // Form
@@ -275,7 +287,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Request
 
     cy.waitForLastRequest(
-      '@createMissionAction',
+      '@updateMissionAction',
       {
         body: {
           actionType: 'SEA_CONTROL',
@@ -304,7 +316,7 @@ context('Side Window > Mission Form > Sea Control', () => {
           ],
           hasSomeGearsSeized: false,
           hasSomeSpeciesSeized: false,
-          id: null,
+          id: 1,
           internalReferenceNumber: 'FAK000999999',
           ircs: 'CALLME',
           latitude: 47.084,
@@ -680,6 +692,13 @@ context('Side Window > Mission Form > Sea Control', () => {
       statusCode: 201
     }).as('createMissionAction')
 
+    cy.intercept('PUT', '/bff/v1/mission_actions/1', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('updateMissionAction')
+
     // -------------------------------------------------------------------------
     // Main Form
 
@@ -718,7 +737,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Request
 
     cy.waitForLastRequest(
-      '@createMissionAction',
+      '@updateMissionAction',
       {
         body: {
           isAdministrativeControl: null,
@@ -740,6 +759,13 @@ context('Side Window > Mission Form > Sea Control', () => {
       },
       statusCode: 201
     }).as('createMissionAction')
+
+    cy.intercept('PUT', '/bff/v1/mission_actions/1', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('updateMissionAction')
 
     // -------------------------------------------------------------------------
     // Main Form
@@ -778,7 +804,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Request
 
     cy.waitForLastRequest(
-      '@createMissionAction',
+      '@updateMissionAction',
       {
         body: {
           isAdministrativeControl: true,

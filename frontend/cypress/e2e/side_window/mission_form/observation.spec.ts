@@ -14,6 +14,13 @@ context('Side Window > Mission Form > Observation', () => {
   it('Should fill the form and send the expected data to the API', () => {
     cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
 
+    cy.intercept('PUT', '/bff/v1/mission_actions/1', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('updateMissionAction')
+
     // -------------------------------------------------------------------------
     // Form
 
@@ -29,7 +36,7 @@ context('Side Window > Mission Form > Observation', () => {
     // Request
 
     cy.waitForLastRequest(
-      '@createMissionAction',
+      '@updateMissionAction',
       {
         body: {
           actionType: 'OBSERVATION',
@@ -41,7 +48,7 @@ context('Side Window > Mission Form > Observation', () => {
           feedbackSheetRequired: null,
           gearInfractions: [],
           gearOnboard: [],
-          id: null,
+          id: 1,
           latitude: null,
           licencesAndLogbookObservations: null,
           licencesMatchActivity: null,
@@ -83,6 +90,13 @@ context('Side Window > Mission Form > Observation', () => {
       },
       statusCode: 201
     }).as('createMissionAction')
+
+    cy.intercept('PUT', '/bff/v1/mission_actions/1', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('updateMissionAction')
 
     // -------------------------------------------------------------------------
     // Form Live Validation

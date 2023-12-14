@@ -15,6 +15,12 @@ context('Side Window > Mission Form > Air Control', () => {
   it('Should fill the form and send the expected data to the API', () => {
     const now = getUtcDateInMultipleFormats()
     cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
+    cy.intercept('PUT', '/bff/v1/mission_actions/1', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('updateMissionAction')
 
     // -------------------------------------------------------------------------
     // Form
@@ -53,7 +59,7 @@ context('Side Window > Mission Form > Air Control', () => {
     // Request
 
     cy.waitForLastRequest(
-      '@createMissionAction',
+      '@updateMissionAction',
       {
         body: {
           actionType: 'AIR_CONTROL',
@@ -69,7 +75,7 @@ context('Side Window > Mission Form > Air Control', () => {
           flagState: 'FR',
           gearInfractions: [],
           gearOnboard: [],
-          id: null,
+          id: 1,
           internalReferenceNumber: 'FAK000999999',
           ircs: 'CALLME',
           latitude: 47.084,

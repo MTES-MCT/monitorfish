@@ -83,7 +83,7 @@ export function Haul({ hasManyHauls, haul, haulNumber }) {
                   </SubField>
                   <SubField>
                     <SubKey>Dimensions</SubKey>
-                    <SubValue>{haul.size ? <>{haul.size}</> : <NoValue>-</NoValue>}</SubValue>
+                    <SubValue>{haul.dimensions ? <>{haul.dimensions}</> : <NoValue>-</NoValue>}</SubValue>
                   </SubField>
                 </SubFields>
               </Gear>

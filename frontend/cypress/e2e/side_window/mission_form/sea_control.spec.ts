@@ -18,6 +18,12 @@ context('Side Window > Mission Form > Sea Control', () => {
       },
       statusCode: 201
     }).as('createMissionAction')
+    cy.intercept('PUT', '/bff/v1/mission_actions/1', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('updateMissionAction')
 
     // -------------------------------------------------------------------------
     // Form
@@ -36,7 +42,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Request
 
     cy.waitForLastRequest(
-      '@createMissionAction',
+      '@updateMissionAction',
       {
         body: {
           externalReferenceNumber: 'UNKNOWN',
@@ -821,6 +827,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
   it('Should update (PUT) a control right after creating a new control (and not create a new one with POST)', () => {
     cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
+    cy.intercept('PUT', '/bff/v1/mission_actions/1').as('updateMissionActionOne')
 
     // -------------------------------------------------------------------------
     // Form
@@ -838,7 +845,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // -------------------------------------------------------------------------
     // Request
 
-    cy.wait('@createMissionAction').then(interception => {
+    cy.wait('@updateMissionActionOne').then(interception => {
       if (!interception.response) {
         assert.fail('`interception.response` is undefined.')
       }

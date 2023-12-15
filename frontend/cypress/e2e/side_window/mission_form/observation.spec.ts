@@ -90,7 +90,7 @@ context('Side Window > Mission Form > Observation', () => {
       statusCode: 201
     }).as('createMissionAction')
 
-    cy.intercept('PUT', '/bff/v1/mission_actions/1', {
+    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
       body: {
         id: 1
       },

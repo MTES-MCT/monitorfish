@@ -337,7 +337,7 @@ context('Side Window > Mission Form > Main Form', () => {
   })
 
   it('Should close an existing mission', () => {
-    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN, true)
+    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
 
     cy.intercept('POST', '/api/v1/missions/2', {
       body: {

@@ -62,10 +62,8 @@ export const fillSideWindowMissionFormBase = (
     },
     statusCode: 201
   }).as('getCreatedMission')
-  cy.intercept('GET', '/bff/v1/missions_actions?missionId=1', {
-    body: {
-      id: 2
-    },
+  cy.intercept('GET', '/bff/v1/mission_actions?missionId=1', {
+    body: [{ id: 2 }],
     statusCode: 201
   }).as('getCreatedMissionActions')
 

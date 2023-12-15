@@ -59,6 +59,9 @@ Cypress.Commands.add('waitForLastRequest', (alias, partialRequest, maxRequests, 
       return interception
     }
 
+    // eslint-disable-next-line no-console
+    cy.log('Intercepted request', JSON.stringify(interception.request))
+
     // @ts-ignore
     return cy.waitForLastRequest(alias, partialRequest, maxRequests, level + 1)
   })

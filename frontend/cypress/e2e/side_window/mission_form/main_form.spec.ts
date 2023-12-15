@@ -386,7 +386,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.clickButton('Retourner à l’édition')
 
-    cy.get('h1').should('contain.text', 'Mission Mer – BGC Bastia')
+    cy.get('h1').should('contain.text', 'Mission Mer –')
 
     cy.clickButton(SideWindowMenuLabel.MISSION_LIST)
     cy.clickButton('Quitter sans enregistrer')

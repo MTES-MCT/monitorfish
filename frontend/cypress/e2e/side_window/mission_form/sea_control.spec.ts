@@ -5,25 +5,20 @@ import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFor
 context('Side Window > Mission Form > Sea Control', () => {
   beforeEach(() => {
     openSideWindowNewMission()
-    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
-
-    cy.clickButton('Ajouter')
-    cy.clickButton('Ajouter un contrôle en mer')
   })
 
   it('Should fill the form with an unknown vessel and send the expected data to the API', () => {
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA, false, false)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
     cy.intercept('POST', '/bff/v1/mission_actions', {
       body: {
         id: 1
       },
       statusCode: 201
     }).as('createMissionAction')
-    cy.intercept('PUT', '/bff/v1/mission_actions/1', {
-      body: {
-        id: 1
-      },
-      statusCode: 201
-    }).as('updateMissionAction')
 
     // -------------------------------------------------------------------------
     // Form
@@ -42,7 +37,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Request
 
     cy.waitForLastRequest(
-      '@updateMissionAction',
+      '@createMissionAction',
       {
         body: {
           externalReferenceNumber: 'UNKNOWN',
@@ -60,16 +55,15 @@ context('Side Window > Mission Form > Sea Control', () => {
   })
 
   it('Should fill the form and send the expected data to the API', () => {
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
     const now = getUtcDateInMultipleFormats()
-    cy.intercept('POST', '/bff/v1/mission_actions', {
+    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
       body: {
-        id: 1
-      },
-      statusCode: 201
-    }).as('createMissionAction')
-    cy.intercept('PUT', '/bff/v1/mission_actions/1', {
-      body: {
-        id: 1
+        id: 2
       },
       statusCode: 201
     }).as('updateMissionAction')
@@ -205,7 +199,7 @@ context('Side Window > Mission Form > Sea Control', () => {
           ],
           hasSomeGearsSeized: true,
           hasSomeSpeciesSeized: true,
-          id: 1,
+          id: 2,
           internalReferenceNumber: 'U_W0NTFINDME',
           ircs: 'QGDF',
           latitude: 47.084,
@@ -260,13 +254,12 @@ context('Side Window > Mission Form > Sea Control', () => {
   })
 
   it('Should fill the form for a vessel with logbook and prefill the gears, species, fao areas and segments fields', () => {
-    cy.intercept('POST', '/bff/v1/mission_actions', {
-      body: {
-        id: 1
-      },
-      statusCode: 201
-    }).as('createMissionAction')
-    cy.intercept('PUT', '/bff/v1/mission_actions/1', {
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
+    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
       body: {
         id: 1
       },
@@ -322,7 +315,7 @@ context('Side Window > Mission Form > Sea Control', () => {
           ],
           hasSomeGearsSeized: false,
           hasSomeSpeciesSeized: false,
-          id: 1,
+          id: 2,
           internalReferenceNumber: 'FAK000999999',
           ircs: 'CALLME',
           latitude: 47.084,
@@ -362,6 +355,11 @@ context('Side Window > Mission Form > Sea Control', () => {
   })
 
   it('Should only close mission once the form closure validation has passed', () => {
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
     const getCloseButton = () => cy.get('button').contains('Clôturer').parent()
 
     // -------------------------------------------------------------------------
@@ -452,13 +450,18 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Mission is now valid for closure
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
     cy.contains('Veuillez corriger les éléments en rouge').should('not.exist')
-    cy.wait(250)
+    cy.wait(500)
     cy.clickButton('Clôturer')
 
     cy.get('h1').should('contain.text', 'Missions et contrôles')
   })
 
   it('Should add, edit, remove and validate gears infractions as expected', () => {
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
     // -------------------------------------------------------------------------
     // Form Validation
 
@@ -519,6 +522,11 @@ context('Side Window > Mission Form > Sea Control', () => {
   })
 
   it('Should fill the mission zone from the last sea control added', () => {
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
     const now = getUtcDateInMultipleFormats()
     cy.intercept('POST', '/api/v1/mission', {
       statusCode: 201
@@ -691,16 +699,21 @@ context('Side Window > Mission Form > Sea Control', () => {
   })
 
   it('Should remove the other control fields When the previous PAM control unit is modified', () => {
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
     cy.intercept('POST', '/bff/v1/mission_actions', {
       body: {
-        id: 1
+        id: 2
       },
       statusCode: 201
     }).as('createMissionAction')
 
-    cy.intercept('PUT', '/bff/v1/mission_actions/1', {
+    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
       body: {
-        id: 1
+        id: 2
       },
       statusCode: 201
     }).as('updateMissionAction')
@@ -759,6 +772,11 @@ context('Side Window > Mission Form > Sea Control', () => {
   })
 
   it('Should add a PAM control unit and send the other control fields', () => {
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
     cy.intercept('POST', '/bff/v1/mission_actions', {
       body: {
         id: 1
@@ -766,9 +784,9 @@ context('Side Window > Mission Form > Sea Control', () => {
       statusCode: 201
     }).as('createMissionAction')
 
-    cy.intercept('PUT', '/bff/v1/mission_actions/1', {
+    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
       body: {
-        id: 1
+        id: 2
       },
       statusCode: 201
     }).as('updateMissionAction')
@@ -814,8 +832,8 @@ context('Side Window > Mission Form > Sea Control', () => {
       {
         body: {
           isAdministrativeControl: true,
-          isComplianceWithWaterRegulationsControl: false,
-          isSafetyEquipmentAndStandardsComplianceControl: false,
+          isComplianceWithWaterRegulationsControl: null,
+          isSafetyEquipmentAndStandardsComplianceControl: null,
           isSeafarersControl: true
         }
       },
@@ -826,8 +844,12 @@ context('Side Window > Mission Form > Sea Control', () => {
   })
 
   it('Should update (PUT) a control right after creating a new control (and not create a new one with POST)', () => {
-    cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
-    cy.intercept('PUT', '/bff/v1/mission_actions/1').as('updateMissionActionOne')
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
+    cy.intercept('PUT', '/bff/v1/mission_actions/2').as('updateMissionActionOne')
 
     // -------------------------------------------------------------------------
     // Form

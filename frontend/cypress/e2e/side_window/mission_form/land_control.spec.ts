@@ -15,9 +15,9 @@ context('Side Window > Mission Form > Land Control', () => {
   it('Should fill the form and send the expected data to the API', () => {
     const now = getUtcDateInMultipleFormats()
     cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
-    cy.intercept('PUT', '/bff/v1/mission_actions/1', {
+    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
       body: {
-        id: 1
+        id: 2
       },
       statusCode: 201
     }).as('updateMissionAction')
@@ -153,7 +153,7 @@ context('Side Window > Mission Form > Land Control', () => {
           ],
           hasSomeGearsSeized: true,
           hasSomeSpeciesSeized: true,
-          id: 1,
+          id: 2,
           internalReferenceNumber: 'FAK000999999',
           ircs: 'CALLME',
           latitude: null,
@@ -299,7 +299,7 @@ context('Side Window > Mission Form > Land Control', () => {
     // Mission is now valid for closure
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
     cy.contains('Veuillez corriger les éléments en rouge').should('not.exist')
-    cy.wait(200)
+    cy.wait(500)
     cy.clickButton('Clôturer')
 
     cy.get('h1').should('contain.text', 'Missions et contrôles')

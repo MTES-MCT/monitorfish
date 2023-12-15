@@ -15,7 +15,7 @@ context('Side Window > Mission Form > Air Control', () => {
   it('Should fill the form and send the expected data to the API', () => {
     const now = getUtcDateInMultipleFormats()
     cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
-    cy.intercept('PUT', '/bff/v1/mission_actions/1', {
+    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
       body: {
         id: 1
       },
@@ -75,7 +75,7 @@ context('Side Window > Mission Form > Air Control', () => {
           flagState: 'FR',
           gearInfractions: [],
           gearOnboard: [],
-          id: 1,
+          id: 2,
           internalReferenceNumber: 'FAK000999999',
           ircs: 'CALLME',
           latitude: 47.084,

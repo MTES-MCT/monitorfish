@@ -314,7 +314,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.fill('Clôturé par', 'Doris')
 
-    cy.wait(250)
+    cy.wait(300)
 
     cy.clickButton('Clôturer')
 
@@ -337,16 +337,18 @@ context('Side Window > Mission Form > Main Form', () => {
   })
 
   it('Should close an existing mission', () => {
-    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
+    editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN, true)
 
     cy.intercept('POST', '/api/v1/missions/2', {
       body: {
-        id: 1
+        id: 2
       },
       statusCode: 201
     }).as('updateMission')
 
     cy.fill('Clôturé par', 'Doris')
+
+    cy.wait(300)
 
     cy.clickButton('Clôturer')
 

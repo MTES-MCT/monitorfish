@@ -779,7 +779,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.intercept('POST', '/bff/v1/mission_actions', {
       body: {
-        id: 1
+        id: 2
       },
       statusCode: 201
     }).as('createMissionAction')
@@ -832,8 +832,8 @@ context('Side Window > Mission Form > Sea Control', () => {
       {
         body: {
           isAdministrativeControl: true,
-          isComplianceWithWaterRegulationsControl: null,
-          isSafetyEquipmentAndStandardsComplianceControl: null,
+          isComplianceWithWaterRegulationsControl: false,
+          isSafetyEquipmentAndStandardsComplianceControl: false,
           isSeafarersControl: true
         }
       },

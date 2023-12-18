@@ -32,6 +32,7 @@ import {
 import { areMissionFormsValuesValid } from './utils/areMissionFormsValuesValid'
 import { getMissionFormInitialValues } from './utils/getMissionFormInitialValues'
 import { validateMissionForms } from './utils/validateMissionForms'
+import { customDayjs } from '../../../../cypress/e2e/utils/customDayjs'
 import {
   useCreateMissionActionMutation,
   useDeleteMissionActionMutation,
@@ -134,6 +135,19 @@ export function MissionForm() {
       dispatch(displayOrLogError(missionActionsError as Error, undefined, true, 'missionFormError'))
     }
   }, [dispatch, missionActionsError])
+
+  const isAutoSaveEnabled = useMemo(() => {
+    if (!AUTO_SAVE_ENABLED) {
+      return false
+    }
+
+    const now = customDayjs()
+    if (mainFormValues?.endDateTimeUtc && now.isAfter(mainFormValues?.endDateTimeUtc) && mainFormValues?.isClosed) {
+      return false
+    }
+
+    return true
+  }, [mainFormValues])
 
   const missionWithActions: MissionWithActions | undefined = useMemo(() => {
     if (!missionData) {
@@ -262,7 +276,7 @@ export function MissionForm() {
       setActionFormKey(key => key + 1)
       setEditedActionIndex(0)
 
-      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !AUTO_SAVE_ENABLED) {
+      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !isAutoSaveEnabled) {
         dispatch(missionActions.setIsDraftDirty(true))
 
         return
@@ -270,7 +284,7 @@ export function MissionForm() {
 
       createOrUpdate(mainFormValues, nextActionsFormValues)
     },
-    [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues]
+    [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues, isAutoSaveEnabled]
   )
 
   const duplicateAction = useCallback(
@@ -283,7 +297,7 @@ export function MissionForm() {
       setActionFormKey(key => key + 1)
       setEditedActionIndex(0)
 
-      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !AUTO_SAVE_ENABLED) {
+      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !isAutoSaveEnabled) {
         dispatch(missionActions.setIsDraftDirty(true))
 
         return
@@ -291,7 +305,7 @@ export function MissionForm() {
 
       createOrUpdate(mainFormValues, nextActionsFormValues)
     },
-    [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues]
+    [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues, isAutoSaveEnabled]
   )
 
   const goToMissionList = useCallback(async () => {
@@ -320,7 +334,7 @@ export function MissionForm() {
         setEditedActionIndex(undefined)
       }
 
-      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !AUTO_SAVE_ENABLED) {
+      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !isAutoSaveEnabled) {
         dispatch(missionActions.setIsDraftDirty(true))
 
         return
@@ -328,7 +342,15 @@ export function MissionForm() {
 
       createOrUpdate(mainFormValues, nextActionsFormValues)
     },
-    [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues, editedActionIndex]
+    [
+      dispatch,
+      updateReduxSliceDraft,
+      createOrUpdate,
+      mainFormValues,
+      actionsFormValues,
+      editedActionIndex,
+      isAutoSaveEnabled
+    ]
   )
 
   const reopen = useCallback(() => {
@@ -396,7 +418,7 @@ export function MissionForm() {
       setActionsFormValues(nextActionFormValuesOrActions)
       updateReduxSliceDraft()
 
-      if (!areMissionFormsValuesValid(mainFormValues, nextActionFormValuesOrActions) || !AUTO_SAVE_ENABLED) {
+      if (!areMissionFormsValuesValid(mainFormValues, nextActionFormValuesOrActions) || !isAutoSaveEnabled) {
         dispatch(missionActions.setIsDraftDirty(true))
 
         return
@@ -404,7 +426,15 @@ export function MissionForm() {
 
       createOrUpdate(mainFormValues, nextActionFormValuesOrActions)
     },
-    [dispatch, updateReduxSliceDraft, createOrUpdate, editedActionIndex, mainFormValues, actionsFormValues]
+    [
+      dispatch,
+      updateReduxSliceDraft,
+      createOrUpdate,
+      editedActionIndex,
+      mainFormValues,
+      actionsFormValues,
+      isAutoSaveEnabled
+    ]
   )
 
   const updateEditedActionFormValues = useDebouncedCallback(
@@ -433,7 +463,7 @@ export function MissionForm() {
 
       if (
         !areMissionFormsValuesValid(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues) ||
-        !AUTO_SAVE_ENABLED
+        !isAutoSaveEnabled
       ) {
         dispatch(missionActions.setIsDraftDirty(true))
 
@@ -442,7 +472,7 @@ export function MissionForm() {
 
       createOrUpdate(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues)
     },
-    [dispatch, updateReduxSliceDraft, createOrUpdate, actionsFormValues, mainFormValues]
+    [dispatch, updateReduxSliceDraft, createOrUpdate, actionsFormValues, mainFormValues, isAutoSaveEnabled]
   )
 
   const updateMainFormValues = useDebouncedCallback(
@@ -584,7 +614,7 @@ export function MissionForm() {
           <div>
             {!isMissionFormValid && <FooterError>Veuillez corriger les éléments en rouge</FooterError>}
 
-            {!AUTO_SAVE_ENABLED && (
+            {!isAutoSaveEnabled && (
               <>
                 <Button accent={Accent.TERTIARY} disabled={isSaving} onClick={goToMissionList}>
                   Annuler
@@ -629,7 +659,9 @@ export function MissionForm() {
       {isDeletionConfirmationDialogOpen && (
         <DeletionConfirmationDialog onCancel={toggleDeletionConfirmationDialog} onConfirm={handleDelete} />
       )}
-      {isDraftCancellationConfirmationDialogOpen && <DraftCancellationConfirmationDialog />}
+      {isDraftCancellationConfirmationDialogOpen && (
+        <DraftCancellationConfirmationDialog isAutoSaveEnabled={isAutoSaveEnabled} />
+      )}
     </>
   )
 }

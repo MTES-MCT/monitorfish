@@ -139,6 +139,12 @@ context('Side Window > Mission Form > Main Form', () => {
 
   it('Should send the expected data to the API when creating a new mission', () => {
     openSideWindowNewMission()
+    cy.intercept('GET', '/api/v1/missions/1', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('getCreatedMission')
 
     cy.intercept('POST', '/api/v1/missions', {
       body: {

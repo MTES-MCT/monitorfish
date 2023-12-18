@@ -56,7 +56,12 @@ import { isCypress } from '../../../utils/isCypress'
 import type { MissionActionFormValues, MissionMainFormValues } from './types'
 import type { MissionAction } from '../../../domain/types/missionAction'
 
+/**
+ * When running Cypress tests, we modify this env var in spec file, so we use `window.Cypress.env()`
+ * instead of `import.meta.env`.
+ */
 const AUTO_SAVE_ENABLED = isCypress()
+  // @ts-ignore
   ? window.Cypress.env().FRONTEND_MISSION_AUTO_SAVE_ENABLED
   : import.meta.env.FRONTEND_MISSION_AUTO_SAVE_ENABLED
 

@@ -1,55 +1,60 @@
-import {Accent, Button, Icon, logSoftError, NotificationEvent, usePrevious} from '@mtes-mct/monitor-ui'
-import {skipToken} from '@reduxjs/toolkit/dist/query'
-import {isEqual} from 'lodash'
-import {omit} from 'lodash/fp'
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react'
+import { Accent, Button, Icon, logSoftError, NotificationEvent, usePrevious } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
+import { isEqual } from 'lodash'
+import { omit } from 'lodash/fp'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
-import {useDebouncedCallback} from 'use-debounce'
+import { useDebouncedCallback } from 'use-debounce'
 
-import {ActionForm} from './ActionForm'
-import {ActionList} from './ActionList'
-import {getMissionActionFormInitialValues} from './ActionList/utils'
-import {useCreateMissionMutation, useDeleteMissionMutation, useGetMissionQuery, useUpdateMissionMutation} from './apis'
-import {useUpdateFreezedActionFormValues} from './hooks/useUpdateFreezedActionFormValues'
-import {useUpdateFreezedMainFormValues} from './hooks/useUpdateFreezedMainFormValues'
-import {MainForm} from './MainForm'
-import {DeletionConfirmationDialog} from './shared/DeletionConfirmationDialog'
-import {DraftCancellationConfirmationDialog} from './shared/DraftCancellationConfirmationDialog'
-import {TitleSourceTag} from './shared/TitleSourceTag'
-import {TitleStatusTag} from './shared/TitleStatusTag'
+import { ActionForm } from './ActionForm'
+import { ActionList } from './ActionList'
+import { getMissionActionFormInitialValues } from './ActionList/utils'
+import {
+  useCreateMissionMutation,
+  useDeleteMissionMutation,
+  useGetMissionQuery,
+  useUpdateMissionMutation
+} from './apis'
+import { AUTO_SAVE_ENABLED } from './constants'
+import { useUpdateFreezedActionFormValues } from './hooks/useUpdateFreezedActionFormValues'
+import { useUpdateFreezedMainFormValues } from './hooks/useUpdateFreezedMainFormValues'
+import { MainForm } from './MainForm'
+import { DeletionConfirmationDialog } from './shared/DeletionConfirmationDialog'
+import { DraftCancellationConfirmationDialog } from './shared/DraftCancellationConfirmationDialog'
+import { TitleSourceTag } from './shared/TitleSourceTag'
+import { TitleStatusTag } from './shared/TitleStatusTag'
 import {
   getMissionActionsDataFromMissionActionsFormValues,
   getMissionDataFromMissionFormValues,
   getTitleFromMissionMainFormValues,
   getUpdatedMissionFromMissionMainFormValues
 } from './utils'
-import {areMissionFormsValuesValid} from './utils/areMissionFormsValuesValid'
-import {getMissionFormInitialValues} from './utils/getMissionFormInitialValues'
-import {validateMissionForms} from './utils/validateMissionForms'
+import { areMissionFormsValuesValid } from './utils/areMissionFormsValuesValid'
+import { getMissionFormInitialValues } from './utils/getMissionFormInitialValues'
+import { validateMissionForms } from './utils/validateMissionForms'
 import {
   useCreateMissionActionMutation,
   useDeleteMissionActionMutation,
   useGetMissionActionsQuery,
   useUpdateMissionActionMutation
 } from '../../../api/missionAction'
-import {missionActions} from '../../../domain/actions'
-import {getMissionStatus} from '../../../domain/entities/mission/utils'
-import {SideWindowMenuKey} from '../../../domain/entities/sideWindow/constants'
-import {sideWindowActions} from '../../../domain/shared_slices/SideWindow'
-import {displayOrLogError} from '../../../domain/use_cases/error/displayOrLogError'
-import {retry} from '../../../domain/use_cases/error/retry'
-import {sideWindowDispatchers} from '../../../domain/use_cases/sideWindow'
-import {useMainAppDispatch} from '../../../hooks/useMainAppDispatch'
-import {useMainAppSelector} from '../../../hooks/useMainAppSelector'
-import {FrontendError} from '../../../libs/FrontendError'
-import {FrontendErrorBoundary} from '../../../ui/FrontendErrorBoundary'
-import {LoadingSpinnerWall} from '../../../ui/LoadingSpinnerWall'
-import {NoRsuiteOverrideWrapper} from '../../../ui/NoRsuiteOverrideWrapper'
-
-import type {MissionActionFormValues, MissionMainFormValues} from './types'
-import type {MissionAction} from '../../../domain/types/missionAction'
+import { missionActions } from '../../../domain/actions'
 import { Mission, type MissionWithActions } from '../../../domain/entities/mission/types'
-import {AUTO_SAVE_ENABLED} from "./constants";
+import { getMissionStatus } from '../../../domain/entities/mission/utils'
+import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
+import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
+import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
+import { retry } from '../../../domain/use_cases/error/retry'
+import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { FrontendError } from '../../../libs/FrontendError'
+import { FrontendErrorBoundary } from '../../../ui/FrontendErrorBoundary'
+import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
+import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
+
+import type { MissionActionFormValues, MissionMainFormValues } from './types'
+import type { MissionAction } from '../../../domain/types/missionAction'
 
 export function MissionForm() {
   const dispatch = useMainAppDispatch()
@@ -426,7 +431,10 @@ export function MissionForm() {
       setMainFormValues(mainFormValuesWithUpdatedIsClosedProperty)
       updateReduxSliceDraft()
 
-      if (!areMissionFormsValuesValid(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues) || !AUTO_SAVE_ENABLED) {
+      if (
+        !areMissionFormsValuesValid(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues) ||
+        !AUTO_SAVE_ENABLED
+      ) {
         dispatch(missionActions.setIsDraftDirty(true))
 
         return

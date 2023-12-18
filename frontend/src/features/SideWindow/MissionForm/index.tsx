@@ -1,69 +1,55 @@
-import { Accent, Button, Icon, logSoftError, NotificationEvent, usePrevious } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/dist/query'
-import { isEqual } from 'lodash'
-import { omit } from 'lodash/fp'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {Accent, Button, Icon, logSoftError, NotificationEvent, usePrevious} from '@mtes-mct/monitor-ui'
+import {skipToken} from '@reduxjs/toolkit/dist/query'
+import {isEqual} from 'lodash'
+import {omit} from 'lodash/fp'
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react'
 import styled from 'styled-components'
-import { useDebouncedCallback } from 'use-debounce'
+import {useDebouncedCallback} from 'use-debounce'
 
-import { ActionForm } from './ActionForm'
-import { ActionList } from './ActionList'
-import { getMissionActionFormInitialValues } from './ActionList/utils'
-import {
-  useCreateMissionMutation,
-  useDeleteMissionMutation,
-  useGetMissionQuery,
-  useUpdateMissionMutation
-} from './apis'
-import { useUpdateFreezedActionFormValues } from './hooks/useUpdateFreezedActionFormValues'
-import { useUpdateFreezedMainFormValues } from './hooks/useUpdateFreezedMainFormValues'
-import { MainForm } from './MainForm'
-import { DeletionConfirmationDialog } from './shared/DeletionConfirmationDialog'
-import { DraftCancellationConfirmationDialog } from './shared/DraftCancellationConfirmationDialog'
-import { TitleSourceTag } from './shared/TitleSourceTag'
-import { TitleStatusTag } from './shared/TitleStatusTag'
+import {ActionForm} from './ActionForm'
+import {ActionList} from './ActionList'
+import {getMissionActionFormInitialValues} from './ActionList/utils'
+import {useCreateMissionMutation, useDeleteMissionMutation, useGetMissionQuery, useUpdateMissionMutation} from './apis'
+import {useUpdateFreezedActionFormValues} from './hooks/useUpdateFreezedActionFormValues'
+import {useUpdateFreezedMainFormValues} from './hooks/useUpdateFreezedMainFormValues'
+import {MainForm} from './MainForm'
+import {DeletionConfirmationDialog} from './shared/DeletionConfirmationDialog'
+import {DraftCancellationConfirmationDialog} from './shared/DraftCancellationConfirmationDialog'
+import {TitleSourceTag} from './shared/TitleSourceTag'
+import {TitleStatusTag} from './shared/TitleStatusTag'
 import {
   getMissionActionsDataFromMissionActionsFormValues,
   getMissionDataFromMissionFormValues,
   getTitleFromMissionMainFormValues,
   getUpdatedMissionFromMissionMainFormValues
 } from './utils'
-import { areMissionFormsValuesValid } from './utils/areMissionFormsValuesValid'
-import { getMissionFormInitialValues } from './utils/getMissionFormInitialValues'
-import { validateMissionForms } from './utils/validateMissionForms'
+import {areMissionFormsValuesValid} from './utils/areMissionFormsValuesValid'
+import {getMissionFormInitialValues} from './utils/getMissionFormInitialValues'
+import {validateMissionForms} from './utils/validateMissionForms'
 import {
   useCreateMissionActionMutation,
   useDeleteMissionActionMutation,
   useGetMissionActionsQuery,
   useUpdateMissionActionMutation
 } from '../../../api/missionAction'
-import { missionActions } from '../../../domain/actions'
+import {missionActions} from '../../../domain/actions'
+import {getMissionStatus} from '../../../domain/entities/mission/utils'
+import {SideWindowMenuKey} from '../../../domain/entities/sideWindow/constants'
+import {sideWindowActions} from '../../../domain/shared_slices/SideWindow'
+import {displayOrLogError} from '../../../domain/use_cases/error/displayOrLogError'
+import {retry} from '../../../domain/use_cases/error/retry'
+import {sideWindowDispatchers} from '../../../domain/use_cases/sideWindow'
+import {useMainAppDispatch} from '../../../hooks/useMainAppDispatch'
+import {useMainAppSelector} from '../../../hooks/useMainAppSelector'
+import {FrontendError} from '../../../libs/FrontendError'
+import {FrontendErrorBoundary} from '../../../ui/FrontendErrorBoundary'
+import {LoadingSpinnerWall} from '../../../ui/LoadingSpinnerWall'
+import {NoRsuiteOverrideWrapper} from '../../../ui/NoRsuiteOverrideWrapper'
+
+import type {MissionActionFormValues, MissionMainFormValues} from './types'
+import type {MissionAction} from '../../../domain/types/missionAction'
 import { Mission, type MissionWithActions } from '../../../domain/entities/mission/types'
-import { getMissionStatus } from '../../../domain/entities/mission/utils'
-import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
-import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
-import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
-import { retry } from '../../../domain/use_cases/error/retry'
-import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { FrontendError } from '../../../libs/FrontendError'
-import { FrontendErrorBoundary } from '../../../ui/FrontendErrorBoundary'
-import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
-import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
-import { isCypress } from '../../../utils/isCypress'
-
-import type { MissionActionFormValues, MissionMainFormValues } from './types'
-import type { MissionAction } from '../../../domain/types/missionAction'
-
-/**
- * When running Cypress tests, we modify this env var in spec file, so we use `window.Cypress.env()`
- * instead of `import.meta.env`.
- */
-const AUTO_SAVE_ENABLED = isCypress()
-  ? // @ts-ignore
-    window.Cypress.env().FRONTEND_MISSION_AUTO_SAVE_ENABLED
-  : import.meta.env.FRONTEND_MISSION_AUTO_SAVE_ENABLED
+import {AUTO_SAVE_ENABLED} from "./constants";
 
 export function MissionForm() {
   const dispatch = useMainAppDispatch()
@@ -178,9 +164,6 @@ export function MissionForm() {
     setTitle(getTitleFromMissionMainFormValues(mainFormValues, missionId))
   }, 250)
 
-  /**
-   * @param mustClose Should the mission be closed?
-   */
   const createOrUpdate = useCallback(
     async (
       createdOrUpdatedMainFormValues: MissionMainFormValues | undefined,
@@ -274,15 +257,13 @@ export function MissionForm() {
       setActionFormKey(key => key + 1)
       setEditedActionIndex(0)
 
-      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues)) {
+      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !AUTO_SAVE_ENABLED) {
         dispatch(missionActions.setIsDraftDirty(true))
 
         return
       }
 
-      if (AUTO_SAVE_ENABLED) {
-        createOrUpdate(mainFormValues, nextActionsFormValues)
-      }
+      createOrUpdate(mainFormValues, nextActionsFormValues)
     },
     [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues]
   )
@@ -297,15 +278,13 @@ export function MissionForm() {
       setActionFormKey(key => key + 1)
       setEditedActionIndex(0)
 
-      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues)) {
+      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !AUTO_SAVE_ENABLED) {
         dispatch(missionActions.setIsDraftDirty(true))
 
         return
       }
 
-      if (AUTO_SAVE_ENABLED) {
-        createOrUpdate(mainFormValues, nextActionsFormValues)
-      }
+      createOrUpdate(mainFormValues, nextActionsFormValues)
     },
     [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues]
   )
@@ -336,15 +315,13 @@ export function MissionForm() {
         setEditedActionIndex(undefined)
       }
 
-      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues)) {
+      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !AUTO_SAVE_ENABLED) {
         dispatch(missionActions.setIsDraftDirty(true))
 
         return
       }
 
-      if (AUTO_SAVE_ENABLED) {
-        createOrUpdate(mainFormValues, nextActionsFormValues)
-      }
+      createOrUpdate(mainFormValues, nextActionsFormValues)
     },
     [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues, editedActionIndex]
   )
@@ -414,15 +391,13 @@ export function MissionForm() {
       setActionsFormValues(nextActionFormValuesOrActions)
       updateReduxSliceDraft()
 
-      if (!areMissionFormsValuesValid(mainFormValues, nextActionFormValuesOrActions)) {
+      if (!areMissionFormsValuesValid(mainFormValues, nextActionFormValuesOrActions) || !AUTO_SAVE_ENABLED) {
         dispatch(missionActions.setIsDraftDirty(true))
 
         return
       }
 
-      if (AUTO_SAVE_ENABLED) {
-        createOrUpdate(mainFormValues, nextActionFormValuesOrActions)
-      }
+      createOrUpdate(mainFormValues, nextActionFormValuesOrActions)
     },
     [dispatch, updateReduxSliceDraft, createOrUpdate, editedActionIndex, mainFormValues, actionsFormValues]
   )
@@ -451,15 +426,13 @@ export function MissionForm() {
       setMainFormValues(mainFormValuesWithUpdatedIsClosedProperty)
       updateReduxSliceDraft()
 
-      if (!areMissionFormsValuesValid(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues)) {
+      if (!areMissionFormsValuesValid(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues) || !AUTO_SAVE_ENABLED) {
         dispatch(missionActions.setIsDraftDirty(true))
 
         return
       }
 
-      if (AUTO_SAVE_ENABLED) {
-        createOrUpdate(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues)
-      }
+      createOrUpdate(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues)
     },
     [dispatch, updateReduxSliceDraft, createOrUpdate, actionsFormValues, mainFormValues]
   )
@@ -474,7 +447,7 @@ export function MissionForm() {
   }, [isDeletionConfirmationDialogOpen])
 
   // ---------------------------------------------------------------------------
-  // DATA
+  // DATA INITIALIZATION ON COMPONENT MOUNT
 
   useEffect(() => {
     // We hide selected missions geometries and overlays on map

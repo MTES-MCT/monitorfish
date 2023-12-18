@@ -96,6 +96,14 @@ context('Side Window > Mission Form > Main Form', () => {
 
       cy.wait(500)
 
+      cy.clickButton(SideWindowMenuLabel.MISSION_LIST)
+
+      cy.get('.Component-Dialog').should('be.visible')
+
+      cy.contains('Voulez-vous enregistrer les modifications avant de quitter')
+
+      cy.clickButton('Retourner à l’édition')
+
       cy.clickButton('Enregistrer et quitter')
 
       cy.wait('@createMission').then(interception => {

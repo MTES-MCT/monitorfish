@@ -29,7 +29,6 @@ export function AirControlForm({ initialValues, onChange }: AirControlFormProps)
 
   const isClosing = useMainAppSelector(store => store.mission.isClosing)
 
-  // We have to re-create the Formik component when `validationSchema` changes to apply it
   const titleDate = useMemo(
     () => initialValues.actionDatetimeUtc && getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),
     [initialValues.actionDatetimeUtc]

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { sideWindowActions } from '../../../../domain/shared_slices/SideWindow'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import {AUTO_SAVE_ENABLED} from "../constants";
 
 export function DraftCancellationConfirmationDialog() {
   const dispatch = useMainAppDispatch()
@@ -20,7 +21,11 @@ export function DraftCancellationConfirmationDialog() {
       <StyledDialogTitle>Enregistrer les modifications ?</StyledDialogTitle>
       <Dialog.Body>
         <p>Vous êtes en train d’abandonner l’édition d’une mission.</p>
-        <p>Si vous souhaitez enregistrer les modifications, merci de corriger les champs en erreurs.</p>
+        {
+          AUTO_SAVE_ENABLED
+            ? <p>Si vous souhaitez enregistrer les modifications, merci de corriger les champs en erreurs.</p>
+            : <p>Voulez-vous enregistrer les modifications avant de quitter ?</p>
+        }
       </Dialog.Body>
 
       <Dialog.Action>

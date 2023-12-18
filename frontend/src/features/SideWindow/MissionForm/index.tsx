@@ -61,8 +61,8 @@ import type { MissionAction } from '../../../domain/types/missionAction'
  * instead of `import.meta.env`.
  */
 const AUTO_SAVE_ENABLED = isCypress()
-  // @ts-ignore
-  ? window.Cypress.env().FRONTEND_MISSION_AUTO_SAVE_ENABLED
+  ? // @ts-ignore
+    window.Cypress.env().FRONTEND_MISSION_AUTO_SAVE_ENABLED
   : import.meta.env.FRONTEND_MISSION_AUTO_SAVE_ENABLED
 
 export function MissionForm() {

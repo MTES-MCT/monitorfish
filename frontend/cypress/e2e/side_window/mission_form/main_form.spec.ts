@@ -348,7 +348,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.fill('Clôturé par', 'Doris')
 
-    cy.wait(300)
+    cy.wait(500)
 
     cy.clickButton('Clôturer')
 

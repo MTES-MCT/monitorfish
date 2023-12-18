@@ -51,9 +51,14 @@ import { FrontendError } from '../../../libs/FrontendError'
 import { FrontendErrorBoundary } from '../../../ui/FrontendErrorBoundary'
 import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
+import { isCypress } from '../../../utils/isCypress'
 
 import type { MissionActionFormValues, MissionMainFormValues } from './types'
 import type { MissionAction } from '../../../domain/types/missionAction'
+
+const AUTO_SAVE_ENABLED = isCypress()
+  ? window.Cypress.env().FRONTEND_MISSION_AUTO_SAVE_ENABLED
+  : import.meta.env.FRONTEND_MISSION_AUTO_SAVE_ENABLED
 
 export function MissionForm() {
   const dispatch = useMainAppDispatch()
@@ -270,7 +275,9 @@ export function MissionForm() {
         return
       }
 
-      createOrUpdate(mainFormValues, nextActionsFormValues)
+      if (AUTO_SAVE_ENABLED) {
+        createOrUpdate(mainFormValues, nextActionsFormValues)
+      }
     },
     [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues]
   )
@@ -291,7 +298,9 @@ export function MissionForm() {
         return
       }
 
-      createOrUpdate(mainFormValues, nextActionsFormValues)
+      if (AUTO_SAVE_ENABLED) {
+        createOrUpdate(mainFormValues, nextActionsFormValues)
+      }
     },
     [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues]
   )
@@ -328,7 +337,9 @@ export function MissionForm() {
         return
       }
 
-      createOrUpdate(mainFormValues, nextActionsFormValues)
+      if (AUTO_SAVE_ENABLED) {
+        createOrUpdate(mainFormValues, nextActionsFormValues)
+      }
     },
     [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues, editedActionIndex]
   )
@@ -404,7 +415,9 @@ export function MissionForm() {
         return
       }
 
-      createOrUpdate(mainFormValues, nextActionFormValuesOrActions)
+      if (AUTO_SAVE_ENABLED) {
+        createOrUpdate(mainFormValues, nextActionFormValuesOrActions)
+      }
     },
     [dispatch, updateReduxSliceDraft, createOrUpdate, editedActionIndex, mainFormValues, actionsFormValues]
   )
@@ -439,7 +452,9 @@ export function MissionForm() {
         return
       }
 
-      createOrUpdate(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues)
+      if (AUTO_SAVE_ENABLED) {
+        createOrUpdate(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues)
+      }
     },
     [dispatch, updateReduxSliceDraft, createOrUpdate, actionsFormValues, mainFormValues]
   )
@@ -582,6 +597,23 @@ export function MissionForm() {
 
           <div>
             {!isMissionFormValid && <FooterError>Veuillez corriger les éléments en rouge</FooterError>}
+
+            {!AUTO_SAVE_ENABLED && (
+              <>
+                <Button accent={Accent.TERTIARY} disabled={isSaving} onClick={goToMissionList}>
+                  Annuler
+                </Button>
+
+                <Button
+                  accent={Accent.PRIMARY}
+                  disabled={isLoading || isSaving || !isMissionFormValid}
+                  Icon={Icon.Save}
+                  onClick={() => createOrUpdate(mainFormValues, actionsFormValues)}
+                >
+                  Enregistrer et quitter
+                </Button>
+              </>
+            )}
 
             {!mainFormValues?.isClosed && (
               <Button

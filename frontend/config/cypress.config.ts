@@ -18,6 +18,7 @@ export default defineConfig({
     specPattern: 'cypress/e2e/**/*.spec.ts'
   },
   env: {
+    FRONTEND_MISSION_AUTO_SAVE_ENABLED: true,
     'cypress-plugin-snapshots': {
       imageConfig: {
         threshold: 20,

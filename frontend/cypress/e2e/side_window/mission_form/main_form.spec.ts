@@ -64,6 +64,71 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.get('h1').should('contain.text', 'Nouvelle mission')
   })
 
+  it(
+    'Should send the expected data to the API When auto update is not enabled',
+    {
+      env: {
+        FRONTEND_MISSION_AUTO_SAVE_ENABLED: false
+      }
+    },
+    () => {
+      openSideWindowNewMission()
+      cy.intercept('GET', '/api/v1/missions/1', {
+        body: {
+          id: 1
+        },
+        statusCode: 201
+      }).as('getCreatedMission')
+
+      const expectedStartDateTimeUtc = new RegExp(`${customDayjs().utc().format('YYYY-MM-DDTHH')}:\\d{2}:00\\.000Z`)
+
+      cy.intercept('POST', '/api/v1/missions', {
+        body: {
+          id: 1
+        },
+        statusCode: 201
+      }).as('createMission')
+
+      cy.fill('Types de mission', ['Mer'])
+
+      cy.fill('Administration 1', 'DDTM')
+      cy.fill('Unité 1', 'Cultures marines – DDTM 40')
+
+      cy.wait(500)
+
+      cy.clickButton('Enregistrer et quitter')
+
+      cy.wait('@createMission').then(interception => {
+        if (!interception.response) {
+          assert.fail('`interception.response` is undefined.')
+        }
+
+        assert.isUndefined(interception.request.body.endDateTimeUtc)
+        // We only need to accurately test this prop in one test, no need to repeat it for each case
+        assert.match(interception.request.body.startDateTimeUtc, expectedStartDateTimeUtc)
+        assert.deepInclude(interception.request.body, {
+          controlUnits: [
+            {
+              administration: 'DDTM',
+              contact: null,
+              id: 10001,
+              isArchived: false,
+              name: 'Cultures marines – DDTM 40',
+              resources: []
+            }
+          ],
+          isClosed: false,
+          isGeometryComputedFromControls: false,
+          isUnderJdp: false,
+          missionSource: 'MONITORFISH',
+          missionTypes: ['SEA']
+        })
+      })
+
+      cy.get('h1').should('contain.text', 'Nouvelle mission')
+    }
+  )
+
   it('Should send the expected data to the API when creating a new mission', () => {
     openSideWindowNewMission()
 

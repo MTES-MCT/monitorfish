@@ -31,6 +31,8 @@
       "geom": null,
       "startDateTimeUtc": "2023-01-01T00:00:00.000000Z",
       "endDateTimeUtc": null,
+      "createdAtUtc": "2021-01-20T08:29:11.923703Z",
+      "updatedAtUtc": "2021-01-20T08:29:11.923703Z",
       "envActions": [],
       "missionSource": "POSEIDON_CNSP",
       "isClosed": false,

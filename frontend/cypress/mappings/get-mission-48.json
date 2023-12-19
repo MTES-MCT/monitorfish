@@ -31,6 +31,8 @@
       "geom": null,
       "startDateTimeUtc": "2023-02-09T23:57:14.923703Z",
       "endDateTimeUtc": null,
+      "createdAtUtc": "2021-01-20T08:29:11.923703Z",
+      "updatedAtUtc": "2021-01-20T08:29:11.923703Z",
       "envActions": [],
       "missionSource": "MONITORENV",
       "isClosed": false,

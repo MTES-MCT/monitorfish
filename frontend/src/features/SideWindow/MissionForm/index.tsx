@@ -4,6 +4,7 @@ import { isEqual } from 'lodash'
 import { omit } from 'lodash/fp'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
+import * as timeago from 'timeago.js'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { ActionForm } from './ActionForm'
@@ -19,6 +20,7 @@ import { AUTO_SAVE_ENABLED } from './constants'
 import { useUpdateFreezedActionFormValues } from './hooks/useUpdateFreezedActionFormValues'
 import { useUpdateFreezedMainFormValues } from './hooks/useUpdateFreezedMainFormValues'
 import { MainForm } from './MainForm'
+import { AutoSaveTag } from './shared/AutoSaveTag'
 import { DeletionConfirmationDialog } from './shared/DeletionConfirmationDialog'
 import { DraftCancellationConfirmationDialog } from './shared/DraftCancellationConfirmationDialog'
 import { TitleSourceTag } from './shared/TitleSourceTag'
@@ -611,25 +613,24 @@ export function MissionForm() {
           </div>
 
           <div>
+            <MissionInfos>
+              {mainFormValues?.createdAtUtc && <>Mission créée {timeago.format(mainFormValues.createdAtUtc, 'fr')}. </>}
+              {mainFormValues?.updatedAtUtc && (
+                <>Dernière modification enregistrée {timeago.format(mainFormValues.updatedAtUtc, 'fr')}.</>
+              )}
+            </MissionInfos>
             {!isMissionFormValid && <FooterError>Veuillez corriger les éléments en rouge</FooterError>}
-
+            <AutoSaveTag isAutoSaveEnabled={isAutoSaveEnabled} />
             {!isAutoSaveEnabled && (
-              <>
-                <Button accent={Accent.TERTIARY} disabled={isSaving} onClick={goToMissionList}>
-                  Annuler
-                </Button>
-
-                <Button
-                  accent={Accent.PRIMARY}
-                  disabled={isLoading || isSaving || !isMissionFormValid}
-                  Icon={Icon.Save}
-                  onClick={() => createOrUpdate(mainFormValues, actionsFormValues)}
-                >
-                  Enregistrer et quitter
-                </Button>
-              </>
+              <Button
+                accent={Accent.PRIMARY}
+                disabled={isLoading || isSaving || !isMissionFormValid}
+                Icon={Icon.Save}
+                onClick={() => createOrUpdate(mainFormValues, actionsFormValues)}
+              >
+                Enregistrer
+              </Button>
             )}
-
             {!mainFormValues?.isClosed && (
               <Button
                 accent={Accent.SECONDARY}
@@ -651,6 +652,13 @@ export function MissionForm() {
                 Ré-ouvrir la mission
               </Button>
             )}
+            <CloseButton
+              accent={isAutoSaveEnabled ? Accent.PRIMARY : Accent.SECONDARY}
+              disabled={isSaving}
+              onClick={goToMissionList}
+            >
+              Fermer
+            </CloseButton>
           </div>
         </Footer>
       </Wrapper>
@@ -664,6 +672,10 @@ export function MissionForm() {
     </>
   )
 }
+
+const MissionInfos = styled.div`
+  font-style: italic;
+`
 
 const ErrorFallback = styled.div`
   width: 250px;
@@ -758,4 +770,8 @@ const FooterError = styled.p`
   color: ${p => p.theme.color.maximumRed};
   font-style: italic;
   margin: 0 0 4px 0;
+`
+
+const CloseButton = styled(Button)`
+  height: 34px;
 `

@@ -104,7 +104,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
       cy.clickButton('Retourner à l’édition')
 
-      cy.clickButton('Enregistrer et quitter')
+      cy.clickButton('Enregistrer')
 
       cy.wait('@createMission').then(interception => {
         if (!interception.response) {

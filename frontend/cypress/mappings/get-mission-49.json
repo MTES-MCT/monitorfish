@@ -34,6 +34,8 @@
       },
       "startDateTimeUtc": "2023-03-15T10:22:11.923703Z",
       "endDateTimeUtc": "2023-03-20T11:14:02.923703Z",
+      "createdAtUtc": "2021-01-20T08:29:11.923703Z",
+      "updatedAtUtc": "2021-01-20T08:29:11.923703Z",
       "envActions": [],
       "missionSource": "MONITORENV",
       "isClosed": true,

@@ -1,4 +1,4 @@
-import { SeaFrontGroup } from '../entities/seaFront/constants'
+import { SeaFront } from '../entities/seaFront/constants'
 
 import type { Infraction } from './infraction'
 import type { LegacyControlUnit } from './legacyControlUnit'
@@ -71,7 +71,7 @@ export type InfractionSuspicion = {
   dml: string
   natinfCode: number
   reportingActor: string
-  seaFront: SeaFrontGroup
+  seaFront: SeaFront
   title: string
   type: string
 }

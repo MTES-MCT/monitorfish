@@ -9,7 +9,7 @@ export namespace Mission {
   export interface Mission {
     closedBy?: string
     controlUnits: LegacyControlUnit.LegacyControlUnit[]
-    createdAtUtc: string | undefined
+    createdAtUtc?: string | undefined
     endDateTimeUtc?: string
     facade?: SeaFront
     geom?: GeoJSON.MultiPolygon
@@ -25,7 +25,7 @@ export namespace Mission {
     observationsCnsp?: string
     openBy?: string
     startDateTimeUtc: string
-    updatedAtUtc: string | undefined
+    updatedAtUtc?: string | undefined
   }
 
   // ---------------------------------------------------------------------------

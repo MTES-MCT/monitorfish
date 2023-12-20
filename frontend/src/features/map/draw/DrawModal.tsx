@@ -1,4 +1,4 @@
-import { Accent, Button, CoordinatesInput, Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
+import { Accent, Button, CoordinatesInput, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor-ui'
 import { Feature } from 'ol'
 import GeoJSON from 'ol/format/GeoJSON'
 import { Point } from 'ol/geom'
@@ -188,7 +188,10 @@ const StyledIconButton = styled(IconButton)`
 `
 
 const StyledCoordinatesInput = styled(CoordinatesInput)`
+  padding-top: 16px;
+  padding-left: 16px;
   input {
+    border: 1px solid ${THEME.color.lightGray};
     height: 28px;
     padding: 0px 11px;
   }

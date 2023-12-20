@@ -15,9 +15,10 @@ export function AutoSaveTag({ isAutoSaveEnabled }: AutoSaveTagProps) {
 const Wrapper = styled(Tag)<{
   isAutoSaveEnabled: boolean
 }>`
-  background: ${p => (p.isAutoSaveEnabled ? p.theme.color.middleBlueGreen : p.theme.color.aliceBlue)};
-  color: ${p => (p.isAutoSaveEnabled ? p.theme.color.mediumSeaGreen : p.theme.color.cadetGray)};
+  background: ${p => (p.isAutoSaveEnabled ? p.theme.color.mediumSeaGreen25 : p.theme.color.gainsboro)};
+  color: ${p => (p.isAutoSaveEnabled ? p.theme.color.mediumSeaGreen : p.theme.color.slateGray)};
   margin-left: 24px;
   vertical-align: middle;
   align-self: unset;
+  font-weight: 500;
 `

@@ -1,5 +1,5 @@
 import type { CollectionItem, Native } from '../../types'
-import type Fuse from 'fuse.js'
+import type IFuseOptions from 'fuse.js'
 
 export type TableColumn<T extends Record<string, any> = Record<string, any>> = {
   /** Fixed width expressed in root ephemeral unit (rem) */
@@ -39,7 +39,7 @@ export type TableOptions<T extends CollectionItem> = {
   defaultSortedKey?: string
   isCheckable?: boolean
   isDefaultSortingDesc?: boolean
-  searchFuseOptions?: Fuse.IFuseOptions<TableItem<T>>
+  searchFuseOptions?: IFuseOptions<TableItem<T>>
   searchQuery?: string
   searchableKeys?: string[]
 }

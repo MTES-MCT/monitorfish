@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
@@ -75,6 +76,20 @@ class BffFilterConfigITests {
         ).forEach {
             mockMvc.perform(
                 get(it),
+            )
+                // Then
+                .andExpect(status().isUnauthorized)
+        }
+    }
+
+    @Test
+    fun `Should return 401 for When deleting an user`() {
+        // When
+        listOf(
+            "/api/v1/authorization/management/dummy@user.com",
+        ).forEach {
+            mockMvc.perform(
+                delete(it),
             )
                 // Then
                 .andExpect(status().isUnauthorized)

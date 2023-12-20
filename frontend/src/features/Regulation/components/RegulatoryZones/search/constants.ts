@@ -1,7 +1,7 @@
 import type { RegulatoryZone } from '../../../types'
-import type Fuse from 'fuse.js'
+import type { IFuseOptions } from 'fuse.js'
 
-export const REGULATION_SEARCH_OPTIONS: Fuse.IFuseOptions<RegulatoryZone[]> = {
+export const REGULATION_SEARCH_OPTIONS: IFuseOptions<RegulatoryZone[]> = {
   ignoreLocation: true,
   includeScore: false,
   keys: [

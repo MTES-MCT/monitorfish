@@ -1,7 +1,7 @@
 // TODO This is a bit shady to mix up pending/silenced alerts with PNO ones here.
 
 import { PendingAlertValueType } from './types'
-import { SeaFrontGroup } from '../seaFront/constants'
+import {SEA_FRONT_GROUP_SEA_FRONTS, SeaFront, SeaFrontGroup} from '../seaFront/constants'
 
 import type { MenuItem } from '../../../types'
 
@@ -51,36 +51,36 @@ export const ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS: Record<
   SeaFrontGroup,
   {
     menuSeaFront: SeaFrontGroup
-    seaFronts: string[]
+    seaFronts: SeaFront[]
   }
 > = {
   ALL: {
     menuSeaFront: SeaFrontGroup.ALL,
-    seaFronts: []
+    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.ALL]
   },
   MED: {
     menuSeaFront: SeaFrontGroup.MED,
-    seaFronts: ['MED']
+    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.MED]
   },
   MEMN: {
     menuSeaFront: SeaFrontGroup.MEMN,
-    seaFronts: ['MEMN']
+    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.MEMN]
   },
   NAMO: {
     menuSeaFront: SeaFrontGroup.NAMO,
-    seaFronts: ['NAMO']
+    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.NAMO]
   },
   OUTREMEROA: {
     menuSeaFront: SeaFrontGroup.OUTREMEROA,
-    seaFronts: ['Guadeloupe', 'Guyane', 'Martinique']
+    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.OUTREMEROA]
   },
   OUTREMEROI: {
     menuSeaFront: SeaFrontGroup.OUTREMEROI,
-    seaFronts: ['Sud Océan Indien']
+    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.OUTREMEROI]
   },
   SA: {
     menuSeaFront: SeaFrontGroup.SA,
-    seaFronts: [SeaFrontGroup.SA]
+    seaFronts: SEA_FRONT_GROUP_SEA_FRONTS[SeaFrontGroup.SA]
   }
 }
 

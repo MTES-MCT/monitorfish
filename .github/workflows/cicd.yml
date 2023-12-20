@@ -17,6 +17,7 @@ on:
       - "infra/docker/DockerfileBuildApp"
       - "**.sql"
       - "backend/pom.xml"
+      - "backend/build.gradle.kts"
       - "Makefile"
       - "frontend"
   schedule:

@@ -7,7 +7,7 @@ import { LayerProperties } from '../entities/layers/constants'
 import type { LayerSliceNamespace, ShowedLayer } from '../entities/layers/types'
 import type { AdministrativeOrRegulatoryLayerIdentity } from '../types/layer'
 import type { PayloadAction, Slice } from '@reduxjs/toolkit'
-import type { WritableDraft } from 'immer/dist/internal'
+import type { WritableDraft } from 'immer/dist/types/types-external'
 
 const layersShowedOnMapLocalStorageKey = 'layersShowedOnMap'
 

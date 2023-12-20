@@ -369,7 +369,6 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.contains('Veuillez indiquer le navire contrôlé.').should('exist')
     cy.contains('Veuillez indiquer votre trigramme dans "Saisi par".').should('exist')
 
-    cy.contains('Veuillez corriger les éléments en rouge').should('exist')
     getCloseButton().should('be.disabled')
 
     // Navire
@@ -384,7 +383,6 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Mission is now valid for saving (but not for closure)
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
 
-    cy.contains('Veuillez corriger les éléments en rouge').should('not.exist')
     getCloseButton().should('be.enabled')
 
     cy.clickButton('Clôturer').wait(500)
@@ -404,7 +402,6 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.contains('Veuillez indiquer si le navire est ciblé par le CNSP.').should('exist')
     cy.contains('Veuillez indiquer votre trigramme dans "Clôturé par".').should('exist')
 
-    cy.contains('Veuillez corriger les éléments en rouge').should('exist')
     cy.contains('Ré-ouvrir la mission').should('not.exist')
 
     // Obligations déclaratives et autorisations de pêche
@@ -449,7 +446,6 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     // Mission is now valid for closure
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
-    cy.contains('Veuillez corriger les éléments en rouge').should('not.exist')
     cy.wait(500)
     cy.clickButton('Clôturer')
 

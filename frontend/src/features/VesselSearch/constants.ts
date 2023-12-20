@@ -1,5 +1,5 @@
 import type { VesselEnhancedLastPositionWebGLObject } from '../../domain/entities/vessel/types'
-import type IFuseOptions from 'fuse.js'
+import type { IFuseOptions } from 'fuse.js'
 
 export const VESSEL_SEARCH_OPTIONS: IFuseOptions<VesselEnhancedLastPositionWebGLObject> = {
   distance: 50,

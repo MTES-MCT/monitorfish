@@ -1,3 +1,5 @@
+import { SeaFront } from '../seaFront/constants'
+
 import type { MissionAction } from '../../types/missionAction'
 import type { VesselIdentifier, VesselIdentity } from '../vessel/types'
 import type { Except } from 'type-fest'
@@ -28,7 +30,7 @@ export type PendingAlertValue = {
   dml?: string
   natinfCode?: string | null
   riskFactor?: number
-  seaFront?: string
+  seaFront?: SeaFront | null
   speed?: number
   type: PendingAlertValueType
 }

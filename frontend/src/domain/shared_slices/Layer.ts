@@ -7,7 +7,6 @@ import { LayerProperties } from '../entities/layers/constants'
 import type { LayerSliceNamespace, ShowedLayer } from '../entities/layers/types'
 import type { AdministrativeOrRegulatoryLayerIdentity } from '../types/layer'
 import type { PayloadAction, Slice } from '@reduxjs/toolkit'
-import type { WritableDraft } from 'immer/dist/internal'
 
 const layersShowedOnMapLocalStorageKey = 'layersShowedOnMap'
 
@@ -58,7 +57,7 @@ const reducers = {
   /**
    * Show a Regulatory or Administrative layer
    */
-  addShowedLayer(state: WritableDraft<LayerState>, action: PayloadAction<ShowedLayer>) {
+  addShowedLayer(state, action: PayloadAction<ShowedLayer>) {
     const { id, namespace, topic, type, zone } = action.payload
 
     if (type !== LayerProperties.VESSELS_POINTS.code) {
@@ -92,7 +91,7 @@ const reducers = {
    * @param {Object=} state
    * @param {{payload: LayerToFeatures | null}} action - The layer and features
    */
-  pushLayerToFeatures(state: WritableDraft<LayerState>, action) {
+  pushLayerToFeatures(state, action) {
     state.layersToFeatures = state.layersToFeatures.filter(layer => layer.name !== action.payload.name)
     state.layersToFeatures = state.layersToFeatures.concat(action.payload)
   },
@@ -100,14 +99,14 @@ const reducers = {
   /**
    * Remove a layer and the features
    */
-  removeLayerToFeatures(state: WritableDraft<LayerState>, action: PayloadAction<string>) {
+  removeLayerToFeatures(state, action: PayloadAction<string>) {
     state.layersToFeatures = state.layersToFeatures.filter(layer => layer.name !== action.payload)
   },
 
   /**
    * Remove a Regulatory or Administrative layer
    */
-  removeShowedLayer(state: WritableDraft<LayerState>, action: PayloadAction<AdministrativeOrRegulatoryLayerIdentity>) {
+  removeShowedLayer(state, action: PayloadAction<AdministrativeOrRegulatoryLayerIdentity>) {
     const { namespace, topic, type, zone } = action.payload
 
     if (type === LayerProperties.VESSELS_POINTS.code) {
@@ -134,7 +133,7 @@ const reducers = {
     }
   },
 
-  resetShowedLayer(state: WritableDraft<LayerState>, action) {
+  resetShowedLayer(state, action) {
     state.showedLayers = []
     if (action.payload !== 'backoffice') {
       window.localStorage.setItem(
@@ -146,15 +145,15 @@ const reducers = {
     }
   },
 
-  setLastShowedFeatures(state: WritableDraft<LayerState>, action) {
+  setLastShowedFeatures(state, action) {
     state.lastShowedFeatures = action.payload
   },
 
-  setLayersSideBarOpenedLayerType(state: WritableDraft<LayerState>, action) {
+  setLayersSideBarOpenedLayerType(state, action) {
     state.layersSidebarOpenedLayerType = action.payload
   },
 
-  setShowedLayersWithLocalStorageValues(state: WritableDraft<LayerState>, action) {
+  setShowedLayersWithLocalStorageValues(state, action) {
     const { regulatoryZones } = action.payload
     let nextShowedLayers = []
     if (action.payload.namespace === 'homepage') {

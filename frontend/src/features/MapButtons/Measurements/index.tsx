@@ -144,13 +144,13 @@ const MeasurementOptions = styled(MapComponent)<{
 }>`
   border-radius: 2px;
   display: inline-block;
-  margin-right: ${p => (p.isOpen ? '45px' : '-200px')};
+  margin-right: ${p => (p.isOpen ? '0px' : '-200px')};
   opacity: ${p => (p.isOpen ? '1' : '0')};
   position: absolute;
   right: 10px;
-  top: 249px;
+  top: 291px;
   transition: all 0.5s;
-  width: 175px;
+  width: 135px;
   z-index: 1000;
 `
 

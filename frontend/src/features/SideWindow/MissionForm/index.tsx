@@ -207,13 +207,27 @@ export function MissionForm() {
 
           newMissionId.current = data.id
           nextMissionId = data.id
+
+          setMainFormValues({
+            ...createdOrUpdatedMainFormValues,
+            createdAtUtc: data.createdAtUtc,
+            updatedAtUtc: data.updatedAtUtc
+          })
         } else {
           const updatedMission = getUpdatedMissionFromMissionMainFormValues(
             editedMissionId,
             createdOrUpdatedMainFormValues
           )
-          await updateMission(updatedMission)
+          const { data, error } = (await updateMission(updatedMission)) as any
+          if (!data) {
+            throw new FrontendError('`updateMission()` failed', error)
+          }
 
+          setMainFormValues({
+            ...createdOrUpdatedMainFormValues,
+            createdAtUtc: data.createdAtUtc,
+            updatedAtUtc: data.updatedAtUtc
+          })
           nextMissionId = editedMissionId
         }
 
@@ -597,7 +611,6 @@ export function MissionForm() {
             )}
           </FrontendErrorBoundary>
         </Body>
-
         <Footer>
           <div>
             {editedMissionId && (
@@ -611,22 +624,25 @@ export function MissionForm() {
               </Button>
             )}
           </div>
-
           <div>
             <MissionInfos>
               {mainFormValues?.createdAtUtc && <>Mission créée {timeago.format(mainFormValues.createdAtUtc, 'fr')}. </>}
+              {!mainFormValues?.createdAtUtc && <>Mission non enregistrée.</>}
               {mainFormValues?.updatedAtUtc && (
                 <>Dernière modification enregistrée {timeago.format(mainFormValues.updatedAtUtc, 'fr')}.</>
               )}
             </MissionInfos>
-            {!isMissionFormValid && <FooterError>Veuillez corriger les éléments en rouge</FooterError>}
             <AutoSaveTag isAutoSaveEnabled={isAutoSaveEnabled} />
             {!isAutoSaveEnabled && (
               <Button
                 accent={Accent.PRIMARY}
                 disabled={isLoading || isSaving || !isMissionFormValid}
                 Icon={Icon.Save}
-                onClick={() => createOrUpdate(mainFormValues, actionsFormValues)}
+                onClick={async () => {
+                  await createOrUpdate(mainFormValues, actionsFormValues)
+
+                  goToMissionList()
+                }}
               >
                 Enregistrer
               </Button>
@@ -653,7 +669,7 @@ export function MissionForm() {
               </Button>
             )}
             <CloseButton
-              accent={isAutoSaveEnabled ? Accent.PRIMARY : Accent.SECONDARY}
+              accent={isAutoSaveEnabled ? Accent.PRIMARY : Accent.TERTIARY}
               disabled={isSaving}
               onClick={goToMissionList}
             >
@@ -764,12 +780,6 @@ const Footer = styled.div`
       }
     }
   }
-`
-
-const FooterError = styled.p`
-  color: ${p => p.theme.color.maximumRed};
-  font-style: italic;
-  margin: 0 0 4px 0;
 `
 
 const CloseButton = styled(Button)`

@@ -80,7 +80,7 @@ const getShowedCoordinates = (coordinates, coordinatesFormat) => {
 }
 
 const RadioWrapper = styled(RadioGroup)`
-  padding: 6px 12px 12px 12px !important;
+  padding: 6px 18px 12px 40px !important;
 `
 
 const Header = styled.span`

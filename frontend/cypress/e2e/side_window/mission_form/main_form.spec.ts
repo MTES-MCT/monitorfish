@@ -20,6 +20,8 @@ context('Side Window > Mission Form > Main Form', () => {
 
   it('Should send the expected data to the API when creating a new mission (required fields only)', () => {
     openSideWindowNewMission()
+    cy.get('div').contains('Mission non enregistrée.')
+    cy.get('.Element-Tag').contains('Enregistrement auto. actif')
 
     const expectedStartDateTimeUtc = new RegExp(`${customDayjs().utc().format('YYYY-MM-DDTHH')}:\\d{2}:00\\.000Z`)
 
@@ -61,6 +63,8 @@ context('Side Window > Mission Form > Main Form', () => {
       })
     })
 
+    cy.get('div').contains('Mission créée il y a')
+    cy.get('div').contains('Dernière modification enregistrée il y a')
     cy.get('h1').should('contain.text', 'Nouvelle mission')
   })
 
@@ -104,6 +108,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
       cy.clickButton('Retourner à l’édition')
 
+      cy.get('.Element-Tag').contains('Enregistrement auto. inactif')
       cy.clickButton('Enregistrer')
 
       cy.wait('@createMission').then(interception => {

@@ -138,7 +138,7 @@ context('Side Window > Mission Form > Main Form', () => {
         })
       })
 
-      cy.get('h1').should('contain.text', 'Nouvelle mission')
+      cy.get('h1').should('contain.text', 'Missions et contrôles')
     }
   )
 

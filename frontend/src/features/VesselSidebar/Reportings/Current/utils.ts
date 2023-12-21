@@ -1,4 +1,7 @@
+import { customDayjs } from '@mtes-mct/monitor-ui'
+
 import { ReportingOriginActor } from '../../../../domain/entities/reporting'
+import { Reporting } from '../../../../domain/types/reporting'
 
 import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
 import type { ReportingUpdate } from '../../../../domain/types/reporting'
@@ -63,3 +66,16 @@ export const mapControlUnitsToUniqueSortedIdsAsOptions = (
       label: `${controlUnit.name} (${controlUnit.administration})`,
       value: controlUnit.id
     }))
+
+/**
+ * Returns:
+ * -  `1`: the second argument is before the second argument
+ * - `-1`: the first argument is before the second argument
+ */
+export function sortByValidationOrCreationDateDesc(a: Reporting, b: Reporting) {
+  if (a.validationDate && b.validationDate) {
+    return customDayjs(a.validationDate).isBefore(customDayjs(b.validationDate)) ? 1 : -1
+  }
+
+  return customDayjs(a.creationDate).isBefore(customDayjs(b.creationDate)) ? 1 : -1
+}

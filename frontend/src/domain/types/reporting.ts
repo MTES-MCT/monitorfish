@@ -20,8 +20,10 @@ export type BaseReporting = {
   infraction: Infraction | null
   internalReferenceNumber: string | null
   ircs: string | null
-  type: ReportingType
-  underCharter: boolean
+  isArchived: boolean
+  isDeleted: boolean
+  type: ReportingType.ALERT | ReportingType.OBSERVATION | ReportingType.INFRACTION_SUSPICION
+  underCharter: boolean | null
   validationDate: string | null
   vesselId: number | null
   vesselIdentifier: VesselIdentifier | null

@@ -4,13 +4,15 @@ import styled from 'styled-components'
 import { ConfirmDeletionModal } from './ConfirmDeletionModal'
 import { CreateOrEditReporting } from './CreateOrEditReporting'
 import { sortByValidationOrCreationDateDesc } from './utils'
-import { COLORS } from '../../../../constants/constants'
-import { operationalAlertTypes } from '../../../../domain/entities/alerts/constants'
-import { Reporting, ReportingType } from '../../../../domain/types/reporting'
-import { deleteReporting } from '../../../../domain/use_cases/reporting/deleteReporting'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { COLORS } from '../../../../../constants/constants'
+import { operationalAlertTypes } from '../../../../../domain/entities/alerts/constants'
+import { ReportingType } from '../../../../../domain/types/reporting'
+import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { deleteReporting } from '../../../useCases/deleteReporting'
 import { ReportingCard } from '../ReportingCard'
+
+import type { Reporting } from '../../../../../domain/types/reporting'
 
 export function Current() {
   const dispatch = useMainAppDispatch()

@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { VesselBeaconMalfunctions } from './beacon_malfunctions/VesselBeaconMalfunctions'
 import { Controls } from './Controls'
 import { Identity } from './Identity'
-import { Reportings } from './Reportings'
 import { VesselSummary } from './Summary'
 import { AlertWarning } from './warnings/AlertWarning'
 import { BeaconMalfunctionWarning } from './warnings/BeaconMalfunctionWarning'
@@ -14,6 +13,7 @@ import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { VesselLogbook } from '../Logbook/components/VesselLogbook'
+import { VesselReportings } from '../Reporting/components/VesselReportings'
 
 export function Body() {
   const isSuperUser = useIsSuperUser()
@@ -44,7 +44,7 @@ export function Body() {
       {vesselSidebarTab === VesselSidebarTab.IDENTITY && <Identity />}
       {vesselSidebarTab === VesselSidebarTab.VOYAGES && <VesselLogbook />}
       {vesselSidebarTab === VesselSidebarTab.CONTROLS && <Controls />}
-      {isSuperUser && vesselSidebarTab === VesselSidebarTab.REPORTING && <Reportings />}
+      {isSuperUser && vesselSidebarTab === VesselSidebarTab.REPORTING && <VesselReportings />}
       {isSuperUser && vesselSidebarTab === VesselSidebarTab.ERSVMS && <VesselBeaconMalfunctions />}
     </Wrapper>
   )

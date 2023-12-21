@@ -3,13 +3,13 @@ import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { ReportingForm } from './ReportingForm'
-import { COLORS } from '../../../../constants/constants'
-import { vesselsAreEquals } from '../../../../domain/entities/vessel/vessel'
-import { setEditedReporting } from '../../../../domain/shared_slices/Reporting'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { PrimaryButton } from '../../../commonStyles/Buttons.style'
-import CloseIconSVG from '../../../icons/Croix_grise.svg?react'
+import { COLORS } from '../../../../../constants/constants'
+import { vesselsAreEquals } from '../../../../../domain/entities/vessel/vessel'
+import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { PrimaryButton } from '../../../../commonStyles/Buttons.style'
+import CloseIconSVG from '../../../../icons/Croix_grise.svg?react'
+import { setEditedReporting } from '../../../slice'
 
 export function CreateOrEditReporting() {
   const dispatch = useMainAppDispatch()

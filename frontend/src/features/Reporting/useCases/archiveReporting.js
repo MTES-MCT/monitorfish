@@ -1,12 +1,12 @@
-import { removeError, setError } from '../../shared_slices/Global'
+import { removeError, setError } from '../../../domain/shared_slices/Global'
 import { batch } from 'react-redux'
 import {
   removeReportingsIdsFromCurrentReportings,
   setCurrentAndArchivedReportingsOfSelectedVessel
-} from '../../shared_slices/Reporting'
+} from '../slice'
 import { archiveReportingFromAPI } from '../../../api/reporting'
-import { Vessel } from '../../entities/vessel/vessel'
-import { removeVesselReporting } from '../../shared_slices/Vessel'
+import { Vessel } from '../../../domain/entities/vessel/vessel'
+import { removeVesselReporting } from '../../../domain/shared_slices/Vessel'
 
 const archiveReporting = id => (dispatch, getState) => {
   const {

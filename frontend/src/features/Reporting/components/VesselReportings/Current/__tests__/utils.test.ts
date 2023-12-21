@@ -1,10 +1,12 @@
 import { expect } from '@jest/globals'
 
-import { PendingAlertValueType } from '../../../../../domain/entities/alerts/types'
-import { SeaFront } from '../../../../../domain/entities/seaFront/constants'
-import { VesselIdentifier } from '../../../../../domain/entities/vessel/types'
-import { PendingAlertReporting, ReportingType } from '../../../../../domain/types/reporting'
+import { PendingAlertValueType } from '../../../../../../domain/entities/alerts/types'
+import { SeaFront } from '../../../../../../domain/entities/seaFront/constants'
+import { VesselIdentifier } from '../../../../../../domain/entities/vessel/types'
+import { ReportingType } from '../../../../../../domain/types/reporting'
 import { sortByValidationOrCreationDateDesc } from '../utils'
+
+import type { PendingAlertReporting } from '../../../../../../domain/types/reporting'
 
 describe('Reportings/Current/utils.sortByValidationOrCreationDateDesc()', () => {
   it('Should return reportings sorted by date desc', () => {

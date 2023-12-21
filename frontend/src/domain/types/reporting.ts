@@ -50,7 +50,10 @@ export type PendingAlertReporting = BaseReporting & {
   value: PendingAlertValue
 }
 
-export type BaseReportingCreation = Omit<BaseReporting, 'id' | 'infraction' | 'underCharter'>
+export type BaseReportingCreation = Omit<
+  BaseReporting,
+  'id' | 'infraction' | 'underCharter' | 'isArchived' | 'isDeleted'
+>
 
 export type ReportingCreation = BaseReportingCreation & {
   type: ReportingType.INFRACTION_SUSPICION | ReportingType.OBSERVATION

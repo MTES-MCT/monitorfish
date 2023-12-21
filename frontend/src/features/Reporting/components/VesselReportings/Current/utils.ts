@@ -1,10 +1,9 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
-import { ReportingOriginActor } from '../../../../domain/entities/reporting'
-import { Reporting } from '../../../../domain/types/reporting'
+import { ReportingOriginActor } from '../../../types'
 
-import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
-import type { ReportingUpdate } from '../../../../domain/types/reporting'
+import type { LegacyControlUnit } from '../../../../../domain/types/legacyControlUnit'
+import type { Reporting, ReportingUpdate } from '../../../../../domain/types/reporting'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 export function getReportingValueErrors(reportingValue: ReportingUpdate) {

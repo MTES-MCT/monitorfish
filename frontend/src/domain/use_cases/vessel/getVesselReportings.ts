@@ -1,11 +1,11 @@
 import { getVesselReportingsFromAPI } from '../../../api/vessel'
-import { setDisplayedErrors } from '../../shared_slices/DisplayedError'
-import { removeError } from '../../shared_slices/Global'
 import {
   loadReporting,
   resetCurrentAndArchivedReportingsOfSelectedVessel,
   setCurrentAndArchivedReportingsOfSelectedVessel
-} from '../../shared_slices/Reporting'
+} from '../../../features/Reporting/slice'
+import { setDisplayedErrors } from '../../shared_slices/DisplayedError'
+import { removeError } from '../../shared_slices/Global'
 import { displayOrLogError } from '../error/displayOrLogError'
 
 export const getVesselReportings = (isFromUserAction: boolean) => async (dispatch, getState) => {

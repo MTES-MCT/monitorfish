@@ -63,7 +63,7 @@ context('Side Window > Mission Form > Main Form', () => {
       })
     })
 
-    cy.get('div').contains('Mission créée il y a')
+    cy.get('div').contains('Mission créée le')
     cy.get('div').contains('Dernière modification enregistrée il y a')
     cy.get('h1').should('contain.text', 'Nouvelle mission')
   })

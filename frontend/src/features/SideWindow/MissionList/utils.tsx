@@ -1,4 +1,4 @@
-import { Tag, TagBullet } from '@mtes-mct/monitor-ui'
+import { Tag } from '@mtes-mct/monitor-ui'
 import { uniq } from 'lodash/fp'
 import styled from 'styled-components'
 
@@ -31,9 +31,9 @@ export const renderStatus = (missionStatus: Mission.MissionStatus): JSX.Element 
       const color = getMissionColor(Mission.MissionStatus.UPCOMING, true)
 
       return (
-        <StyledTag bullet={TagBullet.DISK} bulletColor={color} style={{ color }}>
+        <Tag color={color} iconColor={color} withBullet>
           {Mission.MissionStatusLabel.UPCOMING}
-        </StyledTag>
+        </Tag>
       )
     }
 
@@ -41,9 +41,9 @@ export const renderStatus = (missionStatus: Mission.MissionStatus): JSX.Element 
       const color = getMissionColor(Mission.MissionStatus.IN_PROGRESS, true)
 
       return (
-        <StyledTag bullet={TagBullet.DISK} bulletColor={color} style={{ color }}>
+        <Tag color={color} iconColor={color} withBullet>
           {Mission.MissionStatusLabel.IN_PROGRESS}
-        </StyledTag>
+        </Tag>
       )
     }
 
@@ -51,9 +51,9 @@ export const renderStatus = (missionStatus: Mission.MissionStatus): JSX.Element 
       const color = getMissionColor(Mission.MissionStatus.DONE, true)
 
       return (
-        <StyledTag bullet={TagBullet.DISK} bulletColor={color} style={{ color }}>
+        <Tag color={color} iconColor={color} withBullet>
           {Mission.MissionStatusLabel.DONE}
-        </StyledTag>
+        </Tag>
       )
     }
 
@@ -61,7 +61,7 @@ export const renderStatus = (missionStatus: Mission.MissionStatus): JSX.Element 
       const color = getMissionColor(Mission.MissionStatus.CLOSED, true)
 
       return (
-        <StyledTagWithCheck bulletColor={color} style={{ color }}>
+        <StyledTagWithCheck bulletColor={color} color={color}>
           <span>✓</span>
           {Mission.MissionStatusLabel.CLOSED}
         </StyledTagWithCheck>
@@ -73,22 +73,11 @@ export const renderStatus = (missionStatus: Mission.MissionStatus): JSX.Element 
   }
 }
 
-// TODO Remove this hack once we get rid of local CSS.
-const StyledTag = styled(Tag)`
+const StyledTagWithCheck = styled(Tag)`
   align-items: flex-end;
   display: flex;
   line-height: 1;
 
-  > span {
-    flex-shrink: 0;
-    height: 10px;
-    margin-right: 6px;
-    width: 10px;
-  }
-`
-
-// TODO Add check in icons and `TagBullet` in monitor-ui.
-const StyledTagWithCheck = styled(StyledTag)`
   > span {
     font-size: 16px;
     height: auto;

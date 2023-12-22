@@ -140,7 +140,10 @@ const updateSpeciesOnboard =
 
 const updateMissionLocation =
   (dispatch, ports: Port.Port[] | undefined) =>
-  async (isGeometryComputedFromControls: boolean | undefined, missionAction: MissionActionFormValues | undefined) => {
+  async (
+    isGeometryComputedFromControls: boolean | undefined,
+    missionAction: MissionActionFormValues | MissionAction.MissionAction | undefined
+  ) => {
     if (!missionAction || !ports || !isGeometryComputedFromControls) {
       return
     }

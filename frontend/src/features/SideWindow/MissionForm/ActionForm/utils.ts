@@ -1,6 +1,10 @@
 import { logSoftError } from '@mtes-mct/monitor-ui'
+import { isEqual } from 'lodash'
+import { isEmpty } from 'lodash/fp'
 
 import type { MissionActionFormValues } from '../types'
+import type { FormikErrors } from 'formik'
+import type { Promisable } from 'type-fest'
 
 export function getInitialMissionActionFormValues(
   actions: MissionActionFormValues[] | undefined = [],
@@ -26,4 +30,22 @@ export function getInitialMissionActionFormValues(
   }
 
   return missionActionFormValues
+}
+
+export function validateBeforeOnChange(
+  initialValues: MissionActionFormValues,
+  validateForm: (values?: any) => Promise<FormikErrors<any>>,
+  onChange: (nextValues: MissionActionFormValues) => Promisable<void>
+) {
+  return async nextValues => {
+    const errors = await validateForm()
+    const isValid = isEmpty(errors)
+
+    // Prevent triggering `onChange` when opening the form
+    if (isEqual(initialValues, nextValues)) {
+      return
+    }
+
+    onChange({ ...nextValues, isValid } as any)
+  }
 }

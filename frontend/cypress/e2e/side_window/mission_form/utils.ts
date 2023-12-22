@@ -44,13 +44,40 @@ export const editSideWindowMission = (vesselName: string) => {
   cy.wait(500)
 }
 
-export const fillSideWindowMissionFormBase = (missionTypeLabel: Mission.MissionTypeLabel) => {
+export const fillSideWindowMissionFormBase = (
+  missionTypeLabel: Mission.MissionTypeLabel,
+  isReturningClosed: boolean = false,
+  hasExistingActions: boolean = true
+) => {
   cy.intercept('POST', '/api/v1/missions', {
     body: {
-      id: 1
+      id: 1,
+      isClosed: isReturningClosed
     },
     statusCode: 201
   }).as('createMission')
+  cy.intercept('GET', '/api/v1/missions/1', {
+    body: {
+      id: 1,
+      isClosed: isReturningClosed
+    },
+    statusCode: 201
+  }).as('getCreatedMission')
+
+  if (hasExistingActions) {
+    cy.intercept('GET', '/bff/v1/mission_actions?missionId=1', {
+      body: [{ id: 2 }],
+      statusCode: 200
+    }).as('getCreatedMissionActions')
+  } else {
+    cy.intercept(
+      { times: 1, url: '/bff/v1/mission_actions?missionId=1' },
+      {
+        body: [],
+        statusCode: 200
+      }
+    ).as('getCreatedMissionActions')
+  }
 
   cy.fill('Types de mission', [missionTypeLabel])
 

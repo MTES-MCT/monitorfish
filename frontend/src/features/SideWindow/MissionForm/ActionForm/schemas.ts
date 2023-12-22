@@ -14,25 +14,33 @@ const actionDatetimeUtcValidator = string()
   .test({
     message: 'La date du contrôle doit être postérieure à la date de début de la mission.',
     test: (actionDatetimeUtc: string | undefined) => {
-      const { mission } = mainStore.getState()
-
-      if (!actionDatetimeUtc || !mission.draft?.mainFormValues.startDateTimeUtc) {
+      const { draft } = mainStore.getState().mission
+      const mission = draft?.mainFormValues
+      if (!mission) {
         return true
       }
 
-      return customDayjs(actionDatetimeUtc).isSameOrAfter(mission.draft.mainFormValues.startDateTimeUtc)
+      if (!actionDatetimeUtc || !mission.startDateTimeUtc) {
+        return true
+      }
+
+      return customDayjs(actionDatetimeUtc).isSameOrAfter(mission.startDateTimeUtc)
     }
   })
   .test({
     message: 'La date du contrôle doit être antérieure à la date de fin de la mission.',
     test: (actionDatetimeUtc: string | undefined) => {
-      const { mission } = mainStore.getState()
-
-      if (!actionDatetimeUtc || !mission.draft?.mainFormValues.endDateTimeUtc) {
+      const { draft } = mainStore.getState().mission
+      const mission = draft?.mainFormValues
+      if (!mission) {
         return true
       }
 
-      return customDayjs(actionDatetimeUtc).isSameOrBefore(mission.draft.mainFormValues.endDateTimeUtc)
+      if (!actionDatetimeUtc || !mission.endDateTimeUtc) {
+        return true
+      }
+
+      return customDayjs(actionDatetimeUtc).isSameOrBefore(mission.endDateTimeUtc)
     }
   })
 

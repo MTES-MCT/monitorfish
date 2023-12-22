@@ -12,7 +12,8 @@ import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
  */
 export function FormikRevalidationEffect() {
   const { validateForm } = useFormikContext()
-  const mission = useMainAppSelector(store => store.mission)
+  const isClosing = useMainAppSelector(store => store.mission.isClosing)
+  const draft = useMainAppSelector(state => state.mission.draft)
 
   const debouncedValidateForm = useDebouncedCallback(validateForm, 250)
 
@@ -23,7 +24,7 @@ export function FormikRevalidationEffect() {
 
     // We don't want to trigger infinite re-renders since `validateForm` changes after each rendering
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mission.draft?.mainFormValues?.endDateTimeUtc, mission.draft?.mainFormValues?.startDateTimeUtc]
+    [draft?.mainFormValues.endDateTimeUtc, draft?.mainFormValues.startDateTimeUtc, isClosing]
   )
 
   return <></>

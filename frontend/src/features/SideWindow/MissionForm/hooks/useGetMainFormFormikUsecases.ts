@@ -6,11 +6,11 @@ import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { formikUsecase } from '../formikUsecases'
 
-import type { MissionActionFormValues, MissionMainFormValues } from '../types'
+import type { MissionMainFormValues } from '../types'
 
 export function useGetMainFormFormikUsecases() {
   const dispatch = useMainAppDispatch()
-  const draft = useMainAppSelector(store => store.mission.draft)
+  const draft = useMainAppSelector(state => state.mission.draft)
 
   const getPortsApiQuery = useGetPortsQuery()
 
@@ -22,18 +22,24 @@ export function useGetMainFormFormikUsecases() {
       formikUsecase.updateOtherControlsCheckboxes(dispatch)(mission, previousIsControlUnitPAM),
 
     /**
-     * When updating the mission location from the mission, we use the `draft` object to access the `missionAction` form.
-     * We select the last `missionAction` to update the mission location.
+     * When updating the mission location from the mission, we use the `RTK-Query` cache object to access the `missionAction` form.
+     * Warning: the action MUST be VALID to be stored and available in the RTK cache
+     *
+     * We then select the last `missionAction` to update the mission location.
+     * @return isSuccess - `true` if there is no errors
      */
-    updateMissionLocation: (isGeometryComputedFromControls: boolean) => {
-      const validControls = draft?.actionsFormValues.filter(
-        action => isLandControl(action) || isAirOrSeaControl(action)
-      )
-      if (!validControls) {
-        return
+    updateMissionLocation: async (isGeometryComputedFromControls: boolean): Promise<boolean> => {
+      const missionActions = draft?.actionsFormValues
+      if (!missionActions) {
+        return false
       }
 
-      const sortedValidControlsByDateTimeDesc: MissionActionFormValues[] = sortBy(
+      const validControls = missionActions.filter(action => isLandControl(action) || isAirOrSeaControl(action))
+      if (!validControls) {
+        return false
+      }
+
+      const sortedValidControlsByDateTimeDesc = sortBy(
         validControls,
         ({ actionDatetimeUtc }) => actionDatetimeUtc
       ).reverse()
@@ -41,10 +47,15 @@ export function useGetMainFormFormikUsecases() {
       // Get most recent control, by `actionDatetimeUtc`
       const lastControl = sortedValidControlsByDateTimeDesc.at(0)
       if (!lastControl) {
-        return
+        return false
       }
 
-      formikUsecase.updateMissionLocation(dispatch, getPortsApiQuery.data)(isGeometryComputedFromControls, lastControl)
+      await formikUsecase.updateMissionLocation(dispatch, getPortsApiQuery.data)(
+        isGeometryComputedFromControls,
+        lastControl
+      )
+
+      return true
     }
   }
 }

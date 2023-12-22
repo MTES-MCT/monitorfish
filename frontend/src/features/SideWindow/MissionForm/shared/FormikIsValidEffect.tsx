@@ -10,18 +10,20 @@ import { useDeepCompareEffect } from '../../../../hooks/useDeepCompareEffect'
  * We use this "hook" in `<ActionForm />` in order to retrigger main form-related validation rules.
  */
 export function FormikIsValidEffect() {
-  const { errors, setFieldValue } = useFormikContext()
+  const { setFieldValue, validateForm, values } = useFormikContext()
 
   useDeepCompareEffect(
     () => {
-      const isValid = isEmpty(errors)
+      ;(async () => {
+        const errors = await validateForm()
 
-      setFieldValue('isValid', isValid)
+        setFieldValue('isValid', isEmpty(errors))
+      })()
     },
 
     // We don't want to trigger infinite re-renders since `setFieldValue` changes after each rendering
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [errors]
+    [values]
   )
 
   return <></>

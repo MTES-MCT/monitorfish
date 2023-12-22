@@ -37,6 +37,7 @@
       "envActions": [],
       "missionSource": "MONITORENV",
       "isClosed": true,
+      "isUnderJdp": false,
       "isGeometryComputedFromControls": false
     }
   }

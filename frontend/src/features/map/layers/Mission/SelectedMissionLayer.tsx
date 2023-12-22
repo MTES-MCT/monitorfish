@@ -3,7 +3,6 @@ import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
-import { NEW_MISSION_ID } from './constants'
 import { missionZoneStyle } from './MissionLayer/styles'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
@@ -17,18 +16,19 @@ import type { VectorLayerWithName } from '../../../../domain/types/layer'
 
 export function UnmemoizedSelectedMissionLayer() {
   const { missions } = useGetFilteredMissionsQuery()
-  const mission = useMainAppSelector(store => store.mission)
-  const sideWindow = useMainAppSelector(store => store.sideWindow)
+  const selectedMissionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionGeoJSON)
+  const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
+  const draft = useMainAppSelector(state => state.mission.draft)
 
   const selectedMission = useMemo(() => {
-    if (!mission.selectedMissionGeoJSON) {
+    if (!selectedMissionGeoJSON) {
       return undefined
     }
 
     return new GeoJSON({
       featureProjection: OPENLAYERS_PROJECTION
-    }).readFeature(mission.selectedMissionGeoJSON)
-  }, [mission.selectedMissionGeoJSON])
+    }).readFeature(selectedMissionGeoJSON)
+  }, [selectedMissionGeoJSON])
 
   const vectorSourceRef = useRef<VectorSource>()
   const getVectorSource = useCallback(() => {
@@ -87,14 +87,13 @@ export function UnmemoizedSelectedMissionLayer() {
     getVectorSource().clear(true)
 
     // When creating a new mission, dummy NEW_MISSION_ID is used
-    const missionId = sideWindow.selectedPath.id || NEW_MISSION_ID
-    if (!mission.draft) {
+    if (!draft?.mainFormValues || !missionId) {
       return
     }
 
-    const missionFeature = getMissionFeatureZone({ ...mission.draft.mainFormValues, id: missionId })
+    const missionFeature = getMissionFeatureZone({ ...draft.mainFormValues, id: missionId })
     getVectorSource().addFeature(missionFeature)
-  }, [getVectorSource, mission.draft, sideWindow.selectedPath.id])
+  }, [getVectorSource, draft?.mainFormValues, missionId])
 
   return null
 }

@@ -1,9 +1,10 @@
-import { Accent, Button, Icon, logSoftError, NotificationEvent, usePrevious, customDayjs } from '@mtes-mct/monitor-ui'
+import { Accent, Button, customDayjs, Icon, logSoftError, NotificationEvent, usePrevious } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { isEqual } from 'lodash'
 import { omit } from 'lodash/fp'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
+import * as timeago from 'timeago.js'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { ActionForm } from './ActionForm'
@@ -19,6 +20,7 @@ import { AUTO_SAVE_ENABLED } from './constants'
 import { useUpdateFreezedActionFormValues } from './hooks/useUpdateFreezedActionFormValues'
 import { useUpdateFreezedMainFormValues } from './hooks/useUpdateFreezedMainFormValues'
 import { MainForm } from './MainForm'
+import { AutoSaveTag } from './shared/AutoSaveTag'
 import { DeletionConfirmationDialog } from './shared/DeletionConfirmationDialog'
 import { DraftCancellationConfirmationDialog } from './shared/DraftCancellationConfirmationDialog'
 import { TitleSourceTag } from './shared/TitleSourceTag'
@@ -205,13 +207,27 @@ export function MissionForm() {
 
           newMissionId.current = data.id
           nextMissionId = data.id
+
+          setMainFormValues({
+            ...createdOrUpdatedMainFormValues,
+            createdAtUtc: data.createdAtUtc,
+            updatedAtUtc: data.updatedAtUtc
+          })
         } else {
           const updatedMission = getUpdatedMissionFromMissionMainFormValues(
             editedMissionId,
             createdOrUpdatedMainFormValues
           )
-          await updateMission(updatedMission)
+          const { data, error } = (await updateMission(updatedMission)) as any
+          if (!data) {
+            throw new FrontendError('`updateMission()` failed', error)
+          }
 
+          setMainFormValues({
+            ...createdOrUpdatedMainFormValues,
+            createdAtUtc: data.createdAtUtc,
+            updatedAtUtc: data.updatedAtUtc
+          })
           nextMissionId = editedMissionId
         }
 
@@ -595,7 +611,6 @@ export function MissionForm() {
             )}
           </FrontendErrorBoundary>
         </Body>
-
         <Footer>
           <div>
             {editedMissionId && (
@@ -609,27 +624,31 @@ export function MissionForm() {
               </Button>
             )}
           </div>
-
           <div>
-            {!isMissionFormValid && <FooterError>Veuillez corriger les éléments en rouge</FooterError>}
-
+            <MissionInfos>
+              {mainFormValues?.createdAtUtc && (
+                <>Mission créée le {customDayjs(mainFormValues.createdAtUtc).utc().format('D MMM YY, HH:mm')}. </>
+              )}
+              {!mainFormValues?.createdAtUtc && <>Mission non enregistrée.</>}
+              {mainFormValues?.updatedAtUtc && (
+                <>Dernière modification enregistrée {timeago.format(mainFormValues.updatedAtUtc, 'fr')}.</>
+              )}
+            </MissionInfos>
+            <AutoSaveTag isAutoSaveEnabled={isAutoSaveEnabled} />
             {!isAutoSaveEnabled && (
-              <>
-                <Button accent={Accent.TERTIARY} disabled={isSaving} onClick={goToMissionList}>
-                  Annuler
-                </Button>
+              <Button
+                accent={Accent.PRIMARY}
+                disabled={isLoading || isSaving || !isMissionFormValid}
+                Icon={Icon.Save}
+                onClick={async () => {
+                  await createOrUpdate(mainFormValues, actionsFormValues)
 
-                <Button
-                  accent={Accent.PRIMARY}
-                  disabled={isLoading || isSaving || !isMissionFormValid}
-                  Icon={Icon.Save}
-                  onClick={() => createOrUpdate(mainFormValues, actionsFormValues)}
-                >
-                  Enregistrer et quitter
-                </Button>
-              </>
+                  goToMissionList()
+                }}
+              >
+                Enregistrer
+              </Button>
             )}
-
             {!mainFormValues?.isClosed && (
               <Button
                 accent={Accent.SECONDARY}
@@ -651,6 +670,13 @@ export function MissionForm() {
                 Ré-ouvrir la mission
               </Button>
             )}
+            <CloseButton
+              accent={isAutoSaveEnabled ? Accent.PRIMARY : Accent.TERTIARY}
+              disabled={isSaving}
+              onClick={goToMissionList}
+            >
+              Fermer
+            </CloseButton>
           </div>
         </Footer>
       </Wrapper>
@@ -664,6 +690,10 @@ export function MissionForm() {
     </>
   )
 }
+
+const MissionInfos = styled.div`
+  font-style: italic;
+`
 
 const ErrorFallback = styled.div`
   width: 250px;
@@ -754,8 +784,6 @@ const Footer = styled.div`
   }
 `
 
-const FooterError = styled.p`
-  color: ${p => p.theme.color.maximumRed};
-  font-style: italic;
-  margin: 0 0 4px 0;
+const CloseButton = styled(Button)`
+  height: 34px;
 `

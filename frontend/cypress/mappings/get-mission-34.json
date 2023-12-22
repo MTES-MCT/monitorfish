@@ -64,6 +64,8 @@
       },
       "startDateTimeUtc": "2023-03-02T09:30:55.923703Z",
       "endDateTimeUtc": null,
+      "createdAtUtc": "2021-01-20T08:29:11.923703Z",
+      "updatedAtUtc": "2021-01-20T08:29:11.923703Z",
       "envActions": [
         {
           "actionStartDateTimeUtc": "2022-11-28T13:59:20.176Z",

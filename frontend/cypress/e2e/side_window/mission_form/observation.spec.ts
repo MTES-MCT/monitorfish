@@ -103,7 +103,6 @@ context('Side Window > Mission Form > Observation', () => {
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('exist')
     cy.contains('Veuillez indiquer votre trigramme dans "Saisi par".').should('exist')
 
-    cy.contains('Veuillez corriger les éléments en rouge').should('exist')
     getCloseButton().should('be.disabled')
 
     // Saisi par
@@ -113,7 +112,6 @@ context('Side Window > Mission Form > Observation', () => {
     // Mission is now valid for saving (but not for closure)
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
 
-    cy.contains('Veuillez corriger les éléments en rouge').should('not.exist')
     getCloseButton().should('be.enabled')
 
     // -------------------------------------------------------------------------

@@ -66,6 +66,8 @@
           },
           "startDateTimeUtc": "2023-03-15T23:21:14.923703Z",
           "endDateTimeUtc": "2023-03-12T02:52:15.193661Z",
+          "createdAtUtc": "2023-03-15T23:21:14.923703Z",
+          "updatedAtUtc": "2023-03-15T23:21:14.923703Z",
           "envActions": [
             {
               "actionType": "CONTROL",
@@ -164,6 +166,8 @@
           },
           "startDateTimeUtc": "2023-03-15T23:21:14.923703Z",
           "endDateTimeUtc": "2023-03-23T02:52:15.193661Z",
+          "createdAtUtc": "2023-03-15T23:21:14.923703Z",
+          "updatedAtUtc": "2023-05-15T23:21:14.923703Z",
           "envActions": [
             {
               "actionType": "CONTROL",
@@ -261,6 +265,8 @@
           },
           "startDateTimeUtc": "2023-03-15T23:21:14.923703Z",
           "endDateTimeUtc": "2023-03-23T02:52:15.193661Z",
+          "createdAtUtc": "2023-03-15T23:21:14.923703Z",
+          "updatedAtUtc": "2023-05-15T23:21:14.923703Z",
           "envActions": [
             {
               "actionType": "CONTROL",

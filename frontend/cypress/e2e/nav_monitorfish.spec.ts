@@ -4,6 +4,7 @@ context('Light MonitorFish', () => {
     cy.intercept('/bff/v1/authorization/current', { statusCode: 401 }).as('getIsSuperUser')
     cy.visit('/light#@-824534.42,6082993.21,8.70')
     cy.wait('@getIsSuperUser')
+    cy.wait(200)
 
     // Then
     // Vessel sidebar is minimized
@@ -23,7 +24,10 @@ context('Light MonitorFish', () => {
     // Should not include the modify mission button
     cy.get('*[data-cy="vessel-menu-controls"]').click()
     cy.get('*[data-cy="vessel-controls"]', { timeout: 10000 }).should('be.visible')
-    cy.get('*[data-cy="vessel-controls-year"]').first().click({ timeout: 10000 })
+    cy.get('*[data-cy="vessel-controls-year"]')
+      .filter((_, e) => Cypress.$(e).css('cursor').includes('pointer'))
+      .first()
+      .click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-control"]').should('not.contain', 'Ouvrir le contrôle')
 
     cy.get('*[data-cy="vessel-menu-resume"]').should('not.exist')

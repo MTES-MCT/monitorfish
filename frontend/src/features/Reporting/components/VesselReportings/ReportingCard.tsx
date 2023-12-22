@@ -1,26 +1,22 @@
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../constants/constants'
-import {
-  reportingIsAnInfractionSuspicion,
-  ReportingOriginActor,
-  ReportingTypeCharacteristics
-} from '../../../domain/entities/reporting'
-import { setEditedReporting } from '../../../domain/shared_slices/Reporting'
-import { ReportingType } from '../../../domain/types/reporting'
-import archiveReporting from '../../../domain/use_cases/reporting/archiveReporting'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { getDateTime } from '../../../utils'
-import ArchiveIconSVG from '../../icons/Bouton_archiver.svg?react'
-import EditIconSVG from '../../icons/Bouton_editer.svg?react'
-import DeleteIconSVG from '../../icons/Bouton_supprimer.svg?react'
-import InfractionSuspicionIconSVG from '../../icons/Icone_alerte_signalement_rouge_16.svg?react'
-import ObservationIconSVG from '../../icons/Icone_observations.svg?react'
-import { getAlertNameFromType } from '../../SideWindow/Alert/AlertListAndReportingList/utils'
+import { COLORS } from '../../../../constants/constants'
+import { ReportingType } from '../../../../domain/types/reporting'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { getDateTime } from '../../../../utils'
+import ArchiveIconSVG from '../../../icons/Bouton_archiver.svg?react'
+import EditIconSVG from '../../../icons/Bouton_editer.svg?react'
+import DeleteIconSVG from '../../../icons/Bouton_supprimer.svg?react'
+import InfractionSuspicionIconSVG from '../../../icons/Icone_alerte_signalement_rouge_16.svg?react'
+import ObservationIconSVG from '../../../icons/Icone_observations.svg?react'
+import { getAlertNameFromType } from '../../../SideWindow/Alert/AlertListAndReportingList/utils'
+import { setEditedReporting } from '../../slice'
+import { reportingIsAnInfractionSuspicion, ReportingOriginActor, ReportingTypeCharacteristics } from '../../types'
+import archiveReporting from '../../useCases/archiveReporting'
 
-import type { LegacyControlUnit } from '../../../domain/types/legacyControlUnit'
-import type { Reporting } from '../../../domain/types/reporting'
+import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
+import type { Reporting } from '../../../../domain/types/reporting'
 import type { Promisable } from 'type-fest'
 
 export type ReportingCardProps = {

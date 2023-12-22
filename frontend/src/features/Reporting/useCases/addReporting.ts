@@ -1,14 +1,11 @@
 import { addReportingFromAPI } from '../../../api/reporting'
-import { Vessel } from '../../entities/vessel/vessel'
-import { removeError, setError } from '../../shared_slices/Global'
-import {
-  addReportingToCurrentReportings,
-  setCurrentAndArchivedReportingsOfSelectedVessel
-} from '../../shared_slices/Reporting'
-import { addVesselReporting } from '../../shared_slices/Vessel'
+import { Vessel } from '../../../domain/entities/vessel/vessel'
+import { removeError, setError } from '../../../domain/shared_slices/Global'
+import { addVesselReporting } from '../../../domain/shared_slices/Vessel'
+import { addReportingToCurrentReportings, setCurrentAndArchivedReportingsOfSelectedVessel } from '../slice'
 
+import type { ReportingCreation } from '../../../domain/types/reporting'
 import type { MainAppThunk } from '../../../store'
-import type { ReportingCreation } from '../../types/reporting'
 
 export const addReporting =
   (newReporting: ReportingCreation): MainAppThunk<Promise<void>> =>

@@ -1,17 +1,17 @@
 import { updateReportingFromAPI } from '../../../api/reporting'
-import { Vessel } from '../../entities/vessel/vessel'
-import { removeError, setError } from '../../shared_slices/Global'
+import { Vessel } from '../../../domain/entities/vessel/vessel'
+import { removeError, setError } from '../../../domain/shared_slices/Global'
+import { addVesselReporting, removeVesselReporting } from '../../../domain/shared_slices/Vessel'
+import { ReportingType } from '../../../domain/types/reporting'
 import {
   removeCurrentReporting,
   setCurrentAndArchivedReportingsOfSelectedVessel,
   updateCurrentReporting
-} from '../../shared_slices/Reporting'
-import { addVesselReporting, removeVesselReporting } from '../../shared_slices/Vessel'
-import { ReportingType } from '../../types/reporting'
+} from '../slice'
 
+import type { VesselIdentity } from '../../../domain/entities/vessel/types'
+import type { InfractionSuspicionReporting, ReportingUpdate } from '../../../domain/types/reporting'
 import type { MainAppThunk } from '../../../store'
-import type { VesselIdentity } from '../../entities/vessel/types'
-import type { InfractionSuspicionReporting, ReportingUpdate } from '../../types/reporting'
 
 export const updateReporting =
   (

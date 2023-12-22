@@ -1,11 +1,11 @@
-import { removeError, setError } from '../../shared_slices/Global'
+import { removeError, setError } from '../../../domain/shared_slices/Global'
 import {
   removeReportingsIdsFromCurrentReportings,
   setCurrentAndArchivedReportingsOfSelectedVessel
-} from '../../shared_slices/Reporting'
+} from '../slice'
 import { archiveReportingsFromAPI } from '../../../api/reporting'
-import { Vessel } from '../../entities/vessel/vessel'
-import { removeVesselReportings } from '../../shared_slices/Vessel'
+import { Vessel } from '../../../domain/entities/vessel/vessel'
+import { removeVesselReportings } from '../../../domain/shared_slices/Vessel'
 
 /**
  * Archive multiple reportings

@@ -4,19 +4,24 @@ import { Input, Radio, RadioGroup, SelectPicker } from 'rsuite'
 import styled from 'styled-components'
 
 import { getReportingValueErrors, mapControlUnitsToUniqueSortedIdsAsOptions } from './utils'
-import { useGetLegacyControlUnitsQuery } from '../../../../api/legacyControlUnit'
-import { COLORS } from '../../../../constants/constants'
-import { ReportingOriginActor, ReportingTypeCharacteristics } from '../../../../domain/entities/reporting'
-import { getOnlyVesselIdentityProperties } from '../../../../domain/entities/vessel/vessel'
-import { addReporting } from '../../../../domain/use_cases/reporting/addReporting'
-import { updateReporting } from '../../../../domain/use_cases/reporting/updateReporting'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { PrimaryButton, SecondaryButton } from '../../../commonStyles/Buttons.style'
-import { sortArrayByColumn } from '../../../VesselList/tableSort'
+import { useGetLegacyControlUnitsQuery } from '../../../../../api/legacyControlUnit'
+import { COLORS } from '../../../../../constants/constants'
+import { getOnlyVesselIdentityProperties } from '../../../../../domain/entities/vessel/vessel'
+import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { PrimaryButton, SecondaryButton } from '../../../../commonStyles/Buttons.style'
+import { sortArrayByColumn } from '../../../../VesselList/tableSort'
+import { ReportingOriginActor, ReportingTypeCharacteristics } from '../../../types'
+import { addReporting } from '../../../useCases/addReporting'
+import { updateReporting } from '../../../useCases/updateReporting'
 
-import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
-import type { Reporting, ReportingCreation, ReportingType, ReportingUpdate } from '../../../../domain/types/reporting'
+import type { VesselIdentity } from '../../../../../domain/entities/vessel/types'
+import type {
+  Reporting,
+  ReportingCreation,
+  ReportingType,
+  ReportingUpdate
+} from '../../../../../domain/types/reporting'
 import type { Option } from '@mtes-mct/monitor-ui'
 import type { MutableRefObject } from 'react'
 

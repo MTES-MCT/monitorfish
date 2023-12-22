@@ -3,13 +3,13 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
 import { getOnlyVesselIdentityProperties } from '../../../../domain/entities/vessel/vessel'
-import { setEditedReportingInSideWindow } from '../../../../domain/shared_slices/Reporting'
 import { ReportingType } from '../../../../domain/types/reporting'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import CloseIconSVG from '../../../icons/Croix_grise.svg?react'
 import AlertsSVG from '../../../icons/Icone_alertes_gris.svg?react'
-import { ReportingForm } from '../../../VesselSidebar/Reportings/Current/ReportingForm'
+import { ReportingForm } from '../../../Reporting/components/VesselReportings/Current/ReportingForm'
+import { setEditedReportingInSideWindow } from '../../../Reporting/slice'
 
 import type { CSSProperties } from 'react'
 

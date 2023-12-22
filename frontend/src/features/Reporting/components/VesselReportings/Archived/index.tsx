@@ -3,12 +3,12 @@ import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { YearReportings } from './YearReportings'
-import { COLORS } from '../../../../constants/constants'
-import { getYearsToReportingList } from '../../../../domain/entities/reporting'
-import { setArchivedReportingsFromDate } from '../../../../domain/shared_slices/Reporting'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { Header, Zone } from '../../common_styles/common.style'
+import { COLORS } from '../../../../../constants/constants'
+import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { Header, Zone } from '../../../../VesselSidebar/common_styles/common.style'
+import { setArchivedReportingsFromDate } from '../../../slice'
+import { getYearsToReportingList } from '../../../types'
 
 export function Archived() {
   const dispatch = useMainAppDispatch()

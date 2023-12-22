@@ -2,9 +2,9 @@ import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
 import { RegulatedGears } from './RegulatedGears'
-import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
-import { FrontendError } from '../../../../../../libs/FrontendError'
-import { DEFAULT_AUTHORIZED_REGULATED_GEARS, DEFAULT_UNAUTHORIZED_REGULATED_GEARS } from '../../../../utils'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { FrontendError } from '../../../../../libs/FrontendError'
+import { DEFAULT_AUTHORIZED_REGULATED_GEARS, DEFAULT_UNAUTHORIZED_REGULATED_GEARS } from '../../../utils'
 import { Section } from '../RegulatoryMetadata.style'
 
 export function GearRegulationDisplayed() {

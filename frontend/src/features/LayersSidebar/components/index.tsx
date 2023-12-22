@@ -1,22 +1,22 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../constants/constants'
-import { NamespaceContext } from '../../context/NamespaceContext'
-import { LeftBoxOpened } from '../../domain/entities/global'
-import { setLeftBoxOpened } from '../../domain/shared_slices/Global'
-import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../hooks/useMainAppSelector'
-import { AdministrativeZones } from '../AdministrativeZone/components/AdministrativeZones'
-import { BaseMaps } from '../BaseMap/components/BaseMaps'
-import { MapButton } from '../commonStyles/MapButton'
-import { MapComponent } from '../commonStyles/MapComponent'
-import { CustomZones } from '../CustomZone/components/CustomZones'
-import LayersSVG from '../icons/Couches.svg?react'
-import { RegulatoryZones } from '../Regulation/components/RegulatoryZones'
-import { RegulatoryZoneMetadata } from '../Regulation/components/RegulatoryZones/RegulatoryZoneMetadata'
-import { RegulatoryLayerSearch } from '../Regulation/components/RegulatoryZones/search/RegulatoryLayerSearch'
-import { closeRegulatoryZoneMetadata } from '../Regulation/useCases/closeRegulatoryZoneMetadata'
+import { COLORS } from '../../../constants/constants'
+import { NamespaceContext } from '../../../context/NamespaceContext'
+import { LeftBoxOpened } from '../../../domain/entities/global'
+import { setLeftBoxOpened } from '../../../domain/shared_slices/Global'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { AdministrativeZones } from '../../AdministrativeZone/components/AdministrativeZones'
+import { BaseMaps } from '../../BaseMap/components/BaseMaps'
+import { MapButton } from '../../commonStyles/MapButton'
+import { MapComponent } from '../../commonStyles/MapComponent'
+import { CustomZones } from '../../CustomZone/components/CustomZones'
+import LayersSVG from '../../icons/Couches.svg?react'
+import { RegulationSearch } from '../../Regulation/components/RegulationSearch'
+import { RegulatoryZoneMetadata } from '../../Regulation/components/RegulatoryZoneMetadata'
+import { RegulatoryZones } from '../../Regulation/components/RegulatoryZones'
+import { closeRegulatoryZoneMetadata } from '../../Regulation/useCases/closeRegulatoryZoneMetadata'
 
 export function LayersSidebar() {
   const dispatch = useMainAppDispatch()
@@ -53,7 +53,7 @@ export function LayersSidebar() {
             isOpen={leftBoxOpened === LeftBoxOpened.REGULATIONS}
             isVisible={leftBoxOpened === LeftBoxOpened.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
           >
-            <RegulatoryLayerSearch
+            <RegulationSearch
               namespace={namespace}
               numberOfRegulatoryLayersSaved={numberOfRegulatoryLayersSaved}
               setNumberOfRegulatoryLayersSaved={setNumberOfRegulatoryLayersSaved}

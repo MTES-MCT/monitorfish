@@ -275,7 +275,7 @@ context('Sidebars > Regulatory Layers', () => {
 
     cy.request(
       'GET',
-      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
+      `http://localhost:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
     ).then(response => {
       cy.log(response.body)
     })
@@ -283,7 +283,7 @@ context('Sidebars > Regulatory Layers', () => {
     // When
     cy.intercept(
       'GET',
-      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&srsname=EPSG:4326&bbox=-378334.88336741074,6256373.869989776,-280465.66220758925,6275194.874058974,EPSG:3857&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region`
+      `http://localhost:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&srsname=EPSG:4326&bbox=-378334.88336741074,6256373.869989776,-280465.66220758925,6275194.874058974,EPSG:3857&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region`
     ).as('getFeature')
     cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
 
@@ -301,7 +301,12 @@ context('Sidebars > Regulatory Layers', () => {
     cy.get('*[data-cy="regulation-search-box-filter-selected"]').should('exist')
     cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 2)
     cy.get('*[data-cy="regulatory-layer-topic"]').contains('Ouest Cotentin Bivalves')
+    cy.get('*[data-cy="regulatory-layer-topic"]').first().click()
     cy.get('*[data-cy="regulatory-layer-topic"]').contains('Armor CSJ')
+
+    cy.get('[title="Afficher la réglementation"]').click()
+    // No zoom is triggered when drawing a zone
+    cy.url().should('include', '/#@-224002.65,6302673.54,8.70')
 
     cy.get('*[data-cy="vessel-filter-remove-tag"]').eq(0).click()
     cy.get('*[data-cy="regulation-search-box-filter"]').should('exist')

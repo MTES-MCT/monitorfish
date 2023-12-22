@@ -1,4 +1,4 @@
-import type { RegulatoryZone } from '../../../types'
+import type { RegulatoryZone } from '../../types'
 import type { IFuseOptions } from 'fuse.js'
 
 export const REGULATION_SEARCH_OPTIONS: IFuseOptions<RegulatoryZone[]> = {

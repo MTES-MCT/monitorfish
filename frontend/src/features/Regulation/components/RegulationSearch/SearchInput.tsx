@@ -9,26 +9,26 @@ import {
   setRegulatoryLayersSearchResult,
   setZoneSelected
 } from './slice'
-import { LayerType as LayersType } from '../../../../../domain/entities/layers/constants'
-import { InteractionListener, InteractionType } from '../../../../../domain/entities/map/constants'
-import { resetInteraction, setInteractionTypeAndListener } from '../../../../../domain/shared_slices/Draw'
-import { useListenForDrawedGeometry } from '../../../../../hooks/useListenForDrawing'
-import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import { theme } from '../../../../../ui/theme'
-import CloseIconSVG from '../../../../icons/Croix_grise.svg?react'
-import PolygonFilterSVG from '../../../../icons/Filtre_zone_polygone.svg?react'
-import PolygonFilterSelectedSVG from '../../../../icons/Filtre_zone_polygone_selected.svg?react'
-import BoxFilterSVG from '../../../../icons/Filtre_zone_rectangle.svg?react'
-import BoxFilterSelectedSVG from '../../../../icons/Filtre_zone_rectangle_selected.svg?react'
-import SearchIconSVG from '../../../../icons/Loupe_dark.svg?react'
-import FilterTag from '../../../../MapButtons/VesselFilters/FilterTag'
-import { closeRegulatoryZoneMetadataPanel } from '../../../slice'
-import { MINIMUM_SEARCH_CHARACTERS_NUMBER, searchRegulatoryLayers } from '../../../useCases/searchRegulatoryLayers'
+import { LayerType as LayersType } from '../../../../domain/entities/layers/constants'
+import { InteractionListener, InteractionType } from '../../../../domain/entities/map/constants'
+import { resetInteraction, setInteractionTypeAndListener } from '../../../../domain/shared_slices/Draw'
+import { useListenForDrawedGeometry } from '../../../../hooks/useListenForDrawing'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { theme } from '../../../../ui/theme'
+import CloseIconSVG from '../../../icons/Croix_grise.svg?react'
+import PolygonFilterSVG from '../../../icons/Filtre_zone_polygone.svg?react'
+import PolygonFilterSelectedSVG from '../../../icons/Filtre_zone_polygone_selected.svg?react'
+import BoxFilterSVG from '../../../icons/Filtre_zone_rectangle.svg?react'
+import BoxFilterSelectedSVG from '../../../icons/Filtre_zone_rectangle_selected.svg?react'
+import SearchIconSVG from '../../../icons/Loupe_dark.svg?react'
+import FilterTag from '../../../MapButtons/VesselFilters/FilterTag'
+import { closeRegulatoryZoneMetadataPanel } from '../../slice'
+import { MINIMUM_SEARCH_CHARACTERS_NUMBER, searchRegulatoryLayers } from '../../useCases/searchRegulatoryLayers'
 
 import type { IconButtonProps } from '@mtes-mct/monitor-ui'
 
-export function RegulatoryLayerSearchInput() {
+export function SearchInput() {
   const dispatch = useMainAppDispatch()
   const { advancedSearchIsOpen, zoneSelected } = useMainAppSelector(state => state.regulatoryLayerSearch)
 
@@ -47,6 +47,13 @@ export function RegulatoryLayerSearchInput() {
       dispatch(resetZoneSelected())
     }
   }, [dispatch, advancedSearchIsOpen])
+
+  useEffect(
+    () => () => {
+      dispatch(resetZoneSelected())
+    },
+    [dispatch]
+  )
 
   useEffect(() => {
     if (searchQuery?.length < MINIMUM_SEARCH_CHARACTERS_NUMBER && !zoneSelected) {

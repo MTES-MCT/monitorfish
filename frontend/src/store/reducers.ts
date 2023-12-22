@@ -27,7 +27,7 @@ import { controlUnitDialogReducer } from '../features/ControlUnit/components/Con
 import { controlUnitListDialogPersistedReducer } from '../features/ControlUnit/components/ControlUnitListDialog/slice'
 import { customZoneReducer, type CustomZoneState } from '../features/CustomZone/slice'
 import { logbookReducer } from '../features/Logbook/slice'
-import { regulatoryLayerSearchReducer } from '../features/Regulation/components/RegulatoryZones/search/slice'
+import { regulatoryLayerSearchReducer } from '../features/Regulation/components/RegulationSearch/slice'
 import { regulatoryReducer } from '../features/Regulation/slice'
 import { reportingReducer } from '../features/Reporting/slice'
 import { alertReducer } from '../features/SideWindow/Alert/slice'

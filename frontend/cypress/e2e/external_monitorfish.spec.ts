@@ -32,7 +32,10 @@ context('External MonitorFish', () => {
     // Should not include the modify mission button
     cy.get('*[data-cy="vessel-menu-controls"]').click()
     cy.get('*[data-cy="vessel-controls"]', { timeout: 10000 }).should('be.visible')
-    cy.get('*[data-cy="vessel-controls-year"]').first().click({ timeout: 10000 })
+    cy.get('*[data-cy="vessel-controls-year"]')
+      .filter((i, e) => Cypress.$(e).css('cursor').includes('pointer'))
+      .first()
+      .click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-control"]').should('not.contain', 'Ouvrir le contrôle')
 
     cy.get('*[data-cy="vessel-menu-resume"]').should('not.exist')

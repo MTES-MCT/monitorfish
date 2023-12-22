@@ -1,4 +1,4 @@
-import { Accent, Button, Icon, logSoftError, NotificationEvent, usePrevious } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Icon, logSoftError, NotificationEvent, usePrevious, customDayjs } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { isEqual } from 'lodash'
 import { omit } from 'lodash/fp'
@@ -32,7 +32,6 @@ import {
 import { areMissionFormsValuesValid } from './utils/areMissionFormsValuesValid'
 import { getMissionFormInitialValues } from './utils/getMissionFormInitialValues'
 import { validateMissionForms } from './utils/validateMissionForms'
-import { customDayjs } from '../../../../cypress/e2e/utils/customDayjs'
 import {
   useCreateMissionActionMutation,
   useDeleteMissionActionMutation,

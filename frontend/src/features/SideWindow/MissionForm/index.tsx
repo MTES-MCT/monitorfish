@@ -1,4 +1,4 @@
-import { Accent, Button, Icon, logSoftError, NotificationEvent, usePrevious, customDayjs } from '@mtes-mct/monitor-ui'
+import { Accent, Button, customDayjs, Icon, logSoftError, NotificationEvent, usePrevious } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { isEqual } from 'lodash'
 import { omit } from 'lodash/fp'
@@ -626,7 +626,9 @@ export function MissionForm() {
           </div>
           <div>
             <MissionInfos>
-              {mainFormValues?.createdAtUtc && <>Mission créée {timeago.format(mainFormValues.createdAtUtc, 'fr')}. </>}
+              {mainFormValues?.createdAtUtc && (
+                <>Mission créée le {customDayjs(mainFormValues.createdAtUtc).utc().format('D MMM YY, HH:mm')}. </>
+              )}
               {!mainFormValues?.createdAtUtc && <>Mission non enregistrée.</>}
               {mainFormValues?.updatedAtUtc && (
                 <>Dernière modification enregistrée {timeago.format(mainFormValues.updatedAtUtc, 'fr')}.</>

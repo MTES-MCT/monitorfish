@@ -1,3 +1,5 @@
+import { isCypress } from '../../../utils/isCypress'
+
 import type { MissionActionFormValues } from './types'
 import type { LegacyControlUnit } from '../../../domain/types/legacyControlUnit'
 import type { Undefine } from '@mtes-mct/monitor-ui'
@@ -63,3 +65,14 @@ export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValu
  *  10080 PAM Themis
  */
 export const PAMControlUnitIds = [10141, 10404, 10121, 10345, 10080]
+
+/**
+ * Is auto-save enabled.
+ *
+ * When running Cypress tests, we modify this env var in spec file, so we use `window.Cypress.env()`
+ * instead of `import.meta.env`.
+ */
+export const AUTO_SAVE_ENABLED = isCypress()
+  ? // @ts-ignore
+    window.Cypress.env().FRONTEND_MISSION_AUTO_SAVE_ENABLED
+  : import.meta.env.FRONTEND_MISSION_AUTO_SAVE_ENABLED

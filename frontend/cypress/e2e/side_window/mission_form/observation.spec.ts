@@ -12,6 +12,13 @@ context('Side Window > Mission Form > Observation', () => {
   })
 
   it('Should fill the form and send the expected data to the API', () => {
+    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
+      body: {
+        id: 2
+      },
+      statusCode: 201
+    }).as('updateMissionAction')
+
     // -------------------------------------------------------------------------
     // Form
 
@@ -26,62 +33,69 @@ context('Side Window > Mission Form > Observation', () => {
     // -------------------------------------------------------------------------
     // Request
 
-    cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
-
-    cy.clickButton('Enregistrer et quitter')
-
-    cy.wait('@createMissionAction').then(interception => {
-      if (!interception.response) {
-        assert.fail('`interception.response` is undefined.')
-      }
-
-      assert.deepInclude(interception.request.body, {
-        // actionDatetimeUtc: '2023-02-20T12:31:46.093Z',
-        actionType: 'OBSERVATION',
-        controlQualityComments: null,
-        controlUnits: [],
-        emitsAis: null,
-        emitsVms: null,
-        facade: null,
-        feedbackSheetRequired: null,
-        gearInfractions: [],
-        gearOnboard: [],
-        id: null,
-        latitude: null,
-        licencesAndLogbookObservations: null,
-        licencesMatchActivity: null,
-        logbookInfractions: [],
-        logbookMatchesActivity: null,
-        longitude: null,
-        missionId: 1,
-        numberOfVesselsFlownOver: null,
-        otherComments: 'Une observation.',
-        otherInfractions: [],
-        portLocode: null,
-        segments: [],
-        seizureAndDiversion: null,
-        seizureAndDiversionComments: null,
-        separateStowageOfPreservedSpecies: null,
-        speciesInfractions: [],
-        speciesObservations: null,
-        speciesOnboard: [],
-        speciesSizeControlled: null,
-        speciesWeightControlled: null,
-        unitWithoutOmegaGauge: null,
-        userTrigram: 'Marlin',
-        vesselId: null,
-        vesselName: null,
-        vesselTargeted: null
-      })
-      assert.isString(interception.request.body.actionDatetimeUtc)
-
-      cy.get('h1').should('contain.text', 'Missions et contrôles')
-    })
+    // The request is a POST as there is no modification after the action creation
+    cy.waitForLastRequest(
+      '@updateMissionAction',
+      {
+        body: {
+          actionType: 'OBSERVATION',
+          controlQualityComments: null,
+          controlUnits: [],
+          emitsAis: null,
+          emitsVms: null,
+          facade: null,
+          feedbackSheetRequired: null,
+          gearInfractions: [],
+          gearOnboard: [],
+          id: 2,
+          latitude: null,
+          licencesAndLogbookObservations: null,
+          licencesMatchActivity: null,
+          logbookInfractions: [],
+          logbookMatchesActivity: null,
+          longitude: null,
+          missionId: 1,
+          numberOfVesselsFlownOver: null,
+          otherComments: 'Une observation.',
+          otherInfractions: [],
+          portLocode: null,
+          segments: [],
+          seizureAndDiversion: null,
+          seizureAndDiversionComments: null,
+          separateStowageOfPreservedSpecies: null,
+          speciesInfractions: [],
+          speciesObservations: null,
+          speciesOnboard: [],
+          speciesSizeControlled: null,
+          speciesWeightControlled: null,
+          unitWithoutOmegaGauge: null,
+          userTrigram: 'Marlin',
+          vesselId: null,
+          vesselName: null,
+          vesselTargeted: null
+        }
+      },
+      5
+    )
+      .its('response.statusCode')
+      .should('eq', 201)
   })
 
   it('Should only close mission once the form closure validation has passed', () => {
-    const getSaveButton = () => cy.get('button').contains('Enregistrer et quitter').parent()
-    const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer et clôturer').parent()
+    const getCloseButton = () => cy.get('button').contains('Clôturer').parent()
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('createMissionAction')
+
+    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('updateMissionAction')
 
     // -------------------------------------------------------------------------
     // Form Live Validation
@@ -90,8 +104,7 @@ context('Side Window > Mission Form > Observation', () => {
     cy.contains('Veuillez indiquer votre trigramme dans "Saisi par".').should('exist')
 
     cy.contains('Veuillez corriger les éléments en rouge').should('exist')
-    getSaveButton().should('be.disabled')
-    getSaveAndCloseButton().should('be.disabled')
+    getCloseButton().should('be.disabled')
 
     // Saisi par
     cy.fill('Saisi par', 'Gaumont').wait(500)
@@ -101,20 +114,12 @@ context('Side Window > Mission Form > Observation', () => {
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
 
     cy.contains('Veuillez corriger les éléments en rouge').should('not.exist')
-    getSaveButton().should('be.enabled')
-    getSaveAndCloseButton().should('be.enabled')
-
-    cy.clickButton('Enregistrer et clôturer')
+    getCloseButton().should('be.enabled')
 
     // -------------------------------------------------------------------------
     // Request
 
-    cy.intercept('POST', '/bff/v1/mission_actions', {
-      body: {
-        id: 1
-      },
-      statusCode: 201
-    }).as('createMissionAction')
+    cy.clickButton('Clôturer')
 
     cy.get('h1').should('contain.text', 'Missions et contrôles')
   })

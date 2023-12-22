@@ -1,15 +1,16 @@
+import { skipToken } from '@reduxjs/toolkit/query'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { selectedMissionActionsStyles } from './styles'
+import { useGetMissionActionsQuery } from '../../../../../api/missionAction'
 import { LayerProperties } from '../../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../../domain/entities/layers/types'
-import { getMissionActionFeature, getMissionActionFeatures } from '../../../../../domain/entities/mission'
+import { getMissionActionFeature } from '../../../../../domain/entities/mission'
 import { useGetFilteredMissionsQuery } from '../../../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { monitorfishMap } from '../../../monitorfishMap'
-import { NEW_MISSION_ID } from '../constants'
 
 import type { GeoJSON } from '../../../../../domain/types/GeoJSON'
 import type { VectorLayerWithName } from '../../../../../domain/types/layer'
@@ -18,11 +19,12 @@ import type { MutableRefObject } from 'react'
 
 export function UnmemoizedSelectedMissionActionsLayer() {
   const { missions } = useGetFilteredMissionsQuery()
-  const mission = useMainAppSelector(store => store.mission)
-  const sideWindow = useMainAppSelector(store => store.sideWindow)
+  const selectedMissionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionGeoJSON)
+  const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
+  const { data: missionActionsData } = useGetMissionActionsQuery(missionId || skipToken)
 
   const selectedMissionActions = useMemo(() => {
-    if (!mission.selectedMissionGeoJSON) {
+    if (!selectedMissionGeoJSON) {
       return []
     }
 
@@ -30,12 +32,12 @@ export function UnmemoizedSelectedMissionActionsLayer() {
       missions
         .find(
           missionsAndAction =>
-            missionsAndAction.id === (mission.selectedMissionGeoJSON as GeoJSON.Feature).properties?.missionId
+            missionsAndAction.id === (selectedMissionGeoJSON as GeoJSON.Feature).properties?.missionId
         )
         ?.actions?.map(action => getMissionActionFeature(action))
         .filter((feature): feature is Feature => Boolean(feature)) || []
     )
-  }, [mission.selectedMissionGeoJSON, missions])
+  }, [selectedMissionGeoJSON, missions])
 
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
   const getVectorSource = useCallback(() => {
@@ -79,17 +81,16 @@ export function UnmemoizedSelectedMissionActionsLayer() {
 
   useEffect(() => {
     getVectorSource().clear(true)
-    const missionId = sideWindow.selectedPath.id || NEW_MISSION_ID
-    if (!mission.draft) {
+    if (!missionActionsData || !missionId) {
       return
     }
 
-    const actionFeatures = getMissionActionFeatures(
-      { ...mission.draft.mainFormValues, id: missionId },
-      mission.draft.actionsFormValues
-    )
+    const actionFeatures = missionActionsData
+      .map(action => getMissionActionFeature({ ...action, missionId }))
+      .filter((action): action is Feature => !!action)
+
     getVectorSource().addFeatures(actionFeatures)
-  }, [getVectorSource, mission.draft, sideWindow.selectedPath.id])
+  }, [getVectorSource, missionId, missionActionsData])
 
   return null
 }

@@ -13,7 +13,7 @@ import { find } from 'lodash'
 import { useMemo } from 'react'
 import styled, { css } from 'styled-components'
 
-import { formatDateLabel, getMissionActionInfractionsFromMissionActionFormValues, getActionTitle } from './utils'
+import { formatDateLabel, getActionTitle, getMissionActionInfractionsFromMissionActionFormValues } from './utils'
 import { UNKNOWN_VESSEL } from '../../../../domain/entities/vessel/vessel'
 import { MissionAction } from '../../../../domain/types/missionAction'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
@@ -31,7 +31,7 @@ export type ItemProps = {
   onSelect: () => Promisable<void>
 }
 export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelect }: ItemProps) {
-  const mission = useMainAppSelector(state => state.mission)
+  const draft = useMainAppSelector(state => state.mission.draft)
 
   const natinfsAsOptions = useGetNatinfsAsOptions()
 
@@ -130,7 +130,7 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
     [initialValues]
   )
 
-  const isOpen = isControlAction && !mission.draft?.mainFormValues.isClosed && !initialValues.closedBy
+  const isOpen = isControlAction && draft?.mainFormValues && !draft?.mainFormValues.isClosed && !initialValues.closedBy
 
   return (
     <>
@@ -211,7 +211,7 @@ const DateLabel = styled.div`
 `
 
 const InnerWrapper = styled.div<{
-  $isOpen: boolean
+  $isOpen: boolean | undefined
   $isSelected: boolean
   $type: MissionAction.MissionActionType
 }>`

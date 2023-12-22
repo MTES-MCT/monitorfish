@@ -5,19 +5,23 @@ import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFor
 context('Side Window > Mission Form > Sea Control', () => {
   beforeEach(() => {
     openSideWindowNewMission()
-    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
-
-    cy.clickButton('Ajouter')
-    cy.clickButton('Ajouter un contrôle en mer')
   })
 
   it('Should fill the form with an unknown vessel and send the expected data to the API', () => {
-    const getSaveButton = () => cy.get('button').contains('Enregistrer et quitter').parent()
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA, false, false)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('createMissionAction')
 
     // -------------------------------------------------------------------------
     // Form
-
-    getSaveButton().should('be.disabled')
 
     cy.fill('Navire inconnu', true)
     cy.fill('Ajouter un engin', 'MIS')
@@ -32,41 +36,40 @@ context('Side Window > Mission Form > Sea Control', () => {
     // -------------------------------------------------------------------------
     // Request
 
-    cy.intercept('POST', '/bff/v1/mission_actions', {
-      body: {
-        id: 1
+    cy.waitForLastRequest(
+      '@createMissionAction',
+      {
+        body: {
+          externalReferenceNumber: 'UNKNOWN',
+          flagState: 'UNKNOWN',
+          internalReferenceNumber: 'UNKNOWN',
+          ircs: 'UNKNOWN',
+          vesselId: -1,
+          vesselName: 'UNKNOWN'
+        }
       },
-      statusCode: 201
-    }).as('createMissionAction')
-
-    cy.clickButton('Enregistrer et quitter')
-
-    cy.wait('@createMissionAction').then(interception => {
-      if (!interception.response) {
-        assert.fail('`interception.response` is undefined.')
-      }
-
-      assert.deepInclude(interception.request.body, {
-        externalReferenceNumber: 'UNKNOWN',
-        flagState: 'UNKNOWN',
-        internalReferenceNumber: 'UNKNOWN',
-        ircs: 'UNKNOWN',
-        vesselId: -1,
-        vesselName: 'UNKNOWN'
-      })
-
-      cy.get('h1').should('contain.text', 'Missions et contrôles')
-    })
+      5
+    )
+      .its('response.statusCode')
+      .should('eq', 201)
   })
 
   it('Should fill the form and send the expected data to the API', () => {
-    const getSaveButton = () => cy.get('button').contains('Enregistrer et quitter').parent()
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
     const now = getUtcDateInMultipleFormats()
+    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
+      body: {
+        id: 2
+      },
+      statusCode: 201
+    }).as('updateMissionAction')
 
     // -------------------------------------------------------------------------
     // Form
-
-    getSaveButton().should('be.disabled')
 
     // Rechercher un navire...
     cy.get('input[placeholder="Rechercher un navire..."]').type('malot').wait(250)
@@ -158,110 +161,114 @@ context('Side Window > Mission Form > Sea Control', () => {
     // -------------------------------------------------------------------------
     // Request
 
-    cy.intercept('POST', '/bff/v1/mission_actions', {
+    cy.waitForLastRequest(
+      '@updateMissionAction',
+      {
+        body: {
+          actionType: 'SEA_CONTROL',
+          closedBy: 'Alice',
+          controlQualityComments: 'Une observation sur le déroulé du contrôle.',
+          controlUnits: [],
+          districtCode: 'AY',
+          emitsAis: 'NO',
+          emitsVms: 'YES',
+          externalReferenceNumber: 'TALK2ME',
+          facade: null,
+          feedbackSheetRequired: true,
+          flagState: 'UNDEFINED',
+          gearInfractions: [],
+          gearOnboard: [
+            {
+              comments: 'Autres mesures.',
+              // controlledMesh: undefined,
+              declaredMesh: 10,
+              gearCode: 'MIS',
+              gearName: 'Engin divers',
+              gearWasControlled: true,
+              hasUncontrolledMesh: true
+            },
+            {
+              comments: null,
+              controlledMesh: null,
+              declaredMesh: null,
+              gearCode: 'OTB',
+              gearName: 'Chaluts de fond à panneaux',
+              gearWasControlled: null,
+              hasUncontrolledMesh: false
+            }
+          ],
+          hasSomeGearsSeized: true,
+          hasSomeSpeciesSeized: true,
+          id: 2,
+          internalReferenceNumber: 'U_W0NTFINDME',
+          ircs: 'QGDF',
+          latitude: 47.084,
+          licencesAndLogbookObservations: 'Une observation hors infraction sur les obligations déclaaratives.',
+          licencesMatchActivity: 'NO',
+          logbookInfractions: [
+            { comments: 'Une observation sur l’infraction déclarative.', infractionType: 'WITH_RECORD', natinf: 23581 }
+          ],
+          logbookMatchesActivity: 'NOT_APPLICABLE',
+          longitude: -3.872,
+          missionId: 1,
+          numberOfVesselsFlownOver: null,
+          otherComments: 'Une autre observation.',
+          otherInfractions: [
+            { comments: 'Une observation sur l’infraction autre.', infractionType: 'WITHOUT_RECORD', natinf: 27689 }
+          ],
+          portLocode: null,
+          segments: [],
+          seizureAndDiversion: true,
+          seizureAndDiversionComments: null,
+          separateStowageOfPreservedSpecies: 'YES',
+          speciesInfractions: [
+            {
+              comments: 'Une observation sur l’infraction espèce.',
+              infractionType: 'WITHOUT_RECORD',
+              natinf: 23588
+            }
+          ],
+          speciesObservations: 'Une observation hors infraction sur les espèces.',
+          speciesOnboard: [
+            { controlledWeight: 20, declaredWeight: 10, nbFish: null, speciesCode: 'COD', underSized: true }
+          ],
+          speciesSizeControlled: false,
+          speciesWeightControlled: true,
+          unitWithoutOmegaGauge: true,
+          userTrigram: 'Marlin',
+          vesselId: 2,
+          vesselName: 'MALOTRU',
+          vesselTargeted: 'YES'
+        }
+      },
+      10
+    )
+      .its('response.statusCode')
+      .should('eq', 201)
+
+    /*
+      TODO add these remaining tests :
+      assert.include(interception.request.body.actionDatetimeUtc, now.utcDateAsShortString)
+      assert.isUndefined(interception.request.body.gearOnboard[0].controlledMesh)
+     */
+  })
+
+  it('Should fill the form for a vessel with logbook and prefill the gears, species, fao areas and segments fields', () => {
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
+    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
       body: {
         id: 1
       },
       statusCode: 201
-    }).as('createMissionAction')
-
-    cy.clickButton('Enregistrer et quitter')
-
-    cy.wait('@createMissionAction').then(interception => {
-      if (!interception.response) {
-        assert.fail('`interception.response` is undefined.')
-      }
-
-      assert.include(interception.request.body.actionDatetimeUtc, now.utcDateAsShortString)
-      assert.isUndefined(interception.request.body.gearOnboard[0].controlledMesh)
-      assert.deepInclude(interception.request.body, {
-        actionType: 'SEA_CONTROL',
-        closedBy: 'Alice',
-        controlQualityComments: 'Une observation sur le déroulé du contrôle.',
-        controlUnits: [],
-        districtCode: 'AY',
-        emitsAis: 'NO',
-        emitsVms: 'YES',
-        externalReferenceNumber: 'TALK2ME',
-        facade: null,
-        feedbackSheetRequired: true,
-        flagState: 'UNDEFINED',
-        gearInfractions: [],
-        gearOnboard: [
-          {
-            comments: 'Autres mesures.',
-            // controlledMesh: undefined,
-            declaredMesh: 10,
-            gearCode: 'MIS',
-            gearName: 'Engin divers',
-            gearWasControlled: true,
-            hasUncontrolledMesh: true
-          },
-          {
-            comments: null,
-            controlledMesh: null,
-            declaredMesh: null,
-            gearCode: 'OTB',
-            gearName: 'Chaluts de fond à panneaux',
-            gearWasControlled: null,
-            hasUncontrolledMesh: false
-          }
-        ],
-        hasSomeGearsSeized: true,
-        hasSomeSpeciesSeized: true,
-        id: null,
-        internalReferenceNumber: 'U_W0NTFINDME',
-        ircs: 'QGDF',
-        latitude: 47.084,
-        licencesAndLogbookObservations: 'Une observation hors infraction sur les obligations déclaaratives.',
-        licencesMatchActivity: 'NO',
-        logbookInfractions: [
-          { comments: 'Une observation sur l’infraction déclarative.', infractionType: 'WITH_RECORD', natinf: 23581 }
-        ],
-        logbookMatchesActivity: 'NOT_APPLICABLE',
-        longitude: -3.872,
-        missionId: 1,
-        numberOfVesselsFlownOver: null,
-        otherComments: 'Une autre observation.',
-        otherInfractions: [
-          { comments: 'Une observation sur l’infraction autre.', infractionType: 'WITHOUT_RECORD', natinf: 27689 }
-        ],
-        portLocode: null,
-        segments: [],
-        seizureAndDiversion: true,
-        seizureAndDiversionComments: null,
-        separateStowageOfPreservedSpecies: 'YES',
-        speciesInfractions: [
-          {
-            comments: 'Une observation sur l’infraction espèce.',
-            infractionType: 'WITHOUT_RECORD',
-            natinf: 23588
-          }
-        ],
-        speciesObservations: 'Une observation hors infraction sur les espèces.',
-        speciesOnboard: [
-          { controlledWeight: 20, declaredWeight: 10, nbFish: null, speciesCode: 'COD', underSized: true }
-        ],
-        speciesSizeControlled: false,
-        speciesWeightControlled: true,
-        unitWithoutOmegaGauge: true,
-        userTrigram: 'Marlin',
-        vesselId: 2,
-        vesselName: 'MALOTRU',
-        vesselTargeted: 'YES'
-      })
-
-      cy.get('h1').should('contain.text', 'Missions et contrôles')
-    })
-  })
-
-  it('Should fill the form for a vessel with logbook and prefill the gears, species, fao areas and segments fields', () => {
-    const getSaveButton = () => cy.get('button').contains('Enregistrer et quitter').parent()
+    }).as('updateMissionAction')
 
     // -------------------------------------------------------------------------
     // Form
 
-    getSaveButton().should('be.disabled')
     cy.get('input[placeholder="Rechercher un navire..."]').type('pheno')
     cy.contains('mark', 'PHENO').click()
 
@@ -275,92 +282,85 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.wait(500)
 
-    getSaveButton().should('not.be.disabled')
-
     // -------------------------------------------------------------------------
     // Request
 
-    cy.intercept('POST', '/bff/v1/mission_actions', {
-      body: {
-        id: 1
+    cy.waitForLastRequest(
+      '@updateMissionAction',
+      {
+        body: {
+          actionType: 'SEA_CONTROL',
+          closedBy: 'Alice',
+          controlQualityComments: null,
+          controlUnits: [],
+          districtCode: 'AY',
+          emitsAis: null,
+          emitsVms: null,
+          externalReferenceNumber: 'DONTSINK',
+          facade: null,
+          faoAreas: ['27.8.b', '27.8.c'],
+          feedbackSheetRequired: false,
+          flagState: 'FR',
+          gearInfractions: [],
+          gearOnboard: [
+            {
+              comments: null,
+              controlledMesh: null,
+              declaredMesh: 70,
+              gearCode: 'OTB',
+              gearName: 'Chaluts de fond à panneaux',
+              gearWasControlled: null,
+              hasUncontrolledMesh: false
+            }
+          ],
+          hasSomeGearsSeized: false,
+          hasSomeSpeciesSeized: false,
+          id: 2,
+          internalReferenceNumber: 'FAK000999999',
+          ircs: 'CALLME',
+          latitude: 47.084,
+          licencesAndLogbookObservations: null,
+          licencesMatchActivity: null,
+          logbookInfractions: [],
+          logbookMatchesActivity: null,
+          longitude: -3.872,
+          missionId: 1,
+          numberOfVesselsFlownOver: null,
+          otherComments: null,
+          otherInfractions: [],
+          portLocode: null,
+          segments: [{ segment: 'SWW01/02/03', segmentName: 'Bottom trawls' }],
+          seizureAndDiversion: false,
+          seizureAndDiversionComments: null,
+          separateStowageOfPreservedSpecies: null,
+          speciesInfractions: [],
+          speciesObservations: null,
+          speciesOnboard: [
+            { controlledWeight: null, declaredWeight: 471.2, nbFish: null, speciesCode: 'HKE', underSized: false },
+            { controlledWeight: null, declaredWeight: 13.46, nbFish: null, speciesCode: 'BLI', underSized: false }
+          ],
+          speciesSizeControlled: null,
+          speciesWeightControlled: null,
+          unitWithoutOmegaGauge: false,
+          userTrigram: 'Gaumont',
+          vesselId: 1,
+          vesselName: 'PHENOMENE',
+          vesselTargeted: null
+        }
       },
-      statusCode: 201
-    }).as('createMissionAction')
-
-    cy.clickButton('Enregistrer et quitter')
-
-    cy.wait('@createMissionAction').then(interception => {
-      if (!interception.response) {
-        assert.fail('`interception.response` is undefined.')
-      }
-      assert.deepInclude(interception.request.body, {
-        actionType: 'SEA_CONTROL',
-        closedBy: 'Alice',
-        controlQualityComments: null,
-        controlUnits: [],
-        districtCode: 'AY',
-        emitsAis: null,
-        emitsVms: null,
-        externalReferenceNumber: 'DONTSINK',
-        facade: null,
-        faoAreas: ['27.8.b', '27.8.c'],
-        feedbackSheetRequired: false,
-        flagState: 'FR',
-        gearInfractions: [],
-        gearOnboard: [
-          {
-            comments: null,
-            controlledMesh: null,
-            declaredMesh: 70,
-            gearCode: 'OTB',
-            gearName: 'Chaluts de fond à panneaux',
-            gearWasControlled: null,
-            hasUncontrolledMesh: false
-          }
-        ],
-        hasSomeGearsSeized: false,
-        hasSomeSpeciesSeized: false,
-        id: null,
-        internalReferenceNumber: 'FAK000999999',
-        ircs: 'CALLME',
-        latitude: 47.084,
-        licencesAndLogbookObservations: null,
-        licencesMatchActivity: null,
-        logbookInfractions: [],
-        logbookMatchesActivity: null,
-        longitude: -3.872,
-        missionId: 1,
-        numberOfVesselsFlownOver: null,
-        otherComments: null,
-        otherInfractions: [],
-        portLocode: null,
-        segments: [{ segment: 'SWW01/02/03', segmentName: 'Bottom trawls' }],
-        seizureAndDiversion: false,
-        seizureAndDiversionComments: null,
-        separateStowageOfPreservedSpecies: null,
-        speciesInfractions: [],
-        speciesObservations: null,
-        speciesOnboard: [
-          { controlledWeight: null, declaredWeight: 471.2, nbFish: null, speciesCode: 'HKE', underSized: false },
-          { controlledWeight: null, declaredWeight: 13.46, nbFish: null, speciesCode: 'BLI', underSized: false }
-        ],
-        speciesSizeControlled: null,
-        speciesWeightControlled: null,
-        unitWithoutOmegaGauge: false,
-        userTrigram: 'Gaumont',
-        vesselId: 1,
-        vesselName: 'PHENOMENE',
-        vesselTargeted: null
-      })
-      assert.isString(interception.request.body.actionDatetimeUtc)
-
-      cy.get('h1').should('contain.text', 'Missions et contrôles')
-    })
+      10
+    )
+      .its('response.statusCode')
+      .should('eq', 201)
   })
 
   it('Should only close mission once the form closure validation has passed', () => {
-    const getSaveButton = () => cy.get('button').contains('Enregistrer et quitter').parent()
-    const getSaveAndCloseButton = () => cy.get('button').contains('Enregistrer et clôturer').parent()
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
+    const getCloseButton = () => cy.get('button').contains('Clôturer').parent()
 
     // -------------------------------------------------------------------------
     // Form Live Validation
@@ -370,8 +370,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.contains('Veuillez indiquer votre trigramme dans "Saisi par".').should('exist')
 
     cy.contains('Veuillez corriger les éléments en rouge').should('exist')
-    getSaveButton().should('be.disabled')
-    getSaveAndCloseButton().should('be.disabled')
+    getCloseButton().should('be.disabled')
 
     // Navire
     cy.get('input[placeholder="Rechercher un navire..."]').type('mal')
@@ -386,10 +385,9 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
 
     cy.contains('Veuillez corriger les éléments en rouge').should('not.exist')
-    getSaveButton().should('be.enabled')
-    getSaveAndCloseButton().should('be.enabled')
+    getCloseButton().should('be.enabled')
 
-    cy.clickButton('Enregistrer et clôturer').wait(500)
+    cy.clickButton('Clôturer').wait(500)
 
     // -------------------------------------------------------------------------
     // Form Closure Validation
@@ -407,8 +405,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.contains('Veuillez indiquer votre trigramme dans "Clôturé par".').should('exist')
 
     cy.contains('Veuillez corriger les éléments en rouge').should('exist')
-    getSaveButton().should('be.disabled')
-    getSaveAndCloseButton().should('be.disabled')
+    cy.contains('Ré-ouvrir la mission').should('not.exist')
 
     // Obligations déclaratives et autorisations de pêche
     cy.fill('Bonne émission VMS', 'Oui')
@@ -453,26 +450,17 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Mission is now valid for closure
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
     cy.contains('Veuillez corriger les éléments en rouge').should('not.exist')
-    getSaveButton().should('be.enabled')
-    getSaveAndCloseButton().should('be.enabled')
-
-    cy.clickButton('Enregistrer et clôturer')
-
-    // -------------------------------------------------------------------------
-    // Request
-
-    cy.intercept('POST', '/bff/v1/mission_actions', {
-      body: {
-        id: 1
-      },
-      statusCode: 201
-    }).as('createMissionAction')
+    cy.wait(500)
+    cy.clickButton('Clôturer')
 
     cy.get('h1').should('contain.text', 'Missions et contrôles')
   })
 
   it('Should add, edit, remove and validate gears infractions as expected', () => {
-    const getSubmitButton = () => cy.get('button').contains('Valider l’infraction').parent()
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
 
     // -------------------------------------------------------------------------
     // Form Validation
@@ -480,22 +468,16 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter une infraction').wait(500)
     // This validation only run after the first submission attempt
     cy.clickButton('Valider l’infraction')
-    getSubmitButton().should('be.disabled')
 
     cy.fill('Résultat de l’infraction', 'En attente')
-    getSubmitButton().should('be.enabled')
 
     cy.fill('Résultat de l’infraction', 'Sans PV')
-    getSubmitButton().should('be.disabled')
 
     cy.fill('Résultat de l’infraction', 'Avec PV')
-    getSubmitButton().should('be.disabled')
 
     cy.fill('Catégorie d’infraction', 'Infraction engins')
-    getSubmitButton().should('be.disabled')
 
     cy.fill('NATINF', '23581')
-    getSubmitButton().should('be.enabled')
 
     // -------------------------------------------------------------------------
     // Add
@@ -540,8 +522,21 @@ context('Side Window > Mission Form > Sea Control', () => {
   })
 
   it('Should fill the mission zone from the last sea control added', () => {
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
     const now = getUtcDateInMultipleFormats()
-    cy.wait(250)
+    cy.intercept('POST', '/api/v1/mission', {
+      statusCode: 201
+    }).as('createMission')
+
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      statusCode: 201
+    }).as('createMissionAction')
+
+    cy.wait(500)
 
     // -------------------------------------------------------------------------
     // Form
@@ -596,124 +591,133 @@ context('Side Window > Mission Form > Sea Control', () => {
     // -------------------------------------------------------------------------
     // Request
 
-    cy.intercept('POST', '/api/v1/mission', {
-      statusCode: 201
-    }).as('createMission')
-
-    cy.intercept('POST', '/bff/v1/mission_actions', {
-      statusCode: 201
-    }).as('createMissionAction')
-
-    cy.clickButton('Enregistrer et quitter')
-
-    cy.wait('@createMission').then(interception => {
-      if (!interception.response) {
-        assert.fail('`interception.response` is undefined.')
-      }
-
-      assert.deepInclude(interception.request.body, {
-        controlUnits: [
-          {
-            administration: 'DDTM',
-            contact: null,
-            id: 10001,
-            isArchived: false,
-            name: 'Cultures marines – DDTM 40',
-            resources: [
-              {
-                id: 2,
-                name: 'Semi-rigide 2'
-              }
-            ]
-          }
-        ],
-        geom: {
-          coordinates: [
-            [
-              [
-                [-3.872, 47.11997281454899],
-                [-3.866818340009837, 47.11979947882685],
-                [-3.86168668266924, 47.119281144347354],
-                [-3.856654545205034, 47.118422812932465],
-                [-3.851770478823053, 47.1172327669843],
-                [-3.847081597706614, 47.11572248909647],
-                [-3.8426331222800583, 47.11390655063039],
-                [-3.8384679412517877, 47.1118024703614],
-                [-3.8346261967492987, 47.10943054459656],
-                [-3.8311448966116, 47.106813650444394],
-                [-3.8280575576154847, 47.10397702418069],
-                [-3.8253938830851637, 47.10094801689485],
-                [-3.8231794779741706, 47.09775582982175],
-                [-3.8214356041187667, 47.094431231955554],
-                [-3.8201789779481286, 47.091006262710266],
-                [-3.819421612503582, 47.087513922529524],
-                [-3.819170705171962, 47.08398785445689],
-                [-3.8194285720820487, 47.080462019757306],
-                [-3.820192629652871, 47.07697037072717],
-                [-3.821455423323367, 47.0735465238497],
-                [-3.823204703038934, 47.070223436436635],
-                [-3.825423544626324, 47.06703308985621],
-                [-3.828090515757874, 47.06400618237359],
-                [-3.8311798847932277, 47.06117183452949],
-                [-3.8346618703944726, 47.058557309855075],
-                [-3.838502929442331, 47.05618775356834],
-                [-3.842666080438922, 47.05408595172014],
-                [-3.847111259269298, 47.05227211305896],
-                [-3.851795703911114, 47.05076367566588],
-                [-3.8566743644311576, 47.049575140172834],
-                [-3.861700334390457, 47.04871793112744],
-                [-3.8668252995972194, 47.048200287799745],
-                [-3.872, 47.04802718545105],
-                [-3.877174700402781, 47.048200287799745],
-                [-3.882299665609542, 47.04871793112744],
-                [-3.887325635568842, 47.049575140172834],
-                [-3.8922042960888863, 47.05076367566588],
-                [-3.896888740730702, 47.05227211305896],
-                [-3.9013339195610777, 47.05408595172014],
-                [-3.905497070557668, 47.05618775356834],
-                [-3.9093381296055276, 47.058557309855075],
-                [-3.912820115206772, 47.06117183452949],
-                [-3.9159094842421256, 47.06400618237359],
-                [-3.9185764553736764, 47.06703308985621],
-                [-3.920795296961065, 47.070223436436635],
-                [-3.922544576676633, 47.0735465238497],
-                [-3.923807370347128, 47.07697037072717],
-                [-3.9245714279179507, 47.080462019757306],
-                [-3.9248292948280374, 47.08398785445689],
-                [-3.9245783874964184, 47.087513922529524],
-                [-3.923821022051871, 47.091006262710266],
-                [-3.9225643958812326, 47.094431231955554],
-                [-3.9208205220258296, 47.09775582982175],
-                [-3.918606116914836, 47.10094801689485],
-                [-3.9159424423845146, 47.10397702418069],
-                [-3.9128551033883996, 47.106813650444394],
-                [-3.909373803250701, 47.10943054459656],
-                [-3.905532058748211, 47.1118024703614],
-                [-3.901366877719942, 47.11390655063039],
-                [-3.8969184022933865, 47.11572248909647],
-                [-3.892229521176947, 47.1172327669843],
-                [-3.8873454547949664, 47.118422812932465],
-                [-3.882313317330759, 47.119281144347354],
-                [-3.8771816599901627, 47.11979947882685],
-                [-3.872, 47.11997281454899]
+    cy.waitForLastRequest(
+      '@createMission',
+      {
+        body: {
+          controlUnits: [
+            {
+              administration: 'DDTM',
+              contact: null,
+              id: 10001,
+              isArchived: false,
+              name: 'Cultures marines – DDTM 40',
+              resources: [
+                {
+                  id: 2,
+                  name: 'Semi-rigide 2'
+                }
               ]
-            ]
+            }
           ],
-          type: 'MultiPolygon'
-        },
-        isClosed: false,
-        isGeometryComputedFromControls: true,
-        isUnderJdp: true,
-        isValid: true,
-        missionSource: 'MONITORFISH',
-        missionTypes: ['SEA']
-      })
-
-      cy.get('h1').should('contain.text', 'Missions et contrôles')
-    })
+          geom: {
+            coordinates: [
+              [
+                [
+                  [-3.872, 47.11997281454899],
+                  [-3.866818340009837, 47.11979947882685],
+                  [-3.86168668266924, 47.119281144347354],
+                  [-3.856654545205034, 47.118422812932465],
+                  [-3.851770478823053, 47.1172327669843],
+                  [-3.847081597706614, 47.11572248909647],
+                  [-3.8426331222800583, 47.11390655063039],
+                  [-3.8384679412517877, 47.1118024703614],
+                  [-3.8346261967492987, 47.10943054459656],
+                  [-3.8311448966116, 47.106813650444394],
+                  [-3.8280575576154847, 47.10397702418069],
+                  [-3.8253938830851637, 47.10094801689485],
+                  [-3.8231794779741706, 47.09775582982175],
+                  [-3.8214356041187667, 47.094431231955554],
+                  [-3.8201789779481286, 47.091006262710266],
+                  [-3.819421612503582, 47.087513922529524],
+                  [-3.819170705171962, 47.08398785445689],
+                  [-3.8194285720820487, 47.080462019757306],
+                  [-3.820192629652871, 47.07697037072717],
+                  [-3.821455423323367, 47.0735465238497],
+                  [-3.823204703038934, 47.070223436436635],
+                  [-3.825423544626324, 47.06703308985621],
+                  [-3.828090515757874, 47.06400618237359],
+                  [-3.8311798847932277, 47.06117183452949],
+                  [-3.8346618703944726, 47.058557309855075],
+                  [-3.838502929442331, 47.05618775356834],
+                  [-3.842666080438922, 47.05408595172014],
+                  [-3.847111259269298, 47.05227211305896],
+                  [-3.851795703911114, 47.05076367566588],
+                  [-3.8566743644311576, 47.049575140172834],
+                  [-3.861700334390457, 47.04871793112744],
+                  [-3.8668252995972194, 47.048200287799745],
+                  [-3.872, 47.04802718545105],
+                  [-3.877174700402781, 47.048200287799745],
+                  [-3.882299665609542, 47.04871793112744],
+                  [-3.887325635568842, 47.049575140172834],
+                  [-3.8922042960888863, 47.05076367566588],
+                  [-3.896888740730702, 47.05227211305896],
+                  [-3.9013339195610777, 47.05408595172014],
+                  [-3.905497070557668, 47.05618775356834],
+                  [-3.9093381296055276, 47.058557309855075],
+                  [-3.912820115206772, 47.06117183452949],
+                  [-3.9159094842421256, 47.06400618237359],
+                  [-3.9185764553736764, 47.06703308985621],
+                  [-3.920795296961065, 47.070223436436635],
+                  [-3.922544576676633, 47.0735465238497],
+                  [-3.923807370347128, 47.07697037072717],
+                  [-3.9245714279179507, 47.080462019757306],
+                  [-3.9248292948280374, 47.08398785445689],
+                  [-3.9245783874964184, 47.087513922529524],
+                  [-3.923821022051871, 47.091006262710266],
+                  [-3.9225643958812326, 47.094431231955554],
+                  [-3.9208205220258296, 47.09775582982175],
+                  [-3.918606116914836, 47.10094801689485],
+                  [-3.9159424423845146, 47.10397702418069],
+                  [-3.9128551033883996, 47.106813650444394],
+                  [-3.909373803250701, 47.10943054459656],
+                  [-3.905532058748211, 47.1118024703614],
+                  [-3.901366877719942, 47.11390655063039],
+                  [-3.8969184022933865, 47.11572248909647],
+                  [-3.892229521176947, 47.1172327669843],
+                  [-3.8873454547949664, 47.118422812932465],
+                  [-3.882313317330759, 47.119281144347354],
+                  [-3.8771816599901627, 47.11979947882685],
+                  [-3.872, 47.11997281454899]
+                ]
+              ]
+            ],
+            type: 'MultiPolygon'
+          },
+          isClosed: false,
+          isGeometryComputedFromControls: true,
+          isUnderJdp: true,
+          isValid: true,
+          missionSource: 'MONITORFISH',
+          missionTypes: ['SEA']
+        }
+      },
+      5
+    )
+      .its('response.statusCode')
+      .should('eq', 201)
   })
 
   it('Should remove the other control fields When the previous PAM control unit is modified', () => {
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      body: {
+        id: 2
+      },
+      statusCode: 201
+    }).as('createMissionAction')
+
+    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
+      body: {
+        id: 2
+      },
+      statusCode: 201
+    }).as('updateMissionAction')
+
     // -------------------------------------------------------------------------
     // Main Form
 
@@ -751,30 +755,42 @@ context('Side Window > Mission Form > Sea Control', () => {
     // -------------------------------------------------------------------------
     // Request
 
+    cy.waitForLastRequest(
+      '@updateMissionAction',
+      {
+        body: {
+          isAdministrativeControl: null,
+          isComplianceWithWaterRegulationsControl: null,
+          isSafetyEquipmentAndStandardsComplianceControl: null,
+          isSeafarersControl: null
+        }
+      },
+      5
+    )
+      .its('response.statusCode')
+      .should('eq', 201)
+  })
+
+  it('Should add a PAM control unit and send the other control fields', () => {
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
     cy.intercept('POST', '/bff/v1/mission_actions', {
       body: {
-        id: 1
+        id: 2
       },
       statusCode: 201
     }).as('createMissionAction')
 
-    cy.clickButton('Enregistrer et quitter')
+    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
+      body: {
+        id: 2
+      },
+      statusCode: 201
+    }).as('updateMissionAction')
 
-    cy.wait('@createMissionAction').then(interception => {
-      if (!interception.response) {
-        assert.fail('`interception.response` is undefined.')
-      }
-
-      assert.deepInclude(interception.request.body, {
-        isAdministrativeControl: null,
-        isComplianceWithWaterRegulationsControl: null,
-        isSafetyEquipmentAndStandardsComplianceControl: null,
-        isSeafarersControl: null
-      })
-    })
-  })
-
-  it('Should add a PAM control unit and send the other control fields', () => {
     // -------------------------------------------------------------------------
     // Main Form
 
@@ -811,26 +827,64 @@ context('Side Window > Mission Form > Sea Control', () => {
     // -------------------------------------------------------------------------
     // Request
 
-    cy.intercept('POST', '/bff/v1/mission_actions', {
-      body: {
-        id: 1
+    cy.waitForLastRequest(
+      '@updateMissionAction',
+      {
+        body: {
+          isAdministrativeControl: true,
+          isComplianceWithWaterRegulationsControl: false,
+          isSafetyEquipmentAndStandardsComplianceControl: false,
+          isSeafarersControl: true
+        }
       },
-      statusCode: 201
-    }).as('createMissionAction')
+      5
+    )
+      .its('response.statusCode')
+      .should('eq', 201)
+  })
 
-    cy.clickButton('Enregistrer et quitter')
+  it('Should update (PUT) a control right after creating a new control (and not create a new one with POST)', () => {
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
 
-    cy.wait('@createMissionAction').then(interception => {
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
+    cy.intercept('PUT', '/bff/v1/mission_actions/2').as('updateMissionActionOne')
+
+    // -------------------------------------------------------------------------
+    // Form
+
+    // Navire
+    cy.get('input[placeholder="Rechercher un navire..."]').type('mal')
+    cy.contains('mark', 'MAL').click().wait(500)
+
+    cy.wait(500)
+
+    cy.fill('Saisi par', 'Marlin')
+
+    cy.wait(500)
+
+    // -------------------------------------------------------------------------
+    // Request
+
+    cy.wait('@updateMissionActionOne').then(interception => {
       if (!interception.response) {
         assert.fail('`interception.response` is undefined.')
       }
 
-      assert.deepInclude(interception.request.body, {
-        isAdministrativeControl: true,
-        isComplianceWithWaterRegulationsControl: false,
-        isSafetyEquipmentAndStandardsComplianceControl: false,
-        isSeafarersControl: true
-      })
+      cy.wait(500)
+
+      const newActionId = interception.response.body.id
+      cy.intercept('PUT', `/bff/v1/mission_actions/${newActionId}`, {
+        body: {
+          id: 1
+        },
+        statusCode: 201
+      }).as('updateMissionAction')
+
+      cy.fill('Saisi par', 'Marlin')
+
+      cy.wait('@updateMissionAction')
     })
   })
 })

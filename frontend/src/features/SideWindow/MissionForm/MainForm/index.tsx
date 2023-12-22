@@ -7,74 +7,118 @@ import {
   FormikTextInput
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
-import { noop } from 'lodash/fp'
-import { memo } from 'react'
+import { isEqual, omit } from 'lodash'
+import { isEmpty, noop } from 'lodash/fp'
+import { memo, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_TYPES_AS_OPTIONS } from './constants'
 import { FormikDoubleDatePicker } from './FormikDoubleDatePicker'
 import { FormikLocationPicker } from './FormikLocationPicker'
 import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'
+import { FormikSyncMissionFields } from './FormikSyncMissionFields'
 import { MainFormLiveSchema } from './schemas'
 import { BOOLEAN_AS_OPTIONS } from '../../../../constants'
+import { Mission } from '../../../../domain/entities/mission/types'
 import { FormBody, FormBodyInnerWrapper } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
-import { FormikIsValidEffect } from '../shared/FormikIsValidEffect'
+import { EVENT_SOURCE, MISSION_UPDATE_EVENT, missionEventListener } from '../sse'
 
 import type { MissionMainFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
 type MainFormProps = {
   initialValues: MissionMainFormValues
+  missionId: number | undefined
   onChange: (nextValues: MissionMainFormValues) => Promisable<void>
 }
-function UnmemoizedMainForm({ initialValues, onChange }: MainFormProps) {
+function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProps) {
+  const receivedMission = useRef<Mission.Mission | undefined>()
+
+  useEffect(() => {
+    if (!missionId) {
+      return undefined
+    }
+
+    const listener = missionEventListener(missionId, mission => {
+      receivedMission.current = mission
+    })
+
+    EVENT_SOURCE.addEventListener(MISSION_UPDATE_EVENT, listener)
+
+    return () => {
+      EVENT_SOURCE.removeEventListener(MISSION_UPDATE_EVENT, listener)
+    }
+  }, [missionId])
+
+  function validateBeforeOnChange(validateForm) {
+    return async nextValues => {
+      const errors = await validateForm()
+      const isValid = isEmpty(errors)
+
+      // Prevent triggering `onChange` when opening the form
+      if (isEqual(initialValues, nextValues)) {
+        return
+      }
+
+      // Prevent re-sending the form when receiving an update
+      const nextValuesWithoutIsValid = omit(nextValues, ['isValid'])
+      if (isEqual(receivedMission.current, nextValuesWithoutIsValid)) {
+        return
+      }
+
+      onChange({ ...nextValues, isValid } as any)
+    }
+  }
+
   return (
     <Formik initialValues={initialValues} onSubmit={noop} validationSchema={MainFormLiveSchema}>
-      <Wrapper>
-        <FormikEffect onChange={onChange as any} />
-        <FormikIsValidEffect />
+      {({ validateForm }) => (
+        <Wrapper>
+          <FormikEffect onChange={validateBeforeOnChange(validateForm)} />
+          <FormikSyncMissionFields missionId={missionId} />
 
-        <FormHead>
-          <h2>Informations générales</h2>
-        </FormHead>
+          <FormHead>
+            <h2>Informations générales</h2>
+          </FormHead>
 
-        <FormBody>
-          <CustomFormBodyInnerWrapper>
-            <FormikDoubleDatePicker />
+          <FormBody>
+            <CustomFormBodyInnerWrapper>
+              <FormikDoubleDatePicker />
 
-            <MultiCheckColumns>
-              <FormikMultiCheckbox
-                isErrorMessageHidden
-                isInline
-                label="Types de mission"
-                name="missionTypes"
-                options={MISSION_TYPES_AS_OPTIONS}
-              />
+              <MultiCheckColumns>
+                <FormikMultiCheckbox
+                  isErrorMessageHidden
+                  isInline
+                  label="Types de mission"
+                  name="missionTypes"
+                  options={MISSION_TYPES_AS_OPTIONS}
+                />
 
-              <IsUnderJdpFormikCheckbox isUndefinedWhenDisabled label="Mission sous JDP" name="isUnderJdp" />
-            </MultiCheckColumns>
+                <IsUnderJdpFormikCheckbox isUndefinedWhenDisabled label="Mission sous JDP" name="isUnderJdp" />
+              </MultiCheckColumns>
 
-            <FormikMultiRadio isInline label="Ordre de mission" name="hasMissionOrder" options={BOOLEAN_AS_OPTIONS} />
-          </CustomFormBodyInnerWrapper>
+              <FormikMultiRadio isInline label="Ordre de mission" name="hasMissionOrder" options={BOOLEAN_AS_OPTIONS} />
+            </CustomFormBodyInnerWrapper>
 
-          <FormikMultiControlUnitPicker name="controlUnits" />
+            <FormikMultiControlUnitPicker name="controlUnits" />
 
-          <CustomFormBodyInnerWrapper>
-            <FormikLocationPicker />
+            <CustomFormBodyInnerWrapper>
+              <FormikLocationPicker />
 
-            <RelatedFieldGroupWrapper>
-              <FormikTextarea label="CACEM : orientations, observations" name="observationsCacem" rows={2} />
-              <FormikTextarea label="CNSP : orientations, observations" name="observationsCnsp" rows={2} />
-            </RelatedFieldGroupWrapper>
+              <RelatedFieldGroupWrapper>
+                <FormikTextarea label="CACEM : orientations, observations" name="observationsCacem" rows={2} />
+                <FormikTextarea label="CNSP : orientations, observations" name="observationsCnsp" rows={2} />
+              </RelatedFieldGroupWrapper>
 
-            <InlineFieldGroupWrapper>
-              <FormikTextInput label="Ouvert par" name="openBy" />
-              <FormikTextInput label="Clôturé par" name="closedBy" />
-            </InlineFieldGroupWrapper>
-          </CustomFormBodyInnerWrapper>
-        </FormBody>
-      </Wrapper>
+              <InlineFieldGroupWrapper>
+                <FormikTextInput label="Ouvert par" name="openBy" />
+                <FormikTextInput label="Clôturé par" name="closedBy" />
+              </InlineFieldGroupWrapper>
+            </CustomFormBodyInnerWrapper>
+          </FormBody>
+        </Wrapper>
+      )}
     </Formik>
   )
 }
@@ -84,9 +128,8 @@ function UnmemoizedMainForm({ initialValues, onChange }: MainFormProps) {
  * This component is fully memoized because we want its parent (`<MissionForm />`) to fully control
  * when to re-create this component, the component would be re-render when :
  * - The `key` prop is modified (the edited mission `id` changes).
- * - the `onChange` callback is modified (the mission `isClosed` property has been changed).
  */
-export const MainForm = memo(UnmemoizedMainForm, (prevProps, nextProps) => prevProps.onChange === nextProps.onChange)
+export const MainForm = memo(UnmemoizedMainForm, () => true)
 
 const IsUnderJdpFormikCheckbox = styled(FormikCheckbox)`
   margin-left: 48px;

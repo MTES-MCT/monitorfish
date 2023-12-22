@@ -17,7 +17,7 @@ export interface MissionState {
    * @description
    * We use `mission.draft` in 3 cases:
    * - For some mission draft interactions on the map
-   * - To prevent side window closure when a draft is in progress
+   * - To update location
    * - For cross-form validation (some actions validations depends on current main form values)
    */
   // TODO For side window closure prevention and cross-form validation we don't need the entire forms values.
@@ -28,7 +28,6 @@ export interface MissionState {
         mainFormValues: MissionMainFormValues
       }
     | undefined
-  editedDraftActionIndex: number | undefined
   geometryComputedFromControls: MissionMainFormValues['geom']
   /**
    * Is the mission being closed?
@@ -46,7 +45,6 @@ export interface MissionState {
 }
 const INITIAL_STATE: MissionState = {
   draft: undefined,
-  editedDraftActionIndex: undefined,
   geometryComputedFromControls: undefined,
   isClosing: false,
   isDraftDirty: false,
@@ -78,10 +76,6 @@ const missionSlice = createSlice({
         mainFormValues: MissionMainFormValues
       }>
     ) {
-      if (!state.isDraftDirty && state.draft && !isEqual(current(state.draft), action.payload)) {
-        state.isDraftDirty = true
-      }
-
       state.draft = action.payload
     },
 
@@ -101,6 +95,13 @@ const missionSlice = createSlice({
      */
     setIsClosing(state, action: PayloadAction<boolean>) {
       state.isClosing = action.payload
+    },
+
+    /**
+     * Update isDraftDirty
+     */
+    setIsDraftDirty(state, action: PayloadAction<boolean>) {
+      state.isDraftDirty = action.payload
     },
 
     /**

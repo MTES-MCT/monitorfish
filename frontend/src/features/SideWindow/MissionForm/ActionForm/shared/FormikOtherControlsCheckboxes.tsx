@@ -14,7 +14,8 @@ import type { MissionActionFormValues } from '../../types'
 export function FormikOtherControlsCheckboxes() {
   const dispatch = useMainAppDispatch()
   const { setFieldValue } = useFormikContext<MissionActionFormValues>()
-  const { draft, mustResetOtherControlsCheckboxes } = useMainAppSelector(state => state.mission)
+  const mustResetOtherControlsCheckboxes = useMainAppSelector(state => state.mission.mustResetOtherControlsCheckboxes)
+  const draft = useMainAppSelector(state => state.mission.draft)
 
   useEffect(() => {
     if (mustResetOtherControlsCheckboxes) {
@@ -27,7 +28,7 @@ export function FormikOtherControlsCheckboxes() {
     }
   }, [dispatch, setFieldValue, mustResetOtherControlsCheckboxes])
 
-  const isCurrentControlUnitPAM = draft?.mainFormValues.controlUnits?.some(
+  const isCurrentControlUnitPAM = draft?.mainFormValues.controlUnits.some(
     controlUnit => controlUnit.id && PAMControlUnitIds.includes(controlUnit.id)
   )
 

@@ -275,7 +275,7 @@ context('Sidebars > Regulatory Layers', () => {
 
     cy.request(
       'GET',
-      `http://localhost:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
+      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
     ).then(response => {
       cy.log(response.body)
     })
@@ -283,7 +283,7 @@ context('Sidebars > Regulatory Layers', () => {
     // When
     cy.intercept(
       'GET',
-      `http://localhost:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&srsname=EPSG:4326&bbox=-378334.88336741074,6256373.869989776,-280465.66220758925,6275194.874058974,EPSG:3857&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region`
+      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&srsname=EPSG:4326&bbox=-378334.88336741074,6256373.869989776,-280465.66220758925,6275194.874058974,EPSG:3857&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region`
     ).as('getFeature')
     cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
 

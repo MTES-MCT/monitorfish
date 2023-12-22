@@ -6,7 +6,7 @@ import { ErrorToastNotification } from './commonComponents/ErrorToastNotificatio
 import { ControlUnitDialog } from './ControlUnit/components/ControlUnitDialog'
 import { ControlUnitListDialog } from './ControlUnit/components/ControlUnitListDialog'
 import { HealthcheckHeadband } from './Healthcheck/components/HealthcheckHeadband'
-import { LayersSidebar } from './LayersSidebar'
+import { LayersSidebar } from './LayersSidebar/components'
 import { DrawLayerModal } from './map/draw/DrawModal'
 import { Map } from './map/Map'
 import { MapButtons } from './MapButtons'

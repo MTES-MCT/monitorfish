@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
-import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
-import { getRegulatoryZoneTextTypeAsText } from '../../../../utils'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { getRegulatoryZoneTextTypeAsText } from '../../../utils'
 import { SectionTitle, Section, List, Label } from '../RegulatoryMetadata.style'
 
 export function RegulatoryReferencesDisplayed() {

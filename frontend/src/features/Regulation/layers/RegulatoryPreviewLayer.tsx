@@ -17,7 +17,8 @@ import type { MutableRefObject } from 'react'
 
 function UnmemoizedRegulatoryPreviewLayer() {
   const dispatch = useMainAppDispatch()
-  const { regulatoryZonesToPreview } = useMainAppSelector(state => state.regulatory)
+  const regulatoryZonesToPreview = useMainAppSelector(state => state.regulatory.regulatoryZonesToPreview)
+  const zoneSelected = useMainAppSelector(state => state.regulatoryLayerSearch.zoneSelected)
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
   const layerRef = useRef() as MutableRefObject<VectorLayerWithName>
 
@@ -54,8 +55,12 @@ function UnmemoizedRegulatoryPreviewLayer() {
     }
 
     getVectorSource().addFeatures(features)
-    dispatch(zoomInLayer({ feature: features[0] }))
-  }, [dispatch, regulatoryZonesToPreview])
+
+    // Do not zoom on regulation when a specific zone was drawed to search regulations
+    if (!zoneSelected) {
+      dispatch(zoomInLayer({ feature: features[0] }))
+    }
+  }, [dispatch, zoneSelected, regulatoryZonesToPreview])
 
   useEffect(() => {
     getLayer().name = LayerProperties.REGULATORY_PREVIEW.code

@@ -2,17 +2,17 @@ import { logSoftError } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { RegulatoryLayerSearchResultLawType } from './RegulatoryLayerSearchResultLawType'
-import layer from '../../../../../domain/shared_slices/Layer'
-import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { ResultLawType } from './ResultLawType'
+import layer from '../../../../domain/shared_slices/Layer'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 
-import type { LayerSliceNamespace } from '../../../../../domain/entities/layers/types'
+import type { LayerSliceNamespace } from '../../../../domain/entities/layers/types'
 
 export type RegulatoryLayerSearchResultListProps = {
   namespace: LayerSliceNamespace
 }
-export function RegulatoryLayerSearchResultList({ namespace }: RegulatoryLayerSearchResultListProps) {
+export function ResultList({ namespace }: RegulatoryLayerSearchResultListProps) {
   const dispatch = useMainAppDispatch()
   const { setLayersSideBarOpenedLayerType } = layer[namespace].actions
   const { advancedSearchIsOpen, regulatoryLayersSearchResult } = useMainAppSelector(
@@ -49,7 +49,7 @@ export function RegulatoryLayerSearchResultList({ namespace }: RegulatoryLayerSe
         <List $advancedSearchIsOpen={advancedSearchIsOpen}>
           {hasSearchResults && regulatoryLayersSearchResult
             ? Object.entries(regulatoryLayersSearchResult)?.map(([lawType, topic]) => (
-                <RegulatoryLayerSearchResultLawType key={lawType} regulatoryLayerLawType={lawType} topic={topic} />
+                <ResultLawType key={lawType} regulatoryLayerLawType={lawType} topic={topic} />
               ))
             : null}
         </List>

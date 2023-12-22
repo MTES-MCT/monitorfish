@@ -1,8 +1,8 @@
 import ReactMarkdown from 'react-markdown'
 
-import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
-import { GreenCircle, RedCircle } from '../../../../../commonStyles/Circle.style'
-import { fishingPeriodToString } from '../../../../utils'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { GreenCircle, RedCircle } from '../../../../commonStyles/Circle.style'
+import { fishingPeriodToString } from '../../../utils'
 import { Section, SectionTitle } from '../RegulatoryMetadata.style'
 
 export function FishingPeriodDisplayed() {

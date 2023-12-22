@@ -1,17 +1,17 @@
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../constants/constants'
-import { reportingIsAnInfractionSuspicion } from '../../../../domain/entities/reporting'
+import { COLORS } from '../../../../../constants/constants'
 import {
   YearListChevronIcon,
   YearListContent,
   YearListTitle,
   YearListTitleText
-} from '../../common_styles/YearList.style'
+} from '../../../../VesselSidebar/common_styles/YearList.style'
+import { reportingIsAnInfractionSuspicion } from '../../../types'
 import { ReportingCard } from '../ReportingCard'
 
-import type { Reporting } from '../../../../domain/types/reporting'
+import type { Reporting } from '../../../../../domain/types/reporting'
 
 type YearReportingsProps = {
   year: number

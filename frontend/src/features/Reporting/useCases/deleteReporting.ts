@@ -1,13 +1,10 @@
 import { batch } from 'react-redux'
 
 import { deleteReportingFromAPI } from '../../../api/reporting'
-import { Vessel } from '../../entities/vessel/vessel'
-import { removeError, setError } from '../../shared_slices/Global'
-import {
-  removeReportingsIdsFromCurrentReportings,
-  setCurrentAndArchivedReportingsOfSelectedVessel
-} from '../../shared_slices/Reporting'
-import { removeVesselReporting } from '../../shared_slices/Vessel'
+import { Vessel } from '../../../domain/entities/vessel/vessel'
+import { removeError, setError } from '../../../domain/shared_slices/Global'
+import { removeVesselReporting } from '../../../domain/shared_slices/Vessel'
+import { removeReportingsIdsFromCurrentReportings, setCurrentAndArchivedReportingsOfSelectedVessel } from '../slice'
 
 import type { MainAppThunk } from '../../../store'
 

@@ -27,8 +27,8 @@ export type PendingAlert = {
 }
 
 export type PendingAlertValue = {
-  dml?: string
-  natinfCode?: string | null
+  dml?: string | null
+  natinfCode?: number | null
   riskFactor?: number
   seaFront?: SeaFront | null
   speed?: number

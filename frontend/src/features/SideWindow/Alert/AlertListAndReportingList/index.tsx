@@ -4,12 +4,12 @@ import styled from 'styled-components'
 
 import { AlertAndReportingTab } from './constants'
 import { PendingAlertsList } from './PendingAlertsList'
-import { ReportingList } from './ReportingList'
 import { COLORS } from '../../../../constants/constants'
 import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS } from '../../../../domain/entities/alerts/constants'
 import { SeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { ReportingList } from '../../../Reporting/components/ReportingList'
 import { setSubMenu } from '../slice'
 
 import type { RefObject } from 'react'

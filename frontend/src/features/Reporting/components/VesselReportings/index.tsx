@@ -5,20 +5,20 @@ import styled from 'styled-components'
 
 import { Archived } from './Archived'
 import { Current } from './Current'
-import { COLORS } from '../../../constants/constants'
-import { vesselsAreEquals } from '../../../domain/entities/vessel/vessel'
-import { getVesselReportings } from '../../../domain/use_cases/vessel/getVesselReportings'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { COLORS } from '../../../../constants/constants'
+import { vesselsAreEquals } from '../../../../domain/entities/vessel/vessel'
+import { getVesselReportings } from '../../../../domain/use_cases/vessel/getVesselReportings'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 
 const ReportingTab = {
   CURRENT_REPORTING: 'CURRENT_REPORTING',
   REPORTING_HISTORY: 'REPORTING_HISTORY'
 }
 
-export function Reportings() {
+export function VesselReportings() {
   const dispatch = useMainAppDispatch()
-  const { selectedVesselIdentity } = useMainAppSelector(state => state.vessel)
+  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
 
   const { currentAndArchivedReportingsOfSelectedVessel, isLoadingReporting } = useMainAppSelector(
     state => state.reporting

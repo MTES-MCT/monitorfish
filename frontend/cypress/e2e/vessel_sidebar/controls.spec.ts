@@ -10,6 +10,8 @@ context('Vessel sidebar controls tab', () => {
   })
 
   it('Controls Should contain the controls summary and history', () => {
+    const currentMonth = dayjs().month()
+
     // Given
     cy.get('.VESSELS_POINTS').click(460, 460, { force: true, timeout: 10000 })
     cy.wait(200)
@@ -38,8 +40,15 @@ context('Vessel sidebar controls tab', () => {
     cy.get('*[data-cy="vessel-controls-summary-law-reminders"]').first().contains('4 infractions sans PV')
 
     cy.get('*[data-cy="vessel-controls-year"]').eq(0).contains('1 contrôle, 6 infractions dont 3 sans PV')
-    cy.get('*[data-cy="vessel-controls-year"]').eq(1).contains("2 contrôles, pas d'infraction")
-    cy.get('*[data-cy="vessel-controls-year"]').eq(2).contains('1 contrôle, 1 infraction sans PV')
+    if (currentMonth === 0) {
+      cy.get('*[data-cy="vessel-controls-year"]').eq(1).contains("1 contrôle, pas d'infraction")
+      cy.get('*[data-cy="vessel-controls-year"]').eq(2).contains("1 contrôle, pas d'infraction")
+
+      cy.get('*[data-cy="vessel-controls-year"]').eq(3).contains('1 contrôle, 1 infraction sans PV')
+    } else {
+      cy.get('*[data-cy="vessel-controls-year"]').eq(1).contains("2 contrôles, pas d'infraction")
+      cy.get('*[data-cy="vessel-controls-year"]').eq(2).contains('1 contrôle, 1 infraction sans PV')
+    }
 
     // When
     cy.get('*[data-cy="vessel-controls-year"]').first().click({ timeout: 10000 })
@@ -97,15 +106,28 @@ context('Vessel sidebar controls tab', () => {
     cy.get('*[data-cy="vessel-controls-year"]').eq(0).click({ timeout: 10000 })
 
     // Check the order of controls (in descending order)
-    cy.get('*[data-cy="vessel-controls-year"]').eq(1).click({ timeout: 10000 })
-    const yearBefore = dayjs().subtract(1, 'year')
-    cy.get('*[data-cy="vessel-control-title"]')
-      .eq(0)
-      .contains(`CONTRÔLE EN MER DU ${getDate(yearBefore.toISOString())}`)
-    const yearBeforeMinusOneMonth = dayjs(yearBefore).subtract(1, 'month')
-    cy.get('*[data-cy="vessel-control-title"]')
-      .eq(1)
-      .contains(`CONTRÔLE EN MER DU ${getDate(yearBeforeMinusOneMonth.toISOString())}`)
+    if (currentMonth === 0) {
+      cy.get('*[data-cy="vessel-controls-year"]').eq(1).click({ timeout: 10000 })
+      const yearBefore = dayjs().subtract(1, 'year')
+      cy.get('*[data-cy="vessel-control-title"]').contains(`CONTRÔLE EN MER DU ${getDate(yearBefore.toISOString())}`)
+      cy.get('*[data-cy="vessel-controls-year"]').eq(1).click({ timeout: 10000 })
+
+      cy.get('*[data-cy="vessel-controls-year"]').eq(2).click({ timeout: 10000 })
+      const yearBeforeMinusOneMonth = dayjs(yearBefore).subtract(1, 'month')
+      cy.get('*[data-cy="vessel-control-title"]').contains(
+        `CONTRÔLE EN MER DU ${getDate(yearBeforeMinusOneMonth.toISOString())}`
+      )
+    } else {
+      cy.get('*[data-cy="vessel-controls-year"]').eq(1).click({ timeout: 10000 })
+      const yearBefore = dayjs().subtract(1, 'year')
+      cy.get('*[data-cy="vessel-control-title"]')
+        .eq(0)
+        .contains(`CONTRÔLE EN MER DU ${getDate(yearBefore.toISOString())}`)
+      const yearBeforeMinusOneMonth = dayjs(yearBefore).subtract(1, 'month')
+      cy.get('*[data-cy="vessel-control-title"]')
+        .eq(1)
+        .contains(`CONTRÔLE EN MER DU ${getDate(yearBeforeMinusOneMonth.toISOString())}`)
+    }
   })
 
   it('A control mission Should be opened in the side window', () => {

@@ -67,13 +67,6 @@ html {
   font-size: 16px;
 }
 
-/*
-  We reduce the default font-size to 13px for the app.
- */
-html * {
-  font-size: 0.8125rem;
-}
-
 label {
   color: var(--slateGray);
   font-size: 13px;
@@ -679,7 +672,7 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
 .rs-table-hover .rs-table-row:hover .rs-table-cell-group,
 .rs-table-hover .rs-table-row:hover .rs-table-cell {
   /* blueYonder 25 */
-  background: #D4DDE7 !important;
+  background: #d4dde7 !important;
 }
 
 .rs-table-cell,

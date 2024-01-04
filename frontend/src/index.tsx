@@ -13,11 +13,11 @@ import './ui/shared/ol-override.css'
 /**
  * TODO Step-by-step migration to full CSS-in-JS (= no local CSS stylesheets):
  * 1. Remove duplicated CSS from local rsuite-override.css
- * 2. Either replace legacy components with MUI ones
+ * 2. Either replace legacy components with monitor-ui ones
  *    or integrate leftover local overrides into local components styled definitions.
  * 3. Delete local rsuite-override.css (and <NoRsuiteOverrideWrapper />).
- * 4. Migrate MUI rsuite-override.css rules into components styled definitions.
- * 5. Delete MUI rsuite-override.css.
+ * 4. Migrate monitor-ui rsuite-override.css rules into components styled definitions.
+ * 5. Delete monitor-ui rsuite-override.css.
  * 6. Move App.css rules into styled definitions.
  * 7. Delete App.css.
  */

@@ -22,10 +22,6 @@ import styled from 'styled-components'
  * html {
  *   font-size: 16px;
  * }
- *
- * html * {
- *   font-size: 0.8125rem;
- * }
  * ```
  */
 // TODO Fix these CSS issues.

@@ -30,6 +30,7 @@ export function FormikNameSelect() {
     (nextName: string | undefined) => {
       if (nextName === 'SWITCH_TO_CUSTOM_NAME') {
         setIsCustomName(true)
+        helpers.setValue(undefined)
 
         return
       }

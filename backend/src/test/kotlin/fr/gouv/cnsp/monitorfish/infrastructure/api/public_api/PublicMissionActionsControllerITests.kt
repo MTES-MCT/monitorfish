@@ -64,5 +64,4 @@ class PublicMissionActionsControllerITests {
             Mockito.verify(getMissionActions).execute(123)
         }
     }
-
 }

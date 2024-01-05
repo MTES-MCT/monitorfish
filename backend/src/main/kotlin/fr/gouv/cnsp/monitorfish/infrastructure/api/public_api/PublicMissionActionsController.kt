@@ -26,5 +26,4 @@ class PublicMissionActionsController(
     ): List<MissionActionDataOutput> {
         return getMissionActions.execute(missionId).map { MissionActionDataOutput.fromMissionAction(it) }
     }
-
 }

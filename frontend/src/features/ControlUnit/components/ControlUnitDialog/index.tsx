@@ -86,8 +86,7 @@ export function ControlUnitDialog() {
 const StyledMapMenuDialogContainer = styled(MapMenuDialog.Container)<{
   $hasHealthcheckTextWarning: boolean
 }>`
-  bottom: 10px;
-  max-height: none;
+  max-height: calc(100% - ${p => (p.$hasHealthcheckTextWarning ? '70px' : '20px')});
   position: absolute;
   right: 50px;
   top: ${p => (p.$hasHealthcheckTextWarning ? '60px' : '10px')};

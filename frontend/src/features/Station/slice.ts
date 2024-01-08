@@ -1,16 +1,12 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
-import type { Coordinates } from '@mtes-mct/monitor-ui'
-
 interface MainWindowState {
   highlightedStationIds: number[]
   selectedStationId: number | undefined
-  selectedStationOverlayPosition: Coordinates | undefined
 }
 const INITIAL_STATE: MainWindowState = {
   highlightedStationIds: [],
-  selectedStationId: undefined,
-  selectedStationOverlayPosition: undefined
+  selectedStationId: undefined
 }
 
 const stationSlice = createSlice({
@@ -21,18 +17,8 @@ const stationSlice = createSlice({
       state.highlightedStationIds = action.payload
     },
 
-    selectStation(
-      state,
-      action: PayloadAction<
-        | {
-            overlayPosition: Coordinates
-            stationId: number
-          }
-        | undefined
-      >
-    ) {
-      state.selectedStationId = action.payload?.stationId
-      state.selectedStationOverlayPosition = action.payload?.overlayPosition
+    selectStationId(state, action: PayloadAction<number | undefined>) {
+      state.selectedStationId = action.payload
     }
   }
 })

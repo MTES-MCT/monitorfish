@@ -1,15 +1,15 @@
-import { useMemo, useRef } from 'react'
+import { useForceUpdate, type Coordinates } from '@mtes-mct/monitor-ui'
+import { useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
-import { FEATURE_MARGINS } from './constants'
-import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { getDialogWindowPositionFromFeature } from '../../../../utils/getDialogWindowPositionFromFeature'
-import { useGetStationsQuery } from '../../stationApi'
-import { StationCard } from '../StationCard'
+import { StationCard } from './StationCard'
+import { MonitorFishLayer } from '../../../domain/entities/layers/types'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { getDialogWindowPositionFromFeature } from '../../../utils/getDialogWindowPositionFromFeature'
+import { FEATURE_MARGINS } from '../constants'
+import { useGetStationsQuery } from '../stationApi'
 
-import type { FeatureWithCodeAndEntityId } from '../../../../libs/FeatureWithCodeAndEntityId'
-import type { Coordinates } from '@mtes-mct/monitor-ui'
+import type { FeatureWithCodeAndEntityId } from '../../../libs/FeatureWithCodeAndEntityId'
 
 type HoveredStationOverlayProps = {
   hoveredFeature: FeatureWithCodeAndEntityId | undefined
@@ -24,6 +24,7 @@ export function HoveredStationOverlay({ hoveredFeature }: HoveredStationOverlayP
       : undefined
 
   const { data: stations } = useGetStationsQuery()
+  const { forceUpdate } = useForceUpdate()
 
   const hoveredStation = useMemo(
     () => (hoveredStationId ? stations?.find(station => station.id === hoveredStationId) : undefined),
@@ -37,6 +38,12 @@ export function HoveredStationOverlay({ hoveredFeature }: HoveredStationOverlayP
     [hoverDialogElementRef.current, hoveredStationId]
   )
 
+  useEffect(() => {
+    if (hoveredStationId !== undefined) {
+      forceUpdate()
+    }
+  }, [forceUpdate, hoveredStationId])
+
   return (
     <Wrapper $isVisible={!!hoverDialogElementRef.current} $topLeftPosition={wrapperWindowPosition}>
       {hoveredStation && <StationCard ref={hoverDialogElementRef} station={hoveredStation} />}
@@ -49,10 +56,9 @@ const Wrapper = styled.div<{
   $topLeftPosition: Coordinates
 }>`
   border-radius: 2px;
-  cursor: grabbing;
   left: ${p => p.$topLeftPosition[1]}px;
   position: absolute;
   top: ${p => p.$topLeftPosition[0]}px;
-  z-index: 5001;
   visibility: ${p => (p.$isVisible ? 'visible' : 'hidden')};
+  z-index: 5001;
 `

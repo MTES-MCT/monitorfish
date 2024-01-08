@@ -28,7 +28,7 @@ export function getDialogWindowPositionFromFeature(
     throw new FrontendError('`geometry` is undefined.')
   }
 
-  const dialogHeight = dialogElement.offsetHeight
+  const dialogHeight = dialogElement.offsetHeight + 40
   const dialogWidth = dialogElement.offsetWidth
   const featureGeometryExtent = geometry.getExtent()
   const featureMapTopAndLeft = ensureCoordinates([featureGeometryExtent[0], featureGeometryExtent[3]])

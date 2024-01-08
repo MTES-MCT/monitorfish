@@ -67,6 +67,7 @@ export function Map() {
     setMapMovingAndZoomEvent({ dummyUpdate: true })
   }
 
+  // TODO Maybe debounce this call. This triggers a lot of re-renders.
   const handlePointerMove = event => {
     if (event) {
       setHandlePointerMoveEventPixel(event.pixel)
@@ -113,12 +114,17 @@ export function Map() {
 
       <FrontendErrorBoundary>
         {isSuperUser && isStationLayerDisplayed && (
-          <StationLayer hoveredFeatureId={hoveredFeatureWithCodeAndEntityId?.id} />
+          <>
+            <StationLayer hoveredFeatureId={hoveredFeatureWithCodeAndEntityId?.id} />
+          </>
         )}
-        {isSuperUser && isStationLayerDisplayed && (
-          <HoveredStationOverlay hoveredFeature={hoveredFeatureWithCodeAndEntityId} />
-        )}
-        {isSuperUser && <SelectedStationOverlay />}
+        {/* TODO Investigate the DOM element removal attempt error. */}
+        {/*
+          For some reason I wasn't able to condition overlays mounting to `isStationLayerDisplayed`.
+          Maybe because of OpenLayer VS React DOM race access?
+        */}
+        <HoveredStationOverlay hoveredFeature={hoveredFeatureWithCodeAndEntityId} />
+        <SelectedStationOverlay />
       </FrontendErrorBoundary>
 
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />

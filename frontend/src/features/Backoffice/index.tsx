@@ -34,12 +34,13 @@ export function Backoffice() {
     setMapMovingAndZoomEvent({ dummyUpdate: true })
   }
 
-  const { layersTopicsByRegTerritory, regulatoryZoneMetadataPanelIsOpen } = useMainAppSelector(
-    state => state.regulatory
+  const layersTopicsByRegTerritory = useMainAppSelector(state => state.regulatory.layersTopicsByRegTerritory)
+  const regulatoryZoneMetadataPanelIsOpen = useMainAppSelector(
+    state => state.regulatory.regulatoryZoneMetadataPanelIsOpen
   )
 
   // TODO Scritly type this once the store is perfectly typed.
-  const { regulationSaved } = useMainAppSelector(state => (state as any).regulation)
+  const regulationSaved = useMainAppSelector(state => (state as any).regulation.regulationSaved)
 
   const initBackoffice = useCallback(() => {
     batch(async () => {

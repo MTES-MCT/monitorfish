@@ -20,7 +20,8 @@ import SummarySVG from '../icons/Picto_resume.svg?react'
 export function Tabs() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
-  const { selectedVessel, vesselSidebarTab } = useMainAppSelector(state => state.vessel)
+  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
+  const vesselSidebarTab = useMainAppSelector(state => state.vessel.vesselSidebarTab)
 
   useEffect(() => {
     if (!isSuperUser && forbiddenVesselSidebarPaths.includes(vesselSidebarTab)) {

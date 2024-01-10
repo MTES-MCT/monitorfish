@@ -17,8 +17,8 @@ import { MapToolButton } from '../shared/MapToolButton'
 export function MissionsMenu() {
   const dispatch = useMainAppDispatch()
   const sideWindow = useMainAppSelector(state => state.sideWindow)
-  const { leftBoxOpened } = useMainAppSelector(state => state.global)
-  const { isMissionsLayerDisplayed } = useMainAppSelector(state => state.displayedComponent)
+  const leftBoxOpened = useMainAppSelector(state => state.global.leftBoxOpened)
+  const isMissionsLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isMissionsLayerDisplayed)
 
   const isActive =
     sideWindow.status !== SideWindowStatus.CLOSED && sideWindow.selectedPath.menu === SideWindowMenuKey.MISSION_LIST

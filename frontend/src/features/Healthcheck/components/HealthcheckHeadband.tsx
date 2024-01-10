@@ -13,7 +13,8 @@ import { getHealthcheckWarnings } from '../utils'
 
 export function HealthcheckHeadband() {
   const dispatch = useMainAppDispatch()
-  const { healthcheckTextWarning, previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
+  const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
+  const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
   const isOnline = useIsOnline()
   const {
     data: healthcheck,

@@ -37,10 +37,9 @@ function VesselsTracksLayer() {
   const dispatch = useMainAppDispatch()
   const { highlightedVesselTrackPosition, selectedVessel, selectedVesselPositions, vesselsTracksShowed } =
     useMainAppSelector(state => state.vessel)
-  const { fishingActivitiesShowedOnMap, redrawFishingActivitiesOnMap } = useMainAppSelector(
-    state => state.fishingActivities
-  )
-  const { doNotAnimate } = useMainAppSelector(state => state.map)
+  const fishingActivitiesShowedOnMap = useMainAppSelector(state => state.fishingActivities.fishingActivitiesShowedOnMap)
+  const redrawFishingActivitiesOnMap = useMainAppSelector(state => state.fishingActivities.redrawFishingActivitiesOnMap)
+  const doNotAnimate = useMainAppSelector(state => state.map.doNotAnimate)
 
   const previousHighlightedVesselTrackPosition = usePrevious(highlightedVesselTrackPosition)
   const previousFishingActivitiesShowedOnMap: FishingActivityShowedOnMap[] | undefined =

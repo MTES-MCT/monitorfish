@@ -28,7 +28,8 @@ type EditInterestPointProps = {
 export function EditInterestPoint({ close, isOpen }: EditInterestPointProps) {
   const dispatch = useMainAppDispatch()
 
-  const { interestPointBeingDrawed, isEditing } = useMainAppSelector(state => state.interestPoint)
+  const interestPointBeingDrawed = useMainAppSelector(state => state.interestPoint.interestPointBeingDrawed)
+  const isEditing = useMainAppSelector(state => state.interestPoint.isEditing)
 
   /** Coordinates formatted in DD [latitude, longitude] */
   const coordinates: number[] = useMemo(() => {

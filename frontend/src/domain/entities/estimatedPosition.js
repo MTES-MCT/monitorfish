@@ -1,12 +1,13 @@
-import { transform } from 'ol/proj'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './map/constants'
 import Feature from 'ol/Feature'
-import { LayerProperties } from './layers/constants'
 import LineString from 'ol/geom/LineString'
 import Point from 'ol/geom/Point'
+import { transform } from 'ol/proj'
+
+import { LayerProperties } from './layers/constants'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './map/constants'
+import { Vessel } from './vessel/vessel'
 import { COLORS } from '../../constants/constants'
 import { theme } from '../../ui/theme'
-import { Vessel } from './vessel/vessel'
 
 class EstimatedPosition {
   static colorProperty = 'color'
@@ -25,25 +26,26 @@ class EstimatedPosition {
    * }} options
    * @returns [lineFeature, circleFeature] - array containing 2 features: one for the line, one for the point symbolising the last position
    */
-  static getFeatures (vessel, options) {
-    const {
-      longitude,
-      latitude,
-      estimatedCurrentLongitude,
-      estimatedCurrentLatitude,
-      dateTime
-    } = vessel.vesselProperties
+  static getFeatures(vessel, options) {
+    const { dateTime, estimatedCurrentLatitude, estimatedCurrentLongitude, latitude, longitude } =
+      vessel.vesselProperties
 
-    if (!longitude || !latitude || !estimatedCurrentLongitude || !estimatedCurrentLatitude) return null
+    if (!longitude || !latitude || !estimatedCurrentLongitude || !estimatedCurrentLatitude) {
+      return null
+    }
 
     const currentCoordinates = transform([longitude, latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-    const estimatedCoordinates = transform([estimatedCurrentLongitude, estimatedCurrentLatitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+    const estimatedCoordinates = transform(
+      [estimatedCurrentLongitude, estimatedCurrentLatitude],
+      WSG84_PROJECTION,
+      OPENLAYERS_PROJECTION
+    )
     const vesselCompositeIdentifier = vessel.vesselFeatureId.replace(`${LayerProperties.VESSELS_POINTS.code}:`, '')
 
     const estimatedPositionObject = {
+      dateTime,
       latitude: estimatedCurrentLatitude,
-      longitude: estimatedCurrentLongitude,
-      dateTime: dateTime
+      longitude: estimatedCurrentLongitude
     }
 
     const features = []
@@ -60,20 +62,20 @@ class EstimatedPosition {
     const opacity = Vessel.getVesselOpacity(dateTime, options.vesselIsHidden, options.vesselIsOpacityReduced)
 
     const lineFeature = new Feature({
-      geometry: new LineString([currentCoordinates, estimatedCoordinates]),
       color: lineColor,
-      opacity,
-      isHidden: options.hideNonSelectedVessels
+      geometry: new LineString([currentCoordinates, estimatedCoordinates]),
+      isHidden: options.hideNonSelectedVessels,
+      opacity
     })
     lineFeature.estimatedPosition = estimatedPositionObject
     lineFeature.setId(`${LayerProperties.VESSEL_ESTIMATED_POSITION.code}:${vesselCompositeIdentifier}`)
 
     const circleFeature = new Feature({
+      color: vesselColor,
       geometry: new Point(estimatedCoordinates),
       isCircle: true,
-      color: vesselColor,
-      opacity,
-      isHidden: options.hideNonSelectedVessels
+      isHidden: options.hideNonSelectedVessels,
+      opacity
     })
     circleFeature.estimatedPosition = estimatedPositionObject
     circleFeature.setId(`${LayerProperties.VESSEL_ESTIMATED_POSITION.code}:circle:${vesselCompositeIdentifier}`)
@@ -84,6 +86,4 @@ class EstimatedPosition {
   }
 }
 
-export {
-  EstimatedPosition
-}
+export { EstimatedPosition }

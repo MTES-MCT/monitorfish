@@ -38,9 +38,11 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   // eslint-disable-next-line no-null/no-null
   const wrapperRef = useRef<HTMLDivElement | null>(null)
 
-  const { openedBeaconMalfunctionInKanban } = useMainAppSelector(state => state.beaconMalfunction)
-  const { editedReportingInSideWindow } = useMainAppSelector(state => state.reporting)
-  const { selectedPath } = useMainAppSelector(state => state.sideWindow)
+  const openedBeaconMalfunctionInKanban = useMainAppSelector(
+    state => state.beaconMalfunction.openedBeaconMalfunctionInKanban
+  )
+  const editedReportingInSideWindow = useMainAppSelector(state => state.reporting.editedReportingInSideWindow)
+  const selectedPath = useMainAppSelector(state => state.sideWindow.selectedPath)
   const dispatch = useMainAppDispatch()
 
   const [isFirstRender, setIsFirstRender] = useState(true)

@@ -26,7 +26,7 @@ import type { CSSProperties } from 'react'
 export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails, firstStatus, smallSize }) {
   const { actions, beaconMalfunction, comments, notifications } = beaconMalfunctionWithDetails
   const dispatch = useMainAppDispatch()
-  const { userType } = useMainAppSelector(state => state.global)
+  const userType = useMainAppSelector(state => state.global.userType)
   const firstVesselStatus = VESSEL_STATUS.find(status => status.value === firstStatus) as BeaconMalfunctionStatusValue
   const [today, setToday] = useState('')
   const [yesterday, setYesterday] = useState('')

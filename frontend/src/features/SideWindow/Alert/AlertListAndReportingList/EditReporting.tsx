@@ -16,7 +16,7 @@ import type { CSSProperties } from 'react'
 export function EditReporting() {
   const dispatch = useMainAppDispatch()
   const baseUrl = window.location.origin
-  const { editedReportingInSideWindow } = useMainAppSelector(state => state.reporting)
+  const editedReportingInSideWindow = useMainAppSelector(state => state.reporting.editedReportingInSideWindow)
 
   const editReportingWrapperStyle: CSSProperties = useMemo(
     () => ({

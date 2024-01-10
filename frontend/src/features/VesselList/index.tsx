@@ -64,7 +64,7 @@ type ZoneGroupAndChildren = {
 export function VesselList({ namespace }) {
   const dispatch = useMainAppDispatch()
   const { previewFilteredVesselsMode, rightMenuIsOpen } = useMainAppSelector(state => state.global)
-  const { isVesselListModalDisplayed } = useMainAppSelector(state => state.displayedComponent)
+  const isVesselListModalDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselListModalDisplayed)
   const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.VESSELS_LIST)
   const {
     uniqueVesselsDistricts: districts,

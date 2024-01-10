@@ -5,7 +5,7 @@ import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { InfractionsSummary } from '../../Controls/InfractionsSummary'
 
 export function ProbabilityRiskFactorDetails({ isOpen }) {
-  const { selectedVessel } = useMainAppSelector(state => state.vessel)
+  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
   const currentYear = new Date().getUTCFullYear()
 
   if (!selectedVessel) {

@@ -1,6 +1,7 @@
-import { animateToRegulatoryLayer } from '../../../domain/shared_slices/Map'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { getCenter } from 'ol/extent'
+
+import { LayerProperties } from '../../../domain/entities/layers/constants'
+import { animateToRegulatoryLayer } from '../../../domain/shared_slices/Map'
 import { isNumeric } from '../../../utils/isNumeric'
 
 /**
@@ -12,25 +13,29 @@ import { isNumeric } from '../../../utils/isNumeric'
  *
  * @returns {any}
  */
-const zoomInLayer = ({ topicAndZone, feature }) => (dispatch, getState) => {
-  if (topicAndZone) {
-    const name = `${LayerProperties.REGULATORY.code}:${topicAndZone.topic}:${topicAndZone.zone}`
-    const layerToZoomIn = getState().layer.layersToFeatures.find(layer => layer.name === name)
-    if (layerToZoomIn) {
-      dispatchAnimateToRegulatoryLayer(layerToZoomIn.center, dispatch, name)
+const zoomInLayer =
+  ({ feature, topicAndZone }) =>
+  (dispatch, getState) => {
+    if (topicAndZone) {
+      const name = `${LayerProperties.REGULATORY.code}:${topicAndZone.topic}:${topicAndZone.zone}`
+      const layerToZoomIn = getState().layer.layersToFeatures.find(layer => layer.name === name)
+      if (layerToZoomIn) {
+        dispatchAnimateToRegulatoryLayer(layerToZoomIn.center, dispatch, name)
+      }
+    } else if (feature) {
+      const center = getCenter(feature.getGeometry().getExtent())
+      dispatchAnimateToRegulatoryLayer(center, dispatch, LayerProperties.REGULATORY_PREVIEW)
     }
-  } else if (feature) {
-    const center = getCenter(feature.getGeometry().getExtent())
-    dispatchAnimateToRegulatoryLayer(center, dispatch, LayerProperties.REGULATORY_PREVIEW)
   }
-}
 
 const dispatchAnimateToRegulatoryLayer = (center, dispatch, name) => {
   if (center?.length && isNumeric(center[0]) && isNumeric(center[1])) {
-    dispatch(animateToRegulatoryLayer({
-      name: name,
-      center: center
-    }))
+    dispatch(
+      animateToRegulatoryLayer({
+        center,
+        name
+      })
+    )
   }
 }
 

@@ -67,5 +67,15 @@ export const missionEventListener =
     // eslint-disable-next-line no-console
     console.log(`SSE: received an update for mission id ${id}.`)
 
+    if (!import.meta.env.FRONTEND_MISSION_FORM_AUTO_UPDATE_ENABLED) {
+      // eslint-disable-next-line no-console
+      console.log(
+        'Skipping automatic update of mission form. ' +
+        "Set 'FRONTEND_MISSION_FORM_AUTO_UPDATE_ENABLED=true' feature flag to activate this feature."
+      )
+
+      return
+    }
+
     callback(mission)
   }

@@ -9,7 +9,7 @@ type MapButtonType = {
   isHidden?: boolean | undefined
 } & HTMLProps<HTMLButtonElement>
 export function MapButton({ children, isHidden, ...props }: MapButtonType) {
-  const { healthcheckTextWarning } = useMainAppSelector(state => state.global)
+  const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
 
   return (
     /**

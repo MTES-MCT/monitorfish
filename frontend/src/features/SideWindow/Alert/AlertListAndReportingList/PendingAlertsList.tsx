@@ -30,7 +30,8 @@ export type PendingAlertsListProps = {
  */
 export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSeaFrontGroup }: PendingAlertsListProps) {
   const dispatch = useMainAppDispatch()
-  const { focusedPendingAlertId, pendingAlerts } = useMainAppSelector(state => state.alert)
+  const focusedPendingAlertId = useMainAppSelector(state => state.alert.focusedPendingAlertId)
+  const pendingAlerts = useMainAppSelector(state => state.alert.pendingAlerts)
   const baseUrl = window.location.origin
   const [sortColumn] = useState('creationDate')
   const [sortType] = useState(SortType.DESC)

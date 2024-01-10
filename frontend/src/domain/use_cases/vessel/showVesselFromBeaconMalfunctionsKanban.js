@@ -1,8 +1,8 @@
-import { setSelectedVesselCustomTrackRequest, showVesselSidebarTab } from '../../shared_slices/Vessel'
 import { showVessel } from './showVessel'
-import { VesselSidebarTab } from '../../entities/vessel/vessel'
 import { END_OF_MALFUNCTION_REASON_RECORD } from '../../entities/beaconMalfunction/constants'
+import { VesselSidebarTab } from '../../entities/vessel/vessel'
 import { VesselTrackDepth } from '../../entities/vesselTrackDepth'
+import { setSelectedVesselCustomTrackRequest, showVesselSidebarTab } from '../../shared_slices/Vessel'
 
 /**
  * Show the selected vessel on map.
@@ -31,10 +31,10 @@ export const showVesselFromBeaconMalfunctionsKanban = (beaconMalfunction, openVM
   }
 }
 
-function getDatesAroundMalfunctionDateTime (beaconMalfunction) {
+function getDatesAroundMalfunctionDateTime(beaconMalfunction) {
   const afterDateTime = new Date(beaconMalfunction.malfunctionStartDateTime)
   const twentyFiveHours = 25
-  afterDateTime.setTime(afterDateTime.getTime() - (twentyFiveHours * 60 * 60 * 1000))
+  afterDateTime.setTime(afterDateTime.getTime() - twentyFiveHours * 60 * 60 * 1000)
   afterDateTime.setMilliseconds(0)
 
   const beforeDateTime = new Date(beaconMalfunction.malfunctionStartDateTime)

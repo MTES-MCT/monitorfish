@@ -1,14 +1,15 @@
 import { batch } from 'react-redux'
+
+import { getAllRegulatoryLayersFromAPI } from '../../../api/geoserver'
 import { setError } from '../../../domain/shared_slices/Global'
+import layer from '../../../domain/shared_slices/Layer'
+import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
 import {
   setLayersTopicsByRegTerritory,
   setRegulatoryLayerLawTypes,
   setRegulatoryZones,
   setSelectedRegulatoryZone
 } from '../slice'
-import layer from '../../../domain/shared_slices/Layer'
-import { getAllRegulatoryLayersFromAPI } from '../../../api/geoserver'
-import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
 
 const getAllRegulatoryLayers = () => async (dispatch, getState) => {
   const monitorFishWorker = await new MonitorFishWorker()
@@ -24,15 +25,14 @@ const getAllRegulatoryLayers = () => async (dispatch, getState) => {
       return monitorFishWorker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features, speciesByCode)
     })
     .then(response => {
-      const {
-        layersWithoutGeometry,
-        layersTopicsByRegulatoryTerritory
-      } = response
+      const { layersTopicsByRegulatoryTerritory, layersWithoutGeometry } = response
       batch(() => {
         dispatch(setLayersTopicsByRegTerritory(layersTopicsByRegulatoryTerritory))
         dispatch(setRegulatoryLayerLawTypes(layersTopicsByRegulatoryTerritory))
         dispatch(setSelectedRegulatoryZone(layersWithoutGeometry))
-        dispatch(setShowedLayersWithLocalStorageValues({ regulatoryZones: layersWithoutGeometry, namespace: 'homepage' }))
+        dispatch(
+          setShowedLayersWithLocalStorageValues({ namespace: 'homepage', regulatoryZones: layersWithoutGeometry })
+        )
       })
     })
     .catch(error => {

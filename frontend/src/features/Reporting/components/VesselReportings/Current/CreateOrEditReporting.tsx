@@ -13,7 +13,7 @@ import { setEditedReporting } from '../../../slice'
 
 export function CreateOrEditReporting() {
   const dispatch = useMainAppDispatch()
-  const { selectedVesselIdentity } = useMainAppSelector(state => state.vessel)
+  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)
   const [newReportingFormIsOpen, setNewReportingFormIsOpen] = useState(false)
   const previousSelectedVesselIdentity = usePrevious(selectedVesselIdentity)

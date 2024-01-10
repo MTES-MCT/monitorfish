@@ -1,6 +1,6 @@
-import { setError } from '../../shared_slices/Global'
-import { setOpenedBeaconMalfunction } from '../../shared_slices/BeaconMalfunction'
 import { getBeaconMalfunctionFromAPI } from '../../../api/beaconMalfunction'
+import { setOpenedBeaconMalfunction } from '../../shared_slices/BeaconMalfunction'
+import { setError } from '../../shared_slices/Global'
 
 /**
  * Open a single beacon malfunction
@@ -10,24 +10,32 @@ import { getBeaconMalfunctionFromAPI } from '../../../api/beaconMalfunction'
  */
 const openBeaconMalfunction = (beaconMalfunction, isFromUserAction) => (dispatch, getState) => {
   const previousBeaconMalfunction = getState().beaconMalfunction.openedBeaconMalfunction
-  dispatch(setOpenedBeaconMalfunction({
-    beaconMalfunction: beaconMalfunction,
-    showTab: isFromUserAction
-  }))
+  dispatch(
+    setOpenedBeaconMalfunction({
+      beaconMalfunction,
+      showTab: isFromUserAction
+    })
+  )
 
-  getBeaconMalfunctionFromAPI(beaconMalfunction.beaconMalfunction?.id).then(beaconMalfunctionWithDetails => {
-    dispatch(setOpenedBeaconMalfunction({
-      beaconMalfunction: beaconMalfunctionWithDetails,
-      showTab: isFromUserAction
-    }))
-  }).catch(error => {
-    console.error(error)
-    dispatch(setError(error))
-    dispatch(setOpenedBeaconMalfunction({
-      beaconMalfunction: previousBeaconMalfunction,
-      showTab: isFromUserAction
-    }))
-  })
+  getBeaconMalfunctionFromAPI(beaconMalfunction.beaconMalfunction?.id)
+    .then(beaconMalfunctionWithDetails => {
+      dispatch(
+        setOpenedBeaconMalfunction({
+          beaconMalfunction: beaconMalfunctionWithDetails,
+          showTab: isFromUserAction
+        })
+      )
+    })
+    .catch(error => {
+      console.error(error)
+      dispatch(setError(error))
+      dispatch(
+        setOpenedBeaconMalfunction({
+          beaconMalfunction: previousBeaconMalfunction,
+          showTab: isFromUserAction
+        })
+      )
+    })
 }
 
 export default openBeaconMalfunction

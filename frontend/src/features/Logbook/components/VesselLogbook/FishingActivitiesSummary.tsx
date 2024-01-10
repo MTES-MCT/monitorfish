@@ -36,10 +36,11 @@ type FishingActivitiesSummaryProps = {
 }
 export function FishingActivitiesSummary({ navigation, showLogbookMessages }: FishingActivitiesSummaryProps) {
   const dispatch = useMainAppDispatch()
-  const { selectedVessel } = useMainAppSelector(state => state.vessel)
-  const { fishingActivities, isFirstVoyage, isLastVoyage, tripNumber } = useMainAppSelector(
-    state => state.fishingActivities
-  )
+  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
+  const fishingActivities = useMainAppSelector(state => state.fishingActivities.fishingActivities)
+  const isFirstVoyage = useMainAppSelector(state => state.fishingActivities.isFirstVoyage)
+  const isLastVoyage = useMainAppSelector(state => state.fishingActivities.isLastVoyage)
+  const tripNumber = useMainAppSelector(state => state.fishingActivities.tripNumber)
   const fleetSegments = useMainAppSelector(state => state.fleetSegment.fleetSegments)
 
   const { data: lastLogbookTrips } = useGetLastLogbookTripsQuery(selectedVessel?.internalReferenceNumber || skipToken)

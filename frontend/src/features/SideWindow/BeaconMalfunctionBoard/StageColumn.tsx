@@ -30,7 +30,9 @@ export function StageColumn({
   updateVesselStatus
 }: StageColumnType) {
   const verticalScrollRef = useRef<HTMLDivElement>(null) as MutableRefObject<HTMLDivElement>
-  const { openedBeaconMalfunctionInKanban } = useMainAppSelector(state => state.beaconMalfunction)
+  const openedBeaconMalfunctionInKanban = useMainAppSelector(
+    state => state.beaconMalfunction.openedBeaconMalfunctionInKanban
+  )
 
   return (
     <Wrapper data-cy={`side-window-beacon-malfunctions-columns-${stage.code}`} style={wrapperStyle}>

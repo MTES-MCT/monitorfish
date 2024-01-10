@@ -20,13 +20,16 @@ import type { WebGLPointsLayerWithName } from '../../../../../domain/types/layer
 
 function UnmemoizedVesselsLayer() {
   const dispatch = useMainAppDispatch()
-  const { areVesselsDisplayed } = useMainAppSelector(state => state.displayedComponent)
+  const areVesselsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselsDisplayed)
 
-  const { hideNonSelectedVessels, vessels } = useMainAppSelector(state => state.vessel)
+  const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
+  const vessels = useMainAppSelector(state => state.vessel.vessels)
 
-  const { hideVesselsAtPort, selectedBaseLayer, vesselsLastPositionVisibility } = useMainAppSelector(state => state.map)
+  const hideVesselsAtPort = useMainAppSelector(state => state.map.hideVesselsAtPort)
+  const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
+  const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
 
-  const { previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
+  const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
 
   const { filterColor, filters, nonFilteredVesselsAreHidden, showedFilter } = useMainAppSelector(state => {
     const nextShowedFilter = state.filter?.filters?.find(filter => filter.showed)

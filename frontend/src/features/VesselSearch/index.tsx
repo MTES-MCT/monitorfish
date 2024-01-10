@@ -55,7 +55,8 @@ export function VesselSearch({
 
   const dispatch = useMainAppDispatch()
   const baseUrl = useMemo(() => window.location.origin, [])
-  const { selectedVesselIdentity, vessels } = useMainAppSelector(state => state.vessel)
+  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
+  const vessels = useMainAppSelector(state => state.vessel.vessels)
 
   const escapeFromKeyboard = useEscapeFromKeyboard()
   const clickedOutsideComponent = useClickOutsideWhenOpenedWithinRef(wrapperRef, isExtended, baseRef)

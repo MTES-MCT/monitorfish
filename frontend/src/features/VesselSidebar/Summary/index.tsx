@@ -19,7 +19,7 @@ timeago.register('fr', timeagoFrenchLocale)
 
 export function VesselSummary() {
   const dispatch = useMainAppDispatch()
-  const { coordinatesFormat } = useMainAppSelector(state => state.map)
+  const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const { loadingVessel, selectedVessel, selectedVesselIdentity, selectedVesselPositions } = useMainAppSelector(
     state => state.vessel
   )

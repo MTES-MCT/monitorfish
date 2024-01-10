@@ -20,10 +20,12 @@ import { closeRegulatoryZoneMetadata } from '../../Regulation/useCases/closeRegu
 
 export function LayersSidebar() {
   const dispatch = useMainAppDispatch()
-  const { regulatoryZoneMetadataPanelIsOpen } = useMainAppSelector(state => state.regulatory)
-  const { healthcheckTextWarning, leftBoxOpened, previewFilteredVesselsMode } = useMainAppSelector(
-    state => state.global
+  const regulatoryZoneMetadataPanelIsOpen = useMainAppSelector(
+    state => state.regulatory.regulatoryZoneMetadataPanelIsOpen
   )
+  const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
+  const leftBoxOpened = useMainAppSelector(state => state.global.leftBoxOpened)
+  const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
 
   const [numberOfRegulatoryLayersSaved, setNumberOfRegulatoryLayersSaved] = useState(0)
 

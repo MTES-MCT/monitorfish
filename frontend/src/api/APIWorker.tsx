@@ -29,10 +29,14 @@ export const THIRTY_SECONDS = 30 * 1000
 export function APIWorker() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
-  const { selectedVesselIdentity, vesselSidebarTab } = useMainAppSelector(state => state.vessel)
+  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
+  const vesselSidebarTab = useMainAppSelector(state => state.vessel.vesselSidebarTab)
   const sideWindow = useMainAppSelector(state => state.sideWindow)
-  const { openedBeaconMalfunctionInKanban, vesselBeaconMalfunctionsResumeAndHistory } = useMainAppSelector(
-    state => state.beaconMalfunction
+  const openedBeaconMalfunctionInKanban = useMainAppSelector(
+    state => state.beaconMalfunction.openedBeaconMalfunctionInKanban
+  )
+  const vesselBeaconMalfunctionsResumeAndHistory = useMainAppSelector(
+    state => state.beaconMalfunction.vesselBeaconMalfunctionsResumeAndHistory
   )
 
   const sideWindowInterval = useRef<NodeJS.Timer>()

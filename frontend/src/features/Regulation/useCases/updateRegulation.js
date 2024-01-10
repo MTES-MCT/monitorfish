@@ -1,10 +1,10 @@
-import { setProcessingRegulationSaved, setProcessingRegulationDeleted } from '../../Backoffice/slice'
-import { setError } from '../../../domain/shared_slices/Global'
-import { REGULATION_ACTION_TYPE } from '../utils'
 import { sendRegulationTransaction } from '../../../api/geoserver'
+import { setError } from '../../../domain/shared_slices/Global'
+import { setProcessingRegulationSaved, setProcessingRegulationDeleted } from '../../Backoffice/slice'
+import { REGULATION_ACTION_TYPE } from '../utils'
 
-const updateRegulation = (feature, type) => dispatch => {
-  return sendRegulationTransaction(feature, type)
+const updateRegulation = (feature, type) => dispatch =>
+  sendRegulationTransaction(feature, type)
     .then(_ => {
       if (type === REGULATION_ACTION_TYPE.DELETE) {
         dispatch(setProcessingRegulationDeleted(true))
@@ -16,6 +16,5 @@ const updateRegulation = (feature, type) => dispatch => {
       console.error(e.error)
       dispatch(setError(e))
     })
-}
 
 export default updateRegulation

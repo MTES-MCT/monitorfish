@@ -16,7 +16,10 @@ import type { Reporting } from '../../../../../domain/types/reporting'
 
 export function Current() {
   const dispatch = useMainAppDispatch()
-  const { currentAndArchivedReportingsOfSelectedVessel, editedReporting } = useMainAppSelector(state => state.reporting)
+  const currentAndArchivedReportingsOfSelectedVessel = useMainAppSelector(
+    state => state.reporting.currentAndArchivedReportingsOfSelectedVessel
+  )
+  const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)
   const [deletionModalIsOpenForId, setDeletionModalIsOpenForId] = useState<number | undefined>(undefined)
 
   const getAlertsDesc = useCallback(

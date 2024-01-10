@@ -225,8 +225,8 @@ def test_cps_parser():
                 "catches": [
                     {
                         "sex": "M",
-                        "health_state": "DEA",
-                        "care_minutes": None,
+                        "healthState": "DEA",
+                        "careMinutes": None,
                         "ring": "1234567",
                         "fate": "DIS",
                         "comment": None,
@@ -240,8 +240,8 @@ def test_cps_parser():
                     },
                     {
                         "sex": "M",
-                        "health_state": "DEA",
-                        "care_minutes": 40,
+                        "healthState": "DEA",
+                        "careMinutes": 40,
                         "ring": "1234568",
                         "fate": "DIS",
                         "comment": "Pov' titi a eu bobo",

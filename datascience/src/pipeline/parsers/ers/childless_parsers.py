@@ -61,8 +61,8 @@ def parse_spe(spe):
 def parse_edci(edci):
     data = {
         "sex": edci.get("SE"),
-        "health_state": edci.get("HE"),
-        "care_minutes": try_int(edci.get("CA")),
+        "healthState": edci.get("HE"),
+        "careMinutes": try_int(edci.get("CA")),
         "ring": edci.get("RI"),
         "fate": edci.get("FT"),
         "comment": edci.get("CO"),

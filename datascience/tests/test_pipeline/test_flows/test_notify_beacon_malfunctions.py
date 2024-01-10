@@ -550,8 +550,8 @@ def test_render(
     mode_suffix = "b" if output_format == "pdf" else ""
 
     ######################### Uncomment to replace test files #########################
-    with open(test_filepath, "w" + mode_suffix) as f:
-        f.write(pdf_or_html)
+    # with open(test_filepath, "w" + mode_suffix) as f:
+    #     f.write(pdf_or_html)
     ###################################################################################
 
     with open(test_filepath, "r" + mode_suffix) as f:
@@ -595,8 +595,8 @@ def test_render_sms(malfunction_to_notify_data, sms_templates, notification_type
     test_filepath = TEST_DATA_LOCATION / f"sms/{notification_type}.txt"
 
     ######################### Uncomment to replace test files #########################
-    with open(test_filepath, "w") as f:
-        f.write(sms_text)
+    # with open(test_filepath, "w") as f:
+    #     f.write(sms_text)
     ###################################################################################
 
     with open(test_filepath, "r") as f:
@@ -623,8 +623,8 @@ def test_render_with_null_values(malfunction_to_notify_data_with_nulls, template
     )
 
     ######################### Uncomment to replace test file ##########################
-    with open(test_filepath, "w") as f:
-        f.write(html)
+    # with open(test_filepath, "w") as f:
+    #     f.write(html)
     ###################################################################################
 
     with open(test_filepath, "r") as f:

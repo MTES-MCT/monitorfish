@@ -43,7 +43,7 @@ const INITIAL_STATE: DisplayedComponentState = {
     'isMissionsLayerDisplayed'
   ),
   isMissionsMapButtonDisplayed: true,
-  isStationLayerDisplayed: true,
+  isStationLayerDisplayed: false,
   isVesselFiltersMapButtonDisplayed: true,
   isVesselLabelsMapButtonDisplayed: true,
   isVesselListDisplayed: true,

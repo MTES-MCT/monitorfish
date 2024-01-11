@@ -26,10 +26,6 @@ export function SelectedStationOverlay() {
   const { data: stations } = useGetStationsQuery()
   const { forceUpdate } = useForceUpdate()
 
-  const selectionDialogElementRefCallback = useCallback((ref: HTMLDivElement) => {
-    selectionDialogElementRef.current = ref
-  }, [])
-
   const selectedStation = useMemo(
     () => (selectedStationId ? stations?.find(station => station.id === selectedStationId) : undefined),
     [stations, selectedStationId]
@@ -50,9 +46,7 @@ export function SelectedStationOverlay() {
   }, [])
 
   const updateOverlay = useCallback(
-    (feature: FeatureWithCodeAndEntityId<Geometry>, wrapperElement: HTMLDivElement, cardElement: HTMLDivElement) => {
-      currentOffsetRef.current = getDialogOverlayOffsetFromFeature(feature, cardElement, FEATURE_MARGINS)
-
+    (feature: FeatureWithCodeAndEntityId<Geometry>, wrapperElement: HTMLDivElement) => {
       const nextOverlay = new Overlay({
         className: 'ol-overlay-container overlay-active',
         element: wrapperElement
@@ -84,7 +78,7 @@ export function SelectedStationOverlay() {
       return
     }
 
-    updateOverlay(selectedStationFeature, wrapperElementRef.current, selectionDialogElementRef.current)
+    updateOverlay(selectedStationFeature, wrapperElementRef.current)
   }, [removeOverlay, selectedStationFeature, updateOverlay])
 
   useMoveOverlayWhenDragging(
@@ -99,12 +93,33 @@ export function SelectedStationOverlay() {
     if (selectedStationId !== undefined) {
       forceUpdate()
     }
-  }, [forceUpdate, isStationLayerDisplayed, selectedStationId])
+
+    if (
+      overlayRef.current &&
+      selectedStationFeature &&
+      selectionDialogElementRef.current?.offsetWidth &&
+      selectionDialogElementRef.current?.offsetWidth > 0
+    ) {
+      currentOffsetRef.current = getDialogOverlayOffsetFromFeature(
+        selectedStationFeature,
+        selectionDialogElementRef.current,
+        FEATURE_MARGINS
+      )
+
+      overlayRef.current.setOffset(currentOffsetRef.current)
+    }
+  }, [
+    forceUpdate,
+    isStationLayerDisplayed,
+    selectedStationFeature,
+    selectedStationId,
+    selectionDialogElementRef.current?.offsetWidth
+  ])
 
   return (
     <Wrapper ref={wrapperElementRef} $isVisible={!!selectionDialogElementRef.current}>
       {isStationLayerDisplayed && selectedStation && (
-        <StationCard ref={selectionDialogElementRefCallback} isSelected station={selectedStation} />
+        <StationCard ref={selectionDialogElementRef} isSelected station={selectedStation} />
       )}
     </Wrapper>
   )

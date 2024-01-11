@@ -38,7 +38,8 @@ export function PendingAlertRow({
 }: PendingAlertRowProps) {
   const dispatch = useMainAppDispatch()
   const ref = useRef() as MutableRefObject<HTMLDivElement>
-  const { focusedPendingAlertId, silencedAlertsQueue } = useMainAppSelector(state => state.alert)
+  const focusedPendingAlertId = useMainAppSelector(state => state.alert.focusedPendingAlertId)
+  const silencedAlertsQueue = useMainAppSelector(state => state.alert.silencedAlertsQueue)
   const baseUrl = window.location.origin
 
   const silencedAlertsQueueMatch = useMemo(

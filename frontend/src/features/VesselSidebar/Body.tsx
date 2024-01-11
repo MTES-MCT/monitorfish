@@ -18,9 +18,10 @@ import { VesselReportings } from '../Reporting/components/VesselReportings'
 export function Body() {
   const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
-  const { healthcheckTextWarning } = useMainAppSelector(state => state.global)
+  const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
   const vesselSidebarError = useMainAppSelector(state => state.displayedError.vesselSidebarError)
-  const { selectedVessel, vesselSidebarTab } = useMainAppSelector(state => state.vessel)
+  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
+  const vesselSidebarTab = useMainAppSelector(state => state.vessel.vesselSidebarTab)
 
   if (vesselSidebarError) {
     return (

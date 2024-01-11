@@ -36,7 +36,7 @@ export type FilterBarProps = {
 export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
   const { newWindowContainerRef } = useNewWindow()
 
-  const { listFilterValues } = useMainAppSelector(store => store.mission)
+  const listFilterValues = useMainAppSelector(store => store.mission.listFilterValues)
 
   const [isCustomDateRangeOpen, setIsCustomDateRangeOpen] = useState(false)
 

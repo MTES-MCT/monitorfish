@@ -1,11 +1,12 @@
-import { setCategoriesToGears, setGears, setGroupsToCategories, setGearsByCode } from '../../shared_slices/Gear'
-import { setIsReadyToShowRegulatoryZones } from '../../../features/Regulation/slice'
-import { setError } from '../../shared_slices/Global'
 import { batch } from 'react-redux'
-import { getAllGearsFromAPI } from '../../../api/gearCode'
-import { REGULATED_GEARS_KEYS } from '../../entities/backoffice'
 
-/***
+import { getAllGearsFromAPI } from '../../../api/gearCode'
+import { setIsReadyToShowRegulatoryZones } from '../../../features/Regulation/slice'
+import { REGULATED_GEARS_KEYS } from '../../entities/backoffice'
+import { setCategoriesToGears, setGears, setGroupsToCategories, setGearsByCode } from '../../shared_slices/Gear'
+import { setError } from '../../shared_slices/Global'
+
+/** *
  * Get gear group name, see SQL init of table fishing_gear_groups:
  *
  * INSERT INTO public.fishing_gear_groups VALUES
@@ -17,9 +18,12 @@ import { REGULATED_GEARS_KEYS } from '../../entities/backoffice'
  */
 const getGroupName = groupId => {
   switch (groupId) {
-    case 1: return REGULATED_GEARS_KEYS.ALL_TOWED_GEARS
-    case 2: return REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS
-    default: return null
+    case 1:
+      return REGULATED_GEARS_KEYS.ALL_TOWED_GEARS
+    case 2:
+      return REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS
+    default:
+      return null
   }
 }
 
@@ -28,53 +32,53 @@ const getAllGearCodes = () => (dispatch, getState) => {
     return
   }
 
-  getAllGearsFromAPI().then(gears => {
-    /** @type {Map<string, Gear[]>} */
-    const categoriesToGears = {}
-    /** @type {Map<string, string>} */
-    const groupToCategories = {}
-    /** @type {Map<string, Gear>} */
-    const gearsByCode = {}
+  getAllGearsFromAPI()
+    .then(gears => {
+      /** @type {Map<string, Gear[]>} */
+      const categoriesToGears = {}
+      /** @type {Map<string, string>} */
+      const groupToCategories = {}
+      /** @type {Map<string, Gear>} */
+      const gearsByCode = {}
 
-    gears.forEach(gear => {
-      const {
-        code,
-        category,
-        groupId
-      } = gear
-      gearsByCode[code] = gear
+      gears.forEach(gear => {
+        const { category, code, groupId } = gear
+        gearsByCode[code] = gear
 
-      if (!Object.keys(categoriesToGears).includes(category)) {
-        categoriesToGears[category] = [gear]
-      } else {
-        categoriesToGears[category].push(gear)
-      }
+        if (!Object.keys(categoriesToGears).includes(category)) {
+          categoriesToGears[category] = [gear]
+        } else {
+          categoriesToGears[category].push(gear)
+        }
 
-      const groupName = getGroupName(groupId)
-      if (!Object.keys(groupToCategories).includes(groupName)) {
-        groupToCategories[groupName] = [category]
-      } else {
-        if (!groupToCategories[groupName].includes(category)) {
+        const groupName = getGroupName(groupId)
+        if (!Object.keys(groupToCategories).includes(groupName)) {
+          groupToCategories[groupName] = [category]
+        } else if (!groupToCategories[groupName].includes(category)) {
           groupToCategories[groupName].push(category)
         }
-      }
-    })
-    batch(() => {
-      dispatch(setGears(gears.sort((a, b) => {
-        if (a.code && b.code) {
-          return a.code.localeCompare(b.code)
-        }
+      })
+      batch(() => {
+        dispatch(
+          setGears(
+            gears.sort((a, b) => {
+              if (a.code && b.code) {
+                return a.code.localeCompare(b.code)
+              }
 
-        return null
-      })))
-      dispatch(setIsReadyToShowRegulatoryZones())
-      dispatch(setCategoriesToGears(categoriesToGears))
-      dispatch(setGroupsToCategories(groupToCategories))
-      dispatch(setGearsByCode(gearsByCode))
+              return null
+            })
+          )
+        )
+        dispatch(setIsReadyToShowRegulatoryZones())
+        dispatch(setCategoriesToGears(categoriesToGears))
+        dispatch(setGroupsToCategories(groupToCategories))
+        dispatch(setGearsByCode(gearsByCode))
+      })
     })
-  }).catch(error => {
-    dispatch(setError(error))
-  })
+    .catch(error => {
+      dispatch(setError(error))
+    })
 }
 
 export default getAllGearCodes

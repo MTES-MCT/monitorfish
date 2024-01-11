@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
-import VectorSource from 'ol/source/Vector'
 import GeoJSON from 'ol/format/GeoJSON'
 import { all } from 'ol/loadingstrategy'
+import VectorSource from 'ol/source/Vector'
 
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './domain/entities/map/constants'
 
@@ -11,22 +11,17 @@ import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './domain/entities/map/c
  * @param {number[]} defaultColor
  * @returns
  */
-export const customHexToRGB = (hexColor) => {
+export const customHexToRGB = hexColor => {
   if (!hexColor || !(typeof hexColor === 'string')) {
     return [0, 0, 0]
   }
   const aRgbHex = hexColor.substring(1).match(/.{1,2}/g)
-  const aRgb = [
-    parseInt(aRgbHex[0], 16),
-    parseInt(aRgbHex[1], 16),
-    parseInt(aRgbHex[2], 16)
-  ]
+  const aRgb = [parseInt(aRgbHex[0], 16), parseInt(aRgbHex[1], 16), parseInt(aRgbHex[2], 16)]
+
   return aRgb
 }
 
-export const booleanToInt = (boolean) => {
-  return boolean ? 1 : 0
-}
+export const booleanToInt = boolean => (boolean ? 1 : 0)
 export const calculatePointsDistance = (coord1, coord2) => {
   const dx = coord1[0] - coord2[0]
   const dy = coord1[1] - coord2[1]
@@ -42,19 +37,22 @@ export const calculateSplitPointCoordinates = (startNode, nextNode, distanceBetw
   return [x, y]
 }
 
-function getMonth (date) {
+function getMonth(date) {
   const month = date.getUTCMonth() + 1
-  return month < 10 ? '0' + month : '' + month
+
+  return month < 10 ? `0${month}` : `${month}`
 }
 
-function getDay (date) {
+function getDay(date) {
   const day = date.getUTCDate()
-  return day < 10 ? '0' + day : '' + day
+
+  return day < 10 ? `0${day}` : `${day}`
 }
 
 export const getDate = dateString => {
   if (dateString) {
     const date = new Date(dateString)
+
     return `${getDay(date)}/${getMonth(date)}/${date.getUTCFullYear()}`
   }
 
@@ -66,16 +64,16 @@ export const getTime = (dateString, withoutSeconds) => {
   const timeOptions = withoutSeconds
     ? {
         hour: '2-digit',
+        hourCycle: 'h24',
         minute: '2-digit',
-        timeZone: 'UTC',
-        hourCycle: 'h24'
+        timeZone: 'UTC'
       }
     : {
         hour: '2-digit',
+        hourCycle: 'h24',
         minute: '2-digit',
         second: '2-digit',
-        timeZone: 'UTC',
-        hourCycle: 'h24'
+        timeZone: 'UTC'
       }
 
   let time = date.toLocaleTimeString([], timeOptions)
@@ -100,7 +98,7 @@ export const getDateTime = (dateString, withoutSeconds) => {
  * @param {Number} nofMonths no of months to get date before
  * @returns {Date} date before nofMonths months
  */
-export function getDateMonthsBefore (date, nofMonths) {
+export function getDateMonthsBefore(date, nofMonths) {
   const thisMonth = date.getMonth()
   // set the month index of the date by subtracting nofMonths from the current month index
   date.setMonth(thisMonth - nofMonths)
@@ -110,9 +108,9 @@ export function getDateMonthsBefore (date, nofMonths) {
   // if the result of subtraction is negative and add 6 to the index and check if JS has auto advanced the date,
   // then set the date again to last day of previous month
   // Else check if the result of subtraction is non negative, subtract nofMonths to the index and check the same.
-  if ((thisMonth - nofMonths < 0) && (date.getMonth() !== (thisMonth + nofMonths))) {
+  if (thisMonth - nofMonths < 0 && date.getMonth() !== thisMonth + nofMonths) {
     date.setDate(0)
-  } else if ((thisMonth - nofMonths >= 0) && (date.getMonth() !== thisMonth - nofMonths)) {
+  } else if (thisMonth - nofMonths >= 0 && date.getMonth() !== thisMonth - nofMonths) {
     date.setDate(0)
   }
 
@@ -130,9 +128,8 @@ export const getTextWidth = text => {
 
 export const getLocalStorageState = (defaultValue, key) => {
   const stickyValue = window.localStorage.getItem(key)
-  return stickyValue !== null
-    ? JSON.parse(stickyValue)
-    : defaultValue
+
+  return stickyValue !== null ? JSON.parse(stickyValue) : defaultValue
 }
 
 const SECONDS = 60
@@ -151,8 +148,7 @@ export const timeagoFrenchLocale = function (number, index, totalSec) {
   if (index === 6 || index === 7) {
     // Calculate seconds since midnight for right now
     const now = new Date()
-    const secondsSinceMidnight =
-      now.getSeconds() + (now.getMinutes() * SECONDS) + (now.getHours() * MINUTES * SECONDS)
+    const secondsSinceMidnight = now.getSeconds() + now.getMinutes() * SECONDS + now.getHours() * MINUTES * SECONDS
 
     // Subtract seconds since midnight from totalSec, divide by seconds in a day, round down
     // Result is off-by-one number of days since datetime (unless time was at midnight)
@@ -162,6 +158,7 @@ export const timeagoFrenchLocale = function (number, index, totalSec) {
     const remainder = (totalSec - secondsSinceMidnight) % SECONDS_IN_DAY
     const days = remainder >= 1 ? daysFloored + 1 : daysFloored
     const noun = days === 1 ? 'jour' : 'jours'
+
     return [`il y a  ${days} ${noun}`, `${days} ${noun}`]
   }
 
@@ -170,9 +167,7 @@ export const timeagoFrenchLocale = function (number, index, totalSec) {
   if (index === 8) {
     const days = Math.round(totalSec / SECONDS / MINUTES / HOURS)
     if (days > 8) {
-      return days === 13
-        ? ['il y a 2 semaines', '2 semaines']
-        : ['il y a %s jours', '%s jours']
+      return days === 13 ? ['il y a 2 semaines', '2 semaines'] : ['il y a %s jours', '%s jours']
     }
   }
 
@@ -181,13 +176,13 @@ export const timeagoFrenchLocale = function (number, index, totalSec) {
     const days = Math.round(totalSec / SECONDS / MINUTES / HOURS)
     if (days <= 62) {
       return [`il y a ${days} jours`, `${days} jours`]
-    } else {
-      return ['il y a %s mois', '%s mois']
     }
+
+    return ['il y a %s mois', '%s mois']
   }
 
   return [
-    ['à l\'instant', 'un instant'],
+    ["à l'instant", 'un instant'],
     ['il y a %s secondes', '%s secondes'],
     ['il y a 1 minute', '1 minute'],
     ['il y a %s minutes', '%s minutes'],
@@ -206,18 +201,18 @@ export const timeagoFrenchLocale = function (number, index, totalSec) {
 
 const accentsMap = {
   a: 'á|à|ã|â|À|Á|Ã|Â',
+  c: 'ç|Ç',
   e: 'é|è|ê|É|È|Ê',
   i: 'í|ì|î|Í|Ì|Î',
+  n: 'ñ|Ñ',
   o: 'ó|ò|ô|õ|Ó|Ò|Ô|Õ',
-  u: 'ú|ù|û|ü|Ú|Ù|Û|Ü',
-  c: 'ç|Ç',
-  n: 'ñ|Ñ'
+  u: 'ú|ù|û|ü|Ú|Ù|Û|Ü'
 }
 
-export const removeAccents = text => Object.keys(accentsMap)
-  .reduce((acc, cur) => acc.toString().replace(new RegExp(accentsMap[cur], 'g'), cur), text)
+export const removeAccents = text =>
+  Object.keys(accentsMap).reduce((acc, cur) => acc.toString().replace(new RegExp(accentsMap[cur], 'g'), cur), text)
 
-export function getTextForSearch (text) {
+export function getTextForSearch(text) {
   if (!text) {
     return ''
   }
@@ -231,18 +226,19 @@ export function getTextForSearch (text) {
     .replace(/["]/g, '')
 }
 
-export function getNauticalMilesFromMeters (length) {
+export function getNauticalMilesFromMeters(length) {
   return Math.round((length / 1000) * 100 * 0.539957) / 100
 }
 
-export function createGenericSlice (initialState, reducers, topic) {
-  const initialStateCopy = Object.assign({}, initialState)
-  const reducersCopy = Object.assign({}, reducers)
+export function createGenericSlice(initialState, reducers, topic) {
+  const initialStateCopy = { ...initialState }
+  const reducersCopy = { ...reducers }
   const sliceObject = {
-    name: topic,
     initialState: initialStateCopy,
+    name: topic,
     reducers: reducersCopy
   }
+
   return createSlice(sliceObject)
 }
 
@@ -256,12 +252,10 @@ export function createGenericSlice (initialState, reducers, topic) {
 /**
  * @param {string} element
  * @return {SelectPickerObject} */
-const item = (e) => {
-  return {
-    label: e,
-    value: e
-  }
-}
+const item = e => ({
+  label: e,
+  value: e
+})
 
 /**
  * @function convert a list of elements to a list of object :
@@ -272,16 +266,18 @@ const item = (e) => {
  */
 export const formatDataForSelectPicker = (list, groupName) => {
   if (list?.length > 0) {
-    const array = [...list]
-      .map(e => {
-        const i = item(e)
-        if (groupName) {
-          i.group = groupName
-        }
-        return i
-      })
+    const array = [...list].map(e => {
+      const i = item(e)
+      if (groupName) {
+        i.group = groupName
+      }
+
+      return i
+    })
+
     return array
   }
+
   return []
 }
 
@@ -315,11 +311,13 @@ export const getExtentFromGeoJSON = features => {
  * @param {Object} objectTwo - Second object
  * @return {Object} The merged object
  */
-export function mergeObjects (objectOne, objectTwo) {
+export function mergeObjects(objectOne, objectTwo) {
   const mergedObject = {}
 
   for (const key of Object.keys(objectOne)) {
-    if (!mergedObject[key]) mergedObject[key] = []
+    if (!mergedObject[key]) {
+      mergedObject[key] = []
+    }
 
     for (const innerKey of objectOne[key]) {
       mergedObject[key].push(innerKey)
@@ -327,7 +325,9 @@ export function mergeObjects (objectOne, objectTwo) {
   }
 
   for (const key of Object.keys(objectTwo)) {
-    if (!mergedObject[key]) mergedObject[key] = []
+    if (!mergedObject[key]) {
+      mergedObject[key] = []
+    }
 
     for (const innerKey of objectTwo[key]) {
       mergedObject[key].push(innerKey)

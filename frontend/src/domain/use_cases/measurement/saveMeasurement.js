@@ -1,10 +1,11 @@
 import GeoJSON from 'ol/format/GeoJSON'
-import { OPENLAYERS_PROJECTION } from '../../entities/map/constants'
 import Circle from 'ol/geom/Circle'
 import { fromCircle } from 'ol/geom/Polygon'
-import { addMeasurementDrawed, resetCircleMeasurementInDrawing } from '../../shared_slices/Measurement'
 import { batch } from 'react-redux'
+
+import { OPENLAYERS_PROJECTION } from '../../entities/map/constants'
 import { setMapToolOpened } from '../../shared_slices/Global'
+import { addMeasurementDrawed, resetCircleMeasurementInDrawing } from '../../shared_slices/Measurement'
 
 const saveMeasurement = (feature, measurement) => dispatch => {
   feature.setId(feature.ol_uid)
@@ -17,18 +18,21 @@ const saveMeasurement = (feature, measurement) => dispatch => {
 
   const tooltipCoordinates = feature.getGeometry().getLastCoordinate()
   batch(() => {
-    dispatch(addMeasurementDrawed({
-      feature: geoJSONFeature,
-      measurement: measurement,
-      coordinates: tooltipCoordinates
-    }))
+    dispatch(
+      addMeasurementDrawed({
+        coordinates: tooltipCoordinates,
+        feature: geoJSONFeature,
+        measurement
+      })
+    )
     dispatch(resetCircleMeasurementInDrawing())
     dispatch(setMapToolOpened(undefined))
   })
 }
 
-function getGeoJSONFromFeature (feature) {
+function getGeoJSONFromFeature(feature) {
   const parser = new GeoJSON()
+
   return parser.writeFeatureObject(feature, { featureProjection: OPENLAYERS_PROJECTION })
 }
 

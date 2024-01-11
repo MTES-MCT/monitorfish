@@ -13,16 +13,28 @@ import { ControlUnitListDialogButton } from '../ControlUnit/components/ControlUn
 
 export function MapButtons() {
   const isSuperUser = useIsSuperUser()
-  const {
-    isAlertsMapButtonDisplayed,
-    isBeaconMalfunctionsMapButtonDisplayed,
-    isFavoriteVesselsMapButtonDisplayed,
-    isInterestPointMapButtonDisplayed,
-    isMeasurementMapButtonDisplayed,
-    isVesselFiltersMapButtonDisplayed,
-    isVesselLabelsMapButtonDisplayed,
-    isVesselVisibilityMapButtonDisplayed
-  } = useMainAppSelector(state => state.displayedComponent)
+  const isAlertsMapButtonDisplayed = useMainAppSelector(state => state.displayedComponent.isAlertsMapButtonDisplayed)
+  const isBeaconMalfunctionsMapButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isBeaconMalfunctionsMapButtonDisplayed
+  )
+  const isFavoriteVesselsMapButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isFavoriteVesselsMapButtonDisplayed
+  )
+  const isInterestPointMapButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isInterestPointMapButtonDisplayed
+  )
+  const isMeasurementMapButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isMeasurementMapButtonDisplayed
+  )
+  const isVesselFiltersMapButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isVesselFiltersMapButtonDisplayed
+  )
+  const isVesselLabelsMapButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isVesselLabelsMapButtonDisplayed
+  )
+  const isVesselVisibilityMapButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isVesselVisibilityMapButtonDisplayed
+  )
 
   return (
     <>

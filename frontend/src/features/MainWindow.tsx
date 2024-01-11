@@ -23,13 +23,15 @@ import { SideWindowStatus } from '../domain/entities/sideWindow/constants'
 import { useMainAppSelector } from '../hooks/useMainAppSelector'
 
 export function MainWindow() {
-  const {
-    isControlUnitDialogDisplayed,
-    isControlUnitListDialogDisplayed,
-    isDrawLayerModalDisplayed,
-    isVesselListDisplayed,
-    isVesselSearchDisplayed
-  } = useMainAppSelector(state => state.displayedComponent)
+  const isControlUnitDialogDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isControlUnitDialogDisplayed
+  )
+  const isControlUnitListDialogDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isControlUnitListDialogDisplayed
+  )
+  const isDrawLayerModalDisplayed = useMainAppSelector(state => state.displayedComponent.isDrawLayerModalDisplayed)
+  const isVesselListDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselListDisplayed)
+  const isVesselSearchDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselSearchDisplayed)
   const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
   const isDraftDirty = useMainAppSelector(state => state.mission.isDraftDirty)
   const status = useMainAppSelector(state => state.sideWindow.status)

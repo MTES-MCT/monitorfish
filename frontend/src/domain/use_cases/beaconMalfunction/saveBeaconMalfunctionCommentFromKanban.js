@@ -1,10 +1,10 @@
-import { setError } from '../../shared_slices/Global'
+import { saveBeaconMalfunctionCommentFromAPI } from '../../../api/beaconMalfunction'
 import {
   setOpenedBeaconMalfunction,
   setOpenedBeaconMalfunctionsInKanban,
   updateVesselBeaconMalfunctionsResumeAndHistory
 } from '../../shared_slices/BeaconMalfunction'
-import { saveBeaconMalfunctionCommentFromAPI } from '../../../api/beaconMalfunction'
+import { setError } from '../../shared_slices/Global'
 
 /**
  * Save a new comment to a beacon malfunction
@@ -13,35 +13,40 @@ import { saveBeaconMalfunctionCommentFromAPI } from '../../../api/beaconMalfunct
  * @param {string} comment
  */
 const saveBeaconMalfunctionCommentFromKanban = (beaconMalfunctionId, comment) => (dispatch, getState) => {
-  const userType = getState().global.userType
+  const { userType } = getState().global
   const newCommentInput = {
     comment,
     userType
   }
-  const beaconMalfunctionToUpdateIsOpenedAsCurrentVesselMalfunction = getState().beaconMalfunction
-    .vesselBeaconMalfunctionsResumeAndHistory?.current?.beaconMalfunction?.id === beaconMalfunctionId
-  const beaconMalfunctionToUpdateIsOpened = getState().beaconMalfunction
-    .openedBeaconMalfunction?.beaconMalfunction?.id === beaconMalfunctionId
-  const beaconMalfunctionToUpdateIsOpenedInKanban = getState().beaconMalfunction
-    .openedBeaconMalfunctionInKanban?.beaconMalfunction?.id === beaconMalfunctionId
+  const beaconMalfunctionToUpdateIsOpenedAsCurrentVesselMalfunction =
+    getState().beaconMalfunction.vesselBeaconMalfunctionsResumeAndHistory?.current?.beaconMalfunction?.id ===
+    beaconMalfunctionId
+  const beaconMalfunctionToUpdateIsOpened =
+    getState().beaconMalfunction.openedBeaconMalfunction?.beaconMalfunction?.id === beaconMalfunctionId
+  const beaconMalfunctionToUpdateIsOpenedInKanban =
+    getState().beaconMalfunction.openedBeaconMalfunctionInKanban?.beaconMalfunction?.id === beaconMalfunctionId
 
-  return saveBeaconMalfunctionCommentFromAPI(beaconMalfunctionId, newCommentInput).then(beaconMalfunctionWithDetails => {
-    if (beaconMalfunctionToUpdateIsOpened) {
-      dispatch(setOpenedBeaconMalfunction({
-        beaconMalfunction: beaconMalfunctionWithDetails,
-        showTab: false
-      }))
-    }
-    if (beaconMalfunctionToUpdateIsOpenedInKanban) {
-      dispatch(setOpenedBeaconMalfunctionsInKanban(beaconMalfunctionWithDetails))
-    }
-    if (beaconMalfunctionToUpdateIsOpenedAsCurrentVesselMalfunction) {
-      dispatch(updateVesselBeaconMalfunctionsResumeAndHistory(beaconMalfunctionWithDetails))
-    }
-  }).catch(error => {
-    console.error(error)
-    dispatch(setError(error))
-  })
+  return saveBeaconMalfunctionCommentFromAPI(beaconMalfunctionId, newCommentInput)
+    .then(beaconMalfunctionWithDetails => {
+      if (beaconMalfunctionToUpdateIsOpened) {
+        dispatch(
+          setOpenedBeaconMalfunction({
+            beaconMalfunction: beaconMalfunctionWithDetails,
+            showTab: false
+          })
+        )
+      }
+      if (beaconMalfunctionToUpdateIsOpenedInKanban) {
+        dispatch(setOpenedBeaconMalfunctionsInKanban(beaconMalfunctionWithDetails))
+      }
+      if (beaconMalfunctionToUpdateIsOpenedAsCurrentVesselMalfunction) {
+        dispatch(updateVesselBeaconMalfunctionsResumeAndHistory(beaconMalfunctionWithDetails))
+      }
+    })
+    .catch(error => {
+      console.error(error)
+      dispatch(setError(error))
+    })
 }
 
 export default saveBeaconMalfunctionCommentFromKanban

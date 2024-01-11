@@ -22,7 +22,8 @@ export function VesselSidebarHeader() {
     state => state.vessel
   )
 
-  const { previewFilteredVesselsMode, rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
+  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
 
   const isVesselNameShown = !isFocusedOnVesselSearch && selectedVesselIdentity
   const isRightMenuShrinked = vesselSidebarIsOpen && !rightMenuIsOpen

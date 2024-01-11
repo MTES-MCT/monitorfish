@@ -7,7 +7,7 @@ import { getVesselCompositeIdentifier } from '../../domain/entities/vessel/vesse
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, showLastSearchedVessels }) {
-  const { lastSearchedVessels } = useMainAppSelector(state => state.global)
+  const lastSearchedVessels = useMainAppSelector(state => state.global.lastSearchedVessels)
   const baseUrl = useMemo(() => window.location.origin, [])
 
   return (

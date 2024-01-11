@@ -31,21 +31,21 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
 
   const isSuperUser = useIsSuperUser()
 
-  const { hideNonSelectedVessels, selectedVessel, vessels, vesselsTracksShowed } = useMainAppSelector(
-    state => state.vessel
-  )
-  const { areVesselsDisplayed } = useMainAppSelector(state => state.displayedComponent)
-  const { previewFilteredVesselsMode } = useMainAppSelector(state => state.global)
+  const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
+  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
+  const vessels = useMainAppSelector(state => state.vessel.vessels)
+  const vesselsTracksShowed = useMainAppSelector(state => state.vessel.vesselsTracksShowed)
+  const areVesselsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselsDisplayed)
+  const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
 
-  const {
-    hideVesselsAtPort,
-    riskFactorShowedOnMap,
-    vesselLabel,
-    vesselLabelsShowedOnMap,
-    vesselsLastPositionVisibility
-  } = useMainAppSelector(state => state.map)
+  const hideVesselsAtPort = useMainAppSelector(state => state.map.hideVesselsAtPort)
+  const riskFactorShowedOnMap = useMainAppSelector(state => state.map.riskFactorShowedOnMap)
+  const vesselLabel = useMainAppSelector(state => state.map.vesselLabel)
+  const vesselLabelsShowedOnMap = useMainAppSelector(state => state.map.vesselLabelsShowedOnMap)
+  const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
 
-  const { filters, nonFilteredVesselsAreHidden } = useMainAppSelector(state => state.filter)
+  const filters = useMainAppSelector(state => state.filter.filters)
+  const nonFilteredVesselsAreHidden = useMainAppSelector(state => state.filter.nonFilteredVesselsAreHidden)
 
   const [featuresAndLabels, setFeaturesAndLabels] = useState<
     {

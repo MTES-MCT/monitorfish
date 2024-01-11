@@ -10,7 +10,7 @@ type MapComponentStyleType = {
   isHidden?: boolean | undefined
 }
 export function MapComponent({ children, className, isHidden, ...props }: MapComponentStyleType) {
-  const { healthcheckTextWarning } = useMainAppSelector(state => state.global)
+  const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
 
   return (
     <Wrapper

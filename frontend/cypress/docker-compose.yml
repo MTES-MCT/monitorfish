@@ -46,7 +46,8 @@ services:
       - FRONTEND_SENTRY_DSN=https://a5f3272efa794bb9ada2ffea90f2fec5@sentry.incubateur.net/8
       - FRONTEND_SHOM_KEY=rg8ele7cft4ujkwjspsmtwas
       - VITE_SMALL_CHAT_SNIPPET=
-      - FRONTEND_MISSION_AUTO_SAVE_ENABLED=true
+      - FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED=true # Even if we inject this env var, the value is not used (see cypress.config.ts)
+      - FRONTEND_MISSION_FORM_AUTO_UPDATE_ENABLED=true
     ports:
       - 8880:8880
       - 8000:8000

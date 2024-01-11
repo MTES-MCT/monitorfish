@@ -1,15 +1,15 @@
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { RegulatoryLayerSearchResultZone } from './RegulatoryLayerSearchResultZone'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { ResultZone } from './ResultZone'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 
 export type RegulatoryLayerSearchResultZonesProps = {
   regulatoryLayerLawType: any
   regulatoryLayerTopic: any
   zonesAreOpen: any
 }
-export function RegulatoryLayerSearchResultZones({
+export function ResultZones({
   regulatoryLayerLawType,
   regulatoryLayerTopic,
   zonesAreOpen
@@ -31,11 +31,7 @@ export function RegulatoryLayerSearchResultZones({
   return (
     <RegulatoryZones $isOpen={zonesAreOpen} $length={getRegulatoryZones().length}>
       {getRegulatoryZones().map(regulatoryZone => (
-        <RegulatoryLayerSearchResultZone
-          key={regulatoryZone.id}
-          isOpen={zonesAreOpen}
-          regulatoryZone={regulatoryZone}
-        />
+        <ResultZone key={regulatoryZone.id} isOpen={zonesAreOpen} regulatoryZone={regulatoryZone} />
       ))}
     </RegulatoryZones>
   )

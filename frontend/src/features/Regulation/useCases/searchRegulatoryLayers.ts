@@ -3,7 +3,7 @@ import Fuse from 'fuse.js'
 import { getRegulatoryZonesInExtentFromAPI } from '../../../api/geoserver'
 import { getExtentFromGeoJSON } from '../../../utils'
 import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
-import { REGULATION_SEARCH_OPTIONS } from '../components/RegulatoryZones/search/constants'
+import { REGULATION_SEARCH_OPTIONS } from '../components/RegulationSearch/constants'
 
 import type { RegulatoryZone } from '../types'
 

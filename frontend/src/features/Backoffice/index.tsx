@@ -15,7 +15,7 @@ import { AdministrativeLayers } from '../AdministrativeZone/layers/Administrativ
 import { BaseLayer } from '../BaseMap/layers/BaseLayer'
 import { EmptyResult } from '../commonStyles/Text.style'
 import { BaseMap } from '../map/BaseMap'
-import { RegulatoryZoneMetadata } from '../Regulation/components/RegulatoryZones/RegulatoryZoneMetadata'
+import { RegulatoryZoneMetadata } from '../Regulation/components/RegulatoryZoneMetadata'
 import { RegulatoryLayers } from '../Regulation/layers/RegulatoryLayers'
 import { RegulatoryPreviewLayer } from '../Regulation/layers/RegulatoryPreviewLayer'
 import { setRegulatoryZoneMetadata } from '../Regulation/slice'

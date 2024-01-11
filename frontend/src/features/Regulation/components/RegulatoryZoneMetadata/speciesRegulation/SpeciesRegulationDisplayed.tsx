@@ -2,11 +2,11 @@ import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
 import { RegulatedSpecies } from './RegulatedSpecies'
-import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
-import { DEFAULT_AUTHORIZED_REGULATED_SPECIES, DEFAULT_UNAUTHORIZED_REGULATED_SPECIES } from '../../../../utils'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { DEFAULT_AUTHORIZED_REGULATED_SPECIES, DEFAULT_UNAUTHORIZED_REGULATED_SPECIES } from '../../../utils'
 import { Section } from '../RegulatoryMetadata.style'
 
-import type { RegulatedSpecies as RegulatedSpeciesType } from '../../../../types'
+import type { RegulatedSpecies as RegulatedSpeciesType } from '../../../types'
 
 export function SpeciesRegulationDisplayed() {
   const regulatory = useMainAppSelector(state => state.regulatory)

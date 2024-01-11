@@ -3,21 +3,21 @@ import { Checkbox, CheckboxGroup } from 'rsuite'
 import styled, { css } from 'styled-components'
 
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './slice'
-import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import { PaperDarkIcon, PaperIcon } from '../../../../commonStyles/icons/REGPaperIcon.style'
-import { getRegulatoryLayerStyle } from '../../../layers/styles/regulatoryLayer.style'
-import { closeRegulatoryZoneMetadata } from '../../../useCases/closeRegulatoryZoneMetadata'
-import { showRegulatoryZoneMetadata } from '../../../useCases/showRegulatoryZoneMetadata'
-import { showOrHideMetadataIcon } from '../RegulatoryZone'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { PaperDarkIcon, PaperIcon } from '../../../commonStyles/icons/REGPaperIcon.style'
+import { getRegulatoryLayerStyle } from '../../layers/styles/regulatoryLayer.style'
+import { closeRegulatoryZoneMetadata } from '../../useCases/closeRegulatoryZoneMetadata'
+import { showRegulatoryZoneMetadata } from '../../useCases/showRegulatoryZoneMetadata'
+import { showOrHideMetadataIcon } from '../RegulatoryZones/RegulatoryZone'
 
-import type { RegulatoryZone } from '../../../types'
+import type { RegulatoryZone } from '../../types'
 
 export type RegulatoryLayerSearchResultZoneProps = {
   isOpen: boolean
   regulatoryZone: RegulatoryZone
 }
-export function RegulatoryLayerSearchResultZone({ isOpen, regulatoryZone }: RegulatoryLayerSearchResultZoneProps) {
+export function ResultZone({ isOpen, regulatoryZone }: RegulatoryLayerSearchResultZoneProps) {
   const dispatch = useMainAppDispatch()
 
   const { regulatoryZoneMetadata } = useMainAppSelector(state => state.regulatory)

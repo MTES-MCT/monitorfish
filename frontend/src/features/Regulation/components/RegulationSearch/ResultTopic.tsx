@@ -3,13 +3,13 @@ import { memo, useMemo, useState } from 'react'
 import { Checkbox, CheckboxGroup } from 'rsuite'
 import styled from 'styled-components'
 
-import { RegulatoryLayerSearchResultZones } from './RegulatoryLayerSearchResultZones'
+import { ResultZones } from './ResultZones'
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './slice'
-import { COLORS } from '../../../../../constants/constants'
-import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { COLORS } from '../../../../constants/constants'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 
-import type { RegulatoryZone } from '../../../types'
+import type { RegulatoryZone } from '../../types'
 
 export type RegulatoryLayerSearchResultTopicProps = {
   regulatoryLayerLawType?: string
@@ -139,7 +139,7 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
           ]}
         </CheckboxGroup>
       </LayerTopic>
-      <RegulatoryLayerSearchResultZones
+      <ResultZones
         regulatoryLayerLawType={regulatoryLayerLawType}
         regulatoryLayerTopic={regulatoryLayerTopic}
         zonesAreOpen={zonesAreOpen}
@@ -194,4 +194,4 @@ const LayerTopic = styled.div`
   }
 `
 
-export const RegulatoryLayerSearchResultTopic = memo(UnmemoizedRegulatoryLayerSearchResultTopic)
+export const ResultTopic = memo(UnmemoizedRegulatoryLayerSearchResultTopic)

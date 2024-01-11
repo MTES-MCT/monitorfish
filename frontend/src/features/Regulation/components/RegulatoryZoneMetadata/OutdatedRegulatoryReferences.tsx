@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../../constants/constants'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import { INFINITE } from '../../../../Backoffice/constants'
-import AlertSVG from '../../../../icons/Picto_alerte.svg?react'
+import { COLORS } from '../../../../constants/constants'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { INFINITE } from '../../../Backoffice/constants'
+import AlertSVG from '../../../icons/Picto_alerte.svg?react'
 
 export function OutdatedRegulatoryReferences() {
   const { hasAtLeastOneOutdatedReference, hasOneRegulatoryReference } = useMainAppSelector(state => {

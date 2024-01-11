@@ -1,11 +1,11 @@
 import ReactMarkdown from 'react-markdown'
 
-import { GearMeshSizeEqualityComparator } from '../../../../../../domain/entities/backoffice'
+import { GearMeshSizeEqualityComparator } from '../../../../../domain/entities/backoffice'
 import { CodeAndName } from '../CodeAndName'
 import { Elem, Field, Fields, Key, Value } from '../RegulatoryMetadata.style'
 
-import type { Gear } from '../../../../../../domain/types/Gear'
-import type { GearCategory, Gear as RegulationGear } from '../../../../types'
+import type { Gear } from '../../../../../domain/types/Gear'
+import type { GearCategory, Gear as RegulationGear } from '../../../types'
 
 export type GearOrGearCategoriesProps = {
   categoriesToGears?: Record<string, Gear[]> | undefined

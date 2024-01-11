@@ -1,3 +1,3 @@
 import type { Margins } from '../../utils/getDialogWindowPositionFromFeature'
 
-export const FEATURE_MARGINS: Margins = [50, 40, 10, 40]
+export const FEATURE_MARGINS: Margins = [60, 40, 20, 40]

@@ -34,6 +34,10 @@ describe('utils/getDialogWindowPositionFromFeature()', () => {
   beforeEach(() => {
     global.window.innerWidth = 800
     global.window.innerHeight = 600
+
+    document.body.innerHTML = `
+      <div id="mainWindowWrapper" />
+    `
   })
 
   it('should position dialog above the feature and horizontally centered when there is enough space above', () => {

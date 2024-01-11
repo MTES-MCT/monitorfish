@@ -116,15 +116,10 @@ export function Map() {
         {isSuperUser && isStationLayerDisplayed && (
           <>
             <StationLayer hoveredFeatureId={hoveredFeatureWithCodeAndEntityId?.id} />
+            <HoveredStationOverlay hoveredFeature={hoveredFeatureWithCodeAndEntityId} />
+            <SelectedStationOverlay />
           </>
         )}
-        {/* TODO Investigate the DOM element removal attempt error. */}
-        {/*
-          For some reason I wasn't able to condition overlays mounting to `isStationLayerDisplayed`.
-          Maybe because of OpenLayer VS React DOM race access?
-        */}
-        <HoveredStationOverlay hoveredFeature={hoveredFeatureWithCodeAndEntityId} />
-        <SelectedStationOverlay />
       </FrontendErrorBoundary>
 
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />

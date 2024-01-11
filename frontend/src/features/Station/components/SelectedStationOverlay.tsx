@@ -116,16 +116,20 @@ export function SelectedStationOverlay() {
     selectionDialogElementRef.current?.offsetWidth
   ])
 
+  useEffect(() => () => removeOverlay(), [removeOverlay])
+
   return (
-    <Wrapper ref={wrapperElementRef} $isVisible={!!selectionDialogElementRef.current}>
-      {isStationLayerDisplayed && selectedStation && (
-        <StationCard ref={selectionDialogElementRef} isSelected station={selectedStation} />
-      )}
-    </Wrapper>
+    <WrapperToBeKeptForDOMManagement $isVisible={!!selectionDialogElementRef.current}>
+      <div ref={wrapperElementRef}>
+        {isStationLayerDisplayed && selectedStation && (
+          <StationCard ref={selectionDialogElementRef} isSelected station={selectedStation} />
+        )}
+      </div>
+    </WrapperToBeKeptForDOMManagement>
   )
 }
 
-const Wrapper = styled.div<{
+const WrapperToBeKeptForDOMManagement = styled.div<{
   $isVisible: boolean
 }>`
   border-radius: 2px;

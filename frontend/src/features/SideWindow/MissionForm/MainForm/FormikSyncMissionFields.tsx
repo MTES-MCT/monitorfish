@@ -46,8 +46,8 @@ export function FormikSyncMissionFields({ missionId }: FormikSyncMissionFormProp
          */
         Object.keys(receivedDiff).forEach(key => {
           // eslint-disable-next-line no-console
-          console.log(`SSE: setting form key "${key}" to "${receivedDiff[key]}"`)
-          setFieldValue(key, receivedDiff[key])
+          console.log(`SSE: setting form key "${key}" to "${receivedMission[key]}"`)
+          setFieldValue(key, receivedMission[key])
         })
       })()
     },

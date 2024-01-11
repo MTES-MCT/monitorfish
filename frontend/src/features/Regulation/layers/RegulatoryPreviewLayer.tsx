@@ -17,8 +17,15 @@ import type { MutableRefObject } from 'react'
 
 function UnmemoizedRegulatoryPreviewLayer() {
   const dispatch = useMainAppDispatch()
+  /**
+   * `useMainAppSelector` is typed as `MainApp` store but `useBackofficeAppSelector` also works as `state.regulatory`
+   * is used in both stores.
+   */
   const regulatoryZonesToPreview = useMainAppSelector(state => state.regulatory.regulatoryZonesToPreview)
-  const zoneSelected = useMainAppSelector(state => state.regulatoryLayerSearch.zoneSelected)
+  /**
+   * /!\ `regulatoryLayerSearch` will be null when using this component in <Backoffice/> page.
+   */
+  const zoneSelected = useMainAppSelector(state => state.regulatoryLayerSearch?.zoneSelected)
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
   const layerRef = useRef() as MutableRefObject<VectorLayerWithName>
 

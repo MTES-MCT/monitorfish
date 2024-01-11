@@ -11,7 +11,7 @@ import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { MapComponent } from '../commonStyles/MapComponent'
 
 export function VesselSidebar() {
-  const { rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
   const isFocusedOnVesselSearch = useMainAppSelector(state => state.vessel.isFocusedOnVesselSearch)
 
   const [isFirstLoad, setIsFirstLoad] = useState(false)

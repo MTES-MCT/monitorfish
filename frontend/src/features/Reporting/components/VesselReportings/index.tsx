@@ -20,9 +20,10 @@ export function VesselReportings() {
   const dispatch = useMainAppDispatch()
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
 
-  const { currentAndArchivedReportingsOfSelectedVessel, isLoadingReporting } = useMainAppSelector(
-    state => state.reporting
+  const currentAndArchivedReportingsOfSelectedVessel = useMainAppSelector(
+    state => state.reporting.currentAndArchivedReportingsOfSelectedVessel
   )
+  const isLoadingReporting = useMainAppSelector(state => state.reporting.isLoadingReporting)
 
   const [reportingTab, setReportingTab] = useState(ReportingTab.CURRENT_REPORTING)
   const previousSelectedVesselIdentity = usePrevious(selectedVesselIdentity)

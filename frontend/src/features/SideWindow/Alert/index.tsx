@@ -19,7 +19,7 @@ type AlertProps = {
 export function Alert({ baseRef }: AlertProps) {
   const dispatch = useMainAppDispatch()
   const { pendingAlerts, subMenu } = useMainAppSelector(state => state.alert)
-  const { currentReportings } = useMainAppSelector(state => state.reporting)
+  const currentReportings = useMainAppSelector(state => state.reporting.currentReportings)
   const [selectedTab, setSelectedTab] = useState(AlertAndReportingTab.ALERT)
 
   const handleSubMenuChange = useCallback(

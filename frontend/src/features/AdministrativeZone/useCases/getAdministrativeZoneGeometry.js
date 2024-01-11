@@ -1,6 +1,6 @@
-import { addZoneSelected } from '../../VesselList/slice'
-import layer from '../../../domain/shared_slices/Layer'
 import { getAdministrativeZoneFromAPI } from '../../../api/geoserver'
+import layer from '../../../domain/shared_slices/Layer'
+import { addZoneSelected } from '../../VesselList/slice'
 
 const getAdministrativeZoneGeometry =
   (administrativeZoneCode, subZoneCode, zoneName, namespace) => (dispatch, getState) => {
@@ -33,9 +33,9 @@ const getAdministrativeZoneGeometry =
     function dispatchZoneSelected(feature) {
       dispatch(
         addZoneSelected({
-          name: zoneName,
           code: subZoneCode || administrativeZoneCode,
-          feature: feature
+          feature,
+          name: zoneName
         })
       )
     }

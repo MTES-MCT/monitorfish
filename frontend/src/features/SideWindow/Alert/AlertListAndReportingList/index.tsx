@@ -27,7 +27,9 @@ export function AlertListAndReportingList({
   setSelectedTab
 }: AlertsAndReportingsProps) {
   const dispatch = useMainAppDispatch()
-  const { focusedPendingAlertId, pendingAlerts, silencedAlerts } = useMainAppSelector(state => state.alert)
+  const focusedPendingAlertId = useMainAppSelector(state => state.alert.focusedPendingAlertId)
+  const pendingAlerts = useMainAppSelector(state => state.alert.pendingAlerts)
+  const silencedAlerts = useMainAppSelector(state => state.alert.silencedAlerts)
 
   const filteredSilencedAlerts = useMemo(
     () =>

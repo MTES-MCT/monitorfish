@@ -14,7 +14,7 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 export function Controls() {
   const dispatch = useMainAppDispatch()
 
-  const { selectedVessel } = useMainAppSelector(state => state.vessel)
+  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
 
   const { controlsFromDate, currentControlSummary, loadingControls, nextControlSummary } = useMainAppSelector(
     state => state.controls

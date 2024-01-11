@@ -5,7 +5,7 @@ export default class NoDEPFoundError extends Error {
   type = ErrorType.INFO
   showEmptyComponentFields = true
 
-  constructor (message = '') {
+  constructor(message = '') {
     super(message)
 
     if (Error.captureStackTrace) {

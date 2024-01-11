@@ -11,7 +11,7 @@ import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
   const dispatch = useMainAppDispatch()
-  const { rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
   const { selectedVesselIdentity, selectedVesselPositions } = useMainAppSelector(state => state.vessel)
   const { areFishingActivitiesShowedOnMap, fishingActivities, fishingActivitiesShowedOnMap } = useMainAppSelector(
     state => state.fishingActivities

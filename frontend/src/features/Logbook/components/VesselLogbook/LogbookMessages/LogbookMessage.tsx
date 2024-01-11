@@ -33,7 +33,7 @@ type LogbookMessageComponentType = {
 }
 export function LogbookMessage({ isFirst, message }: LogbookMessageComponentType) {
   const dispatch = useMainAppDispatch()
-  const { fishingActivitiesShowedOnMap } = useMainAppSelector(state => state.fishingActivities)
+  const fishingActivitiesShowedOnMap = useMainAppSelector(state => state.fishingActivities.fishingActivitiesShowedOnMap)
 
   const logbookHeaderTitle = useMemo(() => {
     switch (message.messageType) {

@@ -22,7 +22,8 @@ import type { SilencedAlertData } from '../../../../domain/entities/alerts/types
 
 export function SilencedAlerts() {
   const dispatch = useMainAppDispatch()
-  const { focusedPendingAlertId, silencedAlerts } = useMainAppSelector(state => state.alert)
+  const focusedPendingAlertId = useMainAppSelector(state => state.alert.focusedPendingAlertId)
+  const silencedAlerts = useMainAppSelector(state => state.alert.silencedAlerts)
   const baseUrl = window.location.origin
   const [sortColumn] = useState('silencedBeforeDate')
   const [sortType] = useState(SortType.ASC)

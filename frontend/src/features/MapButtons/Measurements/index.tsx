@@ -18,7 +18,8 @@ import { MapToolButton } from '../shared/MapToolButton'
 export function MeasurementMapButton() {
   const dispatch = useMainAppDispatch()
   const measurementTypeToAdd = useMainAppSelector(state => state.measurement.measurementTypeToAdd)
-  const { mapToolOpened, rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const mapToolOpened = useMainAppSelector(state => state.global.mapToolOpened)
+  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
 
   const isRightMenuShrinked = !rightMenuIsOpen
   const isOpen = useMemo(() => mapToolOpened === MapToolType.MEASUREMENT_MENU, [mapToolOpened])

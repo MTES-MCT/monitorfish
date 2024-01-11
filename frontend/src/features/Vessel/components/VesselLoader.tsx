@@ -19,8 +19,9 @@ export function VesselLoader() {
   const isInLightMode = useIsInLightMode()
   const dispatch = useMainAppDispatch()
 
-  const { blockVesselsUpdate } = useMainAppSelector(state => state.global)
-  const { loadingPositions, vesselSidebarIsOpen } = useMainAppSelector(state => state.vessel)
+  const blockVesselsUpdate = useMainAppSelector(state => state.global.blockVesselsUpdate)
+  const loadingPositions = useMainAppSelector(state => state.vessel.loadingPositions)
+  const vesselSidebarIsOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
 
   const {
     data: vessels,

@@ -16,7 +16,7 @@ type BeaconMalfunctionDetailsProps = {
   isCurrentBeaconMalfunctionDetails: boolean
 }
 export function BeaconMalfunctionDetails({ isCurrentBeaconMalfunctionDetails }: BeaconMalfunctionDetailsProps) {
-  const { openedBeaconMalfunction } = useMainAppSelector(state => state.beaconMalfunction)
+  const openedBeaconMalfunction = useMainAppSelector(state => state.beaconMalfunction.openedBeaconMalfunction)
   const dispatch = useMainAppDispatch()
 
   const navigateToResume = () => dispatch(setBeaconMalfunctionsTab(BeaconMalfunctionsTab.RESUME))

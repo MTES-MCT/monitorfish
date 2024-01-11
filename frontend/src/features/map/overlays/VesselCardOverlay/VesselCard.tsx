@@ -20,7 +20,7 @@ timeago.register('fr', timeagoFrenchLocale)
 
 export function VesselCard({ feature, numberOfWarnings, overlayPosition }) {
   const isSuperUser = useIsSuperUser()
-  const { coordinatesFormat } = useMainAppSelector(state => state.map)
+  const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const { vesselProperties } = feature
   const featureCoordinates = feature.getGeometry().getCoordinates()
 

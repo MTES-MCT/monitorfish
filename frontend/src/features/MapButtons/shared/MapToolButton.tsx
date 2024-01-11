@@ -11,7 +11,8 @@ type MapToolButtonProps = {
   isLeftButton?: boolean
 } & HTMLProps<HTMLButtonElement>
 export function MapToolButton({ children, isActive, isLeftButton = false, ...props }: MapToolButtonProps) {
-  const { previewFilteredVesselsMode, rightMenuIsOpen } = useMainAppSelector(state => state.global)
+  const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
+  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
   const isRightMenuShrinked = !rightMenuIsOpen && !isLeftButton
 
   return (

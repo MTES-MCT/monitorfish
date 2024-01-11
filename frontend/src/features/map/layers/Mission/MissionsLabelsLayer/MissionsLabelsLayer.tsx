@@ -20,7 +20,7 @@ const MIN_ZOOM = 7
 
 export function MissionsLabelsLayer({ mapMovingAndZoomEvent }) {
   const isSuperUser = useIsSuperUser()
-  const { isMissionsLayerDisplayed } = useMainAppSelector(state => state.displayedComponent)
+  const isMissionsLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isMissionsLayerDisplayed)
   const [featuresAndLabels, setFeaturesAndLabels] = useState<
     {
       color: string

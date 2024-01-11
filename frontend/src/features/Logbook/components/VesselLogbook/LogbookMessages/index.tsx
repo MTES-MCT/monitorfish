@@ -79,9 +79,10 @@ type LogbookMessagesProps = {
   showFishingActivitiesSummary: () => void
 }
 export function LogbookMessages({ messageTypeFilter, navigation, showFishingActivitiesSummary }: LogbookMessagesProps) {
-  const { fishingActivities, isFirstVoyage, isLastVoyage, tripNumber } = useMainAppSelector(
-    state => state.fishingActivities
-  )
+  const fishingActivities = useMainAppSelector(state => state.fishingActivities.fishingActivities)
+  const isFirstVoyage = useMainAppSelector(state => state.fishingActivities.isFirstVoyage)
+  const isLastVoyage = useMainAppSelector(state => state.fishingActivities.isLastVoyage)
+  const tripNumber = useMainAppSelector(state => state.fishingActivities.tripNumber)
 
   /** @type {LogbookMessage[]} logbookMessages */
   const [logbookMessages, setLogbookMessages] = useState<LogbookMessageType[]>([])

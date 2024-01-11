@@ -10,7 +10,7 @@ export class InterestPointLine {
    * @param {string[]} toCoordinates - The [longitude, latitude] of the overlay position
    * @param {string} featureId - The feature identifier
    */
-  static getFeature (fromCoordinates, toCoordinates, featureId) {
+  static getFeature(fromCoordinates, toCoordinates, featureId) {
     const interestPointLineFeature = new Feature({
       geometry: new LineString([fromCoordinates, toCoordinates])
     })
@@ -20,7 +20,7 @@ export class InterestPointLine {
     return interestPointLineFeature
   }
 
-  static getFeatureId (uuid) {
+  static getFeatureId(uuid) {
     return `${uuid}:line`
   }
 }

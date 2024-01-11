@@ -1,20 +1,17 @@
-import { FishingActivitiesTab, VesselSidebarTab } from '../../entities/vessel/vessel'
 import { logbookActions } from '../../../features/Logbook/slice'
+import { FishingActivitiesTab, VesselSidebarTab } from '../../entities/vessel/vessel'
 import { showVesselSidebarTab } from '../../shared_slices/Vessel'
 
 const navigateToFishingActivity = id => (dispatch, getState) => {
-  const {
-    vesselSidebarTab
-  } = getState().vessel
+  const { vesselSidebarTab } = getState().vessel
 
-  const {
-    fishingActivitiesTab
-  } = getState().fishingActivities
+  const { fishingActivitiesTab } = getState().fishingActivities
 
   if (vesselSidebarTab === VesselSidebarTab.VOYAGES && fishingActivitiesTab === FishingActivitiesTab.MESSAGES) {
     const element = document.getElementById(id)
     if (element) {
       scrollTo(element)
+
       return
     }
   }
@@ -35,7 +32,7 @@ const navigateToFishingActivity = id => (dispatch, getState) => {
   }, 100)
 }
 
-function scrollTo (element) {
+function scrollTo(element) {
   element.scrollIntoView()
 }
 

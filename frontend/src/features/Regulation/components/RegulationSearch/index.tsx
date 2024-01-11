@@ -30,10 +30,11 @@ export function RegulationSearch({
 }: RegulatoryLayerSearchProps) {
   const dispatch = useMainAppDispatch()
   const { setLayersSideBarOpenedLayerType } = layer[namespace].actions
-  const { layersSidebarOpenedLayerType } = useMainAppSelector(state => state.layer)
-  const { regulatoryLayersSearchResult, regulatoryZonesChecked } = useMainAppSelector(
-    state => state.regulatoryLayerSearch
+  const layersSidebarOpenedLayerType = useMainAppSelector(state => state.layer.layersSidebarOpenedLayerType)
+  const regulatoryLayersSearchResult = useMainAppSelector(
+    state => state.regulatoryLayerSearch.regulatoryLayersSearchResult
   )
+  const regulatoryZonesChecked = useMainAppSelector(state => state.regulatoryLayerSearch.regulatoryZonesChecked)
 
   const escape = useEscapeFromKeyboard()
   const wrapperRef = useRef(null)

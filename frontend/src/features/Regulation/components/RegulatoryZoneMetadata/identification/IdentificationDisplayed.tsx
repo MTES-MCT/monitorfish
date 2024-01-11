@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { Key, Value, Fields, Field } from '../RegulatoryMetadata.style'
 
 export function IdentificationDisplayed() {

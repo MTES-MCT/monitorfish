@@ -1,23 +1,20 @@
 import styled from 'styled-components'
 
-import { RegulatoryLayerSearchResultTopic } from './RegulatoryLayerSearchResultTopic'
+import { ResultTopic } from './ResultTopic'
 
-import type { RegulatoryZone } from '../../../types'
+import type { RegulatoryZone } from '../../types'
 
 export type RegulatoryLayerSearchResultLawTypeProps = {
   regulatoryLayerLawType: string
   topic: Record<string, RegulatoryZone[]>
 }
-export function RegulatoryLayerSearchResultLawType({
-  regulatoryLayerLawType,
-  topic
-}: RegulatoryLayerSearchResultLawTypeProps) {
+export function ResultLawType({ regulatoryLayerLawType, topic }: RegulatoryLayerSearchResultLawTypeProps) {
   return (
     <Wrapper>
       <LayerLawType>{regulatoryLayerLawType}</LayerLawType>
       {Object.keys(topic).length > 0 &&
         Object.entries(topic).map(([regulatoryLayerTopic, topicDetails]) => (
-          <RegulatoryLayerSearchResultTopic
+          <ResultTopic
             key={regulatoryLayerTopic}
             regulatoryLayerLawType={regulatoryLayerLawType}
             regulatoryLayerTopic={regulatoryLayerTopic}

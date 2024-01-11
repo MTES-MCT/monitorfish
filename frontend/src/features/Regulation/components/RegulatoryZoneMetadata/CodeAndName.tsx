@@ -1,8 +1,8 @@
 import { Label } from './RegulatoryMetadata.style'
-import { COLORS } from '../../../../../constants/constants'
-import { InfoPoint } from '../../../../Backoffice/edit_regulation/InfoPoint'
+import { COLORS } from '../../../../constants/constants'
+import { InfoPoint } from '../../../Backoffice/edit_regulation/InfoPoint'
 
-import type { Gear } from '../../../../../domain/types/Gear'
+import type { Gear } from '../../../../domain/types/Gear'
 
 export type CodeAndNameProps = {
   categoriesToGears?: Record<string, Gear[]> | undefined

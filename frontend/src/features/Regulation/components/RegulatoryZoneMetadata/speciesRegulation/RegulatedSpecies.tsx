@@ -1,10 +1,10 @@
 import ReactMarkdown from 'react-markdown'
 
-import { GreenCircle, RedCircle } from '../../../../../commonStyles/Circle.style'
+import { GreenCircle, RedCircle } from '../../../../commonStyles/Circle.style'
 import { CodeAndName } from '../CodeAndName'
 import { Elem, Field, Fields, Key, Label, List, SectionTitle, Value } from '../RegulatoryMetadata.style'
 
-import type { RegulatedSpecies as RegulatedSpeciesType } from '../../../../types'
+import type { RegulatedSpecies as RegulatedSpeciesType } from '../../../types'
 
 export type RegulatedSpeciesProps = {
   authorized: boolean

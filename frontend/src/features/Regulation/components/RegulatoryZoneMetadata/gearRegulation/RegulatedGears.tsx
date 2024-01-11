@@ -3,16 +3,16 @@ import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
 import { GearsOrGearCategories } from './GearsOrGearCategories'
-import { COLORS } from '../../../../../../constants/constants'
-import { getGroupCategories, REGULATED_GEARS_KEYS } from '../../../../../../domain/entities/backoffice'
-import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
-import { theme } from '../../../../../../ui/theme'
-import { INFO_TEXT } from '../../../../../Backoffice/constants'
-import { InfoPoint } from '../../../../../Backoffice/edit_regulation/InfoPoint'
-import { GreenCircle, RedCircle } from '../../../../../commonStyles/Circle.style'
+import { COLORS } from '../../../../../constants/constants'
+import { getGroupCategories, REGULATED_GEARS_KEYS } from '../../../../../domain/entities/backoffice'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { theme } from '../../../../../ui/theme'
+import { INFO_TEXT } from '../../../../Backoffice/constants'
+import { InfoPoint } from '../../../../Backoffice/edit_regulation/InfoPoint'
+import { GreenCircle, RedCircle } from '../../../../commonStyles/Circle.style'
 import { Label, List, SectionTitle } from '../RegulatoryMetadata.style'
 
-import type { RegulatedGears as RegulatedGearsType } from '../../../../types'
+import type { RegulatedGears as RegulatedGearsType } from '../../../types'
 
 export type RegulatedGearsProps = {
   authorized: boolean

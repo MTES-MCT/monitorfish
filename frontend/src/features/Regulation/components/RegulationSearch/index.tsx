@@ -2,20 +2,20 @@ import { logSoftError } from '@mtes-mct/monitor-ui'
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
-import { RegulatoryLayerSearchInput } from './RegulatoryLayerSearchInput'
-import { RegulatoryLayerSearchResultList } from './RegulatoryLayerSearchResultList'
+import { ResultList } from './ResultList'
+import { SearchInput } from './SearchInput'
 import { resetRegulatoryZonesChecked, setRegulatoryLayersSearchResult } from './slice'
-import layer from '../../../../../domain/shared_slices/Layer'
-import { useEscapeFromKeyboard } from '../../../../../hooks/useEscapeFromKeyboard'
-import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import layer from '../../../../domain/shared_slices/Layer'
+import { useEscapeFromKeyboard } from '../../../../hooks/useEscapeFromKeyboard'
+import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import {
   addRegulatoryZonesToMyLayers,
   closeRegulatoryZoneMetadataPanel,
   resetRegulatoryGeometriesToPreview
-} from '../../../slice'
+} from '../../slice'
 
-import type { LayerSliceNamespace } from '../../../../../domain/entities/layers/types'
+import type { LayerSliceNamespace } from '../../../../domain/entities/layers/types'
 import type { Promisable } from 'type-fest'
 
 export type RegulatoryLayerSearchProps = {
@@ -23,7 +23,7 @@ export type RegulatoryLayerSearchProps = {
   numberOfRegulatoryLayersSaved: number
   setNumberOfRegulatoryLayersSaved: (length: number) => Promisable<void>
 }
-export function RegulatoryLayerSearch({
+export function RegulationSearch({
   namespace,
   numberOfRegulatoryLayersSaved,
   setNumberOfRegulatoryLayersSaved
@@ -85,8 +85,8 @@ export function RegulatoryLayerSearch({
 
   return (
     <Search ref={wrapperRef}>
-      <RegulatoryLayerSearchInput />
-      <RegulatoryLayerSearchResultList namespace={namespace} />
+      <SearchInput />
+      <ResultList namespace={namespace} />
       {/* TODO Use monitor-ui `<Button />` here. */}
       <AddRegulatoryLayer
         $isShown={!!regulatoryZonesChecked?.length}

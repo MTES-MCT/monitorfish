@@ -301,7 +301,12 @@ context('Sidebars > Regulatory Layers', () => {
     cy.get('*[data-cy="regulation-search-box-filter-selected"]').should('exist')
     cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 2)
     cy.get('*[data-cy="regulatory-layer-topic"]').contains('Ouest Cotentin Bivalves')
+    cy.get('*[data-cy="regulatory-layer-topic"]').first().click()
     cy.get('*[data-cy="regulatory-layer-topic"]').contains('Armor CSJ')
+
+    cy.get('[title="Afficher la réglementation"]').click()
+    // No zoom is triggered when drawing a zone
+    cy.url().should('include', '/#@-224002.65,6302673.54,8.70')
 
     cy.get('*[data-cy="vessel-filter-remove-tag"]').eq(0).click()
     cy.get('*[data-cy="regulation-search-box-filter"]').should('exist')

@@ -1,6 +1,6 @@
 import ReactMarkdown from 'react-markdown'
 
-import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { Section } from '../RegulatoryMetadata.style'
 
 export function OtherInfoDisplayed() {

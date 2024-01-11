@@ -74,5 +74,5 @@ export const PAMControlUnitIds = [10141, 10404, 10121, 10345, 10080]
  */
 export const AUTO_SAVE_ENABLED = isCypress()
   ? // @ts-ignore
-    window.Cypress.env().FRONTEND_MISSION_AUTO_SAVE_ENABLED
-  : import.meta.env.FRONTEND_MISSION_AUTO_SAVE_ENABLED
+    window.Cypress.env().FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED
+  : import.meta.env.FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED

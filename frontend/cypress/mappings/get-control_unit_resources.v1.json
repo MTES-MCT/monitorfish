@@ -337,81 +337,6 @@
         "type": "SEMI_RIGID"
       },
       {
-        "id": 579,
-        "controlUnit": {
-          "id": 10157,
-          "areaNote": "Morbihan (56)",
-          "administrationId": 1005,
-          "departmentAreaInseeCode": null,
-          "isArchived": false,
-          "name": "Police de l'eau 56",
-          "termsNote": null
-        },
-        "controlUnitId": 10157,
-        "isArchived": false,
-        "name": "Voiture",
-        "note": null,
-        "photo": null,
-        "station": {
-          "id": 245,
-          "latitude": 47.658236,
-          "longitude": -2.760847,
-          "name": "Vannes"
-        },
-        "stationId": 245,
-        "type": "CAR"
-      },
-      {
-        "id": 1208,
-        "controlUnit": {
-          "id": 10499,
-          "areaNote": "Morbihan (56)",
-          "administrationId": 1005,
-          "departmentAreaInseeCode": null,
-          "isArchived": false,
-          "name": "Cultures marines 56",
-          "termsNote": null
-        },
-        "controlUnitId": 10499,
-        "isArchived": false,
-        "name": "Voiture",
-        "note": null,
-        "photo": null,
-        "station": {
-          "id": 8,
-          "latitude": 47.66649100000001,
-          "longitude": -2.983767,
-          "name": "Auray"
-        },
-        "stationId": 8,
-        "type": "CAR"
-      },
-      {
-        "id": 323,
-        "controlUnit": {
-          "id": 10499,
-          "areaNote": "Morbihan (56)",
-          "administrationId": 1005,
-          "departmentAreaInseeCode": null,
-          "isArchived": false,
-          "name": "Cultures marines 56",
-          "termsNote": null
-        },
-        "controlUnitId": 10499,
-        "isArchived": false,
-        "name": "Voiture",
-        "note": null,
-        "photo": null,
-        "station": {
-          "id": 245,
-          "latitude": 47.658236,
-          "longitude": -2.760847,
-          "name": "Vannes"
-        },
-        "stationId": 245,
-        "type": "CAR"
-      },
-      {
         "id": 512,
         "controlUnit": {
           "id": 10449,
@@ -462,17 +387,92 @@
         "type": "CAR"
       },
       {
-        "id": 516,
+        "id": 90,
         "controlUnit": {
-          "id": 10454,
-          "areaNote": "National",
-          "administrationId": 1011,
+          "id": 10336,
+          "areaNote": "Morbihan (56) – Loire-Atlantique (44)",
+          "administrationId": 4,
           "departmentAreaInseeCode": null,
           "isArchived": false,
-          "name": "OFB Brigade Mobile d'Intervention – Bretagne",
-          "termsNote": "Direction de la police des BMI de l’OFB"
+          "name": "BSL Lorient",
+          "termsNote": "CORGMAR Atlantique"
         },
-        "controlUnitId": 10454,
+        "controlUnitId": 10336,
+        "isArchived": false,
+        "name": "Voiture",
+        "note": null,
+        "photo": null,
+        "station": {
+          "id": 153,
+          "latitude": 47.7482524,
+          "longitude": -3.3702449,
+          "name": "Lorient"
+        },
+        "stationId": 153,
+        "type": "CAR"
+      },
+      {
+        "id": 323,
+        "controlUnit": {
+          "id": 10499,
+          "areaNote": "Morbihan (56)",
+          "administrationId": 1005,
+          "departmentAreaInseeCode": null,
+          "isArchived": false,
+          "name": "Cultures marines 56",
+          "termsNote": null
+        },
+        "controlUnitId": 10499,
+        "isArchived": false,
+        "name": "Voiture",
+        "note": null,
+        "photo": null,
+        "station": {
+          "id": 245,
+          "latitude": 47.658236,
+          "longitude": -2.760847,
+          "name": "Vannes"
+        },
+        "stationId": 245,
+        "type": "CAR"
+      },
+      {
+        "id": 1208,
+        "controlUnit": {
+          "id": 10499,
+          "areaNote": "Morbihan (56)",
+          "administrationId": 1005,
+          "departmentAreaInseeCode": null,
+          "isArchived": false,
+          "name": "Cultures marines 56",
+          "termsNote": null
+        },
+        "controlUnitId": 10499,
+        "isArchived": false,
+        "name": "Voiture",
+        "note": null,
+        "photo": null,
+        "station": {
+          "id": 8,
+          "latitude": 47.66649100000001,
+          "longitude": -2.983767,
+          "name": "Auray"
+        },
+        "stationId": 8,
+        "type": "CAR"
+      },
+      {
+        "id": 133,
+        "controlUnit": {
+          "id": 10066,
+          "areaNote": "Morbihan (56)",
+          "administrationId": 1005,
+          "departmentAreaInseeCode": null,
+          "isArchived": false,
+          "name": "DPM 56",
+          "termsNote": null
+        },
+        "controlUnitId": 10066,
         "isArchived": false,
         "name": "Voiture",
         "note": null,
@@ -512,17 +512,17 @@
         "type": "CAR"
       },
       {
-        "id": 133,
+        "id": 516,
         "controlUnit": {
-          "id": 10066,
-          "areaNote": "Morbihan (56)",
-          "administrationId": 1005,
+          "id": 10454,
+          "areaNote": "National",
+          "administrationId": 1011,
           "departmentAreaInseeCode": null,
           "isArchived": false,
-          "name": "DPM 56",
-          "termsNote": null
+          "name": "OFB Brigade Mobile d'Intervention – Bretagne",
+          "termsNote": "Direction de la police des BMI de l’OFB"
         },
-        "controlUnitId": 10066,
+        "controlUnitId": 10454,
         "isArchived": false,
         "name": "Voiture",
         "note": null,
@@ -587,28 +587,28 @@
         "type": "CAR"
       },
       {
-        "id": 90,
+        "id": 579,
         "controlUnit": {
-          "id": 10336,
-          "areaNote": "Morbihan (56) – Loire-Atlantique (44)",
-          "administrationId": 4,
+          "id": 10157,
+          "areaNote": "Morbihan (56)",
+          "administrationId": 1005,
           "departmentAreaInseeCode": null,
           "isArchived": false,
-          "name": "BSL Lorient",
-          "termsNote": "CORGMAR Atlantique"
+          "name": "Police de l'eau 56",
+          "termsNote": null
         },
-        "controlUnitId": 10336,
+        "controlUnitId": 10157,
         "isArchived": false,
         "name": "Voiture",
         "note": null,
         "photo": null,
         "station": {
-          "id": 153,
-          "latitude": 47.7482524,
-          "longitude": -3.3702449,
-          "name": "Lorient"
+          "id": 245,
+          "latitude": 47.658236,
+          "longitude": -2.760847,
+          "name": "Vannes"
         },
-        "stationId": 153,
+        "stationId": 245,
         "type": "CAR"
       }
     ]

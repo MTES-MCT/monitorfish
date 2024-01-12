@@ -140,22 +140,6 @@
         "phone": "09 70 27 51 94"
       },
       {
-        "id": 1075,
-        "controlUnit": {
-          "id": 10484,
-          "areaNote": "Morbihan (56)",
-          "administrationId": 2,
-          "departmentAreaInseeCode": null,
-          "isArchived": false,
-          "name": "BGC Lorient - DF 36 Kan An Avel",
-          "termsNote": "COD Manche Mer du Nord Atlantique"
-        },
-        "controlUnitId": 10484,
-        "email": null,
-        "name": "PERMANENT_CONTACT_ONBOARD",
-        "phone": "06 64 57 64 58"
-      },
-      {
         "id": 1016,
         "controlUnit": {
           "id": 10455,
@@ -188,113 +172,33 @@
         "phone": "06 85 72 02 20"
       },
       {
-        "id": 727,
+        "id": 1075,
         "controlUnit": {
-          "id": 10336,
-          "areaNote": "Morbihan (56) – Loire-Atlantique (44)",
-          "administrationId": 4,
-          "departmentAreaInseeCode": null,
-          "isArchived": false,
-          "name": "BSL Lorient",
-          "termsNote": "CORGMAR Atlantique"
-        },
-        "controlUnitId": 10336,
-        "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "02 97 12 40 67"
-      },
-      {
-        "id": 728,
-        "controlUnit": {
-          "id": 10336,
-          "areaNote": "Morbihan (56) – Loire-Atlantique (44)",
-          "administrationId": 4,
-          "departmentAreaInseeCode": null,
-          "isArchived": false,
-          "name": "BSL Lorient",
-          "termsNote": "CORGMAR Atlantique"
-        },
-        "controlUnitId": 10336,
-        "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "02 97 12 40 67"
-      },
-      {
-        "id": 729,
-        "controlUnit": {
-          "id": 10336,
-          "areaNote": "Morbihan (56) – Loire-Atlantique (44)",
-          "administrationId": 4,
-          "departmentAreaInseeCode": null,
-          "isArchived": false,
-          "name": "BSL Lorient",
-          "termsNote": "CORGMAR Atlantique"
-        },
-        "controlUnitId": 10336,
-        "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "06 72 95 29 02"
-      },
-      {
-        "id": 730,
-        "controlUnit": {
-          "id": 10336,
-          "areaNote": "Morbihan (56) – Loire-Atlantique (44)",
-          "administrationId": 4,
-          "departmentAreaInseeCode": null,
-          "isArchived": false,
-          "name": "BSL Lorient",
-          "termsNote": "CORGMAR Atlantique"
-        },
-        "controlUnitId": 10336,
-        "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "06 72 95 29 03"
-      },
-      {
-        "id": 733,
-        "controlUnit": {
-          "id": 10338,
+          "id": 10484,
           "areaNote": "Morbihan (56)",
-          "administrationId": 1011,
+          "administrationId": 2,
           "departmentAreaInseeCode": null,
           "isArchived": false,
-          "name": "OFB SD 56",
-          "termsNote": null
+          "name": "BGC Lorient - DF 36 Kan An Avel",
+          "termsNote": "COD Manche Mer du Nord Atlantique"
         },
-        "controlUnitId": 10338,
-        "email": "sd56@ofb.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "02 97 47 02 83"
+        "controlUnitId": 10484,
+        "email": null,
+        "name": "PERMANENT_CONTACT_ONBOARD",
+        "phone": "06 64 57 64 58"
       },
       {
-        "id": 1121,
+        "id": 165,
         "controlUnit": {
-          "id": 10499,
+          "id": 10066,
           "areaNote": "Morbihan (56)",
           "administrationId": 1005,
           "departmentAreaInseeCode": null,
           "isArchived": false,
-          "name": "Cultures marines 56",
+          "name": "DPM 56",
           "termsNote": null
         },
-        "controlUnitId": 10499,
-        "email": "ddtm-samel@morbihan.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "02 56 63 75 32"
-      },
-      {
-        "id": 1122,
-        "controlUnit": {
-          "id": 10499,
-          "areaNote": "Morbihan (56)",
-          "administrationId": 1005,
-          "departmentAreaInseeCode": null,
-          "isArchived": false,
-          "name": "Cultures marines 56",
-          "termsNote": null
-        },
-        "controlUnitId": 10499,
+        "controlUnitId": 10066,
         "email": "ddtm-samel@morbihan.gouv.fr",
         "name": "UNKNOWN",
         "phone": "02 97 64 85 06"
@@ -444,17 +348,49 @@
         "phone": "06 85 72 02 20"
       },
       {
-        "id": 165,
+        "id": 1076,
         "controlUnit": {
-          "id": 10066,
+          "id": 10484,
+          "areaNote": "Morbihan (56)",
+          "administrationId": 2,
+          "departmentAreaInseeCode": null,
+          "isArchived": false,
+          "name": "BGC Lorient - DF 36 Kan An Avel",
+          "termsNote": "COD Manche Mer du Nord Atlantique"
+        },
+        "controlUnitId": 10484,
+        "email": "bgc-lorient@douane.finances.gouv.fr",
+        "name": "UNKNOWN",
+        "phone": "09 70 27 46 12"
+      },
+      {
+        "id": 1121,
+        "controlUnit": {
+          "id": 10499,
           "areaNote": "Morbihan (56)",
           "administrationId": 1005,
           "departmentAreaInseeCode": null,
           "isArchived": false,
-          "name": "DPM 56",
+          "name": "Cultures marines 56",
           "termsNote": null
         },
-        "controlUnitId": 10066,
+        "controlUnitId": 10499,
+        "email": "ddtm-samel@morbihan.gouv.fr",
+        "name": "UNKNOWN",
+        "phone": "02 56 63 75 32"
+      },
+      {
+        "id": 1122,
+        "controlUnit": {
+          "id": 10499,
+          "areaNote": "Morbihan (56)",
+          "administrationId": 1005,
+          "departmentAreaInseeCode": null,
+          "isArchived": false,
+          "name": "Cultures marines 56",
+          "termsNote": null
+        },
+        "controlUnitId": 10499,
         "email": "ddtm-samel@morbihan.gouv.fr",
         "name": "UNKNOWN",
         "phone": "02 97 64 85 06"
@@ -476,20 +412,84 @@
         "phone": "02 56 63 72 00"
       },
       {
-        "id": 1076,
+        "id": 727,
         "controlUnit": {
-          "id": 10484,
-          "areaNote": "Morbihan (56)",
-          "administrationId": 2,
+          "id": 10336,
+          "areaNote": "Morbihan (56) – Loire-Atlantique (44)",
+          "administrationId": 4,
           "departmentAreaInseeCode": null,
           "isArchived": false,
-          "name": "BGC Lorient - DF 36 Kan An Avel",
-          "termsNote": "COD Manche Mer du Nord Atlantique"
+          "name": "BSL Lorient",
+          "termsNote": "CORGMAR Atlantique"
         },
-        "controlUnitId": 10484,
-        "email": "bgc-lorient@douane.finances.gouv.fr",
+        "controlUnitId": 10336,
+        "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
         "name": "UNKNOWN",
-        "phone": "09 70 27 46 12"
+        "phone": "02 97 12 40 67"
+      },
+      {
+        "id": 728,
+        "controlUnit": {
+          "id": 10336,
+          "areaNote": "Morbihan (56) – Loire-Atlantique (44)",
+          "administrationId": 4,
+          "departmentAreaInseeCode": null,
+          "isArchived": false,
+          "name": "BSL Lorient",
+          "termsNote": "CORGMAR Atlantique"
+        },
+        "controlUnitId": 10336,
+        "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
+        "name": "UNKNOWN",
+        "phone": "02 97 12 40 67"
+      },
+      {
+        "id": 729,
+        "controlUnit": {
+          "id": 10336,
+          "areaNote": "Morbihan (56) – Loire-Atlantique (44)",
+          "administrationId": 4,
+          "departmentAreaInseeCode": null,
+          "isArchived": false,
+          "name": "BSL Lorient",
+          "termsNote": "CORGMAR Atlantique"
+        },
+        "controlUnitId": 10336,
+        "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
+        "name": "UNKNOWN",
+        "phone": "06 72 95 29 02"
+      },
+      {
+        "id": 730,
+        "controlUnit": {
+          "id": 10336,
+          "areaNote": "Morbihan (56) – Loire-Atlantique (44)",
+          "administrationId": 4,
+          "departmentAreaInseeCode": null,
+          "isArchived": false,
+          "name": "BSL Lorient",
+          "termsNote": "CORGMAR Atlantique"
+        },
+        "controlUnitId": 10336,
+        "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
+        "name": "UNKNOWN",
+        "phone": "06 72 95 29 03"
+      },
+      {
+        "id": 733,
+        "controlUnit": {
+          "id": 10338,
+          "areaNote": "Morbihan (56)",
+          "administrationId": 1011,
+          "departmentAreaInseeCode": null,
+          "isArchived": false,
+          "name": "OFB SD 56",
+          "termsNote": null
+        },
+        "controlUnitId": 10338,
+        "email": "sd56@ofb.gouv.fr",
+        "name": "UNKNOWN",
+        "phone": "02 97 47 02 83"
       }
     ]
   }

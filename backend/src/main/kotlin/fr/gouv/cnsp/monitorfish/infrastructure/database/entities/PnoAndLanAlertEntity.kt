@@ -13,7 +13,7 @@ import java.util.*
 @Table(name = "pno_lan_alerts")
 data class PnoAndLanAlertEntity(
     @Id
-    @Column(name = "alert_id")
+    @Column(name = "alert_id", columnDefinition = "uuid")
     val id: UUID,
     @Column(name = "internal_reference_number", nullable = false)
     val internalReferenceNumber: String? = null,

@@ -13,17 +13,23 @@ const circle = css<{
   vertical-align: middle;
 `
 
-export const GreenCircle = styled.span`
+export const GreenCircle = styled.span<{
+  margin: string
+}>`
   ${circle}
   background-color: ${COLORS.mediumSeaGreen};
 `
 
-export const RedCircle = styled.span`
+export const RedCircle = styled.span<{
+  margin: string
+}>`
   ${circle}
   background-color: ${COLORS.maximumRed};
 `
 
-export const BlackCircle = styled.span`
+export const BlackCircle = styled.span<{
+  margin: string
+}>`
   display: inline-block;
   height: 4px;
   width: 4px;

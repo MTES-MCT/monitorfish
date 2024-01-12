@@ -38,7 +38,7 @@ export function TableHeadNext({
               width: '2.25rem'
             }}
           >
-            <StyledCheckbox checked={isAllChecked} onChange={onAllCheckChange} />
+            <StyledCheckbox checked={isAllChecked || false} onChange={onAllCheckChange} />
           </Cell>
         )}
         {columns.map(({ fixedWidth, isSortable, key, label = '' }) => (

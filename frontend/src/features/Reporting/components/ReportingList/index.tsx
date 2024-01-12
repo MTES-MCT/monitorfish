@@ -182,23 +182,23 @@ MMSI: ${reporting.mmsi || ''}`
             return (
               <CardTableRow key={reporting.id} data-cy="side-window-current-reportings" index={index + 1} style={{}}>
                 <FlexboxGrid>
-                  <Cell style={columnStyles[0]}>
+                  <Cell style={columnStyles[0] || {}}>
                     <StyledCheckbox
                       checked={reporting.$isChecked}
                       onChange={() => toggleTableCheckForId(reporting.id)}
                     />
                   </Cell>
-                  <Cell style={columnStyles[1]} title={reportingDate}>
+                  <Cell style={columnStyles[1] || {}} title={reportingDate}>
                     {timeago.format(reportingDate, 'fr')}
                   </Cell>
-                  <Cell style={columnStyles[2]} title={getReportingOrigin(reporting, true)}>
+                  <Cell style={columnStyles[2] || {}} title={getReportingOrigin(reporting, true)}>
                     {getReportingOrigin(reporting)}
                   </Cell>
-                  <Cell style={columnStyles[3]} title={getReportingTitle(reporting, true)}>
+                  <Cell style={columnStyles[3] || {}} title={getReportingTitle(reporting, true)}>
                     {getReportingTitle(reporting)}
                   </Cell>
-                  <Cell style={columnStyles[4]}>{reporting.value.natinfCode}</Cell>
-                  <Cell style={columnStyles[5]} title={getVesselNameTitle(reporting)}>
+                  <Cell style={columnStyles[4] || {}}>{reporting.value.natinfCode}</Cell>
+                  <Cell style={columnStyles[5] || {}} title={getVesselNameTitle(reporting)}>
                     <Flag
                       rel="preload"
                       src={`${baseUrl ? `${baseUrl}/` : ''}flags/${reporting.flagState.toLowerCase()}.svg`}
@@ -207,12 +207,12 @@ MMSI: ${reporting.mmsi || ''}`
                     />
                     {reporting.vesselName}
                   </Cell>
-                  <Cell style={columnStyles[6]}>{reporting.value.dml}</Cell>
-                  <Cell style={columnStyles[7]}>
+                  <Cell style={columnStyles[6] || {}}>{reporting.value.dml}</Cell>
+                  <Cell style={columnStyles[7] || {}}>
                     {reporting.underCharter && <UnderCharter>Navire sous charte</UnderCharter>}
                   </Cell>
                   <Separator />
-                  <Cell style={columnStyles[8]}>
+                  <Cell style={columnStyles[8] || {}}>
                     <IconButton
                       accent={Accent.TERTIARY}
                       data-cy="side-window-silenced-alerts-show-vessel"
@@ -222,7 +222,7 @@ MMSI: ${reporting.mmsi || ''}`
                       title="Voir sur la carte"
                     />
                   </Cell>
-                  <Cell style={columnStyles[9]}>
+                  <Cell style={columnStyles[9] || {}}>
                     <IconButton
                       accent={Accent.TERTIARY}
                       data-cy="side-window-edit-reporting"

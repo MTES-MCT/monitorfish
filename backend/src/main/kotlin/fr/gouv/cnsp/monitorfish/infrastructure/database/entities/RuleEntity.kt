@@ -16,7 +16,7 @@ import java.util.*
 @Table(name = "rules")
 data class RuleEntity(
     @Id
-    @Column(name = "rule_id")
+    @Column(name = "rule_id", columnDefinition = "uuid")
     val id: UUID,
     @Column(name = "title", nullable = false)
     val title: String,

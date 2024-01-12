@@ -64,7 +64,7 @@ dependencies {
     api("com.github.ben-manes.caffeine:caffeine:3.1.8")
     api("org.springframework.security:spring-security-test:6.1.5")
     api("org.testcontainers:testcontainers:1.19.1")
-    api("io.hypersistence:hypersistence-utils-hibernate-62:3.5.3")
+    api("io.hypersistence:hypersistence-utils-hibernate-62:3.7.0")
     api("org.assertj:assertj-core:3.25.0")
     api("org.testcontainers:postgresql:1.19.1")
     api("org.springframework.boot:spring-boot-starter-log4j2:3.1.5")

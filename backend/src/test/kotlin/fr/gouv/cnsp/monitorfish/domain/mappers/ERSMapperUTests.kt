@@ -208,44 +208,44 @@ class ERSMapperUTests {
     fun `second getERSMessageValueFromJSON Should deserialize an example CPS message`() {
         // Given
         val cpsMessage = "{" +
-                         "\"cpsDatetimeUtc\": \"2023-02-28T17:44:00Z\"," +
-                         "\"gear\": \"GTR\"," +
-                         "\"mesh\": 100.0," +
-                         "\"dimensions\": \"50.0;2.0\"," +
-                         "\"catches\": [" +
-                            "{" +
-                                "\"sex\": \"M\"," +
-                                "\"healthState\": \"DEA\"," +
-                                "\"careMinutes\": null," +
-                                "\"ring\": \"1234567\"," +
-                                "\"fate\": \"DIS\"," +
-                                "\"comment\": null," +
-                                "\"species\": \"DCO\"," +
-                                "\"weight\": 60.0," +
-                                "\"nbFish\": 1.0," +
-                                "\"faoZone\": \"27.8.a\"," +
-                                "\"economicZone\": \"FRA\"," +
-                                "\"statisticalRectangle\": \"22E7\"," +
-                                "\"effortZone\": \"C\"" +
-                            "}," +
-                            "{" +
-                                "\"sex\": \"M\"," +
-                                "\"healthState\": \"DEA\"," +
-                                "\"careMinutes\": 40," +
-                                "\"ring\": \"1234568\"," +
-                                "\"fate\": \"DIS\"," +
-                                "\"comment\": \"Pov' titi a eu bobo\"," +
-                                "\"species\": \"DCO\"," +
-                                "\"weight\": 80.0," +
-                                "\"nbFish\": 1.0," +
-                                "\"faoZone\": \"27.8.a\"," +
-                                "\"economicZone\": \"FRA\"," +
-                                "\"statisticalRectangle\": \"22E7\"," +
-                                "\"effortZone\": \"C\"" +
-                            "}" +
-                         "]," +
-                         "\"latitude\": 46.575," +
-                         "\"longitude\": -2.741" +
+            "\"cpsDatetimeUtc\": \"2023-02-28T17:44:00Z\"," +
+            "\"gear\": \"GTR\"," +
+            "\"mesh\": 100.0," +
+            "\"dimensions\": \"50.0;2.0\"," +
+            "\"catches\": [" +
+            "{" +
+            "\"sex\": \"M\"," +
+            "\"healthState\": \"DEA\"," +
+            "\"careMinutes\": null," +
+            "\"ring\": \"1234567\"," +
+            "\"fate\": \"DIS\"," +
+            "\"comment\": null," +
+            "\"species\": \"DCO\"," +
+            "\"weight\": 60.0," +
+            "\"nbFish\": 1.0," +
+            "\"faoZone\": \"27.8.a\"," +
+            "\"economicZone\": \"FRA\"," +
+            "\"statisticalRectangle\": \"22E7\"," +
+            "\"effortZone\": \"C\"" +
+            "}," +
+            "{" +
+            "\"sex\": \"M\"," +
+            "\"healthState\": \"DEA\"," +
+            "\"careMinutes\": 40," +
+            "\"ring\": \"1234568\"," +
+            "\"fate\": \"DIS\"," +
+            "\"comment\": \"Pov' titi a eu bobo\"," +
+            "\"species\": \"DCO\"," +
+            "\"weight\": 80.0," +
+            "\"nbFish\": 1.0," +
+            "\"faoZone\": \"27.8.a\"," +
+            "\"economicZone\": \"FRA\"," +
+            "\"statisticalRectangle\": \"22E7\"," +
+            "\"effortZone\": \"C\"" +
+            "}" +
+            "]," +
+            "\"latitude\": 46.575," +
+            "\"longitude\": -2.741" +
             "}"
 
         // When

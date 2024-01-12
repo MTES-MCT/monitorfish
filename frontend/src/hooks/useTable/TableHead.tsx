@@ -38,7 +38,7 @@ export function TableHead({
       <FlexboxGrid role="row">
         {isCheckable && (
           <CellWrapper $fixedWidth={36} style={{ padding: 0 }}>
-            <StyledCheckbox checked={isAllChecked} onChange={onAllCheckChange} />
+            <StyledCheckbox checked={isAllChecked || false} onChange={onAllCheckChange} />
           </CellWrapper>
         )}
 

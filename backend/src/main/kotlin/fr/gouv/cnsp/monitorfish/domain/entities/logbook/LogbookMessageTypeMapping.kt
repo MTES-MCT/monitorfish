@@ -8,6 +8,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DEP as DEPMessa
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DIS as DISMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.EOF as EOFMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.FAR as FARMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.CPS as CPSMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LAN as LANMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.NotImplemented as NotImplementedMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO as PNOMessage
@@ -15,6 +16,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.RTP as RTPMessa
 
 enum class LogbookMessageTypeMapping(private val clazz: Class<out LogbookMessageValue>) : IHasImplementation {
     FAR(FARMessage::class.java),
+    CPS(CPSMessage::class.java),
     DEP(DEPMessage::class.java),
     DIS(DISMessage::class.java),
     COX(COXMessage::class.java),

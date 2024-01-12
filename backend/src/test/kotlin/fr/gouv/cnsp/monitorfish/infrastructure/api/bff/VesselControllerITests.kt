@@ -353,12 +353,12 @@ class VesselControllerITests {
     fun `Should find the last logbook messages of vessels`() {
         // Given
         val voyage = Voyage(
-            true,
-            false,
-            ZonedDateTime.parse("2021-01-21T10:21:26.617301+01:00"),
-            null,
-            "1234",
-            LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessages(), listOf()),
+            isLastVoyage = true,
+            isFirstVoyage = false,
+            startDate = ZonedDateTime.parse("2021-01-21T10:21:26.617301+01:00"),
+            endDate = null,
+            tripNumber = "1234",
+            logbookMessagesAndAlerts = LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessages(), listOf()),
         )
         given(this.getVesselVoyage.execute(any(), any(), anyOrNull())).willReturn(voyage)
 
@@ -374,7 +374,7 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.isFirstVoyage", equalTo(false)))
             .andExpect(jsonPath("$.startDate", equalTo("2021-01-21T10:21:26.617301+01:00")))
             .andExpect(jsonPath("$.endDate", equalTo(null)))
-            .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages.length()", equalTo(5)))
+            .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages.length()", equalTo(6)))
             .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[0].messageType", equalTo("FAR")))
             .andExpect(
                 jsonPath(
@@ -398,12 +398,12 @@ class VesselControllerITests {
     fun `Should find the logbook messages of vessels before a specified date`() {
         // Given
         val voyage = Voyage(
-            true,
-            false,
-            ZonedDateTime.now().minusMonths(5),
-            null,
-            "1234",
-            LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessages(), listOf()),
+            isLastVoyage = true,
+            isFirstVoyage = false,
+            startDate = ZonedDateTime.now().minusMonths(5),
+            endDate = null,
+            tripNumber = "1234",
+            logbookMessagesAndAlerts = LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessages(), listOf()),
         )
         given(this.getVesselVoyage.execute(any(), any(), any())).willReturn(voyage)
 

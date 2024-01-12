@@ -61,6 +61,9 @@ class GetLogbookMessages(
             LogbookMessageTypeMapping.FAR.name -> {
                 setNamesFromCodes(it.message as FAR)
             }
+            LogbookMessageTypeMapping.CPS.name -> {
+                setNamesFromCodes(it.message as CPS)
+            }
             LogbookMessageTypeMapping.DEP.name -> {
                 setNamesFromCodes(it.message as DEP)
             }
@@ -231,6 +234,12 @@ class GetLogbookMessages(
         }
     }
 
+    private fun setNamesFromCodes(message: CPS) {
+        message.catches.forEach { catch ->
+            addSpeciesName(catch, catch.species)
+        }
+    }
+
     private fun setNamesFromCodes(message: DEP) {
         message.gearOnboard.forEach { gear ->
             gear.gear?.let { gearCode ->
@@ -310,6 +319,14 @@ class GetLogbookMessages(
     }
 
     private fun addSpeciesName(catch: Catch, species: String) {
+        try {
+            catch.speciesName = speciesRepository.find(species).name
+        } catch (e: CodeNotFoundException) {
+            logger.warn(e.message)
+        }
+    }
+
+    private fun addSpeciesName(catch: ProtectedSpeciesCatch, species: String) {
         try {
             catch.speciesName = speciesRepository.find(species).name
         } catch (e: CodeNotFoundException) {

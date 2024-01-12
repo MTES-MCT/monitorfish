@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.jsontype.NamedType
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule

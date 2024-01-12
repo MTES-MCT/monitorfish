@@ -23,11 +23,11 @@ class ProtectedSpeciesCatch {
 enum class HealthState {
     DEA,
     ALI,
-    INJ
+    INJ,
 }
 
 enum class Fate {
     DIS,
     HEC,
-    DEA
+    DEA,
 }

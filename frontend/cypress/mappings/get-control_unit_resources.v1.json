@@ -137,6 +137,31 @@
         "type": "FAST_BOAT"
       },
       {
+        "id": 329,
+        "controlUnit": {
+          "id": 10141,
+          "areaNote": "Méditerranée",
+          "administrationId": 1009,
+          "departmentAreaInseeCode": null,
+          "isArchived": false,
+          "name": "PAM Gyptis",
+          "termsNote": "Division contrôle de la DIRM MED"
+        },
+        "controlUnitId": 10141,
+        "isArchived": false,
+        "name": "Gyptis",
+        "note": null,
+        "photo": null,
+        "station": {
+          "id": 164,
+          "latitude": 43.296482,
+          "longitude": 5.36978,
+          "name": "Marseille"
+        },
+        "stationId": 164,
+        "type": "PATROL_BOAT"
+      },
+      {
         "id": 134,
         "controlUnit": {
           "id": 10449,
@@ -185,6 +210,31 @@
         },
         "stationId": 245,
         "type": "FAST_BOAT"
+      },
+      {
+        "id": 561,
+        "controlUnit": {
+          "id": 10121,
+          "areaNote": "Manche Est Mer du Nord",
+          "administrationId": 1009,
+          "departmentAreaInseeCode": null,
+          "isArchived": false,
+          "name": "PAM Jeanne Barret",
+          "termsNote": "Division contrôle de la DIRM MEMN"
+        },
+        "controlUnitId": 10121,
+        "isArchived": false,
+        "name": "Jeanne Barret",
+        "note": null,
+        "photo": null,
+        "station": {
+          "id": 136,
+          "latitude": 49.49437,
+          "longitude": 0.107929,
+          "name": "Le Havre"
+        },
+        "stationId": 136,
+        "type": "PATROL_BOAT"
       },
       {
         "id": 580,
@@ -559,6 +609,56 @@
           "name": "Vannes"
         },
         "stationId": 245,
+        "type": "CAR"
+      },
+      {
+        "id": 64,
+        "controlUnit": {
+          "id": 10141,
+          "areaNote": "Méditerranée",
+          "administrationId": 1009,
+          "departmentAreaInseeCode": null,
+          "isArchived": false,
+          "name": "PAM Gyptis",
+          "termsNote": "Division contrôle de la DIRM MED"
+        },
+        "controlUnitId": 10141,
+        "isArchived": false,
+        "name": "Voiture",
+        "note": null,
+        "photo": null,
+        "station": {
+          "id": 164,
+          "latitude": 43.296482,
+          "longitude": 5.36978,
+          "name": "Marseille"
+        },
+        "stationId": 164,
+        "type": "CAR"
+      },
+      {
+        "id": 175,
+        "controlUnit": {
+          "id": 10121,
+          "areaNote": "Manche Est Mer du Nord",
+          "administrationId": 1009,
+          "departmentAreaInseeCode": null,
+          "isArchived": false,
+          "name": "PAM Jeanne Barret",
+          "termsNote": "Division contrôle de la DIRM MEMN"
+        },
+        "controlUnitId": 10121,
+        "isArchived": false,
+        "name": "Voiture",
+        "note": null,
+        "photo": null,
+        "station": {
+          "id": 136,
+          "latitude": 49.49437,
+          "longitude": 0.107929,
+          "name": "Le Havre"
+        },
+        "stationId": 136,
         "type": "CAR"
       },
       {

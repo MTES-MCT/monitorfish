@@ -13,13 +13,13 @@ describe('utils/getMissionDataFromMissionFormValues()', () => {
         {
           administration: 'DDTM',
           contact: undefined,
-          id: 10001,
+          id: 10499,
           isArchived: false,
-          name: 'Cultures marines – DDTM 40',
+          name: 'Cultures marines 56',
           resources: [
             {
-              id: 2,
-              name: 'Semi-rigide 2'
+              id: 314,
+              name: 'Brezel - FAH 7185'
             }
           ]
         }
@@ -41,10 +41,15 @@ describe('utils/getMissionDataFromMissionFormValues()', () => {
         {
           administration: 'DDTM',
           contact: undefined,
-          id: 10001,
+          id: 10499,
           isArchived: false,
-          name: 'Cultures marines – DDTM 40',
-          resources: [{ id: 2, name: 'Semi-rigide 2' }]
+          name: 'Cultures marines 56',
+          resources: [
+            {
+              id: 314,
+              name: 'Brezel - FAH 7185'
+            }
+          ]
         }
       ],
       endDateTimeUtc: '2023-12-31T23:30:00.000000Z',

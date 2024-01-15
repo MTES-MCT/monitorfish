@@ -8,6 +8,10 @@ const CURRENT_DIRECTORY = process.cwd()
 dotenv.config({ path: `${CURRENT_DIRECTORY}/scripts/.env` })
 
 const SELECTED_CONTROL_UNIT_NAMES = [
+  // Le Havre
+  `PAM Jeanne Barret`,
+  // Marseille
+  `PAM Gyptis`,
   // Lorient
   `BGC Lorient - DF 36 Kan An Avel`,
   `BSL Lorient`,

@@ -605,13 +605,13 @@ context('Side Window > Mission Form > Sea Control', () => {
             {
               administration: 'DDTM',
               contact: null,
-              id: 10001,
+              id: 10499,
               isArchived: false,
-              name: 'Cultures marines – DDTM 40',
+              name: 'Cultures marines 56',
               resources: [
                 {
-                  id: 2,
-                  name: 'Semi-rigide 2'
+                  id: 314,
+                  name: 'Brezel - FAH 7185'
                 }
               ]
             }
@@ -752,7 +752,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.wait(500)
     cy.get('span[role="button"][title="Clear"]').eq(1).click({ force: true })
     cy.wait(500)
-    cy.fill('Unité 1', 'Cultures marines – DDTM 30')
+    cy.fill('Unité 1', 'Cultures marines 56')
     cy.wait(500)
 
     cy.get('legend')

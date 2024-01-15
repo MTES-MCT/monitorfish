@@ -1940,6 +1940,505 @@
         "name": "DDTM"
       },
       {
+        "id": 1009,
+        "controlUnitIds": [
+          10227,
+          10275,
+          1084,
+          1099,
+          119,
+          1090,
+          1210,
+          10483,
+          10075,
+          10169,
+          10172,
+          10183,
+          10222,
+          1494,
+          10265,
+          1164,
+          10298,
+          10327,
+          1213,
+          10358,
+          10365,
+          1370,
+          1385,
+          10456,
+          10080,
+          10121,
+          10141,
+          10345,
+          10534,
+          10404,
+          2,
+          3,
+          4,
+          1482,
+          1515,
+          1211,
+          1214,
+          1509,
+          1556,
+          1557,
+          1558,
+          1559,
+          1567,
+          1603,
+          1612,
+          1586,
+          1602,
+          1647,
+          1585
+        ],
+        "controlUnits": [
+          {
+            "id": 10227,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "CSN – Centres de sécurité des navires",
+            "termsNote": null
+          },
+          {
+            "id": 10275,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cellule SESAME (enquête DIRM NAMO)",
+            "termsNote": null
+          },
+          {
+            "id": 1084,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 972 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1099,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 971 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 119,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Vrs Mauve (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1090,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 972 [2] (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1210,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Thasard  (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 10483,
+            "areaNote": "Sud Bretagne à la frontière espagnole",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cross Etel",
+            "termsNote": null
+          },
+          {
+            "id": 10075,
+            "areaNote": "Martinique (972)",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cultures marines 972 Martinique",
+            "termsNote": null
+          },
+          {
+            "id": 10169,
+            "areaNote": "Archipel Guadeloupéen (971)",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 971 Guadeloupe",
+            "termsNote": null
+          },
+          {
+            "id": 10172,
+            "areaNote": "Hauts-de-France",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cross Jobourg",
+            "termsNote": null
+          },
+          {
+            "id": 10183,
+            "areaNote": "La Réunion (974)",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 974 Réunion",
+            "termsNote": null
+          },
+          {
+            "id": 10222,
+            "areaNote": "Nord Bretagne",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cross Corsen",
+            "termsNote": null
+          },
+          {
+            "id": 1494,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Osiris Ii (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 10265,
+            "areaNote": "Guyane (973)",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 973 Guyane",
+            "termsNote": null
+          },
+          {
+            "id": 1164,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Pm 298 Campeche (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 10298,
+            "areaNote": "Normandie",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cross Gris Nez",
+            "termsNote": null
+          },
+          {
+            "id": 10327,
+            "areaNote": "Martinique (972)",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "ULAM 972 Martinique",
+            "termsNote": null
+          },
+          {
+            "id": 1213,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dml Guyane (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 10358,
+            "areaNote": "Antilles-Guyane",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "CROSS Antilles-Guyane",
+            "termsNote": null
+          },
+          {
+            "id": 10365,
+            "areaNote": "Méditerranée",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "Cross Med",
+            "termsNote": null
+          },
+          {
+            "id": 1370,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Paam Osiris (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1385,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 973 Cayenne (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 10456,
+            "areaNote": "Martinique (972)",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "DPM 972 Martinique",
+            "termsNote": null
+          },
+          {
+            "id": 10080,
+            "areaNote": "Nord Atlantique Manche Ouest",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "PAM Themis",
+            "termsNote": "Division contrôle de la DIRM NAMO"
+          },
+          {
+            "id": 10121,
+            "areaNote": "Manche Est Mer du Nord",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "PAM Jeanne Barret",
+            "termsNote": "Division contrôle de la DIRM MEMN"
+          },
+          {
+            "id": 10141,
+            "areaNote": "Méditerranée",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "PAM Gyptis",
+            "termsNote": "Division contrôle de la DIRM MED"
+          },
+          {
+            "id": 10345,
+            "areaNote": "Sud Océan Indien",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "PAM Osiris II",
+            "termsNote": "Division contrôle de la DM SOI"
+          },
+          {
+            "id": 10534,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "CACEM",
+            "termsNote": null
+          },
+          {
+            "id": 10404,
+            "areaNote": "Atlantique",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "PAM Iris",
+            "termsNote": "Division contrôle de la DIRM SA"
+          },
+          {
+            "id": 2,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Vrs Gabian (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 3,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Pam Iris (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 4,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Pam Themis (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1482,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 976 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1515,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 974 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1211,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Pm 453 - Watalibi (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1214,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ucaml 973 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1509,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dirm Namo Cellule Cesam (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1556,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cross Med (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1557,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cross Etel (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1558,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cross Jobourg (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1559,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Cross Gris Nez (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1567,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "L'Aciola (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1603,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 975  (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1612,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Dpm 972 (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1586,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Pam Gyptis (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1602,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ensam (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1647,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Ulam 973 Saint-Laurent-Du-Maroni (historique)",
+            "termsNote": null
+          },
+          {
+            "id": 1585,
+            "areaNote": null,
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": true,
+            "name": "Pam Jeanne Barret (historique)",
+            "termsNote": null
+          }
+        ],
+        "isArchived": false,
+        "name": "DIRM / DM"
+      },
+      {
         "id": 2,
         "controlUnitIds": [
           22,

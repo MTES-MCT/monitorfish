@@ -84,7 +84,7 @@ export const fillSideWindowMissionFormBase = (
   cy.fill('Mission sous JDP', true)
 
   cy.fill('Administration 1', 'DDTM')
-  cy.fill('Unité 1', 'Cultures marines – DDTM 40')
+  cy.fill('Unité 1', 'Cultures marines 56')
   cy.wait(500)
-  cy.fill('Moyen 1', ['Semi-rigide 2'])
+  cy.fill('Moyen 1', ['Brezel - FAH 7185'])
 }

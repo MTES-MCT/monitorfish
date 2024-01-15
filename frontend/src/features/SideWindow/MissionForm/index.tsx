@@ -95,6 +95,7 @@ export function MissionForm() {
     isDeletingMissionAction ||
     isUpdatingMissionAction
 
+  const hasFetchingError = missionError || missionActionsError
   const isLoading =
     missionIdFromPath && ((isFetchingMission && !missionData) || (isFetchingMissionActions && !missionActionsData))
 
@@ -578,7 +579,7 @@ export function MissionForm() {
   // DATA INITIALIZATION ON COMPONENT MOUNT
 
   useEffect(() => {
-    if (isLoading || (mainFormValues && missionIdFromPath === previousMissionId && !isNewEdition)) {
+    if (isLoading || hasFetchingError || (mainFormValues && missionIdFromPath === previousMissionId && !isNewEdition)) {
       return
     }
 
@@ -621,12 +622,13 @@ export function MissionForm() {
     setActionFormKey(key => key + 1)
   }, [
     dispatch,
-    missionIdFromPath,
+    hasFetchingError,
     isNewEdition,
     isLoading,
     mainFormValues,
     missionDraft,
     missionId,
+    missionIdFromPath,
     updateReduxSliceDraft,
     missionWithActions,
     previousMissionId

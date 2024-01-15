@@ -1,0 +1,145 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v2/control_units/10141"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": {
+      "id": 10141,
+      "areaNote": "Méditerranée",
+      "administration": {
+        "id": 1009,
+        "isArchived": false,
+        "name": "DIRM / DM"
+      },
+      "administrationId": 1009,
+      "controlUnitContactIds": [
+        339,
+        335,
+        336,
+        333,
+        334,
+        337,
+        338
+      ],
+      "controlUnitContacts": [
+        {
+          "id": 339,
+          "controlUnitId": 10141,
+          "email": null,
+          "name": "ONBOARD_PHONE",
+          "phone": "+881 677 121 122"
+        },
+        {
+          "id": 335,
+          "controlUnitId": 10141,
+          "email": "pam.dirm-med@mer.gouv.fr",
+          "name": "COMMANDER_A",
+          "phone": "07 64 45 13 62"
+        },
+        {
+          "id": 336,
+          "controlUnitId": 10141,
+          "email": "pam.dirm-med@mer.gouv.fr",
+          "name": "COMMANDER_B",
+          "phone": "06 19 42 86 03"
+        },
+        {
+          "id": 333,
+          "controlUnitId": 10141,
+          "email": "aurelia.sargeot@mer.gouv.fr",
+          "name": "OPERATIONAL_CENTER",
+          "phone": "04 86 94 67 48"
+        },
+        {
+          "id": 334,
+          "controlUnitId": 10141,
+          "email": "aurelia.sargeot@mer.gouv.fr",
+          "name": "OPERATIONAL_CENTER",
+          "phone": "06 69 17 61 82"
+        },
+        {
+          "id": 337,
+          "controlUnitId": 10141,
+          "email": null,
+          "name": "PERMANENT_CONTACT_ONBOARD",
+          "phone": "+47 23 41 25 84"
+        },
+        {
+          "id": 338,
+          "controlUnitId": 10141,
+          "email": null,
+          "name": "PERMANENT_CONTACT_ONBOARD",
+          "phone": "+47 23 41 25 85"
+        }
+      ],
+      "controlUnitResourceIds": [
+        329,
+        64
+      ],
+      "controlUnitResources": [
+        {
+          "id": 329,
+          "controlUnit": {
+            "id": 10141,
+            "areaNote": "Méditerranée",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "PAM Gyptis",
+            "termsNote": "Division contrôle de la DIRM MED"
+          },
+          "controlUnitId": 10141,
+          "isArchived": false,
+          "name": "Gyptis",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 164,
+            "latitude": 43.296482,
+            "longitude": 5.36978,
+            "name": "Marseille"
+          },
+          "stationId": 164,
+          "type": "PATROL_BOAT"
+        },
+        {
+          "id": 64,
+          "controlUnit": {
+            "id": 10141,
+            "areaNote": "Méditerranée",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "PAM Gyptis",
+            "termsNote": "Division contrôle de la DIRM MED"
+          },
+          "controlUnitId": 10141,
+          "isArchived": false,
+          "name": "Voiture",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 164,
+            "latitude": 43.296482,
+            "longitude": 5.36978,
+            "name": "Marseille"
+          },
+          "stationId": 164,
+          "type": "CAR"
+        }
+      ],
+      "departmentArea": null,
+      "departmentAreaInseeCode": null,
+      "isArchived": false,
+      "name": "PAM Gyptis",
+      "termsNote": "Division contrôle de la DIRM MED"
+    }
+  }
+}

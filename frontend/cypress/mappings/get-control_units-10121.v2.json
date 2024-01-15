@@ -1,0 +1,169 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v2/control_units/10121"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": {
+      "id": 10121,
+      "areaNote": "Manche Est Mer du Nord",
+      "administration": {
+        "id": 1009,
+        "isArchived": false,
+        "name": "DIRM / DM"
+      },
+      "administrationId": 1009,
+      "controlUnitContactIds": [
+        288,
+        289,
+        287,
+        290,
+        284,
+        285,
+        286,
+        283,
+        281,
+        282
+      ],
+      "controlUnitContacts": [
+        {
+          "id": 288,
+          "controlUnitId": 10121,
+          "email": "pam-jeanne-barret.dirm-memn@developpement-durable.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "+47 23 41 26 00"
+        },
+        {
+          "id": 289,
+          "controlUnitId": 10121,
+          "email": "pam-jeanne-barret.dirm-memn@developpement-durable.gouv.fr",
+          "name": "UNKNOWN",
+          "phone": "+47 23 41 26 01"
+        },
+        {
+          "id": 287,
+          "controlUnitId": 10121,
+          "email": null,
+          "name": "ONBOARD_PHONE",
+          "phone": "00 47 2341261"
+        },
+        {
+          "id": 290,
+          "controlUnitId": 10121,
+          "email": "pam-jeanne-barret.dirm-memn@developpement-durable.gouv.fr",
+          "name": "ONBOARD_PHONE",
+          "phone": "+881677110865"
+        },
+        {
+          "id": 284,
+          "controlUnitId": 10121,
+          "email": "pam-jeanne-barret.dirm-memn@developpement-durable.gouv.fr",
+          "name": "COMMANDER_B",
+          "phone": "06 50 38 02 13"
+        },
+        {
+          "id": 285,
+          "controlUnitId": 10121,
+          "email": null,
+          "name": "COMMANDER_A",
+          "phone": "06 65 51 86 24"
+        },
+        {
+          "id": 286,
+          "controlUnitId": 10121,
+          "email": null,
+          "name": "COMMANDER_B",
+          "phone": "06 50 38 02 13"
+        },
+        {
+          "id": 283,
+          "controlUnitId": 10121,
+          "email": "pam-jeanne-barret.dirm-memn@developpement-durable.gouv.fr",
+          "name": "COMMANDER_A",
+          "phone": "06 65 51 86 24"
+        },
+        {
+          "id": 281,
+          "controlUnitId": 10121,
+          "email": "alexandre.eveno@developpement-durable.gouv.fr",
+          "name": "OPERATIONAL_CENTER",
+          "phone": "02 35 43 38 70"
+        },
+        {
+          "id": 282,
+          "controlUnitId": 10121,
+          "email": "alexandre.eveno@developpement-durable.gouv.fr",
+          "name": "OPERATIONAL_CENTER",
+          "phone": "02 76 89 98 97"
+        }
+      ],
+      "controlUnitResourceIds": [
+        561,
+        175
+      ],
+      "controlUnitResources": [
+        {
+          "id": 561,
+          "controlUnit": {
+            "id": 10121,
+            "areaNote": "Manche Est Mer du Nord",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "PAM Jeanne Barret",
+            "termsNote": "Division contrôle de la DIRM MEMN"
+          },
+          "controlUnitId": 10121,
+          "isArchived": false,
+          "name": "Jeanne Barret",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 136,
+            "latitude": 49.49437,
+            "longitude": 0.107929,
+            "name": "Le Havre"
+          },
+          "stationId": 136,
+          "type": "PATROL_BOAT"
+        },
+        {
+          "id": 175,
+          "controlUnit": {
+            "id": 10121,
+            "areaNote": "Manche Est Mer du Nord",
+            "administrationId": 1009,
+            "departmentAreaInseeCode": null,
+            "isArchived": false,
+            "name": "PAM Jeanne Barret",
+            "termsNote": "Division contrôle de la DIRM MEMN"
+          },
+          "controlUnitId": 10121,
+          "isArchived": false,
+          "name": "Voiture",
+          "note": null,
+          "photo": null,
+          "station": {
+            "id": 136,
+            "latitude": 49.49437,
+            "longitude": 0.107929,
+            "name": "Le Havre"
+          },
+          "stationId": 136,
+          "type": "CAR"
+        }
+      ],
+      "departmentArea": null,
+      "departmentAreaInseeCode": null,
+      "isArchived": false,
+      "name": "PAM Jeanne Barret",
+      "termsNote": "Division contrôle de la DIRM MEMN"
+    }
+  }
+}

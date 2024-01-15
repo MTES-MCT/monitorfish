@@ -6,8 +6,8 @@ context('Main Window > Control Unit List Dialog > Filters', () => {
   })
 
   it('Should show all control units by default', () => {
-    cy.getDataCy('ControlUnitListDialog-control-unit').should('have.length', 9)
-    cy.contains('BGC Lorient - DF 36 Kan An Avel').should('exist')
+    cy.getDataCy('ControlUnitListDialog-control-unit').should('have.length', 11)
+    cy.contains('PAM Jeanne Barret').should('exist')
     cy.contains('ULAM 56').should('exist')
   })
 

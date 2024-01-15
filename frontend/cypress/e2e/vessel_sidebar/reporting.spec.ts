@@ -26,7 +26,7 @@ context('Vessel sidebar reporting tab', () => {
 
     // Then
     cy.get('*[data-cy="vessel-menu-reporting"]').contains(1)
-    cy.get('*[data-cy="reporting-card"]').eq(0).contains('Cross Etel / Sortie non autorisée')
+    cy.get('*[data-cy="reporting-card"]').eq(0).contains('OFB SD 56 / Sortie non autorisée')
     cy.get('*[data-cy="reporting-card"]')
       .eq(0)
       .contains("Ce navire ne devrait pas être en mer, il n'a plus de points sur son permis")
@@ -67,7 +67,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('[data-cy="new-reporting-select-observation-reporting-type"]').click()
     cy.get('*[data-cy="new-reporting-reporting-actor-UNIT"]').click()
     cy.get('*[data-cy="new-reporting-select-unit"]').click()
-    cy.get('[data-key="10012"] > .rs-picker-select-menu-item').click({ force: true })
+    cy.get('[data-key="10338"] > .rs-picker-select-menu-item').click({ force: true })
     cy.get('*[data-cy="new-reporting-author-contact"]').type('Jean Bon (0612365896)')
     cy.get('*[data-cy="new-reporting-title"]').type('Observation: Sortie non autorisée')
     cy.get('*[data-cy="new-reporting-description"]').type(
@@ -112,7 +112,7 @@ context('Vessel sidebar reporting tab', () => {
 
     createReporting()
 
-    cy.get('*[data-cy="reporting-card"]').eq(0).contains('Cross Etel / Sortie non autorisée')
+    cy.get('*[data-cy="reporting-card"]').eq(0).contains('OFB SD 56 / Sortie non autorisée')
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('NATINF 2608')
     cy.get('*[data-cy="archive-reporting-card"]').eq(0).click()
 
@@ -121,7 +121,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-history-button"]').click()
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-history"]').should('exist')
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-archive-year"]').eq(0).click()
-    cy.get('*[data-cy="reporting-card"]').eq(0).contains('Cross Etel / Sortie non autorisée')
+    cy.get('*[data-cy="reporting-card"]').eq(0).contains('OFB SD 56 / Sortie non autorisée')
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()
   })
 
@@ -145,7 +145,7 @@ context('Vessel sidebar reporting tab', () => {
 
     // When
     cy.get('*[data-cy="vessel-menu-reporting"]').contains(1)
-    cy.get('*[data-cy="reporting-card"]').eq(0).contains('Cross Etel / Sortie non autorisée')
+    cy.get('*[data-cy="reporting-card"]').eq(0).contains('OFB SD 56 / Sortie non autorisée')
     cy.get('*[data-cy="delete-reporting-card"]').eq(0).click()
     // First, we do not confirm the reporting deletion
     cy.get('*[data-cy="close-reporting-deletion-modal"]').click()
@@ -161,7 +161,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-sidebar-open-reporting"]').click()
     cy.get('*[data-cy="new-reporting-reporting-actor-UNIT"]').click()
     cy.get('*[data-cy="new-reporting-select-unit"]').click()
-    cy.get('[data-key="10012"] > .rs-picker-select-menu-item').click({ force: true })
+    cy.get('[data-key="10338"] > .rs-picker-select-menu-item').click({ force: true })
     cy.get('*[data-cy="new-reporting-author-contact"]').type('Jean Bon (0612365896)')
     cy.get('*[data-cy="new-reporting-title"]').type('Sortie non autorisée')
     cy.get('*[data-cy="new-reporting-description"]').type(

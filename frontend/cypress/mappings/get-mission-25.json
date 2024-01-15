@@ -15,13 +15,13 @@
       "missionTypes": ["LAND"],
       "controlUnits": [
         {
-          "id": 10003,
-          "administration": "DDTM",
-          "name": "DML 2A",
+          "id": 10484,
+          "administration": "Douane",
+          "name": "BGC Lorient - DF 36 Kan An Avel",
           "resources": [
             {
-              "id": 3,
-              "name": "Semi-rigide 1"
+              "id": 553,
+              "name": "DF 36 Kan An Avel"
             }
           ],
           "contact": null,

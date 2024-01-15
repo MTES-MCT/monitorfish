@@ -32,7 +32,7 @@ context('Vessel sidebar controls tab', () => {
     cy.get('*[data-cy="vessel-controls-summary-last-control"]').first().contains('Dernier contrôle en mer')
     cy.get('*[data-cy="vessel-controls-summary-last-control"]')
       .first()
-      .contains(`Le ${date} (BGC Bastia), 6 infractions`)
+      .contains(`Le ${date} (BGC Lorient - DF 36 Kan An Avel), 6 infractions`)
     cy.get('*[data-cy="vessel-controls-summary-last-control"]').eq(1).contains('Dernier contrôle à quai')
     cy.get('*[data-cy="vessel-controls-summary-last-control"]')
       .eq(1)

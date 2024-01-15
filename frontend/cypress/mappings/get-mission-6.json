@@ -15,13 +15,13 @@
       "missionTypes": ["AIR"],
       "controlUnits": [
         {
-          "id": 10003,
-          "administration": "DDTM",
-          "name": "DML 2A (historique)",
+          "id": 10336,
+          "administration": "Gendarmerie Maritime",
+          "name": "BSL Lorient",
           "resources": [
             {
-              "id": 3,
-              "name": "Semi-rigide 1"
+              "id": 90,
+              "name": "Voiture"
             }
           ],
           "contact": null,

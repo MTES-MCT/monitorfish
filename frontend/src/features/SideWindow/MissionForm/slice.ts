@@ -38,6 +38,8 @@ export interface MissionState {
   isClosing: boolean
   isDraftDirty: boolean
   isListeningToEvents: boolean
+  /** `true` when we edit or create a new mission. */
+  isNewEdition: boolean
   listFilterValues: FilterValues
   listSeaFront: SeaFrontGroup
   mustResetOtherControlsCheckboxes: boolean | undefined
@@ -50,6 +52,7 @@ const INITIAL_STATE: MissionState = {
   isClosing: false,
   isDraftDirty: false,
   isListeningToEvents: true,
+  isNewEdition: false,
   listFilterValues: {
     [MissionFilterType.DATE_RANGE]: MissionDateRangeFilter.WEEK,
     [MissionFilterType.STATUS]: [Mission.MissionStatus.IN_PROGRESS]
@@ -64,6 +67,26 @@ const missionSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'mission',
   reducers: {
+    /**
+     * Initialize new edition state
+     */
+    initializeEdition(
+      state,
+      action: PayloadAction<
+        | {
+            actionsFormValues: MissionActionFormValues[]
+            mainFormValues: MissionMainFormValues
+          }
+        | undefined
+      >
+    ) {
+      state.draft = action.payload
+      state.isDraftDirty = false
+      state.isNewEdition = true
+      state.selectedMissionGeoJSON = undefined
+      state.selectedMissionActionGeoJSON = undefined
+    },
+
     mustResetOtherControlsCheckboxes(state, action: PayloadAction<boolean>) {
       state.mustResetOtherControlsCheckboxes = action.payload
     },
@@ -154,6 +177,13 @@ const missionSlice = createSlice({
      */
     unsetGeometryComputedFromControls(state) {
       state.geometryComputedFromControls = undefined
+    },
+
+    /**
+     * Unset new edition state
+     */
+    unsetIsNewEdition(state) {
+      state.isNewEdition = false
     },
 
     /**

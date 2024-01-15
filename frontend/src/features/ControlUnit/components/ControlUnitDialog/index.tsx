@@ -1,4 +1,4 @@
-import { ControlUnit, Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
+import { Accent, Button, ControlUnit, Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash/fp'
 import { useCallback } from 'react'
@@ -14,7 +14,11 @@ import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { FrontendApiError } from '../../../../libs/FrontendApiError'
 import { FrontendError } from '../../../../libs/FrontendError'
 import { NoRsuiteOverrideWrapper } from '../../../../ui/NoRsuiteOverrideWrapper'
+import { addMission } from '../../../Mission/useCases/addMission'
+import { getMissionFormInitialValues } from '../../../SideWindow/MissionForm/utils/getMissionFormInitialValues'
 import { monitorenvControlUnitApi, useGetControlUnitQuery } from '../../controlUnitApi'
+
+import type { MissionMainFormValues } from '../../../SideWindow/MissionForm/types'
 
 export function ControlUnitDialog() {
   const dispatch = useMainAppDispatch()
@@ -29,6 +33,28 @@ export function ControlUnitDialog() {
     RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
   )
   FrontendApiError.handleIfAny(getControlControlUnitError)
+
+  const openNewMission = useCallback(() => {
+    if (!controlUnit) {
+      throw new FrontendError('`controlUnit` is undefined.')
+    }
+
+    const initialMissionMainFormValues: MissionMainFormValues = {
+      ...getMissionFormInitialValues(undefined, []).initialMainFormValues,
+      controlUnits: [
+        {
+          administration: controlUnit.administration.name,
+          contact: undefined,
+          id: controlUnit.id,
+          isArchived: controlUnit.isArchived,
+          name: controlUnit.name,
+          resources: []
+        }
+      ]
+    }
+
+    dispatch(addMission({ mainFormValues: initialMissionMainFormValues }))
+  }, [controlUnit, dispatch])
 
   const close = useCallback(() => {
     dispatch(
@@ -73,6 +99,9 @@ export function ControlUnitDialog() {
         </MapMenuDialog.Header>
         <Formik initialValues={controlUnit} onSubmit={noop}>
           <StyledMapMenuDialogBody>
+            <Button accent={Accent.SECONDARY} Icon={Icon.Plus} isFullWidth onClick={openNewMission}>
+              Créer une mission avec cette unité
+            </Button>
             <ControlUnitContactList controlUnit={controlUnit} onSubmit={updateControlUnit} />
             <ControlUnitResourceList controlUnit={controlUnit} />
             <AreaNote controlUnit={controlUnit} onSubmit={updateControlUnit} />

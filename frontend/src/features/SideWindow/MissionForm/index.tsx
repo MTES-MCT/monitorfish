@@ -60,6 +60,7 @@ import type { MissionAction } from '../../../domain/types/missionAction'
 
 export function MissionForm() {
   const dispatch = useMainAppDispatch()
+  const isNewEdition = useMainAppSelector(store => store.mission.isNewEdition)
   const missionIdFromPath = useMainAppSelector(store => store.sideWindow.selectedPath.id)
   const newMissionId = useRef<number | undefined>(undefined)
   const missionId = missionIdFromPath || newMissionId?.current
@@ -67,6 +68,7 @@ export function MissionForm() {
     store => store.sideWindow.isDraftCancellationConfirmationDialogOpen
   )
   const missionFormError = useMainAppSelector(state => state.displayedError.missionFormError)
+  const missionDraft = useMainAppSelector(state => state.mission.draft)
   const {
     data: missionData,
     error: missionError,
@@ -576,38 +578,35 @@ export function MissionForm() {
   // DATA INITIALIZATION ON COMPONENT MOUNT
 
   useEffect(() => {
-    // We hide selected missions geometries and overlays on map
-    dispatch(missionActions.unsetSelectedMissionGeoJSON())
-
-    if (isLoading) {
+    if (isLoading || (mainFormValues && missionIdFromPath === previousMissionId && !isNewEdition)) {
       return
     }
 
-    if (mainFormValues) {
-      return
-    }
+    dispatch(missionActions.unsetIsNewEdition())
+
+    formikEditedActionFormValuesRef.current = undefined
+    newMissionId.current = undefined
 
     // When we create a new mission
-    if (!missionWithActions) {
-      const { initialActionsFormValues, initialMainFormValues } = getMissionFormInitialValues(undefined, [])
+    if (!missionId) {
+      if (!missionDraft) {
+        throw new FrontendError('`missionDraft` is undefined.')
+      }
 
-      setMainFormValues(initialMainFormValues)
-      setActionsFormValues(initialActionsFormValues)
+      setMainFormValues(missionDraft.mainFormValues)
+      setActionsFormValues(missionDraft.actionsFormValues)
       updateReduxSliceDraft()
+      setActionFormKey(key => key + 1)
 
       return
     }
 
     // When we edit an existing mission
-    if (missionWithActions.id !== previousMissionId) {
-      dispatch(missionActions.unsetDraft())
-    }
-
     const mission = omit(['actions'], missionWithActions)
 
     const { initialActionsFormValues, initialMainFormValues } = getMissionFormInitialValues(
       mission,
-      missionWithActions.actions
+      missionWithActions?.actions ?? []
     )
     const [, { nextActionsFormValues, nextMainFormValues }] = validateMissionForms(
       initialMainFormValues,
@@ -618,7 +617,20 @@ export function MissionForm() {
     setMainFormValues(nextMainFormValues)
     setActionsFormValues(nextActionsFormValues)
     updateReduxSliceDraft()
-  }, [dispatch, mainFormValues, updateReduxSliceDraft, missionWithActions, previousMissionId, isLoading])
+
+    setActionFormKey(key => key + 1)
+  }, [
+    dispatch,
+    missionIdFromPath,
+    isNewEdition,
+    isLoading,
+    mainFormValues,
+    missionDraft,
+    missionId,
+    updateReduxSliceDraft,
+    missionWithActions,
+    previousMissionId
+  ])
 
   useEffect(
     () => () => {

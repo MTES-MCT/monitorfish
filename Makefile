@@ -103,6 +103,8 @@ register-pipeline-flows-int:
 	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
 	infra/remote/data-pipeline/register-flows-int.sh
 
+run-datawarehouse:
+	docker compose -f ./infra/data_warehouse/docker-compose.yml up -d
 register-forklift-flows:
 	docker pull ghcr.io/mtes-mct/monitorfish/forklift:$(FORKLIFT_VERSION) && \
 	infra/remote/data-warehouse/forklift/register-flows.sh

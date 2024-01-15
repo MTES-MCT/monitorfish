@@ -213,6 +213,8 @@ export function ControlUnitSelect({
           value={value.administration}
         />
         <Select
+          // TODO Investigate why updating `filteredNamesAsOptions` doesn't re-render the Select.
+          key={JSON.stringify(filteredNamesAsOptions)}
           baseContainer={newWindowContainerRef.current}
           disabled={isLoading}
           error={error?.name}

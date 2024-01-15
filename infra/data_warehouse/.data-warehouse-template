@@ -1,3 +1,5 @@
-// File to fill and place in ~ folder of the server
-export DATA_WAREHOUSE_PASSWORD=
+# File to fill and place in ~ folder of the server
 export DATA_WAREHOUSE_USER=
+export DATA_WAREHOUSE_PASSWORD=
+export FORKLIFT_VERSION=
+export SACROIS_FILES_GID=$(getent group $(whoami) | cut -d: -f3)

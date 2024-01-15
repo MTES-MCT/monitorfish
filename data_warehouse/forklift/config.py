@@ -15,10 +15,10 @@ if TEST_LOCAL:
     load_dotenv(ROOT_DIRECTORY / ".env.test")
 
 # Flow execution configuration
-DOCKER_IMAGE = "ghcr.io/mtes-mct/monitorfish/data-warehouse"
-DATA_WAREHOUSE_VERSION = os.getenv("DATA_WAREHOUSE_VERSION")
+DOCKER_IMAGE = "ghcr.io/mtes-mct/monitorfish/forklift"
+FORKLIFT_VERSION = os.getenv("FORKLIFT_VERSION")
 FLOWS_LOCATION = Path("forklift/pipeline/flows")  # relative to the WORKDIR in the image
-FLOWS_LABEL = "data-warehouse"
+FLOWS_LABEL = "forklift"
 MAX_FLOW_RUN_MINUTES = 30
 FLOW_STATES_TO_CLEAN = ["Running"]
 

@@ -80,9 +80,9 @@ docker-run-data-warehouse:
 docker-test-forklift: docker-run-data-warehouse
 	docker run --network host -v /var/run/docker.sock:/var/run/docker.sock -u forklift:$(DOCKER_GROUP) --env-file data_warehouse/.env.test forklift:$(VERSION) coverage run -m pytest --pdb tests
 docker-tag-forklift:
-	docker tag forklift:$(VERSION) docker.pkg.github.com/mtes-mct/monitorfish/forklift:$(VERSION)
+	docker tag forklift:$(VERSION) ghcr.io/mtes-mct/monitorfish/forklift:$(VERSION)
 docker-push-forklift:
-	docker push docker.pkg.github.com/mtes-mct/monitorfish/forklift:$(VERSION)
+	docker push ghcr.io/mtes-mct/monitorfish/forklift:$(VERSION)
 
 # RUN commands
 init-local-sig:

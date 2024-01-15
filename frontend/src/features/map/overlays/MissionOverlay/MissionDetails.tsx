@@ -7,10 +7,9 @@ import { MissionStatusLabel } from './MissionStatusLabel'
 import { missionActions } from '../../../../domain/actions'
 import { getMissionSourceTagText } from '../../../../domain/entities/mission'
 import { Mission } from '../../../../domain/entities/mission/types'
-import { SideWindowMenuKey } from '../../../../domain/entities/sideWindow/constants'
-import { sideWindowDispatchers } from '../../../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { pluralize } from '../../../../utils/pluralize'
+import { editMission } from '../../../Mission/useCases/editMission'
 import { OverlayPosition } from '../Overlay'
 
 import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
@@ -24,12 +23,7 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
   const dispatch = useMainAppDispatch()
 
   const openMissionInSideWindow = () => {
-    dispatch(
-      sideWindowDispatchers.openPath({
-        id: mission.missionId,
-        menu: SideWindowMenuKey.MISSION_FORM
-      })
-    )
+    dispatch(editMission(mission.missionId))
   }
 
   return (

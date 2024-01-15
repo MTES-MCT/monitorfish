@@ -10,14 +10,14 @@ import { hasSomeOngoingActions, renderStatus } from './utils'
 import { missionActions } from '../../../domain/actions'
 import { useGetFilteredMissionsQuery } from '../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFrontGroup } from '../../../domain/entities/seaFront/constants'
-import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
 import { fitToExtent } from '../../../domain/shared_slices/Map'
-import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { useTable } from '../../../hooks/useTable'
 import { EmptyCardTable } from '../../../ui/card-table/EmptyCardTable'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
+import { addMission } from '../../Mission/useCases/addMission'
+import { editMission } from '../../Mission/useCases/editMission'
 import { SubMenu } from '../SubMenu'
 
 import type { Mission, MissionWithActions } from '../../../domain/entities/mission/types'
@@ -58,7 +58,7 @@ export function MissionList() {
 
   const goToMissionForm = useCallback(
     async (missionId?: Mission.Mission['id']) => {
-      dispatch(sideWindowDispatchers.openPath({ id: missionId, menu: SideWindowMenuKey.MISSION_FORM }))
+      dispatch(missionId ? editMission(missionId) : addMission())
     },
     [dispatch]
   )

@@ -11,6 +11,7 @@ import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
 import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { addMission } from '../../Mission/useCases/addMission'
 import { MapToolBox } from '../shared/MapToolBox'
 import { MapToolButton } from '../shared/MapToolButton'
 
@@ -33,8 +34,8 @@ export function MissionsMenu() {
     dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_LIST }))
   }, [dispatch, isActive])
 
-  const addMission = () => {
-    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_FORM }))
+  const openNewMission = () => {
+    dispatch(addMission())
   }
 
   const toggleMissionsMenu = () => {
@@ -63,7 +64,7 @@ export function MissionsMenu() {
           </MissionsMenuHeader>
           <MissionsMenuBody>
             <Section>
-              <BlockIconButton accent={Accent.PRIMARY} Icon={Icon.Plus} onClick={addMission}>
+              <BlockIconButton accent={Accent.PRIMARY} Icon={Icon.Plus} onClick={openNewMission}>
                 Ouvrir une nouvelle mission
               </BlockIconButton>
             </Section>

@@ -4,10 +4,10 @@ from prefect.schedules import CronSchedule
 from prefect.storage.local import Local
 
 from forklift.config import (
-    DATA_WAREHOUSE_VERSION,
     DOCKER_IMAGE,
     FLOWS_LABEL,
     FLOWS_LOCATION,
+    FORKLIFT_VERSION,
     ROOT_DIRECTORY,
 )
 from forklift.pipeline.flows import clean_flow_runs
@@ -37,7 +37,7 @@ for flow in flows_to_register:
     host_config = None
 
     flow.run_config = DockerRun(
-        image=f"{DOCKER_IMAGE}:{DATA_WAREHOUSE_VERSION}",
+        image=f"{DOCKER_IMAGE}:{FORKLIFT_VERSION}",
         host_config=host_config,
         env=dotenv_values(ROOT_DIRECTORY / ".env"),
         labels=[FLOWS_LABEL],

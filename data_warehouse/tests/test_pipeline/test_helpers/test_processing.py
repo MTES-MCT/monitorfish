@@ -10,7 +10,7 @@ import pytest
 import pytz
 from sqlalchemy import Column, Integer, MetaData, Table
 
-from forklift.pipeline.processing import (
+from forklift.pipeline.helpers.processing import (
     array_equals_row_on_window,
     back_propagate_ones,
     coalesce,
@@ -375,7 +375,7 @@ def test_df_values_to_psql_arrays():
     assert res.values.tolist() == expected_values
 
 
-@patch("forklift.pipeline.processing.pd")
+@patch("forklift.pipeline.helpers.processing.pd")
 def test_drop_rows_already_in_table(mock_pandas):
     df = pd.DataFrame(
         data=[

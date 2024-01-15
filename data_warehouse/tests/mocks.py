@@ -8,7 +8,7 @@ import pandas as pd
 import requests
 from prefect import task
 
-from forklift.pipeline.generic_tasks import extract
+from forklift.pipeline.helpers.generic import extract
 from forklift.pipeline.shared_tasks.datagouv import update_resource
 
 

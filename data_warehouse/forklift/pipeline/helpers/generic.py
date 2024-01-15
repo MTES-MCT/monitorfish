@@ -5,15 +5,13 @@ from typing import List, Union
 import geopandas as gpd
 import pandas as pd
 from clickhouse_connect.driver.httpclient import HttpClient
-from prefect import task
 from sqlalchemy import DDL, text
 from sqlalchemy.engine import Connection, Engine
-from sqlalchemy.sql import Select
 
 from forklift.config import QUERIES_LOCATION, SQL_SCRIPTS_LOCATION
 from forklift.db_engines import create_datawarehouse_client, create_engine
 from forklift.pipeline import utils
-from forklift.pipeline.processing import prepare_df_for_loading
+from forklift.pipeline.helpers.processing import prepare_df_for_loading
 from forklift.pipeline.utils import get_table, psql_insert_copy
 
 
@@ -324,15 +322,6 @@ def delete_rows(
                 connection=connection,
                 logger=logger,
             )
-
-
-@task(checkpoint=False)
-def read_query_task(database: str, query: Select) -> pd.DataFrame:
-    """
-    Prefect `task` decorated version of `read_query`.
-    """
-
-    return read_query(query, db=database)
 
 
 def run_sql_script(*, sql: str = None, sql_script_filepath: Path = None):

@@ -121,7 +121,7 @@ def create_datawarehouse_client() -> HttpClient:
     """Returns clickhouse client for data_warehouse database.
 
     Returns:
-        HttpClient]: clickhouse client for data_warehouse.
+        HttpClient: clickhouse client for data_warehouse.
     """
 
     import forklift.config  # To load env vars in "local test" configurations

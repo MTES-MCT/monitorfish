@@ -1,4 +1,3 @@
-import { missionActions } from '../../../domain/actions'
 import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
 import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { getMissionFormInitialValues } from '../../SideWindow/MissionForm/utils/getMissionFormInitialValues'
@@ -16,14 +15,11 @@ export const addMission =
       initialValues?.mainFormValues || getMissionFormInitialValues(undefined, []).initialMainFormValues
 
     dispatch(
-      missionActions.initializeEdition({
-        actionsFormValues: initialValues?.actionsFormValues || [],
-        mainFormValues
-      })
-    )
-    dispatch(
       sideWindowDispatchers.openPath({
-        id: undefined,
+        initialData: {
+          actionsFormValues: initialValues?.actionsFormValues || [],
+          mainFormValues
+        },
         menu: SideWindowMenuKey.MISSION_FORM
       })
     )

@@ -1,13 +1,11 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
-// import { SeaFrontGroup } from '../../constants'
 import { FrontendError } from '../../libs/FrontendError'
 import { SideWindowMenuKey, SideWindowStatus } from '../entities/sideWindow/constants'
 
 import type { SideWindow } from '../entities/sideWindow/types'
 
 export interface SideWindowState {
-  // hasBeenRenderedOnce: boolean
   isDraftCancellationConfirmationDialogOpen: boolean
   nextPath: SideWindow.Path | undefined
   selectedPath: SideWindow.Path
@@ -54,7 +52,7 @@ const sideWindowSlice = createSlice({
     /**
      * Confirm cancellation of a draft that is both in progress and dirty
      */
-    confirmDraftCancellationAndGoToNextMenuWithSubMenu(state) {
+    hideDraftCancellationConfirmationDialogAndSetNextMenuWithSubMenu(state) {
       if (!state.nextPath) {
         throw new FrontendError('`state.nextPath` is undefined.')
       }

@@ -1,4 +1,5 @@
-import { SideWindowStatus } from '../../entities/sideWindow/constants'
+import { missionActions } from '../../actions'
+import { SideWindowMenuKey, SideWindowStatus } from '../../entities/sideWindow/constants'
 import { setDisplayedErrors } from '../../shared_slices/DisplayedError'
 import { sideWindowActions } from '../../shared_slices/SideWindow'
 
@@ -20,5 +21,8 @@ export const openPath =
       return
     }
 
+    if (path.menu === SideWindowMenuKey.MISSION_FORM) {
+      dispatch(missionActions.initializeEdition(path.initialData))
+    }
     dispatch(sideWindowActions.openOrFocusAndGoTo(path))
   }

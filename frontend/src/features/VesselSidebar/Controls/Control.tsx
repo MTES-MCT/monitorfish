@@ -7,14 +7,13 @@ import { GearOnboard } from './GearOnboard'
 import { Infraction } from './Infraction'
 import { COLORS } from '../../../constants/constants'
 import { getNumberOfInfractions } from '../../../domain/entities/controls'
-import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
 import { MissionAction } from '../../../domain/types/missionAction'
-import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { useIsSuperUser } from '../../../hooks/authorization/useIsSuperUser'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { getDate } from '../../../utils'
 import GyroRedSVG from '../../icons/Gyrophare_controles_rouge.svg?react'
 import GyroGreenSVG from '../../icons/Gyrophare_controles_vert.svg?react'
+import { editMission } from '../../Mission/useCases/editMission'
 
 type ControlProps = {
   control: MissionAction.MissionAction
@@ -36,7 +35,7 @@ export function Control({ control, isLastItem }: ControlProps) {
   )
 
   const openMission = useCallback(async () => {
-    dispatch(sideWindowDispatchers.openPath({ id: control.missionId, menu: SideWindowMenuKey.MISSION_FORM }))
+    dispatch(editMission(control.missionId))
   }, [dispatch, control.missionId])
 
   const controlType = useMemo(() => {

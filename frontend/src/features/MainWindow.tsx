@@ -57,7 +57,7 @@ export function MainWindow() {
 
       <PreviewFilteredVessels />
 
-      <Wrapper>
+      <Wrapper id="mainWindowWrapper">
         <Map />
         <LayersSidebar />
         {isVesselSearchDisplayed && <VesselSidebarHeader />}

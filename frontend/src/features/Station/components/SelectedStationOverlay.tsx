@@ -119,7 +119,7 @@ export function SelectedStationOverlay() {
   useEffect(() => () => removeOverlay(), [removeOverlay])
 
   return (
-    <WrapperToBeKeptForDOMManagement $isVisible={!!selectionDialogElementRef.current}>
+    <WrapperToBeKeptForDOMManagement $isVisible={!!selectionDialogElementRef.current} id="selected-station-overlay">
       <div ref={wrapperElementRef}>
         {isStationLayerDisplayed && selectedStation && (
           <StationCard ref={selectionDialogElementRef} isSelected station={selectedStation} />
@@ -132,8 +132,6 @@ export function SelectedStationOverlay() {
 const WrapperToBeKeptForDOMManagement = styled.div<{
   $isVisible: boolean
 }>`
-  border-radius: 2px;
-  cursor: grabbing;
   left: 0;
   position: absolute;
   top: 0;

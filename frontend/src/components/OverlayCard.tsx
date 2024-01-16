@@ -12,14 +12,14 @@ export type DialogProps = HtmlHTMLAttributes<HTMLDivElement> & {
 export function OverlayCard({ children, isCloseButtonHidden = false, onClose, title, ...props }: DialogProps) {
   return (
     <StyledMapMenuDialogContainer {...props}>
-      <MapMenuDialog.Header>
+      <StyledMapMenuDialogHeader>
         <StyledMapMenuDialogTitle title={title}>{title}</StyledMapMenuDialogTitle>
         <MapMenuDialog.CloseButton
           Icon={Icon.Close}
           onClick={onClose}
           style={{ visibility: isCloseButtonHidden ? 'hidden' : 'visible' }}
         />
-      </MapMenuDialog.Header>
+      </StyledMapMenuDialogHeader>
       {children}
     </StyledMapMenuDialogContainer>
   )
@@ -27,6 +27,10 @@ export function OverlayCard({ children, isCloseButtonHidden = false, onClose, ti
 
 const StyledMapMenuDialogContainer = styled(MapMenuDialog.Container)`
   margin: 0;
+`
+
+const StyledMapMenuDialogHeader = styled(MapMenuDialog.Header)`
+  cursor: grabbing;
 `
 
 const StyledMapMenuDialogTitle = styled(MapMenuDialog.Title)`

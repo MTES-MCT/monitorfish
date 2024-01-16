@@ -1,13 +1,8 @@
 import GeoJSON from 'ol/format/GeoJSON'
 
 import { showRegulatoryZoneMetadata } from '../../../features/Regulation/useCases/showRegulatoryZoneMetadata'
-import {
-  FEATURE_MARGINS,
-  STATION_OVERLAY_DIALOG_WIDTH_AND_HEIGHT
-} from '../../../features/Station/components/SelectedStationOverlay/constants'
 import { stationActions } from '../../../features/Station/slice'
 import { FeatureWithCodeAndEntityId } from '../../../libs/FeatureWithCodeAndEntityId'
-import { getDialogOverlayPositionFromFeature } from '../../../utils/getDialogOverlayPositionFromFeature'
 import { missionActions } from '../../actions'
 import { isControl } from '../../entities/controls'
 import { LayerProperties } from '../../entities/layers/constants'
@@ -70,18 +65,7 @@ export const clickOnMapFeature = (mapClick: MapClick) => (dispatch, getState) =>
   }
 
   if (mapClick.feature instanceof FeatureWithCodeAndEntityId && mapClick.feature.code === MonitorFishLayer.STATION) {
-    const overlayPosition = getDialogOverlayPositionFromFeature(
-      mapClick.feature,
-      STATION_OVERLAY_DIALOG_WIDTH_AND_HEIGHT,
-      FEATURE_MARGINS
-    )
-
-    dispatch(
-      stationActions.selectStation({
-        overlayPosition,
-        stationId: mapClick.feature.entityId
-      })
-    )
+    dispatch(stationActions.selectStationId(mapClick.feature.entityId))
 
     return
   }

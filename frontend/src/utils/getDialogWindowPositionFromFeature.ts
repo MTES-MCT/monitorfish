@@ -17,7 +17,8 @@ export function getDialogWindowPositionFromFeature(
   /** Margin between the feature position (top left extent) and the dialog. */
   featureMargins: Margins,
   /** Minimum margin between window borders and the dialog. */
-  windowMargins: Margins = DEFAULT_WINDOW_MARGINS
+  windowMargins: Margins = DEFAULT_WINDOW_MARGINS,
+  asFeatureOffset = false
 ): Coordinates {
   if (!dialogElement || !feature) {
     return [0, 0]
@@ -28,7 +29,12 @@ export function getDialogWindowPositionFromFeature(
     throw new FrontendError('`geometry` is undefined.')
   }
 
-  const dialogHeight = dialogElement.offsetHeight
+  const mainWindowWrapperElement = window.document.getElementById('mainWindowWrapper')
+  if (!mainWindowWrapperElement) {
+    throw new FrontendError('`mainWindowWrapperElement` is undefined.')
+  }
+
+  const dialogHeight = dialogElement.offsetHeight + 40
   const dialogWidth = dialogElement.offsetWidth
   const featureGeometryExtent = geometry.getExtent()
   const featureMapTopAndLeft = ensureCoordinates([featureGeometryExtent[0], featureGeometryExtent[3]])
@@ -63,5 +69,9 @@ export function getDialogWindowPositionFromFeature(
     }
   }
 
-  return [topPosition, leftPosition]
+  if (asFeatureOffset) {
+    return [leftPosition - featureWindowCoordinates[0], topPosition - featureWindowCoordinates[1]]
+  }
+
+  return [topPosition + mainWindowWrapperElement.offsetTop, leftPosition]
 }

@@ -22,7 +22,7 @@ function StationCardWithRef({ isSelected = false, station }: StationCardProps, r
 
   const close = () => {
     dispatch(stationActions.highlightStationIds([]))
-    dispatch(stationActions.selectStation(undefined))
+    dispatch(stationActions.selectStationId(undefined))
   }
 
   const updateControlUnits = useCallback(async () => {

@@ -12,12 +12,12 @@ export const addMission =
   }): MainAppThunk =>
   dispatch => {
     const mainFormValues =
-      initialValues?.mainFormValues || getMissionFormInitialValues(undefined, []).initialMainFormValues
+      initialValues?.mainFormValues ?? getMissionFormInitialValues(undefined, []).initialMainFormValues
 
     dispatch(
       sideWindowDispatchers.openPath({
         initialData: {
-          actionsFormValues: initialValues?.actionsFormValues || [],
+          actionsFormValues: initialValues?.actionsFormValues ?? [],
           mainFormValues
         },
         menu: SideWindowMenuKey.MISSION_FORM

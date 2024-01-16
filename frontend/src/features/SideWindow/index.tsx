@@ -7,7 +7,8 @@ import {
   useEffect,
   useMemo,
   useRef,
-  useState
+  useState,
+  Fragment
 } from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled, { createGlobalStyle, StyleSheetManager } from 'styled-components'
@@ -144,10 +145,13 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
                   )}
                   {selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && <BeaconMalfunctionBoard />}
                   {selectedPath.menu === SideWindowMenuKey.MISSION_LIST && <MissionList />}
+
                   {selectedPath.menu === SideWindowMenuKey.MISSION_FORM && (
-                    <MissionEventContext.Provider value={missionEvent}>
-                      <MissionForm />
-                    </MissionEventContext.Provider>
+                    <Fragment key={selectedPath.id}>
+                      <MissionEventContext.Provider value={missionEvent}>
+                        <MissionForm />
+                      </MissionEventContext.Provider>
+                    </Fragment>
                   )}
                 </Content>
               )}

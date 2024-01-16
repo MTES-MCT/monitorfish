@@ -95,7 +95,7 @@ export function MissionForm() {
     isDeletingMissionAction ||
     isUpdatingMissionAction
 
-  const hasFetchingError = missionError || missionActionsError
+  const hasFetchingError = !!missionError || !!missionActionsError
   const isLoading =
     missionIdFromPath && ((isFetchingMission && !missionData) || (isFetchingMissionActions && !missionActionsData))
 

@@ -1,3 +1,4 @@
+import itertools
 import os
 from time import sleep
 
@@ -33,13 +34,17 @@ def create_docker_client():
 
 
 @pytest.fixture(scope="session", autouse=True)
-def wait_for_data_warehouse(set_environment_variables, create_docker_client):
+def wait_for_data_warehous_and_migrations(
+    set_environment_variables, create_docker_client
+):
     client = create_docker_client
     health = None
     timeout = 30
     stop_time = 1
     elapsed_time = 0
+    migrations_in_progress = True
 
+    # Start data warehouse
     while health != "healthy" and elapsed_time < timeout:
         print(f"Waiting for data warehouse to start ({elapsed_time}/{timeout})")
         sleep(stop_time)
@@ -49,5 +54,24 @@ def wait_for_data_warehouse(set_environment_variables, create_docker_client):
     if health == "healthy":
         print("Data warehouse started")
     else:
-        raise RuntimeError("Could not start data warehouse")
+        raise RuntimeError("Could not start data warehouse.")
+
+    # Migrate test data
+    elapsed_time = 0
+    while migrations_in_progress and elapsed_time < timeout:
+        print(f"Waiting for test data migrations ({elapsed_time}/{timeout})")
+        running_containers = list(
+            itertools.chain.from_iterable([c["Names"] for c in client.containers()])
+        )
+        running_migrations = [c for c in running_containers if "flyway" in c]
+        print(f"Migrations running: {running_migrations}")
+        migrations_in_progress = len(running_migrations) > 0
+        sleep(stop_time)
+        elapsed_time += stop_time
+
+    if not migrations_in_progress:
+        print("Test data migrated")
+    else:
+        raise RuntimeError("Could not migrate test data.")
+
     yield

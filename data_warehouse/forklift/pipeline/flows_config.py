@@ -10,16 +10,14 @@ from forklift.config import (
     FORKLIFT_VERSION,
     ROOT_DIRECTORY,
 )
-from forklift.pipeline.flows import clean_flow_runs
+from forklift.pipeline.flows import clean_flow_runs, create_database
 
 ################################ Define flow schedules ################################
 clean_flow_runs.flow.schedule = CronSchedule("8,18,28,38,48,58 * * * *")
 
 
 ###################### List flows to register with prefect server #####################
-flows_to_register = [
-    clean_flow_runs.flow,
-]
+flows_to_register = [clean_flow_runs.flow, create_database.flow]
 
 
 ################################ Define flows' storage ################################

@@ -1,13 +1,14 @@
 import os
 from pathlib import Path
 
-from prefect import Flow, Parameter, task
+from prefect import Flow, Parameter, case, task
 
 from forklift.db_engines import create_datawarehouse_client, db_env
+from forklift.pipeline.shared_tasks.control_flow import check_flow_not_running
 
 
 @task(checkpoint=False)
-def mirror_pg_database(database: str, database_name_in_dw: str):
+def mirror_pg_database(database: str, schema: str, database_name_in_dw: str):
     """
     Creates a PostgreSQL engine database in Clickhouse mirroring a remote Postgres
     database.
@@ -31,6 +32,7 @@ def mirror_pg_database(database: str, database_name_in_dw: str):
     Args:
         database (str): Database to mirror. Possible values : 'monitorfish_remote',
           'monitorenv_remote'
+        schema (str): schema to mirror.
         database_name_in_dw (str): Name of the mirror database to create in Clickhouse.
 
     Raises:
@@ -56,7 +58,8 @@ def mirror_pg_database(database: str, database_name_in_dw: str):
             '{host}:{port}',
             '{sid}',
             '{usr}',
-            '{pwd}'
+            '{pwd}',
+            '{schema}'
         )
     """
 
@@ -64,9 +67,14 @@ def mirror_pg_database(database: str, database_name_in_dw: str):
 
 
 with Flow("Mirror PostgreSQL database") as flow:
-    database = Parameter("database")
-    database_name_in_dw = Parameter("database_name_in_dw")
-    mirror_pg_database(database=database, database_name_in_dw=database_name_in_dw)
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
+        database = Parameter("database")
+        schema = Parameter("schema")
+        database_name_in_dw = Parameter("database_name_in_dw")
+        mirror_pg_database(
+            database=database, schema=schema, database_name_in_dw=database_name_in_dw
+        )
 
 
 flow.file_name = Path(__file__).name

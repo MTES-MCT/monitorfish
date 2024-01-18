@@ -324,7 +324,9 @@ def delete_rows(
             )
 
 
-def run_sql_script(*, sql: str = None, sql_script_filepath: Path = None):
+def run_sql_script(
+    *, sql: str = None, sql_script_filepath: Path = None, parameters: dict = None
+):
     """
     Execute SQL script on data_warehouse. Does not return any result.
 
@@ -333,6 +335,8 @@ def run_sql_script(*, sql: str = None, sql_script_filepath: Path = None):
           `sql_script_filepath` is null. Defaults to None.
         sql_script_filepath (Path, optional): path to .sql file, starting from the
           sql_sripts folder. example : "data_warehouse/script_1.sql". Defaults to None.
+        parameters (dict, optionnal): pamaters to pass to clickhouse client `command`
+          method.
 
     Raises:
         ValueError: _description_
@@ -368,7 +372,7 @@ def run_sql_script(*, sql: str = None, sql_script_filepath: Path = None):
             sql = text(sql_file.read())
 
     client = create_datawarehouse_client()
-    client.command(sql)
+    client.command(sql, parameters=parameters)
 
 
 def read_saved_query(

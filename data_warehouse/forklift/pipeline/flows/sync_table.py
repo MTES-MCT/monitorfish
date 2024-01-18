@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import prefect
 from prefect import Flow, Parameter, case, task
 
 from forklift.db_engines import create_datawarehouse_client
@@ -37,7 +38,15 @@ def drop_table_if_exists(database: str, table: str):
 
 
 @task(checkpoint=False)
-def create_table(ddl_script_path: str, database: str, table: str):
+def ddl_script_is_given(ddl_script_path: str):
+    if isinstance(ddl_script_path, str) and len(ddl_script_path) > 0:
+        return True
+    else:
+        return False
+
+
+@task(checkpoint=False)
+def create_table_from_ddl_script(ddl_script_path: str, database: str, table: str):
     """
     Runs DDL script at designated location with `database`  and `table` parameters.
 
@@ -61,7 +70,10 @@ def insert_data_from_source_to_destination(
     source_table: str,
     destination_database: str,
     destination_table: str,
+    create_table: bool,
+    order_by: str,
 ):
+    logger = prefect.context.get("logger")
     client = create_datawarehouse_client()
 
     # Check for the existence of source and destination databases
@@ -86,27 +98,44 @@ def insert_data_from_source_to_destination(
             )
         )
 
-    # Check for the existence of destination tables. Source table cannot be check in this
-    # way, because it can be a view, and `SHOW TABLES` does not include views.
-    destination_tables = client.query_df(
-        "SHOW TABLES FROM {destination_database:Identifier}",
-        parameters={"destination_database": destination_database},
-    )
-    try:
-        assert destination_table in set(destination_tables.name)
-    except AssertionError:
-        raise ValueError(
+    if not create_table:
+        # Check for the existence of destination tables. Source table cannot be check in
+        # this way, because it can be a view, and `SHOW TABLES` does not include views.
+        destination_tables = client.query_df(
+            "SHOW TABLES FROM {destination_database:Identifier}",
+            parameters={"destination_database": destination_database},
+        )
+        try:
+            assert destination_table in set(destination_tables.name)
+        except AssertionError:
+            raise ValueError(
+                (
+                    f"Destination table {destination_table} not found in destination "
+                    f"database {destination_database}. Available tables : {set(destination_tables.name)}"
+                )
+            )
+
+    if create_table:
+        logger.info(
             (
-                f"Destination table {destination_table} not found in destination database "
-                f"{destination_database}. Available tables : {set(destination_tables.name)}"
+                f"Creating table {destination_database}.{destination_table} "
+                "and inserting data from SELECT query."
             )
         )
-
-    sql = """
-    INSERT INTO {destination_database:Identifier}.{destination_table:Identifier}
-    SELECT *
-    FROM {source_database:Identifier}.{source_table:Identifier}
-    """
+        sql = """
+        CREATE TABLE {destination_database:Identifier}.{destination_table:Identifier}
+        ENGINE MergeTree
+        ORDER BY {order_by:Identifier}
+        AS SELECT *
+        FROM {source_database:Identifier}.{source_table:Identifier}
+        """
+    else:
+        logger.info(f"Inserting data into {destination_database}.{destination_table}.")
+        sql = """
+        INSERT INTO {destination_database:Identifier}.{destination_table:Identifier}
+        SELECT *
+        FROM {source_database:Identifier}.{source_table:Identifier}
+        """
 
     run_sql_script(
         sql=sql,
@@ -115,6 +144,7 @@ def insert_data_from_source_to_destination(
             "source_table": source_table,
             "destination_database": destination_database,
             "destination_table": destination_table,
+            "order_by": order_by,
         },
     )
 
@@ -127,24 +157,43 @@ with Flow("Sync table") as flow:
         destination_database = Parameter("destination_database")
         destination_table = Parameter("destination_table")
         ddl_script_path = Parameter("ddl_script_path")
+        order_by = Parameter("order_by")
+
+        ddl_script_given = ddl_script_is_given(ddl_script_path)
 
         create_database = create_database_if_not_exists(destination_database)
-        drop_table = drop_table_if_exists(
-            destination_database, destination_table, upstream_tasks=[create_database]
-        )
-        created_table = create_table(
-            ddl_script_path,
-            database=destination_database,
-            table=destination_table,
-            upstream_tasks=[drop_table],
-        )
-        insert_data_from_source_to_destination(
-            source_database,
-            source_table,
-            destination_database,
-            destination_table,
-            upstream_tasks=[created_table],
-        )
+
+        with case(ddl_script_given, False):
+            insert_data_from_source_to_destination(
+                source_database,
+                source_table,
+                destination_database,
+                destination_table,
+                create_table=True,
+                order_by=order_by,
+            )
+
+        with case(ddl_script_given, True):
+            drop_table = drop_table_if_exists(
+                destination_database,
+                destination_table,
+                upstream_tasks=[create_database],
+            )
+            created_table = create_table_from_ddl_script(
+                ddl_script_path,
+                database=destination_database,
+                table=destination_table,
+                upstream_tasks=[drop_table],
+            )
+            insert_data_from_source_to_destination(
+                source_database,
+                source_table,
+                destination_database,
+                destination_table,
+                upstream_tasks=[created_table],
+                create_table=False,
+                order_by=order_by,
+            )
 
 
 flow.file_name = Path(__file__).name

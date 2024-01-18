@@ -1,4 +1,4 @@
-CREATE TABLE monitorfish.controls (
+CREATE TABLE {database:Identifier}.{table:Identifier} (
     id Int32,
     vessel_id Int32,
     mission_id Int32,

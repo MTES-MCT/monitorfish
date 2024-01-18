@@ -138,7 +138,7 @@ dev-erase-data-warehouse-databases:
 	docker volume rm data_warehouse_data-warehouse-db data_warehouse_data-warehouse-logs data_warehouse_monitorfish-db-data || exit 0
 
 dev-test-forklift: dev-stop-data-warehouse dev-erase-data-warehouse-databases dev-run-data-warehouse
-	cd data_warehouse && export TEST_LOCAL=True && poetry run coverage run -m pytest -s --pdb --ignore=tests/test_data/external tests/ && poetry run coverage report && poetry run coverage html
+	cd data_warehouse && export TEST_LOCAL=True && poetry run coverage run -m pytest --pdb --ignore=tests/test_data/external tests/ && poetry run coverage report && poetry run coverage html
 
 # DOC commands
 push-docs-to-transifex:

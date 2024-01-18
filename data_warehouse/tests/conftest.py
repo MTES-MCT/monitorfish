@@ -60,7 +60,7 @@ def wait_for_data_warehous_and_migrations(
 
     # Migrate test data
     elapsed_time = 0
-    while migrations_in_progress and elapsed_time < timeout:
+    while (migrations_in_progress or elapsed_time < 10) and elapsed_time < timeout:
         print(f"Waiting for test data migrations ({elapsed_time}/{timeout})")
         running_containers = list(
             itertools.chain.from_iterable([c["Names"] for c in client.containers()])

@@ -9,7 +9,7 @@ flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_ru
 
 
 @pytest.mark.parametrize(
-    "source_database,source_table,destination_database,destination_table,ddl_script_path",
+    "source_database,source_table,destination_database,destination_table,ddl_script_path,order_by",
     [
         (
             "monitorfish_proxy",
@@ -17,6 +17,15 @@ flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_ru
             "monitorfish",
             "analytics_controls_full_data",
             "monitorfish/create_analytics_controls_full_data.sql",
+            None,
+        ),
+        (
+            "monitorfish_proxy",
+            "control_objectives",
+            "monitorfish",
+            "control_objectives",
+            None,
+            "year",
         ),
     ],
 )
@@ -27,7 +36,11 @@ def test_sync_table(
     destination_database,
     destination_table,
     ddl_script_path,
+    order_by,
 ):
+    print(
+        f"Testing syncing of {destination_database}.{destination_table} from {source_database}.{source_table}"
+    )
     client = create_datawarehouse_client()
 
     state = flow.run(
@@ -36,6 +49,7 @@ def test_sync_table(
         destination_database=destination_database,
         destination_table=destination_table,
         ddl_script_path=ddl_script_path,
+        order_by=order_by,
     )
 
     assert state.is_successful()

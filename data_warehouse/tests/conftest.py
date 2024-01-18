@@ -8,6 +8,8 @@ from dotenv import dotenv_values
 from pytest import MonkeyPatch
 
 from forklift.config import ROOT_DIRECTORY
+from forklift.db_engines import create_datawarehouse_client
+from forklift.pipeline.flows.proxy_pg_database import create_proxy_pg_database
 
 
 ################################# Start test database #################################
@@ -75,3 +77,17 @@ def wait_for_data_warehous_and_migrations(
         raise RuntimeError("Could not migrate test data.")
 
     yield
+
+
+@pytest.fixture
+def add_monitorfish_proxy_database():
+    print("Creating monitorfish database proxy")
+    create_proxy_pg_database.run(
+        database="monitorfish_remote",
+        schema="public",
+        database_name_in_dw="monitorfish_proxy",
+    )
+    yield
+    print("Dropping monitorfish database proxy")
+    client = create_datawarehouse_client()
+    client.command("DROP DATABASE monitorfish_proxy")

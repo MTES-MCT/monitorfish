@@ -334,7 +334,7 @@ def run_sql_script(
         sql (str, optional): SQL script to execute. Must be passed if
           `sql_script_filepath` is null. Defaults to None.
         sql_script_filepath (Path, optional): path to .sql file, starting from the
-          sql_sripts folder. example : "data_warehouse/script_1.sql". Defaults to None.
+          sql_sripts folder. example : "ddl/create_table_xxx.sql". Defaults to None.
         parameters (dict, optionnal): pamaters to pass to clickhouse client `command`
           method.
 
@@ -350,11 +350,9 @@ def run_sql_script(
             raise ValueError("Cannot pass both `sql` and `sql_script_filepath`.")
 
         try:
-            assert isinstance(sql, (str, text))
+            assert isinstance(sql, str)
         except AssertionError:
-            raise ValueError(
-                f"`sql` must be `str` or `sqlalchemy.text`, got `{type(sql)}` instead."
-            )
+            raise ValueError(f"`sql` must be `str`, got `{type(sql)}` instead.")
 
     else:
         try:
@@ -369,7 +367,7 @@ def run_sql_script(
 
         sql_filepath = SQL_SCRIPTS_LOCATION / sql_script_filepath
         with open(sql_filepath, "r") as sql_file:
-            sql = text(sql_file.read())
+            sql = sql_file.read()
 
     client = create_datawarehouse_client()
     client.command(sql, parameters=parameters)

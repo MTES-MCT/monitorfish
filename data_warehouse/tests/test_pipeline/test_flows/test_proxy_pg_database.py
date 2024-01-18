@@ -1,5 +1,5 @@
-from data_warehouse.forklift.pipeline.flows.proxy_pg_database import flow
 from forklift.db_engines import create_datawarehouse_client
+from forklift.pipeline.flows.proxy_pg_database import flow
 from tests.mocks import mock_check_flow_not_running
 
 flow.schedule = None

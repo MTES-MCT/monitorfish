@@ -107,8 +107,7 @@ run-datawarehouse:
 	docker compose -f ./infra/data_warehouse/docker-compose.yml up -d
 register-forklift-flows:
 	docker pull ghcr.io/mtes-mct/monitorfish/forklift:$(FORKLIFT_VERSION) && \
-	infra/remote/data-warehouse/forklift/register-flows.sh
-
+	infra/data_warehouse/forklift/register-flows.sh
 
 # DATA commands
 install-pipeline:

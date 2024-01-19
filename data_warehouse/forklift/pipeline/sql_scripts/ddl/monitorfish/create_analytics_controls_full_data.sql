@@ -1,0 +1,35 @@
+CREATE TABLE {database:Identifier}.{table:Identifier} (
+    id Int32,
+    vessel_id Int32,
+    mission_id Int32,
+    control_type LowCardinality(String),
+    control_datetime_utc DateTime,
+    control_year Int32,
+    control_unit LowCardinality(String),
+    administration LowCardinality(String),
+    cfr Nullable(String),
+    ircs Nullable(String),
+    external_immatriculation Nullable(String),
+    vessel_name Nullable(String),
+    flag_state Nullable(String),
+    district_code Nullable(String),
+    facade LowCardinality(String),
+    longitude Nullable(Float64),
+    latitude Nullable(Float64),
+    port_locode Nullable(String),
+    port_department Nullable(String),
+    port_name Nullable(String),
+    vessel_targeted Nullable(UInt8),
+    infraction UInt8,
+    fishing_infraction UInt8,
+    infraction_categories Array(String),
+    infraction_natinfs Array(String),
+    seizure_and_diversion UInt8,
+    species Array(String),
+    gears Array(String),
+    fao_areas Array(String),
+    segment LowCardinality(String)
+)
+ENGINE MergeTree
+ORDER BY control_datetime_utc
+PARTITION BY control_year

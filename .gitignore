@@ -147,8 +147,10 @@ dist
 datascience/.env
 github_token.txt
 infra/remote/backup/pg_backup.config
+.data-warehouse
 
 # Notebooks
+/data_warehouse/notebooks
 /datascience/notebooks
 /datascience/.local
 /datascience/.ipython
@@ -159,6 +161,7 @@ infra/remote/backup/pg_backup.config
 # Coverage reports
 datascience/htmlcov/
 datascience/.coverage
+data_warehouse/.coverage
 frontend/cypress/videos/
 
 # Local data
@@ -182,14 +185,15 @@ datascience/docs/build
 # service worker transpiled
 frontend/public/service-worker.js
 
-
-
 # Ignore Gradle project-specific cache directory
 backend/.gradle
 .gradle
 
 # Ignore Gradle build output directory
 backend/build
+
+# Ignore Metabase pludings
+infra/data_warehouse/metabase_plugins/*
 
 # Ignore downloaded external repositories
 data_warehouse/tests/test_data/external/*

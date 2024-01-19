@@ -70,8 +70,13 @@ RUN useradd -m -r ${USER} && \
     chown ${USER} /home/${USER}
 WORKDIR /home/${USER}
 
+# Make library importable
+ENV PYTHONPATH=/home/${USER}/data_warehouse
+
+RUN mkdir /home/${USER}/.prefect/
+
 RUN chown -R ${USER} .
 USER ${USER}
 WORKDIR /home/${USER}/data_warehouse
 ENTRYPOINT ["/tini", "--"]
-CMD ["python", "main.py"]
+CMD ["python", "forklift/main.py"]

@@ -73,7 +73,7 @@ docker-push-pipeline:
 docker-build-forklift:
 	docker build -f "infra/docker/Dockerfile.Forklift" . -t forklift:$(VERSION)
 docker-run-data-warehouse:
-	git clone --depth=1 --branch=master https://github.com/MTES-MCT/monitorfish.git ./data_warehouse/tests/test_data/external/monitorfish || echo "Monitorfish repository already present - skipping git clone" && \
+	git clone --depth=1 --branch=$(shell git rev-parse --abbrev-ref HEAD) https://github.com/MTES-MCT/monitorfish.git ./data_warehouse/tests/test_data/external/monitorfish || echo "Monitorfish repository already present - skipping git clone" && \
 	export DATA_WAREHOUSE_PASSWORD=password && \
 	export DATA_WAREHOUSE_USER=clickhouse_user && \
 	docker compose -f ./infra/data_warehouse/docker-compose.yml -f ./infra/data_warehouse/docker-compose-test-data.yml up -d --remove-orphans
@@ -118,7 +118,7 @@ test-pipeline:
 
 # DATA WAREHOUSE commands
 dev-run-data-warehouse:
-	git clone --depth=1 --branch=master https://github.com/MTES-MCT/monitorfish.git ./data_warehouse/tests/test_data/external/monitorfish || echo "Monitorfish repository already present - skipping git clone" && \
+	git clone --depth=1 --branch=$(shell git rev-parse --abbrev-ref HEAD) https://github.com/MTES-MCT/monitorfish.git ./data_warehouse/tests/test_data/external/monitorfish || echo "Monitorfish repository already present - skipping git clone" && \
 	export DATA_WAREHOUSE_PASSWORD=password && \
 	export DATA_WAREHOUSE_USER=clickhouse_user && \
 	docker compose -f ./infra/data_warehouse/docker-compose.yml -f ./infra/data_warehouse/docker-compose-test-data.yml up -d --remove-orphans

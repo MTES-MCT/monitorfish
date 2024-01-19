@@ -8,4 +8,4 @@ docker run -t --rm --network=host --name forklift-register-flows \
         -e FORKLIFT_VERSION \
         -e SACROIS_FILES_GID \
         ghcr.io/mtes-mct/monitorfish/forklift:$FORKLIFT_VERSION \
-        python main.py
+        python forklift/main.py

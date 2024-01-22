@@ -51,14 +51,6 @@ db_env = {
         "usr": "CACEM_LOCAL_USER",
         "pwd": "CACEM_LOCAL_PWD",
     },
-    "data_warehouse": {
-        "client": "DATA_WAREHOUSE_CLIENT",
-        "host": "DATA_WAREHOUSE_HOST",
-        "port": "DATA_WAREHOUSE_PORT",
-        "sid": "DATA_WAREHOUSE_NAME",
-        "usr": "DATA_WAREHOUSE_USER",
-        "pwd": "DATA_WAREHOUSE_PWD",
-    },
 }
 
 

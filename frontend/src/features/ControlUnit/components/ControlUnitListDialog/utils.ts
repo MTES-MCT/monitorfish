@@ -97,7 +97,9 @@ export function getFilters(
   if (filtersState.stationId) {
     const filter: Filter<ControlUnit.ControlUnit> = controlUnits =>
       controlUnits.reduce<ControlUnit.ControlUnit[]>((previousControlUnits, controlUnit) => {
-        const matches = controlUnit.controlUnitResources.filter(({ stationId }) => stationId === filtersState.stationId)
+        const matches = controlUnit.controlUnitResources.filter(
+          ({ isArchived, stationId }) => !isArchived && stationId === filtersState.stationId
+        )
 
         return matches.length > 0 ? [...previousControlUnits, controlUnit] : previousControlUnits
       }, [])
@@ -109,7 +111,9 @@ export function getFilters(
   if (filtersState.type) {
     const filter: Filter<ControlUnit.ControlUnit> = controlUnits =>
       controlUnits.reduce<ControlUnit.ControlUnit[]>((previousControlUnits, controlUnit) => {
-        const matches = controlUnit.controlUnitResources.filter(({ type }) => type === filtersState.type)
+        const matches = controlUnit.controlUnitResources.filter(
+          ({ isArchived, type }) => !isArchived && type === filtersState.type
+        )
 
         return matches.length > 0 ? [...previousControlUnits, controlUnit] : previousControlUnits
       }, [])

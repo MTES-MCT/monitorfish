@@ -18,7 +18,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.get('label').contains('Administration 2').should('not.exist')
   })
 
-  it('Should send the expected data to the API when creating a new mission (required fields only)', () => {
+  it('Should send the expected data to the API when creating a new mission (required fields)', () => {
     openSideWindowNewMission()
     cy.get('div').contains('Mission non enregistrée.')
     cy.get('.Element-Tag').contains('Enregistrement auto. actif')
@@ -42,7 +42,7 @@ context('Side Window > Mission Form > Main Form', () => {
       }
 
       assert.isUndefined(interception.request.body.endDateTimeUtc)
-      // We only need to accurately test this prop in one test, no need to repeat it for each case
+      // We need to accurately test this prop in one test, no need to repeat it for each case
       assert.match(interception.request.body.startDateTimeUtc, expectedStartDateTimeUtc)
       assert.deepInclude(interception.request.body, {
         controlUnits: [
@@ -117,7 +117,7 @@ context('Side Window > Mission Form > Main Form', () => {
         }
 
         assert.isUndefined(interception.request.body.endDateTimeUtc)
-        // We only need to accurately test this prop in one test, no need to repeat it for each case
+        // We need to accurately test this prop in one test, no need to repeat it for each case
         assert.match(interception.request.body.startDateTimeUtc, expectedStartDateTimeUtc)
         assert.deepInclude(interception.request.body, {
           controlUnits: [
@@ -642,7 +642,7 @@ context('Side Window > Mission Form > Main Form', () => {
       .its('mockEventSources' as any)
       .then(mockEventSources => {
         // URL sur la CI : http://0.0.0.0:8081/api/v1/missions/sse'
-        // URL en local : //localhost:8081/api/v1/missions/sse
+        // URL en local : /api/v1/missions/sse
         mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emitOpen()
         mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emit(
           'MISSION_UPDATE',
@@ -761,6 +761,7 @@ context('Side Window > Mission Form > Main Form', () => {
       .its('mockEventSources' as any)
       .then(mockEventSources => {
         // URL sur la CI : http://0.0.0.0:8081/api/v1/missions/sse'
+        // URL en local : /api/v1/missions/sse
         mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emitOpen()
         mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emit(
           'MISSION_UPDATE',
@@ -827,7 +828,8 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.window()
       .its('mockEventSources' as any)
       .then(mockEventSources => {
-        // URL sur la CI : http://0.0.0.0:8081/api/v1/missions/sse'
+        // URL sur la CI : http://0.0.0.0:8081/api/v1/missions/sse
+        // URL en local : /api/v1/missions/sse
         mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emitOpen()
         mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emit(
           'MISSION_UPDATE',

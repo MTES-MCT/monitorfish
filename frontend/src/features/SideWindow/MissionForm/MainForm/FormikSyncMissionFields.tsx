@@ -1,10 +1,9 @@
 import { diff } from 'deep-object-diff'
 import { useFormikContext } from 'formik'
 import { omit } from 'lodash'
-import { useEffect, useState } from 'react'
 
 import { useDeepCompareEffect } from '../../../../hooks/useDeepCompareEffect'
-import { EVENT_SOURCE, MISSION_UPDATE_EVENT, missionEventListener } from '../sse'
+import { useListenMissionEventUpdatesById } from '../hooks/useListenMissionEventUpdatesById'
 
 import type { MissionMainFormValues } from '../types'
 
@@ -16,21 +15,7 @@ type FormikSyncMissionFormProps = {
  */
 export function FormikSyncMissionFields({ missionId }: FormikSyncMissionFormProps) {
   const { setFieldValue, values } = useFormikContext<MissionMainFormValues>()
-  const [receivedMission, setReceivedMission] = useState<MissionMainFormValues | undefined>()
-
-  useEffect(() => {
-    if (!missionId) {
-      return undefined
-    }
-
-    const listener = missionEventListener(missionId, mission => setReceivedMission(mission))
-
-    EVENT_SOURCE.addEventListener(MISSION_UPDATE_EVENT, listener)
-
-    return () => {
-      EVENT_SOURCE.removeEventListener(MISSION_UPDATE_EVENT, listener)
-    }
-  }, [missionId])
+  const receivedMission = useListenMissionEventUpdatesById(missionId)
 
   useDeepCompareEffect(
     () => {

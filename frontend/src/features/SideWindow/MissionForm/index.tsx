@@ -17,6 +17,7 @@ import {
   useUpdateMissionMutation
 } from './apis'
 import { AUTO_SAVE_ENABLED } from './constants'
+import { useListenMissionEventUpdates } from './hooks/useListenMissionEventUpdates'
 import { useUpdateFreezedActionFormValues } from './hooks/useUpdateFreezedActionFormValues'
 import { useUpdateFreezedMainFormValues } from './hooks/useUpdateFreezedMainFormValues'
 import { MainForm } from './MainForm'
@@ -40,6 +41,7 @@ import {
   useGetMissionActionsQuery,
   useUpdateMissionActionMutation
 } from '../../../api/missionAction'
+import { MissionEventContext } from '../../../context/MissionEventContext'
 import { missionActions } from '../../../domain/actions'
 import { Mission, type MissionWithActions } from '../../../domain/entities/mission/types'
 import { getMissionStatus } from '../../../domain/entities/mission/utils'
@@ -83,6 +85,7 @@ export function MissionForm() {
   const [deleteMissionAction, { isLoading: isDeletingMissionAction }] = useDeleteMissionActionMutation()
   const [updateMission, { isLoading: isUpdatingMission }] = useUpdateMissionMutation()
   const [updateMissionAction, { isLoading: isUpdatingMissionAction }] = useUpdateMissionActionMutation()
+  const missionEvent = useListenMissionEventUpdates()
 
   const isSaving =
     isCreatingMission ||
@@ -194,6 +197,7 @@ export function MissionForm() {
       }
 
       try {
+        dispatch(missionActions.setIsListeningToEvents(false))
         let nextMissionId: number
 
         if (!editedMissionId) {
@@ -260,6 +264,7 @@ export function MissionForm() {
         ])
 
         dispatch(missionActions.setIsDraftDirty(false))
+        dispatch(missionActions.setIsListeningToEvents(true))
       } catch (err) {
         logSoftError({
           isSideWindowError: true,
@@ -281,48 +286,6 @@ export function MissionForm() {
     ]
   )
 
-  const addAction = useCallback(
-    (actionType: MissionAction.MissionActionType) => {
-      const newActionFormValues = getMissionActionFormInitialValues(actionType)
-      const nextActionsFormValues = [newActionFormValues, ...actionsFormValues]
-
-      setActionsFormValues(nextActionsFormValues)
-      updateReduxSliceDraft()
-      setActionFormKey(key => key + 1)
-      setEditedActionIndex(0)
-
-      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !isAutoSaveEnabled) {
-        dispatch(missionActions.setIsDraftDirty(true))
-
-        return
-      }
-
-      createOrUpdate(mainFormValues, nextActionsFormValues)
-    },
-    [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues, isAutoSaveEnabled]
-  )
-
-  const duplicateAction = useCallback(
-    (actionIndex: number) => {
-      const actionCopy: MissionActionFormValues = omit(['id'], actionsFormValues[actionIndex])
-
-      const nextActionsFormValues = [actionCopy, ...actionsFormValues]
-      setActionsFormValues([actionCopy, ...actionsFormValues])
-      updateReduxSliceDraft()
-      setActionFormKey(key => key + 1)
-      setEditedActionIndex(0)
-
-      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !isAutoSaveEnabled) {
-        dispatch(missionActions.setIsDraftDirty(true))
-
-        return
-      }
-
-      createOrUpdate(mainFormValues, nextActionsFormValues)
-    },
-    [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues, isAutoSaveEnabled]
-  )
-
   const goToMissionList = useCallback(async () => {
     dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_LIST }))
   }, [dispatch])
@@ -335,38 +298,6 @@ export function MissionForm() {
     await deleteMission(editedMissionId)
     dispatch(sideWindowActions.openOrFocusAndGoTo({ menu: SideWindowMenuKey.MISSION_LIST }))
   }, [deleteMission, dispatch, editedMissionId])
-
-  const removeAction = useCallback(
-    (actionIndex: number) => {
-      const nextActionsFormValues = actionsFormValues.reduce(
-        (nextActions, action, index) => (index === actionIndex ? nextActions : [...nextActions, action]),
-        [] as MissionActionFormValues[]
-      )
-
-      setActionsFormValues(nextActionsFormValues)
-      updateReduxSliceDraft()
-      if (editedActionIndex === actionIndex) {
-        setEditedActionIndex(undefined)
-      }
-
-      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !isAutoSaveEnabled) {
-        dispatch(missionActions.setIsDraftDirty(true))
-
-        return
-      }
-
-      createOrUpdate(mainFormValues, nextActionsFormValues)
-    },
-    [
-      dispatch,
-      updateReduxSliceDraft,
-      createOrUpdate,
-      mainFormValues,
-      actionsFormValues,
-      editedActionIndex,
-      isAutoSaveEnabled
-    ]
-  )
 
   const reopen = useCallback(() => {
     if (!mainFormValues) {
@@ -454,13 +385,138 @@ export function MissionForm() {
 
   const updateEditedActionFormValues = useDebouncedCallback(
     (nextActionFormValues: MissionActionFormValues) => updateEditedActionFormValuesCallback(nextActionFormValues),
-    500
+    250
   )
 
-  const updateEditedActionIndex = useCallback((nextActionIndex: number | undefined) => {
-    setEditedActionIndex(nextActionIndex)
-    setActionFormKey(key => key + 1)
-  }, [])
+  const removeAction = useCallback(
+    (actionIndex: number) => {
+      /**
+       * If a debounce function is not yet executed, stop there to avoid race condition.
+       * /!\ This can leads to save the debounced action update to the wrong action index
+       */
+      if (updateEditedActionFormValues.isPending()) {
+        return
+      }
+
+      const nextActionsFormValues = actionsFormValues.reduce(
+        (nextActions, action, index) => (index === actionIndex ? nextActions : [...nextActions, action]),
+        [] as MissionActionFormValues[]
+      )
+
+      setActionsFormValues(nextActionsFormValues)
+      updateReduxSliceDraft()
+      if (editedActionIndex === actionIndex) {
+        setEditedActionIndex(undefined)
+      }
+
+      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !isAutoSaveEnabled) {
+        dispatch(missionActions.setIsDraftDirty(true))
+
+        return
+      }
+
+      createOrUpdate(mainFormValues, nextActionsFormValues)
+    },
+    [
+      dispatch,
+      updateEditedActionFormValues,
+      updateReduxSliceDraft,
+      createOrUpdate,
+      mainFormValues,
+      actionsFormValues,
+      editedActionIndex,
+      isAutoSaveEnabled
+    ]
+  )
+
+  const addAction = useCallback(
+    (actionType: MissionAction.MissionActionType) => {
+      /**
+       * If a debounce function is not yet executed, stop there to avoid race condition.
+       * /!\ This can leads to save the debounced action update to the wrong action index
+       */
+      if (updateEditedActionFormValues.isPending()) {
+        return
+      }
+
+      const newActionFormValues = getMissionActionFormInitialValues(actionType)
+      const nextActionsFormValues = [newActionFormValues, ...actionsFormValues]
+
+      setActionsFormValues(nextActionsFormValues)
+      updateReduxSliceDraft()
+      setEditedActionIndex(0)
+      // setActionFormKey(key => key + 1)
+
+      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !isAutoSaveEnabled) {
+        dispatch(missionActions.setIsDraftDirty(true))
+
+        return
+      }
+
+      createOrUpdate(mainFormValues, nextActionsFormValues)
+    },
+    [
+      dispatch,
+      updateEditedActionFormValues,
+      updateReduxSliceDraft,
+      createOrUpdate,
+      mainFormValues,
+      actionsFormValues,
+      isAutoSaveEnabled
+    ]
+  )
+
+  const duplicateAction = useCallback(
+    (actionIndex: number) => {
+      /**
+       * If a debounce function is not yet executed, stop there to avoid race condition.
+       * /!\ This can leads to save the debounced action update to the wrong action index
+       */
+      if (updateEditedActionFormValues.isPending()) {
+        return
+      }
+
+      const actionCopy: MissionActionFormValues = omit(['id'], actionsFormValues[actionIndex])
+
+      const nextActionsFormValues = [actionCopy, ...actionsFormValues]
+      setActionsFormValues([actionCopy, ...actionsFormValues])
+      updateReduxSliceDraft()
+      setEditedActionIndex(0)
+      // setActionFormKey(key => key + 1)
+
+      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !isAutoSaveEnabled) {
+        dispatch(missionActions.setIsDraftDirty(true))
+
+        return
+      }
+
+      createOrUpdate(mainFormValues, nextActionsFormValues)
+    },
+    [
+      dispatch,
+      updateEditedActionFormValues,
+      updateReduxSliceDraft,
+      createOrUpdate,
+      mainFormValues,
+      actionsFormValues,
+      isAutoSaveEnabled
+    ]
+  )
+
+  const updateEditedActionIndex = useCallback(
+    (nextActionIndex: number | undefined) => {
+      /**
+       * If a debounce function is not yet executed, stop there to avoid race condition.
+       * /!\ This can leads to save the debounced action update to the wrong action index
+       */
+      if (updateEditedActionFormValues.isPending()) {
+        return
+      }
+
+      setEditedActionIndex(nextActionIndex)
+    },
+    [updateEditedActionFormValues]
+  )
 
   const updateMainFormValuesCallback = useCallback(
     (nextMissionMainFormValues: MissionMainFormValues) => {
@@ -492,7 +548,7 @@ export function MissionForm() {
 
   const updateMainFormValues = useDebouncedCallback(
     (nextMissionMainFormValues: MissionMainFormValues) => updateMainFormValuesCallback(nextMissionMainFormValues),
-    500
+    250
   )
 
   const toggleDeletionConfirmationDialog = useCallback(async () => {
@@ -587,12 +643,14 @@ export function MissionForm() {
 
             {!isLoading && formikMainFormValuesRef.current && (
               <>
-                <MainForm
-                  key={`main-form-${mainFormKey}`}
-                  initialValues={formikMainFormValuesRef.current}
-                  missionId={missionId}
-                  onChange={updateMainFormValues}
-                />
+                <MissionEventContext.Provider value={missionEvent}>
+                  <MainForm
+                    key={`main-form-${mainFormKey}`}
+                    initialValues={formikMainFormValuesRef.current}
+                    missionId={missionId}
+                    onChange={updateMainFormValues}
+                  />
+                </MissionEventContext.Provider>
                 <ActionList
                   actionsFormValues={actionsFormValues}
                   currentIndex={editedActionIndex}

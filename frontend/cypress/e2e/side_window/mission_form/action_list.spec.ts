@@ -6,6 +6,32 @@ import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constant
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Action List', () => {
+  it('Should focus to the last action selected', () => {
+    openSideWindowNewMission()
+
+    cy.clickButton('Ajouter')
+
+    cy.clickButton('Ajouter un contrôle en mer')
+    cy.get('*[data-cy="action-list-item"]').contains('Contrôle en mer')
+    cy.get('*[data-cy="action-list-item"]').should('have.css', 'outline', 'rgb(86, 151, 210) solid 2px')
+
+    cy.wait(250)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter une note libre')
+
+    cy.wait(250)
+    cy.get('*[data-cy="action-list-item"]').eq(0).should('have.css', 'outline', 'rgb(86, 151, 210) solid 2px')
+    cy.get('*[data-cy="action-list-item"]').eq(0).should('not.contain', 'Contrôle en mer')
+
+    cy.get('*[data-cy="action-list-item"]').eq(1).should('not.have.css', 'outline', 'rgb(86, 151, 210) solid 2px')
+    cy.get('*[data-cy="action-list-item"]').eq(1).contains('Contrôle en mer')
+    cy.wait(250)
+
+    cy.fill('Observations, commentaires...', 'Une observation.')
+    cy.get('*[data-cy="action-list-item"]').eq(0).should('not.contain', 'Une observation.')
+  })
+
   it('Should send the expected data to the API when duplicating a mission action', () => {
     editSideWindowMissionListMissionWithId(4, SeaFrontGroup.MEMN)
 

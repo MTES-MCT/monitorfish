@@ -1,0 +1,98 @@
+{
+  "mappings": [
+    {
+      "scenarioName": "Create mission 78",
+      "requiredScenarioState": "Started",
+      "priority": 1,
+      "request": {
+        "method": "POST",
+        "url": "/api/v1/missions",
+        "bodyPatterns" : [ {
+          "matches": ".*\"observationsCnsp\": \"Scénario qui permet de stubber l'API MonitorEnv\".*"
+        } ]
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*"
+        },
+        "jsonBody": {
+          "id": 78,
+          "missionTypes": ["LAND"],
+          "controlUnits": [
+            {
+              "id": 10003,
+              "administration": "DDTM",
+              "name": "DML 2A (historique)",
+              "resources": [],
+              "contact": null,
+              "isArchived": false
+            }
+          ],
+          "openBy": "",
+          "closedBy": "",
+          "observationsCacem": "",
+          "observationsCnsp": "Scénario qui permet de stubber l'API MonitorEnv",
+          "facade": null,
+          "geom": null,
+          "startDateTimeUtc": "2023-03-15T23:21:14.923703Z",
+          "endDateTimeUtc": "2023-03-12T02:52:15.193661Z",
+          "createdAtUtc": "2023-03-15T23:21:14.923703Z",
+          "updatedAtUtc": "2023-03-15T23:21:14.923703Z",
+          "envActions": [],
+          "missionSource": "MONITORFISH",
+          "isClosed": false,
+          "isUnderJdp": false,
+          "isGeometryComputedFromControls": false
+        }
+      }
+    },
+    {
+      "scenarioName": "Get mission 78",
+      "requiredScenarioState": "Started",
+      "request": {
+        "method": "GET",
+        "url": "/api/v1/missions/78"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*"
+        },
+        "jsonBody": {
+          "id": 78,
+          "missionTypes": ["LAND"],
+          "controlUnits": [
+            {
+              "id": 10003,
+              "administration": "DDTM",
+              "name": "DML 2A (historique)",
+              "resources": [],
+              "contact": null,
+              "isArchived": false
+            }
+          ],
+          "openBy": "",
+          "closedBy": "",
+          "observationsCacem": "",
+          "observationsCnsp": "Scénario qui permet de stubber l'API MonitorEnv",
+          "facade": null,
+          "geom": null,
+          "startDateTimeUtc": "2023-03-15T23:21:14.923703Z",
+          "endDateTimeUtc": "2023-03-12T02:52:15.193661Z",
+          "createdAtUtc": "2023-03-15T23:21:14.923703Z",
+          "updatedAtUtc": "2023-03-15T23:21:14.923703Z",
+          "envActions": [],
+          "missionSource": "MONITORFISH",
+          "isClosed": false,
+          "isUnderJdp": false,
+          "isGeometryComputedFromControls": false
+        }
+      }
+    }
+  ]
+}

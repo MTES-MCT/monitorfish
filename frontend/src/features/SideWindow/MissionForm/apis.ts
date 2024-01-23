@@ -1,6 +1,5 @@
-import { ControlUnit, logSoftError } from '@mtes-mct/monitor-ui'
+import { ControlUnit } from '@mtes-mct/monitor-ui'
 
-import { addNewMissionListener, missionEventListener, removeMissionListener } from './sse'
 import { monitorenvApi, monitorfishApi } from '../../../api/api'
 import { Mission } from '../../../domain/entities/mission/types'
 import { FrontendApiError } from '../../../libs/FrontendApiError'
@@ -47,26 +46,6 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
 
     getMission: builder.query<Mission.Mission, Mission.Mission['id']>({
       keepUnusedDataFor: 0,
-      async onCacheEntryAdded(id, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
-        try {
-          await cacheDataLoaded
-
-          const listener = missionEventListener(id, mission => updateCachedData(() => mission))
-          addNewMissionListener(id, listener)
-
-          // cacheEntryRemoved will resolve when the cache subscription is no longer active
-          await cacheEntryRemoved
-
-          // perform cleanup once the `cacheEntryRemoved` promise resolves
-          removeMissionListener(id)
-        } catch (e) {
-          logSoftError({
-            isSideWindowError: true,
-            message: "SSE: Can't connect or receive messages",
-            originalError: e
-          })
-        }
-      },
       providesTags: [{ type: 'Missions' }],
       query: id => `/v1/missions/${id}`,
       transformErrorResponse: response => new FrontendApiError(GET_MISSION_ERROR_MESSAGE, response)

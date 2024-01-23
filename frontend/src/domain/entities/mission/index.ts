@@ -16,7 +16,7 @@ import { MonitorFishLayer } from '../layers/types'
 import { OpenLayersGeometryType } from '../map/constants'
 
 import type { MissionWithActions } from './types'
-import type { MissionMainFormValues } from '../../../features/SideWindow/MissionForm/types'
+import type { MissionMainFormValues, MissionActionFormValues } from '../../../features/SideWindow/MissionForm/types'
 import type { MultiPolygon } from 'ol/geom'
 
 import MissionStatus = Mission.MissionStatus
@@ -102,7 +102,9 @@ export const getMissionFeatureZone = (mission: Mission.Mission | MissionMainForm
   return feature
 }
 
-export const getMissionActionFeature = (action: MissionAction.MissionAction): Feature | undefined => {
+export const getMissionActionFeature = (
+  action: MissionAction.MissionAction | (MissionActionFormValues & { missionId: number })
+): Feature | undefined => {
   if (!action.longitude || !action.latitude) {
     return undefined
   }

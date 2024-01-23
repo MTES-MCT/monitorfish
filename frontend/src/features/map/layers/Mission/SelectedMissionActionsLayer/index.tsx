@@ -1,16 +1,15 @@
-import { skipToken } from '@reduxjs/toolkit/query'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { selectedMissionActionsStyles } from './styles'
-import { useGetMissionActionsQuery } from '../../../../../api/missionAction'
 import { LayerProperties } from '../../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../../domain/entities/layers/types'
 import { getMissionActionFeature } from '../../../../../domain/entities/mission'
 import { useGetFilteredMissionsQuery } from '../../../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import { monitorfishMap } from '../../../monitorfishMap'
+import { NEW_MISSION_ID } from '../constants'
 
 import type { GeoJSON } from '../../../../../domain/types/GeoJSON'
 import type { VectorLayerWithName } from '../../../../../domain/types/layer'
@@ -21,7 +20,7 @@ export function UnmemoizedSelectedMissionActionsLayer() {
   const { missions } = useGetFilteredMissionsQuery()
   const selectedMissionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionGeoJSON)
   const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
-  const { data: missionActionsData } = useGetMissionActionsQuery(missionId || skipToken)
+  const draft = useMainAppSelector(state => state.mission.draft)
 
   const selectedMissionActions = useMemo(() => {
     if (!selectedMissionGeoJSON) {
@@ -81,16 +80,16 @@ export function UnmemoizedSelectedMissionActionsLayer() {
 
   useEffect(() => {
     getVectorSource().clear(true)
-    if (!missionActionsData || !missionId) {
+    if (!draft?.actionsFormValues) {
       return
     }
 
-    const actionFeatures = missionActionsData
-      .map(action => getMissionActionFeature({ ...action, missionId }))
+    const actionFeatures = draft.actionsFormValues
+      .map(action => getMissionActionFeature({ ...action, missionId: missionId || NEW_MISSION_ID }))
       .filter((action): action is Feature => !!action)
 
     getVectorSource().addFeatures(actionFeatures)
-  }, [getVectorSource, missionId, missionActionsData])
+  }, [getVectorSource, missionId, draft?.actionsFormValues])
 
   return null
 }

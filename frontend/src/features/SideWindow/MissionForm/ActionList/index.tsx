@@ -69,15 +69,15 @@ export function ActionList({
           {!actionsFormValues.length && <Placeholder>Aucune action n’est ajoutée pour le moment.</Placeholder>}
 
           {actionsFormValues.length > 0 &&
-            actionsFormValues.map((actionInitialValues, index) => (
+            actionsFormValues.map((action, index) => (
               <Item
                 // eslint-disable-next-line react/no-array-index-key
                 key={index}
-                initialValues={actionInitialValues}
                 isSelected={index === currentIndex}
                 onDuplicate={() => onDuplicate(index)}
                 onRemove={() => onRemove(index)}
                 onSelect={() => onSelect(index)}
+                values={action}
               />
             ))}
         </FrontendErrorBoundary>

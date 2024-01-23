@@ -24,26 +24,26 @@ import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
 export type ItemProps = {
-  initialValues: MissionActionFormValues
   isSelected: boolean
   onDuplicate: () => Promisable<void>
   onRemove: () => Promisable<void>
   onSelect: () => Promisable<void>
+  values: MissionActionFormValues
 }
-export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelect }: ItemProps) {
+export function Item({ isSelected, onDuplicate, onRemove, onSelect, values }: ItemProps) {
   const draft = useMainAppSelector(state => state.mission.draft)
 
   const natinfsAsOptions = useGetNatinfsAsOptions()
 
   const isControlAction =
-    initialValues.actionType === MissionAction.MissionActionType.AIR_CONTROL ||
-    initialValues.actionType === MissionAction.MissionActionType.LAND_CONTROL ||
-    initialValues.actionType === MissionAction.MissionActionType.SEA_CONTROL
+    values.actionType === MissionAction.MissionActionType.AIR_CONTROL ||
+    values.actionType === MissionAction.MissionActionType.LAND_CONTROL ||
+    values.actionType === MissionAction.MissionActionType.SEA_CONTROL
 
   const [actionLabel, ActionIcon] = useMemo(() => {
-    const vesselName = initialValues.vesselName === UNKNOWN_VESSEL.vesselName ? 'INCONNU' : initialValues.vesselName
+    const vesselName = values.vesselName === UNKNOWN_VESSEL.vesselName ? 'INCONNU' : values.vesselName
 
-    switch (initialValues.actionType) {
+    switch (values.actionType) {
       case MissionAction.MissionActionType.AIR_CONTROL:
         return [getActionTitle('Contrôle aérien', vesselName, '- Navire inconnu'), Icon.Plane]
 
@@ -51,9 +51,7 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
         return [
           getActionTitle(
             'Surveillance aérienne',
-            initialValues.numberOfVesselsFlownOver
-              ? `${initialValues.numberOfVesselsFlownOver} pistes survolées`
-              : undefined,
+            values.numberOfVesselsFlownOver ? `${values.numberOfVesselsFlownOver} pistes survolées` : undefined,
             'à renseigner'
           ),
           Icon.Observation
@@ -63,7 +61,7 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
         return [getActionTitle('Contrôle à la débarque', vesselName, '- Navire inconnu'), Icon.Anchor]
 
       case MissionAction.MissionActionType.OBSERVATION:
-        return [getActionTitle('', initialValues.otherComments, 'Note libre à renseigner'), Icon.Note]
+        return [getActionTitle('', values.otherComments, 'Note libre à renseigner'), Icon.Note]
 
       case MissionAction.MissionActionType.SEA_CONTROL:
         return [getActionTitle('Contrôle en mer', vesselName, '- Navire inconnu'), Icon.FleetSegment]
@@ -71,14 +69,14 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
       default:
         throw new FrontendError('`initialValues.actionType` does not match the enum')
     }
-  }, [initialValues])
+  }, [values])
 
   const infractionTags = useMemo(() => {
-    const allInfractions = getMissionActionInfractionsFromMissionActionFormValues(initialValues, true)
+    const allInfractions = getMissionActionInfractionsFromMissionActionFormValues(values, true)
     if (!allInfractions.length) {
       return []
     }
-    const nonPendingInfractions = getMissionActionInfractionsFromMissionActionFormValues(initialValues)
+    const nonPendingInfractions = getMissionActionInfractionsFromMissionActionFormValues(values)
     const pendingInfractions = allInfractions.filter(
       ({ infractionType }) => infractionType === MissionAction.InfractionType.PENDING
     )
@@ -109,28 +107,28 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
     )
 
     return [...infractionsRecapTags, infractionsTag]
-  }, [initialValues, natinfsAsOptions])
+  }, [values, natinfsAsOptions])
 
   const redTags = useMemo(
     () =>
       [
-        ...(initialValues.hasSomeGearsSeized ? ['Appréhension engin'] : []),
-        ...(initialValues.hasSomeSpeciesSeized ? ['Appréhension espèce'] : []),
-        ...(initialValues.seizureAndDiversion ? ['Appréhension navire'] : [])
+        ...(values.hasSomeGearsSeized ? ['Appréhension engin'] : []),
+        ...(values.hasSomeSpeciesSeized ? ['Appréhension espèce'] : []),
+        ...(values.seizureAndDiversion ? ['Appréhension navire'] : [])
       ].map(label => (
         <Tag key={label} accent={Accent.PRIMARY} bullet={TagBullet.DISK} bulletColor={THEME.color.maximumRed}>
           {label}
         </Tag>
       )),
-    [initialValues]
+    [values]
   )
 
   const startDateAsDayjs = useMemo(
-    () => initialValues.actionDatetimeUtc && getLocalizedDayjs(initialValues.actionDatetimeUtc),
-    [initialValues]
+    () => values.actionDatetimeUtc && getLocalizedDayjs(values.actionDatetimeUtc),
+    [values]
   )
 
-  const isOpen = isControlAction && draft?.mainFormValues && !draft?.mainFormValues.isClosed && !initialValues.closedBy
+  const isOpen = isControlAction && draft?.mainFormValues && !draft?.mainFormValues.isClosed && !values.closedBy
 
   return (
     <>
@@ -146,7 +144,7 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
         <InnerWrapper
           $isOpen={isOpen}
           $isSelected={isSelected}
-          $type={initialValues.actionType}
+          $type={values.actionType}
           data-cy="action-list-item"
           onClick={onSelect}
           title={isOpen ? 'Contrôle en cours' : undefined}
@@ -182,7 +180,7 @@ export function Item({ initialValues, isSelected, onDuplicate, onRemove, onSelec
         </InnerWrapper>
       </Wrapper>
 
-      {!initialValues.isValid && (
+      {!values.isValid && (
         <StyledFieldError>Veuillez compléter les champs manquants dans cette action de contrôle.</StyledFieldError>
       )}
     </>

@@ -9,7 +9,7 @@ import {
 import { Formik } from 'formik'
 import { isEqual, omit } from 'lodash'
 import { isEmpty, noop } from 'lodash/fp'
-import { memo, useEffect, useRef } from 'react'
+import { memo } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_TYPES_AS_OPTIONS } from './constants'
@@ -19,10 +19,9 @@ import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'
 import { FormikSyncMissionFields } from './FormikSyncMissionFields'
 import { MainFormLiveSchema } from './schemas'
 import { BOOLEAN_AS_OPTIONS } from '../../../../constants'
-import { Mission } from '../../../../domain/entities/mission/types'
+import { useListenMissionEventUpdatesById } from '../hooks/useListenMissionEventUpdatesById'
 import { FormBody, FormBodyInnerWrapper } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
-import { EVENT_SOURCE, MISSION_UPDATE_EVENT, missionEventListener } from '../sse'
 
 import type { MissionMainFormValues } from '../types'
 import type { Promisable } from 'type-fest'
@@ -33,23 +32,7 @@ type MainFormProps = {
   onChange: (nextValues: MissionMainFormValues) => Promisable<void>
 }
 function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProps) {
-  const receivedMission = useRef<Mission.Mission | undefined>()
-
-  useEffect(() => {
-    if (!missionId) {
-      return undefined
-    }
-
-    const listener = missionEventListener(missionId, mission => {
-      receivedMission.current = mission
-    })
-
-    EVENT_SOURCE.addEventListener(MISSION_UPDATE_EVENT, listener)
-
-    return () => {
-      EVENT_SOURCE.removeEventListener(MISSION_UPDATE_EVENT, listener)
-    }
-  }, [missionId])
+  const receivedMission = useListenMissionEventUpdatesById(missionId)
 
   function validateBeforeOnChange(validateForm) {
     return async nextValues => {
@@ -63,7 +46,7 @@ function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProp
 
       // Prevent re-sending the form when receiving an update
       const nextValuesWithoutIsValid = omit(nextValues, ['isValid'])
-      if (isEqual(receivedMission.current, nextValuesWithoutIsValid)) {
+      if (isEqual(receivedMission, nextValuesWithoutIsValid)) {
         return
       }
 

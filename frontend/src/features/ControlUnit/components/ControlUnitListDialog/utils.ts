@@ -5,6 +5,7 @@ import { fromLonLat } from 'ol/proj'
 
 import { addBufferToExtent } from '../../../../utils/addBufferToExtent'
 import { isNotArchived } from '../../../../utils/isNotArchived'
+import { getControlUnitResourceCategoryFromControlUnitResourceType } from '../../utils'
 
 import type { FiltersState } from './types'
 
@@ -100,6 +101,22 @@ export function getFilters(
         const matches = controlUnit.controlUnitResources.filter(
           ({ isArchived, stationId }) => !isArchived && stationId === filtersState.stationId
         )
+
+        return matches.length > 0 ? [...previousControlUnits, controlUnit] : previousControlUnits
+      }, [])
+
+    filters.push(filter)
+  }
+
+  // Control Unit Resource Category
+  if (filtersState.categories) {
+    const filter: Filter<ControlUnit.ControlUnit> = controlUnits =>
+      controlUnits.reduce<ControlUnit.ControlUnit[]>((previousControlUnits, controlUnit) => {
+        const matches = controlUnit.controlUnitResources.filter(({ isArchived, type }) => {
+          const category = getControlUnitResourceCategoryFromControlUnitResourceType(type)
+
+          return !isArchived && !!category && filtersState.categories?.includes(category)
+        })
 
         return matches.length > 0 ? [...previousControlUnits, controlUnit] : previousControlUnits
       }, [])

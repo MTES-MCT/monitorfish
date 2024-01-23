@@ -66,7 +66,7 @@ export function ControlUnitDialog() {
     <NoRsuiteOverrideWrapper>
       <StyledMapMenuDialogContainer $hasHealthcheckTextWarning={!!healthcheckTextWarning} data-cy="ControlUnitDialog">
         <MapMenuDialog.Header>
-          <MapMenuDialog.Title>
+          <MapMenuDialog.Title title={`${controlUnit.name} (${controlUnit.administration.name})`}>
             <b>{controlUnit.name}</b> ({controlUnit.administration.name})
           </MapMenuDialog.Title>
           <MapMenuDialog.CloseButton Icon={Icon.Close} onClick={close} />

@@ -74,7 +74,7 @@ class SecurityConfig(val oidcProperties: OIDCProperties) {
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration().apply {
             allowedOrigins = listOf("*")
-            allowedMethods = listOf("HEAD", "GET", "POST", "PUT", "DELETE")
+            allowedMethods = listOf("HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS")
             allowedHeaders = listOf("Authorization", "Cache-Control", "Content-Type")
         }
 

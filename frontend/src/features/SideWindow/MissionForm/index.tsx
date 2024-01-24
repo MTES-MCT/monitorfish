@@ -597,6 +597,8 @@ export function MissionForm() {
       setMainFormValues(missionDraft.mainFormValues)
       setActionsFormValues(missionDraft.actionsFormValues)
       updateReduxSliceDraft()
+      // We need to force the forms re-render when opening a new draft while a draft is already opened.
+      // (i.e.: opening a new draft from another control unit)
       setActionFormKey(key => key + 1)
 
       return
@@ -618,8 +620,6 @@ export function MissionForm() {
     setMainFormValues(nextMainFormValues)
     setActionsFormValues(nextActionsFormValues)
     updateReduxSliceDraft()
-
-    setActionFormKey(key => key + 1)
   }, [
     dispatch,
     hasFetchingError,

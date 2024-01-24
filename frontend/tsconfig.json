@@ -43,5 +43,5 @@
     "src/vite-env-override.d.ts",
     "src/ui/styled.d.ts"
   ],
-  "exclude": ["node_modules/*", "./config/cypress.config.ts"]
+  "exclude": ["node_modules/*"]
 }

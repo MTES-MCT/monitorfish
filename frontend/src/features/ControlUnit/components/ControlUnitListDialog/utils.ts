@@ -1,11 +1,18 @@
-import { CustomSearch, type Filter, isDefined, pluralize, ControlUnit, type Station } from '@mtes-mct/monitor-ui'
+import {
+  CustomSearch,
+  type Filter,
+  isDefined,
+  pluralize,
+  ControlUnit,
+  type Station,
+  getControlUnitResourceCategoryFromType
+} from '@mtes-mct/monitor-ui'
 import { isEmpty, uniq } from 'lodash/fp'
 import { createEmpty, extend, type Extent } from 'ol/extent'
 import { fromLonLat } from 'ol/proj'
 
 import { addBufferToExtent } from '../../../../utils/addBufferToExtent'
 import { isNotArchived } from '../../../../utils/isNotArchived'
-import { getControlUnitResourceCategoryFromControlUnitResourceType } from '../../utils'
 
 import type { FiltersState } from './types'
 
@@ -113,7 +120,7 @@ export function getFilters(
     const filter: Filter<ControlUnit.ControlUnit> = controlUnits =>
       controlUnits.reduce<ControlUnit.ControlUnit[]>((previousControlUnits, controlUnit) => {
         const matches = controlUnit.controlUnitResources.filter(({ isArchived, type }) => {
-          const category = getControlUnitResourceCategoryFromControlUnitResourceType(type)
+          const category = getControlUnitResourceCategoryFromType(type)
 
           return !isArchived && !!category && filtersState.categories?.includes(category)
         })

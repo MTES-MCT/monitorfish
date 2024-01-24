@@ -17,9 +17,8 @@ import {
   useUpdateMissionMutation
 } from './apis'
 import { AUTO_SAVE_ENABLED } from './constants'
-import { useListenMissionEventUpdates } from './hooks/useListenMissionEventUpdates'
+import { useListenMissionEventUpdatesById } from './hooks/useListenMissionEventUpdatesById'
 import { useUpdateFreezedActionFormValues } from './hooks/useUpdateFreezedActionFormValues'
-import { useUpdateFreezedMainFormValues } from './hooks/useUpdateFreezedMainFormValues'
 import { MainForm } from './MainForm'
 import { AutoSaveTag } from './shared/AutoSaveTag'
 import { DeletionConfirmationDialog } from './shared/DeletionConfirmationDialog'
@@ -41,7 +40,6 @@ import {
   useGetMissionActionsQuery,
   useUpdateMissionActionMutation
 } from '../../../api/missionAction'
-import { MissionEventContext } from '../../../context/MissionEventContext'
 import { missionActions } from '../../../domain/actions'
 import { Mission, type MissionWithActions } from '../../../domain/entities/mission/types'
 import { getMissionStatus } from '../../../domain/entities/mission/utils'
@@ -85,7 +83,7 @@ export function MissionForm() {
   const [deleteMissionAction, { isLoading: isDeletingMissionAction }] = useDeleteMissionActionMutation()
   const [updateMission, { isLoading: isUpdatingMission }] = useUpdateMissionMutation()
   const [updateMissionAction, { isLoading: isUpdatingMissionAction }] = useUpdateMissionActionMutation()
-  const missionEvent = useListenMissionEventUpdates()
+  const missionEvent = useListenMissionEventUpdatesById(missionId)
 
   const isSaving =
     isCreatingMission ||
@@ -107,15 +105,8 @@ export function MissionForm() {
 
   // We use these keys to fully control when to re-render `<MainForm />` & `<ActionForm />`
   // since they are fully memoized in order to optimize their (heavy) re-rendering
-  const [mainFormKey, setMainFormKey] = useState(0)
   const [actionFormKey, setActionFormKey] = useState(0)
 
-  // `formikMainFormValuesRef` is freezed as Formik manage his state internally
-  const formikMainFormValuesRef = useRef<MissionMainFormValues | undefined>(undefined)
-  useUpdateFreezedMainFormValues(formikMainFormValuesRef.current, mainFormValues, nextMainFormValues => {
-    formikMainFormValuesRef.current = nextMainFormValues
-    setMainFormKey(key => key + 1)
-  })
   // `formikEditedActionFormValuesRef` is freezed as Formik manage his state internally
   const formikEditedActionFormValuesRef = useRef<MissionActionFormValues | undefined>(undefined)
   useUpdateFreezedActionFormValues(
@@ -127,6 +118,18 @@ export function MissionForm() {
       setActionFormKey(key => key + 1)
     }
   )
+
+  useEffect(() => {
+    if (!missionEvent) {
+      return
+    }
+
+    setMainFormValues(previousMainFormValues => ({
+      ...(previousMainFormValues as MissionMainFormValues),
+      isClosed: missionEvent.isClosed,
+      updatedAtUtc: missionEvent.updatedAtUtc
+    }))
+  }, [missionEvent])
 
   useEffect(() => {
     if (missionError) {
@@ -229,7 +232,6 @@ export function MissionForm() {
 
           setMainFormValues({
             ...createdOrUpdatedMainFormValues,
-            createdAtUtc: data.createdAtUtc,
             updatedAtUtc: data.updatedAtUtc
           })
           nextMissionId = editedMissionId
@@ -264,7 +266,9 @@ export function MissionForm() {
         ])
 
         dispatch(missionActions.setIsDraftDirty(false))
-        dispatch(missionActions.setIsListeningToEvents(true))
+        setTimeout(() => {
+          dispatch(missionActions.setIsListeningToEvents(true))
+        }, 500)
       } catch (err) {
         logSoftError({
           isSideWindowError: true,
@@ -566,7 +570,7 @@ export function MissionForm() {
       return
     }
 
-    if (formikMainFormValuesRef.current) {
+    if (mainFormValues) {
       return
     }
 
@@ -601,7 +605,7 @@ export function MissionForm() {
     setMainFormValues(nextMainFormValues)
     setActionsFormValues(nextActionsFormValues)
     updateReduxSliceDraft()
-  }, [dispatch, updateReduxSliceDraft, missionWithActions, previousMissionId, isLoading])
+  }, [dispatch, mainFormValues, updateReduxSliceDraft, missionWithActions, previousMissionId, isLoading])
 
   useEffect(
     () => () => {
@@ -639,18 +643,17 @@ export function MissionForm() {
 
         <Body>
           <FrontendErrorBoundary>
-            {(isLoading || !formikMainFormValuesRef.current) && <LoadingSpinnerWall />}
+            {(isLoading || !mainFormValues) && <LoadingSpinnerWall />}
 
-            {!isLoading && formikMainFormValuesRef.current && (
+            {!isLoading && mainFormValues && (
               <>
-                <MissionEventContext.Provider value={missionEvent}>
-                  <MainForm
-                    key={`main-form-${mainFormKey}`}
-                    initialValues={formikMainFormValuesRef.current}
-                    missionId={missionId}
-                    onChange={updateMainFormValues}
-                  />
-                </MissionEventContext.Provider>
+                <MainForm
+                  // We use this key to fully control when to re-render `<MainForm />`
+                  key={missionId}
+                  initialValues={mainFormValues}
+                  missionId={missionId}
+                  onChange={updateMainFormValues}
+                />
                 <ActionList
                   actionsFormValues={actionsFormValues}
                   currentIndex={editedActionIndex}
@@ -661,6 +664,7 @@ export function MissionForm() {
                   onSelect={updateEditedActionIndex}
                 />
                 <ActionForm
+                  // We use this key to fully control when to re-render `<ActionForm />`
                   key={`action-form-${actionFormKey}`}
                   actionFormValues={formikEditedActionFormValuesRef.current}
                   onChange={updateEditedActionFormValues}
@@ -687,7 +691,7 @@ export function MissionForm() {
               {mainFormValues?.createdAtUtc && (
                 <>Mission créée le {customDayjs(mainFormValues.createdAtUtc).utc().format('D MMM YY, HH:mm')}. </>
               )}
-              {!mainFormValues?.createdAtUtc && <>Mission non enregistrée.</>}
+              {!mainFormValues?.createdAtUtc && <>Mission non enregistrée. </>}
               {mainFormValues?.updatedAtUtc && (
                 <>Dernière modification enregistrée {timeago.format(mainFormValues.updatedAtUtc, 'fr')}.</>
               )}
@@ -710,6 +714,7 @@ export function MissionForm() {
             {!mainFormValues?.isClosed && (
               <Button
                 accent={Accent.SECONDARY}
+                data-cy="close-mission"
                 disabled={isLoading || isSaving || !isMissionFormValid}
                 Icon={Icon.Confirm}
                 onClick={close}
@@ -720,6 +725,7 @@ export function MissionForm() {
             {mainFormValues?.isClosed && (
               <Button
                 accent={Accent.SECONDARY}
+                data-cy="reopen-mission"
                 disabled={isLoading || isSaving}
                 Icon={Icon.Unlock}
                 onClick={reopen}

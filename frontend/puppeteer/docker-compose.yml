@@ -72,7 +72,7 @@ services:
     depends_on:
       flyway:
         condition: service_completed_successfully
-      geoserver-monitorenv-stubs:
+      geoserver-stubs:
         condition: service_healthy
     restart: always
     logging:

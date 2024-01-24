@@ -67,9 +67,6 @@ docker-compose-up:
 	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
 
 docker-compose-puppeteer-up:
-	docker compose -f ./frontend/cypress/docker-compose.yml up -d --quiet-pull db
-	docker compose -f ./frontend/cypress/docker-compose.yml up --quiet-pull flyway
-	docker compose -f ./frontend/cypress/docker-compose.yml up -d --quiet-pull app
 	docker compose -f ./frontend/puppeteer/docker-compose.yml up -d
 	@printf 'Waiting for backend app to be ready'
 	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done

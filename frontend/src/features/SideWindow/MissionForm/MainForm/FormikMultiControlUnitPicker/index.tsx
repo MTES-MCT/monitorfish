@@ -78,7 +78,7 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
   return (
     <Wrapper>
       <>
-        {(values.controlUnits || []).map((value, index) => (
+        {(values.controlUnits || []).map((_, index) => (
           <ControlUnitSelect
             // eslint-disable-next-line react/no-array-index-key
             key={`unit${index}`}
@@ -89,7 +89,6 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
             index={index}
             onChange={handleChange}
             onDelete={removeUnit}
-            value={value}
           />
         ))}
       </>

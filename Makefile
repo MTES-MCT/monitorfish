@@ -19,6 +19,7 @@ stop-stubbed-apis:
 erase-db:
 	docker compose down -v
 	docker compose -f ./frontend/cypress/docker-compose.yml down -v
+	docker compose -f ./frontend/puppeteer/docker-compose.dev.yml down -v
 check-clean-archi:
 	cd backend/tools && ./check-clean-architecture.sh
 test: test-back
@@ -35,6 +36,12 @@ lint-back:
 		-e "Exceeded max line length" \
 		-e "Package name must not contain underscore" \
 		-e "Wildcard import"
+run-back-for-puppeteer: run-stubbed-apis
+	docker compose up -d --quiet-pull --wait db
+	docker compose -f ./frontend/puppeteer/docker-compose.dev.yml up -d
+	cd backend && ./gradlew bootRun --args='--spring.profiles.active=puppeteer --spring.config.additional-location=$(INFRA_FOLDER)'
+run-front-for-puppeteer:
+	cd ./frontend && npm run dev-puppeteer
 
 # CI commands - app
 docker-build:
@@ -56,6 +63,14 @@ docker-compose-up:
 	docker compose -f ./frontend/cypress/docker-compose.yml up -d --quiet-pull db
 	docker compose -f ./frontend/cypress/docker-compose.yml up --quiet-pull flyway
 	docker compose -f ./frontend/cypress/docker-compose.yml up -d --quiet-pull app
+	@printf 'Waiting for backend app to be ready'
+	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
+
+docker-compose-puppeteer-up:
+	docker compose -f ./frontend/cypress/docker-compose.yml up -d --quiet-pull db
+	docker compose -f ./frontend/cypress/docker-compose.yml up --quiet-pull flyway
+	docker compose -f ./frontend/cypress/docker-compose.yml up -d --quiet-pull app
+	docker compose -f ./frontend/puppeteer/docker-compose.yml up -d
 	@printf 'Waiting for backend app to be ready'
 	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
 

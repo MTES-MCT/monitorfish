@@ -1,6 +1,6 @@
 import { ControlUnit } from '@mtes-mct/monitor-ui'
 
-import { monitorenvApi, monitorfishApi } from '../../../api/api'
+import { monitorenvApi } from '../../../api/api'
 import { Mission } from '../../../domain/entities/mission/types'
 import { FrontendApiError } from '../../../libs/FrontendApiError'
 
@@ -13,11 +13,6 @@ const UPDATE_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu mettre à jour la miss
 export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
   endpoints: builder => ({
     createMission: builder.mutation<Pick<Mission.Mission, 'id'>, Mission.MissionData>({
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        await queryFulfilled
-
-        dispatch(monitorfishApi.util.invalidateTags([{ type: 'Missions' }]))
-      },
       query: mission => ({
         body: mission,
         method: 'POST',
@@ -27,11 +22,6 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
     }),
 
     deleteMission: builder.mutation<void, Mission.Mission['id']>({
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        await queryFulfilled
-
-        dispatch(monitorfishApi.util.invalidateTags([{ type: 'Missions' }]))
-      },
       query: id => ({
         method: 'DELETE',
         url: `/v1/missions/${id}`
@@ -46,13 +36,11 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
 
     getMission: builder.query<Mission.Mission, Mission.Mission['id']>({
       keepUnusedDataFor: 0,
-      providesTags: [{ type: 'Missions' }],
       query: id => `/v1/missions/${id}`,
       transformErrorResponse: response => new FrontendApiError(GET_MISSION_ERROR_MESSAGE, response)
     }),
 
     updateMission: builder.mutation<Mission.Mission, Mission.Mission>({
-      invalidatesTags: [{ type: 'Missions' }],
       query: mission => ({
         body: mission,
         method: 'POST',

@@ -2,6 +2,7 @@ import VectorSource from 'ol/source/Vector'
 import { memo, useEffect, useMemo, useRef } from 'react'
 
 import { getStationPointFeature, getFeatureStyle } from './utils'
+import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '../../../../api/constants'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
@@ -31,7 +32,7 @@ function UnmemoizedStationLayer({ hoveredFeatureId }: StationLayerProps) {
   const selectedStationId = useMainAppSelector(state => state.station.selectedStationId)
   const highlightedStationIds = useMainAppSelector(state => state.station.highlightedStationIds)
 
-  const { data: stations } = useGetStationsQuery()
+  const { data: stations } = useGetStationsQuery(undefined, RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS)
 
   const stationsAsFeatures = useMemo(
     () => (stations || []).filter(station => station.controlUnitResourceIds.length > 0).map(getStationPointFeature),

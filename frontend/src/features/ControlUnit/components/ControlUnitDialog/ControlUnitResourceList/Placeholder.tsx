@@ -17,7 +17,6 @@ const Wrapper = styled.div`
   align-items: center;
   background-color: ${p => p.theme.color.lightGray};
   display: flex;
-  height: 94px;
   justify-content: center;
   min-height: 94px;
   min-width: 116px;

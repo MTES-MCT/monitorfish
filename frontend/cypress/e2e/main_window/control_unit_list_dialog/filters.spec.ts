@@ -26,6 +26,15 @@ context('Main Window > Control Unit List Dialog > Filters', () => {
     cy.contains('BGC Lorient - DF 36 Kan An Avel').should('exist')
   })
 
+  it('Should find control units matching the selected resource category', () => {
+    cy.fill('Catégorie de moyen', ['Maritime'])
+
+    cy.getDataCy('ControlUnitListDialog-control-unit').should('have.length', 7)
+
+    cy.contains('BGC Lorient - DF 36 Kan An Avel').should('exist')
+    cy.contains('ULAM 56').should('exist')
+  })
+
   it('Should find control units matching the selected resource type', () => {
     cy.fill('Type de moyen', 'Semi-rigide')
 

@@ -1,6 +1,8 @@
 import {
   ControlUnit,
+  Field,
   Icon,
+  MultiCheckbox,
   Select,
   Size,
   TextInput,
@@ -38,6 +40,10 @@ export function FilterBar() {
     [administrations]
   )
   const basesAsOptions = useMemo(() => getOptionsFromIdAndName(bases), [bases])
+  const categoriesAsOptions = useMemo(
+    () => getOptionsFromLabelledEnum(ControlUnit.ControlUnitResourceCategoryLabel),
+    []
+  )
   const typesAsOptions = useMemo(() => getOptionsFromLabelledEnum(ControlUnit.ControlUnitResourceTypeLabel), [])
 
   const updateAdministrationId = useCallback(
@@ -50,6 +56,13 @@ export function FilterBar() {
   const updateBaseId = useCallback(
     (nextValue: number | undefined) => {
       dispatch(controlUnitListDialogActions.setFilter({ key: 'stationId', value: nextValue }))
+    },
+    [dispatch]
+  )
+
+  const updateCategories = useCallback(
+    (nextValue: ControlUnit.ControlUnitResourceCategory[] | undefined) => {
+      dispatch(controlUnitListDialogActions.setFilter({ key: 'categories', value: nextValue }))
     },
     [dispatch]
   )
@@ -118,6 +131,17 @@ export function FilterBar() {
         searchable
         value={filtersState.stationId}
       />
+      <Field>
+        <MultiCheckbox
+          isInline
+          isLabelHidden
+          label="Catégorie de moyen"
+          name="category"
+          onChange={updateCategories}
+          options={categoriesAsOptions}
+          value={filtersState.categories}
+        />
+      </Field>
     </Wrapper>
   )
 }

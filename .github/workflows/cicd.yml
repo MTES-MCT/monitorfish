@@ -291,6 +291,9 @@ jobs:
         run: npm ci
         working-directory: ./frontend
 
+      - name: Install Firefox
+        run: npx puppeteer browsers install firefox
+
       - name: Run multi-windows tests
         run: npm run test:multi-windows:run
         working-directory: ./frontend

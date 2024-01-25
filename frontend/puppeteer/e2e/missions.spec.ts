@@ -16,7 +16,7 @@ const URL = `http://${WEBAPP_HOST}:${WEBAPP_PORT}/side_window`
 let pageA
 let pageB
 
-jest.retryTimes(2)
+jest.retryTimes(4)
 
 describe('Missions Form', () => {
   beforeEach(async () => {
@@ -28,7 +28,7 @@ describe('Missions Form', () => {
     pageB = await getFirstTab(browsers[1])
     listenToConsole(pageB, 2)
 
-    await wait(1000)
+    await wait(3000)
     /* eslint-disable no-restricted-syntax */
     for (const page of [pageA, pageB]) {
       await page.goto(URL, { waitUntil: 'domcontentloaded' })

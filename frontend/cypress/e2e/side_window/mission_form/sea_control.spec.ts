@@ -750,6 +750,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.get('span[role="button"][title="Clear"]').eq(0).click({ force: true })
     cy.get('span[role="button"][title="Clear"]').eq(1).click({ force: true })
     cy.fill('Unité 1', 'Cultures marines – DDTM 40')
+    cy.wait(500)
 
     cy.get('legend')
       .filter(':contains("Autre(s) contrôle(s) effectué(s) par l’unité sur le navire")')

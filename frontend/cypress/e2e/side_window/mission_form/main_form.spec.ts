@@ -158,6 +158,13 @@ context('Side Window > Mission Form > Main Form', () => {
       statusCode: 201
     }).as('createMission')
 
+    cy.intercept('POST', '/api/v1/missions/1', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('updateMission')
+
     cy.fill('Début de mission', [2023, 2, 1, 12, 34])
     cy.fill('Fin de mission', [2023, 2, 1, 13, 45])
 
@@ -168,6 +175,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.fill('Administration 1', 'DDTM')
     cy.fill('Unité 1', 'Cultures marines – DDTM 40')
+    cy.wait(500)
     cy.fill('Moyen 1', ['Semi-rigide 1'])
     cy.fill('Contact de l’unité 1', 'Bob')
     cy.fill('Contact de l’unité 1', 'Bob')
@@ -178,6 +186,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.fill('Unité 2', 'DREAL Pays-de-La-Loire')
     cy.fill('Moyen 2', ['ALTAIR', 'ARIOLA'])
     cy.fill('Contact de l’unité 2', 'Bob 2')
+    cy.wait(500)
 
     cy.fill('CACEM : orientations, observations', 'Une note.')
     cy.fill('CNSP : orientations, observations', 'Une autre note.')
@@ -186,9 +195,8 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.wait(500)
 
-    // Approx. 4 requests are sent to the server
     cy.waitForLastRequest(
-      '@createMission',
+      '@updateMission',
       {
         body: {
           closedBy: 'Doris',
@@ -237,7 +245,7 @@ context('Side Window > Mission Form > Main Form', () => {
           startDateTimeUtc: '2023-02-01T12:34:00.000Z'
         }
       },
-      5
+      10
     )
       .its('response.statusCode')
       .should('eq', 201)
@@ -393,19 +401,24 @@ context('Side Window > Mission Form > Main Form', () => {
   })
 
   it('Should close a new mission', () => {
+    cy.intercept('POST', '/api/v1/missions/1', {
+      body: {
+        id: 1,
+        isClosed: true
+      },
+      statusCode: 201
+    }).as('updateMission')
     openSideWindowNewMission()
-    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA, true)
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA, false)
 
     cy.fill('Clôturé par', 'Doris')
 
-    cy.wait(300)
+    cy.wait(500)
 
     cy.clickButton('Clôturer')
 
-    cy.wait(250)
-
     cy.waitForLastRequest(
-      '@createMission',
+      '@updateMission',
       {
         body: {
           // We check this prop to be sure all the data is there (this is the last field to be filled)
@@ -414,7 +427,7 @@ context('Side Window > Mission Form > Main Form', () => {
           isGeometryComputedFromControls: false
         }
       },
-      5
+      10
     )
       .its('response.statusCode')
       .should('eq', 201)
@@ -761,7 +774,7 @@ context('Side Window > Mission Form > Main Form', () => {
       .its('mockEventSources' as any)
       .then(mockEventSources => {
         // URL sur la CI : http://0.0.0.0:8081/api/v1/missions/sse'
-        // URL en local : /api/v1/missions/sse
+        // URL en local :  //localhost:8081/api/v1/missions/sse
         mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emitOpen()
         mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emit(
           'MISSION_UPDATE',
@@ -824,12 +837,13 @@ context('Side Window > Mission Form > Main Form', () => {
       body: [],
       statusCode: 200
     })
+    cy.wait(500)
 
     cy.window()
       .its('mockEventSources' as any)
       .then(mockEventSources => {
         // URL sur la CI : http://0.0.0.0:8081/api/v1/missions/sse
-        // URL en local : /api/v1/missions/sse
+        // URL en local : //localhost:8081/api/v1/missions/sse
         mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emitOpen()
         mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emit(
           'MISSION_UPDATE',
@@ -880,6 +894,7 @@ context('Side Window > Mission Form > Main Form', () => {
           })
         )
       })
+    cy.wait(250)
 
     cy.fill('CNSP : orientations, observations', 'Une autre note (dummy updtae to send a request).')
 

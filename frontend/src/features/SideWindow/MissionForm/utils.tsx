@@ -63,7 +63,7 @@ export function getMissionDataFromMissionFormValues(mainFormValues: MissionMainF
     throw new FormError(mainFormValues, 'startDateTimeUtc', FormErrorCode.MISSING_OR_UNDEFINED)
   }
 
-  const missionBaseValues = omit(['controlUnits'], mainFormValues)
+  const missionBaseValues = omit(['controlUnits', 'isValid'], mainFormValues)
 
   const validControlUnits = mainFormValues.controlUnits.map(getValidMissionDataControlUnit)
   const missionTypes = mainFormValues.missionTypes || []

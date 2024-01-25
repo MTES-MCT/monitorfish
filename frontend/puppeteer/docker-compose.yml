@@ -33,7 +33,7 @@ services:
 
   flyway:
     image: flyway/flyway
-    command: migrate -password=postgres -schemas=public -user=postgres -url=jdbc:postgresql://db:5432/monitorfishdb
+    command: migrate -password=postgres -schemas=public -user=postgres -url=jdbc:postgresql://monitorfish-db:5432/monitorfishdb
     volumes:
       - ../../backend/src/main/resources/db/:/flyway/sql
     depends_on:

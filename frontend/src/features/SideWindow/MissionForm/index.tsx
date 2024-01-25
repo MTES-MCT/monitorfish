@@ -60,9 +60,9 @@ import type { MissionAction } from '../../../domain/types/missionAction'
 
 export function MissionForm() {
   const dispatch = useMainAppDispatch()
-  const editedMissionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
+  const missionIdFromPath = useMainAppSelector(store => store.sideWindow.selectedPath.id)
   const newMissionId = useRef<number | undefined>(undefined)
-  const missionId = editedMissionId || newMissionId?.current
+  const missionId = missionIdFromPath || newMissionId?.current
   const isDraftCancellationConfirmationDialogOpen = useMainAppSelector(
     store => store.sideWindow.isDraftCancellationConfirmationDialogOpen
   )
@@ -94,14 +94,14 @@ export function MissionForm() {
     isUpdatingMissionAction
 
   const isLoading =
-    editedMissionId && ((isFetchingMission && !missionData) || (isFetchingMissionActions && !missionActionsData))
+    missionIdFromPath && ((isFetchingMission && !missionData) || (isFetchingMissionActions && !missionActionsData))
 
   const [mainFormValues, setMainFormValues] = useState<MissionMainFormValues | undefined>(undefined)
   const [actionsFormValues, setActionsFormValues] = useState<MissionActionFormValues[]>([])
   const [editedActionIndex, setEditedActionIndex] = useState<number | undefined>(undefined)
   const [isDeletionConfirmationDialogOpen, setIsDeletionConfirmationDialogOpen] = useState(false)
   const [title, setTitle] = useState(getTitleFromMissionMainFormValues(undefined, undefined))
-  const previousMissionId = usePrevious(editedMissionId)
+  const previousMissionId = usePrevious(missionIdFromPath)
 
   // We use these keys to fully control when to re-render `<MainForm />` & `<ActionForm />`
   // since they are fully memoized in order to optimize their (heavy) re-rendering
@@ -203,7 +203,7 @@ export function MissionForm() {
         dispatch(missionActions.setIsListeningToEvents(false))
         let nextMissionId: number
 
-        if (!editedMissionId) {
+        if (!missionId) {
           const newMission = getMissionDataFromMissionFormValues(createdOrUpdatedMainFormValues)
           // TODO Override Redux RTK typings globally.
           // Redux RTK typing is wrong, this should be a tuple-like to help TS discriminate `data` from `error`.
@@ -221,10 +221,7 @@ export function MissionForm() {
             updatedAtUtc: data.updatedAtUtc
           })
         } else {
-          const updatedMission = getUpdatedMissionFromMissionMainFormValues(
-            editedMissionId,
-            createdOrUpdatedMainFormValues
-          )
+          const updatedMission = getUpdatedMissionFromMissionMainFormValues(missionId, createdOrUpdatedMainFormValues)
           const { data, error } = (await updateMission(updatedMission)) as any
           if (!data) {
             throw new FrontendError('`updateMission()` failed', error)
@@ -234,7 +231,7 @@ export function MissionForm() {
             ...createdOrUpdatedMainFormValues,
             updatedAtUtc: data.updatedAtUtc
           })
-          nextMissionId = editedMissionId
+          nextMissionId = missionId
         }
 
         const { deletedMissionActionIds, updatedMissionActionDatas } =
@@ -286,7 +283,7 @@ export function MissionForm() {
       deleteMissionAction,
       updateMission,
       updateMissionAction,
-      editedMissionId
+      missionId
     ]
   )
 
@@ -295,13 +292,13 @@ export function MissionForm() {
   }, [dispatch])
 
   const handleDelete = useCallback(async () => {
-    if (!editedMissionId) {
+    if (!missionIdFromPath) {
       throw new FrontendError('`missionId` is undefined')
     }
 
-    await deleteMission(editedMissionId)
+    await deleteMission(missionIdFromPath)
     dispatch(sideWindowActions.openOrFocusAndGoTo({ menu: SideWindowMenuKey.MISSION_LIST }))
-  }, [deleteMission, dispatch, editedMissionId])
+  }, [deleteMission, dispatch, missionIdFromPath])
 
   const reopen = useCallback(() => {
     if (!mainFormValues) {
@@ -675,7 +672,7 @@ export function MissionForm() {
         </Body>
         <Footer>
           <div>
-            {editedMissionId && (
+            {missionIdFromPath && (
               <Button
                 accent={Accent.SECONDARY}
                 disabled={isLoading || isSaving || mainFormValues?.missionSource !== Mission.MissionSource.MONITORFISH}

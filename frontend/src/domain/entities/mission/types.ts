@@ -18,7 +18,8 @@ export namespace Mission {
     isClosed: boolean
     isGeometryComputedFromControls: boolean
     isUnderJdp?: boolean | undefined
-    isValid: boolean
+    // For internal Formik validation purpose
+    isValid?: boolean | undefined
     missionSource: MissionSource
     missionTypes: MissionType[]
     observationsCacem?: string

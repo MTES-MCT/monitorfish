@@ -10,20 +10,21 @@ import {
   useNewWindow
 } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
-import { useCallback, useMemo, useState } from 'react'
+import { uniqBy } from 'lodash'
+import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import {
   findControlUnitByname,
   mapControlUnitsToUniqueSortedNamesAsOptions,
-  mapControlUnitToSortedResourcesAsOptions
+  mapToSortedResourcesAsOptions
 } from './utils'
 import { FIVE_MINUTES } from '../../../../../api/APIWorker'
 import { Mission } from '../../../../../domain/entities/mission/types'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { isNotArchived } from '../../../../../utils/isNotArchived'
 import { useGetEngagedControlUnitsQuery } from '../../apis'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
-import { isValidControlUnit } from '../../utils'
 
 import type { LegacyControlUnit } from '../../../../../domain/types/legacyControlUnit'
 import type { MissionMainFormValues } from '../../types'
@@ -71,8 +72,10 @@ export function ControlUnitSelect({
     return engagedControlUnitsData
   }, [engagedControlUnitsData])
 
-  const [selectedControlUnit, setSelectedControlUnit] = useState<LegacyControlUnit.LegacyControlUnit | undefined>(
-    isValidControlUnit(value) ? value : undefined
+  // Include archived control units (and administrations) if they're already selected
+  const activeAndSelectedControlUnits = useMemo(
+    () => allControlUnits.filter(controlUnit => isNotArchived(controlUnit) || value.name === controlUnit.name) || [],
+    [allControlUnits, value]
   )
 
   const engagedControlUnit = engagedControlUnits.find(engaged => engaged.controlUnit.id === value.id)
@@ -91,10 +94,25 @@ export function ControlUnitSelect({
     return mapControlUnitsToUniqueSortedNamesAsOptions(selectedAdministrationControlUnits)
   }, [allControlUnits, allNamesAsOptions, value])
 
-  const selectedControlUnitResourcesAsOptions = useMemo(
+  // Include archived resources if they're already selected
+  const activeWithSelectedControlUnitResources = useMemo(() => {
+    const activeControlUnitResources =
+      activeAndSelectedControlUnits.find(unit => unit.administration === value.administration && unit.id === value.id)
+        ?.resources || []
+    // TODO Remove LegacyControlUnitResource to filter archived resources :
+    //  .filter(isNotArchived)
+
+    const resources = [...activeControlUnitResources, ...value.resources]
+
+    return uniqBy(resources, 'id')
+  }, [activeAndSelectedControlUnits, value])
+
+  const controlUnitResourcesAsOptions = useMemo(
     (): Option<LegacyControlUnit.LegacyControlUnitResource>[] =>
-      selectedControlUnit ? mapControlUnitToSortedResourcesAsOptions(selectedControlUnit) : [],
-    [selectedControlUnit]
+      activeWithSelectedControlUnitResources
+        ? mapToSortedResourcesAsOptions(activeWithSelectedControlUnitResources)
+        : [],
+    [activeWithSelectedControlUnitResources]
   )
 
   const handleAdministrationChange = useCallback(
@@ -103,8 +121,6 @@ export function ControlUnitSelect({
         ...INITIAL_MISSION_CONTROL_UNIT,
         administration: nextAdministration
       }
-
-      setSelectedControlUnit(undefined)
 
       onChange(index, nextControlUnit)
     },
@@ -129,8 +145,6 @@ export function ControlUnitSelect({
               ...INITIAL_MISSION_CONTROL_UNIT,
               administration: value.administration
             }
-
-      setSelectedControlUnit(nextSelectedControlUnit)
 
       onChange(index, nextControlUnit)
     },
@@ -221,7 +235,7 @@ export function ControlUnitSelect({
           label={`Moyen ${index + 1}`}
           name={`resources_${index}`}
           onChange={handleResourcesChange}
-          options={selectedControlUnitResourcesAsOptions}
+          options={controlUnitResourcesAsOptions}
           optionValueKey="name"
           value={value.resources}
         />

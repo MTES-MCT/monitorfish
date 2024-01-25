@@ -8,7 +8,7 @@ export function listenToConsole(page, index) {
 
       if (messageType === 'ERR') {
         console.log(message.args(), message.stackTrace())
-        if (message.args().includes('/sse')) {
+        if (message.text().includes('/sse')) {
           // If the SSE connection fails, the browser will restart it, it is not an application error
           return
         }

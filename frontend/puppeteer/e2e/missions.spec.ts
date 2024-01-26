@@ -30,14 +30,16 @@ describe('Missions Form', () => {
 
     /* eslint-disable no-restricted-syntax */
     for (const page of [pageA, pageB]) {
-      // await page.goto(URL, { waitUntil: 'domcontentloaded' })
       await page.goto(URL, { waitUntil: 'domcontentloaded' })
-      await wait(1000)
+      await wait(2000)
 
+      await page.waitForSelector('[title="Missions et contrôles"]')
       await page.click('[title="Missions et contrôles"]')
 
+      await page.waitForSelector(`[data-cy="side-window-sub-menu-${SeaFrontGroup.NAMO}"]`)
       await page.click(`[data-cy="side-window-sub-menu-${SeaFrontGroup.NAMO}"]`)
 
+      await page.waitForSelector('.TableBodyRow[data-id="29"] > div > [title="Éditer la mission"]')
       await page.click('.TableBodyRow[data-id="29"] > div > [title="Éditer la mission"]')
 
       await wait(1000)
@@ -139,6 +141,7 @@ describe('Missions Form', () => {
       await reopen.click()
       await wait(2000)
       await pageB.click('.TableBodyRow[data-id="29"] > div > [title="Éditer la mission"]')
+      await wait(250)
       await pageB.waitForSelector('.Element-Tag')
       await assertContains(pageB, '.Element-Tag', 'En cours')
       await wait(2000)
@@ -159,7 +162,7 @@ describe('Missions Form', () => {
        */
       const finalReopen = await pageA.waitForSelector('[data-cy="reopen-mission"]')
       await finalReopen.click()
-      await wait(2000)
+      await wait(5000)
     },
     TIMEOUT
   )

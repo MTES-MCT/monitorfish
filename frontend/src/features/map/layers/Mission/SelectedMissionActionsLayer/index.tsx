@@ -73,10 +73,15 @@ export function UnmemoizedSelectedMissionActionsLayer() {
   }, [getVectorLayer])
 
   useEffect(() => {
+    // If a mission is opened in the form, we can't display another selected mission
+    if (draft?.actionsFormValues) {
+      return
+    }
+
     getVectorSource().clear(true)
 
     getVectorSource().addFeatures(selectedMissionActions)
-  }, [selectedMissionActions, getVectorSource])
+  }, [selectedMissionActions, draft?.actionsFormValues, getVectorSource])
 
   useEffect(() => {
     getVectorSource().clear(true)

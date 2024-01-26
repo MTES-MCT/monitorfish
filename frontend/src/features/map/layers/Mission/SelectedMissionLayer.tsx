@@ -67,6 +67,11 @@ export function UnmemoizedSelectedMissionLayer() {
   }, [getVectorLayer])
 
   useEffect(() => {
+    // If a mission is opened in the form, we can't display another selected mission
+    if (draft?.mainFormValues) {
+      return
+    }
+
     getVectorSource().clear(true)
 
     if (!selectedMission?.getId()?.toString()?.includes(MonitorFishLayer.MISSION_PIN_POINT)) {
@@ -82,7 +87,7 @@ export function UnmemoizedSelectedMissionLayer() {
 
     const missionFeature = getMissionFeatureZone(hoveredMissionWithActions)
     getVectorSource().addFeature(missionFeature)
-  }, [selectedMission, missions, getVectorSource])
+  }, [selectedMission, missions, draft?.mainFormValues, getVectorSource])
 
   useEffect(() => {
     getVectorSource().clear(true)

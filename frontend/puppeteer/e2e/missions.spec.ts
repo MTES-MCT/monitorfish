@@ -8,7 +8,7 @@ const TIMEOUT = 120 * 1000
 
 const IS_CI = Boolean(process.env.CI)
 const IS_DARWIN = platform() === 'darwin'
-const WEBAPP_PORT = IS_CI ? 8880 : 3000
+const WEBAPP_PORT = 3000// IS_CI ? 8880 : 3000
 const WEBAPP_HOST = IS_DARWIN ? '0.0.0.0' : 'localhost'
 
 const URL = `http://${WEBAPP_HOST}:${WEBAPP_PORT}/side_window`
@@ -141,7 +141,7 @@ describe('Missions Form', () => {
       const reopen = await pageA.waitForSelector('[data-cy="reopen-mission"]')
       await reopen.click()
       await wait(2000)
-      pageA.waitForSelector('.TableBodyRow[data-id="29"] > div > [title="Éditer la mission"]')
+      await pageA.waitForSelector('.TableBodyRow[data-id="29"] > div > [title="Éditer la mission"]')
       await pageB.click('.TableBodyRow[data-id="29"] > div > [title="Éditer la mission"]')
       await wait(250)
       await pageB.waitForSelector('.Element-Tag')

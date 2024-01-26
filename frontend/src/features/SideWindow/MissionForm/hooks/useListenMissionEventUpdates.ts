@@ -22,10 +22,6 @@ export function useListenMissionEventUpdates() {
       console.log(`SSE: Connected to missions endpoint.`)
     })
 
-    window.addEventListener('beforeunload', () => {
-      eventSourceRef.current?.close()
-    })
-
     return () => {
       eventSourceRef.current?.close()
     }

@@ -10,7 +10,7 @@ export function useListenMissionEventUpdatesById(missionId: number | string | un
 
   const mission = useMemo(() => {
     // @ts-ignore: `missionId` is verified with `Number.isInteger(missionId)`
-    if (!Number.isInteger(missionId) || !missionEvent?.id === missionId) {
+    if (!Number.isInteger(missionId) || missionEvent?.id !== missionId) {
       return undefined
     }
 

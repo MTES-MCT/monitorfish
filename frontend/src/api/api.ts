@@ -14,9 +14,6 @@ const MAX_RETRIES = 2
 // Using local MonitorEnv stubs:
 export const MONITORENV_API_URL = import.meta.env.FRONTEND_MONITORENV_URL
 
-// Using local MonitorEnv instance:
-// const MONITORENV_API_URL = 'http://0.0.0.0:9880'
-
 // =============================================================================
 // Monitorenv API
 

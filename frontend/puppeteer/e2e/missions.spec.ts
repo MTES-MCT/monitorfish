@@ -28,9 +28,9 @@ describe('Missions Form', () => {
     pageB = await getFirstTab(browsers[1])
     listenToConsole(pageB, 2)
 
-    await wait(3000)
     /* eslint-disable no-restricted-syntax */
     for (const page of [pageA, pageB]) {
+      // await page.goto(URL, { waitUntil: 'domcontentloaded' })
       await page.goto(URL, { waitUntil: 'domcontentloaded' })
       await wait(1000)
 

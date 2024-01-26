@@ -9,7 +9,7 @@ Multi-windows tests will run MonitorEnv (app and db) as docker containers. Monit
 > The `monitorenv-app` docker image version used in `docker-compose.yml` and `docker-compose.dev.yml` is the version with stabilized Mission APIs.
 
 To run `puppeteer` multi-windows tests:
-1. In a first terminal, execute `make run-backend-for-puppeteer`.
-2. In a second terminal, execute `make run-frontend-for-puppeteer`.
+1. In a first terminal, execute `make run-back-for-puppeteer`.
+2. In a second terminal, execute `make run-front-for-puppeteer`.
 3. In a third terminal, execute `cd frontend && npm run test:multi-windows:open` to execute tests.
 

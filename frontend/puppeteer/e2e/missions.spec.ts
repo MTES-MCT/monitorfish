@@ -8,7 +8,7 @@ const TIMEOUT = 120 * 1000
 
 const IS_CI = Boolean(process.env.CI)
 const IS_DARWIN = platform() === 'darwin'
-const WEBAPP_PORT = 3000// IS_CI ? 8880 : 3000
+const WEBAPP_PORT = IS_CI ? 8880 : 3000
 const WEBAPP_HOST = IS_DARWIN ? '0.0.0.0' : 'localhost'
 
 const URL = `http://${WEBAPP_HOST}:${WEBAPP_PORT}/side_window`

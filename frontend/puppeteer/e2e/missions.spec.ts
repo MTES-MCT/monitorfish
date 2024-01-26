@@ -38,6 +38,7 @@ describe('Missions Form', () => {
 
       await page.waitForSelector(`[data-cy="side-window-sub-menu-${SeaFrontGroup.NAMO}"]`)
       await page.click(`[data-cy="side-window-sub-menu-${SeaFrontGroup.NAMO}"]`)
+      await wait(2000)
 
       await page.waitForSelector('.TableBodyRow[data-id="29"] > div > [title="Éditer la mission"]')
       await page.click('.TableBodyRow[data-id="29"] > div > [title="Éditer la mission"]')

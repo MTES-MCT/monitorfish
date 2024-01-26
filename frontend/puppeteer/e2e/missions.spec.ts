@@ -140,6 +140,7 @@ describe('Missions Form', () => {
       const reopen = await pageA.waitForSelector('[data-cy="reopen-mission"]')
       await reopen.click()
       await wait(2000)
+      pageA.waitForSelector('.TableBodyRow[data-id="29"] > div > [title="Éditer la mission"]')
       await pageB.click('.TableBodyRow[data-id="29"] > div > [title="Éditer la mission"]')
       await wait(250)
       await pageB.waitForSelector('.Element-Tag')

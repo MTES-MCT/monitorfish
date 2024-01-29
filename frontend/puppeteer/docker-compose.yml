@@ -48,7 +48,7 @@ services:
       - SPRING_PROFILES_ACTIVE=local
       - HOST_IP=127.0.0.1
       - SENTRY_DSN=
-      - MONITORENV_URL=http://monitorenv-app:8082
+      - MONITORENV_URL=http://monitorenv-app:8882
       - MONITORFISH_API_PROTECTED_API_KEY=APIKEY
       - FRONTEND_GEOSERVER_LOCAL_URL=http://0.0.0.0:8081
       - FRONTEND_GEOSERVER_REMOTE_URL=http://0.0.0.0:8081

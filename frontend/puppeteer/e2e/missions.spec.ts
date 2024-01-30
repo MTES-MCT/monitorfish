@@ -1,4 +1,4 @@
-import { beforeEach, expect, it, jest } from '@jest/globals'
+import { beforeEach, expect, it } from '@jest/globals'
 import { platform } from 'os'
 
 import { assertContains, getFirstTab, getInputContent, listenToConsole, wait } from './utils'
@@ -15,8 +15,6 @@ const URL = `http://${WEBAPP_HOST}:${WEBAPP_PORT}/side_window`
 
 let pageA
 let pageB
-
-jest.retryTimes(4)
 
 describe('Missions Form', () => {
   beforeEach(async () => {
@@ -141,7 +139,7 @@ describe('Missions Form', () => {
       const reopen = await pageA.waitForSelector('[data-cy="reopen-mission"]')
       await reopen.click()
       await wait(2000)
-      await pageA.waitForSelector('.TableBodyRow[data-id="29"] > div > [title="Éditer la mission"]')
+      await pageB.waitForSelector('.TableBodyRow[data-id="29"] > div > [title="Éditer la mission"]')
       await pageB.click('.TableBodyRow[data-id="29"] > div > [title="Éditer la mission"]')
       await wait(250)
       await pageB.waitForSelector('.Element-Tag')

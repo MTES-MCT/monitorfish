@@ -521,6 +521,14 @@ export function MissionForm() {
 
   const updateMainFormValuesCallback = useCallback(
     (nextMissionMainFormValues: MissionMainFormValues) => {
+      /**
+       * If an action debounce function is not yet executed, stop there to avoid race condition.
+       * /!\ This can leads to erase a changed action value
+       */
+      if (updateEditedActionFormValues.isPending()) {
+        return
+      }
+
       if (isEqual(nextMissionMainFormValues, mainFormValues)) {
         return
       }
@@ -544,7 +552,15 @@ export function MissionForm() {
 
       createOrUpdate(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues)
     },
-    [dispatch, updateReduxSliceDraft, createOrUpdate, actionsFormValues, mainFormValues, isAutoSaveEnabled]
+    [
+      dispatch,
+      updateEditedActionFormValues,
+      updateReduxSliceDraft,
+      createOrUpdate,
+      actionsFormValues,
+      mainFormValues,
+      isAutoSaveEnabled
+    ]
   )
 
   const updateMainFormValues = useDebouncedCallback(

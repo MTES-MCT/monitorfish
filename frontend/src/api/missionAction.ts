@@ -8,7 +8,6 @@ const GET_MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les a
 export const missionActionApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
     createMissionAction: builder.mutation<void, MissionAction.MissionActionData>({
-      invalidatesTags: () => [{ type: 'Missions' }, { type: 'MissionActions' }],
       query: missionAction => ({
         body: missionAction,
         method: 'POST',
@@ -17,7 +16,6 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
     }),
 
     deleteMissionAction: builder.mutation<void, number>({
-      invalidatesTags: () => [{ type: 'Missions' }, { type: 'MissionActions' }],
       query: missionActionId => ({
         method: 'DELETE',
         url: `/mission_actions/${missionActionId}`
@@ -25,13 +23,11 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
     }),
 
     getMissionActions: builder.query<MissionAction.MissionAction[], number>({
-      providesTags: () => [{ type: 'MissionActions' }],
       query: missionId => `/mission_actions?missionId=${missionId}`,
       transformErrorResponse: response => new ApiError(GET_MISSION_ACTIONS_ERROR_MESSAGE, response)
     }),
 
     updateMissionAction: builder.mutation<void, MissionAction.MissionAction>({
-      invalidatesTags: () => [{ type: 'Missions' }, { type: 'MissionActions' }],
       query: missionAction => ({
         body: missionAction,
         method: 'PUT',

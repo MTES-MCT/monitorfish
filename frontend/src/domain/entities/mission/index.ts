@@ -103,7 +103,7 @@ export const getMissionFeatureZone = (mission: Mission.Mission | MissionMainForm
 }
 
 export const getMissionActionFeature = (
-  action: MissionAction.MissionAction | (MissionActionFormValues & { missionId: number })
+  action: MissionAction.MissionAction | MissionActionFormValues
 ): Feature | undefined => {
   if (!action.longitude || !action.latitude) {
     return undefined

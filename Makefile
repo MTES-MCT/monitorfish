@@ -39,7 +39,7 @@ lint-back:
 run-back-for-puppeteer: run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db
 	docker compose -f ./frontend/puppeteer/docker-compose.dev.yml up -d
-	cd backend && ./gradlew bootRun --args='--spring.profiles.active=puppeteer --spring.config.additional-location=$(INFRA_FOLDER)'
+	cd backend && MONITORENV_URL=http://localhost:8882 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
 run-front-for-puppeteer:
 	cd ./frontend && npm run dev-puppeteer
 

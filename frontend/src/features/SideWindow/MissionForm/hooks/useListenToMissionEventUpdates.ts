@@ -3,12 +3,13 @@ import { useEffect, useRef, useState } from 'react'
 import { MONITORENV_API_URL } from '../../../../api/api'
 import { Mission } from '../../../../domain/entities/mission/types'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { logInDev } from '../../../../utils/logInDev'
 import { missionEventListener } from '../sse'
 
 const MISSION_UPDATES_URL = `${MONITORENV_API_URL}/api/v1/missions/sse`
 const MISSION_UPDATE_EVENT = `MISSION_UPDATE`
 
-export function useListenMissionEventUpdates() {
+export function useListenToMissionEventUpdates() {
   const isListeningToEvents = useMainAppSelector(state => state.mission.isListeningToEvents)
   const eventSourceRef = useRef<EventSource>()
   const [missionEvent, setMissionEvent] = useState<Mission.Mission>()
@@ -18,8 +19,7 @@ export function useListenMissionEventUpdates() {
     eventSourceRef.current = new EventSource(MISSION_UPDATES_URL)
 
     eventSourceRef.current?.addEventListener('open', () => {
-      // eslint-disable-next-line no-console
-      console.log(`SSE: Connected to missions endpoint.`)
+      logInDev(`SSE: Connected to missions endpoint.`)
     })
 
     return () => {

@@ -3,7 +3,8 @@ import { useFormikContext } from 'formik'
 import { omit } from 'lodash'
 
 import { useDeepCompareEffect } from '../../../../hooks/useDeepCompareEffect'
-import { useListenMissionEventUpdatesById } from '../hooks/useListenMissionEventUpdatesById'
+import { logInDev } from '../../../../utils/logInDev'
+import { useListenToMissionEventUpdatesById } from '../hooks/useListenToMissionEventUpdatesById'
 import { MISSION_EVENT_UNSYNCHRONIZED_PROPERTIES_IN_FORM } from '../sse'
 
 import type { MissionMainFormValues } from '../types'
@@ -16,34 +17,33 @@ type FormikSyncMissionFormProps = {
  */
 export function FormikSyncMissionFields({ missionId }: FormikSyncMissionFormProps) {
   const { setFieldValue, values } = useFormikContext<MissionMainFormValues>()
-  const receivedMission = useListenMissionEventUpdatesById(missionId)
+  const missionEvent = useListenToMissionEventUpdatesById(missionId)
 
   useDeepCompareEffect(
     () => {
-      if (!receivedMission) {
+      if (!missionEvent) {
         return
       }
 
       ;(async () => {
         const receivedDiff = diff(
           omit(values, MISSION_EVENT_UNSYNCHRONIZED_PROPERTIES_IN_FORM),
-          omit(receivedMission, MISSION_EVENT_UNSYNCHRONIZED_PROPERTIES_IN_FORM)
+          omit(missionEvent, MISSION_EVENT_UNSYNCHRONIZED_PROPERTIES_IN_FORM)
         )
 
         /**
          * We iterate and use `setFieldValue` on each diff key to avoid a global re-render of the <MainForm/> component
          */
         Object.keys(receivedDiff).forEach(key => {
-          // eslint-disable-next-line no-console
-          console.log(`SSE: setting form key "${key}" to ${JSON.stringify(receivedMission[key])}`)
-          setFieldValue(key, receivedMission[key])
+          logInDev(`SSE: setting form key "${key}" to ${JSON.stringify(missionEvent[key])}`)
+          setFieldValue(key, missionEvent[key])
         })
       })()
     },
 
     // We don't want to trigger infinite re-renders since `setFieldValue` changes after each rendering
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [receivedMission]
+    [missionEvent]
   )
 
   return <></>

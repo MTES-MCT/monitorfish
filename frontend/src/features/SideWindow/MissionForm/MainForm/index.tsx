@@ -19,7 +19,7 @@ import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'
 import { FormikSyncMissionFields } from './FormikSyncMissionFields'
 import { MainFormLiveSchema } from './schemas'
 import { BOOLEAN_AS_OPTIONS } from '../../../../constants'
-import { useListenMissionEventUpdatesById } from '../hooks/useListenMissionEventUpdatesById'
+import { useListenToMissionEventUpdatesById } from '../hooks/useListenToMissionEventUpdatesById'
 import { FormBody, FormBodyInnerWrapper } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
 
@@ -32,7 +32,7 @@ type MainFormProps = {
   onChange: (nextValues: MissionMainFormValues) => Promisable<void>
 }
 function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProps) {
-  const receivedMission = useListenMissionEventUpdatesById(missionId)
+  const missionEvent = useListenToMissionEventUpdatesById(missionId)
 
   function validateBeforeOnChange(validateForm) {
     return async nextValues => {
@@ -46,7 +46,7 @@ function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProp
 
       // Prevent re-sending the form when receiving an update
       const nextValuesWithoutIsValid = omit(nextValues, ['isValid'])
-      if (isEqual(receivedMission, nextValuesWithoutIsValid)) {
+      if (isEqual(missionEvent, nextValuesWithoutIsValid)) {
         return
       }
 

@@ -17,7 +17,7 @@ import {
   useUpdateMissionMutation
 } from './apis'
 import { AUTO_SAVE_ENABLED } from './constants'
-import { useListenMissionEventUpdatesById } from './hooks/useListenMissionEventUpdatesById'
+import { useListenToMissionEventUpdatesById } from './hooks/useListenToMissionEventUpdatesById'
 import { useUpdateFreezedActionFormValues } from './hooks/useUpdateFreezedActionFormValues'
 import { MainForm } from './MainForm'
 import { AutoSaveTag } from './shared/AutoSaveTag'
@@ -83,7 +83,7 @@ export function MissionForm() {
   const [deleteMissionAction, { isLoading: isDeletingMissionAction }] = useDeleteMissionActionMutation()
   const [updateMission, { isLoading: isUpdatingMission }] = useUpdateMissionMutation()
   const [updateMissionAction, { isLoading: isUpdatingMissionAction }] = useUpdateMissionActionMutation()
-  const missionEvent = useListenMissionEventUpdatesById(missionId)
+  const missionEvent = useListenToMissionEventUpdatesById(missionId)
 
   const isSaving =
     isCreatingMission ||

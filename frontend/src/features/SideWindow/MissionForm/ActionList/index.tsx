@@ -74,10 +74,10 @@ export function ActionList({
                 // eslint-disable-next-line react/no-array-index-key
                 key={index}
                 isSelected={index === currentIndex}
+                missionAction={action}
                 onDuplicate={() => onDuplicate(index)}
                 onRemove={() => onRemove(index)}
                 onSelect={() => onSelect(index)}
-                values={action}
               />
             ))}
         </FrontendErrorBoundary>

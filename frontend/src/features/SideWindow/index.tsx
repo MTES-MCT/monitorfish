@@ -16,7 +16,7 @@ import { Alert } from './Alert'
 import { BeaconMalfunctionBoard } from './BeaconMalfunctionBoard'
 import { Menu } from './Menu'
 import { MissionForm } from './MissionForm'
-import { useListenMissionEventUpdates } from './MissionForm/hooks/useListenMissionEventUpdates'
+import { useListenToMissionEventUpdates } from './MissionForm/hooks/useListenToMissionEventUpdates'
 import { MissionList } from './MissionList'
 import { MissionEventContext } from '../../context/MissionEventContext'
 import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
@@ -46,7 +46,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   )
   const editedReportingInSideWindow = useMainAppSelector(state => state.reporting.editedReportingInSideWindow)
   const selectedPath = useMainAppSelector(state => state.sideWindow.selectedPath)
-  const missionEvent = useListenMissionEventUpdates()
+  const missionEvent = useListenToMissionEventUpdates()
 
   const [isFirstRender, setIsFirstRender] = useState(true)
   const [isOverlayed, setIsOverlayed] = useState(false)

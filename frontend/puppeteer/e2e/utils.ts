@@ -28,7 +28,7 @@ export async function assertContains(page: Page, selector: string, text: string)
   // TODO Remove ts-ignore when TS version is 4.9.3:
   // @ts-ignore: https://github.com/puppeteer/puppeteer/issues/9369
   const nodes = await page.$$eval(selector, elements => elements.map(element => element.textContent))
-  const node = nodes.find(content => content.includes(text))
+  const node = nodes.find(content => content?.includes(text))
 
   assert.ok(node, `${selector} of value ${text} not found in array ${nodes}.`)
 }

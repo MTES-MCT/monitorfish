@@ -9,7 +9,7 @@ import { missionEventListener } from '../sse'
 const MISSION_UPDATES_URL = `${MONITORENV_API_URL}/api/v1/missions/sse`
 const MISSION_UPDATE_EVENT = `MISSION_UPDATE`
 
-export function useListenToMissionEventUpdates() {
+export function useListenToAllMissionEventsUpdates() {
   const isListeningToEvents = useMainAppSelector(state => state.mission.isListeningToEvents)
   const eventSourceRef = useRef<EventSource>()
   const [missionEvent, setMissionEvent] = useState<Mission.Mission>()
@@ -29,7 +29,6 @@ export function useListenToMissionEventUpdates() {
 
   useEffect(() => {
     if (!isListeningToEvents) {
-      // @ts-ignore: `MessageEvent` contains more properties than `Event` from `removeEventListener`
       eventSourceRef.current?.removeEventListener(MISSION_UPDATE_EVENT, listener.current)
 
       return
@@ -37,7 +36,6 @@ export function useListenToMissionEventUpdates() {
 
     const nextEventListener = missionEventListener(mission => setMissionEvent(mission))
     listener.current = nextEventListener
-    // @ts-ignore: `MessageEvent` contains more properties than `Event` from `removeEventListener`
     eventSourceRef.current?.addEventListener(MISSION_UPDATE_EVENT, nextEventListener)
   }, [isListeningToEvents])
 

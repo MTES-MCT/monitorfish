@@ -1,6 +1,6 @@
 import { ControlUnit } from '@mtes-mct/monitor-ui'
 
-import { monitorenvApi } from '../../../api/api'
+import { monitorenvApi, monitorfishApi } from '../../../api/api'
 import { Mission } from '../../../domain/entities/mission/types'
 import { FrontendApiError } from '../../../libs/FrontendApiError'
 
@@ -13,6 +13,13 @@ const UPDATE_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu mettre à jour la miss
 export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
   endpoints: builder => ({
     createMission: builder.mutation<Pick<Mission.Mission, 'id'>, Mission.MissionData>({
+      // TODO To remove when FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED feature flag is ON
+      // As all mission will be fetched when closing the mission form
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        await queryFulfilled
+
+        dispatch(monitorfishApi.util.invalidateTags([{ type: 'Missions' }]))
+      },
       query: mission => ({
         body: mission,
         method: 'POST',
@@ -22,6 +29,13 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
     }),
 
     deleteMission: builder.mutation<void, Mission.Mission['id']>({
+      // TODO To remove when FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED feature flag is ON
+      // As all mission will be fetched when closing the mission form
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        await queryFulfilled
+
+        dispatch(monitorfishApi.util.invalidateTags([{ type: 'Missions' }]))
+      },
       query: id => ({
         method: 'DELETE',
         url: `/v1/missions/${id}`
@@ -41,6 +55,9 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
     }),
 
     updateMission: builder.mutation<Mission.Mission, Mission.Mission>({
+      // TODO To remove when FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED feature flag is ON
+      // As all mission will be fetched when closing the mission form
+      invalidatesTags: [{ type: 'Missions' }],
       query: mission => ({
         body: mission,
         method: 'POST',

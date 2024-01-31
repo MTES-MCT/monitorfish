@@ -9,20 +9,22 @@ import {
   TextInput,
   useNewWindow
 } from '@mtes-mct/monitor-ui'
-import { useCallback, useMemo, useState } from 'react'
+import { useField } from 'formik'
+import { uniqBy } from 'lodash'
+import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import {
   findControlUnitByname,
   mapControlUnitsToUniqueSortedNamesAsOptions,
-  mapControlUnitToSortedResourcesAsOptions
+  mapToSortedResourcesAsOptions
 } from './utils'
 import { FIVE_MINUTES } from '../../../../../api/APIWorker'
 import { Mission } from '../../../../../domain/entities/mission/types'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { isNotArchived } from '../../../../../utils/isNotArchived'
 import { useGetEngagedControlUnitsQuery } from '../../apis'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
-import { isValidControlUnit } from '../../utils'
 
 import type { LegacyControlUnit } from '../../../../../domain/types/legacyControlUnit'
 import type { MissionMainFormValues } from '../../types'
@@ -45,7 +47,6 @@ export type ControlUnitSelectProps = {
     nextControlUnit: LegacyControlUnit.LegacyControlUnit | LegacyControlUnit.LegacyControlUnitDraft
   ) => Promisable<void>
   onDelete: (index: number) => Promisable<void>
-  value: LegacyControlUnit.LegacyControlUnit | LegacyControlUnit.LegacyControlUnitDraft
 }
 export function ControlUnitSelect({
   allAdministrationsAsOptions,
@@ -54,12 +55,14 @@ export function ControlUnitSelect({
   error,
   index,
   onChange,
-  onDelete,
-  value
+  onDelete
 }: ControlUnitSelectProps) {
   const { newWindowContainerRef } = useNewWindow()
   const selectedPath = useMainAppSelector(state => state.sideWindow.selectedPath)
   const { data: engagedControlUnitsData } = useGetEngagedControlUnitsQuery(undefined, { pollingInterval: FIVE_MINUTES })
+  const [{ value }, ,] = useField<LegacyControlUnit.LegacyControlUnit | LegacyControlUnit.LegacyControlUnitDraft>(
+    `controlUnits.${index}`
+  )
 
   const engagedControlUnits = useMemo(() => {
     if (!engagedControlUnitsData) {
@@ -69,9 +72,10 @@ export function ControlUnitSelect({
     return engagedControlUnitsData
   }, [engagedControlUnitsData])
 
-  const [controlledValue, setControlledValue] = useState(value)
-  const [selectedControlUnit, setSelectedControlUnit] = useState<LegacyControlUnit.LegacyControlUnit | undefined>(
-    isValidControlUnit(value) ? value : undefined
+  // Include archived control units (and administrations) if they're already selected
+  const activeAndSelectedControlUnits = useMemo(
+    () => allControlUnits.filter(controlUnit => isNotArchived(controlUnit) || value.name === controlUnit.name) || [],
+    [allControlUnits, value]
   )
 
   const engagedControlUnit = engagedControlUnits.find(engaged => engaged.controlUnit.id === value.id)
@@ -79,21 +83,36 @@ export function ControlUnitSelect({
   const isEdition = selectedPath.id
 
   const filteredNamesAsOptions = useMemo((): Option[] => {
-    if (!allControlUnits || !controlledValue.administration) {
+    if (!allControlUnits || !value.administration) {
       return allNamesAsOptions
     }
 
     const selectedAdministrationControlUnits = allControlUnits.filter(
-      ({ administration }) => administration === controlledValue.administration
+      ({ administration }) => administration === value.administration
     )
 
     return mapControlUnitsToUniqueSortedNamesAsOptions(selectedAdministrationControlUnits)
-  }, [allControlUnits, allNamesAsOptions, controlledValue])
+  }, [allControlUnits, allNamesAsOptions, value])
 
-  const selectedControlUnitResourcesAsOptions = useMemo(
+  // Include archived resources if they're already selected
+  const activeWithSelectedControlUnitResources = useMemo(() => {
+    const activeControlUnitResources =
+      activeAndSelectedControlUnits.find(unit => unit.administration === value.administration && unit.id === value.id)
+        ?.resources || []
+    // TODO Remove LegacyControlUnitResource to filter archived resources :
+    //  .filter(isNotArchived)
+
+    const resources = [...activeControlUnitResources, ...value.resources]
+
+    return uniqBy(resources, 'id')
+  }, [activeAndSelectedControlUnits, value])
+
+  const controlUnitResourcesAsOptions = useMemo(
     (): Option<LegacyControlUnit.LegacyControlUnitResource>[] =>
-      selectedControlUnit ? mapControlUnitToSortedResourcesAsOptions(selectedControlUnit) : [],
-    [selectedControlUnit]
+      activeWithSelectedControlUnitResources
+        ? mapToSortedResourcesAsOptions(activeWithSelectedControlUnitResources)
+        : [],
+    [activeWithSelectedControlUnitResources]
   )
 
   const handleAdministrationChange = useCallback(
@@ -102,9 +121,6 @@ export function ControlUnitSelect({
         ...INITIAL_MISSION_CONTROL_UNIT,
         administration: nextAdministration
       }
-
-      setControlledValue(nextControlUnit)
-      setSelectedControlUnit(undefined)
 
       onChange(index, nextControlUnit)
     },
@@ -122,48 +138,41 @@ export function ControlUnitSelect({
         nextSelectedControlUnit
           ? {
               ...nextSelectedControlUnit,
-              contact: controlledValue.contact,
-              resources: controlledValue.resources
+              contact: value.contact,
+              resources: value.resources
             }
           : {
               ...INITIAL_MISSION_CONTROL_UNIT,
-              administration: controlledValue.administration
+              administration: value.administration
             }
-
-      setControlledValue(nextControlUnit)
-      setSelectedControlUnit(nextSelectedControlUnit)
 
       onChange(index, nextControlUnit)
     },
-    [allControlUnits, controlledValue, index, isLoading, onChange]
+    [allControlUnits, value, index, isLoading, onChange]
   )
 
   const handleResourcesChange = useCallback(
     (nextResources: LegacyControlUnit.LegacyControlUnitResource[] | undefined) => {
       const nextControlUnit: LegacyControlUnit.LegacyControlUnitDraft = {
-        ...controlledValue,
+        ...value,
         resources: nextResources || []
       }
 
-      setControlledValue(nextControlUnit)
-
       onChange(index, nextControlUnit)
     },
-    [controlledValue, index, onChange]
+    [value, index, onChange]
   )
 
   const handleContactChange = useCallback(
     (nextValue: string | undefined) => {
       const nextControlUnit: LegacyControlUnit.LegacyControlUnitDraft = {
-        ...controlledValue,
+        ...value,
         contact: nextValue
       }
 
-      setControlledValue(nextControlUnit)
-
       onChange(index, nextControlUnit)
     },
-    [controlledValue, index, onChange]
+    [value, index, onChange]
   )
 
   const handleDelete = useCallback(() => {
@@ -204,7 +213,7 @@ export function ControlUnitSelect({
           onChange={handleAdministrationChange}
           options={allAdministrationsAsOptions}
           searchable
-          value={controlledValue.administration}
+          value={value.administration}
         />
         <Select
           baseContainer={newWindowContainerRef.current}
@@ -216,26 +225,26 @@ export function ControlUnitSelect({
           onChange={handleNameChange}
           options={filteredNamesAsOptions}
           searchable
-          value={controlledValue.name}
+          value={value.name}
         />
         {!isEdition && !!engagedControlUnit && <Message level={Level.WARNING}>{controlUnitWarningMessage}</Message>}
         <MultiSelect
           baseContainer={newWindowContainerRef.current}
-          disabled={isLoading || !controlledValue.administration || !controlledValue.name}
+          disabled={isLoading || !value.administration || !value.name}
           isUndefinedWhenDisabled
           label={`Moyen ${index + 1}`}
           name={`resources_${index}`}
           onChange={handleResourcesChange}
-          options={selectedControlUnitResourcesAsOptions}
+          options={controlUnitResourcesAsOptions}
           optionValueKey="name"
-          value={controlledValue.resources}
+          value={value.resources}
         />
         <TextInput
-          disabled={isLoading || !controlledValue.name}
+          disabled={isLoading || !value.name}
           label={`Contact de l’unité ${index + 1}`}
           name={`contact_${index}`}
           onChange={handleContactChange}
-          value={controlledValue.contact}
+          value={value.contact}
         />
       </UnitWrapper>
 

@@ -153,7 +153,7 @@ export function DrawLayerModal() {
               <StyledIconButton
                 accent={Accent.PRIMARY}
                 className={interactionType === InteractionType.CIRCLE ? '_active' : ''}
-                Icon={Icon.Info}
+                Icon={Icon.SelectPolygon}
                 onClick={handleSelectInteraction(InteractionType.CIRCLE)}
                 size={Size.NORMAL}
               />

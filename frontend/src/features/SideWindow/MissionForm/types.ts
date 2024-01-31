@@ -4,7 +4,7 @@ import type { MissionAction } from '../../../domain/types/missionAction'
 import type { PartialExcept } from '../../../types'
 
 export type MissionActionFormValues = PartialExcept<
-  Omit<MissionAction.MissionActionData, 'missionId'>,
+  MissionAction.MissionActionData,
   'actionType' | 'actionDatetimeUtc'
 > & {
   isValid: boolean

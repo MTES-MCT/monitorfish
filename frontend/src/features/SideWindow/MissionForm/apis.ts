@@ -1,6 +1,5 @@
-import { ControlUnit, logSoftError } from '@mtes-mct/monitor-ui'
+import { ControlUnit } from '@mtes-mct/monitor-ui'
 
-import { addNewMissionListener, missionEventListener, removeMissionListener } from './sse'
 import { monitorenvApi, monitorfishApi } from '../../../api/api'
 import { Mission } from '../../../domain/entities/mission/types'
 import { FrontendApiError } from '../../../libs/FrontendApiError'
@@ -14,6 +13,8 @@ const UPDATE_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu mettre à jour la miss
 export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
   endpoints: builder => ({
     createMission: builder.mutation<Pick<Mission.Mission, 'id'>, Mission.MissionData>({
+      // TODO To remove when FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED feature flag is ON
+      // As all mission will be fetched when closing the mission form
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         await queryFulfilled
 
@@ -28,6 +29,8 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
     }),
 
     deleteMission: builder.mutation<void, Mission.Mission['id']>({
+      // TODO To remove when FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED feature flag is ON
+      // As all mission will be fetched when closing the mission form
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         await queryFulfilled
 
@@ -47,32 +50,13 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
 
     getMission: builder.query<Mission.Mission, Mission.Mission['id']>({
       keepUnusedDataFor: 0,
-      async onCacheEntryAdded(id, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
-        try {
-          await cacheDataLoaded
-
-          const listener = missionEventListener(id, mission => updateCachedData(() => mission))
-          addNewMissionListener(id, listener)
-
-          // cacheEntryRemoved will resolve when the cache subscription is no longer active
-          await cacheEntryRemoved
-
-          // perform cleanup once the `cacheEntryRemoved` promise resolves
-          removeMissionListener(id)
-        } catch (e) {
-          logSoftError({
-            isSideWindowError: true,
-            message: "SSE: Can't connect or receive messages",
-            originalError: e
-          })
-        }
-      },
-      providesTags: [{ type: 'Missions' }],
       query: id => `/v1/missions/${id}`,
       transformErrorResponse: response => new FrontendApiError(GET_MISSION_ERROR_MESSAGE, response)
     }),
 
     updateMission: builder.mutation<Mission.Mission, Mission.Mission>({
+      // TODO To remove when FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED feature flag is ON
+      // As all mission will be fetched when closing the mission form
       invalidatesTags: [{ type: 'Missions' }],
       query: mission => ({
         body: mission,

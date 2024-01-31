@@ -1,13 +1,13 @@
 import { createSlice, current } from '@reduxjs/toolkit'
 import { isEqual } from 'lodash/fp'
 
-import { MissionDateRangeFilter, MissionFilterType } from '../../features/SideWindow/MissionList/types'
-import { Mission } from '../entities/mission/types'
-import { SeaFrontGroup } from '../entities/seaFront/constants'
+import { Mission } from '../../../domain/entities/mission/types'
+import { SeaFrontGroup } from '../../../domain/entities/seaFront/constants'
+import { MissionDateRangeFilter, MissionFilterType } from '../MissionList/types'
 
-import type { MissionActionFormValues, MissionMainFormValues } from '../../features/SideWindow/MissionForm/types'
-import type { FilterValues } from '../../features/SideWindow/MissionList/types'
-import type { GeoJSON } from '../types/GeoJSON'
+import type { MissionActionFormValues, MissionMainFormValues } from './types'
+import type { GeoJSON } from '../../../domain/types/GeoJSON'
+import type { FilterValues } from '../MissionList/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface MissionState {
@@ -37,6 +37,7 @@ export interface MissionState {
    */
   isClosing: boolean
   isDraftDirty: boolean
+  isListeningToEvents: boolean
   listFilterValues: FilterValues
   listSeaFront: SeaFrontGroup
   mustResetOtherControlsCheckboxes: boolean | undefined
@@ -48,6 +49,7 @@ const INITIAL_STATE: MissionState = {
   geometryComputedFromControls: undefined,
   isClosing: false,
   isDraftDirty: false,
+  isListeningToEvents: true,
   listFilterValues: {
     [MissionFilterType.DATE_RANGE]: MissionDateRangeFilter.WEEK,
     [MissionFilterType.STATUS]: [Mission.MissionStatus.IN_PROGRESS]
@@ -102,6 +104,10 @@ const missionSlice = createSlice({
      */
     setIsDraftDirty(state, action: PayloadAction<boolean>) {
       state.isDraftDirty = action.payload
+    },
+
+    setIsListeningToEvents(state, action: PayloadAction<boolean>) {
+      state.isListeningToEvents = action.payload
     },
 
     /**

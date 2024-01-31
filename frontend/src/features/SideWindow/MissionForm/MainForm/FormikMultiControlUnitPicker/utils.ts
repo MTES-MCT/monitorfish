@@ -23,10 +23,10 @@ export function mapControlUnitsToUniqueSortedNamesAsOptions(
   return uniqueSortedNamesAsOptions
 }
 
-export function mapControlUnitToSortedResourcesAsOptions(
-  controlUnit: LegacyControlUnit.LegacyControlUnit
+export function mapToSortedResourcesAsOptions(
+  resources: LegacyControlUnit.LegacyControlUnitResource[]
 ): Array<Option<LegacyControlUnit.LegacyControlUnitResource>> {
-  const sortedResources = sortBy(controlUnit.resources, ({ name }) => name)
+  const sortedResources = sortBy(resources, ({ name }) => name)
   const sortedResourcesAsOptions = sortedResources.map(sortedResource => ({
     label: sortedResource.name,
     value: sortedResource

@@ -16,7 +16,9 @@ import { Alert } from './Alert'
 import { BeaconMalfunctionBoard } from './BeaconMalfunctionBoard'
 import { Menu } from './Menu'
 import { MissionForm } from './MissionForm'
+import { useListenToAllMissionEventsUpdates } from './MissionForm/hooks/useListenToAllMissionEventsUpdates'
 import { MissionList } from './MissionList'
+import { MissionEventContext } from '../../context/MissionEventContext'
 import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
 import { getOperationalAlerts } from '../../domain/use_cases/alert/getOperationalAlerts'
@@ -35,6 +37,7 @@ export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
   isFromURL: boolean
 }
 export function SideWindow({ isFromURL }: SideWindowProps) {
+  const dispatch = useMainAppDispatch()
   // eslint-disable-next-line no-null/no-null
   const wrapperRef = useRef<HTMLDivElement | null>(null)
 
@@ -43,7 +46,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   )
   const editedReportingInSideWindow = useMainAppSelector(state => state.reporting.editedReportingInSideWindow)
   const selectedPath = useMainAppSelector(state => state.sideWindow.selectedPath)
-  const dispatch = useMainAppDispatch()
+  const missionEvent = useListenToAllMissionEventsUpdates()
 
   const [isFirstRender, setIsFirstRender] = useState(true)
   const [isOverlayed, setIsOverlayed] = useState(false)
@@ -141,7 +144,11 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
                   )}
                   {selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && <BeaconMalfunctionBoard />}
                   {selectedPath.menu === SideWindowMenuKey.MISSION_LIST && <MissionList />}
-                  {selectedPath.menu === SideWindowMenuKey.MISSION_FORM && <MissionForm />}
+                  {selectedPath.menu === SideWindowMenuKey.MISSION_FORM && (
+                    <MissionEventContext.Provider value={missionEvent}>
+                      <MissionForm />
+                    </MissionEventContext.Provider>
+                  )}
                 </Content>
               )}
             </FrontendErrorBoundary>

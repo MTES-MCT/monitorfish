@@ -524,9 +524,19 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter un contrôle en mer')
 
     const now = getUtcDateInMultipleFormats()
-    cy.intercept('POST', '/api/v1/mission', {
+    cy.intercept('POST', '/api/v1/missions', {
+      body: {
+        id: 1
+      },
       statusCode: 201
     }).as('createMission')
+
+    cy.intercept('POST', '/api/v1/missions/1', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('updateMission')
 
     cy.intercept('POST', '/bff/v1/mission_actions', {
       statusCode: 201
@@ -588,7 +598,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Request
 
     cy.waitForLastRequest(
-      '@createMission',
+      '@updateMission',
       {
         body: {
           controlUnits: [
@@ -683,7 +693,6 @@ context('Side Window > Mission Form > Sea Control', () => {
           isClosed: false,
           isGeometryComputedFromControls: true,
           isUnderJdp: true,
-          isValid: true,
           missionSource: 'MONITORFISH',
           missionTypes: ['SEA']
         }
@@ -736,17 +745,19 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.wait(500)
 
     cy.fill('Saisi par', 'Marlin')
+    cy.wait(500)
 
     // Remove the PAM control unit
     cy.get('span[role="button"][title="Clear"]').eq(0).click({ force: true })
+    cy.wait(500)
     cy.get('span[role="button"][title="Clear"]').eq(1).click({ force: true })
-    cy.fill('Unité 1', 'Cultures marines – DDTM 40')
+    cy.wait(500)
+    cy.fill('Unité 1', 'Cultures marines – DDTM 30')
+    cy.wait(500)
 
     cy.get('legend')
       .filter(':contains("Autre(s) contrôle(s) effectué(s) par l’unité sur le navire")')
       .should('have.length', 0)
-
-    cy.wait(500)
 
     // -------------------------------------------------------------------------
     // Request

@@ -9,7 +9,6 @@ export function getControlUnitsOptionsFromControlUnits(
   controlUnits: LegacyControlUnit.LegacyControlUnit[] | undefined = [],
   selectedAdministrations?: string[]
 ): {
-  activeControlUnits: LegacyControlUnit.LegacyControlUnit[]
   administrationsAsOptions: Option[]
   unitsAsOptions: Option[]
 } {
@@ -28,7 +27,6 @@ export function getControlUnitsOptionsFromControlUnits(
   const unitsAsOptions = getOptionsFromStrings(uniqueSortedUnits)
 
   return {
-    activeControlUnits,
     administrationsAsOptions,
     unitsAsOptions
   }

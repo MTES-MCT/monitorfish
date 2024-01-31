@@ -1,6 +1,5 @@
 import { type Undefine } from '@mtes-mct/monitor-ui'
-import { difference } from 'lodash'
-import { omit } from 'ramda'
+import { difference, omit } from 'lodash'
 
 import { MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
 import { Mission } from '../../../domain/entities/mission/types'
@@ -33,8 +32,12 @@ export function getMissionActionsDataFromMissionActionsFormValues(
       ...missionActionFormValues
     }
 
-    const maybeValidMissionActionData = omit(['isDraft', 'isVesselUnknown'], missionActionFormValuesWithAllProps)
-    const validMissionActionData = getValidMissionActionData(maybeValidMissionActionData)
+    const maybeValidMissionActionData = omit(missionActionFormValuesWithAllProps, [
+      'isDraft',
+      'isValid',
+      'isVesselUnknown'
+    ])
+    const validMissionActionData = getValidMissionActionData(maybeValidMissionActionData as MissionActionFormValues)
 
     // We get the action `id` to know if the action is an update
     const id = originalMissionActions[index]?.id
@@ -63,7 +66,7 @@ export function getMissionDataFromMissionFormValues(mainFormValues: MissionMainF
     throw new FormError(mainFormValues, 'startDateTimeUtc', FormErrorCode.MISSING_OR_UNDEFINED)
   }
 
-  const missionBaseValues = omit(['controlUnits'], mainFormValues)
+  const missionBaseValues = omit(mainFormValues, ['controlUnits', 'isValid'])
 
   const validControlUnits = mainFormValues.controlUnits.map(getValidMissionDataControlUnit)
   const missionTypes = mainFormValues.missionTypes || []

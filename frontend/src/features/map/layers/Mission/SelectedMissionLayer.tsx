@@ -3,6 +3,7 @@ import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
+import { NEW_MISSION_ID } from './constants'
 import { missionZoneStyle } from './MissionLayer/styles'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
@@ -66,6 +67,11 @@ export function UnmemoizedSelectedMissionLayer() {
   }, [getVectorLayer])
 
   useEffect(() => {
+    // If a mission is opened in the form, we can't display another selected mission
+    if (draft?.mainFormValues) {
+      return
+    }
+
     getVectorSource().clear(true)
 
     if (!selectedMission?.getId()?.toString()?.includes(MonitorFishLayer.MISSION_PIN_POINT)) {
@@ -81,17 +87,17 @@ export function UnmemoizedSelectedMissionLayer() {
 
     const missionFeature = getMissionFeatureZone(hoveredMissionWithActions)
     getVectorSource().addFeature(missionFeature)
-  }, [selectedMission, missions, getVectorSource])
+  }, [selectedMission, missions, draft?.mainFormValues, getVectorSource])
 
   useEffect(() => {
     getVectorSource().clear(true)
 
-    // When creating a new mission, dummy NEW_MISSION_ID is used
-    if (!draft?.mainFormValues || !missionId) {
+    if (!draft?.mainFormValues) {
       return
     }
 
-    const missionFeature = getMissionFeatureZone({ ...draft.mainFormValues, id: missionId })
+    // When creating a new mission, dummy NEW_MISSION_ID is used
+    const missionFeature = getMissionFeatureZone({ ...draft.mainFormValues, id: missionId || NEW_MISSION_ID })
     getVectorSource().addFeature(missionFeature)
   }, [getVectorSource, draft?.mainFormValues, missionId])
 

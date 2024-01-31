@@ -26,11 +26,10 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
 
   const controlUnitsQuery = useGetLegacyControlUnitsQuery(undefined)
 
-  const {
-    activeControlUnits: allActiveControlUnits,
-    administrationsAsOptions: allAdministrationsAsOptions,
-    unitsAsOptions: allNamesAsOptions
-  } = useMemo(() => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data), [controlUnitsQuery.data])
+  const { administrationsAsOptions: allAdministrationsAsOptions, unitsAsOptions: allNamesAsOptions } = useMemo(
+    () => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data),
+    [controlUnitsQuery.data]
+  )
 
   const errors = (allErrors[name] || []) as Array<{
     administration: string
@@ -78,18 +77,17 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
   return (
     <Wrapper>
       <>
-        {(values.controlUnits || []).map((value, index) => (
+        {(values.controlUnits || []).map((_, index) => (
           <ControlUnitSelect
             // eslint-disable-next-line react/no-array-index-key
             key={`unit${index}`}
             allAdministrationsAsOptions={allAdministrationsAsOptions}
-            allControlUnits={allActiveControlUnits}
+            allControlUnits={controlUnitsQuery.data || []}
             allNamesAsOptions={allNamesAsOptions}
             error={errors[index]}
             index={index}
             onChange={handleChange}
             onDelete={removeUnit}
-            value={value}
           />
         ))}
       </>

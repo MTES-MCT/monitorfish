@@ -134,7 +134,7 @@ module.exports = {
 
     // Jest
     {
-      files: ['__mocks__/**/*.[j|t]s', '**/*.test.ts', '**/*.test.tsx'],
+      files: ['__mocks__/**/*.[j|t]s', '**/*.test.ts', '**/*.test.tsx', 'puppeteer/**/*.ts'],
       plugins: ['jest'],
       env: {
         jest: true
@@ -144,7 +144,13 @@ module.exports = {
         'jest/no-focused-tests': 'error',
         'jest/no-identical-title': 'error',
         'jest/prefer-to-have-length': 'error',
-        'jest/valid-expect': 'error'
+        'jest/valid-expect': 'error',
+        'no-await-in-loop': 'off',
+        'no-console': 'off',
+        'no-restricted-syntax': 'off',
+        'no-underscore-dangle': 'off',
+        'import/no-default-export': 'off',
+        'import/no-extraneous-dependencies': 'off',
       }
     },
 

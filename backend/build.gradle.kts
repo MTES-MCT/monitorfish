@@ -3,7 +3,7 @@ plugins {
     `maven-publish`
     id("org.springframework.boot") version "3.1.7"
     id("org.jetbrains.kotlin.plugin.spring") version "1.9.10"
-    kotlin("jvm") version "1.9.10"
+    kotlin("jvm") version "1.9.22"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.9.10"
     kotlin("plugin.noarg") version "1.9.10"
     kotlin("plugin.jpa") version "1.9.22"

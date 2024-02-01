@@ -56,7 +56,7 @@ dependencies {
     api("jakarta.validation:jakarta.validation-api:3.0.2")
     api("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.3")
     api("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
-    api("org.flywaydb:flyway-core:10.5.0")
+    api("org.flywaydb:flyway-core:10.7.1")
     api("org.flywaydb:flyway-database-postgresql:10.5.0")
     api("org.springdoc:springdoc-openapi-ui:1.7.0")
     api("org.jetbrains.kotlin:kotlin-reflect:1.9.10")

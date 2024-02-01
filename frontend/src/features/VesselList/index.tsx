@@ -177,14 +177,13 @@ export function VesselList({ namespace }) {
       }
       setTimeout(() => {
         dispatch(getFilteredVessels(checkedVessels, filters)).then(_filteredVessels => {
-          const nextVessels = _filteredVessels
-            .map(vessel => ({
-              ...vessel,
-              vesselProperties: {
-                ...vessel.vesselProperties,
-                flagState: vessel.vesselProperties.flagState.toLowerCase()
-              }
-              }))
+          const nextVessels = _filteredVessels.map(vessel => ({
+            ...vessel,
+            vesselProperties: {
+              ...vessel.vesselProperties,
+              flagState: vessel.vesselProperties.flagState.toLowerCase()
+            }
+          }))
           setFilteredVessels(nextVessels)
           setVesselsCountShowed(_filteredVessels.length)
         })

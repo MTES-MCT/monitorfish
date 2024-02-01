@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
 import java.time.ZonedDateTime
 
@@ -10,7 +11,7 @@ data class AddMissionActionDataInput(
     var internalReferenceNumber: String? = null,
     var externalReferenceNumber: String? = null,
     var ircs: String? = null,
-    var flagState: String? = null,
+    var flagState: CountryCode,
     var districtCode: String? = null,
     var faoAreas: List<String> = listOf(),
     var flightGoals: List<FlightGoal> = listOf(),
@@ -42,7 +43,7 @@ data class AddMissionActionDataInput(
     var seizureAndDiversionComments: String? = null,
     var otherComments: String? = null,
     var gearOnboard: List<GearControl> = listOf(),
-    var userTrigram: String? = null,
+    var userTrigram: String,
     var speciesOnboard: List<SpeciesControl> = listOf(),
     var vesselTargeted: ControlCheck? = null,
     var hasSomeGearsSeized: Boolean = false,

@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
@@ -49,6 +50,8 @@ class PublicMissionActionsControllerITests {
                     hasSomeGearsSeized = false,
                     hasSomeSpeciesSeized = false,
                     isFromPoseidon = true,
+                    flagState = CountryCode.FR,
+                    userTrigram = "LTH",
                 ),
             ),
         )

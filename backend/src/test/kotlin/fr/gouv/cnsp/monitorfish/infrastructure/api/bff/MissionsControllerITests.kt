@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
@@ -70,6 +71,8 @@ class MissionsControllerITests {
                             hasSomeGearsSeized = false,
                             hasSomeSpeciesSeized = false,
                             isFromPoseidon = false,
+                            flagState = CountryCode.FR,
+                            userTrigram = "LTH",
                         ),
                     ),
                 ),

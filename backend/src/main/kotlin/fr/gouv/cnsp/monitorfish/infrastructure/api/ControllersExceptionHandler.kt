@@ -1,10 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
-import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateControlObjectiveException
-import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateFleetSegmentException
-import fr.gouv.cnsp.monitorfish.domain.exceptions.NAFMessageParsingException
-import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
+import fr.gouv.cnsp.monitorfish.domain.exceptions.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ApiError
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissingParameterApiError
 import io.sentry.Sentry

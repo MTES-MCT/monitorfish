@@ -28,13 +28,12 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.time.ZonedDateTime
 
 @Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class)
 @WebMvcTest(value = [(MissionActionsController::class)])
-class PublicMissionActionsControllerITests {
+class MissionActionsControllerITests {
 
     @Autowired
     private lateinit var api: MockMvc
@@ -85,6 +84,8 @@ class PublicMissionActionsControllerITests {
                         hasSomeGearsSeized = false,
                         hasSomeSpeciesSeized = false,
                         isFromPoseidon = true,
+                        flagState = CountryCode.FR,
+                        userTrigram = "LTH",
                     ),
                 ),
             ),
@@ -119,6 +120,8 @@ class PublicMissionActionsControllerITests {
                     hasSomeGearsSeized = false,
                     hasSomeSpeciesSeized = false,
                     isFromPoseidon = true,
+                    flagState = CountryCode.FR,
+                    userTrigram = "LTH",
                 ),
             ),
         )
@@ -175,6 +178,8 @@ class PublicMissionActionsControllerITests {
                             isComplianceWithWaterRegulationsControl = true,
                             isSafetyEquipmentAndStandardsComplianceControl = true,
                             isSeafarersControl = true,
+                            flagState = CountryCode.FR,
+                            userTrigram = "LTH",
                         ),
                     ),
                 )
@@ -208,7 +213,7 @@ class PublicMissionActionsControllerITests {
     fun `Should update a mission action`() {
         // Given
         val dateTime = ZonedDateTime.parse("2022-05-05T03:04:05.000Z")
-        val newMission = TestUtils.getDummyMissionAction(dateTime)
+        val newMission = TestUtils.getDummyMissionAction(dateTime).copy(flagState = CountryCode.UNDEFINED)
         given(updateMissionAction.execute(any(), any())).willReturn(newMission)
 
         val gearControl = GearControl()
@@ -247,6 +252,8 @@ class PublicMissionActionsControllerITests {
                             hasSomeGearsSeized = false,
                             hasSomeSpeciesSeized = false,
                             isFromPoseidon = true,
+                            flagState = CountryCode.UNDEFINED,
+                            userTrigram = "LTH",
                         ),
                     ),
                 )
@@ -256,6 +263,7 @@ class PublicMissionActionsControllerITests {
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.missionId", equalTo(2)))
             .andExpect(jsonPath("$.vesselId", equalTo(2)))
+            .andExpect(jsonPath("$.flagState", equalTo("UNDEFINED")))
             .andExpect(jsonPath("$.isFromPoseidon", equalTo(true)))
             .andExpect(jsonPath("$.actionDatetimeUtc", equalTo("2022-05-05T03:04:05Z")))
             .andExpect(jsonPath("$.faoAreas[0]", equalTo("25.6.9")))
@@ -274,6 +282,36 @@ class PublicMissionActionsControllerITests {
         runBlocking {
             Mockito.verify(updateMissionAction).execute(eq(123), any())
         }
+    }
+
+    @Test
+    fun `Should not update a mission action with a missing flagState`() {
+        // When
+        api.perform(
+            put("/bff/v1/mission_actions/123")
+                .content(
+                    """
+                    {
+                        "id": 3540,
+                        "vesselId": 1778775,
+                        "vesselName": "TEST",
+                        "internalReferenceNumber": "FRA000936666",
+                        "externalReferenceNumber": "SEGESGES",
+                        "ircs": "FEFGEGSGE",
+                        "flagState": null",
+                        "districtCode": "AD",
+                        "faoAreas": [],
+                        "flightGoals": [],
+                        "missionId": 10556,
+                        "actionType": "LAND_CONTROL",
+                        "actionDatetimeUtc": "2024-02-01T14:29:00Z",
+                    }
+                    """.trimIndent(),
+                )
+                .contentType(MediaType.APPLICATION_JSON),
+        )
+            // Then
+            .andExpect(status().isBadRequest)
     }
 
     @Test
@@ -302,6 +340,8 @@ class PublicMissionActionsControllerITests {
                         hasSomeGearsSeized = false,
                         hasSomeSpeciesSeized = false,
                         isFromPoseidon = true,
+                        flagState = CountryCode.FR,
+                        userTrigram = "LTH",
                     ),
                     activityCode = ActivityCode.FIS,
                     vesselNationalIdentifier = "AYFR000654",

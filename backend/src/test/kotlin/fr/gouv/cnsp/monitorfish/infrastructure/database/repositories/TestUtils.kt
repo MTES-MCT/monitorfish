@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import java.time.ZonedDateTime
@@ -14,7 +15,7 @@ object TestUtils {
             internalReferenceNumber = "FR0564654",
             externalReferenceNumber = "FDEY874",
             ircs = "FDZFEE",
-            flagState = "FR",
+            flagState = CountryCode.FR,
             actionType = MissionActionType.SEA_CONTROL,
             flightGoals = listOf(
                 FlightGoal.CLOSED_AREA,

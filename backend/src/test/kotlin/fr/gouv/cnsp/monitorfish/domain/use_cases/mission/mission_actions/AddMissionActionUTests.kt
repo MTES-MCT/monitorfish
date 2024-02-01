@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.given
@@ -46,6 +47,7 @@ class AddMissionActionUTests {
             hasSomeSpeciesSeized = false,
             completedBy = "XYZ",
             isFromPoseidon = false,
+            flagState = CountryCode.FR,
             completion = Completion.TO_COMPLETE,
         )
 
@@ -80,6 +82,7 @@ class AddMissionActionUTests {
             hasSomeSpeciesSeized = false,
             completedBy = "XYZ",
             isFromPoseidon = false,
+            flagState = CountryCode.FR,
             completion = Completion.TO_COMPLETE,
         )
         given(missionActionsRepository.save(anyOrNull())).willReturn(action)

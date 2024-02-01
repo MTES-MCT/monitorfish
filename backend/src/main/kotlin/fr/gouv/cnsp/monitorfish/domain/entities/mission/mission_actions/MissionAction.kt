@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
 import java.time.ZonedDateTime
 
@@ -11,7 +12,7 @@ data class MissionAction(
     val internalReferenceNumber: String? = null,
     val externalReferenceNumber: String? = null,
     val ircs: String? = null,
-    val flagState: String? = null,
+    val flagState: CountryCode,
     val districtCode: String? = null,
     val faoAreas: List<String> = listOf(),
     val actionType: MissionActionType,
@@ -35,7 +36,7 @@ data class MissionAction(
     val unitWithoutOmegaGauge: Boolean? = null,
     val controlQualityComments: String? = null,
     val feedbackSheetRequired: Boolean? = null,
-    val userTrigram: String? = null,
+    val userTrigram: String,
     val segments: List<FleetSegment> = listOf(),
     val facade: String? = null,
     val longitude: Double? = null,
@@ -92,17 +93,11 @@ data class MissionAction(
         require(this.latitude != null) {
             "A control must specify a position: the `latitude` must be given."
         }
-        require(this.userTrigram != null) {
-            "A control must specify a user trigram: the `userTrigram` must be given."
-        }
     }
 
     private fun checkControlPort() {
         require(this.portLocode != null) {
             "A land control must specify a port: the `portLocode` must be given."
-        }
-        require(this.userTrigram != null) {
-            "A control must specify a user trigram: the `userTrigram` must be given."
         }
     }
 }

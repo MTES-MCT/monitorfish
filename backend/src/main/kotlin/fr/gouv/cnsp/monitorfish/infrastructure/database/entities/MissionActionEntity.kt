@@ -1,6 +1,8 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.Facade
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
@@ -31,7 +33,8 @@ class MissionActionEntity(
     @Column(name = "ircs")
     val ircs: String? = null,
     @Column(name = "flag_state")
-    val flagState: String? = null,
+    @Enumerated(EnumType.STRING)
+    val flagState: CountryCode,
     @Column(name = "district_code")
     val districtCode: String? = null,
     @Column(name = "flight_goals", columnDefinition = "varchar(100)[]")
@@ -93,7 +96,7 @@ class MissionActionEntity(
     @Column(name = "is_from_poseidon")
     val isFromPoseidon: Boolean,
     @Column(name = "user_trigram")
-    val userTrigram: String? = null,
+    val userTrigram: String,
     @Type(JsonBinaryType::class)
     @Column(name = "segments", columnDefinition = "jsonb")
     val segments: String? = null,

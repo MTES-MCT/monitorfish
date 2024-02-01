@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDummyMissionAction
 import org.assertj.core.api.Assertions.assertThat
@@ -216,7 +217,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
             facade = "Sud Océan Indien",
             faoAreas = listOf(),
             feedbackSheetRequired = false,
-            flagState = "FR",
+            flagState = CountryCode.FR,
             flightGoals = listOf(),
             gearInfractions = listOf(),
             gearOnboard = listOf(),

@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
@@ -12,7 +13,7 @@ data class MissionActionDataOutput(
     val internalReferenceNumber: String? = null,
     val externalReferenceNumber: String? = null,
     val ircs: String? = null,
-    val flagState: String? = null,
+    val flagState: CountryCode,
     val districtCode: String? = null,
     val faoAreas: List<String> = listOf(),
     val flightGoals: List<FlightGoal> = listOf(),
@@ -48,7 +49,7 @@ data class MissionActionDataOutput(
     val gearOnboard: List<GearControl> = listOf(),
     val speciesOnboard: List<SpeciesControl> = listOf(),
     val controlUnits: List<ControlUnit> = listOf(),
-    val userTrigram: String? = null,
+    val userTrigram: String,
     val vesselTargeted: ControlCheck? = null,
     val hasSomeGearsSeized: Boolean,
     val hasSomeSpeciesSeized: Boolean,

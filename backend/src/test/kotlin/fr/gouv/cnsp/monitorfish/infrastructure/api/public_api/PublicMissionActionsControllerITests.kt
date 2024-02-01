@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
@@ -50,6 +51,8 @@ class PublicMissionActionsControllerITests {
                     hasSomeGearsSeized = false,
                     hasSomeSpeciesSeized = false,
                     isFromPoseidon = true,
+                    flagState = CountryCode.FR,
+                    userTrigram = "LTH",
                     completion = Completion.TO_COMPLETE,
                 ),
             ),

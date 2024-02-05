@@ -1,6 +1,8 @@
 DELETE FROM infractions;
 DELETE FROM mission_actions;
 
+ALTER SEQUENCE mission_actions_id_seq RESTART WITH 1;
+
 INSERT INTO infractions
     (natinf_code,                                       regulation, infraction_category,                                                                                                                                                                    infraction)
 VALUES

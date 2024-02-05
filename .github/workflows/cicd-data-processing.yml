@@ -22,7 +22,7 @@ jobs:
 
       - name: Get last release version
         id: lastrelease
-        uses: pozetroninc/github-action-get-latest-release@master
+        uses: rez0n/actions-github-release@main
         with:
           repository: mtes-mct/monitorfish
 

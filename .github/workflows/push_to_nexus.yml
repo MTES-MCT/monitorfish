@@ -7,9 +7,9 @@ name: Push docker image to DAM-SI
 on:
   workflow_dispatch:
     version:
-      description: 'Version number'
+      description: "Version number"
       required: true
-      default: 'v1.0.0'
+      default: "v1.0.0"
 
 permissions:
   contents: read
@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Get last release version
         id: lastrelease
-        uses: pozetroninc/github-action-get-latest-release@master
+        uses: rez0n/actions-github-release@main
         with:
           repository: mtes-mct/monitorfish
       - id: version
@@ -57,4 +57,3 @@ jobs:
           echo "${{ secrets.NEXUS_PASSWORD }}" | docker login https://depot-sml.din.developpement-durable.gouv.fr:6010 -u monitorfish --password-stdin
           docker tag ghcr.io/mtes-mct/monitorfish/monitorfish-app:$VERSION monitorfish/monitorfish-app:$VERSION
           docker push depot-sml.din.developpement-durable.gouv.fr:6010/monitorfish/monitorfish-app:$VERSION
-

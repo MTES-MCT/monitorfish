@@ -84,8 +84,13 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
   return (
     yearControls && (
       <Row>
-        <YearListTitle isEmpty={isEmpty} isOpen={isOpen}>
-          <YearListTitleText isEmpty={isEmpty} onClick={() => !isEmpty && setIsOpen(!isOpen)} title={year.toString()}>
+        <YearListTitle
+          isEmpty={isEmpty}
+          isOpen={isOpen}
+          onClick={() => !isEmpty && setIsOpen(!isOpen)}
+          title={year.toString()}
+        >
+          <YearListTitleText isEmpty={isEmpty}>
             {!isEmpty && <YearListChevronIcon $isOpen={isOpen} />}
             <Year>{year}</Year>
             <YearResume data-cy="vessel-controls-year">

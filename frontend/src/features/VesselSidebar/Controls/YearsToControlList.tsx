@@ -24,7 +24,7 @@ export function YearsToControlList({ controlsFromDate, yearsToControls }: YearsT
     <Zone>
       <Header>Historique des contrôles</Header>
       {yearsToControls && Object.keys(yearsToControls) && Object.keys(yearsToControls).length ? (
-        <List>
+        <List data-cy="vessel-control-years">
           {sortedYears.map(year => (
             <YearControls key={year} year={year} yearControls={yearsToControls[year] || []} />
           ))}

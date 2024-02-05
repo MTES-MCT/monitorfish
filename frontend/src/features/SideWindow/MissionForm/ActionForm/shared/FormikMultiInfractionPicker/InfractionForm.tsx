@@ -34,9 +34,7 @@ export function InfractionForm({
   onSubmit
 }: InfractionFormProps) {
   const { newWindowContainerRef } = useNewWindow()
-  const [infractionGroup, setInfractionCategory] = useState<string>(
-    initialValues.group || InfractionCategory.GEAR_INFRACTIONS
-  )
+  const [infractionGroup, setInfractionCategory] = useState<string | undefined>(initialValues.group || undefined)
 
   const infractionCategoryOptions = Object.keys(InfractionCategory).map(category => {
     const categoryValue = InfractionCategory[category]

@@ -17,6 +17,7 @@ export interface BackendApiBooleanResponse {
 }
 
 export type RTKBaseQueryArgs =
+  | Z
   // Query
   | string
   // Mutation

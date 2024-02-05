@@ -1,5 +1,6 @@
 import { uniq } from 'lodash'
 
+import { mapControlUnitsToUniqueSortedNamesAsOptions } from '../../../features/SideWindow/MissionForm/MainForm/FormikMultiControlUnitPicker/utils'
 import { getOptionsFromStrings } from '../../../utils/getOptionsFromStrings'
 
 import type { LegacyControlUnit } from '../../types/legacyControlUnit'
@@ -9,8 +10,9 @@ export function getControlUnitsOptionsFromControlUnits(
   controlUnits: LegacyControlUnit.LegacyControlUnit[] | undefined = [],
   selectedAdministrations?: string[]
 ): {
+  activeAndSortedUnitsAsOptions: Option[]
+  activeControlUnits: LegacyControlUnit.LegacyControlUnit[]
   administrationsAsOptions: Option[]
-  unitsAsOptions: Option[]
 } {
   const activeControlUnits = controlUnits.filter(({ isArchived }) => !isArchived)
 
@@ -21,21 +23,11 @@ export function getControlUnitsOptionsFromControlUnits(
 
   const units = activeControlUnits
     .filter(({ administration }) => filterByAdministration(selectedAdministrations, administration))
-    .map(({ name }) => name)
-  const uniqueUnits = uniq(units)
-  const uniqueSortedUnits = uniqueUnits.sort()
-  const unitsAsOptions = getOptionsFromStrings(uniqueSortedUnits)
+  const unitsAsOptions = mapControlUnitsToUniqueSortedNamesAsOptions(units)
 
   return {
-    administrationsAsOptions,
-    unitsAsOptions
+    activeAndSortedUnitsAsOptions: unitsAsOptions,
+    activeControlUnits,
+    administrationsAsOptions
   }
-}
-
-function filterByAdministration(selectedAdministrations: string[] | undefined, administration: string) {
-  if (!selectedAdministrations) {
-    return true
-  }
-
-  return selectedAdministrations.includes(administration)
 }

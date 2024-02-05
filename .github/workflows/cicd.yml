@@ -185,7 +185,7 @@ jobs:
 
   e2e_test:
     name: Run E2E tests
-    needs: [version, unit_test_backend, unit_test_frontend, build]
+    needs: [version, build]
     runs-on: ubuntu-22.04
     strategy:
       # when one test fails, DO NOT cancel the other

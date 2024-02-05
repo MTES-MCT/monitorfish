@@ -100,7 +100,7 @@ export function Control({ control, isLastItem }: ControlProps) {
         )}
         {control.gearInfractions.map((infraction, index) => (
           <Infraction
-            key={`${infraction.infractionType}${infraction.natinf}`}
+            key={`${infraction.infractionType}${infraction.natinf}${infraction.comments}`}
             index={index + 1}
             infraction={infraction}
             infractionDomain={MissionAction.InfractionDomain.GEAR}
@@ -108,7 +108,7 @@ export function Control({ control, isLastItem }: ControlProps) {
         ))}
         {control.speciesInfractions.map((infraction, index) => (
           <Infraction
-            key={`${infraction.infractionType}${infraction.natinf}`}
+            key={`${infraction.infractionType}${infraction.natinf}${infraction.comments}`}
             index={control.gearInfractions.length + index + 1}
             infraction={infraction}
             infractionDomain={MissionAction.InfractionDomain.SPECIES}
@@ -116,7 +116,7 @@ export function Control({ control, isLastItem }: ControlProps) {
         ))}
         {control.logbookInfractions.map((infraction, index) => (
           <Infraction
-            key={`${infraction.infractionType}${infraction.natinf}`}
+            key={`${infraction.infractionType}${infraction.natinf}${infraction.comments}`}
             index={gearAndSpeciesInfractionsLength + index + 1}
             infraction={infraction}
             infractionDomain={MissionAction.InfractionDomain.LOGBOOK}
@@ -124,14 +124,14 @@ export function Control({ control, isLastItem }: ControlProps) {
         ))}
         {control.otherInfractions.map((infraction, index) => (
           <Infraction
-            key={`${infraction.infractionType}${infraction.natinf}`}
+            key={`${infraction.infractionType}${infraction.natinf}${infraction.comments}`}
             index={gearSpeciesAndLogbookInfractionsLength + index + 1}
             infraction={infraction}
             infractionDomain={MissionAction.InfractionDomain.OTHER}
           />
         ))}
         {control.gearOnboard.map(gear => (
-          <GearOnboard gearOnboard={gear} />
+          <GearOnboard key={JSON.stringify(gear)} gearOnboard={gear} />
         ))}
         {control.otherComments && (
           <OtherComments>

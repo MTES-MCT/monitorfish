@@ -5,7 +5,7 @@ import ChevronIconSVG from '../../icons/Chevron_simple_gris.svg?react'
 
 import type { HTMLProps } from 'react'
 
-export const YearListTitle = styled.span<{
+export const YearListTitle = styled.div<{
   isEmpty: boolean
   isOpen: boolean
 }>`

@@ -32,9 +32,9 @@ import type { Option } from '@mtes-mct/monitor-ui'
 import type { Promisable } from 'type-fest'
 
 export type ControlUnitSelectProps = {
+  activeAndSortedUnitsAsOptions: Option[]
   allAdministrationsAsOptions: Option[]
   allControlUnits: LegacyControlUnit.LegacyControlUnit[]
-  allNamesAsOptions: Option[]
   error:
     | {
         administration: string
@@ -49,9 +49,9 @@ export type ControlUnitSelectProps = {
   onDelete: (index: number) => Promisable<void>
 }
 export function ControlUnitSelect({
+  activeAndSortedUnitsAsOptions,
   allAdministrationsAsOptions,
   allControlUnits,
-  allNamesAsOptions,
   error,
   index,
   onChange,
@@ -200,8 +200,7 @@ export function ControlUnitSelect({
   }, [engagedControlUnit])
 
   return (
-    // eslint-disable-next-line react/no-array-index-key
-    <Wrapper key={`unit${index}`}>
+    <Wrapper>
       <UnitWrapper>
         <Select
           baseContainer={newWindowContainerRef.current}

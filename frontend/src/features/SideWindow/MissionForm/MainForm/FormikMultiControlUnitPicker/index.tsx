@@ -79,8 +79,8 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
       <>
         {(values.controlUnits || []).map((_, index) => (
           <ControlUnitSelect
-            // eslint-disable-next-line react/no-array-index-key
-            key={`unit${index}`}
+            key={JSON.stringify(value)}
+            activeAndSortedUnitsAsOptions={activeAndSortedUnitsAsOptions}
             allAdministrationsAsOptions={allAdministrationsAsOptions}
             allControlUnits={controlUnitsQuery.data || []}
             allNamesAsOptions={allNamesAsOptions}

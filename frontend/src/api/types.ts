@@ -1,4 +1,4 @@
-import type { AnyObject } from '@mtes-mct/monitor-ui/types'
+import type { AnyObject } from '@mtes-mct/monitor-ui'
 
 // Don't forget to mirror any update here in the backend enum.
 export enum ApiErrorCode {

@@ -32,7 +32,6 @@ import type { Option } from '@mtes-mct/monitor-ui'
 import type { Promisable } from 'type-fest'
 
 export type ControlUnitSelectProps = {
-  activeAndSortedUnitsAsOptions: Option[]
   allAdministrationsAsOptions: Option[]
   allControlUnits: LegacyControlUnit.LegacyControlUnit[]
   error:
@@ -49,7 +48,6 @@ export type ControlUnitSelectProps = {
   onDelete: (index: number) => Promisable<void>
 }
 export function ControlUnitSelect({
-  activeAndSortedUnitsAsOptions,
   allAdministrationsAsOptions,
   allControlUnits,
   error,
@@ -83,16 +81,16 @@ export function ControlUnitSelect({
   const isEdition = selectedPath.id
 
   const filteredNamesAsOptions = useMemo((): Option[] => {
-    if (!allControlUnits || !value.administration) {
-      return allNamesAsOptions
+    if (!value.administration) {
+      return mapControlUnitsToUniqueSortedNamesAsOptions(activeAndSelectedControlUnits)
     }
 
-    const selectedAdministrationControlUnits = allControlUnits.filter(
+    const selectedAdministrationControlUnits = activeAndSelectedControlUnits.filter(
       ({ administration }) => administration === value.administration
     )
 
     return mapControlUnitsToUniqueSortedNamesAsOptions(selectedAdministrationControlUnits)
-  }, [allControlUnits, allNamesAsOptions, value])
+  }, [activeAndSelectedControlUnits, value])
 
   // Include archived resources if they're already selected
   const activeWithSelectedControlUnitResources = useMemo(() => {

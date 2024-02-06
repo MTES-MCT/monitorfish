@@ -4,7 +4,6 @@ import {
   FormikMultiSelect,
   FormikSelect,
   Icon,
-  type Option,
   Size,
   TextInput,
   useKey,
@@ -26,7 +25,6 @@ import { getControlUnitsOptionsFromControlUnits } from '../../../domain/entities
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { FormikFilterTagBar } from '../../../ui/formiks/FormikFilterTagBar'
-import { mapControlUnitsToUniqueSortedNamesAsOptions } from '../MissionForm/MainForm/FormikMultiControlUnitPicker/utils'
 
 import type { FilterValues } from './types'
 import type { Promisable } from 'type-fest'
@@ -46,25 +44,13 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
   const dispatch = useMainAppDispatch()
 
   const previousAdministrationFiterValue = usePrevious(listFilterValues.ADMINISTRATION)
-  const { activeAndSortedUnitsAsOptions, activeControlUnits, administrationsAsOptions } = useMemo(
-    () => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data),
-    [controlUnitsQuery.data]
+  const { activeAndFilteredUnitsAsOptions, administrationsAsOptions } = useMemo(
+    () => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data, listFilterValues.ADMINISTRATION),
+    [controlUnitsQuery.data, listFilterValues.ADMINISTRATION]
   )
 
-  const filteredControlUnitNamesAsOptions = useMemo((): Option[] => {
-    if (!listFilterValues.ADMINISTRATION) {
-      return activeAndSortedUnitsAsOptions
-    }
-
-    const selectedAdministrationControlUnits = activeControlUnits.filter(({ administration }) =>
-      listFilterValues.ADMINISTRATION.includes(administration)
-    )
-
-    return mapControlUnitsToUniqueSortedNamesAsOptions(selectedAdministrationControlUnits)
-  }, [activeControlUnits, activeAndSortedUnitsAsOptions, listFilterValues.ADMINISTRATION])
-
   const formikKey = useKey([listFilterValues])
-  const unitMultiSelectKey = useKey([activeAndSortedUnitsAsOptions])
+  const unitMultiSelectKey = useKey([activeAndFilteredUnitsAsOptions])
 
   const handleFilterFormChange = useCallback(
     (nextFilterValues: FilterValues) => {
@@ -171,12 +157,12 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           <FormikMultiSelect
             key={unitMultiSelectKey}
             baseContainer={newWindowContainerRef.current}
-            disabled={filteredControlUnitNamesAsOptions.length === 0}
+            disabled={activeAndFilteredUnitsAsOptions.length === 0}
             isLabelHidden
             isLight
             label="Unité"
             name={MissionFilterType.UNIT}
-            options={filteredControlUnitNamesAsOptions}
+            options={activeAndFilteredUnitsAsOptions}
             placeholder="Unité"
             renderValue={(_, items) => (items.length > 0 ? <OptionValue>Unité ({items.length}) </OptionValue> : <></>)}
             searchable

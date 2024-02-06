@@ -10,9 +10,9 @@ export function getControlUnitsOptionsFromControlUnits(
   controlUnits: LegacyControlUnit.LegacyControlUnit[] | undefined = [],
   selectedAdministrations?: string[]
 ): {
-  activeAndSortedUnitsAsOptions: Option[]
-  activeControlUnits: LegacyControlUnit.LegacyControlUnit[]
+  activeAndFilteredUnitsAsOptions: Option[]
   administrationsAsOptions: Option[]
+  allActiveControlUnits: LegacyControlUnit.LegacyControlUnit[]
 } {
   const activeControlUnits = controlUnits.filter(({ isArchived }) => !isArchived)
 
@@ -21,13 +21,22 @@ export function getControlUnitsOptionsFromControlUnits(
   const uniqueSortedAdministrations = uniqueAdministrations.sort()
   const administrationsAsOptions = getOptionsFromStrings(uniqueSortedAdministrations)
 
-  const units = activeControlUnits
-    .filter(({ administration }) => filterByAdministration(selectedAdministrations, administration))
+  const units = activeControlUnits.filter(({ administration }) =>
+    filterByAdministration(selectedAdministrations, administration)
+  )
   const unitsAsOptions = mapControlUnitsToUniqueSortedNamesAsOptions(units)
 
   return {
-    activeAndSortedUnitsAsOptions: unitsAsOptions,
-    activeControlUnits,
-    administrationsAsOptions
+    activeAndFilteredUnitsAsOptions: unitsAsOptions,
+    administrationsAsOptions,
+    allActiveControlUnits: activeControlUnits
   }
+}
+
+function filterByAdministration(selectedAdministrations: string[] | undefined, administration: string) {
+  if (!selectedAdministrations) {
+    return true
+  }
+
+  return selectedAdministrations.includes(administration)
 }

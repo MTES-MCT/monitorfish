@@ -11,7 +11,7 @@ describe('controlUnits/utils', () => {
     // When
     const options = getControlUnitsOptionsFromControlUnits(dummyControlUnits)
 
-    expect(options.activeControlUnits).toHaveLength(31)
-    expect(options.activeAndSortedUnitsAsOptions).toHaveLength(31)
+    expect(options.allActiveControlUnits).toHaveLength(31)
+    expect(options.activeAndFilteredUnitsAsOptions).toHaveLength(31)
   })
 })

@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import { ControlUnitSelect } from './ControlUnitSelect'
 import { useGetLegacyControlUnitsQuery } from '../../../../../api/legacyControlUnit'
 import { getControlUnitsOptionsFromControlUnits } from '../../../../../domain/entities/controlUnits/utils'
+import { useForceUpdate } from '../../../../../hooks/useForceUpdate'
 import { INITIAL_MISSION_CONTROL_UNIT, PAMControlUnitIds } from '../../constants'
 import { useGetMainFormFormikUsecases } from '../../hooks/useGetMainFormFormikUsecases'
 
@@ -23,10 +24,11 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
     usePrevious(
       values.controlUnits?.some(controlUnit => controlUnit.id && PAMControlUnitIds.includes(controlUnit.id))
     ) || false
+  const { forceUpdate } = useForceUpdate()
 
   const controlUnitsQuery = useGetLegacyControlUnitsQuery(undefined)
 
-  const { administrationsAsOptions: allAdministrationsAsOptions, unitsAsOptions: allNamesAsOptions } = useMemo(
+  const { administrationsAsOptions: allAdministrationsAsOptions } = useMemo(
     () => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data),
     [controlUnitsQuery.data]
   )
@@ -68,6 +70,7 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
 
       updateMissionActionOtherControlsCheckboxes(values, previousIsControlUnitPAM)
       setFieldValue(name, nextControlUnits)
+      forceUpdate()
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,11 +82,10 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
       <>
         {(values.controlUnits || []).map((_, index) => (
           <ControlUnitSelect
-            key={JSON.stringify(value)}
-            activeAndSortedUnitsAsOptions={activeAndSortedUnitsAsOptions}
+            // eslint-disable-next-line react/no-array-index-key
+            key={index}
             allAdministrationsAsOptions={allAdministrationsAsOptions}
             allControlUnits={controlUnitsQuery.data || []}
-            allNamesAsOptions={allNamesAsOptions}
             error={errors[index]}
             index={index}
             onChange={handleChange}

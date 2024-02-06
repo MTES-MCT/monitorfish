@@ -702,7 +702,7 @@ export function MissionForm() {
           <div>
             <MissionInfos>
               {mainFormValues?.createdAtUtc && (
-                <>Mission créée le {customDayjs(mainFormValues.createdAtUtc).utc().format('D MMM YY, HH:mm')}. </>
+                <>Mission créée le {customDayjs(mainFormValues.createdAtUtc).utc().format('D MMM YYYY, HH:mm')}. </>
               )}
               {!mainFormValues?.createdAtUtc && <>Mission non enregistrée. </>}
               {mainFormValues?.updatedAtUtc && (

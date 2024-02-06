@@ -13,10 +13,29 @@ context('Sidebars > Regulatory Layers', () => {
 
     // When
     cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="regulatory-search-input"]').type('interdiction')
+
+    // Then, 2 zones are showed
+    cy.get('*[data-cy="regulatory-layer-topic-count"]').contains('2/4')
+  })
+
+  it('A regulation Should be searched, added to My Zones and showed on the map with the Zone button', () => {
+    cy.loadPath('/#@-224002.65,6302673.54,8.70')
+
+    cy.request(
+      'GET',
+      `http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`
+    ).then(response => {
+      cy.log(response.body)
+    })
+
+    // When
+    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
 
     // Add the layer to My Zones
     cy.get('*[data-cy="regulatory-search-input"]').type('Cotentin biva')
     cy.get('*[data-cy="regulatory-layer-topic"]').first().click({ timeout: 10000 })
+    cy.get('*[data-cy="regulatory-layer-topic-count"]').contains('1/1')
     cy.get('*[data-cy="regulatory-zone-check"]').click({ timeout: 10000 })
     cy.get('*[data-cy="regulatory-search-add-zones-button"]').contains('Ajouter 1 zone')
     cy.get('*[data-cy="regulatory-search-add-zones-button"]').click()

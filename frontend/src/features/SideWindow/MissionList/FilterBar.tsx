@@ -44,13 +44,13 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
   const dispatch = useMainAppDispatch()
 
   const previousAdministrationFiterValue = usePrevious(listFilterValues.ADMINISTRATION)
-  const { administrationsAsOptions, unitsAsOptions } = useMemo(
+  const { activeAndFilteredUnitsAsOptions, administrationsAsOptions } = useMemo(
     () => getControlUnitsOptionsFromControlUnits(controlUnitsQuery.data, listFilterValues.ADMINISTRATION),
     [controlUnitsQuery.data, listFilterValues.ADMINISTRATION]
   )
 
   const formikKey = useKey([listFilterValues])
-  const unitMultiSelectKey = useKey([unitsAsOptions])
+  const unitMultiSelectKey = useKey([activeAndFilteredUnitsAsOptions])
 
   const handleFilterFormChange = useCallback(
     (nextFilterValues: FilterValues) => {
@@ -157,12 +157,12 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           <FormikMultiSelect
             key={unitMultiSelectKey}
             baseContainer={newWindowContainerRef.current}
-            disabled={unitsAsOptions.length === 0}
+            disabled={activeAndFilteredUnitsAsOptions.length === 0}
             isLabelHidden
             isLight
             label="Unité"
             name={MissionFilterType.UNIT}
-            options={unitsAsOptions}
+            options={activeAndFilteredUnitsAsOptions}
             placeholder="Unité"
             renderValue={(_, items) => (items.length > 0 ? <OptionValue>Unité ({items.length}) </OptionValue> : <></>)}
             searchable

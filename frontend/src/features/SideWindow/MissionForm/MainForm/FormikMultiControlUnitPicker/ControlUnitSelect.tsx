@@ -34,7 +34,6 @@ import type { Promisable } from 'type-fest'
 export type ControlUnitSelectProps = {
   allAdministrationsAsOptions: Option[]
   allControlUnits: LegacyControlUnit.LegacyControlUnit[]
-  allNamesAsOptions: Option[]
   error:
     | {
         administration: string
@@ -51,7 +50,6 @@ export type ControlUnitSelectProps = {
 export function ControlUnitSelect({
   allAdministrationsAsOptions,
   allControlUnits,
-  allNamesAsOptions,
   error,
   index,
   onChange,
@@ -83,16 +81,16 @@ export function ControlUnitSelect({
   const isEdition = selectedPath.id
 
   const filteredNamesAsOptions = useMemo((): Option[] => {
-    if (!allControlUnits || !value.administration) {
-      return allNamesAsOptions
+    if (!value.administration) {
+      return mapControlUnitsToUniqueSortedNamesAsOptions(activeAndSelectedControlUnits)
     }
 
-    const selectedAdministrationControlUnits = allControlUnits.filter(
+    const selectedAdministrationControlUnits = activeAndSelectedControlUnits.filter(
       ({ administration }) => administration === value.administration
     )
 
     return mapControlUnitsToUniqueSortedNamesAsOptions(selectedAdministrationControlUnits)
-  }, [allControlUnits, allNamesAsOptions, value])
+  }, [activeAndSelectedControlUnits, value])
 
   // Include archived resources if they're already selected
   const activeWithSelectedControlUnitResources = useMemo(() => {
@@ -200,8 +198,7 @@ export function ControlUnitSelect({
   }, [engagedControlUnit])
 
   return (
-    // eslint-disable-next-line react/no-array-index-key
-    <Wrapper key={`unit${index}`}>
+    <Wrapper>
       <UnitWrapper>
         <Select
           baseContainer={newWindowContainerRef.current}

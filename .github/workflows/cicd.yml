@@ -36,7 +36,7 @@ jobs:
         run: echo ${{ contains(github.ref, 'dependabot') }}
       - name: Get last release version
         id: lastrelease
-        uses: rez0n/actions-github-release@main
+        uses: pozetroninc/github-action-get-latest-release@master
         with:
           repository: mtes-mct/monitorfish
 

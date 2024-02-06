@@ -72,7 +72,11 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
   }, [])
 
   const create = useCallback(
-    (newInfractionFormValues: MissionAction.Infraction, infractionGroup: string) => {
+    (newInfractionFormValues: MissionAction.Infraction, infractionGroup: string | undefined) => {
+      if (!infractionGroup) {
+        return
+      }
+
       const newInfractionWithComments: MissionAction.Infraction = {
         ...newInfractionFormValues,
         comments: newInfractionFormValues.comments || ''
@@ -110,7 +114,11 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
   }, [])
 
   const update = useCallback(
-    (nextInfractionFormValues: MissionAction.Infraction, infractionGroup: string) => {
+    (nextInfractionFormValues: MissionAction.Infraction, infractionGroup: string | undefined) => {
+      if (!infractionGroup) {
+        return
+      }
+
       if (!values[infractionGroup] || editedIndex === undefined) {
         throw new FrontendError('`values[infractionGroup]` or `editedIndex` is undefined')
       }

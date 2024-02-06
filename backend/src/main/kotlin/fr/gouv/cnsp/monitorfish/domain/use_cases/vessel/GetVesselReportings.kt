@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.CurrentAndArchivedReportings
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionOrObservationType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NatinfCodeNotFoundException
@@ -21,6 +22,7 @@ class GetVesselReportings(
     private val logger = LoggerFactory.getLogger(GetVesselReportings::class.java)
 
     fun execute(
+        vesselId: Int?,
         internalReferenceNumber: String,
         externalReferenceNumber: String,
         ircs: String,
@@ -29,28 +31,14 @@ class GetVesselReportings(
     ): CurrentAndArchivedReportings {
         val controlUnits = getAllControlUnits.execute()
 
-        val reportings = when (vesselIdentifier) {
-            VesselIdentifier.INTERNAL_REFERENCE_NUMBER ->
-                reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
-                    vesselIdentifier,
-                    internalReferenceNumber,
-                    fromDate,
-                )
-            VesselIdentifier.IRCS ->
-                reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier, ircs, fromDate)
-            VesselIdentifier.EXTERNAL_REFERENCE_NUMBER ->
-                reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
-                    vesselIdentifier,
-                    externalReferenceNumber,
-                    fromDate,
-                )
-            else -> reportingRepository.findCurrentAndArchivedWithoutVesselIdentifier(
-                internalReferenceNumber,
-                externalReferenceNumber,
-                ircs,
-                fromDate,
-            )
-        }
+        val reportings = findReportings(
+            vesselId,
+            vesselIdentifier,
+            internalReferenceNumber,
+            fromDate,
+            ircs,
+            externalReferenceNumber,
+        )
 
         val current = reportings
             .filter { !it.isArchived }
@@ -91,5 +79,44 @@ class GetVesselReportings(
             }
 
         return CurrentAndArchivedReportings(current, archived)
+    }
+
+    private fun findReportings(
+        vesselId: Int?,
+        vesselIdentifier: VesselIdentifier?,
+        internalReferenceNumber: String,
+        fromDate: ZonedDateTime,
+        ircs: String,
+        externalReferenceNumber: String,
+    ): List<Reporting> {
+        if (vesselId != null) {
+            return reportingRepository.findCurrentAndArchivedByVesselIdEquals(vesselId, fromDate)
+        }
+
+        return when (vesselIdentifier) {
+            VesselIdentifier.INTERNAL_REFERENCE_NUMBER ->
+                reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
+                    vesselIdentifier,
+                    internalReferenceNumber,
+                    fromDate,
+                )
+
+            VesselIdentifier.IRCS ->
+                reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier, ircs, fromDate)
+
+            VesselIdentifier.EXTERNAL_REFERENCE_NUMBER ->
+                reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
+                    vesselIdentifier,
+                    externalReferenceNumber,
+                    fromDate,
+                )
+
+            else -> reportingRepository.findCurrentAndArchivedWithoutVesselIdentifier(
+                internalReferenceNumber,
+                externalReferenceNumber,
+                ircs,
+                fromDate,
+            )
+        }
     }
 }

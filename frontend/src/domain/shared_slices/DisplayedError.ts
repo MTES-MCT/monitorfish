@@ -4,17 +4,9 @@ import { DisplayedError } from '../../libs/DisplayedError'
 
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-/**
- * A `null` value means the error is no longer displayed
- */
-export type OptionalDisplayedErrorAction = {
-  missionFormError?: DisplayedError | null
-  vesselSidebarError?: DisplayedError | null
-}
-
 export type DisplayedErrorState = {
-  missionFormError: DisplayedError | undefined | null
-  vesselSidebarError: DisplayedError | undefined | null
+  missionFormError: DisplayedError | undefined
+  vesselSidebarError: DisplayedError | undefined
 }
 export const INITIAL_STATE: DisplayedErrorState = {
   missionFormError: undefined,
@@ -25,22 +17,21 @@ const displayedErrorSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'displayedError',
   reducers: {
-    setDisplayedErrors(state, action: PayloadAction<OptionalDisplayedErrorAction>) {
-      Object.keys(INITIAL_STATE).forEach(key => {
-        state[key] = getValueOrDefault(action.payload[key], state[key])
+    set(state, action: PayloadAction<Partial<DisplayedErrorState>>) {
+      Object.keys(action.payload).forEach(key => {
+        state[key] = action.payload[key]
+      })
+    },
+
+    unset(state, action: PayloadAction<keyof DisplayedErrorState | Array<keyof DisplayedErrorState>>) {
+      const keys = Array.isArray(action.payload) ? action.payload : [action.payload]
+
+      keys.forEach(key => {
+        state[key] = undefined
       })
     }
   }
 })
 
-export const { setDisplayedErrors } = displayedErrorSlice.actions
-
+export const displayedErrorActions = displayedErrorSlice.actions
 export const displayedErrorReducer = displayedErrorSlice.reducer
-
-function getValueOrDefault(value, defaultValue) {
-  if (value !== undefined) {
-    return value
-  }
-
-  return defaultValue
-}

@@ -16,7 +16,7 @@ import type { Coordinate } from 'ol/coordinate'
 export const addOrEditControlCoordinates =
   (geometry: GeoJSONNamespace.Geometry | undefined): MainAppThunk<void> =>
   (dispatch, getState) => {
-    const { draft } = getState().mission
+    const { draft } = getState().missionForm
     if (!draft?.mainFormValues) {
       return
     }

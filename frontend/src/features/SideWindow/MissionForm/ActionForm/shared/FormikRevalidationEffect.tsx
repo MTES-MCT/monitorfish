@@ -12,8 +12,8 @@ import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
  */
 export function FormikRevalidationEffect() {
   const { validateForm } = useFormikContext()
-  const isClosing = useMainAppSelector(store => store.mission.isClosing)
-  const draft = useMainAppSelector(state => state.mission.draft)
+  const isClosing = useMainAppSelector(store => store.missionForm.isClosing)
+  const draft = useMainAppSelector(state => state.missionForm.draft)
 
   const debouncedValidateForm = useDebouncedCallback(validateForm, 250)
 

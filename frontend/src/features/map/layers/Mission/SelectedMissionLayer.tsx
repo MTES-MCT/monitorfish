@@ -17,9 +17,9 @@ import type { VectorLayerWithName } from '../../../../domain/types/layer'
 
 export function UnmemoizedSelectedMissionLayer() {
   const { missions } = useGetFilteredMissionsQuery()
-  const selectedMissionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionGeoJSON)
+  const selectedMissionGeoJSON = useMainAppSelector(store => store.mainMap.selectedMissionGeoJSON)
   const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
-  const draft = useMainAppSelector(state => state.mission.draft)
+  const draft = useMainAppSelector(store => store.missionForm.draft)
 
   const selectedMission = useMemo(() => {
     if (!selectedMissionGeoJSON) {

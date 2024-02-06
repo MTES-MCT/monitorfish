@@ -14,7 +14,7 @@ const actionDatetimeUtcValidator = string()
   .test({
     message: 'La date du contrôle doit être postérieure à la date de début de la mission.',
     test: (actionDatetimeUtc: string | undefined) => {
-      const { draft } = mainStore.getState().mission
+      const { draft } = mainStore.getState().missionForm
       const mission = draft?.mainFormValues
       if (!mission) {
         return true
@@ -30,7 +30,7 @@ const actionDatetimeUtcValidator = string()
   .test({
     message: 'La date du contrôle doit être antérieure à la date de fin de la mission.',
     test: (actionDatetimeUtc: string | undefined) => {
-      const { draft } = mainStore.getState().mission
+      const { draft } = mainStore.getState().missionForm
       const mission = draft?.mainFormValues
       if (!mission) {
         return true

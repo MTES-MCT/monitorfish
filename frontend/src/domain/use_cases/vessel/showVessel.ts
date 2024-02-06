@@ -4,7 +4,7 @@ import { addVesselIdentifierToVesselIdentity } from '../../../features/VesselSea
 import { Vessel } from '../../entities/vessel/vessel'
 import { getCustomOrDefaultTrackRequest, throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
 import { displayedComponentActions } from '../../shared_slices/DisplayedComponent'
-import { setDisplayedErrors } from '../../shared_slices/DisplayedError'
+import { displayedErrorActions } from '../../shared_slices/DisplayedError'
 import { addSearchedVessel, removeError, setError } from '../../shared_slices/Global'
 import { doNotAnimate } from '../../shared_slices/Map'
 import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../../shared_slices/Vessel'
@@ -63,7 +63,7 @@ export const showVessel =
         vesselIdentifier: addVesselIdentifierToVesselIdentity(vesselIdentity).vesselIdentifier
       }
 
-      dispatch(setDisplayedErrors({ vesselSidebarError: null }))
+      dispatch(displayedErrorActions.unset('vesselSidebarError'))
       dispatch(
         setSelectedVessel({
           positions: vesselAndPositions.positions,
@@ -74,10 +74,7 @@ export const showVessel =
       dispatch(
         displayOrLogError(
           error as Error,
-          {
-            func: showVessel,
-            parameters: [vesselIdentity, isFromSearch, isFromUserAction]
-          },
+          () => showVessel(vesselIdentity, isFromSearch, isFromUserAction),
           isFromUserAction,
           'vesselSidebarError'
         )

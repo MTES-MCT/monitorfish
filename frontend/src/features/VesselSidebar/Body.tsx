@@ -12,6 +12,7 @@ import { retry } from '../../domain/use_cases/error/retry'
 import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
+import { assert } from '../../utils/assert'
 import { VesselLogbook } from '../Logbook/components/VesselLogbook'
 import { VesselReportings } from '../Reporting/components/VesselReportings'
 
@@ -23,13 +24,19 @@ export function Body() {
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
   const vesselSidebarTab = useMainAppSelector(state => state.vessel.vesselSidebarTab)
 
+  const handleRetry = () => {
+    assert(vesselSidebarError, 'vesselSidebarError')
+
+    dispatch(retry('vesselSidebarError', vesselSidebarError.useCase))
+  }
+
   if (vesselSidebarError) {
     return (
       <ErrorFallback data-cy="vessel-sidebar-error">
         🔌 {vesselSidebarError.message}
         <br />
         {vesselSidebarError.useCase && (
-          <RetryButton accent={Accent.PRIMARY} onClick={() => dispatch(retry(vesselSidebarError.useCase))}>
+          <RetryButton accent={Accent.PRIMARY} onClick={handleRetry}>
             Réessayer
           </RetryButton>
         )}

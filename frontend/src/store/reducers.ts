@@ -25,11 +25,13 @@ import { controlUnitDialogReducer } from '../features/ControlUnit/components/Con
 import { controlUnitListDialogPersistedReducer } from '../features/ControlUnit/components/ControlUnitListDialog/slice'
 import { customZoneReducer, type CustomZoneState } from '../features/CustomZone/slice'
 import { logbookReducer } from '../features/Logbook/slice'
+import { mainMapReducer } from '../features/MainMap/slice'
+import { missionFormReducer } from '../features/Mission/components/MissionForm/slice'
+import { missionListReducer, type MissionListState } from '../features/Mission/components/MissionList/slice'
 import { regulatoryLayerSearchReducer } from '../features/Regulation/components/RegulationSearch/slice'
 import { regulatoryReducer } from '../features/Regulation/slice'
 import { reportingReducer } from '../features/Reporting/slice'
 import { alertReducer } from '../features/SideWindow/Alert/slice'
-import { missionReducer, type MissionState } from '../features/SideWindow/MissionForm/slice'
 import { stationReducer } from '../features/Station/slice'
 import { vesselListReducer } from '../features/VesselList/slice'
 
@@ -81,10 +83,14 @@ export const mainReducer = {
   infraction: infractionReducer,
   interestPoint: interestPointReducer,
   layer: layer.homepage.reducer,
+  mainMap: mainMapReducer,
   measurement: measurementReducer,
-  mission: persistReducerTyped(
-    { ...getCommonPersistReducerConfig<MissionState>('mainPersistorMission', ['listFilterValues', 'listSeaFront']) },
-    missionReducer
+  missionForm: missionFormReducer,
+  missionList: persistReducerTyped(
+    {
+      ...getCommonPersistReducerConfig<MissionListState>('mainPersistorMission', ['listFilterValues', 'listSeaFront'])
+    },
+    missionListReducer
   ),
   regulatoryLayerSearch: regulatoryLayerSearchReducer,
   reporting: reportingReducer,

@@ -40,15 +40,15 @@ type SeaControlFormProps = {
 export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps) {
   const { newWindowContainerRef } = useNewWindow()
 
-  const mission = useMainAppSelector(store => store.mission)
+  const isClosing = useMainAppSelector(store => store.missionForm.isClosing)
 
   const titleDate = useMemo(
     () => initialValues.actionDatetimeUtc && getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),
     [initialValues.actionDatetimeUtc]
   )
   const validationSchema = useMemo(
-    () => (mission.isClosing ? SeaControlFormClosureSchema : SeaControlFormLiveSchema),
-    [mission.isClosing]
+    () => (isClosing ? SeaControlFormClosureSchema : SeaControlFormLiveSchema),
+    [isClosing]
   )
 
   return (

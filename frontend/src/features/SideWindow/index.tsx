@@ -19,6 +19,7 @@ import { Menu } from './Menu'
 import { MissionForm } from './MissionForm'
 import { useListenToAllMissionEventsUpdates } from './MissionForm/hooks/useListenToAllMissionEventsUpdates'
 import { MissionList } from './MissionList'
+import { openSideWindowPath } from './useCases/openSideWindowPath'
 import { MissionEventContext } from '../../context/MissionEventContext'
 import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
@@ -27,10 +28,10 @@ import { getSilencedAlerts } from '../../domain/use_cases/alert/getSilencedAlert
 import getAllBeaconMalfunctions from '../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
 import getAllGearCodes from '../../domain/use_cases/gearCode/getAllGearCodes'
 import { getInfractions } from '../../domain/use_cases/infraction/getInfractions'
-import { sideWindowDispatchers } from '../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { FrontendErrorBoundary } from '../../ui/FrontendErrorBoundary'
+import { Loader as MissionFormLoader } from '../Mission/components/MissionForm/Loader'
 import { setEditedReportingInSideWindow } from '../Reporting/slice'
 import { getAllCurrentReportings } from '../Reporting/useCases/getAllCurrentReportings'
 
@@ -107,7 +108,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
       dispatch(getInfractions())
       dispatch(getAllGearCodes())
 
-      dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
+      dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
     }
   }, [dispatch, isFromURL])
 
@@ -147,11 +148,17 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
                   {selectedPath.menu === SideWindowMenuKey.MISSION_LIST && <MissionList />}
 
                   {selectedPath.menu === SideWindowMenuKey.MISSION_FORM && (
-                    <Fragment key={selectedPath.id}>
-                      <MissionEventContext.Provider value={missionEvent}>
-                        <MissionForm />
-                      </MissionEventContext.Provider>
-                    </Fragment>
+                    <>
+                      {selectedPath.isLoading ? (
+                        <MissionFormLoader />
+                      ) : (
+                        <Fragment key={selectedPath.id ?? selectedPath.key}>
+                          <MissionEventContext.Provider value={missionEvent}>
+                            <MissionForm />
+                          </MissionEventContext.Provider>
+                        </Fragment>
+                      )}
+                    </>
                   )}
                 </Content>
               )}

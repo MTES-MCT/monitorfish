@@ -17,7 +17,7 @@ import MissionActionType = MissionAction.MissionActionType
 export function useGetMissionActionFormikUsecases() {
   const dispatch = useMainAppDispatch()
   const gearsByCode = useMainAppSelector(state => state.gear.gearsByCode)
-  const draft = useMainAppSelector(state => state.mission.draft)
+  const draft = useMainAppSelector(state => state.missionForm.draft)
   const { setFieldValue: setMissionActionFieldValue } = useFormikContext<MissionActionFormValues>()
 
   const getFleetSegmentsApiQuery = useGetFleetSegmentsQuery()

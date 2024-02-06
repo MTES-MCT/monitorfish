@@ -31,7 +31,7 @@ export type ItemProps = {
   onSelect: () => Promisable<void>
 }
 export function Item({ isSelected, missionAction, onDuplicate, onRemove, onSelect }: ItemProps) {
-  const draft = useMainAppSelector(state => state.mission.draft)
+  const draft = useMainAppSelector(state => state.missionForm.draft)
 
   const natinfsAsOptions = useGetNatinfsAsOptions()
 

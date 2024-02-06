@@ -4,10 +4,10 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { margins } from './constants'
-import { missionActions } from '../../../../domain/actions'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { pluralize } from '../../../../utils/pluralize'
 import { GreenCircle, RedCircle } from '../../../commonStyles/Circle.style'
+import { mainMapActions } from '../../../MainMap/slice'
 import { Flag } from '../../../VesselList/tableCells'
 import { OverlayPosition } from '../Overlay'
 
@@ -67,7 +67,7 @@ export function ControlDetails({ control, isSelected, overlayPosition }: Control
             data-cy="mission-action-overlay-close"
             Icon={Icon.Close}
             iconSize={14}
-            onClick={() => dispatch(missionActions.unsetSelectedMissionActionGeoJSON())}
+            onClick={() => dispatch(mainMapActions.unsetSelectedMissionActionGeoJSON())}
           />
         )}
         <ZoneText>

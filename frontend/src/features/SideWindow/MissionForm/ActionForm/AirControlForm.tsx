@@ -27,7 +27,7 @@ export type AirControlFormProps = {
 export function AirControlForm({ initialValues, onChange }: AirControlFormProps) {
   const { newWindowContainerRef } = useNewWindow()
 
-  const isClosing = useMainAppSelector(store => store.mission.isClosing)
+  const isClosing = useMainAppSelector(store => store.missionForm.isClosing)
 
   const titleDate = useMemo(
     () => initialValues.actionDatetimeUtc && getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),

@@ -1,16 +1,15 @@
+import { displayedErrorActions, type DisplayedErrorState } from '../../shared_slices/DisplayedError'
+
 import type { RetryableUseCase } from '../../../libs/DisplayedError'
+import type { MainAppThunk } from '../../../store'
 
-export const retry = (retryableUseCase: RetryableUseCase | undefined) => async dispatch => {
-  if (!retryableUseCase) {
-    return
+export const retry =
+  (errorKey: keyof DisplayedErrorState, retryableUseCase: RetryableUseCase | undefined): MainAppThunk =>
+  dispatch => {
+    if (!retryableUseCase) {
+      return
+    }
+
+    dispatch(displayedErrorActions.unset(errorKey))
+    dispatch(retryableUseCase())
   }
-
-  const parameters = retryableUseCase?.parameters
-  if (!parameters) {
-    dispatch(retryableUseCase?.func())
-
-    return
-  }
-
-  dispatch(retryableUseCase?.func(...parameters))
-}

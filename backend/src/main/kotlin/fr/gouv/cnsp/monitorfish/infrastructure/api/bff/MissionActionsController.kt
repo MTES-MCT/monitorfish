@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep.JointDeploymentPlan
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ActivityReportDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ActivityReportsDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ControlsSummaryDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissionActionDataOutput
 import io.swagger.v3.oas.annotations.Operation
@@ -61,10 +61,10 @@ class MissionActionsController(
         @Parameter(description = "JDP")
         @RequestParam(name = "jdp")
         jdp: JointDeploymentPlan,
-    ): List<ActivityReportDataOutput> {
-        return getActivityReports.execute(beforeDateTime, afterDateTime, jdp).map {
-            ActivityReportDataOutput.fromActivityReport(it)
-        }
+    ): ActivityReportsDataOutput {
+        val activityReports = getActivityReports.execute(beforeDateTime, afterDateTime, jdp)
+
+        return ActivityReportsDataOutput.fromActivityReports(activityReports)
     }
 
     @GetMapping("")

@@ -8,7 +8,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 data class ActivityReport(
     val action: MissionAction,
     val activityCode: ActivityCode,
-    val vesselNationalIdentifier: String, // The `districtCode` and `internalReferenceNumber` concatenation
+    // The `districtCode` and `internalReferenceNumber` concatenation
+    val vesselNationalIdentifier: String,
     val controlUnits: List<ControlUnit>,
     val vessel: Vessel,
 )

@@ -10,6 +10,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.dtos.ActivityReport
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.dtos.ActivityReports
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
@@ -22,12 +23,15 @@ class GetActivityReports(
 ) {
     private val logger = LoggerFactory.getLogger(GetActivityReports::class.java)
 
-    fun execute(beforeDateTime: ZonedDateTime, afterDateTime: ZonedDateTime, jdp: JointDeploymentPlan): List<ActivityReport> {
+    fun execute(beforeDateTime: ZonedDateTime, afterDateTime: ZonedDateTime, jdp: JointDeploymentPlan): ActivityReports {
         val controls = missionActionsRepository.findControlsInDates(beforeDateTime, afterDateTime)
         logger.info("Found ${controls.size} controls between dates [$afterDateTime, $beforeDateTime].")
 
         if (controls.isEmpty()) {
-            return listOf()
+            return ActivityReports(
+                activityReports = listOf(),
+                jdpSpecies = jdp.getSpeciesCodes(),
+            )
         }
 
         val controlledVesselsIds = controls.mapNotNull { it.vesselId }.distinct()
@@ -62,7 +66,7 @@ class GetActivityReports(
         }
         logger.info("Found ${filteredControls.size} controls to report.")
 
-        return filteredControls.map { control ->
+        val activityReports = filteredControls.map { control ->
             val activityCode = when (control.actionType) {
                 MissionActionType.LAND_CONTROL -> ActivityCode.LAN
                 MissionActionType.SEA_CONTROL -> ActivityCode.FIS
@@ -103,5 +107,10 @@ class GetActivityReports(
                 vessel = controlledVessel,
             )
         }.filterNotNull()
+
+        return ActivityReports(
+            activityReports = activityReports,
+            jdpSpecies = jdp.getSpeciesCodes(),
+        )
     }
 }

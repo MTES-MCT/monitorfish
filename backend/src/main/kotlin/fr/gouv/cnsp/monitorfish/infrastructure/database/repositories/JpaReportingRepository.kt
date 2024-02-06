@@ -73,6 +73,13 @@ class JpaReportingRepository(
             }
     }
 
+    override fun findCurrentAndArchivedByVesselIdEquals(vesselId: Int, fromDate: ZonedDateTime): List<Reporting> {
+        return dbReportingRepository
+            .findCurrentAndArchivedByVesselId(vesselId, fromDate.toInstant()).map {
+                it.toReporting(mapper)
+            }
+    }
+
     override fun findCurrentAndArchivedWithoutVesselIdentifier(
         internalReferenceNumber: String,
         externalReferenceNumber: String,

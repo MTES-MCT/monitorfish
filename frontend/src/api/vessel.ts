@@ -91,13 +91,13 @@ async function searchVesselsFromAPI(searched: string) {
  * @throws {@link ApiError}
  */
 async function getVesselReportingsFromAPI(identity: VesselIdentity, fromDate: Date) {
-  const { externalReferenceNumber, internalReferenceNumber, ircs, vesselIdentifier } =
+  const { externalReferenceNumber, internalReferenceNumber, ircs, vesselId, vesselIdentifier } =
     getVesselIdentityAsEmptyStringWhenNull(identity)
 
   try {
     return await monitorfishApiKy
       .get(
-        `/bff/v1/vessels/reporting?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&fromDate=${fromDate.toISOString()}`
+        `/bff/v1/vessels/reporting?vesselId=${vesselId}&internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&fromDate=${fromDate.toISOString()}`
       )
       .json<CurrentAndArchivedReportingsOfSelectedVessel>()
   } catch (err) {

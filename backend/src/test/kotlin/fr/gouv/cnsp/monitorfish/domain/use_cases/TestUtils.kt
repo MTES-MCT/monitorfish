@@ -1,11 +1,67 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
+import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValue
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
 object TestUtils {
+    fun getDummyReportings(): List<Reporting> {
+        return listOf(
+            Reporting(
+                id = 1,
+                type = ReportingType.ALERT,
+                vesselName = "BIDUBULE",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                validationDate = ZonedDateTime.now(),
+                value = ThreeMilesTrawlingAlert() as ReportingValue,
+                isArchived = false,
+                isDeleted = false,
+            ),
+            Reporting(
+                id = 1,
+                type = ReportingType.ALERT,
+                vesselName = "BIDUBULE",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                validationDate = ZonedDateTime.now(),
+                value = ThreeMilesTrawlingAlert() as ReportingValue,
+                isArchived = false,
+                isDeleted = false,
+            ),
+            Reporting(
+                id = 666,
+                type = ReportingType.ALERT,
+                vesselName = "BIDUBULE",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now().minusYears(1),
+                validationDate = ZonedDateTime.now().minusYears(1),
+                value = ThreeMilesTrawlingAlert() as ReportingValue,
+                isArchived = true,
+                isDeleted = false,
+            ),
+        )
+    }
+
     fun getDummyLogbookMessages(): List<LogbookMessage> {
         val gearOne = Gear()
         gearOne.gear = "OTB"

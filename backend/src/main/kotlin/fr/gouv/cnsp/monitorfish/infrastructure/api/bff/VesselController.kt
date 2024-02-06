@@ -169,6 +169,9 @@ class VesselController(
     @GetMapping("/reporting")
     @Operation(summary = "Get vessel's reporting")
     fun getVesselReporting(
+        @Parameter(description = "Vessel id")
+        @RequestParam(name = "vesselId")
+        vesselId: Int?,
         @Parameter(description = "Vessel internal reference number (CFR)")
         @RequestParam(name = "internalReferenceNumber")
         internalReferenceNumber: String,
@@ -187,6 +190,7 @@ class VesselController(
         fromDate: ZonedDateTime,
     ): CurrentAndArchivedReportingDataOutput {
         val currentAndArchivedReportings = getVesselReportings.execute(
+            vesselId,
             internalReferenceNumber,
             externalReferenceNumber,
             IRCS,

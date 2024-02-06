@@ -7,21 +7,21 @@ VALUES ('ALERT', 'MARIAGE ÎLE HASARD', 'ABC000180832', 'VP374069', 'CG1312', 'I
                                                            '"riskFactor": 3.5647,' ||
                                                            '"type": "THREE_MILES_TRAWLING_ALERT",' ||
                                                            '"natinfCode": 7059' ||
-                                                           '}')::jsonb, 41.569, 37.28, null),
+                                                           '}')::jsonb, 41.569, 37.28, 123456),
        ('ALERT', 'MARIAGE ÎLE HASARD', 'ABC000180832', 'VP374069', 'CG1312', 'INTERNAL_REFERENCE_NUMBER', 'FR',
         NOW() - ('3 DAY')::interval, NOW() - ('4 DAY')::interval, true, false, ('{' ||
                                                                                   '"seaFront": "NAMO",' ||
                                                                                   '"riskFactor": 3.3647,' ||
                                                                                   '"type": "THREE_MILES_TRAWLING_ALERT",' ||
                                                                                   '"natinfCode": 7059' ||
-                                                                                  '}')::jsonb, null, null, null),
+                                                                                  '}')::jsonb, null, null, 123456),
        ('ALERT', 'MARIAGE ÎLE HASARD', 'ABC000180832', 'VP374069', 'CG1312', 'INTERNAL_REFERENCE_NUMBER', 'FR',
         NOW() - ('4 DAY')::interval, NOW() - ('5 DAY')::interval, true, true, ('{' ||
                                                                                   '"seaFront": "NAMO",' ||
                                                                                   '"riskFactor": 3.6947,' ||
                                                                                   '"type": "MISSING_FAR_ALERT",' ||
                                                                                   '"natinfCode": 27689' ||
-                                                                                  '}')::jsonb, -5.569, 71.569, null),
+                                                                                  '}')::jsonb, -5.569, 71.569, 123456),
        ('ALERT', 'PROMETTRE INTÉRIEUR SAINT', 'ABC000232227', 'ZJ472279', 'TMG5756', 'INTERNAL_REFERENCE_NUMBER', 'FR',
         NOW() - ('1 DAY')::interval, NOW(), false, false, ('{' ||
                                                            '"seaFront": "SA",' ||

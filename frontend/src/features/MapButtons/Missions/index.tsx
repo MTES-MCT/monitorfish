@@ -8,10 +8,10 @@ import { SideWindowMenuKey, SideWindowStatus } from '../../../domain/entities/si
 import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedComponent'
 import { setLeftBoxOpened } from '../../../domain/shared_slices/Global'
 import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
-import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { addMission } from '../../Mission/useCases/addMission'
+import { openSideWindowPath } from '../../SideWindow/useCases/openSideWindowPath'
 import { MapToolBox } from '../shared/MapToolBox'
 import { MapToolButton } from '../shared/MapToolButton'
 
@@ -31,7 +31,7 @@ export function MissionsMenu() {
       return
     }
 
-    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_LIST }))
+    dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }))
   }, [dispatch, isActive])
 
   const openNewMission = () => {

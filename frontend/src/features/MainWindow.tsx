@@ -33,7 +33,7 @@ export function MainWindow() {
   const isVesselListDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselListDisplayed)
   const isVesselSearchDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselSearchDisplayed)
   const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
-  const isDraftDirty = useMainAppSelector(state => state.mission.isDraftDirty)
+  const isDraftDirty = useMainAppSelector(state => state.missionForm.isDraftDirty)
   const status = useMainAppSelector(state => state.sideWindow.status)
 
   const warnOnUnload = useCallback(

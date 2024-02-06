@@ -10,7 +10,7 @@ const MISSION_UPDATES_URL = `${MONITORENV_API_URL}/api/v1/missions/sse`
 const MISSION_UPDATE_EVENT = `MISSION_UPDATE`
 
 export function useListenToAllMissionEventsUpdates() {
-  const isListeningToEvents = useMainAppSelector(state => state.mission.isListeningToEvents)
+  const isListeningToEvents = useMainAppSelector(state => state.missionForm.isListeningToEvents)
   const eventSourceRef = useRef<EventSource>()
   const [missionEvent, setMissionEvent] = useState<Mission.Mission>()
   const listener = useRef(missionEventListener(mission => setMissionEvent(mission)))

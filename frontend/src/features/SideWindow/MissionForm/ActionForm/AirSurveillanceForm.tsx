@@ -33,7 +33,7 @@ export type AirSurveillanceFormProps = {
 export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillanceFormProps) {
   const { newWindowContainerRef } = useNewWindow()
 
-  const isClosing = useMainAppSelector(store => store.mission.isClosing)
+  const isClosing = useMainAppSelector(store => store.missionForm.isClosing)
 
   const validationSchema = useMemo(
     () => (isClosing ? AirSurveillanceFormClosureSchema : AirSurveillanceFormLiveSchema),

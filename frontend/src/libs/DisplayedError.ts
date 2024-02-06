@@ -2,10 +2,9 @@
 
 import { captureException, captureMessage } from '@sentry/react'
 
-export type RetryableUseCase = {
-  func: Function
-  parameters: any[]
-}
+import type { MainAppThunk } from '../store'
+
+export type RetryableUseCase = () => MainAppThunk
 
 export class DisplayedError extends Error {
   originalError: any | undefined

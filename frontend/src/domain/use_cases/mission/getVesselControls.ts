@@ -7,7 +7,7 @@ import {
   setNextControlSummary,
   unsetControlSummary
 } from '../../shared_slices/Control'
-import { setDisplayedErrors } from '../../shared_slices/DisplayedError'
+import { displayedErrorActions } from '../../shared_slices/DisplayedError'
 import { removeError, setError } from '../../shared_slices/Global'
 import { displayOrLogError } from '../error/displayOrLogError'
 
@@ -28,7 +28,7 @@ export const getVesselControls = (isFromUserAction: boolean) => async (dispatch,
 
   const isSameVesselAsCurrentlyShowed = getIsSameVesselAsCurrentlyShowed(selectedVessel.vesselId, currentControlSummary)
   if (isFromUserAction) {
-    dispatch(setDisplayedErrors({ vesselSidebarError: null }))
+    dispatch(displayedErrorActions.unset('vesselSidebarError'))
     dispatch(loadControls())
   }
 
@@ -44,15 +44,7 @@ export const getVesselControls = (isFromUserAction: boolean) => async (dispatch,
     dispatch(removeError())
   } catch (error) {
     dispatch(
-      displayOrLogError(
-        error as Error,
-        {
-          func: getVesselControls,
-          parameters: [isFromUserAction]
-        },
-        isFromUserAction,
-        'vesselSidebarError'
-      )
+      displayOrLogError(error, () => getVesselControls(isFromUserAction), isFromUserAction, 'vesselSidebarError')
     )
     dispatch(resetLoadControls())
   }

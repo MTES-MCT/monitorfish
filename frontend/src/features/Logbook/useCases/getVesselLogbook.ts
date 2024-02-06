@@ -2,7 +2,7 @@ import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import { vesselsAreEquals } from '../../../domain/entities/vessel/vessel'
 import { getTrackRequestFromDates } from '../../../domain/entities/vesselTrackDepth'
-import { setDisplayedErrors } from '../../../domain/shared_slices/DisplayedError'
+import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
 import { removeError, setError } from '../../../domain/shared_slices/Global'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { updateSelectedVesselTrackRequest } from '../../../domain/use_cases/vessel/updateSelectedVesselTrackRequest'
@@ -42,7 +42,7 @@ export const getVesselLogbook =
     }
 
     if (isFromUserAction) {
-      dispatch(setDisplayedErrors({ vesselSidebarError: null }))
+      dispatch(displayedErrorActions.unset('vesselSidebarError'))
       dispatch(logbookActions.setIsLoading())
     }
 
@@ -92,10 +92,7 @@ export const getVesselLogbook =
       dispatch(
         displayOrLogError(
           error as Error,
-          {
-            func: getVesselLogbook(isInLightMode),
-            parameters: [vesselIdentity, navigateTo, isFromUserAction]
-          },
+          () => getVesselLogbook(isInLightMode)(vesselIdentity, navigateTo, isFromUserAction, nextTripNumber),
           isFromUserAction,
           'vesselSidebarError'
         )

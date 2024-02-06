@@ -15,7 +15,6 @@ import { FrontendApiError } from '../../../../libs/FrontendApiError'
 import { FrontendError } from '../../../../libs/FrontendError'
 import { NoRsuiteOverrideWrapper } from '../../../../ui/NoRsuiteOverrideWrapper'
 import { addMission } from '../../../Mission/useCases/addMission'
-import { getMissionFormInitialValues } from '../../../SideWindow/MissionForm/utils/getMissionFormInitialValues'
 import { monitorenvControlUnitApi, useGetControlUnitQuery } from '../../controlUnitApi'
 
 import type { MissionMainFormValues } from '../../../SideWindow/MissionForm/types'
@@ -39,8 +38,7 @@ export function ControlUnitDialog() {
       throw new FrontendError('`controlUnit` is undefined.')
     }
 
-    const initialMissionMainFormValues: MissionMainFormValues = {
-      ...getMissionFormInitialValues(undefined, []).initialMainFormValues,
+    const initialMissionMainFormValues: Partial<MissionMainFormValues> = {
       controlUnits: [
         {
           administration: controlUnit.administration.name,
@@ -53,7 +51,7 @@ export function ControlUnitDialog() {
       ]
     }
 
-    dispatch(addMission({ mainFormValues: initialMissionMainFormValues }))
+    dispatch(addMission(initialMissionMainFormValues))
   }, [controlUnit, dispatch])
 
   const close = useCallback(() => {

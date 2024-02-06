@@ -1,5 +1,4 @@
-import { Accent, Button, customDayjs, Icon, logSoftError, NotificationEvent, usePrevious } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/dist/query'
+import { Accent, Button, customDayjs, Icon, logSoftError, NotificationEvent } from '@mtes-mct/monitor-ui'
 import { isEqual } from 'lodash'
 import { omit } from 'lodash/fp'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -10,12 +9,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { ActionForm } from './ActionForm'
 import { ActionList } from './ActionList'
 import { getMissionActionFormInitialValues } from './ActionList/utils'
-import {
-  useCreateMissionMutation,
-  useDeleteMissionMutation,
-  useGetMissionQuery,
-  useUpdateMissionMutation
-} from './apis'
+import { useCreateMissionMutation, useDeleteMissionMutation, useUpdateMissionMutation } from './apis'
 import { AUTO_SAVE_ENABLED } from './constants'
 import { useListenToMissionEventUpdatesById } from './hooks/useListenToMissionEventUpdatesById'
 import { useUpdateFreezedActionFormValues } from './hooks/useUpdateFreezedActionFormValues'
@@ -32,60 +26,51 @@ import {
   getUpdatedMissionFromMissionMainFormValues
 } from './utils'
 import { areMissionFormsValuesValid } from './utils/areMissionFormsValuesValid'
-import { getMissionFormInitialValues } from './utils/getMissionFormInitialValues'
 import { validateMissionForms } from './utils/validateMissionForms'
 import {
   useCreateMissionActionMutation,
   useDeleteMissionActionMutation,
-  useGetMissionActionsQuery,
   useUpdateMissionActionMutation
 } from '../../../api/missionAction'
-import { missionActions } from '../../../domain/actions'
-import { Mission, type MissionWithActions } from '../../../domain/entities/mission/types'
+import { Mission } from '../../../domain/entities/mission/types'
 import { getMissionStatus } from '../../../domain/entities/mission/utils'
 import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
-import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
-import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
-import { retry } from '../../../domain/use_cases/error/retry'
-import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { FrontendError } from '../../../libs/FrontendError'
 import { FrontendErrorBoundary } from '../../../ui/FrontendErrorBoundary'
 import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
+import { ensure } from '../../../utils/ensure'
+import { missionFormActions } from '../../Mission/components/MissionForm/slice'
+import { openSideWindowPath } from '../useCases/openSideWindowPath'
 
 import type { MissionActionFormValues, MissionMainFormValues } from './types'
 import type { MissionAction } from '../../../domain/types/missionAction'
+import type { MissionWithActionsDraft } from '../../Mission/types'
 
 export function MissionForm() {
   const dispatch = useMainAppDispatch()
-  const isNewEdition = useMainAppSelector(store => store.mission.isNewEdition)
   const missionIdFromPath = useMainAppSelector(store => store.sideWindow.selectedPath.id)
-  const newMissionId = useRef<number | undefined>(undefined)
-  const missionId = missionIdFromPath || newMissionId?.current
-  const isDraftCancellationConfirmationDialogOpen = useMainAppSelector(
-    store => store.sideWindow.isDraftCancellationConfirmationDialogOpen
+  const draft = ensure(
+    useMainAppSelector(store => store.missionForm.draft),
+    'store.missionForm.draft'
   )
-  const missionFormError = useMainAppSelector(state => state.displayedError.missionFormError)
-  const missionDraft = useMainAppSelector(state => state.mission.draft)
-  const {
-    data: missionData,
-    error: missionError,
-    isFetching: isFetchingMission
-  } = useGetMissionQuery(missionId || skipToken)
-  const {
-    data: missionActionsData,
-    error: missionActionsError,
-    isFetching: isFetchingMissionActions
-  } = useGetMissionActionsQuery(missionId || skipToken)
+  const originalMissionWithActions = useMainAppSelector(store => store.missionForm.originalMissionWithActions)
+
+  const missionIdFromRef = useRef<number | undefined>(missionIdFromPath)
+
   const [createMission, { isLoading: isCreatingMission }] = useCreateMissionMutation()
   const [deleteMission, { isLoading: isDeletingMission }] = useDeleteMissionMutation()
   const [createMissionAction, { isLoading: isCreatingMissionAction }] = useCreateMissionActionMutation()
   const [deleteMissionAction, { isLoading: isDeletingMissionAction }] = useDeleteMissionActionMutation()
   const [updateMission, { isLoading: isUpdatingMission }] = useUpdateMissionMutation()
   const [updateMissionAction, { isLoading: isUpdatingMissionAction }] = useUpdateMissionActionMutation()
-  const missionEvent = useListenToMissionEventUpdatesById(missionId)
+  const missionEvent = useListenToMissionEventUpdatesById(missionIdFromRef.current)
+
+  const isDraftCancellationConfirmationDialogOpen = useMainAppSelector(
+    store => store.sideWindow.isDraftCancellationConfirmationDialogOpen
+  )
 
   const isSaving =
     isCreatingMission ||
@@ -95,16 +80,13 @@ export function MissionForm() {
     isDeletingMissionAction ||
     isUpdatingMissionAction
 
-  const hasFetchingError = !!missionError || !!missionActionsError
-  const isLoading =
-    missionIdFromPath && ((isFetchingMission && !missionData) || (isFetchingMissionActions && !missionActionsData))
+  const isLoading = false
 
-  const [mainFormValues, setMainFormValues] = useState<MissionMainFormValues | undefined>(undefined)
+  const [mainFormValues, setMainFormValues] = useState<MissionMainFormValues>(draft.mainFormValues)
   const [actionsFormValues, setActionsFormValues] = useState<MissionActionFormValues[]>([])
   const [editedActionIndex, setEditedActionIndex] = useState<number | undefined>(undefined)
   const [isDeletionConfirmationDialogOpen, setIsDeletionConfirmationDialogOpen] = useState(false)
-  const [title, setTitle] = useState(getTitleFromMissionMainFormValues(undefined, undefined))
-  const previousMissionId = usePrevious(missionIdFromPath)
+  const [title, setTitle] = useState(getTitleFromMissionMainFormValues(mainFormValues, missionIdFromRef.current))
 
   // We use these keys to fully control when to re-render `<MainForm />` & `<ActionForm />`
   // since they are fully memoized in order to optimize their (heavy) re-rendering
@@ -134,18 +116,6 @@ export function MissionForm() {
     }))
   }, [missionEvent])
 
-  useEffect(() => {
-    if (missionError) {
-      dispatch(displayOrLogError(missionError as Error, undefined, true, 'missionFormError'))
-    }
-  }, [dispatch, missionError])
-
-  useEffect(() => {
-    if (missionActionsError) {
-      dispatch(displayOrLogError(missionActionsError as Error, undefined, true, 'missionFormError'))
-    }
-  }, [dispatch, missionActionsError])
-
   const isAutoSaveEnabled = useMemo(() => {
     if (!AUTO_SAVE_ENABLED) {
       return false
@@ -158,17 +128,6 @@ export function MissionForm() {
 
     return true
   }, [mainFormValues])
-
-  const missionWithActions: MissionWithActions | undefined = useMemo(() => {
-    if (!missionData) {
-      return undefined
-    }
-
-    return {
-      ...missionData,
-      actions: missionActionsData || []
-    }
-  }, [missionData, missionActionsData])
 
   const isMissionFormValid = areMissionFormsValuesValid(mainFormValues, actionsFormValues)
 
@@ -184,30 +143,23 @@ export function MissionForm() {
     }
 
     dispatch(
-      missionActions.setDraft({
+      missionFormActions.setDraft({
         actionsFormValues: [...actionsFormValues],
         mainFormValues: { ...mainFormValues }
       })
     )
 
-    setTitle(getTitleFromMissionMainFormValues(mainFormValues, missionId))
+    setTitle(getTitleFromMissionMainFormValues(mainFormValues, missionIdFromRef.current))
   }, 250)
 
   const createOrUpdate = useCallback(
-    async (
-      createdOrUpdatedMainFormValues: MissionMainFormValues | undefined,
-      createdOrUpdatedActionsFormValues: MissionActionFormValues[]
-    ) => {
-      if (!createdOrUpdatedMainFormValues) {
-        return
-      }
-
+    async (missionDraft: MissionWithActionsDraft) => {
       try {
-        dispatch(missionActions.setIsListeningToEvents(false))
+        dispatch(missionFormActions.setIsListeningToEvents(false))
         let nextMissionId: number
 
-        if (!missionId) {
-          const newMission = getMissionDataFromMissionFormValues(createdOrUpdatedMainFormValues)
+        if (!missionIdFromPath) {
+          const newMission = getMissionDataFromMissionFormValues(missionDraft.mainFormValues)
           // TODO Override Redux RTK typings globally.
           // Redux RTK typing is wrong, this should be a tuple-like to help TS discriminate `data` from `error`.
           const { data, error } = (await createMission(newMission)) as any
@@ -215,33 +167,38 @@ export function MissionForm() {
             throw new FrontendError('`createMission()` failed', error)
           }
 
-          newMissionId.current = data.id
+          missionIdFromRef.current = data.id
           nextMissionId = data.id
 
           setMainFormValues({
-            ...createdOrUpdatedMainFormValues,
+            ...missionDraft.mainFormValues,
             createdAtUtc: data.createdAtUtc,
             updatedAtUtc: data.updatedAtUtc
           })
         } else {
-          const updatedMission = getUpdatedMissionFromMissionMainFormValues(missionId, createdOrUpdatedMainFormValues)
+          const updatedMission = getUpdatedMissionFromMissionMainFormValues(
+            missionIdFromPath,
+            missionDraft.mainFormValues
+          )
           const { data, error } = (await updateMission(updatedMission)) as any
           if (!data) {
             throw new FrontendError('`updateMission()` failed', error)
           }
 
+          missionIdFromRef.current = missionIdFromPath
+          nextMissionId = missionIdFromPath
+
           setMainFormValues({
-            ...createdOrUpdatedMainFormValues,
+            ...missionDraft.mainFormValues,
             updatedAtUtc: data.updatedAtUtc
           })
-          nextMissionId = missionId
         }
 
         const { deletedMissionActionIds, updatedMissionActionDatas } =
           getMissionActionsDataFromMissionActionsFormValues(
             nextMissionId,
-            createdOrUpdatedActionsFormValues,
-            missionWithActions?.actions
+            missionDraft.actionsFormValues,
+            originalMissionWithActions?.actions
           )
 
         await Promise.all([
@@ -265,9 +222,9 @@ export function MissionForm() {
           })
         ])
 
-        dispatch(missionActions.setIsDraftDirty(false))
+        dispatch(missionFormActions.setIsDraftDirty(false))
         setTimeout(() => {
-          dispatch(missionActions.setIsListeningToEvents(true))
+          dispatch(missionFormActions.setIsListeningToEvents(true))
         }, 500)
       } catch (err) {
         logSoftError({
@@ -280,28 +237,29 @@ export function MissionForm() {
     },
     [
       dispatch,
-      missionWithActions,
       createMission,
       createMissionAction,
       deleteMissionAction,
       updateMission,
       updateMissionAction,
-      missionId
+      missionIdFromRef,
+      missionIdFromPath,
+      originalMissionWithActions
     ]
   )
 
   const goToMissionList = useCallback(async () => {
-    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_LIST }))
+    dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }))
   }, [dispatch])
 
   const handleDelete = useCallback(async () => {
-    if (!missionIdFromPath) {
+    if (!missionIdFromRef.current) {
       throw new FrontendError('`missionId` is undefined')
     }
 
-    await deleteMission(missionIdFromPath)
-    dispatch(sideWindowActions.openOrFocusAndGoTo({ menu: SideWindowMenuKey.MISSION_LIST }))
-  }, [deleteMission, dispatch, missionIdFromPath])
+    await deleteMission(missionIdFromRef.current)
+    dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }))
+  }, [deleteMission, dispatch])
 
   const reopen = useCallback(() => {
     if (!mainFormValues) {
@@ -317,12 +275,15 @@ export function MissionForm() {
     window.document.dispatchEvent(new NotificationEvent('La mission a bien été réouverte', 'success', true))
 
     if (!areMissionFormsValuesValid(nextMainFormValues, actionsFormValues)) {
-      dispatch(missionActions.setIsDraftDirty(true))
+      dispatch(missionFormActions.setIsDraftDirty(true))
 
       return
     }
 
-    createOrUpdate(nextMainFormValues, actionsFormValues)
+    createOrUpdate({
+      actionsFormValues,
+      mainFormValues: nextMainFormValues
+    })
   }, [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues])
 
   const close = useCallback(async () => {
@@ -340,8 +301,8 @@ export function MissionForm() {
       setMainFormValues(nextMainFormValues)
       setActionsFormValues(nextActionsFormValues)
 
-      dispatch(missionActions.setIsDraftDirty(true))
-      dispatch(missionActions.setIsClosing(true))
+      dispatch(missionFormActions.setIsDraftDirty(true))
+      dispatch(missionFormActions.setIsClosing(true))
 
       return
     }
@@ -352,8 +313,13 @@ export function MissionForm() {
     }
     setMainFormValues(mainFormValuesWithIsClosed)
     updateReduxSliceDraft()
-    await createOrUpdate(mainFormValuesWithIsClosed, actionsFormValues)
-    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_LIST }))
+
+    await createOrUpdate({
+      actionsFormValues,
+      mainFormValues: mainFormValuesWithIsClosed
+    })
+
+    dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }))
   }, [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues])
 
   const updateEditedActionFormValuesCallback = useCallback(
@@ -369,12 +335,15 @@ export function MissionForm() {
       updateReduxSliceDraft()
 
       if (!areMissionFormsValuesValid(mainFormValues, nextActionFormValuesOrActions) || !isAutoSaveEnabled) {
-        dispatch(missionActions.setIsDraftDirty(true))
+        dispatch(missionFormActions.setIsDraftDirty(true))
 
         return
       }
 
-      createOrUpdate(mainFormValues, nextActionFormValuesOrActions)
+      createOrUpdate({
+        actionsFormValues: nextActionFormValuesOrActions,
+        mainFormValues
+      })
     },
     [
       dispatch,
@@ -414,12 +383,15 @@ export function MissionForm() {
       }
 
       if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !isAutoSaveEnabled) {
-        dispatch(missionActions.setIsDraftDirty(true))
+        dispatch(missionFormActions.setIsDraftDirty(true))
 
         return
       }
 
-      createOrUpdate(mainFormValues, nextActionsFormValues)
+      createOrUpdate({
+        actionsFormValues: nextActionsFormValues,
+        mainFormValues
+      })
     },
     [
       dispatch,
@@ -452,12 +424,15 @@ export function MissionForm() {
       // setActionFormKey(key => key + 1)
 
       if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !isAutoSaveEnabled) {
-        dispatch(missionActions.setIsDraftDirty(true))
+        dispatch(missionFormActions.setIsDraftDirty(true))
 
         return
       }
 
-      createOrUpdate(mainFormValues, nextActionsFormValues)
+      createOrUpdate({
+        actionsFormValues: nextActionsFormValues,
+        mainFormValues
+      })
     },
     [
       dispatch,
@@ -489,12 +464,15 @@ export function MissionForm() {
       // setActionFormKey(key => key + 1)
 
       if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !isAutoSaveEnabled) {
-        dispatch(missionActions.setIsDraftDirty(true))
+        dispatch(missionFormActions.setIsDraftDirty(true))
 
         return
       }
 
-      createOrUpdate(mainFormValues, nextActionsFormValues)
+      createOrUpdate({
+        actionsFormValues: nextActionsFormValues,
+        mainFormValues
+      })
     },
     [
       dispatch,
@@ -548,12 +526,15 @@ export function MissionForm() {
         !areMissionFormsValuesValid(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues) ||
         !isAutoSaveEnabled
       ) {
-        dispatch(missionActions.setIsDraftDirty(true))
+        dispatch(missionFormActions.setIsDraftDirty(true))
 
         return
       }
 
-      createOrUpdate(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues)
+      createOrUpdate({
+        actionsFormValues,
+        mainFormValues: mainFormValuesWithUpdatedIsClosedProperty
+      })
     },
     [
       dispatch,
@@ -575,88 +556,6 @@ export function MissionForm() {
     setIsDeletionConfirmationDialogOpen(!isDeletionConfirmationDialogOpen)
   }, [isDeletionConfirmationDialogOpen])
 
-  // ---------------------------------------------------------------------------
-  // DATA INITIALIZATION ON COMPONENT MOUNT
-
-  useEffect(() => {
-    if (isLoading || hasFetchingError || (mainFormValues && missionIdFromPath === previousMissionId && !isNewEdition)) {
-      return
-    }
-
-    dispatch(missionActions.unsetIsNewEdition())
-
-    formikEditedActionFormValuesRef.current = undefined
-    newMissionId.current = undefined
-
-    // When we create a new mission
-    if (!missionId) {
-      if (!missionDraft) {
-        throw new FrontendError('`missionDraft` is undefined.')
-      }
-
-      setMainFormValues(missionDraft.mainFormValues)
-      setActionsFormValues(missionDraft.actionsFormValues)
-      updateReduxSliceDraft()
-      // We need to force the forms re-render when opening a new draft while a draft is already opened.
-      // (i.e.: opening a new draft from another control unit)
-      setActionFormKey(key => key + 1)
-
-      return
-    }
-
-    // When we edit an existing mission
-    const mission = omit(['actions'], missionWithActions)
-
-    const { initialActionsFormValues, initialMainFormValues } = getMissionFormInitialValues(
-      mission,
-      missionWithActions?.actions ?? []
-    )
-    const [, { nextActionsFormValues, nextMainFormValues }] = validateMissionForms(
-      initialMainFormValues,
-      initialActionsFormValues,
-      false
-    )
-
-    setMainFormValues(nextMainFormValues)
-    setActionsFormValues(nextActionsFormValues)
-    updateReduxSliceDraft()
-  }, [
-    dispatch,
-    hasFetchingError,
-    isNewEdition,
-    isLoading,
-    mainFormValues,
-    missionDraft,
-    missionId,
-    missionIdFromPath,
-    updateReduxSliceDraft,
-    missionWithActions,
-    previousMissionId
-  ])
-
-  useEffect(
-    () => () => {
-      dispatch(missionActions.unsetDraft())
-    },
-    [dispatch]
-  )
-
-  // ---------------------------------------------------------------------------
-
-  if (missionFormError) {
-    return (
-      <ErrorFallback data-cy="mission-form-error">
-        🔌 {missionFormError.message}
-        <br />
-        {missionFormError.useCase && (
-          <RetryButton accent={Accent.PRIMARY} onClick={() => dispatch(retry(missionFormError.useCase))}>
-            Réessayer
-          </RetryButton>
-        )}
-      </ErrorFallback>
-    )
-  }
-
   return (
     <>
       <Wrapper>
@@ -664,7 +563,7 @@ export function MissionForm() {
           <BackToListIcon onClick={goToMissionList} />
 
           <HeaderTitle>{title}</HeaderTitle>
-          <TitleSourceTag missionId={missionId} missionSource={mainFormValues?.missionSource} />
+          <TitleSourceTag missionId={missionIdFromRef.current} missionSource={mainFormValues?.missionSource} />
           {mainFormValues && <TitleStatusTag status={getMissionStatus(mainFormValues)} />}
         </Header>
 
@@ -675,10 +574,9 @@ export function MissionForm() {
             {!isLoading && mainFormValues && (
               <>
                 <MainForm
-                  // We use this key to fully control when to re-render `<MainForm />`
-                  key={missionId}
+                  key={missionIdFromRef.current}
                   initialValues={mainFormValues}
-                  missionId={missionId}
+                  missionId={missionIdFromRef.current}
                   onChange={updateMainFormValues}
                 />
                 <ActionList
@@ -702,7 +600,7 @@ export function MissionForm() {
         </Body>
         <Footer>
           <div>
-            {missionIdFromPath && (
+            {!!missionIdFromPath && (
               <Button
                 accent={Accent.SECONDARY}
                 disabled={isLoading || isSaving || mainFormValues?.missionSource !== Mission.MissionSource.MONITORFISH}
@@ -730,7 +628,10 @@ export function MissionForm() {
                 disabled={isLoading || isSaving || !isMissionFormValid}
                 Icon={Icon.Save}
                 onClick={async () => {
-                  await createOrUpdate(mainFormValues, actionsFormValues)
+                  await createOrUpdate({
+                    actionsFormValues,
+                    mainFormValues
+                  })
 
                   goToMissionList()
                 }}
@@ -786,37 +687,20 @@ const MissionInfos = styled.div`
   font-style: italic;
 `
 
-const ErrorFallback = styled.div`
-  width: 250px;
-  height: 90px;
-  color: ${p => p.theme.color.slateGray};
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  transform: translateY(-50%);
-  text-align: center;
-`
-
-const RetryButton = styled(Button)`
-  margin-top: 10px;
-`
-
-const BackToListIcon = styled(Icon.Chevron)`
+export const BackToListIcon = styled(Icon.Chevron)`
   margin-right: 12px;
   transform: rotate(90deg);
   cursor: pointer;
 `
 
 // All containers within Wrapper should now be only using flexboxes
-const Wrapper = styled(NoRsuiteOverrideWrapper)`
+export const Wrapper = styled(NoRsuiteOverrideWrapper)`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 `
 
-const Header = styled.div`
+export const Header = styled.div`
   align-items: center;
   background-color: ${p => p.theme.color.white};
   border-bottom: solid 2px ${p => p.theme.color.gainsboro};
@@ -834,7 +718,7 @@ const Header = styled.div`
   }
 `
 
-const HeaderTitle = styled.h1`
+export const HeaderTitle = styled.h1`
   color: ${p => p.theme.color.charcoal};
   font-size: 22px;
   font-weight: 700;
@@ -843,14 +727,14 @@ const HeaderTitle = styled.h1`
   vertical-align: 2px;
 `
 
-const Body = styled.div`
+export const Body = styled.div`
   background-color: ${p => p.theme.color.gainsboro};
   display: flex;
   flex-grow: 1;
   min-height: 0;
 `
 
-const Footer = styled.div`
+export const Footer = styled.div`
   background-color: ${p => p.theme.color.white};
   border-top: solid 2px ${p => p.theme.color.gainsboro};
   display: flex;
@@ -875,6 +759,6 @@ const Footer = styled.div`
   }
 `
 
-const CloseButton = styled(Button)`
+export const CloseButton = styled(Button)`
   height: 34px;
 `

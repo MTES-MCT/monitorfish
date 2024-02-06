@@ -6,7 +6,7 @@ import {
   resetVesselBeaconMalfunctionsResumeAndHistory,
   setVesselBeaconMalfunctionsResumeAndHistory
 } from '../../shared_slices/BeaconMalfunction'
-import { setDisplayedErrors } from '../../shared_slices/DisplayedError'
+import { displayedErrorActions } from '../../shared_slices/DisplayedError'
 import { removeError } from '../../shared_slices/Global'
 import { displayOrLogError } from '../error/displayOrLogError'
 
@@ -24,7 +24,7 @@ export const getVesselBeaconMalfunctions = (isFromUserAction: boolean) => async 
 
   if (isFromUserAction) {
     dispatch(loadVesselBeaconMalfunctions())
-    dispatch(setDisplayedErrors({ vesselSidebarError: null }))
+    dispatch(displayedErrorActions.unset('vesselSidebarError'))
   }
 
   try {
@@ -47,11 +47,8 @@ export const getVesselBeaconMalfunctions = (isFromUserAction: boolean) => async 
   } catch (error) {
     dispatch(
       displayOrLogError(
-        error as Error,
-        {
-          func: getVesselBeaconMalfunctions,
-          parameters: [isFromUserAction]
-        },
+        error,
+        () => getVesselBeaconMalfunctions(isFromUserAction),
         isFromUserAction,
         'vesselSidebarError'
       )

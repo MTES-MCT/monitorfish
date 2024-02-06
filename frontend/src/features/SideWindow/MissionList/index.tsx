@@ -7,7 +7,6 @@ import { MISSION_LIST_SUB_MENU_OPTIONS, MISSION_LIST_TABLE_OPTIONS } from './con
 import { ExportActivityReportsDialog } from './ExportActivityReportsDialog'
 import { FilterBar } from './FilterBar'
 import { hasSomeOngoingActions, renderStatus } from './utils'
-import { missionActions } from '../../../domain/actions'
 import { useGetFilteredMissionsQuery } from '../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFrontGroup } from '../../../domain/entities/seaFront/constants'
 import { fitToExtent } from '../../../domain/shared_slices/Map'
@@ -16,6 +15,7 @@ import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { useTable } from '../../../hooks/useTable'
 import { EmptyCardTable } from '../../../ui/card-table/EmptyCardTable'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
+import { missionListActions } from '../../Mission/components/MissionList/slice'
 import { addMission } from '../../Mission/useCases/addMission'
 import { editMission } from '../../Mission/useCases/editMission'
 import { SubMenu } from '../SubMenu'
@@ -24,7 +24,7 @@ import type { Mission, MissionWithActions } from '../../../domain/entities/missi
 import type { GeoJSON as GeoJSONType } from '../../../domain/types/GeoJSON'
 
 export function MissionList() {
-  const mission = useMainAppSelector(store => store.mission)
+  const listSeaFront = useMainAppSelector(store => store.missionList.listSeaFront)
 
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
   const [isExportActivityReportsModalOpen, setIsExportActivityReportsModalOpen] = useState<boolean | undefined>(
@@ -65,7 +65,7 @@ export function MissionList() {
 
   const handleSubMenuChange = useCallback(
     (nextSeaFrontGroup: SeaFrontGroup) => {
-      dispatch(missionActions.setListSeaFront(nextSeaFrontGroup))
+      dispatch(missionListActions.setListSeaFront(nextSeaFrontGroup))
     },
     [dispatch]
   )
@@ -93,7 +93,7 @@ export function MissionList() {
         counter={countMissionsForSeaFrontGroup}
         onChange={handleSubMenuChange}
         options={MISSION_LIST_SUB_MENU_OPTIONS}
-        value={mission.listSeaFront}
+        value={listSeaFront}
       />
 
       <Wrapper>

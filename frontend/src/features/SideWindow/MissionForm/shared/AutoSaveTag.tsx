@@ -2,9 +2,9 @@ import { Tag, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 type AutoSaveTagProps = {
-  isAutoSaveEnabled: boolean
+  isAutoSaveEnabled?: boolean
 }
-export function AutoSaveTag({ isAutoSaveEnabled }: AutoSaveTagProps) {
+export function AutoSaveTag({ isAutoSaveEnabled = false }: AutoSaveTagProps) {
   return (
     <Wrapper
       backgroundColor={isAutoSaveEnabled ? THEME.color.mediumSeaGreen25 : THEME.color.gainsboro}
@@ -17,6 +17,7 @@ export function AutoSaveTag({ isAutoSaveEnabled }: AutoSaveTagProps) {
 }
 
 const Wrapper = styled(Tag)<{
+  // TODO Is this used?
   isAutoSaveEnabled: boolean
 }>`
   margin-left: 24px;

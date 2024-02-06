@@ -19,7 +19,7 @@ const overlayHeight = 200
 const INITIAL_OFFSET_VALUE = [0, 0]
 
 export function MissionOverlay({ feature, isSelected = false }) {
-  const selectedMissionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionGeoJSON)
+  const selectedMissionGeoJSON = useMainAppSelector(store => store.mainMap.selectedMissionGeoJSON)
   const currentOffsetRef = useRef(INITIAL_OFFSET_VALUE)
   const [missionProperties, setMissionProperties] = useState<Mission.MissionPointFeatureProperties | undefined>(
     undefined

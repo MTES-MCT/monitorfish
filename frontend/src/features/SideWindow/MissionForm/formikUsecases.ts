@@ -1,11 +1,11 @@
 import { PAMControlUnitIds } from './constants'
 import { faoAreasApi } from '../../../api/faoAreas'
-import { missionActions as missionSliceActions } from '../../../domain/actions'
 import { MissionAction } from '../../../domain/types/missionAction'
 import { getLastControlCircleGeometry } from '../../../domain/use_cases/mission/getLastControlCircleGeometry'
 import { getFleetSegments } from '../../../domain/use_cases/vessel/getFleetSegments'
 import { FrontendError } from '../../../libs/FrontendError'
 import { getSummedSpeciesOnBoard } from '../../Logbook/utils'
+import { missionFormActions } from '../../Mission/components/MissionForm/slice'
 import { vesselApi } from '../../Vessel/apis'
 
 import type { MissionActionFormValues, MissionMainFormValues } from './types'
@@ -153,7 +153,7 @@ const updateMissionLocation =
       return
     }
 
-    dispatch(missionSliceActions.setGeometryComputedFromControls(nextMissionGeometry))
+    dispatch(missionFormActions.setGeometryComputedFromControls(nextMissionGeometry))
   }
 
 const updateOtherControlsCheckboxes =
@@ -169,7 +169,7 @@ const updateOtherControlsCheckboxes =
       return
     }
 
-    dispatch(missionSliceActions.mustResetOtherControlsCheckboxes(true))
+    dispatch(missionFormActions.mustResetOtherControlsCheckboxes(true))
   }
 
 export const formikUsecase = {

@@ -81,13 +81,9 @@ export function getMissionDataFromMissionFormValues(mainFormValues: MissionMainF
 }
 
 export function getTitleFromMissionMainFormValues(
-  mainFormValues: MissionMainFormValues | undefined,
+  mainFormValues: MissionMainFormValues,
   missionId: number | undefined
 ): string {
-  if (!mainFormValues) {
-    return 'Mission en cours de chargement...'
-  }
-
   return missionId
     ? `Mission ${
         mainFormValues.missionTypes &&

@@ -3,9 +3,9 @@ import { useFormikContext } from 'formik'
 import { useEffect } from 'react'
 import styled from 'styled-components'
 
-import { missionActions as missionSliceActions } from '../../../../../domain/actions'
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { missionFormActions } from '../../../../Mission/components/MissionForm/slice'
 import { PAMControlUnitIds } from '../../constants'
 import { FieldsetGroup } from '../../shared/FieldsetGroup'
 
@@ -14,8 +14,10 @@ import type { MissionActionFormValues } from '../../types'
 export function FormikOtherControlsCheckboxes() {
   const dispatch = useMainAppDispatch()
   const { setFieldValue } = useFormikContext<MissionActionFormValues>()
-  const mustResetOtherControlsCheckboxes = useMainAppSelector(state => state.mission.mustResetOtherControlsCheckboxes)
-  const draft = useMainAppSelector(state => state.mission.draft)
+  const mustResetOtherControlsCheckboxes = useMainAppSelector(
+    state => state.missionForm.mustResetOtherControlsCheckboxes
+  )
+  const draft = useMainAppSelector(state => state.missionForm.draft)
 
   useEffect(() => {
     if (mustResetOtherControlsCheckboxes) {
@@ -24,7 +26,7 @@ export function FormikOtherControlsCheckboxes() {
       setFieldValue('isSafetyEquipmentAndStandardsComplianceControl', undefined)
       setFieldValue('isSeafarersControl', undefined)
 
-      dispatch(missionSliceActions.mustResetOtherControlsCheckboxes(false))
+      dispatch(missionFormActions.mustResetOtherControlsCheckboxes(false))
     }
   }, [dispatch, setFieldValue, mustResetOtherControlsCheckboxes])
 

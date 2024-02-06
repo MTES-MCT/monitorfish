@@ -3,11 +3,11 @@ import styled from 'styled-components'
 
 import { SideWindowMenuKey, SideWindowStatus } from '../../domain/entities/sideWindow/constants'
 import { sideWindowActions } from '../../domain/shared_slices/SideWindow'
-import { sideWindowDispatchers } from '../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { MapButton } from '../commonStyles/MapButton'
 import BeaconMalfunctionsSVG from '../icons/Icone_VMS.svg?react'
+import { openSideWindowPath } from '../SideWindow/useCases/openSideWindowPath'
 
 export function BeaconMalfunctionsMapButton() {
   const dispatch = useMainAppDispatch()
@@ -25,7 +25,7 @@ export function BeaconMalfunctionsMapButton() {
       return
     }
 
-    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.BEACON_MALFUNCTION_BOARD }))
+    dispatch(openSideWindowPath({ menu: SideWindowMenuKey.BEACON_MALFUNCTION_BOARD }))
   }, [dispatch, isActive])
 
   return (

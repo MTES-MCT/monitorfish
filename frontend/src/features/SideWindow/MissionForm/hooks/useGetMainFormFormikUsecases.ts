@@ -10,7 +10,7 @@ import type { MissionMainFormValues } from '../types'
 
 export function useGetMainFormFormikUsecases() {
   const dispatch = useMainAppDispatch()
-  const draft = useMainAppSelector(state => state.mission.draft)
+  const draft = useMainAppSelector(state => state.missionForm.draft)
 
   const getPortsApiQuery = useGetPortsQuery()
 

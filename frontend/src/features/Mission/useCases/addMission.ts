@@ -1,25 +1,22 @@
 import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
-import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
-import { getMissionFormInitialValues } from '../../SideWindow/MissionForm/utils/getMissionFormInitialValues'
+import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
+import { openSideWindowPath } from '../../SideWindow/useCases/openSideWindowPath'
+import { missionFormActions } from '../components/MissionForm/slice'
+import { getMissionDraftFromPartialMainFormValues } from '../components/MissionForm/utils/getMissionDraftFromPartialMainFormValues'
 
 import type { MainAppThunk } from '../../../store'
-import type { MissionActionFormValues, MissionMainFormValues } from '../../SideWindow/MissionForm/types'
+import type { MissionMainFormValues } from '../../SideWindow/MissionForm/types'
 
 export const addMission =
-  (initialValues?: {
-    actionsFormValues?: MissionActionFormValues[]
-    mainFormValues?: MissionMainFormValues
-  }): MainAppThunk =>
+  (initialMainFormValues: Partial<MissionMainFormValues> = {}): MainAppThunk =>
   dispatch => {
-    const mainFormValues =
-      initialValues?.mainFormValues ?? getMissionFormInitialValues(undefined, []).initialMainFormValues
+    const newDraft = getMissionDraftFromPartialMainFormValues(initialMainFormValues)
 
+    dispatch(displayedErrorActions.unset('missionFormError'))
+    dispatch(missionFormActions.initializeDraft(newDraft))
     dispatch(
-      sideWindowDispatchers.openPath({
-        initialData: {
-          actionsFormValues: initialValues?.actionsFormValues ?? [],
-          mainFormValues
-        },
+      openSideWindowPath({
+        id: 'new',
         menu: SideWindowMenuKey.MISSION_FORM
       })
     )

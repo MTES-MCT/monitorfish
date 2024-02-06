@@ -19,8 +19,8 @@ export const useGetFilteredMissionsQuery = (): {
   missions: MissionWithActions[]
   missionsSeaFrontFiltered: MissionWithActions[]
 } => {
-  const listFilterValues = useMainAppSelector(state => state.mission.listFilterValues)
-  const listSeaFront = useMainAppSelector(state => state.mission.listSeaFront)
+  const listFilterValues = useMainAppSelector(state => state.missionList.listFilterValues)
+  const listSeaFront = useMainAppSelector(state => state.missionList.listSeaFront)
 
   const filteredSeaFronts = useMemo(() => SEA_FRONT_GROUP_SEA_FRONTS[listSeaFront], [listSeaFront])
 

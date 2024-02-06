@@ -6,7 +6,6 @@ import { remove } from 'ramda'
 import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { missionActions } from '../../../../domain/actions'
 import {
   InteractionListener,
   OPENLAYERS_PROJECTION,
@@ -18,6 +17,7 @@ import { addOrEditMissionZone } from '../../../../domain/use_cases/mission/addOr
 import { useListenForDrawedGeometry } from '../../../../hooks/useListenForDrawing'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { missionFormActions } from '../../../Mission/components/MissionForm/slice'
 import { useGetMainFormFormikUsecases } from '../hooks/useGetMainFormFormikUsecases'
 
 import type { MissionMainFormValues } from '../types'
@@ -25,7 +25,7 @@ import type { Coordinate } from 'ol/coordinate'
 
 export function FormikLocationPicker() {
   const { setFieldValue, values } = useFormikContext<MissionMainFormValues>()
-  const geometryComputedFromControls = useMainAppSelector(store => store.mission.geometryComputedFromControls)
+  const geometryComputedFromControls = useMainAppSelector(store => store.missionForm.geometryComputedFromControls)
 
   const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.MISSION_ZONE)
   const { updateMissionLocation } = useGetMainFormFormikUsecases()
@@ -101,7 +101,7 @@ export function FormikLocationPicker() {
         new NotificationEvent('Une zone de mission a été ajoutée à partir des contrôles de la mission', 'success', true)
       )
 
-      dispatch(missionActions.unsetGeometryComputedFromControls())
+      dispatch(missionFormActions.unsetGeometryComputedFromControls())
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [dispatch, geometryComputedFromControls]

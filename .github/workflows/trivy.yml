@@ -7,9 +7,9 @@ name: Trivy
 on:
   workflow_dispatch:
     version:
-      description: 'Version number'
+      description: "Version number"
       required: true
-      default: 'v1.0.0'
+      default: "v1.0.0"
 
 permissions:
   contents: read
@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Get last release version
         id: lastrelease
-        uses: pozetroninc/github-action-get-latest-release@master
+        uses: rez0n/actions-github-release@main
         with:
           repository: mtes-mct/monitorfish
       - id: version

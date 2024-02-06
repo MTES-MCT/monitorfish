@@ -18,11 +18,11 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Get last release version
         id: lastrelease
-        uses: pozetroninc/github-action-get-latest-release@master
+        uses: rez0n/actions-github-release@main
         with:
           repository: mtes-mct/monitorfish
 

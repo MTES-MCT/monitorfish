@@ -1,7 +1,7 @@
 // import { encodeUriObject } from '../../src/utils/encodeUriObject'
 
 context('Sidebars > Regulatory Layers', () => {
-  it('A regulation Should be searched, added to My Zones and showed on the map with the Zone button', () => {
+  it('The number of zones searched and total zones in law type should be displayed', () => {
     cy.loadPath('/#@-224002.65,6302673.54,8.70')
 
     cy.request(

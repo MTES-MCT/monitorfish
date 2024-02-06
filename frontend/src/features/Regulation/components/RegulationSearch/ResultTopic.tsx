@@ -23,24 +23,26 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
 }: RegulatoryLayerSearchResultTopicProps) {
   const dispatch = useMainAppDispatch()
 
+  const regulatoryLayerLawTypes = useMainAppSelector(state => state.regulatory.regulatoryLayerLawTypes)
   const selectedRegulatoryLayers = useMainAppSelector(state => state.regulatory.selectedRegulatoryLayers)
-  const regulatoryLayerSearch = useMainAppSelector(state => state.regulatoryLayerSearch)
+  const regulatoryLayersSearchResult = useMainAppSelector(
+    state => state.regulatoryLayerSearch.regulatoryLayersSearchResult
+  )
+  const regulatoryZonesChecked = useMainAppSelector(state => state.regulatoryLayerSearch.regulatoryZonesChecked)
 
-  const { regulatoryZonesChecked, searchResultZones, searchResultZonesLength } = useMemo<{
-    regulatoryZonesChecked: any[]
+  const { searchResultZones, searchResultZonesLength } = useMemo<{
     searchResultZones: any[]
     searchResultZonesLength: number
   }>(() => {
     const defaultValue = {
-      regulatoryZonesChecked: [],
       searchResultZones: [],
       searchResultZonesLength: 0
     }
 
-    if (!regulatoryLayerSearch.regulatoryLayersSearchResult || !regulatoryLayerLawType || !regulatoryLayerTopic) {
+    if (!regulatoryLayersSearchResult || !regulatoryLayerLawType || !regulatoryLayerTopic) {
       return defaultValue
     }
-    const regulatoryLayer = regulatoryLayerSearch.regulatoryLayersSearchResult[regulatoryLayerLawType]
+    const regulatoryLayer = regulatoryLayersSearchResult[regulatoryLayerLawType]
     if (!regulatoryLayer) {
       return defaultValue
     }
@@ -56,24 +58,23 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
     }
 
     return {
-      regulatoryZonesChecked: regulatoryLayerSearch.regulatoryZonesChecked,
       searchResultZones: _searchResultZones,
       searchResultZonesLength: _searchResultZones.length
     }
-  }, [regulatoryLayerSearch, regulatoryLayerLawType, regulatoryLayerTopic])
+  }, [regulatoryLayersSearchResult, regulatoryLayerLawType, regulatoryLayerTopic])
 
   const numberOfTotalZones = useMemo(() => {
-    if (!selectedRegulatoryLayers || !regulatoryLayerLawType || !regulatoryLayerTopic) {
+    if (!regulatoryLayerLawTypes || !regulatoryLayerLawType || !regulatoryLayerTopic) {
       return 0
     }
 
-    const regulatoryLayer = selectedRegulatoryLayers[regulatoryLayerLawType]
-    if (!regulatoryLayer) {
+    const regulatoryTopics = regulatoryLayerLawTypes[regulatoryLayerLawType]
+    if (!regulatoryTopics) {
       return 0
     }
 
-    return regulatoryLayer[regulatoryLayerTopic]?.length || 0
-  }, [regulatoryLayerLawType, regulatoryLayerTopic, selectedRegulatoryLayers])
+    return regulatoryTopics[regulatoryLayerTopic]?.length || 0
+  }, [regulatoryLayerLawType, regulatoryLayerTopic, regulatoryLayerLawTypes])
 
   const allZonesAreAlreadySelected =
     selectedRegulatoryLayers && regulatoryLayerTopic
@@ -110,7 +111,7 @@ function UnmemoizedRegulatoryLayerSearchResultTopic({
         <TopicName data-cy="regulatory-layer-topic" title={regulatoryLayerTopic}>
           {regulatoryLayerTopic}
         </TopicName>
-        <ZonesNumber>{`${topicDetails?.length}/${numberOfTotalZones}`}</ZonesNumber>
+        <ZonesNumber data-cy="regulatory-layer-topic-count">{`${topicDetails?.length}/${numberOfTotalZones}`}</ZonesNumber>
         <CheckboxGroup
           inline
           name="checkboxList"

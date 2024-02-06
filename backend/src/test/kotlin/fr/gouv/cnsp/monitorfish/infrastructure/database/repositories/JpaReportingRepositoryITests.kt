@@ -182,6 +182,30 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `findCurrentAndArchivedByVesselIdEquals Should return current and archived reporting`() {
+        // When
+        val reporting = jpaReportingRepository.findCurrentAndArchivedByVesselIdEquals(
+            123456,
+            ZonedDateTime.now().minusYears(1),
+        )
+
+        // Then
+        assertThat(reporting).hasSize(2)
+        assertThat(reporting.last().internalReferenceNumber).isEqualTo("ABC000180832")
+        assertThat(reporting.last().isArchived).isEqualTo(true)
+        assertThat(reporting.last().isDeleted).isEqualTo(false)
+        val alertOne = reporting.last().value as ThreeMilesTrawlingAlert
+        assertThat(alertOne.seaFront).isEqualTo("NAMO")
+
+        assertThat(reporting.first().internalReferenceNumber).isEqualTo("ABC000180832")
+        assertThat(reporting.first().isArchived).isEqualTo(false)
+        assertThat(reporting.first().isDeleted).isEqualTo(false)
+        val alertTwo = reporting.first().value as ThreeMilesTrawlingAlert
+        assertThat(alertTwo.seaFront).isEqualTo("NAMO")
+    }
+
+    @Test
+    @Transactional
     fun `archive Should set the archived flag as true`() {
         // Given
         val reportingToArchive = jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(

@@ -558,6 +558,7 @@ class VesselControllerITests {
 
         given(
             this.getVesselReportings.execute(
+                eq(123456),
                 eq("FR224226850"),
                 eq("123"),
                 eq("IEF4"),
@@ -575,7 +576,7 @@ class VesselControllerITests {
         // When
         api.perform(
             get(
-                "/bff/v1/vessels/reporting?internalReferenceNumber=FR224226850" +
+                "/bff/v1/vessels/reporting?vesselId=123456&internalReferenceNumber=FR224226850" +
                     "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z",
             ),
         )
@@ -598,6 +599,45 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.archived[0].type", equalTo("ALERT")))
             .andExpect(jsonPath("$.archived[0].isArchived", equalTo(true)))
             .andExpect(jsonPath("$.archived[0].isDeleted", equalTo(false)))
+    }
+
+    @Test
+    fun `Should get vessel's reporting with an empty vessel id`() {
+        given(
+            this.getVesselReportings.execute(
+                eq(null),
+                eq("FR224226850"),
+                eq("123"),
+                eq("IEF4"),
+                eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER),
+                any(),
+            ),
+        )
+            .willReturn(
+                CurrentAndArchivedReportings(
+                    current = listOf(),
+                    archived = listOf(),
+                ),
+            )
+
+        // When
+        api.perform(
+            get(
+                "/bff/v1/vessels/reporting?vesselId=&internalReferenceNumber=FR224226850" +
+                    "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z",
+            ),
+        )
+            // Then
+            .andExpect(status().isOk)
+
+        Mockito.verify(getVesselReportings).execute(
+            eq(null),
+            eq("FR224226850"),
+            eq("123"),
+            eq("IEF4"),
+            eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER),
+            any(),
+        )
     }
 
     @Test

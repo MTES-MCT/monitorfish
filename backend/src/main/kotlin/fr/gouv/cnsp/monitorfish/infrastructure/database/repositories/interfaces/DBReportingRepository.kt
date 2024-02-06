@@ -34,6 +34,24 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
 
     @Query(
         value = """
+        SELECT * FROM reportings WHERE
+            vessel_id = :vesselId AND (
+            (creation_date >= :fromDate AND
+                archived IS TRUE AND
+                deleted IS FALSE)
+            OR
+            (archived IS FALSE AND
+                deleted IS FALSE))
+        """,
+        nativeQuery = true,
+    )
+    fun findCurrentAndArchivedByVesselId(
+        vesselId: Int,
+        fromDate: Instant,
+    ): List<ReportingEntity>
+
+    @Query(
+        value = """
         SELECT * FROM reportings WHERE archived IS FALSE AND deleted IS FALSE AND type IN ('INFRACTION_SUSPICION', 'ALERT')
         """,
         nativeQuery = true,

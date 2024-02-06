@@ -157,11 +157,12 @@ class GetActivityReportsUTests {
         )
 
         // Then
-        assertThat(activityReports).hasSize(2)
-        val landReport = activityReports.first()
+        assertThat(activityReports.jdpSpecies).hasSize(38)
+        assertThat(activityReports.activityReports).hasSize(2)
+        val landReport = activityReports.activityReports.first()
         assertThat(landReport.activityCode).isEqualTo(ActivityCode.LAN)
         assertThat(landReport.action.portName).isEqualTo("Al Jazeera Port")
-        val seaReport = activityReports.last()
+        val seaReport = activityReports.activityReports.last()
         assertThat(seaReport.activityCode).isEqualTo(ActivityCode.FIS)
         assertThat(landReport.vesselNationalIdentifier).isEqualTo("AYFR00022680")
     }
@@ -275,8 +276,9 @@ class GetActivityReportsUTests {
         )
 
         // Then
-        assertThat(activityReports).hasSize(1)
-        val landReport = activityReports.first()
+        assertThat(activityReports.jdpSpecies).hasSize(38)
+        assertThat(activityReports.activityReports).hasSize(1)
+        val landReport = activityReports.activityReports.first()
         assertThat(landReport.activityCode).isEqualTo(ActivityCode.LAN)
         assertThat(landReport.action.portName).isEqualTo("Al Jazeera Port")
     }
@@ -369,6 +371,6 @@ class GetActivityReportsUTests {
         )
 
         // Then
-        assertThat(activityReports).hasSize(0)
+        assertThat(activityReports.activityReports).hasSize(0)
     }
 }

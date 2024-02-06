@@ -24,7 +24,7 @@ export type InfractionFormProps = {
   isEdition?: boolean
   natinfsAsOptions: Option<number>[]
   onCancel: () => void
-  onSubmit: (nextInfractionFormValues: MissionAction.Infraction, infractionGroup: string) => void
+  onSubmit: (nextInfractionFormValues: MissionAction.Infraction, infractionGroup: string | undefined) => void
 }
 export function InfractionForm({
   initialValues,
@@ -34,7 +34,7 @@ export function InfractionForm({
   onSubmit
 }: InfractionFormProps) {
   const { newWindowContainerRef } = useNewWindow()
-  const [infractionGroup, setInfractionCategory] = useState<string | undefined>(initialValues.group || undefined)
+  const [infractionGroup, setInfractionGroup] = useState<string | undefined>(initialValues.group || undefined)
 
   const infractionCategoryOptions = Object.keys(InfractionCategory).map(category => {
     const categoryValue = InfractionCategory[category]
@@ -71,7 +71,7 @@ export function InfractionForm({
                 return
               }
 
-              setInfractionCategory(category as string)
+              setInfractionGroup(category as string)
             }}
             options={infractionCategoryOptions}
             value={infractionGroup}

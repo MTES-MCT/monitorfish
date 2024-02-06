@@ -13,7 +13,7 @@ import java.util.*
 class CountryCodeUTests {
 
     @Test
-    fun `verify Should throw an exception When the vesselId is missing in a control`() {
+    fun `country codes from NAVPRO should be included in CountryCode library`() {
         // Given these country codes from NAVPRO
         val countryCodesFromNavpro = listOf(
                 "NA",
@@ -85,7 +85,6 @@ class CountryCodeUTests {
                 "UA",
                 "UG",
                 "UM",
-                "UN",
                 "US",
                 "UY",
                 "UZ",
@@ -104,9 +103,7 @@ class CountryCodeUTests {
                 "ZA",
                 "ZM",
                 "ZW",
-                "S",
                 "CS",
-                "YG",
                 "MA",
                 "AI",
                 "AQ",

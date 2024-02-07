@@ -410,6 +410,12 @@ context('Side Window > Mission Form > Main Form', () => {
   })
 
   it('Should close a new mission', () => {
+    cy.intercept('DELETE', '/bff/v1/mission_actions/2', {
+      body: {
+        id: 2
+      },
+      statusCode: 200
+    }).as('updateMissionAction')
     cy.intercept('POST', '/api/v1/missions/1', {
       body: {
         id: 1,

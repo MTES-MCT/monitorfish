@@ -64,7 +64,7 @@ dependencies {
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     api("com.neovisionaries:nv-i18n:1.29")
     api("com.github.ben-manes.caffeine:caffeine:3.1.8")
-    api("io.hypersistence:hypersistence-utils-hibernate-62:3.7.0")
+    api("io.hypersistence:hypersistence-utils-hibernate-62:3.7.1")
     api("org.locationtech.jts:jts-core:1.19.0")
     api("org.hibernate:hibernate-spatial:6.1.7.Final")
     api("io.sentry:sentry:6.31.0")

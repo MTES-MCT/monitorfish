@@ -5,6 +5,12 @@ typealias FaoZonesAndSpecy = Pair<FaoZones, String>
 
 /**
  * The following fao areas and species are defined in the species table document of each JDP.
+ *
+ * These tables could be found in these file names :
+ * - "Liste Espèces_JDP MED.pdf"
+ * - "liste espèces JDP NS-01.odt"
+ * - "LISTE_ESPECES_JDP WW.odt"
+ * * See issue: https://github.com/MTES-MCT/monitorfish/issues/1750
  */
 
 val MED_FAO_CODES = listOf("37.1", "37.2", "37.3")

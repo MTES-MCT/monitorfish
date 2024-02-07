@@ -1,6 +1,6 @@
 import { range } from 'lodash'
 
-import { JDP } from './constants'
+import { JDP, NOT_TARGETED_SPECIES_CODE } from './constants'
 import { MissionAction } from '../../../../domain/types/missionAction'
 
 import type { ActivityReportWithId } from './types'
@@ -17,9 +17,9 @@ export function formatDMDCoordinateForActivityReport(coordinate: string | undefi
   return `${hemisphere}${nextCoordinate}`
 }
 
-export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>, jdp: JDP) {
-  const numberOfSpeciesColumns = 35
-  const numberOfInfractionColumns = 12
+export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>, jdp: JDP, jdpSpecies: string[]) {
+  const numberOfSpeciesColumns = 10
+  const numberOfInfractionColumns = 6
 
   range(numberOfSpeciesColumns).forEach(index => {
     const count = index + 1
@@ -29,8 +29,15 @@ export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>,
       label: `SPECIES${count}`,
       transform: activity => {
         const speciesOnboard = activity.action.speciesOnboard[count - 1]
+        if (!speciesOnboard?.speciesCode) {
+          return ''
+        }
 
-        return speciesOnboard?.speciesCode || ''
+        if (!jdpSpecies.includes(speciesOnboard.speciesCode)) {
+          return NOT_TARGETED_SPECIES_CODE
+        }
+
+        return speciesOnboard.speciesCode
       }
     }
 

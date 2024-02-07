@@ -73,7 +73,7 @@ context('Side Window > Mission Form > Main Form', () => {
     })
 
     cy.get('div').contains('Mission créée le')
-    cy.get('div').contains('Dernière modification enregistrée il y a')
+    cy.get('div').contains('Dernière modification enregistrée')
     cy.get('h1').should('contain.text', 'Nouvelle mission')
   })
 
@@ -410,12 +410,6 @@ context('Side Window > Mission Form > Main Form', () => {
   })
 
   it('Should close a new mission', () => {
-    cy.intercept('DELETE', '/bff/v1/mission_actions/2', {
-      body: {
-        id: 2
-      },
-      statusCode: 200
-    }).as('updateMissionAction')
     cy.intercept('POST', '/api/v1/missions/1', {
       body: {
         id: 1,
@@ -450,7 +444,12 @@ context('Side Window > Mission Form > Main Form', () => {
 
   it('Should close an existing mission', () => {
     editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
-
+    cy.intercept('DELETE', '/bff/v1/mission_actions/2', {
+      body: {
+        id: 2
+      },
+      statusCode: 200
+    }).as('updateMissionAction')
     cy.intercept('POST', '/api/v1/missions/2', {
       body: {
         id: 2
@@ -462,6 +461,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.wait(500)
 
+    cy.clickButton('Supprimer l’action')
     cy.clickButton('Clôturer')
 
     cy.waitForLastRequest(

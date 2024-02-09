@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { LogbookMessageResumeHeader } from './LogbookMessageResumeHeader'
-import { SpeciesAndWeightChart } from './SpeciesAndWeightChart'
-import { COLORS } from '../../../../constants/constants'
-import { pluralize } from '../../../../utils/pluralize'
-import { LogbookMessageType as LogbookMessageTypeEnum } from '../../constants'
+import { SpeciesAndWeightChart } from './common/SpeciesAndWeightChart'
+import { COLORS } from '../../../../../../constants/constants'
+import { pluralize } from '../../../../../../utils/pluralize'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../constants'
+import { LogbookMessageResumeHeader } from '../LogbookMessageResumeHeader'
 
 export function FARMessageResume({
   allFARMessagesAreNotAcknowledged,

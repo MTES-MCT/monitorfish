@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { LogbookMessageResumeHeader } from './LogbookMessageResumeHeader'
-import { SpeciesAndWeightChart } from './SpeciesAndWeightChart'
-import { getDateTime } from '../../../../utils'
-import { LogbookMessagePNOPurposeType, LogbookMessageType as LogbookMessageTypeEnum } from '../../constants'
+import { SpeciesAndWeightChart } from './common/SpeciesAndWeightChart'
+import { getDateTime } from '../../../../../../utils'
+import { LogbookMessagePNOPurposeType, LogbookMessageType as LogbookMessageTypeEnum } from '../../../../constants'
+import { getCodeWithNameOrDash, getDatetimeOrDash } from '../../LogbookMessages/messages/utils'
+import { LogbookMessageResumeHeader } from '../LogbookMessageResumeHeader'
 
-import type { SpeciesInsight, SpeciesToSpeciesInsight } from '../../types'
+import type { SpeciesInsight, SpeciesToSpeciesInsight } from '../../../../types'
 
 type PNOMessageResumeProps = {
   hasNoMessage?: boolean
@@ -148,27 +149,11 @@ export function PNOMessageResume({
               <TableBody>
                 <Field>
                   <Key>Date de saisie</Key>
-                  <Value>
-                    {pnoMessage.reportDateTime ? (
-                      <>
-                        Le {getDateTime(pnoMessage.reportDateTime, true)} <Gray>(UTC)</Gray>
-                      </>
-                    ) : (
-                      <NoValue>-</NoValue>
-                    )}
-                  </Value>
+                  <Value>{getDatetimeOrDash(pnoMessage.reportDateTime)}</Value>
                 </Field>
                 <Field>
                   <Key>Port d&apos;arrivée</Key>
-                  <Value>
-                    {pnoMessage.message.port && pnoMessage.message.portName ? (
-                      <>
-                        {pnoMessage.message.portName} ({pnoMessage.message.port})
-                      </>
-                    ) : (
-                      <NoValue>-</NoValue>
-                    )}
-                  </Value>
+                  <Value>{getCodeWithNameOrDash(pnoMessage.message.port, pnoMessage.message.portName)}</Value>
                 </Field>
                 <Field>
                   <Key>Raison du préavis</Key>
@@ -201,14 +186,7 @@ export function PNOMessageResume({
                 {speciesNotLandedArray && speciesNotLandedArray.length ? (
                   speciesNotLandedArray.map(speciesCatch => (
                     <IndividualSpeciesNotLanded key={speciesCatch.species}>
-                      {speciesCatch.speciesName ? (
-                        <>
-                          {speciesCatch.speciesName} ({speciesCatch.species})
-                        </>
-                      ) : (
-                        speciesCatch.species
-                      )}
-                      - {speciesCatch.weight} kg
+                      {getCodeWithNameOrDash(speciesCatch.species, speciesCatch.speciesName)}- {speciesCatch.weight} kg
                       <br />
                     </IndividualSpeciesNotLanded>
                   ))

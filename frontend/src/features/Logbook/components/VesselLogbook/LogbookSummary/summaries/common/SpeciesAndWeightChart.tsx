@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import ChevronIconSVG from '../../../icons/Chevron_simple_gris.svg?react'
-import { LogbookSpeciesPresentation } from '../../constants'
+import ChevronIconSVG from '../../../../../../icons/Chevron_simple_gris.svg?react'
+import { LogbookSpeciesPresentation } from '../../../../../constants'
 
-import type { SpeciesInsight, SpeciesInsightWithHeight } from '../../types'
+import type { SpeciesInsight, SpeciesInsightWithHeight } from '../../../../../types'
 
 function getHeight(weight, percentOfTotalFARWeight) {
   let height = weight ? Math.log10(percentOfTotalFARWeight) : 22
@@ -41,7 +41,7 @@ export function SpeciesAndWeightChart({
 
   useEffect(
     () => {
-      if (speciesAndWeightArrayWithHeight && setChartHeight) {
+      if (speciesAndWeightArrayWithHeight) {
         const nextSpeciesAndWeightArrayWithHeight = speciesAndWeightArray.map(speciesAndWeight => {
           // eslint-disable-next-line no-param-reassign
           ;(speciesAndWeight as SpeciesInsightWithHeight).height = getHeight(

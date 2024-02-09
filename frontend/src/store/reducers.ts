@@ -10,7 +10,6 @@ import { displayedErrorReducer } from '../domain/shared_slices/DisplayedError'
 import { drawReducer } from '../domain/shared_slices/Draw'
 import { favoriteVesselReducer } from '../domain/shared_slices/FavoriteVessel'
 import { filterReducer } from '../domain/shared_slices/Filter'
-import { fleetSegmentReducer } from '../domain/shared_slices/FleetSegment'
 import { gearReducer } from '../domain/shared_slices/Gear'
 import { globalSliceReducer } from '../domain/shared_slices/Global'
 import { infractionReducer } from '../domain/shared_slices/Infraction'
@@ -79,7 +78,6 @@ export const mainReducer = {
   favoriteVessel: favoriteVesselReducer,
   filter: filterReducer,
   fishingActivities: logbookReducer,
-  fleetSegment: fleetSegmentReducer,
   infraction: infractionReducer,
   interestPoint: interestPointReducer,
   layer: layer.homepage.reducer,
@@ -98,7 +96,6 @@ export const mainReducer = {
 
 export const backofficeReducer = {
   ...commonReducerList,
-  fleetSegment: fleetSegmentReducer,
   layer: layer.backoffice.reducer,
   regulation: regulationReducer
 }

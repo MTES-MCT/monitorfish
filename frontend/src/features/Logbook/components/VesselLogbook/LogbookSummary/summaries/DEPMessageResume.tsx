@@ -1,30 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { LogbookMessageResumeHeader } from './LogbookMessageResumeHeader'
-import { getDateTime } from '../../../../utils'
-import { LogbookMessageType as LogbookMessageTypeEnum } from '../../constants'
+import { getDateTime } from '../../../../../../utils'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../constants'
+import { getCodeWithNameOrDash } from '../../LogbookMessages/messages/utils'
+import { LogbookMessageResumeHeader } from '../LogbookMessageResumeHeader'
 
+import type { DEPMessageValue } from '../../../../Logbook.types'
 import type { Promisable } from 'type-fest'
 
 type DEPMessageResumeProps = {
-  depMessage: {
-    departureDatetimeUtc: string
-    departurePort: string
-    departurePortName: string
-    gearOnboard: {
-      dimensions: number
-      gear: string
-      gearName: string
-      mesh: number
-      species: string
-    }[]
-    speciesOnboard: {
-      species: string
-      speciesName: string
-      weight: number
-    }[]
-  }
+  depMessage: DEPMessageValue
   hasNoMessage?: boolean
   isDeleted: boolean
   isNotAcknowledged: boolean
@@ -88,15 +74,7 @@ export function DEPMessageResume({
                   // eslint-disable-next-line react/no-array-index-key
                   <Gear key={gear.gear + index}>
                     <SubKey>Engin à bord {index + 1}</SubKey>{' '}
-                    <SubValue>
-                      {gear.gearName ? (
-                        <>
-                          {gear.gearName} ({gear.gear})
-                        </>
-                      ) : (
-                        gear.species
-                      )}
-                    </SubValue>
+                    <SubValue>{getCodeWithNameOrDash(gear.gear, gear.gearName)}</SubValue>
                     <br />
                     <SubKey>Maillage</SubKey>
                     <SubValue>{gear.mesh ? <>{gear.mesh} mm</> : <NoValue>-</NoValue>}</SubValue>
@@ -116,14 +94,8 @@ export function DEPMessageResume({
                       {depMessage.speciesOnboard?.length ? (
                         depMessage.speciesOnboard.map(speciesCatch => (
                           <span key={speciesCatch.species}>
-                            {speciesCatch.speciesName ? (
-                              <>
-                                {speciesCatch.speciesName} ({speciesCatch.species})
-                              </>
-                            ) : (
-                              speciesCatch.species
-                            )}
-                            - {speciesCatch.weight} kg
+                            {getCodeWithNameOrDash(speciesCatch.species, speciesCatch.speciesName)}-{' '}
+                            {speciesCatch.weight} kg
                             <br />
                           </span>
                         ))
@@ -164,6 +136,7 @@ const TableBody = styled.tbody``
 const Zone = styled.div`
   margin-left: 15px;
   margin-right: 10px;
+  margin-top: 10px;
   text-align: left;
 `
 

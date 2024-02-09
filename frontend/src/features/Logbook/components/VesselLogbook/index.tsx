@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
-import { FishingActivitiesSummary } from './FishingActivitiesSummary'
 import { LogbookMessages } from './LogbookMessages'
+import { LogbookSummary } from './LogbookSummary'
 import { FIVE_MINUTES } from '../../../../api/APIWorker'
 import { COLORS } from '../../../../constants/constants'
 import { FishingActivitiesTab, vesselsAreEquals } from '../../../../domain/entities/vessel/vessel'
@@ -12,6 +12,8 @@ import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { NavigateTo } from '../../constants'
 import { useGetLogbookUseCase } from '../../hooks/useGetLogbookUseCase'
 import { logbookActions } from '../../slice'
+
+import type { FishingActivities } from '../../Logbook.types'
 
 export function VesselLogbook() {
   const dispatch = useMainAppDispatch()
@@ -43,10 +45,6 @@ export function VesselLogbook() {
     [dispatch]
   )
 
-  const showSummary = () => {
-    dispatch(logbookActions.setTab(FishingActivitiesTab.SUMMARY))
-  }
-
   useEffect(() => {
     if (loadingFishingActivities) {
       return
@@ -72,29 +70,18 @@ export function VesselLogbook() {
     showedLogbookIsOutdated
   ])
 
-  const updateFishingActivities = useCallback(
-    _nextFishingActivities => {
-      if (!_nextFishingActivities) {
-        return
-      }
+  const updateFishingActivities = (_nextFishingActivities: FishingActivities) => {
+    if (!_nextFishingActivities) {
+      return
+    }
 
-      dispatch(logbookActions.setVoyage(_nextFishingActivities))
-      dispatch(logbookActions.resetNextUpdate())
-    },
-    [dispatch]
-  )
+    dispatch(logbookActions.setFishingActivities(_nextFishingActivities))
+    dispatch(logbookActions.resetNextUpdate())
+  }
 
-  const goToPreviousTrip = useCallback(() => {
-    dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.PREVIOUS, true))
-  }, [dispatch, getVesselLogbook, selectedVesselIdentity])
-
-  const goToNextTrip = useCallback(() => {
-    dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.NEXT, true))
-  }, [dispatch, getVesselLogbook, selectedVesselIdentity])
-
-  const goToLastTrip = useCallback(() => {
-    dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.LAST, true))
-  }, [dispatch, getVesselLogbook, selectedVesselIdentity])
+  const goToPreviousTrip = () => dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.PREVIOUS, true))
+  const goToNextTrip = () => dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.NEXT, true))
+  const goToLastTrip = () => dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.LAST, true))
 
   if (loadingFishingActivities) {
     return <FingerprintSpinner className="radar" color={COLORS.charcoal} size={100} />
@@ -115,7 +102,7 @@ export function VesselLogbook() {
         </>
       )}
       {fishingActivitiesTab === FishingActivitiesTab.SUMMARY && (
-        <FishingActivitiesSummary
+        <LogbookSummary
           navigation={{
             goToLastTrip,
             goToNextTrip,
@@ -132,7 +119,6 @@ export function VesselLogbook() {
             goToNextTrip,
             goToPreviousTrip
           }}
-          showFishingActivitiesSummary={showSummary}
         />
       )}
     </Wrapper>

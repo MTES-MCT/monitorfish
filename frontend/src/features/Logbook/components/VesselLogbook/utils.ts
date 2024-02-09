@@ -1,5 +1,9 @@
+import { getOptionsFromStrings } from '../../../../utils/getOptionsFromStrings'
+import { LogbookMessageType } from '../../constants'
 import {
   areAllMessagesNotAcknowledged,
+  getCPSDistinctSpecies,
+  getCPSMessages,
   getDEPMessage,
   getDISMessages,
   getDISSpeciesInsightRecord,
@@ -20,7 +24,12 @@ import {
 import type { LogbookTripSummary } from './types'
 import type { FishingActivities, Gear } from '../../Logbook.types'
 
-export const emptyLogbookTripSummary = {
+export const EMPTY_LOGBOOK_TRIP_SUMMARY = {
+  cps: {
+    areAllMessagesNotAcknowledged: false,
+    logs: [],
+    numberOfSpecies: 0
+  },
   dep: {
     log: undefined,
     totalWeight: 0
@@ -53,7 +62,7 @@ export const emptyLogbookTripSummary = {
 
 export function getLogbookTripSummary(fishingActivities: FishingActivities | undefined): LogbookTripSummary {
   if (!fishingActivities?.logbookMessages?.length) {
-    return emptyLogbookTripSummary
+    return EMPTY_LOGBOOK_TRIP_SUMMARY
   }
 
   const messages = fishingActivities.logbookMessages
@@ -66,6 +75,9 @@ export function getLogbookTripSummary(fishingActivities: FishingActivities | und
   const disMessages = getDISMessages(messages)
   const totalDISWeight = getTotalDISWeight(disMessages)
 
+  const cpsMessages = getCPSMessages(messages)
+  const numberOfSpecies = getCPSDistinctSpecies(cpsMessages)
+
   const farMessages = getFARMessages(messages)
   const totalFARWeight = getTotalFARWeight(farMessages)
 
@@ -73,6 +85,11 @@ export function getLogbookTripSummary(fishingActivities: FishingActivities | und
   const totalPNOWeight = getTotalPNOWeight(pnoMessage?.message)
 
   return {
+    cps: {
+      areAllMessagesNotAcknowledged: areAllMessagesNotAcknowledged(cpsMessages),
+      logs: cpsMessages.map(message => message.message),
+      numberOfSpecies
+    },
     dep: {
       log: depMessage,
       totalWeight: totalDEPWeight
@@ -116,4 +133,12 @@ export function getUniqueGears(gearOnboard: Gear[] | undefined): Gear[] {
       return acc
     }, []) || []
   )
+}
+
+export function getLogbookMessagesTypeOptions() {
+  const displayedMessages = Object.values(LogbookMessageType)
+    .filter(message => message.isFilterable)
+    .map(message => message.code)
+
+  return getOptionsFromStrings(displayedMessages)
 }

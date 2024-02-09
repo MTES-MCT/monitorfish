@@ -540,14 +540,16 @@ const vesselSlice = createSlice({
           ...vessel,
           flagState: vessel.flagState?.toLowerCase(),
           fleetSegmentsArray: vessel.segments ? vessel.segments.map(segment => segment.replace(' ', '')) : [],
-          gearsArray: vessel.gearOnboard ? [...new Set(vessel.gearOnboard.map(gear => gear.gear))] : [],
+          gearsArray: vessel.gearOnboard ? Array.from(new Set(vessel.gearOnboard.map(gear => gear.gear))) : [],
           hasAlert: !!vessel.alerts?.length,
           hasInfractionSuspicion:
             vessel.reportings?.some(reportingType => reportingIsAnInfractionSuspicion(reportingType)) || false,
           lastControlDateTimeTimestamp: vessel.lastControlDateTime
             ? new Date(vessel.lastControlDateTime).getTime()
             : '',
-          speciesArray: vessel.speciesOnboard ? [...new Set(vessel.speciesOnboard.map(species => species.species))] : []
+          speciesArray: vessel.speciesOnboard
+            ? Array.from(new Set(vessel.speciesOnboard.map(species => species.species)))
+            : []
         }
       }))
     },

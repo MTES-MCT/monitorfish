@@ -116,6 +116,14 @@ const logbookSlice = createSlice({
     },
 
     /**
+     * Set fishing activities
+     */
+    setFishingActivities(state, action: PayloadAction<FishingActivities>) {
+      state.fishingActivities = action.payload
+      state.loadingFishingActivities = false
+    },
+
+    /**
      * Set the loading of fishing activities to true, and shows a loader in the fishing activities tab
      * @param {Object=} state
      */

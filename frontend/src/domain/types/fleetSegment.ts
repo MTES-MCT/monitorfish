@@ -2,6 +2,7 @@ import type { Float } from 'type-fest'
 
 export type FleetSegment = {
   bycatchSpecies: string[] | null
+  dirm: string[]
   faoAreas: string[] | null
   gears: string[] | null
   impactRiskFactor: Float<number> | null

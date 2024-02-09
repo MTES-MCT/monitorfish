@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
-import ChevronIconSVG from '../../../icons/Chevron_simple_gris.svg?react'
-import NotAcknowledgedSVG from '../../../icons/Message_non_acquitte.svg?react'
-import ArrowSVG from '../../../icons/Picto_fleche-pleine-droite.svg?react'
-import { LogbookMessageType as LogbookMessageTypeEnum } from '../../constants'
+import ChevronIconSVG from '../../../../icons/Chevron_simple_gris.svg?react'
+import NotAcknowledgedSVG from '../../../../icons/Message_non_acquitte.svg?react'
+import ArrowSVG from '../../../../icons/Picto_fleche-pleine-droite.svg?react'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../constants'
 
 import type { Promisable } from 'type-fest'
 
@@ -20,7 +20,7 @@ type LogbookMessageResumeHeaderProps = {
   onHoverText: string | null
   rejectionCause?: string | undefined
   setIsOpen: (isOpen: boolean) => void
-  showLogbookMessages: ((messageType: string) => Promisable<void>) | undefined
+  showLogbookMessages: (messageType: string) => Promisable<void>
   title: JSX.Element | string | null
 }
 export function LogbookMessageResumeHeader({
@@ -56,15 +56,14 @@ export function LogbookMessageResumeHeader({
             isOpen={isOpen}
             onClick={() => setIsOpen(!isOpen)}
           >
-            {hasNoMessage || noContent ? null : <ChevronIcon $isOpen={isOpen} name={messageType} />}
+            {!(hasNoMessage || noContent) && <ChevronIcon $isOpen={isOpen} name={messageType} />}
             <LogbookMessageName
               hasNoMessage={hasNoMessage || noContent}
               isNotAcknowledged={isNotAcknowledged}
               title={rejectionCause || (isDeleted ? 'Message supprimé' : '')}
             >
-              {isNotAcknowledged || isDeleted ? (
-                <NotAcknowledgedOrDeleted data-cy="fishing-resume-not-acknowledged-icon" />
-              ) : null}
+              {isNotAcknowledged ||
+                (isDeleted && <NotAcknowledgedOrDeleted data-cy="fishing-resume-not-acknowledged-icon" />)}
               {LogbookMessageTypeEnum[messageType].name}
             </LogbookMessageName>
             <LogbookMessageResumeText data-cy="vessel-fishing-resume-title" title={onHoverText || ''}>
@@ -77,9 +76,7 @@ export function LogbookMessageResumeHeader({
                 </>
               )}
             </LogbookMessageResumeText>
-            {hasNoMessage ? null : (
-              <ShowThisMessage onClick={() => showLogbookMessages && showLogbookMessages(messageType)} />
-            )}
+            {!hasNoMessage && <ShowThisMessage onClick={() => showLogbookMessages(messageType)} />}
           </LogbookMessageTitle>
         </Wrapper>
       ) : null}

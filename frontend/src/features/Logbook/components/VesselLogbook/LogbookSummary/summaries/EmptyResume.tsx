@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 
-import { LogbookMessageResumeHeader } from './LogbookMessageResumeHeader'
-import { COLORS } from '../../../../constants/constants'
+import { COLORS } from '../../../../../../constants/constants'
+import { LogbookMessageResumeHeader } from '../LogbookMessageResumeHeader'
 
 type EmptyResumeProps = {
   messageType: string

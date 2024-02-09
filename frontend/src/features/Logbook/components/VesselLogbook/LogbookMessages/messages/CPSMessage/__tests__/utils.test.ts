@@ -28,6 +28,6 @@ describe('Logbook/components/vesselLogbook/LogbookMessages/CPSMessage/utils.tsx'
     const hours = getRemainingMinutes(40)
 
     // Then
-    expect(hours).toEqual(5)
+    expect(hours).toEqual(40)
   })
 })

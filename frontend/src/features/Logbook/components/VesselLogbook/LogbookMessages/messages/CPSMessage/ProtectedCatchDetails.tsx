@@ -30,9 +30,7 @@ export function ProtectedCatchDetails({ specyCatch }: ProtectedCatchDetailsProps
   }
 
   return (
-    <Wrapper
-      key={`${specyCatch.faoZone}${specyCatch.weight}${specyCatch.nbFish}${specyCatch.species}${specyCatch.statisticalRectangle}${specyCatch.economicZone}`}
-    >
+    <Wrapper data-cy="cps-message-species">
       <StyledTable>
         <TableBody>
           <TableRow>

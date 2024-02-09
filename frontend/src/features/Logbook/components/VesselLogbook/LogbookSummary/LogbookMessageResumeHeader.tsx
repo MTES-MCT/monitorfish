@@ -20,7 +20,7 @@ type LogbookMessageResumeHeaderProps = {
   onHoverText: string | null
   rejectionCause?: string | undefined
   setIsOpen: (isOpen: boolean) => void
-  showLogbookMessages: (messageType: string) => Promisable<void>
+  showLogbookMessages?: (messageType: string) => Promisable<void>
   title: JSX.Element | string | null
 }
 export function LogbookMessageResumeHeader({
@@ -48,7 +48,7 @@ export function LogbookMessageResumeHeader({
 
   return (
     <>
-      {messageType ? (
+      {messageType && (
         <Wrapper>
           <LogbookMessageTitle
             hasNoMessage={hasNoMessage || noContent}
@@ -62,8 +62,8 @@ export function LogbookMessageResumeHeader({
               isNotAcknowledged={isNotAcknowledged}
               title={rejectionCause || (isDeleted ? 'Message supprimé' : '')}
             >
-              {isNotAcknowledged ||
-                (isDeleted && <NotAcknowledgedOrDeleted data-cy="fishing-resume-not-acknowledged-icon" />)}
+              {(isNotAcknowledged ||
+                isDeleted) && <NotAcknowledgedOrDeleted data-cy="fishing-resume-not-acknowledged-icon" />}
               {LogbookMessageTypeEnum[messageType].name}
             </LogbookMessageName>
             <LogbookMessageResumeText data-cy="vessel-fishing-resume-title" title={onHoverText || ''}>
@@ -76,10 +76,12 @@ export function LogbookMessageResumeHeader({
                 </>
               )}
             </LogbookMessageResumeText>
-            {!hasNoMessage && <ShowThisMessage onClick={() => showLogbookMessages(messageType)} />}
+            {!hasNoMessage && (
+              <ShowThisMessage onClick={() => showLogbookMessages && showLogbookMessages(messageType)} />
+            )}
           </LogbookMessageTitle>
         </Wrapper>
-      ) : null}
+      )}
     </>
   )
 }

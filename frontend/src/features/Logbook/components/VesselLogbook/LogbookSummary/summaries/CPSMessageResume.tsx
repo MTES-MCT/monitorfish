@@ -53,9 +53,10 @@ export function CPSMessageResume({
           title={resumeTitleText}
         />
         {!!cpsMessages.length && (
-          <LogbookMessageContent $isOpen={isOpen} numberOfSpecies={species.length}>
+          <LogbookMessageContent $isOpen={isOpen} data-cy="cps-message-resume" numberOfSpecies={species.length}>
             {species.map((specy, index) => (
-              <Species>
+              // eslint-disable-next-line react/no-array-index-key
+              <Species key={index}>
                 <StyledFirstInlineKey>Espèce {index + 1}</StyledFirstInlineKey>
                 {getCodeWithNameOrDash(specy.species, specy.speciesName)}
                 <br />

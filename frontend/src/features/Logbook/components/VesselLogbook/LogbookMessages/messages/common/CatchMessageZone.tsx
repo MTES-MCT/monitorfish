@@ -11,13 +11,13 @@ import {
 } from '../utils'
 
 export type CatchMessageZoneProps = {
-  datetimeUtc?: string
-  dimensions?: string
-  gear?: string
-  gearName?: string
-  latitude?: number
-  longitude?: number
-  mesh?: number
+  datetimeUtc: string | undefined
+  dimensions: string | undefined
+  gear: string | undefined
+  gearName: string | undefined
+  latitude: number | undefined
+  longitude: number | undefined
+  mesh: number | undefined
 }
 export function CatchMessageZone({
   datetimeUtc,

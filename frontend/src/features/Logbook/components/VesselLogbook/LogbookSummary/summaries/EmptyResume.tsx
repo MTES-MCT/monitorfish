@@ -22,7 +22,6 @@ export function EmptyResume({ messageType }: EmptyResumeProps) {
         noContent
         onHoverText={title}
         setIsOpen={setIsOpen}
-        showLogbookMessages={undefined}
         title={<>{title}</>}
       />
     </Wrapper>

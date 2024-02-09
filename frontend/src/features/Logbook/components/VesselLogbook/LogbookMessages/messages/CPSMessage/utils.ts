@@ -20,5 +20,5 @@ export function getRemainingMinutes(minutes?: number) {
 
   const minutesOfHours = hours * 60
 
-  return minutes % minutesOfHours
+  return minutes - minutesOfHours
 }

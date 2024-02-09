@@ -35,14 +35,16 @@ export function CPSMessage({ message }: CPSMessageProps) {
       <SpeciesList $hasCatches={!!message.catches.length}>
         {catchesWithProperties.map((speciesCatch, index) => (
           <SpecyCatch
-            key={`CPS${speciesCatch.species}`}
+            // eslint-disable-next-line react/no-array-index-key
+            key={index}
             isLast={catchesWithProperties.length === index + 1}
             isProtectedSpecies
             specyCatch={speciesCatch}
             weightType={WeightType.LIVE}
           >
-            {speciesCatch.properties.map(specyCatch => (
-              <ProtectedCatchDetails specyCatch={specyCatch} />
+            {speciesCatch.properties.map((specyCatch, specyIndex) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <ProtectedCatchDetails key={specyIndex} specyCatch={specyCatch} />
             ))}
           </SpecyCatch>
         ))}

@@ -23,4 +23,11 @@ describe('Logbook/components/vesselLogbook/LogbookMessages/CPSMessage/utils.tsx'
     // Then
     expect(hours).toBeUndefined()
   })
+
+  it('getRemainingMinutes Should return 40 minutes', async () => {
+    const hours = getRemainingMinutes(40)
+
+    // Then
+    expect(hours).toEqual(5)
+  })
 })

@@ -109,7 +109,7 @@ export function LogbookMessages({ messageTypeFilter, navigation }: LogbookMessag
           title="Télécharger tous les messages"
         />
         <InverseDate
-          ascendingSort={isAscendingSort}
+          $ascendingSort={isAscendingSort}
           onClick={() => setIsAscendingSort(!isAscendingSort)}
           title="Trier par date de saisie"
         />
@@ -181,7 +181,7 @@ const Navigation = styled.div`
 `
 
 const InverseDate = styled(SortSVG)<{
-  ascendingSort: boolean
+  $ascendingSort: boolean
 }>`
   border: 1px solid ${p => p.theme.color.lightGray};
   width: 37px;
@@ -189,7 +189,7 @@ const InverseDate = styled(SortSVG)<{
   padding: 6px;
   margin-left: auto;
   cursor: pointer;
-  ${p => (p.ascendingSort ? 'transform: rotate(180deg);' : null)}
+  ${p => (p.$ascendingSort ? 'transform: rotate(180deg);' : null)}
 `
 
 const DownloadMessages = styled(DownloadMessagesSVG)`

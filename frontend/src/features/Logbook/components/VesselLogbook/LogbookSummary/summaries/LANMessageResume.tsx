@@ -14,7 +14,7 @@ type LANMessageResumeProps = {
   isDeleted: boolean
   isNotAcknowledged: boolean
   lanMessage: any
-  showLogbookMessages: ((messageType: string) => Promisable<void>) | undefined
+  showLogbookMessages: (messageType: string) => Promisable<void>
   speciesToWeightOfFAR: any
   speciesToWeightOfLAN: any
   speciesToWeightOfPNO: any
@@ -88,9 +88,7 @@ export function LANMessageResume({
         setIsOpen={setIsOpen}
         showLogbookMessages={showLogbookMessages}
         title={
-          !hasNoMessage && catchesOverToleranceAlert
-            ? COMMON_ALERT_TYPE_OPTION.PNO_LAN_WEIGHT_TOLERANCE_ALERT.name
-            : null
+          !hasNoMessage && catchesOverToleranceAlert && COMMON_ALERT_TYPE_OPTION.PNO_LAN_WEIGHT_TOLERANCE_ALERT.name
         }
       />
       {!hasNoMessage && (

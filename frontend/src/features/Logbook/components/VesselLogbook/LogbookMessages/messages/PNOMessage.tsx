@@ -71,13 +71,15 @@ export function PNOMessage({ message }: PNOMessageProps) {
           <SpeciesList $hasCatches={!!catchesWithProperties.length}>
             {catchesWithProperties.map((speciesCatch, index) => (
               <SpecyCatch
-                key={`PNO${speciesCatch.species}`}
+                // eslint-disable-next-line react/no-array-index-key
+                key={index}
                 isLast={catchesWithProperties.length === index + 1}
                 specyCatch={speciesCatch}
                 weightType={WeightType.LIVE}
               >
-                {speciesCatch.properties.map(specyCatch => (
-                  <CatchDetails specyCatch={specyCatch} weightType={WeightType.LIVE} />
+                {speciesCatch.properties.map((specyCatch, specyIndex) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <CatchDetails key={specyIndex} specyCatch={specyCatch} weightType={WeightType.LIVE} />
                 ))}
               </SpecyCatch>
             ))}

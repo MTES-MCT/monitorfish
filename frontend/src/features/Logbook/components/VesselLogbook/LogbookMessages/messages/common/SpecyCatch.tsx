@@ -1,5 +1,5 @@
 import { Icon } from '@mtes-mct/monitor-ui'
-import { ReactNode, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../../../../constants/constants'
@@ -7,7 +7,7 @@ import ChevronIconSVG from '../../../../../../icons/Chevron_simple_gris.svg?reac
 import { WeightType } from '../../constants'
 
 import type { CatchWithProperties, ProtectedCatchWithProperties } from '../../../types'
-import type { HTMLProps } from 'react'
+import type { ReactNode, HTMLProps } from 'react'
 
 type SpecyCatchProps = {
   children: ReactNode

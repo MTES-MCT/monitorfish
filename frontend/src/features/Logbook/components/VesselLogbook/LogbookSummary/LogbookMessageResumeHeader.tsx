@@ -62,8 +62,9 @@ export function LogbookMessageResumeHeader({
               isNotAcknowledged={isNotAcknowledged}
               title={rejectionCause || (isDeleted ? 'Message supprimé' : '')}
             >
-              {(isNotAcknowledged ||
-                isDeleted) && <NotAcknowledgedOrDeleted data-cy="fishing-resume-not-acknowledged-icon" />}
+              {(isNotAcknowledged || isDeleted) && (
+                <NotAcknowledgedOrDeleted data-cy="fishing-resume-not-acknowledged-icon" />
+              )}
               {LogbookMessageTypeEnum[messageType].name}
             </LogbookMessageName>
             <LogbookMessageResumeText data-cy="vessel-fishing-resume-title" title={onHoverText || ''}>

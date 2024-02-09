@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../../constants/constants'
+import { COLORS } from '../../../../../../constants/constants'
 
 export function NotImplementedMessage() {
   return (
@@ -18,6 +18,7 @@ const Zone = styled.div`
   flex-wrap: wrap;
   background: ${COLORS.white};
 `
+
 const Message = styled.div`
   padding: 5px;
   width: inherit;

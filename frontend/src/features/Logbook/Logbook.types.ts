@@ -64,13 +64,6 @@ export type PNOAndLANWeightToleranceAlertValue = {
   type: 'PNO_LAN_WEIGHT_TOLERANCE_ALERT'
 }
 
-export type LogbookCatchesBySpecy = {
-  properties: LogbookCatch[]
-  species: string
-  speciesName: string | null
-  weight: number
-}
-
 export type LogbookCatch = {
   conversionFactor: number | null
   economicZone: string | null
@@ -81,7 +74,7 @@ export type LogbookCatch = {
   packaging: string | null
   presentation: string | null
   preservationState: string | null
-  species: string | null
+  species: string
   speciesName: string | null
   statisticalRectangle: string | null
   weight: number | null
@@ -97,4 +90,116 @@ export type Gear = {
 export type PNOAndLANWeightToleranceAlertValueCatches = {
   lan: Object
   pno: Object
+}
+
+export type COEMessageValue = {
+  economicZoneEntered: string
+  effortZoneEntryDatetimeUtc: string
+  faoZoneEntered: string
+  latitudeEntered: number
+  longitudeEntered: number
+  statisticalRectangleEntered: string
+  targetSpeciesNameOnEntry: string
+  targetSpeciesOnEntry: string
+}
+
+export type COXMessageValue = {
+  economicZoneExited: string
+  effortZoneExitDatetimeUtc: string
+  faoZoneExited: string
+  latitudeExited: number
+  longitudeExited: number
+  statisticalRectangleExited: string
+  targetSpeciesNameOnExit: string
+  targetSpeciesOnExit: string
+}
+
+export type CROMessageValue = {
+  effortZoneEntryDatetimeUtc: string
+  effortZoneExitDatetimeUtc: string
+  latitudeEntered: number
+  latitudeExited: number
+  longitudeEntered: number
+  longitudeExited: number
+}
+
+export type DISMessageValue = {
+  catches: LogbookCatch[]
+  discardDatetimeUtc: string
+  latitude: number
+  longitude: number
+}
+
+export type EOFMessageValue = {
+  endOfFishingDatetimeUtc: string
+}
+
+export type DEPMessageValue = {
+  anticipatedActivity: string
+  departureDatetimeUtc: string
+  departurePort: string
+  departurePortName: string
+  gearOnboard: Gear[]
+  speciesOnboard: {
+    species: string
+    speciesName: string
+    weight: number
+  }[]
+}
+
+export type PNOMessageValue = {
+  catchOnboard: LogbookCatch[]
+  port: string
+  portName: string
+  predictedArrivalDatetimeUtc: string
+  purpose: string
+  tripStartDate: string
+}
+
+export type RTPMessageValue = {
+  gearOnboard: Gear[]
+  port: string
+  portName: string
+  reasonOfReturn: string
+  returnDatetimeUtc: string
+}
+
+export type CPSMessageValue = {
+  catches: ProtectedSpeciesCatch[]
+  cpsDatetimeUtc?: string
+  dimensions?: string
+  gear?: string
+  gearName?: string
+  latitude?: number
+  longitude?: number
+  mesh?: number
+}
+
+export type ProtectedSpeciesCatch = {
+  careMinutes?: number
+  comment?: string
+  economicZone?: string
+  effortZone?: string
+  faoZone?: string
+  fate?: Fate
+  healthState?: HealthState
+  nbFish?: number
+  ring?: number
+  sex?: string
+  species: string
+  speciesName?: string
+  statisticalRectangle?: string
+  weight?: number
+}
+
+enum HealthState {
+  DEA,
+  ALI,
+  INJ
+}
+
+enum Fate {
+  DIS,
+  HEC,
+  DEA
 }

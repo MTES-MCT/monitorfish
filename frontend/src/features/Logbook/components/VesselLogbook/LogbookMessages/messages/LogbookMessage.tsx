@@ -1,37 +1,27 @@
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-import { COEMessage } from './COEMessage'
-import { COXMessage } from './COXMessage'
-import { CROMessage } from './CROMessage'
-import { DEPMessage } from './DEPMessage'
-import { DISMessage } from './DISMessage'
-import { EOFMessage } from './EOFMessage'
-import { FARMessage } from './FARMessage'
-import LANMessage from './LANMessage'
-import { NotImplementedMessage } from './NotImplementedMessage'
-import PNOMessage from './PNOMessage'
-import RTPMessage from './RTPMessage'
-import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import { getDateTime } from '../../../../../utils'
-import AckNOkSVG from '../../../../icons/Icon_not_OK.svg?react'
-import AckOkSVG from '../../../../icons/Message_JPE_acquitté.svg?react'
-import XMLSVG from '../../../../icons/Picto_XML.svg?react'
-import ShowActivitySVG from '../../../../icons/Position_message_JPE_Pin_gris_clair.svg?react'
-import HideActivitySVG from '../../../../icons/Position_message_JPE_Pin_masquer.svg?react'
-import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../constants'
-import { logbookActions } from '../../../slice'
-import { getLogbookMessageType } from '../../../utils'
+import { getComponentFromMessageType } from './constants'
+import { useMainAppDispatch } from '../../../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../../../hooks/useMainAppSelector'
+import { getDateTime } from '../../../../../../utils'
+import AckNOkSVG from '../../../../../icons/Icon_not_OK.svg?react'
+import AckOkSVG from '../../../../../icons/Message_JPE_acquitté.svg?react'
+import XMLSVG from '../../../../../icons/Picto_XML.svg?react'
+import ShowActivitySVG from '../../../../../icons/Position_message_JPE_Pin_gris_clair.svg?react'
+import HideActivitySVG from '../../../../../icons/Position_message_JPE_Pin_masquer.svg?react'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../constants'
+import { logbookActions } from '../../../../slice'
+import { getLogbookMessageType } from '../../../../utils'
 
-import type { LogbookMessage as LogbookMessageType } from '../../../Logbook.types'
+import type { LogbookMessage as LogbookMessageType } from '../../../../Logbook.types'
 import type { HTMLProps } from 'react'
 
-type LogbookMessageComponentType = {
+type LogbookMessageComponentProps = {
   isFirst: boolean
   message: LogbookMessageType
 }
-export function LogbookMessage({ isFirst, message }: LogbookMessageComponentType) {
+export function LogbookMessage({ isFirst, message }: LogbookMessageComponentProps) {
   const dispatch = useMainAppDispatch()
   const fishingActivitiesShowedOnMap = useMainAppSelector(state => state.fishingActivities.fishingActivitiesShowedOnMap)
 
@@ -59,52 +49,7 @@ export function LogbookMessage({ isFirst, message }: LogbookMessageComponentType
     URL.revokeObjectURL(url)
   }
 
-  const logbookMessageComponent = useMemo(() => {
-    switch (message.messageType) {
-      case LogbookMessageTypeEnum.DEP.code:
-        return <DEPMessage message={message.message} />
-      case LogbookMessageTypeEnum.FAR.code:
-        return <FARMessage message={message.message} />
-      case LogbookMessageTypeEnum.PNO.code:
-        return <PNOMessage message={message.message} />
-      case LogbookMessageTypeEnum.LAN.code:
-        return <LANMessage message={message.message} />
-      case LogbookMessageTypeEnum.RTP.code:
-        return <RTPMessage message={message.message} />
-      case LogbookMessageTypeEnum.EOF.code:
-        return <EOFMessage message={message.message} />
-      case LogbookMessageTypeEnum.COE.code:
-        return <COEMessage message={message.message} />
-      case LogbookMessageTypeEnum.NOT_COE.code:
-        return <COEMessage message={message.message} />
-      case LogbookMessageTypeEnum.COX.code:
-        return <COXMessage message={message.message} />
-      case LogbookMessageTypeEnum.NOT_COX.code:
-        return <COXMessage message={message.message} />
-      case LogbookMessageTypeEnum.JFO.code:
-        return <NotImplementedMessage />
-      case LogbookMessageTypeEnum.CRO.code:
-        return <CROMessage message={message.message} />
-      case LogbookMessageTypeEnum.DIS.code:
-        return <DISMessage message={message.message} />
-      case LogbookMessageTypeEnum.RLC.code:
-        return <NotImplementedMessage />
-      case LogbookMessageTypeEnum.TRA.code:
-        return <NotImplementedMessage />
-      case LogbookMessageTypeEnum.NOT_TRA.code:
-        return <NotImplementedMessage />
-      case LogbookMessageTypeEnum.GEAR_SHOT.code:
-        return <NotImplementedMessage />
-      case LogbookMessageTypeEnum.GEAR_RETRIEVAL.code:
-        return <NotImplementedMessage />
-      case LogbookMessageTypeEnum.START_ACTIVITY.code:
-        return <NotImplementedMessage />
-      case LogbookMessageTypeEnum.START_FISHING.code:
-        return <NotImplementedMessage />
-      default:
-        return undefined
-    }
-  }, [message])
+  const logbookMessageComponent = useMemo(() => getComponentFromMessageType(message), [message])
 
   return (
     <Wrapper id={message.operationNumber} isFirst={isFirst}>

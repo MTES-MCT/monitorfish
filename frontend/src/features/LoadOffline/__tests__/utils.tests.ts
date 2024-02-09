@@ -2,7 +2,7 @@ import { expect } from '@jest/globals'
 
 import { getMaxXYRange, getZoomToRequestPaths } from '../utils'
 
-describe('features/LoadOffline/utils.ts', () => {
+describe('features/LoadOffline/utils.tsx', () => {
   /**
    * This getNumberOfTiles is only used to understand the number of tiles per zoom level.
    */

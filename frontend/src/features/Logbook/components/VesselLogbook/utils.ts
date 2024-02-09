@@ -70,7 +70,7 @@ export function getLogbookTripSummary(fishingActivities: FishingActivities | und
   const totalFARWeight = getTotalFARWeight(farMessages)
 
   const pnoMessage = getPNOMessage(messages)
-  const totalPNOWeight = getTotalPNOWeight(pnoMessage)
+  const totalPNOWeight = getTotalPNOWeight(pnoMessage?.message)
 
   return {
     dep: {

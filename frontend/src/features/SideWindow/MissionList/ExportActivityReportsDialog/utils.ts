@@ -19,7 +19,7 @@ export function formatDMDCoordinateForActivityReport(coordinate: string | undefi
 
 export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>, jdp: JDP, jdpSpecies: string[]) {
   const numberOfSpeciesColumns = 10
-  const numberOfInfractionColumns = 6
+  const numberOfInfractionColumns = 10
 
   range(numberOfSpeciesColumns).forEach(index => {
     const count = index + 1

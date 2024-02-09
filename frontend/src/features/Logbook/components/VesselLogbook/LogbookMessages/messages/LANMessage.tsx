@@ -55,8 +55,9 @@ export function LANMessage({ message }) {
                 specyCatch={speciesCatch}
                 weightType={WeightType.NET}
               >
-                {speciesCatch.properties.map(specyCatch => (
-                  <CatchDetails specyCatch={specyCatch} weightType={WeightType.NET} />
+                {speciesCatch.properties.map((specyCatch, specyIndex) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <CatchDetails key={specyIndex} specyCatch={specyCatch} weightType={WeightType.NET} />
                 ))}
               </SpecyCatch>
             ))}

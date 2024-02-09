@@ -112,7 +112,7 @@ export function LANMessageResume({
                   <Key>Poids débarqué</Key>
                   <Value>
                     {getValueOrDash(totalLANWeight)} kg
-                    {totalPNOWeight && <> sur les {totalPNOWeight} kg annoncés dans le PNO</>}
+                    {!!totalPNOWeight && <> sur les {totalPNOWeight} kg annoncés dans le PNO</>}
                   </Value>
                 </Field>
               </TableBody>

@@ -1,4 +1,4 @@
-import type { LogbookMessage } from '../../Logbook.types'
+import type { LogbookMessage, ProtectedSpeciesCatch } from '../../Logbook.types'
 import type { SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from '../../types'
 
 export type LogbookTripSummary = {
@@ -30,4 +30,30 @@ export type LogbookTripSummary = {
     totalFARAndDEPWeight: number
     totalWeight: number
   }
+}
+
+export type CatchWithProperties = {
+  properties: CatchProperty[]
+  species: string
+  speciesName: string | undefined
+  weight: number
+}
+
+export type ProtectedCatchWithProperties = {
+  properties: ProtectedSpeciesCatch[]
+  species: string
+  speciesName: string | undefined
+  weight: number
+}
+
+export type CatchProperty = {
+  conversionFactor: number | undefined
+  economicZone: string | undefined
+  effortZone: string | undefined
+  faoZone: string | undefined
+  packaging: string | undefined
+  presentation: string | undefined
+  preservationState: string | undefined
+  statisticalRectangle: string | undefined
+  weight: number | undefined
 }

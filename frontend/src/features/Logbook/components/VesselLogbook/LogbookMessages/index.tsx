@@ -1,15 +1,12 @@
-import { THEME, type Option } from '@mtes-mct/monitor-ui'
-import { ExportToCsv } from 'export-to-csv'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
 import styled from 'styled-components'
 
-import { LogbookMessage } from './LogbookMessage'
-import { COLORS } from '../../../../../constants/constants'
+import { LogbookMessage } from './messages/LogbookMessage'
+import { FilterMessagesStyle } from './styles'
+import { downloadMessages, filterBySelectedType } from './utils'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import { getDate } from '../../../../../utils'
-import { formatAsCSVColumns } from '../../../../../utils/formatAsCSVColumns'
 import SortSVG from '../../../../icons/ascendant-descendant.svg?react'
 import DownloadMessagesSVG from '../../../../icons/Bouton_exporter_piste_navire_dark.svg?react'
 import ArrowLastTripSVG from '../../../../icons/Double_fleche_navigation_marees.svg?react'
@@ -17,57 +14,10 @@ import ArrowTripSVG from '../../../../icons/Fleche_navigation_marees.svg?react'
 import ArrowSVG from '../../../../icons/Picto_fleche-pleine-droite.svg?react'
 import { CustomDatesShowedInfo } from '../CustomDatesShowedInfo'
 
-import type { LogbookMessage as LogbookMessageType } from '../../../Logbook.types'
+import type { Option } from '@mtes-mct/monitor-ui'
 import type { Promisable } from 'type-fest'
 
 const animatedComponents = makeAnimated()
-
-const messageTypeSelectOptions = [
-  { label: 'DEP', value: 'DEP' },
-  { label: 'COE', value: 'COE' },
-  { label: 'CRO', value: 'CRO' },
-  { label: 'COX', value: 'COX' },
-  { label: 'FAR', value: 'FAR' },
-  { label: 'INS', value: 'INS' },
-  { label: 'DIS/DIM', value: 'DIS' },
-  { label: 'EOF', value: 'EOF' },
-  { label: 'PNO', value: 'PNO' },
-  { label: 'RTP', value: 'RTP' },
-  { label: 'LAN', value: 'LAN' }
-]
-
-const optionsCSV = {
-  decimalSeparator: '.',
-  fieldSeparator: ',',
-  quoteStrings: '"',
-  showLabels: true,
-  showTitle: false,
-  useBom: true,
-  useKeysAsHeaders: true,
-  useTextFile: false
-}
-
-const csvExporter = new ExportToCsv(optionsCSV)
-
-// These properties are ordered for the CSV column order
-const downloadMessagesOptions = {
-  dateTime: {
-    code: 'operationDateTime',
-    name: 'Date'
-  },
-  messageType: {
-    code: 'messageType',
-    name: 'Type'
-  },
-  rawMessage: {
-    code: 'rawMessage',
-    name: 'Message'
-  },
-  tripNumber: {
-    code: 'tripNumber',
-    name: 'Marée n°'
-  }
-}
 
 type LogbookMessagesProps = {
   messageTypeFilter: string | undefined
@@ -84,119 +34,51 @@ export function LogbookMessages({ messageTypeFilter, navigation, showFishingActi
   const isLastVoyage = useMainAppSelector(state => state.fishingActivities.isLastVoyage)
   const tripNumber = useMainAppSelector(state => state.fishingActivities.tripNumber)
 
-  /** @type {LogbookMessage[]} logbookMessages */
-  const [logbookMessages, setLogbookMessages] = useState<LogbookMessageType[]>([])
-  const [ascendingSort, setAscendingSort] = useState(true)
-  const [selectedOptions, setSelectedOptions] = useState<Option[] | null>(null)
+  const [isAscendingSort, setIsAscendingSort] = useState(true)
+  const [filteredMessagesTypes, setFilteredMessagesTypes] = useState<Option[] | undefined>(undefined)
 
-  useEffect(() => {
-    if (fishingActivities?.logbookMessages) {
-      setLogbookMessages(fishingActivities.logbookMessages)
+  const filteredAndSortedLogbookMessages = useMemo(() => {
+    if (!fishingActivities?.logbookMessages) {
+      return []
     }
-  }, [fishingActivities])
+
+    const filteredLogbookMessages = fishingActivities.logbookMessages.filter(logbookMessage =>
+      filterBySelectedType(logbookMessage, filteredMessagesTypes)
+    )
+
+    return [...filteredLogbookMessages].sort((a, b) => {
+      if (isAscendingSort) {
+        return a.reportDateTime && b.reportDateTime && a.reportDateTime > b.reportDateTime ? 1 : -1
+      }
+
+      return a.reportDateTime && b.reportDateTime && a.reportDateTime > b.reportDateTime ? -1 : 1
+    })
+  }, [fishingActivities?.logbookMessages, isAscendingSort, filteredMessagesTypes])
 
   useEffect(() => {
     const messageTypes = messageTypeSelectOptions.filter(options => options.value === messageTypeFilter)
-    setSelectedOptions(messageTypes)
+
+    setFilteredMessagesTypes(messageTypes)
   }, [messageTypeFilter])
-
-  const inverseSort = () => {
-    const inversedSort = !ascendingSort
-
-    // TODO Fix these ts-ignore.
-    const sortedFishingActivities = [...logbookMessages].sort((a, b) => {
-      if (inversedSort) {
-        // @ts-ignore
-        return new Date(a.reportDateTime) - new Date(b.reportDateTime)
-      }
-
-      // @ts-ignore
-      return new Date(b.reportDateTime) - new Date(a.reportDateTime)
-    })
-
-    setAscendingSort(inversedSort)
-    setLogbookMessages(sortedFishingActivities)
-  }
-
-  // TODO Move this function to a utils file.
-  const downloadMessages = () => {
-    const objectsToExports = logbookMessages
-      .filter(_logbookMessages => filterBySelectedType(_logbookMessages))
-      .map(position => formatAsCSVColumns(position, downloadMessagesOptions))
-
-    const date = new Date()
-    csvExporter.options.filename = `export_ers_${tripNumber}_${getDate(date.toISOString())}`
-    csvExporter.generateCsv(objectsToExports)
-  }
-
-  // TODO Move this function to a utils file.
-  const selectStyles = {
-    clearIndicator: base => ({ ...base, padding: 1, width: 18 }),
-    container: provided => ({
-      ...provided,
-      height: 'fit-content',
-      padding: 0,
-      width: '-moz-available',
-      zIndex: 4
-    }),
-    control: base => ({ ...base, borderColor: COLORS.lightGray, borderRadius: 'unset', fontSize: 13, minHeight: 26 }),
-    dropdownIndicator: base => ({ ...base, padding: 1, width: 18 }),
-    input: () => ({ margin: 0, padding: 0 }),
-    menu: base => ({ ...base, margin: 0, maxHeight: 360, padding: 0 }),
-    menuList: base => ({ ...base, maxHeight: 360 }),
-    menuPortal: base => ({ ...base, zIndex: 9999 }),
-    multiValue: base => ({ ...base, background: COLORS.gainsboro, borderRadius: 12, fontSize: 13 }),
-    multiValueLabel: base => ({
-      ...base,
-      background: COLORS.gainsboro,
-      borderRadius: 12,
-      color: COLORS.slateGray,
-      paddingBottom: 1,
-      paddingTop: 2
-    }),
-    multiValueRemove: base => ({
-      ...base,
-      '&:hover': {
-        backgroundColor: THEME.color.blueYonder25,
-        color: THEME.color.blueYonder
-      },
-      background: COLORS.gainsboro,
-      borderRadius: 12,
-      color: THEME.color.slateGray
-    }),
-    option: base => ({ ...base, fontSize: 13 }),
-    placeholder: base => ({ ...base, fontSize: 13 }),
-    singleValue: base => ({ ...base, fontSize: 13 }),
-    valueContainer: base => ({ ...base, fontSize: 13, minWidth: 130, padding: '0px 2px' })
-  }
-
-  // TODO Move this function to a utils file.
-  const filterBySelectedType = (logbookMessage: LogbookMessageType) => {
-    if (selectedOptions?.length) {
-      return selectedOptions.some(messageType => logbookMessage.messageType === messageType.value)
-    }
-
-    return true
-  }
 
   return (
     <Wrapper>
-      <Arrow onClick={() => showFishingActivitiesSummary()} />
-      <Previous onClick={() => showFishingActivitiesSummary()}>Revenir au résumé</Previous>
+      <Arrow onClick={showFishingActivitiesSummary} />
+      <Previous onClick={showFishingActivitiesSummary}>Revenir au résumé</Previous>
       <Filters>
         <Select
           className="available-width"
           closeMenuOnSelect
           components={animatedComponents}
-          defaultValue={selectedOptions}
+          defaultValue={filteredMessagesTypes}
           isMulti
           isSearchable={false}
           menuPortalTarget={document.body}
-          onChange={setSelectedOptions as any}
+          onChange={setFilteredMessagesTypes as any}
           options={messageTypeSelectOptions}
           placeholder="Filtrer les messages"
-          styles={selectStyles}
-          value={selectedOptions}
+          styles={FilterMessagesStyle}
+          value={filteredMessagesTypes}
         />
         <Navigation>
           <PreviousTrip
@@ -216,22 +98,43 @@ export function LogbookMessages({ messageTypeFilter, navigation, showFishingActi
             title="Marée suivante"
           />
         </Navigation>
-        <DownloadMessages onClick={downloadMessages} title="Télécharger tous les messages" />
-        <InverseDate ascendingSort={ascendingSort} onClick={inverseSort} title="Trier par date de saisie" />
+        <DownloadMessages
+          onClick={() => downloadMessages(filteredAndSortedLogbookMessages, tripNumber)}
+          title="Télécharger tous les messages"
+        />
+        <InverseDate
+          ascendingSort={isAscendingSort}
+          onClick={() => setIsAscendingSort(!isAscendingSort)}
+          title="Trier par date de saisie"
+        />
       </Filters>
       <CustomDatesShowedInfoWithMargin>
         <CustomDatesShowedInfo width={460} />
       </CustomDatesShowedInfoWithMargin>
-      {logbookMessages?.length ? (
-        logbookMessages
-          .filter(logbookMessage => filterBySelectedType(logbookMessage))
-          .map((message, index) => <LogbookMessage key={message.reportId} isFirst={index === 0} message={message} />)
+      {filteredAndSortedLogbookMessages.length ? (
+        filteredAndSortedLogbookMessages.map((message, index) => (
+          <LogbookMessage key={message.reportId} isFirst={index === 0} message={message} />
+        ))
       ) : (
         <NoMessage>Aucun message reçu</NoMessage>
       )}
     </Wrapper>
   )
 }
+
+const messageTypeSelectOptions = [
+  { label: 'DEP', value: 'DEP' },
+  { label: 'COE', value: 'COE' },
+  { label: 'CRO', value: 'CRO' },
+  { label: 'COX', value: 'COX' },
+  { label: 'FAR', value: 'FAR' },
+  { label: 'INS', value: 'INS' },
+  { label: 'DIS/DIM', value: 'DIS' },
+  { label: 'EOF', value: 'EOF' },
+  { label: 'PNO', value: 'PNO' },
+  { label: 'RTP', value: 'RTP' },
+  { label: 'LAN', value: 'LAN' }
+]
 
 const CustomDatesShowedInfoWithMargin = styled.div`
   margin-bottom: 8px;

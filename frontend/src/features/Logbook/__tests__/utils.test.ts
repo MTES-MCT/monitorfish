@@ -14,7 +14,7 @@ import {
   getTotalPNOWeight
 } from '../utils'
 
-describe('Logbook/utils.ts', () => {
+describe('Logbook/utils.tsx', () => {
   it('getPNOMessage Should get the first valid PNO message', async () => {
     const pnosWithAnotherCorrectedMessage = dummyLogbookMessages.concat(correctedPNOMessage)
 
@@ -91,7 +91,7 @@ describe('Logbook/utils.ts', () => {
     const pnoMessage = getPNOMessage(dummyLogbookMessages)
 
     // When
-    const weight = getTotalPNOWeight(pnoMessage!)
+    const weight = getTotalPNOWeight(pnoMessage?.message)
 
     // Then
     expect(weight).toEqual(1675)

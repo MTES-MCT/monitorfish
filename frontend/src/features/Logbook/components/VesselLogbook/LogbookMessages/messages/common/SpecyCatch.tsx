@@ -1,63 +1,57 @@
-import { useMemo, useState } from 'react'
+import { Icon } from '@mtes-mct/monitor-ui'
+import { ReactNode, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { SpecyCatchDetail } from './SpecyCatchDetail'
-import { COLORS } from '../../../../../constants/constants'
-import ChevronIconSVG from '../../../../icons/Chevron_simple_gris.svg?react'
-import WarningSVG from '../../../../icons/Point_exclamation_info.svg?react'
+import { COLORS } from '../../../../../../../constants/constants'
+import ChevronIconSVG from '../../../../../../icons/Chevron_simple_gris.svg?react'
+import { WeightType } from '../../constants'
 
-import type { LogbookCatchesBySpecy } from '../../../Logbook.types'
+import type { CatchWithProperties, ProtectedCatchWithProperties } from '../../../types'
 import type { HTMLProps } from 'react'
 
-export enum WeightType {
-  LIVE = 'vif',
-  NET = 'net'
-}
-
-type LogbookMessageSpeciesType = {
+type SpecyCatchProps = {
+  children: ReactNode
   isLast: boolean
-  specyCatches: LogbookCatchesBySpecy
+  isProtectedSpecies?: boolean
+  specyCatch: CatchWithProperties | ProtectedCatchWithProperties
   weightType: WeightType
 }
-export function LogbookMessageSpecy({ isLast, specyCatches, weightType }: LogbookMessageSpeciesType) {
+export function SpecyCatch({ children, isLast, isProtectedSpecies = false, specyCatch, weightType }: SpecyCatchProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const specyFullName = useMemo(() => {
-    if (specyCatches.speciesName && specyCatches.species) {
-      return `${specyCatches.speciesName} (${specyCatches.species})`
+    if (specyCatch.speciesName && specyCatch.species) {
+      return `${specyCatch.speciesName} (${specyCatch.species})`
     }
 
-    return specyCatches.species
-  }, [specyCatches])
+    return specyCatch.species
+  }, [specyCatch])
 
   return (
     <Species>
       <Title isLast={isLast} isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
         <TitleText title={specyFullName}>{specyFullName}</TitleText>
-        <Weight title={`${specyCatches.weight} kg (${weightType})`}>
+        <Weight title={`${specyCatch.weight} kg (${weightType})`}>
           <InlineKey>Poids total ({weightType})</InlineKey>
-          <Kg>{specyCatches.weight || <NoValue>-</NoValue>} kg</Kg>
+          <Kg>{specyCatch.weight || <NoValue>-</NoValue>} kg</Kg>
         </Weight>
         <ChevronIcon $isOpen={isOpen} />
       </Title>
-      <Content isOpen={isOpen} length={specyCatches.properties.length || 1}>
-        {specyCatches.properties.length > 1 && (
+      <Content isOpen={isOpen} isProtectedSpecies={isProtectedSpecies} length={specyCatch.properties.length || 1}>
+        {specyCatch.properties.length > 1 && (
           <MultipleProperties>
-            <Warning /> Plusieurs zones de pêche et/ou présentations pour cette espèce
+            <Icon.Warning size={20} />{' '}
+            <WarningText>Plusieurs zones de pêche et/ou présentations pour cette espèce</WarningText>
           </MultipleProperties>
         )}
-        {specyCatches.properties.map(specyCatch => (
-          <SpecyCatchDetail specyCatch={specyCatch} weightType={weightType} />
-        ))}
+        {children}
       </Content>
     </Species>
   )
 }
 
-const Warning = styled(WarningSVG)`
-  width: 15px;
-  margin-bottom: -2px;
-  margin-right: 5px;
+const WarningText = styled.span`
+  vertical-align: top;
 `
 
 const MultipleProperties = styled.div`
@@ -130,6 +124,7 @@ const Title = styled.div<{
 
 const Content = styled.div<{
   isOpen: boolean
+  isProtectedSpecies: boolean
   length: number
 }>`
   width: inherit;
@@ -137,7 +132,7 @@ const Content = styled.div<{
   overflow: hidden;
   padding: 0;
   border-bottom: 1px solid ${p => p.theme.color.lightGray};
-  height: ${p => (p.isOpen ? p.length * 115 + (p.length > 1 ? 30 : 0) : 0)}px;
+  height: ${p => (p.isOpen ? p.length * (p.isProtectedSpecies ? 198 : 99) + (p.length > 1 ? 35 : 5) : 0)}px;
   transition: 0.2s all;
 `
 

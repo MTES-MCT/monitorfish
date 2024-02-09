@@ -3,52 +3,82 @@ import Point from 'ol/geom/Point'
 
 import { LogbookMessageType, LogbookOperationType } from './constants'
 import { LayerProperties } from '../../domain/entities/layers/constants'
+import { undefinedize } from '../../utils/undefinedize'
 import { getFishingActivityCircleStyle } from '../map/layers/styles/vesselTrack.style'
 
-import type { LogbookCatch, LogbookMessage } from './Logbook.types'
-import type {
-  CatchProperty,
-  CatchWithProperties,
-  SpeciesInsight,
-  SpeciesToSpeciesInsight,
-  SpeciesToSpeciesInsightList
-} from './types'
+import type { CatchProperty, CatchWithProperties, ProtectedCatchWithProperties } from './components/VesselLogbook/types'
+import type { LogbookCatch, LogbookMessage, PNOMessageValue, ProtectedSpeciesCatch } from './Logbook.types'
+import type { SpeciesInsight, SpeciesToSpeciesInsight, SpeciesToSpeciesInsightList } from './types'
 import type { DeclaredLogbookSpecies, FishingActivityShowedOnMap } from '../../domain/entities/vessel/types'
 
-function getPropertiesObject(logbookCatch): CatchProperty {
+function getCatchPropertiesObject(logbookCatch: LogbookCatch): CatchProperty {
   return {
-    conversionFactor: logbookCatch.conversionFactor,
-    economicZone: logbookCatch.economicZone,
-    effortZone: logbookCatch.effortZone,
-    faoZone: logbookCatch.faoZone,
-    packaging: logbookCatch.packaging,
-    presentation: logbookCatch.presentation,
-    preservationState: logbookCatch.preservationState,
-    statisticalRectangle: logbookCatch.statisticalRectangle,
-    weight: logbookCatch.weight
+    conversionFactor: undefinedize(logbookCatch.conversionFactor),
+    economicZone: undefinedize(logbookCatch.economicZone),
+    effortZone: undefinedize(logbookCatch.effortZone),
+    faoZone: undefinedize(logbookCatch.faoZone),
+    packaging: undefinedize(logbookCatch.packaging),
+    presentation: undefinedize(logbookCatch.presentation),
+    preservationState: undefinedize(logbookCatch.preservationState),
+    statisticalRectangle: undefinedize(logbookCatch.statisticalRectangle),
+    weight: undefinedize(logbookCatch.weight)
   }
 }
 
-export const buildCatchArray = (catches): CatchWithProperties[] => {
-  const notFound = -1
+export function buildCatchArray(catches: LogbookCatch[]): CatchWithProperties[] {
+  const NOT_FOUND = -1
 
-  return catches.reduce((accumulator, logbookCatch) => {
-    const sameSpeciesIndex = accumulator.findIndex(accCatch => accCatch.species === logbookCatch.species)
+  return catches
+    .reduce((accumulator: CatchWithProperties[], logbookCatch) => {
+      const sameSpeciesIndex = accumulator.findIndex(accCatch => accCatch.species === logbookCatch.species)
 
-    if (sameSpeciesIndex === notFound) {
-      accumulator.push({
-        properties: [getPropertiesObject(logbookCatch)],
-        species: logbookCatch.species,
-        speciesName: logbookCatch.speciesName,
-        weight: logbookCatch.weight ? logbookCatch.weight : 0
-      })
-    } else {
-      accumulator[sameSpeciesIndex].properties.push(getPropertiesObject(logbookCatch))
+      if (sameSpeciesIndex === NOT_FOUND) {
+        accumulator.push({
+          properties: [getCatchPropertiesObject(logbookCatch)],
+          species: logbookCatch.species,
+          speciesName: undefinedize(logbookCatch.speciesName),
+          weight: logbookCatch.weight ? logbookCatch.weight : 0
+        })
+
+        return accumulator
+      }
+
+      // @ts-ignore
+      accumulator[sameSpeciesIndex].properties.push(getCatchPropertiesObject(logbookCatch))
+      // @ts-ignore
       accumulator[sameSpeciesIndex].weight += logbookCatch.weight ? parseFloat(logbookCatch.weight) : 0
-    }
 
-    return accumulator.sort((catchA, catchB) => catchB.weight - catchA.weight)
-  }, [])
+      return accumulator
+    }, [])
+    .sort((catchA, catchB) => catchB.weight - catchA.weight)
+}
+
+export function buildProtectedCatchArray(catches: ProtectedSpeciesCatch[]): ProtectedCatchWithProperties[] {
+  const NOT_FOUND = -1
+
+  return catches
+    .reduce((accumulator: ProtectedCatchWithProperties[], logbookCatch) => {
+      const sameSpeciesIndex = accumulator.findIndex(accCatch => accCatch.species === logbookCatch.species)
+
+      if (sameSpeciesIndex === NOT_FOUND) {
+        accumulator.push({
+          properties: [logbookCatch],
+          species: logbookCatch.species,
+          speciesName: undefinedize(logbookCatch.speciesName),
+          weight: logbookCatch.weight ? logbookCatch.weight : 0
+        })
+
+        return accumulator
+      }
+
+      // @ts-ignore
+      accumulator[sameSpeciesIndex].properties.push(logbookCatch)
+      // @ts-ignore
+      accumulator[sameSpeciesIndex].weight += logbookCatch.weight ? parseFloat(logbookCatch.weight) : 0
+
+      return accumulator
+    }, [])
+    .sort((catchA, catchB) => catchB.weight - catchA.weight)
 }
 
 export const getDEPMessage = (logbookMessages: LogbookMessage[]): LogbookMessage | undefined =>
@@ -188,18 +218,16 @@ export const getTotalLANWeight = (logbookMessage: LogbookMessage | undefined): n
 /**
  * The PNO message weight are LIVE, so we must NOT apply the conversion factor
  */
-export const getTotalPNOWeight = (logbookMessage: LogbookMessage | undefined): number =>
-  logbookMessage ? getSumOfCatches(logbookMessage.message.catchOnboard, false) : 0
+export const getTotalPNOWeight = (logbookMessage: PNOMessageValue | undefined): number =>
+  logbookMessage ? getSumOfCatches(logbookMessage.catchOnboard, false) : 0
 
-function getSumOfCatches(
-  arrayOfCatches: { conversionFactor: number; weight: number }[],
-  hasConversionFactorApplied = false
-): number {
+function getSumOfCatches(arrayOfCatches: LogbookCatch[], hasConversionFactorApplied = false): number {
   const sum = arrayOfCatches.reduce((subAccumulator, speciesCatch) => {
     const conversionFactor =
       hasConversionFactorApplied && speciesCatch.conversionFactor ? speciesCatch.conversionFactor : 1
+    const weight = speciesCatch.weight ?? 0
 
-    return subAccumulator + (speciesCatch.weight * conversionFactor || 0)
+    return subAccumulator + (weight * conversionFactor || 0)
   }, 0)
 
   return parseFloat(sum.toFixed(1))

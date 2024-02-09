@@ -11,6 +11,12 @@ export const LogbookMessageType = {
     fullName: "Sortie d'une zone d'effort",
     name: "Sortie d'une zone d'effort"
   },
+  CPS: {
+    code: 'CPS',
+    displayCode: 'CPS',
+    fullName: "Capture d'espèces protégées",
+    name: "CAPTURES D'ESP. PROTÉGÉES"
+  },
   CRO: {
     code: 'CRO',
     displayCode: 'CRO',
@@ -168,6 +174,23 @@ export const LogbookSpeciesPreservationState = {
   FRE: 'Frais',
   FRO: 'Congelé',
   SAL: 'Salé'
+}
+
+export const LogbookProtectedSpeciesSex = {
+  F: 'Mâle',
+  M: 'Femelle'
+}
+
+export const LogbookProtectedSpeciesHealthState = {
+  ALI: 'Vivant',
+  DEA: 'Mort',
+  INJ: 'Blessé'
+}
+
+export const LogbookProtectedSpeciesFate = {
+  DEA: 'Corps mort ramené pour analyse',
+  DIS: 'Rejeté',
+  HEC: 'Ramené dans un centre de soin'
 }
 
 export const LogbookSpeciesPresentation = {

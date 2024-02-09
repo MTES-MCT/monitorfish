@@ -3,30 +3,31 @@ import { skipToken } from '@reduxjs/toolkit/dist/query'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { CustomDatesShowedInfo } from './CustomDatesShowedInfo'
-import { DEPMessageResume } from './DEPMessageResume'
-import { DISMessageResume } from './DISMessageResume'
-import { EmptyResume } from './EmptyResume'
-import { FARMessageResume } from './FARMessageResume'
-import { LANMessageResume } from './LANMessageResume'
-import { PNOMessageResume } from './PNOMessageResume'
-import { getLogbookTripSummary, getUniqueGears } from './utils'
-import { COMMON_ALERT_TYPE_OPTION } from '../../../../domain/entities/alerts/constants'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import FleetSegments from '../../../fleet_segments/FleetSegments'
-import ArrowLastTripSVG from '../../../icons/Double_fleche_navigation_marees.svg?react'
-import ArrowTripSVG from '../../../icons/Fleche_navigation_marees.svg?react'
-import ArrowSVG from '../../../icons/Picto_fleche-pleine-droite.svg?react'
-import { useGetLastLogbookTripsQuery } from '../../api'
-import { LogbookMessageType as LogbookMessageTypeEnum, LogbookOperationType, NavigateTo } from '../../constants'
-import { useGetLogbookUseCase } from '../../hooks/useGetLogbookUseCase'
-import { getFAOZonesFromFARMessages } from '../../utils'
+import { FleetSegments } from './FleetSegments'
+import { CPSMessageResume } from './summaries/CPSMessageResume'
+import { DEPMessageResume } from './summaries/DEPMessageResume'
+import { DISMessageResume } from './summaries/DISMessageResume'
+import { EmptyResume } from './summaries/EmptyResume'
+import { FARMessageResume } from './summaries/FARMessageResume'
+import { LANMessageResume } from './summaries/LANMessageResume'
+import { PNOMessageResume } from './summaries/PNOMessageResume'
+import { COMMON_ALERT_TYPE_OPTION } from '../../../../../domain/entities/alerts/constants'
+import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import ArrowLastTripSVG from '../../../../icons/Double_fleche_navigation_marees.svg?react'
+import ArrowTripSVG from '../../../../icons/Fleche_navigation_marees.svg?react'
+import ArrowSVG from '../../../../icons/Picto_fleche-pleine-droite.svg?react'
+import { useGetLastLogbookTripsQuery } from '../../../api'
+import { LogbookMessageType as LogbookMessageTypeEnum, LogbookOperationType, NavigateTo } from '../../../constants'
+import { useGetLogbookUseCase } from '../../../hooks/useGetLogbookUseCase'
+import { getFAOZonesFromFARMessages } from '../../../utils'
+import { CustomDatesShowedInfo } from '../CustomDatesShowedInfo'
+import { getLogbookTripSummary, getUniqueGears } from '../utils'
 
-import type { LogbookTripSummary } from './types'
+import type { LogbookTripSummary } from '../types'
 import type { Promisable } from 'type-fest'
 
-type FishingActivitiesSummaryProps = {
+type LogbookSummaryProps = {
   navigation: {
     goToLastTrip: () => Promisable<void>
     goToNextTrip: () => Promisable<void>
@@ -34,14 +35,13 @@ type FishingActivitiesSummaryProps = {
   }
   showLogbookMessages: (messageType?: string) => Promisable<void>
 }
-export function FishingActivitiesSummary({ navigation, showLogbookMessages }: FishingActivitiesSummaryProps) {
+export function LogbookSummary({ navigation, showLogbookMessages }: LogbookSummaryProps) {
   const dispatch = useMainAppDispatch()
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
   const fishingActivities = useMainAppSelector(state => state.fishingActivities.fishingActivities)
   const isFirstVoyage = useMainAppSelector(state => state.fishingActivities.isFirstVoyage)
   const isLastVoyage = useMainAppSelector(state => state.fishingActivities.isLastVoyage)
   const tripNumber = useMainAppSelector(state => state.fishingActivities.tripNumber)
-  const fleetSegments = useMainAppSelector(state => state.fleetSegment.fleetSegments)
 
   const { data: lastLogbookTrips } = useGetLastLogbookTripsQuery(selectedVessel?.internalReferenceNumber || skipToken)
 
@@ -110,7 +110,7 @@ export function FishingActivitiesSummary({ navigation, showLogbookMessages }: Fi
             <Title>
               <Text>Segment(s) de flotte(s) actuel(s)</Text>
               <TextValue>
-                <FleetSegments fleetSegmentsReferential={fleetSegments} selectedVessel={selectedVessel} />
+                <FleetSegments segments={selectedVessel?.segments} />
               </TextValue>
             </Title>
             <Fields>
@@ -207,6 +207,17 @@ export function FishingActivitiesSummary({ navigation, showLogbookMessages }: Fi
                   />
                 ) : (
                   <EmptyResume messageType={LogbookMessageTypeEnum.FAR.code.toString()} />
+                )}
+
+                {logbookTrip.cps.logs.length ? (
+                  <CPSMessageResume
+                    cpsMessages={logbookTrip.cps.logs}
+                    hasNoMessageAcknowledged={logbookTrip.cps.areAllMessagesNotAcknowledged}
+                    numberOfSpecies={logbookTrip.cps.numberOfSpecies}
+                    showLogbookMessages={showLogbookMessages}
+                  />
+                ) : (
+                  <EmptyResume messageType={LogbookMessageTypeEnum.CPS.code.toString()} />
                 )}
 
                 {logbookTrip.dis.logs?.length && logbookTrip.dis.logs[0] ? (
@@ -373,7 +384,7 @@ const TextValue = styled.div<{
 `
 
 const Body = styled.div`
-  padding: 5px 5px 1px 5px;
+  padding: 10px 10px 1px 10px;
 `
 
 const TableBody = styled.tbody``
@@ -398,6 +409,7 @@ const Zone = styled.div<{
   display: flex;
   flex-wrap: wrap;
   text-align: left;
+  margin-bottom: 10px;
 `
 
 const Fields = styled.table`

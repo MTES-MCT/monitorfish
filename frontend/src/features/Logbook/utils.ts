@@ -87,6 +87,9 @@ export const getDEPMessage = (logbookMessages: LogbookMessage[]): LogbookMessage
 export const getDISMessages = (logbookMessages: LogbookMessage[]): LogbookMessage[] =>
   logbookMessages.filter(message => message.messageType === LogbookMessageType.DIS.code)
 
+export const getCPSMessages = (logbookMessages: LogbookMessage[]): LogbookMessage[] =>
+  logbookMessages.filter(message => message.messageType === LogbookMessageType.CPS.code)
+
 /**
  * Get the first valid PNO if found or return the first PNO
  */
@@ -135,7 +138,7 @@ function sortByCorrectedMessagesFirst() {
 }
 
 /**
- * Few notes :
+ * Notes :
  * - The DIS message weight are LIVE, so we must NOT apply the conversion factor
  * - If the message is corrected (hence his `reportId` is contained in the `correctedMessagesReferencedIds` array),
  *    only the correcting message will be taken
@@ -163,11 +166,39 @@ export const getTotalDISWeight = (logbookMessages: LogbookMessage[]): number => 
   return parseFloat(weight)
 }
 
+/**
+ * Notes :
+ * - If the message is corrected (hence his `reportId` is contained in the `correctedMessagesReferencedIds` array),
+ *    only the correcting message will be taken
+ */
+export const getCPSDistinctSpecies = (logbookMessages: LogbookMessage[]): number => {
+  let correctedMessagesReferencedIds: string[] = []
+
+  const species: string[] = logbookMessages
+    .sort(sortByCorrectedMessagesFirst())
+    .reduce((accumulator: string[], logbookMessage) => {
+      if (logbookMessage.operationType === LogbookOperationType.COR && logbookMessage.referencedReportId) {
+        correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(logbookMessage.referencedReportId)
+      }
+
+      const isMessageNotCorrectedAndAcknowledged =
+        !correctedMessagesReferencedIds.includes(logbookMessage.reportId) && logbookMessage.acknowledge?.isSuccess
+
+      if (!isMessageNotCorrectedAndAcknowledged) {
+        return accumulator
+      }
+
+      return accumulator.concat(logbookMessage.message.catches.map(specyCatch => specyCatch.species))
+    }, [])
+
+  return Array.from(new Set(species)).length
+}
+
 export const areAllMessagesNotAcknowledged = (logbookMessages: LogbookMessage[]) =>
   logbookMessages.length === logbookMessages.filter(logbookMessage => !logbookMessage?.acknowledge?.isSuccess).length
 
 /**
- * Few notes :
+ * Notes :
  * - The FAR message weight are LIVE, so we must NOT apply the conversion factor
  * - If the message is corrected (hence his `reportId` is contained in the `correctedMessagesReferencedIds` array),
  *    only the correcting message will be taken

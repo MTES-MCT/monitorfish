@@ -121,7 +121,7 @@ function UnmemoizedVesselListFilters({
 
     let nextZonesWithoutNulls = nextZones.flat().filter(zone => zone)
 
-    const groups = [...new Set(nextZonesWithoutNulls.map(zone => zone.group))]
+    const groups = Array.from(new Set(nextZonesWithoutNulls.map(zone => zone.group)))
     setZoneGroups(groups)
 
     nextZonesWithoutNulls = groups.map(group => ({

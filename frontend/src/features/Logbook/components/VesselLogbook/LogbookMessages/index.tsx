@@ -6,13 +6,17 @@ import styled from 'styled-components'
 import { LogbookMessage } from './messages/LogbookMessage'
 import { FilterMessagesStyle } from './styles'
 import { downloadMessages, filterBySelectedType } from './utils'
+import { FishingActivitiesTab } from '../../../../../domain/entities/vessel/vessel'
+import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
 import SortSVG from '../../../../icons/ascendant-descendant.svg?react'
 import DownloadMessagesSVG from '../../../../icons/Bouton_exporter_piste_navire_dark.svg?react'
 import ArrowLastTripSVG from '../../../../icons/Double_fleche_navigation_marees.svg?react'
 import ArrowTripSVG from '../../../../icons/Fleche_navigation_marees.svg?react'
 import ArrowSVG from '../../../../icons/Picto_fleche-pleine-droite.svg?react'
+import { logbookActions } from '../../../slice'
 import { CustomDatesShowedInfo } from '../CustomDatesShowedInfo'
+import { getLogbookMessagesTypeOptions } from '../utils'
 
 import type { Option } from '@mtes-mct/monitor-ui'
 import type { Promisable } from 'type-fest'
@@ -26,9 +30,9 @@ type LogbookMessagesProps = {
     goToNextTrip: () => Promisable<void>
     goToPreviousTrip: () => Promisable<void>
   }
-  showFishingActivitiesSummary: () => void
 }
-export function LogbookMessages({ messageTypeFilter, navigation, showFishingActivitiesSummary }: LogbookMessagesProps) {
+export function LogbookMessages({ messageTypeFilter, navigation }: LogbookMessagesProps) {
+  const dispatch = useMainAppDispatch()
   const fishingActivities = useMainAppSelector(state => state.fishingActivities.fishingActivities)
   const isFirstVoyage = useMainAppSelector(state => state.fishingActivities.isFirstVoyage)
   const isLastVoyage = useMainAppSelector(state => state.fishingActivities.isLastVoyage)
@@ -56,15 +60,17 @@ export function LogbookMessages({ messageTypeFilter, navigation, showFishingActi
   }, [fishingActivities?.logbookMessages, isAscendingSort, filteredMessagesTypes])
 
   useEffect(() => {
-    const messageTypes = messageTypeSelectOptions.filter(options => options.value === messageTypeFilter)
+    const messageTypes = getLogbookMessagesTypeOptions().filter(options => options.value === messageTypeFilter)
 
     setFilteredMessagesTypes(messageTypes)
   }, [messageTypeFilter])
 
+  const showSummary = () => dispatch(logbookActions.setTab(FishingActivitiesTab.SUMMARY))
+
   return (
     <Wrapper>
-      <Arrow onClick={showFishingActivitiesSummary} />
-      <Previous onClick={showFishingActivitiesSummary}>Revenir au résumé</Previous>
+      <Arrow onClick={showSummary} />
+      <Previous onClick={showSummary}>Revenir au résumé</Previous>
       <Filters>
         <Select
           className="available-width"
@@ -75,7 +81,7 @@ export function LogbookMessages({ messageTypeFilter, navigation, showFishingActi
           isSearchable={false}
           menuPortalTarget={document.body}
           onChange={setFilteredMessagesTypes as any}
-          options={messageTypeSelectOptions}
+          options={getLogbookMessagesTypeOptions()}
           placeholder="Filtrer les messages"
           styles={FilterMessagesStyle}
           value={filteredMessagesTypes}
@@ -121,20 +127,6 @@ export function LogbookMessages({ messageTypeFilter, navigation, showFishingActi
     </Wrapper>
   )
 }
-
-const messageTypeSelectOptions = [
-  { label: 'DEP', value: 'DEP' },
-  { label: 'COE', value: 'COE' },
-  { label: 'CRO', value: 'CRO' },
-  { label: 'COX', value: 'COX' },
-  { label: 'FAR', value: 'FAR' },
-  { label: 'INS', value: 'INS' },
-  { label: 'DIS/DIM', value: 'DIS' },
-  { label: 'EOF', value: 'EOF' },
-  { label: 'PNO', value: 'PNO' },
-  { label: 'RTP', value: 'RTP' },
-  { label: 'LAN', value: 'LAN' }
-]
 
 const CustomDatesShowedInfoWithMargin = styled.div`
   margin-bottom: 8px;

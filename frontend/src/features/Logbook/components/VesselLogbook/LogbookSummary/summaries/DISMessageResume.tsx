@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { LogbookMessageResumeHeader } from './LogbookMessageResumeHeader'
-import { SpeciesAndWeightChart } from './SpeciesAndWeightChart'
-import { pluralize } from '../../../../utils/pluralize'
-import { LogbookMessageType as LogbookMessageTypeEnum } from '../../constants'
+import { SpeciesAndWeightChart } from './common/SpeciesAndWeightChart'
+import { pluralize } from '../../../../../../utils/pluralize'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../constants'
+import { LogbookMessageResumeHeader } from '../LogbookMessageResumeHeader'
 
-import type { SpeciesInsight, SpeciesToSpeciesInsight } from '../../types'
+import type { SpeciesInsight, SpeciesToSpeciesInsight } from '../../../../types'
 
 type DISMessageResumeProps = {
   allDISMessagesAreNotAcknowledged: boolean

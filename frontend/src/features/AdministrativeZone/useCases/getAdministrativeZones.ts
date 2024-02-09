@@ -24,7 +24,7 @@ export const getAdministrativeZones =
       .filter(zone => zone.group)
       .filter(zone => !zone.hasFetchableZones)
       .map(zone => zone.group)
-    const uniqueGroups = [...new Set(groups)]
+    const uniqueGroups = Array.from(new Set(groups))
     const groupedZones: GroupAndZones[] = uniqueGroups.map(group => ({
       group: group!,
       zones: administrativeLayers.filter(zone => zone.group && zone.group === group)

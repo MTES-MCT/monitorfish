@@ -138,6 +138,76 @@ export const correctedPNOMessage = {
   vesselName: 'PHENOMENE'
 }
 
+export const dummyCpsMessage: LogbookMessage = {
+  acknowledge: {
+    dateTime: '2019-10-30T11:32:00Z',
+    isSuccess: true,
+    rejectionCause: null,
+    returnStatus: '000'
+  },
+  deleted: false,
+  externalReferenceNumber: 'DONTSINK',
+  flagState: 'FRA',
+  imo: null,
+  integrationDateTime: '2019-10-11T01:17:28.2717Z',
+  internalReferenceNumber: 'FAK000999999',
+  ircs: 'CALLME',
+  isCorrected: false,
+  isSentByFailoverSoftware: false,
+  message: {
+    catches: [
+      {
+        careMinutes: null,
+        comment: null,
+        economicZone: 'FRA',
+        effortZone: 'C',
+        faoZone: '27.8.a',
+        fate: 'DIS',
+        healthState: 'DEA',
+        nbFish: 1,
+        ring: 1234567,
+        sex: 'M',
+        species: 'DCO',
+        speciesName: 'DAUPHIN COMMUN',
+        statisticalRectangle: '22E7',
+        weight: 60
+      },
+      {
+        careMinutes: 40,
+        comment: 'A comment',
+        economicZone: 'FRA',
+        effortZone: 'C',
+        faoZone: '27.8.a',
+        fate: 'DIS',
+        healthState: 'DEA',
+        nbFish: 1,
+        ring: 1234568,
+        sex: 'M',
+        species: 'PHR',
+        speciesName: 'MARSOUIN COMMUN',
+        statisticalRectangle: '22E7',
+        weight: 80
+      }
+    ],
+    cpsDatetimeUtc: '2023-02-28T17:44:00Z',
+    dimensions: '50.0;2.0',
+    gear: 'GTR',
+    latitude: 46.575,
+    longitude: -2.741,
+    mesh: 100
+  },
+  messageType: 'CPS',
+  operationDateTime: '2019-10-11T01:06:00Z',
+  operationNumber: 'OOF20103048323658',
+  operationType: 'DAT',
+  rawMessage: '',
+  referencedReportId: null,
+  reportDateTime: '2019-10-11T01:06:00Z',
+  reportId: 'OOF20103048323658',
+  tripNumber: '9463715',
+  vesselName: 'PHENOMENE'
+}
+
 export const dummyLogbookMessages: LogbookMessage[] = [
   {
     acknowledge: null,

@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { LogbookMessageResumeHeader } from './LogbookMessageResumeHeader'
-import { COMMON_ALERT_TYPE_OPTION } from '../../../../domain/entities/alerts/constants'
-import { getDateTime } from '../../../../utils'
-import { LogbookMessageType as LogbookMessageTypeEnum } from '../../constants'
+import { COMMON_ALERT_TYPE_OPTION } from '../../../../../../domain/entities/alerts/constants'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../constants'
+import { getCodeWithNameOrDash, getDatetimeOrDash, getValueOrDash } from '../../LogbookMessages/messages/utils'
+import { LogbookMessageResumeHeader } from '../LogbookMessageResumeHeader'
 
 import type { Promisable } from 'type-fest'
 
@@ -45,21 +45,6 @@ export function LANMessageResume({
       setChartHeight(height)
     }
   }, [lanMessage])
-
-  const getPortName = message => {
-    if (message.portName && message.port) {
-      return (
-        <>
-          {message.portName} ({message.port})
-        </>
-      )
-    }
-    if (message.port) {
-      return <>{message.port}</>
-    }
-
-    return <NoValue>-</NoValue>
-  }
 
   useEffect(() => {
     if (isOpen) {
@@ -115,17 +100,11 @@ export function LANMessageResume({
               <TableBody>
                 <Field>
                   <Key>Date de fin de débarquement</Key>
-                  <Value>
-                    {lanMessage.landingDatetimeUtc ? (
-                      getDateTime(lanMessage.landingDatetimeUtc, true)
-                    ) : (
-                      <NoValue>-</NoValue>
-                    )}
-                  </Value>
+                  <Value>{getDatetimeOrDash(lanMessage.landingDatetimeUtc)}</Value>
                 </Field>
                 <Field>
                   <Key>Port de débarquement</Key>
-                  <Value>{getPortName(lanMessage)}</Value>
+                  <Value>{getCodeWithNameOrDash(lanMessage.port, lanMessage.portName)}</Value>
                 </Field>
               </TableBody>
             </Fields>
@@ -134,8 +113,8 @@ export function LANMessageResume({
                 <Field>
                   <Key>Poids débarqué</Key>
                   <Value>
-                    {totalLANWeight || <NoValue>-</NoValue>} kg
-                    {totalPNOWeight ? <> sur les {totalPNOWeight} kg annoncés dans le PNO</> : null}
+                    {getValueOrDash(totalLANWeight)} kg
+                    {totalPNOWeight && <> sur les {totalPNOWeight} kg annoncés dans le PNO</>}
                   </Value>
                 </Field>
               </TableBody>
@@ -147,25 +126,16 @@ export function LANMessageResume({
                 <Species key={index}>
                   <SubKey>Espèce {index + 1}</SubKey>{' '}
                   <SubValue>
-                    {speciesCatch.speciesName ? (
-                      <>
-                        {speciesCatch.speciesName} ({speciesCatch.species})
-                      </>
-                    ) : (
-                      speciesCatch.species
-                    )}
+                    {getCodeWithNameOrDash(speciesCatch.species, speciesCatch.speciesName)}
                     {/* eslint-disable-next-line no-nested-ternary */}
-                    {catchesOverToleranceAlert &&
-                    catchesOverToleranceAlert.catchesOverTolerance &&
-                    catchesOverToleranceAlert.catchesOverTolerance.length ? (
+                    {catchesOverToleranceAlert?.catchesOverTolerance?.length &&
                       catchesOverToleranceAlert.catchesOverTolerance.some(
                         catchWithAlert => catchWithAlert.lan.species === speciesCatch.species
-                      ) ? (
+                      ) && (
                         <OverWeightTolerance title={getWeightOverToleranceInfo()}>
                           <OverWeightToleranceText>10 %</OverWeightToleranceText>
                         </OverWeightTolerance>
-                      ) : null
-                    ) : null}
+                      )}
                   </SubValue>
                   <br />
                   <Weights>

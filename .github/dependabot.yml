@@ -3,8 +3,8 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     assignees:
+      - "ivangabriele"
       - "louptheron"
-      - "thoomasbro"
     schedule:
       interval: "monthly"
     commit-message:

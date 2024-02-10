@@ -8,6 +8,6 @@ jobs:
   set-state:
     runs-on: ubuntu-22.04
     steps:
-      - uses: dessant/issue-states@v2
+      - uses: dessant/issue-states@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

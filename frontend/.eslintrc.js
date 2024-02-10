@@ -104,6 +104,7 @@ module.exports = {
       }
     ],
     '@typescript-eslint/no-use-before-define': 'off',
+    '@typescript-eslint/prefer-nullish-coalescing': 'warn',
 
     'typescript-sort-keys/interface': 'error',
     'typescript-sort-keys/string-enum': 'error'
@@ -150,7 +151,7 @@ module.exports = {
         'no-restricted-syntax': 'off',
         'no-underscore-dangle': 'off',
         'import/no-default-export': 'off',
-        'import/no-extraneous-dependencies': 'off',
+        'import/no-extraneous-dependencies': 'off'
       }
     },
 

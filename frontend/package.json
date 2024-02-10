@@ -33,7 +33,7 @@
     "test:unit:watch": "npm run test:unit -- --watch"
   },
   "dependencies": {
-    "@dnd-kit/core": "6.0.8",
+    "@dnd-kit/core": "6.1.0",
     "@dnd-kit/modifiers": "6.0.1",
     "@mtes-mct/monitor-ui": "11.5.0",
     "@reduxjs/toolkit": "1.9.6",

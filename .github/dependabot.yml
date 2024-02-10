@@ -6,6 +6,9 @@ updates:
       - "louptheron"
     schedule:
       interval: "monthly"
+    commit-message:
+      prefix: "[Tech] "
+    labels: ["tech. enhancement"]
 
   - package-ecosystem: "npm"
     directory: "/frontend"
@@ -14,3 +17,6 @@ updates:
       - "louptheron"
     schedule:
       interval: "monthly"
+    commit-message:
+      prefix: "[Tech] "
+    labels: ["tech. enhancement"]

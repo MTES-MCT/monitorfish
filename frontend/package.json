@@ -37,7 +37,7 @@
     "@dnd-kit/modifiers": "6.0.1",
     "@mtes-mct/monitor-ui": "11.5.0",
     "@reduxjs/toolkit": "1.9.6",
-    "@sentry/browser": "7.55.2",
+    "@sentry/browser": "7.100.1",
     "@sentry/react": "7.52.1",
     "@sentry/tracing": "7.47.0",
     "@svgr/webpack": "8.0.1",

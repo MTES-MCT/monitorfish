@@ -1,5 +1,16 @@
 version: 2
 updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    assignees:
+      - "louptheron"
+      - "thoomasbro"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "[Tech] "
+    labels: ["tech. enhancement"]
+
   - package-ecosystem: "gradle"
     directory: "/backend"
     assignees:
@@ -20,3 +31,17 @@ updates:
     commit-message:
       prefix: "[Tech] "
     labels: ["tech. enhancement"]
+
+  - package-ecosystem: "pip"
+    directory: "/datascience"
+    assignees:
+      - "VincentAntoine"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "[Tech] "
+    labels: ["tech. enhancement"]
+    # Disable all dependencies update
+    # TODO Re-enable once Fish is migrated to Poetry-only.
+    # https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#open-pull-requests-limit
+    open-pull-requests-limit: 0

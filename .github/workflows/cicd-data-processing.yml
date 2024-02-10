@@ -43,7 +43,7 @@ jobs:
         uses: docker/setup-buildx-action@master
 
       - name: Cache Docker layers
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache-pipeline
           key: ${{ runner.os }}-single-buildx-data-pipeline-${{ github.ref_name }}

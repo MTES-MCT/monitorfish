@@ -136,8 +136,8 @@ const Button = styled(MapButton)<{
   height: 40px;
   width: 40px;
 
-  :hover,
-  :focus {
+  &:hover,
+  &:focus {
     background: ${p => (p.isVisible ? p.theme.color.blueGray : p.theme.color.charcoal)};
   }
 `

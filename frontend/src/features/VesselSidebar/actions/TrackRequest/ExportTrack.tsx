@@ -108,8 +108,8 @@ const ExportTrackButton = styled(PrimaryButton)<{
   padding: 0.25rem 0.5rem 0.5rem 0.25rem;
   text-align: left;
 
-  :hover,
-  :focus {
+  &:hover,
+  &:focus {
     background: ${p => p.theme.color.charcoal};
   }
 `

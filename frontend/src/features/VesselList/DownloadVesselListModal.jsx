@@ -211,7 +211,7 @@ const DownloadButton = styled.button`
   font-size: 13px;
   color: ${COLORS.gainsboro};
 
-  :hover {
+  &:hover {
     background: ${COLORS.charcoal};
   }
 `

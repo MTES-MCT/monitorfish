@@ -133,10 +133,10 @@ const Section = styled.div`
 const ToggleMissionsButton = styled(IconButton)`
   background: ${COLORS.white};
 
-  :hover {
+  &:hover {
     background: ${COLORS.white};
   }
-  :focus {
+  &:focus {
     background: ${COLORS.white};
   }
 `

@@ -79,7 +79,7 @@ const Zone = styled.span<{
   padding-bottom: 2px;
   ${p => (!p.isOpen ? null : `border-bottom: 1px solid ${COLORS.lightGray};`)}
 
-  :hover {
+  &:hover {
     background: ${THEME.color.blueGray25};
   }
 `

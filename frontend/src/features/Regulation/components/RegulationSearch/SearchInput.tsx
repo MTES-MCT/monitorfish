@@ -242,8 +242,8 @@ const SearchBoxInput = styled.input`
   vertical-align: bottom;
   width: 270px;
 
-  :hover,
-  :focus {
+  &:hover,
+  &:focus {
     border-bottom: 1px ${p => p.theme.color.slateGray} solid;
   }
 `
@@ -283,9 +283,9 @@ const AdvancedSearch = styled(IconButton)<
     margin-top: -1px;
   }
 
-  :hover,
-  :focus,
-  :active {
+  &:hover,
+  &:focus,
+  &:active {
     background: ${p => (p.advancedSearchIsOpen ? p.theme.color.blueYonder : p.theme.color.charcoal)};
   }
 `

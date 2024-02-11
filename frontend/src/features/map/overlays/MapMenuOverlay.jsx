@@ -239,7 +239,7 @@ const Menu = styled.span`
   width: 100%;
   border-top: ${props => (props.withTopLine ? 1 : 0)}px solid ${COLORS.lightGray};
 
-  :hover {
+  &:hover {
     background: ${COLORS.gainsboro};
   }
 `

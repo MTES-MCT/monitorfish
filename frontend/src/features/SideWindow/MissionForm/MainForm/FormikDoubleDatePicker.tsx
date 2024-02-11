@@ -50,7 +50,7 @@ const Wrapper = styled.div`
     > .Field-DatePicker {
       margin-left: 12px;
 
-      :first-child {
+      &:first-child {
         margin-right: 12px;
       }
     }

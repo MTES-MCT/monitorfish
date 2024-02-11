@@ -234,7 +234,8 @@ const SearchVesselInput = styled.input<{
   min-width: 280px;
   flex-grow: 0;
 
-  :hover, :focus: {
+  &:hover,
+  &:focus {
     border-bottom: ${p => `1px ${p.theme.color.lightGray} solid`};
   }
 `

@@ -23,8 +23,8 @@ export const VesselSidebarActionButton = styled(MapButton)<{
     all 0.5s,
     right 0.3s;
 
-  :hover,
-  :focus {
+  &:hover,
+  &:focus {
     background: ${p => p.backgroundColor || p.theme.color.charcoal};
   }
 `

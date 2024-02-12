@@ -1,8 +1,6 @@
 import { createSlice, current } from '@reduxjs/toolkit'
 import { isEqual } from 'lodash/fp'
 
-import { type MissionWithActions } from '../../../../domain/entities/mission/types'
-
 import type { MissionMainFormValues } from '../../../SideWindow/MissionForm/types'
 import type { MissionWithActionsDraft } from '../../types'
 import type { PayloadAction } from '@reduxjs/toolkit'
@@ -22,7 +20,6 @@ export interface MissionFormState {
   isDraftDirty: boolean
   isListeningToEvents: boolean
   mustResetOtherControlsCheckboxes: boolean | undefined
-  originalMissionWithActions: MissionWithActions | undefined
 }
 const INITIAL_STATE: MissionFormState = {
   draft: undefined,
@@ -30,8 +27,7 @@ const INITIAL_STATE: MissionFormState = {
   isClosing: false,
   isDraftDirty: false,
   isListeningToEvents: true,
-  mustResetOtherControlsCheckboxes: undefined,
-  originalMissionWithActions: undefined
+  mustResetOtherControlsCheckboxes: undefined
 }
 
 const missionFormSlice = createSlice({
@@ -46,7 +42,6 @@ const missionFormSlice = createSlice({
       state.geometryComputedFromControls = undefined
       state.isClosing = false
       state.isDraftDirty = false
-      state.originalMissionWithActions = undefined
     },
 
     mustResetOtherControlsCheckboxes(state, action: PayloadAction<boolean>) {
@@ -61,7 +56,6 @@ const missionFormSlice = createSlice({
       state.geometryComputedFromControls = undefined
       state.isClosing = false
       state.isDraftDirty = false
-      state.originalMissionWithActions = undefined
     },
 
     /**
@@ -98,10 +92,6 @@ const missionFormSlice = createSlice({
 
     setIsListeningToEvents(state, action: PayloadAction<boolean>) {
       state.isListeningToEvents = action.payload
-    },
-
-    setOriginalMissionWithActions(state, action: PayloadAction<MissionWithActions>) {
-      state.originalMissionWithActions = action.payload
     },
 
     /**

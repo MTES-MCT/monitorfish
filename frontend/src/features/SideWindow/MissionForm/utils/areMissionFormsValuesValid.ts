@@ -3,8 +3,8 @@ import { getValidMissionActionData, getValidMissionDataControlUnit } from '../ut
 import type { MissionActionFormValues, MissionMainFormValues } from '../types'
 
 export function areMissionFormsValuesValid(
-  mainFormValues: MissionMainFormValues | undefined,
-  actionsFormValues: MissionActionFormValues[] = []
+  mainFormValues: MissionMainFormValues,
+  actionsFormValues: MissionActionFormValues[]
 ): boolean {
   try {
     actionsFormValues.forEach(actionFormValues => getValidMissionActionData(actionFormValues))
@@ -13,10 +13,10 @@ export function areMissionFormsValuesValid(
   }
 
   try {
-    mainFormValues?.controlUnits?.forEach(controlUnit => getValidMissionDataControlUnit(controlUnit))
+    mainFormValues.controlUnits?.forEach(controlUnit => getValidMissionDataControlUnit(controlUnit))
   } catch (e) {
     return false
   }
 
-  return !!mainFormValues && mainFormValues.isValid && !actionsFormValues.map(({ isValid }) => isValid).includes(false)
+  return mainFormValues.isValid && !actionsFormValues.map(({ isValid }) => isValid).includes(false)
 }

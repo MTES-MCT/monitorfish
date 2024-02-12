@@ -145,7 +145,7 @@ beforeEach(() => {
     }
   )
 
-  // PROD :: FRONTEND_SMALL_CHAT_SNIPPET
+  // PROD :: VITE_SMALL_CHAT_SNIPPET
   cy.intercept(
     { url: /^https:\/\/embed\.small\.chat\/.*/ },
     {

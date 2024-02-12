@@ -14,7 +14,6 @@ interface ImportMetaEnv {
   readonly FRONTEND_OIDC_REDIRECT_URI: string
   readonly FRONTEND_SENTRY_DSN?: string
   readonly FRONTEND_SHOM_KEY: string
-  readonly VITE_SMALL_CHAT_SNIPPET?: string
 }
 
 interface ImportMeta {

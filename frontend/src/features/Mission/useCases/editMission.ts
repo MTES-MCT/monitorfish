@@ -1,5 +1,5 @@
 import { getMissionWithActions } from './getMissionWithActions'
-import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
+import { SideWindowMenuKey, SideWindowStatus } from '../../../domain/entities/sideWindow/constants'
 import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
 import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
@@ -15,10 +15,14 @@ import type { MainAppThunk } from '../../../store'
 export const editMission =
   (id: number): MainAppThunk =>
   async (dispatch, getState) => {
-    const { missionForm } = getState()
+    const { missionForm, sideWindow } = getState()
     const path = { id, isLoading: true, menu: SideWindowMenuKey.MISSION_FORM }
 
-    if (missionForm.isDraftDirty) {
+    if (
+      sideWindow.status !== SideWindowStatus.CLOSED &&
+      sideWindow.selectedPath.menu === SideWindowMenuKey.MISSION_FORM &&
+      missionForm.isDraftDirty
+    ) {
       dispatch(askForSideWindowDraftCancellationConfirmation(path, () => editMissionWithoutConfirmation(id)))
 
       return

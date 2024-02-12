@@ -16,5 +16,3 @@ export const activityReportApi = monitorfishApi.injectEndpoints({
     })
   })
 })
-
-export const { useGetActivityReportsQuery } = activityReportApi

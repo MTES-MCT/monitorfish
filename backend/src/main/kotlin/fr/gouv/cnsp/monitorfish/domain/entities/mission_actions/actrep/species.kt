@@ -1,14 +1,20 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep
 
-typealias FaoCodes = List<String>
-typealias FaoCodesAndSpecy = Pair<FaoCodes, String>
+typealias FaoZones = List<String>
+typealias FaoZonesAndSpecy = Pair<FaoZones, String>
 
 /**
  * The following fao areas and species are defined in the species table document of each JDP.
+ *
+ * These tables could be found in these file names :
+ * - "Liste Espèces_JDP MED.pdf"
+ * - "liste espèces JDP NS-01.odt"
+ * - "LISTE_ESPECES_JDP WW.odt"
+ * * See issue: https://github.com/MTES-MCT/monitorfish/issues/1750
  */
 
 val MED_FAO_CODES = listOf("37.1", "37.2", "37.3")
-val MEDITERRANEAN_AND_EASTERN_ATLANTIC_SPECIES: List<FaoCodesAndSpecy> = generateSpeciesWithFaoCode(
+val MEDITERRANEAN_AND_EASTERN_ATLANTIC_SPECIES: List<FaoZonesAndSpecy> = generateSpeciesWithFaoCode(
     MED_FAO_CODES,
     listOf(
         "ANE",
@@ -59,8 +65,9 @@ val MEDITERRANEAN_AND_EASTERN_ATLANTIC_SPECIES: List<FaoCodesAndSpecy> = generat
 ) +
     // Eastern Atlantic part
     listOf(Pair(listOf("27.7", "27.8", "27.9", "27.10"), "BFT"))
+
 val NS_01_FAO_CODES = listOf("27.4", "27.3.a")
-val NORTH_SEA_SPECIES = generateSpeciesWithFaoCode(
+val NORTH_SEA_SPECIES: List<FaoZonesAndSpecy> = generateSpeciesWithFaoCode(
     NS_01_FAO_CODES,
     listOf(
         "HOM",
@@ -103,8 +110,9 @@ val NORTH_SEA_SPECIES = generateSpeciesWithFaoCode(
         "NOP",
     ),
 )
+
 val WW_01_FAO_CODES = listOf("27.6", "27.7", "27.8", "27.9", "27.10")
-val WESTERN_WATERS_SPECIES = listOf(
+val WESTERN_WATERS_SPECIES: List<FaoZonesAndSpecy> = listOf(
     Pair(listOf("27.6", "27.7", "27.8", "27.9"), "PIL"),
     Pair(listOf("27.6", "27.7", "27.8", "27.9"), "ELE"),
 ) + generateSpeciesWithFaoCode(
@@ -146,6 +154,6 @@ val WESTERN_WATERS_SPECIES = listOf(
     ),
 )
 
-fun generateSpeciesWithFaoCode(faoCodes: FaoCodes, species: List<String>): List<FaoCodesAndSpecy> {
-    return species.map { Pair(faoCodes, it) }
+fun generateSpeciesWithFaoCode(faoZones: FaoZones, species: List<String>): List<FaoZonesAndSpecy> {
+    return species.map { Pair(faoZones, it) }
 }

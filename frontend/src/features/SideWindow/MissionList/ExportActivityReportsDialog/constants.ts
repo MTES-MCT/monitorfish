@@ -3,3 +3,5 @@ export enum JDP {
   NORTH_SEA = 'JDP NS-01',
   WESTERN_WATERS = 'JDP WW-01'
 }
+
+export const NOT_TARGETED_SPECIES_CODE = 'OTH'

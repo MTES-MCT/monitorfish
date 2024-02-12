@@ -7,7 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.dtos.ActivityRe
 data class ActivityReportDataOutput(
     val action: MissionActionDataOutput,
     val activityCode: ActivityCode,
-    val vesselNationalIdentifier: String, // The `districtCode` and `internalReferenceNumber` concatenation
+    val vesselNationalIdentifier: String,
     val controlUnits: List<ControlUnit>,
     val vessel: VesselDataOutput,
 ) {

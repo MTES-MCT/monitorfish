@@ -1,4 +1,5 @@
 import { customDayjs, logSoftError } from '@mtes-mct/monitor-ui'
+import { sortBy } from 'lodash'
 
 import { downloadAsCsv } from '../../../../../utils/downloadAsCsv'
 import { activityReportApi } from '../apis'
@@ -6,10 +7,14 @@ import { JDP } from '../constants'
 import { JDP_CSV_MAP_BASE } from '../csvMap'
 import { getJDPCsvMap } from '../utils'
 
+import type { ActivityReports } from '../types'
+
 export const NO_ACTIVITY_REPORT = 'NO_ACTIVITY_REPORT'
 
 export const downloadActivityReports = (afterDateTime: string, beforeDateTime: string, jdp: JDP) => async dispatch => {
-  const { data: activityReports } = await dispatch(
+  const {
+    data: { activityReports, jdpSpecies }
+  }: { data: ActivityReports } = await dispatch(
     activityReportApi.endpoints.getActivityReports.initiate({
       afterDateTime,
       beforeDateTime,
@@ -21,10 +26,18 @@ export const downloadActivityReports = (afterDateTime: string, beforeDateTime: s
     throw new Error(NO_ACTIVITY_REPORT)
   }
 
-  const activityReportsWithId = activityReports.map((activity, index) => ({ ...activity, id: index }))
+  const activityReportsWithId = activityReports.map((activity, index) => ({
+    ...activity,
+    action: {
+      ...activity.action,
+      // We sort species by weight as only 10 species columns are contained in the CSV
+      speciesOnboard: sortBy(activity.action.speciesOnboard, ({ declaredWeight }) => declaredWeight).reverse()
+    },
+    id: index
+  }))
   const fileName = getCsvFileName(jdp)
 
-  const csvMap = getJDPCsvMap(JDP_CSV_MAP_BASE, jdp)
+  const csvMap = getJDPCsvMap(JDP_CSV_MAP_BASE, jdp, jdpSpecies)
   downloadAsCsv(fileName, activityReportsWithId, csvMap)
 }
 

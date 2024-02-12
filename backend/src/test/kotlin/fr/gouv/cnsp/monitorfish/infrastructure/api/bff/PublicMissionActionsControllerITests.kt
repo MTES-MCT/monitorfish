@@ -13,6 +13,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep.JointDepl
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.dtos.ActivityReport
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.dtos.ActivityReports
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
 import kotlinx.coroutines.runBlocking
@@ -290,32 +291,35 @@ class PublicMissionActionsControllerITests {
     fun `Should get all activity reports for a given date range and JDP`() {
         // Given
         given(getActivityReports.execute(any(), any(), any())).willReturn(
-            listOf(
-                ActivityReport(
-                    action = MissionAction(
-                        1,
-                        1,
-                        1,
-                        actionType = MissionActionType.SEA_CONTROL,
-                        actionDatetimeUtc = ZonedDateTime.now(),
-                        isDeleted = false,
-                        hasSomeGearsSeized = false,
-                        hasSomeSpeciesSeized = false,
-                        isFromPoseidon = true,
-                    ),
-                    activityCode = ActivityCode.FIS,
-                    vesselNationalIdentifier = "AYFR000654",
-                    controlUnits = listOf(ControlUnit(1234, "DIRM", false, "Cross Etel", listOf())),
-                    vessel = Vessel(
-                        id = 1,
-                        internalReferenceNumber = "FR00022680",
-                        vesselName = "MY AWESOME VESSEL",
-                        flagState = CountryCode.FR,
-                        declaredFishingGears = listOf("Trémails"),
-                        vesselType = "Fishing",
-                        districtCode = "AY",
+            ActivityReports(
+                activityReports = listOf(
+                    ActivityReport(
+                        action = MissionAction(
+                            1,
+                            1,
+                            1,
+                            actionType = MissionActionType.SEA_CONTROL,
+                            actionDatetimeUtc = ZonedDateTime.now(),
+                            isDeleted = false,
+                            hasSomeGearsSeized = false,
+                            hasSomeSpeciesSeized = false,
+                            isFromPoseidon = true,
+                        ),
+                        activityCode = ActivityCode.FIS,
+                        vesselNationalIdentifier = "AYFR000654",
+                        controlUnits = listOf(ControlUnit(1234, "DIRM", false, "Cross Etel", listOf())),
+                        vessel = Vessel(
+                            id = 1,
+                            internalReferenceNumber = "FR00022680",
+                            vesselName = "MY AWESOME VESSEL",
+                            flagState = CountryCode.FR,
+                            declaredFishingGears = listOf("Trémails"),
+                            vesselType = "Fishing",
+                            districtCode = "AY",
+                        ),
                     ),
                 ),
+                jdpSpecies = listOf("BSS", "MAK", "LTH"),
             ),
         )
 
@@ -327,12 +331,14 @@ class PublicMissionActionsControllerITests {
         )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.length()", equalTo(1)))
-            .andExpect(jsonPath("$[0].action.id", equalTo(1)))
-            .andExpect(jsonPath("$[0].activityCode", equalTo("FIS")))
-            .andExpect(jsonPath("$[0].vesselNationalIdentifier", equalTo("AYFR000654")))
-            .andExpect(jsonPath("$[0].controlUnits[0].id", equalTo(1234)))
-            .andExpect(jsonPath("$[0].vessel.vesselId", equalTo(1)))
+            .andExpect(jsonPath("$.activityReports.length()", equalTo(1)))
+            .andExpect(jsonPath("$.activityReports[0].action.id", equalTo(1)))
+            .andExpect(jsonPath("$.activityReports[0].activityCode", equalTo("FIS")))
+            .andExpect(jsonPath("$.activityReports[0].vesselNationalIdentifier", equalTo("AYFR000654")))
+            .andExpect(jsonPath("$.activityReports[0].controlUnits[0].id", equalTo(1234)))
+            .andExpect(jsonPath("$.activityReports[0].vessel.vesselId", equalTo(1)))
+            .andExpect(jsonPath("$.jdpSpecies.length()", equalTo(3)))
+            .andExpect(jsonPath("$.jdpSpecies[0]", equalTo("BSS")))
 
         Mockito.verify(getActivityReports).execute(
             ZonedDateTime.parse("2020-05-04T03:04:05Z"),

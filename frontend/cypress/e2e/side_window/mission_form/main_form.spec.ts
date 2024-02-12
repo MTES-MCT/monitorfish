@@ -25,16 +25,25 @@ context('Side Window > Mission Form > Main Form', () => {
 
     const expectedStartDateTimeUtc = new RegExp(`${customDayjs().utc().format('YYYY-MM-DDTHH')}:\\d{2}:00\\.000Z`)
 
-    cy.intercept('POST', '/api/v1/missions', cy.spy().as('createMissionSpy')).as('createMission')
-
-    cy.get('@createMissionSpy').should('not.have.been.called')
+    cy.intercept('POST', '/api/v1/missions', {
+      body: {
+        createdAtUtc: customDayjs().utc().format('YYYY-MM-DDTHH:mm:ss.000Z'),
+        id: 1,
+        updatedAtUtc: customDayjs().utc().format('YYYY-MM-DDTHH:mm:ss.000Z')
+      },
+      statusCode: 201
+    }).as('createMission')
+    cy.intercept('GET', '/api/v1/missions/1', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('getCreatedMission')
 
     cy.fill('Types de mission', ['Mer'])
 
     cy.fill('Administration 1', 'DDTM')
     cy.fill('Unité 1', 'Cultures marines – DDTM 40')
-
-    cy.get('@createMissionSpy').should('have.been.called')
 
     cy.wait('@createMission').then(interception => {
       if (!interception.response) {
@@ -64,7 +73,7 @@ context('Side Window > Mission Form > Main Form', () => {
     })
 
     cy.get('div').contains('Mission créée le')
-    cy.get('div').contains('Dernière modification enregistrée il y a')
+    cy.get('div').contains('Dernière modification enregistrée')
     cy.get('h1').should('contain.text', 'Nouvelle mission')
   })
 
@@ -401,6 +410,12 @@ context('Side Window > Mission Form > Main Form', () => {
   })
 
   it('Should close a new mission', () => {
+    cy.intercept('DELETE', '/bff/v1/mission_actions/2', {
+      body: {
+        id: 2
+      },
+      statusCode: 200
+    }).as('updateMissionAction')
     cy.intercept('POST', '/api/v1/missions/1', {
       body: {
         id: 1,
@@ -435,7 +450,12 @@ context('Side Window > Mission Form > Main Form', () => {
 
   it('Should close an existing mission', () => {
     editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
-
+    cy.intercept('DELETE', '/bff/v1/mission_actions/2', {
+      body: {
+        id: 2
+      },
+      statusCode: 200
+    }).as('updateMissionAction')
     cy.intercept('POST', '/api/v1/missions/2', {
       body: {
         id: 2
@@ -447,6 +467,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.wait(500)
 
+    cy.clickButton('Supprimer l’action')
     cy.clickButton('Clôturer')
 
     cy.waitForLastRequest(

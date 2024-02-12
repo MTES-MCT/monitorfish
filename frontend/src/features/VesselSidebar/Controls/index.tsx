@@ -182,7 +182,7 @@ const Body = styled.div`
   overflow-x: hidden;
   max-height: 700px;
 
-  ::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     width: 20px;
   }
 `

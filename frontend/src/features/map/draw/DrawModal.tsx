@@ -258,7 +258,7 @@ const ActionWrapper = styled.div`
   display: flex;
   padding: 10px;
 
-  & > :not(:last-child) {
+  & > &:not(:last-child) {
     margin-right: 10px;
   }
 `

@@ -31,7 +31,7 @@ const Row = styled.li`
   line-height: 18px;
   user-select: none;
 
-  :hover {
+  &:hover {
     background: ${p => p.theme.color.blueGray25};
   }
 `

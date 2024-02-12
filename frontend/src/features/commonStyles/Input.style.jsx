@@ -35,7 +35,7 @@ export const CustomInput = styled(Input)`
     cursor: text;
   }
 
-  ::placeholder {
+  &::placeholder {
     font-size: 11px;
     color: ${COLORS.slateGray};
   }

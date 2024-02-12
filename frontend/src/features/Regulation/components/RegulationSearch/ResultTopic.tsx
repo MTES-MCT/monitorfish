@@ -182,7 +182,7 @@ const LayerTopic = styled.div`
   color: ${p => p.theme.color.gunMetal};
   border-bottom: 1px solid ${p => p.theme.color.lightGray};
 
-  :hover {
+  &:hover {
     background: ${p => p.theme.color.blueGray25};
   }
 

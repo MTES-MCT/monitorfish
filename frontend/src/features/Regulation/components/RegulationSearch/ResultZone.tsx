@@ -161,7 +161,7 @@ const Zone = styled.span<{
     margin-left: 0px;
   }
 
-  :hover {
+  &:hover {
     background: ${p => p.theme.color.blueGray25};
   }
 

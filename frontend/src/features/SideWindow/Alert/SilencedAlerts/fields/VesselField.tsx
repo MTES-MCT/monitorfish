@@ -150,7 +150,7 @@ const VesselIdentityBar = styled.div`
   > span {
     font-weight: normal;
 
-    :not(:first-child) {
+    &:not(:first-child) {
       margin-left: 16px;
     }
   }

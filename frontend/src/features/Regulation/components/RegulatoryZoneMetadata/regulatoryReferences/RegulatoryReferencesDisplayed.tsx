@@ -43,10 +43,10 @@ const Reference = styled.li`
 
 export const Link = styled.a`
   // LVHA-order
-  :link,
-  :visited,
-  :hover,
-  :active {
+  &:link,
+  &:visited,
+  &:hover,
+  &:active {
     color: ${p => p.theme.color.blueGray};
     font-size: 13px;
     cursor: pointer;

@@ -53,7 +53,7 @@ const Row = styled.span<{
   width: -webkit-fill-available;
   width: stretch;
 
-  :hover {
+  &:hover {
     background: ${THEME.color.blueGray25};
   }
 `

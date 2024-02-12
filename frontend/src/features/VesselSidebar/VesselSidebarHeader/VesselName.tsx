@@ -100,8 +100,8 @@ const Wrapper = styled.div<{
   cursor: text;
   transition: width 0.7s ease forwards;
 
-  :hover,
-  :focus {
+  &:hover,
+  &:focus {
     border-bottom: 1px ${p => p.theme.color.lightGray} solid;
   }
 `

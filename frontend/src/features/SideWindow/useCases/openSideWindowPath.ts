@@ -1,5 +1,5 @@
 import { askForSideWindowDraftCancellationConfirmation } from './askForSideWindowDraftCancellationConfirmation'
-import { SideWindowStatus } from '../../../domain/entities/sideWindow/constants'
+import { SideWindowMenuKey, SideWindowStatus } from '../../../domain/entities/sideWindow/constants'
 import { getFullPathFromPath } from '../../../domain/entities/sideWindow/utils'
 import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
 
@@ -11,13 +11,16 @@ export const openSideWindowPath =
   async (dispatch, getState) => {
     const { missionForm, sideWindow } = getState()
 
-    const fullPath: SideWindow.FullPath = getFullPathFromPath(path)
-
-    if (!withoutConfirmation && sideWindow.status !== SideWindowStatus.CLOSED && missionForm.isDraftDirty) {
+    if (
+      !withoutConfirmation &&
+      sideWindow.selectedPath.menu === SideWindowMenuKey.MISSION_FORM &&
+      sideWindow.status !== SideWindowStatus.CLOSED &&
+      missionForm.isDraftDirty
+    ) {
       dispatch(askForSideWindowDraftCancellationConfirmation(path))
 
       return
     }
 
-    dispatch(sideWindowActions.openOrFocusAndGoTo(fullPath))
+    dispatch(sideWindowActions.openOrFocusAndGoTo(getFullPathFromPath(path)))
   }

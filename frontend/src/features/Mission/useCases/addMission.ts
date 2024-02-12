@@ -1,4 +1,4 @@
-import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
+import { SideWindowMenuKey, SideWindowStatus } from '../../../domain/entities/sideWindow/constants'
 import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
 import { askForSideWindowDraftCancellationConfirmation } from '../../SideWindow/useCases/askForSideWindowDraftCancellationConfirmation'
 import { openSideWindowPath } from '../../SideWindow/useCases/openSideWindowPath'
@@ -11,10 +11,14 @@ import type { MissionMainFormValues } from '../../SideWindow/MissionForm/types'
 export const addMission =
   (initialMainFormValues: Partial<MissionMainFormValues> = {}): MainAppThunk =>
   (dispatch, getState) => {
-    const { missionForm } = getState()
+    const { missionForm, sideWindow } = getState()
     const path = { id: 'new', menu: SideWindowMenuKey.MISSION_FORM }
 
-    if (missionForm.isDraftDirty) {
+    if (
+      sideWindow.status !== SideWindowStatus.CLOSED &&
+      sideWindow.selectedPath.menu === SideWindowMenuKey.MISSION_FORM &&
+      missionForm.isDraftDirty
+    ) {
       dispatch(
         askForSideWindowDraftCancellationConfirmation(path, () => addMissionWithoutConfirmation(initialMainFormValues))
       )

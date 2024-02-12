@@ -1,6 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
-import { FrontendError } from '../../libs/FrontendError'
 import { SideWindowMenuKey, SideWindowStatus } from '../entities/sideWindow/constants'
 import { getFullPathFromPath } from '../entities/sideWindow/utils'
 
@@ -26,12 +25,11 @@ const sideWindowSlice = createSlice({
   name: 'sideWindow',
   reducers: {
     /**
-     * Show confirmation dialog when a draft is both in progress and dirty before going to menu + submenu
+     * Cancel the draft cancellation confirmation dialog.
      */
-    askForDraftCancellationConfirmationBeforeGoingTo(state, action: PayloadAction<SideWindow.FullPath>) {
-      state.isDraftCancellationConfirmationDialogOpen = true
-      state.nextPath = action.payload
-      state.status = SideWindowStatus.FOCUSED
+    cancelDraftCancellationConfirmationDialog(state) {
+      state.isDraftCancellationConfirmationDialogOpen = false
+      state.nextPath = undefined
     },
 
     /**
@@ -42,39 +40,44 @@ const sideWindowSlice = createSlice({
     },
 
     /**
-     * Toggle side window confirmation modal when a draft is both in progress and dirty
+     * Open the draft cancellation confirmation dialog.
+     *
+     * @description
+     * ⚠️ NEVER use this action directly, use `askForSideWindowDraftCancellationConfirmation()` use case instead.
      */
-    closeDraftCancellationConfirmationDialog(state) {
-      state.isDraftCancellationConfirmationDialogOpen = false
-      // We reset this prop that was set by `askForDraftCancellationConfirmationBeforeGoingToPath()`
-      state.nextPath = undefined
-    },
-
-    /**
-     * Confirm cancellation of a draft that is both in progress and dirty
-     */
-    hideDraftCancellationConfirmationDialogAndGoToNextPath(state) {
-      if (!state.nextPath) {
-        throw new FrontendError('`state.nextPath` is undefined.')
-      }
-
-      state.isDraftCancellationConfirmationDialogOpen = false
-      state.selectedPath = state.nextPath
+    openDraftCancellationConfirmationDialog(state) {
+      state.isDraftCancellationConfirmationDialogOpen = true
       state.status = SideWindowStatus.FOCUSED
-
-      state.nextPath = undefined
     },
 
     /**
      * Open side window and go to menu + submenu
      *
      * @description
-     * ⚠️ You should only use this action when you are willingly cancelling or saving a current draft in progress.
-     * In all other cases, you should use `openPath()`.
+     * ⚠️ NEVER use this action directly, use `openSideWindowPath()` use case instead.
      */
     openOrFocusAndGoTo(state, action: PayloadAction<SideWindow.FullPath>) {
+      state.nextPath = undefined
       state.selectedPath = action.payload
       state.status = SideWindowStatus.FOCUSED
+    },
+
+    /**
+     * Set next path.
+     *
+     * @description
+     * Used to store the next path while waiting for user confirmation before changing path.
+     */
+    setNextPath(state, action: PayloadAction<SideWindow.FullPath>) {
+      state.nextPath = action.payload
+    },
+
+    /**
+     * Set current path.
+     */
+    setSelectedPath(state, action: PayloadAction<SideWindow.FullPath>) {
+      state.nextPath = undefined
+      state.selectedPath = action.payload
     },
 
     /**

@@ -5,6 +5,7 @@ import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { FrontendApiError } from '../../../libs/FrontendApiError'
 import { handleThunkError } from '../../../utils/handleThunkError'
+import { askForSideWindowDraftCancellationConfirmation } from '../../SideWindow/useCases/askForSideWindowDraftCancellationConfirmation'
 import { openSideWindowPath } from '../../SideWindow/useCases/openSideWindowPath'
 import { missionFormActions } from '../components/MissionForm/slice'
 import { getMissionDraftFromMissionWithActions } from '../components/MissionForm/utils/getMissionFormInitialValues'
@@ -13,15 +14,24 @@ import type { MainAppThunk } from '../../../store'
 
 export const editMission =
   (id: number): MainAppThunk =>
+  async (dispatch, getState) => {
+    const { missionForm } = getState()
+    const path = { id, isLoading: true, menu: SideWindowMenuKey.MISSION_FORM }
+
+    if (missionForm.isDraftDirty) {
+      dispatch(askForSideWindowDraftCancellationConfirmation(path, () => editMissionWithoutConfirmation(id)))
+
+      return
+    }
+
+    dispatch(editMissionWithoutConfirmation(id))
+    dispatch(openSideWindowPath(path, true))
+  }
+
+export const editMissionWithoutConfirmation =
+  (id: number): MainAppThunk =>
   async dispatch => {
     dispatch(displayedErrorActions.unset('missionFormError'))
-    dispatch(
-      openSideWindowPath({
-        id,
-        isLoading: true,
-        menu: SideWindowMenuKey.MISSION_FORM
-      })
-    )
 
     try {
       const missionWithActions = await dispatch(getMissionWithActions(id))
@@ -32,7 +42,7 @@ export const editMission =
       dispatch(sideWindowActions.setSelectedPathIsLoading(false))
     } catch (err) {
       if (err instanceof FrontendApiError) {
-        dispatch(displayOrLogError(err, () => editMission(id), true, 'missionFormError'))
+        dispatch(displayOrLogError(err, () => editMissionWithoutConfirmation(id), true, 'missionFormError'))
 
         return
       }

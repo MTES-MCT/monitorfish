@@ -1,7 +1,7 @@
 import { displayedErrorActions, type DisplayedErrorState } from '../../shared_slices/DisplayedError'
 
-import type { RetryableUseCase } from '../../../libs/DisplayedError'
 import type { MainAppThunk } from '../../../store'
+import type { RetryableUseCase } from '../../../types'
 
 export const retry =
   (errorKey: keyof DisplayedErrorState, retryableUseCase: RetryableUseCase | undefined): MainAppThunk =>

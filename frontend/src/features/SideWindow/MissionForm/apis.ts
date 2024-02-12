@@ -12,7 +12,7 @@ const UPDATE_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu mettre à jour la miss
 
 export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
   endpoints: builder => ({
-    createMission: builder.mutation<Pick<Mission.Mission, 'id'>, Mission.MissionData>({
+    createMission: builder.mutation<Mission.Mission, Mission.MissionData>({
       // TODO To remove when FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED feature flag is ON
       // As all mission will be fetched when closing the mission form
       async onQueryStarted(_, { dispatch, queryFulfilled }) {

@@ -134,35 +134,25 @@ export function MissionForm() {
 
         if (!missionIdFromRef.current) {
           const newMission = getMissionDataFromMissionFormValues(missionDraft.mainFormValues)
-          // TODO Override Redux RTK typings globally.
-          // Redux RTK typing is wrong, this should be a tuple-like to help TS discriminate `data` from `error`.
-          const { data, error } = (await createMission(newMission)) as any
-          if (!data) {
-            throw new FrontendError('`createMission()` failed', error)
-          }
+          const createdMission = await createMission(newMission).unwrap()
 
-          missionIdFromRef.current = data.id
+          missionIdFromRef.current = createdMission.id
 
           setMainFormValues({
             ...missionDraft.mainFormValues,
-            createdAtUtc: data.createdAtUtc,
-            updatedAtUtc: data.updatedAtUtc
+            createdAtUtc: createdMission.createdAtUtc,
+            updatedAtUtc: createdMission.updatedAtUtc
           })
         } else {
-          const updatedMission = getUpdatedMissionFromMissionMainFormValues(
+          const nextMission = getUpdatedMissionFromMissionMainFormValues(
             missionIdFromRef.current,
             missionDraft.mainFormValues
           )
-          const { data, error } = (await updateMission(updatedMission)) as any
-          if (!data) {
-            throw new FrontendError('`updateMission()` failed', error)
-          }
-
-          missionIdFromRef.current = missionIdFromPath
+          const updatedMission = await updateMission(nextMission).unwrap()
 
           setMainFormValues({
             ...missionDraft.mainFormValues,
-            updatedAtUtc: data.updatedAtUtc
+            updatedAtUtc: updatedMission.updatedAtUtc
           })
         }
 
@@ -217,8 +207,7 @@ export function MissionForm() {
       deleteMissionAction,
       updateMission,
       updateMissionAction,
-      missionIdFromRef,
-      missionIdFromPath
+      missionIdFromRef
     ]
   )
 

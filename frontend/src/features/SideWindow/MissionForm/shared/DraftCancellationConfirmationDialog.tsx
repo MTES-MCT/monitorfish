@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { sideWindowActions } from '../../../../domain/shared_slices/SideWindow'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { confirmSideWindowDraftCancellationAndProceed } from '../../useCases/confirmSideWindowDraftCancellationAndProceed'
 
 type DraftCancellationConfirmationDialogProps = {
   isAutoSaveEnabled: boolean
@@ -11,11 +12,11 @@ export function DraftCancellationConfirmationDialog({ isAutoSaveEnabled }: Draft
   const dispatch = useMainAppDispatch()
 
   const cancel = () => {
-    dispatch(sideWindowActions.closeDraftCancellationConfirmationDialog())
+    dispatch(sideWindowActions.cancelDraftCancellationConfirmationDialog())
   }
 
   const confirm = () => {
-    dispatch(sideWindowActions.hideDraftCancellationConfirmationDialogAndGoToNextPath())
+    dispatch(confirmSideWindowDraftCancellationAndProceed())
   }
 
   return (

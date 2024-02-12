@@ -1,3 +1,4 @@
+import type { MainAppThunk } from './store'
 import type { ConditionalKeys, Exact } from 'type-fest'
 
 export type CollectionItem = {
@@ -41,5 +42,7 @@ export type PickStringKeysWithNativeValues<T extends Record<any, any>> = Exact<
   },
   T
 >
+
+export type RetryableUseCase = () => MainAppThunk
 
 export type StringKeyRecord<T> = PickStringKeys<Record<string, T>>

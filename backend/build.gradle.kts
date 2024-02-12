@@ -36,7 +36,7 @@ tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilation
 }
 
 dependencies {
-    api("org.springframework.boot:spring-boot-starter-web:3.1.7")
+    api("org.springframework.boot:spring-boot-starter-web:3.2.2")
     api("org.springframework.security:spring-security-oauth2-resource-server:6.1.5")
     api("org.springframework.security:spring-security-oauth2-jose:6.1.5")
     api("org.springframework.boot:spring-boot-starter-actuator:3.1.7")

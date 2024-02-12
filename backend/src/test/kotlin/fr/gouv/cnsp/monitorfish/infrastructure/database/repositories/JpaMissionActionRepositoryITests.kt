@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.ControlCheck
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionAction
@@ -201,7 +202,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
             facade = "Sud Océan Indien",
             faoAreas = listOf(),
             feedbackSheetRequired = false,
-            flagState = "FR",
+            flagState = CountryCode.FR,
             flightGoals = listOf(),
             gearInfractions = listOf(),
             gearOnboard = listOf(),

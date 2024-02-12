@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.mission_actions
 
+import com.neovisionaries.i18n.CountryCode
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
@@ -30,6 +31,7 @@ class MissionActionUTests {
             hasSomeSpeciesSeized = false,
             closedBy = "XYZ",
             isFromPoseidon = false,
+            flagState = CountryCode.FR,
         )
 
         // When
@@ -38,37 +40,6 @@ class MissionActionUTests {
         // Then
         assertThat(throwable).isNotNull()
         assertThat(throwable.message).isEqualTo("A control must specify a vessel: the `vesselId` must be given.")
-    }
-
-    @Test
-    fun `verify Should throw an exception When the userTrigram is missing in a control`() {
-        // Given
-        val action = MissionAction(
-            id = null,
-            vesselId = 1,
-            missionId = 1,
-            longitude = 45.7,
-            latitude = 13.5,
-            actionDatetimeUtc = ZonedDateTime.now(),
-            actionType = MissionActionType.SEA_CONTROL,
-            gearOnboard = listOf(),
-            seizureAndDiversion = true,
-            isDeleted = false,
-            userTrigram = null,
-            hasSomeGearsSeized = false,
-            hasSomeSpeciesSeized = false,
-            closedBy = "XYZ",
-            isFromPoseidon = false,
-        )
-
-        // When
-        val throwable = catchThrowable { action.verify() }
-
-        // Then
-        assertThat(throwable).isNotNull()
-        assertThat(throwable.message).isEqualTo(
-            "A control must specify a user trigram: the `userTrigram` must be given.",
-        )
     }
 
     @Test
@@ -92,6 +63,7 @@ class MissionActionUTests {
             hasSomeSpeciesSeized = false,
             closedBy = "XYZ",
             isFromPoseidon = false,
+            flagState = CountryCode.FR,
         )
 
         // When
@@ -122,6 +94,7 @@ class MissionActionUTests {
             hasSomeSpeciesSeized = false,
             closedBy = "XYZ",
             isFromPoseidon = false,
+            flagState = CountryCode.FR,
         )
 
         // When
@@ -152,6 +125,7 @@ class MissionActionUTests {
             hasSomeSpeciesSeized = false,
             closedBy = "XYZ",
             isFromPoseidon = false,
+            flagState = CountryCode.FR,
         )
 
         // When

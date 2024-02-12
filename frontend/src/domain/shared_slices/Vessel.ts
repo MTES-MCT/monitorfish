@@ -538,7 +538,7 @@ const vesselSlice = createSlice({
         vesselFeatureId: Vessel.getVesselFeatureId(vessel),
         vesselProperties: {
           ...vessel,
-          flagState: vessel.flagState?.toLowerCase(),
+          flagState: vessel.flagState,
           fleetSegmentsArray: vessel.segments ? vessel.segments.map(segment => segment.replace(' ', '')) : [],
           gearsArray: vessel.gearOnboard ? [...new Set(vessel.gearOnboard.map(gear => gear.gear))] : [],
           hasAlert: !!vessel.alerts?.length,

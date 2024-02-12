@@ -63,6 +63,8 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
             ),
             MissionAction(
                 id = 2,
@@ -76,6 +78,8 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
             ),
             MissionAction(
                 id = 3,
@@ -89,6 +93,8 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
             ),
         )
         given(missionActionsRepository.findControlsInDates(any(), any())).willReturn(controls)
@@ -188,6 +194,8 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
             ),
             MissionAction(
                 id = 2,
@@ -201,6 +209,8 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
             ),
             MissionAction(
                 id = 3,
@@ -214,6 +224,8 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
             ),
         )
         given(missionActionsRepository.findControlsInDates(any(), any())).willReturn(controls)
@@ -303,6 +315,8 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
             ),
             MissionAction(
                 id = 3,
@@ -316,6 +330,8 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
             ),
         )
         given(missionActionsRepository.findControlsInDates(any(), any())).willReturn(controls)

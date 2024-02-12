@@ -274,7 +274,7 @@ export enum FishingActivitiesTab {
  */
 export const UNKNOWN_VESSEL: VesselIdentity = {
   externalReferenceNumber: 'UNKNOWN',
-  flagState: 'UNKNOWN',
+  flagState: 'UNDEFINED',
   internalReferenceNumber: 'UNKNOWN',
   ircs: 'UNKNOWN',
   vesselId: -1,

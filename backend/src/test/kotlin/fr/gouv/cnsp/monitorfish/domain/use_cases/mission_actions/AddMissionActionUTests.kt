@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.given
@@ -46,6 +47,7 @@ class AddMissionActionUTests {
             hasSomeSpeciesSeized = false,
             closedBy = "XYZ",
             isFromPoseidon = false,
+            flagState = CountryCode.FR,
         )
 
         // When
@@ -79,6 +81,7 @@ class AddMissionActionUTests {
             hasSomeSpeciesSeized = false,
             closedBy = "XYZ",
             isFromPoseidon = false,
+            flagState = CountryCode.FR,
         )
         given(missionActionsRepository.save(anyOrNull())).willReturn(action)
         given(getMissionActionFacade.execute(anyOrNull())).willReturn(Facade.NAMO)

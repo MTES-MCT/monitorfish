@@ -34,7 +34,7 @@ describe('utils', () => {
     const csvMap = getJDPCsvMap(JDP_CSV_MAP_BASE, JDP.WESTERN_WATERS, ['ANZ', 'HKE'])
 
     // Then
-    expect(Object.keys(csvMap)).toHaveLength(79)
+    expect(Object.keys(csvMap)).toHaveLength(91)
 
     // @ts-ignore
     expect(csvMap.species1?.label).toEqual('SPECIES1')
@@ -70,7 +70,7 @@ describe('utils', () => {
     const csvMap = getJDPCsvMap(JDP_CSV_MAP_BASE, JDP.MEDITERRANEAN_AND_EASTERN_ATLANTIC, [])
 
     // Then
-    expect(Object.keys(csvMap)).toHaveLength(79)
+    expect(Object.keys(csvMap)).toHaveLength(91)
 
     // @ts-ignore
     expect(csvMap.eventHour?.label).toEqual('EVENT_HOUR')

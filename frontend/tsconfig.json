@@ -5,6 +5,7 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "alwaysStrict": true,
+    "baseUrl": "./src",
     "checkJs": false,
     // Override inherited value for CommonJS > ESM compatibility purpose
     "esModuleInterop": true,
@@ -23,6 +24,17 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "paths": {
+      "@api/*": ["api/*"],
+      "@components/*": ["components/*"],
+      "@constants/*": ["constants/*"],
+      "@features/*": ["features/*"],
+      "@hooks/*": ["hooks/*"],
+      "@libs/*": ["libs/*"],
+      "@pages/*": ["pages/*"],
+      "@store/*": ["store/*"],
+      "@utils/*": ["utils/*"]
+    },
     "skipLibCheck": true,
     "strict": true,
     "strictBindCallApply": true,

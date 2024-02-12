@@ -1,4 +1,8 @@
+import { useGetUserAuthorization } from '@hooks/authorization/useGetUserAuthorization'
 import { OnlyFontGlobalStyle, THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
+import { LandingPage } from '@pages/LandingPage'
+import { UnsupportedBrowserPage } from '@pages/UnsupportedBrowserPage'
+import { isBrowserSupported } from '@utils/isBrowserSupported'
 import countries from 'i18n-iso-countries'
 import COUNTRIES_FR from 'i18n-iso-countries/langs/fr.json'
 import { useEffect } from 'react'
@@ -8,12 +12,8 @@ import { CustomProvider as RsuiteCustomProvider } from 'rsuite'
 import rsuiteFrFr from 'rsuite/locales/fr_FR'
 
 import { AuthorizationContext } from './context/AuthorizationContext'
-import { useGetUserAuthorization } from './hooks/authorization/useGetUserAuthorization'
-import { LandingPage } from './pages/LandingPage'
-import { UnsupportedBrowserPage } from './pages/UnsupportedBrowserPage'
 import { router } from './router'
 import { FrontendErrorBoundary } from './ui/FrontendErrorBoundary'
-import { isBrowserSupported } from './utils/isBrowserSupported'
 
 import type { AuthContextProps } from 'react-oidc-context'
 

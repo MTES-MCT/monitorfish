@@ -159,15 +159,18 @@ context('Vessel sidebar fishing tab', () => {
 
     // Hide fishing activities
     cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 10000 })
-    cy.intercept('GET', '/bff/v1/vessels/positions*').as('previousTripPositions')
+    cy.intercept('GET', '/bff/v1/vessels/positions*').as('nextTripPositions')
     cy.get('*[data-cy^="vessel-fishing-next-trip"]').click({ timeout: 10000 })
-    cy.wait('@previousTripPositions')
+    /**
+     * Hours are modified before request, see `getDateRangeMinusFourHoursPlusOneHour()`
+     */
+    cy.wait('@nextTripPositions')
       .its('response.url')
       .should(
         'have.string',
         '/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
           '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=CUSTOM' +
-          '&afterDateTime=2019-10-10T22:06:00.000Z&beforeDateTime=2019-10-22T12:06:00.000Z'
+          '&afterDateTime=2019-10-10T21:06:00.000Z&beforeDateTime=2019-10-22T12:06:00.000Z'
       )
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
     cy.get('*[data-cy="custom-dates-showed-text"]').contains('Piste affichée du 10/10/19 au 22/10/19')

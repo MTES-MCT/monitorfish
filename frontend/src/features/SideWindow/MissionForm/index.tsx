@@ -39,10 +39,11 @@ import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { FrontendError } from '../../../libs/FrontendError'
 import { FrontendErrorBoundary } from '../../../ui/FrontendErrorBoundary'
-import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
 import { NoRsuiteOverrideWrapper } from '../../../ui/NoRsuiteOverrideWrapper'
+import { assert } from '../../../utils/assert'
 import { ensure } from '../../../utils/ensure'
 import { missionFormActions } from '../../Mission/components/MissionForm/slice'
+import { getMissionWithActions } from '../../Mission/useCases/getMissionWithActions'
 import { openSideWindowPath } from '../useCases/openSideWindowPath'
 
 import type { MissionActionFormValues, MissionMainFormValues } from './types'
@@ -56,7 +57,6 @@ export function MissionForm() {
     useMainAppSelector(store => store.missionForm.draft),
     'store.missionForm.draft'
   )
-  const originalMissionWithActions = useMainAppSelector(store => store.missionForm.originalMissionWithActions)
 
   const missionIdFromRef = useRef<number | undefined>(missionIdFromPath)
 
@@ -68,10 +68,6 @@ export function MissionForm() {
   const [updateMissionAction, { isLoading: isUpdatingMissionAction }] = useUpdateMissionActionMutation()
   const missionEvent = useListenToMissionEventUpdatesById(missionIdFromRef.current)
 
-  const isDraftCancellationConfirmationDialogOpen = useMainAppSelector(
-    store => store.sideWindow.isDraftCancellationConfirmationDialogOpen
-  )
-
   const isSaving =
     isCreatingMission ||
     isDeletingMission ||
@@ -80,12 +76,13 @@ export function MissionForm() {
     isDeletingMissionAction ||
     isUpdatingMissionAction
 
-  const isLoading = false
-
   const [mainFormValues, setMainFormValues] = useState<MissionMainFormValues>(draft.mainFormValues)
-  const [actionsFormValues, setActionsFormValues] = useState<MissionActionFormValues[]>([])
+  const [actionsFormValues, setActionsFormValues] = useState<MissionActionFormValues[]>(draft.actionsFormValues)
   const [editedActionIndex, setEditedActionIndex] = useState<number | undefined>(undefined)
   const [isDeletionConfirmationDialogOpen, setIsDeletionConfirmationDialogOpen] = useState(false)
+  const isDraftCancellationConfirmationDialogOpen = useMainAppSelector(
+    store => store.sideWindow.isDraftCancellationConfirmationDialogOpen
+  )
   const [title, setTitle] = useState(getTitleFromMissionMainFormValues(mainFormValues, missionIdFromRef.current))
 
   // We use these keys to fully control when to re-render `<MainForm />` & `<ActionForm />`
@@ -104,25 +101,13 @@ export function MissionForm() {
     }
   )
 
-  useEffect(() => {
-    if (!missionEvent) {
-      return
-    }
-
-    setMainFormValues(previousMainFormValues => ({
-      ...(previousMainFormValues as MissionMainFormValues),
-      isClosed: missionEvent.isClosed,
-      updatedAtUtc: missionEvent.updatedAtUtc
-    }))
-  }, [missionEvent])
-
   const isAutoSaveEnabled = useMemo(() => {
     if (!AUTO_SAVE_ENABLED) {
       return false
     }
 
     const now = customDayjs()
-    if (mainFormValues?.endDateTimeUtc && now.isAfter(mainFormValues?.endDateTimeUtc) && mainFormValues?.isClosed) {
+    if (mainFormValues.endDateTimeUtc && now.isAfter(mainFormValues.endDateTimeUtc) && mainFormValues.isClosed) {
       return false
     }
 
@@ -132,16 +117,6 @@ export function MissionForm() {
   const isMissionFormValid = areMissionFormsValuesValid(mainFormValues, actionsFormValues)
 
   const updateReduxSliceDraft = useDebouncedCallback(() => {
-    if (!mainFormValues) {
-      logSoftError({
-        isSideWindowError: true,
-        message: '`mainFormValues` is undefined.',
-        userMessage: "Une erreur est survenue pendant l'édition de la mission."
-      })
-
-      return
-    }
-
     dispatch(
       missionFormActions.setDraft({
         actionsFormValues: [...actionsFormValues],
@@ -156,9 +131,8 @@ export function MissionForm() {
     async (missionDraft: MissionWithActionsDraft) => {
       try {
         dispatch(missionFormActions.setIsListeningToEvents(false))
-        let nextMissionId: number
 
-        if (!missionIdFromPath) {
+        if (!missionIdFromRef.current) {
           const newMission = getMissionDataFromMissionFormValues(missionDraft.mainFormValues)
           // TODO Override Redux RTK typings globally.
           // Redux RTK typing is wrong, this should be a tuple-like to help TS discriminate `data` from `error`.
@@ -168,7 +142,6 @@ export function MissionForm() {
           }
 
           missionIdFromRef.current = data.id
-          nextMissionId = data.id
 
           setMainFormValues({
             ...missionDraft.mainFormValues,
@@ -177,7 +150,7 @@ export function MissionForm() {
           })
         } else {
           const updatedMission = getUpdatedMissionFromMissionMainFormValues(
-            missionIdFromPath,
+            missionIdFromRef.current,
             missionDraft.mainFormValues
           )
           const { data, error } = (await updateMission(updatedMission)) as any
@@ -186,7 +159,6 @@ export function MissionForm() {
           }
 
           missionIdFromRef.current = missionIdFromPath
-          nextMissionId = missionIdFromPath
 
           setMainFormValues({
             ...missionDraft.mainFormValues,
@@ -194,11 +166,14 @@ export function MissionForm() {
           })
         }
 
+        assert(missionIdFromRef.current, 'missionIdFromRef.current')
+
+        const currentMissionWithActions = await dispatch(getMissionWithActions(missionIdFromRef.current))
         const { deletedMissionActionIds, updatedMissionActionDatas } =
           getMissionActionsDataFromMissionActionsFormValues(
-            nextMissionId,
+            missionIdFromRef.current,
             missionDraft.actionsFormValues,
-            originalMissionWithActions?.actions
+            currentMissionWithActions.actions
           )
 
         await Promise.all([
@@ -243,8 +218,7 @@ export function MissionForm() {
       updateMission,
       updateMissionAction,
       missionIdFromRef,
-      missionIdFromPath,
-      originalMissionWithActions
+      missionIdFromPath
     ]
   )
 
@@ -262,10 +236,6 @@ export function MissionForm() {
   }, [deleteMission, dispatch])
 
   const reopen = useCallback(() => {
-    if (!mainFormValues) {
-      throw new FrontendError('`mainFormValues` is undefined.')
-    }
-
     const nextMainFormValues = {
       ...mainFormValues,
       isClosed: false
@@ -287,10 +257,6 @@ export function MissionForm() {
   }, [dispatch, updateReduxSliceDraft, createOrUpdate, mainFormValues, actionsFormValues])
 
   const close = useCallback(async () => {
-    if (!mainFormValues) {
-      throw new FrontendError('`mainFormValues` is undefined.')
-    }
-
     const [canClose, { nextActionsFormValues, nextMainFormValues }] = validateMissionForms(
       mainFormValues,
       actionsFormValues,
@@ -421,7 +387,6 @@ export function MissionForm() {
       setActionsFormValues(nextActionsFormValues)
       updateReduxSliceDraft()
       setEditedActionIndex(0)
-      // setActionFormKey(key => key + 1)
 
       if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !isAutoSaveEnabled) {
         dispatch(missionFormActions.setIsDraftDirty(true))
@@ -461,7 +426,6 @@ export function MissionForm() {
       setActionsFormValues([actionCopy, ...actionsFormValues])
       updateReduxSliceDraft()
       setEditedActionIndex(0)
-      // setActionFormKey(key => key + 1)
 
       if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !isAutoSaveEnabled) {
         dispatch(missionFormActions.setIsDraftDirty(true))
@@ -516,7 +480,7 @@ export function MissionForm() {
 
       const mainFormValuesWithUpdatedIsClosedProperty = {
         ...nextMissionMainFormValues,
-        isClosed: mainFormValues?.isClosed || false
+        isClosed: mainFormValues.isClosed || false
       }
 
       setMainFormValues(mainFormValuesWithUpdatedIsClosedProperty)
@@ -556,6 +520,18 @@ export function MissionForm() {
     setIsDeletionConfirmationDialogOpen(!isDeletionConfirmationDialogOpen)
   }, [isDeletionConfirmationDialogOpen])
 
+  useEffect(() => {
+    if (!missionEvent) {
+      return
+    }
+
+    setMainFormValues(previousMainFormValues => ({
+      ...previousMainFormValues,
+      isClosed: missionEvent.isClosed,
+      updatedAtUtc: missionEvent.updatedAtUtc
+    }))
+  }, [missionEvent])
+
   return (
     <>
       <Wrapper>
@@ -563,39 +539,35 @@ export function MissionForm() {
           <BackToListIcon onClick={goToMissionList} />
 
           <HeaderTitle>{title}</HeaderTitle>
-          <TitleSourceTag missionId={missionIdFromRef.current} missionSource={mainFormValues?.missionSource} />
+          <TitleSourceTag missionId={missionIdFromRef.current} missionSource={mainFormValues.missionSource} />
           {mainFormValues && <TitleStatusTag status={getMissionStatus(mainFormValues)} />}
         </Header>
 
         <Body>
           <FrontendErrorBoundary>
-            {(isLoading || !mainFormValues) && <LoadingSpinnerWall />}
-
-            {!isLoading && mainFormValues && (
-              <>
-                <MainForm
-                  key={missionIdFromRef.current}
-                  initialValues={mainFormValues}
-                  missionId={missionIdFromRef.current}
-                  onChange={updateMainFormValues}
-                />
-                <ActionList
-                  actionsFormValues={actionsFormValues}
-                  currentIndex={editedActionIndex}
-                  missionTypes={mainFormValues?.missionTypes}
-                  onAdd={addAction}
-                  onDuplicate={duplicateAction}
-                  onRemove={removeAction}
-                  onSelect={updateEditedActionIndex}
-                />
-                <ActionForm
-                  // We use this key to fully control when to re-render `<ActionForm />`
-                  key={`action-form-${actionFormKey}`}
-                  actionFormValues={formikEditedActionFormValuesRef.current}
-                  onChange={updateEditedActionFormValues}
-                />
-              </>
-            )}
+            <>
+              <MainForm
+                key={missionIdFromRef.current}
+                initialValues={mainFormValues}
+                missionId={missionIdFromRef.current}
+                onChange={updateMainFormValues}
+              />
+              <ActionList
+                actionsFormValues={actionsFormValues}
+                currentIndex={editedActionIndex}
+                missionTypes={mainFormValues.missionTypes}
+                onAdd={addAction}
+                onDuplicate={duplicateAction}
+                onRemove={removeAction}
+                onSelect={updateEditedActionIndex}
+              />
+              <ActionForm
+                // We use this key to fully control when to re-render `<ActionForm />`
+                key={`action-form-${actionFormKey}`}
+                actionFormValues={formikEditedActionFormValuesRef.current}
+                onChange={updateEditedActionFormValues}
+              />
+            </>
           </FrontendErrorBoundary>
         </Body>
         <Footer>
@@ -603,7 +575,7 @@ export function MissionForm() {
             {!!missionIdFromPath && (
               <Button
                 accent={Accent.SECONDARY}
-                disabled={isLoading || isSaving || mainFormValues?.missionSource !== Mission.MissionSource.MONITORFISH}
+                disabled={isSaving || mainFormValues.missionSource !== Mission.MissionSource.MONITORFISH}
                 Icon={Icon.Delete}
                 onClick={toggleDeletionConfirmationDialog}
               >
@@ -613,11 +585,11 @@ export function MissionForm() {
           </div>
           <div>
             <MissionInfos>
-              {mainFormValues?.createdAtUtc && (
+              {mainFormValues.createdAtUtc && (
                 <>Mission créée le {customDayjs(mainFormValues.createdAtUtc).utc().format('D MMM YYYY, HH:mm')}. </>
               )}
-              {!mainFormValues?.createdAtUtc && <>Mission non enregistrée. </>}
-              {mainFormValues?.updatedAtUtc && (
+              {!mainFormValues.createdAtUtc && <>Mission non enregistrée. </>}
+              {mainFormValues.updatedAtUtc && (
                 <>Dernière modification enregistrée {timeago.format(mainFormValues.updatedAtUtc, 'fr')}.</>
               )}
             </MissionInfos>
@@ -625,7 +597,7 @@ export function MissionForm() {
             {!isAutoSaveEnabled && (
               <Button
                 accent={Accent.PRIMARY}
-                disabled={isLoading || isSaving || !isMissionFormValid}
+                disabled={isSaving || !isMissionFormValid}
                 Icon={Icon.Save}
                 onClick={async () => {
                   await createOrUpdate({
@@ -639,22 +611,22 @@ export function MissionForm() {
                 Enregistrer
               </Button>
             )}
-            {!mainFormValues?.isClosed && (
+            {!mainFormValues.isClosed && (
               <Button
                 accent={Accent.SECONDARY}
                 data-cy="close-mission"
-                disabled={isLoading || isSaving || !isMissionFormValid}
+                disabled={isSaving || !isMissionFormValid}
                 Icon={Icon.Confirm}
                 onClick={close}
               >
                 Clôturer
               </Button>
             )}
-            {mainFormValues?.isClosed && (
+            {mainFormValues.isClosed && (
               <Button
                 accent={Accent.SECONDARY}
                 data-cy="reopen-mission"
-                disabled={isLoading || isSaving}
+                disabled={isSaving}
                 Icon={Icon.Unlock}
                 onClick={reopen}
                 type="button"

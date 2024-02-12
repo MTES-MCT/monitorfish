@@ -23,23 +23,20 @@ export const editMission =
       })
     )
 
-    setTimeout(async () => {
-      try {
-        const missionWithActions = await dispatch(getMissionWithActions(id))
+    try {
+      const missionWithActions = await dispatch(getMissionWithActions(id))
 
-        const nextDraft = getMissionDraftFromMissionWithActions(missionWithActions)
+      const nextDraft = getMissionDraftFromMissionWithActions(missionWithActions)
 
-        dispatch(missionFormActions.setOriginalMissionWithActions(missionWithActions))
-        dispatch(missionFormActions.initializeDraft(nextDraft))
-        dispatch(sideWindowActions.setSelectedPathIsLoading(false))
-      } catch (err) {
-        if (err instanceof FrontendApiError) {
-          dispatch(displayOrLogError(err, () => editMission(id), true, 'missionFormError'))
+      dispatch(missionFormActions.initializeDraft(nextDraft))
+      dispatch(sideWindowActions.setSelectedPathIsLoading(false))
+    } catch (err) {
+      if (err instanceof FrontendApiError) {
+        dispatch(displayOrLogError(err, () => editMission(id), true, 'missionFormError'))
 
-          return
-        }
-
-        handleThunkError(err)
+        return
       }
-    }, 0)
+
+      handleThunkError(err)
+    }
   }

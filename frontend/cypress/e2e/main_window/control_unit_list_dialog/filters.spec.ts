@@ -29,9 +29,9 @@ context('Main Window > Control Unit List Dialog > Filters', () => {
   it('Should find control units matching the selected resource category', () => {
     cy.fill('Catégorie de moyen', ['Maritime'])
 
-    cy.getDataCy('ControlUnitListDialog-control-unit').should('have.length', 7)
+    cy.getDataCy('ControlUnitListDialog-control-unit').should('have.length', 9)
 
-    cy.contains('BGC Lorient - DF 36 Kan An Avel').should('exist')
+    cy.contains('PAM Jeanne Barret').should('exist')
     cy.contains('ULAM 56').should('exist')
   })
 

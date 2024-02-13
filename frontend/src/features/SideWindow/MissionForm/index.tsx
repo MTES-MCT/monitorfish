@@ -323,6 +323,8 @@ export function MissionForm() {
        * /!\ This can leads to save the debounced action update to the wrong action index
        */
       if (updateEditedActionFormValues.isPending()) {
+        setTimeout(() => removeAction(actionIndex), 250)
+
         return
       }
 
@@ -367,6 +369,8 @@ export function MissionForm() {
        * /!\ This can leads to save the debounced action update to the wrong action index
        */
       if (updateEditedActionFormValues.isPending()) {
+        setTimeout(() => addAction(actionType), 250)
+
         return
       }
 
@@ -406,6 +410,8 @@ export function MissionForm() {
        * /!\ This can leads to save the debounced action update to the wrong action index
        */
       if (updateEditedActionFormValues.isPending()) {
+        setTimeout(() => duplicateAction(actionIndex), 250)
+
         return
       }
 
@@ -445,6 +451,8 @@ export function MissionForm() {
        * /!\ This can leads to save the debounced action update to the wrong action index
        */
       if (updateEditedActionFormValues.isPending()) {
+        setTimeout(() => updateEditedActionIndex(nextActionIndex), 250)
+
         return
       }
 
@@ -460,6 +468,8 @@ export function MissionForm() {
        * /!\ This can leads to erase a changed action value
        */
       if (updateEditedActionFormValues.isPending()) {
+        setTimeout(() => updateMainFormValuesCallback(nextMissionMainFormValues), 250)
+
         return
       }
 

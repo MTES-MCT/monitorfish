@@ -455,7 +455,7 @@ context('Side Window > Mission Form > Main Form', () => {
         id: 2
       },
       statusCode: 200
-    }).as('updateMissionAction')
+    }).as('deleteMissionAction')
     cy.intercept('POST', '/api/v1/missions/2', {
       body: {
         id: 2
@@ -465,9 +465,14 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.fill('Clôturé par', 'Doris')
 
-    cy.wait('@updateMission').wait(500)
+    cy.wait('@updateMission')
 
     cy.clickButton('Supprimer l’action')
+
+    cy.wait('@deleteMissionAction')
+    cy.wait('@updateMission')
+
+    cy.wait(250)
     cy.clickButton('Clôturer')
 
     cy.wait('@updateMission').then(interception => {
@@ -475,7 +480,6 @@ context('Side Window > Mission Form > Main Form', () => {
         assert.fail('`interception.response` is undefined.')
       }
 
-      // assert.strictEqual(interception.response?.statusCode, 201)
       assert.deepInclude(interception.request.body, {
         // We check this prop to be sure all the data is there (this is the last field to be filled)
         closedBy: 'Doris',
@@ -483,17 +487,6 @@ context('Side Window > Mission Form > Main Form', () => {
         isClosed: true
       })
     })
-
-    // cy.wait('@updateMission').then(interception => {
-
-    //   assert.strictEqual(interception.response?.statusCode, 201)
-    //   assert.deepInclude(interception.request.body, {
-    //     // We check this prop to be sure all the data is there (this is the last field to be filled)
-    //     closedBy: 'Doris',
-    //     id: 2,
-    //     isClosed: true
-    //   })
-    // })
   })
 
   it('Should show the cancellation confirmation dialog when switching to another menu while a draft is dirty', () => {

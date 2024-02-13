@@ -33,7 +33,7 @@ function UnmemoizedAdministrativeLayers() {
           return
         }
 
-        if (layerToInsert.type === LayerProperties.FAO.code) {
+        if (layerToInsert.type === LayerProperties.FAO.code && FAO_LAYER) {
           olLayers.push(FAO_LAYER)
 
           return

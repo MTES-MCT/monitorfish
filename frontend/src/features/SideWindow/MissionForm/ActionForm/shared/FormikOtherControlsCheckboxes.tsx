@@ -5,6 +5,7 @@ import styled from 'styled-components'
 
 import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { assert } from '../../../../../utils/assert'
 import { missionFormActions } from '../../../../Mission/components/MissionForm/slice'
 import { PAMControlUnitIds } from '../../constants'
 import { FieldsetGroup } from '../../shared/FieldsetGroup'
@@ -18,6 +19,7 @@ export function FormikOtherControlsCheckboxes() {
     state => state.missionForm.mustResetOtherControlsCheckboxes
   )
   const draft = useMainAppSelector(state => state.missionForm.draft)
+  assert(draft, 'draft')
 
   useEffect(() => {
     if (mustResetOtherControlsCheckboxes) {
@@ -30,7 +32,7 @@ export function FormikOtherControlsCheckboxes() {
     }
   }, [dispatch, setFieldValue, mustResetOtherControlsCheckboxes])
 
-  const isCurrentControlUnitPAM = draft?.mainFormValues.controlUnits.some(
+  const isCurrentControlUnitPAM = draft.mainFormValues.controlUnits.some(
     controlUnit => controlUnit.id && PAMControlUnitIds.includes(controlUnit.id)
   )
 

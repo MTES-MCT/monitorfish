@@ -31,22 +31,22 @@ export function buildCatchArray(catches: LogbookCatch[]): CatchWithProperties[] 
   return catches
     .reduce((accumulator: CatchWithProperties[], logbookCatch) => {
       const sameSpeciesIndex = accumulator.findIndex(accCatch => accCatch.species === logbookCatch.species)
+      const logbookCatchProperties = getCatchPropertiesObject(logbookCatch)
 
       if (sameSpeciesIndex === NOT_FOUND) {
-        accumulator.push({
-          properties: [getCatchPropertiesObject(logbookCatch)],
+        return accumulator.concat({
+          properties: [logbookCatchProperties],
           species: logbookCatch.species,
           speciesName: undefinedize(logbookCatch.speciesName),
           weight: logbookCatch.weight ? logbookCatch.weight : 0
         })
-
-        return accumulator
       }
 
-      // @ts-ignore
-      accumulator[sameSpeciesIndex].properties.push(getCatchPropertiesObject(logbookCatch))
-      // @ts-ignore
-      accumulator[sameSpeciesIndex].weight += logbookCatch.weight ? parseFloat(logbookCatch.weight) : 0
+      const nextCatch = accumulator[sameSpeciesIndex] as CatchWithProperties
+      nextCatch.properties = nextCatch.properties.concat(logbookCatchProperties)
+      nextCatch.weight += logbookCatch.weight ?? 0
+
+      accumulator[sameSpeciesIndex] = nextCatch
 
       return accumulator
     }, [])
@@ -61,20 +61,19 @@ export function buildProtectedCatchArray(catches: ProtectedSpeciesCatch[]): Prot
       const sameSpeciesIndex = accumulator.findIndex(accCatch => accCatch.species === logbookCatch.species)
 
       if (sameSpeciesIndex === NOT_FOUND) {
-        accumulator.push({
+        return accumulator.concat({
           properties: [logbookCatch],
           species: logbookCatch.species,
           speciesName: undefinedize(logbookCatch.speciesName),
           weight: logbookCatch.weight ? logbookCatch.weight : 0
         })
-
-        return accumulator
       }
 
-      // @ts-ignore
-      accumulator[sameSpeciesIndex].properties.push(logbookCatch)
-      // @ts-ignore
-      accumulator[sameSpeciesIndex].weight += logbookCatch.weight ? parseFloat(logbookCatch.weight) : 0
+      const nextCatch = accumulator[sameSpeciesIndex] as ProtectedCatchWithProperties
+      nextCatch.properties = nextCatch.properties.concat(logbookCatch)
+      nextCatch.weight += logbookCatch.weight ?? 0
+
+      accumulator[sameSpeciesIndex] = nextCatch
 
       return accumulator
     }, [])

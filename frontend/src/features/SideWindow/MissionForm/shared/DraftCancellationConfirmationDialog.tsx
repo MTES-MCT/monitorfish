@@ -1,8 +1,8 @@
 import { Accent, Button, Dialog } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { sideWindowActions } from '../../../../domain/shared_slices/SideWindow'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { cancelSideWindowDraftCancellation } from '../../useCases/cancelSideWindowDraftCancellation'
 import { confirmSideWindowDraftCancellationAndProceed } from '../../useCases/confirmSideWindowDraftCancellationAndProceed'
 
 type DraftCancellationConfirmationDialogProps = {
@@ -12,7 +12,7 @@ export function DraftCancellationConfirmationDialog({ isAutoSaveEnabled }: Draft
   const dispatch = useMainAppDispatch()
 
   const cancel = () => {
-    dispatch(sideWindowActions.cancelDraftCancellationConfirmationDialog())
+    dispatch(cancelSideWindowDraftCancellation())
   }
 
   const confirm = () => {

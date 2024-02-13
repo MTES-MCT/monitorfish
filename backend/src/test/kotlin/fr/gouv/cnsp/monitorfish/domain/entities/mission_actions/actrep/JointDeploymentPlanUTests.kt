@@ -15,7 +15,7 @@ class JointDeploymentPlanUTests {
         val species = listOf("HKE", "ANN", "BOR")
 
         // When
-        val isLandControlConcerned = jdp.isLandControlApplicable(species, faoCodes)
+        val isLandControlConcerned = jdp.isLandControlApplicable("FR", species, faoCodes)
 
         // Then
         assertThat(isLandControlConcerned).isTrue()
@@ -30,7 +30,7 @@ class JointDeploymentPlanUTests {
         val species = listOf("ANN", "BOR")
 
         // When
-        val isLandControlConcerned = jdp.isLandControlApplicable(species, faoCodes)
+        val isLandControlConcerned = jdp.isLandControlApplicable("FR", species, faoCodes)
 
         // Then
         assertThat(isLandControlConcerned).isFalse()
@@ -45,7 +45,36 @@ class JointDeploymentPlanUTests {
         val species = listOf("HKE", "ANN", "BOR")
 
         // When
-        val isLandControlConcerned = jdp.isLandControlApplicable(species, faoCodes)
+        val isLandControlConcerned = jdp.isLandControlApplicable("FR", species, faoCodes)
+
+        // Then
+        assertThat(isLandControlConcerned).isFalse()
+    }
+
+    @Test
+    fun `isLandControlConcerned Should return true When a third country vessel has species in the EU quota list`() {
+        // Given
+        val jdp = JointDeploymentPlan.NORTH_SEA
+        val faoCodes = listOf("27.5.b", "27.5.c")
+        // ALB is contained in the quotas
+        val species = listOf("HKE", "ANN", "BOR", "ALB")
+
+        // When
+        val isLandControlConcerned = jdp.isLandControlApplicable("GB", species, faoCodes)
+
+        // Then
+        assertThat(isLandControlConcerned).isTrue()
+    }
+
+    @Test
+    fun `isLandControlConcerned Should return false When a third country vessel has no species in the EU quota list`() {
+        // Given
+        val jdp = JointDeploymentPlan.NORTH_SEA
+        val faoCodes = listOf("27.5.b", "27.5.c")
+        val species = listOf("HKE", "ANN", "BOR")
+
+        // When
+        val isLandControlConcerned = jdp.isLandControlApplicable("GB", species, faoCodes)
 
         // Then
         assertThat(isLandControlConcerned).isFalse()

@@ -4,7 +4,9 @@ typealias FaoZones = List<String>
 typealias FaoZonesAndSpecy = Pair<FaoZones, String>
 
 /**
- * The following fao areas and species are defined in the species table document of each JDP.
+ * The following fao areas and species are defined in the species table  (@CNSP) document of each JDP.
+ * This document has been written from "DÉCISION D’EXÉCUTION (UE) 2023/2376":
+ *  https://extranet.legipeche.metier.developpement-durable.gouv.fr/fichier/pdf/oj_l_202302376_fr_txt_cle6b198e.pdf?arg=24774&cle=7d14626b709ff7e8c62586bcd8683e7e9fcaa348&file=pdf%2Foj_l_202302376_fr_txt_cle6b198e.pdf
  *
  * These tables could be found in these file names :
  * - "Liste Espèces_JDP MED.pdf"
@@ -152,6 +154,55 @@ val WESTERN_WATERS_SPECIES: List<FaoZonesAndSpecy> = listOf(
         "BOR",
         "SOL",
     ),
+)
+
+val EU_THIRD_COUNTRIES = listOf("GB")
+
+/**
+ * See species detailed in p.26 ("CARTES DES ESPÈCES SOUMISES A QUOTAS")
+ * https://extranet.legipeche.metier.developpement-durable.gouv.fr/fichier/pdf/guide_cnsp_cle79d8b7.pdf?arg=24331&cle=2b455fff3506433f7e33f33562508a576908b941&file=pdf%2Fguide_cnsp_cle79d8b7.pdf
+ */
+val EU_QUOTAS_SPECIES = listOf(
+    "DGS",
+    "ANE",
+    "ANF",
+    "ALF",
+    "USK",
+    "COD",
+    "LEZ",
+    "JAX",
+    "SBR",
+    "HAD",
+    "SWO",
+    "LEZ",
+    "GHL",
+    "ALB",
+    "ARU",
+    "RNG",
+    "HER",
+    "NEP",
+    "POL",
+    "POK",
+    "LEM",
+    "WIT",
+    "BLI",
+    "LIN",
+    "MAC",
+    "WHG",
+    "WHB",
+    "BSH",
+    "BSH",
+    "PLE",
+    "SRX",
+    "RJU",
+    "RJE",
+    "BSF",
+    "SPR",
+    "SOL",
+    "BET",
+    "BFT",
+    "TUR",
+    "BLL",
 )
 
 fun generateSpeciesWithFaoCode(faoZones: FaoZones, species: List<String>): List<FaoZonesAndSpecy> {

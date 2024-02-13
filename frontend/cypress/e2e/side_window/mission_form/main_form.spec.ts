@@ -185,7 +185,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.fill('Administration 1', 'DDTM')
     cy.fill('Unité 1', 'Cultures marines 56')
     cy.wait(500)
-    cy.fill('Moyen 1', ['Brezel - FAH 7185'])
+    cy.fill('Moyen 1', ['Brezel - FAH 7185']).wait(250)
     cy.fill('Contact de l’unité 1', 'Bob')
     cy.fill('Contact de l’unité 1', 'Bob')
 
@@ -198,7 +198,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.wait(500)
 
     cy.fill('CACEM : orientations, observations', 'Une note.')
-    cy.fill('CNSP : orientations, observations', 'Une autre note.')
+    cy.fill('CNSP : orientations, observations', 'Une autre note.').wait(250)
     cy.fill('Ouvert par', 'Nemo')
     cy.fill('Clôturé par', 'Doris')
 

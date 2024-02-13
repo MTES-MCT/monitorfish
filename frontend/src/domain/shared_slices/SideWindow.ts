@@ -25,18 +25,20 @@ const sideWindowSlice = createSlice({
   name: 'sideWindow',
   reducers: {
     /**
-     * Cancel the draft cancellation confirmation dialog.
-     */
-    cancelDraftCancellationConfirmationDialog(state) {
-      state.isDraftCancellationConfirmationDialogOpen = false
-      state.nextPath = undefined
-    },
-
-    /**
      * Close side window
      */
     close(state) {
       state.status = SideWindowStatus.CLOSED
+    },
+
+    /**
+     * Close the draft cancellation confirmation dialog.
+     *
+     * @description
+     * ⚠️ NEVER use this action directly, use `cancelSideWindowDraftCancellation()` use case instead.
+     */
+    closeDraftCancellationConfirmationDialog(state) {
+      state.isDraftCancellationConfirmationDialogOpen = false
     },
 
     /**
@@ -92,6 +94,13 @@ const sideWindowSlice = createSlice({
      */
     setStatus(state, action: PayloadAction<SideWindowStatus>) {
       state.status = action.payload
+    },
+
+    /**
+     * Unset next path.
+     */
+    unsetNextPath(state) {
+      state.nextPath = undefined
     }
   }
 })

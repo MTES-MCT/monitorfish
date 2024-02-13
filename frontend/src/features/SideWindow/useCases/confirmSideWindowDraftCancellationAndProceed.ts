@@ -12,6 +12,6 @@ export const confirmSideWindowDraftCancellationAndProceed = (): MainAppThunk => 
   if (pendingUseCase) {
     dispatch(pendingUseCase())
   }
-  dispatch(sideWindowActions.cancelDraftCancellationConfirmationDialog())
+  dispatch(sideWindowActions.closeDraftCancellationConfirmationDialog())
   dispatch(sideWindowActions.openOrFocusAndGoTo(sideWindow.nextPath))
 }

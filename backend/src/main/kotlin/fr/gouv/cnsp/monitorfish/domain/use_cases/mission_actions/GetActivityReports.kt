@@ -47,7 +47,7 @@ class GetActivityReports(
                     val speciesOnboardCodes = control.speciesOnboard.mapNotNull { it.speciesCode }
                     val tripFaoCodes = control.faoAreas
 
-                    return@filter jdp.isLandControlApplicable(speciesOnboardCodes, tripFaoCodes)
+                    return@filter jdp.isLandControlApplicable(control.flagState, speciesOnboardCodes, tripFaoCodes)
                 }
                 MissionActionType.SEA_CONTROL -> {
                     val controlMission = missions.firstOrNull { mission -> mission.id == control.missionId }

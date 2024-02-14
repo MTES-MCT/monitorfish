@@ -12,6 +12,7 @@ class Haul() {
     var mesh: Double? = null
     var latitude: Double? = null
     var longitude: Double? = null
+    var dimensions: String? = null
 
     @JsonProperty("farDatetimeUtc")
     var catchDateTime: ZonedDateTime? = null

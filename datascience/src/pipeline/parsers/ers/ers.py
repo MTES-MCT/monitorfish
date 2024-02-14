@@ -15,6 +15,7 @@ from src.pipeline.parsers.ers.log_parsers import (
     parse_cro,
     parse_dep,
     parse_dis,
+    parse_ecps,
     parse_eof,
     parse_far,
     parse_lan,
@@ -121,9 +122,13 @@ def parse_log(log):
     }
 
     elogs = [child for child in list(log) if remove_namespace(child.tag) == "ELOG"]
-    if len(elogs) == 1:
+    if len(elogs) >= 1:
         elog = elogs[0]
         metadata["trip_number"] = elog.get("TN")
+        ecps = [
+            el for elog in elogs for el in elog if remove_namespace(el.tag) == "ECPS"
+        ]
+        logs += ecps
 
     return metadata, None, logs, None
 
@@ -140,6 +145,7 @@ parsers = {
     "LOG": parse_log,
     "DEP": parse_dep,
     "FAR": parse_far,
+    "ECPS": parse_ecps,
     "DIS": parse_dis,
     "EOF": parse_eof,
     "PNO": parse_pno,

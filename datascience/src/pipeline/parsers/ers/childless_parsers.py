@@ -1,4 +1,4 @@
-from src.pipeline.parsers.utils import tagged_children, try_float
+from src.pipeline.parsers.utils import tagged_children, try_float, try_int
 
 
 def parse_ras(ras):
@@ -58,16 +58,36 @@ def parse_spe(spe):
     return data
 
 
+def parse_edci(edci):
+    data = {
+        "sex": edci.get("SE"),
+        "healthState": edci.get("HE"),
+        "careMinutes": try_int(edci.get("CA")),
+        "ring": edci.get("RI"),
+        "fate": edci.get("FT"),
+        "comment": edci.get("CO"),
+    }
+
+    children = tagged_children(edci)
+
+    if "SPE" in children:
+        assert len(children["SPE"]) == 1
+        spe = children["SPE"][0]
+        spe_data = parse_spe(spe)
+        data = {**data, **spe_data}
+
+    return data
+
+
 def parse_pos(pos):
     return try_float(pos.get("LT")), try_float(pos.get("LG"))
 
 
 def parse_gea(gea):
-
     data = {
         "gear": gea.get("GE"),
         "mesh": try_float(gea.get("ME")),
-        "dimensions": try_float(gea.get("GC")),
+        "dimensions": gea.get("GC"),
     }
 
     return data

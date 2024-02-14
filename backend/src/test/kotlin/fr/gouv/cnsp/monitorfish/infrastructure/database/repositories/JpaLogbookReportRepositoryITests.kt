@@ -58,7 +58,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
      *                                +--------------------------------------+
      *                                                    2019-10-15T12:01Z ->
      *
-     *                                                                            <- 2019-10-11T02:06Z
+     *                                                                            <- 2019-10-11T01:06Z
      *                                                                            +------------------------+
      *                                                                            | Trip number 15         |
      *                                                                            +------------------------+
@@ -72,7 +72,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val lastTrip = jpaLogbookReportRepository.findLastTripBeforeDateTime("FAK000999999", ZonedDateTime.now())
 
         // Then
-        assertThat(lastTrip.startDate.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(lastTrip.startDate.toString()).isEqualTo("2019-10-11T01:06Z")
         assertThat(lastTrip.tripNumber).isEqualTo("9463715")
     }
 
@@ -177,7 +177,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(secondTrip.tripNumber).isEqualTo("9463715")
-        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-10-11T01:06Z")
         assertThat(secondTrip.endDate.toString()).isEqualTo("2019-10-22T11:06Z")
     }
 
@@ -209,7 +209,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
             .findAllMessagesByTripNumberBetweenDates("FAK000999999", lastDepartureDate, now, "9463715")
 
         // Then
-        assertThat(messages).hasSize(19)
+        assertThat(messages).hasSize(20)
 
         // LAN
         assertThat(messages[0].message).isInstanceOf(LAN::class.java)
@@ -267,6 +267,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val farMessageOneCorrectedHaul = farMessageOneCorrected.hauls.first()
         assertThat(farMessageOneCorrectedHaul.gear).isEqualTo("GTN")
         assertThat(farMessageOneCorrectedHaul.mesh).isEqualTo(150.0)
+        assertThat(farMessageOneCorrectedHaul.dimensions).isEqualTo("120.0")
+
         assertThat(farMessageOneCorrectedHaul.catches).hasSize(20)
         assertThat(farMessageOneCorrectedHaul.catches.first().weight).isEqualTo(1500.0)
         assertThat(farMessageOneCorrectedHaul.catches.first().numberFish).isEqualTo(null)
@@ -283,7 +285,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val farMessageOneHaul = farMessageOne.hauls.first()
         assertThat(farMessageOneHaul.gear).isEqualTo("GTN")
         assertThat(farMessageOneHaul.mesh).isEqualTo(100.0)
-        assertThat(farMessageOneHaul.mesh).isEqualTo(100.0)
+        assertThat(farMessageOneHaul.dimensions).isEqualTo("150.0;120.0")
+
         assertThat(farMessageOneHaul.catchDateTime.toString()).isEqualTo("2019-10-17T11:32Z")
         assertThat(farMessageOneHaul.catches).hasSize(4)
         assertThat(farMessageOneHaul.catches.first().weight).isEqualTo(1500.0)
@@ -319,49 +322,56 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(depMessage.anticipatedActivity).isEqualTo("FSH")
         assertThat(depMessage.departureDateTime.toString()).isEqualTo("2019-10-11T01:40Z")
 
+        // CPS
+        assertThat(messages[12].reportDateTime.toString()).isEqualTo("2019-10-11T01:06Z")
+        assertThat(messages[12].message).isInstanceOf(CPS::class.java)
+        val cpsMessage = messages[12].message as CPS
+        assertThat(cpsMessage.gear).isEqualTo("GTR")
+        assertThat(cpsMessage.cpsDatetime.toString()).isEqualTo("2023-02-28T17:44Z")
+
         // RET
-        assertThat(messages[12].reportDateTime.toString()).isEqualTo("2021-01-18T07:19:29.384921Z")
-        assertThat(messages[12].message).isInstanceOf(Acknowledge::class.java)
-        assertThat(messages[12].operationType).isEqualTo(LogbookOperationType.RET)
-        val ackMessage1 = messages[12].message as Acknowledge
+        assertThat(messages[13].reportDateTime.toString()).isEqualTo("2021-01-18T07:19:29.384921Z")
+        assertThat(messages[13].message).isInstanceOf(Acknowledge::class.java)
+        assertThat(messages[13].operationType).isEqualTo(LogbookOperationType.RET)
+        val ackMessage1 = messages[13].message as Acknowledge
         assertThat(ackMessage1.returnStatus).isEqualTo("000")
 
         // RET
-        assertThat(messages[13].reportDateTime.toString()).isEqualTo("2019-08-30T11:12Z")
-        assertThat(messages[13].message).isInstanceOf(Acknowledge::class.java)
-        assertThat(messages[13].operationType).isEqualTo(LogbookOperationType.RET)
-        val ackMessage2 = messages[13].message as Acknowledge
-        assertThat(ackMessage2.returnStatus).isEqualTo("002")
-
-        // RET
+        assertThat(messages[14].reportDateTime.toString()).isEqualTo("2019-08-30T11:12Z")
         assertThat(messages[14].message).isInstanceOf(Acknowledge::class.java)
         assertThat(messages[14].operationType).isEqualTo(LogbookOperationType.RET)
-        val ackMessage3 = messages[14].message as Acknowledge
-        assertThat(ackMessage3.returnStatus).isEqualTo("000")
+        val ackMessage2 = messages[14].message as Acknowledge
+        assertThat(ackMessage2.returnStatus).isEqualTo("002")
 
         // RET
         assertThat(messages[15].message).isInstanceOf(Acknowledge::class.java)
         assertThat(messages[15].operationType).isEqualTo(LogbookOperationType.RET)
-        val ackMessage4 = messages[15].message as Acknowledge
-        assertThat(ackMessage4.returnStatus).isEqualTo("000")
+        val ackMessage3 = messages[15].message as Acknowledge
+        assertThat(ackMessage3.returnStatus).isEqualTo("000")
 
         // RET
         assertThat(messages[16].message).isInstanceOf(Acknowledge::class.java)
         assertThat(messages[16].operationType).isEqualTo(LogbookOperationType.RET)
-        val ackMessage5 = messages[16].message as Acknowledge
+        val ackMessage4 = messages[16].message as Acknowledge
+        assertThat(ackMessage4.returnStatus).isEqualTo("000")
+
+        // RET
+        assertThat(messages[17].message).isInstanceOf(Acknowledge::class.java)
+        assertThat(messages[17].operationType).isEqualTo(LogbookOperationType.RET)
+        val ackMessage5 = messages[17].message as Acknowledge
         assertThat(ackMessage5.returnStatus).isEqualTo("000")
 
         // DEL
-        assertThat(messages[17].reportDateTime.toString()).isEqualTo("2019-10-30T11:32Z")
-        assertThat(messages[17].operationType).isEqualTo(LogbookOperationType.RET)
-        assertThat(messages[17].message).isInstanceOf(Acknowledge::class.java)
-        val ackMessage6 = messages[17].message as Acknowledge
+        assertThat(messages[18].reportDateTime.toString()).isEqualTo("2019-10-30T11:32Z")
+        assertThat(messages[18].operationType).isEqualTo(LogbookOperationType.RET)
+        assertThat(messages[18].message).isInstanceOf(Acknowledge::class.java)
+        val ackMessage6 = messages[18].message as Acknowledge
         assertThat(ackMessage6.returnStatus).isEqualTo("000")
 
         // RET
-        assertThat(messages[18].reportDateTime.toString()).isEqualTo("2019-10-30T11:32Z")
-        assertThat(messages[18].operationType).isEqualTo(LogbookOperationType.DEL)
-        assertThat(messages[18].referencedReportId).isEqualTo("OOF20190627059908")
+        assertThat(messages[19].reportDateTime.toString()).isEqualTo("2019-10-30T11:32Z")
+        assertThat(messages[19].operationType).isEqualTo(LogbookOperationType.DEL)
+        assertThat(messages[19].referencedReportId).isEqualTo("OOF20190627059908")
     }
 
     @Test
@@ -376,7 +386,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
             .findAllMessagesByTripNumberBetweenDates("FAK000999999", afterDate, beforeDate, "9463715")
 
         // Then
-        assertThat(messages).hasSize(1)
+        assertThat(messages).hasSize(2)
 
         // DEP
         assertThat(messages[0].reportDateTime.toString()).isEqualTo("2019-10-11T02:06Z")

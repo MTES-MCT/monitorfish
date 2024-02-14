@@ -1,12 +1,18 @@
 import { expect } from '@jest/globals'
 
-import { correctedLANMessage, correctedPNOMessage, dummyLogbookMessages } from './__mocks__/logbookMessages'
+import {
+  correctedLANMessage,
+  correctedPNOMessage,
+  dummyCpsMessage,
+  dummyLogbookMessages
+} from './__mocks__/logbookMessages'
 import {
   getDEPMessage,
   getDISMessages,
   getFARMessages,
   getLANMessage,
   getPNOMessage,
+  getCPSDistinctSpecies,
   getTotalDEPWeight,
   getTotalDISWeight,
   getTotalFARWeight,
@@ -14,7 +20,7 @@ import {
   getTotalPNOWeight
 } from '../utils'
 
-describe('Logbook/utils.ts', () => {
+describe('Logbook/utils.tsx', () => {
   it('getPNOMessage Should get the first valid PNO message', async () => {
     const pnosWithAnotherCorrectedMessage = dummyLogbookMessages.concat(correctedPNOMessage)
 
@@ -91,9 +97,17 @@ describe('Logbook/utils.ts', () => {
     const pnoMessage = getPNOMessage(dummyLogbookMessages)
 
     // When
-    const weight = getTotalPNOWeight(pnoMessage!)
+    const weight = getTotalPNOWeight(pnoMessage?.message)
 
     // Then
     expect(weight).toEqual(1675)
+  })
+
+  it('getTotalCPSDistinctSpecies Should get the total number of distinct CPS species', async () => {
+    // When
+    const total = getCPSDistinctSpecies([dummyCpsMessage])
+
+    // Then
+    expect(total).toEqual(2)
   })
 })

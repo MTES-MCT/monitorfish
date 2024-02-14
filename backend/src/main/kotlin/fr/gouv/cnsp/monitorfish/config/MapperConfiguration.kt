@@ -1,12 +1,13 @@
 package fr.gouv.cnsp.monitorfish.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.jsontype.NamedType
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Catch
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.ProtectedSpeciesCatch
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.type.RuleTypeMapping
 import org.springframework.context.annotation.Bean
@@ -27,9 +28,10 @@ class MapperConfiguration {
         // needed to handle java.time.ZonedDateTime serialization
         mapper.registerModule(JavaTimeModule())
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-        mapper.propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
+        mapper.propertyNamingStrategy = PropertyNamingStrategies.LOWER_CAMEL_CASE
 
         mapper.registerSubtypes(NamedType(Catch::class.java, "catch"))
+        mapper.registerSubtypes(NamedType(ProtectedSpeciesCatch::class.java, "protectedSpeciesCatch"))
         mapper.registerSubtypes(NamedType(GearLogbook::class.java, "gear"))
 
         registerRulesSubType(mapper, RuleTypeMapping::class.java)

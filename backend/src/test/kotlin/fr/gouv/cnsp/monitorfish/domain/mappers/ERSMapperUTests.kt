@@ -2,16 +2,17 @@ package fr.gouv.cnsp.monitorfish.domain.mappers
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Catch
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Haul
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledge
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.CPS
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DEP
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.FAR
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.json.JsonTest
 import org.springframework.context.annotation.Import
+import java.time.ZonedDateTime
 
 @Import(MapperConfiguration::class)
 @JsonTest
@@ -30,7 +31,7 @@ class ERSMapperUTests {
     }
 
     @Test
-    fun `getERSMessageValueFromJSON Should deserialize FARMessage When it is first serialized`() {
+    fun `getERSMessageValueFromJSON Should deserialize a FAR message When it is first serialized`() {
         // Given
         val catch = Catch()
         catch.economicZone = "FRA"
@@ -140,5 +141,142 @@ class ERSMapperUTests {
 
         assertThat(parsedRETMessage.rejectionCause).isNotNull
         assertThat(parsedRETMessage.returnStatus).isEqualTo("002")
+    }
+
+    @Test
+    fun `getERSMessageValueFromJSON Should deserialize an example DEP message`() {
+        // Given
+        val depMessage = "{\"gearOnboard\": [{\"gear\": \"GTR\", \"mesh\": 100.0}], \"departurePort\": \"AEJAZ\", \"anticipatedActivity\": \"FSH\", \"tripStartDate\": \"2018-02-17T00:00Z\", \"departureDatetimeUtc\": \"2018-02-17T01:05Z\"}"
+
+        // When
+        val parsedDEPMessage = ERSMapper.getERSMessageValueFromJSON(mapper, depMessage, "DEP", LogbookOperationType.DAT)
+
+        // Then
+        assertThat(parsedDEPMessage).isInstanceOf(DEP::class.java)
+        parsedDEPMessage as DEP
+
+        assertThat(parsedDEPMessage.tripStartDate).isNotNull
+        assertThat(parsedDEPMessage.departureDateTime).isNotNull
+    }
+
+    @Test
+    fun `getERSMessageValueFromJSON Should deserialize a CPS message When it is first serialized`() {
+        // Given
+        val catch = ProtectedSpeciesCatch()
+        catch.economicZone = "FRA"
+        catch.effortZone = "C"
+        catch.faoZone = "27.8.a"
+        catch.statisticalRectangle = "23E6"
+        catch.species = "SCR"
+        catch.weight = 125.0
+        catch.healthState = HealthState.DEA
+
+        val cpsMessage = CPS()
+        cpsMessage.catches = listOf(catch)
+        cpsMessage.gear = "OTB"
+        cpsMessage.mesh = 80.0
+        cpsMessage.latitude = 45.389
+        cpsMessage.longitude = -1.303
+        cpsMessage.cpsDatetime = ZonedDateTime.now()
+
+        // When
+        val jsonString = mapper.writeValueAsString(cpsMessage)
+        val parsedCPSMessage = ERSMapper.getERSMessageValueFromJSON(mapper, jsonString, "CPS", LogbookOperationType.DAT)
+
+        // Then
+        assertThat(parsedCPSMessage).isInstanceOf(CPS::class.java)
+        parsedCPSMessage as CPS
+
+        assertThat(parsedCPSMessage.gear).isEqualTo("OTB")
+        assertThat(parsedCPSMessage.mesh).isEqualTo(80.0)
+        assertThat(parsedCPSMessage.latitude).isEqualTo(45.389)
+        assertThat(parsedCPSMessage.longitude).isEqualTo(-1.303)
+
+        val parsedCatches = parsedCPSMessage.catches
+        assertThat(parsedCatches.size).isEqualTo(1)
+
+        val parsedCatch = parsedCatches.first()
+        assertThat(parsedCatch).isNotNull
+        assertThat(parsedCatch.statisticalRectangle).isEqualTo("23E6")
+        assertThat(parsedCatch.economicZone).isEqualTo("FRA")
+        assertThat(parsedCatch.faoZone).isEqualTo("27.8.a")
+        assertThat(parsedCatch.species).isEqualTo("SCR")
+        assertThat(parsedCatch.weight).isEqualTo(125.0)
+    }
+
+    @Test
+    fun `second getERSMessageValueFromJSON Should deserialize an example CPS message`() {
+        // Given
+        val cpsMessage = "{" +
+            "\"cpsDatetimeUtc\": \"2023-02-28T17:44:00Z\"," +
+            "\"gear\": \"GTR\"," +
+            "\"mesh\": 100.0," +
+            "\"dimensions\": \"50.0;2.0\"," +
+            "\"catches\": [" +
+            "{" +
+            "\"sex\": \"M\"," +
+            "\"healthState\": \"DEA\"," +
+            "\"careMinutes\": null," +
+            "\"ring\": \"1234567\"," +
+            "\"fate\": \"DIS\"," +
+            "\"comment\": null," +
+            "\"species\": \"DCO\"," +
+            "\"weight\": 60.0," +
+            "\"nbFish\": 1.0," +
+            "\"faoZone\": \"27.8.a\"," +
+            "\"economicZone\": \"FRA\"," +
+            "\"statisticalRectangle\": \"22E7\"," +
+            "\"effortZone\": \"C\"" +
+            "}," +
+            "{" +
+            "\"sex\": \"M\"," +
+            "\"healthState\": \"DEA\"," +
+            "\"careMinutes\": 40," +
+            "\"ring\": \"1234568\"," +
+            "\"fate\": \"DIS\"," +
+            "\"comment\": \"Pov' titi a eu bobo\"," +
+            "\"species\": \"DCO\"," +
+            "\"weight\": 80.0," +
+            "\"nbFish\": 1.0," +
+            "\"faoZone\": \"27.8.a\"," +
+            "\"economicZone\": \"FRA\"," +
+            "\"statisticalRectangle\": \"22E7\"," +
+            "\"effortZone\": \"C\"" +
+            "}" +
+            "]," +
+            "\"latitude\": 46.575," +
+            "\"longitude\": -2.741" +
+            "}"
+
+        // When
+        val parsedCPSMessage = ERSMapper.getERSMessageValueFromJSON(mapper, cpsMessage, "CPS", LogbookOperationType.DAT)
+
+        // Then
+        assertThat(parsedCPSMessage).isInstanceOf(CPS::class.java)
+        parsedCPSMessage as CPS
+
+        assertThat(parsedCPSMessage.cpsDatetime).isNotNull()
+        assertThat(parsedCPSMessage.gear).isEqualTo("GTR")
+        assertThat(parsedCPSMessage.mesh).isEqualTo(100.0)
+        assertThat(parsedCPSMessage.latitude).isEqualTo(46.575)
+        assertThat(parsedCPSMessage.longitude).isEqualTo(-2.741)
+
+        val parsedCatches = parsedCPSMessage.catches
+        assertThat(parsedCatches.size).isEqualTo(2)
+
+        val parsedCatch = parsedCatches.first()
+        assertThat(parsedCatch).isNotNull
+        assertThat(parsedCatch.sex).isEqualTo("M")
+        assertThat(parsedCatch.healthState).isEqualTo(HealthState.DEA)
+        assertThat(parsedCatch.careMinutes).isNull()
+        assertThat(parsedCatch.ring).isEqualTo(1234567)
+        assertThat(parsedCatch.comment).isNull()
+        assertThat(parsedCatch.species).isEqualTo("DCO")
+        assertThat(parsedCatch.weight).isEqualTo(60.0)
+        assertThat(parsedCatch.nbFish).isEqualTo(1.0)
+        assertThat(parsedCatch.faoZone).isEqualTo("27.8.a")
+        assertThat(parsedCatch.economicZone).isEqualTo("FRA")
+        assertThat(parsedCatch.statisticalRectangle).isEqualTo("22E7")
+        assertThat(parsedCatch.effortZone).isEqualTo("C")
     }
 }

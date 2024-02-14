@@ -22,7 +22,7 @@ def xml_tag_structure_func_factory(max_depth: int = None, max_nb_siblings: int =
     def get_xml_tag_structure(
         xml_element, max_depth=max_depth, max_nb_siblings=max_nb_siblings
     ):
-        children = xml_element.getchildren()
+        children = list(xml_element)
         tag = remove_namespace(xml_element.tag)
 
         if children == [] or max_depth == 1:

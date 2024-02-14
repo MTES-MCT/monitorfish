@@ -17,7 +17,7 @@ export function ImpactRiskFactorDetails({ isOpen }) {
     if (riskFactor && riskFactor.speciesOnboard) {
       const nextFaoZones = riskFactor.speciesOnboard.map(species => species.faoZone)
 
-      setFaoZones([...new Set(nextFaoZones)] as any)
+      setFaoZones(Array.from(new Set(nextFaoZones)) as any)
     } else {
       setFaoZones([])
     }

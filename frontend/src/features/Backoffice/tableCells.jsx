@@ -50,6 +50,10 @@ const ModifiableCellWrapper = styled.div`
     background: ${COLORS.charcoal};
     color: ${COLORS.white};
   }
+
+  .rs-input {
+    height: 30px;
+  }
 `
 
 const impactRange = _.range(1, 4.1, 0.1).map(num => {

@@ -1,7 +1,4 @@
-import { customDayjs } from '@mtes-mct/monitor-ui'
-
 import { updateFleetSegmentFromAPI } from '../../../api/fleetSegment'
-import { setFleetSegments } from '../../shared_slices/FleetSegment'
 import { setError } from '../../shared_slices/Global'
 
 import type { FleetSegment, UpdateFleetSegment } from '../../types/fleetSegment'
@@ -16,20 +13,13 @@ export const updateFleetSegment =
     updatedFields: UpdateFleetSegment,
     previousFleetSegments: FleetSegment[]
   ): ((dispatch, getState) => Promise<FleetSegment[] | undefined>) =>
-  async (dispatch, getState) => {
+  async dispatch => {
     try {
       if (!segment || !year) {
         throw new Error('Erreur lors de la modification du segment de flotte')
       }
 
-      const currentYear = customDayjs().year()
-      const previousFleetSegmentsOfCurrentYear = Object.assign([], getState().fleetSegment.fleetSegments)
-
       const updatedFleetSegment = await updateFleetSegmentFromAPI(segment, year, updatedFields)
-      if (year === currentYear) {
-        const nextFleetSegments = updateFleetSegments(previousFleetSegmentsOfCurrentYear, segment, updatedFleetSegment)
-        dispatch(setFleetSegments(nextFleetSegments))
-      }
 
       return updateFleetSegments(previousFleetSegments, segment, updatedFleetSegment)
     } catch (error) {

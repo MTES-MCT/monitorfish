@@ -44,7 +44,7 @@ export const mapToProcessingRegulation = persistProcessingRegulation => {
 
 export const getRegulatoryLawTypesFromZones = (regulatoryZones: RegulatoryZone[]): RegulatoryLawTypes => {
   const lawTypes: string[] = regulatoryZones.map(regulatoryZone => regulatoryZone.lawType).filter(lawType => lawType)
-  const uniqueLawTypes = [...new Set(lawTypes)]
+  const uniqueLawTypes = Array.from(new Set(lawTypes))
 
   return uniqueLawTypes.reduce((lawTypeAccumulator, lawType) => {
     const uniqueLawTypeTopics = getLawTypeTopics(regulatoryZones, lawType)
@@ -61,7 +61,7 @@ function getLawTypeTopics(regulatoryZones: RegulatoryZone[], lawType: string) {
     .filter(regulatoryZone => regulatoryZone.lawType === lawType)
     .map(regulatoryZone => regulatoryZone.topic)
 
-  return [...new Set(lawTypeTopics)]
+  return Array.from(new Set(lawTypeTopics))
 }
 
 function getTopicsToZones(uniqueLawTypeTopics: string[], regulatoryZones: RegulatoryZone[]) {
@@ -537,7 +537,7 @@ export function getUniqueGearCodesFromSearch(searchText: string, gears: Gear[]):
     )
     .map(gear => gear.code)
 
-  return [...new Set(foundGearCodes)]
+  return Array.from(new Set(foundGearCodes))
 }
 
 export function getUniqueSpeciesCodesFromSearch(searchText: string, species: Specy[]): string[] {
@@ -549,7 +549,7 @@ export function getUniqueSpeciesCodesFromSearch(searchText: string, species: Spe
     )
     .map(gear => gear.code)
 
-  return [...new Set(foundSpeciesCodes)]
+  return Array.from(new Set(foundSpeciesCodes))
 }
 
 // TODO `gears` seems to be a strings array here and not a `Gear` array, this should be renamed.

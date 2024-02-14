@@ -1,7 +1,5 @@
-import { customDayjs } from '@mtes-mct/monitor-ui'
+import { deleteFleetSegmentFromAPI } from '@api/fleetSegment'
 
-import { deleteFleetSegmentFromAPI } from '../../../api/fleetSegment'
-import { setFleetSegments } from '../../shared_slices/FleetSegment'
 import { setError } from '../../shared_slices/Global'
 
 import type { FleetSegment } from '../../types/fleetSegment'
@@ -9,20 +7,18 @@ import type { FleetSegment } from '../../types/fleetSegment'
 /**
  * Delete a fleet segment
  */
-export const deleteFleetSegment = (segment: string, year: number) => dispatch => {
-  const currentYear = customDayjs().year()
-
-  return deleteFleetSegmentFromAPI(segment, year)
-    .then(updatedFleetSegments => {
-      if (year === currentYear) {
-        dispatch(setFleetSegments(updatedFleetSegments))
-      }
+export const deleteFleetSegment =
+  (segment: string, year: number) =>
+  async (dispatch): Promise<undefined | FleetSegment[]> => {
+    try {
+      const updatedFleetSegments = await deleteFleetSegmentFromAPI(segment, year)
 
       return (Object.assign([], updatedFleetSegments) as FleetSegment[]).sort((a, b) =>
         a.segment.localeCompare(b.segment)
       )
-    })
-    .catch(error => {
-      dispatch(setError(error))
-    })
-}
+    } catch (e) {
+      dispatch(setError(e))
+
+      return undefined
+    }
+  }

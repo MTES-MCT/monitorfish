@@ -26,7 +26,7 @@ context('Vessel sidebar fishing tab', () => {
       .contains('message non acquitté – aucune capture', { timeout: 10000 })
     // DIS messages are not acknowledged
     cy.get('*[data-cy="vessel-fishing-resume-title"]')
-      .eq(2)
+      .eq(3)
       .contains('message non acquitté – aucun rejet', { timeout: 10000 })
 
     cy.get('*[data-cy="fishing-resume-not-acknowledged-icon"]').should('have.length', 2)
@@ -44,12 +44,14 @@ context('Vessel sidebar fishing tab', () => {
 
     // Then
     cy.get('*[data-cy^="vessel-fishing-gears"]', { timeout: 10000 }).should('be.visible')
-    cy.get('*[data-cy^="vessel-fishing-gears"]').contains('Trémails et filets maillants combinés (GTN)', {
-      timeout: 10000
-    })
-    cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains('1 message - 2256 kg pêchés au total', {
-      timeout: 10000
-    })
+    cy.get('*[data-cy^="vessel-fishing-gears"]').contains('Trémails et filets maillants combinés (GTN)')
+
+    // CPS message resume
+    cy.get('*[data-cy="vessel-fishing-resume-title"]').eq(2).click({ timeout: 10000 })
+    cy.get('*[data-cy="cps-message-resume"]').contains('DAUPHIN COMMUN (DCO)')
+    cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains('1 message non acquitté')
+
+    cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains('1 message - 2256 kg pêchés au total')
   })
 
   it('Fishing Should contain the vessel ERS logbook messages', () => {
@@ -64,38 +66,43 @@ context('Vessel sidebar fishing tab', () => {
     cy.get('*[data-cy^="vessel-fishing-see-all"]').click({ timeout: 10000 })
 
     // Then
-    cy.get('*[data-cy="vessel-fishing-message"]').should('have.length', 12)
-    cy.get('*[data-cy="vessel-fishing-message"]').first().contains('Départ', { timeout: 10000 })
-    cy.get('*[data-cy="vessel-fishing-message"]')
-      .first()
-      .contains('Al Jazeera Port le 11/10/2019 à 01h40 (UTC)', { timeout: 10000 })
+    cy.get('*[data-cy="vessel-fishing-message"]').should('have.length', 13)
 
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(1).contains("Sortie d'une zone d'effort")
-    cy.get('*[data-cy="vessel-fishing-message-body"]').eq(1).contains('Message envoyé via e-sacapt')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(0).contains("Capture d'espèces protégées")
+    cy.get('*[data-cy="vessel-fishing-message-body"]').eq(0).contains('DAUPHIN COMMUN (DCO)')
+    cy.get('*[title="DAUPHIN COMMUN (DCO)"]').click()
+    cy.get('*[data-cy="vessel-fishing-message-body"]').eq(0).contains('Temps à bord')
+    cy.get('*[data-cy="vessel-fishing-message-body"]').eq(0).contains('40 minutes')
 
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(2).contains("Traversée d'une zone d'effort")
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(1).contains('Départ')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(1).contains('Al Jazeera Port le 11/10/2019 à 01h40 (UTC)')
 
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(3).contains("Entrée dans une zone d'effort")
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(2).contains("Sortie d'une zone d'effort")
+    cy.get('*[data-cy="vessel-fishing-message-body"]').eq(2).contains('Message envoyé via e-sacapt')
 
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(4).contains('Déclaration de capture')
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(4).siblings().eq(1).contains('ANCIEN MESSAGE')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(3).contains("Traversée d'une zone d'effort")
 
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(5).contains("Déclaration d'inspection")
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(5).siblings().eq(1).contains('MESSAGE CORRIGÉ')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(4).contains("Entrée dans une zone d'effort")
 
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(6).contains('Fin de pêche')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(5).contains('Déclaration de capture')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(5).siblings().eq(1).contains('ANCIEN MESSAGE')
 
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(7).contains('Préavis (notification de retour au port)')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(6).contains("Déclaration d'inspection")
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(6).siblings().eq(1).contains('MESSAGE CORRIGÉ')
 
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(8).contains('Retour au port')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(7).contains('Fin de pêche')
 
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(9).contains('Déclaration de capture')
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(9).siblings().eq(1).contains('MESSAGE CORRIGÉ')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(8).contains('Préavis (notification de retour au port)')
 
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(10).contains('Déclaration de rejets')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(9).contains('Retour au port')
 
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(11).contains('Débarquement')
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(11).siblings().eq(1).contains('MESSAGE SUPPRIMÉ')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(10).contains('Déclaration de capture')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(10).siblings().eq(1).contains('MESSAGE CORRIGÉ')
+
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(11).contains('Déclaration de rejets')
+
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(12).contains('Débarquement')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(12).siblings().eq(1).contains('MESSAGE SUPPRIMÉ')
   })
 
   it('Fishing Should contain the vessel FLUX logbook messages', () => {
@@ -152,15 +159,18 @@ context('Vessel sidebar fishing tab', () => {
 
     // Hide fishing activities
     cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 10000 })
-    cy.intercept('GET', '/bff/v1/vessels/positions*').as('previousTripPositions')
+    cy.intercept('GET', '/bff/v1/vessels/positions*').as('nextTripPositions')
     cy.get('*[data-cy^="vessel-fishing-next-trip"]').click({ timeout: 10000 })
-    cy.wait('@previousTripPositions')
+    /**
+     * Hours are modified before request, see `getDateRangeMinusFourHoursPlusOneHour()`
+     */
+    cy.wait('@nextTripPositions')
       .its('response.url')
       .should(
         'have.string',
         '/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
           '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=CUSTOM' +
-          '&afterDateTime=2019-10-10T22:06:00.000Z&beforeDateTime=2019-10-22T12:06:00.000Z'
+          '&afterDateTime=2019-10-10T21:06:00.000Z&beforeDateTime=2019-10-22T12:06:00.000Z'
       )
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
     cy.get('*[data-cy="custom-dates-showed-text"]').contains('Piste affichée du 10/10/19 au 22/10/19')
@@ -185,8 +195,8 @@ context('Vessel sidebar fishing tab', () => {
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
     cy.get('*[data-cy^="vessel-fishing-see-all"]').click({ timeout: 10000 })
     cy.scrollTo(0, 380)
-    cy.get('*[data-cy^="show-fishing-activity"]').eq(7).parent().contains('Retour au port')
-    cy.get('*[data-cy^="show-fishing-activity"]').eq(7).scrollIntoView().click({ timeout: 20000 })
+    cy.get('*[data-cy^="show-fishing-activity"]').eq(8).parent().contains('Retour au port')
+    cy.get('*[data-cy^="show-fishing-activity"]').eq(8).scrollIntoView().click({ timeout: 20000 })
 
     // Then
     cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 1).eq(0).contains('RTP')

@@ -3,10 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
@@ -73,7 +70,7 @@ class GetLogbookMessagesUTests {
             .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
-        assertThat(ersMessages).hasSize(5)
+        assertThat(ersMessages).hasSize(6)
 
         assertThat(ersMessages[0].message).isInstanceOf(DEP::class.java)
         assertThat(ersMessages[0].rawMessage).isEqualTo("<xml>DUMMY XML MESSAGE</xml>")
@@ -107,9 +104,15 @@ class GetLogbookMessagesUTests {
         assertThat(cox.targetSpeciesOnExit).isEqualTo("DEM")
         assertThat(cox.targetSpeciesNameOnExit).isEqualTo("Démersal")
 
-        assertThat(ersMessages[4].message).isInstanceOf(PNO::class.java)
-        assertThat(ersMessages[4].rawMessage).isEqualTo("<xml>DUMMY XML MESSAGE</xml>")
-        val pno = ersMessages[4].message as PNO
+        assertThat(ersMessages[4].message).isInstanceOf(CPS::class.java)
+        val cps = ersMessages[4].message as CPS
+        assertThat(cps.catches[0].species).isEqualTo("TTV")
+        assertThat(cps.catches[0].speciesName).isEqualTo("TORPILLE OCELLÉE")
+        assertThat(cps.catches[0].healthState).isEqualTo(HealthState.DEA)
+
+        assertThat(ersMessages[5].message).isInstanceOf(PNO::class.java)
+        assertThat(ersMessages[5].rawMessage).isEqualTo("<xml>DUMMY XML MESSAGE</xml>")
+        val pno = ersMessages[5].message as PNO
         assertThat(pno.catchOnboard[0].species).isEqualTo("TTV")
         assertThat(pno.catchOnboard[0].speciesName).isEqualTo("TORPILLE OCELLÉE")
         assertThat(pno.catchOnboard[1].species).isEqualTo("SMV")
@@ -372,12 +375,12 @@ class GetLogbookMessagesUTests {
             .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
-        assertThat(ersMessages).hasSize(5)
+        assertThat(ersMessages).hasSize(6)
 
         assertThat(ersMessages[0].isSentByFailoverSoftware).isTrue
         assertThat(ersMessages[1].isSentByFailoverSoftware).isFalse
         assertThat(ersMessages[2].isSentByFailoverSoftware).isTrue
         assertThat(ersMessages[3].isSentByFailoverSoftware).isTrue
-        assertThat(ersMessages[4].isSentByFailoverSoftware).isTrue
+        assertThat(ersMessages[4].isSentByFailoverSoftware).isFalse
     }
 }

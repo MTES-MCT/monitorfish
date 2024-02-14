@@ -85,7 +85,24 @@ object TestUtils {
         haul.gear = "OTB"
         haul.catches = listOf(catchTwo, catchThree)
         haul.mesh = 120.0
+        haul.dimensions = "150;120"
         far.hauls = listOf(haul)
+
+        val protectedSpeciesCatch = ProtectedSpeciesCatch()
+        protectedSpeciesCatch.economicZone = "FRA"
+        protectedSpeciesCatch.effortZone = "C"
+        protectedSpeciesCatch.faoZone = "27.8.a"
+        protectedSpeciesCatch.statisticalRectangle = "23E6"
+        protectedSpeciesCatch.species = "TTV"
+        protectedSpeciesCatch.weight = 125.0
+        protectedSpeciesCatch.healthState = HealthState.DEA
+        val cpsMessage = CPS()
+        cpsMessage.catches = listOf(protectedSpeciesCatch)
+        cpsMessage.gear = "OTB"
+        cpsMessage.mesh = 80.0
+        cpsMessage.latitude = 45.389
+        cpsMessage.longitude = -1.303
+        cpsMessage.cpsDatetime = ZonedDateTime.now()
 
         val coe = COE()
         coe.targetSpeciesOnEntry = "DEM"
@@ -169,6 +186,16 @@ object TestUtils {
             LogbookMessage(
                 id = 4, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "COX", software = "e-Sacapt Secours ERSV3 V 1.0.7",
                 message = cox,
+                reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0).minusMinutes(
+                    20,
+                ),
+                transmissionFormat = LogbookTransmissionFormat.ERS,
+                integrationDateTime = ZonedDateTime.now(),
+                operationDateTime = ZonedDateTime.now(),
+            ),
+            LogbookMessage(
+                id = 5, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "CPS", software = "",
+                message = cpsMessage,
                 reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0).minusMinutes(
                     20,
                 ),

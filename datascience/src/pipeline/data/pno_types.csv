@@ -1,0 +1,13 @@
+id,name,minimum_notification_period,has_designated_ports
+1,Espèces soumises à préavis,4.0,True
+2,Ports désignés cabillaud,4.0,True
+3,Ports désignés merlu,4.0,True
+4,Ports désignés espèces eaux profondes,4.0,True
+5,Ports désignés petits pélagiques,4.0,True
+6,Ports désignés sole,4.0,True
+7,Ports désignés thon rouge,4.0,True
+8,Ports désignés espadon,4.0,True
+9,Ports désignés corail rouge,4.0,True
+10,Préavis navire tiers,4.0,True
+11,Préavis communautaire,4.0,True
+12,Préavis senne de plage,4.0,True

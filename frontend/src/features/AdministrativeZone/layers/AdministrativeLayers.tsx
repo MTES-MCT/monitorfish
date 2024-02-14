@@ -1,4 +1,5 @@
 import { FAO_LAYER } from '@features/AdministrativeZone/layers/constants'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import React, { useEffect } from 'react'
 
 import {
@@ -9,7 +10,6 @@ import {
   layersNotInShowedLayers
 } from '../../../domain/entities/layers'
 import { LayerProperties } from '../../../domain/entities/layers/constants'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { monitorfishMap } from '../../map/monitorfishMap'
 import { getVectorOLLayer } from '../useCases/showAdministrativeZone'
 

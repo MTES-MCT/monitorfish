@@ -304,6 +304,7 @@ jobs:
     name: Push to registry
     needs: [version, e2e_test, e2e_multi_windows_test]
     runs-on: ubuntu-22.04
+    if: needs.version.outputs.IS_RELEASE && !contains(github.ref, 'dependabot')
     env:
       IS_RELEASE: ${{ needs.version.outputs.IS_RELEASE }}
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true

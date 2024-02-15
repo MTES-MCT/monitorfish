@@ -7,6 +7,7 @@ export type FleetSegment = {
   gears: string[] | null
   impactRiskFactor: Float<number> | null
   segment: string
+  // TODO Can this be null?
   segmentName: string | null
   targetSpecies: string[] | null
   year: number

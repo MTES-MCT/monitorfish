@@ -7,12 +7,12 @@ import { infractionGroupToLabel } from './constants'
 
 import type { Promisable } from 'type-fest'
 
-export type InfractionProps = {
+type InfractionProps = Readonly<{
   data: MissionAction.Infraction & { group: string; label: string | undefined }
   index: number
   onDelete: (index: number, infractionGroup: string) => Promisable<void>
   onEdit: (index: number, infractionGroup: string) => Promisable<void>
-}
+}>
 export function Infraction({ data, index, onDelete, onEdit }: InfractionProps) {
   return (
     <>
@@ -25,7 +25,7 @@ export function Infraction({ data, index, onDelete, onEdit }: InfractionProps) {
           <TagGroup>
             <Tag accent={Accent.PRIMARY}>{MissionAction.INFRACTION_TYPE_LABEL[data.infractionType]}</Tag>
             {data.infractionType !== MissionAction.InfractionType.PENDING && (
-              <Tag accent={Accent.PRIMARY}>NATINF : {data.label || data.natinf}</Tag>
+              <Tag accent={Accent.PRIMARY}>NATINF : {data.label ?? data.natinf}</Tag>
             )}
           </TagGroup>
 

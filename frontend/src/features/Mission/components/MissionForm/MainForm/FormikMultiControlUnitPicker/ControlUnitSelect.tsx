@@ -31,7 +31,7 @@ import type { Option } from '@mtes-mct/monitor-ui'
 import type { LegacyControlUnit } from 'domain/types/legacyControlUnit'
 import type { Promisable } from 'type-fest'
 
-export type ControlUnitSelectProps = {
+type ControlUnitSelectProps = Readonly<{
   allAdministrationsAsOptions: Option[]
   allControlUnits: LegacyControlUnit.LegacyControlUnit[]
   error:
@@ -46,7 +46,7 @@ export type ControlUnitSelectProps = {
     nextControlUnit: LegacyControlUnit.LegacyControlUnit | LegacyControlUnit.LegacyControlUnitDraft
   ) => Promisable<void>
   onDelete: (index: number) => Promisable<void>
-}
+}>
 export function ControlUnitSelect({
   allAdministrationsAsOptions,
   allControlUnits,
@@ -96,7 +96,7 @@ export function ControlUnitSelect({
   const activeWithSelectedControlUnitResources = useMemo(() => {
     const activeControlUnitResources =
       activeAndSelectedControlUnits.find(unit => unit.administration === value.administration && unit.id === value.id)
-        ?.resources || []
+        ?.resources ?? []
     // TODO Remove LegacyControlUnitResource to filter archived resources :
     //  .filter(isNotArchived)
 
@@ -153,7 +153,7 @@ export function ControlUnitSelect({
     (nextResources: LegacyControlUnit.LegacyControlUnitResource[] | undefined) => {
       const nextControlUnit: LegacyControlUnit.LegacyControlUnitDraft = {
         ...value,
-        resources: nextResources || []
+        resources: nextResources ?? []
       }
 
       onChange(index, nextControlUnit)

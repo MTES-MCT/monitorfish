@@ -34,7 +34,7 @@ export function useGetMainFormFormikUsecases() {
         return false
       }
 
-      const validControls = missionActions.filter(action => isLandControl(action) || isAirOrSeaControl(action))
+      const validControls = missionActions.filter(action => isLandControl(action) ?? isAirOrSeaControl(action))
       if (!validControls) {
         return false
       }

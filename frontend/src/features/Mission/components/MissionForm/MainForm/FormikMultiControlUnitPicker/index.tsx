@@ -14,16 +14,15 @@ import { useGetMainFormFormikUsecases } from '../../hooks/useGetMainFormFormikUs
 import type { MissionMainFormValues } from '../../types'
 import type { LegacyControlUnit } from 'domain/types/legacyControlUnit'
 
-export type FormikMultiControlUnitPickerProps = {
+type FormikMultiControlUnitPickerProps = Readonly<{
   name: string
-}
+}>
 export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPickerProps) {
   const { errors: allErrors, setFieldValue, values } = useFormikContext<MissionMainFormValues>()
   const { updateMissionActionOtherControlsCheckboxes } = useGetMainFormFormikUsecases()
-  const previousIsControlUnitPAM =
-    usePrevious(
-      values.controlUnits?.some(controlUnit => controlUnit.id && PAMControlUnitIds.includes(controlUnit.id))
-    ) || false
+  const previousIsControlUnitPAM = !!usePrevious(
+    values.controlUnits?.some(controlUnit => controlUnit.id && PAMControlUnitIds.includes(controlUnit.id))
+  )
   const { forceUpdate } = useForceUpdate()
 
   const controlUnitsQuery = useGetLegacyControlUnitsQuery(undefined)
@@ -80,12 +79,12 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
   return (
     <Wrapper>
       <>
-        {(values.controlUnits || []).map((_, index) => (
+        {(values.controlUnits ?? []).map((controlUnit, index) => (
           <ControlUnitSelect
             // eslint-disable-next-line react/no-array-index-key
-            key={index}
+            key={`${controlUnit.id}-${index}`}
             allAdministrationsAsOptions={allAdministrationsAsOptions}
-            allControlUnits={controlUnitsQuery.data || []}
+            allControlUnits={controlUnitsQuery.data ?? []}
             error={errors[index]}
             index={index}
             onChange={handleChange}

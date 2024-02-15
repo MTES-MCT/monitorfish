@@ -53,7 +53,7 @@ export function GearsField() {
     }
 
     const nextGears: MissionAction.GearControl[] = [
-      ...(input.value || []),
+      ...(input.value ?? []),
       {
         comments: undefined,
         controlledMesh: undefined,

@@ -42,20 +42,18 @@ export function FormikOtherControlsCheckboxes() {
   }
 
   return (
-    <>
-      <StyledFieldsetGroup isLight legend="Autre(s) contrôle(s) effectué(s) par l’unité sur le navire">
-        <FormikCheckbox label="Contrôle administratif" name="isAdministrativeControl" />
-        <FormikCheckbox
-          label="Respect du code de la navigation sur le plan d’eau"
-          name="isComplianceWithWaterRegulationsControl"
-        />
-        <FormikCheckbox label="Gens de mer" name="isSeafarersControl" />
-        <FormikCheckbox
-          label="Equipement de sécurité et respect des normes"
-          name="isSafetyEquipmentAndStandardsComplianceControl"
-        />
-      </StyledFieldsetGroup>
-    </>
+    <StyledFieldsetGroup isLight legend="Autre(s) contrôle(s) effectué(s) par l’unité sur le navire">
+      <FormikCheckbox label="Contrôle administratif" name="isAdministrativeControl" />
+      <FormikCheckbox
+        label="Respect du code de la navigation sur le plan d’eau"
+        name="isComplianceWithWaterRegulationsControl"
+      />
+      <FormikCheckbox label="Gens de mer" name="isSeafarersControl" />
+      <FormikCheckbox
+        label="Equipement de sécurité et respect des normes"
+        name="isSafetyEquipmentAndStandardsComplianceControl"
+      />
+    </StyledFieldsetGroup>
   )
 }
 

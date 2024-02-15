@@ -11,7 +11,7 @@ import { FormHead } from '../shared/FormHead'
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
-export type ActionListProps = {
+type ActionListProps = Readonly<{
   actionsFormValues: MissionActionFormValues[]
   currentIndex: number | undefined
   missionTypes: Mission.MissionType[] | undefined
@@ -19,7 +19,7 @@ export type ActionListProps = {
   onDuplicate: (actionIndex: number) => Promisable<void>
   onRemove: (actionIndex: number) => Promisable<void>
   onSelect: (actionIndex: number) => Promisable<void>
-}
+}>
 export function ActionList({
   actionsFormValues,
   currentIndex,

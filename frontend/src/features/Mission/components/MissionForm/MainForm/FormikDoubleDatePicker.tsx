@@ -8,7 +8,7 @@ export function FormikDoubleDatePicker() {
   const { newWindowContainerRef } = useNewWindow()
   const { errors } = useFormikContext<MissionMainFormValues>()
 
-  const error = errors.endDateTimeUtc || errors.startDateTimeUtc
+  const error = errors.endDateTimeUtc ?? errors.startDateTimeUtc
 
   return (
     <Wrapper>

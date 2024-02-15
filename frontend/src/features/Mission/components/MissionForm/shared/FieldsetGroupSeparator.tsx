@@ -2,9 +2,9 @@
 
 import styled from 'styled-components'
 
-type FieldsetGroupSeparatorType = {
+type FieldsetGroupSeparatorType = Readonly<{
   marginBottom?: number | undefined
-}
+}>
 export function FieldsetGroupSeparator({ marginBottom }: FieldsetGroupSeparatorType) {
   return (
     <Wrapper marginBottom={marginBottom}>
@@ -18,7 +18,7 @@ const Wrapper = styled.div<{
 }>`
   height: 4px;
   margin-top: 16px;
-  margin-bottom: ${p => p.marginBottom || 0}px;
+  margin-bottom: ${p => p.marginBottom ?? 0}px;
   position: relative;
 `
 

@@ -49,7 +49,7 @@ export function getMissionActionsDataFromMissionActionsFormValues(
     }
   })
 
-  const originalMissionActionIds = originalMissionActions.map(({ id }) => id as number)
+  const originalMissionActionIds = originalMissionActions.map(({ id }) => id)
   const updatedMissionActionIds = updatedMissionActionDatas
     .filter(({ id }) => typeof id === 'number')
     .map(({ id }) => id as number)
@@ -69,13 +69,13 @@ export function getMissionDataFromMissionFormValues(mainFormValues: MissionMainF
   const missionBaseValues = omit(mainFormValues, ['controlUnits', 'isValid'])
 
   const validControlUnits = mainFormValues.controlUnits.map(getValidMissionDataControlUnit)
-  const missionTypes = mainFormValues.missionTypes || []
+  const missionTypes = mainFormValues.missionTypes ?? []
 
   return {
     ...missionBaseValues,
     controlUnits: validControlUnits,
     isClosed: !!missionBaseValues.isClosed,
-    missionSource: mainFormValues.missionSource || Mission.MissionSource.MONITORFISH,
+    missionSource: mainFormValues.missionSource ?? Mission.MissionSource.MONITORFISH,
     missionTypes
   }
 }
@@ -85,10 +85,11 @@ export function getTitleFromMissionMainFormValues(
   missionId: number | undefined
 ): string {
   return missionId
-    ? `Mission ${
-        mainFormValues.missionTypes &&
-        mainFormValues.missionTypes.map(missionType => Mission.MissionTypeLabel[missionType]).join(' / ')
-      } – ${mainFormValues.controlUnits.map(controlUnit => controlUnit.name?.replace('(historique)', '')).join(', ')}`
+    ? `Mission ${mainFormValues.missionTypes
+        ?.map(missionType => Mission.MissionTypeLabel[missionType])
+        .join(' / ')} – ${mainFormValues.controlUnits
+        .map(controlUnit => controlUnit.name?.replace('(historique)', ''))
+        .join(', ')}`
     : `Nouvelle mission`
 }
 

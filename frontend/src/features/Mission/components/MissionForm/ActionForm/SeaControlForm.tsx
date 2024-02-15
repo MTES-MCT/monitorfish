@@ -33,10 +33,10 @@ import { FormHead } from '../shared/FormHead'
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
-type SeaControlFormProps = {
+type SeaControlFormProps = Readonly<{
   initialValues: MissionActionFormValues
   onChange: (nextValues: MissionActionFormValues) => Promisable<void>
-}
+}>
 export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps) {
   const { newWindowContainerRef } = useNewWindow()
 

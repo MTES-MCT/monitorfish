@@ -23,13 +23,13 @@ import { useGetNatinfsAsOptions } from '../hooks/useGetNatinfsAsOptions'
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
-export type ItemProps = {
+type ItemProps = Readonly<{
   isSelected: boolean
   missionAction: MissionActionFormValues
   onDuplicate: () => Promisable<void>
   onRemove: () => Promisable<void>
   onSelect: () => Promisable<void>
-}
+}>
 export function Item({ isSelected, missionAction, onDuplicate, onRemove, onSelect }: ItemProps) {
   const draft = useMainAppSelector(state => state.missionForm.draft)
 
@@ -99,7 +99,7 @@ export function Item({ isSelected, missionAction, onDuplicate, onRemove, onSelec
     const infractionsTitle = infractionsNatinfs.map(natinf => {
       const infractionLabel = find(natinfsAsOptions, { value: natinf })?.label
 
-      return infractionLabel || natinf.toString()
+      return infractionLabel ?? natinf.toString()
     })
     const infractionsLabel = `${infractionsNatinfs.length} NATINF: ${infractionsNatinfs.join(', ')}`
     const infractionsTag = (

@@ -9,9 +9,9 @@ import { MISSION_EVENT_UNSYNCHRONIZED_PROPERTIES_IN_FORM } from '../sse'
 
 import type { MissionMainFormValues } from '../types'
 
-type FormikSyncMissionFormProps = {
+type FormikSyncMissionFormProps = Readonly<{
   missionId: number | undefined
-}
+}>
 /**
  * Sync
  */

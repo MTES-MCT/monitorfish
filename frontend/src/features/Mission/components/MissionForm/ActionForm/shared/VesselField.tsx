@@ -26,13 +26,13 @@ export function VesselField() {
     }
 
     return {
-      districtCode: values.districtCode || null,
-      externalReferenceNumber: values.externalReferenceNumber || null,
-      flagState: values.flagState || '',
-      internalReferenceNumber: values.internalReferenceNumber || null,
-      ircs: values.ircs || null,
+      districtCode: values.districtCode ?? null,
+      externalReferenceNumber: values.externalReferenceNumber ?? null,
+      flagState: values.flagState ?? '',
+      internalReferenceNumber: values.internalReferenceNumber ?? null,
+      ircs: values.ircs ?? null,
       vesselId: values.vesselId,
-      vesselName: values.vesselName || null
+      vesselName: values.vesselName ?? null
     }
   }, [
     values.flagState,
@@ -67,16 +67,16 @@ export function VesselField() {
 
     setValues({
       ...values,
-      districtCode: nextVessel.districtCode || undefined,
-      externalReferenceNumber: nextVessel.externalReferenceNumber || undefined,
+      districtCode: nextVessel.districtCode ?? undefined,
+      externalReferenceNumber: nextVessel.externalReferenceNumber ?? undefined,
       flagState: nextVessel.flagState,
-      internalReferenceNumber: nextVessel.internalReferenceNumber || undefined,
-      ircs: nextVessel.ircs || undefined,
+      internalReferenceNumber: nextVessel.internalReferenceNumber ?? undefined,
+      ircs: nextVessel.ircs ?? undefined,
       vesselId: nextVessel.vesselId,
       vesselName: nextVessel.vesselName
     })
 
-    const valuesWithVessel = { ...values, internalReferenceNumber: nextVessel.internalReferenceNumber || undefined }
+    const valuesWithVessel = { ...values, internalReferenceNumber: nextVessel.internalReferenceNumber ?? undefined }
     updateFieldsControlledByVessel(valuesWithVessel)
   }
 
@@ -123,7 +123,6 @@ export function VesselField() {
                 <span>{values.externalReferenceNumber}</span> (Marq. ext)
               </>
             )}
-            {/* {values.mmsi && <><span>{values.mmsi}</span> (MMSI)</>} */}
             {values.ircs && (
               <>
                 <span>{values.ircs}</span> (Call Sign)
@@ -133,12 +132,12 @@ export function VesselField() {
         )}
       </Wrapper>
 
-      {errors.vesselId && <Error>{errors.vesselId}</Error>}
+      {errors.vesselId && <ErrorMessage>{errors.vesselId}</ErrorMessage>}
     </>
   )
 }
 
-const Error = styled.p`
+const ErrorMessage = styled.p`
   color: ${p => p.theme.color.maximumRed};
   font-style: italic;
   margin: 4px 0 0 !important;

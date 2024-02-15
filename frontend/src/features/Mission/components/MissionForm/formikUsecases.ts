@@ -75,7 +75,7 @@ const updateGearsOnboard =
       return []
     }
 
-    const { gearOnboard } = riskFactor as RiskFactor
+    const { gearOnboard } = riskFactor
     if (!gearOnboard?.length) {
       return []
     }

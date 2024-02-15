@@ -3,10 +3,10 @@ import { getMissionSourceTagText } from 'domain/entities/mission'
 import { Mission } from 'domain/entities/mission/types'
 import styled from 'styled-components'
 
-type TitleSourceTagProps = {
+type TitleSourceTagProps = Readonly<{
   missionId: number | undefined
   missionSource: Mission.MissionSource | undefined
-}
+}>
 export function TitleSourceTag({ missionId, missionSource }: TitleSourceTagProps) {
   if (!missionSource || !missionId) {
     return <></>

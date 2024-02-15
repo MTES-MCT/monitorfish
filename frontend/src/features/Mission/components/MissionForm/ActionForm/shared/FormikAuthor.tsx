@@ -7,7 +7,7 @@ import type { MissionActionFormValues } from '../../types'
 export function FormikAuthor() {
   const { errors } = useFormikContext<MissionActionFormValues>()
 
-  const error = errors.userTrigram || errors.closedBy
+  const error = errors.userTrigram ?? errors.closedBy
 
   return (
     <Wrapper>

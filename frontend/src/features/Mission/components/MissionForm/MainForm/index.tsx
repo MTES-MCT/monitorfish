@@ -26,11 +26,11 @@ import { FormHead } from '../shared/FormHead'
 import type { MissionMainFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
-type MainFormProps = {
+type MainFormProps = Readonly<{
   initialValues: MissionMainFormValues
   missionId: number | undefined
   onChange: (nextValues: MissionMainFormValues) => Promisable<void>
-}
+}>
 function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProps) {
   const missionEvent = useListenToMissionEventUpdatesById(missionId)
 
@@ -50,7 +50,7 @@ function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProp
         return
       }
 
-      onChange({ ...nextValues, isValid } as any)
+      onChange({ ...nextValues, isValid })
     }
   }
 

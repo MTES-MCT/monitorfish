@@ -4,9 +4,9 @@ import styled from 'styled-components'
 
 import MissionStatus = Mission.MissionStatus
 
-type TitleStatusTagProps = {
+type TitleStatusTagProps = Readonly<{
   status: MissionStatus | undefined
-}
+}>
 export function TitleStatusTag({ status }: TitleStatusTagProps) {
   switch (status) {
     case Mission.MissionStatus.UPCOMING:

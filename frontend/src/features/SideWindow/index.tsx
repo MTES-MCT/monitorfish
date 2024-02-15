@@ -1,3 +1,5 @@
+import { MissionForm } from '@features/Mission/components/MissionForm'
+import { useListenToAllMissionEventsUpdates } from '@features/Mission/components/MissionForm/hooks/useListenToAllMissionEventsUpdates'
 import { THEME, type NewWindowContextValue, NewWindowContext, Notifier } from '@mtes-mct/monitor-ui'
 import {
   type CSSProperties,
@@ -16,8 +18,6 @@ import styled, { createGlobalStyle, StyleSheetManager } from 'styled-components'
 import { Alert } from './Alert'
 import { BeaconMalfunctionBoard } from './BeaconMalfunctionBoard'
 import { Menu } from './Menu'
-import { MissionForm } from './MissionForm'
-import { useListenToAllMissionEventsUpdates } from './MissionForm/hooks/useListenToAllMissionEventsUpdates'
 import { MissionList } from './MissionList'
 import { openSideWindowPath } from './useCases/openSideWindowPath'
 import { MissionEventContext } from '../../context/MissionEventContext'

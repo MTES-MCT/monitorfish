@@ -1,7 +1,7 @@
 import { createSlice, current } from '@reduxjs/toolkit'
 import { isEqual } from 'lodash/fp'
 
-import type { MissionMainFormValues } from '../../../SideWindow/MissionForm/types'
+import type { MissionMainFormValues } from './types'
 import type { MissionWithActionsDraft } from '../../types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 

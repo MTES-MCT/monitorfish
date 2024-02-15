@@ -1,7 +1,8 @@
-import { type MissionWithActions } from '../../../../../domain/entities/mission/types'
-import { validateMissionForms } from '../../../../SideWindow/MissionForm/utils/validateMissionForms'
+import { type MissionWithActions } from 'domain/entities/mission/types'
 
-import type { MissionActionFormValues, MissionMainFormValues } from '../../../../SideWindow/MissionForm/types'
+import { validateMissionForms } from './validateMissionForms'
+
+import type { MissionActionFormValues, MissionMainFormValues } from '../types'
 
 export function getMissionDraftFromMissionWithActions(missionWithActions: MissionWithActions): {
   actionsFormValues: MissionActionFormValues[]

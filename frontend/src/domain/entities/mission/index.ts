@@ -1,3 +1,4 @@
+import { getMissionActionInfractionsFromMissionActionFormValues } from '@features/Mission/components/MissionForm/ActionList/utils'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
 import { random } from 'lodash'
 import { Feature } from 'ol'
@@ -8,7 +9,6 @@ import { transform } from 'ol/proj'
 import { Mission } from './types'
 import { getMissionStatus } from './utils'
 import { getMissionColor } from '../../../features/map/layers/Mission/MissionLayer/styles'
-import { getMissionActionInfractionsFromMissionActionFormValues } from '../../../features/SideWindow/MissionForm/ActionList/utils'
 import { booleanToInt, getDate, getDateTime } from '../../../utils'
 import { MissionAction } from '../../types/missionAction'
 import { getNumberOfInfractions, getNumberOfInfractionsWithRecord } from '../controls'
@@ -16,7 +16,7 @@ import { MonitorFishLayer } from '../layers/types'
 import { OpenLayersGeometryType } from '../map/constants'
 
 import type { MissionWithActions } from './types'
-import type { MissionMainFormValues, MissionActionFormValues } from '../../../features/SideWindow/MissionForm/types'
+import type { MissionMainFormValues, MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 import type { MultiPolygon } from 'ol/geom'
 
 import MissionStatus = Mission.MissionStatus

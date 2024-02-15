@@ -1,24 +1,16 @@
+import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
+import { assert } from '@utils/assert'
+import { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
+import { retry } from 'domain/use_cases/error/retry'
 import { useCallback } from 'react'
 import styled from 'styled-components'
+import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
-import { SideWindowMenuKey } from '../../../../domain/entities/sideWindow/constants'
-import { retry } from '../../../../domain/use_cases/error/retry'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { LoadingSpinnerWall } from '../../../../ui/LoadingSpinnerWall'
-import { assert } from '../../../../utils/assert'
-import {
-  BackToListIcon,
-  Body,
-  CloseButton,
-  Footer,
-  Header,
-  HeaderTitle,
-  Wrapper
-} from '../../../SideWindow/MissionForm'
-import { AutoSaveTag } from '../../../SideWindow/MissionForm/shared/AutoSaveTag'
-import { openSideWindowPath } from '../../../SideWindow/useCases/openSideWindowPath'
+import { BackToListIcon, Body, CloseButton, Footer, Header, HeaderTitle, Wrapper } from '.'
+import { AutoSaveTag } from './shared/AutoSaveTag'
 
 export function Loader() {
   const dispatch = useMainAppDispatch()

@@ -27,6 +27,7 @@ import { customZoneReducer, type CustomZoneState } from '../features/CustomZone/
 import { logbookReducer } from '../features/Logbook/slice'
 import { missionFormReducer } from '../features/Mission/components/MissionForm/slice'
 import { missionListReducer, type MissionListState } from '../features/Mission/components/MissionList/slice'
+import { priorNotificationReducer } from '../features/PriorNotification/slice'
 import { regulatoryLayerSearchReducer } from '../features/Regulation/components/RegulationSearch/slice'
 import { regulatoryReducer } from '../features/Regulation/slice'
 import { reportingReducer } from '../features/Reporting/slice'
@@ -67,6 +68,7 @@ export const mainReducer = {
   beaconMalfunction: beaconMalfunctionReducer,
   //  TODO Pass that to singular.
   controls: controlReducer,
+
   controlUnitDialog: controlUnitDialogReducer,
   controlUnitListDialog: controlUnitListDialogPersistedReducer,
   customZone: persistReducerTyped(
@@ -90,6 +92,7 @@ export const mainReducer = {
     },
     missionListReducer
   ),
+  priorNotification: priorNotificationReducer,
   regulatoryLayerSearch: regulatoryLayerSearchReducer,
   reporting: reportingReducer,
   sideWindow: sideWindowReducer,

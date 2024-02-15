@@ -32,6 +32,7 @@ import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { FrontendErrorBoundary } from '../../ui/FrontendErrorBoundary'
 import { Loader as MissionFormLoader } from '../Mission/components/MissionForm/Loader'
 import { MissionList } from '../Mission/components/MissionList'
+import { PriorNotificationList } from '../PriorNotification/components/PriorNotificationList'
 import { setEditedReportingInSideWindow } from '../Reporting/slice'
 import { getAllCurrentReportings } from '../Reporting/useCases/getAllCurrentReportings'
 
@@ -90,7 +91,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   }, [])
 
   useEffect(() => {
-    if (editedReportingInSideWindow || openedBeaconMalfunctionInKanban) {
+    if (editedReportingInSideWindow ?? openedBeaconMalfunctionInKanban) {
       setIsOverlayed(true)
 
       return
@@ -108,8 +109,15 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
       dispatch(getInfractions())
       dispatch(getAllGearCodes())
 
-      dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
+      dispatch(openSideWindowPath({ menu: SideWindowMenuKey.PRIOR_NOTIFICATION_LIST }))
     }
+
+    dispatch(getOperationalAlerts())
+    dispatch(getAllBeaconMalfunctions())
+    dispatch(getSilencedAlerts())
+    dispatch(getAllCurrentReportings())
+    dispatch(getInfractions())
+    dispatch(getAllGearCodes())
   }, [dispatch, isFromURL])
 
   useEffect(() => {
@@ -117,7 +125,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   }, [])
 
   return (
-    <StyleSheetManager target={wrapperRef.current || undefined}>
+    <StyleSheetManager target={wrapperRef.current ?? undefined}>
       <Wrapper ref={wrapperRef}>
         {!isFirstRender && (
           <NewWindowContext.Provider value={newWindowContextProviderValue}>
@@ -145,6 +153,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
                     <Alert baseRef={wrapperRef as MutableRefObject<HTMLDivElement>} />
                   )}
                   {selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && <BeaconMalfunctionBoard />}
+                  {selectedPath.menu === SideWindowMenuKey.PRIOR_NOTIFICATION_LIST && <PriorNotificationList />}
                   {selectedPath.menu === SideWindowMenuKey.MISSION_LIST && <MissionList />}
 
                   {selectedPath.menu === SideWindowMenuKey.MISSION_FORM && (

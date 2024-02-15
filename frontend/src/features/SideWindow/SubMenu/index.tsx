@@ -31,6 +31,11 @@ export function SubMenu<T extends string = string>({ counter, onChange, options,
 
 const Wrapper = styled.div`
   min-width: 222px;
+  user-select: none;
+
+  * {
+    user-select: none;
+  }
 `
 
 const Menu = styled.div`

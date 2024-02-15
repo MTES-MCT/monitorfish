@@ -24,7 +24,7 @@ import type { MissionActionFormValues } from '../../types'
 import type { MissionAction } from '@features/Mission/missionAction.types'
 import type { Option } from '@mtes-mct/monitor-ui'
 import type { Gear } from 'domain/types/Gear'
-import type { DeepPartial } from 'types'
+import type { PartialDeep } from 'type-fest'
 
 export function GearsField() {
   const { values } = useFormikContext<MissionActionFormValues>()
@@ -44,7 +44,7 @@ export function GearsField() {
     }))
   }, [getGearsApiQuery.data])
 
-  const typedError = meta.error as unknown as DeepPartial<MissionAction.GearControl>[] | undefined
+  const typedError = meta.error as unknown as PartialDeep<MissionAction.GearControl>[] | undefined
 
   const add = (newGear: Gear | undefined) => {
     if (!newGear) {

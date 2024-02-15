@@ -1,3 +1,4 @@
+import type { Native } from '@mtes-mct/monitor-ui'
 import type { ConditionalKeys, Exact } from 'type-fest'
 
 // =============================================================================
@@ -10,11 +11,6 @@ export type CollectionItem = {
 
 export type FormikFormError = Record<string, any> | undefined
 
-export type Native = boolean | null | number | string | undefined
-export type NativeAny = boolean | NativeArray | NativeObject | null | number | string | undefined
-export type NativeArray = Array<NativeAny>
-export type NativeObject = { [x: string]: NativeAny } | {}
-
 export type MenuItem<T = string> = {
   code: T
   name: string
@@ -22,12 +18,6 @@ export type MenuItem<T = string> = {
 
 // =============================================================================
 // UTILITIES
-
-export type DeepPartial<T> = T extends object
-  ? {
-      [P in keyof T]?: DeepPartial<T[P]>
-    }
-  : T
 
 export type PartialExcept<T extends Record<string, any>, RequiredKeys extends keyof T> = Partial<
   Omit<T, RequiredKeys>

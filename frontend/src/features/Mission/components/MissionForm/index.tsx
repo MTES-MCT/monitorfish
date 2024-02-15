@@ -58,7 +58,7 @@ export function MissionForm() {
     'store.missionForm.draft'
   )
 
-  const missionIdFromRef = useRef<number | undefined>(missionIdFromPath)
+  const missionIdRef = useRef<number | undefined>(missionIdFromPath)
 
   const [createMission, { isLoading: isCreatingMission }] = useCreateMissionMutation()
   const [deleteMission, { isLoading: isDeletingMission }] = useDeleteMissionMutation()
@@ -66,7 +66,7 @@ export function MissionForm() {
   const [deleteMissionAction, { isLoading: isDeletingMissionAction }] = useDeleteMissionActionMutation()
   const [updateMission, { isLoading: isUpdatingMission }] = useUpdateMissionMutation()
   const [updateMissionAction, { isLoading: isUpdatingMissionAction }] = useUpdateMissionActionMutation()
-  const missionEvent = useListenToMissionEventUpdatesById(missionIdFromRef.current)
+  const missionEvent = useListenToMissionEventUpdatesById(missionIdRef.current)
 
   const isSaving =
     isCreatingMission ||
@@ -83,7 +83,7 @@ export function MissionForm() {
   const isDraftCancellationConfirmationDialogOpen = useMainAppSelector(
     store => store.sideWindow.isDraftCancellationConfirmationDialogOpen
   )
-  const [title, setTitle] = useState(getTitleFromMissionMainFormValues(mainFormValues, missionIdFromRef.current))
+  const [title, setTitle] = useState(getTitleFromMissionMainFormValues(mainFormValues, missionIdRef.current))
 
   // We use these keys to fully control when to re-render `<MainForm />` & `<ActionForm />`
   // since they are fully memoized in order to optimize their (heavy) re-rendering
@@ -124,7 +124,7 @@ export function MissionForm() {
       })
     )
 
-    setTitle(getTitleFromMissionMainFormValues(mainFormValues, missionIdFromRef.current))
+    setTitle(getTitleFromMissionMainFormValues(mainFormValues, missionIdRef.current))
   }, 250)
 
   const createOrUpdate = useCallback(
@@ -132,11 +132,11 @@ export function MissionForm() {
       try {
         dispatch(missionFormActions.setIsListeningToEvents(false))
 
-        if (!missionIdFromRef.current) {
+        if (!missionIdRef.current) {
           const newMission = getMissionDataFromMissionFormValues(missionDraft.mainFormValues)
           const createdMission = await createMission(newMission).unwrap()
 
-          missionIdFromRef.current = createdMission.id
+          missionIdRef.current = createdMission.id
 
           setMainFormValues({
             ...missionDraft.mainFormValues,
@@ -145,7 +145,7 @@ export function MissionForm() {
           })
         } else {
           const nextMission = getUpdatedMissionFromMissionMainFormValues(
-            missionIdFromRef.current,
+            missionIdRef.current,
             missionDraft.mainFormValues
           )
           const updatedMission = await updateMission(nextMission).unwrap()
@@ -156,12 +156,12 @@ export function MissionForm() {
           })
         }
 
-        assert(missionIdFromRef.current, 'missionIdFromRef.current')
+        assert(missionIdRef.current, 'missionIdFromRef.current')
 
-        const currentMissionWithActions = await dispatch(getMissionWithActions(missionIdFromRef.current))
+        const currentMissionWithActions = await dispatch(getMissionWithActions(missionIdRef.current))
         const { deletedMissionActionIds, updatedMissionActionDatas } =
           getMissionActionsDataFromMissionActionsFormValues(
-            missionIdFromRef.current,
+            missionIdRef.current,
             missionDraft.actionsFormValues,
             currentMissionWithActions.actions
           )
@@ -207,7 +207,7 @@ export function MissionForm() {
       deleteMissionAction,
       updateMission,
       updateMissionAction,
-      missionIdFromRef
+      missionIdRef
     ]
   )
 
@@ -216,11 +216,11 @@ export function MissionForm() {
   }, [dispatch])
 
   const handleDelete = useCallback(async () => {
-    if (!missionIdFromRef.current) {
+    if (!missionIdRef.current) {
       throw new FrontendError('`missionId` is undefined')
     }
 
-    await deleteMission(missionIdFromRef.current)
+    await deleteMission(missionIdRef.current)
     dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }))
   }, [deleteMission, dispatch])
 
@@ -538,7 +538,7 @@ export function MissionForm() {
           <BackToListIcon onClick={goToMissionList} />
 
           <HeaderTitle>{title}</HeaderTitle>
-          <TitleSourceTag missionId={missionIdFromRef.current} missionSource={mainFormValues.missionSource} />
+          <TitleSourceTag missionId={missionIdRef.current} missionSource={mainFormValues.missionSource} />
           {mainFormValues && <TitleStatusTag status={getMissionStatus(mainFormValues)} />}
         </Header>
 
@@ -546,9 +546,9 @@ export function MissionForm() {
           <FrontendErrorBoundary>
             <>
               <MainForm
-                key={missionIdFromRef.current}
+                key={missionIdRef.current}
                 initialValues={mainFormValues}
-                missionId={missionIdFromRef.current}
+                missionId={missionIdRef.current}
                 onChange={updateMainFormValues}
               />
               <ActionList

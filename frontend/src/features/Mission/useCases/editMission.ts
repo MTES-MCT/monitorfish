@@ -33,7 +33,7 @@ export const editMission =
     dispatch(openSideWindowPath(path, true))
   }
 
-export const editMissionWithoutConfirmation =
+const editMissionWithoutConfirmation =
   (id: number): MainAppThunk =>
   async dispatch => {
     dispatch(displayedErrorActions.unset('missionFormError'))

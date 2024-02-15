@@ -46,6 +46,6 @@ export function validateBeforeOnChange(
       return
     }
 
-    onChange({ ...nextValues, isValid } as any)
+    onChange({ ...nextValues, isValid })
   }
 }

@@ -24,7 +24,7 @@ type ControlProps = {
 export function Control({ control, isLastItem }: ControlProps) {
   const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
-  const openedMissionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
+  const openedMissionDraft = useMainAppSelector(store => store.mission.draft)
   const numberOfInfractions = useMemo(() => getNumberOfInfractions(control), [control])
   const gearAndSpeciesInfractionsLength = useMemo(
     () => control.gearInfractions.length + control.speciesInfractions.length,
@@ -142,7 +142,7 @@ export function Control({ control, isLastItem }: ControlProps) {
           </OtherComments>
         )}
         {isSuperUser && (
-          <ModifyButton accent={Accent.SECONDARY} disabled={!!openedMissionId} onClick={openMission}>
+          <ModifyButton accent={Accent.SECONDARY} disabled={!!openedMissionDraft} onClick={openMission}>
             Ouvrir le contrôle
           </ModifyButton>
         )}

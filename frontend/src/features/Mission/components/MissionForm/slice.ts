@@ -4,6 +4,7 @@ import { isEqual } from 'lodash/fp'
 import type { MissionMainFormValues } from './types'
 import type { MissionWithActionsDraft } from '../../types'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import type { GeoJSON } from 'domain/types/GeoJSON'
 
 export interface MissionFormState {
   // TODO For side window closure prevention and cross-form validation we don't need the entire forms values.
@@ -20,6 +21,8 @@ export interface MissionFormState {
   isDraftDirty: boolean
   isListeningToEvents: boolean
   mustResetOtherControlsCheckboxes: boolean | undefined
+  selectedMissionActionGeoJSON: GeoJSON.GeoJson | undefined
+  selectedMissionGeoJSON: GeoJSON.GeoJson | undefined
 }
 const INITIAL_STATE: MissionFormState = {
   draft: undefined,
@@ -27,7 +30,9 @@ const INITIAL_STATE: MissionFormState = {
   isClosing: false,
   isDraftDirty: false,
   isListeningToEvents: true,
-  mustResetOtherControlsCheckboxes: undefined
+  mustResetOtherControlsCheckboxes: undefined,
+  selectedMissionActionGeoJSON: undefined,
+  selectedMissionGeoJSON: undefined
 }
 
 const missionFormSlice = createSlice({
@@ -95,11 +100,40 @@ const missionFormSlice = createSlice({
     },
 
     /**
+     * Set selected mission action GeoJSON.
+     */
+    setSelectedMissionActionGeoJSON(state, action: PayloadAction<GeoJSON.GeoJson>) {
+      state.selectedMissionActionGeoJSON = action.payload
+    },
+
+    /**
+     * Set selected mission GeoJSON.
+     */
+    setSelectedMissionGeoJSON(state, action: PayloadAction<GeoJSON.GeoJson>) {
+      state.selectedMissionGeoJSON = action.payload
+    },
+
+    /**
      * Unset geometry computed from controls to permit another modification of the mission's geometry
      * after adding another control to a mission.
      */
     unsetGeometryComputedFromControls(state) {
       state.geometryComputedFromControls = undefined
+    },
+
+    /**
+     * Unset selected mission action GeoJSON.
+     */
+    unsetSelectedMissionActionGeoJSON(state) {
+      state.selectedMissionActionGeoJSON = undefined
+    },
+
+    /**
+     * Unset selected mission ID.
+     */
+    unsetSelectedMissionGeoJSON(state) {
+      state.selectedMissionGeoJSON = undefined
+      state.selectedMissionActionGeoJSON = undefined
     }
   }
 })

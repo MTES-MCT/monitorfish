@@ -25,7 +25,6 @@ import { controlUnitDialogReducer } from '../features/ControlUnit/components/Con
 import { controlUnitListDialogPersistedReducer } from '../features/ControlUnit/components/ControlUnitListDialog/slice'
 import { customZoneReducer, type CustomZoneState } from '../features/CustomZone/slice'
 import { logbookReducer } from '../features/Logbook/slice'
-import { mainMapReducer } from '../features/MainMap/slice'
 import { missionFormReducer } from '../features/Mission/components/MissionForm/slice'
 import { missionListReducer, type MissionListState } from '../features/Mission/components/MissionList/slice'
 import { regulatoryLayerSearchReducer } from '../features/Regulation/components/RegulationSearch/slice'
@@ -83,7 +82,6 @@ export const mainReducer = {
   infraction: infractionReducer,
   interestPoint: interestPointReducer,
   layer: layer.homepage.reducer,
-  mainMap: mainMapReducer,
   measurement: measurementReducer,
   missionForm: missionFormReducer,
   missionList: persistReducerTyped(

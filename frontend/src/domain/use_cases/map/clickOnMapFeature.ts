@@ -1,6 +1,6 @@
 import GeoJSON from 'ol/format/GeoJSON'
 
-import { mainMapActions } from '../../../features/MainMap/slice'
+import { missionFormActions } from '../../../features/Mission/components/MissionForm/slice'
 import { showRegulatoryZoneMetadata } from '../../../features/Regulation/useCases/showRegulatoryZoneMetadata'
 import { stationActions } from '../../../features/Station/slice'
 import { FeatureWithCodeAndEntityId } from '../../../libs/FeatureWithCodeAndEntityId'
@@ -45,7 +45,7 @@ export const clickOnMapFeature =
       const featureGeoJSON = geoJSONParser.writeFeatureObject(mapClick.feature as Feature<Geometry>, {
         featureProjection: OPENLAYERS_PROJECTION
       })
-      dispatch(mainMapActions.setSelectedMissionGeoJSON(featureGeoJSON))
+      dispatch(missionFormActions.setSelectedMissionGeoJSON(featureGeoJSON))
 
       return
     }
@@ -57,7 +57,7 @@ export const clickOnMapFeature =
       const featureGeoJSON = geoJSONParser.writeFeatureObject(mapClick.feature as Feature<Geometry>, {
         featureProjection: OPENLAYERS_PROJECTION
       })
-      dispatch(mainMapActions.setSelectedMissionActionGeoJSON(featureGeoJSON))
+      dispatch(missionFormActions.setSelectedMissionActionGeoJSON(featureGeoJSON))
 
       return
     }

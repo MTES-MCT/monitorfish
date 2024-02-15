@@ -6,7 +6,7 @@ import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { MissionOverlay } from '../MissionOverlay'
 
 export function SelectedMissionOverlay() {
-  const selectedMissionGeoJSON = useMainAppSelector(store => store.mainMap.selectedMissionGeoJSON)
+  const selectedMissionGeoJSON = useMainAppSelector(store => store.missionForm.selectedMissionGeoJSON)
   const isMissionsLayerDisplayed = useMainAppSelector(store => store.displayedComponent.isMissionsLayerDisplayed)
 
   const selectedMission = useMemo(() => {

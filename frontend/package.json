@@ -27,7 +27,6 @@
     "test:multi-windows:run": "IS_HEADLESS=true jest --config=./config/multi-windows/jest.config.js --detectOpenHandles",
     "test:lint": "eslint ./src",
     "test:lint:partial": "eslint --config=./.eslintrc.partial.js ./src ./cypress ./puppeteer",
-    "test:lint:partial:bis": "eslint --config=./.eslintrc.partial.js ./src/features/Mission",
     "test:lint:partial:fix": "npm run test:lint:partial -- --fix",
     "test:type": "tsc",
     "test:unit": "jest --config=./config/jest.config.js --detectOpenHandles",

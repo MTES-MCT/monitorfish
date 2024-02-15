@@ -1,13 +1,17 @@
+import { UseCaseStore } from '@libs/UseCaseStore'
 import { createSlice } from '@reduxjs/toolkit'
+import { ensure } from '@utils/ensure'
 
-import { DisplayedError } from '../../libs/DisplayedError'
-
+import type { DisplayedError } from '@libs/DisplayedError'
+import type { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-export type DisplayedErrorState = {
-  missionFormError: DisplayedError | undefined
-  vesselSidebarError: DisplayedError | undefined
+type DisplayedErrorStateValue = {
+  hasRetryableUseCase: boolean
+  message: string
 }
+
+export type DisplayedErrorState = Record<DisplayedErrorKey, DisplayedErrorStateValue | undefined>
 export const INITIAL_STATE: DisplayedErrorState = {
   missionFormError: undefined,
   vesselSidebarError: undefined
@@ -17,9 +21,22 @@ const displayedErrorSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'displayedError',
   reducers: {
-    set(state, action: PayloadAction<Partial<DisplayedErrorState>>) {
+    set(
+      state,
+      action: PayloadAction<
+        Partial<{
+          [key in DisplayedErrorKey]: DisplayedError
+        }>
+      >
+    ) {
       Object.keys(action.payload).forEach(key => {
-        state[key] = action.payload[key]
+        const typedKey = key as DisplayedErrorKey
+        const displayedError = ensure(action.payload[typedKey], `action.payload[${typedKey}]`)
+
+        state[typedKey] = {
+          hasRetryableUseCase: displayedError.hasRetryableUseCase,
+          message: displayedError.message
+        }
       })
     },
 
@@ -27,6 +44,8 @@ const displayedErrorSlice = createSlice({
       const keys = Array.isArray(action.payload) ? action.payload : [action.payload]
 
       keys.forEach(key => {
+        UseCaseStore.unset(key)
+
         state[key] = undefined
       })
     }

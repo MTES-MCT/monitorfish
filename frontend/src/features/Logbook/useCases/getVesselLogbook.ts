@@ -1,3 +1,4 @@
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import { vesselsAreEquals } from '../../../domain/entities/vessel/vessel'
@@ -35,14 +36,14 @@ export const getVesselLogbook =
 
     const updateVesselTrack = navigateTo && isFromUserAction
     const isSameVesselAsCurrentlyShowed = vesselsAreEquals(vesselIdentity, currentSelectedVesselIdentity)
-    const nextNavigateTo = navigateTo || NavigateTo.LAST
+    const nextNavigateTo = navigateTo ?? NavigateTo.LAST
 
     if (nextNavigateTo === NavigateTo.NEXT && isLastVoyage) {
       return
     }
 
     if (isFromUserAction) {
-      dispatch(displayedErrorActions.unset('vesselSidebarError'))
+      dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
       dispatch(logbookActions.setIsLoading())
     }
 
@@ -51,7 +52,7 @@ export const getVesselLogbook =
         isInLightMode,
         vesselIdentity,
         nextNavigateTo,
-        nextTripNumber || tripNumber
+        nextTripNumber ?? tripNumber
       )
       if (!voyage) {
         dispatch(logbookActions.init(vesselIdentity))
@@ -94,7 +95,7 @@ export const getVesselLogbook =
           error as Error,
           () => getVesselLogbook(isInLightMode)(vesselIdentity, navigateTo, isFromUserAction, nextTripNumber),
           isFromUserAction,
-          'vesselSidebarError'
+          DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
         )
       )
       dispatch(logbookActions.resetIsLoading())

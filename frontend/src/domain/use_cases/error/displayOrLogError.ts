@@ -36,6 +36,6 @@ export const displayOrLogError =
       return
     }
 
-    const displayedError = new DisplayedError(errorMessage, retryableUseCase)
+    const displayedError = new DisplayedError(errorBoundaryKey, errorMessage, retryableUseCase)
     dispatch(displayedErrorActions.set({ [errorBoundaryKey]: displayedError }))
   }

@@ -1,3 +1,4 @@
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { SideWindowMenuKey, SideWindowStatus } from 'domain/entities/sideWindow/constants'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 
@@ -36,6 +37,6 @@ const addMissionWithoutConfirmation =
   dispatch => {
     const newDraft = getMissionDraftFromPartialMainFormValues(initialMainFormValues)
 
-    dispatch(displayedErrorActions.unset('missionFormError'))
+    dispatch(displayedErrorActions.unset(DisplayedErrorKey.MISSION_FORM_ERROR))
     dispatch(missionFormActions.initializeDraft(newDraft))
   }

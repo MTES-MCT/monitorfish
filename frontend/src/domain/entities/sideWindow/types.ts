@@ -4,15 +4,19 @@ export namespace SideWindow {
   /**
    * @example
    * ```ts
-   * // Edit a new mission
-   * dispatch(sideWindowActions.openPath({
-   *   isLoading: true,
+   * // Open a non-form menu
+   * dispatch(openSideWindowPath({
+   *   menu: SideWindowMenuKey.MY_ENTITY_LIST,
+   * })),
+   *
+   * // Open a new entity form
+   * dispatch(openSideWindowPath({
    *   menu: SideWindowMenuKey.MY_ENTITY_FORM,
    *   id: 'new',
    * })),
    *
-   * // Edit an existing mission
-   * dispatch(sideWindowActions.openPath({
+   * // Edit an existing entity
+   * dispatch(openSideWindowPath({
    *   isLoading: true,
    *   menu: SideWindowMenuKey.MY_ENTITY_FORM,
    *   id: 123

@@ -2,13 +2,13 @@
 
 import { captureException, captureMessage } from '@sentry/react'
 
-import type { RetryableUseCase } from '../types'
+import type { MainAppUseCase } from '../types'
 
 export class DisplayedError extends Error {
-  originalError: any | undefined
-  useCase: RetryableUseCase | undefined
+  originalError: any
+  useCase: MainAppUseCase | undefined
 
-  constructor(message: string, useCase: RetryableUseCase | undefined, originalError?: any) {
+  constructor(message: string, useCase: MainAppUseCase | undefined, originalError?: any) {
     super(message)
 
     captureMessage(message)

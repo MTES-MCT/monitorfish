@@ -2,7 +2,7 @@ import { DisplayedError } from '../../../libs/DisplayedError'
 import { INITIAL_STATE, type DisplayedErrorState, displayedErrorActions } from '../../shared_slices/DisplayedError'
 import { setError } from '../../shared_slices/Global'
 
-import type { RetryableUseCase } from '../../../types'
+import type { MainAppUseCase } from '../../../types'
 
 /**
  * Dispatch:
@@ -12,7 +12,7 @@ import type { RetryableUseCase } from '../../../types'
 export const displayOrLogError =
   (
     error: any,
-    retryableUseCase: RetryableUseCase | undefined,
+    retryableUseCase: MainAppUseCase | undefined,
     isFromUserAction: boolean,
     errorBoundaryKey: keyof DisplayedErrorState
   ) =>

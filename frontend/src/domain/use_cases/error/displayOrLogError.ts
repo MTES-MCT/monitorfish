@@ -14,7 +14,7 @@ export const displayOrLogError =
     error: any,
     retryableUseCase: RetryableUseCase | undefined,
     isFromUserAction: boolean,
-    errorKey: keyof DisplayedErrorState
+    displayedErrorBoundary: keyof DisplayedErrorState
   ) =>
   async dispatch => {
     const errorMessages = error instanceof Error ? error.message : JSON.stringify(error)
@@ -32,10 +32,10 @@ export const displayOrLogError =
      * Else, the use-case was an user action, we show a fallback error UI to the user.
      * We first check if the `displayedErrorBoundary` is correct (included in the DisplayedErrorState type)
      */
-    if (!Object.keys(INITIAL_STATE).includes(errorKey)) {
+    if (!Object.keys(INITIAL_STATE).includes(displayedErrorBoundary)) {
       return
     }
 
     const displayedError = new DisplayedError(errorMessages, retryableUseCase)
-    dispatch(displayedErrorActions.set({ [errorKey]: displayedError }))
+    dispatch(displayedErrorActions.set({ [displayedErrorBoundary]: displayedError }))
   }

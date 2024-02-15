@@ -42,35 +42,33 @@ export function Loader() {
   }
 
   return (
-    <>
-      <Wrapper>
-        <Header>
-          <BackToListIcon onClick={goToMissionList} />
+    <Wrapper>
+      <Header>
+        <BackToListIcon onClick={goToMissionList} />
 
-          <HeaderTitle>Mission en cours de chargement...</HeaderTitle>
-        </Header>
+        <HeaderTitle>Mission en cours de chargement...</HeaderTitle>
+      </Header>
 
-        <Body>
-          <LoadingSpinnerWall />
-        </Body>
+      <Body>
+        <LoadingSpinnerWall />
+      </Body>
 
-        <Footer>
-          <div>
-            {!!missionIdFromPath && (
-              <Button accent={Accent.SECONDARY} disabled Icon={Icon.Delete}>
-                Supprimer la mission
-              </Button>
-            )}
-          </div>
-          <div>
-            <AutoSaveTag />
-            <CloseButton accent={Accent.PRIMARY} disabled onClick={goToMissionList}>
-              Fermer
-            </CloseButton>
-          </div>
-        </Footer>
-      </Wrapper>
-    </>
+      <Footer>
+        <div>
+          {!!missionIdFromPath && (
+            <Button accent={Accent.SECONDARY} disabled Icon={Icon.Delete}>
+              Supprimer la mission
+            </Button>
+          )}
+        </div>
+        <div>
+          <AutoSaveTag />
+          <CloseButton accent={Accent.PRIMARY} disabled onClick={goToMissionList}>
+            Fermer
+          </CloseButton>
+        </div>
+      </Footer>
+    </Wrapper>
   )
 }
 

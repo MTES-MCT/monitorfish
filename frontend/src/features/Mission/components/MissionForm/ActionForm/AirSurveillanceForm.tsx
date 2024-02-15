@@ -26,10 +26,10 @@ import { FormHead } from '../shared/FormHead'
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
-export type AirSurveillanceFormProps = {
+type AirSurveillanceFormProps = Readonly<{
   initialValues: MissionActionFormValues
   onChange: (nextValues: MissionActionFormValues) => Promisable<void>
-}
+}>
 export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillanceFormProps) {
   const { newWindowContainerRef } = useNewWindow()
 

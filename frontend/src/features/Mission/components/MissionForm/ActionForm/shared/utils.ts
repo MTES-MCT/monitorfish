@@ -19,7 +19,7 @@ export function getFleetSegmentsAsOption(
     label: `${segment} - ${segmentName}`,
     value: {
       segment,
-      segmentName: segmentName || undefined
+      segmentName: segmentName ?? undefined
     }
   }))
 }

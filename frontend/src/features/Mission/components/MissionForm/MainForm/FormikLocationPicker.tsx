@@ -122,36 +122,35 @@ export function FormikLocationPicker() {
           Ajouter une zone de mission
         </Button>
 
-        <>
-          {polygons.map((polygonCoordinates, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <Row key={`zone-${index}`}>
-              <ZoneWrapper>
-                Polygone dessiné {index + 1}
-                {/* TODO Add `Accent.LINK` accent in @mtes-mct/monitor-ui and use it here. */}
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-                <Link onClick={() => handleCenterOnMap(polygonCoordinates as Coordinate[][])}>
-                  <Icon.SelectRectangle />
-                  <span>Centrer sur la carte</span>
-                </Link>
-              </ZoneWrapper>
+        {polygons.map((polygonCoordinates, index) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <Row key={`zone-${index}`}>
+            <ZoneWrapper>
+              Polygone dessiné {index + 1}
+              {/* TODO Add `Accent.LINK` accent in @mtes-mct/monitor-ui and use it here. */}
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+              <Link onClick={() => handleCenterOnMap(polygonCoordinates as Coordinate[][])}>
+                <Icon.SelectRectangle />
+                <span>Centrer sur la carte</span>
+              </Link>
+            </ZoneWrapper>
 
-              <IconButton
-                accent={Accent.SECONDARY}
-                disabled={values.isGeometryComputedFromControls}
-                Icon={Icon.Edit}
-                onClick={addOrEditZone}
-              />
-              <IconButton
-                accent={Accent.SECONDARY}
-                aria-label="Supprimer cette zone"
-                disabled={values.isGeometryComputedFromControls}
-                Icon={Icon.Delete}
-                onClick={() => deleteZone(index)}
-              />
-            </Row>
-          ))}
-        </>
+            <IconButton
+              accent={Accent.SECONDARY}
+              disabled={values.isGeometryComputedFromControls}
+              Icon={Icon.Edit}
+              onClick={addOrEditZone}
+            />
+            <IconButton
+              accent={Accent.SECONDARY}
+              aria-label="Supprimer cette zone"
+              disabled={values.isGeometryComputedFromControls}
+              Icon={Icon.Delete}
+              onClick={() => deleteZone(index)}
+            />
+          </Row>
+        ))}
+
         <Checkbox
           checked={values.isGeometryComputedFromControls}
           label="Zone de la mission calculée à partir des contrôles"

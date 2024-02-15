@@ -33,10 +33,10 @@ import { FormHead } from '../shared/FormHead'
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
-type LandControlFormProps = {
+type LandControlFormProps = Readonly<{
   initialValues: MissionActionFormValues
   onChange: (nextValues: MissionActionFormValues) => Promisable<void>
-}
+}>
 export function LandControlForm({ initialValues, onChange }: LandControlFormProps) {
   const { newWindowContainerRef } = useNewWindow()
 

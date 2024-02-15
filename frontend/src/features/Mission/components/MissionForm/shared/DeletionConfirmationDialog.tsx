@@ -3,10 +3,10 @@ import styled from 'styled-components'
 
 import type { Promisable } from 'type-fest'
 
-type DeletionConfirmationDialogProps = {
+type DeletionConfirmationDialogProps = Readonly<{
   onCancel: () => Promisable<void>
   onConfirm: () => Promisable<void>
-}
+}>
 export function DeletionConfirmationDialog({ onCancel, onConfirm }: DeletionConfirmationDialogProps) {
   return (
     <Dialog isAbsolute>

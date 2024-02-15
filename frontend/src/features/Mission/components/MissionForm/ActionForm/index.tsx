@@ -12,10 +12,10 @@ import { SeaControlForm } from './SeaControlForm'
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
-type ActionFormProps = {
+type ActionFormProps = Readonly<{
   actionFormValues: MissionActionFormValues | undefined
   onChange: (nextActionFormValues: MissionActionFormValues) => Promisable<void>
-}
+}>
 function UnmemoizedActionForm({ actionFormValues, onChange }: ActionFormProps) {
   if (!actionFormValues) {
     return <Wrapper />

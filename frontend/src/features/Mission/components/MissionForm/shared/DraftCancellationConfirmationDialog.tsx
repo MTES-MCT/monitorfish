@@ -4,9 +4,9 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Button, Dialog } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-type DraftCancellationConfirmationDialogProps = {
+type DraftCancellationConfirmationDialogProps = Readonly<{
   isAutoSaveEnabled: boolean
-}
+}>
 export function DraftCancellationConfirmationDialog({ isAutoSaveEnabled }: DraftCancellationConfirmationDialogProps) {
   const dispatch = useMainAppDispatch()
 

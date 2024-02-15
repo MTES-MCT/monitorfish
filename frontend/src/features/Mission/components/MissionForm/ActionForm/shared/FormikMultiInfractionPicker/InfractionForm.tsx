@@ -19,13 +19,13 @@ import { INFRACTION_TYPES_AS_OPTIONS } from '../constants'
 
 import type { MissionAction } from 'domain/types/missionAction'
 
-export type InfractionFormProps = {
+type InfractionFormProps = Readonly<{
   initialValues: MissionAction.Infraction & { group?: string | undefined }
   isEdition?: boolean
   natinfsAsOptions: Option<number>[]
   onCancel: () => void
   onSubmit: (nextInfractionFormValues: MissionAction.Infraction, infractionGroup: string | undefined) => void
-}
+}>
 export function InfractionForm({
   initialValues,
   isEdition = false,
@@ -34,7 +34,7 @@ export function InfractionForm({
   onSubmit
 }: InfractionFormProps) {
   const { newWindowContainerRef } = useNewWindow()
-  const [infractionGroup, setInfractionGroup] = useState<string | undefined>(initialValues.group || undefined)
+  const [infractionGroup, setInfractionGroup] = useState<string | undefined>(initialValues.group ?? undefined)
 
   const infractionCategoryOptions = Object.keys(InfractionCategory).map(category => {
     const categoryValue = InfractionCategory[category]

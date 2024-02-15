@@ -12,10 +12,10 @@ import { FormHead } from '../shared/FormHead'
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
-export type ObservationFormProps = {
+type ObservationFormProps = Readonly<{
   initialValues: MissionActionFormValues
   onChange: (nextValues: MissionActionFormValues) => Promisable<void>
-}
+}>
 export function ObservationForm({ initialValues, onChange }: ObservationFormProps) {
   const titleDate = useMemo(
     () => initialValues.actionDatetimeUtc && getTitleDateFromUtcStringDate(initialValues.actionDatetimeUtc),

@@ -42,7 +42,7 @@ export function FormikCoordinatesPicker() {
   const [{ value: latitudeValue }, latitudeMeta, latitudeHelpers] =
     useField<MissionActionFormValues['latitude']>('latitude')
 
-  const error = longitudeMeta.error || latitudeMeta.error
+  const error = longitudeMeta.error ?? latitudeMeta.error
 
   const dispatch = useMainAppDispatch()
   const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.CONTROL_POINT)

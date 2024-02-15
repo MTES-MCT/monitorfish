@@ -12,9 +12,9 @@ import { FieldsetGroup, FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 
 import type { MissionActionFormValues } from '../../types'
 
-export type VesselFleetSegmentsFieldProps = {
+type VesselFleetSegmentsFieldProps = Readonly<{
   label: string
-}
+}>
 export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProps) {
   const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
   const { updateSegments } = useGetMissionActionFormikUsecases()
@@ -24,7 +24,7 @@ export function VesselFleetSegmentsField({ label }: VesselFleetSegmentsFieldProp
   const isLoading = useMemo(() => !getFleetSegmentsApiQuery.data, [getFleetSegmentsApiQuery.data])
 
   const removeFaoArea = (faoAreaToDelete: string) => {
-    const nextFaoAreas = values.faoAreas?.filter(faoArea => faoArea !== faoAreaToDelete) || []
+    const nextFaoAreas = values.faoAreas?.filter(faoArea => faoArea !== faoAreaToDelete) ?? []
 
     setFieldValue('faoAreas', nextFaoAreas)
     updateSegments({ ...values, faoAreas: nextFaoAreas })

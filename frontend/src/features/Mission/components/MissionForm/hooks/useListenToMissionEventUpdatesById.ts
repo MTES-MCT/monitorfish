@@ -16,5 +16,5 @@ export function useListenToMissionEventUpdatesById(missionId: number | string | 
     return missionEvent
   }, [missionEvent, missionId])
 
-  return mission || previousMission.current
+  return mission ?? previousMission.current
 }

@@ -17,10 +17,10 @@ import { FieldsetGroupSeparator } from '../../../shared/FieldsetGroupSeparator'
 import type { MissionActionFormValues } from '../../../types'
 import type { MissionAction } from 'domain/types/missionAction'
 
-export type FormikMultiInfractionPickerProps = {
+type FormikMultiInfractionPickerProps = Readonly<{
   addButtonLabel: string
   label: string
-}
+}>
 export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMultiInfractionPickerProps) {
   const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
 
@@ -31,20 +31,20 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
 
   const infractionsWithLabelAndGroup = useMemo(() => {
     const allInfractions = [
-      ...(values.gearInfractions?.map(infraction => ({ ...infraction, group: InfractionCategory.GEAR_INFRACTIONS })) ||
+      ...(values.gearInfractions?.map(infraction => ({ ...infraction, group: InfractionCategory.GEAR_INFRACTIONS })) ??
         []),
       ...(values.logbookInfractions?.map(infraction => ({
         ...infraction,
         group: InfractionCategory.LOGBOOK_INFRACTION
-      })) || []),
+      })) ?? []),
       ...(values.otherInfractions?.map(infraction => ({
         ...infraction,
         group: InfractionCategory.OTHER_INFRACTIONS
-      })) || []),
+      })) ?? []),
       ...(values.speciesInfractions?.map(infraction => ({
         ...infraction,
         group: InfractionCategory.SPECIES_INFRACTIONS
-      })) || [])
+      })) ?? [])
     ]
     if (!allInfractions.length) {
       return []

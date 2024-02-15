@@ -1,9 +1,9 @@
 import { Tag, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-type AutoSaveTagProps = {
+type AutoSaveTagProps = Readonly<{
   isAutoSaveEnabled?: boolean
-}
+}>
 export function AutoSaveTag({ isAutoSaveEnabled = false }: AutoSaveTagProps) {
   return (
     <Wrapper

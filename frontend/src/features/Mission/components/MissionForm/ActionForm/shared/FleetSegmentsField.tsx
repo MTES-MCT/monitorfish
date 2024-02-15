@@ -11,9 +11,9 @@ import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 import type { MissionAction } from 'domain/types/missionAction'
 
-export type FleetSegmentsFieldProps = {
+type FleetSegmentsFieldProps = Readonly<{
   label: string
-}
+}>
 export function FleetSegmentsField({ label }: FleetSegmentsFieldProps) {
   const [input, , helper] = useField<MissionActionFormValues['segments']>('segments')
 
@@ -27,9 +27,9 @@ export function FleetSegmentsField({ label }: FleetSegmentsFieldProps) {
     }
 
     return getFleetSegmentsApiQuery.data.map(({ faoAreas, segment, segmentName }) => ({
-      faoAreas: faoAreas || [],
+      faoAreas: faoAreas ?? [],
       segment,
-      segmentName: segmentName || undefined
+      segmentName: segmentName ?? undefined
     }))
   }, [getFleetSegmentsApiQuery.data])
 

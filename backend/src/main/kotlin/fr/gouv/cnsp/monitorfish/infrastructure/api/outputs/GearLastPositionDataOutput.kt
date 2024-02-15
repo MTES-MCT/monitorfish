@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 
 data class GearLastPositionDataOutput(
     var gear: String? = null,
-    var dimensions: Double? = null,
+    var dimensions: String? = null,
     var mesh: Double? = null,
 ) {
     companion object {

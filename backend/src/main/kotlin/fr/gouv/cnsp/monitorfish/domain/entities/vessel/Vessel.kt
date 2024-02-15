@@ -37,7 +37,11 @@ data class Vessel(
     val underCharter: Boolean? = null,
 ) {
     fun getNationalIdentifier(): String {
-        val internalReferenceNumberCountryCode = LIKELY_CONTROLLED_COUNTRY_CODES.find { countryAlpha3 -> internalReferenceNumber?.contains(countryAlpha3) ?: false }
+        val internalReferenceNumberCountryCode = LIKELY_CONTROLLED_COUNTRY_CODES.find { countryAlpha3 ->
+            internalReferenceNumber?.contains(
+                countryAlpha3,
+            ) ?: false
+        }
         val identifier = internalReferenceNumber?.replace("${internalReferenceNumberCountryCode}000", "") ?: ""
 
         if (districtCode.isNullOrEmpty()) {

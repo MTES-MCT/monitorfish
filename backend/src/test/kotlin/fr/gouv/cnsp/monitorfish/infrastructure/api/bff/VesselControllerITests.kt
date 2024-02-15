@@ -10,6 +10,7 @@ import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagesAndAlerts
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
@@ -89,9 +90,18 @@ class VesselControllerITests {
     @Test
     fun `Should get all vessels last positions`() {
         // Given
+        val gear = Gear()
+        gear.gear = "OTB"
+        gear.dimensions = "12;123"
+
         val farPastFixedDateTime = ZonedDateTime.of(EPOCH, LocalTime.MAX.plusSeconds(1), ZoneId.of("UTC"))
         val position =
-            LastPosition(0, 1, "MMSI", null, null, null, null, CountryCode.FR, PositionType.AIS, 16.445, 48.2525, 16.445, 48.2525, 1.8, 180.0, farPastFixedDateTime, vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER)
+            LastPosition(
+                0, 1, "MMSI", null, null, null, null, CountryCode.FR, PositionType.AIS, 16.445, 48.2525, 16.445, 48.2525, 1.8, 180.0, farPastFixedDateTime, vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                gearOnboard = listOf(
+                    gear,
+                ),
+            )
         given(this.getLastPositions.execute()).willReturn(listOf(position))
 
         // When
@@ -114,6 +124,8 @@ class VesselControllerITests {
             .andExpect(jsonPath("$[0].positionType", equalTo(PositionType.AIS.toString())))
             .andExpect(jsonPath("$[0].dateTime", equalTo(position.dateTime.toOffsetDateTime().toString())))
             .andExpect(jsonPath("$[0].reportings.length()", equalTo(0)))
+            .andExpect(jsonPath("$[0].gearOnboard.length()", equalTo(1)))
+            .andExpect(jsonPath("$[0].gearOnboard[0].dimensions", equalTo("12;123")))
             .andExpect(jsonPath("$[0].alerts.length()", equalTo(0)))
     }
 

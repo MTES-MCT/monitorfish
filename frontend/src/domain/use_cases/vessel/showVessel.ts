@@ -1,3 +1,5 @@
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
+
 import { getVesselFromAPI } from '../../../api/vessel'
 import { logbookActions } from '../../../features/Logbook/slice'
 import { addVesselIdentifierToVesselIdentity } from '../../../features/VesselSearch/utils'
@@ -63,7 +65,7 @@ export const showVessel =
         vesselIdentifier: addVesselIdentifierToVesselIdentity(vesselIdentity).vesselIdentifier
       }
 
-      dispatch(displayedErrorActions.unset('vesselSidebarError'))
+      dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
       dispatch(
         setSelectedVessel({
           positions: vesselAndPositions.positions,
@@ -76,7 +78,7 @@ export const showVessel =
           error as Error,
           () => showVessel(vesselIdentity, isFromSearch, isFromUserAction),
           isFromUserAction,
-          'vesselSidebarError'
+          DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
         )
       )
       dispatch(resetLoadingVessel())

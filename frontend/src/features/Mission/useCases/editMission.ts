@@ -1,3 +1,4 @@
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { SideWindowMenuKey, SideWindowStatus } from 'domain/entities/sideWindow/constants'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 import { sideWindowActions } from 'domain/shared_slices/SideWindow'
@@ -36,7 +37,7 @@ export const editMission =
 const editMissionWithoutConfirmation =
   (id: number): MainAppThunk =>
   async dispatch => {
-    dispatch(displayedErrorActions.unset('missionFormError'))
+    dispatch(displayedErrorActions.unset(DisplayedErrorKey.MISSION_FORM_ERROR))
 
     try {
       const missionWithActions = await dispatch(getMissionWithActions(id))
@@ -47,7 +48,9 @@ const editMissionWithoutConfirmation =
       dispatch(sideWindowActions.setSelectedPathIsLoading(false))
     } catch (err) {
       if (err instanceof FrontendApiError) {
-        dispatch(displayOrLogError(err, () => editMissionWithoutConfirmation(id), true, 'missionFormError'))
+        dispatch(
+          displayOrLogError(err, () => editMissionWithoutConfirmation(id), true, DisplayedErrorKey.MISSION_FORM_ERROR)
+        )
 
         return
       }

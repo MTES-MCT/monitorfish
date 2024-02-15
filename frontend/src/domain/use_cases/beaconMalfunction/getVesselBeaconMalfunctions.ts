@@ -1,3 +1,5 @@
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
+
 import openBeaconMalfunction from './openBeaconMalfunction'
 import { getVesselBeaconsMalfunctionsFromAPI } from '../../../api/beaconMalfunction'
 import { getOnlyVesselIdentityProperties } from '../../entities/vessel/vessel'
@@ -24,7 +26,7 @@ export const getVesselBeaconMalfunctions = (isFromUserAction: boolean) => async 
 
   if (isFromUserAction) {
     dispatch(loadVesselBeaconMalfunctions())
-    dispatch(displayedErrorActions.unset('vesselSidebarError'))
+    dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
   }
 
   try {
@@ -50,7 +52,7 @@ export const getVesselBeaconMalfunctions = (isFromUserAction: boolean) => async 
         error,
         () => getVesselBeaconMalfunctions(isFromUserAction),
         isFromUserAction,
-        'vesselSidebarError'
+        DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
       )
     )
     dispatch(resetVesselBeaconMalfunctionsResumeAndHistory())

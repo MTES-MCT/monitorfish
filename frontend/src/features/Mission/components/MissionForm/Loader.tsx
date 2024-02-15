@@ -1,10 +1,10 @@
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { DisplayedError } from '@libs/DisplayedError'
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
-import { assert } from '@utils/assert'
 import { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
-import { retry } from 'domain/use_cases/error/retry'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
@@ -22,9 +22,7 @@ export function Loader() {
   }, [dispatch])
 
   const handleRetry = () => {
-    assert(missionFormError, 'missionFormError')
-
-    dispatch(retry('missionFormError', missionFormError.useCase))
+    DisplayedError.retryUseCase(dispatch, DisplayedErrorKey.MISSION_FORM_ERROR)
   }
 
   if (missionFormError) {
@@ -32,7 +30,7 @@ export function Loader() {
       <ErrorFallback data-cy="mission-form-error">
         🔌 {missionFormError.message}
         <br />
-        {missionFormError.useCase && (
+        {missionFormError.hasRetryableUseCase && (
           <RetryButton accent={Accent.PRIMARY} onClick={handleRetry}>
             Réessayer
           </RetryButton>

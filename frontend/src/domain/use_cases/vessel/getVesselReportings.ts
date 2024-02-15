@@ -1,3 +1,5 @@
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
+
 import { getVesselReportingsFromAPI } from '../../../api/vessel'
 import {
   loadReporting,
@@ -17,7 +19,7 @@ export const getVesselReportings = (isFromUserAction: boolean) => async (dispatc
   }
 
   if (isFromUserAction) {
-    dispatch(displayedErrorActions.unset('vesselSidebarError'))
+    dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
     dispatch(loadReporting())
   }
 
@@ -40,7 +42,7 @@ export const getVesselReportings = (isFromUserAction: boolean) => async (dispatc
         error as Error,
         () => getVesselReportings(isFromUserAction),
         isFromUserAction,
-        'vesselSidebarError'
+        DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
       )
     )
     dispatch(resetCurrentAndArchivedReportingsOfSelectedVessel())

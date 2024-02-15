@@ -1,3 +1,4 @@
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { useEffect } from 'react'
 import styled from 'styled-components'
 
@@ -30,7 +31,7 @@ export function Tabs() {
   }, [dispatch, isSuperUser, vesselSidebarTab])
 
   function showTab(tab: VesselSidebarTab) {
-    dispatch(displayedErrorActions.unset('vesselSidebarError'))
+    dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
     dispatch(showVesselSidebarTab(tab))
   }
 

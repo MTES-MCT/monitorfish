@@ -19,7 +19,7 @@ const overlayHeight = 130
 const INITIAL_OFFSET_VALUE = [0, 0]
 
 export function ControlOverlay({ feature, isSelected = false }) {
-  const selectedMissionActionGeoJSON = useMainAppSelector(store => store.mainMap.selectedMissionActionGeoJSON)
+  const selectedMissionActionGeoJSON = useMainAppSelector(store => store.missionForm.selectedMissionActionGeoJSON)
   const currentOffsetRef = useRef(INITIAL_OFFSET_VALUE)
   const [controlProperties, setControlProperties] = useState<Mission.MissionActionFeatureProperties | undefined>(
     undefined

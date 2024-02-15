@@ -8,17 +8,17 @@ import { getMissionSourceTagText } from '../../../../domain/entities/mission'
 import { Mission } from '../../../../domain/entities/mission/types'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { pluralize } from '../../../../utils/pluralize'
-import { mainMapActions } from '../../../MainMap/slice'
+import { missionFormActions } from '../../../Mission/components/MissionForm/slice'
 import { editMission } from '../../../Mission/useCases/editMission'
 import { OverlayPosition } from '../Overlay'
 
 import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
 
-type MissionDetailsProps = {
+type MissionDetailsProps = Readonly<{
   isSelected: boolean
   mission: Mission.MissionPointFeatureProperties
   overlayPosition: OverlayPosition
-}
+}>
 export function MissionDetails({ isSelected, mission, overlayPosition }: MissionDetailsProps) {
   const dispatch = useMainAppDispatch()
 
@@ -35,7 +35,7 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
             data-cy="mission-overlay-close"
             Icon={Icon.Close}
             iconSize={14}
-            onClick={() => dispatch(mainMapActions.unsetSelectedMissionGeoJSON())}
+            onClick={() => dispatch(missionFormActions.unsetSelectedMissionGeoJSON())}
           />
         )}
         <ZoneText>

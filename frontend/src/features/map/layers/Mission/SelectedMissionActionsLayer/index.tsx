@@ -18,7 +18,7 @@ import type { MutableRefObject } from 'react'
 
 export function UnmemoizedSelectedMissionActionsLayer() {
   const { missions } = useGetFilteredMissionsQuery()
-  const selectedMissionGeoJSON = useMainAppSelector(store => store.mainMap.selectedMissionGeoJSON)
+  const selectedMissionGeoJSON = useMainAppSelector(store => store.missionForm.selectedMissionGeoJSON)
   const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
   const draft = useMainAppSelector(store => store.missionForm.draft)
 

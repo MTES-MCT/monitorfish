@@ -16,7 +16,7 @@ services:
       retries: 60
 
   flyway:
-    image: flyway/flyway
+    image: flyway/flyway:10.5.0
     command: migrate -password=postgres -schemas=public -user=postgres -url=jdbc:postgresql://db:5432/monitorfishdb
     volumes:
       - ../../backend/src/main/resources/db/:/flyway/sql

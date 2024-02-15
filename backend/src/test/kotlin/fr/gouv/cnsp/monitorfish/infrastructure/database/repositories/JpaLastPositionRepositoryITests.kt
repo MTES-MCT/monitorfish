@@ -33,7 +33,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
             it.internalReferenceNumber == "FAK000999999"
         }
         assertThat(position?.gearOnboard).hasSize(1)
-        assertThat(position?.gearOnboard?.first()?.dimensions).isEqualTo(45.0)
+        assertThat(position?.gearOnboard?.first()?.dimensions).isEqualTo("45.0")
         assertThat(position?.gearOnboard?.first()?.gear).isEqualTo("OTB")
         assertThat(position?.gearOnboard?.first()?.mesh).isEqualTo(70.0)
 

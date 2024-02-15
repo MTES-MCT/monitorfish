@@ -1,9 +1,12 @@
 import { describe, expect, it } from '@jest/globals'
 
+import { mockConsole } from '../../../__mocks__/utils'
 import { FrontendError } from '../../libs/FrontendError'
 import { assert } from '../assert'
 
 describe('utils/assert()', () => {
+  mockConsole()
+
   it('should not throw an error if the value is defined', () => {
     const value = 'test'
 

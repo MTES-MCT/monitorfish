@@ -1,4 +1,3 @@
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, Tag, TagBullet, TagGroup, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
@@ -15,15 +14,13 @@ import GyroRedSVG from '../../icons/Gyrophare_controles_rouge.svg?react'
 import GyroGreenSVG from '../../icons/Gyrophare_controles_vert.svg?react'
 import { editMission } from '../../Mission/useCases/editMission'
 
-type ControlProps = {
+type ControlProps = Readonly<{
   control: MissionAction.MissionAction
   isLastItem: boolean
-}
-
+}>
 export function Control({ control, isLastItem }: ControlProps) {
   const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
-  const openedMissionDraft = useMainAppSelector(store => store.mission.draft)
   const numberOfInfractions = useMemo(() => getNumberOfInfractions(control), [control])
   const gearAndSpeciesInfractionsLength = useMemo(
     () => control.gearInfractions.length + control.speciesInfractions.length,
@@ -141,7 +138,7 @@ export function Control({ control, isLastItem }: ControlProps) {
           </OtherComments>
         )}
         {isSuperUser && (
-          <ModifyButton accent={Accent.SECONDARY} disabled={!!openedMissionDraft} onClick={openMission}>
+          <ModifyButton accent={Accent.SECONDARY} onClick={openMission}>
             Ouvrir le contrôle
           </ModifyButton>
         )}

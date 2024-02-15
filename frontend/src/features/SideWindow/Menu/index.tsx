@@ -22,6 +22,18 @@ export function Menu({ selectedMenu }: MenuProps) {
         selected={selectedMenu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST}
         title={SideWindowMenuLabel.ALERT_LIST_AND_REPORTING_LIST}
       />
+      {import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true' && (
+        <MenuButton
+          aria-label={SideWindowMenuKey.PRIOR_NOTIFICATION_LIST}
+          data-cy="side-window-menu-notice-list"
+          Icon={Icon.Fishery}
+          iconSize={26}
+          onClick={() => dispatch(openSideWindowPath({ menu: SideWindowMenuKey.PRIOR_NOTIFICATION_LIST }))}
+          role="menuitem"
+          selected={selectedMenu === SideWindowMenuKey.PRIOR_NOTIFICATION_LIST}
+          title={SideWindowMenuLabel.PRIOR_NOTIFICATION_LIST}
+        />
+      )}
       <MenuButton
         aria-label={SideWindowMenuKey.MISSION_LIST}
         data-cy="side-window-menu-mission-list"
@@ -53,9 +65,11 @@ const Wrapper = styled.div`
   flex-direction: column;
   max-width: 70px;
   padding: 70px 0 0;
+  user-select: none;
 
   * {
     box-sizing: border-box;
+    user-select: none;
   }
 `
 

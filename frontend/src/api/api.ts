@@ -96,6 +96,7 @@ export const monitorfishApi = createApi({
     'Infractions',
     'Missions',
     'MissionActions',
+    'Notices',
     'Ports',
     'Species',
     'RiskFactor',

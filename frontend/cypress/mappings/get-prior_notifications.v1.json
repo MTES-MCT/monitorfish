@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v1/prior_notifications"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": [
+      {
+        "id": "1",
+        "alertCount": 2,
+        "arrivalPortCode": "FRLEH",
+        "estimatedTimeOfArrival": "2024-03-01T03:00:00Z",
+        "fleetSegments": ["ABC", "DEF"],
+        "isOk": true,
+        "scheduledTimeOfLanding": "2024-03-01T04:00:00Z",
+        "type": "NON_SUBMITTED",
+        "port": {
+          "name": "Port 1"
+        },
+        "vessel": {
+          "name": "Vessel 1",
+          "riskFactor": {
+            "riskFactor": 0.5
+          }
+        }
+      }
+    ]
+  }
+}

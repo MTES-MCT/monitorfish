@@ -6,6 +6,7 @@ export type FleetSegment = {
   gears: string[] | undefined
   impactRiskFactor: Float<number> | undefined
   segment: string
+  // TODO Can this be undefined?
   segmentName: string | undefined
   targetSpecies: string[] | undefined
   year: number

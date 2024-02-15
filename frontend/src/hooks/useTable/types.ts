@@ -1,4 +1,5 @@
-import type { CollectionItem, Native } from '../../types'
+import type { CollectionItem } from '../../types'
+import type { Native } from '@mtes-mct/monitor-ui'
 import type { IFuseOptions } from 'fuse.js'
 
 export type TableColumn<T extends Record<string, any> = Record<string, any>> = {

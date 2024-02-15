@@ -39,6 +39,8 @@
     "@reduxjs/toolkit": "1.9.6",
     "@sentry/browser": "7.55.2",
     "@sentry/react": "7.52.1",
+    "@tanstack/react-table": "8.11.7",
+    "@tanstack/react-virtual": "beta",
     "comlink": "4.4.1",
     "date-fns": "2.30.0",
     "dayjs": "1.11.10",

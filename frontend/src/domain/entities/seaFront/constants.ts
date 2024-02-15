@@ -10,6 +10,7 @@ export enum SeaFrontGroup {
   SA = 'SA'
 }
 
+// TODO This should not be dedicated to Mission feature here.
 export enum SeaFrontGroupLabel {
   ALL = 'Toutes les missions',
   MED = 'MED',

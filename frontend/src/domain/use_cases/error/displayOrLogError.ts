@@ -14,16 +14,16 @@ export const displayOrLogError =
     error: any,
     retryableUseCase: RetryableUseCase | undefined,
     isFromUserAction: boolean,
-    displayedErrorBoundary: keyof DisplayedErrorState
+    errorBoundaryKey: keyof DisplayedErrorState
   ) =>
   async dispatch => {
-    const errorMessages = error instanceof Error ? error.message : JSON.stringify(error)
+    const errorMessage = error instanceof Error ? error.message : JSON.stringify(error)
 
     /**
      * If the use-case was triggered by the cron, we only log an error with a Toast
      */
     if (!isFromUserAction) {
-      dispatch(setError(errorMessages))
+      dispatch(setError(errorMessage))
 
       return
     }
@@ -32,10 +32,10 @@ export const displayOrLogError =
      * Else, the use-case was an user action, we show a fallback error UI to the user.
      * We first check if the `displayedErrorBoundary` is correct (included in the DisplayedErrorState type)
      */
-    if (!Object.keys(INITIAL_STATE).includes(displayedErrorBoundary)) {
+    if (!Object.keys(INITIAL_STATE).includes(errorBoundaryKey)) {
       return
     }
 
-    const displayedError = new DisplayedError(errorMessages, retryableUseCase)
-    dispatch(displayedErrorActions.set({ [displayedErrorBoundary]: displayedError }))
+    const displayedError = new DisplayedError(errorMessage, retryableUseCase)
+    dispatch(displayedErrorActions.set({ [errorBoundaryKey]: displayedError }))
   }

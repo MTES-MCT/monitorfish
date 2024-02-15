@@ -9,17 +9,13 @@ export function AutoSaveTag({ isAutoSaveEnabled = false }: AutoSaveTagProps) {
     <Wrapper
       backgroundColor={isAutoSaveEnabled ? THEME.color.mediumSeaGreen25 : THEME.color.gainsboro}
       color={isAutoSaveEnabled ? THEME.color.mediumSeaGreen : THEME.color.slateGray}
-      isAutoSaveEnabled={isAutoSaveEnabled}
     >
       {isAutoSaveEnabled ? 'Enregistrement auto. actif' : 'Enregistrement auto. inactif'}
     </Wrapper>
   )
 }
 
-const Wrapper = styled(Tag)<{
-  // TODO Is this used?
-  isAutoSaveEnabled: boolean
-}>`
+const Wrapper = styled(Tag)`
   margin-left: 24px;
   vertical-align: middle;
   align-self: unset;

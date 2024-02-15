@@ -10,10 +10,10 @@ import type { MainAppThunk } from '../../../store'
 export const getMissionWithActions =
   (id: number): MainAppThunk<Promise<MissionWithActions>> =>
   async dispatch => {
-    const { data: mission, error: getMissionError } = await dispatch(
+    const { data: mission, error: missionError } = await dispatch(
       monitorenvMissionApi.endpoints.getMission.initiate(id)
     )
-    rethrowErrorIfDefined(getMissionError)
+    rethrowErrorIfDefined(missionError)
     assert(mission, 'mission')
 
     const { data: actions, error: getMissionActionsError } = await dispatch(

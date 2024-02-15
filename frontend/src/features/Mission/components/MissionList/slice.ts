@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { Mission } from 'domain/entities/mission/types'
+import { SeaFrontGroup } from 'domain/entities/seaFront/constants'
 
-import { Mission } from '../../../../domain/entities/mission/types'
-import { SeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
 import { MissionDateRangeFilter, MissionFilterType } from '../../../SideWindow/MissionList/types'
 
 import type { FilterValues } from '../../../SideWindow/MissionList/types'

@@ -1,7 +1,7 @@
 import { fleetSegmentApi } from '../../../api/fleetSegment'
 
-import type { MissionActionFormValues } from '../../../features/SideWindow/MissionForm/types'
 import type { FleetSegment } from '../../types/fleetSegment'
+import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 
 export const getFleetSegments =
   (

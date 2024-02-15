@@ -6,9 +6,9 @@ import { convertToGeoJSONGeometryObject } from '../../entities/layers'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../entities/map/constants'
 import { MissionAction } from '../../types/missionAction'
 
-import type { MissionActionFormValues } from '../../../features/SideWindow/MissionForm/types'
 import type { GeoJSON as GeoJSONType } from '../../types/GeoJSON'
 import type { Port } from '../../types/port'
+import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 
 export const getLastControlCircleGeometry =
   (ports: Port.Port[], actionFormValues: MissionActionFormValues | MissionAction.MissionAction) =>

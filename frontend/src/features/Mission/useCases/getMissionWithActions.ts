@@ -1,8 +1,9 @@
+import { type MissionWithActions } from 'domain/entities/mission/types'
+
 import { missionActionApi } from '../../../api/missionAction'
-import { type MissionWithActions } from '../../../domain/entities/mission/types'
 import { assert } from '../../../utils/assert'
 import { rethrowErrorIfDefined } from '../../../utils/rethrowErrorIfDefined'
-import { monitorenvMissionApi } from '../../SideWindow/MissionForm/apis'
+import { monitorenvMissionApi } from '../components/MissionForm/apis'
 
 import type { MainAppThunk } from '../../../store'
 

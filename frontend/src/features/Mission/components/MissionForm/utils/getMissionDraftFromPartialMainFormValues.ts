@@ -1,10 +1,10 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
+import { Mission } from 'domain/entities/mission/types'
 
-import { Mission } from '../../../../../domain/entities/mission/types'
-import { INITIAL_MISSION_CONTROL_UNIT } from '../../../../SideWindow/MissionForm/constants'
+import { INITIAL_MISSION_CONTROL_UNIT } from '../constants'
 
-import type { MissionMainFormValues } from '../../../../SideWindow/MissionForm/types'
 import type { MissionWithActionsDraft } from '../../../types'
+import type { MissionMainFormValues } from '../types'
 
 export function getMissionDraftFromPartialMainFormValues(
   partialMainFormValues: Partial<MissionMainFormValues>

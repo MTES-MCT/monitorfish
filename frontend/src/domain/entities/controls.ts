@@ -2,7 +2,7 @@ import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import { MissionAction } from '../types/missionAction'
 
-import type { MissionActionFormValues } from '../../features/SideWindow/MissionForm/types'
+import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 
 import InfractionType = MissionAction.InfractionType
 

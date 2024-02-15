@@ -1,4 +1,4 @@
-import type { MissionActionFormValues, MissionMainFormValues } from '../SideWindow/MissionForm/types'
+import type { MissionActionFormValues, MissionMainFormValues } from '@features/Mission/components/MissionForm/types'
 
 export type MissionWithActionsDraft = {
   actionsFormValues: MissionActionFormValues[]

@@ -17,7 +17,7 @@ import { NoRsuiteOverrideWrapper } from '../../../../ui/NoRsuiteOverrideWrapper'
 import { addMission } from '../../../Mission/useCases/addMission'
 import { monitorenvControlUnitApi, useGetControlUnitQuery } from '../../controlUnitApi'
 
-import type { MissionMainFormValues } from '../../../SideWindow/MissionForm/types'
+import type { MissionMainFormValues } from '@features/Mission/components/MissionForm/types'
 
 export function ControlUnitDialog() {
   const dispatch = useMainAppDispatch()

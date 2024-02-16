@@ -1,11 +1,11 @@
 import { FormError, FormErrorCode } from '@libs/FormError'
 import { type Undefine } from '@mtes-mct/monitor-ui'
 import { validateRequiredFormValues } from '@utils/validateRequiredFormValues'
-import { Mission } from 'domain/entities/mission/types'
-import { MissionAction } from 'domain/types/missionAction'
 import { difference, omit } from 'lodash'
 
 import { MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
+import { Mission } from '../../../../domain/entities/mission/types'
+import { MissionAction } from '../../../../domain/types/missionAction'
 
 import type { MissionActionFormValues, MissionMainFormValues } from './types'
 import type { LegacyControlUnit } from 'domain/types/legacyControlUnit'

@@ -1,11 +1,11 @@
 import { expect } from '@jest/globals'
-import { MissionAction } from 'domain/types/missionAction'
 
+import { MissionAction } from '../../../../../domain/types/missionAction'
 import { getMissionActionsDataFromMissionActionsFormValues } from '../utils'
 
 import MissionActionType = MissionAction.MissionActionType
 
-describe('SideWindow/MissionForm/utils.getMissionActionsDataFromMissionActionsFormValues()', () => {
+describe('features/Mission/components/MissionForm/utils.getMissionActionsDataFromMissionActionsFormValues()', () => {
   it('Should add the id to an updated action', () => {
     // Given
     const missionId = 123

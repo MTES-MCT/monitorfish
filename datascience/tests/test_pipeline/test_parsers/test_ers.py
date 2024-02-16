@@ -303,11 +303,13 @@ def test_pno_parser():
     assert set(value) == {
         "catchOnboard",
         "predictedArrivalDatetimeUtc",
+        "predictedLandingDatetimeUtc",
         "tripStartDate",
         "port",
         "purpose",
     }
     assert value["predictedArrivalDatetimeUtc"] == "2020-03-26T12:44:00Z"
+    assert value["predictedLandingDatetimeUtc"] == "2020-03-26T12:44:00Z"
     assert value["port"] == "FRQUI"
     assert value["purpose"] == "LAN"
     assert value["tripStartDate"] == "2020-03-26T00:00:00Z"

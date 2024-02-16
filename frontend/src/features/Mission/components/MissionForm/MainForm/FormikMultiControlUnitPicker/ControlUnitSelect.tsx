@@ -235,7 +235,7 @@ export function ControlUnitSelect({
           name={`resources_${index}`}
           onChange={handleResourcesChange}
           options={controlUnitResourcesAsOptions}
-          optionValueKey="name"
+          optionValueKey="id"
           value={value.resources}
         />
         <TextInput

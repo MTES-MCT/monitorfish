@@ -56,6 +56,11 @@ const missionFormSlice = createSlice({
     /**
      * Reset mission form state
      */
+    reset: () => INITIAL_STATE,
+
+    /**
+     * Reset mission form state
+     */
     resetMissionForm(state) {
       state.draft = undefined
       state.geometryComputedFromControls = undefined

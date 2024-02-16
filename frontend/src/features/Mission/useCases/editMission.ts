@@ -40,8 +40,9 @@ const editMissionWithoutConfirmation =
     dispatch(displayedErrorActions.unset(DisplayedErrorKey.MISSION_FORM_ERROR))
 
     try {
-      const missionWithActions = await dispatch(getMissionWithActions(id))
+      dispatch(missionFormActions.reset())
 
+      const missionWithActions = await dispatch(getMissionWithActions(id))
       const nextDraft = getMissionDraftFromMissionWithActions(missionWithActions)
 
       dispatch(missionFormActions.initializeDraft(nextDraft))

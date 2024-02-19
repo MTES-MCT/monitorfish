@@ -1,3 +1,5 @@
+import { FAO_LAYER } from '@features/AdministrativeZone/layers/constants'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import React, { useEffect } from 'react'
 
 import {
@@ -7,7 +9,7 @@ import {
   layersNotInCurrentOLMap,
   layersNotInShowedLayers
 } from '../../../domain/entities/layers'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
 import { monitorfishMap } from '../../map/monitorfishMap'
 import { getVectorOLLayer } from '../useCases/showAdministrativeZone'
 
@@ -30,6 +32,13 @@ function UnmemoizedAdministrativeLayers() {
         if (!layerToInsert) {
           return
         }
+
+        if (layerToInsert.type === LayerProperties.FAO.code && FAO_LAYER) {
+          olLayers.push(FAO_LAYER)
+
+          return
+        }
+
         const VectorLayer = getVectorOLLayer(layerToInsert.type, layerToInsert.zone, isBackoffice)
         olLayers.push(VectorLayer)
       })

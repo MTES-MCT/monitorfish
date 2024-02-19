@@ -1,3 +1,6 @@
+import TileLayer from 'ol/layer/Tile'
+import { TileWMS } from 'ol/source'
+
 import type { RegulatoryZone } from '../../features/Regulation/types'
 import type { Point } from 'ol/geom'
 import type VectorLayer from 'ol/layer/Vector'
@@ -27,6 +30,10 @@ export type LayerToFeatures = {
 }
 
 export type VectorLayerWithName = VectorLayer<VectorSource> & {
+  name?: string
+}
+
+export type TileLayerWithName = TileLayer<TileWMS> & {
   name?: string
 }
 

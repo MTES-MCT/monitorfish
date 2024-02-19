@@ -1,7 +1,7 @@
 import { type MissionWithActions } from 'domain/entities/mission/types'
 
 import { missionActionApi } from '../../../api/missionAction'
-import { assert } from '../../../utils/assert'
+import { assertNotNullish } from '../../../utils/assertNotNullish'
 import { rethrowErrorIfDefined } from '../../../utils/rethrowErrorIfDefined'
 import { monitorenvMissionApi } from '../components/MissionForm/apis'
 
@@ -14,7 +14,7 @@ export const getMissionWithActions =
       monitorenvMissionApi.endpoints.getMission.initiate(id)
     )
     rethrowErrorIfDefined(missionError)
-    assert(mission, 'mission')
+    assertNotNullish(mission)
 
     const { data: actions, error: getMissionActionsError } = await dispatch(
       missionActionApi.endpoints.getMissionActions.initiate(id)

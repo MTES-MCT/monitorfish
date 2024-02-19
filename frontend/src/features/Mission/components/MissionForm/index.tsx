@@ -8,7 +8,7 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { FrontendError } from '@libs/FrontendError'
 import { Accent, Button, customDayjs, Icon, logSoftError, NotificationEvent } from '@mtes-mct/monitor-ui'
-import { assert } from '@utils/assert'
+import { assertNotNullish } from '@utils/assertNotNullish'
 import { ensure } from '@utils/ensure'
 import { Mission } from 'domain/entities/mission/types'
 import { getMissionStatus } from 'domain/entities/mission/utils'
@@ -156,7 +156,7 @@ export function MissionForm() {
           })
         }
 
-        assert(missionIdRef.current, 'missionIdFromRef.current')
+        assertNotNullish(missionIdRef.current)
 
         const currentMissionWithActions = await dispatch(getMissionWithActions(missionIdRef.current))
         const { deletedMissionActionIds, updatedMissionActionDatas } =

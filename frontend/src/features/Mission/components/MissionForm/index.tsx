@@ -9,7 +9,6 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { FrontendError } from '@libs/FrontendError'
 import { Accent, Button, customDayjs, Icon, logSoftError, NotificationEvent } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
-import { ensure } from '@utils/ensure'
 import { Mission } from 'domain/entities/mission/types'
 import { getMissionStatus } from 'domain/entities/mission/utils'
 import { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
@@ -53,10 +52,8 @@ import type { MissionAction } from 'domain/types/missionAction'
 export function MissionForm() {
   const dispatch = useMainAppDispatch()
   const missionIdFromPath = useMainAppSelector(store => store.sideWindow.selectedPath.id)
-  const draft = ensure(
-    useMainAppSelector(store => store.missionForm.draft),
-    'store.missionForm.draft'
-  )
+  const draft = useMainAppSelector(store => store.missionForm.draft)
+  assertNotNullish(draft)
 
   const missionIdRef = useRef<number | undefined>(missionIdFromPath)
 

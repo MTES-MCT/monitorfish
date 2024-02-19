@@ -1,6 +1,6 @@
 import { UseCaseStore } from '@libs/UseCaseStore'
 import { createSlice } from '@reduxjs/toolkit'
-import { ensure } from '@utils/ensure'
+import { assertNotNullish } from '@utils/assertNotNullish'
 
 import type { DisplayedError } from '@libs/DisplayedError'
 import type { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -31,7 +31,8 @@ const displayedErrorSlice = createSlice({
     ) {
       Object.keys(action.payload).forEach(key => {
         const typedKey = key as DisplayedErrorKey
-        const displayedError = ensure(action.payload[typedKey], `action.payload[${typedKey}]`)
+        const displayedError = action.payload[typedKey]
+        assertNotNullish(displayedError)
 
         state[typedKey] = {
           hasRetryableUseCase: displayedError.hasRetryableUseCase,

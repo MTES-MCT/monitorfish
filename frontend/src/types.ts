@@ -1,4 +1,3 @@
-import type { MainAppThunk } from './store'
 import type { ConditionalKeys, Exact } from 'type-fest'
 
 // =============================================================================
@@ -15,8 +14,6 @@ export type Native = boolean | null | number | string | undefined
 export type NativeAny = boolean | NativeArray | NativeObject | null | number | string | undefined
 export type NativeArray = Array<NativeAny>
 export type NativeObject = { [x: string]: NativeAny } | {}
-
-export type MainAppUseCase = () => MainAppThunk
 
 export type MenuItem<T = string> = {
   code: T

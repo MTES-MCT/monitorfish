@@ -1,16 +1,16 @@
+import { UseCaseStore } from '@store/UseCaseStore'
+
 import { getFullPathFromPath } from '../../../domain/entities/sideWindow/utils'
 import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
-import { UseCaseStore, UseCaseStoreKey } from '../../../libs/UseCaseStore'
 
 import type { SideWindow } from '../../../domain/entities/sideWindow/types'
-import type { MainAppThunk } from '../../../store'
-import type { MainAppUseCase } from '../../../types'
+import type { MainAppThunk, MainAppUseCase } from '@store'
 
 export const askForSideWindowDraftCancellationConfirmation =
-  (nextPath: SideWindow.Path, useCase?: MainAppUseCase): MainAppThunk =>
+  (nextPath: SideWindow.Path, pendingUseCase?: MainAppUseCase): MainAppThunk =>
   dispatch => {
-    if (useCase) {
-      UseCaseStore.set(UseCaseStoreKey.DRAFT_CANCELLATION_CONFIRMATION, useCase)
+    if (pendingUseCase) {
+      UseCaseStore.set('MISSION_DRAFT_CANCELLATION_CONFIRMATION', pendingUseCase)
     }
 
     const nextFullPath = getFullPathFromPath(nextPath)

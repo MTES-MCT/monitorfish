@@ -1,7 +1,7 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { FormikCheckbox } from '@mtes-mct/monitor-ui'
-import { assert } from '@utils/assert'
+import { assertNotNullish } from '@utils/assertNotNullish'
 import { useFormikContext } from 'formik'
 import { useEffect } from 'react'
 import styled from 'styled-components'
@@ -19,7 +19,7 @@ export function FormikOtherControlsCheckboxes() {
     state => state.missionForm.mustResetOtherControlsCheckboxes
   )
   const draft = useMainAppSelector(state => state.missionForm.draft)
-  assert(draft, 'draft')
+  assertNotNullish(draft)
 
   useEffect(() => {
     if (mustResetOtherControlsCheckboxes) {

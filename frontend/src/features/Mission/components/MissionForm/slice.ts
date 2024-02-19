@@ -7,8 +7,6 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import type { GeoJSON } from 'domain/types/GeoJSON'
 
 export interface MissionFormState {
-  // TODO For side window closure prevention and cross-form validation we don't need the entire forms values.
-  // But we do for the map interactions.
   draft: MissionWithActionsDraft | undefined
   geometryComputedFromControls: MissionMainFormValues['geom']
   /**

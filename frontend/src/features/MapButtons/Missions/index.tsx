@@ -56,7 +56,7 @@ export function MissionsMenu() {
             <ToggleMissionsButton
               accent={Accent.TERTIARY}
               data-cy="toggle-mission-layer"
-              Icon={isMissionsLayerDisplayed ? Icon.Hide : Icon.Display}
+              Icon={isMissionsLayerDisplayed ? Icon.Display : Icon.Hide}
               onClick={toggleMissionsLayer}
               size={Size.NORMAL}
               title={isMissionsLayerDisplayed ? 'Cacher les missions' : 'Afficher les missions'}
@@ -84,7 +84,7 @@ export function MissionsMenu() {
         style={{ color: THEME.color.gainsboro, top: 120 }}
         title="Missions et contrôles"
       >
-        <Icon.MissionAction />
+        <Icon.MissionAction size={26} />
       </MissionMenuButton>
     </Wrapper>
   )

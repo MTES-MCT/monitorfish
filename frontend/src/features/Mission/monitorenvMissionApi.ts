@@ -28,7 +28,8 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(DELETE_MISSION_ERROR_MESSAGE, response)
     }),
 
-    getEngagedControlUnits: builder.query<ControlUnit.EngagedControlUnits, void>({
+    getEngagedControlUnits: builder.query<Array<ControlUnit.EngagedControlUnit>, void>({
+      forceRefetch: () => true,
       query: () => `/v1/missions/engaged_control_units`,
       transformErrorResponse: response => new FrontendApiError(GET_ENGAGED_CONTROL_UNITS_ERROR_MESSAGE, response)
     }),

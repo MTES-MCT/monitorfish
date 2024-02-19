@@ -56,14 +56,14 @@ function getCoordinatesOfControl(
 }
 
 export function isLandControl(action: MissionActionFormValues | MissionAction.MissionAction) {
-  return action.actionType === MissionAction.MissionActionType.LAND_CONTROL && action.portLocode
+  return action.actionType === MissionAction.MissionActionType.LAND_CONTROL && !!action.portLocode
 }
 
 export function isAirOrSeaControl(action: MissionActionFormValues | MissionAction.MissionAction) {
   return (
     (action.actionType === MissionAction.MissionActionType.AIR_CONTROL ||
       action.actionType === MissionAction.MissionActionType.SEA_CONTROL) &&
-    action.latitude &&
-    action.longitude
+    !!action.latitude &&
+    !!action.longitude
   )
 }

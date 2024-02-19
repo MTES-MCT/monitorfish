@@ -1,4 +1,5 @@
 import { BOOLEAN_AS_OPTIONS } from '@constants/index'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import {
   FormikCheckbox,
   FormikEffect,
@@ -33,11 +34,16 @@ type MainFormProps = Readonly<{
 }>
 function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProps) {
   const missionEvent = useListenToMissionEventUpdatesById(missionId)
+  const engagedControlUnit = useMainAppSelector(state => state.missionForm.engagedControlUnit)
 
   function validateBeforeOnChange(validateForm) {
     return async nextValues => {
       const errors = await validateForm()
       const isValid = isEmpty(errors)
+
+      if (engagedControlUnit) {
+        return
+      }
 
       // Prevent triggering `onChange` when opening the form
       if (isEqual(initialValues, nextValues)) {
@@ -84,7 +90,11 @@ function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProp
               <FormikMultiRadio isInline label="Ordre de mission" name="hasMissionOrder" options={BOOLEAN_AS_OPTIONS} />
             </CustomFormBodyInnerWrapper>
 
-            <FormikMultiControlUnitPicker name="controlUnits" />
+            <FormikMultiControlUnitPicker
+              missionId={missionId}
+              name="controlUnits"
+              validateBeforeOnChange={validateBeforeOnChange(validateForm)}
+            />
 
             <CustomFormBodyInnerWrapper>
               <FormikLocationPicker />

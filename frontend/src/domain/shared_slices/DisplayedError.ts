@@ -1,5 +1,5 @@
-import { UseCaseStore } from '@libs/UseCaseStore'
 import { createSlice } from '@reduxjs/toolkit'
+import { UseCaseStore } from '@store/UseCaseStore'
 import { assertNotNullish } from '@utils/assertNotNullish'
 
 import type { DisplayedError } from '@libs/DisplayedError'

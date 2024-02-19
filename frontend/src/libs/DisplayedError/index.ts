@@ -1,10 +1,8 @@
 import { captureException, captureMessage } from '@sentry/react'
-
-import { UseCaseStore } from '../UseCaseStore'
+import { UseCaseStore } from '@store/UseCaseStore'
 
 import type { DisplayedErrorKey } from './constants'
-import type { MainAppUseCase } from '../../types'
-import type { MainRootState } from '@store/index'
+import type { MainAppUseCase, MainRootState } from '@store'
 import type { AnyAction } from 'redux'
 import type { ThunkDispatch } from 'redux-thunk'
 

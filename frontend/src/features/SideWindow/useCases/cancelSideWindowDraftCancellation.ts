@@ -1,10 +1,11 @@
-import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
-import { UseCaseStore, UseCaseStoreKey } from '../../../libs/UseCaseStore'
+import { UseCaseStore } from '@store/UseCaseStore'
 
-import type { MainAppThunk } from '../../../store'
+import { sideWindowActions } from '../../../domain/shared_slices/SideWindow'
+
+import type { MainAppThunk } from '@store'
 
 export const cancelSideWindowDraftCancellation = (): MainAppThunk => dispatch => {
-  UseCaseStore.unset(UseCaseStoreKey.DRAFT_CANCELLATION_CONFIRMATION)
+  UseCaseStore.unset('MISSION_DRAFT_CANCELLATION_CONFIRMATION')
 
   dispatch(sideWindowActions.closeDraftCancellationConfirmationDialog())
   dispatch(sideWindowActions.unsetNextPath())

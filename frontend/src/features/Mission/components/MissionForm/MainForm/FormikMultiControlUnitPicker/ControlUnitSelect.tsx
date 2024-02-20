@@ -32,6 +32,7 @@ type ControlUnitSelectProps = Readonly<{
       }
     | undefined
   index: number
+  missionId: number | undefined
   onChange: (
     index: number,
     nextControlUnit: LegacyControlUnit.LegacyControlUnit | LegacyControlUnit.LegacyControlUnitDraft
@@ -43,6 +44,7 @@ export function ControlUnitSelect({
   allControlUnits,
   error,
   index,
+  missionId,
   onChange,
   onDelete
 }: ControlUnitSelectProps) {
@@ -204,7 +206,7 @@ export function ControlUnitSelect({
           searchable
           value={value.name}
         />
-        {!isEdition && <ControlUnitWarningMessage controlUnitIndex={index} />}
+        {!isEdition && <ControlUnitWarningMessage controlUnitIndex={index} missionId={missionId} />}
         <MultiSelect
           baseContainer={newWindowContainerRef.current}
           disabled={isLoading || !value.administration || !value.name}

@@ -9,7 +9,13 @@ import styled from 'styled-components'
 
 import { missionFormActions } from '../../slice'
 
-export function ControlUnitWarningMessage({ controlUnitIndex }: { controlUnitIndex: number }) {
+export function ControlUnitWarningMessage({
+  controlUnitIndex,
+  missionId
+}: {
+  controlUnitIndex: number
+  missionId: number | undefined
+}) {
   const dispatch = useMainAppDispatch()
 
   const [unitField] = useField<number | undefined>(`controlUnits.${controlUnitIndex}.id`)
@@ -46,7 +52,7 @@ export function ControlUnitWarningMessage({ controlUnitIndex }: { controlUnitInd
   const cancel = async () => {
     const controlUnitName = engagedControlUnit?.controlUnit?.name
     if (controlUnitName) {
-      dispatch(cancelCreateAndRedirectToFilteredList({ controlUnitName }))
+      dispatch(cancelCreateAndRedirectToFilteredList({ controlUnitName, missionId }))
     }
   }
 

@@ -107,6 +107,7 @@ export function FormikMultiControlUnitPicker({
             allControlUnits={controlUnitsQuery.data ?? []}
             error={errors[index]}
             index={index}
+            missionId={missionId}
             onChange={handleChange}
             onDelete={removeUnit}
           />

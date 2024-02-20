@@ -1,6 +1,6 @@
-import { monitorenvMissionApi } from '@features/Mission/components/MissionForm/apis'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
 import { missionListActions } from '@features/Mission/components/MissionList/slice'
+import { monitorenvMissionApi } from '@features/Mission/monitorenvMissionApi'
 import { MissionDateRangeFilter, MissionFilterType } from '@features/SideWindow/MissionList/types'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { customDayjs, logSoftError } from '@mtes-mct/monitor-ui'

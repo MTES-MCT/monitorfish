@@ -143,10 +143,24 @@ dist
 ################################################################################
 # Custom
 
-# Env variables & configuration files
-datascience/.env
+# Env variables
+/datascience/.env
+# Our .env files follow the `import-meta-env` convention:
+# - `.env`: git-ignored, generated from `.env.local.defaults`, overriden by `.env.local`.
+# - `.env.local`: git-ignored, used when necessary to override `.env.local.defaults` default values.
+# - `.env.local.defaults`: git-commited, used to share default values with Github contributors.
+# https://import-meta-env.org/api.html#import-meta-env-prepare
+# All explicited here for documentation purposes:
+/frontend/.env
+/frontend/.env.local
+/infra/.env
+/infra/.env.local
+/infra/.env.monitorenv
+/infra/.env.monitorenv.local
+
+# Configuration files
 github_token.txt
-infra/remote/backup/pg_backup.config
+/infra/remote/backup/pg_backup.config
 
 # Notebooks
 /datascience/notebooks
@@ -188,6 +202,3 @@ backend/.gradle
 
 # Ignore Gradle build output directory
 backend/build
-
-# MonitorEnv
-.env.monitorenv

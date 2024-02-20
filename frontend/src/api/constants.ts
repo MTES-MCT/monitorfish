@@ -4,6 +4,10 @@ export const RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS = {
   pollingInterval: FIVE_MINUTES
 }
 
+export const RTK_FORCE_REFETCH_QUERY_OPTIONS = {
+  forceRefetch: true
+}
+
 export enum HttpStatusCode {
   OK = 200,
   CREATED = 201,

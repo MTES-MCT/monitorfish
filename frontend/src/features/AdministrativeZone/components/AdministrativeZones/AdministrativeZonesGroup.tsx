@@ -88,7 +88,7 @@ const List = styled.div<{
   isOpen: boolean
   length: number
 }>`
-  height: ${p => (p.isOpen && p.length ? p.length * 34 + 10 : 0)}px;
+  height: ${p => (p.isOpen && p.length ? p.length * 37 + 10 : 0)}px;
   overflow: hidden;
   transition: 0.2s all;
 `

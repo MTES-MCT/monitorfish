@@ -10,7 +10,7 @@ services:
     ports:
       - $DB_PUBLIC_PORT:5432
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 1s
       timeout: 5s
       retries: 60
@@ -26,7 +26,7 @@ services:
     ports:
       - 5433:5432
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 1s
       timeout: 1s
       retries: 30
@@ -75,14 +75,15 @@ services:
         condition: service_healthy
     restart: always
     logging:
-      driver: 'json-file'
+      driver: "json-file"
       options:
-        max-size: '1024m'
+        max-size: "1024m"
 
   monitorenv-app:
     image: docker.pkg.github.com/mtes-mct/monitorenv/monitorenv-app:loup_add-mission-form-auto-save-and-update-refactoring
     container_name: monitorenv_backend
     environment:
+      # TODO Update these envs to match MonitorEnv migration to Vite.
       - ENV_DB_URL=jdbc:postgresql://monitorenv-db:5432/monitorenvdb?user=postgres&password=postgres
       - SPRING_PROFILES_ACTIVE=test
       - HOST_IP=127.0.0.1
@@ -108,14 +109,13 @@ services:
     ports:
       - 8081:8080
     volumes:
-      - ./mappings:/home/wiremock/mappings
+      - ../../fontend/cypress/mappings:/home/wiremock/mappings
     healthcheck:
-      test:
-        [
-          'CMD-SHELL',
-          'curl --fail
+      test: [
+          "CMD-SHELL",
+          "curl --fail
           http://localhost:8080/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&CQL_FILTER=topic=%27Ouest%20Cotentin%20Bivalves%27%20AND%20zone=%27Praires%20Ouest%20cotentin%27
-          || exit 1 '
+          || exit 1 ",
         ]
       interval: 1s
       timeout: 1s

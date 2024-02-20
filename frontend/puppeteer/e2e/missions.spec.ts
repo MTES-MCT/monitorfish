@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from '@jest/globals'
 import { platform } from 'os'
 import { Page } from 'puppeteer'
 
-import { assertContains, getFirstTab, getInputContent, listenToConsole, wait } from './utils'
+import { assertContains, getFirstTab, getInputContent, listenToConsole, wait, waitForSelectorWithText } from './utils'
 import { SeaFrontGroup } from '../../src/domain/entities/seaFront/constants'
 
 const TIMEOUT = 120 * 1000
@@ -35,7 +35,11 @@ describe('Missions Form', () => {
 
       await page.waitForSelector(`[data-cy="side-window-sub-menu-${SeaFrontGroup.NAMO}"]`)
       await page.click(`[data-cy="side-window-sub-menu-${SeaFrontGroup.NAMO}"]`)
-      await wait(2000)
+      await waitForSelectorWithText(page, 'h1', 'Missions et contrôles')
+
+      // Remove default mission filter "En cours"
+      await page.waitForSelector('.Component-SingleTag')
+      await page.click('.Component-SingleTag > button')
 
       await page.waitForSelector('.TableBodyRow[data-id="29"] > div > [title="Éditer la mission"]')
       await page.click('.TableBodyRow[data-id="29"] > div > [title="Éditer la mission"]')

@@ -18,7 +18,7 @@ run-back: run-stubbed-apis
 
 run-back-with-monitorenv: run-monitorenv
 	docker compose up -d --quiet-pull --wait db
-	cd backend && ./gradlew bootRun --args='--spring.profiles.active=local-with-monitorenv --spring.config.additional-location=$(INFRA_FOLDER)'
+	cd backend && MONITORENV_URL=http://localhost:9880 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
 
 run-monitorenv:
 	docker compose \

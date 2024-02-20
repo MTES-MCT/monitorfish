@@ -15,6 +15,7 @@
     "build:local": "ENV_PROFILE=local vite build",
     "cypress:open": "cypress open --browser firefox --config-file ./config/cypress.config.ts --e2e",
     "dev": "vite --port 3000",
+    "dev-env": "dotenv -v FRONTEND_MONITORENV_URL=//localhost:9880 vite --port 3000",
     "dev-puppeteer": "dotenv -v FRONTEND_MONITORENV_URL=//localhost:8882 vite --port 3000",
     "bundle-sw": "esbuild src/workers/serviceWorker.ts --bundle --outfile=public/service-worker.js",
     "prepare": "cd .. && ./frontend/node_modules/.bin/husky ./frontend/config/husky",

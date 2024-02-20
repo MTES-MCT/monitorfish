@@ -38,8 +38,8 @@ clean:
 	rm -Rf ./backend/target
 	docker compose down -v
 	docker compose --env-file ./infra/.env.monitorenv -f ./infra/docker/docker-compose.monitorenv.dev.yml down -v
-	docker compose --env-file ./infra/.env -f ./frontend/cypress/docker-compose.yml down -v
-	docker compose -f ./frontend/puppeteer/docker-compose.dev.yml down -v
+	docker compose --env-file ./infra/.env -f ./infra/docker/docker-compose.cypress.yml down -v
+	docker compose -f ./infra/docker/docker-compose.cypress.dev.yml down -v
 
 check-clean-archi:
 	cd backend/tools && ./check-clean-architecture.sh
@@ -61,7 +61,7 @@ lint-back:
 
 run-back-for-puppeteer: run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db
-	docker compose -f ./frontend/puppeteer/docker-compose.dev.yml up -d
+	docker compose -f ./infra/docker/docker-compose.cypress.dev.yml up -d
 	cd backend && MONITORENV_URL=http://localhost:8882 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
 
 run-front-for-puppeteer:
@@ -69,7 +69,7 @@ run-front-for-puppeteer:
 
 # CI commands - app
 docker-build:
-	docker build --no-cache -f infra/docker/DockerfileBuildApp . -t monitorfish-app:$(VERSION) \
+	docker build --no-cache -f infra/docker/app/Dockerfile . -t monitorfish-app:$(VERSION) \
 		--build-arg VERSION=$(VERSION) \
 		--build-arg ENV_PROFILE=$(ENV_PROFILE) \
 		--build-arg GITHUB_SHA=$(GITHUB_SHA) \
@@ -82,22 +82,22 @@ docker-tag:
 docker-push:
 	docker push docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-app:$(VERSION)
 docker-compose-down:
-	docker compose -f ./frontend/cypress/docker-compose.yml down -v
+	docker compose -f ./infra/docker/docker-compose.cypress.yml down -v
 docker-compose-up:
-	docker compose -f ./frontend/cypress/docker-compose.yml up -d --quiet-pull db
-	docker compose -f ./frontend/cypress/docker-compose.yml up --quiet-pull flyway
-	docker compose -f ./frontend/cypress/docker-compose.yml up -d --quiet-pull app
+	docker compose -f ./infra/docker/docker-compose.cypress.yml up -d --quiet-pull db
+	docker compose -f ./infra/docker/docker-compose.cypress.yml up --quiet-pull flyway
+	docker compose -f ./infra/docker/docker-compose.cypress.yml up -d --quiet-pull app
 	@printf 'Waiting for backend app to be ready'
 	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
 
 docker-compose-puppeteer-up:
-	docker compose -f ./frontend/puppeteer/docker-compose.yml up -d
+	docker compose -f ./infra/docker/docker-compose.puppeteer.yml up -d
 	@printf 'Waiting for backend app to be ready'
 	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
 
 # CI commands - data pipeline
 docker-build-pipeline:
-	docker build -f "infra/docker/Dockerfile.DataPipeline" . -t monitorfish-pipeline:$(VERSION)
+	docker build -f ./infra/docker/datapipeline/Dockerfile . -t monitorfish-pipeline:$(VERSION)
 docker-test-pipeline:
 	docker run --network host -v /var/run/docker.sock:/var/run/docker.sock -u monitorfish-pipeline:$(DOCKER_GROUP) --env-file datascience/.env.test --env HOST_MIGRATIONS_FOLDER=$(HOST_MIGRATIONS_FOLDER) monitorfish-pipeline:$(VERSION) coverage run -m pytest --pdb tests
 docker-tag-pipeline:

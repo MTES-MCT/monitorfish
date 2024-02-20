@@ -14,7 +14,7 @@ on:
       - "**.yml"
       - ".github/workflows/cicd.yml"
       - "infra/configurations/**.properties"
-      - "infra/docker/DockerfileBuildApp"
+      - "infra/docker/app/**"
       - "**.sql"
       - "backend/pom.xml"
       - "backend/build.gradle.kts"
@@ -156,7 +156,7 @@ jobs:
           context: .
           load: true
           builder: ${{ steps.buildx.outputs.name }}
-          file: infra/docker/DockerfileBuildApp
+          file: infra/docker/app/Dockerfile
           push: false
           tags: monitorfish-app:${{ env.VERSION }}
           cache-from: type=local,src=/tmp/.buildx-cache-app

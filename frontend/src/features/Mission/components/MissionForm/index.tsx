@@ -617,8 +617,11 @@ export function MissionForm() {
           </div>
           <div>
             <MissionInfos>
-              {mainFormValues.createdAtUtc && (
-                <>Mission créée le {customDayjs(mainFormValues.createdAtUtc).utc().format('D MMM YYYY, HH:mm')}. </>
+              {mainFormValues.createdAtUtc && mainFormValues.missionSource && (
+                <>
+                  Mission créée par le {Mission.MissionSourceLabel[mainFormValues.missionSource]} le{' '}
+                  {customDayjs(mainFormValues.createdAtUtc).utc().format('DD/MM/YYYY à HH:mm')}.{' '}
+                </>
               )}
               {!mainFormValues.createdAtUtc && <>Mission non enregistrée. </>}
               {mainFormValues.updatedAtUtc && (
@@ -692,6 +695,7 @@ export function MissionForm() {
 
 const MissionInfos = styled.div`
   font-style: italic;
+  color: ${p => p.theme.color.slateGray};
 `
 
 export const BackToListIcon = styled(Icon.Chevron)`

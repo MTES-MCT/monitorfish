@@ -2,13 +2,16 @@ import type { AnyObject } from '@mtes-mct/monitor-ui'
 
 // Don't forget to mirror any update here in the backend enum.
 export enum ApiErrorCode {
+  EXISTING_MISSION_ACTION = 'EXISTING_MISSION_ACTION',
   /** Thrown when attempting to delete an entity which has  to non-archived children. */
   FOREIGN_KEY_CONSTRAINT = 'FOREIGN_KEY_CONSTRAINT',
+
   /** Thrown when attempting to archive an entity linked to non-archived children. */
   UNARCHIVED_CHILD = 'UNARCHIVED_CHILD'
 }
 
 export interface BackendApiErrorResponse {
+  code: ApiErrorCode | null
   type: ApiErrorCode | null
 }
 

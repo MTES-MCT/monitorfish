@@ -23,7 +23,7 @@ import {
   mapControlUnitsToUniqueSortedNamesAsOptions,
   mapToSortedResourcesAsOptions
 } from './utils'
-import { useGetEngagedControlUnitsQuery } from '../../apis'
+import { useGetEngagedControlUnitsQuery } from '../../../../monitorenvMissionApi'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
 
 import type { MissionMainFormValues } from '../../types'

@@ -59,7 +59,7 @@ export function ReportingForm({
   const [controlUnitId, setControlUnitId] = useState<number | null>(null)
   const [authorTrigram, setAuthorTrigram] = useState('')
   const [authorContact, setAuthorContact] = useState('')
-  const [reportingActor, setReportingActor] = useState(ReportingOriginActor.OPS.code)
+  const [reportingActor, setReportingActor] = useState<keyof typeof ReportingOriginActor>('OPS')
   const [title, setTitle] = useState('')
   const [natinfCode, setNatinfCode] = useState<number | null>(null)
   const [description, setDescription] = useState('')

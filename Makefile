@@ -39,7 +39,7 @@ clean:
 	docker compose down -v
 	docker compose --env-file ./infra/.env.monitorenv -f ./infra/docker/docker-compose.monitorenv.dev.yml down -v
 	docker compose --env-file ./infra/.env -f ./infra/docker/docker-compose.cypress.yml down -v
-	docker compose -f ./infra/docker/docker-compose.cypress.dev.yml down -v
+	docker compose -f ./infra/docker/docker-compose.puppeteer.dev.yml down -v
 
 check-clean-archi:
 	cd backend/tools && ./check-clean-architecture.sh
@@ -61,7 +61,7 @@ lint-back:
 
 run-back-for-puppeteer: run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db
-	docker compose -f ./infra/docker/docker-compose.cypress.dev.yml up -d
+	docker compose -f ./infra/docker/docker-compose.puppeteer.dev.yml up -d
 	cd backend && MONITORENV_URL=http://localhost:8882 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
 
 run-front-for-puppeteer:

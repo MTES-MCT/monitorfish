@@ -188,3 +188,6 @@ backend/.gradle
 
 # Ignore Gradle build output directory
 backend/build
+
+# MonitorEnv
+.env.monitorenv

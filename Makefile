@@ -1,45 +1,69 @@
 INFRA_FOLDER="$(shell pwd)/infra/configurations/"
 HOST_MIGRATIONS_FOLDER=$(shell pwd)/backend/src/main/resources/db/migration
 
-.PHONY: install init-sig run-front run-back docker-build docker-tag docker-push check-clean-archi test restart-app
+.PHONY: clean install test
 
-# DEV commands
+################################################################################
+# Local Development
+
 install:
 	cd ./frontend && npm i
+
 run-front:
 	cd ./frontend && npm run dev
+
 run-back: run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db
 	cd backend && ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
+
+run-back-with-monitorenv: run-monitorenv
+	docker compose up -d --quiet-pull --wait db
+	cd backend && ./gradlew bootRun --args='--spring.profiles.active=local-with-monitorenv --spring.config.additional-location=$(INFRA_FOLDER)'
+
+run-monitorenv:
+	docker compose \
+		--project-directory ./infra/docker \
+		--env-file ./infra/.env.monitorenv \
+		-f ./infra/docker/docker-compose.monitorenv.dev.yml \
+		up -d monitorenv_app
+
 run-stubbed-apis:
 	docker compose stop geoserver-monitorenv-stubs
 	docker compose up -d --quiet-pull --wait geoserver-monitorenv-stubs
+
 stop-stubbed-apis:
 	docker stop cypress-geoserver-1
-erase-db:
+
+clean:
+	rm -Rf ./backend/target
 	docker compose down -v
-	docker compose -f ./frontend/cypress/docker-compose.yml down -v
+	docker compose --env-file ./infra/.env.monitorenv -f ./infra/docker/docker-compose.monitorenv.dev.yml down -v
+	docker compose --env-file ./infra/.env -f ./frontend/cypress/docker-compose.yml down -v
 	docker compose -f ./frontend/puppeteer/docker-compose.dev.yml down -v
+
 check-clean-archi:
 	cd backend/tools && ./check-clean-architecture.sh
+
+################################################################################
+# Testing
+
 test: test-back
 	cd frontend && CI=true npm run test:unit -- --coverage
+
 test-back: check-clean-archi
 	cd backend && ./gradlew clean test
-clean:
-	make erase-db
-	rm -Rf ./backend/target
-dev: clean
-	make run-back
+
 lint-back:
 	cd ./backend && ./gradlew ktlintFormat | grep -v \
 		-e "Exceeded max line length" \
 		-e "Package name must not contain underscore" \
 		-e "Wildcard import"
+
 run-back-for-puppeteer: run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db
 	docker compose -f ./frontend/puppeteer/docker-compose.dev.yml up -d
 	cd backend && MONITORENV_URL=http://localhost:8882 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
+
 run-front-for-puppeteer:
 	cd ./frontend && npm run dev-puppeteer
 
@@ -120,3 +144,9 @@ build-docs-locally:
 	cd datascience/docs && \
 	poetry run sphinx-build -b html source build/html/en && \
 	poetry run sphinx-build -b html -D language=fr source build/html/fr
+
+################################################################################
+# Alias commands
+
+dev: clean run-back
+dev-env: clean run-back-with-monitorenv

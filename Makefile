@@ -149,4 +149,4 @@ build-docs-locally:
 # Alias commands
 
 dev: clean run-back
-dev-env: clean run-back-with-monitorenv
+dev-monitorenv: clean run-back-with-monitorenv

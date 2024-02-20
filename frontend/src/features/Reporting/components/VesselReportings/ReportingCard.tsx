@@ -1,3 +1,4 @@
+import { getReportingActor } from '@features/Reporting/components/VesselReportings/utils'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -12,10 +13,9 @@ import InfractionSuspicionIconSVG from '../../../icons/Icone_alerte_signalement_
 import ObservationIconSVG from '../../../icons/Icone_observations.svg?react'
 import { getAlertNameFromType } from '../../../SideWindow/Alert/AlertListAndReportingList/utils'
 import { setEditedReporting } from '../../slice'
-import { reportingIsAnInfractionSuspicion, ReportingOriginActor, ReportingTypeCharacteristics } from '../../types'
+import { reportingIsAnInfractionSuspicion, ReportingTypeCharacteristics } from '../../types'
 import archiveReporting from '../../useCases/archiveReporting'
 
-import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
 import type { Reporting } from '../../../../domain/types/reporting'
 import type { Promisable } from 'type-fest'
 
@@ -62,13 +62,13 @@ export function ReportingCard({
           )}
         </Date>
         {reporting.type !== ReportingType.ALERT && <Description>{reporting.value.description}</Description>}
-        {reporting.type !== ReportingType.ALERT && reporting.value.authorContact && (
+        {reporting.type !== ReportingType.ALERT && !!reporting.value.authorContact && (
           <Author>Émetteur: {reporting.value.authorContact}</Author>
         )}
-        {reporting.type !== ReportingType.ALERT && reporting.value.authorTrigram && (
+        {reporting.type !== ReportingType.ALERT && !!reporting.value.authorTrigram && (
           <Author>Saisi par: {reporting.value.authorTrigram}</Author>
         )}
-        {reporting.type !== ReportingType.OBSERVATION && reporting.value.natinfCode && (
+        {reporting.type !== ReportingType.OBSERVATION && !Number.isNaN(reporting.value.natinfCode) && (
           <Natinf
             title={
               reporting.infraction
@@ -107,15 +107,6 @@ export function ReportingCard({
       )}
     </Wrapper>
   )
-}
-
-const getReportingActor = (reportingActor, unit: LegacyControlUnit.LegacyControlUnit | null) => {
-  switch (reportingActor) {
-    case ReportingOriginActor.UNIT.code:
-      return unit?.name || 'Unité inconnue'
-    default:
-      return reportingActor
-  }
 }
 
 const Wrapper = styled.div<{

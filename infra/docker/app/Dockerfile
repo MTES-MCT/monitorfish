@@ -120,7 +120,7 @@ COPY --from=buildSourcemaps /tmp/frontend/build /home/monitorfish/public/
 
 # Copy import-meta-env
 COPY --from=buildFront /tmp/frontend/import-meta-env /home/monitorfish/
-COPY --from=buildFront /tmp/frontend/.env.example /home/monitorfish/
+COPY --from=buildFront /tmp/frontend/.env.local.defaults /home/monitorfish/
 COPY --from=buildFront /tmp/infra/docker/app/env.sh /home/monitorfish/
 
 # Add logs folder to be mounted as volume

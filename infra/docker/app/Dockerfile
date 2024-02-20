@@ -8,7 +8,7 @@ ARG VERSION=NO_VERSION
 ########################################
 # Build monitorfish backend with maven #
 ########################################
-FROM gradle:8.4-jdk17 as buildBack
+FROM gradle:8.4-jdk17 AS buildBack
 
 ARG GITHUB_SHA
 ARG VERSION
@@ -29,7 +29,7 @@ RUN gradle assemble
 ###########################
 # Build frontend with npm #
 ###########################
-FROM node:20-alpine as buildFront
+FROM node:20-alpine AS buildFront
 
 ARG VERSION
 ARG ENV_PROFILE
@@ -54,7 +54,7 @@ RUN npx pkg ./node_modules/@import-meta-env/cli/bin/import-meta-env.js \
 ######################
 # Upload sourcemaps  #
 ######################
-FROM getsentry/sentry-cli:2.19.4 as buildSourcemaps
+FROM getsentry/sentry-cli:2.19.4 AS buildSourcemaps
 
 ARG VERSION
 ARG SENTRY_URL

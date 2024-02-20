@@ -1,18 +1,18 @@
 module.exports = {
-  rootDir: '../..',
-  globalSetup: "<rootDir>/puppeteer/setup.ts",
-  testEnvironment: '<rootDir>/puppeteer/puppeteer_environment.ts',
+  globalSetup: '<rootDir>/puppeteer/setup.ts',
   // because it's detected by the default value of testRegex
   // https://jestjs.io/docs/configuration#testregex-string--arraystring
-  globalTeardown: "<rootDir>/puppeteer/teardown.ts",
+  globalTeardown: '<rootDir>/puppeteer/teardown.ts',
+  preset: 'ts-jest',
+  rootDir: '../..',
+  testEnvironment: '<rootDir>/puppeteer/puppeteer_environment.ts',
   testMatch: ['<rootDir>/puppeteer/e2e/*.spec.ts'],
-  preset: "ts-jest",
   transform: {
-    ".ts": [
-      "ts-jest",
+    '.ts': [
+      'ts-jest',
       {
         isolatedModules: true,
-        useESM: true,
+        useESM: true
       }
     ]
   }

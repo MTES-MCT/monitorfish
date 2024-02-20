@@ -1,5 +1,6 @@
-import { beforeEach, expect, it } from '@jest/globals'
+import { beforeEach, describe, expect, it } from '@jest/globals'
 import { platform } from 'os'
+import { Page } from 'puppeteer'
 
 import { assertContains, getFirstTab, getInputContent, listenToConsole, wait } from './utils'
 import { SeaFrontGroup } from '../../src/domain/entities/seaFront/constants'
@@ -13,16 +14,14 @@ const WEBAPP_HOST = IS_DARWIN ? '0.0.0.0' : 'localhost'
 
 const URL = `http://${WEBAPP_HOST}:${WEBAPP_PORT}/side_window`
 
-let pageA
-let pageB
+let pageA: Page
+let pageB: Page
 
 describe('Missions Form', () => {
   beforeEach(async () => {
-    // @ts-ignore
     pageA = await getFirstTab(browsers[0])
     listenToConsole(pageA, 1)
 
-    // @ts-ignore
     pageB = await getFirstTab(browsers[1])
     listenToConsole(pageB, 2)
 

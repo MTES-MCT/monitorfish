@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { Page, Browser } from 'puppeteer'
+import { Page, Browser, type FrameWaitForFunctionOptions } from 'puppeteer'
 
 export function listenToConsole(page: Page, index: number) {
   page
@@ -58,4 +58,13 @@ export async function getFirstTab(browser: Browser) {
 export function wait(ms: number) {
   /* eslint-disable no-promise-executor-return */
   return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+export async function waitForSelectorWithText<Selector extends string>(
+  page: Page,
+  selector: Selector,
+  text: string,
+  options?: FrameWaitForFunctionOptions
+) {
+  await page.waitForFunction(`document.querySelector("${selector}").innerText.includes("${text}")`, options)
 }

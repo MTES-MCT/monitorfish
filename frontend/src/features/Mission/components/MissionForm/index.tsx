@@ -32,6 +32,7 @@ import { MainForm } from './MainForm'
 import { AutoSaveTag } from './shared/AutoSaveTag'
 import { DeletionConfirmationDialog } from './shared/DeletionConfirmationDialog'
 import { DraftCancellationConfirmationDialog } from './shared/DraftCancellationConfirmationDialog'
+import { ExternalActionsDialog } from './shared/ExternalActionsDialog'
 import { TitleSourceTag } from './shared/TitleSourceTag'
 import { TitleStatusTag } from './shared/TitleStatusTag'
 import { missionFormActions } from './slice'
@@ -44,6 +45,7 @@ import {
 import { areMissionFormsValuesValid } from './utils/areMissionFormsValuesValid'
 import { validateMissionForms } from './utils/validateMissionForms'
 import {
+  monitorenvMissionApi,
   useCreateMissionMutation,
   useDeleteMissionMutation,
   useUpdateMissionMutation
@@ -85,6 +87,8 @@ export function MissionForm() {
   const isDraftCancellationConfirmationDialogOpen = useMainAppSelector(
     store => store.sideWindow.isDraftCancellationConfirmationDialogOpen
   )
+  const [isExternalActionsDialogOpen, setIsExternalActionsDialogOpen] = useState(false)
+  const [actionsSources, setActionsSources] = useState<Mission.MissionSource[]>([])
   const [title, setTitle] = useState(getTitleFromMissionMainFormValues(mainFormValues, missionIdRef.current))
 
   // We use these keys to fully control when to re-render `<MainForm />` & `<ActionForm />`
@@ -222,8 +226,18 @@ export function MissionForm() {
       throw new FrontendError('`missionId` is undefined')
     }
 
-    await deleteMission(missionIdRef.current)
-    dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }))
+    try {
+      await deleteMission(missionIdRef.current).unwrap()
+      dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }))
+    } catch (error: any) {
+      setIsDeletionConfirmationDialogOpen(false)
+      logSoftError({
+        isSideWindowError: true,
+        message: '`delete()` failed.',
+        originalError: error,
+        userMessage: error.userMessage
+      })
+    }
   }, [deleteMission, dispatch])
 
   const reopen = useCallback(() => {
@@ -518,8 +532,18 @@ export function MissionForm() {
   )
 
   const toggleDeletionConfirmationDialog = useCallback(async () => {
-    setIsDeletionConfirmationDialogOpen(!isDeletionConfirmationDialogOpen)
-  }, [isDeletionConfirmationDialogOpen])
+    if (missionIdRef.current) {
+      const response = dispatch(monitorenvMissionApi.endpoints.canDeleteMission.initiate(missionIdRef.current))
+      const canDeleteMissionResponse = await response.unwrap()
+      if (canDeleteMissionResponse.canDelete) {
+        setIsDeletionConfirmationDialogOpen(!isDeletionConfirmationDialogOpen)
+
+        return
+      }
+      setActionsSources(canDeleteMissionResponse.sources)
+      setIsExternalActionsDialogOpen(true)
+    }
+  }, [isDeletionConfirmationDialogOpen, dispatch])
 
   useEffect(() => {
     if (!missionEvent) {
@@ -583,7 +607,7 @@ export function MissionForm() {
             {!!missionIdFromPath && (
               <Button
                 accent={Accent.SECONDARY}
-                disabled={isSaving || mainFormValues.missionSource !== Mission.MissionSource.MONITORFISH}
+                // disabled={isSaving || mainFormValues.missionSource !== Mission.MissionSource.MONITORFISH}
                 Icon={Icon.Delete}
                 onClick={toggleDeletionConfirmationDialog}
               >
@@ -658,6 +682,9 @@ export function MissionForm() {
       )}
       {isDraftCancellationConfirmationDialogOpen && (
         <DraftCancellationConfirmationDialog isAutoSaveEnabled={isAutoSaveEnabled} />
+      )}
+      {isExternalActionsDialogOpen && (
+        <ExternalActionsDialog onClose={() => setIsExternalActionsDialogOpen(false)} sources={actionsSources} />
       )}
     </>
   )

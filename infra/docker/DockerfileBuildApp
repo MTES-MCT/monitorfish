@@ -122,7 +122,6 @@ COPY --from=buildSourcemaps /tmp/frontend/build /home/monitorfish/public/
 COPY --from=buildFront /tmp/frontend/import-meta-env /home/monitorfish/
 COPY --from=buildFront /tmp/frontend/.env.example /home/monitorfish/
 COPY --from=buildFront /tmp/infra/docker/env.sh /home/monitorfish/
-COPY --from=buildFront /tmp/infra/configurations/frontend/.env.local /home/monitorfish/
 
 # Add logs folder to be mounted as volume
 RUN mkdir /home/monitorfish/logs
@@ -148,8 +147,6 @@ RUN chmod +rwx public/index.html
 USER monitorfish
 
 ENV VITE_GEOSERVER_LOCAL_URL=""
-
-RUN ./import-meta-env -e .env.local -x .env.example -p public/index.html
 
 ENTRYPOINT ["/home/monitorfish/env.sh"]
 

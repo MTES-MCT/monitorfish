@@ -54,12 +54,20 @@ export function FARMessageResume({
     [orderedSpeciesAndWeightArray, speciesAndPresentationToWeightOfFAR]
   )
 
-  const farMessageResumeTitleText =
-    totalFARWeight > 0
-      ? `${numberOfMessages} message${numberOfMessages > 1 ? 's' : ''} - ${totalFARWeight} kg pêchés au total`
-      : `${numberOfMessages} ${pluralize('message', numberOfMessages)} ${
-          allFARMessagesAreNotAcknowledged && `non ${pluralize('acquitté', numberOfMessages)}`
-        } – aucune capture`
+  const farMessageResumeTitleText = useMemo(() => {
+    if (totalFARWeight > 0) {
+      return `${numberOfMessages} message${numberOfMessages > 1 ? 's' : ''} - ${totalFARWeight} kg pêchés au total`
+    }
+
+    if (!allFARMessagesAreNotAcknowledged) {
+      return `${numberOfMessages} ${pluralize('message', numberOfMessages)} – aucune capture`
+    }
+
+    return `${numberOfMessages} ${pluralize('message', numberOfMessages)} non ${pluralize(
+      'acquitté',
+      numberOfMessages
+    )} – aucune capture`
+  }, [totalFARWeight, numberOfMessages, allFARMessagesAreNotAcknowledged])
 
   useEffect(() => {
     if (chartHeight !== 0 && initialChartHeight === 0) {

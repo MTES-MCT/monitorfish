@@ -52,7 +52,7 @@ export async function getInputContent(page: Page, selector: string) {
 export async function getFirstTab(browser: Browser) {
   const [firstTab] = await browser.pages()
 
-  return firstTab
+  return firstTab as Page
 }
 
 export function wait(ms: number) {

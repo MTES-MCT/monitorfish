@@ -12,7 +12,7 @@ export const marginsWithOneWarning: OverlayCardMargins = {
   xLeft: 20,
   xMiddle: -185,
   xRight: -407,
-  yBottom: -307,
+  yBottom: -305,
   yMiddle: -141,
   yTop: 20
 }
@@ -20,7 +20,7 @@ export const marginsWithTwoWarning: OverlayCardMargins = {
   xLeft: 20,
   xMiddle: -185,
   xRight: -407,
-  yBottom: -337,
+  yBottom: -334,
   yMiddle: -155,
   yTop: 20
 }

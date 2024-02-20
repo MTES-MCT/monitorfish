@@ -365,7 +365,7 @@ const TopTriangleShadow = styled.div<{
       ? marginsWithOneWarning.yBottom
       : props.numberOfWarnings === 2
       ? marginsWithTwoWarning.yBottom
-      : marginsWithoutAlert.yBottom) + 10}px;
+      : marginsWithoutAlert.yBottom) + 15}px;
   clear: top;
 `
 

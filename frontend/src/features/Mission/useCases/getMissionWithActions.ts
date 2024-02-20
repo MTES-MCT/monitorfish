@@ -2,7 +2,7 @@ import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { type MissionWithActions } from 'domain/entities/mission/types'
 
 import { missionActionApi } from '../../../api/missionAction'
-import { monitorenvMissionApi } from '../components/MissionForm/apis'
+import { monitorenvMissionApi } from '../monitorenvMissionApi'
 
 import type { MainAppThunk } from '../../../store'
 

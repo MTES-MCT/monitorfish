@@ -1,15 +1,15 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 
-import { useGetMissionsQuery } from '../../../../api/mission'
-import { MissionDateRangeFilter, MissionFilterType } from '../../../../features/SideWindow/MissionList/types'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { SEA_FRONT_GROUP_SEA_FRONTS } from '../../seaFront/constants'
-import { administrationFilterFunction } from '../filters/administrationFilterFunction'
-import { seaFrontFilterFunction } from '../filters/seaFrontFilterFunction'
-import { unitFilterFunction } from '../filters/unitFilterFunction'
+import { administrationFilterFunction } from '../../../../../domain/entities/mission/filters/administrationFilterFunction'
+import { seaFrontFilterFunction } from '../../../../../domain/entities/mission/filters/seaFrontFilterFunction'
+import { unitFilterFunction } from '../../../../../domain/entities/mission/filters/unitFilterFunction'
+import { SEA_FRONT_GROUP_SEA_FRONTS } from '../../../../../domain/entities/seaFront/constants'
+import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { MissionDateRangeFilter, MissionFilterType } from '../../../../SideWindow/MissionList/types'
+import { useGetMissionsQuery } from '../../../monitorfishMissionApi'
 
-import type { MissionWithActions } from '../types'
+import type { MissionWithActions } from '../../../../../domain/entities/mission/types'
 
 const TWO_MINUTES = 2 * 60 * 1000
 

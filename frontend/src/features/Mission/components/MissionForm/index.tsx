@@ -1,3 +1,4 @@
+import { monitorfishApi } from '@api/api'
 import {
   useCreateMissionActionMutation,
   useDeleteMissionActionMutation,
@@ -24,7 +25,6 @@ import { useDebouncedCallback } from 'use-debounce'
 import { ActionForm } from './ActionForm'
 import { ActionList } from './ActionList'
 import { getMissionActionFormInitialValues } from './ActionList/utils'
-import { useCreateMissionMutation, useDeleteMissionMutation, useUpdateMissionMutation } from './apis'
 import { AUTO_SAVE_ENABLED } from './constants'
 import { useListenToMissionEventUpdatesById } from './hooks/useListenToMissionEventUpdatesById'
 import { useUpdateFreezedActionFormValues } from './hooks/useUpdateFreezedActionFormValues'
@@ -43,6 +43,11 @@ import {
 } from './utils'
 import { areMissionFormsValuesValid } from './utils/areMissionFormsValuesValid'
 import { validateMissionForms } from './utils/validateMissionForms'
+import {
+  useCreateMissionMutation,
+  useDeleteMissionMutation,
+  useUpdateMissionMutation
+} from '../../monitorenvMissionApi'
 import { getMissionWithActions } from '../../useCases/getMissionWithActions'
 
 import type { MissionActionFormValues, MissionMainFormValues } from './types'
@@ -527,6 +532,13 @@ export function MissionForm() {
       updatedAtUtc: missionEvent.updatedAtUtc
     }))
   }, [missionEvent])
+
+  useEffect(
+    () => () => {
+      dispatch(monitorfishApi.util.invalidateTags(['Missions']))
+    },
+    [dispatch]
+  )
 
   return (
     <>

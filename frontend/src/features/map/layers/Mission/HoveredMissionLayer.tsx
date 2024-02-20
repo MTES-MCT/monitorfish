@@ -6,7 +6,7 @@ import { missionZoneStyle } from './MissionLayer/styles'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { getMissionFeatureZone } from '../../../../domain/entities/mission'
-import { useGetFilteredMissionsQuery } from '../../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
+import { useGetFilteredMissionsQuery } from '../../../Mission/components/MissionList/hooks/useGetFilteredMissionsQuery'
 import { monitorfishMap } from '../../monitorfishMap'
 
 import type { VectorLayerWithName } from '../../../../domain/types/layer'

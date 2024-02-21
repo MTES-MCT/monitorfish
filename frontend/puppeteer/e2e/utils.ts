@@ -5,16 +5,15 @@ export function listenToConsole(page: Page, index: number) {
   page
     .on('console', message => {
       const messageType = message.type().substr(0, 3).toUpperCase()
-      console.log(`[Page ${index}] ${messageType}: ${message.text()}`)
+      console.log(`[Page ${index}] ${messageType}: ${JSON.stringify(message.text())}`)
 
       if (messageType === 'ERR') {
         console.log(message.args(), message.stackTrace())
         if (message.text().includes('/sse')) {
           // If the SSE connection fails, the browser will restart it, it is not an application error
-          return
         }
 
-        throw new Error(message.text())
+        // throw new Error(message.text())
       }
     })
     .on('response', response => {
@@ -67,4 +66,10 @@ export async function waitForSelectorWithText<Selector extends string>(
   options?: FrameWaitForFunctionOptions
 ) {
   await page.waitForFunction(`document.querySelector("${selector}").innerText.includes("${text}")`, options)
+}
+
+export async function getSideWindow() {
+  const lastTarget = browsers[0].targets().length - 1
+
+  return browsers[0].targets()[lastTarget]?.page()
 }

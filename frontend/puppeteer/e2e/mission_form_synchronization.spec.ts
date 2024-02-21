@@ -17,7 +17,7 @@ const URL = `http://${WEBAPP_HOST}:${WEBAPP_PORT}/side_window`
 let pageA: Page
 let pageB: Page
 
-describe('Missions Form', () => {
+describe('Missions form synchronization', () => {
   beforeEach(async () => {
     pageA = await getFirstTab(browsers[0])
     listenToConsole(pageA, 1)

@@ -39,6 +39,7 @@ type ControlUnitSelectProps = Readonly<{
   ) => Promisable<void>
   onDelete: (index: number) => Promisable<void>
 }>
+
 export function ControlUnitSelect({
   allAdministrationsAsOptions,
   allControlUnits,
@@ -61,7 +62,7 @@ export function ControlUnitSelect({
     [allControlUnits, value]
   )
 
-  const isLoading = !allControlUnits.length
+  const isLoading = !activeAndSelectedControlUnits.length
   const isEdition = selectedPath.id
 
   const { data: engagedControlUnits = [] } = useGetEngagedControlUnitsQuery(undefined, {
@@ -115,7 +116,8 @@ export function ControlUnitSelect({
 
   const handleNameChange = useCallback(
     (nextName: string | undefined) => {
-      if (isLoading) {
+      const isSameValue = nextName === value.name
+      if (isLoading || isSameValue) {
         return
       }
 
@@ -125,7 +127,7 @@ export function ControlUnitSelect({
           ? {
               ...nextSelectedControlUnit,
               contact: value.contact,
-              resources: value.resources
+              resources: []
             }
           : {
               ...INITIAL_MISSION_CONTROL_UNIT,
@@ -151,6 +153,10 @@ export function ControlUnitSelect({
 
   const handleResourcesChange = useCallback(
     (nextResources: LegacyControlUnit.LegacyControlUnitResource[] | undefined) => {
+      if (isLoading) {
+        return
+      }
+
       const nextControlUnit: LegacyControlUnit.LegacyControlUnitDraft = {
         ...value,
         resources: nextResources ?? []
@@ -158,7 +164,7 @@ export function ControlUnitSelect({
 
       onChange(index, nextControlUnit)
     },
-    [value, index, onChange]
+    [value, index, onChange, isLoading]
   )
 
   const handleContactChange = useCallback(

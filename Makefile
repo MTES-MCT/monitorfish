@@ -3,7 +3,7 @@ HOST_MIGRATIONS_FOLDER=$(shell pwd)/backend/src/main/resources/db/migration
 
 .PHONY: clean env install test
 
-env:
+docker-env:
 	cd ./infra/docker && ../../frontend/node_modules/.bin/import-meta-env-prepare -x ./.env.local.defaults ./ -u
 
 ################################################################################
@@ -23,7 +23,7 @@ run-back-with-monitorenv: run-monitorenv
 	docker compose up -d --quiet-pull --wait db
 	cd backend && MONITORENV_URL=http://localhost:9880 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
 
-run-monitorenv: env
+run-monitorenv: docker-env
 	docker compose \
 		--project-directory ./infra/docker \
 		--env-file ./infra/docker/.env \
@@ -37,7 +37,7 @@ run-stubbed-apis:
 stop-stubbed-apis:
 	docker stop cypress-geoserver-1
 
-clean: env
+clean: docker-env
 	rm -Rf ./backend/target
 	docker compose down -v
 	docker compose --env-file ./infra/docker/.env -f ./infra/docker/docker-compose.monitorenv.dev.yml down -v
@@ -62,7 +62,7 @@ lint-back:
 		-e "Package name must not contain underscore" \
 		-e "Wildcard import"
 
-run-back-for-puppeteer: env run-stubbed-apis
+run-back-for-puppeteer: docker-env run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db
 	docker compose -f ./infra/docker/docker-compose.puppeteer.dev.yml up -d
 	cd backend && MONITORENV_URL=http://localhost:8882 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'

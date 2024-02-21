@@ -154,10 +154,8 @@ dist
 # All explicited here for documentation purposes:
 /frontend/.env
 /frontend/.env.local
-/infra/.env
-/infra/.env.local
-/infra/.env.monitorenv
-/infra/.env.monitorenv.local
+/infra/docker/.env
+/infra/docker/.env.local
 
 # Configuration files
 github_token.txt

@@ -4,7 +4,7 @@ HOST_MIGRATIONS_FOLDER=$(shell pwd)/backend/src/main/resources/db/migration
 .PHONY: clean env install test
 
 docker-env:
-	cd ./infra/docker && ../../frontend/node_modules/.bin/import-meta-env-prepare -x ./.env.local.defaults ./ -u
+	cd ./infra/docker && ../../frontend/node_modules/.bin/import-meta-env-prepare -u -x ./.env.local.defaults\
 
 ################################################################################
 # Local Development
@@ -42,7 +42,7 @@ clean: docker-env
 	docker compose down -v
 	docker compose --env-file ./infra/docker/.env -f ./infra/docker/docker-compose.monitorenv.dev.yml down -v
 	docker compose --env-file ./infra/docker/.env -f ./infra/docker/docker-compose.cypress.yml down -v
-	docker compose -f ./infra/docker/docker-compose.puppeteer.dev.yml down -v
+	docker compose -f ./infra/docker/docker-compose.puppeteer.yml down -v
 
 check-clean-archi:
 	cd backend/tools && ./check-clean-architecture.sh
@@ -64,8 +64,8 @@ lint-back:
 
 run-back-for-puppeteer: docker-env run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db
-	docker compose -f ./infra/docker/docker-compose.puppeteer.dev.yml up -d
-	cd backend && MONITORENV_URL=http://localhost:8882 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
+	docker compose -f ./infra/docker/docker-compose.puppeteer.yml up -d
+	cd backend && MONITORENV_URL=http://localhost:9880 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
 
 run-front-for-puppeteer:
 	cd ./frontend && npm run dev-puppeteer
@@ -90,11 +90,6 @@ docker-compose-up:
 	docker compose -f ./infra/docker/docker-compose.cypress.yml up -d --quiet-pull db
 	docker compose -f ./infra/docker/docker-compose.cypress.yml up --quiet-pull flyway
 	docker compose -f ./infra/docker/docker-compose.cypress.yml up -d --quiet-pull app
-	@printf 'Waiting for backend app to be ready'
-	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
-
-docker-compose-puppeteer-up:
-	docker compose -f ./infra/docker/docker-compose.puppeteer.yml up -d
 	@printf 'Waiting for backend app to be ready'
 	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
 

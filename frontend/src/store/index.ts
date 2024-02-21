@@ -59,6 +59,7 @@ export const mainStorePersistor = persistStore(mainStore)
 export type MainAppDispatch = typeof mainStore.dispatch
 export type MainAppThunk<ReturnType = void> = ThunkAction<ReturnType, MainRootState, undefined, AnyAction>
 export type MainRootState = ReturnType<typeof mainStore.getState>
+export type MainAppUseCase = () => MainAppThunk
 
 // =============================================================================
 // Backoffice Store

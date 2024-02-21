@@ -1,10 +1,11 @@
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
 import { forbiddenVesselSidebarPaths } from '../../domain/entities/authorization/constants'
 import { VesselSidebarTab } from '../../domain/entities/vessel/vessel'
-import { setDisplayedErrors } from '../../domain/shared_slices/DisplayedError'
+import { displayedErrorActions } from '../../domain/shared_slices/DisplayedError'
 import { showVesselSidebarTab } from '../../domain/shared_slices/Vessel'
 import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
@@ -30,7 +31,7 @@ export function Tabs() {
   }, [dispatch, isSuperUser, vesselSidebarTab])
 
   function showTab(tab: VesselSidebarTab) {
-    dispatch(setDisplayedErrors({ vesselSidebarError: null }))
+    dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
     dispatch(showVesselSidebarTab(tab))
   }
 

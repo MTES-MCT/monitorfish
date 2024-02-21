@@ -3,11 +3,11 @@ import styled from 'styled-components'
 
 import { SideWindowMenuKey, SideWindowStatus } from '../../domain/entities/sideWindow/constants'
 import { sideWindowActions } from '../../domain/shared_slices/SideWindow'
-import { sideWindowDispatchers } from '../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { MapButton } from '../commonStyles/MapButton'
 import AlertsSVG from '../icons/Icone_alertes.svg?react'
+import { openSideWindowPath } from '../SideWindow/useCases/openSideWindowPath'
 
 export function AlertsMapButton() {
   const dispatch = useMainAppDispatch()
@@ -25,7 +25,7 @@ export function AlertsMapButton() {
       return
     }
 
-    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
+    dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
   }, [dispatch, isActive])
 
   return (

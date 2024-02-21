@@ -1,3 +1,5 @@
+import { MissionForm } from '@features/Mission/components/MissionForm'
+import { useListenToAllMissionEventsUpdates } from '@features/Mission/components/MissionForm/hooks/useListenToAllMissionEventsUpdates'
 import { THEME, type NewWindowContextValue, NewWindowContext, Notifier } from '@mtes-mct/monitor-ui'
 import {
   type CSSProperties,
@@ -7,7 +9,8 @@ import {
   useEffect,
   useMemo,
   useRef,
-  useState
+  useState,
+  Fragment
 } from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled, { createGlobalStyle, StyleSheetManager } from 'styled-components'
@@ -15,9 +18,8 @@ import styled, { createGlobalStyle, StyleSheetManager } from 'styled-components'
 import { Alert } from './Alert'
 import { BeaconMalfunctionBoard } from './BeaconMalfunctionBoard'
 import { Menu } from './Menu'
-import { MissionForm } from './MissionForm'
-import { useListenToAllMissionEventsUpdates } from './MissionForm/hooks/useListenToAllMissionEventsUpdates'
 import { MissionList } from './MissionList'
+import { openSideWindowPath } from './useCases/openSideWindowPath'
 import { MissionEventContext } from '../../context/MissionEventContext'
 import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
@@ -26,10 +28,10 @@ import { getSilencedAlerts } from '../../domain/use_cases/alert/getSilencedAlert
 import getAllBeaconMalfunctions from '../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
 import getAllGearCodes from '../../domain/use_cases/gearCode/getAllGearCodes'
 import { getInfractions } from '../../domain/use_cases/infraction/getInfractions'
-import { sideWindowDispatchers } from '../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { FrontendErrorBoundary } from '../../ui/FrontendErrorBoundary'
+import { Loader as MissionFormLoader } from '../Mission/components/MissionForm/Loader'
 import { setEditedReportingInSideWindow } from '../Reporting/slice'
 import { getAllCurrentReportings } from '../Reporting/useCases/getAllCurrentReportings'
 
@@ -106,7 +108,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
       dispatch(getInfractions())
       dispatch(getAllGearCodes())
 
-      dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
+      dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
     }
   }, [dispatch, isFromURL])
 
@@ -144,10 +146,19 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
                   )}
                   {selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD && <BeaconMalfunctionBoard />}
                   {selectedPath.menu === SideWindowMenuKey.MISSION_LIST && <MissionList />}
+
                   {selectedPath.menu === SideWindowMenuKey.MISSION_FORM && (
-                    <MissionEventContext.Provider value={missionEvent}>
-                      <MissionForm />
-                    </MissionEventContext.Provider>
+                    <>
+                      {selectedPath.isLoading ? (
+                        <MissionFormLoader />
+                      ) : (
+                        <Fragment key={selectedPath.id ?? selectedPath.key}>
+                          <MissionEventContext.Provider value={missionEvent}>
+                            <MissionForm />
+                          </MissionEventContext.Provider>
+                        </Fragment>
+                      )}
+                    </>
                   )}
                 </Content>
               )}

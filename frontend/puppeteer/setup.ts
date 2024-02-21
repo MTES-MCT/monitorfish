@@ -10,7 +10,6 @@ const HEIGHT = 880
 
 console.log(`Running in ${process.env.CI ? 'headless' : 'browser'} mode.`)
 
-//
 export default async () => {
   const browsers = []
 

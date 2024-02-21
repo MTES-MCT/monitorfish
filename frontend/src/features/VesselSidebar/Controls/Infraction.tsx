@@ -1,10 +1,10 @@
+import { useGetNatinfsAsOptions } from '@features/Mission/components/MissionForm/hooks/useGetNatinfsAsOptions'
 import { find } from 'lodash'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import { MissionAction } from '../../../domain/types/missionAction'
-import { useGetNatinfsAsOptions } from '../../SideWindow/MissionForm/hooks/useGetNatinfsAsOptions'
 
 type InfractionProps = {
   index: number

@@ -1,6 +1,6 @@
+import { mapControlUnitsToUniqueSortedNamesAsOptions } from '@features/Mission/components/MissionForm/MainForm/FormikMultiControlUnitPicker/utils'
 import { uniq } from 'lodash'
 
-import { mapControlUnitsToUniqueSortedNamesAsOptions } from '../../../features/SideWindow/MissionForm/MainForm/FormikMultiControlUnitPicker/utils'
 import { getOptionsFromStrings } from '../../../utils/getOptionsFromStrings'
 
 import type { LegacyControlUnit } from '../../types/legacyControlUnit'

@@ -9,7 +9,12 @@ context('Side Window > Beacon Malfunction Board', () => {
     cy.get('*[data-cy="side-window-menu-beacon-malfunctions"]').click()
   })
 
-  it('A beacon malfunction card Should be moved in the Board', () => {
+  // The 4 specs below have been merged into one in order to prevent flakiness.
+  it('A beacon malfunction card Should be moved in the Board, initialized with the beacon malfunctions, be changed in the Board and opened', () => {
+    // -------------------------------------------------------------------------
+
+    cy.log('A beacon malfunction card Should be moved in the Board')
+
     // Given
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
       .children()
@@ -43,9 +48,11 @@ context('Side Window > Beacon Malfunction Board', () => {
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .should('have.length', 1)
-  })
 
-  it('Board Should be initialized with the beacon malfunctions', () => {
+    // -------------------------------------------------------------------------
+
+    cy.log('Board Should be initialized with the beacon malfunctions')
+
     // Then
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]').children().should('have.length', 7)
 
@@ -105,9 +112,11 @@ context('Side Window > Beacon Malfunction Board', () => {
       .first()
       .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
       .contains('Activité détectée')
-  })
 
-  it('A beacon malfunction card vessel status Should be changed in the Board', () => {
+    // -------------------------------------------------------------------------
+
+    cy.log('A beacon malfunction card vessel status Should be changed in the Board')
+
     // Given
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
       .children()
@@ -144,9 +153,11 @@ context('Side Window > Beacon Malfunction Board', () => {
       .first()
       .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
       .contains('Sans nouvelles')
-  })
 
-  it('Beacon malfunction Should be opened', () => {
+    // -------------------------------------------------------------------------
+
+    cy.log('Beacon malfunction Should be opened')
+
     // Given
     cy.intercept('GET', 'bff/v1/beacon_malfunctions/1').as('showBeaconMalfunction')
 

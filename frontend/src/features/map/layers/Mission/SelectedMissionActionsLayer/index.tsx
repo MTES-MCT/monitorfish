@@ -6,8 +6,8 @@ import { selectedMissionActionsStyles } from './styles'
 import { LayerProperties } from '../../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../../domain/entities/layers/types'
 import { getMissionActionFeature } from '../../../../../domain/entities/mission'
-import { useGetFilteredMissionsQuery } from '../../../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
+import { useGetFilteredMissionsQuery } from '../../../../Mission/components/MissionList/hooks/useGetFilteredMissionsQuery'
 import { monitorfishMap } from '../../../monitorfishMap'
 import { NEW_MISSION_ID } from '../constants'
 
@@ -18,9 +18,9 @@ import type { MutableRefObject } from 'react'
 
 export function UnmemoizedSelectedMissionActionsLayer() {
   const { missions } = useGetFilteredMissionsQuery()
-  const selectedMissionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionGeoJSON)
+  const selectedMissionGeoJSON = useMainAppSelector(store => store.missionForm.selectedMissionGeoJSON)
   const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
-  const draft = useMainAppSelector(state => state.mission.draft)
+  const draft = useMainAppSelector(store => store.missionForm.draft)
 
   const selectedMissionActions = useMemo(() => {
     if (!selectedMissionGeoJSON) {

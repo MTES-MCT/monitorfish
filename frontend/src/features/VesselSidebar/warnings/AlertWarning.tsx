@@ -2,11 +2,11 @@ import { batch } from 'react-redux'
 import styled from 'styled-components'
 
 import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
-import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import AlertSVG from '../../icons/Icone_alertes.svg?react'
 import { getAlertNameFromType } from '../../SideWindow/Alert/AlertListAndReportingList/utils'
 import { focusOnAlert } from '../../SideWindow/Alert/slice'
+import { openSideWindowPath } from '../../SideWindow/useCases/openSideWindowPath'
 
 export function AlertWarning({ selectedVessel }) {
   const dispatch = useMainAppDispatch()
@@ -30,7 +30,7 @@ export function AlertWarning({ selectedVessel }) {
 
 const showAlertInSideWindow = (dispatch, selectedVessel) => {
   batch(() => {
-    dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
+    dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
     dispatch(
       focusOnAlert({
         externalReferenceNumber: selectedVessel.externalReferenceNumber,

@@ -2,8 +2,8 @@ import { Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { SideWindowMenuKey, SideWindowMenuLabel } from '../../../domain/entities/sideWindow/constants'
-import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { openSideWindowPath } from '../useCases/openSideWindowPath'
 
 export type MenuProps = {
   selectedMenu: string | undefined
@@ -17,9 +17,7 @@ export function Menu({ selectedMenu }: MenuProps) {
         data-cy="side-window-menu-alerts"
         Icon={Icon.Alert}
         iconSize={26}
-        onClick={() =>
-          dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
-        }
+        onClick={() => dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))}
         role="menuitem"
         selected={selectedMenu === SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST}
         title={SideWindowMenuLabel.ALERT_LIST_AND_REPORTING_LIST}
@@ -29,7 +27,7 @@ export function Menu({ selectedMenu }: MenuProps) {
         data-cy="side-window-menu-mission-list"
         Icon={Icon.MissionAction}
         iconSize={26}
-        onClick={() => dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.MISSION_LIST }))}
+        onClick={() => dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }))}
         role="menuitem"
         selected={selectedMenu === SideWindowMenuKey.MISSION_LIST}
         title={SideWindowMenuLabel.MISSION_LIST}
@@ -38,7 +36,7 @@ export function Menu({ selectedMenu }: MenuProps) {
         data-cy="side-window-menu-beacon-malfunctions"
         Icon={Icon.Vms}
         iconSize={26}
-        onClick={() => dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.BEACON_MALFUNCTION_BOARD }))}
+        onClick={() => dispatch(openSideWindowPath({ menu: SideWindowMenuKey.BEACON_MALFUNCTION_BOARD }))}
         role="menuitem"
         selected={selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD}
         title={SideWindowMenuLabel.BEACON_MALFUNCTION_BOARD}

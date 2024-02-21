@@ -1,5 +1,6 @@
 import { monitorfishApi, monitorfishApiKy } from './api'
 import { ApiError } from '../libs/ApiError'
+import { FrontendApiError } from '../libs/FrontendApiError'
 
 import type { MissionAction } from '../domain/types/missionAction'
 
@@ -33,7 +34,7 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
       // As all mission will be fetched when closing the mission form
       providesTags: () => [{ type: 'MissionActions' }],
       query: missionId => `/mission_actions?missionId=${missionId}`,
-      transformErrorResponse: response => new ApiError(GET_MISSION_ACTIONS_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new FrontendApiError(GET_MISSION_ACTIONS_ERROR_MESSAGE, response)
     }),
 
     updateMissionAction: builder.mutation<void, MissionAction.MissionAction>({

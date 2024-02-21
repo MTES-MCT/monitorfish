@@ -9,17 +9,17 @@ import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
 import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
 import { getMissionFeatureZone } from '../../../../domain/entities/mission'
-import { useGetFilteredMissionsQuery } from '../../../../domain/entities/mission/hooks/useGetFilteredMissionsQuery'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
+import { useGetFilteredMissionsQuery } from '../../../Mission/components/MissionList/hooks/useGetFilteredMissionsQuery'
 import { monitorfishMap } from '../../monitorfishMap'
 
 import type { VectorLayerWithName } from '../../../../domain/types/layer'
 
 export function UnmemoizedSelectedMissionLayer() {
   const { missions } = useGetFilteredMissionsQuery()
-  const selectedMissionGeoJSON = useMainAppSelector(store => store.mission.selectedMissionGeoJSON)
+  const selectedMissionGeoJSON = useMainAppSelector(store => store.missionForm.selectedMissionGeoJSON)
   const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
-  const draft = useMainAppSelector(state => state.mission.draft)
+  const draft = useMainAppSelector(store => store.missionForm.draft)
 
   const selectedMission = useMemo(() => {
     if (!selectedMissionGeoJSON) {
@@ -97,7 +97,7 @@ export function UnmemoizedSelectedMissionLayer() {
     }
 
     // When creating a new mission, dummy NEW_MISSION_ID is used
-    const missionFeature = getMissionFeatureZone({ ...draft.mainFormValues, id: missionId || NEW_MISSION_ID })
+    const missionFeature = getMissionFeatureZone({ ...draft.mainFormValues, id: missionId ?? NEW_MISSION_ID })
     getVectorSource().addFeature(missionFeature)
   }, [getVectorSource, draft?.mainFormValues, missionId])
 

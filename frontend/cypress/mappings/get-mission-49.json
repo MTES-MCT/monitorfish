@@ -15,9 +15,9 @@
       "missionTypes": ["SEA"],
       "controlUnits": [
         {
-          "id": 10003,
-          "administration": "DDTM",
-          "name": "DML 2A (historique)",
+          "id": 10336,
+          "administration": "Gendarmerie Maritime",
+          "name": "BSL Lorient",
           "resources": [],
           "contact": null,
           "isArchived": false

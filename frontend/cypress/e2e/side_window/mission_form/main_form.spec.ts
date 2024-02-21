@@ -43,7 +43,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.fill('Types de mission', ['Mer'])
 
     cy.fill('Administration 1', 'DDTM')
-    cy.fill('Unité 1', 'Cultures marines – DDTM 40')
+    cy.fill('Unité 1', 'Cultures marines 56')
 
     cy.wait('@createMission').then(interception => {
       if (!interception.response) {
@@ -58,9 +58,9 @@ context('Side Window > Mission Form > Main Form', () => {
           {
             administration: 'DDTM',
             contact: null,
-            id: 10001,
+            id: 10499,
             isArchived: false,
-            name: 'Cultures marines – DDTM 40',
+            name: 'Cultures marines 56',
             resources: []
           }
         ],
@@ -105,7 +105,7 @@ context('Side Window > Mission Form > Main Form', () => {
       cy.fill('Types de mission', ['Mer'])
 
       cy.fill('Administration 1', 'DDTM')
-      cy.fill('Unité 1', 'Cultures marines – DDTM 40')
+      cy.fill('Unité 1', 'Cultures marines 56')
 
       cy.wait(500)
 
@@ -133,9 +133,9 @@ context('Side Window > Mission Form > Main Form', () => {
             {
               administration: 'DDTM',
               contact: null,
-              id: 10001,
+              id: 10499,
               isArchived: false,
-              name: 'Cultures marines – DDTM 40',
+              name: 'Cultures marines 56',
               resources: []
             }
           ],
@@ -183,22 +183,22 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.fill('Ordre de mission', 'Oui')
 
     cy.fill('Administration 1', 'DDTM')
-    cy.fill('Unité 1', 'Cultures marines – DDTM 40')
+    cy.fill('Unité 1', 'Cultures marines 56')
     cy.wait(500)
-    cy.fill('Moyen 1', ['Semi-rigide 1'])
+    cy.fill('Moyen 1', ['Brezel - FAH 7185']).wait(250)
     cy.fill('Contact de l’unité 1', 'Bob')
     cy.fill('Contact de l’unité 1', 'Bob')
 
     cy.clickButton('Ajouter une autre unité')
 
-    cy.fill('Administration 2', 'DREAL')
-    cy.fill('Unité 2', 'DREAL Pays-de-La-Loire')
-    cy.fill('Moyen 2', ['ALTAIR', 'ARIOLA'])
+    cy.fill('Administration 2', 'Office Français de la Biodiversité')
+    cy.fill('Unité 2', 'OFB SD 56')
+    cy.fill('Moyen 2', ['Jean Armel', 'Kereon II'])
     cy.fill('Contact de l’unité 2', 'Bob 2')
     cy.wait(500)
 
     cy.fill('CACEM : orientations, observations', 'Une note.')
-    cy.fill('CNSP : orientations, observations', 'Une autre note.')
+    cy.fill('CNSP : orientations, observations', 'Une autre note.').wait(250)
     cy.fill('Ouvert par', 'Nemo')
     cy.fill('Clôturé par', 'Doris')
 
@@ -213,30 +213,30 @@ context('Side Window > Mission Form > Main Form', () => {
             {
               administration: 'DDTM',
               contact: 'Bob',
-              id: 10001,
+              id: 10499,
               isArchived: false,
-              name: 'Cultures marines – DDTM 40',
+              name: 'Cultures marines 56',
               resources: [
                 {
-                  id: 1,
-                  name: 'Semi-rigide 1'
+                  id: 314,
+                  name: 'Brezel - FAH 7185'
                 }
               ]
             },
             {
-              administration: 'DREAL',
+              administration: 'Office Français de la Biodiversité',
               contact: 'Bob 2',
-              id: 10019,
+              id: 10338,
               isArchived: false,
-              name: 'DREAL Pays-de-La-Loire',
+              name: 'OFB SD 56',
               resources: [
                 {
-                  id: 10,
-                  name: 'ALTAIR'
+                  id: 388,
+                  name: 'Jean Armel – AY 894009'
                 },
                 {
-                  id: 12,
-                  name: 'ARIOLA'
+                  id: 580,
+                  name: 'Kereon II – AY 933119 K'
                 }
               ]
             }
@@ -292,9 +292,9 @@ context('Side Window > Mission Form > Main Form', () => {
           {
             administration: 'Douane',
             contact: null,
-            id: 10015,
+            id: 10484,
             isArchived: false,
-            name: 'BGC Bastia',
+            name: 'BGC Lorient - DF 36 Kan An Avel',
             resources: []
           }
         ],
@@ -406,7 +406,7 @@ context('Side Window > Mission Form > Main Form', () => {
       })
     })
 
-    cy.get('h1').should('contain.text', 'Mission Mer – BGC Bastia')
+    cy.get('h1').should('contain.text', 'Mission Mer – BGC Lorient - DF 36 Kan An Avel')
   })
 
   it('Should close a new mission', () => {
@@ -455,7 +455,7 @@ context('Side Window > Mission Form > Main Form', () => {
         id: 2
       },
       statusCode: 200
-    }).as('updateMissionAction')
+    }).as('deleteMissionAction')
     cy.intercept('POST', '/api/v1/missions/2', {
       body: {
         id: 2
@@ -465,25 +465,28 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.fill('Clôturé par', 'Doris')
 
-    cy.wait(500)
+    cy.wait('@updateMission')
 
     cy.clickButton('Supprimer l’action')
+
+    cy.wait('@deleteMissionAction')
+    cy.wait('@updateMission')
+
+    cy.wait(250)
     cy.clickButton('Clôturer')
 
-    cy.waitForLastRequest(
-      '@updateMission',
-      {
-        body: {
-          // We check this prop to be sure all the data is there (this is the last field to be filled)
-          closedBy: 'Doris',
-          id: 2,
-          isClosed: true
-        }
-      },
-      5
-    )
-      .its('response.statusCode')
-      .should('eq', 201)
+    cy.wait('@updateMission').then(interception => {
+      if (!interception.response) {
+        assert.fail('`interception.response` is undefined.')
+      }
+
+      assert.deepInclude(interception.request.body, {
+        // We check this prop to be sure all the data is there (this is the last field to be filled)
+        closedBy: 'Doris',
+        id: 2,
+        isClosed: true
+      })
+    })
   })
 
   it('Should show the cancellation confirmation dialog when switching to another menu while a draft is dirty', () => {
@@ -536,12 +539,17 @@ context('Side Window > Mission Form > Main Form', () => {
           closedBy: 'Cynthia Phillips',
           controlUnits: [
             {
-              administration: 'DDTM',
+              administration: 'Gendarmerie Maritime',
               contact: 'Bob',
-              id: 10003,
+              id: 10336,
               isArchived: false,
-              name: 'DML 2A (historique)',
-              resources: [{ id: 3, name: 'Semi-rigide 1' }]
+              name: 'BSL Lorient',
+              resources: [
+                {
+                  id: 90,
+                  name: 'Voiture'
+                }
+              ]
             }
           ],
           envActions: [],
@@ -647,8 +655,8 @@ context('Side Window > Mission Form > Main Form', () => {
   it('Should show a warning indicating that a control unit is already engaged in a mission', () => {
     openSideWindowNewMission()
 
-    cy.fill('Administration 1', 'DDTM')
-    cy.fill('Unité 1', 'DML 2A')
+    cy.fill('Administration 1', 'Gendarmerie Maritime')
+    cy.fill('Unité 1', 'BSL Lorient')
 
     cy.get('body').should(
       'contain',

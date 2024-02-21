@@ -1,10 +1,12 @@
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
+
 import { getVesselReportingsFromAPI } from '../../../api/vessel'
 import {
   loadReporting,
   resetCurrentAndArchivedReportingsOfSelectedVessel,
   setCurrentAndArchivedReportingsOfSelectedVessel
 } from '../../../features/Reporting/slice'
-import { setDisplayedErrors } from '../../shared_slices/DisplayedError'
+import { displayedErrorActions } from '../../shared_slices/DisplayedError'
 import { removeError } from '../../shared_slices/Global'
 import { displayOrLogError } from '../error/displayOrLogError'
 
@@ -17,7 +19,7 @@ export const getVesselReportings = (isFromUserAction: boolean) => async (dispatc
   }
 
   if (isFromUserAction) {
-    dispatch(setDisplayedErrors({ vesselSidebarError: null }))
+    dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
     dispatch(loadReporting())
   }
 
@@ -38,12 +40,9 @@ export const getVesselReportings = (isFromUserAction: boolean) => async (dispatc
     dispatch(
       displayOrLogError(
         error as Error,
-        {
-          func: getVesselReportings,
-          parameters: [isFromUserAction]
-        },
+        () => getVesselReportings(isFromUserAction),
         isFromUserAction,
-        'vesselSidebarError'
+        DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
       )
     )
     dispatch(resetCurrentAndArchivedReportingsOfSelectedVessel())

@@ -13,29 +13,30 @@
     "jsonBody": [
       {
         "controlUnit": {
-          "id": 10015,
-          "administration": "Douane",
-          "name": "BGC Bastia",
-          "resources": [],
+          "id": 10336,
+          "administration": "Gendarmerie Maritime",
+          "name": "BSL Lorient",
+          "resources": [
+            {
+              "id": 553,
+              "name": "DF 36 Kan An Avel"
+            }
+          ],
           "contact": null,
           "isArchived": false
         },
-        "missionSources": [
-          "MONITORFISH"
-        ]
+        "missionSources": ["MONITORFISH"]
       },
       {
         "controlUnit": {
-          "id": 10003,
-          "administration": "DDTM",
-          "name": "DML 2A",
+          "id": 10484,
+          "administration": "Douane",
+          "name": "BGC Lorient - DF 36 Kan An Avel",
           "resources": [],
           "contact": null,
           "isArchived": false
         },
-        "missionSources": [
-          "MONITORFISH"
-        ]
+        "missionSources": ["MONITORFISH"]
       },
       {
         "controlUnit": {
@@ -51,9 +52,7 @@
           "contact": null,
           "isArchived": false
         },
-        "missionSources": [
-          "MONITORFISH"
-        ]
+        "missionSources": ["MONITORFISH"]
       },
       {
         "controlUnit": {
@@ -64,10 +63,7 @@
           "contact": null,
           "isArchived": false
         },
-        "missionSources": [
-          "MONITORFISH",
-          "MONITORENV"
-        ]
+        "missionSources": ["MONITORFISH", "MONITORENV"]
       },
       {
         "controlUnit": {
@@ -78,9 +74,7 @@
           "contact": null,
           "isArchived": false
         },
-        "missionSources": [
-          "MONITORFISH"
-        ]
+        "missionSources": ["MONITORFISH"]
       },
       {
         "controlUnit": {
@@ -91,9 +85,7 @@
           "contact": null,
           "isArchived": false
         },
-        "missionSources": [
-          "MONITORFISH"
-        ]
+        "missionSources": ["MONITORFISH"]
       },
       {
         "controlUnit": {
@@ -104,9 +96,7 @@
           "contact": null,
           "isArchived": false
         },
-        "missionSources": [
-          "MONITORFISH"
-        ]
+        "missionSources": ["MONITORFISH"]
       }
     ]
   }

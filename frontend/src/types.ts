@@ -1,15 +1,12 @@
 import type { ConditionalKeys, Exact } from 'type-fest'
 
+// =============================================================================
+// DEFINITIONS
+
 export type CollectionItem = {
   [key: string]: any
   id: number | string
 }
-
-export type DeepPartial<T> = T extends object
-  ? {
-      [P in keyof T]?: DeepPartial<T[P]>
-    }
-  : T
 
 export type FormikFormError = Record<string, any> | undefined
 
@@ -22,6 +19,15 @@ export type MenuItem<T = string> = {
   code: T
   name: string
 }
+
+// =============================================================================
+// UTILITIES
+
+export type DeepPartial<T> = T extends object
+  ? {
+      [P in keyof T]?: DeepPartial<T[P]>
+    }
+  : T
 
 export type PartialExcept<T extends Record<string, any>, RequiredKeys extends keyof T> = Partial<
   Omit<T, RequiredKeys>

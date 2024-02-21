@@ -6,9 +6,9 @@ import { convertToGeoJSONGeometryObject } from '../../entities/layers'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../entities/map/constants'
 import { MissionAction } from '../../types/missionAction'
 
-import type { MissionActionFormValues } from '../../../features/SideWindow/MissionForm/types'
 import type { GeoJSON as GeoJSONType } from '../../types/GeoJSON'
 import type { Port } from '../../types/port'
+import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 
 export const getLastControlCircleGeometry =
   (ports: Port.Port[], actionFormValues: MissionActionFormValues | MissionAction.MissionAction) =>
@@ -56,14 +56,14 @@ function getCoordinatesOfControl(
 }
 
 export function isLandControl(action: MissionActionFormValues | MissionAction.MissionAction) {
-  return action.actionType === MissionAction.MissionActionType.LAND_CONTROL && action.portLocode
+  return action.actionType === MissionAction.MissionActionType.LAND_CONTROL && !!action.portLocode
 }
 
 export function isAirOrSeaControl(action: MissionActionFormValues | MissionAction.MissionAction) {
   return (
     (action.actionType === MissionAction.MissionActionType.AIR_CONTROL ||
       action.actionType === MissionAction.MissionActionType.SEA_CONTROL) &&
-    action.latitude &&
-    action.longitude
+    !!action.latitude &&
+    !!action.longitude
   )
 }

@@ -6,7 +6,7 @@ context('Missions overlay', () => {
   it('An overlay Should be showed and closed', () => {
     cy.get('#root').click(337, 819)
 
-    cy.get('*[data-cy="mission-overlay"]').contains('DML 2A')
+    cy.get('*[data-cy="mission-overlay"]').contains('BGC LORIENT')
     cy.get('*[data-cy="mission-overlay"]').contains('Mission Air / Terre')
     cy.get('*[data-cy="mission-overlay"]').contains('Aucun contact renseigné')
     cy.get('*[data-cy="mission-overlay"]').contains('Ouverte par le CACEM')

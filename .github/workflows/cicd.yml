@@ -14,7 +14,7 @@ on:
       - "**.yml"
       - ".github/workflows/cicd.yml"
       - "infra/configurations/**.properties"
-      - "infra/docker/DockerfileBuildApp"
+      - "infra/docker/app/**"
       - "**.sql"
       - "backend/pom.xml"
       - "backend/build.gradle.kts"
@@ -156,7 +156,7 @@ jobs:
           context: .
           load: true
           builder: ${{ steps.buildx.outputs.name }}
-          file: infra/docker/DockerfileBuildApp
+          file: infra/docker/app/Dockerfile
           push: false
           tags: monitorfish-app:${{ env.VERSION }}
           cache-from: type=local,src=/tmp/.buildx-cache-app
@@ -202,7 +202,6 @@ jobs:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
       CYPRESS_PROJECT_ID: ${{ secrets.PROJECT_ID }}
       CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-      DB_PUBLIC_PORT: 5432
       ENV_PROFILE: ${{ needs.version.outputs.ENV_PROFILE }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       MONITORFISH_VERSION: ${{ needs.version.outputs.VERSION }}
@@ -260,7 +259,6 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-      DB_PUBLIC_PORT: 5432
       ENV_PROFILE: ${{ needs.version.outputs.ENV_PROFILE }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       MONITORFISH_VERSION: ${{ needs.version.outputs.VERSION }}
@@ -279,9 +277,6 @@ jobs:
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
 
-      - name: Run docker images
-        run: make docker-compose-puppeteer-up
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -292,6 +287,9 @@ jobs:
       - name: Install Node.js dependencies
         run: npm ci
         working-directory: ./frontend
+
+      - name: Run docker images
+        run: make docker-compose-puppeteer-up
 
       - name: Install Firefox
         run: npx puppeteer browsers install firefox

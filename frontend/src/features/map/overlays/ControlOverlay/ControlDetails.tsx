@@ -4,20 +4,20 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { margins } from './constants'
-import { missionActions } from '../../../../domain/actions'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { pluralize } from '../../../../utils/pluralize'
 import { GreenCircle, RedCircle } from '../../../commonStyles/Circle.style'
+import { missionFormActions } from '../../../Mission/components/MissionForm/slice'
 import { Flag } from '../../../VesselList/tableCells'
 import { OverlayPosition } from '../Overlay'
 
 import type { Mission } from '../../../../domain/entities/mission/types'
 
-type ControlDetailsProps = {
+type ControlDetailsProps = Readonly<{
   control: Mission.MissionActionFeatureProperties
   isSelected: boolean
   overlayPosition: OverlayPosition
-}
+}>
 export function ControlDetails({ control, isSelected, overlayPosition }: ControlDetailsProps) {
   const dispatch = useMainAppDispatch()
 
@@ -67,12 +67,12 @@ export function ControlDetails({ control, isSelected, overlayPosition }: Control
             data-cy="mission-action-overlay-close"
             Icon={Icon.Close}
             iconSize={14}
-            onClick={() => dispatch(missionActions.unsetSelectedMissionActionGeoJSON())}
+            onClick={() => dispatch(missionFormActions.unsetSelectedMissionActionGeoJSON())}
           />
         )}
         <ZoneText>
           <Title>
-            Contrôle du navire {control.vesselName || 'NOM INCONNU'}
+            Contrôle du navire {control.vesselName ?? 'NOM INCONNU'}
             {control.flagState && (
               <Flag
                 rel="preload"

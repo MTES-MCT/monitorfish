@@ -8,6 +8,10 @@ const CURRENT_DIRECTORY = process.cwd()
 dotenv.config({ path: `${CURRENT_DIRECTORY}/scripts/.env` })
 
 const SELECTED_CONTROL_UNIT_NAMES = [
+  // Le Havre
+  `PAM Jeanne Barret`,
+  // Marseille
+  `PAM Gyptis`,
   // Lorient
   `BGC Lorient - DF 36 Kan An Avel`,
   `BSL Lorient`,
@@ -92,13 +96,32 @@ async function getFromMonitorenvPubliApi(path) {
 }
 
 const administrations = await getFromMonitorenvPubliApi('/v1/administrations')
+const legacyControlUnits = await getFromMonitorenvPubliApi('/v1/control_units')
 const controlUnits = await getFromMonitorenvPubliApi('/v2/control_units')
 const controlUnitContacts = await getFromMonitorenvPubliApi('/v1/control_unit_contacts')
 const controlUnitResources = await getFromMonitorenvPubliApi('/v1/control_unit_resources')
 const stations = await getFromMonitorenvPubliApi('/v1/stations')
 
+const selectedLegacyControlUnits = []
+SELECTED_CONTROL_UNIT_NAMES.forEach(legacyControlUnitName => {
+  const selectedControlUnitMatch = legacyControlUnits.find(
+    legacyControlUnit => legacyControlUnit.name === legacyControlUnitName
+  )
+  if (!selectedControlUnitMatch) {
+    console.error(`[ERROR] Control unit "${legacyControlUnitName}" not found.`)
+    process.exit(1)
+  }
+
+  selectedLegacyControlUnits.push(selectedControlUnitMatch)
+})
+console.info(
+  `[INFO] Selected legacy control units:\n${selectedLegacyControlUnits
+    .map(legacyControlUnit => `  - ${legacyControlUnit.name}`)
+    .join('\n')}`
+)
+
 const selectedControlUnits = []
-SELECTED_CONTROL_UNIT_NAMES.map(controlUnitName => {
+SELECTED_CONTROL_UNIT_NAMES.forEach(controlUnitName => {
   const selectedControlUnitMatch = controlUnits.find(controlUnit => controlUnit.name === controlUnitName)
   if (!selectedControlUnitMatch) {
     console.error(`[ERROR] Control unit "${controlUnitName}" not found.`)
@@ -155,6 +178,7 @@ console.info(
 )
 
 await generateWireMockStub('administrations', 'v1', selectedAdministrations)
+await generateWireMockStub('control_units', 'v1', selectedLegacyControlUnits)
 await generateWireMockStub('control_units', 'v2', selectedControlUnits)
 await Promise.all(
   selectedControlUnits.map(async controlUnit => {

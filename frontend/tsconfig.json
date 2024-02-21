@@ -32,6 +32,7 @@
       "@hooks/*": ["hooks/*"],
       "@libs/*": ["libs/*"],
       "@pages/*": ["pages/*"],
+      "@store": ["store/index.ts"],
       "@store/*": ["store/*"],
       "@utils/*": ["utils/*"]
     },
@@ -50,10 +51,12 @@
     "**/*.js",
     "**/*.jsx",
     "**/*.mjs",
+    "**/*.mts",
     "**/*.ts",
     "**/*.tsx",
     "src/vite-env-override.d.ts",
-    "src/ui/styled.d.ts"
+    "src/ui/styled.d.ts",
+    "vite.config.mts"
   ],
   "exclude": ["node_modules/*"]
 }

@@ -4,32 +4,26 @@ import styled from 'styled-components'
 
 import { margins } from './constants'
 import { MissionStatusLabel } from './MissionStatusLabel'
-import { missionActions } from '../../../../domain/actions'
 import { getMissionSourceTagText } from '../../../../domain/entities/mission'
 import { Mission } from '../../../../domain/entities/mission/types'
-import { SideWindowMenuKey } from '../../../../domain/entities/sideWindow/constants'
-import { sideWindowDispatchers } from '../../../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { pluralize } from '../../../../utils/pluralize'
+import { missionFormActions } from '../../../Mission/components/MissionForm/slice'
+import { editMission } from '../../../Mission/useCases/editMission'
 import { OverlayPosition } from '../Overlay'
 
 import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
 
-type MissionDetailsProps = {
+type MissionDetailsProps = Readonly<{
   isSelected: boolean
   mission: Mission.MissionPointFeatureProperties
   overlayPosition: OverlayPosition
-}
+}>
 export function MissionDetails({ isSelected, mission, overlayPosition }: MissionDetailsProps) {
   const dispatch = useMainAppDispatch()
 
   const openMissionInSideWindow = () => {
-    dispatch(
-      sideWindowDispatchers.openPath({
-        id: mission.missionId,
-        menu: SideWindowMenuKey.MISSION_FORM
-      })
-    )
+    dispatch(editMission(mission.missionId))
   }
 
   return (
@@ -41,7 +35,7 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
             data-cy="mission-overlay-close"
             Icon={Icon.Close}
             iconSize={14}
-            onClick={() => dispatch(missionActions.unsetSelectedMissionGeoJSON())}
+            onClick={() => dispatch(missionFormActions.unsetSelectedMissionGeoJSON())}
           />
         )}
         <ZoneText>

@@ -1,3 +1,5 @@
+import { DisplayedError } from '@libs/DisplayedError'
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Button } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
@@ -8,7 +10,6 @@ import { VesselSummary } from './Summary'
 import { AlertWarning } from './warnings/AlertWarning'
 import { BeaconMalfunctionWarning } from './warnings/BeaconMalfunctionWarning'
 import { VesselSidebarTab } from '../../domain/entities/vessel/vessel'
-import { retry } from '../../domain/use_cases/error/retry'
 import { useIsSuperUser } from '../../hooks/authorization/useIsSuperUser'
 import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
@@ -23,13 +24,17 @@ export function Body() {
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
   const vesselSidebarTab = useMainAppSelector(state => state.vessel.vesselSidebarTab)
 
+  const handleRetry = () => {
+    DisplayedError.retryUseCase(dispatch, DisplayedErrorKey.VESSEL_SIDEBAR_ERROR)
+  }
+
   if (vesselSidebarError) {
     return (
       <ErrorFallback data-cy="vessel-sidebar-error">
         🔌 {vesselSidebarError.message}
         <br />
-        {vesselSidebarError.useCase && (
-          <RetryButton accent={Accent.PRIMARY} onClick={() => dispatch(retry(vesselSidebarError.useCase))}>
+        {vesselSidebarError.hasRetryableUseCase && (
+          <RetryButton accent={Accent.PRIMARY} onClick={handleRetry}>
             Réessayer
           </RetryButton>
         )}

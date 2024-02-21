@@ -1,3 +1,5 @@
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
+
 import { getVesselControlsFromAPI } from '../../../api/missionAction'
 import NoControlsFoundError from '../../../errors/NoControlsFoundError'
 import {
@@ -7,7 +9,7 @@ import {
   setNextControlSummary,
   unsetControlSummary
 } from '../../shared_slices/Control'
-import { setDisplayedErrors } from '../../shared_slices/DisplayedError'
+import { displayedErrorActions } from '../../shared_slices/DisplayedError'
 import { removeError, setError } from '../../shared_slices/Global'
 import { displayOrLogError } from '../error/displayOrLogError'
 
@@ -28,7 +30,7 @@ export const getVesselControls = (isFromUserAction: boolean) => async (dispatch,
 
   const isSameVesselAsCurrentlyShowed = getIsSameVesselAsCurrentlyShowed(selectedVessel.vesselId, currentControlSummary)
   if (isFromUserAction) {
-    dispatch(setDisplayedErrors({ vesselSidebarError: null }))
+    dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
     dispatch(loadControls())
   }
 
@@ -45,13 +47,10 @@ export const getVesselControls = (isFromUserAction: boolean) => async (dispatch,
   } catch (error) {
     dispatch(
       displayOrLogError(
-        error as Error,
-        {
-          func: getVesselControls,
-          parameters: [isFromUserAction]
-        },
+        error,
+        () => getVesselControls(isFromUserAction),
         isFromUserAction,
-        'vesselSidebarError'
+        DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
       )
     )
     dispatch(resetLoadControls())

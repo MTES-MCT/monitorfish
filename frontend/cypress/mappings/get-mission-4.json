@@ -15,9 +15,9 @@
       "missionTypes": ["SEA"],
       "controlUnits": [
         {
-          "id": 10003,
-          "administration": "DDTM",
-          "name": "DML 2A",
+          "id": 10484,
+          "administration": "Douane",
+          "name": "BGC Lorient - DF 36 Kan An Avel",
           "resources": [],
           "contact": null,
           "isArchived": false

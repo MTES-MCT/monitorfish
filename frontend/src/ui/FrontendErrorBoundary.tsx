@@ -75,7 +75,7 @@ export class FrontendErrorBoundary extends Component<FrontendErrorBoundaryProps,
             width: '100%'
           }}
         >
-          Une erreur est survenue{message ? `: ${message}.` : '.'}
+          Une erreur est survenue{message ? `: ${message}` : '.'}
         </div>
       )
     }

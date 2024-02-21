@@ -6,7 +6,7 @@ import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ControlOverlay } from '../ControlOverlay'
 
 export function SelectedControlOverlay() {
-  const selectedControlGeoJSON = useMainAppSelector(store => store.mission.selectedMissionActionGeoJSON)
+  const selectedControlGeoJSON = useMainAppSelector(store => store.missionForm.selectedMissionActionGeoJSON)
   const selectedControl = useMemo(() => {
     if (!selectedControlGeoJSON) {
       return undefined

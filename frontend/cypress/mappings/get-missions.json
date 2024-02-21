@@ -21,9 +21,9 @@
         "missionTypes": ["SEA"],
         "controlUnits": [
           {
-            "id": 10015,
+            "id": 10484,
             "administration": "Douane",
-            "name": "BGC Bastia",
+            "name": "BGC Lorient - DF 36 Kan An Avel",
             "resources": [],
             "contact": null,
             "isArchived": false
@@ -48,9 +48,9 @@
         "missionTypes": ["SEA"],
         "controlUnits": [
           {
-            "id": 10003,
-            "administration": "DDTM",
-            "name": "DML 2A",
+            "id": 10484,
+            "administration": "Douane",
+            "name": "BGC Lorient - DF 36 Kan An Avel",
             "resources": [],
             "contact": null,
             "isArchived": false
@@ -75,13 +75,13 @@
         "missionTypes": ["AIR"],
         "controlUnits": [
           {
-            "id": 10003,
-            "administration": "DDTM",
-            "name": "DML 2A",
+            "id": 10484,
+            "administration": "Douane",
+            "name": "BGC Lorient - DF 36 Kan An Avel",
             "resources": [
               {
-                "id": 3,
-                "name": "Semi-rigide 1"
+                "id": 553,
+                "name": "DF 36 Kan An Avel"
               }
             ],
             "contact": null,
@@ -139,13 +139,13 @@
         "missionTypes": ["LAND"],
         "controlUnits": [
           {
-            "id": 10003,
-            "administration": "DDTM",
-            "name": "DML 2A",
+            "id": 10484,
+            "administration": "Douane",
+            "name": "BGC Lorient - DF 36 Kan An Avel",
             "resources": [
               {
-                "id": 3,
-                "name": "Semi-rigide 1"
+                "id": 553,
+                "name": "DF 36 Kan An Avel"
               }
             ],
             "contact": null,
@@ -283,9 +283,9 @@
         "missionTypes": ["SEA"],
         "controlUnits": [
           {
-            "id": 10015,
+            "id": 10484,
             "administration": "Douane",
-            "name": "BGC Bastia",
+            "name": "BGC Lorient - DF 36 Kan An Avel",
             "resources": [],
             "contact": null,
             "isArchived": false
@@ -310,9 +310,9 @@
         "missionTypes": ["SEA"],
         "controlUnits": [
           {
-            "id": 10015,
+            "id": 10484,
             "administration": "Douane",
-            "name": "BGC Bastia",
+            "name": "BGC Lorient - DF 36 Kan An Avel",
             "resources": [],
             "contact": null,
             "isArchived": false
@@ -337,9 +337,9 @@
         "missionTypes": ["AIR", "LAND"],
         "controlUnits": [
           {
-            "id": 10003,
-            "administration": "DDTM",
-            "name": "DML 2A",
+            "id": 10484,
+            "administration": "Douane",
+            "name": "BGC Lorient - DF 36 Kan An Avel",
             "resources": [],
             "contact": null,
             "isArchived": false
@@ -457,9 +457,9 @@
         "missionTypes": ["SEA"],
         "controlUnits": [
           {
-            "id": 10015,
+            "id": 10484,
             "administration": "Douane",
-            "name": "BGC Bastia",
+            "name": "BGC Lorient - DF 36 Kan An Avel",
             "resources": [],
             "contact": null,
             "isArchived": false
@@ -484,9 +484,9 @@
         "missionTypes": ["LAND"],
         "controlUnits": [
           {
-            "id": 10003,
-            "administration": "DDTM",
-            "name": "DML 2A",
+            "id": 10484,
+            "administration": "Douane",
+            "name": "BGC Lorient - DF 36 Kan An Avel",
             "resources": [],
             "contact": null,
             "isArchived": false
@@ -538,9 +538,9 @@
         "missionTypes": ["SEA"],
         "controlUnits": [
           {
-            "id": 10003,
-            "administration": "DDTM",
-            "name": "DML 2A",
+            "id": 10484,
+            "administration": "Douane",
+            "name": "BGC Lorient - DF 36 Kan An Avel",
             "resources": [],
             "contact": null,
             "isArchived": false

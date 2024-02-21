@@ -10,7 +10,7 @@ import { useMainAppDispatch } from '../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 
 export function SideWindowLauncher() {
-  const isDraftDirty = useMainAppSelector(store => store.mission.isDraftDirty)
+  const isDraftDirty = useMainAppSelector(store => store.missionForm.isDraftDirty)
   const status = useMainAppSelector(store => store.sideWindow.status)
   const dispatch = useMainAppDispatch()
   const { forceUpdate } = useForceUpdate()

@@ -3,9 +3,9 @@ import styled from 'styled-components'
 
 import { SideWindowMenuKey } from '../../../domain/entities/sideWindow/constants'
 import { openBeaconMalfunctionInKanban } from '../../../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
-import { sideWindowDispatchers } from '../../../domain/use_cases/sideWindow'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import BeaconMalfunctionSVG from '../../icons/Icone_VMS_dark.svg?react'
+import { openSideWindowPath } from '../../SideWindow/useCases/openSideWindowPath'
 
 export function BeaconMalfunctionWarning({ selectedVessel }) {
   const dispatch = useMainAppDispatch()
@@ -27,7 +27,7 @@ export function BeaconMalfunctionWarning({ selectedVessel }) {
 }
 
 const showBeaconMalfunctionInSideWindow = (dispatch, selectedVessel) => {
-  dispatch(sideWindowDispatchers.openPath({ menu: SideWindowMenuKey.BEACON_MALFUNCTION_BOARD }))
+  dispatch(openSideWindowPath({ menu: SideWindowMenuKey.BEACON_MALFUNCTION_BOARD }))
   dispatch(openBeaconMalfunctionInKanban(selectedVessel?.beaconMalfunctionId))
 }
 

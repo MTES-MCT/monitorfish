@@ -1,0 +1,43 @@
+import { createSlice } from '@reduxjs/toolkit'
+import { Mission } from 'domain/entities/mission/types'
+import { SeaFrontGroup } from 'domain/entities/seaFront/constants'
+
+import { MissionDateRangeFilter, MissionFilterType } from '../../../SideWindow/MissionList/types'
+
+import type { FilterValues } from '../../../SideWindow/MissionList/types'
+import type { PayloadAction } from '@reduxjs/toolkit'
+
+export interface MissionListState {
+  listFilterValues: FilterValues
+  listSeaFront: SeaFrontGroup
+}
+const INITIAL_STATE: MissionListState = {
+  listFilterValues: {
+    [MissionFilterType.DATE_RANGE]: MissionDateRangeFilter.WEEK,
+    [MissionFilterType.STATUS]: [Mission.MissionStatus.IN_PROGRESS]
+  },
+  listSeaFront: SeaFrontGroup.MED
+}
+
+const missionListSlice = createSlice({
+  initialState: INITIAL_STATE,
+  name: 'mission',
+  reducers: {
+    /**
+     * Set filter values in missions list
+     */
+    setListFilterValues(state, action: PayloadAction<FilterValues>) {
+      state.listFilterValues = action.payload
+    },
+
+    /**
+     * Set sea front filter in missions list
+     */
+    setListSeaFront(state, action: PayloadAction<SeaFrontGroup>) {
+      state.listSeaFront = action.payload
+    }
+  }
+})
+
+export const missionListActions = missionListSlice.actions
+export const missionListReducer = missionListSlice.reducer

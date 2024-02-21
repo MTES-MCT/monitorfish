@@ -1,0 +1,66 @@
+services:
+  monitorenv_app:
+    image: ghcr.io/mtes-mct/monitorenv/monitorenv-app:v${MONITORENV_VERSION}
+    environment:
+      - ENV_DB_URL=jdbc:postgresql://monitorenv_db:5432/monitorenvdb?user=postgres&password=${MONITORENV_POSTGRES_PASSWORD}
+      - FRONTEND_GEOSERVER_NAMESPACE=${MONITORENV_FRONTEND_GEOSERVER_NAMESPACE}
+      - FRONTEND_GEOSERVER_REMOTE_URL=${MONITORENV_FRONTEND_GEOSERVER_REMOTE_URL}
+      - FRONTEND_GOOGLEMAPS_API_KEY=${MONITORENV_FRONTEND_GOOGLEMAPS_API_KEY}
+      - FRONTEND_MAPBOX_KEY=${MONITORENV_FRONTEND_MAPBOX_KEY}
+      - FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED=${MONITORENV_FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED}
+      - FRONTEND_MISSION_FORM_AUTO_UPDATE=${MONITORENV_FRONTEND_MISSION_FORM_AUTO_UPDATE}
+      - FRONTEND_MONITORENV_VERSION=${MONITORENV_VERSION}
+      - FRONTEND_SENTRY_DSN=${MONITORENV_FRONTEND_SENTRY_DSN}
+      - FRONTEND_SENTRY_ENV=${MONITORENV_FRONTEND_SENTRY_ENV}
+      - FRONTEND_SENTRY_TRACING_ORIGIN=${MONITORENV_FRONTEND_SENTRY_TRACING_ORIGIN}
+      - FRONTEND_SHOM_KEY=${MONITORENV_FRONTEND_SHOM_KEY}
+      - HOST_IP=127.0.0.1
+      - MONITORFISH_API_KEY=${MONITORENV_MONITORFISH_API_KEY}
+      - SPRING_PROFILES_ACTIVE=test
+    ports:
+      - 9880:8880
+      - 9000:8000
+      - 6000:5000
+      - 6001:5001
+    depends_on:
+      - monitorenv_db
+      - monitorenv_flyway
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024m"
+
+  monitorenv_db:
+    image: ghcr.io/mtes-mct/monitorenv/monitorenv-database:pg11-ts1.7.4-postgis3.3.2
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${MONITORENV_POSTGRES_PASSWORD}
+      - POSTGRES_DB=monitorenvdb
+    volumes:
+      - "../../.backups/:/opt/monitorenv_backups"
+    ports:
+      - 6432:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 1s
+      timeout: 1s
+      retries: 30
+
+  monitorenv_flyway:
+    image: flyway/flyway
+    command: |
+      migrate \
+        -user=postgres \
+        -password=${MONITORENV_POSTGRES_PASSWORD} \
+        -schemas=public \
+        -url=jdbc:postgresql://monitorenv_db:5432/monitorenvdb
+    volumes:
+      - "../../${MONITORENV_PROJECT_PATH}/backend/src/main/resources/db/:/flyway/sql"
+    depends_on:
+      monitorenv_db:
+        condition: service_healthy
+
+volumes:
+  monitorenv-db-data:
+    driver: local

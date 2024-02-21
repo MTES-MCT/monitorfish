@@ -44,6 +44,137 @@
         "name": "Auray"
       },
       {
+        "id": 136,
+        "controlUnitResourceIds": [
+          57,
+          43,
+          276,
+          283,
+          561,
+          175,
+          332,
+          546,
+          608,
+          615,
+          1242
+        ],
+        "controlUnitResources": [
+          {
+            "id": 57,
+            "controlUnitId": 10412,
+            "isArchived": false,
+            "name": "P622 Esteron",
+            "note": null,
+            "photo": null,
+            "stationId": 136,
+            "type": "FAST_BOAT"
+          },
+          {
+            "id": 43,
+            "controlUnitId": 10412,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 136,
+            "type": "CAR"
+          },
+          {
+            "id": 276,
+            "controlUnitId": 10317,
+            "isArchived": false,
+            "name": "507",
+            "note": null,
+            "photo": null,
+            "stationId": 136,
+            "type": "AIRPLANE"
+          },
+          {
+            "id": 283,
+            "controlUnitId": 10317,
+            "isArchived": false,
+            "name": "510",
+            "note": null,
+            "photo": null,
+            "stationId": 136,
+            "type": "AIRPLANE"
+          },
+          {
+            "id": 561,
+            "controlUnitId": 10121,
+            "isArchived": false,
+            "name": "Jeanne Barret",
+            "note": null,
+            "photo": null,
+            "stationId": 136,
+            "type": "PATROL_BOAT"
+          },
+          {
+            "id": 175,
+            "controlUnitId": 10121,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 136,
+            "type": "CAR"
+          },
+          {
+            "id": 332,
+            "controlUnitId": 10053,
+            "isArchived": false,
+            "name": "LHE 15927",
+            "note": null,
+            "photo": null,
+            "stationId": 136,
+            "type": "SEMI_RIGID"
+          },
+          {
+            "id": 546,
+            "controlUnitId": 10053,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 136,
+            "type": "CAR"
+          },
+          {
+            "id": 608,
+            "controlUnitId": 10423,
+            "isArchived": false,
+            "name": "Mavar",
+            "note": null,
+            "photo": null,
+            "stationId": 136,
+            "type": "SEMI_RIGID"
+          },
+          {
+            "id": 615,
+            "controlUnitId": 10423,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 136,
+            "type": "CAR"
+          },
+          {
+            "id": 1242,
+            "controlUnitId": 10317,
+            "isArchived": false,
+            "name": "Hélicoptère",
+            "note": null,
+            "photo": null,
+            "stationId": 136,
+            "type": "HELICOPTER"
+          }
+        ],
+        "latitude": 49.49437,
+        "longitude": 0.107929,
+        "name": "Le Havre"
+      },
+      {
         "id": 153,
         "controlUnitResourceIds": [
           553,
@@ -162,6 +293,203 @@
         "latitude": 47.7482524,
         "longitude": -3.3702449,
         "name": "Lorient"
+      },
+      {
+        "id": 164,
+        "controlUnitResourceIds": [
+          402,
+          268,
+          360,
+          31,
+          140,
+          213,
+          194,
+          1059,
+          1064,
+          1093,
+          592,
+          329,
+          64,
+          198,
+          495,
+          192,
+          508
+        ],
+        "controlUnitResources": [
+          {
+            "id": 402,
+            "controlUnitId": 10040,
+            "isArchived": false,
+            "name": "DF 28 Mistral",
+            "note": null,
+            "photo": null,
+            "stationId": 164,
+            "type": "FAST_BOAT"
+          },
+          {
+            "id": 268,
+            "controlUnitId": 10016,
+            "isArchived": false,
+            "name": "P619 Huveaune",
+            "note": null,
+            "photo": null,
+            "stationId": 164,
+            "type": "FAST_BOAT"
+          },
+          {
+            "id": 360,
+            "controlUnitId": 10302,
+            "isArchived": false,
+            "name": "BSL Marseille",
+            "note": null,
+            "photo": null,
+            "stationId": 164,
+            "type": "SEMI_RIGID"
+          },
+          {
+            "id": 31,
+            "controlUnitId": 10302,
+            "isArchived": false,
+            "name": "Moto",
+            "note": null,
+            "photo": null,
+            "stationId": 164,
+            "type": "MOTORCYCLE"
+          },
+          {
+            "id": 140,
+            "controlUnitId": 10302,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 164,
+            "type": "CAR"
+          },
+          {
+            "id": 213,
+            "controlUnitId": 10417,
+            "isArchived": false,
+            "name": "La Bathy – MA929352",
+            "note": null,
+            "photo": null,
+            "stationId": 164,
+            "type": "SEMI_RIGID"
+          },
+          {
+            "id": 194,
+            "controlUnitId": 10417,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 164,
+            "type": "CAR"
+          },
+          {
+            "id": 1059,
+            "controlUnitId": 10511,
+            "isArchived": false,
+            "name": "DRASSM Alfred Merlin",
+            "note": null,
+            "photo": null,
+            "stationId": 164,
+            "type": "OTHER"
+          },
+          {
+            "id": 1064,
+            "controlUnitId": 10498,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 164,
+            "type": "CAR"
+          },
+          {
+            "id": 1093,
+            "controlUnitId": 10490,
+            "isArchived": false,
+            "name": "Taravo - MA923157",
+            "note": null,
+            "photo": null,
+            "stationId": 164,
+            "type": "SEMI_RIGID"
+          },
+          {
+            "id": 592,
+            "controlUnitId": 10490,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 164,
+            "type": "CAR"
+          },
+          {
+            "id": 329,
+            "controlUnitId": 10141,
+            "isArchived": false,
+            "name": "Gyptis",
+            "note": null,
+            "photo": null,
+            "stationId": 164,
+            "type": "PATROL_BOAT"
+          },
+          {
+            "id": 64,
+            "controlUnitId": 10141,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 164,
+            "type": "CAR"
+          },
+          {
+            "id": 198,
+            "controlUnitId": 10115,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 164,
+            "type": "CAR"
+          },
+          {
+            "id": 495,
+            "controlUnitId": 10039,
+            "isArchived": false,
+            "name": "Le Taoume PM440",
+            "note": null,
+            "photo": null,
+            "stationId": 164,
+            "type": "SEMI_RIGID"
+          },
+          {
+            "id": 192,
+            "controlUnitId": 10039,
+            "isArchived": false,
+            "name": "L’Erevien PM468",
+            "note": null,
+            "photo": null,
+            "stationId": 164,
+            "type": "SEMI_RIGID"
+          },
+          {
+            "id": 508,
+            "controlUnitId": 10039,
+            "isArchived": false,
+            "name": "Voiture",
+            "note": null,
+            "photo": null,
+            "stationId": 164,
+            "type": "CAR"
+          }
+        ],
+        "latitude": 43.296482,
+        "longitude": 5.36978,
+        "name": "Marseille"
       },
       {
         "id": 222,

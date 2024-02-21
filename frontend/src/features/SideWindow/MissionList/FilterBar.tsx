@@ -20,11 +20,11 @@ import { MISSION_FILTER_LABEL_ENUMS, MISSION_FILTER_OPTIONS } from './constants'
 import { MissionDateRangeFilter, MissionFilterType } from './types'
 import { getControlUnitsNamesFromAdministrations } from './utils'
 import { useGetLegacyControlUnitsQuery } from '../../../api/legacyControlUnit'
-import { missionActions } from '../../../domain/actions'
 import { getControlUnitsOptionsFromControlUnits } from '../../../domain/entities/controlUnits/utils'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { FormikFilterTagBar } from '../../../ui/formiks/FormikFilterTagBar'
+import { missionListActions } from '../../Mission/components/MissionList/slice'
 
 import type { FilterValues } from './types'
 import type { Promisable } from 'type-fest'
@@ -36,7 +36,7 @@ export type FilterBarProps = {
 export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
   const { newWindowContainerRef } = useNewWindow()
 
-  const listFilterValues = useMainAppSelector(store => store.mission.listFilterValues)
+  const listFilterValues = useMainAppSelector(store => store.missionList.listFilterValues)
 
   const [isCustomDateRangeOpen, setIsCustomDateRangeOpen] = useState(false)
 
@@ -85,7 +85,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
       const willCustomDateRangeOpen = normalizedNextFilterValues.DATE_RANGE === MissionDateRangeFilter.CUSTOM
       setIsCustomDateRangeOpen(willCustomDateRangeOpen)
 
-      dispatch(missionActions.setListFilterValues(normalizedNextFilterValues))
+      dispatch(missionListActions.setListFilterValues(normalizedNextFilterValues))
     },
     [controlUnitsQuery.data, dispatch, previousAdministrationFiterValue]
   )

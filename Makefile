@@ -4,7 +4,7 @@ HOST_MIGRATIONS_FOLDER=$(shell pwd)/backend/src/main/resources/db/migration
 .PHONY: clean env install test
 
 env:
-	cd ./infra && ../frontend/node_modules/.bin/import-meta-env-prepare -x ./.env.local.defaults ./ -u
+	cd ./infra/docker && ../../frontend/node_modules/.bin/import-meta-env-prepare -x ./.env.local.defaults ./ -u
 
 ################################################################################
 # Local Development
@@ -26,7 +26,7 @@ run-back-with-monitorenv: run-monitorenv
 run-monitorenv: env
 	docker compose \
 		--project-directory ./infra/docker \
-		--env-file ./infra/.env \
+		--env-file ./infra/docker/.env \
 		-f ./infra/docker/docker-compose.monitorenv.dev.yml \
 		up -d monitorenv_app
 
@@ -40,8 +40,8 @@ stop-stubbed-apis:
 clean: env
 	rm -Rf ./backend/target
 	docker compose down -v
-	docker compose --env-file ./infra/.env -f ./infra/docker/docker-compose.monitorenv.dev.yml down -v
-	docker compose --env-file ./infra/.env -f ./infra/docker/docker-compose.cypress.yml down -v
+	docker compose --env-file ./infra/docker/.env -f ./infra/docker/docker-compose.monitorenv.dev.yml down -v
+	docker compose --env-file ./infra/docker/.env -f ./infra/docker/docker-compose.cypress.yml down -v
 	docker compose -f ./infra/docker/docker-compose.puppeteer.dev.yml down -v
 
 check-clean-archi:

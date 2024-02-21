@@ -147,6 +147,7 @@ dist
 /datascience/.env
 # Our .env files follow the `import-meta-env` convention:
 # - `.env`: git-ignored, generated from `.env.local.defaults`, overriden by `.env.local`.
+# - `.env.example`: git-commited, only for /frontend, used to enforce the env that must be injected at runtime via `import-meta-env`.
 # - `.env.local`: git-ignored, used when necessary to override `.env.local.defaults` default values.
 # - `.env.local.defaults`: git-commited, used to share default values with Github contributors.
 # https://import-meta-env.org/api.html#import-meta-env-prepare

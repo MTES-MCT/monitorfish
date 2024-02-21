@@ -19,7 +19,7 @@ export default defineConfig({
     svgr(),
     importMetaEnv.vite({
       env: './.env',
-      example: './.env.local.defaults'
+      example: './.env.example'
     })
   ],
 

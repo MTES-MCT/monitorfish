@@ -277,9 +277,6 @@ jobs:
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
 
-      - name: Run docker images
-        run: make docker-compose-puppeteer-up
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -290,6 +287,9 @@ jobs:
       - name: Install Node.js dependencies
         run: npm ci
         working-directory: ./frontend
+
+      - name: Run docker images
+        run: make docker-compose-puppeteer-up
 
       - name: Install Firefox
         run: npx puppeteer browsers install firefox

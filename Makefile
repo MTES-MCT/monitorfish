@@ -1,7 +1,7 @@
 INFRA_FOLDER="$(shell pwd)/infra/configurations/"
 HOST_MIGRATIONS_FOLDER=$(shell pwd)/backend/src/main/resources/db/migration
 
-.PHONY: clean env install test
+.PHONY: clean install test
 
 docker-env:
 	cd ./infra/docker && ../../frontend/node_modules/.bin/import-meta-env-prepare -u -x ./.env.local.defaults\
@@ -64,7 +64,7 @@ lint-back:
 
 run-back-for-puppeteer: docker-env run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db
-	docker compose -f ./infra/docker/docker-compose.puppeteer.yml up -d
+	docker compose -f ./infra/docker/docker-compose.puppeteer.yml up -d monitorenv-app
 	cd backend && MONITORENV_URL=http://localhost:9880 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
 
 run-front-for-puppeteer:
@@ -91,6 +91,14 @@ docker-compose-up:
 	docker compose -f ./infra/docker/docker-compose.cypress.yml up --quiet-pull flyway
 	docker compose -f ./infra/docker/docker-compose.cypress.yml up -d --quiet-pull app
 	@printf 'Waiting for backend app to be ready'
+	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
+
+docker-compose-puppeteer-up: docker-env
+	docker compose -f ./infra/docker/docker-compose.puppeteer.yml up -d monitorenv-app
+	docker compose -f ./infra/docker/docker-compose.puppeteer.yml up -d monitorfish-app
+	@printf 'Waiting for MonitorEnv app to be ready'
+	@until curl --output /dev/null --silent --fail "http://localhost:9880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
+	@printf 'Waiting for MonitorFish app to be ready'
 	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
 
 # CI commands - data pipeline

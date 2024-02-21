@@ -1,4 +1,20 @@
 services:
+  monitorfish-db:
+    image: timescale/timescaledb-postgis:1.7.4-pg11
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=monitorfishdb
+    volumes:
+      - monitorfish-db-data:/var/lib/postgresql/data
+    ports:
+      - $DB_PUBLIC_PORT:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 1s
+      timeout: 5s
+      retries: 60
+
   monitorenv-db:
     image: docker.pkg.github.com/mtes-mct/monitorenv/monitorenv-database:pg11-ts1.7.4-postgis3.3.2
     environment:
@@ -14,6 +30,54 @@ services:
       interval: 1s
       timeout: 1s
       retries: 30
+
+  flyway:
+    image: flyway/flyway:10.5.0
+    command: migrate -password=postgres -schemas=public -user=postgres -url=jdbc:postgresql://monitorfish-db:5432/monitorfishdb
+    volumes:
+      - ../../backend/src/main/resources/db/:/flyway/sql
+    depends_on:
+      monitorfish-db:
+        condition: service_healthy
+
+  monitorfish-app:
+    image: monitorfish-app:$MONITORFISH_VERSION
+    container_name: monitorfish_backend
+    environment:
+      - ENV_DB_URL=jdbc:postgresql://monitorfish-db:5432/monitorfishdb?user=postgres&password=postgres
+      - SPRING_PROFILES_ACTIVE=local
+      - HOST_IP=127.0.0.1
+      - SENTRY_DSN=
+      - MONITORENV_URL=http://monitorenv-app:8880
+      - MONITORFISH_API_PROTECTED_API_KEY=DUMMY-API-KEY
+      - FRONTEND_GEOSERVER_LOCAL_URL=http://0.0.0.0:8081
+      - FRONTEND_GEOSERVER_REMOTE_URL=http://0.0.0.0:8081
+      - FRONTEND_MAPBOX_KEY=pk.eyJ1IjoibW9uaXRvcmZpc2giLCJhIjoiY2tsdHJ6dHhhMGZ0eDJ2bjhtZmJlOHJmZiJ9.bdi1cO-cUcZKXdkEkqAoZQ
+      - FRONTEND_MONITORENV_URL=http://0.0.0.0:9880
+      - FRONTEND_OIDC_AUTHORITY=https://authentification.recette.din.developpement-durable.gouv.fr/authSAML/oidc/monitorfish
+      - FRONTEND_OIDC_CLIENT_ID=monitorfish
+      - FRONTEND_OIDC_ENABLED=false
+      - FRONTEND_OIDC_REDIRECT_URI=https://monitorfish.din.developpement-durable.gouv.fr
+      - FRONTEND_SENTRY_DSN=https://a5f3272efa794bb9ada2ffea90f2fec5@sentry.incubateur.net/8
+      - FRONTEND_SHOM_KEY=rg8ele7cft4ujkwjspsmtwas
+      - VITE_SMALL_CHAT_SNIPPET=
+      - FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED=true
+      - FRONTEND_MISSION_FORM_AUTO_UPDATE_ENABLED=true
+    ports:
+      - 8880:8880
+      - 8000:8000
+      - 5000:5000
+      - 5001:5001
+    depends_on:
+      flyway:
+        condition: service_completed_successfully
+      geoserver-stubs:
+        condition: service_healthy
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024m"
 
   monitorenv-app:
     image: docker.pkg.github.com/mtes-mct/monitorenv/monitorenv-app:v${MONITORENV_VERSION}
@@ -47,6 +111,25 @@ services:
       options:
         max-size: "1024m"
 
+  geoserver-stubs:
+    image: rodolpheche/wiremock
+    ports:
+      - 8081:8080
+    volumes:
+      - ./mappings:/home/wiremock/mappings
+    healthcheck:
+      test: [
+          "CMD-SHELL",
+          "curl --fail
+          http://localhost:8080/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&CQL_FILTER=topic=%27Ouest%20Cotentin%20Bivalves%27%20AND%20zone=%27Praires%20Ouest%20cotentin%27
+          || exit 1 ",
+        ]
+      interval: 1s
+      timeout: 1s
+      retries: 30
+
 volumes:
+  monitorfish-db-data:
+    driver: local
   monitorenv-db-data:
     driver: local

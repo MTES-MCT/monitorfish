@@ -91,6 +91,8 @@ jobs:
     name: Run frontend unit tests
     needs: version
     runs-on: ubuntu-22.04
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: "true"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -205,6 +207,7 @@ jobs:
       ENV_PROFILE: ${{ needs.version.outputs.ENV_PROFILE }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       MONITORFISH_VERSION: ${{ needs.version.outputs.VERSION }}
+      PUPPETEER_SKIP_DOWNLOAD: "true"
       VITE_CYPRESS_PORT: 8880
       VERSION: ${{ needs.version.outputs.VERSION }}
     steps:
@@ -262,6 +265,7 @@ jobs:
       ENV_PROFILE: ${{ needs.version.outputs.ENV_PROFILE }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       MONITORFISH_VERSION: ${{ needs.version.outputs.VERSION }}
+      PUPPETEER_SKIP_DOWNLOAD: "true"
       VITE_CYPRESS_PORT: 8880
       VERSION: ${{ needs.version.outputs.VERSION }}
     steps:

@@ -607,7 +607,7 @@ export function MissionForm() {
             {!!missionIdFromPath && (
               <Button
                 accent={Accent.SECONDARY}
-                // disabled={isSaving || mainFormValues.missionSource !== Mission.MissionSource.MONITORFISH}
+                disabled={isSaving || mainFormValues.missionSource !== Mission.MissionSource.MONITORFISH}
                 Icon={Icon.Delete}
                 onClick={toggleDeletionConfirmationDialog}
               >

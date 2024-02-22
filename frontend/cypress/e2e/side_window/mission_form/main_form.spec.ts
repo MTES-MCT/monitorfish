@@ -2,8 +2,9 @@ import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils
 import { Mission } from '../../../../src/domain/entities/mission/types'
 import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
 import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
+import { FAKE_ENV_MISSION_ACTIONS, FAKE_FISH_MISSION_ACTIONS } from '../../constants'
 import { customDayjs } from '../../utils/customDayjs'
-import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
+import { editSideWindowMissionListMissionWithId, openSideWindowMissionList } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Main Form', () => {
   it('Should add and remove a control unit', () => {
@@ -584,7 +585,7 @@ context('Side Window > Mission Form > Main Form', () => {
       .should('eq', 200)
   })
 
-  it('Should delete a mission', () => {
+  it('Should delete a mission if no action created in MonitorEnv', () => {
     // We shouldn't be able to delete a CACEM mission:
 
     editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
@@ -595,11 +596,21 @@ context('Side Window > Mission Form > Main Form', () => {
 
     editSideWindowMissionListMissionWithId(4, SeaFrontGroup.MEMN)
 
-    cy.intercept('DELETE', '/api/v1/missions/4', {
+    cy.intercept(
+      { method: 'GET', url: '/bff/v1/missions/4/can_delete?source=MONITORFISH' },
+      FAKE_ENV_MISSION_ACTIONS
+    ).as('canDeleteMission')
+
+    cy.intercept('DELETE', '/api/v2/missions/4', {
       statusCode: 204
     }).as('deleteMission')
 
     cy.clickButton('Supprimer la mission')
+
+    cy.wait('@canDeleteMission').then(({ response }) => {
+      expect(response && response.statusCode).equal(200)
+      expect(response && response.body.canDelete).equal(true)
+    })
 
     cy.get('.Component-Dialog').should('be.visible')
 
@@ -971,5 +982,38 @@ context('Side Window > Mission Form > Main Form', () => {
     )
       .its('response.statusCode')
       .should('eq', 201)
+  })
+
+  it('A mission should not be deleted if actions have been created in MonitorEnv', () => {
+    openSideWindowMissionList()
+
+    cy.getDataCy('side-window-sub-menu-ALL').click()
+    cy.fill('Période', 'Un mois')
+    cy.intercept('GET', `*missionStatus=ENDED&*`).as('getMissions')
+    cy.fill('Statut', undefined).wait(500)
+    cy.fill('Statut', ['Terminée'])
+
+    cy.get('.Table').find('.TableBodyRow[data-id=50]').clickButton('Éditer la mission')
+
+    cy.intercept(
+      { method: 'GET', url: '/api/v1/missions/50/can_delete?source=MONITORFISH' },
+      FAKE_FISH_MISSION_ACTIONS
+    ).as('canDeleteMission')
+
+    cy.intercept({
+      url: `/bff/v1/missions*`
+    }).as('deleteMission')
+
+    cy.clickButton('Supprimer la mission')
+
+    cy.wait('@canDeleteMission').then(({ response }) => {
+      expect(response && response.statusCode).equal(200)
+      expect(response && response.body.canDelete).equal(false)
+      expect(response && response.body.sources[0]).equal('MONITORENV')
+    })
+
+    cy.getDataCy('external-actions-modal').should('be.visible')
+    cy.clickButton('Fermer')
+    cy.getDataCy('external-actions-modal').should('not.be.exist')
   })
 })

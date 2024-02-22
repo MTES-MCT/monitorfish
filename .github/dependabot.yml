@@ -9,7 +9,7 @@ updates:
       interval: "monthly"
     commit-message:
       prefix: "[Tech] "
-    labels: ["tech. enhancement"]
+    labels: ["tech. enhancement", "dependencies"]
 
   - package-ecosystem: "gradle"
     directory: "/backend"
@@ -19,7 +19,7 @@ updates:
       interval: "monthly"
     commit-message:
       prefix: "[Tech] "
-    labels: ["tech. enhancement"]
+    labels: ["tech. enhancement", "dependencies"]
 
   - package-ecosystem: "npm"
     directory: "/frontend"
@@ -30,7 +30,7 @@ updates:
       interval: "monthly"
     commit-message:
       prefix: "[Tech] "
-    labels: ["tech. enhancement"]
+    labels: ["tech. enhancement", "dependencies"]
 
   - package-ecosystem: "pip"
     directory: "/datascience"
@@ -40,4 +40,4 @@ updates:
       interval: "monthly"
     commit-message:
       prefix: "[Tech] "
-    labels: ["tech. enhancement"]
+    labels: ["tech. enhancement", "dependencies"]

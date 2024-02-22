@@ -13,7 +13,7 @@ export function listenToConsole(page: Page, index: number) {
           // If the SSE connection fails, the browser will restart it, it is not an application error
         }
 
-        // throw new Error(message.text())
+        throw new Error(message.text())
       }
     })
     .on('response', response => {
@@ -48,10 +48,10 @@ export async function getInputContent(page: Page, selector: string) {
   return element && element.evaluate((el: HTMLInputElement) => el.value)
 }
 
-export async function getFirstTab(browser: Browser) {
-  const [firstTab] = await browser.pages()
+export async function getPage(browser: Browser) {
+  const page = await browser.newPage()
 
-  return firstTab as Page
+  return page as Page
 }
 
 export function wait(ms: number) {

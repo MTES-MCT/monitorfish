@@ -40,9 +40,9 @@ stop-stubbed-apis:
 clean: docker-env
 	rm -Rf ./backend/target
 	docker compose down -v
-	docker compose --env-file ./infra/docker/.env -f ./infra/docker/docker-compose.monitorenv.dev.yml down -v
 	docker compose --env-file ./infra/docker/.env -f ./infra/docker/docker-compose.cypress.yml down -v
 	docker compose -f ./infra/docker/docker-compose.puppeteer.yml down -v
+	docker compose --env-file ./infra/docker/.env -f ./infra/docker/docker-compose.monitorenv.dev.yml down -v
 
 check-clean-archi:
 	cd backend/tools && ./check-clean-architecture.sh

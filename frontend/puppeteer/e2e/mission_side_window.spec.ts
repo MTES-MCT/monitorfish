@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from '@jest/globals'
 import { platform } from 'os'
 import { ElementHandle, Page } from 'puppeteer'
 
-import { assertContains, getFirstTab, getInputContent, getSideWindow, listenToConsole, wait } from './utils'
+import { assertContains, getPage, getInputContent, getSideWindow, listenToConsole, wait } from './utils'
 
 const TIMEOUT = 120 * 1000
 
@@ -17,7 +17,7 @@ let mainWindow: Page
 
 describe('Side window', () => {
   beforeEach(async () => {
-    mainWindow = await getFirstTab(browsers[0])
+    mainWindow = await getPage(browsers[0])
     listenToConsole(mainWindow, 1)
 
     await mainWindow.goto(URL, { waitUntil: 'domcontentloaded' })
@@ -112,7 +112,9 @@ describe('Side window', () => {
       await assertContains(sideWindow, '.Element-Tag', 'Appréhension espèce')
       expect(await getInputContent(sideWindow, '[name="contact_0"]')).toBe('')
 
-      await wait(2000)
+      await wait(5000)
+      await sideWindow.close()
+      await mainWindow.close()
     },
     TIMEOUT
   )

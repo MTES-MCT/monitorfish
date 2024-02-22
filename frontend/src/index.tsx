@@ -1,4 +1,4 @@
-import { BrowserTracing } from '@sentry/browser'
+import { browserTracingIntegration } from '@sentry/browser'
 import { init } from '@sentry/react'
 import { createRoot } from 'react-dom/client'
 import { AuthProvider, withAuth } from 'react-oidc-context'
@@ -26,12 +26,12 @@ import './ui/shared/rsuite-override.css'
 import { getOIDCConfig } from './auth/getOIDCConfig'
 
 if (import.meta.env.PROD) {
-  // https://docs.sentry.io/platforms/javascript/performance/#configure-the-sample-rate
+  // https://docs.sentry.io/platforms/javascript/performance/
   init({
     dsn: import.meta.env.FRONTEND_SENTRY_DSN || '',
     environment: import.meta.env.FRONTEND_SENTRY_ENV || '',
     integrations: [
-      new BrowserTracing({
+      browserTracingIntegration({
         tracingOrigins: import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS
           ? [import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS || '']
           : []

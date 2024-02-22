@@ -29,6 +29,8 @@ export function AdministrativeZone({ isFirst, isGrouped, isShown, showOrHideZone
 
 const ShowOrHideWrapper = styled.div`
   float: right;
+  padding-right: 12px;
+  padding-top: 6px;
 `
 
 const LayerName = styled.span`
@@ -43,9 +45,9 @@ const Row = styled.span<{
   isGrouped: boolean | undefined
 }>`
   margin-top: ${p => (p.isFirst ? 5 : 0)}px;
-  padding: ${p => (p.isGrouped ? '4px 0 3px 20px' : '4px 0 4px 20px')};
+  padding: 4px 0 4px 20px;
   padding-left: ${p => (p.isGrouped ? '38px' : '20px')};
-  line-height: 18px;
+  line-height: 20px;
   display: block;
   user-select: none;
   font-weight: 500;

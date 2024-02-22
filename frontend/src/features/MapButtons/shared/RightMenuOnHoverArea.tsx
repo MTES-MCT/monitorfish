@@ -1,10 +1,10 @@
+import { useClickOutsideWhenOpened } from '@hooks/useClickOutsideWhenOpened'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 import { contractRightMenu, expandRightMenu } from '../../../domain/shared_slices/Global'
-import { useClickOutsideWhenOpened } from '../../../hooks/useClickOutsideWhenOpened'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
 export function RightMenuOnHoverArea() {
   const dispatch = useMainAppDispatch()
@@ -15,11 +15,13 @@ export function RightMenuOnHoverArea() {
   const clickedOutsideComponent = useClickOutsideWhenOpened(areaRef, !!selectedVessel)
 
   useEffect(() => {
-    if (clickedOutsideComponent && selectedVessel && !mapToolOpened) {
-      dispatch(contractRightMenu())
-    } else {
+    if (!selectedVessel || mapToolOpened) {
       dispatch(expandRightMenu())
+
+      return
     }
+
+    dispatch(contractRightMenu())
   }, [dispatch, clickedOutsideComponent, mapToolOpened, selectedVessel])
 
   return selectedVessel && <Area ref={areaRef} onMouseEnter={() => dispatch(expandRightMenu())} />

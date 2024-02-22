@@ -1,3 +1,5 @@
+import { ReportingOriginActor } from '@features/Reporting/types'
+
 import { SeaFront } from '../entities/seaFront/constants'
 
 import type { Infraction } from './infraction'
@@ -75,7 +77,7 @@ export type InfractionSuspicion = {
   description: string
   dml: string
   natinfCode: number
-  reportingActor: string
+  reportingActor: keyof typeof ReportingOriginActor
   seaFront: SeaFront
   title: string
   type: string
@@ -87,7 +89,7 @@ export type Observation = {
   controlUnit: LegacyControlUnit.LegacyControlUnit | null
   controlUnitId: number | null
   description: string
-  reportingActor: string
+  reportingActor: keyof typeof ReportingOriginActor
   title: string
   type: string
 }
@@ -98,7 +100,7 @@ export type ReportingUpdate = {
   controlUnitId: number | null
   description: string | undefined
   natinfCode: number | null
-  reportingActor: string
+  reportingActor: keyof typeof ReportingOriginActor
   title: string
   type: ReportingType
 }

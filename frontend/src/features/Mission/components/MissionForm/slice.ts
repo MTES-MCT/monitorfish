@@ -3,11 +3,13 @@ import { isEqual } from 'lodash/fp'
 
 import type { MissionMainFormValues } from './types'
 import type { MissionWithActionsDraft } from '../../types'
+import type { ControlUnit } from '@mtes-mct/monitor-ui'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { GeoJSON } from 'domain/types/GeoJSON'
 
 export interface MissionFormState {
   draft: MissionWithActionsDraft | undefined
+  engagedControlUnit: ControlUnit.EngagedControlUnit | undefined
   geometryComputedFromControls: MissionMainFormValues['geom']
   /**
    * Is the mission being closed?
@@ -24,6 +26,7 @@ export interface MissionFormState {
 }
 const INITIAL_STATE: MissionFormState = {
   draft: undefined,
+  engagedControlUnit: undefined,
   geometryComputedFromControls: undefined,
   isClosing: false,
   isDraftDirty: false,
@@ -72,7 +75,9 @@ const missionFormSlice = createSlice({
     setDraft(state, action: PayloadAction<MissionWithActionsDraft>) {
       state.draft = action.payload
     },
-
+    setEngagedControlUnit(state, action: PayloadAction<ControlUnit.EngagedControlUnit | undefined>) {
+      state.engagedControlUnit = action.payload
+    },
     /**
      * Update mission geometry computed from controls
      */

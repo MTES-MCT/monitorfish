@@ -157,8 +157,8 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
 /* center of radio button when checked */
 .rs-radio-wrapper .rs-radio-inner::after {
   background: var(--charcoal);
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   margin-top: 5px;
   margin-left: 5px;
 }

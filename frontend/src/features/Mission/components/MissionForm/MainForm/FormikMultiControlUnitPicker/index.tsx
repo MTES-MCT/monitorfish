@@ -1,10 +1,11 @@
 import { useGetLegacyControlUnitsQuery } from '@api/legacyControlUnit'
 import { useForceUpdate } from '@hooks/useForceUpdate'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, usePrevious } from '@mtes-mct/monitor-ui'
 import { getControlUnitsOptionsFromControlUnits } from 'domain/entities/controlUnits/utils'
 import { useFormikContext } from 'formik'
 import { remove, update } from 'ramda'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { ControlUnitSelect } from './ControlUnitSelect'
@@ -15,14 +16,24 @@ import type { MissionMainFormValues } from '../../types'
 import type { LegacyControlUnit } from 'domain/types/legacyControlUnit'
 
 type FormikMultiControlUnitPickerProps = Readonly<{
+  missionId: number | undefined
   name: string
+  validateBeforeOnChange: (nextValues: MissionMainFormValues) => void
 }>
-export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPickerProps) {
+export function FormikMultiControlUnitPicker({
+  missionId,
+  name,
+  validateBeforeOnChange
+}: FormikMultiControlUnitPickerProps) {
   const { errors: allErrors, setFieldValue, values } = useFormikContext<MissionMainFormValues>()
+  const engagedControlUnit = useMainAppSelector(state => state.missionForm.engagedControlUnit)
+  const previousEngagedControlUnit = usePrevious(engagedControlUnit)
+
   const { updateMissionActionOtherControlsCheckboxes } = useGetMainFormFormikUsecases()
   const previousIsControlUnitPAM = !!usePrevious(
     values.controlUnits?.some(controlUnit => controlUnit.id && PAMControlUnitIds.includes(controlUnit.id))
   )
+
   const { forceUpdate } = useForceUpdate()
 
   const controlUnitsQuery = useGetLegacyControlUnitsQuery(undefined)
@@ -76,6 +87,15 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
     [values[name], previousIsControlUnitPAM]
   )
 
+  useEffect(() => {
+    if (!missionId && !engagedControlUnit && previousEngagedControlUnit !== engagedControlUnit) {
+      validateBeforeOnChange(values)
+    }
+    // we want to trigger the `validateBeforeOnChange` when engagedControlUnit change
+    // so when user confirm mission creation even if the control unit is engaged
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [missionId, engagedControlUnit])
+
   return (
     <Wrapper>
       <>
@@ -87,13 +107,19 @@ export function FormikMultiControlUnitPicker({ name }: FormikMultiControlUnitPic
             allControlUnits={controlUnitsQuery.data ?? []}
             error={errors[index]}
             index={index}
+            missionId={missionId}
             onChange={handleChange}
             onDelete={removeUnit}
           />
         ))}
       </>
 
-      <Button accent={Accent.SECONDARY} onClick={addUnit}>
+      <Button
+        accent={Accent.SECONDARY}
+        data-cy="add-other-control-unit"
+        disabled={!!engagedControlUnit}
+        onClick={addUnit}
+      >
         Ajouter une autre unité
       </Button>
     </Wrapper>

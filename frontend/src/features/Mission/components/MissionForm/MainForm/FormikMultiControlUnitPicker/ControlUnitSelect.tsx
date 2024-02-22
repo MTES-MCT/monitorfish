@@ -1,23 +1,13 @@
-import { FIVE_MINUTES } from '@api/APIWorker'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import {
-  Accent,
-  Icon,
-  IconButton,
-  Level,
-  Message,
-  MultiSelect,
-  Select,
-  TextInput,
-  useNewWindow
-} from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, MultiSelect, Select, TextInput, useNewWindow } from '@mtes-mct/monitor-ui'
 import { isNotArchived } from '@utils/isNotArchived'
-import { Mission } from 'domain/entities/mission/types'
 import { useField } from 'formik'
 import { uniqBy } from 'lodash'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
+import { ControlUnitWarningMessage } from './ControlUnitWarningMessage'
 import {
   findControlUnitByname,
   mapControlUnitsToUniqueSortedNamesAsOptions,
@@ -25,6 +15,7 @@ import {
 } from './utils'
 import { useGetEngagedControlUnitsQuery } from '../../../../monitorenvMissionApi'
 import { INITIAL_MISSION_CONTROL_UNIT } from '../../constants'
+import { missionFormActions } from '../../slice'
 
 import type { MissionMainFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
@@ -41,6 +32,7 @@ type ControlUnitSelectProps = Readonly<{
       }
     | undefined
   index: number
+  missionId: number | undefined
   onChange: (
     index: number,
     nextControlUnit: LegacyControlUnit.LegacyControlUnit | LegacyControlUnit.LegacyControlUnitDraft
@@ -52,23 +44,16 @@ export function ControlUnitSelect({
   allControlUnits,
   error,
   index,
+  missionId,
   onChange,
   onDelete
 }: ControlUnitSelectProps) {
   const { newWindowContainerRef } = useNewWindow()
   const selectedPath = useMainAppSelector(state => state.sideWindow.selectedPath)
-  const { data: engagedControlUnitsData } = useGetEngagedControlUnitsQuery(undefined, { pollingInterval: FIVE_MINUTES })
+  const dispatch = useMainAppDispatch()
   const [{ value }, ,] = useField<LegacyControlUnit.LegacyControlUnit | LegacyControlUnit.LegacyControlUnitDraft>(
     `controlUnits.${index}`
   )
-
-  const engagedControlUnits = useMemo(() => {
-    if (!engagedControlUnitsData) {
-      return []
-    }
-
-    return engagedControlUnitsData
-  }, [engagedControlUnitsData])
 
   // Include archived control units (and administrations) if they're already selected
   const activeAndSelectedControlUnits = useMemo(
@@ -76,9 +61,12 @@ export function ControlUnitSelect({
     [allControlUnits, value]
   )
 
-  const engagedControlUnit = engagedControlUnits.find(engaged => engaged.controlUnit.id === value.id)
   const isLoading = !allControlUnits.length
   const isEdition = selectedPath.id
+
+  const { data: engagedControlUnits = [] } = useGetEngagedControlUnitsQuery(undefined, {
+    skip: !!isEdition
+  })
 
   const filteredNamesAsOptions = useMemo((): Option[] => {
     if (!value.administration) {
@@ -145,8 +133,20 @@ export function ControlUnitSelect({
             }
 
       onChange(index, nextControlUnit)
+
+      if (!isEdition) {
+        const controlUnitAlreadyEngaged = engagedControlUnits.find(
+          engaged => engaged.controlUnit.id === nextSelectedControlUnit?.id
+        )
+        if (controlUnitAlreadyEngaged) {
+          dispatch(missionFormActions.setEngagedControlUnit(controlUnitAlreadyEngaged))
+
+          return
+        }
+        dispatch(missionFormActions.setEngagedControlUnit(undefined))
+      }
     },
-    [allControlUnits, value, index, isLoading, onChange]
+    [allControlUnits, dispatch, isEdition, engagedControlUnits, value, index, isLoading, onChange]
   )
 
   const handleResourcesChange = useCallback(
@@ -177,26 +177,6 @@ export function ControlUnitSelect({
     onDelete(index)
   }, [index, onDelete])
 
-  const controlUnitWarningMessage = useMemo(() => {
-    if (!engagedControlUnit) {
-      return ''
-    }
-
-    if (engagedControlUnit.missionSources.length === 1) {
-      return `Cette unité est actuellement sélectionnée dans une autre mission en cours ouverte par le ${
-        Mission.MissionSourceLabel[engagedControlUnit.missionSources[0]!]
-      }.`
-    }
-
-    if (engagedControlUnit.missionSources.length > 1) {
-      return `Cette unité est actuellement sélectionnée dans plusieurs autres missions en cours, ouvertes par le ${engagedControlUnit.missionSources
-        .map(source => Mission.MissionSourceLabel[source])
-        .join(' et le ')}.`
-    }
-
-    return ''
-  }, [engagedControlUnit])
-
   return (
     <Wrapper>
       <UnitWrapper>
@@ -226,7 +206,7 @@ export function ControlUnitSelect({
           searchable
           value={value.name}
         />
-        {!isEdition && !!engagedControlUnit && <Message level={Level.WARNING}>{controlUnitWarningMessage}</Message>}
+        {!isEdition && <ControlUnitWarningMessage controlUnitIndex={index} missionId={missionId} />}
         <MultiSelect
           baseContainer={newWindowContainerRef.current}
           disabled={isLoading || !value.administration || !value.name}

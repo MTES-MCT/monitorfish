@@ -49,7 +49,7 @@ dependencies {
     runtimeOnly("org.springframework.boot:spring-boot-devtools:3.1.7")
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     api("io.ktor:ktor-client-core-jvm:2.3.6")
-    api("io.ktor:ktor-client-java-jvm:2.3.3")
+    api("io.ktor:ktor-client-java-jvm:2.3.8")
     api("io.ktor:ktor-client-content-negotiation-jvm:2.3.3")
     api("io.ktor:ktor-serialization-kotlinx-json-jvm:2.3.8")
     api("org.hibernate.validator:hibernate-validator:8.0.1.Final")

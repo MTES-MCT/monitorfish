@@ -4,7 +4,7 @@ import { ControlUnit } from '@mtes-mct/monitor-ui'
 import { Mission } from 'domain/entities/mission/types'
 
 const CREATE_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu créer la mission."
-const DELETE_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu supprimé la mission."
+const DELETE_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu supprimer la mission."
 const GET_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la mission."
 const GET_ENGAGED_CONTROL_UNITS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les unités en mission."
 const UPDATE_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu mettre à jour la mission."
@@ -28,7 +28,8 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(DELETE_MISSION_ERROR_MESSAGE, response)
     }),
 
-    getEngagedControlUnits: builder.query<ControlUnit.EngagedControlUnits, void>({
+    getEngagedControlUnits: builder.query<Array<ControlUnit.EngagedControlUnit>, void>({
+      forceRefetch: () => true,
       query: () => `/v1/missions/engaged_control_units`,
       transformErrorResponse: response => new FrontendApiError(GET_ENGAGED_CONTROL_UNITS_ERROR_MESSAGE, response)
     }),

@@ -652,16 +652,35 @@ context('Side Window > Mission Form > Main Form', () => {
     )
   })
 
-  it('Should show a warning indicating that a control unit is already engaged in a mission', () => {
+  it('A user can delete mission if control unit already engaged and be redirected to filtered mission list', () => {
     openSideWindowNewMission()
 
-    cy.fill('Administration 1', 'Gendarmerie Maritime')
-    cy.fill('Unité 1', 'BSL Lorient')
+    cy.fill('Administration 1', 'Douane')
+    cy.fill('Unité 1', 'BGC Lorient - DF 36 Kan An Avel')
 
-    cy.get('body').should(
-      'contain',
-      'Cette unité est actuellement sélectionnée dans une autre mission en cours ouverte par le CNSP.'
-    )
+    // Then
+    cy.get('body').contains('Une autre mission, ouverte par le CNSP, est en cours avec cette unité.')
+    cy.clickButton("Non, l'abandonner")
+
+    cy.intercept('GET', '/bff/v1/missions*').as('getMissions')
+
+    cy.get('.TableBody').should('have.length.to.be.greaterThan', 0)
+  })
+
+  it('A user can create mission even if control unit already engaged', () => {
+    cy.intercept('POST', '/api/v1/missions').as('createMission')
+
+    openSideWindowNewMission()
+
+    cy.fill('Administration 1', 'Douane')
+    cy.fill('Unité 1', 'BGC Lorient - DF 36 Kan An Avel')
+
+    cy.get('body').contains('Une autre mission, ouverte par le CNSP, est en cours avec cette unité.')
+    cy.getDataCy('add-other-control-unit').should('be.disabled')
+    cy.clickButton('Oui, la conserver')
+    cy.getDataCy('add-other-control-unit').should('not.be.disabled')
+
+    cy.waitForLastRequest('@createMission', {}, 5).its('response.statusCode').should('eq', 200)
   })
 
   it('Should update the form When receiving a mission update', () => {

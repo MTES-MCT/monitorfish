@@ -155,17 +155,6 @@ export const NoRsuiteOverrideWrapper = styled.div`
     > .rs-radio-checker {
       > label {
         line-height: 1.5384; // = 20px
-
-        > .rs-radio-wrapper {
-          > .rs-radio-inner {
-            &:after {
-              height: 9px;
-              margin-left: 4px;
-              margin-top: 3.5px;
-              width: 9px;
-            }
-          }
-        }
       }
     }
   }

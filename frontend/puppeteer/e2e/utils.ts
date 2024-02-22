@@ -13,6 +13,10 @@ export function listenToConsole(page: Page, index: number) {
           // If the SSE connection fails, the browser will restart it, it is not an application error
         }
 
+        if (message.text().includes('/wfs')) {
+          // If the SSE connection fails, the browser will restart it, it is not an application error
+        }
+
         throw new Error(message.text())
       }
     })

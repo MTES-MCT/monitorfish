@@ -9,7 +9,7 @@ import { useCallback } from 'react'
 import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
-import { BackToListIcon, Body, CloseButton, Footer, Header, HeaderTitle, Wrapper } from '.'
+import { BackToListIcon, Body, Footer, Header, HeaderTitle, Wrapper } from '.'
 import { AutoSaveTag } from './shared/AutoSaveTag'
 
 export function Loader() {
@@ -61,9 +61,9 @@ export function Loader() {
         </div>
         <div>
           <AutoSaveTag />
-          <CloseButton accent={Accent.PRIMARY} disabled onClick={goToMissionList}>
+          <Button accent={Accent.PRIMARY} disabled onClick={goToMissionList}>
             Fermer
-          </CloseButton>
+          </Button>
         </div>
       </Footer>
     </Wrapper>

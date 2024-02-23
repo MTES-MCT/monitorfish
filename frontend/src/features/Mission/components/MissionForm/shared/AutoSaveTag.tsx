@@ -16,8 +16,7 @@ export function AutoSaveTag({ isAutoSaveEnabled = false }: AutoSaveTagProps) {
 }
 
 const Wrapper = styled(Tag)`
-  margin-left: 24px;
+  margin: auto 0px auto 24px;
   vertical-align: middle;
-  align-self: unset;
   font-weight: 500;
 `

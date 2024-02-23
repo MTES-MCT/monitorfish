@@ -8,7 +8,15 @@ import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindow
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { FrontendError } from '@libs/FrontendError'
-import { Accent, Button, customDayjs, Icon, logSoftError, NotificationEvent } from '@mtes-mct/monitor-ui'
+import {
+  Accent,
+  Button,
+  customDayjs,
+  humanizePastDate,
+  Icon,
+  logSoftError,
+  NotificationEvent
+} from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { Mission } from 'domain/entities/mission/types'
 import { getMissionStatus } from 'domain/entities/mission/utils'
@@ -17,7 +25,6 @@ import { isEqual } from 'lodash'
 import { omit } from 'lodash/fp'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
-import * as timeago from 'timeago.js'
 import { FrontendErrorBoundary } from 'ui/FrontendErrorBoundary'
 import { NoRsuiteOverrideWrapper } from 'ui/NoRsuiteOverrideWrapper'
 import { useDebouncedCallback } from 'use-debounce'
@@ -121,6 +128,11 @@ export function MissionForm() {
   }, [mainFormValues])
 
   const isMissionFormValid = areMissionFormsValuesValid(mainFormValues, actionsFormValues)
+
+  const formattedUpdateDate = useMemo(
+    () => mainFormValues.updatedAtUtc && humanizePastDate(mainFormValues.updatedAtUtc),
+    [mainFormValues.updatedAtUtc]
+  )
 
   const updateReduxSliceDraft = useDebouncedCallback(() => {
     dispatch(
@@ -603,55 +615,37 @@ export function MissionForm() {
           </FrontendErrorBoundary>
         </Body>
         <Footer>
-          <div>
-            {!!missionIdFromPath && (
-              <Button
-                accent={Accent.SECONDARY}
-                disabled={isSaving || mainFormValues.missionSource !== Mission.MissionSource.MONITORFISH}
-                Icon={Icon.Delete}
-                onClick={toggleDeletionConfirmationDialog}
-              >
-                Supprimer la mission
-              </Button>
-            )}
-          </div>
-          <div>
-            <MissionInfos>
-              {mainFormValues.createdAtUtc && mainFormValues.missionSource && (
-                <>
-                  Mission créée par le {Mission.MissionSourceLabel[mainFormValues.missionSource]} le{' '}
-                  {customDayjs(mainFormValues.createdAtUtc).utc().format('DD/MM/YYYY à HH:mm')}.{' '}
-                </>
-              )}
-              {!mainFormValues.createdAtUtc && <>Mission non enregistrée. </>}
-              {mainFormValues.updatedAtUtc && (
-                <>Dernière modification enregistrée {timeago.format(mainFormValues.updatedAtUtc, 'fr')}.</>
-              )}
-            </MissionInfos>
-            <AutoSaveTag isAutoSaveEnabled={isAutoSaveEnabled} />
-            {!isAutoSaveEnabled && (
-              <Button
-                accent={Accent.PRIMARY}
-                disabled={isSaving || !isMissionFormValid}
-                Icon={Icon.Save}
-                onClick={async () => {
-                  await createOrUpdate({
-                    actionsFormValues,
-                    mainFormValues
-                  })
+          {!!missionIdFromPath && (
+            <DeleteButton
+              accent={Accent.SECONDARY}
+              disabled={isSaving || mainFormValues.missionSource !== Mission.MissionSource.MONITORFISH}
+              Icon={Icon.Delete}
+              onClick={toggleDeletionConfirmationDialog}
+            >
+              Supprimer la mission
+            </DeleteButton>
+          )}
 
-                  goToMissionList()
-                }}
-              >
-                Enregistrer
-              </Button>
+          <Separator />
+
+          <MissionInfos>
+            {mainFormValues.createdAtUtc && mainFormValues.missionSource && (
+              <>
+                Mission créée par le {Mission.MissionSourceLabel[mainFormValues.missionSource]} le{' '}
+                {customDayjs(mainFormValues.createdAtUtc).utc().format('DD/MM/YYYY à HH[h]mm')}.{' '}
+              </>
             )}
+            {!mainFormValues.createdAtUtc && <>Mission non enregistrée. </>}
+            {mainFormValues.updatedAtUtc && <>Dernière modification enregistrée {formattedUpdateDate}.</>}
+          </MissionInfos>
+
+          <RightButtonsContainer>
+            <AutoSaveTag isAutoSaveEnabled={isAutoSaveEnabled} />
             {!mainFormValues.isClosed && (
               <Button
                 accent={Accent.SECONDARY}
                 data-cy="close-mission"
                 disabled={isSaving || !isMissionFormValid}
-                Icon={Icon.Confirm}
                 onClick={close}
               >
                 Clôturer
@@ -666,17 +660,34 @@ export function MissionForm() {
                 onClick={reopen}
                 type="button"
               >
-                Ré-ouvrir la mission
+                Rouvrir la mission
               </Button>
             )}
-            <CloseButton
-              accent={isAutoSaveEnabled ? Accent.PRIMARY : Accent.TERTIARY}
+            <Button
+              accent={isAutoSaveEnabled ? Accent.PRIMARY : Accent.SECONDARY}
               disabled={isSaving}
               onClick={goToMissionList}
             >
               Fermer
-            </CloseButton>
-          </div>
+            </Button>
+
+            {!isAutoSaveEnabled && (
+              <Button
+                accent={Accent.PRIMARY}
+                disabled={isSaving || !isMissionFormValid}
+                onClick={async () => {
+                  await createOrUpdate({
+                    actionsFormValues,
+                    mainFormValues
+                  })
+
+                  goToMissionList()
+                }}
+              >
+                Enregistrer
+              </Button>
+            )}
+          </RightButtonsContainer>
         </Footer>
       </Wrapper>
 
@@ -692,11 +703,6 @@ export function MissionForm() {
     </>
   )
 }
-
-const MissionInfos = styled.div`
-  font-style: italic;
-  color: ${p => p.theme.color.slateGray};
-`
 
 export const BackToListIcon = styled(Icon.Chevron)`
   margin-right: 12px;
@@ -746,30 +752,29 @@ export const Body = styled.div`
 `
 
 export const Footer = styled.div`
-  background-color: ${p => p.theme.color.white};
-  border-top: solid 2px ${p => p.theme.color.gainsboro};
+  align-items: center;
+  border-top: 1px solid ${p => p.theme.color.lightGray};
   display: flex;
-  flex-grow: 1;
+  gap: 16px;
   justify-content: space-between;
-  max-height: 62px;
-  min-height: 62px;
-
-  > div {
-    align-items: center;
-    display: flex;
-    flex-grow: 1;
-    padding: 0 24px;
-
-    :last-child {
-      justify-content: flex-end;
-
-      > button {
-        margin-left: 16px;
-      }
+  padding: 16px;
+`
+const DeleteButton = styled(Button)`
+  :not([disabled]) {
+    svg {
+      color: ${p => p.theme.color.maximumRed};
     }
   }
 `
 
-export const CloseButton = styled(Button)`
-  height: 34px;
+const Separator = styled.div``
+
+const MissionInfos = styled.div`
+  font-style: italic;
+  color: ${p => p.theme.color.slateGray};
+`
+
+const RightButtonsContainer = styled.div`
+  display: flex;
+  gap: 16px;
 `

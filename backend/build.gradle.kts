@@ -72,7 +72,7 @@ dependencies {
     runtimeOnly("org.postgresql:postgresql:42.6.0")
     testImplementation("io.ktor:ktor-client-mock-jvm:2.3.3")
     testImplementation("org.assertj:assertj-core:3.25.0")
-    testImplementation("org.testcontainers:postgresql:1.19.4")
+    testImplementation("org.testcontainers:postgresql:1.19.6")
     testImplementation("org.testcontainers:testcontainers:1.19.4")
     testImplementation("org.testcontainers:junit-jupiter:1.19.4")
     testImplementation("jakarta.servlet:jakarta.servlet-api:6.0.0")

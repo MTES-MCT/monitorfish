@@ -774,7 +774,7 @@ const MissionInfos = styled.div`
   color: ${p => p.theme.color.slateGray};
 `
 
-const RightButtonsContainer = styled.div`
+export const RightButtonsContainer = styled.div`
   display: flex;
   gap: 16px;
 `

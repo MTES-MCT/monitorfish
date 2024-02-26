@@ -301,7 +301,7 @@ const Row = styled(List.Item)<{
   }};
   border: 1px solid ${p => p.theme.color.lightGray};
   border-radius: 1px;
-  height: 15px;
+  height: 42px;
   margin-top: 6px;
   overflow: hidden;
   transition: background 3s;

@@ -10,9 +10,9 @@ import MenuItem from '../custom_form/MenuItem'
 import CreateRegulationTopicForm from './CreateRegulationTopicForm'
 import InfoBox from '../InfoBox'
 import { INFO_TEXT } from '../../constants'
-import { formatDataForSelectPicker } from '../../../../utils'
 import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../Regulation/utils'
 import { updateProcessingRegulationByKey } from '../../slice'
+import { formatDataForSelectPicker } from '@features/Backoffice/utils'
 const RegulationTopicLine = props => {
   const { disabled, regulationTopicIsMissing } = props
 

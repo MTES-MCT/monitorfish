@@ -1,8 +1,12 @@
 import { describe, expect, it } from '@jest/globals'
 
+import { JDP_CSV_MAP_BASE } from '../components/ExportActivityReportsDialog/csvMap'
 import { JDP } from '../constants'
-import { JDP_CSV_MAP_BASE } from '../csvMap'
-import { formatDMDCoordinateForActivityReport, getJDPCsvMap } from '../utils'
+import {
+  formatDMDCoordinateForActivityReport,
+  getJDPCsvMap,
+  getSpeciesOnboardWithUntargetedSpeciesGrouped
+} from '../utils'
 
 describe('utils', () => {
   it('formatCoordinateForActivityReport Should format a latitude', async () => {
@@ -29,9 +33,36 @@ describe('utils', () => {
     expect(latitude).toEqual('')
   })
 
+  it('getSpeciesOnboardWithUntargetedSpeciesGrouped Should return untargeted species grouped as OTH', async () => {
+    // Given
+    const speciesOnboard = [
+      { controlledWeight: 500, declaredWeight: 471.2, nbFish: undefined, speciesCode: 'HKE', underSized: true },
+      { controlledWeight: undefined, declaredWeight: 13.46, nbFish: undefined, speciesCode: 'BLI', underSized: false },
+      { controlledWeight: 123.6, declaredWeight: undefined, nbFish: undefined, speciesCode: 'COD', underSized: false },
+      { controlledWeight: undefined, declaredWeight: 12.6, nbFish: undefined, speciesCode: 'ANZ', underSized: false },
+      { controlledWeight: undefined, declaredWeight: 45.5, nbFish: undefined, speciesCode: 'FMI', underSized: false }
+    ]
+
+    // When
+    const groupedSpeciesOnboard = getSpeciesOnboardWithUntargetedSpeciesGrouped(speciesOnboard, ['ANZ', 'HKE', 'ATJ'])
+
+    // Then
+    expect(groupedSpeciesOnboard).toHaveLength(3)
+    expect(groupedSpeciesOnboard[0]?.speciesCode).toEqual('HKE')
+    expect(groupedSpeciesOnboard[0]?.controlledWeight).toEqual(500)
+    expect(groupedSpeciesOnboard[1]?.speciesCode).toEqual('OTH')
+    expect(groupedSpeciesOnboard[1]?.declaredWeight).toEqual(182.56)
+    expect(groupedSpeciesOnboard[2]?.speciesCode).toEqual('ANZ')
+    expect(groupedSpeciesOnboard[2]?.declaredWeight).toEqual(12.6)
+  })
+
+  /*
+
+   */
+
   it('getJDPCsvMap Should be dynamically generated with species, infractions and control comment for WESTERN_WATERS', async () => {
     // When
-    const csvMap = getJDPCsvMap(JDP_CSV_MAP_BASE, JDP.WESTERN_WATERS, ['ANZ', 'HKE'])
+    const csvMap = getJDPCsvMap(JDP_CSV_MAP_BASE, JDP.WESTERN_WATERS)
 
     // Then
     expect(Object.keys(csvMap)).toHaveLength(91)
@@ -67,7 +98,7 @@ describe('utils', () => {
 
   it('getJDPCsvMap Should be dynamically generated with species, infractions and control comment for MEDITERRANEAN_AND_EASTERN_ATLANTIC', async () => {
     // When
-    const csvMap = getJDPCsvMap(JDP_CSV_MAP_BASE, JDP.MEDITERRANEAN_AND_EASTERN_ATLANTIC, [])
+    const csvMap = getJDPCsvMap(JDP_CSV_MAP_BASE, JDP.MEDITERRANEAN_AND_EASTERN_ATLANTIC)
 
     // Then
     expect(Object.keys(csvMap)).toHaveLength(91)

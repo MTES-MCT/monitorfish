@@ -1,3 +1,4 @@
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import {
   Accent,
   Button,
@@ -11,9 +12,8 @@ import {
 import { useState } from 'react'
 import styled from 'styled-components'
 
-import { JDP } from './constants'
-import { downloadActivityReports, NO_ACTIVITY_REPORT } from './useCases/downloadActivityReports'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
+import { JDP } from '../../constants'
+import { downloadActivityReports, NO_ACTIVITY_REPORT } from '../../useCases/downloadActivityReports'
 
 import type { Promisable } from 'type-fest'
 

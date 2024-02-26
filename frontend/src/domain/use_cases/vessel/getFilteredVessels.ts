@@ -14,7 +14,6 @@ const vectorSource = new VectorSource({
 })
 
 export const getFilteredVessels = (vessels: VesselEnhancedLastPositionWebGLObject[], filters) => async () => {
-  // @ts-ignore
   const monitorFishWorker = await new MonitorFishWorker()
   const workerFilters = getFiltersWithoutZonesSelected(filters)
 

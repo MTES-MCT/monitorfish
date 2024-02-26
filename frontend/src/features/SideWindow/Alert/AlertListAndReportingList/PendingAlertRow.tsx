@@ -212,7 +212,7 @@ const listItemStyle = (isFocused, toClose) => ({
   background: isFocused ? COLORS.gainsboro : COLORS.cultured,
   border: `1px solid ${COLORS.lightGray}`,
   borderRadius: 1,
-  height: 15,
+  height: 42,
   marginTop: 6,
   overflow: 'hidden',
   transition: 'background 3s'

@@ -1,10 +1,10 @@
-import { range } from 'lodash'
+import { range, sortBy } from 'lodash'
 
-import { JDP, NOT_TARGETED_SPECIES_CODE } from './constants'
-import { MissionAction } from '../../../../domain/types/missionAction'
+import { JDP, UNTARGETED_SPECIES_CODE } from './constants'
+import { MissionAction } from '../../domain/types/missionAction'
 
 import type { ActivityReportWithId } from './types'
-import type { DownloadAsCsvMap } from '../../../../utils/downloadAsCsv'
+import type { DownloadAsCsvMap } from '@utils/downloadAsCsv'
 
 export function formatDMDCoordinateForActivityReport(coordinate: string | undefined): string {
   const hemisphere = coordinate?.at(-1)
@@ -17,7 +17,10 @@ export function formatDMDCoordinateForActivityReport(coordinate: string | undefi
   return `${hemisphere}${nextCoordinate}`
 }
 
-export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>, jdp: JDP, jdpSpecies: string[]) {
+/**
+ * Adds 'SPECIES' related columns, 'INFR' related columns and 'COMMENT' column to JDP_CSV_MAP_BASE
+ */
+export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>, jdp: JDP) {
   const numberOfSpeciesColumns = 10
   const numberOfInfractionColumns = 10
 
@@ -31,10 +34,6 @@ export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>,
         const speciesOnboard = activity.action.speciesOnboard[count - 1]
         if (!speciesOnboard?.speciesCode) {
           return ''
-        }
-
-        if (!jdpSpecies.includes(speciesOnboard.speciesCode)) {
-          return NOT_TARGETED_SPECIES_CODE
         }
 
         return speciesOnboard.speciesCode
@@ -93,6 +92,31 @@ export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>,
   baseCsvMap['action.otherComments'] = `COMMENT`
 
   return baseCsvMap
+}
+
+export function getSpeciesOnboardWithUntargetedSpeciesGrouped(
+  speciesOnboard: MissionAction.SpeciesControl[],
+  jdpSpecies: string[]
+): MissionAction.SpeciesControl[] {
+  const otherSpeciesSummedWeight = speciesOnboard
+    .filter(species => !jdpSpecies.includes(species.speciesCode))
+    .map(species => species.controlledWeight ?? species.declaredWeight)
+    .filter((species): species is number => species !== undefined)
+    .reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+
+  const otherSpecy = {
+    controlledWeight: undefined,
+    declaredWeight: otherSpeciesSummedWeight,
+    nbFish: undefined,
+    speciesCode: UNTARGETED_SPECIES_CODE,
+    underSized: undefined
+  }
+
+  const speciesOnboardWithoutOtherSpecies = speciesOnboard.filter(species => jdpSpecies.includes(species.speciesCode))
+
+  const groupedSpeciesOnboard = speciesOnboardWithoutOtherSpecies.concat(otherSpecy)
+
+  return sortBy(groupedSpeciesOnboard, ({ declaredWeight }) => declaredWeight).reverse()
 }
 
 function getInfractionsKeys(action: MissionAction.MissionAction, key: string): string[] {

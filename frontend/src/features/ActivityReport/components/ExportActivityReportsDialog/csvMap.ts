@@ -1,12 +1,12 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { toAlpha3 } from 'i18n-iso-countries'
 
-import { formatDMDCoordinateForActivityReport, getPatrolType } from './utils'
 import { getCoordinates } from '../../../../coordinates'
 import { CoordinatesFormat, WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
+import { formatDMDCoordinateForActivityReport, getPatrolType } from '../../utils'
 
-import type { ActivityReportWithId } from './types'
-import type { DownloadAsCsvMap } from '../../../../utils/downloadAsCsv'
+import type { ActivityReportWithId } from '../../types'
+import type { DownloadAsCsvMap } from '@utils/downloadAsCsv'
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 export const JDP_CSV_MAP_BASE: DownloadAsCsvMap<ActivityReportWithId> = {

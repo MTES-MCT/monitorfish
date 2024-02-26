@@ -63,14 +63,18 @@ export function MainWindow() {
         {isVesselSearchDisplayed && <VesselSidebarHeader />}
         <MapButtons />
         <RightMenuOnHoverArea />
+
         {isVesselListDisplayed && <VesselList namespace="homepage" />}
         {isVesselSidebarOpen && <VesselSidebar />}
+
         {isControlUnitDialogDisplayed && <ControlUnitDialog />}
         {isControlUnitListDialogDisplayed && <ControlUnitListDialog />}
+
         <VesselLoader />
         <APIWorker />
         <ErrorToastNotification />
         <Notifier />
+
         {status !== SideWindowStatus.CLOSED && <SideWindowLauncher />}
         {isDrawLayerModalDisplayed && <DrawLayerModal />}
       </Wrapper>

@@ -1,4 +1,4 @@
-import { SelectPickerObject } from '@features/Backoffice/types'
+import type { SelectPickerObject } from '@features/Backoffice/types'
 
 const item = (element: string): SelectPickerObject => ({
   label: element,

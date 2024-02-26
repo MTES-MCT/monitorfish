@@ -33,7 +33,7 @@ export const getVectorOLLayer = (
   type: string,
   zone: string | null,
   isBackoffice: boolean
-): VectorImageLayer<VectorSource<Geometry>> => {
+): VectorImageLayer<VectorSource<Feature<Geometry>>> => {
   const layer = new VectorImageLayer({
     className: 'administrative',
     declutter: true,
@@ -46,7 +46,7 @@ export const getVectorOLLayer = (
   return layer
 }
 
-const getVectorSource = (type: string, zone: string | null, isBackoffice): VectorSource<Geometry> => {
+const getVectorSource = (type: string, zone: string | null, isBackoffice): VectorSource<Feature<Geometry>> => {
   if (zone) {
     return buildWholeVectorSource(type, zone, isBackoffice)
   }
@@ -54,7 +54,7 @@ const getVectorSource = (type: string, zone: string | null, isBackoffice): Vecto
   return buildBBOXVectorSource(type, zone, isBackoffice)
 }
 
-function buildWholeVectorSource(type: string, zone: string | null, isBackoffice): VectorSource<Geometry> {
+function buildWholeVectorSource(type: string, zone: string | null, isBackoffice): VectorSource<Feature<Geometry>> {
   const vectorSource = new VectorSource({
     format: new GeoJSON({
       dataProjection: WSG84_PROJECTION,
@@ -75,7 +75,7 @@ function buildWholeVectorSource(type: string, zone: string | null, isBackoffice)
   return vectorSource
 }
 
-function buildBBOXVectorSource(type: string, zone: string | null, isBackoffice): VectorSource<Geometry> {
+function buildBBOXVectorSource(type: string, zone: string | null, isBackoffice): VectorSource<Feature<Geometry>> {
   const vectorSource = new VectorSource({
     format: new GeoJSON({
       dataProjection: WSG84_PROJECTION,

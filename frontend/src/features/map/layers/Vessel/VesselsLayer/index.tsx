@@ -42,7 +42,7 @@ function UnmemoizedVesselsLayer() {
     }
   })
 
-  const vesselsVectorSourceRef = useRef<VectorSource<Point>>()
+  const vesselsVectorSourceRef = useRef<VectorSource<Feature<Point>>>()
   const vesselWebGLPointsLayerRef = useRef<WebGLPointsLayerWithName>()
   const style = useRef<any>()
 

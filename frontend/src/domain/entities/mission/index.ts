@@ -30,6 +30,11 @@ export function getMissionFeaturePointId(id: number) {
 
 export const getMissionFeaturePoint = ({ actions, ...mission }: MissionWithActions): Feature<Point> | undefined => {
   const geoJSON = new GeoJSON()
+
+  if (!mission.geom?.coordinates.length) {
+    return undefined
+  }
+
   const geometry = geoJSON.readGeometry(mission.geom, {
     dataProjection: WSG84_PROJECTION,
     featureProjection: OPENLAYERS_PROJECTION

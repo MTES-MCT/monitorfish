@@ -11,9 +11,9 @@ import { OpenLayersGeometryType } from '../../../domain/entities/map/constants'
 import { monitorfishMap } from '../../map/monitorfishMap'
 import { computeCustomZoneStyle } from '../utils/computeCustomZoneStyle'
 
-import type { VectorLayerWithName } from '../../../domain/types/layer'
-import type { MainAppThunk } from '../../../store'
+import type { VectorImageLayerWithName } from '../../../domain/types/layer'
 import type { CustomZone } from '../types'
+import type { MainAppThunk } from '@store'
 
 /**
  * initialise Custom Zone layer
@@ -31,7 +31,7 @@ export const initLayer = (): MainAppThunk => (_, getState) => {
     }),
     style: feature => getLayerStyle(feature as Feature<Geometry>),
     zIndex: LayerProperties.CUSTOM.zIndex
-  }) as VectorLayerWithName
+  }) as VectorImageLayerWithName
   customZoneLayer.name = MonitorFishLayer.CUSTOM
 
   monitorfishMap.getLayers().push(customZoneLayer)
@@ -51,9 +51,10 @@ function getFeaturesFromGeoJson(customZones: CustomZone[]) {
 
       features
         .filter(feature => feature.getGeometry()?.getType() === OpenLayersGeometryType.POLYGON)
+        .filter((feature): feature is Feature<Geometry> => Boolean(feature))
         .forEach(feature => feature.set('name', zone.name))
 
-      return features
+      return features as Feature<Geometry>[]
     })
     .flat()
 }

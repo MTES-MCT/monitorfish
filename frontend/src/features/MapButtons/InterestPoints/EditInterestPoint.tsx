@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import { coordinatesAreDistinct, getCoordinates } from '../../../coordinates'
-import { interestPointType } from '../../../domain/entities/interestPoints'
+import { InterestPointType } from '../../../domain/entities/interestPoints'
 import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
 import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../../domain/shared_slices/InterestPoint'
 import saveInterestPointFeature from '../../../domain/use_cases/interestPoint/saveInterestPointFeature'
@@ -137,23 +137,23 @@ export function EditInterestPoint({ close, isOpen }: EditInterestPointProps) {
         <p>Type de point</p>
         <RadioWrapper>
           <RadioGroup
-            defaultValue={interestPointBeingDrawed?.type || interestPointType.OTHER}
+            defaultValue={interestPointBeingDrawed?.type || InterestPointType.OTHER}
             name="interestTypeRadio"
             onChange={updateType}
           >
-            <Radio value={interestPointType.CONTROL_ENTITY}>
+            <Radio value={InterestPointType.CONTROL_ENTITY}>
               <Control />
               Moyen de contrôle
             </Radio>
-            <Radio value={interestPointType.FISHING_VESSEL}>
+            <Radio value={InterestPointType.FISHING_VESSEL}>
               <Vessel />
               Navire de pêche
             </Radio>
-            <Radio value={interestPointType.FISHING_GEAR}>
+            <Radio value={InterestPointType.FISHING_GEAR}>
               <Gear />
               Engin de pêche
             </Radio>
-            <Radio data-cy="interest-point-type-radio-input" value={interestPointType.OTHER}>
+            <Radio data-cy="interest-point-type-radio-input" value={InterestPointType.OTHER}>
               <Other />
               Autre point
             </Radio>

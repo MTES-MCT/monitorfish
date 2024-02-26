@@ -5,6 +5,8 @@ import { Mission } from '../../../../../domain/entities/mission/types'
 import { getColorWithAlpha } from '../../styles/utils'
 import { featureHas } from '../../styles/utils/webgl'
 
+import type { WebGLStyle } from 'ol/style/webgl'
+
 export const missionZoneStyle = new Style({
   fill: new Fill({
     color: getColorWithAlpha(THEME.color.blueGray, 0.25)
@@ -32,71 +34,70 @@ export const getMissionColor = (missionStatus: Mission.MissionStatus | undefined
   }
 }
 
-/**
- * The coordinates of the `textureCoord` sprite property are : [x1, y1, x2, y2]
- */
-export const getMissionPointWebGLStyle = () => ({
-  symbol: {
-    offset: [0, 19.5],
-    size: [34, 39],
-    src: 'map-icons/icon_mission_sprite.png',
-    symbolType: 'image',
-    // Icons contained in sprite are of size 68x78 pixels
-    textureCoord: [
+export const missionPointWebGLStyle: WebGLStyle = {
+  'icon-displacement': [0, 19.5],
+  'icon-height': 312,
+  'icon-offset': [
+    'case',
+    featureHas('isClosed'),
+    [
       'case',
-      featureHas('isClosed'),
-      [
-        'case',
-        featureHas('isSeaMission'),
-        [0, 0, 0.25, 0.25],
-        featureHas('isLandMission'),
-        [0, 0.25, 0.25, 0.5],
-        featureHas('isAirMission'),
-        [0, 0.5, 0.25, 0.75],
-        featureHas('isMultiMission'),
-        [0, 0.75, 0.25, 1],
-        [0, 0.75, 0.25, 1]
-      ],
-      featureHas('isDone'),
-      [
-        'case',
-        featureHas('isSeaMission'),
-        [0.25, 0, 0.5, 0.25],
-        featureHas('isLandMission'),
-        [0.25, 0.25, 0.5, 0.5],
-        featureHas('isAirMission'),
-        [0.25, 0.5, 0.5, 0.75],
-        featureHas('isMultiMission'),
-        [0.25, 0.75, 0.5, 1],
-        [0.25, 0.75, 0.5, 1]
-      ],
-      featureHas('isInProgress'),
-      [
-        'case',
-        featureHas('isSeaMission'),
-        [0.5, 0, 0.75, 0.25],
-        featureHas('isLandMission'),
-        [0.5, 0.25, 0.75, 0.5],
-        featureHas('isAirMission'),
-        [0.5, 0.5, 0.75, 0.75],
-        featureHas('isMultiMission'),
-        [0.5, 0.75, 0.75, 1],
-        [0.5, 0.75, 0.75, 1]
-      ],
-      featureHas('isUpcoming'),
-      [
-        'case',
-        featureHas('isSeaMission'),
-        [0.75, 0, 1, 0.25],
-        featureHas('isLandMission'),
-        [0.75, 0.25, 1, 0.5],
-        featureHas('isAirMission'),
-        [0.75, 0.5, 1, 0.75],
-        featureHas('isMultiMission'),
-        [0.75, 0.75, 1, 1],
-        [0.75, 0.75, 1, 1]
-      ],
-      [0.75, 0.75, 1, 1]
-    ]
-  }
-})
+      featureHas('isSeaMission'),
+      [0, 0],
+      featureHas('isLandMission'),
+      [0, 78],
+      featureHas('isAirMission'),
+      [0, 156],
+      featureHas('isMultiMission'),
+      [0, 234],
+      [0, 234]
+    ],
+    featureHas('isDone'),
+    [
+      'case',
+      featureHas('isSeaMission'),
+      [68, 0],
+      featureHas('isLandMission'),
+      [68, 78],
+      featureHas('isAirMission'),
+      [68, 156],
+      featureHas('isMultiMission'),
+      [68, 234],
+      [68, 234]
+    ],
+    featureHas('isInProgress'),
+    [
+      'case',
+      featureHas('isSeaMission'),
+      [136, 0],
+      featureHas('isLandMission'),
+      [136, 78],
+      featureHas('isAirMission'),
+      [136, 156],
+      featureHas('isMultiMission'),
+      [136, 234],
+      [136, 234]
+    ],
+    featureHas('isUpcoming'),
+    [
+      'case',
+      featureHas('isSeaMission'),
+      [204, 0],
+      featureHas('isLandMission'),
+      [204, 78],
+      featureHas('isAirMission'),
+      [204, 156],
+      featureHas('isMultiMission'),
+      [204, 234],
+      [204, 234]
+    ],
+    [0, 0]
+  ],
+  'icon-scale': 0.5,
+
+  // Icons contained in sprite are of size 68x78 pixels
+  'icon-size': [68, 78],
+
+  'icon-src': 'map-icons/icon_mission_sprite.png',
+  'icon-width': 272
+}

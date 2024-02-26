@@ -2,7 +2,6 @@ import { Icon, Style } from 'ol/style'
 import Circle from 'ol/style/Circle'
 import Stroke from 'ol/style/Stroke'
 
-import { COLORS } from '../../../../constants/constants'
 import {
   Vessel,
   VESSEL_ALERT_AND_BEACON_MALFUNCTION,
@@ -14,6 +13,8 @@ import {
 import { theme } from '../../../../ui/theme'
 import { booleanToInt } from '../../../../utils'
 import { featureHas, featureHasNot, stateIs } from '../styles/utils/webgl'
+
+import type { WebGLStyle } from 'ol/style/webgl'
 
 const hideVesselsAtPortCondition = [
   'case',
@@ -55,9 +56,9 @@ export const getWebGLVesselStyle = ({
   previewFilteredVesselsMode,
   vesselIsHiddenTimeThreshold,
   vesselIsOpacityReducedTimeThreshold
-}) => {
+}): WebGLStyle => {
   const filterColor = ['color', ['var', 'filterColorRed'], ['var', 'filterColorGreen'], ['var', 'filterColorBlue']]
-  const defaultVesselColor = ['case', stateIs('isLight'), theme.color.lightGray, COLORS.charcoal]
+  const defaultVesselColor = ['case', stateIs('isLight'), theme.color.lightGray, theme.color.charcoal]
   const booleanFilter = [
     'case',
     // in preview mode, show only vessels in preview mode
@@ -75,29 +76,27 @@ export const getWebGLVesselStyle = ({
 
   return {
     filter: booleanFilter,
-    symbol: {
-      color: [
-        'case',
-        stateIs('previewFilteredVesselsMode'),
-        defaultVesselColor,
-        featureHas('isFiltered'),
-        filterColor,
-        defaultVesselColor
-      ],
-      opacity: [
-        'case',
-        featureHas('hasBeaconMalfunction'),
-        1,
-        ['<', ['get', 'lastPositionSentAt'], ['var', 'vesselIsOpacityReducedTimeThreshold']],
-        0.2,
-        1
-      ],
-      rotation: ['*', ['get', 'course'], Math.PI / 180],
-      size: 20,
-      src: 'boat_icons.png',
-      symbolType: 'image',
-      textureCoord: ['case', ['>', ['get', 'speed'], Vessel.vesselIsMovingSpeed], [0, 0, 0.5, 0.25], [0.5, 0, 1, 0.25]]
-    },
+    'icon-color': [
+      'case',
+      stateIs('previewFilteredVesselsMode'),
+      defaultVesselColor,
+      featureHas('isFiltered'),
+      filterColor,
+      defaultVesselColor
+    ],
+    'icon-offset': ['case', ['>', ['get', 'speed'], Vessel.vesselIsMovingSpeed], [0, 0], [0, 25]],
+    'icon-opacity': [
+      'case',
+      featureHas('hasBeaconMalfunction'),
+      1,
+      ['<', ['get', 'lastPositionSentAt'], ['var', 'vesselIsOpacityReducedTimeThreshold']],
+      0.2,
+      1
+    ],
+    'icon-rotation': ['*', ['get', 'course'], Math.PI / 180],
+    'icon-scale': 0.8,
+    'icon-size': [25, 25],
+    'icon-src': 'boat_icons.png',
     variables: {
       filterColorBlue,
       filterColorGreen,
@@ -119,7 +118,7 @@ export const getSelectedVesselStyle =
     const course = feature.get('course')
     const selectorStyle = new Style({
       image: new Icon({
-        color: isLight ? theme.color.lightGray : COLORS.charcoal,
+        color: isLight ? theme.color.lightGray : theme.color.charcoal,
         opacity: 1,
         scale: 0.5,
         src: 'selecteur_navire.png'
@@ -129,7 +128,7 @@ export const getSelectedVesselStyle =
 
     const vesselStyle = new Style({
       image: new Icon({
-        color: isLight ? theme.color.lightGray : COLORS.charcoal,
+        color: isLight ? theme.color.lightGray : theme.color.charcoal,
         opacity: 1,
         rotation: degreesToRadian(course),
         scale: 0.85,
@@ -156,7 +155,7 @@ export const getVesselAlertStyle = (resolution: number) => {
   const styles = [vesselAlertBigCircleStyle]
 
   const scale = Math.min(1, 0.3 + Math.sqrt(200 / resolution))
-  styles[0]?.getImage().setScale(scale)
+  styles[0]?.getImage()?.setScale(scale)
 
   return styles
 }
@@ -172,7 +171,7 @@ export const getVesselBeaconMalfunctionStyle = (resolution: number) => {
   const styles = [vesselBeaconMalfunctionBigCircleStyle]
 
   const scale = Math.min(1, 0.3 + Math.sqrt(200 / resolution))
-  styles[0]?.getImage().setScale(scale)
+  styles[0]?.getImage()?.setScale(scale)
 
   return styles
 }
@@ -188,7 +187,7 @@ export const getVesselAlertAndBeaconMalfunctionStyle = (resolution: number) => {
   const styles = [vesselAlertAndBeaconMalfunctionBigCircleStyle]
 
   const scale = Math.min(1, 0.3 + Math.sqrt(200 / resolution))
-  styles[0]?.getImage().setScale(scale)
+  styles[0]?.getImage()?.setScale(scale)
 
   return styles
 }
@@ -198,7 +197,7 @@ const vesselInfractionSuspicionCircleStyle = new Style({
     fill: undefined,
     radius: 19,
     stroke: new Stroke({
-      color: COLORS.maximumRed,
+      color: theme.color.maximumRed,
       width: 2
     })
   }),
@@ -209,7 +208,7 @@ export const getVesselInfractionSuspicionStyle = (resolution: number) => {
   const styles = [vesselInfractionSuspicionCircleStyle]
 
   const scale = Math.min(1, 0.3 + Math.sqrt(200 / resolution))
-  styles[0]?.getImage().setScale(scale)
+  styles[0]?.getImage()?.setScale(scale)
 
   return styles
 }

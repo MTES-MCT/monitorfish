@@ -33,7 +33,7 @@
   "dependencies": {
     "@dnd-kit/core": "6.1.0",
     "@dnd-kit/modifiers": "6.0.1",
-    "@mtes-mct/monitor-ui": "11.8.0",
+    "@mtes-mct/monitor-ui": "12.0.0",
     "@reduxjs/toolkit": "1.9.6",
     "@sentry/browser": "7.55.2",
     "@sentry/react": "7.52.1",
@@ -72,7 +72,7 @@
     "redux": "4.2.1",
     "redux-persist": "6.0.0",
     "redux-thunk": "2.4.2",
-    "rsuite": "5.45.0",
+    "rsuite": "5.54.0",
     "rsuite-table": "5.12.0",
     "simplify-geojson": "1.0.5",
     "styled-components": "5.3.11",

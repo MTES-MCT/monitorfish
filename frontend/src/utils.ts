@@ -4,7 +4,7 @@ import { all } from 'ol/loadingstrategy'
 import VectorSource from 'ol/source/Vector'
 
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './domain/entities/map/constants'
-import { GeoJSON as GeoJSONType } from './domain/types/GeoJSON'
+import type { GeoJSON as GeoJSONType } from './domain/types/GeoJSON'
 
 import type { Extent } from 'ol/extent'
 
@@ -74,7 +74,7 @@ export const getTime = (dateString: string, withoutSeconds: boolean) => {
   return time
 }
 
-export const getDateTime = (dateString: string, withoutSeconds: boolean) => {
+export const getDateTime = (dateString: string | undefined | null, withoutSeconds: boolean = false) => {
   if (!dateString) {
     return ''
   }

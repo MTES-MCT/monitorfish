@@ -46,7 +46,7 @@ export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>,
       transform: activity => {
         const speciesOnboard = activity.action.speciesOnboard[count - 1]
 
-        return speciesOnboard?.controlledWeight || speciesOnboard?.declaredWeight || ''
+        return speciesOnboard?.controlledWeight ?? speciesOnboard?.declaredWeight ?? ''
       }
     }
 
@@ -56,7 +56,7 @@ export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>,
       transform: activity => {
         const speciesOnboard = activity.action.speciesOnboard[count - 1]
 
-        return speciesOnboard?.nbFish || ''
+        return speciesOnboard?.nbFish ?? ''
       }
     }
   })
@@ -73,7 +73,7 @@ export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>,
       transform: activity => {
         const allNatinfs = getInfractionsKeys(activity.action, 'natinf')
 
-        return allNatinfs[count - 1] || ''
+        return allNatinfs[count - 1] ?? ''
       }
     }
 
@@ -83,7 +83,7 @@ export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>,
       transform: activity => {
         const allComments = getInfractionsKeys(activity.action, 'comments')
 
-        return allComments[count - 1] || ''
+        return allComments[count - 1] ?? ''
       }
     }
   })

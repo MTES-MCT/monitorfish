@@ -1,18 +1,20 @@
-import * as Comlink from 'comlink'
-
-import { VesselLocation, vesselSize } from '../domain/entities/vessel/vessel'
 import {
   FRANCE,
   getRegulatoryLawTypesFromZones,
   LAWTYPES_TO_TERRITORY,
   mapToRegulatoryZone
-} from '../features/Regulation/utils'
+} from '@features/Regulation/utils'
+import * as Comlink from 'comlink'
+
+import { VesselLocation, vesselSize } from '../domain/entities/vessel/vessel'
 import { getDateMonthsBefore } from '../utils'
 
-class MonitorFishWebWorker {
-  getStructuredRegulationLawTypes = regulatoryZones => getRegulatoryLawTypesFromZones(regulatoryZones)
+export class MonitorFishWebWorker {
+  static getStructuredRegulationLawTypes(regulatoryZones) {
+    return getRegulatoryLawTypesFromZones(regulatoryZones)
+  }
 
-  #getLayerTopicList = (features, speciesByCode) => {
+  static getLayerTopicList = (features, speciesByCode) => {
     const featuresWithoutGeometry = features.features.map(feature => mapToRegulatoryZone(feature, speciesByCode))
 
     const uniqueFeaturesWithoutGeometry = featuresWithoutGeometry.reduce((acc, current) => {
@@ -34,15 +36,15 @@ class MonitorFishWebWorker {
     }
   }
 
-  mapGeoserverToRegulatoryZones = (geoJSON, speciesByCode) =>
+  static mapGeoserverToRegulatoryZones = (geoJSON, speciesByCode) =>
     geoJSON.features.map(feature => mapToRegulatoryZone(feature, speciesByCode))
 
-  #getGeometryIdFromFeatureId = feature => feature.properties?.id || feature.id.split('.')[1]
+  static getGeometryIdFromFeatureId = feature => feature.properties?.id || feature.id.split('.')[1]
 
-  getIdToGeometryObject(features) {
+  static getIdToGeometryObject(features) {
     const geometryListAsObject = {}
     features.features.forEach(feature => {
-      geometryListAsObject[this.#getGeometryIdFromFeatureId(feature)] = feature.geometry
+      geometryListAsObject[MonitorFishWebWorker.getGeometryIdFromFeatureId(feature)] = feature.geometry
     })
 
     return geometryListAsObject
@@ -101,12 +103,10 @@ class MonitorFishWebWorker {
    *     }
    * }
    */
-  convertGeoJSONFeaturesToStructuredRegulatoryObject(features, speciesByCode) {
+  static convertGeoJSONFeaturesToStructuredRegulatoryObject(features, speciesByCode) {
     const regulatoryTopicList = new Set()
-    const { featuresWithoutGeometry, uniqueFeaturesWithoutGeometryByTopics: layerTopicArray } = this.#getLayerTopicList(
-      features,
-      speciesByCode
-    )
+    const { featuresWithoutGeometry, uniqueFeaturesWithoutGeometryByTopics: layerTopicArray } =
+      MonitorFishWebWorker.getLayerTopicList(features, speciesByCode)
 
     const layersTopicsByRegulatoryTerritory = layerTopicArray.reduce((accumulatedObject, zone) => {
       const { lawType, topic } = zone[0]
@@ -116,15 +116,28 @@ class MonitorFishWebWorker {
         const regulatoryTerritory = LAWTYPES_TO_TERRITORY[lawType]
         if (regulatoryTerritory) {
           if (!accumulatedObject[regulatoryTerritory]) {
+            // For performance reason
+            // eslint-disable-next-line no-param-reassign
             accumulatedObject[regulatoryTerritory] = {}
           }
           if (!accumulatedObject[regulatoryTerritory][lawType]) {
+            // For performance reason
+            // eslint-disable-next-line no-param-reassign
             accumulatedObject[regulatoryTerritory][lawType] = {}
           }
           let orderZoneList = zone
           if (zone.length > 1) {
-            orderZoneList = zone.sort((a, b) => (a.zone > b.zone ? 1 : a.zone === b.zone ? 0 : -1))
+            orderZoneList = zone.sort((a, b) => {
+              if (a.zone > b.zone) {
+                return 1
+              }
+
+              return a.zone === b.zone ? 0 : -1
+            })
           }
+
+          // For performance reason
+          // eslint-disable-next-line no-param-reassign
           accumulatedObject[regulatoryTerritory][lawType][topic] = orderZoneList
         }
       }
@@ -148,7 +161,7 @@ class MonitorFishWebWorker {
     }
   }
 
-  getUniqueSpeciesAndDistricts(vessels) {
+  static getUniqueSpeciesAndDistricts(vessels) {
     const species = vessels
       .map(vessel => vessel.speciesOnboard)
       .flat()
@@ -179,7 +192,7 @@ class MonitorFishWebWorker {
     return { districts, species }
   }
 
-  getFilteredVessels(vessels, filters) {
+  static getFilteredVessels(vessels, filters) {
     const {
       countriesFiltered,
       districtsFiltered,
@@ -193,6 +206,8 @@ class MonitorFishWebWorker {
     } = filters
 
     if (countriesFiltered?.length) {
+      // For performance reason
+      // eslint-disable-next-line no-param-reassign
       vessels = vessels.filter(vessel =>
         countriesFiltered.some(country => vessel.vesselProperties?.flagState === country)
       )
@@ -202,6 +217,8 @@ class MonitorFishWebWorker {
       const vesselIsHidden = new Date()
       vesselIsHidden.setHours(vesselIsHidden.getHours() - lastPositionTimeAgoFilter)
 
+      // For performance reason
+      // eslint-disable-next-line no-param-reassign
       vessels = vessels.filter(vessel => {
         if (vessel.vesselProperties?.beaconMalfunctionId) {
           return true
@@ -216,6 +233,8 @@ class MonitorFishWebWorker {
     if (lastControlMonthsAgo) {
       const controlBefore = getDateMonthsBefore(new Date(), lastControlMonthsAgo)
 
+      // For performance reason
+      // eslint-disable-next-line no-param-reassign
       vessels = vessels.filter(vessel => {
         const vesselDate = new Date(vessel.vesselProperties?.lastControlDateTimeTimestamp)
 
@@ -224,39 +243,53 @@ class MonitorFishWebWorker {
     }
 
     if (fleetSegmentsFiltered?.length) {
+      // For performance reason
+      // eslint-disable-next-line no-param-reassign
       vessels = vessels.filter(vessel =>
         fleetSegmentsFiltered.some(fleetSegment => vessel.vesselProperties?.fleetSegmentsArray.includes(fleetSegment))
       )
     }
 
     if (gearsFiltered?.length) {
+      // For performance reason
+      // eslint-disable-next-line no-param-reassign
       vessels = vessels.filter(vessel => gearsFiltered.some(gear => vessel.vesselProperties?.gearsArray.includes(gear)))
     }
 
     if (speciesFiltered?.length) {
+      // For performance reason
+      // eslint-disable-next-line no-param-reassign
       vessels = vessels.filter(vessel =>
         speciesFiltered.some(species => vessel.vesselProperties?.speciesArray.includes(species))
       )
     }
 
     if (districtsFiltered?.length) {
+      // For performance reason
+      // eslint-disable-next-line no-param-reassign
       vessels = vessels.filter(vessel =>
         districtsFiltered.some(district => vessel.vesselProperties?.district === district)
       )
     }
 
     if (vesselsSizeValuesChecked?.length) {
+      // For performance reason
+      // eslint-disable-next-line no-param-reassign
       vessels = vessels.filter(vessel =>
-        this.evaluateVesselsSize(vesselsSizeValuesChecked, vessel.vesselProperties?.length)
+        MonitorFishWebWorker.evaluateVesselsSize(vesselsSizeValuesChecked, vessel.vesselProperties?.length)
       )
     }
 
     if (vesselsLocationFilter?.length === 1) {
       if (vesselsLocationFilter.includes(VesselLocation.PORT)) {
+        // For performance reason
+        // eslint-disable-next-line no-param-reassign
         vessels = vessels.filter(vessel => vessel.isAtPort)
       }
 
       if (vesselsLocationFilter.includes(VesselLocation.SEA)) {
+        // For performance reason
+        // eslint-disable-next-line no-param-reassign
         vessels = vessels.filter(vessel => !vessel.isAtPort)
       }
     }
@@ -264,7 +297,7 @@ class MonitorFishWebWorker {
     return vessels
   }
 
-  evaluateVesselsSize(vesselsSizeValuesChecked, length) {
+  static evaluateVesselsSize(vesselsSizeValuesChecked, length) {
     if (vesselsSizeValuesChecked.length === 3) {
       return true
     }
@@ -301,6 +334,8 @@ class MonitorFishWebWorker {
     if (vesselsSizeValuesChecked.includes(vesselSize.ABOVE_TWELVE_METERS.code)) {
       return vesselSize.ABOVE_TWELVE_METERS.evaluate(length)
     }
+
+    return false
   }
 }
 

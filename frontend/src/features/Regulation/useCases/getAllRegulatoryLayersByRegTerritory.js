@@ -6,11 +6,10 @@ import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
 import { setLayersTopicsByRegTerritory, setRegulatoryLayerLawTypes } from '../slice'
 
 const getAllRegulatoryLayersByRegTerritory = () => async (dispatch, getState) => {
-  const monitorFishWorker = await new MonitorFishWorker()
   const { speciesByCode } = getState().species
 
   return getAllRegulatoryLayersFromAPI(getState().global.isBackoffice)
-    .then(features => monitorFishWorker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features, speciesByCode))
+    .then(features => MonitorFishWorker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features, speciesByCode))
     .then(response => {
       const { layersTopicsByRegulatoryTerritory } = response
 

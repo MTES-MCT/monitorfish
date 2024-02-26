@@ -373,7 +373,7 @@ export function VesselList({ namespace }) {
           open={isVesselListModalDisplayed}
           size="full"
         >
-          <StyledModalHeader isFull>
+          <StyledModalHeader $isFull>
             <Modal.Title>
               <VesselIcon $background={COLORS.charcoal} $isRightMenuShrinked={undefined} $isTitle /> Liste des navires
               avec VMS

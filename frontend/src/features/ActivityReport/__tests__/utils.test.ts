@@ -56,10 +56,6 @@ describe('utils', () => {
     expect(groupedSpeciesOnboard[2]?.declaredWeight).toEqual(12.6)
   })
 
-  /*
-
-   */
-
   it('getJDPCsvMap Should be dynamically generated with species, infractions and control comment for WESTERN_WATERS', async () => {
     // When
     const csvMap = getJDPCsvMap(JDP_CSV_MAP_BASE, JDP.WESTERN_WATERS)

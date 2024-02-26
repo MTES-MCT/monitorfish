@@ -29,7 +29,7 @@ function renderTagPickerValue(items) {
   return items.map(tag => <Tag key={tag.label}>{tag.label}</Tag>)
 }
 
-const tagPickerStyle = { margin: '2px 10px 10px 0', verticalAlign: 'top', width: 160 }
+const tagPickerStyle = { margin: '3px 10px 10px 0', verticalAlign: 'top', width: 160 }
 
 function UnmemoizedVesselListFilters({
   controls,
@@ -142,7 +142,6 @@ function UnmemoizedVesselListFilters({
           onChange={lastPositionTimeAgo.setLastPositionTimeAgoFilter}
           placeholder="x heures..."
           searchable={false}
-          style={{ margin: '2px 10px 10px 0', width: 70 }}
           value={lastPositionTimeAgo.lastPositionTimeAgoFilter}
         />
       </SelectWrapper>
@@ -300,7 +299,6 @@ const ZoneFilter = styled.div`
   display: inline-block;
   margin-left: 10px;
   font-size: 13px;
-  vertical-align: sub;
 `
 
 const SelectWrapper = styled.div`
@@ -308,7 +306,6 @@ const SelectWrapper = styled.div`
   display: inline-block;
   margin-right: 20px;
   margin-left: 10px;
-  vertical-align: sub;
 `
 
 const Label = styled.span`
@@ -317,7 +314,7 @@ const Label = styled.span`
 
 const FilterDesc = styled.span`
   font-size: 13px;
-  margin-top: 7px;
+  margin-top: 10px;
   display: inline-block;
 `
 

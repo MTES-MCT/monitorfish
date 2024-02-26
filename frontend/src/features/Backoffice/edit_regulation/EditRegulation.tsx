@@ -1,5 +1,6 @@
 // TODO Remove temporary `as any` and `@ts-ignore` (fresh migration to TS).
 
+import { formatDataForSelectPicker } from '@features/Backoffice/utils'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { batch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -24,7 +25,6 @@ import { setError } from '../../../domain/shared_slices/Global'
 import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
 import { useBackofficeAppDispatch } from '../../../hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '../../../hooks/useBackofficeAppSelector'
-import { formatDataForSelectPicker } from '../../../utils'
 import { BaseLayer } from '../../BaseMap/layers/BaseLayer'
 import { Footer, FooterButton, OtherRemark, Section, Title } from '../../commonStyles/Backoffice.style'
 import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'

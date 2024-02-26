@@ -1,11 +1,10 @@
 import { customDayjs, logSoftError } from '@mtes-mct/monitor-ui'
-import { sortBy } from 'lodash'
+import { downloadAsCsv } from '@utils/downloadAsCsv'
 
-import { downloadAsCsv } from '../../../../../utils/downloadAsCsv'
 import { activityReportApi } from '../apis'
+import { JDP_CSV_MAP_BASE } from '../components/ExportActivityReportsDialog/csvMap'
 import { JDP } from '../constants'
-import { JDP_CSV_MAP_BASE } from '../csvMap'
-import { getJDPCsvMap } from '../utils'
+import { getJDPCsvMap, getSpeciesOnboardWithUntargetedSpeciesGrouped } from '../utils'
 
 import type { ActivityReports } from '../types'
 
@@ -30,14 +29,13 @@ export const downloadActivityReports = (afterDateTime: string, beforeDateTime: s
     ...activity,
     action: {
       ...activity.action,
-      // We sort species by weight as only 10 species columns are contained in the CSV
-      speciesOnboard: sortBy(activity.action.speciesOnboard, ({ declaredWeight }) => declaredWeight).reverse()
+      speciesOnboard: getSpeciesOnboardWithUntargetedSpeciesGrouped(activity.action.speciesOnboard, jdpSpecies)
     },
     id: index
   }))
   const fileName = getCsvFileName(jdp)
 
-  const csvMap = getJDPCsvMap(JDP_CSV_MAP_BASE, jdp, jdpSpecies)
+  const csvMap = getJDPCsvMap(JDP_CSV_MAP_BASE, jdp)
   downloadAsCsv(fileName, activityReportsWithId, csvMap)
 }
 

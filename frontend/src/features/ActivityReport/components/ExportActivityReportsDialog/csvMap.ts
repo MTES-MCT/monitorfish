@@ -1,18 +1,18 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { toAlpha3 } from 'i18n-iso-countries'
 
-import { formatDMDCoordinateForActivityReport, getPatrolType } from './utils'
 import { getCoordinates } from '../../../../coordinates'
 import { CoordinatesFormat, WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
+import { formatDMDCoordinateForActivityReport, getPatrolType } from '../../utils'
 
-import type { ActivityReportWithId } from './types'
-import type { DownloadAsCsvMap } from '../../../../utils/downloadAsCsv'
+import type { ActivityReportWithId } from '../../types'
+import type { DownloadAsCsvMap } from '@utils/downloadAsCsv'
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 export const JDP_CSV_MAP_BASE: DownloadAsCsvMap<ActivityReportWithId> = {
   patrolCode: {
     label: 'PATROL_CODE',
-    transform: activity => getPatrolType(activity) + (activity.controlUnits[0]?.name || '')
+    transform: activity => getPatrolType(activity) + (activity.controlUnits[0]?.name ?? '')
   },
   patrolType: {
     label: 'PATROL_TYPE',
@@ -20,7 +20,7 @@ export const JDP_CSV_MAP_BASE: DownloadAsCsvMap<ActivityReportWithId> = {
   },
   controlUnit: {
     label: 'MEAN_ID',
-    transform: activity => activity.controlUnits[0]?.name || ''
+    transform: activity => activity.controlUnits[0]?.name ?? ''
   },
   jdpCode: 'JDP_CODE',
   eventType: {
@@ -85,15 +85,15 @@ export const JDP_CSV_MAP_BASE: DownloadAsCsvMap<ActivityReportWithId> = {
   meshSize: {
     label: 'MESH_SIZE',
     transform: activity =>
-      activity.action.gearOnboard[0]?.controlledMesh || activity.action.gearOnboard[0]?.declaredMesh || ''
+      activity.action.gearOnboard[0]?.controlledMesh ?? (activity.action.gearOnboard[0]?.declaredMesh || '')
   },
   faoArea: {
     label: 'FAO_AREA_CODE',
-    transform: activity => activity.action.faoAreas[0] || ''
+    transform: activity => activity.action.faoAreas[0] ?? ''
   },
   fleetSegment: {
     label: 'FLEET_SEGMENT',
-    transform: activity => activity.action.segments[0]?.segment || ''
+    transform: activity => activity.action.segments[0]?.segment ?? ''
   },
   latitude: {
     label: 'LA',

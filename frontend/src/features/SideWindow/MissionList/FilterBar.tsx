@@ -7,7 +7,6 @@ import {
   Size,
   TextInput,
   useKey,
-  useNewWindow,
   usePrevious
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
@@ -34,8 +33,6 @@ export type FilterBarProps = {
   searchQuery: string | undefined
 }
 export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
-  const { newWindowContainerRef } = useNewWindow()
-
   const listFilterValues = useMainAppSelector(store => store.missionList.listFilterValues)
 
   const [isCustomDateRangeOpen, setIsCustomDateRangeOpen] = useState(false)
@@ -111,7 +108,6 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
 
         <Row>
           <FormikSelect
-            baseContainer={newWindowContainerRef.current}
             isCleanable={false}
             isLabelHidden
             isLight
@@ -121,7 +117,6 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             placeholder="Période"
           />
           <FormikSelect
-            baseContainer={newWindowContainerRef.current}
             isLabelHidden
             isLight
             label="Origine"
@@ -130,7 +125,6 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             placeholder="Origine"
           />
           <FormikMultiSelect
-            baseContainer={newWindowContainerRef.current}
             isLabelHidden
             isLight
             label="Statut"
@@ -140,7 +134,6 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             renderValue={(_, items) => (items.length > 0 ? <OptionValue>Statut ({items.length}) </OptionValue> : <></>)}
           />
           <FormikMultiSelect
-            baseContainer={newWindowContainerRef.current}
             disabled={administrationsAsOptions.length === 0}
             isLabelHidden
             isLight
@@ -156,7 +149,6 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           />
           <FormikMultiSelect
             key={unitMultiSelectKey}
-            baseContainer={newWindowContainerRef.current}
             disabled={activeAndFilteredUnitsAsOptions.length === 0}
             isLabelHidden
             isLight
@@ -169,7 +161,6 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             style={{ minWidth: 200 }}
           />
           <FormikMultiSelect
-            baseContainer={newWindowContainerRef.current}
             isLabelHidden
             isLight
             label="Type de mission"

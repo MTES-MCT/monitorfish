@@ -7,8 +7,7 @@ import {
   FormikNumberInput,
   FormikTextarea,
   Select,
-  SingleTag,
-  useNewWindow
+  SingleTag
 } from '@mtes-mct/monitor-ui'
 import { useField, useFormikContext } from 'formik'
 import { remove as ramdaRemove } from 'ramda'
@@ -30,7 +29,6 @@ export function GearsField() {
   const { values } = useFormikContext<MissionActionFormValues>()
   const [input, meta, helper] = useField<MissionActionFormValues['gearOnboard']>('gearOnboard')
   const { updateSegments } = useGetMissionActionFormikUsecases()
-  const { newWindowContainerRef } = useNewWindow()
 
   const getGearsApiQuery = useGetGearsQuery()
 
@@ -156,7 +154,6 @@ export function GearsField() {
       )}
       <Select
         key={String(input.value?.length)}
-        baseContainer={newWindowContainerRef.current}
         label="Ajouter un engin"
         name="newGear"
         onChange={add}

@@ -1,4 +1,4 @@
-import { FieldError, Select, useNewWindow } from '@mtes-mct/monitor-ui'
+import { FieldError, Select } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
 import styled from 'styled-components'
 
@@ -10,7 +10,6 @@ import type { Option } from '@mtes-mct/monitor-ui'
 
 export function AlertTypeField() {
   const [input, meta, helper] = useField<SilencedAlertFormValues['value']>('value')
-  const { newWindowContainerRef } = useNewWindow()
 
   const alertsAsOptions: Array<Option<PendingAlertValueType>> = operationalAlertTypes.map(alert => ({
     label: alert.name,
@@ -30,7 +29,6 @@ export function AlertTypeField() {
   return (
     <>
       <StyledSelect
-        baseContainer={newWindowContainerRef.current}
         label="Alerte suspendue"
         name="newGear"
         onChange={nextValue => add(nextValue as PendingAlertValueType)}

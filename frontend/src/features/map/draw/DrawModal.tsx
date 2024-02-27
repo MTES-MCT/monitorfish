@@ -45,7 +45,7 @@ export function DrawLayerModal() {
   const initialFeatureNumberRef = useRef<number | undefined>(undefined)
 
   const feature = useMemo(() => {
-    const currentGeometry = drawedGeometry || initialGeometry
+    const currentGeometry = drawedGeometry ?? initialGeometry
     if (!currentGeometry) {
       return undefined
     }
@@ -165,7 +165,8 @@ export function DrawLayerModal() {
               defaultValue={undefined}
               isLabelHidden
               isLight
-              label=""
+              label="Coordonnées"
+              name="coordinates"
               onChange={handleWriteCoordinates}
             />
           )}

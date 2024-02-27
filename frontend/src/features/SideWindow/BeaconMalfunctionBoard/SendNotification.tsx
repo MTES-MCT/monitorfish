@@ -1,4 +1,4 @@
-import { type Option, Select, useNewWindow } from '@mtes-mct/monitor-ui'
+import { type Option, Select } from '@mtes-mct/monitor-ui'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { SelectPicker } from 'rsuite'
 import styled from 'styled-components'
@@ -13,7 +13,6 @@ import type { CSSProperties } from 'react'
 
 export function SendNotification({ beaconMalfunction }) {
   const dispatch = useMainAppDispatch()
-  const { newWindowContainerRef } = useNewWindow()
   const getForeignFmcsApiQuery = useGetForeignFmcsQuery()
   const selectMenuRef = useRef<HTMLDivElement>()
   const [isSendingNotification, setIsSendingNotification] = useState<string | null>('')
@@ -115,7 +114,6 @@ export function SendNotification({ beaconMalfunction }) {
       <div ref={selectMenuRef as any} />
       {isShowingForeignFmcList && (
         <StyledForeignFmcSelect
-          baseContainer={newWindowContainerRef.current}
           cleanable={false}
           label="Choisir la nationalité du FMC"
           name="foreign-fmc-select"

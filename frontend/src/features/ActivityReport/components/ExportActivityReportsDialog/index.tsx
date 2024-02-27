@@ -72,6 +72,7 @@ export function ExportActivityReportsDialog({ onExit }: ExportActivityReportsDia
             isHistorical
             isLabelHidden
             label="Début"
+            name="afterDateTimeUtc"
             onChange={nextDate => setAfterDateTimeUtc(nextDate)}
           />
           au
@@ -82,6 +83,7 @@ export function ExportActivityReportsDialog({ onExit }: ExportActivityReportsDia
             isHistorical
             isLabelHidden
             label="Fin"
+            name="beforeDateTimeUtc"
             onChange={nextDate => setBeforeDateTimeUtc(nextDate)}
           />
         </div>
@@ -102,7 +104,7 @@ export function ExportActivityReportsDialog({ onExit }: ExportActivityReportsDia
           options={jdpOptions}
           placeholder="JDP"
           searchable
-          value={jdp || undefined}
+          value={jdp}
         />
       </StyledDialogBody>
       {!!error && (

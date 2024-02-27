@@ -15,6 +15,7 @@ import ManualPositionSVG from '../../../icons/Pastille_position_manuelle.svg?rea
 import { CSVOptions } from '../../../VesselList/dataFormatting'
 import { sortArrayByColumn, SortType } from '../../../VesselList/tableSort'
 
+import type { VesselPosition } from 'domain/entities/vessel/types'
 import type { CellProps } from 'rsuite'
 
 const { Cell, Column, HeaderCell } = Table
@@ -77,7 +78,7 @@ export function PositionsTable({ openBox }) {
   )
 }
 
-type SpeedCellProps = CellProps & {
+type SpeedCellProps = CellProps<VesselPosition> & {
   coordinatesFormat: string
   dataKey: string
   rowData?: {
@@ -104,12 +105,12 @@ export function SpeedCell({ coordinatesFormat, dataKey, rowData, ...nativeProps 
       style={{ cursor: 'pointer' }}
       title={rowData && coordinates ? `${coordinates[0]} ${coordinates[1]}` : ''}
     >
-      {!isNumeric(rowData[dataKey]) ? '' : `${rowData[dataKey]} nds`}
+      {!rowData || !isNumeric(rowData[dataKey]) ? '' : `${rowData[dataKey]} nds`}
     </Cell>
   )
 }
 
-type CourseCellProps = CellProps & {
+type CourseCellProps = CellProps<VesselPosition> & {
   coordinatesFormat: string
   dataKey: string
   rowData?: {
@@ -136,12 +137,12 @@ export function CourseCell({ coordinatesFormat, dataKey, rowData, ...nativeProps
       style={{ cursor: 'pointer' }}
       title={rowData && coordinates ? `${coordinates[0]} ${coordinates[1]}` : ''}
     >
-      {rowData[dataKey] || rowData[dataKey] === 0 ? `${rowData[dataKey]}°` : ''}
+      {rowData && (rowData[dataKey] || rowData[dataKey] === 0) ? `${rowData[dataKey]}°` : ''}
     </Cell>
   )
 }
 
-type DateTimeCellProps = CellProps & {
+type DateTimeCellProps = CellProps<VesselPosition> & {
   coordinatesFormat: string
   dataKey: string
   rowData?: {
@@ -159,10 +160,10 @@ export function DateTimeCell({ coordinatesFormat, dataKey, rowData, ...nativePro
     ? transform([rowData.longitude, rowData.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
     : []
 
-  let dateTimeStringWithoutMilliSeconds = rowData[dataKey].split('.')[0]
-  if (rowData[dataKey].includes('Z') && !dateTimeStringWithoutMilliSeconds.includes('Z')) {
+  let dateTimeStringWithoutMilliSeconds: string | undefined = rowData ? rowData[dataKey].split('.')[0] : undefined
+  if (!!rowData && rowData[dataKey].includes('Z') && !dateTimeStringWithoutMilliSeconds?.includes('Z')) {
     dateTimeStringWithoutMilliSeconds += 'Z'
-  } else if (rowData[dataKey].includes('+') && !dateTimeStringWithoutMilliSeconds.includes('+')) {
+  } else if (!!rowData && rowData[dataKey].includes('+') && !dateTimeStringWithoutMilliSeconds?.includes('+')) {
     dateTimeStringWithoutMilliSeconds += `+${rowData[dataKey].split('+')[1]}`
   }
 
@@ -176,7 +177,7 @@ export function DateTimeCell({ coordinatesFormat, dataKey, rowData, ...nativePro
       title={rowData && coordinates ? `${coordinates[0]} ${coordinates[1]}` : ''}
     >
       {dateTimeStringWithoutMilliSeconds}{' '}
-      {rowData.isManual ? <ManualPosition title="Position manuelle (4h-report)" /> : ''}
+      {rowData?.isManual ? <ManualPosition title="Position manuelle (4h-report)" /> : ''}
     </Cell>
   )
 }

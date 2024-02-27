@@ -175,6 +175,14 @@ export type CPSMessageValue = {
   mesh?: number
 }
 
+export type LANMessageValue = {
+  catchLanded: LogbookCatch[]
+  landingDatetimeUtc: string
+  port: string
+  portName?: string
+  sender?: string
+}
+
 export type ProtectedSpeciesCatch = {
   careMinutes?: number
   comment?: string

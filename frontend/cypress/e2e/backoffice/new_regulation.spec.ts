@@ -249,7 +249,7 @@ context('New Regulation', () => {
     cy.get('[data-cy="authorized-all-passive-gears-option"]').should('not.have.class', 'rs-checkbox-checked')
   })
 
-  it.only('Modification of inputs Should be kept in local storage when refreshing the page', () => {
+  it('Modification of inputs Should be kept in local storage when refreshing the page', () => {
     // Given
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
     cy.wait(200)

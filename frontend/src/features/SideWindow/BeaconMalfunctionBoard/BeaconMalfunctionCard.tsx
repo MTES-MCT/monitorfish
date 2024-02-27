@@ -11,7 +11,7 @@ import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_case
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 
 import type { BeaconMalfunction } from '../../../domain/entities/beaconMalfunction/types'
-import type { CSSProperties, MutableRefObject } from 'react'
+import type { MutableRefObject } from 'react'
 
 export type BeaconMalfunctionCardProps = {
   activeBeaconId: number | undefined
@@ -59,47 +59,38 @@ export function BeaconMalfunctionCard({
   return (
     <Wrapper
       ref={wrapperRef}
+      $hasScroll={hasScroll}
+      $isActive={activeBeaconId === beaconMalfunction.id}
+      $isDragging={isDragging}
+      $isDroppedId={!!isDroppedId}
+      $isMalfunctionEnded={!!endOfBeaconMalfunctionReason}
       data-cy="side-window-beacon-malfunctions-card"
-      style={wrapperStyle(
-        hasScroll,
-        isDragging,
-        isDroppedId,
-        beaconMalfunction?.id,
-        activeBeaconId,
-        endOfBeaconMalfunctionReason
-      )}
     >
-      <Header style={headerStyle}>
-        <Row style={rowStyle(true, 8, hasScroll)}>
-          <Id data-cy="side-window-vessel-id" style={idStyle}>
+      <Header>
+        <Row $hasScroll={hasScroll} $isFirstRow $marginTop={8}>
+          <Id data-cy="side-window-vessel-id">
             #{beaconMalfunction?.id} - {getBeaconCreationOrModificationDate(beaconMalfunction)}
           </Id>
           <ShowIcon
             alt="Voir sur la carte"
-            // TODO Fix the TS error when an action returns a Promise
-            // @ts-ignore
             onClick={() => dispatch(showVesselFromBeaconMalfunctionsKanban(beaconMalfunction, false))}
             src={`${baseUrl}/View_on_map.png`}
-            style={showIconStyle}
           />
         </Row>
-        <Row style={rowStyle(false, 4, hasScroll)}>
+        <Row $hasScroll={hasScroll} $marginTop={4}>
           {beaconMalfunction?.flagState ? (
-            <Flag src={`${baseUrl}/flags/${beaconMalfunction?.flagState.toLowerCase()}.svg`} style={flagStyle} />
+            <Flag src={`${baseUrl}/flags/${beaconMalfunction?.flagState.toLowerCase()}.svg`} />
           ) : null}
           <VesselName
             className="hover-border"
             data-cy="side-window-beacon-malfunctions-card-vessel-name"
-            // TODO Fix the TS error when an action returns a Promise
-            // @ts-ignore
             onClick={() => dispatch(openBeaconMalfunctionInKanban(beaconMalfunction.id))}
-            style={vesselNameStyle}
           >
             {beaconMalfunction.vesselName || 'Aucun nom'}
           </VesselName>
         </Row>
       </Header>
-      <Body ref={bodyRef} style={bodyStyle}>
+      <Body ref={bodyRef}>
         {vesselStatus && (
           <VesselStatusSelect
             beaconMalfunction={beaconMalfunction}
@@ -112,14 +103,15 @@ export function BeaconMalfunctionCard({
         )}
         {endOfBeaconMalfunctionReason && (
           <EndOfMalfunction
+            $backgroundColor={endOfBeaconMalfunctionReason.color}
+            $color={endOfBeaconMalfunctionReason.textColor}
             data-cy="side-window-beacon-malfunctions-end-of-malfunction"
-            style={endOfMalfunctionStyle(endOfBeaconMalfunctionReason)}
           >
             {endOfBeaconMalfunctionReason?.label || 'Sans raison'}
           </EndOfMalfunction>
         )}
-        <Row style={rowStyle(false, 8, hasScroll)}>
-          <MalfunctionStartOrEndDateText style={malfunctionStartOrEndDateTextStyle}>
+        <Row $hasScroll={hasScroll} $marginTop={8}>
+          <MalfunctionStartOrEndDateText>
             {getMalfunctionStartDateText(beaconMalfunction)}
           </MalfunctionStartOrEndDateText>
         </Row>
@@ -128,115 +120,99 @@ export function BeaconMalfunctionCard({
   )
 }
 
-const Id = styled.div``
-const idStyle = {
-  color: COLORS.slateGray,
-  fontSize: 11
-}
+const Id = styled.div`
+  color: ${p => p.theme.color.slateGray};
+  font-size: 11px;
+`
 
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
-const ShowIcon = styled.img``
-const showIconStyle: CSSProperties = {
-  cursor: 'pointer',
-  flexShrink: 0,
-  float: 'right',
-  height: 18,
-  marginLeft: 'auto',
-  marginTop: 0,
-  width: 18
-}
+const ShowIcon = styled.img`
+  cursor: pointer;
+  flex-shrink: 0;
+  float: right;
+  height: 18px;
+  margin-left: auto;
+  margin-top: 0;
+  width: 18px;
+`
 
-const Row = styled.div``
-const rowStyle = (isFirstRow, marginTop, hasScroll): CSSProperties => ({
-  display: 'flex',
-  height: `${isFirstRow ? '16px' : 'unset'}`,
-  margin: `${marginTop || 4}px 0 0 12px`,
-  maxWidth: hasScroll ? 205 : 220,
-  textAlign: 'left'
-})
+const Row = styled.div<{
+  $hasScroll: boolean
+  $isFirstRow?: boolean
+  $marginTop: number
+}>`
+  display: flex;
+  height: ${p => (p.$isFirstRow ? '16px' : 'unset')};
+  margin: ${p => p.$marginTop || 4}px 0 0 0;
+  max-width: ${p => (p.$hasScroll ? '205px' : '220px')};
+  text-align: left;
+`
 
-const Wrapper = styled.div``
-const wrapperStyle = (hasScroll, isDragging, isDroppedId, id, activeBeaconId, isMalfunctionEnded) => ({
-  animation: isDroppedId === id ? 'blink 1s' : 'unset',
-  background: activeBeaconId === id ? COLORS.lightGray : COLORS.white,
-  border: `1px solid ${COLORS.lightGray}`,
-  borderRadius: 2,
-  boxShadow: isDragging ? `0px 0px 10px -3px ${COLORS.gunMetal}` : 'unset',
-  height: isMalfunctionEnded ? 163 : 133,
-  width: hasScroll ? 230 : 245
-})
+const Wrapper = styled.div<{
+  $hasScroll: boolean
+  $isActive: boolean
+  $isDragging: boolean
+  $isDroppedId: boolean
+  $isMalfunctionEnded: boolean
+}>`
+  animation: ${p => (p.$isDroppedId ? 'blink 1s' : 'unset')};
+  background: ${p => (p.$isActive ? COLORS.lightGray : COLORS.white)};
+  border: 1px solid ${p => p.theme.color.lightGray};
+  border-radius: 2px;
+  box-shadow: ${p => (p.$isDragging ? `0px 0px 10px -3px ${COLORS.gunMetal}` : 'unset')};
+  height: ${p => (p.$isMalfunctionEnded ? '163px' : '133px')};
+  width: ${p => (p.$hasScroll ? '230px' : '245px')};
+`
 
-const Header = styled.div``
-const headerStyle = {
-  borderBottom: `1px solid ${COLORS.lightGray}`,
-  paddingBottom: 8,
-  paddingLeft: 2
-}
+const Header = styled.div`
+  border-bottom: 1px solid ${COLORS.lightGray};
+  padding: 0 12px 8px;
+`
 
-const Body = styled.div``
-const bodyStyle = {
-  paddingLeft: 2,
-  paddingTop: 4
-}
+const Body = styled.div`
+  padding: 12px;
+  text-align: left;
+`
 
-const Flag = styled.img``
-const flagStyle = {
-  cursor: 'pointer',
-  display: 'inline-block',
-  height: 14,
-  marginTop: 3,
-  verticalAlign: 'middle'
-}
+const Flag = styled.img`
+  cursor: pointer;
+  display: inline-block;
+  height: 14px;
+  margin-top: 3px;
+  vertical-align: middle;
+`
 
-const VesselName = styled.div``
-const vesselNameStyle: CSSProperties = {
-  cursor: 'pointer',
-  fontSize: 13,
-  fontWeight: 700,
-  height: 18,
-  marginLeft: 8,
-  maxWidth: 193,
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  whiteSpace: 'nowrap'
-}
+const VesselName = styled.div`
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  height: 18px;
+  margin-left: 8px;
+  max-width: 193px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
 
-const MalfunctionStartOrEndDateText = styled.div``
-const malfunctionStartOrEndDateTextStyle: CSSProperties = {
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  whiteSpace: 'nowrap'
-}
+const MalfunctionStartOrEndDateText = styled.div`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
 
-export const Priority = styled.div``
-export const priorityStyle = priority => ({
-  border: `1px solid ${priority ? COLORS.charcoal : COLORS.lightGray}`,
-  borderRadius: 2,
-  color: `${priority ? COLORS.gunMetal : COLORS.slateGray}`,
-  display: 'inline-block',
-  fontSize: 14,
-  fontWeight: 500,
-  height: 19,
-  lineHeight: '14px',
-  padding: '3px 9px 0px 9px',
-  textAlign: 'center',
-  userSelect: 'none'
-})
-
-const EndOfMalfunction = styled.div``
-const endOfMalfunctionStyle: (endOfBeaconMalfunctionReason) => CSSProperties = endOfBeaconMalfunctionReason => ({
-  background: endOfBeaconMalfunctionReason?.color || 'unset',
-  borderRadius: 11,
-  color: endOfBeaconMalfunctionReason?.textColor || 'unset',
-  fontWeight: 500,
-  height: 20,
-  margin: '8px 12px 5px 12px',
-  maxWidth: 185,
-  overflow: 'hidden',
-  padding: '1px 10px',
-  textAlign: 'left',
-  textOverflow: 'ellipsis',
-  whiteSpace: 'nowrap',
-  width: 'fit-content'
-})
+const EndOfMalfunction = styled.div<{ $backgroundColor: string; $color: string }>`
+  background-color: ${p => p.$backgroundColor || 'unset'};
+  border-radius: 11px;
+  color: ${p => p.$color || 'unset'};
+  font-weight: 500;
+  height: 20px;
+  margin: 8px 12px 5px;
+  max-width: 185px;
+  overflow: hidden;
+  padding: 1px 10px;
+  text-align: left;
+  text-overflow: 'ellipsis';
+  white-space: nowrap;
+  width: fit-content;
+`

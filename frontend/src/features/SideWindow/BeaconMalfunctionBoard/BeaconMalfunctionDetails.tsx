@@ -358,4 +358,7 @@ const timeAgoStyle = {
   width: 15
 }
 
-const BeaconMalfunctionDetailsWrapper = styled.div``
+const BeaconMalfunctionDetailsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`

@@ -11,6 +11,7 @@ import {
 import { createSelector } from '@reduxjs/toolkit'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
+import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
 import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
 import { BeaconMalfunctionDetails } from './BeaconMalfunctionDetails'
@@ -319,7 +320,11 @@ const searchVesselInputStyle = {
   width: 310
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled(LegacyRsuiteComponentsWrapper)`
+  /* * {
+    font-size: 13px !important;
+  } */
+
   .rs-picker-select-menu-item.rs-picker-select-menu-item-active,
   .rs-picker-select-menu-item.rs-picker-select-menu-item-active:hover,
   .rs-picker-select-menu-item:not(.rs-picker-select-menu-item-disabled):hover,
@@ -329,40 +334,8 @@ const Wrapper = styled.div`
     font-size: 13px;
     font-weight: normal;
   }
-  .rs-picker-select-menu-items {
-    overflow-y: unset;
-  }
-  .rs-picker-select {
-    width: 185px !important;
-    margin: 8px 10px 0 10px !important;
-    height: 30px;
-  }
-  .rs-list-item {
-    box-shadow: unset;
-  }
   .rs-btn rs-btn-default rs-picker-toggle {
     background: #1675e0 !important;
-  }
-  .rs-picker-toggle-wrapper {
-    display: block;
-  }
-  .rs-picker-toggle-placeholder {
-    font-size: 13px;
-  }
-  .rs-picker-toggle-wrapper .rs-picker-toggle.rs-btn {
-    padding-right: 27px;
-    padding-left: 10px;
-    height: 15px;
-    padding-top: 5px;
-    padding-bottom: 8px;
-    width: 152px;
-  }
-  .rs-picker-toggle.rs-btn {
-    padding-left: 5px !important;
-  }
-  .rs-picker-default .rs-picker-toggle.rs-btn .rs-picker-toggle-caret,
-  .rs-picker-default .rs-picker-toggle.rs-btn .rs-picker-toggle-clean {
-    top: 5px;
   }
   .rs-btn-toggle {
     background: #c8dce6 0% 0% no-repeat padding-box;
@@ -378,8 +351,21 @@ const Wrapper = styled.div`
     margin-right: 5px;
     margin-left: 5px;
   }
-  .rs-toggle > input {
-    width: unset;
+
+  .rs-picker {
+    width: 180px !important;
+
+    > .rs-picker-toggle {
+      padding: 3px 8px 5px;
+
+      > .rs-stack {
+        > .rs-picker-toggle-indicator {
+          > svg {
+            top: 4px;
+          }
+        }
+      }
+    }
   }
 `
 const wrapperStyle: CSSProperties = {

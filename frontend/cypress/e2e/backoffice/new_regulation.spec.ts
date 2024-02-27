@@ -281,11 +281,12 @@ context('New Regulation', () => {
 
     // When
     cy.reload()
+    cy.wait(200)
     cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click({ force: true })
     cy.get('*[data-cy^="open-regulated-species"]').scrollIntoView().click({ force: true })
 
     // Then
-    cy.wait(50)
+    cy.wait(200)
     cy.get('[data-cy="tag-Auvergne-Rhône-Alpes"]').should('exist')
     cy.get('[data-cy="regulatory-gear-line"]').should('have.length', 4)
     cy.get('[data-cy="mesh-label"]').should('have.length', 2)

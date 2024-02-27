@@ -96,7 +96,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           <TextInput
             Icon={Icon.Search}
             isLabelHidden
-            isLight
+            isTransparent
             label="Rechercher un navire"
             name="searchInput"
             onChange={onQueryChange}
@@ -110,7 +110,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           <FormikSelect
             isCleanable={false}
             isLabelHidden
-            isLight
+            isTransparent
             label="Période"
             name={MissionFilterType.DATE_RANGE}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.DATE_RANGE]}
@@ -118,7 +118,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           />
           <FormikSelect
             isLabelHidden
-            isLight
+            isTransparent
             label="Origine"
             name={MissionFilterType.SOURCE}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.SOURCE]}
@@ -126,7 +126,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           />
           <FormikMultiSelect
             isLabelHidden
-            isLight
+            isTransparent
             label="Statut"
             name={MissionFilterType.STATUS}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.STATUS]}
@@ -136,7 +136,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           <FormikMultiSelect
             disabled={administrationsAsOptions.length === 0}
             isLabelHidden
-            isLight
+            isTransparent
             label="Administration"
             name={MissionFilterType.ADMINISTRATION}
             options={administrationsAsOptions}
@@ -151,7 +151,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             key={unitMultiSelectKey}
             disabled={activeAndFilteredUnitsAsOptions.length === 0}
             isLabelHidden
-            isLight
+            isTransparent
             label="Unité"
             name={MissionFilterType.UNIT}
             options={activeAndFilteredUnitsAsOptions}
@@ -162,7 +162,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           />
           <FormikMultiSelect
             isLabelHidden
-            isLight
+            isTransparent
             label="Type de mission"
             name={MissionFilterType.TYPE}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.TYPE]}

@@ -1,12 +1,12 @@
 import dayjs from 'dayjs'
 
+import { openSideWindowBeaconMalfunctionBoard } from './utils'
 import { getDate } from '../../../../src/utils'
 import { getUtcizedDayjs } from '../../utils/getUtcizedDayjs'
 
 context('Side Window > Beacon Malfunction Board', () => {
   beforeEach(() => {
-    cy.visit('/side_window')
-    cy.get('*[data-cy="side-window-menu-beacon-malfunctions"]').click()
+    openSideWindowBeaconMalfunctionBoard()
   })
 
   // The 4 specs below have been merged into one in order to prevent flakiness.

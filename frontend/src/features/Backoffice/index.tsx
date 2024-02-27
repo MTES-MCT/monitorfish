@@ -19,7 +19,7 @@ import { RegulatoryZoneMetadata } from '../Regulation/components/RegulatoryZoneM
 import { RegulatoryLayers } from '../Regulation/layers/RegulatoryLayers'
 import { RegulatoryPreviewLayer } from '../Regulation/layers/RegulatoryPreviewLayer'
 import { setRegulatoryZoneMetadata } from '../Regulation/slice'
-import getAllRegulatoryLayersByRegTerritory from '../Regulation/useCases/getAllRegulatoryLayers'
+import { getAllRegulatoryLayersByRegTerritory } from '../Regulation/useCases/getAllRegulatoryLayersByRegTerritory'
 import { FRANCE, ORGP, UE, UK } from '../Regulation/utils'
 
 export function Backoffice() {

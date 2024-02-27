@@ -13,8 +13,7 @@ export const MINIMUM_SEARCH_CHARACTERS_NUMBER = 2
  * Search for regulatory zones in the regulatory referential, by zone (geometry) and by the input filters
  */
 export const searchRegulatoryLayers = searchQuery => async (_, getState) => {
-  // @ts-ignore
-  const monitorFishWorker = await new MonitorFishWorker()
+  const monitorFishWorker = await MonitorFishWorker
   const state = getState()
   const { regulatoryZones } = state.regulatory
   const { zoneSelected } = state.regulatoryLayerSearch

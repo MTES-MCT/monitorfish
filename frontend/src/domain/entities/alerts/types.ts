@@ -47,7 +47,7 @@ export type SilencedAlert = {
   internalReferenceNumber: string | null
   ircs: string | null
   isReactivated: boolean | null
-  silencedBeforeDate: Date
+  silencedBeforeDate: string
   value: PendingAlertValue
   vesselId: number | null
   vesselIdentifier: VesselIdentifier

@@ -6,7 +6,7 @@ import { customZoneActions } from '../slice'
 import { fitViewToFeatures } from '../utils/fitViewToFeatures'
 import { getLayer } from '../utils/getLayer'
 
-import type { MainAppThunk } from '../../../store'
+import type { MainAppThunk } from '@store'
 
 /**
  * Show or hide a Custom Zone layer

@@ -264,6 +264,7 @@ context('New Regulation', () => {
     cy.get('[data-cy="authorized-all-towed-gears-option"]').click()
     cy.get('*[data-cy^="open-regulated-species"]').scrollIntoView().click({ force: true }).scrollIntoView()
     cy.get('.rs-picker-toggle-placeholder').filter(':contains("catégories d\'espèces")').eq(0).click({ timeout: 10000 })
+    cy.wait(200)
     cy.get('.rs-picker-search-bar-input').type('Espèce{enter}', { force: true })
     cy.get('.rs-picker-toggle-placeholder').filter(':contains("des espèces")').eq(0).click({ timeout: 10000 })
     cy.wait(200)
@@ -280,11 +281,12 @@ context('New Regulation', () => {
 
     // When
     cy.reload()
+    cy.wait(200)
     cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click({ force: true })
     cy.get('*[data-cy^="open-regulated-species"]').scrollIntoView().click({ force: true })
 
     // Then
-    cy.wait(50)
+    cy.wait(200)
     cy.get('[data-cy="tag-Auvergne-Rhône-Alpes"]').should('exist')
     cy.get('[data-cy="regulatory-gear-line"]').should('have.length', 4)
     cy.get('[data-cy="mesh-label"]').should('have.length', 2)

@@ -1,5 +1,6 @@
 import { LayerProperties } from '../../domain/entities/layers/constants'
-import { formatDataForSelectPicker, getTextForSearch } from '../../utils'
+import { getTextForSearch } from '../../utils'
+import { formatDataForSelectPicker } from '../Backoffice/utils'
 
 import type {
   FishingPeriod,

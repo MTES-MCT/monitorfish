@@ -1,13 +1,13 @@
+import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { VectorLayerWithCode } from '@libs/VectorLayerWithCode'
 import VectorSource from 'ol/source/Vector'
 import { memo, useEffect, useMemo, useRef } from 'react'
 
 import { getStationPointFeature, getFeatureStyle } from './utils'
-import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '../../../../api/constants'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
 import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { VectorLayerWithCode } from '../../../../libs/VectorLayerWithCode'
 import { monitorfishMap } from '../../../map/monitorfishMap'
 import { useGetStationsQuery } from '../../stationApi'
 

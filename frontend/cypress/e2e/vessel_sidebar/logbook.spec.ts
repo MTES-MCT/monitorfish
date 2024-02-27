@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 
-context('Vessel sidebar fishing tab', () => {
+context('Vessel sidebar logbook tab', () => {
   beforeEach(() => {
     cy.loadPath('/#@-824534.42,6082993.21,8.70')
   })
@@ -93,16 +93,20 @@ context('Vessel sidebar fishing tab', () => {
     cy.get('*[data-cy="vessel-fishing-message"]').eq(7).contains('Fin de pêche')
 
     cy.get('*[data-cy="vessel-fishing-message"]').eq(8).contains('Préavis (notification de retour au port)')
+    cy.get('*[data-cy="vessel-fishing-message-body"]').eq(8).contains('MERLU NOIR DU CAP (HKC)')
 
     cy.get('*[data-cy="vessel-fishing-message"]').eq(9).contains('Retour au port')
 
     cy.get('*[data-cy="vessel-fishing-message"]').eq(10).contains('Déclaration de capture')
     cy.get('*[data-cy="vessel-fishing-message"]').eq(10).siblings().eq(1).contains('MESSAGE CORRIGÉ')
+    cy.get('*[data-cy="vessel-fishing-message-body"]').eq(10).contains('BONITE A DOS RAYE (BON)')
 
     cy.get('*[data-cy="vessel-fishing-message"]').eq(11).contains('Déclaration de rejets')
+    cy.get('*[data-cy="vessel-fishing-message-body"]').eq(11).contains('LANGOUSTINE (NEP)')
 
     cy.get('*[data-cy="vessel-fishing-message"]').eq(12).contains('Débarquement')
     cy.get('*[data-cy="vessel-fishing-message"]').eq(12).siblings().eq(1).contains('MESSAGE SUPPRIMÉ')
+    cy.get('*[data-cy="vessel-fishing-message-body"]').eq(12).contains('BONITE A DOS RAYE (BON)')
   })
 
   it('Fishing Should contain the vessel FLUX logbook messages', () => {

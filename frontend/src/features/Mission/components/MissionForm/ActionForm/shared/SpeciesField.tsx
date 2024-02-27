@@ -10,12 +10,12 @@ import {
   Select,
   SingleTag
 } from '@mtes-mct/monitor-ui'
-import { MissionAction } from 'domain/types/missionAction'
 import { useField, useFormikContext } from 'formik'
 import { append, remove as ramdaRemove } from 'ramda'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
+import { CONTROL_CHECKS_AS_OPTIONS } from '../../constants'
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 import { FieldGroup } from '../../shared/FieldGroup'
 import { FieldsetGroup, FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
@@ -145,11 +145,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
         isInline
         label="Arrimage séparé des espèces soumises à plan"
         name="separateStowageOfPreservedSpecies"
-        options={[
-          { label: 'Oui', value: MissionAction.ControlCheck.YES },
-          { label: 'Non', value: MissionAction.ControlCheck.NO },
-          { label: 'Non concerné', value: MissionAction.ControlCheck.NOT_APPLICABLE }
-        ]}
+        options={CONTROL_CHECKS_AS_OPTIONS}
       />
 
       {input.value && input.value.length > 0 && (
@@ -184,6 +180,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
         name="newSpecy"
         onChange={add}
         options={speciesAsOptions}
+        optionValueKey="code"
         searchable
         virtualized
       />

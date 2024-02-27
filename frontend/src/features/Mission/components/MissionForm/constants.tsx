@@ -1,7 +1,8 @@
 import { isCypress } from '@utils/isCypress'
+import { MissionAction } from 'domain/types/missionAction'
 
 import type { MissionActionFormValues } from './types'
-import type { Undefine } from '@mtes-mct/monitor-ui'
+import type { Option, Undefine } from '@mtes-mct/monitor-ui'
 import type { LegacyControlUnit } from 'domain/types/legacyControlUnit'
 
 export const INITIAL_MISSION_CONTROL_UNIT: LegacyControlUnit.LegacyControlUnitDraft = {
@@ -55,6 +56,12 @@ export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValu
   vesselName: undefined,
   vesselTargeted: undefined
 }
+
+export const CONTROL_CHECKS_AS_OPTIONS: Option[] = [
+  { label: 'Oui', value: MissionAction.ControlCheck.YES },
+  { label: 'Non', value: MissionAction.ControlCheck.NO },
+  { label: 'Non concerné', value: MissionAction.ControlCheck.NOT_APPLICABLE }
+]
 
 /**
  * List of PAM units identifiers:

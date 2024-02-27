@@ -9,6 +9,11 @@ import {
 } from '../features/Regulation/utils'
 import { getDateMonthsBefore } from '../utils'
 
+/**
+ * /!\ Do not shorten imports in the Web worker.
+ * It will fail the Vite build : `Rollup failed to resolve import [...]`
+ */
+
 export class MonitorFishWebWorker {
   static getStructuredRegulationLawTypes(regulatoryZones) {
     return getRegulatoryLawTypesFromZones(regulatoryZones)

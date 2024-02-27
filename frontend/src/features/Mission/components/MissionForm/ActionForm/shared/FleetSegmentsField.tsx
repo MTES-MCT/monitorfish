@@ -1,6 +1,6 @@
 import { useGetFleetSegmentsQuery } from '@api/fleetSegment'
 import { FrontendError } from '@libs/FrontendError'
-import { MultiSelect, useNewWindow } from '@mtes-mct/monitor-ui'
+import { MultiSelect } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
@@ -16,8 +16,6 @@ type FleetSegmentsFieldProps = Readonly<{
 }>
 export function FleetSegmentsField({ label }: FleetSegmentsFieldProps) {
   const [input, , helper] = useField<MissionActionFormValues['segments']>('segments')
-
-  const { newWindowContainerRef } = useNewWindow()
 
   const getFleetSegmentsApiQuery = useGetFleetSegmentsQuery()
 
@@ -90,7 +88,6 @@ export function FleetSegmentsField({ label }: FleetSegmentsFieldProps) {
   return (
     <Box>
       <MultiSelect
-        baseContainer={newWindowContainerRef.current}
         isLight
         label={label}
         name="newFleetSegment"

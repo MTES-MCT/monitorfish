@@ -8,8 +8,7 @@ import {
   FormikNumberInput,
   FormikTextarea,
   Select,
-  SingleTag,
-  useNewWindow
+  SingleTag
 } from '@mtes-mct/monitor-ui'
 import { MissionAction } from 'domain/types/missionAction'
 import { useField, useFormikContext } from 'formik'
@@ -32,7 +31,6 @@ type SpeciesFieldProps = Readonly<{
 export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   const { values } = useFormikContext<MissionActionFormValues>()
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
-  const { newWindowContainerRef } = useNewWindow()
   const { updateSegments } = useGetMissionActionFormikUsecases()
 
   const getSpeciesApiQuery = useGetSpeciesQuery()
@@ -181,7 +179,6 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
 
       <Select
         key={String(input.value?.length)}
-        baseContainer={newWindowContainerRef.current}
         customSearch={customSearch}
         label="Ajouter une espèce"
         name="newSpecy"

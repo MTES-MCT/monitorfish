@@ -98,7 +98,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
           <p>Afficher la piste VMS du navire depuis :</p>
           <Field>
             <DateRangeRadio
-              defaultValue={selectedVesselTrackRequest?.trackDepth || defaultVesselTrackDepth}
+              defaultValue={selectedVesselTrackRequest?.trackDepth ?? defaultVesselTrackDepth}
               onChange={handleDateRangeRadioChange}
             />
           </Field>
@@ -110,6 +110,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
               isHistorical
               isLabelHidden
               label="Plage de temps sur mesure"
+              name="dateRange"
               onChange={handleDateRangePickerChange}
               withTime
             />

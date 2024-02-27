@@ -5,7 +5,6 @@ import {
   FormikSelect,
   FormikTextarea,
   type Option,
-  useNewWindow,
   Select
 } from '@mtes-mct/monitor-ui'
 import { Form, Formik } from 'formik'
@@ -33,7 +32,6 @@ export function InfractionForm({
   onCancel,
   onSubmit
 }: InfractionFormProps) {
-  const { newWindowContainerRef } = useNewWindow()
   const [infractionGroup, setInfractionGroup] = useState<string | undefined>(initialValues.group ?? undefined)
 
   const infractionCategoryOptions = Object.keys(InfractionCategory).map(category => {
@@ -61,7 +59,6 @@ export function InfractionForm({
             options={INFRACTION_TYPES_AS_OPTIONS}
           />
           <Select
-            baseContainer={newWindowContainerRef.current}
             cleanable={false}
             disabled={isEdition}
             label="Catégorie d’infraction"
@@ -76,14 +73,7 @@ export function InfractionForm({
             options={infractionCategoryOptions}
             value={infractionGroup}
           />
-          <HackedFormikSelect
-            baseContainer={newWindowContainerRef.current}
-            isErrorMessageHidden
-            label="NATINF"
-            name="natinf"
-            options={natinfsAsOptions}
-            searchable
-          />
+          <HackedFormikSelect isErrorMessageHidden label="NATINF" name="natinf" options={natinfsAsOptions} searchable />
           <FormikTextarea isErrorMessageHidden label="Observations sur l’infraction" name="comments" rows={2} />
 
           <FormButtonGroup>

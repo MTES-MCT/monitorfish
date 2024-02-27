@@ -1,6 +1,6 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Icon, IconButton, MultiSelect, Select, TextInput, useNewWindow } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, MultiSelect, Select, TextInput } from '@mtes-mct/monitor-ui'
 import { isNotArchived } from '@utils/isNotArchived'
 import { useField } from 'formik'
 import { uniqBy } from 'lodash'
@@ -48,7 +48,6 @@ export function ControlUnitSelect({
   onChange,
   onDelete
 }: ControlUnitSelectProps) {
-  const { newWindowContainerRef } = useNewWindow()
   const selectedPath = useMainAppSelector(state => state.sideWindow.selectedPath)
   const dispatch = useMainAppDispatch()
   const [{ value }, ,] = useField<LegacyControlUnit.LegacyControlUnit | LegacyControlUnit.LegacyControlUnitDraft>(
@@ -181,7 +180,6 @@ export function ControlUnitSelect({
     <Wrapper>
       <UnitWrapper>
         <Select
-          baseContainer={newWindowContainerRef.current}
           disabled={isLoading}
           error={error?.administration}
           isErrorMessageHidden
@@ -195,7 +193,6 @@ export function ControlUnitSelect({
         <Select
           // TODO Investigate why updating `filteredNamesAsOptions` doesn't re-render the Select.
           key={JSON.stringify(filteredNamesAsOptions)}
-          baseContainer={newWindowContainerRef.current}
           disabled={isLoading}
           error={error?.name}
           isErrorMessageHidden
@@ -208,7 +205,6 @@ export function ControlUnitSelect({
         />
         {!isEdition && <ControlUnitWarningMessage controlUnitIndex={index} missionId={missionId} />}
         <MultiSelect
-          baseContainer={newWindowContainerRef.current}
           disabled={isLoading || !value.administration || !value.name}
           isUndefinedWhenDisabled
           label={`Moyen ${index + 1}`}

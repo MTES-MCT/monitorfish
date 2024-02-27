@@ -51,10 +51,9 @@ function getFeaturesFromGeoJson(customZones: CustomZone[]) {
 
       features
         .filter(feature => feature.getGeometry()?.getType() === OpenLayersGeometryType.POLYGON)
-        .filter((feature): feature is Feature<Geometry> => Boolean(feature))
         .forEach(feature => feature.set('name', zone.name))
 
-      return features as Feature<Geometry>[]
+      return features
     })
     .flat()
 }

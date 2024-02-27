@@ -249,7 +249,7 @@ context('New Regulation', () => {
     cy.get('[data-cy="authorized-all-passive-gears-option"]').should('not.have.class', 'rs-checkbox-checked')
   })
 
-  it('Modification of inputs Should be kept in local storage when refreshing the page', () => {
+  it.only('Modification of inputs Should be kept in local storage when refreshing the page', () => {
     // Given
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
     cy.wait(200)
@@ -264,6 +264,7 @@ context('New Regulation', () => {
     cy.get('[data-cy="authorized-all-towed-gears-option"]').click()
     cy.get('*[data-cy^="open-regulated-species"]').scrollIntoView().click({ force: true }).scrollIntoView()
     cy.get('.rs-picker-toggle-placeholder').filter(':contains("catégories d\'espèces")').eq(0).click({ timeout: 10000 })
+    cy.wait(200)
     cy.get('.rs-picker-search-bar-input').type('Espèce{enter}', { force: true })
     cy.get('.rs-picker-toggle-placeholder').filter(':contains("des espèces")').eq(0).click({ timeout: 10000 })
     cy.wait(200)

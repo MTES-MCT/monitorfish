@@ -12,7 +12,7 @@ import {
 } from '../slice'
 
 const getAllRegulatoryLayers = () => async (dispatch, getState) => {
-  const monitorFishWorker = await MonitorFishWorker()
+  const monitorFishWorker = await MonitorFishWorker
   const { setShowedLayersWithLocalStorageValues } = layer.homepage.actions
   const { speciesByCode } = getState().species
 

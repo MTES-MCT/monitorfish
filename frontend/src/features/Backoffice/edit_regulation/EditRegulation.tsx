@@ -242,8 +242,9 @@ export function EditRegulation({ isEdition, title }) {
       return
     }
 
-    if (geometryObjectList && geometryObjectList[id]) {
-      dispatch(setRegulatoryGeometriesToPreview([{ geometry: geometryObjectList[id] }]))
+    const geometryFromId = geometryObjectList && geometryObjectList[id]
+    if (geometryFromId) {
+      dispatch(setRegulatoryGeometriesToPreview([{ geometry: geometryFromId }]))
     } else if (isEdition && processingRegulation?.geometry) {
       dispatch(setRegulatoryGeometriesToPreview([{ geometry: processingRegulation?.geometry }] as any))
     } else {

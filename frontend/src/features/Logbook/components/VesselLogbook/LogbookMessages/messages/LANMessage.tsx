@@ -8,9 +8,14 @@ import { buildCatchArray } from '../../../../utils'
 import { WeightType } from '../constants'
 import { NoValue, Table, TableBody, TableKey, TableRow, TableValue, Zone, SpeciesList } from '../styles'
 
-export function LANMessage({ message }) {
+import type { LANMessageValue } from '@features/Logbook/Logbook.types'
+
+type LANMessageProps = {
+  message: LANMessageValue
+}
+export function LANMessage({ message }: LANMessageProps) {
   const catchesWithProperties = useMemo(() => {
-    if (!message?.catches) {
+    if (!message?.catchLanded) {
       return []
     }
 

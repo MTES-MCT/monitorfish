@@ -24,7 +24,9 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.get('.Element-Tag').contains('Enregistrement auto. actif')
 
     const expectedStartDateTimeUtc = new RegExp(`${customDayjs().utc().format('YYYY-MM-DDTHH')}:\\d{2}:00\\.000Z`)
-
+    cy.intercept('DELETE', '/bff/v1/mission_actions/1', {
+      statusCode: 200
+    })
     cy.intercept('POST', '/api/v1/missions', {
       body: {
         createdAtUtc: customDayjs().utc().format('YYYY-MM-DDTHH:mm:ss.000Z'),
@@ -92,6 +94,9 @@ context('Side Window > Mission Form > Main Form', () => {
         },
         statusCode: 201
       }).as('getCreatedMission')
+      cy.intercept('DELETE', '/bff/v1/mission_actions/1', {
+        statusCode: 200
+      })
 
       const expectedStartDateTimeUtc = new RegExp(`${customDayjs().utc().format('YYYY-MM-DDTHH')}:\\d{2}:00\\.000Z`)
 
@@ -173,6 +178,9 @@ context('Side Window > Mission Form > Main Form', () => {
       },
       statusCode: 201
     }).as('updateMission')
+    cy.intercept('DELETE', '/bff/v1/mission_actions/1', {
+      statusCode: 200
+    })
 
     cy.fill('Début de mission', [2023, 2, 1, 12, 34])
     cy.fill('Fin de mission', [2023, 2, 1, 13, 45])
@@ -524,7 +532,7 @@ context('Side Window > Mission Form > Main Form', () => {
       body: {
         id: 1
       },
-      statusCode: 204
+      statusCode: 200
     }).as('updateMission')
 
     cy.clickButton('Ré-ouvrir la mission')
@@ -568,7 +576,7 @@ context('Side Window > Mission Form > Main Form', () => {
       5
     )
       .its('response.statusCode')
-      .should('eq', 204)
+      .should('eq', 200)
   })
 
   it('Should delete a mission', () => {

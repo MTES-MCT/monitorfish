@@ -1,12 +1,12 @@
+import * as Comlink from 'comlink'
+
+import { VesselLocation, vesselSize } from '../domain/entities/vessel/vessel'
 import {
   FRANCE,
   getRegulatoryLawTypesFromZones,
   LAWTYPES_TO_TERRITORY,
   mapToRegulatoryZone
-} from '@features/Regulation/utils'
-import * as Comlink from 'comlink'
-
-import { VesselLocation, vesselSize } from '../domain/entities/vessel/vessel'
+} from '../features/Regulation/utils'
 import { getDateMonthsBefore } from '../utils'
 
 export class MonitorFishWebWorker {

@@ -11,10 +11,12 @@ export function listenToConsole(page: Page, index: number) {
         console.log(message.args(), message.stackTrace())
         if (message.text().includes('/sse')) {
           // If the SSE connection fails, the browser will restart it, it is not an application error
+          return
         }
 
         if (message.text().includes('/wfs')) {
           // If the SSE connection fails, the browser will restart it, it is not an application error
+          return
         }
 
         throw new Error(message.text())

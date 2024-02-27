@@ -55,12 +55,12 @@ describe('Side window', () => {
        * Open first control in side window
        */
       await mainWindow.waitForXPath("//span[contains(text(), 'Ouvrir le contrôle')]/..")
-      let buttons = (await mainWindow.$x(
+      const openControlButtons = (await mainWindow.$x(
         "//span[contains(text(), 'Ouvrir le contrôle')]/.."
       )) as ElementHandle<HTMLButtonElement>[]
-      console.log(`Found ${buttons.length} controls`)
+      console.log(`Found ${openControlButtons.length} controls`)
 
-      const firstControlButton = buttons[0]
+      const firstControlButton = openControlButtons[0]
       if (!firstControlButton) {
         throw new Error('The first control button is undefined')
       }
@@ -82,10 +82,10 @@ describe('Side window', () => {
        */
       await mainWindow.focus('body')
       await mainWindow.waitForXPath("//span[contains(text(), 'Ouvrir le contrôle')]/..")
-      buttons = (await mainWindow.$x(
+      const openSecondControlButtons = (await mainWindow.$x(
         "//span[contains(text(), 'Ouvrir le contrôle')]/.."
       )) as ElementHandle<HTMLButtonElement>[]
-      const secondControlButton = buttons[1]
+      const secondControlButton = openSecondControlButtons[1]
       if (!secondControlButton) {
         throw new Error('The second control button is undefined')
       }

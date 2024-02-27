@@ -92,13 +92,6 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
     border: 2px solid #cccfd6;
   }
 
-  .rs-radio-wrapper::before,
-  .rs-radio-wrapper .rs-radio-inner::before,
-  .rs-radio-wrapper {
-    width: 10px;
-    height: 10px;
-  }
-
   .rs-radio-checker > label {
     font-size: 13px;
     color: #3b4559;

@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import { Outlet } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
 import styled from 'styled-components'
+import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
 import { LandingPage } from './LandingPage'
 import { BackofficeMode } from '../api/BackofficeMode'
@@ -30,11 +31,13 @@ export function BackofficePage() {
         <NamespaceContext.Provider value={LayerSliceNamespace.backoffice}>
           <BackofficeMode isBackoffice />
 
-          <BackofficeWrapper>
-            <BackOfficeMenu />
+          <LegacyRsuiteComponentsWrapper>
+            <BackofficeWrapper>
+              <BackOfficeMenu />
 
-            <Outlet />
-          </BackofficeWrapper>
+              <Outlet />
+            </BackofficeWrapper>
+          </LegacyRsuiteComponentsWrapper>
 
           <ErrorToastNotification />
         </NamespaceContext.Provider>

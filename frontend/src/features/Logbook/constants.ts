@@ -92,7 +92,7 @@ export const LogbookMessageType = {
     code: 'LAN',
     displayCode: 'LAN',
     fullName: 'Débarquement',
-    isFilterable: false,
+    isFilterable: true,
     name: 'Débarquement'
   },
   NOT_COE: {

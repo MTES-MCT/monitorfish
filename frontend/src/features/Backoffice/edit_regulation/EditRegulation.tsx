@@ -41,7 +41,7 @@ import {
 } from '../../Regulation/slice'
 import { createOrUpdateRegulation } from '../../Regulation/useCases/createOrUpdateRegulation'
 import getAllRegulatoryLayersByRegTerritory from '../../Regulation/useCases/getAllRegulatoryLayersByRegTerritory'
-import getGeometryWithoutRegulationReference from '../../Regulation/useCases/getGeometryWithoutRegulationReference'
+import { getGeometryWithoutRegulationReference } from '../../Regulation/useCases/getGeometryWithoutRegulationReference'
 import showRegulatoryZone from '../../Regulation/useCases/showRegulatoryZone'
 import { DEFAULT_REGULATION, FRANCE, LAWTYPES_TO_TERRITORY, REGULATORY_REFERENCE_KEYS } from '../../Regulation/utils'
 import { STATUS } from '../constants'
@@ -57,7 +57,7 @@ import {
   updateProcessingRegulationByKey
 } from '../slice'
 
-import type { GeoJSONGeometry } from 'ol/format/GeoJSON'
+import type { GeoJSON } from '../../../domain/types/GeoJSON'
 
 export function EditRegulation({ isEdition, title }) {
   const dispatch = useBackofficeAppDispatch()
@@ -74,7 +74,7 @@ export function EditRegulation({ isEdition, title }) {
   const [nameZoneIsMissing, setNameZoneIsMissing] = useState()
   /** @type {boolean} */
   const [regionIsMissing, setRegionIsMissing] = useState(false)
-  const [geometryObjectList, setGeometryObjectList] = useState<GeoJSONGeometry[]>([])
+  const [geometryObjectList, setGeometryObjectList] = useState<Record<string, GeoJSON.Geometry>>({})
   const [geometryIsMissing, setGeometryIsMissing] = useState(false)
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   /** @type {Number[]} geometryIdList */

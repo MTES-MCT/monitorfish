@@ -110,15 +110,6 @@ export function getDateMonthsBefore(date, nofMonths) {
   return date
 }
 
-export const getTextWidth = (text: string) => {
-  const canvas = document.createElement('canvas')
-  const context = canvas.getContext('2d')
-  context!.font = 'Normal 12px Arial'
-  const metrics = context?.measureText(text)
-
-  return metrics?.width
-}
-
 export const getLocalStorageState = (defaultValue, key) => {
   const stickyValue = window.localStorage.getItem(key)
 

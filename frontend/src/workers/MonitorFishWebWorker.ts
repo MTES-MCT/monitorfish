@@ -9,6 +9,8 @@ import {
 } from '../features/Regulation/utils'
 import { getDateMonthsBefore } from '../utils'
 
+import type { GeoJSON } from '../domain/types/GeoJSON'
+
 /**
  * /!\ Do not shorten imports in the Web worker.
  * It will fail the Vite build : `Rollup failed to resolve import [...]`
@@ -44,10 +46,23 @@ export class MonitorFishWebWorker {
   static mapGeoserverToRegulatoryZones = (geoJSON, speciesByCode) =>
     geoJSON.features.map(feature => mapToRegulatoryZone(feature, speciesByCode))
 
-  static getGeometryIdFromFeatureId = feature => feature.properties?.id || feature.id.split('.')[1]
+  static getGeometryIdFromFeatureId = (feature: GeoJSON.Feature): number | string => {
+    const idFromProperties = feature.properties?.id as number | undefined
+    if (idFromProperties) {
+      return idFromProperties
+    }
 
-  static getIdToGeometryObject(features) {
+    const idFromFeature = feature.id?.toString()
+    if (idFromFeature) {
+      return idFromFeature.split('.')[1] ?? ''
+    }
+
+    return ''
+  }
+
+  static getIdToGeometryObject(features: GeoJSON.FeatureCollection): Record<string, GeoJSON.Geometry> {
     const geometryListAsObject = {}
+
     features.features.forEach(feature => {
       geometryListAsObject[MonitorFishWebWorker.getGeometryIdFromFeatureId(feature)] = feature.geometry
     })

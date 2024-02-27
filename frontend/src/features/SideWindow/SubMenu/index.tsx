@@ -30,7 +30,6 @@ export function SubMenu<T extends string = string>({ counter, onChange, options,
 }
 
 const Wrapper = styled.div`
-  position: relative;
   min-width: 222px;
 `
 
@@ -42,7 +41,6 @@ const Menu = styled.div`
   font-size: 16px;
   font-weight: 500;
   height: 100%;
-  position: unset;
   transition: 'width 0.5s';
   width: 222px;
   z-index: 999;

@@ -8,25 +8,22 @@ import { getOIDCConfig } from './auth/getOIDCConfig'
 
 import 'rsuite/dist/rsuite.min.css'
 import 'nouislider/dist/nouislider.css'
-import './ui/assets/index.css'
 import 'ol/ol.css'
-import './ui/assets/App.css'
-import './ui/shared/ol-override.css'
 import '@mtes-mct/monitor-ui/assets/stylesheets/rsuite-override.css'
 
 if (import.meta.env.PROD) {
   // https://docs.sentry.io/platforms/javascript/performance/#configure-the-sample-rate
   init({
-    dsn: import.meta.env.FRONTEND_SENTRY_DSN || '',
-    environment: import.meta.env.FRONTEND_SENTRY_ENV || '',
+    dsn: import.meta.env.FRONTEND_SENTRY_DSN ?? '',
+    environment: import.meta.env.FRONTEND_SENTRY_ENV ?? '',
     integrations: [
       new BrowserTracing({
         tracingOrigins: import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS
-          ? [import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS || '']
+          ? [import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS ?? '']
           : []
       })
     ],
-    release: import.meta.env.FRONTEND_MONITORFISH_VERSION || '',
+    release: import.meta.env.FRONTEND_MONITORFISH_VERSION ?? '',
     tracesSampleRate: 1.0
   })
 }

@@ -14,6 +14,7 @@ import { useGetLineFeatureIdToCoordinates } from '../../hooks/useGetLineFeatureI
 import { useIsZooming } from '../../hooks/useIsZooming'
 import { getLabelLineStyle } from '../../styles/labelLine.style'
 
+import type { FeatureAndLabel } from './types'
 import type { VectorLayerWithName } from '../../../../../domain/types/layer'
 
 const MIN_ZOOM = 7
@@ -87,7 +88,14 @@ export function MissionsLabelsLayer({ mapMovingAndZoomEvent }) {
   }, [isZooming, currentZoom, getVectorSource])
 
   const addLabelsToAllFeaturesInExtent = useDebouncedCallback(
-    (isHidden, vectorSource, missionsLayerSource, extent, _lineFeatureIdToCoordinates, _previousFeaturesAndLabels) => {
+    (
+      isHidden,
+      vectorSource,
+      missionsLayerSource,
+      extent,
+      _lineFeatureIdToCoordinates,
+      _previousFeaturesAndLabels: FeatureAndLabel[] | undefined
+    ) => {
       const nextFeaturesAndLabels = getLabelsOfFeaturesInExtent(
         isHidden,
         vectorSource,

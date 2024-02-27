@@ -40,7 +40,7 @@ import {
   setRegulatoryZoneMetadata
 } from '../../Regulation/slice'
 import { createOrUpdateRegulation } from '../../Regulation/useCases/createOrUpdateRegulation'
-import getAllRegulatoryLayersByRegTerritory from '../../Regulation/useCases/getAllRegulatoryLayersByRegTerritory'
+import { getAllRegulatoryLayersByRegTerritory } from '../../Regulation/useCases/getAllRegulatoryLayersByRegTerritory'
 import { getGeometryWithoutRegulationReference } from '../../Regulation/useCases/getGeometryWithoutRegulationReference'
 import showRegulatoryZone from '../../Regulation/useCases/showRegulatoryZone'
 import { DEFAULT_REGULATION, FRANCE, LAWTYPES_TO_TERRITORY, REGULATORY_REFERENCE_KEYS } from '../../Regulation/utils'
@@ -74,7 +74,7 @@ export function EditRegulation({ isEdition, title }) {
   const [nameZoneIsMissing, setNameZoneIsMissing] = useState()
   /** @type {boolean} */
   const [regionIsMissing, setRegionIsMissing] = useState(false)
-  const [geometryObjectList, setGeometryObjectList] = useState<Record<string, GeoJSON.Geometry>>({})
+  const [geometryObjectList, setGeometryRecord] = useState<Record<string, GeoJSON.Geometry>>({})
   const [geometryIsMissing, setGeometryIsMissing] = useState(false)
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   /** @type {Number[]} geometryIdList */
@@ -100,23 +100,17 @@ export function EditRegulation({ isEdition, title }) {
 
   const { id, lawType, otherInfo, region, regulatoryReferences, topic, zone } = processingRegulation as any
 
-  const getGeometryObjectList = useCallback(() => {
-    dispatch(getGeometryWithoutRegulationReference()).then(geometryListAsObject => {
-      if (geometryListAsObject !== undefined) {
-        setGeometryObjectList(geometryListAsObject)
-      }
-    })
-  }, [dispatch])
-
   useEffect(() => {
-    getGeometryObjectList()
-    batch(async () => {
+    ;(async () => {
+      const geometryRecord = await dispatch(getGeometryWithoutRegulationReference())
+      setGeometryRecord(geometryRecord)
+
       await dispatch(getAllSpecies())
-      if (!layersTopicsByRegTerritory || Object.keys(layersTopicsByRegTerritory).length === 0) {
-        dispatch(getAllRegulatoryLayersByRegTerritory())
-      }
+
+      await dispatch(getAllRegulatoryLayersByRegTerritory())
+
       dispatch(closeRegulatoryZoneMetadataPanel())
-    })
+    })()
 
     return () => {
       dispatch(setStatus(STATUS.IDLE))
@@ -124,7 +118,7 @@ export function EditRegulation({ isEdition, title }) {
       dispatch(setRegulatoryZoneMetadata(undefined))
       dispatch(resetRegulatoryGeometriesToPreview())
     }
-  }, [dispatch, getGeometryObjectList, layersTopicsByRegTerritory])
+  }, [dispatch])
 
   useEffect(
     () => () => {

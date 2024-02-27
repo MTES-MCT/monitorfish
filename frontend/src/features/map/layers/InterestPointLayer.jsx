@@ -21,7 +21,7 @@ import {
 import {
   coordinatesAreModified,
   coordinatesOrTypeAreModified,
-  interestPointType
+  InterestPointType
 } from '../../../domain/entities/interestPoints'
 import saveInterestPointFeature from '../../../domain/use_cases/interestPoint/saveInterestPointFeature'
 import GeoJSON from 'ol/format/GeoJSON'
@@ -126,7 +126,7 @@ const InterestPointLayer = ({ mapMovingAndZoomEvent }) => {
         dispatch(updateInterestPointBeingDrawed({
           uuid: uuidv4(),
           name: null,
-          type: interestPointType.FISHING_VESSEL,
+          type: InterestPointType.FISHING_VESSEL,
           coordinates: null,
           observations: null
         }))
@@ -181,7 +181,7 @@ const InterestPointLayer = ({ mapMovingAndZoomEvent }) => {
           }
 
           if (interestPointBeingDrawed) {
-            startDrawing(event, interestPointBeingDrawed.type || interestPointType.OTHER)
+            startDrawing(event, interestPointBeingDrawed.type || InterestPointType.OTHER)
           }
         })
 

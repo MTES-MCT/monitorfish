@@ -3,12 +3,12 @@ import { useSelector, useDispatch } from 'react-redux'
 import { ContentLine } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
 import CustomSelectComponent from '../custom_form/CustomSelectComponent'
-import { formatDataForSelectPicker } from '../../../../utils'
 import { FRENCH_REGION_LIST } from '../../constants'
 import Tag from '../Tag'
 import MenuItem from '../custom_form/MenuItem'
 import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../Regulation/utils'
 import { updateProcessingRegulationByKey } from '../../slice'
+import { formatDataForSelectPicker } from '@features/Backoffice/utils'
 
 const RegulationRegionLine = props => {
   const { regionIsMissing, disabled } = props

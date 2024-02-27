@@ -17,7 +17,7 @@ import type { MutableRefObject } from 'react'
 export function RegulatoryLayerSearch() {
   const { zoneSelected } = useMainAppSelector(state => state.regulatoryLayerSearch)
 
-  const vectorSourceRef = useRef() as MutableRefObject<VectorSource<Geometry>>
+  const vectorSourceRef = useRef() as MutableRefObject<VectorSource<Feature<Geometry>>>
   const getVectorSource = useCallback(() => {
     if (vectorSourceRef.current === undefined) {
       vectorSourceRef.current = new VectorSource({

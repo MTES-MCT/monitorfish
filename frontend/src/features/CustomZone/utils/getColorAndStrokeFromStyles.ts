@@ -13,7 +13,7 @@ export function getColorAndStrokeFromStyles(styles: Style[]): { color: string; s
   const style = styles[0]
 
   return {
-    color: style!.getFill().getColor()?.toString() || DEFAULT_ZONE_COLOR,
-    stroke: style!.getStroke().getColor()?.toString() || DEFAULT_ZONE_BORDER
+    color: style!.getFill()?.getColor()?.toString() ?? DEFAULT_ZONE_COLOR,
+    stroke: style!.getStroke()?.getColor()?.toString() ?? DEFAULT_ZONE_BORDER
   }
 }

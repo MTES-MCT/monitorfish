@@ -196,12 +196,12 @@ const Rectangle = styled.div<{
 }>`
   background: ${p =>
     p.$vectorLayerStyle && p.$vectorLayerStyle.getFill()
-      ? p.$vectorLayerStyle.getFill().getColor()
+      ? p.$vectorLayerStyle.getFill()?.getColor()
       : p.theme.color.lightGray};
   border: 1px solid
     ${p =>
       p.$vectorLayerStyle && p.$vectorLayerStyle.getStroke()
-        ? p.$vectorLayerStyle.getStroke().getColor()
+        ? p.$vectorLayerStyle.getStroke()?.getColor()
         : p.theme.color.slateGray};
   cursor: zoom-in;
   display: inline-block;

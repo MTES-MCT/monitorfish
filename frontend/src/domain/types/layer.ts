@@ -1,4 +1,6 @@
+import { Feature } from 'ol'
 import TileLayer from 'ol/layer/Tile'
+import VectorImageLayer from 'ol/layer/VectorImage'
 import { TileWMS } from 'ol/source'
 
 import type { RegulatoryZone } from '../../features/Regulation/types'
@@ -33,10 +35,14 @@ export type VectorLayerWithName = VectorLayer<VectorSource> & {
   name?: string
 }
 
+export type VectorImageLayerWithName = VectorImageLayer<VectorSource> & {
+  name?: string
+}
+
 export type TileLayerWithName = TileLayer<TileWMS> & {
   name?: string
 }
 
-export type WebGLPointsLayerWithName = WebGLPointsLayer<VectorSource<Point>> & {
+export type WebGLPointsLayerWithName = WebGLPointsLayer<VectorSource<Feature<Point>>> & {
   name?: string
 }

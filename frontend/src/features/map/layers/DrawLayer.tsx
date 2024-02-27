@@ -1,4 +1,5 @@
 import { isEmpty } from 'lodash'
+import { Feature } from 'ol'
 import GeoJSON from 'ol/format/GeoJSON'
 import { Modify } from 'ol/interaction'
 import Draw, { createBox, createRegularPolygon } from 'ol/interaction/Draw'
@@ -41,7 +42,7 @@ function UnmemoizedDrawLayer() {
     }).readFeature(currentGeometry)
   }, [drawedGeometry, initialGeometry])
 
-  const vectorSourceRef = useRef() as MutableRefObject<VectorSource<Geometry>>
+  const vectorSourceRef = useRef() as MutableRefObject<VectorSource<Feature<Geometry>>>
   const getVectorSource = useCallback(() => {
     if (vectorSourceRef.current === undefined) {
       vectorSourceRef.current = new VectorSource({
@@ -55,7 +56,7 @@ function UnmemoizedDrawLayer() {
     return vectorSourceRef.current
   }, [])
 
-  const drawVectorSourceRef = useRef() as MutableRefObject<VectorSource<Geometry>>
+  const drawVectorSourceRef = useRef() as MutableRefObject<VectorSource<Feature<Geometry>>>
 
   const getDrawVectorSource = useCallback(() => {
     if (drawVectorSourceRef.current === undefined) {

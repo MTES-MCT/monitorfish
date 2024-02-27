@@ -10,6 +10,7 @@
   },
   "scripts": {
     "build": "vite build && npm run bundle-sw",
+    "clean": "rm -Rf ./node-modules/.vite ./node-modules/build",
     "cypress:open": "cypress open --browser firefox --config-file ./config/cypress.config.ts --e2e",
     "dev": "import-meta-env-prepare -x ./.env.local.defaults && vite --port 3000",
     "dev-monitorenv": "FRONTEND_MONITORENV_URL=//localhost:9880 import-meta-env-prepare -u -x ./.env.local.defaults && vite --port 3000",
@@ -17,6 +18,7 @@
     "bundle-sw": "esbuild src/workers/serviceWorker.ts --bundle --outfile=public/service-worker.js",
     "prepare": "cd .. && ./frontend/node_modules/.bin/husky ./frontend/config/husky",
     "start": "import-meta-env-prepare -u -x ./.env.local.defaults && vite preview --port 3000",
+    "start:emulate": "npm run clean && npm run build && import-meta-env -x ./.env.example -p ./build/index.html && import-meta-env-prepare -u -x ./.env.local.defaults && vite preview --port 3000",
     "test:e2e": "cypress run --browser firefox --config-file ./config/cypress.config.ts --e2e",
     "test:e2e:flaky": "./cypress/support/test_flaky_test.sh",
     "test:e2e:generate": "./scripts/clean_wiremock_stubs.sh && node ./scripts/generate_wiremock_stubs.mjs",

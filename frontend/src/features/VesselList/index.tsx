@@ -376,8 +376,8 @@ export function VesselList({ namespace }) {
         >
           <StyledModalHeader $isFull>
             <Modal.Title>
-              <VesselIcon $background={COLORS.charcoal} $isRightMenuShrinked={undefined} $isTitle /> Liste des navires
-              avec VMS
+              <VesselIcon $background={COLORS.charcoal} $isRightMenuShrinked={undefined} $isTitle />
+              Liste des navires avec VMS
             </Modal.Title>
           </StyledModalHeader>
           <Modal.Body>

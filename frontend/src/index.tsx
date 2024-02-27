@@ -4,13 +4,15 @@ import { createRoot } from 'react-dom/client'
 import { AuthProvider, withAuth } from 'react-oidc-context'
 
 import { App } from './App'
+import { getOIDCConfig } from './auth/getOIDCConfig'
+
 import 'rsuite/dist/rsuite.min.css'
 import 'nouislider/dist/nouislider.css'
 import './ui/assets/index.css'
 import 'ol/ol.css'
 import './ui/assets/App.css'
 import './ui/shared/ol-override.css'
-import { getOIDCConfig } from './auth/getOIDCConfig'
+import '@mtes-mct/monitor-ui/assets/stylesheets/rsuite-override.css'
 
 if (import.meta.env.PROD) {
   // https://docs.sentry.io/platforms/javascript/performance/#configure-the-sample-rate

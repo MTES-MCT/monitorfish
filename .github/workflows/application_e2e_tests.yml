@@ -39,9 +39,10 @@ jobs:
         run: echo "MONITORFISH_VERSION=${VERSION}" >> $GITHUB_ENV
 
       - name: Download image
-        uses: ishworkh/docker-image-artifact-download@v1
+        uses: ishworkh/container-image-artifact-download@v1
         with:
           image: monitorfish-app:${{ env.VERSION }}
+          workflow: "Application Build"
 
       - name: Run docker images
         run: make docker-compose-up

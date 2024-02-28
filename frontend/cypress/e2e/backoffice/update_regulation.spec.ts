@@ -31,7 +31,7 @@ context('Update Regulation', () => {
     cy.get('[data-cy="tag-OURSINS,ETC. NCA (URX)"]').should('exist')
     cy.get('[data-cy="tag-Dragues"]').should('exist')
     cy.get('[data-cy="input-Praires Ouest cotentin"]').should('exist')
-    cy.get('.rs-picker-toggle-value').eq(0).should('have.text', getDate(new Date().toISOString()))
+    cy.get('.rs-picker-date input').eq(0).should('have.value', getDate(new Date().toISOString()))
     cy.get('[data-cy="regulatory-general-other-info"]').contains('Encore une info importante')
 
     // Then try to save
@@ -112,10 +112,10 @@ context('Update Regulation', () => {
       .eq(0)
       .scrollIntoView()
       .click({ timeout: 10000 })
-    cy.get('.rs-picker-search-bar-input').type('Espèce{enter}')
+    cy.get('.rs-search-box-input').type('Espèce{enter}')
     cy.get('[data-cy="authorized-species-selector"]').filter(':contains("des espèces")').click({ timeout: 10000 })
     cy.wait(200)
-    cy.get('.rs-picker-search-bar-input').type('HKE{enter}')
+    cy.get('.rs-search-box-input').type('HKE{enter}')
     cy.get('*[data-cy^="authorized-regulatory-species-remarks"]').eq(0).type('Ne pas en prendre beaucoup please')
 
     cy.log('Select unauthorized species and groups')
@@ -124,11 +124,11 @@ context('Update Regulation', () => {
       .eq(1)
       .scrollIntoView()
       .click({ timeout: 10000 })
-    cy.get('.rs-picker-search-bar-input').should('have.length', 1)
-    cy.get('.rs-picker-search-bar-input').type('Bival{enter}')
+    cy.get('.rs-search-box-input').should('have.length', 1)
+    cy.get('.rs-search-box-input').type('Bival{enter}')
     cy.get('[data-cy="unauthorized-species-selector"]').filter(':contains("des espèces")').click({ timeout: 10000 })
-    cy.get('.rs-picker-search-bar-input').should('have.length', 1)
-    cy.get('.rs-picker-search-bar-input').type('MGE{enter}')
+    cy.get('.rs-search-box-input').should('have.length', 1)
+    cy.get('.rs-search-box-input').type('MGE{enter}')
 
     cy.get('*[data-cy^="regulatory-species-other-info"]').type("Mhm pas d'autre info !")
 
@@ -314,6 +314,6 @@ context('Update Regulation', () => {
     cy.get('[data-cy="tag-598"]').should('exist')
     cy.get('[data-cy="tag-texte de reference"]').should('exist')
     cy.get('[data-cy="input-Praires Ouest cotentin"]').should('exist')
-    cy.get('.rs-picker-toggle-value').eq(0).should('have.text', getDate(new Date().toISOString()))
+    cy.get('.rs-picker-date input').eq(0).should('have.value', getDate(new Date().toISOString()))
   })
 })

@@ -1,4 +1,4 @@
-import { SideWindowMenuLabel } from 'domain/entities/sideWindow/constants'
+import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 
 export const openSideWindowAlertList = () => {
   cy.viewport(1920, 1080)

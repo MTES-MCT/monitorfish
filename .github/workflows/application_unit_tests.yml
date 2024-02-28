@@ -23,6 +23,10 @@ on:
   schedule:
     - cron: "38 11 */3 * *"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   unit_test_backend:
     name: Run backend unit tests

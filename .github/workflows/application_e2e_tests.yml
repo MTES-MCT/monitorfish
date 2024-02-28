@@ -8,7 +8,7 @@ on:
       - completed
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch }}
   cancel-in-progress: true
 
 jobs:
@@ -92,6 +92,7 @@ jobs:
         with:
           conclusion: ${{ job.status }}
           name: Application Cypress E2E tests
+          sha: ${{ github.event.workflow_run.head_commit.id }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
   e2e_multi_windows_test:
@@ -151,4 +152,5 @@ jobs:
         with:
           conclusion: ${{ job.status }}
           name: Application Puppeteer E2E tests
+          sha: ${{ github.event.workflow_run.head_commit.id }}
           token: ${{ secrets.GITHUB_TOKEN }}

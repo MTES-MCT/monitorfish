@@ -38,7 +38,6 @@ runs:
         else
             export VERSION=${{ steps.get-last-release-version.outputs.release }}
         fi
-        echo "IS_RELEASE=${{ steps.get-last-release-version.outputs.release }}" >> $GITHUB_ENV
         echo "VERSION=$VERSION" >> $GITHUB_ENV
 
     - name: Print environment profile and version

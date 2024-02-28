@@ -206,13 +206,13 @@ context('New Regulation', () => {
     cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
     cy.wait(1000)
     cy.get('[data-cy="unauthorized-all-gears-option"]').should('not.have.class', 'rs-checkbox-checked')
-    cy.get('[data-cy="unauthorized-all-gears-option"]').click()
+    cy.get('[data-cy="unauthorized-all-gears-option"]').find('input').forceClick()
 
     // then
     cy.get('[data-cy="unauthorized-all-towed-gears-option"]').should('have.class', 'rs-checkbox-checked')
     cy.get('[data-cy="unauthorized-all-passive-gears-option"]').should('have.class', 'rs-checkbox-checked')
     cy.get('[data-cy^="tag-"]').should('have.length', 12)
-    cy.get('[data-cy="unauthorized-all-gears-option"]').click()
+    cy.get('[data-cy="unauthorized-all-gears-option"]').find('input').forceClick()
 
     cy.get('[data-cy="unauthorized-all-towed-gears-option"]').should('not.have.class', 'rs-checkbox-checked')
     cy.get('[data-cy="unauthorized-all-passive-gears-option"]').should('not.have.class', 'rs-checkbox-checked')

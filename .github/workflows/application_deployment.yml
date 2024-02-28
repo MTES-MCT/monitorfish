@@ -1,0 +1,55 @@
+name: CI/CD Back & Front
+
+on:
+  workflow_dispatch:
+  # workflow_run:
+  #   workflows:
+  #     - "Application E2E Tests"
+  #   types:
+  #     - completed
+
+jobs:
+  push_to_registry:
+    name: Push to registry
+    if: ${{ !contains(github.ref, 'dependabot') }}
+    runs-on: ubuntu-22.04
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+      ENV_PROFILE: ${{needs.version.outputs.ENV_PROFILE}}
+      VERSION: ${{needs.version.outputs.VERSION}}
+    steps:
+      - name: Check status of required workflows
+        id: should_deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          APLICATION_UNITS_TESTS_WORKFLOW_CONCLUSION=$(gh api repos/MTES-MCT/monitorfish/actions/runs --jq '.workflow_runs[] | select(.name=="Application Unit Tests").conclusion' | head -n 1)
+          APPLICATION_E2E_TESTS_WORKFLOW_CONCLUSION=$(gh api repos/MTES-MCT/monitorfish/actions/runs --jq '.workflow_runs[] | select(.name=="Application E2E Tests").conclusion' | head -n 1)
+          if [[ "$APLICATION_UNITS_TESTS_WORKFLOW_CONCLUSION" == "success" && "$APPLICATION_E2E_TESTS_WORKFLOW_CONCLUSION" == "success" ]]; then
+            echo "should-deploy=true" >> $GITHUB_OUTPUT
+          else
+            echo "should-deploy=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+      - name: Checkout
+        if: ${{ steps.should_deploy.outputs.should-deploy == 'true' }}
+        uses: actions/checkout@v4
+
+      - name: Set version and environment profile
+        uses: ./.github/actions/set-version-and-environment-profile
+
+      - name: Download image
+        if: ${{ steps.should_deploy.outputs.should-deploy == 'true' }}
+        uses: ishworkh/container-image-artifact-download@v1.0.0
+        with:
+          image: monitorfish-app:${{ env.VERSION }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: "Application Build"
+
+      - name: Push docker image to registry
+        if: ${{ steps.should_deploy.outputs.should-deploy == 'true' }}
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
+          make docker-tag
+          make docker-push

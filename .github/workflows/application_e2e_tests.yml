@@ -82,6 +82,13 @@ jobs:
           wait-on: "http://localhost:8880"
           working-directory: ./frontend
 
+      - uses: LouisBrunner/checks-action@v2.0.0
+        if: ${{ always() }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Application Cypress E2E tests
+          conclusion: ${{ job.status }}
+
   e2e_multi_windows_test:
     name: Run E2E multi windows tests
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
@@ -132,3 +139,10 @@ jobs:
       - name: Run multi-windows tests
         run: npm run test:multi-windows:run
         working-directory: ./frontend
+
+      - uses: LouisBrunner/checks-action@v2.0.0
+        if: ${{ always() }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Application Puppeteer E2E tests
+          conclusion: ${{ job.status }}

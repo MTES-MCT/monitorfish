@@ -45,3 +45,10 @@ jobs:
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
           make docker-tag
           make docker-push
+
+      - uses: LouisBrunner/checks-action@v2.0.0
+        if: ${{ always() }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Application Deployment
+          conclusion: ${{ job.status }}

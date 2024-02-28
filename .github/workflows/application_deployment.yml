@@ -16,7 +16,7 @@ concurrency:
 jobs:
   push_to_registry:
     name: Push to registry
-    if: ${ github.event.workflow_run.conclusion == 'success' && !contains(github.ref, 'dependabot') }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' && !contains(github.ref, 'dependabot') }}
     runs-on: ubuntu-22.04
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
@@ -58,7 +58,7 @@ jobs:
       - uses: LouisBrunner/checks-action@v2.0.0
         if: ${{ always() }}
         with:
-          check_id: ${{ github.run_id }}
+          check_id: application-deployment-${{ github.event.workflow_run.head_commit.id }}
           conclusion: ${{ job.status }}
           details_url: https://github.com/MTES-MCT/monitorfish/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}
           name: Application Deployment

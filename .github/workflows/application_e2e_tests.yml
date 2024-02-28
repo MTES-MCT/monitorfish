@@ -33,6 +33,25 @@ jobs:
       PUPPETEER_SKIP_DOWNLOAD: "true"
       VITE_CYPRESS_PORT: 8880
     steps:
+      - name: "Download 'workflow_share' artifact"
+        uses: actions/download-artifact@v4
+        with:
+          name: workflow_share
+
+      - name: Set STATUS_CHECK_ID environment variable
+        run: |
+          echo "STATUS_CHECK_ID=$(cat workflow_share/cypress_job_check_id)" >> $GITHUB_ENV
+
+      - name: Update job status check
+        uses: LouisBrunner/checks-action@v2.0.0
+        if: ${{ always() }}
+        with:
+          check_id: ${{ env.STATUS_CHECK_ID }}
+          details_url: "https://github.com/MTES-MCT/monitorfish/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}"
+          sha: ${{ github.event.workflow_run.head_commit.id }}
+          status: in_progress
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -77,7 +96,10 @@ jobs:
           firefox -v
           which firefox
 
-      - uses: cypress-io/github-action@v6
+      - name: Run Cypress E2E tests
+        id: run_cypress_e2e_tests
+        continue-on-error: true
+        uses: cypress-io/github-action@v6
         with:
           browser: firefox
           config-file: config/cypress.config.ts
@@ -89,14 +111,15 @@ jobs:
           wait-on: "http://localhost:8880"
           working-directory: ./frontend
 
-      - uses: LouisBrunner/checks-action@v2.0.0
+      - name: set final job status check
+        uses: LouisBrunner/checks-action@v2.0.0
         if: ${{ always() }}
         with:
-          # check_id: application-e2e-cypress-${{ github.event.workflow_run.head_commit.id }}
-          conclusion: ${{ job.status }}
+          check_id: ${{ env.STATUS_CHECK_ID }}
+          conclusion: ${{ steps.run_cypress_e2e_tests.outcome }}
           details_url: "https://github.com/MTES-MCT/monitorfish/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}"
-          name: Application E2E Tests (Cypress)
           sha: ${{ github.event.workflow_run.head_commit.id }}
+          status: completed
           token: ${{ secrets.GITHUB_TOKEN }}
 
   e2e_multi_windows_test:
@@ -109,6 +132,25 @@ jobs:
       PUPPETEER_SKIP_DOWNLOAD: "true"
       VITE_CYPRESS_PORT: 8880
     steps:
+      - name: "Download 'workflow_share' artifact"
+        uses: actions/download-artifact@v4
+        with:
+          name: workflow_share
+
+      - name: Set STATUS_CHECK_ID environment variable
+        run: |
+          echo "STATUS_CHECK_ID=$(cat workflow_share/puppeteer_job_check_id)" >> $GITHUB_ENV
+
+      - name: Update job status check
+        uses: LouisBrunner/checks-action@v2.0.0
+        if: ${{ always() }}
+        with:
+          check_id: ${{ env.STATUS_CHECK_ID }}
+          details_url: "https://github.com/MTES-MCT/monitorfish/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}"
+          sha: ${{ github.event.workflow_run.head_commit.id }}
+          status: in_progress
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -150,15 +192,18 @@ jobs:
         run: npx puppeteer browsers install firefox
 
       - name: Run multi-windows tests
+        id: run_puppeteer_e2e_tests
+        continue-on-error: true
         run: npm run test:multi-windows:run
         working-directory: ./frontend
 
-      - uses: LouisBrunner/checks-action@v2.0.0
+      - name: Set final job status check
+        uses: LouisBrunner/checks-action@v2.0.0
         if: ${{ always() }}
         with:
-          # check_id: application-e2e-puppeteer-${{ github.event.workflow_run.head_commit.id }}
-          conclusion: ${{ job.status }}
+          check_id: ${{ env.STATUS_CHECK_ID }}
+          conclusion: ${{ steps.run_puppeteer_e2e_tests.outcome }}
           details_url: "https://github.com/MTES-MCT/monitorfish/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}"
-          name: Application E2E Tests (Puppeteer)
           sha: ${{ github.event.workflow_run.head_commit.id }}
+          status: completed
           token: ${{ secrets.GITHUB_TOKEN }}

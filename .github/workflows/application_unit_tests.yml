@@ -30,11 +30,8 @@ jobs:
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
-      - id: foo
-        uses: actions/set-version-and-environment-profile@v1
-
-      - name: Print version
-        run: echo "VERSION:${{ env.VERSION }} ENV_PROFILE:${{ env.ENV_PROFILE }}"
+      - name: Set version and environment profile
+        uses: ./.github/actions/set-version-and-environment-profile@v1
 
       - name: Setup Java JDK
         uses: actions/setup-java@v4

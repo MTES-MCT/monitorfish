@@ -1,28 +1,27 @@
 name: Application Unit Tests
 
 on:
-  workflow_dispatch:
-  # push:
-  #   paths:
-  #     - "**.css"
-  #     - "**.kt"
-  #     - "**.png"
-  #     - "**.js"
-  #     - "**.json"
-  #     - "**.snap"
-  #     - "**.ts"
-  #     - "**.tsx"
-  #     - "**.yml"
-  #     - ".github/workflows/cicd.yml"
-  #     - "infra/configurations/**.properties"
-  #     - "infra/docker/app/**"
-  #     - "**.sql"
-  #     - "backend/pom.xml"
-  #     - "backend/build.gradle.kts"
-  #     - "Makefile"
-  #     - "frontend"
-  # schedule:
-  #   - cron: "38 11 */3 * *"
+  push:
+    paths:
+      - "**.css"
+      - "**.kt"
+      - "**.png"
+      - "**.js"
+      - "**.json"
+      - "**.snap"
+      - "**.ts"
+      - "**.tsx"
+      - "**.yml"
+      - ".github/workflows/cicd.yml"
+      - "infra/configurations/**.properties"
+      - "infra/docker/app/**"
+      - "**.sql"
+      - "backend/pom.xml"
+      - "backend/build.gradle.kts"
+      - "Makefile"
+      - "frontend"
+  schedule:
+    - cron: "38 11 */3 * *"
 
 jobs:
   unit_test_backend:

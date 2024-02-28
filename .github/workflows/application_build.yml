@@ -36,7 +36,6 @@ jobs:
         id: initialize_cypress_e2e_tests_job_check
         uses: LouisBrunner/checks-action@v2.0.0
         with:
-          conclusion: action_required
           details_url: "https://github.com/MTES-MCT/monitorfish/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}"
           name: "Application E2E Tests (Cypress)"
           sha: ${{ github.event.push.head_commit.id }}
@@ -47,7 +46,6 @@ jobs:
         id: initialize_puppeteer_e2e_tests_job_check
         uses: LouisBrunner/checks-action@v2.0.0
         with:
-          conclusion: action_required
           details_url: "https://github.com/MTES-MCT/monitorfish/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}"
           name: Application E2E Tests (Puppeteer)
           sha: ${{ github.event.push.head_commit.id }}

@@ -24,10 +24,47 @@ on:
     - cron: "38 11 */3 * *"
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.push.head_commit.id }}
   cancel-in-progress: true
 
 jobs:
+  initialize_e2e_tests_job_check:
+    name: Initialize E2E Tests job checks
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Initialize Cypress E2E Tests job check
+        id: initialize_cypress_e2e_tests_job_check
+        uses: LouisBrunner/checks-action@v2.0.0
+        with:
+          conclusion: action_required
+          details_url: "https://github.com/MTES-MCT/monitorfish/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}"
+          name: "Application E2E Tests (Cypress)"
+          sha: ${{ github.event.push.head_commit.id }}
+          status: queued
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Initialize Cypress E2E Tests job check
+        id: initialize_puppeteer_e2e_tests_job_check
+        uses: LouisBrunner/checks-action@v2.0.0
+        with:
+          conclusion: action_required
+          details_url: "https://github.com/MTES-MCT/monitorfish/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}"
+          name: Application E2E Tests (Puppeteer)
+          sha: ${{ github.event.push.head_commit.id }}
+          status: queued
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Save job check IDs
+        run: |
+          mkdir -p workflow_share
+          echo "${{ steps.initialize_cypress_e2e_tests_job_check.outputs.check_id }}" > workflow_share/cypress_job_check_id
+          echo "${{ steps.initialize_puppeteer_e2e_tests_job_check.outputs.check_id }}" > workflow_share/puppeteer_job_check_id
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: workflow_share
+          path: workflow_share/*
+
   build:
     name: Build and package
     runs-on: ubuntu-22.04

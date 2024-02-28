@@ -48,8 +48,9 @@ describe('Side window', () => {
       console.log(`Found ${years.length} year`)
       years.forEach(async year => {
         year.click()
-        await wait(500)
+        await wait(200)
       })
+      await wait(1000)
 
       /**
        * Open first control in side window
@@ -64,7 +65,6 @@ describe('Side window', () => {
       if (!firstControlButton) {
         throw new Error('The first control button is undefined')
       }
-      await firstControlButton.focus()
       await firstControlButton.click()
 
       await wait(2000)
@@ -89,7 +89,6 @@ describe('Side window', () => {
       if (!secondControlButton) {
         throw new Error('The second control button is undefined')
       }
-      await secondControlButton.focus()
       await secondControlButton.click()
 
       /**
@@ -103,7 +102,6 @@ describe('Side window', () => {
       /**
        * Open first control again
        */
-      await firstControlButton.focus()
       await firstControlButton.click()
 
       /**

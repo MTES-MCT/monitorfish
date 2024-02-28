@@ -16,28 +16,31 @@ concurrency:
 jobs:
   push_to_registry:
     name: Push to registry
-    if: ${{ !contains(github.ref, 'dependabot') }}
+    if: ${ github.event.workflow_run.conclusion == 'success' && !contains(github.ref, 'dependabot') }}
     runs-on: ubuntu-22.04
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
-      - name: Check status of required workflows
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          APLICATION_UNITS_TESTS_WORKFLOW_CONCLUSION=$(gh api repos/MTES-MCT/monitorfish/actions/runs --jq '.workflow_runs[] | select(.name=="Application Unit Tests").conclusion' | head -n 1)
-          APPLICATION_E2E_TESTS_WORKFLOW_CONCLUSION=$(gh api repos/MTES-MCT/monitorfish/actions/runs --jq '.workflow_runs[] | select(.name=="Application E2E Tests").conclusion' | head -n 1)
-          if [[ "$APLICATION_UNITS_TESTS_WORKFLOW_CONCLUSION" != "success" || "$APPLICATION_E2E_TESTS_WORKFLOW_CONCLUSION" != "success" ]]; then
-            exit 1
-          fi
+      - name: Check Unit Tests status
+        id: check_unit_tests_status
+        uses: LASER-Yi/workflow-status@v0.0.2
+        with:
+          branch: ${{ github.event.workflow_run.head_branch }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: application_unit_tests.yml
 
       - name: Checkout
+        if: ${{ steps.check-check_unit_tests_status.outputs.conclusion == 'success' }}
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_commit.id }}
 
       - name: Set version and environment profile
+        if: ${{ steps.check-check_unit_tests_status.outputs.conclusion == 'success' }}
         uses: ./.github/actions/set-version-and-environment-profile
 
       - name: Download image
+        if: ${{ steps.check-check_unit_tests_status.outputs.conclusion == 'success' }}
         uses: ishworkh/container-image-artifact-download@v1.0.0
         with:
           commit_sha: ${{ github.event.workflow_run.head_commit.id }}
@@ -46,6 +49,7 @@ jobs:
           workflow: "Application Build"
 
       - name: Push docker image to registry
+        if: ${{ steps.check-check_unit_tests_status.outputs.conclusion == 'success' }}
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
           make docker-tag

@@ -39,7 +39,7 @@ jobs:
           github-token: ${{ secrets.GH_PAT }}
           name: workflow_share
           repository: MTES-MCT/monitorfish
-          run-id: ${{ github.event.workflow_run.id }}
+          run-id: ${{ github.event.workflow_run.workflow.id }}
 
       - name: Set STATUS_CHECK_ID environment variable
         run: |

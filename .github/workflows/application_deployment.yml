@@ -10,7 +10,7 @@ on:
       - master
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch }}
   cancel-in-progress: true
 
 jobs:
@@ -56,4 +56,5 @@ jobs:
         with:
           conclusion: ${{ job.status }}
           name: Application Deployment
+          sha: ${{ github.event.workflow_run.head_commit.id }}
           token: ${{ secrets.GITHUB_TOKEN }}

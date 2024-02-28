@@ -18,12 +18,12 @@ runs:
 
     - name: "Set environment as 'dev' by default"
       shell: bash
-      run: echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+      run: echo "ENV_PROFILE=dev" >> $GITHUB_ENV
 
     - name: "Set environment as 'prod' if it's a release"
       if: startsWith(github.ref, 'refs/tags/v1') || startsWith(github.ref, 'refs/heads/v1') || startsWith(github.ref, 'refs/tags/v2') || startsWith(github.ref, 'refs/heads/v2')
       shell: bash
-      run: echo "ENVIRONMENT=prod" >> $GITHUB_ENV
+      run: echo "ENV_PROFILE=prod" >> $GITHUB_ENV
 
     - name: Set version output
       id: set-version

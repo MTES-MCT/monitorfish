@@ -34,7 +34,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set version and environment profile
-        uses: ./.github/actions/set-version-and-environment-profile@v1
+        uses: ./.github/actions/set-version-and-environment-profile
 
       - name: Setup Java JDK
         uses: actions/setup-java@v4

@@ -116,7 +116,7 @@ services:
     ports:
       - 8081:8080
     volumes:
-      - ./mappings:/home/wiremock/mappings
+      - ../../frontend/cypress/mappings:/home/wiremock/mappings
     healthcheck:
       test: [
           "CMD-SHELL",

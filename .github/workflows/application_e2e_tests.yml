@@ -36,7 +36,10 @@ jobs:
       - name: "Download 'workflow_share' artifact"
         uses: actions/download-artifact@v4
         with:
+          github-token: ${{ secrets.GH_PAT }}
           name: workflow_share
+          repository: MTES-MCT/monitorfish
+          run-id: ${{ github.event.workflow_run.id }}
 
       - name: Set STATUS_CHECK_ID environment variable
         run: |
@@ -135,7 +138,10 @@ jobs:
       - name: "Download 'workflow_share' artifact"
         uses: actions/download-artifact@v4
         with:
+          github-token: ${{ secrets.GH_PAT }}
           name: workflow_share
+          repository: MTES-MCT/monitorfish
+          run-id: ${{ github.event.workflow_run.id }}
 
       - name: Set STATUS_CHECK_ID environment variable
         run: |

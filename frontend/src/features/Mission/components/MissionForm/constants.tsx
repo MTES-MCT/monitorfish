@@ -1,9 +1,10 @@
 import { isCypress } from '@utils/isCypress'
-import { MissionAction } from 'domain/types/missionAction'
+
+import { MissionAction } from '../../../../domain/types/missionAction'
 
 import type { MissionActionFormValues } from './types'
+import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
 import type { Option, Undefine } from '@mtes-mct/monitor-ui'
-import type { LegacyControlUnit } from 'domain/types/legacyControlUnit'
 
 export const INITIAL_MISSION_CONTROL_UNIT: LegacyControlUnit.LegacyControlUnitDraft = {
   administration: undefined,

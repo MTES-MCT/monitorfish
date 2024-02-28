@@ -45,6 +45,7 @@ jobs:
       - name: Download image
         uses: ishworkh/container-image-artifact-download@v1.0.0
         with:
+          commit_sha: ${{ github.event.workflow_run.head_commit.id }}
           image: monitorfish-app:${{ env.VERSION }}
           token: ${{ secrets.GITHUB_TOKEN }}
           workflow: "Application Build"
@@ -89,9 +90,9 @@ jobs:
       - uses: LouisBrunner/checks-action@v2.0.0
         if: ${{ always() }}
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          name: Application Cypress E2E tests
           conclusion: ${{ job.status }}
+          name: Application Cypress E2E tests
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   e2e_multi_windows_test:
     name: Run E2E multi windows tests
@@ -115,6 +116,7 @@ jobs:
       - name: Download image
         uses: ishworkh/container-image-artifact-download@v1.0.0
         with:
+          commit_sha: ${{ github.event.workflow_run.head_commit.id }}
           image: monitorfish-app:${{ env.VERSION }}
           token: ${{ secrets.GITHUB_TOKEN }}
           workflow: "Application Build"
@@ -147,6 +149,6 @@ jobs:
       - uses: LouisBrunner/checks-action@v2.0.0
         if: ${{ always() }}
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          name: Application Puppeteer E2E tests
           conclusion: ${{ job.status }}
+          name: Application Puppeteer E2E tests
+          token: ${{ secrets.GITHUB_TOKEN }}

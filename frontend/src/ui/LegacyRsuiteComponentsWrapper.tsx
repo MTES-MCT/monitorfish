@@ -429,25 +429,33 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
   }
 
   .rs-checkbox {
-    .rs-checkbox-wrapper {
-      .rs-checkbox-inner {
-        &:before {
-          background-color: ${p => p.theme.color.gainsboro} !important;
-          border: solid 2px ${p => p.theme.color.lightGray} !important;
-          border-radius: 0;
-        }
-      }
-    }
+    .rs-checkbox-checker {
+      min-height: 0;
 
-    &.rs-checkbox-checked {
       .rs-checkbox-wrapper {
         .rs-checkbox-inner {
           &:before {
-            background-color: ${p => p.theme.color.charcoal} !important;
-            border: solid 2px ${p => p.theme.color.charcoal} !important;
+            background-color: ${p => p.theme.color.gainsboro} !important;
+            border: solid 2px ${p => p.theme.color.lightGray} !important;
+            border-radius: 0;
+          }
+        }
+      }
+
+      &.rs-checkbox-checked {
+        .rs-checkbox-wrapper {
+          .rs-checkbox-inner {
+            &:before {
+              background-color: ${p => p.theme.color.charcoal} !important;
+              border: solid 2px ${p => p.theme.color.charcoal} !important;
+            }
           }
         }
       }
     }
+  }
+
+  .rs-picker {
+    width: auto;
   }
 `

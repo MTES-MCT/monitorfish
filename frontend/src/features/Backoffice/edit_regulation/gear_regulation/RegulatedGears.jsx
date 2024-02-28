@@ -321,7 +321,6 @@ const CustomMultiCascader = styled(MultiCascader)`
 
 const GearCheckBox = styled(CustomCheckbox)`
   padding-right: 11px;
-  margin-bottom: 15px;
 `
 
 const DerogationRadioWrapper = styled.div`

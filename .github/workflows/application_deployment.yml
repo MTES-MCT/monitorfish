@@ -1,4 +1,4 @@
-name: CI/CD Back & Front
+name: Application Deployment
 
 on:
   workflow_run:
@@ -6,6 +6,8 @@ on:
       - "Application E2E Tests"
     types:
       - completed
+    branches:
+      - master
 
 jobs:
   push_to_registry:

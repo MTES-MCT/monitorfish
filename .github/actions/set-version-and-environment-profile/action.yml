@@ -1,7 +1,7 @@
 # TODO Rename "dev" to "integration" and "prod" to "production".
 
 name: "Set Version and Environment Profile"
-description: "Set ENV_PROFILE & VERSION env vars for the current workflow run."
+description: "Set ENV_PROFILE, IS_RELEASE & VERSION env vars for the current workflow run."
 
 runs:
   using: "composite"
@@ -16,14 +16,18 @@ runs:
       with:
         repository: mtes-mct/monitorfish
 
-    - name: "Set environment as 'dev' by default"
+    - name: "Set environment profile as 'dev' by default"
       shell: bash
-      run: echo "ENV_PROFILE=dev" >> $GITHUB_ENV
+      run: |
+        echo "ENV_PROFILE=dev" >> $GITHUB_ENV
+        echo "IS_RELEASE=false" >> $GITHUB_ENV
 
-    - name: "Set environment as 'prod' if it's a release"
+    - name: "Set environment profile as 'prod' if it's a release"
       if: startsWith(github.ref, 'refs/tags/v1') || startsWith(github.ref, 'refs/heads/v1') || startsWith(github.ref, 'refs/tags/v2') || startsWith(github.ref, 'refs/heads/v2')
       shell: bash
-      run: echo "ENV_PROFILE=prod" >> $GITHUB_ENV
+      run: |
+        echo "ENV_PROFILE=prod" >> $GITHUB_ENV
+        echo "IS_RELEASE=true" >> $GITHUB_ENV
 
     - name: Set version output
       id: set-version
@@ -34,10 +38,12 @@ runs:
         else
             export VERSION=${{ steps.get-last-release-version.outputs.release }}
         fi
+        echo "IS_RELEASE=${{ steps.get-last-release-version.outputs.release }}" >> $GITHUB_ENV
         echo "VERSION=$VERSION" >> $GITHUB_ENV
 
     - name: Print environment profile and version
       shell: bash
       run: |
         echo "ENV_PROFILE ${{ env.ENV_PROFILE }}"
+        echo "IS_RELEASE ${{ env.IS_RELEASE }}"
         echo "VERSION: ${{ env.VERSION }}"

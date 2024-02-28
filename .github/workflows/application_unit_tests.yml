@@ -30,6 +30,9 @@ jobs:
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Set version and environment profile
         uses: ./.github/actions/set-version-and-environment-profile@v1
 
@@ -39,9 +42,6 @@ jobs:
           # https://github.com/actions/setup-java/blob/main/README.md#Supported-distributions
           distribution: zulu
           java-version: 17
-
-      - name: Checkout
-        uses: actions/checkout@v4
 
       - name: Unit test
         run: make test-back

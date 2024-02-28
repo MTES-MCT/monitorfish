@@ -94,7 +94,7 @@ jobs:
         with:
           check_id: application-e2e-cypress-${{ github.event.workflow_run.head_commit.id }}
           conclusion: ${{ job.status }}
-          name: Application Cypress E2E tests
+          details_url: "https://github.com/MTES-MCT/monitorfish/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}"
           sha: ${{ github.event.workflow_run.head_commit.id }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -123,7 +123,6 @@ jobs:
         uses: ishworkh/container-image-artifact-download@v1.0.0
         with:
           commit_sha: ${{ github.event.workflow_run.head_commit.id }}
-          details_url: https://github.com/MTES-MCT/monitorfish/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}
           image: monitorfish-app:${{ env.VERSION }}
           token: ${{ secrets.GITHUB_TOKEN }}
           workflow: "Application Build"
@@ -158,7 +157,6 @@ jobs:
         with:
           check_id: application-e2e-puppeteer-${{ github.event.workflow_run.head_commit.id }}
           conclusion: ${{ job.status }}
-          details_url: https://github.com/MTES-MCT/monitorfish/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}
-          name: Application Puppeteer E2E tests
+          details_url: "https://github.com/MTES-MCT/monitorfish/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}"
           sha: ${{ github.event.workflow_run.head_commit.id }}
           token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,86 @@
+name: Application Unit Tests
+
+on:
+  push:
+    paths:
+      - "**.css"
+      - "**.kt"
+      - "**.png"
+      - "**.js"
+      - "**.json"
+      - "**.snap"
+      - "**.ts"
+      - "**.tsx"
+      - "**.yml"
+      - ".github/workflows/cicd.yml"
+      - "infra/configurations/**.properties"
+      - "infra/docker/app/**"
+      - "**.sql"
+      - "backend/pom.xml"
+      - "backend/build.gradle.kts"
+      - "Makefile"
+      - "frontend"
+  schedule:
+    - cron: "38 11 */3 * *"
+
+jobs:
+  unit_test_backend:
+    name: Run backend unit tests
+    runs-on: ubuntu-22.04
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+    steps:
+      - id: foo
+        uses: actions/get-version-and-environment-profile@v1
+
+      - name: Print version
+        run: echo "VERSION:${{ env.VERSION }} ENV_PROFILE:${{ env.ENV_PROFILE }}"
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          # https://github.com/actions/setup-java/blob/main/README.md#Supported-distributions
+          distribution: zulu
+          java-version: 17
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Unit test
+        run: make test-back
+
+  unit_test_frontend:
+    name: Run frontend unit tests
+    runs-on: ubuntu-22.04
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: npm
+          cache-dependency-path: ./frontend/package-lock.json
+          node-version: 20
+
+      - name: Install Node.js dependencies
+        run: npm ci
+        working-directory: ./frontend
+
+      - name: Lint Frontend
+        run: npm run test:lint:partial
+        working-directory: ./frontend
+
+      - name: Check Frontend types
+        run: npm run test:type
+        working-directory: ./frontend
+
+      - name: Unit test
+        run: npm run test:unit --coverage
+        working-directory: ./frontend
+
+      - name: Upload coverage
+        run: npx codecov
+        working-directory: ./frontend

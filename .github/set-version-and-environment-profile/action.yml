@@ -1,0 +1,43 @@
+# TODO Rename "dev" to "integration" and "prod" to "production".
+
+name: "Set Version and Environment Profile"
+description: "Set ENV_PROFILE & VERSION env vars for the current workflow run."
+
+runs:
+  using: "composite"
+  steps:
+    - name: Is it a Dependabot PR?
+      shell: bash
+      run: echo ${{ contains(github.ref, 'dependabot') }}
+
+    - name: Get last release version
+      id: get-last-release-version
+      uses: pozetroninc/github-action-get-latest-release@master
+      with:
+        repository: mtes-mct/monitorfish
+
+    - name: "Set environment as 'dev' by default"
+      shell: bash
+      run: echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+
+    - name: "Set environment as 'prod' if it's a release"
+      if: startsWith(github.ref, 'refs/tags/v1') || startsWith(github.ref, 'refs/heads/v1') || startsWith(github.ref, 'refs/tags/v2') || startsWith(github.ref, 'refs/heads/v2')
+      shell: bash
+      run: echo "ENVIRONMENT=prod" >> $GITHUB_ENV
+
+    - name: Set version output
+      id: set-version
+      shell: bash
+      run: |
+        if [ "${ENV_PROFILE}" != "prod" ]; then
+            export VERSION=${{ steps.get-last-release-version.outputs.release }}_snapshot
+        else
+            export VERSION=${{ steps.get-last-release-version.outputs.release }}
+        fi
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+    - name: Print environment profile and version
+      shell: bash
+      run: |
+        echo "ENV_PROFILE ${{ env.ENV_PROFILE }}"
+        echo "VERSION: ${{ env.VERSION }}"

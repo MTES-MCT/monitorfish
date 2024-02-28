@@ -42,6 +42,7 @@ jobs:
         uses: ishworkh/container-image-artifact-download@v1.0.0
         with:
           image: monitorfish-app:${{ env.VERSION }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           workflow: "Application Build"
 
       - name: Run docker images
@@ -104,6 +105,8 @@ jobs:
         uses: ishworkh/container-image-artifact-download@v1.0.0
         with:
           image: monitorfish-app:${{ env.VERSION }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: "Application Build"
 
       - name: Docker login
         run: |

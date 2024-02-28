@@ -37,7 +37,7 @@ context('Side Window > Mission Form > Land Control', () => {
     // Port de contrôle
     // Try to select a port with custom search (the "-" missing but the port should be found)
     cy.get('#port').parent().click({ force: true })
-    cy.get('.rs-picker-search-bar-input').type('saintmalo{enter}', { force: true })
+    cy.get('.rs-search-box-input').type('saintmalo{enter}', { force: true })
     // Should select the right port
     cy.get('.Field-Select').contains('Saint-Malo (FRSML)')
 

@@ -265,10 +265,10 @@ context('New Regulation', () => {
     cy.get('*[data-cy^="open-regulated-species"]').scrollIntoView().click({ force: true }).scrollIntoView()
     cy.get('.rs-picker-toggle-placeholder').filter(':contains("catégories d\'espèces")').eq(0).click({ timeout: 10000 })
     cy.wait(200)
-    cy.get('.rs-picker-search-bar-input').type('Espèce{enter}', { force: true })
+    cy.get('.rs-search-box-input').type('Espèce{enter}', { force: true })
     cy.get('.rs-picker-toggle-placeholder').filter(':contains("des espèces")').eq(0).click({ timeout: 10000 })
     cy.wait(200)
-    cy.get('.rs-picker-search-bar-input').type('HKE{enter}', { force: true })
+    cy.get('.rs-search-box-input').type('HKE{enter}', { force: true })
 
     // Values are found
     cy.get('[data-cy="tag-Auvergne-Rhône-Alpes"]').should('exist')

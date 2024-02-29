@@ -264,7 +264,7 @@ context('Side Window > Mission Form > Main Form', () => {
           startDateTimeUtc: '2023-02-01T12:34:00.000Z'
         }
       },
-      10
+      15
     )
       .its('response.statusCode')
       .should('eq', 201)

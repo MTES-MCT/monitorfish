@@ -11,6 +11,8 @@ context('Side Window > Mission List > Export Activity Reports', () => {
 
     cy.fill('Début', [2020, 1, 17])
     cy.fill('Fin', [2021, 1, 12])
+    // Hack to close the date picker popup
+    cy.get('h4').contains('Exporter les ACT-REP').click().wait(250)
     cy.fill('JDP', 'JDP NS-01')
 
     cy.intercept(

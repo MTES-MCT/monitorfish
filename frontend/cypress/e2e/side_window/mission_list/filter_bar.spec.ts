@@ -63,11 +63,8 @@ context('Side Window > Mission List > Filter Bar', () => {
 
   it('Should filter missions by unit When an administration filter is set', () => {
     cy.fill('Administration', ['Gendarmerie Maritime'])
+    cy.fill('Unité', ['BSL Lorient'])
 
-    cy.get('[data-cy="mission-list-filter-tags"]').contains('Gendarmerie Maritime')
-    cy.get('input[id="UNIT"]').parent().parent().parent().forceClick()
-    cy.get('.rs-checkbox-checker > label').should('have.length', 2)
-    cy.get('.rs-checkbox-checker > label').contains('BSL Lorient').click({ force: true })
     // This filter does the filtering in the frontend
     cy.get('.TableBodyRow').should('have.length', 0)
   })

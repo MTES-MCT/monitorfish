@@ -73,7 +73,7 @@ const Title = styled.div`
   color: ${COLORS.slateGray};
   background: ${COLORS.lightGray};
   padding: 8.5px 10px 8px 20px;
-  font-size: 0.8rem;
+  font-size: 13px;
   flex-shrink: 0;
   flex-grow: 2;
   display: flex;

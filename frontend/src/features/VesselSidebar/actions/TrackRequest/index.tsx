@@ -125,10 +125,10 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
 }
 
 const Section = styled.div`
-  padding: 1rem;
+  padding: 16px;
 
   > p {
-    margin: 0 0 0.5rem;
+    margin: 0 0 8px;
   }
 `
 
@@ -141,7 +141,7 @@ const Header = styled.div`
 `
 
 const Field = styled.div`
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
 `
 
 const TrackRequestBody = styled(MapComponent)<{

@@ -105,7 +105,7 @@ const ExportTrackButton = styled(PrimaryButton)<{
   align-self: flex-start;
   cursor: ${p => (p.isClickable ? 'pointer' : 'not-allowed')};
   margin: 0;
-  padding: 0.25rem 0.5rem 0.5rem 0.25rem;
+  padding: 4px 8px 8px 4px;
   text-align: left;
 
   :hover,
@@ -115,7 +115,7 @@ const ExportTrackButton = styled(PrimaryButton)<{
 `
 
 const ExportIcon = styled(ExportSVG)`
-  height: 1.5rem;
-  margin-right: 0.25rem;
-  width: 1.5rem;
+  height: 24px;
+  margin-right: 4px;
+  width: 24px;
 `

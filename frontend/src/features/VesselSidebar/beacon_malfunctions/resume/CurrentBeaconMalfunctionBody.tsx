@@ -33,7 +33,7 @@ export function CurrentBeaconMalfunctionBody({
       ).style.background = vesselStatus.color
       ;(
         (vesselStatusRef.current as HTMLDivElement).querySelector('.rs-picker-select') as HTMLElement
-      ).style.setProperty('margin', '0 45px 0 0', 'important')
+      ).style.setProperty('margin', '0 16px 0 0', 'important')
       ;(
         (vesselStatusRef.current as HTMLDivElement).querySelector('.rs-picker-toggle-value') as HTMLElement
       ).style.color = vesselStatus.textColor
@@ -81,6 +81,30 @@ const Body = styled.div`
   display: flex;
   flex-wrap: wrap;
   background: ${COLORS.white};
+  position: relative;
+
+  .rs-picker-toggle-wrapper {
+    width: 184px !important;
+
+    > .rs-picker-toggle {
+      height: 30px !important;
+      padding: 2px 8px !important;
+
+      .rs-picker-toggle-value {
+        span {
+          display: inline-block !important;
+          overflow: hidden !important;
+          text-overflow: ellipsis !important;
+          white-space: nowrap !important;
+          width: 130px !important;
+        }
+      }
+
+      .rs-picker-caret-icon {
+        top: 3px !important;
+      }
+    }
+  }
 `
 
 const TimeAgo = styled(TimeAgoSVG)``

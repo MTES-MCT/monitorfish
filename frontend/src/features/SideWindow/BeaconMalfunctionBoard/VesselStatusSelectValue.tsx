@@ -11,12 +11,18 @@ export function VesselStatusSelectValue({ item }) {
   )
 }
 
-const Value = styled.div``
+const Value = styled.div`
+  align-items: center;
+  display: flex;
+  height: 22px;
+`
 const valueStyle = {
   color: '#282F3E'
 }
 
-const Text = styled.span``
+const Text = styled.span`
+  line-height: 1;
+`
 const textStyle = {
   marginLeft: 5
 }

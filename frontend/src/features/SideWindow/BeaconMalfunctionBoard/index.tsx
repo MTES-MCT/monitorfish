@@ -381,6 +381,11 @@ const VesselStatusSelectWrapper = styled.div``
 const Header = styled.div`
   display: flex;
   height: 45px;
+
+  .rs-picker-toggle-wrapper {
+    height: 40px !important;
+    margin-left: 16px;
+  }
 `
 
 const Columns = styled.div``

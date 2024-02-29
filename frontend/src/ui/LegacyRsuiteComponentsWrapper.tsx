@@ -458,4 +458,8 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
   .rs-picker {
     width: auto;
   }
+
+  .rs-picker-popup {
+    z-index: 9999;
+  }
 `

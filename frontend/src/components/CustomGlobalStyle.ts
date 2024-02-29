@@ -18,14 +18,19 @@ export const CustomGlobalStyle = createGlobalStyle`
       'Droid Sans',
       'Helvetica Neue',
       sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-size: 13px;
+    }
 
   html,
   body,
   #root {
     height: 100%;
+  }
+
+  #root {
+    font-size: 13px;
   }
 
   /* TODO Attempt to progressively migrate to "box-sizing: border-box" everywhere. */
@@ -433,5 +438,11 @@ export const CustomGlobalStyle = createGlobalStyle`
   .ol-control.zoom>button {
     width: 25px;
     height: 25px;
+  }
+
+  .rs-picker-popup {
+    border-radius: 0;
+    font-size: 13px;
+    z-index: 9999;
   }
 `

@@ -12,25 +12,26 @@ export function formatDateLabel(dateLabel: string) {
   )
 }
 
-export function getActionTitle(itemTitle: string, details: string | undefined, placeholder: string): ReactNode {
-  if (!itemTitle) {
-    return <StyledSpan>{details}</StyledSpan>
-  }
-
-  if (!details) {
+export function getActionTitle(
+  subject: string | undefined,
+  details: string | undefined,
+  placeholder: string
+): ReactNode {
+  if (details) {
     return (
-      <Placeholder>
-        {itemTitle} {placeholder}
-      </Placeholder>
+      <StyledSpan>
+        {!!subject && (
+          <>
+            {subject}
+            <br />
+          </>
+        )}
+        <strong>{details}</strong>
+      </StyledSpan>
     )
   }
 
-  return (
-    <StyledSpan>
-      {itemTitle} <br />
-      <strong>{details}</strong>
-    </StyledSpan>
-  )
+  return <Placeholder>{`${subject ? `${subject} – ` : ''}${placeholder}`}</Placeholder>
 }
 
 /**

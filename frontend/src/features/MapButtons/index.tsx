@@ -1,3 +1,5 @@
+import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
+
 import { AlertsMapButton } from './AlertsMapButton'
 import { BeaconMalfunctionsMapButton } from './BeaconMalfunctionsMapButton'
 import { FavoriteVessels } from './FavoriteVessels'
@@ -38,15 +40,18 @@ export function MapButtons() {
 
   return (
     <>
-      {isSuperUser && isAlertsMapButtonDisplayed && <AlertsMapButton />}
-      {isSuperUser && isBeaconMalfunctionsMapButtonDisplayed && <BeaconMalfunctionsMapButton />}
-      {isVesselFiltersMapButtonDisplayed && <VesselFiltersMapButton />}
-      {isVesselVisibilityMapButtonDisplayed && <VesselVisibilityMapButton />}
-      {isMeasurementMapButtonDisplayed && <MeasurementMapButton />}
-      {isInterestPointMapButtonDisplayed && <InterestPointMapButton />}
-      {isVesselLabelsMapButtonDisplayed && <VesselLabelsMapButton />}
-      {isFavoriteVesselsMapButtonDisplayed && <FavoriteVessels />}
-      {isSuperUser && isFavoriteVesselsMapButtonDisplayed && <MissionsMenu />}
+      <LegacyRsuiteComponentsWrapper>
+        {isSuperUser && isAlertsMapButtonDisplayed && <AlertsMapButton />}
+        {isSuperUser && isBeaconMalfunctionsMapButtonDisplayed && <BeaconMalfunctionsMapButton />}
+        {isVesselFiltersMapButtonDisplayed && <VesselFiltersMapButton />}
+        {isVesselVisibilityMapButtonDisplayed && <VesselVisibilityMapButton />}
+        {isMeasurementMapButtonDisplayed && <MeasurementMapButton />}
+        {isInterestPointMapButtonDisplayed && <InterestPointMapButton />}
+        {isVesselLabelsMapButtonDisplayed && <VesselLabelsMapButton />}
+        {isFavoriteVesselsMapButtonDisplayed && <FavoriteVessels />}
+        {isSuperUser && isFavoriteVesselsMapButtonDisplayed && <MissionsMenu />}
+      </LegacyRsuiteComponentsWrapper>
+
       {isSuperUser && <ControlUnitListDialogButton />}
     </>
   )

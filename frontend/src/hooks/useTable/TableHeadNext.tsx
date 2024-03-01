@@ -90,7 +90,7 @@ const Wrapper = styled.thead`
 
 const Cell = styled.th`
   font-weight: inherit;
-  padding: 0.25rem;
+  padding: 4px;
 `
 
 const StyledCheckbox = styled(Checkbox)`

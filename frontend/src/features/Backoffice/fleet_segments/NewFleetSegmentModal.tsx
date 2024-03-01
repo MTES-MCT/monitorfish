@@ -1,3 +1,5 @@
+import { Field } from '@mtes-mct/monitor-ui'
+import { isCypress } from '@utils/isCypress'
 import { useMemo, useState } from 'react'
 import { Footer, Modal, TagPicker } from 'rsuite'
 import styled from 'styled-components'
@@ -8,6 +10,8 @@ import { cleanInputString } from '../../../utils/cleanInputString'
 import StyledModalHeader from '../../commonComponents/StyledModalHeader'
 import { PrimaryButton } from '../../commonStyles/Buttons.style'
 import { FleetSegmentInput, INPUT_TYPE, renderTagPickerValue } from '../tableCells'
+
+const IS_CYPRESS = isCypress()
 
 // TODO Use Formik + Yup to handle and validate form
 export function NewFleetSegmentModal({ faoAreasList, onCancel, onSubmit, year }) {
@@ -43,7 +47,15 @@ export function NewFleetSegmentModal({ faoAreasList, onCancel, onSubmit, year })
   }
 
   return (
-    <ModalWithCustomHeight backdrop onClose={onCancel} open size="xs" style={{ marginTop: 50 }}>
+    <ModalWithCustomHeight
+      backdrop
+      // Keep modal open when pressing escape key in Cypress (because it'd used by `cy.fill()` to close picker popups)
+      keyboard={!IS_CYPRESS}
+      onClose={onCancel}
+      open
+      size="xs"
+      style={{ marginTop: 50 }}
+    >
       <StyledModalHeader>
         <Modal.Title>
           <Title>Ajouter un segment de flotte</Title>
@@ -52,100 +64,121 @@ export function NewFleetSegmentModal({ faoAreasList, onCancel, onSubmit, year })
       <Body>
         <Columns>
           <Column>
-            <Label htmlFor="newFleetSegmentName">Nom</Label>
-            <FleetSegmentInput
-              afterChange={undefined}
-              dataCy={undefined}
-              dataKey={undefined}
-              id="newFleetSegmentName"
-              inputType={INPUT_TYPE.STRING}
-              isDisabled={false}
-              maxLength={null}
-              onChange={(_id, _key, value) => setSegment(value)}
-              value={segment}
-              withinCell={false}
-            />
+            {/* TODO Replace with real TextInput component from monitor-ui. */}
+            <Field className="Field-TextInput">
+              <Label htmlFor="newFleetSegmentName">Nom</Label>
+              <FleetSegmentInput
+                afterChange={undefined}
+                dataCy={undefined}
+                dataKey={undefined}
+                id="newFleetSegmentName"
+                inputType={INPUT_TYPE.STRING}
+                isDisabled={false}
+                maxLength={null}
+                onChange={(_id, _key, value) => setSegment(value)}
+                value={segment}
+                withinCell={false}
+              />
+            </Field>
           </Column>
           <Column>
-            <Label htmlFor="newFleetSegmentImpactRiskFactor">Note d’impact</Label>
-            <FleetSegmentInput
-              afterChange={undefined}
-              dataCy={undefined}
-              dataKey={undefined}
-              id="newFleetSegmentImpactRiskFactor"
-              inputType={INPUT_TYPE.DOUBLE}
-              isDisabled={false}
-              maxLength={50}
-              onChange={(_id, _key, value) => setImpactRiskFactor(value)}
-              value={impactRiskFactor}
-              withinCell={false}
-            />
+            {/* TODO Replace with real TextInput component from monitor-ui. */}
+            <Field className="Field-TextInput">
+              <Label htmlFor="newFleetSegmentImpactRiskFactor">Note d’impact</Label>
+              <FleetSegmentInput
+                afterChange={undefined}
+                dataCy={undefined}
+                dataKey={undefined}
+                id="newFleetSegmentImpactRiskFactor"
+                inputType={INPUT_TYPE.DOUBLE}
+                isDisabled={false}
+                maxLength={50}
+                onChange={(_id, _key, value) => setImpactRiskFactor(value)}
+                value={impactRiskFactor}
+                withinCell={false}
+              />
+            </Field>
           </Column>
         </Columns>
-        <Label htmlFor="newFleetSegmentDescription">Description</Label>
-        <FleetSegmentInput
-          afterChange={undefined}
-          dataCy="create-fleet-segment-description"
-          dataKey={undefined}
-          id="newFleetSegmentDescription"
-          inputType={INPUT_TYPE.STRING}
-          isDisabled={false}
-          maxLength={null}
-          onChange={(_id, _key, value) => setSegmentName(value)}
-          value={segmentName}
-          withinCell={false}
-        />
-        <Label>Engins</Label>
-        <TagPicker
-          data={gearsFAOList.map(gear => ({ label: gear.code, value: gear.code }))}
-          data-cy="create-fleet-segment-gears"
-          onChange={setGears}
-          placeholder="Engins"
-          placement="auto"
-          renderValue={(_, items) => renderTagPickerValue(items)}
-          searchable
-          style={tagPickerStyle}
-          value={gears}
-          virtualized
-        />
-        <Label>Espèces ciblées</Label>
-        <TagPicker
-          data={faoSpeciesAsOptions}
-          data-cy="create-fleet-segment-targeted-species"
-          onChange={setTargetSpecies}
-          placeholder="Espèces ciblées"
-          placement="auto"
-          renderValue={(_, items) => renderTagPickerValue(items)}
-          searchable
-          style={tagPickerStyle}
-          value={targetSpecies}
-          virtualized
-        />
-        <Label>Prises accessoires</Label>
-        <TagPicker
-          data={faoSpeciesAsOptions}
-          data-cy="create-fleet-segment-incidental-species"
-          onChange={setBycatchSpecies}
-          placeholder="Prises accessoires"
-          placement="auto"
-          renderValue={(_, items) => renderTagPickerValue(items)}
-          searchable
-          style={tagPickerStyle}
-          value={bycatchSpecies}
-          virtualized
-        />
-        <Label>Zones FAO</Label>
-        <TagPicker
-          data={faoAreasList?.map(_faoAreas => ({ label: _faoAreas, value: _faoAreas }))}
-          data-cy="create-fleet-segment-fao-zones"
-          onChange={setFaoAreas}
-          placeholder="Zones FAO"
-          placement="auto"
-          renderValue={(_, items) => renderTagPickerValue(items)}
-          searchable
-          style={tagPickerStyle}
-          value={faoAreas}
-        />
+        {/* TODO Replace with real TextInput component from monitor-ui. */}
+        <Field className="Field-TextInput">
+          <Label htmlFor="newFleetSegmentDescription">Description</Label>
+          <FleetSegmentInput
+            afterChange={undefined}
+            dataCy="create-fleet-segment-description"
+            dataKey={undefined}
+            id="newFleetSegmentDescription"
+            inputType={INPUT_TYPE.STRING}
+            isDisabled={false}
+            maxLength={null}
+            onChange={(_id, _key, value) => setSegmentName(value)}
+            value={segmentName}
+            withinCell={false}
+          />
+        </Field>
+        {/* TODO Replace with real MultiSelect component from monitor-ui. */}
+        <Field className="Field-MultiSelect">
+          <Label>Engins</Label>
+          <TagPicker
+            data={gearsFAOList.map(gear => ({ label: gear.code, value: gear.code }))}
+            data-cy="create-fleet-segment-gears"
+            onChange={setGears}
+            placeholder="Engins"
+            placement="auto"
+            renderValue={(_, items) => renderTagPickerValue(items)}
+            searchable
+            style={tagPickerStyle}
+            value={gears}
+            virtualized
+          />
+        </Field>
+        {/* TODO Replace with real MultiSelect component from monitor-ui. */}
+        <Field className="Field-MultiSelect">
+          <Label>Espèces ciblées</Label>
+          <TagPicker
+            data={faoSpeciesAsOptions}
+            data-cy="create-fleet-segment-targeted-species"
+            onChange={setTargetSpecies}
+            placeholder="Espèces ciblées"
+            placement="auto"
+            renderValue={(_, items) => renderTagPickerValue(items)}
+            searchable
+            style={tagPickerStyle}
+            value={targetSpecies}
+            virtualized
+          />
+        </Field>
+        {/* TODO Replace with real MultiSelect component from monitor-ui. */}
+        <Field className="Field-MultiSelect">
+          <Label>Prises accessoires</Label>
+          <TagPicker
+            data={faoSpeciesAsOptions}
+            data-cy="create-fleet-segment-incidental-species"
+            onChange={setBycatchSpecies}
+            placeholder="Prises accessoires"
+            placement="auto"
+            renderValue={(_, items) => renderTagPickerValue(items)}
+            searchable
+            style={tagPickerStyle}
+            value={bycatchSpecies}
+            virtualized
+          />
+        </Field>
+        {/* TODO Replace with real MultiSelect component from monitor-ui. */}
+        <Field className="Field-MultiSelect">
+          <Label>Zones FAO</Label>
+          <TagPicker
+            data={faoAreasList?.map(_faoAreas => ({ label: _faoAreas, value: _faoAreas }))}
+            data-cy="create-fleet-segment-fao-zones"
+            onChange={setFaoAreas}
+            placeholder="Zones FAO"
+            placement="auto"
+            renderValue={(_, items) => renderTagPickerValue(items)}
+            searchable
+            style={tagPickerStyle}
+            value={faoAreas}
+          />
+        </Field>
       </Body>
       <Footer>
         <ValidateButton data-cy="create-fleet-segment" onClick={handleSubmit}>

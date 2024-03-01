@@ -1,8 +1,9 @@
+import { openSideWindowAlertList } from './utils'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
 context('Side Window > Alert List', () => {
   beforeEach(() => {
-    cy.visit('/side_window')
+    openSideWindowAlertList()
   })
 
   it('Going to beacon malfunction then back in alerts Should not throw an exception', () => {

@@ -43,12 +43,12 @@ export function BeaconMalfunctionDetails({
       // TODO Use styled-component and avoid useEffect to update these elements style.
       const vesselStatusElement = vesselStatusRef.current.querySelector(
         '[data-cy="side-window-beacon-malfunctions-vessel-status"]'
-      ) as HTMLElement
+      ) as HTMLElement | null
       if (vesselStatusElement?.style) {
         vesselStatusElement.style.color = vesselStatus.textColor
       }
 
-      const selectElement = vesselStatusRef.current.querySelector('.rs-picker-select') as HTMLElement
+      const selectElement = vesselStatusRef.current.querySelector('.rs-picker-select') as HTMLElement | null
       if (selectElement?.style) {
         selectElement.style.background = vesselStatus.color
         selectElement.style.setProperty('margin', '2px 10px 10px 0px', 'important')
@@ -358,4 +358,7 @@ const timeAgoStyle = {
   width: 15
 }
 
-const BeaconMalfunctionDetailsWrapper = styled.div``
+const BeaconMalfunctionDetailsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`

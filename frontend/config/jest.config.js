@@ -21,6 +21,7 @@ module.exports = {
             '@hooks/*': ['hooks/*'],
             '@libs/*': ['libs/*'],
             '@pages/*': ['pages/*'],
+            '@store': ['store/index.ts'],
             '@store/*': ['store/*'],
             '@utils/*': ['utils/*']
           },

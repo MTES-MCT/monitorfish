@@ -17,7 +17,7 @@ export function CellUsingVesselProperty({ vesselProperty, ...props }: CellUsingV
   return <Cell {...props}>{rowData => rowData.vesselProperties[vesselProperty]}</Cell>
 }
 
-type CheckedCellProps = CellProps & {
+type CheckedCellProps = CellProps<any> & {
   onChange: (vesselFeatureId: string, isChecked: boolean) => void
 }
 export function CheckedCell({ dataKey, onChange, rowData, ...props }: CheckedCellProps) {
@@ -65,7 +65,7 @@ export function TimeAgoCell({ dataKey, rowData, ...props }: InnerCellProps) {
   return <Cell {...props}>{dataKey && rowData[dataKey] ? timeago.format(rowData[dataKey], 'fr') : ''}</Cell>
 }
 
-export function CellWithTitle({ dataKey, rowData, ...props }: CellProps) {
+export function CellWithTitle({ dataKey, rowData, ...props }: CellProps<any>) {
   return (
     <Cell title={dataKey && rowData.vesselProperties[dataKey]} {...props}>
       {dataKey && rowData.vesselProperties[dataKey]}

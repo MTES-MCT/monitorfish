@@ -7,7 +7,6 @@ import {
   Size,
   TextInput,
   useKey,
-  useNewWindow,
   usePrevious
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
@@ -34,8 +33,6 @@ export type FilterBarProps = {
   searchQuery: string | undefined
 }
 export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
-  const { newWindowContainerRef } = useNewWindow()
-
   const listFilterValues = useMainAppSelector(store => store.missionList.listFilterValues)
 
   const [isCustomDateRangeOpen, setIsCustomDateRangeOpen] = useState(false)
@@ -99,7 +96,7 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           <TextInput
             Icon={Icon.Search}
             isLabelHidden
-            isLight
+            isTransparent
             label="Rechercher un navire"
             name="searchInput"
             onChange={onQueryChange}
@@ -111,28 +108,25 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
 
         <Row>
           <FormikSelect
-            baseContainer={newWindowContainerRef.current}
             isCleanable={false}
             isLabelHidden
-            isLight
+            isTransparent
             label="Période"
             name={MissionFilterType.DATE_RANGE}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.DATE_RANGE]}
             placeholder="Période"
           />
           <FormikSelect
-            baseContainer={newWindowContainerRef.current}
             isLabelHidden
-            isLight
+            isTransparent
             label="Origine"
             name={MissionFilterType.SOURCE}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.SOURCE]}
             placeholder="Origine"
           />
           <FormikMultiSelect
-            baseContainer={newWindowContainerRef.current}
             isLabelHidden
-            isLight
+            isTransparent
             label="Statut"
             name={MissionFilterType.STATUS}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.STATUS]}
@@ -140,10 +134,9 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             renderValue={(_, items) => (items.length > 0 ? <OptionValue>Statut ({items.length}) </OptionValue> : <></>)}
           />
           <FormikMultiSelect
-            baseContainer={newWindowContainerRef.current}
             disabled={administrationsAsOptions.length === 0}
             isLabelHidden
-            isLight
+            isTransparent
             label="Administration"
             name={MissionFilterType.ADMINISTRATION}
             options={administrationsAsOptions}
@@ -156,10 +149,9 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
           />
           <FormikMultiSelect
             key={unitMultiSelectKey}
-            baseContainer={newWindowContainerRef.current}
             disabled={activeAndFilteredUnitsAsOptions.length === 0}
             isLabelHidden
-            isLight
+            isTransparent
             label="Unité"
             name={MissionFilterType.UNIT}
             options={activeAndFilteredUnitsAsOptions}
@@ -169,9 +161,8 @@ export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
             style={{ minWidth: 200 }}
           />
           <FormikMultiSelect
-            baseContainer={newWindowContainerRef.current}
             isLabelHidden
-            isLight
+            isTransparent
             label="Type de mission"
             name={MissionFilterType.TYPE}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.TYPE]}

@@ -95,8 +95,8 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Engins à bord
     cy.fill('Ajouter un engin', 'MIS')
     cy.fill('Engin contrôlé', 'Oui')
-    cy.fill('Maillage déclaré', '10')
-    cy.fill('Maillage mesuré', '20')
+    cy.fill('Maillage déclaré', 10)
+    cy.fill('Maillage mesuré', 20)
     // This will modify the "Maillage mesuré" input as `undefined`
     cy.fill('Maillage non mesuré', true)
     cy.fill('MIS : autres mesures et dispositifs', 'Autres mesures.')
@@ -494,11 +494,6 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton("Éditer l'infraction")
 
     cy.fill('Résultat de l’infraction', 'Sans PV')
-    // Click the "X" button in the NATINF tag
-    cy.contains('23581 - Taille de maille non réglementaire')
-      .parentsUntil('.rs-picker-toggle')
-      .find('.rs-picker-toggle-clean')
-      .forceClick()
     cy.fill('NATINF', '23588')
     cy.fill('Observations sur l’infraction', "Une autre observation sur l'infraction")
 
@@ -727,8 +722,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Main Form
 
     // Add a PAM control unit
-    cy.get('span[role="button"][title="Clear"]').eq(0).click({ force: true })
-    cy.get('span[role="button"][title="Clear"]').eq(1).click({ force: true })
+    cy.fill('Administration 1', undefined)
     cy.fill('Unité 1', 'PAM Jeanne Barret')
 
     // -------------------------------------------------------------------------
@@ -748,12 +742,8 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.wait(500)
 
     // Remove the PAM control unit
-    cy.get('span[role="button"][title="Clear"]').eq(0).click({ force: true })
-    cy.wait(500)
-    cy.get('span[role="button"][title="Clear"]').eq(1).click({ force: true })
-    cy.wait(500)
+    cy.fill('Administration 1', undefined)
     cy.fill('Unité 1', 'Cultures marines 56')
-    cy.wait(500)
 
     cy.get('legend')
       .filter(':contains("Autre(s) contrôle(s) effectué(s) par l’unité sur le navire")')
@@ -806,8 +796,7 @@ context('Side Window > Mission Form > Sea Control', () => {
       .should('have.length', 0)
 
     // Add a PAM control unit
-    cy.get('span[role="button"][title="Clear"]').eq(0).click({ force: true })
-    cy.get('span[role="button"][title="Clear"]').eq(1).click({ force: true })
+    cy.fill('Administration 1', undefined)
     cy.fill('Unité 1', 'PAM Jeanne Barret')
 
     // -------------------------------------------------------------------------

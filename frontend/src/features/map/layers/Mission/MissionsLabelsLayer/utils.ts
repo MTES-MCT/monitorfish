@@ -1,6 +1,7 @@
 import { MissionLabelLine } from '../../../../../domain/entities/missionLabelLine'
 import { drawMovedLabelLine } from '../../../../../domain/entities/vessel/label'
 
+import type { FeatureAndLabel } from './types'
 import type { LegacyControlUnit } from '../../../../../domain/types/legacyControlUnit'
 
 const NOT_FOUND = -1
@@ -46,7 +47,15 @@ export function getLabelsOfFeaturesInExtent(
   })
 }
 
-export function clearPreviousLineFeatures(previousFeaturesAndLabels, featuresAndLabels, vectorSource) {
+export function clearPreviousLineFeatures(
+  previousFeaturesAndLabels: FeatureAndLabel[] | undefined,
+  featuresAndLabels: FeatureAndLabel[],
+  vectorSource
+) {
+  if (!previousFeaturesAndLabels) {
+    return
+  }
+
   const previousFeatureIdsList = previousFeaturesAndLabels.map(featureAndLabels => featureAndLabels.featureId)
   const featureIdsList = featuresAndLabels.map(featureAndLabels => featureAndLabels.featureId)
 

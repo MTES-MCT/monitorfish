@@ -1,5 +1,6 @@
+import { CustomGlobalStyle } from '@components/CustomGlobalStyle'
 import { useGetUserAuthorization } from '@hooks/authorization/useGetUserAuthorization'
-import { OnlyFontGlobalStyle, THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
+import { GlobalStyle, THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
 import { LandingPage } from '@pages/LandingPage'
 import { UnsupportedBrowserPage } from '@pages/UnsupportedBrowserPage'
 import { isBrowserSupported } from '@utils/isBrowserSupported'
@@ -72,7 +73,8 @@ export function App({ auth }: AppProps) {
 
   return (
     <ThemeProvider theme={THEME}>
-      <OnlyFontGlobalStyle />
+      <GlobalStyle />
+      <CustomGlobalStyle />
 
       <RsuiteCustomProvider locale={rsuiteFrFr}>
         <FrontendErrorBoundary>

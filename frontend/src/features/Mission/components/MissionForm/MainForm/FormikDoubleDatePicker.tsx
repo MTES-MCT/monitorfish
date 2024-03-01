@@ -13,24 +13,20 @@ export function FormikDoubleDatePicker() {
   return (
     <Wrapper>
       <div>
-        Du
         <FormikDatePicker
           baseContainer={newWindowContainerRef.current}
           isCompact
           isErrorMessageHidden
-          isLabelHidden
           isStringDate
           label="Début de mission"
           name="startDateTimeUtc"
           withTime
         />
-        au
         <FormikDatePicker
           baseContainer={newWindowContainerRef.current}
           isCompact
           isEndDate
           isErrorMessageHidden
-          isLabelHidden
           isStringDate
           label="Fin de mission"
           name="endDateTimeUtc"
@@ -48,10 +44,8 @@ const Wrapper = styled.div`
     display: flex;
 
     > .Field-DatePicker {
-      margin-left: 12px;
-
-      :first-child {
-        margin-right: 12px;
+      &:last-child {
+        margin-left: 12px;
       }
     }
   }

@@ -1,15 +1,12 @@
-import { usePrevious } from '@mtes-mct/monitor-ui'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Accent, Button, Icon, Size, THEME, usePrevious, IconButton } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { ReportingForm } from './ReportingForm'
-import { COLORS } from '../../../../../constants/constants'
 import { vesselsAreEquals } from '../../../../../domain/entities/vessel/vessel'
-import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import { PrimaryButton } from '../../../../commonStyles/Buttons.style'
-import CloseIconSVG from '../../../../icons/Croix_grise.svg?react'
 import { setEditedReporting } from '../../../slice'
+import { ReportingForm } from '../../ReportingForm'
 
 export function CreateOrEditReporting() {
   const dispatch = useMainAppDispatch()
@@ -33,7 +30,14 @@ export function CreateOrEditReporting() {
     <FormWrapper>
       <Header>
         <HeaderText>{editedReporting ? 'Editer' : 'Ouvrir'} un signalement</HeaderText>
-        <CloseIcon onClick={close} />
+        <CloseFormIcon
+          accent={Accent.TERTIARY}
+          color={THEME.color.slateGray}
+          Icon={Icon.Close}
+          onClick={close}
+          size={Size.SMALL}
+          title="Fermer le formulaire"
+        />
       </Header>
       {selectedVesselIdentity && (
         <ReportingForm
@@ -46,13 +50,22 @@ export function CreateOrEditReporting() {
       )}
     </FormWrapper>
   ) : (
-    <NewReportingButton data-cy="vessel-sidebar-open-reporting" onClick={() => setNewReportingFormIsOpen(true)}>
+    <NewReportingButton
+      accent={Accent.PRIMARY}
+      data-cy="vessel-sidebar-open-reporting"
+      onClick={() => setNewReportingFormIsOpen(true)}
+    >
       Ouvrir un signalement
     </NewReportingButton>
   )
 }
 
-const NewReportingButton = styled(PrimaryButton)`
+const CloseFormIcon = styled(IconButton)`
+  margin-left: auto;
+  margin-right: 8px;
+`
+
+const NewReportingButton = styled(Button)`
   margin: 0px 10px 10px 0px;
 `
 
@@ -60,12 +73,12 @@ const FormWrapper = styled.div`
   margin-bottom: 10px;
   width: 448px;
   display: inline-block;
-  background: ${COLORS.gainsboro} 0% 0% no-repeat padding-box;
-  color: ${COLORS.slateGray};
+  background: ${THEME.color.gainsboro} 0% 0% no-repeat padding-box;
+  color: ${THEME.color.slateGray};
 `
 
 const Header = styled.div`
-  border-bottom: 2px solid ${COLORS.white};
+  border-bottom: 2px solid ${THEME.color.white};
   display: flex;
   height: 32px;
 `
@@ -73,12 +86,4 @@ const Header = styled.div`
 const HeaderText = styled.span`
   margin: 7px 15px;
   font: normal normal medium 13px/18px Marianne;
-`
-
-const CloseIcon = styled(CloseIconSVG)`
-  width: 13px;
-  vertical-align: text-bottom;
-  cursor: pointer;
-  height: 30px;
-  margin: 2px 10px 0 auto;
 `

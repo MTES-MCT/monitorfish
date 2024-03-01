@@ -4,7 +4,8 @@ import type { VesselIdentity } from '../../domain/entities/vessel/types'
 import type {
   CurrentAndArchivedReportingsOfSelectedVessel,
   InfractionSuspicionReporting,
-  PendingAlertReporting
+  PendingAlertReporting,
+  EditableReporting
 } from '../../domain/types/reporting'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
@@ -12,8 +13,8 @@ export type ReportingState = {
   archivedReportingsFromDate: Date
   currentAndArchivedReportingsOfSelectedVessel: CurrentAndArchivedReportingsOfSelectedVessel | undefined
   currentReportings: Array<InfractionSuspicionReporting | PendingAlertReporting>
-  editedReporting: InfractionSuspicionReporting | PendingAlertReporting | undefined
-  editedReportingInSideWindow: InfractionSuspicionReporting | PendingAlertReporting | undefined
+  editedReporting: EditableReporting | undefined
+  editedReportingInSideWindow: EditableReporting | undefined
   isLoadingReporting: boolean
   vesselIdentity: VesselIdentity | undefined
 }
@@ -125,10 +126,7 @@ const reportingSlice = createSlice({
     /**
      * Set the edited reporting in side window
      */
-    setEditedReportingInSideWindow(
-      state,
-      action: PayloadAction<InfractionSuspicionReporting | PendingAlertReporting | undefined>
-    ) {
+    setEditedReportingInSideWindow(state, action: PayloadAction<EditableReporting | undefined>) {
       state.editedReportingInSideWindow = action.payload
     },
 

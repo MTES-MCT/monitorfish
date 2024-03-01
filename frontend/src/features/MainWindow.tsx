@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { useBeforeUnload } from 'react-router-dom'
 import styled from 'styled-components'
+import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
 import { ErrorToastNotification } from './commonComponents/ErrorToastNotification'
 import { ControlUnitDialog } from './ControlUnit/components/ControlUnitDialog'
@@ -59,18 +60,24 @@ export function MainWindow() {
 
       <Wrapper id="mainWindowWrapper">
         <Map />
-        <LayersSidebar />
-        {isVesselSearchDisplayed && <VesselSidebarHeader />}
-        <MapButtons />
-        <RightMenuOnHoverArea />
-        {isVesselListDisplayed && <VesselList namespace="homepage" />}
-        {isVesselSidebarOpen && <VesselSidebar />}
+
+        <LegacyRsuiteComponentsWrapper>
+          <LayersSidebar />
+          {isVesselSearchDisplayed && <VesselSidebarHeader />}
+          <MapButtons />
+          <RightMenuOnHoverArea />
+          {isVesselListDisplayed && <VesselList namespace="homepage" />}
+          {isVesselSidebarOpen && <VesselSidebar />}
+        </LegacyRsuiteComponentsWrapper>
+
         {isControlUnitDialogDisplayed && <ControlUnitDialog />}
         {isControlUnitListDialogDisplayed && <ControlUnitListDialog />}
+
         <VesselLoader />
         <APIWorker />
         <ErrorToastNotification />
         <Notifier />
+
         {status !== SideWindowStatus.CLOSED && <SideWindowLauncher />}
         {isDrawLayerModalDisplayed && <DrawLayerModal />}
       </Wrapper>

@@ -1,12 +1,12 @@
 import dayjs from 'dayjs'
 
+import { openSideWindowBeaconMalfunctionBoard } from './utils'
 import { getDate } from '../../../../src/utils'
 import { getUtcizedDayjs } from '../../utils/getUtcizedDayjs'
 
 context('Side Window > Beacon Malfunction Board', () => {
   beforeEach(() => {
-    cy.visit('/side_window')
-    cy.get('*[data-cy="side-window-menu-beacon-malfunctions"]').click()
+    openSideWindowBeaconMalfunctionBoard()
   })
 
   // The 4 specs below have been merged into one in order to prevent flakiness.
@@ -359,7 +359,7 @@ context('Side Window > Beacon Malfunction Board', () => {
       .contains('Une Relance pour avarie en mer a été envoyée')
       .contains('email non reçu à lepeletier@gmail.com')
 
-    cy.get('*[data-cy="side-window-beacon-malfunctions-notification-show-details"]').eq(2).click()
+    cy.get('*[data-cy="side-window-beacon-malfunctions-notification-show-details"]').eq(2).forceClick()
 
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-notification-content"]')
       .eq(2)
@@ -383,10 +383,11 @@ context('Side Window > Beacon Malfunction Board', () => {
       .scrollIntoView()
       .find('*[data-cy="side-window-beacon-malfunctions-card-vessel-name"]')
       .click()
+    cy.getDataCy('side-window-beacon-malfunctions-detail').should('be.visible')
 
     // When
     // Click on send notification select menu
-    cy.get('[aria-placeholder="Envoyer un message"]').click()
+    cy.getDataCy('side-window-beacon-malfunctions-detail').contains('Envoyer un message').click()
     cy.get('[data-key="MALFUNCTION_AT_SEA_REMINDER"] > .rs-picker-select-menu-item').click()
 
     // Then
@@ -404,10 +405,11 @@ context('Side Window > Beacon Malfunction Board', () => {
       .scrollIntoView()
       .find('*[data-cy="side-window-beacon-malfunctions-card-vessel-name"]')
       .click()
+    cy.getDataCy('side-window-beacon-malfunctions-detail').should('be.visible')
 
     // When
     // Click on send notification select menu
-    cy.get('[aria-placeholder="Envoyer un message"]').click()
+    cy.getDataCy('side-window-beacon-malfunctions-detail').contains('Envoyer un message').click()
     cy.get('[data-key="MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC"] > .rs-picker-select-menu-item').click()
     cy.fill('Choisir la nationalité du FMC', 'ABC')
 
@@ -455,7 +457,7 @@ context('Side Window > Beacon Malfunction Board', () => {
       .should('have.length', 1)
 
     // When
-    cy.get('[aria-placeholder="Statut"]').click()
+    cy.contains('Statut').click()
     cy.get('[data-key="AT_SEA"]').click()
 
     // Then
@@ -469,7 +471,7 @@ context('Side Window > Beacon Malfunction Board', () => {
       .should('have.length', 0)
 
     // Clean filter
-    cy.get('[aria-label="Clear"]').click()
+    cy.get('.rs-picker-clean.rs-btn-close').click()
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')

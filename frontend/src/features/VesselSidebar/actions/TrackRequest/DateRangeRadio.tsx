@@ -54,11 +54,11 @@ const Column = styled.div`
 `
 
 const StyledRadio = styled(Radio)`
-  margin-bottom: 0.25rem;
+  margin-bottom: 4px;
 
   .rs-radio-checker {
     label {
-      padding-left: 0.5rem;
+      padding-left: 8px;
       vertical-align: -3px;
     }
   }

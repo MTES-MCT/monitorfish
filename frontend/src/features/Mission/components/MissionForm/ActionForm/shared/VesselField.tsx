@@ -80,7 +80,7 @@ export function VesselField() {
     updateFieldsControlledByVessel(valuesWithVessel)
   }
 
-  const handleIsVesselUnknownChange = (isChecked: boolean) => {
+  const handleIsVesselUnknownChange = (isChecked: boolean | undefined) => {
     if (isChecked) {
       handleVesselSearchChange(UNKNOWN_VESSEL)
 

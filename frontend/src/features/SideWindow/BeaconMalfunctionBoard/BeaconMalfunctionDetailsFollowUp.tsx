@@ -206,7 +206,7 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
         })}
       </CommentsAndActions>
       {!smallSize && (
-        <AddCommentRow style={addCommentRow}>
+        <AddCommentRow>
           <AddComment
             ref={textareaRef}
             data-cy="side-window-beacon-malfunctions-detail-comment-textarea"
@@ -237,12 +237,9 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
   )
 }
 
-const AddCommentRow = styled.div``
-const addCommentRow: CSSProperties = {
-  bottom: 20,
-  position: 'absolute',
-  width: 570
-}
+const AddCommentRow = styled.div`
+  width: 570px;
+`
 
 const SubmitComment = styled.button``
 const submitCommentStyle = {
@@ -286,7 +283,7 @@ const commentsAndActionsStyle: (isSmall: boolean, textAreaHeight: number) => CSS
   smallSize,
   textAreaHeight
 ) => ({
-  maxHeight: smallSize ? 410 : 560 - textAreaHeight,
+  maxHeight: smallSize ? 360 : 510 - textAreaHeight,
   overflowX: 'hidden',
   overflowY: 'auto'
 })
@@ -305,11 +302,14 @@ const NumberCommentsText = styled.span``
 const numberCommentsTextStyle: CSSProperties = {
   float: 'right',
   marginRight: 5,
-  position: 'relative',
   width: 'fit-content'
 }
 
-const Body = styled.div``
+const Body = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+`
 const bodyStyle = smallSize => ({
   marginBottom: smallSize ? 5 : 0,
   marginTop: smallSize ? 5 : 25,
@@ -321,6 +321,5 @@ const CommentsIcon = styled(CommentsSVG)``
 const commentsIconStyle: CSSProperties = {
   float: 'right',
   marginTop: 2,
-  position: 'relative',
   width: 'fit-content'
 }

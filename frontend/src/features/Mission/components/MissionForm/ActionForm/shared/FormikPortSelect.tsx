@@ -1,6 +1,6 @@
 import { useGetPortsQuery } from '@api/port'
 import { FrontendError } from '@libs/FrontendError'
-import { CustomSearch, FieldError, Select, useNewWindow } from '@mtes-mct/monitor-ui'
+import { CustomSearch, FieldError, Select } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import { useMemo } from 'react'
 import styled from 'styled-components'
@@ -14,8 +14,6 @@ import type { Option } from '@mtes-mct/monitor-ui'
 export function FormikPortSelect() {
   const { errors, setFieldValue, values } = useFormikContext<MissionActionFormValues>()
   const { updateFAOAreasAndSegments, updateMissionLocation } = useGetMissionActionFormikUsecases()
-
-  const { newWindowContainerRef } = useNewWindow()
 
   const getPortsApiQuery = useGetPortsQuery()
 
@@ -76,14 +74,13 @@ export function FormikPortSelect() {
     [portsAsOptions]
   )
 
-  if (!portsAsOptions.length) {
+  if (!portsAsOptions.length || !customSearch) {
     return <FieldsetGroupSpinner legend="Port de contrôle" />
   }
 
   return (
     <>
       <Select
-        baseContainer={newWindowContainerRef.current}
         customSearch={customSearch}
         isLight
         label="Port de contrôle"

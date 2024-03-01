@@ -87,7 +87,6 @@ const Zone = styled.div`
 const Title = styled.div`
   background: ${COLORS.charcoal};
   color: ${COLORS.white};
-  font-size: 0.8rem;
   font-size: 13px;
   font-weight: 500;
   margin-bottom: 10px;

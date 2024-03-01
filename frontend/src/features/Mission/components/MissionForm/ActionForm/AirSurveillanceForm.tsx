@@ -5,8 +5,7 @@ import {
   FormikMultiSelect,
   FormikNumberInput,
   FormikTextarea,
-  Icon,
-  useNewWindow
+  Icon
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash/fp'
@@ -31,8 +30,6 @@ type AirSurveillanceFormProps = Readonly<{
   onChange: (nextValues: MissionActionFormValues) => Promisable<void>
 }>
 export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillanceFormProps) {
-  const { newWindowContainerRef } = useNewWindow()
-
   const isClosing = useMainAppSelector(store => store.missionForm.isClosing)
 
   const validationSchema = useMemo(
@@ -55,13 +52,7 @@ export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillance
           </FormHead>
 
           <FormBody>
-            <FormikMultiSelect
-              baseContainer={newWindowContainerRef.current}
-              isLight
-              label="Objectifs du vol"
-              name="flightGoals"
-              options={FLIGHT_GOALS_AS_OPTIONS}
-            />
+            <FormikMultiSelect isLight label="Objectifs du vol" name="flightGoals" options={FLIGHT_GOALS_AS_OPTIONS} />
 
             <FleetSegmentsField label="Segments ciblés" />
 

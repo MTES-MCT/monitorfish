@@ -4,6 +4,8 @@ import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constant
 import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 
 export const openSideWindowMissionList = () => {
+  cy.viewport(1920, 1080)
+
   cy.visit('/side_window', {
     onBeforeLoad(window) {
       Object.defineProperty(window, 'EventSource', { value: EventSource })

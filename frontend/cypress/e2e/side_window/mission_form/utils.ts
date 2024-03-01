@@ -3,6 +3,8 @@ import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/
 import type { Mission } from '../../../../src/domain/entities/mission/types'
 
 export const openSideWindowNewMission = () => {
+  cy.viewport(1920, 1080)
+
   cy.visit('/side_window')
 
   cy.wait(500)
@@ -20,6 +22,8 @@ export const openSideWindowNewMission = () => {
 }
 
 export const editSideWindowMission = (vesselName: string) => {
+  cy.viewport(1920, 1080)
+
   cy.visit('/side_window')
 
   cy.wait(500)

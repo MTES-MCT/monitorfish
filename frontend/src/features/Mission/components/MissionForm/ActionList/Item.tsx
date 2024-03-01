@@ -60,13 +60,13 @@ export function Item({ isSelected, missionAction, onDuplicate, onRemove, onSelec
         ]
 
       case MissionAction.MissionActionType.LAND_CONTROL:
-        return [getActionTitle('Contrôle à la débarque', vesselName, '- Navire inconnu'), Icon.Anchor]
+        return [getActionTitle('Contrôle à la débarque', vesselName, 'Navire inconnu'), Icon.Anchor]
 
       case MissionAction.MissionActionType.OBSERVATION:
         return [getActionTitle('', missionAction.otherComments, 'Note libre à renseigner'), Icon.Note]
 
       case MissionAction.MissionActionType.SEA_CONTROL:
-        return [getActionTitle('Contrôle en mer', vesselName, '- Navire inconnu'), Icon.FleetSegment]
+        return [getActionTitle('Contrôle en mer', vesselName, 'Navire inconnu'), Icon.FleetSegment]
 
       default:
         throw new FrontendError('`initialValues.actionType` does not match the enum')

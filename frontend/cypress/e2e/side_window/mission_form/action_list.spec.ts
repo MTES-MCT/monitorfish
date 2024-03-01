@@ -20,6 +20,8 @@ context('Side Window > Mission Form > Action List', () => {
     cy.clickButton('Ajouter')
     cy.clickButton('Ajouter une note libre')
 
+    cy.get('*[data-cy="action-list-item"]').eq(0).should('contain', 'Note libre à renseigner')
+
     cy.wait(250)
     cy.get('*[data-cy="action-list-item"]').eq(0).should('have.css', 'outline', 'rgb(86, 151, 210) solid 2px')
     cy.get('*[data-cy="action-list-item"]').eq(0).should('not.contain', 'Contrôle en mer')
@@ -29,7 +31,7 @@ context('Side Window > Mission Form > Action List', () => {
     cy.wait(250)
 
     cy.fill('Observations, commentaires...', 'Une observation.')
-    cy.get('*[data-cy="action-list-item"]').eq(0).should('not.contain', 'Une observation.')
+    cy.get('*[data-cy="action-list-item"]').eq(0).should('contain', 'Une observation.')
   })
 
   it('Should send the expected data to the API when duplicating a mission action', () => {

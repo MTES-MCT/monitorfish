@@ -363,9 +363,14 @@ const TextValue = styled.div<{
   padding-top: ${p => (p.hasTwoLines ? '6px' : '0')};
 
   .Field-Select {
+    background-color: ${p => p.theme.color.gainsboro};
+    border-color: ${p => p.theme.color.gainsboro};
     display: inline-block;
-    margin-right: 35px;
-    width: 125px;
+    width: 160px;
+
+    .rs-picker-toggle-wrapper {
+      width: 100%;
+    }
   }
 
   .rs-picker-select > .rs-picker-toggle {

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { batch } from 'react-redux'
 import { Modal } from 'rsuite'
 import styled from 'styled-components'
+import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
 import DownloadVesselListModal from './DownloadVesselListModal'
 import { addZoneSelected, removeZoneSelected, resetZonesSelected, setZonesSelected } from './slice'
@@ -373,85 +374,87 @@ export function VesselList({ namespace }) {
           open={isVesselListModalDisplayed}
           size="full"
         >
-          <StyledModalHeader isFull>
+          <StyledModalHeader $isFull>
             <Modal.Title>
-              <VesselIcon $background={COLORS.charcoal} $isRightMenuShrinked={undefined} $isTitle /> Liste des navires
-              avec VMS
+              <VesselIcon $background={COLORS.charcoal} $isRightMenuShrinked={undefined} $isTitle />
+              Liste des navires avec VMS
             </Modal.Title>
           </StyledModalHeader>
           <Modal.Body>
-            <Title>FILTRER LA LISTE</Title>
-            <VesselListFilters
-              controls={{
-                lastControlMonthsAgo,
-                setLastControlMonthsAgo
-              }}
-              countries={{
-                countriesFiltered,
-                setCountriesFiltered
-              }}
-              districts={{
-                districts,
-                districtsFiltered,
-                setDistrictsFiltered
-              }}
-              fleetSegments={{
-                fleetSegments: getFleetSegmentsQuery.data || [],
-                fleetSegmentsFiltered,
-                setFleetSegmentsFiltered
-              }}
-              gears={{
-                gears,
-                gearsFiltered,
-                setGearsFiltered
-              }}
-              geometrySelection={{
-                selectBox,
-                selectPolygon
-              }}
-              lastPositionTimeAgo={{
-                lastPositionTimeAgoFilter,
-                setLastPositionTimeAgoFilter
-              }}
-              location={{
-                setVesselsLocationFilter,
-                vesselsLocationFilter
-              }}
-              seeMore={{
-                seeMoreIsOpen,
-                setSeeMoreIsOpen
-              }}
-              size={{
-                setVesselsSizeValuesChecked,
-                vesselsSizeValuesChecked
-              }}
-              species={{
-                setSpeciesFiltered,
-                species,
-                speciesFiltered
-              }}
-              zones={{
-                administrativeZonesFiltered,
-                callRemoveZoneSelected,
-                setAdministrativeZonesFiltered,
-                setZonesFilter: setZonesFilterCallback,
-                zonesFilter,
-                zonesSelected
-              }}
-            />
-            <VesselListTable
-              allVesselsChecked={allVesselsChecked}
-              filteredVessels={filteredVessels}
-              filters={{
-                districtsFiltered,
-                vesselsSizeValuesChecked
-              }}
-              seeMoreIsOpen={seeMoreIsOpen}
-              setAllVesselsChecked={setAllVesselsChecked}
-              toggleSelectRow={toggleSelectRow}
-              vesselsCountShowed={vesselsCountShowed}
-              vesselsCountTotal={vesselsCountTotal}
-            />
+            <LegacyRsuiteComponentsWrapper>
+              <Title>FILTRER LA LISTE</Title>
+              <VesselListFilters
+                controls={{
+                  lastControlMonthsAgo,
+                  setLastControlMonthsAgo
+                }}
+                countries={{
+                  countriesFiltered,
+                  setCountriesFiltered
+                }}
+                districts={{
+                  districts,
+                  districtsFiltered,
+                  setDistrictsFiltered
+                }}
+                fleetSegments={{
+                  fleetSegments: getFleetSegmentsQuery.data || [],
+                  fleetSegmentsFiltered,
+                  setFleetSegmentsFiltered
+                }}
+                gears={{
+                  gears,
+                  gearsFiltered,
+                  setGearsFiltered
+                }}
+                geometrySelection={{
+                  selectBox,
+                  selectPolygon
+                }}
+                lastPositionTimeAgo={{
+                  lastPositionTimeAgoFilter,
+                  setLastPositionTimeAgoFilter
+                }}
+                location={{
+                  setVesselsLocationFilter,
+                  vesselsLocationFilter
+                }}
+                seeMore={{
+                  seeMoreIsOpen,
+                  setSeeMoreIsOpen
+                }}
+                size={{
+                  setVesselsSizeValuesChecked,
+                  vesselsSizeValuesChecked
+                }}
+                species={{
+                  setSpeciesFiltered,
+                  species,
+                  speciesFiltered
+                }}
+                zones={{
+                  administrativeZonesFiltered,
+                  callRemoveZoneSelected,
+                  setAdministrativeZonesFiltered,
+                  setZonesFilter: setZonesFilterCallback,
+                  zonesFilter,
+                  zonesSelected
+                }}
+              />
+              <VesselListTable
+                allVesselsChecked={allVesselsChecked}
+                filteredVessels={filteredVessels}
+                filters={{
+                  districtsFiltered,
+                  vesselsSizeValuesChecked
+                }}
+                seeMoreIsOpen={seeMoreIsOpen}
+                setAllVesselsChecked={setAllVesselsChecked}
+                toggleSelectRow={toggleSelectRow}
+                vesselsCountShowed={vesselsCountShowed}
+                vesselsCountTotal={vesselsCountTotal}
+              />
+            </LegacyRsuiteComponentsWrapper>
           </Modal.Body>
           <Modal.Footer>
             <PreviewButton
@@ -481,6 +484,7 @@ export function VesselList({ namespace }) {
           </Modal.Footer>
         </Modal>
       </Wrapper>
+
       <DownloadVesselListModal
         filteredVessels={filteredVessels}
         isOpen={downloadVesselListModalIsOpen}

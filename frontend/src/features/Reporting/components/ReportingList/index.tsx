@@ -253,6 +253,7 @@ const UnderCharter = styled.div`
   padding: 2px 8px;
   border-radius: 1px;
   color: ${p => p.theme.color.gunMetal};
+  white-space: nowrap;
 `
 const RightAligned = styled.div`
   align-items: flex-end;
@@ -296,25 +297,11 @@ const columnStyles: CSSProperties[] = [
   },
   {
     ...styleCenter,
-    width: 112
+    width: 130
   },
   {
     ...styleCenter,
-    width: 112
-  },
-  {
-    ...styleCenter,
-    display: 'inline-block',
-    height: 20,
-    marginTop: -3,
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    width: 288
-  },
-  {
-    ...styleCenter,
-    width: 64
+    width: 130
   },
   {
     ...styleCenter,
@@ -324,26 +311,40 @@ const columnStyles: CSSProperties[] = [
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
-    width: 224
+    width: 310
   },
   {
     ...styleCenter,
-    width: 112
+    width: 85
   },
   {
     ...styleCenter,
-    width: 144
+    display: 'inline-block',
+    height: 20,
+    marginTop: -3,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    width: 245
+  },
+  {
+    ...styleCenter,
+    width: 130
+  },
+  {
+    ...styleCenter,
+    width: 165
   },
   {
     ...styleCenter,
     height: '100%',
     justifyContent: 'center',
-    width: 32
+    width: 40
   },
   {
     ...styleCenter,
     justifyContent: 'center',
-    width: 32
+    width: 40
   }
 ]
 

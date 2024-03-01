@@ -21,6 +21,8 @@ context('Side Window > Mission Form > Main Form', () => {
   it('Should send the expected data to the API when creating a new mission (required fields)', () => {
     openSideWindowNewMission()
     cy.get('div').contains('Mission non enregistrée.')
+
+    cy.get('h1').should('contain.text', 'Nouvelle mission')
     cy.get('.Element-Tag').contains('Enregistrement auto. actif')
 
     const expectedStartDateTimeUtc = new RegExp(`${customDayjs().utc().format('YYYY-MM-DDTHH')}:\\d{2}:00\\.000Z`)
@@ -76,7 +78,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.get('div').contains('Mission créée le')
     cy.get('div').contains('Dernière modification enregistrée')
-    cy.get('h1').should('contain.text', 'Nouvelle mission')
+    cy.get('h1').should('contain.text', 'Mission Mer – Cultures marines 56')
   })
 
   it(
@@ -262,7 +264,7 @@ context('Side Window > Mission Form > Main Form', () => {
           startDateTimeUtc: '2023-02-01T12:34:00.000Z'
         }
       },
-      10
+      15
     )
       .its('response.statusCode')
       .should('eq', 201)
@@ -287,6 +289,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.fill('Ouvert par', 'Nemo')
 
+    cy.wait('@updateMission')
     cy.wait('@updateMission').then(interception => {
       if (!interception.response) {
         assert.fail('`interception.response` is undefined.')
@@ -334,6 +337,7 @@ context('Side Window > Mission Form > Main Form', () => {
         emitsAis: 'NOT_APPLICABLE',
         emitsVms: 'YES',
         externalReferenceNumber: null,
+        // TODO There is an issue here, it's loaded as "MENM", not edited and updated as "NAMO".
         facade: 'NAMO',
         feedbackSheetRequired: true,
         flagState: 'GB',
@@ -483,6 +487,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.wait(250)
     cy.clickButton('Clôturer')
 
+    cy.wait('@updateMission')
     cy.wait('@updateMission').then(interception => {
       if (!interception.response) {
         assert.fail('`interception.response` is undefined.')

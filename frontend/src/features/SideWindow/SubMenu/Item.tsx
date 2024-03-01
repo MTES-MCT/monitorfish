@@ -34,6 +34,7 @@ const MenuButton = styled.div<{
   border-bottom: 0.5px solid ${p => p.theme.color.lightGray};
   cursor: pointer;
   display: flex;
+  font-size: 16px;
   height: 47px;
   justify-content: space-between;
   opacity: 1;

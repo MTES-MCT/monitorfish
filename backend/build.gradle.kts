@@ -66,7 +66,7 @@ dependencies {
     api("com.github.ben-manes.caffeine:caffeine:3.1.8")
     api("io.hypersistence:hypersistence-utils-hibernate-62:3.7.1")
     api("org.locationtech.jts:jts-core:1.19.0")
-    api("org.hibernate:hibernate-spatial:6.1.7.Final")
+    api("org.hibernate:hibernate-spatial:6.4.4.Final")
     api("io.sentry:sentry:6.31.0")
     api("io.sentry:sentry-log4j2:7.0.0")
     runtimeOnly("org.postgresql:postgresql:42.6.0")

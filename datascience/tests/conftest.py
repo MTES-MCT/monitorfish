@@ -244,3 +244,9 @@ def reset_test_data(create_tables):
         for s in test_data_scripts:
             print(f"{s.major}.{s.minor}.{s.patch}: {s.path.name}")
             connection.execute(text(s.script))
+
+
+############################ Share fixtures between modules ############################
+pytest_plugins = [
+    "tests.test_pipeline.test_shared_tasks.test_segments",
+]

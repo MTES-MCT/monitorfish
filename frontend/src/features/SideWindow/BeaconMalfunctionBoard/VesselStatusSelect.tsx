@@ -29,16 +29,16 @@ export function VesselStatusSelect({
   useEffect(() => {
     if (domRef.current) {
       // TODO Use styled-component and avoid useEffect to update these elements style.
-      const selectElement = domRef.current.querySelector('.rs-picker-select') as HTMLElement
+      const selectElement = domRef.current.querySelector('.rs-picker-select > div') as HTMLElement
       if (selectElement?.style) {
-        selectElement.style.background = vesselStatus?.color || THEME.color.white
+        selectElement.style.setProperty('background', vesselStatus?.color ?? THEME.color.white, 'important')
       }
 
       const toggleElement = domRef.current.querySelector(
         '*[data-cy="side-window-beacon-malfunctions-vessel-status"]'
       ) as HTMLElement
       if (toggleElement?.style) {
-        toggleElement.style.color = vesselStatus?.textColor || THEME.color.charcoal
+        selectElement.style.setProperty('color', vesselStatus?.textColor ?? THEME.color.charcoal, 'important')
       }
 
       const icons = domRef.current.querySelectorAll('.rs-icon') as HTMLElement[]

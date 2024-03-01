@@ -207,6 +207,7 @@ export function ReportingForm({
             {values.reportingActor === ReportingOriginActor.UNIT.code && (
               <StyledFormikSelect
                 data-cy="new-reporting-select-unit"
+                isLight={!hasWhiteBackground}
                 label="Choisir l'unité"
                 name="controlUnitId"
                 options={controlUnitsAsOptions}
@@ -250,8 +251,9 @@ export function ReportingForm({
             {values.type === ReportingTypeCharacteristics.INFRACTION_SUSPICION.code && (
               <StyledFormikSelect
                 data-cy="new-reporting-select-natinf"
+                isLight={!hasWhiteBackground}
                 label="Natinf"
-                name="Natinf"
+                name="natinfCode"
                 options={infractionsAsOptions}
                 placement={!fromSideWindow ? 'topStart' : undefined}
                 searchable
@@ -305,7 +307,7 @@ const CancelButton = styled(Button)`
 
 const Label = styled.div`
   margin-top: 10px;
-  font-size: 12px;
+  font-size: 13px;
 `
 
 const StyledForm = styled(Form)<{

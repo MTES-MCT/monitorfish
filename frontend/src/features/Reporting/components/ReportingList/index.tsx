@@ -168,7 +168,7 @@ MMSI: ${reporting.mmsi || ''}`
 
       <CardTable
         $hasScroll={tableData.length > 9}
-        $width={1353}
+        $width={1195}
         data-cy="side-window-reporting-list"
         style={{ marginTop: 10 }}
       >
@@ -311,7 +311,7 @@ const columnStyles: CSSProperties[] = [
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
-    width: 310
+    width: 280
   },
   {
     ...styleCenter,
@@ -325,15 +325,15 @@ const columnStyles: CSSProperties[] = [
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
-    width: 245
+    width: 230
   },
   {
     ...styleCenter,
-    width: 130
+    width: 70
   },
   {
     ...styleCenter,
-    width: 165
+    width: 155
   },
   {
     ...styleCenter,
@@ -344,7 +344,7 @@ const columnStyles: CSSProperties[] = [
   {
     ...styleCenter,
     justifyContent: 'center',
-    width: 40
+    width: 33
   }
 ]
 
@@ -354,7 +354,7 @@ export const StyledCheckbox = styled(Checkbox)`
 
 const Content = styled.div`
   width: fit-content;
-  padding: 20px 40px 40px 10px;
+  padding: 20px 0px 40px 10px;
   margin-bottom: 20px;
 `
 

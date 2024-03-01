@@ -67,8 +67,8 @@ export function MainWindow() {
           <MapButtons />
           <RightMenuOnHoverArea />
           {isVesselListDisplayed && <VesselList namespace="homepage" />}
-          {isVesselSidebarOpen && <VesselSidebar />}
         </LegacyRsuiteComponentsWrapper>
+        {isVesselSidebarOpen && <VesselSidebar />}
 
         {isControlUnitDialogDisplayed && <ControlUnitDialog />}
         {isControlUnitListDialogDisplayed && <ControlUnitListDialog />}

@@ -29,14 +29,14 @@ export function CurrentBeaconMalfunctionBody({
     if (vesselStatus?.color && currentBeaconMalfunctionWithDetails?.beaconMalfunction?.id) {
       // TODO Use styled-component and avoid useEffect to update these elements style.
       ;(
-        (vesselStatusRef.current as HTMLDivElement).querySelector('.rs-picker-select') as HTMLElement
-      ).style.background = vesselStatus.color
+        (vesselStatusRef.current as HTMLDivElement).querySelector('.rs-picker-select > div') as HTMLElement
+      ).style.setProperty('background', vesselStatus.color, 'important')
       ;(
         (vesselStatusRef.current as HTMLDivElement).querySelector('.rs-picker-select') as HTMLElement
       ).style.setProperty('margin', '0 16px 0 0', 'important')
       ;(
-        (vesselStatusRef.current as HTMLDivElement).querySelector('.rs-picker-toggle-value') as HTMLElement
-      ).style.color = vesselStatus.textColor
+        (vesselStatusRef.current as HTMLDivElement).querySelector('.rs-picker-toggle-value >  div') as HTMLElement
+      ).style.setProperty('color', vesselStatus.textColor, 'important')
     }
   }, [vesselStatus, currentBeaconMalfunctionWithDetails?.beaconMalfunction])
 

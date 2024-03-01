@@ -64,6 +64,8 @@ export type ReportingCreation = BaseReportingCreation & {
 
 export type Reporting = InfractionSuspicionReporting | ObservationReporting | PendingAlertReporting
 
+export type EditableReporting = InfractionSuspicionReporting | ObservationReporting
+
 export type CurrentAndArchivedReportingsOfSelectedVessel = {
   archived: Reporting[]
   current: Reporting[]
@@ -80,7 +82,7 @@ export type InfractionSuspicion = {
   reportingActor: keyof typeof ReportingOriginActor
   seaFront: SeaFront
   title: string
-  type: string
+  type: ReportingType
 }
 
 export type Observation = {
@@ -91,15 +93,15 @@ export type Observation = {
   description: string
   reportingActor: keyof typeof ReportingOriginActor
   title: string
-  type: string
+  type: ReportingType
 }
 
 export type ReportingUpdate = {
   authorContact: string | undefined
   authorTrigram: string | undefined
-  controlUnitId: number | null
+  controlUnitId: number | undefined
   description: string | undefined
-  natinfCode: number | null
+  natinfCode: number | undefined
   reportingActor: keyof typeof ReportingOriginActor
   title: string
   type: ReportingType

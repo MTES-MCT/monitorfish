@@ -1,17 +1,25 @@
 from datetime import datetime
+from logging import Logger
 
 import pandas as pd
 import pytest
 import pytz
+from sqlalchemy import text
 
+from src.db_config import create_engine
 from src.pipeline.flows.enrich_logbook import (
+    compute_pno_segments,
     compute_pno_types,
     extract_pno_species_and_gears,
     extract_pno_trips_period,
     extract_pno_types,
     flow,
+    load_enriched_pnos,
+    merge_segments_and_types,
+    reset_pnos,
 )
 from src.pipeline.helpers.dates import Period
+from src.read_query import read_query
 from tests.mocks import mock_check_flow_not_running
 
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
@@ -193,6 +201,293 @@ def expected_pno_species_and_gears() -> pd.DataFrame:
     )
 
 
+@pytest.fixture
+def segments() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "year": [2023, 2023, 2023, 2023, 2015],
+            "segment": ["SOTM", "SHKE27", "SSB", "SxTB8910", "SxTB8910-2015"],
+            "segment_name": [
+                "Chaluts pélagiques",
+                "Merlu en zone 27",
+                "Senne de plage",
+                "Merlu Morue xTB zones 8 9 10",
+                "Merlu Morue xTB zones 8 9 10 (2015)",
+            ],
+            "gears": [
+                ["OTM", "PTM"],
+                [],
+                ["SB"],
+                ["OTB", "PTB"],
+                ["OTB", "PTB"],
+            ],
+            "fao_areas": [
+                [],
+                ["27"],
+                [],
+                ["27.8", "27.9", "27.10"],
+                ["27.8", "27.9", "27.10"],
+            ],
+            "species": [
+                [],
+                ["HKE"],
+                [],
+                ["HKE", "COD"],
+                ["HKE", "COD"],
+            ],
+        }
+    )
+
+
+@pytest.fixture
+def expected_computed_pno_types() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "logbook_reports_pno_id": [1, 2, 3, 4, 5, 6, 7, 8],
+            "trip_gears": [
+                [
+                    {"gear": "OTT", "mesh": 120, "dimensions": "250.0"},
+                    {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},
+                ],
+                [{"gear": "TBB", "mesh": 140, "dimensions": "250.0"}],
+                None,
+                [{"gear": "OTB", "mesh": 100, "dimensions": "250.0"}],
+                [{"gear": "PTM", "mesh": 70, "dimensions": "250.0"}],
+                [{"gear": "OTM", "mesh": 80, "dimensions": "200.0"}],
+                [{"gear": "OTM", "mesh": 80, "dimensions": "200.0"}],
+                [{"gear": "SB", "mesh": 20, "dimensions": "4.5"}],
+            ],
+            "pno_types": [
+                [
+                    {
+                        "pno_type_name": "Préavis type 1",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": True,
+                    }
+                ],
+                [
+                    {
+                        "pno_type_name": "Préavis type 1",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": True,
+                    },
+                    {
+                        "pno_type_name": "Préavis type 2",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": True,
+                    },
+                ],
+                [
+                    {
+                        "pno_type_name": "Préavis par pavillon",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": True,
+                    },
+                    {
+                        "pno_type_name": "Préavis type 1",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": True,
+                    },
+                ],
+                [
+                    {
+                        "pno_type_name": "Préavis type 1",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": True,
+                    }
+                ],
+                [
+                    {
+                        "pno_type_name": "Préavis type 1",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": True,
+                    },
+                    {
+                        "pno_type_name": "Préavis type 2",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": True,
+                    },
+                ],
+                None,
+                None,
+                [
+                    {
+                        "pno_type_name": "Préavis par engin",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": True,
+                    }
+                ],
+            ],
+        }
+    )
+
+
+@pytest.fixture
+def expected_computed_pno_segments() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "logbook_reports_pno_id": [1, 2, 3, 4, 5, 6, 7, 8],
+            "trip_segments": [
+                None,
+                None,
+                None,
+                [
+                    {
+                        "segment": "SxTB8910",
+                        "segment_name": "Merlu Morue xTB zones 8 9 10",
+                    }
+                ],
+                [{"segment": "SOTM", "segment_name": "Chaluts pélagiques"}],
+                [
+                    {"segment": "SHKE27", "segment_name": "Merlu en zone 27"},
+                    {"segment": "SOTM", "segment_name": "Chaluts pélagiques"},
+                ],
+                [{"segment": "SOTM", "segment_name": "Chaluts pélagiques"}],
+                [{"segment": "SSB", "segment_name": "Senne de plage"}],
+            ],
+        }
+    )
+
+
+@pytest.fixture
+def pnos_to_load() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "logbook_reports_pno_id": [12, 13],
+            "trip_gears": [
+                [
+                    {"gear": "OTT", "mesh": 120, "dimensions": "250.0"},
+                    {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},
+                ],
+                None,
+            ],
+            "pno_types": [
+                [
+                    {
+                        "pno_type_name": "Préavis type 1",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": True,
+                    },
+                    {
+                        "pno_type_name": "Préavis type 2",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": True,
+                    },
+                ],
+                None,
+            ],
+            "trip_segments": [
+                None,
+                [
+                    {"segment": "SHKE27", "segment_name": "Merlu en zone 27"},
+                    {"segment": "SOTM", "segment_name": "Chaluts pélagiques"},
+                ],
+            ],
+        }
+    )
+
+
+@pytest.fixture
+def expected_merged_pnos() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "logbook_reports_pno_id": [1, 2, 3, 4, 5, 6, 7, 8],
+            "trip_gears": [
+                [
+                    {"gear": "OTT", "mesh": 120, "dimensions": "250.0"},
+                    {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},
+                ],
+                [{"gear": "TBB", "mesh": 140, "dimensions": "250.0"}],
+                None,
+                [{"gear": "OTB", "mesh": 100, "dimensions": "250.0"}],
+                [{"gear": "PTM", "mesh": 70, "dimensions": "250.0"}],
+                [{"gear": "OTM", "mesh": 80, "dimensions": "200.0"}],
+                [{"gear": "OTM", "mesh": 80, "dimensions": "200.0"}],
+                [{"gear": "SB", "mesh": 20, "dimensions": "4.5"}],
+            ],
+            "pno_types": [
+                [
+                    {
+                        "pno_type_name": "Préavis type 1",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": True,
+                    }
+                ],
+                [
+                    {
+                        "pno_type_name": "Préavis type 1",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": True,
+                    },
+                    {
+                        "pno_type_name": "Préavis type 2",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": True,
+                    },
+                ],
+                [
+                    {
+                        "pno_type_name": "Préavis par pavillon",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": True,
+                    },
+                    {
+                        "pno_type_name": "Préavis type 1",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": True,
+                    },
+                ],
+                [
+                    {
+                        "pno_type_name": "Préavis type 1",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": True,
+                    }
+                ],
+                [
+                    {
+                        "pno_type_name": "Préavis type 1",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": True,
+                    },
+                    {
+                        "pno_type_name": "Préavis type 2",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": True,
+                    },
+                ],
+                None,
+                None,
+                [
+                    {
+                        "pno_type_name": "Préavis par engin",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": True,
+                    }
+                ],
+            ],
+            "trip_segments": [
+                None,
+                None,
+                None,
+                [
+                    {
+                        "segment": "SxTB8910",
+                        "segment_name": "Merlu Morue xTB zones 8 9 10",
+                    }
+                ],
+                [{"segment": "SOTM", "segment_name": "Chaluts pélagiques"}],
+                [
+                    {"segment": "SHKE27", "segment_name": "Merlu en zone 27"},
+                    {"segment": "SOTM", "segment_name": "Chaluts pélagiques"},
+                ],
+                [{"segment": "SOTM", "segment_name": "Chaluts pélagiques"}],
+                [{"segment": "SSB", "segment_name": "Senne de plage"}],
+            ],
+        }
+    )
+
+
 def test_extract_pno_types(reset_test_data, expected_pno_types):
     pno_types = extract_pno_types.run()
     pd.testing.assert_frame_equal(pno_types, expected_pno_types)
@@ -229,23 +524,153 @@ def test_extract_pno_species_and_gears(reset_test_data, expected_pno_species_and
     )
 
 
-def test_compute_pno_types(expected_pno_types, sample_pno_species_and_gears):
-    compute_pno_types(sample_pno_species_and_gears, expected_pno_types)
+def test_compute_pno_types(
+    expected_pno_types, sample_pno_species_and_gears, expected_computed_pno_types
+):
+    res = compute_pno_types(sample_pno_species_and_gears, expected_pno_types)
+    pd.testing.assert_frame_equal(res, expected_computed_pno_types)
 
 
-def test_load_then_reset_logbook(reset_test_data):
-    # pnos = read_query("SELECT * FROM logbook_reports WHERE log_type = 'PNO'", db="monitorfish_remote")
-    # breakpoint()
-    pass
+def test_compute_pno_segments(
+    reset_test_data,
+    sample_pno_species_and_gears,
+    segments,
+    expected_computed_pno_segments,
+):
+    res = compute_pno_segments(sample_pno_species_and_gears, segments)
+    pd.testing.assert_frame_equal(res, expected_computed_pno_segments)
 
 
-def test_extract_enrich_load(reset_test_data):
-    pass
+def test_merge_segments_and_types(
+    expected_computed_pno_types, expected_computed_pno_segments, expected_merged_pnos
+):
+    res = merge_segments_and_types(
+        expected_computed_pno_types, expected_computed_pno_segments
+    )
+    pd.testing.assert_frame_equal(res, expected_merged_pnos)
 
 
-def test_flow_does_not_recompute_all_when_not_asked_to(reset_test_data):
-    pass
+def test_load_then_reset_logbook(reset_test_data, pnos_to_load):
+    query = "SELECT * FROM logbook_reports WHERE log_type = 'PNO' ORDER BY id"
+    initial_pnos = read_query(query, db="monitorfish_remote")
+    pno_period = Period(
+        start=datetime(2020, 5, 6, 18, 30, 0), end=datetime(2020, 5, 6, 18, 50, 0)
+    )
+    logger = Logger("myLogger")
+    load_enriched_pnos(enriched_pnos=pnos_to_load, period=pno_period, logger=logger)
+    final_pnos = read_query(query, db="monitorfish_remote")
+
+    assert not initial_pnos.enriched.any()
+    assert not final_pnos.loc[final_pnos.id == 8, "enriched"].values[0]
+    assert final_pnos.loc[final_pnos.id.isin([12, 13]), "enriched"].all()
+    pd.testing.assert_frame_equal(
+        final_pnos.loc[
+            final_pnos.enriched, ["id", "trip_gears", "pno_types", "trip_segments"]
+        ].reset_index(drop=True),
+        pnos_to_load.rename(columns={"logbook_reports_pno_id": "id"}),
+    )
+
+    # Reset logbook and check that the logbook_reports table is back to its original
+    # state.
+    reset_pnos.run(pno_period)
+    pnos_after_reset = read_query(query, db="monitorfish_remote")
+    pd.testing.assert_frame_equal(pnos_after_reset, initial_pnos)
 
 
-def test_flow_recomputes_all_when_asked_to(reset_test_data):
-    pass
+def test_flow(reset_test_data):
+    query = (
+        "SELECT id, enriched, trip_gears, pno_types, trip_segments "
+        "FROM logbook_reports WHERE log_type = 'PNO' ORDER BY id"
+    )
+
+    initial_pnos = read_query(query, db="monitorfish_remote")
+
+    now = datetime.utcnow()
+    pno_start_date = datetime(2020, 5, 5)
+    pno_end_date = datetime(2020, 5, 7)
+
+    start_hours_ago = int((now - pno_start_date).total_seconds() / 3600)
+    end_hours_ago = int((now - pno_end_date).total_seconds() / 3600)
+    minutes_per_chunk = 2 * 24 * 60
+
+    # First run
+    state = flow.run(
+        start_hours_ago=start_hours_ago,
+        end_hours_ago=end_hours_ago,
+        minutes_per_chunk=minutes_per_chunk,
+        recompute_all=False,
+    )
+    assert state.is_successful()
+
+    pnos_after_first_run = read_query(query, db="monitorfish_remote")
+
+    # Manual update : reset PNO n°12, modify PNO n°13
+    e = create_engine("monitorfish_remote")
+    with e.begin() as conn:
+        conn.execute(
+            text("UPDATE logbook_reports " "SET enriched = false " "WHERE id = 12;")
+        )
+
+        conn.execute(
+            text(
+                "UPDATE logbook_reports "
+                """SET trip_gears = '[{"gear": "This was set manually"}]'::jsonb """
+                "WHERE id = 13;"
+            )
+        )
+
+    # Second run without reset : manual modifications on PNO n°13 should be preserved
+    state = flow.run(
+        start_hours_ago=start_hours_ago,
+        end_hours_ago=end_hours_ago,
+        minutes_per_chunk=minutes_per_chunk,
+        recompute_all=False,
+    )
+    assert state.is_successful()
+
+    pnos_after_second_run_without_reset = read_query(query, db="monitorfish_remote")
+
+    # Third run with reset : manual modifications on PNO n°13 should be erased and
+    # recomputed.
+    state = flow.run(
+        start_hours_ago=start_hours_ago,
+        end_hours_ago=end_hours_ago,
+        minutes_per_chunk=minutes_per_chunk,
+        recompute_all=True,
+    )
+    assert state.is_successful()
+
+    pnos_after_third_run_with_reset = read_query(query, db="monitorfish_remote")
+
+    # Initially no PNO should be enriched
+    assert (
+        not initial_pnos[["enriched", "trip_gears", "pno_types", "trip_segments"]]
+        .any()
+        .any()
+    )
+
+    # After first run PNO with ids 12 and 13 should be enriched
+    assert set(pnos_after_first_run.loc[pnos_after_first_run.enriched, "id"]) == {
+        12,
+        13,
+    }
+    pnos_after_first_run.loc[pnos_after_first_run.id == 12, "trip_gears"].iloc[0] == [
+        {"gear": "TBB", "mesh": 140, "dimensions": "250.0"}
+    ]
+
+    pnos_after_first_run.loc[pnos_after_first_run.id == 13, "trip_gears"].iloc[0] == [
+        {"gear": "TBB", "mesh": 140, "dimensions": "250.0"}
+    ]
+
+    # After second run without reset, manual modifications on PNO n°13 should be
+    # preserved
+    assert pnos_after_second_run_without_reset.loc[
+        pnos_after_second_run_without_reset.id == 12, "trip_gears"
+    ].iloc[0] == [{"gear": "TBB", "mesh": 140, "dimensions": "250.0"}]
+    assert pnos_after_second_run_without_reset.loc[
+        pnos_after_second_run_without_reset.id == 13, "trip_gears"
+    ].iloc[0] == [{"gear": "This was set manually"}]
+
+    # After third run with reset, manual modifications on PNO n°13 should be erased and
+    # recomputed.
+    pd.testing.assert_frame_equal(pnos_after_first_run, pnos_after_third_run_with_reset)

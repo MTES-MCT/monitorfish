@@ -1,5 +1,5 @@
 INSERT INTO public.pno_types (
-    id                                name, minimum_notification_period, has_designated_ports) VALUES 
+    id,                               name, minimum_notification_period, has_designated_ports) VALUES 
     (1,                   'Préavis type 1',                           4,                 true),
     (2,                   'Préavis type 2',                           4,                 true),
     (3,             'Préavis par pavillon',                           4,                 true),

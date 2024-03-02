@@ -358,15 +358,20 @@ def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logg
         )
 
         logger.info("Updating pnos from temporary table")
-
         connection.execute(
             text(
                 "UPDATE public.logbook_reports r "
                 "SET"
                 "    enriched  = true,"
-                "    trip_gears = COALESCE(ep.trip_gears, '[]'::jsonb),"
-                "    pno_types = COALESCE(ep.pno_types, '[]'::jsonb),"
-                "    trip_segments = COALESCE(ep.trip_segments, '[]'::jsonb) "
+                "    trip_gears = CASE "
+                "       WHEN ep.trip_gears = 'null' THEN '[]'::jsonb "
+                "       ELSE ep.trip_gears END, "
+                "    pno_types = CASE "
+                "       WHEN ep.pno_types = 'null' THEN '[]'::jsonb "
+                "       ELSE ep.pno_types END, "
+                "    trip_segments = CASE "
+                "       WHEN ep.trip_segments = 'null' THEN '[]'::jsonb "
+                "       ELSE ep.trip_segments END "
                 "FROM tmp_enriched_pnos ep "
                 "WHERE r.id = ep.logbook_reports_pno_id "
                 "AND r.operation_datetime_utc >= :start "

@@ -388,6 +388,48 @@ def pnos_to_load() -> pd.DataFrame:
 
 
 @pytest.fixture
+def expected_loaded_pnos() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "id": [8, 12, 13],
+            "enriched": [False, True, True],
+            "trip_gears": [
+                None,
+                [
+                    {"gear": "OTT", "mesh": 120, "dimensions": "250.0"},
+                    {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},
+                ],
+                [],
+            ],
+            "pno_types": [
+                None,
+                [
+                    {
+                        "pno_type_name": "Préavis type 1",
+                        "has_designated_ports": True,
+                        "minimum_notification_period": 4.0,
+                    },
+                    {
+                        "pno_type_name": "Préavis type 2",
+                        "has_designated_ports": True,
+                        "minimum_notification_period": 4.0,
+                    },
+                ],
+                [],
+            ],
+            "trip_segments": [
+                None,
+                [],
+                [
+                    {"segment": "SHKE27", "segment_name": "Merlu en zone 27"},
+                    {"segment": "SOTM", "segment_name": "Chaluts pélagiques"},
+                ],
+            ],
+        }
+    )
+
+
+@pytest.fixture
 def expected_merged_pnos() -> pd.DataFrame:
     return pd.DataFrame(
         {
@@ -550,8 +592,11 @@ def test_merge_segments_and_types(
     pd.testing.assert_frame_equal(res, expected_merged_pnos)
 
 
-def test_load_then_reset_logbook(reset_test_data, pnos_to_load):
-    query = "SELECT * FROM logbook_reports WHERE log_type = 'PNO' ORDER BY id"
+def test_load_then_reset_logbook(reset_test_data, pnos_to_load, expected_loaded_pnos):
+    query = (
+        "SELECT id, enriched, trip_gears, pno_types, trip_segments "
+        "FROM logbook_reports WHERE log_type = 'PNO' ORDER BY id"
+    )
     initial_pnos = read_query(query, db="monitorfish_remote")
     pno_period = Period(
         start=datetime(2020, 5, 6, 18, 30, 0), end=datetime(2020, 5, 6, 18, 50, 0)
@@ -563,12 +608,8 @@ def test_load_then_reset_logbook(reset_test_data, pnos_to_load):
     assert not initial_pnos.enriched.any()
     assert not final_pnos.loc[final_pnos.id == 8, "enriched"].values[0]
     assert final_pnos.loc[final_pnos.id.isin([12, 13]), "enriched"].all()
-    pd.testing.assert_frame_equal(
-        final_pnos.loc[
-            final_pnos.enriched, ["id", "trip_gears", "pno_types", "trip_segments"]
-        ].reset_index(drop=True),
-        pnos_to_load.rename(columns={"logbook_reports_pno_id": "id"}),
-    )
+
+    pd.testing.assert_frame_equal(final_pnos, expected_loaded_pnos)
 
     # Reset logbook and check that the logbook_reports table is back to its original
     # state.

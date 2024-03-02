@@ -242,6 +242,7 @@ VALUES ('OOF20190126059903', '<ers:OPS AD="FRA" FR="OOE" ON="OOF20190126059903" 
        ('OOF20190015146541', ''),
        ('OOF20190158541231', ''),
        ('OOF20190439686456', ''),
+       ('OOF20190439686457', ''),
        ('d5c3b039-aaee-4cca-bcae-637f5fe574f5', '<Flux>Message FLUX xml</Flux>');
 
 INSERT INTO logbook_reports (operation_number, analyzed_by_rules, trip_number, operation_country,
@@ -448,8 +449,8 @@ VALUES ('OOF20190265896325', 9463701, 'OOF', '2018-02-17T01:05:00Z', 'DAT', 'OOF
         'FAK000999999', 'CALLME', 'DONTSINK', 'PHENOMENE', 'FRA', null, 'EOF',
         '{"endOfFishingDatetimeUtc": "2019-10-20T12:16:00Z"}', '2021-01-18T07:17:26.736456Z', 'ERS',
         'TurboCatch (3.7-1)'),
-       ('OOF20191011059902', 9463715, 'OOF', '2019-10-21T08:16:00Z', 'DAT', 'OOF20191011059902', null,
-        '2019-10-11T08:16:00Z',
+       ('OOF20191011059902', 9463715, 'OOF', (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '24 hours 30 minutes', 'DAT', 'OOF20191011059902', null,
+        (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '24 hours 30 minutes',
         'FAK000999999', 'CALLME', 'DONTSINK', 'PHENOMENE', 'FRA', null, 'PNO',
         '{"port": "AEJAZ", "purpose": "LAN", "catchOnboard": [{"weight": 20.0, "nbFish": null, "species": "SLS", "faoZone": "27.8.a", "effortZone": "C", "economicZone": "FRA", "statisticalRectangle": "23E6"}, {"weight": 153.0, "nbFish": null, "species": "HKC", "faoZone": "27.8.a", "effortZone": "C", "economicZone": "FRA", "statisticalRectangle": "23E6"}, {"weight": 2.0, "nbFish": null, "species": "SOL", "faoZone": "27.8.a", "effortZone": "C", "economicZone": "FRA", "statisticalRectangle": "23E6"}, {"weight": 1500.0, "nbFish": null, "species": "BON", "faoZone": "27.8.a", "effortZone": "C", "economicZone": "FRA", "statisticalRectangle": "23E6"}], "tripStartDate": "2019-10-11T00:00Z", "predictedArrivalDatetimeUtc": "2019-10-21T08:16:00Z"}',
         '2021-01-18T07:17:19.04244Z', 'ERS', 'TurboCatch (3.7-1)'),
@@ -602,7 +603,20 @@ UPDATE logbook_reports
 SET value               = jsonb_set(value, '{predictedArrivalDatetimeUtc}', concat('"', to_char(
         (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '24 hours 30 minutes', 'YYYY-MM-DD"T"HH24:MI:SSZ'),
                                                                                    '"')::jsonb),
+    operation_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '24 hours 30 minutes',
     report_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '24 hours 30 minutes'
+WHERE operation_number = 'OOF20191011059902';
+
+UPDATE logbook_reports
+SET value = jsonb_set(
+    value,
+    '{tripStartDate}',
+    concat(
+        '"',
+        to_char((now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '72 hours', 'YYYY-MM-DDT00:00:00Z'),
+        '"'
+    )::jsonb
+)
 WHERE operation_number = 'OOF20191011059902';
 
 UPDATE logbook_reports
@@ -650,7 +664,7 @@ VALUES ('OOF20190439686456', 20230086, 'OOF', CURRENT_DATE - INTERVAL '5 days', 
         'FR263454484', 'FE4864', '8FR6541', 'NO NAME', 'FRA', null, 'DEP',
         '{"gearOnboard": [{"gear": "GTR", "mesh": 100.0}], "departurePort": "AEJAZ", "anticipatedActivity": "FSH", "tripStartDate": "2018-02-17T00:00Z", "departureDatetimeUtc": "2018-02-17T01:05Z"}',
         CURRENT_DATE - INTERVAL '4 days', 'ERS', 'TurboCatch (3.7-1)'),
-       ('OOF20190439686456', 20230087, 'OOF', CURRENT_DATE - INTERVAL '3 days', 'DAT', 'OOF20190439686456', null,
+       ('OOF20190439686457', 20230087, 'OOF', CURRENT_DATE - INTERVAL '3 days', 'DAT', 'OOF20190439686457', null,
         CURRENT_DATE - INTERVAL '3 days',
         'FR263454484', 'FE4864', '8FR6541', 'NO NAME', 'FRA', null, 'PNO',
         '{"port": "AEJAZ", "purpose": "LAN", "catchOnboard": [{"weight": 25.0, "nbFish": null, "species": "SOL", "faoZone": "27.8.a", "effortZone": "C", "economicZone": "FRA", "statisticalRectangle": "23E6"}], "tripStartDate": "2018-02-20T00:00Z", "predictedArrivalDatetimeUtc": "2018-02-20T13:38Z"}',
@@ -660,3 +674,80 @@ VALUES ('OOF20190439686456', 20230086, 'OOF', CURRENT_DATE - INTERVAL '5 days', 
         'PNO',
         '{"port": "GBPHD", "purpose": "LAN", "catchOnboard": [{"nbFish": null, "weight": 1500.0, "species": "GHL"}], "tripStartDate": "2020-05-04T19:41:03.340Z", "predictedArrivalDatetimeUtc": "2020-05-06T11:41:03.340Z"}',
         CURRENT_DATE - INTERVAL '2 days', 'FLUX', null);
+
+
+
+UPDATE logbook_reports
+SET value = jsonb_set(
+    value,
+    '{predictedArrivalDatetimeUtc}',
+    concat(
+        '"',
+        to_char(CURRENT_DATE AT TIME ZONE 'UTC' - interval '2 days 20 hours', 'YYYY-MM-DD"T"HH24:MI:SSZ'),
+        '"'
+    )::jsonb
+)
+WHERE operation_number = 'OOF20190439686457';
+
+UPDATE logbook_reports
+SET value = jsonb_set(
+    value,
+    '{tripStartDate}',
+    concat(
+        '"',
+        to_char(CURRENT_DATE AT TIME ZONE 'UTC' - interval '5 days', 'YYYY-MM-DDT00:00:00Z'),
+        '"'
+    )::jsonb
+)
+WHERE operation_number = 'OOF20190439686457';
+
+UPDATE logbook_reports
+SET value = jsonb_set(
+    value,
+    '{predictedArrivalDatetimeUtc}',
+    concat(
+        '"',
+        to_char(CURRENT_DATE AT TIME ZONE 'UTC' - interval '1 days 12 hours', 'YYYY-MM-DD"T"HH24:MI:SSZ'),
+        '"'
+    )::jsonb
+)
+WHERE operation_number = 'd5c3b039-aaee-4cca-bcae-637f5fe574f5';
+
+UPDATE logbook_reports
+SET value = jsonb_set(
+    value,
+    '{tripStartDate}',
+    concat(
+        '"',
+        to_char(CURRENT_DATE AT TIME ZONE 'UTC' - interval '6 days', 'YYYY-MM-DDT00:00:00Z'),
+        '"'
+    )::jsonb
+)
+WHERE operation_number = 'd5c3b039-aaee-4cca-bcae-637f5fe574f5';
+
+UPDATE logbook_reports
+SET
+    enriched = true,
+    trip_gears = '[]'::jsonb,
+    trip_segments = '[]'::jsonb,
+    pno_types = '[]'::jsonb
+WHERE operation_number IN ('OOF20191011059902', 'OOF20190439686457', 'd5c3b039-aaee-4cca-bcae-637f5fe574f5');
+
+UPDATE logbook_reports
+SET
+    enriched = true,
+    trip_gears = '[{"gear": "GTR", "mesh": 100, "dimensions": "250;180"}, {"gear": "GTR", "mesh": 120.5, "dimensions": "250;280"}]'::jsonb,
+    trip_segments = '[{"segment": "NWW01", "segment_name": "Chalutiers de fond"}, {"segment": "PEL01", "segment_name": "Chalutiers pélagiques"}]'::jsonb,
+    pno_types = '[
+                    {
+                        "pno_type_name": "Préavis type X",
+                        "minimum_notification_period": 4.0,
+                        "has_designated_ports": false
+                    },
+                    {
+                        "pno_type_name": "Préavis type Y",
+                        "minimum_notification_period": 8.0,
+                        "has_designated_ports": true
+                    }
+                ]'::jsonb
+WHERE operation_number = 'OOF20191011059902';

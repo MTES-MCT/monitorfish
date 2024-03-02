@@ -449,7 +449,7 @@ VALUES ('OOF20190265896325', 9463701, 'OOF', '2018-02-17T01:05:00Z', 'DAT', 'OOF
         'FAK000999999', 'CALLME', 'DONTSINK', 'PHENOMENE', 'FRA', null, 'EOF',
         '{"endOfFishingDatetimeUtc": "2019-10-20T12:16:00Z"}', '2021-01-18T07:17:26.736456Z', 'ERS',
         'TurboCatch (3.7-1)'),
-       ('OOF20191011059902', 9463715, 'OOF', '2019-10-21T08:16:00Z', 'DAT', 'OOF20191011059902', null,
+       ('OOF20191011059902', 9463715, 'OOF', '2019-10-11T08:16:00Z', 'DAT', 'OOF20191011059902', null,
         '2019-10-21T08:16:00Z',
         'FAK000999999', 'CALLME', 'DONTSINK', 'PHENOMENE', 'FRA', null, 'PNO',
         '{"port": "AEJAZ", "purpose": "LAN", "catchOnboard": [{"weight": 20.0, "nbFish": null, "species": "SLS", "faoZone": "27.8.a", "effortZone": "C", "economicZone": "FRA", "statisticalRectangle": "23E6"}, {"weight": 153.0, "nbFish": null, "species": "HKC", "faoZone": "27.8.a", "effortZone": "C", "economicZone": "FRA", "statisticalRectangle": "23E6"}, {"weight": 2.0, "nbFish": null, "species": "SOL", "faoZone": "27.8.a", "effortZone": "C", "economicZone": "FRA", "statisticalRectangle": "23E6"}, {"weight": 1500.0, "nbFish": null, "species": "BON", "faoZone": "27.8.a", "effortZone": "C", "economicZone": "FRA", "statisticalRectangle": "23E6"}], "tripStartDate": "2019-10-11T00:00Z", "predictedArrivalDatetimeUtc": "2019-10-21T08:16:00Z"}',

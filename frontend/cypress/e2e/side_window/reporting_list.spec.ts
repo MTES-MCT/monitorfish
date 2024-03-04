@@ -182,10 +182,9 @@ context('Reportings', () => {
 
   function modifyReportingToObservation(rowNumber, numberOfReportings) {
     cy.get('[data-cy="side-window-edit-reporting"]').eq(rowNumber).click()
-    cy.get('[data-cy="new-reporting-select-observation-reporting-type"]').click()
-    cy.get('[data-cy="new-reporting-author-trigram"]').type('{backspace}{backspace}{backspace}LTH')
-    cy.wait(500)
-    cy.get('[data-cy="new-reporting-create-button"]').click()
+    cy.fill('Type', 'Observation')
+    cy.fill('Saisi par', '{backspace}{backspace}{backspace}LTH')
+    cy.clickButton('Valider')
 
     // Then
     cy.wait('@updateReporting').then(({ request, response }) => {

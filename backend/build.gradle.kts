@@ -47,7 +47,7 @@ dependencies {
     api("org.springframework.boot:spring-boot-starter-cache:3.1.7")
     api("org.springframework.boot:spring-boot-starter-log4j2:3.1.7")
     runtimeOnly("org.springframework.boot:spring-boot-devtools:3.1.7")
-    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
     api("io.ktor:ktor-client-core-jvm:2.3.6")
     api("io.ktor:ktor-client-java-jvm:2.3.3")
     api("io.ktor:ktor-client-content-negotiation-jvm:2.3.3")

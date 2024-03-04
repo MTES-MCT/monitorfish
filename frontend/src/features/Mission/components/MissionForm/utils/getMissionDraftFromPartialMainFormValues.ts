@@ -15,6 +15,7 @@ export function getMissionDraftFromPartialMainFormValues(
       controlUnits: [INITIAL_MISSION_CONTROL_UNIT],
       isGeometryComputedFromControls: false,
       isValid: false,
+      missionSource: Mission.MissionSource.MONITORFISH,
       missionTypes: [Mission.MissionType.SEA],
       startDateTimeUtc: customDayjs().startOf('minute').toISOString(),
       ...partialMainFormValues

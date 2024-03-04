@@ -146,7 +146,7 @@ context('Side Window > Mission Form > Air Control', () => {
 
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('exist')
     cy.contains('Veuillez indiquer votre trigramme dans "Clôturé par".').should('exist')
-    cy.contains('Ré-ouvrir la mission').should('not.exist')
+    cy.contains('Rouvrir la mission').should('not.exist')
 
     // Clôturé par
     // TODO Handle multiple inputs with same label via an `index` in monitor-ui.

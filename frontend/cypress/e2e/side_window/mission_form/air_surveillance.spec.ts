@@ -167,7 +167,7 @@ context('Side Window > Mission Form > Air Surveillance', () => {
     // TODO Handle multiple inputs with same label via an `index` in monitor-ui.
     cy.get('[name="closedBy"]').eq(1).type('Alice')
     cy.contains('Veuillez indiquer votre trigramme dans "Clôturé par".').should('not.exist')
-    cy.contains('Ré-ouvrir la mission').should('not.exist')
+    cy.contains('Rouvrir la mission').should('not.exist')
 
     // Mission is now valid for closure
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')

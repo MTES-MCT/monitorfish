@@ -544,7 +544,10 @@ export function MissionForm() {
   )
 
   const toggleDeletionConfirmationDialog = useCallback(async () => {
-    if (missionIdRef.current) {
+    if (!missionIdRef.current) {
+      return
+    }
+    try {
       const response = dispatch(monitorenvMissionApi.endpoints.canDeleteMission.initiate(missionIdRef.current))
       const canDeleteMissionResponse = await response.unwrap()
       if (canDeleteMissionResponse.canDelete) {
@@ -554,6 +557,13 @@ export function MissionForm() {
       }
       setActionsSources(canDeleteMissionResponse.sources)
       setIsExternalActionsDialogOpen(true)
+    } catch (error) {
+      logSoftError({
+        isSideWindowError: true,
+        message: '`canDeleteMission` API call failed.',
+        originalError: error,
+        userMessage: "Nous n'avons pas pu vérifier si cette mission est supprimable."
+      })
     }
   }, [isDeletionConfirmationDialogOpen, dispatch])
 

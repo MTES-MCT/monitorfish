@@ -120,7 +120,7 @@ export function ReportingForm({
           <>
             <StyledForm $hasWhiteBackground={hasWhiteBackground}>
               <Fieldset className="Field-MultiRadio">
-                <StyledLabel for="type">Type</StyledLabel>
+                <StyledLabel htmlFor="type">Type</StyledLabel>
                 <RadioGroup
                   appearance="picker"
                   defaultValue={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
@@ -146,7 +146,7 @@ export function ReportingForm({
                 </RadioGroup>
               </Fieldset>
               <Fieldset className="Field-MultiRadio">
-                <StyledLabel for="reportingActor">Origine</StyledLabel>
+                <StyledLabel htmlFor="reportingActor">Origine</StyledLabel>
                 <RadioGroup
                   appearance="picker"
                   defaultValue={ReportingOriginActor.OPS.code}
@@ -259,7 +259,7 @@ const CancelButton = styled(Button)`
 `
 
 const StyledLabel = styled(Legend)<{
-  for: string | undefined
+  htmlFor: string | undefined
 }>`
   margin-top: 12px;
 `

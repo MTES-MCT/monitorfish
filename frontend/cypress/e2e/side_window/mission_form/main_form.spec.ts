@@ -2,6 +2,7 @@ import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils
 import { Mission } from '../../../../src/domain/entities/mission/types'
 import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
 import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
+import { FAKE_MISSION_WITHOUT_EXTERNAL_ACTIONS, FAKE_MISSION_WITH_EXTERNAL_ACTIONS } from '../../constants'
 import { customDayjs } from '../../utils/customDayjs'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
@@ -76,7 +77,7 @@ context('Side Window > Mission Form > Main Form', () => {
       })
     })
 
-    cy.get('div').contains('Mission créée le')
+    cy.get('div').contains('Mission créée par le')
     cy.get('div').contains('Dernière modification enregistrée')
     cy.get('h1').should('contain.text', 'Mission Mer – Cultures marines 56')
   })
@@ -540,7 +541,7 @@ context('Side Window > Mission Form > Main Form', () => {
       statusCode: 200
     }).as('updateMission')
 
-    cy.clickButton('Ré-ouvrir la mission')
+    cy.clickButton('Rouvrir la mission')
     cy.wait(200)
 
     cy.fill('Contact de l’unité 1', 'Bob')
@@ -584,22 +585,52 @@ context('Side Window > Mission Form > Main Form', () => {
       .should('eq', 200)
   })
 
-  it('Should delete a mission', () => {
+  it('A mission should not be deleted if actions have been created in MonitorEnv', () => {
+    const missionId = 4
+    editSideWindowMissionListMissionWithId(missionId, SeaFrontGroup.MEMN)
+
+    cy.intercept(
+      { method: 'GET', url: `/api/v1/missions/${missionId}/can_delete?source=${Mission.MissionSource.MONITORFISH}` },
+      FAKE_MISSION_WITH_EXTERNAL_ACTIONS
+    ).as('canDeleteMission')
+
+    cy.clickButton('Supprimer la mission')
+
+    cy.wait('@canDeleteMission').then(({ response }) => {
+      expect(response && response.statusCode).equal(200)
+      expect(response && response.body.canDelete).equal(false)
+      expect(response && response.body.sources[0]).equal('MONITORENV')
+    })
+
+    cy.getDataCy('external-actions-modal').should('be.visible')
+    cy.clickButton('Fermer')
+    cy.getDataCy('external-actions-modal').should('not.exist')
+  })
+
+  it('Should delete a mission if no action created in MonitorEnv', () => {
     // We shouldn't be able to delete a CACEM mission:
-
     editSideWindowMissionListMissionWithId(2, SeaFrontGroup.MEMN)
-
     cy.contains('Supprimer la mission').should('be.disabled')
 
     // But we should be able to delete a CNSP one:
+    const missionId = 4
+    editSideWindowMissionListMissionWithId(missionId, SeaFrontGroup.MEMN)
 
-    editSideWindowMissionListMissionWithId(4, SeaFrontGroup.MEMN)
+    cy.intercept(
+      { method: 'GET', url: `/api/v1/missions/${missionId}/can_delete?source=${Mission.MissionSource.MONITORFISH}` },
+      FAKE_MISSION_WITHOUT_EXTERNAL_ACTIONS
+    ).as('canDeleteMission')
 
-    cy.intercept('DELETE', '/api/v1/missions/4', {
+    cy.intercept('DELETE', `api/v2/missions/${missionId}?source=${Mission.MissionSource.MONITORFISH}`, {
       statusCode: 204
     }).as('deleteMission')
 
     cy.clickButton('Supprimer la mission')
+
+    cy.wait('@canDeleteMission').then(({ response }) => {
+      expect(response && response.statusCode).equal(200)
+      expect(response && response.body.canDelete).equal(true)
+    })
 
     cy.get('.Component-Dialog').should('be.visible')
 

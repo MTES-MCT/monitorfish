@@ -29,7 +29,11 @@ import { setEditedReportingInSideWindow } from '../../slice'
 import archiveReportings from '../../useCases/archiveReportings'
 import deleteReportings from '../../useCases/deleteReportings'
 
-import type { InfractionSuspicionReporting, PendingAlertReporting } from '../../../../domain/types/reporting'
+import type {
+  ObservationReporting,
+  InfractionSuspicionReporting,
+  PendingAlertReporting
+} from '../../../../domain/types/reporting'
 import type { CSSProperties, MutableRefObject } from 'react'
 
 type ReportingListProps = {
@@ -100,7 +104,7 @@ export function ReportingList({ selectedSeaFrontGroup }: ReportingListProps) {
 
   // TODO Rather use a reporting id here than passing a copy of the whole Reporting object.
   const edit = useCallback(
-    (isDisabled: boolean, reporting: InfractionSuspicionReporting | PendingAlertReporting) => {
+    (isDisabled: boolean, reporting: InfractionSuspicionReporting | ObservationReporting) => {
       if (!isDisabled) {
         dispatch(setEditedReportingInSideWindow(reporting))
       }
@@ -228,7 +232,9 @@ MMSI: ${reporting.mmsi || ''}`
                       data-cy="side-window-edit-reporting"
                       disabled={editingIsDisabled}
                       Icon={Icon.Edit}
-                      onClick={() => edit(editingIsDisabled, reporting)}
+                      onClick={() =>
+                        edit(editingIsDisabled, reporting as InfractionSuspicionReporting | ObservationReporting)
+                      }
                       title="Editer le signalement"
                     />
                   </Cell>

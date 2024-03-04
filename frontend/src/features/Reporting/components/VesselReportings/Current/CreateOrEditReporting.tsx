@@ -1,32 +1,26 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, Icon, Size, THEME, usePrevious, IconButton } from '@mtes-mct/monitor-ui'
-import { useCallback, useEffect, useState } from 'react'
+import { Accent, Button, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor-ui'
+import { assertNotNullish } from '@utils/assertNotNullish'
+import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
-import { vesselsAreEquals } from '../../../../../domain/entities/vessel/vessel'
 import { setEditedReporting } from '../../../slice'
 import { ReportingForm } from '../../ReportingForm'
 
 export function CreateOrEditReporting() {
   const dispatch = useMainAppDispatch()
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
+  assertNotNullish(selectedVesselIdentity)
+  const [isNewReportingFormOpen, setIsNewReportingFormOpen] = useState(false)
   const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)
-  const [newReportingFormIsOpen, setNewReportingFormIsOpen] = useState(false)
-  const previousSelectedVesselIdentity = usePrevious(selectedVesselIdentity)
 
   const close = useCallback(() => {
-    setNewReportingFormIsOpen(false)
+    setIsNewReportingFormOpen(false)
     dispatch(setEditedReporting(null))
   }, [dispatch])
 
-  useEffect(() => {
-    if (!vesselsAreEquals(previousSelectedVesselIdentity, selectedVesselIdentity)) {
-      close()
-    }
-  }, [selectedVesselIdentity, previousSelectedVesselIdentity, close])
-
-  return newReportingFormIsOpen || editedReporting ? (
+  return isNewReportingFormOpen || editedReporting ? (
     <FormWrapper>
       <Header>
         <HeaderText>{editedReporting ? 'Editer' : 'Ouvrir'} un signalement</HeaderText>
@@ -39,21 +33,19 @@ export function CreateOrEditReporting() {
           title="Fermer le formulaire"
         />
       </Header>
-      {selectedVesselIdentity && (
-        <ReportingForm
-          closeForm={close}
-          editedReporting={editedReporting}
-          fromSideWindow={false}
-          hasWhiteBackground={false}
-          selectedVesselIdentity={selectedVesselIdentity}
-        />
-      )}
+      <ReportingForm
+        closeForm={close}
+        editedReporting={editedReporting}
+        hasWhiteBackground={false}
+        isFromSideWindow={false}
+        selectedVesselIdentity={selectedVesselIdentity}
+      />
     </FormWrapper>
   ) : (
     <NewReportingButton
       accent={Accent.PRIMARY}
       data-cy="vessel-sidebar-open-reporting"
-      onClick={() => setNewReportingFormIsOpen(true)}
+      onClick={() => setIsNewReportingFormOpen(true)}
     >
       Ouvrir un signalement
     </NewReportingButton>

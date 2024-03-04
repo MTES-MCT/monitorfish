@@ -2,11 +2,11 @@ import { monitorfishApiKy } from './api'
 import { ApiError } from '../libs/ApiError'
 
 import type {
+  EditedReporting,
   InfractionSuspicionReporting,
   PendingAlertReporting,
   Reporting,
-  ReportingCreation,
-  ReportingUpdate
+  ReportingCreation
 } from '../domain/types/reporting'
 
 export const ARCHIVE_REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu archiver le signalement"
@@ -95,7 +95,7 @@ async function addReportingFromAPI(newReporting: ReportingCreation): Promise<Rep
  *
  * @throws {@link ApiError}
  */
-async function updateReportingFromAPI(id: number, nextReporting: ReportingUpdate): Promise<Reporting> {
+async function updateReportingFromAPI(id: number, nextReporting: EditedReporting): Promise<Reporting> {
   try {
     return await monitorfishApiKy
       .put(`/bff/v1/reportings/${id}/update`, {

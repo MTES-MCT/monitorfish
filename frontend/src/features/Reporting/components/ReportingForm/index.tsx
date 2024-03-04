@@ -8,7 +8,7 @@ import {
 } from '@features/Reporting/components/ReportingForm/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, FormikSelect, FormikTextarea, FormikTextInput, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Button, FormikSelect, FormikTextarea, FormikTextInput, Legend, Fieldset } from '@mtes-mct/monitor-ui'
 import { Form, Formik } from 'formik'
 import { useCallback, useMemo, useRef } from 'react'
 import { Radio, RadioGroup } from 'rsuite'
@@ -119,46 +119,51 @@ export function ReportingForm({
         return (
           <>
             <StyledForm $hasWhiteBackground={hasWhiteBackground}>
-              <Label>Type</Label>
-              <RadioGroup
-                appearance="picker"
-                defaultValue={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
-                inline
-                onChange={value => setFieldValue('type', value as ReportingType)}
-                value={values.type}
-              >
-                <Radio
-                  key={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
-                  data-cy="new-reporting-select-infraction-reporting-type"
-                  value={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
+              <Fieldset className="Field-MultiRadio">
+                <StyledLabel for="type">Type</StyledLabel>
+                <RadioGroup
+                  appearance="picker"
+                  defaultValue={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
+                  id="type"
+                  inline
+                  onChange={value => setFieldValue('type', value as ReportingType)}
+                  value={values.type}
                 >
-                  {ReportingTypeCharacteristics.INFRACTION_SUSPICION.inputName}
-                </Radio>
-                <Radio
-                  key={ReportingTypeCharacteristics.OBSERVATION.code}
-                  data-cy="new-reporting-select-observation-reporting-type"
-                  value={ReportingTypeCharacteristics.OBSERVATION.code}
-                >
-                  {ReportingTypeCharacteristics.OBSERVATION.inputName}
-                </Radio>
-              </RadioGroup>
-              <Label>Origine</Label>
-              <RadioGroup
-                appearance="picker"
-                defaultValue={ReportingOriginActor.OPS.code}
-                inline
-                onChange={value => updateActor(value)}
-                value={values.reportingActor ?? ''}
-              >
-                {Object.entries(ReportingOriginActor).map(([key, val]) => (
-                  <Radio key={key} data-cy={`new-reporting-reporting-actor-${key}`} value={key}>
-                    {val.name}
+                  <Radio
+                    key={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
+                    data-cy="new-reporting-select-infraction-reporting-type"
+                    value={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
+                  >
+                    {ReportingTypeCharacteristics.INFRACTION_SUSPICION.inputName}
                   </Radio>
-                ))}
-              </RadioGroup>
+                  <Radio
+                    key={ReportingTypeCharacteristics.OBSERVATION.code}
+                    data-cy="new-reporting-select-observation-reporting-type"
+                    value={ReportingTypeCharacteristics.OBSERVATION.code}
+                  >
+                    {ReportingTypeCharacteristics.OBSERVATION.inputName}
+                  </Radio>
+                </RadioGroup>
+              </Fieldset>
+              <Fieldset className="Field-MultiRadio">
+                <StyledLabel for="reportingActor">Origine</StyledLabel>
+                <RadioGroup
+                  appearance="picker"
+                  defaultValue={ReportingOriginActor.OPS.code}
+                  id="reportingActor"
+                  inline
+                  onChange={value => updateActor(value)}
+                  value={values.reportingActor ?? ''}
+                >
+                  {Object.entries(ReportingOriginActor).map(([key, val]) => (
+                    <Radio key={key} data-cy={`new-reporting-reporting-actor-${key}`} value={key}>
+                      {val.name}
+                    </Radio>
+                  ))}
+                </RadioGroup>
+              </Fieldset>
               {values.reportingActor === ReportingOriginActor.UNIT.code && (
                 <StyledFormikSelect
-                  data-cy="new-reporting-select-unit"
                   isLight={!hasWhiteBackground}
                   label="Choisir l'unité"
                   name="controlUnitId"
@@ -171,7 +176,6 @@ export function ReportingForm({
                 values.reportingActor === ReportingOriginActor.DIRM.code ||
                 values.reportingActor === ReportingOriginActor.OTHER.code) && (
                 <StyledFormikTextInput
-                  data-cy="new-reporting-author-contact"
                   isLight={!hasWhiteBackground}
                   label="Nom et contact (numéro, mail…) de l’émetteur"
                   name="authorContact"
@@ -179,7 +183,6 @@ export function ReportingForm({
                 />
               )}
               <StyledFormikTextInput
-                data-cy="new-reporting-title"
                 isLight={!hasWhiteBackground}
                 label="Titre"
                 name="title"
@@ -190,7 +193,6 @@ export function ReportingForm({
                 }
               />
               <StyledFormikTextarea
-                data-cy="new-reporting-description"
                 isLight={!hasWhiteBackground}
                 label="Description"
                 name="description"
@@ -202,7 +204,6 @@ export function ReportingForm({
               />
               {values.type === ReportingTypeCharacteristics.INFRACTION_SUSPICION.code && (
                 <StyledFormikSelect
-                  data-cy="new-reporting-select-natinf"
                   isLight={!hasWhiteBackground}
                   label="Natinf"
                   name="natinfCode"
@@ -214,13 +215,12 @@ export function ReportingForm({
                 />
               )}
               <StyledFormikTextInput
-                data-cy="new-reporting-author-trigram"
                 isLight={!hasWhiteBackground}
                 label="Saisi par"
                 name="authorTrigram"
                 placeholder="Ex: LTH"
               />
-              <ValidateButton accent={Accent.PRIMARY} data-cy="new-reporting-create-button" type="submit">
+              <ValidateButton accent={Accent.PRIMARY} type="submit">
                 Valider
               </ValidateButton>
               <CancelButton accent={Accent.SECONDARY} onClick={closeForm}>
@@ -258,10 +258,10 @@ const CancelButton = styled(Button)`
   margin: 24px 0px 0px 0px;
 `
 
-const Label = styled.div`
-  margin-top: 10px;
-  color: ${THEME.color.slateGray};
-  font-size: 13px;
+const StyledLabel = styled(Legend)<{
+  for: string | undefined
+}>`
+  margin-top: 12px;
 `
 
 const StyledForm = styled(Form)<{
@@ -271,13 +271,13 @@ const StyledForm = styled(Form)<{
     box-sizing: border-box !important;
   }
 
-  margin: 16px;
+  margin: 0px 16px 16px 16px;
   .rs-picker-toggle {
     background: ${p => (p.$hasWhiteBackground ? COLORS.gainsboro : COLORS.white)} !important;
   }
 
   .rs-radio-group {
-    margin-top: 5px;
+    margin-top: 1px;
     margin-bottom: 5px;
     background: ${p => (p.$hasWhiteBackground ? COLORS.gainsboro : COLORS.white)} !important;
   }

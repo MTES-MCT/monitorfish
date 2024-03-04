@@ -59,12 +59,16 @@ export type BaseReportingCreation = Omit<
 
 export type ReportingCreation = BaseReportingCreation & {
   type: ReportingType.INFRACTION_SUSPICION | ReportingType.OBSERVATION
-  value: InfractionSuspicion | Observation
+  value: EditedReporting
 }
 
 export type Reporting = InfractionSuspicionReporting | ObservationReporting | PendingAlertReporting
 
 export type EditableReporting = InfractionSuspicionReporting | ObservationReporting
+
+export type EditedReporting = Partial<InfractionSuspicion | Observation> & {
+  type: ReportingType.INFRACTION_SUSPICION | ReportingType.OBSERVATION
+}
 
 export type CurrentAndArchivedReportingsOfSelectedVessel = {
   archived: Reporting[]
@@ -72,37 +76,26 @@ export type CurrentAndArchivedReportingsOfSelectedVessel = {
 }
 
 export type InfractionSuspicion = {
-  authorContact: string | null
-  authorTrigram: string | null
-  controlUnit: LegacyControlUnit.LegacyControlUnit | null
-  controlUnitId: number | null
-  description: string
+  authorContact: string | undefined
+  authorTrigram: string | undefined
+  controlUnit: LegacyControlUnit.LegacyControlUnit | undefined
+  controlUnitId: number | undefined
+  description: string | undefined
   dml: string
   natinfCode: number
   reportingActor: keyof typeof ReportingOriginActor
   seaFront: SeaFront
   title: string
-  type: ReportingType
+  type: ReportingType.INFRACTION_SUSPICION
 }
 
 export type Observation = {
-  authorContact: string | null
-  authorTrigram: string | null
-  controlUnit: LegacyControlUnit.LegacyControlUnit | null
-  controlUnitId: number | null
-  description: string
-  reportingActor: keyof typeof ReportingOriginActor
-  title: string
-  type: ReportingType
-}
-
-export type ReportingUpdate = {
   authorContact: string | undefined
   authorTrigram: string | undefined
+  controlUnit: LegacyControlUnit.LegacyControlUnit | undefined
   controlUnitId: number | undefined
   description: string | undefined
-  natinfCode: number | undefined
   reportingActor: keyof typeof ReportingOriginActor
   title: string
-  type: ReportingType
+  type: ReportingType.OBSERVATION
 }

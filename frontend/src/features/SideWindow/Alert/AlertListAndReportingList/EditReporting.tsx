@@ -51,8 +51,8 @@ export function EditReporting() {
           <ReportingForm
             closeForm={closeForm}
             editedReporting={editedReportingInSideWindow}
-            fromSideWindow
             hasWhiteBackground
+            isFromSideWindow
             selectedVesselIdentity={getOnlyVesselIdentityProperties(editedReportingInSideWindow)}
           />
         )}

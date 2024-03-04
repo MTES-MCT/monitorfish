@@ -2,7 +2,7 @@ import Overlay from 'ol/Overlay'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { marginsWithOneWarning, marginsWithoutAlert, marginsWithTwoWarning } from './constants'
+import { marginsWithOneWarning, marginsWithoutAlert, marginsWithThreeWarning, marginsWithTwoWarning } from './constants'
 import { VesselCard } from './VesselCard'
 import { COLORS } from '../../../../constants/constants'
 import { LayerProperties } from '../../../../domain/entities/layers/constants'
@@ -91,6 +91,9 @@ export function VesselCardOverlay({ feature }) {
         break
       case 2:
         margins = marginsWithTwoWarning
+        break
+      case 3:
+        margins = marginsWithThreeWarning
         break
       default:
         margins = marginsWithoutAlert

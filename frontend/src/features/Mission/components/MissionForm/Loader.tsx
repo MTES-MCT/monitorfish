@@ -9,7 +9,7 @@ import { useCallback } from 'react'
 import styled from 'styled-components'
 import { LoadingSpinnerWall } from 'ui/LoadingSpinnerWall'
 
-import { BackToListIcon, Body, CloseButton, Footer, Header, HeaderTitle, Wrapper } from '.'
+import { BackToListIcon, Body, Footer, Header, HeaderTitle, RightButtonsContainer, Wrapper } from '.'
 import { AutoSaveTag } from './shared/AutoSaveTag'
 
 export function Loader() {
@@ -52,19 +52,18 @@ export function Loader() {
       </Body>
 
       <Footer>
-        <div>
-          {!!missionIdFromPath && (
-            <Button accent={Accent.SECONDARY} disabled Icon={Icon.Delete}>
-              Supprimer la mission
-            </Button>
-          )}
-        </div>
-        <div>
+        {!!missionIdFromPath && (
+          <Button accent={Accent.SECONDARY} disabled Icon={Icon.Delete}>
+            Supprimer la mission
+          </Button>
+        )}
+
+        <RightButtonsContainer>
           <AutoSaveTag />
-          <CloseButton accent={Accent.PRIMARY} disabled onClick={goToMissionList}>
+          <Button accent={Accent.PRIMARY} disabled onClick={goToMissionList}>
             Fermer
-          </CloseButton>
-        </div>
+          </Button>
+        </RightButtonsContainer>
       </Footer>
     </Wrapper>
   )

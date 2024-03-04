@@ -16,18 +16,18 @@ export default defineConfig({
     specPattern: 'cypress/e2e/**/*.spec.ts'
   },
   env: {
-    /**
-     * When running Cypress tests, we modify this env var in spec file, so we use `window.Cypress.env()`
-     * instead of `import.meta.env` in application code.
-     */
-    FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED: true,
     'cypress-plugin-snapshots': {
       imageConfig: {
         threshold: 20,
         thresholdType: 'pixel'
       },
       updateSnapshots: false
-    }
+    },
+    /**
+     * When running Cypress tests, we modify this env var in spec file, so we use `window.Cypress.env()`
+     * instead of `import.meta.env` in application code.
+     */
+    FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED: true
   },
   projectId: '9b7q8z',
   retries: {

@@ -251,7 +251,7 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.contains('Veuillez indiquer si le navire est ciblé par le CNSP.').should('exist')
     cy.contains('Veuillez indiquer votre trigramme dans "Clôturé par".').should('exist')
 
-    cy.contains('Ré-ouvrir la mission').should('not.exist')
+    cy.contains('Rouvrir la mission').should('not.exist')
 
     // Obligations déclaratives et autorisations de pêche
     cy.fill('Bonne émission VMS', 'Oui')

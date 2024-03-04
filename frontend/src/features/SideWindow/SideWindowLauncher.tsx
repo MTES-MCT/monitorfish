@@ -45,7 +45,7 @@ export function SideWindowLauncher() {
       showPrompt={isDraftDirty}
       title="MonitorFish"
     >
-      <SideWindow isFromURL={false} />
+      <SideWindow />
     </NewWindow>
   )
 }

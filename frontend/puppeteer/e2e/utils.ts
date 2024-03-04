@@ -5,12 +5,17 @@ export function listenToConsole(page: Page, index: number) {
   page
     .on('console', message => {
       const messageType = message.type().substr(0, 3).toUpperCase()
-      console.log(`[Page ${index}] ${messageType}: ${message.text()}`)
+      console.log(`[Page ${index}] ${messageType}: ${JSON.stringify(message.text())}`)
 
       if (messageType === 'ERR') {
         console.log(message.args(), message.stackTrace())
         if (message.text().includes('/sse')) {
           // If the SSE connection fails, the browser will restart it, it is not an application error
+          return
+        }
+
+        if (message.text().includes('/wfs') || message.text().includes('areas')) {
+          // Do not throw an error when the app could not load a layer
           return
         }
 
@@ -49,10 +54,10 @@ export async function getInputContent(page: Page, selector: string) {
   return element && element.evaluate((el: HTMLInputElement) => el.value)
 }
 
-export async function getFirstTab(browser: Browser) {
-  const [firstTab] = await browser.pages()
+export async function getPage(browser: Browser) {
+  const page = await browser.newPage()
 
-  return firstTab as Page
+  return page as Page
 }
 
 export function wait(ms: number) {
@@ -67,4 +72,10 @@ export async function waitForSelectorWithText<Selector extends string>(
   options?: FrameWaitForFunctionOptions
 ) {
   await page.waitForFunction(`document.querySelector("${selector}").innerText.includes("${text}")`, options)
+}
+
+export async function getSideWindow() {
+  const lastTarget = browsers[0].targets().length - 1
+
+  return browsers[0].targets()[lastTarget]?.page()
 }

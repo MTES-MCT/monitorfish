@@ -36,9 +36,9 @@ import { setEditedReportingInSideWindow } from '../Reporting/slice'
 import { getAllCurrentReportings } from '../Reporting/useCases/getAllCurrentReportings'
 
 export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
-  isFromURL: boolean
+  isFromURL?: boolean
 }
-export function SideWindow({ isFromURL }: SideWindowProps) {
+export function SideWindow({ isFromURL = false }: SideWindowProps) {
   const dispatch = useMainAppDispatch()
   // eslint-disable-next-line no-null/no-null
   const wrapperRef = useRef<HTMLDivElement | null>(null)

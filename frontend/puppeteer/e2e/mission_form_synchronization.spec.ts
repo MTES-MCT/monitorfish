@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from '@jest/globals'
 import { platform } from 'os'
 import { Page } from 'puppeteer'
 
-import { assertContains, getFirstTab, getInputContent, listenToConsole, wait, waitForSelectorWithText } from './utils'
+import { assertContains, getPage, getInputContent, listenToConsole, wait, waitForSelectorWithText } from './utils'
 import { SeaFrontGroup } from '../../src/domain/entities/seaFront/constants'
 
 const TIMEOUT = 120 * 1000
@@ -17,12 +17,12 @@ const URL = `http://${WEBAPP_HOST}:${WEBAPP_PORT}/side_window`
 let pageA: Page
 let pageB: Page
 
-describe('Missions Form', () => {
+describe('Missions form synchronization', () => {
   beforeEach(async () => {
-    pageA = await getFirstTab(browsers[0])
+    pageA = await getPage(browsers[0])
     listenToConsole(pageA, 1)
 
-    pageB = await getFirstTab(browsers[1])
+    pageB = await getPage(browsers[1])
     listenToConsole(pageB, 2)
 
     /* eslint-disable no-restricted-syntax */
@@ -165,7 +165,10 @@ describe('Missions Form', () => {
        */
       const finalReopen = await pageA.waitForSelector('[data-cy="reopen-mission"]')
       await finalReopen.click()
+
       await wait(5000)
+      await pageA.close()
+      await pageB.close()
     },
     TIMEOUT
   )

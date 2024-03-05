@@ -237,7 +237,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(pnoMessage.catchOnboard.first().effortZone).isEqualTo("C")
         assertThat(pnoMessage.catchOnboard.first().economicZone).isEqualTo("FRA")
         assertThat(pnoMessage.catchOnboard.first().statisticalRectangle).isEqualTo("23E6")
-        assertThat(pnoMessage.tripStartDate.toString()).isEqualTo("2019-10-11T00:00Z")
+        assertThat(pnoMessage.tripStartDate.toString()).isEqualTo("2024-03-02T00:00Z")
         assertThat(pnoMessage.predictedArrivalDateTime).isAfter(ZonedDateTime.now().minusDays(5))
 
         // EOF

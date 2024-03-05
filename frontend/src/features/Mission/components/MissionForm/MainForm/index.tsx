@@ -11,10 +11,10 @@ import {
 import { Formik } from 'formik'
 import { isEqual, omit } from 'lodash'
 import { isEmpty, noop } from 'lodash/fp'
-import { memo } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
-import { MISSION_TYPES_AS_OPTIONS } from './constants'
+import { MISSION_EVENT_UNSYNCHRONIZED_PROPERTIES_IN_FORM, MISSION_TYPES_AS_OPTIONS } from './constants'
 import { FormikDoubleDatePicker } from './FormikDoubleDatePicker'
 import { FormikLocationPicker } from './FormikLocationPicker'
 import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'
@@ -34,7 +34,13 @@ type MainFormProps = Readonly<{
 }>
 function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProps) {
   const missionEvent = useListenToMissionEventUpdatesById(missionId)
+  const isMissionEventOutdated = useRef(false)
+  const isFormOpening = useRef(true)
   const engagedControlUnit = useMainAppSelector(state => state.missionForm.engagedControlUnit)
+
+  useEffect(() => {
+    isMissionEventOutdated.current = false
+  }, [missionEvent])
 
   function validateBeforeOnChange(validateForm) {
     return async nextValues => {
@@ -46,17 +52,21 @@ function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProp
       }
 
       // Prevent triggering `onChange` when opening the form
-      if (isEqual(initialValues, nextValues)) {
+      if (isFormOpening.current && isEqual(initialValues, nextValues)) {
+        isFormOpening.current = false
+
         return
       }
 
       // Prevent re-sending the form when receiving an update
-      const nextValuesWithoutIsValid = omit(nextValues, ['isValid'])
-      if (isEqual(missionEvent, nextValuesWithoutIsValid)) {
+      const nextValuesWithoutIsValid = omit(nextValues, MISSION_EVENT_UNSYNCHRONIZED_PROPERTIES_IN_FORM)
+      const missionEventWithoutIsValid = omit(missionEvent, MISSION_EVENT_UNSYNCHRONIZED_PROPERTIES_IN_FORM)
+      if (!isMissionEventOutdated.current && isEqual(missionEventWithoutIsValid, nextValuesWithoutIsValid)) {
         return
       }
 
       onChange({ ...nextValues, isValid })
+      isMissionEventOutdated.current = true
     }
   }
 

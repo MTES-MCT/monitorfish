@@ -30,7 +30,7 @@ const INITIAL_STATE: MissionFormState = {
   geometryComputedFromControls: undefined,
   isClosing: false,
   isDraftDirty: false,
-  isListeningToEvents: true,
+  isListeningToEvents: false,
   mustResetOtherControlsCheckboxes: undefined,
   selectedMissionActionGeoJSON: undefined,
   selectedMissionGeoJSON: undefined

@@ -8,9 +8,9 @@ import {
 } from '@features/Reporting/components/ReportingForm/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, FormikSelect, FormikTextarea, FormikTextInput, Legend, Fieldset } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Fieldset, FormikSelect, FormikTextarea, FormikTextInput, Legend } from '@mtes-mct/monitor-ui'
 import { Form, Formik } from 'formik'
-import { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Radio, RadioGroup } from 'rsuite'
 import styled from 'styled-components'
 
@@ -25,7 +25,6 @@ import { mapControlUnitsToUniqueSortedIdsAsOptions } from '../VesselReportings/C
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
 import type { EditableReporting, EditedReporting } from '../../../../domain/types/reporting'
 import type { Option } from '@mtes-mct/monitor-ui'
-import type { MutableRefObject } from 'react'
 
 type ReportingFormProps = {
   closeForm: () => void
@@ -44,7 +43,6 @@ export function ReportingForm({
   const dispatch = useMainAppDispatch()
   const infractions = useMainAppSelector(state => state.infraction.infractions)
   const controlUnitsQuery = useGetLegacyControlUnitsQuery(undefined)
-  const previousReportingType = useRef() as MutableRefObject<ReportingType>
 
   const infractionsAsOptions = useMemo(
     () =>
@@ -75,7 +73,7 @@ export function ReportingForm({
             getOnlyVesselIdentityProperties(editedReporting),
             editedReporting.id,
             nextReportingValue,
-            previousReportingType.current
+            editedReporting.type
           )
         ).then(() => {
           closeForm()

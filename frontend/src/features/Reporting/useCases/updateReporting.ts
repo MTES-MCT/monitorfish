@@ -34,7 +34,7 @@ export const updateReporting =
           nextReporting.type === ReportingType.OBSERVATION &&
           previousReportingType === ReportingType.INFRACTION_SUSPICION
         ) {
-          dispatch(removeCurrentReporting(updatedReporting.id))
+          dispatch(removeCurrentReporting(id))
         }
 
         // We update the reportings of the last positions vessels state

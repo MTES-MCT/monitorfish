@@ -3,7 +3,7 @@
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
-import { marginsWithOneWarning, marginsWithoutAlert, marginsWithTwoWarning } from './constants'
+import { marginsWithOneWarning, marginsWithoutAlert, marginsWithThreeWarning, marginsWithTwoWarning } from './constants'
 import { COLORS } from '../../../../constants/constants'
 import { getCoordinates } from '../../../../coordinates'
 import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
@@ -52,26 +52,26 @@ export function VesselCard({ feature, numberOfWarnings, overlayPosition }) {
           </Logbook>
         )}
       </VesselCardHeader>
-      {isSuperUser && vesselProperties.alerts?.length ? (
+      {isSuperUser && !!vesselProperties.alerts?.length && (
         <VesselCardAlert data-cy="vessel-card-alert">
           <AlertIcon />
           {vesselProperties.alerts?.length === 1
             ? getAlertNameFromType(vesselProperties.alerts[0])
             : `${vesselProperties.alerts?.length} alertes`}
         </VesselCardAlert>
-      ) : null}
-      {isSuperUser && vesselProperties.hasInfractionSuspicion ? (
+      )}
+      {isSuperUser && vesselProperties.hasInfractionSuspicion && (
         <VesselCardAlert>
           <AlertIcon />
           Suspicion d&apos;infraction
         </VesselCardAlert>
-      ) : null}
-      {isSuperUser && vesselProperties.beaconMalfunctionId ? (
+      )}
+      {isSuperUser && !!vesselProperties.beaconMalfunctionId && (
         <VesselCardBeaconMalfunction data-cy="vessel-card-beacon-malfunction">
           <BeaconMalfunctionIcon />
           NON-ÉMISSION VMS
         </VesselCardBeaconMalfunction>
-      ) : null}
+      )}
       <VesselCardBody>
         <LatLon>
           <FieldName>Latitude</FieldName>
@@ -334,12 +334,21 @@ const BottomTriangleShadow = styled.div<{
   border-style: solid;
   border-width: 11px 6px 0 6px;
   border-color: ${COLORS.gainsboro} transparent transparent transparent;
-  margin-left: ${props =>
-    -(props.numberOfWarnings === 1
-      ? marginsWithOneWarning.xMiddle
-      : props.numberOfWarnings === 2
-      ? marginsWithTwoWarning.xMiddle
-      : marginsWithoutAlert.xMiddle) - 6}px;
+  margin-left: ${props => {
+    if (props.numberOfWarnings === 1) {
+      return -marginsWithOneWarning.xMiddle - 6
+    }
+
+    if (props.numberOfWarnings === 2) {
+      return -marginsWithTwoWarning.xMiddle - 6
+    }
+
+    if (props.numberOfWarnings === 3) {
+      return -marginsWithThreeWarning.xMiddle - 6
+    }
+
+    return -marginsWithoutAlert.xMiddle - 6
+  }}px;
   margin-top: -1px;
   clear: top;
 `
@@ -354,18 +363,36 @@ const TopTriangleShadow = styled.div<{
   border-right: 6px solid transparent;
   border-bottom: 11px solid ${COLORS.gainsboro};
   border-left: 6px solid transparent;
-  margin-left: ${props =>
-    -(props.numberOfWarnings === 1
-      ? marginsWithOneWarning.xMiddle
-      : props.numberOfWarnings === 2
-      ? marginsWithTwoWarning.xMiddle
-      : marginsWithoutAlert.xMiddle) - 6}px;
-  margin-top: ${props =>
-    (props.numberOfWarnings === 1
-      ? marginsWithOneWarning.yBottom
-      : props.numberOfWarnings === 2
-      ? marginsWithTwoWarning.yBottom
-      : marginsWithoutAlert.yBottom) + 15}px;
+  margin-left: ${props => {
+    if (props.numberOfWarnings === 1) {
+      return -marginsWithOneWarning.xMiddle - 6
+    }
+
+    if (props.numberOfWarnings === 2) {
+      return -marginsWithTwoWarning.xMiddle - 6
+    }
+
+    if (props.numberOfWarnings === 3) {
+      return -marginsWithThreeWarning.xMiddle - 6
+    }
+
+    return -marginsWithoutAlert.xMiddle - 6
+  }}px;
+  margin-top: ${props => {
+    if (props.numberOfWarnings === 1) {
+      return marginsWithOneWarning.yBottom + 18
+    }
+
+    if (props.numberOfWarnings === 2) {
+      return marginsWithTwoWarning.yBottom + 18
+    }
+
+    if (props.numberOfWarnings === 3) {
+      return marginsWithThreeWarning.yBottom + 18
+    }
+
+    return marginsWithoutAlert.yBottom + 18
+  }}px;
   clear: top;
 `
 
@@ -379,18 +406,36 @@ const RightTriangleShadow = styled.div<{
   border-top: 6px solid transparent;
   border-bottom: 6px solid transparent;
   border-left: 11px solid ${COLORS.gainsboro};
-  margin-left: ${props =>
-    -(props.numberOfWarnings === 1
-      ? marginsWithOneWarning.xRight
-      : props.numberOfWarnings === 2
-      ? marginsWithTwoWarning.xRight
-      : marginsWithoutAlert.xRight) - 20}px;
-  margin-top: ${props =>
-    (props.numberOfWarnings === 1
-      ? marginsWithOneWarning.yMiddle
-      : props.numberOfWarnings === 2
-      ? marginsWithTwoWarning.yMiddle
-      : marginsWithoutAlert.yMiddle) - 6}px;
+  margin-left: ${props => {
+    if (props.numberOfWarnings === 1) {
+      return -marginsWithOneWarning.xRight - 20
+    }
+
+    if (props.numberOfWarnings === 2) {
+      return -marginsWithTwoWarning.xRight - 20
+    }
+
+    if (props.numberOfWarnings === 3) {
+      return -marginsWithThreeWarning.xRight - 20
+    }
+
+    return -marginsWithoutAlert.xRight - 20
+  }}px;
+  margin-top: ${props => {
+    if (props.numberOfWarnings === 1) {
+      return marginsWithOneWarning.yMiddle - 6
+    }
+
+    if (props.numberOfWarnings === 2) {
+      return marginsWithTwoWarning.yMiddle - 6
+    }
+
+    if (props.numberOfWarnings === 3) {
+      return marginsWithThreeWarning.yMiddle - 6
+    }
+
+    return marginsWithoutAlert.yMiddle - 6
+  }}px;
   clear: top;
 `
 
@@ -406,12 +451,21 @@ const LeftTriangleShadow = styled.div<{
   border-bottom: 6px solid transparent;
   border-left: transparent;
   margin-left: -11px;
-  margin-top: ${props =>
-    (props.numberOfWarnings === 1
-      ? marginsWithOneWarning.yMiddle
-      : props.numberOfWarnings === 2
-      ? marginsWithTwoWarning.yMiddle
-      : marginsWithoutAlert.yMiddle) - 6}px;
+  margin-top: ${props => {
+    if (props.numberOfWarnings === 1) {
+      return marginsWithOneWarning.yMiddle - 6
+    }
+
+    if (props.numberOfWarnings === 2) {
+      return marginsWithTwoWarning.yMiddle - 6
+    }
+
+    if (props.numberOfWarnings === 3) {
+      return marginsWithThreeWarning.yMiddle - 6
+    }
+
+    return marginsWithoutAlert.yMiddle - 6
+  }}px;
   clear: top;
 `
 

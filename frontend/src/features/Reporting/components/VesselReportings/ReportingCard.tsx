@@ -93,8 +93,8 @@ export function ReportingCard({
             />
           )}
           <ArchiveButton
+            $isAlert={!!numberOfAlerts}
             data-cy="archive-reporting-card"
-            isAlert={!!numberOfAlerts}
             onClick={() => dispatch(archiveReporting(reporting.id))}
             title="Archiver"
           />
@@ -195,10 +195,10 @@ const InfractionSuspicionIcon = styled(InfractionSuspicionIconSVG)`
 `
 
 const ArchiveButton = styled(ArchiveIconSVG)<{
-  isAlert: boolean
+  $isAlert: boolean
 }>`
   cursor: pointer;
-  margin-top: ${p => (p.isAlert ? 11 : 7)}px;
+  margin-top: ${p => (p.$isAlert ? 11 : 7)}px;
 `
 
 const EditButton = styled(EditIconSVG)`

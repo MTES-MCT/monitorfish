@@ -48,9 +48,9 @@ export function BeaconMalfunctionDetails({
         vesselStatusElement.style.color = vesselStatus.textColor
       }
 
-      const selectElement = vesselStatusRef.current.querySelector('.rs-picker-select') as HTMLElement | null
+      const selectElement = vesselStatusRef.current.querySelector('.rs-picker-select > div') as HTMLElement | null
       if (selectElement?.style) {
-        selectElement.style.background = vesselStatus.color
+        selectElement.style.setProperty('background', vesselStatus.color, 'important')
         selectElement.style.setProperty('margin', '2px 10px 10px 0px', 'important')
       }
     }

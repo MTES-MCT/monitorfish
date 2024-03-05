@@ -4,7 +4,7 @@ import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUn
 
 export const getReportingActor = (
   reportingActor: keyof typeof ReportingOriginActor,
-  unit: LegacyControlUnit.LegacyControlUnit | null
+  unit: LegacyControlUnit.LegacyControlUnit | undefined
 ) => {
   if (reportingActor === ReportingOriginActor.UNIT.code) {
     return unit?.name ?? 'Unité inconnue'

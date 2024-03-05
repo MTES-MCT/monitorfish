@@ -1,7 +1,7 @@
 import { getReportingOrigin, getReportingTitle } from './utils'
 
 import type { InfractionSuspicionReporting, PendingAlertReporting } from '../../../../domain/types/reporting'
-import type { TableOptions } from '../../../../hooks/useTable/types'
+import type { TableOptions } from '@hooks/useTable/types'
 
 export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<InfractionSuspicionReporting | PendingAlertReporting> = {
   columns: [
@@ -20,7 +20,7 @@ export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<InfractionSuspicionRepor
       transform: getReportingOrigin
     },
     {
-      fixedWidth: 310,
+      fixedWidth: 280,
       isSortable: true,
       key: 'title',
       label: 'Titre',
@@ -33,19 +33,19 @@ export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<InfractionSuspicionRepor
       label: 'NATINF'
     },
     {
-      fixedWidth: 245,
+      fixedWidth: 230,
       isSortable: true,
       key: 'vesselName',
       label: 'Navire'
     },
     {
-      fixedWidth: 130,
+      fixedWidth: 70,
       isSortable: true,
       key: 'value.dml',
-      label: 'DML concernées'
+      label: 'DML'
     },
     {
-      fixedWidth: 165,
+      fixedWidth: 155,
       isSortable: false,
       key: 'underCharter',
       label: ''
@@ -55,7 +55,7 @@ export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<InfractionSuspicionRepor
       key: '_focusOnMap'
     },
     {
-      fixedWidth: 40,
+      fixedWidth: 33,
       key: '_edit'
     }
   ],

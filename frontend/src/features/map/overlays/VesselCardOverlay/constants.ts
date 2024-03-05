@@ -24,3 +24,11 @@ export const marginsWithTwoWarning: OverlayCardMargins = {
   yMiddle: -155,
   yTop: 20
 }
+export const marginsWithThreeWarning: OverlayCardMargins = {
+  xLeft: 20,
+  xMiddle: -185,
+  xRight: -407,
+  yBottom: -360,
+  yMiddle: -166,
+  yTop: 20
+}

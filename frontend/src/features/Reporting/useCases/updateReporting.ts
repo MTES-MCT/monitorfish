@@ -1,4 +1,5 @@
-import { updateReportingFromAPI } from '../../../api/reporting'
+import { updateReportingFromAPI } from '@api/reporting'
+
 import { Vessel } from '../../../domain/entities/vessel/vessel'
 import { removeError, setError } from '../../../domain/shared_slices/Global'
 import { addVesselReporting, removeVesselReporting } from '../../../domain/shared_slices/Vessel'
@@ -10,14 +11,14 @@ import {
 } from '../slice'
 
 import type { VesselIdentity } from '../../../domain/entities/vessel/types'
-import type { InfractionSuspicionReporting, ReportingUpdate } from '../../../domain/types/reporting'
-import type { MainAppThunk } from '../../../store'
+import type { EditedReporting, InfractionSuspicionReporting } from '../../../domain/types/reporting'
+import type { MainAppThunk } from '@store'
 
 export const updateReporting =
   (
     selectedVesselIdentity: VesselIdentity,
     id: number,
-    nextReporting: ReportingUpdate,
+    nextReporting: EditedReporting,
     previousReportingType: ReportingType
   ): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
@@ -33,7 +34,7 @@ export const updateReporting =
           nextReporting.type === ReportingType.OBSERVATION &&
           previousReportingType === ReportingType.INFRACTION_SUSPICION
         ) {
-          dispatch(removeCurrentReporting(updatedReporting.id))
+          dispatch(removeCurrentReporting(id))
         }
 
         // We update the reportings of the last positions vessels state

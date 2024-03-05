@@ -46,10 +46,6 @@ export const SecondaryButton = styled(Button)`
   ${baseSecondaryButton}
 `
 
-export const BackofficeSecondaryButton = styled(BackofficeButton)`
-  ${baseSecondaryButton}
-`
-
 const baseAddButton = css`
   position: relative;
   border: 1px solid ${COLORS.lightGray};

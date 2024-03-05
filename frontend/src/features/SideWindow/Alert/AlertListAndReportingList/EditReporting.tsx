@@ -1,83 +1,58 @@
-import { useCallback, useMemo } from 'react'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { THEME } from '@mtes-mct/monitor-ui'
+import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../constants/constants'
 import { getOnlyVesselIdentityProperties } from '../../../../domain/entities/vessel/vessel'
-import { ReportingType } from '../../../../domain/types/reporting'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import CloseIconSVG from '../../../icons/Croix_grise.svg?react'
 import AlertsSVG from '../../../icons/Icone_alertes_gris.svg?react'
-import { ReportingForm } from '../../../Reporting/components/VesselReportings/Current/ReportingForm'
+import { ReportingForm } from '../../../Reporting/components/ReportingForm'
 import { setEditedReportingInSideWindow } from '../../../Reporting/slice'
-
-import type { CSSProperties } from 'react'
 
 export function EditReporting() {
   const dispatch = useMainAppDispatch()
   const baseUrl = window.location.origin
   const editedReportingInSideWindow = useMainAppSelector(state => state.reporting.editedReportingInSideWindow)
 
-  const editReportingWrapperStyle: CSSProperties = useMemo(
-    () => ({
-      background: COLORS.white,
-      height: '100vh',
-      marginRight: editedReportingInSideWindow ? 0 : -490,
-      position: 'fixed',
-      right: 0,
-      top: 0,
-      transition: 'margin-right 0.5s',
-      width: 490,
-      zIndex: 999
-    }),
-    [editedReportingInSideWindow]
-  )
-
   const closeForm = useCallback(() => {
     dispatch(setEditedReportingInSideWindow())
   }, [dispatch])
 
   return (
-    <EditReportingWrapper data-cy="side-window-beacon-malfunctions-detail" style={editReportingWrapperStyle}>
-      <Header style={headerStyle}>
-        <Row style={rowStyle()}>
-          <AlertsIcon style={alertsIconStyle} />
-          <Title style={titleStyle}>ÉDITER LE SIGNALEMENT</Title>
-          <CloseIcon onClick={() => dispatch(setEditedReportingInSideWindow())} style={closeIconStyle} />
+    <EditReportingWrapper
+      data-cy="side-window-beacon-malfunctions-detail"
+      isEditedInSideWindow={!!editedReportingInSideWindow}
+    >
+      <Header>
+        <Row topMargin={0}>
+          <AlertsIcon />
+          <Title> ÉDITER LE SIGNALEMENT</Title>
+          <CloseIcon onClick={() => dispatch(setEditedReportingInSideWindow())} />
         </Row>
-        <Row style={rowStyle(10)}>
-          {editedReportingInSideWindow &&
-            editedReportingInSideWindow.type === ReportingType.ALERT &&
-            editedReportingInSideWindow.flagState && (
-              <Flag
-                rel="preload"
-                src={`${baseUrl}/flags/${editedReportingInSideWindow.flagState.toLowerCase()}.svg`}
-                style={flagStyle}
-              />
-            )}
+        <Row topMargin={6}>
+          {editedReportingInSideWindow && editedReportingInSideWindow.flagState && (
+            <Flag rel="preload" src={`${baseUrl}/flags/${editedReportingInSideWindow.flagState.toLowerCase()}.svg`} />
+          )}
           <VesselName
             data-cy="side-window-beacon-malfunctions-detail-vessel-name"
-            style={vesselNameStyle}
-            title={editedReportingInSideWindow?.vesselName || 'Aucun nom'}
+            title={editedReportingInSideWindow?.vesselName ?? 'Aucun nom'}
           >
-            {editedReportingInSideWindow?.vesselName || 'Aucun nom'}
+            {editedReportingInSideWindow?.vesselName ?? 'Aucun nom'}
           </VesselName>
-          <InternalReferenceNumber
-            data-cy="side-window-beacon-malfunctions-detail-cfr"
-            style={internalReferenceNumberStyle}
-          >
-            ({editedReportingInSideWindow?.internalReferenceNumber || 'Aucun CFR'})
+          <InternalReferenceNumber data-cy="side-window-beacon-malfunctions-detail-cfr">
+            ({editedReportingInSideWindow?.internalReferenceNumber ?? 'Aucun CFR'})
           </InternalReferenceNumber>
         </Row>
       </Header>
-      <Line style={lineStyle} />
+      <Line />
       <ReportingFormWrapper>
         {editedReportingInSideWindow && (
           <ReportingForm
             closeForm={closeForm}
             editedReporting={editedReportingInSideWindow}
-            fromSideWindow
             hasWhiteBackground
+            isFromSideWindow
             selectedVesselIdentity={getOnlyVesselIdentityProperties(editedReportingInSideWindow)}
           />
         )}
@@ -86,77 +61,82 @@ export function EditReporting() {
   )
 }
 
-const EditReportingWrapper = styled.div``
+const EditReportingWrapper = styled.div<{
+  isEditedInSideWindow: boolean
+}>`
+  background: ${THEME.color.white};
+  height: 100vh;
+  margin-right: ${p => (p.isEditedInSideWindow ? 0 : -490)}px;
+  position: fixed;
+  right: 0px;
+  top: 0px;
+  transition: margin-right 0.5s;
+  width: 490px;
+  z-index: 999;
+`
 
 const ReportingFormWrapper = styled.div`
   padding: 10px 25px 20px 25px;
 `
 
-const Line = styled.div``
-const lineStyle = {
-  borderBottom: `1px solid ${COLORS.lightGray}`,
-  width: '100%'
-}
+const Line = styled.div`
+  border-bottom: 1px solid ${THEME.color.lightGray};
+  width: 100%;
+`
 
 const Flag = styled.img<{
   rel?: 'preload'
-}>``
-const flagStyle = {
-  cursor: 'pointer',
-  display: 'inline-block',
-  height: 14,
-  marginTop: 5,
-  verticalAlign: 'middle'
-}
+}>`
+  cursor: pointer;
+  display: inline-block;
+  height: 14;
+  margin-top: 5px;
+  vertical-align: middle;
+`
 
-const VesselName = styled.div``
-const vesselNameStyle: CSSProperties = {
-  color: COLORS.gunMetal,
-  font: 'normal normal bold 16px/22px Marianne',
-  marginLeft: 8,
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  whiteSpace: 'nowrap'
-}
+const VesselName = styled.div`
+  color: ${THEME.color.gunMetal};
+  font: normal normal bold 16px/22px Marianne;
+  margin-left: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
 
-const InternalReferenceNumber = styled.div``
-const internalReferenceNumberStyle = {
-  color: COLORS.gunMetal,
-  font: 'normal normal normal 16px/22px Marianne',
-  marginLeft: 5
-}
+const InternalReferenceNumber = styled.div`
+  color: ${THEME.color.gunMetal};
+  font: normal normal normal 16px/22px Marianne;
+  margin-left: 5;
+`
 
-const CloseIcon = styled(CloseIconSVG)``
-const closeIconStyle = {
-  cursor: 'pointer',
-  height: 20,
-  marginLeft: 'auto',
-  marginRight: 4,
-  marginTop: 0,
-  width: 20
-}
+const CloseIcon = styled(CloseIconSVG)`
+  cursor: pointer;
+  height: 20px;
+  margin-left: auto;
+  margin-right: 4px;
+  margin-top: 0px;
+  width: 20px;
+`
 
-const Row = styled.div``
-const rowStyle = (topMargin: number = 0): CSSProperties => ({
-  display: 'flex',
-  marginTop: topMargin
-})
+const Row = styled.div<{
+  topMargin: number
+}>`
+  display: flex;
+  margin-top: ${p => p.topMargin};
+`
 
-const Header = styled.div``
-const headerStyle = {
-  margin: '20px 20px 5px 40px'
-}
+const Header = styled.div`
+  margin: 16px 20px 16px 40px;
+`
 
-const Title = styled.span``
-const titleStyle = {
-  color: COLORS.slateGray,
-  font: 'normal normal bold 16px Marianne',
-  letterSpacing: 0,
-  marginLeft: 10,
-  verticalAlign: 'super'
-}
+const Title = styled.span`
+  color: ${THEME.color.slateGray};
+  font: normal normal bold 16px Marianne;
+  letter-spacing: 0px;
+  margin-left: 10px;
+  vertical-align: super;
+`
 
-const AlertsIcon = styled(AlertsSVG)``
-const alertsIconStyle = {
-  width: 17
-}
+const AlertsIcon = styled(AlertsSVG)`
+  width: 17px;
+`

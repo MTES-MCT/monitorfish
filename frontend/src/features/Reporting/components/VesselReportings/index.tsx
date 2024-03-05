@@ -1,15 +1,14 @@
-import { usePrevious } from '@mtes-mct/monitor-ui'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { THEME, usePrevious } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
 import { Archived } from './Archived'
 import { Current } from './Current'
-import { COLORS } from '../../../../constants/constants'
 import { vesselsAreEquals } from '../../../../domain/entities/vessel/vessel'
 import { getVesselReportings } from '../../../../domain/use_cases/vessel/getVesselReportings'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 
 const ReportingTab = {
   CURRENT_REPORTING: 'CURRENT_REPORTING',
@@ -29,8 +28,10 @@ export function VesselReportings() {
   const previousSelectedVesselIdentity = usePrevious(selectedVesselIdentity)
 
   useEffect(() => {
-    dispatch(getVesselReportings(true))
-  }, [dispatch, selectedVesselIdentity])
+    if (!previousSelectedVesselIdentity || !vesselsAreEquals(previousSelectedVesselIdentity, selectedVesselIdentity)) {
+      dispatch(getVesselReportings(true))
+    }
+  }, [dispatch, previousSelectedVesselIdentity, selectedVesselIdentity])
 
   useEffect(() => {
     if (!vesselsAreEquals(previousSelectedVesselIdentity, selectedVesselIdentity)) {
@@ -61,7 +62,7 @@ export function VesselReportings() {
           {reportingTab === ReportingTab.REPORTING_HISTORY && <Archived />}
         </Body>
       ) : (
-        <FingerprintSpinner className="radar" color={COLORS.charcoal} size={100} />
+        <FingerprintSpinner className="radar" color={THEME.color.charcoal} size={100} />
       )}
     </>
   )
@@ -88,5 +89,5 @@ const Menu = styled.div`
 const Body = styled.div`
   padding: 5px;
   overflow-x: hidden;
-  max-height: 700px;
+  max-height: 670px;
 `

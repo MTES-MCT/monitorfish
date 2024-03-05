@@ -8,7 +8,7 @@ const GET_MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les a
 
 export const missionActionApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
-    createMissionAction: builder.mutation<void, MissionAction.MissionActionData>({
+    createMissionAction: builder.mutation<MissionAction.MissionAction, MissionAction.MissionActionData>({
       // TODO To remove when FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED feature flag is ON
       // As all mission will be fetched when closing the mission form
       invalidatesTags: () => [{ type: 'Missions' }, { type: 'MissionActions' }],

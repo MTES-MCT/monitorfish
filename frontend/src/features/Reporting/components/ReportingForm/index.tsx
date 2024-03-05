@@ -1,5 +1,5 @@
-import { useGetLegacyControlUnitsQuery } from '@api/legacyControlUnit'
 import { COLORS } from '@constants/constants'
+import { useGetControlUnitsQuery } from '@features/ControlUnit/controlUnitApi'
 import { CreateOrEditReportingSchema } from '@features/Reporting/components/ReportingForm/schemas'
 import {
   getFormFields,
@@ -42,7 +42,7 @@ export function ReportingForm({
 }: ReportingFormProps) {
   const dispatch = useMainAppDispatch()
   const infractions = useMainAppSelector(state => state.infraction.infractions)
-  const controlUnitsQuery = useGetLegacyControlUnitsQuery(undefined)
+  const controlUnitsQuery = useGetControlUnitsQuery(undefined)
 
   const infractionsAsOptions = useMemo(
     () =>
@@ -118,7 +118,7 @@ export function ReportingForm({
           <>
             <StyledForm $hasWhiteBackground={hasWhiteBackground}>
               <Fieldset className="Field-MultiRadio">
-                <StyledLabel htmlFor="type">Type</StyledLabel>
+                <Legend>Type</Legend>
                 <RadioGroup
                   appearance="picker"
                   defaultValue={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
@@ -144,7 +144,7 @@ export function ReportingForm({
                 </RadioGroup>
               </Fieldset>
               <Fieldset className="Field-MultiRadio">
-                <StyledLabel htmlFor="reportingActor">Origine</StyledLabel>
+                <Legend>Origine</Legend>
                 <RadioGroup
                   appearance="picker"
                   defaultValue={ReportingOriginActor.OPS.code}
@@ -233,18 +233,14 @@ export function ReportingForm({
 }
 
 const StyledFormikSelect = styled(FormikSelect)`
-  margin-top: 16px;
   width: 410px;
 `
 
 const StyledFormikTextInput = styled(FormikTextInput)`
-  box-sizing: border-box;
-  margin-top: 16px;
   width: 410px;
 `
 
 const StyledFormikTextarea = styled(FormikTextarea)`
-  margin-top: 16px;
   width: 410px;
 `
 
@@ -256,12 +252,6 @@ const CancelButton = styled(Button)`
   margin: 24px 0px 0px 0px;
 `
 
-const StyledLabel = styled(Legend)<{
-  htmlFor: string | undefined
-}>`
-  margin-top: 12px;
-`
-
 const StyledForm = styled(Form)<{
   $hasWhiteBackground: boolean
 }>`
@@ -269,10 +259,12 @@ const StyledForm = styled(Form)<{
     box-sizing: border-box !important;
   }
 
-  margin: 0px 16px 16px 16px;
-  .rs-picker-toggle {
-    background: ${p => (p.$hasWhiteBackground ? COLORS.gainsboro : COLORS.white)} !important;
+  > .Element-Field,
+  > .Element-Fieldset {
+    margin-top: 12px;
   }
+
+  margin: 0px 16px 16px 16px;
 
   .rs-radio-group {
     margin-top: 1px;

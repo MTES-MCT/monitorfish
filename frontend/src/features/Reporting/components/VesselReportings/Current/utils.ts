@@ -1,16 +1,13 @@
-import { customDayjs } from '@mtes-mct/monitor-ui'
+import { ControlUnit, customDayjs } from '@mtes-mct/monitor-ui'
 
-import type { LegacyControlUnit } from '../../../../../domain/types/legacyControlUnit'
 import type { Reporting } from '../../../../../domain/types/reporting'
 import type { Option } from '@mtes-mct/monitor-ui'
 
-export const mapControlUnitsToUniqueSortedIdsAsOptions = (
-  controlUnits: LegacyControlUnit.LegacyControlUnit[]
-): Option<number>[] =>
+export const mapControlUnitsToUniqueSortedIdsAsOptions = (controlUnits: ControlUnit.ControlUnit[]): Option<number>[] =>
   Array.from(controlUnits)
     .sort((a, b) => Number(b.name) - Number(a.name))
     .map(controlUnit => ({
-      label: `${controlUnit.name} (${controlUnit.administration})`,
+      label: `${controlUnit.name} (${controlUnit.administration.name})`,
       value: controlUnit.id
     }))
 

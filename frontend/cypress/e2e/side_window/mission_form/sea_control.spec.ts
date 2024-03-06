@@ -61,6 +61,12 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter un contrôle en mer')
 
     const now = getUtcDateInMultipleFormats()
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      body: {
+        id: 2
+      },
+      statusCode: 201
+    })
     cy.intercept('PUT', '/bff/v1/mission_actions/2', {
       body: {
         id: 2
@@ -259,9 +265,15 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter')
     cy.clickButton('Ajouter un contrôle en mer')
 
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      body: {
+        id: 2
+      },
+      statusCode: 201
+    })
     cy.intercept('PUT', '/bff/v1/mission_actions/2', {
       body: {
-        id: 1
+        id: 2
       },
       statusCode: 201
     }).as('updateMissionAction')
@@ -710,7 +722,6 @@ context('Side Window > Mission Form > Sea Control', () => {
       },
       statusCode: 201
     }).as('createMissionAction')
-
     cy.intercept('PUT', '/bff/v1/mission_actions/2', {
       body: {
         id: 2
@@ -780,7 +791,6 @@ context('Side Window > Mission Form > Sea Control', () => {
       },
       statusCode: 201
     }).as('createMissionAction')
-
     cy.intercept('PUT', '/bff/v1/mission_actions/2', {
       body: {
         id: 2
@@ -845,6 +855,12 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter')
     cy.clickButton('Ajouter un contrôle en mer')
 
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      body: {
+        id: 2
+      },
+      statusCode: 201
+    })
     cy.intercept('PUT', '/bff/v1/mission_actions/2').as('updateMissionActionOne')
 
     // -------------------------------------------------------------------------

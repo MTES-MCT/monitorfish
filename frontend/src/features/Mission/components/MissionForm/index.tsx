@@ -549,6 +549,7 @@ export function MissionForm() {
       if (savedMainFormValues) {
         setMainFormValues(savedMainFormValues)
         missionIdRef.current = savedMainFormValues.id
+        updateReduxSliceDraft()
       }
     },
     [

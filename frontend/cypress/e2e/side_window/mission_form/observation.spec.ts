@@ -47,7 +47,6 @@ context('Side Window > Mission Form > Observation', () => {
           feedbackSheetRequired: null,
           gearInfractions: [],
           gearOnboard: [],
-          id: 2,
           latitude: null,
           licencesAndLogbookObservations: null,
           licencesMatchActivity: null,

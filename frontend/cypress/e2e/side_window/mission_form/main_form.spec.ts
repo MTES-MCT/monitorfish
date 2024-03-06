@@ -745,7 +745,7 @@ context('Side Window > Mission Form > Main Form', () => {
       .its('mockEventSources' as any)
       .then(mockEventSources => {
         // URL sur la CI : http://0.0.0.0:8081/api/v1/missions/sse'
-        // URL en local : /api/v1/missions/sse
+        // URL en local : //localhost:8081/api/v1/missions/sse
         mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emitOpen()
         mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emit(
           'MISSION_UPDATE',

@@ -3,8 +3,10 @@ import {
   getMissionDataFromMissionFormValues,
   getUpdatedMissionFromMissionMainFormValues
 } from '@features/Mission/components/MissionForm/utils'
+import { areMainFormValuesValid } from '@features/Mission/components/MissionForm/utils/areMainFormValuesValid'
 import { monitorenvMissionApi } from '@features/Mission/monitorenvMissionApi'
 import { logSoftError } from '@mtes-mct/monitor-ui'
+import { isEqual } from 'lodash'
 
 import type { MissionMainFormValues } from '@features/Mission/components/MissionForm/types'
 import type { MainAppThunk } from '@store'
@@ -12,12 +14,29 @@ import type { MainAppThunk } from '@store'
 export const saveMission =
   (
     nextMainFormValues: MissionMainFormValues,
-    missionId: number | undefined
+    previousMainFormValues: MissionMainFormValues,
+    missionId: number | undefined,
+    isAutoSaveEnabled: boolean
   ): MainAppThunk<Promise<MissionMainFormValues | undefined>> =>
   async dispatch => {
-    try {
-      dispatch(missionFormActions.setIsListeningToEvents(false))
+    if (isEqual(nextMainFormValues, previousMainFormValues)) {
+      return undefined
+    }
 
+    const mainFormValuesWithUpdatedIsClosedProperty = {
+      ...nextMainFormValues,
+      isClosed: !!previousMainFormValues.isClosed
+    }
+
+    if (!areMainFormValuesValid(mainFormValuesWithUpdatedIsClosedProperty) || !isAutoSaveEnabled) {
+      dispatch(missionFormActions.setIsDraftDirty(true))
+
+      return mainFormValuesWithUpdatedIsClosedProperty
+    }
+
+    dispatch(missionFormActions.setIsListeningToEvents(false))
+
+    try {
       if (!missionId) {
         const newMission = getMissionDataFromMissionFormValues(nextMainFormValues)
         const createdMission = await dispatch(
@@ -31,6 +50,7 @@ export const saveMission =
           updatedAtUtc: createdMission.updatedAtUtc
         }
       }
+
       const nextMission = getUpdatedMissionFromMissionMainFormValues(missionId, nextMainFormValues)
       const updatedMission = await dispatch(monitorenvMissionApi.endpoints.updateMission.initiate(nextMission)).unwrap()
 
@@ -51,6 +71,6 @@ export const saveMission =
         userMessage: "Une erreur est survenue pendant l'enregistrement de la mission."
       })
 
-      return undefined
+      return mainFormValuesWithUpdatedIsClosedProperty
     }
   }

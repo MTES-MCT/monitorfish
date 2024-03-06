@@ -255,6 +255,8 @@ export function MissionForm() {
           portName: undefined
         })
 
+        dispatch(missionFormActions.setIsDraftDirty(false))
+
         return undefined
       } catch (err) {
         logSoftError({
@@ -394,8 +396,10 @@ export function MissionForm() {
         return
       }
 
+      const { id } = actionsFormValues.find((_, index) => index === editedActionIndex) || { id: undefined }
+      const nextActionFormValuesWithId = { id, ...nextActionFormValues }
       const nextActionsFormValues = actionsFormValues.map((action, index) =>
-        index === editedActionIndex ? nextActionFormValues : action
+        index === editedActionIndex ? nextActionFormValuesWithId : action
       )
       if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !isAutoSaveEnabled) {
         setActionsFormValues(nextActionsFormValues)
@@ -406,7 +410,7 @@ export function MissionForm() {
         return
       }
 
-      const createdId = await autoSaveAction(nextActionFormValues)
+      const createdId = await autoSaveAction(nextActionFormValuesWithId)
       if (!createdId) {
         setActionsFormValues(nextActionsFormValues)
         updateReduxSliceDraft()
@@ -414,10 +418,10 @@ export function MissionForm() {
         return
       }
 
-      const nextActionsWithIdFormValues = actionsFormValues.map((action, index) =>
+      const nextActionsFormValuesWithCreatedId = actionsFormValues.map((action, index) =>
         index === editedActionIndex ? { ...nextActionFormValues, id: createdId } : action
       )
-      setActionsFormValues(nextActionsWithIdFormValues)
+      setActionsFormValues(nextActionsFormValuesWithCreatedId)
       updateReduxSliceDraft()
     },
     [

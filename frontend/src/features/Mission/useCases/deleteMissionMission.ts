@@ -12,10 +12,7 @@ export const deleteMissionMission =
   ): MainAppThunk<Promise<MissionActionFormValues[]>> =>
   async dispatch => {
     const deletedAction = actionsFormValues.find((_, index) => index === actionIndex)
-    const nextActionsFormValues = actionsFormValues.reduce(
-      (nextActions, action, index) => (index === actionIndex ? nextActions : [...nextActions, action]),
-      [] as MissionActionFormValues[]
-    )
+    const nextActionsFormValues = actionsFormValues.filter((_, index) => index !== actionIndex)
 
     if (!isAutoSaveEnabled) {
       dispatch(missionFormActions.setIsDraftDirty(true))

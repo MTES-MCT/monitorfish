@@ -61,7 +61,7 @@ export function getMissionActionDataFromFormValues(
   const validMissionActionData = getValidMissionActionData(maybeValidMissionActionData as MissionActionFormValues)
 
   // We get the action `id` to know if the action is an update
-  const id = index ? originalMissionActions[index]?.id : missionActionFormValues.id
+  const id = index !== undefined ? originalMissionActions[index]?.id : missionActionFormValues.id
 
   return {
     ...validMissionActionData,

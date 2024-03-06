@@ -1,9 +1,9 @@
+import { MainFormLiveSchema } from '@features/Mission/components/MissionForm/MainForm/schemas'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
 import {
   getMissionDataFromMissionFormValues,
   getUpdatedMissionFromMissionMainFormValues
 } from '@features/Mission/components/MissionForm/utils'
-import { areMainFormValuesValid } from '@features/Mission/components/MissionForm/utils/areMainFormValuesValid'
 import { monitorenvMissionApi } from '@features/Mission/monitorenvMissionApi'
 import { logSoftError } from '@mtes-mct/monitor-ui'
 import { isEqual } from 'lodash'
@@ -28,7 +28,7 @@ export const saveMission =
       isClosed: !!previousMainFormValues.isClosed
     }
 
-    if (!areMainFormValuesValid(mainFormValuesWithUpdatedIsClosedProperty) || !isAutoSaveEnabled) {
+    if (!MainFormLiveSchema.isValidSync(mainFormValuesWithUpdatedIsClosedProperty) || !isAutoSaveEnabled) {
       dispatch(missionFormActions.setIsDraftDirty(true))
 
       return mainFormValuesWithUpdatedIsClosedProperty

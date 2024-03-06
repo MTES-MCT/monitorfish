@@ -54,10 +54,10 @@ describe('utils/getMissionDataFromMissionFormValues()', () => {
         }
       ],
       endDateTimeUtc: '2023-12-31T23:30:00.000000Z',
+      id: undefined,
       isClosed: false,
       isGeometryComputedFromControls: true,
       isUnderJdp: true,
-      isValid: true,
       missionSource: 'POSEIDON_CNSP',
       missionTypes: ['SEA'],
       startDateTimeUtc: '2022-12-31T23:30:00.000000Z'

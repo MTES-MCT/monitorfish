@@ -53,11 +53,7 @@ export function getMissionActionDataFromFormValues(
     ...missionActionFormValues
   }
 
-  const maybeValidMissionActionData = omit(missionActionFormValuesWithAllProps, [
-    'isDraft',
-    'isValid',
-    'isVesselUnknown'
-  ])
+  const maybeValidMissionActionData = omit(missionActionFormValuesWithAllProps, ['isValid', 'isVesselUnknown'])
   const validMissionActionData = getValidMissionActionData(maybeValidMissionActionData as MissionActionFormValues)
 
   // We get the action `id` to know if the action is an update

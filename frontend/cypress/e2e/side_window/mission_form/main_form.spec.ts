@@ -77,6 +77,7 @@ context('Side Window > Mission Form > Main Form', () => {
       })
     })
 
+    cy.wait(500)
     cy.get('div').contains('Mission créée par le')
     cy.get('div').contains('Dernière modification enregistrée')
     cy.get('h1').should('contain.text', 'Mission Mer – Cultures marines 56')
@@ -290,7 +291,6 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.fill('Ouvert par', 'Nemo')
 
-    cy.wait('@updateMission')
     cy.wait('@updateMission').then(interception => {
       if (!interception.response) {
         assert.fail('`interception.response` is undefined.')
@@ -483,12 +483,10 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.clickButton('Supprimer l’action')
 
     cy.wait('@deleteMissionAction')
-    cy.wait('@updateMission')
 
     cy.wait(250)
     cy.clickButton('Clôturer')
 
-    cy.wait('@updateMission')
     cy.wait('@updateMission').then(interception => {
       if (!interception.response) {
         assert.fail('`interception.response` is undefined.')

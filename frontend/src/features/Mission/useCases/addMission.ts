@@ -7,8 +7,8 @@ import { openSideWindowPath } from '../../SideWindow/useCases/openSideWindowPath
 import { missionFormActions } from '../components/MissionForm/slice'
 import { getMissionDraftFromPartialMainFormValues } from '../components/MissionForm/utils/getMissionDraftFromPartialMainFormValues'
 
-import type { MainAppThunk } from '../../../store'
 import type { MissionMainFormValues } from '../components/MissionForm/types'
+import type { MainAppThunk } from '@store'
 
 export const addMission =
   (initialMainFormValues: Partial<MissionMainFormValues> = {}): MainAppThunk =>

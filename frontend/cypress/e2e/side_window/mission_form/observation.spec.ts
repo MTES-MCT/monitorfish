@@ -17,13 +17,7 @@ context('Side Window > Mission Form > Observation', () => {
         id: 2
       },
       statusCode: 201
-    })
-    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
-      body: {
-        id: 2
-      },
-      statusCode: 201
-    }).as('updateMissionAction')
+    }).as('createMissionAction')
 
     // -------------------------------------------------------------------------
     // Form
@@ -41,7 +35,7 @@ context('Side Window > Mission Form > Observation', () => {
 
     // The request is a POST as there is no modification after the action creation
     cy.waitForLastRequest(
-      '@updateMissionAction',
+      '@createMissionAction',
       {
         body: {
           actionType: 'OBSERVATION',

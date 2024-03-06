@@ -4,6 +4,8 @@ import {
   useDeleteMissionActionMutation,
   useUpdateMissionActionMutation
 } from '@api/missionAction'
+import { saveMission } from '@features/Mission/useCases/saveMission'
+import { saveMissionAction } from '@features/Mission/useCases/saveMissionAction'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -44,7 +46,6 @@ import { TitleSourceTag } from './shared/TitleSourceTag'
 import { TitleStatusTag } from './shared/TitleStatusTag'
 import { missionFormActions } from './slice'
 import {
-  getMissionActionDataFromFormValues,
   getMissionActionsDataFromMissionActionsFormValues,
   getMissionDataFromMissionFormValues,
   getTitleFromMissionMainFormValues,
@@ -233,89 +234,6 @@ export function MissionForm() {
     ]
   )
 
-  const autoSaveAction = useCallback(
-    async (actionFormValues: MissionActionFormValues): Promise<number | undefined> => {
-      try {
-        assertNotNullish(missionIdRef.current)
-
-        const missionActionData = getMissionActionDataFromFormValues(actionFormValues, missionIdRef.current)
-
-        if (missionActionData.id === undefined) {
-          const { id } = await createMissionAction(missionActionData).unwrap()
-
-          return id
-        }
-
-        await updateMissionAction({
-          ...missionActionData,
-          id: missionActionData.id,
-          /**
-           * This field is not used in the backend use-case, we add this property to
-           * respected the MissionAction type (using `portName` when fetching missions actions).
-           */
-          portName: undefined
-        })
-
-        dispatch(missionFormActions.setIsDraftDirty(false))
-
-        return missionActionData.id
-      } catch (err) {
-        logSoftError({
-          isSideWindowError: true,
-          message: '`await autoSaveAction()` failed.',
-          originalError: err,
-          userMessage: "Une erreur est survenue pendant l'enregistrement de la mission."
-        })
-
-        return undefined
-      }
-    },
-    [dispatch, createMissionAction, updateMissionAction]
-  )
-
-  const autoSaveMission = useCallback(
-    async (nextMainFormValues: MissionMainFormValues): Promise<MissionMainFormValues | undefined> => {
-      try {
-        dispatch(missionFormActions.setIsListeningToEvents(false))
-
-        if (!missionIdRef.current) {
-          const newMission = getMissionDataFromMissionFormValues(nextMainFormValues)
-          const createdMission = await createMission(newMission).unwrap()
-
-          missionIdRef.current = createdMission.id
-
-          return {
-            ...nextMainFormValues,
-            createdAtUtc: createdMission.createdAtUtc,
-            updatedAtUtc: createdMission.updatedAtUtc
-          }
-        }
-        const nextMission = getUpdatedMissionFromMissionMainFormValues(missionIdRef.current, nextMainFormValues)
-        const updatedMission = await updateMission(nextMission).unwrap()
-
-        dispatch(missionFormActions.setIsDraftDirty(false))
-        setTimeout(() => {
-          dispatch(missionFormActions.setIsListeningToEvents(true))
-        }, 500)
-
-        return {
-          ...nextMainFormValues,
-          updatedAtUtc: updatedMission.updatedAtUtc
-        }
-      } catch (err) {
-        logSoftError({
-          isSideWindowError: true,
-          message: '`createOrUpdate()` failed.',
-          originalError: err,
-          userMessage: "Une erreur est survenue pendant l'enregistrement de la mission."
-        })
-      }
-
-      return undefined
-    },
-    [dispatch, createMission, updateMission, missionIdRef]
-  )
-
   const goToMissionList = useCallback(async () => {
     dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }))
   }, [dispatch])
@@ -412,7 +330,7 @@ export function MissionForm() {
         return
       }
 
-      const createdId = await autoSaveAction(nextActionFormValuesWithId)
+      const createdId = await dispatch(saveMissionAction(nextActionFormValuesWithId, missionIdRef.current))
       if (!createdId) {
         setActionsFormValues(nextActionsFormValues)
         updateReduxSliceDraft()
@@ -426,15 +344,7 @@ export function MissionForm() {
       setActionsFormValues(nextActionsFormValuesWithCreatedId)
       updateReduxSliceDraft()
     },
-    [
-      dispatch,
-      updateReduxSliceDraft,
-      autoSaveAction,
-      editedActionIndex,
-      mainFormValues,
-      actionsFormValues,
-      isAutoSaveEnabled
-    ]
+    [dispatch, updateReduxSliceDraft, editedActionIndex, mainFormValues, actionsFormValues, isAutoSaveEnabled]
   )
 
   const updateEditedActionFormValues = useDebouncedCallback(
@@ -514,7 +424,7 @@ export function MissionForm() {
         return
       }
 
-      const createdId = await autoSaveAction(newActionFormValues)
+      const createdId = await dispatch(saveMissionAction(newActionFormValues, missionIdRef.current))
       if (!createdId) {
         setActionsFormValues(nextActionsFormValues)
         updateReduxSliceDraft()
@@ -530,7 +440,6 @@ export function MissionForm() {
       dispatch,
       updateEditedActionFormValues,
       updateReduxSliceDraft,
-      autoSaveAction,
       mainFormValues,
       actionsFormValues,
       isAutoSaveEnabled
@@ -562,7 +471,7 @@ export function MissionForm() {
         return
       }
 
-      const createdId = await autoSaveAction(actionCopy)
+      const createdId = await dispatch(saveMissionAction(actionCopy, missionIdRef.current))
       if (!createdId) {
         setActionsFormValues(nextActionsFormValues)
         updateReduxSliceDraft()
@@ -578,7 +487,6 @@ export function MissionForm() {
       dispatch,
       updateEditedActionFormValues,
       updateReduxSliceDraft,
-      autoSaveAction,
       mainFormValues,
       actionsFormValues,
       isAutoSaveEnabled
@@ -635,16 +543,18 @@ export function MissionForm() {
         return
       }
 
-      const savedMainFormValues = await autoSaveMission(mainFormValuesWithUpdatedIsClosedProperty)
+      const savedMainFormValues = await dispatch(
+        saveMission(mainFormValuesWithUpdatedIsClosedProperty, missionIdRef.current)
+      )
       if (savedMainFormValues) {
         setMainFormValues(savedMainFormValues)
+        missionIdRef.current = savedMainFormValues.id
       }
     },
     [
       dispatch,
       updateEditedActionFormValues,
       updateReduxSliceDraft,
-      autoSaveMission,
       actionsFormValues,
       mainFormValues,
       isAutoSaveEnabled

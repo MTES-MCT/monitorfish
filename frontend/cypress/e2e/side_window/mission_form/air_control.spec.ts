@@ -14,10 +14,15 @@ context('Side Window > Mission Form > Air Control', () => {
 
   it('Should fill the form and send the expected data to the API', () => {
     const now = getUtcDateInMultipleFormats()
-    cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionAction')
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      body: {
+        id: 2
+      },
+      statusCode: 201
+    }).as('createMissionAction')
     cy.intercept('PUT', '/bff/v1/mission_actions/2', {
       body: {
-        id: 1
+        id: 2
       },
       statusCode: 201
     }).as('updateMissionAction')

@@ -245,6 +245,7 @@ export function MissionForm() {
 
           return id
         }
+
         await updateMissionAction({
           ...missionActionData,
           id: missionActionData.id,
@@ -257,7 +258,7 @@ export function MissionForm() {
 
         dispatch(missionFormActions.setIsDraftDirty(false))
 
-        return undefined
+        return missionActionData.id
       } catch (err) {
         logSoftError({
           isSideWindowError: true,
@@ -269,11 +270,11 @@ export function MissionForm() {
         return undefined
       }
     },
-    [createMissionAction, updateMissionAction]
+    [dispatch, createMissionAction, updateMissionAction]
   )
 
   const autoSaveMission = useCallback(
-    async (nextMainFormValues: MissionMainFormValues) => {
+    async (nextMainFormValues: MissionMainFormValues): Promise<MissionMainFormValues | undefined> => {
       try {
         dispatch(missionFormActions.setIsListeningToEvents(false))
 
@@ -283,25 +284,24 @@ export function MissionForm() {
 
           missionIdRef.current = createdMission.id
 
-          setMainFormValues({
+          return {
             ...nextMainFormValues,
             createdAtUtc: createdMission.createdAtUtc,
             updatedAtUtc: createdMission.updatedAtUtc
-          })
-        } else {
-          const nextMission = getUpdatedMissionFromMissionMainFormValues(missionIdRef.current, nextMainFormValues)
-          const updatedMission = await updateMission(nextMission).unwrap()
-
-          setMainFormValues({
-            ...nextMainFormValues,
-            updatedAtUtc: updatedMission.updatedAtUtc
-          })
+          }
         }
+        const nextMission = getUpdatedMissionFromMissionMainFormValues(missionIdRef.current, nextMainFormValues)
+        const updatedMission = await updateMission(nextMission).unwrap()
 
         dispatch(missionFormActions.setIsDraftDirty(false))
         setTimeout(() => {
           dispatch(missionFormActions.setIsListeningToEvents(true))
         }, 500)
+
+        return {
+          ...nextMainFormValues,
+          updatedAtUtc: updatedMission.updatedAtUtc
+        }
       } catch (err) {
         logSoftError({
           isSideWindowError: true,
@@ -310,6 +310,8 @@ export function MissionForm() {
           userMessage: "Une erreur est survenue pendant l'enregistrement de la mission."
         })
       }
+
+      return undefined
     },
     [dispatch, createMission, updateMission, missionIdRef]
   )
@@ -601,7 +603,7 @@ export function MissionForm() {
   )
 
   const updateMainFormValuesCallback = useCallback(
-    (nextMissionMainFormValues: MissionMainFormValues) => {
+    async (nextMissionMainFormValues: MissionMainFormValues) => {
       /**
        * If an action debounce function is not yet executed, stop there to avoid race condition.
        * /!\ This can leads to erase a changed action value
@@ -621,19 +623,22 @@ export function MissionForm() {
         isClosed: !!mainFormValues.isClosed
       }
 
-      setMainFormValues(mainFormValuesWithUpdatedIsClosedProperty)
-      updateReduxSliceDraft()
-
       if (
         !areMissionFormsValuesValid(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues) ||
         !isAutoSaveEnabled
       ) {
         dispatch(missionFormActions.setIsDraftDirty(true))
 
+        setMainFormValues(mainFormValuesWithUpdatedIsClosedProperty)
+        updateReduxSliceDraft()
+
         return
       }
 
-      autoSaveMission(mainFormValuesWithUpdatedIsClosedProperty)
+      const savedMainFormValues = await autoSaveMission(mainFormValuesWithUpdatedIsClosedProperty)
+      if (savedMainFormValues) {
+        setMainFormValues(savedMainFormValues)
+      }
     },
     [
       dispatch,

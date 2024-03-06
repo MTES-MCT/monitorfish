@@ -1,7 +1,7 @@
 import { missionActionApi } from '@api/missionAction'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
 import { getMissionActionDataFromFormValues } from '@features/Mission/components/MissionForm/utils'
-import { areMissionActionFormValuesValid } from '@features/Mission/components/MissionForm/utils/areMissionActionFormValuesValid'
+import { isMissionActionFormValid } from '@features/Mission/components/MissionForm/utils/isMissionActionFormValid'
 import { logSoftError } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 
@@ -12,13 +12,14 @@ export const saveMissionAction =
   (
     actionFormValues: MissionActionFormValues,
     missionId: number | undefined,
+    isMissionClosed: boolean | undefined,
     isAutoSaveEnabled: boolean
   ): MainAppThunk<Promise<number | undefined>> =>
   async dispatch => {
-    if (!areMissionActionFormValuesValid(actionFormValues) || !isAutoSaveEnabled) {
+    if (!isMissionActionFormValid(actionFormValues, isMissionClosed ?? false) || !isAutoSaveEnabled) {
       dispatch(missionFormActions.setIsDraftDirty(true))
 
-      return undefined
+      return actionFormValues.id
     }
 
     try {
@@ -57,6 +58,6 @@ export const saveMissionAction =
         userMessage: "Une erreur est survenue pendant l'enregistrement de la mission."
       })
 
-      return undefined
+      return actionFormValues.id
     }
   }

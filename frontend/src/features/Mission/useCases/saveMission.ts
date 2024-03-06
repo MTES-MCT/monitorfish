@@ -1,5 +1,4 @@
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
-import { MissionMainFormValues } from '@features/Mission/components/MissionForm/types'
 import {
   getMissionDataFromMissionFormValues,
   getUpdatedMissionFromMissionMainFormValues
@@ -7,6 +6,7 @@ import {
 import { monitorenvMissionApi } from '@features/Mission/monitorenvMissionApi'
 import { logSoftError } from '@mtes-mct/monitor-ui'
 
+import type { MissionMainFormValues } from '@features/Mission/components/MissionForm/types'
 import type { MainAppThunk } from '@store'
 
 export const saveMission =
@@ -32,7 +32,7 @@ export const saveMission =
         }
       }
       const nextMission = getUpdatedMissionFromMissionMainFormValues(missionId, nextMainFormValues)
-      const updatedMission = await dispatch(monitorenvMissionApi.endpoints.createMission.initiate(nextMission)).unwrap()
+      const updatedMission = await dispatch(monitorenvMissionApi.endpoints.updateMission.initiate(nextMission)).unwrap()
 
       dispatch(missionFormActions.setIsDraftDirty(false))
       setTimeout(() => {

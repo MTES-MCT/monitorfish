@@ -1,10 +1,10 @@
 import { missionActionApi } from '@api/missionAction'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
-import { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 import { getMissionActionDataFromFormValues } from '@features/Mission/components/MissionForm/utils'
 import { logSoftError } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 
+import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 import type { MainAppThunk } from '@store'
 
 export const saveMissionAction =

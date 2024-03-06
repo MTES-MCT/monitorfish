@@ -13,6 +13,7 @@ export function getMissionDraftFromPartialMainFormValues(
     actionsFormValues: [],
     mainFormValues: {
       controlUnits: [INITIAL_MISSION_CONTROL_UNIT],
+      id: undefined,
       isGeometryComputedFromControls: false,
       isValid: false,
       missionSource: Mission.MissionSource.MONITORFISH,

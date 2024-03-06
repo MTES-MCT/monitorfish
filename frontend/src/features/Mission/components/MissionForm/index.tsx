@@ -4,6 +4,7 @@ import {
   useDeleteMissionActionMutation,
   useUpdateMissionActionMutation
 } from '@api/missionAction'
+import { deleteMissionMission } from '@features/Mission/useCases/deleteMissionMission'
 import { saveMission } from '@features/Mission/useCases/saveMission'
 import { saveMissionAction } from '@features/Mission/useCases/saveMissionAction'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
@@ -23,7 +24,6 @@ import { assertNotNullish } from '@utils/assertNotNullish'
 import { Mission } from 'domain/entities/mission/types'
 import { getMissionStatus } from 'domain/entities/mission/utils'
 import { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
-import { isEqual } from 'lodash'
 import { omit } from 'lodash/fp'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -316,35 +316,19 @@ export function MissionForm() {
         return
       }
 
-      const { id } = actionsFormValues.find((_, index) => index === editedActionIndex) || { id: undefined }
+      const { id } = actionsFormValues.find((_, index) => index === editedActionIndex) ?? { id: undefined }
       const nextActionFormValuesWithId = { id, ...nextActionFormValues }
-      const nextActionsFormValues = actionsFormValues.map((action, index) =>
-        index === editedActionIndex ? nextActionFormValuesWithId : action
+
+      const createdId = await dispatch(
+        saveMissionAction(nextActionFormValuesWithId, missionIdRef.current, isAutoSaveEnabled)
       )
-      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !isAutoSaveEnabled) {
-        setActionsFormValues(nextActionsFormValues)
-        updateReduxSliceDraft()
-
-        dispatch(missionFormActions.setIsDraftDirty(true))
-
-        return
-      }
-
-      const createdId = await dispatch(saveMissionAction(nextActionFormValuesWithId, missionIdRef.current))
-      if (!createdId) {
-        setActionsFormValues(nextActionsFormValues)
-        updateReduxSliceDraft()
-
-        return
-      }
-
       const nextActionsFormValuesWithCreatedId = actionsFormValues.map((action, index) =>
         index === editedActionIndex ? { ...nextActionFormValues, id: createdId } : action
       )
       setActionsFormValues(nextActionsFormValuesWithCreatedId)
       updateReduxSliceDraft()
     },
-    [dispatch, updateReduxSliceDraft, editedActionIndex, mainFormValues, actionsFormValues, isAutoSaveEnabled]
+    [dispatch, updateReduxSliceDraft, editedActionIndex, actionsFormValues, isAutoSaveEnabled]
   )
 
   const updateEditedActionFormValues = useDebouncedCallback(
@@ -353,7 +337,7 @@ export function MissionForm() {
   )
 
   const removeAction = useCallback(
-    (actionIndex: number) => {
+    async (actionIndex: number) => {
       /**
        * If a debounce function is not yet executed, stop there to avoid race condition.
        * /!\ This can leads to save the debounced action update to the wrong action index
@@ -364,10 +348,8 @@ export function MissionForm() {
         return
       }
 
-      const deletedAction = actionsFormValues.find((_, index) => index === actionIndex)
-      const nextActionsFormValues = actionsFormValues.reduce(
-        (nextActions, action, index) => (index === actionIndex ? nextActions : [...nextActions, action]),
-        [] as MissionActionFormValues[]
+      const nextActionsFormValues = await dispatch(
+        deleteMissionMission(actionsFormValues, actionIndex, isAutoSaveEnabled)
       )
 
       setActionsFormValues(nextActionsFormValues)
@@ -375,23 +357,11 @@ export function MissionForm() {
       if (editedActionIndex === actionIndex) {
         setEditedActionIndex(undefined)
       }
-
-      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !isAutoSaveEnabled) {
-        dispatch(missionFormActions.setIsDraftDirty(true))
-
-        return
-      }
-
-      if (deletedAction?.id) {
-        deleteMissionAction(deletedAction.id)
-      }
     },
     [
       dispatch,
       updateEditedActionFormValues,
       updateReduxSliceDraft,
-      deleteMissionAction,
-      mainFormValues,
       actionsFormValues,
       editedActionIndex,
       isAutoSaveEnabled
@@ -411,39 +381,15 @@ export function MissionForm() {
       }
 
       const newActionFormValues = getMissionActionFormInitialValues(actionType)
-      const nextActionsFormValues = [newActionFormValues, ...actionsFormValues]
-
       setEditedActionIndex(0)
 
-      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !isAutoSaveEnabled) {
-        setActionsFormValues(nextActionsFormValues)
-        updateReduxSliceDraft()
-
-        dispatch(missionFormActions.setIsDraftDirty(true))
-
-        return
-      }
-
-      const createdId = await dispatch(saveMissionAction(newActionFormValues, missionIdRef.current))
-      if (!createdId) {
-        setActionsFormValues(nextActionsFormValues)
-        updateReduxSliceDraft()
-
-        return
-      }
+      const createdId = await dispatch(saveMissionAction(newActionFormValues, missionIdRef.current, isAutoSaveEnabled))
 
       const nextActionsWithIdFormValues = [{ ...newActionFormValues, id: createdId }, ...actionsFormValues]
       setActionsFormValues(nextActionsWithIdFormValues)
       updateReduxSliceDraft()
     },
-    [
-      dispatch,
-      updateEditedActionFormValues,
-      updateReduxSliceDraft,
-      mainFormValues,
-      actionsFormValues,
-      isAutoSaveEnabled
-    ]
+    [dispatch, updateEditedActionFormValues, updateReduxSliceDraft, actionsFormValues, isAutoSaveEnabled]
   )
 
   const duplicateAction = useCallback(
@@ -459,38 +405,15 @@ export function MissionForm() {
       }
 
       const actionCopy: MissionActionFormValues = omit(['id'], actionsFormValues[actionIndex])
-      const nextActionsFormValues = [actionCopy, ...actionsFormValues]
       setEditedActionIndex(0)
 
-      if (!areMissionFormsValuesValid(mainFormValues, nextActionsFormValues) || !isAutoSaveEnabled) {
-        setActionsFormValues(nextActionsFormValues)
-        updateReduxSliceDraft()
-
-        dispatch(missionFormActions.setIsDraftDirty(true))
-
-        return
-      }
-
-      const createdId = await dispatch(saveMissionAction(actionCopy, missionIdRef.current))
-      if (!createdId) {
-        setActionsFormValues(nextActionsFormValues)
-        updateReduxSliceDraft()
-
-        return
-      }
+      const createdId = await dispatch(saveMissionAction(actionCopy, missionIdRef.current, isAutoSaveEnabled))
 
       const nextActionsWithIdFormValues = [{ ...actionCopy, id: createdId }, ...actionsFormValues]
       setActionsFormValues(nextActionsWithIdFormValues)
       updateReduxSliceDraft()
     },
-    [
-      dispatch,
-      updateEditedActionFormValues,
-      updateReduxSliceDraft,
-      mainFormValues,
-      actionsFormValues,
-      isAutoSaveEnabled
-    ]
+    [dispatch, updateEditedActionFormValues, updateReduxSliceDraft, actionsFormValues, isAutoSaveEnabled]
   )
 
   const updateEditedActionIndex = useCallback(
@@ -522,44 +445,18 @@ export function MissionForm() {
         return
       }
 
-      if (isEqual(nextMissionMainFormValues, mainFormValues)) {
-        return
-      }
-
-      const mainFormValuesWithUpdatedIsClosedProperty = {
-        ...nextMissionMainFormValues,
-        isClosed: !!mainFormValues.isClosed
-      }
-
-      if (
-        !areMissionFormsValuesValid(mainFormValuesWithUpdatedIsClosedProperty, actionsFormValues) ||
-        !isAutoSaveEnabled
-      ) {
-        dispatch(missionFormActions.setIsDraftDirty(true))
-
-        setMainFormValues(mainFormValuesWithUpdatedIsClosedProperty)
-        updateReduxSliceDraft()
-
-        return
-      }
-
       const savedMainFormValues = await dispatch(
-        saveMission(mainFormValuesWithUpdatedIsClosedProperty, missionIdRef.current)
+        saveMission(nextMissionMainFormValues, mainFormValues, missionIdRef.current, isAutoSaveEnabled)
       )
-      if (savedMainFormValues) {
-        setMainFormValues(savedMainFormValues)
-        missionIdRef.current = savedMainFormValues.id
-        updateReduxSliceDraft()
+      if (!savedMainFormValues) {
+        return
       }
+
+      setMainFormValues(savedMainFormValues)
+      missionIdRef.current = savedMainFormValues.id
+      updateReduxSliceDraft()
     },
-    [
-      dispatch,
-      updateEditedActionFormValues,
-      updateReduxSliceDraft,
-      actionsFormValues,
-      mainFormValues,
-      isAutoSaveEnabled
-    ]
+    [dispatch, updateEditedActionFormValues, updateReduxSliceDraft, mainFormValues, isAutoSaveEnabled]
   )
 
   const updateMainFormValues = useDebouncedCallback(

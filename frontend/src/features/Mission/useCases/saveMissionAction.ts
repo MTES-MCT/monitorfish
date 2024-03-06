@@ -1,6 +1,7 @@
 import { missionActionApi } from '@api/missionAction'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
 import { getMissionActionDataFromFormValues } from '@features/Mission/components/MissionForm/utils'
+import { areMissionActionFormValuesValid } from '@features/Mission/components/MissionForm/utils/areMissionActionFormValuesValid'
 import { logSoftError } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 
@@ -10,9 +11,16 @@ import type { MainAppThunk } from '@store'
 export const saveMissionAction =
   (
     actionFormValues: MissionActionFormValues,
-    missionId: number | undefined
+    missionId: number | undefined,
+    isAutoSaveEnabled: boolean
   ): MainAppThunk<Promise<number | undefined>> =>
   async dispatch => {
+    if (!areMissionActionFormValuesValid(actionFormValues) || !isAutoSaveEnabled) {
+      dispatch(missionFormActions.setIsDraftDirty(true))
+
+      return undefined
+    }
+
     try {
       assertNotNullish(missionId)
 

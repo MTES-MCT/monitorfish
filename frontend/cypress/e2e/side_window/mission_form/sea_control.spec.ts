@@ -546,6 +546,9 @@ context('Side Window > Mission Form > Sea Control', () => {
     }).as('updateMission')
 
     cy.intercept('POST', '/bff/v1/mission_actions', {
+      body: {
+        id: 1
+      },
       statusCode: 201
     }).as('createMissionAction')
 

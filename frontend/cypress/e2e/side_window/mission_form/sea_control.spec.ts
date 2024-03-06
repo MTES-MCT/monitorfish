@@ -791,12 +791,6 @@ context('Side Window > Mission Form > Sea Control', () => {
       },
       statusCode: 201
     }).as('createMissionAction')
-    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
-      body: {
-        id: 2
-      },
-      statusCode: 201
-    }).as('updateMissionAction')
 
     // -------------------------------------------------------------------------
     // Main Form
@@ -834,7 +828,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Request
 
     cy.waitForLastRequest(
-      '@updateMissionAction',
+      '@createMissionAction',
       {
         body: {
           isAdministrativeControl: true,
@@ -855,13 +849,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter')
     cy.clickButton('Ajouter un contrôle en mer')
 
-    cy.intercept('POST', '/bff/v1/mission_actions', {
-      body: {
-        id: 2
-      },
-      statusCode: 201
-    })
-    cy.intercept('PUT', '/bff/v1/mission_actions/2').as('updateMissionActionOne')
+    cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionActionOne')
 
     // -------------------------------------------------------------------------
     // Form
@@ -879,7 +867,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // -------------------------------------------------------------------------
     // Request
 
-    cy.wait('@updateMissionActionOne').then(interception => {
+    cy.wait('@createMissionActionOne').then(interception => {
       if (!interception.response) {
         assert.fail('`interception.response` is undefined.')
       }
@@ -894,7 +882,7 @@ context('Side Window > Mission Form > Sea Control', () => {
         statusCode: 201
       }).as('updateMissionAction')
 
-      cy.fill('Saisi par', 'Marlin')
+      cy.fill('Saisi par', 'Marlin CROSS')
 
       cy.wait('@updateMissionAction')
     })

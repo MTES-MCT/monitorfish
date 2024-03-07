@@ -125,6 +125,7 @@ class APIMissionRepositoryITest {
                           "hasSomeSpeciesSeized": false
                         }
                       ],
+                      "isGeometryComputedFromControls": false,
                       "missionSource": "MONITORENV",
                       "isClosed": false,
                       "isUnderJdp": false

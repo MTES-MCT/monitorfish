@@ -122,6 +122,7 @@ class GetActivityReportsUTests {
                 missionSource = MissionSource.MONITORFISH,
                 isClosed = false,
                 isUnderJdp = false,
+                isGeometryComputedFromControls = false,
                 startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
             ),
             Mission(
@@ -130,6 +131,7 @@ class GetActivityReportsUTests {
                 missionSource = MissionSource.MONITORFISH,
                 isClosed = false,
                 isUnderJdp = true,
+                isGeometryComputedFromControls = false,
                 startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
             ),
             Mission(
@@ -138,6 +140,7 @@ class GetActivityReportsUTests {
                 missionSource = MissionSource.MONITORFISH,
                 isClosed = false,
                 isUnderJdp = false,
+                isGeometryComputedFromControls = false,
                 startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
             ),
         )
@@ -248,6 +251,7 @@ class GetActivityReportsUTests {
                 missionSource = MissionSource.MONITORFISH,
                 isClosed = false,
                 isUnderJdp = false,
+                isGeometryComputedFromControls = false,
                 startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
             ),
             Mission(
@@ -256,6 +260,7 @@ class GetActivityReportsUTests {
                 missionSource = MissionSource.MONITORFISH,
                 isClosed = false,
                 isUnderJdp = false,
+                isGeometryComputedFromControls = false,
                 startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
             ),
         )
@@ -351,6 +356,7 @@ class GetActivityReportsUTests {
                 missionSource = MissionSource.MONITORFISH,
                 isClosed = false,
                 isUnderJdp = false,
+                isGeometryComputedFromControls = false,
                 startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
             ),
         )

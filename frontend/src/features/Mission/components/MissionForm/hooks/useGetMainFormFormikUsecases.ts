@@ -1,7 +1,7 @@
 import { useGetPortsQuery } from '@api/port'
+import { isAirOrSeaControl, isLandControl } from '@features/Mission/useCases/getLastControlCircleGeometry'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { isAirOrSeaControl, isLandControl } from 'domain/use_cases/mission/getLastControlCircleGeometry'
 import { sortBy } from 'lodash'
 
 import { formikUsecase } from '../formikUsecases'

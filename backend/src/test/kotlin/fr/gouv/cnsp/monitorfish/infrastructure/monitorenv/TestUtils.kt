@@ -22,6 +22,7 @@ class TestUtils {
                     "startDateTimeUtc":"2023-04-20T09:57:00Z",
                     "endDateTimeUtc":"2023-04-21T10:57:59Z",
                     "envActions":[],
+                    "isGeometryComputedFromControls":false,
                     "missionSource":"MONITORFISH",
                     "isClosed":false
                 },
@@ -43,6 +44,7 @@ class TestUtils {
                     "startDateTimeUtc":"2023-04-19T08:14:28.384Z",
                     "endDateTimeUtc":"2023-04-21T00:00:00Z",
                     "envActions":[],
+                    "isGeometryComputedFromControls":false,
                     "missionSource":"MONITORENV",
                     "isClosed":true
                 },
@@ -64,6 +66,7 @@ class TestUtils {
                     "startDateTimeUtc":"2023-04-18T14:15:08.43Z",
                     "endDateTimeUtc":"2023-04-18T15:15:08.43Z",
                     "envActions":[],
+                    "isGeometryComputedFromControls":false,
                     "missionSource":"MONITORFISH",
                     "isClosed":false
                 },
@@ -85,6 +88,7 @@ class TestUtils {
                     "startDateTimeUtc":"2023-04-18T13:19:00Z",
                     "endDateTimeUtc":"2023-04-19T00:00:00Z",
                     "envActions":[],
+                    "isGeometryComputedFromControls":false,
                     "missionSource":"MONITORFISH",
                     "isClosed":false
                 },
@@ -124,6 +128,7 @@ class TestUtils {
                     "startDateTimeUtc":"2023-04-18T10:07:08.941Z",
                     "endDateTimeUtc":"2023-04-18T11:07:08.941Z",
                     "envActions":[],
+                    "isGeometryComputedFromControls":false,
                     "missionSource":"MONITORFISH",
                     "isClosed":false
                 },
@@ -145,6 +150,7 @@ class TestUtils {
                     "startDateTimeUtc":"2023-04-18T09:38:20.178Z",
                     "endDateTimeUtc":"2023-04-18T10:38:20.178Z",
                     "envActions":[],
+                    "isGeometryComputedFromControls":false,
                     "missionSource":"MONITORFISH",
                     "isClosed":false
                 },
@@ -172,6 +178,7 @@ class TestUtils {
                     "startDateTimeUtc":"2023-04-18T09:00:00Z",
                     "endDateTimeUtc":"2023-04-18T18:00:59Z",
                     "envActions":[],
+                    "isGeometryComputedFromControls":false,
                     "missionSource":"MONITORFISH",
                     "isClosed":false
                 },
@@ -193,6 +200,7 @@ class TestUtils {
                     "startDateTimeUtc":"2023-04-18T08:09:59.578Z",
                     "endDateTimeUtc":"2023-04-18T09:09:59.578Z",
                     "envActions":[],
+                    "isGeometryComputedFromControls":false,
                     "missionSource":"MONITORFISH",
                     "isClosed":false
                 },
@@ -212,6 +220,7 @@ class TestUtils {
                     "facade":"MED",
                     "geom":{"type":"MultiPolygon","coordinates":[[[[51.49119758,  -18.10424171],[53.53854137,-22.2000453],[59.22261425,-22.89666373],[61.86261019,-19.04903036],[51.49119758,-18.10424171]]]]},"startDateTimeUtc":"2023-04-16T08:00:00Z","endDateTimeUtc":"2023-04-20T18:00:00Z",
                     "envActions":[],
+                    "isGeometryComputedFromControls":false,
                     "missionSource":"MONITORFISH",
                     "isClosed":false
                 },
@@ -234,6 +243,7 @@ class TestUtils {
                     "startDateTimeUtc":"2023-04-13T16:48:53.005Z",
                     "endDateTimeUtc":"2023-04-13T17:48:53.005Z",
                     "envActions":[],
+                    "isGeometryComputedFromControls":false,
                     "missionSource":"MONITORFISH",
                     "isClosed":false
                 },
@@ -254,6 +264,7 @@ class TestUtils {
                     "facade":"MED",
                     "geom":{"type":"MultiPolygon","coordinates":[[[[3.70244841, 43.39883986],[3.69556248,43.39696361],[3.69470173,43.39321095],[3.70876052,43.39300246],[3.70244841,43.39883986]]]]},"startDateTimeUtc":"2023-04-13T16:40:17.766Z","endDateTimeUtc":null,
                     "envActions":[],
+                    "isGeometryComputedFromControls":false,
                     "missionSource":"MONITORENV",
                     "isClosed":false
                 },
@@ -275,6 +286,7 @@ class TestUtils {
                     "startDateTimeUtc":"2023-04-13T12:14:59.149Z",
                     "endDateTimeUtc":"2023-04-13T13:14:59.149Z",
                     "envActions":[],
+                    "isGeometryComputedFromControls":false,
                     "missionSource":"MONITORFISH",
                     "isClosed":false
                 }]

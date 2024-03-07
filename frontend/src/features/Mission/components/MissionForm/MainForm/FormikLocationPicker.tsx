@@ -1,7 +1,8 @@
+import { addOrEditMissionZone } from '@features/Mission/useCases/addOrEditMissionZone'
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, Checkbox, Fieldset, Icon, IconButton, Label, NotificationEvent } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Fieldset, Icon, IconButton, Label, NotificationEvent, THEME } from '@mtes-mct/monitor-ui'
 import {
   InteractionListener,
   OPENLAYERS_PROJECTION,
@@ -9,7 +10,6 @@ import {
   WSG84_PROJECTION
 } from 'domain/entities/map/constants'
 import { fitToExtent } from 'domain/shared_slices/Map'
-import { addOrEditMissionZone } from 'domain/use_cases/mission/addOrEditMissionZone'
 import { useFormikContext } from 'formik'
 import { boundingExtent } from 'ol/extent'
 import { transformExtent } from 'ol/proj'
@@ -39,12 +39,16 @@ export function FormikLocationPicker() {
     return values.geom.coordinates || []
   }, [values.geom])
 
-  const addOrEditZone = useCallback(async () => {
+  const addZone = useCallback(async () => {
+    dispatch(addOrEditMissionZone(undefined))
+  }, [dispatch])
+
+  const editZone = useCallback(async () => {
     dispatch(addOrEditMissionZone(values.geom))
   }, [dispatch, values.geom])
 
   const deleteZone = useCallback(
-    (index: number) => {
+    async (index: number) => {
       if (!values.geom) {
         return
       }
@@ -52,6 +56,21 @@ export function FormikLocationPicker() {
       const nextCoordinates = remove(index, 1, values.geom.coordinates)
 
       setFieldValue('geom', { ...values.geom, coordinates: nextCoordinates })
+
+      if (!nextCoordinates.length) {
+        setFieldValue('isGeometryComputedFromControls', true)
+
+        const isSuccess = await updateMissionLocation(true)
+        if (!isSuccess) {
+          window.document.dispatchEvent(
+            new NotificationEvent(
+              'Aucune zone ajoutée. La zone de mission sera calculée à partir du prochain contrôle ajouté.',
+              'warning',
+              true
+            )
+          )
+        }
+      }
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,6 +98,7 @@ export function FormikLocationPicker() {
     () => {
       if (drawedGeometry?.type === OpenLayersGeometryType.MULTIPOLYGON) {
         setFieldValue('geom', drawedGeometry)
+        setFieldValue('isGeometryComputedFromControls', false)
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -91,7 +111,7 @@ export function FormikLocationPicker() {
    */
   useEffect(
     () => {
-      if (!geometryComputedFromControls) {
+      if (!geometryComputedFromControls || !values.isGeometryComputedFromControls) {
         return
       }
 
@@ -110,72 +130,50 @@ export function FormikLocationPicker() {
   return (
     <StyledFieldSet data-cy="mission-main-form-location">
       <Label>Localisations</Label>
-
       <div>
-        <Button
-          accent={Accent.SECONDARY}
-          disabled={values.isGeometryComputedFromControls}
-          Icon={Icon.Plus}
-          isFullWidth
-          onClick={addOrEditZone}
-        >
-          Ajouter une zone de mission
+        <Button accent={Accent.SECONDARY} Icon={Icon.Plus} isFullWidth onClick={addZone}>
+          Ajouter une zone de mission manuelle
         </Button>
+        {!values.isGeometryComputedFromControls &&
+          polygons.map((polygonCoordinates, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Row key={`zone-${index}`}>
+              <ZoneWrapper>
+                {`Zone de mission ${index + 1}`}
+                {/* TODO Add `Accent.LINK` accent in @mtes-mct/monitor-ui and use it here. */}
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+                <Link onClick={() => handleCenterOnMap(polygonCoordinates as Coordinate[][])}>
+                  <Icon.SelectRectangle />
+                  <span>Centrer sur la carte</span>
+                </Link>
+              </ZoneWrapper>
 
-        {polygons.map((polygonCoordinates, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <Row key={`zone-${index}`}>
-            <ZoneWrapper>
-              Polygone dessiné {index + 1}
-              {/* TODO Add `Accent.LINK` accent in @mtes-mct/monitor-ui and use it here. */}
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-              <Link onClick={() => handleCenterOnMap(polygonCoordinates as Coordinate[][])}>
-                <Icon.SelectRectangle />
-                <span>Centrer sur la carte</span>
-              </Link>
-            </ZoneWrapper>
-
-            <IconButton
-              accent={Accent.SECONDARY}
-              disabled={values.isGeometryComputedFromControls}
-              Icon={Icon.Edit}
-              onClick={addOrEditZone}
-            />
-            <IconButton
-              accent={Accent.SECONDARY}
-              aria-label="Supprimer cette zone"
-              disabled={values.isGeometryComputedFromControls}
-              Icon={Icon.Delete}
-              onClick={() => deleteZone(index)}
-            />
-          </Row>
-        ))}
-
-        <Checkbox
-          checked={values.isGeometryComputedFromControls}
-          label="Zone de la mission calculée à partir des contrôles"
-          name="isGeometryComputedFromControls"
-          onChange={async isChecked => {
-            setFieldValue('isGeometryComputedFromControls', isChecked)
-
-            if (isChecked) {
-              const isSuccess = await updateMissionLocation(isChecked)
-              if (!isSuccess) {
-                window.document.dispatchEvent(
-                  new NotificationEvent(
-                    'Aucune zone ajoutée. La zone de mission est calculée à partir du dernier contrôle ajouté.',
-                    'warning',
-                    true
-                  )
-                )
-              }
-            }
-          }}
-        />
+              <IconButton accent={Accent.SECONDARY} Icon={Icon.Edit} onClick={editZone} />
+              <IconButton
+                accent={Accent.SECONDARY}
+                aria-label="Supprimer cette zone"
+                Icon={Icon.Delete}
+                onClick={() => deleteZone(index)}
+              />
+            </Row>
+          ))}
+        {values.isGeometryComputedFromControls && (
+          <ZoneComputedFromActions>
+            Actuellement, la zone de mission est <b>automatiquement calculée</b> selon le point ou la zone de la
+            dernière action rapportée par l’unité.
+          </ZoneComputedFromActions>
+        )}
       </div>
     </StyledFieldSet>
   )
 }
+
+const ZoneComputedFromActions = styled.div`
+  margin-top: 8px;
+  color: ${THEME.color.blueYonder};
+  background: ${THEME.color.blueYonder25};
+  padding: 16px;
+`
 
 const StyledFieldSet = styled(Fieldset)`
   .Field-Checkbox {

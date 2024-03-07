@@ -1,11 +1,12 @@
+import { missionZoneStyle } from '@features/Mission/layers/MissionLayer/styles'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { getCenter } from 'ol/extent'
 import { MultiPoint, MultiPolygon } from 'ol/geom'
 import { Fill, Icon, Stroke, Style } from 'ol/style'
 
-import { isControl } from '../../../../../domain/entities/controls'
-import { MissionAction } from '../../../../../domain/types/missionAction'
-import { getColorWithAlpha } from '../../styles/utils'
+import { isControl } from '../../../../domain/entities/controls'
+import { MissionAction } from '../../../../domain/types/missionAction'
+import { getColorWithAlpha } from '../../../map/layers/styles/utils'
 
 import MissionActionType = MissionAction.MissionActionType
 
@@ -75,5 +76,16 @@ export const selectedMissionActionsStyles = [
       scale: 1,
       src: 'map-icons/Observation.svg'
     })
+  }),
+  new Style({
+    fill: missionZoneStyle.getFill() ?? undefined,
+    geometry: feature => {
+      if (!feature.get('isGeometryComputedFromControls')) {
+        return undefined
+      }
+
+      return feature.getGeometry()
+    },
+    stroke: missionZoneStyle.getStroke() ?? undefined
   })
 ]

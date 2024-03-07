@@ -1,0 +1,2 @@
+export const LAND_CONTROL_ZONE_RADIUS = 1500
+export const SEA_CONTROL_ZONE_RADIUS = 4000

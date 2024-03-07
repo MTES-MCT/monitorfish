@@ -1,3 +1,4 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import GeoJSON from 'ol/format/GeoJSON'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
@@ -5,15 +6,14 @@ import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { NEW_MISSION_ID } from './constants'
 import { missionZoneStyle } from './MissionLayer/styles'
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
-import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
-import { OPENLAYERS_PROJECTION } from '../../../../domain/entities/map/constants'
-import { getMissionFeatureZone } from '../../../../domain/entities/mission'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
-import { useGetFilteredMissionsQuery } from '../../../Mission/components/MissionList/hooks/useGetFilteredMissionsQuery'
-import { monitorfishMap } from '../../monitorfishMap'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
+import { MonitorFishLayer } from '../../../domain/entities/layers/types'
+import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map/constants'
+import { getMissionFeatureZone } from '../../../domain/entities/mission'
+import { monitorfishMap } from '../../map/monitorfishMap'
+import { useGetFilteredMissionsQuery } from '../components/MissionList/hooks/useGetFilteredMissionsQuery'
 
-import type { VectorLayerWithName } from '../../../../domain/types/layer'
+import type { VectorLayerWithName } from '../../../domain/types/layer'
 
 export function UnmemoizedSelectedMissionLayer() {
   const { missions } = useGetFilteredMissionsQuery()

@@ -1,3 +1,5 @@
+import { useIsSuperUser } from '@hooks/authorization/useIsSuperUser'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { usePrevious } from '@mtes-mct/monitor-ui'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
@@ -5,17 +7,15 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { clearPreviousLineFeatures, getLabelsOfFeaturesInExtent } from './utils'
-import { LayerProperties } from '../../../../../domain/entities/layers/constants'
-import { useIsSuperUser } from '../../../../../hooks/authorization/useIsSuperUser'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import { monitorfishMap } from '../../../monitorfishMap'
-import { MissionLabelOverlay } from '../../../overlays/MissionUnitLabelOverlay'
-import { useGetLineFeatureIdToCoordinates } from '../../hooks/useGetLineFeatureIdToCoordinates'
-import { useIsZooming } from '../../hooks/useIsZooming'
-import { getLabelLineStyle } from '../../styles/labelLine.style'
+import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import { useGetLineFeatureIdToCoordinates } from '../../../map/layers/hooks/useGetLineFeatureIdToCoordinates'
+import { useIsZooming } from '../../../map/layers/hooks/useIsZooming'
+import { getLabelLineStyle } from '../../../map/layers/styles/labelLine.style'
+import { monitorfishMap } from '../../../map/monitorfishMap'
+import { MissionLabelOverlay } from '../../../map/overlays/MissionUnitLabelOverlay'
 
 import type { FeatureAndLabel } from './types'
-import type { VectorLayerWithName } from '../../../../../domain/types/layer'
+import type { VectorLayerWithName } from '../../../../domain/types/layer'
 
 const MIN_ZOOM = 7
 

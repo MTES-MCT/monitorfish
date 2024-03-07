@@ -1,6 +1,7 @@
+import { setInteractionTypeAndListener } from '@features/Draw/slice'
+
 import { InteractionListener, InteractionType } from '../../entities/map/constants'
 import { setDisplayedComponents } from '../../shared_slices/DisplayedComponent'
-import { setInteractionTypeAndListener } from '../../shared_slices/Draw'
 
 export const addVesselListFilterZone = (interactionType: InteractionType) => dispatch => {
   dispatch(

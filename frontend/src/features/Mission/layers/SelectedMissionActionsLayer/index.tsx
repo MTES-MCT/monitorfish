@@ -1,18 +1,18 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { selectedMissionActionsStyles } from './styles'
-import { LayerProperties } from '../../../../../domain/entities/layers/constants'
-import { MonitorFishLayer } from '../../../../../domain/entities/layers/types'
-import { getMissionActionFeature } from '../../../../../domain/entities/mission'
-import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import { useGetFilteredMissionsQuery } from '../../../../Mission/components/MissionList/hooks/useGetFilteredMissionsQuery'
-import { monitorfishMap } from '../../../monitorfishMap'
+import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
+import { getMissionActionFeature, getMissionActionFeatureZone } from '../../../../domain/entities/mission'
+import { monitorfishMap } from '../../../map/monitorfishMap'
+import { useGetFilteredMissionsQuery } from '../../components/MissionList/hooks/useGetFilteredMissionsQuery'
 import { NEW_MISSION_ID } from '../constants'
 
-import type { GeoJSON } from '../../../../../domain/types/GeoJSON'
-import type { VectorLayerWithName } from '../../../../../domain/types/layer'
+import type { GeoJSON } from '../../../../domain/types/GeoJSON'
+import type { VectorLayerWithName } from '../../../../domain/types/layer'
 import type { Feature } from 'ol'
 import type { MutableRefObject } from 'react'
 
@@ -34,6 +34,23 @@ export function UnmemoizedSelectedMissionActionsLayer() {
             missionsAndAction.id === (selectedMissionGeoJSON as GeoJSON.Feature).properties?.missionId
         )
         ?.actions?.map(action => getMissionActionFeature(action))
+        .filter((feature): feature is Feature => Boolean(feature)) || []
+    )
+  }, [selectedMissionGeoJSON, missions])
+
+  const selectedMissionActionsZones = useMemo(() => {
+    if (!selectedMissionGeoJSON) {
+      return []
+    }
+
+    return (
+      missions
+        .find(
+          missionsAndAction =>
+            missionsAndAction.isGeometryComputedFromControls &&
+            missionsAndAction.id === (selectedMissionGeoJSON as GeoJSON.Feature).properties?.missionId
+        )
+        ?.actions?.map(action => getMissionActionFeatureZone(action))
         .filter((feature): feature is Feature => Boolean(feature)) || []
     )
   }, [selectedMissionGeoJSON, missions])
@@ -74,14 +91,14 @@ export function UnmemoizedSelectedMissionActionsLayer() {
 
   useEffect(() => {
     // If a mission is opened in the form, we can't display another selected mission
-    if (draft?.actionsFormValues) {
+    if (draft?.mainFormValues) {
       return
     }
 
     getVectorSource().clear(true)
 
-    getVectorSource().addFeatures(selectedMissionActions)
-  }, [selectedMissionActions, draft?.actionsFormValues, getVectorSource])
+    getVectorSource().addFeatures(selectedMissionActions.concat(selectedMissionActionsZones))
+  }, [selectedMissionActions, selectedMissionActionsZones, draft?.mainFormValues, getVectorSource])
 
   useEffect(() => {
     getVectorSource().clear(true)
@@ -93,8 +110,14 @@ export function UnmemoizedSelectedMissionActionsLayer() {
       .map(action => getMissionActionFeature({ ...action, missionId: missionId || NEW_MISSION_ID }))
       .filter((action): action is Feature => !!action)
 
-    getVectorSource().addFeatures(actionFeatures)
-  }, [getVectorSource, missionId, draft?.actionsFormValues])
+    const actionZonesFeatures = draft?.mainFormValues?.isGeometryComputedFromControls
+      ? draft.actionsFormValues
+          .map(action => getMissionActionFeatureZone({ ...action, missionId: missionId || NEW_MISSION_ID }))
+          .filter((action): action is Feature => !!action)
+      : []
+
+    getVectorSource().addFeatures(actionFeatures.concat(actionZonesFeatures))
+  }, [getVectorSource, missionId, draft?.actionsFormValues, draft?.mainFormValues?.isGeometryComputedFromControls])
 
   return null
 }

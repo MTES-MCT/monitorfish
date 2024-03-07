@@ -3,13 +3,13 @@ import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useRef } from 'react'
 
 import { missionZoneStyle } from './MissionLayer/styles'
-import { LayerProperties } from '../../../../domain/entities/layers/constants'
-import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
-import { getMissionFeatureZone } from '../../../../domain/entities/mission'
-import { useGetFilteredMissionsQuery } from '../../../Mission/components/MissionList/hooks/useGetFilteredMissionsQuery'
-import { monitorfishMap } from '../../monitorfishMap'
+import { LayerProperties } from '../../../domain/entities/layers/constants'
+import { MonitorFishLayer } from '../../../domain/entities/layers/types'
+import { getMissionFeatureZone } from '../../../domain/entities/mission'
+import { monitorfishMap } from '../../map/monitorfishMap'
+import { useGetFilteredMissionsQuery } from '../components/MissionList/hooks/useGetFilteredMissionsQuery'
 
-import type { VectorLayerWithName } from '../../../../domain/types/layer'
+import type { VectorLayerWithName } from '../../../domain/types/layer'
 
 export function UnmemoizedMissionHoveredLayer({ feature }) {
   const { missions } = useGetFilteredMissionsQuery()

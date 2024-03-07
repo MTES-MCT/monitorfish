@@ -3,14 +3,14 @@ import { boundingExtent } from 'ol/extent'
 import { transformExtent } from 'ol/proj'
 
 import { openDrawLayerModal } from './addOrEditMissionZone'
-import { InteractionListener, InteractionType } from '../../entities/map/constants'
-import { setInitialGeometry, setInteractionTypeAndListener } from '../../shared_slices/Draw'
-import { fitToExtent } from '../../shared_slices/Map'
-import { getCoordinatesExtent } from '../map/getCoordinatesExtent'
-import { unselectVessel } from '../vessel/unselectVessel'
+import { InteractionListener, InteractionType } from '../../../domain/entities/map/constants'
+import { fitToExtent } from '../../../domain/shared_slices/Map'
+import { getCoordinatesExtent } from '../../../domain/use_cases/map/getCoordinatesExtent'
+import { unselectVessel } from '../../../domain/use_cases/vessel/unselectVessel'
+import { setInitialGeometry, setInteractionTypeAndListener } from '../../Draw/slice'
 
-import type { MainAppThunk } from '../../../store'
-import type { GeoJSON as GeoJSONNamespace, GeoJSON } from '../../types/GeoJSON'
+import type { GeoJSON as GeoJSONNamespace, GeoJSON } from '../../../domain/types/GeoJSON'
+import type { MainAppThunk } from '@store'
 import type { Coordinate } from 'ol/coordinate'
 
 export const addOrEditControlCoordinates =

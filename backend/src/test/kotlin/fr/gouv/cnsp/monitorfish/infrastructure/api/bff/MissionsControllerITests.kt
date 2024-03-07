@@ -55,6 +55,7 @@ class MissionsControllerITests {
                         missionTypes = listOf(MissionType.SEA),
                         missionSource = MissionSource.MONITORFISH,
                         isClosed = false,
+                        isGeometryComputedFromControls = false,
                         startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
                     ),
                     actions = listOf(
@@ -94,6 +95,7 @@ class MissionsControllerITests {
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
+            .andExpect(jsonPath("$[0].isGeometryComputedFromControls", equalTo(false)))
             .andExpect(jsonPath("$[0].actions.length()", equalTo(1)))
 
         runBlocking {

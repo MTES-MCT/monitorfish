@@ -200,7 +200,7 @@
         "observationsCacem": "Surface different shoulder interview. Job together area probably. Of alone class capital determine machine always.",
         "observationsCnsp": null,
         "facade": "MEMN",
-        "isGeometryComputedFromControls": false,
+        "isGeometryComputedFromControls": true,
         "geom": {
           "type": "MultiPolygon",
           "coordinates": [

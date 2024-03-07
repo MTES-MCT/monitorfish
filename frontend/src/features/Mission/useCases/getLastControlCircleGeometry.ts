@@ -2,12 +2,13 @@ import Feature from 'ol/Feature'
 import { MultiPolygon } from 'ol/geom'
 import { circular } from 'ol/geom/Polygon'
 
-import { convertToGeoJSONGeometryObject } from '../../entities/layers'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../entities/map/constants'
-import { MissionAction } from '../../types/missionAction'
+import { convertToGeoJSONGeometryObject } from '../../../domain/entities/layers'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
+import { LAND_CONTROL_ZONE_RADIUS, SEA_CONTROL_ZONE_RADIUS } from '../../../domain/entities/mission/constants'
+import { MissionAction } from '../../../domain/types/missionAction'
 
-import type { GeoJSON as GeoJSONType } from '../../types/GeoJSON'
-import type { Port } from '../../types/port'
+import type { GeoJSON as GeoJSONType } from '../../../domain/types/GeoJSON'
+import type { Port } from '../../../domain/types/port'
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 
 export const getLastControlCircleGeometry =
@@ -22,7 +23,7 @@ export const getLastControlCircleGeometry =
       return undefined
     }
 
-    const radius = isLandControl(actionFormValues) ? 1500 : 4000
+    const radius = isLandControl(actionFormValues) ? LAND_CONTROL_ZONE_RADIUS : SEA_CONTROL_ZONE_RADIUS
     const circleGeometry = new Feature({
       geometry: circular(coordinates, radius, 64).transform(WSG84_PROJECTION, OPENLAYERS_PROJECTION)
     }).getGeometry()

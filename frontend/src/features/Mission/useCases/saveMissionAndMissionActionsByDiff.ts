@@ -1,13 +1,12 @@
 import { missionActionApi } from '@api/missionAction'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
-import { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 import { getMissionActionsDataFromMissionActionsFormValues } from '@features/Mission/components/MissionForm/utils'
 import { getMissionWithActions } from '@features/Mission/useCases/getMissionWithActions'
 import { saveMission } from '@features/Mission/useCases/saveMission'
 import { logSoftError } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 
-import type { MissionMainFormValues } from '@features/Mission/components/MissionForm/types'
+import type { MissionActionFormValues, MissionMainFormValues } from '@features/Mission/components/MissionForm/types'
 import type { MainAppThunk } from '@store'
 
 export const saveMissionAndMissionActionsByDiff =

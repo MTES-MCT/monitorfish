@@ -92,4 +92,96 @@ describe('utils/undefinedize()', () => {
       }
     ])
   })
+
+  it('should return the expected result with a geometry object', () => {
+    const value = {
+      closedBy: null,
+      controlUnits: [
+        {
+          administration: 'DIRM / DM',
+          contact: null,
+          id: 10121,
+          isArchived: false,
+          name: 'PAM Jeanne Barret',
+          resources: []
+        }
+      ],
+      createdAtUtc: '2024-03-05T09:51:18.379906Z',
+      endDateTimeUtc: '2024-04-26T01:53:35.968599Z',
+      envActions: [],
+      facade: 'SA',
+      geom: {
+        coordinates: [
+          [
+            [
+              [-4.05440374, 48.76920876],
+              [-3.9882835, 48.77112607],
+              [-3.99375797, 48.72670474],
+              [-4.05440374, 48.76920876]
+            ]
+          ]
+        ],
+        type: 'MultiPolygon'
+      },
+      hasMissionOrder: false,
+      id: 22,
+      isClosed: false,
+      isGeometryComputedFromControls: false,
+      isUnderJdp: false,
+      missionSource: 'MONITORENV',
+      missionTypes: ['LAND'],
+      observationsCacem:
+        'So maintain focus bag. Benefit put charge shake high national experience music. Surface computer decade happen small.',
+      observationsCnsp: null,
+      openBy: null,
+      startDateTimeUtc: '2023-12-27T02:22:25.968599Z',
+      updatedAtUtc: '2024-03-05T09:51:18.379906Z'
+    }
+
+    const result = undefinedize(value)
+
+    expect(result).toStrictEqual({
+      closedBy: undefined,
+      controlUnits: [
+        {
+          administration: 'DIRM / DM',
+          contact: undefined,
+          id: 10121,
+          isArchived: false,
+          name: 'PAM Jeanne Barret',
+          resources: []
+        }
+      ],
+      createdAtUtc: '2024-03-05T09:51:18.379906Z',
+      endDateTimeUtc: '2024-04-26T01:53:35.968599Z',
+      envActions: [],
+      facade: 'SA',
+      geom: {
+        coordinates: [
+          [
+            [
+              [-4.05440374, 48.76920876],
+              [-3.9882835, 48.77112607],
+              [-3.99375797, 48.72670474],
+              [-4.05440374, 48.76920876]
+            ]
+          ]
+        ],
+        type: 'MultiPolygon'
+      },
+      hasMissionOrder: false,
+      id: 22,
+      isClosed: false,
+      isGeometryComputedFromControls: false,
+      isUnderJdp: false,
+      missionSource: 'MONITORENV',
+      missionTypes: ['LAND'],
+      observationsCacem:
+        'So maintain focus bag. Benefit put charge shake high national experience music. Surface computer decade happen small.',
+      observationsCnsp: undefined,
+      openBy: undefined,
+      startDateTimeUtc: '2023-12-27T02:22:25.968599Z',
+      updatedAtUtc: '2024-03-05T09:51:18.379906Z'
+    })
+  })
 })

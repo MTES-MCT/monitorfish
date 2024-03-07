@@ -12,7 +12,7 @@ const MISSION_UPDATE_EVENT = `MISSION_UPDATE`
 export function useListenToAllMissionEventsUpdates() {
   const isListeningToEvents = useMainAppSelector(state => state.missionForm.isListeningToEvents)
   const eventSourceRef = useRef<EventSource>()
-  const [missionEvent, setMissionEvent] = useState<Mission.Mission>()
+  const [missionEvent, setMissionEvent] = useState<Mission.Mission | undefined>()
   const listener = useRef(missionEventListener(mission => setMissionEvent(mission)))
 
   useEffect(() => {
@@ -30,6 +30,7 @@ export function useListenToAllMissionEventsUpdates() {
   useEffect(() => {
     if (!isListeningToEvents) {
       eventSourceRef.current?.removeEventListener(MISSION_UPDATE_EVENT, listener.current)
+      setMissionEvent(undefined)
 
       return
     }

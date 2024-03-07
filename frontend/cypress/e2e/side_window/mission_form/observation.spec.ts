@@ -12,12 +12,12 @@ context('Side Window > Mission Form > Observation', () => {
   })
 
   it('Should fill the form and send the expected data to the API', () => {
-    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
+    cy.intercept('POST', '/bff/v1/mission_actions', {
       body: {
         id: 2
       },
       statusCode: 201
-    }).as('updateMissionAction')
+    }).as('createMissionAction')
 
     // -------------------------------------------------------------------------
     // Form
@@ -35,7 +35,7 @@ context('Side Window > Mission Form > Observation', () => {
 
     // The request is a POST as there is no modification after the action creation
     cy.waitForLastRequest(
-      '@updateMissionAction',
+      '@createMissionAction',
       {
         body: {
           actionType: 'OBSERVATION',
@@ -47,7 +47,6 @@ context('Side Window > Mission Form > Observation', () => {
           feedbackSheetRequired: null,
           gearInfractions: [],
           gearOnboard: [],
-          id: 2,
           latitude: null,
           licencesAndLogbookObservations: null,
           licencesMatchActivity: null,
@@ -85,14 +84,13 @@ context('Side Window > Mission Form > Observation', () => {
     const getCloseButton = () => cy.get('button').contains('Clôturer').parent()
     cy.intercept('POST', '/bff/v1/mission_actions', {
       body: {
-        id: 1
+        id: 2
       },
       statusCode: 201
     }).as('createMissionAction')
-
     cy.intercept('PUT', '/bff/v1/mission_actions/2', {
       body: {
-        id: 1
+        id: 2
       },
       statusCode: 201
     }).as('updateMissionAction')

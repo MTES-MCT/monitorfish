@@ -1,5 +1,4 @@
 import { FormError, FormErrorCode } from '@libs/FormError'
-import { type Undefine } from '@mtes-mct/monitor-ui'
 import { validateRequiredFormValues } from '@utils/validateRequiredFormValues'
 import { difference, omit } from 'lodash'
 
@@ -8,6 +7,7 @@ import { Mission } from '../../../../domain/entities/mission/types'
 import { MissionAction } from '../../../../domain/types/missionAction'
 
 import type { MissionActionFormValues, MissionMainFormValues } from './types'
+import type { Undefine } from '@mtes-mct/monitor-ui'
 import type { LegacyControlUnit } from 'domain/types/legacyControlUnit'
 
 import MissionActionType = MissionAction.MissionActionType
@@ -26,28 +26,9 @@ export function getMissionActionsDataFromMissionActionsFormValues(
   deletedMissionActionIds: number[]
   updatedMissionActionDatas: MissionAction.MissionActionData[]
 } {
-  const updatedMissionActionDatas = actionsFormValues.map((missionActionFormValues, index) => {
-    const missionActionFormValuesWithAllProps = {
-      ...MISSION_ACTION_FORM_VALUES_SKELETON,
-      ...missionActionFormValues
-    }
-
-    const maybeValidMissionActionData = omit(missionActionFormValuesWithAllProps, [
-      'isDraft',
-      'isValid',
-      'isVesselUnknown'
-    ])
-    const validMissionActionData = getValidMissionActionData(maybeValidMissionActionData as MissionActionFormValues)
-
-    // We get the action `id` to know if the action is an update
-    const id = originalMissionActions[index]?.id
-
-    return {
-      ...validMissionActionData,
-      id,
-      missionId
-    }
-  })
+  const updatedMissionActionDatas = actionsFormValues.map((missionActionFormValues, index) =>
+    getMissionActionDataFromFormValues(missionActionFormValues, missionId, originalMissionActions, index)
+  )
 
   const originalMissionActionIds = originalMissionActions.map(({ id }) => id)
   const updatedMissionActionIds = updatedMissionActionDatas
@@ -58,6 +39,30 @@ export function getMissionActionsDataFromMissionActionsFormValues(
   return {
     deletedMissionActionIds,
     updatedMissionActionDatas
+  }
+}
+
+export function getMissionActionDataFromFormValues(
+  missionActionFormValues: MissionActionFormValues,
+  missionId: MissionAction.MissionAction['missionId'],
+  originalMissionActions: MissionAction.MissionAction[] = [],
+  index?: number
+) {
+  const missionActionFormValuesWithAllProps = {
+    ...MISSION_ACTION_FORM_VALUES_SKELETON,
+    ...missionActionFormValues
+  }
+
+  const maybeValidMissionActionData = omit(missionActionFormValuesWithAllProps, ['isValid', 'isVesselUnknown'])
+  const validMissionActionData = getValidMissionActionData(maybeValidMissionActionData as MissionActionFormValues)
+
+  // We get the action `id` to know if the action is an update
+  const id = index !== undefined ? originalMissionActions[index]?.id : missionActionFormValues.id
+
+  return {
+    ...validMissionActionData,
+    id,
+    missionId
   }
 }
 

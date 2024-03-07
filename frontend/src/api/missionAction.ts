@@ -8,10 +8,7 @@ const GET_MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les a
 
 export const missionActionApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
-    createMissionAction: builder.mutation<void, MissionAction.MissionActionData>({
-      // TODO To remove when FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED feature flag is ON
-      // As all mission will be fetched when closing the mission form
-      invalidatesTags: () => [{ type: 'Missions' }, { type: 'MissionActions' }],
+    createMissionAction: builder.mutation<MissionAction.MissionAction, MissionAction.MissionActionData>({
       query: missionAction => ({
         body: missionAction,
         method: 'POST',
@@ -20,9 +17,6 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
     }),
 
     deleteMissionAction: builder.mutation<void, number>({
-      // TODO To remove when FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED feature flag is ON
-      // As all mission will be fetched when closing the mission form
-      invalidatesTags: () => [{ type: 'Missions' }, { type: 'MissionActions' }],
       query: missionActionId => ({
         method: 'DELETE',
         url: `/mission_actions/${missionActionId}`
@@ -30,17 +24,11 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
     }),
 
     getMissionActions: builder.query<MissionAction.MissionAction[], number>({
-      // TODO To remove when FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED feature flag is ON
-      // As all mission will be fetched when closing the mission form
-      providesTags: () => [{ type: 'MissionActions' }],
       query: missionId => `/mission_actions?missionId=${missionId}`,
       transformErrorResponse: response => new FrontendApiError(GET_MISSION_ACTIONS_ERROR_MESSAGE, response)
     }),
 
     updateMissionAction: builder.mutation<void, MissionAction.MissionAction>({
-      // TODO To remove when FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED feature flag is ON
-      // As all mission will be fetched when closing the mission form
-      invalidatesTags: () => [{ type: 'Missions' }, { type: 'MissionActions' }],
       query: missionAction => ({
         body: missionAction,
         method: 'PUT',

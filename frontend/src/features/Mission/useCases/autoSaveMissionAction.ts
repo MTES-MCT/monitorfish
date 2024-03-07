@@ -8,7 +8,7 @@ import { assertNotNullish } from '@utils/assertNotNullish'
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 import type { MainAppThunk } from '@store'
 
-export const saveMissionAction =
+export const autoSaveMissionAction =
   (
     actionFormValues: MissionActionFormValues,
     missionId: number | undefined,

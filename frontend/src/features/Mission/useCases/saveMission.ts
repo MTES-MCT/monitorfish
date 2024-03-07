@@ -1,4 +1,3 @@
-import { MainFormLiveSchema } from '@features/Mission/components/MissionForm/MainForm/schemas'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
 import {
   getMissionDataFromMissionFormValues,
@@ -6,7 +5,6 @@ import {
 } from '@features/Mission/components/MissionForm/utils'
 import { monitorenvMissionApi } from '@features/Mission/monitorenvMissionApi'
 import { logSoftError } from '@mtes-mct/monitor-ui'
-import { isEqual } from 'lodash'
 
 import type { MissionMainFormValues } from '@features/Mission/components/MissionForm/types'
 import type { MainAppThunk } from '@store'
@@ -14,26 +12,9 @@ import type { MainAppThunk } from '@store'
 export const saveMission =
   (
     nextMainFormValues: MissionMainFormValues,
-    previousMainFormValues: MissionMainFormValues,
-    missionId: number | undefined,
-    isAutoSaveEnabled: boolean
-  ): MainAppThunk<Promise<MissionMainFormValues | undefined>> =>
+    missionId: number | undefined
+  ): MainAppThunk<Promise<MissionMainFormValues>> =>
   async dispatch => {
-    if (isEqual(nextMainFormValues, previousMainFormValues)) {
-      return undefined
-    }
-
-    const mainFormValuesWithUpdatedIsClosedProperty = {
-      ...nextMainFormValues,
-      isClosed: !!previousMainFormValues.isClosed
-    }
-
-    if (!MainFormLiveSchema.isValidSync(mainFormValuesWithUpdatedIsClosedProperty) || !isAutoSaveEnabled) {
-      dispatch(missionFormActions.setIsDraftDirty(true))
-
-      return mainFormValuesWithUpdatedIsClosedProperty
-    }
-
     dispatch(missionFormActions.setIsListeningToEvents(false))
 
     try {
@@ -71,6 +52,6 @@ export const saveMission =
         userMessage: "Une erreur est survenue pendant l'enregistrement de la mission."
       })
 
-      return mainFormValuesWithUpdatedIsClosedProperty
+      return nextMainFormValues
     }
   }

@@ -4,13 +4,14 @@ import {
   useDeleteMissionActionMutation,
   useUpdateMissionActionMutation
 } from '@api/missionAction'
-import { deleteMissionMission } from '@features/Mission/useCases/deleteMissionMission'
-import { saveMission } from '@features/Mission/useCases/saveMission'
-import { saveMissionAction } from '@features/Mission/useCases/saveMissionAction'
+import { autoSaveMission } from '@features/Mission/useCases/autoSaveMission'
+import { autoSaveMissionAction } from '@features/Mission/useCases/autoSaveMissionAction'
+import { deleteMission } from '@features/Mission/useCases/deleteMission'
+import { deleteMissionAction } from '@features/Mission/useCases/deleteMissionAction'
+import { saveMissionAndMissionActionsByDiff } from '@features/Mission/useCases/saveMissionAndMissionActionsByDiff'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { FrontendError } from '@libs/FrontendError'
 import {
   Accent,
   Button,
@@ -45,12 +46,7 @@ import { ExternalActionsDialog } from './shared/ExternalActionsDialog'
 import { TitleSourceTag } from './shared/TitleSourceTag'
 import { TitleStatusTag } from './shared/TitleStatusTag'
 import { missionFormActions } from './slice'
-import {
-  getMissionActionsDataFromMissionActionsFormValues,
-  getMissionDataFromMissionFormValues,
-  getTitleFromMissionMainFormValues,
-  getUpdatedMissionFromMissionMainFormValues
-} from './utils'
+import { getTitleFromMissionMainFormValues } from './utils'
 import { areMissionFormsValuesValid } from './utils/areMissionFormsValuesValid'
 import { validateMissionForms } from './utils/validateMissionForms'
 import {
@@ -59,7 +55,6 @@ import {
   useDeleteMissionMutation,
   useUpdateMissionMutation
 } from '../../monitorenvMissionApi'
-import { getMissionWithActions } from '../../useCases/getMissionWithActions'
 
 import type { MissionActionFormValues, MissionMainFormValues } from './types'
 import type { MissionWithActionsDraft } from '../../types'
@@ -75,12 +70,12 @@ export function MissionForm() {
 
   const missionIdRef = useRef<number | undefined>(missionIdFromPath)
 
-  const [createMission, { isLoading: isCreatingMission }] = useCreateMissionMutation()
-  const [deleteMission, { isLoading: isDeletingMission }] = useDeleteMissionMutation()
-  const [createMissionAction, { isLoading: isCreatingMissionAction }] = useCreateMissionActionMutation()
-  const [deleteMissionAction, { isLoading: isDeletingMissionAction }] = useDeleteMissionActionMutation()
-  const [updateMission, { isLoading: isUpdatingMission }] = useUpdateMissionMutation()
-  const [updateMissionAction, { isLoading: isUpdatingMissionAction }] = useUpdateMissionActionMutation()
+  const [, { isLoading: isCreatingMission }] = useCreateMissionMutation()
+  const [, { isLoading: isDeletingMission }] = useDeleteMissionMutation()
+  const [, { isLoading: isCreatingMissionAction }] = useCreateMissionActionMutation()
+  const [, { isLoading: isDeletingMissionAction }] = useDeleteMissionActionMutation()
+  const [, { isLoading: isUpdatingMission }] = useUpdateMissionMutation()
+  const [, { isLoading: isUpdatingMissionAction }] = useUpdateMissionActionMutation()
   const missionEvent = useListenToMissionEventUpdatesById(missionIdRef.current)
 
   const isSaving =
@@ -154,86 +149,18 @@ export function MissionForm() {
    */
   const createOrUpdate = useCallback(
     async (missionDraft: MissionWithActionsDraft) => {
-      try {
-        dispatch(missionFormActions.setIsListeningToEvents(false))
+      const savedMission = await dispatch(
+        saveMissionAndMissionActionsByDiff(
+          missionDraft.mainFormValues,
+          missionDraft.actionsFormValues,
+          missionIdRef.current
+        )
+      )
 
-        if (!missionIdRef.current) {
-          const newMission = getMissionDataFromMissionFormValues(missionDraft.mainFormValues)
-          const createdMission = await createMission(newMission).unwrap()
-
-          missionIdRef.current = createdMission.id
-
-          setMainFormValues({
-            ...missionDraft.mainFormValues,
-            createdAtUtc: createdMission.createdAtUtc,
-            updatedAtUtc: createdMission.updatedAtUtc
-          })
-        } else {
-          const nextMission = getUpdatedMissionFromMissionMainFormValues(
-            missionIdRef.current,
-            missionDraft.mainFormValues
-          )
-          const updatedMission = await updateMission(nextMission).unwrap()
-
-          setMainFormValues({
-            ...missionDraft.mainFormValues,
-            updatedAtUtc: updatedMission.updatedAtUtc
-          })
-        }
-
-        assertNotNullish(missionIdRef.current)
-
-        const currentMissionWithActions = await dispatch(getMissionWithActions(missionIdRef.current))
-        const { deletedMissionActionIds, updatedMissionActionDatas } =
-          getMissionActionsDataFromMissionActionsFormValues(
-            missionIdRef.current,
-            missionDraft.actionsFormValues,
-            currentMissionWithActions.actions
-          )
-
-        await Promise.all([
-          ...deletedMissionActionIds.map(async missionActionId => {
-            await deleteMissionAction(missionActionId)
-          }),
-          ...updatedMissionActionDatas.map(async missionActionData => {
-            if (missionActionData.id === undefined) {
-              await createMissionAction(missionActionData)
-            } else {
-              await updateMissionAction({
-                ...missionActionData,
-                id: missionActionData.id,
-                /**
-                 * This field is not used in the backend use-case, we add this property to
-                 * respected the MissionAction type (using `portName` when fetching missions actions).
-                 */
-                portName: undefined
-              })
-            }
-          })
-        ])
-
-        dispatch(missionFormActions.setIsDraftDirty(false))
-        setTimeout(() => {
-          dispatch(missionFormActions.setIsListeningToEvents(true))
-        }, DEBOUNCE_DELAY)
-      } catch (err) {
-        logSoftError({
-          isSideWindowError: true,
-          message: '`createOrUpdate()` failed.',
-          originalError: err,
-          userMessage: "Une erreur est survenue pendant l'enregistrement de la mission."
-        })
-      }
+      setMainFormValues(savedMission)
+      missionIdRef.current = savedMission.id
     },
-    [
-      dispatch,
-      createMission,
-      createMissionAction,
-      deleteMissionAction,
-      updateMission,
-      updateMissionAction,
-      missionIdRef
-    ]
+    [dispatch, missionIdRef]
   )
 
   const goToMissionList = useCallback(async () => {
@@ -241,23 +168,11 @@ export function MissionForm() {
   }, [dispatch])
 
   const handleDelete = useCallback(async () => {
-    if (!missionIdRef.current) {
-      throw new FrontendError('`missionId` is undefined')
-    }
-
-    try {
-      await deleteMission(missionIdRef.current).unwrap()
-      dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }))
-    } catch (error: any) {
+    const isDeleted = dispatch(deleteMission(missionIdRef.current))
+    if (!isDeleted) {
       setIsDeletionConfirmationDialogOpen(false)
-      logSoftError({
-        isSideWindowError: true,
-        message: '`delete()` failed.',
-        originalError: error,
-        userMessage: error.userMessage
-      })
     }
-  }, [deleteMission, dispatch])
+  }, [dispatch])
 
   const reopen = useCallback(() => {
     const nextMainFormValues = {
@@ -322,7 +237,12 @@ export function MissionForm() {
       const nextActionFormValuesWithId = { ...nextActionFormValues, id }
 
       const createdId = await dispatch(
-        saveMissionAction(nextActionFormValuesWithId, missionIdRef.current, mainFormValues.isClosed, isAutoSaveEnabled)
+        autoSaveMissionAction(
+          nextActionFormValuesWithId,
+          missionIdRef.current,
+          mainFormValues.isClosed,
+          isAutoSaveEnabled
+        )
       )
       const nextActionsFormValuesWithCreatedId = actionsFormValues.map((action, index) =>
         index === editedActionIndex ? { ...nextActionFormValues, id: createdId } : action
@@ -351,7 +271,7 @@ export function MissionForm() {
       }
 
       const nextActionsFormValues = await dispatch(
-        deleteMissionMission(actionsFormValues, actionIndex, isAutoSaveEnabled)
+        deleteMissionAction(actionsFormValues, actionIndex, isAutoSaveEnabled)
       )
 
       setActionsFormValues(nextActionsFormValues)
@@ -386,7 +306,7 @@ export function MissionForm() {
       setEditedActionIndex(0)
 
       const createdId = await dispatch(
-        saveMissionAction(newActionFormValues, missionIdRef.current, mainFormValues.isClosed, isAutoSaveEnabled)
+        autoSaveMissionAction(newActionFormValues, missionIdRef.current, mainFormValues.isClosed, isAutoSaveEnabled)
       )
 
       const nextActionsWithIdFormValues = [{ ...newActionFormValues, id: createdId }, ...actionsFormValues]
@@ -419,7 +339,7 @@ export function MissionForm() {
       setEditedActionIndex(0)
 
       const createdId = await dispatch(
-        saveMissionAction(actionCopy, missionIdRef.current, mainFormValues.isClosed, isAutoSaveEnabled)
+        autoSaveMissionAction(actionCopy, missionIdRef.current, mainFormValues.isClosed, isAutoSaveEnabled)
       )
 
       const nextActionsWithIdFormValues = [{ ...actionCopy, id: createdId }, ...actionsFormValues]
@@ -466,7 +386,7 @@ export function MissionForm() {
       }
 
       const savedMainFormValues = await dispatch(
-        saveMission(nextMissionMainFormValues, mainFormValues, missionIdRef.current, isAutoSaveEnabled)
+        autoSaveMission(nextMissionMainFormValues, mainFormValues, missionIdRef.current, isAutoSaveEnabled)
       )
       if (!savedMainFormValues) {
         return
@@ -488,6 +408,7 @@ export function MissionForm() {
     if (!missionIdRef.current) {
       return
     }
+
     try {
       const response = dispatch(monitorenvMissionApi.endpoints.canDeleteMission.initiate(missionIdRef.current))
       const canDeleteMissionResponse = await response.unwrap()
@@ -496,6 +417,7 @@ export function MissionForm() {
 
         return
       }
+
       setActionsSources(canDeleteMissionResponse.sources)
       setIsExternalActionsDialogOpen(true)
     } catch (error) {

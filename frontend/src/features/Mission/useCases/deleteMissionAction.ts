@@ -4,7 +4,7 @@ import { missionFormActions } from '@features/Mission/components/MissionForm/sli
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 import type { MainAppThunk } from '@store'
 
-export const deleteMissionMission =
+export const deleteMissionAction =
   (
     actionsFormValues: MissionActionFormValues[],
     actionIndex: number,

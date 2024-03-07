@@ -350,7 +350,7 @@ context('Side Window > Mission Form > Main Form', () => {
           // We check this prop to be sure all the data is there (this is the last field to be filled)
           closedBy: 'Doris',
           isClosed: true,
-          isGeometryComputedFromControls: false
+          isGeometryComputedFromControls: true
         }
       },
       10

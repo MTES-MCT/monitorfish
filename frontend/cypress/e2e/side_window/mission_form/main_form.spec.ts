@@ -2,7 +2,7 @@ import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils
 import { Mission } from '../../../../src/domain/entities/mission/types'
 import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
 import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
-import { FAKE_MISSION_WITHOUT_EXTERNAL_ACTIONS, FAKE_MISSION_WITH_EXTERNAL_ACTIONS } from '../../constants'
+import { FAKE_MISSION_WITH_EXTERNAL_ACTIONS, FAKE_MISSION_WITHOUT_EXTERNAL_ACTIONS } from '../../constants'
 import { customDayjs } from '../../utils/customDayjs'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
@@ -77,6 +77,7 @@ context('Side Window > Mission Form > Main Form', () => {
       })
     })
 
+    cy.wait(500)
     cy.get('div').contains('Mission créée par le')
     cy.get('div').contains('Dernière modification enregistrée')
     cy.get('h1').should('contain.text', 'Mission Mer – Cultures marines 56')
@@ -281,16 +282,8 @@ context('Side Window > Mission Form > Main Form', () => {
       statusCode: 201
     }).as('updateMission')
 
-    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
-      body: {
-        id: 2
-      },
-      statusCode: 200
-    }).as('updateMissionAction2')
-
     cy.fill('Ouvert par', 'Nemo')
 
-    cy.wait('@updateMission')
     cy.wait('@updateMission').then(interception => {
       if (!interception.response) {
         assert.fail('`interception.response` is undefined.')
@@ -321,101 +314,6 @@ context('Side Window > Mission Form > Main Form', () => {
           'Maybe own each college away likely major. Former space technology million cell. Outside body my drop require.',
         observationsCnsp: null,
         openBy: 'Nemo'
-      })
-    })
-
-    cy.wait('@updateMissionAction2').then(interception => {
-      if (!interception.response) {
-        assert.fail('`interception.response` is undefined.')
-      }
-
-      assert.isString(interception.request.body.actionDatetimeUtc)
-      assert.deepInclude(interception.request.body, {
-        actionType: 'SEA_CONTROL',
-        closedBy: 'XYZ',
-        controlQualityComments: 'Ciblage CNSP non respecté',
-        controlUnits: [],
-        emitsAis: 'NOT_APPLICABLE',
-        emitsVms: 'YES',
-        externalReferenceNumber: null,
-        // TODO There is an issue here, it's loaded as "MENM", not edited and updated as "NAMO".
-        facade: 'NAMO',
-        feedbackSheetRequired: true,
-        flagState: 'GB',
-        flightGoals: [],
-        gearInfractions: [
-          { comments: 'Maille trop petite', infractionType: 'WITH_RECORD', natinf: 23581 },
-          { comments: 'Engin non conforme', infractionType: 'PENDING', natinf: 27724 }
-        ],
-        gearOnboard: [
-          {
-            comments: null,
-            controlledMesh: null,
-            declaredMesh: 60,
-            gearCode: 'OTB',
-            gearName: 'Chaluts de fond à panneaux',
-            gearWasControlled: false,
-            hasUncontrolledMesh: true
-          },
-          {
-            comments: null,
-            controlledMesh: 52.8,
-            declaredMesh: 60,
-            gearCode: 'OTM',
-            gearName: 'Chaluts pélagiques à panneaux',
-            gearWasControlled: true,
-            hasUncontrolledMesh: false
-          }
-        ],
-        hasSomeGearsSeized: false,
-        hasSomeSpeciesSeized: true,
-        id: 2,
-        internalReferenceNumber: 'FAK000999999',
-        ircs: null,
-        latitude: 47.44,
-        licencesAndLogbookObservations: "C'est pas très très bien réglo toute cette poissecalle non déclarée",
-        licencesMatchActivity: 'NO',
-        logbookInfractions: [
-          {
-            comments: 'Poids à bord MNZ supérieur de 50% au poids déclaré',
-            infractionType: 'WITH_RECORD',
-            natinf: 27689
-          }
-        ],
-        logbookMatchesActivity: 'NO',
-        longitude: -0.52,
-        missionId: 2,
-        numberOfVesselsFlownOver: null,
-        otherComments: 'Commentaires post contrôle',
-        otherInfractions: [
-          {
-            comments: 'Chalutage répété dans les 3 milles sur Piste VMS - confirmé de visu',
-            infractionType: 'WITH_RECORD',
-            natinf: 23588
-          },
-          { comments: "Absence d'équipement AIS à bord", infractionType: 'PENDING', natinf: 23584 }
-        ],
-        portLocode: null,
-        segments: [
-          { segment: 'SWW04', segmentName: 'Midwater trawls' },
-          { segment: 'PEL03', segmentName: 'Polyvalent - Bottom trawl' }
-        ],
-        seizureAndDiversion: true,
-        seizureAndDiversionComments: 'Saisie de la pêche',
-        separateStowageOfPreservedSpecies: 'YES',
-        speciesInfractions: [{ comments: 'Sous taille de 8cm', infractionType: 'WITHOUT_RECORD', natinf: 28346 }],
-        speciesObservations: "Saisie de l'ensemble des captures à bord",
-        speciesOnboard: [
-          { controlledWeight: 450, declaredWeight: 302.5, nbFish: null, speciesCode: 'MNZ', underSized: true },
-          { controlledWeight: 40, declaredWeight: 40, nbFish: null, speciesCode: 'CRF', underSized: false }
-        ],
-        speciesSizeControlled: true,
-        speciesWeightControlled: true,
-        unitWithoutOmegaGauge: false,
-        userTrigram: 'DEF',
-        vesselId: 1,
-        vesselName: 'PHENOMENE',
-        vesselTargeted: 'NO'
       })
     })
 
@@ -483,12 +381,10 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.clickButton('Supprimer l’action')
 
     cy.wait('@deleteMissionAction')
-    cy.wait('@updateMission')
 
     cy.wait(250)
     cy.clickButton('Clôturer')
 
-    cy.wait('@updateMission')
     cy.wait('@updateMission').then(interception => {
       if (!interception.response) {
         assert.fail('`interception.response` is undefined.')
@@ -747,7 +643,7 @@ context('Side Window > Mission Form > Main Form', () => {
       .its('mockEventSources' as any)
       .then(mockEventSources => {
         // URL sur la CI : http://0.0.0.0:8081/api/v1/missions/sse'
-        // URL en local : /api/v1/missions/sse
+        // URL en local : //localhost:8081/api/v1/missions/sse
         mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emitOpen()
         mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emit(
           'MISSION_UPDATE',

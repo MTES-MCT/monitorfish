@@ -1,4 +1,5 @@
 import { logInDev } from '@utils/logInDev'
+import { undefinedize } from '@utils/undefinedize'
 
 import type { Mission } from 'domain/entities/mission/types'
 
@@ -14,7 +15,7 @@ export const MISSION_EVENT_UNSYNCHRONIZED_PROPERTIES_IN_FORM = [
 ]
 
 export const missionEventListener = (callback: (mission: Mission.Mission) => void) => (event: MessageEvent) => {
-  const mission = JSON.parse(event.data) as Mission.Mission
+  const mission = undefinedize(JSON.parse(event.data)) as Mission.Mission
 
   logInDev(`SSE: received a mission update.`)
 

@@ -12,7 +12,7 @@ import { openSideWindowPath } from '../../SideWindow/useCases/openSideWindowPath
 import { missionFormActions } from '../components/MissionForm/slice'
 import { getMissionDraftFromMissionWithActions } from '../components/MissionForm/utils/getMissionFormInitialValues'
 
-import type { MainAppThunk } from '../../../store'
+import type { MainAppThunk } from '@store'
 
 export const editMission =
   (id: number): MainAppThunk =>

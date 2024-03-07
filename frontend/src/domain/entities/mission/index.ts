@@ -162,7 +162,7 @@ export const getMissionActionFeatureZone = (
     isGeometryComputedFromControls: true,
     missionId: action.missionId
   })
-  feature.setId(`${MonitorFishLayer.MISSION_ACTION_ZONE}:${actionId}`)
+  feature.setId(`MISSION_ACTION_ZONE:${actionId}`)
 
   return feature
 }

@@ -97,7 +97,7 @@ export function MissionForm() {
   const [actionsSources, setActionsSources] = useState<Mission.MissionSource[]>([])
   const [title, setTitle] = useState(getTitleFromMissionMainFormValues(mainFormValues, missionIdRef.current))
 
-  // We use these keys to fully control when to re-render `<MainForm />` & `<ActionForm />`
+  // We use these keys to fully control when to re-render `<ActionForm />`
   // since they are fully memoized in order to optimize their (heavy) re-rendering
   const [actionFormKey, setActionFormKey] = useState(0)
 

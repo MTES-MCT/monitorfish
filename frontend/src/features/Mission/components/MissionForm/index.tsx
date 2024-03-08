@@ -66,6 +66,7 @@ export function MissionForm() {
   const dispatch = useMainAppDispatch()
   const missionIdFromPath = useMainAppSelector(store => store.sideWindow.selectedPath.id)
   const draft = useMainAppSelector(store => store.missionForm.draft)
+  const hasEngagedControlUnit = useMainAppSelector(state => !!state.missionForm.engagedControlUnit)
   assertNotNullish(draft)
 
   const missionIdRef = useRef<number | undefined>(missionIdFromPath)
@@ -575,9 +576,19 @@ export function MissionForm() {
       {isExternalActionsDialogOpen && (
         <ExternalActionsDialog onClose={() => setIsExternalActionsDialogOpen(false)} sources={actionsSources} />
       )}
+      {hasEngagedControlUnit && <DisabledMissionBackground />}
     </>
   )
 }
+
+const DisabledMissionBackground = styled.div`
+  position: absolute;
+  background-color: ${p => p.theme.color.white};
+  opacity: 0.6;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+`
 
 export const BackToListIcon = styled(Icon.Chevron)`
   margin-right: 12px;

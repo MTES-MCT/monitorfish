@@ -15,6 +15,7 @@ object TestUtils {
                 controlUnits = listOf(),
                 missionTypes = listOf(MissionType.SEA),
                 startDateTimeUtc = ZonedDateTime.now(),
+                isGeometryComputedFromControls = false,
                 missionSource = MissionSource.MONITORFISH,
                 isClosed = false,
             )

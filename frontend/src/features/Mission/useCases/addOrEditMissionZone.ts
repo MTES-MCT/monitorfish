@@ -1,11 +1,11 @@
-import { InteractionListener, InteractionType } from '../../entities/map/constants'
-import { setDisplayedComponents } from '../../shared_slices/DisplayedComponent'
-import { setInitialGeometry, setInteractionTypeAndListener } from '../../shared_slices/Draw'
-import { fitMultiPolygonToExtent } from '../map/fitMultiPolygonToExtent'
-import { unselectVessel } from '../vessel/unselectVessel'
+import { InteractionListener, InteractionType } from '../../../domain/entities/map/constants'
+import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedComponent'
+import { fitMultiPolygonToExtent } from '../../../domain/use_cases/map/fitMultiPolygonToExtent'
+import { unselectVessel } from '../../../domain/use_cases/vessel/unselectVessel'
+import { setInitialGeometry, setInteractionTypeAndListener } from '../../Draw/slice'
 
-import type { MainAppThunk } from '../../../store'
-import type { GeoJSON as GeoJSONNamespace } from '../../types/GeoJSON'
+import type { GeoJSON as GeoJSONNamespace } from '../../../domain/types/GeoJSON'
+import type { MainAppThunk } from '@store'
 
 export const addOrEditMissionZone =
   (geometry: GeoJSONNamespace.Geometry | undefined): MainAppThunk =>

@@ -1,14 +1,17 @@
 import { getMissionActionInfractionsFromMissionActionFormValues } from '@features/Mission/components/MissionForm/ActionList/utils'
+import { isLandControl } from '@features/Mission/useCases/getLastControlCircleGeometry'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
 import { random } from 'lodash'
 import { Feature } from 'ol'
 import { GeoJSON } from 'ol/format'
 import Point from 'ol/geom/Point'
+import { circular } from 'ol/geom/Polygon'
 import { transform } from 'ol/proj'
 
+import { LAND_CONTROL_ZONE_RADIUS, SEA_CONTROL_ZONE_RADIUS } from './constants'
 import { Mission } from './types'
 import { getMissionStatus } from './utils'
-import { getMissionColor } from '../../../features/map/layers/Mission/MissionLayer/styles'
+import { getMissionColor } from '../../../features/Mission/layers/MissionLayer/styles'
 import { booleanToInt, getDate, getDateTime } from '../../../utils'
 import { MissionAction } from '../../types/missionAction'
 import { getNumberOfInfractions, getNumberOfInfractionsWithRecord } from '../controls'
@@ -16,7 +19,7 @@ import { MonitorFishLayer } from '../layers/types'
 import { OpenLayersGeometryType } from '../map/constants'
 
 import type { MissionWithActions } from './types'
-import type { MissionMainFormValues, MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
+import type { MissionActionFormValues, MissionMainFormValues } from '@features/Mission/components/MissionForm/types'
 import type { MultiPolygon } from 'ol/geom'
 
 import MissionStatus = Mission.MissionStatus
@@ -135,6 +138,31 @@ export const getMissionActionFeature = (
     vesselName: action.vesselName
   })
   feature.setId(`${MonitorFishLayer.MISSION_ACTION_SELECTED}:${actionId}`)
+
+  return feature
+}
+
+export const getMissionActionFeatureZone = (
+  action: MissionAction.MissionAction | MissionActionFormValues
+): Feature | undefined => {
+  if (!action.longitude || !action.latitude) {
+    return undefined
+  }
+
+  const radius = isLandControl(action) ? LAND_CONTROL_ZONE_RADIUS : SEA_CONTROL_ZONE_RADIUS
+
+  const actionId = action.id || random(1000)
+  const feature = new Feature({
+    actionType: action.actionType,
+    dateTime: getDateTime(action.actionDatetimeUtc, true),
+    geometry: circular([action.longitude, action.latitude], radius, 64).transform(
+      WSG84_PROJECTION,
+      OPENLAYERS_PROJECTION
+    ),
+    isGeometryComputedFromControls: true,
+    missionId: action.missionId
+  })
+  feature.setId(`MISSION_ACTION_ZONE:${actionId}`)
 
   return feature
 }

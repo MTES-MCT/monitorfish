@@ -17,6 +17,7 @@ data class Mission(
     val geom: MultiPolygon? = null,
     val startDateTimeUtc: ZonedDateTime,
     val endDateTimeUtc: ZonedDateTime? = null,
+    val isGeometryComputedFromControls: Boolean,
     val missionSource: MissionSource,
     val isClosed: Boolean,
     val hasMissionOrder: Boolean? = false,

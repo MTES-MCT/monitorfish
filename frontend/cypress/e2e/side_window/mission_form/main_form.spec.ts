@@ -70,7 +70,7 @@ context('Side Window > Mission Form > Main Form', () => {
           }
         ],
         isClosed: false,
-        isGeometryComputedFromControls: false,
+        isGeometryComputedFromControls: true,
         isUnderJdp: false,
         missionSource: 'MONITORFISH',
         missionTypes: ['SEA']
@@ -149,7 +149,7 @@ context('Side Window > Mission Form > Main Form', () => {
             }
           ],
           isClosed: false,
-          isGeometryComputedFromControls: false,
+          isGeometryComputedFromControls: true,
           isUnderJdp: false,
           missionSource: 'MONITORFISH',
           missionTypes: ['SEA']
@@ -256,7 +256,7 @@ context('Side Window > Mission Form > Main Form', () => {
           endDateTimeUtc: '2023-02-01T13:45:00.000Z',
           hasMissionOrder: true,
           isClosed: false,
-          isGeometryComputedFromControls: false,
+          isGeometryComputedFromControls: true,
           isUnderJdp: true,
           missionSource: 'MONITORFISH',
           missionTypes: ['AIR'],
@@ -350,7 +350,7 @@ context('Side Window > Mission Form > Main Form', () => {
           // We check this prop to be sure all the data is there (this is the last field to be filled)
           closedBy: 'Doris',
           isClosed: true,
-          isGeometryComputedFromControls: false
+          isGeometryComputedFromControls: true
         }
       },
       10

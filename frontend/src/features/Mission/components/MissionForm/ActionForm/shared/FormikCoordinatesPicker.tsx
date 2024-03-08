@@ -1,3 +1,4 @@
+import { addOrEditControlCoordinates } from '@features/Mission/useCases/addOrEditControlCoordinates'
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -8,7 +9,6 @@ import { InteractionListener, OpenLayersGeometryType } from 'domain/entities/map
 import { fitToExtent } from 'domain/shared_slices/Map'
 import { MissionAction } from 'domain/types/missionAction'
 import { getCoordinatesExtent } from 'domain/use_cases/map/getCoordinatesExtent'
-import { addOrEditControlCoordinates } from 'domain/use_cases/mission/addOrEditControlCoordinates'
 import { useField, useFormikContext } from 'formik'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'

@@ -1,3 +1,5 @@
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { isEmpty } from 'lodash'
 import { Feature } from 'ol'
 import GeoJSON from 'ol/format/GeoJSON'
@@ -7,22 +9,20 @@ import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
-import { dottedLayerStyle } from './styles/dottedLayer.style'
-import { drawStyle, editStyle } from './styles/draw.style'
-import { LayerProperties } from '../../../domain/entities/layers/constants'
+import { addFeatureToDrawedFeature } from './useCases/addFeatureToDrawedFeature'
+import { setDrawedGeometry } from './useCases/setDrawedGeometry'
+import { LayerProperties } from '../../domain/entities/layers/constants'
 import {
   InteractionType,
   OPENLAYERS_PROJECTION,
   OpenLayersGeometryType,
   WSG84_PROJECTION
-} from '../../../domain/entities/map/constants'
-import { addFeatureToDrawedFeature } from '../../../domain/use_cases/draw/addFeatureToDrawedFeature'
-import { setDrawedGeometry } from '../../../domain/use_cases/draw/setDrawedGeometry'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { monitorfishMap } from '../monitorfishMap'
+} from '../../domain/entities/map/constants'
+import { dottedLayerStyle } from '../map/layers/styles/dottedLayer.style'
+import { drawStyle, editStyle } from '../map/layers/styles/draw.style'
+import { monitorfishMap } from '../map/monitorfishMap'
 
-import type { VectorLayerWithName } from '../../../domain/types/layer'
+import type { VectorLayerWithName } from '../../domain/types/layer'
 import type Geometry from 'ol/geom/Geometry'
 import type { GeometryFunction } from 'ol/interaction/Draw'
 import type { MutableRefObject } from 'react'

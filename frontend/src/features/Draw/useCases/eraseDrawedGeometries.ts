@@ -1,5 +1,6 @@
-import { keepOnlyInitialGeometriesOfMultiPolygon } from '../../entities/layers'
-import { setDrawedGeometry } from '../../shared_slices/Draw'
+import { setDrawedGeometry } from '@features/Draw/slice'
+
+import { keepOnlyInitialGeometriesOfMultiPolygon } from '../../../domain/entities/layers'
 
 export const eraseDrawedGeometries = initialFeatureNumber => (dispatch, getState) => {
   const { drawedGeometry } = getState().draw

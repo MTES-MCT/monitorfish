@@ -164,6 +164,8 @@ export function MissionForm() {
   )
 
   const goToMissionList = useCallback(async () => {
+    dispatch(missionFormActions.resetMissionForm())
+    dispatch(missionFormActions.unsetSelectedMissionGeoJSON())
     dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }))
   }, [dispatch])
 

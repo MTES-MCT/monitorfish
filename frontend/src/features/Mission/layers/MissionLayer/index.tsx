@@ -1,16 +1,16 @@
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import WebGLPointsLayer from 'ol/layer/WebGLPoints'
 import VectorSource from 'ol/source/Vector'
 import { memo, useCallback, useEffect, useRef } from 'react'
 
 import { missionPointWebGLStyle } from './styles'
-import { LayerProperties } from '../../../../../domain/entities/layers/constants'
-import { MonitorFishLayer } from '../../../../../domain/entities/layers/types'
-import { getMissionFeaturePoint } from '../../../../../domain/entities/mission'
-import { useMainAppDispatch } from '../../../../../hooks/useMainAppDispatch'
-import { useGetFilteredMissionsQuery } from '../../../../Mission/components/MissionList/hooks/useGetFilteredMissionsQuery'
-import { monitorfishMap } from '../../../monitorfishMap'
+import { LayerProperties } from '../../../../domain/entities/layers/constants'
+import { MonitorFishLayer } from '../../../../domain/entities/layers/types'
+import { getMissionFeaturePoint } from '../../../../domain/entities/mission'
+import { monitorfishMap } from '../../../map/monitorfishMap'
+import { useGetFilteredMissionsQuery } from '../../components/MissionList/hooks/useGetFilteredMissionsQuery'
 
-import type { WebGLPointsLayerWithName } from '../../../../../domain/types/layer'
+import type { WebGLPointsLayerWithName } from '../../../../domain/types/layer'
 import type { Feature } from 'ol'
 import type { Point } from 'ol/geom'
 

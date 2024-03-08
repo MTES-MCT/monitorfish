@@ -1,8 +1,8 @@
-import { MissionLabelLine } from '../../../../../domain/entities/missionLabelLine'
-import { drawMovedLabelLine } from '../../../../../domain/entities/vessel/label'
+import { MissionLabelLine } from '../../../../domain/entities/missionLabelLine'
+import { drawMovedLabelLine } from '../../../../domain/entities/vessel/label'
 
 import type { FeatureAndLabel } from './types'
-import type { LegacyControlUnit } from '../../../../../domain/types/legacyControlUnit'
+import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
 
 const NOT_FOUND = -1
 const MAX_MISSIONS_LABELS_DISPLAYED = 13

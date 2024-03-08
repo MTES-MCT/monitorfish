@@ -120,7 +120,7 @@
       "missionSource": "MONITORENV",
       "isClosed": false,
       "isUnderJdp": false,
-      "isGeometryComputedFromControls": false
+      "isGeometryComputedFromControls": true
     }
   }
 }

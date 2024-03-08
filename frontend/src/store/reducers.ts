@@ -1,3 +1,4 @@
+import { drawReducer } from '@features/Draw/slice'
 import persistReducer from 'redux-persist/es/persistReducer'
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
 import storage from 'redux-persist/es/storage' // LocalStorage
@@ -7,7 +8,6 @@ import { beaconMalfunctionReducer } from '../domain/shared_slices/BeaconMalfunct
 import { controlReducer } from '../domain/shared_slices/Control'
 import { displayedComponentReducer } from '../domain/shared_slices/DisplayedComponent'
 import { displayedErrorReducer } from '../domain/shared_slices/DisplayedError'
-import { drawReducer } from '../domain/shared_slices/Draw'
 import { favoriteVesselReducer } from '../domain/shared_slices/FavoriteVessel'
 import { filterReducer } from '../domain/shared_slices/Filter'
 import { gearReducer } from '../domain/shared_slices/Gear'

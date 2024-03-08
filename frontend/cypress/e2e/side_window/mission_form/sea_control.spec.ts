@@ -557,15 +557,17 @@ context('Side Window > Mission Form > Sea Control', () => {
     // -------------------------------------------------------------------------
     // Form
 
-    cy.get('*[data-cy="mission-main-form-location"]').should('not.contain', 'Polygone dessiné 1')
     cy.wait(250)
-    cy.fill('Zone de la mission calculée à partir des contrôles', true)
 
     // A mission zone should be automatically added (because of the stubbed coordinates update when IS_CYPRESS LocalSorage key is "true")
     cy.get('.Toastify__toast--success').contains(
       'Une zone de mission a été ajoutée à partir des contrôles de la mission'
     )
-    cy.get('*[data-cy="mission-main-form-location"]').should('contain', 'Polygone dessiné 1')
+    cy.get('*[data-cy="mission-main-form-location"]').should(
+      'contain',
+      'Actuellement, la zone de mission ' +
+        'est automatiquement calculée selon le point ou la zone de la dernière action rapportée par l’unité.'
+    )
 
     // Navire
     // TODO Handle Automplete in custom `cy.fill()` command once it's used via monitor-ui.
@@ -590,7 +592,11 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.get('.Toastify__toast--success').contains(
       'Une zone de mission a été ajoutée à partir des contrôles de la mission'
     )
-    cy.get('*[data-cy="mission-main-form-location"]').should('contain', 'Polygone dessiné 1')
+    cy.get('*[data-cy="mission-main-form-location"]').should(
+      'contain',
+      'Actuellement, la zone de mission ' +
+        'est automatiquement calculée selon le point ou la zone de la dernière action rapportée par l’unité.'
+    )
 
     // Navire
     // TODO Handle Automplete in custom `cy.fill()` command once it's used via monitor-ui.

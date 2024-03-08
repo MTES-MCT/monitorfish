@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { Mission, type MissionWithActions } from '../../../domain/entities/mission/types'
 import { FrontendError } from '../../../libs/FrontendError'
-import { getMissionColor } from '../../map/layers/Mission/MissionLayer/styles'
+import { getMissionColor } from '../../Mission/layers/MissionLayer/styles'
 
 import type { LegacyControlUnit } from '../../../domain/types/legacyControlUnit'
 

@@ -83,6 +83,8 @@ export function ControlUnitWarningMessage({
 
 const StyledMessage = styled(Message)`
   margin-top: 8px;
+  position: relative;
+  z-index: 10;
 `
 const Warning = styled.p`
   color: ${({ theme }) => theme.color.goldenPoppy};

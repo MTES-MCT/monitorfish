@@ -8,14 +8,14 @@ module.exports = {
     ecmaVersion: 2022,
     project: path.join(__dirname, 'tsconfig.json')
   },
-  ignorePatterns: ['.eslintrc.js', '.eslintrc.partial.js', 'scripts/*'],
+  ignorePatterns: ['.eslintrc.js', '.eslintrc.partial.js'],
   env: {
     browser: true
   },
   rules: {
     curly: ['error', 'all'],
     'newline-before-return': 'error',
-    'no-console': 'error',
+    'no-console': ['error', { allow: ['info', 'warn', 'error'] }],
 
     'import/no-default-export': 'error',
     'import/order': [
@@ -104,6 +104,13 @@ module.exports = {
       }
     ],
     '@typescript-eslint/no-use-before-define': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_'
+      }
+    ],
     '@typescript-eslint/prefer-nullish-coalescing': 'warn',
 
     'typescript-sort-keys/interface': 'error',

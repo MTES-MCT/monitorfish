@@ -170,7 +170,7 @@ def add_article_id(regulations: pd.DataFrame, url_column: str) -> pd.DataFrame:
     """
     legipeche_regex = re.compile(
         (
-            r"^http://legipeche\.metier\."
+            r"^https?://legipeche\.metier\."
             r"e2\.rie\.gouv\.fr/"
             r"(?:[a-zA-Z0-9-]*)"
             r"-a(?P<article_id>\d+)"

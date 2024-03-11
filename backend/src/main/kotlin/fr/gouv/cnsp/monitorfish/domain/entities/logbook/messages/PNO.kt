@@ -15,6 +15,7 @@ class PNO() : LogbookMessageValue {
     var port: String? = null
     var portName: String? = null
     var catchOnboard: List<Catch> = listOf()
+    var catchToLand: List<Catch> = listOf()
 
     @JsonProperty("predictedArrivalDatetimeUtc")
     var predictedArrivalDateTime: ZonedDateTime? = null

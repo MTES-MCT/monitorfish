@@ -9,6 +9,7 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
+import org.hibernate.query.sqm.TemporalUnit
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -237,7 +238,15 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(pnoMessage.catchOnboard.first().effortZone).isEqualTo("C")
         assertThat(pnoMessage.catchOnboard.first().economicZone).isEqualTo("FRA")
         assertThat(pnoMessage.catchOnboard.first().statisticalRectangle).isEqualTo("23E6")
-        assertThat(pnoMessage.tripStartDate.toString()).isEqualTo("2024-03-02T00:00Z")
+        assertThat(pnoMessage.catchToLand).hasSize(4)
+        assertThat(pnoMessage.catchToLand.first().weight).isEqualTo(15.0)
+        assertThat(pnoMessage.catchToLand.first().numberFish).isEqualTo(null)
+        assertThat(pnoMessage.catchToLand.first().species).isEqualTo("SLS")
+        assertThat(pnoMessage.catchToLand.first().faoZone).isEqualTo("27.8.a")
+        assertThat(pnoMessage.catchToLand.first().effortZone).isEqualTo("C")
+        assertThat(pnoMessage.catchToLand.first().economicZone).isEqualTo("FRA")
+        assertThat(pnoMessage.catchToLand.first().statisticalRectangle).isEqualTo("23E6")
+        assertThat(pnoMessage.tripStartDate).isAfter(ZonedDateTime.now().minusDays(5))
         assertThat(pnoMessage.predictedArrivalDateTime).isAfter(ZonedDateTime.now().minusDays(5))
 
         // EOF

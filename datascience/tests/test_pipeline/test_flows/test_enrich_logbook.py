@@ -594,7 +594,7 @@ def test_merge_segments_and_types(
 
 def test_load_then_reset_logbook(reset_test_data, pnos_to_load, expected_loaded_pnos):
     query = (
-        "SELECT id, enriched, trip_gears, pno_types, trip_segments "
+        "SELECT id, enriched, trip_gears, value->'pnoTypes' AS pno_types, trip_segments "
         "FROM logbook_reports WHERE log_type = 'PNO' ORDER BY id"
     )
     initial_pnos = read_query(query, db="monitorfish_remote")
@@ -620,7 +620,7 @@ def test_load_then_reset_logbook(reset_test_data, pnos_to_load, expected_loaded_
 
 def test_flow(reset_test_data):
     query = (
-        "SELECT id, enriched, trip_gears, pno_types, trip_segments "
+        "SELECT id, enriched, trip_gears, value->'pnoTypes' AS pno_types, trip_segments "
         "FROM logbook_reports WHERE log_type = 'PNO' ORDER BY id"
     )
 

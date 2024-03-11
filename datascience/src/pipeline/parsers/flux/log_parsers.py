@@ -15,7 +15,6 @@ def null_parser(el: xml.etree.ElementTree.Element):
 
 
 def parse_dep(dep):
-
     value = {
         "departureDatetimeUtc": get_text(dep, ".//ram:OccurrenceDateTime/udt:DateTime"),
         "departurePort": get_text(
@@ -56,7 +55,6 @@ def parse_dep(dep):
 
 
 def parse_far(far):
-
     value = {"farDatetimeUtc": get_text(far, ".//ram:OccurrenceDateTime/udt:DateTime")}
 
     children = tagged_children(far)
@@ -99,7 +97,6 @@ def parse_far(far):
 
 
 def parse_dis(dis):
-
     value = {
         "discardDatetimeUtc": get_text(dis, ".//ram:OccurrenceDateTime/udt:DateTime")
     }
@@ -126,7 +123,6 @@ def parse_dis(dis):
 
 
 def parse_coe(coe):
-
     children = tagged_children(coe)
 
     value = {
@@ -183,7 +179,6 @@ def parse_cox(cox):
 
 
 def parse_pno(pno):
-
     children = tagged_children(pno)
 
     value = {
@@ -208,13 +203,19 @@ def parse_pno(pno):
         zone_data = complete_ras(zone_data)
 
     if "SpecifiedFACatch" in children:
-        unloaded_catches = pno.findall(
+        catch_onboard = pno.findall(
+            ".//ram:SpecifiedFACatch[ram:TypeCode='ONBOARD']", NS_FLUX
+        )
+        catch_to_land = pno.findall(
             ".//ram:SpecifiedFACatch[ram:TypeCode='UNLOADED']", NS_FLUX
         )
-        catches = [parse_spe(spe) for spe in unloaded_catches]
+        catch_onboard = [parse_spe(spe) for spe in catch_onboard]
+        catch_to_land = [parse_spe(spe) for spe in catch_to_land]
         if hasRelatedFLUXLocation:
-            catches = [dict(item, **zone_data) for item in catches]
-        value["catchOnboard"] = catches
+            catch_to_land = [dict(item, **zone_data) for item in catch_to_land]
+            catch_onboard = [dict(item, **zone_data) for item in catch_onboard]
+        value["catchOnboard"] = catch_onboard
+        value["catchToLand"] = catch_to_land
 
     pos = get_element(pno, ".//ram:SpecifiedPhysicalFLUXGeographicalCoordinate")
     if pos is not None:
@@ -225,7 +226,6 @@ def parse_pno(pno):
 
 
 def parse_lan(lan):
-
     value = {
         "landingDatetimeUtc": get_text(lan, ".//ram:EndDateTime/udt:DateTime"),
         "port": get_text(

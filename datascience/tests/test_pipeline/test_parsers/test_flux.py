@@ -479,6 +479,9 @@ def test_batch_parse():
                     "catchOnboard": [
                         {"species": "GHL", "weight": 1500.0, "nbFish": None}
                     ],
+                    "catchToLand": [
+                        {"species": "GHL", "weight": 1500.0, "nbFish": None}
+                    ],
                 },
                 "SRC-TRP-TTT20200506194103340",
             ],
@@ -502,6 +505,9 @@ def test_batch_parse():
                     "purpose": "LAN",
                     "tripStartDate": "2020-05-04T19:41:03.340Z",
                     "catchOnboard": [
+                        {"species": "GHL", "weight": 1500.0, "nbFish": None}
+                    ],
+                    "catchToLand": [
                         {"species": "GHL", "weight": 1500.0, "nbFish": None}
                     ],
                 },

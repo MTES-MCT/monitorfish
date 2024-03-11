@@ -17,6 +17,7 @@ run-front:
 
 run-back: run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db
+	cd frontend && node ./scripts/generate_test_data_seeds.mjs
 	cd backend && ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
 
 run-back-with-monitorenv: run-monitorenv

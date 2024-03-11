@@ -243,8 +243,12 @@ def parse_pno(pno):
         value = {**value, **ras_data}
 
     if "SPE" in children:
-        catches = [parse_spe(spe) for spe in children["SPE"]]
-        value["catchOnboard"] = catches
+        value["catchOnboard"] = [
+            parse_spe(spe, catch_to_land=False) for spe in children["SPE"]
+        ]
+        value["catchToLand"] = [
+            parse_spe(spe, catch_to_land=True) for spe in children["SPE"]
+        ]
 
     if "POS" in children:
         assert len(children["POS"]) == 1

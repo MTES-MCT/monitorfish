@@ -302,6 +302,7 @@ def test_pno_parser():
     value = data["value"]
     assert set(value) == {
         "catchOnboard",
+        "catchToLand",
         "predictedArrivalDatetimeUtc",
         "predictedLandingDatetimeUtc",
         "tripStartDate",

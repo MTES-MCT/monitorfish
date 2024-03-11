@@ -34,11 +34,14 @@ def parse_pro(pro):
     return data
 
 
-def parse_spe(spe):
+def parse_spe(spe, catch_to_land: bool = False):
+    weight_attribute = "WL" if catch_to_land else "WT"
+    number_of_fish_attribute = "FL" if catch_to_land else "NF"
+
     data = {
         "species": spe.get("SN"),
-        "weight": try_float(spe.get("WT")),
-        "nbFish": try_float(spe.get("NF")),
+        "weight": try_float(spe.get(weight_attribute)),
+        "nbFish": try_float(spe.get(number_of_fish_attribute)),
     }
 
     children = tagged_children(spe)

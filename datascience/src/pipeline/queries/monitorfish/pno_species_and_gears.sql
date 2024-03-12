@@ -79,8 +79,8 @@ dep_gears AS (
     FROM pno_trips t
     JOIN logbook_reports dep
     ON
-        dep.operation_datetime_utc >= '2024-01-07'
-        AND dep.operation_datetime_utc < '2024-03-01'
+        dep.operation_datetime_utc >= :min_trip_date - INTERVAL '1 day'
+        AND dep.operation_datetime_utc < :max_trip_date
         AND dep.log_type = 'DEP'
         AND dep.cfr = t.cfr
         AND dep.report_id NOT IN (SELECT referenced_report_id FROM deleted_corrected_or_rejected_messages)

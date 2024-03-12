@@ -95,7 +95,7 @@ SELECT
     s.id AS logbook_reports_pno_id,
     EXTRACT('YEAR' FROM predicted_arrival_datetime_utc)::INTEGER AS year,
     s.species,
-    COALESCE(fg.far_gears, dg.dep_gears) AS trip_gears,
+    COALESCE(fg.far_gears, dg.dep_gears, '[]'::jsonb) AS trip_gears,
     s.fao_area,
     s.weight,
     s.flag_state

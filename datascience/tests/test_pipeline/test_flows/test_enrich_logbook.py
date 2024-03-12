@@ -126,7 +126,7 @@ def sample_pno_species_and_gears() -> pd.DataFrame:
                     {"gear": "OTT", "mesh": 120, "dimensions": "250.0"},
                 ],
                 [{"gear": "TBB", "mesh": 140, "dimensions": "250.0"}],
-                None,
+                [],
                 [{"gear": "OTB", "mesh": 100, "dimensions": "250.0"}],
                 [{"gear": "OTB", "mesh": 100, "dimensions": "250.0"}],
                 [{"gear": "OTB", "mesh": 100, "dimensions": "250.0"}],
@@ -250,7 +250,7 @@ def expected_computed_pno_types() -> pd.DataFrame:
                     {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},
                 ],
                 [{"gear": "TBB", "mesh": 140, "dimensions": "250.0"}],
-                None,
+                [],
                 [{"gear": "OTB", "mesh": 100, "dimensions": "250.0"}],
                 [{"gear": "PTM", "mesh": 70, "dimensions": "250.0"}],
                 [{"gear": "OTM", "mesh": 80, "dimensions": "200.0"}],
@@ -359,7 +359,7 @@ def pnos_to_load() -> pd.DataFrame:
                     {"gear": "OTT", "mesh": 120, "dimensions": "250.0"},
                     {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},
                 ],
-                None,
+                [],
             ],
             "pno_types": [
                 [
@@ -440,7 +440,7 @@ def expected_merged_pnos() -> pd.DataFrame:
                     {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},
                 ],
                 [{"gear": "TBB", "mesh": 140, "dimensions": "250.0"}],
-                None,
+                [],
                 [{"gear": "OTB", "mesh": 100, "dimensions": "250.0"}],
                 [{"gear": "PTM", "mesh": 70, "dimensions": "250.0"}],
                 [{"gear": "OTM", "mesh": 80, "dimensions": "200.0"}],
@@ -573,6 +573,16 @@ def test_compute_pno_types(
     pd.testing.assert_frame_equal(res, expected_computed_pno_types)
 
 
+def test_compute_pno_types_with_empty_gears_list_only(
+    expected_pno_types, sample_pno_species_and_gears, expected_computed_pno_types
+):
+    assert sample_pno_species_and_gears.loc[2, "trip_gears"] == []
+    res = compute_pno_types(sample_pno_species_and_gears.loc[[2]], expected_pno_types)
+    pd.testing.assert_frame_equal(
+        res, expected_computed_pno_types.loc[[2]].reset_index(drop=True)
+    )
+
+
 def test_compute_pno_segments(
     reset_test_data,
     sample_pno_species_and_gears,
@@ -581,6 +591,19 @@ def test_compute_pno_segments(
 ):
     res = compute_pno_segments(sample_pno_species_and_gears, segments)
     pd.testing.assert_frame_equal(res, expected_computed_pno_segments)
+
+
+def test_compute_pno_segments_with_empty_gears_only(
+    reset_test_data,
+    sample_pno_species_and_gears,
+    segments,
+    expected_computed_pno_segments,
+):
+    assert sample_pno_species_and_gears.loc[2, "trip_gears"] == []
+    res = compute_pno_segments(sample_pno_species_and_gears.loc[[2]], segments)
+    pd.testing.assert_frame_equal(
+        res, expected_computed_pno_segments.loc[[2]].reset_index(drop=True)
+    )
 
 
 def test_merge_segments_and_types(

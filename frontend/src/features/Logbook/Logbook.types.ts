@@ -15,6 +15,7 @@ export type FishingActivities = {
   logbookMessages: LogbookMessage[]
 }
 
+// TODO Replace this type with `LogbookMessage.LogbookMessage`.
 export type LogbookMessage = {
   acknowledge: {
     dateTime: string | null

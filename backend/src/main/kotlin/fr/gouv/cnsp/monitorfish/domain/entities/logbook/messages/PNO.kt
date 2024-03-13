@@ -19,6 +19,8 @@ class PNO() : LogbookMessageValue {
 
     @JsonProperty("predictedArrivalDatetimeUtc")
     var predictedArrivalDateTime: ZonedDateTime? = null
+    @JsonProperty("predictedLandingDatetimeUtc")
+    var predictedLandingDatetime: ZonedDateTime? = null
 
     var tripStartDate: ZonedDateTime? = null
 }

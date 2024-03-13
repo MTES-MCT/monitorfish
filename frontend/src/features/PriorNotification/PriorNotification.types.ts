@@ -1,24 +1,29 @@
-import type { SeaFrontGroup } from '../../domain/entities/seaFront/constants'
+// import type { SeaFrontGroup } from '../../domain/entities/seaFront/constants'
 import type { Vessel } from '../../domain/entities/vessel/types'
 import type { Port } from '../../domain/types/port'
-import type { FleetSegment } from '@features/FleetSegment/types'
+import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
+import type { RiskFactor } from 'domain/entities/vessel/riskFactor/types'
 
 export namespace PriorNotification {
   export interface PriorNotification {
-    alertCount: number
-    estimatedTimeOfArrival: string
-    facade: SeaFrontGroup
-    fleetSegments: FleetSegment[]
     id: number
-    isSubmitted: boolean
-    port: Port.Port
-    reason: PriorNotificationReason
-    receivedAt: string
-    scheduledTimeOfLanding: string
-    types: PriorNotificationType[]
-    vessel: Vessel
+    logbookMessage: LogbookMessage.LogbookMessage | undefined
+    // TODO Real time or pre-calculated and stored?
+    port: Port.Port | undefined
+    // TODO Real time or pre-calculated and stored?
+    reportingsCount: number
+    // TODO Is it a seaFront or a seaFrontGroup?
+    // TODO Replace with enum.
+    seaFront: string | undefined
+    tripGears: LogbookMessage.TripGear[]
+    tripSegments: LogbookMessage.TripSegment[]
+    // TODO Real time or pre-calculated and stored?
+    vessel: Vessel | undefined
+    // TODO Real time or pre-calculated and stored?
+    vesselRiskFactor: RiskFactor | undefined
   }
 
+  // TODO Fill all the possible case. Exiting labelled enum somewhere else?
   export enum PriorNotificationReason {
     LANDING = 'LANDING'
   }
@@ -26,6 +31,7 @@ export namespace PriorNotification {
     LANDING: 'Débarquement'
   }
 
+  // TODO Check and update with datascience values.
   /* eslint-disable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
   export enum PriorNotificationType {
     BASS = 'BASS',

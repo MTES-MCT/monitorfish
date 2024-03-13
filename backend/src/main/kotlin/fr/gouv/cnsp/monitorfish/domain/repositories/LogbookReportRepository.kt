@@ -3,9 +3,13 @@ package fr.gouv.cnsp.monitorfish.domain.repositories
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
+import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.dtos.PriorNotification
 import java.time.ZonedDateTime
 
 interface LogbookReportRepository {
+    fun findAllPriorNotifications(filter: LogbookReportFilter? = null): List<PriorNotification>
+
     @Throws(NoLogbookFishingTripFound::class)
     fun findLastTripBeforeDateTime(
         internalReferenceNumber: String,
@@ -25,7 +29,11 @@ interface LogbookReportRepository {
     ): VoyageDatesAndTripNumber
 
     @Throws(NoLogbookFishingTripFound::class)
-    fun findTripAfterTripNumber(internalReferenceNumber: String, tripNumber: String): VoyageDatesAndTripNumber
+    fun findTripAfterTripNumber(
+        internalReferenceNumber: String,
+        tripNumber: String,
+    ): VoyageDatesAndTripNumber
+
     fun findAllMessagesByTripNumberBetweenDates(
         internalReferenceNumber: String,
         afterDate: ZonedDateTime,
@@ -34,10 +42,18 @@ interface LogbookReportRepository {
     ): List<LogbookMessage>
 
     fun findLANAndPNOMessagesNotAnalyzedBy(ruleType: String): List<Pair<LogbookMessage, LogbookMessage?>>
-    fun updateLogbookMessagesAsProcessedByRule(ids: List<Long>, ruleType: String)
+
+    fun updateLogbookMessagesAsProcessedByRule(
+        ids: List<Long>,
+        ruleType: String,
+    )
+
     fun findById(id: Long): LogbookMessage
+
     fun findLastMessageDate(): ZonedDateTime
+
     fun findLastTwoYearsTripNumbers(internalReferenceNumber: String): List<String>
+
     fun findFirstAndLastOperationsDatesOfTrip(
         internalReferenceNumber: String,
         tripNumber: String,
@@ -45,5 +61,6 @@ interface LogbookReportRepository {
 
     // For test purpose
     fun deleteAll()
+
     fun save(message: LogbookMessage)
 }

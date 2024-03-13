@@ -729,7 +729,7 @@ SET
     enriched = true,
     trip_gears = '[]'::jsonb,
     trip_segments = '[]'::jsonb,
-    pno_types = '[]'::jsonb
+    value = jsonb_set(value, '{pnoTypes}', '[]'::jsonb)
 WHERE operation_number IN ('OOF20191011059902', 'OOF20190439686457', 'd5c3b039-aaee-4cca-bcae-637f5fe574f5');
 
 UPDATE logbook_reports
@@ -737,16 +737,20 @@ SET
     enriched = true,
     trip_gears = '[{"gear": "GTR", "mesh": 100, "dimensions": "250;180"}, {"gear": "GTR", "mesh": 120.5, "dimensions": "250;280"}]'::jsonb,
     trip_segments = '[{"segment": "NWW01", "segment_name": "Chalutiers de fond"}, {"segment": "PEL01", "segment_name": "Chalutiers pélagiques"}]'::jsonb,
-    pno_types = '[
-                    {
-                        "pno_type_name": "Préavis type X",
-                        "minimum_notification_period": 4.0,
-                        "has_designated_ports": false
-                    },
-                    {
-                        "pno_type_name": "Préavis type Y",
-                        "minimum_notification_period": 8.0,
-                        "has_designated_ports": true
-                    }
-                ]'::jsonb
+    value = jsonb_set(
+        value,
+        '{pnoTypes}',
+        '[
+            {
+                "pnoTypeName": "Préavis type X",
+                "minimumNotificationPeriod": 4.0,
+                "hasDesignated_ports": false
+            },
+            {
+                "pnoTypeName": "Préavis type Y",
+                "minimumNotificationPeriod": 8.0,
+                "hasDesignated_ports": true
+            }
+        ]'::jsonb
+    )
 WHERE operation_number = 'OOF20191011059902';

@@ -11,7 +11,9 @@ data class LogbookMessage(
     val tripNumber: String? = null,
     val referencedReportId: String? = null,
     var isCorrected: Boolean? = false,
+    val isEnriched: Boolean,
     val operationType: LogbookOperationType,
+    // TODO What's the difference between `operationDateTime`, `integrationDateTime` and `reportDateTime`? Is it in UTC?
     val operationDateTime: ZonedDateTime,
     val internalReferenceNumber: String? = null,
     val externalReferenceNumber: String? = null,
@@ -30,4 +32,6 @@ data class LogbookMessage(
     val transmissionFormat: LogbookTransmissionFormat,
     val software: String? = null,
     var isSentByFailoverSoftware: Boolean = false,
+    val tripGears: List<LogbookTripGear>? = listOf(),
+    val tripSegments: List<LogbookTripSegment>? = listOf(),
 )

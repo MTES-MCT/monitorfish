@@ -1,4 +1,4 @@
-import { COUNTRIES_AS_OPTIONS } from '@constants/index'
+import { COUNTRIES_AS_ALPHA3_OPTIONS } from '@constants/index'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { useGetFleetSegmentsAsOptions } from '@hooks/useGetFleetSegmentsAsOptions'
 import { useGetGearsAsTreeOptions } from '@hooks/useGetGearsAsTreeOptions'
@@ -16,7 +16,7 @@ import {
   Select,
   Size,
   TextInput,
-  type DateRange
+  type DateAsStringRange
 } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
@@ -70,20 +70,20 @@ export function FilterBar() {
     dispatch(priorNotificationActions.setListFilterValues({ lastControlPeriod: nextLastControlPeriod }))
   }
 
-  const updateQuery = (nextQuery: string | undefined) => {
-    dispatch(priorNotificationActions.setListFilterValues({ query: nextQuery }))
-  }
-
   const updatePortLocodes = (nextPortLocodes: string[] | undefined) => {
     dispatch(priorNotificationActions.setListFilterValues({ portLocodes: nextPortLocodes }))
   }
 
-  const updateReceivedAtCustomDateRange = (nextReceivedAtCustomDateRange: DateRange | undefined) => {
+  const updateReceivedAtCustomDateRange = (nextReceivedAtCustomDateRange: DateAsStringRange | undefined) => {
     dispatch(priorNotificationActions.setListFilterValues({ receivedAtCustomDateRange: nextReceivedAtCustomDateRange }))
   }
 
   const updateReceivedAtPeriod = (nextReceivedAtPeriod: ReceivedAtPeriod | undefined) => {
     dispatch(priorNotificationActions.setListFilterValues({ receivedAtPeriod: nextReceivedAtPeriod }))
+  }
+
+  const updateSearchQuery = (nextSearchQuery: string | undefined) => {
+    dispatch(priorNotificationActions.setListFilterValues({ searchQuery: nextSearchQuery }))
   }
 
   const updateSpecyCodes = (nextSpecyCodes: string[] | undefined) => {
@@ -102,11 +102,11 @@ export function FilterBar() {
           isLabelHidden
           isTransparent
           label="Rechercher un navire"
-          name="query"
-          onChange={updateQuery}
+          name="searchQuery"
+          onChange={updateSearchQuery}
           placeholder="Rechercher un navire"
           size={Size.LARGE}
-          value={listFilterValues.query}
+          value={listFilterValues.searchQuery}
         />
       </Row>
 
@@ -117,7 +117,7 @@ export function FilterBar() {
           label="Nationalité"
           name="countryCodes"
           onChange={updateCountryCodes}
-          options={COUNTRIES_AS_OPTIONS}
+          options={COUNTRIES_AS_ALPHA3_OPTIONS}
           placeholder="Nationalité"
           popupWidth={240}
           searchable
@@ -246,6 +246,7 @@ export function FilterBar() {
           <DateRangePicker
             defaultValue={listFilterValues.receivedAtCustomDateRange}
             isHistorical
+            isStringDate
             isTransparent
             label="Arrivée estimée du navire entre deux dates"
             name="receivedAtCustomDateRange"

@@ -1,15 +1,17 @@
-import { monitorenvApi } from '../../api/api'
+import { getUrlOrPathWithQueryParams } from '@utils/getUrlOrPathWithQueryParams'
+
+import { monitorfishApi } from '../../api/api'
 
 import type { PriorNotification } from './PriorNotification.types'
+import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 
-// TODO Replace that (and uncomment tags). Temporarely using Fake Env API to use mappings.
-export const priorNotificationApi = monitorenvApi.injectEndpoints({
+export const priorNotificationApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
-    getNotices: builder.query<PriorNotification.PriorNotification[], void>({
-      // providesTags: () => [{ type: 'Notices' }],
-      query: () => `/v1/prior_notifications`
+    getPriorNotifications: builder.query<PriorNotification.PriorNotification[], LogbookMessage.ApiFilter>({
+      providesTags: () => [{ type: 'Notices' }],
+      query: filter => getUrlOrPathWithQueryParams(`/prior-notifications`, filter)
     })
   })
 })
 
-export const { useGetNoticesQuery } = priorNotificationApi
+export const { useGetPriorNotificationsQuery } = priorNotificationApi

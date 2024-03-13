@@ -1,9 +1,8 @@
+import { monitorfishApi, monitorfishApiKy } from '@api/api'
+import { ApiError } from '@libs/ApiError'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
-import { monitorfishApi, monitorfishApiKy } from './api'
-import { ApiError } from '../libs/ApiError'
-
-import type { FleetSegment, UpdateFleetSegment } from '../domain/types/fleetSegment'
+import type { FleetSegment, UpdateFleetSegment } from '@features/FleetSegment/types'
 
 export type ComputeFleetSegmentsParams = {
   faoAreas: string[]

@@ -1,7 +1,8 @@
-import { updateFleetSegmentFromAPI } from '../../../api/fleetSegment'
-import { setError } from '../../shared_slices/Global'
+import { updateFleetSegmentFromAPI } from '@features/FleetSegment/apis'
 
-import type { FleetSegment, UpdateFleetSegment } from '../../types/fleetSegment'
+import { setError } from '../../../domain/shared_slices/Global'
+
+import type { FleetSegment, UpdateFleetSegment } from '../types'
 
 /**
  * Update a fleet segment

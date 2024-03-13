@@ -2,8 +2,8 @@ import { Icon } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { getSegmentInfo, getTripSegments } from './utils'
-import { useGetFleetSegmentsQuery } from '../../../../../api/fleetSegment'
 import { COLORS } from '../../../../../constants/constants'
+import { useGetFleetSegmentsQuery } from '../../../../FleetSegment/apis'
 
 export type FleetSegmentsProps = {
   segments: string[] | undefined

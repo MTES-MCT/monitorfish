@@ -1,4 +1,4 @@
-import type { FleetSegment } from '../../../../../domain/types/fleetSegment'
+import type { FleetSegment } from '../../../../FleetSegment/types'
 
 export function getTripSegments(
   segments: string[] | undefined,

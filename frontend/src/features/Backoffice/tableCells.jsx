@@ -1,14 +1,11 @@
 import { COLORS } from '../../constants/constants'
 import { RiskFactorBox } from '../VesselSidebar/risk_factor/RiskFactorBox'
 import { getRiskFactorColor } from '../../domain/entities/vessel/riskFactor'
-import DeleteIconSVG from '../icons/Icone_suppression.svg?react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback } from 'react'
 import styled from 'styled-components'
-import { InputPicker, Table, Tag, TagPicker } from 'rsuite'
-import { useClickOutsideWhenOpenedAndNotInSelector } from '../../hooks/useClickOutsideWhenOpenedAndNotInSelector'
+import { SelectPicker, Table } from 'rsuite'
+import { Accent, Icon, IconButton, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { theme } from '../../ui/theme'
-import _ from 'lodash'
-import SelectPicker from 'rsuite/SelectPicker'
 
 const { Cell } = Table
 const rowKey = 'id'
@@ -53,41 +50,6 @@ const ModifiableCellWrapper = styled.div`
 
   .rs-input {
     height: 30px;
-  }
-`
-
-const impactRange = _.range(1, 4.1, 0.1).map(num => {
-  const rounded = Number(num.toFixed(1))
-  return { label: rounded, value: rounded }
-})
-
-export const ImpactCell = ({ dataKey, id, onChange, ...props }) => {
-  const { rowData } = props
-  const dataCy = `row-${rowData[id]}-${dataKey}`
-
-  return (
-    <Cell title={rowData[dataKey]} key={rowData[id]} className={'table-content-editing'} {...props}>
-      <ImpactSelectPicker
-        data-cy={dataCy}
-        cleanable={false}
-        data={impactRange}
-        onChange={value => onChange && onChange(rowData[id], dataKey, value)}
-        searchable={false}
-        size="xs"
-        value={rowData[dataKey]}
-        placement={'auto'}
-      />
-    </Cell>
-  )
-}
-
-const ImpactSelectPicker = styled(SelectPicker)`
-  .rs-picker-toggle {
-    width: 60px;
-  }
-
-  .rs-picker-toggle-wrapper {
-    margin-top: -5px;
   }
 `
 
@@ -155,15 +117,13 @@ export const FleetSegmentInput = ({
   )
 }
 
-/**
- * @param {*} props
- */
-export const ControlPriorityCell = ({ rowData, dataKey, onChange, ...props }) => {
+export const ControlPriorityCell = ({ dataKey, onChange, ...props }) => {
+  const { rowData } = props
   const dataCy = `row-${rowData.id}-${dataKey}`
 
   return (
     <Cell key={rowData.id} {...props} className={'table-content-editing'}>
-      <InputPicker
+      <SelectPicker
         data-cy={dataCy}
         value={rowData[dataKey]}
         onChange={value => {
@@ -179,6 +139,7 @@ export const ControlPriorityCell = ({ rowData, dataKey, onChange, ...props }) =>
         style={{ width: 20 }}
         creatable={false}
         cleanable={false}
+        searchable={false}
         size={'xs'}
       />
     </Cell>
@@ -230,136 +191,43 @@ export const ImpactRiskFactorCell = ({ rowData, expandedRowKeys, onChange, ...pr
   </Cell>
 )
 
-/**
- * This component show a list of tag by default and only open the tagPicker if the user click, for performance reason
- */
-export const TagPickerCell = ({ dataKey, data, id, onChange, ...props }) => {
+export const TagsCell = ({ dataKey, data, id, ...props }) => {
   const { rowData } = props
-  const wrapperRef = useRef(null)
-  const [isOpened, setIsOpened] = useState(false)
-  const clickedOutsideComponent = useClickOutsideWhenOpenedAndNotInSelector(wrapperRef, isOpened, '.rs-picker-menu')
-
-  useEffect(() => {
-    setIsOpened(false)
-  }, [clickedOutsideComponent])
 
   return (
-    <TagPickerWrapper ref={wrapperRef}>
+    <Wrapper>
       <Cell
         {...props}
-        style={{
-          whiteSpace: 'nowrap',
-          textOverflow: 'ellipsis',
-          overflow: 'hidden'
-        }}
-        onClick={() => setIsOpened(true)}
         title={rowData[dataKey]?.join(', ')}
       >
-        {isOpened ? (
-          <TagPicker
-            virtualized
-            searchable
-            value={rowData[dataKey]}
-            data={data}
-            placeholder={''}
-            placement={'auto'}
-            open={isOpened}
-            onChange={value => onChange && onChange(rowData[id], dataKey, value)}
-            renderMenuItem={(_, item) => renderTagPickerMenuItem(onChange, item)}
-            renderValue={(_, items) => renderTagPickerValue(items)}
-          />
-        ) : (
-          <TagOnly className="rs-picker-tag-wrapper">
-            {rowData[dataKey]?.map(tag => (
-              <div key={tag} className="rs-tag rs-tag-default">
-                <span className="rs-tag-text">{tag}</span>
-              </div>
-            ))}
-          </TagOnly>
-        )}
+        <TagOnly>
+          {rowData[dataKey]?.map(tag => (
+            <Tag backgroundColor={THEME.color.gainsboro} key={tag}>
+              {tag}
+            </Tag>
+          ))}
+        </TagOnly>
       </Cell>
-    </TagPickerWrapper>
+    </Wrapper>
   )
 }
 
-const TagPickerWrapper = styled.div`
+const Wrapper = styled.div`
   .rs-table-cell-content {
     padding-left: 5px;
     padding-top: 0px;
   }
-
-  .rs-picker-input {
-    border: none;
-    margin-left: -5px !important;
-    margin-top: 0px !important;
-  }
-
-  .rs-picker-default .rs-picker-toggle.rs-btn-xs {
-    padding-left: 5px;
-    width: 290px;
-  }
-
-  .rs-picker-has-value .rs-btn .rs-picker-toggle-value,
-  .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
-    color: ${COLORS.charcoal};
-  }
-
-  .rs-picker-toggle-wrapper .rs-picker-toggle.rs-btn-xs {
-    padding-right: 17px;
-  }
-
-  .rs-picker-tag-wrapper {
-    width: 290px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .rs-picker-tag {
-    width: 290px;
-    background: none;
-  }
-
-  .rs-picker-toggle-clean {
-    visibility: hidden !important;
-  }
-
-  .rs-picker-toggle-caret {
-    visibility: hidden !important;
-  }
-
-  .rs-picker-toggle-placeholder {
-    visibility: hidden !important;
-  }
-
-  *:focus {
-    outline: none;
-  }
-
-  .rs-picker-default {
-    background: ${COLORS.charcoal};
-  }
 `
-
-export function renderTagPickerMenuItem(onChange, item) {
-  return <Label onClick={() => onChange(item.label)}>{item.label}</Label>
-}
 
 export function renderTagPickerValue(items) {
   return items.filter(tag => tag).map(tag => <Tag key={tag?.label}>{tag?.label}</Tag>)
 }
 
 const TagOnly = styled.div`
-  margin: 7px 7px 10px 6px;
-
-  .rs-tag {
-    padding-left: 2px;
-    padding-right: 2px;
-    line-height: 18px;
-  }
-`
-
-const Label = styled.span`
-  font-size: 13px;
+  margin: -3px 0px 0px 0px;
+  whiteSpace: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `
 
 export const renderRowExpanded = rowData => {
@@ -394,26 +262,47 @@ export const renderRowExpanded = rowData => {
   )
 }
 
-export const DeleteCell = ({ dataKey, id, onClick, ...props }) => {
+export const EditAndDeleteCell = ({ dataKey, id, onEdit, onDelete, ...props }) => {
   const { rowData } = props
 
   return (
-    <Cell key={rowData[id]} {...props}>
-      <Delete
-        title={'Supprimer la ligne'}
+    <Cell key={rowData[id]} {...props} style={{ padding: '5px 5px', display: 'flex' }}>
+      <IconButton
+        accent={Accent.TERTIARY}
+        Icon={Icon.EditUnbordered}
+        data-cy={`edit-row-${rowData[id]}`}
+        iconSize={17}
+        onClick={() => onEdit(rowData)}
+        title="Editer la ligne"
+      />
+      <IconButton
+        accent={Accent.TERTIARY}
+        Icon={Icon.Delete}
         data-cy={`delete-row-${rowData[id]}`}
-        onClick={() => onClick && onClick(rowData[id], rowData[dataKey])}
-      >
-        <DeleteIcon />
-      </Delete>
+        iconSize={17}
+        onClick={() => onDelete(rowData[id])}
+        title="Supprimer la ligne"
+      />
     </Cell>
   )
 }
 
-const DeleteIcon = styled(DeleteIconSVG)`
-  margin-left: 1px;
-  margin-top: 2px;
-`
+export const DeleteCell = ({ dataKey, id, onClick, ...props }) => {
+  const { rowData } = props
+
+  return (
+    <Cell key={rowData[id]} {...props} style={{ padding: '5px 2px' }}>
+      <IconButton
+        accent={Accent.TERTIARY}
+        Icon={Icon.Delete}
+        data-cy={`delete-row-${rowData[id]}`}
+        iconSize={17}
+        onClick={() => onClick(rowData[id], rowData[dataKey])}
+        title="Supprimer la ligne"
+      />
+    </Cell>
+  )
+}
 
 const TableBody = styled.tbody``
 
@@ -438,8 +327,4 @@ const Value = styled.td`
 const NoValue = styled.span`
   color: ${p => p.theme.color.slateGray};
   font-weight: 300;
-`
-
-const Delete = styled.div`
-  cursor: pointer;
 `

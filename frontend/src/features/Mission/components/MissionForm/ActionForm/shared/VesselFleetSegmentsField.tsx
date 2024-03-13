@@ -1,4 +1,4 @@
-import { useGetFleetSegmentsQuery } from '@api/fleetSegment'
+import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
 import { FrontendError } from '@libs/FrontendError'
 import { Field, Label, SingleTag, TagGroup } from '@mtes-mct/monitor-ui'
 import { sortByAscendingValue } from '@utils/sortByAscendingValue'

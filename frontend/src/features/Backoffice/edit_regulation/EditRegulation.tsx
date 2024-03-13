@@ -1,5 +1,9 @@
 // TODO Remove temporary `as any` and `@ts-ignore` (fresh migration to TS).
 
+import { RegulationLawTypeLine } from '@features/Backoffice/edit_regulation/identification/RegulationLawTypeLine'
+import { RegulationLayerZoneLine } from '@features/Backoffice/edit_regulation/identification/RegulationLayerZoneLine'
+import { RegulationRegionLine } from '@features/Backoffice/edit_regulation/identification/RegulationRegionLine'
+import { RegulationTopicLine } from '@features/Backoffice/edit_regulation/identification/RegulationTopicLine'
 import { formatDataForSelectPicker } from '@features/Backoffice/utils'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { batch } from 'react-redux'
@@ -10,10 +14,6 @@ import {
   FishingPeriodSection,
   GearRegulation,
   RegulationGeometryLine,
-  RegulationLawTypeLine,
-  RegulationLayerZoneLine,
-  RegulationRegionLine,
-  RegulationTopicLine,
   RegulatoryTextSection,
   RemoveRegulationModal
 } from '.'
@@ -66,16 +66,7 @@ export function EditRegulation({ isEdition, title }) {
 
   const layersTopicsByRegTerritory = useBackofficeAppSelector(state => state.regulatory.layersTopicsByRegTerritory)
 
-  /** @type {boolean} */
-  const [lawTypeIsMissing, setLawTypeIsMissing] = useState(false)
-  /** @type {boolean} */
-  const [regulationTopicIsMissing, setProcessingRegulationTopicIsMissing] = useState(false)
-  /** @type {boolean} */
-  const [nameZoneIsMissing, setNameZoneIsMissing] = useState()
-  /** @type {boolean} */
-  const [regionIsMissing, setRegionIsMissing] = useState(false)
   const [geometryObjectList, setGeometryRecord] = useState<Record<string, GeoJSON.Geometry>>({})
-  const [geometryIsMissing, setGeometryIsMissing] = useState(false)
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   /** @type {Number[]} geometryIdList */
   const geometryIdList = useMemo(
@@ -170,23 +161,18 @@ export function EditRegulation({ isEdition, title }) {
     let willHaveOneOrMoreValuesMissing = false
     let valueIsMissing = !(lawType && lawType !== '')
     willHaveOneOrMoreValuesMissing = willHaveOneOrMoreValuesMissing || valueIsMissing
-    setLawTypeIsMissing(valueIsMissing)
 
     valueIsMissing = !(topic && topic !== '')
     willHaveOneOrMoreValuesMissing = willHaveOneOrMoreValuesMissing || valueIsMissing
-    setProcessingRegulationTopicIsMissing(valueIsMissing)
 
     valueIsMissing = !(zone && zone !== '')
     willHaveOneOrMoreValuesMissing = willHaveOneOrMoreValuesMissing || valueIsMissing
-    setNameZoneIsMissing(valueIsMissing as any)
 
     valueIsMissing =
       lawType && lawType !== '' && LAWTYPES_TO_TERRITORY[lawType] === FRANCE && !(region && region.length !== 0)
     willHaveOneOrMoreValuesMissing = willHaveOneOrMoreValuesMissing || valueIsMissing
-    setRegionIsMissing(valueIsMissing)
 
     valueIsMissing = !(id && id !== '')
-    setGeometryIsMissing(valueIsMissing)
     willHaveOneOrMoreValuesMissing = willHaveOneOrMoreValuesMissing || valueIsMissing
     dispatch(setHasOneOrMoreValuesMissing(willHaveOneOrMoreValuesMissing))
   }, [lawType, topic, zone, region, id, dispatch])
@@ -282,19 +268,12 @@ export function EditRegulation({ isEdition, title }) {
               {/* @ts-ignore */}
               <Section show>
                 <Title>identification de la zone réglementaire</Title>
-                <RegulationLawTypeLine
-                  lawTypeIsMissing={lawTypeIsMissing}
-                  selectData={formatDataForSelectPicker(Object.keys(LAWTYPES_TO_TERRITORY))}
-                />
-                <RegulationTopicLine disabled={!lawType} regulationTopicIsMissing={regulationTopicIsMissing} />
-                <RegulationLayerZoneLine nameZoneIsMissing={nameZoneIsMissing} />
-                <RegulationRegionLine
-                  disabled={!lawType || LAWTYPES_TO_TERRITORY[lawType] !== FRANCE}
-                  regionIsMissing={regionIsMissing}
-                />
+                <RegulationLawTypeLine selectData={formatDataForSelectPicker(Object.keys(LAWTYPES_TO_TERRITORY))} />
+                <RegulationTopicLine isDisabled={!lawType} />
+                <RegulationLayerZoneLine />
+                <RegulationRegionLine isDisabled={!lawType || LAWTYPES_TO_TERRITORY[lawType] !== FRANCE} />
                 <RegulationGeometryLine
                   geometryIdList={geometryIdList}
-                  geometryIsMissing={geometryIsMissing}
                   setShowRegulatoryPreview={setShowRegulatoryPreview}
                   showRegulatoryPreview={showRegulatoryPreview}
                 />
@@ -379,7 +358,6 @@ const ErrorMessage = styled.div`
 
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: column;
   overflow-y: auto;
   width: 100%;
 `

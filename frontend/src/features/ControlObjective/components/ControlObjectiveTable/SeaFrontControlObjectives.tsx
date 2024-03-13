@@ -3,7 +3,6 @@ import { SelectPicker, Table } from 'rsuite'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { useGetFleetSegmentsQuery } from '../../../../api/fleetSegment'
 import { LoadingSpinnerWall } from '../../../../ui/LoadingSpinnerWall'
 import { BackOfficeTitle } from '../../../BackOffice/components/BackOfficeTitle'
 import {
@@ -16,6 +15,7 @@ import {
   renderRowExpanded,
   SegmentCellWithTitle
 } from '../../../Backoffice/tableCells'
+import { useGetFleetSegmentsQuery } from '../../../FleetSegment/apis'
 import { sortArrayByColumn, SortType } from '../../../VesselList/tableSort'
 import {
   useAddControlObjectiveMutation,
@@ -23,7 +23,7 @@ import {
   useUpdateControlObjectiveMutation
 } from '../../apis'
 
-import type { FleetSegment } from '../../../../domain/types/fleetSegment'
+import type { FleetSegment } from '../../../FleetSegment/types'
 import type { ControlObjective } from '../../types'
 
 type ControlObjectiveWithMaybeFleetSegment = ControlObjective &
@@ -248,7 +248,7 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
         rowKey="id"
         sortColumn={sortColumn}
         sortType={sortType}
-        width={769}
+        width={795}
       >
         <Table.Column align="center" width={50}>
           <Table.HeaderCell> </Table.HeaderCell>
@@ -291,12 +291,12 @@ export function SeaFrontControlObjectives({ data, facade, title, year }: SeaFron
           />
         </Table.Column>
 
-        <Table.Column width={70}>
+        <Table.Column width={80}>
           <Table.HeaderCell>N. impact</Table.HeaderCell>
           <ImpactRiskFactorCell />
         </Table.Column>
 
-        <Table.Column width={55}>
+        <Table.Column width={70}>
           <Table.HeaderCell>Priorité</Table.HeaderCell>
           <ControlPriorityCell
             dataKey="controlPriorityLevel"
@@ -348,31 +348,7 @@ const Wrapper = styled.div`
   margin-top: 10px;
   margin-bottom: 10px;
 
-  .rs-picker-input {
-    border: none;
-    margin-left: 7px;
-    margin-top: -3px;
-  }
-
-  .rs-picker-toggle {
-    width: 120px;
-  }
-
-  .rs-picker-default .rs-picker-toggle.rs-btn-xs {
-    padding-left: 5px;
-  }
-
-  .rs-picker-has-value .rs-btn .rs-picker-toggle-value,
-  .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
-    color: ${p => p.theme.color.charcoal};
-  }
-
-  .rs-picker-toggle-wrapper .rs-picker-toggle.rs-btn-xs {
-    padding-right: 17px;
-  }
-
-  .rs-input:focus {
-    background: ${p => p.theme.color.charcoal};
-    color: ${p => p.theme.color.white};
+  * {
+    box-sizing: revert;
   }
 `

@@ -69,8 +69,7 @@ export type RegulatoryState = {
   // TODO Type this prop.
   regulationSearchedZoneExtent: Record<string, any>[]
   regulatoryLayerLawTypes: RegulatoryLawTypes | undefined
-  // TODO Type this prop.
-  regulatoryTopics: Record<string, any>[]
+  regulatoryTopics: string[]
   regulatoryTopicsOpened: string[]
   regulatoryZoneMetadata: RegulatoryZone | undefined
   regulatoryZoneMetadataPanelIsOpen: boolean

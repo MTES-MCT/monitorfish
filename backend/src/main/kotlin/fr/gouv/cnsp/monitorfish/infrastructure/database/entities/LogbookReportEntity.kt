@@ -1,10 +1,9 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.mappers.ERSMapper.getERSMessageValueFromJSON
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.dtos.PriorNotification
 import io.hypersistence.utils.hibernate.type.array.ListArrayType
 import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
@@ -21,7 +20,6 @@ data class LogbookReportEntity(
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "logbook_report_id_seq")
     @Column(name = "id")
     val id: Long? = null,
-
     @Column(name = "operation_number")
     val operationNumber: String,
     @Column(name = "trip_number")
@@ -67,10 +65,20 @@ data class LogbookReportEntity(
     val transmissionFormat: LogbookTransmissionFormat,
     @Column(name = "software")
     val software: String? = null,
+    @Column(name = "enriched")
+    val isEnriched: Boolean,
+    @Type(JsonBinaryType::class)
+    @Column(name = "trip_gears", nullable = true, columnDefinition = "jsonb")
+    val tripGears: String? = null,
+    @Type(JsonBinaryType::class)
+    @Column(name = "trip_segments", nullable = true, columnDefinition = "jsonb")
+    val tripSegments: String? = null,
 ) {
-
     companion object {
-        fun fromLogbookMessage(mapper: ObjectMapper, logbookMessage: LogbookMessage) = LogbookReportEntity(
+        fun fromLogbookMessage(
+            mapper: ObjectMapper,
+            logbookMessage: LogbookMessage,
+        ) = LogbookReportEntity(
             internalReferenceNumber = logbookMessage.internalReferenceNumber,
             referencedReportId = logbookMessage.referencedReportId,
             externalReferenceNumber = logbookMessage.externalReferenceNumber,
@@ -90,29 +98,63 @@ data class LogbookReportEntity(
             message = mapper.writeValueAsString(logbookMessage.message),
             software = logbookMessage.software,
             transmissionFormat = logbookMessage.transmissionFormat,
+            isEnriched = logbookMessage.isEnriched,
         )
     }
 
-    fun toLogbookMessage(mapper: ObjectMapper) = LogbookMessage(
-        id = id!!,
-        internalReferenceNumber = internalReferenceNumber,
-        referencedReportId = referencedReportId,
-        externalReferenceNumber = externalReferenceNumber,
-        ircs = ircs,
-        operationDateTime = operationDateTime.atZone(UTC),
-        reportDateTime = reportDateTime?.atZone(UTC),
-        integrationDateTime = integrationDateTime.atZone(UTC),
-        vesselName = vesselName,
-        operationType = operationType,
-        reportId = reportId,
-        operationNumber = operationNumber,
-        tripNumber = tripNumber,
-        flagState = flagState,
-        imo = imo,
-        messageType = messageType,
-        analyzedByRules = analyzedByRules ?: listOf(),
-        message = getERSMessageValueFromJSON(mapper, message, messageType, operationType),
-        software = software,
-        transmissionFormat = transmissionFormat,
-    )
+    fun toLogbookMessage(mapper: ObjectMapper) =
+        LogbookMessage(
+            id = id!!,
+            internalReferenceNumber = internalReferenceNumber,
+            referencedReportId = referencedReportId,
+            externalReferenceNumber = externalReferenceNumber,
+            ircs = ircs,
+            operationDateTime = operationDateTime.atZone(UTC),
+            reportDateTime = reportDateTime?.atZone(UTC),
+            integrationDateTime = integrationDateTime.atZone(UTC),
+            vesselName = vesselName,
+            operationType = operationType,
+            reportId = reportId,
+            operationNumber = operationNumber,
+            tripNumber = tripNumber,
+            flagState = flagState,
+            imo = imo,
+            messageType = messageType,
+            analyzedByRules = analyzedByRules ?: listOf(),
+            message = getERSMessageValueFromJSON(mapper, message, messageType, operationType),
+            software = software,
+            transmissionFormat = transmissionFormat,
+            isEnriched = isEnriched,
+            tripGears = deserializeJSONList(mapper, tripGears, LogbookTripGear::class.java),
+            tripSegments = deserializeJSONList(mapper, tripSegments, LogbookTripSegment::class.java),
+        )
+
+    fun toPriorNotification(mapper: ObjectMapper): PriorNotification {
+        val messageAsJsonNode = mapper.readTree(message)
+        val portLocode = messageAsJsonNode.get("port")?.asText()
+        val logbookMessage = toLogbookMessage(mapper)
+        val tripGears = deserializeJSONList(mapper, tripGears, LogbookTripGear::class.java)
+        val tripSegments = deserializeJSONList(mapper, tripSegments, LogbookTripSegment::class.java)
+
+        return PriorNotification(
+            id = id!!,
+            logbookMessage = logbookMessage,
+            portLocode = portLocode,
+            tripGears = tripGears,
+            tripSegments = tripSegments,
+        )
+    }
+
+    private fun <T> deserializeJSONList(
+        mapper: ObjectMapper,
+        json: String?,
+        clazz: Class<T>,
+    ): List<T> =
+        json?.let {
+            mapper.readValue(
+                json,
+                mapper.typeFactory
+                    .constructCollectionType(MutableList::class.java, clazz),
+            )
+        } ?: listOf()
 }

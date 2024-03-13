@@ -1,9 +1,9 @@
 import type { LastControlPeriod, ReceivedAtPeriod } from './constants'
 import type { SeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
 import type { PriorNotification } from '../../PriorNotification.types'
-import type { DateRange, RichBoolean, UndefineExcept } from '@mtes-mct/monitor-ui'
+import type { DateAsStringRange, RichBoolean, UndefineExcept } from '@mtes-mct/monitor-ui'
 
-export type ListFilterValues = UndefineExcept<
+export type ListFilter = UndefineExcept<
   {
     countryCodes: string[]
     fleetSegmentSegments: string[]
@@ -11,13 +11,12 @@ export type ListFilterValues = UndefineExcept<
     hasOneOrMoreReportings: RichBoolean
     isLessThanTwelveMetersVessel: RichBoolean
     isSent: boolean
-    isVesselPretargeted: boolean
     lastControlPeriod: LastControlPeriod
     portLocodes: string[]
-    query: string
-    receivedAtCustomDateRange: DateRange
+    receivedAtCustomDateRange: DateAsStringRange
     receivedAtPeriod: ReceivedAtPeriod | undefined
     seaFrontGroup: SeaFrontGroup | 'EXTRA'
+    searchQuery: string
     specyCodes: string[]
     types: PriorNotification.PriorNotificationType[]
   },

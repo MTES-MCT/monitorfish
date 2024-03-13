@@ -1,0 +1,134 @@
+[
+    {
+        "table": "logbook_raw_messages",
+        "data": [{ "operation_number": "FAKE_OPERATION_101" }, { "operation_number": "FAKE_OPERATION_102" }]
+    },
+    {
+        "table": "logbook_reports",
+        "data": [
+            // - Without reporting
+            {
+                "id": 101,
+                "cfr": "FAK000999999",
+                "enriched": true,
+                "external_identification": "DONTSINK",
+                "flag_state": "FRA",
+                "imo": null,
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC'",
+                "ircs": "CALLME",
+                "log_type": "PNO",
+                "operation_country": "OOF",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC'",
+                "operation_number": "FAKE_OPERATION_101",
+                "operation_type": "DAT",
+                "referenced_report_id": null,
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC'",
+                "report_id": "FAKE_REPORT_101",
+                "software": null,
+                "transmission_format": "ERS",
+                "trip_number": 10000001,
+                "vessel_name": "PHENOMENE",
+                "trip_gears:jsonb": [
+                    { "gear": "GTR", "mesh": 100, "dimensions": "250;180" },
+                    { "gear": "GTR", "mesh": 120.5, "dimensions": "250;280" }
+                ],
+                "trip_segments:jsonb": [
+                    { "segment": "NWW01", "segment_name": "Chalutiers de fond" },
+                    { "segment": "PEL01", "segment_name": "Chalutiers pélagiques" }
+                ],
+                "value:jsonb": {
+                    "catchOnboard": [
+                        {
+                            "weight": 25.0,
+                            "nbFish": null,
+                            "species": "SOL",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        }
+                    ],
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type X",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignated_ports": false
+                        },
+                        {
+                            "pnoTypeName": "Préavis type Y",
+                            "minimumNotificationPeriod": 8.0,
+                            "hasDesignated_ports": true
+                        }
+                    ],
+                    "port": "FRSML",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '4 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                }
+            },
+
+            // - With reporting
+            {
+                "id": 102,
+                "cfr": "ABC000042310",
+                "enriched": true,
+                "external_identification": "IW783219",
+                "flag_state": "FRA",
+                "imo": null,
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC'",
+                "ircs": "QD0506",
+                "log_type": "PNO",
+                "operation_country": "OOF",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC'",
+                "operation_number": "FAKE_OPERATION_102",
+                "operation_type": "DAT",
+                "referenced_report_id": null,
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC'",
+                "report_id": "FAKE_REPORT_102",
+                "software": null,
+                "transmission_format": "ERS",
+                "trip_number": 10000002,
+                "vessel_name": "COURANT MAIN PROFESSEUR",
+                "trip_gears:jsonb": [
+                    { "gear": "GTR", "mesh": 100, "dimensions": "250;180" },
+                    { "gear": "GTR", "mesh": 120.5, "dimensions": "250;280" }
+                ],
+                "trip_segments:jsonb": [
+                    { "segment": "NWW01", "segment_name": "Chalutiers de fond" },
+                    { "segment": "PEL01", "segment_name": "Chalutiers pélagiques" }
+                ],
+                "value:jsonb": {
+                    "catchOnboard": [
+                        {
+                            "weight": 25.0,
+                            "nbFish": null,
+                            "species": "SOL",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        }
+                    ],
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type X",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignated_ports": false
+                        },
+                        {
+                            "pnoTypeName": "Préavis type Y",
+                            "minimumNotificationPeriod": 8.0,
+                            "hasDesignated_ports": true
+                        }
+                    ],
+                    "port": "FRSML",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '4 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                }
+            }
+        ]
+    }
+]

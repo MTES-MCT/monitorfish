@@ -25,7 +25,6 @@ import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class GetLogbookMessagesUTests {
-
     @MockBean
     private lateinit var logbookReportRepository: LogbookReportRepository
 
@@ -60,14 +59,15 @@ class GetLogbookMessagesUTests {
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
-        val ersMessages = GetLogbookMessages(
-            logbookReportRepository,
-            gearRepository,
-            speciesRepository,
-            portRepository,
-            logbookRawMessageRepository,
-        )
-            .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+        val ersMessages =
+            GetLogbookMessages(
+                logbookReportRepository,
+                gearRepository,
+                speciesRepository,
+                portRepository,
+                logbookRawMessageRepository,
+            )
+                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(6)
@@ -142,14 +142,15 @@ class GetLogbookMessagesUTests {
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
-        val ersMessages = GetLogbookMessages(
-            logbookReportRepository,
-            gearRepository,
-            speciesRepository,
-            portRepository,
-            logbookRawMessageRepository,
-        )
-            .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+        val ersMessages =
+            GetLogbookMessages(
+                logbookReportRepository,
+                gearRepository,
+                speciesRepository,
+                portRepository,
+                logbookRawMessageRepository,
+            )
+                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(2)
@@ -188,14 +189,15 @@ class GetLogbookMessagesUTests {
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
-        val ersMessages = GetLogbookMessages(
-            logbookReportRepository,
-            gearRepository,
-            speciesRepository,
-            portRepository,
-            logbookRawMessageRepository,
-        )
-            .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+        val ersMessages =
+            GetLogbookMessages(
+                logbookReportRepository,
+                gearRepository,
+                speciesRepository,
+                portRepository,
+                logbookRawMessageRepository,
+            )
+                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(3)
@@ -241,16 +243,25 @@ class GetLogbookMessagesUTests {
             .willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any()))
             .willReturn(
-                getDummyRETLogbookMessages() + LogbookMessage(
-                    id = 2, analyzedByRules = listOf(), operationNumber = "", reportId = "9065646816", referencedReportId = "9065646811", operationType = LogbookOperationType.RET, messageType = "",
-                    message = lastAck,
-                    reportDateTime = ZonedDateTime.of(2021, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC).minusHours(
-                        12,
+                getDummyRETLogbookMessages() +
+                    LogbookMessage(
+                        id = 2,
+                        analyzedByRules = listOf(),
+                        operationNumber = "",
+                        reportId = "9065646816",
+                        referencedReportId = "9065646811",
+                        operationType = LogbookOperationType.RET,
+                        messageType = "",
+                        message = lastAck,
+                        reportDateTime =
+                            ZonedDateTime.of(2021, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC).minusHours(
+                                12,
+                            ),
+                        transmissionFormat = LogbookTransmissionFormat.ERS,
+                        integrationDateTime = ZonedDateTime.now(),
+                        isEnriched = false,
+                        operationDateTime = ZonedDateTime.now(),
                     ),
-                    transmissionFormat = LogbookTransmissionFormat.ERS,
-                    integrationDateTime = ZonedDateTime.now(),
-                    operationDateTime = ZonedDateTime.now(),
-                ),
             )
         given(speciesRepository.find(any())).willThrow(CodeNotFoundException("not found"))
         given(gearRepository.find(any())).willThrow(CodeNotFoundException("not found"))
@@ -258,14 +269,15 @@ class GetLogbookMessagesUTests {
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
-        val ersMessages = GetLogbookMessages(
-            logbookReportRepository,
-            gearRepository,
-            speciesRepository,
-            portRepository,
-            logbookRawMessageRepository,
-        )
-            .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+        val ersMessages =
+            GetLogbookMessages(
+                logbookReportRepository,
+                gearRepository,
+                speciesRepository,
+                portRepository,
+                logbookRawMessageRepository,
+            )
+                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(3)
@@ -295,14 +307,15 @@ class GetLogbookMessagesUTests {
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
-        val ersMessages = GetLogbookMessages(
-            logbookReportRepository,
-            gearRepository,
-            speciesRepository,
-            portRepository,
-            logbookRawMessageRepository,
-        )
-            .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+        val ersMessages =
+            GetLogbookMessages(
+                logbookReportRepository,
+                gearRepository,
+                speciesRepository,
+                portRepository,
+                logbookRawMessageRepository,
+            )
+                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(3)
@@ -329,14 +342,15 @@ class GetLogbookMessagesUTests {
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
-        val ersMessages = GetLogbookMessages(
-            logbookReportRepository,
-            gearRepository,
-            speciesRepository,
-            portRepository,
-            logbookRawMessageRepository,
-        )
-            .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+        val ersMessages =
+            GetLogbookMessages(
+                logbookReportRepository,
+                gearRepository,
+                speciesRepository,
+                portRepository,
+                logbookRawMessageRepository,
+            )
+                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(3)
@@ -365,14 +379,15 @@ class GetLogbookMessagesUTests {
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
-        val ersMessages = GetLogbookMessages(
-            logbookReportRepository,
-            gearRepository,
-            speciesRepository,
-            portRepository,
-            logbookRawMessageRepository,
-        )
-            .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+        val ersMessages =
+            GetLogbookMessages(
+                logbookReportRepository,
+                gearRepository,
+                speciesRepository,
+                portRepository,
+                logbookRawMessageRepository,
+            )
+                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(6)

@@ -18,7 +18,6 @@ import styled, { createGlobalStyle, StyleSheetManager } from 'styled-components'
 import { Alert } from './Alert'
 import { BeaconMalfunctionBoard } from './BeaconMalfunctionBoard'
 import { Menu } from './Menu'
-import { openSideWindowPath } from './useCases/openSideWindowPath'
 import { MissionEventContext } from '../../context/MissionEventContext'
 import { SideWindowMenuKey } from '../../domain/entities/sideWindow/constants'
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
@@ -108,8 +107,6 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
       dispatch(getAllCurrentReportings())
       dispatch(getInfractions())
       dispatch(getAllGearCodes())
-
-      dispatch(openSideWindowPath({ menu: SideWindowMenuKey.PRIOR_NOTIFICATION_LIST }))
     }
 
     dispatch(getOperationalAlerts())

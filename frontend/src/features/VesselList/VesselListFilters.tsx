@@ -3,7 +3,7 @@ import { Checkbox, CheckboxGroup, MultiCascader, SelectPicker, Tag, TagPicker } 
 import styled from 'styled-components'
 
 import { lastControlAfterLabels, lastPositionTimeAgoLabels } from './dataFormatting'
-import { COUNTRIES_AS_OPTIONS } from '../../constants'
+import { COUNTRIES_AS_ALPHA2_OPTIONS } from '../../constants'
 import { COLORS } from '../../constants/constants'
 import { LayerType as LayersType } from '../../domain/entities/layers/constants'
 import { VesselLocation, vesselSize } from '../../domain/entities/vessel/vessel'
@@ -138,7 +138,7 @@ function UnmemoizedVesselListFilters({
         />
       </SelectWrapper>
       <TagPicker
-        data={COUNTRIES_AS_OPTIONS}
+        data={COUNTRIES_AS_ALPHA2_OPTIONS}
         data-cy="vessel-list-country-filter"
         onChange={countries.setCountriesFiltered}
         placeholder="Nationalité"

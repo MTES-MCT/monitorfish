@@ -14,14 +14,15 @@ import {
   getExpandedRowModel
 } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { Fragment, useCallback, useRef, useState } from 'react'
+import { assertNotNullish } from '@utils/assertNotNullish'
+import { Fragment, useCallback, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { FAKE_PRIOR_NOTIFICATIONS, PRIOR_NOTIFICATION_TABLE_COLUMNS, SUB_MENUS_AS_OPTIONS } from './constants'
+import { PRIOR_NOTIFICATION_TABLE_COLUMNS, SUB_MENUS_AS_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
-import { SEA_FRONT_GROUP_SEA_FRONTS, SeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
-import { useGetNoticesQuery } from '../../api'
-import { PriorNotification } from '../../PriorNotification.types'
+import { getApiFilterFromListFilter } from './utils'
+import { SeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
+import { useGetPriorNotificationsQuery } from '../../api'
 import { priorNotificationActions } from '../../slice'
 
 export function PriorNotificationList() {
@@ -29,8 +30,14 @@ export function PriorNotificationList() {
   const tableContainerRef = useRef<HTMLDivElement>(null)
 
   const dispatch = useMainAppDispatch()
+  const listFilter = useMainAppSelector(state => state.priorNotification.listFilterValues)
+  const apiFilter = useMemo(() => getApiFilterFromListFilter(listFilter), [listFilter])
   const selectedSeaFrontGroup = useMainAppSelector(state => state.priorNotification.listFilterValues.seaFrontGroup)
-  const { data: priorNotifications, isError, isLoading } = useGetNoticesQuery(undefined, { pollingInterval: 60000 })
+  const {
+    data: priorNotifications,
+    isError,
+    isLoading
+  } = useGetPriorNotificationsQuery(apiFilter, { pollingInterval: 60000 })
 
   const [rowSelection, setRowSelection] = useState({})
   const [sorting, setSorting] = useState<SortingState>([
@@ -41,16 +48,19 @@ export function PriorNotificationList() {
   ])
 
   const countNoticesForSeaFrontGroup = useCallback(
-    (seaFrontGroup: SeaFrontGroup | 'EXTRA'): number =>
-      FAKE_PRIOR_NOTIFICATIONS.filter(({ facade }) => {
-        if (seaFrontGroup === SeaFrontGroup.ALL) {
-          return true
-        }
+    (_seaFrontGroup: SeaFrontGroup | 'EXTRA'): number =>
+      // TODO Calculate the sea front for each prior notification.
+      // return priorNotifications.filter(({ facade }) => {
+      //   if (seaFrontGroup === SeaFrontGroup.ALL) {
+      //     return true
+      //   }
 
-        return facade && SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup]
-          ? SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup].includes(facade as any)
-          : false
-      }).length,
+      //   return facade && SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup]
+      //     ? SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup].includes(facade as any)
+      //     : false
+      // }).length
+
+      0,
     []
   )
 
@@ -63,7 +73,7 @@ export function PriorNotificationList() {
 
   const table = useReactTable({
     columns: PRIOR_NOTIFICATION_TABLE_COLUMNS,
-    data: FAKE_PRIOR_NOTIFICATIONS,
+    data: priorNotifications ?? [],
     enableColumnResizing: false,
     enableRowSelection: true,
     enableSortingRemoval: false,
@@ -155,6 +165,7 @@ export function PriorNotificationList() {
                     }
 
                     const priorNotification = row.original
+                    assertNotNullish(priorNotification.logbookMessage?.message)
 
                     return (
                       <Fragment key={virtualRow.key}>
@@ -181,68 +192,80 @@ export function PriorNotificationList() {
                             <ExpandedRowCell $width={50} />
                             <ExpandedRowCell $width={120}>
                               <p>
-                                <ExpandedRowLabel>PNO reçu :</ExpandedRowLabel>
+                                <ExpandedRowLabel>PNO émis :</ExpandedRowLabel>
                                 <ExpandedRowValue>
-                                  {customDayjs(priorNotification.receivedAt).utc().format('DD/MM/YYYY [à] hh[h]mm')}
+                                  {customDayjs(priorNotification.logbookMessage.reportDateTime)
+                                    .utc()
+                                    .format('DD/MM/YYYY [à] hh[h]mm')}
                                 </ExpandedRowValue>
                               </p>
                             </ExpandedRowCell>
                             <ExpandedRowCell $width={120}>
                               <p>
                                 <ExpandedRowLabel>Raison du PNO :</ExpandedRowLabel>
-                                <ExpandedRowValue>
-                                  {PriorNotification.PRIOR_NOTIFICATION_REASON_LABEL[priorNotification.reason]}
-                                </ExpandedRowValue>
+                                <ExpandedRowValue>{priorNotification.logbookMessage.message.purpose}</ExpandedRowValue>
                               </p>
                             </ExpandedRowCell>
                             <ExpandedRowCell $width={180} />
                             <ExpandedRowCell $width={50} />
-                            <ExpandedRowCell $width={140}>
+                            <ExpandedRowCell $width={160}>
                               <p>
-                                <ExpandedRowValue $isLight>
-                                  {priorNotification.vessel.internalReferenceNumber} (CFR)
-                                </ExpandedRowValue>
-                                <ExpandedRowValue $isLight>
-                                  {priorNotification.vessel.ircs} (Call sign)
-                                </ExpandedRowValue>
-                                <ExpandedRowValue $isLight>
-                                  {priorNotification.vessel.externalReferenceNumber} (Marq. ext.)
-                                </ExpandedRowValue>
-                                <ExpandedRowValue $isLight>{priorNotification.vessel.mmsi} (MMSI)</ExpandedRowValue>
+                                {!!priorNotification.vessel?.internalReferenceNumber && (
+                                  <ExpandedRowValue $isLight>
+                                    {priorNotification.vessel.internalReferenceNumber} (CFR)
+                                  </ExpandedRowValue>
+                                )}
+                                {!!priorNotification.vessel?.ircs && (
+                                  <ExpandedRowValue $isLight>
+                                    {priorNotification.vessel.ircs} (Call sign)
+                                  </ExpandedRowValue>
+                                )}
+                                {!!priorNotification.vessel?.externalReferenceNumber && (
+                                  <ExpandedRowValue $isLight>
+                                    {priorNotification.vessel.externalReferenceNumber} (Marq. ext.)
+                                  </ExpandedRowValue>
+                                )}
+                                {!!priorNotification.vessel?.mmsi && (
+                                  <ExpandedRowValue $isLight>{priorNotification.vessel.mmsi} (MMSI)</ExpandedRowValue>
+                                )}
                               </p>
                               <p>
                                 <ExpandedRowLabel>Taille du navire :</ExpandedRowLabel>
-                                <ExpandedRowValue>{priorNotification.vessel.length}</ExpandedRowValue>
+                                <ExpandedRowValue>{priorNotification.vessel?.width ?? '-'}</ExpandedRowValue>
                               </p>
                               <p>
                                 <ExpandedRowLabel>Dernier contrôle :</ExpandedRowLabel>
                                 <ExpandedRowValue>
-                                  {customDayjs(priorNotification.vessel.riskFactor.lastControlDatetime)
-                                    .utc()
-                                    .format('[Le] DD/MM/YYYY')}
+                                  {priorNotification.vesselRiskFactor?.lastControlDatetime
+                                    ? customDayjs(priorNotification.vesselRiskFactor.lastControlDatetime)
+                                        .utc()
+                                        .format('[Le] DD/MM/YYYY')
+                                    : '-'}
                                 </ExpandedRowValue>
                               </p>
                             </ExpandedRowCell>
-                            <ExpandedRowCell $width={120} style={{}}>
+                            <ExpandedRowCell $width={130}>
                               <ExpandedRowLabel>Nom du segment :</ExpandedRowLabel>
                               <span>
-                                {priorNotification.fleetSegments
-                                  .map(fleetSegment => fleetSegment.segmentName)
-                                  .join(', ')}
+                                {priorNotification.tripSegments.map(tripSegment => tripSegment.segmentName).join(', ')}
                               </span>
                             </ExpandedRowCell>
-                            <ExpandedRowCell $width={140}>
-                              <ExpandedRowLabel>Principales espèces à bord soumises à plan :</ExpandedRowLabel>
-                              <ExpandedRowList>
-                                <li>Baudroies (NCA) – 280 kg</li>
-                                <li>Merlu européen (HKE) – 140 kg</li>
-                                <li>Bar européen (BSS) – 45 kg</li>
-                                <li>Sole commune (SOL) – 33 kg</li>
-                                <li>Églefin (HAD) – 24 kg</li>
-                              </ExpandedRowList>
+                            <ExpandedRowCell $width={170}>
+                              <ExpandedRowLabel>Principales espèces à bord :</ExpandedRowLabel>
+                              {priorNotification.logbookMessage.message.catchOnboard ? (
+                                <ExpandedRowList>
+                                  {priorNotification.logbookMessage.message.catchOnboard.map(
+                                    ({ species, speciesName, weight }) => (
+                                      <li key={species}>{`${speciesName} (${species}) – ${weight} kg`}</li>
+                                    )
+                                  )}
+                                </ExpandedRowList>
+                              ) : (
+                                <ExpandedRowValue>Non soumis</ExpandedRowValue>
+                              )}
                               <p>
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                <a href="#">Voir plus de détail</a>
+                                <Link>Voir plus de détail</Link>
                               </p>
                             </ExpandedRowCell>
                             <ExpandedRowCell $width={60} />
@@ -269,6 +292,7 @@ const TableWrapper = styled.div`
 
 const ExpandableRow = styled(TableWithSelectableRows.Td)`
   cursor: pointer;
+  user-select: none;
 `
 
 const ExpandedRow = TableWithSelectableRows.BodyTr
@@ -277,6 +301,7 @@ const ExpandedRowCell = styled(TableWithSelectableRows.Td).attrs(props => ({
   ...props,
   $hasRightBorder: false
 }))`
+  padding: 8px 16px 16px;
   white-space: normal;
 
   > p:not(:first-child) {
@@ -298,4 +323,18 @@ const ExpandedRowValue = styled.span<{
 const ExpandedRowList = styled.ul`
   list-style: none;
   padding: 0;
+`
+
+const Link = styled.button`
+  background: none;
+  border: none;
+  color: ${p => p.theme.color.slateGray};
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  transition: color 0.2s;
+
+  &:hover {
+    color: ${p => p.theme.color.gunMetal};
+  }
 `

@@ -70,7 +70,7 @@ context('New Regulation', () => {
     cy.get('.Component-SingleTag').contains('Grand Est')
 
     // Remove tag
-    cy.get('.Component-SingleTag').filter(':contains("Auvergne-Rhône-Alpes")').find('button').click()
+    cy.get('.Component-SingleTag').filter(':contains("Auvergne-Rhône-Alpes")').find('button').click({ force: true })
 
     // 2 tags still exists (1 seafront and 1 region)
     cy.get('.Component-SingleTag').should('have.length', 2)

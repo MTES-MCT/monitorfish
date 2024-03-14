@@ -3,10 +3,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import { STATUS } from './constants'
-import type { EditedRegulatoryZone } from '../Regulation/types'
 import { DEFAULT_REGULATION, REGULATORY_REFERENCE_KEYS } from '../Regulation/utils'
 
-import type { RegulatoryText } from '../Regulation/types'
+import type { EditedRegulatoryZone, RegulatoryText } from '../Regulation/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { ValueOf } from 'type-fest'
 

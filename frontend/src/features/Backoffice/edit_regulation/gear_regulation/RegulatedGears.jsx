@@ -48,6 +48,7 @@ const RegulatedGears = props => {
   } = useSelector(state => state.gear)
 
   const onCheckboxChange = (groupName, checked) => {
+    console.log(groupName, checked)
     let nextSelectedCategoriesAndGears = selectedCategoriesAndGears ? [...selectedCategoriesAndGears] : []
     const gearsListToConcatOrFilter = getGroupCategories(groupName, groupsToCategories)
 

@@ -31,6 +31,7 @@ export function RegulationGeometryLine({ geometryIdList, setShowRegulatoryPrevie
           dispatch(updateProcessingRegulationByKey({ key: 'id', value }))
         }}
         options={geometryIdList}
+        placeholder="Choisir un tracé"
         value="Choisir un tracé"
       />
       {id && (

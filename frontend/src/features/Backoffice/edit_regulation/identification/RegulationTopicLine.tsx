@@ -51,6 +51,7 @@ export function RegulationTopicLine({ isDisabled }) {
           name="Choisir une thématique"
           onChange={updateTopic}
           options={layerTypeList}
+          placeholder="Choisir une thématique"
           searchable
           value="Choisir une thématique"
         />

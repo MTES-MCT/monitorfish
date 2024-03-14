@@ -13,16 +13,12 @@ const ConfirmRegulationModal = ({ goBackofficeHome }) => {
   const { isConfirmModalOpen } = useSelector(state => state.regulation)
 
   const save = () => {
-    batch(() => {
-      dispatch(setIsConfirmModalOpen(false))
-      dispatch(setSaveOrUpdateRegulation(true))
-      dispatch(setRegulationModified(false))
-    })
+    dispatch(setIsConfirmModalOpen(false))
+    dispatch(setSaveOrUpdateRegulation(true))
   }
 
   const close = () => {
     dispatch(setIsConfirmModalOpen(false))
-    dispatch(setRegulationModified(false))
   }
 
   return (

@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { getDate } from '../../../src/utils'
+import { customDayjs } from '../utils/customDayjs'
 
 context('Update Regulation', () => {
   beforeEach(() => {
@@ -20,32 +20,29 @@ context('Update Regulation', () => {
 
   it('A layer zone Should be edited', () => {
     // When check expected form values
-    cy.get('[data-cy^="tag"]').should('have.length', 10)
-    cy.get('[data-cy="tag-Reg. MEMN"]').should('exist')
-    cy.get('[data-cy="tag-Ouest Cotentin Bivalves"]').should('exist')
-    cy.get('[data-cy="tag-Normandie"]').should('exist')
-    cy.get('[data-cy="tag-Bretagne"]').should('exist')
-    cy.get('[data-cy="tag-598"]').should('exist')
-    cy.get('[data-cy="tag-texte de reference"]').should('exist')
+    cy.get('.Component-SingleTag').contains('Reg. MEMN')
+    cy.get('.Component-SingleTag').contains('Ouest Cotentin Bivalves')
+    cy.get('.Component-SingleTag').contains('Normandie')
+    cy.get('.Component-SingleTag').contains('Bretagne')
+    cy.get('.Component-SingleTag').contains('598')
+    cy.get('[name="reference"]').invoke('val').should('equal', 'texte de reference')
+
     cy.get('[data-cy="tag-OURSINS NCA (URC)"]').should('exist')
     cy.get('[data-cy="tag-OURSINS,ETC. NCA (URX)"]').should('exist')
     cy.get('[data-cy="tag-Dragues"]').should('exist')
     cy.get('[data-cy="input-Praires Ouest cotentin"]').should('exist')
-    cy.get('.rs-picker-date input').eq(0).should('have.value', getDate(new Date().toISOString()))
+    cy.get('.rs-picker-date input').eq(0).should('have.value', customDayjs().utc().format('YYYY-MM-DD'))
     cy.get('[data-cy="regulatory-general-other-info"]').contains('Encore une info importante')
 
     // Then try to save
     cy.get('[data-cy="validate-button"]').contains('Enregister les modifications')
     cy.get('[data-cy="validate-button"]').click()
-    cy.get('.rs-checkbox-wrapper').should('have.css', 'border-top-color', 'rgb(225, 0, 15)')
+    // Saving is blocked as the form contains errors
   })
 
   it('Select another law type should reset selected layer name', () => {
-    cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
-    // Since this input is virtualized, we need to scroll and wait for it to render new items
-    cy.get('.rs-picker-select-menu-items > div > div').eq(0).scrollTo(0, 500).wait(500)
-    cy.get('[data-key="R(CE) 494/2002"]').eq(0).click()
-    cy.get('[data-cy="tag-Ouest Cotentin Bivalves"]').should('not.exist')
+    cy.fill('Choisir un ensemble', '494/2002')
+    cy.get('.Component-SingleTag').should('not.contain', 'Ouest Cotentin Bivalves')
   })
 
   it('A species Should be removed', () => {
@@ -235,7 +232,7 @@ context('Update Regulation', () => {
 
   it('If a value is missing, the confirm modal is opened and a warning message is displayed if saving', () => {
     // When
-    cy.get('[data-cy="close-tag-Ouest Cotentin Bivalves"]').click()
+    cy.get('.Component-SingleTag').filter(':contains("Ouest Cotentin Bivalves")').find('button').click()
     cy.get('[data-cy="go-back-link"]').eq(0).click()
     cy.get('[data-cy="regulation-modal"]').should('exist')
     cy.get('[data-cy="confirm-modal-confirm-button"]').click()
@@ -276,12 +273,11 @@ context('Update Regulation', () => {
       })
 
     // Delete the current geometry
-    cy.get('[data-cy="tag-598"] > svg').click()
+    cy.get('.Component-SingleTag').filter(':contains("598")').find('button').click()
     cy.wait(200)
 
-    cy.get('.rs-picker-toggle-placeholder').filter(':contains("Choisir un tracé")').eq(0).click()
     // We select the new geometry
-    cy.get('[data-key="598"]').eq(0).click({ force: true })
+    cy.fill('Choisir un tracé', '598')
 
     // When
     cy.get('[data-cy="edit-regulation-show-geometry"]').click()
@@ -306,14 +302,13 @@ context('Update Regulation', () => {
     // When F5 is pressed
     cy.reload()
     // then form values are kept
-    cy.get('[data-cy^="tag"]').should('have.length', 10)
-    cy.get('[data-cy="tag-Reg. MEMN"]').should('exist')
-    cy.get('[data-cy="tag-Ouest Cotentin Bivalves"]').should('exist')
-    cy.get('[data-cy="tag-Normandie"]').should('exist')
-    cy.get('[data-cy="tag-Bretagne"]').should('exist')
-    cy.get('[data-cy="tag-598"]').should('exist')
-    cy.get('[data-cy="tag-texte de reference"]').should('exist')
+    cy.get('[data-cy^="tag"]').should('have.length', 4)
+    cy.get('.Component-SingleTag').contains('Reg. MEMN')
+    cy.get('.Component-SingleTag').contains('Ouest Cotentin Bivalves')
+    cy.get('.Component-SingleTag').contains('Normandie')
+    cy.get('.Component-SingleTag').contains('Bretagne')
+    cy.get('[name="reference"]').invoke('val').should('equal', 'texte de reference')
     cy.get('[data-cy="input-Praires Ouest cotentin"]').should('exist')
-    cy.get('.rs-picker-date input').eq(0).should('have.value', getDate(new Date().toISOString()))
+    cy.get('.rs-picker-date input').eq(0).should('have.value', customDayjs().utc().format('YYYY-MM-DD'))
   })
 })

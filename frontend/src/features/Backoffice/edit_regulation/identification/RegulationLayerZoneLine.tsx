@@ -30,7 +30,7 @@ export function RegulationLayerZoneLine() {
         label="Nom de la zone"
         name="Nom de la zone"
         onChange={setZoneName}
-        placeholder=""
+        placeholder="Nom de la zone"
         value={(zone || undefined) as unknown as string}
         width="200px"
       />

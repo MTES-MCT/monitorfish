@@ -1,6 +1,6 @@
 import { fleetSegmentApi } from '@features/FleetSegment/apis'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
-import { customDayjs, Select, THEME } from '@mtes-mct/monitor-ui'
+import { Button, customDayjs, Select, THEME } from '@mtes-mct/monitor-ui'
 import _ from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
@@ -46,6 +46,9 @@ export function FleetSegmentsBackoffice() {
       const { data: nextFleetSegments } = await dispatch(fleetSegmentApi.endpoints.getFleetSegments.initiate(_year))
 
       setFleetSegments(nextFleetSegments || [])
+      if (_year) {
+        setYear(_year)
+      }
     },
     [dispatch]
   )
@@ -56,9 +59,7 @@ export function FleetSegmentsBackoffice() {
 
       const yearsWithLabel = nextYears.map(_year => getLabeledYear(_year))
       setYearEntries(yearsWithLabel)
-      setYear(addedYear)
-
-      fetchFleetSegments(addedYear)
+      await fetchFleetSegments(addedYear)
     },
     [dispatch, fetchFleetSegments]
   )
@@ -127,13 +128,14 @@ export function FleetSegmentsBackoffice() {
         <TitleBox>
           <BackOfficeTitle>Segments de flotte</BackOfficeTitle>
           <YearSelectPicker
-            key={year}
             cleanable={false}
             isLabelHidden
             label="Année"
             name="fleet-segments-select-year"
             onChange={_year => fetchFleetSegments(_year as number)}
             options={yearEntries}
+            placeholder="Année"
+            popupWidth={100}
             value={year}
           />
         </TitleBox>
@@ -148,7 +150,7 @@ export function FleetSegmentsBackoffice() {
             onChange={_year => addYearEntry(Number(_year))}
             options={yearsToAdd}
             placeholder={"l'année"}
-            value={String(year)}
+            value={undefined}
           />
         </AddYearBox>
       </Header>
@@ -162,11 +164,7 @@ export function FleetSegmentsBackoffice() {
             openEditFleetSegmentModal={openEditFleetSegmentModal}
           />
 
-          <AddSegmentBox>
-            <AddSegment data-cy="open-create-fleet-segment-modal" onClick={openNewFleetSegmentModal}>
-              Ajouter un segment
-            </AddSegment>
-          </AddSegmentBox>
+          <AddSegmentButton onClick={openNewFleetSegmentModal}>Ajouter un segment</AddSegmentButton>
         </>
       ) : (
         <Loading>
@@ -220,14 +218,8 @@ const AddYear = styled.span`
   margin-right: 10px;
 `
 
-const AddSegmentBox = styled.div`
+const AddSegmentButton = styled(Button)`
   margin-top: 12px;
-`
-
-const AddSegment = styled.a`
-  color: ${THEME.color.gunMetal};
-  cursor: pointer;
-  text-decoration: underline;
 `
 
 const YearSelectPicker = styled(Select)`

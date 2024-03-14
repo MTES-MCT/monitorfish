@@ -1,6 +1,6 @@
 import { checkNameAndUrl, checkOtherRequiredValues } from '@features/Backoffice/edit_regulation/regulatory_text/utils'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
-import { Accent, Button, Checkbox, DatePicker, MultiCheckbox, TextInput, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Checkbox, DatePicker, MultiCheckbox, SingleTag, TextInput, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -10,7 +10,6 @@ import { Label } from '../../../commonStyles/Input.style'
 import { checkURL, RegulatoryTextType } from '../../../Regulation/utils'
 import { INFINITE } from '../../constants'
 import { addObjectToRegulatoryTextCheckedMap } from '../../slice'
-import Tag from '../Tag'
 
 /**
  * @typedef {object} Props
@@ -32,7 +31,6 @@ export function RegulatoryText({
   const dispatch = useBackofficeAppDispatch()
 
   const [isEditing, setIsEditing] = useState<boolean>(true)
-  const [fromForm, setFromForm] = useState<boolean>(false)
 
   const set = useCallback(
     (key, value) => {
@@ -46,21 +44,8 @@ export function RegulatoryText({
   )
 
   useEffect(() => {
-    if (fromForm) {
-      if (!isEditing) {
-        setIsEditing(reference === undefined || reference === '' || url === undefined || url === '')
-      }
-    } else {
-      setIsEditing(reference === undefined || reference === '' || url === undefined || url === '')
-    }
-  }, [reference, url, fromForm, setIsEditing, isEditing])
-
-  useEffect(() => {
     if (saveForm) {
       const nameOrUrlIsMissing = checkNameAndUrl(reference, url)
-      if (!nameOrUrlIsMissing) {
-        setFromForm(false)
-      }
       const hasOneOrMoreValuesMissing = checkOtherRequiredValues(startDate, endDate, textType) || nameOrUrlIsMissing
       const payload = {
         complete: !hasOneOrMoreValuesMissing,
@@ -85,7 +70,6 @@ export function RegulatoryText({
   }, [regulatoryText, id, setRegulatoryText, setIsEditing])
 
   const onCloseIconClicked = () => {
-    setFromForm(true)
     setIsEditing(true)
   }
 
@@ -99,17 +83,13 @@ export function RegulatoryText({
 
   const onInputValueChange = (key, value) => {
     set(key, value)
-
-    if (!fromForm) {
-      setFromForm(true)
-    }
   }
 
   return (
     <>
       <ContentLine>
         <Label>{`Texte réglementaire ${regulatoryText && id ? id + 1 : 1}`}</Label>
-        {isEditing ? (
+        {isEditing && (
           <>
             <StyledTextInput
               error={reference ? undefined : 'Le nom est requis'}
@@ -133,25 +113,17 @@ export function RegulatoryText({
             />
             {(reference || url) && (
               <>
-                <StyledButton
-                  data-cy="save-reg-text-name"
-                  onClick={() => checkNameAndUrl(reference, url) && setFromForm(false)}
-                >
+                <StyledButton onClick={() => !checkNameAndUrl(reference, url) && setIsEditing(false)}>
                   Enregistrer
                 </StyledButton>
-                <StyledButton
-                  accent={Accent.TERTIARY}
-                  data-cy="clear-reg-text-name"
-                  onClick={cancelAddNewRegulatoryText}
-                >
+                <StyledButton accent={Accent.TERTIARY} onClick={cancelAddNewRegulatoryText}>
                   Effacer
                 </StyledButton>
               </>
             )}
           </>
-        ) : (
-          <Tag onCloseIconClicked={onCloseIconClicked} tagUrl={url} tagValue={reference} />
         )}
+        {!isEditing && <SingleTag onDelete={onCloseIconClicked}>{reference}</SingleTag>}
       </ContentLine>
       <ContentLine>
         <Label>Type de texte</Label>

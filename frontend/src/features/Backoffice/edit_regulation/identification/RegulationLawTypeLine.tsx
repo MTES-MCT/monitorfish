@@ -34,6 +34,7 @@ export function RegulationLawTypeLine({ selectData }) {
         name="Choisir un ensemble"
         onChange={onLawTypeChange}
         options={selectData}
+        placeholder="Choisir un ensemble"
         searchable={false}
         value="Choisir un ensemble"
       />

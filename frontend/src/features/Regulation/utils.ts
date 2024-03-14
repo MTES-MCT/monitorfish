@@ -3,6 +3,7 @@ import { getTextForSearch } from '../../utils'
 import { formatDataForSelectPicker } from '../Backoffice/utils'
 
 import type {
+  EditedRegulatoryZone,
   FishingPeriod,
   Gear,
   GearRegulation,
@@ -15,7 +16,7 @@ import type {
 } from './types'
 import type { Specy } from '../../domain/types/specy'
 
-export const mapToRegulatoryZone = ({ geometry, id, properties }, speciesByCode): Partial<RegulatoryZone> => ({
+export const mapToRegulatoryZone = ({ geometry, id, properties }, speciesByCode): RegulatoryZone => ({
   fishingPeriod: parseFishingPeriod(properties.fishing_period),
   gearRegulation: parseGearRegulation(properties.gears),
   geometry,
@@ -374,8 +375,9 @@ export const REGULATORY_REFERENCE_KEYS = {
   ZONE: 'zone'
 }
 
-export const DEFAULT_REGULATION = {
-  [REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES]: [DEFAULT_REGULATORY_TEXT],
+export const DEFAULT_REGULATION: Partial<EditedRegulatoryZone> = {
+  [REGULATORY_REFERENCE_KEYS.TOPIC]: undefined,
+  [REGULATORY_REFERENCE_KEYS.ZONE]: undefined,
   [REGULATORY_REFERENCE_KEYS.FISHING_PERIOD]: DEFAULT_FISHING_PERIOD_VALUES,
   [REGULATORY_REFERENCE_KEYS.SPECIES_REGULATION]: DEFAULT_SPECIES_REGULATION,
   [REGULATORY_REFERENCE_KEYS.GEAR_REGULATION]: DEFAULT_GEAR_REGULATION,
@@ -389,8 +391,6 @@ export const GEARS_CATEGORIES_WITH_MESH = [
   'Filets soulevés',
   'Filets maillants et filets emmêlants'
 ]
-
-export const INITIAL_UPCOMING_REG_REFERENCE = { regulatoryTextList: [DEFAULT_REGULATORY_TEXT] }
 
 export const FISHING_PERIOD_KEYS = {
   ALWAYS: 'always',

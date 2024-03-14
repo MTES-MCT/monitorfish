@@ -4,16 +4,7 @@ import { checkURL } from '@features/Regulation/utils'
  * @returns true if a regulatory text form value is missing or incorrect, else false
  */
 export function checkOtherRequiredValues(startDate, endDate, textType) {
-  let oneValueIsMissing = false
-
-  let valueIsMissing = !startDate || startDate === ''
-  oneValueIsMissing = oneValueIsMissing || valueIsMissing
-  valueIsMissing = !endDate || endDate === ''
-  oneValueIsMissing = oneValueIsMissing || valueIsMissing
-  valueIsMissing = !textType || textType.length === 0
-  oneValueIsMissing = oneValueIsMissing || valueIsMissing
-
-  return oneValueIsMissing
+  return !startDate || startDate === '' || !endDate || endDate === '' || !textType || textType.length === 0
 }
 
 /**

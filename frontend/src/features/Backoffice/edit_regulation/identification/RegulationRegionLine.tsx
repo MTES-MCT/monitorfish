@@ -13,9 +13,7 @@ import { updateProcessingRegulationByKey } from '../../slice'
 
 export function RegulationRegionLine({ isDisabled }) {
   const dispatch = useBackofficeAppDispatch()
-  const { region: regionList }: { region?: string[] } = useBackofficeAppSelector(
-    state => state.regulation.processingRegulation
-  )
+  const regionList = useBackofficeAppSelector(state => state.regulation.processingRegulation?.region)
 
   const removeRegionToSelectedRegionList = async regionToRemove => {
     if (!regionList) {
@@ -53,7 +51,9 @@ export function RegulationRegionLine({ isDisabled }) {
         value={regionList}
       />
       {regionList?.map(selectedRegion => (
-        <StyledTag onDelete={() => removeRegionToSelectedRegionList(selectedRegion)}>{selectedRegion}</StyledTag>
+        <StyledTag key={selectedRegion} onDelete={() => removeRegionToSelectedRegionList(selectedRegion)}>
+          {selectedRegion}
+        </StyledTag>
       ))}
     </ContentLine>
   )

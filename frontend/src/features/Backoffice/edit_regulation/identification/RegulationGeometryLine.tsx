@@ -10,7 +10,7 @@ import { updateProcessingRegulationByKey } from '../../slice'
 
 export function RegulationGeometryLine({ geometryIdList, setShowRegulatoryPreview, showRegulatoryPreview }) {
   const dispatch = useBackofficeAppDispatch()
-  const { id } = useBackofficeAppSelector(state => state.regulation.processingRegulation)
+  const id = useBackofficeAppSelector(state => state.regulation.processingRegulation?.id)
 
   const onCloseIconClicked = async () => {
     await dispatch(updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ID, value: undefined }))

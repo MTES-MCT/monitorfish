@@ -19,7 +19,7 @@ import type { Option } from '@mtes-mct/monitor-ui'
 export function RegulationTopicLine({ isDisabled }) {
   const dispatch = useBackofficeAppDispatch()
   const regulatoryTopics = useBackofficeAppSelector(state => state.regulatory.regulatoryTopics)
-  const { topic } = useBackofficeAppSelector(state => state.regulation.processingRegulation)
+  const topic = useBackofficeAppSelector(state => state.regulation.processingRegulation?.topic)
 
   const [layerTypeList, setLayerTypeList] = useState<Option[]>([])
   const [isAddTopicClicked, setIsAddTopicClicked] = useState(false)
@@ -27,7 +27,7 @@ export function RegulationTopicLine({ isDisabled }) {
 
   useEffect(() => {
     if (regulatoryTopics) {
-      setLayerTypeList(formatDataForSelectPicker([...regulatoryTopics].sort()))
+      setLayerTypeList(formatDataForSelectPicker([...regulatoryTopics].sort((a, b) => a.localeCompare(b))))
     }
   }, [regulatoryTopics])
 

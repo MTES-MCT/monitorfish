@@ -11,7 +11,7 @@ import { updateProcessingRegulationByKey } from '../../slice'
 export function RegulationLawTypeLine({ selectData }) {
   const dispatch = useBackofficeAppDispatch()
 
-  const { lawType } = useBackofficeAppSelector(state => state.regulation.processingRegulation)
+  const lawType = useBackofficeAppSelector(state => state.regulation.processingRegulation?.lawType)
 
   const onLawTypeChange = async (value?) => {
     if (LAWTYPES_TO_TERRITORY[value] !== UE) {

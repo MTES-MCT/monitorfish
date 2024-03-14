@@ -3,6 +3,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import { STATUS } from './constants'
+import type { EditedRegulatoryZone } from '../Regulation/types'
 import { DEFAULT_REGULATION, REGULATORY_REFERENCE_KEYS } from '../Regulation/utils'
 
 import type { RegulatoryText } from '../Regulation/types'
@@ -13,8 +14,7 @@ export type RegulationState = {
   hasOneOrMoreValuesMissing: boolean | undefined
   isConfirmModalOpen: boolean
   isRemoveModalOpen: boolean
-  // TODO Convert that to a real type.
-  processingRegulation: typeof DEFAULT_REGULATION
+  processingRegulation: Partial<EditedRegulatoryZone>
   regulationDeleted: boolean
   regulationModified: boolean
   regulationSaved: boolean

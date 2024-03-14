@@ -13,7 +13,7 @@ import InfoBox from '../InfoBox'
 export function RegulationLayerZoneLine() {
   const dispatch = useBackofficeAppDispatch()
 
-  const { zone } = useBackofficeAppSelector(state => state.regulation.processingRegulation)
+  const zone = useBackofficeAppSelector(state => state.regulation.processingRegulation?.zone)
 
   const setZoneName = value => {
     dispatch(updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ZONE, value }))

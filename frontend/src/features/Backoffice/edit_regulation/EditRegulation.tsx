@@ -187,7 +187,7 @@ export function EditRegulation({ isEdition, title }) {
     if (regulatoryTextCheckedMap && saveOrUpdateRegulation) {
       const regulatoryTextCheckList = Object.values(regulatoryTextCheckedMap)
       const allTextsHaveBeenChecked =
-        regulatoryTextCheckList?.length > 0 && regulatoryTextCheckList.length === regulatoryReferences.length
+        regulatoryTextCheckList?.length > 0 && regulatoryTextCheckList.length === regulatoryReferences?.length
 
       if (allTextsHaveBeenChecked) {
         const allRequiredValuesHaveBeenFilled = !regulatoryTextCheckList.includes(false) && !hasOneOrMoreValuesMissing
@@ -210,7 +210,7 @@ export function EditRegulation({ isEdition, title }) {
     dispatch,
     id,
     processingRegulation,
-    regulatoryReferences.length,
+    regulatoryReferences?.length,
     regulatoryTextCheckedMap,
     saveOrUpdateRegulation,
     selectedRegulatoryZoneId,

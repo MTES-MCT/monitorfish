@@ -256,7 +256,7 @@ context('Update Regulation', () => {
     cy.cleanScreenshots(1)
 
     // When
-    cy.get('[data-cy="edit-regulation-show-geometry"]').click()
+    cy.get('[title="Afficher"]').click()
     cy.wait(1500)
 
     // Then, the last position should be positioned in the bottom of the window
@@ -280,7 +280,7 @@ context('Update Regulation', () => {
     cy.fill('Choisir un tracé', '598')
 
     // When
-    cy.get('[data-cy="edit-regulation-show-geometry"]').click()
+    cy.get('[title="Afficher"]').click()
     cy.wait(1500)
 
     // Then, the last position should be positioned in the bottom of the window

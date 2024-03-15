@@ -93,9 +93,11 @@ Cypress.on('uncaught:exception', err => {
 before(() => {
   runBeforeEachHook()
 
-  // Warm up the app
-  cy.visit('/#@-824534.42,6082993.21,8.70')
-  cy.wait(30000)
+  if (process.env.CI) {
+    // Warm up the app
+    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait(60000)
+  }
 })
 
 // Run before each spec

@@ -22,7 +22,6 @@ import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class GetAllCurrentReportingsUTests {
-
     @MockBean
     private lateinit var reportingRepository: ReportingRepository
 
@@ -35,24 +34,26 @@ class GetAllCurrentReportingsUTests {
     @Test
     fun `execute Should get all reportings with the underCharter field`() {
         // Given
-        val currentReporting = Reporting(
-            internalReferenceNumber = "FRFGRGR",
-            externalReferenceNumber = "RGD",
-            ircs = "6554fEE",
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            creationDate = ZonedDateTime.now(),
-            value = InfractionSuspicion(
-                ReportingActor.OPS,
-                natinfCode = 123456,
-                authorTrigram = "LTH",
-                title = "A title",
-            ),
-            type = ReportingType.INFRACTION_SUSPICION,
-            isDeleted = false,
-            isArchived = false,
-        )
-        given(reportingRepository.findAllCurrent()).willReturn(listOf(currentReporting))
+        val currentReporting =
+            Reporting(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                value =
+                    InfractionSuspicion(
+                        ReportingActor.OPS,
+                        natinfCode = 123456,
+                        authorTrigram = "LTH",
+                        title = "A title",
+                    ),
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false,
+            )
+        given(reportingRepository.findAll()).willReturn(listOf(currentReporting))
         given(
             lastPositionRepository.findUnderCharterForVessel(
                 eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER),
@@ -62,11 +63,12 @@ class GetAllCurrentReportingsUTests {
             .willReturn(true)
 
         // When
-        val reportings = GetAllCurrentReportings(
-            reportingRepository,
-            lastPositionRepository,
-            getAllControlUnits,
-        ).execute()
+        val reportings =
+            GetAllCurrentReportings(
+                reportingRepository,
+                lastPositionRepository,
+                getAllControlUnits,
+            ).execute()
 
         // Then
         assertThat(reportings).hasSize(1)
@@ -78,29 +80,32 @@ class GetAllCurrentReportingsUTests {
     @Test
     fun `execute Should not throw an exception When a last position is not found to obtain the underCharter field`() {
         // Given
-        val currentReporting = Reporting(
-            internalReferenceNumber = null,
-            externalReferenceNumber = "RGD",
-            ircs = "6554fEE",
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            creationDate = ZonedDateTime.now(),
-            value = InfractionSuspicion(
-                ReportingActor.OPS,
-                natinfCode = 123456,
-                authorTrigram = "LTH",
-                title = "A title",
-            ),
-            type = ReportingType.INFRACTION_SUSPICION,
-            isDeleted = false,
-            isArchived = false,
-        )
-        given(reportingRepository.findAllCurrent()).willReturn(listOf(currentReporting))
+        val currentReporting =
+            Reporting(
+                internalReferenceNumber = null,
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                value =
+                    InfractionSuspicion(
+                        ReportingActor.OPS,
+                        natinfCode = 123456,
+                        authorTrigram = "LTH",
+                        title = "A title",
+                    ),
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false,
+            )
+        given(reportingRepository.findAll()).willReturn(listOf(currentReporting))
 
         // When
-        val throwable = catchThrowable {
-            GetAllCurrentReportings(reportingRepository, lastPositionRepository, getAllControlUnits).execute()
-        }
+        val throwable =
+            catchThrowable {
+                GetAllCurrentReportings(reportingRepository, lastPositionRepository, getAllControlUnits).execute()
+            }
 
         // Then
         assertThat(throwable).isNull()

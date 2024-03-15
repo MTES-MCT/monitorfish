@@ -1,13 +1,13 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
-import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
-import fr.gouv.cnsp.monitorfish.domain.filters.ReportingFilter
-import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.dtos.PriorNotification
+import fr.gouv.cnsp.monitorfish.infrastructure.database.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.*
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
+import java.time.ZonedDateTime
 
 @UseCase
 class GetPriorNotifications(
@@ -15,7 +15,6 @@ class GetPriorNotifications(
     private val logbookReportRepository: JpaLogbookReportRepository,
     private val portRepository: JpaPortRepository,
     private val reportingRepository: JpaReportingRepository,
-    private val riskFactorRepository: JpaRiskFactorsRepository,
     private val vesselRepository: JpaVesselRepository,
 ) {
     fun execute(filter: LogbookReportFilter): List<PriorNotification> {
@@ -40,36 +39,21 @@ class GetPriorNotifications(
                         }
                     }
 
-                val vessel =
-                    vesselRepository.findVessel(
-                        priorNotification.logbookMessage?.internalReferenceNumber,
-                        priorNotification.logbookMessage?.externalReferenceNumber,
-                        priorNotification.logbookMessage?.ircs,
-                    )
+                val vessel = vesselRepository.findVessel(priorNotification.vesselId)
 
                 val reportingsCount =
-                    vessel?.id.let { vesselId ->
-                        val reportingsFilter =
-                            ReportingFilter(
-                                isArchived = false,
-                                isDeleted = false,
-                                vesselId = vesselId,
-                            )
-
-                        reportingRepository.findAll(reportingsFilter).count()
-                    }
-
-                val vesselRiskFactor =
-                    priorNotification.logbookMessage?.internalReferenceNumber?.let {
-                        riskFactorRepository.findVesselRiskFactors(it)
-                    }
+                    vessel?.id?.let { vesselId ->
+                        reportingRepository.findCurrentAndArchivedByVesselIdEquals(
+                            vesselId,
+                            // TODO Fix that.
+                            fromDate = ZonedDateTime.now().minusYears(2),
+                        ).count()
+                    } ?: 0
 
                 priorNotification.copy(
-                    port = port,
+                    portName = port?.name,
                     reportingsCount = reportingsCount,
                     seaFront = seaFront,
-                    vessel = vessel,
-                    vesselRiskFactor = vesselRiskFactor,
                 )
             }
 

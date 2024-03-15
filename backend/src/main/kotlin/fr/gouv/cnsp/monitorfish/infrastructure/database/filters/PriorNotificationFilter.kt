@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.domain.filters
+package fr.gouv.cnsp.monitorfish.infrastructure.database.filters
 
 data class PriorNotificationFilter(
     val countryCodes: List<String>? = null,

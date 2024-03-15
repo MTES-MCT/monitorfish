@@ -187,6 +187,7 @@ export const LogbookMessageSender = {
   MAS: 'Capitaine'
 }
 
+// TODO Replace with `PriorNotification.PurposeCode`.
 export const LogbookMessagePNOPurposeType = {
   LAN: 'Débarquement',
   SHE: "Mise à l'abri"

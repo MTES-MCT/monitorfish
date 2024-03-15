@@ -4,7 +4,7 @@ import { Page } from '@features/SideWindow/components/Page'
 import { SubMenu } from '@features/SideWindow/SubMenu'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Icon, TableWithSelectableRows, customDayjs } from '@mtes-mct/monitor-ui'
+import { Icon, TableWithSelectableRows, customDayjs, getFilteredCollection } from '@mtes-mct/monitor-ui'
 import {
   flexRender,
   getCoreRowModel,
@@ -14,16 +14,21 @@ import {
   getExpandedRowModel
 } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { assertNotNullish } from '@utils/assertNotNullish'
 import { Fragment, useCallback, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { PRIOR_NOTIFICATION_TABLE_COLUMNS, SUB_MENUS_AS_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
-import { getApiFilterFromListFilter } from './utils'
-import { SeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
+import {
+  countPriorNotificationsForSeaFrontGroup,
+  getApiFilterFromListFilter,
+  getLocalFilterFromListFilter
+} from './utils'
 import { useGetPriorNotificationsQuery } from '../../api'
+import { PriorNotification } from '../../PriorNotification.types'
 import { priorNotificationActions } from '../../slice'
+
+import type { SeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
 
 export function PriorNotificationList() {
   // eslint-disable-next-line no-null/no-null
@@ -32,12 +37,17 @@ export function PriorNotificationList() {
   const dispatch = useMainAppDispatch()
   const listFilter = useMainAppSelector(state => state.priorNotification.listFilterValues)
   const apiFilter = useMemo(() => getApiFilterFromListFilter(listFilter), [listFilter])
+  const localFilters = useMemo(() => getLocalFilterFromListFilter(listFilter), [listFilter])
   const selectedSeaFrontGroup = useMainAppSelector(state => state.priorNotification.listFilterValues.seaFrontGroup)
   const {
     data: priorNotifications,
     isError,
     isLoading
   } = useGetPriorNotificationsQuery(apiFilter, { pollingInterval: 60000 })
+  const filteredPriorNotifications = useMemo(
+    () => getFilteredCollection(priorNotifications, localFilters),
+    [localFilters, priorNotifications]
+  )
 
   const [rowSelection, setRowSelection] = useState({})
   const [sorting, setSorting] = useState<SortingState>([
@@ -47,21 +57,10 @@ export function PriorNotificationList() {
     }
   ])
 
-  const countNoticesForSeaFrontGroup = useCallback(
-    (_seaFrontGroup: SeaFrontGroup | 'EXTRA'): number =>
-      // TODO Calculate the sea front for each prior notification.
-      // return priorNotifications.filter(({ facade }) => {
-      //   if (seaFrontGroup === SeaFrontGroup.ALL) {
-      //     return true
-      //   }
-
-      //   return facade && SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup]
-      //     ? SEA_FRONT_GROUP_SEA_FRONTS[seaFrontGroup].includes(facade as any)
-      //     : false
-      // }).length
-
-      0,
-    []
+  const subMenuCounter = useCallback(
+    (seaFrontGroup: SeaFrontGroup | 'EXTRA'): number =>
+      countPriorNotificationsForSeaFrontGroup(priorNotifications, seaFrontGroup),
+    [priorNotifications]
   )
 
   const handleSubMenuChange = useCallback(
@@ -73,7 +72,7 @@ export function PriorNotificationList() {
 
   const table = useReactTable({
     columns: PRIOR_NOTIFICATION_TABLE_COLUMNS,
-    data: priorNotifications ?? [],
+    data: filteredPriorNotifications ?? [],
     enableColumnResizing: false,
     enableRowSelection: true,
     enableSortingRemoval: false,
@@ -109,7 +108,7 @@ export function PriorNotificationList() {
   return (
     <>
       <SubMenu
-        counter={countNoticesForSeaFrontGroup}
+        counter={subMenuCounter}
         onChange={handleSubMenuChange}
         options={SUB_MENUS_AS_OPTIONS}
         value={selectedSeaFrontGroup}
@@ -165,7 +164,6 @@ export function PriorNotificationList() {
                     }
 
                     const priorNotification = row.original
-                    assertNotNullish(priorNotification.logbookMessage?.message)
 
                     return (
                       <Fragment key={virtualRow.key}>
@@ -176,11 +174,6 @@ export function PriorNotificationList() {
                               $hasRightBorder={cell.column.id === 'alertCount'}
                               $width={cell.column.getSize()}
                               onClick={() => row.toggleExpanded()}
-                              style={{
-                                height: 42,
-                                padding: '0 16px 1px',
-                                verticalAlign: 'middle'
-                              }}
                             >
                               {flexRender(cell.column.columnDef.cell, cell.getContext())}
                             </ExpandableRow>
@@ -190,78 +183,78 @@ export function PriorNotificationList() {
                         {row.getIsExpanded() && (
                           <ExpandedRow>
                             <ExpandedRowCell $width={50} />
-                            <ExpandedRowCell $width={120}>
+                            <ExpandedRowCell $width={130}>
                               <p>
                                 <ExpandedRowLabel>PNO émis :</ExpandedRowLabel>
                                 <ExpandedRowValue>
-                                  {customDayjs(priorNotification.logbookMessage.reportDateTime)
-                                    .utc()
-                                    .format('DD/MM/YYYY [à] hh[h]mm')}
+                                  {customDayjs(priorNotification.sentAt).utc().format('DD/MM/YYYY [à] HH[h]mm')}
                                 </ExpandedRowValue>
                               </p>
                             </ExpandedRowCell>
                             <ExpandedRowCell $width={120}>
                               <p>
                                 <ExpandedRowLabel>Raison du PNO :</ExpandedRowLabel>
-                                <ExpandedRowValue>{priorNotification.logbookMessage.message.purpose}</ExpandedRowValue>
+                                <ExpandedRowValue>
+                                  {priorNotification.purposeCode
+                                    ? PriorNotification.PURPOSE_LABEL[priorNotification.purposeCode]
+                                    : '-'}
+                                </ExpandedRowValue>
                               </p>
                             </ExpandedRowCell>
                             <ExpandedRowCell $width={180} />
                             <ExpandedRowCell $width={50} />
                             <ExpandedRowCell $width={160}>
                               <p>
-                                {!!priorNotification.vessel?.internalReferenceNumber && (
+                                {!!priorNotification.vesselInternalReferenceNumber && (
                                   <ExpandedRowValue $isLight>
-                                    {priorNotification.vessel.internalReferenceNumber} (CFR)
+                                    {priorNotification.vesselInternalReferenceNumber} (CFR)
                                   </ExpandedRowValue>
                                 )}
-                                {!!priorNotification.vessel?.ircs && (
+                                {!!priorNotification.vesselIrcs && (
                                   <ExpandedRowValue $isLight>
-                                    {priorNotification.vessel.ircs} (Call sign)
+                                    {priorNotification.vesselIrcs} (Call sign)
                                   </ExpandedRowValue>
                                 )}
-                                {!!priorNotification.vessel?.externalReferenceNumber && (
+                                {!!priorNotification.vesselExternalReferenceNumber && (
                                   <ExpandedRowValue $isLight>
-                                    {priorNotification.vessel.externalReferenceNumber} (Marq. ext.)
+                                    {priorNotification.vesselExternalReferenceNumber} (Marq. ext.)
                                   </ExpandedRowValue>
                                 )}
-                                {!!priorNotification.vessel?.mmsi && (
-                                  <ExpandedRowValue $isLight>{priorNotification.vessel.mmsi} (MMSI)</ExpandedRowValue>
+                                {!!priorNotification.vesselMmsi && (
+                                  <ExpandedRowValue $isLight>{priorNotification.vesselMmsi} (MMSI)</ExpandedRowValue>
                                 )}
                               </p>
                               <p>
                                 <ExpandedRowLabel>Taille du navire :</ExpandedRowLabel>
-                                <ExpandedRowValue>{priorNotification.vessel?.width ?? '-'}</ExpandedRowValue>
+                                <ExpandedRowValue>{priorNotification.vesselLength ?? 'Inconnu'}</ExpandedRowValue>
                               </p>
                               <p>
                                 <ExpandedRowLabel>Dernier contrôle :</ExpandedRowLabel>
                                 <ExpandedRowValue>
-                                  {priorNotification.vesselRiskFactor?.lastControlDatetime
-                                    ? customDayjs(priorNotification.vesselRiskFactor.lastControlDatetime)
+                                  {priorNotification.vesselLastControlDate
+                                    ? customDayjs(priorNotification.vesselLastControlDate)
                                         .utc()
                                         .format('[Le] DD/MM/YYYY')
-                                    : '-'}
+                                    : 'Inconnu'}
                                 </ExpandedRowValue>
                               </p>
                             </ExpandedRowCell>
                             <ExpandedRowCell $width={130}>
-                              <ExpandedRowLabel>Nom du segment :</ExpandedRowLabel>
+                              <ExpandedRowLabel>Nom des segments :</ExpandedRowLabel>
                               <span>
-                                {priorNotification.tripSegments.map(tripSegment => tripSegment.segmentName).join(', ')}
+                                {priorNotification.tripSegments.map(tripSegment => tripSegment.name).join(', ')}
                               </span>
                             </ExpandedRowCell>
-                            <ExpandedRowCell $width={170}>
+                            <ExpandedRowCell $width={180}>
                               <ExpandedRowLabel>Principales espèces à bord :</ExpandedRowLabel>
-                              {priorNotification.logbookMessage.message.catchOnboard ? (
+                              {priorNotification.onBoardCatches.length > 0 ? (
                                 <ExpandedRowList>
-                                  {priorNotification.logbookMessage.message.catchOnboard.map(
-                                    ({ species, speciesName, weight }) => (
-                                      <li key={species}>{`${speciesName} (${species}) – ${weight} kg`}</li>
-                                    )
-                                  )}
+                                  {priorNotification.onBoardCatches.map(({ species, speciesName, weight }) => (
+                                    <li key={species}>{`${speciesName} (${species}) – ${weight} kg`}</li>
+                                  ))}
                                 </ExpandedRowList>
                               ) : (
-                                <ExpandedRowValue>Non soumis</ExpandedRowValue>
+                                <ExpandedRowValue>Aucune capture à bord.</ExpandedRowValue>
                               )}
                               <p>
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
@@ -290,11 +283,15 @@ const TableWrapper = styled.div`
   width: 1440px;
 `
 
+// TODO Update monitor-ui?
 const ExpandableRow = styled(TableWithSelectableRows.Td)`
   cursor: pointer;
+  padding: 0 16px 1px;
   user-select: none;
+  vertical-align: middle;
 `
 
+// TODO Add this feature in monitor-ui?
 const ExpandedRow = TableWithSelectableRows.BodyTr
 
 const ExpandedRowCell = styled(TableWithSelectableRows.Td).attrs(props => ({
@@ -302,6 +299,7 @@ const ExpandedRowCell = styled(TableWithSelectableRows.Td).attrs(props => ({
   $hasRightBorder: false
 }))`
   padding: 8px 16px 16px;
+  height: 42px;
   white-space: normal;
 
   > p:not(:first-child) {

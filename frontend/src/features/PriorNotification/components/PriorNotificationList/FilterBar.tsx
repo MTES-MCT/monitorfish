@@ -1,5 +1,5 @@
 import { COUNTRIES_AS_ALPHA3_OPTIONS } from '@constants/index'
-import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import { useGetPriorNotificationTypesAsOptions } from '@features/PriorNotification/hooks/useGetPriorNotificationTypesAsOptions'
 import { useGetFleetSegmentsAsOptions } from '@hooks/useGetFleetSegmentsAsOptions'
 import { useGetGearsAsTreeOptions } from '@hooks/useGetGearsAsTreeOptions'
 import { useGetPortsAsTreeOptions } from '@hooks/useGetPortsAsTreeOptions'
@@ -18,14 +18,15 @@ import {
   TextInput,
   type DateAsStringRange
 } from '@mtes-mct/monitor-ui'
+import { assertNotNullish } from '@utils/assertNotNullish'
+import { useCallback } from 'react'
 import styled from 'styled-components'
 
 import {
   LAST_CONTROL_PERIODS_AS_OPTIONS,
   LastControlPeriod,
-  PRIOR_NOTIFICATION_TYPES_AS_OPTIONS,
-  RECEIVED_AT_PERIODS_AS_OPTIONS,
-  ReceivedAtPeriod
+  EXPECTED_ARRIVAL_PERIODS_AS_OPTIONS,
+  ExpectedArrivalPeriod
 } from './constants'
 import { priorNotificationActions } from '../../slice'
 
@@ -42,10 +43,26 @@ export function FilterBar() {
   const { gearsAsTreeOptions } = useGetGearsAsTreeOptions()
   const { portsAsTreeOptions } = useGetPortsAsTreeOptions()
   const { speciesAsOptions } = useGetSpeciesAsOptions()
+  const { typesAsOptions } = useGetPriorNotificationTypesAsOptions()
   const dispatch = useMainAppDispatch()
 
   const updateCountryCodes = (nextCountryCodes: string[] | undefined) => {
     dispatch(priorNotificationActions.setListFilterValues({ countryCodes: nextCountryCodes }))
+  }
+
+  const updateExpectedArrivalCustomPeriod = (nextExpectedArrivalCustomPeriod: DateAsStringRange | undefined) => {
+    dispatch(
+      priorNotificationActions.setListFilterValues({ expectedArrivalCustomPeriod: nextExpectedArrivalCustomPeriod })
+    )
+  }
+
+  const updateExpectedArrivalPeriod = (nextexpectedArrivalPeriod: ExpectedArrivalPeriod | undefined) => {
+    assertNotNullish(nextexpectedArrivalPeriod)
+
+    if (nextexpectedArrivalPeriod !== ExpectedArrivalPeriod.CUSTOM) {
+      dispatch(priorNotificationActions.setListFilterValues({ expectedArrivalCustomPeriod: undefined }))
+    }
+    dispatch(priorNotificationActions.setListFilterValues({ expectedArrivalPeriod: nextexpectedArrivalPeriod }))
   }
 
   const updateFleetSegments = (nextFleetSegmentSegments: string[] | undefined) => {
@@ -56,9 +73,12 @@ export function FilterBar() {
     dispatch(priorNotificationActions.setListFilterValues({ gearCodes: nextGearCodes }))
   }
 
-  const updateHasOneOrMoreReportings = (nextHasOneOrMoreReportings: RichBoolean | undefined) => {
-    dispatch(priorNotificationActions.setListFilterValues({ hasOneOrMoreReportings: nextHasOneOrMoreReportings }))
-  }
+  const updateHasOneOrMoreReportings = useCallback(
+    (nextHasOneOrMoreReportings: RichBoolean | undefined) => {
+      dispatch(priorNotificationActions.setListFilterValues({ hasOneOrMoreReportings: nextHasOneOrMoreReportings }))
+    },
+    [dispatch]
+  )
 
   const updateIsLessThanTwelveMetersVessel = (nextIsLessThanTwelveMetersVessel: RichBoolean | undefined) => {
     dispatch(
@@ -74,14 +94,6 @@ export function FilterBar() {
     dispatch(priorNotificationActions.setListFilterValues({ portLocodes: nextPortLocodes }))
   }
 
-  const updateReceivedAtCustomDateRange = (nextReceivedAtCustomDateRange: DateAsStringRange | undefined) => {
-    dispatch(priorNotificationActions.setListFilterValues({ receivedAtCustomDateRange: nextReceivedAtCustomDateRange }))
-  }
-
-  const updateReceivedAtPeriod = (nextReceivedAtPeriod: ReceivedAtPeriod | undefined) => {
-    dispatch(priorNotificationActions.setListFilterValues({ receivedAtPeriod: nextReceivedAtPeriod }))
-  }
-
   const updateSearchQuery = (nextSearchQuery: string | undefined) => {
     dispatch(priorNotificationActions.setListFilterValues({ searchQuery: nextSearchQuery }))
   }
@@ -90,7 +102,7 @@ export function FilterBar() {
     dispatch(priorNotificationActions.setListFilterValues({ specyCodes: nextSpecyCodes }))
   }
 
-  const updateTypes = (nextTypes: PriorNotification.PriorNotificationType[] | undefined) => {
+  const updateTypes = (nextTypes: string[] | undefined) => {
     dispatch(priorNotificationActions.setListFilterValues({ types: nextTypes }))
   }
 
@@ -183,7 +195,7 @@ export function FilterBar() {
           isInline
           isLabelHidden
           label="Signalements"
-          name="isLessThanTwelveMetersVessel"
+          name="hasOneOrMoreReportings"
           onChange={updateHasOneOrMoreReportings}
           trueOptionLabel="Avec signalements"
           value={listFilterValues.hasOneOrMoreReportings}
@@ -192,15 +204,16 @@ export function FilterBar() {
 
       <Row>
         <Select
+          cleanable={false}
           isLabelHidden
           isTransparent
-          label="Date d'envoi du préavis"
-          name="receivedAtPeriod"
-          onChange={updateReceivedAtPeriod}
-          options={RECEIVED_AT_PERIODS_AS_OPTIONS}
+          label="Date d'arrivée estimée"
+          name="expectedArrivalPeriod"
+          onChange={updateExpectedArrivalPeriod}
+          options={EXPECTED_ARRIVAL_PERIODS_AS_OPTIONS}
           placeholder="Date d'envoi du préavis"
           style={{ minWidth: 265 }}
-          value={listFilterValues.receivedAtPeriod}
+          value={listFilterValues.expectedArrivalPeriod}
         />
         <MultiCascader
           disabled={!portsAsTreeOptions}
@@ -216,13 +229,13 @@ export function FilterBar() {
           value={listFilterValues.portLocodes}
         />
         <MultiSelect
-          disabled={!speciesAsOptions}
+          disabled={!typesAsOptions}
           isLabelHidden
           isTransparent
           label="Types de préavis"
           name="types"
           onChange={updateTypes}
-          options={PRIOR_NOTIFICATION_TYPES_AS_OPTIONS}
+          options={typesAsOptions ?? []}
           placeholder="Types de préavis"
           popupWidth={240}
           searchable
@@ -230,27 +243,27 @@ export function FilterBar() {
           virtualized
         />
         <RichBooleanCheckbox
-          falseOptionLabel="Navires < 12 m"
+          falseOptionLabel="Navires ≥ 12 m"
           isInline
           isLabelHidden
           label="Taille du navire"
           name="isLessThanTwelveMetersVessel"
           onChange={updateIsLessThanTwelveMetersVessel}
-          trueOptionLabel="Navires ≥ 12 m"
+          trueOptionLabel="Navires < 12 m"
           value={listFilterValues.isLessThanTwelveMetersVessel}
         />
       </Row>
 
-      {listFilterValues.receivedAtPeriod === ReceivedAtPeriod.CUSTOM && (
+      {listFilterValues.expectedArrivalPeriod === ExpectedArrivalPeriod.CUSTOM && (
         <Row>
           <DateRangePicker
-            defaultValue={listFilterValues.receivedAtCustomDateRange}
+            defaultValue={listFilterValues.expectedArrivalCustomPeriod}
             isHistorical
             isStringDate
             isTransparent
             label="Arrivée estimée du navire entre deux dates"
-            name="receivedAtCustomDateRange"
-            onChange={updateReceivedAtCustomDateRange}
+            name="expectedArrivalCustomPeriod"
+            onChange={updateExpectedArrivalCustomPeriod}
             withTime
           />
         </Row>

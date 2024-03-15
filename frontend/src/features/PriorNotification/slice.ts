@@ -1,7 +1,7 @@
 import { RichBoolean } from '@mtes-mct/monitor-ui'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
-import { ReceivedAtPeriod } from './components/PriorNotificationList/constants'
+import { ExpectedArrivalPeriod } from './components/PriorNotificationList/constants'
 import { SeaFrontGroup } from '../../domain/entities/seaFront/constants'
 
 import type { ListFilter } from './components/PriorNotificationList/types'
@@ -12,6 +12,8 @@ interface PriorNotificationState {
 const INITIAL_STATE: PriorNotificationState = {
   listFilterValues: {
     countryCodes: undefined,
+    expectedArrivalCustomPeriod: undefined,
+    expectedArrivalPeriod: ExpectedArrivalPeriod.AFTER_FOUR_HOURS_AGO,
     fleetSegmentSegments: undefined,
     gearCodes: undefined,
     hasOneOrMoreReportings: RichBoolean.BOTH,
@@ -19,8 +21,6 @@ const INITIAL_STATE: PriorNotificationState = {
     isSent: undefined,
     lastControlPeriod: undefined,
     portLocodes: undefined,
-    receivedAtCustomDateRange: undefined,
-    receivedAtPeriod: ReceivedAtPeriod.AFTER_FOUR_HOURS_AGO,
     seaFrontGroup: SeaFrontGroup.ALL,
     searchQuery: undefined,
     specyCodes: undefined,

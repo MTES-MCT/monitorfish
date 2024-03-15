@@ -1,5 +1,5 @@
 import type { Vessel } from '@features/Vessel/Vessel.types'
-import type { Undefine } from '@mtes-mct/monitor-ui'
+import type { Undefine, UndefineExcept } from '@mtes-mct/monitor-ui'
 
 export namespace LogbookMessage {
   export type LogbookMessage = {
@@ -32,6 +32,25 @@ export namespace LogbookMessage {
     rejectionCause: string | undefined
     returnStatus: string | undefined
   }
+
+  export type Catch = UndefineExcept<
+    {
+      conversionFactor: number
+      economicZone: string
+      effortZone: string
+      faoZone: string
+      freshness: string
+      numberFish: number
+      packaging: string
+      presentation: string
+      preservationState: string
+      species: string
+      speciesName: string
+      statisticalRectangle: string
+      weight: number
+    },
+    'species'
+  >
 
   export type Message = Undefine<{
     catchOnboard: MessageCatchonboard[]
@@ -68,7 +87,7 @@ export namespace LogbookMessage {
   }
 
   export type MessagePnoType = {
-    hasDesignated_ports: boolean
+    hasDesignatedPorts: boolean
     minimumNotificationPeriod: number
     // TODO Replace that with an enum.
     pnoTypeName: string
@@ -82,19 +101,24 @@ export namespace LogbookMessage {
   }
 
   export type TripSegment = {
-    segment: string
-    segmentName: string
+    code: string
+    name: string
   }
 
-  export type ApiFilter = Undefine<{
-    flagStates: string[]
-    integratedAfter: string
-    integratedBefore: string
-    portLocodes: string[]
-    searchQuery: string
-    specyCodes: string[]
-    tripGearCodes: string[]
-    tripSegmentSegments: string[]
-    vesselId: Vessel.VesselId
-  }>
+  export type ApiFilter = Partial<
+    Undefine<{
+      flagStates: string[]
+      isLessThanTwelveMetersVessel: boolean
+      lastControlledAfter: string
+      lastControlledBefore: string
+      portLocodes: string[]
+      searchQuery: string
+      specyCodes: string[]
+      tripGearCodes: string[]
+      tripSegmentSegments: string[]
+      vesselLength: Vessel.VesselId
+      willArriveAfter: string
+      willArriveBefore: string
+    }>
+  >
 }

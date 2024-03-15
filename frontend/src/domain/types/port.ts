@@ -5,5 +5,6 @@ export namespace Port {
     locode: string
     longitude: number | undefined
     name: string
+    region: string | undefined
   }
 }

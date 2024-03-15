@@ -2,8 +2,9 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationType
 import fr.gouv.cnsp.monitorfish.domain.mappers.ERSMapper.getERSMessageValueFromJSON
-import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.dtos.PriorNotification
 import io.hypersistence.utils.hibernate.type.array.ListArrayType
 import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
@@ -73,6 +74,13 @@ data class LogbookReportEntity(
     @Type(JsonBinaryType::class)
     @Column(name = "trip_segments", nullable = true, columnDefinition = "jsonb")
     val tripSegments: String? = null,
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "vessel_id", nullable = true)
+    val vessel: VesselEntity? = null,
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    // TODO Should it be CFR?
+    @JoinColumn(name = "cfr", referencedColumnName = "cfr", nullable = true, insertable = false, updatable = false)
+    val vesselRiskFactor: RiskFactorsEntity? = null,
 ) {
     companion object {
         fun fromLogbookMessage(
@@ -102,8 +110,12 @@ data class LogbookReportEntity(
         )
     }
 
-    fun toLogbookMessage(mapper: ObjectMapper) =
-        LogbookMessage(
+    fun toLogbookMessage(mapper: ObjectMapper): LogbookMessage {
+        val message = getERSMessageValueFromJSON(mapper, message, messageType, operationType)
+        val tripGears = deserializeJSONList(mapper, tripGears, LogbookTripGear::class.java)
+        val tripSegments = deserializeJSONList(mapper, tripSegments, LogbookTripSegment::class.java)
+
+        return LogbookMessage(
             id = id!!,
             internalReferenceNumber = internalReferenceNumber,
             referencedReportId = referencedReportId,
@@ -121,27 +133,58 @@ data class LogbookReportEntity(
             imo = imo,
             messageType = messageType,
             analyzedByRules = analyzedByRules ?: listOf(),
-            message = getERSMessageValueFromJSON(mapper, message, messageType, operationType),
+            message = message,
             software = software,
             transmissionFormat = transmissionFormat,
             isEnriched = isEnriched,
-            tripGears = deserializeJSONList(mapper, tripGears, LogbookTripGear::class.java),
-            tripSegments = deserializeJSONList(mapper, tripSegments, LogbookTripSegment::class.java),
+            tripGears = tripGears,
+            tripSegments = tripSegments,
         )
+    }
 
     fun toPriorNotification(mapper: ObjectMapper): PriorNotification {
         val messageAsJsonNode = mapper.readTree(message)
+
+        val expectedArrivalDate = messageAsJsonNode.get("predictedArrivalDatetimeUtc")?.asText()
+        val expectedLandingDate = messageAsJsonNode.get("predictedLandingDatetimeUtc")?.asText()
+        val landingCauseCode = messageAsJsonNode.get("purpose")?.asText()
+        val onboardCatches =
+            deserializeJSONList(mapper, messageAsJsonNode.get("catchOnboard")?.toString(), Catch::class.java)
         val portLocode = messageAsJsonNode.get("port")?.asText()
-        val logbookMessage = toLogbookMessage(mapper)
         val tripGears = deserializeJSONList(mapper, tripGears, LogbookTripGear::class.java)
         val tripSegments = deserializeJSONList(mapper, tripSegments, LogbookTripSegment::class.java)
+        val types =
+            deserializeJSONList(
+                mapper,
+                messageAsJsonNode.get("pnoTypes")?.toString(),
+                PriorNotificationType::class.java,
+            )
 
         return PriorNotification(
             id = id!!,
-            logbookMessage = logbookMessage,
+            expectedArrivalDate = expectedArrivalDate,
+            expectedLandingDate = expectedLandingDate,
+            isVesselUnderCharter = vessel?.underCharter,
+            types = types,
+            onboardCatches = onboardCatches,
             portLocode = portLocode,
+            purposeCode = landingCauseCode,
+            sentAt = reportDateTime.toString(),
             tripGears = tripGears,
             tripSegments = tripSegments,
+            vesselId = vessel!!.id,
+            vesselExternalReferenceNumber = vessel.externalReferenceNumber,
+            vesselFlagCountryCode = vessel.flagState,
+            vesselInternalReferenceNumber = vessel.internalReferenceNumber,
+            vesselIrcs = vessel.ircs,
+            vesselMmsi = vessel.mmsi,
+            vesselLastControlDate = vesselRiskFactor?.lastControlDatetime?.toString(),
+            vesselLength = vessel.length,
+            vesselName = vessel.vesselName,
+            vesselRiskFactor = vesselRiskFactor?.riskFactor,
+            vesselRiskFactorDetectability = vesselRiskFactor?.detectabilityRiskFactor,
+            vesselRiskFactorImpact = vesselRiskFactor?.impactRiskFactor,
+            vesselRiskFactorProbability = vesselRiskFactor?.probabilityRiskFactor,
         )
     }
 

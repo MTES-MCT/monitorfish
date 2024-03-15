@@ -1,32 +1,39 @@
 [
     {
         "table": "logbook_raw_messages",
-        "data": [{ "operation_number": "FAKE_OPERATION_101" }, { "operation_number": "FAKE_OPERATION_102" }]
+        "data": [
+            { "operation_number": "FAKE_OPERATION_101" },
+            { "operation_number": "FAKE_OPERATION_102" },
+            { "operation_number": "FAKE_OPERATION_103" },
+            { "operation_number": "FAKE_OPERATION_104" },
+            { "operation_number": "FAKE_OPERATION_105" },
+            { "operation_number": "FAKE_OPERATION_106" },
+            { "operation_number": "FAKE_OPERATION_107" },
+            { "operation_number": "FAKE_OPERATION_108" },
+            { "operation_number": "FAKE_OPERATION_109" },
+            { "operation_number": "FAKE_OPERATION_110" },
+            { "operation_number": "FAKE_OPERATION_111" },
+            { "operation_number": "FAKE_OPERATION_112" }
+        ]
     },
     {
         "table": "logbook_reports",
         "data": [
+            // - Vessel: PHENOMENE
+            // - Purpose: LAN
             // - Without reporting
             {
                 "id": 101,
                 "cfr": "FAK000999999",
                 "enriched": true,
-                "external_identification": "DONTSINK",
-                "flag_state": "FRA",
-                "imo": null,
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC'",
-                "ircs": "CALLME",
                 "log_type": "PNO",
-                "operation_country": "OOF",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC'",
                 "operation_number": "FAKE_OPERATION_101",
                 "operation_type": "DAT",
-                "referenced_report_id": null,
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC'",
-                "report_id": "FAKE_REPORT_101",
-                "software": null,
                 "transmission_format": "ERS",
-                "trip_number": 10000001,
+                "vessel_id": 1,
                 "vessel_name": "PHENOMENE",
                 "trip_gears:jsonb": [
                     { "gear": "GTR", "mesh": 100, "dimensions": "250;180" },
@@ -50,45 +57,39 @@
                     ],
                     "pnoTypes": [
                         {
-                            "pnoTypeName": "Préavis type X",
+                            "pnoTypeName": "Préavis type A",
                             "minimumNotificationPeriod": 4.0,
-                            "hasDesignated_ports": false
+                            "hasDesignatedPorts": false
                         },
                         {
-                            "pnoTypeName": "Préavis type Y",
+                            "pnoTypeName": "Préavis type B",
                             "minimumNotificationPeriod": 8.0,
-                            "hasDesignated_ports": true
+                            "hasDesignatedPorts": true
                         }
                     ],
                     "port": "FRSML",
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '4 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
-                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
                     "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
                 }
             },
 
-            // - With reporting
+            // - Vessel: COURANT MAIN PROFESSEUR
+            // - Purpose: LAN
+            // - With reportings
             {
                 "id": 102,
                 "cfr": "ABC000042310",
                 "enriched": true,
-                "external_identification": "IW783219",
-                "flag_state": "FRA",
-                "imo": null,
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC'",
-                "ircs": "QD0506",
                 "log_type": "PNO",
-                "operation_country": "OOF",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC'",
                 "operation_number": "FAKE_OPERATION_102",
                 "operation_type": "DAT",
-                "referenced_report_id": null,
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC'",
-                "report_id": "FAKE_REPORT_102",
-                "software": null,
                 "transmission_format": "ERS",
-                "trip_number": 10000002,
+                "vessel_id": 10,
                 "vessel_name": "COURANT MAIN PROFESSEUR",
                 "trip_gears:jsonb": [
                     { "gear": "GTR", "mesh": 100, "dimensions": "250;180" },
@@ -112,20 +113,41 @@
                     ],
                     "pnoTypes": [
                         {
-                            "pnoTypeName": "Préavis type X",
+                            "pnoTypeName": "Préavis type C",
                             "minimumNotificationPeriod": 4.0,
-                            "hasDesignated_ports": false
-                        },
-                        {
-                            "pnoTypeName": "Préavis type Y",
-                            "minimumNotificationPeriod": 8.0,
-                            "hasDesignated_ports": true
+                            "hasDesignatedPorts": false
                         }
                     ],
-                    "port": "FRSML",
+                    "port": "AEFRP",
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '4 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                }
+            },
+
+            // - Vessel: UNKNOWN
+            // - Purpose: GRD
+            // - Without reporting
+            {
+                "id": 103,
+                "enriched": true,
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC'",
+                "log_type": "PNO",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC'",
+                "operation_number": "FAKE_OPERATION_103",
+                "operation_type": "DAT",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC'",
+                "transmission_format": "ERS",
+                "vessel_id": -1,
+                "trip_gears:jsonb": [],
+                "trip_segments:jsonb": [],
+                "value:jsonb": {
+                    "catchOnboard": [],
+                    "pnoTypes": [],
+                    "port": "AEHZP",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "GRD",
                     "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
                 }
             }

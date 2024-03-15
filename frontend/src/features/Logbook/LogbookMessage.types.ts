@@ -1,4 +1,3 @@
-import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { Undefine, UndefineExcept } from '@mtes-mct/monitor-ui'
 
 export namespace LogbookMessage {
@@ -116,7 +115,7 @@ export namespace LogbookMessage {
       specyCodes: string[]
       tripGearCodes: string[]
       tripSegmentSegments: string[]
-      vesselLength: Vessel.VesselId
+      vesselLength: number
       willArriveAfter: string
       willArriveBefore: string
     }>

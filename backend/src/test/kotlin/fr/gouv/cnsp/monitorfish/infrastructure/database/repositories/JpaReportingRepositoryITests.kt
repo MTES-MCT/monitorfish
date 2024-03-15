@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.filters.ReportingFilter
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.ZonedDateTime
 
 class JpaReportingRepositoryITests : AbstractDBTests() {
-
     @Autowired
     private lateinit var jpaReportingRepository: JpaReportingRepository
 
@@ -22,19 +22,20 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         // Given
         val creationDate = ZonedDateTime.now()
         val now = ZonedDateTime.now()
-        val alertOne = PendingAlert(
-            internalReferenceNumber = "FRFGRGR",
-            externalReferenceNumber = "RGD",
-            ircs = "6554fEE",
-            vesselId = 125,
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            tripNumber = "123456",
-            creationDate = creationDate,
-            value = ThreeMilesTrawlingAlert("NAMO"),
-            latitude = 5.5588,
-            longitude = -45.3698,
-        )
+        val alertOne =
+            PendingAlert(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselId = 125,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                tripNumber = "123456",
+                creationDate = creationDate,
+                value = ThreeMilesTrawlingAlert("NAMO"),
+                latitude = 5.5588,
+                longitude = -45.3698,
+            )
 
         // When
         jpaReportingRepository.save(alertOne, now)
@@ -58,24 +59,26 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     fun `save Should save a reporting`() {
         // Given
         val creationDate = ZonedDateTime.now()
-        val reporting = Reporting(
-            internalReferenceNumber = "FRFGRGR",
-            externalReferenceNumber = "RGD",
-            ircs = "6554fEE",
-            vesselId = 126,
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            creationDate = creationDate,
-            value = InfractionSuspicion(
-                ReportingActor.OPS,
-                natinfCode = 123456,
-                authorTrigram = "LTH",
-                title = "A title",
-            ),
-            type = ReportingType.INFRACTION_SUSPICION,
-            isDeleted = false,
-            isArchived = false,
-        )
+        val reporting =
+            Reporting(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselId = 126,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = creationDate,
+                value =
+                    InfractionSuspicion(
+                        ReportingActor.OPS,
+                        natinfCode = 123456,
+                        authorTrigram = "LTH",
+                        title = "A title",
+                    ),
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false,
+            )
 
         // When
         jpaReportingRepository.save(reporting)
@@ -100,23 +103,25 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     fun `save Should save a reporting When no vessel identifier given`() {
         // Given
         val creationDate = ZonedDateTime.now()
-        val reporting = Reporting(
-            internalReferenceNumber = "FRFGRGR",
-            externalReferenceNumber = "RGD",
-            ircs = "6554fEE",
-            vesselId = 523,
-            creationDate = creationDate,
-            flagState = CountryCode.FR,
-            value = InfractionSuspicion(
-                ReportingActor.OPS,
-                natinfCode = 123456,
-                authorTrigram = "LTH",
-                title = "A title",
-            ),
-            type = ReportingType.INFRACTION_SUSPICION,
-            isDeleted = false,
-            isArchived = false,
-        )
+        val reporting =
+            Reporting(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselId = 523,
+                creationDate = creationDate,
+                flagState = CountryCode.FR,
+                value =
+                    InfractionSuspicion(
+                        ReportingActor.OPS,
+                        natinfCode = 123456,
+                        authorTrigram = "LTH",
+                        title = "A title",
+                    ),
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false,
+            )
 
         // When
         jpaReportingRepository.save(reporting)
@@ -140,11 +145,12 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findCurrentAndArchivedByVesselIdentifierEquals Should return current and archived reporting`() {
         // When
-        val reporting = jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
-            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            "ABC000180832",
-            ZonedDateTime.now().minusYears(1),
-        )
+        val reporting =
+            jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                "ABC000180832",
+                ZonedDateTime.now().minusYears(1),
+            )
 
         // Then
         assertThat(reporting).hasSize(2)
@@ -165,11 +171,12 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findCurrentAndArchivedByVesselIdentifierEquals Should return current and archived reporting When filtering with date`() {
         // When
-        val reporting = jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
-            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            "ABC000180832",
-            ZonedDateTime.now(),
-        )
+        val reporting =
+            jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                "ABC000180832",
+                ZonedDateTime.now(),
+            )
 
         // Then
         assertThat(reporting).hasSize(1)
@@ -184,10 +191,11 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findCurrentAndArchivedByVesselIdEquals Should return current and archived reporting`() {
         // When
-        val reporting = jpaReportingRepository.findCurrentAndArchivedByVesselIdEquals(
-            123456,
-            ZonedDateTime.now().minusYears(1),
-        )
+        val reporting =
+            jpaReportingRepository.findCurrentAndArchivedByVesselIdEquals(
+                123456,
+                ZonedDateTime.now().minusYears(1),
+            )
 
         // Then
         assertThat(reporting).hasSize(2)
@@ -208,22 +216,24 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `archive Should set the archived flag as true`() {
         // Given
-        val reportingToArchive = jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
-            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            "ABC000180832",
-            ZonedDateTime.now().minusYears(1),
-        ).first()
+        val reportingToArchive =
+            jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                "ABC000180832",
+                ZonedDateTime.now().minusYears(1),
+            ).first()
         assertThat(reportingToArchive.isArchived).isEqualTo(false)
 
         // When
         jpaReportingRepository.archive(reportingToArchive.id!!)
 
         // Then
-        val archivedReporting = jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
-            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            "ABC000180832",
-            ZonedDateTime.now().minusYears(1),
-        ).first()
+        val archivedReporting =
+            jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                "ABC000180832",
+                ZonedDateTime.now().minusYears(1),
+            ).first()
         assertThat(archivedReporting.isArchived).isEqualTo(true)
     }
 
@@ -231,30 +241,33 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `delete Should set the deleted flag as true`() {
         // Given
-        val reportingList = jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
-            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            "ABC000180832",
-            ZonedDateTime.now().minusYears(1),
-        )
+        val reportingList =
+            jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                "ABC000180832",
+                ZonedDateTime.now().minusYears(1),
+            )
         assertThat(reportingList).hasSize(2)
 
         // When
         jpaReportingRepository.delete(reportingList.first().id!!)
 
         // Then
-        val nextReportingList = jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
-            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            "ABC000180832",
-            ZonedDateTime.now().minusYears(1),
-        )
+        val nextReportingList =
+            jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                "ABC000180832",
+                ZonedDateTime.now().minusYears(1),
+            )
         assertThat(nextReportingList).hasSize(1)
     }
 
     @Test
     @Transactional
-    fun `findAllCurrent Should return current reportings`() {
+    fun `findAll Should return current reportings with 'isArchived = false, isDeleted = false' filter`() {
         // When
-        val reporting = jpaReportingRepository.findAllCurrent()
+        val reportingFilter = ReportingFilter(isArchived = false, isDeleted = false)
+        val reporting = jpaReportingRepository.findAll(reportingFilter)
 
         // Then
         assertThat(reporting).hasSize(5)
@@ -267,17 +280,18 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `update Should update a given InfractionSuspicion`() {
         // Given
-        val updatedReporting = InfractionSuspicion(
-            ReportingActor.UNIT,
-            1,
-            "",
-            "Jean Bon",
-            "Une observation",
-            "Une description",
-            1236,
-            "MEMN",
-            "DML 56",
-        )
+        val updatedReporting =
+            InfractionSuspicion(
+                ReportingActor.UNIT,
+                1,
+                "",
+                "Jean Bon",
+                "Une observation",
+                "Une description",
+                1236,
+                "MEMN",
+                "DML 56",
+            )
 
         // When
         val reporting = jpaReportingRepository.update(6, updatedReporting)
@@ -299,14 +313,15 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `update Should update a given Observation`() {
         // Given
-        val updatedReporting = Observation(
-            ReportingActor.UNIT,
-            1,
-            "",
-            "Jean Bon",
-            "Une observation",
-            "Une description",
-        )
+        val updatedReporting =
+            Observation(
+                ReportingActor.UNIT,
+                1,
+                "",
+                "Jean Bon",
+                "Une observation",
+                "Une description",
+            )
 
         // When
         val reporting = jpaReportingRepository.update(8, updatedReporting)
@@ -325,14 +340,15 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `update Should convert an InfractionSuspicion to an Observation`() {
         // Given
-        val updatedReporting = Observation(
-            ReportingActor.UNIT,
-            1,
-            "",
-            "Jean Bon",
-            "Une observation",
-            "Une description",
-        )
+        val updatedReporting =
+            Observation(
+                ReportingActor.UNIT,
+                1,
+                "",
+                "Jean Bon",
+                "Une observation",
+                "Une description",
+            )
 
         // When
         val reporting = jpaReportingRepository.update(6, updatedReporting)

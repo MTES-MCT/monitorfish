@@ -4,18 +4,18 @@ import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
-import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import java.time.ZonedDateTime
 
 @UseCase
 class GetPriorNotifications(
-    private val facadeAreasRepository: JpaFacadeAreasRepository,
-    private val logbookReportRepository: JpaLogbookReportRepository,
-    private val portRepository: JpaPortRepository,
-    private val reportingRepository: JpaReportingRepository,
-    private val vesselRepository: JpaVesselRepository,
+    private val facadeAreasRepository: FacadeAreasRepository,
+    private val logbookReportRepository: LogbookReportRepository,
+    private val portRepository: PortRepository,
+    private val reportingRepository: ReportingRepository,
+    private val vesselRepository: VesselRepository,
 ) {
     fun execute(filter: LogbookReportFilter): List<PriorNotification> {
         val priorNotifications =

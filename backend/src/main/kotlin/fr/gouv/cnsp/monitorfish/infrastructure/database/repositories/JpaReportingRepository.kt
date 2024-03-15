@@ -7,9 +7,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
+import fr.gouv.cnsp.monitorfish.infrastructure.database.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBReportingRepository
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
@@ -80,44 +80,6 @@ class JpaReportingRepository(
             it.types?.let { types ->
                 predicates.add(reportingEntity.get<ReportingType>("type").`in`(*types.toTypedArray()))
             }
-
-            it.vesselId?.let { vesselId ->
-                predicates.add(
-                    criteriaBuilder.equal(
-                        reportingEntity.get<Int>("vesselId"),
-                        vesselId,
-                    ),
-                )
-            }
-
-//            it.vesselId?.let { vesselId ->
-//                when (vesselId.identifier) {
-//                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> {
-//                        predicates.add(
-//                            criteriaBuilder.equal(
-//                                reportingEntity.get<String>("internalReferenceNumber"),
-//                                vesselId.toString(),
-//                            ),
-//                        )
-//                    }
-//                    VesselIdentifier.IRCS -> {
-//                        predicates.add(
-//                            criteriaBuilder.equal(
-//                                reportingEntity.get<String>("ircs"),
-//                                vesselId.toString(),
-//                            ),
-//                        )
-//                    }
-//                    VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> {
-//                        predicates.add(
-//                            criteriaBuilder.equal(
-//                                reportingEntity.get<String>("externalReferenceNumber"),
-//                                vesselId.toString(),
-//                            ),
-//                        )
-//                    }
-//                }
-//            }
         }
 
         criteriaQuery.select(reportingEntity).where(*predicates.toTypedArray())

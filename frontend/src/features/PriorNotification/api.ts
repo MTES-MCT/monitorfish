@@ -10,8 +10,13 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
     getPriorNotifications: builder.query<PriorNotification.PriorNotification[], LogbookMessage.ApiFilter>({
       providesTags: () => [{ type: 'Notices' }],
       query: filter => getUrlOrPathWithQueryParams(`/prior-notifications`, filter)
+    }),
+
+    getPriorNotificationTypes: builder.query<string[], void>({
+      providesTags: () => [{ type: 'Notices' }],
+      query: () => '/prior-notifications/types'
     })
   })
 })
 
-export const { useGetPriorNotificationsQuery } = priorNotificationApi
+export const { useGetPriorNotificationsQuery, useGetPriorNotificationTypesQuery } = priorNotificationApi

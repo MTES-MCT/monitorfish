@@ -2,9 +2,9 @@ package fr.gouv.cnsp.monitorfish.domain.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
-import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
-import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.dtos.PriorNotification
+import fr.gouv.cnsp.monitorfish.infrastructure.database.filters.LogbookReportFilter
 import java.time.ZonedDateTime
 
 interface LogbookReportRepository {
@@ -58,6 +58,8 @@ interface LogbookReportRepository {
         internalReferenceNumber: String,
         tripNumber: String,
     ): VoyageDatesAndTripNumber
+
+    fun findDistinctPriorNotificationTypes(): List<String>
 
     // For test purpose
     fun deleteAll()

@@ -13,7 +13,6 @@ data class LogbookMessage(
     var isCorrected: Boolean? = false,
     val isEnriched: Boolean,
     val operationType: LogbookOperationType,
-    // TODO What's the difference between `operationDateTime`, `integrationDateTime` and `reportDateTime`? Is it in UTC?
     val operationDateTime: ZonedDateTime,
     val internalReferenceNumber: String? = null,
     val externalReferenceNumber: String? = null,
@@ -22,7 +21,9 @@ data class LogbookMessage(
     val flagState: String? = null,
     val imo: String? = null,
     val messageType: String? = null,
+    // Submission date of the report by the vessel
     val reportDateTime: ZonedDateTime? = null,
+    // Reception date of the report by the data center
     val integrationDateTime: ZonedDateTime,
     var acknowledge: Acknowledge? = null,
     var deleted: Boolean? = false,

@@ -5,23 +5,27 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
-import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.dtos.PriorNotification
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookReportEntity
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.RiskFactorsEntity
+import fr.gouv.cnsp.monitorfish.infrastructure.database.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLogbookReportRepository
 import jakarta.persistence.EntityManager
+import jakarta.persistence.criteria.Join
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 @Repository
 class JpaLogbookReportRepository(
@@ -30,6 +34,44 @@ class JpaLogbookReportRepository(
     private val mapper: ObjectMapper,
 ) : LogbookReportRepository {
     private val postgresChunkSize = 5000
+
+    companion object {
+        fun withIsLessThanTwelveMetersVessel(
+            isLessThanTwelveMetersVessel: Boolean,
+        ): Specification<LogbookReportEntity> {
+            return Specification { root, _, criteriaBuilder ->
+                val vessel: Join<LogbookReportEntity, RiskFactorsEntity> = root.join("vessel")
+
+                if (isLessThanTwelveMetersVessel) {
+                    criteriaBuilder.lessThan(vessel.get("length"), 12)
+                } else {
+                    criteriaBuilder.greaterThanOrEqualTo(vessel.get("length"), 12)
+                }
+            }
+        }
+
+        fun withLastControlledAfter(lastControlledAfter: String): Specification<LogbookReportEntity> {
+            return Specification { root, _, criteriaBuilder ->
+                val vesselRiskFactor: Join<LogbookReportEntity, RiskFactorsEntity> = root.join("vesselRiskFactor")
+
+                criteriaBuilder.greaterThanOrEqualTo(
+                    vesselRiskFactor.get("lastControlDatetime"),
+                    ZonedDateTime.parse(lastControlledAfter, DateTimeFormatter.ISO_ZONED_DATE_TIME),
+                )
+            }
+        }
+
+        fun withLastControlledBefore(lastControlledBefore: String): Specification<LogbookReportEntity> {
+            return Specification { root, _, criteriaBuilder ->
+                val vesselRiskFactor: Join<LogbookReportEntity, RiskFactorsEntity> = root.join("vesselRiskFactor")
+
+                criteriaBuilder.lessThanOrEqualTo(
+                    vesselRiskFactor.get("lastControlDatetime"),
+                    ZonedDateTime.parse(lastControlledBefore, DateTimeFormatter.ISO_ZONED_DATE_TIME),
+                )
+            }
+        }
+    }
 
     override fun findAllPriorNotifications(filter: LogbookReportFilter?): List<PriorNotification> {
         val criteriaBuilder = entityManager.criteriaBuilder
@@ -45,26 +87,55 @@ class JpaLogbookReportRepository(
             ),
         )
 
-        filter?.let {
-            it.flagStates?.let { flagStates ->
-                predicates.add(logbookReportEntity.get<String>("flagState").`in`(flagStates))
-            }
+        val predictedArrivalDatetimeUtcAsTimestamp =
+            criteriaBuilder.function(
+                "jsonb_to_timestamp",
+                ZonedDateTime::class.java,
+                logbookReportEntity.get<String>("message"),
+                criteriaBuilder.literal("predictedArrivalDatetimeUtc"),
+            )
 
-            it.integratedAfter?.let { integratedAfter ->
+        filter?.let {
+            it.willArriveAfter?.let { willArriveAfter ->
                 predicates.add(
                     criteriaBuilder.greaterThanOrEqualTo(
-                        logbookReportEntity.get("integrationDateTime"),
-                        ZonedDateTime.parse(integratedAfter).withZoneSameInstant(UTC),
+                        predictedArrivalDatetimeUtcAsTimestamp,
+                        ZonedDateTime.parse(willArriveAfter).withZoneSameInstant(UTC),
                     ),
                 )
             }
 
-            it.integratedBefore?.let { integratedBefore ->
+            it.willArriveBefore?.let { willArriveBefore ->
                 predicates.add(
                     criteriaBuilder.lessThanOrEqualTo(
-                        logbookReportEntity.get("integrationDateTime"),
-                        ZonedDateTime.parse(integratedBefore).withZoneSameInstant(UTC),
+                        predictedArrivalDatetimeUtcAsTimestamp,
+                        ZonedDateTime.parse(willArriveBefore).withZoneSameInstant(UTC),
                     ),
+                )
+            }
+
+            it.flagStates?.let { flagStates ->
+                predicates.add(logbookReportEntity.get<String>("flagState").`in`(flagStates))
+            }
+
+            it.isLessThanTwelveMetersVessel?.let { isLessThanTwelveMetersVessel ->
+                predicates.add(
+                    withIsLessThanTwelveMetersVessel(isLessThanTwelveMetersVessel)
+                        .toPredicate(logbookReportEntity, criteriaQuery, criteriaBuilder),
+                )
+            }
+
+            it.lastControlledAfter?.let { lastControlledAfter ->
+                predicates.add(
+                    withLastControlledAfter(lastControlledAfter)
+                        .toPredicate(logbookReportEntity, criteriaQuery, criteriaBuilder),
+                )
+            }
+
+            it.lastControlledBefore?.let { lastControlledBefore ->
+                predicates.add(
+                    withLastControlledBefore(lastControlledBefore)
+                        .toPredicate(logbookReportEntity, criteriaQuery, criteriaBuilder),
                 )
             }
 
@@ -339,6 +410,10 @@ class JpaLogbookReportRepository(
 
             Pair(lanMessage.toLogbookMessage(mapper), pnoMessage?.toLogbookMessage(mapper))
         }
+    }
+
+    override fun findDistinctPriorNotificationTypes(): List<String> {
+        return dbERSRepository.findDistinctPriorNotificationType()
     }
 
     override fun updateLogbookMessagesAsProcessedByRule(

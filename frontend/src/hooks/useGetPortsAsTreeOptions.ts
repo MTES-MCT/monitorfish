@@ -1,7 +1,7 @@
 import { useGetPortsQuery } from '@api/port'
+import { isDefined, type TreeOption } from '@mtes-mct/monitor-ui'
+import { uniq } from 'lodash'
 import { useMemo } from 'react'
-
-import type { TreeOption } from '@mtes-mct/monitor-ui'
 
 /**
  * Fetches ports and returns them as tree options with their `locode` property as option value.
@@ -15,18 +15,18 @@ export function useGetPortsAsTreeOptions() {
         return undefined
       }
 
-      // TODO Add the department to the ports list API endpoint data.
-      const sortedPortCategories = ['Un département']
+      // TODO If `region` is null, the port won't appear. Check if that's the expected behavior.
+      const sortedUniquePortDepartments = uniq(ports.map(port => port.region).filter(isDefined)).sort()
 
-      return sortedPortCategories.map(category => ({
+      return sortedUniquePortDepartments.map(department => ({
         children: ports
-          // .filter(port => port.department.code === category)
+          .filter(port => port.region === department)
           .map(port => ({
             label: port.name,
             value: port.locode
           }))
           .sort((a, b) => a.label.localeCompare(b.label)),
-        label: category
+        label: department
       }))
     },
 

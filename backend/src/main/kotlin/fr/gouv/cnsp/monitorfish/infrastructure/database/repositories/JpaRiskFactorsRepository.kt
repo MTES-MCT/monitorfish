@@ -17,6 +17,7 @@ class JpaRiskFactorsRepository(
 ) : RiskFactorsRepository {
     private val logger: Logger = LoggerFactory.getLogger(JpaRiskFactorsRepository::class.java)
 
+    // TODO Why don't we use the `vesseId` (=> CFR) parameter since it's a safer unique value?
     @Cacheable(value = ["risk_factors"])
     override fun findVesselRiskFactors(internalReferenceNumber: String): VesselRiskFactor? {
         try {

@@ -185,12 +185,11 @@ interface DBLogbookReportRepository :
 
     @Query(
         """
-        SELECT *
+        SELECT DISTINCT jsonb_array_elements(value->'pnoTypes')->>'pnoTypeName' AS uniquePnoTypeName
         FROM logbook_reports
-        WHERE log_type = 'PNO'
-        ORDER BY operation_datetime_utc DESC
+        ORDER BY uniquePnoTypeName
         """,
         nativeQuery = true,
     )
-    fun findPNOMessages(): List<LogbookReportEntity>
+    fun findDistinctPriorNotificationType(): List<String>
 }

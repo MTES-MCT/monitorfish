@@ -15,7 +15,7 @@ export type FishingActivities = {
   logbookMessages: LogbookMessage[]
 }
 
-// TODO Replace this type with `LogbookMessage.LogbookMessage`.
+// TODO Replace with `LogbookMessage.LogbookMessage`.
 export type LogbookMessage = {
   acknowledge: {
     dateTime: string | null
@@ -65,6 +65,7 @@ export type PNOAndLANWeightToleranceAlertValue = {
   type: 'PNO_LAN_WEIGHT_TOLERANCE_ALERT'
 }
 
+// TODO Replace this type with `LogbookMessage.Catch`.
 export type LogbookCatch = {
   conversionFactor: number | null
   economicZone: string | null
@@ -81,6 +82,7 @@ export type LogbookCatch = {
   weight: number | null
 }
 
+// TODO Duplicate with `LogbookMessage.TripGear`?
 export type Gear = {
   dimensions: string
   gear: string

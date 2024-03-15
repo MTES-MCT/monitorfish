@@ -1,13 +1,12 @@
+import { Ellipsised } from '@components/Ellipsised'
 import { customDayjs, THEME, Tag, getOptionsFromLabelledEnum, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
-import { capitalizeFirstLetter } from '@utils/capitalizeFirstLetter'
 
 import { ButtonsGroupRow } from './ButtonsGroupRow'
-import { VesselRiskFactor } from './VesselRiskFactor'
 import { SeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
+import { VesselRiskFactor } from '../../../Vessel/components/VesselRiskFactor'
 import { PriorNotification } from '../../PriorNotification.types'
 
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
-import type { RiskFactor } from 'domain/entities/vessel/riskFactor/types'
 
 export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification.PriorNotification, any>> = [
   {
@@ -31,27 +30,23 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
     size: 50
   },
   {
-    accessorFn: row => row.logbookMessage?.message?.predictedArrivalDatetimeUtc,
+    accessorFn: row => row.expectedArrivalDate,
     cell: (info: CellContext<PriorNotification.PriorNotification, string | undefined>) => {
-      const predictedArrivalDatetimeUtc = info.getValue()
+      const expectedArrivalDate = info.getValue()
 
-      return predictedArrivalDatetimeUtc
-        ? customDayjs(predictedArrivalDatetimeUtc).utc().format('DD/MM/YYYY à HH[h]mm')
-        : '-'
+      return expectedArrivalDate ? customDayjs(expectedArrivalDate).utc().format('DD/MM/YYYY à HH[h]mm') : '-'
     },
     enableSorting: true,
     header: () => 'Arrivée estimée',
     id: 'estimatedTimeOfArrival',
-    size: 120
+    size: 130
   },
   {
-    accessorFn: row => row.logbookMessage?.message?.predictedLandingDatetimeUtc,
+    accessorFn: row => row.expectedLandingDate,
     cell: (info: CellContext<PriorNotification.PriorNotification, string | undefined>) => {
-      const predictedLandingDatetimeUtc = info.getValue()
+      const expectedLandingDate = info.getValue()
 
-      return predictedLandingDatetimeUtc
-        ? customDayjs(predictedLandingDatetimeUtc).utc().format('DD/MM/YYYY à HH[h]mm')
-        : '-'
+      return expectedLandingDate ? customDayjs(expectedLandingDate).utc().format('DD/MM/YYYY à HH[h]mm') : '-'
     },
     enableSorting: true,
     header: () => 'Débarque prévue',
@@ -59,8 +54,10 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
     size: 120
   },
   {
-    accessorFn: row => (row.port ? `${row.port.name} (${row.port.locode})` : undefined),
-    cell: (info: CellContext<PriorNotification.PriorNotification, string | undefined>) => info.getValue() ?? '-',
+    accessorFn: row => (!!row.portLocode && !!row.portName ? `${row.portName} (${row.portLocode})` : '-'),
+    cell: (info: CellContext<PriorNotification.PriorNotification, string>) => (
+      <Ellipsised>{info.getValue()}</Ellipsised>
+    ),
     enableSorting: true,
     header: () => "Port d'arrivée",
     id: 'port',
@@ -68,43 +65,57 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
   },
   {
     accessorFn: row => row.vesselRiskFactor,
-    cell: (info: CellContext<PriorNotification.PriorNotification, RiskFactor | undefined>) => (
-      <VesselRiskFactor vesselRiskFactor={info.getValue()} />
-    ),
+    cell: (info: CellContext<PriorNotification.PriorNotification, number | undefined>) => {
+      const priorNotification = info.row.original
+
+      return (
+        <VesselRiskFactor
+          // TODO Check if making it always `true` is a valid assumption.
+          hasSegments
+          isVesselUnderCharter={priorNotification.isVesselUnderCharter}
+          vesselLastControlDate={priorNotification.vesselLastControlDate}
+          vesselRiskFactor={priorNotification.vesselRiskFactor}
+          vesselRiskFactorDetectability={priorNotification.vesselRiskFactorDetectability}
+          vesselRiskFactorImpact={priorNotification.vesselRiskFactorImpact}
+          vesselRiskFactorProbability={priorNotification.vesselRiskFactorProbability}
+        />
+      )
+    },
     enableSorting: true,
     header: () => 'Note',
     id: 'riskFactor.riskFactor',
     size: 50
   },
   {
-    accessorFn: row => row.vessel?.vesselName,
-    cell: (info: CellContext<PriorNotification.PriorNotification, string | undefined>) => info.getValue() ?? '-',
+    accessorFn: row => row.vesselName ?? '-',
+    cell: (info: CellContext<PriorNotification.PriorNotification, string>) => (
+      <Ellipsised>{info.getValue()}</Ellipsised>
+    ),
     enableSorting: true,
     header: () => 'Nom',
     id: 'vessel.vesselName',
     size: 160
   },
   {
-    accessorFn: row => row.tripSegments.map(tripSegment => tripSegment.segment).join('/'),
-    cell: (info: CellContext<PriorNotification.PriorNotification, string>) => {
-      const segmentsAsText = info.getValue()
-
-      return segmentsAsText.length > 0 ? segmentsAsText : '-'
-    },
+    accessorFn: row =>
+      row.tripSegments.length > 0 ? row.tripSegments.map(tripSegment => tripSegment.code).join('/') : '-',
+    cell: (info: CellContext<PriorNotification.PriorNotification, string>) => (
+      <Ellipsised>{info.getValue()}</Ellipsised>
+    ),
     enableSorting: true,
     header: () => 'Segments',
     id: 'fleetSegments',
     size: 130
   },
   {
-    // accessorFn: row => row.types.map(type => PriorNotification.PRIOR_NOTIFICATION_TYPE_LABEL[type]).join(', '),
-    accessorFn: () => PriorNotification.PRIOR_NOTIFICATION_TYPE_LABEL.NOT_APPLICABLE,
-    cell: (info: CellContext<PriorNotification.PriorNotification, string>) =>
-      capitalizeFirstLetter(info.getValue() as string),
+    accessorFn: row => (row.types.length > 0 ? row.types.map(({ name }) => name).join(', ') : '-'),
+    cell: (info: CellContext<PriorNotification.PriorNotification, string>) => (
+      <Ellipsised>{info.getValue()}</Ellipsised>
+    ),
     enableSorting: true,
     header: () => 'Types de préavis',
     id: 'types',
-    size: 170
+    size: 180
   },
   {
     accessorFn: row => row.reportingsCount,
@@ -130,10 +141,6 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
     size: 56
   }
 ]
-
-export const PRIOR_NOTIFICATION_TYPES_AS_OPTIONS = getOptionsFromLabelledEnum(
-  PriorNotification.PRIOR_NOTIFICATION_TYPE_LABEL
-)
 
 /* eslint-disable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
 export const SUB_MENU_LABEL: Record<SeaFrontGroup | 'EXTRA', string> = {
@@ -166,7 +173,7 @@ export const LAST_CONTROL_PERIOD_LABEL: Record<LastControlPeriod, string> = {
 }
 export const LAST_CONTROL_PERIODS_AS_OPTIONS = getOptionsFromLabelledEnum(LAST_CONTROL_PERIOD_LABEL)
 
-export enum ReceivedAtPeriod {
+export enum ExpectedArrivalPeriod {
   AFTER_TWO_HOURS_AGO = 'AFTER_TWO_HOURS_AGO',
   AFTER_FOUR_HOURS_AGO = 'AFTER_FOUR_HOURS_AGO',
   AFTER_EIGTH_HOURS_AGO = 'AFTER_EIGTH_HOURS_AGO',
@@ -174,7 +181,7 @@ export enum ReceivedAtPeriod {
   AFTER_ONE_DAY_AGO = 'AFTER_ONE_DAY_AGO',
   CUSTOM = 'CUSTOM'
 }
-export const RECEIVED_AT_PERIOD_LABEL: Record<ReceivedAtPeriod, string> = {
+export const EXPECTED_ARRIVAL_PERIOD_LABEL: Record<ExpectedArrivalPeriod, string> = {
   AFTER_TWO_HOURS_AGO: 'Arrivée estimée dans moins de 2h',
   AFTER_FOUR_HOURS_AGO: 'Arrivée estimée dans moins de 4h',
   AFTER_EIGTH_HOURS_AGO: 'Arrivée estimée dans moins de 8h',
@@ -182,5 +189,5 @@ export const RECEIVED_AT_PERIOD_LABEL: Record<ReceivedAtPeriod, string> = {
   AFTER_ONE_DAY_AGO: 'Arrivée estimée dans moins de 24h',
   CUSTOM: 'Période spécifique'
 }
-export const RECEIVED_AT_PERIODS_AS_OPTIONS = getOptionsFromLabelledEnum(RECEIVED_AT_PERIOD_LABEL)
+export const EXPECTED_ARRIVAL_PERIODS_AS_OPTIONS = getOptionsFromLabelledEnum(EXPECTED_ARRIVAL_PERIOD_LABEL)
 /* eslint-enable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */

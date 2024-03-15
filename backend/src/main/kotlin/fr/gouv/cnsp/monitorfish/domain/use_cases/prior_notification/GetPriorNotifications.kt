@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
-import fr.gouv.cnsp.monitorfish.infrastructure.database.filters.LogbookReportFilter
+import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.*
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory

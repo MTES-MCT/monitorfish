@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.infrastructure.database.filters
+package fr.gouv.cnsp.monitorfish.domain.filters
 
 data class LogbookReportFilter(
     val flagStates: List<String>? = null,

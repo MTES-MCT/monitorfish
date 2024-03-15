@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
-import fr.gouv.cnsp.monitorfish.infrastructure.database.filters.LogbookReportFilter
+import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
 import java.time.ZonedDateTime
 
 interface LogbookReportRepository {

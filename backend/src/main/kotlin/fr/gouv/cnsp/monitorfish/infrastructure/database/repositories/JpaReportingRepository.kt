@@ -7,9 +7,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
-import fr.gouv.cnsp.monitorfish.infrastructure.database.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBReportingRepository
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional

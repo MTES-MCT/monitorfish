@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import com.neovisionaries.i18n.CountryCode
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
@@ -53,7 +54,7 @@ class GetAllCurrentReportingsUTests {
                 isDeleted = false,
                 isArchived = false,
             )
-        given(reportingRepository.findAll()).willReturn(listOf(currentReporting))
+        given(reportingRepository.findAll(any())).willReturn(listOf(currentReporting))
         given(
             lastPositionRepository.findUnderCharterForVessel(
                 eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER),

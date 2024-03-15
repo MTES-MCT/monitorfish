@@ -264,16 +264,57 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAll Should return current reportings with 'isArchived = false, isDeleted = false' filter`() {
-        // When
-        val reportingFilter = ReportingFilter(isArchived = false, isDeleted = false)
-        val reporting = jpaReportingRepository.findAll(reportingFilter)
+    fun `findAll Should return non-archived reportings`() {
+        val filter = ReportingFilter(isArchived = false)
 
-        // Then
-        assertThat(reporting).hasSize(5)
-        assertThat(reporting.first().internalReferenceNumber).isEqualTo("ABC000180832")
-        assertThat(reporting.first().isArchived).isEqualTo(false)
-        assertThat(reporting.first().isDeleted).isEqualTo(false)
+        val result = jpaReportingRepository.findAll(filter).sortedBy { it.id }
+
+        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(result.none { it.isArchived }).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
+    fun `findAll Should return non-deleted reportings`() {
+        val filter = ReportingFilter(isDeleted = false)
+
+        val result = jpaReportingRepository.findAll(filter).sortedBy { it.id }
+
+        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(result.none { it.isDeleted }).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
+    fun `findAll Should return ALERT & INFRACTION_SUSPICION reportings`() {
+        val filter = ReportingFilter(types = listOf(ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION))
+
+        val result = jpaReportingRepository.findAll(filter).sortedBy { it.id }
+
+        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(
+            result.all { listOf(ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION).contains(it.type) },
+        ).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
+    fun `findAll Should return non-archived, non-deleted, ALERT & INFRACTION_SUSPICION reportings`() {
+        val filter =
+            ReportingFilter(
+                isArchived = false,
+                isDeleted = false,
+                types = listOf(ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION),
+            )
+
+        val result = jpaReportingRepository.findAll(filter).sortedBy { it.id }
+
+        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(result.none { it.isArchived }).isEqualTo(true)
+        assertThat(result.none { it.isDeleted }).isEqualTo(true)
+        assertThat(
+            result.all { listOf(ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION).contains(it.type) },
+        ).isEqualTo(true)
     }
 
     @Test

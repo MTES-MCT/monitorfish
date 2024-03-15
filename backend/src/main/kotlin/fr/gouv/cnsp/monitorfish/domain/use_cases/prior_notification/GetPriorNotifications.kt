@@ -39,7 +39,7 @@ class GetPriorNotifications(
                         }
                     }
 
-                val vessel = vesselRepository.findVessel(priorNotification.vesselId)
+                val vessel = vesselRepository.findVesselById(priorNotification.vesselId)
 
                 val reportingsCount =
                     vessel?.id?.let { vesselId ->

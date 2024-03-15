@@ -33,35 +33,39 @@ class GetVessel(
         toDateTime: ZonedDateTime? = null,
     ): Pair<Boolean, VesselInformation> {
         return coroutineScope {
-            val (vesselTrackHasBeenModified, positions) = GetVesselPositions(
-                positionRepository,
-                logbookReportRepository,
-            ).execute(
-                internalReferenceNumber = internalReferenceNumber,
-                externalReferenceNumber = externalReferenceNumber,
-                ircs = ircs,
-                trackDepth = trackDepth,
-                vesselIdentifier = vesselIdentifier,
-                fromDateTime = fromDateTime,
-                toDateTime = toDateTime,
-            )
+            val (vesselTrackHasBeenModified, positions) =
+                GetVesselPositions(
+                    positionRepository,
+                    logbookReportRepository,
+                ).execute(
+                    internalReferenceNumber = internalReferenceNumber,
+                    externalReferenceNumber = externalReferenceNumber,
+                    ircs = ircs,
+                    trackDepth = trackDepth,
+                    vesselIdentifier = vesselIdentifier,
+                    fromDateTime = fromDateTime,
+                    toDateTime = toDateTime,
+                )
 
-            val vesselFuture = async {
-                vesselId?.let { vesselRepository.findVessel(vesselId) }
-            }
+            val vesselFuture =
+                async {
+                    vesselId?.let { vesselRepository.findVesselById(vesselId) }
+                }
 
-            val vesselRiskFactorsFuture = async {
-                riskFactorsRepository.findVesselRiskFactors(internalReferenceNumber)
-            }
+            val vesselRiskFactorsFuture =
+                async {
+                    riskFactorsRepository.findVesselRiskFactors(internalReferenceNumber)
+                }
 
             val vessel = vesselFuture.await()
-            val vesselWithBeaconNumber = vessel?.id?.let { vesselId ->
-                val beaconNumber = beaconRepository.findBeaconNumberByVesselId(vesselId)
+            val vesselWithBeaconNumber =
+                vessel?.id?.let { vesselId ->
+                    val beaconNumber = beaconRepository.findBeaconNumberByVesselId(vesselId)
 
-                beaconNumber?.let {
-                    vessel.copy(beaconNumber = it)
-                }
-            } ?: vessel
+                    beaconNumber?.let {
+                        vessel.copy(beaconNumber = it)
+                    }
+                } ?: vessel
 
             Pair(
                 vesselTrackHasBeenModified,

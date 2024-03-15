@@ -53,7 +53,7 @@ class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : 
         return dbVesselRepository.findAllByIds(ids).map { it.toVessel() }
     }
 
-    override fun findVessel(vesselId: Int): Vessel? {
+    override fun findVesselById(vesselId: Int): Vessel? {
         return try {
             dbVesselRepository.findById(vesselId).get().toVessel()
         } catch (e: NoSuchElementException) {

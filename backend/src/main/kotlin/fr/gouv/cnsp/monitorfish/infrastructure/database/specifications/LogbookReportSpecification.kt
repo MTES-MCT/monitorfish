@@ -8,7 +8,7 @@ import org.springframework.data.jpa.domain.Specification
 class LogbookReportSpecification {
     companion object {
         fun withVesselLengthGreaterThan(minLength: Double): Specification<LogbookReportEntity> {
-            return Specification { root, query, criteriaBuilder ->
+            return Specification { root, _, criteriaBuilder ->
                 val vesselJoin: Join<LogbookReportEntity, VesselEntity> = root.join("vessel")
                 criteriaBuilder.greaterThan(vesselJoin.get<Double>("length"), minLength)
             }

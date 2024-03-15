@@ -123,10 +123,10 @@ export function getApiFilterFromListFilter(listFilter: ListFilter): LogbookMessa
   }
 }
 
-export function getLocalFilterFromListFilter(listFilterValues: ListFilter) {
+export function getLocalFilterFromListFilter(listFilter: ListFilter) {
   const filters: Filter<PriorNotification.PriorNotification>[] = []
 
-  const hasOneOrMoreReportings = getMaybeBooleanFromRichBoolean(listFilterValues.hasOneOrMoreReportings)
+  const hasOneOrMoreReportings = getMaybeBooleanFromRichBoolean(listFilter.hasOneOrMoreReportings)
   if (hasOneOrMoreReportings !== undefined) {
     const filter: Filter<PriorNotification.PriorNotification> = hasOneOrMoreReportings
       ? priorNotifications => priorNotifications.filter(priorNotification => priorNotification.reportingsCount > 0)
@@ -135,13 +135,13 @@ export function getLocalFilterFromListFilter(listFilterValues: ListFilter) {
     filters.push(filter)
   }
 
-  if (!!listFilterValues.seaFrontGroup && listFilterValues.seaFrontGroup !== SeaFrontGroup.ALL) {
+  if (!!listFilter.seaFrontGroup && listFilter.seaFrontGroup !== SeaFrontGroup.ALL) {
     const filter: Filter<PriorNotification.PriorNotification> =
-      listFilterValues.seaFrontGroup === 'EXTRA'
+      listFilter.seaFrontGroup === 'EXTRA'
         ? priorNotifications => priorNotifications.filter(priorNotification => !priorNotification.seaFront)
         : priorNotifications =>
             priorNotifications.filter(priorNotification =>
-              SEA_FRONT_GROUP_SEA_FRONTS[listFilterValues.seaFrontGroup].includes(priorNotification.seaFront)
+              SEA_FRONT_GROUP_SEA_FRONTS[listFilter.seaFrontGroup].includes(priorNotification.seaFront)
             )
 
     filters.push(filter)

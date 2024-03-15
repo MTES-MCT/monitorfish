@@ -4,7 +4,14 @@ import { promises as fs } from 'fs'
 import { join } from 'path'
 import stripJsonComments from 'strip-json-comments'
 
-const DIRECTORY_PATH = join(import.meta.url, '../../../backend/src/main/resources/db/testdata').replace('file:', '')
+const SOURCE_DIRECTORY_PATH = join(import.meta.url, '../../../backend/src/main/resources/db/testdata/json').replace(
+  'file:',
+  ''
+)
+const TARGET_DIRECTORY_PATH = join(import.meta.url, '../../../backend/src/main/resources/db/testdata').replace(
+  'file:',
+  ''
+)
 
 function setJsonbSqlPropsToNull(obj) {
   const processObject = currentObj => {
@@ -92,10 +99,10 @@ console.info(`
   ##     ######  ######      ##             ## ###   ##   ##     ##    ##   ##
 `)
 
-const jsonFiles = (await fs.readdir(DIRECTORY_PATH)).filter(file => file.endsWith('.jsonc'))
+const jsonFiles = (await fs.readdir(SOURCE_DIRECTORY_PATH)).filter(file => file.endsWith('.jsonc'))
 for (const file of jsonFiles) {
-  const jsonFilePath = join(DIRECTORY_PATH, file)
-  const outputSqlFilePath = jsonFilePath.replace('.jsonc', '.sql')
+  const jsonFilePath = join(SOURCE_DIRECTORY_PATH, file)
+  const sqlFilePath = join(TARGET_DIRECTORY_PATH, file.replace('.jsonc', '.sql'))
   const jsonSource = await fs.readFile(jsonFilePath, 'utf8')
   const jsonSourceAsObject = JSON.parse(stripJsonComments(jsonSource))
 
@@ -119,8 +126,8 @@ for (const file of jsonFiles) {
     '',
     ...sqlStatementBlocks
   ].join('\n')
-  await fs.writeFile(outputSqlFilePath, sqlSource, 'utf8')
-  console.info(`[Test Data Generator] SQL Test Data file generated at ${outputSqlFilePath}`)
+  await fs.writeFile(sqlFilePath, sqlSource, 'utf8')
+  console.info(`[Test Data Generator] SQL Test Data file generated at ${sqlFilePath}`)
 }
 
 console.info()

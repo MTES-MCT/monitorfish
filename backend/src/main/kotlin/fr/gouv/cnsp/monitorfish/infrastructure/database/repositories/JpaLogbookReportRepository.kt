@@ -150,6 +150,7 @@ class JpaLogbookReportRepository(
                 )
             }
 
+            // TODO Should we use `vesselName` (history) or `vessel.name` (up-to-date)?
             it.searchQuery?.let { searchQuery ->
                 val normalizedPath =
                     criteriaBuilder.lower(

@@ -8,7 +8,6 @@ import 'cypress-plugin-snapshots/commands'
 import './commands'
 import './commands/dragTo'
 import './commands/loadPath'
-import { runBeforeEachHook } from './utils'
 
 declare global {
   namespace Cypress {
@@ -88,16 +87,6 @@ Cypress.on('uncaught:exception', err => {
   }
 
   return undefined
-})
-
-before(() => {
-  runBeforeEachHook()
-
-  if (process.env.CI) {
-    // Warm up the app
-    cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait(60000)
-  }
 })
 
 // Run before each spec

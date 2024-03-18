@@ -70,7 +70,9 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
 
             <FormikDatePicker
               baseContainer={newWindowContainerRef.current}
+              isErrorMessageHidden
               isLight
+              isRequired
               isStringDate
               label="Date et heure du contrôle"
               name="actionDatetimeUtc"

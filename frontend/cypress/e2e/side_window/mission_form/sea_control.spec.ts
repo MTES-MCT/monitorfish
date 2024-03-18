@@ -378,20 +378,16 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Form Live Validation
 
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('exist')
-    cy.contains('Veuillez indiquer le navire contrôlé.').should('exist')
-    cy.contains('Veuillez indiquer votre trigramme dans "Saisi par".').should('exist')
 
     getCloseButton().should('be.disabled')
 
     // Navire
     cy.get('input[placeholder="Rechercher un navire..."]').type('mal')
     cy.contains('mark', 'MAL').click().wait(500)
-    cy.contains('Veuillez indiquer le navire contrôlé.').should('not.exist')
 
     // Saisi par
     cy.fill('Saisi par', 'Gaumont')
     cy.wait(500)
-    cy.contains('Veuillez indiquer votre trigramme dans "Saisi par".').should('not.exist')
 
     // Mission is now valid for saving (but not for closure)
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
@@ -404,16 +400,6 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Form Closure Validation
 
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('exist')
-    cy.contains('Veuillez indiquer si le navire émet un signal VMS.').should('exist')
-    cy.contains('Veuillez indiquer si le navire émet un signal AIS.').should('exist')
-    cy.contains('Veuillez indiquer si le journal de bord correspond à l’activité du navire.').should('exist')
-    cy.contains('Veuillez indiquer si les licences correspondent à l’activité du navire.').should('exist')
-    cy.contains('Veuillez indiquer les engins à bord.').should('exist')
-    cy.contains('Veuillez indiquer si le poids des espèces a été contrôlé.').should('exist')
-    cy.contains('Veuillez indiquer si la taille des espèces a été contrôlée.').should('exist')
-    cy.contains('Veuillez indiquer si les espèces soumises à plan sont séparées.').should('exist')
-    cy.contains('Veuillez indiquer si le navire est ciblé par le CNSP.').should('exist')
-    cy.contains('Veuillez indiquer votre trigramme dans "Clôturé par".').should('exist')
 
     cy.contains('Rouvrir la mission').should('not.exist')
 
@@ -423,39 +409,21 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Déclarations journal de pêche conformes à l’activité du navire', 'Non concerné')
     cy.fill('Autorisations de pêche conformes à l’activité du navire (zone, engins, espèces)', 'Non')
 
-    cy.contains('Veuillez indiquer si le navire émet un signal VMS.').should('not.exist')
-    cy.contains('Veuillez indiquer si le navire émet un signal AIS.').should('not.exist')
-    cy.contains('Veuillez indiquer si le journal de bord correspond à l’activité du navire.').should('not.exist')
-    cy.contains('Veuillez indiquer si les licences correspondent à l’activité du navire.').should('not.exist')
-
     // Engins à bord
     cy.fill('Ajouter un engin', 'MIS')
-
-    cy.contains('Veuillez indiquer les engins à bord.').should('not.exist')
-    cy.contains("Veuillez indiquer si l'engin a été contrôlé.").should('exist')
-
     cy.fill('Engin contrôlé', 'Oui')
-
-    cy.contains("Veuillez indiquer si l'engin a été contrôlé.").should('not.exist')
 
     // Espèces à bord
     cy.fill('Poids des espèces vérifiés', 'Oui')
     cy.fill('Taille des espèces vérifiées', 'Non')
     cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
 
-    cy.contains('Veuillez indiquer si le poids des espèces a été contrôlé.').should('not.exist')
-    cy.contains('Veuillez indiquer si la taille des espèces a été contrôlée.').should('not.exist')
-    cy.contains('Veuillez indiquer si les espèces soumises à plan sont séparées.').should('not.exist')
-
     // Qualité du contrôle
     cy.fill('Navire ciblé par le CNSP', 'Non')
-
-    cy.contains('Veuillez indiquer si le navire est ciblé par le CNSP.').should('not.exist')
 
     // Clôturé par
     // TODO Handle multiple inputs with same label via an `index` in monitor-ui.
     cy.get('[name="closedBy"]').eq(1).type('Alice')
-    cy.contains('Veuillez indiquer votre trigramme dans "Clôturé par".').should('not.exist')
 
     // Mission is now valid for closure
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')

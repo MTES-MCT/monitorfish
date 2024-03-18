@@ -89,6 +89,7 @@ function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProp
                 <FormikMultiCheckbox
                   isErrorMessageHidden
                   isInline
+                  isRequired
                   label="Types de mission"
                   name="missionTypes"
                   options={MISSION_TYPES_AS_OPTIONS}
@@ -115,8 +116,8 @@ function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProp
               </RelatedFieldGroupWrapper>
 
               <InlineFieldGroupWrapper>
-                <FormikTextInput label="Ouvert par" name="openBy" />
-                <FormikTextInput label="Clôturé par" name="closedBy" />
+                <FormikTextInput isRequired label="Ouvert par" name="openBy" />
+                <FormikTextInput isRequired label="Clôturé par" name="closedBy" />
               </InlineFieldGroupWrapper>
             </CustomFormBodyInnerWrapper>
           </FormBody>

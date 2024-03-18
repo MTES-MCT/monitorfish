@@ -146,15 +146,11 @@ context('Side Window > Mission Form > Air Surveillance', () => {
     // -------------------------------------------------------------------------
     // Form Live Validation
 
-    cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('exist')
-    cy.contains('Veuillez indiquer votre trigramme dans "Saisi par".').should('exist')
-
     getCloseButton().should('be.disabled')
 
     // Saisi par
     cy.fill('Saisi par', 'Gaumont')
     cy.wait(500)
-    cy.contains('Veuillez indiquer votre trigramme dans "Saisi par".').should('not.exist')
 
     // Mission is now valid for saving (but not for closure)
     cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('not.exist')
@@ -166,13 +162,9 @@ context('Side Window > Mission Form > Air Surveillance', () => {
     // -------------------------------------------------------------------------
     // Form Closure Validation
 
-    cy.contains('Veuillez compléter les champs manquants dans cette action de contrôle.').should('exist')
-    cy.contains('Veuillez indiquer votre trigramme dans "Clôturé par".').should('exist')
-
     // Clôturé par
     // TODO Handle multiple inputs with same label via an `index` in monitor-ui.
     cy.get('[name="closedBy"]').eq(1).type('Alice')
-    cy.contains('Veuillez indiquer votre trigramme dans "Clôturé par".').should('not.exist')
     cy.contains('Rouvrir la mission').should('not.exist')
 
     // Mission is now valid for closure

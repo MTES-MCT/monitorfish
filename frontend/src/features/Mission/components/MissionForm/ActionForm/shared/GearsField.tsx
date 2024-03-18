@@ -1,5 +1,6 @@
 import { useGetGearsQuery } from '@api/gear'
 import { BOOLEAN_AS_OPTIONS } from '@constants/index'
+import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
 import {
   FieldError,
   FormikCheckbox,
@@ -106,7 +107,9 @@ export function GearsField() {
                 >{`${gearOnboard.gearCode} - ${gearOnboard.gearName}`}</SingleTag>
 
                 <FormikMultiRadio
+                  isErrorMessageHidden
                   isInline
+                  isRequired
                   label="Engin contrôlé"
                   name={`gearOnboard[${index}].gearWasControlled`}
                   options={BOOLEAN_AS_OPTIONS}
@@ -154,6 +157,9 @@ export function GearsField() {
       )}
       <Select
         key={String(input.value?.length)}
+        error={typeof meta.error === 'string' ? meta.error : undefined}
+        isErrorMessageHidden
+        isRequired
         label="Ajouter un engin"
         name="newGear"
         onChange={add}
@@ -162,7 +168,9 @@ export function GearsField() {
         searchable
       />
 
-      {typeof meta.error === 'string' && <StyledFieldError>{meta.error}</StyledFieldError>}
+      {typeof meta.error === 'string' && meta.error !== HIDDEN_ERROR && (
+        <StyledFieldError>{meta.error}</StyledFieldError>
+      )}
     </FieldsetGroup>
   )
 }

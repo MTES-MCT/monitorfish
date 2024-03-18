@@ -58,12 +58,13 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         // When
         val updatedFleetSegment = jpaFleetSegmentRepository.update(
             "ATL01",
-            CreateOrUpdateFleetSegmentFields("NEXT_ATL01"),
+            CreateOrUpdateFleetSegmentFields("NEXT_ATL01", "A segment name"),
             currentYear,
         )
 
         // Then
         assertThat(updatedFleetSegment.segment).isEqualTo("NEXT_ATL01")
+        assertThat(updatedFleetSegment.segmentName).isEqualTo("A segment name")
     }
 
     @Test

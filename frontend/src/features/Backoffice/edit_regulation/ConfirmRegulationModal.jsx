@@ -1,9 +1,9 @@
 import React from 'react'
-import { batch, useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { setIsConfirmModalOpen, setRegulationModified, setSaveOrUpdateRegulation } from '../slice'
+import { setIsConfirmModalOpen, setSaveOrUpdateRegulation } from '../slice'
 import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
 import { FooterButton } from '../../commonStyles/Backoffice.style'
 import CloseIconSVG from '../../icons/Croix_grise_clair.svg?react'
@@ -13,16 +13,12 @@ const ConfirmRegulationModal = ({ goBackofficeHome }) => {
   const { isConfirmModalOpen } = useSelector(state => state.regulation)
 
   const save = () => {
-    batch(() => {
-      dispatch(setIsConfirmModalOpen(false))
-      dispatch(setSaveOrUpdateRegulation(true))
-      dispatch(setRegulationModified(false))
-    })
+    dispatch(setIsConfirmModalOpen(false))
+    dispatch(setSaveOrUpdateRegulation(true))
   }
 
   const close = () => {
     dispatch(setIsConfirmModalOpen(false))
-    dispatch(setRegulationModified(false))
   }
 
   return (

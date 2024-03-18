@@ -152,7 +152,8 @@ context('Side Window > Mission Form > Air Surveillance', () => {
     getCloseButton().should('be.disabled')
 
     // Saisi par
-    cy.fill('Saisi par', 'Gaumont').wait(500)
+    cy.fill('Saisi par', 'Gaumont')
+    cy.wait(500)
     cy.contains('Veuillez indiquer votre trigramme dans "Saisi par".').should('not.exist')
 
     // Mission is now valid for saving (but not for closure)

@@ -1,15 +1,14 @@
+import { Backoffice } from '@features/Backoffice'
+import { EditRegulation } from '@features/Backoffice/edit_regulation/EditRegulation'
+import { ControlObjectiveTable } from '@features/ControlObjective/components/ControlObjectiveTable'
+import { FleetSegmentsBackoffice } from '@features/FleetSegment/components/FleetSegmentsBackoffice'
+import { MainWindow } from '@features/MainWindow'
+import { SideWindow } from '@features/SideWindow'
+import { BackofficePage } from '@pages/BackofficePage'
+import { HomePage } from '@pages/HomePage'
+import { LightBackoffice } from '@pages/LightBackoffice'
+import { LightHomePage } from '@pages/LightHomePage'
 import { createBrowserRouter, Navigate } from 'react-router-dom'
-
-import { Backoffice } from './features/Backoffice'
-import { EditRegulation } from './features/Backoffice/edit_regulation/EditRegulation'
-import { FleetSegments } from './features/Backoffice/fleet_segments/FleetSegments'
-import { ControlObjectiveTable } from './features/ControlObjective/components/ControlObjectiveTable'
-import { MainWindow } from './features/MainWindow'
-import { SideWindow } from './features/SideWindow'
-import { BackofficePage } from './pages/BackofficePage'
-import { HomePage } from './pages/HomePage'
-import { LightBackoffice } from './pages/LightBackoffice'
-import { LightHomePage } from './pages/LightHomePage'
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 export const routes = [
@@ -63,7 +62,7 @@ export const routes = [
       },
       {
         path: 'fleet_segments',
-        element: <FleetSegments />
+        element: <FleetSegmentsBackoffice />
       }
     ]
   },

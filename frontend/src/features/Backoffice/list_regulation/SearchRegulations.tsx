@@ -13,14 +13,13 @@ import SearchIconSVG from '../../icons/Loupe.svg?react'
 import { closeRegulatoryZoneMetadataPanel } from '../../Regulation/slice'
 import { searchByLawType, searchResultIncludeZone } from '../../Regulation/utils'
 
-export function SearchRegulations(props) {
+export function SearchRegulations({ regulatoryZoneListByRegTerritory, setFoundRegulatoryZonesByRegTerritory }) {
   const dispatch = useBackofficeAppDispatch()
-  const { regulatoryZoneListByRegTerritory, setFoundRegulatoryZonesByRegTerritory } = props
 
   const searchInput = useRef<HTMLInputElement | null>(null)
   const [searchText, setSearchText] = useState('')
 
-  const { regulatoryZoneMetadata } = useBackofficeAppSelector(state => state.regulatory)
+  const regulatoryZoneMetadata = useBackofficeAppSelector(state => state.regulatory.regulatoryZoneMetadata)
 
   useEffect(() => {
     searchRegulatoryZone()

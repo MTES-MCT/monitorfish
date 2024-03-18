@@ -30,10 +30,6 @@ class JpaFleetSegmentRepository(
     @Transactional
     override fun update(segment: String, fields: CreateOrUpdateFleetSegmentFields, year: Int): FleetSegment {
         try {
-            fields.segment?.let {
-                dbFleetSegmentRepository.updateSegment(segment, it, year)
-            }
-
             fields.segmentName?.let {
                 dbFleetSegmentRepository.updateSegmentName(segment, it, year)
             }
@@ -56,6 +52,10 @@ class JpaFleetSegmentRepository(
 
             fields.impactRiskFactor?.let {
                 dbFleetSegmentRepository.updateImpactRiskFactor(segment, it, year)
+            }
+
+            fields.segment?.let {
+                dbFleetSegmentRepository.updateSegment(segment, it, year)
             }
 
             return fields.segment?.let {

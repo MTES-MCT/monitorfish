@@ -1,5 +1,5 @@
-import { useGetFleetSegmentsQuery } from '@api/fleetSegment'
 import { useGetPortsQuery } from '@api/port'
+import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { MissionAction } from 'domain/types/missionAction'

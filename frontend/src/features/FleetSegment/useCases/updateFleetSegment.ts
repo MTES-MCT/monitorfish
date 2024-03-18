@@ -1,7 +1,8 @@
-import { updateFleetSegmentFromAPI } from '../../../api/fleetSegment'
-import { setError } from '../../shared_slices/Global'
+import { updateFleetSegmentFromAPI } from '@features/FleetSegment/apis'
 
-import type { FleetSegment, UpdateFleetSegment } from '../../types/fleetSegment'
+import { setError } from '../../../domain/shared_slices/Global'
+
+import type { FleetSegment, UpdateFleetSegment } from '../types'
 
 /**
  * Update a fleet segment
@@ -35,7 +36,7 @@ function updateFleetSegments(
   updatedFleetSegment: FleetSegment
 ): FleetSegment[] {
   return previousFleetSegments
-    .filter(_segment => _segment.segment !== segment)
+    .filter(existingSegment => existingSegment.segment !== segment)
     .concat(updatedFleetSegment)
     .sort((a, b) => a.segment.localeCompare(b.segment))
 }

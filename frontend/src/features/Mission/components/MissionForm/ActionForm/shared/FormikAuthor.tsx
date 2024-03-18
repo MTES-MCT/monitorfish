@@ -1,3 +1,4 @@
+import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
 import { FieldError, FormikTextInput } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import styled from 'styled-components'
@@ -12,10 +13,10 @@ export function FormikAuthor() {
   return (
     <Wrapper>
       <div>
-        <FormikTextInput isErrorMessageHidden isLight label="Saisi par" name="userTrigram" />
+        <FormikTextInput isErrorMessageHidden isLight isRequired label="Saisi par" name="userTrigram" />
         <FormikTextInput isErrorMessageHidden isLight label="Clôturé par" name="closedBy" />
       </div>
-      {error && <FieldError>{error}</FieldError>}
+      {error && error !== HIDDEN_ERROR && <FieldError>{error}</FieldError>}
     </Wrapper>
   )
 }

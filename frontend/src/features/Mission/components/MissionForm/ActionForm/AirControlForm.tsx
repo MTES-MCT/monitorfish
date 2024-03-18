@@ -57,7 +57,9 @@ export function AirControlForm({ initialValues, onChange }: AirControlFormProps)
 
             <FormikDatePicker
               baseContainer={newWindowContainerRef.current}
+              isErrorMessageHidden
               isLight
+              isRequired
               isStringDate
               label="Date et heure du contrôle"
               name="actionDatetimeUtc"

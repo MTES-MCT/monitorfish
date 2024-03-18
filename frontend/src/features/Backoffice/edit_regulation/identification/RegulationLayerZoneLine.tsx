@@ -24,7 +24,7 @@ export function RegulationLayerZoneLine() {
       <Label>Nom de la zone</Label>
       <StyledTextInput
         data-cy={`input-${zone}`}
-        error={zone ? undefined : 'Thématique requise.'}
+        error={zone ? undefined : 'Zone requise.'}
         isErrorMessageHidden
         isLabelHidden
         label="Nom de la zone"

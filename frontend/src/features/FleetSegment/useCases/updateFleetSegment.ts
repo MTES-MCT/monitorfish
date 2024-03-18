@@ -36,7 +36,7 @@ function updateFleetSegments(
   updatedFleetSegment: FleetSegment
 ): FleetSegment[] {
   return previousFleetSegments
-    .filter(_segment => _segment.segment !== segment)
+    .filter(existingSegment => existingSegment.segment !== segment)
     .concat(updatedFleetSegment)
     .sort((a, b) => a.segment.localeCompare(b.segment))
 }

@@ -24,6 +24,7 @@ export function CreateRegulationTopicForm({ onCancelEdit, updateTopic }) {
         ${topicSpecies ? ` - ${topicSpecies}` : ''}
         ${topicGears ? ` - ${topicGears}` : ''}
         ${topicOtherIndications ? ` - ${topicOtherIndications}` : ''}`
+
       updateTopic(regulationTopic)
       resetThemeForm()
       onCancelEdit()

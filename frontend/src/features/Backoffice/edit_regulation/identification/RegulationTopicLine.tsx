@@ -11,7 +11,7 @@ import { CreateRegulationTopicForm } from './CreateRegulationTopicForm'
 import { ContentLine, InfoText, InfoTextWrapper } from '../../../commonStyles/Backoffice.style'
 import { SquareButton } from '../../../commonStyles/Buttons.style'
 import { Label } from '../../../commonStyles/Input.style'
-import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../Regulation/utils'
+import { REGULATORY_REFERENCE_KEYS } from '../../../Regulation/utils'
 import { updateProcessingRegulationByKey } from '../../slice'
 
 import type { Option } from '@mtes-mct/monitor-ui'
@@ -46,14 +46,11 @@ export function RegulationTopicLine({ isDisabled }) {
           isErrorMessageHidden
           isLabelHidden
           label="Choisir une thématique"
-          menuClassName={DEFAULT_MENU_CLASSNAME}
-          menuStyle={{ overflowY: 'hidden', textOverflow: 'ellipsis', width: 250 }}
           name="Choisir une thématique"
           onChange={updateTopic}
           options={layerTypeList}
           placeholder="Choisir une thématique"
           searchable
-          value="Choisir une thématique"
         />
         {topic && !isAddTopicClicked && <StyledTag onDelete={updateTopic}>{topic as unknown as string}</StyledTag>}
         {isAddTopicClicked && (

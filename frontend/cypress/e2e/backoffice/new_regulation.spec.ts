@@ -77,8 +77,10 @@ context('New Regulation', () => {
   })
 
   it('Enter a reg text name with a valid url', () => {
-    cy.fill('Nom', 'zone name')
-    cy.fill('URL', 'http://url.com')
+    // TODO A re-render might stop the first fill(), we need to re-fill a second time
+    cy.fill('Nom', 'zone name', { delay: 20 })
+    cy.fill('Nom', 'zone name', { delay: 20 })
+    cy.fill('URL', 'http://url.com', { delay: 20 })
     cy.clickButton('Enregistrer')
 
     cy.get('.Component-SingleTag').contains('zone name')
@@ -179,6 +181,8 @@ context('New Regulation', () => {
     cy.fill('Choisir un ensemble', 'Reg. MEMN')
     cy.fill('Choisir une thématique', 'Ouest Cotentin Bivalves')
     cy.fill('Choisir une région', ['Auvergne-Rhône-Alpes'])
+    // TODO A re-render might stop the first fill(), we need to re-fill a second time
+    cy.fill('Nom', 'zone name')
     cy.fill('Nom', 'zone name')
     cy.fill('URL', 'http://url.com')
     cy.clickButton('Enregistrer')

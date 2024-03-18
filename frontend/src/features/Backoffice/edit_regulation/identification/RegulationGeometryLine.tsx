@@ -1,6 +1,6 @@
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
-import { Accent, Icon, IconButton, Select, SingleTag } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, SingleTag, Select } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { ContentLine } from '../../../commonStyles/Backoffice.style'
@@ -8,13 +8,17 @@ import { Label } from '../../../commonStyles/Input.style'
 import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../Regulation/utils'
 import { updateProcessingRegulationByKey } from '../../slice'
 
-export function RegulationGeometryLine({ geometryIdList, setShowRegulatoryPreview, showRegulatoryPreview }) {
+export function RegulationGeometryLine({
+  geometryIdList,
+  isRegulatoryPreviewDisplayed,
+  setIsRegulatoryPreviewDisplayed
+}) {
   const dispatch = useBackofficeAppDispatch()
   const id = useBackofficeAppSelector(state => state.regulation.processingRegulation?.id)
 
   const onCloseIconClicked = async () => {
     await dispatch(updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ID, value: undefined }))
-    setShowRegulatoryPreview(false)
+    setIsRegulatoryPreviewDisplayed(false)
   }
 
   return (
@@ -32,29 +36,17 @@ export function RegulationGeometryLine({ geometryIdList, setShowRegulatoryPrevie
         }}
         options={geometryIdList}
         placeholder="Choisir un tracé"
-        value="Choisir un tracé"
       />
       {id && (
         <>
           <SingleTag onDelete={onCloseIconClicked}>{id as unknown as string}</SingleTag>
-          {showRegulatoryPreview && (
-            <IconButton
-              accent={Accent.TERTIARY}
-              Icon={Icon.Hide}
-              iconSize={17}
-              onClick={() => setShowRegulatoryPreview(false)}
-              title="Cacher"
-            />
-          )}
-          {!showRegulatoryPreview && (
-            <IconButton
-              accent={Accent.TERTIARY}
-              Icon={Icon.Display}
-              iconSize={17}
-              onClick={() => setShowRegulatoryPreview(true)}
-              title="Afficher"
-            />
-          )}
+          <IconButton
+            accent={Accent.TERTIARY}
+            Icon={isRegulatoryPreviewDisplayed ? Icon.Hide : Icon.Display}
+            iconSize={17}
+            onClick={() => setIsRegulatoryPreviewDisplayed(!isRegulatoryPreviewDisplayed)}
+            title={isRegulatoryPreviewDisplayed ? 'Cacher' : 'Afficher'}
+          />
         </>
       )}
     </ContentLine>

@@ -1,22 +1,20 @@
 // TODO Remove temporary `as any` and `@ts-ignore` (fresh migration to TS).
 
+import FishingPeriodSection from '@features/Backoffice/edit_regulation/fishing_period/FishingPeriodSection'
+import GearRegulation from '@features/Backoffice/edit_regulation/gear_regulation/GearRegulation'
+import { RegulationGeometryLine } from '@features/Backoffice/edit_regulation/identification/RegulationGeometryLine'
 import { RegulationLawTypeLine } from '@features/Backoffice/edit_regulation/identification/RegulationLawTypeLine'
 import { RegulationLayerZoneLine } from '@features/Backoffice/edit_regulation/identification/RegulationLayerZoneLine'
 import { RegulationRegionLine } from '@features/Backoffice/edit_regulation/identification/RegulationRegionLine'
 import { RegulationTopicLine } from '@features/Backoffice/edit_regulation/identification/RegulationTopicLine'
+import RegulatoryTextSection from '@features/Backoffice/edit_regulation/regulatory_text/RegulatoryTextSection'
+import RemoveRegulationModal from '@features/Backoffice/edit_regulation/regulatory_text/RemoveRegulationModal'
 import { formatDataForSelectPicker } from '@features/Backoffice/utils'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { batch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
-import {
-  FishingPeriodSection,
-  GearRegulation,
-  RegulationGeometryLine,
-  RegulatoryTextSection,
-  RemoveRegulationModal
-} from '.'
 import ConfirmRegulationModal from './ConfirmRegulationModal'
 import SpeciesRegulation from './species_regulation/SpeciesRegulation'
 import { COLORS } from '../../../constants/constants'
@@ -67,7 +65,7 @@ export function EditRegulation({ isEdition, title }) {
   const layersTopicsByRegTerritory = useBackofficeAppSelector(state => state.regulatory.layersTopicsByRegTerritory)
 
   const [geometryObjectList, setGeometryRecord] = useState<Record<string, GeoJSON.Geometry>>({})
-  const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
+  const [isRegulatoryPreviewDisplayed, setIsRegulatoryPreviewDisplayed] = useState(false)
   /** @type {Number[]} geometryIdList */
   const geometryIdList = useMemo(
     () => (geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : []),
@@ -218,7 +216,7 @@ export function EditRegulation({ isEdition, title }) {
   ])
 
   useEffect(() => {
-    if (!showRegulatoryPreview) {
+    if (!isRegulatoryPreviewDisplayed) {
       return
     }
 
@@ -237,7 +235,7 @@ export function EditRegulation({ isEdition, title }) {
     isEdition,
     processingRegulation,
     selectedRegulatoryZoneId,
-    showRegulatoryPreview
+    isRegulatoryPreviewDisplayed
   ])
 
   const setOtherInfo = value => {
@@ -274,8 +272,8 @@ export function EditRegulation({ isEdition, title }) {
                 <RegulationRegionLine isDisabled={!lawType || LAWTYPES_TO_TERRITORY[lawType] !== FRANCE} />
                 <RegulationGeometryLine
                   geometryIdList={geometryIdList}
-                  setShowRegulatoryPreview={setShowRegulatoryPreview}
-                  showRegulatoryPreview={showRegulatoryPreview}
+                  isRegulatoryPreviewDisplayed={isRegulatoryPreviewDisplayed}
+                  setIsRegulatoryPreviewDisplayed={setIsRegulatoryPreviewDisplayed}
                 />
               </Section>
               <RegulatoryTextSection regulatoryTextList={regulatoryReferences} saveForm={saveOrUpdateRegulation} />
@@ -333,7 +331,7 @@ export function EditRegulation({ isEdition, title }) {
             </FooterButton>
           </Footer>
         </CreateRegulationWrapper>
-        {showRegulatoryPreview && (
+        {isRegulatoryPreviewDisplayed && (
           <BaseMap>
             <BaseLayer />
             <RegulatoryPreviewLayer />

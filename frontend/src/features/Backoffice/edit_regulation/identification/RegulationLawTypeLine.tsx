@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { ContentLine } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
-import { DEFAULT_MENU_CLASSNAME, LAWTYPES_TO_TERRITORY, REGULATORY_REFERENCE_KEYS, UE } from '../../../Regulation/utils'
+import { LAWTYPES_TO_TERRITORY, REGULATORY_REFERENCE_KEYS, UE } from '../../../Regulation/utils'
 import { updateProcessingRegulationByKey } from '../../slice'
 
 export function RegulationLawTypeLine({ selectData }) {
@@ -29,14 +29,11 @@ export function RegulationLawTypeLine({ selectData }) {
         data-cy="regulation-lawtype-select"
         isLabelHidden
         label="Choisir un ensemble"
-        menuClassName={DEFAULT_MENU_CLASSNAME}
-        menuStyle={{ overflowY: 'scroll', textOverflow: 'ellipsis', width: 200 }}
         name="Choisir un ensemble"
         onChange={onLawTypeChange}
         options={selectData}
         placeholder="Choisir un ensemble"
         searchable={false}
-        value="Choisir un ensemble"
       />
       {lawType && <StyledTag onDelete={onLawTypeChange}>{lawType as unknown as string}</StyledTag>}
     </ContentLine>

@@ -7,7 +7,7 @@ import styled from 'styled-components'
 
 import { ContentLine } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
-import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../Regulation/utils'
+import { REGULATORY_REFERENCE_KEYS } from '../../../Regulation/utils'
 import { FRENCH_REGION_LIST } from '../../constants'
 import { updateProcessingRegulationByKey } from '../../slice'
 
@@ -40,8 +40,6 @@ export function RegulationRegionLine({ isDisabled }) {
         isErrorMessageHidden
         isLabelHidden
         label="Choisir une région"
-        menuClassName={DEFAULT_MENU_CLASSNAME}
-        menuStyle={{ overflowY: 'hidden', textOverflow: 'ellipsis', width: 250 }}
         name="Choisir une région"
         onChange={onChange}
         options={formatDataForSelectPicker(FRENCH_REGION_LIST)}

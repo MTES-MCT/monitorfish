@@ -1,6 +1,7 @@
 // Support file
 // This file runs before every single spec file.
 // https://docs.cypress.io/guides/core-concepts/writing-and-organizing-tests#Support-file
+/// <reference path="../../node_modules/@mtes-mct/monitor-ui/cypress/global.d.ts" />
 
 import 'cypress-mouse-position/commands'
 import 'cypress-plugin-snapshots/commands'
@@ -47,36 +48,7 @@ declare global {
           separator: string
         }>
       ): Chainable<null>
-      /* eslint-enable typescript-sort-keys/interface */
-
-      // eslint-disable-next-line typescript-sort-keys/interface
-      clickButton(
-        label: string,
-        options?: Partial<{
-          index: number
-          withinSelector: string
-        }>
-      ): Chainable<JQuery<HTMLButtonElement>>
-      clickLink(linkText: string): Chainable<JQuery<HTMLAnchorElement>>
-      clickOutside(xPosition?: number, yPosition?: number): void
-      fill(
-        label: string,
-        value:
-          | boolean
-          | number
-          | string
-          | string[]
-          | (DateTuple | DateWithTimeTuple)
-          | ([Cypress.DateTuple, Cypress.DateTuple] | [Cypress.DateWithTimeTuple, Cypress.DateWithTimeTuple])
-          | undefined
-      ): Chainable<Element>
-      forceClick(): Chainable<JQuery<HTMLElement>>
-      getDataCy(dataCy: string): Chainable<JQuery<HTMLElement>>
-      waitForLastRequest(alias, partialRequest, maxRequests, level?)
     }
-
-    type DateTuple = [number, number, number]
-    type DateWithTimeTuple = [number, number, number, number, number]
   }
 }
 

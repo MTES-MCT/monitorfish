@@ -1,4 +1,4 @@
-import { useGetFleetSegmentsQuery } from '@api/fleetSegment'
+import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
 import { FrontendError } from '@libs/FrontendError'
 import { MultiSelect } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'

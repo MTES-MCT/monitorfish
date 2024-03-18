@@ -223,7 +223,7 @@ const Row = styled.div`
   }
 `
 
-const OptionValue = styled.span`
+export const OptionValue = styled.span`
   display: flex;
   overflow: hidden;
   padding: 4px 0 0 8px;

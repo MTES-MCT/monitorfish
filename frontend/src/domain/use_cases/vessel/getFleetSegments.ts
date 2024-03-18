@@ -1,6 +1,6 @@
-import { fleetSegmentApi } from '../../../api/fleetSegment'
+import { fleetSegmentApi } from '@features/FleetSegment/apis'
 
-import type { FleetSegment } from '../../types/fleetSegment'
+import type { FleetSegment } from '@features/FleetSegment/types'
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 
 export const getFleetSegments =

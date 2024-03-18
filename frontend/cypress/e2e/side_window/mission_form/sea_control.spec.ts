@@ -389,7 +389,8 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.contains('Veuillez indiquer le navire contrôlé.').should('not.exist')
 
     // Saisi par
-    cy.fill('Saisi par', 'Gaumont').wait(500)
+    cy.fill('Saisi par', 'Gaumont')
+    cy.wait(500)
     cy.contains('Veuillez indiquer votre trigramme dans "Saisi par".').should('not.exist')
 
     // Mission is now valid for saving (but not for closure)

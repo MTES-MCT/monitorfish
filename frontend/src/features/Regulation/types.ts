@@ -7,7 +7,7 @@ export type BaseRegulatoryZone = {
 }
 
 export type RegulatoryZone = BaseRegulatoryZone & {
-  color: string
+  color?: string
   fishingPeriod: FishingPeriod
   gearRegulation: GearRegulation
   geometry: GeoJSON.Geometry
@@ -17,8 +17,12 @@ export type RegulatoryZone = BaseRegulatoryZone & {
   otherInfo: string
   region: string
   regulatoryReferences: RegulatoryText[] | undefined
-  showed: boolean
+  showed?: boolean
   speciesRegulation: SpeciesRegulation
+}
+
+export type EditedRegulatoryZone = RegulatoryZone & {
+  region: string[] | undefined
 }
 
 export type RegulatoryText = {

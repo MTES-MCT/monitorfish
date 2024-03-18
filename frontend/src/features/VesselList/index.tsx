@@ -9,7 +9,6 @@ import DownloadVesselListModal from './DownloadVesselListModal'
 import { addZoneSelected, removeZoneSelected, resetZonesSelected, setZonesSelected } from './slice'
 import { VesselListFilters } from './VesselListFilters'
 import { VesselListTable } from './VesselListTable'
-import { useGetFleetSegmentsQuery } from '../../api/fleetSegment'
 import { COLORS } from '../../constants/constants'
 import { LayerType as LayersType, LayerType } from '../../domain/entities/layers/constants'
 import { InteractionListener, InteractionType } from '../../domain/entities/map/constants'
@@ -32,6 +31,7 @@ import StyledModalHeader from '../commonComponents/StyledModalHeader'
 import { PrimaryButton, SecondaryButton } from '../commonStyles/Buttons.style'
 import { MapComponent } from '../commonStyles/MapComponent'
 import { resetInteraction } from '../Draw/slice'
+import { useGetFleetSegmentsQuery } from '../FleetSegment/apis'
 import VesselListSVG from '../icons/Icone_liste_navires.svg?react'
 import PreviewSVG from '../icons/Oeil_apercu_carte.svg?react'
 import { MapToolButton } from '../MapButtons/shared/MapToolButton'
@@ -381,7 +381,7 @@ export function VesselList({ namespace }) {
             </Modal.Title>
           </StyledModalHeader>
           <Modal.Body>
-            <LegacyRsuiteComponentsWrapper>
+            <LegacyRsuiteComponentsWrapper overrideCheckbox>
               <Title>FILTRER LA LISTE</Title>
               <VesselListFilters
                 controls={{

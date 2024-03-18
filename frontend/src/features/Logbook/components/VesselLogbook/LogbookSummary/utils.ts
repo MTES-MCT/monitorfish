@@ -1,4 +1,4 @@
-import type { FleetSegment } from '../../../../../domain/types/fleetSegment'
+import type { FleetSegment } from '../../../../FleetSegment/types'
 
 export function getTripSegments(
   segments: string[] | undefined,
@@ -28,10 +28,9 @@ export function getTripSegments(
 }
 
 export function getSegmentInfo(segment: Partial<FleetSegment>): string {
-  if (segment.gears || segment.faoAreas || segment.targetSpecies || segment.dirm || segment.bycatchSpecies) {
+  if (segment.gears || segment.faoAreas || segment.targetSpecies || segment.bycatchSpecies) {
     const gears = segment.gears?.length ? segment.gears.join(', ') : 'aucun'
     const faoAreas = segment.faoAreas?.length ? segment.faoAreas.join(', ') : 'aucune'
-    const dirm = segment.dirm?.length ? segment.dirm.join(', ') : 'aucune'
 
     let targetSpeciesArray: string[] = []
     if (segment.targetSpecies?.length) {
@@ -44,8 +43,7 @@ export function getSegmentInfo(segment: Partial<FleetSegment>): string {
 
     return `Engins: ${gears}
 Zones FAO: ${faoAreas}
-Espèces: ${targetSpecies}
-Façade: ${dirm}`
+Espèces: ${targetSpecies}`
   }
 
   return 'Segment de flotte inconnu'

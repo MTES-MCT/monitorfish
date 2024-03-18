@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 
-export const LegacyRsuiteComponentsWrapper = styled.div`
+export const LegacyRsuiteComponentsWrapper = styled.div<{
+  overrideCheckbox?: boolean
+}>`
   height: 100%;
   width: 100%;
 
@@ -428,15 +430,17 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
     }
   }
 
-  .rs-checkbox {
+  ${p =>
+    p.overrideCheckbox
+      ? `.rs-checkbox {
     .rs-checkbox-checker {
       min-height: 0;
 
       .rs-checkbox-wrapper {
         .rs-checkbox-inner {
           &:before {
-            background-color: ${p => p.theme.color.gainsboro} !important;
-            border: solid 2px ${p => p.theme.color.lightGray} !important;
+            background-color: ${p.theme.color.gainsboro} !important;
+            border: solid 2px ${p.theme.color.lightGray} !important;
             border-radius: 0;
           }
         }
@@ -446,14 +450,15 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
         .rs-checkbox-wrapper {
           .rs-checkbox-inner {
             &:before {
-              background-color: ${p => p.theme.color.charcoal} !important;
-              border: solid 2px ${p => p.theme.color.charcoal} !important;
+              background-color: ${p.theme.color.charcoal} !important;
+              border: solid 2px ${p.theme.color.charcoal} !important;
             }
           }
         }
       }
     }
-  }
+  }`
+      : ''}
 
   .rs-picker {
     width: auto;

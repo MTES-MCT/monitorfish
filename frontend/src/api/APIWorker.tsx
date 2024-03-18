@@ -1,6 +1,6 @@
+import { fleetSegmentApi } from '@features/FleetSegment/apis'
 import { useEffect, useRef, useState } from 'react'
 
-import { fleetSegmentApi } from './fleetSegment'
 import { SideWindowStatus } from '../domain/entities/sideWindow/constants'
 import { VesselSidebarTab } from '../domain/entities/vessel/vessel'
 import { setIsUpdatingVessels } from '../domain/shared_slices/Global'

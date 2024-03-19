@@ -3,7 +3,6 @@ import { missionFormActions } from '@features/Mission/components/MissionForm/sli
 import { getMissionActionDataFromFormValues } from '@features/Mission/components/MissionForm/utils'
 import { isMissionActionFormValid } from '@features/Mission/components/MissionForm/utils/isMissionActionFormValid'
 import { logSoftError } from '@mtes-mct/monitor-ui'
-import { assertNotNullish } from '@utils/assertNotNullish'
 
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 import type { MainAppThunk } from '@store'
@@ -23,7 +22,11 @@ export const autoSaveMissionAction =
     }
 
     try {
-      assertNotNullish(missionId)
+      if (!missionId) {
+        // The mission is still unsaved, we can't save the action
+
+        return undefined
+      }
 
       const missionActionData = getMissionActionDataFromFormValues(actionFormValues, missionId)
 

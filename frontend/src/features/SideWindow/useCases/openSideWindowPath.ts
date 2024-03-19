@@ -7,8 +7,8 @@ import type { SideWindow } from '../../../domain/entities/sideWindow/types'
 import type { MainAppThunk } from '../../../store'
 
 export const openSideWindowPath =
-  (path: SideWindow.Path, withoutConfirmation: boolean = false): MainAppThunk =>
-  async (dispatch, getState): Promise<boolean> => {
+  (path: SideWindow.Path, withoutConfirmation: boolean = false): MainAppThunk<Promise<boolean>> =>
+  async (dispatch, getState) => {
     const { missionForm, sideWindow } = getState()
 
     if (

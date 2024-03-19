@@ -493,16 +493,14 @@ export function MissionForm() {
           </FrontendErrorBoundary>
         </Body>
         <Footer>
-          {!!missionIdFromPath && (
-            <DeleteButton
-              accent={Accent.SECONDARY}
-              disabled={isSaving || mainFormValues.missionSource !== Mission.MissionSource.MONITORFISH}
-              Icon={Icon.Delete}
-              onClick={toggleDeletionConfirmationDialog}
-            >
-              Supprimer la mission
-            </DeleteButton>
-          )}
+          <DeleteButton
+            accent={Accent.SECONDARY}
+            disabled={isSaving || mainFormValues.missionSource !== Mission.MissionSource.MONITORFISH}
+            Icon={Icon.Delete}
+            onClick={toggleDeletionConfirmationDialog}
+          >
+            Supprimer la mission
+          </DeleteButton>
 
           <Separator />
 

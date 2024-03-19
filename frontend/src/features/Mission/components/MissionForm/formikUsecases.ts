@@ -6,14 +6,17 @@ import { vesselApi } from '@features/Vessel/apis'
 import { FrontendError } from '@libs/FrontendError'
 import { MissionAction } from 'domain/types/missionAction'
 import { getFleetSegments } from 'domain/use_cases/vessel/getFleetSegments'
+import { MultiPolygon } from 'ol/geom'
 
 import { PAMControlUnitIds } from './constants'
+import { convertToGeoJSONGeometryObject } from '../../../../domain/entities/layers'
 
 import type { MissionActionFormValues, MissionMainFormValues } from './types'
 import type { Option } from '@mtes-mct/monitor-ui'
 import type { MainRootState } from '@store'
 import type { RiskFactor } from 'domain/entities/vessel/riskFactor/types'
 import type { Gear } from 'domain/types/Gear'
+import type { GeoJSON } from 'domain/types/GeoJSON'
 import type { Port } from 'domain/types/port'
 import type { AnyAction } from 'redux'
 import type { ThunkDispatch } from 'redux-thunk'
@@ -157,6 +160,16 @@ const updateMissionLocation =
     dispatch(missionFormActions.setGeometryComputedFromControls(nextMissionGeometry))
   }
 
+const initMissionLocation = dispatch => async (isGeometryComputedFromControls: boolean | undefined) => {
+  if (!isGeometryComputedFromControls) {
+    return
+  }
+
+  const emptyMissionGeometry = convertToGeoJSONGeometryObject(new MultiPolygon([])) as GeoJSON.MultiPolygon
+
+  dispatch(missionFormActions.setGeometryComputedFromControls(emptyMissionGeometry))
+}
+
 const updateOtherControlsCheckboxes =
   dispatch => async (mission: MissionMainFormValues, previousIsControlUnitPAM: boolean) => {
     const isControlUnitPAM = mission.controlUnits?.some(
@@ -174,6 +187,7 @@ const updateOtherControlsCheckboxes =
   }
 
 export const formikUsecase = {
+  initMissionLocation,
   updateFAOAreas,
   updateGearsOnboard,
   updateMissionLocation,

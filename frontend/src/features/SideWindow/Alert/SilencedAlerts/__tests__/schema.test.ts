@@ -1,4 +1,3 @@
-import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
 import { expect } from '@jest/globals'
 import dayjs from 'dayjs'
 
@@ -37,7 +36,7 @@ describe('SideWindow/SilencedAlerts/schema.ts', () => {
 
       expect(data).toBeFalsy()
     } catch (err: any) {
-      expect(err.message).toContain(HIDDEN_ERROR)
+      expect(err.message).toContain('Veuillez indiquer le navire')
     }
   })
 })

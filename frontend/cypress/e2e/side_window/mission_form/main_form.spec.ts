@@ -46,8 +46,9 @@ context('Side Window > Mission Form > Main Form', () => {
       statusCode: 201
     }).as('getCreatedMission')
 
-    const endDate = getUtcDateInMultipleFormats(customDayjs().utc().add(7, 'day').toISOString())
-    cy.fill('Fin de mission', endDate.utcDateTupleWithTime)
+    const endDate = customDayjs().utc().add(7, 'day')
+    cy.fill('Fin de mission', getUtcDateInMultipleFormats(endDate.toISOString()).utcDateTupleWithTime)
+    const expectedEndDateTimeUtc = new RegExp(`${endDate.format('YYYY-MM-DDTHH')}:\\d{2}:00\\.000Z`)
 
     cy.fill('Types de mission', ['Mer'])
 
@@ -59,9 +60,9 @@ context('Side Window > Mission Form > Main Form', () => {
         assert.fail('`interception.response` is undefined.')
       }
 
-      assert.isUndefined(interception.request.body.endDateTimeUtc)
       // We need to accurately test this prop in one test, no need to repeat it for each case
       assert.match(interception.request.body.startDateTimeUtc, expectedStartDateTimeUtc)
+      assert.match(interception.request.body.endDateTimeUtc, expectedEndDateTimeUtc)
       assert.deepInclude(interception.request.body, {
         controlUnits: [
           {
@@ -141,7 +142,6 @@ context('Side Window > Mission Form > Main Form', () => {
           assert.fail('`interception.response` is undefined.')
         }
 
-        assert.isUndefined(interception.request.body.endDateTimeUtc)
         // We need to accurately test this prop in one test, no need to repeat it for each case
         assert.match(interception.request.body.startDateTimeUtc, expectedStartDateTimeUtc)
         assert.deepInclude(interception.request.body, {
@@ -621,6 +621,8 @@ context('Side Window > Mission Form > Main Form', () => {
 
     openSideWindowNewMission()
 
+    const endDate = getUtcDateInMultipleFormats(customDayjs().utc().add(7, 'day').toISOString())
+    cy.fill('Fin de mission', endDate.utcDateTupleWithTime)
     cy.fill('Administration 1', 'Douane')
     cy.fill('Unité 1', 'BGC Lorient - DF 36 Kan An Avel')
 

@@ -84,3 +84,5 @@ export const AUTO_SAVE_ENABLED = isCypress()
   ? // @ts-ignore
     window.Cypress.env().FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED
   : import.meta.env.FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED === 'true'
+
+export const HIDDEN_ERROR = 'HIDDEN_ERROR'

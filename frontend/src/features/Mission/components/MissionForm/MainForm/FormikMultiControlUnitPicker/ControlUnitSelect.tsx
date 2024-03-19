@@ -183,6 +183,7 @@ export function ControlUnitSelect({
           disabled={isLoading}
           error={error?.administration}
           isErrorMessageHidden
+          isRequired={index === 0}
           label={`Administration ${index + 1}`}
           name={`administration_${index}`}
           onChange={handleAdministrationChange}
@@ -196,6 +197,7 @@ export function ControlUnitSelect({
           disabled={isLoading}
           error={error?.name}
           isErrorMessageHidden
+          isRequired={index === 0}
           label={`Unité ${index + 1}`}
           name={`name_${index}`}
           onChange={handleNameChange}

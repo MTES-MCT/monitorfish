@@ -1,3 +1,4 @@
+import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
 import { addOrEditControlCoordinates } from '@features/Mission/useCases/addOrEditControlCoordinates'
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -145,11 +146,14 @@ export function FormikCoordinatesPicker() {
       <MultiZoneEditor
         addButtonLabel="Ajouter un point de contrôle"
         defaultValue={coordinates}
+        error={error}
         initialZone={{
           name: 'Nouvelle coordonnée'
         }}
         isAddButtonDisabled={!!coordinates.length || listener === InteractionListener.CONTROL_POINT}
+        isErrorMessageHidden
         isLight
+        isRequired
         label="Lieu du contrôle"
         labelPropName="name"
         onAdd={addOrEditCoordinates}
@@ -159,7 +163,7 @@ export function FormikCoordinatesPicker() {
         onDelete={deleteCoordinates}
         onEdit={addOrEditCoordinates}
       />
-      {error && <FieldError>{error}</FieldError>}
+      {error && error !== HIDDEN_ERROR && <FieldError>{error}</FieldError>}
     </>
   )
 }

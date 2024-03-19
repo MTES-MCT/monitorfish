@@ -1,4 +1,6 @@
 import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
+import { customDayjs } from '../../utils/customDayjs'
+import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
 import type { Mission } from '../../../../src/domain/entities/mission/types'
 
@@ -91,4 +93,7 @@ export const fillSideWindowMissionFormBase = (
   cy.fill('Unité 1', 'Cultures marines 56')
   cy.wait(500)
   cy.fill('Moyen 1', ['Brezel - FAH 7185'])
+
+  const endDate = getUtcDateInMultipleFormats(customDayjs().utc().add(7, 'day').toISOString())
+  cy.fill('Fin de mission', endDate.utcDateTupleWithTime)
 }

@@ -8,7 +8,9 @@ export function LicencesAndLogbookField() {
   return (
     <FieldsetGroup isLight legend="Obligations déclaratives et autorisations de pêche">
       <FormikMultiRadio
+        isErrorMessageHidden
         isInline
+        isRequired
         label="Bonne émission VMS"
         name="emitsVms"
         options={[
@@ -18,7 +20,9 @@ export function LicencesAndLogbookField() {
         ]}
       />
       <FormikMultiRadio
+        isErrorMessageHidden
         isInline
+        isRequired
         label="Bonne émission AIS"
         name="emitsAis"
         options={[
@@ -28,7 +32,9 @@ export function LicencesAndLogbookField() {
         ]}
       />
       <FormikMultiRadio
+        isErrorMessageHidden
         isInline
+        isRequired
         label="Déclarations journal de pêche conformes à l’activité du navire"
         name="logbookMatchesActivity"
         options={[
@@ -38,7 +44,9 @@ export function LicencesAndLogbookField() {
         ]}
       />
       <FormikMultiRadio
+        isErrorMessageHidden
         isInline
+        isRequired
         label="Autorisations de pêche conformes à l’activité du navire (zone, engins, espèces)"
         name="licencesMatchActivity"
         options={[

@@ -7,7 +7,7 @@ import type { SideWindow } from '../../../domain/entities/sideWindow/types'
 import type { MainAppThunk } from '../../../store'
 
 export const openSideWindowPath =
-  (path: SideWindow.Path, withoutConfirmation: boolean = false): MainAppThunk =>
+  (path: SideWindow.Path, withoutConfirmation: boolean = false): MainAppThunk<Promise<boolean>> =>
   async (dispatch, getState) => {
     const { missionForm, sideWindow } = getState()
 
@@ -17,10 +17,12 @@ export const openSideWindowPath =
       sideWindow.status !== SideWindowStatus.CLOSED &&
       missionForm.isDraftDirty
     ) {
-      dispatch(askForSideWindowDraftCancellationConfirmation(path))
+      await dispatch(askForSideWindowDraftCancellationConfirmation(path))
 
-      return
+      return false
     }
 
-    dispatch(sideWindowActions.openOrFocusAndGoTo(getFullPathFromPath(path)))
+    await dispatch(sideWindowActions.openOrFocusAndGoTo(getFullPathFromPath(path)))
+
+    return true
   }

@@ -1,3 +1,4 @@
+import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
 import { VesselSearch } from '@features/VesselSearch'
 import { Checkbox, useNewWindow } from '@mtes-mct/monitor-ui'
 import { UNKNOWN_VESSEL } from 'domain/entities/vessel/vessel'
@@ -132,7 +133,7 @@ export function VesselField() {
         )}
       </Wrapper>
 
-      {errors.vesselId && <ErrorMessage>{errors.vesselId}</ErrorMessage>}
+      {errors.vesselId && errors.vesselId !== HIDDEN_ERROR && <ErrorMessage>{errors.vesselId}</ErrorMessage>}
     </>
   )
 }

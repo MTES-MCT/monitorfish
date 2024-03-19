@@ -1,6 +1,8 @@
+/* eslint-disable typescript-sort-keys/string-enum */
 export enum InfractionCategory {
-  GEAR_INFRACTIONS = 'gearInfractions',
   LOGBOOK_INFRACTION = 'logbookInfractions',
-  OTHER_INFRACTIONS = 'otherInfractions',
-  SPECIES_INFRACTIONS = 'speciesInfractions'
+  GEAR_INFRACTIONS = 'gearInfractions',
+  SPECIES_INFRACTIONS = 'speciesInfractions',
+  OTHER_INFRACTIONS = 'otherInfractions'
 }
+/* eslint-enable typescript-sort-keys/string-enum */

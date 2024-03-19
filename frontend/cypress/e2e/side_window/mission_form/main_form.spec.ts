@@ -4,6 +4,7 @@ import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constant
 import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 import { FAKE_MISSION_WITH_EXTERNAL_ACTIONS, FAKE_MISSION_WITHOUT_EXTERNAL_ACTIONS } from '../../constants'
 import { customDayjs } from '../../utils/customDayjs'
+import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Main Form', () => {
@@ -44,6 +45,9 @@ context('Side Window > Mission Form > Main Form', () => {
       },
       statusCode: 201
     }).as('getCreatedMission')
+
+    const endDate = getUtcDateInMultipleFormats(customDayjs().utc().add(7, 'day').toISOString())
+    cy.fill('Fin de mission', endDate.utcDateTupleWithTime)
 
     cy.fill('Types de mission', ['Mer'])
 
@@ -110,6 +114,9 @@ context('Side Window > Mission Form > Main Form', () => {
         },
         statusCode: 201
       }).as('createMission')
+
+      const endDate = getUtcDateInMultipleFormats(customDayjs().utc().add(7, 'day').toISOString())
+      cy.fill('Fin de mission', endDate.utcDateTupleWithTime)
 
       cy.fill('Types de mission', ['Mer'])
 

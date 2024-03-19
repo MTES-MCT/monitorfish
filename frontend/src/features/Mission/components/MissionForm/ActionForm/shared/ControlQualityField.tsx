@@ -8,7 +8,9 @@ export function ControlQualityField() {
   return (
     <Wrapper isLight legend="Qualité du contrôle">
       <FormikMultiRadio
+        isErrorMessageHidden
         isInline
+        isRequired
         label="Navire ciblé par le CNSP"
         name="vesselTargeted"
         options={[

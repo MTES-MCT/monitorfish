@@ -20,27 +20,31 @@ export function DraftCancellationConfirmationDialog({ isAutoSaveEnabled }: Draft
 
   return (
     <Dialog isAbsolute>
-      <StyledDialogTitle>Enregistrer les modifications ?</StyledDialogTitle>
+      <StyledDialogTitle>Enregistrement impossible</StyledDialogTitle>
       <Dialog.Body>
-        <p>Vous êtes en train d’abandonner l’édition d’une mission.</p>
+        <p>Vous êtes en train d’abandonner l’édition de la mission.</p>
         {isAutoSaveEnabled ? (
-          <p>Si vous souhaitez enregistrer les modifications, merci de corriger les champs en erreurs.</p>
+          <Details>Si vous souhaitez enregistrer les modifications, merci de corriger les champs en erreur.</Details>
         ) : (
-          <p>Voulez-vous enregistrer les modifications avant de quitter ?</p>
+          <Details>Voulez-vous enregistrer les modifications avant de quitter ?</Details>
         )}
       </Dialog.Body>
 
       <Dialog.Action>
-        <Button accent={Accent.TERTIARY} onClick={cancel}>
+        <Button accent={Accent.SECONDARY} onClick={cancel}>
           Retourner à l’édition
         </Button>
-        <Button accent={Accent.SECONDARY} onClick={confirm}>
+        <Button accent={Accent.TERTIARY} onClick={confirm}>
           Quitter sans enregistrer
         </Button>
       </Dialog.Action>
     </Dialog>
   )
 }
+
+const Details = styled.p`
+  font-weight: 700;
+`
 
 // TODO Remove that once we get rid of global legacy CSS.
 const StyledDialogTitle = styled(Dialog.Title)`

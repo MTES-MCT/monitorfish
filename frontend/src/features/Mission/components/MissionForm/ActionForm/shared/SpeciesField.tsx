@@ -130,19 +130,25 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
     <FieldsetGroup isLight legend="Espèces à bord">
       {/* TODO Add a BooleanRadio field in monitor-ui. */}
       <FormikMultiRadio
+        isErrorMessageHidden
         isInline
+        isRequired
         label="Poids des espèces vérifiés"
         name="speciesWeightControlled"
         options={BOOLEAN_AS_OPTIONS}
       />
       <FormikMultiRadio
+        isErrorMessageHidden
         isInline
+        isRequired
         label="Taille des espèces vérifiées"
         name="speciesSizeControlled"
         options={BOOLEAN_AS_OPTIONS}
       />
       <FormikMultiRadio
+        isErrorMessageHidden
         isInline
+        isRequired
         label="Arrimage séparé des espèces soumises à plan"
         name="separateStowageOfPreservedSpecies"
         options={CONTROL_CHECKS_AS_OPTIONS}

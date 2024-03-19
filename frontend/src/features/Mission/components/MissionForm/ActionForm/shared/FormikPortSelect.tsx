@@ -1,4 +1,5 @@
 import { useGetPortsQuery } from '@api/port'
+import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
 import { FrontendError } from '@libs/FrontendError'
 import { CustomSearch, FieldError, Select } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
@@ -82,7 +83,10 @@ export function FormikPortSelect() {
     <>
       <Select
         customSearch={customSearch}
+        error={errors.portLocode}
+        isErrorMessageHidden
         isLight
+        isRequired
         label="Port de contrôle"
         name="port"
         onChange={handleChange}
@@ -91,7 +95,9 @@ export function FormikPortSelect() {
         value={values.portLocode}
       />
 
-      {errors.portLocode && <StyledFieldError>{errors.portLocode}</StyledFieldError>}
+      {errors.portLocode && errors.portLocode !== HIDDEN_ERROR && (
+        <StyledFieldError>{errors.portLocode}</StyledFieldError>
+      )}
     </>
   )
 }

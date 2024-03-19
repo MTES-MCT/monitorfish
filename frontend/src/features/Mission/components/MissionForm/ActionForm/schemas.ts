@@ -1,5 +1,6 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
+import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { mainStore } from '@store/index'
 import { MissionAction } from 'domain/types/missionAction'
@@ -9,7 +10,7 @@ import { array, boolean, number, object, string } from 'yup'
 // Form Schema Validators
 
 const actionDatetimeUtcValidator = string()
-  .required('La date du contrôle est un champ obligatoire.')
+  .required(HIDDEN_ERROR)
   .test({
     message: 'La date du contrôle doit être postérieure à la date de début de la mission.',
     test: (actionDatetimeUtc: string | undefined) => {
@@ -44,7 +45,7 @@ const actionDatetimeUtcValidator = string()
   })
 
 export const GearOnboardSchema = object({
-  gearWasControlled: boolean().required("Veuillez indiquer si l'engin a été contrôlé.")
+  gearWasControlled: boolean().required(HIDDEN_ERROR)
 })
 
 // -----------------------------------------------------------------------------
@@ -52,15 +53,15 @@ export const GearOnboardSchema = object({
 
 export const AirControlFormLiveSchema = object({
   actionDatetimeUtc: actionDatetimeUtcValidator,
-  latitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
-  longitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
-  vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
-  userTrigram: string().trim().required('Veuillez indiquer votre trigramme dans "Saisi par".')
+  latitude: number().required(HIDDEN_ERROR),
+  longitude: number().required(HIDDEN_ERROR),
+  vesselId: number().required(HIDDEN_ERROR),
+  userTrigram: string().trim().required(HIDDEN_ERROR)
 })
 
 export const AirControlFormClosureSchema = AirControlFormLiveSchema.concat(
   object({
-    closedBy: string().trim().required('Veuillez indiquer votre trigramme dans "Clôturé par".')
+    closedBy: string().trim().required(HIDDEN_ERROR)
   })
 )
 
@@ -68,12 +69,12 @@ export const AirControlFormClosureSchema = AirControlFormLiveSchema.concat(
 // Air Surveillance Action Form
 
 export const AirSurveillanceFormLiveSchema = object({
-  userTrigram: string().trim().required('Veuillez indiquer votre trigramme dans "Saisi par".')
+  userTrigram: string().trim().required(HIDDEN_ERROR)
 })
 
 export const AirSurveillanceFormClosureSchema = AirSurveillanceFormLiveSchema.concat(
   object({
-    closedBy: string().trim().required('Veuillez indiquer votre trigramme dans "Clôturé par".')
+    closedBy: string().trim().required(HIDDEN_ERROR)
   })
 )
 
@@ -81,7 +82,7 @@ export const AirSurveillanceFormClosureSchema = AirSurveillanceFormLiveSchema.co
 // Observation Action Form
 
 export const ObservationFormLiveSchema = object({
-  userTrigram: string().trim().required('Veuillez indiquer votre trigramme dans "Saisi par".')
+  userTrigram: string().trim().required(HIDDEN_ERROR)
 })
 
 // -----------------------------------------------------------------------------
@@ -89,39 +90,32 @@ export const ObservationFormLiveSchema = object({
 
 export const LandControlFormLiveSchema = object({
   actionDatetimeUtc: actionDatetimeUtcValidator,
-  portLocode: string().required('Veuillez indiquer le port de contrôle.'),
-  vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
-  userTrigram: string().trim().required('Veuillez indiquer votre trigramme dans "Saisi par".')
+  portLocode: string().required(HIDDEN_ERROR),
+  vesselId: number().required(HIDDEN_ERROR),
+  userTrigram: string().trim().required(HIDDEN_ERROR)
 })
 
 export const LandControlFormClosureSchema = LandControlFormLiveSchema.concat(
   object({
     // Obligations déclaratives et autorisations de pêche
-    emitsVms: string().required('Veuillez indiquer si le navire émet un signal VMS.'),
-    emitsAis: string().required('Veuillez indiquer si le navire émet un signal AIS.'),
-    logbookMatchesActivity: string().required(
-      'Veuillez indiquer si le journal de bord correspond à l’activité du navire.'
-    ),
-    licencesMatchActivity: string().required('Veuillez indiquer si les licences correspondent à l’activité du navire.'),
+    emitsVms: string().required(HIDDEN_ERROR),
+    emitsAis: string().required(HIDDEN_ERROR),
+    logbookMatchesActivity: string().required(HIDDEN_ERROR),
+    licencesMatchActivity: string().required(HIDDEN_ERROR),
 
     // Espèces à bord
-    speciesWeightControlled: boolean().required('Veuillez indiquer si le poids des espèces a été contrôlé.'),
-    speciesSizeControlled: boolean().required('Veuillez indiquer si la taille des espèces a été contrôlée.'),
-    separateStowageOfPreservedSpecies: string().required(
-      'Veuillez indiquer si les espèces soumises à plan sont séparées.'
-    ),
+    speciesWeightControlled: boolean().required(HIDDEN_ERROR),
+    speciesSizeControlled: boolean().required(HIDDEN_ERROR),
+    separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR),
 
     // Engins à bord
-    gearOnboard: array()
-      .of(GearOnboardSchema)
-      .required('Veuillez indiquer les engins à bord.')
-      .min(1, 'Veuillez indiquer les engins à bord.'),
+    gearOnboard: array().of(GearOnboardSchema).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
 
     // Qualité du contrôle
-    vesselTargeted: string().required('Veuillez indiquer si le navire est ciblé par le CNSP.'),
+    vesselTargeted: string().required(HIDDEN_ERROR),
 
     // Saisi par / Clôturé par
-    closedBy: string().trim().required('Veuillez indiquer votre trigramme dans "Clôturé par".')
+    closedBy: string().trim().required(HIDDEN_ERROR)
   })
 )
 
@@ -129,41 +123,34 @@ export const LandControlFormClosureSchema = LandControlFormLiveSchema.concat(
 // Sea Control Action Form
 
 export const SeaControlFormLiveSchema = object({
-  longitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
-  latitude: number().required('Veuillez indiquer la position du navire contrôlé.'),
-  vesselId: number().required('Veuillez indiquer le navire contrôlé.'),
+  longitude: number().required(HIDDEN_ERROR),
+  latitude: number().required(HIDDEN_ERROR),
+  vesselId: number().required(HIDDEN_ERROR),
   actionDatetimeUtc: actionDatetimeUtcValidator,
-  userTrigram: string().required('Veuillez indiquer votre trigramme dans "Saisi par".')
+  userTrigram: string().required(HIDDEN_ERROR)
 })
 
 export const SeaControlFormClosureSchema = SeaControlFormLiveSchema.concat(
   object({
     // Obligations déclaratives et autorisations de pêche
-    emitsVms: string().required('Veuillez indiquer si le navire émet un signal VMS.'),
-    emitsAis: string().required('Veuillez indiquer si le navire émet un signal AIS.'),
-    logbookMatchesActivity: string().required(
-      'Veuillez indiquer si le journal de bord correspond à l’activité du navire.'
-    ),
-    licencesMatchActivity: string().required('Veuillez indiquer si les licences correspondent à l’activité du navire.'),
+    emitsVms: string().required(HIDDEN_ERROR),
+    emitsAis: string().required(HIDDEN_ERROR),
+    logbookMatchesActivity: string().required(HIDDEN_ERROR),
+    licencesMatchActivity: string().required(HIDDEN_ERROR),
 
     // Espèces à bord
-    speciesWeightControlled: boolean().required('Veuillez indiquer si le poids des espèces a été contrôlé.'),
-    speciesSizeControlled: boolean().required('Veuillez indiquer si la taille des espèces a été contrôlée.'),
-    separateStowageOfPreservedSpecies: string().required(
-      'Veuillez indiquer si les espèces soumises à plan sont séparées.'
-    ),
+    speciesWeightControlled: boolean().required(HIDDEN_ERROR),
+    speciesSizeControlled: boolean().required(HIDDEN_ERROR),
+    separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR),
 
     // Engins à bord
-    gearOnboard: array()
-      .of(GearOnboardSchema)
-      .required('Veuillez indiquer les engins à bord.')
-      .min(1, 'Veuillez indiquer les engins à bord.'),
+    gearOnboard: array().of(GearOnboardSchema).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
 
     // Qualité du contrôle
-    vesselTargeted: string().required('Veuillez indiquer si le navire est ciblé par le CNSP.'),
+    vesselTargeted: string().required(HIDDEN_ERROR),
 
     // Saisi par / Clôturé par
-    closedBy: string().trim().required('Veuillez indiquer votre trigramme dans "Clôturé par".')
+    closedBy: string().trim().required(HIDDEN_ERROR)
   })
 )
 
@@ -172,11 +159,9 @@ export const SeaControlFormClosureSchema = SeaControlFormLiveSchema.concat(
 
 export const InfractionFormLiveSchema = object({
   comments: string(),
-  infractionType: string()
-    .oneOf(Object.values(MissionAction.InfractionType))
-    .required('Le résultat de l’infraction est un champ obligatoire.'),
+  infractionType: string().oneOf(Object.values(MissionAction.InfractionType)).required(HIDDEN_ERROR),
   natinf: number().when('infractionType', {
     is: (infractionType?: MissionAction.InfractionType) => infractionType !== MissionAction.InfractionType.PENDING,
-    then: schema => schema.required('Le NATINF est un champ obligatoire.')
+    then: schema => schema.required(HIDDEN_ERROR)
   })
 })

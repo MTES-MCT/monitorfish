@@ -94,7 +94,14 @@ export function useGetMissionActionFormikUsecases() {
       missionActionValues
     )
 
+  /**
+   * When updating the mission location from an action, we use the `RTK-Query` cache object to access the `mission` form.
+   */
+  const initMissionLocation = () =>
+    formikUsecase.initMissionLocation(dispatch)(draft?.mainFormValues.isGeometryComputedFromControls)
+
   return {
+    initMissionLocation,
     updateFAOAreasAndSegments,
     updateFieldsControlledByVessel,
     updateMissionLocation,

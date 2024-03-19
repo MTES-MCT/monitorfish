@@ -118,7 +118,11 @@ export function FormikLocationPicker() {
       setFieldValue('geom', geometryComputedFromControls)
 
       window.document.dispatchEvent(
-        new NotificationEvent('Une zone de mission a été ajoutée à partir des contrôles de la mission', 'success', true)
+        new NotificationEvent(
+          'Une zone de mission a été modifiée à partir des contrôles de la mission',
+          'success',
+          true
+        )
       )
 
       dispatch(missionFormActions.unsetGeometryComputedFromControls())
@@ -157,7 +161,7 @@ export function FormikLocationPicker() {
               />
             </Row>
           ))}
-        {values.isGeometryComputedFromControls && (
+        {values.isGeometryComputedFromControls && !!polygons.length && (
           <ZoneComputedFromActions>
             Actuellement, la zone de mission est <b>automatiquement calculée</b> selon le point ou la zone de la
             dernière action rapportée par l’unité.

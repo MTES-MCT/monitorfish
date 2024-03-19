@@ -14,7 +14,7 @@ import type { Option } from '@mtes-mct/monitor-ui'
 
 export function FormikPortSelect() {
   const { errors, setFieldValue, values } = useFormikContext<MissionActionFormValues>()
-  const { updateFAOAreasAndSegments, updateMissionLocation } = useGetMissionActionFormikUsecases()
+  const { initMissionLocation, updateFAOAreasAndSegments, updateMissionLocation } = useGetMissionActionFormikUsecases()
 
   const getPortsApiQuery = useGetPortsQuery()
 
@@ -36,6 +36,7 @@ export function FormikPortSelect() {
 
     if (!nextPortLocode) {
       setFieldValue('portLocode', undefined)
+      initMissionLocation()
 
       return
     }

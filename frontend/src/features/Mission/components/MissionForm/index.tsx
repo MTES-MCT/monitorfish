@@ -276,7 +276,12 @@ export function MissionForm() {
       }
 
       const nextActionsFormValues = await dispatch(
-        deleteMissionAction(actionsFormValues, actionIndex, isAutoSaveEnabled)
+        deleteMissionAction(
+          actionsFormValues,
+          actionIndex,
+          isAutoSaveEnabled,
+          mainFormValues.isGeometryComputedFromControls
+        )
       )
 
       setActionsFormValues(nextActionsFormValues)
@@ -289,6 +294,7 @@ export function MissionForm() {
       dispatch,
       updateEditedActionFormValues,
       updateReduxSliceDraft,
+      mainFormValues.isGeometryComputedFromControls,
       actionsFormValues,
       editedActionIndex,
       isAutoSaveEnabled

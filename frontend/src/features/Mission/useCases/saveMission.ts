@@ -28,6 +28,7 @@ export const saveMission =
           ...nextMainFormValues,
           createdAtUtc: createdMission.createdAtUtc,
           id: createdMission.id,
+          missionSource: createdMission.missionSource,
           updatedAtUtc: createdMission.updatedAtUtc
         }
       }

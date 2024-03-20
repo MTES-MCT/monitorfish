@@ -174,19 +174,19 @@ export const LAST_CONTROL_PERIOD_LABEL: Record<LastControlPeriod, string> = {
 export const LAST_CONTROL_PERIODS_AS_OPTIONS = getOptionsFromLabelledEnum(LAST_CONTROL_PERIOD_LABEL)
 
 export enum ExpectedArrivalPeriod {
-  AFTER_TWO_HOURS_AGO = 'AFTER_TWO_HOURS_AGO',
-  AFTER_FOUR_HOURS_AGO = 'AFTER_FOUR_HOURS_AGO',
-  AFTER_EIGTH_HOURS_AGO = 'AFTER_EIGTH_HOURS_AGO',
-  AFTER_TWELVE_HOURS_AGO = 'AFTER_TWELVE_HOURS_AGO',
-  AFTER_ONE_DAY_AGO = 'AFTER_ONE_DAY_AGO',
+  IN_LESS_THAN_TWO_HOURS = 'IN_LESS_THAN_TWO_HOURS',
+  IN_LESS_THAN_FOUR_HOURS = 'IN_LESS_THAN_FOUR_HOURS',
+  IN_LESS_THAN_EIGTH_HOURS = 'IN_LESS_THAN_EIGTH_HOURS',
+  IN_LESS_THAN_TWELVE_HOURS = 'IN_LESS_THAN_TWELVE_HOURS',
+  IN_LESS_THAN_ONE_DAY = 'IN_LESS_THAN_ONE_DAY',
   CUSTOM = 'CUSTOM'
 }
 export const EXPECTED_ARRIVAL_PERIOD_LABEL: Record<ExpectedArrivalPeriod, string> = {
-  AFTER_TWO_HOURS_AGO: 'Arrivée estimée dans moins de 2h',
-  AFTER_FOUR_HOURS_AGO: 'Arrivée estimée dans moins de 4h',
-  AFTER_EIGTH_HOURS_AGO: 'Arrivée estimée dans moins de 8h',
-  AFTER_TWELVE_HOURS_AGO: 'Arrivée estimée dans moins de 12h',
-  AFTER_ONE_DAY_AGO: 'Arrivée estimée dans moins de 24h',
+  IN_LESS_THAN_TWO_HOURS: 'Arrivée estimée dans moins de 2h',
+  IN_LESS_THAN_FOUR_HOURS: 'Arrivée estimée dans moins de 4h',
+  IN_LESS_THAN_EIGTH_HOURS: 'Arrivée estimée dans moins de 8h',
+  IN_LESS_THAN_TWELVE_HOURS: 'Arrivée estimée dans moins de 12h',
+  IN_LESS_THAN_ONE_DAY: 'Arrivée estimée dans moins de 24h',
   CUSTOM: 'Période spécifique'
 }
 export const EXPECTED_ARRIVAL_PERIODS_AS_OPTIONS = getOptionsFromLabelledEnum(EXPECTED_ARRIVAL_PERIOD_LABEL)

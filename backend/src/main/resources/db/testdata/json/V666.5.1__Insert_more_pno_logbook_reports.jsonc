@@ -20,12 +20,11 @@
         "table": "logbook_reports",
         "data": [
             // - Vessel: PHENOMENE
-            // - Purpose: LAN
-            // - Without reporting
             {
                 "id": 101,
                 "cfr": "FAK000999999",
                 "enriched": true,
+                "flag_state": "FRA",
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "log_type": "PNO",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
@@ -36,19 +35,19 @@
                 "vessel_id": 1,
                 "vessel_name": "PHENOMENE",
                 "trip_gears:jsonb": [
-                    { "gear": "GTR", "mesh": 100, "dimensions": "250;180" },
-                    { "gear": "GTR", "mesh": 120.5, "dimensions": "250;280" }
+                    { "gear": "TBN", "mesh": 100, "dimensions": "250;180" },
+                    { "gear": "OTT", "mesh": 120.5, "dimensions": "250;280" }
                 ],
                 "trip_segments:jsonb": [
-                    { "segment": "NWW01", "segment_name": "Chalutiers de fond" },
-                    { "segment": "PEL01", "segment_name": "Chalutiers pélagiques" }
+                    { "segment": "SWW04", "segment_name": "Chaluts pélagiques" },
+                    { "segment": "SWW06", "segment_name": "Sennes" }
                 ],
                 "value:jsonb": {
                     "catchOnboard": [
                         {
                             "weight": 25.0,
                             "nbFish": null,
-                            "species": "SOL",
+                            "species": "COD",
                             "faoZone": "27.8.a",
                             "effortZone": "C",
                             "economicZone": "FRA",
@@ -76,12 +75,12 @@
             },
 
             // - Vessel: COURANT MAIN PROFESSEUR
-            // - Purpose: LAN
             // - With reportings
             {
                 "id": 102,
                 "cfr": "ABC000042310",
                 "enriched": true,
+                "flag_state": "FRA",
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "log_type": "PNO",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
@@ -92,12 +91,12 @@
                 "vessel_id": 10,
                 "vessel_name": "COURANT MAIN PROFESSEUR",
                 "trip_gears:jsonb": [
-                    { "gear": "GTR", "mesh": 100, "dimensions": "250;180" },
-                    { "gear": "GTR", "mesh": 120.5, "dimensions": "250;280" }
+                    { "gear": "PT", "mesh": 100, "dimensions": "250;180" },
+                    { "gear": "OT", "mesh": 120.5, "dimensions": "250;280" }
                 ],
                 "trip_segments:jsonb": [
-                    { "segment": "NWW01", "segment_name": "Chalutiers de fond" },
-                    { "segment": "PEL01", "segment_name": "Chalutiers pélagiques" }
+                    { "segment": "SWW10", "segment_name": "Palangres ciblant les espèces démersales" },
+                    { "segment": "SWW11", "segment_name": "Hameçons" }
                 ],
                 "value:jsonb": {
                     "catchOnboard": [
@@ -105,6 +104,15 @@
                             "weight": 25.0,
                             "nbFish": null,
                             "species": "SOL",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        },
+                        {
+                            "weight": 25.0,
+                            "nbFish": null,
+                            "species": "HKE",
                             "faoZone": "27.8.a",
                             "effortZone": "C",
                             "economicZone": "FRA",
@@ -118,7 +126,7 @@
                             "hasDesignatedPorts": false
                         }
                     ],
-                    "port": "AEFRP",
+                    "port": "FRBES",
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '4 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
@@ -128,10 +136,10 @@
 
             // - Vessel: UNKNOWN
             // - Purpose: GRD
-            // - Without reporting
             {
                 "id": 103,
                 "enriched": true,
+                "flag_state": null,
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "log_type": "PNO",
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
@@ -146,8 +154,63 @@
                     "catchOnboard": [],
                     "pnoTypes": [],
                     "port": "AEHZP",
-                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedArrivalDatetimeUtc": "2023-12-31T23:59:59Z",
                     "purpose": "GRD",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                }
+            },
+
+            // - Vessel: VIVA ESPANA
+            {
+                "id": 104,
+                "cfr": "CFR101",
+                "enriched": true,
+                "flag_state": "ESP",
+                "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "log_type": "PNO",
+                "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "operation_number": "FAKE_OPERATION_104",
+                "operation_type": "DAT",
+                "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
+                "transmission_format": "ERS",
+                "vessel_id": 101,
+                "vessel_name": "VIVA ESPANA",
+                "trip_gears:jsonb": [
+                    { "gear": "TB", "mesh": 100, "dimensions": "250;180" },
+                    { "gear": "TBS", "mesh": 120.5, "dimensions": "250;280" }
+                ],
+                "trip_segments:jsonb": [
+                    { "segment": "NWW03", "segment_name": "Chalut de fond en eau profonde" },
+                    { "segment": "NWW05", "segment_name": "Chalut à perche" }
+                ],
+                "value:jsonb": {
+                    "catchOnboard": [
+                        {
+                            "weight": 25.0,
+                            "nbFish": null,
+                            "species": "FRF",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        }
+                    ],
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type A",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false
+                        },
+                        {
+                            "pnoTypeName": "Préavis type B",
+                            "minimumNotificationPeriod": 8.0,
+                            "hasDesignatedPorts": true
+                        }
+                    ],
+                    "port": "FRVNE",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '4 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
                     "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
                 }
             }

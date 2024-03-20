@@ -43,6 +43,7 @@ data class RiskFactorsEntity(
     val segmentHighestPriority: String? = null,
     @Column(name = "control_priority_level")
     val controlPriorityLevel: Double,
+    // TODO Can't this field be null?
     @Column(name = "last_control_datetime_utc")
     val lastControlDatetime: ZonedDateTime,
     @Column(name = "control_rate_risk_factor")
@@ -62,34 +63,36 @@ data class RiskFactorsEntity(
     @Column(name = "number_vessel_seizures_last_5_years")
     val numberVesselSeizuresLastFiveYears: Short,
 ) : Serializable {
-
-    fun toVesselRiskFactor(mapper: ObjectMapper) = VesselRiskFactor(
-        impactRiskFactor = impactRiskFactor,
-        probabilityRiskFactor = probabilityRiskFactor,
-        detectabilityRiskFactor = detectabilityRiskFactor,
-        riskFactor = riskFactor,
-        internalReferenceNumber = cfr,
-        gearOnboard = mapper.readValue(
-            gearOnboard,
-            mapper.typeFactory
-                .constructCollectionType(MutableList::class.java, Gear::class.java),
-        ),
-        speciesOnboard = mapper.readValue(
-            speciesOnboard,
-            mapper.typeFactory
-                .constructCollectionType(MutableList::class.java, Species::class.java),
-        ),
-        segments = segments,
-        controlPriorityLevel = controlPriorityLevel,
-        segmentHighestImpact = segmentHighestImpact,
-        segmentHighestPriority = segmentHighestPriority,
-        lastControlDatetime = lastControlDatetime,
-        controlRateRiskFactor = controlRateRiskFactor,
-        numberControlsLastFiveYears = numberControlsLastFiveYears,
-        numberControlsLastThreeYears = numberControlsLastThreeYears,
-        numberInfractionsLastFiveYears = numberInfractionsLastFiveYears,
-        numberGearSeizuresLastFiveYears = numberGearSeizuresLastFiveYears,
-        numberSpeciesSeizuresLastFiveYears = numberSpeciesSeizuresLastFiveYears,
-        numberVesselSeizuresLastFiveYears = numberVesselSeizuresLastFiveYears,
-    )
+    fun toVesselRiskFactor(mapper: ObjectMapper) =
+        VesselRiskFactor(
+            impactRiskFactor = impactRiskFactor,
+            probabilityRiskFactor = probabilityRiskFactor,
+            detectabilityRiskFactor = detectabilityRiskFactor,
+            riskFactor = riskFactor,
+            internalReferenceNumber = cfr,
+            gearOnboard =
+                mapper.readValue(
+                    gearOnboard,
+                    mapper.typeFactory
+                        .constructCollectionType(MutableList::class.java, Gear::class.java),
+                ),
+            speciesOnboard =
+                mapper.readValue(
+                    speciesOnboard,
+                    mapper.typeFactory
+                        .constructCollectionType(MutableList::class.java, Species::class.java),
+                ),
+            segments = segments,
+            controlPriorityLevel = controlPriorityLevel,
+            segmentHighestImpact = segmentHighestImpact,
+            segmentHighestPriority = segmentHighestPriority,
+            lastControlDatetime = lastControlDatetime,
+            controlRateRiskFactor = controlRateRiskFactor,
+            numberControlsLastFiveYears = numberControlsLastFiveYears,
+            numberControlsLastThreeYears = numberControlsLastThreeYears,
+            numberInfractionsLastFiveYears = numberInfractionsLastFiveYears,
+            numberGearSeizuresLastFiveYears = numberGearSeizuresLastFiveYears,
+            numberSpeciesSeizuresLastFiveYears = numberSpeciesSeizuresLastFiveYears,
+            numberVesselSeizuresLastFiveYears = numberVesselSeizuresLastFiveYears,
+        )
 }

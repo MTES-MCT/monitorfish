@@ -46,6 +46,7 @@ data class LogbookReportEntity(
     val externalReferenceNumber: String? = null,
     @Column(name = "vessel_name")
     val vesselName: String? = null,
+    // ISO Alpha-3 country code
     @Column(name = "flag_state")
     val flagState: String? = null,
     @Column(name = "imo")

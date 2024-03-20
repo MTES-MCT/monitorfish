@@ -36,15 +36,17 @@ export const saveMissionAndMissionActionsByDiff =
           if (missionActionData.id === undefined) {
             await dispatch(missionActionApi.endpoints.createMissionAction.initiate(missionActionData)).unwrap()
           } else {
-            missionActionApi.endpoints.updateMissionAction.initiate({
-              ...missionActionData,
-              id: missionActionData.id,
-              /**
-               * This field is not used in the backend use-case, we add this property to
-               * respected the MissionAction type (using `portName` when fetching missions actions).
-               */
-              portName: undefined
-            })
+            await dispatch(
+              missionActionApi.endpoints.updateMissionAction.initiate({
+                ...missionActionData,
+                id: missionActionData.id,
+                /**
+                 * This field is not used in the backend use-case, we add this property to
+                 * respected the MissionAction type (using `portName` when fetching missions actions).
+                 */
+                portName: undefined
+              })
+            )
           }
         })
       ])

@@ -14,7 +14,6 @@ import { AutoSaveTag } from './shared/AutoSaveTag'
 
 export function Loader() {
   const dispatch = useMainAppDispatch()
-  const missionIdFromPath = useMainAppSelector(store => store.sideWindow.selectedPath.id)
   const missionFormError = useMainAppSelector(state => state.displayedError.missionFormError)
 
   const goToMissionList = useCallback(async () => {
@@ -52,11 +51,9 @@ export function Loader() {
       </Body>
 
       <Footer>
-        {!!missionIdFromPath && (
-          <Button accent={Accent.SECONDARY} disabled Icon={Icon.Delete}>
-            Supprimer la mission
-          </Button>
-        )}
+        <Button accent={Accent.SECONDARY} disabled Icon={Icon.Delete}>
+          Supprimer la mission
+        </Button>
 
         <RightButtonsContainer>
           <AutoSaveTag />

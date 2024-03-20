@@ -12,7 +12,7 @@ export function ExternalActionsDialog({ onClose, sources }: ExternalActionsModal
 
   return (
     <Dialog data-cy="external-actions-modal" isAbsolute>
-      <Dialog.Title>Supprimer la mission</Dialog.Title>
+      <Dialog.Title>Suppression impossible</Dialog.Title>
       <Dialog.Body>
         <Alert>
           <Icon.Attention color={THEME.color.maximumRed} size={30} />

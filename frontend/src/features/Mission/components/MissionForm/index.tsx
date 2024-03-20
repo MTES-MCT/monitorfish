@@ -424,7 +424,7 @@ export function MissionForm() {
       const response = dispatch(monitorenvMissionApi.endpoints.canDeleteMission.initiate(missionIdRef.current))
       const canDeleteMissionResponse = await response.unwrap()
       if (canDeleteMissionResponse.canDelete) {
-        setIsDeletionConfirmationDialogOpen(!isDeletionConfirmationDialogOpen)
+        setIsDeletionConfirmationDialogOpen(true)
 
         return
       }
@@ -439,7 +439,7 @@ export function MissionForm() {
         userMessage: "Nous n'avons pas pu vérifier si cette mission est supprimable."
       })
     }
-  }, [isDeletionConfirmationDialogOpen, dispatch])
+  }, [dispatch])
 
   useEffect(() => {
     if (!missionEvent) {
@@ -501,14 +501,16 @@ export function MissionForm() {
           </FrontendErrorBoundary>
         </Body>
         <Footer>
-          <DeleteButton
-            accent={Accent.SECONDARY}
-            disabled={isSaving || mainFormValues.missionSource !== Mission.MissionSource.MONITORFISH}
-            Icon={Icon.Delete}
-            onClick={toggleDeletionConfirmationDialog}
-          >
-            Supprimer la mission
-          </DeleteButton>
+          {missionIdRef.current && (
+            <DeleteButton
+              accent={Accent.SECONDARY}
+              disabled={isSaving || mainFormValues.missionSource !== Mission.MissionSource.MONITORFISH}
+              Icon={Icon.Delete}
+              onClick={toggleDeletionConfirmationDialog}
+            >
+              Supprimer la mission
+            </DeleteButton>
+          )}
 
           <Separator />
 
@@ -576,7 +578,10 @@ export function MissionForm() {
       </Wrapper>
 
       {isDeletionConfirmationDialogOpen && (
-        <DeletionConfirmationDialog onCancel={toggleDeletionConfirmationDialog} onConfirm={handleDelete} />
+        <DeletionConfirmationDialog
+          onCancel={() => setIsDeletionConfirmationDialogOpen(false)}
+          onConfirm={handleDelete}
+        />
       )}
       {isDraftCancellationConfirmationDialogOpen && (
         <DraftCancellationConfirmationDialog isAutoSaveEnabled={isAutoSaveEnabled} />

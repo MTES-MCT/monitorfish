@@ -9,6 +9,7 @@ import { autoSaveMissionAction } from '@features/Mission/useCases/autoSaveMissio
 import { deleteMission } from '@features/Mission/useCases/deleteMission'
 import { deleteMissionAction } from '@features/Mission/useCases/deleteMissionAction'
 import { saveMissionAndMissionActionsByDiff } from '@features/Mission/useCases/saveMissionAndMissionActionsByDiff'
+import { cleanMissionForm } from '@features/SideWindow/useCases/cleanMissionForm'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -167,8 +168,7 @@ export function MissionForm() {
   const goToMissionList = useCallback(async () => {
     const canExit = await dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }))
     if (canExit) {
-      dispatch(missionFormActions.resetMissionForm())
-      dispatch(missionFormActions.unsetSelectedMissionGeoJSON())
+      dispatch(cleanMissionForm())
     }
   }, [dispatch])
 

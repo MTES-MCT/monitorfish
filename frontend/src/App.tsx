@@ -83,6 +83,8 @@ export function App({ auth }: AppProps) {
           </AuthorizationContext.Provider>
         </FrontendErrorBoundary>
       </RsuiteCustomProvider>
+      {/* This script is used to inject the chat */}
+      <script async src={import.meta.env.FRONTEND_SMALL_CHAT_SNIPPET} />
     </ThemeProvider>
   )
 }

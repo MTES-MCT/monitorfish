@@ -313,7 +313,13 @@ def merge_segments_and_types(
         pd.DataFrame: DataFrame of PNOs with their types and segments
     """
 
-    return pd.merge(pnos_with_types, pnos_with_segments, on="logbook_reports_pno_id")
+    return pd.merge(
+        pnos_with_types,
+        pnos_with_segments,
+        on="logbook_reports_pno_id",
+        validate="1:1",
+        how="inner",
+    )
 
 
 def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logger):

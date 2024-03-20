@@ -9,7 +9,7 @@
     "npm": "10"
   },
   "scripts": {
-    "build": "import-meta-env-prepare -x ./../infra/configurations/frontend/.env.example -p ./../infra/configurations/frontend/.env.prod && vite build && npm run bundle-sw",
+    "build": "vite build && npm run bundle-sw",
     "clean": "rm -Rf ./node-modules/.vite ./node-modules/build",
     "cypress:open": "cypress open --browser firefox --config-file ./config/cypress.config.ts --e2e",
     "dev": "import-meta-env-prepare -x ./.env.local.defaults && vite --port 3000",

@@ -213,4 +213,49 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
       .its('response.statusCode')
       .should('eq', 201)
   })
+
+  it(
+    'Should update actions When auto save is not enabled',
+    {
+      env: {
+        FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED: false
+      }
+    },
+    () => {
+      cy.intercept('PUT', '/bff/v1/mission_actions/4', {
+        body: {
+          id: 4
+        },
+        statusCode: 201
+      }).as('updateMissionAction')
+
+      // -------------------------------------------------------------------------
+      // Form
+      cy.get('*[data-cy="action-list-item"]').click()
+      cy.wait(500)
+
+      cy.fill(
+        'Observations (hors infractions) sur les obligations déclaratives / autorisations',
+        'Une nouvelle observation'
+      )
+      // We need to wait for some time because there is a throttle on the form
+      cy.wait(500)
+      cy.clickButton('Enregistrer')
+
+      // -------------------------------------------------------------------------
+      // Request
+
+      cy.waitForLastRequest(
+        '@updateMissionAction',
+        {
+          body: {
+            licencesAndLogbookObservations: 'Une nouvelle observation'
+          }
+        },
+        5
+      )
+        .its('response.statusCode')
+        .should('eq', 201)
+    }
+  )
 })

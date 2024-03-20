@@ -22,6 +22,7 @@ data class PriorNotification(
     val types: List<PriorNotificationType>,
     val vesselId: Int,
     val vesselExternalReferenceNumber: String?,
+    // ISO Alpha-2 country code
     val vesselFlagCountryCode: String?,
     val vesselInternalReferenceNumber: String?,
     val vesselIrcs: String?,

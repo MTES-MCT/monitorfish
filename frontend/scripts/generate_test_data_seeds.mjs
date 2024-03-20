@@ -47,17 +47,22 @@ function generateInsertStatement(row, table) {
 
       sqlColumns.push(sqlColumn)
       sqlValues.push(sqlValue)
-    } else {
-      const processedValue =
-        // eslint-disable-next-line no-nested-ternary
-        value === null
-          ? 'null'
-          : typeof value !== 'string' || key.endsWith(':sql')
-          ? value
-          : `'${value.replace(/'/g, "''")}'`
+    } else if (Array.isArray(value)) {
+      const valueAsSqlArray = `'{"${value.map(valueItem => valueItem.replace(/'/g, "''")).join('", "')}"}'`
 
       sqlColumns.push(sqlColumn)
-      sqlValues.push(processedValue)
+      sqlValues.push(valueAsSqlArray)
+    } else if (value === null) {
+      sqlColumns.push(sqlColumn)
+      sqlValues.push('NULL')
+    } else if (typeof value !== 'string' || key.endsWith(':sql')) {
+      sqlColumns.push(sqlColumn)
+      sqlValues.push(value)
+    } else {
+      const valueAsSqlString = `'${value.replace(/'/g, "''")}'`
+
+      sqlColumns.push(sqlColumn)
+      sqlValues.push(valueAsSqlString)
     }
   }
 

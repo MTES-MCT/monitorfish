@@ -13,7 +13,7 @@ const INITIAL_STATE: PriorNotificationState = {
   listFilterValues: {
     countryCodes: undefined,
     expectedArrivalCustomPeriod: undefined,
-    expectedArrivalPeriod: ExpectedArrivalPeriod.AFTER_FOUR_HOURS_AGO,
+    expectedArrivalPeriod: ExpectedArrivalPeriod.IN_LESS_THAN_FOUR_HOURS,
     fleetSegmentSegments: undefined,
     gearCodes: undefined,
     hasOneOrMoreReportings: RichBoolean.BOTH,

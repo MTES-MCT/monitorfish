@@ -42,29 +42,36 @@ function getApiFilterFromExpectedArrivalPeriod(
   }
 
   switch (period) {
-    case ExpectedArrivalPeriod.AFTER_TWO_HOURS_AGO:
+    case ExpectedArrivalPeriod.IN_LESS_THAN_TWO_HOURS:
       return {
-        willArriveAfter: customDayjs().subtract(2, 'hours').toISOString()
+        willArriveAfter: customDayjs.utc().toISOString(),
+        willArriveBefore: customDayjs.utc().add(2, 'hours').toISOString()
       }
 
-    case ExpectedArrivalPeriod.AFTER_FOUR_HOURS_AGO:
+    // Since this is the default period, we also use for the custom period when the date range input is not yet filled.
+    case ExpectedArrivalPeriod.IN_LESS_THAN_FOUR_HOURS:
+    case ExpectedArrivalPeriod.CUSTOM:
       return {
-        willArriveAfter: customDayjs().subtract(4, 'hours').toISOString()
+        willArriveAfter: customDayjs.utc().toISOString(),
+        willArriveBefore: customDayjs.utc().add(4, 'hours').toISOString()
       }
 
-    case ExpectedArrivalPeriod.AFTER_EIGTH_HOURS_AGO:
+    case ExpectedArrivalPeriod.IN_LESS_THAN_EIGTH_HOURS:
       return {
-        willArriveAfter: customDayjs().subtract(8, 'hours').toISOString()
+        willArriveAfter: customDayjs.utc().toISOString(),
+        willArriveBefore: customDayjs.utc().add(8, 'hours').toISOString()
       }
 
-    case ExpectedArrivalPeriod.AFTER_TWELVE_HOURS_AGO:
+    case ExpectedArrivalPeriod.IN_LESS_THAN_TWELVE_HOURS:
       return {
-        willArriveAfter: customDayjs().subtract(12, 'hours').toISOString()
+        willArriveAfter: customDayjs.utc().toISOString(),
+        willArriveBefore: customDayjs.utc().add(12, 'hours').toISOString()
       }
 
-    case ExpectedArrivalPeriod.AFTER_ONE_DAY_AGO:
+    case ExpectedArrivalPeriod.IN_LESS_THAN_ONE_DAY:
       return {
-        willArriveAfter: customDayjs().subtract(1, 'day').toISOString()
+        willArriveAfter: customDayjs.utc().toISOString(),
+        willArriveBefore: customDayjs.utc().add(1, 'day').toISOString()
       }
 
     default:

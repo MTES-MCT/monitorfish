@@ -314,7 +314,7 @@ context('Side Window > Mission Form > Land Control', () => {
 
     // A mission zone should be automatically added
     cy.get('.Toastify__toast--success').contains(
-      'Une zone de mission a été ajoutée à partir des contrôles de la mission'
+      'Une zone de mission a été modifiée à partir des contrôles de la mission'
     )
     cy.get('*[data-cy="mission-main-form-location"]').should(
       'contain',
@@ -345,7 +345,7 @@ context('Side Window > Mission Form > Land Control', () => {
 
     // The mission zone should be automatically updated
     cy.get('.Toastify__toast--success').contains(
-      'Une zone de mission a été ajoutée à partir des contrôles de la mission'
+      'Une zone de mission a été modifiée à partir des contrôles de la mission'
     )
 
     cy.get('*[data-cy="mission-main-form-location"]').should(
@@ -464,5 +464,12 @@ context('Side Window > Mission Form > Land Control', () => {
     )
       .its('response.statusCode')
       .should('eq', 201)
+    cy.wait(250)
+    cy.fill('Port de contrôle', undefined)
+    cy.get('*[data-cy="mission-main-form-location"]').should(
+      'not.contain',
+      'Actuellement, la zone de mission ' +
+        'est automatiquement calculée selon le point ou la zone de la dernière action rapportée par l’unité.'
+    )
   })
 })

@@ -1,3 +1,4 @@
+import { cleanMissionForm } from '@features/SideWindow/useCases/cleanMissionForm'
 import { UseCaseStore } from '@store/UseCaseStore'
 import { assertNotNullish } from '@utils/assertNotNullish'
 
@@ -15,4 +16,5 @@ export const confirmSideWindowDraftCancellationAndProceed = (): MainAppThunk => 
   }
   dispatch(sideWindowActions.closeDraftCancellationConfirmationDialog())
   dispatch(sideWindowActions.openOrFocusAndGoTo(sideWindow.nextPath))
+  dispatch(cleanMissionForm())
 }

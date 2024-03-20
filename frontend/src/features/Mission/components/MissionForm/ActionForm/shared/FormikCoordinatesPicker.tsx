@@ -36,7 +36,7 @@ export function FormikCoordinatesPicker() {
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const listener = useMainAppSelector(state => state.draw.listener)
 
-  const { updateFAOAreasAndSegments, updateMissionLocation } = useGetMissionActionFormikUsecases()
+  const { initMissionLocation, updateFAOAreasAndSegments, updateMissionLocation } = useGetMissionActionFormikUsecases()
   const { values } = useFormikContext<MissionActionFormValues>()
   const [{ value: longitudeValue }, longitudeMeta, longitudeHelpers] =
     useField<MissionActionFormValues['longitude']>('longitude')
@@ -135,6 +135,7 @@ export function FormikCoordinatesPicker() {
 
       longitudeHelpers.setValue(undefined)
       latitudeHelpers.setValue(undefined)
+      initMissionLocation()
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

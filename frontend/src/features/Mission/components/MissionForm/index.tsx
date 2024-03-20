@@ -9,6 +9,7 @@ import { autoSaveMissionAction } from '@features/Mission/useCases/autoSaveMissio
 import { deleteMission } from '@features/Mission/useCases/deleteMission'
 import { deleteMissionAction } from '@features/Mission/useCases/deleteMissionAction'
 import { saveMissionAndMissionActionsByDiff } from '@features/Mission/useCases/saveMissionAndMissionActionsByDiff'
+import { cleanMissionForm } from '@features/SideWindow/useCases/cleanMissionForm'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -167,8 +168,7 @@ export function MissionForm() {
   const goToMissionList = useCallback(async () => {
     const canExit = await dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }))
     if (canExit) {
-      dispatch(missionFormActions.resetMissionForm())
-      dispatch(missionFormActions.unsetSelectedMissionGeoJSON())
+      dispatch(cleanMissionForm())
     }
   }, [dispatch])
 
@@ -276,7 +276,12 @@ export function MissionForm() {
       }
 
       const nextActionsFormValues = await dispatch(
-        deleteMissionAction(actionsFormValues, actionIndex, isAutoSaveEnabled)
+        deleteMissionAction(
+          actionsFormValues,
+          actionIndex,
+          isAutoSaveEnabled,
+          mainFormValues.isGeometryComputedFromControls
+        )
       )
 
       setActionsFormValues(nextActionsFormValues)
@@ -289,6 +294,7 @@ export function MissionForm() {
       dispatch,
       updateEditedActionFormValues,
       updateReduxSliceDraft,
+      mainFormValues.isGeometryComputedFromControls,
       actionsFormValues,
       editedActionIndex,
       isAutoSaveEnabled
@@ -418,7 +424,7 @@ export function MissionForm() {
       const response = dispatch(monitorenvMissionApi.endpoints.canDeleteMission.initiate(missionIdRef.current))
       const canDeleteMissionResponse = await response.unwrap()
       if (canDeleteMissionResponse.canDelete) {
-        setIsDeletionConfirmationDialogOpen(!isDeletionConfirmationDialogOpen)
+        setIsDeletionConfirmationDialogOpen(true)
 
         return
       }
@@ -433,7 +439,7 @@ export function MissionForm() {
         userMessage: "Nous n'avons pas pu vérifier si cette mission est supprimable."
       })
     }
-  }, [isDeletionConfirmationDialogOpen, dispatch])
+  }, [dispatch])
 
   useEffect(() => {
     if (!missionEvent) {
@@ -495,14 +501,16 @@ export function MissionForm() {
           </FrontendErrorBoundary>
         </Body>
         <Footer>
-          <DeleteButton
-            accent={Accent.SECONDARY}
-            disabled={isSaving || mainFormValues.missionSource !== Mission.MissionSource.MONITORFISH}
-            Icon={Icon.Delete}
-            onClick={toggleDeletionConfirmationDialog}
-          >
-            Supprimer la mission
-          </DeleteButton>
+          {missionIdRef.current && (
+            <DeleteButton
+              accent={Accent.SECONDARY}
+              disabled={isSaving || mainFormValues.missionSource !== Mission.MissionSource.MONITORFISH}
+              Icon={Icon.Delete}
+              onClick={toggleDeletionConfirmationDialog}
+            >
+              Supprimer la mission
+            </DeleteButton>
+          )}
 
           <Separator />
 
@@ -570,7 +578,10 @@ export function MissionForm() {
       </Wrapper>
 
       {isDeletionConfirmationDialogOpen && (
-        <DeletionConfirmationDialog onCancel={toggleDeletionConfirmationDialog} onConfirm={handleDelete} />
+        <DeletionConfirmationDialog
+          onCancel={() => setIsDeletionConfirmationDialogOpen(false)}
+          onConfirm={handleDelete}
+        />
       )}
       {isDraftCancellationConfirmationDialogOpen && (
         <DraftCancellationConfirmationDialog isAutoSaveEnabled={isAutoSaveEnabled} />

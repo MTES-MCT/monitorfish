@@ -43,7 +43,7 @@ export function FilterBar() {
   const { gearsAsTreeOptions } = useGetGearsAsTreeOptions()
   const { portsAsTreeOptions } = useGetPortsAsTreeOptions()
   const { speciesAsOptions } = useGetSpeciesAsOptions()
-  const { typesAsOptions } = useGetPriorNotificationTypesAsOptions()
+  const { priorNotificationTypesAsOptions } = useGetPriorNotificationTypesAsOptions()
   const dispatch = useMainAppDispatch()
 
   const updateCountryCodes = (nextCountryCodes: string[] | undefined) => {
@@ -94,16 +94,16 @@ export function FilterBar() {
     dispatch(priorNotificationActions.setListFilterValues({ portLocodes: nextPortLocodes }))
   }
 
+  const updatePriorNotificationTypes = (nextPriorNotificationTypes: string[] | undefined) => {
+    dispatch(priorNotificationActions.setListFilterValues({ priorNotificationTypes: nextPriorNotificationTypes }))
+  }
+
   const updateSearchQuery = (nextSearchQuery: string | undefined) => {
     dispatch(priorNotificationActions.setListFilterValues({ searchQuery: nextSearchQuery }))
   }
 
   const updateSpecyCodes = (nextSpecyCodes: string[] | undefined) => {
     dispatch(priorNotificationActions.setListFilterValues({ specyCodes: nextSpecyCodes }))
-  }
-
-  const updateTypes = (nextTypes: string[] | undefined) => {
-    dispatch(priorNotificationActions.setListFilterValues({ types: nextTypes }))
   }
 
   return (
@@ -207,11 +207,11 @@ export function FilterBar() {
           cleanable={false}
           isLabelHidden
           isTransparent
-          label="Date d'arrivée estimée"
+          label="Date d’arrivée estimée"
           name="expectedArrivalPeriod"
           onChange={updateExpectedArrivalPeriod}
           options={EXPECTED_ARRIVAL_PERIODS_AS_OPTIONS}
-          placeholder="Date d'envoi du préavis"
+          placeholder="Date d’arrivée estimée"
           style={{ minWidth: 265 }}
           value={listFilterValues.expectedArrivalPeriod}
         />
@@ -219,27 +219,27 @@ export function FilterBar() {
           disabled={!portsAsTreeOptions}
           isLabelHidden
           isTransparent
-          label="Ports d'arrivée"
+          label="Ports d’arrivée"
           name="portLocodes"
           onChange={updatePortLocodes}
           options={portsAsTreeOptions ?? []}
-          placeholder="Ports d'arrivée"
+          placeholder="Ports d’arrivée"
           popupWidth={500}
           searchable
           value={listFilterValues.portLocodes}
         />
         <MultiSelect
-          disabled={!typesAsOptions}
+          disabled={!priorNotificationTypesAsOptions}
           isLabelHidden
           isTransparent
           label="Types de préavis"
-          name="types"
-          onChange={updateTypes}
-          options={typesAsOptions ?? []}
+          name="priorNotificationTypes"
+          onChange={updatePriorNotificationTypes}
+          options={priorNotificationTypesAsOptions ?? []}
           placeholder="Types de préavis"
           popupWidth={240}
           searchable
-          value={listFilterValues.types}
+          value={listFilterValues.priorNotificationTypes}
           virtualized
         />
         <RichBooleanCheckbox

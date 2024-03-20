@@ -223,6 +223,21 @@ class JpaLogbookReportRepository(
                     ),
                 )
             }
+
+            it.priorNotificationTypes?.let { types ->
+                predicates.add(
+                    criteriaBuilder.isTrue(
+                        criteriaBuilder.function(
+                            "jsonb_contains_any",
+                            Boolean::class.java,
+                            logbookReportEntity.get<String>("message"),
+                            criteriaBuilder.literal(arrayOf("pnoTypes")),
+                            criteriaBuilder.literal("pnoTypeName"),
+                            criteriaBuilder.literal(types.toTypedArray()),
+                        ),
+                    ),
+                )
+            }
         }
 
         criteriaQuery.select(logbookReportEntity).where(*predicates.toTypedArray())

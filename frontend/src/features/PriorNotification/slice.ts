@@ -21,10 +21,10 @@ const INITIAL_STATE: PriorNotificationState = {
     isSent: undefined,
     lastControlPeriod: undefined,
     portLocodes: undefined,
+    priorNotificationTypes: undefined,
     seaFrontGroup: SeaFrontGroup.ALL,
     searchQuery: undefined,
-    specyCodes: undefined,
-    types: undefined
+    specyCodes: undefined
   }
 }
 

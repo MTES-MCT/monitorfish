@@ -111,6 +111,7 @@ export namespace LogbookMessage {
       lastControlledAfter: string
       lastControlledBefore: string
       portLocodes: string[]
+      priorNotificationTypesAsOptions: string[]
       searchQuery: string
       specyCodes: string[]
       tripGearCodes: string[]

@@ -672,7 +672,7 @@ def test_flow(reset_test_data):
     e = create_engine("monitorfish_remote")
     with e.begin() as conn:
         conn.execute(
-            text("UPDATE logbook_reports " "SET enriched = false " "WHERE id = 12;")
+            text("UPDATE logbook_reports SET enriched = false " "WHERE id = 12;")
         )
 
         conn.execute(
@@ -718,13 +718,13 @@ def test_flow(reset_test_data):
         12,
         13,
     }
-    pnos_after_first_run.loc[pnos_after_first_run.id == 12, "trip_gears"].iloc[0] == [
-        {"gear": "TBB", "mesh": 140, "dimensions": "250.0"}
-    ]
+    assert pnos_after_first_run.loc[pnos_after_first_run.id == 12, "trip_gears"].iloc[
+        0
+    ] == [{"gear": "TBB", "mesh": 140, "dimensions": "250.0"}]
 
-    pnos_after_first_run.loc[pnos_after_first_run.id == 13, "trip_gears"].iloc[0] == [
-        {"gear": "TBB", "mesh": 140, "dimensions": "250.0"}
-    ]
+    assert pnos_after_first_run.loc[pnos_after_first_run.id == 13, "trip_gears"].iloc[
+        0
+    ] == [{"gear": "TBB", "mesh": 140, "dimensions": "250.0"}]
 
     # After second run without reset, manual modifications on PNO n°13 should be
     # preserved

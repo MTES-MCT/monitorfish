@@ -15,10 +15,10 @@ export type ListFilter = UndefineExcept<
     isSent: boolean
     lastControlPeriod: LastControlPeriod
     portLocodes: string[]
+    priorNotificationTypes: string[]
     seaFrontGroup: SeaFrontGroup | 'EXTRA'
     searchQuery: string
     specyCodes: string[]
-    types: string[]
   },
   'expectedArrivalPeriod' | 'seaFrontGroup'
 >

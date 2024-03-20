@@ -727,6 +727,21 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `findAllPriorNotifications Should return PNO logbook reports for Préavis type A & Préavis type C types`() {
+        val filter = LogbookReportFilter(priorNotificationTypes = listOf("Préavis type A", "Préavis type C"))
+
+        val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
+
+        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(
+            result.all {
+                it.types.any { type -> listOf("Préavis type A", "Préavis type C").contains(type.name) }
+            },
+        ).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for vessels arriving after or before January 1st, 2024`() {
         val firstFilter = LogbookReportFilter(willArriveAfter = "2024-01-01T00:00:00Z")
 

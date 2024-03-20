@@ -6,6 +6,7 @@ data class LogbookReportFilter(
     val lastControlledAfter: String? = null,
     val lastControlledBefore: String? = null,
     val portLocodes: List<String>? = null,
+    val priorNotificationTypes: List<String>? = null,
     val searchQuery: String? = null,
     val specyCodes: List<String>? = null,
     val tripSegmentSegments: List<String>? = null,

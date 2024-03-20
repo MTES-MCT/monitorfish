@@ -10,7 +10,7 @@ import type { Option } from '@mtes-mct/monitor-ui'
 export function useGetPriorNotificationTypesAsOptions() {
   const { data: types, error, isLoading } = useGetPriorNotificationTypesQuery()
 
-  const typesAsOptions: Option[] | undefined = useMemo(() => {
+  const priorNotificationTypesAsOptions: Option[] | undefined = useMemo(() => {
     if (!types) {
       return undefined
     }
@@ -24,6 +24,6 @@ export function useGetPriorNotificationTypesAsOptions() {
   return {
     error,
     isLoading,
-    typesAsOptions
+    priorNotificationTypesAsOptions
   }
 }

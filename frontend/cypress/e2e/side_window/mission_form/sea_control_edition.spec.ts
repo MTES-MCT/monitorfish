@@ -1,4 +1,6 @@
 import { editSideWindowMission } from './utils'
+import { customDayjs } from '../../utils/customDayjs'
+import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
 context('Side Window > Mission Form > Sea Control Edition', () => {
   beforeEach(() => {
@@ -231,6 +233,9 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
 
       // -------------------------------------------------------------------------
       // Form
+      const endDate = getUtcDateInMultipleFormats(customDayjs().utc().add(7, 'day').toISOString())
+      cy.fill('Fin de mission', endDate.utcDateTupleWithTime)
+
       cy.get('*[data-cy="action-list-item"]').click()
       cy.wait(500)
 

@@ -671,9 +671,7 @@ def test_flow(reset_test_data):
     # Manual update : reset PNO n°12, modify PNO n°13
     e = create_engine("monitorfish_remote")
     with e.begin() as conn:
-        conn.execute(
-            text("UPDATE logbook_reports SET enriched = false " "WHERE id = 12;")
-        )
+        conn.execute(text("UPDATE logbook_reports SET enriched = false WHERE id = 12;"))
 
         conn.execute(
             text(

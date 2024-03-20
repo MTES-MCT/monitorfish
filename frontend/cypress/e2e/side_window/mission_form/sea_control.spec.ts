@@ -290,7 +290,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     // Clôturé par
     // TODO Handle multiple inputs with same label via an `index` in monitor-ui.
-    cy.get('[name="closedBy"]').eq(1).type('Alice')
+    cy.get('[name="closedBy"]').eq(1).type('Alice', { force: true })
 
     cy.wait(500)
 

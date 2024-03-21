@@ -1,7 +1,7 @@
 import type { PartialExcept } from '../../../../types'
-import type { Mission } from 'domain/entities/mission/types'
+import type { Mission } from '@features/Mission/mission.types'
+import type { MissionAction } from '@features/Mission/missionAction.types'
 import type { LegacyControlUnit } from 'domain/types/legacyControlUnit'
-import type { MissionAction } from 'domain/types/missionAction'
 
 export type MissionActionFormValues = PartialExcept<
   MissionAction.MissionActionData,

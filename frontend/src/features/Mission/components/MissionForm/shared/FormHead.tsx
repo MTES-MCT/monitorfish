@@ -1,12 +1,17 @@
+import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 export const FormHead = styled.div`
-  align-items: center;
+  align-items: end;
   display: flex;
-  padding: 32px 40px;
+  margin: 32px 40px 32px 40px;
+  padding-bottom: 8px;
+  height: 32px;
+  border-bottom: 1px solid ${THEME.color.slateGray};
+  flex-shrink: 0;
 
   > div {
-    margin-left: 24px;
+    margin-left: auto;
   }
 
   > h2 {

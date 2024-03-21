@@ -1,4 +1,4 @@
-import { Mission } from '../types'
+import { Mission } from '@features/Mission/mission.types'
 
 export function unitFilterFunction(mission: Mission.Mission, filter: string[]) {
   if (filter.length === 0) {

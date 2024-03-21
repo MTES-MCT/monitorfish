@@ -1,5 +1,5 @@
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { FormikCheckbox, FormikMultiRadio, FormikTextarea } from '@mtes-mct/monitor-ui'
-import { MissionAction } from 'domain/types/missionAction'
 import styled from 'styled-components'
 
 import { FieldsetGroup } from '../../shared/FieldsetGroup'

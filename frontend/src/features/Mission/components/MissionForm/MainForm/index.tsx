@@ -1,4 +1,5 @@
 import { BOOLEAN_AS_OPTIONS } from '@constants/index'
+import { MISSION_EVENT_UNSYNCHRONIZED_PROPERTIES_IN_FORM } from '@features/Mission/components/MissionForm/sse'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import {
   FormikCheckbox,
@@ -14,7 +15,7 @@ import { isEmpty, noop } from 'lodash/fp'
 import { memo, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
-import { MISSION_EVENT_UNSYNCHRONIZED_PROPERTIES_IN_FORM, MISSION_TYPES_AS_OPTIONS } from './constants'
+import { MISSION_TYPES_AS_OPTIONS } from './constants'
 import { FormikDoubleDatePicker } from './FormikDoubleDatePicker'
 import { FormikLocationPicker } from './FormikLocationPicker'
 import { FormikMultiControlUnitPicker } from './FormikMultiControlUnitPicker'

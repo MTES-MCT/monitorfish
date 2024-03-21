@@ -1,5 +1,6 @@
+import { Mission } from '@features/Mission/mission.types'
+
 import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
-import { Mission } from '../../../../src/domain/entities/mission/types'
 import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
 import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 import { FAKE_MISSION_WITH_EXTERNAL_ACTIONS, FAKE_MISSION_WITHOUT_EXTERNAL_ACTIONS } from '../../constants'

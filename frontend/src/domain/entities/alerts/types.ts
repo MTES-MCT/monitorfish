@@ -1,7 +1,7 @@
 import { SeaFront } from '../seaFront/constants'
 
-import type { MissionAction } from '../../types/missionAction'
 import type { VesselIdentifier, VesselIdentity } from '../vessel/types'
+import type { MissionAction } from '@features/Mission/missionAction.types'
 import type { Except } from 'type-fest'
 
 export enum PendingAlertValueType {

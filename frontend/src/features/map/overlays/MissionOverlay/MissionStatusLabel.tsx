@@ -1,8 +1,8 @@
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { Mission } from '../../../../domain/entities/mission/types'
 import { getMissionColor } from '../../../Mission/layers/MissionLayer/styles'
+import { Mission } from '../../../Mission/mission.types'
 
 type MissionStatusLabelType = {
   missionStatus?: Mission.MissionStatus | undefined

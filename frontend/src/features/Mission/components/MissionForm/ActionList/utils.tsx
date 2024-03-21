@@ -1,8 +1,11 @@
+import { Mission } from '@features/Mission/mission.types'
+import { MissionAction } from '@features/Mission/missionAction.types'
+import { MonitorEnvMissionAction } from '@features/Mission/monitorEnvMissionAction.types'
 import dayjs from 'dayjs'
-import { MissionAction } from 'domain/types/missionAction'
 import styled from 'styled-components'
 
 import type { MissionActionFormValues } from '../types'
+import type { MissionActionWithSource } from '@features/Mission/components/MissionForm/ActionList/types'
 import type { ReactNode } from 'react'
 
 export function formatDateLabel(dateLabel: string) {
@@ -15,7 +18,7 @@ export function formatDateLabel(dateLabel: string) {
 export function getActionTitle(
   subject: string | undefined,
   details: string | undefined,
-  placeholder: string
+  placeholder: string | undefined
 ): ReactNode {
   if (details) {
     return (
@@ -31,7 +34,11 @@ export function getActionTitle(
     )
   }
 
-  return <Placeholder>{`${subject ? `${subject} – ` : ''}${placeholder}`}</Placeholder>
+  if (placeholder) {
+    return <Placeholder>{`${subject ? `${subject} – ` : ''}${placeholder}`}</Placeholder>
+  }
+
+  return subject
 }
 
 /**
@@ -59,6 +66,18 @@ export function getMissionActionFormInitialValues(type: MissionAction.MissionAct
     actionType: type,
     isValid: false
   }
+}
+
+export function getMissionActionDate(missionAction: MissionActionWithSource) {
+  if (missionAction.source === Mission.MissionSource.MONITORFISH) {
+    return (missionAction as unknown as MissionAction.MissionAction).actionDatetimeUtc
+  }
+
+  if (missionAction.source === Mission.MissionSource.MONITORENV) {
+    return (missionAction as MonitorEnvMissionAction.MissionAction).actionStartDateTimeUtc
+  }
+
+  throw new Error(`Unknown source: ${missionAction.source}`)
 }
 
 const Placeholder = styled.span`

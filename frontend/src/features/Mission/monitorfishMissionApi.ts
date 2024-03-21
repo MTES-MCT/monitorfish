@@ -1,6 +1,6 @@
 import { monitorfishApi } from '../../api/api'
 
-import type { MissionWithActions } from '../../domain/entities/mission/types'
+import type { MissionWithActions } from './mission.types'
 
 type GetMissionsFilter = {
   missionSource?: string

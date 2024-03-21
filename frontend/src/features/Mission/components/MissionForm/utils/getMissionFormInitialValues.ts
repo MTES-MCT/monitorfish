@@ -1,4 +1,4 @@
-import { type MissionWithActions } from 'domain/entities/mission/types'
+import { type MissionWithActions } from '@features/Mission/mission.types'
 
 import { validateMissionForms } from './validateMissionForms'
 

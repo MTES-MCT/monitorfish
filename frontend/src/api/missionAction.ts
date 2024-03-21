@@ -2,7 +2,7 @@ import { monitorfishApi, monitorfishApiKy } from './api'
 import { ApiError } from '../libs/ApiError'
 import { FrontendApiError } from '../libs/FrontendApiError'
 
-import type { MissionAction } from '../domain/types/missionAction'
+import type { MissionAction } from '@features/Mission/missionAction.types'
 
 const GET_MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les actions de la mission"
 

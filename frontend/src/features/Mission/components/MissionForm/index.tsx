@@ -4,6 +4,7 @@ import {
   useDeleteMissionActionMutation,
   useUpdateMissionActionMutation
 } from '@api/missionAction'
+import { Mission } from '@features/Mission/mission.types'
 import { autoSaveMission } from '@features/Mission/useCases/autoSaveMission'
 import { autoSaveMissionAction } from '@features/Mission/useCases/autoSaveMissionAction'
 import { deleteMission } from '@features/Mission/useCases/deleteMission'
@@ -23,7 +24,6 @@ import {
   NotificationEvent
 } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
-import { Mission } from 'domain/entities/mission/types'
 import { getMissionStatus } from 'domain/entities/mission/utils'
 import { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
 import { omit } from 'lodash/fp'
@@ -59,7 +59,7 @@ import {
 
 import type { MissionActionFormValues, MissionMainFormValues } from './types'
 import type { MissionWithActionsDraft } from '../../types'
-import type { MissionAction } from 'domain/types/missionAction'
+import type { MissionAction } from '@features/Mission/missionAction.types'
 
 const DEBOUNCE_DELAY = 500
 
@@ -485,6 +485,7 @@ export function MissionForm() {
               <ActionList
                 actionsFormValues={actionsFormValues}
                 currentIndex={editedActionIndex}
+                missionId={missionIdRef.current}
                 missionTypes={mainFormValues.missionTypes}
                 onAdd={addAction}
                 onDuplicate={duplicateAction}

@@ -1,19 +1,27 @@
+import { MonitorEnvMissionActionItem } from '@features/Mission/components/MissionForm/ActionList/MonitorEnvMissionActionItem'
+import { getMissionActionDate } from '@features/Mission/components/MissionForm/ActionList/utils'
+import { Mission } from '@features/Mission/mission.types'
+import { MissionAction } from '@features/Mission/missionAction.types'
+import { MonitorEnvMissionAction } from '@features/Mission/monitorEnvMissionAction.types'
+import { useGetMissionQuery } from '@features/Mission/monitorenvMissionApi'
 import { Dropdown, Icon } from '@mtes-mct/monitor-ui'
-import { Mission } from 'domain/entities/mission/types'
-import { MissionAction } from 'domain/types/missionAction'
+import { skipToken } from '@reduxjs/toolkit/dist/query'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 import { FrontendErrorBoundary } from 'ui/FrontendErrorBoundary'
 
-import { Item } from './Item'
+import { MissionActionItem } from './MissionActionItem'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
 
 import type { MissionActionFormValues } from '../types'
+import type { MissionActionWithSource } from '@features/Mission/components/MissionForm/ActionList/types'
 import type { Promisable } from 'type-fest'
 
 type ActionListProps = Readonly<{
   actionsFormValues: MissionActionFormValues[]
   currentIndex: number | undefined
+  missionId: number | undefined
   missionTypes: Mission.MissionType[] | undefined
   onAdd: (actionType: MissionAction.MissionActionType) => Promisable<void>
   onDuplicate: (actionIndex: number) => Promisable<void>
@@ -23,12 +31,43 @@ type ActionListProps = Readonly<{
 export function ActionList({
   actionsFormValues,
   currentIndex,
+  missionId,
   missionTypes = [],
   onAdd,
   onDuplicate,
   onRemove,
   onSelect
 }: ActionListProps) {
+  const getMissionApiQuery = useGetMissionQuery(missionId || skipToken)
+
+  const allSortedMissionActionsWithSource = useMemo(() => {
+    const monitorFishActions = actionsFormValues.map((action, index) => ({
+      ...action,
+      index,
+      source: Mission.MissionSource.MONITORFISH
+    }))
+
+    if (!getMissionApiQuery.data) {
+      return monitorFishActions
+    }
+
+    const monitorEnvActions = getMissionApiQuery.data.envActions.map(action => ({
+      ...action,
+      source: Mission.MissionSource.MONITORENV
+    }))
+
+    return [...monitorEnvActions, ...monitorFishActions].sort((actionA, actionB) => {
+      const dateA = getMissionActionDate(actionA)
+      const dateB = getMissionActionDate(actionB)
+
+      if (dateA < dateB) {
+        return 1
+      }
+
+      return -1
+    })
+  }, [actionsFormValues, getMissionApiQuery.data])
+
   return (
     <Wrapper>
       <FormHead>
@@ -66,20 +105,38 @@ export function ActionList({
 
       <FormBody data-cy="mission-form-action-list">
         <FrontendErrorBoundary>
-          {!actionsFormValues.length && <Placeholder>Aucune action n’est ajoutée pour le moment.</Placeholder>}
+          {!allSortedMissionActionsWithSource.length && (
+            <Placeholder>Aucune action n’est ajoutée pour le moment.</Placeholder>
+          )}
 
-          {actionsFormValues.length > 0 &&
-            actionsFormValues.map((action, index) => (
-              <Item
-                // eslint-disable-next-line react/no-array-index-key
-                key={index}
-                isSelected={index === currentIndex}
-                missionAction={action}
-                onDuplicate={() => onDuplicate(index)}
-                onRemove={() => onRemove(index)}
-                onSelect={() => onSelect(index)}
-              />
-            ))}
+          {allSortedMissionActionsWithSource.length > 0 &&
+            allSortedMissionActionsWithSource.map((action, index) => {
+              if (action.source === Mission.MissionSource.MONITORFISH) {
+                return (
+                  <MissionActionItem
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={index}
+                    isSelected={(action as unknown as MissionActionWithSource).index!! === currentIndex}
+                    missionAction={action as MissionActionFormValues}
+                    onDuplicate={() => onDuplicate((action as unknown as MissionActionWithSource).index!!)}
+                    onRemove={() => onRemove((action as unknown as MissionActionWithSource).index!!)}
+                    onSelect={() => onSelect((action as unknown as MissionActionWithSource).index!!)}
+                  />
+                )
+              }
+
+              if (action.source === Mission.MissionSource.MONITORENV) {
+                return (
+                  <MonitorEnvMissionActionItem
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={index}
+                    missionAction={action as MonitorEnvMissionAction.MissionAction}
+                  />
+                )
+              }
+
+              return null
+            })}
         </FrontendErrorBoundary>
       </FormBody>
     </Wrapper>

@@ -1,9 +1,9 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
 import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { mainStore } from '@store/index'
-import { MissionAction } from 'domain/types/missionAction'
 import { array, boolean, number, object, string } from 'yup'
 
 // -----------------------------------------------------------------------------

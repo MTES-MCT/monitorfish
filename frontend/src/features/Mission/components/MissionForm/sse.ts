@@ -1,14 +1,14 @@
 import { logInDev } from '@utils/logInDev'
 import { undefinedize } from '@utils/undefinedize'
 
-import type { Mission } from 'domain/entities/mission/types'
+import type { Mission } from '@features/Mission/mission.types'
 
 export const MISSION_EVENT_UNSYNCHRONIZED_PROPERTIES_IN_FORM = [
   // We do not update this field as it is not used by the form
   'updatedAtUtc',
   // We do not update this field as it is not used by the form
   'createdAtUtc',
-  // TODO add the update of the env actions
+  // We do not update this field as it is not used by the form
   'envActions',
   // For internal validation only
   'isValid'

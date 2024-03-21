@@ -1,7 +1,7 @@
 import { MONITORENV_API_URL } from '@api/api'
+import { Mission } from '@features/Mission/mission.types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { logInDev } from '@utils/logInDev'
-import { Mission } from 'domain/entities/mission/types'
 import { useEffect, useRef, useState } from 'react'
 
 import { missionEventListener } from '../sse'

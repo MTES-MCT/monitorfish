@@ -5,7 +5,7 @@ import { Green, Red } from './Controls.style'
 import { getNumberOfInfractions } from '../../../domain/entities/controls'
 import { getDate } from '../../../utils'
 
-import type { MissionAction } from '../../../domain/types/missionAction'
+import type { MissionAction } from '../../Mission/missionAction.types'
 
 type LastControlProps = {
   field: MissionAction.ControlAndText

@@ -5,7 +5,7 @@ import { circular } from 'ol/geom/Polygon'
 import { convertToGeoJSONGeometryObject } from '../../../domain/entities/layers'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../domain/entities/map/constants'
 import { LAND_CONTROL_ZONE_RADIUS, SEA_CONTROL_ZONE_RADIUS } from '../../../domain/entities/mission/constants'
-import { MissionAction } from '../../../domain/types/missionAction'
+import { MissionAction } from '../missionAction.types'
 
 import type { GeoJSON as GeoJSONType } from '../../../domain/types/GeoJSON'
 import type { Port } from '../../../domain/types/port'

@@ -118,7 +118,7 @@ module.exports = {
       }
     },
     {
-      files: ['src/domain/types/*.ts', 'src/domain/**/types.ts', 'src/domain/shared_slices/**/*.ts', 'src/**/slice.ts'],
+      files: ['src/domain/types/*.ts', 'src/domain/**/mission.types.ts', 'src/domain/shared_slices/**/*.ts', 'src/**/slice.ts'],
       plugins: ['no-null'],
       rules: {
         'no-param-reassign': 'off'

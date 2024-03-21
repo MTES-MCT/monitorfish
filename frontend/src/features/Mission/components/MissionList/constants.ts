@@ -1,15 +1,15 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
+import { getOptionsFromLabelledEnum } from '@utils/getOptionsFromLabelledEnum'
 
 import { MissionDateRangeFilterLabel, MissionFilterType } from './types'
-import { Mission } from '../../../domain/entities/mission/types'
-import { getMissionStatus } from '../../../domain/entities/mission/utils'
-import { SeaFrontGroup, SeaFrontGroupLabel } from '../../../domain/entities/seaFront/constants'
-import { UNKNOWN_VESSEL } from '../../../domain/entities/vessel/vessel'
-import { MissionAction } from '../../../domain/types/missionAction'
-import { getOptionsFromLabelledEnum } from '../../../utils/getOptionsFromLabelledEnum'
+import { getMissionStatus } from '../../../../domain/entities/mission/utils'
+import { SeaFrontGroup, SeaFrontGroupLabel } from '../../../../domain/entities/seaFront/constants'
+import { UNKNOWN_VESSEL } from '../../../../domain/entities/vessel/vessel'
+import { Mission } from '../../mission.types'
+import { MissionAction } from '../../missionAction.types'
 
-import type { MissionWithActions } from '../../../domain/entities/mission/types'
-import type { TableOptions } from '../../../hooks/useTable/types'
+import type { MissionWithActions } from '../../mission.types'
+import type { TableOptions } from '@hooks/useTable/types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 export const MISSION_FILTER_LABEL_ENUMS: Record<MissionFilterType, Record<string, string> | undefined> = {

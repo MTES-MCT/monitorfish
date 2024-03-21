@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import type { MissionAction } from '../types/missionAction'
+import type { MissionAction } from '@features/Mission/missionAction.types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export type ControlState = {

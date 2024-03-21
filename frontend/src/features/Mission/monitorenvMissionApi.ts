@@ -1,9 +1,9 @@
 import { monitorenvApi } from '@api/api'
 import { ApiErrorCode } from '@api/types'
+import { Mission } from '@features/Mission/mission.types'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { UsageError } from '@libs/UsageError'
 import { ControlUnit } from '@mtes-mct/monitor-ui'
-import { Mission } from 'domain/entities/mission/types'
 
 const CREATE_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu créer la mission."
 const DELETE_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu supprimer la mission."

@@ -1,5 +1,6 @@
+import { Mission } from '@features/Mission/mission.types'
+
 import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
-import { Mission } from '../../../../src/domain/entities/mission/types'
 
 context('Side Window > Mission Form > Observation', () => {
   beforeEach(() => {

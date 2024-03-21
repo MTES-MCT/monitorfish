@@ -1,8 +1,10 @@
-import { SeaFront } from '../seaFront/constants'
+import { MonitorEnvMissionAction } from '@features/Mission/monitorEnvMissionAction.types'
 
-import type { GeoJSON } from '../../types/GeoJSON'
-import type { LegacyControlUnit } from '../../types/legacyControlUnit'
-import type { MissionAction } from '../../types/missionAction'
+import { SeaFront } from '../../domain/entities/seaFront/constants'
+
+import type { GeoJSON } from '../../domain/types/GeoJSON'
+import type { LegacyControlUnit } from '../../domain/types/legacyControlUnit'
+import type { MissionAction } from '@features/Mission/missionAction.types'
 import type { Except } from 'type-fest'
 
 export namespace Mission {
@@ -11,6 +13,7 @@ export namespace Mission {
     controlUnits: LegacyControlUnit.LegacyControlUnit[]
     createdAtUtc?: string | undefined
     endDateTimeUtc?: string
+    envActions: MonitorEnvMissionAction.MissionAction[]
     facade?: SeaFront
     geom?: GeoJSON.MultiPolygon
     hasMissionOrder?: boolean | undefined

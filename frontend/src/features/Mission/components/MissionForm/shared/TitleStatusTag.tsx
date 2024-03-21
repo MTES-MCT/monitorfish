@@ -1,5 +1,5 @@
+import { Mission } from '@features/Mission/mission.types'
 import { Tag, THEME } from '@mtes-mct/monitor-ui'
-import { Mission } from 'domain/entities/mission/types'
 import styled from 'styled-components'
 
 import MissionStatus = Mission.MissionStatus

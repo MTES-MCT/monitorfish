@@ -1,3 +1,4 @@
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { FrontendError } from '@libs/FrontendError'
 import {
@@ -12,7 +13,6 @@ import {
   THEME
 } from '@mtes-mct/monitor-ui'
 import { UNKNOWN_VESSEL } from 'domain/entities/vessel/vessel'
-import { MissionAction } from 'domain/types/missionAction'
 import { find } from 'lodash'
 import { useMemo } from 'react'
 import styled, { css } from 'styled-components'
@@ -23,14 +23,20 @@ import { useGetNatinfsAsOptions } from '../hooks/useGetNatinfsAsOptions'
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
-type ItemProps = Readonly<{
+type MissionActionItemProps = Readonly<{
   isSelected: boolean
   missionAction: MissionActionFormValues
   onDuplicate: () => Promisable<void>
   onRemove: () => Promisable<void>
   onSelect: () => Promisable<void>
 }>
-export function Item({ isSelected, missionAction, onDuplicate, onRemove, onSelect }: ItemProps) {
+export function MissionActionItem({
+  isSelected,
+  missionAction,
+  onDuplicate,
+  onRemove,
+  onSelect
+}: MissionActionItemProps) {
   const draft = useMainAppSelector(state => state.missionForm.draft)
 
   const natinfsAsOptions = useGetNatinfsAsOptions()
@@ -136,10 +142,8 @@ export function Item({ isSelected, missionAction, onDuplicate, onRemove, onSelec
     <>
       <Wrapper>
         {startDateAsDayjs && (
-          <DateLabel>
+          <DateLabel title={missionAction.actionDatetimeUtc}>
             <b>{formatDateLabel(startDateAsDayjs.format('DD MMM'))}</b> à {startDateAsDayjs.format('HH:mm')}
-            <br />
-            (UTC)
           </DateLabel>
         )}
 
@@ -248,7 +252,7 @@ const ActionLabel = styled.div`
     margin-top: 0px;
     color: ${p => p.theme.color.gunMetal};
     padding: 1px 0px 0 0;
-    height: 30px;
+    min-height: 26px;
   }
 `
 

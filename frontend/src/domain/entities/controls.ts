@@ -1,6 +1,5 @@
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { customDayjs } from '@mtes-mct/monitor-ui'
-
-import { MissionAction } from '../types/missionAction'
 
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 

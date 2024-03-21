@@ -1,8 +1,8 @@
 import { useGetPortsQuery } from '@api/port'
 import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { MissionAction } from 'domain/types/missionAction'
 import { useFormikContext } from 'formik'
 import { useMemo } from 'react'
 

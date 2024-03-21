@@ -3,8 +3,8 @@ import { missionActionApi } from '@api/missionAction'
 
 import { monitorenvMissionApi } from '../monitorenvMissionApi'
 
+import type { MissionWithActions } from '@features/Mission/mission.types'
 import type { MainAppThunk } from '@store'
-import type { MissionWithActions } from 'domain/entities/mission/types'
 
 export const getMissionWithActions =
   (id: number): MainAppThunk<Promise<MissionWithActions>> =>

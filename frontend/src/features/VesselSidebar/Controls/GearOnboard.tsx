@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import type { MissionAction } from '../../../domain/types/missionAction'
+import type { MissionAction } from '../../Mission/missionAction.types'
 
 type GearOnboardProps = {
   gearOnboard: MissionAction.GearControl

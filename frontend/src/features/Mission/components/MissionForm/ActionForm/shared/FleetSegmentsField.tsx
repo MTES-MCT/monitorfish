@@ -8,8 +8,8 @@ import styled from 'styled-components'
 import { FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 
 import type { MissionActionFormValues } from '../../types'
+import type { MissionAction } from '@features/Mission/missionAction.types'
 import type { Option } from '@mtes-mct/monitor-ui'
-import type { MissionAction } from 'domain/types/missionAction'
 
 type FleetSegmentsFieldProps = Readonly<{
   label: string

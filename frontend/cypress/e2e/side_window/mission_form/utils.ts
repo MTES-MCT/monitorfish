@@ -2,7 +2,7 @@ import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
-import type { Mission } from '../../../../src/domain/entities/mission/types'
+import type { Mission } from '@features/Mission/mission.types'
 
 export const openSideWindowNewMission = () => {
   cy.viewport(1920, 1080)

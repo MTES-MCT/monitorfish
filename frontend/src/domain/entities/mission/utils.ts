@@ -1,6 +1,5 @@
+import { Mission } from '@features/Mission/mission.types'
 import { customDayjs } from '@mtes-mct/monitor-ui'
-
-import { Mission } from './types'
 
 export const getMissionStatus = ({
   endDateTimeUtc,

@@ -15,7 +15,6 @@ class GetPriorNotifications(
     private val logbookReportRepository: LogbookReportRepository,
     private val portRepository: PortRepository,
     private val reportingRepository: ReportingRepository,
-    private val vesselRepository: VesselRepository,
 ) {
     fun execute(filter: LogbookReportFilter): List<PriorNotification> {
         val priorNotifications =
@@ -39,10 +38,8 @@ class GetPriorNotifications(
                         }
                     }
 
-                val vessel = vesselRepository.findVesselById(priorNotification.vesselId)
-
                 val reportingsCount =
-                    vessel?.id?.let { vesselId ->
+                    priorNotification.vesselId.let { vesselId ->
                         reportingRepository.findCurrentAndArchivedByVesselIdEquals(
                             vesselId,
                             // TODO Fix that.

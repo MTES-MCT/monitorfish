@@ -37,7 +37,7 @@
     "@dnd-kit/modifiers": "6.0.1",
     "@mtes-mct/monitor-ui": "13.7.4",
     "@reduxjs/toolkit": "1.9.6",
-    "@sentry/browser": "7.55.2",
+    "@sentry/browser": "7.107.0",
     "@sentry/react": "7.52.1",
     "comlink": "4.4.1",
     "date-fns": "2.30.0",

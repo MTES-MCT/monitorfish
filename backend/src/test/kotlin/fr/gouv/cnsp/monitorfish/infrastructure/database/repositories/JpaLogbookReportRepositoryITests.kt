@@ -599,10 +599,13 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Test
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports from ESP & FRA vessels`() {
+        // Given
         val filter = LogbookReportFilter(flagStates = listOf("ESP", "FRA"))
 
+        // When
         val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
 
+        // Then
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(result.all { listOf("ES", "FR").contains(it.vesselFlagCountryCode) }).isEqualTo(true)
     }
@@ -610,17 +613,23 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Test
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for less than 12 meters long vessels`() {
+        // Given
         val firstFilter = LogbookReportFilter(isLessThanTwelveMetersVessel = true)
 
+        // When
         val firstResult = jpaLogbookReportRepository.findAllPriorNotifications(firstFilter)
 
+        // Then
         assertThat(firstResult).hasSizeGreaterThan(0)
         assertThat(firstResult.all { it.vesselLength!! < 12 }).isEqualTo(true)
 
+        // Given
         val secondFilter = LogbookReportFilter(isLessThanTwelveMetersVessel = false)
 
+        // When
         val secondResult = jpaLogbookReportRepository.findAllPriorNotifications(secondFilter)
 
+        // Then
         assertThat(secondResult).hasSizeGreaterThan(0)
         assertThat(secondResult.all { it.vesselLength!! >= 12 }).isEqualTo(true)
     }
@@ -628,10 +637,13 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Test
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports controlled after or before January 1st, 2024`() {
+        // Given
         val firstFilter = LogbookReportFilter(lastControlledAfter = "2024-01-01T00:00:00Z")
 
+        // When
         val firstResult = jpaLogbookReportRepository.findAllPriorNotifications(firstFilter)
 
+        // Then
         assertThat(firstResult).hasSizeGreaterThan(0)
         assertThat(
             firstResult.all {
@@ -639,10 +651,13 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
             },
         ).isEqualTo(true)
 
+        // Given
         val secondFilter = LogbookReportFilter(lastControlledBefore = "2024-01-01T00:00:00Z")
 
+        // When
         val secondResult = jpaLogbookReportRepository.findAllPriorNotifications(secondFilter)
 
+        // Then
         assertThat(secondResult).hasSizeGreaterThan(0)
         assertThat(
             secondResult.all {
@@ -654,10 +669,13 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Test
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for FRSML & FRVNE ports`() {
+        // Given
         val filter = LogbookReportFilter(portLocodes = listOf("FRSML", "FRVNE"))
 
+        // When
         val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
 
+        // Then
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(result.all { listOf("FRSML", "FRVNE").contains(it.portLocode) }).isEqualTo(true)
     }
@@ -665,17 +683,23 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Test
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for PHENOMENE vessel`() {
+        // Given
         val firstFilter = LogbookReportFilter(searchQuery = "pheno")
 
+        // When
         val firstResult = jpaLogbookReportRepository.findAllPriorNotifications(firstFilter)
 
+        // Then
         assertThat(firstResult).hasSizeGreaterThan(0)
         assertThat(firstResult.all { it.vesselName == "PHENOMENE" }).isEqualTo(true)
 
+        // Given
         val secondFilter = LogbookReportFilter(searchQuery = "hénO")
 
+        // When
         val secondResult = jpaLogbookReportRepository.findAllPriorNotifications(secondFilter)
 
+        // Then
         assertThat(secondResult).hasSizeGreaterThan(0)
         assertThat(secondResult.all { it.vesselName == "PHENOMENE" }).isEqualTo(true)
     }
@@ -683,10 +707,13 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Test
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for COD & HKE species`() {
+        // Given
         val filter = LogbookReportFilter(specyCodes = listOf("COD", "HKE"))
 
+        // When
         val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
 
+        // Then
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
@@ -698,10 +725,13 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Test
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for SWW06 & NWW03 segments`() {
+        // Given
         val filter = LogbookReportFilter(tripSegmentSegments = listOf("SWW06", "NWW03"))
 
+        // When
         val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
 
+        // Then
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
@@ -713,10 +743,13 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Test
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for OTT & TB gears`() {
+        // Given
         val filter = LogbookReportFilter(tripGearCodes = listOf("OTT", "TB"))
 
+        // When
         val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
 
+        // Then
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
@@ -728,10 +761,13 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Test
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for Préavis type A & Préavis type C types`() {
+        // Given
         val filter = LogbookReportFilter(priorNotificationTypes = listOf("Préavis type A", "Préavis type C"))
 
+        // When
         val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
 
+        // Then
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all {
@@ -743,10 +779,13 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Test
     @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for vessels arriving after or before January 1st, 2024`() {
+        // Given
         val firstFilter = LogbookReportFilter(willArriveAfter = "2024-01-01T00:00:00Z")
 
+        // When
         val firstResult = jpaLogbookReportRepository.findAllPriorNotifications(firstFilter)
 
+        // Then
         assertThat(firstResult).hasSizeGreaterThan(0)
         assertThat(
             firstResult.all {
@@ -754,10 +793,13 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
             },
         ).isEqualTo(true)
 
+        // Given
         val secondFilter = LogbookReportFilter(willArriveBefore = "2024-01-01T00:00:00Z")
 
+        // When
         val secondResult = jpaLogbookReportRepository.findAllPriorNotifications(secondFilter)
 
+        // Then
         assertThat(secondResult).hasSizeGreaterThan(0)
         assertThat(
             secondResult.all {

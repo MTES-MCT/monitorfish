@@ -334,16 +334,16 @@ def expected_computed_pno_segments() -> pd.DataFrame:
                 [
                     {
                         "segment": "SxTB8910",
-                        "segment_name": "Merlu Morue xTB zones 8 9 10",
+                        "segmentName": "Merlu Morue xTB zones 8 9 10",
                     }
                 ],
-                [{"segment": "SOTM", "segment_name": "Chaluts pélagiques"}],
+                [{"segment": "SOTM", "segmentName": "Chaluts pélagiques"}],
                 [
-                    {"segment": "SHKE27", "segment_name": "Merlu en zone 27"},
-                    {"segment": "SOTM", "segment_name": "Chaluts pélagiques"},
+                    {"segment": "SHKE27", "segmentName": "Merlu en zone 27"},
+                    {"segment": "SOTM", "segmentName": "Chaluts pélagiques"},
                 ],
-                [{"segment": "SOTM", "segment_name": "Chaluts pélagiques"}],
-                [{"segment": "SSB", "segment_name": "Senne de plage"}],
+                [{"segment": "SOTM", "segmentName": "Chaluts pélagiques"}],
+                [{"segment": "SSB", "segmentName": "Senne de plage"}],
             ],
         }
     )
@@ -379,8 +379,8 @@ def pnos_to_load() -> pd.DataFrame:
             "trip_segments": [
                 None,
                 [
-                    {"segment": "SHKE27", "segment_name": "Merlu en zone 27"},
-                    {"segment": "SOTM", "segment_name": "Chaluts pélagiques"},
+                    {"segment": "SHKE27", "segmentName": "Merlu en zone 27"},
+                    {"segment": "SOTM", "segmentName": "Chaluts pélagiques"},
                 ],
             ],
         }
@@ -421,8 +421,8 @@ def expected_loaded_pnos() -> pd.DataFrame:
                 None,
                 [],
                 [
-                    {"segment": "SHKE27", "segment_name": "Merlu en zone 27"},
-                    {"segment": "SOTM", "segment_name": "Chaluts pélagiques"},
+                    {"segment": "SHKE27", "segmentName": "Merlu en zone 27"},
+                    {"segment": "SOTM", "segmentName": "Chaluts pélagiques"},
                 ],
             ],
         }
@@ -515,16 +515,16 @@ def expected_merged_pnos() -> pd.DataFrame:
                 [
                     {
                         "segment": "SxTB8910",
-                        "segment_name": "Merlu Morue xTB zones 8 9 10",
+                        "segmentName": "Merlu Morue xTB zones 8 9 10",
                     }
                 ],
-                [{"segment": "SOTM", "segment_name": "Chaluts pélagiques"}],
+                [{"segment": "SOTM", "segmentName": "Chaluts pélagiques"}],
                 [
-                    {"segment": "SHKE27", "segment_name": "Merlu en zone 27"},
-                    {"segment": "SOTM", "segment_name": "Chaluts pélagiques"},
+                    {"segment": "SHKE27", "segmentName": "Merlu en zone 27"},
+                    {"segment": "SOTM", "segmentName": "Chaluts pélagiques"},
                 ],
-                [{"segment": "SOTM", "segment_name": "Chaluts pélagiques"}],
-                [{"segment": "SSB", "segment_name": "Senne de plage"}],
+                [{"segment": "SOTM", "segmentName": "Chaluts pélagiques"}],
+                [{"segment": "SSB", "segmentName": "Senne de plage"}],
             ],
         }
     )

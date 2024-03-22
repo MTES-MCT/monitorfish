@@ -736,7 +736,7 @@ UPDATE logbook_reports
 SET
     enriched = true,
     trip_gears = '[{"gear": "GTR", "mesh": 100, "dimensions": "250;180"}, {"gear": "GTR", "mesh": 120.5, "dimensions": "250;280"}]'::jsonb,
-    trip_segments = '[{"segment": "NWW01", "segment_name": "Chalutiers de fond"}, {"segment": "PEL01", "segment_name": "Chalutiers pélagiques"}]'::jsonb,
+    trip_segments = '[{"segment": "NWW01", "segmentName": "Chalutiers de fond"}, {"segment": "PEL01", "segmentName": "Chalutiers pélagiques"}]'::jsonb,
     value = jsonb_set(
         value,
         '{pnoTypes}',

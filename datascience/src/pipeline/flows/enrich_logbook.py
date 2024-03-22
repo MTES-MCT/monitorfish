@@ -161,7 +161,7 @@ def compute_pno_segments(
                 sg.logbook_reports_pno_id,
                 LIST_SORT(ARRAY_AGG(DISTINCT {
                     'segment': s.segment,
-                    'segment_name': s.segment_name
+                    'segmentName': s.segment_name
                 })) AS trip_segments
             FROM pno_species_and_gears sg
             LEFT JOIN trip_gear_codes tgc

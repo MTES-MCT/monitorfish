@@ -5,6 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 data class LogbookTripSegment(
     @JsonProperty("segment")
     val code: String,
-    @JsonProperty("segment_name")
+    @JsonProperty("segmentName")
     val name: String,
 )

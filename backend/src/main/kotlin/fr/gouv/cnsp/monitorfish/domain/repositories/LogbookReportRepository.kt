@@ -8,7 +8,7 @@ import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
 import java.time.ZonedDateTime
 
 interface LogbookReportRepository {
-    fun findAllPriorNotifications(filter: LogbookReportFilter? = null): List<PriorNotification>
+    fun findAllPriorNotifications(filter: LogbookReportFilter): List<PriorNotification>
 
     @Throws(NoLogbookFishingTripFound::class)
     fun findLastTripBeforeDateTime(

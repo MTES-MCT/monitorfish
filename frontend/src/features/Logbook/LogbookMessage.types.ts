@@ -2,7 +2,7 @@ import type { Undefine, UndefineExcept } from '@mtes-mct/monitor-ui'
 
 export namespace LogbookMessage {
   export type LogbookMessage = {
-    acknowledge: Aknowledge | undefined
+    acknowledge: Acknowledge | undefined
     deleted: boolean
     externalReferenceNumber: string
     flagState: string
@@ -25,7 +25,7 @@ export namespace LogbookMessage {
     vesselName: string
   }
 
-  export type Aknowledge = {
+  export type Acknowledge = {
     dateTime: string | undefined
     isSuccess: boolean
     rejectionCause: string | undefined
@@ -52,7 +52,7 @@ export namespace LogbookMessage {
   >
 
   export type Message = Undefine<{
-    catchOnboard: MessageCatchonboard[]
+    catchOnboard: MessageCatchOnboard[]
     economicZone: string
     effortZone: string
     faoZone: string
@@ -69,7 +69,7 @@ export namespace LogbookMessage {
     tripStartDate: string
   }>
 
-  export type MessageCatchonboard = {
+  export type MessageCatchOnboard = {
     conversionFactor: number
     economicZone: string
     effortZone: string

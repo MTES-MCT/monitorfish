@@ -373,7 +373,7 @@ class JpaLogbookReportRepository(
     }
 
     private fun getTripNotFoundExceptionMessage(internalReferenceNumber: String) =
-        "No trip found found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
+        "No trip found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
 
     @Cacheable(value = ["logbook_messages"])
     override fun findAllMessagesByTripNumberBetweenDates(

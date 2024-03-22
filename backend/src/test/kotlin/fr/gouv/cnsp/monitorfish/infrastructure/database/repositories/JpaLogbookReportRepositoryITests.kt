@@ -87,7 +87,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
-        assertThat(throwable.message).contains("No trip found found for the vessel.")
+        assertThat(throwable.message).contains("No trip found for the vessel.")
     }
 
     @Test
@@ -104,7 +104,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
-        assertThat(throwable.message).contains("No trip found found for the vessel.")
+        assertThat(throwable.message).contains("No trip found for the vessel.")
     }
 
     @Test
@@ -137,7 +137,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
-        assertThat(throwable.message).contains("No trip found found for the vessel.")
+        assertThat(throwable.message).contains("No trip found for the vessel.")
     }
 
     @Test
@@ -202,7 +202,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
-        assertThat(throwable.message).contains("No trip found found for the vessel.")
+        assertThat(throwable.message).contains("No trip found for the vessel.")
     }
 
     @Test
@@ -536,7 +536,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
-        assertThat(throwable.message).contains("No trip found found for the vessel.")
+        assertThat(throwable.message).contains("No trip found for the vessel.")
     }
 
     @Test

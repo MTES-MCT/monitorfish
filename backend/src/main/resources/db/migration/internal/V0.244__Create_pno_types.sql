@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS pno_types (
     id SERIAL PRIMARY KEY,
     name VARCHAR NOT NULL,
     minimum_notification_period DOUBLE PRECISION NOT NULL DEFAULT -1,
-    has_designated_ports BOOLEAN NOT NULL DEFAULT False
+    has_designated_ports BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS pno_type_rules (

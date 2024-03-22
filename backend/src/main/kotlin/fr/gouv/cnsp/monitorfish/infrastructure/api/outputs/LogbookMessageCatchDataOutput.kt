@@ -18,21 +18,21 @@ class LogbookMessageCatchDataOutput(
     var statisticalRectangle: String?,
 ) {
     companion object {
-        fun fromCatch(priorNotificationType: Catch): LogbookMessageCatchDataOutput {
+        fun fromCatch(catch: Catch): LogbookMessageCatchDataOutput {
             return LogbookMessageCatchDataOutput(
-                weight = priorNotificationType.weight,
-                numberFish = priorNotificationType.numberFish,
-                species = priorNotificationType.species,
-                speciesName = priorNotificationType.speciesName,
-                faoZone = priorNotificationType.faoZone,
-                freshness = priorNotificationType.freshness,
-                packaging = priorNotificationType.packaging,
-                effortZone = priorNotificationType.effortZone,
-                presentation = priorNotificationType.presentation,
-                economicZone = priorNotificationType.economicZone,
-                conversionFactor = priorNotificationType.conversionFactor,
-                preservationState = priorNotificationType.preservationState,
-                statisticalRectangle = priorNotificationType.statisticalRectangle,
+                weight = catch.weight,
+                numberFish = catch.numberFish,
+                species = catch.species,
+                speciesName = catch.speciesName,
+                faoZone = catch.faoZone,
+                freshness = catch.freshness,
+                packaging = catch.packaging,
+                effortZone = catch.effortZone,
+                presentation = catch.presentation,
+                economicZone = catch.economicZone,
+                conversionFactor = catch.conversionFactor,
+                preservationState = catch.preservationState,
+                statisticalRectangle = catch.statisticalRectangle,
             )
         }
     }

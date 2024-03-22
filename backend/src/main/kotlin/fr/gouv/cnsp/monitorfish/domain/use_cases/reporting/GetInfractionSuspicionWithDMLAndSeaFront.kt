@@ -28,7 +28,7 @@ class GetInfractionSuspicionWithDMLAndSeaFront(
 
                     return infractionSuspicion.copy(dml = district.dml, seaFront = district.facade)
                 } catch (e: CodeNotFoundException) {
-                    logger.warn("Could not add DML and sea front.", e)
+                    logger.warn("Could not add DML and sea front for vesselId: $vesselIdNotNull.", e)
                 }
             }
         }

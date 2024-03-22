@@ -95,15 +95,14 @@ data class VesselEntity(
             mmsi = mmsi,
             externalReferenceNumber = externalReferenceNumber,
             vesselName = vesselName,
-            flagState =
-                flagState?.let {
-                    try {
-                        CountryCode.valueOf(flagState)
-                    } catch (e: IllegalArgumentException) {
-                        logger.warn(e.message)
-                        CountryCode.UNDEFINED
-                    }
-                } ?: CountryCode.UNDEFINED,
+            flagState = flagState?.let {
+                try {
+                    CountryCode.valueOf(flagState)
+                } catch (e: IllegalArgumentException) {
+                    logger.warn(e.message)
+                    CountryCode.UNDEFINED
+                }
+            } ?: CountryCode.UNDEFINED,
             width = width,
             length = length,
             district = district,

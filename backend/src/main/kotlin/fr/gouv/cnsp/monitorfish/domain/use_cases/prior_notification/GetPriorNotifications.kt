@@ -19,33 +19,30 @@ class GetPriorNotifications(
     fun execute(filter: LogbookReportFilter): List<PriorNotification> {
         val priorNotifications =
             logbookReportRepository.findAllPriorNotifications(filter).map { priorNotification ->
-                val port =
-                    try {
-                        priorNotification.portLocode?.let {
-                            portRepository.find(it)
-                        }
-                    } catch (e: CodeNotFoundException) {
-                        null
+                val port = try {
+                    priorNotification.portLocode?.let {
+                        portRepository.find(it)
                     }
+                } catch (e: CodeNotFoundException) {
+                    null
+                }
 
                 // TODO Doesn't seem to work.
-                val seaFront =
-                    port?.latitude?.let { latitude ->
-                        port.longitude?.let { longitude ->
-                            val point = GeometryFactory().createPoint(Coordinate(longitude, latitude))
+                val seaFront = port?.latitude?.let { latitude ->
+                    port.longitude?.let { longitude ->
+                        val point = GeometryFactory().createPoint(Coordinate(longitude, latitude))
 
-                            facadeAreasRepository.findByIncluding(point).firstOrNull()?.facade
-                        }
+                        facadeAreasRepository.findByIncluding(point).firstOrNull()?.facade
                     }
+                }
 
-                val reportingsCount =
-                    priorNotification.vesselId.let { vesselId ->
-                        reportingRepository.findCurrentAndArchivedByVesselIdEquals(
-                            vesselId,
-                            // TODO Fix that.
-                            fromDate = ZonedDateTime.now().minusYears(2),
-                        ).count()
-                    }
+                val reportingsCount = priorNotification.vesselId.let { vesselId ->
+                    reportingRepository.findCurrentAndArchivedByVesselIdEquals(
+                        vesselId,
+                        // TODO Fix that.
+                        fromDate = ZonedDateTime.now().minusYears(2),
+                    ).count()
+                }
 
                 priorNotification.copy(
                     portName = port?.name,

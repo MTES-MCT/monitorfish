@@ -253,10 +253,9 @@ class GetLogbookMessagesUTests {
                         operationType = LogbookOperationType.RET,
                         messageType = "",
                         message = lastAck,
-                        reportDateTime =
-                            ZonedDateTime.of(2021, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC).minusHours(
-                                12,
-                            ),
+                        reportDateTime = ZonedDateTime.of(2021, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC).minusHours(
+                            12,
+                        ),
                         transmissionFormat = LogbookTransmissionFormat.ERS,
                         integrationDateTime = ZonedDateTime.now(),
                         isEnriched = false,

@@ -45,7 +45,7 @@ class GetPriorNotifications(
                             // TODO Fix that.
                             fromDate = ZonedDateTime.now().minusYears(2),
                         ).count()
-                    } ?: 0
+                    }
 
                 priorNotification.copy(
                     portName = port?.name,

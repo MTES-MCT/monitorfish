@@ -74,7 +74,7 @@ class JpaLogbookReportRepository(
         }
     }
 
-    override fun findAllPriorNotifications(filter: LogbookReportFilter?): List<PriorNotification> {
+    override fun findAllPriorNotifications(filter: LogbookReportFilter): List<PriorNotification> {
         val criteriaBuilder = entityManager.criteriaBuilder
         val criteriaQuery = criteriaBuilder.createQuery(LogbookReportEntity::class.java)
         val logbookReportEntity = criteriaQuery.from(LogbookReportEntity::class.java)
@@ -96,148 +96,146 @@ class JpaLogbookReportRepository(
                 criteriaBuilder.literal("predictedArrivalDatetimeUtc"),
             )
 
-        filter?.let {
-            it.willArriveAfter?.let { willArriveAfter ->
-                predicates.add(
-                    criteriaBuilder.greaterThanOrEqualTo(
-                        predictedArrivalDatetimeUtcAsTimestamp,
-                        ZonedDateTime.parse(willArriveAfter).withZoneSameInstant(UTC),
-                    ),
-                )
-            }
+        filter.willArriveAfter?.let { willArriveAfter ->
+            predicates.add(
+                criteriaBuilder.greaterThanOrEqualTo(
+                    predictedArrivalDatetimeUtcAsTimestamp,
+                    ZonedDateTime.parse(willArriveAfter).withZoneSameInstant(UTC),
+                ),
+            )
+        }
 
-            it.willArriveBefore?.let { willArriveBefore ->
-                predicates.add(
-                    criteriaBuilder.lessThanOrEqualTo(
-                        predictedArrivalDatetimeUtcAsTimestamp,
-                        ZonedDateTime.parse(willArriveBefore).withZoneSameInstant(UTC),
-                    ),
-                )
-            }
+        filter.willArriveBefore?.let { willArriveBefore ->
+            predicates.add(
+                criteriaBuilder.lessThanOrEqualTo(
+                    predictedArrivalDatetimeUtcAsTimestamp,
+                    ZonedDateTime.parse(willArriveBefore).withZoneSameInstant(UTC),
+                ),
+            )
+        }
 
-            it.flagStates?.let { flagStates ->
-                predicates.add(logbookReportEntity.get<String>("flagState").`in`(flagStates))
-            }
+        filter.flagStates?.let { flagStates ->
+            predicates.add(logbookReportEntity.get<String>("flagState").`in`(flagStates))
+        }
 
-            it.isLessThanTwelveMetersVessel?.let { isLessThanTwelveMetersVessel ->
-                predicates.add(
-                    withIsLessThanTwelveMetersVessel(isLessThanTwelveMetersVessel)
-                        .toPredicate(logbookReportEntity, criteriaQuery, criteriaBuilder),
-                )
-            }
+        filter.isLessThanTwelveMetersVessel?.let { isLessThanTwelveMetersVessel ->
+            predicates.add(
+                withIsLessThanTwelveMetersVessel(isLessThanTwelveMetersVessel)
+                    .toPredicate(logbookReportEntity, criteriaQuery, criteriaBuilder),
+            )
+        }
 
-            it.lastControlledAfter?.let { lastControlledAfter ->
-                predicates.add(
-                    withLastControlledAfter(lastControlledAfter)
-                        .toPredicate(logbookReportEntity, criteriaQuery, criteriaBuilder),
-                )
-            }
+        filter.lastControlledAfter?.let { lastControlledAfter ->
+            predicates.add(
+                withLastControlledAfter(lastControlledAfter)
+                    .toPredicate(logbookReportEntity, criteriaQuery, criteriaBuilder),
+            )
+        }
 
-            it.lastControlledBefore?.let { lastControlledBefore ->
-                predicates.add(
-                    withLastControlledBefore(lastControlledBefore)
-                        .toPredicate(logbookReportEntity, criteriaQuery, criteriaBuilder),
-                )
-            }
+        filter.lastControlledBefore?.let { lastControlledBefore ->
+            predicates.add(
+                withLastControlledBefore(lastControlledBefore)
+                    .toPredicate(logbookReportEntity, criteriaQuery, criteriaBuilder),
+            )
+        }
 
-            it.portLocodes?.let { portLocodes ->
-                predicates.add(
+        filter.portLocodes?.let { portLocodes ->
+            predicates.add(
+                criteriaBuilder.function(
+                    "jsonb_extract_path_text",
+                    String::class.java,
+                    logbookReportEntity.get<String>("message"),
+                    criteriaBuilder.literal("port"),
+                ).`in`(portLocodes),
+            )
+        }
+
+        // TODO Should we use `vesselName` (history) or `vessel.name` (up-to-date)?
+        filter.searchQuery?.let { searchQuery ->
+            val normalizedPath =
+                criteriaBuilder.lower(
                     criteriaBuilder.function(
-                        "jsonb_extract_path_text",
+                        "unaccent",
                         String::class.java,
+                        logbookReportEntity.get<String>("vesselName"),
+                    ),
+                )
+            val searchQueryPattern = "%${searchQuery.trim()}%"
+            val normalizedSearchQuery =
+                criteriaBuilder.lower(
+                    criteriaBuilder.function(
+                        "unaccent",
+                        String::class.java,
+                        criteriaBuilder.literal(searchQueryPattern),
+                    ),
+                )
+
+            predicates.add(
+                criteriaBuilder.like(
+                    normalizedPath,
+                    normalizedSearchQuery,
+                ),
+            )
+        }
+
+        filter.specyCodes?.let { specyCodes ->
+            predicates.add(
+                criteriaBuilder.isTrue(
+                    criteriaBuilder.function(
+                        "jsonb_contains_any",
+                        Boolean::class.java,
                         logbookReportEntity.get<String>("message"),
-                        criteriaBuilder.literal("port"),
-                    ).`in`(portLocodes),
-                )
-            }
-
-            // TODO Should we use `vesselName` (history) or `vessel.name` (up-to-date)?
-            it.searchQuery?.let { searchQuery ->
-                val normalizedPath =
-                    criteriaBuilder.lower(
-                        criteriaBuilder.function(
-                            "unaccent",
-                            String::class.java,
-                            logbookReportEntity.get<String>("vesselName"),
-                        ),
-                    )
-                val searchQueryPattern = "%${searchQuery.trim()}%"
-                val normalizedSearchQuery =
-                    criteriaBuilder.lower(
-                        criteriaBuilder.function(
-                            "unaccent",
-                            String::class.java,
-                            criteriaBuilder.literal(searchQueryPattern),
-                        ),
-                    )
-
-                predicates.add(
-                    criteriaBuilder.like(
-                        normalizedPath,
-                        normalizedSearchQuery,
+                        criteriaBuilder.literal(arrayOf("catchOnboard")),
+                        criteriaBuilder.literal("species"),
+                        criteriaBuilder.literal(specyCodes.toTypedArray()),
                     ),
-                )
-            }
+                ),
+            )
+        }
 
-            it.specyCodes?.let { specyCodes ->
-                predicates.add(
-                    criteriaBuilder.isTrue(
-                        criteriaBuilder.function(
-                            "jsonb_contains_any",
-                            Boolean::class.java,
-                            logbookReportEntity.get<String>("message"),
-                            criteriaBuilder.literal(arrayOf("catchOnboard")),
-                            criteriaBuilder.literal("species"),
-                            criteriaBuilder.literal(specyCodes.toTypedArray()),
-                        ),
+        filter.tripGearCodes?.let { tripGearCodes ->
+            predicates.add(
+                criteriaBuilder.isTrue(
+                    criteriaBuilder.function(
+                        "jsonb_contains_any",
+                        Boolean::class.java,
+                        logbookReportEntity.get<String>("tripGears"),
+                        criteriaBuilder.literal(emptyArray<String>()),
+                        criteriaBuilder.literal("gear"),
+                        criteriaBuilder.literal(tripGearCodes.toTypedArray()),
                     ),
-                )
-            }
+                ),
+            )
+        }
 
-            it.tripGearCodes?.let { tripGearCodes ->
-                predicates.add(
-                    criteriaBuilder.isTrue(
-                        criteriaBuilder.function(
-                            "jsonb_contains_any",
-                            Boolean::class.java,
-                            logbookReportEntity.get<String>("tripGears"),
-                            criteriaBuilder.literal(emptyArray<String>()),
-                            criteriaBuilder.literal("gear"),
-                            criteriaBuilder.literal(tripGearCodes.toTypedArray()),
-                        ),
+        filter.tripSegmentSegments?.let { tripSegmentSegments ->
+            predicates.add(
+                criteriaBuilder.isTrue(
+                    criteriaBuilder.function(
+                        "jsonb_contains_any",
+                        Boolean::class.java,
+                        logbookReportEntity.get<String>("tripSegments"),
+                        criteriaBuilder.literal(emptyArray<String>()),
+                        criteriaBuilder.literal("segment"),
+                        criteriaBuilder.literal(tripSegmentSegments.toTypedArray()),
                     ),
-                )
-            }
+                ),
+            )
+        }
 
-            it.tripSegmentSegments?.let { tripSegmentSegments ->
-                predicates.add(
-                    criteriaBuilder.isTrue(
-                        criteriaBuilder.function(
-                            "jsonb_contains_any",
-                            Boolean::class.java,
-                            logbookReportEntity.get<String>("tripSegments"),
-                            criteriaBuilder.literal(emptyArray<String>()),
-                            criteriaBuilder.literal("segment"),
-                            criteriaBuilder.literal(tripSegmentSegments.toTypedArray()),
-                        ),
+        filter.priorNotificationTypes?.let { types ->
+            predicates.add(
+                criteriaBuilder.isTrue(
+                    criteriaBuilder.function(
+                        "jsonb_contains_any",
+                        Boolean::class.java,
+                        logbookReportEntity.get<String>("message"),
+                        criteriaBuilder.literal(arrayOf("pnoTypes")),
+                        criteriaBuilder.literal("pnoTypeName"),
+                        criteriaBuilder.literal(types.toTypedArray()),
                     ),
-                )
-            }
-
-            it.priorNotificationTypes?.let { types ->
-                predicates.add(
-                    criteriaBuilder.isTrue(
-                        criteriaBuilder.function(
-                            "jsonb_contains_any",
-                            Boolean::class.java,
-                            logbookReportEntity.get<String>("message"),
-                            criteriaBuilder.literal(arrayOf("pnoTypes")),
-                            criteriaBuilder.literal("pnoTypeName"),
-                            criteriaBuilder.literal(types.toTypedArray()),
-                        ),
-                    ),
-                )
-            }
+                ),
+            )
         }
 
         criteriaQuery.select(logbookReportEntity).where(*predicates.toTypedArray())

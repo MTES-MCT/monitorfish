@@ -1,8 +1,6 @@
-import { RichBoolean } from '@mtes-mct/monitor-ui'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
-import { ExpectedArrivalPeriod } from './components/PriorNotificationList/constants'
-import { SeaFrontGroup } from '../../domain/entities/seaFront/constants'
+import { DEFAULT_LIST_FILTER_VALUES } from './constants'
 
 import type { ListFilter } from './components/PriorNotificationList/types'
 
@@ -10,28 +8,17 @@ interface PriorNotificationState {
   listFilterValues: ListFilter
 }
 const INITIAL_STATE: PriorNotificationState = {
-  listFilterValues: {
-    countryCodes: undefined,
-    expectedArrivalCustomPeriod: undefined,
-    expectedArrivalPeriod: ExpectedArrivalPeriod.IN_LESS_THAN_FOUR_HOURS,
-    fleetSegmentSegments: undefined,
-    gearCodes: undefined,
-    hasOneOrMoreReportings: RichBoolean.BOTH,
-    isLessThanTwelveMetersVessel: RichBoolean.BOTH,
-    isSent: undefined,
-    lastControlPeriod: undefined,
-    portLocodes: undefined,
-    priorNotificationTypes: undefined,
-    seaFrontGroup: SeaFrontGroup.ALL,
-    searchQuery: undefined,
-    specyCodes: undefined
-  }
+  listFilterValues: DEFAULT_LIST_FILTER_VALUES
 }
 
 const priorNotificationSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'priorNotification',
   reducers: {
+    resetListFilterValues(state) {
+      state.listFilterValues = DEFAULT_LIST_FILTER_VALUES
+    },
+
     setListFilterValues(state, action: PayloadAction<Partial<ListFilter>>) {
       state.listFilterValues = {
         ...state.listFilterValues,

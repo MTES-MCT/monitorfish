@@ -10,13 +10,13 @@ import {
   DateRangePicker,
   Icon,
   MultiCascader,
-  MultiSelect,
   RichBoolean,
   RichBooleanCheckbox,
   Select,
   Size,
   TextInput,
-  type DateAsStringRange
+  type DateAsStringRange,
+  CheckPicker
 } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { useCallback } from 'react'
@@ -38,13 +38,13 @@ export type FilterBarProps = {
 }
 export function FilterBar() {
   const listFilterValues = useMainAppSelector(store => store.priorNotification.listFilterValues)
+  const dispatch = useMainAppDispatch()
 
   const { fleetSegmentsAsOptions } = useGetFleetSegmentsAsOptions()
   const { gearsAsTreeOptions } = useGetGearsAsTreeOptions()
   const { portsAsTreeOptions } = useGetPortsAsTreeOptions()
   const { speciesAsOptions } = useGetSpeciesAsOptions()
   const { priorNotificationTypesAsOptions } = useGetPriorNotificationTypesAsOptions()
-  const dispatch = useMainAppDispatch()
 
   const updateCountryCodes = (nextCountryCodes: string[] | undefined) => {
     dispatch(priorNotificationActions.setListFilterValues({ countryCodes: nextCountryCodes }))
@@ -123,20 +123,23 @@ export function FilterBar() {
       </Row>
 
       <Row>
-        <MultiSelect
+        <CheckPicker
           isLabelHidden
           isTransparent
-          label="Nationalité"
+          label="Nationalités"
           name="countryCodes"
           onChange={updateCountryCodes}
           options={COUNTRIES_AS_ALPHA3_OPTIONS}
           placeholder="Nationalité"
           popupWidth={240}
+          renderValue={(_, items) =>
+            items.length > 0 ? <SelectValue>Nationalités ({items.length})</SelectValue> : <></>
+          }
           searchable
           value={listFilterValues.countryCodes}
           virtualized
         />
-        <MultiSelect
+        <CheckPicker
           disabled={!fleetSegmentsAsOptions}
           isLabelHidden
           isTransparent
@@ -146,11 +149,14 @@ export function FilterBar() {
           options={fleetSegmentsAsOptions ?? []}
           placeholder="Segments de flotte"
           popupWidth={320}
+          renderValue={(_, items) =>
+            items.length > 0 ? <SelectValue>Segments de flotte ({items.length})</SelectValue> : <></>
+          }
           searchable
           value={listFilterValues.fleetSegmentSegments}
           virtualized
         />
-        <MultiSelect
+        <CheckPicker
           disabled={!speciesAsOptions}
           isLabelHidden
           isTransparent
@@ -160,6 +166,9 @@ export function FilterBar() {
           options={speciesAsOptions ?? []}
           placeholder="Espèces à bord"
           popupWidth={320}
+          renderValue={(_, items) =>
+            items.length > 0 ? <SelectValue>Espèces à bord ({items.length})</SelectValue> : <></>
+          }
           searchable
           value={listFilterValues.specyCodes}
           virtualized
@@ -174,6 +183,9 @@ export function FilterBar() {
           options={gearsAsTreeOptions ?? []}
           placeholder="Engins utilisés"
           popupWidth={500}
+          renderValue={(_, items) =>
+            items.length > 0 ? <SelectValue>Engins utilisés ({items.length})</SelectValue> : <></>
+          }
           searchable
           value={listFilterValues.gearCodes}
         />
@@ -225,10 +237,13 @@ export function FilterBar() {
           options={portsAsTreeOptions ?? []}
           placeholder="Ports d’arrivée"
           popupWidth={500}
+          renderValue={(_, items) =>
+            items.length > 0 ? <SelectValue>Ports d’arrivée ({items.length})</SelectValue> : <></>
+          }
           searchable
           value={listFilterValues.portLocodes}
         />
-        <MultiSelect
+        <CheckPicker
           disabled={!priorNotificationTypesAsOptions}
           isLabelHidden
           isTransparent
@@ -238,6 +253,9 @@ export function FilterBar() {
           options={priorNotificationTypesAsOptions ?? []}
           placeholder="Types de préavis"
           popupWidth={240}
+          renderValue={(_, items) =>
+            items.length > 0 ? <SelectValue>Types de préavis ({items.length})</SelectValue> : <></>
+          }
           searchable
           value={listFilterValues.priorNotificationTypes}
           virtualized
@@ -303,4 +321,12 @@ const Row = styled.div`
   > .Field-MultiCheckbox {
     min-width: 320px;
   }
+`
+
+const SelectValue = styled.span`
+  display: flex;
+  overflow: hidden;
+  pointer-events: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `

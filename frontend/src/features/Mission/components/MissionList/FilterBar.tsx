@@ -28,10 +28,10 @@ import { FormikFilterTagBar } from '../../../../ui/formiks/FormikFilterTagBar'
 import type { FilterValues } from './types'
 import type { Promisable } from 'type-fest'
 
-export type FilterBarProps = {
+export type FilterBarProps = Readonly<{
   onQueryChange: (nextQuery: string | undefined) => Promisable<void>
   searchQuery: string | undefined
-}
+}>
 export function FilterBar({ onQueryChange, searchQuery }: FilterBarProps) {
   const listFilterValues = useMainAppSelector(store => store.missionList.listFilterValues)
 

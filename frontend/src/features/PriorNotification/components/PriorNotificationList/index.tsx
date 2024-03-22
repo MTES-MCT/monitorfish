@@ -19,6 +19,7 @@ import styled from 'styled-components'
 
 import { PRIOR_NOTIFICATION_TABLE_COLUMNS, SUB_MENUS_AS_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
+import { FilterTags } from './FilterTags'
 import {
   countPriorNotificationsForSeaFrontGroup,
   getApiFilterFromListFilter,
@@ -121,6 +122,7 @@ export function PriorNotificationList() {
 
         <Body>
           <FilterBar />
+          <FilterTags />
 
           <TableWrapper ref={tableContainerRef}>
             {isError && <div>Une erreur est survenue.</div>}

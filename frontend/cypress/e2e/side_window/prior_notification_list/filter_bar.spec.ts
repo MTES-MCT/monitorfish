@@ -16,7 +16,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
 
     cy.intercept('GET', `${apiPathBase}*flagStates=FRA&flagStates=ESP*`).as('getPriorNotifications')
 
-    cy.fill('Nationalité', ['Espagne', 'France'])
+    cy.fill('Nationalités', ['Espagne', 'France'])
 
     cy.wait('@getPriorNotifications')
 
@@ -54,15 +54,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
 
     cy.intercept('GET', `${apiPathBase}*tripGearCodes=OTT&tripGearCodes=TBS*`).as('getPriorNotifications')
 
-    cy.get('#gearCodes').click()
-    cy.get('[role="searchbox"]').type('OTT')
-    cy.get('.rs-picker-cascader-search-match').click()
-    cy.get('[role="searchbox"]').clear().type('TBS')
-    cy.get('.rs-picker-cascader-search-match').click()
-    cy.get('body').type('{esc}')
-
-    // TODO Fix that in monitor-ui.
-    // cy.fill('Engins utilisés', ['OTT', 'TBS'])
+    cy.fill('Engins utilisés', ['OTT', 'TBS'])
 
     cy.wait('@getPriorNotifications')
 
@@ -181,15 +173,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
 
     cy.intercept('GET', `${apiPathBase}*&tripSegmentSegments=NWW03*`).as('getPriorNotifications')
 
-    cy.get('#portLocodes').click()
-    cy.get('[role="searchbox"]').type('Saint-Malo')
-    cy.get('.rs-picker-cascader-search-match').click()
-    cy.get('[role="searchbox"]').clear().type('Vannes')
-    cy.get('.rs-picker-cascader-search-match').click()
-    cy.get('body').type('{esc}')
-
-    // TODO Fix that in monitor-ui.
-    // cy.fill('Ports d’arrivée', ['FRSML', 'FRVNE'])
+    cy.fill('Ports d’arrivée', ['Saint-Malo', 'Vanne'])
 
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
   })

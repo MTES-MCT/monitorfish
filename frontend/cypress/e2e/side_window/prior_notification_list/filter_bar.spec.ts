@@ -14,7 +14,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   it('Should filter prior notifications by countries', () => {
     openSideWindowPriorNotificationList()
 
-    cy.intercept('GET', `${apiPathBase}*flagStates=FRA,ESP*`).as('getPriorNotifications')
+    cy.intercept('GET', `${apiPathBase}*flagStates=ESP,FRA*`).as('getPriorNotifications')
 
     cy.fill('Nationalités', ['Espagne', 'France'])
 

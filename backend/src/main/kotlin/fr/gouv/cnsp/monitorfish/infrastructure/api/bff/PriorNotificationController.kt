@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/bff/v1/prior-notifications")
+@RequestMapping("/bff/v1/prior_notifications")
 @Tag(name = "Prior notifications endpoints")
 class PriorNotificationController(
     private val getPriorNotifications: GetPriorNotifications,

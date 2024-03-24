@@ -9,7 +9,7 @@ import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFor
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 context('Side Window > Prior Notification List > Filter Bar', () => {
-  const apiPathBase = '/bff/v1/prior-notifications?'
+  const apiPathBase = '/bff/v1/prior_notifications?'
 
   it('Should filter prior notifications by countries', () => {
     openSideWindowPriorNotificationList()

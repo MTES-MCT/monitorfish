@@ -43,9 +43,8 @@ data class RiskFactorsEntity(
     val segmentHighestPriority: String? = null,
     @Column(name = "control_priority_level")
     val controlPriorityLevel: Double,
-    // TODO Can't this field be null?
     @Column(name = "last_control_datetime_utc")
-    val lastControlDatetime: ZonedDateTime,
+    val lastControlDatetime: ZonedDateTime? = null,
     @Column(name = "control_rate_risk_factor")
     val controlRateRiskFactor: Double,
     @Column(name = "infraction_score")

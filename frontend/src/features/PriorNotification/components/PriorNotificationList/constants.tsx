@@ -2,7 +2,7 @@ import { Ellipsised } from '@components/Ellipsised'
 import { customDayjs, THEME, Tag, getOptionsFromLabelledEnum, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 
 import { ButtonsGroupRow } from './ButtonsGroupRow'
-import { SeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
+import { SeaFrontGroup, type NoSeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
 import { VesselRiskFactor } from '../../../Vessel/components/VesselRiskFactor'
 import { PriorNotification } from '../../PriorNotification.types'
 
@@ -143,7 +143,7 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
 ]
 
 /* eslint-disable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
-export const SUB_MENU_LABEL: Record<SeaFrontGroup | 'EXTRA', string> = {
+export const SUB_MENU_LABEL: Record<SeaFrontGroup | NoSeaFrontGroup, string> = {
   ALL: 'Vue d’ensemble',
   MED: 'MED',
   MEMN: 'MEMN',
@@ -151,7 +151,7 @@ export const SUB_MENU_LABEL: Record<SeaFrontGroup | 'EXTRA', string> = {
   SA: 'SA',
   OUTREMEROA: 'OUTRE-MER OA',
   OUTREMEROI: 'OUTRE-MER OI',
-  EXTRA: 'HORS FAÇADE'
+  NO_SEA_FRONT_GROUP: 'HORS FAÇADE'
 }
 export const SUB_MENUS_AS_OPTIONS = getOptionsFromLabelledEnum(SUB_MENU_LABEL)
 

@@ -100,13 +100,8 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   }, [openedBeaconMalfunctionInKanban, editedReportingInSideWindow, selectedPath.menu])
 
   useEffect(() => {
-    if (isFromURL) {
-      dispatch(getOperationalAlerts())
-      dispatch(getAllBeaconMalfunctions())
-      dispatch(getSilencedAlerts())
-      dispatch(getAllCurrentReportings())
-      dispatch(getInfractions())
-      dispatch(getAllGearCodes())
+    if (!isFromURL) {
+      return
     }
 
     dispatch(getOperationalAlerts())

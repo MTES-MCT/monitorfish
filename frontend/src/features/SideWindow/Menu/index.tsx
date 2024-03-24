@@ -25,7 +25,6 @@ export function Menu({ selectedMenu }: MenuProps) {
       {import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true' && (
         <MenuButton
           aria-label={SideWindowMenuKey.PRIOR_NOTIFICATION_LIST}
-          data-cy="side-window-menu-notice-list"
           Icon={Icon.Fishery}
           iconSize={26}
           onClick={() => dispatch(openSideWindowPath({ menu: SideWindowMenuKey.PRIOR_NOTIFICATION_LIST }))}

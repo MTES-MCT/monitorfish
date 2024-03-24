@@ -8,7 +8,7 @@ data class Catch(
     var weight: Double? = null,
     @JsonProperty("nbFish")
     var numberFish: Double? = null,
-    /** Species code. */
+    /** Species FAO code. */
     var species: String? = null,
     var speciesName: String? = null,
     var faoZone: String? = null,

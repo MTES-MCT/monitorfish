@@ -1,3 +1,4 @@
+import { RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { Body } from '@features/SideWindow/components/Body'
 import { Header } from '@features/SideWindow/components/Header'
 import { Page } from '@features/SideWindow/components/Page'
@@ -29,7 +30,7 @@ import { useGetPriorNotificationsQuery } from '../../api'
 import { PriorNotification } from '../../PriorNotification.types'
 import { priorNotificationActions } from '../../slice'
 
-import type { SeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
+import type { NoSeaFrontGroup, SeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
 
 export function PriorNotificationList() {
   // eslint-disable-next-line no-null/no-null
@@ -44,7 +45,7 @@ export function PriorNotificationList() {
     data: priorNotifications,
     isError,
     isLoading
-  } = useGetPriorNotificationsQuery(apiFilter, { pollingInterval: 60000 })
+  } = useGetPriorNotificationsQuery(apiFilter, RTK_ONE_MINUTE_POLLING_QUERY_OPTIONS)
   const filteredPriorNotifications = useMemo(
     () => getFilteredCollection(priorNotifications, localFilters),
     [localFilters, priorNotifications]
@@ -59,13 +60,13 @@ export function PriorNotificationList() {
   ])
 
   const subMenuCounter = useCallback(
-    (seaFrontGroup: SeaFrontGroup | 'EXTRA'): number =>
+    (seaFrontGroup: SeaFrontGroup | NoSeaFrontGroup): number =>
       countPriorNotificationsForSeaFrontGroup(priorNotifications, seaFrontGroup),
     [priorNotifications]
   )
 
   const handleSubMenuChange = useCallback(
-    (nextSeaFrontGroup: SeaFrontGroup | 'EXTRA') => {
+    (nextSeaFrontGroup: SeaFrontGroup | NoSeaFrontGroup) => {
       dispatch(priorNotificationActions.setListFilterValues({ seaFrontGroup: nextSeaFrontGroup }))
     },
     [dispatch]

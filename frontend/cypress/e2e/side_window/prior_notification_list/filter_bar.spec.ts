@@ -14,7 +14,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   it('Should filter prior notifications by countries', () => {
     openSideWindowPriorNotificationList()
 
-    cy.intercept('GET', `${apiPathBase}*flagStates=FRA&flagStates=ESP*`).as('getPriorNotifications')
+    cy.intercept('GET', `${apiPathBase}*flagStates=FRA,ESP*`).as('getPriorNotifications')
 
     cy.fill('Nationalités', ['Espagne', 'France'])
 
@@ -26,9 +26,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   it('Should filter prior notifications by fleet segments', () => {
     openSideWindowPriorNotificationList()
 
-    cy.intercept('GET', `${apiPathBase}*tripSegmentSegments=NWW03&tripSegmentSegments=SWW06*`).as(
-      'getPriorNotifications'
-    )
+    cy.intercept('GET', `${apiPathBase}*tripSegmentSegments=NWW03,SWW06*`).as('getPriorNotifications')
 
     cy.fill('Segments de flotte', ['NWW03', 'SWW06'])
 
@@ -40,7 +38,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   it('Should filter prior notifications by species', () => {
     openSideWindowPriorNotificationList()
 
-    cy.intercept('GET', `${apiPathBase}*specyCodes=FRF&specyCodes=HKE*`).as('getPriorNotifications')
+    cy.intercept('GET', `${apiPathBase}*specyCodes=FRF,HKE*`).as('getPriorNotifications')
 
     cy.fill('Espèces à bord', ['FRF', 'HKE'])
 
@@ -52,7 +50,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   it('Should filter prior notifications by gears', () => {
     openSideWindowPriorNotificationList()
 
-    cy.intercept('GET', `${apiPathBase}*tripGearCodes=OTT&tripGearCodes=TBS*`).as('getPriorNotifications')
+    cy.intercept('GET', `${apiPathBase}*tripGearCodes=OTT,TBS*`).as('getPriorNotifications')
 
     cy.fill('Engins utilisés', ['OTT', 'TBS'])
 
@@ -171,7 +169,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   it('Should filter prior notifications by ports', () => {
     openSideWindowPriorNotificationList()
 
-    cy.intercept('GET', `${apiPathBase}*&tripSegmentSegments=NWW03*`).as('getPriorNotifications')
+    cy.intercept('GET', `${apiPathBase}*&portsFRSM,FRVN*`).as('getPriorNotifications')
 
     cy.fill('Ports d’arrivée', ['Saint-Malo', 'Vanne'])
 
@@ -181,10 +179,9 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
   it('Should filter prior notifications by type', () => {
     openSideWindowPriorNotificationList()
 
-    cy.intercept(
-      'GET',
-      `${apiPathBase}*priorNotificationTypes=Préavis type A&priorNotificationTypes=Préavis type C*`
-    ).as('getPriorNotifications')
+    cy.intercept('GET', `${apiPathBase}*priorNotificationTypes=Préavis type A,Préavis type C*`).as(
+      'getPriorNotifications'
+    )
 
     cy.fill('Types de préavis', ['Préavis type A', 'Préavis type C'])
 

@@ -4,10 +4,7 @@ import type { AnyObject } from '@mtes-mct/monitor-ui'
 
 function getUrlQueryParamFromObjectEntry(key: string, value: any): string {
   if (Array.isArray(value)) {
-    return value.reduce(
-      (queryParamAsString, valueItem) => `${queryParamAsString}${queryParamAsString ? '&' : ''}${key}=${valueItem}`,
-      ''
-    )
+    return `${key}=${value.join(',')}`
   }
 
   if (isObject(value)) {

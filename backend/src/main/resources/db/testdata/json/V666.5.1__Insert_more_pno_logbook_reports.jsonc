@@ -214,12 +214,12 @@
                 "cfr": "CFR102",
                 "enriched": true,
                 "flag_state": "NLD",
-                "integration_datetime_utc": "2024-03-01T15:00:00",
+                "integration_datetime_utc": "2024-03-01 15:00:00",
                 "log_type": "PNO",
-                "operation_datetime_utc": "2024-03-01T15:00:00",
+                "operation_datetime_utc": "2024-03-01 15:00:00",
                 "operation_number": "FAKE_OPERATION_105",
                 "operation_type": "DAT",
-                "report_datetime_utc": "2024-03-01T15:00:00",
+                "report_datetime_utc": "2024-03-01 15:00:00",
                 "transmission_format": "ERS",
                 "vessel_id": 102,
                 "vessel_name": "LEVE NEDERLAND",
@@ -255,10 +255,10 @@
                         }
                     ],
                     "port": "FRVNE",
-                    "predictedArrivalDatetimeUtc": "2024-03-01T17:00:00",
-                    "predictedLandingDatetimeUtc": "2024-03-01T17:30:00",
+                    "predictedArrivalDatetimeUtc": "2024-03-01T17:00:00Z",
+                    "predictedLandingDatetimeUtc": "2024-03-01T17:30:00Z",
                     "purpose": "LAN",
-                    "tripStartDate": "2024-03-01T05:00:00"
+                    "tripStartDate": "2024-03-01T05:00:00Z"
                 }
             }
         ]

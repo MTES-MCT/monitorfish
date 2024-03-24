@@ -2,3 +2,5 @@
 -- Do NOT update it directly, update the associated .jsonc file.
 
 INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (101, 'CFR101', 'MMSI101', 'IRCS101', 'EXTIMM101', 'VIVA ESPANA', 'ES', 15, false);
+
+INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (102, 'CFR102', 'MMSI102', 'IRCS102', 'EXTIMM102', 'LEVE NEDERLAND', 'NL', 20, true);

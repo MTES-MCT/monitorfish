@@ -11,20 +11,6 @@ INSERT INTO logbook_raw_messages (operation_number) VALUES ('FAKE_OPERATION_104'
 
 INSERT INTO logbook_raw_messages (operation_number) VALUES ('FAKE_OPERATION_105');
 
-INSERT INTO logbook_raw_messages (operation_number) VALUES ('FAKE_OPERATION_106');
-
-INSERT INTO logbook_raw_messages (operation_number) VALUES ('FAKE_OPERATION_107');
-
-INSERT INTO logbook_raw_messages (operation_number) VALUES ('FAKE_OPERATION_108');
-
-INSERT INTO logbook_raw_messages (operation_number) VALUES ('FAKE_OPERATION_109');
-
-INSERT INTO logbook_raw_messages (operation_number) VALUES ('FAKE_OPERATION_110');
-
-INSERT INTO logbook_raw_messages (operation_number) VALUES ('FAKE_OPERATION_111');
-
-INSERT INTO logbook_raw_messages (operation_number) VALUES ('FAKE_OPERATION_112');
-
 INSERT INTO logbook_reports (id, cfr, enriched, flag_state, integration_datetime_utc, log_type, operation_datetime_utc, operation_number, operation_type, report_datetime_utc, transmission_format, vessel_id, vessel_name, trip_gears, trip_segments, value) VALUES (101, 'FAK000999999', true, 'FRA', NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes', 'PNO', NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes', 'FAKE_OPERATION_101', 'DAT', NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes', 'ERS', 1, 'PHENOMENE', '[{"gear":"TBN","mesh":100,"dimensions":"250;180"},{"gear":"OTT","mesh":120.5,"dimensions":"250;280"}]', '[{"segment":"SWW04","segmentName":"Chaluts pélagiques"},{"segment":"SWW06","segmentName":"Sennes"}]', '{"catchOnboard":[{"weight":25,"nbFish":null,"species":"COD","faoZone":"27.8.a","effortZone":"C","economicZone":"FRA","statisticalRectangle":"23E6"}],"pnoTypes":[{"pnoTypeName":"Préavis type A","minimumNotificationPeriod":4,"hasDesignatedPorts":false},{"pnoTypeName":"Préavis type B","minimumNotificationPeriod":8,"hasDesignatedPorts":true}],"port":"FRSML","predictedArrivalDatetimeUtc":null,"predictedLandingDatetimeUtc":null,"purpose":"LAN","tripStartDate":null}');
 UPDATE logbook_reports SET value = JSONB_SET(value, '{predictedArrivalDatetimeUtc}', TO_JSONB(TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '1 hour', 'YYYY-MM-DD"T"HH24:MI:SS"Z"')), true) WHERE id = 101;
 UPDATE logbook_reports SET value = JSONB_SET(value, '{predictedLandingDatetimeUtc}', TO_JSONB(TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '2 hours', 'YYYY-MM-DD"T"HH24:MI:SS"Z"')), true) WHERE id = 101;
@@ -42,3 +28,5 @@ INSERT INTO logbook_reports (id, cfr, enriched, flag_state, integration_datetime
 UPDATE logbook_reports SET value = JSONB_SET(value, '{predictedArrivalDatetimeUtc}', TO_JSONB(TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD"T"HH24:MI:SS"Z"')), true) WHERE id = 104;
 UPDATE logbook_reports SET value = JSONB_SET(value, '{predictedLandingDatetimeUtc}', TO_JSONB(TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '4 hours', 'YYYY-MM-DD"T"HH24:MI:SS"Z"')), true) WHERE id = 104;
 UPDATE logbook_reports SET value = JSONB_SET(value, '{tripStartDate}', TO_JSONB(TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD"T"HH24:MI:SS"Z"')), true) WHERE id = 104;
+
+INSERT INTO logbook_reports (id, cfr, enriched, flag_state, integration_datetime_utc, log_type, operation_datetime_utc, operation_number, operation_type, report_datetime_utc, transmission_format, vessel_id, vessel_name, trip_gears, trip_segments, value) VALUES (105, 'CFR102', true, 'NLD', '2024-03-01T15:00:00', 'PNO', '2024-03-01T15:00:00', 'FAKE_OPERATION_105', 'DAT', '2024-03-01T15:00:00', 'ERS', 102, 'LEVE NEDERLAND', '[{"gear":"DHB","mesh":20.25,"dimensions":"500;500"},{"gear":"DRM","mesh":25.75,"dimensions":"1000;1000"}]', '[{"segment":"NWW03","segmentName":"Chalut de fond en eau profonde ≥100 mm"}]', '{"catchOnboard":[{"weight":25,"nbFish":null,"species":"FRF","faoZone":"27.8.a","effortZone":"C","economicZone":"FRA","statisticalRectangle":"23E6"}],"pnoTypes":[{"pnoTypeName":"Préavis type A","minimumNotificationPeriod":4,"hasDesignatedPorts":false},{"pnoTypeName":"Préavis type B","minimumNotificationPeriod":8,"hasDesignatedPorts":true}],"port":"FRVNE","predictedArrivalDatetimeUtc":"2024-03-01T17:00:00","predictedLandingDatetimeUtc":"2024-03-01T17:30:00","purpose":"LAN","tripStartDate":"2024-03-01T05:00:00"}');

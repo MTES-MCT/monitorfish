@@ -6,14 +6,7 @@
             { "operation_number": "FAKE_OPERATION_102" },
             { "operation_number": "FAKE_OPERATION_103" },
             { "operation_number": "FAKE_OPERATION_104" },
-            { "operation_number": "FAKE_OPERATION_105" },
-            { "operation_number": "FAKE_OPERATION_106" },
-            { "operation_number": "FAKE_OPERATION_107" },
-            { "operation_number": "FAKE_OPERATION_108" },
-            { "operation_number": "FAKE_OPERATION_109" },
-            { "operation_number": "FAKE_OPERATION_110" },
-            { "operation_number": "FAKE_OPERATION_111" },
-            { "operation_number": "FAKE_OPERATION_112" }
+            { "operation_number": "FAKE_OPERATION_105" }
         ]
     },
     {
@@ -39,8 +32,8 @@
                     { "gear": "OTT", "mesh": 120.5, "dimensions": "250;280" }
                 ],
                 "trip_segments:jsonb": [
-                    { "segment": "SWW04", "segment_name": "Chaluts pélagiques" },
-                    { "segment": "SWW06", "segment_name": "Sennes" }
+                    { "segment": "SWW04", "segmentName": "Chaluts pélagiques" },
+                    { "segment": "SWW06", "segmentName": "Sennes" }
                 ],
                 "value:jsonb": {
                     "catchOnboard": [
@@ -95,8 +88,8 @@
                     { "gear": "OT", "mesh": 120.5, "dimensions": "250;280" }
                 ],
                 "trip_segments:jsonb": [
-                    { "segment": "SWW10", "segment_name": "Palangres ciblant les espèces démersales" },
-                    { "segment": "SWW11", "segment_name": "Hameçons" }
+                    { "segment": "SWW10", "segmentName": "Palangres ciblant les espèces démersales" },
+                    { "segment": "SWW11", "segmentName": "Hameçons" }
                 ],
                 "value:jsonb": {
                     "catchOnboard": [
@@ -180,8 +173,8 @@
                     { "gear": "TBS", "mesh": 120.5, "dimensions": "250;280" }
                 ],
                 "trip_segments:jsonb": [
-                    { "segment": "NWW03", "segment_name": "Chalut de fond en eau profonde" },
-                    { "segment": "NWW05", "segment_name": "Chalut à perche" }
+                    { "segment": "NWW03", "segmentName": "Chalut de fond en eau profonde" },
+                    { "segment": "NWW05", "segmentName": "Chalut à perche" }
                 ],
                 "value:jsonb": {
                     "catchOnboard": [
@@ -212,6 +205,60 @@
                     "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '4 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
                     "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')"
+                }
+            },
+
+            // - Vessel: LEVE NEDERLAND
+            {
+                "id": 105,
+                "cfr": "CFR102",
+                "enriched": true,
+                "flag_state": "NLD",
+                "integration_datetime_utc": "2024-03-01T15:00:00",
+                "log_type": "PNO",
+                "operation_datetime_utc": "2024-03-01T15:00:00",
+                "operation_number": "FAKE_OPERATION_105",
+                "operation_type": "DAT",
+                "report_datetime_utc": "2024-03-01T15:00:00",
+                "transmission_format": "ERS",
+                "vessel_id": 102,
+                "vessel_name": "LEVE NEDERLAND",
+                "trip_gears:jsonb": [
+                    { "gear": "DHB", "mesh": 20.25, "dimensions": "500;500" },
+                    { "gear": "DRM", "mesh": 25.75, "dimensions": "1000;1000" }
+                ],
+                "trip_segments:jsonb": [
+                    { "segment": "NWW03", "segmentName": "Chalut de fond en eau profonde ≥100 mm" }
+                ],
+                "value:jsonb": {
+                    "catchOnboard": [
+                        {
+                            "weight": 25.0,
+                            "nbFish": null,
+                            "species": "FRF",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        }
+                    ],
+                    "pnoTypes": [
+                        {
+                            "pnoTypeName": "Préavis type A",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false
+                        },
+                        {
+                            "pnoTypeName": "Préavis type B",
+                            "minimumNotificationPeriod": 8.0,
+                            "hasDesignatedPorts": true
+                        }
+                    ],
+                    "port": "FRVNE",
+                    "predictedArrivalDatetimeUtc": "2024-03-01T17:00:00",
+                    "predictedLandingDatetimeUtc": "2024-03-01T17:30:00",
+                    "purpose": "LAN",
+                    "tripStartDate": "2024-03-01T05:00:00"
                 }
             }
         ]

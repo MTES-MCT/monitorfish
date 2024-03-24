@@ -1,43 +1,39 @@
 // import type { SeaFrontGroup } from '../../domain/entities/seaFront/constants'
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
-import type { UndefineExcept } from '@mtes-mct/monitor-ui'
 import type { SeaFront } from 'domain/entities/seaFront/constants'
 
 export namespace PriorNotification {
-  export type PriorNotification = UndefineExcept<
-    {
-      expectedArrivalDate: string
-      expectedLandingDate: string
-      id: number
-      isVesselUnderCharter: boolean
-      notificationTypeLabel: string
-      onBoardCatches: LogbookMessage.Catch[]
-      portLocode: string
-      portName: string
-      purposeCode: PurposeCode
-      reportingsCount: number
-      seaFront: SeaFront
-      sentAt: string
-      tripGears: LogbookMessage.TripGear[]
-      tripSegments: LogbookMessage.TripSegment[]
-      types: Type[]
-      vesselExternalReferenceNumber: string
-      vesselFlagCountryCode: string
-      // TODO Wait for vesselId in logbook reports (including "navire inconnu").
-      vesselId: number
-      vesselInternalReferenceNumber: string
-      vesselIrcs: string
-      vesselLastControlDate: string
-      vesselLength: number
-      vesselMmsi: string
-      vesselName: string
-      vesselRiskFactor: number
-      vesselRiskFactorDetectability: number
-      vesselRiskFactorImpact: number
-      vesselRiskFactorProbability: number
-    },
-    'id' | 'onBoardCatches' | 'reportingsCount' | 'tripGears' | 'tripSegments' | 'types'
-  >
+  export type PriorNotification = {
+    expectedArrivalDate: string | undefined
+    expectedLandingDate: string | undefined
+    id: number
+    isVesselUnderCharter: boolean | undefined
+    notificationTypeLabel: string | undefined
+    onBoardCatches: LogbookMessage.Catch[]
+    portLocode: string | undefined
+    portName: string | undefined
+    purposeCode: PurposeCode | undefined
+    reportingsCount: number
+    seaFront: SeaFront | undefined
+    sentAt: string | undefined
+    tripGears: LogbookMessage.TripGear[]
+    tripSegments: LogbookMessage.TripSegment[]
+    types: Type[]
+    vesselExternalReferenceNumber: string | undefined
+    vesselFlagCountryCode: string | undefined
+    // TODO Wait for vesselId in logbook reports (including "navire inconnu").
+    vesselId: number | undefined
+    vesselInternalReferenceNumber: string | undefined
+    vesselIrcs: string | undefined
+    vesselLastControlDate: string | undefined
+    vesselLength: number | undefined
+    vesselMmsi: string | undefined
+    vesselName: string | undefined
+    vesselRiskFactor: number | undefined
+    vesselRiskFactorDetectability: number | undefined
+    vesselRiskFactorImpact: number | undefined
+    vesselRiskFactorProbability: number | undefined
+  }
 
   export type Type = {
     hasDesignatedPorts: number

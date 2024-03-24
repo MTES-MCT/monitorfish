@@ -1,6 +1,6 @@
 import { COUNTRIES_AS_ALPHA3_OPTIONS } from '@constants/index'
+import { useGetFleetSegmentsAsOptions } from '@features/FleetSegment/hooks/useGetFleetSegmentsAsOptions'
 import { useGetPriorNotificationTypesAsOptions } from '@features/PriorNotification/hooks/useGetPriorNotificationTypesAsOptions'
-import { useGetFleetSegmentsAsOptions } from '@hooks/useGetFleetSegmentsAsOptions'
 import { useGetGearsAsTreeOptions } from '@hooks/useGetGearsAsTreeOptions'
 import { useGetPortsAsTreeOptions } from '@hooks/useGetPortsAsTreeOptions'
 import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'

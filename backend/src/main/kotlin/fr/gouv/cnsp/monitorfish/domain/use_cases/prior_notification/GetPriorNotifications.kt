@@ -27,7 +27,6 @@ class GetPriorNotifications(
                     null
                 }
 
-                // TODO Doesn't seem to work.
                 val seaFront = port?.latitude?.let { latitude ->
                     port.longitude?.let { longitude ->
                         val point = GeometryFactory().createPoint(Coordinate(longitude, latitude))

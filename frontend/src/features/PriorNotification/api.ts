@@ -8,12 +8,12 @@ import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
 export const priorNotificationApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
     getPriorNotifications: builder.query<PriorNotification.PriorNotification[], LogbookMessage.ApiFilter>({
-      providesTags: () => [{ type: 'Notices' }],
+      providesTags: () => [{ type: 'PriorNotifications' }],
       query: filter => getUrlOrPathWithQueryParams(`/prior_notifications`, filter)
     }),
 
     getPriorNotificationTypes: builder.query<string[], void>({
-      providesTags: () => [{ type: 'Notices' }],
+      providesTags: () => [{ type: 'PriorNotificationTypes' }],
       query: () => '/prior_notifications/types'
     })
   })

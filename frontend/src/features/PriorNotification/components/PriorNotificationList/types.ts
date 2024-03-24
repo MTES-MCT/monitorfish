@@ -1,5 +1,5 @@
 import type { LastControlPeriod, ExpectedArrivalPeriod } from './constants'
-import type { SeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
+import type { NoSeaFrontGroup, SeaFrontGroup } from '../../../../domain/entities/seaFront/constants'
 import type { DateAsStringRange, RichBoolean, UndefineExcept } from '@mtes-mct/monitor-ui'
 
 export type ListFilter = UndefineExcept<
@@ -16,7 +16,7 @@ export type ListFilter = UndefineExcept<
     lastControlPeriod: LastControlPeriod
     portLocodes: string[]
     priorNotificationTypes: string[]
-    seaFrontGroup: SeaFrontGroup | 'EXTRA'
+    seaFrontGroup: SeaFrontGroup | NoSeaFrontGroup
     searchQuery: string
     specyCodes: string[]
   },

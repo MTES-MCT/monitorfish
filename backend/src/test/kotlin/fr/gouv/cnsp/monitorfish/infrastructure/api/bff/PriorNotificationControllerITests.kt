@@ -1,33 +1,40 @@
-package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
+package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import com.nhaarman.mockitokotlin2.given
+import fr.gouv.cnsp.monitorfish.config.OIDCProperties
+import fr.gouv.cnsp.monitorfish.config.SecurityConfig
+import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
-import fr.gouv.cnsp.monitorfish.domain.repositories.*
-import org.assertj.core.api.Assertions
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationTypes
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotifications
+import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.BDDMockito.given
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.context.annotation.Import
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@ExtendWith(SpringExtension::class)
-class GetPrioNotificationsUTests {
-    @MockBean
-    private lateinit var facadeAreasRepository: FacadeAreasRepository
+@Import(SecurityConfig::class, OIDCProperties::class, SentryConfig::class)
+@WebMvcTest(value = [(PriorNotificationController::class)])
+class PriorNotificationControllerITests {
+    @Autowired
+    private lateinit var api: MockMvc
 
     @MockBean
-    private lateinit var logbookReportRepository: LogbookReportRepository
+    private lateinit var getPriorNotifications: GetPriorNotifications
 
     @MockBean
-    private lateinit var portRepository: PortRepository
-
-    @MockBean
-    private lateinit var reportingRepository: ReportingRepository
+    private lateinit var getPriorNotificationTypes: GetPriorNotificationTypes
 
     @Test
-    fun `execute Should return a list prior notifications`() {
+    fun `Should get a list of prior notifications`() {
         // Given
-        given(logbookReportRepository.findAllPriorNotifications(LogbookReportFilter())).willReturn(
+        given(this.getPriorNotifications.execute(LogbookReportFilter())).willReturn(
             listOf(
                 PriorNotification(
                     id = 1,
@@ -94,16 +101,25 @@ class GetPrioNotificationsUTests {
         )
 
         // When
-        val result = GetPriorNotifications(
-            facadeAreasRepository,
-            logbookReportRepository,
-            portRepository,
-            reportingRepository,
-        ).execute(LogbookReportFilter())
+        api.perform(get("/bff/v1/prior_notifications"))
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(2)))
+            .andExpect(jsonPath("$[0].id", equalTo(1)))
+            .andExpect(jsonPath("$[1].id", equalTo(2)))
+    }
 
-        // Then
-        Assertions.assertThat(result).hasSize(2)
-        Assertions.assertThat(result[0].id).isEqualTo(1)
-        Assertions.assertThat(result[1].id).isEqualTo(2)
+    @Test
+    fun `Should get a list of prior notification types`() {
+        // Given
+        given(this.getPriorNotificationTypes.execute()).willReturn(listOf("Préavis de Type A", "Préavis de Type B"))
+
+        // When
+        api.perform(get("/bff/v1/prior_notifications/types"))
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(2)))
+            .andExpect(jsonPath("$[0]", equalTo("Préavis de Type A")))
+            .andExpect(jsonPath("$[1]", equalTo("Préavis de Type B")))
     }
 }

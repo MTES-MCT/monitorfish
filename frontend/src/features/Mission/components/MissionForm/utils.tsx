@@ -101,7 +101,7 @@ export function getTitleFromMissionMainFormValues(
 export function getUpdatedMissionFromMissionMainFormValues(
   missionId: Mission.Mission['id'],
   mainFormValues: MissionMainFormValues
-): Mission.Mission {
+): Mission.SavedMission {
   const missionData = getMissionDataFromMissionFormValues(mainFormValues)
 
   return {

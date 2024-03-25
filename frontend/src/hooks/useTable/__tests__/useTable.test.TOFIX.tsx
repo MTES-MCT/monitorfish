@@ -21,10 +21,10 @@ describe('hooks/useTable()', () => {
 
   it('should return the expected augmented data from simple queries with untransformed columns', () => {
     const rawData: CollectionItem[] = [
-      { id: '1', title: 'First MissionAction' },
-      { id: '2', title: 'Second MissionAction' },
-      { id: '12', title: 'Twelfth MissionAction' },
-      { id: '123', title: 'Hundred and twenty-third MissionAction' }
+      { id: '1', title: 'First Item' },
+      { id: '2', title: 'Second Item' },
+      { id: '12', title: 'Twelfth Item' },
+      { id: '123', title: 'Hundred and twenty-third Item' }
     ]
     const tableOptions: TableOptions<any> = {
       columns: [
@@ -49,7 +49,7 @@ describe('hooks/useTable()', () => {
         },
         $sortable: {},
         id: '12',
-        title: 'Twelfth MissionAction'
+        title: 'Twelfth Item'
       },
       {
         $isChecked: false,
@@ -61,7 +61,7 @@ describe('hooks/useTable()', () => {
         },
         $sortable: {},
         id: '123',
-        title: 'Hundred and twenty-third MissionAction'
+        title: 'Hundred and twenty-third Item'
       }
     ])
 
@@ -78,7 +78,7 @@ describe('hooks/useTable()', () => {
         },
         $sortable: {},
         id: '123',
-        title: 'Hundred and twenty-third MissionAction'
+        title: 'Hundred and twenty-third Item'
       }
     ])
 
@@ -95,7 +95,7 @@ describe('hooks/useTable()', () => {
         },
         $sortable: {},
         id: '12',
-        title: 'Twelfth MissionAction'
+        title: 'Twelfth Item'
       },
       {
         $isChecked: false,
@@ -107,7 +107,7 @@ describe('hooks/useTable()', () => {
         },
         $sortable: {},
         id: '123',
-        title: 'Hundred and twenty-third MissionAction'
+        title: 'Hundred and twenty-third Item'
       }
     ])
   })

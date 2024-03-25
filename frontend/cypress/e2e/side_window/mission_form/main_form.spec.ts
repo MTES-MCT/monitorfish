@@ -42,6 +42,7 @@ context('Side Window > Mission Form > Main Form', () => {
     }).as('createMission')
     cy.intercept('GET', '/api/v1/missions/1', {
       body: {
+        envActions: [],
         id: 1
       },
       statusCode: 201
@@ -100,6 +101,7 @@ context('Side Window > Mission Form > Main Form', () => {
       openSideWindowNewMission()
       cy.intercept('GET', '/api/v1/missions/1', {
         body: {
+          envActions: [],
           id: 1
         },
         statusCode: 201
@@ -172,6 +174,7 @@ context('Side Window > Mission Form > Main Form', () => {
     openSideWindowNewMission()
     cy.intercept('GET', '/api/v1/missions/1', {
       body: {
+        envActions: [],
         id: 1
       },
       statusCode: 201

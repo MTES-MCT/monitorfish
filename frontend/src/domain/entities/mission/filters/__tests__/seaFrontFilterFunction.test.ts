@@ -12,6 +12,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
   it('should return true when the facade is included in the mission facade', () => {
     const mission = {
       controlUnits: [],
+      envActions: [],
       facade: SeaFront.MED,
       id: 123,
       isClosed: false,
@@ -30,6 +31,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
   it('should return false when the facade is not included in the mission facade', () => {
     const mission = {
       controlUnits: [],
+      envActions: [],
       facade: SeaFront.SA,
       id: 123,
       isClosed: false,
@@ -48,6 +50,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
   it('should return true when the facade is not filtered', () => {
     const mission = {
       controlUnits: [],
+      envActions: [],
       facade: SeaFront.SA,
       id: 123,
       isClosed: false,
@@ -66,6 +69,7 @@ describe('domain/entities/mission/filters/seaFrontFilterFunction.ts()', () => {
   it('should return true when a group of facade is filtered', () => {
     const mission = {
       controlUnits: [],
+      envActions: [],
       facade: SeaFront.GUADELOUPE,
       id: 123,
       isClosed: false,

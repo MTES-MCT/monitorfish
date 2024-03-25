@@ -59,7 +59,7 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(GET_MISSION_ERROR_MESSAGE, response)
     }),
 
-    updateMission: builder.mutation<Mission.Mission, Mission.Mission>({
+    updateMission: builder.mutation<Mission.Mission, Mission.SavedMission>({
       query: mission => ({
         body: mission,
         method: 'POST',

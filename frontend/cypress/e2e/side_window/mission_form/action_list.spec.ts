@@ -220,7 +220,7 @@ context('Side Window > Mission Form > Action List', () => {
     )
 
     cy.wait(500)
-    cy.clickButton('Supprimer l’action').eq(0)
+    cy.clickButton('Supprimer l’action')
 
     // There is still a valid control with a geometry that could be used for the mission zone
     cy.get('.Toastify__toast--success').contains(

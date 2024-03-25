@@ -11,7 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
-class GetPrioNotificationsUTests {
+class GetPriorNotificationTypesUTests {
     @MockBean
     private lateinit var facadeAreasRepository: FacadeAreasRepository
 
@@ -25,7 +25,7 @@ class GetPrioNotificationsUTests {
     private lateinit var reportingRepository: ReportingRepository
 
     @Test
-    fun `execute Should return a list prior notifications`() {
+    fun `execute Should return a list of prior notification types`() {
         // Given
         given(logbookReportRepository.findAllPriorNotifications(LogbookReportFilter())).willReturn(
             listOf(

@@ -219,7 +219,7 @@ context('Side Window > Mission Form > Action List', () => {
         'est automatiquement calculée selon le point ou la zone de la dernière action rapportée par l’unité.'
     )
 
-    cy.wait(250)
+    cy.wait(500)
     cy.clickButton('Supprimer l’action').eq(0)
 
     // There is still a valid control with a geometry that could be used for the mission zone

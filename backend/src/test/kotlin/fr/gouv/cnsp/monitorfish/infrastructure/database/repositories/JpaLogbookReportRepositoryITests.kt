@@ -724,6 +724,24 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `findAllPriorNotifications Should return PNO logbook reports for Préavis type A & Préavis type C types`() {
+        // Given
+        val filter = LogbookReportFilter(priorNotificationTypes = listOf("Préavis type A", "Préavis type C"))
+
+        // When
+        val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
+
+        // Then
+        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(
+            result.all {
+                it.types.any { type -> listOf("Préavis type A", "Préavis type C").contains(type.name) }
+            },
+        ).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for SWW06 & NWW03 segments`() {
         // Given
         val filter = LogbookReportFilter(tripSegmentSegments = listOf("SWW06", "NWW03"))
@@ -760,24 +778,6 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllPriorNotifications Should return PNO logbook reports for Préavis type A & Préavis type C types`() {
-        // Given
-        val filter = LogbookReportFilter(priorNotificationTypes = listOf("Préavis type A", "Préavis type C"))
-
-        // When
-        val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
-
-        // Then
-        assertThat(result).hasSizeGreaterThan(0)
-        assertThat(
-            result.all {
-                it.types.any { type -> listOf("Préavis type A", "Préavis type C").contains(type.name) }
-            },
-        ).isEqualTo(true)
-    }
-
-    @Test
-    @Transactional
     fun `findAllPriorNotifications Should return PNO logbook reports for vessels arriving after or before January 1st, 2024`() {
         // Given
         val firstFilter = LogbookReportFilter(willArriveAfter = "2024-01-01T00:00:00Z")
@@ -804,6 +804,38 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(
             secondResult.all {
                 ZonedDateTime.parse(it.expectedArrivalDate!!).isBefore(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
+            },
+        ).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllPriorNotifications Should return the expected PNO logbook reports with multiple filters`() {
+        // Given
+        val filter = LogbookReportFilter(
+            priorNotificationTypes = listOf("Préavis type A", "Préavis type C"),
+            tripGearCodes = listOf("OTT", "TB"),
+            willArriveAfter = "2024-01-01T00:00:00Z",
+        )
+
+        // When
+        val result = jpaLogbookReportRepository.findAllPriorNotifications(filter)
+
+        // Then
+        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(
+            result.all {
+                it.types.any { type -> listOf("Préavis type A", "Préavis type C").contains(type.name) }
+            },
+        ).isEqualTo(true)
+        assertThat(
+            result.all {
+                it.tripGears.any { tripGear -> listOf("OTT", "TB").contains(tripGear.gear) }
+            },
+        ).isEqualTo(true)
+        assertThat(
+            result.all {
+                ZonedDateTime.parse(it.expectedArrivalDate!!).isAfter(ZonedDateTime.parse("2024-01-01T00:00:00Z"))
             },
         ).isEqualTo(true)
     }

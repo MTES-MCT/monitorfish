@@ -1,8 +1,8 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationTypes
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotifications
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.LogbookReportFilterDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PriorNotificationDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -21,9 +21,11 @@ class PriorNotificationController(
     @GetMapping("")
     @Operation(summary = "Get all prior notifications")
     fun getAll(
-        @ModelAttribute filter: LogbookReportFilter,
+        @ModelAttribute filter: LogbookReportFilterDataInput,
     ): List<PriorNotificationDataOutput> {
-        return getPriorNotifications.execute(filter).map { PriorNotificationDataOutput.fromPriorNotification(it) }
+        return getPriorNotifications.execute(filter.toLogbookReportFilter()).map {
+            PriorNotificationDataOutput.fromPriorNotification(it)
+        }
     }
 
     @GetMapping("/types")

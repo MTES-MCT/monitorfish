@@ -1,5 +1,3 @@
-import type { Undefine, UndefineExcept } from '@mtes-mct/monitor-ui'
-
 export namespace LogbookMessage {
   export type LogbookMessage = {
     acknowledge: Acknowledge | undefined
@@ -32,42 +30,39 @@ export namespace LogbookMessage {
     returnStatus: string | undefined
   }
 
-  export type Catch = UndefineExcept<
-    {
-      conversionFactor: number
-      economicZone: string
-      effortZone: string
-      faoZone: string
-      freshness: string
-      numberFish: number
-      packaging: string
-      presentation: string
-      preservationState: string
-      species: string
-      speciesName: string
-      statisticalRectangle: string
-      weight: number
-    },
-    'species'
-  >
+  export type Catch = {
+    conversionFactor: number | undefined
+    economicZone: string | undefined
+    effortZone: string | undefined
+    faoZone: string | undefined
+    freshness: string | undefined
+    numberFish: number | undefined
+    packaging: string | undefined
+    presentation: string | undefined
+    preservationState: string | undefined
+    species: string
+    speciesName: string | undefined
+    statisticalRectangle: string | undefined
+    weight: number | undefined
+  }
 
-  export type Message = Undefine<{
-    catchOnboard: MessageCatchOnboard[]
-    economicZone: string
-    effortZone: string
-    faoZone: string
-    latitude: string
-    longitude: string
-    pnoTypes: MessagePnoType[]
+  export type Message = {
+    catchOnboard: MessageCatchOnboard[] | undefined
+    economicZone: string | undefined
+    effortZone: string | undefined
+    faoZone: string | undefined
+    latitude: string | undefined
+    longitude: string | undefined
+    pnoTypes: MessagePnoType[] | undefined
     /** Port code. */
-    port: string
-    portName: string
-    predictedArrivalDatetimeUtc: string
-    predictedLandingDatetimeUtc: string
-    purpose: string
-    statisticalRectangle: string
-    tripStartDate: string
-  }>
+    port: string | undefined
+    portName: string | undefined
+    predictedArrivalDatetimeUtc: string | undefined
+    predictedLandingDatetimeUtc: string | undefined
+    purpose: string | undefined
+    statisticalRectangle: string | undefined
+    tripStartDate: string | undefined
+  }
 
   export type MessageCatchOnboard = {
     conversionFactor: number
@@ -104,21 +99,19 @@ export namespace LogbookMessage {
     name: string
   }
 
-  export type ApiFilter = Partial<
-    Undefine<{
-      flagStates: string[]
-      isLessThanTwelveMetersVessel: boolean
-      lastControlledAfter: string
-      lastControlledBefore: string
-      portLocodes: string[]
-      priorNotificationTypesAsOptions: string[]
-      searchQuery: string
-      specyCodes: string[]
-      tripGearCodes: string[]
-      tripSegmentSegments: string[]
-      vesselLength: number
-      willArriveAfter: string
-      willArriveBefore: string
-    }>
-  >
+  export type ApiFilter = Partial<{
+    flagStates: string[] | undefined
+    isLessThanTwelveMetersVessel: boolean | undefined
+    lastControlledAfter: string | undefined
+    lastControlledBefore: string | undefined
+    portLocodes: string[] | undefined
+    priorNotificationTypesAsOptions: string[] | undefined
+    searchQuery: string | undefined
+    specyCodes: string[] | undefined
+    tripGearCodes: string[] | undefined
+    tripSegmentSegments: string[] | undefined
+    vesselLength: number | undefined
+    willArriveAfter: string | undefined
+    willArriveBefore: string | undefined
+  }>
 }

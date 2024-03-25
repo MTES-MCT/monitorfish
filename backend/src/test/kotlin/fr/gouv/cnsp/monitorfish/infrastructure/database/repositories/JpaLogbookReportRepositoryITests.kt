@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
@@ -607,7 +608,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(result).hasSizeGreaterThan(0)
-        assertThat(result.all { listOf("ES", "FR").contains(it.vesselFlagCountryCode) }).isEqualTo(true)
+        assertThat(result.all { listOf(CountryCode.ES, CountryCode.FR).contains(it.vessel.flagState) }).isEqualTo(true)
     }
 
     @Test
@@ -621,7 +622,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(firstResult).hasSizeGreaterThan(0)
-        assertThat(firstResult.all { it.vesselLength!! < 12 }).isEqualTo(true)
+        assertThat(firstResult.all { it.vessel.length!! < 12 }).isEqualTo(true)
 
         // Given
         val secondFilter = LogbookReportFilter(isLessThanTwelveMetersVessel = false)
@@ -631,7 +632,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(secondResult).hasSizeGreaterThan(0)
-        assertThat(secondResult.all { it.vesselLength!! >= 12 }).isEqualTo(true)
+        assertThat(secondResult.all { it.vessel.length!! >= 12 }).isEqualTo(true)
     }
 
     @Test
@@ -691,7 +692,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(firstResult).hasSizeGreaterThan(0)
-        assertThat(firstResult.all { it.vesselName == "PHENOMENE" }).isEqualTo(true)
+        assertThat(firstResult.all { it.vessel.vesselName == "PHENOMENE" }).isEqualTo(true)
 
         // Given
         val secondFilter = LogbookReportFilter(searchQuery = "hénO")
@@ -701,7 +702,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(secondResult).hasSizeGreaterThan(0)
-        assertThat(secondResult.all { it.vesselName == "PHENOMENE" }).isEqualTo(true)
+        assertThat(secondResult.all { it.vessel.vesselName == "PHENOMENE" }).isEqualTo(true)
     }
 
     @Test

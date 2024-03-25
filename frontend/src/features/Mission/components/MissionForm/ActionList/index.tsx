@@ -1,4 +1,5 @@
-import { MonitorEnvMissionActionItem } from '@features/Mission/components/MissionForm/ActionList/MonitorEnvMissionActionItem'
+import { ActionCard } from '@features/Mission/components/MissionForm/ActionList/ActionCard'
+import { EnvActionCard } from '@features/Mission/components/MissionForm/ActionList/EnvActionCard'
 import { EnvMissionAction } from '@features/Mission/envMissionAction.types'
 import { Mission } from '@features/Mission/mission.types'
 import { MissionAction } from '@features/Mission/missionAction.types'
@@ -9,7 +10,7 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 import { FrontendErrorBoundary } from 'ui/FrontendErrorBoundary'
 
-import { MissionActionItem } from './MissionActionItem'
+import { FishActionCard } from './FishActionCard'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
 
@@ -114,25 +115,31 @@ export function ActionList({
             allSortedMissionActionsForTimeline.map((action, index) => {
               if (action.source === Mission.MissionSource.MONITORFISH) {
                 return (
-                  <MissionActionItem
-                    // eslint-disable-next-line react/no-array-index-key
-                    key={index}
+                  <ActionCard
                     isSelected={action.index === currentIndex}
-                    missionAction={action as MissionActionFormValues}
-                    onDuplicate={() => onDuplicate(action.index!!)}
-                    onRemove={() => onRemove(action.index!!)}
+                    missionAction={action}
                     onSelect={() => onSelect(action.index!!)}
-                  />
+                  >
+                    <FishActionCard
+                      // eslint-disable-next-line react/no-array-index-key
+                      key={index}
+                      missionAction={action as MissionActionFormValues}
+                      onDuplicate={() => onDuplicate(action.index!!)}
+                      onRemove={() => onRemove(action.index!!)}
+                    />
+                  </ActionCard>
                 )
               }
 
               if (action.source === Mission.MissionSource.MONITORENV) {
                 return (
-                  <MonitorEnvMissionActionItem
-                    // eslint-disable-next-line react/no-array-index-key
-                    key={index}
-                    missionAction={action as EnvMissionAction.MissionAction}
-                  />
+                  <ActionCard isSelected={false} missionAction={action}>
+                    <EnvActionCard
+                      // eslint-disable-next-line react/no-array-index-key
+                      key={index}
+                      missionAction={action as EnvMissionAction.MissionAction}
+                    />
+                  </ActionCard>
                 )
               }
 

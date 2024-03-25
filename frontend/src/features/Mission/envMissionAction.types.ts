@@ -1,13 +1,15 @@
-export namespace MonitorEnvMissionAction {
+import { Mission } from '@features/Mission/mission.types'
+
+export namespace EnvMissionAction {
   export interface MissionAction {
     actionStartDateTimeUtc: string
     actionType: MissionActionType
+    id: number
   }
 
   // ---------------------------------------------------------------------------
   // Constants
 
-  /* eslint-disable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
   export enum MissionActionType {
     CONTROL = 'CONTROL',
     NOTE = 'NOTE',
@@ -20,5 +22,9 @@ export namespace MonitorEnvMissionAction {
     SURVEILLANCE: 'Surveillance'
   }
 
-  /* eslint-enable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
+  export type MissionActionForTimeline = MissionAction & {
+    actionDatetimeUtc?: string
+    index?: number
+    source: Mission.MissionSource
+  }
 }

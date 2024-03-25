@@ -164,7 +164,7 @@ const Wrapper = styled.div`
 const CustomFormBodyInnerWrapper = styled(FormBodyInnerWrapper)`
   > div:not(:first-child),
   > fieldset:not(:first-child) {
-    margin-top: 32px;
+    margin-top: 24px;
   }
 `
 

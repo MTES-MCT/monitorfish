@@ -1,8 +1,7 @@
 import { MonitorEnvMissionActionItem } from '@features/Mission/components/MissionForm/ActionList/MonitorEnvMissionActionItem'
-import { getMissionActionDate } from '@features/Mission/components/MissionForm/ActionList/utils'
+import { EnvMissionAction } from '@features/Mission/envMissionAction.types'
 import { Mission } from '@features/Mission/mission.types'
 import { MissionAction } from '@features/Mission/missionAction.types'
-import { MonitorEnvMissionAction } from '@features/Mission/monitorEnvMissionAction.types'
 import { useGetMissionQuery } from '@features/Mission/monitorenvMissionApi'
 import { Dropdown, Icon } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
@@ -14,8 +13,7 @@ import { MissionActionItem } from './MissionActionItem'
 import { FormBody } from '../shared/FormBody'
 import { FormHead } from '../shared/FormHead'
 
-import type { MissionActionFormValues } from '../types'
-import type { MissionActionWithSource } from '@features/Mission/components/MissionForm/ActionList/types'
+import type { MissionActionFormValues, MissionActionForTimeline } from '../types'
 import type { Promisable } from 'type-fest'
 
 type ActionListProps = Readonly<{
@@ -40,7 +38,9 @@ export function ActionList({
 }: ActionListProps) {
   const getMissionApiQuery = useGetMissionQuery(missionId || skipToken)
 
-  const allSortedMissionActionsWithSource = useMemo(() => {
+  const allSortedMissionActionsForTimeline: Array<
+    MissionActionForTimeline | EnvMissionAction.MissionActionForTimeline
+  > = useMemo(() => {
     const monitorFishActions = actionsFormValues.map((action, index) => ({
       ...action,
       index,
@@ -53,12 +53,13 @@ export function ActionList({
 
     const monitorEnvActions = getMissionApiQuery.data.envActions.map(action => ({
       ...action,
+      actionDatetimeUtc: action.actionStartDateTimeUtc,
       source: Mission.MissionSource.MONITORENV
     }))
 
     return [...monitorEnvActions, ...monitorFishActions].sort((actionA, actionB) => {
-      const dateA = getMissionActionDate(actionA)
-      const dateB = getMissionActionDate(actionB)
+      const dateA = actionA.actionDatetimeUtc
+      const dateB = actionB.actionDatetimeUtc
 
       if (dateA < dateB) {
         return 1
@@ -105,22 +106,22 @@ export function ActionList({
 
       <FormBody data-cy="mission-form-action-list">
         <FrontendErrorBoundary>
-          {!allSortedMissionActionsWithSource.length && (
+          {!allSortedMissionActionsForTimeline.length && (
             <Placeholder>Aucune action n’est ajoutée pour le moment.</Placeholder>
           )}
 
-          {allSortedMissionActionsWithSource.length > 0 &&
-            allSortedMissionActionsWithSource.map((action, index) => {
+          {allSortedMissionActionsForTimeline.length > 0 &&
+            allSortedMissionActionsForTimeline.map((action, index) => {
               if (action.source === Mission.MissionSource.MONITORFISH) {
                 return (
                   <MissionActionItem
                     // eslint-disable-next-line react/no-array-index-key
                     key={index}
-                    isSelected={(action as unknown as MissionActionWithSource).index!! === currentIndex}
+                    isSelected={action.index === currentIndex}
                     missionAction={action as MissionActionFormValues}
-                    onDuplicate={() => onDuplicate((action as unknown as MissionActionWithSource).index!!)}
-                    onRemove={() => onRemove((action as unknown as MissionActionWithSource).index!!)}
-                    onSelect={() => onSelect((action as unknown as MissionActionWithSource).index!!)}
+                    onDuplicate={() => onDuplicate(action.index!!)}
+                    onRemove={() => onRemove(action.index!!)}
+                    onSelect={() => onSelect(action.index!!)}
                   />
                 )
               }
@@ -130,7 +131,7 @@ export function ActionList({
                   <MonitorEnvMissionActionItem
                     // eslint-disable-next-line react/no-array-index-key
                     key={index}
-                    missionAction={action as MonitorEnvMissionAction.MissionAction}
+                    missionAction={action as EnvMissionAction.MissionAction}
                   />
                 )
               }

@@ -8,7 +8,7 @@ export const FormBody = styled.div`
 
   > div:not(:first-child),
   > fieldset:not(:first-child) {
-    margin-top: 24px;
+    margin-top: 16px;
   }
 
   hr {

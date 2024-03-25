@@ -5,7 +5,7 @@ import { YearControls } from './YearControls'
 import { COLORS } from '../../../constants/constants'
 import { Header, Zone } from '../common_styles/common.style'
 
-import type { MissionAction } from '../../../domain/types/missionAction'
+import type { MissionAction } from '../../Mission/missionAction.types'
 
 type YearsToControlListProps = {
   controlsFromDate: Date

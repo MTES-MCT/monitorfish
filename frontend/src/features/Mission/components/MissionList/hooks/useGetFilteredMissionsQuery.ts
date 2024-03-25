@@ -6,10 +6,10 @@ import { seaFrontFilterFunction } from '../../../../../domain/entities/mission/f
 import { unitFilterFunction } from '../../../../../domain/entities/mission/filters/unitFilterFunction'
 import { SEA_FRONT_GROUP_SEA_FRONTS } from '../../../../../domain/entities/seaFront/constants'
 import { useMainAppSelector } from '../../../../../hooks/useMainAppSelector'
-import { MissionDateRangeFilter, MissionFilterType } from '../../../../SideWindow/MissionList/types'
 import { useGetMissionsQuery } from '../../../monitorfishMissionApi'
+import { MissionDateRangeFilter, MissionFilterType } from '../types'
 
-import type { MissionWithActions } from '../../../../../domain/entities/mission/types'
+import type { MissionWithActions } from '../../../mission.types'
 
 const TWO_MINUTES = 2 * 60 * 1000
 

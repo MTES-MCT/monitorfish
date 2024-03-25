@@ -1,9 +1,9 @@
 import { THEME } from '@mtes-mct/monitor-ui'
 import { Fill, Stroke, Style } from 'ol/style'
 
-import { Mission } from '../../../../domain/entities/mission/types'
 import { getColorWithAlpha } from '../../../map/layers/styles/utils'
 import { featureHas } from '../../../map/layers/styles/utils/webgl'
+import { Mission } from '../../mission.types'
 
 import type { WebGLStyle } from 'ol/style/webgl'
 

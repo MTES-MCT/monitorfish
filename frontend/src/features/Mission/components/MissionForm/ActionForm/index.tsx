@@ -1,4 +1,4 @@
-import { MissionAction } from 'domain/types/missionAction'
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { memo } from 'react'
 import styled from 'styled-components'
 import { FrontendErrorBoundary } from 'ui/FrontendErrorBoundary'

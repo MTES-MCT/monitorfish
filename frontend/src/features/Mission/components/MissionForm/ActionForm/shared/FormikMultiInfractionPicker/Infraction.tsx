@@ -1,5 +1,5 @@
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { Accent, Icon, IconButton, Legend, Tag, TagGroup, THEME } from '@mtes-mct/monitor-ui'
-import { MissionAction } from 'domain/types/missionAction'
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 

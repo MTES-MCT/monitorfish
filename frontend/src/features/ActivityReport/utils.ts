@@ -1,7 +1,7 @@
 import { range, sortBy } from 'lodash'
 
 import { JDP, UNTARGETED_SPECIES_CODE } from './constants'
-import { MissionAction } from '../../domain/types/missionAction'
+import { MissionAction } from '../Mission/missionAction.types'
 
 import type { ActivityReportWithId } from './types'
 import type { DownloadAsCsvMap } from '@utils/downloadAsCsv'

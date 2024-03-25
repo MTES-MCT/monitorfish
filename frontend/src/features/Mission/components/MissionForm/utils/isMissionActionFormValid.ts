@@ -1,5 +1,5 @@
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { logSoftError } from '@mtes-mct/monitor-ui'
-import { MissionAction } from 'domain/types/missionAction'
 
 import * as ActionSchemas from '../ActionForm/schemas'
 

@@ -1,5 +1,6 @@
+import { Mission } from '@features/Mission/mission.types'
+
 import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
-import { Mission } from '../../../../src/domain/entities/mission/types'
 import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
 import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/constants'
 import { FAKE_MISSION_WITH_EXTERNAL_ACTIONS, FAKE_MISSION_WITHOUT_EXTERNAL_ACTIONS } from '../../constants'
@@ -41,6 +42,7 @@ context('Side Window > Mission Form > Main Form', () => {
     }).as('createMission')
     cy.intercept('GET', '/api/v1/missions/1', {
       body: {
+        envActions: [],
         id: 1
       },
       statusCode: 201
@@ -99,6 +101,7 @@ context('Side Window > Mission Form > Main Form', () => {
       openSideWindowNewMission()
       cy.intercept('GET', '/api/v1/missions/1', {
         body: {
+          envActions: [],
           id: 1
         },
         statusCode: 201
@@ -171,6 +174,7 @@ context('Side Window > Mission Form > Main Form', () => {
     openSideWindowNewMission()
     cy.intercept('GET', '/api/v1/missions/1', {
       body: {
+        envActions: [],
         id: 1
       },
       statusCode: 201

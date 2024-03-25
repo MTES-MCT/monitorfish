@@ -1,6 +1,6 @@
 import { isCypress } from '@utils/isCypress'
 
-import { MissionAction } from '../../../../domain/types/missionAction'
+import { MissionAction } from '../../missionAction.types'
 
 import type { MissionActionFormValues } from './types'
 import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'

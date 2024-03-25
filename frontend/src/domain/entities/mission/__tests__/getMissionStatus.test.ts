@@ -1,7 +1,7 @@
+import { Mission } from '@features/Mission/mission.types'
 import { expect } from '@jest/globals'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
-import { Mission } from '../types'
 import { getMissionStatus } from '../utils'
 
 // TODO Test all mission statuses.

@@ -1,5 +1,5 @@
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { getLocalizedDayjs } from '@mtes-mct/monitor-ui'
-import { MissionAction } from 'domain/types/missionAction'
 
 import type { FleetSegment } from '@features/FleetSegment/types'
 import type { Option } from '@mtes-mct/monitor-ui'

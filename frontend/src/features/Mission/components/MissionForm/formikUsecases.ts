@@ -1,10 +1,10 @@
 import { faoAreasApi } from '@api/faoAreas'
 import { getSummedSpeciesOnBoard } from '@features/Logbook/utils'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { getLastControlCircleGeometry } from '@features/Mission/useCases/getLastControlCircleGeometry'
 import { vesselApi } from '@features/Vessel/apis'
 import { FrontendError } from '@libs/FrontendError'
-import { MissionAction } from 'domain/types/missionAction'
 import { getFleetSegments } from 'domain/use_cases/vessel/getFleetSegments'
 import { MultiPolygon } from 'ol/geom'
 

@@ -10,7 +10,7 @@ import CautionSVG from '../../icons/Attention_controles.svg?react'
 import SeaSVG from '../../icons/Avarie_statut_navire_en_mer.svg?react'
 import { Header, Zone } from '../common_styles/common.style'
 
-import type { MissionAction } from '../../../domain/types/missionAction'
+import type { MissionAction } from '../../Mission/missionAction.types'
 
 type ControlsResumeZoneProps = {
   controlsFromDate: Date

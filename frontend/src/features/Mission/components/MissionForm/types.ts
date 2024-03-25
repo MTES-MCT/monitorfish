@@ -1,13 +1,18 @@
 import type { PartialExcept } from '../../../../types'
-import type { Mission } from 'domain/entities/mission/types'
+import type { Mission } from '@features/Mission/mission.types'
+import type { MissionAction } from '@features/Mission/missionAction.types'
 import type { LegacyControlUnit } from 'domain/types/legacyControlUnit'
-import type { MissionAction } from 'domain/types/missionAction'
 
 export type MissionActionFormValues = PartialExcept<
   MissionAction.MissionActionData,
   'actionType' | 'actionDatetimeUtc'
 > & {
   isValid: boolean
+}
+
+export type MissionActionForTimeline = MissionActionFormValues & {
+  index: number
+  source: Mission.MissionSource
 }
 
 export type MissionMainFormValues = Partial<

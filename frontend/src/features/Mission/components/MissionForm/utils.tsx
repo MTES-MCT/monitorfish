@@ -3,8 +3,8 @@ import { validateRequiredFormValues } from '@utils/validateRequiredFormValues'
 import { difference, omit } from 'lodash'
 
 import { MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
-import { Mission } from '../../../../domain/entities/mission/types'
-import { MissionAction } from '../../../../domain/types/missionAction'
+import { Mission } from '../../mission.types'
+import { MissionAction } from '../../missionAction.types'
 
 import type { MissionActionFormValues, MissionMainFormValues } from './types'
 import type { Undefine } from '@mtes-mct/monitor-ui'
@@ -101,7 +101,7 @@ export function getTitleFromMissionMainFormValues(
 export function getUpdatedMissionFromMissionMainFormValues(
   missionId: Mission.Mission['id'],
   mainFormValues: MissionMainFormValues
-): Mission.Mission {
+): Mission.SavedMission {
   const missionData = getMissionDataFromMissionFormValues(mainFormValues)
 
   return {

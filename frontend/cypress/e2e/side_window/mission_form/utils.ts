@@ -2,7 +2,7 @@ import { SideWindowMenuLabel } from '../../../../src/domain/entities/sideWindow/
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
-import type { Mission } from '../../../../src/domain/entities/mission/types'
+import type { Mission } from '@features/Mission/mission.types'
 
 export const openSideWindowNewMission = () => {
   cy.viewport(1920, 1080)
@@ -64,6 +64,7 @@ export const fillSideWindowMissionFormBase = (
   }).as('createMission')
   cy.intercept('GET', '/api/v1/missions/1', {
     body: {
+      envActions: [],
       id: 1,
       isClosed: isReturningClosed
     },

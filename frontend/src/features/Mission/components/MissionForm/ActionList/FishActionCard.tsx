@@ -1,44 +1,24 @@
 import { MissionAction } from '@features/Mission/missionAction.types'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { FrontendError } from '@libs/FrontendError'
-import {
-  Accent,
-  FieldError,
-  getLocalizedDayjs,
-  Icon,
-  IconButton,
-  Tag,
-  TagBullet,
-  TagGroup,
-  THEME
-} from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, Tag, TagBullet, TagGroup, THEME } from '@mtes-mct/monitor-ui'
 import { UNKNOWN_VESSEL } from 'domain/entities/vessel/vessel'
 import { find } from 'lodash'
 import { useMemo } from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
-import { formatDateLabel, getActionTitle, getMissionActionInfractionsFromMissionActionFormValues } from './utils'
+import { Head, ActionLabel } from './styles'
+import { getActionTitle, getMissionActionInfractionsFromMissionActionFormValues } from './utils'
 import { useGetNatinfsAsOptions } from '../hooks/useGetNatinfsAsOptions'
 
 import type { MissionActionFormValues } from '../types'
 import type { Promisable } from 'type-fest'
 
-type MissionActionItemProps = Readonly<{
-  isSelected: boolean
+type FishActionCardProps = Readonly<{
   missionAction: MissionActionFormValues
   onDuplicate: () => Promisable<void>
   onRemove: () => Promisable<void>
-  onSelect: () => Promisable<void>
 }>
-export function MissionActionItem({
-  isSelected,
-  missionAction,
-  onDuplicate,
-  onRemove,
-  onSelect
-}: MissionActionItemProps) {
-  const draft = useMainAppSelector(state => state.missionForm.draft)
-
+export function FishActionCard({ missionAction, onDuplicate, onRemove }: FishActionCardProps) {
   const natinfsAsOptions = useGetNatinfsAsOptions()
 
   const isControlAction =
@@ -131,64 +111,36 @@ export function MissionActionItem({
     [missionAction]
   )
 
-  const startDateAsDayjs = useMemo(
-    () => missionAction.actionDatetimeUtc && getLocalizedDayjs(missionAction.actionDatetimeUtc),
-    [missionAction]
-  )
-
-  const isOpen = isControlAction && draft?.mainFormValues && !draft?.mainFormValues.isClosed && !missionAction.closedBy
-
   return (
     <>
-      <Wrapper>
-        {startDateAsDayjs && (
-          <DateLabel title={missionAction.actionDatetimeUtc}>
-            <b>{formatDateLabel(startDateAsDayjs.format('DD MMM'))}</b> à {startDateAsDayjs.format('HH:mm')}
-          </DateLabel>
-        )}
+      <Head>
+        <ActionLabel>
+          <ActionIcon color={THEME.color.charcoal} size={20} />
+          <p>{actionLabel}</p>
+        </ActionLabel>
 
-        <InnerWrapper
-          $isOpen={isOpen}
-          $isSelected={isSelected}
-          $type={missionAction.actionType}
-          data-cy="action-list-item"
-          onClick={onSelect}
-          title={isOpen ? 'Contrôle en cours' : undefined}
-        >
-          <Head>
-            <ActionLabel>
-              <ActionIcon color={THEME.color.charcoal} size={20} />
-              <p>{actionLabel}</p>
-            </ActionLabel>
+        <RightAlignedIconButton
+          accent={Accent.TERTIARY}
+          color={THEME.color.slateGray}
+          Icon={Icon.Duplicate}
+          iconSize={20}
+          onClick={onDuplicate}
+          title="Dupliquer l’action"
+          withUnpropagatedClick
+        />
+        <RightAlignedIconButton
+          accent={Accent.TERTIARY}
+          color={THEME.color.maximumRed}
+          Icon={Icon.Delete}
+          iconSize={20}
+          onClick={onRemove}
+          title="Supprimer l’action"
+          withUnpropagatedClick
+        />
+      </Head>
 
-            <RightAlignedIconButton
-              accent={Accent.TERTIARY}
-              color={THEME.color.slateGray}
-              Icon={Icon.Duplicate}
-              iconSize={20}
-              onClick={onDuplicate}
-              title="Dupliquer l’action"
-              withUnpropagatedClick
-            />
-            <RightAlignedIconButton
-              accent={Accent.TERTIARY}
-              color={THEME.color.maximumRed}
-              Icon={Icon.Delete}
-              iconSize={20}
-              onClick={onRemove}
-              title="Supprimer l’action"
-              withUnpropagatedClick
-            />
-          </Head>
-
-          {isControlAction && redTags.length > 0 && <StyledTagGroup>{redTags}</StyledTagGroup>}
-          {isControlAction && infractionTags.length > 0 && <StyledTagGroup>{infractionTags}</StyledTagGroup>}
-        </InnerWrapper>
-      </Wrapper>
-
-      {!missionAction.isValid && (
-        <StyledFieldError>Veuillez compléter les champs manquants dans cette action de contrôle.</StyledFieldError>
-      )}
+      {isControlAction && redTags.length > 0 && <StyledTagGroup>{redTags}</StyledTagGroup>}
+      {isControlAction && infractionTags.length > 0 && <StyledTagGroup>{infractionTags}</StyledTagGroup>}
     </>
   )
 }
@@ -197,80 +149,7 @@ const RightAlignedIconButton = styled(IconButton)`
   margin-left: auto;
 `
 
-const Wrapper = styled.div`
-  align-items: center;
-  color: ${p => p.theme.color.slateGray};
-  display: flex;
-  font-size: 13px;
-  /* This padding allows the top 2px outline to be visible in InnerWrapper */
-  padding-top: 2px;
-  user-select: none;
-`
-
-const DateLabel = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-width: 65px;
-  padding: 4px 16px 4px 0;
-`
-
-const InnerWrapper = styled.div<{
-  $isOpen: boolean | undefined
-  $isSelected: boolean
-  $type: MissionAction.MissionActionType
-}>`
-  background-color: ${p =>
-    ({
-      [MissionAction.MissionActionType.AIR_SURVEILLANCE]: p.theme.color.gainsboro,
-      [MissionAction.MissionActionType.OBSERVATION]: p.theme.color.blueYonder25
-    })[p.$type] || p.theme.color.white};
-  border: solid 1px ${p => (p.$isSelected ? p.theme.color.blueGray : p.theme.color.lightGray)};
-  outline: ${p => (p.$isSelected ? `${p.theme.color.blueGray} solid 2px` : 'none')};
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  padding: 16px;
-
-  ${p =>
-    p.$isOpen &&
-    css`
-      border-left: solid 5px ${p.theme.color.blueGray};
-      padding-left: 12px;
-    `}
-`
-
-const ActionLabel = styled.div`
-  display: flex;
-  flex-grow: 1;
-
-  > .Element-IconBox {
-    margin-right: 8px;
-  }
-
-  > p {
-    margin-top: 0px;
-    color: ${p => p.theme.color.gunMetal};
-    padding: 1px 0px 0 0;
-    min-height: 26px;
-  }
-`
-
-const Head = styled.div`
-  align-items: flex-start;
-  display: flex;
-
-  /* TODO Remove the padding if iconSize is set in monitor-ui. */
-  > button {
-    padding: 0;
-  }
-`
-
 const StyledTagGroup = styled(TagGroup)`
   margin-top: 12px;
   padding-left: 32px;
-`
-
-const StyledFieldError = styled(FieldError)`
-  padding-left: 70px;
 `

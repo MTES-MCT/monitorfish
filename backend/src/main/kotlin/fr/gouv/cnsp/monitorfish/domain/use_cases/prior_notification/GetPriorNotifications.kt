@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
@@ -27,21 +28,13 @@ class GetPriorNotifications(
                     null
                 }
 
-                val seaFront = port?.latitude?.let { latitude ->
-                    port.longitude?.let { longitude ->
-                        val point = GeometryFactory().createPoint(Coordinate(longitude, latitude))
+                val seaFront = getSeaFrontFromPort(port)
 
-                        facadeAreasRepository.findByIncluding(point).firstOrNull()?.facade
-                    }
-                }
-
-                val reportingsCount = priorNotification.vesselId.let { vesselId ->
-                    reportingRepository.findCurrentAndArchivedByVesselIdEquals(
-                        vesselId,
-                        // TODO Fix that.
-                        fromDate = ZonedDateTime.now().minusYears(2),
-                    ).count()
-                }
+                val reportingsCount = reportingRepository.findCurrentAndArchivedByVesselIdEquals(
+                    priorNotification.vessel.id,
+                    // TODO Fix that.
+                    fromDate = ZonedDateTime.now().minusYears(2),
+                ).count()
 
                 priorNotification.copy(
                     portName = port?.name,
@@ -51,5 +44,15 @@ class GetPriorNotifications(
             }
 
         return priorNotifications
+    }
+
+    private fun getSeaFrontFromPort(port: Port?): String? {
+        if (port?.latitude == null || port.longitude == null) {
+            return null
+        }
+
+        val point = GeometryFactory().createPoint(Coordinate(port.longitude, port.latitude))
+
+        return facadeAreasRepository.findByIncluding(point).firstOrNull()?.facade
     }
 }

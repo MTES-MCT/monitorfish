@@ -1,9 +1,11 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationTypes
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotifications
@@ -40,7 +42,6 @@ class PriorNotificationControllerITests {
                     id = 1,
                     expectedArrivalDate = null,
                     expectedLandingDate = null,
-                    isVesselUnderCharter = null,
                     notificationTypeLabel = null,
                     onboardCatches = emptyList(),
                     portLocode = null,
@@ -52,15 +53,18 @@ class PriorNotificationControllerITests {
                     tripGears = emptyList(),
                     tripSegments = emptyList(),
                     types = emptyList(),
-                    vesselId = 1,
-                    vesselExternalReferenceNumber = null,
-                    vesselFlagCountryCode = null,
-                    vesselInternalReferenceNumber = null,
-                    vesselIrcs = null,
+                    vessel = Vessel(
+                        id = 1,
+                        externalReferenceNumber = null,
+                        flagState = CountryCode.FR,
+                        internalReferenceNumber = null,
+                        ircs = null,
+                        length = null,
+                        mmsi = null,
+                        underCharter = null,
+                        vesselName = null,
+                    ),
                     vesselLastControlDate = null,
-                    vesselLength = null,
-                    vesselMmsi = null,
-                    vesselName = null,
                     vesselRiskFactorImpact = null,
                     vesselRiskFactorProbability = null,
                     vesselRiskFactorDetectability = null,
@@ -71,7 +75,6 @@ class PriorNotificationControllerITests {
                     id = 2,
                     expectedArrivalDate = null,
                     expectedLandingDate = null,
-                    isVesselUnderCharter = null,
                     notificationTypeLabel = null,
                     onboardCatches = emptyList(),
                     portLocode = null,
@@ -83,15 +86,18 @@ class PriorNotificationControllerITests {
                     tripGears = emptyList(),
                     tripSegments = emptyList(),
                     types = emptyList(),
-                    vesselId = 2,
-                    vesselExternalReferenceNumber = null,
-                    vesselFlagCountryCode = null,
-                    vesselInternalReferenceNumber = null,
-                    vesselIrcs = null,
+                    vessel = Vessel(
+                        id = 2,
+                        externalReferenceNumber = null,
+                        flagState = CountryCode.FR,
+                        internalReferenceNumber = null,
+                        ircs = null,
+                        length = null,
+                        mmsi = null,
+                        underCharter = null,
+                        vesselName = null,
+                    ),
                     vesselLastControlDate = null,
-                    vesselLength = null,
-                    vesselMmsi = null,
-                    vesselName = null,
                     vesselRiskFactorImpact = null,
                     vesselRiskFactorProbability = null,
                     vesselRiskFactorDetectability = null,

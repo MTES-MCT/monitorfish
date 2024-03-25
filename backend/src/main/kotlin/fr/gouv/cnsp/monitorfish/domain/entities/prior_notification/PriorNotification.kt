@@ -3,12 +3,12 @@ package fr.gouv.cnsp.monitorfish.domain.entities.prior_notification
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Catch
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripGear
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripSegment
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 
 data class PriorNotification(
     val id: Long,
     val expectedArrivalDate: String?,
     val expectedLandingDate: String?,
-    val isVesselUnderCharter: Boolean?,
     val notificationTypeLabel: String? = null,
     val onboardCatches: List<Catch>,
     val portLocode: String?,
@@ -20,18 +20,10 @@ data class PriorNotification(
     val tripGears: List<LogbookTripGear>,
     val tripSegments: List<LogbookTripSegment>,
     val types: List<PriorNotificationType>,
-    val vesselId: Int,
-    val vesselExternalReferenceNumber: String?,
-    // ISO Alpha-2 country code
-    val vesselFlagCountryCode: String?,
-    val vesselInternalReferenceNumber: String?,
-    val vesselIrcs: String?,
+    val vessel: Vessel,
     val vesselLastControlDate: String?,
-    val vesselLength: Double?,
-    val vesselMmsi: String?,
-    val vesselName: String?,
+    val vesselRiskFactor: Double?,
     val vesselRiskFactorImpact: Double?,
     val vesselRiskFactorProbability: Double?,
     val vesselRiskFactorDetectability: Double?,
-    val vesselRiskFactor: Double?,
 )

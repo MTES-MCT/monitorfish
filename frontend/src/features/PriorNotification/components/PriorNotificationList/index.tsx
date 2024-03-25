@@ -208,28 +208,28 @@ export function PriorNotificationList() {
                             <ExpandedRowCell $width={50} />
                             <ExpandedRowCell $width={160}>
                               <p>
-                                {!!priorNotification.vesselInternalReferenceNumber && (
+                                {!!priorNotification.vessel.internalReferenceNumber && (
                                   <ExpandedRowValue $isLight>
-                                    {priorNotification.vesselInternalReferenceNumber} (CFR)
+                                    {priorNotification.vessel.internalReferenceNumber} (CFR)
                                   </ExpandedRowValue>
                                 )}
-                                {!!priorNotification.vesselIrcs && (
+                                {!!priorNotification.vessel.ircs && (
                                   <ExpandedRowValue $isLight>
-                                    {priorNotification.vesselIrcs} (Call sign)
+                                    {priorNotification.vessel.ircs} (Call sign)
                                   </ExpandedRowValue>
                                 )}
-                                {!!priorNotification.vesselExternalReferenceNumber && (
+                                {!!priorNotification.vessel.externalReferenceNumber && (
                                   <ExpandedRowValue $isLight>
-                                    {priorNotification.vesselExternalReferenceNumber} (Marq. ext.)
+                                    {priorNotification.vessel.externalReferenceNumber} (Marq. ext.)
                                   </ExpandedRowValue>
                                 )}
-                                {!!priorNotification.vesselMmsi && (
-                                  <ExpandedRowValue $isLight>{priorNotification.vesselMmsi} (MMSI)</ExpandedRowValue>
+                                {!!priorNotification.vessel.mmsi && (
+                                  <ExpandedRowValue $isLight>{priorNotification.vessel.mmsi} (MMSI)</ExpandedRowValue>
                                 )}
                               </p>
                               <p>
                                 <ExpandedRowLabel>Taille du navire :</ExpandedRowLabel>
-                                <ExpandedRowValue>{priorNotification.vesselLength ?? 'Inconnu'}</ExpandedRowValue>
+                                <ExpandedRowValue>{priorNotification.vessel.length ?? 'Inconnu'}</ExpandedRowValue>
                               </p>
                               <p>
                                 <ExpandedRowLabel>Dernier contrôle :</ExpandedRowLabel>

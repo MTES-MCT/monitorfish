@@ -6,13 +6,13 @@ import { BaseLayers, LayerProperties } from '../layers/constants'
 import type {
   SelectedVessel,
   ShowedVesselTrack,
-  Vessel as VesselType,
   VesselCompositeIdentifier,
   VesselEnhancedObject,
   VesselIdentity
 } from './types'
 import type { LastPositionVisibility } from '../../types/map'
 import type { Reporting } from '../../types/reporting'
+import type { Vessel as VesselTypes } from '@features/Vessel/Vessel.types'
 
 export const VESSEL_ALERT_STYLE = 1
 export const VESSEL_INFRACTION_SUSPICION_STYLE = 1
@@ -142,18 +142,18 @@ export class Vessel {
 }
 
 export const getOnlyVesselIdentityProperties = (
-  vessel: VesselEnhancedObject | SelectedVessel | VesselType | Reporting
+  vessel: VesselEnhancedObject | SelectedVessel | VesselTypes.Vessel | Reporting
 ): VesselIdentity => ({
-  beaconNumber: 'beaconNumber' in vessel ? vessel.beaconNumber : null,
-  districtCode: 'districtCode' in vessel ? vessel.districtCode : null,
-  externalReferenceNumber: vessel.externalReferenceNumber,
+  beaconNumber: 'beaconNumber' in vessel && !!vessel.beaconNumber ? vessel.beaconNumber : null,
+  districtCode: 'districtCode' in vessel && !!vessel.districtCode ? vessel.districtCode : null,
+  externalReferenceNumber: vessel.externalReferenceNumber ?? null,
   flagState: vessel.flagState,
-  internalReferenceNumber: vessel.internalReferenceNumber,
-  ircs: vessel.ircs,
-  mmsi: 'mmsi' in vessel ? vessel.mmsi : null,
-  vesselId: 'vesselId' in vessel ? vessel.vesselId : null,
-  vesselIdentifier: 'vesselIdentifier' in vessel ? vessel.vesselIdentifier : null,
-  vesselName: vessel.vesselName
+  internalReferenceNumber: vessel.internalReferenceNumber ?? null,
+  ircs: 'ircs' in vessel && !!vessel.ircs ? vessel.ircs : null,
+  mmsi: 'mmsi' in vessel && !!vessel.mmsi ? vessel.mmsi : null,
+  vesselId: 'vesselId' in vessel && !!vessel.vesselId ? vessel.vesselId : null,
+  vesselIdentifier: 'vesselIdentifier' in vessel && !!vessel.vesselIdentifier ? vessel.vesselIdentifier : null,
+  vesselName: vessel.vesselName ?? null
 })
 
 export const getVesselCompositeIdentifier: (vessel) => VesselCompositeIdentifier = vessel =>

@@ -87,7 +87,7 @@ export const PRIOR_NOTIFICATION_TABLE_COLUMNS: Array<ColumnDef<PriorNotification
     size: 50
   },
   {
-    accessorFn: row => row.vesselName ?? '-',
+    accessorFn: row => row.vessel.vesselName ?? '-',
     cell: (info: CellContext<PriorNotification.PriorNotification, string>) => (
       <Ellipsised>{info.getValue()}</Ellipsised>
     ),

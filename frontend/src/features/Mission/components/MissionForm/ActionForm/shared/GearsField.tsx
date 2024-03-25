@@ -21,9 +21,9 @@ import { FieldsetGroup, FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../shared/FieldsetGroupSeparator'
 
 import type { MissionActionFormValues } from '../../types'
+import type { MissionAction } from '@features/Mission/missionAction.types'
 import type { Option } from '@mtes-mct/monitor-ui'
 import type { Gear } from 'domain/types/Gear'
-import type { MissionAction } from 'domain/types/missionAction'
 import type { DeepPartial } from 'types'
 
 export function GearsField() {

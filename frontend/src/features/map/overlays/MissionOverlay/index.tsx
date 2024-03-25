@@ -13,7 +13,7 @@ import { monitorfishMap } from '../../monitorfishMap'
 import { getMapResolution } from '../../utils'
 import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../Overlay'
 
-import type { Mission } from '../../../../domain/entities/mission/types'
+import type { Mission } from '../../../Mission/mission.types'
 
 const overlayHeight = 200
 const INITIAL_OFFSET_VALUE = [0, 0]

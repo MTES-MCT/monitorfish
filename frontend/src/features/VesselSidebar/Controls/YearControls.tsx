@@ -10,7 +10,7 @@ import {
 import { pluralize } from '../../../utils/pluralize'
 import { YearListChevronIcon, YearListContent, YearListTitle, YearListTitleText } from '../common_styles/YearList.style'
 
-import type { MissionAction } from '../../../domain/types/missionAction'
+import type { MissionAction } from '../../Mission/missionAction.types'
 
 type YearControlsProps = {
   year: number

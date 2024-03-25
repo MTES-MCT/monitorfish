@@ -11,7 +11,7 @@ import { missionFormActions } from '../../../Mission/components/MissionForm/slic
 import { Flag } from '../../../VesselList/tableCells'
 import { OverlayPosition } from '../Overlay'
 
-import type { Mission } from '../../../../domain/entities/mission/types'
+import type { Mission } from '../../../Mission/mission.types'
 
 type ControlDetailsProps = Readonly<{
   control: Mission.MissionActionFeatureProperties

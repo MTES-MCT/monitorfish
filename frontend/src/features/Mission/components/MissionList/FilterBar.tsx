@@ -1,3 +1,6 @@
+import { useGetLegacyControlUnitsQuery } from '@api/legacyControlUnit'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import {
   FormikDateRangePicker,
   FormikEffect,
@@ -16,14 +19,11 @@ import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { MISSION_FILTER_LABEL_ENUMS, MISSION_FILTER_OPTIONS } from './constants'
+import { missionListActions } from './slice'
 import { MissionDateRangeFilter, MissionFilterType } from './types'
 import { getControlUnitsNamesFromAdministrations } from './utils'
-import { useGetLegacyControlUnitsQuery } from '../../../api/legacyControlUnit'
-import { getControlUnitsOptionsFromControlUnits } from '../../../domain/entities/controlUnits/utils'
-import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
-import { FormikFilterTagBar } from '../../../ui/formiks/FormikFilterTagBar'
-import { missionListActions } from '../../Mission/components/MissionList/slice'
+import { getControlUnitsOptionsFromControlUnits } from '../../../../domain/entities/controlUnits/utils'
+import { FormikFilterTagBar } from '../../../../ui/formiks/FormikFilterTagBar'
 
 import type { FilterValues } from './types'
 import type { Promisable } from 'type-fest'

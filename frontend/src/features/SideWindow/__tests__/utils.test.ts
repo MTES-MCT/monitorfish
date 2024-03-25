@@ -1,7 +1,7 @@
 import { getMissionDataFromMissionFormValues } from '@features/Mission/components/MissionForm/utils'
 import { expect } from '@jest/globals'
 
-import { Mission } from '../../../domain/entities/mission/types'
+import { Mission } from '../../Mission/mission.types'
 
 import MissionSource = Mission.MissionSource
 import MissionType = Mission.MissionType

@@ -1,10 +1,10 @@
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
 import { missionListActions } from '@features/Mission/components/MissionList/slice'
+import { MissionDateRangeFilter, MissionFilterType } from '@features/Mission/components/MissionList/types'
+import { Mission } from '@features/Mission/mission.types'
 import { monitorenvMissionApi } from '@features/Mission/monitorenvMissionApi'
-import { MissionDateRangeFilter, MissionFilterType } from '@features/SideWindow/MissionList/types'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { customDayjs, logSoftError } from '@mtes-mct/monitor-ui'
-import { Mission } from 'domain/entities/mission/types'
 import { SideWindowMenuKey } from 'domain/entities/sideWindow/constants'
 
 export const cancelCreateAndRedirectToFilteredList =

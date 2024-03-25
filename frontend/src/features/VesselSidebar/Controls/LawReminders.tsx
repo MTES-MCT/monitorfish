@@ -7,7 +7,7 @@ import {
 } from '../../../domain/entities/controls'
 import { pluralize } from '../../../utils/pluralize'
 
-import type { MissionAction } from '../../../domain/types/missionAction'
+import type { MissionAction } from '../../Mission/missionAction.types'
 
 type LawRemindersProps = {
   controls: MissionAction.MissionAction[]

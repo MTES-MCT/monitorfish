@@ -1,12 +1,12 @@
+import { FrontendError } from '@libs/FrontendError'
 import { Tag } from '@mtes-mct/monitor-ui'
 import { uniq } from 'lodash/fp'
 import styled from 'styled-components'
 
-import { Mission, type MissionWithActions } from '../../../domain/entities/mission/types'
-import { FrontendError } from '../../../libs/FrontendError'
-import { getMissionColor } from '../../Mission/layers/MissionLayer/styles'
+import { getMissionColor } from '../../layers/MissionLayer/styles'
+import { Mission, type MissionWithActions } from '../../mission.types'
 
-import type { LegacyControlUnit } from '../../../domain/types/legacyControlUnit'
+import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
 
 export function getControlUnitsNamesFromAdministrations(
   controlUnits: LegacyControlUnit.LegacyControlUnit[],

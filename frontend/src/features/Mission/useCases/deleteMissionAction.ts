@@ -3,7 +3,7 @@ import { portApi } from '@api/port'
 import { formikUsecase } from '@features/Mission/components/MissionForm/formikUsecases'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
 
-import { MissionAction } from '../../../domain/types/missionAction'
+import { MissionAction } from '../missionAction.types'
 
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 import type { MainAppThunk } from '@store'

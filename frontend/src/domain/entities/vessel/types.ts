@@ -1,4 +1,4 @@
-// TODO This should be moved to `entities/vessel/types.ts`
+// TODO This should be moved to `entities/vessel/mission.types.ts`
 
 import type { RiskFactor } from './riskFactor/types'
 import type { ReportingType } from '../../types/reporting'

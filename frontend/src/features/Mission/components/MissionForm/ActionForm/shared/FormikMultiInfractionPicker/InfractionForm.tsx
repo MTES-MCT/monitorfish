@@ -16,7 +16,7 @@ import { InfractionCategory } from './types'
 import { InfractionFormLiveSchema } from '../../schemas'
 import { INFRACTION_TYPES_AS_OPTIONS } from '../constants'
 
-import type { MissionAction } from 'domain/types/missionAction'
+import type { MissionAction } from '@features/Mission/missionAction.types'
 
 type InfractionFormProps = Readonly<{
   initialValues: MissionAction.Infraction & { group?: string | undefined }

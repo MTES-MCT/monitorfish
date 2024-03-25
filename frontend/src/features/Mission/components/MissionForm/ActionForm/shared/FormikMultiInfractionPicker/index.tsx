@@ -15,7 +15,7 @@ import { FieldsetGroup, FieldsetGroupSpinner } from '../../../shared/FieldsetGro
 import { FieldsetGroupSeparator } from '../../../shared/FieldsetGroupSeparator'
 
 import type { MissionActionFormValues } from '../../../types'
-import type { MissionAction } from 'domain/types/missionAction'
+import type { MissionAction } from '@features/Mission/missionAction.types'
 
 type FormikMultiInfractionPickerProps = Readonly<{
   addButtonLabel: string

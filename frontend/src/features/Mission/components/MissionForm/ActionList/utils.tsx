@@ -1,5 +1,5 @@
+import { MissionAction } from '@features/Mission/missionAction.types'
 import dayjs from 'dayjs'
-import { MissionAction } from 'domain/types/missionAction'
 import styled from 'styled-components'
 
 import type { MissionActionFormValues } from '../types'
@@ -15,24 +15,29 @@ export function formatDateLabel(dateLabel: string) {
 export function getActionTitle(
   subject: string | undefined,
   details: string | undefined,
-  placeholder: string
+  placeholder: string | undefined
 ): ReactNode {
   if (details) {
     return (
       <StyledSpan>
-        {!!subject && (
-          <>
-            {subject}
-            <br />
-          </>
-        )}
-        <strong>{details}</strong>
+        {!!subject && <>{subject}</>}
+        <Strong>{details}</Strong>
       </StyledSpan>
     )
   }
 
-  return <Placeholder>{`${subject ? `${subject} – ` : ''}${placeholder}`}</Placeholder>
+  if (placeholder) {
+    return <Placeholder>{`${subject ? `${subject} – ` : ''}${placeholder}`}</Placeholder>
+  }
+
+  return subject
 }
+
+const Strong = styled.div`
+  display: block;
+  font-weight: 700;
+  margin-top: 4px;
+`
 
 /**
  * @description

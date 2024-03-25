@@ -1,6 +1,6 @@
 import { expect } from '@jest/globals'
 
-import { MissionAction } from '../../../../../domain/types/missionAction'
+import { MissionAction } from '../../../missionAction.types'
 import { getMissionActionsDataFromMissionActionsFormValues } from '../utils'
 
 import MissionActionType = MissionAction.MissionActionType

@@ -1,5 +1,5 @@
+import { Mission } from '@features/Mission/mission.types'
 import { customDayjs } from '@mtes-mct/monitor-ui'
-import { Mission } from 'domain/entities/mission/types'
 
 import { INITIAL_MISSION_CONTROL_UNIT } from '../constants'
 

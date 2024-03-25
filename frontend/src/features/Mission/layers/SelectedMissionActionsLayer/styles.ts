@@ -5,8 +5,8 @@ import { MultiPoint, MultiPolygon } from 'ol/geom'
 import { Fill, Icon, Stroke, Style } from 'ol/style'
 
 import { isControl } from '../../../../domain/entities/controls'
-import { MissionAction } from '../../../../domain/types/missionAction'
 import { getColorWithAlpha } from '../../../map/layers/styles/utils'
+import { MissionAction } from '../../missionAction.types'
 
 import MissionActionType = MissionAction.MissionActionType
 

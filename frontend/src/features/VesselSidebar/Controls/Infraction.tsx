@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { MissionAction } from '../../../domain/types/missionAction'
+import { MissionAction } from '../../Mission/missionAction.types'
 
 type InfractionProps = {
   index: number

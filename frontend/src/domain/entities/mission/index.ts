@@ -1,4 +1,6 @@
 import { getMissionActionInfractionsFromMissionActionFormValues } from '@features/Mission/components/MissionForm/ActionList/utils'
+import { Mission } from '@features/Mission/mission.types'
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { isLandControl } from '@features/Mission/useCases/getLastControlCircleGeometry'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
 import { random } from 'lodash'
@@ -9,17 +11,15 @@ import { circular } from 'ol/geom/Polygon'
 import { transform } from 'ol/proj'
 
 import { LAND_CONTROL_ZONE_RADIUS, SEA_CONTROL_ZONE_RADIUS } from './constants'
-import { Mission } from './types'
 import { getMissionStatus } from './utils'
 import { getMissionColor } from '../../../features/Mission/layers/MissionLayer/styles'
 import { booleanToInt, getDate, getDateTime } from '../../../utils'
-import { MissionAction } from '../../types/missionAction'
 import { getNumberOfInfractions, getNumberOfInfractionsWithRecord } from '../controls'
 import { MonitorFishLayer } from '../layers/types'
 import { OpenLayersGeometryType } from '../map/constants'
 
-import type { MissionWithActions } from './types'
 import type { MissionActionFormValues, MissionMainFormValues } from '@features/Mission/components/MissionForm/types'
+import type { MissionWithActions } from '@features/Mission/mission.types'
 import type { MultiPolygon } from 'ol/geom'
 
 import MissionStatus = Mission.MissionStatus

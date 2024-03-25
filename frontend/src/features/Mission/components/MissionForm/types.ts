@@ -10,6 +10,11 @@ export type MissionActionFormValues = PartialExcept<
   isValid: boolean
 }
 
+export type MissionActionForTimeline = MissionActionFormValues & {
+  index: number
+  source: Mission.MissionSource
+}
+
 export type MissionMainFormValues = Partial<
   Omit<Mission.MissionData, 'actions' | 'controlUnits' | 'startDateTimeUtc' | 'missionTypes'>
 > & {

@@ -1,11 +1,10 @@
+import { EnvMissionAction } from '@features/Mission/envMissionAction.types'
 import { Mission } from '@features/Mission/mission.types'
 import { MissionAction } from '@features/Mission/missionAction.types'
-import { MonitorEnvMissionAction } from '@features/Mission/monitorEnvMissionAction.types'
 import dayjs from 'dayjs'
 import styled from 'styled-components'
 
-import type { MissionActionFormValues } from '../types'
-import type { MissionActionWithSource } from '@features/Mission/components/MissionForm/ActionList/types'
+import type { MissionActionFormValues, MissionActionForTimeline } from '../types'
 import type { ReactNode } from 'react'
 
 export function formatDateLabel(dateLabel: string) {
@@ -23,13 +22,8 @@ export function getActionTitle(
   if (details) {
     return (
       <StyledSpan>
-        {!!subject && (
-          <>
-            {subject}
-            <br />
-          </>
-        )}
-        <strong>{details}</strong>
+        {!!subject && <>{subject}</>}
+        <Strong>{details}</Strong>
       </StyledSpan>
     )
   }
@@ -40,6 +34,12 @@ export function getActionTitle(
 
   return subject
 }
+
+const Strong = styled.div`
+  display: block;
+  font-weight: 700;
+  margin-top: 4px;
+`
 
 /**
  * @description
@@ -68,13 +68,15 @@ export function getMissionActionFormInitialValues(type: MissionAction.MissionAct
   }
 }
 
-export function getMissionActionDate(missionAction: MissionActionWithSource) {
+export function getMissionActionDate(
+  missionAction: MissionActionForTimeline | EnvMissionAction.MissionActionForTimeline
+) {
   if (missionAction.source === Mission.MissionSource.MONITORFISH) {
-    return (missionAction as unknown as MissionAction.MissionAction).actionDatetimeUtc
+    return (missionAction as MissionActionFormValues).actionDatetimeUtc
   }
 
   if (missionAction.source === Mission.MissionSource.MONITORENV) {
-    return (missionAction as MonitorEnvMissionAction.MissionAction).actionStartDateTimeUtc
+    return (missionAction as EnvMissionAction.MissionAction).actionStartDateTimeUtc
   }
 
   throw new Error(`Unknown source: ${missionAction.source}`)

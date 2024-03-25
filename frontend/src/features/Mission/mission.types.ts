@@ -1,4 +1,4 @@
-import { MonitorEnvMissionAction } from '@features/Mission/monitorEnvMissionAction.types'
+import { EnvMissionAction } from '@features/Mission/envMissionAction.types'
 
 import { SeaFront } from '../../domain/entities/seaFront/constants'
 
@@ -13,7 +13,7 @@ export namespace Mission {
     controlUnits: LegacyControlUnit.LegacyControlUnit[]
     createdAtUtc?: string | undefined
     endDateTimeUtc?: string
-    envActions: MonitorEnvMissionAction.MissionAction[]
+    envActions: EnvMissionAction.MissionAction[]
     facade?: SeaFront
     geom?: GeoJSON.MultiPolygon
     hasMissionOrder?: boolean | undefined

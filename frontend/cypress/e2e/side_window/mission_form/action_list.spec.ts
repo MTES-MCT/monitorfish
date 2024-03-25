@@ -241,4 +241,16 @@ context('Side Window > Mission Form > Action List', () => {
         'est automatiquement calculée selon le point ou la zone de la dernière action rapportée par l’unité.'
     )
   })
+
+  it('Should show Env actions on the actions timeline', () => {
+    editSideWindowMissionListMissionWithId(34, SeaFrontGroup.MEMN)
+
+    cy.get('[data-cy="mission-form-action-list"]').children().eq(0).contains('28 Nov à 13:59')
+    cy.get('[data-cy="mission-form-action-list"]').children().eq(0).contains('Surveillance')
+    cy.get('[data-cy="mission-form-action-list"]').children().eq(1).contains('Action CACEM')
+
+    cy.get('[data-cy="mission-form-action-list"]').children().eq(2).contains('17 Nov à 13:59')
+    cy.get('[data-cy="mission-form-action-list"]').children().eq(2).contains('Contrôle')
+    cy.get('[data-cy="mission-form-action-list"]').children().eq(3).contains('Action CACEM')
+  })
 })

@@ -1,4 +1,4 @@
-import { MonitorEnvMissionAction } from '@features/Mission/monitorEnvMissionAction.types'
+import { EnvMissionAction } from '@features/Mission/envMissionAction.types'
 import { getLocalizedDayjs, Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 import styled from 'styled-components'
@@ -6,35 +6,35 @@ import styled from 'styled-components'
 import { formatDateLabel, getActionTitle } from './utils'
 
 type MonitorEnvMissionActionProps = Readonly<{
-  missionAction: MonitorEnvMissionAction.MissionAction
+  missionAction: EnvMissionAction.MissionAction
 }>
 export function MonitorEnvMissionActionItem({ missionAction }: MonitorEnvMissionActionProps) {
   const [actionLabel, ActionIcon] = useMemo(() => {
     switch (missionAction.actionType) {
-      case MonitorEnvMissionAction.MissionActionType.CONTROL:
+      case EnvMissionAction.MissionActionType.CONTROL:
         return [
           getActionTitle(
-            MonitorEnvMissionAction.MISSION_ACTION_TYPE_LABEL[MonitorEnvMissionAction.MissionActionType.CONTROL],
+            EnvMissionAction.MISSION_ACTION_TYPE_LABEL[EnvMissionAction.MissionActionType.CONTROL],
             undefined,
             ''
           ),
           Icon.ControlUnit
         ]
 
-      case MonitorEnvMissionAction.MissionActionType.NOTE:
+      case EnvMissionAction.MissionActionType.NOTE:
         return [
           getActionTitle(
-            MonitorEnvMissionAction.MISSION_ACTION_TYPE_LABEL[MonitorEnvMissionAction.MissionActionType.NOTE],
+            EnvMissionAction.MISSION_ACTION_TYPE_LABEL[EnvMissionAction.MissionActionType.NOTE],
             undefined,
             ''
           ),
           Icon.Note
         ]
 
-      case MonitorEnvMissionAction.MissionActionType.SURVEILLANCE:
+      case EnvMissionAction.MissionActionType.SURVEILLANCE:
         return [
           getActionTitle(
-            MonitorEnvMissionAction.MISSION_ACTION_TYPE_LABEL[MonitorEnvMissionAction.MissionActionType.SURVEILLANCE],
+            EnvMissionAction.MISSION_ACTION_TYPE_LABEL[EnvMissionAction.MissionActionType.SURVEILLANCE],
             undefined,
             ''
           ),
@@ -98,12 +98,12 @@ const DateLabel = styled.div`
 `
 
 const InnerWrapper = styled.div<{
-  $type: MonitorEnvMissionAction.MissionActionType
+  $type: EnvMissionAction.MissionActionType
 }>`
   background-color: ${p =>
     ({
-      [MonitorEnvMissionAction.MissionActionType.SURVEILLANCE]: p.theme.color.gainsboro,
-      [MonitorEnvMissionAction.MissionActionType.NOTE]: p.theme.color.blueYonder25
+      [EnvMissionAction.MissionActionType.SURVEILLANCE]: p.theme.color.gainsboro,
+      [EnvMissionAction.MissionActionType.NOTE]: p.theme.color.blueYonder25
     })[p.$type] || p.theme.color.white};
   border: solid 1px ${p => p.theme.color.lightGray};
   display: flex;

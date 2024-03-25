@@ -267,7 +267,7 @@ const Head = styled.div`
 `
 
 const StyledTagGroup = styled(TagGroup)`
-  margin-top: 8px;
+  margin-top: 12px;
   padding-left: 32px;
 `
 

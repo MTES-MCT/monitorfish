@@ -83,7 +83,9 @@ export namespace Mission {
   // ---------------------------------------------------------------------------
   // Types
 
-  export type MissionData = Except<Mission, 'id'>
+  export type MissionData = Except<Mission, 'id' | 'envActions'>
+
+  export type SavedMission = Except<Mission, 'envActions'>
 
   export type MissionPointFeatureProperties = {
     color: string

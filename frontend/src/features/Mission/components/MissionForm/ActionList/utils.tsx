@@ -1,10 +1,8 @@
-import { EnvMissionAction } from '@features/Mission/envMissionAction.types'
-import { Mission } from '@features/Mission/mission.types'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import dayjs from 'dayjs'
 import styled from 'styled-components'
 
-import type { MissionActionFormValues, MissionActionForTimeline } from '../types'
+import type { MissionActionFormValues } from '../types'
 import type { ReactNode } from 'react'
 
 export function formatDateLabel(dateLabel: string) {
@@ -66,20 +64,6 @@ export function getMissionActionFormInitialValues(type: MissionAction.MissionAct
     actionType: type,
     isValid: false
   }
-}
-
-export function getMissionActionDate(
-  missionAction: MissionActionForTimeline | EnvMissionAction.MissionActionForTimeline
-) {
-  if (missionAction.source === Mission.MissionSource.MONITORFISH) {
-    return (missionAction as MissionActionFormValues).actionDatetimeUtc
-  }
-
-  if (missionAction.source === Mission.MissionSource.MONITORENV) {
-    return (missionAction as EnvMissionAction.MissionAction).actionStartDateTimeUtc
-  }
-
-  throw new Error(`Unknown source: ${missionAction.source}`)
 }
 
 const Placeholder = styled.span`

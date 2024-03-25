@@ -64,6 +64,7 @@ export const fillSideWindowMissionFormBase = (
   }).as('createMission')
   cy.intercept('GET', '/api/v1/missions/1', {
     body: {
+      envActions: [],
       id: 1,
       isClosed: isReturningClosed
     },

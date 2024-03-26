@@ -23,7 +23,7 @@ values ('AD',         null, null, 'ADALV', 'Andorra la Vella', 42.5, 1.016666666
 
        -- https://service.unece.org/trade/locode/fr.htm
        ('FR',       'NAMO', '29', 'FRBES', 'Brest', 48.24, 4.29, null, true),
-       ('FR',       'MEMN', '29', 'FRMRS', 'Marseille', 43.18, 5.24, null, true),
-       ('FR',       'MEMN', '29', 'FRNCE', 'Nice', 43.42, 7.16, null, true),
+       ('FR',       'MEMN', '13', 'FRMRS', 'Marseille', 43.18, 5.24, null, true),
+       ('FR',       'MEMN', '06', 'FRNCE', 'Nice', 43.42, 7.16, null, true),
        ('FR',       'NAMO', '35', 'FRSML', 'Saint-Malo', 48.39, 2.01, null, true),
        ('FR',       'NAMO', '56', 'FRVNE', 'Vannes', 47.39, 2.46, null, true);

@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.monitorenv
 import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.MonitorenvProperties
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionType
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.EnvMissionActionType
 import fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.TestUtils.Companion.getDummyMission
 import fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.TestUtils.Companion.getDummyMissions
 import io.ktor.client.engine.mock.*
@@ -311,7 +311,7 @@ class APIMissionRepositoryITest {
             // Then
             assertThat(mission.createdAtUtc.toString()).isEqualTo("2023-04-20T09:57Z")
             assertThat(mission.envActions).hasSize(2)
-            assertThat(mission.envActions?.first()?.actionType).isEqualTo(MissionActionType.CONTROL)
+            assertThat(mission.envActions?.first()?.actionType).isEqualTo(EnvMissionActionType.CONTROL)
             assertThat(mockEngine.requestHistory.first().url.toString())
                 .isEqualTo(
                     "http://test/api/v1/missions/123",

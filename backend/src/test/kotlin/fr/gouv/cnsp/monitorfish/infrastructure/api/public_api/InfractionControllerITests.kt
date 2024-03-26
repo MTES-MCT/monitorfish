@@ -33,13 +33,13 @@ class InfractionControllerITests {
         // Given
         given(this.getAllInfractions.execute()).willReturn(
             listOf(
-                fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction(
+                Infraction(
                     natinfCode = 7059,
-                    infractionCategory = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory.FISHING,
+                    infractionCategory = InfractionCategory.FISHING,
                 ),
-                fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction(
+                Infraction(
                     natinfCode = 7065,
-                    infractionCategory = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory.FISHING,
+                    infractionCategory = InfractionCategory.FISHING,
                 ),
             ),
         )

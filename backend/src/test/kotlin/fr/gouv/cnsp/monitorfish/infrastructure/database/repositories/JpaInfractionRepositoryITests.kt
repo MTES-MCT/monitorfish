@@ -21,7 +21,7 @@ class JpaInfractionRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(infraction.infraction).isEqualTo("Taille de maille non réglementaire")
         assertThat(infraction.infractionCategory).isEqualTo(
-            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory.FISHING,
+            InfractionCategory.FISHING,
         )
         assertThat(infraction.natinfCode).isEqualTo(23581)
         assertThat(infraction.regulation).isEqualTo("Arreté du 12/01/3021")
@@ -51,7 +51,7 @@ class JpaInfractionRepositoryITests : AbstractDBTests() {
         assertThat(infractions.first().regulation).isEqualTo("Arreté du 12/01/3021")
         assertThat(infractions.first().infraction).isEqualTo("Taille de maille non réglementaire")
         assertThat(infractions.first().infractionCategory).isEqualTo(
-            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory.FISHING,
+            InfractionCategory.FISHING,
         )
     }
 }

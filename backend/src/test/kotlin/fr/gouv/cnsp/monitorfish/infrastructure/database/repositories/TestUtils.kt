@@ -5,7 +5,7 @@ import java.time.ZonedDateTime
 
 object TestUtils {
     fun getDummyMissionAction(dateTime: ZonedDateTime, id: Int? = null) =
-        fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction(
+        MissionAction(
             id = id,
             actionDatetimeUtc = dateTime,
             missionId = 2,
@@ -16,32 +16,32 @@ object TestUtils {
             flagState = "FR",
             actionType = MissionActionType.SEA_CONTROL,
             flightGoals = listOf(
-                fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.FlightGoal.CLOSED_AREA,
-                fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.FlightGoal.UNAUTHORIZED_FISHING,
+                FlightGoal.CLOSED_AREA,
+                FlightGoal.UNAUTHORIZED_FISHING,
             ),
-            emitsVms = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck.YES,
-            emitsAis = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck.NOT_APPLICABLE,
-            logbookMatchesActivity = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck.NO,
+            emitsVms = ControlCheck.YES,
+            emitsAis = ControlCheck.NOT_APPLICABLE,
+            logbookMatchesActivity = ControlCheck.NO,
             speciesWeightControlled = true,
             speciesSizeControlled = true,
-            separateStowageOfPreservedSpecies = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck.YES,
+            separateStowageOfPreservedSpecies = ControlCheck.YES,
             logbookInfractions = listOf(
-                fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.LogbookInfraction(
-                    fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType.WITH_RECORD,
+                LogbookInfraction(
+                    InfractionType.WITH_RECORD,
                     27689,
                     "Poids à bord MNZ supérieur de 50% au poids déclaré",
                 ),
             ),
             faoAreas = listOf("25.6.9", "25.7.9"),
             segments = listOf(
-                fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.FleetSegment(
+                FleetSegment(
                     segment = "WWSS10",
                     segmentName = "World Wide Segment",
                 ),
             ),
             gearInfractions = listOf(
-                fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearInfraction(
-                    fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType.WITH_RECORD,
+                GearInfraction(
+                    InfractionType.WITH_RECORD,
                     27689,
                     "Maille trop petite",
                 ),

@@ -48,23 +48,23 @@ class MissionActionEntity(
     val actionDatetimeUtc: Instant,
     @Column(name = "emits_vms")
     @Enumerated(EnumType.STRING)
-    val emitsVms: fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck? = null,
+    val emitsVms: ControlCheck? = null,
     @Column(name = "emits_ais")
     @Enumerated(EnumType.STRING)
-    val emitsAis: fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck? = null,
+    val emitsAis: ControlCheck? = null,
     @Column(name = "logbook_matches_activity")
     @Enumerated(EnumType.STRING)
-    val logbookMatchesActivity: fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck? = null,
+    val logbookMatchesActivity: ControlCheck? = null,
     @Column(name = "licences_match_activity")
     @Enumerated(EnumType.STRING)
-    val licencesMatchActivity: fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck? = null,
+    val licencesMatchActivity: ControlCheck? = null,
     @Column(name = "species_weight_controlled")
     val speciesWeightControlled: Boolean? = null,
     @Column(name = "species_size_controlled")
     val speciesSizeControlled: Boolean? = null,
     @Column(name = "separate_stowage_of_preserved_species")
     @Enumerated(EnumType.STRING)
-    val separateStowageOfPreservedSpecies: fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck? = null,
+    val separateStowageOfPreservedSpecies: ControlCheck? = null,
     @Type(JsonBinaryType::class)
     @Column(name = "logbook_infractions", columnDefinition = "jsonb")
     val logbookInfractions: String? = null,
@@ -108,7 +108,7 @@ class MissionActionEntity(
     val portLocode: String? = null,
     @Column(name = "vessel_targeted")
     @Enumerated(EnumType.STRING)
-    val vesselTargeted: fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck? = null,
+    val vesselTargeted: ControlCheck? = null,
     @Column(name = "seizure_and_diversion_comments")
     val seizureAndDiversionComments: String? = null,
     @Column(name = "other_comments")
@@ -140,7 +140,7 @@ class MissionActionEntity(
     companion object {
         fun fromMissionAction(
             mapper: ObjectMapper,
-            missionAction: fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction,
+            missionAction: MissionAction,
         ): MissionActionEntity =
             MissionActionEntity(
                 id = missionAction.id,
@@ -198,7 +198,7 @@ class MissionActionEntity(
     }
 
     fun toMissionAction(mapper: ObjectMapper) =
-        fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction(
+        MissionAction(
             id = id,
             missionId = missionId,
             vesselId = vesselId,
@@ -226,13 +226,13 @@ class MissionActionEntity(
             logbookInfractions = deserializeJSONList(
                 mapper,
                 logbookInfractions,
-                fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.LogbookInfraction::class.java,
+                LogbookInfraction::class.java,
             ),
             licencesAndLogbookObservations = licencesAndLogbookObservations,
             gearInfractions = deserializeJSONList(
                 mapper,
                 gearInfractions,
-                fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearInfraction::class.java,
+                GearInfraction::class.java,
             ),
             speciesInfractions = deserializeJSONList(mapper, speciesInfractions, SpeciesInfraction::class.java),
             speciesObservations = speciesObservations,
@@ -246,7 +246,7 @@ class MissionActionEntity(
             segments = deserializeJSONList(
                 mapper,
                 segments,
-                fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.FleetSegment::class.java,
+                FleetSegment::class.java,
             ),
             facade = facade?.let { Facade.from(it).toString() },
             longitude = longitude,
@@ -258,7 +258,7 @@ class MissionActionEntity(
             gearOnboard = deserializeJSONList(
                 mapper,
                 gearOnboard,
-                fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearControl::class.java,
+                GearControl::class.java,
             ),
             speciesOnboard = deserializeJSONList(mapper, speciesOnboard, SpeciesControl::class.java),
             isDeleted = isDeleted,

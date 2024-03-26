@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.input
 
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.EnvMissionAction
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.EnvMissionActionType
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -16,7 +16,7 @@ data class EnvMissionActionDataResponse(
     @Serializable(with = UUIDSerializer::class)
     val id: UUID,
     val actionStartDateTimeUtc: String,
-    val actionType: MissionActionType,
+    val actionType: EnvMissionActionType,
 ) {
     fun toEnvMissionAction() = EnvMissionAction(
         id = id,

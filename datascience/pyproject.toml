@@ -8,7 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "3.11.6"
 pandas = {extras = ["postgresql"], version = "^2.2.1"}
-black = "^23.9.1"
+black = "^24.3.0"
 isort = "^5.12.0"
 coverage = "^7.3.2"
 pre-commit = "^3.5.0"

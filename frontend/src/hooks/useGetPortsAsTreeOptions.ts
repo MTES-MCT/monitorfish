@@ -15,12 +15,13 @@ export function useGetPortsAsTreeOptions() {
         return undefined
       }
 
-      // TODO If `region` is null, the port won't appear. Check if that's the expected behavior.
-      const sortedUniquePortDepartments = uniq(ports.map(port => port.region).filter(isDefined)).sort()
+      const sortedUniquePortDepartments = uniq(ports.map(port => port.region).filter(isDefined))
+        .sort()
+        .concat('Hors Départements')
 
       return sortedUniquePortDepartments.map(department => ({
         children: ports
-          .filter(port => port.region === department)
+          .filter(port => (department === 'Hors Départements' ? !port.region : port.region === department))
           .map(port => ({
             label: port.name,
             value: port.locode

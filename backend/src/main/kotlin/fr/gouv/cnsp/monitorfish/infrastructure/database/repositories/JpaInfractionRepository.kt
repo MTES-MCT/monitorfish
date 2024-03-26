@@ -11,14 +11,14 @@ import org.springframework.stereotype.Repository
 @Repository
 class JpaInfractionRepository(private val dbInfractionRepository: DBInfractionRepository) : InfractionRepository {
     @Cacheable(value = ["infractions"])
-    override fun findAll(): List<fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction> {
+    override fun findAll(): List<Infraction> {
         return dbInfractionRepository.findAll().map {
             it.toInfraction()
         }
     }
 
     @Cacheable(value = ["infraction"])
-    override fun findInfractionByNatinfCode(natinfCode: Int): fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction {
+    override fun findInfractionByNatinfCode(natinfCode: Int): Infraction {
         return try {
             dbInfractionRepository.findByNatinfCodeEquals(natinfCode).toInfraction()
         } catch (e: EmptyResultDataAccessException) {

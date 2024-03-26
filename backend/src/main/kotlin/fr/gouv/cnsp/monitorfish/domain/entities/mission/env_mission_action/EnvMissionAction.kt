@@ -6,5 +6,5 @@ import java.util.*
 data class EnvMissionAction(
     val id: UUID,
     val actionStartDateTimeUtc: ZonedDateTime,
-    val actionType: MissionActionType,
+    val actionType: EnvMissionActionType,
 )

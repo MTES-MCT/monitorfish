@@ -549,9 +549,9 @@ class VesselControllerITests {
                 value = ThreeMilesTrawlingAlert() as ReportingValue,
                 isArchived = false,
                 isDeleted = false,
-                infraction = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction(
+                infraction = Infraction(
                     natinfCode = 7059,
-                    infractionCategory = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory.FISHING,
+                    infractionCategory = InfractionCategory.FISHING,
                 ),
             ),
             null,

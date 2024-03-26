@@ -18,11 +18,11 @@ data class InfractionEntity(
     var infraction: String? = null,
 ) {
 
-    fun toInfraction() = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction(
+    fun toInfraction() = Infraction(
         natinfCode = natinfCode,
         regulation = regulation,
         infractionCategory = infractionCategory?.let { category ->
-            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory.values().firstOrNull {
+            InfractionCategory.entries.firstOrNull {
                 it.value == category
             }
         },

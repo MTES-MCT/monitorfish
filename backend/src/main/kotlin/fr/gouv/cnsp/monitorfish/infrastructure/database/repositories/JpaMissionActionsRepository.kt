@@ -18,14 +18,14 @@ class JpaMissionActionsRepository(
     override fun findVesselMissionActionsAfterDateTime(
         vesselId: Int,
         afterDateTime: ZonedDateTime,
-    ): List<fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction> {
+    ): List<MissionAction> {
         return dbMissionActionsRepository.findAllByVesselIdEqualsAndActionDatetimeUtcAfterAndIsDeletedIsFalse(
             vesselId,
             afterDateTime.toInstant(),
         ).map { control -> control.toMissionAction(mapper) }
     }
 
-    override fun findByMissionId(missionId: Int): List<fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction> {
+    override fun findByMissionId(missionId: Int): List<MissionAction> {
         return dbMissionActionsRepository.findAllByMissionIdAndIsDeletedIsFalse(missionId).map { action ->
             action.toMissionAction(
                 mapper,
@@ -33,7 +33,7 @@ class JpaMissionActionsRepository(
         }
     }
 
-    override fun findMissionActionsIn(missionIds: List<Int>): List<fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction> {
+    override fun findMissionActionsIn(missionIds: List<Int>): List<MissionAction> {
         return dbMissionActionsRepository.findAllByMissionIdInAndIsDeletedIsFalse(missionIds).map { action ->
             action.toMissionAction(
                 mapper,
@@ -41,16 +41,16 @@ class JpaMissionActionsRepository(
         }
     }
 
-    override fun save(missionAction: fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction): fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction {
+    override fun save(missionAction: MissionAction): MissionAction {
         return dbMissionActionsRepository.save(MissionActionEntity.fromMissionAction(mapper, missionAction))
             .toMissionAction(mapper)
     }
 
-    override fun findById(id: Int): fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction {
+    override fun findById(id: Int): MissionAction {
         return dbMissionActionsRepository.findById(id).get().toMissionAction(mapper)
     }
 
-    override fun findControlsInDates(beforeDateTime: ZonedDateTime, afterDateTime: ZonedDateTime): List<fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction> {
+    override fun findControlsInDates(beforeDateTime: ZonedDateTime, afterDateTime: ZonedDateTime): List<MissionAction> {
         return dbMissionActionsRepository.findAllByActionDatetimeUtcBeforeAndActionDatetimeUtcAfterAndIsDeletedIsFalseAndActionTypeIn(
             beforeDateTime.toInstant(),
             afterDateTime.toInstant(),

@@ -2,12 +2,11 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.mission
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
-import com.nhaarman.mockitokotlin2.willThrow
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.Mission
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionSource
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.EnvMissionAction
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.EnvMissionActionType
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotFindException
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.TestUtils.getDummyMissionActions
@@ -47,7 +46,7 @@ class GetMissionUTests {
                     EnvMissionAction(
                         id = UUID.randomUUID(),
                         actionStartDateTimeUtc = ZonedDateTime.now(),
-                        actionType = MissionActionType.CONTROL,
+                        actionType = EnvMissionActionType.CONTROL,
                     ),
                 ),
             ),

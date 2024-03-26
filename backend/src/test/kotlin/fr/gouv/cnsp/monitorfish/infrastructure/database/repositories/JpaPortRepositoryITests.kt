@@ -16,7 +16,7 @@ class JpaPortRepositoryITests : AbstractDBTests() {
         val activePorts = jpaPortRepository.findAllActive().sortedBy { it.locode }
 
         // Then
-        assertThat(activePorts).hasSize(20)
+        assertThat(activePorts).hasSize(22)
         assertThat(activePorts.first().locode).isEqualTo("ADALV")
         assertThat(activePorts.first().name).isEqualTo("Andorra la Vella")
         assertThat(activePorts.first().faoAreas.first()).isEqualTo("27.8")

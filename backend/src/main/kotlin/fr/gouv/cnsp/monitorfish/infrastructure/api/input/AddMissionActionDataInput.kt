@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
 import java.time.ZonedDateTime
 
 data class AddMissionActionDataInput(
@@ -13,19 +13,19 @@ data class AddMissionActionDataInput(
     var flagState: String? = null,
     var districtCode: String? = null,
     var faoAreas: List<String> = listOf(),
-    var flightGoals: List<FlightGoal> = listOf(),
+    var flightGoals: List<fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.FlightGoal> = listOf(),
     var actionType: MissionActionType,
     var actionDatetimeUtc: ZonedDateTime,
-    var emitsVms: ControlCheck? = null,
-    var emitsAis: ControlCheck? = null,
-    var logbookMatchesActivity: ControlCheck? = null,
-    var licencesMatchActivity: ControlCheck? = null,
+    var emitsVms: fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck? = null,
+    var emitsAis: fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck? = null,
+    var logbookMatchesActivity: fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck? = null,
+    var licencesMatchActivity: fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck? = null,
     var speciesWeightControlled: Boolean? = null,
     var speciesSizeControlled: Boolean? = null,
-    var separateStowageOfPreservedSpecies: ControlCheck? = null,
-    var logbookInfractions: List<LogbookInfraction> = listOf(),
+    var separateStowageOfPreservedSpecies: fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck? = null,
+    var logbookInfractions: List<fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.LogbookInfraction> = listOf(),
     var licencesAndLogbookObservations: String? = null,
-    var gearInfractions: List<GearInfraction> = listOf(),
+    var gearInfractions: List<fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearInfraction> = listOf(),
     var speciesInfractions: List<SpeciesInfraction> = listOf(),
     var speciesObservations: String? = null,
     var seizureAndDiversion: Boolean? = null,
@@ -34,17 +34,17 @@ data class AddMissionActionDataInput(
     var unitWithoutOmegaGauge: Boolean? = null,
     var controlQualityComments: String? = null,
     var feedbackSheetRequired: Boolean? = null,
-    var segments: List<FleetSegment> = listOf(),
+    var segments: List<fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.FleetSegment> = listOf(),
     var facade: String? = null,
     var longitude: Double? = null,
     var latitude: Double? = null,
     var portLocode: String? = null,
     var seizureAndDiversionComments: String? = null,
     var otherComments: String? = null,
-    var gearOnboard: List<GearControl> = listOf(),
+    var gearOnboard: List<fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearControl> = listOf(),
     var userTrigram: String? = null,
     var speciesOnboard: List<SpeciesControl> = listOf(),
-    var vesselTargeted: ControlCheck? = null,
+    var vesselTargeted: fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck? = null,
     var hasSomeGearsSeized: Boolean = false,
     var hasSomeSpeciesSeized: Boolean = false,
     var closedBy: String? = null,
@@ -54,7 +54,7 @@ data class AddMissionActionDataInput(
     var isSafetyEquipmentAndStandardsComplianceControl: Boolean? = null,
     var isSeafarersControl: Boolean? = null,
 ) {
-    fun toMissionAction() = MissionAction(
+    fun toMissionAction() = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction(
         vesselId = vesselId,
         vesselName = vesselName,
         internalReferenceNumber = internalReferenceNumber,

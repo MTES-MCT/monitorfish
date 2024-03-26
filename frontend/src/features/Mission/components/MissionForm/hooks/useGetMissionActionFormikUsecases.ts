@@ -1,7 +1,7 @@
 import { useGetPortsQuery } from '@api/port'
 import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
 import { MissionAction } from '@features/Mission/missionAction.types'
-import { useGetMissionQuery } from '@features/Mission/monitorenvMissionApi'
+import { useGetMissionQuery } from '@features/Mission/monitorfishMissionApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { skipToken } from '@reduxjs/toolkit/query'

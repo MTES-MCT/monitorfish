@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.MonitorenvProperties
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.Mission
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotFindException
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.input.MissionDataResponse
 import io.ktor.client.call.*
@@ -119,6 +120,21 @@ class APIMissionRepository(
                 logger.error("Could not fetch missions at $missionsUrl", e)
 
                 return@runBlocking listOf()
+            }
+        }
+    }
+
+    override fun findById(id: Int): Mission {
+        val missionUrl = "${monitorenvProperties.url}/api/v1/missions/$id"
+
+        logger.info("Fetching mission at URL: $missionUrl")
+        return runBlocking {
+            try {
+                val mission = apiClient.httpClient.get(missionUrl).body<MissionDataResponse>()
+
+                return@runBlocking mission.toFullMission()
+            } catch (e: Exception) {
+                throw CouldNotFindException("Could not fetch missions at $missionUrl", e)
             }
         }
     }

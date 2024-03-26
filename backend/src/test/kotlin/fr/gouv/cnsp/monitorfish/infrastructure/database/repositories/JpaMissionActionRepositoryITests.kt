@@ -1,9 +1,9 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.ControlCheck
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionType
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionAction
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDummyMissionAction
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -48,17 +48,27 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(controls).hasSize(2)
         val firstControl = controls.first()
 
-        assertThat(firstControl.emitsVms).isEqualTo(ControlCheck.YES)
-        assertThat(firstControl.emitsAis).isEqualTo(ControlCheck.NOT_APPLICABLE)
-        assertThat(firstControl.logbookMatchesActivity).isEqualTo(ControlCheck.NO)
+        assertThat(firstControl.emitsVms).isEqualTo(
+            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck.YES,
+        )
+        assertThat(firstControl.emitsAis).isEqualTo(
+            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck.NOT_APPLICABLE,
+        )
+        assertThat(firstControl.logbookMatchesActivity).isEqualTo(
+            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck.NO,
+        )
         assertThat(firstControl.speciesWeightControlled).isTrue
         assertThat(firstControl.speciesSizeControlled).isTrue
-        assertThat(firstControl.separateStowageOfPreservedSpecies).isEqualTo(ControlCheck.YES)
+        assertThat(firstControl.separateStowageOfPreservedSpecies).isEqualTo(
+            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck.YES,
+        )
         assertThat(firstControl.faoAreas).hasSize(2)
         assertThat(firstControl.faoAreas.first()).isEqualTo("27.7.d")
         assertThat(firstControl.faoAreas.last()).isEqualTo("27.7.e")
         assertThat(firstControl.logbookInfractions).hasSize(1)
-        assertThat(firstControl.logbookInfractions.first().infractionType).isEqualTo(InfractionType.WITH_RECORD)
+        assertThat(firstControl.logbookInfractions.first().infractionType).isEqualTo(
+            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType.WITH_RECORD,
+        )
         assertThat(firstControl.logbookInfractions.first().natinf).isEqualTo(27689)
         assertThat(firstControl.logbookInfractions.first().comments).contains(
             "Poids à bord MNZ supérieur de 50% au poids déclaré",
@@ -67,17 +77,23 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
             "C'est pas très très bien réglo toute cette poissecalle non déclarée",
         )
         assertThat(firstControl.gearInfractions).hasSize(2)
-        assertThat(firstControl.gearInfractions.first().infractionType).isEqualTo(InfractionType.WITH_RECORD)
+        assertThat(firstControl.gearInfractions.first().infractionType).isEqualTo(
+            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType.WITH_RECORD,
+        )
         assertThat(firstControl.gearInfractions.first().natinf).isEqualTo(23581)
         assertThat(firstControl.gearInfractions.first().comments).isEqualTo("Maille trop petite")
         assertThat(firstControl.speciesInfractions).hasSize(1)
-        assertThat(firstControl.speciesInfractions.first().infractionType).isEqualTo(InfractionType.WITHOUT_RECORD)
+        assertThat(firstControl.speciesInfractions.first().infractionType).isEqualTo(
+            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType.WITHOUT_RECORD,
+        )
         assertThat(firstControl.speciesInfractions.first().natinf).isEqualTo(28346)
         assertThat(firstControl.speciesInfractions.first().comments).isEqualTo("Sous taille de 8cm")
         assertThat(firstControl.speciesObservations).isEqualTo("Saisie de l'ensemble des captures à bord")
         assertThat(firstControl.seizureAndDiversion).isTrue
         assertThat(firstControl.otherInfractions).hasSize(2)
-        assertThat(firstControl.otherInfractions.first().infractionType).isEqualTo(InfractionType.WITH_RECORD)
+        assertThat(firstControl.otherInfractions.first().infractionType).isEqualTo(
+            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType.WITH_RECORD,
+        )
         assertThat(firstControl.otherInfractions.first().natinf).isEqualTo(23588)
         assertThat(firstControl.otherInfractions.first().comments).isEqualTo(
             "Chalutage répété dans les 3 milles sur Piste VMS - confirmé de visu",
@@ -94,7 +110,9 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.longitude).isEqualTo(-0.52)
         assertThat(firstControl.latitude).isEqualTo(47.44)
         assertThat(firstControl.portLocode).isNull()
-        assertThat(firstControl.vesselTargeted).isEqualTo(ControlCheck.NO)
+        assertThat(firstControl.vesselTargeted).isEqualTo(
+            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck.NO,
+        )
         assertThat(firstControl.seizureAndDiversion).isTrue
         assertThat(firstControl.seizureAndDiversionComments).isEqualTo("Saisie de la pêche")
         assertThat(firstControl.otherComments).isEqualTo("Commentaires post contrôle")
@@ -189,14 +207,14 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         val existingAction = jpaMissionActionsRepository.findById(expectedId)
         assertThat(existingAction.internalReferenceNumber).isNull()
 
-        val actionToUpdate = MissionAction(
+        val actionToUpdate = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction(
             actionDatetimeUtc = ZonedDateTime.now(),
             actionType = MissionActionType.SEA_CONTROL,
             controlQualityComments = null,
             controlUnits = listOf(),
             districtCode = null,
             emitsAis = null,
-            emitsVms = ControlCheck.NOT_APPLICABLE,
+            emitsVms = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck.NOT_APPLICABLE,
             externalReferenceNumber = "DONTSINK",
             facade = "Sud Océan Indien",
             faoAreas = listOf(),
@@ -210,9 +228,9 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
             ircs = "CALLME",
             latitude = 49.44,
             licencesAndLogbookObservations = null,
-            licencesMatchActivity = ControlCheck.NOT_APPLICABLE,
+            licencesMatchActivity = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck.NOT_APPLICABLE,
             logbookInfractions = listOf(),
-            logbookMatchesActivity = ControlCheck.NOT_APPLICABLE,
+            logbookMatchesActivity = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck.NOT_APPLICABLE,
             longitude = -0.56,
             missionId = 34,
             numberOfVesselsFlownOver = null,
@@ -223,7 +241,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
             segments = listOf(),
             seizureAndDiversion = false,
             seizureAndDiversionComments = null,
-            separateStowageOfPreservedSpecies = ControlCheck.NO,
+            separateStowageOfPreservedSpecies = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck.NO,
             speciesInfractions = listOf(),
             speciesObservations = null,
             speciesOnboard = listOf(),
@@ -233,7 +251,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
             userTrigram = "JKL",
             vesselId = 1,
             vesselName = "PHENOMENE",
-            vesselTargeted = ControlCheck.YES,
+            vesselTargeted = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck.YES,
             isDeleted = false,
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,

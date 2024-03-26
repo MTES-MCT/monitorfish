@@ -14,8 +14,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagesAndAlerts
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Infraction
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionCategory
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.CurrentAndArchivedReportings
@@ -549,9 +549,9 @@ class VesselControllerITests {
                 value = ThreeMilesTrawlingAlert() as ReportingValue,
                 isArchived = false,
                 isDeleted = false,
-                infraction = Infraction(
+                infraction = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction(
                     natinfCode = 7059,
-                    infractionCategory = InfractionCategory.FISHING,
+                    infractionCategory = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory.FISHING,
                 ),
             ),
             null,

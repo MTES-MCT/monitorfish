@@ -1,10 +1,11 @@
+import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
+import { monitorfishMissionApi } from '@features/Mission/monitorfishMissionApi'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { SideWindowMenuKey, SideWindowStatus } from 'domain/entities/sideWindow/constants'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 import { sideWindowActions } from 'domain/shared_slices/SideWindow'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 
-import { getMissionWithActions } from './getMissionWithActions'
 import { FrontendApiError } from '../../../libs/FrontendApiError'
 import { handleThunkError } from '../../../utils/handleThunkError'
 import { askForSideWindowDraftCancellationConfirmation } from '../../SideWindow/useCases/askForSideWindowDraftCancellationConfirmation'
@@ -42,7 +43,9 @@ const editMissionWithoutConfirmation =
     try {
       dispatch(missionFormActions.reset())
 
-      const missionWithActions = await dispatch(getMissionWithActions(id))
+      const missionWithActions = await dispatch(
+        monitorfishMissionApi.endpoints.getMission.initiate(id, RTK_FORCE_REFETCH_QUERY_OPTIONS)
+      ).unwrap()
       const nextDraft = getMissionDraftFromMissionWithActions(missionWithActions)
 
       dispatch(missionFormActions.initializeDraft(nextDraft))

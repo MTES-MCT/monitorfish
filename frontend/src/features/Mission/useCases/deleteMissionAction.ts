@@ -2,7 +2,7 @@ import { missionActionApi } from '@api/missionAction'
 import { portApi } from '@api/port'
 import { formikUsecase } from '@features/Mission/components/MissionForm/formikUsecases'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
-import { monitorenvMissionApi } from '@features/Mission/monitorenvMissionApi'
+import { monitorfishMissionApi } from '@features/Mission/monitorfishMissionApi'
 
 import { MissionAction } from '../missionAction.types'
 
@@ -66,7 +66,7 @@ async function getEnvActions(dispatch, missionId: number | undefined) {
     return []
   }
 
-  const { data: mission } = await dispatch(monitorenvMissionApi.endpoints.getMission.initiate(missionId))
+  const { data: mission } = await dispatch(monitorfishMissionApi.endpoints.getMission.initiate(missionId))
 
   return mission?.envActions ?? []
 }

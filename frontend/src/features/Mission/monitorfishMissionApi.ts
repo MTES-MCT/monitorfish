@@ -1,6 +1,9 @@
+import { FrontendApiError } from '@libs/FrontendApiError'
+
+import { Mission } from './mission.types'
 import { monitorfishApi } from '../../api/api'
 
-import type { MissionWithActions } from './mission.types'
+const GET_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la mission."
 
 type GetMissionsFilter = {
   missionSource?: string
@@ -31,7 +34,13 @@ enum MonitorenvStatusMapping {
 
 export const monitorfishMissionApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
-    getMissions: builder.query<MissionWithActions[], GetMissionsFilter | void>({
+    getMission: builder.query<Mission.MissionWithActions, Mission.Mission['id']>({
+      keepUnusedDataFor: 0,
+      query: id => `/missions/${id}`,
+      transformErrorResponse: response => new FrontendApiError(GET_MISSION_ERROR_MESSAGE, response)
+    }),
+
+    getMissions: builder.query<Mission.MissionWithActions[], GetMissionsFilter | void>({
       providesTags: [{ type: 'Missions' }],
       query: (filter: GetMissionsFilter) =>
         [
@@ -49,4 +58,4 @@ export const monitorfishMissionApi = monitorfishApi.injectEndpoints({
   })
 })
 
-export const { useGetMissionsQuery } = monitorfishMissionApi
+export const { useGetMissionQuery, useGetMissionsQuery } = monitorfishMissionApi

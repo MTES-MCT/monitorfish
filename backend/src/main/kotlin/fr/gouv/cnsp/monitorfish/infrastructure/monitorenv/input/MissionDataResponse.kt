@@ -19,6 +19,9 @@ data class MissionDataResponse(
     val observationsCnsp: String? = null,
     val facade: String? = null,
     val geom: MultiPolygon? = null,
+    val createdAtUtc: String? = null,
+    val updatedAtUtc: String? = null,
+    val envActions: List<EnvMissionActionDataResponse>? = listOf(),
     val startDateTimeUtc: String,
     val endDateTimeUtc: String? = null,
     val isGeometryComputedFromControls: Boolean,
@@ -45,4 +48,14 @@ data class MissionDataResponse(
         hasMissionOrder = hasMissionOrder,
         isUnderJdp = isUnderJdp,
     )
+
+    fun toFullMission(): Mission {
+        val mission = toMission().copy(
+            createdAtUtc = createdAtUtc?.let { ZonedDateTime.parse(createdAtUtc) },
+            updatedAtUtc = updatedAtUtc?.let { ZonedDateTime.parse(updatedAtUtc) },
+            envActions = envActions?.map { it.toEnvMissionAction() },
+        )
+
+        return mission
+    }
 }

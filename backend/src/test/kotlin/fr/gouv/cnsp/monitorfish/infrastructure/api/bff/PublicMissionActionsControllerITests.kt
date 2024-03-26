@@ -7,13 +7,14 @@ import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep.ActivityCode
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.actrep.JointDeploymentPlan
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.ActivityCode
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.JointDeploymentPlan
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReport
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReports
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.*
-import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.dtos.ActivityReport
-import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.dtos.ActivityReports
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
 import kotlinx.coroutines.runBlocking
@@ -70,13 +71,13 @@ class PublicMissionActionsControllerITests {
     fun `Should get all controls for a vessel`() {
         // Given
         givenSuspended { this.getVesselControls.execute(any(), any()) }.willReturn(
-            ControlsSummary(
+            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlsSummary(
                 1,
                 3,
                 4,
                 5,
                 listOf(
-                    MissionAction(
+                    fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction(
                         1,
                         1,
                         1,
@@ -110,7 +111,7 @@ class PublicMissionActionsControllerITests {
         // Given
         givenSuspended { this.getMissionActions.execute(any()) }.willReturn(
             listOf(
-                MissionAction(
+                fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction(
                     123,
                     1,
                     1,
@@ -154,21 +155,25 @@ class PublicMissionActionsControllerITests {
                             vesselId = 2,
                             actionType = MissionActionType.SEA_CONTROL,
                             logbookInfractions = listOf(
-                                LogbookInfraction(
-                                    InfractionType.WITH_RECORD,
+                                fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.LogbookInfraction(
+                                    fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType.WITH_RECORD,
                                     27689,
                                     "Poids à bord MNZ supérieur de 50% au poids déclaré",
                                 ),
                             ),
                             faoAreas = listOf("25.6.9", "25.7.9"),
                             segments = listOf(
-                                FleetSegment(
+                                fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.FleetSegment(
                                     segment = "WWSS10",
                                     segmentName = "World Wide Segment",
                                 ),
                             ),
                             gearInfractions = listOf(
-                                GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite"),
+                                fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearInfraction(
+                                    fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType.WITH_RECORD,
+                                    27689,
+                                    "Maille trop petite",
+                                ),
                             ),
                             hasSomeGearsSeized = false,
                             hasSomeSpeciesSeized = false,
@@ -198,7 +203,7 @@ class PublicMissionActionsControllerITests {
                 ),
             )
 
-        argumentCaptor<MissionAction>().apply {
+        argumentCaptor<fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction>().apply {
             verify(addMissionAction).execute(capture())
 
             Assertions.assertThat(allValues[0].actionDatetimeUtc.toString()).isEqualTo("2023-04-27T16:05Z")
@@ -212,7 +217,7 @@ class PublicMissionActionsControllerITests {
         val newMission = TestUtils.getDummyMissionAction(dateTime)
         given(updateMissionAction.execute(any(), any())).willReturn(newMission)
 
-        val gearControl = GearControl()
+        val gearControl = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearControl()
         gearControl.declaredMesh = 60.0
         gearControl.hasUncontrolledMesh = true
         gearControl.gearCode = "OTB"
@@ -228,21 +233,25 @@ class PublicMissionActionsControllerITests {
                             vesselId = 2,
                             actionType = MissionActionType.SEA_CONTROL,
                             logbookInfractions = listOf(
-                                LogbookInfraction(
-                                    InfractionType.WITH_RECORD,
+                                fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.LogbookInfraction(
+                                    fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType.WITH_RECORD,
                                     27689,
                                     "Poids à bord MNZ supérieur de 50% au poids déclaré",
                                 ),
                             ),
                             faoAreas = listOf("25.6.9", "25.7.9"),
                             segments = listOf(
-                                FleetSegment(
+                                fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.FleetSegment(
                                     segment = "WWSS10",
                                     segmentName = "World Wide Segment",
                                 ),
                             ),
                             gearInfractions = listOf(
-                                GearInfraction(InfractionType.WITH_RECORD, 27689, "Maille trop petite"),
+                                fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearInfraction(
+                                    fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType.WITH_RECORD,
+                                    27689,
+                                    "Maille trop petite",
+                                ),
                             ),
                             gearOnboard = listOf(gearControl),
                             hasSomeGearsSeized = false,

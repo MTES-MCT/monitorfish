@@ -7,7 +7,6 @@ import { ControlUnit } from '@mtes-mct/monitor-ui'
 
 const CREATE_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu créer la mission."
 const DELETE_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu supprimer la mission."
-const GET_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la mission."
 const GET_ENGAGED_CONTROL_UNITS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les unités en mission."
 const UPDATE_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu mettre à jour la mission."
 const CAN_DELETE_MISSION_ERROR_MESSAGE = "Nous n'avons pas pu vérifier si cette mission est supprimable."
@@ -53,12 +52,6 @@ export const monitorenvMissionApi = monitorenvApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(GET_ENGAGED_CONTROL_UNITS_ERROR_MESSAGE, response)
     }),
 
-    getMission: builder.query<Mission.Mission, Mission.Mission['id']>({
-      keepUnusedDataFor: 0,
-      query: id => `/v1/missions/${id}`,
-      transformErrorResponse: response => new FrontendApiError(GET_MISSION_ERROR_MESSAGE, response)
-    }),
-
     updateMission: builder.mutation<Mission.Mission, Mission.SavedMission>({
       query: mission => ({
         body: mission,
@@ -74,6 +67,5 @@ export const {
   useCreateMissionMutation,
   useDeleteMissionMutation,
   useGetEngagedControlUnitsQuery,
-  useGetMissionQuery,
   useUpdateMissionMutation
 } = monitorenvMissionApi

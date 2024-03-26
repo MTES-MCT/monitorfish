@@ -6,8 +6,8 @@ import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.*
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
-import fr.gouv.cnsp.monitorfish.domain.use_cases.missions.GetAllMissions
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.GetAllMissions
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -59,7 +59,7 @@ class MissionsControllerITests {
                         startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
                     ),
                     actions = listOf(
-                        MissionAction(
+                        fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction(
                             id = 3,
                             vesselId = 1,
                             missionId = 123,

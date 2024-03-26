@@ -8,7 +8,6 @@ import { UNKNOWN_VESSEL } from '../../../../domain/entities/vessel/vessel'
 import { Mission } from '../../mission.types'
 import { MissionAction } from '../../missionAction.types'
 
-import type { MissionWithActions } from '../../mission.types'
 import type { TableOptions } from '@hooks/useTable/types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
@@ -40,7 +39,7 @@ const MISSION_ACTION_CONTROL_TYPES = [
   MissionAction.MissionActionType.SEA_CONTROL
 ]
 
-export const MISSION_LIST_TABLE_OPTIONS: TableOptions<MissionWithActions> = {
+export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission.MissionWithActions> = {
   columns: [
     {
       fixedWidth: 136,

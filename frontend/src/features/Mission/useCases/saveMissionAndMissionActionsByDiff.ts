@@ -1,7 +1,8 @@
+import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { missionActionApi } from '@api/missionAction'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
 import { getMissionActionsDataFromMissionActionsFormValues } from '@features/Mission/components/MissionForm/utils'
-import { getMissionWithActions } from '@features/Mission/useCases/getMissionWithActions'
+import { monitorfishMissionApi } from '@features/Mission/monitorfishMissionApi'
 import { saveMission } from '@features/Mission/useCases/saveMission'
 import { logSoftError } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
@@ -21,7 +22,9 @@ export const saveMissionAndMissionActionsByDiff =
 
       assertNotNullish(savedMission.id)
 
-      const currentMissionWithActions = await dispatch(getMissionWithActions(savedMission.id))
+      const currentMissionWithActions = await dispatch(
+        monitorfishMissionApi.endpoints.getMission.initiate(savedMission.id, RTK_FORCE_REFETCH_QUERY_OPTIONS)
+      ).unwrap()
       const { deletedMissionActionIds, updatedMissionActionDatas } = getMissionActionsDataFromMissionActionsFormValues(
         savedMission.id,
         actionsFormValues,

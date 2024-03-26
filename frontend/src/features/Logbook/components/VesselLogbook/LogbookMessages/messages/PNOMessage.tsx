@@ -1,18 +1,18 @@
+import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { useMemo } from 'react'
 
 import { SpecyCatch } from './common/SpecyCatch'
 import { CatchDetails } from './FARMessage/CatchDetails'
 import { getCodeWithNameOrDash, getDatetimeOrDash } from './utils'
-import { LogbookMessagePNOPurposeType } from '../../../../constants'
 import { buildCatchArray, getTotalPNOWeight } from '../../../../utils'
 import { WeightType } from '../constants'
 import { NoValue, Table, TableBody, TableKey, TableRow, TableValue, Zone, SpeciesList } from '../styles'
 
 import type { PNOMessageValue } from '../../../../Logbook.types'
 
-type PNOMessageProps = {
+type PNOMessageProps = Readonly<{
   message: PNOMessageValue
-}
+}>
 export function PNOMessage({ message }: PNOMessageProps) {
   const catchesWithProperties = useMemo(() => {
     if (!message?.catchOnboard) {
@@ -54,7 +54,7 @@ export function PNOMessage({ message }: PNOMessageProps) {
                   <TableValue>
                     {message.purpose ? (
                       <>
-                        {LogbookMessagePNOPurposeType[message.purpose]} ({message.purpose})
+                        {PriorNotification.PURPOSE_LABEL[message.purpose]} ({message.purpose})
                       </>
                     ) : (
                       <NoValue>-</NoValue>

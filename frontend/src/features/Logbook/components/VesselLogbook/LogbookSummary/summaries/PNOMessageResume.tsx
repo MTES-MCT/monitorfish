@@ -1,15 +1,16 @@
+import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { SpeciesAndWeightChart } from './common/SpeciesAndWeightChart'
 import { getDateTime } from '../../../../../../utils'
-import { LogbookMessagePNOPurposeType, LogbookMessageType as LogbookMessageTypeEnum } from '../../../../constants'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../constants'
 import { getCodeWithNameOrDash, getDatetimeOrDash } from '../../LogbookMessages/messages/utils'
 import { LogbookMessageResumeHeader } from '../LogbookMessageResumeHeader'
 
 import type { SpeciesInsight, SpeciesToSpeciesInsight } from '../../../../types'
 
-type PNOMessageResumeProps = {
+type PNOMessageResumeProps = Readonly<{
   hasNoMessage?: boolean
   id: string
   isDeleted: boolean
@@ -33,7 +34,7 @@ type PNOMessageResumeProps = {
   speciesToWeightOfPNO: SpeciesToSpeciesInsight | undefined
   totalFARAndDEPWeight: number
   totalPNOWeight: number
-}
+}>
 export function PNOMessageResume({
   hasNoMessage = false,
   id,
@@ -160,7 +161,7 @@ export function PNOMessageResume({
                   <Value>
                     {pnoMessage.message.purpose ? (
                       <>
-                        {LogbookMessagePNOPurposeType[pnoMessage.message.purpose]} ({pnoMessage.message.purpose})
+                        {PriorNotification.PURPOSE_LABEL[pnoMessage.message.purpose]} ({pnoMessage.message.purpose})
                       </>
                     ) : (
                       <NoValue>-</NoValue>
@@ -179,11 +180,11 @@ export function PNOMessageResume({
               setChartHeight={setChartHeight}
               speciesAndWeightArray={speciesAndWeightArray}
             />
-            {speciesNotLandedArray && speciesNotLandedArray.length ? (
+            {!!speciesNotLandedArray && speciesNotLandedArray.length > 0 ? (
               <SpeciesNotLanded>
                 Poids des captures non débarquées ({getPercentOfTotalWeight(totalWeightNotLanded, totalFARAndDEPWeight)}
                 %)
-                {speciesNotLandedArray && speciesNotLandedArray.length ? (
+                {!!speciesNotLandedArray && speciesNotLandedArray.length > 0 ? (
                   speciesNotLandedArray.map(speciesCatch => (
                     <IndividualSpeciesNotLanded key={speciesCatch.species}>
                       {getCodeWithNameOrDash(speciesCatch.species, speciesCatch.speciesName)}- {speciesCatch.weight} kg

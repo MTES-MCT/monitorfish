@@ -2,6 +2,7 @@ import { missionActionApi } from '@api/missionAction'
 import { portApi } from '@api/port'
 import { formikUsecase } from '@features/Mission/components/MissionForm/formikUsecases'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
+import { monitorenvMissionApi } from '@features/Mission/monitorenvMissionApi'
 
 import { MissionAction } from '../missionAction.types'
 
@@ -15,7 +16,7 @@ export const deleteMissionAction =
     isAutoSaveEnabled: boolean,
     isGeometryComputedFromControls: boolean
   ): MainAppThunk<Promise<MissionActionFormValues[]>> =>
-  async dispatch => {
+  async (dispatch, getState) => {
     const deletedAction = actionsFormValues.find((_, index) => index === actionIndex)
     const nextActionsFormValues = actionsFormValues.filter((_, index) => index !== actionIndex)
 
@@ -47,12 +48,25 @@ export const deleteMissionAction =
       await formikUsecase.initMissionLocation(dispatch)(isGeometryComputedFromControls)
     } else {
       const { data: ports } = await dispatch(portApi.endpoints.getPorts.initiate())
+      const missionId = getState().missionForm.draft?.mainFormValues?.id
+      const envActions = await getEnvActions(dispatch, missionId)
 
-      await formikUsecase.updateMissionLocation(dispatch, ports)(
-        isGeometryComputedFromControls,
-        nextControlActionsWithGeometry[0]
-      )
+      await formikUsecase.updateMissionLocation(
+        dispatch,
+        ports,
+        envActions
+      )(isGeometryComputedFromControls, nextControlActionsWithGeometry[0])
     }
 
     return nextActionsFormValues
   }
+
+async function getEnvActions(dispatch, missionId: number | undefined) {
+  if (!missionId) {
+    return []
+  }
+
+  const { data: mission } = await dispatch(monitorenvMissionApi.endpoints.getMission.initiate(missionId))
+
+  return mission?.envActions ?? []
+}

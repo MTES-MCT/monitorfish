@@ -25,7 +25,6 @@
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "transmission_format": "ERS",
-                "vessel_id": 1,
                 "vessel_name": "PHENOMENE",
                 "trip_gears:jsonb": [
                     { "gear": "TBN", "mesh": 100, "dimensions": "250;180" },
@@ -81,7 +80,6 @@
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "transmission_format": "ERS",
-                "vessel_id": 10,
                 "vessel_name": "COURANT MAIN PROFESSEUR",
                 "trip_gears:jsonb": [
                     { "gear": "PT", "mesh": 100, "dimensions": "250;180" },
@@ -131,6 +129,7 @@
             // - Purpose: GRD
             {
                 "id": 103,
+                "cfr": null,
                 "enriched": true,
                 "flag_state": null,
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
@@ -140,7 +139,7 @@
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "transmission_format": "ERS",
-                "vessel_id": -1,
+                "vessel_name": null,
                 "trip_gears:jsonb": [],
                 "trip_segments:jsonb": [],
                 "value:jsonb": {
@@ -166,7 +165,6 @@
                 "operation_type": "DAT",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '15 minutes'",
                 "transmission_format": "ERS",
-                "vessel_id": 101,
                 "vessel_name": "VIVA ESPANA",
                 "trip_gears:jsonb": [
                     { "gear": "TB", "mesh": 100, "dimensions": "250;180" },
@@ -221,7 +219,6 @@
                 "operation_type": "DAT",
                 "report_datetime_utc": "2024-03-01 15:00:00",
                 "transmission_format": "ERS",
-                "vessel_id": 102,
                 "vessel_name": "LEVE NEDERLAND",
                 "trip_gears:jsonb": [
                     { "gear": "DHB", "mesh": 20.25, "dimensions": "500;500" },

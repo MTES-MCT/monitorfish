@@ -1,9 +1,10 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
-import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationType
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.mappers.ERSMapper.getERSMessageValueFromJSON
 import io.hypersistence.utils.hibernate.type.array.ListArrayType
 import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType
@@ -76,10 +77,9 @@ data class LogbookReportEntity(
     @Column(name = "trip_segments", nullable = true, columnDefinition = "jsonb")
     val tripSegments: String? = null,
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "vessel_id", nullable = true)
+    @JoinColumn(name = "cfr", referencedColumnName = "cfr", nullable = true, insertable = false, updatable = false)
     val vessel: VesselEntity? = null,
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    // TODO Should it be CFR?
     @JoinColumn(name = "cfr", referencedColumnName = "cfr", nullable = true, insertable = false, updatable = false)
     val vesselRiskFactor: RiskFactorsEntity? = null,
 ) {
@@ -144,40 +144,13 @@ data class LogbookReportEntity(
     }
 
     fun toPriorNotification(mapper: ObjectMapper): PriorNotification {
-        val messageAsJsonNode = mapper.readTree(message)
-
-        val expectedArrivalDate = messageAsJsonNode.get("predictedArrivalDatetimeUtc")?.asText()
-        val expectedLandingDate = messageAsJsonNode.get("predictedLandingDatetimeUtc")?.asText()
-        val landingCauseCode = messageAsJsonNode.get("purpose")?.asText()
-        val onboardCatches =
-            deserializeJSONList(mapper, messageAsJsonNode.get("catchOnboard")?.toString(), Catch::class.java)
-        val portLocode = messageAsJsonNode.get("port")?.asText()
-        val tripGears = deserializeJSONList(mapper, tripGears, LogbookTripGear::class.java)
-        val tripSegments = deserializeJSONList(mapper, tripSegments, LogbookTripSegment::class.java)
-        val types =
-            deserializeJSONList(
-                mapper,
-                messageAsJsonNode.get("pnoTypes")?.toString(),
-                PriorNotificationType::class.java,
-            )
+        val logbookMessage = toLogbookMessage(mapper)
 
         return PriorNotification(
             id = id!!,
-            expectedArrivalDate = expectedArrivalDate,
-            expectedLandingDate = expectedLandingDate,
-            types = types,
-            onboardCatches = onboardCatches,
-            portLocode = portLocode,
-            purposeCode = landingCauseCode,
-            sentAt = reportDateTime.toString(),
-            tripGears = tripGears,
-            tripSegments = tripSegments,
-            vessel = vessel!!.toVessel(),
-            vesselLastControlDate = vesselRiskFactor?.lastControlDatetime?.toString(),
-            vesselRiskFactor = vesselRiskFactor?.riskFactor,
-            vesselRiskFactorDetectability = vesselRiskFactor?.detectabilityRiskFactor,
-            vesselRiskFactorImpact = vesselRiskFactor?.impactRiskFactor,
-            vesselRiskFactorProbability = vesselRiskFactor?.probabilityRiskFactor,
+            logbookMessage = logbookMessage,
+            vessel = vessel?.toVessel() ?: Vessel(id = -1, flagState = CountryCode.UNDEFINED),
+            vesselRiskFactor = vesselRiskFactor?.toVesselRiskFactor(mapper),
         )
     }
 

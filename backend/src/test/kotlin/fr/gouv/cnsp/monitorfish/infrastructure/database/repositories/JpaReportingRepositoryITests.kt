@@ -265,7 +265,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     fun `findAll Should return non-archived reportings`() {
         val filter = ReportingFilter(isArchived = false)
 
-        val result = jpaReportingRepository.findAll(filter).sortedBy { it.id }
+        val result = jpaReportingRepository.findAll(filter)
 
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(result.none { it.isArchived }).isEqualTo(true)
@@ -276,7 +276,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     fun `findAll Should return non-deleted reportings`() {
         val filter = ReportingFilter(isDeleted = false)
 
-        val result = jpaReportingRepository.findAll(filter).sortedBy { it.id }
+        val result = jpaReportingRepository.findAll(filter)
 
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(result.none { it.isDeleted }).isEqualTo(true)
@@ -287,11 +287,24 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     fun `findAll Should return ALERT & INFRACTION_SUSPICION reportings`() {
         val filter = ReportingFilter(types = listOf(ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION))
 
-        val result = jpaReportingRepository.findAll(filter).sortedBy { it.id }
+        val result = jpaReportingRepository.findAll(filter)
 
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
             result.all { listOf(ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION).contains(it.type) },
+        ).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
+    fun `findAll Should return reportings for vessels MARIAGE ÎLE HASARD & COURANT MAIN PROFESSEUR`() {
+        val filter = ReportingFilter(vesselInternalReferenceNumbers = listOf("ABC000180832", "ABC000042310"))
+
+        val result = jpaReportingRepository.findAll(filter)
+
+        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(
+            result.all { listOf("ABC000180832", "ABC000042310").contains(it.internalReferenceNumber) },
         ).isEqualTo(true)
     }
 
@@ -305,7 +318,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                 types = listOf(ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION),
             )
 
-        val result = jpaReportingRepository.findAll(filter).sortedBy { it.id }
+        val result = jpaReportingRepository.findAll(filter)
 
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(result.none { it.isArchived }).isEqualTo(true)

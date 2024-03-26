@@ -13,38 +13,66 @@ import java.util.concurrent.TimeUnit
 @EnableCaching
 @Configuration
 class CaffeineConfiguration {
-    val vessels = "vessel"
-    val searchVessels = "search_vessels"
+    // Beacons
+    val findBeacon = "find_beacon"
     val searchBeacons = "search_beacons"
-    val gearCodeGroups = "gear_code_groups"
-    val gearCodeGroup = "gear_code_group"
-    val gears = "gears"
+
+    // Control Units
+    val controlUnits = "control_units"
+
+    // FAO Areas
+    val faoAreas = "fao_areas"
+
+    // Facade Areas (Sea Fronts)
+    val faoFacades = "fao_facades"
+
+    // Gears
     val gear = "gear"
-    val ports = "ports"
+    val gearCodeGroup = "gear_code_group"
+    val gearCodeGroups = "gear_code_groups"
+    val gears = "gears"
+
+    // Infractions
+    val infraction = "infraction"
+    val infractions = "infractions"
+
+    // Logbook Reports (Logbook Messages)
+    val logbook = "logbook_messages"
+    val logbookRawMessage = "logbook_raw_message"
+    val nextLogbook = "next_logbook"
+    val previousLogbook = "previous_logbook"
+
+    // Missions
+    val missionControlUnits = "mission_control_units"
+
+    // Ports
     val activePorts = "active_ports"
     val port = "port"
+    val ports = "ports"
+
+    // Risk Factors
+    val riskFactors = "risk_factors"
+
+    // Segments
+    val currentSegments = "current_segment"
+
+    // Species
     val allSpecies = "all_species"
     val allSpeciesGroups = "all_species_groups"
     val species = "species"
-    val logbook = "logbook_messages"
-    val nextLogbook = "next_logbook"
-    val previousLogbook = "previous_logbook"
-    val logbookRawMessage = "logbook_raw_message"
-    val firstAndLastTripDates = "first_and_last_trip_dates"
+
+    // Vessels
+    val searchVessels = "search_vessels"
     val vesselTrack = "vessel_track"
-    val vesselsPositions = "vessels_positions"
+    val vessels = "vessel"
     val vesselsAllPositions = "vessels_all_position"
+    val vesselsPositions = "vessels_positions"
     val vesselsPositionsWithBeaconMalfunctions = "vessels_positions_with_beacon_malfunctions"
-    val infractions = "infractions"
-    val infraction = "infraction"
-    val currentSegments = "current_segment"
+
+    // Others
     val controlAnteriority = "control_anteriority"
-    val controlUnits = "control_units"
-    val riskFactors = "risk_factors"
-    val faoAreas = "fao_areas"
-    val findBeacon = "find_beacon"
     val district = "district"
-    val missionControlUnits = "mission_control_units"
+    val firstAndLastTripDates = "first_and_last_trip_dates"
     val userAuthorization = "user_authorization"
 
     @Bean
@@ -52,91 +80,109 @@ class CaffeineConfiguration {
         val oneWeek = 10080
         val oneDay = 1440
 
-        val logbookCache = buildMinutesCache(logbook, ticker, 10)
-        val nextLogbookCache = buildMinutesCache(nextLogbook, ticker, 10)
-        val previousLogbookCache = buildMinutesCache(previousLogbook, ticker, 10)
-        val firstAndLastTripDates = buildMinutesCache(firstAndLastTripDates, ticker, 10)
-        val logbookRawMessageCache = buildMinutesCache(logbookRawMessage, ticker, oneWeek)
-        val vesselCache = buildMinutesCache(vessels, ticker, 60)
+        // Beacons
+        val searchBeaconsCache = buildMinutesCache(searchBeacons, ticker, 1)
+        val findBeaconCache = buildMinutesCache(findBeacon, ticker, 60)
 
+        // Control Units
+        val controlUnitsCache = buildMinutesCache(controlUnits, ticker, oneWeek)
+
+        // FAO Areas
+        val faoAreasCache = buildMinutesCache(faoAreas, ticker, oneWeek)
+
+        // FAO Facades
+        val faoFacadesCache = buildMinutesCache(faoFacades, ticker, oneWeek)
+
+        // Gears
+        val gearsCache = buildMinutesCache(gears, ticker, oneWeek)
+        val gearCache = buildMinutesCache(gear, ticker, oneWeek)
         val gearCodeGroupsCache = buildMinutesCache(gearCodeGroups, ticker, oneWeek)
         val gearCodeGroupCache = buildMinutesCache(gearCodeGroup, ticker, oneWeek)
 
-        val gearsCache = buildMinutesCache(gears, ticker, oneWeek)
-        val gearCache = buildMinutesCache(gear, ticker, oneWeek)
+        // Infractions
+        val infractionsCache = buildMinutesCache(infractions, ticker, oneWeek)
+        val infractionCache = buildMinutesCache(infraction, ticker, oneWeek)
 
-        val allSpeciesCache = buildMinutesCache(allSpecies, ticker, oneWeek)
-        val speciesCache = buildMinutesCache(species, ticker, oneWeek)
-        val allSpeciesGroupsCache = buildMinutesCache(allSpeciesGroups, ticker, oneWeek)
+        // Logbook Reports (Logbook Messages)
+        val logbookCache = buildMinutesCache(logbook, ticker, 10)
+        val logbookRawMessageCache = buildMinutesCache(logbookRawMessage, ticker, oneWeek)
+        val nextLogbookCache = buildMinutesCache(nextLogbook, ticker, 10)
+        val previousLogbookCache = buildMinutesCache(previousLogbook, ticker, 10)
 
+        // Missions
+        val missionControlUnitsCache = buildMinutesCache(missionControlUnits, ticker, 120)
+
+        // Ports
         val portsCache = buildMinutesCache(ports, ticker, oneWeek)
         val activePortsCache = buildMinutesCache(activePorts, ticker, oneDay)
         val portCache = buildMinutesCache(port, ticker, oneWeek)
 
-        val currentSegmentsCache = buildMinutesCache(currentSegments, ticker, 1)
-        val controlAnteriorityCache = buildMinutesCache(controlAnteriority, ticker, 1)
+        // Risk Factors
         val riskFactorsCache = buildMinutesCache(riskFactors, ticker, 1)
 
-        val faoAreasCache = buildMinutesCache(faoAreas, ticker, oneWeek)
+        // Segments
+        val currentSegmentsCache = buildMinutesCache(currentSegments, ticker, 1)
 
-        val districtCache = buildMinutesCache(district, ticker, 10)
+        // Species
+        val allSpeciesCache = buildMinutesCache(allSpecies, ticker, oneWeek)
+        val speciesCache = buildMinutesCache(species, ticker, oneWeek)
+        val allSpeciesGroupsCache = buildMinutesCache(allSpeciesGroups, ticker, oneWeek)
 
-        val infractionsCache = buildMinutesCache(infractions, ticker, oneWeek)
-        val infractionCache = buildMinutesCache(infraction, ticker, oneWeek)
-
+        // Vessels
+        val searchVesselsCache = buildMinutesCache(searchVessels, ticker, 60)
         val vesselTrackCache = buildMinutesCache(vesselTrack, ticker, 1)
-        val vesselsPositionsCache = buildSecondsCache(vesselsPositions, ticker, 30)
+        val vesselCache = buildMinutesCache(vessels, ticker, 60)
         val vesselsAllPositionsCache = buildSecondsCache(vesselsAllPositions, ticker, 30)
+        val vesselsPositionsCache = buildSecondsCache(vesselsPositions, ticker, 30)
         val vesselsPositionsWithBeaconMalfunctionsCache = buildMinutesCache(
             vesselsPositionsWithBeaconMalfunctions,
             ticker,
             1,
         )
-        val searchVesselsCache = buildMinutesCache(searchVessels, ticker, 60)
-        val searchBeaconsCache = buildMinutesCache(searchBeacons, ticker, 1)
-        val findBeaconCache = buildMinutesCache(findBeacon, ticker, 60)
 
-        val missionControlUnitsCache = buildMinutesCache(missionControlUnits, ticker, 120)
-        val controlUnitsCache = buildMinutesCache(controlUnits, ticker, oneWeek)
-
+        // Others
+        val controlAnteriorityCache = buildMinutesCache(controlAnteriority, ticker, 1)
+        val districtCache = buildMinutesCache(district, ticker, 10)
+        val firstAndLastTripDates = buildMinutesCache(firstAndLastTripDates, ticker, 10)
         val userAuthorizationCache = buildMinutesCache(userAuthorization, ticker, 120)
 
         val manager = SimpleCacheManager()
         manager.setCaches(
             listOf(
+                activePortsCache,
+                allSpeciesCache,
+                allSpeciesGroupsCache,
+                controlAnteriorityCache,
+                controlUnitsCache,
+                currentSegmentsCache,
+                districtCache,
+                faoAreasCache,
+                faoFacadesCache,
+                findBeaconCache,
+                firstAndLastTripDates,
+                gearCache,
+                gearCodeGroupCache,
+                gearCodeGroupsCache,
+                gearsCache,
+                infractionCache,
+                infractionsCache,
+                logbookCache,
+                logbookRawMessageCache,
+                missionControlUnitsCache,
+                nextLogbookCache,
+                portCache,
+                portsCache,
+                previousLogbookCache,
+                riskFactorsCache,
+                searchBeaconsCache,
+                searchVesselsCache,
+                speciesCache,
+                userAuthorizationCache,
                 vesselCache,
                 vesselTrackCache,
-                vesselsPositionsCache,
                 vesselsAllPositionsCache,
+                vesselsPositionsCache,
                 vesselsPositionsWithBeaconMalfunctionsCache,
-                gearCodeGroupsCache,
-                gearCodeGroupCache,
-                gearsCache,
-                gearCache,
-                portsCache,
-                activePortsCache,
-                portCache,
-                allSpeciesCache,
-                speciesCache,
-                searchVesselsCache,
-                searchBeaconsCache,
-                logbookCache,
-                nextLogbookCache,
-                previousLogbookCache,
-                logbookRawMessageCache,
-                infractionsCache,
-                infractionCache,
-                currentSegmentsCache,
-                controlAnteriorityCache,
-                riskFactorsCache,
-                allSpeciesGroupsCache,
-                faoAreasCache,
-                districtCache,
-                findBeaconCache,
-                missionControlUnitsCache,
-                controlUnitsCache,
-                userAuthorizationCache,
-                firstAndLastTripDates,
             ),
         )
 

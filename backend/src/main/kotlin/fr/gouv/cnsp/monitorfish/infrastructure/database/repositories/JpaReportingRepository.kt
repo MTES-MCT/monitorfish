@@ -12,6 +12,9 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBReportingRepository
 import jakarta.persistence.EntityManager
+import jakarta.persistence.criteria.CriteriaBuilder
+import jakarta.persistence.criteria.Predicate
+import jakarta.persistence.criteria.Root
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
@@ -68,17 +71,21 @@ class JpaReportingRepository(
         val reportingEntity = criteriaQuery.from(ReportingEntity::class.java)
 
         val predicates = mutableListOf(criteriaBuilder.isTrue(criteriaBuilder.literal(true)))
+
         filter?.let {
             it.isArchived?.let { isArchived ->
-                predicates.add(criteriaBuilder.equal(reportingEntity.get<Boolean>("isArchived"), isArchived))
+                predicates.add(getIsArchivedPredicate(isArchived, reportingEntity, criteriaBuilder))
             }
-
             it.isDeleted?.let { isDeleted ->
-                predicates.add(criteriaBuilder.equal(reportingEntity.get<Boolean>("isDeleted"), isDeleted))
+                predicates.add(getIsDeletedPredicate(isDeleted, reportingEntity, criteriaBuilder))
             }
-
             it.types?.let { types ->
-                predicates.add(reportingEntity.get<ReportingType>("type").`in`(*types.toTypedArray()))
+                predicates.add(getTypesPredicate(types, reportingEntity))
+            }
+            it.vesselInternalReferenceNumbers?.let { vesselInternalReferenceNumbers ->
+                predicates.add(
+                    getVesselInternalReferenceNumbersPredicate(vesselInternalReferenceNumbers, reportingEntity),
+                )
             }
         }
 
@@ -162,5 +169,37 @@ class JpaReportingRepository(
     @Transactional
     override fun delete(id: Int) {
         dbReportingRepository.deleteReporting(id)
+    }
+
+    private fun getIsArchivedPredicate(
+        isArchived: Boolean,
+        reportingEntity: Root<ReportingEntity>,
+        criteriaBuilder: CriteriaBuilder,
+    ): Predicate {
+        return criteriaBuilder.equal(reportingEntity.get<Boolean>("isArchived"), isArchived)
+    }
+
+    private fun getIsDeletedPredicate(
+        isDeleted: Boolean,
+        reportingEntity: Root<ReportingEntity>,
+        criteriaBuilder: CriteriaBuilder,
+    ): Predicate {
+        return criteriaBuilder.equal(reportingEntity.get<Boolean>("isDeleted"), isDeleted)
+    }
+
+    private fun getTypesPredicate(
+        types: List<ReportingType>,
+        reportingEntity: Root<ReportingEntity>,
+    ): Predicate {
+        return reportingEntity.get<ReportingType>("type").`in`(*types.toTypedArray())
+    }
+
+    private fun getVesselInternalReferenceNumbersPredicate(
+        vesselInternalReferenceNumbers: List<String>,
+        reportingEntity: Root<ReportingEntity>,
+    ): Predicate {
+        return reportingEntity.get<String>("internalReferenceNumber").`in`(
+            *vesselInternalReferenceNumbers.toTypedArray(),
+        )
     }
 }

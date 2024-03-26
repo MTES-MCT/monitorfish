@@ -10,9 +10,9 @@ class DeleteMissionAction(private val missionActionsRepository: MissionActionsRe
     fun execute(actionId: Int) {
         try {
             val targetedAction = missionActionsRepository.findById(actionId)
-            val sofDeletedAction = targetedAction.copy(isDeleted = true)
+            val softDeletedAction = targetedAction.copy(isDeleted = true)
 
-            missionActionsRepository.save(sofDeletedAction)
+            missionActionsRepository.save(softDeletedAction)
         } catch (e: Throwable) {
             throw CouldNotDeleteException("Could not find mission action with id: ${e.message}", e)
         }

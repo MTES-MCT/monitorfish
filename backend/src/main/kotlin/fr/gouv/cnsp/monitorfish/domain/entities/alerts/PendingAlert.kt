@@ -18,7 +18,7 @@ class PendingAlert(
     val creationDate: ZonedDateTime,
     val tripNumber: String? = null,
     val value: AlertType,
-    var infraction: fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction? = null,
+    var infraction: Infraction? = null,
     val latitude: Double? = null,
     val longitude: Double? = null,
 )

@@ -20,7 +20,7 @@ data class Reporting(
     val value: ReportingValue,
     val isArchived: Boolean,
     val isDeleted: Boolean,
-    var infraction: fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction? = null,
+    var infraction: Infraction? = null,
     var underCharter: Boolean? = null,
     val latitude: Double? = null,
     val longitude: Double? = null,

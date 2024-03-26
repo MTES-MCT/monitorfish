@@ -154,8 +154,13 @@ const updateMissionLocation =
     }
 
     const lastEnvActionDate = envActions
+      .filter(
+        action =>
+          action.actionType === EnvMissionAction.MissionActionType.CONTROL ||
+          action.actionType === EnvMissionAction.MissionActionType.SURVEILLANCE
+      )
       .map(action => action.actionStartDateTimeUtc)
-      .sort((a, b) => a.localeCompare(b))[0]
+      .sort((a, b) => b.localeCompare(a))[0]
 
     if (lastEnvActionDate && lastEnvActionDate > missionAction.actionDatetimeUtc) {
       // As a action from Env is newer, we do not update the mission location

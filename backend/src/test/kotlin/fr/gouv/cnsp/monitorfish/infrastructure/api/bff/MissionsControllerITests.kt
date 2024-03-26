@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
@@ -8,6 +9,7 @@ import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.*
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.GetAllMissions
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.GetMission
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -32,6 +34,9 @@ class MissionsControllerITests {
 
     @MockBean
     private lateinit var getAllMission: GetAllMissions
+
+    @MockBean
+    private lateinit var getMission: GetMission
 
     @Test
     fun `Should get all missions`() {
@@ -59,7 +64,7 @@ class MissionsControllerITests {
                         startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
                     ),
                     actions = listOf(
-                        fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction(
+                        MissionAction(
                             id = 3,
                             vesselId = 1,
                             missionId = 123,
@@ -108,6 +113,55 @@ class MissionsControllerITests {
                 listOf("SEA", "LAND"),
                 listOf(),
                 listOf("MED"),
+            )
+        }
+    }
+
+    @Test
+    fun `Should get a mission`() {
+        // Given
+        givenSuspended {
+            getMission.execute(any())
+        }.willReturn(
+            MissionAndActions(
+                mission = Mission(
+                    123,
+                    missionTypes = listOf(MissionType.SEA),
+                    missionSource = MissionSource.MONITORFISH,
+                    isClosed = false,
+                    isGeometryComputedFromControls = false,
+                    startDateTimeUtc = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC),
+                ),
+                actions = listOf(
+                    MissionAction(
+                        id = 3,
+                        vesselId = 1,
+                        missionId = 123,
+                        actionDatetimeUtc = ZonedDateTime.now(),
+                        actionType = MissionActionType.SEA_CONTROL,
+                        seizureAndDiversion = false,
+                        speciesInfractions = listOf(),
+                        isDeleted = false,
+                        hasSomeGearsSeized = false,
+                        hasSomeSpeciesSeized = false,
+                        isFromPoseidon = false,
+                    ),
+                ),
+            ),
+        )
+
+        // When
+        api.perform(
+            get("/bff/v1/missions/123"),
+        )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.isGeometryComputedFromControls", equalTo(false)))
+            .andExpect(jsonPath("$.actions.length()", equalTo(1)))
+
+        runBlocking {
+            Mockito.verify(getMission).execute(
+                123,
             )
         }
     }

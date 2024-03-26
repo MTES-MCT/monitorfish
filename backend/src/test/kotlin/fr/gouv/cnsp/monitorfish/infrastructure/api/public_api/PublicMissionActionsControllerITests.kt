@@ -39,7 +39,7 @@ class PublicMissionActionsControllerITests {
         // Given
         givenSuspended { this.getMissionActions.execute(any()) }.willReturn(
             listOf(
-                fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction(
+                MissionAction(
                     123,
                     1,
                     1,

@@ -26,12 +26,12 @@ class TestUtils {
                     "endDateTimeUtc":"2023-04-21T10:57:59Z",
                     "envActions":[
                     {
-                        "id": "123",
+                        "id": "88713755-3966-4ca4-ae18-10cab6249485",
                         "actionStartDateTimeUtc": "2023-04-21T10:57:59Z",
                         "actionType": "CONTROL"
                     },
                     {
-                        "id": "124",
+                        "id": "69713755-3966-4ca4-ae18-10cab6249485",
                         "actionStartDateTimeUtc": "2023-04-21T10:57:59Z",
                         "actionType": "NOTE"
                     }
@@ -65,16 +65,15 @@ class TestUtils {
                     "startDateTimeUtc":"2023-04-20T09:57:00Z",
                     "startDateTimeUtc":"2023-04-20T09:57:00Z",
                     "endDateTimeUtc":"2023-04-21T10:57:59Z",
-                    "envActions":[
-                    {
-                        "id": 123,
+                    "envActions":[{
+                        "id": "88713755-3966-4ca4-ae18-10cab6249485",
                         "actionStartDateTimeUtc": "2023-04-21T10:57:59Z",
-                        "actionType": "CONTROL",
+                        "actionType": "CONTROL"
                     },
                     {
-                        "id": 124,
+                        "id": "65713755-3966-4ca4-ae18-10cab6249485",
                         "actionStartDateTimeUtc": "2023-04-21T10:57:59Z",
-                        "actionType": "NOTE",
+                        "actionType": "NOTE"
                     }
                     ],
                     "isGeometryComputedFromControls":false,

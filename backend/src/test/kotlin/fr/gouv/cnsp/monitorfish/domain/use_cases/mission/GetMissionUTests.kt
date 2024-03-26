@@ -52,7 +52,7 @@ class GetMissionUTests {
                 ),
             ),
         )
-        given(getMissionActions.execute(any())).willReturn(getDummyMissionActions(listOf(123, 456)))
+        given(getMissionActions.execute(any())).willReturn(getDummyMissionActions(listOf(1, 2)))
 
         // When
         val missionsAndActions = runBlocking {
@@ -64,7 +64,7 @@ class GetMissionUTests {
 
         // Then
         assertThat(missionsAndActions.mission.envActions).hasSize(1)
-        assertThat(missionsAndActions.actions).hasSize(2)
+        assertThat(missionsAndActions.actions).hasSize(3)
     }
 
     @Test

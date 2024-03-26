@@ -2,6 +2,10 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.given
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
@@ -11,6 +15,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class GetPriorNotificationsUTests {
@@ -33,19 +38,19 @@ class GetPriorNotificationsUTests {
             listOf(
                 PriorNotification(
                     id = 1,
-                    expectedArrivalDate = null,
-                    expectedLandingDate = null,
-                    notificationTypeLabel = null,
-                    onboardCatches = emptyList(),
-                    portLocode = null,
-                    portName = null,
-                    purposeCode = null,
+                    logbookMessage = LogbookMessage(
+                        id = 1,
+                        analyzedByRules = emptyList(),
+                        integrationDateTime = ZonedDateTime.now(),
+                        isEnriched = false,
+                        message = PNO(),
+                        operationDateTime = ZonedDateTime.now(),
+                        operationNumber = "1",
+                        operationType = LogbookOperationType.COR,
+                        transmissionFormat = LogbookTransmissionFormat.ERS,
+                    ),
                     reportingsCount = null,
                     seaFront = null,
-                    sentAt = null,
-                    tripGears = emptyList(),
-                    tripSegments = emptyList(),
-                    types = emptyList(),
                     vessel = Vessel(
                         id = 1,
                         externalReferenceNumber = null,
@@ -57,28 +62,24 @@ class GetPriorNotificationsUTests {
                         underCharter = null,
                         vesselName = null,
                     ),
-                    vesselLastControlDate = null,
-                    vesselRiskFactorImpact = null,
-                    vesselRiskFactorProbability = null,
-                    vesselRiskFactorDetectability = null,
                     vesselRiskFactor = null,
                 ),
 
                 PriorNotification(
                     id = 2,
-                    expectedArrivalDate = null,
-                    expectedLandingDate = null,
-                    notificationTypeLabel = null,
-                    onboardCatches = emptyList(),
-                    portLocode = null,
-                    portName = null,
-                    purposeCode = null,
+                    logbookMessage = LogbookMessage(
+                        id = 2,
+                        analyzedByRules = emptyList(),
+                        integrationDateTime = ZonedDateTime.now(),
+                        isEnriched = false,
+                        message = PNO(),
+                        operationDateTime = ZonedDateTime.now(),
+                        operationNumber = "2",
+                        operationType = LogbookOperationType.DAT,
+                        transmissionFormat = LogbookTransmissionFormat.FLUX,
+                    ),
                     reportingsCount = null,
                     seaFront = null,
-                    sentAt = null,
-                    tripGears = emptyList(),
-                    tripSegments = emptyList(),
-                    types = emptyList(),
                     vessel = Vessel(
                         id = 1,
                         externalReferenceNumber = null,
@@ -90,10 +91,6 @@ class GetPriorNotificationsUTests {
                         underCharter = null,
                         vesselName = null,
                     ),
-                    vesselLastControlDate = null,
-                    vesselRiskFactorImpact = null,
-                    vesselRiskFactorProbability = null,
-                    vesselRiskFactorDetectability = null,
                     vesselRiskFactor = null,
                 ),
             ),

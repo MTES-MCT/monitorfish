@@ -1,5 +1,4 @@
 import type { LogbookMessage } from '@features/Logbook/LogbookMessage.types'
-import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { SeaFront } from 'domain/entities/seaFront/constants'
 
 export namespace PriorNotification {
@@ -8,7 +7,6 @@ export namespace PriorNotification {
     expectedLandingDate: string | undefined
     id: number
     isVesselUnderCharter: boolean | undefined
-    notificationTypeLabel: string | undefined
     onBoardCatches: LogbookMessage.Catch[]
     portLocode: string | undefined
     portName: string | undefined
@@ -19,9 +17,15 @@ export namespace PriorNotification {
     tripGears: LogbookMessage.TripGear[]
     tripSegments: LogbookMessage.TripSegment[]
     types: Type[]
-    // TODO Wait for vesselId in logbook reports (including "navire inconnu").
-    vessel: Vessel.Vessel
+    vesselExternalReferenceNumber: string | undefined
+    vesselFlagCountryCode: string | undefined
+    vesselId: number
+    vesselInternalReferenceNumber: string | undefined
+    vesselIrcs: string | undefined
     vesselLastControlDate: string | undefined
+    vesselLength: number | undefined
+    vesselMmsi: string | undefined
+    vesselName: string | undefined
     vesselRiskFactor: number | undefined
     vesselRiskFactorDetectability: number | undefined
     vesselRiskFactorImpact: number | undefined

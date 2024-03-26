@@ -1,0 +1,29 @@
+[
+    {
+        "table": "reportings",
+        "data": [
+            {
+                "type": "ALERT",
+                "vessel_name": "MARIAGE ÎLE HASARD",
+                "internal_reference_number": "ABC000180832",
+                "external_reference_number": "VP374069",
+                "ircs": "CG1312",
+                "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",
+                "flag_state": "FR",
+                "creation_date:sql": "NOW() - ('1 DAY')::interval",
+                "validation_date:sql": "NOW()",
+                "archived": false,
+                "deleted": false,
+                "value:jsonb": {
+                    "seaFront": "NAMO",
+                    "riskFactor": 3.5647,
+                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "natinfCode": 7059
+                },
+                "latitude": 41.569,
+                "longitude": 37.28,
+                "vessel_id": 123456
+            }
+        ]
+    }
+]

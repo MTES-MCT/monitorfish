@@ -384,11 +384,10 @@ class JpaLogbookReportRepository(
     ): Predicate {
         val vessel: Join<LogbookReportEntity, RiskFactorsEntity> = logbookReportEntity.join("vessel")
 
-        // TODO Double-check if it's < 12 VS >= 12.
-        if (isLessThanTwelveMetersVessel) {
-            return criteriaBuilder.lessThan(vessel.get("length"), 12)
+        return if (isLessThanTwelveMetersVessel) {
+            criteriaBuilder.lessThan(vessel.get("length"), 12)
         } else {
-            return criteriaBuilder.greaterThanOrEqualTo(vessel.get("length"), 12)
+            criteriaBuilder.greaterThanOrEqualTo(vessel.get("length"), 12)
         }
     }
 

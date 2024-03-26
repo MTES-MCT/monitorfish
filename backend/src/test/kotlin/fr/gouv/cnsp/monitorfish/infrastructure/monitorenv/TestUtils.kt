@@ -2,6 +2,47 @@ package fr.gouv.cnsp.monitorfish.infrastructure.monitorenv
 
 class TestUtils {
     companion object {
+        fun getDummyMission(): String {
+            return """
+                {
+                    "id":263,
+                    "missionTypes":["SEA"],
+                    "controlUnits":[{"id":10197,
+                    "administration":"Marine Nationale",
+                    "isArchived":false,
+                    "name":"BE Jaguar",
+                    "resources":[],
+                    "contact":null}],
+                    "openBy":null,
+                    "closedBy":null,
+                    "observationsCacem":null,
+                    "observationsCnsp":null,
+                    "facade":"NAMO",
+                    "geom":{"type":"MultiPolygon","coordinates":[[[[-3.50814078, 48.92061516],[-3.48954745,48.84160728],[-3.40230182,48.80959241],[-3.28073004,48.85384285],[-3.25212491,48.90557567],[-3.50814078,48.92061516]]]]},
+                    "createdAtUtc":"2023-04-20T09:57:00Z",
+                    "updatedAtUtc":"2023-04-20T09:57:00Z",
+                    "startDateTimeUtc":"2023-04-20T09:57:00Z",
+                    "startDateTimeUtc":"2023-04-20T09:57:00Z",
+                    "endDateTimeUtc":"2023-04-21T10:57:59Z",
+                    "envActions":[
+                    {
+                        "id": "123",
+                        "actionStartDateTimeUtc": "2023-04-21T10:57:59Z",
+                        "actionType": "CONTROL"
+                    },
+                    {
+                        "id": "124",
+                        "actionStartDateTimeUtc": "2023-04-21T10:57:59Z",
+                        "actionType": "NOTE"
+                    }
+                    ],
+                    "isGeometryComputedFromControls":false,
+                    "missionSource":"MONITORFISH",
+                    "isClosed":false
+                }
+            """.trimIndent()
+        }
+
         fun getDummyMissions(): String {
             return """
                 [{
@@ -19,9 +60,23 @@ class TestUtils {
                     "observationsCnsp":null,
                     "facade":"NAMO",
                     "geom":{"type":"MultiPolygon","coordinates":[[[[-3.50814078, 48.92061516],[-3.48954745,48.84160728],[-3.40230182,48.80959241],[-3.28073004,48.85384285],[-3.25212491,48.90557567],[-3.50814078,48.92061516]]]]},
+                    "createdAtUtc":"2023-04-20T09:57:00Z",
+                    "updatedAtUtc":"2023-04-20T09:57:00Z",
+                    "startDateTimeUtc":"2023-04-20T09:57:00Z",
                     "startDateTimeUtc":"2023-04-20T09:57:00Z",
                     "endDateTimeUtc":"2023-04-21T10:57:59Z",
-                    "envActions":[],
+                    "envActions":[
+                    {
+                        "id": 123,
+                        "actionStartDateTimeUtc": "2023-04-21T10:57:59Z",
+                        "actionType": "CONTROL",
+                    },
+                    {
+                        "id": 124,
+                        "actionStartDateTimeUtc": "2023-04-21T10:57:59Z",
+                        "actionType": "NOTE",
+                    }
+                    ],
                     "isGeometryComputedFromControls":false,
                     "missionSource":"MONITORFISH",
                     "isClosed":false

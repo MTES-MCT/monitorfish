@@ -1,10 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
-import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateControlObjectiveException
-import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateFleetSegmentException
-import fr.gouv.cnsp.monitorfish.domain.exceptions.NAFMessageParsingException
-import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
+import fr.gouv.cnsp.monitorfish.domain.exceptions.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ApiError
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissingParameterApiError
 import io.sentry.Sentry
@@ -43,19 +40,11 @@ class ControllersExceptionHandler(val sentryConfig: SentryConfig) {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(CouldNotUpdateControlObjectiveException::class)
-    fun handleCouldNotUpdateControlObjectiveException(e: Exception): ApiError {
-        logger.error(e.message, e.cause)
-
-        if (sentryConfig.enabled == true) {
-            Sentry.captureException(e)
-        }
-
-        return ApiError(CouldNotUpdateControlObjectiveException(e.message.toString(), e))
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(IllegalArgumentException::class)
+    @ExceptionHandler(
+        IllegalArgumentException::class,
+        CouldNotUpdateControlObjectiveException::class,
+        CouldNotFindException::class,
+    )
     fun handleIllegalArgumentException(e: Exception): ApiError {
         logger.error(e.message, e.cause)
 

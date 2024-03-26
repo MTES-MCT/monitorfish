@@ -1,11 +1,14 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import fr.gouv.cnsp.monitorfish.domain.use_cases.missions.GetAllMissions
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.GetAllMissions
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.GetMission
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.FullMissionWithActionsDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissionWithActionsDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.websocket.server.PathParam
+import kotlinx.coroutines.runBlocking
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.web.bind.annotation.*
 import java.time.ZonedDateTime
@@ -15,6 +18,7 @@ import java.time.ZonedDateTime
 @Tag(name = "Proxy APIs for missions")
 class MissionController(
     private val getAllMissions: GetAllMissions,
+    private val getMission: GetMission,
 ) {
 
     @GetMapping("")
@@ -58,5 +62,19 @@ class MissionController(
             pageSize = pageSize,
         )
         return missionsAndActions.map { MissionWithActionsDataOutput.fromMissionAndActions(it) }
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Get mission")
+    fun getMissionController(
+        @PathParam("Id")
+        @PathVariable(name = "id")
+        id: Int,
+    ): FullMissionWithActionsDataOutput {
+        return runBlocking {
+            val missionAndActions = getMission.execute(id)
+
+            return@runBlocking FullMissionWithActionsDataOutput.fromMissionAndActions(missionAndActions)
+        }
     }
 }

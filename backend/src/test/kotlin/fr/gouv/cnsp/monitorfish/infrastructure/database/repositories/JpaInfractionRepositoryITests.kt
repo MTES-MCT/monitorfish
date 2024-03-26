@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionCategory
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
@@ -20,7 +20,9 @@ class JpaInfractionRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(infraction.infraction).isEqualTo("Taille de maille non réglementaire")
-        assertThat(infraction.infractionCategory).isEqualTo(InfractionCategory.FISHING)
+        assertThat(infraction.infractionCategory).isEqualTo(
+            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory.FISHING,
+        )
         assertThat(infraction.natinfCode).isEqualTo(23581)
         assertThat(infraction.regulation).isEqualTo("Arreté du 12/01/3021")
     }
@@ -48,6 +50,8 @@ class JpaInfractionRepositoryITests : AbstractDBTests() {
         assertThat(infractions.first().natinfCode).isEqualTo(23581)
         assertThat(infractions.first().regulation).isEqualTo("Arreté du 12/01/3021")
         assertThat(infractions.first().infraction).isEqualTo("Taille de maille non réglementaire")
-        assertThat(infractions.first().infractionCategory).isEqualTo(InfractionCategory.FISHING)
+        assertThat(infractions.first().infractionCategory).isEqualTo(
+            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory.FISHING,
+        )
     }
 }

@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.ControlUnit
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
 import java.time.ZonedDateTime
 
 data class MissionActionDataOutput(

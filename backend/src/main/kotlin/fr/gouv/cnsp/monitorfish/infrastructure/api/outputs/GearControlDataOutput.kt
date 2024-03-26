@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.GearControl
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearControl
 
 data class GearControlDataOutput(
     var gearCode: String? = null,

@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
 
 data class InfractionDataOutput(
     var natinfCode: Int? = null,

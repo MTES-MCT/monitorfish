@@ -3,6 +3,8 @@ package fr.gouv.cnsp.monitorfish.infrastructure.monitorenv
 import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.MonitorenvProperties
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.MissionActionType
+import fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.TestUtils.Companion.getDummyMission
 import fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.TestUtils.Companion.getDummyMissions
 import io.ktor.client.engine.mock.*
 import io.ktor.http.*
@@ -283,6 +285,36 @@ class APIMissionRepositoryITest {
             assertThat(mockEngine.requestHistory.first().url.toString())
                 .isEqualTo(
                     "http://test/api/v1/missions/find?ids=123,456",
+                )
+        }
+    }
+
+    @Test
+    fun `findById Should return a mission`() {
+        runBlocking {
+            // Given
+            val mockEngine = MockEngine { _ ->
+                respond(
+                    content = ByteReadChannel(getDummyMission()),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            }
+            val apiClient = ApiClient(mockEngine)
+            val monitorenvProperties = MonitorenvProperties()
+            monitorenvProperties.url = "http://test"
+
+            // When
+            val mission = APIMissionRepository(monitorenvProperties, apiClient)
+                .findById(123)
+
+            // Then
+            assertThat(mission.createdAtUtc.toString()).isEqualTo("2023-04-20T09:57Z")
+            assertThat(mission.envActions).hasSize(2)
+            assertThat(mission.envActions?.first()?.actionType).isEqualTo(MissionActionType.CONTROL)
+            assertThat(mockEngine.requestHistory.first().url.toString())
+                .isEqualTo(
+                    "http://test/api/v1/missions/123",
                 )
         }
     }

@@ -117,13 +117,15 @@ export function FormikLocationPicker() {
 
       setFieldValue('geom', geometryComputedFromControls)
 
-      window.document.dispatchEvent(
-        new NotificationEvent(
-          'Une zone de mission a été modifiée à partir des contrôles de la mission',
-          'success',
-          true
+      if (geometryComputedFromControls.coordinates?.length) {
+        window.document.dispatchEvent(
+          new NotificationEvent(
+            'Une zone de mission a été modifiée à partir des contrôles de la mission',
+            'success',
+            true
+          )
         )
-      )
+      }
 
       dispatch(missionFormActions.unsetGeometryComputedFromControls())
     },

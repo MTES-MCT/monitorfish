@@ -12,7 +12,6 @@ import jakarta.persistence.Table
 data class PortEntity(
     @Column(name = "country_code_iso2")
     val countryCode: String? = null,
-    // TODO Can it be null in prod? It's used for the multi-cascader in Frontend.
     @Column(name = "region")
     val region: String? = null,
     @Id

@@ -45,15 +45,15 @@ class PriorNotificationDataOutput(
 
             return PriorNotificationDataOutput(
                 id = priorNotification.id,
-                expectedArrivalDate = message.predictedArrivalDateTime.toString(),
-                expectedLandingDate = message.predictedLandingDatetime.toString(),
+                expectedArrivalDate = message.predictedArrivalDateTime?.toString(),
+                expectedLandingDate = message.predictedLandingDatetime?.toString(),
                 onBoardCatches,
                 portLocode = priorNotification.port?.locode,
                 portName = priorNotification.port?.name,
                 purposeCode = message.purpose,
                 reportingsCount = priorNotification.reportingsCount,
                 seaFront = priorNotification.seaFront,
-                sentAt = priorNotification.logbookMessage.reportDateTime.toString(),
+                sentAt = priorNotification.logbookMessage.reportDateTime?.toString(),
                 tripGears,
                 tripSegments,
                 types,

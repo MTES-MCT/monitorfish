@@ -20,6 +20,10 @@ values ('AD',         null, null, 'ADALV', 'Andorra la Vella', 42.5, 1.016666666
        ('AE',         null, 'DU', 'AEHZP', 'Hamriya Free Zone Port', 25.3, 55.0833333333333, null, true),
        ('AE',         null, 'DU', 'AEHSN', 'Hassyan', 24.9, 54.0666666666667, null, false),
        ('AE',         null, null, 'AEHTL', 'Hulaylah Terminal', 25.9833333333333, 55.0833333333333, null, true),
-       ('FR',         null, '35', 'FRSML', 'Saint-Malo', 48.3833333333333, 00.2033333333333, null, true),
-       ('FR',         null, '56', 'FRVNE', 'Vannes', 47.39, 00.246, null, true),
-       ('FR',         null, '29', 'FRBES', 'Brest', 48.24, 00.429, null, true);
+
+       -- https://service.unece.org/trade/locode/fr.htm
+       ('FR',       'NAMO', '29', 'FRBES', 'Brest', 48.24, 4.29, null, true),
+       ('FR',       'MEMN', '29', 'FRMRS', 'Marseille', 43.18, 5.24, null, true),
+       ('FR',       'MEMN', '29', 'FRNCE', 'Nice', 43.42, 7.16, null, true),
+       ('FR',       'NAMO', '35', 'FRSML', 'Saint-Malo', 48.39, 2.01, null, true),
+       ('FR',       'NAMO', '56', 'FRVNE', 'Vannes', 47.39, 2.46, null, true);

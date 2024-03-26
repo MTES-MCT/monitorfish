@@ -28,6 +28,19 @@
                 "flag_state": "NL",
                 "length": 20,
                 "under_charter": true
+            },
+
+            // - Vessel: L'OM DU POISSON
+            {
+                "id": 103,
+                "cfr": "CFR103",
+                "mmsi": "MMSI103",
+                "ircs": "IRCS103",
+                "external_immatriculation": "EXTIMM103",
+                "vessel_name": "L'OM DU POISSON",
+                "flag_state": "FR",
+                "length": 11.99,
+                "under_charter": true
             }
         ]
     }

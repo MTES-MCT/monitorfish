@@ -23,9 +23,6 @@ class CaffeineConfiguration {
     // FAO Areas
     val faoAreas = "fao_areas"
 
-    // Facade Areas (Sea Fronts)
-    val faoFacades = "fao_facades"
-
     // Gears
     val gear = "gear"
     val gearCodeGroup = "gear_code_group"
@@ -89,9 +86,6 @@ class CaffeineConfiguration {
 
         // FAO Areas
         val faoAreasCache = buildMinutesCache(faoAreas, ticker, oneWeek)
-
-        // FAO Facades
-        val faoFacadesCache = buildMinutesCache(faoFacades, ticker, oneWeek)
 
         // Gears
         val gearsCache = buildMinutesCache(gears, ticker, oneWeek)
@@ -157,7 +151,6 @@ class CaffeineConfiguration {
                 currentSegmentsCache,
                 districtCache,
                 faoAreasCache,
-                faoFacadesCache,
                 findBeaconCache,
                 firstAndLastTripDates,
                 gearCache,

@@ -2,15 +2,12 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
-import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.filters.LogbookReportFilter
 import fr.gouv.cnsp.monitorfish.domain.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
-import org.locationtech.jts.geom.Coordinate
-import org.locationtech.jts.geom.GeometryFactory
 
 @UseCase
 class GetPriorNotifications(
@@ -30,11 +27,9 @@ class GetPriorNotifications(
                     null
                 }
 
-                val seaFront = getSeaFrontFromPort(port)
-
                 priorNotification.copy(
                     port = port,
-                    seaFront = seaFront,
+                    seaFront = port?.facade,
                 )
             }
 
@@ -64,19 +59,5 @@ class GetPriorNotifications(
         }
 
         return priorNotificationsWithReportingCount
-    }
-
-    private fun getSeaFrontFromPort(port: Port?): String? {
-        if (port?.latitude == null || port.longitude == null) {
-            return null
-        }
-
-        // Cached call
-        val facadeAreas = facadeAreasRepository.findAll()
-        val point = GeometryFactory().createPoint(Coordinate(port.longitude, port.latitude))
-
-        return facadeAreas.find { facadeArea ->
-            facadeArea.geometry.contains(point)
-        }?.facade
     }
 }

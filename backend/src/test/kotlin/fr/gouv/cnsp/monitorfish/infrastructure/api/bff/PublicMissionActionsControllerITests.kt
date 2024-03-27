@@ -70,7 +70,7 @@ class PublicMissionActionsControllerITests {
     fun `Should get all controls for a vessel`() {
         // Given
         givenSuspended { this.getVesselControls.execute(any(), any()) }.willReturn(
-            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlsSummary(
+            ControlsSummary(
                 1,
                 3,
                 4,

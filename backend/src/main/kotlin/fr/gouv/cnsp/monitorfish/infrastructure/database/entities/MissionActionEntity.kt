@@ -210,7 +210,7 @@ class MissionActionEntity(
             districtCode = districtCode,
             faoAreas = faoAreas ?: listOf(),
             flightGoals = flightGoals?.map {
-                fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.FlightGoal.valueOf(
+                FlightGoal.valueOf(
                     it,
                 )
             } ?: listOf(),

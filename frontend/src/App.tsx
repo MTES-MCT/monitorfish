@@ -84,9 +84,7 @@ export function App({ auth }: AppProps) {
         </FrontendErrorBoundary>
       </RsuiteCustomProvider>
       {/* This script is used to inject the chat */}
-      {import.meta.env.FRONTEND_SMALL_CHAT_SNIPPET && (
-        <script async src={import.meta.env.FRONTEND_SMALL_CHAT_SNIPPET} />
-      )}
+      <script async src="https://embed.small.chat/T0176BBUCEQC01SV3W4464.js" />
     </ThemeProvider>
   )
 }

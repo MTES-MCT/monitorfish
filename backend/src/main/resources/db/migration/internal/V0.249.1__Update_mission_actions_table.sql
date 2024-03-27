@@ -10,4 +10,4 @@ UPDATE mission_actions
 SET completion = 'COMPLETED'
 WHERE
     action_type IN ('SEA_CONTROL', 'LAND_CONTROL', 'AIR_CONTROL') AND
-    completed_by IS NOT NULL AND completed_by <> '';
+    NULLIF(completed_by, '') IS NOT NULL;

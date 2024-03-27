@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
-import java.util.*
 
 @ExtendWith(SpringExtension::class)
 class MissionActionUTests {
@@ -28,8 +27,9 @@ class MissionActionUTests {
             userTrigram = "LTH",
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
-            closedBy = "XYZ",
+            completedBy = "XYZ",
             isFromPoseidon = false,
+            completion = Completion.TO_COMPLETE,
         )
 
         // When
@@ -57,8 +57,9 @@ class MissionActionUTests {
             userTrigram = null,
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
-            closedBy = "XYZ",
+            completedBy = "XYZ",
             isFromPoseidon = false,
+            completion = Completion.TO_COMPLETE,
         )
 
         // When
@@ -90,8 +91,9 @@ class MissionActionUTests {
             userTrigram = "LTH",
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
-            closedBy = "XYZ",
+            completedBy = "XYZ",
             isFromPoseidon = false,
+            completion = Completion.TO_COMPLETE,
         )
 
         // When
@@ -120,8 +122,9 @@ class MissionActionUTests {
             userTrigram = "LTH",
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
-            closedBy = "XYZ",
+            completedBy = "XYZ",
             isFromPoseidon = false,
+            completion = Completion.TO_COMPLETE,
         )
 
         // When
@@ -150,8 +153,9 @@ class MissionActionUTests {
             userTrigram = "LTH",
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
-            closedBy = "XYZ",
+            completedBy = "XYZ",
             isFromPoseidon = false,
+            completion = Completion.TO_COMPLETE,
         )
 
         // When

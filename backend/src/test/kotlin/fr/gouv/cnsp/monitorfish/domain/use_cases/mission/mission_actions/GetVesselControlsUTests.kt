@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearControl
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesInfraction
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
@@ -67,6 +68,7 @@ class GetVesselControlsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
             ),
             MissionAction(
                 id = 2,
@@ -80,6 +82,7 @@ class GetVesselControlsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
             ),
             MissionAction(
                 id = 3,
@@ -93,6 +96,7 @@ class GetVesselControlsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
             ),
         )
         given(missionActionsRepository.findVesselMissionActionsAfterDateTime(any(), any())).willReturn(

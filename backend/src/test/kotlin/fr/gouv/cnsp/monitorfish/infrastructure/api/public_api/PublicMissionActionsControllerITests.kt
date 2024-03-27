@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.GetMissionActions
 import kotlinx.coroutines.runBlocking
@@ -49,6 +50,7 @@ class PublicMissionActionsControllerITests {
                     hasSomeGearsSeized = false,
                     hasSomeSpeciesSeized = false,
                     isFromPoseidon = true,
+                    completion = Completion.TO_COMPLETE,
                 ),
             ),
         )

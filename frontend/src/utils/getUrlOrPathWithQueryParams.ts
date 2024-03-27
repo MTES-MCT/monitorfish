@@ -1,35 +1,18 @@
-import { isObject } from './isObject'
+type QueryParamValue = number | string | boolean | Array<number | string> | null | undefined
 
-import type { AnyObject } from '@mtes-mct/monitor-ui'
-
-const sortByKey = (a: [string, any], b: [string, any]): number => {
+const sortByKey = (a: [string, QueryParamValue], b: [string, QueryParamValue]): number => {
   const [keyA] = a
   const [keyB] = b
 
   return keyA.localeCompare(keyB)
 }
 
-function getUrlQueryParamFromObjectEntry(key: string, value: any): string {
-  if (Array.isArray(value)) {
-    return `${key}=${[...value].sort().join(',')}`
+export function getUrlOrPathWithQueryParams(
+  urlOrPath: string,
+  queryParamsAsObject: {
+    [key: string]: QueryParamValue
   }
-
-  if (isObject(value)) {
-    return Object.entries(value)
-      .sort(sortByKey)
-      .reduce((queryParamAsString, [nestedKey, nestedValue]) => {
-        if (nestedValue === undefined) {
-          return queryParamAsString
-        }
-
-        return `${queryParamAsString}${queryParamAsString ? '&' : ''}${key}.${nestedKey}=${nestedValue}`
-      }, '')
-  }
-
-  return `${key}=${value}`
-}
-
-export function getUrlOrPathWithQueryParams(urlOrPath: string, queryParamsAsObject: AnyObject): string {
+): string {
   const queryParamsAsString = Object.entries(queryParamsAsObject)
     .sort(sortByKey)
     .reduce((queryParamsAsStringAcc, [key, value]) => {
@@ -37,7 +20,7 @@ export function getUrlOrPathWithQueryParams(urlOrPath: string, queryParamsAsObje
         return queryParamsAsStringAcc
       }
 
-      const queryParamAsString = getUrlQueryParamFromObjectEntry(key, value)
+      const queryParamAsString = Array.isArray(value) ? `${key}=${[...value].sort().join(',')}` : `${key}=${value}`
 
       return `${queryParamsAsStringAcc}${queryParamsAsStringAcc ? '&' : ''}${queryParamAsString}`
     }, '')

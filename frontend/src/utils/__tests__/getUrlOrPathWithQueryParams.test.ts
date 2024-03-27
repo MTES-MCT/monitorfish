@@ -21,15 +21,6 @@ describe('getUrlOrPathWithQueryParams', () => {
     expect(result).toBe('/example?colors=blue,green,red')
   })
 
-  it('should handle nested objects correctly', () => {
-    const path = '/example'
-    const queryParams = { user: { age: '30', name: 'John' } }
-
-    const result = getUrlOrPathWithQueryParams(path, queryParams)
-
-    expect(result).toBe('/example?user.age=30&user.name=John')
-  })
-
   it('should exclude undefined or null values', () => {
     const path = '/example'
     const queryParams = { age: undefined, location: null, name: 'John' }

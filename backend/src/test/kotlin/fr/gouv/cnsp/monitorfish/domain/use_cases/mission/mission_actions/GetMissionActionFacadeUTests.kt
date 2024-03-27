@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Facade
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.FacadeArea
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.repositories.FacadeAreasRepository
@@ -43,6 +44,7 @@ class GetMissionActionFacadeUTests {
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             isFromPoseidon = false,
+            completion = Completion.TO_COMPLETE,
         )
         given(portRepository.find(any())).willReturn(Port("AEFAT", name = "Dummy name", facade = "NAMO"))
 
@@ -69,6 +71,7 @@ class GetMissionActionFacadeUTests {
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             isFromPoseidon = false,
+            completion = Completion.TO_COMPLETE,
         )
 
         // When
@@ -95,6 +98,7 @@ class GetMissionActionFacadeUTests {
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             isFromPoseidon = false,
+            completion = Completion.TO_COMPLETE,
         )
         given(facadeAreasRepository.findByIncluding(any())).willReturn(
             listOf(
@@ -131,6 +135,7 @@ class GetMissionActionFacadeUTests {
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             isFromPoseidon = false,
+            completion = Completion.TO_COMPLETE,
         )
 
         // When
@@ -157,6 +162,7 @@ class GetMissionActionFacadeUTests {
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
             isFromPoseidon = false,
+            completion = Completion.TO_COMPLETE,
         )
         given(facadeAreasRepository.findByIncluding(any())).willReturn(listOf())
 

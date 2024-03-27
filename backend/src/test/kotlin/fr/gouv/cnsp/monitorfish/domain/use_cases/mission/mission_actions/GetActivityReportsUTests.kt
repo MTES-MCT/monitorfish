@@ -8,6 +8,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.Mission
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionSource
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesControl
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.ActivityCode
@@ -63,6 +64,7 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
             ),
             MissionAction(
                 id = 2,
@@ -76,6 +78,7 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
             ),
             MissionAction(
                 id = 3,
@@ -89,6 +92,7 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
             ),
         )
         given(missionActionsRepository.findControlsInDates(any(), any())).willReturn(controls)
@@ -192,6 +196,7 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
             ),
             MissionAction(
                 id = 2,
@@ -205,6 +210,7 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
             ),
             MissionAction(
                 id = 3,
@@ -218,6 +224,7 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
             ),
         )
         given(missionActionsRepository.findControlsInDates(any(), any())).willReturn(controls)
@@ -310,6 +317,7 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
             ),
             MissionAction(
                 id = 3,
@@ -323,6 +331,7 @@ class GetActivityReportsUTests {
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,
                 isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
             ),
         )
         given(missionActionsRepository.findControlsInDates(any(), any())).willReturn(controls)

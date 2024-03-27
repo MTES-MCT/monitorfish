@@ -5,8 +5,7 @@ import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.verify
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Facade
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -15,7 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
-import java.util.*
 
 @ExtendWith(SpringExtension::class)
 class AddMissionActionUTests {
@@ -44,8 +42,9 @@ class AddMissionActionUTests {
             userTrigram = "LTH",
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
-            closedBy = "XYZ",
+            completedBy = "XYZ",
             isFromPoseidon = false,
+            completion = Completion.TO_COMPLETE,
         )
 
         // When
@@ -77,8 +76,9 @@ class AddMissionActionUTests {
             userTrigram = "LTH",
             hasSomeGearsSeized = false,
             hasSomeSpeciesSeized = false,
-            closedBy = "XYZ",
+            completedBy = "XYZ",
             isFromPoseidon = false,
+            completion = Completion.TO_COMPLETE,
         )
         given(missionActionsRepository.save(anyOrNull())).willReturn(action)
         given(getMissionActionFacade.execute(anyOrNull())).willReturn(Facade.NAMO)

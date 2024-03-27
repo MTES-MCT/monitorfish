@@ -19,7 +19,6 @@ import { MonitorFishLayer } from '../layers/types'
 import { OpenLayersGeometryType } from '../map/constants'
 
 import type { MissionActionFormValues, MissionMainFormValues } from '@features/Mission/components/MissionForm/types'
-import type { MissionWithActions } from '@features/Mission/mission.types'
 import type { MultiPolygon } from 'ol/geom'
 
 import MissionStatus = Mission.MissionStatus
@@ -31,7 +30,10 @@ export function getMissionFeaturePointId(id: number) {
   return `${MonitorFishLayer.MISSION_PIN_POINT}:${id}`
 }
 
-export const getMissionFeaturePoint = ({ actions, ...mission }: MissionWithActions): Feature<Point> | undefined => {
+export const getMissionFeaturePoint = ({
+  actions,
+  ...mission
+}: Mission.MissionWithActions): Feature<Point> | undefined => {
   const geoJSON = new GeoJSON()
 
   if (!mission.geom?.coordinates.length) {

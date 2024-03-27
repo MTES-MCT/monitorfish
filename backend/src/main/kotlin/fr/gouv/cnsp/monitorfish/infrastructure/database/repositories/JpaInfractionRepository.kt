@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NatinfCodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBInfractionRepository

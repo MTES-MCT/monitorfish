@@ -17,11 +17,11 @@ import { EmptyCardTable } from '../../../../ui/card-table/EmptyCardTable'
 import { NoRsuiteOverrideWrapper } from '../../../../ui/NoRsuiteOverrideWrapper'
 import { ExportActivityReportsDialog } from '../../../ActivityReport/components/ExportActivityReportsDialog'
 import { SubMenu } from '../../../SideWindow/SubMenu'
+import { Mission } from '../../mission.types'
 import { addMission } from '../../useCases/addMission'
 import { editMission } from '../../useCases/editMission'
 
 import type { GeoJSON as GeoJSONType } from '../../../../domain/types/GeoJSON'
-import type { Mission, MissionWithActions } from '../../mission.types'
 
 export function MissionList() {
   const listSeaFront = useMainAppSelector(store => store.missionList.listSeaFront)
@@ -35,7 +35,7 @@ export function MissionList() {
 
   const { isError, isLoading, missions, missionsSeaFrontFiltered } = useGetFilteredMissionsQuery()
 
-  const { renderTableHead, tableData } = useTable<MissionWithActions>(
+  const { renderTableHead, tableData } = useTable<Mission.MissionWithActions>(
     missionsSeaFrontFiltered,
     MISSION_LIST_TABLE_OPTIONS,
     [],

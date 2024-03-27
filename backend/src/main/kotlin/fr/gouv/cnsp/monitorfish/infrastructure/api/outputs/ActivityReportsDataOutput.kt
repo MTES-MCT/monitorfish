@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.dtos.ActivityReports
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReports
 
 data class ActivityReportsDataOutput(
     val activityReports: List<ActivityReportDataOutput>,

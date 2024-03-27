@@ -1,6 +1,8 @@
 import { editSideWindowMission } from './utils'
+import { SeaFrontGroup } from '../../../../src/domain/entities/seaFront/constants'
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
+import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Sea Control Edition', () => {
   beforeEach(() => {
@@ -263,4 +265,32 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
         .should('eq', 201)
     }
   )
+
+  it('Should not update the mission zone When a CACEM control is newer', () => {
+    editSideWindowMissionListMissionWithId(34, SeaFrontGroup.MEMN)
+
+    cy.intercept('POST', '/api/v1/missions/34', {
+      body: {
+        id: 1
+      },
+      statusCode: 201
+    }).as('updateMission34')
+    cy.intercept('PUT', '/bff/v1/mission_actions/9', {
+      body: {
+        id: 1
+      },
+      statusCode: 200
+    })
+
+    cy.get('*[data-cy="action-list-item"]').eq(2).click()
+    cy.wait(500)
+
+    cy.get('input[placeholder="Rechercher un navire..."]').clear().type('phe')
+    cy.contains('mark', 'PHE').click()
+
+    cy.get('[aria-label="Supprimer cette zone"]').click()
+
+    cy.wait(250)
+    cy.get('.Toastify__toast--success').should('not.exist')
+  })
 })

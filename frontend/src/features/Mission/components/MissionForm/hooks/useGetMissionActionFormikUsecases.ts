@@ -1,8 +1,10 @@
 import { useGetPortsQuery } from '@api/port'
 import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
 import { MissionAction } from '@features/Mission/missionAction.types'
+import { useGetMissionQuery } from '@features/Mission/monitorfishMissionApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { useFormikContext } from 'formik'
 import { useMemo } from 'react'
 
@@ -22,6 +24,7 @@ export function useGetMissionActionFormikUsecases() {
 
   const getFleetSegmentsApiQuery = useGetFleetSegmentsQuery()
   const getPortsApiQuery = useGetPortsQuery()
+  const getMissionApiQuery = useGetMissionQuery(draft?.mainFormValues?.id ?? skipToken)
 
   const fleetSegmentsAsOptions: Option<MissionAction.FleetSegment>[] = useMemo(
     () => getFleetSegmentsAsOption(getFleetSegmentsApiQuery.data),
@@ -89,10 +92,11 @@ export function useGetMissionActionFormikUsecases() {
    * The mission location is equal to the current action geometry modified.
    */
   const updateMissionLocation = (missionActionValues: MissionActionFormValues) =>
-    formikUsecase.updateMissionLocation(dispatch, getPortsApiQuery.data)(
-      draft?.mainFormValues.isGeometryComputedFromControls,
-      missionActionValues
-    )
+    formikUsecase.updateMissionLocation(
+      dispatch,
+      getPortsApiQuery.data,
+      getMissionApiQuery.data?.envActions ?? []
+    )(draft?.mainFormValues.isGeometryComputedFromControls, missionActionValues)
 
   /**
    * When updating the mission location from an action, we use the `RTK-Query` cache object to access the `mission` form.

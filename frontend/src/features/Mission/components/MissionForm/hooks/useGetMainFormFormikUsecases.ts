@@ -1,7 +1,9 @@
 import { useGetPortsQuery } from '@api/port'
+import { useGetMissionQuery } from '@features/Mission/monitorfishMissionApi'
 import { isAirOrSeaControl, isLandControl } from '@features/Mission/useCases/getLastControlCircleGeometry'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { sortBy } from 'lodash'
 
 import { formikUsecase } from '../formikUsecases'
@@ -13,6 +15,7 @@ export function useGetMainFormFormikUsecases() {
   const draft = useMainAppSelector(state => state.missionForm.draft)
 
   const getPortsApiQuery = useGetPortsQuery()
+  const getMissionApiQuery = useGetMissionQuery(draft?.mainFormValues?.id ?? skipToken)
 
   return {
     /**
@@ -50,10 +53,11 @@ export function useGetMainFormFormikUsecases() {
         return false
       }
 
-      await formikUsecase.updateMissionLocation(dispatch, getPortsApiQuery.data)(
-        isGeometryComputedFromControls,
-        lastControl
-      )
+      await formikUsecase.updateMissionLocation(
+        dispatch,
+        getPortsApiQuery.data,
+        getMissionApiQuery.data?.envActions ?? []
+      )(isGeometryComputedFromControls, lastControl)
 
       return true
     }

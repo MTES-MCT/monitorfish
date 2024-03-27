@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces
 
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.MissionActionEntity
 import org.springframework.data.repository.CrudRepository
 import java.time.Instant

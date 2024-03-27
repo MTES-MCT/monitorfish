@@ -3,8 +3,8 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Infraction
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionCategory
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.use_cases.infraction.GetAllInfractions
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -33,8 +33,14 @@ class InfractionControllerITests {
         // Given
         given(this.getAllInfractions.execute()).willReturn(
             listOf(
-                Infraction(natinfCode = 7059, infractionCategory = InfractionCategory.FISHING),
-                Infraction(natinfCode = 7065, infractionCategory = InfractionCategory.FISHING),
+                Infraction(
+                    natinfCode = 7059,
+                    infractionCategory = InfractionCategory.FISHING,
+                ),
+                Infraction(
+                    natinfCode = 7065,
+                    infractionCategory = InfractionCategory.FISHING,
+                ),
             ),
         )
 

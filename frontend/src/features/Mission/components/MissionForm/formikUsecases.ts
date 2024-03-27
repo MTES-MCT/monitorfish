@@ -1,6 +1,7 @@
 import { faoAreasApi } from '@api/faoAreas'
 import { getSummedSpeciesOnBoard } from '@features/Logbook/utils'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
+import { EnvMissionAction } from '@features/Mission/envMissionAction.types'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { getLastControlCircleGeometry } from '@features/Mission/useCases/getLastControlCircleGeometry'
 import { vesselApi } from '@features/Vessel/apis'
@@ -143,12 +144,27 @@ const updateSpeciesOnboard =
   }
 
 const updateMissionLocation =
-  (dispatch, ports: Port.Port[] | undefined) =>
+  (dispatch, ports: Port.Port[] | undefined, envActions: EnvMissionAction.MissionAction[]) =>
   async (
     isGeometryComputedFromControls: boolean | undefined,
     missionAction: MissionActionFormValues | MissionAction.MissionAction | undefined
   ) => {
     if (!missionAction || !ports || !isGeometryComputedFromControls) {
+      return
+    }
+
+    const lastEnvActionDate = envActions
+      .filter(
+        action =>
+          action.actionType === EnvMissionAction.MissionActionType.CONTROL ||
+          action.actionType === EnvMissionAction.MissionActionType.SURVEILLANCE
+      )
+      .map(action => action.actionStartDateTimeUtc)
+      .filter((actionStartDateTimeUtc): actionStartDateTimeUtc is string => actionStartDateTimeUtc !== null)
+      .sort((a, b) => b.localeCompare(a))[0]
+
+    if (lastEnvActionDate && lastEnvActionDate > missionAction.actionDatetimeUtc) {
+      // As a action from Env is newer, we do not update the mission location
       return
     }
 

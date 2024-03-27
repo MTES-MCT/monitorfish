@@ -4,7 +4,7 @@ import { uniq } from 'lodash/fp'
 import styled from 'styled-components'
 
 import { getMissionColor } from '../../layers/MissionLayer/styles'
-import { Mission, type MissionWithActions } from '../../mission.types'
+import { Mission } from '../../mission.types'
 
 import type { LegacyControlUnit } from '../../../../domain/types/legacyControlUnit'
 
@@ -21,7 +21,7 @@ export function getControlUnitsNamesFromAdministrations(
   return uniqueSortedNames
 }
 
-export function hasSomeOngoingActions(mission: MissionWithActions): boolean {
+export function hasSomeOngoingActions(mission: Mission.MissionWithActions): boolean {
   return !mission.isClosed && mission.actions.filter(({ closedBy }) => !closedBy).length > 0
 }
 

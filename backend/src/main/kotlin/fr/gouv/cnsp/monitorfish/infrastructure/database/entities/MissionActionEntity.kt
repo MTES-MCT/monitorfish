@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Facade
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
 import io.hypersistence.utils.hibernate.type.array.ListArrayType
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import jakarta.persistence.*
@@ -138,7 +138,10 @@ class MissionActionEntity(
 ) {
 
     companion object {
-        fun fromMissionAction(mapper: ObjectMapper, missionAction: MissionAction): MissionActionEntity =
+        fun fromMissionAction(
+            mapper: ObjectMapper,
+            missionAction: MissionAction,
+        ): MissionActionEntity =
             MissionActionEntity(
                 id = missionAction.id,
                 missionId = missionAction.missionId,
@@ -194,59 +197,80 @@ class MissionActionEntity(
             )
     }
 
-    fun toMissionAction(mapper: ObjectMapper) = MissionAction(
-        id = id,
-        missionId = missionId,
-        vesselId = vesselId,
-        vesselName = vesselName,
-        internalReferenceNumber = internalReferenceNumber,
-        externalReferenceNumber = externalReferenceNumber,
-        ircs = ircs,
-        flagState = flagState,
-        districtCode = districtCode,
-        faoAreas = faoAreas ?: listOf(),
-        flightGoals = flightGoals?.map { FlightGoal.valueOf(it) } ?: listOf(),
-        actionType = actionType,
-        actionDatetimeUtc = actionDatetimeUtc.atZone(ZoneOffset.UTC),
-        emitsVms = emitsVms,
-        emitsAis = emitsAis,
-        logbookMatchesActivity = logbookMatchesActivity,
-        licencesMatchActivity = licencesMatchActivity,
-        speciesWeightControlled = speciesWeightControlled,
-        speciesSizeControlled = speciesSizeControlled,
-        separateStowageOfPreservedSpecies = separateStowageOfPreservedSpecies,
-        logbookInfractions = deserializeJSONList(mapper, logbookInfractions, LogbookInfraction::class.java),
-        licencesAndLogbookObservations = licencesAndLogbookObservations,
-        gearInfractions = deserializeJSONList(mapper, gearInfractions, GearInfraction::class.java),
-        speciesInfractions = deserializeJSONList(mapper, speciesInfractions, SpeciesInfraction::class.java),
-        speciesObservations = speciesObservations,
-        seizureAndDiversion = seizureAndDiversion,
-        otherInfractions = deserializeJSONList(mapper, otherInfractions, OtherInfraction::class.java),
-        numberOfVesselsFlownOver = numberOfVesselsFlownOver,
-        unitWithoutOmegaGauge = unitWithoutOmegaGauge,
-        controlQualityComments = controlQualityComments,
-        feedbackSheetRequired = feedbackSheetRequired,
-        userTrigram = userTrigram,
-        segments = deserializeJSONList(mapper, segments, FleetSegment::class.java),
-        facade = facade?.let { Facade.from(it).toString() },
-        longitude = longitude,
-        latitude = latitude,
-        portLocode = portLocode,
-        vesselTargeted = vesselTargeted,
-        seizureAndDiversionComments = seizureAndDiversionComments,
-        otherComments = otherComments,
-        gearOnboard = deserializeJSONList(mapper, gearOnboard, GearControl::class.java),
-        speciesOnboard = deserializeJSONList(mapper, speciesOnboard, SpeciesControl::class.java),
-        isDeleted = isDeleted,
-        hasSomeGearsSeized = hasSomeGearsSeized,
-        hasSomeSpeciesSeized = hasSomeSpeciesSeized,
-        closedBy = closedBy,
-        isFromPoseidon = isFromPoseidon,
-        isAdministrativeControl = isAdministrativeControl,
-        isComplianceWithWaterRegulationsControl = isComplianceWithWaterRegulationsControl,
-        isSafetyEquipmentAndStandardsComplianceControl = isSafetyEquipmentAndStandardsComplianceControl,
-        isSeafarersControl = isSeafarersControl,
-    )
+    fun toMissionAction(mapper: ObjectMapper) =
+        MissionAction(
+            id = id,
+            missionId = missionId,
+            vesselId = vesselId,
+            vesselName = vesselName,
+            internalReferenceNumber = internalReferenceNumber,
+            externalReferenceNumber = externalReferenceNumber,
+            ircs = ircs,
+            flagState = flagState,
+            districtCode = districtCode,
+            faoAreas = faoAreas ?: listOf(),
+            flightGoals = flightGoals?.map {
+                FlightGoal.valueOf(
+                    it,
+                )
+            } ?: listOf(),
+            actionType = actionType,
+            actionDatetimeUtc = actionDatetimeUtc.atZone(ZoneOffset.UTC),
+            emitsVms = emitsVms,
+            emitsAis = emitsAis,
+            logbookMatchesActivity = logbookMatchesActivity,
+            licencesMatchActivity = licencesMatchActivity,
+            speciesWeightControlled = speciesWeightControlled,
+            speciesSizeControlled = speciesSizeControlled,
+            separateStowageOfPreservedSpecies = separateStowageOfPreservedSpecies,
+            logbookInfractions = deserializeJSONList(
+                mapper,
+                logbookInfractions,
+                LogbookInfraction::class.java,
+            ),
+            licencesAndLogbookObservations = licencesAndLogbookObservations,
+            gearInfractions = deserializeJSONList(
+                mapper,
+                gearInfractions,
+                GearInfraction::class.java,
+            ),
+            speciesInfractions = deserializeJSONList(mapper, speciesInfractions, SpeciesInfraction::class.java),
+            speciesObservations = speciesObservations,
+            seizureAndDiversion = seizureAndDiversion,
+            otherInfractions = deserializeJSONList(mapper, otherInfractions, OtherInfraction::class.java),
+            numberOfVesselsFlownOver = numberOfVesselsFlownOver,
+            unitWithoutOmegaGauge = unitWithoutOmegaGauge,
+            controlQualityComments = controlQualityComments,
+            feedbackSheetRequired = feedbackSheetRequired,
+            userTrigram = userTrigram,
+            segments = deserializeJSONList(
+                mapper,
+                segments,
+                FleetSegment::class.java,
+            ),
+            facade = facade?.let { Facade.from(it).toString() },
+            longitude = longitude,
+            latitude = latitude,
+            portLocode = portLocode,
+            vesselTargeted = vesselTargeted,
+            seizureAndDiversionComments = seizureAndDiversionComments,
+            otherComments = otherComments,
+            gearOnboard = deserializeJSONList(
+                mapper,
+                gearOnboard,
+                GearControl::class.java,
+            ),
+            speciesOnboard = deserializeJSONList(mapper, speciesOnboard, SpeciesControl::class.java),
+            isDeleted = isDeleted,
+            hasSomeGearsSeized = hasSomeGearsSeized,
+            hasSomeSpeciesSeized = hasSomeSpeciesSeized,
+            closedBy = closedBy,
+            isFromPoseidon = isFromPoseidon,
+            isAdministrativeControl = isAdministrativeControl,
+            isComplianceWithWaterRegulationsControl = isComplianceWithWaterRegulationsControl,
+            isSafetyEquipmentAndStandardsComplianceControl = isSafetyEquipmentAndStandardsComplianceControl,
+            isSeafarersControl = isSeafarersControl,
+        )
 
     private fun <T> deserializeJSONList(mapper: ObjectMapper, json: String?, clazz: Class<T>): List<T> = json?.let {
         mapper.readValue(

@@ -1,10 +1,10 @@
-import { type MissionWithActions } from '@features/Mission/mission.types'
+import { Mission } from '@features/Mission/mission.types'
 
 import { validateMissionForms } from './validateMissionForms'
 
 import type { MissionActionFormValues, MissionMainFormValues } from '../types'
 
-export function getMissionDraftFromMissionWithActions(missionWithActions: MissionWithActions): {
+export function getMissionDraftFromMissionWithActions(missionWithActions: Mission.MissionWithActions): {
   actionsFormValues: MissionActionFormValues[]
   mainFormValues: MissionMainFormValues
 } {

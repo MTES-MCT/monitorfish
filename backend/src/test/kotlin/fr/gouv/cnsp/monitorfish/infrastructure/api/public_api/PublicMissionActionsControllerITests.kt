@@ -4,9 +4,9 @@ import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionAction
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionType
-import fr.gouv.cnsp.monitorfish.domain.use_cases.mission_actions.GetMissionActions
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.GetMissionActions
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test

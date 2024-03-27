@@ -1,8 +1,8 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionAction
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.MissionActionEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBMissionActionsRepository

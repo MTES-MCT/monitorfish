@@ -2,8 +2,8 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.Infraction
-import fr.gouv.cnsp.monitorfish.domain.entities.mission_actions.InfractionCategory
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
@@ -33,7 +33,10 @@ class GetVesselReportingsUTests {
     fun `execute Should return the reporting of a specified vessel When vessel id is null`() {
         // Given
         given(infractionRepository.findInfractionByNatinfCode(eq(7059))).willReturn(
-            Infraction(natinfCode = 7059, infractionCategory = InfractionCategory.FISHING),
+            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction(
+                natinfCode = 7059,
+                infractionCategory = InfractionCategory.FISHING,
+            ),
         )
         given(reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(any(), any(), any())).willReturn(
             TestUtils.getDummyReportings(),
@@ -67,7 +70,10 @@ class GetVesselReportingsUTests {
     fun `execute Should return the reporting of a specified vessel When vessel id is not null`() {
         // Given
         given(infractionRepository.findInfractionByNatinfCode(eq(7059))).willReturn(
-            Infraction(natinfCode = 7059, infractionCategory = InfractionCategory.FISHING),
+            Infraction(
+                natinfCode = 7059,
+                infractionCategory = InfractionCategory.FISHING,
+            ),
         )
         given(reportingRepository.findCurrentAndArchivedByVesselIdEquals(eq(123456), any())).willReturn(
             TestUtils.getDummyReportings(),

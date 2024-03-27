@@ -9,20 +9,23 @@ import {
   getRiskFactorColor
 } from '../../../domain/entities/vessel/riskFactor'
 
-// TODO Under charter?
-// TODO Top right dot indicator?
-type VesselRiskFactorProps = Undefine<{
-  hasSegments: boolean
-  isVesselUnderCharter: boolean
-  vesselLastControlDate: string
-  vesselRiskFactor: number
-  vesselRiskFactorDetectability: number
-  vesselRiskFactorImpact: number
-  vesselRiskFactorProbability: number
-}>
+type VesselRiskFactorProps = Readonly<
+  Undefine<{
+    hasVesselRiskFactorSegments: boolean
+    isInteractive?: boolean
+    isVesselUnderCharter: boolean
+    vesselLastControlDate: string
+    vesselRiskFactor: number
+    vesselRiskFactorDetectability: number
+    vesselRiskFactorImpact: number
+    vesselRiskFactorProbability: number
+  }>
+>
+// https://github.com/MTES-MCT/monitorfish/issues/3043
 export function VesselRiskFactor({
-  hasSegments = false,
-  // isVesselUnderCharter = false,
+  hasVesselRiskFactorSegments = false,
+  isInteractive = false,
+  isVesselUnderCharter = false,
   vesselLastControlDate,
   vesselRiskFactor,
   vesselRiskFactorDetectability,
@@ -32,6 +35,10 @@ export function VesselRiskFactor({
   const [isOpen, setIsOpen] = useState(false)
 
   const toggle = () => {
+    if (!isInteractive) {
+      return
+    }
+
     setIsOpen(wasOpen => !wasOpen)
   }
 
@@ -45,16 +52,24 @@ export function VesselRiskFactor({
 
   return (
     <Box onClick={event => event.stopPropagation()}>
-      <Score $value={vesselRiskFactor} data-cy="vessel-label-risk-factor" onClick={toggle}>
+      <Score $isInteractive={isInteractive} $value={vesselRiskFactor} onClick={toggle}>
         {vesselRiskFactor.toFixed(0)}
       </Score>
+      {isVesselUnderCharter && <UnderCharterAsBadge title="Navire sous charte" />}
 
-      {isOpen && (
-        <Detail data-cy="vessel-label-risk-factor-details">
+      {isInteractive && isOpen && (
+        <Detail>
+          {isVesselUnderCharter && (
+            <DetailRow>
+              <UnderCharterAsText />
+              <DetailText>Navire sous charte</DetailText>
+            </DetailRow>
+          )}
+
           {!!vesselRiskFactorImpact && (
             <DetailRow>
               <DetailScore $value={vesselRiskFactorImpact}>{vesselRiskFactorImpact}</DetailScore>
-              <DetailText>{getImpactRiskFactorText(vesselRiskFactorImpact, hasSegments)}</DetailText>
+              <DetailText>{getImpactRiskFactorText(vesselRiskFactorImpact, true)}</DetailText>
             </DetailRow>
           )}
 
@@ -70,7 +85,9 @@ export function VesselRiskFactor({
           {!!vesselRiskFactorDetectability && (
             <DetailRow>
               <DetailScore $value={vesselRiskFactorDetectability}>{vesselRiskFactorDetectability}</DetailScore>
-              <DetailText>{getDetectabilityRiskFactorText(vesselRiskFactorDetectability, false)}</DetailText>
+              <DetailText>
+                {getDetectabilityRiskFactorText(vesselRiskFactorDetectability, hasVesselRiskFactorSegments)}
+              </DetailText>
             </DetailRow>
           )}
         </Detail>
@@ -80,6 +97,7 @@ export function VesselRiskFactor({
 }
 
 const Box = styled.span`
+  font-size: 13px;
   position: relative;
   width: auto;
 
@@ -88,13 +106,15 @@ const Box = styled.span`
   }
 `
 
-const Score = styled.button<{
+const Score = styled.div<{
+  $isInteractive: boolean
   $value: number
 }>`
   align-items: center;
   background-color: ${p => getRiskFactorColor(p.$value)};
   border-radius: 1px;
   color: ${p => p.theme.color.white};
+  cursor: ${p => (p.$isInteractive ? 'pointer' : 'default')};
   display: flex;
   font-family: 'Open Sans', sans-serif;
   font-size: 13px;
@@ -102,22 +122,24 @@ const Score = styled.button<{
   height: 22px;
   justify-content: center;
   line-height: 1;
-  padding: 0 0 2px;
+  padding: 0 0 1px;
   width: 28px;
 `
 
 const Detail = styled.div`
   background: ${p => p.theme.color.white};
   box-shadow: 0px 2px 3px ${p => p.theme.color.charcoalShadow};
-  height: 72px;
   line-height: 18px;
-  margin-left: 2px;
+  left: 36px;
+  top: -8px;
   position: absolute;
   transition: 0.2s all;
+  z-index: 1;
 `
 
 const DetailRow = styled.div`
-  display: block;
+  align-items: center;
+  display: flex;
   font-size: 12px;
   font-weight: 500;
   margin-right: 6px;
@@ -128,21 +150,42 @@ const DetailRow = styled.div`
 const DetailScore = styled.div<{
   $value: number
 }>`
+  align-items: center;
   background-color: ${p => getRiskFactorColor(p.$value)};
   border-radius: 1px;
   color: ${p => p.theme.color.white};
-  display: inline-block;
+  display: inline-flex;
+  font-family: 'Open Sans', sans-serif;
   font-size: 13px;
-  font-weight: 500;
-  height: 19px;
-  line-height: 16px;
+  font-weight: 700;
+  height: 20px;
+  justify-content: center;
+  line-height: 1;
   margin-right: 3px;
-  padding-top: 1px;
-  text-align: center;
-  user-select: none;
+  padding-bottom: 1px;
   width: 26px;
 `
 
 const DetailText = styled.span`
-  vertical-align: bottom;
+  line-height: 1;
+  padding-bottom: 2px;
+`
+
+const UnderCharter = styled.span`
+  background: ${p => p.theme.color.mediumSeaGreen} 0% 0% no-repeat padding-box;
+  border-radius: 50%;
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+`
+
+const UnderCharterAsBadge = styled(UnderCharter)`
+  box-shadow: 0px 2px 3px ${p => p.theme.color.slateGray};
+  position: absolute;
+  left: 22px;
+  top: 11px;
+`
+
+const UnderCharterAsText = styled(UnderCharter)`
+  margin: 5px 10px 5px 8px;
 `
